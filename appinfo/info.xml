@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<info xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
+    <id>wiki</id>
+    <name>Wiki</name>
+    <summary>A wiki for Nextcloud</summary>
+    <description><![CDATA[
+The Wiki app adds wiki functionality to Nextcloud.
+]]></description>
+    <version>0.0.2</version>
+    <licence>AGPL</licence>
+    <author mail="jonas@freesources.org" >Jonas Meurer</author>
+    <namespace>Wiki</namespace>
+    <category>organization</category>
+    <category>social</category>
+	<website>https://0xacab.org/wiki</website>
+	<bugs>https://0xacab.org/wiki</bugs>
+	<repository type="git">https://0xacab.org/wiki.git</repository>
+    <dependencies>
+        <nextcloud min-version="16" max-version="19" />
+    </dependencies>
+    <navigations>
+        <navigation>
+            <name>Wiki</name>
+            <route>wiki.page.index</route>
+        </navigation>
+    </navigations>
+</info>
