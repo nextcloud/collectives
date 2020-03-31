@@ -58,9 +58,9 @@ class PageService {
 		try {
 			return $this->mapper->find($id, $userId);
 		// in order to be able to plug in different storage backends like files
-        // for instance it is a good idea to turn storage related exceptions
-        // into service related exceptions so controllers and service users
-        // have to deal with only one type of exception
+		// for instance it is a good idea to turn storage related exceptions
+		// into service related exceptions so controllers and service users
+		// have to deal with only one type of exception
 		} catch(Exception $e) {
 			$this->handleException($e);
 		}
@@ -74,12 +74,12 @@ class PageService {
 	 * @return Page
 	 */
 	public function create(string $title, string $content, string $userId): Page {
-        $page = new Page();
-        $page->setTitle($title);
-        $page->setContent($content);
-        $page->setUserId($userId);
-        return $this->mapper->insert($page);
-    }
+		$page = new Page();
+		$page->setTitle($title);
+		$page->setContent($content);
+		$page->setUserId($userId);
+		return $this->mapper->insert($page);
+	}
 
 	/**
 	 * @param int    $id
@@ -90,18 +90,18 @@ class PageService {
 	 * @return Page
 	 * @throws NotFoundException
 	 */
-    public function update(int $id, string $title, string $content, string $userId): Page {
-        try {
-            $page = $this->mapper->find($id, $userId);
+	public function update(int $id, string $title, string $content, string $userId): Page {
+		try {
+			$page = $this->mapper->find($id, $userId);
 			$page->setId($id);
 			$page->setTitle($title);
-            $page->setContent($content);
-            $page->setUserId($userId);
-            return $this->mapper->update($page);
-        } catch(Exception $e) {
-            $this->handleException($e);
-        }
-    }
+			$page->setContent($content);
+			$page->setUserId($userId);
+			return $this->mapper->update($page);
+		} catch(Exception $e) {
+			$this->handleException($e);
+		}
+	}
 
 	/**
 	 * @param int    $id
@@ -110,13 +110,13 @@ class PageService {
 	 * @return Page
 	 * @throws NotFoundException
 	 */
-    public function delete(int $id, string $userId) {
-        try {
-            $page = $this->mapper->find($id, $userId);
-            $this->mapper->delete($page);
-            return $page;
-        } catch(Exception $e) {
-            $this->handleException($e);
-        }
-    }
+	public function delete(int $id, string $userId) {
+		try {
+			$page = $this->mapper->find($id, $userId);
+			$this->mapper->delete($page);
+			return $page;
+		} catch(Exception $e) {
+			$this->handleException($e);
+		}
+	}
 }
