@@ -1,0 +1,31 @@
+image: registry.gitlab.com/collectivecloud/docker-builds/dependencies
+
+# Select what we should cache between builds
+cache:
+  paths:
+    - vendor/
+
+# Set any variables we need
+variables:
+  # Configure mysql environment variables (https://hub.docker.com/r/_/mysql/)
+  MYSQL_DATABASE: mysql_database
+  MYSQL_ROOT_PASSWORD: mysql_strong_password
+  NEXTCLOUD_SOURCE: '/srv/nextcloud/server'
+
+before_script:
+  - curl -sS https://getcomposer.org/installer | php
+  - php composer.phar install
+  - ln -s `pwd` $NEXTCLOUD_SOURCE/apps/wiki
+
+# Bring in any services we need http://docs.gitlab.com/ee/ci/docker/using_docker_images.html#what-is-a-service
+# See http://docs.gitlab.com/ce/ci/services/README.html for examples.
+services:
+  - mysql:5.7
+
+unit:
+  script:
+    - vendor/bin/phpunit --configuration phpunit.xml --coverage-text --colors=never
+
+integration:
+  script:
+    - vendor/bin/phpunit --configuration phpunit.integration.xml --coverage-text --colors=never
