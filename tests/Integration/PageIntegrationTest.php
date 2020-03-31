@@ -3,7 +3,7 @@
 namespace OCA\Wiki\Tests\Integration\Controller;
 
 use OCA\Wiki\Controller\PageController;
-use OCA\Wiki\Db\PageMapper;
+use OCA\Wiki\Service\PageService;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\App;
 use OCP\IRequest;
@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 class PageIntegrationTest extends TestCase {
 
     private $controller;
-    private $mapper;
+    private $service;
     private $userId = 'jane';
 
     public function setUp(): void {
@@ -36,7 +36,7 @@ class PageIntegrationTest extends TestCase {
         });
 
         $this->controller = $container->query(PageController::class);
-        $this->mapper = $container->query(PageMapper::class);
+        $this->service = $container->query(PageService::class);
     }
 
     public function testAppInstalled(): void {
