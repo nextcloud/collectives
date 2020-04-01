@@ -8,10 +8,13 @@ use OCA\Wiki\Service\PageDoesNotExistException;
 use OCP\Files\AlreadyExistsException;
 use OCP\Files\File;
 use OCP\Files\Folder;
+use OCP\Files\InvalidPathException;
 use OCP\Files\IRootFolder;
 use OCP\Files\Node;
 use OCP\Files\NotFoundException;
+use OCP\Files\NotPermittedException;
 use OCP\IDBConnection;
+use OCP\Lock\LockedException;
 
 class PageMapper {
 	private const SUFFIX = '.md';
@@ -33,8 +36,8 @@ class PageMapper {
 	 *
 	 * @return Folder
 	 * @throws NotFoundException
+	 * @throws NotPermittedException
 	 * @throws PagesFolderException
-	 * @throws \OCP\Files\NotPermittedException
 	 */
 	private function getFolderForUser(string $userId): Folder {
 		$path = '/' . $userId . '/files/' . self::WIKI_FOLDER;
@@ -46,8 +49,8 @@ class PageMapper {
 	 *
 	 * @return Folder
 	 * @throws NotFoundException
+	 * @throws NotPermittedException
 	 * @throws PagesFolderException
-	 * @throws \OCP\Files\NotPermittedException
 	 */
 	private function getOrCreateFolder(string $path): Folder {
 		if ($this->root->nodeExists($path)) {
@@ -72,7 +75,7 @@ class PageMapper {
 		$file = $folder->getById($id);
 
 		if (count($file) <= 0 || !($file[0] instanceof File)) {
-			throw new PageDoesNotExistException();
+			throw new PageDoesNotExistException('page does not exist');
 		}
 		return $file[0];
 	}
@@ -82,10 +85,10 @@ class PageMapper {
 	 * @param Folder $pagesFolder
 	 *
 	 * @return Page
-	 * @throws \OCP\Files\InvalidPathException
-	 * @throws \OCP\Files\NotFoundException
-	 * @throws \OCP\Files\NotPermittedException
-	 * @throws \OCP\Lock\LockedException
+	 * @throws InvalidPathException
+	 * @throws LockedException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
 	 */
 	private function getPage(File $file, Folder $pagesFolder): Page {
 		$id = $file->getId();
@@ -97,7 +100,12 @@ class PageMapper {
 	 * @param string $userId
 	 *
 	 * @return Page
-	 * @throws \Exception
+	 * @throws InvalidPathException
+	 * @throws LockedException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 * @throws PageDoesNotExistException
+	 * @throws PagesFolderException
 	 */
 	public function find(int $id, string $userId): Page {
 		$folder = $this->getFolderForUser($userId);
@@ -108,8 +116,12 @@ class PageMapper {
 	/**
 	 * @param string $userId
 	 *
-	 * @return Page[]
-	 * @throws \Exception
+	 * @return array
+	 * @throws InvalidPathException
+	 * @throws LockedException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 * @throws PagesFolderException
 	 */
 	public function findAll(string $userId): array {
 		$pages = [];
@@ -125,17 +137,18 @@ class PageMapper {
 	 *
 	 * @return Page
 	 * @throws AlreadyExistsException
+	 * @throws InvalidPathException
+	 * @throws LockedException
 	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 * @throws PagesFolderException
 	 * @throws \OCP\Files\GenericFileException
-	 * @throws \OCP\Files\InvalidPathException
-	 * @throws \OCP\Files\NotPermittedException
-	 * @throws \OCP\Lock\LockedException
 	 */
 	public function insert(Page $page): Page {
 		$folder = $this->getFolderForUser($page->getUserId());
 		$filename = $page->getTitle() . self::SUFFIX;
 		if ($folder->nodeExists($filename)) {
-			throw new AlreadyExistsException();
+			throw new AlreadyExistsException('page ' . $filename . ' already exists');
 		}
 
 		$file = $folder->newFile($filename);
@@ -148,18 +161,20 @@ class PageMapper {
 	 * @param Page $page
 	 *
 	 * @return Page
+	 * @throws InvalidPathException
+	 * @throws LockedException
 	 * @throws NotFoundException
+	 * @throws NotPermittedException
 	 * @throws PageDoesNotExistException
-	 * @throws \OCP\Files\InvalidPathException
+	 * @throws PagesFolderException
+	 * @throws \OCP\Files\GenericFileException
 	 */
 	public function update(Page $page): Page {
 		$folder = $this->getFolderForUser($page->getUserId());
-		$filename = $page->getTitle() . self::SUFFIX;
-		$file = $folder->get($filename);
-		if (!$folder->nodeExists($filename) || $file->getID() !== $page->getId()) {
-			throw new PageDoesNotExistException();
-		}
+		$file = $this->getFileById($folder, $page->getId());
 
+		$newFilename = $page->getTitle() . self::SUFFIX;
+		$file->move($folder->getPath() . '/' . $newFilename);
 		$file->putContent($page->getContent());
 		return $page;
 	}
@@ -167,10 +182,11 @@ class PageMapper {
 	/**
 	 * @param Page $page
 	 *
+	 * @throws InvalidPathException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
 	 * @throws PageDoesNotExistException
-	 * @throws \OCP\Files\InvalidPathException
-	 * @throws \OCP\Files\NotFoundException
-	 * @throws \OCP\Files\NotPermittedException
+	 * @throws PagesFolderException
 	 */
 	public function delete(Page $page): void {
 		$folder = $this->getFolderForUser($page->getUserId());
