@@ -3,9 +3,12 @@
 namespace OCA\Wiki\Tests\Integration\Controller;
 
 use OCA\Wiki\Controller\PageController;
-use OCA\Wiki\Service\PageService;
+use OCA\Wiki\Db\Page;
+use OCA\Wiki\Fs\PageMapper;
+use OCA\Wiki\Service\PageDoesNotExistException;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\App;
+use OCP\Files\AlreadyExistsException;
 use OCP\IRequest;
 use PHPUnit\Framework\TestCase;
 
@@ -18,7 +21,7 @@ use PHPUnit\Framework\TestCase;
 class PageIntegrationTest extends TestCase {
 
     private $controller;
-    private $service;
+    private $mapper;
     private $userId = 'jane';
 
     public function setUp(): void {
@@ -36,7 +39,7 @@ class PageIntegrationTest extends TestCase {
         });
 
         $this->controller = $container->query(PageController::class);
-        $this->service = $container->query(PageService::class);
+        $this->mapper = $container->query(PageMapper::class);
     }
 
     public function testAppInstalled(): void {
@@ -46,13 +49,25 @@ class PageIntegrationTest extends TestCase {
 
     public function testUpdatePage(): void {
         // create a new page that should be updated
-        $page = $this->service->create('old_title', 'old_content', $this->userId);
+		$page = new Page();
+		$page->setTitle('titleasdf23abadb');
+		$page->setContent('content');
+		$page->setUserId($this->userId);
+        $page = $this->mapper->insert($page);
+        var_dump($page);
 
-        $updatedPage = $this->service->update($page->getId(), 'title', 'content', $this->userId);
+        $page->setTitle('new_title');
+        $page->setContent('new_content');
 
-        $this->assertEquals($updatedPage, $this->service->find($page->getId(), $this-userId));
+        try {
+			$page = $this->mapper->update($page);
+		} catch (PageDoesNotExistException $e) {
+			$this->mapper->delete($page);
+		}
+
+        $this->assertEquals($this->mapper->find($page->getId()->getTitle()), 'new_title');
 
         // clean up
-        $this->service->delete($page->getId(), $this->userId);
+        $this->mapper->delete($page);
     }
 }
