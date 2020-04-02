@@ -52,7 +52,6 @@ class PageService {
 	 * @param string $userId
 	 *
 	 * @return Page
-	 * @throws NotFoundException
 	 */
 	public function find(int $id, string $userId): Page {
 		try {
@@ -88,7 +87,6 @@ class PageService {
 	 * @param string $userId
 	 *
 	 * @return Page
-	 * @throws NotFoundException
 	 */
 	public function update(int $id, string $title, string $content, string $userId): Page {
 		try {
@@ -108,7 +106,6 @@ class PageService {
 	 * @param string $userId
 	 *
 	 * @return Page
-	 * @throws NotFoundException
 	 */
 	public function delete(int $id, string $userId) {
 		try {

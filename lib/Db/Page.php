@@ -40,10 +40,6 @@ class Page extends Entity implements JsonSerializable {
 	 * @param string $userId
 	 *
 	 * @return static
-	 * @throws \OCP\Files\InvalidPathException
-	 * @throws \OCP\Files\NotFoundException
-	 * @throws \OCP\Files\NotPermittedException
-	 * @throws \OCP\Lock\LockedException
 	 */
 	public static function fromFile(File $file, Folder $pagesFolder, string $userId): Page {
 		$page = new static();
