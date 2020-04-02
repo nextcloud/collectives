@@ -76,8 +76,7 @@ class PageService {
 		$page = new Page();
 		$page->setTitle($title);
 		$page->setContent($content);
-		$page->setUserId($userId);
-		return $this->mapper->insert($page);
+		return $this->mapper->insert($page, $userId);
 	}
 
 	/**
@@ -94,8 +93,7 @@ class PageService {
 			$page->setId($id);
 			$page->setTitle($title);
 			$page->setContent($content);
-			$page->setUserId($userId);
-			return $this->mapper->update($page);
+			return $this->mapper->update($page, $userId);
 		} catch(Exception $e) {
 			$this->handleException($e);
 		}
@@ -110,7 +108,7 @@ class PageService {
 	public function delete(int $id, string $userId) {
 		try {
 			$page = $this->mapper->find($id, $userId);
-			$this->mapper->delete($page);
+			$this->mapper->delete($page, $userId);
 			return $page;
 		} catch(Exception $e) {
 			$this->handleException($e);

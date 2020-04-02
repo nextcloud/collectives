@@ -19,18 +19,15 @@ class PageMapper {
 
 	private $root;
 	private $logger;
-	private $userId;
 	private $appName;
 
 	public function __construct(
 		IDBConnection $db,
 		IRootFolder $root,
 		ILogger $logger,
-		string $userId,
 		string $appName) {
 		$this->root = $root;
 		$this->logger = $logger;
-		$this->userId = $userId;
 		$this->appName = $appName;
 	}
 
@@ -78,13 +75,12 @@ class PageMapper {
 
 	/**
 	 * @param File   $file
-	 * @param Folder $pagesFolder
 	 *
 	 * @return Page
 	 */
-	private function getPage(File $file, Folder $pagesFolder): Page {
+	private function getPage(File $file): Page {
 		$id = $file->getId();
-		return Page::fromFile($file, $pagesFolder, $this->userId);
+		return Page::fromFile($file);
 	}
 
 	/**
@@ -95,8 +91,7 @@ class PageMapper {
 	 */
 	public function find(int $id, string $userId): Page {
 		$folder = $this->getFolderForUser($userId);
-		//var_dump($folder);
-		return $this->getPage($this->getFileById($folder, $id), $folder);
+		return $this->getPage($this->getFileById($folder, $id));
 	}
 
 	/**
@@ -108,18 +103,19 @@ class PageMapper {
 		$pages = [];
 		$folder = $this->getFolderForUser($userId);
 		foreach ($folder->getDirectoryListing() as $page) {
-			$pages[] = $this->getPage($page, $folder);
+			$pages[] = $this->getPage($page);
 		}
 		return $pages;
 	}
 
 	/**
 	 * @param Page $page
+	 * @param string $userId
 	 *
 	 * @return Page
 	 */
-	public function insert(Page $page): Page {
-		$folder = $this->getFolderForUser($page->getUserId());
+	public function insert(Page $page, string $userId): Page {
+		$folder = $this->getFolderForUser($userId);
 		$filename = $page->getTitle() . self::SUFFIX;
 		if ($folder->nodeExists($filename)) {
 			throw new AlreadyExistsException('page ' . $filename . ' already exists');
@@ -136,12 +132,13 @@ class PageMapper {
 	 * dynamically generated and filename conflicts are are resolved
 	 *
 	 * @param Page $page
+	 * @param string $userId
 	 *
 	 * @return Page
 	 * @throws PageDoesNotExistException if note does not exist
 	 */
-	public function update(Page $page): Page {
-		$folder = $this->getFolderForUser($page->getUserId());
+	public function update(Page $page, string $userId): Page {
+		$folder = $this->getFolderForUser($userId);
 		$file = $this->getFileById($folder, $page->getId());
 
 		// Rename file if title changed
@@ -158,14 +155,15 @@ class PageMapper {
 
 		$file->putContent($page->getContent());
 
-		return $this->getPage($file, $folder);
+		return $this->getPage($file);
 	}
 
 	/**
 	 * @param Page $page
+	 * @param string $userId
 	 */
-	public function delete(Page $page): void {
-		$folder = $this->getFolderForUser($page->getUserId());
+	public function delete(Page $page, string $userId): void {
+		$folder = $this->getFolderForUser($userId);
 		$file = $this->getFileById($folder, $page->getId());
 		$file->delete();
 	}
