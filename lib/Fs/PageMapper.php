@@ -9,21 +9,29 @@ use OCP\Files\AlreadyExistsException;
 use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
+use OCP\Files\NotPermittedException;
 use OCP\IDBConnection;
+use OCP\ILogger;
 
 class PageMapper {
 	private const SUFFIX = '.md';
 	private const WIKI_FOLDER = 'Wiki';
 
 	private $root;
+	private $logger;
 	private $userId;
+	private $appName;
 
 	public function __construct(
 		IDBConnection $db,
 		IRootFolder $root,
-		string $userId) {
+		ILogger $logger,
+		string $userId,
+		string $appName) {
 		$this->root = $root;
+		$this->logger = $logger;
 		$this->userId = $userId;
+		$this->appName = $appName;
 	}
 
 	/**
@@ -124,6 +132,9 @@ class PageMapper {
 	}
 
 	/**
+	 * Updates a note. Be sure to check the returned note since the title is
+	 * dynamically generated and filename conflicts are are resolved
+	 *
 	 * @param Page $page
 	 *
 	 * @return Page
@@ -133,10 +144,21 @@ class PageMapper {
 		$folder = $this->getFolderForUser($page->getUserId());
 		$file = $this->getFileById($folder, $page->getId());
 
+		// Rename file if title changed
 		$newFilename = $page->getTitle() . self::SUFFIX;
-		$file->move($folder->getPath() . '/' . $newFilename);
+		if ($newFilename !== $file->getName()) {
+			try {
+				$file->move($folder->getPath() . '/' . $newFilename);
+			} catch (NotPermittedException $e) {
+				$err = 'Moving page ' . $page->getId() . ' (' . $newFilename . ') to the desired targed is not allowed.';
+				$this->logger->error($err, ['app' => $this->appName]);
+			}
+		}
+
+
 		$file->putContent($page->getContent());
-		return $page;
+
+		return $this->getPage($file, $folder);
 	}
 
 	/**
