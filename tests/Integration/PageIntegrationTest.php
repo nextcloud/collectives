@@ -42,11 +42,6 @@ class PageIntegrationTest extends TestCase {
         $this->mapper = $container->query(PageMapper::class);
     }
 
-    public function testAppInstalled(): void {
-        $appManager = $this->controller->query('OCP\App\IAppManager');
-        $this->assertTrue($appManager->isInstalled('wiki'));
-    }
-
     public function testUpdatePage(): void {
         // create a new page that should be updated
 		$page = new Page();
