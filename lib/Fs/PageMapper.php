@@ -102,8 +102,8 @@ class PageMapper {
 	public function findAll(string $userId): array {
 		$pages = [];
 		$folder = $this->getFolderForUser($userId);
-		foreach ($folder->getDirectoryListing() as $page) {
-			$pages[] = $this->getPage($page);
+		foreach ($folder->getDirectoryListing() as $file) {
+			$pages[] = $this->getPage($file);
 		}
 		return $pages;
 	}
