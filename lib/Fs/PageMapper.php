@@ -147,7 +147,7 @@ class PageMapper {
 			try {
 				$file->move($folder->getPath() . '/' . $newFilename);
 			} catch (NotPermittedException $e) {
-				$err = 'Moving page ' . $page->getId() . ' (' . $newFilename . ') to the desired targed is not allowed.';
+				$err = 'Moving page ' . $page->getId() . ' (' . $newFilename . ') to the desired target is not allowed.';
 				$this->logger->error($err, ['app' => $this->appName]);
 			}
 		}
