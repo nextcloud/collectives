@@ -52,7 +52,6 @@ class PageService {
 	 * @param string $userId
 	 *
 	 * @return Page
-	 * @throws NotFoundException
 	 */
 	public function find(int $id, string $userId): Page {
 		try {
@@ -77,8 +76,7 @@ class PageService {
 		$page = new Page();
 		$page->setTitle($title);
 		$page->setContent($content);
-		$page->setUserId($userId);
-		return $this->mapper->insert($page);
+		return $this->mapper->insert($page, $userId);
 	}
 
 	/**
@@ -88,7 +86,6 @@ class PageService {
 	 * @param string $userId
 	 *
 	 * @return Page
-	 * @throws NotFoundException
 	 */
 	public function update(int $id, string $title, string $content, string $userId): Page {
 		try {
@@ -96,8 +93,7 @@ class PageService {
 			$page->setId($id);
 			$page->setTitle($title);
 			$page->setContent($content);
-			$page->setUserId($userId);
-			return $this->mapper->update($page);
+			return $this->mapper->update($page, $userId);
 		} catch(Exception $e) {
 			$this->handleException($e);
 		}
@@ -108,12 +104,11 @@ class PageService {
 	 * @param string $userId
 	 *
 	 * @return Page
-	 * @throws NotFoundException
 	 */
 	public function delete(int $id, string $userId) {
 		try {
 			$page = $this->mapper->find($id, $userId);
-			$this->mapper->delete($page);
+			$this->mapper->delete($page, $userId);
 			return $page;
 		} catch(Exception $e) {
 			$this->handleException($e);
