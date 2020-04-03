@@ -18,8 +18,6 @@ class PageMapper extends QBMapper {
 	 * @param string $userId
 	 *
 	 * @return Entity|Page
-	 * @throws DoesNotExistException
-	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 */
 	public function find(int $id, string $userId): Entity {
 		/** @var $qb IQueryBuilder */

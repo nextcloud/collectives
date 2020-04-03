@@ -16,15 +16,12 @@ use OCP\Files\Folder;
  * @method void setTitle(string $value)
  * @method string getContent()
  * @method void setContent(string $value)
- * @method string getUserId()
- * @method void setUserId(string $value)
  */
 class Page extends Entity implements JsonSerializable {
 	private const SUFFIX = '.md';
 
 	protected $title;
 	protected $content;
-	protected $userId;
 
 	public function jsonSerialize() {
 		return [
@@ -36,21 +33,14 @@ class Page extends Entity implements JsonSerializable {
 
 	/**
 	 * @param File   $file
-	 * @param Folder $pagesFolder
-	 * @param string $userId
 	 *
 	 * @return static
-	 * @throws \OCP\Files\InvalidPathException
-	 * @throws \OCP\Files\NotFoundException
-	 * @throws \OCP\Files\NotPermittedException
-	 * @throws \OCP\Lock\LockedException
 	 */
-	public static function fromFile(File $file, Folder $pagesFolder, string $userId): Page {
+	public static function fromFile(File $file): Page {
 		$page = new static();
 		$page->setId($file->getId());
 		$page->setTitle(basename($file->getName(), self::SUFFIX));
 		$page->setContent($file->getContent());
-		$page->setUserId($userId);
 		return $page;
 	}
 }
