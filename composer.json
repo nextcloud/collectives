@@ -4,8 +4,7 @@
     "license": "AGPL",
     "authors": [
         {
-            "name": "Jonas Meurer",
-            "email": "jonas@freesources.org"
+            "name": "CollectiveCloud Team"
         }
     ],
     "require": {},
