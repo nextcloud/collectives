@@ -13,12 +13,11 @@ return [
 		'page_api' => ['url' => '/api/0.1/pages']
 	],
 	'routes' => [
-		// wikis
+		// default route
 		['name' => 'wiki#index', 'url' => '/', 'verb' => 'GET'],
-		['name' => 'wiki#show', 'url' => '/show', 'verb' => 'GET'],
 
 		// api
 		['name' => 'page_api#preflighted_cors', 'url' => '/api/0.1/{path}',
-			'verb' => 'OPTIONS', 'requirements' => ['path' => '.+']],
+		 'verb' => 'OPTIONS', 'requirements' => ['path' => '.+']],
 	]
 ];
