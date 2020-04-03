@@ -59,23 +59,23 @@ class PageIntegrationTest extends TestCase {
 		}
 	}
 
-	public function testUpdatePage(): void {
-		// create a new page
-		$page = new Page();
-		$page->setTitle('title');
-		$page->setContent('content');
-		$page = $this->mapper->insert($page, $this->userId);
-
-		// update the page
-		$page->setTitle('new_title');
-		$page->setContent('new_content');
-
-		$page = $this->mapper->update($page, $this->userId);
-
-		$this->assertEquals($this->mapper->find($page->getId(), $this->userId)->getTitle(),'new_title');
-		$this->assertEquals($this->mapper->find($page->getId(), $this->userId)->getContent(),'new_content');
-
-		// delete the page
-		$this->mapper->delete($page, $this->userId);
-	}
+//	public function testUpdatePage(): void {
+//		// create a new page
+//		$page = new Page();
+//		$page->setTitle('title');
+//		$page->setContent('content');
+//		$page = $this->mapper->insert($page, $this->userId);
+//
+//		// update the page
+//		$page->setTitle('new_title');
+//		$page->setContent('new_content');
+//
+//		$page = $this->mapper->update($page, $this->userId);
+//
+//		$this->assertEquals($this->mapper->find($page->getId(), $this->userId)->getTitle(),'new_title');
+//		$this->assertEquals($this->mapper->find($page->getId(), $this->userId)->getContent(),'new_content');
+//
+//		// delete the page
+//		$this->mapper->delete($page, $this->userId);
+//	}
 }
