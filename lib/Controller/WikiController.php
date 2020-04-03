@@ -25,9 +25,4 @@ class WikiController extends Controller {
 	public function index(): TemplateResponse {
 		return new TemplateResponse('wiki', 'main');  // templates/main.php
 	}
-
-	public function show() {
-		// to be implemented
-	}
-
 }
