@@ -4,7 +4,6 @@ namespace OCA\Wiki\Service;
 
 use Exception;
 use OCA\Wiki\Db\Page;
-//use OCA\Wiki\Db\PageMapper;
 use OCA\Wiki\Fs\PageMapper;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
