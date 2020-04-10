@@ -89,7 +89,6 @@ class PageService {
 	public function update(int $id, string $title, string $content, string $userId): Page {
 		try {
 			$page = $this->mapper->find($id, $userId);
-			$page->setId($id);
 			$page->setTitle($title);
 			$page->setContent($content);
 			return $this->mapper->update($page, $userId);
@@ -104,7 +103,7 @@ class PageService {
 	 *
 	 * @return Page
 	 */
-	public function delete(int $id, string $userId) {
+	public function delete(int $id, string $userId): Page {
 		try {
 			$page = $this->mapper->find($id, $userId);
 			$this->mapper->delete($page, $userId);
