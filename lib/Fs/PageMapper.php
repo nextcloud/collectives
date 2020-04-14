@@ -11,6 +11,7 @@ use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotPermittedException;
 use OCP\IDBConnection;
+use OCP\IL10N;
 use OCP\ILogger;
 
 class PageMapper {
@@ -18,16 +19,19 @@ class PageMapper {
 	private const WIKI_FOLDER = 'Wiki';
 
 	private $db;
+	private $l10n;
 	private $root;
 	private $logger;
 	private $appName;
 
 	public function __construct(
 		IDBConnection $db,
+		IL10N $l10n,
 		IRootFolder $root,
 		ILogger $logger,
 		string $appName) {
 		$this->db = $db;
+		$this->l10n = $l10n;
 		$this->root = $root;
 		$this->logger = $logger;
 		$this->appName = $appName;
@@ -145,7 +149,7 @@ class PageMapper {
 		$title = trim($title);
 
 		if (empty($title)) {
-			$title = 'New Page';
+			$title = $this->l10n->t('New Page');
 		}
 
 		return $title;

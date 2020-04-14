@@ -6,11 +6,13 @@ use OC\Files\Node\Folder;
 use OCA\Wiki\Fs\PageMapper;
 use OCP\Files\IRootFolder;
 use OCP\IDBConnection;
+use OCP\IL10N;
 use OCP\ILogger;
 use PHPUnit\Framework\TestCase;
 
 class PageMapperTest extends TestCase {
 	private $db;
+	private $l10n;
 	private $root;
 	private $logger;
 	private $appName = 'wiki';
@@ -23,6 +25,9 @@ class PageMapperTest extends TestCase {
 		$this->db = $this->getMockBuilder(IDBConnection::class)
 			->disableOriginalConstructor()
 			->getMock();
+		$this->l10n = $this->getMockBuilder(IL10N::class)
+			->disableOriginalConstructor()
+			->getMock();
 		$this->root = $this->getMockBuilder(IRootFolder::class)
 			->disableOriginalConstructor()
 			->getMock();
@@ -30,7 +35,7 @@ class PageMapperTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
-		$this->mapper = new PageMapper($this->db, $this->root, $this->logger, $this->appName);
+		$this->mapper = new PageMapper($this->db, $this->l10n, $this->root, $this->logger, $this->appName);
 	}
 
 	public function titleProvider(): array {
@@ -56,6 +61,9 @@ class PageMapperTest extends TestCase {
 	 * @param string $output
 	 */
 	public function testSanitiseTitle(string $input, string $output): void {
+		$this->l10n->method('t')
+			->willReturn('New Page');
+
 		$this->assertEquals($output, $this->mapper->sanitiseTitle($input));
 		$this->mapper->sanitiseTitle('abc');
 
