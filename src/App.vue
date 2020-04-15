@@ -170,6 +170,9 @@ export default {
 				const index = this.pages.findIndex((match) => match.id === this.currentPageId)
 				this.$set(this.pages, index, response.data)
 				this.currentPageId = response.data.id
+				// Update title as it might have changed due to filename conflict handling
+				const response2 = await axios.get(OC.generateUrl(`/apps/wiki/pages/${response.data.id}`))
+				this.currentPage.title = response2.data.title
 			} catch (e) {
 				console.error(e)
 				OCP.Toast.error(t('wiki', 'Could not create the page'))
@@ -184,6 +187,9 @@ export default {
 			this.updating = true
 			try {
 				await axios.put(OC.generateUrl(`/apps/wiki/pages/${page.id}`), page)
+				// Update title as it might have changed due to filename conflict handling
+				const response = await axios.get(OC.generateUrl(`/apps/wiki/pages/${page.id}`))
+				this.currentPage.title = response.data.title
 			} catch (e) {
 				console.error(e)
 				OCP.Toast.error(t('wiki', 'Could not update the page'))
