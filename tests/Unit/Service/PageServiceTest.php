@@ -34,31 +34,23 @@ class PageServiceTest extends TestCase {
 		$this->service = new PageService($this->mapper);
 	}
 
-	/**
-	 * @expectedException \OCA\Wiki\Service\NotFoundException
-	 */
 	public function testHandleExceptionDoesNotExistException(): void {
+		$this->expectException(\OCA\Wiki\Service\NotFoundException::class);
 		$this->service->handleException(new DoesNotExistException('msg'));
 	}
 
-	/**
-	 * @expectedException \OCA\Wiki\Service\NotFoundException
-	 */
 	public function testHandleExceptionMultipleObjectsReturnedException(): void {
+		$this->expectException(\OCA\Wiki\Service\NotFoundException::class);
 		$this->service->handleException(new MultipleObjectsReturnedException('msg'));
 	}
 
-	/**
-	 * @expectedException \OCA\Wiki\Service\NotFoundException
-	 */
 	public function testHandleExceptionAlreadyExistsException(): void {
+		$this->expectException(\OCA\Wiki\Service\NotFoundException::class);
 		$this->service->handleException(new AlreadyExistsException('msg'));
 	}
 
-	/**
-	 * @expectedException \OCA\Wiki\Service\NotFoundException
-	 */
 	public function testHandleExceptionPageDoesNotExistException(): void {
+		$this->expectException(\OCA\Wiki\Service\NotFoundException::class);
 		$this->service->handleException(new PageDoesNotExistException('msg'));
 	}
 
