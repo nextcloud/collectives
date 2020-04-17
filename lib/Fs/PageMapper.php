@@ -99,7 +99,7 @@ class PageMapper {
 	public static function generateFilename(Folder $folder, string $filename): string {
 		$path = $filename . self::SUFFIX;
 		if (!$folder->nodeExists($path)) {
-			return $path;
+			return $filename;
 		}
 
 		// Append ' (#)' if filename conflict ('#' starting at 2 and incremented if necessary)
@@ -191,9 +191,9 @@ class PageMapper {
 		$safeTitle = $this->sanitiseTitle($page->getTitle());
 		$filename = self::generateFilename($folder, $safeTitle);
 
-		$file = $folder->newFile($filename);
+		$file = $folder->newFile($filename . self::SUFFIX);
 		$page->setId($file->getId());
-		$page->setTitle($safeTitle);
+		$page->setTitle($filename);
 		$file->putContent($page->getContent());
 		return $page;
 	}
@@ -217,14 +217,14 @@ class PageMapper {
 		if ($safeTitle . self::SUFFIX !== $file->getName()) {
 			$newFilename = self::generateFilename($folder, $safeTitle);
 			try {
-				$file->move($folder->getPath() . '/' . $newFilename);
+				$file->move($folder->getPath() . '/' . $newFilename . self::SUFFIX);
 			} catch (NotPermittedException $e) {
-				$err = 'Moving page ' . $page->getId() . ' (' . $newFilename . ') to the desired target is not allowed.';
+				$err = 'Moving page ' . $page->getId() . ' (' . $newFilename . self::SUFFIX . ') to the desired target is not allowed.';
 				$this->logger->error($err, ['app' => $this->appName]);
 			}
+			$page->setTitle($newFilename);
 		}
 
-		$page->setTitle($safeTitle);
 		$file->putContent($page->getContent());
 
 		return $this->getPage($file);

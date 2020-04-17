@@ -71,14 +71,14 @@ class PageMapperTest extends TestCase {
 
 	public function filenameProvider(): array {
 		return [
-			['File exists1', 'File exists1 (2).md'],
-			['File exists2', 'File exists2 (4).md'],
-			['File exists2 (3)', 'File exists2 (4).md'],
-			['File exists3', 'File exists3 (2).md'],
-			['File exists4 (9)', 'File exists4 (10).md'],
-			['File exists5 (1i)', 'File exists5 (1i) (2).md'],
-			['File new', 'File new.md'],
-			[' (2)', ' (3).md']
+			['File exists1', 'File exists1 (2)'],
+			['File exists2', 'File exists2 (4)'],
+			['File exists2 (3)', 'File exists2 (4)'],
+			['File exists3', 'File exists3 (2)'],
+			['File exists4 (9)', 'File exists4 (10)'],
+			['File exists5 (1i)', 'File exists5 (1i) (2)'],
+			['File new', 'File new'],
+			[' (2)', ' (3)']
 		];
 
 	}
