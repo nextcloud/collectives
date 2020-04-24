@@ -1,14 +1,23 @@
 <?php
 namespace OCA\Wiki\Controller;
 
+use OCA\Viewer\Event\LoadViewer;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IRequest;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Controller;
 
 class WikiController extends Controller {
-	public function __construct($AppName, IRequest $request){
+	/** @var IEventDispatcher */
+	private $eventDispatcher;
+
+	public function __construct(string $AppName,
+								IRequest $request,
+								IEventDispatcher $eventDispatcher
+	){
 		parent::__construct($AppName, $request);
+		$this->eventDispatcher = $eventDispatcher;
 	}
 
 	/**
@@ -23,6 +32,7 @@ class WikiController extends Controller {
 	 * @return TemplateResponse
 	 */
 	public function index(): TemplateResponse {
+		$this->eventDispatcher->dispatch(LoadViewer::class, new LoadViewer());
 		return new TemplateResponse('wiki', 'main');  // templates/main.php
 	}
 }
