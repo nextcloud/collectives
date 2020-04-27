@@ -18,9 +18,5 @@ return [
 		 'requirements' => ['id' => '\d+']],
 		['name' => 'page#destroy', 'url' => '/pages/{id}', 'verb' => 'DELETE',
 		 'requirements' => ['id' => '\d+']],
-
-		// API
-		['name' => 'page_api#preflighted_cors', 'url' => '/api/0.1/{path}',
-		 'verb' => 'OPTIONS', 'requirements' => ['path' => '.+']],
 	]
 ];
