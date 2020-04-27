@@ -35,19 +35,6 @@ class PageController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 *
-	 * @param int $id
-	 *
-	 * @return DataResponse
-	 */
-	public function show(int $id): DataResponse {
-		return $this->handleNotFound(function() use ($id) {
-			return $this->service->find($id, $this->userId);
-		});
-	}
-
-	/**
-	 * @NoAdminRequired
-	 *
 	 * @param string $title
 	 * @param string $content
 	 *
