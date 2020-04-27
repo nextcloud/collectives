@@ -69,28 +69,27 @@ class PageServiceTest extends TestCase {
 		$this->assertEquals($this->page, $newPage);
 	}
 
-	public function testUpdate(): void {
+	public function testRename(): void {
 		$this->mapper->expects($this->once())
 			->method('find')
 			->with($this->equalTo($this->pageId))
 			->willReturn($this->page);
 
 		// New values for page
-		$updatedPageTitle = 'new_title2';
-		$updatedPageContent = 'new_content';
+		$renamedPageTitle = 'new_title2';
 
-		// Updated page
-		$updatedPage = new Page();
-		$updatedPage->setId($this->pageId);
-		$updatedPage->setTitle($updatedPageTitle);
-		$updatedPage->setContent($updatedPageContent);
+		// Renamed page
+		$renamedPage = new Page();
+		$renamedPage->setId($this->pageId);
+		$renamedPage->setTitle($renamedPageTitle);
+		$renamedPage->setContent($this->pageContent);
 		$this->mapper->expects($this->once())
-			->method('update')
-			->with($this->equalTo($updatedPage))
-			->willReturn($updatedPage);
+			->method('rename')
+			->with($this->equalTo($renamedPage))
+			->willReturn($renamedPage);
 
-		$result = $this->service->update($this->pageId, $updatedPageTitle, $updatedPageContent, $this->userId);
+		$result = $this->service->rename($this->pageId, $renamedPageTitle, $this->userId);
 
-		$this->assertEquals($updatedPage, $result);
+		$this->assertEquals($renamedPage, $result);
 	}
 }

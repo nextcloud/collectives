@@ -131,17 +131,6 @@ export default {
 			this.currentPageId = page.id
 		},
 		/**
-		 * Action tiggered when clicking the save button
-		 * create a new page or save
-		 */
-		savePage() {
-			if (this.currentPageId === -1) {
-				this.createPage(this.currentPage)
-			} else {
-				this.updatePage(this.currentPage)
-			}
-		},
-		/**
 		 * Create a new page and focus the page content field automatically
 		 * The page is not yet saved, therefore an id of -1 is used until it
 		 * has been persisted in the backend
@@ -179,10 +168,10 @@ export default {
 			this.updating = false
 		},
 		/**
-		 * Update an existing page on the server
+		 * Rename a page on the server
 		 * @param {Object} page Page object
 		 */
-		async updatePage(page) {
+		async renamePage(page) {
 			this.updating = true
 			try {
 				const response = await axios.put(OC.generateUrl(`/apps/wiki/pages/${page.id}`), page)
@@ -190,7 +179,7 @@ export default {
 				this.currentPage.title = response.data.title
 			} catch (e) {
 				console.error(e)
-				OCP.Toast.error(t('wiki', 'Could not update the page'))
+				OCP.Toast.error(t('wiki', 'Could not rename the page'))
 			}
 			this.updating = false
 		},

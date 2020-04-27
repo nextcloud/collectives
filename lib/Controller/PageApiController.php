@@ -76,10 +76,10 @@ class PageApiController extends ApiController {
 	 *
 	 * @return DataResponse
 	 */
-	public function update(int $id, string $title,
+	public function rename(int $id, string $title,
 						   string $content): DataResponse {
 		return $this->handleNotFound(function () use ($id, $title, $content) {
-			return $this->service->update($id, $title, $content, $this->userId);
+			return $this->service->rename($id, $title, $this->userId);
 		});
 	}
 

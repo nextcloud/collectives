@@ -81,17 +81,15 @@ class PageService {
 	/**
 	 * @param int    $id
 	 * @param string $title
-	 * @param string $content
 	 * @param string $userId
 	 *
 	 * @return Page
 	 */
-	public function update(int $id, string $title, string $content, string $userId): Page {
+	public function rename(int $id, string $title, string $userId): Page {
 		try {
 			$page = $this->mapper->find($id, $userId);
 			$page->setTitle($title);
-			$page->setContent($content);
-			return $this->mapper->update($page, $userId);
+			return $this->mapper->rename($page, $userId);
 		} catch(Exception $e) {
 			$this->handleException($e);
 		}

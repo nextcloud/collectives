@@ -203,8 +203,8 @@ class PageMapper {
 	}
 
 	/**
-	 * Updates a note. Be sure to check the returned note since the title is
-	 * dynamically generated and filename conflicts are are resolved
+	 * Renames a note. Be sure to check the returned note since the title is
+	 * dynamically generated and filename conflicts are resolved
 	 *
 	 * @param Page $page
 	 * @param string $userId
@@ -212,7 +212,7 @@ class PageMapper {
 	 * @return Page
 	 * @throws PageDoesNotExistException if note does not exist
 	 */
-	public function update(Page $page, string $userId): Page {
+	public function rename(Page $page, string $userId): Page {
 		$folder = $this->getFolderForUser($userId);
 		$file = $this->getFileById($folder, $page->getId());
 		$safeTitle = $this->sanitiseTitle($page->getTitle());
@@ -228,8 +228,6 @@ class PageMapper {
 			}
 			$page->setTitle($newFilename);
 		}
-
-		$file->putContent($page->getContent());
 
 		return $this->getPage($file);
 	}
