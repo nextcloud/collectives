@@ -190,7 +190,7 @@ class PageMapper {
 	 *
 	 * @return Page
 	 */
-	public function insert(Page $page, string $userId): Page {
+	public function create(Page $page, string $userId): Page {
 		$folder = $this->getFolderForUser($userId);
 		$safeTitle = $this->sanitiseTitle($page->getTitle());
 		$filename = self::generateFilename($folder, $safeTitle);
@@ -198,7 +198,6 @@ class PageMapper {
 		$file = $folder->newFile($filename . self::SUFFIX);
 		$page->setId($file->getId());
 		$page->setTitle($filename);
-		$file->putContent($page->getContent());
 		return $page;
 	}
 

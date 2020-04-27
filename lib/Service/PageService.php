@@ -66,16 +66,14 @@ class PageService {
 
 	/**
 	 * @param string $title
-	 * @param string $content
 	 * @param string $userId
 	 *
 	 * @return Page
 	 */
-	public function create(string $title, string $content, string $userId): Page {
+	public function create(string $title, string $userId): Page {
 		$page = new Page();
 		$page->setTitle($title);
-		$page->setContent($content);
-		return $this->mapper->insert($page, $userId);
+		return $this->mapper->create($page, $userId);
 	}
 
 	/**

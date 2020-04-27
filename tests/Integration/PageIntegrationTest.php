@@ -63,7 +63,7 @@ class PageIntegrationTest extends TestCase {
 //		// create a new page
 //		$page = new Page();
 //		$page->setTitle('title');
-//		$page = $this->mapper->insert($page, $this->userId);
+//		$page = $this->mapper->create($page, $this->userId);
 //
 //		// rename the page
 //		$page->setTitle('new_title');

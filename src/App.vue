@@ -138,7 +138,6 @@ export default {
 		newPage() {
 			const page = {
 				title: 'New Page',
-				content: '# New Page',
 			}
 			this.createPage(page)
 		},

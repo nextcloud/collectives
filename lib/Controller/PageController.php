@@ -36,12 +36,11 @@ class PageController extends Controller {
 	 * @NoAdminRequired
 	 *
 	 * @param string $title
-	 * @param string $content
 	 *
 	 * @return Entity
 	 */
-	public function create(string $title, string $content): Entity {
-		return $this->service->create($title, $content, $this->userId);
+	public function create(string $title): Entity {
+		return $this->service->create($title, $this->userId);
 	}
 
 	/**

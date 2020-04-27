@@ -19,7 +19,6 @@ class PageServiceTest extends TestCase {
 	private $page;
 	private $pageId = 2;
 	private $pageTitle = 'title';
-	private $pageContent = 'content';
 
 	protected function setUp(): void {
 		$this->mapper = $this->getMockBuilder(PageMapper::class)
@@ -29,7 +28,6 @@ class PageServiceTest extends TestCase {
 		$this->page = new Page();
 		$this->page->setId($this->pageId);
 		$this->page->setTitle($this->pageTitle);
-		$this->page->setContent($this->pageContent);
 
 		$this->service = new PageService($this->mapper);
 	}
@@ -57,14 +55,13 @@ class PageServiceTest extends TestCase {
 	public function testCreate(): void {
 		$newPage = new Page();
 		$newPage->setTitle($this->pageTitle);
-		$newPage->setContent($this->pageContent);
 
 		$this->mapper->expects($this->once())
-			->method('insert')
+			->method('create')
 			->with($this->equalTo($newPage))
 			->willReturn($this->page);
 
-		$newPage = $this->service->create($this->pageTitle, $this->pageContent, $this->userId);
+		$newPage = $this->service->create($this->pageTitle, $this->userId);
 
 		$this->assertEquals($this->page, $newPage);
 	}
@@ -82,7 +79,6 @@ class PageServiceTest extends TestCase {
 		$renamedPage = new Page();
 		$renamedPage->setId($this->pageId);
 		$renamedPage->setTitle($renamedPageTitle);
-		$renamedPage->setContent($this->pageContent);
 		$this->mapper->expects($this->once())
 			->method('rename')
 			->with($this->equalTo($renamedPage))
