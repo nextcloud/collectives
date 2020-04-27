@@ -30,16 +30,14 @@
 		</AppNavigation>
 		<AppContent>
 			<div v-if="currentPage">
-				<input ref="title"
-					v-model="currentPage.title"
-					type="text"
-					:disabled="updating">
-				<textarea ref="content" v-model="currentPage.content" :disabled="updating" />
-				<input type="button"
-					class="primary"
-					:value="t('wiki', 'Save')"
-					:disabled="updating || !savePossible"
-					@click="savePage">
+				<component
+					:is="handler.component"
+					:key="currentPage.id"
+					:fileid="currentPage.id"
+					mime="text/markdown"
+					:active="true"
+					v-bind="currentPage"
+					class="file-view active" />
 			</div>
 			<div v-else id="emptycontent">
 				<div class="icon-file" />
@@ -87,6 +85,10 @@ export default {
 			return this.pages.find((page) => page.id === this.currentPageId)
 		},
 
+		handler() {
+			return OCA.Viewer.availableHandlers.filter(h => h.mimes.indexOf('text/markdown') !== -1)[0]
+		},
+
 		/**
 		 * Returns true if a page is selected and its title is not empty
 		 * @returns {Boolean}
@@ -119,9 +121,6 @@ export default {
 				return
 			}
 			this.currentPageId = page.id
-			this.$nextTick(() => {
-				this.$refs.content.focus()
-			})
 		},
 		/**
 		 * Action tiggered when clicking the save button
@@ -140,17 +139,11 @@ export default {
 		 * has been persisted in the backend
 		 */
 		newPage() {
-			if (this.currentPageId !== -1) {
-				this.currentPageId = -1
-				this.pages.push({
-					id: -1,
-					title: '',
-					content: '',
-				})
-				this.$nextTick(() => {
-					this.$refs.title.focus()
-				})
+			const page = {
+				title: 'New Page',
+				content: '# New Page',
 			}
+			this.createPage(page)
 		},
 		/**
 		 * Abort creating a new page
@@ -167,8 +160,7 @@ export default {
 			this.updating = true
 			try {
 				const response = await axios.post(OC.generateUrl(`/apps/wiki/pages`), page)
-				const index = this.pages.findIndex((match) => match.id === this.currentPageId)
-				this.$set(this.pages, index, response.data)
+				this.pages.push(response.data)
 				this.currentPageId = response.data.id
 				// Update title as it might have changed due to filename conflict handling
 				this.currentPage.title = response.data.title
