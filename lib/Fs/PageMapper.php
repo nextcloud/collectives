@@ -119,7 +119,7 @@ class PageMapper {
 	}
 
 	/**
-	 * Removes characters that are illegal in a file or folder name on some operating systems.
+	 * Removes or replaces characters that are illegal in a file or folder name on some operating systems.
 	 * Most code copied from `Service::NoteUtil::sanitisePath()` from Notes App.
 	 *
 	 * @param string $title
@@ -127,10 +127,14 @@ class PageMapper {
 	 * @return string
 	 */
 	public function sanitiseTitle(string $title): string {
+		// replace '/' with '-' to prevent directory traversal
+		// replacing instead of stripping seems the better tradeoff here
+		$title = str_replace('/', '-', $title);
+
 		// remove characters which are illegal on Windows (includes illegal characters on Unix/Linux)
-		// prevents also directory traversal by eliminiating slashes
 		// see also \OC\Files\Storage\Common::verifyPosixPath(...)
-		$title = str_replace(['*', '|', '/', '\\', ':', '"', '<', '>', '?'], '', $title);
+		/** @noinspection CascadeStringReplacementInspection */
+		$title = str_replace(['*', '|', '\\', ':', '"', '<', '>', '?'], '', $title);
 
 		// if mysql doesn't support 4byte UTF-8, then remove those characters
 		// see \OC\Files\Storage\Common::verifyPath(...)
@@ -145,7 +149,7 @@ class PageMapper {
 		// remove leading spaces or dots to prevent hidden files
 		$title = preg_replace('/^[\. ]+/mu', '', $title);
 
-		// remove leading and appending spaces
+		// remove leading and trailing spaces
 		$title = trim($title);
 
 		if (empty($title)) {
