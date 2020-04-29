@@ -34,9 +34,11 @@
 					:is="handler.component"
 					:key="currentPage.id"
 					:fileid="currentPage.id"
+					:basename="currentFilename"
+					:filename="currentPath"
+					:has-preview="true"
 					mime="text/markdown"
 					:active="true"
-					v-bind="currentPage"
 					class="file-view active" />
 			</div>
 			<div v-else id="emptycontent">
@@ -74,6 +76,9 @@ export default {
 		}
 	},
 	computed: {
+		currentFilename() {
+			return `${this.currentPage.title}.md`
+		},
 		/**
 		 * Return the currently selected page object
 		 * @returns {Object|null}
@@ -83,6 +88,9 @@ export default {
 				return null
 			}
 			return this.pages.find((page) => page.id === this.currentPageId)
+		},
+		currentPath() {
+			return `/Wiki/${this.currentFilename}`
 		},
 
 		handler() {
