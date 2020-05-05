@@ -33,7 +33,7 @@
 				<div id="titleform">
 					{{ t('wiki', 'Title') }}:
 					<input ref="title"
-						v-model="newTitle"
+						v-model="currentPage.newTitle"
 						type="text"
 						:disabled="updating">
 					<input type="button"
@@ -105,19 +105,6 @@ export default {
 		currentPath() {
 			return `/Wiki/${this.currentFilename}`
 		},
-		newTitle: {
-			get: function () {
-				if (this.currentNewTitle === null) {
-					return this.currentPage.title
-				} else {
-					return this.currentNewTitle
-				}
-			},
-			set: function(newValue) {
-				this.currentNewTitle = newValue
-			}
-		},
-
 		handler() {
 			return OCA.Viewer.availableHandlers.filter(h => h.mimes.indexOf('text/markdown') !== -1)[0]
 		},
@@ -128,6 +115,13 @@ export default {
 		 */
 		savePossible() {
 			return this.currentPage && this.currentPage.title !== ''
+		},
+	},
+	watch: {
+		'currentPage.title': function(val, oldVal) {
+			if (!this.currentPage.newTitle) {
+				this.currentPage.newTitle = val
+			}
 		},
 	},
 	/**
@@ -186,7 +180,6 @@ export default {
 				this.currentPageId = response.data.id
 				// Update title as it might have changed due to filename conflict handling
 				this.currentPage.title = response.data.title
-				this.newTitle = response.data.title;
 			} catch (e) {
 				console.error(e)
 				OCP.Toast.error(t('wiki', 'Could not create the page'))
@@ -200,11 +193,12 @@ export default {
 		async renamePage(page) {
 			this.updating = true
 			try {
-				page.title = this.newTitle
+				page.title = page.newTitle
 				const response = await axios.put(OC.generateUrl(`/apps/wiki/pages/${page.id}`), page)
 				// Update title as it might have changed due to filename conflict handling
 				page.title = response.data.title
-				this.newTitle = response.data.title
+				// Need to explicitely update newTitle as it's already set
+				page.newTitle = response.data.title
 			} catch (e) {
 				console.error(e)
 				OCP.Toast.error(t('wiki', 'Could not rename the page'))
