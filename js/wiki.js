@@ -4228,15 +4228,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -4324,10 +4315,6 @@ __webpack_require__.r(__webpack_exports__);
      * @param {Object} page Page object
      */
     openPage(page) {
-      if (this.updating) {
-        return;
-      }
-
       this.currentPageId = page.id;
     },
 
@@ -4341,15 +4328,6 @@ __webpack_require__.r(__webpack_exports__);
         title: 'New Page'
       };
       this.createPage(page);
-    },
-
-    /**
-     * Abort creating a new page
-     */
-    cancelNewPage() {
-      this.pages.splice(this.pages.findIndex(page => page.id === -1), 1);
-      this.currentPageId = null;
-      this.newTitle = null;
     },
 
     /**
@@ -4377,16 +4355,20 @@ __webpack_require__.r(__webpack_exports__);
      * Rename a page on the server
      * @param {Object} page Page object
      */
-    async renamePage(page) {
+    async renamePage() {
+      if (this.currentPage.title === this.currentPage.newTitle) {
+        return;
+      }
+
+      const page = this.currentPage;
       this.updating = true;
 
       try {
         page.title = page.newTitle;
+        delete page.newTitle;
         const response = await _nextcloud_axios__WEBPACK_IMPORTED_MODULE_5___default.a.put(OC.generateUrl(`/apps/wiki/pages/${page.id}`), page); // Update title as it might have changed due to filename conflict handling
 
-        page.title = response.data.title; // Need to explicitely update newTitle as it's already set
-
-        page.newTitle = response.data.title;
+        page.title = response.data.title;
       } catch (e) {
         console.error(e);
         OCP.Toast.error(t('wiki', 'Could not rename the page'));
@@ -4406,7 +4388,6 @@ __webpack_require__.r(__webpack_exports__);
 
         if (this.currentPageId === page.id) {
           this.currentPageId = null;
-          this.newTitle = null;
         }
 
         OCP.Toast.success(t('wiki', 'Page deleted'));
@@ -21264,45 +21245,24 @@ var render = function() {
                     "template",
                     { slot: "actions" },
                     [
-                      page.id === -1
-                        ? _c(
-                            "ActionButton",
-                            {
-                              attrs: { icon: "icon-close" },
-                              on: {
-                                click: function($event) {
-                                  return _vm.cancelNewPage(page)
-                                }
-                              }
-                            },
-                            [
-                              _vm._v(
-                                "\n\t\t\t\t\t\t" +
-                                  _vm._s(
-                                    _vm.t("wiki", "Cancel page creation")
-                                  ) +
-                                  "\n\t\t\t\t\t"
-                              )
-                            ]
+                      _c(
+                        "ActionButton",
+                        {
+                          attrs: { icon: "icon-delete" },
+                          on: {
+                            click: function($event) {
+                              return _vm.deletePage(page)
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n\t\t\t\t\t\t" +
+                              _vm._s(_vm.t("wiki", "Delete page")) +
+                              "\n\t\t\t\t\t"
                           )
-                        : _c(
-                            "ActionButton",
-                            {
-                              attrs: { icon: "icon-delete" },
-                              on: {
-                                click: function($event) {
-                                  return _vm.deletePage(page)
-                                }
-                              }
-                            },
-                            [
-                              _vm._v(
-                                "\n\t\t\t\t\t\t" +
-                                  _vm._s(_vm.t("wiki", "Delete page")) +
-                                  "\n\t\t\t\t\t"
-                              )
-                            ]
-                          )
+                        ]
+                      )
                     ],
                     1
                   )
@@ -21337,9 +21297,13 @@ var render = function() {
                       }
                     ],
                     ref: "title",
-                    attrs: { type: "text", disabled: _vm.updating },
+                    attrs: {
+                      type: "text",
+                      disabled: _vm.updating || !_vm.savePossible
+                    },
                     domProps: { value: _vm.currentPage.newTitle },
                     on: {
+                      blur: _vm.renamePage,
                       input: function($event) {
                         if ($event.target.composing) {
                           return
@@ -21349,20 +21313,6 @@ var render = function() {
                           "newTitle",
                           $event.target.value
                         )
-                      }
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c("input", {
-                    staticClass: "primary",
-                    attrs: {
-                      type: "button",
-                      value: _vm.t("wiki", "Rename"),
-                      disabled: _vm.updating || !_vm.savePossible
-                    },
-                    on: {
-                      click: function($event) {
-                        return _vm.renamePage(_vm.currentPage)
                       }
                     }
                   })

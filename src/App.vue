@@ -14,12 +14,7 @@
 					:class="{active: currentPageId === page.id}"
 					@click="openPage(page)">
 					<template slot="actions">
-						<ActionButton v-if="page.id === -1"
-							icon="icon-close"
-							@click="cancelNewPage(page)">
-							{{ t('wiki', 'Cancel page creation') }}
-						</ActionButton>
-						<ActionButton v-else
+						<ActionButton
 							icon="icon-delete"
 							@click="deletePage(page)">
 							{{ t('wiki', 'Delete page') }}
@@ -35,12 +30,8 @@
 					<input ref="title"
 						v-model="currentPage.newTitle"
 						type="text"
-						:disabled="updating">
-					<input type="button"
-						:value="t('wiki', 'Rename')"
 						:disabled="updating || !savePossible"
-						class="primary"
-						@click="renamePage(currentPage)">
+						@blur="renamePage">
 				</div>
 				<component
 					:is="handler.component"
@@ -144,9 +135,6 @@ export default {
 		 * @param {Object} page Page object
 		 */
 		openPage(page) {
-			if (this.updating) {
-				return
-			}
 			this.currentPageId = page.id
 		},
 		/**
@@ -161,14 +149,6 @@ export default {
 			this.createPage(page)
 		},
 		/**
-		 * Abort creating a new page
-		 */
-		cancelNewPage() {
-			this.pages.splice(this.pages.findIndex((page) => page.id === -1), 1)
-			this.currentPageId = null
-			this.newTitle = null
-		},
-		/**
 		 * Create a new page by sending the information to the server
 		 * @param {Object} page Page object
 		 */
@@ -180,6 +160,7 @@ export default {
 				this.currentPageId = response.data.id
 				// Update title as it might have changed due to filename conflict handling
 				this.currentPage.title = response.data.title
+
 			} catch (e) {
 				console.error(e)
 				OCP.Toast.error(t('wiki', 'Could not create the page'))
@@ -190,15 +171,18 @@ export default {
 		 * Rename a page on the server
 		 * @param {Object} page Page object
 		 */
-		async renamePage(page) {
+		async renamePage() {
+			if (this.currentPage.title === this.currentPage.newTitle) {
+				return
+			}
+			const page = this.currentPage
 			this.updating = true
 			try {
 				page.title = page.newTitle
+				delete page.newTitle
 				const response = await axios.put(OC.generateUrl(`/apps/wiki/pages/${page.id}`), page)
 				// Update title as it might have changed due to filename conflict handling
 				page.title = response.data.title
-				// Need to explicitely update newTitle as it's already set
-				page.newTitle = response.data.title
 			} catch (e) {
 				console.error(e)
 				OCP.Toast.error(t('wiki', 'Could not rename the page'))
@@ -215,7 +199,6 @@ export default {
 				this.pages.splice(this.pages.indexOf(page), 1)
 				if (this.currentPageId === page.id) {
 					this.currentPageId = null
-					this.newTitle = null
 				}
 				OCP.Toast.success(t('wiki', 'Page deleted'))
 			} catch (e) {
