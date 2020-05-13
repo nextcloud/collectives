@@ -17,7 +17,7 @@ The Wiki app adds wiki functionality to Nextcloud.
 	<bugs>https://gitlab.com/collectivecloud/wiki/issues</bugs>
 	<repository type="git">https://gitlab.com/collectivecloud/wiki.git</repository>
 	<dependencies>
-		<nextcloud min-version="16" max-version="19" />
+		<nextcloud min-version="16" max-version="20" />
 	</dependencies>
 	<navigations>
 		<navigation>
