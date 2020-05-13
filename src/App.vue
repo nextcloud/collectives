@@ -108,11 +108,13 @@ export default {
 			return this.currentPage && this.currentPage.title !== ''
 		},
 	},
+
 	watch: {
 		'currentPage.title': function(val, oldVal) {
 			if (!this.currentPage.newTitle) {
 				this.currentPage.newTitle = val
 			}
+			document.title = this.currentPage.title + ' - Wiki - Nextcloud'
 		},
 	},
 	/**

@@ -4291,6 +4291,8 @@ __webpack_require__.r(__webpack_exports__);
       if (!this.currentPage.newTitle) {
         this.currentPage.newTitle = val;
       }
+
+      document.title = this.currentPage.title + ' - Wiki - Nextcloud';
     }
   },
 
