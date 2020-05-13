@@ -40,7 +40,8 @@ class PageMapperTest extends TestCase {
 
 	public function titleProvider(): array {
 		return [
-			['string with forbidden chars *|/\\:"<>?', 'string with forbidden chars'],
+			['string with slash /', 'string with slash -'],
+			['string with forbidden chars *|\\:"<>?', 'string with forbidden chars'],
 			["string with forbidden UTF-8 chars #1: \xF0\x90\x80\x80", 'string with forbidden UTF-8 chars #1'],
 			["string with forbidden UTF-8 chars #2: \xF0\xBF\xBF\xBF", 'string with forbidden UTF-8 chars #2'],
 			["string with forbidden UTF-8 chars #3: \xF1\x80\x80\x80", 'string with forbidden UTF-8 chars #3'],

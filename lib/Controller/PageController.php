@@ -36,12 +36,11 @@ class PageController extends Controller {
 	 * @NoAdminRequired
 	 *
 	 * @param string $title
-	 * @param string $content
 	 *
 	 * @return Entity
 	 */
-	public function create(string $title, string $content): Entity {
-		return $this->service->create($title, $content, $this->userId);
+	public function create(string $title): Entity {
+		return $this->service->create($title, $this->userId);
 	}
 
 	/**
@@ -49,13 +48,12 @@ class PageController extends Controller {
 	 *
 	 * @param int    $id
 	 * @param string $title
-	 * @param string $content
 	 *
 	 * @return DataResponse
 	 */
-	public function update(int $id, string $title, string $content): DataResponse {
-		return $this->handleNotFound(function() use ($id, $title, $content) {
-			return $this->service->update($id, $title, $content, $this->userId);
+	public function rename(int $id, string $title): DataResponse {
+		return $this->handleNotFound(function() use ($id, $title) {
+			return $this->service->rename($id, $title, $this->userId);
 		});
 	}
 

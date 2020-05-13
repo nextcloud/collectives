@@ -119,7 +119,7 @@ class PageMapper {
 	}
 
 	/**
-	 * Removes characters that are illegal in a file or folder name on some operating systems.
+	 * Removes or replaces characters that are illegal in a file or folder name on some operating systems.
 	 * Most code copied from `Service::NoteUtil::sanitisePath()` from Notes App.
 	 *
 	 * @param string $title
@@ -127,10 +127,14 @@ class PageMapper {
 	 * @return string
 	 */
 	public function sanitiseTitle(string $title): string {
+		// replace '/' with '-' to prevent directory traversal
+		// replacing instead of stripping seems the better tradeoff here
+		$title = str_replace('/', '-', $title);
+
 		// remove characters which are illegal on Windows (includes illegal characters on Unix/Linux)
-		// prevents also directory traversal by eliminiating slashes
 		// see also \OC\Files\Storage\Common::verifyPosixPath(...)
-		$title = str_replace(['*', '|', '/', '\\', ':', '"', '<', '>', '?'], '', $title);
+		/** @noinspection CascadeStringReplacementInspection */
+		$title = str_replace(['*', '|', '\\', ':', '"', '<', '>', '?'], '', $title);
 
 		// if mysql doesn't support 4byte UTF-8, then remove those characters
 		// see \OC\Files\Storage\Common::verifyPath(...)
@@ -145,7 +149,7 @@ class PageMapper {
 		// remove leading spaces or dots to prevent hidden files
 		$title = preg_replace('/^[\. ]+/mu', '', $title);
 
-		// remove leading and appending spaces
+		// remove leading and trailing spaces
 		$title = trim($title);
 
 		if (empty($title)) {
@@ -186,7 +190,7 @@ class PageMapper {
 	 *
 	 * @return Page
 	 */
-	public function insert(Page $page, string $userId): Page {
+	public function create(Page $page, string $userId): Page {
 		$folder = $this->getFolderForUser($userId);
 		$safeTitle = $this->sanitiseTitle($page->getTitle());
 		$filename = self::generateFilename($folder, $safeTitle);
@@ -194,13 +198,12 @@ class PageMapper {
 		$file = $folder->newFile($filename . self::SUFFIX);
 		$page->setId($file->getId());
 		$page->setTitle($filename);
-		$file->putContent($page->getContent());
 		return $page;
 	}
 
 	/**
-	 * Updates a note. Be sure to check the returned note since the title is
-	 * dynamically generated and filename conflicts are are resolved
+	 * Renames a note. Be sure to check the returned note since the title is
+	 * dynamically generated and filename conflicts are resolved
 	 *
 	 * @param Page $page
 	 * @param string $userId
@@ -208,7 +211,7 @@ class PageMapper {
 	 * @return Page
 	 * @throws PageDoesNotExistException if note does not exist
 	 */
-	public function update(Page $page, string $userId): Page {
+	public function rename(Page $page, string $userId): Page {
 		$folder = $this->getFolderForUser($userId);
 		$file = $this->getFileById($folder, $page->getId());
 		$safeTitle = $this->sanitiseTitle($page->getTitle());
@@ -224,8 +227,6 @@ class PageMapper {
 			}
 			$page->setTitle($newFilename);
 		}
-
-		$file->putContent($page->getContent());
 
 		return $this->getPage($file);
 	}

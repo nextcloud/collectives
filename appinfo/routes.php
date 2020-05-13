@@ -14,11 +14,9 @@ return [
 		// pages
 		['name' => 'page#index', 'url' => '/pages', 'verb' => 'GET'],
 		['name' => 'page#create', 'url' => '/pages', 'verb' => 'POST'],
-		['name' => 'page#update', 'url' => '/pages/{id}', 'verb' => 'PUT'],
-		['name' => 'page#destroy', 'url' => '/pages/{id}', 'verb' => 'DELETE'],
-
-		// API
-		['name' => 'page_api#preflighted_cors', 'url' => '/api/0.1/{path}',
-		 'verb' => 'OPTIONS', 'requirements' => ['path' => '.+']],
+		['name' => 'page#rename', 'url' => '/pages/{id}', 'verb' => 'PUT',
+		 'requirements' => ['id' => '\d+']],
+		['name' => 'page#destroy', 'url' => '/pages/{id}', 'verb' => 'DELETE',
+		 'requirements' => ['id' => '\d+']],
 	]
 ];

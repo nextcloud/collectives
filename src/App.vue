@@ -14,12 +14,7 @@
 					:class="{active: currentPageId === page.id}"
 					@click="openPage(page)">
 					<template slot="actions">
-						<ActionButton v-if="page.id === -1"
-							icon="icon-close"
-							@click="cancelNewPage(page)">
-							{{ t('wiki', 'Cancel page creation') }}
-						</ActionButton>
-						<ActionButton v-else
+						<ActionButton
 							icon="icon-delete"
 							@click="deletePage(page)">
 							{{ t('wiki', 'Delete page') }}
@@ -30,6 +25,14 @@
 		</AppNavigation>
 		<AppContent>
 			<div v-if="currentPage">
+				<div id="titleform">
+					{{ t('wiki', 'Title') }}:
+					<input ref="title"
+						v-model="currentPage.newTitle"
+						type="text"
+						:disabled="updating || !savePossible"
+						@blur="renamePage">
+				</div>
 				<component
 					:is="handler.component"
 					:key="currentPage.id"
@@ -71,6 +74,7 @@ export default {
 		return {
 			pages: [],
 			currentPageId: null,
+			currentNewTitle: null,
 			updating: false,
 			loading: true,
 		}
@@ -92,7 +96,6 @@ export default {
 		currentPath() {
 			return `/Wiki/${this.currentFilename}`
 		},
-
 		handler() {
 			return OCA.Viewer.availableHandlers.filter(h => h.mimes.indexOf('text/markdown') !== -1)[0]
 		},
@@ -103,6 +106,13 @@ export default {
 		 */
 		savePossible() {
 			return this.currentPage && this.currentPage.title !== ''
+		},
+	},
+	watch: {
+		'currentPage.title': function(val, oldVal) {
+			if (!this.currentPage.newTitle) {
+				this.currentPage.newTitle = val
+			}
 		},
 	},
 	/**
@@ -125,21 +135,7 @@ export default {
 		 * @param {Object} page Page object
 		 */
 		openPage(page) {
-			if (this.updating) {
-				return
-			}
 			this.currentPageId = page.id
-		},
-		/**
-		 * Action tiggered when clicking the save button
-		 * create a new page or save
-		 */
-		savePage() {
-			if (this.currentPageId === -1) {
-				this.createPage(this.currentPage)
-			} else {
-				this.updatePage(this.currentPage)
-			}
 		},
 		/**
 		 * Create a new page and focus the page content field automatically
@@ -149,16 +145,8 @@ export default {
 		newPage() {
 			const page = {
 				title: 'New Page',
-				content: '# New Page',
 			}
 			this.createPage(page)
-		},
-		/**
-		 * Abort creating a new page
-		 */
-		cancelNewPage() {
-			this.pages.splice(this.pages.findIndex((page) => page.id === -1), 1)
-			this.currentPageId = null
 		},
 		/**
 		 * Create a new page by sending the information to the server
@@ -172,6 +160,7 @@ export default {
 				this.currentPageId = response.data.id
 				// Update title as it might have changed due to filename conflict handling
 				this.currentPage.title = response.data.title
+
 			} catch (e) {
 				console.error(e)
 				OCP.Toast.error(t('wiki', 'Could not create the page'))
@@ -179,18 +168,24 @@ export default {
 			this.updating = false
 		},
 		/**
-		 * Update an existing page on the server
+		 * Rename a page on the server
 		 * @param {Object} page Page object
 		 */
-		async updatePage(page) {
+		async renamePage() {
+			if (this.currentPage.title === this.currentPage.newTitle) {
+				return
+			}
+			const page = this.currentPage
 			this.updating = true
 			try {
+				page.title = page.newTitle
+				delete page.newTitle
 				const response = await axios.put(OC.generateUrl(`/apps/wiki/pages/${page.id}`), page)
 				// Update title as it might have changed due to filename conflict handling
-				this.currentPage.title = response.data.title
+				page.title = response.data.title
 			} catch (e) {
 				console.error(e)
-				OCP.Toast.error(t('wiki', 'Could not update the page'))
+				OCP.Toast.error(t('wiki', 'Could not rename the page'))
 			}
 			this.updating = false
 		},
@@ -223,11 +218,7 @@ export default {
 		flex-direction: column;
 		flex-grow: 1;
 	}
-	input[type="text"] {
-		width: 100%;
-	}
-	textarea {
-		flex-grow: 1;
-		width: 100%;
+	#titleform > input[type="text"] {
+		width: 80%;
 	}
 </style>

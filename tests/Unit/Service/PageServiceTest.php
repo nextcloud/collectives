@@ -19,7 +19,6 @@ class PageServiceTest extends TestCase {
 	private $page;
 	private $pageId = 2;
 	private $pageTitle = 'title';
-	private $pageContent = 'content';
 
 	protected function setUp(): void {
 		$this->mapper = $this->getMockBuilder(PageMapper::class)
@@ -29,7 +28,6 @@ class PageServiceTest extends TestCase {
 		$this->page = new Page();
 		$this->page->setId($this->pageId);
 		$this->page->setTitle($this->pageTitle);
-		$this->page->setContent($this->pageContent);
 
 		$this->service = new PageService($this->mapper);
 	}
@@ -57,40 +55,37 @@ class PageServiceTest extends TestCase {
 	public function testCreate(): void {
 		$newPage = new Page();
 		$newPage->setTitle($this->pageTitle);
-		$newPage->setContent($this->pageContent);
 
 		$this->mapper->expects($this->once())
-			->method('insert')
+			->method('create')
 			->with($this->equalTo($newPage))
 			->willReturn($this->page);
 
-		$newPage = $this->service->create($this->pageTitle, $this->pageContent, $this->userId);
+		$newPage = $this->service->create($this->pageTitle, $this->userId);
 
 		$this->assertEquals($this->page, $newPage);
 	}
 
-	public function testUpdate(): void {
+	public function testRename(): void {
 		$this->mapper->expects($this->once())
 			->method('find')
 			->with($this->equalTo($this->pageId))
 			->willReturn($this->page);
 
 		// New values for page
-		$updatedPageTitle = 'new_title2';
-		$updatedPageContent = 'new_content';
+		$renamedPageTitle = 'new_title2';
 
-		// Updated page
-		$updatedPage = new Page();
-		$updatedPage->setId($this->pageId);
-		$updatedPage->setTitle($updatedPageTitle);
-		$updatedPage->setContent($updatedPageContent);
+		// Renamed page
+		$renamedPage = new Page();
+		$renamedPage->setId($this->pageId);
+		$renamedPage->setTitle($renamedPageTitle);
 		$this->mapper->expects($this->once())
-			->method('update')
-			->with($this->equalTo($updatedPage))
-			->willReturn($updatedPage);
+			->method('rename')
+			->with($this->equalTo($renamedPage))
+			->willReturn($renamedPage);
 
-		$result = $this->service->update($this->pageId, $updatedPageTitle, $updatedPageContent, $this->userId);
+		$result = $this->service->rename($this->pageId, $renamedPageTitle, $this->userId);
 
-		$this->assertEquals($updatedPage, $result);
+		$this->assertEquals($renamedPage, $result);
 	}
 }

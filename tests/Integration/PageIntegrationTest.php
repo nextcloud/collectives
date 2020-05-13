@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 
 
 /**
- * Run tests to create, update and delete a page against the database.
+ * Run tests to create, rename and delete a page against the database.
  */
 class PageIntegrationTest extends TestCase {
 
@@ -59,21 +59,18 @@ class PageIntegrationTest extends TestCase {
 		}
 	}
 
-//	public function testUpdatePage(): void {
+//	public function testRenamePage(): void {
 //		// create a new page
 //		$page = new Page();
 //		$page->setTitle('title');
-//		$page->setContent('content');
-//		$page = $this->mapper->insert($page, $this->userId);
+//		$page = $this->mapper->create($page, $this->userId);
 //
-//		// update the page
+//		// rename the page
 //		$page->setTitle('new_title');
-//		$page->setContent('new_content');
 //
-//		$page = $this->mapper->update($page, $this->userId);
+//		$page = $this->mapper->rename($page, $this->userId);
 //
 //		$this->assertEquals($this->mapper->find($page->getId(), $this->userId)->getTitle(),'new_title');
-//		$this->assertEquals($this->mapper->find($page->getId(), $this->userId)->getContent(),'new_content');
 //
 //		// delete the page
 //		$this->mapper->delete($page, $this->userId);
