@@ -41,9 +41,7 @@
 							<div :class="{menubar: true, loading: (preview && edit)}" />
 							<div>
 								<div class="menububble" />
-								<div class="editor__content">
-									<div class="ProseMirror" v-html="htmlContent" />
-								</div>
+								<EditorContent class="editor__content" :editor="editor" />
 							</div>
 						</div>
 					</div>
@@ -80,6 +78,22 @@ import axios from '@nextcloud/axios'
 import MarkdownIt from 'markdown-it'
 import taskLists from 'markdown-it-task-lists'
 
+import { Editor, EditorContent } from 'tiptap'
+import {
+	HardBreak,
+	Heading,
+	Code,
+	Link,
+	BulletList,
+	OrderedList,
+	Blockquote,
+	CodeBlock,
+	HorizontalRule,
+	Italic,
+	Strike,
+	ListItem,
+} from 'tiptap-extensions'
+
 export default {
 	name: 'App',
 	components: {
@@ -88,6 +102,7 @@ export default {
 		AppNavigation,
 		AppNavigationItem,
 		AppNavigationNew,
+		EditorContent,
 	},
 	data: function() {
 		return {
@@ -137,8 +152,32 @@ export default {
 		},
 
 		htmlContent() {
-			return this.markdownit.render(this.currentPage.content).replace(/\n/g, '')
+			return this.markdownit.render(this.currentPage.content)
 		},
+
+		editor() {
+			return new Editor({
+				editable: false,
+				extensions: [
+					new Heading(),
+					new Code(),
+					new Italic(),
+					new Strike(),
+					new HardBreak(),
+					new HorizontalRule(),
+					new BulletList(),
+					new OrderedList(),
+					new Blockquote(),
+					new CodeBlock(),
+					new ListItem(),
+					new Link({
+						openOnClick: true,
+					}),
+				],
+				content: this.htmlContent,
+			})
+		},
+
 	},
 
 	watch: {
