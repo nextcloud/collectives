@@ -32,17 +32,34 @@
 						type="text"
 						:disabled="updating || !savePossible"
 						@blur="renamePage">
+					<input v-model="edit"
+						type="checkbox">
 				</div>
-				<component
-					:is="handler.component"
+				<div v-if="preview || !edit" id="preview-container">
+					<div id="preview-wrapper" class="richEditor">
+						<div id="preview" class="editor">
+							<div :class="{menubar: true, loading: (preview && edit)}" />
+							<div>
+								<div class="menububble" />
+								<div class="editor__content">
+									<div class="ProseMirror" v-html="htmlContent" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<component :is="handler.component"
+					v-show="edit && !preview"
+					ref="editor"
 					:key="currentPage.id"
 					:fileid="currentPage.id"
 					:basename="currentFilename"
 					:filename="currentPath"
 					:has-preview="true"
-					mime="text/markdown"
 					:active="true"
-					class="file-view active" />
+					mime="text/markdown"
+					class="file-view active"
+					v-on:ready="hidePreview" />
 			</div>
 			<div v-else id="emptycontent">
 				<div class="icon-file" />
@@ -60,6 +77,8 @@ import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
 import AppNavigationNew from '@nextcloud/vue/dist/Components/AppNavigationNew'
 
 import axios from '@nextcloud/axios'
+import MarkdownIt from 'markdown-it'
+import taskLists from 'markdown-it-task-lists'
 
 export default {
 	name: 'App',
@@ -77,12 +96,15 @@ export default {
 			currentNewTitle: null,
 			updating: false,
 			loading: true,
+			edit: false,
+			preview: true,
 		}
 	},
 	computed: {
 		currentFilename() {
 			return `${this.currentPage.title}.md`
 		},
+
 		/**
 		 * Return the currently selected page object
 		 * @returns {Object|null}
@@ -106,6 +128,16 @@ export default {
 		 */
 		savePossible() {
 			return this.currentPage && this.currentPage.title !== ''
+		},
+
+		markdownit() {
+			return MarkdownIt('commonmark', { html: false, breaks: false })
+				.enable('strikethrough')
+				.use(taskLists, { enable: true, labelAfter: true })
+		},
+
+		htmlContent() {
+			return this.markdownit.render(this.currentPage.content).replace(/\n/g, '')
 		},
 	},
 
@@ -137,6 +169,7 @@ export default {
 		 * @param {Object} page Page object
 		 */
 		openPage(page) {
+			this.preview = true
 			this.currentPageId = page.id
 		},
 		/**
@@ -208,10 +241,102 @@ export default {
 				OCP.Toast.error(t('wiki', 'Could not delete the page'))
 			}
 		},
+		hidePreview() {
+			this.preview = false
+		},
 	},
 }
 </script>
-<style scoped>
+<style scoped lang="scss">
+
+	#preview-container {
+		display: block;
+		width: 100%;
+		max-width: 100%;
+		height: 100%;
+		left: 0;
+		top: 50px;
+		margin: 0 auto;
+		position: relative;
+		background-color: var(--color-main-background);
+	}
+
+	.menubar {
+		position: fixed;
+		position: -webkit-sticky;
+		position: sticky;
+		top: 0;
+		display: flex;
+		z-index: 10010;
+		background-color: var(--color-main-background-translucent);
+		height: 44px;
+		opacity: 0;
+	}
+
+	.menubar.loading {
+		opacity: 100%;
+	}
+
+	#preview-wrapper {
+		display: flex;
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+		position: absolute;
+		&.icon-loading {
+			#editor {
+				opacity: 0.3;
+			}
+		}
+	}
+
+	#preview, .editor {
+		background: var(--color-main-background);
+		color: var(--color-main-text);
+		background-clip: padding-box;
+		border-radius: var(--border-radius);
+		padding: 0;
+		position: relative;
+		overflow-y: auto;
+		overflow-x: hidden;
+		width: 100%;
+	}
+
+	.editor__content {
+		max-width: 670px;
+		margin: auto;
+		position: relative;
+	}
+
+	.menububble {
+		position: absolute;
+		display: flex;
+		z-index: 10020;
+		background: var(--color-main-background-translucent);
+		box-shadow: 0 1px 5px var(--color-box-shadow);
+		border-radius: var(--border-radius);
+		padding: 0;
+		margin-bottom: 0.4rem;
+		visibility: hidden;
+		opacity: 0;
+		transform: translateX(-50%);
+		transition: opacity 0.2s, visibility 0.2s;
+	}
+
+</style>
+
+<style lang="scss">
+	@import './../../text/css/style';
+
+	#preview-wrapper {
+		@import './../../text/css/prosemirror';
+	}
+
+	#preview-container {
+		height: calc(100% - 50px);
+		top: 50px;
+	}
+
 	#app-content > div {
 		width: 100%;
 		height: 100%;
@@ -220,7 +345,9 @@ export default {
 		flex-direction: column;
 		flex-grow: 1;
 	}
+
 	#titleform > input[type="text"] {
 		width: 80%;
+		max-width: 670px;
 	}
 </style>
