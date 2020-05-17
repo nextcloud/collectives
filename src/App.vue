@@ -35,12 +35,13 @@
 					<input v-model="edit"
 						type="checkbox">
 				</div>
-				<div v-if="preview || !edit" id="preview-container">
+				<div v-if="preview || !edit"
+					:key="'preview-' + currentPage.id"
+					id="preview-container">
 					<div id="preview-wrapper" class="richEditor">
 						<div id="preview" class="editor">
 							<div :class="{menubar: true, loading: (preview && edit)}" />
 							<div>
-								<div class="menububble" />
 								<EditorContent class="editor__content" :editor="editor" />
 							</div>
 						</div>
@@ -49,7 +50,7 @@
 				<component :is="handler.component"
 					v-show="edit && !preview"
 					ref="editor"
-					:key="currentPage.id"
+					:key="'editor-' + currentPage.id"
 					:fileid="currentPage.id"
 					:basename="currentFilename"
 					:filename="currentPath"
@@ -347,26 +348,9 @@ export default {
 		position: relative;
 	}
 
-	.menububble {
-		position: absolute;
-		display: flex;
-		z-index: 10020;
-		background: var(--color-main-background-translucent);
-		box-shadow: 0 1px 5px var(--color-box-shadow);
-		border-radius: var(--border-radius);
-		padding: 0;
-		margin-bottom: 0.4rem;
-		visibility: hidden;
-		opacity: 0;
-		transform: translateX(-50%);
-		transition: opacity 0.2s, visibility 0.2s;
-	}
-
 </style>
 
 <style lang="scss">
-	@import './../../text/css/style';
-
 	#preview-wrapper {
 		@import './../../text/css/prosemirror';
 	}
