@@ -32,17 +32,24 @@
 						type="text"
 						:disabled="updating || !savePossible"
 						@blur="renamePage">
+					<input v-model="edit"
+						type="checkbox">
 				</div>
-				<component
-					:is="handler.component"
-					:key="currentPage.id"
+				<PagePreview v-if="preview || !edit"
+					:page="currentPage"
+					:loading="preview && edit" />
+				<component :is="handler.component"
+					v-show="edit && !preview"
+					ref="editor"
+					:key="'editor-' + currentPage.id"
 					:fileid="currentPage.id"
 					:basename="currentFilename"
 					:filename="currentPath"
 					:has-preview="true"
-					mime="text/markdown"
 					:active="true"
-					class="file-view active" />
+					mime="text/markdown"
+					class="file-view active"
+					@ready="hidePreview" />
 			</div>
 			<div v-else id="emptycontent">
 				<div class="icon-file" />
@@ -60,6 +67,7 @@ import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
 import AppNavigationNew from '@nextcloud/vue/dist/Components/AppNavigationNew'
 
 import axios from '@nextcloud/axios'
+import PagePreview from './PagePreview'
 
 export default {
 	name: 'App',
@@ -69,6 +77,7 @@ export default {
 		AppNavigation,
 		AppNavigationItem,
 		AppNavigationNew,
+		PagePreview,
 	},
 	data: function() {
 		return {
@@ -77,12 +86,15 @@ export default {
 			currentNewTitle: null,
 			updating: false,
 			loading: true,
+			edit: false,
+			preview: true,
 		}
 	},
 	computed: {
 		currentFilename() {
 			return `${this.currentPage.title}.md`
 		},
+
 		/**
 		 * Return the currently selected page object
 		 * @returns {Object|null}
@@ -107,6 +119,7 @@ export default {
 		savePossible() {
 			return this.currentPage && this.currentPage.title !== ''
 		},
+
 	},
 
 	watch: {
@@ -137,6 +150,7 @@ export default {
 		 * @param {Object} page Page object
 		 */
 		openPage(page) {
+			this.preview = true
 			this.currentPageId = page.id
 		},
 		/**
@@ -208,6 +222,9 @@ export default {
 				OCP.Toast.error(t('wiki', 'Could not delete the page'))
 			}
 		},
+		hidePreview() {
+			this.preview = false
+		},
 	},
 }
 </script>
@@ -220,7 +237,9 @@ export default {
 		flex-direction: column;
 		flex-grow: 1;
 	}
+
 	#titleform > input[type="text"] {
 		width: 80%;
+		max-width: 670px;
 	}
 </style>

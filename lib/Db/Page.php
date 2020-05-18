@@ -14,28 +14,33 @@ use OCP\Files\Folder;
  * @method void setId(integer $value)
  * @method string getTitle()
  * @method void setTitle(string $value)
+ * @method string getContent()
+ * @method void setContent(string $value)
  */
 class Page extends Entity implements JsonSerializable {
 	private const SUFFIX = '.md';
 
 	protected $title;
+	protected $content;
 
 	public function jsonSerialize() {
 		return [
 			'id' => $this->id,
-			'title' => $this->title
+			'title' => $this->title,
+			'content' => $this->content
 		];
 	}
 
 	/**
-	 * @param File $file
+	 * @param File   $file
 	 *
-	 * @return Page
+	 * @return static
 	 */
 	public static function fromFile(File $file): Page {
 		$page = new static();
 		$page->setId($file->getId());
 		$page->setTitle(basename($file->getName(), self::SUFFIX));
+		$page->setContent($file->getContent());
 		return $page;
 	}
 }
