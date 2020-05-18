@@ -1,10 +1,8 @@
 <template>
-	<div v-if="preview || !edit"
-		:key="'preview-' + page.id"
-		id="preview-container">
+	<div id="preview-container" :key="'preview-' + page.id">
 		<div id="preview-wrapper" class="richEditor">
 			<div id="preview" class="editor">
-				<div :class="{menubar: true, loading: (preview && edit)}" />
+				<div :class="{menubar: true, loading}" />
 				<div>
 					<EditorContent class="editor__content" :editor="editor" />
 				</div>
@@ -17,7 +15,7 @@
 import MarkdownIt from 'markdown-it'
 import taskLists from 'markdown-it-task-lists'
 
-import {Editor, EditorContent} from 'tiptap'
+import { Editor, EditorContent } from 'tiptap'
 import {
 	HardBreak,
 	Heading,
@@ -39,13 +37,9 @@ export default {
 		EditorContent,
 	},
 	props: {
-		preview: {
+		loading: {
 			type: Boolean,
-			required: true,
-		},
-		edit: {
-			type: Boolean,
-			required: true,
+			required: false,
 		},
 		page: {
 			type: Object,

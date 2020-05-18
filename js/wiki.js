@@ -4234,6 +4234,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 
@@ -4447,8 +4449,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 
 
@@ -4459,13 +4459,9 @@ __webpack_require__.r(__webpack_exports__);
     EditorContent: tiptap__WEBPACK_IMPORTED_MODULE_2__["EditorContent"]
   },
   props: {
-    preview: {
+    loading: {
       type: Boolean,
-      required: true
-    },
-    edit: {
-      type: Boolean,
-      required: true
+      required: false
     },
     page: {
       type: Object,
@@ -57082,13 +57078,14 @@ var render = function() {
                   })
                 ]),
                 _vm._v(" "),
-                _c("PagePreview", {
-                  attrs: {
-                    page: _vm.currentPage,
-                    preview: _vm.preview,
-                    edit: _vm.edit
-                  }
-                }),
+                _vm.preview || !_vm.edit
+                  ? _c("PagePreview", {
+                      attrs: {
+                        page: _vm.currentPage,
+                        loading: _vm.preview && _vm.edit
+                      }
+                    })
+                  : _vm._e(),
                 _vm._v(" "),
                 _c(_vm.handler.component, {
                   directives: [
@@ -57150,36 +57147,32 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm.preview || !_vm.edit
-    ? _c(
+  return _c(
+    "div",
+    { key: "preview-" + _vm.page.id, attrs: { id: "preview-container" } },
+    [
+      _c(
         "div",
-        { key: "preview-" + _vm.page.id, attrs: { id: "preview-container" } },
+        { staticClass: "richEditor", attrs: { id: "preview-wrapper" } },
         [
-          _c(
-            "div",
-            { staticClass: "richEditor", attrs: { id: "preview-wrapper" } },
-            [
-              _c("div", { staticClass: "editor", attrs: { id: "preview" } }, [
-                _c("div", {
-                  class: { menubar: true, loading: _vm.preview && _vm.edit }
-                }),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  [
-                    _c("EditorContent", {
-                      staticClass: "editor__content",
-                      attrs: { editor: _vm.editor }
-                    })
-                  ],
-                  1
-                )
-              ])
-            ]
-          )
+          _c("div", { staticClass: "editor", attrs: { id: "preview" } }, [
+            _c("div", { class: { menubar: true, loading: _vm.loading } }),
+            _vm._v(" "),
+            _c(
+              "div",
+              [
+                _c("EditorContent", {
+                  staticClass: "editor__content",
+                  attrs: { editor: _vm.editor }
+                })
+              ],
+              1
+            )
+          ])
         ]
       )
-    : _vm._e()
+    ]
+  )
 }
 var staticRenderFns = []
 render._withStripped = true

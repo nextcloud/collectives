@@ -35,7 +35,9 @@
 					<input v-model="edit"
 						type="checkbox">
 				</div>
-				<PagePreview :page="currentPage" :preview="preview" :edit="edit"></PagePreview>
+				<PagePreview v-if="preview || !edit"
+					:page="currentPage"
+					:loading="preview && edit" />
 				<component :is="handler.component"
 					v-show="edit && !preview"
 					ref="editor"
@@ -47,7 +49,7 @@
 					:active="true"
 					mime="text/markdown"
 					class="file-view active"
-					v-on:ready="hidePreview" />
+					@ready="hidePreview" />
 			</div>
 			<div v-else id="emptycontent">
 				<div class="icon-file" />
@@ -65,7 +67,7 @@ import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
 import AppNavigationNew from '@nextcloud/vue/dist/Components/AppNavigationNew'
 
 import axios from '@nextcloud/axios'
-import PagePreview from './PagePreview';
+import PagePreview from './PagePreview'
 
 export default {
 	name: 'App',
