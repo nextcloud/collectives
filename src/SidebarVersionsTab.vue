@@ -8,25 +8,56 @@
 		:class="{ 'icon-loading': loading }">
 	-->
 	<div id="versions">
+		<!-- loading -->
+		<div v-if="loading" class="emptycontent">
+			<div class="icon icon-loading" />
+		</div>
+
 		<!-- error message -->
-		<div v-if="error" class="emptycontent">
+		<div v-else-if="error" class="emptycontent">
 			<div class="icon icon-error" />
 			<h2>{{ error }}</h2>
 		</div>
 
 		<!-- versions content -->
-		<template v-else>
-			Page ID: {{ pageId }}
-			<div v-if="!loading">
-				List of versions: {{ versions }}
-			</div>
+		<template v-else-if="!loading && versions">
+			<ul>
+				<template v-for="version in versions">
+					<div><li>
+						<div class="preview-container">
+							<img class="preview" :src="version.previewUrl" width="44" height="44"/>
+						</div>
+						<div class="version-container">
+							<div>
+								<a :href="version.downloadUrl" class="downloadVersion" :download="pageTitle"><img :src="downloadImagePath" />
+									<span class="versiondate has-tooltip live-relative-timestamp" :data-timestamp="version.millisecondsTimestamp" :title="version.formattedTimestamp">{{ version.relativeTimestamp }}</span>
+								</a>
+							</div>
+							<div class="version-details">
+								<span class="size has-tooltip" :title="version.altSize">{{ version.humanReadableSize }}</span>
+							</div>
+						</div>
+					</li></div>
+				</template>
+			</ul>
 		</template>
+
+		<!-- no versions found -->
+		<div v-else class="emptycontent">
+			<div class="icon icon-history" />
+			<h2>{{ t('wiki', 'No other versions available') }}</h2>
+		</div>
+
 	</div>
 	<!-- </AppSidebarTab> -->
 </template>
 
 <script>
 //import AppSidebarTab from '@nextcloud/vue/dist/Components/AppSidebarTab'
+import { getCurrentUser } from "@nextcloud/auth";
+import axios from "@nextcloud/axios";
+import { generateRemoteUrl, imagePath } from "@nextcloud/router";
+import moment from "@nextcloud/moment";
 
 export default {
 	name: 'SidebarVersionsTab',
@@ -38,16 +69,197 @@ export default {
 			type: Number,
 			required: true,
 		},
+		pageTitle: {
+			type: String,
+			required: true,
+		}
 	},
-	data: function() {
+	data: function () {
 		return {
 			error: '',
 			loading: true,
 			versions: null,
+			downloadImagePath: imagePath('core', 'actions/download'),
 		}
+	},
+	watch: {
+		'pageId': function () {
+			this.getPageVersions();
+		},
+	},
+	beforeMount() {
+		this.getPageVersions();
+	},
+	methods: {
+		/**
+		 * Convert an XML DOM object into a JSON object
+		 * Copied from apps/workflowengine/src/components/Checks/MultiselectTag/api.js
+		 *
+		 * @param {object} xml XML object
+		 * @returns {object}
+		 */
+		xmlToJson: function (xml) {
+			let obj = {}
+
+			if (xml.nodeType === 1) {
+				if(xml.attributes.length > 0) {
+					obj['@attributes'] = {}
+					for (let j = 0; j < xml.attributes.length; j++) {
+						const attribute = xml.attributes.item(j)
+						obj['@attributes'][attribute.nodeName] = attribute.nodeValue
+					}
+				}
+			} else if (xml.nodeType === 3) {
+				obj = xml.nodeValue
+			}
+
+			if (xml.hasChildNodes()) {
+				for (let i = 0; i < xml.childNodes.length; i++) {
+					const item = xml.childNodes.item(i)
+					const nodeName = item.nodeName
+					if (typeof (obj[nodeName]) === 'undefined') {
+						obj[nodeName] = this.xmlToJson(item)
+					} else {
+						if (typeof obj[nodeName].push === 'undefined') {
+							const old = obj[nodeName]
+							obj[nodeName] = []
+							obj[nodeName].push(old)
+						}
+						obj[nodeName].push(this.xmlToJson(item))
+					}
+				}
+			}
+			return obj
+		},
+
+		/**
+		 * Read string with XML content into DOMParser()
+		 * Copied from apps/workflowengine/src/components/Checks/MultiselectTag/api.js
+		 *
+		 * @param {string} xml XML string
+		 * @returns {object|null}
+		 */
+		parseXml: function (xml) {
+			let dom = null
+			try {
+				dom = (new DOMParser()).parseFromString(xml, 'text/xml')
+			} catch (e) {
+				console.error('Failed to parse xml document', e)
+			}
+			return dom
+		},
+
+		/**
+		 * Extract list of versions from an XML-encoded Nextcloud DAV API response
+		 * @param {string} xml XML string
+		 * @returns {array|null}
+		 */
+		xmlToVersionsList: function (xml) {
+			const json = this.xmlToJson(this.parseXml(xml))
+			const list = json['d:multistatus']['d:response']
+			const result = []
+			for (const index in list) {
+				const version = list[index]['d:propstat']
+
+				if (!version || version['d:status']['#text'] !== 'HTTP/1.1 200 OK') {
+					continue
+				}
+				const url = list[index]['d:href']['#text']
+				const time = moment.unix(url.split('/').pop())
+				const size = version['d:prop']['d:getcontentlength']['#text']
+				const mimetype = version['d:prop']['d:getcontenttype']['#text']
+				result.push({
+					downloadUrl: url,
+					formattedTimestamp: time.format('LLL'),
+					relativeTimestamp: time.fromNow(),
+					millisecondsTimestamp: time.valueOf(),
+					humanReadableSize: OC.Util.humanFileSize(size),
+					altSize: n('files', '%n byte', '%n bytes', size),
+					previewUrl: OC.MimeType.getIconUrl(mimetype),
+				})
+			}
+			return (result.length ? result : null)
+		},
+
+		/**
+		 * Get versions of a page
+		 */
+		async getPageVersions() {
+			try {
+				this.loading = true
+				const user = getCurrentUser().uid
+				const versionsUrl = generateRemoteUrl(`dav/versions/${user}/versions/${this.pageId}`)
+				const response = await axios({
+					method: 'PROPFIND',
+					url: versionsUrl,
+					data: `<?xml version="1.0"?>
+<d:propfind xmlns:d="DAV:" xmlns:oc="http://owncloud.org/ns">
+ <d:prop>
+  <d:getcontentlength />
+  <d:getcontenttype />
+  <d:getlastmodified />
+ </d:prop>
+</d:propfind>`,
+				})
+				this.versions = this.xmlToVersionsList(response.data)
+				this.loading = false
+			} catch (e) {
+				this.error = t('wiki', 'Could not get page versions')
+				this.loading = false
+				console.error(e)
+			}
+		},
 	},
 }
 </script>
 
+// Copied from apps/files_versions/src/css/versions.css
 <style lang="scss" scoped>
+	.clear-float {
+		clear: both;
+	}
+	li {
+		width: 100%;
+		cursor: default;
+		height: 56px;
+		float: left;
+		border-bottom: 1px solid rgba(100,100,100,.1);
+	}
+	li:last-child {
+		border-bottom: none;
+	}
+	a, div > span {
+		vertical-align: middle;
+		opacity: .5;
+	}
+	li a {
+		padding: 15px 10px 11px;
+	}
+	a:hover, a:focus {
+		opacity: 1;
+	}
+	.preview-container {
+		display: inline-block;
+		vertical-align: top;
+	}
+	img {
+		cursor: pointer;
+		padding-right: 4px;
+	}
+	img.preview {
+		cursor: default;
+	}
+	.version-container {
+		display: inline-block;
+	}
+	.versiondate {
+		min-width: 100px;
+		vertical-align: super;
+	}
+	.version-details {
+		text-align: left;
+	}
+	.version-details > span {
+		padding: 0 10px;
+	}
 </style>

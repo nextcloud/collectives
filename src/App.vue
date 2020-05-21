@@ -70,7 +70,7 @@
 			:title="'Page: ' + currentPage.title"
 			subtitle="..."
 			@close="showSidebar=false">
-			<SidebarVersionsTab :pageId="currentPage.id"/>
+			<SidebarVersionsTab :pageId="currentPage.id" :pageTitle="currentPage.title"/>
 		</AppSidebar>
 	</div>
 </template>
