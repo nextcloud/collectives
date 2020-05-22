@@ -4852,7 +4852,6 @@ __webpack_require__.r(__webpack_exports__);
     return {
       pages: [],
       currentPageId: null,
-      currentNewTitle: null,
       updating: false,
       loading: true,
       edit: false,
@@ -4860,6 +4859,10 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   computed: {
+    /**
+     * Return filename of currentPage
+     * @returns {string}
+     */
     currentFilename() {
       return `${this.currentPage.title}.md`;
     },
@@ -4876,16 +4879,24 @@ __webpack_require__.r(__webpack_exports__);
       return this.pages.find(page => page.id === this.currentPageId);
     },
 
+    /**
+     * Return path of currentPage
+     * @returns {string}
+     */
     currentPath() {
       return `/Wiki/${this.currentFilename}`;
     },
 
+    /**
+     * Fetch handlers for 'text/markdown' from Viewer app
+     * @returns {object}
+     */
     handler() {
       return OCA.Viewer.availableHandlers.filter(h => h.mimes.indexOf('text/markdown') !== -1)[0];
     },
 
     /**
-     * Returns true if a page is selected and its title is not empty
+     * Return true if a page is selected and its title is not empty
      * @returns {Boolean}
      */
     savePossible() {
@@ -4962,8 +4973,7 @@ __webpack_require__.r(__webpack_exports__);
     },
 
     /**
-     * Rename a page on the server
-     * @param {Object} page Page object
+     * Rename currentPage on the server
      */
     async renamePage() {
       if (this.currentPage.title === this.currentPage.newTitle) {
@@ -5007,6 +5017,9 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
 
+    /**
+     * Set preview to false
+     */
     hidePreview() {
       this.preview = false;
     }
