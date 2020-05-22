@@ -85,7 +85,6 @@ export default {
 		return {
 			pages: [],
 			currentPageId: null,
-			currentNewTitle: null,
 			updating: false,
 			loading: true,
 			edit: false,
