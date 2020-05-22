@@ -67,6 +67,8 @@ import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
 import AppNavigationNew from '@nextcloud/vue/dist/Components/AppNavigationNew'
 
 import axios from '@nextcloud/axios'
+import { showSuccess, showError } from '@nextcloud/dialogs'
+import { generateUrl } from '@nextcloud/router'
 import PagePreview from './PagePreview'
 
 export default {
@@ -135,11 +137,11 @@ export default {
 	 */
 	async mounted() {
 		try {
-			const response = await axios.get(OC.generateUrl('/apps/wiki/pages'))
+			const response = await axios.get(generateUrl('/apps/wiki/pages'))
 			this.pages = response.data
 		} catch (e) {
 			console.error(e)
-			OCP.Toast.error(t('wiki', 'Could not fetch pages'))
+			showError(t('wiki', 'Could not fetch pages'))
 		}
 		this.loading = false
 	},
@@ -171,7 +173,7 @@ export default {
 		async createPage(page) {
 			this.updating = true
 			try {
-				const response = await axios.post(OC.generateUrl(`/apps/wiki/pages`), page)
+				const response = await axios.post(generateUrl(`/apps/wiki/pages`), page)
 				this.pages.push(response.data)
 				this.currentPageId = response.data.id
 				// Update title as it might have changed due to filename conflict handling
@@ -179,7 +181,7 @@ export default {
 
 			} catch (e) {
 				console.error(e)
-				OCP.Toast.error(t('wiki', 'Could not create the page'))
+				showError(t('wiki', 'Could not create the page'))
 			}
 			this.updating = false
 		},
@@ -196,12 +198,12 @@ export default {
 			try {
 				page.title = page.newTitle
 				delete page.newTitle
-				const response = await axios.put(OC.generateUrl(`/apps/wiki/pages/${page.id}`), page)
+				const response = await axios.put(generateUrl(`/apps/wiki/pages/${page.id}`), page)
 				// Update title as it might have changed due to filename conflict handling
 				page.title = response.data.title
 			} catch (e) {
 				console.error(e)
-				OCP.Toast.error(t('wiki', 'Could not rename the page'))
+				showError(t('wiki', 'Could not rename the page'))
 			}
 			this.updating = false
 		},
@@ -211,15 +213,15 @@ export default {
 		 */
 		async deletePage(page) {
 			try {
-				await axios.delete(OC.generateUrl(`/apps/wiki/pages/${page.id}`))
+				await axios.delete(generateUrl(`/apps/wiki/pages/${page.id}`))
 				this.pages.splice(this.pages.indexOf(page), 1)
 				if (this.currentPageId === page.id) {
 					this.currentPageId = null
 				}
-				OCP.Toast.success(t('wiki', 'Page deleted'))
+				showSuccess(t('wiki', 'Page deleted'))
 			} catch (e) {
 				console.error(e)
-				OCP.Toast.error(t('wiki', 'Could not delete the page'))
+				showError(t('wiki', 'Could not delete the page'))
 			}
 		},
 		hidePreview() {
