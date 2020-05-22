@@ -29,7 +29,7 @@
 						</div>
 						<div class="version-container">
 							<div>
-								<a :href="version.downloadUrl" class="downloadVersion" :download="pageTitle"><img :src="downloadImagePath" />
+								<a :href="version.downloadUrl" class="downloadVersion" :download="pageTitle"><img :src="downloadIconUrl" />
 									<span class="versiondate has-tooltip live-relative-timestamp" :data-timestamp="version.millisecondsTimestamp" :title="version.formattedTimestamp">{{ version.relativeTimestamp }}</span>
 								</a>
 							</div>
@@ -37,6 +37,9 @@
 								<span class="size has-tooltip" :title="version.altSize">{{ version.humanReadableSize }}</span>
 							</div>
 						</div>
+						<a href="#" class="revertVersion" :title="t('wiki', 'Restore')" @click="revertVersion(version)">
+							<img :src="revertIconUrl">
+						</a>
 					</li></div>
 				</template>
 			</ul>
@@ -54,10 +57,11 @@
 
 <script>
 //import AppSidebarTab from '@nextcloud/vue/dist/Components/AppSidebarTab'
-import { getCurrentUser } from "@nextcloud/auth";
-import axios from "@nextcloud/axios";
-import { generateRemoteUrl, imagePath } from "@nextcloud/router";
-import moment from "@nextcloud/moment";
+import { getCurrentUser } from "@nextcloud/auth"
+import axios from "@nextcloud/axios"
+import { showSuccess, showError } from '@nextcloud/dialogs'
+import { generateRemoteUrl, imagePath } from "@nextcloud/router"
+import moment from "@nextcloud/moment"
 
 export default {
 	name: 'SidebarVersionsTab',
@@ -79,22 +83,22 @@ export default {
 			error: '',
 			loading: true,
 			versions: null,
-			downloadImagePath: imagePath('core', 'actions/download'),
+			downloadIconUrl: imagePath('core', 'actions/download'),
+			revertIconUrl: imagePath('core', 'actions/history'),
 		}
 	},
 	watch: {
 		'pageId': function () {
-			this.getPageVersions();
+			this.getPageVersions()
 		},
 	},
 	beforeMount() {
-		this.getPageVersions();
+		this.getPageVersions()
 	},
 	methods: {
 		/**
 		 * Convert an XML DOM object into a JSON object
 		 * Copied from apps/workflowengine/src/components/Checks/MultiselectTag/api.js
-		 *
 		 * @param {object} xml XML object
 		 * @returns {object}
 		 */
@@ -135,7 +139,6 @@ export default {
 		/**
 		 * Read string with XML content into DOMParser()
 		 * Copied from apps/workflowengine/src/components/Checks/MultiselectTag/api.js
-		 *
 		 * @param {string} xml XML string
 		 * @returns {object|null}
 		 */
@@ -169,9 +172,10 @@ export default {
 				const size = version['d:prop']['d:getcontentlength']['#text']
 				const mimetype = version['d:prop']['d:getcontenttype']['#text']
 				result.push({
-					downloadUrl: url,
+					downloadUrl: generateRemoteUrl(url.split('remote.php/', 2)[1]),
 					formattedTimestamp: time.format('LLL'),
 					relativeTimestamp: time.fromNow(),
+					timestamp: time.unix(),
 					millisecondsTimestamp: time.valueOf(),
 					humanReadableSize: OC.Util.humanFileSize(size),
 					altSize: n('files', '%n byte', '%n bytes', size),
@@ -206,7 +210,42 @@ export default {
 			} catch (e) {
 				this.error = t('wiki', 'Could not get page versions')
 				this.loading = false
-				console.error(e)
+				console.error('Failed to get page versions', e)
+			}
+		},
+
+		/**
+		 * Revert page to an old version
+		 * @param {object} version old revision version object
+		 */
+		async revertVersion(version) {
+			try {
+				this.loading = true
+				const user = getCurrentUser().uid
+				const restoreFolderUrl = generateRemoteUrl(`dav/versions/${user}/restore/${this.pageId}`)
+				console.info(`Move ${version.downloadUrl} to ${restoreFolderUrl}`)
+				const response = await axios({
+					method: 'MOVE',
+					url: version.downloadUrl,
+					headers: {
+						'Destination': restoreFolderUrl,
+						'Overwrite': 'T',
+					},
+				})
+				console.info(response)
+				await this.getPageVersions()
+				this.loading = false
+				showSuccess(t('wiki', 'Reverted {page} to revision {timestamp}.', {
+					page: this.pageTitle,
+					timestamp: version.timestamp,
+				}))
+			} catch (e) {
+				showError(t('wiki', 'Failed to revert {page} to revision {timestamp}.', {
+					page: this.pageTitle,
+					timestamp: version.timestamp,
+				}))
+				this.loading = false
+				console.error('Failed to move page to restore folder', e)
 			}
 		},
 	},
@@ -261,5 +300,10 @@ export default {
 	}
 	.version-details > span {
 		padding: 0 10px;
+	}
+	.revertVersion {
+		cursor: pointer;
+		float: right;
+		margin-right: -10px;
 	}
 </style>

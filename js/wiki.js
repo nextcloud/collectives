@@ -5938,10 +5938,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _nextcloud_auth__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_nextcloud_auth__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _nextcloud_axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @nextcloud/axios */ "./node_modules/@nextcloud/axios/dist/index.js");
 /* harmony import */ var _nextcloud_axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_nextcloud_axios__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _nextcloud_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @nextcloud/router */ "./node_modules/@nextcloud/router/dist/index.js");
-/* harmony import */ var _nextcloud_router__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_nextcloud_router__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _nextcloud_moment__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @nextcloud/moment */ "./node_modules/@nextcloud/moment/dist/index.js");
-/* harmony import */ var _nextcloud_moment__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_nextcloud_moment__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _nextcloud_dialogs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @nextcloud/dialogs */ "./node_modules/@nextcloud/dialogs/dist/index.js");
+/* harmony import */ var _nextcloud_dialogs__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_nextcloud_dialogs__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _nextcloud_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @nextcloud/router */ "./node_modules/@nextcloud/router/dist/index.js");
+/* harmony import */ var _nextcloud_router__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_nextcloud_router__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _nextcloud_moment__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @nextcloud/moment */ "./node_modules/@nextcloud/moment/dist/index.js");
+/* harmony import */ var _nextcloud_moment__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_nextcloud_moment__WEBPACK_IMPORTED_MODULE_4__);
+//
+//
+//
 //
 //
 //
@@ -6001,6 +6006,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'SidebarVersionsTab',
 
@@ -6022,7 +6028,8 @@ __webpack_require__.r(__webpack_exports__);
       error: '',
       loading: true,
       versions: null,
-      downloadImagePath: Object(_nextcloud_router__WEBPACK_IMPORTED_MODULE_2__["imagePath"])('core', 'actions/download')
+      downloadIconUrl: Object(_nextcloud_router__WEBPACK_IMPORTED_MODULE_3__["imagePath"])('core', 'actions/download'),
+      revertIconUrl: Object(_nextcloud_router__WEBPACK_IMPORTED_MODULE_3__["imagePath"])('core', 'actions/history')
     };
   },
   watch: {
@@ -6039,7 +6046,6 @@ __webpack_require__.r(__webpack_exports__);
     /**
      * Convert an XML DOM object into a JSON object
      * Copied from apps/workflowengine/src/components/Checks/MultiselectTag/api.js
-     *
      * @param {object} xml XML object
      * @returns {object}
      */
@@ -6084,7 +6090,6 @@ __webpack_require__.r(__webpack_exports__);
     /**
      * Read string with XML content into DOMParser()
      * Copied from apps/workflowengine/src/components/Checks/MultiselectTag/api.js
-     *
      * @param {string} xml XML string
      * @returns {object|null}
      */
@@ -6118,13 +6123,14 @@ __webpack_require__.r(__webpack_exports__);
         }
 
         const url = list[index]['d:href']['#text'];
-        const time = _nextcloud_moment__WEBPACK_IMPORTED_MODULE_3___default.a.unix(url.split('/').pop());
+        const time = _nextcloud_moment__WEBPACK_IMPORTED_MODULE_4___default.a.unix(url.split('/').pop());
         const size = version['d:prop']['d:getcontentlength']['#text'];
         const mimetype = version['d:prop']['d:getcontenttype']['#text'];
         result.push({
-          downloadUrl: url,
+          downloadUrl: Object(_nextcloud_router__WEBPACK_IMPORTED_MODULE_3__["generateRemoteUrl"])(url.split('remote.php/', 2)[1]),
           formattedTimestamp: time.format('LLL'),
           relativeTimestamp: time.fromNow(),
+          timestamp: time.unix(),
           millisecondsTimestamp: time.valueOf(),
           humanReadableSize: OC.Util.humanFileSize(size),
           altSize: n('files', '%n byte', '%n bytes', size),
@@ -6142,7 +6148,7 @@ __webpack_require__.r(__webpack_exports__);
       try {
         this.loading = true;
         const user = Object(_nextcloud_auth__WEBPACK_IMPORTED_MODULE_0__["getCurrentUser"])().uid;
-        const versionsUrl = Object(_nextcloud_router__WEBPACK_IMPORTED_MODULE_2__["generateRemoteUrl"])(`dav/versions/${user}/versions/${this.pageId}`);
+        const versionsUrl = Object(_nextcloud_router__WEBPACK_IMPORTED_MODULE_3__["generateRemoteUrl"])(`dav/versions/${user}/versions/${this.pageId}`);
         const response = await _nextcloud_axios__WEBPACK_IMPORTED_MODULE_1___default()({
           method: 'PROPFIND',
           url: versionsUrl,
@@ -6160,7 +6166,42 @@ __webpack_require__.r(__webpack_exports__);
       } catch (e) {
         this.error = t('wiki', 'Could not get page versions');
         this.loading = false;
-        console.error(e);
+        console.error('Failed to get page versions', e);
+      }
+    },
+
+    /**
+     * Revert page to an old version
+     * @param {object} version old revision version object
+     */
+    async revertVersion(version) {
+      try {
+        this.loading = true;
+        const user = Object(_nextcloud_auth__WEBPACK_IMPORTED_MODULE_0__["getCurrentUser"])().uid;
+        const restoreFolderUrl = Object(_nextcloud_router__WEBPACK_IMPORTED_MODULE_3__["generateRemoteUrl"])(`dav/versions/${user}/restore/${this.pageId}`);
+        console.info(`Move ${version.downloadUrl} to ${restoreFolderUrl}`);
+        const response = await _nextcloud_axios__WEBPACK_IMPORTED_MODULE_1___default()({
+          method: 'MOVE',
+          url: version.downloadUrl,
+          headers: {
+            'Destination': restoreFolderUrl,
+            'Overwrite': 'T'
+          }
+        });
+        console.info(response);
+        await this.getPageVersions();
+        this.loading = false;
+        Object(_nextcloud_dialogs__WEBPACK_IMPORTED_MODULE_2__["showSuccess"])(t('wiki', 'Reverted {page} to revision {timestamp}.', {
+          page: this.pageTitle,
+          timestamp: version.timestamp
+        }));
+      } catch (e) {
+        Object(_nextcloud_dialogs__WEBPACK_IMPORTED_MODULE_2__["showError"])(t('wiki', 'Failed to revert {page} to revision {timestamp}.', {
+          page: this.pageTitle,
+          timestamp: version.timestamp
+        }));
+        this.loading = false;
+        console.error('Failed to move page to restore folder', e);
       }
     }
 
@@ -13448,7 +13489,7 @@ module.exports = exports;
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, ".clear-float[data-v-88647a92] {\n  clear: both;\n}\nli[data-v-88647a92] {\n  width: 100%;\n  cursor: default;\n  height: 56px;\n  float: left;\n  border-bottom: 1px solid rgba(100, 100, 100, 0.1);\n}\nli[data-v-88647a92]:last-child {\n  border-bottom: none;\n}\na[data-v-88647a92], div > span[data-v-88647a92] {\n  vertical-align: middle;\n  opacity: .5;\n}\nli a[data-v-88647a92] {\n  padding: 15px 10px 11px;\n}\na[data-v-88647a92]:hover, a[data-v-88647a92]:focus {\n  opacity: 1;\n}\n.preview-container[data-v-88647a92] {\n  display: inline-block;\n  vertical-align: top;\n}\nimg[data-v-88647a92] {\n  cursor: pointer;\n  padding-right: 4px;\n}\nimg.preview[data-v-88647a92] {\n  cursor: default;\n}\n.version-container[data-v-88647a92] {\n  display: inline-block;\n}\n.versiondate[data-v-88647a92] {\n  min-width: 100px;\n  vertical-align: super;\n}\n.version-details[data-v-88647a92] {\n  text-align: left;\n}\n.version-details > span[data-v-88647a92] {\n  padding: 0 10px;\n}\n", ""]);
+exports.push([module.i, ".clear-float[data-v-88647a92] {\n  clear: both;\n}\nli[data-v-88647a92] {\n  width: 100%;\n  cursor: default;\n  height: 56px;\n  float: left;\n  border-bottom: 1px solid rgba(100, 100, 100, 0.1);\n}\nli[data-v-88647a92]:last-child {\n  border-bottom: none;\n}\na[data-v-88647a92], div > span[data-v-88647a92] {\n  vertical-align: middle;\n  opacity: .5;\n}\nli a[data-v-88647a92] {\n  padding: 15px 10px 11px;\n}\na[data-v-88647a92]:hover, a[data-v-88647a92]:focus {\n  opacity: 1;\n}\n.preview-container[data-v-88647a92] {\n  display: inline-block;\n  vertical-align: top;\n}\nimg[data-v-88647a92] {\n  cursor: pointer;\n  padding-right: 4px;\n}\nimg.preview[data-v-88647a92] {\n  cursor: default;\n}\n.version-container[data-v-88647a92] {\n  display: inline-block;\n}\n.versiondate[data-v-88647a92] {\n  min-width: 100px;\n  vertical-align: super;\n}\n.version-details[data-v-88647a92] {\n  text-align: left;\n}\n.version-details > span[data-v-88647a92] {\n  padding: 0 10px;\n}\n.revertVersion[data-v-88647a92] {\n  cursor: pointer;\n  float: right;\n  margin-right: -10px;\n}\n", ""]);
 // Exports
 module.exports = exports;
 
@@ -81969,7 +82010,7 @@ var render = function() {
                               },
                               [
                                 _c("img", {
-                                  attrs: { src: _vm.downloadImagePath }
+                                  attrs: { src: _vm.downloadIconUrl }
                                 }),
                                 _vm._v(" "),
                                 _c(
@@ -81999,7 +82040,24 @@ var render = function() {
                               [_vm._v(_vm._s(version.humanReadableSize))]
                             )
                           ])
-                        ])
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "a",
+                          {
+                            staticClass: "revertVersion",
+                            attrs: {
+                              href: "#",
+                              title: _vm.t("wiki", "Restore")
+                            },
+                            on: {
+                              click: function($event) {
+                                return _vm.revertVersion(version)
+                              }
+                            }
+                          },
+                          [_c("img", { attrs: { src: _vm.revertIconUrl } })]
+                        )
                       ])
                     ])
                   ]
