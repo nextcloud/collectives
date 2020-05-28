@@ -29,9 +29,12 @@ class WikiController extends Controller {
 	 *
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
+	 *
+	 * @param string $path
+	 *
 	 * @return TemplateResponse
 	 */
-	public function index(): TemplateResponse {
+	public function index(string $path): TemplateResponse {
 		$this->eventDispatcher->dispatch(LoadViewer::class, new LoadViewer());
 		return new TemplateResponse('wiki', 'main');  // templates/main.php
 	}
