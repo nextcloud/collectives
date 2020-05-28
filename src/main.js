@@ -40,10 +40,14 @@ const routes = [
 	{ path: '/:name', component: Path, props: true },
 ]
 
-// Create the router instance and pass the `routes` option
-// You can pass in additional options here, but let's
-// keep it simple for now.
+// We cannot predict the base
+// as some servers have index.php in their urls.
+// So we take the current path and drop everything after '/apps/wiki'.
+const base = window.location.pathname.replace(/\/apps\/wiki\/.*/, '/apps/wiki/')
+
 const router = new VueRouter({
+	mode: 'history',
+	base,
 	routes,
 })
 
