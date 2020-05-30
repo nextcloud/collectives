@@ -4,3 +4,5 @@ vendor/
 
 # Editor directories and files
 .idea/
+js/*.js
+js/*.js.map
