@@ -92,8 +92,8 @@ import { showSuccess, showError } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
 import { encodePath } from '@nextcloud/paths'
 
-import PagePreview from './PagePreview'
-import SidebarVersionsTab from './SidebarVersionsTab'
+import PagePreview from './components/PagePreview'
+import SidebarVersionsTab from './components/SidebarVersionsTab'
 
 export default {
 	name: 'App',
