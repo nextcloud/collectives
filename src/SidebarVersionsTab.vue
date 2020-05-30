@@ -23,24 +23,32 @@
 		<template v-else-if="!loading && versions">
 			<ul>
 				<template v-for="version in versions">
-					<div><li>
-						<div class="preview-container">
-							<img class="preview" :src="version.previewUrl" width="44" height="44"/>
-						</div>
-						<div class="version-container">
-							<div>
-								<a :href="version.downloadUrl" class="downloadVersion" :download="pageTitle"><img :src="downloadIconUrl" />
-									<span class="versiondate has-tooltip live-relative-timestamp" :data-timestamp="version.millisecondsTimestamp" :title="version.formattedTimestamp">{{ version.relativeTimestamp }}</span>
-								</a>
+					<div :key="version.downloadUrl">
+						<li>
+							<div class="preview-container">
+								<img class="preview"
+									:src="version.previewUrl"
+									width="44"
+									height="44">
 							</div>
-							<div class="version-details">
-								<span class="size has-tooltip" :title="version.altSize">{{ version.humanReadableSize }}</span>
+							<div class="version-container">
+								<div>
+									<a :href="version.downloadUrl" class="downloadVersion" :download="pageTitle"><img :src="downloadIconUrl">
+										<span class="versiondate has-tooltip live-relative-timestamp" :data-timestamp="version.millisecondsTimestamp" :title="version.formattedTimestamp">{{ version.relativeTimestamp }}</span>
+									</a>
+								</div>
+								<div class="version-details">
+									<span class="size has-tooltip" :title="version.altSize">{{ version.humanReadableSize }}</span>
+								</div>
 							</div>
-						</div>
-						<a href="#" class="revertVersion" :title="t('wiki', 'Restore')" @click="revertVersion(version)">
-							<img :src="revertIconUrl">
-						</a>
-					</li></div>
+							<a href="#"
+								class="revertVersion"
+								:title="t('wiki', 'Restore')"
+								@click="revertVersion(version)">
+								<img :src="revertIconUrl">
+							</a>
+						</li>
+					</div>
 				</template>
 			</ul>
 		</template>
@@ -50,18 +58,17 @@
 			<div class="icon icon-history" />
 			<h2>{{ t('wiki', 'No other versions available') }}</h2>
 		</div>
-
 	</div>
 	<!-- </AppSidebarTab> -->
 </template>
 
 <script>
-//import AppSidebarTab from '@nextcloud/vue/dist/Components/AppSidebarTab'
-import { getCurrentUser } from "@nextcloud/auth"
-import axios from "@nextcloud/axios"
+// import AppSidebarTab from '@nextcloud/vue/dist/Components/AppSidebarTab'
+import { getCurrentUser } from '@nextcloud/auth'
+import axios from '@nextcloud/axios'
 import { showSuccess, showError } from '@nextcloud/dialogs'
-import { generateRemoteUrl, imagePath } from "@nextcloud/router"
-import moment from "@nextcloud/moment"
+import { generateRemoteUrl, imagePath } from '@nextcloud/router'
+import moment from '@nextcloud/moment'
 
 export default {
 	name: 'SidebarVersionsTab',
@@ -76,9 +83,9 @@ export default {
 		pageTitle: {
 			type: String,
 			required: true,
-		}
+		},
 	},
-	data: function () {
+	data: function() {
 		return {
 			error: '',
 			loading: true,
@@ -88,7 +95,7 @@ export default {
 		}
 	},
 	watch: {
-		'pageId': function () {
+		'pageId': function() {
 			this.getPageVersions()
 		},
 	},
@@ -102,11 +109,11 @@ export default {
 		 * @param {object} xml XML object
 		 * @returns {object}
 		 */
-		xmlToJson: function (xml) {
+		xmlToJson: function(xml) {
 			let obj = {}
 
 			if (xml.nodeType === 1) {
-				if(xml.attributes.length > 0) {
+				if (xml.attributes.length > 0) {
 					obj['@attributes'] = {}
 					for (let j = 0; j < xml.attributes.length; j++) {
 						const attribute = xml.attributes.item(j)
@@ -142,7 +149,7 @@ export default {
 		 * @param {string} xml XML string
 		 * @returns {object|null}
 		 */
-		parseXml: function (xml) {
+		parseXml: function(xml) {
 			let dom = null
 			try {
 				dom = (new DOMParser()).parseFromString(xml, 'text/xml')
@@ -157,7 +164,7 @@ export default {
 		 * @param {string} xml XML string
 		 * @returns {array|null}
 		 */
-		xmlToVersionsList: function (xml) {
+		xmlToVersionsList: function(xml) {
 			const json = this.xmlToJson(this.parseXml(xml))
 			const list = json['d:multistatus']['d:response']
 			const result = []

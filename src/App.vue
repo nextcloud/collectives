@@ -32,7 +32,7 @@
 						</ActionButton>
 					</Actions>
 					<Actions>
-						<ActionButton icon="icon-menu" @click="showSidebar = !showSidebar" v-if="!showSidebar">
+						<ActionButton v-if="!showSidebar" icon="icon-menu" @click="showSidebar = !showSidebar">
 							{{ t('wiki', 'Toggle sidebar') }}
 						</ActionButton>
 					</Actions>
@@ -68,12 +68,12 @@
 		</AppContent>
 		<AppSidebar
 			v-if="currentPage"
-			ref="sidebar"
 			v-show="showSidebar"
+			ref="sidebar"
 			:title="'Page: ' + currentPage.title"
 			subtitle="..."
 			@close="showSidebar=false">
-			<SidebarVersionsTab :pageId="currentPage.id" :pageTitle="currentPage.title"/>
+			<SidebarVersionsTab :page-id="currentPage.id" :page-title="currentPage.title" />
 		</AppSidebar>
 	</div>
 </template>
@@ -93,7 +93,7 @@ import { generateUrl } from '@nextcloud/router'
 import { encodePath } from '@nextcloud/paths'
 
 import PagePreview from './PagePreview'
-import SidebarVersionsTab from "./SidebarVersionsTab";
+import SidebarVersionsTab from './SidebarVersionsTab'
 
 export default {
 	name: 'App',
