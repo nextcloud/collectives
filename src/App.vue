@@ -25,9 +25,14 @@
 		</AppNavigation>
 		<AppContent>
 			<div v-if="currentPage">
-				<div id="sidebar-action" v-if="!showSidebar">
+				<div id="action-menu">
 					<Actions>
-						<ActionButton icon="icon-menu" @click="showSidebar = !showSidebar">
+						<ActionButton icon="icon-edit" @click="edit = !edit">
+							{{ t('wiki', 'Toggle edit mode') }}
+						</ActionButton>
+					</Actions>
+					<Actions>
+						<ActionButton icon="icon-menu" @click="showSidebar = !showSidebar" v-if="!showSidebar">
 							{{ t('wiki', 'Toggle sidebar') }}
 						</ActionButton>
 					</Actions>
@@ -39,8 +44,6 @@
 						type="text"
 						:disabled="updating || !savePossible"
 						@blur="renamePage">
-					<input v-model="edit"
-						type="checkbox">
 				</div>
 				<PagePreview v-if="preview || !edit"
 					:page="currentPage"
@@ -289,7 +292,7 @@ export default {
 		max-width: 670px;
 	}
 
-	#sidebar-action {
+	#action-menu {
 		position: absolute;
 		right: 0;
 	}

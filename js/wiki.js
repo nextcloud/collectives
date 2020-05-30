@@ -5640,6 +5640,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 
 
@@ -13471,7 +13474,7 @@ module.exports = exports;
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "#preview-wrapper {\n  /* Document rendering styles */\n}\n#preview-wrapper div.ProseMirror {\n    margin-top: 44px;\n    height: 100%;\n    position: relative;\n    word-wrap: break-word;\n    white-space: pre-wrap;\n    -webkit-font-variant-ligatures: none;\n    font-variant-ligatures: none;\n    padding: 4px 8px 200px 14px;\n    line-height: 150%;\n    font-size: 14px;\n    outline: none;\n}\n#preview-wrapper div.ProseMirror[contenteditable=true], #preview-wrapper div.ProseMirror[contenteditable=false] {\n      border: none !important;\n      width: 100%;\n      background-color: transparent;\n      color: var(--color-main-text);\n      opacity: 1;\n      -webkit-user-select: text;\n      user-select: text;\n      font-size: 14px;\n}\n#preview-wrapper div.ProseMirror .checkbox-item {\n      display: flex;\n      align-items: start;\n}\n#preview-wrapper div.ProseMirror .checkbox-item input[type=checkbox] {\n        display: none;\n}\n#preview-wrapper div.ProseMirror .checkbox-item:before {\n        content: '';\n        display: inline-block;\n        height: 14px;\n        width: 14px;\n        vertical-align: middle;\n        border-radius: 50%;\n        margin: 0 6px 3px 3px;\n        margin-left: 3px;\n        border: 1px solid #878787;\n        content: \"\";\n        position: relative;\n        width: 44px;\n        height: 44px;\n        display: block;\n        border-radius: 1px;\n        height: 14px;\n        width: 14px;\n        box-shadow: none !important;\n        background-position: center;\n}\n#preview-wrapper div.ProseMirror .checkbox-item.checked:before {\n        background-image: url(\"/core/css/../img/actions/checkbox-mark.svg\");\n        background-color: var(--color-primary-element);\n}\n#preview-wrapper div.ProseMirror .checkbox-item label {\n        display: block;\n        flex-grow: 1;\n}\n#preview-wrapper div.ProseMirror .checkbox-item label > *:first-child {\n          margin-top: 0;\n}\n#preview-wrapper div.ProseMirror li label.checkbox-label {\n      width: 100%;\n      display: flex;\n      margin-top: 10px;\n      margin-bottom: 1em;\n}\n#preview-wrapper div.ProseMirror li label.checkbox-label:before {\n        position: relative;\n        top: 2px;\n}\n#preview-wrapper div.ProseMirror li label.checkbox-label div.checkbox-wrapper {\n        margin-bottom: -1em;\n        width: 100%;\n}\n#preview-wrapper div.ProseMirror li label.checkbox-label div.checkbox-wrapper > p {\n          margin-top: -1px;\n          margin-bottom: 0;\n          padding-bottom: 10px;\n}\n#preview-wrapper div.ProseMirror p:first-child,\n    #preview-wrapper div.ProseMirror h1:first-child,\n    #preview-wrapper div.ProseMirror h2:first-child,\n    #preview-wrapper div.ProseMirror h3:first-child,\n    #preview-wrapper div.ProseMirror h4:first-child,\n    #preview-wrapper div.ProseMirror h5:first-child,\n    #preview-wrapper div.ProseMirror h6:first-child {\n      margin-top: 10px;\n}\n#preview-wrapper div.ProseMirror a {\n      color: var(--color-primary-element);\n      text-decoration: underline;\n      padding: .5em 0;\n}\n#preview-wrapper div.ProseMirror p {\n      margin-bottom: 1em;\n      line-height: 150%;\n}\n#preview-wrapper div.ProseMirror em {\n      font-style: italic;\n}\n#preview-wrapper div.ProseMirror h1,\n    #preview-wrapper div.ProseMirror h2,\n    #preview-wrapper div.ProseMirror h3,\n    #preview-wrapper div.ProseMirror h4,\n    #preview-wrapper div.ProseMirror h5,\n    #preview-wrapper div.ProseMirror h6 {\n      font-weight: 600;\n      line-height: 120%;\n      margin-top: 24px;\n      margin-bottom: 12px;\n      color: var(--color-main-text);\n}\n#preview-wrapper div.ProseMirror h1 {\n      font-size: 36px;\n      margin-top: 48px;\n}\n#preview-wrapper div.ProseMirror h2 {\n      font-size: 28px;\n      margin-top: 48px;\n}\n#preview-wrapper div.ProseMirror h3 {\n      font-size: 24px;\n}\n#preview-wrapper div.ProseMirror h4 {\n      font-size: 21px;\n}\n#preview-wrapper div.ProseMirror h5 {\n      font-size: 17px;\n}\n#preview-wrapper div.ProseMirror h6 {\n      font-size: 14px;\n}\n#preview-wrapper div.ProseMirror img {\n      cursor: default;\n      max-width: 100%;\n}\n#preview-wrapper div.ProseMirror hr {\n      padding: 2px 0;\n      border: none;\n      margin: 1em 0;\n      width: 100%;\n}\n#preview-wrapper div.ProseMirror hr:after {\n      content: \"\";\n      display: block;\n      height: 1px;\n      background-color: var(--color-border-dark);\n      line-height: 2px;\n}\n#preview-wrapper div.ProseMirror pre {\n      white-space: pre;\n      overflow-x: auto;\n      background-color: var(--color-background-dark);\n      border-radius: var(--border-radius);\n      padding: 1em 1.3em;\n      margin-bottom: 1em;\n}\n#preview-wrapper div.ProseMirror p code {\n      background-color: var(--color-background-dark);\n      border-radius: var(--border-radius);\n      padding: .1em .3em;\n}\n#preview-wrapper div.ProseMirror li {\n      position: relative;\n}\n#preview-wrapper div.ProseMirror ul, #preview-wrapper div.ProseMirror ol {\n      padding-left: 10px;\n      margin-left: 10px;\n}\n#preview-wrapper div.ProseMirror ul li {\n      list-style-type: disc;\n}\n#preview-wrapper div.ProseMirror ul > li > ul > li {\n      list-style-type: circle;\n}\n#preview-wrapper div.ProseMirror ul > li > ul > li ul li {\n      list-style-type: square;\n}\n#preview-wrapper div.ProseMirror blockquote {\n      padding-left: 1em;\n      border-left: 4px solid var(--color-primary-element);\n      color: var(--color-text-maxcontrast);\n      margin-left: 0;\n      margin-right: 0;\n}\n#preview-wrapper .ProseMirror-focused .ProseMirror-gapcursor {\n    display: block;\n}\n#preview-wrapper .editor__content p.is-empty:first-child::before {\n    content: attr(data-empty-text);\n    float: left;\n    color: var(--color-text-maxcontrast);\n    pointer-events: none;\n    height: 0;\n}\n#preview-container {\n  height: calc(100% - 50px);\n  top: 50px;\n}\n", ""]);
+exports.push([module.i, "#preview-wrapper {\n  /* Document rendering styles */\n}\n#preview-wrapper div.ProseMirror {\n    margin-top: 44px;\n    height: 100%;\n    position: relative;\n    word-wrap: break-word;\n    white-space: pre-wrap;\n    -webkit-font-variant-ligatures: none;\n    font-variant-ligatures: none;\n    padding: 4px 8px 200px 14px;\n    line-height: 150%;\n    font-size: 14px;\n    outline: none;\n}\n#preview-wrapper div.ProseMirror[contenteditable=true], #preview-wrapper div.ProseMirror[contenteditable=false],\n    #preview-wrapper div.ProseMirror [contenteditable=true],\n    #preview-wrapper div.ProseMirror [contenteditable=false] {\n      border: none !important;\n      width: 100%;\n      background-color: transparent;\n      color: var(--color-main-text);\n      opacity: 1;\n      -webkit-user-select: text;\n      user-select: text;\n      font-size: 14px;\n}\n#preview-wrapper div.ProseMirror .checkbox-item {\n      display: flex;\n      align-items: start;\n}\n#preview-wrapper div.ProseMirror .checkbox-item input[type=checkbox] {\n        display: none;\n}\n#preview-wrapper div.ProseMirror .checkbox-item:before {\n        content: '';\n        display: inline-block;\n        height: 14px;\n        width: 14px;\n        vertical-align: middle;\n        border-radius: 50%;\n        margin: 0 6px 3px 3px;\n        margin-left: 3px;\n        border: 1px solid #878787;\n        content: \"\";\n        position: relative;\n        width: 44px;\n        height: 44px;\n        display: block;\n        border-radius: 1px;\n        height: 14px;\n        width: 14px;\n        box-shadow: none !important;\n        background-position: center;\n}\n#preview-wrapper div.ProseMirror .checkbox-item.checked:before {\n        background-image: url(\"/core/css/../img/actions/checkbox-mark.svg\");\n        background-color: var(--color-primary-element);\n}\n#preview-wrapper div.ProseMirror .checkbox-item label {\n        display: block;\n        flex-grow: 1;\n        max-width: calc(100% - 28px);\n}\n#preview-wrapper div.ProseMirror .checkbox-item label > *:first-child {\n          margin-top: 0;\n}\n#preview-wrapper div.ProseMirror li label.checkbox-label {\n      width: 100%;\n      display: flex;\n      margin-top: 10px;\n      margin-bottom: 1em;\n}\n#preview-wrapper div.ProseMirror li label.checkbox-label:before {\n        position: relative;\n        top: 2px;\n}\n#preview-wrapper div.ProseMirror li label.checkbox-label div.checkbox-wrapper {\n        margin-bottom: -1em;\n        width: 100%;\n}\n#preview-wrapper div.ProseMirror li label.checkbox-label div.checkbox-wrapper > p {\n          margin-top: -1px;\n          margin-bottom: 0;\n          padding-bottom: 10px;\n}\n#preview-wrapper div.ProseMirror p:first-child,\n    #preview-wrapper div.ProseMirror h1:first-child,\n    #preview-wrapper div.ProseMirror h2:first-child,\n    #preview-wrapper div.ProseMirror h3:first-child,\n    #preview-wrapper div.ProseMirror h4:first-child,\n    #preview-wrapper div.ProseMirror h5:first-child,\n    #preview-wrapper div.ProseMirror h6:first-child {\n      margin-top: 10px;\n}\n#preview-wrapper div.ProseMirror a {\n      color: var(--color-primary-element);\n      text-decoration: underline;\n      padding: .5em 0;\n}\n#preview-wrapper div.ProseMirror p {\n      margin-bottom: 1em;\n      line-height: 150%;\n}\n#preview-wrapper div.ProseMirror em {\n      font-style: italic;\n}\n#preview-wrapper div.ProseMirror h1,\n    #preview-wrapper div.ProseMirror h2,\n    #preview-wrapper div.ProseMirror h3,\n    #preview-wrapper div.ProseMirror h4,\n    #preview-wrapper div.ProseMirror h5,\n    #preview-wrapper div.ProseMirror h6 {\n      font-weight: 600;\n      line-height: 120%;\n      margin-top: 24px;\n      margin-bottom: 12px;\n      color: var(--color-main-text);\n}\n#preview-wrapper div.ProseMirror h1 {\n      font-size: 36px;\n      margin-top: 48px;\n}\n#preview-wrapper div.ProseMirror h2 {\n      font-size: 28px;\n      margin-top: 48px;\n}\n#preview-wrapper div.ProseMirror h3 {\n      font-size: 24px;\n}\n#preview-wrapper div.ProseMirror h4 {\n      font-size: 21px;\n}\n#preview-wrapper div.ProseMirror h5 {\n      font-size: 17px;\n}\n#preview-wrapper div.ProseMirror h6 {\n      font-size: 14px;\n}\n#preview-wrapper div.ProseMirror img {\n      cursor: default;\n      max-width: 100%;\n}\n#preview-wrapper div.ProseMirror hr {\n      padding: 2px 0;\n      border: none;\n      margin: 1em 0;\n      width: 100%;\n}\n#preview-wrapper div.ProseMirror hr:after {\n      content: \"\";\n      display: block;\n      height: 1px;\n      background-color: var(--color-border-dark);\n      line-height: 2px;\n}\n#preview-wrapper div.ProseMirror pre {\n      white-space: pre;\n      overflow-x: auto;\n      background-color: var(--color-background-dark);\n      border-radius: var(--border-radius);\n      padding: 1em 1.3em;\n      margin-bottom: 1em;\n}\n#preview-wrapper div.ProseMirror p code {\n      background-color: var(--color-background-dark);\n      border-radius: var(--border-radius);\n      padding: .1em .3em;\n}\n#preview-wrapper div.ProseMirror li {\n      position: relative;\n}\n#preview-wrapper div.ProseMirror ul, #preview-wrapper div.ProseMirror ol {\n      padding-left: 10px;\n      margin-left: 10px;\n}\n#preview-wrapper div.ProseMirror ul li {\n      list-style-type: disc;\n}\n#preview-wrapper div.ProseMirror ul > li > ul > li {\n      list-style-type: circle;\n}\n#preview-wrapper div.ProseMirror ul > li > ul > li ul li {\n      list-style-type: square;\n}\n#preview-wrapper div.ProseMirror blockquote {\n      padding-left: 1em;\n      border-left: 4px solid var(--color-primary-element);\n      color: var(--color-text-maxcontrast);\n      margin-left: 0;\n      margin-right: 0;\n}\n#preview-wrapper .ProseMirror-focused .ProseMirror-gapcursor {\n    display: block;\n}\n#preview-wrapper .editor__content p.is-empty:first-child::before {\n    content: attr(data-empty-text);\n    float: left;\n    color: var(--color-text-maxcontrast);\n    pointer-events: none;\n    height: 0;\n}\n#preview-container {\n  height: calc(100% - 50px);\n  top: 50px;\n}\n", ""]);
 // Exports
 module.exports = exports;
 
@@ -13507,7 +13510,7 @@ module.exports = exports;
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "\n#app-content > div[data-v-7ba5bd90] {\n\twidth: 100%;\n\theight: 100%;\n\tpadding: 20px;\n\tdisplay: flex;\n\tflex-direction: column;\n\tflex-grow: 1;\n}\n#titleform > input[type=\"text\"][data-v-7ba5bd90] {\n\twidth: 80%;\n\tmax-width: 670px;\n}\n#sidebar-action[data-v-7ba5bd90] {\n\tposition: absolute;\n\tright: 0;\n}\n", ""]);
+exports.push([module.i, "\n#app-content > div[data-v-7ba5bd90] {\n\twidth: 100%;\n\theight: 100%;\n\tpadding: 20px;\n\tdisplay: flex;\n\tflex-direction: column;\n\tflex-grow: 1;\n}\n#titleform > input[type=\"text\"][data-v-7ba5bd90] {\n\twidth: 80%;\n\tmax-width: 670px;\n}\n#action-menu[data-v-7ba5bd90] {\n\tposition: absolute;\n\tright: 0;\n}\n", ""]);
 // Exports
 module.exports = exports;
 
@@ -81701,15 +81704,40 @@ var render = function() {
           ? _c(
               "div",
               [
-                !_vm.showSidebar
-                  ? _c(
-                      "div",
-                      { attrs: { id: "sidebar-action" } },
+                _c(
+                  "div",
+                  { attrs: { id: "action-menu" } },
+                  [
+                    _c(
+                      "Actions",
                       [
                         _c(
-                          "Actions",
+                          "ActionButton",
+                          {
+                            attrs: { icon: "icon-edit", highlighted: _vm.edit },
+                            on: {
+                              click: function($event) {
+                                _vm.edit = !_vm.edit
+                              }
+                            }
+                          },
                           [
-                            _c(
+                            _vm._v(
+                              "\n\t\t\t\t\t\t" +
+                                _vm._s(_vm.t("wiki", "Toggle edit mode")) +
+                                "\n\t\t\t\t\t"
+                            )
+                          ]
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "Actions",
+                      [
+                        !_vm.showSidebar
+                          ? _c(
                               "ActionButton",
                               {
                                 attrs: { icon: "icon-menu" },
@@ -81727,13 +81755,13 @@ var render = function() {
                                 )
                               ]
                             )
-                          ],
-                          1
-                        )
+                          : _vm._e()
                       ],
                       1
                     )
-                  : _vm._e(),
+                  ],
+                  1
+                ),
                 _vm._v(" "),
                 _c("div", { attrs: { id: "titleform" } }, [
                   _vm._v(
@@ -81767,44 +81795,6 @@ var render = function() {
                           "newTitle",
                           $event.target.value
                         )
-                      }
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.edit,
-                        expression: "edit"
-                      }
-                    ],
-                    attrs: { type: "checkbox" },
-                    domProps: {
-                      checked: Array.isArray(_vm.edit)
-                        ? _vm._i(_vm.edit, null) > -1
-                        : _vm.edit
-                    },
-                    on: {
-                      change: function($event) {
-                        var $$a = _vm.edit,
-                          $$el = $event.target,
-                          $$c = $$el.checked ? true : false
-                        if (Array.isArray($$a)) {
-                          var $$v = null,
-                            $$i = _vm._i($$a, $$v)
-                          if ($$el.checked) {
-                            $$i < 0 && (_vm.edit = $$a.concat([$$v]))
-                          } else {
-                            $$i > -1 &&
-                              (_vm.edit = $$a
-                                .slice(0, $$i)
-                                .concat($$a.slice($$i + 1)))
-                          }
-                        } else {
-                          _vm.edit = $$c
-                        }
                       }
                     }
                   })
