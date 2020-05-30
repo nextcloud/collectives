@@ -25,6 +25,13 @@
 		</AppNavigation>
 		<AppContent>
 			<div v-if="currentPage">
+				<div id="sidebar-action" v-if="!showSidebar">
+					<Actions>
+						<ActionButton icon="icon-menu" @click="showSidebar = !showSidebar">
+							{{ t('wiki', 'Toggle sidebar') }}
+						</ActionButton>
+					</Actions>
+				</div>
 				<div id="titleform">
 					{{ t('wiki', 'Title') }}:
 					<input ref="title"
@@ -56,30 +63,47 @@
 				<h2>{{ t('wiki', 'Create a page to get started') }}</h2>
 			</div>
 		</AppContent>
+		<AppSidebar
+			v-if="currentPage"
+			ref="sidebar"
+			v-show="showSidebar"
+			:title="'Page: ' + currentPage.title"
+			subtitle="..."
+			@close="showSidebar=false">
+			<SidebarVersionsTab :pageId="currentPage.id" :pageTitle="currentPage.title"/>
+		</AppSidebar>
 	</div>
 </template>
 
 <script>
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
+import Actions from '@nextcloud/vue/dist/Components/Actions'
 import AppContent from '@nextcloud/vue/dist/Components/AppContent'
 import AppNavigation from '@nextcloud/vue/dist/Components/AppNavigation'
 import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
 import AppNavigationNew from '@nextcloud/vue/dist/Components/AppNavigationNew'
+import AppSidebar from '@nextcloud/vue/dist/Components/AppSidebar'
 
 import axios from '@nextcloud/axios'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
+import { encodePath } from '@nextcloud/paths'
+
 import PagePreview from './PagePreview'
+import SidebarVersionsTab from "./SidebarVersionsTab";
 
 export default {
 	name: 'App',
 	components: {
 		ActionButton,
+		Actions,
 		AppContent,
 		AppNavigation,
 		AppNavigationItem,
 		AppNavigationNew,
+		AppSidebar,
 		PagePreview,
+		SidebarVersionsTab,
 	},
 	data: function() {
 		return {
@@ -89,6 +113,7 @@ export default {
 			loading: true,
 			edit: false,
 			preview: true,
+			showSidebar: false,
 		}
 	},
 	computed: {
@@ -116,7 +141,7 @@ export default {
 		 * @returns {string}
 		 */
 		currentPath() {
-			return `/Wiki/${this.currentFilename}`
+			return encodePath(`/Wiki/${this.currentFilename}`)
 		},
 
 		/**
@@ -134,7 +159,6 @@ export default {
 		savePossible() {
 			return this.currentPage && this.currentPage.title !== ''
 		},
-
 	},
 
 	watch: {
@@ -263,5 +287,10 @@ export default {
 	#titleform > input[type="text"] {
 		width: 80%;
 		max-width: 670px;
+	}
+
+	#sidebar-action {
+		position: absolute;
+		right: 0;
 	}
 </style>
