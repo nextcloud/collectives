@@ -23,111 +23,56 @@
 				</AppNavigationItem>
 			</ul>
 		</AppNavigation>
-		<AppContent>
-			<div v-if="currentPage">
-				<div id="action-menu">
-					<Actions>
-						<ActionButton icon="icon-edit" @click="edit = !edit">
-							{{ t('wiki', 'Toggle edit mode') }}
-						</ActionButton>
-					</Actions>
-					<Actions>
-						<ActionButton v-if="!showSidebar" icon="icon-menu" @click="showSidebar = !showSidebar">
-							{{ t('wiki', 'Toggle sidebar') }}
-						</ActionButton>
-					</Actions>
-				</div>
-				<div id="titleform">
-					{{ t('wiki', 'Title') }}:
-					<input ref="title"
-						v-model="currentPage.newTitle"
-						type="text"
-						:disabled="updating || !savePossible"
-						@blur="renamePage">
-				</div>
-				<PagePreview v-if="preview || !edit"
-					:page="currentPage"
-					:loading="preview && edit" />
-				<component :is="handler.component"
-					v-show="edit && !preview"
-					ref="editor"
-					:key="'editor-' + currentPage.id"
-					:fileid="currentPage.id"
-					:basename="currentFilename"
-					:filename="currentPath"
-					:has-preview="true"
-					:active="true"
-					mime="text/markdown"
-					class="file-view active"
-					@ready="hidePreview" />
-			</div>
-			<div v-else id="emptycontent">
-				<div class="icon-file" />
-				<h2>{{ t('wiki', 'Create a page to get started') }}</h2>
-			</div>
-		</AppContent>
-		<AppSidebar
-			v-if="currentPage"
+		<Page v-if="currentPage"
+			:page="currentPage"
+			:updating="updating"
+			@toggleSidebar="showSidebar=!showSidebar"
+			@rename-page="renamePage" />
+		<Start v-else />
+		<PageSidebar v-if="currentPage"
 			v-show="showSidebar"
-			ref="sidebar"
-			:title="'Page: ' + currentPage.title"
-			subtitle="..."
-			@close="showSidebar=false">
-			<SidebarVersionsTab :page-id="currentPage.id" :page-title="currentPage.title" />
-		</AppSidebar>
+			:page="currentPage"
+			@close="showSidebar=false" />
 	</div>
 </template>
 
 <script>
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
-import Actions from '@nextcloud/vue/dist/Components/Actions'
-import AppContent from '@nextcloud/vue/dist/Components/AppContent'
 import AppNavigation from '@nextcloud/vue/dist/Components/AppNavigation'
 import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
 import AppNavigationNew from '@nextcloud/vue/dist/Components/AppNavigationNew'
-import AppSidebar from '@nextcloud/vue/dist/Components/AppSidebar'
 
 import axios from '@nextcloud/axios'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
-import { encodePath } from '@nextcloud/paths'
 
-import PagePreview from './PagePreview'
-import SidebarVersionsTab from './SidebarVersionsTab'
+import Page from './components/Page'
+import PageSidebar from './components/PageSidebar'
+import Start from './components/Start'
 
 export default {
 	name: 'App',
 	components: {
 		ActionButton,
-		Actions,
-		AppContent,
 		AppNavigation,
 		AppNavigationItem,
 		AppNavigationNew,
-		AppSidebar,
-		PagePreview,
-		SidebarVersionsTab,
+		Page,
+		PageSidebar,
+		Start,
 	},
+
 	data: function() {
 		return {
 			pages: [],
 			currentPageId: null,
 			updating: false,
 			loading: true,
-			edit: false,
-			preview: true,
 			showSidebar: false,
 		}
 	},
-	computed: {
-		/**
-		 * Return filename of currentPage
-		 * @returns {string}
-		 */
-		currentFilename() {
-			return `${this.currentPage.title}.md`
-		},
 
+	computed: {
 		/**
 		 * Return the currently selected page object
 		 * @returns {Object|null}
@@ -138,40 +83,8 @@ export default {
 			}
 			return this.pages.find((page) => page.id === this.currentPageId)
 		},
-
-		/**
-		 * Return path of currentPage
-		 * @returns {string}
-		 */
-		currentPath() {
-			return encodePath(`/Wiki/${this.currentFilename}`)
-		},
-
-		/**
-		 * Fetch handlers for 'text/markdown' from Viewer app
-		 * @returns {object}
-		 */
-		handler() {
-			return OCA.Viewer.availableHandlers.filter(h => h.mimes.indexOf('text/markdown') !== -1)[0]
-		},
-
-		/**
-		 * Return true if a page is selected and its title is not empty
-		 * @returns {Boolean}
-		 */
-		savePossible() {
-			return this.currentPage && this.currentPage.title !== ''
-		},
 	},
 
-	watch: {
-		'currentPage.title': function(val, oldVal) {
-			if (!this.currentPage.newTitle) {
-				this.currentPage.newTitle = val
-			}
-			document.title = this.currentPage.title + ' - Wiki - Nextcloud'
-		},
-	},
 	/**
 	 * Fetch list of pages when the component is loaded
 	 */
@@ -192,7 +105,6 @@ export default {
 		 * @param {Object} page Page object
 		 */
 		openPage(page) {
-			this.preview = true
 			this.currentPageId = page.id
 		},
 
@@ -230,15 +142,16 @@ export default {
 
 		/**
 		 * Rename currentPage on the server
+		 * @param {String} newTitle New title for the page
 		 */
-		async renamePage() {
-			if (this.currentPage.title === this.currentPage.newTitle) {
+		async renamePage(newTitle) {
+			if (this.currentPage.title === newTitle) {
 				return
 			}
 			const page = this.currentPage
 			this.updating = true
 			try {
-				page.title = page.newTitle
+				page.title = newTitle
 				delete page.newTitle
 				const response = await axios.put(generateUrl(`/apps/wiki/pages/${page.id}`), page)
 				// Update title as it might have changed due to filename conflict handling
@@ -268,32 +181,6 @@ export default {
 			}
 		},
 
-		/**
-		 * Set preview to false
-		 */
-		hidePreview() {
-			this.preview = false
-		},
 	},
 }
 </script>
-<style scoped>
-	#app-content > div {
-		width: 100%;
-		height: 100%;
-		padding: 20px;
-		display: flex;
-		flex-direction: column;
-		flex-grow: 1;
-	}
-
-	#titleform > input[type="text"] {
-		width: 80%;
-		max-width: 670px;
-	}
-
-	#action-menu {
-		position: absolute;
-		right: 0;
-	}
-</style>
