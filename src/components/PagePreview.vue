@@ -3,8 +3,11 @@
 		<div id="preview-wrapper" class="richEditor">
 			<div id="preview" class="editor">
 				<div :class="{menubar: true, loading}" />
-				<div>
-					<EditorContent class="editor__content" :editor="editor" />
+				<div v-if="!loading">
+					<EditorContent
+						class="editor__content"
+						:class="{ 'preview-revision': version }"
+						:editor="editor" />
 				</div>
 			</div>
 		</div>
@@ -12,6 +15,10 @@
 </template>
 
 <script>
+import { getCurrentUser } from '@nextcloud/auth'
+import axios from '@nextcloud/axios'
+import { generateRemoteUrl } from '@nextcloud/router'
+
 import MarkdownIt from 'markdown-it'
 import taskLists from 'markdown-it-task-lists'
 
@@ -33,11 +40,13 @@ import {
 
 export default {
 	name: 'PagePreview',
+
 	components: {
 		EditorContent,
 	},
+
 	props: {
-		loading: {
+		pageLoading: {
 			type: Boolean,
 			required: false,
 		},
@@ -45,8 +54,24 @@ export default {
 			type: Object,
 			required: true,
 		},
+		version: {
+			type: Boolean,
+			required: true,
+		},
 	},
+
+	data: function() {
+		return {
+			contentLoading: true,
+			pageContent: null,
+		}
+	},
+
 	computed: {
+		loading() {
+			return (this.pageLoading || this.contentLoading)
+		},
+
 		markdownit() {
 			return MarkdownIt('commonmark', { html: false, breaks: false })
 				.enable('strikethrough')
@@ -54,7 +79,7 @@ export default {
 		},
 
 		htmlContent() {
-			return this.markdownit.render(this.page.content)
+			return this.markdownit.render(this.pageContent)
 		},
 
 		editor() {
@@ -78,6 +103,33 @@ export default {
 				],
 				content: this.htmlContent,
 			})
+		},
+	},
+
+	watch: {
+		'page.id': function() {
+			this.getPageContent()
+		},
+	},
+
+	mounted() {
+		this.getPageContent()
+	},
+
+	methods: {
+		/**
+		 * Get markdown content of page
+		 */
+		async getPageContent() {
+			try {
+				this.contentLoading = true
+				const user = getCurrentUser().uid
+				const content = await axios.get(generateRemoteUrl(`dav/files/${user}/${this.page.basedir}/${this.page.filename}`))
+				this.pageContent = content.data
+				this.contentLoading = false
+			} catch (e) {
+				console.error(`Failed to fetch content of page ${this.page.title}`, e)
+			}
 		},
 	},
 }
