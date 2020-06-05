@@ -13,9 +13,7 @@
     "dev": "NODE_ENV=development webpack --progress --config webpack.dev.js",
     "watch": "NODE_ENV=development webpack --progress --watch --config webpack.dev.js",
     "lint": "eslint --ext .js,.vue src",
-    "lint:fix": "eslint --ext .js,.vue src --fix",
-    "stylelint": "stylelint src",
-    "stylelint:fix": "stylelint src --fix"
+    "lint:fix": "eslint --ext .js,.vue src --fix"
   },
   "dependencies": {
     "@nextcloud/auth": "^1.2.3",
@@ -61,10 +59,6 @@
     "file-loader": "^6.0.0",
     "node-sass": "^4.14.1",
     "sass-loader": "^8.0.2",
-    "stylelint": "^13.5.0",
-    "stylelint-config-recommended-scss": "^3.3.0",
-    "stylelint-scss": "^3.17.2",
-    "stylelint-webpack-plugin": "^0.10.5",
     "url-loader": "^3.0.0",
     "vue-loader": "^15.9.2",
     "vue-template-compiler": "^2.6.11",
