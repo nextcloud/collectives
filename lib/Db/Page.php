@@ -14,20 +14,25 @@ use OCP\Files\Folder;
  * @method void setId(integer $value)
  * @method string getTitle()
  * @method void setTitle(string $value)
- * @method string getContent()
- * @method void setContent(string $value)
+ * @method string getFilename()
+ * @method void setFilename(string $value)
+ * @method string getBasedir()
+ * @method void setBasedir(string $value)
  */
 class Page extends Entity implements JsonSerializable {
+	private const BASEDIR = 'Wiki';
 	private const SUFFIX = '.md';
 
 	protected $title;
-	protected $content;
+	protected $filename;
+	protected $basedir;
 
 	public function jsonSerialize() {
 		return [
 			'id' => $this->id,
 			'title' => $this->title,
-			'content' => $this->content
+			'filename' => $this->filename,
+			'basedir' => $this->basedir
 		];
 	}
 
@@ -40,7 +45,8 @@ class Page extends Entity implements JsonSerializable {
 		$page = new static();
 		$page->setId($file->getId());
 		$page->setTitle(basename($file->getName(), self::SUFFIX));
-		$page->setContent($file->getContent());
+		$page->setFilename($file->getName());
+		$page->setBasedir(self::BASEDIR);
 		return $page;
 	}
 }

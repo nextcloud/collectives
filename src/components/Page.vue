@@ -23,14 +23,15 @@
 			</div>
 			<PagePreview v-if="preview || !edit"
 				:page="page"
-				:loading="preview && edit" />
+				:page-loading="preview && edit"
+				:version="true" />
 			<component :is="handler.component"
 				v-show="edit && !preview"
 				ref="editor"
 				:key="'editor-' + page.id"
 				:fileid="page.id"
-				:basename="currentFilename"
-				:filename="currentPath"
+				:basename="page.filename"
+				:filename="'/' + page.basedir + '/' + page.filename"
 				:has-preview="true"
 				:active="true"
 				mime="text/markdown"
@@ -45,7 +46,6 @@ import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import Actions from '@nextcloud/vue/dist/Components/Actions'
 import AppContent from '@nextcloud/vue/dist/Components/AppContent'
 import PagePreview from './PagePreview'
-import { encodePath } from '@nextcloud/paths'
 
 export default {
 	name: 'Page',
@@ -76,22 +76,6 @@ export default {
 	},
 
 	computed: {
-		/**
-		 * Return filename of page
-		 * @returns {string}
-		 */
-		currentFilename() {
-			return `${this.page.title}.md`
-		},
-
-		/**
-		 * Return path of page
-		 * @returns {string}
-		 */
-		currentPath() {
-			return encodePath(`/Wiki/${this.currentFilename}`)
-		},
-
 		/**
 		 * Fetch handlers for 'text/markdown' from Viewer app
 		 * @returns {object}
