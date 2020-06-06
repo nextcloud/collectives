@@ -7,6 +7,8 @@
 		<SidebarVersionsTab
 			:page-id="page.id"
 			:page-title="page.title"
+			:page-timestamp="page.timestamp"
+			:page-size="page.size"
 			:reload-versions="reloadVersions"
 			@preview-version="emitVersion" />
 	</AppSidebar>

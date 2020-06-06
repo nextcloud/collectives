@@ -14,6 +14,10 @@ use OCP\Files\Folder;
  * @method void setId(integer $value)
  * @method string getTitle()
  * @method void setTitle(string $value)
+ * @method string getTimestamp()
+ * @method void setTimestamp(int $value)
+ * @method string getSize()
+ * @method void setSize(int $value)
  * @method string getFilename()
  * @method void setFilename(string $value)
  * @method string getBasedir()
@@ -24,6 +28,8 @@ class Page extends Entity implements JsonSerializable {
 	private const SUFFIX = '.md';
 
 	protected $title;
+	protected $timestamp;
+	protected $size;
 	protected $filename;
 	protected $basedir;
 
@@ -31,6 +37,8 @@ class Page extends Entity implements JsonSerializable {
 		return [
 			'id' => $this->id,
 			'title' => $this->title,
+			'timestamp' => $this->timestamp,
+			'size' => $this->size,
 			'filename' => $this->filename,
 			'basedir' => $this->basedir
 		];
@@ -45,6 +53,8 @@ class Page extends Entity implements JsonSerializable {
 		$page = new static();
 		$page->setId($file->getId());
 		$page->setTitle(basename($file->getName(), self::SUFFIX));
+		$page->setTimestamp($file->getMTime());
+		$page->setSize($file->getSize());
 		$page->setFilename($file->getName());
 		$page->setBasedir(self::BASEDIR);
 		return $page;

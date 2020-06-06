@@ -22,20 +22,43 @@
 		<!-- versions content -->
 		<template v-else-if="!loading && versions">
 			<ul>
+				<div :key="pageId">
+					<li>
+						<div class="icon-container">
+							<img class="icon"
+								:src="iconUrl"
+								width="44"
+								height="44">
+						</div>
+						<div class="version-container">
+							<div>
+								<a class="openVersion" @click="clickPreviewVersion(null)">
+									<span class="versiondate has-tooltip live-relative-timestamp" :data-timestamp="pageMillisecondsTimestamp" :title="pageFormattedTimestamp">
+										{{ t('wiki', 'Current version') }}
+									</span>
+								</a>
+							</div>
+							<div class="version-details">
+								<span class="size has-tooltip" :title="pageAltSize">{{ pageHumanReadableSize }}</span>
+							</div>
+						</div>
+					</li>
+				</div>
 				<template v-for="version in versions">
 					<div :key="version.downloadUrl">
 						<li>
-							<div class="preview-container">
-								<img class="preview"
-									:src="version.previewUrl"
+							<div class="icon-container">
+								<img class="icon"
+									:src="iconUrl"
 									width="44"
 									height="44">
 							</div>
 							<div class="version-container">
 								<div>
-									<a :href="version.downloadUrl" class="downloadVersion" :download="pageTitle"><img :src="downloadIconUrl"></a>
-									<a class="downloadVersion" @click="clickPreviewVersion(version)">
-										<span class="versiondate has-tooltip live-relative-timestamp" :data-timestamp="version.millisecondsTimestamp" :title="version.formattedTimestamp">{{ version.relativeTimestamp }}</span>
+									<a class="openVersion" @click="clickPreviewVersion(version)">
+										<span class="versiondate has-tooltip live-relative-timestamp" :data-timestamp="version.millisecondsTimestamp" :title="version.formattedTimestamp">
+											{{ version.relativeTimestamp }}
+										</span>
 									</a>
 								</div>
 								<div class="version-details">
@@ -61,14 +84,16 @@
 // import AppSidebarTab from '@nextcloud/vue/dist/Components/AppSidebarTab'
 import { getCurrentUser } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
-import { generateRemoteUrl, imagePath } from '@nextcloud/router'
+import { generateRemoteUrl } from '@nextcloud/router'
 import moment from '@nextcloud/moment'
 
 export default {
 	name: 'SidebarVersionsTab',
+
 	/* components: {
 		AppSidebarTab,
 	}, */
+
 	props: {
 		pageId: {
 			type: Number,
@@ -78,19 +103,52 @@ export default {
 			type: String,
 			required: true,
 		},
+		pageTimestamp: {
+			type: Number,
+			required: true,
+		},
+		pageSize: {
+			type: Number,
+			required: true,
+		},
 		reloadVersions: {
 			type: Boolean,
 			required: true,
 		},
 	},
+
 	data: function() {
 		return {
 			error: '',
 			loading: true,
 			versions: null,
-			downloadIconUrl: imagePath('core', 'actions/download'),
 		}
 	},
+
+	computed: {
+		pageTime() {
+			return moment.unix(this.pageTimestamp)
+		},
+		pageFormattedTimestamp() {
+			return this.pageTime.format('LLL')
+		},
+		pageRelativeTimestamp() {
+			return this.pageTime.fromNow()
+		},
+		pageMillisecondsTimestamp() {
+			return this.pageTime.valueOf()
+		},
+		iconUrl() {
+			return OC.MimeType.getIconUrl('text/markdown')
+		},
+		pageHumanReadableSize() {
+			return OC.Util.humanFileSize(this.pageSize)
+		},
+		pageAltSize() {
+			return n('files', '%n byte', '%n bytes', this.pageSize)
+		},
+	},
+
 	watch: {
 		'pageId': function() {
 			this.getPageVersions()
@@ -99,9 +157,11 @@ export default {
 			this.getPageVersions()
 		},
 	},
+
 	beforeMount() {
 		this.getPageVersions()
 	},
+
 	methods: {
 		/**
 		 * Convert an XML DOM object into a JSON object
@@ -177,7 +237,6 @@ export default {
 				const url = list[index]['d:href']['#text']
 				const time = moment.unix(url.split('/').pop())
 				const size = version['d:prop']['d:getcontentlength']['#text']
-				const mimetype = version['d:prop']['d:getcontenttype']['#text']
 				result.push({
 					downloadUrl: generateRemoteUrl(url.split('remote.php/', 2)[1]),
 					formattedTimestamp: time.format('LLL'),
@@ -186,7 +245,6 @@ export default {
 					millisecondsTimestamp: time.valueOf(),
 					humanReadableSize: OC.Util.humanFileSize(size),
 					altSize: n('files', '%n byte', '%n bytes', size),
-					previewUrl: OC.MimeType.getIconUrl(mimetype),
 				})
 			}
 			return (result.length ? result : null)
@@ -257,7 +315,7 @@ export default {
 	a:hover, a:focus {
 		opacity: 1;
 	}
-	.preview-container {
+	.icon-container {
 		display: inline-block;
 		vertical-align: top;
 	}
@@ -265,7 +323,7 @@ export default {
 		cursor: pointer;
 		padding-right: 4px;
 	}
-	img.preview {
+	img.icon {
 		cursor: default;
 	}
 	.version-container {
