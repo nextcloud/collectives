@@ -20,13 +20,17 @@
 					</ActionButton>
 				</Actions>
 			</div>
-			<div id="titleform">
+			<div v-if="!isVersion" id="titleform" class="page-title">
 				{{ t('wiki', 'Title') }}:
-				<input ref="title"
+				<input v-if="!isVersion"
+					ref="title"
 					v-model="page.newTitle"
 					type="text"
 					:disabled="updating || !savePossible"
 					@blur="renamePage">
+			</div>
+			<div v-else class="page-title">
+				{{ page.title }}
 			</div>
 			<PagePreview v-if="preview || !edit"
 				:page-id="page.id"
@@ -192,6 +196,7 @@ export default {
 	}
 
 	#titleform > input[type="text"] {
+		font-size: 24px;
 		width: 80%;
 		max-width: 670px;
 	}
@@ -199,5 +204,11 @@ export default {
 	#action-menu {
 		position: absolute;
 		right: 0;
+	}
+
+	.page-title {
+		font-size: 24px;
+		font-weight: bold;
+		text-align: center;
 	}
 </style>
