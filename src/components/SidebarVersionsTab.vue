@@ -33,7 +33,8 @@
 							</div>
 							<div class="version-container">
 								<div>
-									<a :href="version.downloadUrl" class="downloadVersion" :download="pageTitle"><img :src="downloadIconUrl">
+									<a :href="version.downloadUrl" class="downloadVersion" :download="pageTitle"><img :src="downloadIconUrl"></a>
+									<a class="downloadVersion" @click="clickPreviewVersion(version.downloadUrl)">
 										<span class="versiondate has-tooltip live-relative-timestamp" :data-timestamp="version.millisecondsTimestamp" :title="version.formattedTimestamp">{{ version.relativeTimestamp }}</span>
 									</a>
 								</div>
@@ -254,6 +255,15 @@ export default {
 				this.loading = false
 				console.error('Failed to move page to restore folder', e)
 			}
+		},
+
+		/**
+		 * Emit page version URL to the parent component
+		 * @param {string} url Page version URL
+		 */
+		clickPreviewVersion(url) {
+			this.$emit('preview-version', url)
+			this.$parent.$emit('preview-version', url)
 		},
 	},
 }

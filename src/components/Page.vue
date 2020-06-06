@@ -66,6 +66,10 @@ export default {
 			type: Object,
 			required: true,
 		},
+		versionUrl: {
+			type: String,
+			required: true,
+		},
 		updating: {
 			type: Boolean,
 			required: false,
@@ -76,7 +80,6 @@ export default {
 		return {
 			edit: false,
 			preview: true,
-			versionUrl: null,
 		}
 	},
 

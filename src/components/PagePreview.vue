@@ -109,7 +109,7 @@ export default {
 	},
 
 	watch: {
-		'pageId': function() {
+		'pageUrl': function() {
 			this.getPageContent()
 		},
 	},

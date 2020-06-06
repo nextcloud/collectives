@@ -4,7 +4,10 @@
 		:title="'Page: ' + page.title"
 		subtitle="..."
 		@close="$emit('close')">
-		<SidebarVersionsTab :page-id="page.id" :page-title="page.title" />
+		<SidebarVersionsTab
+			:page-id="page.id"
+			:page-title="page.title"
+			@preview-version="emitVersionUrl" />
 	</AppSidebar>
 </template>
 
@@ -24,6 +27,16 @@ export default {
 		page: {
 			type: Object,
 			required: true,
+		},
+	},
+
+	methods: {
+		/**
+		 * Emit page version URL to the parent component
+		 * @param {string} url Page version url
+		 */
+		emitVersionUrl(url) {
+			this.$emit('preview-version', url)
 		},
 	},
 }

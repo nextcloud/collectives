@@ -25,6 +25,7 @@
 		</AppNavigation>
 		<Page v-if="currentPage"
 			:page="currentPage"
+			:version-url="currentVersionUrl"
 			:updating="updating"
 			@toggleSidebar="showSidebar=!showSidebar"
 			@rename-page="renamePage" />
@@ -32,6 +33,7 @@
 		<PageSidebar v-if="currentPage"
 			v-show="showSidebar"
 			:page="currentPage"
+			@preview-version="setCurrentVersionUrl"
 			@close="showSidebar=false" />
 	</div>
 </template>
@@ -66,6 +68,7 @@ export default {
 		return {
 			pages: [],
 			currentPageId: null,
+			currentVersionUrl: '',
 			updating: false,
 			loading: true,
 			showSidebar: false,
@@ -181,6 +184,13 @@ export default {
 			}
 		},
 
+		/**
+		 * Set URL to specific version of currentPage (passed to Page component)
+		 * @param {string} url Page version url
+		 */
+		setCurrentVersionUrl(url) {
+			this.currentVersionUrl = url
+		},
 	},
 }
 </script>
