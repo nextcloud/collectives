@@ -1,12 +1,12 @@
 <template>
-	<div id="preview-container" :key="'preview-' + page.id">
+	<div id="preview-container" :key="'preview-' + pageId">
 		<div id="preview-wrapper" class="richEditor">
 			<div id="preview" class="editor">
 				<div :class="{menubar: true, loading}" />
 				<div v-if="!loading">
 					<EditorContent
 						class="editor__content"
-						:class="{ 'preview-revision': version }"
+						:class="{ 'preview-revision': isVersion }"
 						:editor="editor" />
 				</div>
 			</div>
@@ -15,9 +15,7 @@
 </template>
 
 <script>
-import { getCurrentUser } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
-import { generateRemoteUrl } from '@nextcloud/router'
 
 import MarkdownIt from 'markdown-it'
 import taskLists from 'markdown-it-task-lists'
@@ -50,11 +48,15 @@ export default {
 			type: Boolean,
 			required: false,
 		},
-		page: {
-			type: Object,
+		pageId: {
+			type: Number,
 			required: true,
 		},
-		version: {
+		pageUrl: {
+			type: String,
+			required: true,
+		},
+		isVersion: {
 			type: Boolean,
 			required: true,
 		},
@@ -107,7 +109,7 @@ export default {
 	},
 
 	watch: {
-		'page.id': function() {
+		'pageId': function() {
 			this.getPageContent()
 		},
 	},
@@ -123,12 +125,11 @@ export default {
 		async getPageContent() {
 			try {
 				this.contentLoading = true
-				const user = getCurrentUser().uid
-				const content = await axios.get(generateRemoteUrl(`dav/files/${user}/${this.page.basedir}/${this.page.filename}`))
+				const content = await axios.get(this.pageUrl)
 				this.pageContent = content.data
 				this.contentLoading = false
 			} catch (e) {
-				console.error(`Failed to fetch content of page ${this.page.title}`, e)
+				console.error(`Failed to fetch content of page ${this.pageId}`, e)
 			}
 		},
 	},
@@ -195,6 +196,9 @@ export default {
 		position: relative;
 	}
 
+	.preview-revision {
+		background-color: lightcoral;
+	}
 </style>
 
 <style lang="scss">

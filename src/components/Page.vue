@@ -22,9 +22,10 @@
 					@blur="renamePage">
 			</div>
 			<PagePreview v-if="preview || !edit"
-				:page="page"
+				:page-id="page.id"
+				:page-url="pageUrl"
 				:page-loading="preview && edit"
-				:version="true" />
+				:is-version="isVersion" />
 			<component :is="handler.component"
 				v-show="edit && !preview"
 				ref="editor"
@@ -46,6 +47,9 @@ import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import Actions from '@nextcloud/vue/dist/Components/Actions'
 import AppContent from '@nextcloud/vue/dist/Components/AppContent'
 import PagePreview from './PagePreview'
+
+import { getCurrentUser } from '@nextcloud/auth'
+import { generateRemoteUrl } from '@nextcloud/router'
 
 export default {
 	name: 'Page',
@@ -72,6 +76,7 @@ export default {
 		return {
 			edit: false,
 			preview: true,
+			versionUrl: null,
 		}
 	},
 
@@ -91,6 +96,22 @@ export default {
 		savePossible() {
 			return this.page && this.page.title !== ''
 		},
+
+		/**
+		 * Return the URL for currently selected page object
+		 * @returns {string}
+		 */
+		pageUrl() {
+			return this.isVersion ? this.versionUrl : generateRemoteUrl(`dav/files/${this.getUser}/${this.page.basedir}/${this.page.filename}`)
+		},
+
+		isVersion() {
+			return !!this.versionUrl
+		},
+
+		getUser() {
+			return getCurrentUser().uid
+		},
 	},
 
 	watch: {
@@ -104,7 +125,6 @@ export default {
 	},
 
 	methods: {
-
 		renamePage() {
 			this.$emit('renamePage', this.page.newTitle)
 		},
