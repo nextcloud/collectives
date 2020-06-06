@@ -7,7 +7,8 @@
 		<SidebarVersionsTab
 			:page-id="page.id"
 			:page-title="page.title"
-			@preview-version="emitVersionUrl" />
+			:reload-versions="reloadVersions"
+			@preview-version="emitVersion" />
 	</AppSidebar>
 </template>
 
@@ -28,15 +29,19 @@ export default {
 			type: Object,
 			required: true,
 		},
+		reloadVersions: {
+			type: Boolean,
+			required: true,
+		},
 	},
 
 	methods: {
 		/**
 		 * Emit page version URL to the parent component
-		 * @param {string} url Page version url
+		 * @param {object} version Page version object
 		 */
-		emitVersionUrl(url) {
-			this.$emit('preview-version', url)
+		emitVersion(version) {
+			this.$emit('preview-version', version)
 		},
 	},
 }

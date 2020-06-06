@@ -3,8 +3,15 @@
 		<div>
 			<div id="action-menu">
 				<Actions>
-					<ActionButton icon="icon-edit" @click="edit = !edit">
+					<ActionButton v-if="!isVersion"
+						icon="icon-edit"
+						@click="edit = !edit">
 						{{ t('wiki', 'Toggle edit mode') }}
+					</ActionButton>
+					<ActionButton v-else
+						icon="icon-history"
+						@click="revertVersion">
+						{{ t('wiki', 'Restore this version') }}
 					</ActionButton>
 				</Actions>
 				<Actions>
@@ -49,6 +56,8 @@ import AppContent from '@nextcloud/vue/dist/Components/AppContent'
 import PagePreview from './PagePreview'
 
 import { getCurrentUser } from '@nextcloud/auth'
+import axios from '@nextcloud/axios'
+import { showError, showSuccess } from '@nextcloud/dialogs'
 import { generateRemoteUrl } from '@nextcloud/router'
 
 export default {
@@ -66,9 +75,10 @@ export default {
 			type: Object,
 			required: true,
 		},
-		versionUrl: {
-			type: String,
-			required: true,
+		version: {
+			type: Object,
+			required: false,
+			default: null,
 		},
 		updating: {
 			type: Boolean,
@@ -105,11 +115,11 @@ export default {
 		 * @returns {string}
 		 */
 		pageUrl() {
-			return this.isVersion ? this.versionUrl : generateRemoteUrl(`dav/files/${this.getUser}/${this.page.basedir}/${this.page.filename}`)
+			return this.isVersion ? this.version.downloadUrl : generateRemoteUrl(`dav/files/${this.getUser}/${this.page.basedir}/${this.page.filename}`)
 		},
 
 		isVersion() {
-			return !!this.versionUrl
+			return !!this.version
 		},
 
 		getUser() {
@@ -139,6 +149,33 @@ export default {
 			this.preview = false
 		},
 
+		/**
+		 * Revert page to an old version
+		 */
+		async revertVersion() {
+			try {
+				const user = getCurrentUser().uid
+				const restoreFolderUrl = generateRemoteUrl(`dav/versions/${user}/restore/${this.page.id}`)
+				await axios({
+					method: 'MOVE',
+					url: this.version.downloadUrl,
+					headers: {
+						'Destination': restoreFolderUrl,
+					},
+				})
+				this.$emit('resetVersion')
+				showSuccess(t('wiki', 'Reverted {page} to revision {timestamp}.', {
+					page: this.page.title,
+					timestamp: this.version.relativeTimestamp,
+				}))
+			} catch (e) {
+				showError(t('wiki', 'Failed to revert {page} to revision {timestamp}.', {
+					page: this.page.title,
+					timestamp: this.version.relativeTimestamp,
+				}))
+				console.error('Failed to move page to restore folder', e)
+			}
+		},
 	},
 
 }

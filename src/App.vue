@@ -25,15 +25,17 @@
 		</AppNavigation>
 		<Page v-if="currentPage"
 			:page="currentPage"
-			:version-url="currentVersionUrl"
+			:version="currentVersion"
 			:updating="updating"
 			@toggleSidebar="showSidebar=!showSidebar"
-			@rename-page="renamePage" />
+			@rename-page="renamePage"
+			@resetVersion="setCurrentVersion(null)" />
 		<Start v-else />
 		<PageSidebar v-if="currentPage"
 			v-show="showSidebar"
 			:page="currentPage"
-			@preview-version="setCurrentVersionUrl"
+			:reload-versions="reloadVersions"
+			@preview-version="setCurrentVersion"
 			@close="showSidebar=false" />
 	</div>
 </template>
@@ -68,10 +70,11 @@ export default {
 		return {
 			pages: [],
 			currentPageId: null,
-			currentVersionUrl: '',
+			currentVersion: null,
 			updating: false,
 			loading: true,
 			showSidebar: false,
+			reloadVersions: false,
 		}
 	},
 
@@ -85,6 +88,12 @@ export default {
 				return null
 			}
 			return this.pages.find((page) => page.id === this.currentPageId)
+		},
+	},
+
+	watch: {
+		'currentPageId': function() {
+			this.setCurrentVersion(null)
 		},
 	},
 
@@ -185,11 +194,12 @@ export default {
 		},
 
 		/**
-		 * Set URL to specific version of currentPage (passed to Page component)
-		 * @param {string} url Page version url
+		 * Set specific version of currentPage (passed to Page component)
+		 * @param {object} version Page version object
 		 */
-		setCurrentVersionUrl(url) {
-			this.currentVersionUrl = url
+		setCurrentVersion(version) {
+			this.currentVersion = version
+			this.reloadVersions = !this.reloadVersions
 		},
 	},
 }
