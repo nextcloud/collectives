@@ -97,24 +97,29 @@ export default {
 		},
 	},
 
-	/**
-	 * Fetch list of pages when the component is loaded
-	 */
-	async mounted() {
-		try {
-			const response = await axios.get(generateUrl('/apps/wiki/pages'))
-			this.pages = response.data
-		} catch (e) {
-			console.error(e)
-			showError(t('wiki', 'Could not fetch pages'))
-		}
-		this.loading = false
+	mounted() {
+		this.getPages()
 	},
 
 	methods: {
 		/**
+		 * Get list of all pages
+		 */
+		async getPages() {
+			this.loading = true
+			try {
+				const response = await axios.get(generateUrl('/apps/wiki/pages'))
+				this.pages = response.data
+			} catch (e) {
+				console.error(e)
+				showError(t('wiki', 'Could not fetch pages'))
+			}
+			this.loading = false
+		},
+
+		/**
 		 * Create a new page and focus the page content field automatically
-		 * @param {Object} page Page object
+		 * @param {object} page Page object
 		 */
 		openPage(page) {
 			this.currentPageId = page.id
@@ -134,7 +139,7 @@ export default {
 
 		/**
 		 * Create a new page by sending the information to the server
-		 * @param {Object} page Page object
+		 * @param {object} page Page object
 		 */
 		async createPage(page) {
 			this.updating = true
@@ -154,7 +159,7 @@ export default {
 
 		/**
 		 * Rename currentPage on the server
-		 * @param {String} newTitle New title for the page
+		 * @param {string} newTitle New title for the page
 		 */
 		async renamePage(newTitle) {
 			if (this.currentPage.title === newTitle) {
@@ -177,7 +182,7 @@ export default {
 
 		/**
 		 * Delete a page, remove it from the frontend and show a hint
-		 * @param {Object} page Page object
+		 * @param {object} page Page object
 		 */
 		async deletePage(page) {
 			try {
