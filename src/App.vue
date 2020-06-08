@@ -201,13 +201,13 @@ export default {
 
 		/**
 		 * Delete a page, remove it from the frontend and show a hint
-		 * @param {object} page Page object
+		 * @param {number} pageId Page ID
 		 */
-		async deletePage(page) {
+		async deletePage(pageId) {
 			try {
-				await axios.delete(generateUrl(`/apps/wiki/pages/${page.id}`))
-				this.pages.splice(this.pages.indexOf(page), 1)
-				if (this.currentPageId === page.id) {
+				await axios.delete(generateUrl(`/apps/wiki/pages/${pageId}`))
+				this.pages.splice(this.pages.findIndex(page => page.id === pageId), 1)
+				if (this.currentPageId === pageId) {
 					this.currentPageId = null
 				}
 				showSuccess(t('wiki', 'Page deleted'))
