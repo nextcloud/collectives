@@ -2,7 +2,6 @@
 	<AppSidebar
 		ref="sidebar"
 		:title="'Page: ' + page.title"
-		subtitle="..."
 		@close="$emit('close')">
 		<SidebarVersionsTab
 			:page-id="page.id"
