@@ -32,7 +32,7 @@
 					<div class="version-container">
 						<div>
 							<a class="openVersion" @click="clickPreviewVersion(null)">
-								<span class="versiondate has-tooltip live-relative-timestamp" :data-timestamp="pageMillisecondsTimestamp" :title="pageFormattedTimestamp">
+								<span class="versiondate has-tooltip" :title="pageFormattedTimestamp">
 									{{ t('wiki', 'Current version') }}
 								</span>
 							</a>
@@ -236,7 +236,6 @@ export default {
 					formattedTimestamp: time.format('LLL'),
 					relativeTimestamp: time.fromNow(),
 					timestamp: time.unix(),
-					millisecondsTimestamp: time.valueOf(),
 					humanReadableSize: OC.Util.humanFileSize(size),
 					altSize: n('files', '%n byte', '%n bytes', size),
 				})
