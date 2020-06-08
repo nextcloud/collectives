@@ -29,7 +29,7 @@
 			:updating="updating"
 			@toggleSidebar="showSidebar=!showSidebar"
 			@rename-page="renamePage"
-			@resetVersion="setCurrentVersion(null)" />
+			@resetVersion="resetVersion" />
 		<Start v-else />
 		<PageSidebar v-if="currentPage"
 			v-show="showSidebar"
@@ -213,6 +213,14 @@ export default {
 				console.error(e)
 				showError(t('wiki', 'Could not delete the page'))
 			}
+		},
+
+		/**
+		 * Reset the version and reload current page in order to update page properties
+		 */
+		resetVersion() {
+			this.getPage(this.currentPageId)
+			this.setCurrentVersion(null)
 		},
 
 		/**

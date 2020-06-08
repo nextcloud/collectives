@@ -22,7 +22,7 @@
 		<!-- versions content -->
 		<template v-else-if="!loading && versions">
 			<ul :key="pageId + currentVersionTimestamp">
-				<li :key="pageId + currentVersionTimestamp">
+				<li :key="pageId + pageSize">
 					<div class="icon-container">
 						<img class="icon"
 							:src="iconUrl"
