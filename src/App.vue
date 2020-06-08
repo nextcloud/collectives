@@ -118,6 +118,23 @@ export default {
 		},
 
 		/**
+		 * Fetch and update one particular page
+		 * @param {number} pageId Page ID
+		 */
+		async getPage(pageId) {
+			this.loading = true
+			try {
+				const response = await axios.get(generateUrl(`/apps/wiki/pages/${pageId}`))
+				// update page object from the list of pages
+				this.pages.splice(this.pages.findIndex(page => page.id === response.data.id), 1, response.data)
+			} catch (e) {
+				console.error(e)
+				showError(t('wiki', `Could not fetch page ${pageId}`))
+			}
+			this.loading = false
+		},
+
+		/**
 		 * Create a new page and focus the page content field automatically
 		 * @param {object} page Page object
 		 */
