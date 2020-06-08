@@ -22,52 +22,46 @@
 		<!-- versions content -->
 		<template v-else-if="!loading && versions">
 			<ul>
-				<div :key="pageId">
-					<li>
-						<div class="icon-container">
-							<img class="icon"
-								:src="iconUrl"
-								width="44"
-								height="44">
-						</div>
-						<div class="version-container">
-							<div>
-								<a class="openVersion" @click="clickPreviewVersion(null)">
-									<span class="versiondate has-tooltip live-relative-timestamp" :data-timestamp="pageMillisecondsTimestamp" :title="pageFormattedTimestamp">
-										{{ t('wiki', 'Current version') }}
-									</span>
-								</a>
-							</div>
-							<div class="version-details">
-								<span class="size has-tooltip" :title="pageAltSize">{{ pageHumanReadableSize }}</span>
-							</div>
-						</div>
-					</li>
-				</div>
-				<template v-for="version in versions">
-					<div :key="version.downloadUrl">
-						<li>
-							<div class="icon-container">
-								<img class="icon"
-									:src="iconUrl"
-									width="44"
-									height="44">
-							</div>
-							<div class="version-container">
-								<div>
-									<a class="openVersion" @click="clickPreviewVersion(version)">
-										<span class="versiondate has-tooltip live-relative-timestamp" :data-timestamp="version.millisecondsTimestamp" :title="version.formattedTimestamp">
-											{{ version.relativeTimestamp }}
-										</span>
-									</a>
-								</div>
-								<div class="version-details">
-									<span class="size has-tooltip" :title="version.altSize">{{ version.humanReadableSize }}</span>
-								</div>
-							</div>
-						</li>
+				<li key="pageId">
+					<div class="icon-container">
+						<img class="icon"
+							:src="iconUrl"
+							width="44"
+							height="44">
 					</div>
-				</template>
+					<div class="version-container">
+						<div>
+							<a class="openVersion" @click="clickPreviewVersion(null)">
+								<span class="versiondate has-tooltip live-relative-timestamp" :data-timestamp="pageMillisecondsTimestamp" :title="pageFormattedTimestamp">
+									{{ t('wiki', 'Current version') }}
+								</span>
+							</a>
+						</div>
+						<div class="version-details">
+							<span class="size has-tooltip" :title="pageAltSize">{{ pageHumanReadableSize }}</span>
+						</div>
+					</div>
+				</li>
+				<li :key="version.downloadUrl" v-for="version in versions">
+					<div class="icon-container">
+						<img class="icon"
+							:src="iconUrl"
+							width="44"
+							height="44">
+					</div>
+					<div class="version-container">
+						<div>
+							<a class="openVersion" @click="clickPreviewVersion(version)">
+								<span class="versiondate has-tooltip live-relative-timestamp" :data-timestamp="version.millisecondsTimestamp" :title="version.formattedTimestamp">
+									{{ version.relativeTimestamp }}
+								</span>
+							</a>
+						</div>
+						<div class="version-details">
+							<span class="size has-tooltip" :title="version.altSize">{{ version.humanReadableSize }}</span>
+						</div>
+					</div>
+				</li>
 			</ul>
 		</template>
 
