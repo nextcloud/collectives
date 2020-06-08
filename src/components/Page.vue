@@ -14,6 +14,13 @@
 						{{ t('wiki', 'Restore this version') }}
 					</ActionButton>
 				</Actions>
+				<Actions v-if="!isVersion">
+					<ActionButton
+						icon="icon-delete"
+						@click="deletePage">
+						{{ t('wiki', 'Delete page') }}
+					</ActionButton>
+				</Actions>
 				<Actions>
 					<ActionButton icon="icon-menu" @click="$emit('toggleSidebar')">
 						{{ t('wiki', 'Toggle sidebar') }}
@@ -154,6 +161,10 @@ export default {
 	methods: {
 		renamePage() {
 			this.$emit('renamePage', this.page.newTitle)
+		},
+
+		deletePage() {
+			this.$emit('deletePage', this.page.id)
 		},
 
 		/**

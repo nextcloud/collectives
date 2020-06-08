@@ -12,15 +12,7 @@
 					:key="page.id"
 					:title="page.title ? page.title : t('wiki', 'New page')"
 					:class="{active: currentPageId === page.id}"
-					@click="openPage(page)">
-					<template slot="actions">
-						<ActionButton
-							icon="icon-delete"
-							@click="deletePage(page)">
-							{{ t('wiki', 'Delete page') }}
-						</ActionButton>
-					</template>
-				</AppNavigationItem>
+					@click="openPage(page)" />
 			</ul>
 		</AppNavigation>
 		<Page v-if="currentPage"
@@ -30,6 +22,7 @@
 			:updating="updating"
 			@toggleSidebar="showSidebar=!showSidebar"
 			@rename-page="renamePage"
+			@deletePage="deletePage"
 			@resetVersion="resetVersion" />
 		<Start v-else />
 		<PageSidebar v-if="currentPage"
@@ -42,7 +35,6 @@
 </template>
 
 <script>
-import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import AppNavigation from '@nextcloud/vue/dist/Components/AppNavigation'
 import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
 import AppNavigationNew from '@nextcloud/vue/dist/Components/AppNavigationNew'
@@ -59,7 +51,6 @@ export default {
 	name: 'App',
 
 	components: {
-		ActionButton,
 		AppNavigation,
 		AppNavigationItem,
 		AppNavigationNew,
