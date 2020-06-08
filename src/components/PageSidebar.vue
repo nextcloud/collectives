@@ -9,7 +9,7 @@
 			:page-title="page.title"
 			:page-timestamp="page.timestamp"
 			:page-size="page.size"
-			:reload-versions="reloadVersions"
+			:current-version-timestamp="currentVersionTimestamp"
 			@preview-version="emitVersion" />
 	</AppSidebar>
 </template>
@@ -31,8 +31,8 @@ export default {
 			type: Object,
 			required: true,
 		},
-		reloadVersions: {
-			type: Boolean,
+		currentVersionTimestamp: {
+			type: Number,
 			required: true,
 		},
 	},

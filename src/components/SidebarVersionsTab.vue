@@ -21,8 +21,8 @@
 
 		<!-- versions content -->
 		<template v-else-if="!loading && versions">
-			<ul>
-				<li key="pageId">
+			<ul :key="pageId + currentVersionTimestamp">
+				<li :key="pageId + currentVersionTimestamp">
 					<div class="icon-container">
 						<img class="icon"
 							:src="iconUrl"
@@ -42,7 +42,7 @@
 						</div>
 					</div>
 				</li>
-				<li :key="version.downloadUrl" v-for="version in versions">
+				<li v-for="version in versions" :key="version.downloadUrl">
 					<div class="icon-container">
 						<img class="icon"
 							:src="iconUrl"
@@ -105,8 +105,8 @@ export default {
 			type: Number,
 			required: true,
 		},
-		reloadVersions: {
-			type: Boolean,
+		currentVersionTimestamp: {
+			type: Number,
 			required: true,
 		},
 	},
@@ -147,7 +147,7 @@ export default {
 		'pageId': function() {
 			this.getPageVersions()
 		},
-		'reloadVersions': function() {
+		'currentVersionTimestamp': function() {
 			this.getPageVersions()
 		},
 	},

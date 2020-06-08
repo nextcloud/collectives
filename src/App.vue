@@ -34,7 +34,7 @@
 		<PageSidebar v-if="currentPage"
 			v-show="showSidebar"
 			:page="currentPage"
-			:reload-versions="reloadVersions"
+			:current-version-timestamp="currentVersionTimestamp"
 			@preview-version="setCurrentVersion"
 			@close="showSidebar=false" />
 	</div>
@@ -74,7 +74,7 @@ export default {
 			updating: false,
 			loading: true,
 			showSidebar: false,
-			reloadVersions: false,
+			currentVersionTimestamp: 0,
 		}
 	},
 
@@ -199,7 +199,7 @@ export default {
 		 */
 		setCurrentVersion(version) {
 			this.currentVersion = version
-			this.reloadVersions = !this.reloadVersions
+			this.currentVersionTimestamp = (version ? version.timestamp : 0)
 		},
 	},
 }
