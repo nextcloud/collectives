@@ -3,8 +3,15 @@
 		<div>
 			<div id="action-menu">
 				<Actions>
-					<ActionButton icon="icon-edit" @click="edit = !edit">
+					<ActionButton v-if="!isVersion"
+						icon="icon-edit"
+						@click="edit = !edit">
 						{{ t('wiki', 'Toggle edit mode') }}
+					</ActionButton>
+					<ActionButton v-else
+						icon="icon-history"
+						@click="revertVersion">
+						{{ t('wiki', 'Restore this version') }}
 					</ActionButton>
 				</Actions>
 				<Actions>
@@ -13,22 +20,27 @@
 					</ActionButton>
 				</Actions>
 			</div>
-			<div id="titleform">
+			<div v-if="!isVersion" id="titleform" class="page-title">
 				{{ t('wiki', 'Title') }}:
-				<input ref="title"
+				<input v-if="!isVersion"
+					ref="title"
 					v-model="page.newTitle"
 					type="text"
 					:disabled="updating || !savePossible"
 					@blur="renamePage">
 			</div>
-			<PagePreview v-if="preview || !edit"
-				:page="page"
+			<div v-else class="page-title">
+				{{ page.title }}
+			</div>
+			<PagePreview v-if="preview || !edit || isVersion"
+				:page-id="page.id"
+				:page-url="pageUrl"
 				:page-loading="preview && edit"
-				:version="true" />
+				:is-version="isVersion" />
 			<component :is="handler.component"
-				v-show="edit && !preview"
+				v-show="edit && !preview && !isVersion"
 				ref="editor"
-				:key="'editor-' + page.id"
+				:key="'editor-' + page.id + currentVersionTimestamp"
 				:fileid="page.id"
 				:basename="page.filename"
 				:filename="'/' + page.basedir + '/' + page.filename"
@@ -47,6 +59,11 @@ import Actions from '@nextcloud/vue/dist/Components/Actions'
 import AppContent from '@nextcloud/vue/dist/Components/AppContent'
 import PagePreview from './PagePreview'
 
+import { getCurrentUser } from '@nextcloud/auth'
+import axios from '@nextcloud/axios'
+import { showError, showSuccess } from '@nextcloud/dialogs'
+import { generateRemoteUrl } from '@nextcloud/router'
+
 export default {
 	name: 'Page',
 
@@ -60,6 +77,15 @@ export default {
 	props: {
 		page: {
 			type: Object,
+			required: true,
+		},
+		version: {
+			type: Object,
+			required: false,
+			default: null,
+		},
+		currentVersionTimestamp: {
+			type: Number,
 			required: true,
 		},
 		updating: {
@@ -86,10 +112,32 @@ export default {
 
 		/**
 		 * Return true if a page is selected and its title is not empty
-		 * @returns {Boolean}
+		 * @returns {boolean}
 		 */
 		savePossible() {
 			return this.page && this.page.title !== ''
+		},
+
+		/**
+		 * Return the URL for currently selected page object
+		 * @returns {string}
+		 */
+		pageUrl() {
+			return this.isVersion ? this.version.downloadUrl : generateRemoteUrl(`dav/files/${this.getUser}/${this.page.basedir}/${this.page.filename}`)
+		},
+
+		/**
+		 * @returns {boolean}
+		 */
+		isVersion() {
+			return !!this.version
+		},
+
+		/**
+		 * @returns {string}
+		 */
+		getUser() {
+			return getCurrentUser().uid
 		},
 	},
 
@@ -104,7 +152,6 @@ export default {
 	},
 
 	methods: {
-
 		renamePage() {
 			this.$emit('renamePage', this.page.newTitle)
 		},
@@ -116,8 +163,34 @@ export default {
 			this.preview = false
 		},
 
+		/**
+		 * Revert page to an old version
+		 */
+		async revertVersion() {
+			try {
+				const user = getCurrentUser().uid
+				const restoreFolderUrl = generateRemoteUrl(`dav/versions/${user}/restore/${this.page.id}`)
+				await axios({
+					method: 'MOVE',
+					url: this.version.downloadUrl,
+					headers: {
+						'Destination': restoreFolderUrl,
+					},
+				})
+				this.$emit('resetVersion')
+				showSuccess(t('wiki', 'Reverted {page} to revision {timestamp}.', {
+					page: this.page.title,
+					timestamp: this.version.relativeTimestamp,
+				}))
+			} catch (e) {
+				showError(t('wiki', 'Failed to revert {page} to revision {timestamp}.', {
+					page: this.page.title,
+					timestamp: this.version.relativeTimestamp,
+				}))
+				console.error('Failed to move page to restore folder', e)
+			}
+		},
 	},
-
 }
 </script>
 
@@ -132,6 +205,7 @@ export default {
 	}
 
 	#titleform > input[type="text"] {
+		font-size: 24px;
 		width: 80%;
 		max-width: 670px;
 	}
@@ -139,5 +213,11 @@ export default {
 	#action-menu {
 		position: absolute;
 		right: 0;
+	}
+
+	.page-title {
+		font-size: 24px;
+		font-weight: bold;
+		text-align: center;
 	}
 </style>

@@ -1,12 +1,12 @@
 <template>
-	<div id="preview-container" :key="'preview-' + page.id">
+	<div id="preview-container" :key="'preview-' + pageId">
 		<div id="preview-wrapper" class="richEditor">
 			<div id="preview" class="editor">
 				<div :class="{menubar: true, loading}" />
 				<div v-if="!loading">
 					<EditorContent
 						class="editor__content"
-						:class="{ 'preview-revision': version }"
+						:class="{ 'preview-revision': isVersion }"
 						:editor="editor" />
 				</div>
 			</div>
@@ -15,9 +15,7 @@
 </template>
 
 <script>
-import { getCurrentUser } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
-import { generateRemoteUrl } from '@nextcloud/router'
 
 import MarkdownIt from 'markdown-it'
 import taskLists from 'markdown-it-task-lists'
@@ -50,11 +48,15 @@ export default {
 			type: Boolean,
 			required: false,
 		},
-		page: {
-			type: Object,
+		pageId: {
+			type: Number,
 			required: true,
 		},
-		version: {
+		pageUrl: {
+			type: String,
+			required: true,
+		},
+		isVersion: {
 			type: Boolean,
 			required: true,
 		},
@@ -68,20 +70,32 @@ export default {
 	},
 
 	computed: {
+		/**
+		 * @returns {boolean}
+		 */
 		loading() {
 			return (this.pageLoading || this.contentLoading)
 		},
 
+		/**
+		 * @returns {object}
+		 */
 		markdownit() {
 			return MarkdownIt('commonmark', { html: false, breaks: false })
 				.enable('strikethrough')
 				.use(taskLists, { enable: true, labelAfter: true })
 		},
 
+		/**
+		 * @returns {string}
+		 */
 		htmlContent() {
 			return this.markdownit.render(this.pageContent)
 		},
 
+		/**
+		 * @returns {object}
+		 */
 		editor() {
 			return new Editor({
 				editable: false,
@@ -107,7 +121,7 @@ export default {
 	},
 
 	watch: {
-		'page.id': function() {
+		'pageUrl': function() {
 			this.getPageContent()
 		},
 	},
@@ -123,19 +137,18 @@ export default {
 		async getPageContent() {
 			try {
 				this.contentLoading = true
-				const user = getCurrentUser().uid
-				const content = await axios.get(generateRemoteUrl(`dav/files/${user}/${this.page.basedir}/${this.page.filename}`))
+				const content = await axios.get(this.pageUrl)
 				this.pageContent = content.data
 				this.contentLoading = false
 			} catch (e) {
-				console.error(`Failed to fetch content of page ${this.page.title}`, e)
+				console.error(`Failed to fetch content of page ${this.pageId}`, e)
 			}
 		},
 	},
 }
 </script>
-<style scoped lang="scss">
 
+<style scoped lang="scss">
 	#preview-container {
 		display: block;
 		width: 100%;
@@ -195,6 +208,9 @@ export default {
 		position: relative;
 	}
 
+	.preview-revision {
+		background-color: lightcoral;
+	}
 </style>
 
 <style lang="scss">

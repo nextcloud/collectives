@@ -13,6 +13,7 @@ return [
 
 		// pages
 		['name' => 'page#index', 'url' => '/pages', 'verb' => 'GET'],
+		['name' => 'page#get', 'url' => '/pages/{id}', 'verb' => 'GET'],
 		['name' => 'page#create', 'url' => '/pages', 'verb' => 'POST'],
 		['name' => 'page#rename', 'url' => '/pages/{id}', 'verb' => 'PUT',
 		 'requirements' => ['id' => '\d+']],

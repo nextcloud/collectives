@@ -21,35 +21,47 @@
 
 		<!-- versions content -->
 		<template v-else-if="!loading && versions">
-			<ul>
-				<template v-for="version in versions">
-					<div :key="version.downloadUrl">
-						<li>
-							<div class="preview-container">
-								<img class="preview"
-									:src="version.previewUrl"
-									width="44"
-									height="44">
-							</div>
-							<div class="version-container">
-								<div>
-									<a :href="version.downloadUrl" class="downloadVersion" :download="pageTitle"><img :src="downloadIconUrl">
-										<span class="versiondate has-tooltip live-relative-timestamp" :data-timestamp="version.millisecondsTimestamp" :title="version.formattedTimestamp">{{ version.relativeTimestamp }}</span>
-									</a>
-								</div>
-								<div class="version-details">
-									<span class="size has-tooltip" :title="version.altSize">{{ version.humanReadableSize }}</span>
-								</div>
-							</div>
-							<a href="#"
-								class="revertVersion"
-								:title="t('wiki', 'Restore')"
-								@click="revertVersion(version)">
-								<img :src="revertIconUrl">
-							</a>
-						</li>
+			<ul :key="pageId + currentVersionTimestamp">
+				<li :key="pageId + pageSize">
+					<div class="icon-container">
+						<img class="icon"
+							:src="iconUrl"
+							width="44"
+							height="44">
 					</div>
-				</template>
+					<div class="version-container">
+						<div>
+							<a class="openVersion" @click="clickPreviewVersion(null)">
+								<span class="versiondate has-tooltip" :title="pageFormattedTimestamp">
+									{{ t('wiki', 'Current version') }}
+								</span>
+							</a>
+						</div>
+						<div class="version-details">
+							<span class="size has-tooltip" :title="pageAltSize">{{ pageHumanReadableSize }}</span>
+						</div>
+					</div>
+				</li>
+				<li v-for="version in versions" :key="version.downloadUrl">
+					<div class="icon-container">
+						<img class="icon"
+							:src="iconUrl"
+							width="44"
+							height="44">
+					</div>
+					<div class="version-container">
+						<div>
+							<a class="openVersion" @click="clickPreviewVersion(version)">
+								<span class="versiondate has-tooltip live-relative-timestamp" :data-timestamp="version.millisecondsTimestamp" :title="version.formattedTimestamp">
+									{{ version.relativeTimestamp }}
+								</span>
+							</a>
+						</div>
+						<div class="version-details">
+							<span class="size has-tooltip" :title="version.altSize">{{ version.humanReadableSize }}</span>
+						</div>
+					</div>
+				</li>
 			</ul>
 		</template>
 
@@ -66,15 +78,16 @@
 // import AppSidebarTab from '@nextcloud/vue/dist/Components/AppSidebarTab'
 import { getCurrentUser } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
-import { showSuccess, showError } from '@nextcloud/dialogs'
-import { generateRemoteUrl, imagePath } from '@nextcloud/router'
+import { generateRemoteUrl } from '@nextcloud/router'
 import moment from '@nextcloud/moment'
 
 export default {
 	name: 'SidebarVersionsTab',
+
 	/* components: {
 		AppSidebarTab,
 	}, */
+
 	props: {
 		pageId: {
 			type: Number,
@@ -84,24 +97,78 @@ export default {
 			type: String,
 			required: true,
 		},
+		pageTimestamp: {
+			type: Number,
+			required: true,
+		},
+		pageSize: {
+			type: Number,
+			required: true,
+		},
+		currentVersionTimestamp: {
+			type: Number,
+			required: true,
+		},
 	},
+
 	data: function() {
 		return {
 			error: '',
 			loading: true,
 			versions: null,
-			downloadIconUrl: imagePath('core', 'actions/download'),
-			revertIconUrl: imagePath('core', 'actions/history'),
 		}
 	},
+
+	computed: {
+		/**
+		 * @returns {object}
+		 */
+		pageTime() {
+			return moment.unix(this.pageTimestamp)
+		},
+
+		/**
+		 * @returns {string}
+		 */
+		pageFormattedTimestamp() {
+			return this.pageTime.format('LLL')
+		},
+
+		/**
+		 * @returns {string}
+		 */
+		iconUrl() {
+			return OC.MimeType.getIconUrl('text/markdown')
+		},
+
+		/**
+		 * @returns {string}
+		 */
+		pageHumanReadableSize() {
+			return OC.Util.humanFileSize(this.pageSize)
+		},
+
+		/**
+		 * @returns {string}
+		 */
+		pageAltSize() {
+			return n('files', '%n byte', '%n bytes', this.pageSize)
+		},
+	},
+
 	watch: {
 		'pageId': function() {
 			this.getPageVersions()
 		},
+		'currentVersionTimestamp': function() {
+			this.getPageVersions()
+		},
 	},
+
 	beforeMount() {
 		this.getPageVersions()
 	},
+
 	methods: {
 		/**
 		 * Convert an XML DOM object into a JSON object
@@ -177,7 +244,6 @@ export default {
 				const url = list[index]['d:href']['#text']
 				const time = moment.unix(url.split('/').pop())
 				const size = version['d:prop']['d:getcontentlength']['#text']
-				const mimetype = version['d:prop']['d:getcontenttype']['#text']
 				result.push({
 					downloadUrl: generateRemoteUrl(url.split('remote.php/', 2)[1]),
 					formattedTimestamp: time.format('LLL'),
@@ -186,7 +252,6 @@ export default {
 					millisecondsTimestamp: time.valueOf(),
 					humanReadableSize: OC.Util.humanFileSize(size),
 					altSize: n('files', '%n byte', '%n bytes', size),
-					previewUrl: OC.MimeType.getIconUrl(mimetype),
 				})
 			}
 			return (result.length ? result : null)
@@ -222,38 +287,11 @@ export default {
 		},
 
 		/**
-		 * Revert page to an old version
-		 * @param {object} version old revision version object
+		 * Emit page version object to the parent component
+		 * @param {object} version Page version object
 		 */
-		async revertVersion(version) {
-			try {
-				this.loading = true
-				const user = getCurrentUser().uid
-				const restoreFolderUrl = generateRemoteUrl(`dav/versions/${user}/restore/${this.pageId}`)
-				console.info(`Move ${version.downloadUrl} to ${restoreFolderUrl}`)
-				const response = await axios({
-					method: 'MOVE',
-					url: version.downloadUrl,
-					headers: {
-						'Destination': restoreFolderUrl,
-						'Overwrite': 'T',
-					},
-				})
-				console.info(response)
-				await this.getPageVersions()
-				this.loading = false
-				showSuccess(t('wiki', 'Reverted {page} to revision {timestamp}.', {
-					page: this.pageTitle,
-					timestamp: version.timestamp,
-				}))
-			} catch (e) {
-				showError(t('wiki', 'Failed to revert {page} to revision {timestamp}.', {
-					page: this.pageTitle,
-					timestamp: version.timestamp,
-				}))
-				this.loading = false
-				console.error('Failed to move page to restore folder', e)
-			}
+		clickPreviewVersion(version) {
+			this.$emit('preview-version', version)
 		},
 	},
 }
@@ -284,7 +322,7 @@ export default {
 	a:hover, a:focus {
 		opacity: 1;
 	}
-	.preview-container {
+	.icon-container {
 		display: inline-block;
 		vertical-align: top;
 	}
@@ -292,7 +330,7 @@ export default {
 		cursor: pointer;
 		padding-right: 4px;
 	}
-	img.preview {
+	img.icon {
 		cursor: default;
 	}
 	.version-container {
@@ -307,10 +345,5 @@ export default {
 	}
 	.version-details > span {
 		padding: 0 10px;
-	}
-	.revertVersion {
-		cursor: pointer;
-		float: right;
-		margin-right: -10px;
 	}
 </style>

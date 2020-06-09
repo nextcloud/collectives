@@ -11,6 +11,7 @@
 import AppContent from '@nextcloud/vue/dist/Components/AppContent'
 export default {
 	name: 'Start',
+
 	components: {
 		AppContent,
 	},
