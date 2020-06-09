@@ -70,20 +70,32 @@ export default {
 	},
 
 	computed: {
+		/**
+		 * @returns {boolean}
+		 */
 		loading() {
 			return (this.pageLoading || this.contentLoading)
 		},
 
+		/**
+		 * @returns {object}
+		 */
 		markdownit() {
 			return MarkdownIt('commonmark', { html: false, breaks: false })
 				.enable('strikethrough')
 				.use(taskLists, { enable: true, labelAfter: true })
 		},
 
+		/**
+		 * @returns {string}
+		 */
 		htmlContent() {
 			return this.markdownit.render(this.pageContent)
 		},
 
+		/**
+		 * @returns {object}
+		 */
 		editor() {
 			return new Editor({
 				editable: false,
@@ -135,8 +147,8 @@ export default {
 	},
 }
 </script>
-<style scoped lang="scss">
 
+<style scoped lang="scss">
 	#preview-container {
 		display: block;
 		width: 100%;

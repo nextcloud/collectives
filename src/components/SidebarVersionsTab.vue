@@ -120,18 +120,37 @@ export default {
 	},
 
 	computed: {
+		/**
+		 * @returns {object}
+		 */
 		pageTime() {
 			return moment.unix(this.pageTimestamp)
 		},
+
+		/**
+		 * @returns {string}
+		 */
 		pageFormattedTimestamp() {
 			return this.pageTime.format('LLL')
 		},
+
+		/**
+		 * @returns {string}
+		 */
 		iconUrl() {
 			return OC.MimeType.getIconUrl('text/markdown')
 		},
+
+		/**
+		 * @returns {string}
+		 */
 		pageHumanReadableSize() {
 			return OC.Util.humanFileSize(this.pageSize)
 		},
+
+		/**
+		 * @returns {string}
+		 */
 		pageAltSize() {
 			return n('files', '%n byte', '%n bytes', this.pageSize)
 		},

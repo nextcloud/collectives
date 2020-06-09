@@ -108,7 +108,7 @@ export default {
 
 		/**
 		 * Return true if a page is selected and its title is not empty
-		 * @returns {Boolean}
+		 * @returns {boolean}
 		 */
 		savePossible() {
 			return this.page && this.page.title !== ''
@@ -122,10 +122,16 @@ export default {
 			return this.isVersion ? this.version.downloadUrl : generateRemoteUrl(`dav/files/${this.getUser}/${this.page.basedir}/${this.page.filename}`)
 		},
 
+		/**
+		 * @returns {boolean}
+		 */
 		isVersion() {
 			return !!this.version
 		},
 
+		/**
+		 * @returns {string}
+		 */
 		getUser() {
 			return getCurrentUser().uid
 		},
@@ -181,7 +187,6 @@ export default {
 			}
 		},
 	},
-
 }
 </script>
 
