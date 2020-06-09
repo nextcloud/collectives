@@ -126,12 +126,6 @@ export default {
 		pageFormattedTimestamp() {
 			return this.pageTime.format('LLL')
 		},
-		pageRelativeTimestamp() {
-			return this.pageTime.fromNow()
-		},
-		pageMillisecondsTimestamp() {
-			return this.pageTime.valueOf()
-		},
 		iconUrl() {
 			return OC.MimeType.getIconUrl('text/markdown')
 		},
@@ -236,6 +230,7 @@ export default {
 					formattedTimestamp: time.format('LLL'),
 					relativeTimestamp: time.fromNow(),
 					timestamp: time.unix(),
+					millisecondsTimestamp: time.valueOf(),
 					humanReadableSize: OC.Util.humanFileSize(size),
 					altSize: n('files', '%n byte', '%n bytes', size),
 				})
