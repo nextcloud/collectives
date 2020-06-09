@@ -25,13 +25,18 @@
 		</AppNavigation>
 		<Page v-if="currentPage"
 			:page="currentPage"
+			:version="currentVersion"
+			:current-version-timestamp="currentVersionTimestamp"
 			:updating="updating"
 			@toggleSidebar="showSidebar=!showSidebar"
-			@rename-page="renamePage" />
+			@rename-page="renamePage"
+			@resetVersion="resetVersion" />
 		<Start v-else />
 		<PageSidebar v-if="currentPage"
 			v-show="showSidebar"
 			:page="currentPage"
+			:current-version-timestamp="currentVersionTimestamp"
+			@preview-version="setCurrentVersion"
 			@close="showSidebar=false" />
 	</div>
 </template>
@@ -52,6 +57,7 @@ import Start from './components/Start'
 
 export default {
 	name: 'App',
+
 	components: {
 		ActionButton,
 		AppNavigation,
@@ -66,9 +72,11 @@ export default {
 		return {
 			pages: [],
 			currentPageId: null,
+			currentVersion: null,
 			updating: false,
 			loading: true,
 			showSidebar: false,
+			currentVersionTimestamp: 0,
 		}
 	},
 
@@ -85,24 +93,52 @@ export default {
 		},
 	},
 
-	/**
-	 * Fetch list of pages when the component is loaded
-	 */
-	async mounted() {
-		try {
-			const response = await axios.get(generateUrl('/apps/wiki/pages'))
-			this.pages = response.data
-		} catch (e) {
-			console.error(e)
-			showError(t('wiki', 'Could not fetch pages'))
-		}
-		this.loading = false
+	watch: {
+		'currentPageId': function() {
+			this.setCurrentVersion(null)
+		},
+	},
+
+	mounted() {
+		this.getPages()
 	},
 
 	methods: {
 		/**
+		 * Get list of all pages
+		 */
+		async getPages() {
+			this.loading = true
+			try {
+				const response = await axios.get(generateUrl('/apps/wiki/pages'))
+				this.pages = response.data
+			} catch (e) {
+				console.error(e)
+				showError(t('wiki', 'Could not fetch pages'))
+			}
+			this.loading = false
+		},
+
+		/**
+		 * Fetch and update one particular page
+		 * @param {number} pageId Page ID
+		 */
+		async getPage(pageId) {
+			this.loading = true
+			try {
+				const response = await axios.get(generateUrl(`/apps/wiki/pages/${pageId}`))
+				// update page object from the list of pages
+				this.pages.splice(this.pages.findIndex(page => page.id === response.data.id), 1, response.data)
+			} catch (e) {
+				console.error(e)
+				showError(t('wiki', `Could not fetch page ${pageId}`))
+			}
+			this.loading = false
+		},
+
+		/**
 		 * Create a new page and focus the page content field automatically
-		 * @param {Object} page Page object
+		 * @param {object} page Page object
 		 */
 		openPage(page) {
 			this.currentPageId = page.id
@@ -122,7 +158,7 @@ export default {
 
 		/**
 		 * Create a new page by sending the information to the server
-		 * @param {Object} page Page object
+		 * @param {object} page Page object
 		 */
 		async createPage(page) {
 			this.updating = true
@@ -142,7 +178,7 @@ export default {
 
 		/**
 		 * Rename currentPage on the server
-		 * @param {String} newTitle New title for the page
+		 * @param {string} newTitle New title for the page
 		 */
 		async renamePage(newTitle) {
 			if (this.currentPage.title === newTitle) {
@@ -165,7 +201,7 @@ export default {
 
 		/**
 		 * Delete a page, remove it from the frontend and show a hint
-		 * @param {Object} page Page object
+		 * @param {object} page Page object
 		 */
 		async deletePage(page) {
 			try {
@@ -181,6 +217,22 @@ export default {
 			}
 		},
 
+		/**
+		 * Reset the version and reload current page in order to update page properties
+		 */
+		resetVersion() {
+			this.getPage(this.currentPageId)
+			this.setCurrentVersion(null)
+		},
+
+		/**
+		 * Set specific version of currentPage (passed to Page component)
+		 * @param {object} version Page version object
+		 */
+		setCurrentVersion(version) {
+			this.currentVersion = version
+			this.currentVersionTimestamp = (version ? version.timestamp : 0)
+		},
 	},
 }
 </script>

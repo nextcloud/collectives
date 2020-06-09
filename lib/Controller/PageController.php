@@ -35,6 +35,17 @@ class PageController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 *
+	 * @param int $id
+	 *
+	 * @return DataResponse
+	 */
+	public function get(int $id): DataResponse {
+		return new DataResponse($this->service->find($id, $this->userId));
+	}
+
+	/**
+	 * @NoAdminRequired
+	 *
 	 * @param string $title
 	 *
 	 * @return Entity
