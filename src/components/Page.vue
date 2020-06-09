@@ -32,15 +32,15 @@
 			<div v-else class="page-title">
 				{{ page.title }}
 			</div>
-			<PagePreview v-if="preview || !edit"
+			<PagePreview v-if="preview || !edit || isVersion"
 				:page-id="page.id"
 				:page-url="pageUrl"
 				:page-loading="preview && edit"
 				:is-version="isVersion" />
 			<component :is="handler.component"
-				v-show="edit && !preview"
+				v-show="edit && !preview && !isVersion"
 				ref="editor"
-				:key="'editor-' + page.id"
+				:key="'editor-' + page.id + currentVersionTimestamp"
 				:fileid="page.id"
 				:basename="page.filename"
 				:filename="'/' + page.basedir + '/' + page.filename"
@@ -83,6 +83,10 @@ export default {
 			type: Object,
 			required: false,
 			default: null,
+		},
+		currentVersionTimestamp: {
+			type: Number,
+			required: true,
 		},
 		updating: {
 			type: Boolean,

@@ -26,6 +26,7 @@
 		<Page v-if="currentPage"
 			:page="currentPage"
 			:version="currentVersion"
+			:current-version-timestamp="currentVersionTimestamp"
 			:updating="updating"
 			@toggleSidebar="showSidebar=!showSidebar"
 			@rename-page="renamePage"
