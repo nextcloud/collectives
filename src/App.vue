@@ -102,7 +102,8 @@ export default {
 			this.loading = true
 			try {
 				const response = await axios.get(generateUrl('/apps/wiki/pages'))
-				this.pages = response.data
+				// sort pages by timestamp
+				this.pages = response.data.sort((a, b) => b.timestamp - a.timestamp)
 			} catch (e) {
 				console.error(e)
 				showError(t('wiki', 'Could not fetch pages'))
@@ -155,7 +156,8 @@ export default {
 			this.updating = true
 			try {
 				const response = await axios.post(generateUrl(`/apps/wiki/pages`), page)
-				this.pages.push(response.data)
+				// Add new page to the beginning of pages array
+				this.pages.unshift(response.data)
 				this.currentPageId = response.data.id
 				// Update title as it might have changed due to filename conflict handling
 				this.currentPage.title = response.data.title
