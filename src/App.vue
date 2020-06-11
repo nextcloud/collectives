@@ -21,7 +21,7 @@
 			:current-version-timestamp="currentVersionTimestamp"
 			:updating="updating"
 			@toggleSidebar="showSidebar=!showSidebar"
-			@rename-page="renamePage"
+			@renamePage="renamePage"
 			@deletePage="deletePage"
 			@resetVersion="resetVersion" />
 		<Start v-else />
@@ -157,7 +157,7 @@ export default {
 			try {
 				const response = await axios.post(generateUrl(`/apps/wiki/pages`), page)
 				// Add new page to the beginning of pages array
-				this.pages.unshift(response.data)
+				this.pages.unshift({ newTitle: '', ...response.data })
 				this.currentPageId = response.data.id
 				// Update title as it might have changed due to filename conflict handling
 				this.currentPage.title = response.data.title
@@ -184,7 +184,8 @@ export default {
 				delete page.newTitle
 				const response = await axios.put(generateUrl(`/apps/wiki/pages/${page.id}`), page)
 				// Update title as it might have changed due to filename conflict handling
-				page.title = response.data.title
+				// also update all other attributes such as filename etc.
+				Object.assign(page, response.data)
 			} catch (e) {
 				console.error(e)
 				showError(t('wiki', 'Could not rename the page'))
