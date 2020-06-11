@@ -21,7 +21,7 @@
 			:current-version-timestamp="currentVersionTimestamp"
 			:updating="updating"
 			@toggleSidebar="showSidebar=!showSidebar"
-			@rename-page="renamePage"
+			@renamePage="renamePage"
 			@deletePage="deletePage"
 			@resetVersion="resetVersion" />
 		<Start v-else />
