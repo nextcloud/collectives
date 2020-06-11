@@ -196,9 +196,7 @@ class PageMapper {
 		$filename = self::generateFilename($folder, $safeTitle);
 
 		$file = $folder->newFile($filename . self::SUFFIX);
-		$page->setId($file->getId());
-		$page->setTitle($filename);
-		return $page;
+		return Page::fromFile($file);
 	}
 
 	/**
