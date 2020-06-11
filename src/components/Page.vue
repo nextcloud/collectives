@@ -28,24 +28,27 @@
 				</Actions>
 			</div>
 			<div v-if="!isVersion" id="titleform" class="page-title">
-				{{ t('wiki', 'Title') }}:
-				<input v-if="!isVersion"
-					ref="title"
-					v-model="page.newTitle"
-					type="text"
-					:disabled="updating || !savePossible"
-					@blur="renamePage">
+				<h2>
+					<input v-if="!isVersion"
+						ref="title"
+						v-model="newTitle"
+						:placeholder="t('wiki', 'Title')"
+						type="text"
+						:disabled="updating || !savePossible"
+						@keypress.13="focusEditor"
+						@blur="renamePage">
+				</h2>
 			</div>
 			<div v-else class="page-title">
 				{{ page.title }}
 			</div>
-			<PagePreview v-if="preview || !edit || isVersion"
+			<PagePreview v-if="readOnly"
 				:page-id="page.id"
 				:page-url="pageUrl"
 				:page-loading="preview && edit"
 				:is-version="isVersion" />
 			<component :is="handler.component"
-				v-show="edit && !preview && !isVersion"
+				v-show="!readOnly"
 				ref="editor"
 				:key="'editor-' + page.id + currentVersionTimestamp"
 				:fileid="page.id"
@@ -109,6 +112,10 @@ export default {
 	},
 
 	computed: {
+		readOnly() {
+			return this.preview || !this.edit || this.isVersion
+		},
+
 		/**
 		 * Fetch handlers for 'text/markdown' from Viewer app
 		 * @returns {object}
@@ -130,7 +137,9 @@ export default {
 		 * @returns {string}
 		 */
 		pageUrl() {
-			return this.isVersion ? this.version.downloadUrl : generateRemoteUrl(`dav/files/${this.getUser}/${this.page.basedir}/${this.page.filename}`)
+			return this.isVersion
+				? this.version.downloadUrl
+				: generateRemoteUrl(`dav/files/${this.getUser}/${this.page.basedir}/${this.page.filename}`)
 		},
 
 		/**
@@ -146,21 +155,53 @@ export default {
 		getUser() {
 			return getCurrentUser().uid
 		},
-	},
 
-	watch: {
-		'page': function(val, oldVal) {
-			if (!this.page.newTitle) {
-				this.page.newTitle = this.page.title
-			}
-			document.title = this.page.title + ' - Wiki - Nextcloud'
-			this.preview = true
+		newTitle: {
+			get: function() {
+				return (typeof this.page.newTitle === 'string')
+					? this.page.newTitle
+					: this.page.title
+			},
+			set: function(val) {
+				this.page.newTitle = val
+			},
 		},
 	},
 
+	watch: {
+		page: function(val, oldVal) {
+			this.init()
+		},
+	},
+
+	mounted: function() {
+		this.init()
+	},
+
 	methods: {
+		init() {
+			document.title = this.page.title + ' - Wiki - Nextcloud'
+			this.preview = true
+			this.edit = false
+			if (this.page.newTitle === '') {
+				this.$nextTick(this.focusTitle)
+			}
+		},
+
 		renamePage() {
-			this.$emit('renamePage', this.page.newTitle)
+			if (this.page.newTitle) {
+				this.$emit('renamePage', this.page.newTitle)
+				this.edit = true
+				this.$nextTick(this.focusEditor)
+			}
+		},
+
+		focusTitle() {
+			this.$refs.title.focus()
+		},
+
+		focusEditor() {
+			this.$el.querySelector('.ProseMirror').focus()
 		},
 
 		deletePage() {
@@ -215,10 +256,11 @@ export default {
 		flex-grow: 1;
 	}
 
-	#titleform > input[type="text"] {
+	#titleform input[type="text"] {
 		font-size: 24px;
 		width: 80%;
 		max-width: 670px;
+		border: none;
 	}
 
 	#action-menu {
