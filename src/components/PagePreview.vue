@@ -138,7 +138,9 @@ export default {
 			try {
 				this.contentLoading = true
 				const content = await axios.get(this.pageUrl)
-				this.pageContent = content.data
+				// content.data will attempt to parse as json
+				// but we want the raw text.
+				this.pageContent = content.request.responseText
 				this.contentLoading = false
 			} catch (e) {
 				console.error(`Failed to fetch content of page ${this.pageId}`, e)
