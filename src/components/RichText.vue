@@ -37,14 +37,16 @@ import {
 } from 'tiptap-extensions'
 
 export default {
-	name: 'PagePreview',
+	name: 'RichText',
 
 	components: {
 		EditorContent,
 	},
 
 	props: {
-		pageLoading: {
+		// RichText is rendered as a placeholder
+		// with a spinning wheel where the toolbar would be.
+		asPlaceholder: {
 			type: Boolean,
 			required: false,
 		},

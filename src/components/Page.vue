@@ -40,10 +40,10 @@
 			<h1 v-else class="page-title">
 				{{ page.title }}
 			</h1>
-			<PagePreview v-if="readOnly"
+			<RichText v-if="readOnly"
 				:page-id="page.id"
 				:page-url="pageUrl"
-				:page-loading="preview && edit"
+				:as-placeholder="preview && edit"
 				:is-version="isVersion" />
 			<component :is="handler.component"
 				v-show="!readOnly"
@@ -65,7 +65,7 @@
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import Actions from '@nextcloud/vue/dist/Components/Actions'
 import AppContent from '@nextcloud/vue/dist/Components/AppContent'
-import PagePreview from './PagePreview'
+import RichText from './RichText'
 
 import { getCurrentUser } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
@@ -79,7 +79,7 @@ export default {
 		ActionButton,
 		Actions,
 		AppContent,
-		PagePreview,
+		RichText,
 	},
 
 	props: {
