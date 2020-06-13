@@ -6,7 +6,6 @@
 				<div v-if="!loading">
 					<EditorContent
 						class="editor__content"
-						:class="{ 'text-revision': isVersion }"
 						:editor="editor" />
 				</div>
 			</div>
@@ -56,10 +55,6 @@ export default {
 		},
 		pageUrl: {
 			type: String,
-			required: true,
-		},
-		isVersion: {
-			type: Boolean,
 			required: true,
 		},
 	},

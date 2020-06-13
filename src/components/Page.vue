@@ -3,18 +3,13 @@
 		<div>
 			<div id="action-menu">
 				<Actions>
-					<ActionButton v-if="!isVersion"
+					<ActionButton
 						icon="icon-edit"
 						@click="edit = !edit">
 						{{ t('wiki', 'Toggle edit mode') }}
 					</ActionButton>
-					<ActionButton v-else
-						icon="icon-history"
-						@click="revertVersion">
-						{{ t('wiki', 'Restore this version') }}
-					</ActionButton>
 				</Actions>
-				<Actions v-if="!isVersion">
+				<Actions>
 					<ActionButton
 						icon="icon-delete"
 						@click="deletePage">
@@ -27,9 +22,8 @@
 					</ActionButton>
 				</Actions>
 			</div>
-			<h1 v-if="!isVersion" id="titleform" class="page-title">
-				<input v-if="!isVersion"
-					ref="title"
+			<h1 id="titleform" class="page-title">
+				<input ref="title"
 					v-model="newTitle"
 					:placeholder="t('wiki', 'Title')"
 					type="text"
@@ -37,18 +31,14 @@
 					@keypress.13="focusEditor"
 					@blur="renamePage">
 			</h1>
-			<h1 v-else class="page-title">
-				{{ page.title }}
-			</h1>
 			<RichText v-if="readOnly"
 				:page-id="page.id"
 				:page-url="pageUrl"
-				:as-placeholder="preview && edit"
-				:is-version="isVersion" />
+				:as-placeholder="preview && edit" />
 			<component :is="handler.component"
 				v-show="!readOnly"
 				ref="editor"
-				:key="'editor-' + page.id + currentVersionTimestamp"
+				:key="'editor-' + page.id"
 				:fileid="page.id"
 				:basename="page.filename"
 				:filename="'/' + page.basedir + '/' + page.filename"
@@ -68,8 +58,6 @@ import AppContent from '@nextcloud/vue/dist/Components/AppContent'
 import RichText from './RichText'
 
 import { getCurrentUser } from '@nextcloud/auth'
-import axios from '@nextcloud/axios'
-import { showError, showSuccess } from '@nextcloud/dialogs'
 import { generateRemoteUrl } from '@nextcloud/router'
 
 export default {
@@ -87,15 +75,6 @@ export default {
 			type: Object,
 			required: true,
 		},
-		version: {
-			type: Object,
-			required: false,
-			default: null,
-		},
-		currentVersionTimestamp: {
-			type: Number,
-			required: true,
-		},
 		updating: {
 			type: Boolean,
 			required: false,
@@ -111,7 +90,7 @@ export default {
 
 	computed: {
 		readOnly() {
-			return this.preview || !this.edit || this.isVersion
+			return this.preview || !this.edit
 		},
 
 		/**
@@ -135,16 +114,9 @@ export default {
 		 * @returns {string}
 		 */
 		pageUrl() {
-			return this.isVersion
-				? this.version.downloadUrl
-				: generateRemoteUrl(`dav/files/${this.getUser}/${this.page.basedir}/${this.page.filename}`)
-		},
-
-		/**
-		 * @returns {boolean}
-		 */
-		isVersion() {
-			return !!this.version
+			return generateRemoteUrl(
+				`dav/files/${this.getUser}/${this.page.basedir}/${this.page.filename}`
+			)
 		},
 
 		/**
@@ -212,58 +184,6 @@ export default {
 		hidePreview() {
 			this.preview = false
 		},
-
-		/**
-		 * Revert page to an old version
-		 */
-		async revertVersion() {
-			try {
-				const user = getCurrentUser().uid
-				const restoreFolderUrl = generateRemoteUrl(`dav/versions/${user}/restore/${this.page.id}`)
-				await axios({
-					method: 'MOVE',
-					url: this.version.downloadUrl,
-					headers: {
-						'Destination': restoreFolderUrl,
-					},
-				})
-				this.$emit('resetVersion')
-				showSuccess(t('wiki', 'Reverted {page} to revision {timestamp}.', {
-					page: this.page.title,
-					timestamp: this.version.relativeTimestamp,
-				}))
-			} catch (e) {
-				showError(t('wiki', 'Failed to revert {page} to revision {timestamp}.', {
-					page: this.page.title,
-					timestamp: this.version.relativeTimestamp,
-				}))
-				console.error('Failed to move page to restore folder', e)
-			}
-		},
 	},
 }
 </script>
-
-<style scoped>
-	#app-content > div {
-		width: 100%;
-		height: 100%;
-		padding: 20px;
-		display: flex;
-		flex-direction: column;
-		flex-grow: 1;
-	}
-
-	.page-title, #titleform input[type="text"] {
-		font-size: 24px;
-		width: 80%;
-		max-width: 670px;
-		border: none;
-		text-align: center;
-	}
-
-	#action-menu {
-		position: absolute;
-		right: 0;
-	}
-</style>
