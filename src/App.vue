@@ -248,11 +248,11 @@ export default {
 	}
 
 	.page-title, #titleform input[type="text"] {
-		font-size: 24px;
-		width: 80%;
-		max-width: 670px;
+		font-size: 36px;
 		border: none;
-		text-align: center;
+		font-weight: 600;
+		color: var(--color-main-text);
+		width: 100%
 	}
 
 	#action-menu {

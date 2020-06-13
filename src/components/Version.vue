@@ -118,3 +118,9 @@ export default {
 	},
 }
 </script>
+
+<style scoped>
+	.page-title {
+		padding: 4px 8px 2px 14px;
+	}
+</style>

@@ -210,3 +210,21 @@ export default {
 	},
 }
 </script>
+
+<style>
+	#editor-container .editor__content {
+		box-shadow: 5px 5px 10px 0px #aaa;
+	}
+
+	.page-title {
+		padding: 4px 2px 2px 8px;
+		position: relative;
+		margin: auto;
+		max-width: 670px;
+		margin-bottom: -50px;
+	}
+
+	#action-menu button {
+		z-index: 1;
+	}
+</style>
