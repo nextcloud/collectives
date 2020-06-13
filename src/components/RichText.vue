@@ -1,12 +1,11 @@
 <template>
-	<div id="preview-container" :key="'preview-' + pageId">
-		<div id="preview-wrapper" class="richEditor">
-			<div id="preview" class="editor">
+	<div id="text-container" :key="'text-' + pageId">
+		<div id="text-wrapper" class="richEditor">
+			<div id="text" class="editor">
 				<div :class="{menubar: true, loading}" />
 				<div v-if="!loading">
 					<EditorContent
 						class="editor__content"
-						:class="{ 'preview-revision': isVersion }"
 						:editor="editor" />
 				</div>
 			</div>
@@ -37,14 +36,16 @@ import {
 } from 'tiptap-extensions'
 
 export default {
-	name: 'PagePreview',
+	name: 'RichText',
 
 	components: {
 		EditorContent,
 	},
 
 	props: {
-		pageLoading: {
+		// RichText is rendered as a placeholder
+		// with a spinning wheel where the toolbar would be.
+		asPlaceholder: {
 			type: Boolean,
 			required: false,
 		},
@@ -54,10 +55,6 @@ export default {
 		},
 		pageUrl: {
 			type: String,
-			required: true,
-		},
-		isVersion: {
-			type: Boolean,
 			required: true,
 		},
 	},
@@ -138,7 +135,12 @@ export default {
 			try {
 				this.contentLoading = true
 				const content = await axios.get(this.pageUrl)
-				this.pageContent = content.data
+				// content.data will attempt to parse as json
+				// but we want the raw text.
+				this.pageContent = content.request.responseText
+				if (!this.pageContent) {
+					this.$emit('empty')
+				}
 				this.contentLoading = false
 			} catch (e) {
 				console.error(`Failed to fetch content of page ${this.pageId}`, e)
@@ -149,7 +151,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-	#preview-container {
+	#text-container {
 		display: block;
 		width: 100%;
 		max-width: 100%;
@@ -177,20 +179,19 @@ export default {
 		opacity: 100%;
 	}
 
-	#preview-wrapper {
+	#text-wrapper {
 		display: flex;
 		width: 100%;
 		height: 100%;
 		overflow: hidden;
 		position: absolute;
-		&.icon-loading {
-			#editor {
-				opacity: 0.3;
-			}
-		}
 	}
 
-	#preview, .editor {
+	#text-wrapper.icon-loading #editor {
+		opacity: 0.3;
+	}
+
+	#text, .editor {
 		background: var(--color-main-background);
 		color: var(--color-main-text);
 		background-clip: padding-box;
@@ -208,17 +209,17 @@ export default {
 		position: relative;
 	}
 
-	.preview-revision {
+	.text-revision {
 		background-color: lightcoral;
 	}
 </style>
 
 <style lang="scss">
-	#preview-wrapper {
+	#text-wrapper {
 		@import './../../apps/text/css/prosemirror';
 	}
 
-	#preview-container {
+	#text-container {
 		height: calc(100% - 50px);
 		top: 50px;
 	}
