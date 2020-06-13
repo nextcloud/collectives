@@ -138,6 +138,9 @@ export default {
 				// content.data will attempt to parse as json
 				// but we want the raw text.
 				this.pageContent = content.request.responseText
+				if (!this.pageContent) {
+					this.$emit('empty')
+				}
 				this.contentLoading = false
 			} catch (e) {
 				console.error(`Failed to fetch content of page ${this.pageId}`, e)
