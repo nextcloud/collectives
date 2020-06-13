@@ -34,7 +34,8 @@
 			<RichText v-if="readOnly"
 				:page-id="page.id"
 				:page-url="pageUrl"
-				:as-placeholder="preview && edit" />
+				:as-placeholder="preview && edit"
+				@empty="emptyPreview" />
 			<component :is="handler.component"
 				v-show="!readOnly"
 				ref="editor"
@@ -60,6 +61,8 @@ import RichText from './RichText'
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateRemoteUrl } from '@nextcloud/router'
 
+const EditState = { Unset: 0, Edit: 1, Read: 2 }
+
 export default {
 	name: 'Page',
 
@@ -83,12 +86,22 @@ export default {
 
 	data: function() {
 		return {
-			edit: false,
+			editToggle: EditState.Unset,
 			preview: true,
 		}
 	},
 
 	computed: {
+
+		edit: {
+			get: function() {
+				return this.editToggle === EditState.Edit
+			},
+			set: function(val) {
+				this.editToggle = val ? EditState.Edit : EditState.Read
+			},
+		},
+
 		readOnly() {
 			return this.preview || !this.edit
 		},
@@ -126,6 +139,10 @@ export default {
 			return getCurrentUser().uid
 		},
 
+		emptyTitle() {
+			return this.page.newTitle === ''
+		},
+
 		newTitle: {
 			get: function() {
 				return (typeof this.page.newTitle === 'string')
@@ -152,8 +169,8 @@ export default {
 		init() {
 			document.title = this.page.title + ' - Wiki - Nextcloud'
 			this.preview = true
-			this.edit = false
-			if (this.page.newTitle === '') {
+			this.editToggle = EditState.Unset
+			if (this.emptyTitle) {
 				this.$nextTick(this.focusTitle)
 			}
 		},
@@ -183,6 +200,12 @@ export default {
 		 */
 		hidePreview() {
 			this.preview = false
+		},
+
+		emptyPreview() {
+			if (this.editToggle === EditState.Unset && !this.emptyTitle) {
+				this.edit = true
+			}
 		},
 	},
 }
