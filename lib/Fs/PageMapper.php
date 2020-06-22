@@ -91,6 +91,17 @@ class PageMapper {
 	}
 
 	/**
+	 * @param File   $file
+	 *
+	 * @return bool
+	 */
+	private function isPage(File $file): bool {
+		$name = $file->getName();
+		$length = strlen(self::SUFFIX);
+		return (substr($name, -$length) === self::SUFFIX);
+	}
+
+	/**
 	 * @param Folder $folder
 	 * @param string $filename
 	 *
@@ -179,7 +190,9 @@ class PageMapper {
 		$pages = [];
 		$folder = $this->getFolderForUser($userId);
 		foreach ($folder->getDirectoryListing() as $file) {
-			$pages[] = $this->getPage($file);
+			if ($file instanceof File && $this->isPage($file)) {
+				$pages[] = $this->getPage($file);
+			}
 		}
 		return $pages;
 	}
