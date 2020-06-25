@@ -11,7 +11,7 @@
 				:key="page.id"
 				:title="page.title ? page.title : t('wiki', 'New page')"
 				:class="{active: currentPageId === page.id}"
-				@click="$emit('open', page)" />
+				:to="`/${page.id}`" />
 		</ul>
 	</AppNavigation>
 </template>
@@ -36,6 +36,7 @@ export default {
 		currentPageId: {
 			type: Number,
 			required: false,
+			default: null,
 		},
 		loading: {
 			type: Boolean,

@@ -22,7 +22,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import App from './App'
-import Path from './Path'
+import Start from './components/Start'
+import Pages from './components/Pages'
 
 Vue.prototype.t = t
 Vue.prototype.n = n
@@ -37,7 +38,8 @@ Vue.use(VueRouter)
 // `Vue.extend()`, or just a component options object.
 // We'll talk about nested routes later.
 const routes = [
-	{ path: '/:name', component: Path, props: true },
+	{ path: '/', component: Start, props: false },
+	{ path: '/:pageId', component: Pages, props: (route) => ({ pageId: Number(route.params.pageId) }) },
 ]
 
 // We cannot predict the base
