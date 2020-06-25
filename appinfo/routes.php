@@ -8,16 +8,19 @@
 
 return [
 	'routes' => [
-		// default route
-		['name' => 'wiki#index', 'url' => '/', 'verb' => 'GET'],
-
 		// pages
-		['name' => 'page#index', 'url' => '/pages', 'verb' => 'GET'],
-		['name' => 'page#get', 'url' => '/pages/{id}', 'verb' => 'GET'],
-		['name' => 'page#create', 'url' => '/pages', 'verb' => 'POST'],
-		['name' => 'page#rename', 'url' => '/pages/{id}', 'verb' => 'PUT',
+		['name' => 'page#index', 'url' => '/_pages', 'verb' => 'GET'],
+		['name' => 'page#get', 'url' => '/_pages/{id}', 'verb' => 'GET'],
+		['name' => 'page#create', 'url' => '/_pages', 'verb' => 'POST'],
+		['name' => 'page#rename', 'url' => '/_pages/{id}', 'verb' => 'PUT',
 		 'requirements' => ['id' => '\d+']],
-		['name' => 'page#destroy', 'url' => '/pages/{id}', 'verb' => 'DELETE',
+		['name' => 'page#destroy', 'url' => '/_pages/{id}', 'verb' => 'DELETE',
 		 'requirements' => ['id' => '\d+']],
+
+		// default route
+		['name' => 'wiki#index', 'url' => '/{path}', 'verb' => 'GET',
+		 'requirements' => ['path' => '.*'],
+		 'defaults' => ['path' => '']],
+
 	]
 ];

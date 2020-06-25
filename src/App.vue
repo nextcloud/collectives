@@ -107,7 +107,7 @@ export default {
 		async getPages() {
 			this.loading = true
 			try {
-				const response = await axios.get(generateUrl('/apps/wiki/pages'))
+				const response = await axios.get(generateUrl('/apps/wiki/_pages'))
 				// sort pages by timestamp
 				this.pages = response.data.sort((a, b) => b.timestamp - a.timestamp)
 			} catch (e) {
@@ -124,7 +124,7 @@ export default {
 		async getPage(pageId) {
 			this.loading = true
 			try {
-				const response = await axios.get(generateUrl(`/apps/wiki/pages/${pageId}`))
+				const response = await axios.get(generateUrl(`/apps/wiki/_pages/${pageId}`))
 				// update page object from the list of pages
 				this.pages.splice(this.pages.findIndex(page => page.id === response.data.id), 1, response.data)
 			} catch (e) {
@@ -161,7 +161,7 @@ export default {
 		async createPage(page) {
 			this.updating = true
 			try {
-				const response = await axios.post(generateUrl(`/apps/wiki/pages`), page)
+				const response = await axios.post(generateUrl(`/apps/wiki/_pages`), page)
 				// Add new page to the beginning of pages array
 				this.pages.unshift({ newTitle: '', ...response.data })
 				this.currentPageId = response.data.id
@@ -188,7 +188,7 @@ export default {
 			try {
 				page.title = newTitle
 				delete page.newTitle
-				const response = await axios.put(generateUrl(`/apps/wiki/pages/${page.id}`), page)
+				const response = await axios.put(generateUrl(`/apps/wiki/_pages/${page.id}`), page)
 				// Update title as it might have changed due to filename conflict handling
 				// also update all other attributes such as filename etc.
 				Object.assign(page, response.data)
@@ -205,7 +205,7 @@ export default {
 		 */
 		async deletePage(pageId) {
 			try {
-				await axios.delete(generateUrl(`/apps/wiki/pages/${pageId}`))
+				await axios.delete(generateUrl(`/apps/wiki/_pages/${pageId}`))
 				this.pages.splice(this.pages.findIndex(page => page.id === pageId), 1)
 				if (this.currentPageId === pageId) {
 					this.currentPageId = null
