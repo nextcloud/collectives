@@ -145,7 +145,7 @@ export default {
 				const response = await axios.post(generateUrl(`/apps/wiki/_pages`), page)
 				// Add new page to the beginning of pages array
 				this.pages.unshift({ newTitle: '', ...response.data })
-				this.$router.push(`/${response.data.id}`)
+				this.$router.push(`/${response.data.title}.md?fileId=${response.data.id}`)
 			} catch (e) {
 				console.error(e)
 				showError(t('wiki', 'Could not create the page'))

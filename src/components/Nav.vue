@@ -11,7 +11,7 @@
 				:key="page.id"
 				:title="page.title ? page.title : t('wiki', 'New page')"
 				:class="{active: currentPageId === page.id}"
-				:to="`/${page.id}`" />
+				:to="`/${page.title}.md?fileId=${page.id}`" />
 		</ul>
 	</AppNavigation>
 </template>

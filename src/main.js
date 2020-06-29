@@ -39,7 +39,13 @@ Vue.use(VueRouter)
 // We'll talk about nested routes later.
 const routes = [
 	{ path: '/', component: Start, props: false },
-	{ path: '/:pageId', component: Pages, props: (route) => ({ pageId: Number(route.params.pageId) }) },
+	{ path: '/:name',
+		component: Pages,
+		props: (route) => ({
+			...route.params,
+			pageId: Number(route.query.fileId),
+		}),
+	},
 ]
 
 // We cannot predict the base
