@@ -24,7 +24,6 @@ import {
 	HardBreak,
 	Heading,
 	Code,
-	Link,
 	BulletList,
 	OrderedList,
 	Blockquote,
@@ -34,6 +33,7 @@ import {
 	Strike,
 	ListItem,
 } from 'tiptap-extensions'
+import Link from '../marks/link'
 
 export default {
 	name: 'RichText',
