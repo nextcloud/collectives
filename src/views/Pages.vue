@@ -185,9 +185,7 @@ export default {
 			try {
 				await axios.delete(generateUrl(`/apps/wiki/_pages/${pageId}`))
 				this.pages.splice(this.pages.findIndex(page => page.id === pageId), 1)
-				if (this.pageId === pageId) {
-					this.pageId = null
-				}
+				this.$router.push(`/`)
 				showSuccess(t('wiki', 'Page deleted'))
 			} catch (e) {
 				console.error(e)
