@@ -18,7 +18,7 @@ import axios from '@nextcloud/axios'
 import { showError } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
 import AppContent from '@nextcloud/vue/dist/Components/AppContent'
-import Nav from './Nav'
+import Nav from '../components/Nav'
 export default {
 	name: 'Start',
 

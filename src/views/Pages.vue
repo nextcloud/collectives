@@ -33,10 +33,10 @@ import axios from '@nextcloud/axios'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
 
-import Nav from './Nav'
-import Page from './Page'
-import Version from './Version'
-import PageSidebar from './PageSidebar'
+import Nav from '../components/Nav'
+import Page from '../components/Page'
+import Version from '../components/Version'
+import PageSidebar from '../components/PageSidebar'
 
 export default {
 	name: 'Pages',

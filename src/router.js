@@ -1,7 +1,7 @@
 /**
- * @copyright Copyright (c) 2018 John Molakvoæ <skjnldsv@protonmail.com>
+ * @copyright Copyright (c) 2020 Azul <azul@riseup.net>
  *
- * @author John Molakvoæ <skjnldsv@protonmail.com>
+ * @author Azul <azul@riseup.net>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -20,16 +20,30 @@
  *
  */
 import Vue from 'vue'
-import App from './App'
-import router from './router'
+import VueRouter from 'vue-router'
+import Start from './views/Start'
+import Pages from './views/Pages'
 
-Vue.prototype.t = t
-Vue.prototype.n = n
-Vue.prototype.OC = OC
-Vue.prototype.OCA = OCA
+Vue.use(VueRouter)
 
-export default new Vue({
-	router,
-	el: '#content',
-	render: h => h(App),
+// We cannot predict the base
+// as some servers have index.php in their urls.
+// So we take the current path and drop everything after '/apps/wiki'.
+const base = window.location.pathname.replace(/\/apps\/wiki\/.*/, '/apps/wiki/')
+
+const routes = [
+	{ path: '/', component: Start, props: false },
+	{ path: '/:name',
+		component: Pages,
+		props: (route) => ({
+			...route.params,
+			pageId: Number(route.query.fileId),
+		}),
+	},
+]
+
+export default new VueRouter({
+	mode: 'history',
+	base,
+	routes,
 })
