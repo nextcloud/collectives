@@ -1,7 +1,7 @@
 <template>
 	<router-link v-if="useRouter" :to="to" :href="href" />
 	<a v-else-if="leaveHref" :href="href" />
-	<a v-else-if="withFileId" :href="viewerHref" />
+	<a v-else-if="hrefFileId" :href="viewerHref" @click.prevent="openViewer" />
 	<a v-else :href="href" />
 </template>
 
@@ -41,9 +41,12 @@ export default {
 		href() {
 			return this.node.attrs.href
 		},
-		// TODO: use good heuristic
 		useRouter() {
-			return !this.href.includes('/') && this.href.includes('.md?fileId=')
+			return this.wikiLink
+		},
+		wikiLink() {
+			return this.href.includes('.md?fileId=')
+				&& !this.href.includes('/') // for now we stay inside the Wiki dir
 		},
 		leaveHref() {
 			// empty
@@ -51,14 +54,37 @@ export default {
 				// starting with protocol:
 				|| this.href.match(/^[a-zA-Z]*:/)
 		},
-		withFileId() { return this.href.match(/^([^?]*)\?fileId=(\d+)/) },
-		to() { return this.href },
-		viewerHref() {
-			const [, relPath, id] = this.href.match(/^([^?]*)\?fileId=(\d+)/)
-			const dir = absolutePath('/Wiki', basedir(relPath))
-			return generateUrl(`/apps/files/?dir=${dir}&openfile=${id}#relPath=${relPath}`)
+		hrefFileId() {
+			const [, id] = this.href.match(/^[^?]*\?fileId=(\d+)/)
+			return id
 		},
-
+		relPath() {
+			const [, relPath] = this.href.match(/^([^?]*)\?fileId=\d+/)
+			return relPath
+		},
+		to() {
+			if (this.wikiLink) {
+				return this.href
+			} else {
+				// open file in viewer on top of current page
+				return `?fileId=${this.pageId}&openfile=${this.hrefFileId}`
+			}
+		},
+		viewerHref() {
+			const dir = absolutePath('/Wiki', basedir(this.relPath))
+			return generateUrl(
+				`/apps/files/?dir=${dir}&openfile=${this.hrefFileId}#relPath=${this.relPath}`
+			)
+		},
+		pageId() {
+			return Number(this.$route.query.fileId)
+		},
+	},
+	methods: {
+		openViewer() {
+			const file = absolutePath('/Wiki', this.relPath)
+			this.OCA.Viewer.open(file)
+		},
 	},
 }
 </script>

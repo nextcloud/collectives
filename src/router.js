@@ -33,11 +33,12 @@ const base = window.location.pathname.replace(/\/apps\/wiki\/.*/, '/apps/wiki/')
 
 const routes = [
 	{ path: '/', component: Start, props: false },
-	{ path: '/:name',
+	{ path: '/:subdir*/:filename',
 		component: Pages,
 		props: (route) => ({
 			...route.params,
 			pageId: Number(route.query.fileId),
+			openFileId: Number(route.query.openFile),
 		}),
 	},
 ]
