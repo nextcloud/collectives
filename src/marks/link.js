@@ -1,7 +1,7 @@
-/**
- * @copyright Copyright (c) 2018 John Molakvoæ <skjnldsv@protonmail.com>
+/*
+ * @copyright Copyright (c) 2020 Azul <azul@riseup.net>
  *
- * @author John Molakvoæ <skjnldsv@protonmail.com>
+ * @author Azul <azul@riseup.net>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -12,24 +12,25 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-import Vue from 'vue'
-import App from './App'
-import router from './router'
 
-Vue.prototype.t = t
-Vue.prototype.n = n
-Vue.prototype.OC = OC
-Vue.prototype.OCA = OCA
+import { Link as TipTapLink } from 'tiptap-extensions'
+import LinkView from './LinkView'
 
-export default new Vue({
-	router,
-	el: '#content',
-	render: h => h(App),
-})
+export default class Link extends TipTapLink {
+
+	get view() {
+		return LinkView
+	}
+
+	get plugins() {
+		return []
+	}
+
+}
