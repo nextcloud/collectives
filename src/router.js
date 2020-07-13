@@ -23,6 +23,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Start from './views/Start'
 import Pages from './views/Pages'
+import Circle from './views/Circle'
 
 Vue.use(VueRouter)
 
@@ -33,6 +34,7 @@ const base = window.location.pathname.replace(/\/apps\/wiki\/.*/, '/apps/wiki/')
 
 const routes = [
 	{ path: '/', component: Start, props: false },
+	{ path: '/circles/:id', component: Circle, props: true },
 	{ path: '/:subdir*/:filename',
 		component: Pages,
 		props: (route) => ({

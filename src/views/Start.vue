@@ -7,7 +7,15 @@
 		<AppContent>
 			<div id="emptycontent">
 				<div class="icon-file" />
-				<h2>{{ t('wiki', 'Create a page to get started') }}</h2>
+				<h2>{{ t('wiki', 'Create a wiki for one of your circles to get started') }}</h2>
+
+				<ul>
+					<li v-for="circle in circles" :key="circle.name">
+						<router-link :to="`/circles/${circle.unique_id}`">
+							{{ circle.name }}
+						</router-link>
+					</li>
+				</ul>
 			</div>
 		</AppContent>
 	</div>
@@ -32,14 +40,17 @@ export default {
 			pages: [],
 			loading: false,
 			updating: false,
+			circles: [],
 		}
 	},
 
 	mounted() {
 		this.getPages()
+		this.getCircles()
 	},
 
 	methods: {
+
 		/**
 		 * Get list of all pages
 		 */
@@ -54,6 +65,18 @@ export default {
 				showError(t('wiki', 'Could not fetch pages'))
 			}
 			this.loading = false
+		},
+
+		/**
+		 * Get list of all pages
+		 */
+		getCircles() {
+			this.loading = true
+			const view = this
+			OCA.Circles.api.listCircles('all', '', 0, function(response) {
+				view.circles = response.data
+				view.loading = false
+			})
 		},
 
 		/**
