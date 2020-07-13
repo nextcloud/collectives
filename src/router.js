@@ -21,32 +21,34 @@
  */
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Start from './views/Start'
-import Pages from './views/Pages'
-import Circle from './views/Circle'
+import { generateUrl } from '@nextcloud/router'
+import CircleDash from './views/CircleDash'
 
 Vue.use(VueRouter)
 
-// We cannot predict the base
-// as some servers have index.php in their urls.
-// So we take the current path and drop everything after '/apps/wiki'.
-const base = window.location.pathname.replace(/\/apps\/wiki\/.*/, '/apps/wiki/')
-
 const routes = [
-	{ path: '/', component: Start, props: false },
-	{ path: '/circles/:id', component: Circle, props: true },
-	{ path: '/:subdir*/:filename',
-		component: Pages,
+	{
+		path: '/',
+		component: CircleDash,
 		props: (route) => ({
 			...route.params,
-			pageId: Number(route.query.fileId),
-			openFileId: Number(route.query.openFile),
+			fileId: Number(route.query.fileId),
 		}),
+		children: [
+			{
+				path: ':selectedWiki',
+				component: CircleDash,
+			},
+			{
+				path: ':selectedWiki/:selectedPage',
+				component: CircleDash,
+			},
+		],
 	},
 ]
 
 export default new VueRouter({
 	mode: 'history',
-	base,
+	base: generateUrl('/apps/wiki', ''),
 	routes,
 })

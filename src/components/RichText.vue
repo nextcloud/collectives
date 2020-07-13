@@ -159,7 +159,7 @@ export default {
 		left: 0;
 		top: 50px;
 		margin: 0 auto;
-		position: relative;
+		position: absolute;
 		background-color: var(--color-main-background);
 	}
 

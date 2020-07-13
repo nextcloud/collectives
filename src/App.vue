@@ -3,13 +3,16 @@
 </template>
 
 <style>
-	#app-content > div {
-		width: 100%;
-		height: 100%;
-		padding: 20px;
-		display: flex;
-		flex-direction: column;
-		flex-grow: 1;
+	.app-content-details {
+		position: relative
+	}
+
+	#app-content-wrapper {
+		padding-top: 40px
+	}
+
+	.app-content-details div #editor-container {
+		position: absolute
 	}
 
 	.page-title, #titleform input[type="text"] {
@@ -17,7 +20,7 @@
 		border: none;
 		font-weight: 600;
 		color: var(--color-main-text);
-		width: 100%
+		width: 100%;
 	}
 
 	#action-menu {

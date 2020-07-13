@@ -1,17 +1,12 @@
 <template>
 	<AppNavigation>
-		<AppNavigationNew v-if="!loading"
-			:text="t('wiki', 'New page')"
-			:disabled="false"
-			button-id="new-wiki-button"
-			button-class="icon-add"
-			@click="$emit('new')" />
 		<ul>
-			<AppNavigationItem v-for="page in pages"
-				:key="page.id"
-				:title="page.title ? page.title : t('wiki', 'New page')"
-				:class="{active: currentPageId === page.id}"
-				:to="`/${page.title}.md?fileId=${page.id}`" />
+			<AppNavigationCaption :title="t('wiki', 'Select a wiki')" />
+			<AppNavigationItem v-for="wiki in wikis"
+				:key="wiki.circleUniqueId"
+				:title="wiki.folderName"
+				:class="{active: isActive(wiki)}"
+				:to="`/${wiki.folderName}`" />
 		</ul>
 	</AppNavigation>
 </template>
@@ -19,28 +14,33 @@
 <script>
 import AppNavigation from '@nextcloud/vue/dist/Components/AppNavigation'
 import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
-import AppNavigationNew from '@nextcloud/vue/dist/Components/AppNavigationNew'
+import AppNavigationCaption from '@nextcloud/vue/dist/Components/AppNavigationCaption'
 
 export default {
 	name: 'Nav',
 	components: {
 		AppNavigation,
 		AppNavigationItem,
-		AppNavigationNew,
+		AppNavigationCaption,
 	},
 	props: {
-		pages: {
+		wikis: {
 			type: Array,
 			required: true,
 		},
-		currentPageId: {
-			type: Number,
+		selectedWiki: {
+			type: String,
 			required: false,
 			default: null,
 		},
 		loading: {
 			type: Boolean,
 			required: true,
+		},
+	},
+	methods: {
+		isActive(wiki) {
+			return this.selectedWiki === wiki.folderName
 		},
 	},
 }

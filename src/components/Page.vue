@@ -1,55 +1,53 @@
 <template>
-	<AppContent>
-		<div>
-			<div id="action-menu">
-				<Actions>
-					<ActionButton
-						icon="icon-edit"
-						@click="edit = !edit">
-						{{ t('wiki', 'Toggle edit mode') }}
-					</ActionButton>
-				</Actions>
-				<Actions>
-					<ActionButton
-						icon="icon-delete"
-						@click="deletePage">
-						{{ t('wiki', 'Delete page') }}
-					</ActionButton>
-				</Actions>
-				<Actions>
-					<ActionButton icon="icon-menu" @click="$emit('toggleSidebar')">
-						{{ t('wiki', 'Toggle sidebar') }}
-					</ActionButton>
-				</Actions>
-			</div>
-			<h1 id="titleform" class="page-title">
-				<input ref="title"
-					v-model="newTitle"
-					:placeholder="t('wiki', 'Title')"
-					type="text"
-					:disabled="updating || !savePossible"
-					@keypress.13="focusEditor"
-					@blur="renamePage">
-			</h1>
-			<RichText v-if="readOnly"
-				:page-id="page.id"
-				:page-url="pageUrl"
-				:as-placeholder="preview && edit"
-				@empty="emptyPreview" />
-			<component :is="handler.component"
-				v-show="!readOnly"
-				ref="editor"
-				:key="'editor-' + page.id"
-				:fileid="page.id"
-				:basename="page.filename"
-				:filename="'/' + page.basedir + '/' + page.filename"
-				:has-preview="true"
-				:active="true"
-				mime="text/markdown"
-				class="file-view active"
-				@ready="hidePreview" />
+	<div>
+		<div id="action-menu">
+			<Actions>
+				<ActionButton
+					icon="icon-edit"
+					@click="edit = !edit">
+					{{ t('wiki', 'Toggle edit mode') }}
+				</ActionButton>
+			</Actions>
+			<Actions>
+				<ActionButton
+					icon="icon-delete"
+					@click="deletePage">
+					{{ t('wiki', 'Delete page') }}
+				</ActionButton>
+			</Actions>
+			<Actions>
+				<ActionButton icon="icon-menu" @click="$emit('toggleSidebar')">
+					{{ t('wiki', 'Toggle sidebar') }}
+				</ActionButton>
+			</Actions>
 		</div>
-	</AppContent>
+		<h1 id="titleform" class="page-title">
+			<input ref="title"
+				v-model="newTitle"
+				:placeholder="t('wiki', 'Title')"
+				type="text"
+				:disabled="updating || !savePossible"
+				@keypress.13="focusEditor"
+				@blur="renamePage">
+		</h1>
+		<RichText v-if="readOnly"
+			:page-id="page.id"
+			:page-url="pageUrl"
+			:as-placeholder="preview && edit"
+			@empty="emptyPreview" />
+		<component :is="handler.component"
+			v-show="!readOnly"
+			ref="editor"
+			:key="'editor-' + page.id"
+			:fileid="page.id"
+			:basename="page.filename"
+			:filename="'/' + page.basedir + '/' + page.filename"
+			:has-preview="true"
+			:active="true"
+			mime="text/markdown"
+			class="file-view active"
+			@ready="hidePreview" />
+	</div>
 </template>
 
 <script>

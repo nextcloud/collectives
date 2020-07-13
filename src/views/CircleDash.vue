@@ -1,57 +1,112 @@
 <template>
-	<div id="content" class="app-wiki">
-		<Nav :key="`nav-${pageId}`"
+	<Content app-name="wiki" :class="{'icon-loading': loading}">
+		<Nav v-if="!selectedWiki"
 			:loading="loading"
-			:pages="pages"
-			:current-page-id="pageId"
+			:wikis="wikis"
+			:selected-wiki="selectedWiki"
 			@new="newPage" />
-		<Version v-if="currentPage && currentVersion"
-			:page="currentPage"
-			:version="currentVersion"
-			:current-version-timestamp="currentVersionTimestamp"
-			:updating="updating"
-			@toggleSidebar="showSidebar=!showSidebar"
-			@resetVersion="resetVersion" />
-		<Page v-else-if="currentPage"
-			:key="`page-${pageId}`"
-			:page="currentPage"
-			:updating="updating"
-			@toggleSidebar="showSidebar=!showSidebar"
-			@renamePage="renamePage"
-			@deletePage="deletePage" />
+		<AppContent>
+			<Breadcrumbs>
+				<Breadcrumb title="Home" to="/" />
+				<Breadcrumb v-if="selectedWiki"
+					:title="selectedWiki"
+					:to="`/${selectedWiki}`" />
+				<Breadcrumb v-if="selectedWiki" title="">
+					<ActionButton icon="icon-add" @click="newPage">
+						{{ t('wiki', 'Add a page') }}
+					</ActionButton>
+				</Breadcrumb>
+				<Breadcrumb v-else
+					title=""
+					:force-menu="true"
+					:open="!loading && wikis.length === 0">
+					<ActionInput ref="newWikiName"
+						icon="icon-add"
+						@submit="newWiki">
+						Name for a new wiki
+					</ActionInput>
+				</Breadcrumb>
+			</Breadcrumbs>
+			<div v-if="selectedWiki" id="app-content-wrapper">
+				<PagesList
+					:show-details="!!currentPage"
+					:loading="loading"
+					:pages="pages"
+					:current-page="currentPage" />
+				<AppContentDetails v-if="currentPage">
+					<Version v-if="currentVersion"
+						:page="currentPage"
+						:version="currentVersion"
+						:current-version-timestamp="currentVersionTimestamp"
+						:updating="updating"
+						@toggleSidebar="showSidebar=!showSidebar"
+						@resetVersion="resetVersion" />
+					<Page key="selectedPage"
+						:page="currentPage"
+						:updating="updating"
+						@toggleSidebar="showSidebar=!showSidebar"
+						@renamePage="renamePage"
+						@deletePage="deletePage" />
+				</AppContentDetails>
+			</div>
+			<div v-else id="emptycontent">
+				<div class="icon-add" />
+				<h2>{{ t('wiki', 'Create a wiki...') }}</h2>
+			</div>
+		</AppContent>
 		<PageSidebar v-if="currentPage"
 			v-show="showSidebar"
 			:page="currentPage"
 			:current-version-timestamp="currentVersionTimestamp"
 			@preview-version="setCurrentVersion"
 			@close="showSidebar=false" />
-	</div>
+	</Content>
 </template>
 
 <script>
 import axios from '@nextcloud/axios'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
-
+import AppContent from '@nextcloud/vue/dist/Components/AppContent'
+import AppContentDetails from '@nextcloud/vue/dist/Components/AppContentDetails'
+import ActionInput from '@nextcloud/vue/dist/Components/ActionInput'
+import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
+import Breadcrumbs from '@nextcloud/vue/dist/Components/Breadcrumbs'
+import Breadcrumb from '@nextcloud/vue/dist/Components/Breadcrumb'
+import Content from '@nextcloud/vue/dist/Components/Content'
 import Nav from '../components/Nav'
+import PagesList from '../components/PagesList'
 import Page from '../components/Page'
-import Version from '../components/Version'
 import PageSidebar from '../components/PageSidebar'
-
+import Version from '../components/Version'
 export default {
-	name: 'Pages',
+	name: 'CircleDash',
 
 	components: {
+		AppContent,
+		AppContentDetails,
+		ActionInput,
+		ActionButton,
+		Breadcrumbs,
+		Breadcrumb,
+		Content,
 		Nav,
 		Page,
+		PagesList,
 		PageSidebar,
 		Version,
 	},
 
 	props: {
-		pageId: {
-			type: Number,
-			required: true,
+		selectedWiki: {
+			type: String,
+			required: false,
+			default: null,
+		},
+		selectedPage: {
+			type: String,
+			required: false,
+			default: null,
 		},
 	},
 
@@ -59,10 +114,11 @@ export default {
 		return {
 			pages: [],
 			currentVersion: null,
-			updating: false,
 			loading: true,
+			updating: false,
 			showSidebar: false,
 			currentVersionTimestamp: 0,
+			wikis: [],
 		}
 	},
 
@@ -75,21 +131,32 @@ export default {
 			if (this.pageId === null) {
 				return null
 			}
-			return this.pages.find((page) => page.id === this.pageId)
+			return this.pages.find((page) => page.title === this.selectedPage)
 		},
+
+		wikiName() {
+			// Somehow ActionInput.value does not reflect
+			// the value of the input field.
+			// This is a workaround.
+			// TODO: properly fix this in nextclouds ActionInput.
+			return this.$refs.newWikiName.$refs.form[1].value
+		},
+
 	},
 
 	watch: {
-		'pageId': function() {
+		'selectedPage': function() {
 			this.setCurrentVersion(null)
 		},
 	},
 
 	mounted() {
 		this.getPages()
+		this.getWikis()
 	},
 
 	methods: {
+
 		/**
 		 * Get list of all pages
 		 */
@@ -124,33 +191,45 @@ export default {
 		},
 
 		/**
-		 * Create a new page and focus the page content field automatically
-		 * The page is not yet saved, therefore an id of -1 is used until it
-		 * has been persisted in the backend
+		 * Get list of all pages
 		 */
-		newPage() {
-			const page = {
-				title: 'New Page',
-			}
-			this.createPage(page)
+		async getWikis() {
+			this.loading = true
+			const view = this
+			const response = await axios.get(generateUrl(`/apps/wiki/_wikis`))
+			view.wikis = response.data
+			view.loading = false
 		},
 
 		/**
-		 * Create a new page by sending the information to the server
-		 * @param {object} page Page object
+		 * Create a new page and focus the page content field automatically
 		 */
-		async createPage(page) {
+		async newPage() {
+			const page = {
+				title: 'New Page',
+			}
 			this.updating = true
 			try {
 				const response = await axios.post(generateUrl(`/apps/wiki/_pages`), page)
 				// Add new page to the beginning of pages array
 				this.pages.unshift({ newTitle: '', ...response.data })
-				this.$router.push(`/${response.data.title}.md?fileId=${response.data.id}`)
+				this.$router.push(`/${this.selectedWiki}/${response.data.title}?fileId=${response.data.id}`)
 			} catch (e) {
 				console.error(e)
 				showError(t('wiki', 'Could not create the page'))
 			}
 			this.updating = false
+		},
+
+		/**
+		 * Create a new wiki with the name given in the breadcrumb input
+		 */
+		async newWiki() {
+			const wiki = {
+				name: this.wikiName,
+			}
+			const response = await axios.post(generateUrl(`/apps/wiki/_wikis`), wiki)
+			this.$router.push(`/${response.data.folderName}`)
 		},
 
 		/**
@@ -170,6 +249,7 @@ export default {
 				// Update title as it might have changed due to filename conflict handling
 				// also update all other attributes such as filename etc.
 				Object.assign(page, response.data)
+				this.$router.push(`/${this.selectedWiki}/${response.data.title}?fileId=${response.data.id}`)
 			} catch (e) {
 				console.error(e)
 				showError(t('wiki', 'Could not rename the page'))
