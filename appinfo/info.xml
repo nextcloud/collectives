@@ -7,7 +7,7 @@
 	<description><![CDATA[
 The Wiki app adds wiki functionality to Nextcloud.
 ]]></description>
-	<version>0.0.2</version>
+	<version>0.0.3</version>
 	<licence>AGPL</licence>
 	<author>CollectiveCloud Team</author>
 	<namespace>Wiki</namespace>
