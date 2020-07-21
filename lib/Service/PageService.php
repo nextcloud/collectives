@@ -3,8 +3,8 @@
 namespace OCA\Wiki\Service;
 
 use Exception;
-use OCA\Wiki\Db\Page;
 use OCA\Wiki\Fs\PageMapper;
+use OCA\Wiki\Model\Page;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\Files\AlreadyExistsException;

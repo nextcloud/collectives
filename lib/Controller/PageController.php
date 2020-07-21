@@ -3,10 +3,10 @@
 namespace OCA\Wiki\Controller;
 
 use OCA\Wiki\Service\PageService;
+use OCP\AppFramework\Controller;
 use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
-use OCP\AppFramework\Controller;
 
 class PageController extends Controller {
 	/** @var PageService */

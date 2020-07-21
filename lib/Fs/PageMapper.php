@@ -3,9 +3,8 @@
 namespace OCA\Wiki\Fs;
 
 use OCA\Pages\Service\PagesFolderException;
-use OCA\Wiki\Db\Page;
+use OCA\Wiki\Model\Page;
 use OCA\Wiki\Service\PageDoesNotExistException;
-use OCP\Files\AlreadyExistsException;
 use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;

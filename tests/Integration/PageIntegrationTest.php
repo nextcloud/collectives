@@ -3,8 +3,8 @@
 namespace OCA\Wiki\Tests\Integration;
 
 use OC\Files\Config\UserMountCache;
-use OCA\Wiki\Db\Page;
 use OCA\Wiki\Fs\PageMapper;
+use OCA\Wiki\Model\Page;
 use OCA\Wiki\Service\PageDoesNotExistException;
 use OCP\AppFramework\App;
 use PHPUnit\Framework\TestCase;

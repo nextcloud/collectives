@@ -1,9 +1,9 @@
 <?php
 
-namespace Unit\Db;
+namespace Unit\Service;
 
-use OCA\Wiki\Db\Page;
 use OCA\Wiki\Fs\PageMapper;
+use OCA\Wiki\Model\Page;
 use OCA\Wiki\Service\PageDoesNotExistException;
 use OCA\Wiki\Service\PageService;
 use OCP\AppFramework\Db\DoesNotExistException;

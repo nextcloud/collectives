@@ -1,12 +1,11 @@
 <?php
 
-namespace OCA\Wiki\Db;
+namespace OCA\Wiki\Model;
 
 use JsonSerializable;
 
 use OCP\AppFramework\Db\Entity;
 use OCP\Files\File;
-use OCP\Files\Folder;
 
 /**
  * Class Page

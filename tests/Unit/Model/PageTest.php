@@ -1,8 +1,8 @@
 <?php
 
-namespace Unit\Db;
+namespace Unit\Model;
 
-use OCA\Wiki\Db\Page;
+use OCA\Wiki\Model\Page;
 use OCP\Files\File;
 use PHPUnit\Framework\TestCase;
 
