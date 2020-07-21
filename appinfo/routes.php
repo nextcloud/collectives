@@ -17,10 +17,13 @@ return [
 		['name' => 'page#destroy', 'url' => '/_pages/{id}', 'verb' => 'DELETE',
 		 'requirements' => ['id' => '\d+']],
 
+		// circles
+		['name' => 'wiki#list', 'url' => '/_wikis', 'verb' => 'GET'],
+		['name' => 'wiki#create', 'url' => '/_wikis', 'verb' => 'POST'],
+
 		// default route
 		['name' => 'wiki#index', 'url' => '/{path}', 'verb' => 'GET',
 		 'requirements' => ['path' => '.*'],
 		 'defaults' => ['path' => '']],
-
 	]
 ];
