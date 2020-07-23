@@ -1,4 +1,4 @@
-# Collective Wiki
+# CollectiveWiki
 
 The CollectiveWiki app provides simple wiki functionalities to collectives.
 It facilitates to record and organize knowledge in a collaborative way.
@@ -22,6 +22,26 @@ install it manually:
 4. Compile NodeJS assets by running `npm run build`
 
 Afterwards, you can enable the app from the Nextcloud app management menu.
+
+## Development Background: Circle and user management
+
+In Nextcloud, every file/folder is owned by a user. Even when shared with a
+circle, the ultimate power over this object remains at the owner user.In
+collective workflows, this leads to several problems. Instead of individual
+users, we want the documents to be owned and maintained by the collective.
+Since this concept is unsupported by the Nextcloud and Circles per default,
+we decided to implement it on our own.
+
+Creating a new wiki internally does the following:
+
+1. Create a vehicle user `wiki@<NAME>@<UUID>` (with random UUID as password)
+2. Create a vehicle circle `wiki@<NAME>@<UUID>` with the vehicle user as owner
+3. Create a wiki folder `wiki_<NAME>` with the vehicle user as owner
+4. Share the wiki folder with the vehicle circle
+
+TODO:
+* Add support to rename and delete wikis
+* Add support to maintain circle members (and their privilege level?)
 
 ## Maintainers
 
