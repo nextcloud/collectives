@@ -30,4 +30,11 @@ Afterwards, you can enable the app from the Nextcloud app management menu.
 
 ## Licence
 
-GNU AGPL v3 or later
+Files: *
+Copyright: (c) 2019-2020 Azul <azul@riseup.net>
+           (c) 2019-2020 Jonas <jonas@freesources.org>
+License: AGPL v3 or later
+
+Files: images/app.svg
+Copyright: (c) 2012-2018 Dave Gandy <drgandy@alum.mit.edu>
+License: CC-BY-4.0
