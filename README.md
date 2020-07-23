@@ -1,52 +1,33 @@
-# Wiki App
-Place this app in **nextcloud/apps/**
+# Collective Wiki
 
-## Building the app
+The CollectiveWiki app provides simple wiki functionalities to collectives.
+It facilitates to record and organize knowledge in a collaborative way.
 
-The app can be built by using the provided Makefile by running:
+* **Collective and non-hierarchical workflow by heart**: Wikis are tied to
+  a [Nextcloud Circle](https://github.com/nextcloud/circles) and owned by
+  the collective.
+* **Collaborative page editing** like known from Etherpad thanks to the
+  [Text app](https://github.com/nextcloud/text)
+* **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**
+  for page formatting
 
-    make
+## Installation
 
-This requires the following things to be present:
-* make
-* which
-* tar: for building the archive
-* curl: used if phpunit and composer are not installed to fetch them from the web
-* npm: for building and testing everything JS, only required if a package.json is placed inside the **js/** folder
+The app is *not* published yet to the Nextcloud app store, so you have to
+install it manually:
 
-The make command will install or update Composer dependencies if a composer.json is present and also **npm run build** if a package.json is present in the **js/** folder. The npm **build** script should use local paths for build systems and package managers, so people that simply want to build the app won't need to install npm libraries globally, e.g.:
+1. Clone this into the `apps` folder of your Nextcloud
+2. Install PHP dependencies by running `composer install`
+3. Install NodeJS dependencies by running `npm install`
+4. Compile NodeJS assets by running `npm run build`
 
-**package.json**:
-```json
-"scripts": {
-    "test": "node node_modules/gulp-cli/bin/gulp.js karma",
-    "prebuild": "npm install && node_modules/bower/bin/bower install && node_modules/bower/bin/bower update",
-    "build": "node node_modules/gulp-cli/bin/gulp.js"
-}
-```
+Afterwards, you can enable the app from the Nextcloud app management menu.
 
+## Maintainers
 
-## Publish to App Store
+* Azul <azul@riseup.net>
+* Jonas <jonas@freesources.org>
 
-First get an account for the [App Store](http://apps.nextcloud.com/) then run:
+## Licence
 
-    make && make appstore
-
-The archive is located in build/artifacts/appstore and can then be uploaded to the App Store.
-
-## Running tests
-You can use the provided Makefile to run all tests by using:
-
-    make test
-
-This will run the PHP unit and integration tests and if a package.json is present in the **js/** folder will execute **npm run test**
-
-Of course you can also install [PHPUnit](http://phpunit.de/getting-started.html) and use the configurations directly:
-
-    phpunit -c phpunit.xml
-
-or:
-
-    phpunit -c phpunit.integration.xml
-
-for integration tests
+GNU AGPL v3 or later
