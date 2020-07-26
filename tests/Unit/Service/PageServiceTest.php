@@ -52,6 +52,11 @@ class PageServiceTest extends TestCase {
 		$this->service->handleException(new PageDoesNotExistException('msg'));
 	}
 
+	public function testHandleExceptionOtherException(): void {
+		$this->expectException(\RuntimeException::class);
+		$this->service->handleException(new \RuntimeException('msg'));
+	}
+
 	public function testCreate(): void {
 		$newPage = new Page();
 		$newPage->setTitle($this->pageTitle);

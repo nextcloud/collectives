@@ -41,9 +41,9 @@ class PageService {
 			$e instanceof AlreadyExistsException ||
 			$e instanceof PageDoesNotExistException) {
 			throw new NotFoundException($e->getMessage());
-		} else {
-			throw $e;
 		}
+
+		throw $e;
 	}
 
 	/**
