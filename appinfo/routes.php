@@ -13,9 +13,9 @@ return [
 		['name' => 'page#get', 'url' => '/_pages/{id}', 'verb' => 'GET'],
 		['name' => 'page#create', 'url' => '/_pages', 'verb' => 'POST'],
 		['name' => 'page#rename', 'url' => '/_pages/{id}', 'verb' => 'PUT',
-		 'requirements' => ['id' => '\d+']],
+			'requirements' => ['id' => '\d+']],
 		['name' => 'page#destroy', 'url' => '/_pages/{id}', 'verb' => 'DELETE',
-		 'requirements' => ['id' => '\d+']],
+			'requirements' => ['id' => '\d+']],
 
 		// circles
 		['name' => 'wiki#index', 'url' => '/_wikis', 'verb' => 'GET'],
@@ -25,7 +25,7 @@ return [
 
 		// default route
 		['name' => 'start#index', 'url' => '/{path}', 'verb' => 'GET',
-		 'requirements' => ['path' => '.*'],
-		 'defaults' => ['path' => '']],
+			'requirements' => ['path' => '.*'],
+			'defaults' => ['path' => '']],
 	]
 ];

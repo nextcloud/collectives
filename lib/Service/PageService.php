@@ -35,9 +35,9 @@ class PageService {
 	 *
 	 * @throws NotFoundException
 	 */
-	public function handleException ($e) {
+	public function handleException($e) {
 		if ($e instanceof DoesNotExistException ||
-		    $e instanceof MultipleObjectsReturnedException ||
+			$e instanceof MultipleObjectsReturnedException ||
 			$e instanceof AlreadyExistsException ||
 			$e instanceof PageDoesNotExistException) {
 			throw new NotFoundException($e->getMessage());
@@ -55,11 +55,11 @@ class PageService {
 	public function find(int $id, string $userId): Page {
 		try {
 			return $this->mapper->find($id, $userId);
-		// in order to be able to plug in different storage backends like files
-		// for instance it is a good idea to turn storage related exceptions
-		// into service related exceptions so controllers and service users
-		// have to deal with only one type of exception
-		} catch(Exception $e) {
+		} catch (Exception $e) {
+			// in order to be able to plug in different storage backends like files
+			// for instance it is a good idea to turn storage related exceptions
+			// into service related exceptions so controllers and service users
+			// have to deal with only one type of exception
 			$this->handleException($e);
 		}
 	}
@@ -88,7 +88,7 @@ class PageService {
 			$page = $this->mapper->find($id, $userId);
 			$page->setTitle($title);
 			return $this->mapper->rename($page, $userId);
-		} catch(Exception $e) {
+		} catch (Exception $e) {
 			$this->handleException($e);
 		}
 	}
@@ -104,7 +104,7 @@ class PageService {
 			$page = $this->mapper->find($id, $userId);
 			$this->mapper->delete($page, $userId);
 			return $page;
-		} catch(Exception $e) {
+		} catch (Exception $e) {
 			$this->handleException($e);
 		}
 	}

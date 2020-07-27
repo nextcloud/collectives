@@ -1,4 +1,5 @@
 <?php
+
 namespace OCA\Wiki\Controller;
 
 use OCA\Viewer\Event\LoadViewer;
@@ -14,7 +15,7 @@ class StartController extends Controller {
 	public function __construct(string $AppName,
 								IRequest $request,
 								IEventDispatcher $eventDispatcher
-	){
+	) {
 		parent::__construct($AppName, $request);
 		$this->eventDispatcher = $eventDispatcher;
 	}

@@ -7,7 +7,6 @@ use OCP\Files\File;
 use PHPUnit\Framework\TestCase;
 
 class PageTest extends TestCase {
-
 	public function testFromFile(): void {
 		$fileId = 1;
 		$fileTitle = 'title';

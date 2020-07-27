@@ -2,4 +2,5 @@
 
 namespace OCA\Wiki\Service;
 
-class NotFoundException extends ServiceException {}
+class NotFoundException extends ServiceException {
+}

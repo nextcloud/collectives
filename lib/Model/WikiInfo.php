@@ -2,8 +2,6 @@
 
 namespace OCA\Wiki\Model;
 
-use JsonSerializable;
-
 use OCA\Wiki\Db\Wiki;
 use OCP\Files\Folder;
 

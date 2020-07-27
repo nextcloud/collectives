@@ -1,4 +1,5 @@
 <?php
+
 namespace OCA\Wiki\Controller;
 
 use OCA\Wiki\Service\WikiCircleService;
@@ -16,7 +17,7 @@ class WikiController extends Controller {
 								IRequest $request,
 								WikiCircleService $service,
 								string $userId
-	){
+	) {
 		parent::__construct($AppName, $request);
 		$this->service = $service;
 		$this->userId = $userId;

@@ -2,9 +2,7 @@
 
 namespace OCA\Wiki\Db;
 
-use OCA\Wiki\Db\Wiki;
 use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
@@ -18,7 +16,7 @@ use OCP\IDBConnection;
 class WikiMapper extends QBMapper {
 	public function __construct(
 		IDBConnection $db) {
-		parent::__construct($db, 'wiki', Wiki::Class);
+		parent::__construct($db, 'wiki', Wiki::class);
 	}
 
 	/**
@@ -35,7 +33,7 @@ class WikiMapper extends QBMapper {
 			);
 		try {
 			return $this->findEntity($qb);
-		} catch(DoesNotExistException | MultipleObjectsReturnedException $e) {
+		} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
 			return null;
 		}
 	}
@@ -54,7 +52,7 @@ class WikiMapper extends QBMapper {
 			);
 		try {
 			return $this->findEntity($qb);
-		} catch(DoesNotExistException | MultipleObjectsReturnedException $e) {
+		} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
 			return null;
 		}
 	}
