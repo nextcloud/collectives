@@ -12,21 +12,21 @@ use OCP\AppFramework\Db\Entity;
  * @method void setId(integer $value)
  * @method string getCircleUniqueId()
  * @method void setCircleUniqueId(string $value)
- * @method string getFileId()
- * @method void setFileId(integer $value)
+ * @method string getFolderId()
+ * @method void setFolderId(integer $value)
  * @method string getOwnerId()
  * @method void setOwnerId(string $value)
  */
 class Wiki extends Entity implements JsonSerializable {
 	protected $circleUniqueId;
-	protected $fileId;
+	protected $folderId;
 	protected $ownerId;
 
 	public function jsonSerialize() {
 		return [
 			'id' => $this->id,
 			'circleUniqueId' => $this->circleUniqueId,
-			'fileId' => $this->fileId,
+			'folderId' => $this->folderId,
 			'ownerId' => $this->ownerId
 		];
 	}

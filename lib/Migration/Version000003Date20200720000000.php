@@ -30,7 +30,7 @@ class Version000003Date20200720000000 extends SimpleMigrationStep {
 				'notnull' => true,
 				'length' => 15,
 			]);
-			$table->addColumn('file_id', Type::BIGINT, [
+			$table->addColumn('folder_id', Type::BIGINT, [
 				'notnull' => true,
 			]);
 			$table->addColumn('owner_id', Type::STRING, [

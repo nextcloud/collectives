@@ -30,7 +30,7 @@ class WikiController extends Controller {
 	 * @return DataResponse
 	 */
 	public function index(): DataResponse {
-		return new DataResponse($this->service->getCircles());
+		return new DataResponse($this->service->getWikis());
 	}
 
 	/**
