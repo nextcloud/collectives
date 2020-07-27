@@ -22,7 +22,7 @@ The Wiki app adds wiki functionality to Nextcloud.
 	<navigations>
 		<navigation>
 			<name>Wiki</name>
-			<route>wiki.wiki.index</route>
+			<route>wiki.start.index</route>
 		</navigation>
 	</navigations>
 </info>
