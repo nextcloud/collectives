@@ -45,4 +45,17 @@ class WikiController extends Controller {
 	public function create(string $name): DataResponse {
 		return new DataResponse($this->service->createWiki($name, $this->userId));
 	}
+
+	/**
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * TODO: remove @NoCSRFRequired
+	 *
+	 * @param int $id
+	 *
+	 * @return DataResponse
+	 */
+	public function destroy(int $id): DataResponse {
+		return new DataResponse($this->service->deleteWiki($id, $this->userId));
+	}
 }

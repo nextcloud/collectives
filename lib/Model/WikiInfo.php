@@ -5,6 +5,7 @@ namespace OCA\Wiki\Model;
 use JsonSerializable;
 
 use OCA\Wiki\Db\Wiki;
+use OCP\Files\Folder;
 
 /**
  * Class WikiInfo
@@ -29,12 +30,20 @@ class WikiInfo extends Wiki {
 	}
 
 	/**
-	 * @param Wiki $wiki
+	 * @param Wiki        $wiki
+	 * @param Folder|null $folder
 	 */
-	public function fromWiki(Wiki $wiki): void {
+	public function fromWiki(
+		Wiki $wiki,
+		Folder $folder = null
+	): void {
 		$this->setId($wiki->getId());
 		$this->setCircleUniqueId($wiki->getCircleUniqueId());
 		$this->setFolderId($wiki->getFolderId());
 		$this->setOwnerId($wiki->getOwnerId());
+		if (null !== $folder) {
+			$this->setFolderName($folder->getName());
+			$this->setFolderPath($folder->getPath());
+		}
 	}
 }

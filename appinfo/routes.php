@@ -20,6 +20,8 @@ return [
 		// circles
 		['name' => 'wiki#index', 'url' => '/_wikis', 'verb' => 'GET'],
 		['name' => 'wiki#create', 'url' => '/_wikis', 'verb' => 'POST'],
+		['name' => 'wiki#destroy', 'url' => '/_wikis/{id}', 'verb' => 'DELETE',
+			'requirements' => ['id' => '\d+']],
 
 		// default route
 		['name' => 'start#index', 'url' => '/{path}', 'verb' => 'GET',

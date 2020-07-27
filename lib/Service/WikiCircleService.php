@@ -36,15 +36,8 @@ class WikiCircleService {
 				continue;
 			}
 
-			if ([] === $folders = $this->root->getById($w->getFolderId())) {
-				// TODO: Decide what to do with missing wiki folders
-				throw new NotFoundException('Error: Wiki folder (FileID ' . $w->getFolderId() . ') not found');
-			}
-
 			$wi = new WikiInfo();
-			$wi->fromWiki($w);
-			$wi->setFolderName($folders[0]->getName());
-			$wi->setFolderPath($folders[0]->getPath());
+			$wi->fromWiki($w, $folder = $this->findWikiFolder($w->getFolderId()));
 			$wikis[] = $wi;
 		}
 		return $wikis;
@@ -54,11 +47,11 @@ class WikiCircleService {
 	 * @param string $name
 	 * @param string $userId
 	 *
-	 * @return Wiki
+	 * @return WikiInfo
 	 * @throws AlreadyExistsException
 	 * @throws \OCP\Files\NotPermittedException
 	 */
-	public function createWiki(string $name, string $userId): Wiki {
+	public function createWiki(string $name, string $userId): WikiInfo {
 		// TODO: Create a hidden WikiCircle user
 
 		// Create a new folder for the wiki
@@ -81,6 +74,45 @@ class WikiCircleService {
 		$wiki->setOwnerId($userId);
 
 		$this->wikiMapper->insert($wiki);
-		return $wiki;
+
+		$wi = new WikiInfo();
+		$wi->fromWiki($wiki, $folder);
+		return $wi;
+	}
+
+	/**
+	 * @param int    $id
+	 * @param string $userId
+	 *
+	 * @return WikiInfo
+	 * @throws NotFoundException
+	 */
+	public function deleteWiki(int $id, string $userId): WikiInfo {
+		if (null === $wiki = $this->wikiMapper->findById($id)) {
+			throw new NotFoundException('Failed to delete wiki, not found: ' . $id);
+		}
+
+		Circles::destroyCircle($wiki->getCircleUniqueId());
+
+		$wiki = $this->wikiMapper->delete($wiki);
+		$wi = new WikiInfo();
+		$wi->fromWiki($wiki);
+		return $wi;
+	}
+
+	/**
+	 * @param int $folderId
+	 *
+	 * @return Folder
+	 * @throws NotFoundException
+	 */
+	private function findWikiFolder(int $folderId): Folder {
+		$folders = $this->root->getById($folderId);
+		if ([] === $folders || !($folders[0] instanceof Folder)) {
+			// TODO: Decide what to do with missing wiki folders
+			throw new NotFoundException('Error: Wiki folder (FileID ' . $folderId . ') not found');
+		}
+
+		return $folders[0];
 	}
 }
