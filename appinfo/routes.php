@@ -18,11 +18,11 @@ return [
 		 'requirements' => ['id' => '\d+']],
 
 		// circles
-		['name' => 'wiki#list', 'url' => '/_wikis', 'verb' => 'GET'],
+		['name' => 'wiki#index', 'url' => '/_wikis', 'verb' => 'GET'],
 		['name' => 'wiki#create', 'url' => '/_wikis', 'verb' => 'POST'],
 
 		// default route
-		['name' => 'wiki#index', 'url' => '/{path}', 'verb' => 'GET',
+		['name' => 'start#index', 'url' => '/{path}', 'verb' => 'GET',
 		 'requirements' => ['path' => '.*'],
 		 'defaults' => ['path' => '']],
 	]
