@@ -25,8 +25,6 @@ class WikiController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * TODO: remove @NoCSRFRequired
 	 *
 	 * @return DataResponse
 	 */
@@ -36,8 +34,6 @@ class WikiController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * TODO: remove @NoCSRFRequired
 	 *
 	 * @param string $name
 	 *
@@ -49,8 +45,6 @@ class WikiController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * TODO: remove @NoCSRFRequired
 	 *
 	 * @param int $id
 	 *

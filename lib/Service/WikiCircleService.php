@@ -54,6 +54,7 @@ class WikiCircleService {
 	 */
 	public function createWiki(string $name, string $userId): WikiInfo {
 		// TODO: Create a hidden WikiCircle user
+		// TODO: Share new folder with the circle
 
 		// Create a new folder for the wiki
 		$wikiPath= '/' . $userId . '/files/' . 'Wiki_' . $name;
