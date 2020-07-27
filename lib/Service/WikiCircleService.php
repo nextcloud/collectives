@@ -10,6 +10,7 @@ use OCP\AppFramework\QueryException;
 use OCP\Files\AlreadyExistsException;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
+use Ramsey\Uuid\Uuid;
 
 class WikiCircleService {
 	private $root;
@@ -60,19 +61,20 @@ class WikiCircleService {
 			throw new AlreadyExistsException($wikiPath.' already exists');
 		}
 
-		// Create a new secret circle
-		$circle = Circles::createCircle(2, $name);
-
 		$folder = $this->root->newFolder($wikiPath);
 		if (!($folder instanceof Folder)) {
 			throw new \Exception($wikiPath.' is not a folder');
 		}
 
+		// Create a new secret circle
+		$uuid = strtolower(Uuid::uuid4()->toString());
+		$circleName = 'wiki@' . $name . '@' . $uuid;
+		$circle = Circles::createCircle(2, $circleName);
+
 		$wiki = new Wiki();
 		$wiki->setCircleUniqueId($circle->getUniqueId());
 		$wiki->setFolderId($folder->getId());
 		$wiki->setOwnerId($userId);
-
 		$this->wikiMapper->insert($wiki);
 
 		$wi = new WikiInfo();
