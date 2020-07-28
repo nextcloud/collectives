@@ -3,18 +3,15 @@
 namespace OCA\Wiki\Tests\Integration;
 
 use OC\Files\Config\UserMountCache;
-use OCA\Wiki\Db\Page;
 use OCA\Wiki\Fs\PageMapper;
-use OCA\Wiki\Service\PageDoesNotExistException;
+use OCA\Wiki\Model\Page;
 use OCP\AppFramework\App;
 use PHPUnit\Framework\TestCase;
-
 
 /**
  * Run tests to create, rename and delete a page against the database.
  */
 class PageIntegrationTest extends TestCase {
-
 	private $mapper;
 	private $provider;
 	private $userId = 'jane';

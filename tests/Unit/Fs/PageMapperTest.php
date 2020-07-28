@@ -18,8 +18,7 @@ class PageMapperTest extends TestCase {
 	private $appName = 'wiki';
 	private $mapper;
 
-	protected function setUp()
-	{
+	protected function setUp() {
 		parent::setUp();
 
 		$this->db = $this->getMockBuilder(IDBConnection::class)
@@ -67,7 +66,6 @@ class PageMapperTest extends TestCase {
 
 		$this->assertEquals($output, $this->mapper->sanitiseTitle($input));
 		$this->mapper->sanitiseTitle('abc');
-
 	}
 
 	public function filenameProvider(): array {
@@ -81,7 +79,6 @@ class PageMapperTest extends TestCase {
 			['File new', 'File new'],
 			[' (2)', ' (3)']
 		];
-
 	}
 
 	/**
@@ -96,18 +93,18 @@ class PageMapperTest extends TestCase {
 			->getMock();
 		$folder->method('nodeExists')
 			->willReturnMap([
-					['File exists1.md', true],
-					['File exists2.md', true],
-					['File exists2 (2).md', true],
-					['File exists2 (3).md', true],
-					['File exists3.md', true],
-					['File exists3 (1).md', true],
-					['File exists4 (9).md', true],
-					['File exists5 (1).md', true],
-					[' (2).md', true],
-					['File exists5 (1i).md', true]
+				['File exists1.md', true],
+				['File exists2.md', true],
+				['File exists2 (2).md', true],
+				['File exists2 (3).md', true],
+				['File exists3.md', true],
+				['File exists3 (1).md', true],
+				['File exists4 (9).md', true],
+				['File exists5 (1).md', true],
+				[' (2).md', true],
+				['File exists5 (1i).md', true]
 			]);
 
 		$this->assertEquals($output, PageMapper::generateFilename($folder, $input));
-    }
+	}
 }

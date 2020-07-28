@@ -1,9 +1,9 @@
 <?php
 
-namespace Unit\Db;
+namespace Unit\Service;
 
-use OCA\Wiki\Db\Page;
 use OCA\Wiki\Fs\PageMapper;
+use OCA\Wiki\Model\Page;
 use OCA\Wiki\Service\PageDoesNotExistException;
 use OCA\Wiki\Service\PageService;
 use OCP\AppFramework\Db\DoesNotExistException;
@@ -50,6 +50,11 @@ class PageServiceTest extends TestCase {
 	public function testHandleExceptionPageDoesNotExistException(): void {
 		$this->expectException(\OCA\Wiki\Service\NotFoundException::class);
 		$this->service->handleException(new PageDoesNotExistException('msg'));
+	}
+
+	public function testHandleExceptionOtherException(): void {
+		$this->expectException(\RuntimeException::class);
+		$this->service->handleException(new \RuntimeException('msg'));
 	}
 
 	public function testCreate(): void {
