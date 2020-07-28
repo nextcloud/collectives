@@ -4,18 +4,18 @@ namespace OCA\Wiki\Controller;
 
 use Closure;
 
+use OCA\Wiki\Service\NotFoundException;
+
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 
-use OCA\Wiki\Service\NotFoundException;
-
-trait Errors {
+trait ErrorHelper {
 	/**
 	 * @param Closure $callback
 	 *
 	 * @return DataResponse
 	 */
-	protected function handleNotFound(Closure $callback): DataResponse {
+	protected function handleErrorResponse(Closure $callback): DataResponse {
 		try {
 			return new DataResponse($callback());
 		} catch (NotFoundException $e) {

@@ -14,7 +14,7 @@ class PageController extends Controller {
 	/** @var $string */
 	private $userId;
 
-	use Errors;
+	use ErrorHelper;
 
 	public function __construct(string $appName,
 								IRequest $request,
@@ -63,7 +63,7 @@ class PageController extends Controller {
 	 * @return DataResponse
 	 */
 	public function rename(int $id, string $title): DataResponse {
-		return $this->handleNotFound(function () use ($id, $title) {
+		return $this->handleErrorResponse(function () use ($id, $title) {
 			return $this->service->rename($id, $title, $this->userId);
 		});
 	}
@@ -76,7 +76,7 @@ class PageController extends Controller {
 	 * @return DataResponse
 	 */
 	public function destroy(int $id): DataResponse {
-		return $this->handleNotFound(function () use ($id) {
+		return $this->handleErrorResponse(function () use ($id) {
 			return $this->service->delete($id, $this->userId);
 		});
 	}

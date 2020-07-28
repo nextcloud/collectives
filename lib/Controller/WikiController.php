@@ -13,6 +13,8 @@ class WikiController extends Controller {
 	/** @var string */
 	private $userId;
 
+	use ErrorHelper;
+
 	public function __construct(string $AppName,
 								IRequest $request,
 								WikiCircleService $service,
@@ -51,6 +53,8 @@ class WikiController extends Controller {
 	 * @return DataResponse
 	 */
 	public function destroy(int $id): DataResponse {
-		return new DataResponse($this->service->deleteWiki($id, $this->userId));
+		return $this->handleErrorResponse(function () use ($id) {
+			return $this->service->deleteWiki($id, $this->userId);
+		});
 	}
 }
