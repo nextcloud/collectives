@@ -10,7 +10,7 @@ use OCP\IRequest;
 class WikiController extends Controller {
 	/** @var WikiCircleService */
 	private $service;
-	/** @var $string */
+	/** @var string */
 	private $userId;
 
 	public function __construct(string $AppName,
