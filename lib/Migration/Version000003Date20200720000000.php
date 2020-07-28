@@ -39,7 +39,7 @@ class Version000003Date20200720000000 extends SimpleMigrationStep {
 			]);
 
 			$table->setPrimaryKey(['id']);
-			$table->addIndex(['circle_unique_id'], 'wiki_circle_unique_id_index');
+			$table->addUniqueIndex(['circle_unique_id'], 'wiki_circle_unique_id_index');
 		}
 		return $schema;
 	}
