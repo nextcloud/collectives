@@ -29,13 +29,12 @@
 				<Breadcrumb v-if="currentPage"
 					:title="currentPage.title"
 					:to="`/${selectedWiki}/${currentPage.title}`">
-					<!--
 					<ActionButton
 						icon="icon-edit"
+						:close-after-click="true"
 						@click="edit = !edit">
 						{{ t('wiki', 'Toggle edit mode') }}
 					</ActionButton>
-					-->
 					<ActionButton
 						icon="icon-delete"
 						@click="deletePage">
@@ -63,6 +62,8 @@
 					<Page key="selectedPage"
 						:page="currentPage"
 						:updating="updating"
+						:edit="edit"
+						@emptyPreview="emptyPreview"
 						@renamePage="renamePage" />
 				</AppContentDetails>
 			</div>
@@ -96,6 +97,9 @@ import PagesList from '../components/PagesList'
 import Page from '../components/Page'
 import PageSidebar from '../components/PageSidebar'
 import Version from '../components/Version'
+
+const EditState = { Unset: 0, Edit: 1, Read: 2 }
+
 export default {
 	name: 'CircleDash',
 
@@ -134,7 +138,7 @@ export default {
 			loading: true,
 			updating: false,
 			showSidebar: false,
-			edit: false,
+			editToggle: EditState.Unset,
 			currentVersionTimestamp: 0,
 			wikis: [],
 		}
@@ -152,6 +156,15 @@ export default {
 			return this.pages.find((page) => page.title === this.selectedPage)
 		},
 
+		edit: {
+			get: function() {
+				return this.editToggle === EditState.Edit
+			},
+			set: function(val) {
+				this.editToggle = val ? EditState.Edit : EditState.Read
+			},
+		},
+
 		wikiName() {
 			// Somehow ActionInput.value does not reflect
 			// the value of the input field.
@@ -165,6 +178,7 @@ export default {
 	watch: {
 		'selectedPage': function() {
 			this.setCurrentVersion(null)
+			this.editToggle = EditState.Unset
 		},
 	},
 
@@ -307,6 +321,14 @@ export default {
 		setCurrentVersion(version) {
 			this.currentVersion = version
 			this.currentVersionTimestamp = (version ? version.timestamp : 0)
+		},
+
+		/**
+		 * Called when an empty preview was loaded.
+		 * Switch to edit mode
+		 */
+		emptyPreview() {
+			this.edit = true
 		},
 	},
 }

@@ -1,14 +1,5 @@
 <template>
 	<div>
-		<div id="action-menu">
-			<Actions>
-				<ActionButton
-					icon="icon-edit"
-					@click="edit = !edit">
-					{{ t('wiki', 'Toggle edit mode') }}
-				</ActionButton>
-			</Actions>
-		</div>
 		<h1 id="titleform" class="page-title">
 			<input ref="title"
 				v-model="newTitle"
@@ -47,8 +38,6 @@ import RichText from './RichText'
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateRemoteUrl } from '@nextcloud/router'
 
-const EditState = { Unset: 0, Edit: 1, Read: 2 }
-
 export default {
 	name: 'Page',
 
@@ -68,25 +57,19 @@ export default {
 			type: Boolean,
 			required: false,
 		},
+		edit: {
+			type: Boolean,
+			required: false,
+		},
 	},
 
 	data: function() {
 		return {
-			editToggle: EditState.Unset,
 			preview: true,
 		}
 	},
 
 	computed: {
-
-		edit: {
-			get: function() {
-				return this.editToggle === EditState.Edit
-			},
-			set: function(val) {
-				this.editToggle = val ? EditState.Edit : EditState.Read
-			},
-		},
 
 		readOnly() {
 			return this.preview || !this.edit
@@ -155,7 +138,6 @@ export default {
 		init() {
 			document.title = this.page.title + ' - Wiki - Nextcloud'
 			this.preview = true
-			this.editToggle = EditState.Unset
 			if (this.emptyTitle) {
 				this.$nextTick(this.focusTitle)
 			}
@@ -164,7 +146,6 @@ export default {
 		renamePage() {
 			if (this.page.newTitle) {
 				this.$emit('renamePage', this.page.newTitle)
-				this.edit = true
 				this.$nextTick(this.focusEditor)
 			}
 		},
@@ -189,8 +170,8 @@ export default {
 		},
 
 		emptyPreview() {
-			if (this.editToggle === EditState.Unset && !this.emptyTitle) {
-				this.edit = true
+			if (!this.emptyTitle) {
+				this.$emit('emptyPreview')
 			}
 		},
 	},
