@@ -7,24 +7,43 @@
 			@new="newPage" />
 		<AppContent>
 			<Breadcrumbs>
-				<Breadcrumb title="Home" to="/" />
-				<Breadcrumb v-if="selectedWiki"
-					:title="selectedWiki"
-					:to="`/${selectedWiki}`" />
-				<Breadcrumb v-if="selectedWiki" title="">
-					<ActionButton icon="icon-add" @click="newPage">
-						{{ t('wiki', 'Add a page') }}
-					</ActionButton>
-				</Breadcrumb>
-				<Breadcrumb v-else
-					title=""
-					:force-menu="true"
+				<Breadcrumb title="Home"
+					to="/"
+					:primary="true"
+					:force-menu="!selectedWiki"
 					:open="!loading && wikis.length === 0">
-					<ActionInput ref="newWikiName"
+					<ActionInput v-if="!selectedWiki"
+						ref="newWikiName"
 						icon="icon-add"
 						@submit="newWiki">
 						Name for a new wiki
 					</ActionInput>
+				</Breadcrumb>
+				<Breadcrumb v-if="selectedWiki"
+					:title="selectedWiki"
+					:to="`/${selectedWiki}`">
+					<ActionButton icon="icon-add" @click="newPage">
+						{{ t('wiki', 'Add a page') }}
+					</ActionButton>
+				</Breadcrumb>
+				<Breadcrumb v-if="currentPage"
+					:title="currentPage.title"
+					:to="`/${selectedWiki}/${currentPage.title}`">
+					<!--
+					<ActionButton
+						icon="icon-edit"
+						@click="edit = !edit">
+						{{ t('wiki', 'Toggle edit mode') }}
+					</ActionButton>
+					-->
+					<ActionButton
+						icon="icon-delete"
+						@click="deletePage">
+						{{ t('wiki', 'Delete page') }}
+					</ActionButton>
+					<ActionButton icon="icon-menu" @click="showSidebar=!showSidebar">
+						{{ t('wiki', 'Toggle sidebar') }}
+					</ActionButton>
 				</Breadcrumb>
 			</Breadcrumbs>
 			<div v-if="selectedWiki" id="app-content-wrapper">
@@ -44,9 +63,7 @@
 					<Page key="selectedPage"
 						:page="currentPage"
 						:updating="updating"
-						@toggleSidebar="showSidebar=!showSidebar"
-						@renamePage="renamePage"
-						@deletePage="deletePage" />
+						@renamePage="renamePage" />
 				</AppContentDetails>
 			</div>
 			<div v-else id="emptycontent">
@@ -117,6 +134,7 @@ export default {
 			loading: true,
 			updating: false,
 			showSidebar: false,
+			edit: false,
 			currentVersionTimestamp: 0,
 			wikis: [],
 		}
@@ -258,14 +276,15 @@ export default {
 		},
 
 		/**
-		 * Delete a page, remove it from the frontend and show a hint
-		 * @param {number} pageId Page ID
+		 * Delete the current page,
+		 * remove it from the frontend and show a hint
 		 */
-		async deletePage(pageId) {
+		async deletePage() {
 			try {
+				const pageId = this.currentPage.id
 				await axios.delete(generateUrl(`/apps/wiki/_pages/${pageId}`))
 				this.pages.splice(this.pages.findIndex(page => page.id === pageId), 1)
-				this.$router.push(`/`)
+				this.$router.push(`/${this.selectedWiki}`)
 				showSuccess(t('wiki', 'Page deleted'))
 			} catch (e) {
 				console.error(e)

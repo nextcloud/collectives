@@ -8,18 +8,6 @@
 					{{ t('wiki', 'Toggle edit mode') }}
 				</ActionButton>
 			</Actions>
-			<Actions>
-				<ActionButton
-					icon="icon-delete"
-					@click="deletePage">
-					{{ t('wiki', 'Delete page') }}
-				</ActionButton>
-			</Actions>
-			<Actions>
-				<ActionButton icon="icon-menu" @click="$emit('toggleSidebar')">
-					{{ t('wiki', 'Toggle sidebar') }}
-				</ActionButton>
-			</Actions>
 		</div>
 		<h1 id="titleform" class="page-title">
 			<input ref="title"

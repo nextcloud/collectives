@@ -169,7 +169,6 @@ export default {
 		position: sticky;
 		top: 0;
 		display: flex;
-		z-index: 10010;
 		background-color: var(--color-main-background-translucent);
 		height: 44px;
 		opacity: 0;
