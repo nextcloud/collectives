@@ -1,55 +1,33 @@
 <template>
-	<AppContent>
-		<div>
-			<div id="action-menu">
-				<Actions>
-					<ActionButton
-						icon="icon-edit"
-						@click="edit = !edit">
-						{{ t('wiki', 'Toggle edit mode') }}
-					</ActionButton>
-				</Actions>
-				<Actions>
-					<ActionButton
-						icon="icon-delete"
-						@click="deletePage">
-						{{ t('wiki', 'Delete page') }}
-					</ActionButton>
-				</Actions>
-				<Actions>
-					<ActionButton icon="icon-menu" @click="$emit('toggleSidebar')">
-						{{ t('wiki', 'Toggle sidebar') }}
-					</ActionButton>
-				</Actions>
-			</div>
-			<h1 id="titleform" class="page-title">
-				<input ref="title"
-					v-model="newTitle"
-					:placeholder="t('wiki', 'Title')"
-					type="text"
-					:disabled="updating || !savePossible"
-					@keypress.13="focusEditor"
-					@blur="renamePage">
-			</h1>
-			<RichText v-if="readOnly"
-				:page-id="page.id"
-				:page-url="pageUrl"
-				:as-placeholder="preview && edit"
-				@empty="emptyPreview" />
-			<component :is="handler.component"
-				v-show="!readOnly"
-				ref="editor"
-				:key="'editor-' + page.id"
-				:fileid="page.id"
-				:basename="page.filename"
-				:filename="'/' + page.basedir + '/' + page.filename"
-				:has-preview="true"
-				:active="true"
-				mime="text/markdown"
-				class="file-view active"
-				@ready="hidePreview" />
-		</div>
-	</AppContent>
+	<div>
+		<h1 id="titleform" class="page-title">
+			<input ref="title"
+				v-model="newTitle"
+				:placeholder="t('wiki', 'Title')"
+				type="text"
+				:disabled="updating || !savePossible"
+				@keypress.13="focusEditor"
+				@blur="renamePage">
+		</h1>
+		<RichText v-if="readOnly"
+			:page-id="page.id"
+			:page-url="pageUrl"
+			:as-placeholder="preview && edit"
+			@edit="$emit('edit')"
+			@empty="emptyPreview" />
+		<component :is="handler.component"
+			v-show="!readOnly"
+			ref="editor"
+			:key="'editor-' + page.id"
+			:fileid="page.id"
+			:basename="page.filename"
+			:filename="'/' + page.basedir + '/' + page.filename"
+			:has-preview="true"
+			:active="true"
+			mime="text/markdown"
+			class="file-view active"
+			@ready="hidePreview" />
+	</div>
 </template>
 
 <script>
@@ -60,8 +38,6 @@ import RichText from './RichText'
 
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateRemoteUrl } from '@nextcloud/router'
-
-const EditState = { Unset: 0, Edit: 1, Read: 2 }
 
 export default {
 	name: 'Page',
@@ -82,25 +58,19 @@ export default {
 			type: Boolean,
 			required: false,
 		},
+		edit: {
+			type: Boolean,
+			required: false,
+		},
 	},
 
 	data: function() {
 		return {
-			editToggle: EditState.Unset,
 			preview: true,
 		}
 	},
 
 	computed: {
-
-		edit: {
-			get: function() {
-				return this.editToggle === EditState.Edit
-			},
-			set: function(val) {
-				this.editToggle = val ? EditState.Edit : EditState.Read
-			},
-		},
 
 		readOnly() {
 			return this.preview || !this.edit
@@ -169,7 +139,6 @@ export default {
 		init() {
 			document.title = this.page.title + ' - Wiki - Nextcloud'
 			this.preview = true
-			this.editToggle = EditState.Unset
 			if (this.emptyTitle) {
 				this.$nextTick(this.focusTitle)
 			}
@@ -178,7 +147,6 @@ export default {
 		renamePage() {
 			if (this.page.newTitle) {
 				this.$emit('renamePage', this.page.newTitle)
-				this.edit = true
 				this.$nextTick(this.focusEditor)
 			}
 		},
@@ -203,8 +171,8 @@ export default {
 		},
 
 		emptyPreview() {
-			if (this.editToggle === EditState.Unset && !this.emptyTitle) {
-				this.edit = true
+			if (!this.emptyTitle) {
+				this.$emit('edit')
 			}
 		},
 	},

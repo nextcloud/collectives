@@ -1,5 +1,7 @@
 <template>
-	<router-link v-if="useRouter" :to="to" :href="href" />
+	<router-link
+		v-if="useRouter"
+		:to="href.replace('.md?', '?')" />
 	<a v-else-if="leaveHref" :href="href" />
 	<a v-else-if="hrefFileId" :href="viewerHref" @click.prevent="openViewer" />
 	<a v-else :href="href" />
@@ -61,14 +63,6 @@ export default {
 		relPath() {
 			const [, relPath] = this.href.match(/^([^?]*)\?fileId=\d+/)
 			return relPath
-		},
-		to() {
-			if (this.wikiLink) {
-				return this.href
-			} else {
-				// open file in viewer on top of current page
-				return `?fileId=${this.pageId}&openfile=${this.hrefFileId}`
-			}
 		},
 		viewerHref() {
 			const dir = absolutePath('/Wiki', basedir(this.relPath))

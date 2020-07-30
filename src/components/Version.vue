@@ -9,11 +9,6 @@
 						{{ t('wiki', 'Restore this version') }}
 					</ActionButton>
 				</Actions>
-				<Actions>
-					<ActionButton icon="icon-menu" @click="$emit('toggleSidebar')">
-						{{ t('wiki', 'Toggle sidebar') }}
-					</ActionButton>
-				</Actions>
 			</div>
 			<h1 class="page-title">
 				{{ page.title }}
