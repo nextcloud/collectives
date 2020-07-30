@@ -145,6 +145,12 @@ class WikiCircleService {
 		}
 
 		$wiki = $this->wikiMapper->delete($wiki);
+		$folder = $this->findWikiFolder($wiki->getFolderId());
+		try {
+			$folder->delete();
+		} catch (InvalidPathException | \OCP\Files\NotFoundException | NotPermittedException $e) {
+			throw new NotFoundException('Failed to delete wiki folder: ' . $id);
+		}
 
 		$wi = new WikiInfo();
 		$wi->fromWiki($wiki);
