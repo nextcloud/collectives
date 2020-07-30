@@ -2,6 +2,7 @@
 
 namespace Unit\Service;
 
+use OCA\Wiki\Db\WikiMapper;
 use OCA\Wiki\Fs\NodeHelper;
 use OCA\Wiki\Model\Page;
 use OCA\Wiki\Service\PageDoesNotExistException;
@@ -12,7 +13,8 @@ use OCP\Files\AlreadyExistsException;
 use PHPUnit\Framework\TestCase;
 
 class PageServiceTest extends TestCase {
-	private $helper;
+	private $nodeHelper;
+	private $wikiMapper;
 	private $service;
 	private $userId = 'jane';
 
@@ -21,7 +23,11 @@ class PageServiceTest extends TestCase {
 	private $pageTitle = 'title';
 
 	protected function setUp(): void {
-		$this->helper = $this->getMockBuilder(NodeHelper::class)
+		$this->nodeHelper = $this->getMockBuilder(NodeHelper::class)
+			->disableOriginalConstructor()
+			->getMock();
+
+		$this->wikiMapper = $this->getMockBuilder(WikiMapper::class)
 			->disableOriginalConstructor()
 			->getMock();
 
@@ -29,7 +35,7 @@ class PageServiceTest extends TestCase {
 		$this->page->setId($this->pageId);
 		$this->page->setTitle($this->pageTitle);
 
-		$this->service = new PageService($this->helper);
+		$this->service = new PageService($this->nodeHelper, $this->wikiMapper);
 	}
 
 	public function testHandleExceptionDoesNotExistException(): void {
