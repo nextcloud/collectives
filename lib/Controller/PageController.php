@@ -4,7 +4,6 @@ namespace OCA\Wiki\Controller;
 
 use OCA\Wiki\Service\PageService;
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
 
@@ -29,7 +28,9 @@ class PageController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function index(): DataResponse {
-		return new DataResponse($this->service->findAll($this->userId));
+		return $this->handleErrorResponse(function () {
+			return $this->service->findAll($this->userId);
+		});
 	}
 
 	/**
@@ -40,7 +41,9 @@ class PageController extends Controller {
 	 * @return DataResponse
 	 */
 	public function get(int $id): DataResponse {
-		return new DataResponse($this->service->find($id, $this->userId));
+		return $this->handleErrorResponse(function () use ($id) {
+			return $this->service->find($id, $this->userId);
+		});
 	}
 
 	/**
@@ -48,10 +51,12 @@ class PageController extends Controller {
 	 *
 	 * @param string $title
 	 *
-	 * @return Entity
+	 * @return DataResponse
 	 */
-	public function create(string $title): Entity {
-		return $this->service->create($title, $this->userId);
+	public function create(string $title): DataResponse {
+		return $this->handleErrorResponse(function () use ($title) {
+			return $this->service->create($title, $this->userId);
+		});
 	}
 
 	/**
