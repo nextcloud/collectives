@@ -63,7 +63,7 @@
 						:page="currentPage"
 						:updating="updating"
 						:edit="edit"
-						@emptyPreview="emptyPreview"
+						@edit="edit = true"
 						@renamePage="renamePage" />
 				</AppContentDetails>
 			</div>
@@ -323,13 +323,6 @@ export default {
 			this.currentVersionTimestamp = (version ? version.timestamp : 0)
 		},
 
-		/**
-		 * Called when an empty preview was loaded.
-		 * Switch to edit mode
-		 */
-		emptyPreview() {
-			this.edit = true
-		},
 	},
 }
 </script>

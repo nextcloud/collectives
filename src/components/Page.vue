@@ -13,6 +13,7 @@
 			:page-id="page.id"
 			:page-url="pageUrl"
 			:as-placeholder="preview && edit"
+			@edit="$emit('edit')"
 			@empty="emptyPreview" />
 		<component :is="handler.component"
 			v-show="!readOnly"
@@ -171,7 +172,7 @@ export default {
 
 		emptyPreview() {
 			if (!this.emptyTitle) {
-				this.$emit('emptyPreview')
+				this.$emit('edit')
 			}
 		},
 	},

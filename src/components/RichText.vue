@@ -2,7 +2,16 @@
 	<div id="text-container" :key="'text-' + pageId">
 		<div id="text-wrapper" class="richEditor">
 			<div id="text" class="editor">
-				<div :class="{menubar: true, loading}" />
+				<div :class="{menubar: true, loading}">
+					<div class="menubar-icons">
+						<Actions>
+							<ActionButton icon="icon-edit"
+								@click="$emit('edit')">
+								{{ t('wiki', 'Edit') }}
+							</ActionButton>
+						</Actions>
+					</div>
+				</div>
 				<div v-if="!loading">
 					<EditorContent
 						class="editor__content"
@@ -34,11 +43,15 @@ import {
 	ListItem,
 } from 'tiptap-extensions'
 import Link from '../marks/link'
+import Actions from '@nextcloud/vue/dist/Components/Actions'
+import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 
 export default {
 	name: 'RichText',
 
 	components: {
+		Actions,
+		ActionButton,
 		EditorContent,
 	},
 
@@ -171,11 +184,26 @@ export default {
 		display: flex;
 		background-color: var(--color-main-background-translucent);
 		height: 44px;
-		opacity: 0;
 	}
 
 	.menubar.loading {
 		opacity: 100%;
+	}
+
+	.menubar .menubar-icons {
+		flex-grow: 1;
+		margin-left: calc((100% - 660px) / 2);
+	}
+
+	.menubar-icons button {
+		opacity: .4;
+		background-color: var(--color-background-dark);
+	}
+
+	@media (max-width: 660px) {
+		.menubar .menubar-icons {
+			margin-left: 0;
+		}
 	}
 
 	#text-wrapper {
@@ -222,4 +250,5 @@ export default {
 		height: calc(100% - 50px);
 		top: 50px;
 	}
+
 </style>
