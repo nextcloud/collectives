@@ -80,25 +80,25 @@ class PageService {
 	}
 
 	/**
-	 * @param int    $id
 	 * @param string $userId
+	 * @param int    $id
 	 *
 	 * @return Page
 	 * @throws PageDoesNotExistException
 	 */
-	public function find(int $id, string $userId): Page {
+	public function find(string $userId, int $id): Page {
 		$folder = $this->nodeHelper->getFolderForUser($userId);
 		return $this->getPage($this->nodeHelper->getFileById($folder, $id));
 	}
 
 	/**
-	 * @param string $title
 	 * @param string $userId
+	 * @param string $title
 	 *
 	 * @return Page
 	 * @throws NotPermittedException
 	 */
-	public function create(string $title, string $userId): Page {
+	public function create(string $userId, string $title): Page {
 		$page = new Page();
 		$page->setTitle($title);
 
@@ -111,15 +111,15 @@ class PageService {
 	}
 
 	/**
+	 * @param string $userId
 	 * @param int    $id
 	 * @param string $title
-	 * @param string $userId
 	 *
 	 * @return Page
 	 */
-	public function rename(int $id, string $title, string $userId): Page {
+	public function rename(string $userId, int $id, string $title): Page {
 		try {
-			$page = $this->find($id, $userId);
+			$page = $this->find($userId, $id);
 			$page->setTitle($title);
 
 			$folder = $this->nodeHelper->getFolderForUser($userId);
@@ -145,14 +145,14 @@ class PageService {
 	}
 
 	/**
-	 * @param int    $id
 	 * @param string $userId
+	 * @param int    $id
 	 *
 	 * @return Page
 	 */
-	public function delete(int $id, string $userId): Page {
+	public function delete(string $userId, int $id): Page {
 		try {
-			$page = $this->find($id, $userId);
+			$page = $this->find($userId, $id);
 			$folder = $this->nodeHelper->getFolderForUser($userId);
 			$file = $this->nodeHelper->getFileById($folder, $page->getId());
 			$file->delete();

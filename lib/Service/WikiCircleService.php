@@ -39,11 +39,13 @@ class WikiCircleService {
 	}
 
 	/**
+	 * @param string $userId
+	 *
 	 * @return array
 	 * @throws QueryException
 	 * @throws NotFoundException
 	 */
-	public function getWikis(): array {
+	public function getWikis(string $userId): array {
 		$wikis = [];
 		$joinedCircles = Circles::joinedCircles();
 		foreach ($joinedCircles as $jc) {
@@ -59,15 +61,15 @@ class WikiCircleService {
 	}
 
 	/**
-	 * @param string $name
 	 * @param string $userId
+	 * @param string $name
 	 *
 	 * @return WikiInfo
 	 * @throws AlreadyExistsException
 	 * @throws NotPermittedException
 	 * @throws OCSException
 	 */
-	public function createWiki(string $name, string $userId): WikiInfo {
+	public function createWiki(string $userId, string $name): WikiInfo {
 		// TODO: Create a hidden WikiCircle user
 		// TODO: Share new folder with the circle
 
@@ -127,13 +129,13 @@ class WikiCircleService {
 	}
 
 	/**
-	 * @param int    $id
 	 * @param string $userId
+	 * @param int    $id
 	 *
 	 * @return WikiInfo
 	 * @throws NotFoundException
 	 */
-	public function deleteWiki(int $id, string $userId): WikiInfo {
+	public function deleteWiki(string $userId, int $id): WikiInfo {
 		if (null === $wiki = $this->wikiMapper->findById($id)) {
 			throw new NotFoundException('Failed to delete wiki, not found: ' . $id);
 		}

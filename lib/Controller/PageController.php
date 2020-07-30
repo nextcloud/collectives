@@ -44,7 +44,7 @@ class PageController extends Controller {
 	 */
 	public function get(int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($id) {
-			return $this->service->find($id, $this->userId);
+			return $this->service->find($this->userId, $id);
 		});
 	}
 
@@ -58,7 +58,7 @@ class PageController extends Controller {
 	 */
 	public function create(string $title): DataResponse {
 		return $this->handleErrorResponse(function () use ($title) {
-			return $this->service->create($title, $this->userId);
+			return $this->service->create($this->userId, $title);
 		});
 	}
 
@@ -73,7 +73,7 @@ class PageController extends Controller {
 	 */
 	public function rename(int $id, string $title): DataResponse {
 		return $this->handleErrorResponse(function () use ($id, $title) {
-			return $this->service->rename($id, $title, $this->userId);
+			return $this->service->rename($this->userId, $id, $title);
 		});
 	}
 
@@ -87,7 +87,7 @@ class PageController extends Controller {
 	 */
 	public function destroy(int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($id) {
-			return $this->service->delete($id, $this->userId);
+			return $this->service->delete($this->userId, $id);
 		});
 	}
 }
