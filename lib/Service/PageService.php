@@ -3,6 +3,7 @@
 namespace OCA\Wiki\Service;
 
 use Exception;
+use OCA\Wiki\Db\WikiMapper;
 use OCA\Wiki\Fs\NodeHelper;
 use OCA\Wiki\Model\Page;
 use OCP\AppFramework\Db\DoesNotExistException;
@@ -16,14 +17,19 @@ class PageService {
 
 	/** @var NodeHelper */
 	private $nodeHelper;
+	/** @var WikiMapper */
+	private $wikiMapper;
 
 	/**
 	 * PageService constructor.
 	 *
 	 * @param NodeHelper $nodeHelper
+	 * @param WikiMapper $wikiMapper
 	 */
-	public function __construct(NodeHelper $nodeHelper) {
+	public function __construct(NodeHelper $nodeHelper,
+								WikiMapper $wikiMapper) {
 		$this->nodeHelper = $nodeHelper;
+		$this->wikiMapper = $wikiMapper;
 	}
 
 	/**
@@ -47,28 +53,11 @@ class PageService {
 	}
 
 	/**
-	 * @param string $userId
-	 *
-	 * @return Page[]
-	 * @throws \OCP\Files\NotFoundException
-	 */
-	public function findAll(string $userId): array {
-		$pages = [];
-		$folder = $this->nodeHelper->getFolderForUser($userId);
-		foreach ($folder->getDirectoryListing() as $file) {
-			if ($file instanceof File && $this->isPage($file)) {
-				$pages[] = $this->getPage($file);
-			}
-		}
-		return $pages;
-	}
-
-	/**
 	 * @param $e
 	 *
 	 * @throws NotFoundException
 	 */
-	public function handleException($e) {
+	public function handleException($e): void {
 		if ($e instanceof DoesNotExistException ||
 			$e instanceof MultipleObjectsReturnedException ||
 			$e instanceof AlreadyExistsException ||
@@ -81,28 +70,51 @@ class PageService {
 
 	/**
 	 * @param string $userId
+	 * @param int    $wikiId
+	 *
+	 * @return Page[]
+	 * @throws \OCP\Files\NotFoundException
+	 * @throws NotFoundException
+	 */
+	public function findAll(string $userId, int $wikiId): array {
+		$pages = [];
+		$folder = $this->wikiMapper->getWikiFolder($wikiId);
+		foreach ($folder->getDirectoryListing() as $file) {
+			if ($file instanceof File && $this->isPage($file)) {
+				$pages[] = $this->getPage($file);
+			}
+		}
+		return $pages;
+	}
+
+	/**
+	 * @param string $userId
+	 * @param int    $wikiId
 	 * @param int    $id
 	 *
 	 * @return Page
 	 * @throws PageDoesNotExistException
+	 * @throws NotFoundException
 	 */
-	public function find(string $userId, int $id): Page {
-		$folder = $this->nodeHelper->getFolderForUser($userId);
+	public function find(string $userId, int $wikiId, int $id): Page {
+		$folder = $this->wikiMapper->getWikiFolder($wikiId);
 		return $this->getPage($this->nodeHelper->getFileById($folder, $id));
 	}
 
 	/**
 	 * @param string $userId
+	 * @param int    $wikiId
 	 * @param string $title
 	 *
 	 * @return Page
 	 * @throws NotPermittedException
+	 * @throws NotFoundException
 	 */
-	public function create(string $userId, string $title): Page {
+	public function create(string $userId, int $wikiId, string $title): Page {
 		$page = new Page();
 		$page->setTitle($title);
 
-		$folder = $this->nodeHelper->getFolderForUser($userId);
+		$folder = $this->wikiMapper->getWikiFolder($wikiId);
 		$safeTitle = $this->nodeHelper->sanitiseFilename($page->getTitle());
 		$filename = NodeHelper::generateFilename($folder, $safeTitle);
 
@@ -112,17 +124,18 @@ class PageService {
 
 	/**
 	 * @param string $userId
+	 * @param int    $wikiId
 	 * @param int    $id
 	 * @param string $title
 	 *
 	 * @return Page
 	 */
-	public function rename(string $userId, int $id, string $title): Page {
+	public function rename(string $userId, int $wikiId, int $id, string $title): Page {
 		try {
-			$page = $this->find($userId, $id);
+			$page = $this->find($userId, $wikiId, $id);
 			$page->setTitle($title);
 
-			$folder = $this->nodeHelper->getFolderForUser($userId);
+			$folder = $this->wikiMapper->getWikiFolder($wikiId);
 			$file = $this->nodeHelper->getFileById($folder, $page->getId());
 			$safeTitle = $this->nodeHelper->sanitiseFilename($page->getTitle());
 
@@ -146,14 +159,15 @@ class PageService {
 
 	/**
 	 * @param string $userId
+	 * @param int    $wikiId
 	 * @param int    $id
 	 *
 	 * @return Page
 	 */
-	public function delete(string $userId, int $id): Page {
+	public function delete(string $userId, int $wikiId, int $id): Page {
 		try {
-			$page = $this->find($userId, $id);
-			$folder = $this->nodeHelper->getFolderForUser($userId);
+			$page = $this->find($userId, $wikiId, $id);
+			$folder = $this->wikiMapper->getWikiFolder($wikiId);
 			$file = $this->nodeHelper->getFileById($folder, $page->getId());
 			$file->delete();
 			return $page;

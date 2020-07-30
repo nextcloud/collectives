@@ -55,7 +55,7 @@ class WikiCircleService {
 			}
 
 			$wi = new WikiInfo();
-			$wi->fromWiki($w, $folder = $this->findWikiFolder($w->getFolderId()));
+			$wi->fromWiki($w, $folder = $this->wikiMapper->getWikiFolder($w->getId()));
 			$wikis[] = $wi;
 		}
 		return $wikis;
@@ -152,7 +152,7 @@ class WikiCircleService {
 		}
 
 		$wiki = $this->wikiMapper->delete($wiki);
-		$folder = $this->findWikiFolder($wiki->getFolderId());
+		$folder = $this->wikiMapper->getWikiFolder($wiki->getId());
 		try {
 			$folder->delete();
 		} catch (InvalidPathException | \OCP\Files\NotFoundException | NotPermittedException $e) {
@@ -163,21 +163,5 @@ class WikiCircleService {
 		$wi->fromWiki($wiki);
 
 		return $wi;
-	}
-
-	/**
-	 * @param int $folderId
-	 *
-	 * @return Folder
-	 * @throws NotFoundException
-	 */
-	private function findWikiFolder(int $folderId): Folder {
-		$folders = $this->root->getById($folderId);
-		if ([] === $folders || !($folders[0] instanceof Folder)) {
-			// TODO: Decide what to do with missing wiki folders
-			throw new NotFoundException('Error: Wiki folder (FileID ' . $folderId . ') not found');
-		}
-
-		return $folders[0];
 	}
 }

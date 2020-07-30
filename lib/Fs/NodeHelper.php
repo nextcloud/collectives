@@ -2,62 +2,23 @@
 
 namespace OCA\Wiki\Fs;
 
-use OCA\Pages\Service\PagesFolderException;
 use OCA\Wiki\Service\PageDoesNotExistException;
 use OCP\Files\File;
 use OCP\Files\Folder;
-use OCP\Files\IRootFolder;
-use OCP\Files\NotFoundException;
-use OCP\Files\NotPermittedException;
 use OCP\IDBConnection;
 use OCP\IL10N;
 
 class NodeHelper {
 	private const SUFFIX = '.md';
-	private const WIKI_FOLDER = 'Wiki';
 
 	private $db;
 	private $l10n;
-	private $root;
 
 	public function __construct(
 		IDBConnection $db,
-		IL10N $l10n,
-		IRootFolder $root) {
+		IL10N $l10n) {
 		$this->db = $db;
 		$this->l10n = $l10n;
-		$this->root = $root;
-	}
-
-	/**
-	 * @param string $userId
-	 *
-	 * @return Folder
-	 * @throws NotPermittedException
-	 * @throws NotFoundException
-	 */
-	public function getFolderForUser(string $userId): Folder {
-		$path = '/' . $userId . '/files/' . self::WIKI_FOLDER;
-		return $this->getOrCreateFolder($path);
-	}
-
-	/**
-	 * @param string $path
-	 *
-	 * @return Folder
-	 * @throws NotPermittedException
-	 * @throws NotFoundException
-	 */
-	public function getOrCreateFolder(string $path): Folder {
-		if ($this->root->nodeExists($path)) {
-			$folder = $this->root->get($path);
-		} else {
-			$folder = $this->root->newFolder($path);
-		}
-		if (!($folder instanceof Folder)) {
-			throw new PagesFolderException($path.' is not a folder');
-		}
-		return $folder;
 	}
 
 	/**

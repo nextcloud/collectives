@@ -2,10 +2,13 @@
 
 namespace OCA\Wiki\Db;
 
+use OCA\Wiki\Service\NotFoundException;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
+use OCP\Files\Folder;
+use OCP\Files\IRootFolder;
 use OCP\IDBConnection;
 
 /**
@@ -14,9 +17,31 @@ use OCP\IDBConnection;
  * @method Wiki findEntity(IQueryBuilder $query) : Wiki
  */
 class WikiMapper extends QBMapper {
+	private $root;
+
 	public function __construct(
+		IRootFolder $root,
 		IDBConnection $db) {
 		parent::__construct($db, 'wiki', Wiki::class);
+		$this->root = $root;
+	}
+
+	/**
+	 * @param int $wikiId
+	 *
+	 * @return Folder
+	 * @throws NotFoundException
+	 */
+	public function getWikiFolder(int $wikiId): Folder {
+		if (null === $wiki = $this->findById($wikiId)) {
+			throw new NotFoundException('wiki ' . $wikiId . ' not found');
+		}
+		$folders = $this->root->getById($wiki->getFolderId());
+		if ([] === $folders || !($folders[0] instanceof Folder)) {
+			// TODO: Decide what to do with missing wiki folders
+			throw new NotFoundException('wiki folder (FileID ' . $wiki->getFolderId() . ') not found');
+		}
+		return $folders[0];
 	}
 
 	/**

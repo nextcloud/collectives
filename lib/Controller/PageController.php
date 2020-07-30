@@ -26,68 +26,69 @@ class PageController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
+	 *
+	 * @param int $wikiId
 	 */
-	public function index(): DataResponse {
-		return $this->handleErrorResponse(function () {
-			return $this->service->findAll($this->userId);
+	public function index(int $wikiId): DataResponse {
+		return $this->handleErrorResponse(function () use ($wikiId) {
+			return $this->service->findAll($this->userId, $wikiId);
 		});
 	}
 
 	/**
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 *
+	 * @param int $wikiId
 	 * @param int $id
 	 *
 	 * @return DataResponse
 	 */
-	public function get(int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($id) {
-			return $this->service->find($this->userId, $id);
+	public function get(int $wikiId, int $id): DataResponse {
+		return $this->handleErrorResponse(function () use ($wikiId, $id) {
+			return $this->service->find($this->userId, $wikiId, $id);
 		});
 	}
 
 	/**
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 *
+	 * @param int    $wikiId
 	 * @param string $title
 	 *
 	 * @return DataResponse
 	 */
-	public function create(string $title): DataResponse {
-		return $this->handleErrorResponse(function () use ($title) {
-			return $this->service->create($this->userId, $title);
+	public function create(int $wikiId, string $title): DataResponse {
+		return $this->handleErrorResponse(function () use ($wikiId, $title) {
+			return $this->service->create($this->userId, $wikiId, $title);
 		});
 	}
 
 	/**
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 *
+	 * @param int    $wikiId
 	 * @param int    $id
 	 * @param string $title
 	 *
 	 * @return DataResponse
 	 */
-	public function rename(int $id, string $title): DataResponse {
-		return $this->handleErrorResponse(function () use ($id, $title) {
-			return $this->service->rename($this->userId, $id, $title);
+	public function rename(int $wikiId, int $id, string $title): DataResponse {
+		return $this->handleErrorResponse(function () use ($wikiId, $id, $title) {
+			return $this->service->rename($this->userId, $wikiId, $id, $title);
 		});
 	}
 
 	/**
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 *
+	 * @param int $wikiId
 	 * @param int $id
 	 *
 	 * @return DataResponse
 	 */
-	public function destroy(int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($id) {
-			return $this->service->delete($this->userId, $id);
+	public function destroy(int $wikiId, int $id): DataResponse {
+		return $this->handleErrorResponse(function () use ($wikiId, $id) {
+			return $this->service->delete($this->userId, $wikiId, $id);
 		});
 	}
 }
