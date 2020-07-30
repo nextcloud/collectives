@@ -19,18 +19,14 @@ use OCP\Files\File;
  * @method void setSize(int $value)
  * @method string getFilename()
  * @method void setFilename(string $value)
- * @method string getBasedir()
- * @method void setBasedir(string $value)
  */
 class Page extends Entity implements JsonSerializable {
-	private const BASEDIR = 'Wiki';
 	private const SUFFIX = '.md';
 
 	protected $title;
 	protected $timestamp;
 	protected $size;
 	protected $filename;
-	protected $basedir;
 
 	public function jsonSerialize() {
 		return [
@@ -38,8 +34,7 @@ class Page extends Entity implements JsonSerializable {
 			'title' => $this->title,
 			'timestamp' => $this->timestamp,
 			'size' => $this->size,
-			'filename' => $this->filename,
-			'basedir' => $this->basedir
+			'filename' => $this->filename
 		];
 	}
 
@@ -55,7 +50,6 @@ class Page extends Entity implements JsonSerializable {
 		$page->setTimestamp($file->getMTime());
 		$page->setSize($file->getSize());
 		$page->setFilename($file->getName());
-		$page->setBasedir(self::BASEDIR);
 		return $page;
 	}
 }
