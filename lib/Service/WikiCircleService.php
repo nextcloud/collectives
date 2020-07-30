@@ -85,7 +85,11 @@ class WikiCircleService {
 		// Create a new secret circle
 		$uuid = strtolower(Uuid::uuid4()->toString());
 		$circleName = 'wiki@' . $name . '@' . $uuid;
-		$circle = Circles::createCircle(2, $circleName);
+		try {
+			$circle = Circles::createCircle(2, $circleName);
+		} catch (QueryException $e) {
+			throw new \RuntimeException('Failed to create Circle ' . $circleName);
+		}
 
 		// Create wiki object
 		$wiki = new Wiki();

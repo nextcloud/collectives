@@ -31,7 +31,9 @@ class WikiController extends Controller {
 	 * @return DataResponse
 	 */
 	public function index(): DataResponse {
-		return new DataResponse($this->service->getWikis());
+		return $this->handleErrorResponse(function () {
+			return $this->service->getWikis();
+		});
 	}
 
 	/**
@@ -42,7 +44,9 @@ class WikiController extends Controller {
 	 * @return DataResponse
 	 */
 	public function create(string $name): DataResponse {
-		return new DataResponse($this->service->createWiki($name, $this->userId));
+		return $this->handleErrorResponse(function () use ($name) {
+			return $this->service->createWiki($name, $this->userId);
+		});
 	}
 
 	/**
