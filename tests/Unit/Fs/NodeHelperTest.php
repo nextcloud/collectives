@@ -3,20 +3,17 @@
 namespace Unit\Fs;
 
 use OC\Files\Node\Folder;
-use OCA\Wiki\Fs\PageMapper;
+use OCA\Wiki\Fs\NodeHelper;
 use OCP\Files\IRootFolder;
 use OCP\IDBConnection;
 use OCP\IL10N;
-use OCP\ILogger;
 use PHPUnit\Framework\TestCase;
 
-class PageMapperTest extends TestCase {
+class NodeHelperTest extends TestCase {
 	private $db;
 	private $l10n;
 	private $root;
-	private $logger;
-	private $appName = 'wiki';
-	private $mapper;
+	private $helper;
 
 	protected function setUp() {
 		parent::setUp();
@@ -30,11 +27,8 @@ class PageMapperTest extends TestCase {
 		$this->root = $this->getMockBuilder(IRootFolder::class)
 			->disableOriginalConstructor()
 			->getMock();
-		$this->logger = $this->getMockBuilder(ILogger::class)
-			->disableOriginalConstructor()
-			->getMock();
 
-		$this->mapper = new PageMapper($this->db, $this->l10n, $this->root, $this->logger, $this->appName);
+		$this->helper = new NodeHelper($this->db, $this->l10n, $this->root);
 	}
 
 	public function titleProvider(): array {
@@ -60,12 +54,12 @@ class PageMapperTest extends TestCase {
 	 * @param string $input
 	 * @param string $output
 	 */
-	public function testSanitiseTitle(string $input, string $output): void {
+	public function testSanitiseFilename(string $input, string $output): void {
 		$this->l10n->method('t')
 			->willReturn('New Page');
 
-		$this->assertEquals($output, $this->mapper->sanitiseTitle($input));
-		$this->mapper->sanitiseTitle('abc');
+		self::assertEquals($output, $this->helper->sanitiseFilename($input));
+		$this->helper->sanitiseFilename('abc');
 	}
 
 	public function filenameProvider(): array {
@@ -105,6 +99,6 @@ class PageMapperTest extends TestCase {
 				['File exists5 (1i).md', true]
 			]);
 
-		$this->assertEquals($output, PageMapper::generateFilename($folder, $input));
+		self::assertEquals($output, NodeHelper::generateFilename($folder, $input));
 	}
 }

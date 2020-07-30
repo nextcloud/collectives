@@ -3,46 +3,40 @@
 namespace OCA\Wiki\Fs;
 
 use OCA\Pages\Service\PagesFolderException;
-use OCA\Wiki\Model\Page;
 use OCA\Wiki\Service\PageDoesNotExistException;
 use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
+use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
 use OCP\IDBConnection;
 use OCP\IL10N;
-use OCP\ILogger;
 
-class PageMapper {
+class NodeHelper {
 	private const SUFFIX = '.md';
 	private const WIKI_FOLDER = 'Wiki';
 
 	private $db;
 	private $l10n;
 	private $root;
-	private $logger;
-	private $appName;
 
 	public function __construct(
 		IDBConnection $db,
 		IL10N $l10n,
-		IRootFolder $root,
-		ILogger $logger,
-		string $appName) {
+		IRootFolder $root) {
 		$this->db = $db;
 		$this->l10n = $l10n;
 		$this->root = $root;
-		$this->logger = $logger;
-		$this->appName = $appName;
 	}
 
 	/**
 	 * @param string $userId
 	 *
 	 * @return Folder
-	 * @throws PagesFolderException
+	 * @throws NotPermittedException
+	 * @throws NotFoundException
 	 */
-	private function getFolderForUser(string $userId): Folder {
+	public function getFolderForUser(string $userId): Folder {
 		$path = '/' . $userId . '/files/' . self::WIKI_FOLDER;
 		return $this->getOrCreateFolder($path);
 	}
@@ -51,8 +45,10 @@ class PageMapper {
 	 * @param string $path
 	 *
 	 * @return Folder
+	 * @throws NotPermittedException
+	 * @throws NotFoundException
 	 */
-	private function getOrCreateFolder(string $path): Folder {
+	public function getOrCreateFolder(string $path): Folder {
 		if ($this->root->nodeExists($path)) {
 			$folder = $this->root->get($path);
 		} else {
@@ -69,35 +65,15 @@ class PageMapper {
 	 * @param int    $id
 	 *
 	 * @return File
+	 * @throws PageDoesNotExistException
 	 */
-	private function getFileById(Folder $folder, int $id): File {
+	public function getFileById(Folder $folder, int $id): File {
 		$file = $folder->getById($id);
 
 		if (count($file) <= 0 || !($file[0] instanceof File)) {
 			throw new PageDoesNotExistException('page does not exist');
 		}
 		return $file[0];
-	}
-
-	/**
-	 * @param File   $file
-	 *
-	 * @return Page
-	 */
-	private function getPage(File $file): Page {
-		$id = $file->getId();
-		return Page::fromFile($file);
-	}
-
-	/**
-	 * @param File   $file
-	 *
-	 * @return bool
-	 */
-	private function isPage(File $file): bool {
-		$name = $file->getName();
-		$length = strlen(self::SUFFIX);
-		return (substr($name, -$length) === self::SUFFIX);
 	}
 
 	/**
@@ -136,7 +112,7 @@ class PageMapper {
 	 *
 	 * @return string
 	 */
-	public function sanitiseTitle(string $title): string {
+	public function sanitiseFilename(string $title): string {
 		// replace '/' with '-' to prevent directory traversal
 		// replacing instead of stripping seems the better tradeoff here
 		$title = str_replace('/', '-', $title);
@@ -167,87 +143,5 @@ class PageMapper {
 		}
 
 		return $title;
-	}
-
-	/**
-	 * @param int    $id
-	 * @param string $userId
-	 *
-	 * @return Page
-	 */
-	public function find(int $id, string $userId): Page {
-		$folder = $this->getFolderForUser($userId);
-		return $this->getPage($this->getFileById($folder, $id));
-	}
-
-	/**
-	 * @param string $userId
-	 *
-	 * @return array
-	 */
-	public function findAll(string $userId): array {
-		$pages = [];
-		$folder = $this->getFolderForUser($userId);
-		foreach ($folder->getDirectoryListing() as $file) {
-			if ($file instanceof File && $this->isPage($file)) {
-				$pages[] = $this->getPage($file);
-			}
-		}
-		return $pages;
-	}
-
-	/**
-	 * @param Page $page
-	 * @param string $userId
-	 *
-	 * @return Page
-	 */
-	public function create(Page $page, string $userId): Page {
-		$folder = $this->getFolderForUser($userId);
-		$safeTitle = $this->sanitiseTitle($page->getTitle());
-		$filename = self::generateFilename($folder, $safeTitle);
-
-		$file = $folder->newFile($filename . self::SUFFIX);
-		return Page::fromFile($file);
-	}
-
-	/**
-	 * Renames a note. Be sure to check the returned note since the title is
-	 * dynamically generated and filename conflicts are resolved
-	 *
-	 * @param Page $page
-	 * @param string $userId
-	 *
-	 * @return Page
-	 * @throws PageDoesNotExistException if note does not exist
-	 */
-	public function rename(Page $page, string $userId): Page {
-		$folder = $this->getFolderForUser($userId);
-		$file = $this->getFileById($folder, $page->getId());
-		$safeTitle = $this->sanitiseTitle($page->getTitle());
-
-		// Rename file if title changed
-		if ($safeTitle . self::SUFFIX !== $file->getName()) {
-			$newFilename = self::generateFilename($folder, $safeTitle);
-			try {
-				$file->move($folder->getPath() . '/' . $newFilename . self::SUFFIX);
-			} catch (NotPermittedException $e) {
-				$err = 'Moving page ' . $page->getId() . ' (' . $newFilename . self::SUFFIX . ') to the desired target is not allowed.';
-				$this->logger->error($err, ['app' => $this->appName]);
-			}
-			$page->setTitle($newFilename);
-		}
-
-		return $this->getPage($file);
-	}
-
-	/**
-	 * @param Page $page
-	 * @param string $userId
-	 */
-	public function delete(Page $page, string $userId): void {
-		$folder = $this->getFolderForUser($userId);
-		$file = $this->getFileById($folder, $page->getId());
-		$file->delete();
 	}
 }

@@ -19,9 +19,9 @@ trait ErrorHelper {
 		try {
 			return new DataResponse($callback());
 		} catch (NotFoundException $e) {
-			return new DataResponse([], Http::STATUS_NOT_FOUND);
+			return new DataResponse($e->getMessage(), Http::STATUS_NOT_FOUND);
 		} catch (\Throwable $e) {
-			return new DataResponse([], Http::STATUS_INTERNAL_SERVER_ERROR);
+			return new DataResponse($e->getMessage(), Http::STATUS_INTERNAL_SERVER_ERROR);
 		}
 	}
 }

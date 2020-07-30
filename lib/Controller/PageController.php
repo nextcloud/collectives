@@ -26,6 +26,7 @@ class PageController extends Controller {
 
 	/**
 	 * @NoAdminRequired
+	 * @NoCSRFRequired
 	 */
 	public function index(): DataResponse {
 		return $this->handleErrorResponse(function () {
@@ -35,6 +36,7 @@ class PageController extends Controller {
 
 	/**
 	 * @NoAdminRequired
+	 * @NoCSRFRequired
 	 *
 	 * @param int $id
 	 *
@@ -48,6 +50,7 @@ class PageController extends Controller {
 
 	/**
 	 * @NoAdminRequired
+	 * @NoCSRFRequired
 	 *
 	 * @param string $title
 	 *
@@ -61,6 +64,7 @@ class PageController extends Controller {
 
 	/**
 	 * @NoAdminRequired
+	 * @NoCSRFRequired
 	 *
 	 * @param int    $id
 	 * @param string $title
@@ -75,6 +79,7 @@ class PageController extends Controller {
 
 	/**
 	 * @NoAdminRequired
+	 * @NoCSRFRequired
 	 *
 	 * @param int $id
 	 *
