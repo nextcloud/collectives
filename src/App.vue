@@ -4,15 +4,19 @@
 
 <style>
 	.app-content-details {
-		position: relative
+		position: relative;
 	}
 
 	#app-content-wrapper {
-		padding-top: 40px
+		padding-top: 40px;
 	}
 
 	.app-content-details div #editor-container {
-		position: absolute
+		position: absolute;
+	}
+
+	#editor-container #editor .menubar {
+		z-index: 100;
 	}
 
 	.page-title, #titleform input[type="text"] {
