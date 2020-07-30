@@ -3,6 +3,7 @@
 namespace OCA\Wiki\Service;
 
 use OCA\Circles\Api\v1\Circles;
+use OCA\Circles\Model\BaseMember;
 use OCA\Wiki\Db\Wiki;
 use OCA\Wiki\Db\WikiMapper;
 use OCA\Wiki\Model\WikiInfo;
@@ -141,6 +142,10 @@ class WikiCircleService {
 		}
 
 		try {
+			$circleMember = Circles::getMember($wiki->getCircleUniqueId(), $userId, BaseMember::TYPE_USER, true);
+			if ($userId !== $circleMember->getUserId()) {
+				throw new NotFoundException('Failed to delete wiki, not found: ' . $id);
+			}
 			Circles::destroyCircle($wiki->getCircleUniqueId());
 		} catch (QueryException $e) {
 			throw new NotFoundException('Failed to delete wiki (circle not deleted): ' . $id);
