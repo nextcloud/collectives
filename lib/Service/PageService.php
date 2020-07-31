@@ -113,7 +113,7 @@ class PageService {
 	public function create(string $userId, int $wikiId, string $title): Page {
 		$folder = $this->wikiMapper->getWikiFolder($wikiId);
 		$safeTitle = $this->nodeHelper->sanitiseFilename($title);
-		$filename = NodeHelper::generateFilename($folder, $safeTitle);
+		$filename = NodeHelper::generateFilename($folder, $safeTitle, self::SUFFIX);
 
 		$file = $folder->newFile($filename . self::SUFFIX);
 		return Page::fromFile($file);
@@ -137,7 +137,7 @@ class PageService {
 
 			// Rename file if title changed
 			if ($safeTitle . self::SUFFIX !== $file->getName()) {
-				$newFilename = NodeHelper::generateFilename($folder, $safeTitle);
+				$newFilename = NodeHelper::generateFilename($folder, $safeTitle, self::SUFFIX);
 				try {
 					$file->move($folder->getPath() . '/' . $newFilename . self::SUFFIX);
 				} catch (NotPermittedException $e) {

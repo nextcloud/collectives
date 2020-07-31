@@ -2,10 +2,12 @@
 
 namespace OCA\Wiki\Service;
 
+use OC\User\NoUserException;
 use OCA\Circles\Api\v1\Circles;
 use OCA\Circles\Model\BaseMember;
 use OCA\Wiki\Db\Wiki;
 use OCA\Wiki\Db\WikiMapper;
+use OCA\Wiki\Fs\NodeHelper;
 use OCA\Wiki\Model\WikiInfo;
 use OCP\AppFramework\OCS\OCSException;
 use OCP\AppFramework\QueryException;
@@ -26,16 +28,20 @@ class WikiCircleService {
 	private $root;
 	/** @var WikiMapper */
 	private $wikiMapper;
+	/** @var NodeHelper */
+	private $nodeHelper;
 	/** @var IManager */
 	private $shareManager;
 
 	public function __construct(
 		IRootFolder $root,
 		WikiMapper $wikiMapper,
+		NodeHelper $nodeHelper,
 		IManager $shareManager
 	) {
 		$this->root = $root;
 		$this->wikiMapper = $wikiMapper;
+		$this->nodeHelper = $nodeHelper;
 		$this->shareManager = $shareManager;
 	}
 
@@ -69,6 +75,7 @@ class WikiCircleService {
 	 * @throws AlreadyExistsException
 	 * @throws NotPermittedException
 	 * @throws OCSException
+	 * @throws NoUserException
 	 */
 	public function createWiki(string $userId, string $name): WikiInfo {
 		if (empty($name)) {
@@ -78,12 +85,11 @@ class WikiCircleService {
 		// TODO: Create a hidden WikiCircle user
 
 		// Create a new folder for the wiki
-		$wikiPath= '/' . $userId . '/files/' . 'Wiki_' . $name;
-		if ($this->root->nodeExists($wikiPath)) {
-			throw new AlreadyExistsException($wikiPath . ' already exists');
-		}
+		$userFolder = $this->root->getUserFolder($userId);
+		$safeName = $this->nodeHelper->sanitiseFilename($name);
+		$wikiPath = NodeHelper::generateFilename($userFolder, 'Wiki_' . $safeName);
 
-		$folder = $this->root->newFolder($wikiPath);
+		$folder = $userFolder->newFolder($wikiPath);
 		if (!($folder instanceof Folder)) {
 			throw new \RuntimeException($wikiPath . ' is not a folder');
 		}

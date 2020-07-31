@@ -9,8 +9,6 @@ use OCP\IDBConnection;
 use OCP\IL10N;
 
 class NodeHelper {
-	private const SUFFIX = '.md';
-
 	private $db;
 	private $l10n;
 
@@ -40,11 +38,12 @@ class NodeHelper {
 	/**
 	 * @param Folder $folder
 	 * @param string $filename
+	 * @param string $suffix
 	 *
 	 * @return string
 	 */
-	public static function generateFilename(Folder $folder, string $filename): string {
-		$path = $filename . self::SUFFIX;
+	public static function generateFilename(Folder $folder, string $filename, string $suffix = ''): string {
+		$path = $filename . $suffix;
 		if (!$folder->nodeExists($path)) {
 			return $filename;
 		}
@@ -62,7 +61,7 @@ class NodeHelper {
 			$newFilename = $filename . ' (2)';
 		}
 
-		return self::generateFilename($folder, $newFilename);
+		return self::generateFilename($folder, $newFilename, $suffix);
 	}
 
 	/**
