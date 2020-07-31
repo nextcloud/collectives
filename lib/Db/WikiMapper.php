@@ -34,12 +34,12 @@ class WikiMapper extends QBMapper {
 	 */
 	public function getWikiFolder(int $wikiId): Folder {
 		if (null === $wiki = $this->findById($wikiId)) {
-			throw new NotFoundException('wiki ' . $wikiId . ' not found');
+			throw new NotFoundException('Wiki ' . $wikiId . ' not found');
 		}
 		$folders = $this->root->getById($wiki->getFolderId());
 		if ([] === $folders || !($folders[0] instanceof Folder)) {
 			// TODO: Decide what to do with missing wiki folders
-			throw new NotFoundException('wiki folder (FileID ' . $wiki->getFolderId() . ') not found');
+			throw new NotFoundException('Wiki folder (FileID ' . $wiki->getFolderId() . ') not found');
 		}
 		return $folders[0];
 	}

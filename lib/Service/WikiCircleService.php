@@ -150,6 +150,8 @@ class WikiCircleService {
 			throw new NotFoundException('Failed to delete wiki, not found: ' . $id);
 		}
 
+		$folder = $this->wikiMapper->getWikiFolder($wiki->getId());
+
 		try {
 			$circleMember = Circles::getMember($wiki->getCircleUniqueId(), $userId, BaseMember::TYPE_USER, true);
 			if ($userId !== $circleMember->getUserId()) {
@@ -161,7 +163,6 @@ class WikiCircleService {
 		}
 
 		$wiki = $this->wikiMapper->delete($wiki);
-		$folder = $this->wikiMapper->getWikiFolder($wiki->getId());
 		try {
 			$folder->delete();
 		} catch (InvalidPathException | \OCP\Files\NotFoundException | NotPermittedException $e) {
