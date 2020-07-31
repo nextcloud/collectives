@@ -71,8 +71,11 @@ class WikiCircleService {
 	 * @throws OCSException
 	 */
 	public function createWiki(string $userId, string $name): WikiInfo {
+		if (empty($name)) {
+			throw new \RuntimeException('Empty wiki name is not allowed');
+		}
+
 		// TODO: Create a hidden WikiCircle user
-		// TODO: Share new folder with the circle
 
 		// Create a new folder for the wiki
 		$wikiPath= '/' . $userId . '/files/' . 'Wiki_' . $name;
