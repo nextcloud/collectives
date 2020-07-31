@@ -111,11 +111,8 @@ class PageService {
 	 * @throws NotFoundException
 	 */
 	public function create(string $userId, int $wikiId, string $title): Page {
-		$page = new Page();
-		$page->setTitle($title);
-
 		$folder = $this->wikiMapper->getWikiFolder($wikiId);
-		$safeTitle = $this->nodeHelper->sanitiseFilename($page->getTitle());
+		$safeTitle = $this->nodeHelper->sanitiseFilename($title);
 		$filename = NodeHelper::generateFilename($folder, $safeTitle);
 
 		$file = $folder->newFile($filename . self::SUFFIX);
@@ -133,11 +130,10 @@ class PageService {
 	public function rename(string $userId, int $wikiId, int $id, string $title): Page {
 		try {
 			$page = $this->find($userId, $wikiId, $id);
-			$page->setTitle($title);
 
 			$folder = $this->wikiMapper->getWikiFolder($wikiId);
 			$file = $this->nodeHelper->getFileById($folder, $page->getId());
-			$safeTitle = $this->nodeHelper->sanitiseFilename($page->getTitle());
+			$safeTitle = $this->nodeHelper->sanitiseFilename($title);
 
 			// Rename file if title changed
 			if ($safeTitle . self::SUFFIX !== $file->getName()) {
