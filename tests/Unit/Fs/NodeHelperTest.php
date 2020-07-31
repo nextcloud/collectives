@@ -44,7 +44,7 @@ class NodeHelperTest extends TestCase {
 			[' string with leading space', 'string with leading space'],
 			['.string with leading dot', 'string with leading dot'],
 			['string with trailing space ', 'string with trailing space'],
-			['', 'New Page']
+			['', 'New File']
 		];
 	}
 
@@ -56,10 +56,10 @@ class NodeHelperTest extends TestCase {
 	 */
 	public function testSanitiseFilename(string $input, string $output): void {
 		$this->l10n->method('t')
-			->willReturn('New Page');
+			->willReturnArgument(0);
 
 		self::assertEquals($output, $this->helper->sanitiseFilename($input));
-		$this->helper->sanitiseFilename('abc');
+		self::assertEquals('New Page', $this->helper->sanitiseFilename('', 'New Page'));
 	}
 
 	public function filenameProvider(): array {
@@ -87,16 +87,16 @@ class NodeHelperTest extends TestCase {
 			->getMock();
 		$folder->method('nodeExists')
 			->willReturnMap([
-				['File exists1.md', true],
-				['File exists2.md', true],
-				['File exists2 (2).md', true],
-				['File exists2 (3).md', true],
-				['File exists3.md', true],
-				['File exists3 (1).md', true],
-				['File exists4 (9).md', true],
-				['File exists5 (1).md', true],
-				[' (2).md', true],
-				['File exists5 (1i).md', true]
+				['File exists1', true],
+				['File exists2', true],
+				['File exists2 (2)', true],
+				['File exists2 (3)', true],
+				['File exists3', true],
+				['File exists3 (1)', true],
+				['File exists4 (9)', true],
+				['File exists5 (1)', true],
+				[' (2)', true],
+				['File exists5 (1i)', true]
 			]);
 
 		self::assertEquals($output, NodeHelper::generateFilename($folder, $input));

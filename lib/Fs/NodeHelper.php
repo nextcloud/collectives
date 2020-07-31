@@ -69,10 +69,11 @@ class NodeHelper {
 	 * Most code copied from `Service::NoteUtil::sanitisePath()` from Notes App.
 	 *
 	 * @param string $name
+	 * @param string $default
 	 *
 	 * @return string
 	 */
-	public function sanitiseFilename(string $name): string {
+	public function sanitiseFilename(string $name, string $default = 'New File'): string {
 		// replace '/' with '-' to prevent directory traversal
 		// replacing instead of stripping seems the better tradeoff here
 		$name = str_replace('/', '-', $name);
@@ -99,7 +100,7 @@ class NodeHelper {
 		$name = trim($name);
 
 		if (empty($name)) {
-			$name = $this->l10n->t('New Page');
+			$name = $this->l10n->t($default);
 		}
 
 		return $name;

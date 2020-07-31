@@ -13,6 +13,7 @@ use OCP\Files\File;
 use OCP\Files\NotPermittedException;
 
 class PageService {
+	private const DEFAULT_PAGE_TITLE = 'New Page';
 	private const SUFFIX = '.md';
 
 	/** @var NodeHelper */
@@ -112,7 +113,7 @@ class PageService {
 	 */
 	public function create(string $userId, int $wikiId, string $title): Page {
 		$folder = $this->wikiMapper->getWikiFolder($wikiId);
-		$safeTitle = $this->nodeHelper->sanitiseFilename($title);
+		$safeTitle = $this->nodeHelper->sanitiseFilename($title, self::DEFAULT_PAGE_TITLE);
 		$filename = NodeHelper::generateFilename($folder, $safeTitle, self::SUFFIX);
 
 		$file = $folder->newFile($filename . self::SUFFIX);
@@ -133,7 +134,7 @@ class PageService {
 
 			$folder = $this->wikiMapper->getWikiFolder($wikiId);
 			$file = $this->nodeHelper->getFileById($folder, $page->getId());
-			$safeTitle = $this->nodeHelper->sanitiseFilename($title);
+			$safeTitle = $this->nodeHelper->sanitiseFilename($title, self::DEFAULT_PAGE_TITLE);
 
 			// Rename file if title changed
 			if ($safeTitle . self::SUFFIX !== $file->getName()) {
