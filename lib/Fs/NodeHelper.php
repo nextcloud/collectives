@@ -69,40 +69,40 @@ class NodeHelper {
 	 * Removes or replaces characters that are illegal in a file or folder name on some operating systems.
 	 * Most code copied from `Service::NoteUtil::sanitisePath()` from Notes App.
 	 *
-	 * @param string $title
+	 * @param string $name
 	 *
 	 * @return string
 	 */
-	public function sanitiseFilename(string $title): string {
+	public function sanitiseFilename(string $name): string {
 		// replace '/' with '-' to prevent directory traversal
 		// replacing instead of stripping seems the better tradeoff here
-		$title = str_replace('/', '-', $title);
+		$name = str_replace('/', '-', $name);
 
 		// remove characters which are illegal on Windows (includes illegal characters on Unix/Linux)
 		// see also \OC\Files\Storage\Common::verifyPosixPath(...)
 		/** @noinspection CascadeStringReplacementInspection */
-		$title = str_replace(['*', '|', '\\', ':', '"', '<', '>', '?'], '', $title);
+		$name = str_replace(['*', '|', '\\', ':', '"', '<', '>', '?'], '', $name);
 
 		// if mysql doesn't support 4byte UTF-8, then remove those characters
 		// see \OC\Files\Storage\Common::verifyPath(...)
 		if (!$this->db->supports4ByteText()) {
-			$title = preg_replace('%(?:
+			$name = preg_replace('%(?:
                 \xF0[\x90-\xBF][\x80-\xBF]{2}      # planes 1-3
               | [\xF1-\xF3][\x80-\xBF]{3}          # planes 4-15
               | \xF4[\x80-\x8F][\x80-\xBF]{2}      # plane 16
-              )%xs', '', $title);
+              )%xs', '', $name);
 		}
 
 		// remove leading spaces or dots to prevent hidden files
-		$title = preg_replace('/^[\. ]+/mu', '', $title);
+		$name = preg_replace('/^[\. ]+/mu', '', $name);
 
 		// remove leading and trailing spaces
-		$title = trim($title);
+		$name = trim($name);
 
-		if (empty($title)) {
-			$title = $this->l10n->t('New Page');
+		if (empty($name)) {
+			$name = $this->l10n->t('New Page');
 		}
 
-		return $title;
+		return $name;
 	}
 }

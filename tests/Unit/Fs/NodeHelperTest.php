@@ -31,7 +31,7 @@ class NodeHelperTest extends TestCase {
 		$this->helper = new NodeHelper($this->db, $this->l10n, $this->root);
 	}
 
-	public function titleProvider(): array {
+	public function nameProvider(): array {
 		return [
 			['string with slash /', 'string with slash -'],
 			['string with forbidden chars *|\\:"<>?', 'string with forbidden chars'],
@@ -49,7 +49,7 @@ class NodeHelperTest extends TestCase {
 	}
 
 	/**
-	 * @dataProvider titleProvider
+	 * @dataProvider nameProvider
 	 *
 	 * @param string $input
 	 * @param string $output
