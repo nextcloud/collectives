@@ -4,7 +4,6 @@ namespace OCA\Wiki\Controller;
 
 use OCA\Wiki\Service\PageService;
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
 
@@ -27,57 +26,69 @@ class PageController extends Controller {
 
 	/**
 	 * @NoAdminRequired
+	 *
+	 * @param int $wikiId
 	 */
-	public function index(): DataResponse {
-		return new DataResponse($this->service->findAll($this->userId));
-	}
-
-	/**
-	 * @NoAdminRequired
-	 *
-	 * @param int $id
-	 *
-	 * @return DataResponse
-	 */
-	public function get(int $id): DataResponse {
-		return new DataResponse($this->service->find($id, $this->userId));
-	}
-
-	/**
-	 * @NoAdminRequired
-	 *
-	 * @param string $title
-	 *
-	 * @return Entity
-	 */
-	public function create(string $title): Entity {
-		return $this->service->create($title, $this->userId);
-	}
-
-	/**
-	 * @NoAdminRequired
-	 *
-	 * @param int    $id
-	 * @param string $title
-	 *
-	 * @return DataResponse
-	 */
-	public function rename(int $id, string $title): DataResponse {
-		return $this->handleErrorResponse(function () use ($id, $title) {
-			return $this->service->rename($id, $title, $this->userId);
+	public function index(int $wikiId): DataResponse {
+		return $this->handleErrorResponse(function () use ($wikiId) {
+			return $this->service->findAll($this->userId, $wikiId);
 		});
 	}
 
 	/**
 	 * @NoAdminRequired
 	 *
+	 * @param int $wikiId
 	 * @param int $id
 	 *
 	 * @return DataResponse
 	 */
-	public function destroy(int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($id) {
-			return $this->service->delete($id, $this->userId);
+	public function get(int $wikiId, int $id): DataResponse {
+		return $this->handleErrorResponse(function () use ($wikiId, $id) {
+			return $this->service->find($this->userId, $wikiId, $id);
+		});
+	}
+
+	/**
+	 * @NoAdminRequired
+	 *
+	 * @param int    $wikiId
+	 * @param string $title
+	 *
+	 * @return DataResponse
+	 */
+	public function create(int $wikiId, string $title): DataResponse {
+		return $this->handleErrorResponse(function () use ($wikiId, $title) {
+			return $this->service->create($this->userId, $wikiId, $title);
+		});
+	}
+
+	/**
+	 * @NoAdminRequired
+	 *
+	 * @param int    $wikiId
+	 * @param int    $id
+	 * @param string $title
+	 *
+	 * @return DataResponse
+	 */
+	public function rename(int $wikiId, int $id, string $title): DataResponse {
+		return $this->handleErrorResponse(function () use ($wikiId, $id, $title) {
+			return $this->service->rename($this->userId, $wikiId, $id, $title);
+		});
+	}
+
+	/**
+	 * @NoAdminRequired
+	 *
+	 * @param int $wikiId
+	 * @param int $id
+	 *
+	 * @return DataResponse
+	 */
+	public function destroy(int $wikiId, int $id): DataResponse {
+		return $this->handleErrorResponse(function () use ($wikiId, $id) {
+			return $this->service->delete($this->userId, $wikiId, $id);
 		});
 	}
 }

@@ -2,7 +2,8 @@
 
 namespace Unit\Service;
 
-use OCA\Wiki\Fs\PageMapper;
+use OCA\Wiki\Db\WikiMapper;
+use OCA\Wiki\Fs\NodeHelper;
 use OCA\Wiki\Model\Page;
 use OCA\Wiki\Service\PageDoesNotExistException;
 use OCA\Wiki\Service\PageService;
@@ -12,7 +13,8 @@ use OCP\Files\AlreadyExistsException;
 use PHPUnit\Framework\TestCase;
 
 class PageServiceTest extends TestCase {
-	private $mapper;
+	private $nodeHelper;
+	private $wikiMapper;
 	private $service;
 	private $userId = 'jane';
 
@@ -21,7 +23,11 @@ class PageServiceTest extends TestCase {
 	private $pageTitle = 'title';
 
 	protected function setUp(): void {
-		$this->mapper = $this->getMockBuilder(PageMapper::class)
+		$this->nodeHelper = $this->getMockBuilder(NodeHelper::class)
+			->disableOriginalConstructor()
+			->getMock();
+
+		$this->wikiMapper = $this->getMockBuilder(WikiMapper::class)
 			->disableOriginalConstructor()
 			->getMock();
 
@@ -29,7 +35,7 @@ class PageServiceTest extends TestCase {
 		$this->page->setId($this->pageId);
 		$this->page->setTitle($this->pageTitle);
 
-		$this->service = new PageService($this->mapper);
+		$this->service = new PageService($this->nodeHelper, $this->wikiMapper);
 	}
 
 	public function testHandleExceptionDoesNotExistException(): void {
@@ -55,42 +61,5 @@ class PageServiceTest extends TestCase {
 	public function testHandleExceptionOtherException(): void {
 		$this->expectException(\RuntimeException::class);
 		$this->service->handleException(new \RuntimeException('msg'));
-	}
-
-	public function testCreate(): void {
-		$newPage = new Page();
-		$newPage->setTitle($this->pageTitle);
-
-		$this->mapper->expects($this->once())
-			->method('create')
-			->with($this->equalTo($newPage))
-			->willReturn($this->page);
-
-		$newPage = $this->service->create($this->pageTitle, $this->userId);
-
-		$this->assertEquals($this->page, $newPage);
-	}
-
-	public function testRename(): void {
-		$this->mapper->expects($this->once())
-			->method('find')
-			->with($this->equalTo($this->pageId))
-			->willReturn($this->page);
-
-		// New values for page
-		$renamedPageTitle = 'new_title2';
-
-		// Renamed page
-		$renamedPage = new Page();
-		$renamedPage->setId($this->pageId);
-		$renamedPage->setTitle($renamedPageTitle);
-		$this->mapper->expects($this->once())
-			->method('rename')
-			->with($this->equalTo($renamedPage))
-			->willReturn($renamedPage);
-
-		$result = $this->service->rename($this->pageId, $renamedPageTitle, $this->userId);
-
-		$this->assertEquals($renamedPage, $result);
 	}
 }

@@ -3,20 +3,17 @@
 namespace Unit\Fs;
 
 use OC\Files\Node\Folder;
-use OCA\Wiki\Fs\PageMapper;
+use OCA\Wiki\Fs\NodeHelper;
 use OCP\Files\IRootFolder;
 use OCP\IDBConnection;
 use OCP\IL10N;
-use OCP\ILogger;
 use PHPUnit\Framework\TestCase;
 
-class PageMapperTest extends TestCase {
+class NodeHelperTest extends TestCase {
 	private $db;
 	private $l10n;
 	private $root;
-	private $logger;
-	private $appName = 'wiki';
-	private $mapper;
+	private $helper;
 
 	protected function setUp() {
 		parent::setUp();
@@ -30,14 +27,11 @@ class PageMapperTest extends TestCase {
 		$this->root = $this->getMockBuilder(IRootFolder::class)
 			->disableOriginalConstructor()
 			->getMock();
-		$this->logger = $this->getMockBuilder(ILogger::class)
-			->disableOriginalConstructor()
-			->getMock();
 
-		$this->mapper = new PageMapper($this->db, $this->l10n, $this->root, $this->logger, $this->appName);
+		$this->helper = new NodeHelper($this->db, $this->l10n, $this->root);
 	}
 
-	public function titleProvider(): array {
+	public function nameProvider(): array {
 		return [
 			['string with slash /', 'string with slash -'],
 			['string with forbidden chars *|\\:"<>?', 'string with forbidden chars'],
@@ -50,22 +44,22 @@ class PageMapperTest extends TestCase {
 			[' string with leading space', 'string with leading space'],
 			['.string with leading dot', 'string with leading dot'],
 			['string with trailing space ', 'string with trailing space'],
-			['', 'New Page']
+			['', 'New File']
 		];
 	}
 
 	/**
-	 * @dataProvider titleProvider
+	 * @dataProvider nameProvider
 	 *
 	 * @param string $input
 	 * @param string $output
 	 */
-	public function testSanitiseTitle(string $input, string $output): void {
+	public function testSanitiseFilename(string $input, string $output): void {
 		$this->l10n->method('t')
-			->willReturn('New Page');
+			->willReturnArgument(0);
 
-		$this->assertEquals($output, $this->mapper->sanitiseTitle($input));
-		$this->mapper->sanitiseTitle('abc');
+		self::assertEquals($output, $this->helper->sanitiseFilename($input));
+		self::assertEquals('New Page', $this->helper->sanitiseFilename('', 'New Page'));
 	}
 
 	public function filenameProvider(): array {
@@ -93,18 +87,18 @@ class PageMapperTest extends TestCase {
 			->getMock();
 		$folder->method('nodeExists')
 			->willReturnMap([
-				['File exists1.md', true],
-				['File exists2.md', true],
-				['File exists2 (2).md', true],
-				['File exists2 (3).md', true],
-				['File exists3.md', true],
-				['File exists3 (1).md', true],
-				['File exists4 (9).md', true],
-				['File exists5 (1).md', true],
-				[' (2).md', true],
-				['File exists5 (1i).md', true]
+				['File exists1', true],
+				['File exists2', true],
+				['File exists2 (2)', true],
+				['File exists2 (3)', true],
+				['File exists3', true],
+				['File exists3 (1)', true],
+				['File exists4 (9)', true],
+				['File exists5 (1)', true],
+				[' (2)', true],
+				['File exists5 (1i)', true]
 			]);
 
-		$this->assertEquals($output, PageMapper::generateFilename($folder, $input));
+		self::assertEquals($output, NodeHelper::generateFilename($folder, $input));
 	}
 }

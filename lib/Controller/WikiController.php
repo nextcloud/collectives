@@ -32,7 +32,7 @@ class WikiController extends Controller {
 	 */
 	public function index(): DataResponse {
 		return $this->handleErrorResponse(function () {
-			return $this->service->getWikis();
+			return $this->service->getWikis($this->userId);
 		});
 	}
 
@@ -45,7 +45,7 @@ class WikiController extends Controller {
 	 */
 	public function create(string $name): DataResponse {
 		return $this->handleErrorResponse(function () use ($name) {
-			return $this->service->createWiki($name, $this->userId);
+			return $this->service->createWiki($this->userId, $name);
 		});
 	}
 
@@ -58,7 +58,7 @@ class WikiController extends Controller {
 	 */
 	public function destroy(int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($id) {
-			return $this->service->deleteWiki($id, $this->userId);
+			return $this->service->deleteWiki($this->userId, $id);
 		});
 	}
 }

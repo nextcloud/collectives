@@ -2,9 +2,12 @@
 
 namespace OCA\Wiki\Service;
 
+use OC\User\NoUserException;
 use OCA\Circles\Api\v1\Circles;
+use OCA\Circles\Model\BaseMember;
 use OCA\Wiki\Db\Wiki;
 use OCA\Wiki\Db\WikiMapper;
+use OCA\Wiki\Fs\NodeHelper;
 use OCA\Wiki\Model\WikiInfo;
 use OCP\AppFramework\OCS\OCSException;
 use OCP\AppFramework\QueryException;
@@ -18,32 +21,37 @@ use OCP\Lock\ILockingProvider;
 use OCP\Lock\LockedException;
 use OCP\Share\IManager;
 use OCP\Share\IShare;
-use Ramsey\Uuid\Uuid;
 
 class WikiCircleService {
 	/** @var IRootFolder */
 	private $root;
 	/** @var WikiMapper */
 	private $wikiMapper;
+	/** @var NodeHelper */
+	private $nodeHelper;
 	/** @var IManager */
 	private $shareManager;
 
 	public function __construct(
 		IRootFolder $root,
 		WikiMapper $wikiMapper,
+		NodeHelper $nodeHelper,
 		IManager $shareManager
 	) {
 		$this->root = $root;
 		$this->wikiMapper = $wikiMapper;
+		$this->nodeHelper = $nodeHelper;
 		$this->shareManager = $shareManager;
 	}
 
 	/**
+	 * @param string $userId
+	 *
 	 * @return array
 	 * @throws QueryException
 	 * @throws NotFoundException
 	 */
-	public function getWikis(): array {
+	public function getWikis(string $userId): array {
 		$wikis = [];
 		$joinedCircles = Circles::joinedCircles();
 		foreach ($joinedCircles as $jc) {
@@ -52,43 +60,44 @@ class WikiCircleService {
 			}
 
 			$wi = new WikiInfo();
-			$wi->fromWiki($w, $folder = $this->findWikiFolder($w->getFolderId()));
+			$wi->fromWiki($w, $jc->getName(), $this->wikiMapper->getWikiFolder($w->getId()));
 			$wikis[] = $wi;
 		}
 		return $wikis;
 	}
 
 	/**
-	 * @param string $name
 	 * @param string $userId
+	 * @param string $name
 	 *
 	 * @return WikiInfo
 	 * @throws AlreadyExistsException
 	 * @throws NotPermittedException
 	 * @throws OCSException
+	 * @throws NoUserException
 	 */
-	public function createWiki(string $name, string $userId): WikiInfo {
-		// TODO: Create a hidden WikiCircle user
-		// TODO: Share new folder with the circle
-
-		// Create a new folder for the wiki
-		$wikiPath= '/' . $userId . '/files/' . 'Wiki_' . $name;
-		if ($this->root->nodeExists($wikiPath)) {
-			throw new AlreadyExistsException($wikiPath . ' already exists');
+	public function createWiki(string $userId, string $name): WikiInfo {
+		if (empty($name)) {
+			throw new \RuntimeException('Empty wiki name is not allowed');
 		}
 
-		$folder = $this->root->newFolder($wikiPath);
+		// TODO: Create a hidden WikiCircle user
+
+		// Create a new folder for the wiki
+		$userFolder = $this->root->getUserFolder($userId);
+		$safeName = $this->nodeHelper->sanitiseFilename($name);
+		$wikiPath = NodeHelper::generateFilename($userFolder, $safeName);
+
+		$folder = $userFolder->newFolder($wikiPath);
 		if (!($folder instanceof Folder)) {
 			throw new \RuntimeException($wikiPath . ' is not a folder');
 		}
 
 		// Create a new secret circle
-		$uuid = strtolower(Uuid::uuid4()->toString());
-		$circleName = 'wiki@' . $name . '@' . $uuid;
 		try {
-			$circle = Circles::createCircle(2, $circleName);
+			$circle = Circles::createCircle(2, $safeName);
 		} catch (QueryException $e) {
-			throw new \RuntimeException('Failed to create Circle ' . $circleName);
+			throw new \RuntimeException('Failed to create Circle ' . $safeName);
 		}
 
 		// Create wiki object
@@ -99,7 +108,7 @@ class WikiCircleService {
 		$this->wikiMapper->insert($wiki);
 
 		$wi = new WikiInfo();
-		$wi->fromWiki($wiki, $folder);
+		$wi->fromWiki($wiki, $circle->getName(), $folder);
 
 		// Share folder with circle
 		$share = $this->shareManager->newShare();
@@ -127,25 +136,31 @@ class WikiCircleService {
 	}
 
 	/**
-	 * @param int    $id
 	 * @param string $userId
+	 * @param int    $id
 	 *
 	 * @return WikiInfo
 	 * @throws NotFoundException
 	 */
-	public function deleteWiki(int $id, string $userId): WikiInfo {
+	public function deleteWiki(string $userId, int $id): WikiInfo {
 		if (null === $wiki = $this->wikiMapper->findById($id)) {
 			throw new NotFoundException('Failed to delete wiki, not found: ' . $id);
 		}
 
+		$folder = $this->wikiMapper->getWikiFolder($wiki->getId());
+
 		try {
+			$circle = Circles::detailsCircle($wiki->getCircleUniqueId());
+			$circleMember = Circles::getMember($wiki->getCircleUniqueId(), $userId, BaseMember::TYPE_USER, true);
+			if ($userId !== $circleMember->getUserId()) {
+				throw new NotFoundException('Failed to delete wiki, not found: ' . $id);
+			}
 			Circles::destroyCircle($wiki->getCircleUniqueId());
 		} catch (QueryException $e) {
 			throw new NotFoundException('Failed to delete wiki (circle not deleted): ' . $id);
 		}
 
 		$wiki = $this->wikiMapper->delete($wiki);
-		$folder = $this->findWikiFolder($wiki->getFolderId());
 		try {
 			$folder->delete();
 		} catch (InvalidPathException | \OCP\Files\NotFoundException | NotPermittedException $e) {
@@ -153,24 +168,8 @@ class WikiCircleService {
 		}
 
 		$wi = new WikiInfo();
-		$wi->fromWiki($wiki);
+		$wi->fromWiki($wiki, $circle->getName());
 
 		return $wi;
-	}
-
-	/**
-	 * @param int $folderId
-	 *
-	 * @return Folder
-	 * @throws NotFoundException
-	 */
-	private function findWikiFolder(int $folderId): Folder {
-		$folders = $this->root->getById($folderId);
-		if ([] === $folders || !($folders[0] instanceof Folder)) {
-			// TODO: Decide what to do with missing wiki folders
-			throw new NotFoundException('Error: Wiki folder (FileID ' . $folderId . ') not found');
-		}
-
-		return $folders[0];
 	}
 }
