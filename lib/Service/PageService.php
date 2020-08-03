@@ -47,7 +47,7 @@ class PageService {
 	 *
 	 * @return bool
 	 */
-	private function isPage(File $file): bool {
+	public function isPage(File $file): bool {
 		$name = $file->getName();
 		$length = strlen(self::SUFFIX);
 		return (substr($name, -$length) === self::SUFFIX);
