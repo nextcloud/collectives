@@ -51,10 +51,17 @@ export default {
 			return this.currentPage && this.currentPage.id === page.id
 		},
 
-		iconStyle(title) {
-			const c = title.toRgb()
-			return `background-color: rgb(${c.r}, ${c.g}, ${c.b})`
+		iconStyle(id) {
+			const c = `page-${id}`.toRgb()
+			return `box-shadow: 3px 3px 7px rgb(${c.r}, ${c.g}, ${c.b})`
 		},
 	},
 }
 </script>
+
+<style lang="scss" scoped>
+	.app-content-list .app-content-list-item .app-content-list-item-icon {
+		border-radius: 0px;
+		color: grey;
+	}
+</style>
