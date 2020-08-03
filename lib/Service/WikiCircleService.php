@@ -21,7 +21,6 @@ use OCP\Lock\ILockingProvider;
 use OCP\Lock\LockedException;
 use OCP\Share\IManager;
 use OCP\Share\IShare;
-use Ramsey\Uuid\Uuid;
 
 class WikiCircleService {
 	/** @var IRootFolder */
@@ -87,7 +86,7 @@ class WikiCircleService {
 		// Create a new folder for the wiki
 		$userFolder = $this->root->getUserFolder($userId);
 		$safeName = $this->nodeHelper->sanitiseFilename($name);
-		$wikiPath = NodeHelper::generateFilename($userFolder, 'Wiki_' . $safeName);
+		$wikiPath = NodeHelper::generateFilename($userFolder, $safeName);
 
 		$folder = $userFolder->newFolder($wikiPath);
 		if (!($folder instanceof Folder)) {
@@ -95,12 +94,10 @@ class WikiCircleService {
 		}
 
 		// Create a new secret circle
-		$uuid = strtolower(Uuid::uuid4()->toString());
-		$circleName = 'wiki@' . $name . '@' . $uuid;
 		try {
-			$circle = Circles::createCircle(2, $circleName);
+			$circle = Circles::createCircle(2, $safeName);
 		} catch (QueryException $e) {
-			throw new \RuntimeException('Failed to create Circle ' . $circleName);
+			throw new \RuntimeException('Failed to create Circle ' . $safeName);
 		}
 
 		// Create wiki object

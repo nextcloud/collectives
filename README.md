@@ -46,22 +46,24 @@ You can do so by running the following commands on the nextcloud server:
 ## Development Background: Circle and user management
 
 In Nextcloud, every file/folder is owned by a user. Even when shared with a
-circle, the ultimate power over this object remains at the owner user.In
+circle, the ultimate power over this object remains at the owner user. In
 collective workflows, this leads to several problems. Instead of individual
 users, we want the documents to be owned and maintained by the collective.
 Since this concept is unsupported by the Nextcloud and Circles per default,
-we decided to implement it on our own.
+we plan to implement it on our own.
 
-Creating a new wiki internally does the following:
+Current status: Creating a new wiki internally does the following:
 
-1. Create a vehicle user `wiki@<NAME>@<UUID>` (with random UUID as password)
-2. Create a vehicle circle `wiki@<NAME>@<UUID>` with the vehicle user as owner
-3. Create a wiki folder `wiki_<NAME>` with the vehicle user as owner
+2. Create a vehicle circle `<NAME>`
+3. Create a wiki folder `<NAME>`
 4. Share the wiki folder with the vehicle circle
 
-TODO:
-* Add support to rename and delete wikis
-* Add support to maintain circle members (and their privilege level?)
+Planned: Creating a new wiki internally does the following:
+
+1. Create a vehicle user `wiki@<NAME>@<UUID>` (with random UUID as password)
+2. Create a vehicle circle `<NAME>` with the vehicle user as owner
+3. Create a wiki folder `<NAME>` with the vehicle user as owner
+4. Share the wiki folder with the vehicle circle
 
 ## Maintainers
 
