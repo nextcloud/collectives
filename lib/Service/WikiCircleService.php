@@ -60,7 +60,7 @@ class WikiCircleService {
 			}
 
 			$wi = new WikiInfo();
-			$wi->fromWiki($w, $folder = $this->wikiMapper->getWikiFolder($w->getId()));
+			$wi->fromWiki($w, $jc->getName(), $this->wikiMapper->getWikiFolder($w->getId()));
 			$wikis[] = $wi;
 		}
 		return $wikis;
@@ -108,7 +108,7 @@ class WikiCircleService {
 		$this->wikiMapper->insert($wiki);
 
 		$wi = new WikiInfo();
-		$wi->fromWiki($wiki, $folder);
+		$wi->fromWiki($wiki, $circle->getName(), $folder);
 
 		// Share folder with circle
 		$share = $this->shareManager->newShare();
@@ -150,6 +150,7 @@ class WikiCircleService {
 		$folder = $this->wikiMapper->getWikiFolder($wiki->getId());
 
 		try {
+			$circle = Circles::detailsCircle($wiki->getCircleUniqueId());
 			$circleMember = Circles::getMember($wiki->getCircleUniqueId(), $userId, BaseMember::TYPE_USER, true);
 			if ($userId !== $circleMember->getUserId()) {
 				throw new NotFoundException('Failed to delete wiki, not found: ' . $id);
@@ -167,7 +168,7 @@ class WikiCircleService {
 		}
 
 		$wi = new WikiInfo();
-		$wi->fromWiki($wiki);
+		$wi->fromWiki($wiki, $circle->getName());
 
 		return $wi;
 	}
