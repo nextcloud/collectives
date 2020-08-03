@@ -5,7 +5,7 @@
 			:to="`/${$route.params.selectedWiki}/${page.title}`"
 			:class="{active: isActive(page)}"
 			class="app-content-list-item">
-			<div class="app-content-list-item-icon" :style="iconStyle(page.title)">
+			<div class="app-content-list-item-icon" :style="iconStyle(page.id)">
 				{{ page.title[0] }}
 			</div>
 			<div class="app-content-list-item-line-one">
@@ -51,10 +51,19 @@ export default {
 			return this.currentPage && this.currentPage.id === page.id
 		},
 
-		iconStyle(title) {
-			const c = title.toRgb()
+		iconStyle(id) {
+			const c = `page-${id}`.toRgb()
 			return `background-color: rgb(${c.r}, ${c.g}, ${c.b})`
 		},
 	},
 }
 </script>
+
+<style lang="scss" scoped>
+	.app-content-list .app-content-list-item .app-content-list-item-icon {
+		border-radius: 3px 12px 3px 3px;
+		line-height: 40px;
+		width: 30px;
+		left: 12px;
+	}
+</style>
