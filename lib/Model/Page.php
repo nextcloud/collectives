@@ -17,8 +17,10 @@ use OCP\Files\File;
  * @method void setTimestamp(int $value)
  * @method string getSize()
  * @method void setSize(int $value)
- * @method string getFilename()
- * @method void setFilename(string $value)
+ * @method string getFileName()
+ * @method void setFileName(string $value)
+ * @method string getFilePath()
+ * @method void setFilePath(string $value)
  */
 class Page extends Entity implements JsonSerializable {
 	private const SUFFIX = '.md';
@@ -26,7 +28,8 @@ class Page extends Entity implements JsonSerializable {
 	protected $title;
 	protected $timestamp;
 	protected $size;
-	protected $filename;
+	protected $fileName;
+	protected $filePath;
 
 	public function jsonSerialize() {
 		return [
@@ -34,7 +37,8 @@ class Page extends Entity implements JsonSerializable {
 			'title' => $this->title,
 			'timestamp' => $this->timestamp,
 			'size' => $this->size,
-			'filename' => $this->filename
+			'fileName' => $this->fileName,
+			'filePath' => $this->filePath
 		];
 	}
 
@@ -49,7 +53,8 @@ class Page extends Entity implements JsonSerializable {
 		$page->setTitle(basename($file->getName(), self::SUFFIX));
 		$page->setTimestamp($file->getMTime());
 		$page->setSize($file->getSize());
-		$page->setFilename($file->getName());
+		$page->setFileName($file->getName());
+		$page->setFilePath($file->getPath());
 		return $page;
 	}
 }
