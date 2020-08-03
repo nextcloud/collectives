@@ -5,10 +5,15 @@
 <style>
 	.app-content-details {
 		position: relative;
+		flex: 1 1 524px;
 	}
 
 	#app-content-wrapper {
 		padding-top: 40px;
+		display: flex;
+		position: relative;
+		align-items: stretch;
+		min-height: 100%;
 	}
 
 	.app-content-details div #editor-container {

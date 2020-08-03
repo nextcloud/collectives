@@ -22,7 +22,7 @@
     "@nextcloud/moment": "^1.1.1",
     "@nextcloud/paths": "^1.1.2",
     "@nextcloud/router": "^1.0.2",
-    "@nextcloud/vue": "^1.5.0",
+    "@nextcloud/vue": "^2.3.0",
     "markdown-it": "^10.0.0",
     "markdown-it-task-lists": "^2.1.1",
     "tiptap": "^1.27.1",
