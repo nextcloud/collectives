@@ -2,25 +2,13 @@
 	<Content app-name="wiki" :class="{'icon-loading': loading}">
 		<Nav v-if="!selectedWiki"
 			:loading="loading"
-			:wikis="wikis"
-			:selected-wiki="selectedWiki"
-			@new="newPage" />
+			:wikis="wikis" />
 		<AppContent>
-			<Breadcrumbs>
+			<Breadcrumbs v-if="selectedWiki">
 				<Breadcrumb title="Home"
 					to="/"
-					:primary="true"
-					:force-menu="!selectedWiki"
-					:open="!loading && wikis.length === 0">
-					<ActionInput v-if="!selectedWiki"
-						ref="newWikiName"
-						icon="icon-add"
-						@submit="newWiki">
-						Name for a new wiki
-					</ActionInput>
-				</Breadcrumb>
-				<Breadcrumb v-if="selectedWiki"
-					:title="selectedWiki"
+					:primary="true" />
+				<Breadcrumb :title="selectedWiki"
 					:to="`/${selectedWiki}`">
 					<ActionButton icon="icon-add" @click="newPage">
 						{{ t('wiki', 'Add a page') }}
@@ -67,10 +55,20 @@
 						@renamePage="renamePage" />
 				</AppContentDetails>
 			</div>
-			<div v-else id="emptycontent">
-				<div class="icon-add" />
-				<h2>{{ t('wiki', 'Create a wiki...') }}</h2>
-			</div>
+			<EmptyContent v-else icon="icon-star">
+				{{ t('wiki', 'No wiki selected') }}
+				<template #desc>
+					{{ t('wiki', 'Select a wiki on the left or create a new one:') }}
+					<ul>
+						<ActionInput v-if="!selectedWiki"
+							ref="newWikiName"
+							icon="icon-star"
+							@submit="newWiki">
+							Name for a new wiki
+						</ActionInput>
+					</ul>
+				</template>
+			</EmptyContent>
 		</AppContent>
 		<PageSidebar v-if="currentPage"
 			v-show="showSidebar"
@@ -92,6 +90,7 @@ import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import Breadcrumbs from '@nextcloud/vue/dist/Components/Breadcrumbs'
 import Breadcrumb from '@nextcloud/vue/dist/Components/Breadcrumb'
 import Content from '@nextcloud/vue/dist/Components/Content'
+import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 import Nav from '../components/Nav'
 import PagesList from '../components/PagesList'
 import Page from '../components/Page'
@@ -111,6 +110,7 @@ export default {
 		Breadcrumbs,
 		Breadcrumb,
 		Content,
+		EmptyContent,
 		Nav,
 		Page,
 		PagesList,
@@ -163,14 +163,6 @@ export default {
 			set: function(val) {
 				this.editToggle = val ? EditState.Edit : EditState.Read
 			},
-		},
-
-		wikiName() {
-			// Somehow ActionInput.value does not reflect
-			// the value of the input field.
-			// This is a workaround.
-			// TODO: properly fix this in nextclouds ActionInput.
-			return this.$refs.newWikiName.$refs.form[1].value
 		},
 
 	},
@@ -255,11 +247,11 @@ export default {
 
 		/**
 		 * Create a new wiki with the name given in the breadcrumb input
+		 * @param {Event} event Event that triggered the function
 		 */
-		async newWiki() {
-			const wiki = {
-				name: this.wikiName,
-			}
+		async newWiki(event) {
+			const name = event.currentTarget[1].value
+			const wiki = { name }
 			const response = await axios.post(generateUrl(`/apps/wiki/_wikis`), wiki)
 			this.$router.push(`/${response.data.folderName}`)
 		},
