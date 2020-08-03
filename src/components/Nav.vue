@@ -1,13 +1,14 @@
 <template>
 	<AppNavigation>
-		<ul>
+		<template #list>
 			<AppNavigationCaption :title="t('wiki', 'Select a wiki')" />
 			<AppNavigationItem v-for="wiki in wikis"
 				:key="wiki.circleUniqueId"
 				:title="wiki.folderName"
 				:class="{active: isActive(wiki)}"
-				:to="`/${wiki.folderName}`" />
-		</ul>
+				:to="`/${wiki.folderName}`"
+				icon="icon-star" />
+		</template>
 	</AppNavigation>
 </template>
 
