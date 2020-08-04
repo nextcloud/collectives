@@ -6,6 +6,8 @@ use JsonSerializable;
 
 use OCP\AppFramework\Db\Entity;
 use OCP\Files\File;
+use OCP\Files\InvalidPathException;
+use OCP\Files\NotFoundException;
 
 /**
  * Class Page
@@ -43,18 +45,17 @@ class Page extends Entity implements JsonSerializable {
 	}
 
 	/**
-	 * @param File   $file
+	 * @param File $file
 	 *
-	 * @return static
+	 * @throws InvalidPathException
+	 * @throws NotFoundException
 	 */
-	public static function fromFile(File $file): Page {
-		$page = new static();
-		$page->setId($file->getId());
-		$page->setTitle(basename($file->getName(), self::SUFFIX));
-		$page->setTimestamp($file->getMTime());
-		$page->setSize($file->getSize());
-		$page->setFileName($file->getName());
-		$page->setFilePath($file->getPath());
-		return $page;
+	public function fromFile(File $file): void {
+		$this->setId($file->getId());
+		$this->setTitle(basename($file->getName(), self::SUFFIX));
+		$this->setTimestamp($file->getMTime());
+		$this->setSize($file->getSize());
+		$this->setFileName($file->getName());
+		$this->setFilePath($file->getPath());
 	}
 }

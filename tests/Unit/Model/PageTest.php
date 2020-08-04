@@ -24,7 +24,8 @@ class PageTest extends TestCase {
 		$file->method('getName')->willReturn($fileName);
 		$file->method('getPath')->willReturn($filePath);
 
-		$page = Page::fromFile($file);
+		$page = new Page();
+		$page->fromFile($file);
 
 		self::assertEquals($page->getId(), $fileId);
 		self::assertEquals($page->getTitle(), $fileTitle);
