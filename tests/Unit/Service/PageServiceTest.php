@@ -71,7 +71,9 @@ class PageServiceTest extends TestCase {
 			}
 			$filesJustMd[] = $file;
 
-			$pages[] = Page::fromFile($file);
+			$page = new Page();
+			$page->fromFile($file);
+			$pages[] = $page;
 		}
 
 		$this->wikiFolder->method('getDirectoryListing')

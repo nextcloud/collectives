@@ -10,6 +10,7 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\Files\AlreadyExistsException;
 use OCP\Files\File;
+use OCP\Files\InvalidPathException;
 use OCP\Files\NotPermittedException;
 
 class PageService {
@@ -37,9 +38,13 @@ class PageService {
 	 * @param File   $file
 	 *
 	 * @return Page
+	 * @throws InvalidPathException
+	 * @throws \OCP\Files\NotFoundException
 	 */
 	private function getPage(File $file): Page {
-		return Page::fromFile($file);
+		$page = new Page();
+		$page->fromFile($file);
+		return $page;
 	}
 
 	/**
@@ -108,8 +113,10 @@ class PageService {
 	 * @param string $title
 	 *
 	 * @return Page
+	 * @throws InvalidPathException
 	 * @throws NotPermittedException
 	 * @throws NotFoundException
+	 * @throws \OCP\Files\NotFoundException
 	 */
 	public function create(string $userId, int $wikiId, string $title): Page {
 		$folder = $this->wikiMapper->getWikiFolder($wikiId);
@@ -117,7 +124,9 @@ class PageService {
 		$filename = NodeHelper::generateFilename($folder, $safeTitle, self::SUFFIX);
 
 		$file = $folder->newFile($filename . self::SUFFIX);
-		return Page::fromFile($file);
+		$page = new Page();
+		$page->fromFile($file);
+		return $page;
 	}
 
 	/**
