@@ -5,7 +5,7 @@
 				<div :class="{menubar: true, loading}">
 					<div class="menubar-icons">
 						<Actions>
-							<ActionButton icon="icon-edit"
+							<ActionButton icon="icon-rename"
 								@click="$emit('edit')">
 								{{ t('wiki', 'Edit') }}
 							</ActionButton>
