@@ -146,11 +146,22 @@ export default {
 
 	computed: {
 		/**
+		 * Return the currently selected wiki
+		 * @returns {Object|null}
+		 */
+		currentWiki() {
+			if (this.selectedWiki === null) {
+				return null
+			}
+			return this.wikis.find((wiki) => wiki.folderName === this.selectedWiki)
+		},
+
+		/**
 		 * Return the currently selected page object
 		 * @returns {Object|null}
 		 */
 		currentPage() {
-			if (this.pageId === null) {
+			if (this.selectedPage === null) {
 				return null
 			}
 			return this.pages.find((page) => page.title === this.selectedPage)
@@ -165,9 +176,18 @@ export default {
 			},
 		},
 
+		pagesUrl() {
+			return generateUrl(`/apps/wiki/_wikis/${this.currentWiki.id}/_pages`)
+		},
 	},
 
 	watch: {
+		'currentWiki': function() {
+			if (this.currentWiki) {
+				this.getPages()
+			}
+		},
+
 		'selectedPage': function() {
 			this.setCurrentVersion(null)
 			this.editToggle = EditState.Unset
@@ -175,7 +195,6 @@ export default {
 	},
 
 	mounted() {
-		this.getPages()
 		this.getWikis()
 	},
 
@@ -185,9 +204,12 @@ export default {
 		 * Get list of all pages
 		 */
 		async getPages() {
+			if (!this.currentWiki) {
+				return
+			}
 			this.loading = true
 			try {
-				const response = await axios.get(generateUrl('/apps/wiki/_pages'))
+				const response = await axios.get(this.pagesUrl)
 				// sort pages by timestamp
 				this.pages = response.data.sort((a, b) => b.timestamp - a.timestamp)
 			} catch (e) {
@@ -202,9 +224,12 @@ export default {
 		 * @param {number} pageId Page ID
 		 */
 		async getPage(pageId) {
+			if (!this.currentWiki) {
+				return
+			}
 			this.loading = true
 			try {
-				const response = await axios.get(generateUrl(`/apps/wiki/_pages/${pageId}`))
+				const response = await axios.get(this.pageUrl(pageId))
 				// update page object from the list of pages
 				this.pages.splice(this.pages.findIndex(page => page.id === response.data.id), 1, response.data)
 			} catch (e) {
@@ -234,7 +259,7 @@ export default {
 			}
 			this.updating = true
 			try {
-				const response = await axios.post(generateUrl(`/apps/wiki/_pages`), page)
+				const response = await axios.post(this.pagesUrl, page)
 				// Add new page to the beginning of pages array
 				this.pages.unshift({ newTitle: '', ...response.data })
 				this.$router.push(`/${this.selectedWiki}/${response.data.title}?fileId=${response.data.id}`)
@@ -269,7 +294,7 @@ export default {
 			try {
 				page.title = newTitle
 				delete page.newTitle
-				const response = await axios.put(generateUrl(`/apps/wiki/_pages/${page.id}`), page)
+				const response = await axios.put(this.pageUrl(page.id), page)
 				// Update title as it might have changed due to filename conflict handling
 				// also update all other attributes such as filename etc.
 				Object.assign(page, response.data)
@@ -288,7 +313,7 @@ export default {
 		async deletePage() {
 			try {
 				const pageId = this.currentPage.id
-				await axios.delete(generateUrl(`/apps/wiki/_pages/${pageId}`))
+				await axios.delete(this.pageUrl(pageId))
 				this.pages.splice(this.pages.findIndex(page => page.id === pageId), 1)
 				this.$router.push(`/${this.selectedWiki}`)
 				showSuccess(t('wiki', 'Page deleted'))
@@ -313,6 +338,10 @@ export default {
 		setCurrentVersion(version) {
 			this.currentVersion = version
 			this.currentVersionTimestamp = (version ? version.timestamp : 0)
+		},
+
+		pageUrl(pageId) {
+			return `${this.pagesUrl}/${pageId}`
 		},
 
 	},

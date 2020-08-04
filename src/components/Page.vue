@@ -20,8 +20,8 @@
 			ref="editor"
 			:key="'editor-' + page.id"
 			:fileid="page.id"
-			:basename="page.filename"
-			:filename="'/' + page.basedir + '/' + page.filename"
+			:basename="page.fileName"
+			:filename="'/' + page.filePath + '/' + page.fileName"
 			:has-preview="true"
 			:active="true"
 			mime="text/markdown"
@@ -98,8 +98,18 @@ export default {
 		 */
 		pageUrl() {
 			return generateRemoteUrl(
-				`dav/files/${this.getUser}/${this.page.basedir}/${this.page.filename}`
+				`dav/files/${this.filePath}`
 			)
+		},
+
+		/**
+		 * Path of the file via dav
+		 * @returns {string}
+		 */
+		filePath() {
+			const parts = this.page.filePath.split('/')
+			parts.splice(2, 1)
+			return parts.join('/')
 		},
 
 		/**
