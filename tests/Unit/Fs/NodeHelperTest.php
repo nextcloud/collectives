@@ -12,10 +12,9 @@ use PHPUnit\Framework\TestCase;
 class NodeHelperTest extends TestCase {
 	private $db;
 	private $l10n;
-	private $root;
 	private $helper;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$this->db = $this->getMockBuilder(IDBConnection::class)
@@ -24,11 +23,8 @@ class NodeHelperTest extends TestCase {
 		$this->l10n = $this->getMockBuilder(IL10N::class)
 			->disableOriginalConstructor()
 			->getMock();
-		$this->root = $this->getMockBuilder(IRootFolder::class)
-			->disableOriginalConstructor()
-			->getMock();
 
-		$this->helper = new NodeHelper($this->db, $this->l10n, $this->root);
+		$this->helper = new NodeHelper($this->db, $this->l10n);
 	}
 
 	public function nameProvider(): array {
