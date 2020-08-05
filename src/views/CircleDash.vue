@@ -18,21 +18,17 @@
 					:title="currentPage.title"
 					:to="`/${selectedWiki}/${currentPage.title}`">
 					<ActionButton
-						icon="icon-edit"
-						:close-after-click="true"
-						@click="edit = !edit">
-						{{ t('wiki', 'Toggle edit mode') }}
-					</ActionButton>
-					<ActionButton
 						icon="icon-delete"
 						@click="deletePage">
 						{{ t('wiki', 'Delete page') }}
 					</ActionButton>
-					<ActionButton icon="icon-menu" @click="showSidebar=!showSidebar">
-						{{ t('wiki', 'Toggle sidebar') }}
-					</ActionButton>
 				</Breadcrumb>
 			</Breadcrumbs>
+			<TopBar v-if="currentPage"
+				:edit="edit"
+				:sidebar="showSidebar"
+				@toggleEdit="edit = !edit"
+				@toggleSidebar="showSidebar = !showSidebar" />
 			<div v-if="selectedWiki" id="app-content-wrapper">
 				<PagesList
 					:show-details="!!currentPage"
@@ -95,6 +91,7 @@ import Nav from '../components/Nav'
 import PagesList from '../components/PagesList'
 import Page from '../components/Page'
 import PageSidebar from '../components/PageSidebar'
+import TopBar from '../components/TopBar'
 import Version from '../components/Version'
 
 const EditState = { Unset: 0, Edit: 1, Read: 2 }
@@ -115,6 +112,7 @@ export default {
 		Page,
 		PagesList,
 		PageSidebar,
+		TopBar,
 		Version,
 	},
 
