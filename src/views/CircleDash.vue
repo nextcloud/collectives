@@ -1,11 +1,11 @@
 <template>
 	<Content app-name="wiki" :class="{'icon-loading': loading}">
-		<Nav v-if="!selectedWiki"
-			:loading="loading"
+		<Nav :loading="loading"
 			:wikis="wikis" />
 		<AppContent>
 			<Breadcrumbs v-if="selectedWiki">
 				<Breadcrumb title="Home"
+					style="opacity: 0"
 					to="/"
 					:primary="true" />
 				<Breadcrumb :title="selectedWiki"
