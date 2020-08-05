@@ -24,7 +24,7 @@ unit:
 
 integration:
   script:
-    - vendor/bin/phpunit --configuration phpunit.integration.xml --coverage-text --colors=never
+    - vendor/bin/behat --config=tests/Integration/config/behat.yml 
   before_script:
     - curl -sS https://getcomposer.org/installer | php
     - php composer.phar install

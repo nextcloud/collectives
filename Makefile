@@ -153,5 +153,5 @@ appstore:
 
 .PHONY: test
 test: composer
-	$(CURDIR)/vendor/phpunit/phpunit/phpunit -c phpunit.xml
-	$(CURDIR)/vendor/phpunit/phpunit/phpunit -c phpunit.integration.xml
+	$(CURDIR)/vendor/bin/phpunit --configuration phpunit.xml
+	$(CURDIR)/vendor/bin/behat --config=tests/Integration/config/behat.yml 
