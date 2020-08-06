@@ -1,38 +1,15 @@
 <template>
 	<Content app-name="wiki" :class="{'icon-loading': loading}">
-		<Nav v-if="!selectedWiki"
-			:loading="loading"
+		<Nav :loading="loading"
 			:wikis="wikis" />
 		<AppContent>
-			<Breadcrumbs v-if="selectedWiki">
-				<Breadcrumb title="Home"
-					to="/"
-					:primary="true" />
-				<Breadcrumb :title="selectedWiki"
-					:to="`/${selectedWiki}`">
-					<ActionButton icon="icon-add" @click="newPage">
-						{{ t('wiki', 'Add a page') }}
-					</ActionButton>
-				</Breadcrumb>
-				<Breadcrumb v-if="currentPage"
-					:title="currentPage.title"
-					:to="`/${selectedWiki}/${currentPage.title}`">
-					<ActionButton
-						icon="icon-edit"
-						:close-after-click="true"
-						@click="edit = !edit">
-						{{ t('wiki', 'Toggle edit mode') }}
-					</ActionButton>
-					<ActionButton
-						icon="icon-delete"
-						@click="deletePage">
-						{{ t('wiki', 'Delete page') }}
-					</ActionButton>
-					<ActionButton icon="icon-menu" @click="showSidebar=!showSidebar">
-						{{ t('wiki', 'Toggle sidebar') }}
-					</ActionButton>
-				</Breadcrumb>
-			</Breadcrumbs>
+			<WikiHeading v-if="currentWiki"
+				:wiki="currentWiki"
+				@newPage="newPage" />
+			<TopBar v-if="currentPage"
+				:edit="edit"
+				:sidebar="showSidebar"
+				@toggleSidebar="showSidebar = !showSidebar" />
 			<div v-if="selectedWiki" id="app-content-wrapper">
 				<PagesList
 					:show-details="!!currentPage"
@@ -51,7 +28,8 @@
 						:page="currentPage"
 						:updating="updating"
 						:edit="edit"
-						@edit="edit = true"
+						@deletePage="deletePage"
+						@toggleEdit="edit = !edit"
 						@renamePage="renamePage" />
 				</AppContentDetails>
 			</div>
@@ -86,16 +64,15 @@ import { generateUrl } from '@nextcloud/router'
 import AppContent from '@nextcloud/vue/dist/Components/AppContent'
 import AppContentDetails from '@nextcloud/vue/dist/Components/AppContentDetails'
 import ActionInput from '@nextcloud/vue/dist/Components/ActionInput'
-import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
-import Breadcrumbs from '@nextcloud/vue/dist/Components/Breadcrumbs'
-import Breadcrumb from '@nextcloud/vue/dist/Components/Breadcrumb'
 import Content from '@nextcloud/vue/dist/Components/Content'
 import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 import Nav from '../components/Nav'
 import PagesList from '../components/PagesList'
 import Page from '../components/Page'
 import PageSidebar from '../components/PageSidebar'
+import TopBar from '../components/TopBar'
 import Version from '../components/Version'
+import WikiHeading from '../components/WikiHeading'
 
 const EditState = { Unset: 0, Edit: 1, Read: 2 }
 
@@ -106,16 +83,15 @@ export default {
 		AppContent,
 		AppContentDetails,
 		ActionInput,
-		ActionButton,
-		Breadcrumbs,
-		Breadcrumb,
 		Content,
 		EmptyContent,
 		Nav,
 		Page,
 		PagesList,
 		PageSidebar,
+		TopBar,
 		Version,
+		WikiHeading,
 	},
 
 	props: {

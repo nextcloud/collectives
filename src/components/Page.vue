@@ -8,6 +8,25 @@
 				:disabled="updating || !savePossible"
 				@keypress.13="focusEditor"
 				@blur="renamePage">
+			<Actions class="top-bar__button" close-after-click="true">
+				<ActionButton v-if="edit"
+					icon="icon-edit"
+					@click="$emit('toggleEdit')">
+					{{ t('wiki', 'View page without editing') }}
+				</ActionButton>
+				<ActionButton v-else
+					icon="icon-rename"
+					@click="$emit('toggleEdit')">
+					{{ t('wiki', 'Edit page') }}
+				</ActionButton>
+			</Actions>
+			<Actions>
+				<ActionButton
+					icon="icon-delete"
+					@click="$emit('deletePage')">
+					{{ t('wiki', 'Delete page') }}
+				</ActionButton>
+			</Actions>
 		</h1>
 		<RichText v-if="readOnly"
 			:page-id="page.id"
@@ -195,11 +214,12 @@ export default {
 	}
 
 	.page-title {
-		padding: 4px 2px 2px 8px;
+		padding: 8px 2px 2px 8px;
 		position: relative;
 		margin: auto;
 		max-width: 670px;
 		margin-bottom: -50px;
+		display: flex;
 	}
 
 	#action-menu button {

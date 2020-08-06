@@ -7,7 +7,8 @@
 				:title="wiki.folderName"
 				:class="{active: isActive(wiki)}"
 				:to="`/${wiki.folderName}`"
-				icon="icon-star" />
+				icon="icon-star"
+				@click="closeNav" />
 		</template>
 	</AppNavigation>
 </template>
@@ -16,6 +17,7 @@
 import AppNavigation from '@nextcloud/vue/dist/Components/AppNavigation'
 import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
 import AppNavigationCaption from '@nextcloud/vue/dist/Components/AppNavigationCaption'
+import { emit } from '@nextcloud/event-bus'
 
 export default {
 	name: 'Nav',
@@ -42,6 +44,10 @@ export default {
 	methods: {
 		isActive(wiki) {
 			return this.selectedWiki === wiki.folderName
+		},
+
+		closeNav() {
+			emit('toggle-navigation', { open: false })
 		},
 	},
 }

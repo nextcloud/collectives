@@ -3,14 +3,7 @@
 		<div id="text-wrapper" class="richEditor">
 			<div id="text" class="editor">
 				<div :class="{menubar: true, loading}">
-					<div class="menubar-icons">
-						<Actions>
-							<ActionButton icon="icon-edit"
-								@click="$emit('edit')">
-								{{ t('wiki', 'Edit') }}
-							</ActionButton>
-						</Actions>
-					</div>
+					<div class="menubar-icons" />
 				</div>
 				<div v-if="!loading">
 					<EditorContent
@@ -43,15 +36,11 @@ import {
 	ListItem,
 } from 'tiptap-extensions'
 import Link from '../marks/link'
-import Actions from '@nextcloud/vue/dist/Components/Actions'
-import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 
 export default {
 	name: 'RichText',
 
 	components: {
-		Actions,
-		ActionButton,
 		EditorContent,
 	},
 
