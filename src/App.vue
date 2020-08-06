@@ -24,6 +24,14 @@
 		z-index: 100;
 	}
 
+	#editor-wrapper #editor div.ProseMirror {
+		margin-top: 5px;
+	}
+
+	#text-wrapper #text div.ProseMirror {
+		margin-top: 5px;
+	}
+
 	.page-title, #titleform input[type="text"] {
 		font-size: 35px;
 		border: none;
