@@ -176,7 +176,6 @@ export default {
 		renamePage() {
 			if (this.page.newTitle) {
 				this.$emit('renamePage', this.page.newTitle)
-				this.$nextTick(this.focusEditor)
 			}
 		},
 

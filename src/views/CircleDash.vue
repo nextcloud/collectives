@@ -29,6 +29,7 @@
 						:updating="updating"
 						:edit="edit"
 						@deletePage="deletePage"
+						@edit="edit = true"
 						@toggleEdit="edit = !edit"
 						@renamePage="renamePage" />
 				</AppContentDetails>
