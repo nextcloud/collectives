@@ -25,11 +25,17 @@
 	}
 
 	.page-title, #titleform input[type="text"] {
-		font-size: 36px;
+		font-size: 35px;
 		border: none;
 		font-weight: 600;
 		color: var(--color-main-text);
 		width: 100%;
+		height: 40px;
+		opacity: 0.8;
+	}
+
+	.page-title, #titleform input[type="text"]:focus {
+		opacity: 1;
 	}
 
 	#action-menu {

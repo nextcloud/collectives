@@ -3,30 +3,13 @@
 		<Nav :loading="loading"
 			:wikis="wikis" />
 		<AppContent>
-			<Breadcrumbs v-if="selectedWiki">
-				<Breadcrumb title="Home"
-					style="opacity: 0"
-					to="/"
-					:primary="true" />
-				<Breadcrumb :title="selectedWiki"
-					:to="`/${selectedWiki}`">
-					<ActionButton icon="icon-add" @click="newPage">
-						{{ t('wiki', 'Add a page') }}
-					</ActionButton>
-				</Breadcrumb>
-				<Breadcrumb v-if="currentPage"
-					:title="currentPage.title"
-					:to="`/${selectedWiki}/${currentPage.title}`">
-					<ActionButton
-						icon="icon-delete"
-						@click="deletePage">
-						{{ t('wiki', 'Delete page') }}
-					</ActionButton>
-				</Breadcrumb>
-			</Breadcrumbs>
+			<WikiHeading v-if="currentWiki"
+				:wiki="currentWiki"
+				@newPage="newPage" />
 			<TopBar v-if="currentPage"
 				:edit="edit"
 				:sidebar="showSidebar"
+				@deletePage="deletePage"
 				@toggleEdit="edit = !edit"
 				@toggleSidebar="showSidebar = !showSidebar" />
 			<div v-if="selectedWiki" id="app-content-wrapper">
@@ -82,9 +65,6 @@ import { generateUrl } from '@nextcloud/router'
 import AppContent from '@nextcloud/vue/dist/Components/AppContent'
 import AppContentDetails from '@nextcloud/vue/dist/Components/AppContentDetails'
 import ActionInput from '@nextcloud/vue/dist/Components/ActionInput'
-import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
-import Breadcrumbs from '@nextcloud/vue/dist/Components/Breadcrumbs'
-import Breadcrumb from '@nextcloud/vue/dist/Components/Breadcrumb'
 import Content from '@nextcloud/vue/dist/Components/Content'
 import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 import Nav from '../components/Nav'
@@ -93,6 +73,7 @@ import Page from '../components/Page'
 import PageSidebar from '../components/PageSidebar'
 import TopBar from '../components/TopBar'
 import Version from '../components/Version'
+import WikiHeading from '../components/WikiHeading'
 
 const EditState = { Unset: 0, Edit: 1, Read: 2 }
 
@@ -103,9 +84,6 @@ export default {
 		AppContent,
 		AppContentDetails,
 		ActionInput,
-		ActionButton,
-		Breadcrumbs,
-		Breadcrumb,
 		Content,
 		EmptyContent,
 		Nav,
@@ -114,6 +92,7 @@ export default {
 		PageSidebar,
 		TopBar,
 		Version,
+		WikiHeading,
 	},
 
 	props: {

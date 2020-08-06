@@ -195,7 +195,7 @@ export default {
 	}
 
 	.page-title {
-		padding: 4px 2px 2px 8px;
+		padding: 8px 2px 2px 8px;
 		position: relative;
 		margin: auto;
 		max-width: 670px;

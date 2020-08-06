@@ -34,6 +34,13 @@
 				{{ t('wiki', 'Edit page') }}
 			</ActionButton>
 		</Actions>
+		<Actions>
+			<ActionButton
+				icon="icon-delete"
+				@click="$emit('deletePage')">
+				{{ t('wiki', 'Delete page') }}
+			</ActionButton>
+		</Actions>
 		<!-- sidebar toggle -->
 		<Actions class="top-bar__button" close-after-click="true">
 			<ActionButton v-if="!sidebar"
