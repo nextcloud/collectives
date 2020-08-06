@@ -9,8 +9,6 @@
 			<TopBar v-if="currentPage"
 				:edit="edit"
 				:sidebar="showSidebar"
-				@deletePage="deletePage"
-				@toggleEdit="edit = !edit"
 				@toggleSidebar="showSidebar = !showSidebar" />
 			<div v-if="selectedWiki" id="app-content-wrapper">
 				<PagesList
@@ -30,7 +28,8 @@
 						:page="currentPage"
 						:updating="updating"
 						:edit="edit"
-						@edit="edit = true"
+						@deletePage="deletePage"
+						@toggleEdit="edit = !edit"
 						@renamePage="renamePage" />
 				</AppContentDetails>
 			</div>
