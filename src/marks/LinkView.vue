@@ -62,7 +62,7 @@ export default {
 		},
 		relPath() {
 			const [, relPath] = this.href.match(/^([^?]*)\?fileId=\d+/)
-			return relPath
+			return unescape(relPath)
 		},
 		viewerHref() {
 			const dir = absolutePath('/Wiki', basedir(this.relPath))
