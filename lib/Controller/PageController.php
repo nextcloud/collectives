@@ -6,22 +6,30 @@ use OCA\Wiki\Service\PageService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
+use OCP\IUserSession;
 
 class PageController extends Controller {
 	/** @var PageService */
 	private $service;
-	/** @var $string */
-	private $userId;
+	/** @var IUserSession */
+	private $userSession;
 
 	use ErrorHelper;
 
 	public function __construct(string $appName,
 								IRequest $request,
 								PageService $service,
-								string $userId) {
+								IUserSession $userSession) {
 		parent::__construct($appName, $request);
 		$this->service = $service;
-		$this->userId = $userId;
+		$this->userSession = $userSession;
+	}
+
+	/**
+	 * @return string
+	 */
+	private function getUserId(): string {
+		return $this->userSession->getUser()->getUID();
 	}
 
 	/**
@@ -31,7 +39,7 @@ class PageController extends Controller {
 	 */
 	public function index(int $wikiId): DataResponse {
 		return $this->handleErrorResponse(function () use ($wikiId) {
-			return $this->service->findAll($this->userId, $wikiId);
+			return $this->service->findAll($this->getUserId(), $wikiId);
 		});
 	}
 
@@ -45,7 +53,7 @@ class PageController extends Controller {
 	 */
 	public function get(int $wikiId, int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($wikiId, $id) {
-			return $this->service->find($this->userId, $wikiId, $id);
+			return $this->service->find($this->getUserId(), $wikiId, $id);
 		});
 	}
 
@@ -59,7 +67,7 @@ class PageController extends Controller {
 	 */
 	public function create(int $wikiId, string $title): DataResponse {
 		return $this->handleErrorResponse(function () use ($wikiId, $title) {
-			return $this->service->create($this->userId, $wikiId, $title);
+			return $this->service->create($this->getUserId(), $wikiId, $title);
 		});
 	}
 
@@ -74,7 +82,7 @@ class PageController extends Controller {
 	 */
 	public function rename(int $wikiId, int $id, string $title): DataResponse {
 		return $this->handleErrorResponse(function () use ($wikiId, $id, $title) {
-			return $this->service->rename($this->userId, $wikiId, $id, $title);
+			return $this->service->rename($this->getUserId(), $wikiId, $id, $title);
 		});
 	}
 
@@ -88,7 +96,7 @@ class PageController extends Controller {
 	 */
 	public function destroy(int $wikiId, int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($wikiId, $id) {
-			return $this->service->delete($this->userId, $wikiId, $id);
+			return $this->service->delete($this->getUserId(), $wikiId, $id);
 		});
 	}
 }

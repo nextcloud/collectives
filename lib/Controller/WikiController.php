@@ -6,23 +6,30 @@ use OCA\Wiki\Service\WikiCircleService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
+use OCP\IUserSession;
 
 class WikiController extends Controller {
 	/** @var WikiCircleService */
 	private $service;
-	/** @var string */
-	private $userId;
+	/** @var IUserSession */
+	private $userSession;
 
 	use ErrorHelper;
 
 	public function __construct(string $AppName,
 								IRequest $request,
 								WikiCircleService $service,
-								string $userId
-	) {
+								IUserSession $userSession) {
 		parent::__construct($AppName, $request);
 		$this->service = $service;
-		$this->userId = $userId;
+		$this->userSession = $userSession;
+	}
+
+	/**
+	 * @return string
+	 */
+	private function getUserId(): string {
+		return $this->userSession->getUser()->getUID();
 	}
 
 	/**
@@ -32,7 +39,7 @@ class WikiController extends Controller {
 	 */
 	public function index(): DataResponse {
 		return $this->handleErrorResponse(function () {
-			return $this->service->getWikis($this->userId);
+			return $this->service->getWikis($this->getUserId());
 		});
 	}
 
@@ -45,7 +52,7 @@ class WikiController extends Controller {
 	 */
 	public function create(string $name): DataResponse {
 		return $this->handleErrorResponse(function () use ($name) {
-			return $this->service->createWiki($this->userId, $name);
+			return $this->service->createWiki($this->getUserId(), $name);
 		});
 	}
 
@@ -58,7 +65,7 @@ class WikiController extends Controller {
 	 */
 	public function destroy(int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($id) {
-			return $this->service->deleteWiki($this->userId, $id);
+			return $this->service->deleteWiki($this->getUserId(), $id);
 		});
 	}
 }
