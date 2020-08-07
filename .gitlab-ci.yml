@@ -10,7 +10,7 @@ variables:
   # Configure mysql environment variables (https://hub.docker.com/r/_/mysql/)
   MYSQL_DATABASE: mysql_database
   MYSQL_ROOT_PASSWORD: mysql_strong_password
-  NEXTCLOUD_SOURCE: '/srv/nextcloud/server'
+  NEXTCLOUD_SOURCE: '/var/www/html'
 
 unit:
   script:
@@ -24,12 +24,15 @@ unit:
 
 integration:
   script:
-    - occ app:enable wiki
     - vendor/bin/behat --config=tests/Integration/config/behat.yml 
   before_script:
     - curl -sS https://getcomposer.org/installer | php
     - php composer.phar install
     - ln -s `pwd` $NEXTCLOUD_SOURCE/apps/wiki
+    - sudo -u www-data $NEXTCLOUD_SOURCE/occ app:enable wiki
+    - INTERNAL_IP_ADDRESS="$(ip a show type veth | grep -o "inet [0-9]*\.[0-9]*\.[0-9]*\.[0-9]*" | grep -o "[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*")"
+    - echo "$INTERNAL_IP_ADDRESS nextcloud.local"
+    - echo "$INTERNAL_IP_ADDRESS nextcloud.local" >>/etc/hosts
   services:
     - mysql:5.7
 
