@@ -24,6 +24,7 @@ unit:
 
 integration:
   script:
+    - occ app:enable wiki
     - vendor/bin/behat --config=tests/Integration/config/behat.yml 
   before_script:
     - curl -sS https://getcomposer.org/installer | php
