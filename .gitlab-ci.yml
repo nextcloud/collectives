@@ -33,6 +33,7 @@ integration:
     - INTERNAL_IP_ADDRESS="$(ip a show type veth | grep -o "inet [0-9]*\.[0-9]*\.[0-9]*\.[0-9]*" | grep -o "[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*")"
     - echo "$INTERNAL_IP_ADDRESS nextcloud.local"
     - echo "$INTERNAL_IP_ADDRESS nextcloud.local" >>/etc/hosts
+    - apache2-foreground &
   services:
     - mysql:5.7
 
