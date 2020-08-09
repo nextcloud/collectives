@@ -7,4 +7,4 @@ default:
                 - '%paths.base%/../features'
             contexts:
                 - FeatureContext:
-                    baseUrl: 'https://nextcloud.local/index.php'
+                    baseUrl: 'http://nextcloud.local/index.php'
