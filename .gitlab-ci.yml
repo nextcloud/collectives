@@ -24,7 +24,7 @@ unit:
 
 integration:
   script:
-    - vendor/bin/behat --config=tests/Integration/config/behat.yml 
+    - vendor/bin/behat --config=tests/Integration/config/behat.yml --profile ci
   before_script:
     - curl -sS https://getcomposer.org/installer | php
     - php composer.phar install
