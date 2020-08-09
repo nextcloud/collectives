@@ -116,7 +116,7 @@ class WikiCircleService {
 		try {
 			$folder->lock(ILockingProvider::LOCK_SHARED);
 		} catch (LockedException $e) {
-			throw new OCSException('Could not create share for ' . $folder->getName());
+			throw new OCSException('Failed to create lock for ' . $folder->getName() . ': ' . $e->getMessage());
 		}
 		$share->setSharedWith($circle->getUniqueId());
 		$share->setPermissions(Constants::PERMISSION_ALL);
@@ -127,7 +127,7 @@ class WikiCircleService {
 		try {
 			$this->shareManager->createShare($share);
 		} catch (\Exception $e) {
-			throw new OCSException('Could not create share for ' . $folder->getName());
+			throw new OCSException('Failed to create share for ' . $folder->getName() . ': ' . $e->getMessage());
 		} finally {
 			$folder->unlock(ILockingProvider::LOCK_SHARED);
 		}
