@@ -76,7 +76,7 @@ class FeatureContext implements Context {
 
 		$data = new TableNode([
 			['ident', $user],
-			['type', 8],
+			['type', 1],
 			['instance', '']
 		]);
 		$this->sendRequest('PUT', '/apps/circles/v1/circles/' . $circleUniqueId . '/member', $data);
