@@ -255,6 +255,7 @@ export default {
 			const name = event.currentTarget[1].value
 			const wiki = { name }
 			const response = await axios.post(generateUrl(`/apps/wiki/_wikis`), wiki)
+			await this.getWikis()
 			this.$router.push(`/${response.data.folderName}`)
 		},
 
