@@ -165,6 +165,23 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @When user :user renames page :page to :newpage in :wiki
+	 *
+	 * @param string $user
+	 * @param string $page
+	 * @param string $newpage
+	 * @param string $wiki
+	 */
+	public function userRenamesPage(string $user, string $page, string $newpage, string $wiki): void {
+		$this->setCurrentUser($user);
+		$wikiId = $this->wikiIdByName($wiki);
+		$pageId = $this->pageIdByName($wikiId, $page);
+		$formData = new TableNode([['title', $newpage]]);
+		$this->sendRequest('PUT', '/apps/wiki/_wikis/' . $wikiId . '/_pages/' . $pageId, $formData);
+		$this->assertStatusCode($this->response, 200);
+	}
+
+	/**
 	 * @When user :user is member of circle :circle with admin :admin
 	 *
 	 * @param string $user
