@@ -5,12 +5,20 @@
 			:to="`/${$route.params.selectedWiki}/${page.title}`"
 			:class="{active: isActive(page)}"
 			class="app-content-list-item">
-			<div class="app-content-list-item-icon" :style="iconStyle(page.id)">
+			<div class="app-content-list-item-icon"
+				:style="iconStyle(`Page-${page.id}`)">
 				{{ page.title[0] }}
 			</div>
 			<div class="app-content-list-item-line-one">
 				{{ page.title }}
 			</div>
+			<span class="app-content-list-item-details"
+				:class="{active: recentlyEdited(page)}">
+				{{ lastUpdate(page) }}
+				<Avatar v-if="page.user && page.user !== OC.currentUser"
+					:user="page.user"
+					size="16" />
+			</span>
 		</router-link>
 	</AppContentList>
 </template>
@@ -18,12 +26,15 @@
 <script>
 
 import AppContentList from '@nextcloud/vue/dist/Components/AppContentList'
+import Avatar from '@nextcloud/vue/dist/Components/Avatar'
+import moment from '@nextcloud/moment'
 
 export default {
 	name: 'PagesList',
 
 	components: {
 		AppContentList,
+		Avatar,
 	},
 
 	props: {
@@ -52,8 +63,17 @@ export default {
 		},
 
 		iconStyle(id) {
-			const c = `page-${id}`.toRgb()
+			const c = id.toRgb()
 			return `background-color: rgb(${c.r}, ${c.g}, ${c.b})`
+		},
+
+		lastUpdate(page) {
+			return moment.unix(page.timestamp).fromNow()
+		},
+
+		// was edited in the last 5 Minutes
+		recentlyEdited(page) {
+			return (Date.now() / 1000) - page.timestamp < 300
 		},
 	},
 }
@@ -65,5 +85,8 @@ export default {
 		line-height: 40px;
 		width: 30px;
 		left: 12px;
+	}
+	.app-content-list .app-content-list-item .app-content-list-item-details.active {
+		opacity: 1;
 	}
 </style>
