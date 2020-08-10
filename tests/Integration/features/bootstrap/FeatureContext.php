@@ -29,9 +29,6 @@ class FeatureContext implements Context {
 	private $requestTokens;
 
 	/** @var array */
-	private $createdWikiIds;
-
-	/** @var array */
 	private $clientOptions;
 
 	/**
@@ -48,17 +45,123 @@ class FeatureContext implements Context {
     }
 
 	/**
-	 * @When user :user creates wiki :name
+	 * @When user :user creates wiki :wiki
 	 *
 	 * @param string $user
-	 * @param string $name
+	 * @param string $wiki
 	 */
-    public function userCreatesWiki(string $user, string $name): void {
+	public function userCreatesWiki(string $user, string $wiki): void {
+		$this->setCurrentUser($user);
+		$formData = new TableNode([['name', $wiki]]);
+		$this->sendRequest('POST', '/apps/wiki/_wikis', $formData);
+		$this->assertStatusCode($this->response, 200);
+	}
+
+	/**
+	 * @When user :user creates page :page in :wiki
+	 *
+	 * @param string $user
+	 * @param string $page
+	 * @param string $wiki
+	 */
+    public function userCreatesPage(string $user, string $page, string $wiki): void {
     	$this->setCurrentUser($user);
-		$formData = new TableNode([['name', $name]]);
-    	$this->sendRequest('POST', '/apps/wiki/_wikis', $formData);
+		$wikiId = $this->wikiIdByName($wiki);
+		$formData = new TableNode([['title', $page]]);
+    	$this->sendRequest('POST', '/apps/wiki/_wikis/' . $wikiId . '/_pages', $formData);
     	$this->assertStatusCode($this->response, 200);
-		$this->addCreatedWikiId($this->response);
+	}
+
+	/**
+	 * @Then user :user sees wiki :wiki
+	 *
+	 * @param string $user
+	 * @param string $wiki
+	 */
+    public function userSeesWiki(string $user, string $wiki): void {
+		$this->setCurrentUser($user);
+		$this->sendRequest('GET', '/apps/wiki/_wikis');
+		$this->assertStatusCode($this->response, 200);
+		$this->assertWikiByName($this->response, $wiki);
+    }
+
+	/**
+	 * @Then user :user sees page :page in :wiki
+	 *
+	 * @param string $user
+	 * @param string $page
+	 * @param string $wiki
+	 */
+	public function userSeesPage(string $user, string $page, string $wiki): void {
+		$this->setCurrentUser($user);
+		$wikiId = $this->wikiIdByName($wiki);
+		$this->sendRequest('GET', '/apps/wiki/_wikis/' . $wikiId . '/_pages');
+		$this->assertStatusCode($this->response, 200);
+		$this->assertPageByTitle($this->response, $page);
+	}
+
+	/**
+	 * @Then user :user doesn't see wiki :wiki
+	 *
+	 * @param string $user
+	 * @param string $wiki
+	 */
+	public function userDoesntSeeWiki(string $user, string $wiki): void {
+		$this->setCurrentUser($user);
+		$this->sendRequest('GET', '/apps/wiki/_wikis');
+		$this->assertStatusCode($this->response, 200);
+		$this->assertWikiByName($this->response, $wiki, true);
+	}
+
+	/**
+	 * @Then user :user doesn't see page :page in :wiki
+	 *
+	 * @param string $user
+	 * @param string $page
+	 * @param string $wiki
+	 */
+    public function userDoesntSeePage(string $user, string $page, string $wiki): void {
+		$this->setCurrentUser($user);
+		$wikiId = $this->wikiIdByName($wiki);
+		$this->sendRequest('GET', '/apps/wiki/_wikis/' . $wikiId . '/_pages');
+		$this->assertStatusCode($this->response, 200);
+		$this->assertPageByTitle($this->response, $page, true);
+    }
+
+	/**
+	 * @When user :user deletes wiki :wiki
+	 * @When user :user :fails to delete wiki :wiki
+	 *
+	 * @param string $user
+	 * @param string $wiki
+	 * @param string $fail
+	 */
+    public function userDeletesWiki(string $user, string $wiki, ?string $fail = null): void {
+		$this->setCurrentUser($user);
+		$wikiId = $this->wikiIdByName($wiki);
+		if ("fails" === $fail) {
+			if (null !== $wikiId) {
+				throw new RuntimeException('Got a wikiId while not expecting one');
+			}
+			return;
+		}
+		$this->sendRequest('DELETE', '/apps/wiki/_wikis/' . $wikiId);
+		$this->assertStatusCode($this->response, 200);
+	}
+
+	/**
+	 * @When user :user deletes page :page in :wiki
+	 *
+	 * @param string $user
+	 * @param string $page
+	 * @param string $wiki
+	 */
+	public function userDeletesPage(string $user, string $page, string $wiki): void {
+		$this->setCurrentUser($user);
+		$wikiId = $this->wikiIdByName($wiki);
+		$pageId = $this->pageIdByName($wikiId, $page);
+		$this->sendRequest('DELETE', '/apps/wiki/_wikis/' . $wikiId . '/_pages/' . $pageId);
+		$this->assertStatusCode($this->response, 200);
 	}
 
 	/**
@@ -68,7 +171,7 @@ class FeatureContext implements Context {
 	 * @param string $circle
 	 * @param string $admin
 	 */
-    public function userIsMemberOfCircle(string $user, string $circle, string $admin): void {
+	public function userIsMemberOfCircle(string $user, string $circle, string $admin): void {
 		$this->setCurrentUser($admin);
 		$this->sendRequest('GET', '/apps/wiki/_wikis');
 		$this->assertStatusCode($this->response, 200);
@@ -81,53 +184,6 @@ class FeatureContext implements Context {
 		]);
 		$this->sendRequest('PUT', '/apps/circles/v1/circles/' . $circleUniqueId . '/member', $data);
 		$this->assertStatusCode($this->response, 201);
-    }
-
-	/**
-	 * @Then user :user sees wiki :name
-	 *
-	 * @param string $user
-	 * @param string $name
-	 */
-    public function userSeesWiki(string $user, string $name): void {
-		$this->setCurrentUser($user);
-		$this->sendRequest('GET', '/apps/wiki/_wikis');
-		$this->assertStatusCode($this->response, 200);
-		$this->assertWikiByName($this->response, $name);
-    }
-
-	/**
-	 * @Then user :user doesn't see wiki :name
-	 *
-	 * @param string $user
-	 * @param string $name
-	 */
-    public function userDoesntSeeWiki(string $user, string $name): void {
-		$this->setCurrentUser($user);
-		$this->sendRequest('GET', '/apps/wiki/_wikis');
-		$this->assertStatusCode($this->response, 200);
-		$this->assertWikiByName($this->response, $name, true);
-    }
-
-	/**
-	 * @When user :user deletes wiki :name
-	 * @When user :user :fails to delete wiki :name
-	 *
-	 * @param string $user
-	 * @param string $name
-	 * @param string $fail
-	 */
-    public function userDeletesWiki(string $user, string $name, ?string $fail = null): void {
-		$this->setCurrentUser($user);
-		$wikiId = $this->wikiIdByName($name);
-		if ("fails" === $fail) {
-			if (null !== $wikiId) {
-				throw new RuntimeException('Got a wikiId while not expecting one');
-			}
-			return;
-		}
-		$this->sendRequest('DELETE', '/apps/wiki/_wikis/' . $wikiId);
-		$this->assertStatusCode($this->response, 200);
 	}
 
 	/**
@@ -144,6 +200,26 @@ class FeatureContext implements Context {
 		foreach ($jsonBody as $wiki) {
 			if ($name === $wiki['name']) {
 				return $wiki['id'];
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * @param int    $wikiId
+	 * @param string $name
+	 *
+	 * @return int|null
+	 */
+	private function pageIdByName(int $wikiId, string $name): ?int {
+		$this->sendRequest('GET', '/apps/wiki/_wikis/' . $wikiId . '/_pages');
+		if (200 !== $this->response->getStatusCode()) {
+			throw new RuntimeException('Unable to get list of pages for wiki ' . $wikiId);
+		}
+		$jsonBody = json_decode($this->response->getBody()->getContents(), true);
+		foreach ($jsonBody as $page) {
+			if ($name === $page['title']) {
+				return $page['id'];
 			}
 		}
 		return null;
@@ -240,17 +316,6 @@ class FeatureContext implements Context {
 
 	/**
 	 * @param Response $response
-	 */
-	private function addCreatedWikiId(Response $response): void {
-		$jsonBody = json_decode($response->getBody()->getContents(), true);
-		$this->createdWikiIds[] = [
-			'user' => $this->currentUser,
-			'id' => $jsonBody['id']
-		];
-	}
-
-	/**
-	 * @param Response $response
 	 * @param string   $name
 	 *
 	 * @return string|null
@@ -288,6 +353,24 @@ class FeatureContext implements Context {
 			Assert::assertContains($name, $wikiNames);
 		} else {
 			Assert::assertNotContains($name, $wikiNames);
+		}
+	}
+
+	/**
+	 * @param Response  $response
+	 * @param string    $title
+	 * @param bool|null $revert
+	 */
+	private function assertPageByTitle(Response $response, string $title, ?bool $revert = false): void {
+		$jsonBody = json_decode($response->getBody()->getContents(), true);
+		$pageTitles = [];
+		foreach ($jsonBody as $page) {
+			$pageTitles[] = $page['title'];
+		}
+		if (false === $revert) {
+			Assert::assertContains($title, $pageTitles);
+		} else {
+			Assert::assertNotContains($title, $pageTitles);
 		}
 	}
 }
