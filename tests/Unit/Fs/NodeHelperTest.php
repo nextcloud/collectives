@@ -4,7 +4,6 @@ namespace Unit\Fs;
 
 use OC\Files\Node\Folder;
 use OCA\Wiki\Fs\NodeHelper;
-use OCP\Files\IRootFolder;
 use OCP\IDBConnection;
 use OCP\IL10N;
 use PHPUnit\Framework\TestCase;

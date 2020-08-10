@@ -21,6 +21,11 @@ Feature: wikiPages
     When user "jane" creates page "firstpage" in "mywiki"
     Then user "jane" sees page "firstpage (3)" in "mywiki"
 
+  Scenario: Rename page
+    When user "jane" renames page "firstpage (2)" to "thirdpage" in "mywiki"
+    Then user "jane" sees page "thirdpage" in "mywiki"
+    And user "jane" doesn't see page "firstpage (2)" in "mywiki"
+
   Scenario: Delete a page
     When user "alice" deletes page "firstpage" in "mywiki"
     And user "jane" deletes page "secondpage" in "mywiki"
