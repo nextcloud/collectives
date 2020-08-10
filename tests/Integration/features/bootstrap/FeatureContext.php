@@ -39,10 +39,10 @@ class FeatureContext implements Context {
 	 *
 	 * @param $baseUrl
 	 */
-    public function __construct($baseUrl) {
-    	$this->baseUrl = $baseUrl;
-    	$this->clientOptions = ['verify' => false];
-    }
+	public function __construct($baseUrl) {
+		$this->baseUrl = $baseUrl;
+		$this->clientOptions = ['verify' => false];
+	}
 
 	/**
 	 * @When user :user creates wiki :wiki
@@ -64,12 +64,12 @@ class FeatureContext implements Context {
 	 * @param string $page
 	 * @param string $wiki
 	 */
-    public function userCreatesPage(string $user, string $page, string $wiki): void {
-    	$this->setCurrentUser($user);
+	public function userCreatesPage(string $user, string $page, string $wiki): void {
+		$this->setCurrentUser($user);
 		$wikiId = $this->wikiIdByName($wiki);
 		$formData = new TableNode([['title', $page]]);
-    	$this->sendRequest('POST', '/apps/wiki/_wikis/' . $wikiId . '/_pages', $formData);
-    	$this->assertStatusCode($this->response, 200);
+		$this->sendRequest('POST', '/apps/wiki/_wikis/' . $wikiId . '/_pages', $formData);
+		$this->assertStatusCode($this->response, 200);
 	}
 
 	/**
@@ -78,12 +78,12 @@ class FeatureContext implements Context {
 	 * @param string $user
 	 * @param string $wiki
 	 */
-    public function userSeesWiki(string $user, string $wiki): void {
+	public function userSeesWiki(string $user, string $wiki): void {
 		$this->setCurrentUser($user);
 		$this->sendRequest('GET', '/apps/wiki/_wikis');
 		$this->assertStatusCode($this->response, 200);
 		$this->assertWikiByName($this->response, $wiki);
-    }
+	}
 
 	/**
 	 * @Then user :user sees page :page in :wiki
@@ -120,13 +120,13 @@ class FeatureContext implements Context {
 	 * @param string $page
 	 * @param string $wiki
 	 */
-    public function userDoesntSeePage(string $user, string $page, string $wiki): void {
+	public function userDoesntSeePage(string $user, string $page, string $wiki): void {
 		$this->setCurrentUser($user);
 		$wikiId = $this->wikiIdByName($wiki);
 		$this->sendRequest('GET', '/apps/wiki/_wikis/' . $wikiId . '/_pages');
 		$this->assertStatusCode($this->response, 200);
 		$this->assertPageByTitle($this->response, $page, true);
-    }
+	}
 
 	/**
 	 * @When user :user deletes wiki :wiki
@@ -136,7 +136,7 @@ class FeatureContext implements Context {
 	 * @param string $wiki
 	 * @param string $fail
 	 */
-    public function userDeletesWiki(string $user, string $wiki, ?string $fail = null): void {
+	public function userDeletesWiki(string $user, string $wiki, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$wikiId = $this->wikiIdByName($wiki);
 		if ("fails" === $fail) {
@@ -251,12 +251,12 @@ class FeatureContext implements Context {
 	 *
 	 * @throws GuzzleException
 	 */
-    private function sendRequest(string $verb,
+	private function sendRequest(string $verb,
 								 string $url,
 								 ?TableNode $body = null,
 								 array $headers = [],
-                                 ?bool $auth = true): void {
-    	$fullUrl = $this->baseUrl . $url;
+								 ?bool $auth = true): void {
+		$fullUrl = $this->baseUrl . $url;
 
 		$client = new Client($this->clientOptions);
 
@@ -281,9 +281,9 @@ class FeatureContext implements Context {
 		}
 
 		try {
-    		$this->response = $client->{$verb}($fullUrl, $options);
+			$this->response = $client->{$verb}($fullUrl, $options);
 		} catch (ClientException $e) {
-    		$this->response = $e->getResponse();
+			$this->response = $e->getResponse();
 		}
 	}
 
@@ -327,8 +327,8 @@ class FeatureContext implements Context {
 	/**
 	 * @param string $user
 	 */
-    private function setCurrentUser(string $user): void {
-    	$this->currentUser = $user;
+	private function setCurrentUser(string $user): void {
+		$this->currentUser = $user;
 	}
 
 	/**
@@ -352,7 +352,7 @@ class FeatureContext implements Context {
 	 * @param string   $message
 	 */
 	private function assertStatusCode(Response $response, int $statusCode, string $message = ''): void {
-    	Assert::assertEquals($statusCode, $response->getStatusCode(), $message);
+		Assert::assertEquals($statusCode, $response->getStatusCode(), $message);
 	}
 
 	/**
