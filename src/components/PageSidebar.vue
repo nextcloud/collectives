@@ -1,7 +1,7 @@
 <template>
 	<AppSidebar
 		ref="sidebar"
-		:title="'Page: ' + page.title"
+		:title="page.title"
 		@close="$emit('close')">
 		<SidebarVersionsTab
 			:page-id="page.id"

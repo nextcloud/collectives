@@ -12,6 +12,7 @@
 # * curl: used if phpunit and composer are not installed to fetch them from the web
 # * tar: for building the archive
 # * npm: for building and testing everything JS
+# * php: for installing composer and running nextclouds translation tool
 #
 # If no composer.json is in the app root directory, the Composer step
 # will be skipped. The same goes for the package.json which can be located in
@@ -41,12 +42,15 @@
 
 app_name=$(notdir $(CURDIR))
 build_tools_directory=$(CURDIR)/build/tools
+vendor_bin_directory=$(CURDIR)/vendor/bin
 source_build_directory=$(CURDIR)/build/artifacts/source
 source_package_name=$(source_build_directory)/$(app_name)
 appstore_build_directory=$(CURDIR)/build/artifacts/appstore
 appstore_package_name=$(appstore_build_directory)/$(app_name)
 npm=$(shell which npm 2> /dev/null)
 composer=$(shell which composer 2> /dev/null)
+translationtool_url=https://github.com/nextcloud/docker-ci/raw/master/translations/translationtool/translationtool.phar
+
 
 all: build
 
@@ -88,6 +92,14 @@ ifeq (,$(wildcard $(CURDIR)/package.json))
 	cd js && $(npm) run build
 else
 	npm run build
+endif
+
+# Installs nextclouds translation tool
+.PHONY: translationtool
+translationtool:
+ifeq (, $(wildcard $(vendor_bin_directory)/translationtool.phar))
+	mkdir -p $(vendor_bin_directory)
+	curl $(translationtool_url) --silent --location --output $(vendor_bin_directory)/translationtool.phar
 endif
 
 # Removes the appstore build
@@ -154,4 +166,22 @@ appstore:
 .PHONY: test
 test: composer
 	$(CURDIR)/vendor/bin/phpunit --configuration phpunit.xml
-	$(CURDIR)/vendor/bin/behat --config=tests/Integration/config/behat.yml 
+	$(CURDIR)/vendor/bin/behat --config=tests/Integration/config/behat.yml
+
+# Extracts translatable strings from source code
+# and builds the transtlation template.
+#
+# Filtering stderr for "node_modules/"
+# to work around an issue in translationtool:
+# https://github.com/nextcloud/docker-ci/pull/236
+.PHONY: pot
+pot: translationtool
+	# { php $(vendor_bin_directory)/translationtool.phar create-pot-files 2>&1 1>&3 | grep -q --invert-match "node_modules/"; } 3>&1 1>&2
+	php $(vendor_bin_directory)/translationtool.phar create-pot-files 2>&1 \
+		| grep --invert-match "node_modules/"
+	rm -f $(CURDIR)/translationfiles/templates/moment.pot
+	rm -f $(CURDIR)/translationfiles/templates/@nextcloud.pot
+
+.PHONY: l10n
+l10n: translationtool
+	php $(vendor_bin_directory)/translationtool.phar convert-po-files
