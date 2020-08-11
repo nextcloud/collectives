@@ -3,20 +3,25 @@
 namespace OCA\Wiki\Controller;
 
 use OCA\Viewer\Event\LoadViewer;
+use OCP\App\IAppManager;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IRequest;
 
 class StartController extends Controller {
+	/** @var IAppManager */
+	private $appManager;
 	/** @var IEventDispatcher */
 	private $eventDispatcher;
 
 	public function __construct(string $AppName,
 								IRequest $request,
+								IAppManager $appManager,
 								IEventDispatcher $eventDispatcher
 	) {
 		parent::__construct($AppName, $request);
+		$this->appManager = $appManager;
 		$this->eventDispatcher = $eventDispatcher;
 	}
 
@@ -35,7 +40,25 @@ class StartController extends Controller {
 	 * @return TemplateResponse
 	 */
 	public function index(string $path): TemplateResponse {
+		if ($appsMissing = $this->checkDependencies(['circles', 'text', 'viewer'])) {
+			return new TemplateResponse('wiki', 'error', ['appsMissing' => $appsMissing]);  // templates/error.php
+		}
 		$this->eventDispatcher->dispatch(LoadViewer::class, new LoadViewer());
 		return new TemplateResponse('wiki', 'main');  // templates/main.php
+	}
+
+	/**
+	 * @param $apps
+	 *
+	 * @return array
+	 */
+	private function checkDependencies($apps): array {
+		$appsMissing = [];
+		foreach ($apps as $app) {
+			if (!$this->appManager->isEnabledForUser($app)) {
+				$appsMissing[] = $app;
+			}
+		}
+		return $appsMissing;
 	}
 }
