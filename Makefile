@@ -13,6 +13,7 @@
 # * tar: for building the archive
 # * npm: for building and testing everything JS
 # * php: for installing composer and running nextclouds translation tool
+# * gettext: used by translationtool to generate pot files
 #
 # If no composer.json is in the app root directory, the Composer step
 # will be skipped. The same goes for the package.json which can be located in
