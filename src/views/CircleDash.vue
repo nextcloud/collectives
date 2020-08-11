@@ -43,7 +43,7 @@
 							ref="newWikiName"
 							icon="icon-star"
 							@submit="newWiki">
-							Name for a new wiki
+							{{ t('wiki', 'Name for a new wiki') }}
 						</ActionInput>
 					</ul>
 				</template>
