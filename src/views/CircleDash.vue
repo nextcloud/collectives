@@ -60,6 +60,7 @@
 
 <script>
 import axios from '@nextcloud/axios'
+import { emit } from '@nextcloud/event-bus'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
 import AppContent from '@nextcloud/vue/dist/Components/AppContent'
@@ -162,6 +163,7 @@ export default {
 		'currentWiki': function() {
 			if (this.currentWiki) {
 				this.getPages()
+				this.closeNav()
 			}
 		},
 
@@ -322,6 +324,9 @@ export default {
 			return `${this.pagesUrl}/${pageId}`
 		},
 
+		closeNav() {
+			emit('toggle-navigation', { open: false })
+		},
 	},
 }
 </script>
