@@ -22,9 +22,10 @@ The app is *not* published yet to the Nextcloud app store, so you have to
 install it manually:
 
 1. Clone this into the `apps` folder of your Nextcloud
-2. Install PHP dependencies by running `composer install`
+2. Install PHP dependencies by running `make composer`
 3. Install NodeJS dependencies by running `npm install`
-4. Compile NodeJS assets by running `npm run build`
+4. Compile NodeJS assets by running `make npm`
+5. Compile translation files by running `make l10n`
 
 Afterwards, you can enable the app from the Nextcloud app management menu.
 
