@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2020-08-11 19:06+0200\n"
+"POT-Creation-Date: 2020-08-11 21:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,121 +18,121 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: /home/next/code/nextcloud/server/apps/wiki/specialAppInfoFakeDummyForL10nScript.php:2
+#: /nextcloud/server/apps-extra/wiki/specialAppInfoFakeDummyForL10nScript.php:2
 msgid "Wiki"
 msgstr ""
 
-#: /home/next/code/nextcloud/server/apps/wiki/specialAppInfoFakeDummyForL10nScript.php:3
+#: /nextcloud/server/apps-extra/wiki/specialAppInfoFakeDummyForL10nScript.php:3
 msgid "A wiki for Nextcloud"
 msgstr ""
 
-#: /home/next/code/nextcloud/server/apps/wiki/specialAppInfoFakeDummyForL10nScript.php:4
+#: /nextcloud/server/apps-extra/wiki/specialAppInfoFakeDummyForL10nScript.php:4
 msgid "The Wiki app adds wiki functionality to Nextcloud."
 msgstr ""
 
-#: /home/next/code/nextcloud/server/apps/wiki/specialVueFakeDummyForL10nScript.js:1
+#: /nextcloud/server/apps-extra/wiki/specialVueFakeDummyForL10nScript.js:1
 msgid "Select a wiki"
 msgstr ""
 
-#: /home/next/code/nextcloud/server/apps/wiki/specialVueFakeDummyForL10nScript.js:2
+#: /nextcloud/server/apps-extra/wiki/specialVueFakeDummyForL10nScript.js:2
 msgid "Title"
 msgstr ""
 
-#: /home/next/code/nextcloud/server/apps/wiki/specialVueFakeDummyForL10nScript.js:3
+#: /nextcloud/server/apps-extra/wiki/specialVueFakeDummyForL10nScript.js:3
 msgid "View page without editing"
 msgstr ""
 
-#: /home/next/code/nextcloud/server/apps/wiki/specialVueFakeDummyForL10nScript.js:4
+#: /nextcloud/server/apps-extra/wiki/specialVueFakeDummyForL10nScript.js:4
 msgid "Edit page"
 msgstr ""
 
-#: /home/next/code/nextcloud/server/apps/wiki/specialVueFakeDummyForL10nScript.js:5
+#: /nextcloud/server/apps-extra/wiki/specialVueFakeDummyForL10nScript.js:5
 msgid "Delete page"
 msgstr ""
 
-#: /home/next/code/nextcloud/server/apps/wiki/specialVueFakeDummyForL10nScript.js:6
+#: /nextcloud/server/apps-extra/wiki/specialVueFakeDummyForL10nScript.js:6
 msgid "Current version"
 msgstr ""
 
-#: /home/next/code/nextcloud/server/apps/wiki/specialVueFakeDummyForL10nScript.js:7
+#: /nextcloud/server/apps-extra/wiki/specialVueFakeDummyForL10nScript.js:7
 msgid "No other versions available"
 msgstr ""
 
-#: /home/next/code/nextcloud/server/apps/wiki/specialVueFakeDummyForL10nScript.js:8
+#: /nextcloud/server/apps-extra/wiki/specialVueFakeDummyForL10nScript.js:8
 msgid "Could not get page versions"
 msgstr ""
 
-#: /home/next/code/nextcloud/server/apps/wiki/specialVueFakeDummyForL10nScript.js:9
-#: /home/next/code/nextcloud/server/apps/wiki/specialVueFakeDummyForL10nScript.js:10
+#: /nextcloud/server/apps-extra/wiki/specialVueFakeDummyForL10nScript.js:9
+#: /nextcloud/server/apps-extra/wiki/specialVueFakeDummyForL10nScript.js:10
 msgid "%n byte"
 msgid_plural "%n bytes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: /home/next/code/nextcloud/server/apps/wiki/specialVueFakeDummyForL10nScript.js:11
+#: /nextcloud/server/apps-extra/wiki/specialVueFakeDummyForL10nScript.js:11
 msgid "Show sidebar"
 msgstr ""
 
-#: /home/next/code/nextcloud/server/apps/wiki/specialVueFakeDummyForL10nScript.js:12
+#: /nextcloud/server/apps-extra/wiki/specialVueFakeDummyForL10nScript.js:12
 msgid "Restore this version"
 msgstr ""
 
-#: /home/next/code/nextcloud/server/apps/wiki/specialVueFakeDummyForL10nScript.js:13
+#: /nextcloud/server/apps-extra/wiki/specialVueFakeDummyForL10nScript.js:13
 msgid "Reverted {page} to revision {timestamp}."
 msgstr ""
 
-#: /home/next/code/nextcloud/server/apps/wiki/specialVueFakeDummyForL10nScript.js:14
+#: /nextcloud/server/apps-extra/wiki/specialVueFakeDummyForL10nScript.js:14
 msgid "Failed to revert {page} to revision {timestamp}."
 msgstr ""
 
-#: /home/next/code/nextcloud/server/apps/wiki/specialVueFakeDummyForL10nScript.js:15
+#: /nextcloud/server/apps-extra/wiki/specialVueFakeDummyForL10nScript.js:15
 msgid "Add a page"
 msgstr ""
 
-#: /home/next/code/nextcloud/server/apps/wiki/specialVueFakeDummyForL10nScript.js:16
+#: /nextcloud/server/apps-extra/wiki/specialVueFakeDummyForL10nScript.js:16
 msgid "No wiki selected"
 msgstr ""
 
-#: /home/next/code/nextcloud/server/apps/wiki/specialVueFakeDummyForL10nScript.js:17
+#: /nextcloud/server/apps-extra/wiki/specialVueFakeDummyForL10nScript.js:17
 msgid "Select a wiki on the left or create a new one:"
 msgstr ""
 
-#: /home/next/code/nextcloud/server/apps/wiki/specialVueFakeDummyForL10nScript.js:18
+#: /nextcloud/server/apps-extra/wiki/specialVueFakeDummyForL10nScript.js:18
 msgid "Name for a new wiki"
 msgstr ""
 
-#: /home/next/code/nextcloud/server/apps/wiki/specialVueFakeDummyForL10nScript.js:19
+#: /nextcloud/server/apps-extra/wiki/specialVueFakeDummyForL10nScript.js:19
 msgid "Could not fetch pages"
 msgstr ""
 
-#: /home/next/code/nextcloud/server/apps/wiki/specialVueFakeDummyForL10nScript.js:20
+#: /nextcloud/server/apps-extra/wiki/specialVueFakeDummyForL10nScript.js:20
 msgid "Could not create the page"
 msgstr ""
 
-#: /home/next/code/nextcloud/server/apps/wiki/specialVueFakeDummyForL10nScript.js:21
+#: /nextcloud/server/apps-extra/wiki/specialVueFakeDummyForL10nScript.js:21
 msgid "Could not rename the page"
 msgstr ""
 
-#: /home/next/code/nextcloud/server/apps/wiki/specialVueFakeDummyForL10nScript.js:22
+#: /nextcloud/server/apps-extra/wiki/specialVueFakeDummyForL10nScript.js:22
 msgid "Page deleted"
 msgstr ""
 
-#: /home/next/code/nextcloud/server/apps/wiki/specialVueFakeDummyForL10nScript.js:23
+#: /nextcloud/server/apps-extra/wiki/specialVueFakeDummyForL10nScript.js:23
 msgid "Could not delete the page"
 msgstr ""
 
-#: /home/next/code/nextcloud/server/apps/wiki/specialVueFakeDummyForL10nScript.js:24
+#: /nextcloud/server/apps-extra/wiki/specialVueFakeDummyForL10nScript.js:24
 msgid "Could not fetch page ${pageId}"
 msgstr ""
 
-#: /home/next/code/nextcloud/server/apps/wiki/templates/error.php:4
+#: /nextcloud/server/apps-extra/wiki/templates/error.php:4
 msgid "Error: Missing apps"
 msgstr ""
 
-#: /home/next/code/nextcloud/server/apps/wiki/templates/error.php:9
+#: /nextcloud/server/apps-extra/wiki/templates/error.php:9
 msgid "The following dependency apps are missing: "
 msgstr ""
 
-#: /home/next/code/nextcloud/server/apps/wiki/templates/error.php:27
+#: /nextcloud/server/apps-extra/wiki/templates/error.php:27
 msgid "Please ask the administrator to enable these apps."
 msgstr ""
