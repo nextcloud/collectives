@@ -34,6 +34,7 @@ import {
 	Italic,
 	ListItem,
 	Strike,
+	Bold,
 } from 'tiptap-extensions'
 import { Image } from '../nodes'
 import Link from '../marks/link'
@@ -102,6 +103,7 @@ export default {
 				extensions: [
 					new Heading(),
 					new Code(),
+					new Bold(),
 					new Italic(),
 					new Strike(),
 					new HardBreak(),
