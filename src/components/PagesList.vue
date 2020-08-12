@@ -38,18 +38,19 @@ export default {
 	},
 
 	props: {
-		pages: {
-			type: Array,
-			required: true,
-		},
-		currentPage: {
-			type: Object,
-			required: false,
-			default: null,
-		},
 		showDetails: {
 			type: Boolean,
 			required: true,
+		},
+	},
+
+	computed: {
+		pages() {
+			return this.$store.state.pages
+		},
+
+		currentPage() {
+			return this.$store.getters.currentPage
 		},
 	},
 

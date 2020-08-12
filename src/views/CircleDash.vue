@@ -103,7 +103,6 @@ export default {
 
 	data: function() {
 		return {
-			pages: [],
 			currentVersion: null,
 			updating: false,
 			showSidebar: false,
@@ -131,13 +130,10 @@ export default {
 
 		/**
 		 * Return the currently selected page object
-		 * @returns {Object|null}
+		 * @returns {Object|undefined}
 		 */
 		currentPage() {
-			if (this.selectedPage === null) {
-				return null
-			}
-			return this.pages.find((page) => page.title === this.selectedPage)
+			return this.$store.getters.currentPage
 		},
 
 		edit: {
@@ -159,7 +155,11 @@ export default {
 		},
 
 		pagesUrl() {
-			return generateUrl(`/apps/wiki/_wikis/${this.currentWiki.id}/_pages`)
+			return this.$store.getters.pageUrl
+		},
+
+		pages() {
+			return this.$store.state.pages
 		},
 
 		wikis() {
@@ -198,16 +198,12 @@ export default {
 			if (!this.currentWiki) {
 				return
 			}
-			this.loading = true
 			try {
-				const response = await axios.get(this.pagesUrl)
-				// sort pages by timestamp
-				this.pages = response.data.sort((a, b) => b.timestamp - a.timestamp)
+				await this.$store.dispatch('getPages')
 			} catch (e) {
 				console.error(e)
 				showError(t('wiki', 'Could not fetch pages'))
 			}
-			this.loading = false
 		},
 
 		/**
@@ -234,7 +230,12 @@ export default {
 		 * Get list of all wikis
 		 */
 		getWikis() {
-			this.$store.dispatch('getWikis')
+			try {
+				this.$store.dispatch('getWikis')
+			} catch (e) {
+				console.error(e)
+				showError(t('wiki', 'Could not fetch wikis'))
+			}
 		},
 
 		/**

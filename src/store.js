@@ -32,10 +32,22 @@ export default new Vuex.Store({
 
 	state: {
 		loading: true,
+		pages: [],
 		wikis: [],
 	},
 
 	getters: {
+
+		selectedPage(state) {
+			return state.route.params.selectedPage
+		},
+
+		currentPage(state, getters) {
+			return state.pages.find(
+				(page) => page.title === getters.selectedPage
+			)
+		},
+
 		selectedWiki(state) {
 			return state.route.params.selectedWiki
 		},
@@ -44,6 +56,10 @@ export default new Vuex.Store({
 			return state.wikis.find(
 				(wiki) => wiki.folderName === getters.selectedWiki
 			)
+		},
+
+		pagesUrl(_state, getters) {
+			return generateUrl(`/apps/wiki/_wikis/${getters.currentWiki.id}/_pages`)
 		},
 	},
 
@@ -57,11 +73,27 @@ export default new Vuex.Store({
 		wikis(state, wikis) {
 			state.wikis = wikis
 		},
+		pages(state, pages) {
+			state.pages = pages
+		},
 	},
 
 	actions: {
 		/**
 		 * Get list of all pages
+		 */
+		async getPages({ commit, getters }) {
+			commit('loading')
+			const response = await axios.get(getters.pagesUrl)
+			this.commit('pages',
+				// sort pages by timestamp
+				response.data.sort((a, b) => b.timestamp - a.timestamp)
+			)
+			commit('done')
+		},
+
+		/**
+		 * Get list of all wikis
 		 */
 		async getWikis({ commit }) {
 			commit('loading')
