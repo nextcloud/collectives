@@ -24,20 +24,14 @@ export default {
 		AppNavigationItem,
 		AppNavigationCaption,
 	},
-	props: {
-		wikis: {
-			type: Array,
-			required: true,
-		},
-		selectedWiki: {
-			type: String,
-			required: false,
-			default: null,
+	computed: {
+		wikis() {
+			return this.$store.state.wikis
 		},
 	},
 	methods: {
 		isActive(wiki) {
-			return this.selectedWiki === wiki.folderName
+			return this.$store.getters.selectedWiki === wiki.folderName
 		},
 	},
 }

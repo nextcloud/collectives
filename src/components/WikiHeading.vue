@@ -16,16 +16,12 @@
 export default {
 	name: 'WikiHeading',
 
-	props: {
-		wiki: {
-			type: Object,
-			required: true,
-		},
-	},
-
 	computed: {
 		name() {
 			return this.wiki.name
+		},
+		wiki() {
+			return this.$store.getters.currentWiki
 		},
 	},
 }

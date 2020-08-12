@@ -1,9 +1,8 @@
 <template>
 	<Content app-name="wiki" :class="{'icon-loading': loading}">
-		<Nav :wikis="wikis" />
+		<Nav />
 		<AppContent>
 			<WikiHeading v-if="currentWiki"
-				:wiki="currentWiki"
 				@newPage="newPage" />
 			<TopBar v-if="currentPage"
 				:edit="edit"
@@ -95,11 +94,6 @@ export default {
 	},
 
 	props: {
-		selectedWiki: {
-			type: String,
-			required: false,
-			default: null,
-		},
 		selectedPage: {
 			type: String,
 			required: false,
@@ -121,13 +115,18 @@ export default {
 	computed: {
 		/**
 		 * Return the currently selected wiki
-		 * @returns {Object|null}
+		 * @returns {Object|undefined}
 		 */
 		currentWiki() {
-			if (this.selectedWiki === null) {
-				return null
-			}
-			return this.wikis.find((wiki) => wiki.folderName === this.selectedWiki)
+			return this.$store.getters.currentWiki
+		},
+
+		/**
+		 * Return the url param for the currently selected wiki
+		 * @returns {String|undefined}
+		 */
+		selectedWiki() {
+			return this.$store.getters.selectedWiki
 		},
 
 		/**
@@ -232,7 +231,7 @@ export default {
 		},
 
 		/**
-		 * Get list of all pages
+		 * Get list of all wikis
 		 */
 		getWikis() {
 			this.$store.dispatch('getWikis')

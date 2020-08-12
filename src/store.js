@@ -35,6 +35,18 @@ export default new Vuex.Store({
 		wikis: [],
 	},
 
+	getters: {
+		selectedWiki(state) {
+			return state.route.params.selectedWiki
+		},
+
+		currentWiki(state, getters) {
+			return state.wikis.find(
+				(wiki) => wiki.folderName === getters.selectedWiki
+			)
+		},
+	},
+
 	mutations: {
 		loading(state) {
 			state.loading = true
