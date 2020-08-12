@@ -32,9 +32,10 @@ import {
 	CodeBlock,
 	HorizontalRule,
 	Italic,
-	Strike,
 	ListItem,
+	Strike,
 } from 'tiptap-extensions'
+import { Image } from '../nodes'
 import Link from '../marks/link'
 
 export default {
@@ -113,6 +114,7 @@ export default {
 					new Link({
 						openOnClick: true,
 					}),
+					new Image(),
 				],
 				content: this.htmlContent,
 			})
