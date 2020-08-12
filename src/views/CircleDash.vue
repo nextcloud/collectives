@@ -1,7 +1,6 @@
 <template>
 	<Content app-name="wiki" :class="{'icon-loading': loading}">
-		<Nav :loading="loading"
-			:wikis="wikis" />
+		<Nav :wikis="wikis" />
 		<AppContent>
 			<WikiHeading v-if="currentWiki"
 				:wiki="currentWiki"
@@ -13,7 +12,6 @@
 			<div v-if="selectedWiki" id="app-content-wrapper">
 				<PagesList
 					:show-details="!!currentPage"
-					:loading="loading"
 					:pages="pages"
 					:current-page="currentPage" />
 				<AppContentDetails v-if="currentPage">
@@ -113,7 +111,6 @@ export default {
 		return {
 			pages: [],
 			currentVersion: null,
-			loading: true,
 			updating: false,
 			showSidebar: false,
 			editToggle: EditState.Unset,
@@ -151,6 +148,15 @@ export default {
 			},
 			set: function(val) {
 				this.editToggle = val ? EditState.Edit : EditState.Read
+			},
+		},
+
+		loading: {
+			get: function() {
+				return this.$store.state.loading
+			},
+			set: function(val) {
+				this.$store.commit(val ? 'loading' : 'done')
 			},
 		},
 

@@ -21,18 +21,19 @@
  */
 
 import Vue from 'vue'
-import App from './App'
-import router from './router'
-import store from './store'
+import Vuex from 'vuex'
+Vue.use(Vuex)
 
-Vue.prototype.t = t
-Vue.prototype.n = n
-Vue.prototype.OC = OC
-Vue.prototype.OCA = OCA
-
-export default new Vue({
-	el: '#content',
-	router,
-	store,
-	render: h => h(App),
+export default new Vuex.Store({
+	state: {
+		loading: true,
+	},
+	mutations: {
+		loading(state) {
+			state.loading = true
+		},
+		done(state) {
+			state.loading = false
+		},
+	},
 })

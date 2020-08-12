@@ -34,10 +34,6 @@ export default {
 			required: false,
 			default: null,
 		},
-		loading: {
-			type: Boolean,
-			required: true,
-		},
 	},
 	methods: {
 		isActive(wiki) {

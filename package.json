@@ -30,7 +30,8 @@
     "tiptap-extensions": "^1.29.1",
     "tiptap-utils": "^1.9.1",
     "vue": "^2.6.11",
-    "vue-router": "^3.3.1"
+    "vue-router": "^3.3.1",
+    "vuex": "^3.5.1"
   },
   "browserslist": [
     "extends @nextcloud/browserslist-config"

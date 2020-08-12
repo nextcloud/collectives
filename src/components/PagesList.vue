@@ -47,10 +47,6 @@ export default {
 			required: false,
 			default: null,
 		},
-		loading: {
-			type: Boolean,
-			required: true,
-		},
 		showDetails: {
 			type: Boolean,
 			required: true,
