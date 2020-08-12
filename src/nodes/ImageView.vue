@@ -31,10 +31,7 @@
 			</transition>
 			<transition name="fade">
 				<div v-show="loaded" class="image__caption">
-					<input ref="altInput"
-						type="text"
-						:value="alt"
-						@keyup.enter="updateAlt()">
+					{{ alt }}
 				</div>
 			</transition>
 		</div>
@@ -48,10 +45,7 @@
 				</div>
 			</transition><transition name="fade">
 				<div v-show="loaded" class="image__caption">
-					<input ref="altInput"
-						type="text"
-						:value="alt"
-						@keyup.enter="updateAlt()">
+					{{ alt }}
 				</div>
 			</transition>
 		</div>
@@ -146,15 +140,8 @@ export default {
 				})
 			},
 		},
-		alt: {
-			get() {
-				return this.node.attrs.alt ? this.node.attrs.alt : ''
-			},
-			set(alt) {
-				this.updateAttrs({
-					alt,
-				})
-			},
+		alt() {
+			return this.node.attrs.alt ? this.node.attrs.alt : ''
 		},
 		t() {
 			return (a, s) => window.t(a, s)
@@ -180,9 +167,6 @@ export default {
 		}
 	},
 	methods: {
-		updateAlt() {
-			this.alt = this.$refs.altInput.value
-		},
 		onLoaded() {
 			this.loaded = true
 		},
