@@ -115,7 +115,6 @@ export default {
 			showSidebar: false,
 			editToggle: EditState.Unset,
 			currentVersionTimestamp: 0,
-			wikis: [],
 		}
 	},
 
@@ -162,6 +161,10 @@ export default {
 
 		pagesUrl() {
 			return generateUrl(`/apps/wiki/_wikis/${this.currentWiki.id}/_pages`)
+		},
+
+		wikis() {
+			return this.$store.state.wikis
 		},
 	},
 
@@ -231,12 +234,8 @@ export default {
 		/**
 		 * Get list of all pages
 		 */
-		async getWikis() {
-			this.loading = true
-			const view = this
-			const response = await axios.get(generateUrl(`/apps/wiki/_wikis`))
-			view.wikis = response.data
-			view.loading = false
+		getWikis() {
+			this.$store.dispatch('getWikis')
 		},
 
 		/**

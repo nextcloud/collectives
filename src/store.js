@@ -22,12 +22,19 @@
 
 import Vue from 'vue'
 import Vuex from 'vuex'
+
+import axios from '@nextcloud/axios'
+import { generateUrl } from '@nextcloud/router'
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
+
 	state: {
 		loading: true,
+		wikis: [],
 	},
+
 	mutations: {
 		loading(state) {
 			state.loading = true
@@ -35,5 +42,22 @@ export default new Vuex.Store({
 		done(state) {
 			state.loading = false
 		},
+		wikis(state, wikis) {
+			state.wikis = wikis
+		},
 	},
+
+	actions: {
+		/**
+		 * Get list of all pages
+		 */
+		async getWikis({ commit }) {
+			commit('loading')
+			const response = await axios.get(generateUrl(`/apps/wiki/_wikis`))
+
+			commit('wikis', response.data)
+			commit('done')
+		},
+	},
+
 })
