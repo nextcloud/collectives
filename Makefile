@@ -69,6 +69,9 @@ endif
 ifneq (,$(wildcard $(CURDIR)/js/package.json))
 	make npm
 endif
+ifneq (,$(wildcard $(CURDIR)/translationfiles/templates/wiki.pot))
+	make l10n
+endif
 
 # Installs and updates the composer dependencies. If composer is not installed
 # a copy is fetched from the web
