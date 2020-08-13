@@ -21,7 +21,7 @@
 						:updating="updating"
 						@toggleSidebar="showSidebar=!showSidebar"
 						@resetVersion="resetVersion" />
-					<Page key="selectedPage"
+					<Page key="currentPage.timestamp"
 						:page="currentPage"
 						:updating="updating"
 						:edit="edit"
@@ -225,9 +225,9 @@ export default {
 		/**
 		 * Get list of all wikis
 		 */
-		getWikis() {
+		async getWikis() {
 			try {
-				this.$store.dispatch('getWikis')
+				await this.$store.dispatch('getWikis')
 			} catch (e) {
 				console.error(e)
 				showError(t('wiki', 'Could not fetch wikis'))
