@@ -160,7 +160,7 @@ export default {
 	},
 
 	watch: {
-		'currentWiki': function() {
+		'selectedWiki': function() {
 			if (this.currentWiki) {
 				this.getPages()
 				this.closeNav()
