@@ -2,6 +2,7 @@
 
 namespace Unit\Model;
 
+use OC\Files\Mount\MountPoint;
 use OCA\Wiki\Model\Page;
 use OCP\Files\File;
 use PHPUnit\Framework\TestCase;
@@ -13,7 +14,13 @@ class PageTest extends TestCase {
 		$fileMTime = '';
 		$fileSize = 100;
 		$fileName = 'name.md';
-		$filePath = '/path/to/file/name.txt';
+		$fileMountPoint = '/mountpoint/';
+		$fileInternalPath = 'path/to/file/name.txt';
+
+		$mountPoint = $this->getMockBuilder(MountPoint::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$mountPoint->method('getMountPoint')->willReturn($fileMountPoint);
 
 		$file = $this->getMockBuilder(File::class)
 			->disableOriginalConstructor()
@@ -22,7 +29,8 @@ class PageTest extends TestCase {
 		$file->method('getMTime')->willReturn($fileMTime);
 		$file->method('getSize')->willReturn($fileSize);
 		$file->method('getName')->willReturn($fileName);
-		$file->method('getPath')->willReturn($filePath);
+		$file->method('getMountPoint')->willReturn($mountPoint);
+		$file->method('getInternalPath')->willReturn($fileInternalPath);
 
 		$page = new Page();
 		$page->fromFile($file);
@@ -32,6 +40,6 @@ class PageTest extends TestCase {
 		self::assertEquals($page->getTimestamp(), $fileMTime);
 		self::assertEquals($page->getSize(), $fileSize);
 		self::assertEquals($page->getFileName(), $fileName);
-		self::assertEquals($page->getFilePath(), $filePath);
+		self::assertEquals($page->getFilePath(), $fileMountPoint . $fileInternalPath);
 	}
 }
