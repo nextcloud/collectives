@@ -56,6 +56,6 @@ class Page extends Entity implements JsonSerializable {
 		$this->setTimestamp($file->getMTime());
 		$this->setSize($file->getSize());
 		$this->setFileName($file->getName());
-		$this->setFilePath($file->getPath());
+		$this->setFilePath($file->getMountPoint()->getMountPoint() . $file->getInternalPath());
 	}
 }

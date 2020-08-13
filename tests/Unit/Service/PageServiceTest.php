@@ -2,6 +2,7 @@
 
 namespace Unit\Service;
 
+use OC\Files\Mount\MountPoint;
 use OC\Files\Node\File;
 use OC\Files\Node\Folder;
 use OCA\Wiki\Db\WikiMapper;
@@ -39,6 +40,11 @@ class PageServiceTest extends TestCase {
 	}
 
 	public function testIsPage(): void {
+		$mountPoint = $this->getMockBuilder(MountPoint::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$mountPoint->method('getMountPoint')->willReturn('');
+
 		$file = $this->getMockBuilder(File::class)
 			->disableOriginalConstructor()
 			->getMock();
@@ -46,6 +52,8 @@ class PageServiceTest extends TestCase {
 			->willReturnOnConsecutiveCalls(
 				'page.md', 'image.jpg'
 			);
+		$file->method('getMountPoint')
+			->willReturn($mountPoint);
 
 		self::assertTrue($this->service->isPage($file));
 		self::assertFalse($this->service->isPage($file));
@@ -57,12 +65,19 @@ class PageServiceTest extends TestCase {
 		$filesJustMd = [];
 		$pages = [];
 		foreach ($fileNameList as $fileName) {
+			$mountPoint = $this->getMockBuilder(MountPoint::class)
+				->disableOriginalConstructor()
+				->getMock();
+			$mountPoint->method('getMountPoint')->willReturn('');
+
 			// Add all files to $filesNotJustMd
 			$file = $this->getMockBuilder(File::class)
 				->disableOriginalConstructor()
 				->getMock();
 			$file->method('getName')
 				->willReturn($fileName);
+			$file->method('getMountPoint')
+				->willReturn($mountPoint);
 			$filesNotJustMd[] = $file;
 
 			// Only add markdown files to $filesJustMd
