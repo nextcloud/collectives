@@ -173,8 +173,12 @@ export default {
 		},
 	},
 
-	mounted() {
-		this.getWikis()
+	async mounted() {
+		await this.getWikis()
+		if (this.currentWiki) {
+			this.getPages()
+			this.closeNav()
+		}
 	},
 
 	methods: {
