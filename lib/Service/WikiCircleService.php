@@ -4,7 +4,6 @@ namespace OCA\Wiki\Service;
 
 use OC\User\NoUserException;
 use OCA\Circles\Api\v1\Circles;
-use OCA\Circles\Model\BaseMember;
 use OCA\Wiki\Db\Wiki;
 use OCA\Wiki\Db\WikiMapper;
 use OCA\Wiki\Fs\NodeHelper;
@@ -27,19 +26,32 @@ class WikiCircleService {
 	private $root;
 	/** @var WikiMapper */
 	private $wikiMapper;
+	/** @var WikiCircleHelper */
+	private $wikiCircleHelper;
 	/** @var NodeHelper */
 	private $nodeHelper;
 	/** @var IManager */
 	private $shareManager;
 
+	/**
+	 * WikiCircleService constructor.
+	 *
+	 * @param IRootFolder      $root
+	 * @param WikiMapper       $wikiMapper
+	 * @param WikiCircleHelper $wikiCircleHelper
+	 * @param NodeHelper       $nodeHelper
+	 * @param IManager         $shareManager
+	 */
 	public function __construct(
 		IRootFolder $root,
 		WikiMapper $wikiMapper,
+		WikiCircleHelper $wikiCircleHelper,
 		NodeHelper $nodeHelper,
 		IManager $shareManager
 	) {
 		$this->root = $root;
 		$this->wikiMapper = $wikiMapper;
+		$this->wikiCircleHelper = $wikiCircleHelper;
 		$this->nodeHelper = $nodeHelper;
 		$this->shareManager = $shareManager;
 	}
@@ -143,6 +155,7 @@ class WikiCircleService {
 	 * @throws NotFoundException
 	 */
 	public function deleteWiki(string $userId, int $id): WikiInfo {
+		$this->wikiCircleHelper->userHasWiki($userId, $id);
 		if (null === $wiki = $this->wikiMapper->findById($id)) {
 			throw new NotFoundException('Failed to delete wiki, not found: ' . $id);
 		}
@@ -151,11 +164,6 @@ class WikiCircleService {
 
 		try {
 			$circle = Circles::detailsCircle($wiki->getCircleUniqueId());
-			// TODO: directly use `Circles::TYPE_USER` once Circles release after 0.19.4 got released
-			$circleMember = Circles::getMember($wiki->getCircleUniqueId(), $userId, BaseMember::TYPE_USER, true);
-			if ($userId !== $circleMember->getUserId()) {
-				throw new NotFoundException('Failed to delete wiki, not found: ' . $id);
-			}
 			Circles::destroyCircle($wiki->getCircleUniqueId());
 		} catch (QueryException $e) {
 			throw new NotFoundException('Failed to delete wiki (circle not deleted): ' . $id);

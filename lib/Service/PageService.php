@@ -8,6 +8,7 @@ use OCA\Wiki\Fs\NodeHelper;
 use OCA\Wiki\Model\Page;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
+use OCP\AppFramework\QueryException;
 use OCP\Files\AlreadyExistsException;
 use OCP\Files\File;
 use OCP\Files\InvalidPathException;
@@ -21,17 +22,23 @@ class PageService {
 	private $nodeHelper;
 	/** @var WikiMapper */
 	private $wikiMapper;
+	/** @var WikiCircleHelper */
+	private $wikiCircleHelper;
 
 	/**
 	 * PageService constructor.
 	 *
-	 * @param NodeHelper $nodeHelper
-	 * @param WikiMapper $wikiMapper
+	 * @param NodeHelper       $nodeHelper
+	 * @param WikiMapper       $wikiMapper
+	 * @param WikiCircleHelper $wikiCircleHelper
 	 */
 	public function __construct(NodeHelper $nodeHelper,
-								WikiMapper $wikiMapper) {
+								WikiMapper $wikiMapper,
+								WikiCircleHelper $wikiCircleHelper
+	) {
 		$this->nodeHelper = $nodeHelper;
 		$this->wikiMapper = $wikiMapper;
+		$this->wikiCircleHelper = $wikiCircleHelper;
 	}
 
 	/**
@@ -83,6 +90,7 @@ class PageService {
 	 * @throws NotFoundException
 	 */
 	public function findAll(string $userId, int $wikiId): array {
+		$this->wikiCircleHelper->userHasWiki($userId, $wikiId);
 		$pages = [];
 		$folder = $this->wikiMapper->getWikiFolder($wikiId);
 		foreach ($folder->getDirectoryListing() as $file) {
@@ -103,6 +111,7 @@ class PageService {
 	 * @throws NotFoundException
 	 */
 	public function find(string $userId, int $wikiId, int $id): Page {
+		$this->wikiCircleHelper->userHasWiki($userId, $wikiId);
 		$folder = $this->wikiMapper->getWikiFolder($wikiId);
 		return $this->getPage($this->nodeHelper->getFileById($folder, $id));
 	}
@@ -136,8 +145,10 @@ class PageService {
 	 * @param string $title
 	 *
 	 * @return Page
+	 * @throws NotFoundException
 	 */
 	public function rename(string $userId, int $wikiId, int $id, string $title): Page {
+		$this->wikiCircleHelper->userHasWiki($userId, $wikiId);
 		try {
 			$page = $this->find($userId, $wikiId, $id);
 
@@ -169,8 +180,10 @@ class PageService {
 	 * @param int    $id
 	 *
 	 * @return Page
+	 * @throws NotFoundException
 	 */
 	public function delete(string $userId, int $wikiId, int $id): Page {
+		$this->wikiCircleHelper->userHasWiki($userId, $wikiId);
 		try {
 			$page = $this->find($userId, $wikiId, $id);
 			$folder = $this->wikiMapper->getWikiFolder($wikiId);
