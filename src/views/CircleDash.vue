@@ -291,9 +291,7 @@ export default {
 		 */
 		async deletePage() {
 			try {
-				const pageId = this.currentPage.id
-				await axios.delete(this.pageUrl(pageId))
-				this.pages.splice(this.pages.findIndex(page => page.id === pageId), 1)
+				await this.$store.dispatch('deletePage')
 				this.$router.push(`/${this.selectedWiki}`)
 				showSuccess(t('wiki', 'Page deleted'))
 			} catch (e) {

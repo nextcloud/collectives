@@ -98,6 +98,9 @@ export default new Vuex.Store({
 			state.pages.unshift(page)
 			state.newPage = page
 		},
+		deletePage(state, id) {
+			state.pages.splice(state.pages.findIndex(p => p.id === id), 1)
+		},
 	},
 
 	actions: {
@@ -137,6 +140,16 @@ export default new Vuex.Store({
 			const response = await axios.post(getters.pagesUrl, page)
 			// Add new page to the beginning of pages array
 			commit('addPage', { newTitle: '', ...response.data })
+			commit('done')
+		},
+
+		/**
+		 * Delete the current page
+		 */
+		async deletePage({ commit, getters, state }) {
+			commit('loading')
+			await axios.delete(getters.pageUrl(getters.currentPage.id))
+			commit('deletePage', getters.currentPage.id)
 			commit('done')
 		},
 
