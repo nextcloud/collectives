@@ -53,7 +53,7 @@ class WikiCircleService {
 	 */
 	public function getWikis(string $userId): array {
 		$wikis = [];
-		$joinedCircles = Circles::joinedCircles();
+		$joinedCircles = Circles::joinedCircles($userId);
 		foreach ($joinedCircles as $jc) {
 			if (null === $w = $this->wikiMapper->findByCircleId($jc->getUniqueId())) {
 				continue;
@@ -151,6 +151,7 @@ class WikiCircleService {
 
 		try {
 			$circle = Circles::detailsCircle($wiki->getCircleUniqueId());
+			// TODO: directly use `Circles::TYPE_USER` once Circles release after 0.19.4 got released
 			$circleMember = Circles::getMember($wiki->getCircleUniqueId(), $userId, BaseMember::TYPE_USER, true);
 			if ($userId !== $circleMember->getUserId()) {
 				throw new NotFoundException('Failed to delete wiki, not found: ' . $id);
