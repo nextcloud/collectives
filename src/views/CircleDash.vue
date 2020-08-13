@@ -154,10 +154,6 @@ export default {
 			},
 		},
 
-		pagesUrl() {
-			return this.$store.getters.pageUrl
-		},
-
 		pages() {
 			return this.$store.state.pages
 		},
@@ -240,7 +236,7 @@ export default {
 		async newPage() {
 			try {
 				await this.$store.dispatch('newPage')
-				this.$router.push(this.$store.getters.newPagePath)
+				this.$router.push(this.$store.getters.updatedPagePath)
 			} catch (e) {
 				console.error(e)
 				showError(t('wiki', 'Could not create the page'))
@@ -268,21 +264,13 @@ export default {
 			if (this.currentPage.title === newTitle) {
 				return
 			}
-			const page = this.currentPage
-			this.updating = true
 			try {
-				page.title = newTitle
-				delete page.newTitle
-				const response = await axios.put(this.pageUrl(page.id), page)
-				// Update title as it might have changed due to filename conflict handling
-				// also update all other attributes such as filename etc.
-				Object.assign(page, response.data)
-				this.$router.push(`/${this.selectedWiki}/${response.data.title}?fileId=${response.data.id}`)
+				await this.$store.dispatch('renamePage', newTitle)
+				this.$router.push(this.$store.getters.updatedPagePath)
 			} catch (e) {
 				console.error(e)
 				showError(t('wiki', 'Could not rename the page'))
 			}
-			this.updating = false
 		},
 
 		/**
@@ -315,10 +303,6 @@ export default {
 		setCurrentVersion(version) {
 			this.currentVersion = version
 			this.currentVersionTimestamp = (version ? version.timestamp : 0)
-		},
-
-		pageUrl(pageId) {
-			return `${this.pagesUrl}/${pageId}`
 		},
 
 		closeNav() {
