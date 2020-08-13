@@ -235,18 +235,12 @@ export default {
 		},
 
 		/**
-		 * Create a new page and focus the page content field automatically
+		 * Create a new page and focus the page  automatically
 		 */
 		async newPage() {
-			const page = {
-				title: 'New Page',
-			}
-			this.updating = true
 			try {
-				const response = await axios.post(this.pagesUrl, page)
-				// Add new page to the beginning of pages array
-				this.pages.unshift({ newTitle: '', ...response.data })
-				this.$router.push(`/${this.selectedWiki}/${response.data.title}?fileId=${response.data.id}`)
+				await this.$store.dispatch('newPage')
+				this.$router.push(this.$store.getters.newPagePath)
 			} catch (e) {
 				console.error(e)
 				showError(t('wiki', 'Could not create the page'))

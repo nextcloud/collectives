@@ -34,6 +34,7 @@ export default new Vuex.Store({
 		loading: true,
 		pages: [],
 		wikis: [],
+		newPage: {},
 	},
 
 	getters: {
@@ -66,6 +67,11 @@ export default new Vuex.Store({
 			return (pageId) => `${getters.pagesUrl}/${pageId}`
 		},
 
+		newPagePath(state, getters) {
+			const wiki = getters.selectedWiki
+			const { title, id } = state.newPage
+			return `/${wiki}/${title}?fileId=${id}`
+		},
 	},
 
 	mutations: {
@@ -81,12 +87,16 @@ export default new Vuex.Store({
 		pages(state, pages) {
 			state.pages = pages
 		},
-		update_page(state, page) {
+		updatePage(state, page) {
 			state.pages.splice(
 				state.pages.findIndex(p => p.id === page.id),
 				1,
 				page
 			)
+		},
+		addPage(state, page) {
+			state.pages.unshift(page)
+			state.newPage = page
 		},
 	},
 
@@ -112,7 +122,21 @@ export default new Vuex.Store({
 		async getPage({ commit, getters, state }, pageId) {
 			commit('loading')
 			const response = await axios.get(getters.pageUrl(pageId))
-			commit('update_page', response.data)
+			commit('updatePage', response.data)
+			commit('done')
+		},
+
+		/**
+		 * Create a new page
+		 */
+		async newPage({ commit, getters }) {
+			commit('loading')
+			const page = {
+				title: 'New Page',
+			}
+			const response = await axios.post(getters.pagesUrl, page)
+			// Add new page to the beginning of pages array
+			commit('addPage', { newTitle: '', ...response.data })
 			commit('done')
 		},
 
