@@ -61,6 +61,11 @@ export default new Vuex.Store({
 		pagesUrl(_state, getters) {
 			return generateUrl(`/apps/wiki/_wikis/${getters.currentWiki.id}/_pages`)
 		},
+
+		pageUrl(_state, getters) {
+			return (pageId) => `${getters.pagesUrl}/${pageId}`
+		},
+
 	},
 
 	mutations: {
@@ -76,9 +81,17 @@ export default new Vuex.Store({
 		pages(state, pages) {
 			state.pages = pages
 		},
+		update_page(state, page) {
+			state.pages.splice(
+				state.pages.findIndex(p => p.id === page.id),
+				1,
+				page
+			)
+		},
 	},
 
 	actions: {
+
 		/**
 		 * Get list of all pages
 		 */
@@ -89,6 +102,17 @@ export default new Vuex.Store({
 				// sort pages by timestamp
 				response.data.sort((a, b) => b.timestamp - a.timestamp)
 			)
+			commit('done')
+		},
+
+		/**
+		 * Get a single page and update it in the store
+		 * @param {number} pageId Page ID
+		 */
+		async getPage({ commit, getters, state }, pageId) {
+			commit('loading')
+			const response = await axios.get(getters.pageUrl(pageId))
+			commit('update_page', response.data)
 			commit('done')
 		},
 

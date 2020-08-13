@@ -214,16 +214,12 @@ export default {
 			if (!this.currentWiki) {
 				return
 			}
-			this.loading = true
 			try {
-				const response = await axios.get(this.pageUrl(pageId))
-				// update page object from the list of pages
-				this.pages.splice(this.pages.findIndex(page => page.id === response.data.id), 1, response.data)
+				await this.$store.dispatch('getPage', pageId)
 			} catch (e) {
 				console.error(e)
 				showError(t('wiki', `Could not fetch page ${pageId}`))
 			}
-			this.loading = false
 		},
 
 		/**
@@ -316,7 +312,7 @@ export default {
 		 * Reset the version and reload current page in order to update page properties
 		 */
 		resetVersion() {
-			this.getPage(this.pageId)
+			this.getPage(this.currentPage.id)
 			this.setCurrentVersion(null)
 		},
 
