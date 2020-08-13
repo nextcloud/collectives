@@ -11,6 +11,7 @@ use OCA\Wiki\Model\Page;
 use OCA\Wiki\Service\NotFoundException;
 use OCA\Wiki\Service\PageDoesNotExistException;
 use OCA\Wiki\Service\PageService;
+use OCA\Wiki\Service\WikiCircleHelper;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\Files\AlreadyExistsException;
@@ -30,7 +31,11 @@ class PageServiceTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
-		$this->service = new PageService($nodeHelper, $wikiMapper);
+		$wikiCircleHelper = $this->getMockBuilder(WikiCircleHelper::class)
+			->disableOriginalConstructor()
+			->getMock();
+
+		$this->service = new PageService($nodeHelper, $wikiMapper, $wikiCircleHelper);
 
 		$this->wikiFolder = $this->getMockBuilder(Folder::class)
 			->disableOriginalConstructor()
