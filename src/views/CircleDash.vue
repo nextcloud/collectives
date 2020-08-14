@@ -56,10 +56,8 @@
 </template>
 
 <script>
-import axios from '@nextcloud/axios'
 import { emit } from '@nextcloud/event-bus'
 import { showSuccess, showError } from '@nextcloud/dialogs'
-import { generateUrl } from '@nextcloud/router'
 import AppContent from '@nextcloud/vue/dist/Components/AppContent'
 import AppContentDetails from '@nextcloud/vue/dist/Components/AppContentDetails'
 import ActionInput from '@nextcloud/vue/dist/Components/ActionInput'
@@ -251,9 +249,13 @@ export default {
 		async newWiki(event) {
 			const name = event.currentTarget[1].value
 			const wiki = { name }
-			const response = await axios.post(generateUrl(`/apps/wiki/_wikis`), wiki)
-			await this.getWikis()
-			this.$router.push(`/${response.data.folderName}`)
+			try {
+				await this.$store.dispatch('newWiki', wiki)
+				this.$router.push(this.$store.getters.updatedWikiPath)
+			} catch (e) {
+				console.error(e)
+				showError(t('wiki', 'Could not create the wiki'))
+			}
 		},
 
 		/**

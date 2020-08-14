@@ -35,6 +35,7 @@ export default new Vuex.Store({
 		pages: [],
 		wikis: [],
 		updatedPage: {},
+		updatedWiki: {},
 	},
 
 	getters: {
@@ -72,6 +73,12 @@ export default new Vuex.Store({
 			const { title, id } = state.updatedPage
 			return `/${wiki}/${title}?fileId=${id}`
 		},
+
+		updatedWikiPath(state, getters) {
+			const wiki = state.updatedWiki
+			return `/${wiki.folderName}`
+		},
+
 	},
 
 	mutations: {
@@ -83,6 +90,10 @@ export default new Vuex.Store({
 		},
 		wikis(state, wikis) {
 			state.wikis = wikis
+		},
+		addWiki(state, wiki) {
+			state.wikis.unshift(wiki)
+			state.updatedWiki = wiki
 		},
 		pages(state, pages) {
 			state.pages = pages
@@ -178,6 +189,18 @@ export default new Vuex.Store({
 			commit('wikis', response.data)
 			commit('done')
 		},
+
+		/**
+		 * Create a new wiki with the given properties
+		 * @param {Object} wiki Properties for the new wiki (name for now)
+		 */
+		async newWiki({ commit }, wiki) {
+			commit('loading')
+			const response = await axios.post(generateUrl(`/apps/wiki/_wikis`), wiki)
+			commit('addWiki', response.data)
+			commit('done')
+		},
+
 	},
 
 })
