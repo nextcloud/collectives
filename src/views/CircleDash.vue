@@ -9,10 +9,7 @@
 				:sidebar="showSidebar"
 				@toggleSidebar="showSidebar = !showSidebar" />
 			<div v-if="selectedWiki" id="app-content-wrapper">
-				<PagesList
-					:show-details="!!currentPage"
-					:pages="pages"
-					:current-page="currentPage" />
+				<PagesList />
 				<AppContentDetails v-if="currentPage">
 					<Version v-if="currentVersion"
 						:page="currentPage"
@@ -22,7 +19,6 @@
 						@toggleSidebar="showSidebar=!showSidebar"
 						@resetVersion="resetVersion" />
 					<Page key="currentPage.timestamp"
-						:page="currentPage"
 						:updating="updating"
 						:edit="edit"
 						@deletePage="deletePage"
@@ -48,7 +44,6 @@
 		</AppContent>
 		<PageSidebar v-if="currentPage"
 			v-show="showSidebar"
-			:page="currentPage"
 			:current-version-timestamp="currentVersionTimestamp"
 			@preview-version="setCurrentVersion"
 			@close="showSidebar=false" />

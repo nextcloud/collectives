@@ -1,5 +1,5 @@
 <template>
-	<AppContentList :show-details="showDetails">
+	<AppContentList>
 		<router-link v-for="page in pages"
 			:key="page.title"
 			:to="`/${$route.params.selectedWiki}/${page.title}`"
@@ -35,13 +35,6 @@ export default {
 	components: {
 		AppContentList,
 		Avatar,
-	},
-
-	props: {
-		showDetails: {
-			type: Boolean,
-			required: true,
-		},
 	},
 
 	computed: {

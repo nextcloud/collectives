@@ -69,10 +69,6 @@ export default {
 	},
 
 	props: {
-		page: {
-			type: Object,
-			required: true,
-		},
 		updating: {
 			type: Boolean,
 			required: false,
@@ -90,6 +86,10 @@ export default {
 	},
 
 	computed: {
+
+		page() {
+			return this.$store.getters.currentPage
+		},
 
 		readOnly() {
 			return this.preview || !this.edit
