@@ -27,7 +27,7 @@
 						@renamePage="renamePage" />
 				</AppContentDetails>
 			</div>
-			<EmptyContent v-else icon="icon-star">
+			<EmptyContent v-else icon="icon-ant">
 				{{ t('unite', 'No collective selected') }}
 				<template #desc>
 					{{ t('unite', 'Select a collective on the left or create a new one:') }}
