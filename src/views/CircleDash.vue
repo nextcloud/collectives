@@ -1,14 +1,14 @@
 <template>
-	<Content app-name="wiki" :class="{'icon-loading': loading}">
+	<Content app-name="collective" :class="{'icon-loading': loading}">
 		<Nav />
 		<AppContent>
-			<WikiHeading v-if="currentWiki"
+			<CollectiveHeading v-if="currentCollective"
 				@newPage="newPage" />
 			<TopBar v-if="currentPage"
 				:edit="edit"
 				:sidebar="showSidebar"
 				@toggleSidebar="showSidebar = !showSidebar" />
-			<div v-if="wikiParam" id="app-content-wrapper">
+			<div v-if="collectiveParam" id="app-content-wrapper">
 				<PagesList />
 				<AppContentDetails v-if="currentPage">
 					<Version v-if="currentVersion"
@@ -28,15 +28,15 @@
 				</AppContentDetails>
 			</div>
 			<EmptyContent v-else icon="icon-star">
-				{{ t('wiki', 'No wiki selected') }}
+				{{ t('unite', 'No collective selected') }}
 				<template #desc>
-					{{ t('wiki', 'Select a wiki on the left or create a new one:') }}
+					{{ t('unite', 'Select a collective on the left or create a new one:') }}
 					<ul>
-						<ActionInput v-if="!wikiParam"
-							ref="newWikiName"
+						<ActionInput v-if="!collectiveParam"
+							ref="newCollectiveName"
 							icon="icon-star"
-							@submit="newWiki">
-							{{ t('wiki', 'Name for a new wiki') }}
+							@submit="newCollective">
+							{{ t('unite', 'Name for a new collective') }}
 						</ActionInput>
 					</ul>
 				</template>
@@ -64,7 +64,7 @@ import Page from '../components/Page'
 import PageSidebar from '../components/PageSidebar'
 import TopBar from '../components/TopBar'
 import Version from '../components/Version'
-import WikiHeading from '../components/WikiHeading'
+import CollectiveHeading from '../components/CollectiveHeading'
 
 const EditState = { Unset: 0, Edit: 1, Read: 2 }
 
@@ -83,7 +83,7 @@ export default {
 		PageSidebar,
 		TopBar,
 		Version,
-		WikiHeading,
+		CollectiveHeading,
 	},
 
 	data: function() {
@@ -98,19 +98,19 @@ export default {
 
 	computed: {
 		/**
-		 * Return the currently selected wiki
+		 * Return the currently selected collective
 		 * @returns {Object|undefined}
 		 */
-		currentWiki() {
-			return this.$store.getters.currentWiki
+		currentCollective() {
+			return this.$store.getters.currentCollective
 		},
 
 		/**
-		 * Return the url param for the currently selected wiki
+		 * Return the url param for the currently selected collective
 		 * @returns {String|undefined}
 		 */
-		wikiParam() {
-			return this.$store.getters.wikiParam
+		collectiveParam() {
+			return this.$store.getters.collectiveParam
 		},
 
 		/**
@@ -122,11 +122,11 @@ export default {
 		},
 
 		/**
-		 * Return the url param for the currently selected wiki
+		 * Return the url param for the currently selected collective
 		 * @returns {String|undefined}
 		 */
 		pageParam() {
-			return this.$store.getters.wikiParam
+			return this.$store.getters.collectiveParam
 		},
 
 		edit: {
@@ -151,14 +151,14 @@ export default {
 			return this.$store.state.pages
 		},
 
-		wikis() {
-			return this.$store.state.wikis
+		collectives() {
+			return this.$store.state.collectives
 		},
 	},
 
 	watch: {
-		'wikiParam': function() {
-			if (this.currentWiki) {
+		'collectiveParam': function() {
+			if (this.currentCollective) {
 				this.getPages()
 				this.closeNav()
 			}
@@ -171,8 +171,8 @@ export default {
 	},
 
 	async mounted() {
-		await this.getWikis()
-		if (this.currentWiki) {
+		await this.getCollectives()
+		if (this.currentCollective) {
 			this.getPages()
 			this.closeNav()
 		}
@@ -184,14 +184,14 @@ export default {
 		 * Get list of all pages
 		 */
 		async getPages() {
-			if (!this.currentWiki) {
+			if (!this.currentCollective) {
 				return
 			}
 			try {
 				await this.$store.dispatch('getPages')
 			} catch (e) {
 				console.error(e)
-				showError(t('wiki', 'Could not fetch pages'))
+				showError(t('unite', 'Could not fetch pages'))
 			}
 		},
 
@@ -200,26 +200,26 @@ export default {
 		 * @param {number} pageId Page ID
 		 */
 		async getPage(pageId) {
-			if (!this.currentWiki) {
+			if (!this.currentCollective) {
 				return
 			}
 			try {
 				await this.$store.dispatch('getPage', pageId)
 			} catch (e) {
 				console.error(e)
-				showError(t('wiki', `Could not fetch page ${pageId}`))
+				showError(t('unite', `Could not fetch page ${pageId}`))
 			}
 		},
 
 		/**
-		 * Get list of all wikis
+		 * Get list of all collectives
 		 */
-		async getWikis() {
+		async getCollectives() {
 			try {
-				await this.$store.dispatch('getWikis')
+				await this.$store.dispatch('getCollectives')
 			} catch (e) {
 				console.error(e)
-				showError(t('wiki', 'Could not fetch wikis'))
+				showError(t('unite', 'Could not fetch collectives'))
 			}
 		},
 
@@ -232,24 +232,24 @@ export default {
 				this.$router.push(this.$store.getters.updatedPagePath)
 			} catch (e) {
 				console.error(e)
-				showError(t('wiki', 'Could not create the page'))
+				showError(t('unite', 'Could not create the page'))
 			}
 			this.updating = false
 		},
 
 		/**
-		 * Create a new wiki with the name given in the breadcrumb input
+		 * Create a new collective with the name given in the breadcrumb input
 		 * @param {Event} event Event that triggered the function
 		 */
-		async newWiki(event) {
+		async newCollective(event) {
 			const name = event.currentTarget[1].value
-			const wiki = { name }
+			const collective = { name }
 			try {
-				await this.$store.dispatch('newWiki', wiki)
-				this.$router.push(this.$store.getters.updatedWikiPath)
+				await this.$store.dispatch('newCollective', collective)
+				this.$router.push(this.$store.getters.updatedCollectivePath)
 			} catch (e) {
 				console.error(e)
-				showError(t('wiki', 'Could not create the wiki'))
+				showError(t('unite', 'Could not create the collective'))
 			}
 		},
 
@@ -266,7 +266,7 @@ export default {
 				this.$router.push(this.$store.getters.updatedPagePath)
 			} catch (e) {
 				console.error(e)
-				showError(t('wiki', 'Could not rename the page'))
+				showError(t('unite', 'Could not rename the page'))
 			}
 		},
 
@@ -277,11 +277,11 @@ export default {
 		async deletePage() {
 			try {
 				await this.$store.dispatch('deletePage')
-				this.$router.push(`/${this.wikiParam}`)
-				showSuccess(t('wiki', 'Page deleted'))
+				this.$router.push(`/${this.collectiveParam}`)
+				showSuccess(t('unite', 'Page deleted'))
 			} catch (e) {
 				console.error(e)
-				showError(t('wiki', 'Could not delete the page'))
+				showError(t('unite', 'Could not delete the page'))
 			}
 		},
 

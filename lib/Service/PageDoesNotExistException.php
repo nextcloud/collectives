@@ -1,13 +1,13 @@
 <?php
 
-namespace OCA\Wiki\Service;
+namespace OCA\Unite\Service;
 
 use Exception;
 
 /**
  * Class PageDoesNotExistException
  *
- * @package OCA\Wiki\Service
+ * @package OCA\Unite\Service
  */
 class PageDoesNotExistException extends Exception {
 }

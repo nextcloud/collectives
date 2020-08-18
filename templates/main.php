@@ -1,5 +1,5 @@
 <?php
-script('wiki', 'wiki');
+script('unite', 'unite');
 ?>
 
 <div id="q-app"></div>

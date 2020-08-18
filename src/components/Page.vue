@@ -3,7 +3,7 @@
 		<h1 id="titleform" class="page-title">
 			<input ref="title"
 				v-model="newTitle"
-				:placeholder="t('wiki', 'Title')"
+				:placeholder="t('unite', 'Title')"
 				type="text"
 				:disabled="updating || !savePossible"
 				@keypress.13="focusEditor"
@@ -12,19 +12,19 @@
 				<ActionButton v-if="edit"
 					icon="icon-edit"
 					@click="$emit('toggleEdit')">
-					{{ t('wiki', 'View page without editing') }}
+					{{ t('unite', 'View page without editing') }}
 				</ActionButton>
 				<ActionButton v-else
 					icon="icon-rename"
 					@click="$emit('toggleEdit')">
-					{{ t('wiki', 'Edit page') }}
+					{{ t('unite', 'Edit page') }}
 				</ActionButton>
 			</Actions>
 			<Actions>
 				<ActionButton
 					icon="icon-delete"
 					@click="$emit('deletePage')">
-					{{ t('wiki', 'Delete page') }}
+					{{ t('unite', 'Delete page') }}
 				</ActionButton>
 			</Actions>
 		</h1>
@@ -176,7 +176,7 @@ export default {
 
 	methods: {
 		init() {
-			document.title = this.page.title + ' - Wiki - Nextcloud'
+			document.title = this.page.title + ' - Collective - Nextcloud'
 			this.preview = true
 			if (this.emptyTitle) {
 				this.$nextTick(this.focusTitle)

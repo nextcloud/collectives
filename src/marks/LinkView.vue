@@ -44,11 +44,11 @@ export default {
 			return this.node.attrs.href
 		},
 		useRouter() {
-			return this.wikiLink
+			return this.collectiveLink
 		},
-		wikiLink() {
+		collectiveLink() {
 			return this.href.includes('.md?fileId=')
-				&& !this.href.includes('/') // for now we stay inside the Wiki dir
+				&& !this.href.includes('/') // for now we stay inside the Collective dir
 		},
 		leaveHref() {
 			// empty
@@ -65,7 +65,7 @@ export default {
 			return unescape(relPath)
 		},
 		viewerHref() {
-			const dir = absolutePath('/Wiki', basedir(this.relPath))
+			const dir = absolutePath('/Collective', basedir(this.relPath))
 			return generateUrl(
 				`/apps/files/?dir=${dir}&openfile=${this.hrefFileId}#relPath=${this.relPath}`
 			)
@@ -76,7 +76,7 @@ export default {
 	},
 	methods: {
 		openViewer() {
-			const file = absolutePath('/Wiki', this.relPath)
+			const file = absolutePath('/Collective', this.relPath)
 			this.OCA.Viewer.open(file)
 		},
 	},

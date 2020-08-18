@@ -3,7 +3,7 @@
 namespace Unit\Model;
 
 use OC\Files\Mount\MountPoint;
-use OCA\Wiki\Model\Page;
+use OCA\Unite\Model\Page;
 use OCP\Files\File;
 use PHPUnit\Framework\TestCase;
 

@@ -6,7 +6,7 @@
 					<ActionButton
 						icon="icon-history"
 						@click="revertVersion">
-						{{ t('wiki', 'Restore this version') }}
+						{{ t('unite', 'Restore this version') }}
 					</ActionButton>
 				</Actions>
 			</div>
@@ -98,12 +98,12 @@ export default {
 					},
 				})
 				this.$emit('resetVersion')
-				showSuccess(t('wiki', 'Reverted {page} to revision {timestamp}.', {
+				showSuccess(t('unite', 'Reverted {page} to revision {timestamp}.', {
 					page: this.page.title,
 					timestamp: this.version.relativeTimestamp,
 				}))
 			} catch (e) {
-				showError(t('wiki', 'Failed to revert {page} to revision {timestamp}.', {
+				showError(t('unite', 'Failed to revert {page} to revision {timestamp}.', {
 					page: this.page.title,
 					timestamp: this.version.relativeTimestamp,
 				}))

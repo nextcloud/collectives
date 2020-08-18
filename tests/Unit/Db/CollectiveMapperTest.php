@@ -4,14 +4,14 @@ namespace Unit\Db;
 
 use OC\Files\Node\Folder;
 use OC\Files\View;
-use OCA\Wiki\Db\Wiki;
-use OCA\Wiki\Db\WikiMapper;
-use OCA\Wiki\Service\NotFoundException;
+use OCA\Unite\Db\Collective;
+use OCA\Unite\Db\CollectiveMapper;
+use OCA\Unite\Service\NotFoundException;
 use OCP\Files\IRootFolder;
 use OCP\IDBConnection;
 use PHPUnit\Framework\TestCase;
 
-class WikiMapperTest extends TestCase {
+class CollectiveMapperTest extends TestCase {
 	private $mapper;
 	private $folder;
 
@@ -37,40 +37,40 @@ class WikiMapperTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
-		$wiki1 = new Wiki();
-		$wiki1->setFolderId(1);
-		$wiki2 = new Wiki();
-		$wiki2->setFolderId(2);
-		$wiki4 = new Wiki();
-		$wiki4->setFolderId(4);
+		$collective1 = new Collective();
+		$collective1->setFolderId(1);
+		$collective2 = new Collective();
+		$collective2->setFolderId(2);
+		$collective4 = new Collective();
+		$collective4->setFolderId(4);
 
-		$this->mapper = $this->getMockBuilder(WikiMapper::class)
+		$this->mapper = $this->getMockBuilder(CollectiveMapper::class)
 			->setConstructorArgs([$root, $db])
 			->setMethods(['findById'])
 			->getMock();
 		$this->mapper->method('findById')
 			->willReturnMap([
-				[1, $wiki1],
-				[2, $wiki2],
+				[1, $collective1],
+				[2, $collective2],
 				[3, null],
-				[4, $wiki4]
+				[4, $collective4]
 			]);
 	}
 
 	public function testFindById(): void {
-		self::assertEquals($this->folder, $this->mapper->getWikiFolder(1));
-		self::assertEquals($this->folder, $this->mapper->getWikiFolder(2));
+		self::assertEquals($this->folder, $this->mapper->getCollectiveFolder(1));
+		self::assertEquals($this->folder, $this->mapper->getCollectiveFolder(2));
 	}
 
-	public function testFindByIdWikiNotFoundException(): void {
+	public function testFindByIdCollectiveNotFoundException(): void {
 		$this->expectException(NotFoundException::class);
-		$this->expectExceptionMessage("Wiki 3 not found");
-		self::assertEquals($this->folder, $this->mapper->getWikiFolder(3));
+		$this->expectExceptionMessage("Collective 3 not found");
+		self::assertEquals($this->folder, $this->mapper->getCollectiveFolder(3));
 	}
 
 	public function testFindByIdFolderNotFoundException(): void {
 		$this->expectException(NotFoundException::class);
-		$this->expectExceptionMessage("Wiki folder (FileID 4) not found");
-		self::assertEquals($this->folder, $this->mapper->getWikiFolder(4));
+		$this->expectExceptionMessage("Collective folder (FileID 4) not found");
+		self::assertEquals($this->folder, $this->mapper->getCollectiveFolder(4));
 	}
 }

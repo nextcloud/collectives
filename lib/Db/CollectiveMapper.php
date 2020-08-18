@@ -1,8 +1,8 @@
 <?php
 
-namespace OCA\Wiki\Db;
+namespace OCA\Unite\Db;
 
-use OCA\Wiki\Service\NotFoundException;
+use OCA\Unite\Service\NotFoundException;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\AppFramework\Db\QBMapper;
@@ -12,34 +12,34 @@ use OCP\Files\IRootFolder;
 use OCP\IDBConnection;
 
 /**
- * @method Wiki insert(Wiki $wiki) : Wiki
- * @method Wiki delete(Wiki $wiki) : Wiki
- * @method Wiki findEntity(IQueryBuilder $query) : Wiki
+ * @method Collective insert(Collective $collective) : Collective
+ * @method Collective delete(Collective $collective) : Collective
+ * @method Collective findEntity(IQueryBuilder $query) : Collective
  */
-class WikiMapper extends QBMapper {
+class CollectiveMapper extends QBMapper {
 	private $root;
 
 	public function __construct(
 		IRootFolder $root,
 		IDBConnection $db) {
-		parent::__construct($db, 'wiki', Wiki::class);
+		parent::__construct($db, 'unite', Collective::class);
 		$this->root = $root;
 	}
 
 	/**
-	 * @param int $wikiId
+	 * @param int $collectiveId
 	 *
 	 * @return Folder
 	 * @throws NotFoundException
 	 */
-	public function getWikiFolder(int $wikiId): Folder {
-		if (null === $wiki = $this->findById($wikiId)) {
-			throw new NotFoundException('Wiki ' . $wikiId . ' not found');
+	public function getCollectiveFolder(int $collectiveId): Folder {
+		if (null === $collective = $this->findById($collectiveId)) {
+			throw new NotFoundException('Collective ' . $collectiveId . ' not found');
 		}
-		$folders = $this->root->getById($wiki->getFolderId());
+		$folders = $this->root->getById($collective->getFolderId());
 		if ([] === $folders || !($folders[0] instanceof Folder)) {
-			// TODO: Decide what to do with missing wiki folders
-			throw new NotFoundException('Wiki folder (FileID ' . $wiki->getFolderId() . ') not found');
+			// TODO: Decide what to do with missing collective folders
+			throw new NotFoundException('Collective folder (FileID ' . $collective->getFolderId() . ') not found');
 		}
 		return $folders[0];
 	}
@@ -47,9 +47,9 @@ class WikiMapper extends QBMapper {
 	/**
 	 * @param string $circleUniqueId
 	 *
-	 * @return Wiki|null
+	 * @return Collective|null
 	 */
-	public function findByCircleId(string $circleUniqueId): ?Wiki {
+	public function findByCircleId(string $circleUniqueId): ?Collective {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from($this->tableName)
@@ -66,9 +66,9 @@ class WikiMapper extends QBMapper {
 	/**
 	 * @param int $id
 	 *
-	 * @return \OCA\Wiki\Db\Wiki|null
+	 * @return \OCA\Unite\Db\Collective|null
 	 */
-	public function findById(int $id): ?Wiki {
+	public function findById(int $id): ?Collective {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from($this->tableName)

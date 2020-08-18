@@ -45,139 +45,139 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user creates wiki :wiki
+	 * @When user :user creates collective :collective
 	 *
 	 * @param string $user
-	 * @param string $wiki
+	 * @param string $collective
 	 */
-	public function userCreatesWiki(string $user, string $wiki): void {
+	public function userCreatesCollective(string $user, string $collective): void {
 		$this->setCurrentUser($user);
-		$formData = new TableNode([['name', $wiki]]);
-		$this->sendRequest('POST', '/apps/wiki/_wikis', $formData);
+		$formData = new TableNode([['name', $collective]]);
+		$this->sendRequest('POST', '/apps/unite/_collectives', $formData);
 		$this->assertStatusCode($this->response, 200);
 	}
 
 	/**
-	 * @When user :user creates page :page in :wiki
+	 * @When user :user creates page :page in :collective
 	 *
 	 * @param string $user
 	 * @param string $page
-	 * @param string $wiki
+	 * @param string $collective
 	 */
-	public function userCreatesPage(string $user, string $page, string $wiki): void {
+	public function userCreatesPage(string $user, string $page, string $collective): void {
 		$this->setCurrentUser($user);
-		$wikiId = $this->wikiIdByName($wiki);
+		$collectiveId = $this->collectiveIdByName($collective);
 		$formData = new TableNode([['title', $page]]);
-		$this->sendRequest('POST', '/apps/wiki/_wikis/' . $wikiId . '/_pages', $formData);
+		$this->sendRequest('POST', '/apps/unite/_collectives/' . $collectiveId . '/_pages', $formData);
 		$this->assertStatusCode($this->response, 200);
 	}
 
 	/**
-	 * @Then user :user sees wiki :wiki
+	 * @Then user :user sees collective :collective
 	 *
 	 * @param string $user
-	 * @param string $wiki
+	 * @param string $collective
 	 */
-	public function userSeesWiki(string $user, string $wiki): void {
+	public function userSeesCollective(string $user, string $collective): void {
 		$this->setCurrentUser($user);
-		$this->sendRequest('GET', '/apps/wiki/_wikis');
+		$this->sendRequest('GET', '/apps/unite/_collectives');
 		$this->assertStatusCode($this->response, 200);
-		$this->assertWikiByName($this->response, $wiki);
+		$this->assertCollectiveByName($this->response, $collective);
 	}
 
 	/**
-	 * @Then user :user sees page :page in :wiki
+	 * @Then user :user sees page :page in :collective
 	 *
 	 * @param string $user
 	 * @param string $page
-	 * @param string $wiki
+	 * @param string $collective
 	 */
-	public function userSeesPage(string $user, string $page, string $wiki): void {
+	public function userSeesPage(string $user, string $page, string $collective): void {
 		$this->setCurrentUser($user);
-		$wikiId = $this->wikiIdByName($wiki);
-		$this->sendRequest('GET', '/apps/wiki/_wikis/' . $wikiId . '/_pages');
+		$collectiveId = $this->collectiveIdByName($collective);
+		$this->sendRequest('GET', '/apps/unite/_collectives/' . $collectiveId . '/_pages');
 		$this->assertStatusCode($this->response, 200);
 		$this->assertPageByTitle($this->response, $page);
 	}
 
 	/**
-	 * @Then user :user doesn't see wiki :wiki
+	 * @Then user :user doesn't see collective :collective
 	 *
 	 * @param string $user
-	 * @param string $wiki
+	 * @param string $collective
 	 */
-	public function userDoesntSeeWiki(string $user, string $wiki): void {
+	public function userDoesntSeeCollective(string $user, string $collective): void {
 		$this->setCurrentUser($user);
-		$this->sendRequest('GET', '/apps/wiki/_wikis');
+		$this->sendRequest('GET', '/apps/unite/_collectives');
 		$this->assertStatusCode($this->response, 200);
-		$this->assertWikiByName($this->response, $wiki, true);
+		$this->assertCollectiveByName($this->response, $collective, true);
 	}
 
 	/**
-	 * @Then user :user doesn't see page :page in :wiki
+	 * @Then user :user doesn't see page :page in :collective
 	 *
 	 * @param string $user
 	 * @param string $page
-	 * @param string $wiki
+	 * @param string $collective
 	 */
-	public function userDoesntSeePage(string $user, string $page, string $wiki): void {
+	public function userDoesntSeePage(string $user, string $page, string $collective): void {
 		$this->setCurrentUser($user);
-		$wikiId = $this->wikiIdByName($wiki);
-		$this->sendRequest('GET', '/apps/wiki/_wikis/' . $wikiId . '/_pages');
+		$collectiveId = $this->collectiveIdByName($collective);
+		$this->sendRequest('GET', '/apps/unite/_collectives/' . $collectiveId . '/_pages');
 		$this->assertStatusCode($this->response, 200);
 		$this->assertPageByTitle($this->response, $page, true);
 	}
 
 	/**
-	 * @When user :user deletes wiki :wiki
-	 * @When user :user :fails to delete wiki :wiki
+	 * @When user :user deletes collective :collective
+	 * @When user :user :fails to delete collective :collective
 	 *
 	 * @param string $user
-	 * @param string $wiki
+	 * @param string $collective
 	 * @param string $fail
 	 */
-	public function userDeletesWiki(string $user, string $wiki, ?string $fail = null): void {
+	public function userDeletesCollective(string $user, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
-		$wikiId = $this->wikiIdByName($wiki);
+		$collectiveId = $this->collectiveIdByName($collective);
 		if ("fails" === $fail) {
-			if (null !== $wikiId) {
-				throw new RuntimeException('Got a wikiId while not expecting one');
+			if (null !== $collectiveId) {
+				throw new RuntimeException('Got a collectiveId while not expecting one');
 			}
 			return;
 		}
-		$this->sendRequest('DELETE', '/apps/wiki/_wikis/' . $wikiId);
+		$this->sendRequest('DELETE', '/apps/unite/_collectives/' . $collectiveId);
 		$this->assertStatusCode($this->response, 200);
 	}
 
 	/**
-	 * @When user :user deletes page :page in :wiki
+	 * @When user :user deletes page :page in :collective
 	 *
 	 * @param string $user
 	 * @param string $page
-	 * @param string $wiki
+	 * @param string $collective
 	 */
-	public function userDeletesPage(string $user, string $page, string $wiki): void {
+	public function userDeletesPage(string $user, string $page, string $collective): void {
 		$this->setCurrentUser($user);
-		$wikiId = $this->wikiIdByName($wiki);
-		$pageId = $this->pageIdByName($wikiId, $page);
-		$this->sendRequest('DELETE', '/apps/wiki/_wikis/' . $wikiId . '/_pages/' . $pageId);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$pageId = $this->pageIdByName($collectiveId, $page);
+		$this->sendRequest('DELETE', '/apps/unite/_collectives/' . $collectiveId . '/_pages/' . $pageId);
 		$this->assertStatusCode($this->response, 200);
 	}
 
 	/**
-	 * @When user :user renames page :page to :newpage in :wiki
+	 * @When user :user renames page :page to :newpage in :collective
 	 *
 	 * @param string $user
 	 * @param string $page
 	 * @param string $newpage
-	 * @param string $wiki
+	 * @param string $collective
 	 */
-	public function userRenamesPage(string $user, string $page, string $newpage, string $wiki): void {
+	public function userRenamesPage(string $user, string $page, string $newpage, string $collective): void {
 		$this->setCurrentUser($user);
-		$wikiId = $this->wikiIdByName($wiki);
-		$pageId = $this->pageIdByName($wikiId, $page);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$pageId = $this->pageIdByName($collectiveId, $page);
 		$formData = new TableNode([['title', $newpage]]);
-		$this->sendRequest('PUT', '/apps/wiki/_wikis/' . $wikiId . '/_pages/' . $pageId, $formData);
+		$this->sendRequest('PUT', '/apps/unite/_collectives/' . $collectiveId . '/_pages/' . $pageId, $formData);
 		$this->assertStatusCode($this->response, 200);
 	}
 
@@ -190,9 +190,9 @@ class FeatureContext implements Context {
 	 */
 	public function userIsMemberOfCircle(string $user, string $circle, string $admin): void {
 		$this->setCurrentUser($admin);
-		$this->sendRequest('GET', '/apps/wiki/_wikis');
+		$this->sendRequest('GET', '/apps/unite/_collectives');
 		$this->assertStatusCode($this->response, 200);
-		$circleUniqueId = $this->getCircleIdByWikiName($this->response, $circle);
+		$circleUniqueId = $this->getCircleIdByCollectiveName($this->response, $circle);
 
 		$data = new TableNode([
 			['ident', $user],
@@ -208,30 +208,30 @@ class FeatureContext implements Context {
 	 *
 	 * @return int|null
 	 */
-	private function wikiIdByName(string $name): ?int {
-		$this->sendRequest('GET', '/apps/wiki/_wikis');
+	private function collectiveIdByName(string $name): ?int {
+		$this->sendRequest('GET', '/apps/unite/_collectives');
 		if (200 !== $this->response->getStatusCode()) {
-			throw new RuntimeException('Unable to get list of wikis');
+			throw new RuntimeException('Unable to get list of collectives');
 		}
 		$jsonBody = json_decode($this->response->getBody()->getContents(), true);
-		foreach ($jsonBody as $wiki) {
-			if ($name === $wiki['name']) {
-				return $wiki['id'];
+		foreach ($jsonBody as $collective) {
+			if ($name === $collective['name']) {
+				return $collective['id'];
 			}
 		}
 		return null;
 	}
 
 	/**
-	 * @param int    $wikiId
+	 * @param int    $collectiveId
 	 * @param string $name
 	 *
 	 * @return int|null
 	 */
-	private function pageIdByName(int $wikiId, string $name): ?int {
-		$this->sendRequest('GET', '/apps/wiki/_wikis/' . $wikiId . '/_pages');
+	private function pageIdByName(int $collectiveId, string $name): ?int {
+		$this->sendRequest('GET', '/apps/unite/_collectives/' . $collectiveId . '/_pages');
 		if (200 !== $this->response->getStatusCode()) {
-			throw new RuntimeException('Unable to get list of pages for wiki ' . $wikiId);
+			throw new RuntimeException('Unable to get list of pages for collective ' . $collectiveId);
 		}
 		$jsonBody = json_decode($this->response->getBody()->getContents(), true);
 		foreach ($jsonBody as $page) {
@@ -337,11 +337,11 @@ class FeatureContext implements Context {
 	 *
 	 * @return string|null
 	 */
-	private function getCircleIdByWikiName(Response $response, string $name): ?string {
+	private function getCircleIdByCollectiveName(Response $response, string $name): ?string {
 		$jsonBody = json_decode($response->getBody()->getContents(), true);
-		foreach ($jsonBody as $wiki) {
-			if ($name === $wiki['name']) {
-				return $wiki['circleUniqueId'];
+		foreach ($jsonBody as $collective) {
+			if ($name === $collective['name']) {
+				return $collective['circleUniqueId'];
 			}
 		}
 	}
@@ -360,16 +360,16 @@ class FeatureContext implements Context {
 	 * @param string    $name
 	 * @param bool|null $revert
 	 */
-	private function assertWikiByName(Response $response, string $name, ?bool $revert = false): void {
+	private function assertCollectiveByName(Response $response, string $name, ?bool $revert = false): void {
 		$jsonBody = json_decode($response->getBody()->getContents(), true);
-		$wikiNames = [];
-		foreach ($jsonBody as $wiki) {
-			$wikiNames[] = $wiki['name'];
+		$collectiveNames = [];
+		foreach ($jsonBody as $collective) {
+			$collectiveNames[] = $collective['name'];
 		}
 		if (false === $revert) {
-			Assert::assertContains($name, $wikiNames);
+			Assert::assertContains($name, $collectiveNames);
 		} else {
-			Assert::assertNotContains($name, $wikiNames);
+			Assert::assertNotContains($name, $collectiveNames);
 		}
 	}
 

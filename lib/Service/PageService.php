@@ -1,14 +1,13 @@
 <?php
 
-namespace OCA\Wiki\Service;
+namespace OCA\Unite\Service;
 
 use Exception;
-use OCA\Wiki\Db\WikiMapper;
-use OCA\Wiki\Fs\NodeHelper;
-use OCA\Wiki\Model\Page;
+use OCA\Unite\Db\CollectiveMapper;
+use OCA\Unite\Fs\NodeHelper;
+use OCA\Unite\Model\Page;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
-use OCP\AppFramework\QueryException;
 use OCP\Files\AlreadyExistsException;
 use OCP\Files\File;
 use OCP\Files\InvalidPathException;
@@ -20,25 +19,25 @@ class PageService {
 
 	/** @var NodeHelper */
 	private $nodeHelper;
-	/** @var WikiMapper */
-	private $wikiMapper;
-	/** @var WikiCircleHelper */
-	private $wikiCircleHelper;
+	/** @var CollectiveMapper */
+	private $collectiveMapper;
+	/** @var CollectiveCircleHelper */
+	private $collectiveCircleHelper;
 
 	/**
 	 * PageService constructor.
 	 *
-	 * @param NodeHelper       $nodeHelper
-	 * @param WikiMapper       $wikiMapper
-	 * @param WikiCircleHelper $wikiCircleHelper
+	 * @param NodeHelper             $nodeHelper
+	 * @param CollectiveMapper       $collectiveMapper
+	 * @param CollectiveCircleHelper $collectiveCircleHelper
 	 */
 	public function __construct(NodeHelper $nodeHelper,
-								WikiMapper $wikiMapper,
-								WikiCircleHelper $wikiCircleHelper
+								CollectiveMapper $collectiveMapper,
+								CollectiveCircleHelper $collectiveCircleHelper
 	) {
 		$this->nodeHelper = $nodeHelper;
-		$this->wikiMapper = $wikiMapper;
-		$this->wikiCircleHelper = $wikiCircleHelper;
+		$this->collectiveMapper = $collectiveMapper;
+		$this->collectiveCircleHelper = $collectiveCircleHelper;
 	}
 
 	/**
@@ -83,16 +82,16 @@ class PageService {
 
 	/**
 	 * @param string $userId
-	 * @param int    $wikiId
+	 * @param int    $collectiveId
 	 *
 	 * @return Page[]
 	 * @throws \OCP\Files\NotFoundException
 	 * @throws NotFoundException
 	 */
-	public function findAll(string $userId, int $wikiId): array {
-		$this->wikiCircleHelper->userHasWiki($userId, $wikiId);
+	public function findAll(string $userId, int $collectiveId): array {
+		$this->collectiveCircleHelper->userHasCollective($userId, $collectiveId);
 		$pages = [];
-		$folder = $this->wikiMapper->getWikiFolder($wikiId);
+		$folder = $this->collectiveMapper->getCollectiveFolder($collectiveId);
 		foreach ($folder->getDirectoryListing() as $file) {
 			if ($file instanceof File && $this->isPage($file)) {
 				$pages[] = $this->getPage($file);
@@ -103,22 +102,22 @@ class PageService {
 
 	/**
 	 * @param string $userId
-	 * @param int    $wikiId
+	 * @param int    $collectiveId
 	 * @param int    $id
 	 *
 	 * @return Page
 	 * @throws PageDoesNotExistException
 	 * @throws NotFoundException
 	 */
-	public function find(string $userId, int $wikiId, int $id): Page {
-		$this->wikiCircleHelper->userHasWiki($userId, $wikiId);
-		$folder = $this->wikiMapper->getWikiFolder($wikiId);
+	public function find(string $userId, int $collectiveId, int $id): Page {
+		$this->collectiveCircleHelper->userHasCollective($userId, $collectiveId);
+		$folder = $this->collectiveMapper->getCollectiveFolder($collectiveId);
 		return $this->getPage($this->nodeHelper->getFileById($folder, $id));
 	}
 
 	/**
 	 * @param string $userId
-	 * @param int    $wikiId
+	 * @param int    $collectiveId
 	 * @param string $title
 	 *
 	 * @return Page
@@ -127,8 +126,8 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws \OCP\Files\NotFoundException
 	 */
-	public function create(string $userId, int $wikiId, string $title): Page {
-		$folder = $this->wikiMapper->getWikiFolder($wikiId);
+	public function create(string $userId, int $collectiveId, string $title): Page {
+		$folder = $this->collectiveMapper->getCollectiveFolder($collectiveId);
 		$safeTitle = $this->nodeHelper->sanitiseFilename($title, self::DEFAULT_PAGE_TITLE);
 		$filename = NodeHelper::generateFilename($folder, $safeTitle, self::SUFFIX);
 
@@ -140,19 +139,19 @@ class PageService {
 
 	/**
 	 * @param string $userId
-	 * @param int    $wikiId
+	 * @param int    $collectiveId
 	 * @param int    $id
 	 * @param string $title
 	 *
 	 * @return Page
 	 * @throws NotFoundException
 	 */
-	public function rename(string $userId, int $wikiId, int $id, string $title): Page {
-		$this->wikiCircleHelper->userHasWiki($userId, $wikiId);
+	public function rename(string $userId, int $collectiveId, int $id, string $title): Page {
+		$this->collectiveCircleHelper->userHasCollective($userId, $collectiveId);
 		try {
-			$page = $this->find($userId, $wikiId, $id);
+			$page = $this->find($userId, $collectiveId, $id);
 
-			$folder = $this->wikiMapper->getWikiFolder($wikiId);
+			$folder = $this->collectiveMapper->getCollectiveFolder($collectiveId);
 			$file = $this->nodeHelper->getFileById($folder, $page->getId());
 			$safeTitle = $this->nodeHelper->sanitiseFilename($title, self::DEFAULT_PAGE_TITLE);
 
@@ -176,17 +175,17 @@ class PageService {
 
 	/**
 	 * @param string $userId
-	 * @param int    $wikiId
+	 * @param int    $collectiveId
 	 * @param int    $id
 	 *
 	 * @return Page
 	 * @throws NotFoundException
 	 */
-	public function delete(string $userId, int $wikiId, int $id): Page {
-		$this->wikiCircleHelper->userHasWiki($userId, $wikiId);
+	public function delete(string $userId, int $collectiveId, int $id): Page {
+		$this->collectiveCircleHelper->userHasCollective($userId, $collectiveId);
 		try {
-			$page = $this->find($userId, $wikiId, $id);
-			$folder = $this->wikiMapper->getWikiFolder($wikiId);
+			$page = $this->find($userId, $collectiveId, $id);
+			$folder = $this->collectiveMapper->getCollectiveFolder($collectiveId);
 			$file = $this->nodeHelper->getFileById($folder, $page->getId());
 			$file->delete();
 			return $page;

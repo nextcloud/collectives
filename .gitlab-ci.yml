@@ -18,7 +18,7 @@ unit:
   before_script:
     - curl -sS https://getcomposer.org/installer | php
     - php composer.phar install
-    - ln -s `pwd` $NEXTCLOUD_SOURCE/apps/wiki
+    - ln -s `pwd` $NEXTCLOUD_SOURCE/apps/unite
   services:
     - mysql:5.7
 
@@ -28,8 +28,8 @@ integration:
   before_script:
     - curl -sS https://getcomposer.org/installer | php
     - php composer.phar install
-    - ln -s `pwd` $NEXTCLOUD_SOURCE/apps/wiki
-    - sudo -u www-data $NEXTCLOUD_SOURCE/occ app:enable wiki
+    - ln -s `pwd` $NEXTCLOUD_SOURCE/apps/unite
+    - sudo -u www-data $NEXTCLOUD_SOURCE/occ app:enable unite
     - INTERNAL_IP_ADDRESS="$(ip a show type veth | grep -o "inet [0-9]*\.[0-9]*\.[0-9]*\.[0-9]*" | grep -o "[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*")"
     - echo "$INTERNAL_IP_ADDRESS nextcloud.local" >>/etc/hosts
     - /etc/init.d/apache2 start

@@ -1,12 +1,12 @@
 {
-  "name": "wiki",
-  "description": "Nextcloud Wiki App",
+  "name": "unite",
+  "description": "Nextcloud Unite App",
   "version": "0.0.2",
   "author": "CollectiveCloud Team",
   "license": "AGPL",
   "repository": {
     "type": "git",
-    "url": "https://gitlab.com/collectivecloud/wiki.git"
+    "url": "https://gitlab.com/collectivecloud/unite.git"
   },
   "scripts": {
     "build": "NODE_ENV=production webpack --progress --hide-modules --config webpack.prod.js",

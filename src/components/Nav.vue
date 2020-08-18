@@ -1,12 +1,12 @@
 <template>
 	<AppNavigation>
 		<template #list>
-			<AppNavigationCaption :title="t('wiki', 'Select a wiki')" />
-			<AppNavigationItem v-for="wiki in wikis"
-				:key="wiki.circleUniqueId"
-				:title="wiki.name"
-				:class="{active: isActive(wiki)}"
-				:to="`/${wiki.name}`"
+			<AppNavigationCaption :title="t('unite', 'Select a collective')" />
+			<AppNavigationItem v-for="collective in collectives"
+				:key="collective.circleUniqueId"
+				:title="collective.name"
+				:class="{active: isActive(collective)}"
+				:to="`/${collective.name}`"
 				icon="icon-star" />
 		</template>
 	</AppNavigation>
@@ -25,13 +25,13 @@ export default {
 		AppNavigationCaption,
 	},
 	computed: {
-		wikis() {
-			return this.$store.state.wikis
+		collectives() {
+			return this.$store.state.collectives
 		},
 	},
 	methods: {
-		isActive(wiki) {
-			return this.$store.getters.wikiParam === wiki.name
+		isActive(collective) {
+			return this.$store.getters.collectiveParam === collective.name
 		},
 	},
 }

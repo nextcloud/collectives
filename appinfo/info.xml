@@ -1,28 +1,28 @@
 <?xml version="1.0"?>
 <info xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance"
 	  xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
-	<id>wiki</id>
-	<name>Wiki</name>
-	<summary>A wiki for Nextcloud</summary>
+	<id>unite</id>
+	<name>Unite</name>
+	<summary>A place for activist and community projects to build shared knowledge</summary>
 	<description><![CDATA[
-The Wiki app adds wiki functionality to Nextcloud.
+Unite is a Nextcloud App for activist and community projects to organize together. Come and gather in collectives to build shared knowledge.
 ]]></description>
-	<version>0.0.3</version>
+	<version>0.0.4</version>
 	<licence>AGPL</licence>
 	<author>CollectiveCloud Team</author>
-	<namespace>Wiki</namespace>
+	<namespace>Unite</namespace>
 	<category>organization</category>
 	<category>social</category>
-	<website>https://gitlab.com/collectivecloud/wiki</website>
-	<bugs>https://gitlab.com/collectivecloud/wiki/issues</bugs>
-	<repository type="git">https://gitlab.com/collectivecloud/wiki.git</repository>
+	<website>https://gitlab.com/collectivecloud/unite</website>
+	<bugs>https://gitlab.com/collectivecloud/unitei/issues</bugs>
+	<repository type="git">https://gitlab.com/collectivecloud/unite.git</repository>
 	<dependencies>
 		<nextcloud min-version="16" max-version="20" />
 	</dependencies>
 	<navigations>
 		<navigation>
-			<name>Wiki</name>
-			<route>wiki.start.index</route>
+			<name>Unite</name>
+			<route>unite.start.index</route>
 		</navigation>
 	</navigations>
 </info>
