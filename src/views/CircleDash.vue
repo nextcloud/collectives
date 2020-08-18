@@ -1,21 +1,15 @@
 <template>
 	<Content app-name="wiki" :class="{'icon-loading': loading}">
-		<Nav :loading="loading"
-			:wikis="wikis" />
+		<Nav />
 		<AppContent>
 			<WikiHeading v-if="currentWiki"
-				:wiki="currentWiki"
 				@newPage="newPage" />
 			<TopBar v-if="currentPage"
 				:edit="edit"
 				:sidebar="showSidebar"
 				@toggleSidebar="showSidebar = !showSidebar" />
-			<div v-if="selectedWiki" id="app-content-wrapper">
-				<PagesList
-					:show-details="!!currentPage"
-					:loading="loading"
-					:pages="pages"
-					:current-page="currentPage" />
+			<div v-if="wikiParam" id="app-content-wrapper">
+				<PagesList />
 				<AppContentDetails v-if="currentPage">
 					<Version v-if="currentVersion"
 						:page="currentPage"
@@ -24,8 +18,7 @@
 						:updating="updating"
 						@toggleSidebar="showSidebar=!showSidebar"
 						@resetVersion="resetVersion" />
-					<Page key="selectedPage"
-						:page="currentPage"
+					<Page key="currentPage.timestamp"
 						:updating="updating"
 						:edit="edit"
 						@deletePage="deletePage"
@@ -39,7 +32,7 @@
 				<template #desc>
 					{{ t('wiki', 'Select a wiki on the left or create a new one:') }}
 					<ul>
-						<ActionInput v-if="!selectedWiki"
+						<ActionInput v-if="!wikiParam"
 							ref="newWikiName"
 							icon="icon-star"
 							@submit="newWiki">
@@ -51,7 +44,6 @@
 		</AppContent>
 		<PageSidebar v-if="currentPage"
 			v-show="showSidebar"
-			:page="currentPage"
 			:current-version-timestamp="currentVersionTimestamp"
 			@preview-version="setCurrentVersion"
 			@close="showSidebar=false" />
@@ -59,10 +51,8 @@
 </template>
 
 <script>
-import axios from '@nextcloud/axios'
 import { emit } from '@nextcloud/event-bus'
 import { showSuccess, showError } from '@nextcloud/dialogs'
-import { generateUrl } from '@nextcloud/router'
 import AppContent from '@nextcloud/vue/dist/Components/AppContent'
 import AppContentDetails from '@nextcloud/vue/dist/Components/AppContentDetails'
 import ActionInput from '@nextcloud/vue/dist/Components/ActionInput'
@@ -96,53 +86,47 @@ export default {
 		WikiHeading,
 	},
 
-	props: {
-		selectedWiki: {
-			type: String,
-			required: false,
-			default: null,
-		},
-		selectedPage: {
-			type: String,
-			required: false,
-			default: null,
-		},
-	},
-
 	data: function() {
 		return {
-			pages: [],
 			currentVersion: null,
-			loading: true,
 			updating: false,
 			showSidebar: false,
 			editToggle: EditState.Unset,
 			currentVersionTimestamp: 0,
-			wikis: [],
 		}
 	},
 
 	computed: {
 		/**
 		 * Return the currently selected wiki
-		 * @returns {Object|null}
+		 * @returns {Object|undefined}
 		 */
 		currentWiki() {
-			if (this.selectedWiki === null) {
-				return null
-			}
-			return this.wikis.find((wiki) => wiki.folderName === this.selectedWiki)
+			return this.$store.getters.currentWiki
+		},
+
+		/**
+		 * Return the url param for the currently selected wiki
+		 * @returns {String|undefined}
+		 */
+		wikiParam() {
+			return this.$store.getters.wikiParam
 		},
 
 		/**
 		 * Return the currently selected page object
-		 * @returns {Object|null}
+		 * @returns {Object|undefined}
 		 */
 		currentPage() {
-			if (this.selectedPage === null) {
-				return null
-			}
-			return this.pages.find((page) => page.title === this.selectedPage)
+			return this.$store.getters.currentPage
+		},
+
+		/**
+		 * Return the url param for the currently selected wiki
+		 * @returns {String|undefined}
+		 */
+		pageParam() {
+			return this.$store.getters.wikiParam
 		},
 
 		edit: {
@@ -154,20 +138,33 @@ export default {
 			},
 		},
 
-		pagesUrl() {
-			return generateUrl(`/apps/wiki/_wikis/${this.currentWiki.id}/_pages`)
+		loading: {
+			get: function() {
+				return this.$store.state.loading
+			},
+			set: function(val) {
+				this.$store.commit(val ? 'loading' : 'done')
+			},
+		},
+
+		pages() {
+			return this.$store.state.pages
+		},
+
+		wikis() {
+			return this.$store.state.wikis
 		},
 	},
 
 	watch: {
-		'selectedWiki': function() {
+		'wikiParam': function() {
 			if (this.currentWiki) {
 				this.getPages()
 				this.closeNav()
 			}
 		},
 
-		'selectedPage': function() {
+		'pageParam': function() {
 			this.setCurrentVersion(null)
 			this.editToggle = EditState.Unset
 		},
@@ -190,16 +187,12 @@ export default {
 			if (!this.currentWiki) {
 				return
 			}
-			this.loading = true
 			try {
-				const response = await axios.get(this.pagesUrl)
-				// sort pages by timestamp
-				this.pages = response.data.sort((a, b) => b.timestamp - a.timestamp)
+				await this.$store.dispatch('getPages')
 			} catch (e) {
 				console.error(e)
 				showError(t('wiki', 'Could not fetch pages'))
 			}
-			this.loading = false
 		},
 
 		/**
@@ -210,42 +203,33 @@ export default {
 			if (!this.currentWiki) {
 				return
 			}
-			this.loading = true
 			try {
-				const response = await axios.get(this.pageUrl(pageId))
-				// update page object from the list of pages
-				this.pages.splice(this.pages.findIndex(page => page.id === response.data.id), 1, response.data)
+				await this.$store.dispatch('getPage', pageId)
 			} catch (e) {
 				console.error(e)
 				showError(t('wiki', `Could not fetch page ${pageId}`))
 			}
-			this.loading = false
 		},
 
 		/**
-		 * Get list of all pages
+		 * Get list of all wikis
 		 */
 		async getWikis() {
-			this.loading = true
-			const view = this
-			const response = await axios.get(generateUrl(`/apps/wiki/_wikis`))
-			view.wikis = response.data
-			view.loading = false
+			try {
+				await this.$store.dispatch('getWikis')
+			} catch (e) {
+				console.error(e)
+				showError(t('wiki', 'Could not fetch wikis'))
+			}
 		},
 
 		/**
-		 * Create a new page and focus the page content field automatically
+		 * Create a new page and focus the page  automatically
 		 */
 		async newPage() {
-			const page = {
-				title: 'New Page',
-			}
-			this.updating = true
 			try {
-				const response = await axios.post(this.pagesUrl, page)
-				// Add new page to the beginning of pages array
-				this.pages.unshift({ newTitle: '', ...response.data })
-				this.$router.push(`/${this.selectedWiki}/${response.data.title}?fileId=${response.data.id}`)
+				await this.$store.dispatch('newPage')
+				this.$router.push(this.$store.getters.updatedPagePath)
 			} catch (e) {
 				console.error(e)
 				showError(t('wiki', 'Could not create the page'))
@@ -260,9 +244,13 @@ export default {
 		async newWiki(event) {
 			const name = event.currentTarget[1].value
 			const wiki = { name }
-			const response = await axios.post(generateUrl(`/apps/wiki/_wikis`), wiki)
-			await this.getWikis()
-			this.$router.push(`/${response.data.folderName}`)
+			try {
+				await this.$store.dispatch('newWiki', wiki)
+				this.$router.push(this.$store.getters.updatedWikiPath)
+			} catch (e) {
+				console.error(e)
+				showError(t('wiki', 'Could not create the wiki'))
+			}
 		},
 
 		/**
@@ -273,21 +261,13 @@ export default {
 			if (this.currentPage.title === newTitle) {
 				return
 			}
-			const page = this.currentPage
-			this.updating = true
 			try {
-				page.title = newTitle
-				delete page.newTitle
-				const response = await axios.put(this.pageUrl(page.id), page)
-				// Update title as it might have changed due to filename conflict handling
-				// also update all other attributes such as filename etc.
-				Object.assign(page, response.data)
-				this.$router.push(`/${this.selectedWiki}/${response.data.title}?fileId=${response.data.id}`)
+				await this.$store.dispatch('renamePage', newTitle)
+				this.$router.push(this.$store.getters.updatedPagePath)
 			} catch (e) {
 				console.error(e)
 				showError(t('wiki', 'Could not rename the page'))
 			}
-			this.updating = false
 		},
 
 		/**
@@ -296,10 +276,8 @@ export default {
 		 */
 		async deletePage() {
 			try {
-				const pageId = this.currentPage.id
-				await axios.delete(this.pageUrl(pageId))
-				this.pages.splice(this.pages.findIndex(page => page.id === pageId), 1)
-				this.$router.push(`/${this.selectedWiki}`)
+				await this.$store.dispatch('deletePage')
+				this.$router.push(`/${this.wikiParam}`)
 				showSuccess(t('wiki', 'Page deleted'))
 			} catch (e) {
 				console.error(e)
@@ -311,7 +289,7 @@ export default {
 		 * Reset the version and reload current page in order to update page properties
 		 */
 		resetVersion() {
-			this.getPage(this.pageId)
+			this.getPage(this.currentPage.id)
 			this.setCurrentVersion(null)
 		},
 
@@ -322,10 +300,6 @@ export default {
 		setCurrentVersion(version) {
 			this.currentVersion = version
 			this.currentVersionTimestamp = (version ? version.timestamp : 0)
-		},
-
-		pageUrl(pageId) {
-			return `${this.pagesUrl}/${pageId}`
 		},
 
 		closeNav() {

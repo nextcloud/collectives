@@ -5,7 +5,9 @@
 				{{ name }}
 			</router-link>
 		</h2>
-		<button class="primary" @click="$emit('newPage')">
+		<button class="primary"
+			:disabled="$store.state.loading"
+			@click="$emit('newPage')">
 			<span class="icon icon-add-white" />
 			{{ t('wiki', 'Add a page') }}
 		</button>
@@ -16,16 +18,12 @@
 export default {
 	name: 'WikiHeading',
 
-	props: {
-		wiki: {
-			type: Object,
-			required: true,
-		},
-	},
-
 	computed: {
 		name() {
 			return this.wiki.name
+		},
+		wiki() {
+			return this.$store.getters.currentWiki
 		},
 	},
 }

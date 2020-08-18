@@ -4,9 +4,9 @@
 			<AppNavigationCaption :title="t('wiki', 'Select a wiki')" />
 			<AppNavigationItem v-for="wiki in wikis"
 				:key="wiki.circleUniqueId"
-				:title="wiki.folderName"
+				:title="wiki.name"
 				:class="{active: isActive(wiki)}"
-				:to="`/${wiki.folderName}`"
+				:to="`/${wiki.name}`"
 				icon="icon-star" />
 		</template>
 	</AppNavigation>
@@ -24,24 +24,14 @@ export default {
 		AppNavigationItem,
 		AppNavigationCaption,
 	},
-	props: {
-		wikis: {
-			type: Array,
-			required: true,
-		},
-		selectedWiki: {
-			type: String,
-			required: false,
-			default: null,
-		},
-		loading: {
-			type: Boolean,
-			required: true,
+	computed: {
+		wikis() {
+			return this.$store.state.wikis
 		},
 	},
 	methods: {
 		isActive(wiki) {
-			return this.selectedWiki === wiki.folderName
+			return this.$store.getters.wikiParam === wiki.name
 		},
 	},
 }

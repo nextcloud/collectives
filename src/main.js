@@ -1,7 +1,7 @@
 /**
- * @copyright Copyright (c) 2018 John Molakvoæ <skjnldsv@protonmail.com>
+ * @copyright Copyright (c) 2020 Azul <azul@riseup.net>
  *
- * @author John Molakvoæ <skjnldsv@protonmail.com>
+ * @author Azul <azul@riseup.net>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -19,17 +19,23 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import store from './store'
+import { sync } from 'vuex-router-sync'
 
 Vue.prototype.t = t
 Vue.prototype.n = n
 Vue.prototype.OC = OC
 Vue.prototype.OCA = OCA
 
+sync(store, router)
+
 export default new Vue({
-	router,
 	el: '#content',
+	router,
+	store,
 	render: h => h(App),
 })

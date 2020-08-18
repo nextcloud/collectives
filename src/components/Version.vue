@@ -42,10 +42,6 @@ export default {
 	},
 
 	props: {
-		page: {
-			type: Object,
-			required: true,
-		},
 		version: {
 			type: Object,
 			required: false,
@@ -58,6 +54,10 @@ export default {
 	},
 
 	computed: {
+
+		page() {
+			return this.$store.getters.currentPage
+		},
 
 		/**
 		 * Return the URL for currently selected page version

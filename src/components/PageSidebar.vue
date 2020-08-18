@@ -26,13 +26,15 @@ export default {
 	},
 
 	props: {
-		page: {
-			type: Object,
-			required: true,
-		},
 		currentVersionTimestamp: {
 			type: Number,
 			required: true,
+		},
+	},
+
+	computed: {
+		page() {
+			return this.$store.getters.currentPage
 		},
 	},
 
