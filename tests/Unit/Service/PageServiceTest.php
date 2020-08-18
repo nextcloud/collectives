@@ -5,20 +5,20 @@ namespace Unit\Service;
 use OC\Files\Mount\MountPoint;
 use OC\Files\Node\File;
 use OC\Files\Node\Folder;
-use OCA\Wiki\Db\WikiMapper;
-use OCA\Wiki\Fs\NodeHelper;
-use OCA\Wiki\Model\Page;
-use OCA\Wiki\Service\NotFoundException;
-use OCA\Wiki\Service\PageDoesNotExistException;
-use OCA\Wiki\Service\PageService;
-use OCA\Wiki\Service\WikiCircleHelper;
+use OCA\Unite\Db\CollectiveMapper;
+use OCA\Unite\Fs\NodeHelper;
+use OCA\Unite\Model\Page;
+use OCA\Unite\Service\NotFoundException;
+use OCA\Unite\Service\PageDoesNotExistException;
+use OCA\Unite\Service\PageService;
+use OCA\Unite\Service\CollectiveCircleHelper;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\Files\AlreadyExistsException;
 use PHPUnit\Framework\TestCase;
 
 class PageServiceTest extends TestCase {
-	private $wikiFolder;
+	private $collectiveFolder;
 	private $service;
 	private $userId = 'jane';
 
@@ -27,21 +27,21 @@ class PageServiceTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
-		$wikiMapper = $this->getMockBuilder(WikiMapper::class)
+		$collectiveMapper = $this->getMockBuilder(CollectiveMapper::class)
 			->disableOriginalConstructor()
 			->getMock();
 
-		$wikiCircleHelper = $this->getMockBuilder(WikiCircleHelper::class)
+		$collectiveCircleHelper = $this->getMockBuilder(CollectiveCircleHelper::class)
 			->disableOriginalConstructor()
 			->getMock();
 
-		$this->service = new PageService($nodeHelper, $wikiMapper, $wikiCircleHelper);
+		$this->service = new PageService($nodeHelper, $collectiveMapper, $collectiveCircleHelper);
 
-		$this->wikiFolder = $this->getMockBuilder(Folder::class)
+		$this->collectiveFolder = $this->getMockBuilder(Folder::class)
 			->disableOriginalConstructor()
 			->getMock();
-		$wikiMapper->method('getWikiFolder')
-			->willReturn($this->wikiFolder);
+		$collectiveMapper->method('getCollectiveFolder')
+			->willReturn($this->collectiveFolder);
 	}
 
 	public function testIsPage(): void {
@@ -96,7 +96,7 @@ class PageServiceTest extends TestCase {
 			$pages[] = $page;
 		}
 
-		$this->wikiFolder->method('getDirectoryListing')
+		$this->collectiveFolder->method('getDirectoryListing')
 			->willReturnOnConsecutiveCalls(
 				$filesJustMd,
 				$filesNotJustMd

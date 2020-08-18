@@ -26,7 +26,7 @@
 			<ActionButton v-if="!sidebar"
 				icon="icon-menu"
 				@click="$emit('toggleSidebar')">
-				{{ t('wiki', 'Show sidebar') }}
+				{{ t('unite', 'Show sidebar') }}
 			</ActionButton>
 		</Actions>
 	</div>

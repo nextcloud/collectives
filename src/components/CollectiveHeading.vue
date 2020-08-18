@@ -1,5 +1,5 @@
 <template>
-	<div class="wiki-heading">
+	<div class="collective-heading">
 		<h2>
 			<router-link :to="`/${name}`">
 				{{ name }}
@@ -9,28 +9,28 @@
 			:disabled="$store.state.loading"
 			@click="$emit('newPage')">
 			<span class="icon icon-add-white" />
-			{{ t('wiki', 'Add a page') }}
+			{{ t('unite', 'Add a page') }}
 		</button>
 	</div>
 </template>
 
 <script>
 export default {
-	name: 'WikiHeading',
+	name: 'CollectiveHeading',
 
 	computed: {
 		name() {
-			return this.wiki.name
+			return this.collective.name
 		},
-		wiki() {
-			return this.$store.getters.currentWiki
+		collective() {
+			return this.$store.getters.currentCollective
 		},
 	},
 }
 </script>
 
 <style scoped>
-.wiki-heading {
+.collective-heading {
 	position: absolute;
 	left: 0;
 	top: 0;
@@ -38,21 +38,21 @@ export default {
 	display: flex;
 	z-index: 10;
 }
-.wiki-heading button {
+.collective-heading button {
 	align-self: center;
 	display: flex;
 	cursor: pointer;
 	margin: 0 5px;
 	min-height: 30px;
 }
-.wiki-heading h2 {
+.collective-heading h2 {
 	display: flex;
 	margin: 0 5px;
 	cursor: pointer;
 	opacity: 0.5;
 	color: var(--color-main-text);
 }
-.wiki-heading h2:hover {
+.collective-heading h2:hover {
 	opacity: 1;
 }
 </style>

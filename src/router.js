@@ -36,11 +36,11 @@ const routes = [
 		}),
 		children: [
 			{
-				path: ':wiki',
+				path: ':collective',
 				component: CircleDash,
 			},
 			{
-				path: ':wiki/:page',
+				path: ':collective/:page',
 				component: CircleDash,
 			},
 		],
@@ -49,6 +49,6 @@ const routes = [
 
 export default new VueRouter({
 	mode: 'history',
-	base: generateUrl('/apps/wiki', ''),
+	base: generateUrl('/apps/unite', ''),
 	routes,
 })

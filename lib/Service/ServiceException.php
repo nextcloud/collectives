@@ -1,6 +1,6 @@
 <?php
 
-namespace OCA\Wiki\Service;
+namespace OCA\Unite\Service;
 
 use Exception;
 

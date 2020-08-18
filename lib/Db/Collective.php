@@ -1,13 +1,13 @@
 <?php
 
-namespace OCA\Wiki\Db;
+namespace OCA\Unite\Db;
 
 use JsonSerializable;
 
 use OCP\AppFramework\Db\Entity;
 
 /**
- * Class Wiki
+ * Class Collective
  * @method integer getId()
  * @method void setId(integer $value)
  * @method string getCircleUniqueId()
@@ -17,7 +17,7 @@ use OCP\AppFramework\Db\Entity;
  * @method string getOwnerId()
  * @method void setOwnerId(string $value)
  */
-class Wiki extends Entity implements JsonSerializable {
+class Collective extends Entity implements JsonSerializable {
 	protected $circleUniqueId;
 	protected $folderId;
 	protected $ownerId;

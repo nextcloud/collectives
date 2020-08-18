@@ -69,7 +69,7 @@ endif
 ifneq (,$(wildcard $(CURDIR)/js/package.json))
 	make npm
 endif
-ifneq (,$(wildcard $(CURDIR)/translationfiles/templates/wiki.pot))
+ifneq (,$(wildcard $(CURDIR)/translationfiles/templates/unite.pot))
 	make l10n
 endif
 

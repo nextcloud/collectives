@@ -1,11 +1,11 @@
-# CollectiveWiki
+# Unite
 
-The CollectiveWiki app provides simple wiki functionalities to collectives.
-It facilitates to record and organize knowledge in a collaborative way.
+Unite is a Nextcloud App for activist and community projects to organize
+together. Come and gather in collectives to build shared knowledge.
 
-* **Collective and non-hierarchical workflow by heart**: Wikis are tied to
-  a [Nextcloud Circle](https://github.com/nextcloud/circles) and owned by
-  the collective.
+* **Collective and non-hierarchical workflow by heart**: Collectives are
+  tied to a [Nextcloud Circle](https://github.com/nextcloud/circles) and
+  owned by the collective.
 * **Collaborative page editing** like known from Etherpad thanks to the
   [Text app](https://github.com/nextcloud/text)
 * **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**
@@ -14,7 +14,7 @@ It facilitates to record and organize knowledge in a collaborative way.
 ## Requirements
 
 This app builds on the functionality of the Circles and the Text App.
-They both need to be installed for CollectiveWiki to work properly.
+They both need to be installed for Unite to work properly.
 
 ## Installation
 
@@ -53,18 +53,18 @@ users, we want the documents to be owned and maintained by the collective.
 Since this concept is unsupported by the Nextcloud and Circles per default,
 we plan to implement it on our own.
 
-Current status: Creating a new wiki internally does the following:
+Current status: Creating a new collective internally does the following:
 
 2. Create a vehicle circle `<NAME>`
-3. Create a wiki folder `<NAME>`
-4. Share the wiki folder with the vehicle circle
+3. Create a collective folder `<NAME>`
+4. Share the collective folder with the vehicle circle
 
-Planned: Creating a new wiki internally does the following:
+Planned: Creating a new collective internally does the following:
 
-1. Create a vehicle user `wiki@<NAME>@<UUID>` (with random UUID as password)
+1. Create a vehicle user `collective@<NAME>@<UUID>` (with random UUID as password)
 2. Create a vehicle circle `<NAME>` with the vehicle user as owner
-3. Create a wiki folder `<NAME>` with the vehicle user as owner
-4. Share the wiki folder with the vehicle circle
+3. Create a collective folder `<NAME>` with the vehicle user as owner
+4. Share the collective folder with the vehicle circle
 
 ## Maintainers
 

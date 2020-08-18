@@ -1,0 +1,148 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the Nextcloud package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Nextcloud 3.14159\n"
+"Report-Msgid-Bugs-To: translations\\@example.com\n"
+"POT-Creation-Date: 2020-08-18 15:00+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: /nextcloud/server/apps-extra/unite/specialAppInfoFakeDummyForL10nScript.php:2
+msgid "Unite"
+msgstr ""
+
+#: /nextcloud/server/apps-extra/unite/specialAppInfoFakeDummyForL10nScript.php:3
+msgid "A place for activist and community projects to build shared knowledge"
+msgstr ""
+
+#: /nextcloud/server/apps-extra/unite/specialAppInfoFakeDummyForL10nScript.php:4
+msgid ""
+"Unite is a Nextcloud App for activist and community projects to organize "
+"together. Come and gather in collectives to build shared knowledge."
+msgstr ""
+
+#: /nextcloud/server/apps-extra/unite/specialVueFakeDummyForL10nScript.js:1
+msgid "Add a page"
+msgstr ""
+
+#: /nextcloud/server/apps-extra/unite/specialVueFakeDummyForL10nScript.js:2
+msgid "Select a collective"
+msgstr ""
+
+#: /nextcloud/server/apps-extra/unite/specialVueFakeDummyForL10nScript.js:3
+msgid "Title"
+msgstr ""
+
+#: /nextcloud/server/apps-extra/unite/specialVueFakeDummyForL10nScript.js:4
+msgid "View page without editing"
+msgstr ""
+
+#: /nextcloud/server/apps-extra/unite/specialVueFakeDummyForL10nScript.js:5
+msgid "Edit page"
+msgstr ""
+
+#: /nextcloud/server/apps-extra/unite/specialVueFakeDummyForL10nScript.js:6
+msgid "Delete page"
+msgstr ""
+
+#: /nextcloud/server/apps-extra/unite/specialVueFakeDummyForL10nScript.js:7
+msgid "Current version"
+msgstr ""
+
+#: /nextcloud/server/apps-extra/unite/specialVueFakeDummyForL10nScript.js:8
+msgid "No other versions available"
+msgstr ""
+
+#: /nextcloud/server/apps-extra/unite/specialVueFakeDummyForL10nScript.js:9
+msgid "Could not get page versions"
+msgstr ""
+
+#: /nextcloud/server/apps-extra/unite/specialVueFakeDummyForL10nScript.js:10
+#: /nextcloud/server/apps-extra/unite/specialVueFakeDummyForL10nScript.js:11
+msgid "%n byte"
+msgid_plural "%n bytes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: /nextcloud/server/apps-extra/unite/specialVueFakeDummyForL10nScript.js:12
+msgid "Show sidebar"
+msgstr ""
+
+#: /nextcloud/server/apps-extra/unite/specialVueFakeDummyForL10nScript.js:13
+msgid "Restore this version"
+msgstr ""
+
+#: /nextcloud/server/apps-extra/unite/specialVueFakeDummyForL10nScript.js:14
+msgid "Reverted {page} to revision {timestamp}."
+msgstr ""
+
+#: /nextcloud/server/apps-extra/unite/specialVueFakeDummyForL10nScript.js:15
+msgid "Failed to revert {page} to revision {timestamp}."
+msgstr ""
+
+#: /nextcloud/server/apps-extra/unite/specialVueFakeDummyForL10nScript.js:16
+msgid "No collective selected"
+msgstr ""
+
+#: /nextcloud/server/apps-extra/unite/specialVueFakeDummyForL10nScript.js:17
+msgid "Select a collective on the left or create a new one:"
+msgstr ""
+
+#: /nextcloud/server/apps-extra/unite/specialVueFakeDummyForL10nScript.js:18
+msgid "Name for a new collective"
+msgstr ""
+
+#: /nextcloud/server/apps-extra/unite/specialVueFakeDummyForL10nScript.js:19
+msgid "Could not fetch pages"
+msgstr ""
+
+#: /nextcloud/server/apps-extra/unite/specialVueFakeDummyForL10nScript.js:20
+msgid "Could not fetch collectives"
+msgstr ""
+
+#: /nextcloud/server/apps-extra/unite/specialVueFakeDummyForL10nScript.js:21
+msgid "Could not create the page"
+msgstr ""
+
+#: /nextcloud/server/apps-extra/unite/specialVueFakeDummyForL10nScript.js:22
+msgid "Could not create the collective"
+msgstr ""
+
+#: /nextcloud/server/apps-extra/unite/specialVueFakeDummyForL10nScript.js:23
+msgid "Could not rename the page"
+msgstr ""
+
+#: /nextcloud/server/apps-extra/unite/specialVueFakeDummyForL10nScript.js:24
+msgid "Page deleted"
+msgstr ""
+
+#: /nextcloud/server/apps-extra/unite/specialVueFakeDummyForL10nScript.js:25
+msgid "Could not delete the page"
+msgstr ""
+
+#: /nextcloud/server/apps-extra/unite/specialVueFakeDummyForL10nScript.js:26
+msgid "Could not fetch page ${pageId}"
+msgstr ""
+
+#: /nextcloud/server/apps-extra/unite/templates/error.php:4
+msgid "Error: Missing apps"
+msgstr ""
+
+#: /nextcloud/server/apps-extra/unite/templates/error.php:9
+msgid "The following dependency apps are missing: "
+msgstr ""
+
+#: /nextcloud/server/apps-extra/unite/templates/error.php:27
+msgid "Please ask the administrator to enable these apps."
+msgstr ""

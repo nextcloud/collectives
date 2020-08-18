@@ -33,9 +33,9 @@ export default new Vuex.Store({
 	state: {
 		loading: true,
 		pages: [],
-		wikis: [],
+		collectives: [],
 		updatedPage: {},
-		updatedWiki: {},
+		updatedCollective: {},
 	},
 
 	getters: {
@@ -50,18 +50,18 @@ export default new Vuex.Store({
 			)
 		},
 
-		wikiParam(state) {
-			return state.route.params.wiki
+		collectiveParam(state) {
+			return state.route.params.collective
 		},
 
-		currentWiki(state, getters) {
-			return state.wikis.find(
-				(wiki) => wiki.name === getters.wikiParam
+		currentCollective(state, getters) {
+			return state.collectives.find(
+				(collective) => collective.name === getters.collectiveParam
 			)
 		},
 
 		pagesUrl(_state, getters) {
-			return generateUrl(`/apps/wiki/_wikis/${getters.currentWiki.id}/_pages`)
+			return generateUrl(`/apps/unite/_collectives/${getters.currentCollective.id}/_pages`)
 		},
 
 		pageUrl(_state, getters) {
@@ -69,14 +69,14 @@ export default new Vuex.Store({
 		},
 
 		updatedPagePath(state, getters) {
-			const wiki = getters.wikiParam
+			const collective = getters.collectiveParam
 			const { title, id } = state.updatedPage
-			return `/${wiki}/${title}?fileId=${id}`
+			return `/${collective}/${title}?fileId=${id}`
 		},
 
-		updatedWikiPath(state, getters) {
-			const wiki = state.updatedWiki
-			return `/${wiki.name}`
+		updatedCollectivePath(state, getters) {
+			const collective = state.updatedCollective
+			return `/${collective.name}`
 		},
 
 	},
@@ -88,12 +88,12 @@ export default new Vuex.Store({
 		done(state) {
 			state.loading = false
 		},
-		wikis(state, wikis) {
-			state.wikis = wikis
+		collectives(state, collectives) {
+			state.collectives = collectives
 		},
-		addWiki(state, wiki) {
-			state.wikis.unshift(wiki)
-			state.updatedWiki = wiki
+		addCollective(state, collective) {
+			state.collectives.unshift(collective)
+			state.updatedCollective = collective
 		},
 		pages(state, pages) {
 			state.pages = pages
@@ -180,24 +180,24 @@ export default new Vuex.Store({
 		},
 
 		/**
-		 * Get list of all wikis
+		 * Get list of all collectives
 		 */
-		async getWikis({ commit }) {
+		async getCollectives({ commit }) {
 			commit('loading')
-			const response = await axios.get(generateUrl(`/apps/wiki/_wikis`))
+			const response = await axios.get(generateUrl(`/apps/unite/_collectives`))
 
-			commit('wikis', response.data)
+			commit('collectives', response.data)
 			commit('done')
 		},
 
 		/**
-		 * Create a new wiki with the given properties
-		 * @param {Object} wiki Properties for the new wiki (name for now)
+		 * Create a new collective with the given properties
+		 * @param {Object} collective Properties for the new collective (name for now)
 		 */
-		async newWiki({ commit }, wiki) {
+		async newCollective({ commit }, collective) {
 			commit('loading')
-			const response = await axios.post(generateUrl(`/apps/wiki/_wikis`), wiki)
-			commit('addWiki', response.data)
+			const response = await axios.post(generateUrl(`/apps/unite/_collectives`), collective)
+			commit('addCollective', response.data)
 			commit('done')
 		},
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace OCA\Wiki\Model;
+namespace OCA\Unite\Model;
 
 use JsonSerializable;
 

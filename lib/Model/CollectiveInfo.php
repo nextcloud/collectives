@@ -1,12 +1,12 @@
 <?php
 
-namespace OCA\Wiki\Model;
+namespace OCA\Unite\Model;
 
-use OCA\Wiki\Db\Wiki;
+use OCA\Unite\Db\Collective;
 use OCP\Files\Folder;
 
 /**
- * Class WikiInfo
+ * Class CollectiveInfo
  * @method string getName()
  * @method void setName(string $value)
  * @method string getFolderName()
@@ -14,7 +14,7 @@ use OCP\Files\Folder;
  * @method string getFolderPath()
  * @method void setFolderPath(string $value)
  */
-class WikiInfo extends Wiki {
+class CollectiveInfo extends Collective {
 	protected $name;
 	protected $folderName;
 	protected $folderPath;
@@ -32,19 +32,19 @@ class WikiInfo extends Wiki {
 	}
 
 	/**
-	 * @param Wiki        $wiki
+	 * @param Collective  $collective
 	 * @param string      $name
 	 * @param Folder|null $folder
 	 */
-	public function fromWiki(
-		Wiki $wiki,
-		string $name,
-		Folder $folder = null
+	public function fromCollective(
+        Collective $collective,
+        string $name,
+        Folder $folder = null
 	): void {
-		$this->setId($wiki->getId());
-		$this->setCircleUniqueId($wiki->getCircleUniqueId());
-		$this->setFolderId($wiki->getFolderId());
-		$this->setOwnerId($wiki->getOwnerId());
+		$this->setId($collective->getId());
+		$this->setCircleUniqueId($collective->getCircleUniqueId());
+		$this->setFolderId($collective->getFolderId());
+		$this->setOwnerId($collective->getOwnerId());
 		$this->setName($name);
 		if (null !== $folder) {
 			$this->setFolderName($folder->getName());
