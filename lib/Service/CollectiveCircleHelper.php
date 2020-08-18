@@ -37,5 +37,4 @@ class CollectiveCircleHelper {
 			throw new NotFoundException('Collective ' . $collectiveId . ' not found');
 		}
 	}
-
 }

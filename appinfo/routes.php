@@ -19,15 +19,15 @@ return [
 			'verb' => 'GET', 'requirements' => ['collectiveId' => '\d+']],
 		['name' => 'page#get', 'url' => '/_collectives/{collectiveId}/_pages/{id}',
 			'verb' => 'GET', 'requirements' => ['collectiveId' => '\d+',
-			'id' => '\d+']],
+				'id' => '\d+']],
 		['name' => 'page#create', 'url' => '/_collectives/{collectiveId}/_pages',
 			'verb' => 'POST', 'requirements' => ['collectiveId' => '\d+']],
 		['name' => 'page#rename', 'url' => '/_collectives/{collectiveId}/_pages/{id}',
 			'verb' => 'PUT', 'requirements' => ['collectiveId' => '\d+',
-			'id' => '\d+']],
+				'id' => '\d+']],
 		['name' => 'page#destroy', 'url' => '/_collectives/{collectiveId}/_pages/{id}',
 			'verb' => 'DELETE', 'requirements' => ['collectiveId' => '\d+',
-			'id' => '\d+']],
+				'id' => '\d+']],
 
 		// default route
 		['name' => 'start#index', 'url' => '/{path}', 'verb' => 'GET',
