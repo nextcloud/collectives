@@ -79,5 +79,5 @@ Copyright: (c) 2019-2020 Azul <azul@riseup.net>
 License: AGPL v3 or later
 
 Files: images/app.svg
-Copyright: (c) 2012-2018 Dave Gandy <drgandy@alum.mit.edu>
+Copyright: (c) Phạm Thanh Lộc
 License: CC-BY-4.0
