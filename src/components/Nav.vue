@@ -4,9 +4,9 @@
 			<AppNavigationCaption :title="t('wiki', 'Select a wiki')" />
 			<AppNavigationItem v-for="wiki in wikis"
 				:key="wiki.circleUniqueId"
-				:title="wiki.folderName"
+				:title="wiki.name"
 				:class="{active: isActive(wiki)}"
-				:to="`/${wiki.folderName}`"
+				:to="`/${wiki.name}`"
 				icon="icon-star" />
 		</template>
 	</AppNavigation>
@@ -31,7 +31,7 @@ export default {
 	},
 	methods: {
 		isActive(wiki) {
-			return this.$store.getters.selectedWiki === wiki.folderName
+			return this.$store.getters.wikiParam === wiki.name
 		},
 	},
 }

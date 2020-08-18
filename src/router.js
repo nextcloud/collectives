@@ -36,11 +36,11 @@ const routes = [
 		}),
 		children: [
 			{
-				path: ':selectedWiki',
+				path: ':wiki',
 				component: CircleDash,
 			},
 			{
-				path: ':selectedWiki/:selectedPage',
+				path: ':wiki/:page',
 				component: CircleDash,
 			},
 		],

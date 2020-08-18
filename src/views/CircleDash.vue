@@ -8,7 +8,7 @@
 				:edit="edit"
 				:sidebar="showSidebar"
 				@toggleSidebar="showSidebar = !showSidebar" />
-			<div v-if="selectedWiki" id="app-content-wrapper">
+			<div v-if="wikiParam" id="app-content-wrapper">
 				<PagesList />
 				<AppContentDetails v-if="currentPage">
 					<Version v-if="currentVersion"
@@ -32,7 +32,7 @@
 				<template #desc>
 					{{ t('wiki', 'Select a wiki on the left or create a new one:') }}
 					<ul>
-						<ActionInput v-if="!selectedWiki"
+						<ActionInput v-if="!wikiParam"
 							ref="newWikiName"
 							icon="icon-star"
 							@submit="newWiki">
@@ -86,14 +86,6 @@ export default {
 		WikiHeading,
 	},
 
-	props: {
-		selectedPage: {
-			type: String,
-			required: false,
-			default: null,
-		},
-	},
-
 	data: function() {
 		return {
 			currentVersion: null,
@@ -117,8 +109,8 @@ export default {
 		 * Return the url param for the currently selected wiki
 		 * @returns {String|undefined}
 		 */
-		selectedWiki() {
-			return this.$store.getters.selectedWiki
+		wikiParam() {
+			return this.$store.getters.wikiParam
 		},
 
 		/**
@@ -127,6 +119,14 @@ export default {
 		 */
 		currentPage() {
 			return this.$store.getters.currentPage
+		},
+
+		/**
+		 * Return the url param for the currently selected wiki
+		 * @returns {String|undefined}
+		 */
+		pageParam() {
+			return this.$store.getters.wikiParam
 		},
 
 		edit: {
@@ -157,14 +157,14 @@ export default {
 	},
 
 	watch: {
-		'selectedWiki': function() {
+		'wikiParam': function() {
 			if (this.currentWiki) {
 				this.getPages()
 				this.closeNav()
 			}
 		},
 
-		'selectedPage': function() {
+		'pageParam': function() {
 			this.setCurrentVersion(null)
 			this.editToggle = EditState.Unset
 		},
@@ -277,7 +277,7 @@ export default {
 		async deletePage() {
 			try {
 				await this.$store.dispatch('deletePage')
-				this.$router.push(`/${this.selectedWiki}`)
+				this.$router.push(`/${this.wikiParam}`)
 				showSuccess(t('wiki', 'Page deleted'))
 			} catch (e) {
 				console.error(e)

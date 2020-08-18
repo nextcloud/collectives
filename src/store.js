@@ -40,23 +40,23 @@ export default new Vuex.Store({
 
 	getters: {
 
-		selectedPage(state) {
-			return state.route.params.selectedPage
+		pageParam(state) {
+			return state.route.params.page
 		},
 
 		currentPage(state, getters) {
 			return state.pages.find(
-				(page) => page.title === getters.selectedPage
+				(page) => page.title === getters.pageParam
 			)
 		},
 
-		selectedWiki(state) {
-			return state.route.params.selectedWiki
+		wikiParam(state) {
+			return state.route.params.wiki
 		},
 
 		currentWiki(state, getters) {
 			return state.wikis.find(
-				(wiki) => wiki.folderName === getters.selectedWiki
+				(wiki) => wiki.name === getters.wikiParam
 			)
 		},
 
@@ -69,14 +69,14 @@ export default new Vuex.Store({
 		},
 
 		updatedPagePath(state, getters) {
-			const wiki = getters.selectedWiki
+			const wiki = getters.wikiParam
 			const { title, id } = state.updatedPage
 			return `/${wiki}/${title}?fileId=${id}`
 		},
 
 		updatedWikiPath(state, getters) {
 			const wiki = state.updatedWiki
-			return `/${wiki.folderName}`
+			return `/${wiki.name}`
 		},
 
 	},

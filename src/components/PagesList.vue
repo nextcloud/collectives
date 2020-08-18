@@ -2,7 +2,7 @@
 	<AppContentList>
 		<router-link v-for="page in pages"
 			:key="page.title"
-			:to="`/${$route.params.selectedWiki}/${page.title}`"
+			:to="`/${wikiParam}/${page.title}`"
 			:class="{active: isActive(page)}"
 			class="app-content-list-item">
 			<div class="app-content-list-item-icon"
@@ -38,6 +38,10 @@ export default {
 	},
 
 	computed: {
+		wikiParam() {
+			return this.$store.getters.wikiParam
+		},
+
 		pages() {
 			return this.$store.state.pages
 		},
