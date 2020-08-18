@@ -17,9 +17,9 @@ class CollectiveController extends Controller {
 	use ErrorHelper;
 
 	public function __construct(string $AppName,
-                                IRequest $request,
-                                CollectiveCircleService $service,
-                                IUserSession $userSession) {
+								IRequest $request,
+								CollectiveCircleService $service,
+								IUserSession $userSession) {
 		parent::__construct($AppName, $request);
 		$this->service = $service;
 		$this->userSession = $userSession;

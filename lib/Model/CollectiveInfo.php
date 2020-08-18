@@ -37,9 +37,9 @@ class CollectiveInfo extends Collective {
 	 * @param Folder|null $folder
 	 */
 	public function fromCollective(
-        Collective $collective,
-        string $name,
-        Folder $folder = null
+		Collective $collective,
+		string $name,
+		Folder $folder = null
 	): void {
 		$this->setId($collective->getId());
 		$this->setCircleUniqueId($collective->getCircleUniqueId());
