@@ -26,12 +26,13 @@ class CollectiveInfoTest extends TestCase {
 
 		$collective = new Collective();
 		$collective->setId($id);
+		$collective->setName($name);
 		$collective->setCircleUniqueId($circleUniqueId);
 		$collective->setFolderId($folderId);
 		$collective->setOwnerId($ownerId);
 
 		$wi = new CollectiveInfo();
-		$wi->fromCollective($collective, $name, $folder);
+		$wi->fromCollective($collective, $folder);
 
 		self::assertEquals($wi->getId(), $id);
 		self::assertEquals($wi->getCircleUniqueId(), $circleUniqueId);
