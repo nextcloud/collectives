@@ -66,7 +66,7 @@ class CollectiveMapper extends QBMapper {
 	/**
 	 * @param int $id
 	 *
-	 * @return \OCA\Unite\Db\Collective|null
+	 * @return Collective|null
 	 */
 	public function findById(int $id): ?Collective {
 		$qb = $this->db->getQueryBuilder();

@@ -64,18 +64,14 @@ class CollectiveCircleService {
 	 * @throws NotFoundException
 	 */
 	public function getCollectives(string $userId): array {
-		$collectives = [];
-		$joinedCircles = Circles::joinedCircles($userId);
-		foreach ($joinedCircles as $jc) {
-			if (null === $w = $this->collectiveMapper->findByCircleId($jc->getUniqueId())) {
-				continue;
-			}
-
-			$wi = new CollectiveInfo();
-			$wi->fromCollective($w, $this->collectiveMapper->getCollectiveFolder($w->getId()));
-			$collectives[] = $wi;
+		$collectives = $this->collectiveCircleHelper->getCollectivesForUser($userId);
+		$cis = [];
+		foreach ($collectives as $c) {
+			$ci = new CollectiveInfo();
+			$ci->fromCollective($c, $this->collectiveMapper->getCollectiveFolder($c->getId()));
+			$cis[] = $ci;
 		}
-		return $collectives;
+		return $cis;
 	}
 
 	/**
@@ -120,8 +116,8 @@ class CollectiveCircleService {
 		$collective->setOwnerId($userId);
 		$this->collectiveMapper->insert($collective);
 
-		$wi = new CollectiveInfo();
-		$wi->fromCollective($collective, $folder);
+		$ci = new CollectiveInfo();
+		$ci->fromCollective($collective, $folder);
 
 		// Share folder with circle
 		$share = $this->shareManager->newShare();
@@ -145,7 +141,7 @@ class CollectiveCircleService {
 			$folder->unlock(ILockingProvider::LOCK_SHARED);
 		}
 
-		return $wi;
+		return $ci;
 	}
 
 	/**
@@ -177,9 +173,9 @@ class CollectiveCircleService {
 			throw new NotFoundException('Failed to delete collective folder: ' . $id);
 		}
 
-		$wi = new CollectiveInfo();
-		$wi->fromCollective($collective);
+		$ci = new CollectiveInfo();
+		$ci->fromCollective($collective);
 
-		return $wi;
+		return $ci;
 	}
 }

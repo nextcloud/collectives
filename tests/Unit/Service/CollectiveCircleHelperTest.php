@@ -29,7 +29,6 @@ class CollectiveCircleHelperTest extends TestCase {
 		$this->helper = new CollectiveCircleHelper($collectiveMapper);
 	}
 
-
 	public function testUserHasCollectiveCollectiveDoesntExist(): void {
 		$this->expectException(NotFoundException::class);
 		$this->helper->userHasCollective($this->userId, 2);
