@@ -64,18 +64,14 @@ class CollectiveCircleService {
 	 * @throws NotFoundException
 	 */
 	public function getCollectives(string $userId): array {
-		$collectives = [];
-		$joinedCircles = Circles::joinedCircles($userId);
-		foreach ($joinedCircles as $jc) {
-			if (null === $w = $this->collectiveMapper->findByCircleId($jc->getUniqueId())) {
-				continue;
-			}
-
+		$collectives = $this->collectiveCircleHelper->getCollectivesForUser($userId);
+		$cis = [];
+		foreach ($collectives as $c) {
 			$wi = new CollectiveInfo();
-			$wi->fromCollective($w, $this->collectiveMapper->getCollectiveFolder($w->getId()));
-			$collectives[] = $wi;
+			$wi->fromCollective($c, $this->collectiveMapper->getCollectiveFolder($c->getId()));
+			$cis[] = $wi;
 		}
-		return $collectives;
+		return $cis;
 	}
 
 	/**

@@ -16,6 +16,17 @@ class CollectiveCircleHelper {
 		$this->collectiveMapper = $collectiveMapper;
 	}
 
+	public function getCollectivesForUser(string $userId): array {
+		$collectives = [];
+		$joinedCircles = Circles::joinedCircles($userId);
+		foreach ($joinedCircles as $jc) {
+			if (null !== $w = $this->collectiveMapper->findByCircleId($jc->getUniqueId())) {
+				$collectives[] = $w;
+			}
+		}
+		return $collectives;
+	}
+
 	/**
 	 * @param string $userId
 	 * @param int    $collectiveId
