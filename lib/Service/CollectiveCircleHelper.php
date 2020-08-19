@@ -19,8 +19,8 @@ class CollectiveCircleHelper {
 		$collectives = [];
 		$joinedCircles = Circles::joinedCircles($userId);
 		foreach ($joinedCircles as $jc) {
-			if (null !== $w = $this->collectiveMapper->findByCircleId($jc->getUniqueId())) {
-				$collectives[] = $w;
+			if (null !== $c = $this->collectiveMapper->findByCircleId($jc->getUniqueId())) {
+				$collectives[] = $c;
 			}
 		}
 		return $collectives;

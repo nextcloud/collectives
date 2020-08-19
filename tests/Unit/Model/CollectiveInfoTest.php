@@ -31,15 +31,15 @@ class CollectiveInfoTest extends TestCase {
 		$collective->setFolderId($folderId);
 		$collective->setOwnerId($ownerId);
 
-		$wi = new CollectiveInfo();
-		$wi->fromCollective($collective, $folder);
+		$ci = new CollectiveInfo();
+		$ci->fromCollective($collective, $folder);
 
-		self::assertEquals($wi->getId(), $id);
-		self::assertEquals($wi->getCircleUniqueId(), $circleUniqueId);
-		self::assertEquals($wi->getFolderId(), $folderId);
-		self::assertEquals($wi->getOwnerId(), $ownerId);
-		self::assertEquals($wi->getName(), $name);
-		self::assertEquals($wi->getFolderName(), $folderName);
-		self::assertEquals($wi->getFolderPath(), $folderPath);
+		self::assertEquals($ci->getId(), $id);
+		self::assertEquals($ci->getCircleUniqueId(), $circleUniqueId);
+		self::assertEquals($ci->getFolderId(), $folderId);
+		self::assertEquals($ci->getOwnerId(), $ownerId);
+		self::assertEquals($ci->getName(), $name);
+		self::assertEquals($ci->getFolderName(), $folderName);
+		self::assertEquals($ci->getFolderPath(), $folderPath);
 	}
 }
