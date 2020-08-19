@@ -4,7 +4,6 @@ namespace OCA\Unite\Service;
 
 use OCA\Circles\Api\v1\Circles;
 use OCA\Circles\Exceptions\MemberDoesNotExistException;
-use OCA\Circles\Model\BaseMember;
 use OCA\Unite\Db\CollectiveMapper;
 use OCP\AppFramework\QueryException;
 
@@ -38,9 +37,8 @@ class CollectiveCircleHelper {
 			throw new NotFoundException('Collective ' . $collectiveId . ' not found');
 		}
 
-		// TODO: directly use `Circles::TYPE_USER` once Circles release after 0.19.4 got released
 		try {
-			$circleMember = Circles::getMember($collective->getCircleUniqueId(), $userId, BaseMember::TYPE_USER, true);
+			$circleMember = Circles::getMember($collective->getCircleUniqueId(), $userId, Circles::TYPE_USER, true);
 			if ($userId !== $circleMember->getUserId()) {
 				throw new NotFoundException('Collective ' . $collectiveId . ' not found');
 			}
