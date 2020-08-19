@@ -72,7 +72,7 @@ class CollectiveCircleService {
 			}
 
 			$wi = new CollectiveInfo();
-			$wi->fromCollective($w, $jc->getName(), $this->collectiveMapper->getCollectiveFolder($w->getId()));
+			$wi->fromCollective($w, $this->collectiveMapper->getCollectiveFolder($w->getId()));
 			$collectives[] = $wi;
 		}
 		return $collectives;
@@ -114,13 +114,14 @@ class CollectiveCircleService {
 
 		// Create collective object
 		$collective = new Collective();
+		$collective->setName($name);
 		$collective->setCircleUniqueId($circle->getUniqueId());
 		$collective->setFolderId($folder->getId());
 		$collective->setOwnerId($userId);
 		$this->collectiveMapper->insert($collective);
 
 		$wi = new CollectiveInfo();
-		$wi->fromCollective($collective, $circle->getName(), $folder);
+		$wi->fromCollective($collective, $folder);
 
 		// Share folder with circle
 		$share = $this->shareManager->newShare();
@@ -177,7 +178,7 @@ class CollectiveCircleService {
 		}
 
 		$wi = new CollectiveInfo();
-		$wi->fromCollective($collective, $circle->getName());
+		$wi->fromCollective($collective);
 
 		return $wi;
 	}

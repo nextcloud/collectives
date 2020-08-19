@@ -26,6 +26,10 @@ class Version000003Date20200720000000 extends SimpleMigrationStep {
 				'autoincrement' => true,
 				'notnull' => true,
 			]);
+			$table->addColumn('name', Type::STRING, [
+				'notnull' => true,
+				'length' => 128,
+			]);
 			$table->addColumn('circle_unique_id', Type::STRING, [
 				'notnull' => true,
 				'length' => 15,
