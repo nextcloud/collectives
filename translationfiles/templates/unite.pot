@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2020-08-20 10:20+0200\n"
+"POT-Creation-Date: 2020-08-20 14:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,109 +33,117 @@ msgid ""
 msgstr ""
 
 #: /unite/specialVueFakeDummyForL10nScript.js:1
-msgid "Add a page"
-msgstr ""
-
-#: /unite/specialVueFakeDummyForL10nScript.js:2
 msgid "Select a collective"
 msgstr ""
 
+#: /unite/specialVueFakeDummyForL10nScript.js:2
+msgid "Create new collective"
+msgstr ""
+
 #: /unite/specialVueFakeDummyForL10nScript.js:3
-msgid "Title"
+msgid "New collective name"
 msgstr ""
 
 #: /unite/specialVueFakeDummyForL10nScript.js:4
-msgid "View page without editing"
+msgid "Title"
 msgstr ""
 
 #: /unite/specialVueFakeDummyForL10nScript.js:5
-msgid "Edit page"
+msgid "Done with editing"
 msgstr ""
 
 #: /unite/specialVueFakeDummyForL10nScript.js:6
-msgid "Delete page"
+msgid "Edit page"
 msgstr ""
 
 #: /unite/specialVueFakeDummyForL10nScript.js:7
-msgid "Current version"
+msgid "Delete page"
 msgstr ""
 
 #: /unite/specialVueFakeDummyForL10nScript.js:8
-msgid "No other versions available"
+msgid "Show old versions"
 msgstr ""
 
 #: /unite/specialVueFakeDummyForL10nScript.js:9
-msgid "Could not get page versions"
+msgid "Add a page"
 msgstr ""
 
 #: /unite/specialVueFakeDummyForL10nScript.js:10
+msgid "Current version"
+msgstr ""
+
 #: /unite/specialVueFakeDummyForL10nScript.js:11
+msgid "No other versions available"
+msgstr ""
+
+#: /unite/specialVueFakeDummyForL10nScript.js:12
+msgid "Could not get page versions"
+msgstr ""
+
+#: /unite/specialVueFakeDummyForL10nScript.js:13
+#: /unite/specialVueFakeDummyForL10nScript.js:14
 msgid "%n byte"
 msgid_plural "%n bytes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: /unite/specialVueFakeDummyForL10nScript.js:12
-msgid "Show sidebar"
-msgstr ""
-
-#: /unite/specialVueFakeDummyForL10nScript.js:13
+#: /unite/specialVueFakeDummyForL10nScript.js:15
 msgid "Restore this version"
 msgstr ""
 
-#: /unite/specialVueFakeDummyForL10nScript.js:14
-msgid "Reverted {page} to revision {timestamp}."
-msgstr ""
-
-#: /unite/specialVueFakeDummyForL10nScript.js:15
-msgid "Failed to revert {page} to revision {timestamp}."
-msgstr ""
-
 #: /unite/specialVueFakeDummyForL10nScript.js:16
-msgid "No collective selected"
+msgid "Back to current version"
 msgstr ""
 
 #: /unite/specialVueFakeDummyForL10nScript.js:17
-msgid "Select a collective on the left or create a new one:"
+msgid "Reverted {page} to revision {timestamp}."
 msgstr ""
 
 #: /unite/specialVueFakeDummyForL10nScript.js:18
-msgid "Name for a new collective"
+msgid "Failed to revert {page} to revision {timestamp}."
 msgstr ""
 
 #: /unite/specialVueFakeDummyForL10nScript.js:19
-msgid "Could not fetch pages"
+msgid "No collective selected"
 msgstr ""
 
 #: /unite/specialVueFakeDummyForL10nScript.js:20
-msgid "Could not fetch collectives"
+msgid "Select a collective or create a new one on the left."
 msgstr ""
 
 #: /unite/specialVueFakeDummyForL10nScript.js:21
-msgid "New Page"
+msgid "Could not fetch pages"
 msgstr ""
 
 #: /unite/specialVueFakeDummyForL10nScript.js:22
-msgid "Could not create the page"
+msgid "Could not fetch collectives"
 msgstr ""
 
 #: /unite/specialVueFakeDummyForL10nScript.js:23
-msgid "Could not create the collective"
+msgid "New Page"
 msgstr ""
 
 #: /unite/specialVueFakeDummyForL10nScript.js:24
-msgid "Could not rename the page"
+msgid "Could not create the page"
 msgstr ""
 
 #: /unite/specialVueFakeDummyForL10nScript.js:25
-msgid "Page deleted"
+msgid "Could not create the collective"
 msgstr ""
 
 #: /unite/specialVueFakeDummyForL10nScript.js:26
-msgid "Could not delete the page"
+msgid "Could not rename the page"
 msgstr ""
 
 #: /unite/specialVueFakeDummyForL10nScript.js:27
+msgid "Page deleted"
+msgstr ""
+
+#: /unite/specialVueFakeDummyForL10nScript.js:28
+msgid "Could not delete the page"
+msgstr ""
+
+#: /unite/specialVueFakeDummyForL10nScript.js:29
 msgid "Could not fetch page ${pageId}"
 msgstr ""
 
