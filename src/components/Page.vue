@@ -219,7 +219,17 @@ export default {
 
 <style>
 	#editor-container .editor__content {
-		box-shadow: 5px 5px 10px 0px #aaa;
+		border: 2px solid var(--color-border);
+		border-radius: var(--border-radius);
+	}
+
+	#text-container .editor__content {
+		border: 2px solid var(--color-main-background);
+		border-radius: var(--border-radius);
+	}
+
+	.editor__content {
+		border: 2px;
 	}
 
 	.page-title {
