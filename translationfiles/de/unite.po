@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2020-08-10 10:39+0200\n"
-"PO-Revision-Date: 2020-08-10 10:42+0200\n"
+"POT-Creation-Date: 2020-08-20 09:27+0200\n"
+"PO-Revision-Date: 2020-08-20 09:31+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -18,111 +18,142 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.3\n"
 
-#: /home/next/code/nextcloud/server/apps/unite/specialAppInfoFakeDummyForL10nScript.php:2
+#: /unite/specialAppInfoFakeDummyForL10nScript.php:2
 msgid "Unite"
 msgstr "Unite"
 
-#: /home/next/code/nextcloud/server/apps/unite/specialAppInfoFakeDummyForL10nScript.php:3
+#: /unite/specialAppInfoFakeDummyForL10nScript.php:3
 msgid "A place for activist and community projects to build shared knowledge"
-msgstr "Ein Ort für Aktivst:innen und Community-Projekte um gemeinsames Wissen aufzubauen"
+msgstr ""
+"Ein Ort für Aktivst:innen und Community-Projekte um gemeinsames Wissen "
+"aufzubauen"
 
-#: /home/next/code/nextcloud/server/apps/unite/specialAppInfoFakeDummyForL10nScript.php:4
-msgid "Unite is a Nextcloud App for activist and community projects to organize together. Come and gather in collectives to build shared knowledge."
-msgstr "Unite ist eine Nextcloud App für Aktivist:innen und Community-Projekte um sich gemeinsam zu organisieren. Komm vorbei und verbünde dich in Kollektiven um gemeinsames Wissen aufzubauen."
+#: /unite/specialAppInfoFakeDummyForL10nScript.php:4
+msgid ""
+"Unite is a Nextcloud App for activist and community projects to organize "
+"together. Come and gather in collectives to build shared knowledge."
+msgstr ""
+"Unite ist eine Nextcloud App für Aktivist:innen und Community-Projekte um "
+"sich gemeinsam zu organisieren. Komm vorbei und verbünde dich in Kollektiven "
+"um gemeinsames Wissen aufzubauen."
 
-#: /home/next/code/nextcloud/server/apps/unite/specialVueFakeDummyForL10nScript.js:1
+#: /unite/specialVueFakeDummyForL10nScript.js:1
+msgid "Add a page"
+msgstr "Seite hinzufügen"
+
+#: /unite/specialVueFakeDummyForL10nScript.js:2
 msgid "Select a collective"
 msgstr "Wähle ein Kollektiv aus"
 
-#: /home/next/code/nextcloud/server/apps/unite/specialVueFakeDummyForL10nScript.js:2
+#: /unite/specialVueFakeDummyForL10nScript.js:3
 msgid "Title"
 msgstr "Titel"
 
-#: /home/next/code/nextcloud/server/apps/unite/specialVueFakeDummyForL10nScript.js:3
+#: /unite/specialVueFakeDummyForL10nScript.js:4
 msgid "View page without editing"
 msgstr "Seite ansehen ohne sie zu bearbeiten"
 
-#: /home/next/code/nextcloud/server/apps/unite/specialVueFakeDummyForL10nScript.js:4
+#: /unite/specialVueFakeDummyForL10nScript.js:5
 msgid "Edit page"
 msgstr "Seite bearbeiten"
 
-#: /home/next/code/nextcloud/server/apps/unite/specialVueFakeDummyForL10nScript.js:5
+#: /unite/specialVueFakeDummyForL10nScript.js:6
 msgid "Delete page"
 msgstr "Seite entfernen"
 
-#: /home/next/code/nextcloud/server/apps/unite/specialVueFakeDummyForL10nScript.js:6
+#: /unite/specialVueFakeDummyForL10nScript.js:7
 msgid "Current version"
 msgstr "Aktuelle Version"
 
-#: /home/next/code/nextcloud/server/apps/unite/specialVueFakeDummyForL10nScript.js:7
+#: /unite/specialVueFakeDummyForL10nScript.js:8
 msgid "No other versions available"
 msgstr "Keine weiteren Versionen vorhanden"
 
-#: /home/next/code/nextcloud/server/apps/unite/specialVueFakeDummyForL10nScript.js:8
+#: /unite/specialVueFakeDummyForL10nScript.js:9
 msgid "Could not get page versions"
 msgstr "Konnte Versionen der Seite nicht laden"
 
-#: /home/next/code/nextcloud/server/apps/unite/specialVueFakeDummyForL10nScript.js:9
-#: /home/next/code/nextcloud/server/apps/unite/specialVueFakeDummyForL10nScript.js:10
+#: /unite/specialVueFakeDummyForL10nScript.js:10
+#: /unite/specialVueFakeDummyForL10nScript.js:11
 msgid "%n byte"
 msgid_plural "%n bytes"
 msgstr[0] "%n Byte"
 msgstr[1] "%n Bytes"
 
-#: /home/next/code/nextcloud/server/apps/unite/specialVueFakeDummyForL10nScript.js:11
+#: /unite/specialVueFakeDummyForL10nScript.js:12
 msgid "Show sidebar"
 msgstr "Seitenleiste anzeigen"
 
-#: /home/next/code/nextcloud/server/apps/unite/specialVueFakeDummyForL10nScript.js:12
+#: /unite/specialVueFakeDummyForL10nScript.js:13
 msgid "Restore this version"
 msgstr "Diese Version wiederherstellen"
 
-#: /home/next/code/nextcloud/server/apps/unite/specialVueFakeDummyForL10nScript.js:13
+#: /unite/specialVueFakeDummyForL10nScript.js:14
 msgid "Reverted {page} to revision {timestamp}."
 msgstr "Seiete {page} auf Version {timestamp} zurücksetzen."
 
-#: /home/next/code/nextcloud/server/apps/unite/specialVueFakeDummyForL10nScript.js:14
+#: /unite/specialVueFakeDummyForL10nScript.js:15
 msgid "Failed to revert {page} to revision {timestamp}."
 msgstr ""
 "Das Zurücksetzen der Seite {page} auf die Version {timestamp} ist "
 "fehlgeschlagen."
 
-#: /home/next/code/nextcloud/server/apps/unite/specialVueFakeDummyForL10nScript.js:15
-msgid "Add a page"
-msgstr "Seite hinzufügen"
-
-#: /home/next/code/nextcloud/server/apps/unite/specialVueFakeDummyForL10nScript.js:16
+#: /unite/specialVueFakeDummyForL10nScript.js:16
 msgid "No collective selected"
 msgstr "Kein Kollektiv ausgewählt"
 
-#: /home/next/code/nextcloud/server/apps/unite/specialVueFakeDummyForL10nScript.js:17
+#: /unite/specialVueFakeDummyForL10nScript.js:17
 msgid "Select a collective on the left or create a new one:"
 msgstr "Wähle auf der linken Seite ein Kollektiv aus oder lege ein neues an:"
 
-#: /home/next/code/nextcloud/server/apps/unite/specialVueFakeDummyForL10nScript.js:18
+#: /unite/specialVueFakeDummyForL10nScript.js:18
 msgid "Name for a new collective"
 msgstr "Name für das neue Kollektiv"
 
-#: /home/next/code/nextcloud/server/apps/unite/specialVueFakeDummyForL10nScript.js:19
+#: /unite/specialVueFakeDummyForL10nScript.js:19
 msgid "Could not fetch pages"
 msgstr "Konnte die Seiten nicht laden"
 
-#: /home/next/code/nextcloud/server/apps/unite/specialVueFakeDummyForL10nScript.js:20
+#: /unite/specialVueFakeDummyForL10nScript.js:20
+msgid "Could not fetch collectives"
+msgstr "Konnte die Kollektive nicht laden"
+
+#: /unite/specialVueFakeDummyForL10nScript.js:21
+msgid "New Page"
+msgstr "Neue Seite"
+
+#: /unite/specialVueFakeDummyForL10nScript.js:22
 msgid "Could not create the page"
 msgstr "Anlegen der Seite fehlgeschlagen"
 
-#: /home/next/code/nextcloud/server/apps/unite/specialVueFakeDummyForL10nScript.js:21
+#: /unite/specialVueFakeDummyForL10nScript.js:23
+msgid "Could not create the collective"
+msgstr "Anlegen des Kollektivs fehlgeschlagen"
+
+#: /unite/specialVueFakeDummyForL10nScript.js:24
 msgid "Could not rename the page"
 msgstr "Umbenennen der Seite fehlgeschlagen"
 
-#: /home/next/code/nextcloud/server/apps/unite/specialVueFakeDummyForL10nScript.js:22
+#: /unite/specialVueFakeDummyForL10nScript.js:25
 msgid "Page deleted"
 msgstr "Seite entfernt"
 
-#: /home/next/code/nextcloud/server/apps/unite/specialVueFakeDummyForL10nScript.js:23
+#: /unite/specialVueFakeDummyForL10nScript.js:26
 msgid "Could not delete the page"
 msgstr "Seite konnte nicht entfernt werden"
 
-#: /home/next/code/nextcloud/server/apps/unite/specialVueFakeDummyForL10nScript.js:24
+#: /unite/specialVueFakeDummyForL10nScript.js:27
 msgid "Could not fetch page ${pageId}"
 msgstr "Seite ${pageId} konnte nicht geladen werden"
+
+#: /unite/templates/error.php:4
+msgid "Error: Missing apps"
+msgstr "Fehler: Apps fehlen"
+
+#: /unite/templates/error.php:9
+msgid "The following dependency apps are missing: "
+msgstr "Die folgenden notwendigen Apps fehlen:"
+
+#: /unite/templates/error.php:27
+msgid "Please ask the administrator to enable these apps."
+msgstr "Bitte frage die Admins, ob sie diese Apps aktivieren können."
