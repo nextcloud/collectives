@@ -10,9 +10,9 @@
 				@blur="renamePage">
 			<Actions class="top-bar__button" close-after-click="true">
 				<ActionButton v-if="edit"
-					icon="icon-edit"
+					icon="icon-checkmark"
 					@click="$emit('toggleEdit')">
-					{{ t('unite', 'View page without editing') }}
+					{{ t('unite', 'Done with editing') }}
 				</ActionButton>
 				<ActionButton v-else
 					icon="icon-rename"
