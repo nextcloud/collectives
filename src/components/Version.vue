@@ -1,29 +1,34 @@
 <template>
-	<AppContent>
-		<div>
-			<div id="action-menu">
-				<Actions>
-					<ActionButton
-						icon="icon-history"
-						@click="revertVersion">
-						{{ t('unite', 'Restore this version') }}
-					</ActionButton>
-				</Actions>
-			</div>
-			<h1 class="page-title">
-				{{ page.title }}
-			</h1>
-			<RichText :page-id="page.id"
-				:page-url="pageUrl"
-				:is-version="true" />
-		</div>
-	</AppContent>
+	<div>
+		<h1 class="page-title">
+			<input id="version-title"
+				type="text"
+				disabled
+				:value="versionTitle">
+			<Actions class="top-bar__button">
+				<ActionButton
+					icon="icon-history"
+					@click="revertVersion">
+					{{ t('unite', 'Restore this version') }}
+				</ActionButton>
+			</Actions>
+			<Actions>
+				<ActionButton
+					icon="icon-play-next"
+					@click="$emit('preview-version', null)">
+					{{ t('unite', 'Back to current version') }}
+				</ActionButton>
+			</Actions>
+		</h1>
+		<RichText :page-id="page.id"
+			:page-url="pageUrl"
+			:is-version="true" />
+	</div>
 </template>
 
 <script>
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import Actions from '@nextcloud/vue/dist/Components/Actions'
-import AppContent from '@nextcloud/vue/dist/Components/AppContent'
 import RichText from './RichText'
 
 import { getCurrentUser } from '@nextcloud/auth'
@@ -37,7 +42,6 @@ export default {
 	components: {
 		ActionButton,
 		Actions,
-		AppContent,
 		RichText,
 	},
 
@@ -82,6 +86,10 @@ export default {
 		getUser() {
 			return getCurrentUser().uid
 		},
+
+		versionTitle() {
+			return `${this.page.title} (${this.version.relativeTimestamp})`
+		},
 	},
 
 	methods: {
@@ -115,7 +123,11 @@ export default {
 </script>
 
 <style scoped>
-	.page-title {
-		padding: 4px 8px 2px 14px;
+    #version-title {
+		background-color: var(--color-main-background);
+		color: var(--color-text-lighter);
+		margin: 3px 3px 3px 0;
+		padding: 7px 6px;
 	}
+
 </style>

@@ -13,8 +13,10 @@
 						:current-version-timestamp="currentVersionTimestamp"
 						:updating="updating"
 						@toggleSidebar="showSidebar=!showSidebar"
+						@preview-version="setCurrentVersion"
 						@resetVersion="resetVersion" />
-					<Page key="currentPage.timestamp"
+					<Page v-else
+						key="currentPage.timestamp"
 						:updating="updating"
 						:edit="edit"
 						@deletePage="deletePage"

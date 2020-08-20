@@ -32,7 +32,7 @@
 		margin-top: 5px;
 	}
 
-	.page-title, #titleform input[type="text"] {
+	.page-title, #version-title, #titleform input[type="text"] {
 		font-size: 35px;
 		border: none;
 		font-weight: 600;
