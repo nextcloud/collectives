@@ -56,15 +56,9 @@ build-js-production:
 	npm run build
 
 # Builds translation template from source code
-#
-# Filtering stderr for "node_modules/" to work around an issue in translationtool
-# https://github.com/nextcloud/docker-ci/pull/236
-pot:
-	# { php $(build_tools_dir)/translationtool.phar create-pot-files 2>&1 1>&3 | grep -q --invert-match "node_modules/"; } 3>&1 1>&2
-	php $(build_tools_dir)/translationtool.phar create-pot-files 2>&1 \
-		| grep --invert-match "node_modules/"
-	rm -f $(CURDIR)/translationfiles/templates/moment.pot
-	rm -f $(CURDIR)/translationfiles/templates/@nextcloud.pot
+pot: translationtool
+	php $(build_tools_dir)/translationtool.phar create-pot-files
+	sed -i 's/^#: .*\/unite/#: \/unite/' $(CURDIR)/translationfiles/templates/unite.pot
 
 l10n: pot
 	php $(build_tools_dir)/translationtool.phar convert-po-files
