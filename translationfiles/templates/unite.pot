@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2020-08-20 09:10+0200\n"
+"POT-Creation-Date: 2020-08-20 09:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -112,26 +112,30 @@ msgid "Could not fetch collectives"
 msgstr ""
 
 #: /unite/specialVueFakeDummyForL10nScript.js:21
-msgid "Could not create the page"
+msgid "New Page"
 msgstr ""
 
 #: /unite/specialVueFakeDummyForL10nScript.js:22
-msgid "Could not create the collective"
+msgid "Could not create the page"
 msgstr ""
 
 #: /unite/specialVueFakeDummyForL10nScript.js:23
-msgid "Could not rename the page"
+msgid "Could not create the collective"
 msgstr ""
 
 #: /unite/specialVueFakeDummyForL10nScript.js:24
-msgid "Page deleted"
+msgid "Could not rename the page"
 msgstr ""
 
 #: /unite/specialVueFakeDummyForL10nScript.js:25
-msgid "Could not delete the page"
+msgid "Page deleted"
 msgstr ""
 
 #: /unite/specialVueFakeDummyForL10nScript.js:26
+msgid "Could not delete the page"
+msgstr ""
+
+#: /unite/specialVueFakeDummyForL10nScript.js:27
 msgid "Could not fetch page ${pageId}"
 msgstr ""
 

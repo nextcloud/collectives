@@ -227,8 +227,11 @@ export default {
 		 * Create a new page and focus the page  automatically
 		 */
 		async newPage() {
+			const page = {
+				title: t('unite', 'New Page'),
+			}
 			try {
-				await this.$store.dispatch('newPage')
+				await this.$store.dispatch('newPage', page)
 				this.$router.push(this.$store.getters.updatedPagePath)
 			} catch (e) {
 				console.error(e)
