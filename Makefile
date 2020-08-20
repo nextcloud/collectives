@@ -55,12 +55,15 @@ build-js:
 build-js-production:
 	npm run build
 
-# Builds translation template from source code
-pot: translationtool
+# Builds translation template from source code and update 
+po:
 	php $(build_tools_dir)/translationtool.phar create-pot-files
 	sed -i 's/^#: .*\/unite/#: \/unite/' $(CURDIR)/translationfiles/templates/unite.pot
+	for pofile in $(CURDIR)/translationfiles/*/unite.po; do \
+		msgmerge --update "$$pofile" translationfiles/templates/unite.pot; \
+	done
 
-l10n: pot
+l10n: po
 	php $(build_tools_dir)/translationtool.phar convert-po-files
 
 # Testing
