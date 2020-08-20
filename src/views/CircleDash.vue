@@ -1,6 +1,6 @@
 <template>
 	<Content app-name="collective" :class="{'icon-loading': loading}">
-		<Nav />
+		<Nav @newCollective="newCollective" />
 		<AppContent>
 			<CollectiveHeading v-if="currentCollective" />
 			<TopBar v-if="currentPage"
@@ -30,15 +30,7 @@
 			<EmptyContent v-else icon="icon-ant">
 				{{ t('unite', 'No collective selected') }}
 				<template #desc>
-					{{ t('unite', 'Select a collective on the left or create a new one:') }}
-					<ul>
-						<ActionInput v-if="!collectiveParam"
-							ref="newCollectiveName"
-							icon="icon-star"
-							@submit="newCollective">
-							{{ t('unite', 'Name for a new collective') }}
-						</ActionInput>
-					</ul>
+					{{ t('unite', 'Select a collective or create a new one on the left.') }}
 				</template>
 			</EmptyContent>
 		</AppContent>
@@ -55,7 +47,6 @@ import { emit } from '@nextcloud/event-bus'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import AppContent from '@nextcloud/vue/dist/Components/AppContent'
 import AppContentDetails from '@nextcloud/vue/dist/Components/AppContentDetails'
-import ActionInput from '@nextcloud/vue/dist/Components/ActionInput'
 import Content from '@nextcloud/vue/dist/Components/Content'
 import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 import Nav from '../components/Nav'
@@ -74,7 +65,6 @@ export default {
 	components: {
 		AppContent,
 		AppContentDetails,
-		ActionInput,
 		Content,
 		EmptyContent,
 		Nav,
@@ -242,11 +232,9 @@ export default {
 
 		/**
 		 * Create a new collective with the name given in the breadcrumb input
-		 * @param {Event} event Event that triggered the function
+		 * @param {Object} collective Properties of the new collective
 		 */
-		async newCollective(event) {
-			const name = event.currentTarget[1].value
-			const collective = { name }
+		async newCollective(collective) {
 			try {
 				await this.$store.dispatch('newCollective', collective)
 				this.$router.push(this.$store.getters.updatedCollectivePath)
