@@ -143,12 +143,10 @@ export default new Vuex.Store({
 
 		/**
 		 * Create a new page
+		 * @param {Object} page Properties for the new page (title for now)
 		 */
-		async newPage({ commit, getters }) {
+		async newPage({ commit, getters }, page) {
 			commit('loading')
-			const page = {
-				title: 'New Page',
-			}
 			const response = await axios.post(getters.pagesUrl, page)
 			// Add new page to the beginning of pages array
 			commit('addPage', { newTitle: '', ...response.data })

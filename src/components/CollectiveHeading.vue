@@ -5,12 +5,6 @@
 				{{ name }}
 			</router-link>
 		</h2>
-		<button class="primary"
-			:disabled="$store.state.loading"
-			@click="$emit('newPage')">
-			<span class="icon icon-add-white" />
-			{{ t('unite', 'Add a page') }}
-		</button>
 	</div>
 </template>
 

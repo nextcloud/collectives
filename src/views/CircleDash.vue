@@ -1,15 +1,11 @@
 <template>
 	<Content app-name="collective" :class="{'icon-loading': loading}">
-		<Nav />
+		<Nav @newCollective="newCollective" />
 		<AppContent>
-			<CollectiveHeading v-if="currentCollective"
-				@newPage="newPage" />
-			<TopBar v-if="currentPage"
-				:edit="edit"
-				:sidebar="showSidebar"
-				@toggleSidebar="showSidebar = !showSidebar" />
+			<CollectiveHeading v-if="currentCollective" />
 			<div v-if="collectiveParam" id="app-content-wrapper">
-				<PagesList />
+				<PagesList
+					@newPage="newPage" />
 				<AppContentDetails v-if="currentPage">
 					<Version v-if="currentVersion"
 						:page="currentPage"
@@ -17,28 +13,23 @@
 						:current-version-timestamp="currentVersionTimestamp"
 						:updating="updating"
 						@toggleSidebar="showSidebar=!showSidebar"
+						@preview-version="setCurrentVersion"
 						@resetVersion="resetVersion" />
-					<Page key="currentPage.timestamp"
+					<Page v-else
+						key="currentPage.timestamp"
 						:updating="updating"
 						:edit="edit"
 						@deletePage="deletePage"
 						@edit="edit = true"
 						@toggleEdit="edit = !edit"
+						@showVersions="showSidebar = true"
 						@renamePage="renamePage" />
 				</AppContentDetails>
 			</div>
 			<EmptyContent v-else icon="icon-ant">
 				{{ t('unite', 'No collective selected') }}
 				<template #desc>
-					{{ t('unite', 'Select a collective on the left or create a new one:') }}
-					<ul>
-						<ActionInput v-if="!collectiveParam"
-							ref="newCollectiveName"
-							icon="icon-star"
-							@submit="newCollective">
-							{{ t('unite', 'Name for a new collective') }}
-						</ActionInput>
-					</ul>
+					{{ t('unite', 'Select a collective or create a new one on the left.') }}
 				</template>
 			</EmptyContent>
 		</AppContent>
@@ -55,14 +46,12 @@ import { emit } from '@nextcloud/event-bus'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import AppContent from '@nextcloud/vue/dist/Components/AppContent'
 import AppContentDetails from '@nextcloud/vue/dist/Components/AppContentDetails'
-import ActionInput from '@nextcloud/vue/dist/Components/ActionInput'
 import Content from '@nextcloud/vue/dist/Components/Content'
 import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 import Nav from '../components/Nav'
 import PagesList from '../components/PagesList'
 import Page from '../components/Page'
 import PageSidebar from '../components/PageSidebar'
-import TopBar from '../components/TopBar'
 import Version from '../components/Version'
 import CollectiveHeading from '../components/CollectiveHeading'
 
@@ -74,14 +63,12 @@ export default {
 	components: {
 		AppContent,
 		AppContentDetails,
-		ActionInput,
 		Content,
 		EmptyContent,
 		Nav,
 		Page,
 		PagesList,
 		PageSidebar,
-		TopBar,
 		Version,
 		CollectiveHeading,
 	},
@@ -227,8 +214,11 @@ export default {
 		 * Create a new page and focus the page  automatically
 		 */
 		async newPage() {
+			const page = {
+				title: t('unite', 'New Page'),
+			}
 			try {
-				await this.$store.dispatch('newPage')
+				await this.$store.dispatch('newPage', page)
 				this.$router.push(this.$store.getters.updatedPagePath)
 			} catch (e) {
 				console.error(e)
@@ -239,11 +229,9 @@ export default {
 
 		/**
 		 * Create a new collective with the name given in the breadcrumb input
-		 * @param {Event} event Event that triggered the function
+		 * @param {Object} collective Properties of the new collective
 		 */
-		async newCollective(event) {
-			const name = event.currentTarget[1].value
-			const collective = { name }
+		async newCollective(collective) {
 			try {
 				await this.$store.dispatch('newCollective', collective)
 				this.$router.push(this.$store.getters.updatedCollectivePath)

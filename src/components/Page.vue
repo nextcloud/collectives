@@ -10,9 +10,9 @@
 				@blur="renamePage">
 			<Actions class="top-bar__button" close-after-click="true">
 				<ActionButton v-if="edit"
-					icon="icon-edit"
+					icon="icon-checkmark"
 					@click="$emit('toggleEdit')">
-					{{ t('unite', 'View page without editing') }}
+					{{ t('unite', 'Done with editing') }}
 				</ActionButton>
 				<ActionButton v-else
 					icon="icon-rename"
@@ -25,6 +25,12 @@
 					icon="icon-delete"
 					@click="$emit('deletePage')">
 					{{ t('unite', 'Delete page') }}
+				</ActionButton>
+				<ActionButton v-if="!sidebar"
+					icon="icon-menu"
+					:close-after-click="true"
+					@click="$emit('showVersions')">
+					{{ t('unite', 'Show old versions') }}
 				</ActionButton>
 			</Actions>
 		</h1>
@@ -219,7 +225,17 @@ export default {
 
 <style>
 	#editor-container .editor__content {
-		box-shadow: 5px 5px 10px 0px #aaa;
+		border: 2px solid var(--color-border);
+		border-radius: var(--border-radius);
+	}
+
+	#text-container .editor__content {
+		border: 2px solid var(--color-main-background);
+		border-radius: var(--border-radius);
+	}
+
+	.editor__content {
+		border: 2px;
 	}
 
 	.page-title {
