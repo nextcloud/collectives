@@ -1,5 +1,13 @@
 <template>
 	<AppContentList>
+		<div class="app-content-list-item">
+			<button class="primary"
+				:disabled="$store.state.loading"
+				@click="$emit('newPage')">
+				<span class="icon icon-add-white" />
+				{{ t('unite', 'Add a page') }}
+			</button>
+		</div>
 		<router-link v-for="page in pages"
 			:key="page.title"
 			:to="`/${collectiveParam}/${page.title}`"
@@ -80,7 +88,16 @@ export default {
 		width: 30px;
 		left: 12px;
 	}
+
 	.app-content-list .app-content-list-item .app-content-list-item-details.active {
 		opacity: 1;
+	}
+
+	.app-content-list div.app-content-list-item:hover {
+		background-color: var(--color-main-background);
+	}
+
+	.app-content-list div.app-content-list-item {
+		cursor: default;
 	}
 </style>

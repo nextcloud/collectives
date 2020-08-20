@@ -2,14 +2,14 @@
 	<Content app-name="collective" :class="{'icon-loading': loading}">
 		<Nav />
 		<AppContent>
-			<CollectiveHeading v-if="currentCollective"
-				@newPage="newPage" />
+			<CollectiveHeading v-if="currentCollective" />
 			<TopBar v-if="currentPage"
 				:edit="edit"
 				:sidebar="showSidebar"
 				@toggleSidebar="showSidebar = !showSidebar" />
 			<div v-if="collectiveParam" id="app-content-wrapper">
-				<PagesList />
+				<PagesList
+					@newPage="newPage" />
 				<AppContentDetails v-if="currentPage">
 					<Version v-if="currentVersion"
 						:page="currentPage"
