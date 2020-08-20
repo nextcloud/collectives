@@ -26,6 +26,12 @@
 					@click="$emit('deletePage')">
 					{{ t('unite', 'Delete page') }}
 				</ActionButton>
+				<ActionButton v-if="!sidebar"
+					icon="icon-menu"
+					:close-after-click="true"
+					@click="$emit('showVersions')">
+					{{ t('unite', 'Show old versions') }}
+				</ActionButton>
 			</Actions>
 		</h1>
 		<RichText v-if="readOnly"

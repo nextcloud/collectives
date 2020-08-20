@@ -3,10 +3,6 @@
 		<Nav @newCollective="newCollective" />
 		<AppContent>
 			<CollectiveHeading v-if="currentCollective" />
-			<TopBar v-if="currentPage"
-				:edit="edit"
-				:sidebar="showSidebar"
-				@toggleSidebar="showSidebar = !showSidebar" />
 			<div v-if="collectiveParam" id="app-content-wrapper">
 				<PagesList
 					@newPage="newPage" />
@@ -24,6 +20,7 @@
 						@deletePage="deletePage"
 						@edit="edit = true"
 						@toggleEdit="edit = !edit"
+						@showVersions="showSidebar = true"
 						@renamePage="renamePage" />
 				</AppContentDetails>
 			</div>
@@ -53,7 +50,6 @@ import Nav from '../components/Nav'
 import PagesList from '../components/PagesList'
 import Page from '../components/Page'
 import PageSidebar from '../components/PageSidebar'
-import TopBar from '../components/TopBar'
 import Version from '../components/Version'
 import CollectiveHeading from '../components/CollectiveHeading'
 
@@ -71,7 +67,6 @@ export default {
 		Page,
 		PagesList,
 		PageSidebar,
-		TopBar,
 		Version,
 		CollectiveHeading,
 	},
