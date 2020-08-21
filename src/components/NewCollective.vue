@@ -1,7 +1,7 @@
 <!--
-  - @copyright Copyright (c) 2018 John Molakvoæ <skjnldsv@protonmail.com>
+  - @copyright Copyright (c) 2020 Azul <azul@riseup.net>
   -
-  - @author John Molakvoæ <skjnldsv@protonmail.com>
+  - @author Azul <azul@riseup.net>
   -
   - @license GNU AGPL version 3 or any later version
   -
@@ -25,27 +25,45 @@
 		icon="icon-add"
 		@click.prevent.stop="startCreateCollective" />
 	<div v-else class="collective-create">
-		<!--
-		<ColorPicker v-model="color" class="app-navigation-entry-bullet-wrapper">
-			<div :style="{ backgroundColor: color }" class="color0 icon-colorpicker app-navigation-entry-bullet" />
-		</ColorPicker>
-		-->
 		<form @submit.prevent.stop="createCollective">
-			<input :placeholder="t('unite', 'New collective name')" type="text" required>
+			<input
+				ref="nameField"
+				:placeholder="t('unite', 'New collective name')"
+				type="text"
+				required>
 			<input type="submit" value="" class="icon-confirm">
-			<Actions><ActionButton icon="icon-close" @click.stop.prevent="cancelEdit" /></Actions>
+			<EmojiPicker @select="addEmoji">
+				<button
+					type="button"
+					:aria-label="t('unite', 'Add emoji')"
+					:aria-haspopup="true">
+					<EmoticonOutline
+						:size="20" />
+				</button>
+			</EmojiPicker>
+			<Actions>
+				<ActionButton icon="icon-close" @click.stop.prevent="cancelEdit" />
+			</Actions>
 		</form>
 	</div>
 </template>
 
 <script>
 import { ActionButton, Actions, AppNavigationItem } from '@nextcloud/vue'
+import EmojiPicker from '@nextcloud/vue/dist/Components/EmojiPicker'
+import EmoticonOutline from 'vue-material-design-icons/EmoticonOutline'
 
 const randomColor = () => '#' + ((1 << 24) * Math.random() | 0).toString(16)
 
 export default {
 	name: 'NewCollective',
-	components: { AppNavigationItem, ActionButton, Actions },
+	components: {
+		AppNavigationItem,
+		ActionButton,
+		Actions,
+		EmojiPicker,
+		EmoticonOutline,
+	},
 	directives: {},
 	props: {},
 	data() {
@@ -54,6 +72,7 @@ export default {
 			editing: false,
 			loading: false,
 			color: randomColor(),
+			emojiSelected: false,
 		}
 	},
 	computed: {},
@@ -62,6 +81,9 @@ export default {
 	methods: {
 		startCreateCollective(e) {
 			this.editing = true
+			this.$nextTick(() => {
+				this.$refs.nameField.focus()
+			})
 		},
 		createCollective(e) {
 			const name = e.currentTarget.childNodes[0].value
@@ -76,6 +98,10 @@ export default {
 		cancelEdit(e) {
 			this.editing = false
 			this.color = randomColor()
+		},
+		addEmoji(emoji) {
+			const nameField = this.$refs.nameField
+			nameField.value += emoji
 		},
 	},
 }
