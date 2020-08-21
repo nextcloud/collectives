@@ -14,24 +14,16 @@ use OCP\AppFramework\Db\Entity;
  * @method void setName(string $value)
  * @method string getCircleUniqueId()
  * @method void setCircleUniqueId(string $value)
- * @method string getFolderId()
- * @method void setFolderId(integer $value)
- * @method string getOwnerId()
- * @method void setOwnerId(string $value)
  */
 class Collective extends Entity implements JsonSerializable {
 	protected $name;
 	protected $circleUniqueId;
-	protected $folderId;
-	protected $ownerId;
 
 	public function jsonSerialize() {
 		return [
 			'id' => $this->id,
 			'name' => $this->name,
-			'circleUniqueId' => $this->circleUniqueId,
-			'folderId' => $this->folderId,
-			'ownerId' => $this->ownerId
+			'circleUniqueId' => $this->circleUniqueId
 		];
 	}
 }

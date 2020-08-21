@@ -89,9 +89,11 @@ class PageService {
 	 * @throws NotFoundException
 	 */
 	public function findAll(string $userId, int $collectiveId): array {
-		$this->collectiveCircleHelper->userHasCollective($userId, $collectiveId);
+		if (null === $collective = $this->collectiveMapper->findById($collectiveId, $userId)) {
+			throw new NotFoundException('Collective not found: '. $collectiveId);
+		}
+		$folder = $this->collectiveMapper->getCollectiveFolder($collective, $userId);
 		$pages = [];
-		$folder = $this->collectiveMapper->getCollectiveFolder($collectiveId);
 		foreach ($folder->getDirectoryListing() as $file) {
 			if ($file instanceof File && $this->isPage($file)) {
 				$pages[] = $this->getPage($file);
@@ -110,8 +112,10 @@ class PageService {
 	 * @throws NotFoundException
 	 */
 	public function find(string $userId, int $collectiveId, int $id): Page {
-		$this->collectiveCircleHelper->userHasCollective($userId, $collectiveId);
-		$folder = $this->collectiveMapper->getCollectiveFolder($collectiveId);
+		if (null === $collective = $this->collectiveMapper->findById($collectiveId, $userId)) {
+			throw new NotFoundException('Collective not found: '. $collectiveId);
+		}
+		$folder = $this->collectiveMapper->getCollectiveFolder($collective, $userId);
 		return $this->getPage($this->nodeHelper->getFileById($folder, $id));
 	}
 
@@ -127,7 +131,10 @@ class PageService {
 	 * @throws \OCP\Files\NotFoundException
 	 */
 	public function create(string $userId, int $collectiveId, string $title): Page {
-		$folder = $this->collectiveMapper->getCollectiveFolder($collectiveId);
+		if (null === $collective = $this->collectiveMapper->findById($collectiveId, $userId)) {
+			throw new NotFoundException('Collective not found: '. $collectiveId);
+		}
+		$folder = $this->collectiveMapper->getCollectiveFolder($collective, $userId);
 		$safeTitle = $this->nodeHelper->sanitiseFilename($title, self::DEFAULT_PAGE_TITLE);
 		$filename = NodeHelper::generateFilename($folder, $safeTitle, self::SUFFIX);
 
@@ -147,11 +154,13 @@ class PageService {
 	 * @throws NotFoundException
 	 */
 	public function rename(string $userId, int $collectiveId, int $id, string $title): Page {
-		$this->collectiveCircleHelper->userHasCollective($userId, $collectiveId);
+		if (null === $collective = $this->collectiveMapper->findById($collectiveId, $userId)) {
+			throw new NotFoundException('Collective not found: '. $collectiveId);
+		}
 		try {
 			$page = $this->find($userId, $collectiveId, $id);
 
-			$folder = $this->collectiveMapper->getCollectiveFolder($collectiveId);
+			$folder = $this->collectiveMapper->getCollectiveFolder($collective, $userId);
 			$file = $this->nodeHelper->getFileById($folder, $page->getId());
 			$safeTitle = $this->nodeHelper->sanitiseFilename($title, self::DEFAULT_PAGE_TITLE);
 
@@ -182,10 +191,12 @@ class PageService {
 	 * @throws NotFoundException
 	 */
 	public function delete(string $userId, int $collectiveId, int $id): Page {
-		$this->collectiveCircleHelper->userHasCollective($userId, $collectiveId);
+		if (null === $collective = $this->collectiveMapper->findById($collectiveId, $userId)) {
+			throw new NotFoundException('Collective not found: '. $collectiveId);
+		}
 		try {
 			$page = $this->find($userId, $collectiveId, $id);
-			$folder = $this->collectiveMapper->getCollectiveFolder($collectiveId);
+			$folder = $this->collectiveMapper->getCollectiveFolder($collective, $userId);
 			$file = $this->nodeHelper->getFileById($folder, $page->getId());
 			$file->delete();
 			return $page;

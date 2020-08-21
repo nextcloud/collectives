@@ -5,6 +5,7 @@ namespace Unit\Service;
 use OC\Files\Mount\MountPoint;
 use OC\Files\Node\File;
 use OC\Files\Node\Folder;
+use OCA\Unite\Db\Collective;
 use OCA\Unite\Db\CollectiveMapper;
 use OCA\Unite\Fs\NodeHelper;
 use OCA\Unite\Model\Page;
@@ -42,6 +43,13 @@ class PageServiceTest extends TestCase {
 			->getMock();
 		$collectiveMapper->method('getCollectiveFolder')
 			->willReturn($this->collectiveFolder);
+		$collective = new Collective();
+		$collectiveMapper->method('findById')
+			->willReturnMap([
+				[1, $this->userId, $collective],
+				[2, $this->userId, $collective],
+				[3, $this->userId, null]
+			]);
 	}
 
 	public function testIsPage(): void {
@@ -104,6 +112,12 @@ class PageServiceTest extends TestCase {
 
 		self::assertEquals($pages, $this->service->findAll($this->userId, 1));
 		self::assertEquals($pages, $this->service->findAll($this->userId, 2));
+	}
+
+	public function testFindAllCollectiveNotFoundException(): void {
+		$this->expectException(NotFoundException::class);
+		$this->service->findAll($this->userId, 3);
+
 	}
 
 	public function testHandleExceptionDoesNotExistException(): void {
