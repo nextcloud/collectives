@@ -116,7 +116,7 @@ msgstr "Kein Kollektiv ausgewählt"
 
 #: /unite/specialVueFakeDummyForL10nScript.js:20
 msgid "Select a collective or create a new one on the left."
-msgstr "Wähle ein Kollektiv aus oder lege ein neues an:"
+msgstr "Wähle ein Kollektiv aus oder lege links ein neues an."
 
 #: /unite/specialVueFakeDummyForL10nScript.js:21
 msgid "Could not fetch pages"
