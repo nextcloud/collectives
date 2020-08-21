@@ -15,7 +15,7 @@
 			class="app-content-list-item">
 			<div class="app-content-list-item-icon"
 				:style="iconStyle(`Page-${page.id}`)">
-				{{ page.title[0] }}
+				{{ firstGrapheme(page.title) }}
 			</div>
 			<div class="app-content-list-item-line-one">
 				{{ page.title }}
@@ -76,6 +76,11 @@ export default {
 		// was edited in the last 5 Minutes
 		recentlyEdited(page) {
 			return (Date.now() / 1000) - page.timestamp < 300
+		},
+
+		// UTF8 friendly way of getting first 'letter'
+		firstGrapheme(str) {
+			return str[Symbol.iterator]().next().value
 		},
 	},
 }
