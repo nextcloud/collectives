@@ -6,7 +6,9 @@ use OCA\Circles\Api\v1\Circles;
 use OCA\Unite\Db\Collective;
 use OCA\Unite\Db\CollectiveMapper;
 use OCA\Unite\Fs\NodeHelper;
+use OCA\Unite\Mount\CollectiveRootPathHelper;
 use OCP\AppFramework\QueryException;
+use OCP\Files\IRootFolder;
 
 class CollectiveCircleService {
 	/** @var CollectiveMapper */
@@ -15,22 +17,32 @@ class CollectiveCircleService {
 	private $collectiveCircleHelper;
 	/** @var NodeHelper */
 	private $nodeHelper;
+	/** @var IRootFolder */
+	private $rootFolder;
+	/** @var CollectiveRootPathHelper */
+	private $collectiveRootPathHelper;
 
 	/**
 	 * CollectiveCircleService constructor.
 	 *
-	 * @param CollectiveMapper       $collectiveMapper
-	 * @param CollectiveCircleHelper $collectiveCircleHelper
-	 * @param NodeHelper             $nodeHelper
+	 * @param CollectiveMapper         $collectiveMapper
+	 * @param CollectiveCircleHelper   $collectiveCircleHelper
+	 * @param NodeHelper               $nodeHelper
+	 * @param IRootFolder              $rootFolder
+	 * @param CollectiveRootPathHelper $collectiveRootPathHelper
 	 */
 	public function __construct(
 		CollectiveMapper $collectiveMapper,
 		CollectiveCircleHelper $collectiveCircleHelper,
-		NodeHelper $nodeHelper
+		NodeHelper $nodeHelper,
+		IRootFolder $rootFolder,
+		CollectiveRootPathHelper $collectiveRootPathHelper
 	) {
 		$this->collectiveMapper = $collectiveMapper;
 		$this->collectiveCircleHelper = $collectiveCircleHelper;
 		$this->nodeHelper = $nodeHelper;
+		$this->rootFolder = $rootFolder;
+		$this->collectiveRootPathHelper = $collectiveRootPathHelper;
 	}
 
 	/**
@@ -95,15 +107,13 @@ class CollectiveCircleService {
 			throw new NotFoundException('Circle not found: ' . $collective->getCircleUniqueId());
 		}
 
-		$collective = $this->collectiveMapper->delete($collective);
-
-		// TODO: Remove folder at $this->collectiveRootPathHelper->get() . $id
-		/* try {
-			$folder->delete();
+		$collectiveFolder = $this->rootFolder->get($this->collectiveRootPathHelper->get() . '/' . $collective->getId());
+		try {
+			$collectiveFolder->delete();
 		} catch (InvalidPathException | \OCP\Files\NotFoundException | NotPermittedException $e) {
-			throw new NotFoundException('Failed to delete collective folder: ' . $id);
-		} */
+			throw new NotFoundException('Failed to delete collective folder');
+		}
 
-		return $collective;
+		return $this->collectiveMapper->delete($collective);
 	}
 }
