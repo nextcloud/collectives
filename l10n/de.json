@@ -19,7 +19,7 @@
     "Reverted {page} to revision {timestamp}." : "Seiete {page} auf Version {timestamp} zurücksetzen.",
     "Failed to revert {page} to revision {timestamp}." : "Das Zurücksetzen der Seite {page} auf die Version {timestamp} ist fehlgeschlagen.",
     "No collective selected" : "Kein Kollektiv ausgewählt",
-    "Select a collective or create a new one on the left." : "Wähle ein Kollektiv aus oder lege ein neues an:",
+    "Select a collective or create a new one on the left." : "Wähle ein Kollektiv aus oder lege links ein neues an.",
     "Could not fetch pages" : "Konnte die Seiten nicht laden",
     "Could not fetch collectives" : "Konnte die Kollektive nicht laden",
     "New Page" : "Neue Seite",
