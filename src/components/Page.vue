@@ -26,7 +26,7 @@
 					@click="$emit('deletePage')">
 					{{ t('unite', 'Delete page') }}
 				</ActionButton>
-				<ActionButton v-if="!sidebar"
+				<ActionButton
 					icon="icon-menu"
 					:close-after-click="true"
 					@click="$emit('showVersions')">
