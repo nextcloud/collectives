@@ -109,11 +109,11 @@ export default {
 		},
 
 		/**
-		 * Return the url param for the currently selected collective
+		 * Return the url param for the currently selected page
 		 * @returns {String|undefined}
 		 */
 		pageParam() {
-			return this.$store.getters.collectiveParam
+			return this.$store.getters.pageParam
 		},
 
 		edit: {
