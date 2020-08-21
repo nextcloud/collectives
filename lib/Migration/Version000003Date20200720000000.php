@@ -34,13 +34,6 @@ class Version000003Date20200720000000 extends SimpleMigrationStep {
 				'notnull' => true,
 				'length' => 15,
 			]);
-			$table->addColumn('folder_id', Type::BIGINT, [
-				'notnull' => true,
-			]);
-			$table->addColumn('owner_id', Type::STRING, [
-				'notnull' => true,
-				'length' => 64,
-			]);
 
 			$table->setPrimaryKey(['id']);
 			$table->addUniqueIndex(['circle_unique_id'], 'unite_circle_unique_id_index');

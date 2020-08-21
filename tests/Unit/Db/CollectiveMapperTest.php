@@ -14,6 +14,11 @@ use PHPUnit\Framework\TestCase;
 class CollectiveMapperTest extends TestCase {
 	private $mapper;
 	private $folder;
+	private $collective1;
+	private $collective2;
+	private $collective3;
+	private $collective4;
+	private $userId = 'jane';
 
 	protected function setUp() {
 		parent::setUp();
@@ -25,24 +30,31 @@ class CollectiveMapperTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 		$this->folder = new Folder($root, $view, '/path/to/Folder');
-
-		$root->method('getById')
+		$userFolder = $this->getMockBuilder(Folder::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$userFolder->method('get')
 			->willReturnMap([
-				[1, [$this->folder]],
-				[2, [$this->folder, $this->folder]],
-				[4, []]
+				['collective1', $this->folder],
+				['collective2', null],
+				['collective3', null],
 			]);
+		$root->method('getUserFolder')
+			->willReturn($userFolder);
 
 		$db = $this->getMockBuilder(IDBConnection::class)
 			->disableOriginalConstructor()
 			->getMock();
 
-		$collective1 = new Collective();
-		$collective1->setFolderId(1);
-		$collective2 = new Collective();
-		$collective2->setFolderId(2);
-		$collective4 = new Collective();
-		$collective4->setFolderId(4);
+		$this->collective1 = new Collective();
+		$this->collective1->setId(1);
+		$this->collective1->setName('collective1');
+		$this->collective2 = new Collective();
+		$this->collective2->setId(2);
+		$this->collective2->setName('collective2');
+		$this->collective3 = new Collective();
+		$this->collective3->setId(3);
+		$this->collective3->setName('collective3');
 
 		$this->mapper = $this->getMockBuilder(CollectiveMapper::class)
 			->setConstructorArgs([$root, $db])
@@ -50,27 +62,23 @@ class CollectiveMapperTest extends TestCase {
 			->getMock();
 		$this->mapper->method('findById')
 			->willReturnMap([
-				[1, $collective1],
-				[2, $collective2],
-				[3, null],
-				[4, $collective4]
+				[1, $this->collective1],
+				[2, $this->collective2],
+				[3, null]
 			]);
 	}
 
-	public function testFindById(): void {
-		self::assertEquals($this->folder, $this->mapper->getCollectiveFolder(1));
-		self::assertEquals($this->folder, $this->mapper->getCollectiveFolder(2));
+	public function testGetCollectiveFolder(): void {
+		self::assertEquals($this->folder, $this->mapper->getCollectiveFolder($this->collective1, $this->userId));
 	}
 
-	public function testFindByIdCollectiveNotFoundException(): void {
+	public function testGetCollectiveFolderNotFoundException(): void {
 		$this->expectException(NotFoundException::class);
-		$this->expectExceptionMessage("Collective 3 not found");
-		self::assertEquals($this->folder, $this->mapper->getCollectiveFolder(3));
+		$this->expectExceptionMessage("Folder not found for collective collective2");
+		$this->mapper->getCollectiveFolder($this->collective2, $this->userId);
 	}
 
-	public function testFindByIdFolderNotFoundException(): void {
-		$this->expectException(NotFoundException::class);
-		$this->expectExceptionMessage("Collective folder (FileID 4) not found");
-		self::assertEquals($this->folder, $this->mapper->getCollectiveFolder(4));
+	public function testUserHasCollectiveCollectiveNull(): void {
+		$this->assertNull($this->mapper->userHasCollective($this->collective1, $this->userId));
 	}
 }
