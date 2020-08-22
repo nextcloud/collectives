@@ -9,13 +9,15 @@ use OCP\Files\Config\IMountProvider;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\Files\Mount\IMountPoint;
-use OCP\Files\Node;
 use OCP\Files\NotFoundException;
+use OCP\Files\NotPermittedException;
 use OCP\Files\Storage\IStorageFactory;
 use OCP\IUser;
 use OCP\IUserSession;
 
 class MountProvider implements IMountProvider {
+	private const LANDING_PAGE = 'README.md';
+
 	/** @var CollectiveHelper */
 	private $collectiveHelper;
 
@@ -87,7 +89,22 @@ class MountProvider implements IMountProvider {
 		return $user ? $user->getUID() : null;
 	}
 
-	public function getMount($id, string $mountPoint, $cacheEntry = null, IStorageFactory $loader = null, IUser $user = null): IMountPoint {
+	/**
+	 * @param int                  $id
+	 * @param string               $mountPoint
+	 * @param null                 $cacheEntry
+	 * @param IStorageFactory|null $loader
+	 * @param IUser|null           $user
+	 *
+	 * @return IMountPoint
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function getMount(int $id,
+							 string $mountPoint,
+							 $cacheEntry = null,
+							 IStorageFactory $loader = null,
+							 IUser $user = null): IMountPoint {
 		if (!$cacheEntry) {
 			// trigger folder creation
 			$this->getFolder($id);
@@ -95,7 +112,7 @@ class MountProvider implements IMountProvider {
 
 		$storage = $this->getCollectivesRootFolder()->getStorage();
 
-		$rootPath = $this->getJailPath((int)$id);
+		$rootPath = $this->getJailPath($id);
 
 		$baseStorage = new Jail([
 			'storage' => $storage,
@@ -143,19 +160,25 @@ class MountProvider implements IMountProvider {
 	}
 
 	/**
-	 * @param      $id
+	 * @param int  $id
 	 * @param bool $create
 	 *
-	 * @return Node|null
+	 * @return Folder|null
+	 * @throws NotPermittedException
 	 */
-	public function getFolder($id, bool $create = true): ?Node {
+	public function getFolder(int $id, bool $create = true): ?Folder {
 		try {
-			return $this->getCollectivesRootFolder()->get((string)$id);
+			$folder = $this->getCollectivesRootFolder()->get((string)$id);
+			if (!$folder instanceof Folder) {
+				return null;
+			}
 		} catch (NotFoundException $e) {
 			if ($create) {
-				return $this->getCollectivesRootFolder()->newFolder((string)$id);
+				$folder = $this->getCollectivesRootFolder()->newFolder((string)$id);
 			}
 			return null;
 		}
+
+		return $folder;
 	}
 }
