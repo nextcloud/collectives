@@ -8,7 +8,9 @@ use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Mount\CollectiveRootPathHelper;
 use OCP\AppFramework\QueryException;
+use OCP\Files\InvalidPathException;
 use OCP\Files\IRootFolder;
+use OCP\Files\NotPermittedException;
 
 class CollectiveService {
 	/** @var CollectiveMapper */
@@ -107,8 +109,8 @@ class CollectiveService {
 			throw new NotFoundException('Circle not found: ' . $collective->getCircleUniqueId());
 		}
 
-		$collectiveFolder = $this->rootFolder->get($this->collectiveRootPathHelper->get() . '/' . $collective->getId());
 		try {
+			$collectiveFolder = $this->rootFolder->get($this->collectiveRootPathHelper->get() . '/' . $collective->getId());
 			$collectiveFolder->delete();
 		} catch (InvalidPathException | \OCP\Files\NotFoundException | NotPermittedException $e) {
 			throw new NotFoundException('Failed to delete collective folder');
