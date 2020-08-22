@@ -2,15 +2,12 @@
 
 namespace OCA\Collectives\Mount;
 
-use OC\Files\Node\LazyFolder;
 use OC\Files\Storage\Wrapper\Jail;
 use OCA\Collectives\Service\CollectiveHelper;
 use OCP\Files\Config\IMountProvider;
-use OCP\Files\Folder;
-use OCP\Files\IRootFolder;
 use OCP\Files\Mount\IMountPoint;
-use OCP\Files\Node;
 use OCP\Files\NotFoundException;
+use OCP\Files\NotPermittedException;
 use OCP\Files\Storage\IStorageFactory;
 use OCP\IUser;
 use OCP\IUserSession;
@@ -19,11 +16,8 @@ class MountProvider implements IMountProvider {
 	/** @var CollectiveHelper */
 	private $collectiveHelper;
 
-	/** @var CollectiveRootPathHelper */
-	private $collectiveRootPathHelper;
-
-	/** @var IRootFolder */
-	private $rootFolder;
+	/** @var CollectiveFolderManager */
+	private $collectiveFolderManager;
 
 	/** @var IUserSession */
 	private $userSession;
@@ -32,18 +26,15 @@ class MountProvider implements IMountProvider {
 	 * MountProvider constructor.
 	 *
 	 * @param CollectiveHelper   $collectiveHelper
-	 * @param CollectiveRootPathHelper $collectiveRootPathHelper
-	 * @param IRootFolder              $rootFolder
+	 * @param CollectiveFolderManager $collectiveFolderManager
 	 * @param IUserSession             $userSession
 	 */
 	public function __construct(
 		CollectiveHelper $collectiveHelper,
-		CollectiveRootPathHelper $collectiveRootPathHelper,
-		IRootFolder $rootFolder,
+		CollectiveFolderManager $collectiveFolderManager,
 		IUserSession $userSession) {
 		$this->collectiveHelper = $collectiveHelper;
-		$this->collectiveRootPathHelper = $collectiveRootPathHelper;
-		$this->rootFolder = $rootFolder;
+		$this->collectiveFolderManager = $collectiveFolderManager;
 		$this->userSession = $userSession;
 	}
 
@@ -80,22 +71,29 @@ class MountProvider implements IMountProvider {
 	}
 
 	/**
-	 * @return string|null
+	 * @param int                  $id
+	 * @param string               $mountPoint
+	 * @param null                 $cacheEntry
+	 * @param IStorageFactory|null $loader
+	 * @param IUser|null           $user
+	 *
+	 * @return IMountPoint
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
 	 */
-	private function getCurrentUID(): ?string {
-		$user = $this->userSession->getUser();
-		return $user ? $user->getUID() : null;
-	}
-
-	public function getMount($id, string $mountPoint, $cacheEntry = null, IStorageFactory $loader = null, IUser $user = null): IMountPoint {
+	public function getMount(int $id,
+							 string $mountPoint,
+							 $cacheEntry = null,
+							 IStorageFactory $loader = null,
+							 IUser $user = null): IMountPoint {
 		if (!$cacheEntry) {
 			// trigger folder creation
-			$this->getFolder($id);
+			$this->collectiveFolderManager->getFolder($id);
 		}
 
-		$storage = $this->getCollectivesRootFolder()->getStorage();
+		$storage = $this->collectiveFolderManager->getRootFolder()->getStorage();
 
-		$rootPath = $this->getJailPath((int)$id);
+		$rootPath = $this->getJailPath($id);
 
 		$baseStorage = new Jail([
 			'storage' => $storage,
@@ -111,7 +109,7 @@ class MountProvider implements IMountProvider {
 
 		return new CollectiveMountPoint(
 			$id,
-			$this->collectiveRootPathHelper,
+			$this->collectiveFolderManager,
 			$collectiveStorage,
 			$mountPoint,
 			null,
@@ -125,37 +123,6 @@ class MountProvider implements IMountProvider {
 	 * @return string
 	 */
 	public function getJailPath(int $folderId): string {
-		return $this->getCollectivesRootFolder()->getInternalPath() . '/' . $folderId;
-	}
-
-	/**
-	 * @return Folder
-	 */
-	private function getCollectivesRootFolder(): Folder {
-		$rootFolder = $this->rootFolder;
-		return (new LazyFolder(function () use ($rootFolder) {
-			try {
-				return $rootFolder->get($this->collectiveRootPathHelper->get());
-			} catch (NotFoundException $e) {
-				return $rootFolder->newFolder($this->collectiveRootPathHelper->get());
-			}
-		}));
-	}
-
-	/**
-	 * @param      $id
-	 * @param bool $create
-	 *
-	 * @return Node|null
-	 */
-	public function getFolder($id, bool $create = true): ?Node {
-		try {
-			return $this->getCollectivesRootFolder()->get((string)$id);
-		} catch (NotFoundException $e) {
-			if ($create) {
-				return $this->getCollectivesRootFolder()->newFolder((string)$id);
-			}
-			return null;
-		}
+		return $this->collectiveFolderManager->getRootFolder()->getInternalPath() . '/' . $folderId;
 	}
 }

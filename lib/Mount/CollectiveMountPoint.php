@@ -9,25 +9,25 @@ class CollectiveMountPoint extends MountPoint {
 	/** @var int */
 	private $folderId;
 
-	/** @var CollectiveRootPathHelper */
-	private $collectiveRootPathHelper;
+	/** @var CollectiveFolderManager */
+	private $collectiveFolderManager;
 
 	/**
 	 * CollectiveMountPoint constructor.
 	 *
-	 * @param int|null                 $folderId
-	 * @param CollectiveRootPathHelper $collectiveRootPathHelper
-	 * @param CollectiveStorage        $storage
-	 * @param string                   $mountPoint
-	 * @param array|null               $arguments
-	 * @param IStorageFactory|null     $loader
-	 * @param array|null               $mountOptions
-	 * @param int|null                 $mountId
+	 * @param int|null                $folderId
+	 * @param CollectiveFolderManager $collectiveFolderManager
+	 * @param CollectiveStorage       $storage
+	 * @param string                  $mountPoint
+	 * @param array|null              $arguments
+	 * @param IStorageFactory|null    $loader
+	 * @param array|null              $mountOptions
+	 * @param int|null                $mountId
 	 *
 	 * @throws \Exception
 	 */
 	public function __construct(?int $folderId,
-								CollectiveRootPathHelper $collectiveRootPathHelper,
+								CollectiveFolderManager $collectiveFolderManager,
 								CollectiveStorage $storage,
 								string $mountPoint,
 								array $arguments = null,
@@ -35,7 +35,7 @@ class CollectiveMountPoint extends MountPoint {
 								array $mountOptions = null,
 								int $mountId = null) {
 		$this->folderId = $folderId;
-		$this->collectiveRootPathHelper = $collectiveRootPathHelper;
+		$this->collectiveFolderManager = $collectiveFolderManager;
 		parent::__construct($storage, $mountPoint, $arguments, $loader, $mountOptions, $mountId);
 	}
 
@@ -77,6 +77,6 @@ class CollectiveMountPoint extends MountPoint {
 	 * @return string
 	 */
 	public function getSourcePath(): string {
-		return '/' . $this->collectiveRootPathHelper->get() . '/' . $this->getFolderId();
+		return '/' . $this->collectiveFolderManager->getRootFolder()->getPath() . '/' . $this->getFolderId();
 	}
 }

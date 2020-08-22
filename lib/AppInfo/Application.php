@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace OCA\Collectives\AppInfo;
 
 use Closure;
-use OCA\Collectives\Mount\CollectiveRootPathHelper;
+use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Mount\MountProvider;
 use OCA\Collectives\Service\CollectiveHelper;
 use OCP\AppFramework\App;
@@ -13,7 +13,6 @@ use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\Files\Config\IMountProviderCollection;
-use OCP\Files\IRootFolder;
 use OCP\IUserSession;
 use Psr\Container\ContainerInterface;
 
@@ -31,8 +30,7 @@ class Application extends App implements IBootstrap {
 		$context->registerService(MountProvider::class, function (ContainerInterface $c) {
 			return new MountProvider(
 				$c->get(CollectiveHelper::class),
-				$c->get(CollectiveRootPathHelper::class),
-				$c->get(IRootFolder::class),
+				$c->get(CollectiveFolderManager::class),
 				$c->get(IUserSession::class)
 			);
 		});
