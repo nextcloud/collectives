@@ -61,7 +61,7 @@ export default new Vuex.Store({
 		},
 
 		pagesUrl(_state, getters) {
-			return generateUrl(`/apps/unite/_collectives/${getters.currentCollective.id}/_pages`)
+			return generateUrl(`/apps/collectives/_collectives/${getters.currentCollective.id}/_pages`)
 		},
 
 		pageUrl(_state, getters) {
@@ -182,7 +182,7 @@ export default new Vuex.Store({
 		 */
 		async getCollectives({ commit }) {
 			commit('loading')
-			const response = await axios.get(generateUrl(`/apps/unite/_collectives`))
+			const response = await axios.get(generateUrl(`/apps/collectives/_collectives`))
 
 			commit('collectives', response.data)
 			commit('done')
@@ -194,7 +194,7 @@ export default new Vuex.Store({
 		 */
 		async newCollective({ commit }, collective) {
 			commit('loading')
-			const response = await axios.post(generateUrl(`/apps/unite/_collectives`), collective)
+			const response = await axios.post(generateUrl(`/apps/collectives/_collectives`), collective)
 			commit('addCollective', response.data)
 			commit('done')
 		},

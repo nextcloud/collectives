@@ -1,8 +1,8 @@
 <?php
 
-namespace OCA\Unite\Controller;
+namespace OCA\Collectives\Controller;
 
-use OCA\Unite\Service\PageService;
+use OCA\Collectives\Service\PageService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;

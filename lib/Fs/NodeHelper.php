@@ -1,8 +1,8 @@
 <?php
 
-namespace OCA\Unite\Fs;
+namespace OCA\Collectives\Fs;
 
-use OCA\Unite\Service\PageDoesNotExistException;
+use OCA\Collectives\Service\PageDoesNotExistException;
 use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\IDBConnection;

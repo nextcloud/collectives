@@ -1,7 +1,7 @@
-# Unite
+# Collectives
 
-Unite is a Nextcloud App for activist and community projects to organize
-together. Come and gather in collectives to build shared knowledge.
+Collectives is a Nextcloud App for activist and community projects to
+organize together. Come and gather in collectives to build shared knowledge.
 
 * **Collective and non-hierarchical workflow by heart**: Collectives are
   tied to a [Nextcloud Circle](https://github.com/nextcloud/circles) and
@@ -22,7 +22,7 @@ For installation (see below), the following tools need to be available:
 * gettext: to generate pot/translation files
 
 Additionally, this app builds on the functionality of the Circles and the
-Text App. They both need to be installed for Unite to work properly.
+Text App. They both need to be installed for Collectives to work properly.
 
 ## Installation
 

@@ -53,7 +53,7 @@ class FeatureContext implements Context {
 	public function userCreatesCollective(string $user, string $collective): void {
 		$this->setCurrentUser($user);
 		$formData = new TableNode([['name', $collective]]);
-		$this->sendRequest('POST', '/apps/unite/_collectives', $formData);
+		$this->sendRequest('POST', '/apps/collectives/_collectives', $formData);
 		$this->assertStatusCode($this->response, 200);
 	}
 
@@ -68,7 +68,7 @@ class FeatureContext implements Context {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$formData = new TableNode([['title', $page]]);
-		$this->sendRequest('POST', '/apps/unite/_collectives/' . $collectiveId . '/_pages', $formData);
+		$this->sendRequest('POST', '/apps/collectives/_collectives/' . $collectiveId . '/_pages', $formData);
 		$this->assertStatusCode($this->response, 200);
 	}
 
@@ -80,7 +80,7 @@ class FeatureContext implements Context {
 	 */
 	public function userSeesCollective(string $user, string $collective): void {
 		$this->setCurrentUser($user);
-		$this->sendRequest('GET', '/apps/unite/_collectives');
+		$this->sendRequest('GET', '/apps/collectives/_collectives');
 		$this->assertStatusCode($this->response, 200);
 		$this->assertCollectiveByName($this->response, $collective);
 	}
@@ -95,7 +95,7 @@ class FeatureContext implements Context {
 	public function userSeesPage(string $user, string $page, string $collective): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
-		$this->sendRequest('GET', '/apps/unite/_collectives/' . $collectiveId . '/_pages');
+		$this->sendRequest('GET', '/apps/collectives/_collectives/' . $collectiveId . '/_pages');
 		$this->assertStatusCode($this->response, 200);
 		$this->assertPageByTitle($this->response, $page);
 	}
@@ -108,7 +108,7 @@ class FeatureContext implements Context {
 	 */
 	public function userDoesntSeeCollective(string $user, string $collective): void {
 		$this->setCurrentUser($user);
-		$this->sendRequest('GET', '/apps/unite/_collectives');
+		$this->sendRequest('GET', '/apps/collectives/_collectives');
 		$this->assertStatusCode($this->response, 200);
 		$this->assertCollectiveByName($this->response, $collective, true);
 	}
@@ -123,7 +123,7 @@ class FeatureContext implements Context {
 	public function userDoesntSeePage(string $user, string $page, string $collective): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
-		$this->sendRequest('GET', '/apps/unite/_collectives/' . $collectiveId . '/_pages');
+		$this->sendRequest('GET', '/apps/collectives/_collectives/' . $collectiveId . '/_pages');
 		$this->assertStatusCode($this->response, 200);
 		$this->assertPageByTitle($this->response, $page, true);
 	}
@@ -145,7 +145,7 @@ class FeatureContext implements Context {
 			}
 			return;
 		}
-		$this->sendRequest('DELETE', '/apps/unite/_collectives/' . $collectiveId);
+		$this->sendRequest('DELETE', '/apps/collectives/_collectives/' . $collectiveId);
 		$this->assertStatusCode($this->response, 200);
 	}
 
@@ -160,7 +160,7 @@ class FeatureContext implements Context {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$pageId = $this->pageIdByName($collectiveId, $page);
-		$this->sendRequest('DELETE', '/apps/unite/_collectives/' . $collectiveId . '/_pages/' . $pageId);
+		$this->sendRequest('DELETE', '/apps/collectives/_collectives/' . $collectiveId . '/_pages/' . $pageId);
 		$this->assertStatusCode($this->response, 200);
 	}
 
@@ -177,7 +177,7 @@ class FeatureContext implements Context {
 		$collectiveId = $this->collectiveIdByName($collective);
 		$pageId = $this->pageIdByName($collectiveId, $page);
 		$formData = new TableNode([['title', $newpage]]);
-		$this->sendRequest('PUT', '/apps/unite/_collectives/' . $collectiveId . '/_pages/' . $pageId, $formData);
+		$this->sendRequest('PUT', '/apps/collectives/_collectives/' . $collectiveId . '/_pages/' . $pageId, $formData);
 		$this->assertStatusCode($this->response, 200);
 	}
 
@@ -190,7 +190,7 @@ class FeatureContext implements Context {
 	 */
 	public function userIsMemberOfCircle(string $user, string $circle, string $admin): void {
 		$this->setCurrentUser($admin);
-		$this->sendRequest('GET', '/apps/unite/_collectives');
+		$this->sendRequest('GET', '/apps/collectives/_collectives');
 		$this->assertStatusCode($this->response, 200);
 		$circleUniqueId = $this->getCircleIdByCollectiveName($this->response, $circle);
 
@@ -209,7 +209,7 @@ class FeatureContext implements Context {
 	 * @return int|null
 	 */
 	private function collectiveIdByName(string $name): ?int {
-		$this->sendRequest('GET', '/apps/unite/_collectives');
+		$this->sendRequest('GET', '/apps/collectives/_collectives');
 		if (200 !== $this->response->getStatusCode()) {
 			throw new RuntimeException('Unable to get list of collectives');
 		}
@@ -229,7 +229,7 @@ class FeatureContext implements Context {
 	 * @return int|null
 	 */
 	private function pageIdByName(int $collectiveId, string $name): ?int {
-		$this->sendRequest('GET', '/apps/unite/_collectives/' . $collectiveId . '/_pages');
+		$this->sendRequest('GET', '/apps/collectives/_collectives/' . $collectiveId . '/_pages');
 		if (200 !== $this->response->getStatusCode()) {
 			throw new RuntimeException('Unable to get list of pages for collective ' . $collectiveId);
 		}

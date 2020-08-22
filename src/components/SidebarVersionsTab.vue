@@ -33,7 +33,7 @@
 						<div>
 							<a class="openVersion" @click="clickPreviewVersion(null)">
 								<span class="versiondate has-tooltip" :title="pageFormattedTimestamp">
-									{{ t('unite', 'Current version') }}
+									{{ t('collectives', 'Current version') }}
 								</span>
 							</a>
 						</div>
@@ -68,7 +68,7 @@
 		<!-- no versions found -->
 		<div v-else class="emptycontent">
 			<div class="icon icon-history" />
-			<h2>{{ t('unite', 'No other versions available') }}</h2>
+			<h2>{{ t('collectives', 'No other versions available') }}</h2>
 		</div>
 	</div>
 	<!-- </AppSidebarTab> -->
@@ -280,7 +280,7 @@ export default {
 				this.versions = this.xmlToVersionsList(response.data)
 				this.loading = false
 			} catch (e) {
-				this.error = t('unite', 'Could not get page versions')
+				this.error = t('collectives', 'Could not get page versions')
 				this.loading = false
 				console.error('Failed to get page versions', e)
 			}

@@ -1,6 +1,6 @@
 <?php
 
-namespace OCA\Unite\Migration;
+namespace OCA\Collectives\Migration;
 
 use Closure;
 use Doctrine\DBAL\Types\Type;
@@ -20,8 +20,8 @@ class Version000003Date20200720000000 extends SimpleMigrationStep {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
 
-		if (!$schema->hasTable('unite')) {
-			$table = $schema->createTable('unite');
+		if (!$schema->hasTable('collectives')) {
+			$table = $schema->createTable('collectives');
 			$table->addColumn('id', Type::BIGINT, [
 				'autoincrement' => true,
 				'notnull' => true,
@@ -36,7 +36,7 @@ class Version000003Date20200720000000 extends SimpleMigrationStep {
 			]);
 
 			$table->setPrimaryKey(['id']);
-			$table->addUniqueIndex(['circle_unique_id'], 'unite_circle_unique_id_index');
+			$table->addUniqueIndex(['circle_unique_id'], 'collectives_circle_unique_id_index');
 		}
 		return $schema;
 	}

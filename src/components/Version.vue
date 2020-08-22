@@ -9,14 +9,14 @@
 				<ActionButton
 					icon="icon-history"
 					@click="revertVersion">
-					{{ t('unite', 'Restore this version') }}
+					{{ t('collectives', 'Restore this version') }}
 				</ActionButton>
 			</Actions>
 			<Actions>
 				<ActionButton
 					icon="icon-play-next"
 					@click="$emit('preview-version', null)">
-					{{ t('unite', 'Back to current version') }}
+					{{ t('collectives', 'Back to current version') }}
 				</ActionButton>
 			</Actions>
 		</h1>
@@ -106,12 +106,12 @@ export default {
 					},
 				})
 				this.$emit('resetVersion')
-				showSuccess(t('unite', 'Reverted {page} to revision {timestamp}.', {
+				showSuccess(t('collectives', 'Reverted {page} to revision {timestamp}.', {
 					page: this.page.title,
 					timestamp: this.version.relativeTimestamp,
 				}))
 			} catch (e) {
-				showError(t('unite', 'Failed to revert {page} to revision {timestamp}.', {
+				showError(t('collectives', 'Failed to revert {page} to revision {timestamp}.', {
 					page: this.page.title,
 					timestamp: this.version.relativeTimestamp,
 				}))

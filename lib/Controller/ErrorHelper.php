@@ -1,10 +1,10 @@
 <?php
 
-namespace OCA\Unite\Controller;
+namespace OCA\Collectives\Controller;
 
 use Closure;
 
-use OCA\Unite\Service\NotFoundException;
+use OCA\Collectives\Service\NotFoundException;
 
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;

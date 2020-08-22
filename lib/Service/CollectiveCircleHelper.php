@@ -1,10 +1,10 @@
 <?php
 
-namespace OCA\Unite\Service;
+namespace OCA\Collectives\Service;
 
 use OCA\Circles\Api\v1\Circles;
-use OCA\Unite\Db\Collective;
-use OCA\Unite\Db\CollectiveMapper;
+use OCA\Collectives\Db\Collective;
+use OCA\Collectives\Db\CollectiveMapper;
 use OCP\AppFramework\QueryException;
 
 class CollectiveCircleHelper {

@@ -1,11 +1,11 @@
 <?php
 
-namespace OCA\Unite\Db;
+namespace OCA\Collectives\Db;
 
 use OC\User\NoUserException;
 use OCA\Circles\Api\v1\Circles;
 use OCA\Circles\Exceptions\MemberDoesNotExistException;
-use OCA\Unite\Service\NotFoundException;
+use OCA\Collectives\Service\NotFoundException;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\AppFramework\Db\QBMapper;
@@ -27,7 +27,7 @@ class CollectiveMapper extends QBMapper {
 	public function __construct(
 		IRootFolder $root,
 		IDBConnection $db) {
-		parent::__construct($db, 'unite', Collective::class);
+		parent::__construct($db, 'collectives', Collective::class);
 		$this->root = $root;
 	}
 

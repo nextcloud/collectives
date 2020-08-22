@@ -27,9 +27,9 @@
 				</AppContentDetails>
 			</div>
 			<EmptyContent v-else icon="icon-ant">
-				{{ t('unite', 'No collective selected') }}
+				{{ t('collectives', 'No collective selected') }}
 				<template #desc>
-					{{ t('unite', 'Select a collective or create a new one on the left.') }}
+					{{ t('collectives', 'Select a collective or create a new one on the left.') }}
 				</template>
 			</EmptyContent>
 		</AppContent>
@@ -178,7 +178,7 @@ export default {
 				await this.$store.dispatch('getPages')
 			} catch (e) {
 				console.error(e)
-				showError(t('unite', 'Could not fetch pages'))
+				showError(t('collectives', 'Could not fetch pages'))
 			}
 		},
 
@@ -194,7 +194,7 @@ export default {
 				await this.$store.dispatch('getPage', pageId)
 			} catch (e) {
 				console.error(e)
-				showError(t('unite', `Could not fetch page ${pageId}`))
+				showError(t('collectives', `Could not fetch page ${pageId}`))
 			}
 		},
 
@@ -206,7 +206,7 @@ export default {
 				await this.$store.dispatch('getCollectives')
 			} catch (e) {
 				console.error(e)
-				showError(t('unite', 'Could not fetch collectives'))
+				showError(t('collectives', 'Could not fetch collectives'))
 			}
 		},
 
@@ -215,14 +215,14 @@ export default {
 		 */
 		async newPage() {
 			const page = {
-				title: t('unite', 'New Page'),
+				title: t('collectives', 'New Page'),
 			}
 			try {
 				await this.$store.dispatch('newPage', page)
 				this.$router.push(this.$store.getters.updatedPagePath)
 			} catch (e) {
 				console.error(e)
-				showError(t('unite', 'Could not create the page'))
+				showError(t('collectives', 'Could not create the page'))
 			}
 			this.updating = false
 		},
@@ -237,7 +237,7 @@ export default {
 				this.$router.push(this.$store.getters.updatedCollectivePath)
 			} catch (e) {
 				console.error(e)
-				showError(t('unite', 'Could not create the collective'))
+				showError(t('collectives', 'Could not create the collective'))
 			}
 		},
 
@@ -254,7 +254,7 @@ export default {
 				this.$router.push(this.$store.getters.updatedPagePath)
 			} catch (e) {
 				console.error(e)
-				showError(t('unite', 'Could not rename the page'))
+				showError(t('collectives', 'Could not rename the page'))
 			}
 		},
 
@@ -266,10 +266,10 @@ export default {
 			try {
 				await this.$store.dispatch('deletePage')
 				this.$router.push(`/${this.collectiveParam}`)
-				showSuccess(t('unite', 'Page deleted'))
+				showSuccess(t('collectives', 'Page deleted'))
 			} catch (e) {
 				console.error(e)
-				showError(t('unite', 'Could not delete the page'))
+				showError(t('collectives', 'Could not delete the page'))
 			}
 		},
 

@@ -4,9 +4,9 @@ namespace Unit\Db;
 
 use OC\Files\Node\Folder;
 use OC\Files\View;
-use OCA\Unite\Db\Collective;
-use OCA\Unite\Db\CollectiveMapper;
-use OCA\Unite\Service\NotFoundException;
+use OCA\Collectives\Db\Collective;
+use OCA\Collectives\Db\CollectiveMapper;
+use OCA\Collectives\Service\NotFoundException;
 use OCP\Files\IRootFolder;
 use OCP\IDBConnection;
 use PHPUnit\Framework\TestCase;

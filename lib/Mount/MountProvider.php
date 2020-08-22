@@ -1,10 +1,10 @@
 <?php
 
-namespace OCA\Unite\Mount;
+namespace OCA\Collectives\Mount;
 
 use OC\Files\Node\LazyFolder;
 use OC\Files\Storage\Wrapper\Jail;
-use OCA\Unite\Service\CollectiveCircleHelper;
+use OCA\Collectives\Service\CollectiveCircleHelper;
 use OCP\Files\Config\IMountProvider;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
