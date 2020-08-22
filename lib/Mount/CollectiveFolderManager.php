@@ -11,7 +11,7 @@ use OCP\Files\NotPermittedException;
 
 class CollectiveFolderManager {
 	public const SKELETON_DIR = 'skeleton';
-	public const LANDING_PAGE = 'README.md';
+	public const LANDING_PAGE = 'Readme.md';
 
 	/** @var SystemConfig */
 	private $systemConfig;
@@ -93,7 +93,7 @@ class CollectiveFolderManager {
 			}
 
 			$folder = $this->getSkeletonFolder($this->getRootFolder())
-				->copy($this->getRootFolder()->getPath() . '/' . (string)$id);
+				->copy($this->getRootFolder()->getPath() . '/' . $id);
 		}
 
 		return $folder;

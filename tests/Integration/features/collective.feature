@@ -5,8 +5,8 @@ Feature: collective
     And user "alice" is member of circle "mycollective" with admin "jane"
     Then user "jane" sees collective "mycollective"
     And user "alice" sees collective "mycollective"
-    And user "jane" sees page "README" in "mycollective"
-    And user "alice" sees page "README" in "mycollective"
+    And user "jane" sees page "Readme" in "mycollective"
+    And user "alice" sees page "Readme" in "mycollective"
     And user "john" doesn't see collective "mycollective"
 
   Scenario: Fail to delete a foreign collective
