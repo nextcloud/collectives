@@ -11,6 +11,21 @@ organize together. Come and gather in collectives to build shared knowledge.
 * **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**
   for page formatting
 
+## Usage
+
+### Custom skeletons for new collectives
+
+It's possible to customize the skeletons for new collectives by putting files
+in the app skeleton directory at `data/app_<INSTANCE_ID>/collectives/skeleton`.
+New collectives get the contents of this skeleton directory copied over.
+
+`README.md` is the landing page that is opened automatically when entering a
+collective.
+
+If the skeleton directory doesn't contain a `README.md`, the default landing
+page from `collectives/skeleton/README.md` will be copied into the collectives
+directory instead.
+
 ## Dependencies
 
 For installation (see below), the following tools need to be available:

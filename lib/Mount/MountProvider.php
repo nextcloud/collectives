@@ -2,12 +2,9 @@
 
 namespace OCA\Collectives\Mount;
 
-use OC\Files\Node\LazyFolder;
 use OC\Files\Storage\Wrapper\Jail;
 use OCA\Collectives\Service\CollectiveHelper;
 use OCP\Files\Config\IMountProvider;
-use OCP\Files\Folder;
-use OCP\Files\IRootFolder;
 use OCP\Files\Mount\IMountPoint;
 use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
@@ -16,16 +13,11 @@ use OCP\IUser;
 use OCP\IUserSession;
 
 class MountProvider implements IMountProvider {
-	private const LANDING_PAGE = 'README.md';
-
 	/** @var CollectiveHelper */
 	private $collectiveHelper;
 
-	/** @var CollectiveRootPathHelper */
-	private $collectiveRootPathHelper;
-
-	/** @var IRootFolder */
-	private $rootFolder;
+	/** @var CollectiveFolderManager */
+	private $collectiveFolderManager;
 
 	/** @var IUserSession */
 	private $userSession;
@@ -34,18 +26,15 @@ class MountProvider implements IMountProvider {
 	 * MountProvider constructor.
 	 *
 	 * @param CollectiveHelper   $collectiveHelper
-	 * @param CollectiveRootPathHelper $collectiveRootPathHelper
-	 * @param IRootFolder              $rootFolder
+	 * @param CollectiveFolderManager $collectiveFolderManager
 	 * @param IUserSession             $userSession
 	 */
 	public function __construct(
 		CollectiveHelper $collectiveHelper,
-		CollectiveRootPathHelper $collectiveRootPathHelper,
-		IRootFolder $rootFolder,
+		CollectiveFolderManager $collectiveFolderManager,
 		IUserSession $userSession) {
 		$this->collectiveHelper = $collectiveHelper;
-		$this->collectiveRootPathHelper = $collectiveRootPathHelper;
-		$this->rootFolder = $rootFolder;
+		$this->collectiveFolderManager = $collectiveFolderManager;
 		$this->userSession = $userSession;
 	}
 
@@ -82,14 +71,6 @@ class MountProvider implements IMountProvider {
 	}
 
 	/**
-	 * @return string|null
-	 */
-	private function getCurrentUID(): ?string {
-		$user = $this->userSession->getUser();
-		return $user ? $user->getUID() : null;
-	}
-
-	/**
 	 * @param int                  $id
 	 * @param string               $mountPoint
 	 * @param null                 $cacheEntry
@@ -107,10 +88,10 @@ class MountProvider implements IMountProvider {
 							 IUser $user = null): IMountPoint {
 		if (!$cacheEntry) {
 			// trigger folder creation
-			$this->getFolder($id);
+			$this->collectiveFolderManager->getFolder($id);
 		}
 
-		$storage = $this->getCollectivesRootFolder()->getStorage();
+		$storage = $this->collectiveFolderManager->getRootFolder()->getStorage();
 
 		$rootPath = $this->getJailPath($id);
 
@@ -128,7 +109,7 @@ class MountProvider implements IMountProvider {
 
 		return new CollectiveMountPoint(
 			$id,
-			$this->collectiveRootPathHelper,
+			$this->collectiveFolderManager,
 			$collectiveStorage,
 			$mountPoint,
 			null,
@@ -142,47 +123,6 @@ class MountProvider implements IMountProvider {
 	 * @return string
 	 */
 	public function getJailPath(int $folderId): string {
-		return $this->getCollectivesRootFolder()->getInternalPath() . '/' . $folderId;
-	}
-
-	/**
-	 * @return Folder
-	 */
-	private function getCollectivesRootFolder(): Folder {
-		$rootFolder = $this->rootFolder;
-		return (new LazyFolder(function () use ($rootFolder) {
-			try {
-				return $rootFolder->get($this->collectiveRootPathHelper->get());
-			} catch (NotFoundException $e) {
-				return $rootFolder->newFolder($this->collectiveRootPathHelper->get());
-			}
-		}));
-	}
-
-	/**
-	 * @param int  $id
-	 * @param bool $create
-	 *
-	 * @return Folder|null
-	 * @throws NotPermittedException
-	 */
-	public function getFolder(int $id, bool $create = true): ?Folder {
-		try {
-			$folder = $this->getCollectivesRootFolder()->get((string)$id);
-			if (!$folder instanceof Folder) {
-				return null;
-			}
-		} catch (NotFoundException $e) {
-			if ($create) {
-				$folder = $this->getCollectivesRootFolder()->newFolder((string)$id);
-			}
-			return null;
-		}
-
-		if ($create && !$folder->nodeExists(self::LANDING_PAGE)) {
-			$folder->newFile(self::LANDING_PAGE);
-		}
-
-		return $folder;
+		return $this->collectiveFolderManager->getRootFolder()->getInternalPath() . '/' . $folderId;
 	}
 }

@@ -6,10 +6,9 @@ use OCA\Circles\Api\v1\Circles;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Fs\NodeHelper;
-use OCA\Collectives\Mount\CollectiveRootPathHelper;
+use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCP\AppFramework\QueryException;
 use OCP\Files\InvalidPathException;
-use OCP\Files\IRootFolder;
 use OCP\Files\NotPermittedException;
 
 class CollectiveService {
@@ -19,10 +18,8 @@ class CollectiveService {
 	private $collectiveHelper;
 	/** @var NodeHelper */
 	private $nodeHelper;
-	/** @var IRootFolder */
-	private $rootFolder;
-	/** @var CollectiveRootPathHelper */
-	private $collectiveRootPathHelper;
+	/** @var CollectiveFolderManager */
+	private $collectiveFolderManager;
 
 	/**
 	 * CollectiveService constructor.
@@ -30,21 +27,17 @@ class CollectiveService {
 	 * @param CollectiveMapper         $collectiveMapper
 	 * @param CollectiveHelper   $collectiveHelper
 	 * @param NodeHelper               $nodeHelper
-	 * @param IRootFolder              $rootFolder
-	 * @param CollectiveRootPathHelper $collectiveRootPathHelper
+	 * @param CollectiveFolderManager  $collectiveFolderManager
 	 */
 	public function __construct(
 		CollectiveMapper $collectiveMapper,
 		CollectiveHelper $collectiveHelper,
 		NodeHelper $nodeHelper,
-		IRootFolder $rootFolder,
-		CollectiveRootPathHelper $collectiveRootPathHelper
-	) {
+		CollectiveFolderManager $collectiveFolderManager) {
 		$this->collectiveMapper = $collectiveMapper;
 		$this->collectiveHelper = $collectiveHelper;
 		$this->nodeHelper = $nodeHelper;
-		$this->rootFolder = $rootFolder;
-		$this->collectiveRootPathHelper = $collectiveRootPathHelper;
+		$this->collectiveFolderManager = $collectiveFolderManager;
 	}
 
 	/**
@@ -62,6 +55,7 @@ class CollectiveService {
 	 * @param string $name
 	 *
 	 * @return Collective
+	 * @throws NotPermittedException
 	 */
 	public function createCollective(string $userId, string $name): Collective {
 		if (empty($name)) {
@@ -87,6 +81,15 @@ class CollectiveService {
 		$collective->setCircleUniqueId($circle->getUniqueId());
 		$collective = $this->collectiveMapper->insert($collective);
 
+		// Create folder for collective and optionally copy default landing page
+		$collectiveFolder = $this->collectiveFolderManager->getFolder($collective->getId());
+		if (null !== $collectiveFolder &&
+			!$collectiveFolder->nodeExists(CollectiveFolderManager::LANDING_PAGE)) {
+			if (false !== $content = file_get_contents(__DIR__ . '/../../skeleton/' . CollectiveFolderManager::LANDING_PAGE)) {
+				$collectiveFolder->newFile(CollectiveFolderManager::LANDING_PAGE, $content);
+			}
+		}
+
 		return $collective;
 	}
 
@@ -101,7 +104,6 @@ class CollectiveService {
 		if (null === $collective = $this->collectiveMapper->findById($id, $userId)) {
 			throw new NotFoundException('Collective not found: '. $id);
 		}
-		$folder = $this->collectiveMapper->getCollectiveFolder($collective, $userId);
 
 		try {
 			Circles::destroyCircle($collective->getCircleUniqueId());
@@ -110,8 +112,9 @@ class CollectiveService {
 		}
 
 		try {
-			$collectiveFolder = $this->rootFolder->get($this->collectiveRootPathHelper->get() . '/' . $collective->getId());
-			$collectiveFolder->delete();
+			if (null !== $collectiveFolder = $this->collectiveFolderManager->getFolder($collective->getId(), false)) {
+				$collectiveFolder->delete();
+			}
 		} catch (InvalidPathException | \OCP\Files\NotFoundException | NotPermittedException $e) {
 			throw new NotFoundException('Failed to delete collective folder');
 		}
