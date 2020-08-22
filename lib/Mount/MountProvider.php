@@ -179,6 +179,10 @@ class MountProvider implements IMountProvider {
 			return null;
 		}
 
+		if ($create && !$folder->nodeExists(self::LANDING_PAGE)) {
+			$folder->newFile(self::LANDING_PAGE);
+		}
+
 		return $folder;
 	}
 }
