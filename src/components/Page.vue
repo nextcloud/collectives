@@ -1,8 +1,15 @@
 <template>
 	<div>
 		<h1 id="titleform" class="page-title">
-			<input ref="title"
+			<input v-if="landingPage"
+				class="title"
+				type="text"
+				disabled
+				:value="collective.name">
+			<input v-else
+				ref="title"
 				v-model="newTitle"
+				class="title"
 				:placeholder="t('collectives', 'Title')"
 				type="text"
 				:disabled="updating || !savePossible"
@@ -21,7 +28,7 @@
 				</ActionButton>
 			</Actions>
 			<Actions>
-				<ActionButton
+				<ActionButton v-if="!landingPage"
 					icon="icon-delete"
 					@click="$emit('deletePage')">
 					{{ t('collectives', 'Delete page') }}
@@ -93,8 +100,16 @@ export default {
 
 	computed: {
 
+		landingPage() {
+			return !this.$store.getters.pageParam
+		},
+
 		page() {
 			return this.$store.getters.currentPage
+		},
+
+		collective() {
+			return this.$store.getters.currentCollective
 		},
 
 		readOnly() {

@@ -45,8 +45,9 @@ export default new Vuex.Store({
 		},
 
 		currentPage(state, getters) {
+			const title = getters.pageParam || 'Readme'
 			return state.pages.find(
-				(page) => page.title === getters.pageParam
+				(page) => page.title === title
 			)
 		},
 
@@ -58,6 +59,14 @@ export default new Vuex.Store({
 			return state.collectives.find(
 				(collective) => collective.name === getters.collectiveParam
 			)
+		},
+
+		mostRecentPages(_state, getters) {
+			return getters.visiblePages.sort((a, b) => b.timestamp - a.timestamp)
+		},
+
+		visiblePages(state) {
+			return state.pages.filter((p) => p.title !== 'Readme')
 		},
 
 		pagesUrl(_state, getters) {
@@ -123,10 +132,7 @@ export default new Vuex.Store({
 		async getPages({ commit, getters }) {
 			commit('loading')
 			const response = await axios.get(getters.pagesUrl)
-			this.commit('pages',
-				// sort pages by timestamp
-				response.data.sort((a, b) => b.timestamp - a.timestamp)
-			)
+			commit('pages', response.data)
 			commit('done')
 		},
 
@@ -183,7 +189,6 @@ export default new Vuex.Store({
 		async getCollectives({ commit }) {
 			commit('loading')
 			const response = await axios.get(generateUrl(`/apps/collectives/_collectives`))
-
 			commit('collectives', response.data)
 			commit('done')
 		},

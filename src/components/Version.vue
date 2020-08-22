@@ -1,7 +1,7 @@
 <template>
 	<div>
-		<h1 class="page-title">
-			<input id="version-title"
+		<h1 id="titleform" class="page-title">
+			<input class="title"
 				type="text"
 				disabled
 				:value="versionTitle">
@@ -63,6 +63,10 @@ export default {
 			return this.$store.getters.currentPage
 		},
 
+		collective() {
+			return this.$store.getters.currentCollective
+		},
+
 		/**
 		 * Return the URL for currently selected page version
 		 * @returns {string}
@@ -87,8 +91,13 @@ export default {
 			return getCurrentUser().uid
 		},
 
+		landingPage() {
+			return !this.$store.getters.pageParam
+		},
+
 		versionTitle() {
-			return `${this.page.title} (${this.version.relativeTimestamp})`
+			const title = this.landingPage ? this.collective.name : this.page.title
+			return `${title} (${this.version.relativeTimestamp})`
 		},
 	},
 
@@ -121,13 +130,3 @@ export default {
 	},
 }
 </script>
-
-<style scoped>
-    #version-title {
-		background-color: var(--color-main-background);
-		color: var(--color-text-lighter);
-		margin: 3px 3px 3px 0;
-		padding: 7px 6px;
-	}
-
-</style>

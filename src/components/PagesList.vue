@@ -51,7 +51,7 @@ export default {
 		},
 
 		pages() {
-			return this.$store.state.pages
+			return this.$store.getters.mostRecentPages
 		},
 
 		currentPage() {

@@ -93,10 +93,6 @@ export default {
 				this.editToggle = val ? EditState.Edit : EditState.Read
 			},
 		},
-
-		pages() {
-			return this.$store.state.pages
-		},
 	},
 
 	watch: {
