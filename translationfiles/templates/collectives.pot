@@ -18,143 +18,143 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: /unite/specialAppInfoFakeDummyForL10nScript.php:2
-msgid "Unite"
+#: /collectives/specialAppInfoFakeDummyForL10nScript.php:2
+msgid "Collectives"
 msgstr ""
 
-#: /unite/specialAppInfoFakeDummyForL10nScript.php:3
+#: /collectives/specialAppInfoFakeDummyForL10nScript.php:3
 msgid "A place for activist and community projects to build shared knowledge"
 msgstr ""
 
-#: /unite/specialAppInfoFakeDummyForL10nScript.php:4
+#: /collectives/specialAppInfoFakeDummyForL10nScript.php:4
 msgid ""
-"Unite is a Nextcloud App for activist and community projects to organize "
+"Collectives is a Nextcloud App for activist and community projects to organize "
 "together. Come and gather in collectives to build shared knowledge."
 msgstr ""
 
-#: /unite/specialVueFakeDummyForL10nScript.js:1
+#: /collectives/specialVueFakeDummyForL10nScript.js:1
 msgid "Select a collective"
 msgstr ""
 
-#: /unite/specialVueFakeDummyForL10nScript.js:2
+#: /collectives/specialVueFakeDummyForL10nScript.js:2
 msgid "Create new collective"
 msgstr ""
 
-#: /unite/specialVueFakeDummyForL10nScript.js:3
+#: /collectives/specialVueFakeDummyForL10nScript.js:3
 msgid "New collective name"
 msgstr ""
 
-#: /unite/specialVueFakeDummyForL10nScript.js:4
+#: /collectives/specialVueFakeDummyForL10nScript.js:4
 msgid "Title"
 msgstr ""
 
-#: /unite/specialVueFakeDummyForL10nScript.js:5
+#: /collectives/specialVueFakeDummyForL10nScript.js:5
 msgid "Done with editing"
 msgstr ""
 
-#: /unite/specialVueFakeDummyForL10nScript.js:6
+#: /collectives/specialVueFakeDummyForL10nScript.js:6
 msgid "Edit page"
 msgstr ""
 
-#: /unite/specialVueFakeDummyForL10nScript.js:7
+#: /collectives/specialVueFakeDummyForL10nScript.js:7
 msgid "Delete page"
 msgstr ""
 
-#: /unite/specialVueFakeDummyForL10nScript.js:8
+#: /collectives/specialVueFakeDummyForL10nScript.js:8
 msgid "Show old versions"
 msgstr ""
 
-#: /unite/specialVueFakeDummyForL10nScript.js:9
+#: /collectives/specialVueFakeDummyForL10nScript.js:9
 msgid "Add a page"
 msgstr ""
 
-#: /unite/specialVueFakeDummyForL10nScript.js:10
+#: /collectives/specialVueFakeDummyForL10nScript.js:10
 msgid "Current version"
 msgstr ""
 
-#: /unite/specialVueFakeDummyForL10nScript.js:11
+#: /collectives/specialVueFakeDummyForL10nScript.js:11
 msgid "No other versions available"
 msgstr ""
 
-#: /unite/specialVueFakeDummyForL10nScript.js:12
+#: /collectives/specialVueFakeDummyForL10nScript.js:12
 msgid "Could not get page versions"
 msgstr ""
 
-#: /unite/specialVueFakeDummyForL10nScript.js:13
-#: /unite/specialVueFakeDummyForL10nScript.js:14
+#: /collectives/specialVueFakeDummyForL10nScript.js:13
+#: /collectives/specialVueFakeDummyForL10nScript.js:14
 msgid "%n byte"
 msgid_plural "%n bytes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: /unite/specialVueFakeDummyForL10nScript.js:15
+#: /collectives/specialVueFakeDummyForL10nScript.js:15
 msgid "Restore this version"
 msgstr ""
 
-#: /unite/specialVueFakeDummyForL10nScript.js:16
+#: /collectives/specialVueFakeDummyForL10nScript.js:16
 msgid "Back to current version"
 msgstr ""
 
-#: /unite/specialVueFakeDummyForL10nScript.js:17
+#: /collectives/specialVueFakeDummyForL10nScript.js:17
 msgid "Reverted {page} to revision {timestamp}."
 msgstr ""
 
-#: /unite/specialVueFakeDummyForL10nScript.js:18
+#: /collectives/specialVueFakeDummyForL10nScript.js:18
 msgid "Failed to revert {page} to revision {timestamp}."
 msgstr ""
 
-#: /unite/specialVueFakeDummyForL10nScript.js:19
+#: /collectives/specialVueFakeDummyForL10nScript.js:19
 msgid "No collective selected"
 msgstr ""
 
-#: /unite/specialVueFakeDummyForL10nScript.js:20
+#: /collectives/specialVueFakeDummyForL10nScript.js:20
 msgid "Select a collective or create a new one on the left."
 msgstr ""
 
-#: /unite/specialVueFakeDummyForL10nScript.js:21
+#: /collectives/specialVueFakeDummyForL10nScript.js:21
 msgid "Could not fetch pages"
 msgstr ""
 
-#: /unite/specialVueFakeDummyForL10nScript.js:22
+#: /collectives/specialVueFakeDummyForL10nScript.js:22
 msgid "Could not fetch collectives"
 msgstr ""
 
-#: /unite/specialVueFakeDummyForL10nScript.js:23
+#: /collectives/specialVueFakeDummyForL10nScript.js:23
 msgid "New Page"
 msgstr ""
 
-#: /unite/specialVueFakeDummyForL10nScript.js:24
+#: /collectives/specialVueFakeDummyForL10nScript.js:24
 msgid "Could not create the page"
 msgstr ""
 
-#: /unite/specialVueFakeDummyForL10nScript.js:25
+#: /collectives/specialVueFakeDummyForL10nScript.js:25
 msgid "Could not create the collective"
 msgstr ""
 
-#: /unite/specialVueFakeDummyForL10nScript.js:26
+#: /collectives/specialVueFakeDummyForL10nScript.js:26
 msgid "Could not rename the page"
 msgstr ""
 
-#: /unite/specialVueFakeDummyForL10nScript.js:27
+#: /collectives/specialVueFakeDummyForL10nScript.js:27
 msgid "Page deleted"
 msgstr ""
 
-#: /unite/specialVueFakeDummyForL10nScript.js:28
+#: /collectives/specialVueFakeDummyForL10nScript.js:28
 msgid "Could not delete the page"
 msgstr ""
 
-#: /unite/specialVueFakeDummyForL10nScript.js:29
+#: /collectives/specialVueFakeDummyForL10nScript.js:29
 msgid "Could not fetch page ${pageId}"
 msgstr ""
 
-#: /unite/templates/error.php:4
+#: /collectives/templates/error.php:4
 msgid "Error: Missing apps"
 msgstr ""
 
-#: /unite/templates/error.php:9
+#: /collectives/templates/error.php:9
 msgid "The following dependency apps are missing: "
 msgstr ""
 
-#: /unite/templates/error.php:27
+#: /collectives/templates/error.php:27
 msgid "Please ask the administrator to enable these apps."
 msgstr ""

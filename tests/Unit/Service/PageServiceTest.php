@@ -5,14 +5,14 @@ namespace Unit\Service;
 use OC\Files\Mount\MountPoint;
 use OC\Files\Node\File;
 use OC\Files\Node\Folder;
-use OCA\Unite\Db\Collective;
-use OCA\Unite\Db\CollectiveMapper;
-use OCA\Unite\Fs\NodeHelper;
-use OCA\Unite\Model\Page;
-use OCA\Unite\Service\NotFoundException;
-use OCA\Unite\Service\PageDoesNotExistException;
-use OCA\Unite\Service\PageService;
-use OCA\Unite\Service\CollectiveCircleHelper;
+use OCA\Collectives\Db\Collective;
+use OCA\Collectives\Db\CollectiveMapper;
+use OCA\Collectives\Fs\NodeHelper;
+use OCA\Collectives\Model\Page;
+use OCA\Collectives\Service\NotFoundException;
+use OCA\Collectives\Service\PageDoesNotExistException;
+use OCA\Collectives\Service\PageService;
+use OCA\Collectives\Service\CollectiveHelper;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\Files\AlreadyExistsException;
@@ -32,11 +32,11 @@ class PageServiceTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
-		$collectiveCircleHelper = $this->getMockBuilder(CollectiveCircleHelper::class)
+		$collectiveHelper = $this->getMockBuilder(CollectiveHelper::class)
 			->disableOriginalConstructor()
 			->getMock();
 
-		$this->service = new PageService($nodeHelper, $collectiveMapper, $collectiveCircleHelper);
+		$this->service = new PageService($nodeHelper, $collectiveMapper, $collectiveHelper);
 
 		$this->collectiveFolder = $this->getMockBuilder(Folder::class)
 			->disableOriginalConstructor()
@@ -117,7 +117,6 @@ class PageServiceTest extends TestCase {
 	public function testFindAllCollectiveNotFoundException(): void {
 		$this->expectException(NotFoundException::class);
 		$this->service->findAll($this->userId, 3);
-
 	}
 
 	public function testHandleExceptionDoesNotExistException(): void {

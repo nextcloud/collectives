@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace OCA\Unite\Mount;
+namespace OCA\Collectives\Mount;
 
 use OC\Files\Cache\Wrapper\CacheWrapper;
 use OCP\Files\Cache\ICache;

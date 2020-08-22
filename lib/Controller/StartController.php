@@ -1,6 +1,6 @@
 <?php
 
-namespace OCA\Unite\Controller;
+namespace OCA\Collectives\Controller;
 
 use OCA\Viewer\Event\LoadViewer;
 use OCP\App\IAppManager;
@@ -41,10 +41,10 @@ class StartController extends Controller {
 	 */
 	public function index(string $path): TemplateResponse {
 		if ($appsMissing = $this->checkDependencies(['circles', 'text', 'viewer'])) {
-			return new TemplateResponse('unite', 'error', ['appsMissing' => $appsMissing]);  // templates/error.php
+			return new TemplateResponse('collectives', 'error', ['appsMissing' => $appsMissing]);  // templates/error.php
 		}
 		$this->eventDispatcher->dispatch(LoadViewer::class, new LoadViewer());
-		return new TemplateResponse('unite', 'main');  // templates/main.php
+		return new TemplateResponse('collectives', 'main');  // templates/main.php
 	}
 
 	/**

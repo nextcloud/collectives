@@ -49,6 +49,6 @@ const routes = [
 
 export default new VueRouter({
 	mode: 'history',
-	base: generateUrl('/apps/unite', ''),
+	base: generateUrl('/apps/collectives', ''),
 	routes,
 })

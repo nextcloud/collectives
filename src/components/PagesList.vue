@@ -5,7 +5,7 @@
 				:disabled="$store.state.loading"
 				@click="$emit('newPage')">
 				<span class="icon icon-add-white" />
-				{{ t('unite', 'Add a page') }}
+				{{ t('collectives', 'Add a page') }}
 			</button>
 		</div>
 		<router-link v-for="page in pages"

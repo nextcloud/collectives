@@ -1,6 +1,6 @@
 <?php
 
-namespace OCA\Unite\Service;
+namespace OCA\Collectives\Service;
 
 class NotFoundException extends ServiceException {
 }

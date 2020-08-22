@@ -6,7 +6,7 @@ module.exports = {
 	output: {
 		path: path.resolve(__dirname, './js'),
 		publicPath: '/js/',
-		filename: 'unite.js',
+		filename: 'collectives.js',
 		chunkFilename: 'chunks/[name]-[hash].js',
 	},
 	module: {

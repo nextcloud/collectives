@@ -1,7 +1,7 @@
 <template>
 	<AppNavigation>
 		<template #list>
-			<AppNavigationCaption :title="t('unite', 'Select a collective')" />
+			<AppNavigationCaption :title="t('collectives', 'Select a collective')" />
 			<AppNavigationItem v-for="collective in collectives"
 				:key="collective.circleUniqueId"
 				:title="collective.name"

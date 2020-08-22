@@ -1,6 +1,6 @@
 <?php
 
-namespace OCA\Unite\Db;
+namespace OCA\Collectives\Db;
 
 use JsonSerializable;
 

@@ -17,7 +17,7 @@ unit:
     - vendor/bin/phpunit --configuration phpunit.xml --coverage-text --colors=never
   before_script:
     - make composer
-    - ln -s `pwd` $NEXTCLOUD_SOURCE/apps/unite
+    - ln -s `pwd` $NEXTCLOUD_SOURCE/apps/collectives
   services:
     - mysql:5.7
 
@@ -26,8 +26,8 @@ integration:
     - vendor/bin/behat --config=tests/Integration/config/behat.yml --profile ci
   before_script:
     - make composer
-    - ln -s `pwd` $NEXTCLOUD_SOURCE/apps/unite
-    - sudo -u www-data $NEXTCLOUD_SOURCE/occ app:enable unite
+    - ln -s `pwd` $NEXTCLOUD_SOURCE/apps/collectives
+    - sudo -u www-data $NEXTCLOUD_SOURCE/occ app:enable collectives
     - INTERNAL_IP_ADDRESS="$(ip a show type veth | grep -o "inet [0-9]*\.[0-9]*\.[0-9]*\.[0-9]*" | grep -o "[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*")"
     - echo "$INTERNAL_IP_ADDRESS nextcloud.local" >>/etc/hosts
     - /etc/init.d/apache2 start

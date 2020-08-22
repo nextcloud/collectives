@@ -1,11 +1,11 @@
 <?php
 
-namespace OCA\Unite\Service;
+namespace OCA\Collectives\Service;
 
 use Exception;
-use OCA\Unite\Db\CollectiveMapper;
-use OCA\Unite\Fs\NodeHelper;
-use OCA\Unite\Model\Page;
+use OCA\Collectives\Db\CollectiveMapper;
+use OCA\Collectives\Fs\NodeHelper;
+use OCA\Collectives\Model\Page;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\Files\AlreadyExistsException;
@@ -21,23 +21,18 @@ class PageService {
 	private $nodeHelper;
 	/** @var CollectiveMapper */
 	private $collectiveMapper;
-	/** @var CollectiveCircleHelper */
-	private $collectiveCircleHelper;
 
 	/**
 	 * PageService constructor.
 	 *
 	 * @param NodeHelper             $nodeHelper
 	 * @param CollectiveMapper       $collectiveMapper
-	 * @param CollectiveCircleHelper $collectiveCircleHelper
 	 */
 	public function __construct(NodeHelper $nodeHelper,
-								CollectiveMapper $collectiveMapper,
-								CollectiveCircleHelper $collectiveCircleHelper
+								CollectiveMapper $collectiveMapper
 	) {
 		$this->nodeHelper = $nodeHelper;
 		$this->collectiveMapper = $collectiveMapper;
-		$this->collectiveCircleHelper = $collectiveCircleHelper;
 	}
 
 	/**

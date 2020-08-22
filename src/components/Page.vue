@@ -3,7 +3,7 @@
 		<h1 id="titleform" class="page-title">
 			<input ref="title"
 				v-model="newTitle"
-				:placeholder="t('unite', 'Title')"
+				:placeholder="t('collectives', 'Title')"
 				type="text"
 				:disabled="updating || !savePossible"
 				@keypress.13="focusEditor"
@@ -12,25 +12,25 @@
 				<ActionButton v-if="edit"
 					icon="icon-checkmark"
 					@click="$emit('toggleEdit')">
-					{{ t('unite', 'Done with editing') }}
+					{{ t('collectives', 'Done with editing') }}
 				</ActionButton>
 				<ActionButton v-else
 					icon="icon-rename"
 					@click="$emit('toggleEdit')">
-					{{ t('unite', 'Edit page') }}
+					{{ t('collectives', 'Edit page') }}
 				</ActionButton>
 			</Actions>
 			<Actions>
 				<ActionButton
 					icon="icon-delete"
 					@click="$emit('deletePage')">
-					{{ t('unite', 'Delete page') }}
+					{{ t('collectives', 'Delete page') }}
 				</ActionButton>
 				<ActionButton
 					icon="icon-menu"
 					:close-after-click="true"
 					@click="$emit('showVersions')">
-					{{ t('unite', 'Show old versions') }}
+					{{ t('collectives', 'Show old versions') }}
 				</ActionButton>
 			</Actions>
 		</h1>

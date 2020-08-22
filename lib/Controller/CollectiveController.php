@@ -1,15 +1,15 @@
 <?php
 
-namespace OCA\Unite\Controller;
+namespace OCA\Collectives\Controller;
 
-use OCA\Unite\Service\CollectiveCircleService;
+use OCA\Collectives\Service\CollectiveService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
 use OCP\IUserSession;
 
 class CollectiveController extends Controller {
-	/** @var CollectiveCircleService */
+	/** @var CollectiveService */
 	private $service;
 	/** @var IUserSession */
 	private $userSession;
@@ -18,7 +18,7 @@ class CollectiveController extends Controller {
 
 	public function __construct(string $AppName,
 								IRequest $request,
-								CollectiveCircleService $service,
+								CollectiveService $service,
 								IUserSession $userSession) {
 		parent::__construct($AppName, $request);
 		$this->service = $service;

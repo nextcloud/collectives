@@ -1,6 +1,6 @@
 <?php
 
-namespace OCA\Unite\Mount;
+namespace OCA\Collectives\Mount;
 
 use OC\Files\Mount\MountPoint;
 use OCP\Files\Storage\IStorageFactory;

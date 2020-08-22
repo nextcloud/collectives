@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace OCA\Unite\AppInfo;
+namespace OCA\Collectives\AppInfo;
 
 use Closure;
-use OCA\Unite\Mount\CollectiveRootPathHelper;
-use OCA\Unite\Mount\MountProvider;
-use OCA\Unite\Service\CollectiveCircleHelper;
+use OCA\Collectives\Mount\CollectiveRootPathHelper;
+use OCA\Collectives\Mount\MountProvider;
+use OCA\Collectives\Service\CollectiveHelper;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
@@ -18,7 +18,7 @@ use OCP\IUserSession;
 use Psr\Container\ContainerInterface;
 
 class Application extends App implements IBootstrap {
-	public const APP_NAME = 'unite';
+	public const APP_NAME = 'collectives';
 
 	public function __construct(array $urlParams = []) {
 		parent::__construct(self::APP_NAME, $urlParams);
@@ -30,7 +30,7 @@ class Application extends App implements IBootstrap {
 	public function register(IRegistrationContext $context): void {
 		$context->registerService(MountProvider::class, function (ContainerInterface $c) {
 			return new MountProvider(
-				$c->get(CollectiveCircleHelper::class),
+				$c->get(CollectiveHelper::class),
 				$c->get(CollectiveRootPathHelper::class),
 				$c->get(IRootFolder::class),
 				$c->get(IUserSession::class)

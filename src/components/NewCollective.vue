@@ -21,21 +21,21 @@
   -->
 <template>
 	<AppNavigationItem v-if="!editing"
-		:title="t('unite', 'Create new collective')"
+		:title="t('collectives', 'Create new collective')"
 		icon="icon-add"
 		@click.prevent.stop="startCreateCollective" />
 	<div v-else class="collective-create">
 		<form @submit.prevent.stop="createCollective">
 			<input
 				ref="nameField"
-				:placeholder="t('unite', 'New collective name')"
+				:placeholder="t('collectives', 'New collective name')"
 				type="text"
 				required>
 			<input type="submit" value="" class="icon-confirm">
 			<EmojiPicker @select="addEmoji">
 				<button
 					type="button"
-					:aria-label="t('unite', 'Add emoji')"
+					:aria-label="t('collectives', 'Add emoji')"
 					:aria-haspopup="true">
 					<EmoticonOutline
 						:size="20" />

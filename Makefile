@@ -58,9 +58,9 @@ build-js-production:
 # Builds translation template from source code and update 
 po:
 	php $(build_tools_dir)/translationtool.phar create-pot-files
-	sed -i 's/^#: .*\/unite/#: \/unite/' $(CURDIR)/translationfiles/templates/unite.pot
-	for pofile in $(CURDIR)/translationfiles/*/unite.po; do \
-		msgmerge --update "$$pofile" translationfiles/templates/unite.pot; \
+	sed -i 's/^#: .*\/collectives/#: \/collectives/' $(CURDIR)/translationfiles/templates/collectives.pot
+	for pofile in $(CURDIR)/translationfiles/*/collectives.po; do \
+		msgmerge --update "$$pofile" translationfiles/templates/collectives.pot; \
 	done
 
 l10n: po
