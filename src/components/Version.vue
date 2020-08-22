@@ -15,7 +15,7 @@
 			<Actions>
 				<ActionButton
 					icon="icon-play-next"
-					@click="$emit('preview-version', null)">
+					@click="$emit('showCurrent')">
 					{{ t('collectives', 'Back to current version') }}
 				</ActionButton>
 			</Actions>
