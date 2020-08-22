@@ -11,6 +11,10 @@ Feature: collectivePages
     Then user "alice" sees page "secondpage" in "mycollective"
     And user "jane" sees page "secondpage" in "mycollective"
 
+  Scenario: Touch page
+    When user "alice" touches page "firstpage" in "mycollective"
+    Then user "alice" last edited page "firstpage" in "mycollective"
+
   Scenario: Create page with namespace conflict
     When user "alice" creates page "firstpage" in "mycollective"
     Then user "alice" doesn't see page "firstpage (1)" in "mycollective"

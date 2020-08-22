@@ -129,6 +129,21 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @Then user :user last edited page :page in :collective
+	 *
+	 * @param string $user
+	 * @param string $page
+	 * @param string $collective
+	 */
+	public function userLastEditedPage(string $user, string $page, string $collective): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$this->sendRequest('GET', '/apps/collectives/_collectives/' . $collectiveId . '/_pages');
+		$this->assertStatusCode($this->response, 200);
+		$this->assertPageLastEditedByUser($this->response, $page, $user);
+	}
+
+	/**
 	 * @When user :user deletes collective :collective
 	 * @When user :user :fails to delete collective :collective
 	 *
@@ -161,6 +176,21 @@ class FeatureContext implements Context {
 		$collectiveId = $this->collectiveIdByName($collective);
 		$pageId = $this->pageIdByName($collectiveId, $page);
 		$this->sendRequest('DELETE', '/apps/collectives/_collectives/' . $collectiveId . '/_pages/' . $pageId);
+		$this->assertStatusCode($this->response, 200);
+	}
+
+	/**
+	 * @When user :user touches page :page in :collective
+	 *
+	 * @param string $user
+	 * @param string $page
+	 * @param string $collective
+	 */
+	public function userTouchesPage(string $user, string $page, string $collective): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$pageId = $this->pageIdByName($collectiveId, $page);
+		$this->sendRequest('GET', '/apps/collectives/_collectives/' . $collectiveId . '/_pages/' . $pageId . '/touch');
 		$this->assertStatusCode($this->response, 200);
 	}
 
@@ -389,5 +419,21 @@ class FeatureContext implements Context {
 		} else {
 			Assert::assertNotContains($title, $pageTitles);
 		}
+	}
+
+	/**
+	 * @param Response  $response
+	 * @param string    $title
+	 * @param string    $user
+	 */
+	private function assertPageLastEditedByUser(Response $response, string $title, string $user): void {
+		$jsonBody = json_decode($response->getBody()->getContents(), true);
+		$pageTitles = [];
+		foreach ($jsonBody as $page) {
+			if ($page['lastUserId'] === $user) {
+				$pageTitles[] = $page['title'];
+			}
+		}
+		Assert::assertContains($title, $pageTitles);
 	}
 }

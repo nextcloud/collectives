@@ -7,6 +7,7 @@ use OC\Files\Node\File;
 use OC\Files\Node\Folder;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
+use OCA\Collectives\Db\PageMapper;
 use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Model\PageFile;
 use OCA\Collectives\Service\NotFoundException;
@@ -24,6 +25,12 @@ class PageServiceTest extends TestCase {
 	private $userId = 'jane';
 
 	protected function setUp(): void {
+		$pageMapper = $this->getMockBuilder(PageMapper::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$pageMapper->method('findByFileId')
+			->willReturn(null);
+
 		$nodeHelper = $this->getMockBuilder(NodeHelper::class)
 			->disableOriginalConstructor()
 			->getMock();
@@ -36,7 +43,7 @@ class PageServiceTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
-		$this->service = new PageService($nodeHelper, $collectiveMapper, $collectiveHelper);
+		$this->service = new PageService($pageMapper, $nodeHelper, $collectiveMapper);
 
 		$this->collectiveFolder = $this->getMockBuilder(Folder::class)
 			->disableOriginalConstructor()
@@ -76,7 +83,7 @@ class PageServiceTest extends TestCase {
 		$fileNameList = [ 'page1.md', 'page2.md', 'page3.md', 'image.png', 'text.txt' ];
 		$filesNotJustMd = [];
 		$filesJustMd = [];
-		$pages = [];
+		$pageFiles = [];
 		foreach ($fileNameList as $fileName) {
 			$mountPoint = $this->getMockBuilder(MountPoint::class)
 				->disableOriginalConstructor()
@@ -87,6 +94,8 @@ class PageServiceTest extends TestCase {
 			$file = $this->getMockBuilder(File::class)
 				->disableOriginalConstructor()
 				->getMock();
+			$file->method('getId')
+				->willReturn(1);
 			$file->method('getName')
 				->willReturn($fileName);
 			$file->method('getMountPoint')
@@ -99,9 +108,9 @@ class PageServiceTest extends TestCase {
 			}
 			$filesJustMd[] = $file;
 
-			$page = new PageFile();
-			$page->fromFile($file);
-			$pages[] = $page;
+			$pageFile = new PageFile();
+			$pageFile->fromFile($file, null);
+			$pageFiles[] = $pageFile;
 		}
 
 		$this->collectiveFolder->method('getDirectoryListing')
@@ -110,8 +119,8 @@ class PageServiceTest extends TestCase {
 				$filesNotJustMd
 			);
 
-		self::assertEquals($pages, $this->service->findAll($this->userId, 1));
-		self::assertEquals($pages, $this->service->findAll($this->userId, 2));
+		self::assertEquals($pageFiles, $this->service->findAll($this->userId, 1));
+		self::assertEquals($pageFiles, $this->service->findAll($this->userId, 2));
 	}
 
 	public function testFindAllCollectiveNotFoundException(): void {

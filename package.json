@@ -1,7 +1,6 @@
 {
   "name": "collectives",
   "description": "Nextcloud Collectives App",
-  "version": "0.1.0",
   "author": "CollectiveCloud Team",
   "license": "AGPL",
   "repository": {

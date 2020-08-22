@@ -16,6 +16,7 @@ class PageFileTest extends TestCase {
 		$fileName = 'name.md';
 		$fileMountPoint = '/mountpoint/';
 		$fileInternalPath = 'path/to/file/name.txt';
+		$userId = 'jane';
 
 		$mountPoint = $this->getMockBuilder(MountPoint::class)
 			->disableOriginalConstructor()
@@ -32,14 +33,14 @@ class PageFileTest extends TestCase {
 		$file->method('getMountPoint')->willReturn($mountPoint);
 		$file->method('getInternalPath')->willReturn($fileInternalPath);
 
-		$page = new PageFile();
-		$page->fromFile($file);
+		$pageFile = new PageFile();
+		$pageFile->fromFile($file, $userId);
 
-		self::assertEquals($page->getId(), $fileId);
-		self::assertEquals($page->getTitle(), $fileTitle);
-		self::assertEquals($page->getTimestamp(), $fileMTime);
-		self::assertEquals($page->getSize(), $fileSize);
-		self::assertEquals($page->getFileName(), $fileName);
-		self::assertEquals($page->getFilePath(), $fileMountPoint . $fileInternalPath);
+		self::assertEquals($pageFile->getId(), $fileId);
+		self::assertEquals($pageFile->getTitle(), $fileTitle);
+		self::assertEquals($pageFile->getTimestamp(), $fileMTime);
+		self::assertEquals($pageFile->getSize(), $fileSize);
+		self::assertEquals($pageFile->getFileName(), $fileName);
+		self::assertEquals($pageFile->getFilePath(), $fileMountPoint . $fileInternalPath);
 	}
 }

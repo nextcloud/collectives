@@ -23,6 +23,8 @@ use OCP\Files\NotFoundException;
  * @method void setFileName(string $value)
  * @method string getFilePath()
  * @method void setFilePath(string $value)
+ * @method string getLastUserId()
+ * @method void setLastUserId(string $value)
  */
 class PageFile extends Entity implements JsonSerializable {
 	private const SUFFIX = '.md';
@@ -32,6 +34,7 @@ class PageFile extends Entity implements JsonSerializable {
 	protected $size;
 	protected $fileName;
 	protected $filePath;
+	protected $lastUserId;
 
 	public function jsonSerialize() {
 		return [
@@ -40,22 +43,27 @@ class PageFile extends Entity implements JsonSerializable {
 			'timestamp' => $this->timestamp,
 			'size' => $this->size,
 			'fileName' => $this->fileName,
-			'filePath' => $this->filePath
+			'filePath' => $this->filePath,
+			'lastUserId' => $this->lastUserId,
 		];
 	}
 
 	/**
-	 * @param File $file
+	 * @param File        $file
+	 * @param string|null $lastUserId
 	 *
 	 * @throws InvalidPathException
 	 * @throws NotFoundException
 	 */
-	public function fromFile(File $file): void {
+	public function fromFile(File $file, ?string $lastUserId = null): void {
 		$this->setId($file->getId());
 		$this->setTitle(basename($file->getName(), self::SUFFIX));
 		$this->setTimestamp($file->getMTime());
 		$this->setSize($file->getSize());
 		$this->setFileName($file->getName());
 		$this->setFilePath($file->getMountPoint()->getMountPoint() . $file->getInternalPath());
+		if (null !== $lastUserId) {
+			$this->setLastUserId($lastUserId);
+		}
 	}
 }
