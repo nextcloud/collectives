@@ -8,7 +8,7 @@ use OC\Files\Node\Folder;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Fs\NodeHelper;
-use OCA\Collectives\Model\Page;
+use OCA\Collectives\Model\PageFile;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\PageDoesNotExistException;
 use OCA\Collectives\Service\PageService;
@@ -99,7 +99,7 @@ class PageServiceTest extends TestCase {
 			}
 			$filesJustMd[] = $file;
 
-			$page = new Page();
+			$page = new PageFile();
 			$page->fromFile($file);
 			$pages[] = $page;
 		}

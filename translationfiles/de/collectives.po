@@ -127,7 +127,7 @@ msgid "Could not fetch collectives"
 msgstr "Konnte die Kollektive nicht laden"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:23
-msgid "New Page"
+msgid "New PageFile"
 msgstr "Neue Seite"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:24
@@ -143,7 +143,7 @@ msgid "Could not rename the page"
 msgstr "Umbenennen der Seite fehlgeschlagen"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:27
-msgid "Page deleted"
+msgid "PageFile deleted"
 msgstr "Seite entfernt"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:28

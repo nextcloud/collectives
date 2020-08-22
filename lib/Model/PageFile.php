@@ -10,7 +10,7 @@ use OCP\Files\InvalidPathException;
 use OCP\Files\NotFoundException;
 
 /**
- * Class Page
+ * Class PageFile
  * @method integer getId()
  * @method void setId(integer $value)
  * @method string getTitle()
@@ -24,7 +24,7 @@ use OCP\Files\NotFoundException;
  * @method string getFilePath()
  * @method void setFilePath(string $value)
  */
-class Page extends Entity implements JsonSerializable {
+class PageFile extends Entity implements JsonSerializable {
 	private const SUFFIX = '.md';
 
 	protected $title;

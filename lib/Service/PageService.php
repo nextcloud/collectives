@@ -5,7 +5,7 @@ namespace OCA\Collectives\Service;
 use Exception;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Fs\NodeHelper;
-use OCA\Collectives\Model\Page;
+use OCA\Collectives\Model\PageFile;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\Files\AlreadyExistsException;
@@ -38,12 +38,12 @@ class PageService {
 	/**
 	 * @param File   $file
 	 *
-	 * @return Page
+	 * @return PageFile
 	 * @throws InvalidPathException
 	 * @throws \OCP\Files\NotFoundException
 	 */
-	private function getPage(File $file): Page {
-		$page = new Page();
+	private function getPage(File $file): PageFile {
+		$page = new PageFile();
 		$page->fromFile($file);
 		return $page;
 	}
@@ -79,7 +79,7 @@ class PageService {
 	 * @param string $userId
 	 * @param int    $collectiveId
 	 *
-	 * @return Page[]
+	 * @return PageFile[]
 	 * @throws \OCP\Files\NotFoundException
 	 * @throws NotFoundException
 	 */
@@ -102,11 +102,11 @@ class PageService {
 	 * @param int    $collectiveId
 	 * @param int    $id
 	 *
-	 * @return Page
+	 * @return PageFile
 	 * @throws PageDoesNotExistException
 	 * @throws NotFoundException
 	 */
-	public function find(string $userId, int $collectiveId, int $id): Page {
+	public function find(string $userId, int $collectiveId, int $id): PageFile {
 		if (null === $collective = $this->collectiveMapper->findById($collectiveId, $userId)) {
 			throw new NotFoundException('Collective not found: '. $collectiveId);
 		}
@@ -119,13 +119,13 @@ class PageService {
 	 * @param int    $collectiveId
 	 * @param string $title
 	 *
-	 * @return Page
+	 * @return PageFile
 	 * @throws InvalidPathException
 	 * @throws NotPermittedException
 	 * @throws NotFoundException
 	 * @throws \OCP\Files\NotFoundException
 	 */
-	public function create(string $userId, int $collectiveId, string $title): Page {
+	public function create(string $userId, int $collectiveId, string $title): PageFile {
 		if (null === $collective = $this->collectiveMapper->findById($collectiveId, $userId)) {
 			throw new NotFoundException('Collective not found: '. $collectiveId);
 		}
@@ -134,7 +134,7 @@ class PageService {
 		$filename = NodeHelper::generateFilename($folder, $safeTitle, self::SUFFIX);
 
 		$file = $folder->newFile($filename . self::SUFFIX);
-		$page = new Page();
+		$page = new PageFile();
 		$page->fromFile($file);
 		return $page;
 	}
@@ -145,10 +145,10 @@ class PageService {
 	 * @param int    $id
 	 * @param string $title
 	 *
-	 * @return Page
+	 * @return PageFile
 	 * @throws NotFoundException
 	 */
-	public function rename(string $userId, int $collectiveId, int $id, string $title): Page {
+	public function rename(string $userId, int $collectiveId, int $id, string $title): PageFile {
 		if (null === $collective = $this->collectiveMapper->findById($collectiveId, $userId)) {
 			throw new NotFoundException('Collective not found: '. $collectiveId);
 		}
@@ -182,10 +182,10 @@ class PageService {
 	 * @param int    $collectiveId
 	 * @param int    $id
 	 *
-	 * @return Page
+	 * @return PageFile
 	 * @throws NotFoundException
 	 */
-	public function delete(string $userId, int $collectiveId, int $id): Page {
+	public function delete(string $userId, int $collectiveId, int $id): PageFile {
 		if (null === $collective = $this->collectiveMapper->findById($collectiveId, $userId)) {
 			throw new NotFoundException('Collective not found: '. $collectiveId);
 		}

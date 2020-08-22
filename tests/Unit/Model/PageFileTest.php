@@ -3,11 +3,11 @@
 namespace Unit\Model;
 
 use OC\Files\Mount\MountPoint;
-use OCA\Collectives\Model\Page;
+use OCA\Collectives\Model\PageFile;
 use OCP\Files\File;
 use PHPUnit\Framework\TestCase;
 
-class PageTest extends TestCase {
+class PageFileTest extends TestCase {
 	public function testFromFile(): void {
 		$fileId = 1;
 		$fileTitle = 'name';
@@ -32,7 +32,7 @@ class PageTest extends TestCase {
 		$file->method('getMountPoint')->willReturn($mountPoint);
 		$file->method('getInternalPath')->willReturn($fileInternalPath);
 
-		$page = new Page();
+		$page = new PageFile();
 		$page->fromFile($file);
 
 		self::assertEquals($page->getId(), $fileId);

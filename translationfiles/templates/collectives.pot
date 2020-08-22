@@ -120,7 +120,7 @@ msgid "Could not fetch collectives"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:23
-msgid "New Page"
+msgid "New PageFile"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:24
@@ -136,7 +136,7 @@ msgid "Could not rename the page"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:27
-msgid "Page deleted"
+msgid "PageFile deleted"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:28
