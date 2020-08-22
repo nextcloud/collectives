@@ -46,6 +46,13 @@
 		opacity: 1;
 	}
 
+	.page-title, #titleform input[type="text"]:disabled {
+		background-color: var(--color-main-background);
+		color: var(--color-text-lighter);
+		margin: 3px 3px 3px 0;
+		padding: 7px 6px;
+	}
+
 	#action-menu {
 		position: absolute;
 		right: 0;
