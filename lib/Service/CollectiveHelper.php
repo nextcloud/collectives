@@ -7,12 +7,12 @@ use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCP\AppFramework\QueryException;
 
-class CollectiveCircleHelper {
+class CollectiveHelper {
 	/** @var CollectiveMapper */
 	private $collectiveMapper;
 
 	/**
-	 * CollectiveCircleHelper constructor.
+	 * CollectiveHelper constructor.
 	 *
 	 * @param CollectiveMapper $collectiveMapper
 	 */

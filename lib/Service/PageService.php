@@ -21,23 +21,18 @@ class PageService {
 	private $nodeHelper;
 	/** @var CollectiveMapper */
 	private $collectiveMapper;
-	/** @var CollectiveCircleHelper */
-	private $collectiveCircleHelper;
 
 	/**
 	 * PageService constructor.
 	 *
 	 * @param NodeHelper             $nodeHelper
 	 * @param CollectiveMapper       $collectiveMapper
-	 * @param CollectiveCircleHelper $collectiveCircleHelper
 	 */
 	public function __construct(NodeHelper $nodeHelper,
-								CollectiveMapper $collectiveMapper,
-								CollectiveCircleHelper $collectiveCircleHelper
+								CollectiveMapper $collectiveMapper
 	) {
 		$this->nodeHelper = $nodeHelper;
 		$this->collectiveMapper = $collectiveMapper;
-		$this->collectiveCircleHelper = $collectiveCircleHelper;
 	}
 
 	/**

@@ -10,11 +10,11 @@ use OCA\Collectives\Mount\CollectiveRootPathHelper;
 use OCP\AppFramework\QueryException;
 use OCP\Files\IRootFolder;
 
-class CollectiveCircleService {
+class CollectiveService {
 	/** @var CollectiveMapper */
 	private $collectiveMapper;
-	/** @var CollectiveCircleHelper */
-	private $collectiveCircleHelper;
+	/** @var CollectiveHelper */
+	private $collectiveHelper;
 	/** @var NodeHelper */
 	private $nodeHelper;
 	/** @var IRootFolder */
@@ -23,23 +23,23 @@ class CollectiveCircleService {
 	private $collectiveRootPathHelper;
 
 	/**
-	 * CollectiveCircleService constructor.
+	 * CollectiveService constructor.
 	 *
 	 * @param CollectiveMapper         $collectiveMapper
-	 * @param CollectiveCircleHelper   $collectiveCircleHelper
+	 * @param CollectiveHelper   $collectiveHelper
 	 * @param NodeHelper               $nodeHelper
 	 * @param IRootFolder              $rootFolder
 	 * @param CollectiveRootPathHelper $collectiveRootPathHelper
 	 */
 	public function __construct(
 		CollectiveMapper $collectiveMapper,
-		CollectiveCircleHelper $collectiveCircleHelper,
+		CollectiveHelper $collectiveHelper,
 		NodeHelper $nodeHelper,
 		IRootFolder $rootFolder,
 		CollectiveRootPathHelper $collectiveRootPathHelper
 	) {
 		$this->collectiveMapper = $collectiveMapper;
-		$this->collectiveCircleHelper = $collectiveCircleHelper;
+		$this->collectiveHelper = $collectiveHelper;
 		$this->nodeHelper = $nodeHelper;
 		$this->rootFolder = $rootFolder;
 		$this->collectiveRootPathHelper = $collectiveRootPathHelper;
@@ -52,7 +52,7 @@ class CollectiveCircleService {
 	 * @throws QueryException
 	 */
 	public function getCollectives(string $userId): array {
-		return $this->collectiveCircleHelper->getCollectivesForUser($userId);
+		return $this->collectiveHelper->getCollectivesForUser($userId);
 	}
 
 	/**

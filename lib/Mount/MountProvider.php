@@ -4,7 +4,7 @@ namespace OCA\Collectives\Mount;
 
 use OC\Files\Node\LazyFolder;
 use OC\Files\Storage\Wrapper\Jail;
-use OCA\Collectives\Service\CollectiveCircleHelper;
+use OCA\Collectives\Service\CollectiveHelper;
 use OCP\Files\Config\IMountProvider;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
@@ -16,8 +16,8 @@ use OCP\IUser;
 use OCP\IUserSession;
 
 class MountProvider implements IMountProvider {
-	/** @var CollectiveCircleHelper */
-	private $collectiveCircleHelper;
+	/** @var CollectiveHelper */
+	private $collectiveHelper;
 
 	/** @var CollectiveRootPathHelper */
 	private $collectiveRootPathHelper;
@@ -31,17 +31,17 @@ class MountProvider implements IMountProvider {
 	/**
 	 * MountProvider constructor.
 	 *
-	 * @param CollectiveCircleHelper   $collectiveCircleHelper
+	 * @param CollectiveHelper   $collectiveHelper
 	 * @param CollectiveRootPathHelper $collectiveRootPathHelper
 	 * @param IRootFolder              $rootFolder
 	 * @param IUserSession             $userSession
 	 */
 	public function __construct(
-		CollectiveCircleHelper $collectiveCircleHelper,
+		CollectiveHelper $collectiveHelper,
 		CollectiveRootPathHelper $collectiveRootPathHelper,
 		IRootFolder $rootFolder,
 		IUserSession $userSession) {
-		$this->collectiveCircleHelper = $collectiveCircleHelper;
+		$this->collectiveHelper = $collectiveHelper;
 		$this->collectiveRootPathHelper = $collectiveRootPathHelper;
 		$this->rootFolder = $rootFolder;
 		$this->userSession = $userSession;
@@ -54,7 +54,7 @@ class MountProvider implements IMountProvider {
 	 */
 	public function getFoldersForUser(IUser $user): array {
 		// TODO: Search filecache ID, see joinQueryWithFileCache() from groupfolders app
-		$collectives = $this->collectiveCircleHelper->getCollectivesForUser($user->getUID());
+		$collectives = $this->collectiveHelper->getCollectivesForUser($user->getUID());
 		$folders = [];
 		foreach ($collectives as $c) {
 			$folders[] = ['folderId' => $c->getId(),
