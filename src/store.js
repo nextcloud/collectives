@@ -83,6 +83,10 @@ export default new Vuex.Store({
 			return (pageId) => `${getters.pagesUrl}/${pageId}`
 		},
 
+		touchUrl(_state, getters) {
+			return `${getters.pageUrl(getters.currentPage.id)}/touch`
+		},
+
 		updatedPagePath(state, getters) {
 			const collective = getters.collectiveParam
 			const { title, id } = state.updatedPage
@@ -163,6 +167,11 @@ export default new Vuex.Store({
 			// Add new page to the beginning of pages array
 			commit('addPage', { newTitle: '', ...response.data })
 			commit('done')
+		},
+
+		async touchPage({ commit, getters }) {
+			const response = await axios.get(getters.touchUrl)
+			commit('updatePage', response.data)
 		},
 
 		/**
