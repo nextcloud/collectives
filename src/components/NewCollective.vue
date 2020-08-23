@@ -26,21 +26,21 @@
 		@click.prevent.stop="startCreateCollective" />
 	<div v-else class="collective-create">
 		<form @submit.prevent.stop="createCollective">
+			<EmojiPicker :show-preview="true" @select="addEmoji">
+				<button
+					type="button"
+					:aria-label="t('collectives', 'Add emoji')"
+					:aria-haspopup="true">
+					<span v-if="emoji">{{ emoji }}</span>
+					<EmoticonOutline v-else :size="20" />
+				</button>
+			</EmojiPicker>
 			<input
 				ref="nameField"
 				:placeholder="t('collectives', 'New collective name')"
 				type="text"
 				required>
 			<input type="submit" value="" class="icon-confirm">
-			<EmojiPicker @select="addEmoji">
-				<button
-					type="button"
-					:aria-label="t('collectives', 'Add emoji')"
-					:aria-haspopup="true">
-					<EmoticonOutline
-						:size="20" />
-				</button>
-			</EmojiPicker>
 			<Actions>
 				<ActionButton icon="icon-close" @click.stop.prevent="cancelEdit" />
 			</Actions>
@@ -72,10 +72,15 @@ export default {
 			editing: false,
 			loading: false,
 			color: randomColor(),
-			emojiSelected: false,
+			emoji: null,
 		}
 	},
-	computed: {},
+	computed: {
+		name() {
+			const text = this.$refs.nameField.value
+			return this.emoji ? `${text} ${this.emoji}` : text
+		},
+	},
 	watch: {},
 	mounted() {},
 	methods: {
@@ -86,22 +91,17 @@ export default {
 			})
 		},
 		createCollective(e) {
-			const name = e.currentTarget.childNodes[0].value
 			const collective = {
-				name,
-				color: this.color.substring(1),
+				name: this.name,
 			}
 			this.$emit('newCollective', collective)
 			this.editing = false
-			this.color = randomColor()
 		},
 		cancelEdit(e) {
 			this.editing = false
-			this.color = randomColor()
 		},
 		addEmoji(emoji) {
-			const nameField = this.$refs.nameField
-			nameField.value += emoji
+			this.emoji = emoji
 		},
 	},
 }
@@ -119,19 +119,6 @@ export default {
 			input[type='text'] {
 				flex-grow: 1;
 			}
-		}
-	}
-
-	.app-navigation-entry-bullet-wrapper {
-		width: 44px;
-		height: 44px;
-		.color0 {
-			width: 30px !important;
-			margin: 5px;
-			margin-left: 7px;
-			height: 30px;
-			border-radius: 50%;
-			background-size: 14px;
 		}
 	}
 </style>
