@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2020-08-23 09:26+0000\n"
+"POT-Creation-Date: 2020-08-23 13:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -65,11 +65,11 @@ msgid "Create new collective"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:9
-msgid "New collective name"
+msgid "Add emoji"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:10
-msgid "Add emoji"
+msgid "New collective name"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:11
@@ -97,57 +97,61 @@ msgid "Add a page"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:17
-msgid "Current version"
+msgid "Last edited by {user}"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:18
-msgid "No other versions available"
+msgid "Current version"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:19
-msgid "Could not get page versions"
+msgid "No other versions available"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:20
+msgid "Could not get page versions"
+msgstr ""
+
 #: /collectives/specialVueFakeDummyForL10nScript.js:21
+#: /collectives/specialVueFakeDummyForL10nScript.js:22
 msgid "%n byte"
 msgid_plural "%n bytes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:22
+#: /collectives/specialVueFakeDummyForL10nScript.js:23
 msgid "Restore this version"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:23
+#: /collectives/specialVueFakeDummyForL10nScript.js:24
 msgid "Back to current version"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:24
+#: /collectives/specialVueFakeDummyForL10nScript.js:25
 msgid "Reverted {page} to revision {timestamp}."
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:25
+#: /collectives/specialVueFakeDummyForL10nScript.js:26
 msgid "Failed to revert {page} to revision {timestamp}."
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:26
+#: /collectives/specialVueFakeDummyForL10nScript.js:27
 msgid "No collective selected"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:27
+#: /collectives/specialVueFakeDummyForL10nScript.js:28
 msgid "Select a collective or create a new one on the left."
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:28
+#: /collectives/specialVueFakeDummyForL10nScript.js:29
 msgid "Could not fetch collectives"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:29
+#: /collectives/specialVueFakeDummyForL10nScript.js:30
 msgid "Could not fetch pages"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:30
+#: /collectives/specialVueFakeDummyForL10nScript.js:31
 msgid "Could not create the collective"
 msgstr ""
 

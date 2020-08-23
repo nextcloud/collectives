@@ -20,12 +20,16 @@
 			<div class="app-content-list-item-line-one">
 				{{ page.title }}
 			</div>
+			<div class="app-content-list-item-line-two">
+				{{ lastUpdate(page) }}
+			</div>
 			<span class="app-content-list-item-details"
 				:class="{active: recentlyEdited(page)}">
-				{{ lastUpdate(page) }}
-				<Avatar v-if="page.user && page.user !== OC.currentUser"
-					:user="page.user"
-					size="16" />
+				<Avatar v-if="page.lastUserId"
+					:user="page.lastUserId"
+					:disable-menu="true"
+					:tooltip-message="lastEditedUserMessage(page)"
+					size="20" />
 			</span>
 		</router-link>
 	</AppContentList>
@@ -81,6 +85,10 @@ export default {
 		// UTF8 friendly way of getting first 'letter'
 		firstGrapheme(str) {
 			return str[Symbol.iterator]().next().value
+		},
+
+		lastEditedUserMessage(page) {
+			return t('collectives', 'Last edited by {user}', { user: page.lastUserId })
 		},
 	},
 }
