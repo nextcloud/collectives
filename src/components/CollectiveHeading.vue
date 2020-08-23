@@ -2,7 +2,8 @@
 	<div class="collective-heading">
 		<h2>
 			<router-link :to="`/${name}`">
-				{{ name }}
+				<span class="emoji">{{ collective.emoji }}</span>
+				{{ collective.title }}
 			</router-link>
 		</h2>
 	</div>
@@ -13,9 +14,6 @@ export default {
 	name: 'CollectiveHeading',
 
 	computed: {
-		name() {
-			return this.collective.name
-		},
 		collective() {
 			return this.$store.getters.currentCollective
 		},
@@ -43,7 +41,7 @@ export default {
 	display: flex;
 	margin: 0 5px;
 	cursor: pointer;
-	opacity: 0.5;
+	opacity: 0.7;
 	color: var(--color-main-text);
 }
 .collective-heading h2:hover {

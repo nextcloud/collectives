@@ -163,7 +163,7 @@ export default {
 		max-width: 100%;
 		height: 100%;
 		left: 0;
-		top: 50px;
+		top: 54px;
 		margin: 0 auto;
 		position: absolute;
 		background-color: var(--color-main-background);

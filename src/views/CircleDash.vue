@@ -91,10 +91,6 @@ export default {
 		currentPage() {
 			return this.$store.getters.currentPage
 		},
-
-		collectives() {
-			return this.$store.state.collectives
-		},
 	},
 
 	watch: {

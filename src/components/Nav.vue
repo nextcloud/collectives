@@ -4,10 +4,14 @@
 			<AppNavigationCaption :title="t('collectives', 'Select a collective')" />
 			<AppNavigationItem v-for="collective in collectives"
 				:key="collective.circleUniqueId"
-				:title="collective.name"
+				:title="collective.title"
 				:class="{active: isActive(collective)}"
 				:to="`/${collective.name}`"
-				icon="icon-star" />
+				:icon="icon(collective)">
+				<template v-if="collective.emoji" v-slot:icon>
+					{{ collective.emoji }}
+				</template>
+			</AppNavigationItem>
 			<NewCollective @newCollective="newCollective" />
 		</template>
 	</AppNavigation>
@@ -29,7 +33,7 @@ export default {
 	},
 	computed: {
 		collectives() {
-			return this.$store.state.collectives
+			return this.$store.getters.collectives
 		},
 	},
 	methods: {
@@ -38,6 +42,9 @@ export default {
 		},
 		newCollective(collective) {
 			this.$emit('newCollective', collective)
+		},
+		icon(collective) {
+			return !collective.emoji && 'icon-star'
 		},
 	},
 }

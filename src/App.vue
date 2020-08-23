@@ -18,6 +18,13 @@
 
 	.app-content-details div #editor-container {
 		position: absolute;
+		top: 54px;
+	}
+
+	#editor-container #editor {
+		max-width: 800px;
+		margin-left: auto;
+		margin-right: auto;
 	}
 
 	#editor-container #editor .menubar {
@@ -32,7 +39,7 @@
 		margin-top: 5px;
 	}
 
-	.page-title, #version-title, #titleform input[type="text"] {
+	#version-title, #titleform input[type="text"] {
 		font-size: 35px;
 		border: none;
 		font-weight: 600;
@@ -42,11 +49,11 @@
 		opacity: 0.8;
 	}
 
-	.page-title, #titleform input[type="text"]:focus {
-		opacity: 1;
+	.page-title {
+		width: 100%;
 	}
 
-	.page-title, #titleform input[type="text"]:disabled {
+	#titleform input[type="text"]:disabled {
 		background-color: var(--color-main-background);
 		color: var(--color-text-lighter);
 		margin: 3px 3px 3px 0;
