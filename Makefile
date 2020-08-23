@@ -2,13 +2,15 @@
 # later. See the COPYING file.
 
 app_name=$(notdir $(CURDIR))
+project_dir=$(CURDIR)/../$(app_name)
 build_dir=$(CURDIR)/build
 build_tools_dir=$(build_dir)/tools
 source_dir=$(build_dir)/source
-sign_dir=$(build_dir)/sign
+appstore_dir=$(build_dir)/appstore
 cert_dir=$(HOME)/.nextcloud/certificates
 composer=$(shell which composer 2> /dev/null)
 translationtool_url=https://github.com/nextcloud/docker-ci/raw/master/translations/translationtool/translationtool.phar
+version+=0.2.0
 
 
 all: dev-setup lint build test
@@ -55,7 +57,7 @@ build-js:
 build-js-production:
 	npm run build
 
-# Builds translation template from source code and update 
+# Builds translation template from source code and update
 po:
 	php $(build_tools_dir)/translationtool.phar create-pot-files
 	sed -i 's/^#: .*\/collectives/#: \/collectives/' $(CURDIR)/translationfiles/templates/collectives.pot
@@ -79,7 +81,7 @@ clean:
 distclean: clean
 	rm -rf $(build_tools_dir)
 	rm -rf $(source_dir)
-	rm -rf $(sign_dir)
+	rm -rf $(appsstore_dir)
 	rm -rf node_modules
 	rm -rf vendor
 
@@ -90,34 +92,39 @@ dist:
 
 # Builds the source package
 source: clean build
-	rm -rf $(source_dir)
 	mkdir -p $(source_dir)
-	tar cvzf $(source_package_name).tar.gz ../$(app_name) \
-	--exclude-vcs \
-	--exclude="../$(app_name)/build" \
-	--exclude="../$(app_name)/node_modules"
+	rsync -a --delete --delete-excluded \
+		--exclude=".git*" \
+		--exclude=".php_cs.cache" \
+		--exclude="build" \
+		--exclude="js/*" \
+		--exclude="node_modules" \
+		--exclude="vendor" \
+	$(project_dir) $(source_dir)/
+	tar -czf $(source_dir)/$(app_name)-$(version).tar.gz \
+		-C $(source_dir) $(app_name)
 
-# Builds the source package for the app store, ignores php and js tests
+# Builds the source package for the app store
 appstore: clean build
-	rm -rf $(sign_dir)
-	mkdir -p $(sign_dir)
-	rsync -a \
-	--exclude-vcs \
-	--exclude="../$(app_name)/.*" \
-	--exclude="../$(app_name)/Makefile" \
-	--exclude="../$(app_name)/build" \
-	--exclude="../$(app_name)/composer.*" \
-	--exclude="../$(app_name)/package-lock.json" \
-	--exclude="../$(app_name)/package.json" \
-	--exclude="../$(app_name)/phpunit.xml" \
-	--exclude="../$(app_name)/protractor\.*" \
-	--exclude="../$(app_name)/src" \
-	--exclude="../$(app_name)/tests" \
-	--exclude="../$(app_name)/webpack.*" \
-	./ $(sign_dir)/$(app_name)
-	tar -czf $(build_dir)/$(app_name)-$(version).tar.gz \
-		-C $(sign_dir) $(app_name)
+	mkdir -p $(appstore_dir)
+	rsync -a --delete --delete-excluded \
+		--exclude=".[a-z]*" \
+		--exclude="Makefile" \
+		--exclude="build" \
+		--exclude="composer.*" \
+		--exclude="node_modules" \
+		--exclude="package-lock.json" \
+		--exclude="package.json" \
+		--exclude="phpunit.xml" \
+		--exclude="src" \
+		--exclude="tests" \
+		--exclude="vendor" \
+		--exclude="webpack.*" \
+	$(project_dir) $(appstore_dir)/
+	tar -czf $(appstore_dir)/$(app_name)-$(version).tar.gz \
+		-C $(appstore_dir) $(app_name)
 	@if [ -f $(cert_dir)/$(app_name).key ]; then \
 		echo "Signing package…"; \
-		openssl dgst -sha512 -sign $(cert_dir)/$(app_name).key $(build_dir)/$(app_name)-$(version).t    ar.gz | openssl base64; \
+		openssl dgst -sha512 -sign $(cert_dir)/$(app_name).key \
+			$(appstore_dir)/$(app_name)-$(version).tar.gz | openssl base64; \
 	fi
