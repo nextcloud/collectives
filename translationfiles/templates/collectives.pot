@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2020-08-20 14:11+0000\n"
+"POT-Creation-Date: 2020-08-23 09:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,123 +28,127 @@ msgstr ""
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:4
 msgid ""
-"Collectives is a Nextcloud App for activist and community projects to organize "
-"together. Come and gather in collectives to build shared knowledge."
+"Collectives is a Nextcloud App for activist and community projects to "
+"organize together. Come and gather in collectives to build shared knowledge."
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:1
-msgid "Select a collective"
+msgid "New Page"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:2
-msgid "Create new collective"
+msgid "Could not create the page"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:3
-msgid "New collective name"
+msgid "Could not rename the page"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:4
-msgid "Title"
+msgid "Page deleted"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:5
-msgid "Done with editing"
+msgid "Could not delete the page"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:6
-msgid "Edit page"
+msgid "Could not fetch page ${pageId}"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:7
-msgid "Delete page"
+msgid "Select a collective"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:8
-msgid "Show old versions"
+msgid "Create new collective"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:9
-msgid "Add a page"
+msgid "New collective name"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:10
-msgid "Current version"
+msgid "Add emoji"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:11
-msgid "No other versions available"
+msgid "Title"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:12
-msgid "Could not get page versions"
+msgid "Done with editing"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:13
+msgid "Edit page"
+msgstr ""
+
 #: /collectives/specialVueFakeDummyForL10nScript.js:14
+msgid "Delete page"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:15
+msgid "Show old versions"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:16
+msgid "Add a page"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:17
+msgid "Current version"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:18
+msgid "No other versions available"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:19
+msgid "Could not get page versions"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:20
+#: /collectives/specialVueFakeDummyForL10nScript.js:21
 msgid "%n byte"
 msgid_plural "%n bytes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:15
+#: /collectives/specialVueFakeDummyForL10nScript.js:22
 msgid "Restore this version"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:16
+#: /collectives/specialVueFakeDummyForL10nScript.js:23
 msgid "Back to current version"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:17
+#: /collectives/specialVueFakeDummyForL10nScript.js:24
 msgid "Reverted {page} to revision {timestamp}."
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:18
+#: /collectives/specialVueFakeDummyForL10nScript.js:25
 msgid "Failed to revert {page} to revision {timestamp}."
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:19
+#: /collectives/specialVueFakeDummyForL10nScript.js:26
 msgid "No collective selected"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:20
+#: /collectives/specialVueFakeDummyForL10nScript.js:27
 msgid "Select a collective or create a new one on the left."
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:21
-msgid "Could not fetch pages"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:22
+#: /collectives/specialVueFakeDummyForL10nScript.js:28
 msgid "Could not fetch collectives"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:23
-msgid "New PageFile"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:24
-msgid "Could not create the page"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:25
-msgid "Could not create the collective"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:26
-msgid "Could not rename the page"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:27
-msgid "PageFile deleted"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:28
-msgid "Could not delete the page"
-msgstr ""
-
 #: /collectives/specialVueFakeDummyForL10nScript.js:29
-msgid "Could not fetch page ${pageId}"
+msgid "Could not fetch pages"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:30
+msgid "Could not create the collective"
 msgstr ""
 
 #: /collectives/templates/error.php:4
