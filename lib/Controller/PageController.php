@@ -74,6 +74,20 @@ class PageController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 *
+	 * @param int $collectiveId
+	 * @param int $id
+	 *
+	 * @return DataResponse
+	 */
+	public function touch(int $collectiveId, int $id): DataResponse {
+		return $this->handleErrorResponse(function () use ($collectiveId, $id) {
+			return $this->service->touch($this->getUserId(), $collectiveId, $id);
+		});
+	}
+
+	/**
+	 * @NoAdminRequired
+	 *
 	 * @param int    $collectiveId
 	 * @param int    $id
 	 * @param string $title
