@@ -99,6 +99,7 @@ export default {
 		},
 		cancelEdit(e) {
 			this.editing = false
+			this.emoji = null
 		},
 		addEmoji(emoji) {
 			this.emoji = emoji
@@ -107,18 +108,23 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-	.collective-create {
-		order: 1;
+.collective-create {
+	order: 1;
+	display: flex;
+	height: 44px;
+
+	form {
 		display: flex;
-		height: 44px;
+		flex-grow: 1;
 
-		form {
-			display: flex;
+		input[type='text'] {
 			flex-grow: 1;
-
-			input[type='text'] {
-				flex-grow: 1;
-			}
 		}
 	}
+}
+.popover button {
+    background-color: var(--color-main-background);
+    border: none;
+    font-size: 14px;
+}
 </style>
