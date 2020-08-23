@@ -27,7 +27,7 @@ function emoji(name) {
 	if (last && last.length === 2) {
 		return last
 	}
-	return null
+	return ''
 }
 
 // name without the emoji if there is one
