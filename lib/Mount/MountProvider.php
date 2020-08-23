@@ -44,12 +44,16 @@ class MountProvider implements IMountProvider {
 	 * @return array
 	 */
 	public function getFoldersForUser(IUser $user): array {
-		// TODO: Search filecache ID, see joinQueryWithFileCache() from groupfolders app
 		$collectives = $this->collectiveHelper->getCollectivesForUser($user->getUID());
+		// TODO: Find and set `rootCacheEntry`, see `getFoldersForGroup()` from groupfolders app
+		//$rootFolderId = $this->collectiveFolderManager->getRootFolderId();
 		$folders = [];
 		foreach ($collectives as $c) {
-			$folders[] = ['folderId' => $c->getId(),
-				'mountPoint' => $c->getName()];
+			$folders[] = [
+				'folderId' => $c->getId(),
+				'mountPoint' => $c->getName(),
+				'rootCacheEntry' => null,
+			];
 		}
 		return $folders;
 	}
