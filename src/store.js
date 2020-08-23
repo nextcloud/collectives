@@ -26,19 +26,25 @@ import Vuex from 'vuex'
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 
+import decorate from './decorators'
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
 
 	state: {
 		loading: true,
-		pages: [],
 		collectives: [],
+		pages: [],
 		updatedPage: {},
 		updatedCollective: {},
 	},
 
 	getters: {
+
+		collectives(state) {
+			return state.collectives.map(decorate.collective)
+		},
 
 		pageParam(state) {
 			return state.route.params.page
@@ -55,8 +61,8 @@ export default new Vuex.Store({
 			return state.route.params.collective
 		},
 
-		currentCollective(state, getters) {
-			return state.collectives.find(
+		currentCollective(_state, getters) {
+			return getters.collectives.find(
 				(collective) => collective.name === getters.collectiveParam
 			)
 		},

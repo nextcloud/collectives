@@ -5,7 +5,7 @@
 				class="title"
 				type="text"
 				disabled
-				:value="collective.name">
+				:value="`${collective.emoji} ${collective.title}`">
 			<input v-else
 				ref="title"
 				v-model="newTitle"
