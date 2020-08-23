@@ -1,8 +1,10 @@
 <template>
 	<div class="collective-heading">
 		<h2>
-			<router-link :to="`/${name}`">
-				<span class="emoji">{{ collective.emoji }}</span>
+			<router-link :to="`/${collective.name}`">
+				<span v-if="collective.emoji" class="emoji">
+					{{ collective.emoji }}
+				</span>
 				{{ collective.title }}
 			</router-link>
 		</h2>
