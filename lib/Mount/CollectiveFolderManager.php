@@ -8,37 +8,52 @@ use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
+use OCP\IDBConnection;
 
 class CollectiveFolderManager {
 	public const SKELETON_DIR = 'skeleton';
 	public const LANDING_PAGE = 'Readme.md';
 
+	/** @var IRootFolder */
+	private $rootFolder;
+
+	/** @var IDBConnection */
+	private $connection;
+
 	/** @var SystemConfig */
 	private $systemConfig;
 
-	/** @var IRootFolder */
-	private $rootFolder;
+	/** @var string */
+	private $rootPath;
 
 	/**
 	 * MountProvider constructor.
 	 *
-	 * @param SystemConfig $systemConfig
-	 * @param IRootFolder              $rootFolder
+	 * @param IRootFolder   $rootFolder
+	 * @param IDBConnection $connection
+	 * @param SystemConfig  $systemConfig
 	 */
 	public function __construct(
 		IRootFolder $rootFolder,
+		IDBConnection $connection,
 		SystemConfig $systemConfig) {
-		$this->systemConfig = $systemConfig;
 		$this->rootFolder = $rootFolder;
+		$this->connection = $connection;
+		$this->systemConfig = $systemConfig;
 	}
 
 	public function getRootPath(): string {
+		if (null !== $this->rootPath) {
+			return $this->rootPath;
+		}
+
 		$instanceId = $this->systemConfig->getValue('instanceid', null);
 		if (null === $instanceId) {
 			throw new \RuntimeException('no instance id!');
 		}
 
-		return 'appdata_' . $instanceId . '/collectives';
+		$this->rootPath = 'appdata_' . $instanceId . '/collectives';
+		return $this->rootPath;
 	}
 
 	/**
@@ -53,6 +68,17 @@ class CollectiveFolderManager {
 				return $rootFolder->newFolder($this->getRootPath());
 			}
 		}));
+	}
+
+	public function getRootFolderId(): int {
+		$query = $this->connection->getQueryBuilder();
+
+		$query->select('fileid')
+			->from('filecache')
+			->where($query->expr()->eq('storage', $query->createNamedParameter($this->getRootFolder()->getStorage()->getCache()->getNumericStorageId())))
+			->andWhere($query->expr()->eq('path_hash', $query->createNamedParameter(md5($this->getRootPath()))));
+
+		return (int)$query->execute()->fetchColumn();
 	}
 
 	/**
