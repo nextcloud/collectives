@@ -29,7 +29,7 @@
 					:user="page.lastUserId"
 					:disable-menu="true"
 					:tooltip-message="lastEditedUserMessage(page)"
-					size="20" />
+					:size="20" />
 			</span>
 		</router-link>
 	</AppContentList>

@@ -23,7 +23,7 @@
 				</ActionButton>
 				<ActionButton v-else
 					icon="icon-rename"
-					@click="$emit('toggleEdit')">
+					@click="startEdit">
 					{{ t('collectives', 'Edit page') }}
 				</ActionButton>
 			</Actions>
@@ -94,6 +94,7 @@ export default {
 
 	data: function() {
 		return {
+			previousSaveTimestamp: null,
 			preview: true,
 		}
 	},
@@ -235,9 +236,22 @@ export default {
 			}
 		},
 
-		stopEdit() {
+		startEdit() {
+			const doc = this.$refs.editor.$children[0].$data.document
+			this.previousSaveTimestamp = doc.lastSavedVersionTime
 			this.$emit('toggleEdit')
-			this.$store.dispatch('touchPage')
+		},
+
+		async stopEdit() {
+			const wrapper = this.$refs.editor.$children[0]
+			const doc = wrapper.$data.document
+			if (wrapper.$data.dirty) {
+				await wrapper.close()
+				this.$store.dispatch('touchPage')
+			} else if (doc.lastSavedVersionTime !== this.previousSaveTimestamp) {
+				this.$store.dispatch('touchPage')
+			}
+			this.$emit('toggleEdit')
 		},
 	},
 }
