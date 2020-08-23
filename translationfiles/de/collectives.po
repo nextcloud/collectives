@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2020-08-23 09:22+0000\n"
+"POT-Creation-Date: 2020-08-23 13:13+0000\n"
 "PO-Revision-Date: 2020-08-20 09:31+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -70,12 +70,12 @@ msgid "Create new collective"
 msgstr "Erstelle ein neues Kollektiv"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:9
-msgid "New collective name"
-msgstr "Name für das neue Kollektiv"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:10
 msgid "Add emoji"
 msgstr "Wähle einen Emoji"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:10
+msgid "New collective name"
+msgstr "Name für das neue Kollektiv"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:11
 msgid "Title"
@@ -102,59 +102,63 @@ msgid "Add a page"
 msgstr "Seite hinzufügen"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:17
+msgid "Last edited by {user}"
+msgstr "Zuletzt bearbeitet von {user}"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:18
 msgid "Current version"
 msgstr "Aktuelle Version"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:18
+#: /collectives/specialVueFakeDummyForL10nScript.js:19
 msgid "No other versions available"
 msgstr "Keine weiteren Versionen vorhanden"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:19
+#: /collectives/specialVueFakeDummyForL10nScript.js:20
 msgid "Could not get page versions"
 msgstr "Konnte Versionen der Seite nicht laden"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:20
 #: /collectives/specialVueFakeDummyForL10nScript.js:21
+#: /collectives/specialVueFakeDummyForL10nScript.js:22
 msgid "%n byte"
 msgid_plural "%n bytes"
 msgstr[0] "%n Byte"
 msgstr[1] "%n Bytes"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:22
+#: /collectives/specialVueFakeDummyForL10nScript.js:23
 msgid "Restore this version"
 msgstr "Diese Version wiederherstellen"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:23
+#: /collectives/specialVueFakeDummyForL10nScript.js:24
 msgid "Back to current version"
 msgstr "Zurück zur aktuellen Version"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:24
+#: /collectives/specialVueFakeDummyForL10nScript.js:25
 msgid "Reverted {page} to revision {timestamp}."
 msgstr "Seiete {page} auf Version {timestamp} zurücksetzen."
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:25
+#: /collectives/specialVueFakeDummyForL10nScript.js:26
 msgid "Failed to revert {page} to revision {timestamp}."
 msgstr ""
 "Das Zurücksetzen der Seite {page} auf die Version {timestamp} ist "
 "fehlgeschlagen."
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:26
+#: /collectives/specialVueFakeDummyForL10nScript.js:27
 msgid "No collective selected"
 msgstr "Kein Kollektiv ausgewählt"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:27
+#: /collectives/specialVueFakeDummyForL10nScript.js:28
 msgid "Select a collective or create a new one on the left."
 msgstr "Wähle ein Kollektiv aus oder lege links ein neues an."
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:28
+#: /collectives/specialVueFakeDummyForL10nScript.js:29
 msgid "Could not fetch collectives"
 msgstr "Konnte die Kollektive nicht laden"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:29
+#: /collectives/specialVueFakeDummyForL10nScript.js:30
 msgid "Could not fetch pages"
 msgstr "Konnte die Seiten nicht laden"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:30
+#: /collectives/specialVueFakeDummyForL10nScript.js:31
 msgid "Could not create the collective"
 msgstr "Anlegen des Kollektivs fehlgeschlagen"
 

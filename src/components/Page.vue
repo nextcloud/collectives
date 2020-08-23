@@ -18,7 +18,7 @@
 			<Actions class="top-bar__button" close-after-click="true">
 				<ActionButton v-if="edit"
 					icon="icon-checkmark"
-					@click="$emit('toggleEdit')">
+					@click="stopEdit">
 					{{ t('collectives', 'Done with editing') }}
 				</ActionButton>
 				<ActionButton v-else
@@ -50,7 +50,7 @@
 		<component :is="handler.component"
 			v-show="!readOnly"
 			ref="editor"
-			:key="'editor-' + page.id"
+			:key="'editor-' + page.id + '-' + page.timestamp"
 			:fileid="page.id"
 			:basename="page.fileName"
 			:filename="filePath"
@@ -233,6 +233,11 @@ export default {
 			if (!this.emptyTitle) {
 				this.$emit('edit')
 			}
+		},
+
+		stopEdit() {
+			this.$emit('toggleEdit')
+			this.$store.dispatch('touchPage')
 		},
 	},
 }
