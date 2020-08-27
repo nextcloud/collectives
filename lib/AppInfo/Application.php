@@ -15,6 +15,7 @@ use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\Files\Config\IMountProviderCollection;
+use OCP\Files\IMimeTypeLoader;
 use OCP\IUserSession;
 use Psr\Container\ContainerInterface;
 
@@ -33,7 +34,8 @@ class Application extends App implements IBootstrap {
 			return new MountProvider(
 				$c->get(CollectiveHelper::class),
 				$c->get(CollectiveFolderManager::class),
-				$c->get(IUserSession::class)
+				$c->get(IUserSession::class),
+				$c->get(IMimeTypeLoader::class)
 			);
 		});
 
