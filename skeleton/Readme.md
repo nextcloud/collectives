@@ -20,4 +20,4 @@ Push the pencil button to get started ↗️
 
 * Link local pages by selecting text and choosing "link file"
 * Multiple people can edit the same page simultaneously
-* Find out more about this App in the [documentation](https://gitlab.com/collectivecloud/collectives)
+* Find out more about this App in the [documentation](https://collectivecloud.gitlab.io/collectives/)

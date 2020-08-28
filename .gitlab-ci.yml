@@ -40,3 +40,17 @@ lint:
     - make lint
   before_script:
     - make npm-init
+
+pages:
+  image: registry.gitlab.com/pages/hugo:latest
+  script:
+    - apk add --update --no-cache git
+    - git submodule update --init
+    - cat DEVELOPING.md >>docs/content/development/_index.md
+    - hugo --config=docs/config.toml
+    - mv build/pages public
+  artifacts:
+    paths:
+      - public
+#  only:
+#    - master
