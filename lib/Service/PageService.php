@@ -120,6 +120,28 @@ class PageService {
 	/**
 	 * @param string $userId
 	 * @param int    $collectiveId
+	 * @param string $search
+	 *
+	 * @return PageFile[]
+	 * @throws NotFoundException
+	 * @throws \OCP\Files\NotFoundException
+	 */
+	public function findByString(string $userId, int $collectiveId, string $search): array {
+		$allPageFiles = $this->findAll($userId, $collectiveId);
+		$pageFiles = [];
+		foreach ($allPageFiles as $page) {
+			if (stripos($page->getFileName(), $search) === false) {
+				continue;
+			}
+			$pageFiles[] = $page;
+		}
+
+		return $pageFiles;
+	}
+
+	/**
+	 * @param string $userId
+	 * @param int    $collectiveId
 	 * @param int    $id
 	 *
 	 * @return PageFile
