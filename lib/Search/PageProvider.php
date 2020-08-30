@@ -92,7 +92,7 @@ class PageProvider implements IProvider {
 						'ant.svg'
 					),
 					$page->getTitle(),
-					'',
+					str_replace('{collective}', $collective->getName(), $this->l10n->t('in {collective}')),
 					$this->urlGenerator->linkToRoute('collectives.start.index') . '/' . $collective->getName() . '/' . $page->getTitle()
 				);
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2020-08-23 13:13+0000\n"
+"POT-Creation-Date: 2020-08-30 09:31+0000\n"
 "PO-Revision-Date: 2020-08-20 09:31+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -18,9 +18,20 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.3\n"
 
+#: /collectives/lib/Search/CollectiveProvider.php:51
+#: /collectives/lib/Search/CollectiveProvider.php:95
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:2
 msgid "Collectives"
-msgstr "Collectives"
+msgstr "Kollektive"
+
+#: /collectives/lib/Search/PageProvider.php:58
+#: /collectives/lib/Search/PageProvider.php:103
+msgid "Collective Pages"
+msgstr "Kollektiv-Seiten"
+
+#: /collectives/lib/Search/PageProvider.php:95
+msgid "in {collective}"
+msgstr "in {collective}"
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:3
 msgid "A place for activist and community projects to build shared knowledge"
@@ -33,7 +44,7 @@ msgid ""
 "Collectives is a Nextcloud App for activist and community projects to "
 "organize together. Come and gather in collectives to build shared knowledge."
 msgstr ""
-"Collectives ist eine Nextcloud App für Aktivist:innen und Community-Projekte "
+"Kollektive ist eine Nextcloud App für Aktivist:innen und Community-Projekte "
 "um sich gemeinsam zu organisieren. Komm vorbei und verbünde dich in "
 "Kollektiven um gemeinsames Wissen aufzubauen."
 
