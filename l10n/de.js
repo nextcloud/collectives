@@ -1,9 +1,11 @@
 OC.L10N.register(
     "collectives",
     {
-    "Collectives" : "Collectives",
+    "Collectives" : "Kollektive",
+    "Collective Pages" : "Kollektiv-Seiten",
+    "in {collective}" : "in {collective}",
     "A place for activist and community projects to build shared knowledge" : "Ein Ort für Aktivst:innen und Community-Projekte um gemeinsames Wissen aufzubauen",
-    "Collectives is a Nextcloud App for activist and community projects to organize together. Come and gather in collectives to build shared knowledge." : "Collectives ist eine Nextcloud App für Aktivist:innen und Community-Projekte um sich gemeinsam zu organisieren. Komm vorbei und verbünde dich in Kollektiven um gemeinsames Wissen aufzubauen.",
+    "Collectives is a Nextcloud App for activist and community projects to organize together. Come and gather in collectives to build shared knowledge." : "Kollektive ist eine Nextcloud App für Aktivist:innen und Community-Projekte um sich gemeinsam zu organisieren. Komm vorbei und verbünde dich in Kollektiven um gemeinsames Wissen aufzubauen.",
     "New Page" : "Neue Seite",
     "Could not create the page" : "Anlegen der Seite fehlgeschlagen",
     "Could not rename the page" : "Umbenennen der Seite fehlgeschlagen",
