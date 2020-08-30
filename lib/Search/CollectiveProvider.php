@@ -10,6 +10,7 @@ use OCP\IUser;
 use OCP\Search\IProvider;
 use OCP\Search\ISearchQuery;
 use OCP\Search\SearchResult;
+use OCP\Search\SearchResultEntry;
 
 class CollectiveProvider implements IProvider {
 	/** @var IL10N */
@@ -79,7 +80,7 @@ class CollectiveProvider implements IProvider {
 			if (stripos($collective->getName(), $query->getTerm()) === false) {
 				continue;
 			}
-			$collectiveSearchResults[] = new CollectiveSearchResultEntry(
+			$collectiveSearchResults[] = new SearchResultEntry(
 				$this->urlGenerator->imagePath(
 					'collectives',
 					'ant.svg'

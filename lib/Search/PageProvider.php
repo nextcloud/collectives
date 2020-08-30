@@ -11,6 +11,7 @@ use OCP\IUser;
 use OCP\Search\IProvider;
 use OCP\Search\ISearchQuery;
 use OCP\Search\SearchResult;
+use OCP\Search\SearchResultEntry;
 
 class PageProvider implements IProvider {
 	/** @var IL10N */
@@ -85,7 +86,7 @@ class PageProvider implements IProvider {
 		foreach ($collectives as $collective) {
 			$pages = $this->pageService->findByString($user->getUID(), $collective->getId(), $query->getTerm());
 			foreach ($pages as $page) {
-				$pageSearchResults[] = new PageSearchResultEntry(
+				$pageSearchResults[] = new SearchResultEntry(
 					$this->urlGenerator->imagePath(
 						'collectives',
 						'ant.svg'
