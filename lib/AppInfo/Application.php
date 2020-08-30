@@ -7,6 +7,8 @@ namespace OCA\Collectives\AppInfo;
 use Closure;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Mount\MountProvider;
+use OCA\Collectives\Search\CollectiveProvider;
+use OCA\Collectives\Search\PageProvider;
 use OCA\Collectives\Service\CollectiveHelper;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
@@ -34,6 +36,9 @@ class Application extends App implements IBootstrap {
 				$c->get(IUserSession::class)
 			);
 		});
+
+		$context->registerSearchProvider(CollectiveProvider::class);
+		$context->registerSearchProvider(PageProvider::class);
 	}
 
 	public function boot(IBootcontext $context): void {
