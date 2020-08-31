@@ -125,6 +125,27 @@ class CollectiveFolderManager {
 	}
 
 	/**
+	 * @return array
+	 */
+	public function getAllFolders(): array {
+		$qb = $this->connection->getQueryBuilder();
+		$qb->select('*')
+			->from('collectives');
+		$rows = $qb->execute()->fetchAll();
+
+		$folderMap = [];
+		foreach ($rows as $row) {
+			$id = (int)$row['id'];
+			$folderMap[$id] = [
+				'id' => $id,
+				'mount_point' => $row['name'],
+			];
+		}
+
+		return $folderMap;
+	}
+
+	/**
 	 * @param int  $id
 	 * @param bool $create
 	 *
