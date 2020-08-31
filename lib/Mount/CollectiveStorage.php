@@ -30,7 +30,7 @@ class CollectiveStorage extends Wrapper {
 	 */
 	public function __construct($parameters) {
 		parent::__construct($parameters);
-		$this->folderId = $parameters['folderId'];
+		$this->folderId = $parameters['folder_id'];
 		$this->rootEntry = $parameters['rootCacheEntry'];
 		$this->userSession = $parameters['userSession'];
 		$this->mountOwner = $parameters['mountOwner'];

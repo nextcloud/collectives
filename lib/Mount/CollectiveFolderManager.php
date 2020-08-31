@@ -113,8 +113,8 @@ class CollectiveFolderManager {
 	public function getFolderFileCache(int $id): array {
 		$query = $this->connection->getQueryBuilder();
 		$query->select(
-			'co.id',
-			'fileid', 'storage', 'path', 'fc.name AS name', 'mimetype', 'mimepart', 'size', 'mtime', 'storage_mtime', 'etag', 'encrypted', 'parent')
+			'co.id AS folder_id', 'co.name AS mount_point',
+			'fileid', 'storage', 'path', 'fc.name AS name', 'mimetype', 'mimepart', 'size', 'mtime', 'storage_mtime', 'etag', 'encrypted', 'parent', 'fc.permissions AS permissions')
 			->from('collectives', 'co')
 			->leftJoin('co', 'filecache', 'fc', $query->expr()->andX(
 				// concat with empty string to work around missing cast to string

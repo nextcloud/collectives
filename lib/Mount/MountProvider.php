@@ -57,8 +57,8 @@ class MountProvider implements IMountProvider {
 		foreach ($collectives as $c) {
 			$cacheEntry = $this->collectiveFolderManager->getFolderFileCache($c->getId());
 			$folders[] = [
-				'folderId' => $c->getId(),
-				'mountPoint' => $c->getName(),
+				'folder_id' => $c->getId(),
+				'mount_point' => $c->getName(),
 				'rootCacheEntry' => (isset($cacheEntry['fileid'])) ? Cache::cacheEntryFromData($cacheEntry, $this->mimeTypeLoader) : null
 			];
 		}
@@ -72,8 +72,8 @@ class MountProvider implements IMountProvider {
 
 		return array_map(function ($folder) use ($user, $loader) {
 			return $this->getMount(
-				$folder['folderId'],
-				'/' . $user->getUID() . '/files/' . $folder['mountPoint'],
+				$folder['folder_id'],
+				'/' . $user->getUID() . '/files/' . $folder['mount_point'],
 				$folder['rootCacheEntry'],
 				$loader,
 				$user
@@ -112,7 +112,7 @@ class MountProvider implements IMountProvider {
 		]);
 		$collectiveStorage = new CollectiveStorage([
 			'storage' => $baseStorage,
-			'folderId' => $id,
+			'folder_id' => $id,
 			'rootCacheEntry' => $cacheEntry,
 			'userSession' => $this->userSession,
 			'mountOwner' => $user,
