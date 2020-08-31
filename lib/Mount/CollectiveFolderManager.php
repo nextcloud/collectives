@@ -70,7 +70,11 @@ class CollectiveFolderManager {
 		}));
 	}
 
-	public function getRootFolderId(): int {
+	/**
+	 * @return int
+	 * @throws NotFoundException
+	 */
+	private function getRootFolderStorageId(): int {
 		$query = $this->connection->getQueryBuilder();
 
 		$query->select('fileid')
@@ -98,6 +102,26 @@ class CollectiveFolderManager {
 		}
 
 		return $skeletonFolder;
+	}
+
+	/**
+	 * @param int $id
+	 *
+	 * @return array|bool
+	 * @throws NotFoundException
+	 */
+	public function getFolderFileCache(int $id): array {
+		$query = $this->connection->getQueryBuilder();
+		$query->select(
+			'co.id AS folder_id', 'co.name AS mount_point',
+			'fileid', 'storage', 'path', 'fc.name AS name', 'mimetype', 'mimepart', 'size', 'mtime', 'storage_mtime', 'etag', 'encrypted', 'parent', 'fc.permissions AS permissions')
+			->from('collectives', 'co')
+			->leftJoin('co', 'filecache', 'fc', $query->expr()->andX(
+				// concat with empty string to work around missing cast to string
+				$query->expr()->eq('fc.name', $query->func()->concat('co.id', $query->expr()->literal(''))),
+				$query->expr()->eq('parent', $query->createNamedParameter($this->getRootFolderStorageId()))))
+			->where($query->expr()->eq('co.id', $query->createNamedParameter($id)));
+		return $query->execute()->fetch();
 	}
 
 	/**
