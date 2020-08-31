@@ -74,7 +74,7 @@ class CollectiveFolderManager {
 	 * @return int
 	 * @throws NotFoundException
 	 */
-	private function getRootFolderId(): int {
+	private function getRootFolderStorageId(): int {
 		$query = $this->connection->getQueryBuilder();
 
 		$query->select('fileid')
@@ -119,7 +119,7 @@ class CollectiveFolderManager {
 			->leftJoin('co', 'filecache', 'fc', $query->expr()->andX(
 				// concat with empty string to work around missing cast to string
 				$query->expr()->eq('fc.name', $query->func()->concat('co.id', $query->expr()->literal(''))),
-				$query->expr()->eq('parent', $query->createNamedParameter($this->getRootFolderId()))))
+				$query->expr()->eq('parent', $query->createNamedParameter($this->getRootFolderStorageId()))))
 			->where($query->expr()->eq('co.id', $query->createNamedParameter($id)));
 		return $query->execute()->fetch();
 	}
