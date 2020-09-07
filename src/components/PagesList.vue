@@ -10,7 +10,7 @@
 		</div>
 		<router-link v-for="page in pages"
 			:key="page.title"
-			:to="`/${collectiveParam}/${page.title}`"
+			:to="`/${collectiveParam}/${encodeURIComponent(page.title)}`"
 			:class="{active: isActive(page)}"
 			class="app-content-list-item">
 			<div class="app-content-list-item-icon"
