@@ -1,7 +1,14 @@
-# Collectives
++++
+title = "Nextcloud Collectives"
+description = "Collectives is a Nextcloud App for activist and community projects to organize together. Come and gather in collectives to build shared knowledge."
++++
+
+# Nextcloud Collectives
 
 Collectives is a Nextcloud App for activist and community projects to
 organize together. Come and gather in collectives to build shared knowledge.
+
+## Features
 
 * **Collective and non-hierarchical workflow by heart**: Collectives are
   tied to a [Nextcloud Circle](https://github.com/nextcloud/circles) and
@@ -11,24 +18,8 @@ organize together. Come and gather in collectives to build shared knowledge.
 * **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**
   for page formatting
 
-## Installation
+## Documentation overview
 
-In your Nextcloud instance, simply navigate to **»Apps«**, find the
-**»Collectives«** app and enable it.
-
-## Documentation
-
-Take a look at our [online documention](https://collectivecloud.gitlab.io/collectives/).
-
-## Developer documentation
-
-Documentation for developers can be found at [DEVELOPING.md](DEVELOPING.md).
-
-## Maintainers
-
-* Azul <azul@riseup.net>
-* Jonas <jonas@freesources.org>
-
-## Licence
-
-AGPL v3 or later. See [COPYING](COPYING) for the full licence text.
+* [**User Documentation**](usage/)
+* [**Administrator Documentation**](administration/)
+* [**Developer Documentation**](development/)

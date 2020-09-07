@@ -1,0 +1,49 @@
+baseurl = "/collectives"
+title = "Nextcloud Collectives"
+canonifyurls = true
+
+contentdir = "docs/content"
+publishdir = "build/pages"
+
+theme = "docdock"
+themesdir = "docs/themes"
+pygmentCodeFences = true
+pygmentsStyle = "monokailight"
+
+languageCode = "en-us"
+defaultContentLanguage = "en"
+defaultContentLanguageInSubdir = false
+enableMissingTranslationPlaceholders = false
+
+[Autor]
+  name = "CollectiveCloud Team"
+  gitlab = "collectivecloud"
+
+[params]
+editURL = "https://gitlab.com/collectivecloud/collectives/edit/master/-/docs/"
+showVisitedLinks = false # default is false
+themeStyle = "flex" # "original" or "flex" # default "flex"
+themeVariant = "gray" # choose theme variant "green", "gold" , "gray", "blue" (default)
+ordersectionsby = "weight" # ordersectionsby = "title"
+disableHomeIcon = true # default is false
+disableSearch = false # default is false
+disableNavChevron = false # set true to hide next/prev chevron, default is false
+highlightClientSide = false # set true to use highlight.pack.js instead of the default hugo chroma highlighter
+menushortcutsnewtab = false # set true to open shortcuts links to a new tab/window
+enableGitInfo = true
+
+[outputs]
+home = [ "HTML", "RSS", "JSON"]
+
+[[menu.shortcuts]]
+pre = "<h3>More</h3>"
+name = "<i class='fa fa-gitlab'></i> Gitlab"
+identifier = "gitlab"
+url = "https://gitlab.com/collectivecloud/collectives/"
+weight = 10
+
+[[menu.shortcuts]]
+name = "<i class='fa fa-cloud-download'></i> Nextcloud App Store"
+identifier = "appstore"
+url = "https://apps.nextcloud.com/apps/collectives"
+weight = 11
