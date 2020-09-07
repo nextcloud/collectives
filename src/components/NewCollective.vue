@@ -37,6 +37,7 @@
 			</EmojiPicker>
 			<input
 				ref="nameField"
+				v-model="text"
 				:placeholder="t('collectives', 'New collective name')"
 				type="text"
 				required>
@@ -73,12 +74,12 @@ export default {
 			loading: false,
 			color: randomColor(),
 			emoji: null,
+			text: null,
 		}
 	},
 	computed: {
 		name() {
-			const text = this.$refs.nameField.value
-			return this.emoji ? `${text} ${this.emoji}` : text
+			return this.emoji ? `${this.text} ${this.emoji}` : this.text
 		},
 	},
 	watch: {},
