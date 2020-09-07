@@ -150,7 +150,9 @@ export default {
 		davPath() {
 			const parts = this.page.filePath.split('/')
 			parts.splice(2, 1)
-			return parts.join('/')
+			return parts
+				.map(p => encodeURIComponent(p))
+				.join('/')
 		},
 
 		/**

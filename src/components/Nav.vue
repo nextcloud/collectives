@@ -6,7 +6,7 @@
 				:key="collective.circleUniqueId"
 				:title="collective.title"
 				:class="{active: isActive(collective)}"
-				:to="`/${collective.name}`"
+				:to="`/${encodeURIComponent(collective.name)}`"
 				:icon="icon(collective)">
 				<template v-if="collective.emoji" v-slot:icon>
 					{{ collective.emoji }}
