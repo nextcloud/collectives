@@ -87,7 +87,7 @@ class CollectiveProvider implements IProvider {
 				),
 				$collective->getName(),
 				'',
-				$this->urlGenerator->linkToRoute('collectives.start.index') . '/' . $collective->getName()
+				$this->urlGenerator->linkToRoute('collectives.start.index') . '/' . rawurlencode($collective->getName())
 			);
 		}
 
