@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace OCA\Collectives\AppInfo;
 
 use Closure;
+use OCA\Collectives\CacheListener;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Mount\MountProvider;
 use OCA\Collectives\Search\CollectiveProvider;
@@ -41,6 +42,9 @@ class Application extends App implements IBootstrap {
 
 		$context->registerSearchProvider(CollectiveProvider::class);
 		$context->registerSearchProvider(PageProvider::class);
+
+		$cacheListener = $this->getContainer()->get(CacheListener::class);
+		$cacheListener->listen();
 	}
 
 	public function boot(IBootcontext $context): void {
