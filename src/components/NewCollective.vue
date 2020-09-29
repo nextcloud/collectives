@@ -96,14 +96,18 @@ export default {
 				name: this.name,
 			}
 			this.$emit('newCollective', collective)
-			this.editing = false
+			this.clear()
 		},
 		cancelEdit(e) {
-			this.editing = false
-			this.emoji = null
+			this.clear()
 		},
 		addEmoji(emoji) {
 			this.emoji = emoji
+		},
+		clear() {
+			this.editing = false
+			this.emoji = null
+			this.text = null
 		},
 	},
 }
