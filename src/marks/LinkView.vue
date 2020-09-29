@@ -56,13 +56,17 @@ export default {
 				// starting with protocol:
 				|| this.href.match(/^[a-zA-Z]*:/)
 		},
+		// returns an Array of the vars in the href:
+		// [full string, relPath, fileId]
+		hrefMatches() {
+			return this.href.match(/^([^?]*)\?fileId=(\d+)/) || []
+		},
 		hrefFileId() {
-			const [, id] = this.href.match(/^[^?]*\?fileId=(\d+)/)
-			return id
+			return this.hrefMatches[2]
 		},
 		relPath() {
-			const [, relPath] = this.href.match(/^([^?]*)\?fileId=\d+/)
-			return unescape(relPath)
+			const relPath = this.hrefMatches[1]
+			return relPath && unescape(relPath)
 		},
 		viewerHref() {
 			const dir = absolutePath('/Collective', basedir(this.relPath))
