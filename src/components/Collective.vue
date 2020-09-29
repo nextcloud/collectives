@@ -2,7 +2,7 @@
 	<div id="app-content-wrapper">
 		<PagesList
 			@newPage="newPage" />
-		<AppContentDetails v-if="currentPage">
+		<AppContentDetails v-if="currentPage && !$store.state.loading.collective">
 			<Version v-if="currentVersion"
 				:page="currentPage"
 				:version="currentVersion"
