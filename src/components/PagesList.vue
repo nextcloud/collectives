@@ -1,8 +1,8 @@
 <template>
-	<AppContentList>
+	<AppContentList :class="{loading: $store.state.loading.collective}">
 		<div class="app-content-list-item">
 			<button class="primary"
-				:disabled="$store.state.loading"
+				:disabled="$store.state.loading.page"
 				@click="$emit('newPage')">
 				<span class="icon icon-add-white" />
 				{{ t('collectives', 'Add a page') }}

@@ -33,7 +33,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
 
 	state: {
-		loading: true,
+		loading: {},
 		collectives: [],
 		pages: [],
 		updatedPage: {},
@@ -72,6 +72,9 @@ export default new Vuex.Store({
 		},
 
 		visiblePages(state) {
+			if (state.loading.collective) {
+				return []
+			}
 			return state.pages.filter((p) => p.title !== 'Readme')
 		},
 
@@ -101,11 +104,11 @@ export default new Vuex.Store({
 	},
 
 	mutations: {
-		loading(state) {
-			state.loading = true
+		loading(state, aspect) {
+			Vue.set(state.loading, aspect, true)
 		},
-		done(state) {
-			state.loading = false
+		done(state, aspect) {
+			Vue.set(state.loading, aspect, false)
 		},
 		collectives(state, collectives) {
 			state.collectives = collectives
@@ -140,10 +143,10 @@ export default new Vuex.Store({
 		 * Get list of all pages
 		 */
 		async getPages({ commit, getters }) {
-			commit('loading')
+			commit('loading', 'collective')
 			const response = await axios.get(getters.pagesUrl)
 			commit('pages', response.data)
-			commit('done')
+			commit('done', 'collective')
 		},
 
 		/**
@@ -151,10 +154,10 @@ export default new Vuex.Store({
 		 * @param {number} pageId Page ID
 		 */
 		async getPage({ commit, getters, state }, pageId) {
-			commit('loading')
+			commit('loading', 'page')
 			const response = await axios.get(getters.pageUrl(pageId))
 			commit('updatePage', response.data)
-			commit('done')
+			commit('done', 'page')
 		},
 
 		/**
@@ -163,10 +166,11 @@ export default new Vuex.Store({
 		 */
 		async newPage({ commit, getters }, page) {
 			commit('loading')
+			commit('loading', 'page')
 			const response = await axios.post(getters.pagesUrl, page)
 			// Add new page to the beginning of pages array
 			commit('addPage', { newTitle: '', ...response.data })
-			commit('done')
+			commit('done', 'page')
 		},
 
 		async touchPage({ commit, getters }) {
@@ -179,33 +183,33 @@ export default new Vuex.Store({
 		 * @param {string} newTitle new title for the page
 		 */
 		async renamePage({ commit, getters, state }, newTitle) {
-			commit('loading')
+			commit('loading', 'page')
 			const page = getters.currentPage
 			page.title = newTitle
 			delete page.newTitle
 			const response = await axios.put(getters.pageUrl(page.id), page)
 			commit('updatePage', response.data)
-			commit('done')
+			commit('done', 'page')
 		},
 
 		/**
 		 * Delete the current page
 		 */
 		async deletePage({ commit, getters, state }) {
-			commit('loading')
+			commit('loading', 'page')
 			await axios.delete(getters.pageUrl(getters.currentPage.id))
 			commit('deletePage', getters.currentPage.id)
-			commit('done')
+			commit('done', 'page')
 		},
 
 		/**
 		 * Get list of all collectives
 		 */
 		async getCollectives({ commit }) {
-			commit('loading')
+			commit('loading', 'collective')
 			const response = await axios.get(generateUrl(`/apps/collectives/_collectives`))
 			commit('collectives', response.data)
-			commit('done')
+			commit('done', 'collective')
 		},
 
 		/**
@@ -213,10 +217,10 @@ export default new Vuex.Store({
 		 * @param {Object} collective Properties for the new collective (name for now)
 		 */
 		async newCollective({ commit }, collective) {
-			commit('loading')
+			commit('loading', 'collective')
 			const response = await axios.post(generateUrl(`/apps/collectives/_collectives`), collective)
 			commit('addCollective', response.data)
-			commit('done')
+			commit('done', 'collective')
 		},
 
 	},
