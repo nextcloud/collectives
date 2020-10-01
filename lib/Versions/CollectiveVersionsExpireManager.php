@@ -3,7 +3,6 @@
 
 namespace OCA\Collectives\Versions;
 
-
 use OC\Files\FileInfo;
 use OC\Files\View;
 use OC\Hooks\BasicEmitter;

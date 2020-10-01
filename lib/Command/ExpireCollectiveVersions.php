@@ -1,7 +1,8 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace OCA\Collectives\Command;
-
 
 use OC\Core\Command\Base;
 use OCA\Files_Versions\Versions\IVersion;
@@ -37,16 +38,16 @@ class ExpireCollectiveVersions extends Base {
 	 * @throws NotPermittedException
 	 */
 	protected function execute(InputInterface $input, OutputInterface $output): void {
-		$this->expireManager->listen(CollectiveVersionsExpireManager::class, 'enterFolder', function(array $folder) use ($output) {
+		$this->expireManager->listen(CollectiveVersionsExpireManager::class, 'enterFolder', function (array $folder) use ($output) {
 			$output->writeln("<info>Expiring version in '${folder['mount_point']}'</info>");
 		});
-		$this->expireManager->listen(CollectiveVersionsExpireManager::class, 'deleteVersion', function(IVersion $version) use ($output) {
+		$this->expireManager->listen(CollectiveVersionsExpireManager::class, 'deleteVersion', function (IVersion $version) use ($output) {
 			$id = $version->getRevisionId();
 			$file = $version->getSourceFileName();
 			$output->writeln("<info>Expiring version $id for '$file'</info>");
 		});
 
-		$this->expireManager->listen(CollectiveVersionsExpireManager::class, 'deleteFile', function($id) use ($output) {
+		$this->expireManager->listen(CollectiveVersionsExpireManager::class, 'deleteFile', function ($id) use ($output) {
 			$output->writeln("<info>Cleaning up versions for no longer existing file with id $id</info>");
 		});
 

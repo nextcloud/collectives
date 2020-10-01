@@ -57,8 +57,7 @@ class CollectiveProvider implements IProvider {
 	 *
 	 * @return int
 	 */
-	public function getOrder(string $route, array $routeParameters): int
-	{
+	public function getOrder(string $route, array $routeParameters): int {
 		if ($route === 'collectives.Start.index') {
 			// Collectives first
 			return 0;

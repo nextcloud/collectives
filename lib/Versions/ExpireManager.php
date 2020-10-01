@@ -43,7 +43,7 @@ class ExpireManager {
 		$toDelete = []; // versions we want to delete
 
 		// ensure the versions are sorted newest first
-		usort($versions, static function(IVersion $a, IVersion $b) {
+		usort($versions, static function (IVersion $a, IVersion $b) {
 			return $b->getTimestamp() <=> $a->getTimestamp();
 		});
 

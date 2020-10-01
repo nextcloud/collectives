@@ -64,8 +64,7 @@ class PageProvider implements IProvider {
 	 *
 	 * @return int
 	 */
-	public function getOrder(string $route, array $routeParameters): int
-	{
+	public function getOrder(string $route, array $routeParameters): int {
 		if ($route === 'collectives.Start.index') {
 			// Collectives first
 			return 0;
@@ -95,7 +94,6 @@ class PageProvider implements IProvider {
 					str_replace('{collective}', $collective->getName(), $this->l10n->t('in {collective}')),
 					$this->urlGenerator->linkToRoute('collectives.start.index') . '/' . rawurlencode($collective->getName()) . '/' . rawurlencode($page->getTitle())
 				);
-
 			}
 		}
 
