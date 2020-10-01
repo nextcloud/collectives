@@ -92,7 +92,7 @@ export default {
 		},
 	},
 
-	data: function() {
+	data() {
 		return {
 			previousSaveTimestamp: null,
 			preview: true,
@@ -177,24 +177,24 @@ export default {
 		},
 
 		newTitle: {
-			get: function() {
+			get() {
 				return (typeof this.page.newTitle === 'string')
 					? this.page.newTitle
 					: this.page.title
 			},
-			set: function(val) {
+			set(val) {
 				this.page.newTitle = val
 			},
 		},
 	},
 
 	watch: {
-		page: function(val, oldVal) {
+		page(val, oldVal) {
 			this.init()
 		},
 	},
 
-	mounted: function() {
+	mounted() {
 		this.init()
 	},
 

@@ -111,7 +111,7 @@ export default {
 		},
 	},
 
-	data: function() {
+	data() {
 		return {
 			error: '',
 			loading: true,
@@ -157,10 +157,10 @@ export default {
 	},
 
 	watch: {
-		'pageId': function() {
+		'pageId'() {
 			this.getPageVersions()
 		},
-		'currentVersionTimestamp': function() {
+		'currentVersionTimestamp'() {
 			this.getPageVersions()
 		},
 	},
@@ -176,7 +176,7 @@ export default {
 		 * @param {object} xml XML object
 		 * @returns {object}
 		 */
-		xmlToJson: function(xml) {
+		xmlToJson(xml) {
 			let obj = {}
 
 			if (xml.nodeType === 1) {
@@ -216,7 +216,7 @@ export default {
 		 * @param {string} xml XML string
 		 * @returns {object|null}
 		 */
-		parseXml: function(xml) {
+		parseXml(xml) {
 			let dom = null
 			try {
 				dom = (new DOMParser()).parseFromString(xml, 'text/xml')
@@ -231,7 +231,7 @@ export default {
 		 * @param {string} xml XML string
 		 * @returns {array|null}
 		 */
-		xmlToVersionsList: function(xml) {
+		xmlToVersionsList(xml) {
 			const json = this.xmlToJson(this.parseXml(xml))
 			const list = json['d:multistatus']['d:response']
 			const result = []
