@@ -1,17 +1,20 @@
 # This file is licensed under the Affero General Public License version 3 or
 # later. See the COPYING file.
 
+# Variables that can be overridden by env variables
+VERSION?=0.2.0
+OCC?=php ../../occ
+NPM?=npm
+
 app_name=$(notdir $(CURDIR))
 project_dir=$(CURDIR)/../$(app_name)
 build_dir=$(CURDIR)/build
 build_tools_dir=$(build_dir)/tools
 source_dir=$(build_dir)/source
-appstore_dir=$(build_dir)/appstore
+release_dir=$(build_dir)/release
 cert_dir=$(HOME)/.nextcloud/certificates
 composer=$(shell which composer 2> /dev/null)
 translationtool_url=https://github.com/nextcloud/docker-ci/raw/master/translations/translationtool/translationtool.phar
-version+=0.2.0
-
 
 all: dev-setup lint build test
 
@@ -37,7 +40,7 @@ else
 endif
 
 npm-init:
-	npm ci
+	$(NPM) ci
 
 # Installs nextclouds translation tool
 translationtool:
@@ -48,14 +51,14 @@ endif
 
 # Linting
 lint:
-	npm run lint
+	$(NPM) run lint
 
 # Building
 build-js:
-	npm run dev
+	$(NPM) run dev
 
 build-js-production:
-	npm run build
+	$(NPM) run build
 
 # Builds translation template from source code and update
 po:
@@ -88,10 +91,10 @@ distclean: clean
 	rm -rf node_modules
 	rm -rf vendor
 
-# Builds the source and appstore package
+# Builds the source and release package
 dist:
 	make source
-	make appstore
+	make release
 
 # Builds the source package
 source: clean build
@@ -104,12 +107,12 @@ source: clean build
 		--exclude="node_modules" \
 		--exclude="vendor" \
 	$(project_dir) $(source_dir)/
-	tar -czf $(source_dir)/$(app_name)-$(version).tar.gz \
+	tar -czf $(source_dir)/$(app_name)-$(VERSION).tar.gz \
 		-C $(source_dir) $(app_name)
 
 # Builds the source package for the app store
-appstore: clean build
-	mkdir -p $(appstore_dir)
+release: clean build
+	mkdir -p $(release_dir)
 	rsync -a --delete --delete-excluded \
 		--exclude=".[a-z]*" \
 		--exclude="Makefile" \
@@ -123,11 +126,17 @@ appstore: clean build
 		--exclude="tests" \
 		--exclude="vendor" \
 		--exclude="webpack.*" \
-	$(project_dir) $(appstore_dir)/
-	tar -czf $(appstore_dir)/$(app_name)-$(version).tar.gz \
-		-C $(appstore_dir) $(app_name)
+	$(project_dir) $(release_dir)/
 	@if [ -f $(cert_dir)/$(app_name).key ]; then \
-		echo "Signing package…"; \
+		echo "Signing code…"; \
+		$(OCC) integrity:sign-app --privateKey="$(cert_dir)/$(app_name).key" \
+			--certificate="$(cert_dir)/$(app_name).crt" \
+			--path="$(release_dir)/$(app_name)"; \
+	fi
+	tar -czf $(release_dir)/$(app_name)-$(VERSION).tar.gz \
+		-C $(release_dir) $(app_name)
+	@if [ -f $(cert_dir)/$(app_name).key ]; then \
+		echo "Signing release tarball…"; \
 		openssl dgst -sha512 -sign $(cert_dir)/$(app_name).key \
-			$(appstore_dir)/$(app_name)-$(version).tar.gz | openssl base64; \
+			$(release_dir)/$(app_name)-$(VERSION).tar.gz | openssl base64; \
 	fi
