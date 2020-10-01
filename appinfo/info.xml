@@ -20,7 +20,7 @@ Collectives is a Nextcloud App for activist and community projects to organize t
 	<bugs>https://gitlab.com/collectivecloud/collectives/issues</bugs>
 	<repository type="git">https://gitlab.com/collectivecloud/collectives.git</repository>
 	<dependencies>
-		<nextcloud min-version="20" max-version="20" />
+		<nextcloud min-version="20" max-version="21" />
 	</dependencies>
 	<navigations>
 		<navigation>
