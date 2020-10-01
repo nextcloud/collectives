@@ -63,7 +63,7 @@ export default {
 		},
 	},
 
-	data: function() {
+	data() {
 		return {
 			contentLoading: true,
 			pageContent: null,
@@ -124,7 +124,7 @@ export default {
 	},
 
 	watch: {
-		'pageUrl': function() {
+		'pageUrl'() {
 			this.getPageContent()
 		},
 	},

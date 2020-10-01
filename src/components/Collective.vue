@@ -53,7 +53,7 @@ export default {
 		},
 	},
 
-	data: function() {
+	data() {
 		return {
 			editToggle: EditState.Unset,
 		}
@@ -86,10 +86,10 @@ export default {
 		},
 
 		edit: {
-			get: function() {
+			get() {
 				return this.editToggle === EditState.Edit
 			},
-			set: function(val) {
+			set(val) {
 				this.editToggle = val ? EditState.Edit : EditState.Read
 			},
 		},
@@ -97,7 +97,7 @@ export default {
 
 	watch: {
 
-		'pageParam': function() {
+		'pageParam'() {
 			this.editToggle = EditState.Unset
 		},
 	},

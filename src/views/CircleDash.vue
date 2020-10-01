@@ -50,7 +50,7 @@ export default {
 		PageSidebar,
 	},
 
-	data: function() {
+	data() {
 		return {
 			currentVersion: null,
 			showSidebar: false,
@@ -94,13 +94,13 @@ export default {
 	},
 
 	watch: {
-		'collectiveParam': function() {
+		'collectiveParam'() {
 			if (this.currentCollective) {
 				this.getPages()
 				this.closeNav()
 			}
 		},
-		'pageParam': function() {
+		'pageParam'() {
 			this.setCurrentVersion(null)
 		},
 	},
