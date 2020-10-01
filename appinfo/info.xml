@@ -28,4 +28,13 @@ Collectives is a Nextcloud App for activist and community projects to organize t
 			<route>collectives.start.index</route>
 		</navigation>
 	</navigations>
+	<background-jobs>
+		<job>OCA\Collectives\BackgroundJob\ExpireCollectiveVersions</job>
+	</background-jobs>
+	<commands>
+		<command>OCA\Collectives\Command\ExpireCollectiveVersions</command>
+	</commands>
+	<versions>
+		<backend for="OCA\Collectives\Mount\CollectiveStorage">OCA\Collectives\Versions\VersionsBackend</backend>
+	</versions>
 </info>

@@ -3,7 +3,6 @@
 namespace OCA\Collectives\Db;
 
 use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
@@ -22,8 +21,7 @@ class PageMapper extends QBMapper {
 	 * @param IDBConnection $db
 	 * @param string|null   $entityClass
 	 */
-	public function __construct(IDBConnection $db, string $entityClass = null)
-	{
+	public function __construct(IDBConnection $db, string $entityClass = null) {
 		parent::__construct($db, 'collectives_pages', $entityClass);
 	}
 
