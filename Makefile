@@ -2,7 +2,7 @@
 # later. See the COPYING file.
 
 # Variables that can be overridden by env variables
-VERSION?=0.2.0
+VERSION?=$(shell sed -ne 's/^\s*<version>\(.*\)<\/version>/\1/p' appinfo/info.xml)
 OCC?=php ../../occ
 NPM?=npm
 
@@ -111,7 +111,7 @@ source: clean build
 		-C $(source_dir) $(app_name)
 
 # Builds the source package for the app store
-release: clean build
+release:
 	mkdir -p $(release_dir)
 	rsync -a --delete --delete-excluded \
 		--exclude=".[a-z]*" \
