@@ -236,7 +236,7 @@ export default {
 
 <style lang="scss">
 	#text-wrapper {
-		@import './../../apps/text/css/prosemirror';
+		@import './css/prosemirror';
 	}
 
 	#text-container {

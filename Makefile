@@ -68,6 +68,9 @@ po:
 l10n: po
 	php $(build_tools_dir)/translationtool.phar convert-po-files
 
+text-app-includes:
+	for n in `cat .files_from_text`; do cp ../../apps/text/$$n $$n ; done
+
 # Testing
 test:
 	$(CURDIR)/vendor/bin/phpunit --configuration phpunit.xml
