@@ -7,7 +7,7 @@
 	<description><![CDATA[
 Collectives is a Nextcloud App for activist and community projects to organize together. Come and gather in collectives to build shared knowledge.
 ]]></description>
-	<version>0.2.0</version>
+	<version>0.2.1</version>
 	<licence>AGPL</licence>
 	<author>CollectiveCloud Team</author>
 	<namespace>Collectives</namespace>
@@ -19,6 +19,7 @@ Collectives is a Nextcloud App for activist and community projects to organize t
 	<website>https://gitlab.com/collectivecloud/collectives</website>
 	<bugs>https://gitlab.com/collectivecloud/collectives/issues</bugs>
 	<repository type="git">https://gitlab.com/collectivecloud/collectives.git</repository>
+    <screenshot>https://gitlab.com/collectivecloud/collectives/-/raw/master/docs/static/images/screenshot.png</screenshot>
 	<dependencies>
 		<nextcloud min-version="20" max-version="21" />
 	</dependencies>
