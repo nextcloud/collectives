@@ -5,6 +5,8 @@ description = "Collectives is a Nextcloud App for activist and community project
 
 # Nextcloud Collectives
 
+![Screenshot of Version 0.2.0](/images/screenshot.png)
+
 Collectives is a Nextcloud App for activist and community projects to
 organize together. Come and gather in collectives to build shared knowledge.
 

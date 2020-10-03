@@ -3,6 +3,7 @@ title = "Nextcloud Collectives"
 canonifyurls = true
 
 contentdir = "docs/content"
+staticdir = "docs/static"
 publishdir = "build/pages"
 
 theme = "docdock"
