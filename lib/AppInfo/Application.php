@@ -14,6 +14,7 @@ use OCA\Collectives\Search\PageProvider;
 use OCA\Collectives\Service\CollectiveHelper;
 use OCA\Collectives\Versions\CollectiveVersionsExpireManager;
 use OCA\Collectives\Versions\VersionsBackend;
+use OCP\App\IAppManager;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
@@ -40,7 +41,8 @@ class Application extends App implements IBootstrap {
 				$c->get(CollectiveHelper::class),
 				$c->get(CollectiveFolderManager::class),
 				$c->get(IUserSession::class),
-				$c->get(IMimeTypeLoader::class)
+				$c->get(IMimeTypeLoader::class),
+				$c->get(IAppManager::class)
 			);
 		});
 
