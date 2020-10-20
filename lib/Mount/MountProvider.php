@@ -5,6 +5,7 @@ namespace OCA\Collectives\Mount;
 use OC\Files\Cache\Cache;
 use OC\Files\Storage\Wrapper\Jail;
 use OCA\Collectives\Service\CollectiveHelper;
+use OCP\App\IAppManager;
 use OCP\Files\Config\IMountProvider;
 use OCP\Files\IMimeTypeLoader;
 use OCP\Files\Mount\IMountPoint;
@@ -34,16 +35,19 @@ class MountProvider implements IMountProvider {
 	 * @param CollectiveFolderManager $collectiveFolderManager
 	 * @param IUserSession            $userSession
 	 * @param IMimeTypeLoader         $mimeTypeLoader
+	 * @param IAppManager             $appManager
 	 */
 	public function __construct(
 		CollectiveHelper $collectiveHelper,
 		CollectiveFolderManager $collectiveFolderManager,
 		IUserSession $userSession,
-		IMimeTypeLoader $mimeTypeLoader) {
+		IMimeTypeLoader $mimeTypeLoader,
+		IAppManager $appManager) {
 		$this->collectiveHelper = $collectiveHelper;
 		$this->collectiveFolderManager = $collectiveFolderManager;
 		$this->userSession = $userSession;
 		$this->mimeTypeLoader = $mimeTypeLoader;
+		$this->appManager = $appManager;
 	}
 
 	/**
@@ -52,8 +56,11 @@ class MountProvider implements IMountProvider {
 	 * @return array
 	 */
 	public function getFoldersForUser(IUser $user): array {
-		$collectives = $this->collectiveHelper->getCollectivesForUser($user->getUID());
 		$folders = [];
+		if (!$this->appManager->isEnabledForUser('circles', $user)) {
+			return $folders;
+		}
+		$collectives = $this->collectiveHelper->getCollectivesForUser($user->getUID());
 		foreach ($collectives as $c) {
 			$cacheEntry = $this->collectiveFolderManager->getFolderFileCache($c->getId());
 			$folders[] = [
