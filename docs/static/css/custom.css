@@ -1,0 +1,6 @@
+.left {
+	margin-left: 0;
+}
+article figure.left > a > img {
+	margin-left: 0;
+}
