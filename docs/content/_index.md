@@ -25,3 +25,10 @@ organize together. Come and gather in collectives to build shared knowledge.
 * [**User Documentation**](usage/)
 * [**Administrator Documentation**](administration/)
 * [**Developer Documentation**](development/)
+
+## Funding
+
+gefördert von
+![Bundesministerium für Bildung und Forschung](/images/bmbf.svg)
+
+![Prototype Fund](/images/prototype.png)
