@@ -6,7 +6,7 @@ contentdir = "docs/content"
 staticdir = "docs/static"
 publishdir = "build/pages"
 
-theme = "docdock"
+theme = ["custom-css", "docdock"]
 themesdir = "docs/themes"
 pygmentCodeFences = true
 pygmentsStyle = "monokailight"

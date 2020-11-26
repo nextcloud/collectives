@@ -28,7 +28,16 @@ organize together. Come and gather in collectives to build shared knowledge.
 
 ## Funding
 
-gefördert von
-![Bundesministerium für Bildung und Forschung](/images/bmbf.svg)
+{{<figure
+  class="left"
+  alt="Bundesministerium für Bildung und Forschung"
+  src="/images/bmbf.jpg"
+  height="255px"
+>}}
 
-![Prototype Fund](/images/prototype.png)
+{{<figure
+  class="left"
+  alt="Prototype Fund"
+  src="/images/prototype.png"
+  height="255px"
+>}}
