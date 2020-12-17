@@ -20,22 +20,27 @@
  *
  */
 
-// last grapheme in the collective name if it's a 2 byte utf8 char
+// There are two ways of modifying emojis:
+// * skin color
+// * variation selector
+// Use this in regular expressions to match the full emoji
+// including possible modifications.
+const flexibleEmoji = '\\p{Emoji}\\p{Emoji_Modifier}?\\p{Variation_Selector}?'
+
+// Multiple Emojis can be joined together to form a new one.
+// This regexp will match all joined emojis at the end of the string.
+const trailingEmojiRegexp = new RegExp(
+	`${flexibleEmoji}(‍${flexibleEmoji})*$`, 'u'
+)
+
 function emoji(name) {
-	const arr = [...name]
-	const last = arr[arr.length - 1]
-	if (last && last.length === 2) {
-		return last
-	}
-	return ''
+	const match = name.match(trailingEmojiRegexp)
+	return match ? match[0] : ''
 }
 
 // name without the emoji if there is one
 function title(name) {
-	if (emoji(name)) {
-		return name.substring(0, name.length - 2).trim()
-	}
-	return name
+	return name.replace(trailingEmojiRegexp, '').trim()
 }
 
 export default function({ id, name, circleUniqueId }) {
