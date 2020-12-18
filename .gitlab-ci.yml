@@ -41,6 +41,13 @@ lint:
   before_script:
     - make npm-init
 
+js-unit:
+  image: node
+  script:
+    - npm test
+  before_script:
+    - make npm-init
+
 pages:
   image: registry.gitlab.com/pages/hugo:latest
   script:
