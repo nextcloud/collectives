@@ -44,7 +44,7 @@ lint:
 js-unit:
   image: node
   script:
-    - npm test
+    - make test-js
   before_script:
     - make npm-init
 

@@ -42,6 +42,9 @@ endif
 npm-init:
 	$(NPM) ci
 
+node_modules: package.json package-lock.json
+	$(NPM) install
+
 # Installs nextclouds translation tool
 translationtool:
 ifeq (, $(wildcard $(build_tools_dir)/translationtool.phar))
@@ -75,9 +78,14 @@ text-app-includes:
 	for n in `cat .files_from_text`; do cp ../../apps/text/$$n $$n ; done
 
 # Testing
-test:
+test: test-php test-js
+
+test-php:
 	$(CURDIR)/vendor/bin/phpunit --configuration phpunit.xml
 	$(CURDIR)/vendor/bin/behat --config=tests/Integration/config/behat.yml
+
+test-js: node_modules
+	$(NPM) test
 
 # Cleaning
 clean:
