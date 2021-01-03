@@ -5,6 +5,8 @@
 VERSION?=$(shell sed -ne 's/^\s*<version>\(.*\)<\/version>/\1/p' appinfo/info.xml)
 OCC?=php ../../occ
 NPM?=npm
+COMMIT_IMAGE?=nextcloud-collectives:latest
+LATEST_IMAGE?=nextcloud-collectives:latest
 
 app_name=$(notdir $(CURDIR))
 project_dir=$(CURDIR)/../$(app_name)
@@ -87,6 +89,12 @@ test-php:
 test-js: node_modules
 	$(NPM) test
 
+test-cypress:
+	cd cypress && ./runLocal.sh run
+
+test-cypress-watch:
+	cd cypress && ./runLocal.sh open
+
 # Cleaning
 clean:
 	rm -rf js/*
@@ -105,7 +113,7 @@ dist:
 	make release
 
 # Builds the source package
-source: clean build
+source:
 	mkdir -p $(source_dir)
 	rsync -a --delete --delete-excluded \
 		--exclude=".git*" \
@@ -148,3 +156,8 @@ release:
 		openssl dgst -sha512 -sign $(cert_dir)/$(app_name).key \
 			$(release_dir)/$(app_name)-$(VERSION).tar.gz | openssl base64; \
 	fi
+
+# Builds a docker image ci can test
+docker-ci: source
+	docker build -t $(COMMIT_IMAGE) --cache-from $(LATEST_IMAGE) \
+		$(source_dir)/$(app_name)
