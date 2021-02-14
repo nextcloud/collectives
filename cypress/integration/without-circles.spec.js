@@ -38,7 +38,7 @@ describe('Disabled circles app does not break files view', function() {
 		cy.logout()
 	})
 
-	it('See the default files list', function() {
+	it('Renders the default files list', function() {
 		cy.visit('/apps/files')
 		cy.get('#fileList tr').should('contain', 'welcome.txt')
 	})
