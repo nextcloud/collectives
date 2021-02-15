@@ -103,4 +103,5 @@ e2e:
       - cypress/videos
       - cypress/screenshots
     expire_in: 1 day
+    when: on_failure
 
