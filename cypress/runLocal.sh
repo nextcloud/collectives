@@ -8,7 +8,7 @@ function finish {
 }
 trap finish EXIT
 
-docker-compose up -d
+docker-compose up -d --no-recreate
 
 npm install --no-save wait-on
 $(npm bin)/wait-on -i 500 -t 240000 $CYPRESS_baseUrl || (docker-compose logs && exit 1)
