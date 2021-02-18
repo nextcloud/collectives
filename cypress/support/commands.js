@@ -30,9 +30,6 @@ Cypress.env('baseUrl', url)
 
 Cypress.Commands.add('login', (user, password, route = '/apps/files') => {
 	cy.clearCookies()
-	Cypress.Cookies.defaults({
-		preserve: /^(oc|nc)/
-	})
 	cy.visit(route)
 	cy.get('input[name=user]').type(user)
 	cy.get('input[name=password]').type(password)
@@ -41,16 +38,8 @@ Cypress.Commands.add('login', (user, password, route = '/apps/files') => {
 })
 
 Cypress.Commands.add('logout', () => {
-	Cypress.Cookies.defaults({
-		preserve: []
-	})
-
 	cy.clearLocalStorage()
 	cy.clearCookies()
-
-	Cypress.Cookies.defaults({
-		preserve: /^(oc|nc)/
-	})
 })
 
 Cypress.Commands.add('nextcloudCreateUser', (user, password) => {
