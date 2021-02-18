@@ -1,4 +1,4 @@
-FROM nextcloudci/server:server-17
+FROM nextcloudci/server:server-20
 
 ENV BRANCH=stable20
 RUN /usr/local/bin/initnc.sh
