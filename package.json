@@ -2,7 +2,7 @@
   "name": "collectives",
   "description": "Nextcloud Collectives App",
   "author": "CollectiveCloud Team",
-  "license": "AGPL",
+  "license": "AGPL-1.0-or-later",
   "repository": {
     "type": "git",
     "url": "https://gitlab.com/collectivecloud/collectives.git"
