@@ -11,7 +11,8 @@ trap finish EXIT
 docker-compose up -d --no-recreate
 
 npm install --no-save wait-on
-$(npm bin)/wait-on -i 500 -t 240000 $CYPRESS_baseUrl || (docker-compose logs && exit 1)
+echo "starting to wait for server $CYPRESS_baseUrl"
+$(npm bin)/wait-on -i 500 -t 300000 $CYPRESS_baseUrl || (docker-compose logs && exit 1)
 docker-compose exec -T nextcloud bash /var/www/html/apps/collectives/cypress/server.sh
 
 (cd .. && $(npm bin)/cypress $@)
