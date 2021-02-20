@@ -159,5 +159,4 @@ release:
 
 # Builds a docker image ci can test
 docker-ci: source
-	docker build -t $(COMMIT_IMAGE) --cache-from $(LATEST_IMAGE) \
-		$(source_dir)/$(app_name)
+	docker build -t $(COMMIT_IMAGE) --cache-from $(LATEST_IMAGE) .
