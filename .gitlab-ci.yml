@@ -43,6 +43,7 @@ integration:
 
 lint:
   image: node
+  stage: prepare
   script:
     - make lint
   before_script:
