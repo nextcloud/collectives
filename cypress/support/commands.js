@@ -34,6 +34,7 @@ Cypress.Commands.add('login', (user, password, route = '/apps/files') => {
 	cy.get('input[name=user]').type(user)
 	cy.get('input[name=password]').type(password)
 	cy.get('#submit-wrapper input[type=submit]').click()
+	cy.url().should('not.include', 'index.php/login?redirect_url')
 	cy.url().should('include', route)
 })
 
@@ -42,72 +43,9 @@ Cypress.Commands.add('logout', () => {
 	cy.clearCookies()
 })
 
-Cypress.Commands.add('nextcloudCreateUser', (user, password) => {
-	cy.clearCookies()
-	cy.request({
-		method: 'POST',
-		url: `${Cypress.env('baseUrl')}/ocs/v1.php/cloud/users?format=json`,
-		form: true,
-		body: {
-			userid: user,
-			password: password
-		},
-		auth: { user: 'admin', pass: 'admin' },
-		headers: {
-			'OCS-ApiRequest': 'true',
-			'Content-Type': 'application/x-www-form-urlencoded',
-		}
-	}).then(response => {
-		cy.log(`Created user ${user}`, response.status)
-	})
+Cypress.Commands.add('toggleApp', (appName) => {
+	cy.login('admin', 'admin', `/settings/apps/installed/${appName}`)
+	cy.get('#app-sidebar-vue .app-details input.enable').click()
+	cy.logout()
 })
 
-Cypress.Commands.add('uploadFile', (fileName, mimeType, target) => {
-	cy.fixture(fileName, 'base64')
-		.then(Cypress.Blob.base64StringToBlob)
-		.then(async blob => {
-			const file = new File([blob], fileName, { type: mimeType })
-			if (typeof target !== 'undefined') {
-				fileName = target
-			}
-			await cy.window().then(async window => {
-				await axios.put(`${Cypress.env('baseUrl')}/remote.php/webdav/${fileName}`, file, {
-					headers: {
-						requesttoken: window.OC.requestToken,
-						'Content-Type': mimeType
-					}
-				}).then(response => {
-					cy.log(`Uploaded ${fileName}`, response.status)
-				})
-			})
-		})
-})
-
-Cypress.Commands.add('createFolder', dirName => {
-	cy.get('#controls .actions > .button.new').click()
-	cy.get('#controls .actions .newFileMenu a[data-action="folder"]').click()
-	cy.get('#controls .actions .newFileMenu a[data-action="folder"] input[type="text"]').type(dirName)
-	cy.get('#controls .actions .newFileMenu a[data-action="folder"] input.icon-confirm').click()
-	cy.log('Created folder', dirName)
-})
-
-Cypress.Commands.add('openFile', fileName => {
-	cy.get(`#fileList tr[data-file="${fileName}"] a.name`).click()
-	cy.wait(250)
-})
-
-Cypress.Commands.add('deleteFile', fileName => {
-	cy.get(`#fileList tr[data-file="${fileName}"] a.name .action-menu`).click()
-	cy.get(`#fileList tr[data-file="${fileName}"] a.name + .popovermenu .action-delete`).click()
-})
-
-Cypress.Commands.overwrite('matchImageSnapshot', (originalFn, subject, name, options) => {
-	// hide avatar because random colour break the visual regression tests
-	cy.window().then(win => {
-		const avatarDiv = win.document.querySelector('.avatardiv')
-		if (avatarDiv) {
-			avatarDiv.remove()
-		}
-	})
-	return originalFn(subject, name, options)
-})

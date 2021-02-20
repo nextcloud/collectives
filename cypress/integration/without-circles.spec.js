@@ -30,18 +30,15 @@
 describe('Disabled circles app does not break files view', function() {
 
 	before(function() {
-		cy.login('admin', 'admin', '/settings/apps/installed/circles')
-		cy.get('#app-sidebar-vue .app-details input.enable').click()
+		cy.toggleApp('circles')
 	})
 
 	after(function() {
-		cy.login('admin', 'admin', '/settings/apps/installed/circles')
-		cy.visit('/settings/apps/installed/circles')
-		cy.get('#app-sidebar-vue .app-details input.enable').click()
+		cy.toggleApp('circles')
 	})
 
 	it('Renders the default files list', function() {
-		cy.visit('/apps/files')
+		cy.login('bob', 'bob')
 		cy.get('#fileList tr').should('contain', 'welcome.txt')
 	})
 
