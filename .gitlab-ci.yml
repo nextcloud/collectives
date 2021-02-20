@@ -1,5 +1,10 @@
 image: registry.gitlab.com/collectivecloud/docker-builds/dependencies
 
+stages:
+  - prepare
+  - build
+  - test
+
 # Select what we should cache between builds
 cache:
   paths:
@@ -50,6 +55,17 @@ js-unit:
   before_script:
     - make npm-init
 
+js-build:
+  image: node
+  stage: prepare
+  script:
+    - make build-js-production
+  before_script:
+    - make npm-init
+  artifacts:
+    paths:
+      - js
+
 pages:
   image: registry.gitlab.com/pages/hugo:latest
   script:
@@ -79,6 +95,8 @@ build:
     - docker push $LATEST_IMAGE
   before_script:
     - apk add --no-cache make rsync
+  needs:
+    - js-build
 
 e2e:
   stage: test

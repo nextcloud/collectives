@@ -22,9 +22,7 @@ all: dev-setup lint build test
 
 dev-setup: distclean composer npm-init translationtool
 
-build: build-js-production
 build-dev: build-js
-
 
 # Installs and updates the composer dependencies. If composer is not installed
 # a copy is fetched from the web
@@ -126,8 +124,11 @@ source:
 	tar -czf $(source_dir)/$(app_name)-$(VERSION).tar.gz \
 		-C $(source_dir) $(app_name)
 
+js/collectives.js:
+	$(NPM) run build
+
 # Builds the source package for the app store
-release:
+release: js/collectives.js
 	mkdir -p $(release_dir)
 	rsync -a --delete --delete-excluded \
 		--exclude=".[a-z]*" \
@@ -158,5 +159,6 @@ release:
 	fi
 
 # Builds a docker image ci can test
-docker-ci: source
-	docker build -t $(COMMIT_IMAGE) --cache-from $(LATEST_IMAGE) .
+docker-ci: release
+	docker build -t $(COMMIT_IMAGE) --cache-from $(LATEST_IMAGE) \
+		$(release_dir)/$(app_name)
