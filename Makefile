@@ -5,6 +5,8 @@
 VERSION?=$(shell sed -ne 's/^\s*<version>\(.*\)<\/version>/\1/p' appinfo/info.xml)
 OCC?=php ../../occ
 NPM?=npm
+COMMIT_IMAGE?=nextcloud-collectives:latest
+LATEST_IMAGE?=nextcloud-collectives:latest
 
 app_name=$(notdir $(CURDIR))
 project_dir=$(CURDIR)/../$(app_name)
@@ -20,9 +22,7 @@ all: dev-setup lint build test
 
 dev-setup: distclean composer npm-init translationtool
 
-build: build-js-production
 build-dev: build-js
-
 
 # Installs and updates the composer dependencies. If composer is not installed
 # a copy is fetched from the web
@@ -41,6 +41,9 @@ endif
 
 npm-init:
 	$(NPM) ci
+
+node_modules: package.json package-lock.json
+	$(NPM) install
 
 # Installs nextclouds translation tool
 translationtool:
@@ -75,9 +78,20 @@ text-app-includes:
 	for n in `cat .files_from_text`; do cp ../../apps/text/$$n $$n ; done
 
 # Testing
-test:
+test: test-php test-js
+
+test-php:
 	$(CURDIR)/vendor/bin/phpunit --configuration phpunit.xml
 	$(CURDIR)/vendor/bin/behat --config=tests/Integration/config/behat.yml
+
+test-js: node_modules
+	$(NPM) test
+
+test-cypress:
+	cd cypress && ./runLocal.sh run
+
+test-cypress-watch:
+	cd cypress && ./runLocal.sh open
 
 # Cleaning
 clean:
@@ -97,7 +111,7 @@ dist:
 	make release
 
 # Builds the source package
-source: clean build
+source:
 	mkdir -p $(source_dir)
 	rsync -a --delete --delete-excluded \
 		--exclude=".git*" \
@@ -110,8 +124,11 @@ source: clean build
 	tar -czf $(source_dir)/$(app_name)-$(VERSION).tar.gz \
 		-C $(source_dir) $(app_name)
 
+js/collectives.js:
+	$(NPM) run build
+
 # Builds the source package for the app store
-release:
+release: js/collectives.js
 	mkdir -p $(release_dir)
 	rsync -a --delete --delete-excluded \
 		--exclude=".[a-z]*" \
@@ -140,3 +157,8 @@ release:
 		openssl dgst -sha512 -sign $(cert_dir)/$(app_name).key \
 			$(release_dir)/$(app_name)-$(VERSION).tar.gz | openssl base64; \
 	fi
+
+# Builds a docker image ci can test
+docker-ci: release
+	docker build -t $(COMMIT_IMAGE) --cache-from $(LATEST_IMAGE) \
+		$(release_dir)/$(app_name)

@@ -1,5 +1,10 @@
 image: registry.gitlab.com/collectivecloud/docker-builds/dependencies
 
+stages:
+  - prepare
+  - build
+  - test
+
 # Select what we should cache between builds
 cache:
   paths:
@@ -11,6 +16,8 @@ variables:
   MYSQL_DATABASE: mysql_database
   MYSQL_ROOT_PASSWORD: mysql_strong_password
   NEXTCLOUD_SOURCE: '/var/www/html'
+  COMMIT_IMAGE: $CI_REGISTRY_IMAGE/ci:$CI_COMMIT_SHA
+  LATEST_IMAGE: $CI_REGISTRY_IMAGE/ci:latest
 
 unit:
   script:
@@ -36,6 +43,7 @@ integration:
 
 lint:
   image: node
+  stage: prepare
   script:
     - make lint
   before_script:
@@ -44,9 +52,20 @@ lint:
 js-unit:
   image: node
   script:
-    - npm test
+    - make test-js
   before_script:
     - make npm-init
+
+js-build:
+  image: node
+  stage: prepare
+  script:
+    - make build-js-production
+  before_script:
+    - make npm-init
+  artifacts:
+    paths:
+      - js
 
 pages:
   image: registry.gitlab.com/pages/hugo:latest
@@ -61,3 +80,47 @@ pages:
       - public
 #  only:
 #    - master
+
+build:
+  stage: build
+  image: docker:stable
+  services:
+      - docker:stable-dind
+  script:
+    - echo building $COMMIT_IMAGE
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker pull $LATEST_IMAGE || true
+    - make docker-ci
+    - docker push $COMMIT_IMAGE
+    - docker tag $COMMIT_IMAGE $LATEST_IMAGE
+    - docker push $LATEST_IMAGE
+  before_script:
+    - apk add --no-cache make rsync
+  needs:
+    - js-build
+
+e2e:
+  stage: test
+  image: cypress/browsers
+  variables:
+    CYPRESS_baseUrl: http://nextcloud.local/index.php
+  services:
+    - name: $COMMIT_IMAGE
+      alias: nextcloud.local
+  script:
+    - $(npm bin)/wait-on -i 500 -t 240000 $CYPRESS_baseUrl
+    - $(npm bin)/cypress run --browser chrome
+  before_script:
+    - make npm-init
+    - $(npm bin)/cypress install
+    - $(npm bin)/cypress verify
+    - npm install --no-save wait-on
+  needs:
+    - build
+  artifacts:
+    paths:
+      - cypress/videos
+      - cypress/screenshots
+    expire_in: 1 day
+    when: on_failure
+
