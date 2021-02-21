@@ -40,6 +40,7 @@ describe('Pages are accessible via group membership to circle', function() {
 			.contains('Group Collective').click()
 		cy.get('#circle-actions-group').click()
 		cy.get('input#linkgroup').type("Bobs Group{enter}")
+		cy.get('#groupslist_table .groupid').should('contain', 'Bobs Group')
 		cy.logout()
 		cy.clearCookies()
 		cy.getCookies().should('be.empty')
