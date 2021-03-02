@@ -111,7 +111,7 @@ export default {
 					method: 'MOVE',
 					url: this.version.downloadUrl,
 					headers: {
-						'Destination': this.restoreFolderUrl,
+						Destination: this.restoreFolderUrl,
 					},
 				})
 				this.$emit('resetVersion')
