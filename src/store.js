@@ -207,7 +207,7 @@ export default new Vuex.Store({
 		 */
 		async getCollectives({ commit }) {
 			commit('loading', 'collective')
-			const response = await axios.get(generateUrl(`/apps/collectives/_collectives`))
+			const response = await axios.get(generateUrl('/apps/collectives/_collectives'))
 			commit('collectives', response.data)
 			commit('done', 'collective')
 		},
@@ -218,7 +218,7 @@ export default new Vuex.Store({
 		 */
 		async newCollective({ commit }, collective) {
 			commit('loading', 'collective')
-			const response = await axios.post(generateUrl(`/apps/collectives/_collectives`), collective)
+			const response = await axios.post(generateUrl('/apps/collectives/_collectives'), collective)
 			commit('addCollective', response.data)
 			commit('done', 'collective')
 		},

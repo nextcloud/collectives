@@ -80,6 +80,7 @@ import { getCurrentUser } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
 import { generateRemoteUrl } from '@nextcloud/router'
 import moment from '@nextcloud/moment'
+import { formatFileSize } from '@nextcloud/files'
 
 export default {
 	name: 'SidebarVersionsTab',
@@ -145,7 +146,7 @@ export default {
 		 * @returns {string}
 		 */
 		pageHumanReadableSize() {
-			return OC.Util.humanFileSize(this.pageSize)
+			return formatFileSize(this.pageSize)
 		},
 
 		/**
@@ -250,7 +251,7 @@ export default {
 					relativeTimestamp: time.fromNow(),
 					timestamp: time.unix(),
 					millisecondsTimestamp: time.valueOf(),
-					humanReadableSize: OC.Util.humanFileSize(size),
+					humanReadableSize: formatFileSize(size),
 					altSize: n('files', '%n byte', '%n bytes', size),
 				})
 			}
