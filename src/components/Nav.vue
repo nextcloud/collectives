@@ -8,7 +8,7 @@
 				:class="{active: isActive(collective)}"
 				:to="`/${encodeURIComponent(collective.name)}`"
 				:icon="icon(collective)">
-				<template v-if="collective.emoji" v-slot:icon>
+				<template v-if="collective.emoji" #icon>
 					{{ collective.emoji }}
 				</template>
 			</AppNavigationItem>
