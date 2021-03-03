@@ -122,13 +122,16 @@ class CollectiveMapper extends QBMapper {
 	 */
 	public function userHasCollective(Collective $collective, string $userId): ?Collective {
 		try {
-			$circleMember = Circles::getMember($collective->getCircleUniqueId(), $userId, Circles::TYPE_USER, true);
-			if ($userId !== $circleMember->getUserId()) {
-				return null;
+			$joinedCircles = Circles::joinedCircles($userId);
+			foreach ($joinedCircles as $jc) {
+				if ($collective->getCircleUniqueId() === $jc->getUniqueId()) {
+					return $collective;
+				}
 			}
 		} catch (QueryException | MemberDoesNotExistException $e) {
 			return null;
 		}
-		return $collective;
+		
+		return null;
 	}
 }
