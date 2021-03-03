@@ -30,6 +30,6 @@ describe('The app is properly installed and responding', function() {
 	it('allows creating a new collective', function() {
 		cy.login('jane', 'jane', '/apps/circles')
 		cy.get('#app-content')
-			.should('contain', "No circle selected")
+			.should('contain', 'No circle selected')
 	})
 })
