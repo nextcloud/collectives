@@ -20,11 +20,6 @@
  *
  */
 
-import { addMatchImageSnapshotCommand } from 'cypress-image-snapshot/command'
-import axios from '@nextcloud/axios'
-
-addMatchImageSnapshotCommand()
-
 const url = Cypress.config('baseUrl').replace(/\/index.php\/?$/g, '')
 Cypress.env('baseUrl', url)
 
@@ -49,3 +44,17 @@ Cypress.Commands.add('toggleApp', (appName) => {
 	cy.logout()
 })
 
+Cypress.Commands.add('createCollective', (name) => {
+	cy.visit('/apps/collectives')
+	cy.get('a [title="Create new collective"]').click()
+	cy.get('.collective-create input[type="text"]').type(`${name}{enter}`)
+})
+
+Cypress.Commands.add('addGroupToCollective', ({ group, collective }) => {
+	cy.visit('/apps/circles')
+	cy.get('#circle-navigation .circle .title')
+		.contains(collective).click()
+	cy.get('#circle-actions-group').click()
+	cy.get('input#linkgroup').type(`${group}{enter}`)
+	cy.get('#groupslist_table .groupid').should('contain', group)
+})

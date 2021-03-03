@@ -32,15 +32,11 @@
 describe('Pages are accessible via group membership to circle', function() {
 	before(function() {
 		cy.login('jane', 'jane', '/apps/collectives')
-		cy.get('a [title="Create new collective"]', { timeout: 100000 }).click()
-		cy.get('.collective-create input[type="text"]').type("Group Collective{enter}")
-
-		cy.visit('/apps/circles')
-		cy.get('#circle-navigation .circle .title')
-			.contains('Group Collective').click()
-		cy.get('#circle-actions-group').click()
-		cy.get('input#linkgroup').type("Bobs Group{enter}")
-		cy.get('#groupslist_table .groupid').should('contain', 'Bobs Group')
+		cy.createCollective('Group Collective')
+		cy.addGroupToCollective({
+			group: 'Bobs Group',
+			collective: 'Group Collective',
+		})
 		cy.logout()
 		cy.clearCookies()
 		cy.getCookies().should('be.empty')
@@ -54,4 +50,3 @@ describe('Pages are accessible via group membership to circle', function() {
 		cy.logout()
 	})
 })
-
