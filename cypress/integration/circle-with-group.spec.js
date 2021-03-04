@@ -49,6 +49,7 @@ describe('Pages are accessible via group membership to circle', function() {
 	it('Lists the collective', function() {
 		cy.login('bob', 'bob', '/apps/collectives')
 		cy.get('.app-navigation').contains('Group Collective').click()
+		cy.get('#text h1').should('contain', 'Welcome to your new collective')
 		cy.screenshot()
 		cy.logout()
 	})
