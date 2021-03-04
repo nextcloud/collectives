@@ -30,6 +30,6 @@ describe('The app is properly installed and responding', function() {
 	it('allows creating a new collective', function() {
 		cy.login('jane', 'jane', '/apps/collectives')
 		cy.get('#app-navigation-vue')
-			.should('contain', "Create new collective")
+			.should('contain', 'Create new collective')
 	})
 })

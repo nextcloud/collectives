@@ -33,9 +33,16 @@ Vue.prototype.OCA = OCA
 
 sync(store, router)
 
-export default new Vue({
+const app = new Vue({
 	el: '#content',
 	router,
 	store,
 	render: h => h(App),
 })
+
+// Expose the app during E2E tests
+if (window.Cypress) {
+	window.app = app
+}
+
+export default app
