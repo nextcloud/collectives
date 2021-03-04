@@ -44,6 +44,15 @@ Cypress.Commands.add('toggleApp', (appName) => {
 	cy.logout()
 })
 
+Cypress.Commands.add('seedCollective', (name) => {
+	cy.window()
+		.its('app')
+		.then(async app => {
+			await app.$store.dispatch('newCollective', { name })
+			app.$router.push(app.$store.getters.updatedCollectivePath)
+		})
+})
+
 Cypress.Commands.add('createCollective', (name) => {
 	cy.visit('/apps/collectives')
 	cy.get('a [title="Create new collective"]').click()
