@@ -5,13 +5,6 @@ weight = 1
 alwaysopen = true
 +++
 
-## 🐾 Add your comrades to the collective
-
-Members can be managed in the [Circle App](https://apps.nextcloud.com/apps/circles)
-
-If your nextcloud instance is configured to allow groups in circles
-you can even add entire groups to your collectives.
-
 ## 🌱 Bring life to your collective
 
 Create pages and share the knowledge that really matters.
@@ -29,6 +22,13 @@ When you create a new collective it will start with some initial
 content.
 Push the pencil button on the top left of the start page ↗️
 to adjust it to your collectives needs.
+
+## 🐾 Add your comrades to the collective
+
+Members can be managed in the [Circle App](https://apps.nextcloud.com/apps/circles)
+
+If your nextcloud instance is configured to allow groups in circles
+you can even add entire groups to your collectives.
 
 ## Also good to know
 
