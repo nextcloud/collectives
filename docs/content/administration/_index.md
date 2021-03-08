@@ -33,3 +33,12 @@ when entering a collective.
 If the skeleton directory doesn't contain a `Readme.md`, the default landing
 page from `apps/collectives/skeleton/Readme.md` will be copied into the
 collectives directory instead.
+
+### Allow for groups in your collectives
+
+You can configure the circles app to allow adding groups to circles.
+Since the collectives app relies on the circles app for user management
+this also allows adding entire groups to collectives.
+
+Keep in mind thought that in contrast to circles
+groups can only be managed by server admins.

@@ -16,7 +16,7 @@ defaultContentLanguage = "en"
 defaultContentLanguageInSubdir = false
 enableMissingTranslationPlaceholders = false
 
-[Autor]
+[Author]
   name = "CollectiveCloud Team"
   gitlab = "collectivecloud"
 
