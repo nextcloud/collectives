@@ -23,9 +23,7 @@ It's probably empty if you have not been added to any yet.
 Click "Create new collective" and type a name for your collective.
 You can also pick an emoji to easily find your collective later:
 
-<video width="640" height="480" controls>
-<source src="video/create-collective.webm" type="video/webm">
-</video>
+![Screencast of clicking the "Create new collective" button](/images/create-collective.gif)
 
 
 ## 🌱 Bring life to your collective
