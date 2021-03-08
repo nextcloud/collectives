@@ -9,14 +9,26 @@ alwaysopen = true
 
 Members can be managed in the [Circle App](https://apps.nextcloud.com/apps/circles)
 
+If your nextcloud instance is configured to allow groups in circles
+you can even add entire groups to your collectives.
+
 ## 🌱 Bring life to your collective
 
-Create pages and share the knowledge that really matters
+Create pages and share the knowledge that really matters.
 
-## 🛋️ Edit this landing page to feel like home
+Click the "Create a Page" button in the upper left
+and a new page will appear.
 
-Push the pencil button to get started ↗️
+You can type in a title right away
+or add some content first
+and settle on a title later.
 
+## 🛋️ Edit the landing page to feel like home
+
+When you create a new collective it will start with some initial
+content.
+Push the pencil button on the top left of the start page ↗️
+to adjust it to your collectives needs.
 
 ## Also good to know
 
