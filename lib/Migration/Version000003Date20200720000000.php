@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OCA\Collectives\Migration;
 
 use Closure;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use OCP\DB\ISchemaWrapper;
 use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
@@ -22,15 +24,15 @@ class Version000003Date20200720000000 extends SimpleMigrationStep {
 
 		if (!$schema->hasTable('collectives')) {
 			$table = $schema->createTable('collectives');
-			$table->addColumn('id', Type::BIGINT, [
+			$table->addColumn('id', Types::BIGINT, [
 				'autoincrement' => true,
 				'notnull' => true,
 			]);
-			$table->addColumn('name', Type::STRING, [
+			$table->addColumn('name', Types::STRING, [
 				'notnull' => true,
 				'length' => 128,
 			]);
-			$table->addColumn('circle_unique_id', Type::STRING, [
+			$table->addColumn('circle_unique_id', Types::STRING, [
 				'notnull' => true,
 				'length' => 15,
 			]);

@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OCA\Collectives\Migration;
 
 use Closure;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use OCP\DB\ISchemaWrapper;
 use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
@@ -22,14 +24,14 @@ class Version000200Date20200822000000 extends SimpleMigrationStep {
 
 		if (!$schema->hasTable('collectives_pages')) {
 			$table = $schema->createTable('collectives_pages');
-			$table->addColumn('id', Type::BIGINT, [
+			$table->addColumn('id', Types::BIGINT, [
 				'autoincrement' => true,
 				'notnull' => true,
 			]);
-			$table->addColumn('file_id', Type::BIGINT, [
+			$table->addColumn('file_id', Types::BIGINT, [
 				'notnull' => true,
 			]);
-			$table->addColumn('last_user_id', Type::STRING, [
+			$table->addColumn('last_user_id', Types::STRING, [
 				'notnull' => true,
 				'length' => 64,
 			]);
