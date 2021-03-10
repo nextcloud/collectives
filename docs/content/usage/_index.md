@@ -55,3 +55,4 @@ you can even add entire groups to your collectives.
 
 * Link local pages by selecting text and choosing "link file"
 * Multiple people can edit the same page simultaneously
+* Ask [the community](https://help.nextcloud.com/c/apps/collectives/174) for help in case of questions
