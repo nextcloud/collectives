@@ -11,7 +11,7 @@ organize together. Come and gather in collectives to build shared knowledge.
 * **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**
   for page formatting
 
-![Screenshot of Nextcloud Collectives Version 0.2.1](https://gitlab.com/collectivecloud/collectives/-/raw/master/docs/static/images/screenshot.png)
+![Screenshot of Nextcloud Collectives Version 0.2.1](https://gitlab.com/collectivecloud/collectives/-/raw/main/docs/static/images/screenshot.png)
 
 ## Installation
 
