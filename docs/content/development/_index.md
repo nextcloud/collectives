@@ -30,3 +30,4 @@ Releasing a new version contains the following steps:
   make release
   ```
 * Upload release tarball to Gitlab, add release tag and publish releas on Gitlab
+* Publish new app version in Nextcloud App Store
