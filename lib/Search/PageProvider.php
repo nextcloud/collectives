@@ -4,6 +4,7 @@ namespace OCA\Collectives\Search;
 
 use OCA\Collectives\Service\CollectiveHelper;
 use OCA\Collectives\Service\PageService;
+use OCP\App\IAppManager;
 use OCP\AppFramework\QueryException;
 use OCP\IL10N;
 use OCP\IURLGenerator;
@@ -26,6 +27,9 @@ class PageProvider implements IProvider {
 	/** @var PageService */
 	private $pageService;
 
+	/** @var IAppManager */
+	private $appManager;
+
 	/**
 	 * CollectiveProvider constructor.
 	 *
@@ -33,15 +37,18 @@ class PageProvider implements IProvider {
 	 * @param IURLGenerator    $urlGenerator
 	 * @param CollectiveHelper $collectiveHelper
 	 * @param PageService      $pageService
+	 * @param IAppManager      $appManager
 	 */
 	public function __construct(IL10N $l10n,
 								IURLGenerator $urlGenerator,
 								CollectiveHelper $collectiveHelper,
-								PageService $pageService) {
+								PageService $pageService,
+								IAppManager $appManager) {
 		$this->l10n = $l10n;
 		$this->urlGenerator = $urlGenerator;
 		$this->collectiveHelper = $collectiveHelper;
 		$this->pageService = $pageService;
+		$this->appManager = $appManager;
 	}
 
 	/**
@@ -80,7 +87,13 @@ class PageProvider implements IProvider {
 	 * @throws QueryException
 	 */
 	public function search(IUser $user, ISearchQuery $query): SearchResult {
-		$collectives = $this->collectiveHelper->getCollectivesForUser($user->getUID());
+
+		if ($this->appManager->isEnabledForUser('circles', $user)) {
+			$collectives = $this->collectiveHelper->getCollectivesForUser($user->getUID());
+		} else {
+			$collectives = [];
+		}
+
 		$pageSearchResults = [];
 		foreach ($collectives as $collective) {
 			$pages = $this->pageService->findByString($user->getUID(), $collective->getId(), $query->getTerm());

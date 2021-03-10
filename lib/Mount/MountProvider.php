@@ -28,6 +28,9 @@ class MountProvider implements IMountProvider {
 	/** @var IMimeTypeLoader */
 	private $mimeTypeLoader;
 
+	/** @var IAppManager */
+	private $appManager;
+
 	/**
 	 * MountProvider constructor.
 	 *
