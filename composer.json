@@ -19,6 +19,9 @@
         "christophwurst/nextcloud": "^21.0"
     },
     "scripts": {
-      "lint": "find . -name \\*.php -not -path './vendor/*' -exec php -l \"{}\" \\;"
+      "lint": "find . -name \\*.php -not -path './vendor/*' -exec php -l \"{}\" \\;",
+      "cs:check": "vendor/bin/php-cs-fixer fix --dry-run --diff",
+      "cs:fix": "vendor/bin/php-cs-fixer fix",
+      "psalm": "vendor/bin/psalm"
     }
 }
