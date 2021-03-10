@@ -48,11 +48,11 @@ class StartController extends Controller {
 	}
 
 	/**
-	 * @param $apps
+	 * @param string[] $apps
 	 *
 	 * @return array
 	 */
-	private function checkDependencies($apps): array {
+	private function checkDependencies(array $apps): array {
 		$appsMissing = [];
 		foreach ($apps as $app) {
 			if (!$this->appManager->isEnabledForUser($app)) {
