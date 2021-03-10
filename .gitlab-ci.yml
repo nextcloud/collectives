@@ -42,12 +42,11 @@ integration:
     - mysql:5.7
 
 static-psalm-analysis:
+  stage: prepare
   script:
     - vendor/bin/psalm
   before_script:
     - make composer
-  only:
-    - merge_requests
 
 lint:
   image: node
