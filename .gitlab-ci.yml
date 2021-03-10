@@ -1,4 +1,4 @@
-image: registry.gitlab.com/collectivecloud/docker-builds/dependencies
+image: registry.gitlab.com/collectivecloud/docker-builds:php7.3-nc20
 
 stages:
   - prepare
