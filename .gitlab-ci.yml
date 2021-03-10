@@ -78,8 +78,8 @@ pages:
   artifacts:
     paths:
       - public
-#  only:
-#    - main
+  only:
+    - main
 
 build:
   stage: build
