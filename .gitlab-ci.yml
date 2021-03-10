@@ -79,7 +79,7 @@ pages:
     paths:
       - public
 #  only:
-#    - master
+#    - main
 
 build:
   stage: build
