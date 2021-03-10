@@ -11,6 +11,7 @@ cache:
     - vendor/
 
 # Set any variables we need
+
 variables:
   # Configure mysql environment variables (https://hub.docker.com/r/_/mysql/)
   MYSQL_DATABASE: mysql_database
@@ -19,7 +20,17 @@ variables:
   COMMIT_IMAGE: $CI_REGISTRY_IMAGE/ci:$CI_COMMIT_SHA
   LATEST_IMAGE: $CI_REGISTRY_IMAGE/ci:latest
 
-unit:
+# PHP jobs
+
+php-static-psalm-analysis:
+  stage: prepare
+  script:
+    - vendor/bin/psalm
+  before_script:
+    - make composer
+
+php-unit:
+  stage: test
   script:
     - vendor/bin/phpunit --configuration phpunit.xml --coverage-text --colors=never
   before_script:
@@ -28,7 +39,8 @@ unit:
   services:
     - mysql:5.7
 
-integration:
+php-integration:
+  stage: test
   script:
     - vendor/bin/behat --config=tests/Integration/config/behat.yml --profile ci
   before_script:
@@ -41,18 +53,13 @@ integration:
   services:
     - mysql:5.7
 
-lint:
+# JS jobs
+
+js-lint:
   image: node
   stage: prepare
   script:
     - make lint
-  before_script:
-    - make npm-init
-
-js-unit:
-  image: node
-  script:
-    - make test-js
   before_script:
     - make npm-init
 
@@ -67,6 +74,40 @@ js-build:
     paths:
       - js
 
+js-unit:
+  image: node
+  stage: test
+  script:
+    - make test-js
+  before_script:
+    - make npm-init
+
+e2e:
+  stage: test
+  image: cypress/browsers
+  variables:
+    CYPRESS_baseUrl: http://nextcloud.local/index.php
+  services:
+    - name: $COMMIT_IMAGE
+      alias: nextcloud.local
+  script:
+    - $(npm bin)/wait-on -i 500 -t 240000 $CYPRESS_baseUrl
+    - $(npm bin)/cypress run --browser chrome
+  before_script:
+    - make npm-init
+    - $(npm bin)/cypress install
+    - $(npm bin)/cypress verify
+    - npm install --no-save wait-on
+  needs:
+    - build
+  artifacts:
+    paths:
+      - cypress/videos
+      - cypress/screenshots
+    expire_in: 1 day
+    when: on_failure
+
+# Job to build documentation website on Gitlab pages
 pages:
   image: registry.gitlab.com/pages/hugo:latest
   script:
@@ -98,29 +139,3 @@ build:
     - apk add --no-cache make rsync
   needs:
     - js-build
-
-e2e:
-  stage: test
-  image: cypress/browsers
-  variables:
-    CYPRESS_baseUrl: http://nextcloud.local/index.php
-  services:
-    - name: $COMMIT_IMAGE
-      alias: nextcloud.local
-  script:
-    - $(npm bin)/wait-on -i 500 -t 240000 $CYPRESS_baseUrl
-    - $(npm bin)/cypress run --browser chrome
-  before_script:
-    - make npm-init
-    - $(npm bin)/cypress install
-    - $(npm bin)/cypress verify
-    - npm install --no-save wait-on
-  needs:
-    - build
-  artifacts:
-    paths:
-      - cypress/videos
-      - cypress/screenshots
-    expire_in: 1 day
-    when: on_failure
-

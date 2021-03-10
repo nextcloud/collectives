@@ -107,7 +107,8 @@ class CollectiveFolderManager {
 	/**
 	 * @param int $id
 	 *
-	 * @return array|bool
+	 * @return array
+	 *
 	 * @throws NotFoundException
 	 */
 	public function getFolderFileCache(int $id): array {

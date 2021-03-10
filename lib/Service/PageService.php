@@ -84,7 +84,7 @@ class PageService {
 	 *
 	 * @throws NotFoundException
 	 */
-	public function handleException($e): void {
+	public function handleException(Exception $e): void {
 		if ($e instanceof DoesNotExistException ||
 			$e instanceof MultipleObjectsReturnedException ||
 			$e instanceof AlreadyExistsException ||

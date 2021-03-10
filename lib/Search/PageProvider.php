@@ -87,7 +87,6 @@ class PageProvider implements IProvider {
 	 * @throws QueryException
 	 */
 	public function search(IUser $user, ISearchQuery $query): SearchResult {
-
 		if ($this->appManager->isEnabledForUser('circles', $user)) {
 			$collectives = $this->collectiveHelper->getCollectivesForUser($user->getUID());
 		} else {
