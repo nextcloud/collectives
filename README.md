@@ -18,9 +18,12 @@ organize together. Come and gather in collectives to build shared knowledge.
 In your Nextcloud instance, simply navigate to **»Apps«**, find the
 **»Collectives«** app and enable it.
 
-## Documentation
+## Documentation and help
 
 Take a look at our [online documention](https://collectivecloud.gitlab.io/collectives/).
+
+Also, don't hesitate to ask [the community](https://help.nextcloud.com/c/apps/collectives/174)
+for help in case of questions.
 
 ## Developer documentation
 

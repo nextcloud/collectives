@@ -7,6 +7,7 @@ The following tools are required for app development:
 * npm: to install NodeJS dependencies and compile JS assets
 * g++: to compile some NodeJS dependencies
 * gettext: to generate pot/translation files
+* rsync and openssl: for generating release tarballs
 
 ## Developer installation
 
@@ -50,3 +51,28 @@ to mount the collective folders to members home directories.
 
 Every collective is bound to a circle. Currently, the app automatically creates
 a new secret circle with every new collective.
+
+## Prepare a release
+
+Dependencies for building a new release:
+
+* Nextcloud OCC at `../../occ` and required PHP dependencies
+* App certificate+key for signing the app at `~/.nextcloud/certificates`
+
+Releasing a new version contains the following steps:
+
+* Update `CHANGELOG.md`
+* Bump version in `appinfo/info.xml`
+* Make sure the Gitlab CI to passes
+* Update node.js dependencies and build the JS assets:
+  ```
+  npm ci
+  make clean
+  make build-js-production
+  ```
+* Copy files to release directory, sign files and pack them in a release tarball:
+  ```
+  make release
+  ```
+* Upload release tarball to Gitlab, add release tag and publish releas on Gitlab
+* Publish new app version in Nextcloud App Store
