@@ -29,7 +29,7 @@ php-static-psalm-analysis:
   before_script:
     - make composer
 
-php-unit:
+.php-unit: &php-unit
   stage: test
   script:
     - vendor/bin/phpunit --configuration phpunit.xml --coverage-text --colors=never
@@ -39,7 +39,15 @@ php-unit:
   services:
     - mariadb:latest
 
-php-integration:
+php-unit-php7.3-nc20:
+  <<: *php-unit
+  image: registry.gitlab.com/collectivecloud/docker-builds:php7.3-nc20
+
+php-unit-php8.0-nc21:
+  <<: *php-unit
+  image: registry.gitlab.com/collectivecloud/docker-builds:php8.0-nc21
+
+.php-integration: &php-integration
   stage: test
   script:
     - vendor/bin/behat --config=tests/Integration/config/behat.yml --profile ci
@@ -52,6 +60,14 @@ php-integration:
     - /etc/init.d/apache2 start
   services:
     - mariadb:latest
+
+php-integration-php7.3-nc20:
+  <<: *php-integration
+  image: registry.gitlab.com/collectivecloud/docker-builds:php7.3-nc20
+
+php-integration-php8.0-nc21:
+  <<: *php-integration
+  image: registry.gitlab.com/collectivecloud/docker-builds:php8.0-nc21
 
 # JS jobs
 
