@@ -1,27 +1,28 @@
 {
     "name": "nextcloud/collectives",
     "type": "project",
-    "license": "AGPL",
+    "license": "AGPLv3",
     "authors": [
         {
-            "name": "CollectiveCloud Team"
+            "name": "CollectiveCloud Team",
+            "email": "collectivecloud@systemli.org"
         }
     ],
     "require": {
         "ext-json": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "^7.5",
-        "nextcloud/coding-standard": "^0.3.0",
-        "behat/behat": "^3.7",
-        "guzzlehttp/guzzle": "^7.0",
-        "vimeo/psalm": "^4.6",
-        "christophwurst/nextcloud": "^21.0"
+        "phpunit/phpunit": "^9.5",
+        "nextcloud/coding-standard": "^0.5.0",
+        "behat/behat": "^3.8",
+        "guzzlehttp/guzzle": "^7.2",
+        "christophwurst/nextcloud": "^21.0",
+        "psalm/phar": "^4.6"
     },
     "scripts": {
       "lint": "find . -name \\*.php -not -path './vendor/*' -exec php -l \"{}\" \\;",
-      "cs:check": "vendor/bin/php-cs-fixer fix --dry-run --diff",
-      "cs:fix": "vendor/bin/php-cs-fixer fix",
-      "psalm": "vendor/bin/psalm"
+      "cs:check": "php-cs-fixer fix --dry-run --diff",
+      "cs:fix": "php-cs-fixer fix",
+      "psalm": "psalm.phar"
     }
 }
