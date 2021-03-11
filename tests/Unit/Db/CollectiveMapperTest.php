@@ -20,7 +20,7 @@ class CollectiveMapperTest extends TestCase {
 	private $collective4;
 	private $userId = 'jane';
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 
 		$root = $this->getMockBuilder(IRootFolder::class)
