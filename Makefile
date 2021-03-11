@@ -101,7 +101,6 @@ clean:
 distclean: clean
 	rm -rf $(build_tools_dir)
 	rm -rf $(source_dir)
-	rm -rf $(appsstore_dir)
 	rm -rf node_modules
 	rm -rf vendor
 
