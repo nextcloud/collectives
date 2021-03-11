@@ -25,7 +25,7 @@ variables:
 php-static-psalm-analysis:
   stage: prepare
   script:
-    - vendor/bin/psalm
+    - vendor/bin/psalm.phar
   before_script:
     - make composer
 
