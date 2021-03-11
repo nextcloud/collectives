@@ -32,9 +32,11 @@ Collectives is a Nextcloud App for activist and community projects to organize t
 		</navigation>
 	</navigations>
 	<background-jobs>
+		<job>OCA\Collectives\BackgroundJob\PurgeObsoletePages</job>
 		<job>OCA\Collectives\BackgroundJob\ExpireCollectiveVersions</job>
 	</background-jobs>
 	<commands>
+		<command>OCA\Collectives\Command\PurgeObsoletePages</command>
 		<command>OCA\Collectives\Command\ExpireCollectiveVersions</command>
 	</commands>
 	<versions>

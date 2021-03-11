@@ -12,6 +12,7 @@ use OCP\IDBConnection;
  * @method Page insert(Page $page) : Page
  * @method Page update(Page $page) : Page
  * @method Page delete(Page $page) : Page
+ * @method Page findEntities(IQueryBuilder $query) : Page[]
  * @method Page findEntity(IQueryBuilder $query) : Page
  */
 class PageMapper extends QBMapper {
@@ -69,5 +70,15 @@ class PageMapper extends QBMapper {
 		} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
 			return null;
 		}
+	}
+
+	/**
+	 * @return Page[]
+	 */
+	public function getAll(): array {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from($this->tableName);
+		return $this->findEntities($qb);
 	}
 }
