@@ -13,9 +13,9 @@ cache:
 # Set any variables we need
 
 variables:
-  # Configure mysql environment variables (https://hub.docker.com/r/_/mysql/)
-  MYSQL_DATABASE: mysql_database
-  MYSQL_ROOT_PASSWORD: mysql_strong_password
+  # Configure mariadb environment variables (https://hub.docker.com/r/_/mariadb/)
+  MYSQL_DATABASE: nextcloud
+  MYSQL_ROOT_PASSWORD: mariadb_password
   NEXTCLOUD_SOURCE: '/var/www/html'
   COMMIT_IMAGE: $CI_REGISTRY_IMAGE/ci:$CI_COMMIT_SHA
   LATEST_IMAGE: $CI_REGISTRY_IMAGE/ci:latest
@@ -37,7 +37,7 @@ php-unit:
     - make composer
     - ln -s `pwd` $NEXTCLOUD_SOURCE/apps/collectives
   services:
-    - mysql:5.7
+    - mariadb:latest
 
 php-integration:
   stage: test
@@ -51,7 +51,7 @@ php-integration:
     - echo "$INTERNAL_IP_ADDRESS nextcloud.local" >>/etc/hosts
     - /etc/init.d/apache2 start
   services:
-    - mysql:5.7
+    - mariadb:latest
 
 # JS jobs
 
