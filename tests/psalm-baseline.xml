@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.6.2@bca09d74adc704c4eaee36a3c3e9d379e290fc3b">
+<files psalm-version="4.x-dev@">
   <file src="lib/AppInfo/Application.php">
     <MissingDependency occurrences="8">
       <code>CollectiveVersionsExpireManager</code>
@@ -17,6 +17,11 @@
       <code>TimedJob</code>
     </UndefinedClass>
   </file>
+  <file src="lib/BackgroundJob/PurgeObsoletePages.php">
+    <UndefinedClass occurrences="1">
+      <code>TimedJob</code>
+    </UndefinedClass>
+  </file>
   <file src="lib/CacheListener.php">
     <MissingDependency occurrences="3">
       <code>CacheInsertEvent</code>
@@ -25,6 +30,11 @@
     </MissingDependency>
   </file>
   <file src="lib/Command/ExpireCollectiveVersions.php">
+    <UndefinedClass occurrences="1">
+      <code>Base</code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Command/PurgeObsoletePages.php">
     <UndefinedClass occurrences="1">
       <code>Base</code>
     </UndefinedClass>
@@ -46,6 +56,12 @@
     </UndefinedClass>
   </file>
   <file src="lib/Db/PageMapper.php">
+    <InvalidReturnStatement occurrences="1">
+      <code>$this-&gt;findEntities($qb)</code>
+    </InvalidReturnStatement>
+    <InvalidReturnType occurrences="1">
+      <code>Page[]</code>
+    </InvalidReturnType>
     <MoreSpecificImplementedParamType occurrences="1"/>
   </file>
   <file src="lib/Mount/CollectiveFolderManager.php">
