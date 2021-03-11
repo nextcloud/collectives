@@ -65,7 +65,7 @@ class CollectiveService {
 		$safeName = $this->nodeHelper->sanitiseFilename($name);
 
 		if (null !== $this->collectiveMapper->findByName($safeName)) {
-			throw new \RuntimeException('Collective name already taken: ' . $safeName);
+			throw new AlreadyExistsException('Collective already exists: ' . $safeName);
 		}
 
 		// Create a new secret circle

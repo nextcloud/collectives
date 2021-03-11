@@ -4,6 +4,7 @@ namespace OCA\Collectives\Controller;
 
 use Closure;
 
+use OCA\Collectives\Service\AlreadyExistsException;
 use OCA\Collectives\Service\NotFoundException;
 
 use OCP\AppFramework\Http;
@@ -20,6 +21,8 @@ trait ErrorHelper {
 			return new DataResponse($callback());
 		} catch (NotFoundException $e) {
 			return new DataResponse($e->getMessage(), Http::STATUS_NOT_FOUND);
+		} catch (AlreadyExistsException $e) {
+			return new DataResponse($e->getMessage(), Http::STATUS_UNPROCESSABLE_ENTITY);
 		} catch (\Throwable $e) {
 			return new DataResponse($e->getMessage(), Http::STATUS_INTERNAL_SERVER_ERROR);
 		}
