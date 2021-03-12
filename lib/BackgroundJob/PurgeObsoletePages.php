@@ -2,16 +2,18 @@
 
 namespace OCA\Collectives\BackgroundJob;
 
-use OC\BackgroundJob\TimedJob;
+use OCP\AppFramework\Utility\ITimeFactory;
+use OCP\BackgroundJob\TimedJob;
 use OCA\Collectives\Db\PageGarbageCollector;
 
 class PurgeObsoletePages extends TimedJob {
-	public const ITEMS_PER_SESSION = 1000;
-
 	/** @var PageGarbageCollector */
 	private $garbageCollector;
 
-	public function __construct(PageGarbageCollector $garbageCollector) {
+	public function __construct(ITimeFactory $time,
+								PageGarbageCollector $garbageCollector) {
+		parent::__construct($time);
+
 		// Run once every two days
 		$this->setInterval(60 * 60 * 24 * 2);
 

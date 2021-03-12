@@ -1,26 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files psalm-version="4.x-dev@">
   <file src="lib/AppInfo/Application.php">
-    <MissingDependency occurrences="8">
+    <MissingDependency occurrences="6">
       <code>CollectiveVersionsExpireManager</code>
       <code>CollectiveVersionsExpireManager</code>
       <code>ExpireCollectiveVersions</code>
       <code>ExpireCollectiveVersions</code>
       <code>VersionsBackend</code>
       <code>VersionsBackend</code>
-      <code>\OCA\Collectives\BackgroundJob\ExpireCollectiveVersions</code>
-      <code>\OCA\Collectives\BackgroundJob\ExpireCollectiveVersions</code>
     </MissingDependency>
+    <TooFewArguments occurrences="1"/>
   </file>
   <file src="lib/BackgroundJob/ExpireCollectiveVersions.php">
-    <UndefinedClass occurrences="1">
-      <code>TimedJob</code>
-    </UndefinedClass>
-  </file>
-  <file src="lib/BackgroundJob/PurgeObsoletePages.php">
-    <UndefinedClass occurrences="1">
-      <code>TimedJob</code>
-    </UndefinedClass>
+    <MissingDependency occurrences="3">
+      <code>$this-&gt;expireManager</code>
+      <code>CollectiveVersionsExpireManager</code>
+      <code>CollectiveVersionsExpireManager</code>
+    </MissingDependency>
   </file>
   <file src="lib/CacheListener.php">
     <MissingDependency occurrences="3">
