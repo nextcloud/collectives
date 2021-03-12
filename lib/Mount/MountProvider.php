@@ -4,6 +4,7 @@ namespace OCA\Collectives\Mount;
 
 use OC\Files\Cache\Cache;
 use OC\Files\Storage\Wrapper\Jail;
+use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Service\CollectiveHelper;
 use OCP\App\IAppManager;
 use OCP\Files\Config\IMountProvider;
@@ -31,6 +32,9 @@ class MountProvider implements IMountProvider {
 	/** @var IAppManager */
 	private $appManager;
 
+	/** @var UserFolderHelper */
+	private $userFolderHelper;
+
 	/**
 	 * MountProvider constructor.
 	 *
@@ -39,18 +43,21 @@ class MountProvider implements IMountProvider {
 	 * @param IUserSession            $userSession
 	 * @param IMimeTypeLoader         $mimeTypeLoader
 	 * @param IAppManager             $appManager
+	 * @param UserFolderHelper        $userFolderHelper
 	 */
 	public function __construct(
 		CollectiveHelper $collectiveHelper,
 		CollectiveFolderManager $collectiveFolderManager,
 		IUserSession $userSession,
 		IMimeTypeLoader $mimeTypeLoader,
-		IAppManager $appManager) {
+		IAppManager $appManager,
+		UserFolderHelper $userFolderHelper) {
 		$this->collectiveHelper = $collectiveHelper;
 		$this->collectiveFolderManager = $collectiveFolderManager;
 		$this->userSession = $userSession;
 		$this->mimeTypeLoader = $mimeTypeLoader;
 		$this->appManager = $appManager;
+		$this->userFolderHelper = $userFolderHelper;
 	}
 
 	/**
@@ -68,7 +75,7 @@ class MountProvider implements IMountProvider {
 			$cacheEntry = $this->collectiveFolderManager->getFolderFileCache($c->getId());
 			$folders[] = [
 				'folder_id' => $c->getId(),
-				'mount_point' => $c->getName(),
+				'mount_point' => $this->userFolderHelper->getName($user->getUID()) . '/' . $c->getName(),
 				'rootCacheEntry' => (isset($cacheEntry['fileid'])) ? Cache::cacheEntryFromData($cacheEntry, $this->mimeTypeLoader) : null
 			];
 		}
@@ -77,8 +84,6 @@ class MountProvider implements IMountProvider {
 
 	public function getMountsForUser(IUser $user, IStorageFactory $loader) {
 		$folders = $this->getFoldersForUser($user);
-
-		// TODO: Create '/Collectives' subfolder in user home and use it
 
 		return array_map(function ($folder) use ($user, $loader) {
 			return $this->getMount(

@@ -195,14 +195,14 @@ class VersionsBackend implements IVersionBackend {
 	/**
 	 * @param array $folder
 	 *
-	 * @return (FileInfo|null)[] [$fileId => FileInfo|null]
+	 * @return array (FileInfo|null)[] [$fileId => FileInfo|null]
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
 	public function getAllVersionedFiles(array $folder): array {
 		$versionsFolder = $this->getVersionsFolder($folder['id']);
 		// TODO: correct?
-		$mount = $this->mountProvider->getMount($folder['id'], '/dummyuser/files/' . $folder['mount_point']);
+		$mount = $this->mountProvider->getMount($folder['id'], '/dummyuser/files/Collectives/' . $folder['mount_point']);
 		try {
 			$contents = $versionsFolder->getDirectoryListing();
 		} catch (NotFoundException $e) {

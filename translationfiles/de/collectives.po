@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2020-08-30 09:31+0000\n"
+"POT-Creation-Date: 2021-03-12 17:58+0100\n"
 "PO-Revision-Date: 2020-08-20 09:31+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -18,18 +18,19 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.3\n"
 
-#: /collectives/lib/Search/CollectiveProvider.php:51
-#: /collectives/lib/Search/CollectiveProvider.php:95
+#: /collectives/lib/Fs/UserFolderHelper.php:34
+#: /collectives/lib/Search/CollectiveProvider.php:58
+#: /collectives/lib/Search/CollectiveProvider.php:106
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:2
 msgid "Collectives"
 msgstr "Kollektive"
 
-#: /collectives/lib/Search/PageProvider.php:58
-#: /collectives/lib/Search/PageProvider.php:103
+#: /collectives/lib/Search/PageProvider.php:65
+#: /collectives/lib/Search/PageProvider.php:113
 msgid "Collective Pages"
 msgstr "Kollektiv-Seiten"
 
-#: /collectives/lib/Search/PageProvider.php:95
+#: /collectives/lib/Search/PageProvider.php:106
 msgid "in {collective}"
 msgstr "in {collective}"
 

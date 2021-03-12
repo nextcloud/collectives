@@ -42,9 +42,6 @@
     </UndefinedClass>
   </file>
   <file src="lib/Db/CollectiveMapper.php">
-    <MissingDependency occurrences="1">
-      <code>IRootFolder</code>
-    </MissingDependency>
     <MoreSpecificImplementedParamType occurrences="1"/>
     <UndefinedClass occurrences="2">
       <code>Circles</code>
@@ -59,6 +56,13 @@
       <code>Page[]</code>
     </InvalidReturnType>
     <MoreSpecificImplementedParamType occurrences="1"/>
+  </file>
+  <file src="lib/Fs/UserFolderHelper.php">
+    <MissingDependency occurrences="3">
+      <code>$this-&gt;rootfolder</code>
+      <code>IRootFolder</code>
+      <code>IRootFolder</code>
+    </MissingDependency>
   </file>
   <file src="lib/Mount/CollectiveFolderManager.php">
     <InvalidArgument occurrences="1"/>
