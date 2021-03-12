@@ -3,12 +3,12 @@
 
 namespace OCA\Collectives\Versions;
 
-use OC\Files\FileInfo;
 use OC\Files\View;
 use OC\Hooks\BasicEmitter;
 use OC\User\User;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCP\AppFramework\Utility\ITimeFactory;
+use OCP\Files\FileInfo;
 use OCP\Files\InvalidPathException;
 use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
