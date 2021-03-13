@@ -10,7 +10,7 @@ use OCP\IL10N;
 
 class UserFolderHelper {
 	/** @var IRootFolder */
-	private $rootfolder;
+	private $rootFolder;
 
 	/** @var IL10N */
 	private $l10n;
@@ -24,7 +24,7 @@ class UserFolderHelper {
 	public function __construct(
 		IRootFolder $rootFolder,
 		IL10N $l10n) {
-		$this->rootfolder = $rootFolder;
+		$this->rootFolder = $rootFolder;
 		$this->l10n = $l10n;
 	}
 
@@ -34,7 +34,7 @@ class UserFolderHelper {
 	 * @return Folder
 	 */
 	private function initializeUserFolder(string $userId): Folder {
-		$userFolder = $this->rootfolder->getUserFolder($userId);
+		$userFolder = $this->rootFolder->getUserFolder($userId);
 		$userCollectivesPath = $this->l10n->t('Collectives');
 		try {
 			$userCollectivesFolder = $userFolder->get($userCollectivesPath);

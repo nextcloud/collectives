@@ -59,7 +59,7 @@
   </file>
   <file src="lib/Fs/UserFolderHelper.php">
     <MissingDependency occurrences="3">
-      <code>$this-&gt;rootfolder</code>
+      <code>$this-&gt;rootFolder</code>
       <code>IRootFolder</code>
       <code>IRootFolder</code>
     </MissingDependency>
