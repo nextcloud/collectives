@@ -35,12 +35,12 @@ const trailingEmojiRegexp = new RegExp(
 
 function emoji(name) {
 	const match = name.match(trailingEmojiRegexp)
-	return match ? match[0] : ''
+	return match && !match[0].match(/\d/) ? match[0] : ''
 }
 
 // name without the emoji if there is one
 function title(name) {
-	return name.replace(trailingEmojiRegexp, '').trim()
+	return name.replace(new RegExp(`${emoji(name)}$`), '').trim()
 }
 
 export default function({ id, name, circleUniqueId }) {

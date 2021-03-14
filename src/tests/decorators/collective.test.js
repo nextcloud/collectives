@@ -9,6 +9,16 @@ test('name without emoji', () => {
 	expect(decorated.emoji).toBe('')
 })
 
+test('name with digit', () => {
+	const decorated = decorate({
+		id: 'id',
+		name: 'name 1',
+		circleUniqueId: 123,
+	})
+	expect(decorated.emoji).toBe('')
+	expect(decorated.title).toBe('name 1')
+})
+
 test('name with emoji', () => {
 	const decorated = decorate({
 		id: 'id',
