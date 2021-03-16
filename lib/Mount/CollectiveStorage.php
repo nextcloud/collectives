@@ -6,7 +6,6 @@ use OC\Files\Cache\Scanner;
 use OC\Files\Storage\Wrapper\Wrapper;
 use OCP\Files\Cache\ICacheEntry;
 use OCP\IUser;
-use OCP\IUserSession;
 
 class CollectiveStorage extends Wrapper {
 	/** @var int */
@@ -15,8 +14,6 @@ class CollectiveStorage extends Wrapper {
 	/** @var ICacheEntry */
 	private $rootEntry;
 
-	/** @var IUserSession */
-	private $userSession;
 	/** @var IUser */
 	private $mountOwner;
 
@@ -32,7 +29,6 @@ class CollectiveStorage extends Wrapper {
 		parent::__construct($parameters);
 		$this->folderId = $parameters['folder_id'];
 		$this->rootEntry = $parameters['rootCacheEntry'];
-		$this->userSession = $parameters['userSession'];
 		$this->mountOwner = $parameters['mountOwner'];
 	}
 
@@ -49,10 +45,6 @@ class CollectiveStorage extends Wrapper {
 	 * @return false|string
 	 */
 	public function getOwner($path) {
-		$user = $this->userSession->getUser();
-		if ($user !== null) {
-			return $user->getUID();
-		}
 		return $this->mountOwner !== null ? $this->mountOwner->getUID() : false;
 	}
 

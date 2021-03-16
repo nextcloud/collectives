@@ -14,7 +14,6 @@ use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
 use OCP\Files\Storage\IStorageFactory;
 use OCP\IUser;
-use OCP\IUserSession;
 
 class MountProvider implements IMountProvider {
 	/** @var CollectiveHelper */
@@ -22,9 +21,6 @@ class MountProvider implements IMountProvider {
 
 	/** @var CollectiveFolderManager */
 	private $collectiveFolderManager;
-
-	/** @var IUserSession */
-	private $userSession;
 
 	/** @var IMimeTypeLoader */
 	private $mimeTypeLoader;
@@ -40,7 +36,6 @@ class MountProvider implements IMountProvider {
 	 *
 	 * @param CollectiveHelper        $collectiveHelper
 	 * @param CollectiveFolderManager $collectiveFolderManager
-	 * @param IUserSession            $userSession
 	 * @param IMimeTypeLoader         $mimeTypeLoader
 	 * @param IAppManager             $appManager
 	 * @param UserFolderHelper        $userFolderHelper
@@ -48,13 +43,11 @@ class MountProvider implements IMountProvider {
 	public function __construct(
 		CollectiveHelper $collectiveHelper,
 		CollectiveFolderManager $collectiveFolderManager,
-		IUserSession $userSession,
 		IMimeTypeLoader $mimeTypeLoader,
 		IAppManager $appManager,
 		UserFolderHelper $userFolderHelper) {
 		$this->collectiveHelper = $collectiveHelper;
 		$this->collectiveFolderManager = $collectiveFolderManager;
-		$this->userSession = $userSession;
 		$this->mimeTypeLoader = $mimeTypeLoader;
 		$this->appManager = $appManager;
 		$this->userFolderHelper = $userFolderHelper;
@@ -129,8 +122,7 @@ class MountProvider implements IMountProvider {
 			'storage' => $baseStorage,
 			'folder_id' => $id,
 			'rootCacheEntry' => $cacheEntry,
-			'userSession' => $this->userSession,
-			'mountOwner' => $user,
+			'mountOwner' => $user
 		]);
 
 		return new CollectiveMountPoint(
