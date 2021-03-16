@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2020-08-30 09:32+0000\n"
+"POT-Creation-Date: 2021-03-16 10:09+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,18 +18,19 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: /collectives/lib/Search/CollectiveProvider.php:51
-#: /collectives/lib/Search/CollectiveProvider.php:95
+#: /collectives/lib/Fs/UserFolderHelper.php:38
+#: /collectives/lib/Search/CollectiveProvider.php:58
+#: /collectives/lib/Search/CollectiveProvider.php:106
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:2
 msgid "Collectives"
 msgstr ""
 
-#: /collectives/lib/Search/PageProvider.php:58
-#: /collectives/lib/Search/PageProvider.php:103
+#: /collectives/lib/Search/PageProvider.php:65
+#: /collectives/lib/Search/PageProvider.php:113
 msgid "Collective Pages"
 msgstr ""
 
-#: /collectives/lib/Search/PageProvider.php:95
+#: /collectives/lib/Search/PageProvider.php:106
 msgid "in {collective}"
 msgstr ""
 

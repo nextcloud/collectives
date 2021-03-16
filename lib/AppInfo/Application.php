@@ -7,6 +7,7 @@ namespace OCA\Collectives\AppInfo;
 use Closure;
 use OCA\Collectives\CacheListener;
 use OCA\Collectives\Command\ExpireCollectiveVersions;
+use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Mount\MountProvider;
 use OCA\Collectives\Search\CollectiveProvider;
@@ -40,9 +41,9 @@ class Application extends App implements IBootstrap {
 			return new MountProvider(
 				$c->get(CollectiveHelper::class),
 				$c->get(CollectiveFolderManager::class),
-				$c->get(IUserSession::class),
 				$c->get(IMimeTypeLoader::class),
-				$c->get(IAppManager::class)
+				$c->get(IAppManager::class),
+				$c->get(UserFolderHelper::class)
 			);
 		});
 

@@ -27,7 +27,7 @@ class CollectiveFolderManager {
 	private $rootPath;
 
 	/**
-	 * MountProvider constructor.
+	 * CollectiveFolderManager constructor.
 	 *
 	 * @param IRootFolder   $rootFolder
 	 * @param IDBConnection $connection

@@ -7,6 +7,9 @@ vendor/
 js/*.js
 js/*.js.map
 
+# PHPunit cache
+.phpunit.result.cache
+
 # Cypress test artifacts
 cypress/screenshots/
 cypress/videos/

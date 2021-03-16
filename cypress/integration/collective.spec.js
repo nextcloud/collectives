@@ -58,6 +58,9 @@ describe('Collective', function() {
 			cy.login('bob', 'bob', '/apps/files')
 		})
 		it('has a matching folder', function() {
+			cy.get('#fileList').should('contain', 'Collectives')
+			cy.get('#fileList a').contains('Collectives').click()
+			cy.get('#controls .breadcrumb').should('contain', 'Collectives')
 			cy.get('#fileList').should('contain', 'Preexisting Collective')
 			cy.get('#fileList a').contains('Preexisting Collective').click()
 			cy.get('#controls .breadcrumb').should('contain', 'Preexisting Collective')

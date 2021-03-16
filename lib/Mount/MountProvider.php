@@ -4,6 +4,7 @@ namespace OCA\Collectives\Mount;
 
 use OC\Files\Cache\Cache;
 use OC\Files\Storage\Wrapper\Jail;
+use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Service\CollectiveHelper;
 use OCP\App\IAppManager;
 use OCP\Files\Config\IMountProvider;
@@ -13,7 +14,6 @@ use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
 use OCP\Files\Storage\IStorageFactory;
 use OCP\IUser;
-use OCP\IUserSession;
 
 class MountProvider implements IMountProvider {
 	/** @var CollectiveHelper */
@@ -22,35 +22,35 @@ class MountProvider implements IMountProvider {
 	/** @var CollectiveFolderManager */
 	private $collectiveFolderManager;
 
-	/** @var IUserSession */
-	private $userSession;
-
 	/** @var IMimeTypeLoader */
 	private $mimeTypeLoader;
 
 	/** @var IAppManager */
 	private $appManager;
 
+	/** @var UserFolderHelper */
+	private $userFolderHelper;
+
 	/**
 	 * MountProvider constructor.
 	 *
 	 * @param CollectiveHelper        $collectiveHelper
 	 * @param CollectiveFolderManager $collectiveFolderManager
-	 * @param IUserSession            $userSession
 	 * @param IMimeTypeLoader         $mimeTypeLoader
 	 * @param IAppManager             $appManager
+	 * @param UserFolderHelper        $userFolderHelper
 	 */
 	public function __construct(
 		CollectiveHelper $collectiveHelper,
 		CollectiveFolderManager $collectiveFolderManager,
-		IUserSession $userSession,
 		IMimeTypeLoader $mimeTypeLoader,
-		IAppManager $appManager) {
+		IAppManager $appManager,
+		UserFolderHelper $userFolderHelper) {
 		$this->collectiveHelper = $collectiveHelper;
 		$this->collectiveFolderManager = $collectiveFolderManager;
-		$this->userSession = $userSession;
 		$this->mimeTypeLoader = $mimeTypeLoader;
 		$this->appManager = $appManager;
+		$this->userFolderHelper = $userFolderHelper;
 	}
 
 	/**
@@ -68,7 +68,7 @@ class MountProvider implements IMountProvider {
 			$cacheEntry = $this->collectiveFolderManager->getFolderFileCache($c->getId());
 			$folders[] = [
 				'folder_id' => $c->getId(),
-				'mount_point' => $c->getName(),
+				'mount_point' => $this->userFolderHelper->initialize($user->getUID())->getName() . '/' . $c->getName(),
 				'rootCacheEntry' => (isset($cacheEntry['fileid'])) ? Cache::cacheEntryFromData($cacheEntry, $this->mimeTypeLoader) : null
 			];
 		}
@@ -77,8 +77,6 @@ class MountProvider implements IMountProvider {
 
 	public function getMountsForUser(IUser $user, IStorageFactory $loader) {
 		$folders = $this->getFoldersForUser($user);
-
-		// TODO: Create '/Collectives' subfolder in user home and use it
 
 		return array_map(function ($folder) use ($user, $loader) {
 			return $this->getMount(
@@ -124,8 +122,7 @@ class MountProvider implements IMountProvider {
 			'storage' => $baseStorage,
 			'folder_id' => $id,
 			'rootCacheEntry' => $cacheEntry,
-			'userSession' => $this->userSession,
-			'mountOwner' => $user,
+			'mountOwner' => $user
 		]);
 
 		return new CollectiveMountPoint(

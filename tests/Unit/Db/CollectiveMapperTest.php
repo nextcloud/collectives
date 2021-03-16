@@ -6,8 +6,8 @@ use OC\Files\Node\Folder;
 use OC\Files\View;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
+use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Service\NotFoundException;
-use OCP\Files\IRootFolder;
 use OCP\IDBConnection;
 use PHPUnit\Framework\TestCase;
 
@@ -17,19 +17,15 @@ class CollectiveMapperTest extends TestCase {
 	private $collective1;
 	private $collective2;
 	private $collective3;
-	private $collective4;
 	private $userId = 'jane';
 
 	protected function setUp(): void {
 		parent::setUp();
 
-		$root = $this->getMockBuilder(IRootFolder::class)
-			->disableOriginalConstructor()
-			->getMock();
 		$view = $this->getMockBuilder(View::class)
 			->disableOriginalConstructor()
 			->getMock();
-		$this->folder = new Folder($root, $view, '/path/to/Folder');
+		$this->folder = new Folder('', $view, '/path/to/Folder');
 		$userFolder = $this->getMockBuilder(Folder::class)
 			->disableOriginalConstructor()
 			->getMock();
@@ -39,12 +35,16 @@ class CollectiveMapperTest extends TestCase {
 				['collective2', null],
 				['collective3', null],
 			]);
-		$root->method('getUserFolder')
-			->willReturn($userFolder);
 
 		$db = $this->getMockBuilder(IDBConnection::class)
 			->disableOriginalConstructor()
 			->getMock();
+
+		$userFolderHelper = $this->getMockBuilder(UserFolderHelper::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$userFolderHelper->method('initialize')
+			->willReturn($userFolder);
 
 		$this->collective1 = new Collective();
 		$this->collective1->setId(1);
@@ -57,7 +57,7 @@ class CollectiveMapperTest extends TestCase {
 		$this->collective3->setName('collective3');
 
 		$this->mapper = $this->getMockBuilder(CollectiveMapper::class)
-			->setConstructorArgs([$root, $db])
+			->setConstructorArgs([$db, $userFolderHelper])
 			->setMethods(['findById'])
 			->getMock();
 		$this->mapper->method('findById')
@@ -79,6 +79,6 @@ class CollectiveMapperTest extends TestCase {
 	}
 
 	public function testUserHasCollectiveCollectiveNull(): void {
-		$this->assertNull($this->mapper->userHasCollective($this->collective1, $this->userId));
+		self::assertNull($this->mapper->userHasCollective($this->collective1, $this->userId));
 	}
 }

@@ -5,6 +5,7 @@ namespace OCA\Collectives\Db;
 use OC\User\NoUserException;
 use OCA\Circles\Api\v1\Circles;
 use OCA\Circles\Exceptions\MemberDoesNotExistException;
+use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Service\NotFoundException;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
@@ -12,7 +13,6 @@ use OCP\AppFramework\Db\QBMapper;
 use OCP\AppFramework\QueryException;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\Folder;
-use OCP\Files\IRootFolder;
 use OCP\Files\NotPermittedException;
 use OCP\IDBConnection;
 
@@ -22,13 +22,20 @@ use OCP\IDBConnection;
  * @method Collective findEntity(IQueryBuilder $query) : Collective
  */
 class CollectiveMapper extends QBMapper {
-	private $root;
+	/** @var UserFolderHelper */
+	private $userFolderHelper;
 
+	/**
+	 * CollectiveMapper constructor.
+	 *
+	 * @param IDBConnection    $db
+	 * @param UserFolderHelper $userFolderHelper
+	 */
 	public function __construct(
-		IRootFolder $root,
-		IDBConnection $db) {
+		IDBConnection $db,
+		UserFolderHelper $userFolderHelper) {
 		parent::__construct($db, 'collectives', Collective::class);
-		$this->root = $root;
+		$this->userFolderHelper = $userFolderHelper;
 	}
 
 	/**
@@ -40,7 +47,7 @@ class CollectiveMapper extends QBMapper {
 	 */
 	public function getCollectiveFolder(Collective $collective, string $userId): Folder {
 		try {
-			$folder = $this->root->getUserFolder($userId)->get($collective->getName());
+			$folder = $this->userFolderHelper->initialize($userId)->get($collective->getName());
 		} catch (\OCP\Files\NotFoundException | NotPermittedException | NoUserException $e) {
 			throw new NotFoundException('Folder not found for collective ' . $collective->getName());
 		}
@@ -131,7 +138,7 @@ class CollectiveMapper extends QBMapper {
 		} catch (QueryException | MemberDoesNotExistException $e) {
 			return null;
 		}
-		
+
 		return null;
 	}
 }
