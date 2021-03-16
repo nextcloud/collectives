@@ -75,7 +75,7 @@ class MountProvider implements IMountProvider {
 			$cacheEntry = $this->collectiveFolderManager->getFolderFileCache($c->getId());
 			$folders[] = [
 				'folder_id' => $c->getId(),
-				'mount_point' => $this->userFolderHelper->getName($user->getUID()) . '/' . $c->getName(),
+				'mount_point' => $this->userFolderHelper->initialize($user->getUID())->getName() . '/' . $c->getName(),
 				'rootCacheEntry' => (isset($cacheEntry['fileid'])) ? Cache::cacheEntryFromData($cacheEntry, $this->mimeTypeLoader) : null
 			];
 		}

@@ -33,7 +33,7 @@ class UserFolderHelper {
 	 *
 	 * @return Folder
 	 */
-	private function initializeUserFolder(string $userId): Folder {
+	public function initialize(string $userId): Folder {
 		$userFolder = $this->rootFolder->getUserFolder($userId);
 		$userCollectivesPath = $this->l10n->t('Collectives');
 		try {
@@ -49,23 +49,5 @@ class UserFolderHelper {
 		}
 
 		return $userCollectivesFolder;
-	}
-
-	/**
-	 * @param string $userId
-	 *
-	 * @return string
-	 */
-	public function getName(string $userId): string {
-		return $this->initializeUserFolder($userId)->getName();
-	}
-
-	/**
-	 * @param string $userId
-	 *
-	 * @return Folder
-	 */
-	public function getFolder(string $userId): Folder {
-		return $this->initializeUserFolder($userId);
 	}
 }

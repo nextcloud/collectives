@@ -47,7 +47,7 @@ class CollectiveMapper extends QBMapper {
 	 */
 	public function getCollectiveFolder(Collective $collective, string $userId): Folder {
 		try {
-			$folder = $this->userFolderHelper->getFolder($userId)->get($collective->getName());
+			$folder = $this->userFolderHelper->initialize($userId)->get($collective->getName());
 		} catch (\OCP\Files\NotFoundException | NotPermittedException | NoUserException $e) {
 			throw new NotFoundException('Folder not found for collective ' . $collective->getName());
 		}

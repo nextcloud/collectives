@@ -46,14 +46,14 @@ class UserFolderHelperTest extends TestCase {
 		$this->helper = new UserFolderHelper($this->rootFolder, $this->l10n);
 	}
 
-	public function testGetNameFolderExists(): void {
+	public function testInitializeFolderExists(): void {
 		$this->userFolder->method('get')
 			->willReturn($this->collectivesFolder);
 
-		self::assertEquals('Collectives', $this->helper->getName('jane'));
+		self::assertEquals($this->collectivesFolder, $this->helper->initialize('jane'));
 	}
 
-	public function testGetNameFileExists(): void
+	public function testInitializeFileExists(): void
 	{
 		$file = $this->getMockBuilder(File::class)
 			->disableOriginalConstructor()
@@ -62,21 +62,14 @@ class UserFolderHelperTest extends TestCase {
 		$this->userFolder->method('get')
 			->willReturn($file);
 
-		self::assertEquals('Collectives', $this->helper->getName('jane'));
+		self::assertEquals($this->collectivesFolder, $this->helper->initialize('jane'));
 	}
 
-	public function testGetNameFolderNotExists(): void
+	public function testInitializeFolderNotExists(): void
 	{
 		$this->userFolder->method('get')
 			->willThrowException(new NotFoundException);
 
-		self::assertEquals('Collectives', $this->helper->getName('jane'));
-	}
-
-	public function testGetFolderFolderExists(): void {
-		$this->userFolder->method('get')
-			->willReturn($this->collectivesFolder);
-
-		self::assertEquals($this->collectivesFolder, $this->helper->getFolder('jane'));
+		self::assertEquals($this->collectivesFolder, $this->helper->initialize('jane'));
 	}
 }
