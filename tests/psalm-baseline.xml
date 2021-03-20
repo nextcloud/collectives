@@ -10,6 +10,9 @@
       <code>VersionsBackend</code>
     </MissingDependency>
     <TooFewArguments occurrences="1"/>
+    <UndefinedClass occurrences="1">
+      <code>LoadAdditionalScriptsEvent</code>
+    </UndefinedClass>
   </file>
   <file src="lib/BackgroundJob/ExpireCollectiveVersions.php">
     <MissingDependency occurrences="3">

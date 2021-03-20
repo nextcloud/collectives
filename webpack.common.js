@@ -3,11 +3,14 @@ const { VueLoaderPlugin } = require('vue-loader')
 const ESLintPlugin = require('eslint-webpack-plugin')
 
 module.exports = {
-	entry: path.join(__dirname, 'src', 'main.js'),
+	entry: {
+		collectives: [ './src/main.js' ],
+		files: [ './src/files.js' ],
+	},
 	output: {
 		path: path.resolve(__dirname, './js'),
 		publicPath: '/js/',
-		filename: 'collectives.js',
+		filename: '[name].js',
 		chunkFilename: 'chunks/[name]-[hash].js',
 	},
 	module: {
