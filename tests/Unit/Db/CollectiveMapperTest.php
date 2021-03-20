@@ -43,7 +43,7 @@ class CollectiveMapperTest extends TestCase {
 		$userFolderHelper = $this->getMockBuilder(UserFolderHelper::class)
 			->disableOriginalConstructor()
 			->getMock();
-		$userFolderHelper->method('initialize')
+		$userFolderHelper->method('get')
 			->willReturn($userFolder);
 
 		$this->collective1 = new Collective();

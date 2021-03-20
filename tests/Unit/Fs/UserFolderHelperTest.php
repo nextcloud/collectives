@@ -46,14 +46,14 @@ class UserFolderHelperTest extends TestCase {
 		$this->helper = new UserFolderHelper($this->rootFolder, $this->l10n);
 	}
 
-	public function testInitializeFolderExists(): void {
+	public function testGetFolderExists(): void {
 		$this->userFolder->method('get')
 			->willReturn($this->collectivesFolder);
 
-		self::assertEquals($this->collectivesFolder, $this->helper->initialize('jane'));
+		self::assertEquals($this->collectivesFolder, $this->helper->get('jane'));
 	}
 
-	public function testInitializeFileExists(): void
+	public function testGetFileExists(): void
 	{
 		$file = $this->getMockBuilder(File::class)
 			->disableOriginalConstructor()
@@ -62,14 +62,14 @@ class UserFolderHelperTest extends TestCase {
 		$this->userFolder->method('get')
 			->willReturn($file);
 
-		self::assertEquals($this->collectivesFolder, $this->helper->initialize('jane'));
+		self::assertEquals($this->collectivesFolder, $this->helper->get('jane'));
 	}
 
-	public function testInitializeFolderNotExists(): void
+	public function testGetFolderNotExists(): void
 	{
 		$this->userFolder->method('get')
 			->willThrowException(new NotFoundException);
 
-		self::assertEquals($this->collectivesFolder, $this->helper->initialize('jane'));
+		self::assertEquals($this->collectivesFolder, $this->helper->get('jane'));
 	}
 }

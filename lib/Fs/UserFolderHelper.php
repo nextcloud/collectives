@@ -15,6 +15,9 @@ class UserFolderHelper {
 	/** @var IL10N */
 	private $l10n;
 
+	/** @var Folder */
+	private $userFolder;
+
 	/**
 	 * UserFolderHelper constructor.
 	 *
@@ -33,7 +36,7 @@ class UserFolderHelper {
 	 *
 	 * @return Folder
 	 */
-	public function initialize(string $userId): Folder {
+	private function initialize(string $userId): Folder {
 		$userFolder = $this->rootFolder->getUserFolder($userId);
 		$userCollectivesPath = $this->l10n->t('Collectives');
 		try {
@@ -49,5 +52,18 @@ class UserFolderHelper {
 		}
 
 		return $userCollectivesFolder;
+	}
+
+	/**
+	 * @param string $userId
+	 *
+	 * @return Folder
+	 */
+	public function get(string $userId): Folder {
+		if (!$this->userFolder) {
+			$this->userFolder = $this->initialize($userId);
+		}
+
+		return $this->userFolder;
 	}
 }
