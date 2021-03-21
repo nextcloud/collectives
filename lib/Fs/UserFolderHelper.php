@@ -6,29 +6,36 @@ namespace OCA\Collectives\Fs;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
-use OCP\IL10N;
+use OCP\L10N\IFactory;
+use OCP\IUserManager;
 
 class UserFolderHelper {
 	/** @var IRootFolder */
 	private $rootFolder;
 
-	/** @var IL10N */
-	private $l10n;
+	/** @var IUserManager */
+	private $userManager;
 
 	/** @var Folder */
 	private $userFolder;
 
+	/** @var IFactory */
+	private $l10nFactory;
+
 	/**
 	 * UserFolderHelper constructor.
 	 *
-	 * @param IRootFolder $rootFolder
-	 * @param IL10N       $l10n
+	 * @param IRootFolder  $rootFolder
+	 * @param IUserManager $userManager
+	 * @param IFactory     $l10nFactory
 	 */
 	public function __construct(
 		IRootFolder $rootFolder,
-		IL10N $l10n) {
+		IUserManager $userManager,
+		IFactory $l10nFactory) {
 		$this->rootFolder = $rootFolder;
-		$this->l10n = $l10n;
+		$this->userManager = $userManager;
+		$this->l10nFactory = $l10nFactory;
 	}
 
 	/**
@@ -38,7 +45,9 @@ class UserFolderHelper {
 	 */
 	private function initialize(string $userId): Folder {
 		$userFolder = $this->rootFolder->getUserFolder($userId);
-		$userCollectivesPath = $this->l10n->t('Collectives');
+		$userLang = $this->l10nFactory->getUserLanguage($this->userManager->get($userId));
+		$l10n = $this->l10nFactory->get('collectives', $userLang);
+		$userCollectivesPath = $l10n->t('Collectives');
 		try {
 			$userCollectivesFolder = $userFolder->get($userCollectivesPath);
 			// Rename existing node if it's not a folder

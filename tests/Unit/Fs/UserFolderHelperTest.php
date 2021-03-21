@@ -8,13 +8,17 @@ use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
 use OCP\IL10N;
+use OCP\IUser;
+use OCP\IUserManager;
+use OCP\L10N\IFactory;
 use PHPUnit\Framework\TestCase;
 
 class UserFolderHelperTest extends TestCase {
 	private $collectivesFolder;
 	private $userFolder;
 	private $rootFolder;
-	private $l10n;
+	private $userManager;
+	private $l10nFactory;
 	private $helper;
 
 	protected function setUp(): void {
@@ -37,13 +41,28 @@ class UserFolderHelperTest extends TestCase {
 			->getMock();
 		$this->rootFolder->method('getUserFolder')
 			->willReturn($this->userFolder);
-		$this->l10n = $this->getMockBuilder(IL10N::class)
+
+		$user = $this->getMockBuilder(IUser::class)
 			->disableOriginalConstructor()
 			->getMock();
-		$this->l10n->method('t')
-			->willReturn('Collectives');
+		$this->userManager = $this->getMockBuilder(IUserManager::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$this->userManager->method('get')
+			->willReturn($user);
 
-		$this->helper = new UserFolderHelper($this->rootFolder, $this->l10n);
+		$l10n = $this->getMockBuilder(IL10N::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$l10n->method('t')
+			->willReturn('Collectives');
+		$this->l10nFactory = $this->getMockBuilder(IFactory::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$this->l10nFactory->method('get')
+			->willReturn($l10n);
+
+		$this->helper = new UserFolderHelper($this->rootFolder, $this->userManager, $this->l10nFactory);
 	}
 
 	public function testGetFolderExists(): void {
@@ -53,8 +72,7 @@ class UserFolderHelperTest extends TestCase {
 		self::assertEquals($this->collectivesFolder, $this->helper->get('jane'));
 	}
 
-	public function testGetFileExists(): void
-	{
+	public function testGetFileExists(): void {
 		$file = $this->getMockBuilder(File::class)
 			->disableOriginalConstructor()
 			->getMock();
@@ -65,8 +83,7 @@ class UserFolderHelperTest extends TestCase {
 		self::assertEquals($this->collectivesFolder, $this->helper->get('jane'));
 	}
 
-	public function testGetFolderNotExists(): void
-	{
+	public function testGetFolderNotExists(): void {
 		$this->userFolder->method('get')
 			->willThrowException(new NotFoundException);
 
