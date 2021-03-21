@@ -7,6 +7,7 @@ use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Db\Page;
 use OCA\Collectives\Db\PageMapper;
 use OCA\Collectives\Fs\NodeHelper;
+use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Model\PageFile;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
@@ -21,10 +22,15 @@ class PageService {
 
 	/** @var PageMapper */
 	private $pageMapper;
+
 	/** @var NodeHelper */
 	private $nodeHelper;
+
 	/** @var CollectiveMapper */
 	private $collectiveMapper;
+
+	/** @var UserFolderHelper */
+	private $userFolderHelper;
 
 	/**
 	 * PageService constructor.
@@ -32,14 +38,16 @@ class PageService {
 	 * @param PageMapper       $pageMapper
 	 * @param NodeHelper       $nodeHelper
 	 * @param CollectiveMapper $collectiveMapper
+	 * @param UserFolderHelper $userFolderHelper
 	 */
 	public function __construct(PageMapper $pageMapper,
 								NodeHelper $nodeHelper,
-								CollectiveMapper $collectiveMapper
-	) {
+								CollectiveMapper $collectiveMapper,
+								UserFolderHelper $userFolderHelper) {
 		$this->pageMapper = $pageMapper;
 		$this->nodeHelper = $nodeHelper;
 		$this->collectiveMapper = $collectiveMapper;
+		$this->userFolderHelper = $userFolderHelper;
 	}
 
 	/**
@@ -107,7 +115,7 @@ class PageService {
 		if (null === $collective = $this->collectiveMapper->findById($collectiveId, $userId)) {
 			throw new NotFoundException('Collective not found: '. $collectiveId);
 		}
-		$folder = $this->collectiveMapper->getCollectiveFolder($collective, $userId);
+		$folder = $this->userFolderHelper->getCollectiveFolder($collective->getName(), $userId);
 		$pageFiles = [];
 		foreach ($folder->getDirectoryListing() as $file) {
 			if ($file instanceof File && $this->isPage($file)) {
@@ -152,7 +160,7 @@ class PageService {
 		if (null === $collective = $this->collectiveMapper->findById($collectiveId, $userId)) {
 			throw new NotFoundException('Collective not found: '. $collectiveId);
 		}
-		$folder = $this->collectiveMapper->getCollectiveFolder($collective, $userId);
+		$folder = $this->userFolderHelper->getCollectiveFolder($collective->getName(), $userId);
 		return $this->getPage($this->nodeHelper->getFileById($folder, $id));
 	}
 
@@ -171,7 +179,7 @@ class PageService {
 		if (null === $collective = $this->collectiveMapper->findById($collectiveId, $userId)) {
 			throw new NotFoundException('Collective not found: '. $collectiveId);
 		}
-		$folder = $this->collectiveMapper->getCollectiveFolder($collective, $userId);
+		$folder = $this->userFolderHelper->getCollectiveFolder($collective->getName(), $userId);
 		$safeTitle = $this->nodeHelper->sanitiseFilename($title, self::DEFAULT_PAGE_TITLE);
 		$filename = NodeHelper::generateFilename($folder, $safeTitle, self::SUFFIX);
 
@@ -222,7 +230,7 @@ class PageService {
 		try {
 			$pageFile = $this->find($userId, $collectiveId, $id);
 
-			$folder = $this->collectiveMapper->getCollectiveFolder($collective, $userId);
+			$folder = $this->userFolderHelper->getCollectiveFolder($collective->getName(), $userId);
 			$file = $this->nodeHelper->getFileById($folder, $pageFile->getId());
 			$safeTitle = $this->nodeHelper->sanitiseFilename($title, self::DEFAULT_PAGE_TITLE);
 
@@ -255,7 +263,7 @@ class PageService {
 		}
 		try {
 			$pageFile = $this->find($userId, $collectiveId, $id);
-			$folder = $this->collectiveMapper->getCollectiveFolder($collective, $userId);
+			$folder = $this->userFolderHelper->getCollectiveFolder($collective->getName(), $userId);
 			$file = $this->nodeHelper->getFileById($folder, $pageFile->getId());
 			$file->delete();
 			$this->pageMapper->deleteByFileId($pageFile->getId());

@@ -3,8 +3,10 @@
 namespace Unit\Fs;
 
 use OC\Files\Node\File;
+use OC\Files\Node\Folder;
+use OC\Files\View;
+use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Fs\UserFolderHelper;
-use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
 use OCP\IL10N;
@@ -14,27 +16,39 @@ use OCP\L10N\IFactory;
 use PHPUnit\Framework\TestCase;
 
 class UserFolderHelperTest extends TestCase {
-	private $collectivesFolder;
+	private $collectivesUserFolder;
 	private $userFolder;
 	private $rootFolder;
 	private $userManager;
 	private $l10nFactory;
 	private $helper;
+	private $collective1;
+	private $collective2;
+	private $userId = 'jane';
 
 	protected function setUp(): void {
 		parent::setUp();
 
-		$this->collectivesFolder = $this->getMockBuilder(Folder::class)
+		$this->collective1 = new Collective();
+		$this->collective1->setId(1);
+		$this->collective1->setName('collective1');
+		$this->collective2 = new Collective();
+		$this->collective2->setId(2);
+		$this->collective2->setName('collective2');
+
+		$this->collectivesUserFolder = $this->getMockBuilder(Folder::class)
 			->disableOriginalConstructor()
 			->getMock();
-		$this->collectivesFolder->method('getName')
+		$this->collectivesUserFolder->method('getName')
 			->willReturn('Collectives');
 
 		$this->userFolder = $this->getMockBuilder(Folder::class)
 			->disableOriginalConstructor()
 			->getMock();
 		$this->userFolder->method('newFolder')
-			->willReturn($this->collectivesFolder);
+			->willReturn($this->collectivesUserFolder);
+		$this->userFolder->method('get')
+			->willReturn($this->collectivesUserFolder);
 
 		$this->rootFolder = $this->getMockBuilder(IRootFolder::class)
 			->disableOriginalConstructor()
@@ -67,9 +81,9 @@ class UserFolderHelperTest extends TestCase {
 
 	public function testGetFolderExists(): void {
 		$this->userFolder->method('get')
-			->willReturn($this->collectivesFolder);
+			->willReturn($this->collectivesUserFolder);
 
-		self::assertEquals($this->collectivesFolder, $this->helper->get('jane'));
+		self::assertEquals($this->collectivesUserFolder, $this->helper->get('jane'));
 	}
 
 	public function testGetFileExists(): void {
@@ -80,13 +94,33 @@ class UserFolderHelperTest extends TestCase {
 		$this->userFolder->method('get')
 			->willReturn($file);
 
-		self::assertEquals($this->collectivesFolder, $this->helper->get('jane'));
+		self::assertEquals($this->collectivesUserFolder, $this->helper->get('jane'));
 	}
 
 	public function testGetFolderNotExists(): void {
 		$this->userFolder->method('get')
 			->willThrowException(new NotFoundException);
 
-		self::assertEquals($this->collectivesFolder, $this->helper->get('jane'));
+		self::assertEquals($this->collectivesUserFolder, $this->helper->get('jane'));
+	}
+
+	public function testGetCollectiveFolder(): void {
+		$view = $this->getMockBuilder(View::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$folder = new Folder('', $view, '/path/to/Folder');
+		$this->collectivesUserFolder->method('get')
+			->willReturn($folder);
+
+		self::assertEquals($folder, $this->helper->getCollectiveFolder($this->collective1->getName(), $this->userId));
+	}
+
+	public function testGetCollectiveFolderNotFoundException(): void {
+		$this->collectivesUserFolder->method('get')
+			->willThrowException(new NotFoundException);
+
+		$this->expectException(NotFoundException::class);
+		$this->expectExceptionMessage("Folder not found for collective collective2");
+		$this->helper->getCollectiveFolder($this->collective2->getName(), $this->userId);
 	}
 }

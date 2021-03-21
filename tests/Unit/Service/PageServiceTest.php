@@ -9,6 +9,7 @@ use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Db\PageMapper;
 use OCA\Collectives\Fs\NodeHelper;
+use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Model\PageFile;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\PageDoesNotExistException;
@@ -43,14 +44,19 @@ class PageServiceTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
-		$this->service = new PageService($pageMapper, $nodeHelper, $collectiveMapper);
+		$userFolderHelper = $this->getMockBuilder(UserFolderHelper::class)
+			->disableOriginalConstructor()
+			->getMock();
+
+		$this->service = new PageService($pageMapper, $nodeHelper, $collectiveMapper, $userFolderHelper);
 
 		$this->collectiveFolder = $this->getMockBuilder(Folder::class)
 			->disableOriginalConstructor()
 			->getMock();
-		$collectiveMapper->method('getCollectiveFolder')
+		$userFolderHelper->method('getCollectiveFolder')
 			->willReturn($this->collectiveFolder);
 		$collective = new Collective();
+		$collective->setName('collective');
 		$collectiveMapper->method('findById')
 			->willReturnMap([
 				[1, $this->userId, $collective],
