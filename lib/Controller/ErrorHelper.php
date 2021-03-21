@@ -7,6 +7,7 @@ use Closure;
 use OCA\Collectives\Service\AlreadyExistsException;
 use OCA\Collectives\Service\NotFoundException;
 
+use OCA\Collectives\Service\NotPermittedException;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 
@@ -19,6 +20,8 @@ trait ErrorHelper {
 	protected function handleErrorResponse(Closure $callback): DataResponse {
 		try {
 			return new DataResponse($callback());
+		} catch (NotPermittedException $e) {
+			return new DataResponse($e->getMessage(), Http::STATUS_FORBIDDEN);
 		} catch (NotFoundException $e) {
 			return new DataResponse($e->getMessage(), Http::STATUS_NOT_FOUND);
 		} catch (AlreadyExistsException $e) {

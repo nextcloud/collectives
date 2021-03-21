@@ -10,7 +10,10 @@ Feature: collective
     And user "john" doesn't see collective "mycollective"
 
   Scenario: Fail to delete a foreign collective
-    And user "john" fails to delete collective "mycollective"
+    And user "john" fails to delete foreign collective "mycollective" with member "jane"
+
+  Scenario: Fail to delete a collective as simple member
+    And user "alice" fails to delete collective "mycollective"
 
   Scenario: Delete an owned collective
     When user "jane" deletes collective "mycollective"
