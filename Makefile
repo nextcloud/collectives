@@ -74,6 +74,11 @@ po:
 l10n: po
 	php $(build_tools_dir)/translationtool.phar convert-po-files
 
+# Update psalm baseline
+psalm-baseline:
+	$(CURDIR)/vendor/bin/psalm.phar --set-baseline=tests/psalm-baseline.xml
+	$(CURDIR)/vendor/bin/psalm.phar --update-baseline
+
 text-app-includes:
 	for n in `cat .files_from_text`; do cp ../../apps/text/$$n $$n ; done
 
