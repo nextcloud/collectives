@@ -2,18 +2,14 @@
 
 namespace OCA\Collectives\Db;
 
-use OC\User\NoUserException;
 use OCA\Circles\Api\v1\Circles;
 use OCA\Circles\Exceptions\MemberDoesNotExistException;
 use OCA\Collectives\Fs\UserFolderHelper;
-use OCA\Collectives\Service\NotFoundException;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\AppFramework\QueryException;
 use OCP\DB\QueryBuilder\IQueryBuilder;
-use OCP\Files\Folder;
-use OCP\Files\NotPermittedException;
 use OCP\IDBConnection;
 
 /**
@@ -36,26 +32,6 @@ class CollectiveMapper extends QBMapper {
 		UserFolderHelper $userFolderHelper) {
 		parent::__construct($db, 'collectives', Collective::class);
 		$this->userFolderHelper = $userFolderHelper;
-	}
-
-	/**
-	 * @param Collective $collective
-	 * @param string     $userId
-	 *
-	 * @return Folder
-	 * @throws NotFoundException
-	 */
-	public function getCollectiveFolder(Collective $collective, string $userId): Folder {
-		try {
-			$folder = $this->userFolderHelper->get($userId)->get($collective->getName());
-		} catch (\OCP\Files\NotFoundException | NotPermittedException | NoUserException $e) {
-			throw new NotFoundException('Folder not found for collective ' . $collective->getName());
-		}
-
-		if (!($folder instanceof Folder)) {
-			throw new NotFoundException('Folder not found for collective ' . $collective->getName());
-		}
-		return $folder;
 	}
 
 	/**

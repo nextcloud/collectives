@@ -3,9 +3,11 @@
 
 namespace OCA\Collectives\Fs;
 
+use OC\User\NoUserException;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
+use OCP\Files\NotPermittedException;
 use OCP\L10N\IFactory;
 use OCP\IUserManager;
 
@@ -13,11 +15,11 @@ class UserFolderHelper {
 	/** @var IRootFolder */
 	private $rootFolder;
 
+	/** @var Folder */
+	private $userCollectivesFolder;
+
 	/** @var IUserManager */
 	private $userManager;
-
-	/** @var Folder */
-	private $userFolder;
 
 	/** @var IFactory */
 	private $l10nFactory;
@@ -69,10 +71,30 @@ class UserFolderHelper {
 	 * @return Folder
 	 */
 	public function get(string $userId): Folder {
-		if (!$this->userFolder) {
-			$this->userFolder = $this->initialize($userId);
+		if (!$this->userCollectivesFolder) {
+			$this->userCollectivesFolder = $this->initialize($userId);
 		}
 
-		return $this->userFolder;
+		return $this->userCollectivesFolder;
+	}
+
+	/**
+	 * @param string $collectiveName
+	 * @param string $userId
+	 *
+	 * @return Folder
+	 * @throws NotFoundException
+	 */
+	public function getCollectiveFolder(string $collectiveName, string $userId): Folder {
+		try {
+			$folder = $this->get($userId)->get($collectiveName);
+		} catch (\OCP\Files\NotFoundException | NotPermittedException | NoUserException $e) {
+			throw new NotFoundException('Folder not found for collective ' . $collectiveName);
+		}
+
+		if (!($folder instanceof Folder)) {
+			throw new NotFoundException('Folder not found for collective ' . $collectiveName);
+		}
+		return $folder;
 	}
 }

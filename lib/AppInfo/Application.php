@@ -23,7 +23,6 @@ use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Files\Config\IMountProviderCollection;
 use OCP\Files\IMimeTypeLoader;
-use OCP\IUserSession;
 use Psr\Container\ContainerInterface;
 
 class Application extends App implements IBootstrap {
