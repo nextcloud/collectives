@@ -8,6 +8,7 @@ use Closure;
 use OCA\Collectives\CacheListener;
 use OCA\Collectives\Command\ExpireCollectiveVersions;
 use OCA\Collectives\Fs\UserFolderHelper;
+use OCA\Collectives\Listeners\LoadAdditionalScriptsListener;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Mount\MountProvider;
 use OCA\Collectives\Search\CollectiveProvider;
@@ -15,6 +16,7 @@ use OCA\Collectives\Search\PageProvider;
 use OCA\Collectives\Service\CollectiveHelper;
 use OCA\Collectives\Versions\CollectiveVersionsExpireManager;
 use OCA\Collectives\Versions\VersionsBackend;
+use OCA\Files\Event\LoadAdditionalScriptsEvent;
 use OCP\App\IAppManager;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
@@ -36,6 +38,8 @@ class Application extends App implements IBootstrap {
 	 * @param IRegistrationContext $context
 	 */
 	public function register(IRegistrationContext $context): void {
+		$context->registerEventListener(LoadAdditionalScriptsEvent::class, LoadAdditionalScriptsListener::class);
+
 		$context->registerService(MountProvider::class, function (ContainerInterface $c) {
 			return new MountProvider(
 				$c->get(CollectiveHelper::class),
