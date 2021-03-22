@@ -89,3 +89,69 @@ js-build:
   artifacts:
     paths:
       - js
+
+js-unit:
+  image: node
+  stage: test
+  script:
+    - make test-js
+  before_script:
+    - make npm-init
+
+e2e:
+  stage: test
+  image: cypress/browsers
+  variables:
+    CYPRESS_baseUrl: http://nextcloud.local/index.php
+  services:
+    - name: $COMMIT_IMAGE
+      alias: nextcloud.local
+  script:
+    - $(npm bin)/wait-on -i 500 -t 240000 $CYPRESS_baseUrl
+    - $(npm bin)/cypress run --browser chrome
+  before_script:
+    - make npm-init
+    - $(npm bin)/cypress install
+    - $(npm bin)/cypress verify
+    - npm install --no-save wait-on
+  needs:
+    - build
+  artifacts:
+    paths:
+      - cypress/videos
+      - cypress/screenshots
+    expire_in: 1 day
+    when: on_failure
+
+# Job to build documentation website on Gitlab pages
+pages:
+  image: registry.gitlab.com/pages/hugo:latest
+  script:
+    - apk add --update --no-cache git
+    - git submodule update --init
+    - cat DEVELOPING.md >>docs/content/development/_index.md
+    - hugo --config=docs/config.toml
+    - mv build/pages public
+  artifacts:
+    paths:
+      - public
+  only:
+    - main
+
+build:
+  stage: build
+  image: docker:stable
+  services:
+      - docker:stable-dind
+  script:
+    - echo building $COMMIT_IMAGE
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker pull $LATEST_IMAGE || true
+    - make docker-ci
+    - docker push $COMMIT_IMAGE
+    - docker tag $COMMIT_IMAGE $LATEST_IMAGE
+    - docker push $LATEST_IMAGE
+  before_script:
+    - apk add --no-cache make rsync
+  needs:
+    - js-build
