@@ -146,22 +146,25 @@ class FeatureContext implements Context {
 	/**
 	 * @When user :user deletes collective :collective
 	 * @When user :user :fails to delete collective :collective
+	 * @When user :user :fails to delete foreign collective :collective with member :member
 	 *
 	 * @param string $user
 	 * @param string $collective
 	 * @param string $fail
 	 */
-	public function userDeletesCollective(string $user, string $collective, ?string $fail = null): void {
-		$this->setCurrentUser($user);
+	public function userDeletesCollective(string $user, string $collective, ?string $fail = null, ?string $member = null): void {
+		$this->setCurrentUser($member ? $member : $user);
 		$collectiveId = $this->collectiveIdByName($collective);
-		if ("fails" === $fail) {
-			if (null !== $collectiveId) {
-				throw new RuntimeException('Got a collectiveId while not expecting one');
-			}
-			return;
+		if (null === $collectiveId) {
+			throw new RuntimeException('Could not get collectiveId for ' . $collective);
 		}
+		$this->setCurrentUser($user);
 		$this->sendRequest('DELETE', '/apps/collectives/_collectives/' . $collectiveId);
-		$this->assertStatusCode($this->response, 200);
+		if ("fails" === $fail) {
+			$this->assertStatusCode($this->response, $member ? 404 : 403);
+		} else {
+			$this->assertStatusCode($this->response, 200);
+		}
 	}
 
 	/**
@@ -309,6 +312,9 @@ class FeatureContext implements Context {
 			$fd = $body->getRowsHash();
 			$options['form_params'] = $fd;
 		}
+
+		// Add Xdebug trigger variable as GET parameter
+		$fullUrl = $fullUrl . '?XDEBUG_SESSION=PHPSTORM';
 
 		try {
 			$this->response = $client->{$verb}($fullUrl, $options);

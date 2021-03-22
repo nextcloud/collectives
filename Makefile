@@ -83,10 +83,14 @@ text-app-includes:
 	for n in `cat .files_from_text`; do cp ../../apps/text/$$n $$n ; done
 
 # Testing
-test: test-php test-js
+test: php-test test-js
 
-test-php:
+php-test: php-unit-test php-integration-test
+
+php-unit-test:
 	$(CURDIR)/vendor/bin/phpunit --configuration phpunit.xml
+
+php-integration-test:
 	$(CURDIR)/vendor/bin/behat --config=tests/Integration/config/behat.yml
 
 test-js: node_modules

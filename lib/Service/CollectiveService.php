@@ -9,7 +9,7 @@ use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCP\AppFramework\QueryException;
 use OCP\Files\InvalidPathException;
-use OCP\Files\NotPermittedException;
+use OCP\Files\NotPermittedException as FilesNotPermittedException;
 use OCP\IUserManager;
 use OCP\L10N\IFactory;
 
@@ -72,7 +72,7 @@ class CollectiveService {
 	 * @param string $name
 	 *
 	 * @return Collective
-	 * @throws NotPermittedException
+	 * @throws FilesNotPermittedException
 	 */
 	public function createCollective(string $userId, string $name): Collective {
 		if (empty($name)) {
@@ -119,23 +119,31 @@ class CollectiveService {
 	 *
 	 * @return Collective
 	 * @throws NotFoundException
+	 * @throws NotPermittedException
 	 */
 	public function deleteCollective(string $userId, int $id): Collective {
 		if (null === $collective = $this->collectiveMapper->findById($id, $userId)) {
-			throw new NotFoundException('Collective not found: '. $id);
+			throw new NotFoundException('Collective not found: ' . $id);
 		}
 
+		$circleId = $collective->getCircleUniqueId();
 		try {
-			Circles::destroyCircle($collective->getCircleUniqueId());
+			$member = Circles::getMember($circleId, $userId, Circles::TYPE_USER);
 		} catch (QueryException $e) {
-			throw new NotFoundException('Circle not found: ' . $collective->getCircleUniqueId());
+			throw new NotFoundException('Collective not found: ' . $id);
 		}
+
+		if ($member->getLevel() < Circles::LEVEL_ADMIN) {
+			throw new NotPermittedException('Member ' . $userId . ' not allowed to delete collective: ' . $id);
+		}
+
+		Circles::destroyCircle($collective->getCircleUniqueId());
 
 		try {
 			if (null !== $collectiveFolder = $this->collectiveFolderManager->getFolder($collective->getId(), false)) {
 				$collectiveFolder->delete();
 			}
-		} catch (InvalidPathException | \OCP\Files\NotFoundException | NotPermittedException $e) {
+		} catch (InvalidPathException | \OCP\Files\NotFoundException | FilesNotPermittedException $e) {
 			throw new NotFoundException('Failed to delete collective folder');
 		}
 
