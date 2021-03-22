@@ -13,6 +13,7 @@ OC.L10N.register(
     "Could not delete the page" : "Seite konnte nicht entfernt werden",
     "Could not fetch page ${pageId}" : "Seite ${pageId} konnte nicht geladen werden",
     "Select a collective" : "Wähle ein Kollektiv aus",
+    "Delete" : "Löschen",
     "Create new collective" : "Erstelle ein neues Kollektiv",
     "Add emoji" : "Wähle einen Emoji",
     "New collective name" : "Name für das neue Kollektiv",

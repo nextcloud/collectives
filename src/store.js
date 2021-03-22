@@ -117,6 +117,9 @@ export default new Vuex.Store({
 			state.collectives.unshift(collective)
 			state.updatedCollective = collective
 		},
+		deleteCollective(state, { id }) {
+			state.collectives.splice(state.collectives.findIndex(c => c.id === id), 1)
+		},
 		pages(state, pages) {
 			state.pages = pages
 		},
@@ -221,6 +224,15 @@ export default new Vuex.Store({
 			const response = await axios.post(generateUrl('/apps/collectives/_collectives'), collective)
 			commit('addCollective', response.data)
 			commit('done', 'collective')
+		},
+
+		/**
+		 * Delete a collective with the given id
+		 * @param {Number} id ID of the colletive to be deleted
+		 */
+		async deleteCollective({ commit }, { id }) {
+			await axios.delete(generateUrl('/apps/collectives/_collectives/' + id))
+			commit('deleteCollective', { id })
 		},
 
 	},

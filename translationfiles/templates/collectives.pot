@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2021-03-21 07:56+0100\n"
+"POT-Creation-Date: 2021-03-22 14:21+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: /collectives/lib/Fs/UserFolderHelper.php:50
+#: /collectives/lib/Fs/UserFolderHelper.php:52
 #: /collectives/lib/Search/CollectiveProvider.php:58
 #: /collectives/lib/Search/CollectiveProvider.php:106
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:2
@@ -73,97 +73,101 @@ msgid "Select a collective"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:8
-msgid "Create new collective"
+msgid "Delete"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:9
-msgid "Add emoji"
+msgid "Create new collective"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:10
-msgid "New collective name"
+msgid "Add emoji"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:11
-msgid "Title"
+msgid "New collective name"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:12
-msgid "Done with editing"
+msgid "Title"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:13
-msgid "Edit page"
+msgid "Done with editing"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:14
-msgid "Delete page"
+msgid "Edit page"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:15
-msgid "Show old versions"
+msgid "Delete page"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:16
-msgid "Add a page"
+msgid "Show old versions"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:17
-msgid "Last edited by {user}"
+msgid "Add a page"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:18
-msgid "Current version"
+msgid "Last edited by {user}"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:19
-msgid "No other versions available"
+msgid "Current version"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:20
-msgid "Could not get page versions"
+msgid "No other versions available"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:21
+msgid "Could not get page versions"
+msgstr ""
+
 #: /collectives/specialVueFakeDummyForL10nScript.js:22
+#: /collectives/specialVueFakeDummyForL10nScript.js:23
 msgid "%n byte"
 msgid_plural "%n bytes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:23
+#: /collectives/specialVueFakeDummyForL10nScript.js:24
 msgid "Restore this version"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:24
+#: /collectives/specialVueFakeDummyForL10nScript.js:25
 msgid "Back to current version"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:25
+#: /collectives/specialVueFakeDummyForL10nScript.js:26
 msgid "Reverted {page} to revision {timestamp}."
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:26
+#: /collectives/specialVueFakeDummyForL10nScript.js:27
 msgid "Failed to revert {page} to revision {timestamp}."
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:27
+#: /collectives/specialVueFakeDummyForL10nScript.js:28
 msgid "No collective selected"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:28
+#: /collectives/specialVueFakeDummyForL10nScript.js:29
 msgid "Select a collective or create a new one on the left."
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:29
+#: /collectives/specialVueFakeDummyForL10nScript.js:30
 msgid "Could not fetch collectives"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:30
+#: /collectives/specialVueFakeDummyForL10nScript.js:31
 msgid "Could not fetch pages"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:31
+#: /collectives/specialVueFakeDummyForL10nScript.js:32
 msgid "Could not create the collective"
 msgstr ""
 
