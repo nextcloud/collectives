@@ -1,6 +1,6 @@
 <template>
 	<Content app-name="collective">
-		<Nav @newCollective="newCollective" />
+		<Nav @newCollective="newCollective" @deleteCollective="deleteCollective" />
 		<AppContent>
 			<CollectiveHeading v-if="currentCollective" />
 			<Collective v-if="collectiveParam"
@@ -153,6 +153,22 @@ export default {
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not create the collective'))
+			}
+		},
+
+		/**
+		 * Delete a collective with the given name
+		 * @param {Object} collective Properties of the collective
+		 */
+		async deleteCollective(collective) {
+			try {
+				await this.$store.dispatch('deleteCollective', collective)
+				if (this.$store.getters.collectiveParam === collective.name) {
+					this.$router.push('/')
+				}
+			} catch (e) {
+				console.error(e)
+				showError(t('collectives', 'Could not delete the collective'))
 			}
 		},
 
