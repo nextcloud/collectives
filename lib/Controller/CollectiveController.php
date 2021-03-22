@@ -7,22 +7,29 @@ use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
 use OCP\IUserSession;
+use Psr\Log\LoggerInterface;
 
 class CollectiveController extends Controller {
 	/** @var CollectiveService */
 	private $service;
+
 	/** @var IUserSession */
 	private $userSession;
+
+	/** @var LoggerInterface */
+	private $logger;
 
 	use ErrorHelper;
 
 	public function __construct(string $AppName,
 								IRequest $request,
 								CollectiveService $service,
-								IUserSession $userSession) {
+								IUserSession $userSession,
+								LoggerInterface $logger) {
 		parent::__construct($AppName, $request);
 		$this->service = $service;
 		$this->userSession = $userSession;
+		$this->logger = $logger;
 	}
 
 	/**
@@ -40,7 +47,7 @@ class CollectiveController extends Controller {
 	public function index(): DataResponse {
 		return $this->handleErrorResponse(function () {
 			return $this->service->getCollectives($this->getUserId());
-		});
+		}, $this->logger);
 	}
 
 	/**
@@ -53,7 +60,7 @@ class CollectiveController extends Controller {
 	public function create(string $name): DataResponse {
 		return $this->handleErrorResponse(function () use ($name) {
 			return $this->service->createCollective($this->getUserId(), $name);
-		});
+		}, $this->logger);
 	}
 
 	/**
@@ -66,6 +73,6 @@ class CollectiveController extends Controller {
 	public function destroy(int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($id) {
 			return $this->service->deleteCollective($this->getUserId(), $id);
-		});
+		}, $this->logger);
 	}
 }

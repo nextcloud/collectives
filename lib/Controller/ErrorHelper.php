@@ -10,14 +10,16 @@ use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
+use Psr\Log\LoggerInterface;
 
 trait ErrorHelper {
 	/**
-	 * @param Closure $callback
+	 * @param Closure              $callback
+	 * @param LoggerInterface|null $logger
 	 *
 	 * @return DataResponse
 	 */
-	protected function handleErrorResponse(Closure $callback): DataResponse {
+	protected function handleErrorResponse(Closure $callback, ?LoggerInterface $logger): DataResponse {
 		try {
 			return new DataResponse($callback());
 		} catch (NotPermittedException $e) {
@@ -27,7 +29,10 @@ trait ErrorHelper {
 		} catch (AlreadyExistsException $e) {
 			return new DataResponse($e->getMessage(), Http::STATUS_UNPROCESSABLE_ENTITY);
 		} catch (\Throwable $e) {
-			return new DataResponse($e->getMessage(), Http::STATUS_INTERNAL_SERVER_ERROR);
+			if ($logger) {
+				$logger->error('Collectives App Error: ' . $e->getMessage());
+			}
+			return new DataResponse('Internal Server Error', Http::STATUS_INTERNAL_SERVER_ERROR);
 		}
 	}
 }

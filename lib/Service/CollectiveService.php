@@ -137,11 +137,7 @@ class CollectiveService {
 			throw new NotPermittedException('Member ' . $userId . ' not allowed to delete collective: ' . $id);
 		}
 
-		try {
-			Circles::destroyCircle($collective->getCircleUniqueId());
-		} catch (QueryException $e) {
-			throw new NotFoundException('Could not delete circle ' . $circleId);
-		}
+		Circles::destroyCircle($collective->getCircleUniqueId());
 
 		try {
 			if (null !== $collectiveFolder = $this->collectiveFolderManager->getFolder($collective->getId(), false)) {

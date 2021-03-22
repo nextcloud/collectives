@@ -7,22 +7,29 @@ use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
 use OCP\IUserSession;
+use Psr\Log\LoggerInterface;
 
 class PageController extends Controller {
 	/** @var PageService */
 	private $service;
+
 	/** @var IUserSession */
 	private $userSession;
+
+	/** @var LoggerInterface */
+	private $logger;
 
 	use ErrorHelper;
 
 	public function __construct(string $appName,
 								IRequest $request,
 								PageService $service,
-								IUserSession $userSession) {
+								IUserSession $userSession,
+								LoggerInterface $logger) {
 		parent::__construct($appName, $request);
 		$this->service = $service;
 		$this->userSession = $userSession;
+		$this->logger = $logger;
 	}
 
 	/**
@@ -40,7 +47,7 @@ class PageController extends Controller {
 	public function index(int $collectiveId): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId) {
 			return $this->service->findAll($this->getUserId(), $collectiveId);
-		});
+		}, $this->logger);
 	}
 
 	/**
@@ -54,7 +61,7 @@ class PageController extends Controller {
 	public function get(int $collectiveId, int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $id) {
 			return $this->service->find($this->getUserId(), $collectiveId, $id);
-		});
+		}, $this->logger);
 	}
 
 	/**
@@ -68,7 +75,7 @@ class PageController extends Controller {
 	public function create(int $collectiveId, string $title): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $title) {
 			return $this->service->create($this->getUserId(), $collectiveId, $title);
-		});
+		}, $this->logger);
 	}
 
 	/**
@@ -82,7 +89,7 @@ class PageController extends Controller {
 	public function touch(int $collectiveId, int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $id) {
 			return $this->service->touch($this->getUserId(), $collectiveId, $id);
-		});
+		}, $this->logger);
 	}
 
 	/**
@@ -97,7 +104,7 @@ class PageController extends Controller {
 	public function rename(int $collectiveId, int $id, string $title): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $id, $title) {
 			return $this->service->rename($this->getUserId(), $collectiveId, $id, $title);
-		});
+		}, $this->logger);
 	}
 
 	/**
@@ -111,6 +118,6 @@ class PageController extends Controller {
 	public function destroy(int $collectiveId, int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $id) {
 			return $this->service->delete($this->getUserId(), $collectiveId, $id);
-		});
+		}, $this->logger);
 	}
 }
