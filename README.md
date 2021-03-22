@@ -31,9 +31,11 @@ Documentation for developers can be found at [DEVELOPING.md](DEVELOPING.md).
 
 ## Maintainers
 
-* Azul <azul@riseup.net>
-* Jonas <jonas@freesources.org>
+* Azul and Jonas <collectivecloud@systemli.org>
 
 ## Licence
 
 AGPL v3 or later. See [COPYING](COPYING) for the full licence text.
+
+The app logo and corresponding icons were contributed by Jörg Schmidt from
+Institut für Gebrauchsgrafik <info@institut.gebrauchsgrafik.org>.
