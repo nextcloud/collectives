@@ -27,8 +27,7 @@ class CollectiveFolderManagerTest extends TestCase {
 		$this->manager = new CollectiveFolderManager($rootFolder, $connection, $systemConfig);
 	}
 
-	protected function tearDown(): void
-	{
+	protected function tearDown(): void {
 		parent::tearDown();
 
 		unlink(__DIR__ . '/Readme.de.md');
