@@ -12,7 +12,8 @@ use OCP\IDBConnection;
 
 class CollectiveFolderManager {
 	public const SKELETON_DIR = 'skeleton';
-	public const LANDING_PAGE = 'Readme.md';
+	public const LANDING_PAGE = 'Readme';
+	public const LANDING_PAGE_SUFFIX = 'md';
 
 	/** @var IRootFolder */
 	private $rootFolder;
@@ -102,6 +103,18 @@ class CollectiveFolderManager {
 		}
 
 		return $skeletonFolder;
+	}
+
+	/**
+	 * @param string $lang
+	 *
+	 * @return string
+	 */
+	public function getLandingPagePath(string $path, string $lang): string {
+		$landingPagePathEnglish = $path . '/' . self::LANDING_PAGE . '.en.' . self::LANDING_PAGE_SUFFIX;
+		$landingPagePathLocalized = $path . '/' . self::LANDING_PAGE . '.' . $lang . '.' . self::LANDING_PAGE_SUFFIX;
+
+		return file_exists($landingPagePathLocalized) ? $landingPagePathLocalized : $landingPagePathEnglish;
 	}
 
 	/**

@@ -10,34 +10,51 @@ use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCP\AppFramework\QueryException;
 use OCP\Files\InvalidPathException;
 use OCP\Files\NotPermittedException;
+use OCP\IUserManager;
+use OCP\L10N\IFactory;
 
 class CollectiveService {
 	/** @var CollectiveMapper */
 	private $collectiveMapper;
+
 	/** @var CollectiveHelper */
 	private $collectiveHelper;
+
 	/** @var NodeHelper */
 	private $nodeHelper;
+
 	/** @var CollectiveFolderManager */
 	private $collectiveFolderManager;
+
+	/** @var IUserManager */
+	private $userManager;
+
+	/** @var IFactory */
+	private $l10nFactory;
 
 	/**
 	 * CollectiveService constructor.
 	 *
 	 * @param CollectiveMapper         $collectiveMapper
-	 * @param CollectiveHelper   $collectiveHelper
+	 * @param CollectiveHelper         $collectiveHelper
 	 * @param NodeHelper               $nodeHelper
 	 * @param CollectiveFolderManager  $collectiveFolderManager
+	 * @param IUserManager             $userManager
+	 * @param IFactory                 $l10nFactory
 	 */
 	public function __construct(
 		CollectiveMapper $collectiveMapper,
 		CollectiveHelper $collectiveHelper,
 		NodeHelper $nodeHelper,
-		CollectiveFolderManager $collectiveFolderManager) {
+		CollectiveFolderManager $collectiveFolderManager,
+		IUserManager $userManager,
+		IFactory $l10nFactory) {
 		$this->collectiveMapper = $collectiveMapper;
 		$this->collectiveHelper = $collectiveHelper;
 		$this->nodeHelper = $nodeHelper;
 		$this->collectiveFolderManager = $collectiveFolderManager;
+		$this->userManager = $userManager;
+		$this->l10nFactory = $l10nFactory;
 	}
 
 	/**
@@ -85,8 +102,11 @@ class CollectiveService {
 		$collectiveFolder = $this->collectiveFolderManager->getFolder($collective->getId());
 		if (null !== $collectiveFolder &&
 			!$collectiveFolder->nodeExists(CollectiveFolderManager::LANDING_PAGE)) {
-			if (false !== $content = file_get_contents(__DIR__ . '/../../skeleton/' . CollectiveFolderManager::LANDING_PAGE)) {
-				$collectiveFolder->newFile(CollectiveFolderManager::LANDING_PAGE, $content);
+			$userLang = $this->l10nFactory->getUserLanguage($this->userManager->get($userId));
+			$landingPageDir = __DIR__ . '/../../' . CollectiveFolderManager::SKELETON_DIR;
+			$landingPagePath = $this->collectiveFolderManager->getLandingPagePath($landingPageDir, $userLang);
+			if (false !== $content = file_get_contents($landingPagePath)) {
+				$collectiveFolder->newFile(CollectiveFolderManager::LANDING_PAGE . '.' . CollectiveFolderManager::LANDING_PAGE_SUFFIX, $content);
 			}
 		}
 
