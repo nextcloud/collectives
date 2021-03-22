@@ -1,7 +1,9 @@
 <template>
 	<div id="app-content-wrapper">
 		<PagesList
-			@newPage="newPage" />
+			:show-details="showDetails"
+			@newPage="newPage"
+			@toggleDetails="$emit('toggleDetails')" />
 		<AppContentDetails v-if="currentPage && !$store.state.loading.collective">
 			<Version v-if="currentVersion"
 				:page="currentPage"
@@ -50,6 +52,10 @@ export default {
 		currentVersionTimestamp: {
 			type: Number,
 			required: true,
+		},
+		showDetails: {
+			type: Boolean,
+			default: true,
 		},
 	},
 

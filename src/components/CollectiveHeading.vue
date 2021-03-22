@@ -1,7 +1,8 @@
 <template>
 	<div class="collective-heading">
 		<h2>
-			<router-link :to="`/${collective.name}`">
+			<router-link :to="`/${collective.name}`"
+				@click.native="$emit('toggleDetails')">
 				<span v-if="collective.emoji" class="emoji">
 					{{ collective.emoji }}
 				</span>
