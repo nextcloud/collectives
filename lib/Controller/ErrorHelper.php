@@ -30,7 +30,7 @@ trait ErrorHelper {
 			return new DataResponse($e->getMessage(), Http::STATUS_UNPROCESSABLE_ENTITY);
 		} catch (\Throwable $e) {
 			if ($logger) {
-				$logger->error('Collectives App Error: ' . $e->getMessage());
+				$logger->error('Collectives App Error: ' . $e->getMessage(), ['exception' => $e]);
 			}
 			return new DataResponse('Internal Server Error', Http::STATUS_INTERNAL_SERVER_ERROR);
 		}
