@@ -1,5 +1,6 @@
 <template>
-	<AppContentList :class="{loading: $store.state.loading.collective}">
+	<AppContentList :class="{loading: $store.state.loading.collective}"
+		:show-details="showDetails">
 		<div class="app-content-list-item">
 			<button class="primary"
 				:disabled="$store.state.loading.page"
@@ -12,7 +13,8 @@
 			:key="page.title"
 			:to="`/${collectiveParam}/${encodeURIComponent(page.title)}`"
 			:class="{active: isActive(page)}"
-			class="app-content-list-item">
+			class="app-content-list-item"
+			@click.native="$emit('toggleDetails')">
 			<div class="app-content-list-item-icon"
 				:style="iconStyle(`Page-${page.id}`)">
 				{{ firstGrapheme(page.title) }}
@@ -47,6 +49,13 @@ export default {
 	components: {
 		AppContentList,
 		Avatar,
+	},
+
+	props: {
+		showDetails: {
+			type: Boolean,
+			default: true,
+		},
 	},
 
 	computed: {
