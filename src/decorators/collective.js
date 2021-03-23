@@ -43,11 +43,12 @@ function title(name) {
 	return name.replace(new RegExp(`${emoji(name)}$`), '').trim()
 }
 
-export default function({ id, name, circleUniqueId }) {
+export default function({ id, name, circleUniqueId, admin }) {
 	return {
 		id,
 		name,
 		circleUniqueId,
+		admin,
 		title: title(name),
 		emoji: emoji(name),
 	}
