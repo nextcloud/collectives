@@ -23,17 +23,17 @@ In your Nextcloud instance, simply navigate to **»Apps«**, find the
 
 	]]></description>
 	<version>0.2.3</version>
-	<licence>AGPLv3</licence>
+	<licence>agpl</licence>
 	<author>CollectiveCloud Team</author>
 	<namespace>Collectives</namespace>
+	<types>
+		<filesystem/>
+	</types>
 	<documentation>
 		<user>https://collectivecloud.gitlab.io/collectives/usage/</user>
 		<admin>https://collectivecloud.gitlab.io/collectives/administration/</admin>
 		<developer>https://collectivecloud.gitlab.io/collectives/development/</developer>
 	</documentation>
-	<types>
-		<filesystem/>
-	</types>
 	<category>organization</category>
 	<category>social</category>
 	<website>https://gitlab.com/collectivecloud/collectives</website>
@@ -45,12 +45,6 @@ In your Nextcloud instance, simply navigate to **»Apps«**, find the
 	<dependencies>
 		<nextcloud min-version="20" max-version="21" />
 	</dependencies>
-	<navigations>
-		<navigation>
-			<name>Collectives</name>
-			<route>collectives.start.index</route>
-		</navigation>
-	</navigations>
 	<background-jobs>
 		<job>OCA\Collectives\BackgroundJob\PurgeObsoletePages</job>
 		<job>OCA\Collectives\BackgroundJob\ExpireCollectiveVersions</job>
@@ -59,6 +53,12 @@ In your Nextcloud instance, simply navigate to **»Apps«**, find the
 		<command>OCA\Collectives\Command\PurgeObsoletePages</command>
 		<command>OCA\Collectives\Command\ExpireCollectiveVersions</command>
 	</commands>
+	<navigations>
+		<navigation>
+			<name>Collectives</name>
+			<route>collectives.start.index</route>
+		</navigation>
+	</navigations>
 	<versions>
 		<backend for="OCA\Collectives\Mount\CollectiveStorage">OCA\Collectives\Versions\VersionsBackend</backend>
 	</versions>
