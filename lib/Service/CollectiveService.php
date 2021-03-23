@@ -6,6 +6,7 @@ use OCA\Circles\Api\v1\Circles;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Fs\NodeHelper;
+use OCA\Collectives\Model\CollectiveInfo;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCP\AppFramework\QueryException;
 use OCP\Files\InvalidPathException;
@@ -60,7 +61,7 @@ class CollectiveService {
 	/**
 	 * @param string $userId
 	 *
-	 * @return array
+	 * @return CollectiveInfo[]
 	 * @throws QueryException
 	 */
 	public function getCollectives(string $userId): array {
@@ -71,10 +72,10 @@ class CollectiveService {
 	 * @param string $userId
 	 * @param string $name
 	 *
-	 * @return Collective
+	 * @return CollectiveInfo
 	 * @throws FilesNotPermittedException
 	 */
-	public function createCollective(string $userId, string $name): Collective {
+	public function createCollective(string $userId, string $name): CollectiveInfo {
 		if (empty($name)) {
 			throw new \RuntimeException('Empty collective name is not allowed');
 		}
@@ -98,6 +99,9 @@ class CollectiveService {
 		$collective->setCircleUniqueId($circle->getUniqueId());
 		$collective = $this->collectiveMapper->insert($collective);
 
+		// Read in collectiveInfo object
+		$collectiveInfo = new CollectiveInfo($collective, true);
+
 		// Create folder for collective and optionally copy default landing page
 		$collectiveFolder = $this->collectiveFolderManager->getFolder($collective->getId());
 		if (null !== $collectiveFolder &&
@@ -110,14 +114,14 @@ class CollectiveService {
 			}
 		}
 
-		return $collective;
+		return $collectiveInfo;
 	}
 
 	/**
 	 * @param string $userId
 	 * @param int    $id
 	 *
-	 * @return Collective
+	 * @return CollectiveInfo
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
@@ -147,6 +151,6 @@ class CollectiveService {
 			throw new NotFoundException('Failed to delete collective folder');
 		}
 
-		return $this->collectiveMapper->delete($collective);
+		return new CollectiveInfo($this->collectiveMapper->delete($collective), true);
 	}
 }

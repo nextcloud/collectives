@@ -81,13 +81,13 @@ class CollectiveProvider implements IProvider {
 	 */
 	public function search(IUser $user, ISearchQuery $query): SearchResult {
 		if ($this->appManager->isEnabledForUser('circles', $user)) {
-			$collectives = $this->collectiveHelper->getCollectivesForUser($user->getUID());
+			$collectiveInfos = $this->collectiveHelper->getCollectivesForUser($user->getUID(), false);
 		} else {
-			$collectives = [];
+			$collectiveInfos = [];
 		}
 
 		$collectiveSearchResults = [];
-		foreach ($collectives as $collective) {
+		foreach ($collectiveInfos as $collective) {
 			if (stripos($collective->getName(), $query->getTerm()) === false) {
 				continue;
 			}
