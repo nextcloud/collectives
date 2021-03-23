@@ -33,10 +33,8 @@ ifeq (, $(composer))
 	curl -sS https://getcomposer.org/installer | php
 	mv composer.phar $(build_tools_dir)
 	php $(build_tools_dir)/composer.phar install --prefer-dist
-	php $(build_tools_dir)/composer.phar update --prefer-dist
 else
 	composer install --prefer-dist
-	composer update --prefer-dist
 endif
 
 npm-init:
