@@ -53,6 +53,25 @@ describe('Collective', function() {
 				.should('contain', 'Add a page')
 		})
 	})
+	describe('delete collective', function() {
+		before(function() {
+			cy.login('bob', 'bob', '/apps/collectives')
+			cy.createCollective('Delete me')
+		})
+		it('Allows deleting the collective', function() {
+			cy.get('.app-navigation-toggle')
+				.click()
+			cy.get('.app-navigation-entry')
+				.contains('li', 'Delete me')
+				.find('.action-item__menutoggle')
+				.click()
+			cy.get('button')
+				.contains('Delete')
+				.click()
+			cy.get('.app-navigation-entry')
+				.should('not.contain', 'Delete me')
+		})
+	})
 	describe('in the files app', function() {
 		before(function() {
 			cy.login('bob', 'bob', '/apps/files')
