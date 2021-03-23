@@ -88,13 +88,13 @@ class PageProvider implements IProvider {
 	 */
 	public function search(IUser $user, ISearchQuery $query): SearchResult {
 		if ($this->appManager->isEnabledForUser('circles', $user)) {
-			$collectives = $this->collectiveHelper->getCollectivesForUser($user->getUID());
+			$collectiveInfos = $this->collectiveHelper->getCollectivesForUser($user->getUID(), false);
 		} else {
-			$collectives = [];
+			$collectiveInfos = [];
 		}
 
 		$pageSearchResults = [];
-		foreach ($collectives as $collective) {
+		foreach ($collectiveInfos as $collective) {
 			$pages = $this->pageService->findByString($user->getUID(), $collective->getId(), $query->getTerm());
 			foreach ($pages as $page) {
 				$pageSearchResults[] = new SearchResultEntry(

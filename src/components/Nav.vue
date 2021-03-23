@@ -12,7 +12,7 @@
 				<template v-if="collective.emoji" #icon>
 					{{ collective.emoji }}
 				</template>
-				<template #actions>
+				<template v-if="collective.admin" #actions>
 					<ActionButton icon="icon-delete" @click="deleteCollective(collective)">
 						{{ t('collectives', 'Delete') }}
 					</ActionButton>

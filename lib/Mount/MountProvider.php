@@ -63,8 +63,8 @@ class MountProvider implements IMountProvider {
 		if (!$this->appManager->isEnabledForUser('circles', $user)) {
 			return $folders;
 		}
-		$collectives = $this->collectiveHelper->getCollectivesForUser($user->getUID());
-		foreach ($collectives as $c) {
+		$collectiveInfos = $this->collectiveHelper->getCollectivesForUser($user->getUID(), false);
+		foreach ($collectiveInfos as $c) {
 			$cacheEntry = $this->collectiveFolderManager->getFolderFileCache($c->getId());
 			$folders[] = [
 				'folder_id' => $c->getId(),
