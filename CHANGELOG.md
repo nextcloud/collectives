@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.3.0 - 2021-03-23
+
+### ✨ New
+- 🖼️ New icon for the Collectives app \o/.
+- 📂 In the files app you now find Collectives in a dedicated subfolder.
+- 👁️ Collective folders now have their own icon.
+- 🗺️ Support for localized start page for new collectives.
+- 🗑️ Collectives can finally be deleted (by their owners).
+- 📱 Improved mobile experience - you can now see the page content.
+
+### Fixed
+- 🚚 Garbage collector for obsolete database entries.
+- 3️⃣ Treat digits as non-emoji characters in collective names.
+- 🔎 Check if Circles app is installed in SearchProviders.
+
+### Upgrades
+- 🚀 Improved support for PHP 8.0 and Nextcloud 21.
+
+
 ## 0.2.3 - 2021-03-10
 
 ### Fixed
