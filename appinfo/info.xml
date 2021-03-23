@@ -5,15 +5,35 @@
 	<name>Collectives</name>
 	<summary>A place for activist and community projects to build shared knowledge</summary>
 	<description><![CDATA[
-Collectives is a Nextcloud App for activist and community projects to organize together. Come and gather in collectives to build shared knowledge.
-]]></description>
-	<version>0.2.3</version>
-	<licence>AGPLv3</licence>
+Collectives is a Nextcloud App for activist and community projects to organize together.
+Come and gather in collectives to build shared knowledge.
+
+* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are
+  tied to a [Nextcloud Circle](https://github.com/nextcloud/circles) and
+  owned by the collective.
+* 📝 **Collaborative page editing** like known from Etherpad thanks to the
+  [Text app](https://github.com/nextcloud/text).
+* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**
+  for page formatting.
+
+## Installation
+
+In your Nextcloud instance, simply navigate to **»Apps«**, find the
+**»Circles«** and **»Collectives«** apps and enable them.
+
+	]]></description>
+	<version>0.3.0</version>
+	<licence>agpl</licence>
 	<author>CollectiveCloud Team</author>
 	<namespace>Collectives</namespace>
 	<types>
 		<filesystem/>
 	</types>
+	<documentation>
+		<user>https://collectivecloud.gitlab.io/collectives/usage/</user>
+		<admin>https://collectivecloud.gitlab.io/collectives/administration/</admin>
+		<developer>https://collectivecloud.gitlab.io/collectives/development/</developer>
+	</documentation>
 	<category>organization</category>
 	<category>social</category>
 	<website>https://gitlab.com/collectivecloud/collectives</website>
@@ -25,12 +45,6 @@ Collectives is a Nextcloud App for activist and community projects to organize t
 	<dependencies>
 		<nextcloud min-version="20" max-version="21" />
 	</dependencies>
-	<navigations>
-		<navigation>
-			<name>Collectives</name>
-			<route>collectives.start.index</route>
-		</navigation>
-	</navigations>
 	<background-jobs>
 		<job>OCA\Collectives\BackgroundJob\PurgeObsoletePages</job>
 		<job>OCA\Collectives\BackgroundJob\ExpireCollectiveVersions</job>
@@ -39,6 +53,12 @@ Collectives is a Nextcloud App for activist and community projects to organize t
 		<command>OCA\Collectives\Command\PurgeObsoletePages</command>
 		<command>OCA\Collectives\Command\ExpireCollectiveVersions</command>
 	</commands>
+	<navigations>
+		<navigation>
+			<name>Collectives</name>
+			<route>collectives.start.index</route>
+		</navigation>
+	</navigations>
 	<versions>
 		<backend for="OCA\Collectives\Mount\CollectiveStorage">OCA\Collectives\Versions\VersionsBackend</backend>
 	</versions>
