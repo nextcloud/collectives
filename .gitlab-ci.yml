@@ -2,7 +2,6 @@ image: registry.gitlab.com/collectivecloud/docker-builds:php8.0-nc21
 
 stages:
   - prepare
-  - build
   - test
 
 # Select what we should cache between builds
@@ -22,9 +21,9 @@ variables:
 
 # App build job
 
-build:
+Build App:
   image: node
-  stage: build
+  stage: prepare
   script:
     - echo "BUILD_VERSION=$CI_COMMIT_SHORT_SHA" >>build.env
     - echo "BUILD_JOB_ID=$CI_JOB_ID" >>build.env
@@ -41,7 +40,7 @@ build:
 
 # PHP jobs
 
-php-static-psalm-analysis:
+Static PHP Analysis:
   stage: prepare
   script:
     - vendor/bin/psalm.phar
@@ -49,7 +48,7 @@ php-static-psalm-analysis:
     - make composer
 
 .php-unit: &php-unit
-  stage: test
+  stage: prepare
   script:
     - vendor/bin/phpunit --configuration phpunit.xml --coverage-text --colors=never
   before_script:
@@ -58,13 +57,29 @@ php-static-psalm-analysis:
   services:
     - mariadb:latest
 
-php-unit-php7.3-nc20:
+Unit Test PHP 7.3 nextcloud 20:
   <<: *php-unit
   image: registry.gitlab.com/collectivecloud/docker-builds:php7.3-nc20
 
-php-unit-php8.0-nc21:
+Unit Test PHP 8.0 nextcloud 21:
   <<: *php-unit
   image: registry.gitlab.com/collectivecloud/docker-builds:php8.0-nc21
+
+Lint Javascript:
+  image: node
+  stage: prepare
+  script:
+    - make lint
+  before_script:
+    - make npm-init
+
+Unit Test Javascript:
+  image: node
+  stage: prepare
+  script:
+    - make test-js
+  before_script:
+    - make npm-init
 
 .php-integration: &php-integration
   stage: test
@@ -80,58 +95,51 @@ php-unit-php8.0-nc21:
   services:
     - mariadb:latest
 
-php-integration-php7.3-nc20:
+API PHP 7.3 nextcloud 20:
   <<: *php-integration
   image: registry.gitlab.com/collectivecloud/docker-builds:php7.3-nc20
 
-php-integration-php8.0-nc21:
+API PHP 8.0 nextcloud 21:
   <<: *php-integration
   image: registry.gitlab.com/collectivecloud/docker-builds:php8.0-nc21
+  allow_failure: true
 
-# JS jobs
-
-js-lint:
-  image: node
-  stage: prepare
-  script:
-    - make lint
-  before_script:
-    - make npm-init
-
-js-unit:
-  image: node
-  stage: test
-  script:
-    - make test-js
-  before_script:
-    - make npm-init
-
-e2e:
+.browser-test: &browser-test
   stage: test
   image: cypress/browsers
   variables:
     CYPRESS_baseUrl: http://nextcloud.local/index.php
     APP_SOURCE_URL: "https://gitlab.com/collectivecloud/collectives/-/jobs/${BUILD_JOB_ID}/artifacts/raw/build/release/collectives-${BUILD_VERSION}.tar.gz"
-  services:
-    - name: registry.gitlab.com/collectivecloud/docker-builds:php8.0-nc21
-      alias: nextcloud.local
-      entrypoint: ["/usr/local/bin/run.sh"]
   script:
     - $(npm bin)/wait-on -i 500 -t 240000 $CYPRESS_baseUrl
-    - $(npm bin)/cypress run --browser chrome
+    - $(npm bin)/cypress run --browser chrome --config video=false
   before_script:
     - make npm-init
     - $(npm bin)/cypress install
     - $(npm bin)/cypress verify
     - npm install --no-save wait-on
   needs:
-    - build
+    - Build App
   artifacts:
     paths:
       - cypress/videos
       - cypress/screenshots
     expire_in: 1 day
     when: on_failure
+
+Browser PHP 8.0 nextcloud 21:
+  <<: *browser-test
+  services:
+    - name: registry.gitlab.com/collectivecloud/docker-builds:php8.0-nc21
+      alias: nextcloud.local
+      entrypoint: ["/usr/local/bin/run.sh"]
+
+Browser PHP 7.3 nextcloud 20:
+  <<: *browser-test
+  services:
+    - name: registry.gitlab.com/collectivecloud/docker-builds:php7.3-nc20
+      alias: nextcloud.local
+      entrypoint: ["/usr/local/bin/run.sh"]
 
 # Job to build documentation website on Gitlab pages
 pages:
