@@ -139,12 +139,19 @@ release: js/collectives.js
 	rsync -a --delete --delete-excluded \
 		--exclude=".[a-z]*" \
 		--exclude="Makefile" \
+		--exclude="Dockerfile" \
+		--exclude="babel.config.js" \
 		--exclude="build" \
 		--exclude="composer.*" \
+		--exclude="cypress" \
+		--exclude="cypress.json" \
+		--exclude="docs" \
+		--exclude="jest.config.json" \
 		--exclude="node_modules" \
 		--exclude="package-lock.json" \
 		--exclude="package.json" \
 		--exclude="phpunit.xml" \
+		--exclude="psalm.xml" \
 		--exclude="src" \
 		--exclude="tests" \
 		--exclude="vendor" \
