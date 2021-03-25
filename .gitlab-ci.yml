@@ -1,13 +1,29 @@
-image: registry.gitlab.com/collectivecloud/docker-builds:php8.0-nc21
 
 stages:
+  - cache
   - prepare
   - test
+  - deploy
 
-# Select what we should cache between builds
-cache:
-  paths:
-    - vendor/
+# Settings for all jobs in a php based containers
+.php: &php
+  image: registry.gitlab.com/collectivecloud/docker-builds:php8.0-nc21
+  cache:
+    paths:
+      - vendor/
+    key: composer
+
+# Settings for all jobs in node based containers
+.node: &node
+  image: node:14.16
+  cache:
+    paths:
+      - .npm/
+      - "node_modules/"
+    key: npm
+    policy: pull
+  before_script:
+    - npm install
 
 # Set any variables we need
 
@@ -19,19 +35,30 @@ variables:
   COMMIT_IMAGE: $CI_REGISTRY_IMAGE/ci:$CI_COMMIT_SHA
   LATEST_IMAGE: $CI_REGISTRY_IMAGE/ci:latest
 
-# App build job
+Cache node_modules:
+  stage: cache
+  image: node:14.16
+  cache:
+    paths:
+      - .npm/
+      - node_modules/
+    key: npm
+  script:
+    - npm ci --cache .npm --prefer-offline
+  only:
+    changes:
+      - package.json
+      - package-lock.json
 
 Build App:
-  image: node
+  <<: *node
   stage: prepare
   script:
+    - DEBIAN_FRONTEND=noninteractive apt-get update
+    - DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install make rsync
     - echo "BUILD_VERSION=$CI_COMMIT_SHORT_SHA" >>build.env
     - echo "BUILD_JOB_ID=$CI_JOB_ID" >>build.env
     - VERSION="$CI_COMMIT_SHORT_SHA" make release
-  before_script:
-    - DEBIAN_FRONTEND=noninteractive apt-get update
-    - DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install make rsync
-    - make npm-init
   artifacts:
     reports:
       dotenv: build.env
@@ -41,13 +68,16 @@ Build App:
 # PHP jobs
 
 Static PHP Analysis:
+  <<: *php
   stage: prepare
   script:
     - vendor/bin/psalm.phar
   before_script:
     - make composer
+  needs: []
 
 .php-unit: &php-unit
+  <<: *php
   stage: prepare
   script:
     - vendor/bin/phpunit --configuration phpunit.xml --coverage-text --colors=never
@@ -56,6 +86,7 @@ Static PHP Analysis:
     - ln -s `pwd` $NEXTCLOUD_SOURCE/apps/collectives
   services:
     - mariadb:latest
+  needs: []
 
 Unit Test PHP 7.3 nextcloud 20:
   <<: *php-unit
@@ -66,22 +97,19 @@ Unit Test PHP 8.0 nextcloud 21:
   image: registry.gitlab.com/collectivecloud/docker-builds:php8.0-nc21
 
 Lint Javascript:
-  image: node
+  <<: *node
   stage: prepare
   script:
     - make lint
-  before_script:
-    - make npm-init
 
 Unit Test Javascript:
-  image: node
+  <<: *node
   stage: prepare
   script:
     - make test-js
-  before_script:
-    - make npm-init
 
 .php-integration: &php-integration
+  <<: *php
   stage: test
   script:
     - vendor/bin/behat --config=tests/Integration/config/behat.yml --profile ci
@@ -98,26 +126,31 @@ Unit Test Javascript:
 API PHP 7.3 nextcloud 20:
   <<: *php-integration
   image: registry.gitlab.com/collectivecloud/docker-builds:php7.3-nc20
+  needs:
+    - "Static PHP Analysis"
+    - "Unit Test PHP 7.3 nextcloud 20"
 
 API PHP 8.0 nextcloud 21:
   <<: *php-integration
   image: registry.gitlab.com/collectivecloud/docker-builds:php8.0-nc21
   allow_failure: true
+  needs:
+    - "Static PHP Analysis"
+    - "Unit Test PHP 8.0 nextcloud 21"
 
 .browser-test: &browser-test
+  <<: *node
+  image: cypress/browsers:node14.16.0-chrome89-ff86
   stage: test
-  image: cypress/browsers
   variables:
     CYPRESS_baseUrl: http://nextcloud.local/index.php
     APP_SOURCE_URL: "https://gitlab.com/collectivecloud/collectives/-/jobs/${BUILD_JOB_ID}/artifacts/raw/build/release/collectives-${BUILD_VERSION}.tar.gz"
   script:
-    - $(npm bin)/cypress run --browser chrome --config video=false
-  before_script:
-    - make npm-init
     - $(npm bin)/cypress install
     - $(npm bin)/cypress verify
+    - $(npm bin)/cypress run --browser chrome --config video=false
   needs:
-    - Build App
+    - "Build App"
   artifacts:
     paths:
       - cypress/videos
@@ -149,6 +182,7 @@ Browser PHP 7.3 nextcloud 20:
 
 # Job to build documentation website on Gitlab pages
 pages:
+  stage: deploy
   image: registry.gitlab.com/pages/hugo:latest
   script:
     - apk add --update --no-cache git
@@ -161,3 +195,4 @@ pages:
       - public
   only:
     - main
+  needs: []
