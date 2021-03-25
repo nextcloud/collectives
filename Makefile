@@ -33,10 +33,8 @@ ifeq (, $(composer))
 	curl -sS https://getcomposer.org/installer | php
 	mv composer.phar $(build_tools_dir)
 	php $(build_tools_dir)/composer.phar install --prefer-dist
-	php $(build_tools_dir)/composer.phar update --prefer-dist
 else
 	composer install --prefer-dist
-	composer update --prefer-dist
 endif
 
 npm-init:
@@ -165,8 +163,3 @@ release: js/collectives.js
 		openssl dgst -sha512 -sign $(cert_dir)/$(app_name).key \
 			$(release_dir)/$(app_name)-$(VERSION).tar.gz | openssl base64; \
 	fi
-
-# Builds a docker image ci can test
-docker-ci: release
-	docker build -t $(COMMIT_IMAGE) --cache-from $(LATEST_IMAGE) \
-		$(release_dir)/$(app_name)
