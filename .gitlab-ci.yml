@@ -133,6 +133,13 @@ Browser PHP 8.0 nextcloud 21:
       entrypoint: ["/usr/local/bin/run.sh"]
   allow_failure: true
 
+Browser PHP 7.3 nextcloud 21:
+  <<: *browser-test
+  services:
+    - name: registry.gitlab.com/collectivecloud/docker-builds:php7.3-nc21
+      alias: nextcloud.local
+      entrypoint: ["/usr/local/bin/run.sh"]
+
 Browser PHP 7.3 nextcloud 20:
   <<: *browser-test
   services:
