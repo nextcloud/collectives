@@ -1,5 +1,6 @@
 
 stages:
+  - cache
   - prepare
   - test
 
@@ -13,13 +14,15 @@ stages:
 
 # Settings for all jobs in node based containers
 .node: &node
-  image: node
+  image: node:14.16
   cache:
     paths:
       - .npm/
+      - "node_modules/"
     key: npm
+    policy: pull
   before_script:
-    - npm ci --cache .npm --prefer-offline
+    - npm install
 
 # Set any variables we need
 
@@ -31,19 +34,30 @@ variables:
   COMMIT_IMAGE: $CI_REGISTRY_IMAGE/ci:$CI_COMMIT_SHA
   LATEST_IMAGE: $CI_REGISTRY_IMAGE/ci:latest
 
-# App build job
+Cache node_modules:
+  stage: cache
+  image: node:14.16
+  cache:
+    paths:
+      - .npm/
+      - node_modules/
+    key: npm
+  script:
+    - npm ci --cache .npm --prefer-offline
+  only:
+    changes:
+      - package.json
+      - package-lock.json
 
 Build App:
   <<: *node
   stage: prepare
   script:
+    - DEBIAN_FRONTEND=noninteractive apt-get update
+    - DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install make rsync
     - echo "BUILD_VERSION=$CI_COMMIT_SHORT_SHA" >>build.env
     - echo "BUILD_JOB_ID=$CI_JOB_ID" >>build.env
     - VERSION="$CI_COMMIT_SHORT_SHA" make release
-  before_script:
-    - DEBIAN_FRONTEND=noninteractive apt-get update
-    - DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install make rsync
-    - npm ci --cache .npm --prefer-offline
   artifacts:
     reports:
       dotenv: build.env
@@ -59,6 +73,7 @@ Static PHP Analysis:
     - vendor/bin/psalm.phar
   before_script:
     - make composer
+  needs: []
 
 .php-unit: &php-unit
   <<: *php
@@ -70,6 +85,7 @@ Static PHP Analysis:
     - ln -s `pwd` $NEXTCLOUD_SOURCE/apps/collectives
   services:
     - mariadb:latest
+  needs: []
 
 Unit Test PHP 7.3 nextcloud 20:
   <<: *php-unit
@@ -109,15 +125,21 @@ Unit Test Javascript:
 API PHP 7.3 nextcloud 20:
   <<: *php-integration
   image: registry.gitlab.com/collectivecloud/docker-builds:php7.3-nc20
+  needs:
+    - Static PHP Analysis
+    - Unit Test PHP 7.3 nextcloud 20
 
 API PHP 8.0 nextcloud 21:
   <<: *php-integration
   image: registry.gitlab.com/collectivecloud/docker-builds:php8.0-nc21
   allow_failure: true
+  needs:
+    - Static PHP Analysis
+    - Unit Test PHP 8.0 nextcloud 21
 
 .browser-test: &browser-test
   <<: *node
-  image: cypress/browsers
+  image: cypress/browsers:node14.16.0-chrome89-ff86
   stage: test
   variables:
     CYPRESS_baseUrl: http://nextcloud.local/index.php
