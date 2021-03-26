@@ -63,8 +63,8 @@ Releasing a new version contains the following steps:
 
 * Update `CHANGELOG.md`
 * Bump version in `appinfo/info.xml`
-* Make sure the Gitlab CI to passes
-* Update node.js dependencies and build the JS assets:
+* Make sure the Gitlab CI passes
+* Build the JS assets from a clean state:
   ```
   npm ci
   make clean
@@ -76,3 +76,23 @@ Releasing a new version contains the following steps:
   ```
 * Upload release tarball to Gitlab, add release tag and publish releas on Gitlab
 * Publish new app version in Nextcloud App Store
+
+## Update javascript dependencies
+
+Update all dependencies right after a release
+so they will be tested for a while before the next release.
+
+After installing `npm-check-updates` with
+```
+npm install npm-check-updates --no-save
+```
+List all outdated packages with `npm run npm-check-updates`
+and then updat all of them with the `-u` option.
+
+Roll back updates that brake the build with
+```
+npm install package@^1.2.3
+```
+
+Note in the commit message why packages rolled back to an earlier version.
+This information makes the next version update easier.
