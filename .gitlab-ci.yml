@@ -49,6 +49,8 @@ Cache node_modules:
     changes:
       - package.json
       - package-lock.json
+    refs:
+      - master
 
 Build App:
   <<: *node
