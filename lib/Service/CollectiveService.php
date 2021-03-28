@@ -104,15 +104,8 @@ class CollectiveService {
 		$collectiveInfo = new CollectiveInfo($collective, true);
 
 		// Create folder for collective and optionally copy default landing page
-		$collectiveFolder = $this->collectiveFolderManager->createFolder($collective->getId());
-		if (!$collectiveFolder->nodeExists(CollectiveFolderManager::LANDING_PAGE)) {
-			$userLang = $this->l10nFactory->getUserLanguage($this->userManager->get($userId));
-			$landingPageDir = __DIR__ . '/../../' . CollectiveFolderManager::SKELETON_DIR;
-			$landingPagePath = $this->collectiveFolderManager->getLandingPagePath($landingPageDir, $userLang);
-			if (false !== $content = file_get_contents($landingPagePath)) {
-				$collectiveFolder->newFile(CollectiveFolderManager::LANDING_PAGE . '.' . CollectiveFolderManager::LANDING_PAGE_SUFFIX, $content);
-			}
-		}
+		$userLang = $this->l10nFactory->getUserLanguage($this->userManager->get($userId));
+		$this->collectiveFolderManager->createFolder($collective->getId(), $userLang);
 
 		return $collectiveInfo;
 	}
