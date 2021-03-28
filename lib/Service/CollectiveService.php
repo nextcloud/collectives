@@ -73,6 +73,7 @@ class CollectiveService {
 	 * @param string $name
 	 *
 	 * @return CollectiveInfo
+	 * @throws InvalidPathException
 	 * @throws FilesNotPermittedException
 	 */
 	public function createCollective(string $userId, string $name): CollectiveInfo {
@@ -103,9 +104,8 @@ class CollectiveService {
 		$collectiveInfo = new CollectiveInfo($collective, true);
 
 		// Create folder for collective and optionally copy default landing page
-		$collectiveFolder = $this->collectiveFolderManager->getFolder($collective->getId());
-		if (null !== $collectiveFolder &&
-			!$collectiveFolder->nodeExists(CollectiveFolderManager::LANDING_PAGE)) {
+		$collectiveFolder = $this->collectiveFolderManager->createFolder($collective->getId());
+		if (!$collectiveFolder->nodeExists(CollectiveFolderManager::LANDING_PAGE)) {
 			$userLang = $this->l10nFactory->getUserLanguage($this->userManager->get($userId));
 			$landingPageDir = __DIR__ . '/../../' . CollectiveFolderManager::SKELETON_DIR;
 			$landingPagePath = $this->collectiveFolderManager->getLandingPagePath($landingPageDir, $userLang);
@@ -144,9 +144,8 @@ class CollectiveService {
 		Circles::destroyCircle($collective->getCircleUniqueId());
 
 		try {
-			if (null !== $collectiveFolder = $this->collectiveFolderManager->getFolder($collective->getId(), false)) {
-				$collectiveFolder->delete();
-			}
+			$collectiveFolder = $this->collectiveFolderManager->getFolder($collective->getId());
+			$collectiveFolder->delete();
 		} catch (InvalidPathException | \OCP\Files\NotFoundException | FilesNotPermittedException $e) {
 			throw new NotFoundException('Failed to delete collective folder');
 		}

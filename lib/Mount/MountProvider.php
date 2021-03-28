@@ -106,8 +106,7 @@ class MountProvider implements IMountProvider {
 							 IStorageFactory $loader = null,
 							 IUser $user = null): IMountPoint {
 		if (!$cacheEntry) {
-			// trigger folder creation
-			$this->collectiveFolderManager->getFolder($id);
+			$this->collectiveFolderManager->createFolder($id);
 		}
 
 		$storage = $this->collectiveFolderManager->getRootFolder()->getStorage();
