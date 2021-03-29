@@ -3,6 +3,7 @@
 namespace Unit\Service;
 
 use OCA\Circles\Api\v1\Circles;
+use OCA\Circles\Model\Circle;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Model\CollectiveInfo;
@@ -58,6 +59,36 @@ class CollectiveServiceTest extends TestCase {
 		$this->expectException(\RuntimeException::class);
 		$this->expectExceptionMessage('Failed to create Circle taken');
 		$this->service->createCollective($this->userId, 'de', 'taken', 'taken');
+	}
+
+	public function testCreate(): void {
+		$circle = $this->getMockBuilder(Circle::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$circle->method('getUniqueId')
+			->willReturn('CircleUniqueId');
+		$collective = new Collective();
+		$collective->setId(123);
+		$this->collectiveMapper->method('findByName')
+			->willReturn(null);
+		$this->collectiveMapper->method('createCircle')
+			->willReturn($circle);
+		$this->collectiveMapper
+			->expects($this->once())
+			->method('insert')
+			->with($this->callback(function($collective) {
+				return is_callable([$collective, 'getName']) &&
+					$collective->getName() == 'free';
+			}))
+			->willReturn($collective);
+		$info = $this->service->createCollective($this->userId, 'de', 'free', 'free');
+		self::assertTrue(is_callable([$info, 'jsonSerialize']));
+		self::assertEqualsCanonicalizing([
+				'id' => 123,
+				'name' => null,
+				'circleUniqueId' => null,
+				'admin' => true
+			], $info->jsonSerialize());
 	}
 
 }
