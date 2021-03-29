@@ -5,14 +5,11 @@ namespace OCA\Collectives\Service;
 use OCA\Circles\Api\v1\Circles;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
-use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Model\CollectiveInfo;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCP\AppFramework\QueryException;
 use OCP\Files\InvalidPathException;
 use OCP\Files\NotPermittedException as FilesNotPermittedException;
-use OCP\IUserManager;
-use OCP\L10N\IFactory;
 
 class CollectiveService {
 	/** @var CollectiveMapper */
@@ -21,41 +18,23 @@ class CollectiveService {
 	/** @var CollectiveHelper */
 	private $collectiveHelper;
 
-	/** @var NodeHelper */
-	private $nodeHelper;
-
 	/** @var CollectiveFolderManager */
 	private $collectiveFolderManager;
-
-	/** @var IUserManager */
-	private $userManager;
-
-	/** @var IFactory */
-	private $l10nFactory;
 
 	/**
 	 * CollectiveService constructor.
 	 *
 	 * @param CollectiveMapper         $collectiveMapper
 	 * @param CollectiveHelper         $collectiveHelper
-	 * @param NodeHelper               $nodeHelper
 	 * @param CollectiveFolderManager  $collectiveFolderManager
-	 * @param IUserManager             $userManager
-	 * @param IFactory                 $l10nFactory
 	 */
 	public function __construct(
 		CollectiveMapper $collectiveMapper,
 		CollectiveHelper $collectiveHelper,
-		NodeHelper $nodeHelper,
-		CollectiveFolderManager $collectiveFolderManager,
-		IUserManager $userManager,
-		IFactory $l10nFactory) {
+		CollectiveFolderManager $collectiveFolderManager) {
 		$this->collectiveMapper = $collectiveMapper;
 		$this->collectiveHelper = $collectiveHelper;
-		$this->nodeHelper = $nodeHelper;
 		$this->collectiveFolderManager = $collectiveFolderManager;
-		$this->userManager = $userManager;
-		$this->l10nFactory = $l10nFactory;
 	}
 
 	/**
@@ -76,12 +55,10 @@ class CollectiveService {
 	 * @throws InvalidPathException
 	 * @throws FilesNotPermittedException
 	 */
-	public function createCollective(string $userId, string $name): CollectiveInfo {
+	public function createCollective(string $userId, string $userLang, string $name, string $safeName): CollectiveInfo {
 		if (empty($name)) {
 			throw new \RuntimeException('Empty collective name is not allowed');
 		}
-
-		$safeName = $this->nodeHelper->sanitiseFilename($name);
 
 		if (null !== $this->collectiveMapper->findByName($safeName)) {
 			throw new UnprocessableEntityException('Collective already exists: ' . $safeName);
@@ -104,7 +81,6 @@ class CollectiveService {
 		$collectiveInfo = new CollectiveInfo($collective, true);
 
 		// Create folder for collective and optionally copy default landing page
-		$userLang = $this->l10nFactory->getUserLanguage($this->userManager->get($userId));
 		$this->collectiveFolderManager->createFolder($collective->getId(), $userLang);
 
 		return $collectiveInfo;
