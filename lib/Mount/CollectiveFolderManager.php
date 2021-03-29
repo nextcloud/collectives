@@ -6,14 +6,15 @@ use OC\Files\Node\LazyFolder;
 use OC\SystemConfig;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
+use OCP\Files\InvalidPathException;
 use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
 use OCP\IDBConnection;
 
 class CollectiveFolderManager {
-	public const SKELETON_DIR = 'skeleton';
-	public const LANDING_PAGE = 'Readme';
-	public const LANDING_PAGE_SUFFIX = 'md';
+	private const SKELETON_DIR = 'skeleton';
+	private const LANDING_PAGE = 'Readme';
+	private const LANDING_PAGE_SUFFIX = 'md';
 
 	/** @var IRootFolder */
 	private $rootFolder;
@@ -92,7 +93,7 @@ class CollectiveFolderManager {
 	 * @return Folder
 	 * @throws NotPermittedException
 	 */
-	public function getSkeletonFolder(Folder $folder): Folder {
+	private function getSkeletonFolder(Folder $folder): Folder {
 		try {
 			$skeletonFolder = $folder->get(self::SKELETON_DIR);
 			if (!$skeletonFolder instanceof Folder) {
@@ -161,26 +162,40 @@ class CollectiveFolderManager {
 
 	/**
 	 * @param int  $id
-	 * @param bool $create
 	 *
-	 * @return Folder|null
+	 * @returns Folder
+	 * @throws NotFoundException
+	 * @throws InvalidPathException
+	 */
+	public function getFolder(int $id): Folder {
+		$folder = $this->getRootFolder()->get((string)$id);
+		if (!$folder instanceof Folder) {
+			throw new InvalidPathException('Not a folder: ' . $folder->getPath());
+		}
+		return $folder;
+	}
+
+	/**
+	 * @param int  $id
+	 * @param string $lang
+	 *
+	 * @throws InvalidPathException
 	 * @throws NotPermittedException
 	 */
-	public function getFolder(int $id, bool $create = true): ?Folder {
+	public function createFolder(int $id, string $lang = null) {
 		try {
-			$folder = $this->getRootFolder()->get((string)$id);
-			if (!$folder instanceof Folder) {
-				return null;
-			}
+			$folder = $this->getFolder($id);
 		} catch (NotFoundException $e) {
-			if (!$create) {
-				return null;
-			}
-
 			$folder = $this->getSkeletonFolder($this->getRootFolder())
 				->copy($this->getRootFolder()->getPath() . '/' . $id);
 		}
-
-		return $folder;
+		if (null !== $lang && !$folder->nodeExists(self::LANDING_PAGE)) {
+			$landingPageDir = __DIR__ . '/../../' . self::SKELETON_DIR;
+			$landingPagePath = $this->getLandingPagePath($landingPageDir, $lang);
+			if (false !== $content = file_get_contents($landingPagePath)) {
+				$folder->newFile(self::LANDING_PAGE . '.' . self::LANDING_PAGE_SUFFIX, $content);
+			}
+		}
 	}
+
 }
