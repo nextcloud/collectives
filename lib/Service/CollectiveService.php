@@ -65,11 +65,7 @@ class CollectiveService {
 		}
 
 		// Create a new secret circle
-		try {
-			$circle = Circles::createCircle(2, $safeName);
-		} catch (QueryException $e) {
-			throw new \RuntimeException('Failed to create Circle ' . $safeName);
-		}
+		$circle = $this->collectiveMapper->createCircle($safeName);
 
 		// Create collective object
 		$collective = new Collective();

@@ -3,6 +3,7 @@
 namespace OCA\Collectives\Db;
 
 use OCA\Circles\Api\v1\Circles;
+use OCA\Circles\Model\Circle;
 use OCA\Circles\Exceptions\MemberDoesNotExistException;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
@@ -108,7 +109,20 @@ class CollectiveMapper extends QBMapper {
 		} catch (QueryException | MemberDoesNotExistException $e) {
 			return null;
 		}
-
 		return null;
+	}
+
+	/**
+	 * @param string     $name
+	 *
+	 * @return Circle|null
+	 * @throws \RuntimeException
+	 */
+	public function createCircle(string $name): Circle {
+		try {
+			return Circles::createCircle(2, $name);
+		} catch (QueryException $e) {
+			throw new \RuntimeException('Failed to create Circle ' . $name);
+		}
 	}
 }

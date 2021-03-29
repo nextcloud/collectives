@@ -46,7 +46,8 @@
   </file>
   <file src="lib/Db/CollectiveMapper.php">
     <MoreSpecificImplementedParamType occurrences="1"/>
-    <UndefinedClass occurrences="1">
+    <UndefinedClass occurrences="2">
+      <code>Circle</code>
       <code>Circles</code>
     </UndefinedClass>
   </file>
@@ -118,7 +119,6 @@
   </file>
   <file src="lib/Service/CollectiveService.php">
     <UndefinedClass occurrences="2">
-      <code>Circles</code>
       <code>Circles</code>
     </UndefinedClass>
   </file>
