@@ -4,7 +4,6 @@ namespace OCA\Collectives\Db;
 
 use OCA\Circles\Api\v1\Circles;
 use OCA\Circles\Exceptions\MemberDoesNotExistException;
-use OCA\Collectives\Fs\UserFolderHelper;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\AppFramework\Db\QBMapper;
@@ -18,20 +17,15 @@ use OCP\IDBConnection;
  * @method Collective findEntity(IQueryBuilder $query) : Collective
  */
 class CollectiveMapper extends QBMapper {
-	/** @var UserFolderHelper */
-	private $userFolderHelper;
 
 	/**
 	 * CollectiveMapper constructor.
 	 *
 	 * @param IDBConnection    $db
-	 * @param UserFolderHelper $userFolderHelper
 	 */
 	public function __construct(
-		IDBConnection $db,
-		UserFolderHelper $userFolderHelper) {
+		IDBConnection $db) {
 		parent::__construct($db, 'collectives', Collective::class);
-		$this->userFolderHelper = $userFolderHelper;
 	}
 
 	/**
