@@ -57,11 +57,13 @@ class CollectiveService {
 	 */
 	public function createCollective(string $userId, string $userLang, string $name, string $safeName): CollectiveInfo {
 		if (empty($name)) {
-			throw new \RuntimeException('Empty collective name is not allowed');
+			throw new UnprocessableEntityException('Empty collective name is not allowed');
 		}
 
 		if (null !== $this->collectiveMapper->findByName($safeName)) {
-			throw new UnprocessableEntityException('Collective already exists: ' . $safeName);
+			throw new UnprocessableEntityException(
+				'Name "' . $safeName . '" has already been taken.'
+			);
 		}
 
 		// Create a new secret circle

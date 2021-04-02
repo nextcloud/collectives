@@ -8,16 +8,44 @@ The following tools are required for app development:
 * g++: to compile some NodeJS dependencies
 * gettext: to generate pot/translation files
 * rsync and openssl: for generating release tarballs
+* composer for installing php dependencies
+* nextcloud server: for running php tests
+* circles app: for passing some php tests that depend on it.
 
 ## Developer installation
 
 To install the app manually:
 
+0. Install a [development setup](https://docs.nextcloud.com/server/21/developer_manual/app_development/tutorial.html#setup) of nextcloud.
 1. Clone this into the `apps` folder of your Nextcloud
 2. Install build tools and dependencies by running `make dev-setup`
 3. Compile NodeJS assets by running `make build`
+4. Install the circles app in Nextcloud.
 
 Afterwards, you can enable the app from the Nextcloud app management menu.
+
+## Running tests
+
+With the app available in the Nextcloud app management
+you should be able to run the unit tests with
+```sh
+make php-unit-test
+```
+
+In order to run the integration tests you either need to configure your
+nextcloud to run with https and be availabe at `https://nextcloud.local`
+or you need to change the `default` config for behat in
+`tests/Integration/features/config/behat.yml`
+to use a different `baseUrl`.
+
+Then you can run them with
+```sh
+make php-integration-test
+```
+
+The integration tests rely test data installed to the server.
+This is available on our docker image or in the
+`nextcloud-docker-dev` repo.
 
 ### Development environment
 

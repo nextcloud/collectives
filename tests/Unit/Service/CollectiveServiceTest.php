@@ -38,7 +38,7 @@ class CollectiveServiceTest extends TestCase {
 	}
 
 	public function testCreateWithEmptyName(): void {
-		$this->expectException(\RuntimeException::class);
+		$this->expectException(UnprocessableEntityException::class);
 		$this->expectExceptionMessage('Empty collective name is not allowed');
 		$this->service->createCollective($this->userId, 'de', '', '');
 	}
@@ -47,7 +47,7 @@ class CollectiveServiceTest extends TestCase {
 		$this->collectiveMapper->method('findByName')
 			->willReturn(new Collective());
 		$this->expectException(UnprocessableEntityException::class);
-		$this->expectExceptionMessage('Collective already exists: taken');
+		$this->expectExceptionMessage('Name "taken" has already been taken.');
 		$this->service->createCollective($this->userId, 'de', 'taken', 'taken');
 	}
 
