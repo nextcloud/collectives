@@ -38,6 +38,11 @@
       <code>Base</code>
     </UndefinedClass>
   </file>
+  <file src="lib/Controller/ErrorHelper.php">
+    <UndefinedClass occurrences="1">
+      <code>CircleAlreadyExistsException</code>
+    </UndefinedClass>
+  </file>
   <file src="lib/Controller/StartController.php">
     <UndefinedClass occurrences="2">
       <code>LoadViewer</code>
@@ -46,8 +51,9 @@
   </file>
   <file src="lib/Db/CollectiveMapper.php">
     <MoreSpecificImplementedParamType occurrences="1"/>
-    <UndefinedClass occurrences="2">
+    <UndefinedClass occurrences="3">
       <code>Circle</code>
+      <code>Circles</code>
       <code>Circles</code>
     </UndefinedClass>
   </file>
@@ -119,6 +125,7 @@
   </file>
   <file src="lib/Service/CollectiveService.php">
     <UndefinedClass occurrences="2">
+      <code>$circle</code>
       <code>Circles</code>
     </UndefinedClass>
   </file>

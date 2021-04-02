@@ -11,6 +11,7 @@ use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Service\CollectiveHelper;
 use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\UnprocessableEntityException;
+use OCA\Collectives\Service\ConflictException;
 use OCP\AppFramework\QueryException;
 use OCP\Files\InvalidPathException;
 use OCP\Files\NotPermittedException as FilesNotPermittedException;
@@ -43,11 +44,11 @@ class CollectiveServiceTest extends TestCase {
 		$this->service->createCollective($this->userId, 'de', '', '');
 	}
 
-	public function testCreateWithExistingName(): void {
+	public function testCreateExistingAsMember(): void {
 		$this->collectiveMapper->method('findByName')
 			->willReturn(new Collective());
-		$this->expectException(UnprocessableEntityException::class);
-		$this->expectExceptionMessage('Name "taken" has already been taken.');
+		$this->expectException(ConflictException::class);
+		$this->expectExceptionMessage('Collective "taken" exists already.');
 		$this->service->createCollective($this->userId, 'de', 'taken', 'taken');
 	}
 

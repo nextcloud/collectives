@@ -60,13 +60,17 @@ class CollectiveService {
 			throw new UnprocessableEntityException('Empty collective name is not allowed');
 		}
 
-		if (null !== $this->collectiveMapper->findByName($safeName)) {
-			throw new UnprocessableEntityException(
-				'Name "' . $safeName . '" has already been taken.'
+		$existing = $this->collectiveMapper->findByName($name, $userId);
+		if (null !== $existing) {
+			$admin = $this->collectiveMapper->isAdmin($existing, $userId);
+			throw new ConflictException(
+				'Collective "' . $name . '" exists already.',
+				new CollectiveInfo($existing, $admin)
 			);
 		}
 
 		// Create a new secret circle
+		// Will fail if there's a naming conflict
 		$circle = $this->collectiveMapper->createCircle($safeName);
 
 		// Create collective object

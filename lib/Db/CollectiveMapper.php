@@ -4,6 +4,7 @@ namespace OCA\Collectives\Db;
 
 use OCA\Circles\Api\v1\Circles;
 use OCA\Circles\Model\Circle;
+use OCA\Circles\Exceptions\CircleAlreadyExistsException;
 use OCA\Circles\Exceptions\MemberDoesNotExistException;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
@@ -116,13 +117,26 @@ class CollectiveMapper extends QBMapper {
 	 * @param string     $name
 	 *
 	 * @return Circle|null
-	 * @throws \RuntimeException
+	 * @throws CircleAlreadyExistsException
 	 */
 	public function createCircle(string $name): Circle {
-		try {
-			return Circles::createCircle(2, $name);
-		} catch (QueryException $e) {
-			throw new \RuntimeException('Failed to create Circle ' . $name);
-		}
+		return Circles::createCircle(Circles::CIRCLES_SECRET, $name);
 	}
+
+	/**
+	 * Determine if the current user is admin of the given collective
+	 * @param Collective $collective
+	 * @param string     $userId
+	 *
+	 * @return bool
+	 * @throws QueryException
+	 */
+	public function isAdmin(Collective $collective, string $userId): bool {
+		$member = Circles::getMember(
+			$collective->getCircleUniqueId(),
+			$userId,
+			Circles::TYPE_USER);
+		return ( $member !== null && $member->getLevel() >= Circles::LEVEL_OWNER);
+	}
+
 }
