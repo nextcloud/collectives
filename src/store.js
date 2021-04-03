@@ -33,6 +33,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
 
 	state: {
+		messages: {},
 		loading: {},
 		collectives: [],
 		pages: [],
@@ -41,6 +42,10 @@ export default new Vuex.Store({
 	},
 
 	getters: {
+
+		messages(state) {
+			return state.messages
+		},
 
 		collectives(state) {
 			return state.collectives.map(decorate.collective)
@@ -101,9 +106,19 @@ export default new Vuex.Store({
 			return `/${collective.name}`
 		},
 
+		collectiveChanged(state, getters) {
+			const updated = state.updatedCollective
+				&& state.updatedCollective.name
+			const current = getters.currentCollective
+				&& getters.currentCollective.name
+			return updated && (updated !== current)
+		},
 	},
 
 	mutations: {
+		info(state, message) {
+			Vue.set(state.messages, 'info', message)
+		},
 		loading(state, aspect) {
 			Vue.set(state.loading, aspect, true)
 		},
@@ -113,8 +128,13 @@ export default new Vuex.Store({
 		collectives(state, collectives) {
 			state.collectives = collectives
 		},
-		addCollective(state, collective) {
-			state.collectives.unshift(collective)
+		addOrUpdateCollective(state, collective) {
+			const cur = state.collectives.findIndex(c => c.id === collective.id)
+			if (cur === -1) {
+				state.collectives.unshift(collective)
+			} else {
+				state.collectives.splice(cur, 1, collective)
+			}
 			state.updatedCollective = collective
 		},
 		deleteCollective(state, { id }) {
@@ -221,9 +241,20 @@ export default new Vuex.Store({
 		 */
 		async newCollective({ commit }, collective) {
 			commit('loading', 'collective')
-			const response = await axios.post(generateUrl('/apps/collectives/_collectives'), collective)
-			commit('addCollective', response.data)
-			commit('done', 'collective')
+			try {
+				const response = await axios.post(
+					generateUrl('/apps/collectives/_collectives'),
+					collective,
+					// Http status 409 indicates the collective already existed.
+					{ validateStatus: s => (s < 300 || s === 409) },
+				)
+				if (response.status === 409) {
+					commit('info', 'Collective already existed.')
+				}
+				commit('addOrUpdateCollective', response.data)
+			} finally {
+				commit('done', 'collective')
+			}
 		},
 
 		/**
