@@ -2,6 +2,7 @@
 
 export CYPRESS_baseUrl=http://localhost:8081/index.php
 export APP_SOURCE=$PWD/..
+export LANG="en_EN.UTF-8"
 
 function finish {
 	docker-compose down

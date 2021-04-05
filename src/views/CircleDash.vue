@@ -36,7 +36,7 @@
 <script>
 
 import { emit } from '@nextcloud/event-bus'
-import { showError } from '@nextcloud/dialogs'
+import { showInfo } from '@nextcloud/dialogs'
 import AppContent from '@nextcloud/vue/dist/Components/AppContent'
 import Content from '@nextcloud/vue/dist/Components/Content'
 import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
@@ -45,6 +45,16 @@ import CollectiveHeading from '../components/CollectiveHeading'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile'
 import Nav from '../components/Nav'
 import PageSidebar from '../components/PageSidebar'
+import showRequestException from '../util/showRequestException'
+
+async function handleError(msg, func) {
+	try {
+		await func()
+	} catch (e) {
+		const translated = t('collectives', msg)
+		showRequestException(translated, e)
+	}
+}
 
 export default {
 	name: 'CircleDash',
@@ -73,6 +83,10 @@ export default {
 	},
 
 	computed: {
+
+		info() {
+			return this.$store.getters.messages.info
+		},
 
 		/**
 		 * Return the url param for the currently selected collective
@@ -117,6 +131,12 @@ export default {
 		'pageParam'() {
 			this.setCurrentVersion(null)
 		},
+		'info'() {
+			if (this.info) {
+				showInfo(this.info)
+				this.$store.commit('info', null)
+			}
+		},
 	},
 
 	async mounted() {
@@ -129,16 +149,13 @@ export default {
 
 	methods: {
 
-		/**
+				 /**
 		 * Get list of all collectives
 		 */
 		async getCollectives() {
-			try {
+			handleError('Could not fetch collectives', async() => {
 				await this.$store.dispatch('getCollectives')
-			} catch (e) {
-				console.error(e)
-				showError(t('collectives', 'Could not fetch collectives'))
-			}
+			})
 		},
 
 		/**
@@ -148,12 +165,9 @@ export default {
 			if (!this.currentCollective) {
 				return
 			}
-			try {
+			handleError('Could not fetch pages', async() => {
 				await this.$store.dispatch('getPages')
-			} catch (e) {
-				console.error(e)
-				showError(t('collectives', 'Could not fetch pages'))
-			}
+			})
 		},
 
 		/**
@@ -161,13 +175,12 @@ export default {
 		 * @param {Object} collective Properties of the new collective
 		 */
 		async newCollective(collective) {
-			try {
+			handleError('Could not create the collective', async() => {
 				await this.$store.dispatch('newCollective', collective)
-				this.$router.push(this.$store.getters.updatedCollectivePath)
-			} catch (e) {
-				console.error(e)
-				showError(t('collectives', 'Could not create the collective'))
-			}
+				if (this.$store.getters.collectiveChanged) {
+					this.$router.push(this.$store.getters.updatedCollectivePath)
+				}
+			})
 		},
 
 		/**
@@ -175,15 +188,12 @@ export default {
 		 * @param {Object} collective Properties of the collective
 		 */
 		async deleteCollective(collective) {
-			try {
+			handleError('Could not delete the collective', async() => {
 				await this.$store.dispatch('deleteCollective', collective)
 				if (this.$store.getters.collectiveParam === collective.name) {
 					this.$router.push('/')
 				}
-			} catch (e) {
-				console.error(e)
-				showError(t('collectives', 'Could not delete the collective'))
-			}
+			})
 		},
 
 		/**

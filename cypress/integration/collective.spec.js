@@ -30,6 +30,22 @@ describe('Collective', function() {
 		cy.seedCollective('Preexisting Collective')
 	})
 
+	describe('name conflicts', function() {
+		it('Redirects members to existing collective', function() {
+			cy.login('bob', 'bob', '/apps/collectives')
+			cy.createCollective('Preexisting Collective')
+			cy.get('#titleform input').should('have.value', ' Preexisting Collective')
+			cy.get('.toast-info').should('contain', 'Collective already existed.')
+		})
+		it('Reports existing circle', function() {
+			cy.login('alice', 'alice', '/apps/collectives')
+			cy.createCollective('Preexisting Collective')
+			cy.get('main .empty-content').should('contain', 'No collective selected')
+			cy.get('.toast-warning').should('contain', 'Could not create the collective')
+			cy.get('.toast-warning').should('contain', 'A circle with that name exists')
+		})
+	})
+
 	// Note: the different assertions in here
 	// all happen without any page reload or navigation.
 	//
