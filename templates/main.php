@@ -1,5 +1,5 @@
 <?php
-script('collectives', 'collectives');
+script('collectives', 'collectives-main');
 style('collectives', 'icons');
 ?>
 

@@ -303,6 +303,7 @@ export default {
 	.clear-float {
 		clear: both;
 	}
+
 	li {
 		width: 100%;
 		cursor: default;
@@ -310,40 +311,51 @@ export default {
 		float: left;
 		border-bottom: 1px solid rgba(100,100,100,.1);
 	}
+
 	li:last-child {
 		border-bottom: none;
 	}
+
 	a, div > span {
 		vertical-align: middle;
 		opacity: .5;
 	}
+
 	li a {
 		padding: 15px 10px 11px;
 	}
+
 	a:hover, a:focus {
 		opacity: 1;
 	}
+
 	.icon-container {
 		display: inline-block;
 		vertical-align: top;
 	}
+
 	img {
 		cursor: pointer;
 		padding-right: 4px;
 	}
+
 	img.icon {
 		cursor: default;
 	}
+
 	.version-container {
 		display: inline-block;
 	}
+
 	.versiondate {
 		min-width: 100px;
 		vertical-align: super;
 	}
+
 	.version-details {
 		text-align: left;
 	}
+
 	.version-details > span {
 		padding: 0 10px;
 	}

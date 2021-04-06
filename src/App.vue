@@ -38,7 +38,7 @@
 		margin-top: 5px;
 	}
 
-	#version-title, #titleform input[type="text"] {
+	#version-title, #titleform input[type='text'] {
 		font-size: 35px;
 		border: none;
 		font-weight: 600;
@@ -52,7 +52,7 @@
 		width: 100%;
 	}
 
-	#titleform input[type="text"]:disabled {
+	#titleform input[type='text']:disabled {
 		background-color: var(--color-main-background);
 		color: var(--color-text-lighter);
 		margin: 3px 3px 3px 0;
