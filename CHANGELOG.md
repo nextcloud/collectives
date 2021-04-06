@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.3.1 - 2021-04-06
+
+### Fixed
+- ✨ Attempting to create collective with same name
+     redirects to existing collective
+- ℹ️  Have `Info` and `Warning` notices for naming conflices.
+
+### Upgrades
+- 🚀 Update all npm dependencies.
+
+### Tests
+- ✅ Completely rework the CI setup and make it 2x faster.
+
+
 ## 0.3.0 - 2021-03-23
 
 ### ✨ New
