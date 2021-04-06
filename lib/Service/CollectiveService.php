@@ -65,20 +65,36 @@ class CollectiveService {
 	 * @param string $name
 	 * @param string $safeName
 	 *
-	 * @return CollectiveInfo
+	 * @return [CollectiveInfo, string]
 	 * @throws FilesNotPermittedException
 	 * @throws InvalidPathException
 	 * @throws UnprocessableEntityException
 	 * @throws CircleAlreadyExistsException
 	 */
-	public function createCollective(string $userId, string $userLang, string $name, string $safeName): CollectiveInfo {
+	public function createCollective(string $userId, string $userLang, string $name, string $safeName): array {
 		if (empty($name) || empty($safeName)) {
 			throw new UnprocessableEntityException('Empty collective name is not allowed');
 		}
 
 		// Create a new secret circle
-		// Will fail if there's a naming conflict
-		$circle = $this->collectiveMapper->createCircle($safeName);
+		$circle = null;
+		$message = '';
+		try {
+			$circle = $this->collectiveMapper->createCircle($safeName);
+		} catch (CircleAlreadyExistsException $e) {
+			$circle = $this->collectiveMapper->findCircle($safeName);
+			if (null === $circle) {
+				// We do not have access to the circle.
+				throw $e;
+			}
+			$circleId = $circle->getUniqueId();
+			$collective = $this->collectiveMapper->findByCircleId($circleId);
+			if (null !== $collective) {
+				// There's already a collective with that name.
+				throw $e;
+			}
+			$message = 'Created collective for existing circle.';
+		}
 
 		// Create collective object
 		$collective = new Collective();
@@ -86,12 +102,12 @@ class CollectiveService {
 		$collective = $this->collectiveMapper->insert($collective);
 
 		// Read in collectiveInfo object
-		$collectiveInfo = new CollectiveInfo($collective, $safeName, true);
+		$collectiveInfo = new CollectiveInfo($collective, $circle->getName(), true);
 
 		// Create folder for collective and optionally copy default landing page
 		$this->collectiveFolderManager->createFolder($collective->getId(), $userLang);
 
-		return $collectiveInfo;
+		return [$collectiveInfo, $message];
 	}
 
 	/**

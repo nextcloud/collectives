@@ -186,6 +186,25 @@ class CollectiveMapper extends QBMapper {
 	}
 
 	/**
+	 * @param string     $name
+	 *
+	 * @return Circle|null
+	 */
+	public function findCircle(string $name): ?Circle {
+		$circles = Circles::listCircles(
+			Circles::CIRCLES_ALL,
+			$name,
+			Circles::LEVEL_ADMIN
+		);
+		foreach ($circles as $circle) {
+			if (strtolower($circle->getName()) === strtolower($name)) {
+				return $circle;
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * Determine if the current user is admin of the given collective
 	 * @param Collective $collective
 	 * @param string     $userId

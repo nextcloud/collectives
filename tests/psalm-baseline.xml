@@ -47,7 +47,8 @@
   </file>
   <file src="lib/Db/CollectiveMapper.php">
     <MoreSpecificImplementedParamType occurrences="1"/>
-    <UndefinedClass occurrences="4">
+    <UndefinedClass occurrences="5">
+      <code>?Circle</code>
       <code>Circle</code>
       <code>Circles</code>
       <code>Circles</code>
@@ -126,8 +127,15 @@
     </UndefinedClass>
   </file>
   <file src="lib/Service/CollectiveService.php">
-    <UndefinedClass occurrences="2">
+    <InvalidThrow occurrences="2">
+      <code>throw $e;</code>
+      <code>throw $e;</code>
+    </InvalidThrow>
+    <UndefinedClass occurrences="5">
       <code>$circle</code>
+      <code>$circle</code>
+      <code>$circle</code>
+      <code>CircleAlreadyExistsException</code>
       <code>Circles</code>
     </UndefinedClass>
     <UndefinedDocblockClass occurrences="4">

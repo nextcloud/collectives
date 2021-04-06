@@ -29,6 +29,7 @@ describe('Collective', function() {
 		before(function() {
 			cy.login('bob', 'bob', '/apps/collectives')
 			cy.seedCollective('Preexisting Collective')
+			cy.seedCircle('Preexisting Circle')
 		})
 		it('Reports existing circle', function() {
 			cy.login('bob', 'bob', '/apps/collectives')
@@ -36,6 +37,16 @@ describe('Collective', function() {
 			cy.get('main .empty-content').should('contain', 'No collective selected')
 			cy.get('.toast-warning').should('contain', 'Could not create the collective')
 			cy.get('.toast-warning').should('contain', 'A circle with that name exists')
+		})
+		it('creates collectives for admins of corresponding circle',
+			function() {
+				cy.login('bob', 'bob', '/apps/collectives')
+				cy.createCollective('Preexisting Circle')
+				cy.get('#titleform input').should('have.value', ' Preexisting Circle')
+				cy.get('.toast-info').should('contain', 'Created collective for existing circle.')
+			})
+		after(function() {
+			cy.deleteCollective('Preexisting Circle')
 		})
 	})
 

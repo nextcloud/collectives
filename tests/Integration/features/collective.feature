@@ -41,10 +41,14 @@ Feature: collective
     Then user "jane" doesn't see collective "mycollective"
     And user "alice" doesn't see collective "mycollective"
 
-  Scenario: Create, trash and delete a collective with namespace conflict due to leftover circle
-    When user "jane" creates collective "mycollective2"
-    When user "jane" trashes collective "mycollective2"
-    And user "jane" deletes collective "mycollective2"
-    And user "jane" is member of circle "mycollective2"
-    Then user "jane" fails to create collective "mycollective2"
-    And user "jane" deletes circle "mycollective2"
+  Scenario: Recreate a collective based on a leftover circle
+    When user "jane" creates collective "Phoenix"
+    And user "alice" joins circle "Phoenix" with admin "jane"
+    And user "jane" trashes collective "Phoenix"
+    And user "jane" deletes collective "Phoenix"
+    And user "jane" is member of circle "Phoenix"
+    And user "jane" creates collective "Phoenix"
+    Then user "jane" sees collective "Phoenix"
+    And user "alice" sees collective "Phoenix"
+    And user "jane" trashes collective "Phoenix"
+    And user "jane" deletes collective+circle "Phoenix"

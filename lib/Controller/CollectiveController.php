@@ -81,14 +81,15 @@ class CollectiveController extends Controller {
 	public function create(string $name): DataResponse {
 		return $this->handleErrorResponse(function () use ($name) {
 			$safeName = $this->nodeHelper->sanitiseFilename($name);
-			$collective = $this->service->createCollective(
+			[$collective, $info] = $this->service->createCollective(
 				$this->getUserId(),
 				$this->getUserLang(),
 				$name,
 				$safeName
 			);
 			return [
-				"data" => $collective
+				"data" => $collective,
+				"message" => $info,
 			];
 		}, $this->logger);
 	}

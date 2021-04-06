@@ -59,6 +59,25 @@ Cypress.Commands.add('seedCollective', (name) => {
 		})
 })
 
+Cypress.Commands.add('deleteCollective', (name) => {
+	cy.window()
+		.its('app')
+		.then(async app => {
+			const id = app.$store.getters.collectives.find(c => c.name === name).id
+			await app.$store.dispatch('trashCollective', { id })
+			await app.$store.dispatch('deleteCollective', { id, circle: true })
+		})
+})
+
+Cypress.Commands.add('seedCircle', (name) => {
+	cy.visit('/apps/circles')
+	cy.window()
+		.its('OCA.Circles.api')
+		.then(async api => {
+			api.createCircle(4, name)
+		})
+})
+
 Cypress.Commands.add('createCollective', (name) => {
 	cy.get('a [title="Create new collective"]').click()
 	cy.get('.collective-create input[type="text"]').type(`${name}{enter}`)
