@@ -33,6 +33,7 @@ export default {
 	display: flex;
 	z-index: 10;
 }
+
 .collective-heading button {
 	align-self: center;
 	display: flex;
@@ -40,6 +41,7 @@ export default {
 	margin: 0 5px;
 	min-height: 30px;
 }
+
 .collective-heading h2 {
 	display: flex;
 	margin: 0 5px;
@@ -47,6 +49,7 @@ export default {
 	opacity: 0.7;
 	color: var(--color-main-text);
 }
+
 .collective-heading h2:hover {
 	opacity: 1;
 }

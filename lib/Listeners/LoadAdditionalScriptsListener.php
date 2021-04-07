@@ -10,6 +10,6 @@ use OCP\EventDispatcher\IEventListener;
 
 class LoadAdditionalScriptsListener implements IEventListener {
 	public function handle(Event $event): void {
-		\OCP\Util::addScript('collectives', 'files');
+		\OCP\Util::addScript('collectives', 'collectives-files');
 	}
 }

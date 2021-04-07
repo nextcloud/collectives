@@ -127,9 +127,10 @@ export default {
 		}
 	}
 }
+
 .popover button {
-    background-color: var(--color-main-background);
-    border: none;
-    font-size: 14px;
+	background-color: var(--color-main-background);
+	border: none;
+	font-size: 14px;
 }
 </style>
