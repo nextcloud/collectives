@@ -104,6 +104,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+	.app-content-list {
+		padding-top: 40px;
+	}
+
 	.app-content-list .app-content-list-item .app-content-list-item-icon {
 		border-radius: 3px 12px 3px 3px;
 		line-height: 40px;
