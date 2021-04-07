@@ -9,7 +9,6 @@
 	}
 
 	#app-content-wrapper {
-		padding-top: 40px;
 		display: flex;
 		position: relative;
 		align-items: stretch;
