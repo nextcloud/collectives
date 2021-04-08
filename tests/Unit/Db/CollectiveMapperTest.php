@@ -2,7 +2,6 @@
 
 namespace Unit\Db;
 
-use OC\Files\Node\Folder;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCP\IDBConnection;

@@ -25,7 +25,7 @@ class ExpireCollectiveVersions extends Base {
 	protected function configure(): void {
 		$this
 			->setName('collectives:expire')
-			->setDescription('Trigger expiry of versions for pages/files in collectives');
+			->setDescription('Trigger expiry of old page versions in collectives');
 		parent::configure();
 	}
 

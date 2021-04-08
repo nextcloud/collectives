@@ -2,19 +2,14 @@
 
 namespace Unit\Service;
 
-use OCA\Circles\Api\v1\Circles;
 use OCA\Circles\Model\Circle;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
-use OCA\Collectives\Model\CollectiveInfo;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Service\CollectiveHelper;
 use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\UnprocessableEntityException;
 use OCA\Collectives\Service\ConflictException;
-use OCP\AppFramework\QueryException;
-use OCP\Files\InvalidPathException;
-use OCP\Files\NotPermittedException as FilesNotPermittedException;
 use PHPUnit\Framework\TestCase;
 
 class CollectiveServiceTest extends TestCase {
@@ -77,7 +72,7 @@ class CollectiveServiceTest extends TestCase {
 		$this->collectiveMapper
 			->expects($this->once())
 			->method('insert')
-			->with($this->callback(function($collective) {
+			->with($this->callback(function ($collective) {
 				return is_callable([$collective, 'getName']) &&
 					$collective->getName() == 'free';
 			}))
@@ -85,11 +80,10 @@ class CollectiveServiceTest extends TestCase {
 		$info = $this->service->createCollective($this->userId, 'de', 'free', 'free');
 		self::assertTrue(is_callable([$info, 'jsonSerialize']));
 		self::assertEqualsCanonicalizing([
-				'id' => 123,
-				'name' => null,
-				'circleUniqueId' => null,
-				'admin' => true
-			], $info->jsonSerialize());
+			'id' => 123,
+			'name' => null,
+			'circleUniqueId' => null,
+			'admin' => true
+		], $info->jsonSerialize());
 	}
-
 }

@@ -30,16 +30,16 @@ class CollectiveFolderManagerTest extends TestCase {
 	protected function tearDown(): void {
 		parent::tearDown();
 
-		unlink(__DIR__ . '/Readme.de.md');
+		unlink( '/tmp/Readme.de.md');
 	}
 
 	public function testGetLandingPagePath(): void {
 		// Test for nonexistent localized landing page
-		self::assertStringEndsWith('Readme.en.md', $this->manager->getLandingPagePath(__DIR__, 'de'));
-		self::assertStringEndsWith('Readme.en.md', $this->manager->getLandingPagePath(__DIR__, 'en'));
+		self::assertStringEndsWith('Readme.en.md', $this->manager->getLandingPagePath('/tmp', 'de'));
+		self::assertStringEndsWith('Readme.en.md', $this->manager->getLandingPagePath('/tmp', 'en'));
 
 		// Test for existent localized landing page
-		file_put_contents(__DIR__ . '/Readme.de.md', 'testfile');
-		self::assertStringEndsWith('Readme.de.md', $this->manager->getLandingPagePath(__DIR__, 'de'));
+		file_put_contents('/tmp/Readme.de.md', 'testfile');
+		self::assertStringEndsWith('Readme.de.md', $this->manager->getLandingPagePath('/tmp', 'de'));
 	}
 }

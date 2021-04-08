@@ -104,13 +104,9 @@
     </UndefinedClass>
   </file>
   <file src="lib/Mount/MountProvider.php">
-    <MissingDependency occurrences="2">
-      <code>CollectiveMountPoint</code>
-      <code>CollectiveStorage</code>
-    </MissingDependency>
     <UndefinedClass occurrences="2">
       <code>Cache</code>
-      <code>Jail</code>
+      <code>CacheEntry|null</code>
     </UndefinedClass>
   </file>
   <file src="lib/Mount/RootEntryCache.php">

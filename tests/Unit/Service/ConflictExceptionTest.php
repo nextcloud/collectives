@@ -10,7 +10,6 @@ use PHPUnit\Framework\TestCase;
 use OCA\Collectives\Service\ConflictException;
 
 class ConflictExceptionTest extends TestCase {
-
 	public function testMessage(): void {
 		$dummy = new Dummy('test me');
 		$message = "Dummy already exists";
@@ -24,11 +23,9 @@ class ConflictExceptionTest extends TestCase {
 		$exc = new ConflictException($message, $dummy);
 		self::assertEquals($dummy->jsonSerialize(), $exc->jsonSerialize());
 	}
-
 }
 
 class Dummy implements JsonSerializable {
-
 	private $name;
 
 	public function __construct(
