@@ -10,7 +10,6 @@ use JsonSerializable;
  * Only use this if the user has access to the existing record.
  */
 class ConflictException extends ServiceException implements JsonSerializable {
-
 	private $existing;
 
 	public function __construct(
@@ -23,5 +22,4 @@ class ConflictException extends ServiceException implements JsonSerializable {
 	public function jsonSerialize() {
 		return $this->existing->jsonSerialize();
 	}
-
 }

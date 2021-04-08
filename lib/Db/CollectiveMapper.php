@@ -136,7 +136,6 @@ class CollectiveMapper extends QBMapper {
 			$collective->getCircleUniqueId(),
 			$userId,
 			Circles::TYPE_USER);
-		return ( $member !== null && $member->getLevel() >= Circles::LEVEL_OWNER);
+		return ($member !== null && $member->getLevel() >= Circles::LEVEL_OWNER);
 	}
-
 }
