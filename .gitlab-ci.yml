@@ -50,7 +50,7 @@ Cache node_modules:
       - package.json
       - package-lock.json
     refs:
-      - master
+      - main
 
 Build App:
   <<: *node
