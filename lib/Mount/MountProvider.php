@@ -3,6 +3,7 @@
 namespace OCA\Collectives\Mount;
 
 use OC\Files\Cache\Cache;
+use OC\Files\Cache\CacheEntry;
 use OC\Files\Storage\Wrapper\Jail;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Service\CollectiveHelper;
@@ -92,7 +93,7 @@ class MountProvider implements IMountProvider {
 	/**
 	 * @param int                  $id
 	 * @param string               $mountPoint
-	 * @param null                 $cacheEntry
+	 * @param CacheEntry|null      $cacheEntry
 	 * @param IStorageFactory|null $loader
 	 * @param IUser|null           $user
 	 *
@@ -102,13 +103,9 @@ class MountProvider implements IMountProvider {
 	 */
 	public function getMount(int $id,
 							 string $mountPoint,
-							 $cacheEntry = null,
+							 CacheEntry $cacheEntry = null,
 							 IStorageFactory $loader = null,
 							 IUser $user = null): IMountPoint {
-		if (!$cacheEntry) {
-			$this->collectiveFolderManager->createFolder($id);
-		}
-
 		$storage = $this->collectiveFolderManager->getRootFolder()->getStorage();
 
 		$rootPath = $this->getJailPath($id);

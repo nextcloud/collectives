@@ -182,18 +182,19 @@ class CollectiveFolderManager {
 	 * @throws InvalidPathException
 	 * @throws NotPermittedException
 	 */
-	public function createFolder(int $id, string $lang = null) {
+	public function createFolder(int $id, string $lang) {
+		$landingPageFileName = self::LANDING_PAGE . '.' . self::LANDING_PAGE_SUFFIX;
 		try {
 			$folder = $this->getFolder($id);
 		} catch (NotFoundException $e) {
 			$folder = $this->getSkeletonFolder($this->getRootFolder())
 				->copy($this->getRootFolder()->getPath() . '/' . $id);
 		}
-		if (null !== $lang && !$folder->nodeExists(self::LANDING_PAGE)) {
+		if (!$folder->nodeExists($landingPageFileName)) {
 			$landingPageDir = __DIR__ . '/../../' . self::SKELETON_DIR;
 			$landingPagePath = $this->getLandingPagePath($landingPageDir, $lang);
 			if (false !== $content = file_get_contents($landingPagePath)) {
-				$folder->newFile(self::LANDING_PAGE . '.' . self::LANDING_PAGE_SUFFIX, $content);
+				$folder->newFile($landingPageFileName, $content);
 			}
 		}
 	}
