@@ -115,9 +115,9 @@ After installing `npm-check-updates` with
 npm install npm-check-updates --no-save
 ```
 List all outdated packages with `npm run npm-check-updates`
-and then updat all of them with the `-u` option.
+and then update all of them with the `-u` option.
 
-Roll back updates that brake the build with
+Roll back updates that break the build with
 ```
 npm install package@^1.2.3
 ```

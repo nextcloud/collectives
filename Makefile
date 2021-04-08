@@ -123,6 +123,8 @@ source:
 		--exclude=".git*" \
 		--exclude=".php_cs.cache" \
 		--exclude="build" \
+		--exclude="cypress/screenshots" \
+		--exclude="cypress/videos" \
 		--exclude="js/*" \
 		--exclude="node_modules" \
 		--exclude="vendor" \
