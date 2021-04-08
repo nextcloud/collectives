@@ -148,8 +148,10 @@ API PHP 8.0 nextcloud 21:
     CYPRESS_baseUrl: http://nextcloud.local/index.php
     APP_SOURCE_URL: "https://gitlab.com/collectivecloud/collectives/-/jobs/${BUILD_JOB_ID}/artifacts/raw/build/release/collectives-${BUILD_VERSION}.tar.gz"
   script:
+    - npm install --no-save wait-on
     - $(npm bin)/cypress install
     - $(npm bin)/cypress verify
+    - $(npm bin)/wait-on -i 500 -t 240000 $CYPRESS_baseUrl
     - $(npm bin)/cypress run --browser chrome --config video=false
   needs:
     - "Build App"
