@@ -21,7 +21,7 @@ class PurgeObsoletePages extends Base {
 	protected function configure(): void {
 		$this
 			->setName('collectives:purge-obsolete-pages')
-			->setDescription('Trigger garbage collector for obsolete pages');
+			->setDescription('Trigger garbage collector for cruft pages in database');
 		parent::configure();
 	}
 
@@ -30,9 +30,9 @@ class PurgeObsoletePages extends Base {
 	 * @param OutputInterface $output
 	 */
 	protected function execute(InputInterface $input, OutputInterface $output): void {
-		$output->write('Start to purge obsolete pages from database ...');
+		$output->write('Start to purge cruft pages from database ...');
 		$count = $this->garbageCollector->purgeObsoletePages();
 		$output->writeln('done.');
-		$output->writeln(sprintf('Purged %d obsolete pages.', $count));
+		$output->writeln(sprintf('Purged %d cruft pages from database.', $count));
 	}
 }
