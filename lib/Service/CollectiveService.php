@@ -49,6 +49,16 @@ class CollectiveService {
 
 	/**
 	 * @param string $userId
+	 *
+	 * @return CollectiveInfo[]
+	 * @throws QueryException
+	 */
+	public function getCollectivesTrash(string $userId): array {
+		return $this->collectiveHelper->getCollectivesTrashForUser($userId);
+	}
+
+	/**
+	 * @param string $userId
 	 * @param string $userLang
 	 * @param string $name
 	 * @param string $safeName
@@ -99,14 +109,30 @@ class CollectiveService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function deleteCollective(string $userId, int $id): CollectiveInfo {
-		if (null === $collective = $this->collectiveMapper->findById($id, $userId)) {
+	public function trashCollective(string $userId, int $id): CollectiveInfo {
+		if (null === $collective = $this->collectiveMapper->findById($id, $userId, false)) {
 			throw new NotFoundException('Collective not found: ' . $id);
 		}
 
 		if (!$this->collectiveMapper->isAdmin($collective, $userId)) {
 			throw new NotPermittedException('Member ' . $userId . ' not allowed to delete collective: ' . $id);
 		}
+
+		return new CollectiveInfo($this->collectiveMapper->trash($collective), true);
+	}
+
+	/**
+	 * @param string $userId
+	 * @param int    $id
+	 *
+	 * @return CollectiveInfo
+	 * @throws NotFoundException
+	 */
+	public function deleteCollective(string $userId, int $id): CollectiveInfo {
+		if (null === $collective = $this->collectiveMapper->findById($id, $userId, true)) {
+			throw new NotFoundException('Collective not found: ' . $id);
+		}
+
 		Circles::destroyCircle($collective->getCircleUniqueId());
 
 		// Delete collective folder and its contents
@@ -118,5 +144,20 @@ class CollectiveService {
 		}
 
 		return new CollectiveInfo($this->collectiveMapper->delete($collective), true);
+	}
+
+	/**
+	 * @param string $userId
+	 * @param int    $id
+	 *
+	 * @return CollectiveInfo
+	 * @throws NotFoundException
+	 */
+	public function restoreCollective(string $userId, int $id): CollectiveInfo {
+		if (null === $collective = $this->collectiveMapper->findById($id, $userId, true)) {
+			throw new NotFoundException('Collective not found in trash: ' . $id);
+		}
+
+		return new CollectiveInfo($this->collectiveMapper->restore($collective), true);
 	}
 }

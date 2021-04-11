@@ -74,13 +74,19 @@ class FeatureContext implements Context {
 
 	/**
 	 * @Then user :user sees collective :collective
+	 * @Then user :user sees collective :collective in :trash
 	 *
 	 * @param string $user
 	 * @param string $collective
+	 * @param string $trash
 	 */
-	public function userSeesCollective(string $user, string $collective): void {
+	public function userSeesCollective(string $user, string $collective, ?string $trash = null): void {
 		$this->setCurrentUser($user);
-		$this->sendRequest('GET', '/apps/collectives/_collectives');
+		if ($trash) {
+			$this->sendRequest('GET', '/apps/collectives/_collectives/trash');
+		} else {
+			$this->sendRequest('GET', '/apps/collectives/_collectives');
+		}
 		$this->assertStatusCode($this->response, 200);
 		$this->assertCollectiveByName($this->response, $collective);
 	}
@@ -102,13 +108,19 @@ class FeatureContext implements Context {
 
 	/**
 	 * @Then user :user doesn't see collective :collective
+	 * @Then user :user doesn't see collective :collective in :trash
 	 *
 	 * @param string $user
 	 * @param string $collective
+	 * @param string $trash
 	 */
-	public function userDoesntSeeCollective(string $user, string $collective): void {
+	public function userDoesntSeeCollective(string $user, string $collective, ?string $trash = null): void {
 		$this->setCurrentUser($user);
-		$this->sendRequest('GET', '/apps/collectives/_collectives');
+		if ($trash) {
+			$this->sendRequest('GET', '/apps/collectives/_collectives/trash');
+		} else {
+			$this->sendRequest('GET', '/apps/collectives/_collectives');
+		}
 		$this->assertStatusCode($this->response, 200);
 		$this->assertCollectiveByName($this->response, $collective, true);
 	}
@@ -144,16 +156,17 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user deletes collective :collective
-	 * @When user :user :fails to delete collective :collective
-	 * @When user :user :fails to delete foreign collective :collective with member :member
+	 * @When user :user trashs collective :collective
+	 * @When user :user :fails to trash collective :collective
+	 * @When user :user :fails to trash foreign collective :collective with member :member
 	 *
-	 * @param string $user
-	 * @param string $collective
-	 * @param string $fail
+	 * @param string      $user
+	 * @param string      $collective
+	 * @param string|null $fail
+	 * @param string|null $member
 	 */
-	public function userDeletesCollective(string $user, string $collective, ?string $fail = null, ?string $member = null): void {
-		$this->setCurrentUser($member ? $member : $user);
+	public function userTrashsCollective(string $user, string $collective, ?string $fail = null, ?string $member = null): void {
+		$this->setCurrentUser($member ?: $user);
 		$collectiveId = $this->collectiveIdByName($collective);
 		if (null === $collectiveId) {
 			throw new RuntimeException('Could not get collectiveId for ' . $collective);
@@ -162,6 +175,55 @@ class FeatureContext implements Context {
 		$this->sendRequest('DELETE', '/apps/collectives/_collectives/' . $collectiveId);
 		if ("fails" === $fail) {
 			$this->assertStatusCode($this->response, $member ? 404 : 403);
+		} else {
+			$this->assertStatusCode($this->response, 200);
+		}
+	}
+
+	/**
+	 * @When user :user deletes collective :collective
+	 * @When user :user :fails to delete collective :collective
+	 * @When user :user :fails to delete collective :collective with admin :admin
+	 *
+	 * @param string      $user
+	 * @param string      $collective
+	 * @param string|null $fail
+	 * @param string|null $admin
+	 */
+	public function userDeletesCollective(string $user, string $collective, ?string $fail = null, ?string $admin = null): void {
+		$this->setCurrentUser($admin ?: $user);
+		$collectiveId = $this->collectiveIdByName($collective, true);
+		if (null === $collectiveId) {
+			throw new RuntimeException('Could not get collectiveId for ' . $collective);
+		}
+		$this->setCurrentUser($user);
+		$this->sendRequest('DELETE', '/apps/collectives/_collectives/trash/' . $collectiveId);
+		if ("fails" === $fail) {
+			$this->assertStatusCode($this->response, 404);
+		} else {
+			$this->assertStatusCode($this->response, 200);
+		}
+	}
+
+	/**
+	 * @When user :user restores collective :collective
+	 * @When user :user :fails to restore collective :collective with admin :admin
+	 *
+	 * @param string      $user
+	 * @param string      $collective
+	 * @param string|null $fail
+	 * @param string|null $admin
+	 */
+	public function userRestoresCollective(string $user, string $collective, ?string $fail = null, ?string $admin = null): void {
+		$this->setCurrentUser($admin ?: $user);
+		$collectiveId = $this->collectiveIdByName($collective, true);
+		if (null === $collectiveId) {
+			throw new RuntimeException('Could not get collectiveId for ' . $collective);
+		}
+		$this->setCurrentUser($user);
+		$this->sendRequest('PATCH', '/apps/collectives/_collectives/trash/' . $collectiveId);
+		if ("fails" === $fail) {
+			$this->assertStatusCode($this->response, 404);
 		} else {
 			$this->assertStatusCode($this->response, 200);
 		}
@@ -238,11 +300,17 @@ class FeatureContext implements Context {
 
 	/**
 	 * @param string $name
+	 * @param bool   $trash
 	 *
 	 * @return int|null
+	 * @throws GuzzleException
 	 */
-	private function collectiveIdByName(string $name): ?int {
-		$this->sendRequest('GET', '/apps/collectives/_collectives');
+	private function collectiveIdByName(string $name, bool $trash = false): ?int {
+		if ($trash) {
+			$this->sendRequest('GET', '/apps/collectives/_collectives/trash');
+		} else {
+			$this->sendRequest('GET', '/apps/collectives/_collectives');
+		}
 		if (200 !== $this->response->getStatusCode()) {
 			throw new RuntimeException('Unable to get list of collectives');
 		}

@@ -72,6 +72,17 @@ class CollectiveController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 *
+	 * @return DataResponse
+	 */
+	public function indexTrash(): DataResponse {
+		return $this->handleErrorResponse(function () {
+			return $this->service->getCollectivesTrash($this->getUserId());
+		}, $this->logger);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 *
 	 * @param string $name
 	 *
 	 * @return DataResponse
@@ -95,9 +106,35 @@ class CollectiveController extends Controller {
 	 *
 	 * @return DataResponse
 	 */
-	public function destroy(int $id): DataResponse {
+	public function trash(int $id): DataResponse {
+		return $this->handleErrorResponse(function () use ($id) {
+			return $this->service->trashCollective($this->getUserId(), $id);
+		}, $this->logger);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 *
+	 * @param int $id
+	 *
+	 * @return DataResponse
+	 */
+	public function delete(int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($id) {
 			return $this->service->deleteCollective($this->getUserId(), $id);
+		}, $this->logger);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 *
+	 * @param int $id
+	 *
+	 * @return DataResponse
+	 */
+	public function restore(int $id): DataResponse {
+		return $this->handleErrorResponse(function () use ($id) {
+			return $this->service->restoreCollective($this->getUserId(), $id);
 		}, $this->logger);
 	}
 }

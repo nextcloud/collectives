@@ -36,5 +36,8 @@ Feature: collectivePages
     Then user "alice" doesn't see page "firstpage" in "mycollective"
     And user "jane" doesn't see page "secondpage" in "mycollective"
 
-  Scenario: Delete collective with all remaining pages
-    Then user "jane" deletes collective "mycollective"
+  Scenario: Trash collective with all remaining pages
+    Then user "jane" trashs collective "mycollective"
+
+  Scenario: Destroy collective with all remaining pages
+    Then user "jane" destroys collective "mycollective"
