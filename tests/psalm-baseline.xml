@@ -9,7 +9,6 @@
       <code>VersionsBackend</code>
       <code>VersionsBackend</code>
     </MissingDependency>
-    <TooFewArguments occurrences="1"/>
     <UndefinedClass occurrences="1">
       <code>LoadAdditionalScriptsEvent</code>
     </UndefinedClass>
@@ -76,6 +75,11 @@
       <code>NoUserException</code>
     </UndefinedClass>
   </file>
+  <file src="lib/Model/CollectiveInfo.php">
+    <InvalidPropertyAssignmentValue occurrences="1">
+      <code>$collective-&gt;getTrashTimestamp()</code>
+    </InvalidPropertyAssignmentValue>
+  </file>
   <file src="lib/Mount/CollectiveFolderManager.php">
     <InvalidArgument occurrences="1"/>
     <MissingDependency occurrences="4">
@@ -115,7 +119,8 @@
     </UndefinedClass>
   </file>
   <file src="lib/Service/CollectiveHelper.php">
-    <UndefinedClass occurrences="1">
+    <UndefinedClass occurrences="2">
+      <code>Circles</code>
       <code>Circles</code>
     </UndefinedClass>
   </file>

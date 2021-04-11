@@ -207,20 +207,18 @@ class FeatureContext implements Context {
 
 	/**
 	 * @When user :user restores collective :collective
-	 * @When user :user :fails to restore collective :collective with admin :admin
+	 * @When user :user :fails to restore collective :collective
 	 *
 	 * @param string      $user
 	 * @param string      $collective
 	 * @param string|null $fail
-	 * @param string|null $admin
 	 */
-	public function userRestoresCollective(string $user, string $collective, ?string $fail = null, ?string $admin = null): void {
-		$this->setCurrentUser($admin ?: $user);
+	public function userRestoresCollective(string $user, string $collective, ?string $fail = null): void {
+		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective, true);
 		if (null === $collectiveId) {
 			throw new RuntimeException('Could not get collectiveId for ' . $collective);
 		}
-		$this->setCurrentUser($user);
 		$this->sendRequest('PATCH', '/apps/collectives/_collectives/trash/' . $collectiveId);
 		if ("fails" === $fail) {
 			$this->assertStatusCode($this->response, 404);

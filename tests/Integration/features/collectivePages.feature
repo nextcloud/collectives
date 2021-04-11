@@ -39,5 +39,5 @@ Feature: collectivePages
   Scenario: Trash collective with all remaining pages
     Then user "jane" trashs collective "mycollective"
 
-  Scenario: Destroy collective with all remaining pages
-    Then user "jane" destroys collective "mycollective"
+  Scenario: Delete collective with all remaining pages
+    Then user "jane" deletes collective "mycollective"

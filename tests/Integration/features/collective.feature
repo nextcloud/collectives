@@ -15,19 +15,10 @@ Feature: collective
   Scenario: Fail to trash a foreign collective
     And user "john" fails to trash foreign collective "mycollective" with member "jane"
 
-  Scenario: Fail to delete an owned collective without deleteTimestamp
-    And user "jane" fails to delete collective "mycollective"
-
   Scenario: Trash an owned collective
     When user "jane" trashs collective "mycollective"
     Then user "jane" sees collective "mycollective" in trash
     And user "alice" doesn't see collective "mycollective" in trash
-
-  Scenario: Fail to restore a collective as simple member
-    And user "alice" fails to restore collective "mycollective" with admin "jane"
-
-  Scenario: Fail to restore a foreign collective
-    And user "john" fails to restore collective "mycollective" with admin "jane"
 
   Scenario: Restore an owned collective
     When user "jane" restores collective "mycollective"
