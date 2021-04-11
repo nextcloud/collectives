@@ -3,6 +3,7 @@
 namespace OCA\Collectives\Db;
 
 use OCA\Circles\Api\v1\Circles;
+use OCA\Circles\Exceptions\MemberDoesNotExistException;
 use OCA\Circles\Model\Circle;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
@@ -172,11 +173,15 @@ class CollectiveMapper extends QBMapper {
 	 * @return bool
 	 */
 	public function isAdmin(Collective $collective, string $userId): bool {
-		$member = Circles::getMember(
-			$collective->getCircleUniqueId(),
-			$userId,
-			Circles::TYPE_USER);
-		// For now only circle owners are admins for the collective
-		return ($member !== null && $member->getLevel() >= Circles::LEVEL_OWNER);
+		try {
+			$member = Circles::getMember(
+				$collective->getCircleUniqueId(),
+				$userId,
+				Circles::TYPE_USER);
+			// For now only circle owners are admins for the collective
+			return ($member !== null && $member->getLevel() >= Circles::LEVEL_OWNER);
+		} catch (MemberDoesNotExistException $e) {
+			return false;
+		}
 	}
 }
