@@ -38,4 +38,21 @@ class CollectiveHelper {
 		}
 		return $collectiveInfos;
 	}
+
+	/**
+	 * @param string $userId
+	 *
+	 * @return CollectiveInfo[]
+	 * @throws QueryException
+	 */
+	public function getCollectivesTrashForUser(string $userId): array {
+		$collectiveInfos = [];
+		$joinedCircleIds = Circles::joinedCircleIds($userId);
+		foreach ($joinedCircleIds as $cId) {
+			if ((null !== $c = $this->collectiveMapper->findByCircleId($cId, $userId, true))) {
+				$collectiveInfos[] = new CollectiveInfo($c, true);
+			}
+		}
+		return $collectiveInfos;
+	}
 }

@@ -15,6 +15,7 @@ use OCP\IDBConnection;
  * @method Collective insert(Collective $collective) : Collective
  * @method Collective delete(Collective $collective) : Collective
  * @method Collective findEntity(IQueryBuilder $query) : Collective
+ * @method Collective update(Collective $collective) : Collective
  */
 class CollectiveMapper extends QBMapper {
 
@@ -113,6 +114,26 @@ class CollectiveMapper extends QBMapper {
 		} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
 			return null;
 		}
+	}
+
+	/**
+	 * @param Collective $collective
+	 *
+	 * @return Collective
+	 */
+	public function trash(Collective $collective): Collective {
+		$collective->setTrashTimestamp(time());
+		return $this->update($collective);
+	}
+
+	/**
+	 * @param Collective $collective
+	 *
+	 * @return Collective
+	 */
+	public function restore(Collective $collective): Collective {
+		$collective->setTrashTimestamp();
+		return $this->update($collective);
 	}
 
 	/**
