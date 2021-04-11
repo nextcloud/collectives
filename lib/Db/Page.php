@@ -16,7 +16,10 @@ use OCP\AppFramework\Db\Entity;
  * @method void setLastUserId(string $value)
  */
 class Page extends Entity implements JsonSerializable {
+	/** @var int */
 	protected $fileId;
+
+	/** @var string */
 	protected $lastUserId;
 
 	public function jsonSerialize() {

@@ -14,16 +14,32 @@ use OCP\AppFramework\Db\Entity;
  * @method void setName(string $value)
  * @method string getCircleUniqueId()
  * @method void setCircleUniqueId(string $value)
+ * @method string getTrashTimestamp()
+ * @method void setTrashTimestamp(int $value = null)
  */
 class Collective extends Entity implements JsonSerializable {
+	/** @var string */
 	protected $name;
+
+	/** @var string */
 	protected $circleUniqueId;
+
+	/** @var int */
+	protected $trashTimestamp;
+
+	/**
+	 * @return bool
+	 */
+	public function isTrashed(): bool {
+		return (bool)$this->getTrashTimestamp();
+	}
 
 	public function jsonSerialize() {
 		return [
 			'id' => $this->id,
 			'name' => $this->name,
-			'circleUniqueId' => $this->circleUniqueId
+			'circleUniqueId' => $this->circleUniqueId,
+			'trashTimestamp' => $this->trashTimestamp
 		];
 	}
 }

@@ -51,7 +51,7 @@ class CollectiveServiceTest extends TestCase {
 		$this->collectiveMapper->method('findByName')
 			->willReturn(null);
 		$this->collectiveMapper->method('createCircle')
-			->will($this->throwException(new \RuntimeException('Failed to create Circle taken')));
+			->will(self::throwException(new \RuntimeException('Failed to create Circle taken')));
 		$this->expectException(\RuntimeException::class);
 		$this->expectExceptionMessage('Failed to create Circle taken');
 		$this->service->createCollective($this->userId, 'de', 'taken', 'taken');
@@ -83,6 +83,7 @@ class CollectiveServiceTest extends TestCase {
 			'id' => 123,
 			'name' => null,
 			'circleUniqueId' => null,
+			'trashTimestamp' => null,
 			'admin' => true
 		], $info->jsonSerialize());
 	}
