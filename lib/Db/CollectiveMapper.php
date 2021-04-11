@@ -4,8 +4,6 @@ namespace OCA\Collectives\Db;
 
 use OCA\Circles\Api\v1\Circles;
 use OCA\Circles\Model\Circle;
-use OCA\Circles\Exceptions\CircleAlreadyExistsException;
-use OCA\Circles\Exceptions\MemberDoesNotExistException;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\AppFramework\Db\QBMapper;
@@ -38,14 +36,17 @@ class CollectiveMapper extends QBMapper {
 	 */
 	public function findByCircleId(string $circleUniqueId, string $userId = null): ?Collective {
 		$qb = $this->db->getQueryBuilder();
+		$where = $qb->expr()->andX();
+		$where->add($qb->expr()->eq('circle_unique_id', $qb->createNamedParameter($circleUniqueId, IQueryBuilder::PARAM_STR)));
 		$qb->select('*')
 			->from($this->tableName)
-			->where(
-				$qb->expr()->eq('circle_unique_id', $qb->createNamedParameter($circleUniqueId, IQueryBuilder::PARAM_STR))
-			);
+			->where($where);
 		try {
 			$collective = $this->findEntity($qb);
-			return (null === $userId) ? $collective : $this->userHasCollective($collective, $userId);
+			if (null === $userId) {
+				return $collective;
+			}
+			return ($this->isMember($collective, $userId)) ? $collective : null;
 		} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
 			return null;
 		}
@@ -59,14 +60,17 @@ class CollectiveMapper extends QBMapper {
 	 */
 	public function findById(int $id, string $userId = null): ?Collective {
 		$qb = $this->db->getQueryBuilder();
+		$where = $qb->expr()->andX();
+		$where->add($qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 		$qb->select('*')
 			->from($this->tableName)
-			->where(
-				$qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT))
-			);
+			->where($where);
 		try {
 			$collective = $this->findEntity($qb);
-			return (null === $userId) ? $collective : $this->userHasCollective($collective, $userId);
+			if (null === $userId) {
+				return $collective;
+			}
+			return ($this->isMember($collective, $userId)) ? $collective : null;
 		} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
 			return null;
 		}
@@ -80,46 +84,48 @@ class CollectiveMapper extends QBMapper {
 	 */
 	public function findByName(string $name, string $userId = null): ?Collective {
 		$qb = $this->db->getQueryBuilder();
+		$where = $qb->expr()->andX();
+		$where->add($qb->expr()->eq('name', $qb->createNamedParameter($name, IQueryBuilder::PARAM_STR)));
 		$qb->select('*')
 			->from($this->tableName)
-			->where(
-				$qb->expr()->eq('name', $qb->createNamedParameter($name, IQueryBuilder::PARAM_STR))
-			);
+			->where($where);
 		try {
 			$collective = $this->findEntity($qb);
-			return (null === $userId) ? $collective : $this->userHasCollective($collective, $userId);
+			if (null === $userId) {
+				return $collective;
+			}
+			return ($this->isMember($collective, $userId)) ? $collective : null;
 		} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
 			return null;
 		}
 	}
 
 	/**
+	 * @param string $name
+	 *
+	 * @return Circle
+	 */
+	public function createCircle(string $name): Circle {
+		return Circles::createCircle(Circles::CIRCLES_SECRET, $name);
+	}
+
+	/**
 	 * @param Collective $collective
 	 * @param string     $userId
 	 *
-	 * @return Collective|null
+	 * @return bool
 	 */
-	public function userHasCollective(Collective $collective, string $userId): ?Collective {
+	public function isMember(Collective $collective, string $userId): bool {
 		try {
 			$joinedCircles = Circles::joinedCircles($userId);
 			foreach ($joinedCircles as $jc) {
 				if ($collective->getCircleUniqueId() === $jc->getUniqueId()) {
-					return $collective;
+					return true;
 				}
 			}
 		} catch (QueryException $e) {
 		}
-		return null;
-	}
-
-	/**
-	 * @param string     $name
-	 *
-	 * @return Circle|null
-	 * @throws CircleAlreadyExistsException
-	 */
-	public function createCircle(string $name): Circle {
-		return Circles::createCircle(Circles::CIRCLES_SECRET, $name);
+		return false;
 	}
 
 	/**
@@ -128,13 +134,13 @@ class CollectiveMapper extends QBMapper {
 	 * @param string     $userId
 	 *
 	 * @return bool
-	 * @throws QueryException
 	 */
 	public function isAdmin(Collective $collective, string $userId): bool {
 		$member = Circles::getMember(
 			$collective->getCircleUniqueId(),
 			$userId,
 			Circles::TYPE_USER);
+		// For now only circle owners are admins for the collective
 		return ($member !== null && $member->getLevel() >= Circles::LEVEL_OWNER);
 	}
 }
