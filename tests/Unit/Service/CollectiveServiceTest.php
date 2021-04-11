@@ -70,15 +70,15 @@ class CollectiveServiceTest extends TestCase {
 		$this->collectiveMapper->method('createCircle')
 			->willReturn($circle);
 		$this->collectiveMapper
-			->expects($this->once())
+			->expects(self::once())
 			->method('insert')
-			->with($this->callback(function ($collective) {
+			->with(self::callback(function ($collective) {
 				return is_callable([$collective, 'getName']) &&
-					$collective->getName() == 'free';
+					$collective->getName() === 'free';
 			}))
 			->willReturn($collective);
 		$info = $this->service->createCollective($this->userId, 'de', 'free', 'free');
-		self::assertTrue(is_callable([$info, 'jsonSerialize']));
+		self::assertIsCallable([$info, 'jsonSerialize']);
 		self::assertEqualsCanonicalizing([
 			'id' => 123,
 			'name' => null,
