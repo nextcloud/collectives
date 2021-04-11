@@ -60,12 +60,14 @@ class Application extends App implements IBootstrap {
 
 		$context->registerService(ExpireCollectiveVersions::class, function (ContainerInterface $c) {
 			return new ExpireCollectiveVersions(
+				$c->get(ITimeFactory::class),
 				$c->get(CollectiveVersionsExpireManager::class)
 			);
 		});
 
 		$context->registerService(\OCA\Collectives\BackgroundJob\ExpireCollectiveVersions::class, function (ContainerInterface $c) {
 			return new \OCA\Collectives\BackgroundJob\ExpireCollectiveVersions(
+				$c->get(ITimeFactory::class),
 				$c->get(CollectiveVersionsExpireManager::class)
 			);
 		});
