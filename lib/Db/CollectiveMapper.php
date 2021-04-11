@@ -107,8 +107,7 @@ class CollectiveMapper extends QBMapper {
 					return $collective;
 				}
 			}
-		} catch (QueryException | MemberDoesNotExistException $e) {
-			return null;
+		} catch (QueryException $e) {
 		}
 		return null;
 	}
