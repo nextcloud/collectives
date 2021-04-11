@@ -31,13 +31,15 @@ class CollectiveMapper extends QBMapper {
 	/**
 	 * @param string      $circleUniqueId
 	 * @param string|null $userId
+	 * @param bool        $trash
 	 *
 	 * @return Collective|null
 	 */
-	public function findByCircleId(string $circleUniqueId, string $userId = null): ?Collective {
+	public function findByCircleId(string $circleUniqueId, string $userId = null, bool $trash = false): ?Collective {
 		$qb = $this->db->getQueryBuilder();
 		$where = $qb->expr()->andX();
 		$where->add($qb->expr()->eq('circle_unique_id', $qb->createNamedParameter($circleUniqueId, IQueryBuilder::PARAM_STR)));
+		$where->add($trash ? $qb->expr()->isNotNull('trash_timestamp') : $qb->expr()->isNull('trash_timestamp'));
 		$qb->select('*')
 			->from($this->tableName)
 			->where($where);
@@ -45,6 +47,9 @@ class CollectiveMapper extends QBMapper {
 			$collective = $this->findEntity($qb);
 			if (null === $userId) {
 				return $collective;
+			}
+			if ($trash) {
+				return ($this->isAdmin($collective, $userId)) ? $collective : null;
 			}
 			return ($this->isMember($collective, $userId)) ? $collective : null;
 		} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
@@ -55,13 +60,15 @@ class CollectiveMapper extends QBMapper {
 	/**
 	 * @param int         $id
 	 * @param string|null $userId
+	 * @param bool        $trash
 	 *
 	 * @return Collective|null
 	 */
-	public function findById(int $id, string $userId = null): ?Collective {
+	public function findById(int $id, string $userId = null, bool $trash = false): ?Collective {
 		$qb = $this->db->getQueryBuilder();
 		$where = $qb->expr()->andX();
 		$where->add($qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
+		$where->add($trash ? $qb->expr()->isNotNull('trash_timestamp') : $qb->expr()->isNull('trash_timestamp'));
 		$qb->select('*')
 			->from($this->tableName)
 			->where($where);
@@ -69,6 +76,9 @@ class CollectiveMapper extends QBMapper {
 			$collective = $this->findEntity($qb);
 			if (null === $userId) {
 				return $collective;
+			}
+			if ($trash) {
+				return ($this->isAdmin($collective, $userId)) ? $collective : null;
 			}
 			return ($this->isMember($collective, $userId)) ? $collective : null;
 		} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
@@ -79,13 +89,15 @@ class CollectiveMapper extends QBMapper {
 	/**
 	 * @param string      $name
 	 * @param string|null $userId
+	 * @param bool        $trash
 	 *
 	 * @return Collective|null
 	 */
-	public function findByName(string $name, string $userId = null): ?Collective {
+	public function findByName(string $name, string $userId = null, bool $trash = false): ?Collective {
 		$qb = $this->db->getQueryBuilder();
 		$where = $qb->expr()->andX();
 		$where->add($qb->expr()->eq('name', $qb->createNamedParameter($name, IQueryBuilder::PARAM_STR)));
+		$where->add($trash ? $qb->expr()->isNotNull('trash_timestamp') : $qb->expr()->isNull('trash_timestamp'));
 		$qb->select('*')
 			->from($this->tableName)
 			->where($where);
@@ -93,6 +105,9 @@ class CollectiveMapper extends QBMapper {
 			$collective = $this->findEntity($qb);
 			if (null === $userId) {
 				return $collective;
+			}
+			if ($trash) {
+				return ($this->isAdmin($collective, $userId)) ? $collective : null;
 			}
 			return ($this->isMember($collective, $userId)) ? $collective : null;
 		} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
