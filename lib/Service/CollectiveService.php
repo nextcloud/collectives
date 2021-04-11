@@ -49,19 +49,22 @@ class CollectiveService {
 
 	/**
 	 * @param string $userId
+	 * @param string $userLang
 	 * @param string $name
+	 * @param string $safeName
 	 *
 	 * @return CollectiveInfo
-	 * @throws InvalidPathException
+	 * @throws ConflictException
 	 * @throws FilesNotPermittedException
+	 * @throws InvalidPathException
+	 * @throws UnprocessableEntityException
 	 */
 	public function createCollective(string $userId, string $userLang, string $name, string $safeName): CollectiveInfo {
 		if (empty($name)) {
 			throw new UnprocessableEntityException('Empty collective name is not allowed');
 		}
 
-		$existing = $this->collectiveMapper->findByName($name, $userId);
-		if (null !== $existing) {
+		if (null !== $existing = $this->collectiveMapper->findByName($name, $userId, false)) {
 			$admin = $this->collectiveMapper->isAdmin($existing, $userId);
 			throw new ConflictException(
 				'Collective "' . $name . '" exists already.',
@@ -96,24 +99,17 @@ class CollectiveService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function deleteCollective(string $userId, int $id): Collective {
+	public function deleteCollective(string $userId, int $id): CollectiveInfo {
 		if (null === $collective = $this->collectiveMapper->findById($id, $userId)) {
 			throw new NotFoundException('Collective not found: ' . $id);
 		}
 
-		$circleId = $collective->getCircleUniqueId();
-		try {
-			$member = Circles::getMember($circleId, $userId, Circles::TYPE_USER);
-		} catch (QueryException $e) {
-			throw new NotFoundException('Collective not found: ' . $id);
-		}
-
-		if ($member->getLevel() < Circles::LEVEL_ADMIN) {
+		if (!$this->collectiveMapper->isAdmin($collective, $userId)) {
 			throw new NotPermittedException('Member ' . $userId . ' not allowed to delete collective: ' . $id);
 		}
-
 		Circles::destroyCircle($collective->getCircleUniqueId());
 
+		// Delete collective folder and its contents
 		try {
 			$collectiveFolder = $this->collectiveFolderManager->getFolder($collective->getId());
 			$collectiveFolder->delete();
