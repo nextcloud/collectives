@@ -133,7 +133,7 @@ class CollectiveService {
 	 */
 	public function deleteCollective(string $userId, int $id, bool $deleteCircle): CollectiveInfo {
 		if (null === $collective = $this->collectiveMapper->findTrashById($id, $userId)) {
-			throw new NotFoundException('Collective not found: ' . $id);
+			throw new NotFoundException('Collective not found in trash: ' . $id);
 		}
 
 		if ($deleteCircle) {

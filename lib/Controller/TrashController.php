@@ -53,26 +53,17 @@ class TrashController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 *
-	 * @param int $id
+	 * @param int  $id
+	 * @param bool $circle
 	 *
 	 * @return DataResponse
 	 */
-	public function delete(int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($id) {
+	public function delete(int $id, bool $circle = false): DataResponse {
+		return $this->handleErrorResponse(function () use ($circle, $id) {
+			if ($circle) {
+				return $this->service->deleteCollective($this->getUserId(), $id, true);
+			}
 			return $this->service->deleteCollective($this->getUserId(), $id, false);
-		}, $this->logger);
-	}
-
-	/**
-	 * @NoAdminRequired
-	 *
-	 * @param int $id
-	 *
-	 * @return DataResponse
-	 */
-	public function deleteAll(int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($id) {
-			return $this->service->deleteCollective($this->getUserId(), $id, true);
 		}, $this->logger);
 	}
 

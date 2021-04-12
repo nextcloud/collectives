@@ -249,7 +249,7 @@ class FeatureContext implements Context {
 			throw new RuntimeException('Could not get collectiveId for ' . $collective);
 		}
 		$this->setCurrentUser($user);
-		$this->sendRequest('DELETE', '/apps/collectives/_collectives/trash/' . $collectiveId . '/all');
+		$this->sendRequest('DELETE', '/apps/collectives/_collectives/trash/' . $collectiveId . '?circle=1');
 		if ("fails" === $fail) {
 			$this->assertStatusCode($this->response, 404);
 		} else {

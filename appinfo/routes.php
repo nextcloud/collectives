@@ -18,8 +18,6 @@ return [
 		['name' => 'trash#index', 'url' => '/_collectives/trash', 'verb' => 'GET'],
 		['name' => 'trash#delete', 'url' => '/_collectives/trash/{id}', 'verb' => 'DELETE',
 			'requirements' => ['id' => '\d+']],
-		['name' => 'trash#deleteAll', 'url' => '/_collectives/trash/{id}/all', 'verb' => 'DELETE',
-			'requirements' => ['id' => '\d+']],
 		['name' => 'trash#restore', 'url' => '/_collectives/trash/{id}', 'verb' => 'PATCH',
 			'requirements' => ['id' => '\d+']],
 
