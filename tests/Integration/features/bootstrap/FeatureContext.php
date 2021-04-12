@@ -31,9 +31,6 @@ class FeatureContext implements Context {
 	/** @var array */
 	private $clientOptions;
 
-	/** @var string */
-	private $cruftCircleUniqueId;
-
 	/**
 	 * Initializes context.
 	 * Every scenario gets its own context instance.
@@ -54,6 +51,8 @@ class FeatureContext implements Context {
 	 * @param string $user
 	 * @param string $collective
 	 * @param string|null $fail
+	 *
+	 * @throws GuzzleException
 	 */
 	public function userCreatesCollective(string $user, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
@@ -72,6 +71,8 @@ class FeatureContext implements Context {
 	 * @param string $user
 	 * @param string $page
 	 * @param string $collective
+	 *
+	 * @throws GuzzleException
 	 */
 	public function userCreatesPage(string $user, string $page, string $collective): void {
 		$this->setCurrentUser($user);
@@ -85,9 +86,11 @@ class FeatureContext implements Context {
 	 * @Then user :user sees collective :collective
 	 * @Then user :user sees collective :collective in :trash
 	 *
-	 * @param string $user
-	 * @param string $collective
-	 * @param string $trash
+	 * @param string      $user
+	 * @param string      $collective
+	 * @param string|null $trash
+	 *
+	 * @throws GuzzleException
 	 */
 	public function userSeesCollective(string $user, string $collective, ?string $trash = null): void {
 		$this->setCurrentUser($user);
@@ -106,6 +109,8 @@ class FeatureContext implements Context {
 	 * @param string $user
 	 * @param string $page
 	 * @param string $collective
+	 *
+	 * @throws GuzzleException
 	 */
 	public function userSeesPage(string $user, string $page, string $collective): void {
 		$this->setCurrentUser($user);
@@ -119,9 +124,11 @@ class FeatureContext implements Context {
 	 * @Then user :user doesn't see collective :collective
 	 * @Then user :user doesn't see collective :collective in :trash
 	 *
-	 * @param string $user
-	 * @param string $collective
-	 * @param string $trash
+	 * @param string      $user
+	 * @param string      $collective
+	 * @param string|null $trash
+	 *
+	 * @throws GuzzleException
 	 */
 	public function userDoesntSeeCollective(string $user, string $collective, ?string $trash = null): void {
 		$this->setCurrentUser($user);
@@ -140,6 +147,8 @@ class FeatureContext implements Context {
 	 * @param string $user
 	 * @param string $page
 	 * @param string $collective
+	 *
+	 * @throws GuzzleException
 	 */
 	public function userDoesntSeePage(string $user, string $page, string $collective): void {
 		$this->setCurrentUser($user);
@@ -155,6 +164,8 @@ class FeatureContext implements Context {
 	 * @param string $user
 	 * @param string $page
 	 * @param string $collective
+	 *
+	 * @throws GuzzleException
 	 */
 	public function userLastEditedPage(string $user, string $page, string $collective): void {
 		$this->setCurrentUser($user);
@@ -173,6 +184,8 @@ class FeatureContext implements Context {
 	 * @param string      $collective
 	 * @param string|null $fail
 	 * @param string|null $member
+	 *
+	 * @throws GuzzleException
 	 */
 	public function userTrashesCollective(string $user, string $collective, ?string $fail = null, ?string $member = null): void {
 		$this->setCurrentUser($member ?: $user);
@@ -198,6 +211,8 @@ class FeatureContext implements Context {
 	 * @param string      $collective
 	 * @param string|null $fail
 	 * @param string|null $admin
+	 *
+	 * @throws GuzzleException
 	 */
 	public function userDeletesCollective(string $user, string $collective, ?string $fail = null, ?string $admin = null): void {
 		$this->setCurrentUser($admin ?: $user);
@@ -206,15 +221,6 @@ class FeatureContext implements Context {
 			throw new RuntimeException('Could not get collectiveId for ' . $collective);
 		}
 		$this->setCurrentUser($user);
-
-		// Store circleUniqueId for later usage
-		if ("fails" !== $fail) {
-			$this->sendRequest('GET', '/apps/collectives/_collectives/trash');
-			$this->assertStatusCode($this->response, 200);
-			if (null !== $cruftCircleUniqueId = $this->getCircleIdByCollectiveName($this->response, $collective)) {
-				$this->cruftCircleUniqueId = $cruftCircleUniqueId;
-			}
-		}
 
 		$this->sendRequest('DELETE', '/apps/collectives/_collectives/trash/' . $collectiveId);
 		if ("fails" === $fail) {
@@ -233,6 +239,8 @@ class FeatureContext implements Context {
 	 * @param string      $collective
 	 * @param string|null $fail
 	 * @param string|null $admin
+	 *
+	 * @throws GuzzleException
 	 */
 	public function userDeletesCollectiveAndCircle(string $user, string $collective, ?string $fail = null, ?string $admin = null): void {
 		$this->setCurrentUser($admin ?: $user);
@@ -256,6 +264,8 @@ class FeatureContext implements Context {
 	 * @param string      $user
 	 * @param string      $collective
 	 * @param string|null $fail
+	 *
+	 * @throws GuzzleException
 	 */
 	public function userRestoresCollective(string $user, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
@@ -277,6 +287,8 @@ class FeatureContext implements Context {
 	 * @param string $user
 	 * @param string $page
 	 * @param string $collective
+	 *
+	 * @throws GuzzleException
 	 */
 	public function userDeletesPage(string $user, string $page, string $collective): void {
 		$this->setCurrentUser($user);
@@ -292,6 +304,8 @@ class FeatureContext implements Context {
 	 * @param string $user
 	 * @param string $page
 	 * @param string $collective
+	 *
+	 * @throws GuzzleException
 	 */
 	public function userTouchesPage(string $user, string $page, string $collective): void {
 		$this->setCurrentUser($user);
@@ -308,6 +322,8 @@ class FeatureContext implements Context {
 	 * @param string $page
 	 * @param string $newpage
 	 * @param string $collective
+	 *
+	 * @throws GuzzleException
 	 */
 	public function userRenamesPage(string $user, string $page, string $newpage, string $collective): void {
 		$this->setCurrentUser($user);
@@ -319,17 +335,18 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user is member of circle :circle with admin :admin
+	 * @When user :user joins circle :name with admin :admin
 	 *
 	 * @param string $user
-	 * @param string $circle
+	 * @param string $name
 	 * @param string $admin
+	 *
+	 * @throws GuzzleException
 	 */
-	public function userIsMemberOfCircle(string $user, string $circle, string $admin): void {
+	public function userJoinsCircle(string $user, string $name, string $admin): void {
 		$this->setCurrentUser($admin);
-		$this->sendRequest('GET', '/apps/collectives/_collectives');
-		$this->assertStatusCode($this->response, 200);
-		$circleUniqueId = $this->getCircleIdByCollectiveName($this->response, $circle);
+		$circleUniqueId = $this->circleUniqueIdByName($name);
+		Assert::assertNotNull($circleUniqueId);
 
 		$data = new TableNode([
 			['ident', $user],
@@ -341,15 +358,53 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user deletes cruft circle
+	 * @When user :user is member of circle :name
 	 *
 	 * @param string $user
+	 * @param string $name
+	 *
+	 * @throws GuzzleException
 	 */
-	public function userDeletesCruftCircle(string $user): void {
-		Assert::assertNotEmpty($this->cruftCircleUniqueId);
+	public function userIsMemberOfCircle(string $user, string $name): void {
 		$this->setCurrentUser($user);
-		$this->sendRequest('DELETE', '/apps/circles/v1/circles/' . $this->cruftCircleUniqueId);
+		$circleUniqueId = $this->circleUniqueIdByName($name);
+		Assert::assertNotNull($circleUniqueId);
+	}
+
+	/**
+	 * @When user :user deletes circle :name
+	 *
+	 * @param string $user
+	 * @param string $name
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userDeletesCircle(string $user, string $name): void {
+		$this->setCurrentUser($user);
+		$circleUniqueId = $this->circleUniqueIdByName($name);
+		Assert::assertNotNull($circleUniqueId);
+		$this->sendRequest('DELETE', '/apps/circles/v1/circles/' . $circleUniqueId);
 		$this->assertStatusCode($this->response, 201);
+	}
+
+	/**
+	 * @param string $name
+	 *
+	 * @return string|null
+	 * @throws GuzzleException
+	 */
+	private function circleUniqueIdByName(string $name): ?string {
+		$this->sendRequest('GET', '/apps/circles/v1/circles?type=14');
+		if (201 !== $this->response->getStatusCode()) {
+			throw new RuntimeException('Unable to get list of circles');
+		}
+		$jsonBody = json_decode($this->response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
+		foreach ($jsonBody['data'] as $circle) {
+			if ($name === $circle['name']) {
+				return $circle['unique_id'];
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -368,7 +423,7 @@ class FeatureContext implements Context {
 		if (200 !== $this->response->getStatusCode()) {
 			throw new RuntimeException('Unable to get list of collectives');
 		}
-		$jsonBody = json_decode($this->response->getBody()->getContents(), true);
+		$jsonBody = json_decode($this->response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
 		foreach ($jsonBody as $collective) {
 			if ($name === $collective['name']) {
 				return $collective['id'];
@@ -382,13 +437,14 @@ class FeatureContext implements Context {
 	 * @param string $name
 	 *
 	 * @return int|null
+	 * @throws GuzzleException
 	 */
 	private function pageIdByName(int $collectiveId, string $name): ?int {
 		$this->sendRequest('GET', '/apps/collectives/_collectives/' . $collectiveId . '/_pages');
 		if (200 !== $this->response->getStatusCode()) {
 			throw new RuntimeException('Unable to get list of pages for collective ' . $collectiveId);
 		}
-		$jsonBody = json_decode($this->response->getBody()->getContents(), true);
+		$jsonBody = json_decode($this->response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
 		foreach ($jsonBody as $page) {
 			if ($name === $page['title']) {
 				return $page['id'];
@@ -436,7 +492,7 @@ class FeatureContext implements Context {
 		}
 
 		// Add Xdebug trigger variable as GET parameter
-		$fullUrl = $fullUrl . '?XDEBUG_SESSION=PHPSTORM';
+		$fullUrl .= '?XDEBUG_SESSION=PHPSTORM';
 
 		try {
 			$this->response = $client->{$verb}($fullUrl, $options);
@@ -496,7 +552,7 @@ class FeatureContext implements Context {
 	 * @return string|null
 	 */
 	private function getCircleIdByCollectiveName(Response $response, string $name): ?string {
-		$jsonBody = json_decode($response->getBody()->getContents(), true);
+		$jsonBody = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
 		foreach ($jsonBody as $collective) {
 			if ($name === $collective['name']) {
 				return $collective['circleUniqueId'];
@@ -520,7 +576,7 @@ class FeatureContext implements Context {
 	 * @param bool|null $revert
 	 */
 	private function assertCollectiveByName(Response $response, string $name, ?bool $revert = false): void {
-		$jsonBody = json_decode($response->getBody()->getContents(), true);
+		$jsonBody = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
 		$collectiveNames = [];
 		foreach ($jsonBody as $collective) {
 			$collectiveNames[] = $collective['name'];
@@ -538,7 +594,7 @@ class FeatureContext implements Context {
 	 * @param bool|null $revert
 	 */
 	private function assertPageByTitle(Response $response, string $title, ?bool $revert = false): void {
-		$jsonBody = json_decode($response->getBody()->getContents(), true);
+		$jsonBody = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
 		$pageTitles = [];
 		foreach ($jsonBody as $page) {
 			$pageTitles[] = $page['title'];
@@ -556,7 +612,7 @@ class FeatureContext implements Context {
 	 * @param string    $user
 	 */
 	private function assertPageLastEditedByUser(Response $response, string $title, string $user): void {
-		$jsonBody = json_decode($response->getBody()->getContents(), true);
+		$jsonBody = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
 		$pageTitles = [];
 		foreach ($jsonBody as $page) {
 			if ($page['lastUserId'] === $user) {

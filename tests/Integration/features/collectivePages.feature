@@ -6,7 +6,7 @@ Feature: collectivePages
     Then user "jane" sees page "firstpage" in "mycollective"
 
   Scenario: Share collective (with pages) and create second page
-    When user "alice" is member of circle "mycollective" with admin "jane"
+    When user "alice" joins circle "mycollective" with admin "jane"
     And user "alice" creates page "secondpage" in "mycollective"
     Then user "alice" sees page "secondpage" in "mycollective"
     And user "jane" sees page "secondpage" in "mycollective"

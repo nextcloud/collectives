@@ -2,7 +2,7 @@ Feature: collective
 
   Scenario: Create and share a collective
     When user "jane" creates collective "mycollective"
-    And user "alice" is member of circle "mycollective" with admin "jane"
+    And user "alice" joins circle "mycollective" with admin "jane"
     Then user "jane" sees collective "mycollective"
     And user "alice" sees collective "mycollective"
     And user "jane" sees page "Readme" in "mycollective"
@@ -45,5 +45,6 @@ Feature: collective
     When user "jane" creates collective "mycollective2"
     When user "jane" trashes collective "mycollective2"
     And user "jane" deletes collective "mycollective2"
+    And user "jane" is member of circle "mycollective2"
     Then user "jane" fails to create collective "mycollective2"
-    And user "jane" deletes cruft circle
+    And user "jane" deletes circle "mycollective2"
