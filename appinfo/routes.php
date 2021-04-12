@@ -15,12 +15,12 @@ return [
 			'requirements' => ['id' => '\d+']],
 
 		// collectives trash
-		['name' => 'collective#indexTrash', 'url' => '/_collectives/trash', 'verb' => 'GET'],
-		['name' => 'collective#delete', 'url' => '/_collectives/trash/{id}', 'verb' => 'DELETE',
+		['name' => 'trash#index', 'url' => '/_collectives/trash', 'verb' => 'GET'],
+		['name' => 'trash#delete', 'url' => '/_collectives/trash/{id}', 'verb' => 'DELETE',
 			'requirements' => ['id' => '\d+']],
-		['name' => 'collective#deleteAll', 'url' => '/_collectives/trash/{id}/all', 'verb' => 'DELETE',
+		['name' => 'trash#deleteAll', 'url' => '/_collectives/trash/{id}/all', 'verb' => 'DELETE',
 			'requirements' => ['id' => '\d+']],
-		['name' => 'collective#restore', 'url' => '/_collectives/trash/{id}', 'verb' => 'PATCH',
+		['name' => 'trash#restore', 'url' => '/_collectives/trash/{id}', 'verb' => 'PATCH',
 			'requirements' => ['id' => '\d+']],
 
 		// pages
