@@ -20,8 +20,8 @@ class PurgeObsoletePages extends Base {
 
 	protected function configure(): void {
 		$this
-			->setName('collectives:purge-obsolete-pages')
-			->setDescription('Trigger garbage collector for cruft pages in database');
+			->setName('collectives:pages:purge-obsolete')
+			->setDescription('Purge cruft pages from database');
 		parent::configure();
 	}
 
