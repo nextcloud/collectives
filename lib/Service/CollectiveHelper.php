@@ -30,21 +30,27 @@ class CollectiveHelper {
 	public function getCollectivesForUser(string $userId, bool $getAdmin = true): array {
 		$collectiveInfos = [];
 		$joinedCircleIds = Circles::joinedCircleIds($userId);
-		$adminCircles = [];
-		if ($getAdmin) {
-			// For now only circle owners are allowed to delete the collective
-			// $adminCircles = Circles::listCircles(Circles::CIRCLES_ALL, '', Circles::LEVEL_ADMIN, $userId);
-			$adminCircles = Circles::listCircles(Circles::CIRCLES_ALL, '', Circles::LEVEL_OWNER, $userId);
-		}
 		foreach ($joinedCircleIds as $cId) {
 			if (null !== $c = $this->collectiveMapper->findByCircleId($cId)) {
-				$ci = new CollectiveInfo($c);
-				foreach ($adminCircles as $ac) {
-					if ($ac->getUniqueId() === $cId) {
-						$ci->setAdmin(true);
-					}
-				}
-				$collectiveInfos[] = $ci;
+				$admin = $getAdmin && $this->collectiveMapper->isAdmin($c, $userId);
+				$collectiveInfos[] = new CollectiveInfo($c, $admin);
+			}
+		}
+		return $collectiveInfos;
+	}
+
+	/**
+	 * @param string $userId
+	 *
+	 * @return CollectiveInfo[]
+	 * @throws QueryException
+	 */
+	public function getCollectivesTrashForUser(string $userId): array {
+		$collectiveInfos = [];
+		$joinedCircleIds = Circles::joinedCircleIds($userId);
+		foreach ($joinedCircleIds as $cId) {
+			if ((null !== $c = $this->collectiveMapper->findTrashByCircleId($cId, $userId))) {
+				$collectiveInfos[] = new CollectiveInfo($c, true);
 			}
 		}
 		return $collectiveInfos;

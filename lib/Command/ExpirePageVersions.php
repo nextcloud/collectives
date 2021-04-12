@@ -13,7 +13,7 @@ use OCP\Files\NotPermittedException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ExpireCollectiveVersions extends Base {
+class ExpirePageVersions extends Base {
 	/** @var CollectiveVersionsExpireManager */
 	private $expireManager;
 
@@ -24,8 +24,8 @@ class ExpireCollectiveVersions extends Base {
 
 	protected function configure(): void {
 		$this
-			->setName('collectives:expire')
-			->setDescription('Trigger expiry of old page versions in collectives');
+			->setName('collectives:pages:expire')
+			->setDescription('Expire old page versions in collectives');
 		parent::configure();
 	}
 
@@ -39,16 +39,16 @@ class ExpireCollectiveVersions extends Base {
 	 */
 	protected function execute(InputInterface $input, OutputInterface $output): void {
 		$this->expireManager->listen(CollectiveVersionsExpireManager::class, 'enterFolder', function (array $folder) use ($output) {
-			$output->writeln("<info>Expiring version in '${folder['mount_point']}'</info>");
+			$output->writeln("<info>Expiring old page versions in '${folder['mount_point']}'</info>");
 		});
 		$this->expireManager->listen(CollectiveVersionsExpireManager::class, 'deleteVersion', function (IVersion $version) use ($output) {
 			$id = $version->getRevisionId();
 			$file = $version->getSourceFileName();
-			$output->writeln("<info>Expiring version $id for '$file'</info>");
+			$output->writeln("<info>Expiring page version $id for '$file'</info>");
 		});
 
 		$this->expireManager->listen(CollectiveVersionsExpireManager::class, 'deleteFile', function ($id) use ($output) {
-			$output->writeln("<info>Cleaning up versions for no longer existing file with id $id</info>");
+			$output->writeln("<info>Cleaning up page versions for no longer existing file with id $id</info>");
 		});
 
 		$this->expireManager->expireAll();

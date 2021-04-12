@@ -22,7 +22,7 @@ In your Nextcloud instance, simply navigate to **»Apps«**, find the
 **»Circles«** and **»Collectives«** apps and enable them.
 
 	]]></description>
-	<version>0.3.1</version>
+	<version>0.4.0</version>
 	<licence>agpl</licence>
 	<author>CollectiveCloud Team</author>
 	<namespace>Collectives</namespace>
@@ -46,12 +46,12 @@ In your Nextcloud instance, simply navigate to **»Apps«**, find the
 		<nextcloud min-version="20" max-version="21" />
 	</dependencies>
 	<background-jobs>
+		<job>OCA\Collectives\BackgroundJob\ExpirePageVersions</job>
 		<job>OCA\Collectives\BackgroundJob\PurgeObsoletePages</job>
-		<job>OCA\Collectives\BackgroundJob\ExpireCollectiveVersions</job>
 	</background-jobs>
 	<commands>
+		<command>OCA\Collectives\Command\ExpirePageVersions</command>
 		<command>OCA\Collectives\Command\PurgeObsoletePages</command>
-		<command>OCA\Collectives\Command\ExpireCollectiveVersions</command>
 	</commands>
 	<navigations>
 		<navigation>

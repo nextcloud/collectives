@@ -11,7 +11,14 @@ return [
 		// collectives
 		['name' => 'collective#index', 'url' => '/_collectives', 'verb' => 'GET'],
 		['name' => 'collective#create', 'url' => '/_collectives', 'verb' => 'POST'],
-		['name' => 'collective#destroy', 'url' => '/_collectives/{id}', 'verb' => 'DELETE',
+		['name' => 'collective#trash', 'url' => '/_collectives/{id}', 'verb' => 'DELETE',
+			'requirements' => ['id' => '\d+']],
+
+		// collectives trash
+		['name' => 'trash#index', 'url' => '/_collectives/trash', 'verb' => 'GET'],
+		['name' => 'trash#delete', 'url' => '/_collectives/trash/{id}', 'verb' => 'DELETE',
+			'requirements' => ['id' => '\d+']],
+		['name' => 'trash#restore', 'url' => '/_collectives/trash/{id}', 'verb' => 'PATCH',
 			'requirements' => ['id' => '\d+']],
 
 		// pages

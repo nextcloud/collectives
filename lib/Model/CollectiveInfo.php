@@ -16,6 +16,7 @@ class CollectiveInfo extends Collective {
 		$this->id = $collective->getId();
 		$this->name = $collective->getName();
 		$this->circleUniqueId = $collective->getCircleUniqueId();
+		$this->trashTimestamp = $collective->getTrashTimestamp();
 		$this->admin = $admin;
 	}
 
@@ -24,6 +25,7 @@ class CollectiveInfo extends Collective {
 			'id' => $this->id,
 			'name' => $this->name,
 			'circleUniqueId' => $this->circleUniqueId,
+			'trashTimestamp' => $this->trashTimestamp,
 			'admin' => $this->admin,
 		];
 	}

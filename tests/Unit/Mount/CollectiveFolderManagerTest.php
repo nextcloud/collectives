@@ -30,7 +30,7 @@ class CollectiveFolderManagerTest extends TestCase {
 	protected function tearDown(): void {
 		parent::tearDown();
 
-		unlink( '/tmp/Readme.de.md');
+		unlink('/tmp/Readme.de.md');
 	}
 
 	public function testGetLandingPagePath(): void {

@@ -6,7 +6,7 @@ namespace OCA\Collectives\AppInfo;
 
 use Closure;
 use OCA\Collectives\CacheListener;
-use OCA\Collectives\Command\ExpireCollectiveVersions;
+use OCA\Collectives\Command\ExpirePageVersions;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Listeners\LoadAdditionalScriptsListener;
 use OCA\Collectives\Mount\CollectiveFolderManager;
@@ -55,20 +55,6 @@ class Application extends App implements IBootstrap {
 				$c->get(CollectiveFolderManager::class),
 				$c->get(MountProvider::class),
 				$c->get(ITimeFactory::class)
-			);
-		});
-
-		$context->registerService(ExpireCollectiveVersions::class, function (ContainerInterface $c) {
-			return new ExpireCollectiveVersions(
-				$c->get(ITimeFactory::class),
-				$c->get(CollectiveVersionsExpireManager::class)
-			);
-		});
-
-		$context->registerService(\OCA\Collectives\BackgroundJob\ExpireCollectiveVersions::class, function (ContainerInterface $c) {
-			return new \OCA\Collectives\BackgroundJob\ExpireCollectiveVersions(
-				$c->get(ITimeFactory::class),
-				$c->get(CollectiveVersionsExpireManager::class)
 			);
 		});
 

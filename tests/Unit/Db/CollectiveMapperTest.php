@@ -25,13 +25,12 @@ class CollectiveMapperTest extends TestCase {
 
 		$this->mapper = $this->getMockBuilder(CollectiveMapper::class)
 			->setConstructorArgs([$db])
-			->setMethods(['findById'])
 			->getMock();
 		$this->mapper->method('findById')
 			->willReturn($this->collective);
 	}
 
-	public function testUserHasCollectiveCollectiveNull(): void {
-		self::assertNull($this->mapper->userHasCollective($this->collective, $this->userId));
+	public function testIsMemberFalse(): void {
+		self::assertFalse($this->mapper->isMember($this->collective, $this->userId));
 	}
 }

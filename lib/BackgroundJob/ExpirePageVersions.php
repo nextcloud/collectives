@@ -9,7 +9,7 @@ use OCP\Files\InvalidPathException;
 use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
 
-class ExpireCollectiveVersions extends TimedJob {
+class ExpirePageVersions extends TimedJob {
 	/** @var CollectiveVersionsExpireManager */
 	private $expireManager;
 
