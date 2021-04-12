@@ -47,13 +47,14 @@ import Nav from '../components/Nav'
 import PageSidebar from '../components/PageSidebar'
 import showRequestException from '../util/showRequestException'
 
-async function handleError(msg, func) {
-	try {
-		await func()
-	} catch (e) {
-		const translated = t('collectives', msg)
-		showRequestException(translated, e)
-	}
+/**
+ * Error handler function to display a translation of the message
+ * alongside the error itself.
+ * @param {String} msg translation key for the error message
+ * @returns {Function} error handler function
+ */
+function displayError(msg) {
+	return e => showRequestException(t('collectives', msg), e)
 }
 
 export default {
@@ -122,7 +123,7 @@ export default {
 	},
 
 	watch: {
-		'collectiveParam'() {
+		'currentCollective'() {
 			if (this.currentCollective) {
 				this.getPages()
 				this.closeNav()
@@ -139,61 +140,63 @@ export default {
 		},
 	},
 
-	async mounted() {
-		await this.getCollectives()
-		if (this.currentCollective) {
-			this.getPages()
-			this.closeNav()
-		}
+	mounted() {
+		return this.getCollectives()
 	},
 
 	methods: {
 
-				 /**
+		/**
 		 * Get list of all collectives
+		 * @returns {Promise}
 		 */
-		async getCollectives() {
-			handleError('Could not fetch collectives', async() => {
-				await this.$store.dispatch('getCollectives')
-			})
+		getCollectives() {
+			return this.$store.dispatch('getCollectives')
+				.catch(displayError('Could not fetch collectives'))
 		},
 
 		/**
 		 * Get list of all pages
+		 * @returns {Promise}
 		 */
-		async getPages() {
+		getPages() {
 			if (!this.currentCollective) {
-				return
+				return new Promise((resolve) => { resolve() })
 			}
-			handleError('Could not fetch pages', async() => {
-				await this.$store.dispatch('getPages')
-			})
+			return this.$store.dispatch('getPages')
+				.catch(displayError('Could not fetch pages'))
 		},
 
 		/**
 		 * Create a new collective with the name given in the breadcrumb input
 		 * @param {Object} collective Properties of the new collective
+		 * @returns {Promise}
 		 */
-		async newCollective(collective) {
-			handleError('Could not create the collective', async() => {
-				await this.$store.dispatch('newCollective', collective)
+		newCollective(collective) {
+			const updateCollective = () => {
 				if (this.$store.getters.collectiveChanged) {
 					this.$router.push(this.$store.getters.updatedCollectivePath)
 				}
-			})
+			}
+			return this.$store.dispatch('newCollective', collective)
+				.then(updateCollective)
+				.catch(displayError('Could not create the collective'))
 		},
 
 		/**
 		 * Delete a collective with the given name
 		 * @param {Object} collective Properties of the collective
+		 * @returns {Promise}
 		 */
-		async deleteCollective(collective) {
-			handleError('Could not delete the collective', async() => {
-				await this.$store.dispatch('deleteCollective', collective)
+		deleteCollective(collective) {
+			const closeDeletedCollective = () => {
 				if (this.$store.getters.collectiveParam === collective.name) {
 					this.$router.push('/')
 				}
-			})
+			}
+			return this.$store.dispatch('deleteCollective', collective)
+				.then(closeDeletedCollective)
+				.catch(displayError('Could not delete the collective'))
 		},
 
 		/**
