@@ -3,6 +3,7 @@
 namespace OCA\Collectives\Db;
 
 use OCA\Circles\Api\v1\Circles;
+use OCA\Circles\Exceptions\CircleAlreadyExistsException;
 use OCA\Circles\Exceptions\MemberDoesNotExistException;
 use OCA\Circles\Model\Circle;
 use OCP\AppFramework\Db\DoesNotExistException;
@@ -31,90 +32,130 @@ class CollectiveMapper extends QBMapper {
 	}
 
 	/**
-	 * @param string      $circleUniqueId
-	 * @param string|null $userId
-	 * @param bool        $trash
+	 * @param IQueryBuilder $qb
+	 * @param string|null   $userId
+	 * @param bool          $admin
 	 *
 	 * @return Collective|null
 	 */
-	public function findByCircleId(string $circleUniqueId, string $userId = null, bool $trash = false): ?Collective {
-		$qb = $this->db->getQueryBuilder();
-		$where = $qb->expr()->andX();
-		$where->add($qb->expr()->eq('circle_unique_id', $qb->createNamedParameter($circleUniqueId, IQueryBuilder::PARAM_STR)));
-		$where->add($trash ? $qb->expr()->isNotNull('trash_timestamp') : $qb->expr()->isNull('trash_timestamp'));
-		$qb->select('*')
-			->from($this->tableName)
-			->where($where);
+	private function findBy(IQueryBuilder $qb, string $userId = null, bool $admin = false): ?Collective {
 		try {
 			$collective = $this->findEntity($qb);
+			// Return all found collectives if `$userId` is unset
 			if (null === $userId) {
 				return $collective;
 			}
-			if ($trash) {
-				return ($this->isAdmin($collective, $userId)) ? $collective : null;
+			// Return all member collectives if `$admin` is false
+			if (!$admin) {
+				return ($this->isMember($collective, $userId)) ? $collective : null;
 			}
-			return ($this->isMember($collective, $userId)) ? $collective : null;
+			// Return only admin collectives if `$admin` is true
+			return ($this->isAdmin($collective, $userId)) ? $collective : null;
 		} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
 			return null;
 		}
+	}
+
+	/**
+	 * @param string      $circleUniqueId
+	 * @param string|null $userId
+	 *
+	 * @return Collective|null
+	 */
+	public function findByCircleId(string $circleUniqueId, string $userId = null): ?Collective {
+		$qb = $this->db->getQueryBuilder();
+		$where = $qb->expr()->andX();
+		$where->add($qb->expr()->eq('circle_unique_id', $qb->createNamedParameter($circleUniqueId, IQueryBuilder::PARAM_STR)));
+		$where->add($qb->expr()->isNull('trash_timestamp'));
+		$qb->select('*')
+			->from($this->tableName)
+			->where($where);
+		return $this->findBy($qb, $userId, false);
+	}
+
+	/**
+	 * @param string $circleUniqueId
+	 * @param string $userId
+	 *
+	 * @return Collective|null
+	 */
+	public function findTrashByCircleId(string $circleUniqueId, string $userId): ?Collective {
+		$qb = $this->db->getQueryBuilder();
+		$where = $qb->expr()->andX();
+		$where->add($qb->expr()->eq('circle_unique_id', $qb->createNamedParameter($circleUniqueId, IQueryBuilder::PARAM_STR)));
+		$where->add($qb->expr()->isNotNull('trash_timestamp'));
+		$qb->select('*')
+			->from($this->tableName)
+			->where($where);
+		return $this->findBy($qb, $userId, true);
 	}
 
 	/**
 	 * @param int         $id
 	 * @param string|null $userId
-	 * @param bool        $trash
 	 *
 	 * @return Collective|null
 	 */
-	public function findById(int $id, string $userId = null, bool $trash = false): ?Collective {
+	public function findById(int $id, string $userId = null): ?Collective {
 		$qb = $this->db->getQueryBuilder();
 		$where = $qb->expr()->andX();
 		$where->add($qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
-		$where->add($trash ? $qb->expr()->isNotNull('trash_timestamp') : $qb->expr()->isNull('trash_timestamp'));
+		$where->add($qb->expr()->isNull('trash_timestamp'));
 		$qb->select('*')
 			->from($this->tableName)
 			->where($where);
-		try {
-			$collective = $this->findEntity($qb);
-			if (null === $userId) {
-				return $collective;
-			}
-			if ($trash) {
-				return ($this->isAdmin($collective, $userId)) ? $collective : null;
-			}
-			return ($this->isMember($collective, $userId)) ? $collective : null;
-		} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
-			return null;
-		}
+		return $this->findBy($qb, $userId, false);
+	}
+
+	/**
+	 * @param int    $id
+	 * @param string $userId
+	 *
+	 * @return Collective|null
+	 */
+	public function findTrashById(int $id, string $userId): ?Collective {
+		$qb = $this->db->getQueryBuilder();
+		$where = $qb->expr()->andX();
+		$where->add($qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
+		$where->add($qb->expr()->isNotNull('trash_timestamp'));
+		$qb->select('*')
+			->from($this->tableName)
+			->where($where);
+		return $this->findBy($qb, $userId, true);
 	}
 
 	/**
 	 * @param string      $name
 	 * @param string|null $userId
-	 * @param bool        $trash
 	 *
 	 * @return Collective|null
 	 */
-	public function findByName(string $name, string $userId = null, bool $trash = false): ?Collective {
+	public function findByName(string $name, string $userId = null): ?Collective {
 		$qb = $this->db->getQueryBuilder();
 		$where = $qb->expr()->andX();
 		$where->add($qb->expr()->eq('name', $qb->createNamedParameter($name, IQueryBuilder::PARAM_STR)));
-		$where->add($trash ? $qb->expr()->isNotNull('trash_timestamp') : $qb->expr()->isNull('trash_timestamp'));
+		$where->add($qb->expr()->isNull('trash_timestamp'));
 		$qb->select('*')
 			->from($this->tableName)
 			->where($where);
-		try {
-			$collective = $this->findEntity($qb);
-			if (null === $userId) {
-				return $collective;
-			}
-			if ($trash) {
-				return ($this->isAdmin($collective, $userId)) ? $collective : null;
-			}
-			return ($this->isMember($collective, $userId)) ? $collective : null;
-		} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
-			return null;
-		}
+		return $this->findBy($qb, $userId, false);
+	}
+
+	/**
+	 * @param string      $name
+	 * @param string|null $userId
+	 *
+	 * @return Collective|null
+	 */
+	public function findTrashByName(string $name, string $userId = null): ?Collective {
+		$qb = $this->db->getQueryBuilder();
+		$where = $qb->expr()->andX();
+		$where->add($qb->expr()->eq('name', $qb->createNamedParameter($name, IQueryBuilder::PARAM_STR)));
+		$where->add($qb->expr()->isNotNull('trash_timestamp'));
+		$qb->select('*')
+			->from($this->tableName)
+			->where($where);
+		return $this->findBy($qb, $userId, true);
 	}
 
 	/**
@@ -141,12 +182,14 @@ class CollectiveMapper extends QBMapper {
 	 * @param string $name
 	 *
 	 * @return Circle
+	 * @throws CircleAlreadyExistsException
 	 */
 	public function createCircle(string $name): Circle {
 		return Circles::createCircle(Circles::CIRCLES_SECRET, $name);
 	}
 
 	/**
+	 * Determine if the current user is member of the given collective
 	 * @param Collective $collective
 	 * @param string     $userId
 	 *

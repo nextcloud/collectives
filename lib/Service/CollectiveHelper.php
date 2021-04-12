@@ -49,7 +49,7 @@ class CollectiveHelper {
 		$collectiveInfos = [];
 		$joinedCircleIds = Circles::joinedCircleIds($userId);
 		foreach ($joinedCircleIds as $cId) {
-			if ((null !== $c = $this->collectiveMapper->findByCircleId($cId, $userId, true))) {
+			if ((null !== $c = $this->collectiveMapper->findTrashByCircleId($cId, $userId))) {
 				$collectiveInfos[] = new CollectiveInfo($c, true);
 			}
 		}

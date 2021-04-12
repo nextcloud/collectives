@@ -74,7 +74,7 @@ class CollectiveService {
 			throw new UnprocessableEntityException('Empty collective name is not allowed');
 		}
 
-		if (null !== $existing = $this->collectiveMapper->findByName($name, $userId, false)) {
+		if (null !== $existing = $this->collectiveMapper->findByName($name, $userId)) {
 			$admin = $this->collectiveMapper->isAdmin($existing, $userId);
 			throw new ConflictException(
 				'Collective "' . $name . '" exists already.',
@@ -110,7 +110,7 @@ class CollectiveService {
 	 * @throws NotPermittedException
 	 */
 	public function trashCollective(string $userId, int $id): CollectiveInfo {
-		if (null === $collective = $this->collectiveMapper->findById($id, $userId, false)) {
+		if (null === $collective = $this->collectiveMapper->findById($id, $userId)) {
 			throw new NotFoundException('Collective not found: ' . $id);
 		}
 
@@ -129,7 +129,7 @@ class CollectiveService {
 	 * @throws NotFoundException
 	 */
 	public function deleteCollective(string $userId, int $id): CollectiveInfo {
-		if (null === $collective = $this->collectiveMapper->findById($id, $userId, true)) {
+		if (null === $collective = $this->collectiveMapper->findTrashById($id, $userId)) {
 			throw new NotFoundException('Collective not found: ' . $id);
 		}
 
@@ -154,7 +154,7 @@ class CollectiveService {
 	 * @throws NotFoundException
 	 */
 	public function restoreCollective(string $userId, int $id): CollectiveInfo {
-		if (null === $collective = $this->collectiveMapper->findById($id, $userId, true)) {
+		if (null === $collective = $this->collectiveMapper->findTrashById($id, $userId)) {
 			throw new NotFoundException('Collective not found in trash: ' . $id);
 		}
 

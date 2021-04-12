@@ -59,9 +59,9 @@ class PageServiceTest extends TestCase {
 		$collective->setName('collective');
 		$collectiveMapper->method('findById')
 			->willReturnMap([
-				[1, $this->userId, false, $collective],
-				[2, $this->userId, false, $collective],
-				[3, $this->userId, false, null]
+				[1, $this->userId, $collective],
+				[2, $this->userId, $collective],
+				[3, $this->userId, null]
 			]);
 	}
 
