@@ -4,8 +4,8 @@
     <MissingDependency occurrences="6">
       <code>CollectiveVersionsExpireManager</code>
       <code>CollectiveVersionsExpireManager</code>
-      <code>ExpireCollectiveVersions</code>
-      <code>ExpireCollectiveVersions</code>
+      <code>ExpirePageVersions</code>
+      <code>ExpirePageVersions</code>
       <code>VersionsBackend</code>
       <code>VersionsBackend</code>
     </MissingDependency>
@@ -13,7 +13,7 @@
       <code>LoadAdditionalScriptsEvent</code>
     </UndefinedClass>
   </file>
-  <file src="lib/BackgroundJob/ExpireCollectiveVersions.php">
+  <file src="lib/BackgroundJob/ExpirePageVersions.php">
     <MissingDependency occurrences="3">
       <code>$this-&gt;expireManager</code>
       <code>CollectiveVersionsExpireManager</code>
@@ -27,7 +27,7 @@
       <code>CollectiveStorage</code>
     </MissingDependency>
   </file>
-  <file src="lib/Command/ExpireCollectiveVersions.php">
+  <file src="lib/Command/ExpirePageVersions.php">
     <UndefinedClass occurrences="1">
       <code>Base</code>
     </UndefinedClass>
@@ -49,6 +49,12 @@
     </UndefinedClass>
   </file>
   <file src="lib/Db/CollectiveMapper.php">
+    <InvalidReturnStatement occurrences="1">
+      <code>$this-&gt;findEntities($qb)</code>
+    </InvalidReturnStatement>
+    <InvalidReturnType occurrences="1">
+      <code>Collective[]|[]</code>
+    </InvalidReturnType>
     <MoreSpecificImplementedParamType occurrences="1"/>
     <UndefinedClass occurrences="3">
       <code>Circle</code>

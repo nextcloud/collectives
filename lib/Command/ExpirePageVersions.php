@@ -13,7 +13,7 @@ use OCP\Files\NotPermittedException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ExpireCollectiveVersions extends Base {
+class ExpirePageVersions extends Base {
 	/** @var CollectiveVersionsExpireManager */
 	private $expireManager;
 
