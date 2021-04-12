@@ -165,7 +165,7 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user trashs collective :collective
+	 * @When user :user trashes collective :collective
 	 * @When user :user :fails to trash collective :collective
 	 * @When user :user :fails to trash foreign collective :collective with member :member
 	 *
@@ -174,7 +174,7 @@ class FeatureContext implements Context {
 	 * @param string|null $fail
 	 * @param string|null $member
 	 */
-	public function userTrashsCollective(string $user, string $collective, ?string $fail = null, ?string $member = null): void {
+	public function userTrashesCollective(string $user, string $collective, ?string $fail = null, ?string $member = null): void {
 		$this->setCurrentUser($member ?: $user);
 		$collectiveId = $this->collectiveIdByName($collective);
 		if (null === $collectiveId) {

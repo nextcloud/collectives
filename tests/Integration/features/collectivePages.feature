@@ -37,7 +37,7 @@ Feature: collectivePages
     And user "jane" doesn't see page "secondpage" in "mycollective"
 
   Scenario: Trash collective with all remaining pages
-    Then user "jane" trashs collective "mycollective"
+    Then user "jane" trashes collective "mycollective"
 
   Scenario: Delete collective+circle with all remaining pages
     Then user "jane" deletes collective+circle "mycollective"
