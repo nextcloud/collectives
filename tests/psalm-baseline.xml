@@ -129,6 +129,9 @@
       <code>$circle</code>
       <code>Circles</code>
     </UndefinedClass>
+    <UndefinedDocblockClass occurrences="1">
+      <code>CircleAlreadyExistsException</code>
+    </UndefinedDocblockClass>
   </file>
   <file src="lib/Service/PageService.php">
     <InvalidReturnType occurrences="3">
