@@ -31,6 +31,9 @@ class FeatureContext implements Context {
 	/** @var array */
 	private $clientOptions;
 
+	/** @var string */
+	private $cruftCircleUniqueId;
+
 	/**
 	 * Initializes context.
 	 * Every scenario gets its own context instance.
@@ -46,15 +49,21 @@ class FeatureContext implements Context {
 
 	/**
 	 * @When user :user creates collective :collective
+	 * @When user :user :fails to create collective :collective
 	 *
 	 * @param string $user
 	 * @param string $collective
+	 * @param string|null $fail
 	 */
-	public function userCreatesCollective(string $user, string $collective): void {
+	public function userCreatesCollective(string $user, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$formData = new TableNode([['name', $collective]]);
 		$this->sendRequest('POST', '/apps/collectives/_collectives', $formData);
-		$this->assertStatusCode($this->response, 200);
+		if ("fails" === $fail) {
+			$this->assertStatusCode($this->response, 422);
+		} else {
+			$this->assertStatusCode($this->response, 200);
+		}
 	}
 
 	/**
@@ -197,7 +206,42 @@ class FeatureContext implements Context {
 			throw new RuntimeException('Could not get collectiveId for ' . $collective);
 		}
 		$this->setCurrentUser($user);
+
+		// Store circleUniqueId for later usage
+		if ("fails" !== $fail) {
+			$this->sendRequest('GET', '/apps/collectives/_collectives/trash');
+			$this->assertStatusCode($this->response, 200);
+			if (null !== $cruftCircleUniqueId = $this->getCircleIdByCollectiveName($this->response, $collective)) {
+				$this->cruftCircleUniqueId = $cruftCircleUniqueId;
+			}
+		}
+
 		$this->sendRequest('DELETE', '/apps/collectives/_collectives/trash/' . $collectiveId);
+		if ("fails" === $fail) {
+			$this->assertStatusCode($this->response, 404);
+		} else {
+			$this->assertStatusCode($this->response, 200);
+		}
+	}
+
+	/**
+	 * @When user :user deletes collective+circle :collective
+	 * @When user :user :fails to delete collective+circle :collective
+	 * @When user :user :fails to delete collective+circle :collective with admin :admin
+	 *
+	 * @param string      $user
+	 * @param string      $collective
+	 * @param string|null $fail
+	 * @param string|null $admin
+	 */
+	public function userDeletesCollectiveAndCircle(string $user, string $collective, ?string $fail = null, ?string $admin = null): void {
+		$this->setCurrentUser($admin ?: $user);
+		$collectiveId = $this->collectiveIdByName($collective, true);
+		if (null === $collectiveId) {
+			throw new RuntimeException('Could not get collectiveId for ' . $collective);
+		}
+		$this->setCurrentUser($user);
+		$this->sendRequest('DELETE', '/apps/collectives/_collectives/trash/' . $collectiveId . '/all');
 		if ("fails" === $fail) {
 			$this->assertStatusCode($this->response, 404);
 		} else {
@@ -293,6 +337,18 @@ class FeatureContext implements Context {
 			['instance', '']
 		]);
 		$this->sendRequest('PUT', '/apps/circles/v1/circles/' . $circleUniqueId . '/member', $data);
+		$this->assertStatusCode($this->response, 201);
+	}
+
+	/**
+	 * @When user :user deletes cruft circle
+	 *
+	 * @param string $user
+	 */
+	public function userDeletesCruftCircle(string $user): void {
+		Assert::assertNotEmpty($this->cruftCircleUniqueId);
+		$this->setCurrentUser($user);
+		$this->sendRequest('DELETE', '/apps/circles/v1/circles/' . $this->cruftCircleUniqueId);
 		$this->assertStatusCode($this->response, 201);
 	}
 
@@ -446,6 +502,7 @@ class FeatureContext implements Context {
 				return $collective['circleUniqueId'];
 			}
 		}
+		return null;
 	}
 
 	/**

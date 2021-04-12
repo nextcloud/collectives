@@ -30,11 +30,20 @@ Feature: collective
 
   Scenario: Fail to delete a collective as simple member
     And user "alice" fails to delete collective "mycollective" with admin "jane"
+    And user "alice" fails to delete collective+circle "mycollective" with admin "jane"
 
   Scenario: Fail to delete a foreign collective
     And user "john" fails to delete collective "mycollective" with admin "jane"
+    And user "john" fails to delete collective+circle "mycollective" with admin "jane"
 
-  Scenario: delete an owned collective with deleteTimestamp
-    When user "jane" deletes collective "mycollective"
+  Scenario: Delete an owned collective+circle with deleteTimestamp
+    When user "jane" deletes collective+circle "mycollective"
     Then user "jane" doesn't see collective "mycollective"
     And user "alice" doesn't see collective "mycollective"
+
+  Scenario: Create, trash and delete a collective with namespace conflict due to leftover circle
+    When user "jane" creates collective "mycollective2"
+    When user "jane" trashs collective "mycollective2"
+    And user "jane" deletes collective "mycollective2"
+    Then user "jane" fails to create collective "mycollective2"
+    And user "jane" deletes cruft circle

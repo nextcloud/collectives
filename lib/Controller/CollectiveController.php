@@ -121,7 +121,20 @@ class CollectiveController extends Controller {
 	 */
 	public function delete(int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($id) {
-			return $this->service->deleteCollective($this->getUserId(), $id);
+			return $this->service->deleteCollective($this->getUserId(), $id, false);
+		}, $this->logger);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 *
+	 * @param int $id
+	 *
+	 * @return DataResponse
+	 */
+	public function deleteAll(int $id): DataResponse {
+		return $this->handleErrorResponse(function () use ($id) {
+			return $this->service->deleteCollective($this->getUserId(), $id, true);
 		}, $this->logger);
 	}
 

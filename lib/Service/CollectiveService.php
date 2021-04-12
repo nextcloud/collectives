@@ -3,6 +3,7 @@
 namespace OCA\Collectives\Service;
 
 use OCA\Circles\Api\v1\Circles;
+use OCA\Circles\Exceptions\CircleAlreadyExistsException;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Model\CollectiveInfo;
@@ -68,6 +69,7 @@ class CollectiveService {
 	 * @throws FilesNotPermittedException
 	 * @throws InvalidPathException
 	 * @throws UnprocessableEntityException
+	 * @throws CircleAlreadyExistsException
 	 */
 	public function createCollective(string $userId, string $userLang, string $name, string $safeName): CollectiveInfo {
 		if (empty($name)) {
@@ -124,16 +126,19 @@ class CollectiveService {
 	/**
 	 * @param string $userId
 	 * @param int    $id
+	 * @param bool   $deleteCircle
 	 *
 	 * @return CollectiveInfo
 	 * @throws NotFoundException
 	 */
-	public function deleteCollective(string $userId, int $id): CollectiveInfo {
+	public function deleteCollective(string $userId, int $id, bool $deleteCircle): CollectiveInfo {
 		if (null === $collective = $this->collectiveMapper->findTrashById($id, $userId)) {
 			throw new NotFoundException('Collective not found: ' . $id);
 		}
 
-		Circles::destroyCircle($collective->getCircleUniqueId());
+		if ($deleteCircle) {
+			Circles::destroyCircle($collective->getCircleUniqueId());
+		}
 
 		// Delete collective folder and its contents
 		try {
