@@ -6,7 +6,6 @@ namespace OCA\Collectives\AppInfo;
 
 use Closure;
 use OCA\Collectives\CacheListener;
-use OCA\Collectives\Command\ExpirePageVersions;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Listeners\LoadAdditionalScriptsListener;
 use OCA\Collectives\Mount\CollectiveFolderManager;
@@ -14,7 +13,6 @@ use OCA\Collectives\Mount\MountProvider;
 use OCA\Collectives\Search\CollectiveProvider;
 use OCA\Collectives\Search\PageProvider;
 use OCA\Collectives\Service\CollectiveHelper;
-use OCA\Collectives\Versions\CollectiveVersionsExpireManager;
 use OCA\Collectives\Versions\VersionsBackend;
 use OCA\Files\Event\LoadAdditionalScriptsEvent;
 use OCP\App\IAppManager;

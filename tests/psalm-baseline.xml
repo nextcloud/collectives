@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files psalm-version="4.x-dev@">
   <file src="lib/AppInfo/Application.php">
-    <MissingDependency occurrences="6">
-      <code>CollectiveVersionsExpireManager</code>
-      <code>CollectiveVersionsExpireManager</code>
-      <code>ExpirePageVersions</code>
-      <code>ExpirePageVersions</code>
+    <MissingDependency occurrences="2">
       <code>VersionsBackend</code>
       <code>VersionsBackend</code>
     </MissingDependency>
@@ -38,7 +34,8 @@
     </UndefinedClass>
   </file>
   <file src="lib/Controller/ErrorHelper.php">
-    <UndefinedClass occurrences="1">
+    <UndefinedClass occurrences="2">
+      <code>$e</code>
       <code>CircleAlreadyExistsException</code>
     </UndefinedClass>
   </file>
@@ -49,12 +46,6 @@
     </UndefinedClass>
   </file>
   <file src="lib/Db/CollectiveMapper.php">
-    <InvalidReturnStatement occurrences="1">
-      <code>$this-&gt;findEntities($qb)</code>
-    </InvalidReturnStatement>
-    <InvalidReturnType occurrences="1">
-      <code>Collective[]|[]</code>
-    </InvalidReturnType>
     <MoreSpecificImplementedParamType occurrences="1"/>
     <UndefinedClass occurrences="3">
       <code>Circle</code>
