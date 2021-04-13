@@ -8,7 +8,8 @@
 				:class="{active: isActive(collective)}"
 				:to="`/${encodeURIComponent(collective.name)}`"
 				:icon="icon(collective)"
-				:force-menu="true">
+				:force-menu="true"
+				class="collectives_list_item">
 				<template v-if="collective.emoji" #icon>
 					{{ collective.emoji }}
 				</template>
@@ -20,6 +21,12 @@
 			</AppNavigationItem>
 			<NewCollective @newCollective="newCollective" />
 		</template>
+
+		<template #footer>
+			<CollectiveTrash
+				@restoreCollective="restoreCollective"
+				@deleteCollective="deleteCollective" />
+		</template>
 	</AppNavigation>
 </template>
 
@@ -28,6 +35,7 @@ import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import AppNavigation from '@nextcloud/vue/dist/Components/AppNavigation'
 import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
 import AppNavigationCaption from '@nextcloud/vue/dist/Components/AppNavigationCaption'
+import CollectiveTrash from '../components/CollectiveTrash'
 import NewCollective from './NewCollective'
 
 export default {
@@ -37,6 +45,7 @@ export default {
 		AppNavigation,
 		AppNavigationItem,
 		AppNavigationCaption,
+		CollectiveTrash,
 		NewCollective,
 	},
 	computed: {
@@ -56,6 +65,12 @@ export default {
 		},
 		trashCollective(collective) {
 			this.$emit('trashCollective', collective)
+		},
+		restoreCollective(collective) {
+			this.$emit('restoreCollective', collective)
+		},
+		deleteCollective(collective, circle) {
+			this.$emit('deleteCollective', collective, circle)
 		},
 	},
 }

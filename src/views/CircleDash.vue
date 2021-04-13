@@ -5,7 +5,10 @@
 			class="app-details-toggle icon-confirm"
 			href="#"
 			@click.stop.prevent="showList" />
-		<Nav @newCollective="newCollective" @trashCollective="trashCollective" />
+		<Nav @newCollective="newCollective"
+			@trashCollective="trashCollective"
+			@restoreCollective="restoreCollective"
+			@deleteCollective="deleteCollective" />
 		<AppContent>
 			<CollectiveHeading v-if="currentCollective"
 				@toggleDetails="showDetails = true" />
@@ -141,11 +144,11 @@ export default {
 	},
 
 	mounted() {
-		return this.getCollectives()
+		this.getCollectives()
+		this.getTrashCollectives()
 	},
 
 	methods: {
-
 		/**
 		 * Get list of all collectives
 		 * @returns {Promise}
@@ -153,6 +156,15 @@ export default {
 		getCollectives() {
 			return this.$store.dispatch('getCollectives')
 				.catch(displayError('Could not fetch collectives'))
+		},
+
+		/**
+		 * Get list of all collectives in trash
+		 * @returns {Promise}
+		 */
+		getTrashCollectives() {
+			return this.$store.dispatch('getTrashCollectives')
+				.catch(displayError('Could not fetch collectives from trash'))
 		},
 
 		/**
@@ -197,6 +209,27 @@ export default {
 			return this.$store.dispatch('trashCollective', collective)
 				.then(closeTrashedCollective)
 				.catch(displayError('Could not move the collective to trash'))
+		},
+
+		/**
+		 * Restore a collective with the given name from trash
+		 * @param {Object} collective Properties of the collective
+		 * @returns {Promise}
+		 */
+		restoreCollective(collective) {
+			return this.$store.dispatch('restoreCollective', collective)
+				.catch(displayError('Could not restore collective from trash'))
+		},
+
+		/**
+		 * Delete a collective with the given name from trash
+		 * @param {Object} collective Properties of the collective
+		 * @param {boolean} circle Whether to delete the circle as well
+		 * @returns {Promise}
+		 */
+		deleteCollective(collective, circle) {
+			return this.$store.dispatch('deleteCollective', { ...collective, circle })
+				.catch(displayError('Could not delete collective from trash'))
 		},
 
 		/**
