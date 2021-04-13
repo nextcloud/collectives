@@ -81,23 +81,23 @@ describe('Collective', function() {
 		})
 	})
 
-	describe('delete collective', function() {
+	describe('move collective to trash', function() {
 		before(function() {
 			cy.login('bob', 'bob', '/apps/collectives')
-			cy.createCollective('Delete me')
+			cy.createCollective('Trash me')
 		})
-		it('Allows deleting the collective', function() {
+		it('Allows moving the collective to trash', function() {
 			cy.get('.app-navigation-toggle')
 				.click()
 			cy.get('.app-navigation-entry')
-				.contains('li', 'Delete me')
+				.contains('li', 'Trash me')
 				.find('.action-item__menutoggle')
 				.click()
 			cy.get('button')
-				.contains('Delete')
+				.contains('Move to trash')
 				.click()
 			cy.get('.app-navigation-entry')
-				.should('not.contain', 'Delete me')
+				.should('not.contain', 'Trash me')
 		})
 	})
 	describe('in the files app', function() {

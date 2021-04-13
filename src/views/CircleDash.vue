@@ -5,7 +5,7 @@
 			class="app-details-toggle icon-confirm"
 			href="#"
 			@click.stop.prevent="showList" />
-		<Nav @newCollective="newCollective" @deleteCollective="deleteCollective" />
+		<Nav @newCollective="newCollective" @trashCollective="trashCollective" />
 		<AppContent>
 			<CollectiveHeading v-if="currentCollective"
 				@toggleDetails="showDetails = true" />
@@ -184,19 +184,19 @@ export default {
 		},
 
 		/**
-		 * Delete a collective with the given name
+		 * Trash a collective with the given name
 		 * @param {Object} collective Properties of the collective
 		 * @returns {Promise}
 		 */
-		deleteCollective(collective) {
-			const closeDeletedCollective = () => {
+		trashCollective(collective) {
+			const closeTrashedCollective = () => {
 				if (this.$store.getters.collectiveParam === collective.name) {
 					this.$router.push('/')
 				}
 			}
-			return this.$store.dispatch('deleteCollective', collective)
-				.then(closeDeletedCollective)
-				.catch(displayError('Could not delete the collective'))
+			return this.$store.dispatch('trashCollective', collective)
+				.then(closeTrashedCollective)
+				.catch(displayError('Could not move the collective to trash'))
 		},
 
 		/**

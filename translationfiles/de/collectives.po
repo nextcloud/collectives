@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2021-03-22 14:20+0100\n"
+"POT-Creation-Date: 2021-04-13 10:26+0200\n"
 "PO-Revision-Date: 2020-08-20 09:31+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -43,11 +43,40 @@ msgstr ""
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:4
 msgid ""
 "Collectives is a Nextcloud App for activist and community projects to "
-"organize together. Come and gather in collectives to build shared knowledge."
+"organize together.\n"
+"Come and gather in collectives to build shared knowledge.\n"
+"\n"
+"* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n"
+"  tied to a [Nextcloud Circle](https://github.com/nextcloud/circles) and\n"
+"  owned by the collective.\n"
+"* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n"
+"  [Text app](https://github.com/nextcloud/text).\n"
+"* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) "
+"syntax**\n"
+"  for page formatting.\n"
+"\n"
+"## Installation\n"
+"\n"
+"In your Nextcloud instance, simply navigate to **»Apps«**, find the\n"
+"**»Circles«** and **»Collectives«** apps and enable them."
 msgstr ""
 "Kollektive ist eine Nextcloud App für Aktivist:innen und Community-Projekte "
 "um sich gemeinsam zu organisieren. Komm vorbei und verbünde dich in "
 "Kollektiven um gemeinsames Wissen aufzubauen."
+"\n"
+"* 👥 **Kollektive und hierarchie-arme Arbeitsweise**: Kollektive sind\n"
+"  mit einem [Nextcloud Zirkel](https://github.com/nextcloud/circles) verknüpft\n"
+"  und unter Kontrolle des Kollektivs.\n"
+"* 📝 **Kollaboratives Bearbeiten von Seiten** (wie etwa von Etherpad bekannt)\n"
+"  dank der [Text app](https://github.com/nextcloud/text).\n"
+"* 🔤 **Wohlbekannte [Markdown](https://en.wikipedia.org/wiki/Markdown) "
+"Syntax**\n"
+"  zum Formatieren von Seiten.\n"
+"\n"
+"## Installation\n"
+"\n"
+"In deiner Nextcloud Instanz, gehe zu **»Apps«**, suche nach den Apps\n"
+"**»Circles«** und **»Collectives«** und aktiviere sie."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:1
 msgid "New Page"
@@ -78,8 +107,8 @@ msgid "Select a collective"
 msgstr "Wähle ein Kollektiv aus"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:8
-msgid "Delete"
-msgstr "Löschen"
+msgid "Move to trash"
+msgstr "In den Papierkorb verschieben"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:9
 msgid "Create new collective"
@@ -166,18 +195,6 @@ msgstr "Kein Kollektiv ausgewählt"
 msgid "Select a collective or create a new one on the left."
 msgstr "Wähle ein Kollektiv aus oder lege links ein neues an."
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:30
-msgid "Could not fetch collectives"
-msgstr "Konnte die Kollektive nicht laden"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:31
-msgid "Could not fetch pages"
-msgstr "Konnte die Seiten nicht laden"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:32
-msgid "Could not create the collective"
-msgstr "Anlegen des Kollektivs fehlgeschlagen"
-
 #: /collectives/templates/error.php:4
 msgid "Error: Missing apps"
 msgstr "Fehler: Apps fehlen"
@@ -189,6 +206,3 @@ msgstr "Die folgenden notwendigen Apps fehlen:"
 #: /collectives/templates/error.php:27
 msgid "Please ask the administrator to enable these apps."
 msgstr "Bitte frage die Admins, ob sie diese Apps aktivieren können."
-
-#~ msgid "Show sidebar"
-#~ msgstr "Seitenleiste anzeigen"

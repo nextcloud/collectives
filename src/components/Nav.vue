@@ -13,8 +13,8 @@
 					{{ collective.emoji }}
 				</template>
 				<template v-if="collective.admin" #actions>
-					<ActionButton icon="icon-delete" @click="deleteCollective(collective)">
-						{{ t('collectives', 'Delete') }}
+					<ActionButton icon="icon-delete" @click="trashCollective(collective)">
+						{{ t('collectives', 'Move to trash') }}
 					</ActionButton>
 				</template>
 			</AppNavigationItem>
@@ -54,8 +54,8 @@ export default {
 		icon(collective) {
 			return collective.emoji ? '' : 'icon-star'
 		},
-		deleteCollective(collective) {
-			this.$emit('deleteCollective', collective)
+		trashCollective(collective) {
+			this.$emit('trashCollective', collective)
 		},
 	},
 }
