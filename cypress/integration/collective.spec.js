@@ -69,6 +69,18 @@ describe('Collective', function() {
 				.should('contain', 'Add a page')
 		})
 	})
+
+	describe('reloading works', function() {
+		before(function() {
+			cy.login('bob', 'bob', '/apps/collectives/Preexisting%20Collective')
+			cy.get('#titleform input').should('have.value', ' Preexisting Collective')
+		})
+		it('Shows the name in the disabled titleform', function() {
+			cy.reload()
+			cy.get('#titleform input').should('have.value', ' Preexisting Collective')
+		})
+	})
+
 	describe('delete collective', function() {
 		before(function() {
 			cy.login('bob', 'bob', '/apps/collectives')
