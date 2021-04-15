@@ -1,7 +1,7 @@
 <template>
 	<router-link
 		v-if="useRouter"
-		:to="href.replace('.md?', '?')" />
+		:to="routerHref" />
 	<a v-else-if="leaveHref" :href="href" />
 	<a v-else-if="hrefFileId" :href="viewerHref" @click.prevent="openViewer" />
 	<a v-else :href="href" />
@@ -9,6 +9,7 @@
 
 <script>
 import { generateUrl } from '@nextcloud/router'
+import { mapGetters } from 'vuex'
 
 const absolutePath = function(base, rel) {
 	if (!rel) {
@@ -39,6 +40,7 @@ export default {
 	name: 'LinkView',
 	props: ['node', 'updateAttrs', 'view'], // eslint-disable-line
 	computed: {
+		...mapGetters(['collectiveParam', 'pageParam']),
 		schema() { return this.view.state.schema },
 		href() {
 			return this.node.attrs.href
@@ -67,6 +69,12 @@ export default {
 		relPath() {
 			const relPath = this.hrefMatches[1]
 			return relPath && unescape(relPath)
+		},
+		routerHref() {
+			// prefix relative route with the collectiveParam
+			// if we are on the collective landing page.
+			const prefix = this.pageParam ? '' : this.collectiveParam + '/'
+			return prefix + this.href.replace('.md?', '?')
 		},
 		viewerHref() {
 			const dir = absolutePath('/Collective', basedir(this.relPath))
