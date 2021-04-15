@@ -36,9 +36,10 @@ export default new Vuex.Store({
 		messages: {},
 		loading: {},
 		collectives: [],
+		trashCollectives: [],
 		pages: [],
 		updatedPage: {},
-		updatedCollective: {},
+		updatedTrashCollective: {},
 	},
 
 	getters: {
@@ -49,6 +50,10 @@ export default new Vuex.Store({
 
 		collectives(state) {
 			return state.collectives.map(decorate.collective)
+		},
+
+		trashCollectives(state) {
+			return state.trashCollectives.map(decorate.collective)
 		},
 
 		pageParam(state) {
@@ -128,6 +133,9 @@ export default new Vuex.Store({
 		collectives(state, collectives) {
 			state.collectives = collectives
 		},
+		trashCollectives(state, trashCollectives) {
+			state.trashCollectives = trashCollectives
+		},
 		addOrUpdateCollective(state, collective) {
 			const cur = state.collectives.findIndex(c => c.id === collective.id)
 			if (cur === -1) {
@@ -137,8 +145,16 @@ export default new Vuex.Store({
 			}
 			state.updatedCollective = collective
 		},
-		deleteCollective(state, { id }) {
-			state.collectives.splice(state.collectives.findIndex(c => c.id === id), 1)
+		trashCollective(state, collective) {
+			state.collectives.splice(state.collectives.findIndex(c => c.id === collective.id), 1)
+			state.trashCollectives.unshift(collective)
+		},
+		restoreCollective(state, collective) {
+			state.trashCollectives.splice(state.trashCollectives.findIndex(c => c.id === collective.id), 1)
+			state.collectives.unshift(collective)
+		},
+		deleteCollective(state, collective) {
+			state.trashCollectives.splice(state.trashCollectives.findIndex(c => c.id === collective.id), 1)
 		},
 		pages(state, pages) {
 			state.pages = pages
@@ -236,6 +252,16 @@ export default new Vuex.Store({
 		},
 
 		/**
+		 * Get list of all collectives in trash
+		 */
+		async getTrashCollectives({ commit }) {
+			commit('loading', 'collectiveTrash')
+			const response = await axios.get(generateUrl('/apps/collectives/_collectives/trash'))
+			commit('trashCollectives', response.data)
+			commit('done', 'collectiveTrash')
+		},
+
+		/**
 		 * Create a new collective with the given properties
 		 * @param {Object} collective Properties for the new collective (name for now)
 		 */
@@ -258,14 +284,36 @@ export default new Vuex.Store({
 		},
 
 		/**
-		 * Delete a collective with the given id
-		 * @param {Number} id ID of the colletive to be deleted
+		 * Trash a collective with the given id
+		 * @param {Number} id ID of the colletive to be trashed
 		 */
-		async deleteCollective({ commit }, { id }) {
-			await axios.delete(generateUrl('/apps/collectives/_collectives/' + id))
-			commit('deleteCollective', { id })
+		async trashCollective({ commit }, { id }) {
+			const response = await axios.delete(generateUrl('/apps/collectives/_collectives/' + id))
+			commit('trashCollective', response.data)
 		},
 
+		/**
+		 * Restore a collective with the given id from trash
+		 * @param {Number} id ID of the colletive to be trashed
+		 */
+		async restoreCollective({ commit }, { id }) {
+			const response = await axios.patch(generateUrl('/apps/collectives/_collectives/trash/' + id))
+			commit('restoreCollective', response.data)
+		},
+
+		/**
+		 * Delete a collective with the given id from trash
+		 * @param {Number} id ID of the colletive to be trashed
+		 * @param {boolean} circle Whether to delete the circle as well
+		 */
+		async deleteCollective({ commit }, { id, circle }) {
+			let doCircle = ''
+			if (circle) {
+				doCircle = '?circle=1'
+			}
+			const response = await axios.delete(generateUrl('/apps/collectives/_collectives/trash/' + id + doCircle))
+			commit('deleteCollective', response.data)
+		},
 	},
 
 })

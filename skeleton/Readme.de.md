@@ -19,6 +19,6 @@ Wechselt in den Editier-Modus um loszulegen ↗️
 ## Auch gut zu wissen
 
 * Verlinkt lokale Seiten, indem ihr Text markiert und "Datei verknüpfen" wählt.
-* Mehrere Menschen können gleichzeitig die selbe Seite bearbeiten
+* Mehrere Menschen können gleichzeitig die selbe Seite bearbeiten.
 * Findet mehr über diese App heraus und schaut in die [Dokumentation](https://collectivecloud.gitlab.io/collectives/).
-* Fragt [die Community](https://help.nextcloud.com/c/apps/collectives/174) um Hilfe, wenn ihr weitere Fragen hast.
+* Fragt [die Community](https://help.nextcloud.com/c/apps/collectives/174) um Hilfe, wenn ihr weitere Fragen habt.
