@@ -19,7 +19,7 @@
 					</ActionButton>
 				</template>
 			</AppNavigationItem>
-			<NewCollective @newCollective="newCollective" />
+			<NewCollective />
 		</template>
 
 		<template #footer>

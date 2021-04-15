@@ -266,16 +266,11 @@ export default new Vuex.Store({
 		 * @param {Object} collective Properties for the new collective (name for now)
 		 */
 		async newCollective({ commit }, collective) {
-			commit('loading', 'collective')
-			try {
-				const response = await axios.post(
-					generateUrl('/apps/collectives/_collectives'),
-					collective,
-				)
-				commit('addOrUpdateCollective', response.data)
-			} finally {
-				commit('done', 'collective')
-			}
+			const response = await axios.post(
+				generateUrl('/apps/collectives/_collectives'),
+				collective,
+			)
+			commit('addOrUpdateCollective', response.data)
 		},
 
 		/**

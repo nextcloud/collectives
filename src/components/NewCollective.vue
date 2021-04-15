@@ -41,7 +41,11 @@
 				:placeholder="t('collectives', 'New collective name')"
 				type="text"
 				required>
-			<input type="submit" value="" class="icon-confirm">
+			<input
+				type="submit"
+				value=""
+				class="icon-confirm"
+				:class="{ 'icon-loading-small': loading }">
 			<Actions>
 				<ActionButton icon="icon-close" @click.stop.prevent="cancelEdit" />
 			</Actions>
@@ -53,6 +57,7 @@
 import { ActionButton, Actions, AppNavigationItem } from '@nextcloud/vue'
 import EmojiPicker from '@nextcloud/vue/dist/Components/EmojiPicker'
 import EmoticonOutline from 'vue-material-design-icons/EmoticonOutline'
+import displayError from '../util/displayError'
 
 const randomColor = () => '#' + ((1 << 24) * Math.random() | 0).toString(16)
 
@@ -91,12 +96,26 @@ export default {
 				this.$refs.nameField.focus()
 			})
 		},
+
+		/**
+		 * Create a new collective with the name given in the input
+		 * @param {Event} e - trigger event
+		 */
 		createCollective(e) {
-			const collective = {
-				name: this.name,
+			const updateCollective = () => {
+				this.clear()
+				if (this.$store.getters.collectiveChanged) {
+					this.$router.push(this.$store.getters.updatedCollectivePath)
+				}
 			}
-			this.$emit('newCollective', collective)
-			this.clear()
+			const done = () => {
+				this.loading = false
+			}
+			this.loading = true
+			this.$store.dispatch('newCollective', { name: this.name })
+				.then(updateCollective)
+				.catch(displayError('Could not create the collective'))
+				.finally(done)
 		},
 		cancelEdit(e) {
 			this.clear()

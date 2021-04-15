@@ -5,8 +5,7 @@
 			class="app-details-toggle icon-confirm"
 			href="#"
 			@click.stop.prevent="showList" />
-		<Nav @newCollective="newCollective"
-			@trashCollective="trashCollective"
+		<Nav @trashCollective="trashCollective"
 			@restoreCollective="restoreCollective"
 			@deleteCollective="deleteCollective" />
 		<AppContent>
@@ -48,17 +47,7 @@ import CollectiveHeading from '../components/CollectiveHeading'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile'
 import Nav from '../components/Nav'
 import PageSidebar from '../components/PageSidebar'
-import showRequestException from '../util/showRequestException'
-
-/**
- * Error handler function to display a translation of the message
- * alongside the error itself.
- * @param {String} msg translation key for the error message
- * @returns {Function} error handler function
- */
-function displayError(msg) {
-	return e => showRequestException(t('collectives', msg), e)
-}
+import displayError from '../util/displayError'
 
 export default {
 	name: 'CircleDash',
@@ -177,22 +166,6 @@ export default {
 			}
 			return this.$store.dispatch('getPages')
 				.catch(displayError('Could not fetch pages'))
-		},
-
-		/**
-		 * Create a new collective with the name given in the breadcrumb input
-		 * @param {Object} collective Properties of the new collective
-		 * @returns {Promise}
-		 */
-		newCollective(collective) {
-			const updateCollective = () => {
-				if (this.$store.getters.collectiveChanged) {
-					this.$router.push(this.$store.getters.updatedCollectivePath)
-				}
-			}
-			return this.$store.dispatch('newCollective', collective)
-				.then(updateCollective)
-				.catch(displayError('Could not create the collective'))
 		},
 
 		/**
