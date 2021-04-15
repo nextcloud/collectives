@@ -25,20 +25,13 @@
  */
 
 describe('Collective', function() {
-	before(function() {
-		cy.login('bob', 'bob', '/apps/collectives')
-		cy.seedCollective('Preexisting Collective')
-	})
-
 	describe('name conflicts', function() {
-		it('Redirects members to existing collective', function() {
+		before(function() {
 			cy.login('bob', 'bob', '/apps/collectives')
-			cy.createCollective('Preexisting Collective')
-			cy.get('#titleform input').should('have.value', ' Preexisting Collective')
-			cy.get('.toast-info').should('contain', 'Collective already existed.')
+			cy.seedCollective('Preexisting Collective')
 		})
 		it('Reports existing circle', function() {
-			cy.login('alice', 'alice', '/apps/collectives')
+			cy.login('bob', 'bob', '/apps/collectives')
 			cy.createCollective('Preexisting Collective')
 			cy.get('main .empty-content').should('contain', 'No collective selected')
 			cy.get('.toast-warning').should('contain', 'Could not create the collective')
@@ -53,12 +46,13 @@ describe('Collective', function() {
 	// So in all but the first run it block
 	// bob will be logged out.
 	describe('after creation', function() {
+		const name = 'Created just now ' + Math.random().toString(36).substr(2, 4)
 		before(function() {
 			cy.login('bob', 'bob', '/apps/collectives')
-			cy.createCollective('Created just now')
+			cy.createCollective(name)
 		})
 		it('Shows the name in the disabled titleform', function() {
-			cy.get('#titleform input').should('have.value', ' Created just now')
+			cy.get('#titleform input').should('have.value', ` ${name}`)
 			cy.get('#titleform input').should('have.attr', 'disabled')
 		})
 		it('Has an initial Readme.md', function() {

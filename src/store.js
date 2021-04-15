@@ -108,7 +108,7 @@ export default new Vuex.Store({
 
 		updatedCollectivePath(state, getters) {
 			const collective = state.updatedCollective
-			return `/${collective.name}`
+			return collective && `/${collective.name}`
 		},
 
 		collectiveChanged(state, getters) {
@@ -271,12 +271,7 @@ export default new Vuex.Store({
 				const response = await axios.post(
 					generateUrl('/apps/collectives/_collectives'),
 					collective,
-					// Http status 409 indicates the collective already existed.
-					{ validateStatus: s => (s < 300 || s === 409) },
 				)
-				if (response.status === 409) {
-					commit('info', 'Collective already existed.')
-				}
 				commit('addOrUpdateCollective', response.data)
 			} finally {
 				commit('done', 'collective')

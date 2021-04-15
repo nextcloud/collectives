@@ -65,7 +65,6 @@ class CollectiveService {
 	 * @param string $safeName
 	 *
 	 * @return CollectiveInfo
-	 * @throws ConflictException
 	 * @throws FilesNotPermittedException
 	 * @throws InvalidPathException
 	 * @throws UnprocessableEntityException
@@ -74,14 +73,6 @@ class CollectiveService {
 	public function createCollective(string $userId, string $userLang, string $name, string $safeName): CollectiveInfo {
 		if (empty($name)) {
 			throw new UnprocessableEntityException('Empty collective name is not allowed');
-		}
-
-		if (null !== $existing = $this->collectiveMapper->findByName($name, $userId)) {
-			$admin = $this->collectiveMapper->isAdmin($existing, $userId);
-			throw new ConflictException(
-				'Collective "' . $name . '" exists already.',
-				new CollectiveInfo($existing, $admin)
-			);
 		}
 
 		// Create a new secret circle
