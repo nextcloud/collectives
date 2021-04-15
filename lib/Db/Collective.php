@@ -10,17 +10,12 @@ use OCP\AppFramework\Db\Entity;
  * Class Collective
  * @method integer getId()
  * @method void setId(integer $value)
- * @method string getName()
- * @method void setName(string $value)
  * @method string getCircleUniqueId()
  * @method void setCircleUniqueId(string $value)
  * @method string getTrashTimestamp()
  * @method void setTrashTimestamp(int $value = null)
  */
 class Collective extends Entity implements JsonSerializable {
-	/** @var string */
-	protected $name;
-
 	/** @var string */
 	protected $circleUniqueId;
 
@@ -37,7 +32,6 @@ class Collective extends Entity implements JsonSerializable {
 	public function jsonSerialize() {
 		return [
 			'id' => $this->id,
-			'name' => $this->name,
 			'circleUniqueId' => $this->circleUniqueId,
 			'trashTimestamp' => $this->trashTimestamp
 		];

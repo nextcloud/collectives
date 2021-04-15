@@ -8,25 +8,31 @@ use OCA\Collectives\Db\Collective;
  * Class CollectiveInfo
  * @method integer getAdmin()
  * @method void setAdmin(bool $value)
+ * @method string getName()
+ * @method void setName(string $value)
  */
 class CollectiveInfo extends Collective {
+	/** @var string */
+	protected $name;
+
+	/** @var bool */
 	protected $admin;
 
-	public function __construct(Collective $collective, bool $admin = false) {
+	public function __construct(Collective $collective, string $name, bool $admin = false) {
 		$this->id = $collective->getId();
-		$this->name = $collective->getName();
 		$this->circleUniqueId = $collective->getCircleUniqueId();
 		$this->trashTimestamp = $collective->getTrashTimestamp();
+		$this->name = $name;
 		$this->admin = $admin;
 	}
 
 	public function jsonSerialize() {
 		return [
 			'id' => $this->id,
-			'name' => $this->name,
 			'circleUniqueId' => $this->circleUniqueId,
 			'trashTimestamp' => $this->trashTimestamp,
-			'admin' => $this->admin,
+			'name' => $this->name,
+			'admin' => $this->admin
 		];
 	}
 }

@@ -31,10 +31,8 @@ class UserFolderHelperTest extends TestCase {
 
 		$this->collective1 = new Collective();
 		$this->collective1->setId(1);
-		$this->collective1->setName('collective1');
 		$this->collective2 = new Collective();
 		$this->collective2->setId(2);
-		$this->collective2->setName('collective2');
 
 		$this->collectivesUserFolder = $this->getMockBuilder(Folder::class)
 			->disableOriginalConstructor()
@@ -112,7 +110,7 @@ class UserFolderHelperTest extends TestCase {
 		$this->collectivesUserFolder->method('get')
 			->willReturn($folder);
 
-		self::assertEquals($folder, $this->helper->getCollectiveFolder($this->collective1->getName(), $this->userId));
+		self::assertEquals($folder, $this->helper->getCollectiveFolder('collective1', $this->userId));
 	}
 
 	public function testGetCollectiveFolderNotFoundException(): void {
@@ -121,6 +119,6 @@ class UserFolderHelperTest extends TestCase {
 
 		$this->expectException(NotFoundException::class);
 		$this->expectExceptionMessage("Folder not found for collective collective2");
-		$this->helper->getCollectiveFolder($this->collective2->getName(), $this->userId);
+		$this->helper->getCollectiveFolder('collective2', $this->userId);
 	}
 }

@@ -47,11 +47,15 @@
   </file>
   <file src="lib/Db/CollectiveMapper.php">
     <MoreSpecificImplementedParamType occurrences="1"/>
-    <UndefinedClass occurrences="3">
+    <UndefinedClass occurrences="4">
       <code>Circle</code>
       <code>Circles</code>
       <code>Circles</code>
+      <code>Circles</code>
     </UndefinedClass>
+    <UndefinedDocblockClass occurrences="1">
+      <code>CircleDoesNotExistException</code>
+    </UndefinedDocblockClass>
   </file>
   <file src="lib/Db/PageMapper.php">
     <InvalidReturnStatement occurrences="1">
@@ -78,7 +82,7 @@
     </InvalidPropertyAssignmentValue>
   </file>
   <file src="lib/Mount/CollectiveFolderManager.php">
-    <InvalidArgument occurrences="1"/>
+    <InvalidArgument occurrences="3"/>
     <MissingDependency occurrences="4">
       <code>$rootFolder</code>
       <code>$rootFolder</code>
@@ -126,8 +130,11 @@
       <code>$circle</code>
       <code>Circles</code>
     </UndefinedClass>
-    <UndefinedDocblockClass occurrences="1">
+    <UndefinedDocblockClass occurrences="4">
       <code>CircleAlreadyExistsException</code>
+      <code>CircleDoesNotExistException</code>
+      <code>CircleDoesNotExistException</code>
+      <code>CircleDoesNotExistException</code>
     </UndefinedDocblockClass>
   </file>
   <file src="lib/Service/PageService.php">
@@ -136,6 +143,11 @@
       <code>PageFile</code>
       <code>PageFile</code>
     </InvalidReturnType>
+    <UndefinedDocblockClass occurrences="3">
+      <code>CircleDoesNotExistException</code>
+      <code>CircleDoesNotExistException</code>
+      <code>CircleDoesNotExistException</code>
+    </UndefinedDocblockClass>
   </file>
   <file src="lib/Versions/CollectiveVersion.php">
     <UndefinedClass occurrences="1">

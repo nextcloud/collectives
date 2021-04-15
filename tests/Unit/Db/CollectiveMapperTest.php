@@ -21,7 +21,6 @@ class CollectiveMapperTest extends TestCase {
 
 		$this->collective = new Collective();
 		$this->collective->setId(1);
-		$this->collective->setName('collective');
 
 		$this->mapper = $this->getMockBuilder(CollectiveMapper::class)
 			->setConstructorArgs([$db])

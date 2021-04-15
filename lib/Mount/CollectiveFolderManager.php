@@ -77,14 +77,14 @@ class CollectiveFolderManager {
 	 * @throws NotFoundException
 	 */
 	private function getRootFolderStorageId(): int {
-		$query = $this->connection->getQueryBuilder();
+		$qb = $this->connection->getQueryBuilder();
 
-		$query->select('fileid')
+		$qb->select('fileid')
 			->from('filecache')
-			->where($query->expr()->eq('storage', $query->createNamedParameter($this->getRootFolder()->getStorage()->getCache()->getNumericStorageId())))
-			->andWhere($query->expr()->eq('path_hash', $query->createNamedParameter(md5($this->getRootPath()))));
+			->where($qb->expr()->eq('storage', $qb->createNamedParameter($this->getRootFolder()->getStorage()->getCache()->getNumericStorageId())))
+			->andWhere($qb->expr()->eq('path_hash', $qb->createNamedParameter(md5($this->getRootPath()))));
 
-		return (int)$query->execute()->fetchColumn();
+		return (int)$qb->execute()->fetchColumn();
 	}
 
 	/**
@@ -126,17 +126,21 @@ class CollectiveFolderManager {
 	 * @throws NotFoundException
 	 */
 	public function getFolderFileCache(int $id): array {
-		$query = $this->connection->getQueryBuilder();
-		$query->select(
-			'co.id AS folder_id', 'co.name AS mount_point',
-			'fileid', 'storage', 'path', 'fc.name AS name', 'mimetype', 'mimepart', 'size', 'mtime', 'storage_mtime', 'etag', 'encrypted', 'parent', 'fc.permissions AS permissions')
+		$qb = $this->connection->getQueryBuilder();
+		$qb->select(
+			'co.id AS folder_id', 'ci.name AS mount_point', 'fileid', 'storage', 'path', 'fc.name AS name',
+			'mimetype', 'mimepart', 'size', 'mtime', 'storage_mtime', 'etag', 'encrypted', 'parent', 'permissions')
 			->from('collectives', 'co')
-			->leftJoin('co', 'filecache', 'fc', $query->expr()->andX(
+			->leftJoin('co', 'circle_circles', 'ci', $qb->expr()->andX(
+				$qb->expr()->eq('co.circle_unique_id', 'ci.unique_id')))
+			->leftJoin('co', 'filecache', 'fc', $qb->expr()->andX(
 				// concat with empty string to work around missing cast to string
-				$query->expr()->eq('fc.name', $query->func()->concat('co.id', $query->expr()->literal(''))),
-				$query->expr()->eq('parent', $query->createNamedParameter($this->getRootFolderStorageId()))))
-			->where($query->expr()->eq('co.id', $query->createNamedParameter($id)));
-		return $query->execute()->fetch();
+				$qb->expr()->eq('fc.name', $qb->func()->concat('co.id', $qb->expr()->literal(''))),
+				$qb->expr()->eq('parent', $qb->createNamedParameter($this->getRootFolderStorageId()))))
+			->where($qb->expr()->eq('co.id', $qb->createNamedParameter($id)));
+		$tmp = $qb->getSQL();
+		$tmp2 = $qb->execute()->fetch();
+		return $qb->execute()->fetch();
 	}
 
 	/**
@@ -144,8 +148,11 @@ class CollectiveFolderManager {
 	 */
 	public function getAllFolders(): array {
 		$qb = $this->connection->getQueryBuilder();
-		$qb->select('*')
-			->from('collectives');
+		$qb->select('co.id AS id', 'circle_unique_id', 'oc_circle_circles.name AS name')
+			->from('collectives', 'co')
+			->leftJoin('co', 'circle_circles', 'ci', $qb->expr()->andX(
+				$qb->expr()->eq('co.circle_unique_id', 'ci.unique_id')
+			));
 		$rows = $qb->execute()->fetchAll();
 
 		$folderMap = [];
