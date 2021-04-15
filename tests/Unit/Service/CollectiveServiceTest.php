@@ -39,8 +39,6 @@ class CollectiveServiceTest extends TestCase {
 	}
 
 	public function testCreateWithExistingCircle(): void {
-		$this->collectiveMapper->method('findByName')
-			->willReturn(null);
 		$this->collectiveMapper->method('createCircle')
 			->will(self::throwException(new \RuntimeException('Failed to create Circle taken')));
 		$this->expectException(\RuntimeException::class);
@@ -56,25 +54,23 @@ class CollectiveServiceTest extends TestCase {
 			->willReturn('CircleUniqueId');
 		$collective = new Collective();
 		$collective->setId(123);
-		$this->collectiveMapper->method('findByName')
-			->willReturn(null);
 		$this->collectiveMapper->method('createCircle')
 			->willReturn($circle);
 		$this->collectiveMapper
 			->expects(self::once())
 			->method('insert')
 			->with(self::callback(function ($collective) {
-				return is_callable([$collective, 'getName']) &&
-					$collective->getName() === 'free';
+				return is_callable([$collective, 'getCircleUniqueId']) &&
+					$collective->getCircleUniqueId() === 'CircleUniqueId';
 			}))
 			->willReturn($collective);
 		$info = $this->service->createCollective($this->userId, 'de', 'free', 'free');
 		self::assertIsCallable([$info, 'jsonSerialize']);
 		self::assertEqualsCanonicalizing([
 			'id' => 123,
-			'name' => null,
 			'circleUniqueId' => null,
 			'trashTimestamp' => null,
+			'name' => 'free',
 			'admin' => true
 		], $info->jsonSerialize());
 	}

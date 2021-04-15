@@ -33,7 +33,9 @@ class CollectiveHelper {
 		foreach ($joinedCircleIds as $cId) {
 			if (null !== $c = $this->collectiveMapper->findByCircleId($cId)) {
 				$admin = $getAdmin && $this->collectiveMapper->isAdmin($c, $userId);
-				$collectiveInfos[] = new CollectiveInfo($c, $admin);
+				$collectiveInfos[] = new CollectiveInfo($c,
+					$this->collectiveMapper->circleUniqueIdToName($c->getCircleUniqueId()),
+					$admin);
 			}
 		}
 		return $collectiveInfos;
@@ -50,7 +52,9 @@ class CollectiveHelper {
 		$joinedCircleIds = Circles::joinedCircleIds($userId);
 		foreach ($joinedCircleIds as $cId) {
 			if ((null !== $c = $this->collectiveMapper->findTrashByCircleId($cId, $userId))) {
-				$collectiveInfos[] = new CollectiveInfo($c, true);
+				$collectiveInfos[] = new CollectiveInfo($c,
+					$this->collectiveMapper->circleUniqueIdToName($c->getCircleUniqueId()),
+					true);
 			}
 		}
 		return $collectiveInfos;

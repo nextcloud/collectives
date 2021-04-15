@@ -4,6 +4,7 @@ namespace OCA\Collectives\Db;
 
 use OCA\Circles\Api\v1\Circles;
 use OCA\Circles\Exceptions\CircleAlreadyExistsException;
+use OCA\Circles\Exceptions\CircleDoesNotExistException;
 use OCA\Circles\Exceptions\MemberDoesNotExistException;
 use OCA\Circles\Model\Circle;
 use OCP\AppFramework\Db\DoesNotExistException;
@@ -125,37 +126,13 @@ class CollectiveMapper extends QBMapper {
 	}
 
 	/**
-	 * @param string      $name
-	 * @param string|null $userId
+	 * @param string $circleUniqueId
 	 *
-	 * @return Collective|null
+	 * @return string
+	 * @throws CircleDoesNotExistException
 	 */
-	public function findByName(string $name, string $userId = null): ?Collective {
-		$qb = $this->db->getQueryBuilder();
-		$where = $qb->expr()->andX();
-		$where->add($qb->expr()->eq('name', $qb->createNamedParameter($name, IQueryBuilder::PARAM_STR)));
-		$where->add($qb->expr()->isNull('trash_timestamp'));
-		$qb->select('*')
-			->from($this->tableName)
-			->where($where);
-		return $this->findBy($qb, $userId, false);
-	}
-
-	/**
-	 * @param string      $name
-	 * @param string|null $userId
-	 *
-	 * @return Collective|null
-	 */
-	public function findTrashByName(string $name, string $userId = null): ?Collective {
-		$qb = $this->db->getQueryBuilder();
-		$where = $qb->expr()->andX();
-		$where->add($qb->expr()->eq('name', $qb->createNamedParameter($name, IQueryBuilder::PARAM_STR)));
-		$where->add($qb->expr()->isNotNull('trash_timestamp'));
-		$qb->select('*')
-			->from($this->tableName)
-			->where($where);
-		return $this->findBy($qb, $userId, true);
+	public function circleUniqueIdToName(string $circleUniqueId): string {
+		return Circles::detailsCircle($circleUniqueId)->getName();
 	}
 
 	/**

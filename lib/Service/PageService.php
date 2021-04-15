@@ -3,6 +3,7 @@
 namespace OCA\Collectives\Service;
 
 use Exception;
+use OCA\Circles\Exceptions\CircleDoesNotExistException;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Db\Page;
 use OCA\Collectives\Db\PageMapper;
@@ -107,15 +108,19 @@ class PageService {
 	 * @param string $userId
 	 * @param int    $collectiveId
 	 *
-	 * @return PageFile[]
-	 * @throws \OCP\Files\NotFoundException
+	 * @return array
+	 * @throws CircleDoesNotExistException
+	 * @throws InvalidPathException
 	 * @throws NotFoundException
+	 * @throws \OCP\Files\NotFoundException
 	 */
 	public function findAll(string $userId, int $collectiveId): array {
 		if (null === $collective = $this->collectiveMapper->findById($collectiveId, $userId)) {
 			throw new NotFoundException('Collective not found: '. $collectiveId);
 		}
-		$folder = $this->userFolderHelper->getCollectiveFolder($collective->getName(), $userId);
+		$folder = $this->userFolderHelper->getCollectiveFolder(
+			$this->collectiveMapper->circleUniqueIdToName($collective->getCircleUniqueId()),
+			$userId);
 		$pageFiles = [];
 		foreach ($folder->getDirectoryListing() as $file) {
 			if ($file instanceof File && $this->isPage($file)) {
@@ -153,14 +158,17 @@ class PageService {
 	 * @param int    $id
 	 *
 	 * @return PageFile
-	 * @throws PageDoesNotExistException
+	 * @throws CircleDoesNotExistException
 	 * @throws NotFoundException
+	 * @throws PageDoesNotExistException
 	 */
 	public function find(string $userId, int $collectiveId, int $id): PageFile {
 		if (null === $collective = $this->collectiveMapper->findById($collectiveId, $userId)) {
 			throw new NotFoundException('Collective not found: '. $collectiveId);
 		}
-		$folder = $this->userFolderHelper->getCollectiveFolder($collective->getName(), $userId);
+		$folder = $this->userFolderHelper->getCollectiveFolder(
+			$this->collectiveMapper->circleUniqueIdToName($collective->getCircleUniqueId()),
+			$userId);
 		return $this->getPage($this->nodeHelper->getFileById($folder, $id));
 	}
 
@@ -170,16 +178,19 @@ class PageService {
 	 * @param string $title
 	 *
 	 * @return PageFile
+	 * @throws CircleDoesNotExistException
 	 * @throws InvalidPathException
-	 * @throws NotPermittedException
 	 * @throws NotFoundException
+	 * @throws NotPermittedException
 	 * @throws \OCP\Files\NotFoundException
 	 */
 	public function create(string $userId, int $collectiveId, string $title): PageFile {
 		if (null === $collective = $this->collectiveMapper->findById($collectiveId, $userId)) {
 			throw new NotFoundException('Collective not found: '. $collectiveId);
 		}
-		$folder = $this->userFolderHelper->getCollectiveFolder($collective->getName(), $userId);
+		$folder = $this->userFolderHelper->getCollectiveFolder(
+			$this->collectiveMapper->circleUniqueIdToName($collective->getCircleUniqueId()),
+			$userId);
 		$safeTitle = $this->nodeHelper->sanitiseFilename($title, self::DEFAULT_PAGE_TITLE);
 		$filename = NodeHelper::generateFilename($folder, $safeTitle, self::SUFFIX);
 
@@ -230,7 +241,9 @@ class PageService {
 		try {
 			$pageFile = $this->find($userId, $collectiveId, $id);
 
-			$folder = $this->userFolderHelper->getCollectiveFolder($collective->getName(), $userId);
+			$folder = $this->userFolderHelper->getCollectiveFolder(
+				$this->collectiveMapper->circleUniqueIdToName($collective->getCircleUniqueId()),
+				$userId);
 			$file = $this->nodeHelper->getFileById($folder, $pageFile->getId());
 			$safeTitle = $this->nodeHelper->sanitiseFilename($title, self::DEFAULT_PAGE_TITLE);
 
@@ -263,7 +276,9 @@ class PageService {
 		}
 		try {
 			$pageFile = $this->find($userId, $collectiveId, $id);
-			$folder = $this->userFolderHelper->getCollectiveFolder($collective->getName(), $userId);
+			$folder = $this->userFolderHelper->getCollectiveFolder(
+				$this->collectiveMapper->circleUniqueIdToName($collective->getCircleUniqueId()),
+				$userId);
 			$file = $this->nodeHelper->getFileById($folder, $pageFile->getId());
 			$file->delete();
 			$this->pageMapper->deleteByFileId($pageFile->getId());

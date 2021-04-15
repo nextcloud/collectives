@@ -40,10 +40,6 @@ class PageServiceTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
-		$collectiveHelper = $this->getMockBuilder(CollectiveHelper::class)
-			->disableOriginalConstructor()
-			->getMock();
-
 		$userFolderHelper = $this->getMockBuilder(UserFolderHelper::class)
 			->disableOriginalConstructor()
 			->getMock();
@@ -56,7 +52,7 @@ class PageServiceTest extends TestCase {
 		$userFolderHelper->method('getCollectiveFolder')
 			->willReturn($this->collectiveFolder);
 		$collective = new Collective();
-		$collective->setName('collective');
+		$collective->setCircleUniqueId('circleUniqueId');
 		$collectiveMapper->method('findById')
 			->willReturnMap([
 				[1, $this->userId, $collective],
