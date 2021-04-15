@@ -49,12 +49,17 @@ Cypress.Commands.add('seedCollective', (name) => {
 		.its('app')
 		.then(async app => {
 			await app.$store.dispatch('newCollective', { name })
-			app.$router.push(app.$store.getters.updatedCollectivePath)
+				.catch(e => {
+					if (e.request && e.request.status === 422) {
+						// The collective already existed... carry on.
+					} else {
+						throw e
+					}
+				})
 		})
 })
 
 Cypress.Commands.add('createCollective', (name) => {
-	cy.visit('/apps/collectives')
 	cy.get('a [title="Create new collective"]').click()
 	cy.get('.collective-create input[type="text"]').type(`${name}{enter}`)
 })

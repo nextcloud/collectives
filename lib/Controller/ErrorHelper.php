@@ -7,7 +7,6 @@ use Closure;
 use OCA\Circles\Exceptions\CircleAlreadyExistsException;
 use OCA\Collectives\Service\UnprocessableEntityException;
 use OCA\Collectives\Service\NotFoundException;
-use OCA\Collectives\Service\ConflictException;
 use OCA\Collectives\Service\NotPermittedException;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
@@ -28,8 +27,6 @@ trait ErrorHelper {
 			return new DataResponse($e->getMessage(), Http::STATUS_FORBIDDEN);
 		} catch (NotFoundException $e) {
 			return new DataResponse($e->getMessage(), Http::STATUS_NOT_FOUND);
-		} catch (ConflictException $e) {
-			return new DataResponse($e->jsonSerialize(), Http::STATUS_CONFLICT);
 		} catch (CircleAlreadyExistsException | QueryException | UnprocessableEntityException $e) {
 			return new DataResponse($e->getMessage(), Http::STATUS_UNPROCESSABLE_ENTITY);
 		} catch (\Throwable $e) {

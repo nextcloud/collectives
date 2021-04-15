@@ -9,7 +9,6 @@ use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Service\CollectiveHelper;
 use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\UnprocessableEntityException;
-use OCA\Collectives\Service\ConflictException;
 use PHPUnit\Framework\TestCase;
 
 class CollectiveServiceTest extends TestCase {
@@ -37,14 +36,6 @@ class CollectiveServiceTest extends TestCase {
 		$this->expectException(UnprocessableEntityException::class);
 		$this->expectExceptionMessage('Empty collective name is not allowed');
 		$this->service->createCollective($this->userId, 'de', '', '');
-	}
-
-	public function testCreateExistingAsMember(): void {
-		$this->collectiveMapper->method('findByName')
-			->willReturn(new Collective());
-		$this->expectException(ConflictException::class);
-		$this->expectExceptionMessage('Collective "taken" exists already.');
-		$this->service->createCollective($this->userId, 'de', 'taken', 'taken');
 	}
 
 	public function testCreateWithExistingCircle(): void {
