@@ -424,7 +424,7 @@ class FeatureContext implements Context {
 			throw new RuntimeException('Unable to get list of collectives');
 		}
 		$jsonBody = json_decode($this->response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
-		foreach ($jsonBody as $collective) {
+		foreach ($jsonBody['data'] as $collective) {
 			if ($name === $collective['name']) {
 				return $collective['id'];
 			}
@@ -445,7 +445,7 @@ class FeatureContext implements Context {
 			throw new RuntimeException('Unable to get list of pages for collective ' . $collectiveId);
 		}
 		$jsonBody = json_decode($this->response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
-		foreach ($jsonBody as $page) {
+		foreach ($jsonBody['data'] as $page) {
 			if ($name === $page['title']) {
 				return $page['id'];
 			}
@@ -553,7 +553,7 @@ class FeatureContext implements Context {
 	 */
 	private function getCircleIdByCollectiveName(Response $response, string $name): ?string {
 		$jsonBody = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
-		foreach ($jsonBody as $collective) {
+		foreach ($jsonBody['data'] as $collective) {
 			if ($name === $collective['name']) {
 				return $collective['circleUniqueId'];
 			}
@@ -578,7 +578,7 @@ class FeatureContext implements Context {
 	private function assertCollectiveByName(Response $response, string $name, ?bool $revert = false): void {
 		$jsonBody = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
 		$collectiveNames = [];
-		foreach ($jsonBody as $collective) {
+		foreach ($jsonBody['data'] as $collective) {
 			$collectiveNames[] = $collective['name'];
 		}
 		if (false === $revert) {
@@ -596,7 +596,7 @@ class FeatureContext implements Context {
 	private function assertPageByTitle(Response $response, string $title, ?bool $revert = false): void {
 		$jsonBody = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
 		$pageTitles = [];
-		foreach ($jsonBody as $page) {
+		foreach ($jsonBody['data'] as $page) {
 			$pageTitles[] = $page['title'];
 		}
 		if (false === $revert) {
@@ -614,7 +614,7 @@ class FeatureContext implements Context {
 	private function assertPageLastEditedByUser(Response $response, string $title, string $user): void {
 		$jsonBody = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
 		$pageTitles = [];
-		foreach ($jsonBody as $page) {
+		foreach ($jsonBody['data'] as $page) {
 			if ($page['lastUserId'] === $user) {
 				$pageTitles[] = $page['title'];
 			}
