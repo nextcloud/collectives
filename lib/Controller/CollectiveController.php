@@ -65,7 +65,9 @@ class CollectiveController extends Controller {
 	 */
 	public function index(): DataResponse {
 		return $this->handleErrorResponse(function () {
-			return $this->service->getCollectives($this->getUserId());
+			return [
+				"data" => $this->service->getCollectives($this->getUserId()),
+			];
 		}, $this->logger);
 	}
 
@@ -79,12 +81,15 @@ class CollectiveController extends Controller {
 	public function create(string $name): DataResponse {
 		return $this->handleErrorResponse(function () use ($name) {
 			$safeName = $this->nodeHelper->sanitiseFilename($name);
-			return $this->service->createCollective(
+			$collective = $this->service->createCollective(
 				$this->getUserId(),
 				$this->getUserLang(),
 				$name,
 				$safeName
 			);
+			return [
+				"data" => $collective
+			];
 		}, $this->logger);
 	}
 
@@ -97,7 +102,10 @@ class CollectiveController extends Controller {
 	 */
 	public function trash(int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($id) {
-			return $this->service->trashCollective($this->getUserId(), $id);
+			$collective = $this->service->trashCollective($this->getUserId(), $id);
+			return [
+				"data" => $collective
+			];
 		}, $this->logger);
 	}
 }

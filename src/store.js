@@ -184,7 +184,7 @@ export default new Vuex.Store({
 		async getPages({ commit, getters }) {
 			commit('loading', 'collective')
 			const response = await axios.get(getters.pagesUrl)
-			commit('pages', response.data)
+			commit('pages', response.data.data)
 			commit('done', 'collective')
 		},
 
@@ -195,7 +195,7 @@ export default new Vuex.Store({
 		async getPage({ commit, getters, state }, pageId) {
 			commit('loading', 'page')
 			const response = await axios.get(getters.pageUrl(pageId))
-			commit('updatePage', response.data)
+			commit('updatePage', response.data.data)
 			commit('done', 'page')
 		},
 
@@ -208,13 +208,13 @@ export default new Vuex.Store({
 			commit('loading', 'page')
 			const response = await axios.post(getters.pagesUrl, page)
 			// Add new page to the beginning of pages array
-			commit('addPage', { newTitle: '', ...response.data })
+			commit('addPage', { newTitle: '', ...response.data.data })
 			commit('done', 'page')
 		},
 
 		async touchPage({ commit, getters }) {
 			const response = await axios.get(getters.touchUrl)
-			commit('updatePage', response.data)
+			commit('updatePage', response.data.data)
 		},
 
 		/**
@@ -227,7 +227,7 @@ export default new Vuex.Store({
 			page.title = newTitle
 			delete page.newTitle
 			const response = await axios.put(getters.pageUrl(page.id), page)
-			commit('updatePage', response.data)
+			commit('updatePage', response.data.data)
 			commit('done', 'page')
 		},
 
@@ -247,7 +247,7 @@ export default new Vuex.Store({
 		async getCollectives({ commit }) {
 			commit('loading', 'collective')
 			const response = await axios.get(generateUrl('/apps/collectives/_collectives'))
-			commit('collectives', response.data)
+			commit('collectives', response.data.data)
 			commit('done', 'collective')
 		},
 
@@ -257,7 +257,7 @@ export default new Vuex.Store({
 		async getTrashCollectives({ commit }) {
 			commit('loading', 'collectiveTrash')
 			const response = await axios.get(generateUrl('/apps/collectives/_collectives/trash'))
-			commit('trashCollectives', response.data)
+			commit('trashCollectives', response.data.data)
 			commit('done', 'collectiveTrash')
 		},
 
@@ -270,7 +270,7 @@ export default new Vuex.Store({
 				generateUrl('/apps/collectives/_collectives'),
 				collective,
 			)
-			commit('addOrUpdateCollective', response.data)
+			commit('addOrUpdateCollective', response.data.data)
 		},
 
 		/**
@@ -279,7 +279,7 @@ export default new Vuex.Store({
 		 */
 		async trashCollective({ commit }, { id }) {
 			const response = await axios.delete(generateUrl('/apps/collectives/_collectives/' + id))
-			commit('trashCollective', response.data)
+			commit('trashCollective', response.data.data)
 		},
 
 		/**
@@ -288,7 +288,7 @@ export default new Vuex.Store({
 		 */
 		async restoreCollective({ commit }, { id }) {
 			const response = await axios.patch(generateUrl('/apps/collectives/_collectives/trash/' + id))
-			commit('restoreCollective', response.data)
+			commit('restoreCollective', response.data.data)
 		},
 
 		/**
@@ -302,7 +302,7 @@ export default new Vuex.Store({
 				doCircle = '?circle=1'
 			}
 			const response = await axios.delete(generateUrl('/apps/collectives/_collectives/trash/' + id + doCircle))
-			commit('deleteCollective', response.data)
+			commit('deleteCollective', response.data.data)
 		},
 	},
 
