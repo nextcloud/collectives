@@ -192,7 +192,7 @@ class CollectiveMapper extends QBMapper {
 	 */
 	public function findCircle(string $name): ?Circle {
 		$circles = Circles::listCircles(
-			Circles::CIRCLES_ALL,
+			Circles::CIRCLES_ALL & ~Circles::CIRCLES_PERSONAL,
 			$name,
 			Circles::LEVEL_ADMIN
 		);
