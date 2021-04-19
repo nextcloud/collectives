@@ -2,6 +2,7 @@
 
 namespace Unit\Db;
 
+use OCA\Circles\Db\CirclesRequest;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCP\IDBConnection;
@@ -22,8 +23,12 @@ class CollectiveMapperTest extends TestCase {
 		$this->collective = new Collective();
 		$this->collective->setId(1);
 
+		$circlesRequest = $this->getMockBuilder(CirclesRequest::class)
+			->disableOriginalConstructor()
+			->getMock();
+
 		$this->mapper = $this->getMockBuilder(CollectiveMapper::class)
-			->setConstructorArgs([$db])
+			->setConstructorArgs([$db, $circlesRequest])
 			->getMock();
 		$this->mapper->method('findById')
 			->willReturn($this->collective);

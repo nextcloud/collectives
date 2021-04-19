@@ -3,6 +3,7 @@
 namespace OCA\Collectives\Db;
 
 use OCA\Circles\Api\v1\Circles;
+use OCA\Circles\Db\CirclesRequest;
 use OCA\Circles\Exceptions\CircleAlreadyExistsException;
 use OCA\Circles\Exceptions\CircleDoesNotExistException;
 use OCA\Circles\Exceptions\MemberDoesNotExistException;
@@ -21,6 +22,8 @@ use OCP\IDBConnection;
  * @method Collective update(Collective $collective) : Collective
  */
 class CollectiveMapper extends QBMapper {
+	/** @var CirclesRequest */
+	private $circlesRequest;
 
 	/**
 	 * CollectiveMapper constructor.
@@ -28,8 +31,10 @@ class CollectiveMapper extends QBMapper {
 	 * @param IDBConnection    $db
 	 */
 	public function __construct(
-		IDBConnection $db) {
+		IDBConnection $db,
+		CirclesRequest $circlesRequest) {
 		parent::__construct($db, 'collectives', Collective::class);
+		$this->circlesRequest = $circlesRequest;
 	}
 
 	/**
@@ -126,13 +131,23 @@ class CollectiveMapper extends QBMapper {
 	}
 
 	/**
+	 * @return Collective[]
+	 */
+	public function getAll(): array {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from($this->tableName);
+		return $this->findEntities($qb);
+	}
+
+	/**
 	 * @param string $circleUniqueId
 	 *
 	 * @return string
 	 * @throws CircleDoesNotExistException
 	 */
 	public function circleUniqueIdToName(string $circleUniqueId): string {
-		return Circles::detailsCircle($circleUniqueId)->getName();
+		return $this->circlesRequest->getCircleFromUniqueId($circleUniqueId)->getName();
 	}
 
 	/**

@@ -28,6 +28,11 @@
       <code>Base</code>
     </UndefinedClass>
   </file>
+  <file src="lib/Command/PurgeObsoleteCollectives.php">
+    <UndefinedClass occurrences="1">
+      <code>Base</code>
+    </UndefinedClass>
+  </file>
   <file src="lib/Command/PurgeObsoletePages.php">
     <UndefinedClass occurrences="1">
       <code>Base</code>
@@ -45,6 +50,11 @@
       <code>LoadViewer</code>
     </UndefinedClass>
   </file>
+  <file src="lib/Db/CollectiveGarbageCollector.php">
+    <UndefinedClass occurrences="1">
+      <code>CircleDoesNotExistException</code>
+    </UndefinedClass>
+  </file>
   <file src="lib/Db/CollectiveMapper.php">
     <MoreSpecificImplementedParamType occurrences="1"/>
     <UndefinedClass occurrences="5">
@@ -52,10 +62,12 @@
       <code>Circle</code>
       <code>Circles</code>
       <code>Circles</code>
-      <code>Circles</code>
+      <code>CirclesRequest</code>
     </UndefinedClass>
-    <UndefinedDocblockClass occurrences="1">
+    <UndefinedDocblockClass occurrences="3">
+      <code>$this-&gt;circlesRequest</code>
       <code>CircleDoesNotExistException</code>
+      <code>CirclesRequest</code>
     </UndefinedDocblockClass>
   </file>
   <file src="lib/Db/PageMapper.php">
