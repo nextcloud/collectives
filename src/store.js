@@ -39,7 +39,7 @@ export default new Vuex.Store({
 		trashCollectives: [],
 		pages: [],
 		updatedPage: {},
-		updatedTrashCollective: {},
+		updatedCollective: {},
 	},
 
 	getters: {

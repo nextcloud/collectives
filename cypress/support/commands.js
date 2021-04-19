@@ -56,6 +56,15 @@ Cypress.Commands.add('seedCollective', (name) => {
 						throw e
 					}
 				})
+			app.$router.push(app.$store.getters.updatedCollectivePath)
+		})
+})
+
+Cypress.Commands.add('seedPage', (name) => {
+	cy.window()
+		.its('app')
+		.then(async app => {
+			await app.$store.dispatch('newPage', { title: name })
 		})
 })
 
