@@ -4,8 +4,7 @@ vendor/
 
 # Editor directories and files
 .idea/
-js/*.js
-js/*.js.map
+js/*
 
 # PHPunit cache
 .phpunit.result.cache
