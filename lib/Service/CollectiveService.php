@@ -170,9 +170,7 @@ class CollectiveService {
 			throw new NotFoundException('Failed to delete collective folder');
 		}
 
-		return new CollectiveInfo($this->collectiveMapper->delete($collective),
-			$name,
-			true);
+		return new CollectiveInfo($this->collectiveMapper->delete($collective), $name, true);
 	}
 
 	/**

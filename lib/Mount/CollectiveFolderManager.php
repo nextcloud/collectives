@@ -138,8 +138,6 @@ class CollectiveFolderManager {
 				$qb->expr()->eq('fc.name', $qb->func()->concat('co.id', $qb->expr()->literal(''))),
 				$qb->expr()->eq('parent', $qb->createNamedParameter($this->getRootFolderStorageId()))))
 			->where($qb->expr()->eq('co.id', $qb->createNamedParameter($id)));
-		$tmp = $qb->getSQL();
-		$tmp2 = $qb->execute()->fetch();
 		return $qb->execute()->fetch();
 	}
 
