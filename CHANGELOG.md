@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.4.0 - 2021-04-19
+
+### ✨ New
+- ♻️l Restore deleted collectives.
+- 🗑️ Permanently remove deleted collectives.
+- 💱 Rename an existing collective.
+- ⭕ Create a collective for an existing circle.
+
+### Fixed
+- 🌐 Loading Collectives and Pages via Links.
+- 🏖️ Links from the Collective Startpage.
+
+### Upgrades
+- 🚀 Update all npm dependencies.
+
+
 ## 0.3.1 - 2021-04-06
 
 ### Fixed
