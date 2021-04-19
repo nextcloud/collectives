@@ -12,6 +12,7 @@ use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCP\AppFramework\QueryException;
 use OCP\Files\InvalidPathException;
 use OCP\Files\NotPermittedException as FilesNotPermittedException;
+use OCP\IL10N;
 
 class CollectiveService {
 	/** @var CollectiveMapper */
@@ -23,20 +24,26 @@ class CollectiveService {
 	/** @var CollectiveFolderManager */
 	private $collectiveFolderManager;
 
+	/** @var IL10N */
+	private $l10n;
+
 	/**
 	 * CollectiveService constructor.
 	 *
 	 * @param CollectiveMapper         $collectiveMapper
 	 * @param CollectiveHelper         $collectiveHelper
 	 * @param CollectiveFolderManager  $collectiveFolderManager
+	 * @param IL10N                    $l10n
 	 */
 	public function __construct(
 		CollectiveMapper $collectiveMapper,
 		CollectiveHelper $collectiveHelper,
-		CollectiveFolderManager $collectiveFolderManager) {
+		CollectiveFolderManager $collectiveFolderManager,
+		IL10N $l10n) {
 		$this->collectiveMapper = $collectiveMapper;
 		$this->collectiveHelper = $collectiveHelper;
 		$this->collectiveFolderManager = $collectiveFolderManager;
+		$this->l10n = $l10n;
 	}
 
 	/**
@@ -62,7 +69,6 @@ class CollectiveService {
 	/**
 	 * @param string $userId
 	 * @param string $userLang
-	 * @param string $name
 	 * @param string $safeName
 	 *
 	 * @return [CollectiveInfo, string]
@@ -71,8 +77,8 @@ class CollectiveService {
 	 * @throws UnprocessableEntityException
 	 * @throws CircleAlreadyExistsException
 	 */
-	public function createCollective(string $userId, string $userLang, string $name, string $safeName): array {
-		if (empty($name) || empty($safeName)) {
+	public function createCollective(string $userId, string $userLang, string $safeName): array {
+		if (empty($safeName)) {
 			throw new UnprocessableEntityException('Empty collective name is not allowed');
 		}
 
@@ -93,7 +99,10 @@ class CollectiveService {
 				// There's already a collective with that name.
 				throw $e;
 			}
-			$message = 'Created collective for existing circle.';
+			$message = $this->l10n->t(
+				'Created collective "%s" for existing circle.',
+				[$safeName]
+			);
 		}
 
 		// Create collective object

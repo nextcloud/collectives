@@ -10,6 +10,7 @@ use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Service\CollectiveHelper;
 use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\UnprocessableEntityException;
+use OCP\IL10N;
 use PHPUnit\Framework\TestCase;
 
 class CollectiveServiceTest extends TestCase {
@@ -30,13 +31,22 @@ class CollectiveServiceTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
-		$this->service = new CollectiveService($this->collectiveMapper, $collectiveHelper, $collectiveFolderManager);
+		$l10n = $this->getMockBuilder(IL10N::class)
+			->disableOriginalConstructor()
+			->getMock();
+
+		$this->service = new CollectiveService(
+			$this->collectiveMapper,
+			$collectiveHelper,
+			$collectiveFolderManager,
+			$l10n
+		);
 	}
 
 	public function testCreateWithEmptyName(): void {
 		$this->expectException(UnprocessableEntityException::class);
 		$this->expectExceptionMessage('Empty collective name is not allowed');
-		$this->service->createCollective($this->userId, 'de', '', '');
+		$this->service->createCollective($this->userId, 'de', '');
 	}
 
 	public function testCreateWithExistingCircle(): void {
@@ -46,7 +56,7 @@ class CollectiveServiceTest extends TestCase {
 			->willReturn(null);
 		$this->expectException(CircleAlreadyExistsException::class);
 		$this->expectExceptionMessage('A circle with that name already exists.');
-		$this->service->createCollective($this->userId, 'de', 'taken', 'taken');
+		$this->service->createCollective($this->userId, 'de', 'taken');
 	}
 
 	public function testCreateForOwnCircle(): void {
@@ -65,7 +75,7 @@ class CollectiveServiceTest extends TestCase {
 			->willReturn($collective);
 		$this->expectException(CircleAlreadyExistsException::class);
 		$this->expectExceptionMessage('A circle with that name already exists.');
-		$this->service->createCollective($this->userId, 'de', 'own', 'own');
+		$this->service->createCollective($this->userId, 'de', 'own');
 	}
 
 	public function testCreate(): void {
@@ -88,7 +98,7 @@ class CollectiveServiceTest extends TestCase {
 					$collective->getCircleUniqueId() === 'CircleUniqueId';
 			}))
 			->willReturn($collective);
-		[$collective, $info] = $this->service->createCollective($this->userId, 'de', 'free', 'free');
+		[$collective, $info] = $this->service->createCollective($this->userId, 'de', 'free');
 		self::assertIsCallable([$collective, 'jsonSerialize']);
 		self::assertEqualsCanonicalizing([
 			'id' => 123,

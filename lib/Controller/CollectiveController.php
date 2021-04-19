@@ -95,7 +95,6 @@ class CollectiveController extends Controller {
 			[$collective, $info] = $this->service->createCollective(
 				$this->getUserId(),
 				$this->getUserLang(),
-				$name,
 				$safeName
 			);
 			return [

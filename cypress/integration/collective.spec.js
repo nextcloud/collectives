@@ -43,7 +43,9 @@ describe('Collective', function() {
 				cy.login('bob', 'bob', '/apps/collectives')
 				cy.createCollective('Preexisting Circle')
 				cy.get('#titleform input').should('have.value', ' Preexisting Circle')
-				cy.get('.toast-info').should('contain', 'Created collective for existing circle.')
+				cy.get('.toast-info').should('contain',
+					'Created collective "Preexisting Circle" for existing circle.'
+				)
 			})
 		after(function() {
 			cy.deleteCollective('Preexisting Circle')
