@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2021-04-14 13:25+0200\n"
+"POT-Creation-Date: 2021-04-19 12:55+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,6 +32,11 @@ msgstr ""
 
 #: /collectives/lib/Search/PageProvider.php:106
 msgid "in {collective}"
+msgstr ""
+
+#: /collectives/lib/Service/CollectiveService.php:103
+#, php-format
+msgid "Created collective \"%s\" for existing circle."
 msgstr ""
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:3

@@ -2,6 +2,8 @@
 
 namespace OCA\Collectives\Controller;
 
+use Closure;
+
 use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Service\CollectiveService;
 use OCP\AppFramework\Controller;
@@ -59,16 +61,25 @@ class CollectiveController extends Controller {
 	}
 
 	/**
+	 * @param Closure              $callback
+	 *
+	 * @return DataResponse
+	 */
+	private function prepareResponse(Closure $callback) : DataResponse {
+		return $this->handleErrorResponse($callback, $this->logger);
+	}
+
+	/**
 	 * @NoAdminRequired
 	 *
 	 * @return DataResponse
 	 */
 	public function index(): DataResponse {
-		return $this->handleErrorResponse(function () {
+		return $this->prepareResponse(function () {
 			return [
 				"data" => $this->service->getCollectives($this->getUserId()),
 			];
-		}, $this->logger);
+		});
 	}
 
 	/**
@@ -79,18 +90,18 @@ class CollectiveController extends Controller {
 	 * @return DataResponse
 	 */
 	public function create(string $name): DataResponse {
-		return $this->handleErrorResponse(function () use ($name) {
+		return $this->prepareResponse(function () use ($name) {
 			$safeName = $this->nodeHelper->sanitiseFilename($name);
-			$collective = $this->service->createCollective(
+			[$collective, $info] = $this->service->createCollective(
 				$this->getUserId(),
 				$this->getUserLang(),
-				$name,
 				$safeName
 			);
 			return [
-				"data" => $collective
+				"data" => $collective,
+				"message" => $info,
 			];
-		}, $this->logger);
+		});
 	}
 
 	/**
@@ -101,11 +112,11 @@ class CollectiveController extends Controller {
 	 * @return DataResponse
 	 */
 	public function trash(int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($id) {
+		return $this->prepareResponse(function () use ($id) {
 			$collective = $this->service->trashCollective($this->getUserId(), $id);
 			return [
 				"data" => $collective
 			];
-		}, $this->logger);
+		});
 	}
 }

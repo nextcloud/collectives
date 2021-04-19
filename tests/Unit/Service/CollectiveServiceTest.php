@@ -2,6 +2,7 @@
 
 namespace Unit\Service;
 
+use OCA\Circles\Exceptions\CircleAlreadyExistsException;
 use OCA\Circles\Model\Circle;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
@@ -9,6 +10,7 @@ use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Service\CollectiveHelper;
 use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\UnprocessableEntityException;
+use OCP\IL10N;
 use PHPUnit\Framework\TestCase;
 
 class CollectiveServiceTest extends TestCase {
@@ -29,21 +31,51 @@ class CollectiveServiceTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
-		$this->service = new CollectiveService($this->collectiveMapper, $collectiveHelper, $collectiveFolderManager);
+		$l10n = $this->getMockBuilder(IL10N::class)
+			->disableOriginalConstructor()
+			->getMock();
+
+		$this->service = new CollectiveService(
+			$this->collectiveMapper,
+			$collectiveHelper,
+			$collectiveFolderManager,
+			$l10n
+		);
 	}
 
 	public function testCreateWithEmptyName(): void {
 		$this->expectException(UnprocessableEntityException::class);
 		$this->expectExceptionMessage('Empty collective name is not allowed');
-		$this->service->createCollective($this->userId, 'de', '', '');
+		$this->service->createCollective($this->userId, 'de', '');
 	}
 
 	public function testCreateWithExistingCircle(): void {
 		$this->collectiveMapper->method('createCircle')
-			->will(self::throwException(new \RuntimeException('Failed to create Circle taken')));
-		$this->expectException(\RuntimeException::class);
-		$this->expectExceptionMessage('Failed to create Circle taken');
-		$this->service->createCollective($this->userId, 'de', 'taken', 'taken');
+			->will(self::throwException(new CircleAlreadyExistsException('A circle with that name already exists.')));
+		$this->collectiveMapper->method('findCircle')
+			->willReturn(null);
+		$this->expectException(CircleAlreadyExistsException::class);
+		$this->expectExceptionMessage('A circle with that name already exists.');
+		$this->service->createCollective($this->userId, 'de', 'taken');
+	}
+
+	public function testCreateForOwnCircle(): void {
+		$circle = $this->getMockBuilder(Circle::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$circle->method('getUniqueId')
+			->willReturn('CircleUniqueId');
+		$circle->method('getName')
+			->willReturn('own');
+		$collective = new Collective();
+		$collective->setId(123);
+		$this->collectiveMapper->method('createCircle')
+			->will(self::throwException(new CircleAlreadyExistsException('A circle with that name already exists.')));
+		$this->collectiveMapper->method('findByCircleId')
+			->willReturn($collective);
+		$this->expectException(CircleAlreadyExistsException::class);
+		$this->expectExceptionMessage('A circle with that name already exists.');
+		$this->service->createCollective($this->userId, 'de', 'own');
 	}
 
 	public function testCreate(): void {
@@ -52,6 +84,8 @@ class CollectiveServiceTest extends TestCase {
 			->getMock();
 		$circle->method('getUniqueId')
 			->willReturn('CircleUniqueId');
+		$circle->method('getName')
+			->willReturn('free');
 		$collective = new Collective();
 		$collective->setId(123);
 		$this->collectiveMapper->method('createCircle')
@@ -64,14 +98,14 @@ class CollectiveServiceTest extends TestCase {
 					$collective->getCircleUniqueId() === 'CircleUniqueId';
 			}))
 			->willReturn($collective);
-		$info = $this->service->createCollective($this->userId, 'de', 'free', 'free');
-		self::assertIsCallable([$info, 'jsonSerialize']);
+		[$collective, $info] = $this->service->createCollective($this->userId, 'de', 'free');
+		self::assertIsCallable([$collective, 'jsonSerialize']);
 		self::assertEqualsCanonicalizing([
 			'id' => 123,
 			'circleUniqueId' => null,
 			'trashTimestamp' => null,
 			'name' => 'free',
 			'admin' => true
-		], $info->jsonSerialize());
+		], $collective->jsonSerialize());
 	}
 }

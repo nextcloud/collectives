@@ -122,7 +122,9 @@ export default new Vuex.Store({
 
 	mutations: {
 		info(state, message) {
-			Vue.set(state.messages, 'info', message)
+			if (message) {
+				Vue.set(state.messages, 'info', message)
+			}
 		},
 		loading(state, aspect) {
 			Vue.set(state.loading, aspect, true)
@@ -270,6 +272,7 @@ export default new Vuex.Store({
 				generateUrl('/apps/collectives/_collectives'),
 				collective,
 			)
+			commit('info', response.data.message)
 			commit('addOrUpdateCollective', response.data.data)
 		},
 
