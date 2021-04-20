@@ -11,18 +11,36 @@
 					{{ collective.emoji }}
 				</template>
 				<template #actions>
-					<ActionButton icon="icon-history" @click="restoreCollective(collective)">
-						{{ t('collectives', 'Restore collective') }}
+					<ActionButton icon="icon-history" :close-after-click="true" @click="restoreCollective(collective)">
+						{{ t('collectives', 'Restore') }}
 					</ActionButton>
-					<ActionButton icon="icon-delete" @click="deleteCollective(collective, false)">
-						{{ t('collectives', 'Permanently delete collective') }}
-					</ActionButton>
-					<ActionButton icon="icon-delete" @click="deleteCollective(collective, true)">
-						{{ t('collectives', 'Permanently delete collective and circle') }}
+					<ActionButton icon="icon-delete" :close-after-click="true" @click="showDeleteModal(collective)">
+						{{ t('collectives', 'Delete permanently') }}
 					</ActionButton>
 				</template>
 			</AppNavigationItem>
 		</ul>
+		<Modal v-if="deleteModal" @close="closeDeleteModal">
+			<div class="modal__content">
+				<h2 class="modal__content__title">
+					{{ t('collectives', 'Permanently delete collective »{collective}«', { collective: modalCollective.name }) }}
+				</h2>
+				<div class="modal__content__content">
+					<p>{{ t('collectives', 'Delete corresponding circle along with the collective?') }}</p>
+				</div>
+				<div class="modal__content__buttonrow threebuttons">
+					<button @click="closeDeleteModal">
+						{{ t('collectives', 'Cancel') }}
+					</button>
+					<button class="error primary" @click="deleteCollective(modalCollective, false)">
+						{{ t('collectives', 'Only collective') }}
+					</button>
+					<button class="error primary" @click="deleteCollective(modalCollective, true)">
+						{{ t('collectives', 'Collective and circle') }}
+					</button>
+				</div>
+			</div>
+		</Modal>
 	</AppNavigationSettings>
 </template>
 
@@ -30,6 +48,7 @@
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
 import AppNavigationSettings from '@nextcloud/vue/dist/Components/AppNavigationSettings'
+import Modal from '@nextcloud/vue/dist/Components/Modal'
 
 export default {
 	name: 'CollectiveTrash',
@@ -37,6 +56,13 @@ export default {
 		ActionButton,
 		AppNavigationItem,
 		AppNavigationSettings,
+		Modal,
+	},
+	data() {
+		return {
+			deleteModal: false,
+			modalCollective: null,
+		}
 	},
 	computed: {
 		trashCollectives() {
@@ -52,6 +78,15 @@ export default {
 		},
 		deleteCollective(collective, circle) {
 			this.$emit('deleteCollective', collective, circle)
+			this.closeDeleteModal()
+		},
+		showDeleteModal(collective) {
+			this.modalCollective = collective
+			this.deleteModal = true
+		},
+		closeDeleteModal() {
+			this.modalCollective = null
+			this.deleteModal = false
 		},
 	},
 }
@@ -60,5 +95,55 @@ export default {
 <style lang="scss">
 #app-settings-header .settings-button {
 	background-image: var(--icon-delete-000);
+}
+</style>
+
+<style lang="scss" scoped>
+.modal__content {
+	background: var(--color-main-background);
+	color: var(--color-text-light);
+	border-radius: var(--border-radius-large);
+	box-shadow: 0 0 30px var(--color-box-shadow);
+	padding: 15px;
+	font-size: 100%;
+	min-width: 200px;
+	max-height: calc(100% - 20px);
+	max-width: calc(100% - 20px);
+	overflow: auto;
+	position: relative;
+}
+
+.modal__content__title {
+	background: var(--color-main-background);
+}
+
+.modal__content__buttonrow {
+	position: relative;
+	display: flex;
+	background: transparent;
+	right: 0;
+	bottom: 0;
+	padding: 0;
+	padding-top: 10px;
+	box-sizing: border-box;
+	width: 100%;
+	background-image: linear-gradient(rgba(255, 255, 255, 0.0), var(--color-main-background));
+
+	&.threebuttons {
+		justify-content: space-between;
+	}
+
+	button {
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		height: 44px;
+		min-width: 44px;
+	}
+}
+
+.modal__content__content {
+	width: 100%;
+	max-width: 550px;
 }
 </style>

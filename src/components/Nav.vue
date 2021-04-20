@@ -15,7 +15,7 @@
 				</template>
 				<template v-if="collective.admin" #actions>
 					<ActionButton icon="icon-delete" @click="trashCollective(collective)">
-						{{ t('collectives', 'Move to trash') }}
+						{{ t('collectives', 'Delete') }}
 					</ActionButton>
 				</template>
 			</AppNavigationItem>

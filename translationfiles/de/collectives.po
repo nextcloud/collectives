@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2021-04-21 12:27+0200\n"
+"POT-Creation-Date: 2021-04-21 15:22+0200\n"
 "PO-Revision-Date: 2020-08-20 09:31+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -17,6 +17,28 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.3\n"
+
+#: /collectives-files.js:1
+msgid "img"
+msgid_plural ".svg"
+msgstr[0] ""
+msgstr[1] ""
+
+#: /collectives-main.js:2
+msgid "seconds"
+msgstr "Sekunden"
+
+#: /collectives-main.js:2
+msgid " 0o1"
+msgstr ""
+
+#: /collectives-main.js:2
+msgid "0b1"
+msgstr ""
+
+#: /collectives-main.js:2
+msgid "+0x1"
+msgstr ""
 
 #: /collectives/lib/Fs/UserFolderHelper.php:52
 #: /collectives/lib/Search/CollectiveProvider.php:58
@@ -84,6 +106,18 @@ msgstr ""
 "In deiner Nextcloud Instanz, gehe zu **»Apps«**, suche nach den Apps\n"
 "**»Circles«** und **»Collectives«** und aktiviere sie."
 
+#: /collectives/templates/error.php:4
+msgid "Error: Missing apps"
+msgstr "Fehler: Apps fehlen"
+
+#: /collectives/templates/error.php:9
+msgid "The following dependency apps are missing: "
+msgstr "Die folgenden notwendigen Apps fehlen:"
+
+#: /collectives/templates/error.php:27
+msgid "Please ask the administrator to enable these apps."
+msgstr "Bitte frage die Admins, ob sie diese Apps aktivieren können."
+
 #: /collectives/specialVueFakeDummyForL10nScript.js:1
 msgid "New Page"
 msgstr "Neue Seite"
@@ -113,126 +147,139 @@ msgid "Deleted collectives"
 msgstr "Gelöschte Kollektive"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:8
-msgid "Restore collective"
-msgstr "Stelle Kollektiv wieder her"
+msgid "Restore"
+msgstr "Wiederherstellen"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:9
-msgid "Permanently delete collective"
-msgstr "Lösche Kollektiv dauerhaft"
+msgid "Delete permanently"
+msgstr "Dauerhaft löschen"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:10
-msgid "Permanently delete collective and circle"
-msgstr "Lösche Kollektiv und Kreis dauerhaft"
+msgid "Permanently delete collective »{collective}«"
+msgstr "Kollektiv »{collective}« dauerhaft löschen"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:11
+msgid "Delete corresponding circle along with the collective?"
+msgstr "Den zum Kollektiv gehörenden Kreis ebenfalls löschen?"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:12
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:13
+msgid "Only collective"
+msgstr "Nur Kollektiv"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:14
+msgid "Collective and circle"
+msgstr "Kollektiv und Kreis"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:15
 msgid "Select a collective"
 msgstr "Wähle ein Kollektiv aus"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:12
-msgid "Move to trash"
-msgstr "In den Papierkorb verschieben"
+#: /collectives/specialVueFakeDummyForL10nScript.js:16
+msgid "Delete"
+msgstr "Löschen"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:13
+#: /collectives/specialVueFakeDummyForL10nScript.js:17
 msgid "Create new collective"
 msgstr "Erstelle ein neues Kollektiv"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:14
+#: /collectives/specialVueFakeDummyForL10nScript.js:18
 msgid "Create collective for existing circle"
 msgstr "Kollektiv für bestehenden Kreis anlegen"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:15
+#: /collectives/specialVueFakeDummyForL10nScript.js:19
 msgid "Add emoji"
 msgstr "Wähle einen Emoji"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:16
+#: /collectives/specialVueFakeDummyForL10nScript.js:20
 msgid "New collective name"
 msgstr "Name für das neue Kollektiv"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:17
+#: /collectives/specialVueFakeDummyForL10nScript.js:21
 msgid "Select circle..."
-msgstr ""
+msgstr "Wähle Kreis..."
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:18
+#: /collectives/specialVueFakeDummyForL10nScript.js:22
 msgid "Title"
 msgstr "Titel"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:19
+#: /collectives/specialVueFakeDummyForL10nScript.js:23
 msgid "Done with editing"
 msgstr "Bearbeiten abschließen"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:20
+#: /collectives/specialVueFakeDummyForL10nScript.js:24
 msgid "Edit page"
 msgstr "Seite bearbeiten"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:21
+#: /collectives/specialVueFakeDummyForL10nScript.js:25
 msgid "Delete page"
 msgstr "Seite entfernen"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:22
+#: /collectives/specialVueFakeDummyForL10nScript.js:26
 msgid "Show old versions"
 msgstr "Zeige alte Version"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:23
+#: /collectives/specialVueFakeDummyForL10nScript.js:27
 msgid "Add a page"
 msgstr "Seite hinzufügen"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:24
+#: /collectives/specialVueFakeDummyForL10nScript.js:28
 msgid "Last edited by {user}"
 msgstr "Zuletzt bearbeitet von {user}"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:25
+#: /collectives/specialVueFakeDummyForL10nScript.js:29
 msgid "Current version"
 msgstr "Aktuelle Version"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:26
+#: /collectives/specialVueFakeDummyForL10nScript.js:30
 msgid "No other versions available"
 msgstr "Keine weiteren Versionen vorhanden"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:27
+#: /collectives/specialVueFakeDummyForL10nScript.js:31
 msgid "Could not get page versions"
 msgstr "Konnte Versionen der Seite nicht laden"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:28
-#: /collectives/specialVueFakeDummyForL10nScript.js:29
+#: /collectives/specialVueFakeDummyForL10nScript.js:32
+#: /collectives/specialVueFakeDummyForL10nScript.js:33
 msgid "%n byte"
 msgid_plural "%n bytes"
 msgstr[0] "%n Byte"
 msgstr[1] "%n Bytes"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:30
+#: /collectives/specialVueFakeDummyForL10nScript.js:34
 msgid "Restore this version"
 msgstr "Diese Version wiederherstellen"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:31
+#: /collectives/specialVueFakeDummyForL10nScript.js:35
 msgid "Back to current version"
 msgstr "Zurück zur aktuellen Version"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:32
+#: /collectives/specialVueFakeDummyForL10nScript.js:36
 msgid "Reverted {page} to revision {timestamp}."
 msgstr "Seiete {page} auf Version {timestamp} zurücksetzen."
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:33
+#: /collectives/specialVueFakeDummyForL10nScript.js:37
 msgid "Failed to revert {page} to revision {timestamp}."
 msgstr ""
 "Das Zurücksetzen der Seite {page} auf die Version {timestamp} ist "
 "fehlgeschlagen."
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:34
+#: /collectives/specialVueFakeDummyForL10nScript.js:38
 msgid "No collective selected"
 msgstr "Kein Kollektiv ausgewählt"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:35
+#: /collectives/specialVueFakeDummyForL10nScript.js:39
 msgid "Select a collective or create a new one on the left."
 msgstr "Wähle ein Kollektiv aus oder lege links ein neues an."
 
-#: /collectives/templates/error.php:4
-msgid "Error: Missing apps"
-msgstr "Fehler: Apps fehlen"
+#~ msgid "Restore collective"
+#~ msgstr "Stelle Kollektiv wieder her"
 
-#: /collectives/templates/error.php:9
-msgid "The following dependency apps are missing: "
-msgstr "Die folgenden notwendigen Apps fehlen:"
+#~ msgid "Permanently delete collective and circle"
+#~ msgstr "Lösche Kollektiv und Kreis dauerhaft"
 
-#: /collectives/templates/error.php:27
-msgid "Please ask the administrator to enable these apps."
-msgstr "Bitte frage die Admins, ob sie diese Apps aktivieren können."
+#~ msgid "Move to trash"
+#~ msgstr "In den Papierkorb verschieben"
