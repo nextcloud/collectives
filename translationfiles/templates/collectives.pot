@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2021-04-21 12:33+0200\n"
+"POT-Creation-Date: 2021-04-21 16:12+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,6 +18,32 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
+#: /collectives-files.js:1
+msgid "img"
+msgid_plural ".svg"
+msgstr[0] ""
+msgstr[1] ""
+
+#: /collectives-main.js:2
+msgid "seconds"
+msgstr ""
+
+#: /collectives-main.js:2
+msgid " 0o1"
+msgstr ""
+
+#: /collectives-main.js:2
+msgid "0b1"
+msgstr ""
+
+#: /collectives-main.js:2
+msgid "+0x1"
+msgstr ""
+
+#: /collectives/lib/Fs/UserFolderHelper.php:52
+#: /collectives/lib/Search/CollectiveProvider.php:58
+#: /collectives/lib/Search/CollectiveProvider.php:106
+#: /collectives/specialAppInfoFakeDummyForL10nScript.php:2
 #: /collectives/lib/Fs/UserFolderHelper.php:52
 #: /collectives/lib/Search/CollectiveProvider.php:58
 #: /collectives/lib/Search/CollectiveProvider.php:106
@@ -27,22 +53,28 @@ msgstr ""
 
 #: /collectives/lib/Search/PageProvider.php:65
 #: /collectives/lib/Search/PageProvider.php:113
+#: /collectives/lib/Search/PageProvider.php:65
+#: /collectives/lib/Search/PageProvider.php:113
 msgid "Collective Pages"
 msgstr ""
 
 #: /collectives/lib/Search/PageProvider.php:106
+#: /collectives/lib/Search/PageProvider.php:106
 msgid "in {collective}"
 msgstr ""
 
+#: /collectives/lib/Service/CollectiveService.php:103
 #: /collectives/lib/Service/CollectiveService.php:103
 #, php-format
 msgid "Created collective \"%s\" for existing circle."
 msgstr ""
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:3
+#: /collectives/specialAppInfoFakeDummyForL10nScript.php:3
 msgid "A place for activist and community projects to build shared knowledge"
 msgstr ""
 
+#: /collectives/specialAppInfoFakeDummyForL10nScript.php:4
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:4
 msgid ""
 "Collectives is a Nextcloud App for activist and community projects to "
@@ -62,6 +94,21 @@ msgid ""
 "\n"
 "In your Nextcloud instance, simply navigate to **»Apps«**, find the\n"
 "**»Circles«** and **»Collectives«** apps and enable them."
+msgstr ""
+
+#: /collectives/templates/error.php:4
+#: /collectives/templates/error.php:4
+msgid "Error: Missing apps"
+msgstr ""
+
+#: /collectives/templates/error.php:9
+#: /collectives/templates/error.php:9
+msgid "The following dependency apps are missing: "
+msgstr ""
+
+#: /collectives/templates/error.php:27
+#: /collectives/templates/error.php:27
+msgid "Please ask the administrator to enable these apps."
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:1
@@ -93,124 +140,128 @@ msgid "Deleted collectives"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:8
-msgid "Restore collective"
+msgid "Restore"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:9
-msgid "Permanently delete collective"
+msgid "Delete permanently"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:10
-msgid "Permanently delete collective and circle"
+msgid "Permanently delete collective »{collective}«"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:11
-msgid "Select a collective"
+msgid "Delete corresponding circle along with the collective?"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:12
-msgid "Move to trash"
+msgid "Cancel"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:13
-msgid "Create new collective"
+msgid "Only collective"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:14
-msgid "Create collective for existing circle"
+msgid "Collective and circle"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:15
-msgid "Add emoji"
+msgid "Select a collective"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:16
-msgid "New collective name"
+msgid "Delete"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:17
-msgid "Select circle..."
+msgid "Create new collective"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:18
-msgid "Title"
+msgid "Create collective for existing circle"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:19
-msgid "Done with editing"
+msgid "Add emoji"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:20
-msgid "Edit page"
+msgid "New collective name"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:21
-msgid "Delete page"
+msgid "Select circle..."
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:22
-msgid "Show old versions"
+msgid "Title"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:23
-msgid "Add a page"
+msgid "Done with editing"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:24
-msgid "Last edited by {user}"
+msgid "Edit page"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:25
-msgid "Current version"
+msgid "Delete page"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:26
-msgid "No other versions available"
+msgid "Show old versions"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:27
-msgid "Could not get page versions"
+msgid "Add a page"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:28
+msgid "Last edited by {user}"
+msgstr ""
+
 #: /collectives/specialVueFakeDummyForL10nScript.js:29
+msgid "Current version"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:30
+msgid "No other versions available"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:31
+msgid "Could not get page versions"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:32
+#: /collectives/specialVueFakeDummyForL10nScript.js:33
 msgid "%n byte"
 msgid_plural "%n bytes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:30
+#: /collectives/specialVueFakeDummyForL10nScript.js:34
 msgid "Restore this version"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:31
+#: /collectives/specialVueFakeDummyForL10nScript.js:35
 msgid "Back to current version"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:32
+#: /collectives/specialVueFakeDummyForL10nScript.js:36
 msgid "Reverted {page} to revision {timestamp}."
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:33
+#: /collectives/specialVueFakeDummyForL10nScript.js:37
 msgid "Failed to revert {page} to revision {timestamp}."
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:34
+#: /collectives/specialVueFakeDummyForL10nScript.js:38
 msgid "No collective selected"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:35
+#: /collectives/specialVueFakeDummyForL10nScript.js:39
 msgid "Select a collective or create a new one on the left."
-msgstr ""
-
-#: /collectives/templates/error.php:4
-msgid "Error: Missing apps"
-msgstr ""
-
-#: /collectives/templates/error.php:9
-msgid "The following dependency apps are missing: "
-msgstr ""
-
-#: /collectives/templates/error.php:27
-msgid "Please ask the administrator to enable these apps."
 msgstr ""
