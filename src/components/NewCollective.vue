@@ -23,7 +23,6 @@
 	<AppNavigationItem v-if="!editing"
 		:title="t('collectives', 'Create new collective')"
 		icon="icon-add"
-		:force-menu="true"
 		@click.prevent.stop="startCreateCollective">
 		<template #actions>
 			<ActionButton v-if="anyCircle"
