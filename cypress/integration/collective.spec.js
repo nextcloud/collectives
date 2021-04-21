@@ -43,10 +43,7 @@ describe('Collective', function() {
 		it('creates collectives by picking circle',
 			function() {
 				cy.login('bob', 'bob', '/apps/collectives')
-				cy.contains('.app-navigation-entry', 'Create new collective')
-					.find('.action-item__menutoggle')
-					.click()
-				cy.get('.icon-circles').click()
+				cy.get('button.icon-circles').click()
 				cy.get('.multiselect__option [title*=History]').click()
 				cy.get('input.icon-confirm').click()
 				cy.get('#titleform input').should('have.value', ' History Club')
