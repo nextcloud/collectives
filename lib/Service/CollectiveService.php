@@ -94,7 +94,7 @@ class CollectiveService {
 				throw $e;
 			}
 			$circleId = $circle->getUniqueId();
-			$collective = $this->collectiveMapper->findByCircleId($circleId);
+			$collective = $this->collectiveMapper->findByCircleId($circleId, null, true);
 			if (null !== $collective) {
 				// There's already a collective with that name.
 				throw $e;

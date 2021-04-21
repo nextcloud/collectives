@@ -18,6 +18,7 @@ Feature: collective
   Scenario: Trash an owned collective
     When user "jane" trashes collective "mycollective"
     Then user "jane" sees collective "mycollective" in trash
+    And user "jane" fails to create collective "mycollective"
     And user "alice" doesn't see collective "mycollective" in trash
 
   Scenario: Restore an owned collective
