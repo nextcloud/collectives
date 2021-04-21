@@ -23,10 +23,19 @@
 	<AppNavigationItem v-if="!editing"
 		:title="t('collectives', 'Create new collective')"
 		icon="icon-add"
-		@click.prevent.stop="startCreateCollective" />
+		:force-menu="true"
+		@click.prevent.stop="startCreateCollective">
+		<template #actions>
+			<ActionButton v-if="anyCircle"
+				icon="icon-circles"
+				@click.stop.prevent="startSelectCircle">
+				{{ t('collectives', 'Create collective for existing circle') }}
+			</ActionButton>
+		</template>
+	</AppNavigationItem>
 	<div v-else class="collective-create">
 		<form @submit.prevent.stop="createCollective">
-			<EmojiPicker :show-preview="true" @select="addEmoji">
+			<EmojiPicker v-if="!pickCircle" show-preview="true" @select="addEmoji">
 				<button
 					type="button"
 					:aria-label="t('collectives', 'Add emoji')"
@@ -35,12 +44,23 @@
 					<EmoticonOutline v-else :size="20" />
 				</button>
 			</EmojiPicker>
-			<input
+			<button v-else :disabled="true">
+				<EmoticonOutline :size="20" />
+			</button>
+
+			<input v-if="!pickCircle"
 				ref="nameField"
 				v-model="text"
 				:placeholder="t('collectives', 'New collective name')"
 				type="text"
 				required>
+			<Multiselect v-else
+				ref="circleSelector"
+				v-model="circle"
+				:options="circles"
+				open-direction="below"
+				:placeholder="t('collectives', 'Select circle...')"
+				required />
 			<input
 				type="submit"
 				value=""
@@ -54,7 +74,7 @@
 </template>
 
 <script>
-import { ActionButton, Actions, AppNavigationItem } from '@nextcloud/vue'
+import { ActionButton, Actions, AppNavigationItem, Multiselect } from '@nextcloud/vue'
 import EmojiPicker from '@nextcloud/vue/dist/Components/EmojiPicker'
 import EmoticonOutline from 'vue-material-design-icons/EmoticonOutline'
 import displayError from '../util/displayError'
@@ -69,6 +89,7 @@ export default {
 		Actions,
 		EmojiPicker,
 		EmoticonOutline,
+		Multiselect,
 	},
 	directives: {},
 	props: {},
@@ -80,20 +101,51 @@ export default {
 			color: randomColor(),
 			emoji: null,
 			text: null,
+			circle: null,
+			pickCircle: false,
 		}
 	},
 	computed: {
 		name() {
-			return this.emoji ? `${this.text} ${this.emoji}` : this.text
+			if (this.pickCircle) {
+				return this.circle
+			} else {
+				return this.emoji ? `${this.text} ${this.emoji}` : this.text
+			}
+		},
+		circles() {
+			return this.$store.getters.availableCircles.map(c => c.name)
+		},
+		anyCircle() {
+			return this.circles.length > 0
 		},
 	},
 	watch: {},
-	mounted() {},
+	mounted() {
+		this.getCircles()
+	},
 	methods: {
+		/**
+		 * Get list of all circles
+		 * @returns {Promise}
+		 */
+		getCircles() {
+			return this.$store.dispatch('getCircles')
+				.catch(displayError('Could not fetch circles'))
+		},
+
 		startCreateCollective(e) {
 			this.editing = true
 			this.$nextTick(() => {
 				this.$refs.nameField.focus()
+			})
+		},
+
+		startSelectCircle(e) {
+			this.editing = true
+			this.pickCircle = true
+			this.$nextTick(() => {
+				this.$refs.circleSelector.$el.focus()
 			})
 		},
 
@@ -125,6 +177,7 @@ export default {
 		},
 		clear() {
 			this.editing = false
+			this.pickCircle = false
 			this.emoji = null
 			this.text = null
 		},
@@ -132,6 +185,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+
 .collective-create {
 	order: 1;
 	display: flex;
