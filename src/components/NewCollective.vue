@@ -109,7 +109,7 @@ export default {
 			if (this.pickCircle) {
 				return this.circle
 			} else {
-				return this.emoji ? `${this.text} ${this.emoji}` : this.text
+				return this.text
 			}
 		},
 		circles() {
@@ -163,7 +163,8 @@ export default {
 				this.loading = false
 			}
 			this.loading = true
-			this.$store.dispatch('newCollective', { name: this.name })
+			this.$store.dispatch('newCollective',
+				{ name: this.name, emoji: this.emoji })
 				.then(updateCollective)
 				.catch(displayError('Could not create the collective'))
 				.finally(done)

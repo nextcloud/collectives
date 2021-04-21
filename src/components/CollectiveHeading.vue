@@ -6,7 +6,7 @@
 				<span v-if="collective.emoji" class="emoji">
 					{{ collective.emoji }}
 				</span>
-				{{ collective.title }}
+				{{ collective.name }}
 			</router-link>
 		</h2>
 	</div>

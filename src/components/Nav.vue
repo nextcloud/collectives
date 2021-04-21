@@ -4,7 +4,7 @@
 			<AppNavigationCaption :title="t('collectives', 'Select a collective')" />
 			<AppNavigationItem v-for="collective in collectives"
 				:key="collective.circleUniqueId"
-				:title="collective.title"
+				:title="collective.name"
 				:class="{active: isActive(collective)}"
 				:to="`/${encodeURIComponent(collective.name)}`"
 				:icon="icon(collective)"

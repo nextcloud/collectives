@@ -26,8 +26,6 @@ import Vuex from 'vuex'
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 
-import decorate from './decorators'
-
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -50,11 +48,11 @@ export default new Vuex.Store({
 		},
 
 		collectives(state) {
-			return state.collectives.map(decorate.collective)
+			return state.collectives
 		},
 
 		trashCollectives(state) {
-			return state.trashCollectives.map(decorate.collective)
+			return state.trashCollectives
 		},
 
 		circles(state) {

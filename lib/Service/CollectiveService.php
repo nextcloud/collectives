@@ -67,17 +67,18 @@ class CollectiveService {
 	}
 
 	/**
-	 * @param string $userId
-	 * @param string $userLang
-	 * @param string $safeName
+	 * @param string      $userId
+	 * @param string      $userLang
+	 * @param string      $safeName
+	 * @param string|null $emoji
 	 *
-	 * @return [CollectiveInfo, string]
+	 * @return array [CollectiveInfo, string]
+	 * @throws CircleAlreadyExistsException
 	 * @throws FilesNotPermittedException
 	 * @throws InvalidPathException
 	 * @throws UnprocessableEntityException
-	 * @throws CircleAlreadyExistsException
 	 */
-	public function createCollective(string $userId, string $userLang, string $safeName): array {
+	public function createCollective(string $userId, string $userLang, string $safeName, string $emoji = null): array {
 		if (empty($safeName)) {
 			throw new UnprocessableEntityException('Empty collective name is not allowed');
 		}
@@ -108,6 +109,9 @@ class CollectiveService {
 		// Create collective object
 		$collective = new Collective();
 		$collective->setCircleUniqueId($circle->getUniqueId());
+		if ($emoji) {
+			$collective->setEmoji($emoji);
+		}
 		$collective = $this->collectiveMapper->insert($collective);
 
 		// Read in collectiveInfo object

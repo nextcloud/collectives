@@ -3,7 +3,7 @@
 		<ul class="app-navigation__list">
 			<AppNavigationItem v-for="collective in trashCollectives"
 				:key="collective.circleUniqueId"
-				:title="collective.title"
+				:title="collective.name"
 				:icon="icon(collective)"
 				:force-menu="true"
 				class="collectives_trash_list_item">

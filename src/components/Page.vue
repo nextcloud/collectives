@@ -5,7 +5,7 @@
 				class="title"
 				type="text"
 				disabled
-				:value="`${collective.emoji} ${collective.title}`">
+				:value="collectiveTitle">
 			<input v-else
 				ref="title"
 				v-model="newTitle"
@@ -111,6 +111,14 @@ export default {
 
 		collective() {
 			return this.$store.getters.currentCollective
+		},
+
+		collectiveTitle() {
+			if (this.collective.emoji) {
+				return `${this.collective.emoji} ${this.collective.name}`
+			} else {
+				return this.collective.name
+			}
 		},
 
 		readOnly() {
