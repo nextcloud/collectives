@@ -68,11 +68,13 @@ class CollectiveMapper extends QBMapper {
 	 *
 	 * @return Collective|null
 	 */
-	public function findByCircleId(string $circleUniqueId, string $userId = null): ?Collective {
+	public function findByCircleId(string $circleUniqueId, string $userId = null, bool $includeTrash = false): ?Collective {
 		$qb = $this->db->getQueryBuilder();
 		$where = $qb->expr()->andX();
 		$where->add($qb->expr()->eq('circle_unique_id', $qb->createNamedParameter($circleUniqueId, IQueryBuilder::PARAM_STR)));
-		$where->add($qb->expr()->isNull('trash_timestamp'));
+		if (!$includeTrash) {
+			$where->add($qb->expr()->isNull('trash_timestamp'));
+		}
 		$qb->select('*')
 			->from($this->tableName)
 			->where($where);
