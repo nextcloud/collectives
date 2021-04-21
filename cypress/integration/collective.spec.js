@@ -30,6 +30,7 @@ describe('Collective', function() {
 			cy.login('bob', 'bob', '/apps/collectives')
 			cy.seedCollective('Preexisting Collective')
 			cy.seedCircle('Preexisting Circle')
+			cy.seedCircle('History Club')
 		})
 		it('Reports existing circle', function() {
 			cy.login('bob', 'bob', '/apps/collectives')
@@ -38,6 +39,22 @@ describe('Collective', function() {
 			cy.get('.toast-warning').should('contain', 'Could not create the collective')
 			cy.get('.toast-warning').should('contain', 'A circle with that name exists')
 		})
+
+		it('creates collectives by picking circle',
+			function() {
+				cy.login('bob', 'bob', '/apps/collectives')
+				cy.contains('.app-navigation-entry', 'Create new collective')
+					.find('.action-item__menutoggle')
+					.click()
+				cy.get('.icon-circles').click()
+				cy.get('.multiselect__option [title*=History]').click()
+				cy.get('input.icon-confirm').click()
+				cy.get('#titleform input').should('have.value', ' History Club')
+				cy.get('.toast-info').should('contain',
+					'Created collective "History Club" for existing circle.'
+				)
+			})
+
 		it('creates collectives for admins of corresponding circle',
 			function() {
 				cy.login('bob', 'bob', '/apps/collectives')
@@ -47,8 +64,10 @@ describe('Collective', function() {
 					'Created collective "Preexisting Circle" for existing circle.'
 				)
 			})
+
 		after(function() {
 			cy.deleteCollective('Preexisting Circle')
+			cy.deleteCollective('History Club')
 		})
 	})
 

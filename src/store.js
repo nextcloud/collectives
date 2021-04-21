@@ -40,6 +40,7 @@ export default new Vuex.Store({
 		pages: [],
 		updatedPage: {},
 		updatedCollective: {},
+		circles: [],
 	},
 
 	getters: {
@@ -54,6 +55,21 @@ export default new Vuex.Store({
 
 		trashCollectives(state) {
 			return state.trashCollectives.map(decorate.collective)
+		},
+
+		circles(state) {
+			return state.circles
+		},
+
+		availableCircles(state) {
+			return state.circles.filter(circle => {
+			    const matchUniqueId = c => {
+					return (c.circleUniqueId === circle.unique_id)
+				}
+				const alive = state.collectives.find(matchUniqueId)
+				const trashed = state.trashCollectives.find(matchUniqueId)
+				return !alive && !trashed
+			})
 		},
 
 		pageParam(state) {
@@ -134,6 +150,9 @@ export default new Vuex.Store({
 		},
 		collectives(state, collectives) {
 			state.collectives = collectives
+		},
+		circles(state, circles) {
+			state.circles = circles
 		},
 		trashCollectives(state, trashCollectives) {
 			state.trashCollectives = trashCollectives
@@ -251,6 +270,16 @@ export default new Vuex.Store({
 			const response = await axios.get(generateUrl('/apps/collectives/_collectives'))
 			commit('collectives', response.data.data)
 			commit('done', 'collective')
+		},
+
+		/**
+		 * Get list of all circles
+		 */
+		async getCircles({ commit }) {
+			const api = OCA.Circles.api
+			api.listCircles('all', '', 9, response => {
+				commit('circles', response.data)
+			})
 		},
 
 		/**
