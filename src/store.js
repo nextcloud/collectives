@@ -177,6 +177,9 @@ export default new Vuex.Store({
 		deleteCollective(state, collective) {
 			state.trashCollectives.splice(state.trashCollectives.findIndex(c => c.id === collective.id), 1)
 		},
+		deleteCircleFor(state, collective) {
+			state.circles.splice(state.circles.findIndex(c => c.unique_id === collective.circleUniqueId), 1)
+		},
 		pages(state, pages) {
 			state.pages = pages
 		},
@@ -335,6 +338,9 @@ export default new Vuex.Store({
 			}
 			const response = await axios.delete(generateUrl('/apps/collectives/_collectives/trash/' + id + doCircle))
 			commit('deleteCollective', response.data.data)
+			if (circle) {
+				commit('deleteCircleFor', response.data.data)
+			}
 		},
 	},
 
