@@ -85,17 +85,19 @@ class CollectiveController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 *
-	 * @param string $name
+	 * @param string      $name
+	 * @param string|null $emoji
 	 *
 	 * @return DataResponse
 	 */
-	public function create(string $name): DataResponse {
-		return $this->prepareResponse(function () use ($name) {
+	public function create(string $name, string $emoji = null): DataResponse {
+		return $this->prepareResponse(function () use ($name, $emoji) {
 			$safeName = $this->nodeHelper->sanitiseFilename($name);
 			[$collective, $info] = $this->service->createCollective(
 				$this->getUserId(),
 				$this->getUserLang(),
-				$safeName
+				$safeName,
+				$emoji
 			);
 			return [
 				"data" => $collective,

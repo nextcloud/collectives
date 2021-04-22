@@ -9,8 +9,7 @@ use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use PHPUnit\Framework\TestCase;
 
-class CollectiveGarbageCollectorTest extends TestCase
-{
+class CollectiveGarbageCollectorTest extends TestCase {
 	private $collectiveList;
 
 	public function testPurgeObsoleteCollectives(): void {
@@ -28,7 +27,7 @@ class CollectiveGarbageCollectorTest extends TestCase
 		$mapper->method('getAll')
 			->willReturn($this->collectiveList);
 		$mapper->method('circleUniqueIdToName')
-			->willReturnCallback(function($circleUniqueId) {
+			->willReturnCallback(function ($circleUniqueId) {
 				if ($circleUniqueId === 'cruftCircleUniqueId') {
 					throw new CircleDoesNotExistException();
 				}

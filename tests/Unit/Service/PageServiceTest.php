@@ -14,7 +14,6 @@ use OCA\Collectives\Model\PageFile;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\PageDoesNotExistException;
 use OCA\Collectives\Service\PageService;
-use OCA\Collectives\Service\CollectiveHelper;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\Files\AlreadyExistsException;

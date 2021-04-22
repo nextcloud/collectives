@@ -117,6 +117,7 @@ class CollectiveServiceTest extends TestCase {
 		self::assertIsCallable([$collective, 'jsonSerialize']);
 		self::assertEqualsCanonicalizing([
 			'id' => 123,
+			'emoji' => null,
 			'circleUniqueId' => null,
 			'trashTimestamp' => null,
 			'name' => 'free',

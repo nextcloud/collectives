@@ -46,7 +46,7 @@ describe('Collective', function() {
 				cy.get('button.icon-circles').click()
 				cy.get('.multiselect__option [title*=History]').click()
 				cy.get('input.icon-confirm').click()
-				cy.get('#titleform input').should('have.value', ' History Club')
+				cy.get('#titleform input').should('have.value', 'History Club')
 				cy.get('.toast-info').should('contain',
 					'Created collective "History Club" for existing circle.'
 				)
@@ -56,7 +56,7 @@ describe('Collective', function() {
 			function() {
 				cy.login('bob', 'bob', '/apps/collectives')
 				cy.createCollective('Preexisting Circle')
-				cy.get('#titleform input').should('have.value', ' Preexisting Circle')
+				cy.get('#titleform input').should('have.value', 'Preexisting Circle')
 				cy.get('.toast-info').should('contain',
 					'Created collective "Preexisting Circle" for existing circle.'
 				)
@@ -81,7 +81,7 @@ describe('Collective', function() {
 			cy.createCollective(name)
 		})
 		it('Shows the name in the disabled titleform', function() {
-			cy.get('#titleform input').should('have.value', ` ${name}`)
+			cy.get('#titleform input').should('have.value', `${name}`)
 			cy.get('#titleform input').should('have.attr', 'disabled')
 		})
 		it('Has an initial Readme.md', function() {
@@ -96,11 +96,11 @@ describe('Collective', function() {
 	describe('reloading works', function() {
 		before(function() {
 			cy.login('bob', 'bob', '/apps/collectives/Preexisting%20Collective')
-			cy.get('#titleform input').should('have.value', ' Preexisting Collective')
+			cy.get('#titleform input').should('have.value', 'Preexisting Collective')
 		})
 		it('Shows the name in the disabled titleform', function() {
 			cy.reload()
-			cy.get('#titleform input').should('have.value', ' Preexisting Collective')
+			cy.get('#titleform input').should('have.value', 'Preexisting Collective')
 		})
 	})
 
