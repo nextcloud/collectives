@@ -203,7 +203,7 @@ class CollectiveMapper extends QBMapper {
 	}
 
 	/**
-	 * @param string     $name
+	 * @param string $name
 	 *
 	 * @return Circle|null
 	 */
