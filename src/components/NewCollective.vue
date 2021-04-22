@@ -34,7 +34,7 @@
 	</AppNavigationItem>
 	<div v-else class="collective-create">
 		<form @submit.prevent.stop="createCollective">
-			<EmojiPicker v-if="!pickCircle" show-preview="true" @select="addEmoji">
+			<EmojiPicker show-preview="true" @select="addEmoji">
 				<button
 					type="button"
 					:aria-label="t('collectives', 'Add emoji')"
@@ -43,9 +43,6 @@
 					<EmoticonOutline v-else :size="20" />
 				</button>
 			</EmojiPicker>
-			<button v-else :disabled="true">
-				<EmoticonOutline :size="20" />
-			</button>
 
 			<input v-if="!pickCircle"
 				ref="nameField"
