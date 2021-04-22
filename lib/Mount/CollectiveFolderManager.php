@@ -146,7 +146,7 @@ class CollectiveFolderManager {
 	 */
 	public function getAllFolders(): array {
 		$qb = $this->connection->getQueryBuilder();
-		$qb->select('co.id AS id', 'circle_unique_id', 'oc_circle_circles.name AS name')
+		$qb->select('co.id AS id', 'circle_unique_id', 'ci.name AS name')
 			->from('collectives', 'co')
 			->leftJoin('co', 'circle_circles', 'ci', $qb->expr()->andX(
 				$qb->expr()->eq('co.circle_unique_id', 'ci.unique_id')
@@ -166,11 +166,11 @@ class CollectiveFolderManager {
 	}
 
 	/**
-	 * @param int  $id
+	 * @param int $id
 	 *
-	 * @returns Folder
-	 * @throws NotFoundException
+	 * @return Folder
 	 * @throws InvalidPathException
+	 * @throws NotFoundException
 	 */
 	public function getFolder(int $id): Folder {
 		$folder = $this->getRootFolder()->get((string)$id);
