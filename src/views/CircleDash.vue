@@ -174,13 +174,10 @@ export default {
 		 * @returns {Promise}
 		 */
 		trashCollective(collective) {
-			const closeTrashedCollective = () => {
-				if (this.$store.getters.collectiveParam === collective.name) {
-					this.$router.push('/')
-				}
+			if (this.$store.getters.collectiveParam === collective.name) {
+				this.$router.push('/')
 			}
 			return this.$store.dispatch('trashCollective', collective)
-				.then(closeTrashedCollective)
 				.catch(displayError('Could not move the collective to trash'))
 		},
 
