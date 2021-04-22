@@ -9,14 +9,21 @@ use OCP\IDBConnection;
 use OCP\IL10N;
 
 class NodeHelper {
+	/** @var IDBConnection */
 	private $db;
+
+	/** @var IL10N */
 	private $l10n;
+
+	/** @var bool */
+	private $db4ByteSupport;
 
 	public function __construct(
 		IDBConnection $db,
 		IL10N $l10n) {
 		$this->db = $db;
 		$this->l10n = $l10n;
+		$this->db4ByteSupport = $this->db->supports4ByteText();
 	}
 
 	/**
@@ -85,7 +92,7 @@ class NodeHelper {
 
 		// if mysql doesn't support 4byte UTF-8, then remove those characters
 		// see \OC\Files\Storage\Common::verifyPath(...)
-		if (!$this->db->supports4ByteText()) {
+		if (!$this->db4ByteSupport) {
 			$name = preg_replace('%(?:
                 \xF0[\x90-\xBF][\x80-\xBF]{2}      # planes 1-3
               | [\xF1-\xF3][\x80-\xBF]{3}          # planes 4-15
