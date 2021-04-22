@@ -5,6 +5,7 @@ namespace OCA\Collectives\Mount;
 use OC\Files\Cache\Cache;
 use OC\Files\Cache\CacheEntry;
 use OC\Files\Storage\Wrapper\Jail;
+use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Service\CollectiveHelper;
 use OCP\App\IAppManager;
@@ -32,6 +33,9 @@ class MountProvider implements IMountProvider {
 	/** @var UserFolderHelper */
 	private $userFolderHelper;
 
+	/** @var NodeHelper */
+	private $nodeHelper;
+
 	/**
 	 * MountProvider constructor.
 	 *
@@ -40,18 +44,21 @@ class MountProvider implements IMountProvider {
 	 * @param IMimeTypeLoader         $mimeTypeLoader
 	 * @param IAppManager             $appManager
 	 * @param UserFolderHelper        $userFolderHelper
+	 * @param NodeHelper              $nodeHelper
 	 */
 	public function __construct(
 		CollectiveHelper $collectiveHelper,
 		CollectiveFolderManager $collectiveFolderManager,
 		IMimeTypeLoader $mimeTypeLoader,
 		IAppManager $appManager,
-		UserFolderHelper $userFolderHelper) {
+		UserFolderHelper $userFolderHelper,
+		NodeHelper $nodeHelper) {
 		$this->collectiveHelper = $collectiveHelper;
 		$this->collectiveFolderManager = $collectiveFolderManager;
 		$this->mimeTypeLoader = $mimeTypeLoader;
 		$this->appManager = $appManager;
 		$this->userFolderHelper = $userFolderHelper;
+		$this->nodeHelper = $nodeHelper;
 	}
 
 	/**
@@ -69,9 +76,10 @@ class MountProvider implements IMountProvider {
 		$collectiveInfos = $this->collectiveHelper->getCollectivesForUser($user->getUID(), false);
 		foreach ($collectiveInfos as $c) {
 			$cacheEntry = $this->collectiveFolderManager->getFolderFileCache($c->getId());
+			$mountPointName = $this->nodeHelper->sanitiseFilename($c->getName());
 			$folders[] = [
 				'folder_id' => $c->getId(),
-				'mount_point' => $this->userFolderHelper->get($user->getUID())->getName() . '/' . $c->getName(),
+				'mount_point' => $this->userFolderHelper->get($user->getUID())->getName() . '/' . $mountPointName,
 				'rootCacheEntry' => (isset($cacheEntry['fileid'])) ? Cache::cacheEntryFromData($cacheEntry, $this->mimeTypeLoader) : null
 			];
 		}

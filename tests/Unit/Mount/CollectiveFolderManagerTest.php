@@ -3,6 +3,7 @@
 namespace Unit\Mount;
 
 use OC\SystemConfig;
+use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCP\Files\IRootFolder;
 use OCP\IDBConnection;
@@ -23,8 +24,11 @@ class CollectiveFolderManagerTest extends TestCase {
 		$systemConfig = $this->getMockBuilder(SystemConfig::class)
 			->disableOriginalConstructor()
 			->getMock();
+		$nodeHelper = $this->getMockBuilder(NodeHelper::class)
+			->disableOriginalConstructor()
+			->getMock();
 
-		$this->manager = new CollectiveFolderManager($rootFolder, $connection, $systemConfig);
+		$this->manager = new CollectiveFolderManager($rootFolder, $connection, $systemConfig, $nodeHelper);
 	}
 
 	protected function tearDown(): void {

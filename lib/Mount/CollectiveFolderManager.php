@@ -4,6 +4,7 @@ namespace OCA\Collectives\Mount;
 
 use OC\Files\Node\LazyFolder;
 use OC\SystemConfig;
+use OCA\Collectives\Fs\NodeHelper;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\Files\InvalidPathException;
@@ -25,6 +26,9 @@ class CollectiveFolderManager {
 	/** @var SystemConfig */
 	private $systemConfig;
 
+	/** @var NodeHelper */
+	private $nodeHelper;
+
 	/** @var string */
 	private $rootPath;
 
@@ -34,14 +38,17 @@ class CollectiveFolderManager {
 	 * @param IRootFolder   $rootFolder
 	 * @param IDBConnection $connection
 	 * @param SystemConfig  $systemConfig
+	 * @param NodeHelper    $nodeHelper
 	 */
 	public function __construct(
 		IRootFolder $rootFolder,
 		IDBConnection $connection,
-		SystemConfig $systemConfig) {
+		SystemConfig $systemConfig,
+		NodeHelper $nodeHelper) {
 		$this->rootFolder = $rootFolder;
 		$this->connection = $connection;
 		$this->systemConfig = $systemConfig;
+		$this->nodeHelper = $nodeHelper;
 	}
 
 	public function getRootPath(): string {
@@ -138,7 +145,9 @@ class CollectiveFolderManager {
 				$qb->expr()->eq('fc.name', $qb->func()->concat('co.id', $qb->expr()->literal(''))),
 				$qb->expr()->eq('parent', $qb->createNamedParameter($this->getRootFolderStorageId()))))
 			->where($qb->expr()->eq('co.id', $qb->createNamedParameter($id)));
-		return $qb->execute()->fetch();
+		$cache = $qb->execute()->fetch();
+		$cache['mount_point'] = $this->nodeHelper->sanitiseFilename($cache['mount_point']);
+		return $cache;
 	}
 
 	/**
@@ -158,7 +167,7 @@ class CollectiveFolderManager {
 			$id = (int)$row['id'];
 			$folderMap[$id] = [
 				'id' => $id,
-				'mount_point' => $row['name'],
+				'mount_point' => $this->nodeHelper->sanitiseFilename($row['name']),
 			];
 		}
 
