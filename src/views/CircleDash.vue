@@ -20,7 +20,7 @@
 				@showVersions="showSidebar = true"
 				@toggleDetails="showDetails = true"
 				@toggleSidebar="showSidebar=!showSidebar" />
-			<EmptyContent v-else icon="icon-ant">
+			<EmptyContent v-else-if="!isMobile" icon="icon-ant">
 				{{ t('collectives', 'No collective selected') }}
 				<template #desc>
 					{{ t('collectives', 'Select a collective or create a new one on the left.') }}
@@ -39,6 +39,7 @@
 
 import { emit } from '@nextcloud/event-bus'
 import { showInfo } from '@nextcloud/dialogs'
+import { mapGetters } from 'vuex'
 import AppContent from '@nextcloud/vue/dist/Components/AppContent'
 import Content from '@nextcloud/vue/dist/Components/Content'
 import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
@@ -70,47 +71,22 @@ export default {
 		return {
 			currentVersion: null,
 			showSidebar: false,
-			showDetails: true,
+			showDetails: false,
 			currentVersionTimestamp: 0,
 		}
 	},
 
 	computed: {
+		...mapGetters([
+			'collectiveParam',
+			'currentCollective',
+			'currentPage',
+			'messages',
+			'pageParam',
+		]),
 
 		info() {
-			return this.$store.getters.messages.info
-		},
-
-		/**
-		 * Return the url param for the currently selected collective
-		 * @returns {String|undefined}
-		 */
-		collectiveParam() {
-			return this.$store.getters.collectiveParam
-		},
-
-		/**
-		 * Return the currently selected collective
-		 * @returns {Object|undefined}
-		 */
-		currentCollective() {
-			return this.$store.getters.currentCollective
-		},
-
-		/**
-		 * Return the url param for the currently selected page
-		 * @returns {String|undefined}
-		 */
-		pageParam() {
-			return this.$store.getters.pageParam
-		},
-
-		/**
-		 * Return the currently selected page object
-		 * @returns {Object|undefined}
-		 */
-		currentPage() {
-			return this.$store.getters.currentPage
+			return this.messages.info
 		},
 	},
 
@@ -119,6 +95,9 @@ export default {
 			if (this.currentCollective) {
 				this.getPages()
 				this.closeNav()
+				this.showDetails = true
+			} else {
+				this.openNav()
 			}
 		},
 		'pageParam'() {
@@ -133,8 +112,12 @@ export default {
 	},
 
 	mounted() {
+		this.openNav()
 		this.getCollectives()
 		this.getTrashCollectives()
+		this.$nextTick(function() {
+			this.openNav()
+		})
 	},
 
 	methods: {
@@ -225,6 +208,11 @@ export default {
 		closeNav() {
 			emit('toggle-navigation', { open: false })
 		},
+
+		openNav() {
+			emit('toggle-navigation', { open: true })
+		},
+
 	},
 }
 </script>

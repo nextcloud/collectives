@@ -1,6 +1,9 @@
 <template>
 	<AppNavigation>
-		<template #list>
+		<template v-if="loading" #default>
+			<EmptyContent icon="icon-loading" />
+		</template>
+		<template v-else #list>
 			<AppNavigationCaption :title="t('collectives', 'Select a collective')" />
 			<AppNavigationItem v-for="collective in collectives"
 				:key="collective.circleUniqueId"
@@ -21,8 +24,7 @@
 			</AppNavigationItem>
 			<NewCollective />
 		</template>
-
-		<template #footer>
+		<template v-if="!loading" #footer>
 			<CollectiveTrash
 				@restoreCollective="restoreCollective"
 				@deleteCollective="deleteCollective" />
@@ -36,6 +38,7 @@ import AppNavigation from '@nextcloud/vue/dist/Components/AppNavigation'
 import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
 import AppNavigationCaption from '@nextcloud/vue/dist/Components/AppNavigationCaption'
 import CollectiveTrash from '../components/CollectiveTrash'
+import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 import NewCollective from './NewCollective'
 
 export default {
@@ -46,11 +49,15 @@ export default {
 		AppNavigationItem,
 		AppNavigationCaption,
 		CollectiveTrash,
+		EmptyContent,
 		NewCollective,
 	},
 	computed: {
 		collectives() {
 			return this.$store.getters.collectives
+		},
+		loading() {
+			return this.$store.getters.loading('collectives')
 		},
 	},
 	methods: {
