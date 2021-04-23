@@ -20,7 +20,7 @@
 				@showVersions="showSidebar = true"
 				@toggleDetails="showDetails = true"
 				@toggleSidebar="showSidebar=!showSidebar" />
-			<EmptyContent v-else icon="icon-ant">
+			<EmptyContent v-else-if="!isMobile" icon="icon-ant">
 				{{ t('collectives', 'No collective selected') }}
 				<template #desc>
 					{{ t('collectives', 'Select a collective or create a new one on the left.') }}
@@ -71,7 +71,7 @@ export default {
 		return {
 			currentVersion: null,
 			showSidebar: false,
-			showDetails: true,
+			showDetails: false,
 			currentVersionTimestamp: 0,
 		}
 	},
@@ -95,6 +95,9 @@ export default {
 			if (this.currentCollective) {
 				this.getPages()
 				this.closeNav()
+				this.showDetails = true
+			} else {
+				this.openNav()
 			}
 		},
 		'pageParam'() {
@@ -109,8 +112,12 @@ export default {
 	},
 
 	mounted() {
+		this.openNav()
 		this.getCollectives()
 		this.getTrashCollectives()
+		this.$nextTick(function() {
+			this.openNav()
+		})
 	},
 
 	methods: {
@@ -201,6 +208,11 @@ export default {
 		closeNav() {
 			emit('toggle-navigation', { open: false })
 		},
+
+		openNav() {
+			emit('toggle-navigation', { open: true })
+		},
+
 	},
 }
 </script>
