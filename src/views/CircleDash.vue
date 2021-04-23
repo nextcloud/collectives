@@ -39,6 +39,7 @@
 
 import { emit } from '@nextcloud/event-bus'
 import { showInfo } from '@nextcloud/dialogs'
+import { mapGetters } from 'vuex'
 import AppContent from '@nextcloud/vue/dist/Components/AppContent'
 import Content from '@nextcloud/vue/dist/Components/Content'
 import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
@@ -76,41 +77,16 @@ export default {
 	},
 
 	computed: {
+		...mapGetters([
+			'collectiveParam',
+			'currentCollective',
+			'currentPage',
+			'messages',
+			'pageParam',
+		]),
 
 		info() {
-			return this.$store.getters.messages.info
-		},
-
-		/**
-		 * Return the url param for the currently selected collective
-		 * @returns {String|undefined}
-		 */
-		collectiveParam() {
-			return this.$store.getters.collectiveParam
-		},
-
-		/**
-		 * Return the currently selected collective
-		 * @returns {Object|undefined}
-		 */
-		currentCollective() {
-			return this.$store.getters.currentCollective
-		},
-
-		/**
-		 * Return the url param for the currently selected page
-		 * @returns {String|undefined}
-		 */
-		pageParam() {
-			return this.$store.getters.pageParam
-		},
-
-		/**
-		 * Return the currently selected page object
-		 * @returns {Object|undefined}
-		 */
-		currentPage() {
-			return this.$store.getters.currentPage
+			return this.messages.info
 		},
 	},
 
