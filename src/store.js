@@ -91,6 +91,8 @@ export default new Vuex.Store({
 			)
 		},
 
+		loading: (state) => (aspect) => state.loading[aspect],
+
 		mostRecentPages(_state, getters) {
 			return getters.visiblePages.sort((a, b) => b.timestamp - a.timestamp)
 		},
@@ -267,10 +269,10 @@ export default new Vuex.Store({
 		 * Get list of all collectives
 		 */
 		async getCollectives({ commit }) {
-			commit('loading', 'collective')
+			commit('loading', 'collectives')
 			const response = await axios.get(generateUrl('/apps/collectives/_collectives'))
 			commit('collectives', response.data.data)
-			commit('done', 'collective')
+			commit('done', 'collectives')
 		},
 
 		/**
