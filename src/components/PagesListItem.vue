@@ -1,85 +1,107 @@
 <template>
-	<router-link
-		:to="`/${collectiveParam}/${encodeURIComponent(page.title)}`"
+	<router-link :to="to"
 		:class="{active: isActive}"
-		class="app-content-list-item">
+		class="app-content-list-item"
+		:style="indentItem">
 		<div class="app-content-list-item-icon"
-			:style="iconStyle">
-			{{ firstGrapheme }}
+			:style="indentIcon">
+			<slot name="icon">
+				<div :style="iconStyle">
+					{{ firstGrapheme }}
+				</div>
+			</slot>
 		</div>
 		<div class="app-content-list-item-line-one">
-			{{ page.title }}
+			{{ title }}
 		</div>
-		<div class="app-content-list-item-line-two">
+		<div v-if="timestamp" class="app-content-list-item-line-two">
 			{{ lastUpdate }}
 		</div>
-		<span class="app-content-list-item-details"
+		<Actions class="app-content-list-item-details"
 			:class="{active: recentlyEdited}">
-			<Avatar v-if="page.lastUserId"
-				:user="page.lastUserId"
-				:disable-menu="true"
-				:tooltip-message="lastEditedUserMessage"
-				:size="20" />
+			<slot name="actions" />
+		</Actions>
+		<span class="app-content-list-item-details">
+			<slot name="avatar" />
 		</span>
 	</router-link>
 </template>
 
 <script>
 
-import Avatar from '@nextcloud/vue/dist/Components/Avatar'
+import Actions from '@nextcloud/vue/dist/Components/Actions'
 import moment from '@nextcloud/moment'
+import { mapGetters } from 'vuex'
 
 export default {
 	name: 'PagesListItem',
 
 	components: {
-		Avatar,
+		Actions,
 	},
 
 	props: {
-		page: {
+		to: {
+			type: String,
+			default: '',
+		},
+		title: {
+			type: String,
 			required: true,
-			type: Object,
+		},
+		timestamp: {
+			type: Number,
+			default: 0,
+		},
+		indent: {
+			type: Number,
+			default: 0,
+		},
+		pageId: {
+			type: Number,
+			default: 0,
 		},
 	},
 
 	computed: {
-		collectiveParam() {
-			return this.$store.getters.collectiveParam
-		},
-
-		currentPage() {
-			return this.$store.getters.currentPage
-		},
+		...mapGetters([
+			'currentPage',
+		]),
 
 		isActive() {
-			return this.currentPage && this.currentPage.id === this.page.id
+			return this.$store.state.route.path === this.to
+		},
+
+		indentIcon() {
+			const left = 12 + 12 * this.indent
+			return `left: ${left}px`
+		},
+
+		indentItem() {
+			const left = 7 + 12 * this.indent
+			return `padding-left: ${left}px`
 		},
 
 		iconStyle() {
-			const id = `Page-${this.page.id}`
+			const id = `Page-${this.pageId}`
 			const c = id.toRgb()
 			return `background-color: rgb(${c.r}, ${c.g}, ${c.b})`
 		},
 
 		lastUpdate() {
-			return moment.unix(this.page.timestamp).fromNow()
+			return moment.unix(this.timestamp).fromNow()
 		},
 
 		// was edited in the last 5 Minutes
 		recentlyEdited() {
-			return (Date.now() / 1000) - this.page.timestamp < 300
+			return (Date.now() / 1000) - this.timestamp < 300
 		},
 
 		// UTF8 friendly way of getting first 'letter'
 		firstGrapheme() {
-			return this.page.title[Symbol.iterator]().next().value
+			return this.title[Symbol.iterator]().next().value
 		},
 
-		lastEditedUserMessage() {
-			return t('collectives',
-				'Last edited by {user}', { user: this.page.lastUserId })
-		},
 	},
 }
 
@@ -88,10 +110,13 @@ export default {
 <style lang="scss" scoped>
 
 	.app-content-list-item .app-content-list-item-icon {
-		border-radius: 3px 12px 3px 3px;
 		line-height: 40px;
 		width: 30px;
 		left: 12px;
+	}
+
+	.app-content-list-item .app-content-list-item-icon div {
+		border-radius: 3px 12px 3px 3px;
 	}
 
 	.app-content-list-item .app-content-list-item-details.active {

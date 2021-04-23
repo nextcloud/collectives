@@ -2,15 +2,13 @@
 	<Content app-name="collective">
 		<!-- go back to list when in details mode -->
 		<a v-if="showDetails && isMobile"
-			class="app-details-toggle icon-confirm"
+			class="app-details-toggle icon-toggle-filelist"
 			href="#"
 			@click.stop.prevent="showList" />
 		<Nav @trashCollective="trashCollective"
 			@restoreCollective="restoreCollective"
 			@deleteCollective="deleteCollective" />
 		<AppContent>
-			<CollectiveHeading v-if="currentCollective"
-				@toggleDetails="showDetails = true" />
 			<Collective v-if="collectiveParam"
 				:current-version="currentVersion"
 				:current-version-timestamp="currentVersionTimestamp"
@@ -44,7 +42,6 @@ import AppContent from '@nextcloud/vue/dist/Components/AppContent'
 import Content from '@nextcloud/vue/dist/Components/Content'
 import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 import Collective from '../components/Collective'
-import CollectiveHeading from '../components/CollectiveHeading'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile'
 import Nav from '../components/Nav'
 import PageSidebar from '../components/PageSidebar'
@@ -57,7 +54,6 @@ export default {
 		AppContent,
 		Content,
 		Collective,
-		CollectiveHeading,
 		EmptyContent,
 		Nav,
 		PageSidebar,
@@ -227,7 +223,6 @@ export default {
 	opacity: .6;
 	font-size: 16px;
 	line-height: 17px;
-	transform: rotate(180deg);
 	// background-color: var(--color-main-background);
 	z-index: 2000;
 	&:active,
