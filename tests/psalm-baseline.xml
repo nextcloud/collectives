@@ -89,18 +89,26 @@
       <code>NoUserException</code>
     </UndefinedClass>
   </file>
-  <file src="lib/Migration/Version000500Date20210421000000.php">
-    <UndefinedClass occurrences="4">
-      <code>CircleAlreadyExistsException</code>
-      <code>CircleDoesNotExistException</code>
-      <code>CirclesRequest</code>
-      <code>ConfigNoCircleAvailableException</code>
+  <file src="lib/Migration/Version000500Date20210423000000.php">
+    <InvalidPropertyAssignmentValue occurrences="1">
+      <code>$logger</code>
+    </InvalidPropertyAssignmentValue>
+    <UndefinedClass occurrences="1">
+      <code>Exception</code>
     </UndefinedClass>
-    <UndefinedDocblockClass occurrences="3">
-      <code>$this-&gt;circlesRequest</code>
-      <code>$this-&gt;circlesRequest</code>
-      <code>CirclesRequest</code>
+    <UndefinedDocblockClass occurrences="8">
+      <code>$collective</code>
+      <code>$collective</code>
+      <code>$this-&gt;logger</code>
+      <code>$this-&gt;logger</code>
+      <code>$this-&gt;logger</code>
+      <code>$this-&gt;logger</code>
+      <code>Collective[]</code>
+      <code>ILogger</code>
     </UndefinedDocblockClass>
+    <UndefinedVariable occurrences="1">
+      <code>$oldname</code>
+    </UndefinedVariable>
   </file>
   <file src="lib/Model/CollectiveInfo.php">
     <InvalidPropertyAssignmentValue occurrences="2">
