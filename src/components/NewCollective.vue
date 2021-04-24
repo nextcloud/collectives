@@ -34,7 +34,7 @@
 	</AppNavigationItem>
 	<div v-else class="collective-create">
 		<form @submit.prevent.stop="createCollective">
-			<EmojiPicker show-preview="true" @select="addEmoji">
+			<EmojiPicker :show-preview="true" @select="addEmoji">
 				<button
 					type="button"
 					:aria-label="t('collectives', 'Add emoji')"
