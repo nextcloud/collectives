@@ -97,10 +97,11 @@ export default new Vuex.Store({
 			return getters.visiblePages.sort((a, b) => b.timestamp - a.timestamp)
 		},
 
+		collectivePage(state) {
+			return state.pages.find((p) => p.title === 'Readme')
+		},
+
 		visiblePages(state) {
-			if (state.loading.collective) {
-				return []
-			}
 			return state.pages.filter((p) => p.title !== 'Readme')
 		},
 

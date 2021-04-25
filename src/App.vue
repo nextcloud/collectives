@@ -15,9 +15,11 @@
 		min-height: 100%;
 	}
 
-	.app-content-details div #editor-container {
+	.app-content-details div #editor-container,
+	.app-content-details div #text-container {
 		position: absolute;
 		top: 54px;
+		height: calc(100% - 56px);
 	}
 
 	#editor-container #editor {
@@ -41,7 +43,6 @@
 	#version-title, #titleform input[type='text'] {
 		font-size: 35px;
 		border: none;
-		font-weight: 600;
 		color: var(--color-main-text);
 		width: 100%;
 		height: 40px;

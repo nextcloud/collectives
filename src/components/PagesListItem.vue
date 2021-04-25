@@ -14,23 +14,19 @@
 		<div class="app-content-list-item-line-one">
 			{{ title }}
 		</div>
-		<div v-if="timestamp" class="app-content-list-item-line-two">
-			{{ lastUpdate }}
+		<div v-if="$scopedSlots['line-two']"
+			class="app-content-list-item-line-two">
+			<slot name="line-two" />
 		</div>
-		<Actions class="app-content-list-item-details"
-			:class="{active: recentlyEdited}">
+		<Actions class="app-content-list-item-details">
 			<slot name="actions" />
 		</Actions>
-		<span class="app-content-list-item-details">
-			<slot name="avatar" />
-		</span>
 	</router-link>
 </template>
 
 <script>
 
 import Actions from '@nextcloud/vue/dist/Components/Actions'
-import moment from '@nextcloud/moment'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -48,10 +44,6 @@ export default {
 		title: {
 			type: String,
 			required: true,
-		},
-		timestamp: {
-			type: Number,
-			default: 0,
 		},
 		indent: {
 			type: Number,
@@ -88,20 +80,10 @@ export default {
 			return `background-color: rgb(${c.r}, ${c.g}, ${c.b})`
 		},
 
-		lastUpdate() {
-			return moment.unix(this.timestamp).fromNow()
-		},
-
-		// was edited in the last 5 Minutes
-		recentlyEdited() {
-			return (Date.now() / 1000) - this.timestamp < 300
-		},
-
 		// UTF8 friendly way of getting first 'letter'
 		firstGrapheme() {
 			return this.title[Symbol.iterator]().next().value
 		},
-
 	},
 }
 
@@ -113,13 +95,18 @@ export default {
 		line-height: 40px;
 		width: 30px;
 		left: 12px;
+		font-size: 24px;
 	}
 
 	.app-content-list-item .app-content-list-item-icon div {
 		border-radius: 3px 12px 3px 3px;
 	}
 
-	.app-content-list-item .app-content-list-item-details.active {
+	.app-content-list .app-content-list-item .app-content-list-item-line-one {
+		font-size: 120%;
+	}
+
+	.app-content-list .app-content-list-item .app-content-list-item-line-two {
 		opacity: 1;
 	}
 
