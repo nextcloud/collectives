@@ -6,6 +6,7 @@
 			:show-user-status="false"
 			:tooltip-message="lastEditedUserMessage"
 			:size="16" />
+		&nbsp;
 		{{ lastUpdate }}
 	</div>
 </template>
