@@ -15,9 +15,11 @@
 		min-height: 100%;
 	}
 
-	.app-content-details div #editor-container {
+	.app-content-details div #editor-container,
+	.app-content-details div #text-container {
 		position: absolute;
 		top: 54px;
+		height: calc(100% - 56px);
 	}
 
 	#editor-container #editor {
