@@ -41,7 +41,6 @@
 	#version-title, #titleform input[type='text'] {
 		font-size: 35px;
 		border: none;
-		font-weight: 600;
 		color: var(--color-main-text);
 		width: 100%;
 		height: 40px;

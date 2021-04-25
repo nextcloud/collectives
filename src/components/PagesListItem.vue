@@ -95,10 +95,15 @@ export default {
 		line-height: 40px;
 		width: 30px;
 		left: 12px;
+		font-size: 24px;
 	}
 
 	.app-content-list-item .app-content-list-item-icon div {
 		border-radius: 3px 12px 3px 3px;
+	}
+
+	.app-content-list .app-content-list-item .app-content-list-item-line-one {
+		font-size: 120%;
 	}
 
 	.app-content-list .app-content-list-item .app-content-list-item-line-two {
