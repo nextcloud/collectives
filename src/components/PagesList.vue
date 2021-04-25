@@ -8,6 +8,10 @@
 			<template #icon>
 				{{ currentCollective.emoji }}
 			</template>
+			<template #line-two>
+				<LastUpdate :timestamp="collectivePage.timestamp"
+					:user="collectivePage.lastUserId" />
+			</template>
 			<template #actions>
 				<ActionButton class="primary"
 					icon="icon-add"
@@ -60,6 +64,7 @@ export default {
 	computed: {
 		...mapGetters([
 			'collectiveParam',
+			'collectivePage',
 			'currentCollective',
 			'loading',
 			'mostRecentPages',
