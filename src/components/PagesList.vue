@@ -20,17 +20,12 @@
 			:key="page.title"
 			:to="`/${encodeURIComponent(collectiveParam)}/${encodeURIComponent(page.title)}`"
 			:page-id="page.id"
-			:timestamp="page.timestamp"
 			:indent="1"
 			:title="page.title"
 			@click.native="$emit('toggleDetails')">
-			<template #avatar>
-				<Avatar v-if="page.lastUserId"
-					:user="page.lastUserId"
-					:disable-menu="true"
-					:show-user-status="false"
-					:tooltip-message="lastEditedUserMessage(page.lastUserId)"
-					:size="20" />
+			<template #line-two>
+				<LastUpdate :timestamp="page.timestamp"
+					:user="page.lastUserId" />
 			</template>
 		</PagesListItem>
 	</AppContentList>
@@ -40,9 +35,10 @@
 
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import AppContentList from '@nextcloud/vue/dist/Components/AppContentList'
-import Avatar from '@nextcloud/vue/dist/Components/Avatar'
-import { mapGetters } from 'vuex'
+import LastUpdate from './LastUpdate'
 import PagesListItem from './PagesListItem'
+
+import { mapGetters } from 'vuex'
 
 export default {
 	name: 'PagesList',
@@ -50,8 +46,8 @@ export default {
 	components: {
 		ActionButton,
 		AppContentList,
+		LastUpdate,
 		PagesListItem,
-		Avatar,
 	},
 
 	props: {
@@ -72,13 +68,6 @@ export default {
 			return this.mostRecentPages
 		},
 	},
-
-	methods: {
-		lastEditedUserMessage(user) {
-			return t('collectives', 'Last edited by {user}', { user })
-		},
-	},
-
 }
 
 </script>
