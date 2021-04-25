@@ -5,10 +5,10 @@
 			key="Readme"
 			:to="`/${encodeURIComponent(collectiveParam)}`"
 			:title="currentCollective.name">
-			<template #icon>
+			<template v-if="currentCollective.emoji" #icon>
 				{{ currentCollective.emoji }}
 			</template>
-			<template #line-two>
+			<template v-if="collectivePage" #line-two>
 				<LastUpdate :timestamp="collectivePage.timestamp"
 					:user="collectivePage.lastUserId" />
 			</template>
