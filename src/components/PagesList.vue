@@ -4,7 +4,8 @@
 		<PagesListItem v-if="currentCollective"
 			key="Readme"
 			:to="`/${encodeURIComponent(collectiveParam)}`"
-			:title="currentCollective.name">
+			:title="currentCollective.name"
+			@click.native="$emit('toggleDetails')">
 			<template v-if="currentCollective.emoji" #icon>
 				{{ currentCollective.emoji }}
 			</template>
