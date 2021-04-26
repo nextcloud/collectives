@@ -43,7 +43,7 @@ class Version000500Date20210423000000 extends SimpleMigrationStep {
 				continue;
 			}
 			try {
-				$this->setEmoji($collective['id'], $emoji);
+				$this->setEmoji((int)$collective['id'], $emoji);
 				$this->renameCircle($uniqueId, $name);
 			} catch (\Exception $e) {
 				$this->logger->error("Failed to migrate $oldName.", [

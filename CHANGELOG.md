@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.1 - 2021-04-26
+
+### Fixes
+
+- ✂️  Fix migration step to split emojis from collective names.
+
 ## 0.5.0 - 2021-04-26
 
 ### ✨New
@@ -11,7 +17,7 @@
 
 ### Fixes
 
-- ✂️ Split emojis from collective names.
+- ✂️  Split emojis from collective names.
 - 🧽 Always use sanitized filename for mountpoint.
 - 📲 Fix overlapping elements in mobile view.
 - 💽 Fix database query in ExpirePageVersions background job.
