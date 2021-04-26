@@ -13,7 +13,7 @@ Erstellt Seiten und teilt euer wertvolles Wissen.
 
 ### 🛋️ Verändert die Startseite und fühlt euch wie Zuhause
 
-Wechselt in den Editier-Modus um loszulegen ↗️
+Wechselt in den Editier-Modus um loszulegen. ↗️
 
 
 ## Auch gut zu wissen
