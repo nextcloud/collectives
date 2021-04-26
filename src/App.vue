@@ -38,6 +38,7 @@
 
 	#text-wrapper #text div.ProseMirror {
 		margin-top: 5px;
+		padding-bottom: 50px;
 	}
 
 	#version-title, #titleform input[type='text'] {
