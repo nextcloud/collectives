@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.5.0 - 2021-04-26
+
+### ✨New
+
+- ⭕ Pick an existing circle when creating a new collective.
+- 🗑️ Dialog to decide if the circle should be deleted when deleting a collective.
+- 📋 Cleaner pages list, including info for the start page.
+- 📱 Better workflows for mobile use.
+
+###Fixes
+
+- ✂️ Split emojis from collective names.
+- 🧽 Always use sanitized filename for mountpoint.
+- 📲 Fix overlapping elements in mobile view.
+- 💽 Fix database query in ExpirePageVersions background job.
+- ⏱️ Show loading spinner when list of collectives isn't available yet.
+
+###Updates
+
+- 🔌 Update all dependencies.
+
 ## 0.4.0 - 2021-04-19
 
 ### ✨ New
