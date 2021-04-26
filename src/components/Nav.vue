@@ -1,6 +1,6 @@
 <template>
 	<AppNavigation>
-		<template v-if="loading" #default>
+		<template v-if="loading('collectives')" #default>
 			<EmptyContent icon="icon-loading" />
 		</template>
 		<template v-else #list>
@@ -24,7 +24,8 @@
 			</AppNavigationItem>
 			<NewCollective />
 		</template>
-		<template v-if="!loading" #footer>
+		<template v-if="!loading('collectives') && !loading('collectiveTrash')"
+			#footer>
 			<CollectiveTrash
 				@restoreCollective="restoreCollective"
 				@deleteCollective="deleteCollective" />
@@ -33,6 +34,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import AppNavigation from '@nextcloud/vue/dist/Components/AppNavigation'
 import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
@@ -53,16 +55,15 @@ export default {
 		NewCollective,
 	},
 	computed: {
-		collectives() {
-			return this.$store.getters.collectives
-		},
-		loading() {
-			return this.$store.getters.loading('collectives')
-		},
+		...mapGetters([
+			'loading',
+			'collectives',
+			'collectiveParam',
+		]),
 	},
 	methods: {
 		isActive(collective) {
-			return this.$store.getters.collectiveParam === collective.name
+			return this.collectiveParam === collective.name
 		},
 		newCollective(collective) {
 			this.$emit('newCollective', collective)
