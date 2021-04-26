@@ -273,6 +273,10 @@ export default {
 		border-radius: var(--border-radius);
 	}
 
+	#editor-container .menububble {
+		margin-bottom: 0px;
+	}
+
 	#text-container .editor__content {
 		border: 2px solid var(--color-main-background);
 		border-radius: var(--border-radius);
