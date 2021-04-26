@@ -14,7 +14,7 @@ class Version000500Date20210423000000 extends SimpleMigrationStep {
 	/** @var IDBConnection */
 	private $db;
 
-	/** @var ILogger */
+	/** @var LoggerInterface */
 	protected $logger;
 
 	public function __construct(IDBConnection $db, LoggerInterface $logger) {
@@ -45,8 +45,8 @@ class Version000500Date20210423000000 extends SimpleMigrationStep {
 			try {
 				$this->setEmoji($collective['id'], $emoji);
 				$this->renameCircle($uniqueId, $name);
-			} catch (Exception $e) {
-				$this->logger->error("Failed to migrate $oldname.", [
+			} catch (\Exception $e) {
+				$this->logger->error("Failed to migrate $oldName.", [
 					"app" => "Collectives",
 					"exception" => $e
 				]);
@@ -58,7 +58,7 @@ class Version000500Date20210423000000 extends SimpleMigrationStep {
 	}
 
 	/**
-	 * @return Collective[]
+	 * @return array
 	 */
 	private function getAll(): array {
 		$qb = $this->db->getQueryBuilder();
@@ -74,7 +74,7 @@ class Version000500Date20210423000000 extends SimpleMigrationStep {
 	}
 
 	/**
-	 * @param string $circleUniqueId
+	 * @param string $uniqueId
 	 *
 	 * @return string|null
 	 */
@@ -106,8 +106,8 @@ class Version000500Date20210423000000 extends SimpleMigrationStep {
 			->addSelect('c.name')
 			->from('circle_circles', 'c');
 		$cursor = $qb->execute();
-		while ($data = $cursor->fetch()){
-			if (strtolower($data['name']) === strtolower($name)){
+		while ($data = $cursor->fetch()) {
+			if (strtolower($data['name']) === strtolower($name)) {
 				return false;
 			}
 		}
@@ -115,7 +115,11 @@ class Version000500Date20210423000000 extends SimpleMigrationStep {
 		return true;
 	}
 
-	private function setEmoji(int $id, string $emoji) {
+	/**
+	 * @param int    $id
+	 * @param string $emoji
+	 */
+	private function setEmoji(int $id, string $emoji): void {
 		$qb = $this->db->getQueryBuilder();
 		$qb->update('collectives')
 			->set('emoji', $qb->createNamedParameter($emoji))
@@ -123,7 +127,11 @@ class Version000500Date20210423000000 extends SimpleMigrationStep {
 		$qb->execute();
 	}
 
-	private function renameCircle(string $uniqueId, string $name) {
+	/**
+	 * @param string $uniqueId
+	 * @param string $name
+	 */
+	private function renameCircle(string $uniqueId, string $name): void {
 		// the new name is already taken... Do not rename
 		if (!$this->isCircleUnique($name)) {
 			return;

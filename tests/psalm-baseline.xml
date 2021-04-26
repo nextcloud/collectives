@@ -89,27 +89,6 @@
       <code>NoUserException</code>
     </UndefinedClass>
   </file>
-  <file src="lib/Migration/Version000500Date20210423000000.php">
-    <InvalidPropertyAssignmentValue occurrences="1">
-      <code>$logger</code>
-    </InvalidPropertyAssignmentValue>
-    <UndefinedClass occurrences="1">
-      <code>Exception</code>
-    </UndefinedClass>
-    <UndefinedDocblockClass occurrences="8">
-      <code>$collective</code>
-      <code>$collective</code>
-      <code>$this-&gt;logger</code>
-      <code>$this-&gt;logger</code>
-      <code>$this-&gt;logger</code>
-      <code>$this-&gt;logger</code>
-      <code>Collective[]</code>
-      <code>ILogger</code>
-    </UndefinedDocblockClass>
-    <UndefinedVariable occurrences="1">
-      <code>$oldname</code>
-    </UndefinedVariable>
-  </file>
   <file src="lib/Model/CollectiveInfo.php">
     <InvalidPropertyAssignmentValue occurrences="2">
       <code>$collective-&gt;getEmoji()</code>
