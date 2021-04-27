@@ -31,14 +31,15 @@ Vue.use(Vuex)
 export default new Vuex.Store({
 
 	state: {
-		messages: {},
-		loading: {},
+		circles: [],
 		collectives: [],
 		trashCollectives: [],
+		updatedCollective: {},
 		pages: [],
 		updatedPage: {},
-		updatedCollective: {},
-		circles: [],
+		messages: {},
+		showing: {},
+		loading: {},
 	},
 
 	getters: {
@@ -92,6 +93,7 @@ export default new Vuex.Store({
 		},
 
 		loading: (state) => (aspect) => state.loading[aspect],
+		showing: (state) => (aspect) => state.showing[aspect],
 
 		mostRecentPages(_state, getters) {
 			return getters.visiblePages.sort((a, b) => b.timestamp - a.timestamp)
@@ -148,6 +150,12 @@ export default new Vuex.Store({
 		},
 		done(state, aspect) {
 			Vue.set(state.loading, aspect, false)
+		},
+		show(state, aspect) {
+			Vue.set(state.showing, aspect, true)
+		},
+		hide(state, aspect) {
+			Vue.set(state.showing, aspect, false)
 		},
 		collectives(state, collectives) {
 			state.collectives = collectives

@@ -1,15 +1,11 @@
 <template>
 	<div id="app-content-wrapper">
-		<PagesList
-			:show-details="showDetails"
-			@newPage="newPage"
-			@toggleDetails="$emit('toggleDetails')" />
-		<AppContentDetails v-if="currentPage && !$store.state.loading.collective">
+		<PagesList @newPage="newPage" />
+		<AppContentDetails v-if="currentPage">
 			<Version v-if="currentVersion"
 				:page="currentPage"
 				:version="currentVersion"
 				:current-version-timestamp="currentVersionTimestamp"
-				@toggleSidebar="$emit('toggleSidebar')"
 				@showCurrent="$emit('preview-version', null)"
 				@resetVersion="resetVersion" />
 			<Page v-else
@@ -18,7 +14,6 @@
 				@deletePage="deletePage"
 				@edit="edit = true"
 				@toggleEdit="edit = !edit"
-				@showVersions="$emit('showVersions')"
 				@renamePage="renamePage" />
 		</AppContentDetails>
 	</div>
@@ -52,10 +47,6 @@ export default {
 		currentVersionTimestamp: {
 			type: Number,
 			required: true,
-		},
-		showDetails: {
-			type: Boolean,
-			default: true,
 		},
 	},
 

@@ -1,11 +1,11 @@
 <template>
 	<AppContentList :class="{loading: loading('collective')}"
-		:show-details="showDetails">
+		:show-details="showing('details')">
 		<PagesListItem v-if="currentCollective"
 			key="Readme"
 			:to="`/${encodeURIComponent(collectiveParam)}`"
 			:title="currentCollective.name"
-			@click.native="$emit('toggleDetails')">
+			@click.native="show('details')">
 			<template v-if="currentCollective.emoji" #icon>
 				{{ currentCollective.emoji }}
 			</template>
@@ -27,7 +27,7 @@
 			:page-id="page.id"
 			:indent="1"
 			:title="page.title"
-			@click.native="$emit('toggleDetails')">
+			@click.native="show('details')">
 			<template #line-two>
 				<LastUpdate :timestamp="page.timestamp"
 					:user="page.lastUserId" />
@@ -43,7 +43,7 @@ import AppContentList from '@nextcloud/vue/dist/Components/AppContentList'
 import LastUpdate from './LastUpdate'
 import PagesListItem from './PagesListItem'
 
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 
 export default {
 	name: 'PagesList',
@@ -55,25 +55,21 @@ export default {
 		PagesListItem,
 	},
 
-	props: {
-		showDetails: {
-			type: Boolean,
-			default: true,
-		},
-	},
-
 	computed: {
 		...mapGetters([
 			'collectiveParam',
 			'collectivePage',
 			'currentCollective',
 			'loading',
+			'showing',
 			'mostRecentPages',
 		]),
 		pages() {
 			return this.mostRecentPages
 		},
 	},
+
+	methods: mapMutations(['show']),
 }
 
 </script>

@@ -2,7 +2,7 @@
 	<AppSidebar
 		ref="sidebar"
 		:title="page.title"
-		@close="$emit('close')">
+		@close="hide('sidebar')">
 		<SidebarVersionsTab
 			:page-id="page.id"
 			:page-title="page.title"
@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 import AppSidebar from '@nextcloud/vue/dist/Components/AppSidebar'
 import SidebarVersionsTab from './SidebarVersionsTab'
 
@@ -39,6 +40,8 @@ export default {
 	},
 
 	methods: {
+		...mapMutations(['hide']),
+
 		/**
 		 * Emit page version URL to the parent component
 		 * @param {object} version Page version object

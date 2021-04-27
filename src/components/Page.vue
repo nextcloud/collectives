@@ -36,7 +36,7 @@
 				<ActionButton
 					icon="icon-menu"
 					:close-after-click="true"
-					@click="$emit('showVersions')">
+					@click="show('versions')">
 					{{ t('collectives', 'Show old versions') }}
 				</ActionButton>
 			</Actions>
@@ -68,6 +68,7 @@ import Actions from '@nextcloud/vue/dist/Components/Actions'
 import AppContent from '@nextcloud/vue/dist/Components/AppContent'
 import RichText from './RichText'
 
+import { mapGetters, mapMutations } from 'vuex'
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateRemoteUrl } from '@nextcloud/router'
 
@@ -100,17 +101,22 @@ export default {
 	},
 
 	computed: {
+		...mapGetters([
+			'pageParam',
+			'currentPage',
+			'currentCollective',
+		]),
 
 		landingPage() {
-			return !this.$store.getters.pageParam
+			return !this.pageParam
 		},
 
 		page() {
-			return this.$store.getters.currentPage
+			return this.currentPage
 		},
 
 		collective() {
-			return this.$store.getters.currentCollective
+			return this.currentCollective
 		},
 
 		collectiveTitle() {
@@ -207,6 +213,7 @@ export default {
 	},
 
 	methods: {
+		...mapMutations(['show']),
 		init() {
 			document.title = this.page.title + ' - Collective - Nextcloud'
 			this.preview = true
