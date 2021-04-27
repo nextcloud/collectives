@@ -1,23 +1,17 @@
 <template>
 	<Content app-name="collective">
 		<!-- go back to list when in details mode -->
-		<a v-if="showDetails && isMobile"
+		<a v-if="showing('details') && isMobile"
 			class="app-details-toggle icon-toggle-filelist"
 			href="#"
-			@click.stop.prevent="showList" />
-		<Nav @trashCollective="trashCollective"
-			@restoreCollective="restoreCollective"
-			@deleteCollective="deleteCollective" />
+			@click.stop.prevent="hide('details')" />
+		<Nav />
 		<AppContent>
 			<Collective v-if="collectiveParam"
 				:current-version="currentVersion"
 				:current-version-timestamp="currentVersionTimestamp"
-				:show-details="showDetails"
 				@preview-version="setCurrentVersion"
-				@resetVersion="resetVersion"
-				@showVersions="showSidebar = true"
-				@toggleDetails="showDetails = true"
-				@toggleSidebar="showSidebar=!showSidebar" />
+				@resetVersion="resetVersion" />
 			<EmptyContent v-else-if="!isMobile" icon="icon-ant">
 				{{ t('collectives', 'No collective selected') }}
 				<template #desc>
@@ -26,10 +20,9 @@
 			</EmptyContent>
 		</AppContent>
 		<PageSidebar v-if="currentPage"
-			v-show="showSidebar"
+			v-show="showing('sidebar')"
 			:current-version-timestamp="currentVersionTimestamp"
-			@preview-version="setCurrentVersion"
-			@close="showSidebar=false" />
+			@preview-version="setCurrentVersion" />
 	</Content>
 </template>
 
@@ -37,7 +30,7 @@
 
 import { emit } from '@nextcloud/event-bus'
 import { showInfo } from '@nextcloud/dialogs'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import AppContent from '@nextcloud/vue/dist/Components/AppContent'
 import Content from '@nextcloud/vue/dist/Components/Content'
 import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
@@ -66,8 +59,6 @@ export default {
 	data() {
 		return {
 			currentVersion: null,
-			showSidebar: false,
-			showDetails: false,
 			currentVersionTimestamp: 0,
 		}
 	},
@@ -79,6 +70,7 @@ export default {
 			'currentPage',
 			'messages',
 			'pageParam',
+			'showing',
 		]),
 
 		info() {
@@ -91,7 +83,7 @@ export default {
 			if (this.currentCollective) {
 				this.getPages()
 				this.closeNav()
-				this.showDetails = true
+				this.show('details')
 			} else {
 				this.openNav()
 			}
@@ -117,6 +109,7 @@ export default {
 	},
 
 	methods: {
+		...mapMutations(['show', 'hide']),
 		/**
 		 * Get list of all collectives
 		 * @returns {Promise}
@@ -148,40 +141,6 @@ export default {
 		},
 
 		/**
-		 * Trash a collective with the given name
-		 * @param {Object} collective Properties of the collective
-		 * @returns {Promise}
-		 */
-		trashCollective(collective) {
-			if (this.$store.getters.collectiveParam === collective.name) {
-				this.$router.push('/')
-			}
-			return this.$store.dispatch('trashCollective', collective)
-				.catch(displayError('Could not move the collective to trash'))
-		},
-
-		/**
-		 * Restore a collective with the given name from trash
-		 * @param {Object} collective Properties of the collective
-		 * @returns {Promise}
-		 */
-		restoreCollective(collective) {
-			return this.$store.dispatch('restoreCollective', collective)
-				.catch(displayError('Could not restore collective from trash'))
-		},
-
-		/**
-		 * Delete a collective with the given name from trash
-		 * @param {Object} collective Properties of the collective
-		 * @param {boolean} circle Whether to delete the circle as well
-		 * @returns {Promise}
-		 */
-		deleteCollective(collective, circle) {
-			return this.$store.dispatch('deleteCollective', { ...collective, circle })
-				.catch(displayError('Could not delete collective from trash'))
-		},
-
-		/**
 		 * Reset the version
 		 */
 		resetVersion() {
@@ -195,10 +154,6 @@ export default {
 		setCurrentVersion(version) {
 			this.currentVersion = version
 			this.currentVersionTimestamp = (version ? version.timestamp : 0)
-		},
-
-		showList() {
-			this.showDetails = false
 		},
 
 		closeNav() {
