@@ -42,6 +42,7 @@ import AppNavigationCaption from '@nextcloud/vue/dist/Components/AppNavigationCa
 import CollectiveTrash from '../components/CollectiveTrash'
 import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 import NewCollective from './NewCollective'
+import displayError from '../util/displayError'
 
 export default {
 	name: 'Nav',
@@ -71,14 +72,39 @@ export default {
 		icon(collective) {
 			return collective.emoji ? '' : 'icon-star'
 		},
+
+		/**
+		 * Trash a collective with the given name
+		 * @param {Object} collective Properties of the collective
+		 * @returns {Promise}
+		 */
 		trashCollective(collective) {
-			this.$emit('trashCollective', collective)
+			if (this.collectiveParam === collective.name) {
+				this.$router.push('/')
+			}
+			return this.$store.dispatch('trashCollective', collective)
+				.catch(displayError('Could not move the collective to trash'))
 		},
+
+		/**
+		 * Restore a collective with the given name from trash
+		 * @param {Object} collective Properties of the collective
+		 * @returns {Promise}
+		 */
 		restoreCollective(collective) {
-			this.$emit('restoreCollective', collective)
+			return this.$store.dispatch('restoreCollective', collective)
+				.catch(displayError('Could not restore collective from trash'))
 		},
+
+		/**
+		 * Delete a collective with the given name from trash
+		 * @param {Object} collective Properties of the collective
+		 * @param {boolean} circle Whether to delete the circle as well
+		 * @returns {Promise}
+		 */
 		deleteCollective(collective, circle) {
-			this.$emit('deleteCollective', collective, circle)
+			return this.$store.dispatch('deleteCollective', { ...collective, circle })
+				.catch(displayError('Could not delete collective from trash'))
 		},
 	},
 }

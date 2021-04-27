@@ -5,9 +5,7 @@
 			class="app-details-toggle icon-toggle-filelist"
 			href="#"
 			@click.stop.prevent="showList" />
-		<Nav @trashCollective="trashCollective"
-			@restoreCollective="restoreCollective"
-			@deleteCollective="deleteCollective" />
+		<Nav />
 		<AppContent>
 			<Collective v-if="collectiveParam"
 				:current-version="currentVersion"
@@ -145,40 +143,6 @@ export default {
 			}
 			return this.$store.dispatch('getPages')
 				.catch(displayError('Could not fetch pages'))
-		},
-
-		/**
-		 * Trash a collective with the given name
-		 * @param {Object} collective Properties of the collective
-		 * @returns {Promise}
-		 */
-		trashCollective(collective) {
-			if (this.$store.getters.collectiveParam === collective.name) {
-				this.$router.push('/')
-			}
-			return this.$store.dispatch('trashCollective', collective)
-				.catch(displayError('Could not move the collective to trash'))
-		},
-
-		/**
-		 * Restore a collective with the given name from trash
-		 * @param {Object} collective Properties of the collective
-		 * @returns {Promise}
-		 */
-		restoreCollective(collective) {
-			return this.$store.dispatch('restoreCollective', collective)
-				.catch(displayError('Could not restore collective from trash'))
-		},
-
-		/**
-		 * Delete a collective with the given name from trash
-		 * @param {Object} collective Properties of the collective
-		 * @param {boolean} circle Whether to delete the circle as well
-		 * @returns {Promise}
-		 */
-		deleteCollective(collective, circle) {
-			return this.$store.dispatch('deleteCollective', { ...collective, circle })
-				.catch(displayError('Could not delete collective from trash'))
 		},
 
 		/**
