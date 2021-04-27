@@ -175,10 +175,7 @@ describe('Collective', function() {
 				.click()
 			cy.get('.collectives_list_item')
 				.should('not.contain', 'Delete me')
-			cy.get('.settings-button')
-				.click()
-			cy.get('#app-settings-content')
-				.should('not.contain', 'Delete me')
+			cy.get('#app-navigation-vue .settings-button').should('not.exist')
 		})
 	})
 
