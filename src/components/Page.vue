@@ -68,6 +68,7 @@ import Actions from '@nextcloud/vue/dist/Components/Actions'
 import AppContent from '@nextcloud/vue/dist/Components/AppContent'
 import RichText from './RichText'
 
+import { showSuccess, showError } from '@nextcloud/dialogs'
 import { mapGetters, mapMutations } from 'vuex'
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateRemoteUrl } from '@nextcloud/router'
@@ -105,6 +106,7 @@ export default {
 			'pageParam',
 			'currentPage',
 			'currentCollective',
+			'updatedPagePath',
 		]),
 
 		landingPage() {
@@ -222,9 +224,20 @@ export default {
 			}
 		},
 
-		renamePage() {
-			if (this.page.newTitle) {
-				this.$emit('renamePage', this.page.newTitle)
+		/**
+		 * Rename currentPage on the server
+		 */
+		async renamePage() {
+			const newTitle = this.page.newTitle
+			if (!newTitle || newTitle === this.page.title) {
+				return
+			}
+			try {
+				await this.$store.dispatch('renamePage', newTitle)
+				this.$router.push(this.updatedPagePath)
+			} catch (e) {
+				console.error(e)
+				showError(t('collectives', 'Could not rename the page'))
 			}
 		},
 
@@ -236,8 +249,19 @@ export default {
 			this.$el.querySelector('.ProseMirror').focus()
 		},
 
-		deletePage() {
-			this.$emit('deletePage', this.page.id)
+		/**
+		 * Delete the current page,
+		 * remove it from the frontend and show a hint
+		 */
+		async deletePage() {
+			try {
+				await this.$store.dispatch('deletePage')
+				this.$router.push(`/${this.collectiveParam}`)
+				showSuccess(t('collectives', 'Page deleted'))
+			} catch (e) {
+				console.error(e)
+				showError(t('collectives', 'Could not delete the page'))
+			}
 		},
 
 		/**

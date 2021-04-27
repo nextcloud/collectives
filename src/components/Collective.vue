@@ -11,17 +11,15 @@
 			<Page v-else
 				key="currentPage.timestamp"
 				:edit="edit"
-				@deletePage="deletePage"
 				@edit="edit = true"
-				@toggleEdit="edit = !edit"
-				@renamePage="renamePage" />
+				@toggleEdit="edit = !edit" />
 		</AppContentDetails>
 	</div>
 </template>
 
 <script>
 
-import { showSuccess, showError } from '@nextcloud/dialogs'
+import { showError } from '@nextcloud/dialogs'
 import AppContentDetails from '@nextcloud/vue/dist/Components/AppContentDetails'
 import Page from '../components/Page'
 import PagesList from '../components/PagesList'
@@ -130,38 +128,6 @@ export default {
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not create the page'))
-			}
-		},
-
-		/**
-		 * Rename currentPage on the server
-		 * @param {string} newTitle New title for the page
-		 */
-		async renamePage(newTitle) {
-			if (this.currentPage.title === newTitle) {
-				return
-			}
-			try {
-				await this.$store.dispatch('renamePage', newTitle)
-				this.$router.push(this.$store.getters.updatedPagePath)
-			} catch (e) {
-				console.error(e)
-				showError(t('collectives', 'Could not rename the page'))
-			}
-		},
-
-		/**
-		 * Delete the current page,
-		 * remove it from the frontend and show a hint
-		 */
-		async deletePage() {
-			try {
-				await this.$store.dispatch('deletePage')
-				this.$router.push(`/${this.collectiveParam}`)
-				showSuccess(t('collectives', 'Page deleted'))
-			} catch (e) {
-				console.error(e)
-				showError(t('collectives', 'Could not delete the page'))
 			}
 		},
 
