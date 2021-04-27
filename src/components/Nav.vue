@@ -70,7 +70,7 @@ export default {
 			this.$emit('newCollective', collective)
 		},
 		icon(collective) {
-			return collective.emoji ? '' : 'icon-star'
+			return collective.emoji ? '' : 'icon-collectives'
 		},
 
 		/**
