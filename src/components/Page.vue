@@ -110,7 +110,7 @@ export default {
 		]),
 
 		landingPage() {
-			return !this.pageParam
+			return !this.pageParam || this.pageParam === 'Readme'
 		},
 
 		page() {
@@ -217,7 +217,15 @@ export default {
 	methods: {
 		...mapMutations(['show']),
 		init() {
-			document.title = this.page.title + ' - Collective - Nextcloud'
+			const parts = [
+				this.collective.name,
+				t('collectives', 'Collectives'),
+				'Nextcloud',
+			]
+			if (!this.landingPage) {
+				parts.unshift(this.page.title)
+			}
+			document.title = parts.join(' - ')
 			this.preview = true
 			if (this.emptyTitle) {
 				this.$nextTick(this.focusTitle)
