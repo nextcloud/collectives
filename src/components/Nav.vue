@@ -24,8 +24,7 @@
 			</AppNavigationItem>
 			<NewCollective />
 		</template>
-		<template v-if="!loading('collectives') && !loading('collectiveTrash')"
-			#footer>
+		<template v-if="displayTrash" #footer>
 			<CollectiveTrash
 				@restoreCollective="restoreCollective"
 				@deleteCollective="deleteCollective" />
@@ -60,7 +59,14 @@ export default {
 			'loading',
 			'collectives',
 			'collectiveParam',
+			'trashCollectives',
 		]),
+
+		displayTrash() {
+			return this.trashCollectives.length
+				&& !this.loading('collectives')
+				&& !this.loading('collectiveTrash')
+		},
 	},
 	methods: {
 		isActive(collective) {
@@ -70,7 +76,7 @@ export default {
 			this.$emit('newCollective', collective)
 		},
 		icon(collective) {
-			return collective.emoji ? '' : 'icon-star'
+			return collective.emoji ? '' : 'icon-collectives'
 		},
 
 		/**

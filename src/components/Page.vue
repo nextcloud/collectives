@@ -15,19 +15,21 @@
 				:disabled="updating || !savePossible"
 				@keypress.13="focusEditor"
 				@blur="renamePage">
-			<Actions class="top-bar__button" close-after-click="true">
-				<ActionButton v-if="edit"
-					icon="icon-checkmark"
-					@click="stopEdit">
-					{{ t('collectives', 'Done with editing') }}
-				</ActionButton>
-				<ActionButton v-else
-					icon="icon-rename"
-					@click="startEdit">
-					{{ t('collectives', 'Edit page') }}
-				</ActionButton>
-			</Actions>
-			<Actions>
+			<button v-if="edit"
+				class="button primary"
+				type="button"
+				@click="stopEdit">
+				<span class="icon icon-checkmark-white" />
+				{{ t('collectives', 'Save') }}
+			</button>
+			<button v-else
+				type="button"
+				class="button primary"
+				@click="startEdit">
+				<span class="icon icon-rename-white" />
+				{{ t('collectives', 'Edit') }}
+			</button>
+			<Actions :force-menu="true">
 				<ActionButton v-if="!landingPage"
 					icon="icon-delete"
 					@click="$emit('deletePage')">
@@ -36,7 +38,7 @@
 				<ActionButton
 					icon="icon-menu"
 					:close-after-click="true"
-					@click="show('versions')">
+					@click="show('sidebar')">
 					{{ t('collectives', 'Show old versions') }}
 				</ActionButton>
 			</Actions>
@@ -110,7 +112,7 @@ export default {
 		]),
 
 		landingPage() {
-			return !this.pageParam
+			return !this.pageParam || this.pageParam === 'Readme'
 		},
 
 		page() {
@@ -217,7 +219,15 @@ export default {
 	methods: {
 		...mapMutations(['show']),
 		init() {
-			document.title = this.page.title + ' - Collective - Nextcloud'
+			const parts = [
+				this.collective.name,
+				t('collectives', 'Collectives'),
+				'Nextcloud',
+			]
+			if (!this.landingPage) {
+				parts.unshift(this.page.title)
+			}
+			document.title = parts.join(' - ')
 			this.preview = true
 			if (this.emptyTitle) {
 				this.$nextTick(this.focusTitle)
@@ -324,6 +334,10 @@ export default {
 		max-width: 670px;
 		margin-bottom: -50px;
 		display: flex;
+	}
+
+	#titleform button.primary {
+		margin-top: 0px;
 	}
 
 	#action-menu button {
