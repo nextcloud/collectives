@@ -29,11 +29,22 @@ use OCP\Files\NotFoundException;
 class PageFile extends Entity implements JsonSerializable {
 	public const SUFFIX = '.md';
 
+	/** @var string */
 	protected $title;
+
+	/** @var int */
 	protected $timestamp;
+
+	/** @var int */
 	protected $size;
+
+	/** @var string */
 	protected $fileName;
+
+	/** @var string */
 	protected $filePath;
+
+	/** @var string */
 	protected $lastUserId;
 
 	public function jsonSerialize() {
