@@ -14,7 +14,8 @@ class PageFileTest extends TestCase {
 		$fileMTime = '';
 		$fileSize = 100;
 		$fileName = 'name.md';
-		$fileMountPoint = '/mountpoint/';
+		$fileMountPoint = '/files/user/Collectives/collective/';
+		$fileCollectivePath = 'Collectives/collective/';
 		$fileInternalPath = 'path/to/file/name.txt';
 		$userId = 'jane';
 
@@ -36,11 +37,12 @@ class PageFileTest extends TestCase {
 		$pageFile = new PageFile();
 		$pageFile->fromFile($file, $userId);
 
-		self::assertEquals($pageFile->getId(), $fileId);
-		self::assertEquals($pageFile->getTitle(), $fileTitle);
-		self::assertEquals($pageFile->getTimestamp(), $fileMTime);
-		self::assertEquals($pageFile->getSize(), $fileSize);
-		self::assertEquals($pageFile->getFileName(), $fileName);
-		self::assertEquals($pageFile->getFilePath(), $fileMountPoint . $fileInternalPath);
+		self::assertEquals($fileId, $pageFile->getId());
+		self::assertEquals($fileTitle, $pageFile->getTitle());
+		self::assertEquals($fileMTime, $pageFile->getTimestamp());
+		self::assertEquals($fileSize, $pageFile->getSize());
+		self::assertEquals($fileName, $pageFile->getFileName());
+		self::assertEquals($fileInternalPath, $pageFile->getFilePath());
+		self::assertEquals($fileCollectivePath, $pageFile->getCollectivePath());
 	}
 }

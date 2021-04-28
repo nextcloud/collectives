@@ -23,6 +23,8 @@ use OCP\Files\NotFoundException;
  * @method void setFileName(string $value)
  * @method string getFilePath()
  * @method void setFilePath(string $value)
+ * @method string getCollectivePath()
+ * @method void setCollectivePath(string $value)
  * @method string getLastUserId()
  * @method void setLastUserId(string $value)
  */
@@ -45,6 +47,9 @@ class PageFile extends Entity implements JsonSerializable {
 	protected $filePath;
 
 	/** @var string */
+	protected $collectivePath;
+
+	/** @var string */
 	protected $lastUserId;
 
 	public function jsonSerialize() {
@@ -55,6 +60,7 @@ class PageFile extends Entity implements JsonSerializable {
 			'size' => $this->size,
 			'fileName' => $this->fileName,
 			'filePath' => $this->filePath,
+			'collectivePath' => $this->collectivePath,
 			'lastUserId' => $this->lastUserId,
 		];
 	}
@@ -72,7 +78,8 @@ class PageFile extends Entity implements JsonSerializable {
 		$this->setTimestamp($file->getMTime());
 		$this->setSize($file->getSize());
 		$this->setFileName($file->getName());
-		$this->setFilePath($file->getMountPoint()->getMountPoint() . $file->getInternalPath());
+		$this->setCollectivePath(explode('/', $file->getMountPoint()->getMountPoint(), 4)[3]);
+		$this->setFilePath($file->getInternalPath());
 		if (null !== $lastUserId) {
 			$this->setLastUserId($lastUserId);
 		}

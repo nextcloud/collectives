@@ -166,8 +166,8 @@ export default {
 		 * @returns {string}
 		 */
 		davPath() {
-			const parts = this.page.filePath.split('/')
-			parts.splice(2, 1)
+			const parts = this.filePath.split('/')
+			parts.unshift(this.getUser)
 			return parts
 				.map(p => encodeURIComponent(p))
 				.join('/')
@@ -178,9 +178,7 @@ export default {
 		 * @returns {string}
 		 */
 		filePath() {
-			const parts = this.page.filePath.split('/')
-			parts.splice(1, 2)
-			return parts.join('/')
+			return this.page.collectivePath + this.page.filePath
 		},
 
 		/**

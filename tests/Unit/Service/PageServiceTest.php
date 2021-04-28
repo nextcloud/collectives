@@ -90,7 +90,7 @@ class PageServiceTest extends TestCase {
 			$mountPoint = $this->getMockBuilder(MountPoint::class)
 				->disableOriginalConstructor()
 				->getMock();
-			$mountPoint->method('getMountPoint')->willReturn('');
+			$mountPoint->method('getMountPoint')->willReturn('/files/user/Collectives/collective/');
 
 			// Add all files to $filesNotJustMd
 			$file = $this->getMockBuilder(File::class)
