@@ -66,19 +66,22 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user creates page :page in :collective
+	 * @When user :user creates page :page with parentPath :parentPath in :collective
 	 *
 	 * @param string $user
 	 * @param string $page
+	 * @param string $parentPath
 	 * @param string $collective
 	 *
 	 * @throws GuzzleException
 	 */
-	public function userCreatesPage(string $user, string $page, string $collective): void {
+	public function userCreatesPage(string $user, string $page, string $parentPath, string $collective): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
-		$formData = new TableNode([['title', $page]]);
-		$this->sendRequest('POST', '/apps/collectives/_collectives/' . $collectiveId . '/_pages', $formData);
+		$parentId = $this->getParentId($collectiveId, $parentPath);
+
+		$formData = new TableNode([['title', $page], ['parentId', $parentId]]);
+		$this->sendRequest('POST', '/apps/collectives/_collectives/' . $collectiveId . '/_pages/parent/' . $parentId, $formData);
 		$this->assertStatusCode($this->response, 200);
 	}
 
@@ -104,20 +107,20 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @Then user :user sees page :page in :collective
+	 * @Then user :user sees pagePath :pagePath in :collective
 	 *
 	 * @param string $user
-	 * @param string $page
+	 * @param string $pagePath
 	 * @param string $collective
 	 *
 	 * @throws GuzzleException
 	 */
-	public function userSeesPage(string $user, string $page, string $collective): void {
+	public function userSeesPagePath(string $user, string $pagePath, string $collective): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$this->sendRequest('GET', '/apps/collectives/_collectives/' . $collectiveId . '/_pages');
 		$this->assertStatusCode($this->response, 200);
-		$this->assertPageByTitle($this->response, $page);
+		$this->assertPageByPath($this->response, $pagePath);
 	}
 
 	/**
@@ -142,20 +145,20 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @Then user :user doesn't see page :page in :collective
+	 * @Then user :user doesn't see pagePath :pagePath in :collective
 	 *
 	 * @param string $user
-	 * @param string $page
+	 * @param string $pagePath
 	 * @param string $collective
 	 *
 	 * @throws GuzzleException
 	 */
-	public function userDoesntSeePage(string $user, string $page, string $collective): void {
+	public function userDoesntSeePagePath(string $user, string $pagePath, string $collective): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$this->sendRequest('GET', '/apps/collectives/_collectives/' . $collectiveId . '/_pages');
 		$this->assertStatusCode($this->response, 200);
-		$this->assertPageByTitle($this->response, $page, true);
+		$this->assertPageByPath($this->response, $pagePath, true);
 	}
 
 	/**
@@ -282,55 +285,68 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user deletes page :page in :collective
+	 * @When user :user deletes page :page with parentPath :parentPath in :collective
+	 * @When user :user :fails to delete page :page with parentPath :parentPath in :collective
 	 *
-	 * @param string $user
-	 * @param string $page
-	 * @param string $collective
+	 * @param string      $user
+	 * @param string      $page
+	 * @param string      $collective
+	 * @param string      $parentPath
+	 * @param string|null $fail
 	 *
 	 * @throws GuzzleException
 	 */
-	public function userDeletesPage(string $user, string $page, string $collective): void {
+	public function userDeletesPage(string $user, string $page, string $collective, string $parentPath, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$pageId = $this->pageIdByName($collectiveId, $page);
-		$this->sendRequest('DELETE', '/apps/collectives/_collectives/' . $collectiveId . '/_pages/' . $pageId);
+		$parentId = $this->getParentId($collectiveId, $parentPath);
+		$this->sendRequest('DELETE', '/apps/collectives/_collectives/' . $collectiveId . '/_pages/parent/' . $parentId . '/page/' . $pageId);
+		if ("fails" === $fail) {
+			$this->assertStatusCode($this->response, 403);
+		} else {
+			$this->assertStatusCode($this->response, 200);
+		}
+	}
+
+	/**
+	 * @When user :user touches page :page with parentPath :parentPath in :collective
+	 *
+	 * @param string $user
+	 * @param string $page
+	 * @param string $parentPath
+	 * @param string $collective
+	 *
+	 * @throws GuzzleException
+	 * @throws JsonException
+	 */
+	public function userTouchesPage(string $user, string $page, string $parentPath, string $collective): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$pageId = $this->pageIdByName($collectiveId, $page);
+		$parentId = $this->getParentId($collectiveId, $parentPath);
+		$this->sendRequest('GET', '/apps/collectives/_collectives/' . $collectiveId . '/_pages/parent/' . $parentId . '/page/' . $pageId . '/touch');
 		$this->assertStatusCode($this->response, 200);
 	}
 
 	/**
-	 * @When user :user touches page :page in :collective
+	 * @When user :user renames page :page to :newtitle with parentPath :parentPath in :collective
 	 *
 	 * @param string $user
 	 * @param string $page
+	 * @param string $newtitle
+	 * @param string $parentPath
 	 * @param string $collective
 	 *
 	 * @throws GuzzleException
 	 */
-	public function userTouchesPage(string $user, string $page, string $collective): void {
+	public function userRenamesPage(string $user, string $page, string $newtitle, string $parentPath, string $collective): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$pageId = $this->pageIdByName($collectiveId, $page);
-		$this->sendRequest('GET', '/apps/collectives/_collectives/' . $collectiveId . '/_pages/' . $pageId . '/touch');
-		$this->assertStatusCode($this->response, 200);
-	}
-
-	/**
-	 * @When user :user renames page :page to :newpage in :collective
-	 *
-	 * @param string $user
-	 * @param string $page
-	 * @param string $newpage
-	 * @param string $collective
-	 *
-	 * @throws GuzzleException
-	 */
-	public function userRenamesPage(string $user, string $page, string $newpage, string $collective): void {
-		$this->setCurrentUser($user);
-		$collectiveId = $this->collectiveIdByName($collective);
-		$pageId = $this->pageIdByName($collectiveId, $page);
-		$formData = new TableNode([['title', $newpage]]);
-		$this->sendRequest('PUT', '/apps/collectives/_collectives/' . $collectiveId . '/_pages/' . $pageId, $formData);
+		$parentId = $this->getParentId($collectiveId, $parentPath);
+		$formData = new TableNode([['title', $newtitle]]);
+		$this->sendRequest('PUT', '/apps/collectives/_collectives/' . $collectiveId . '/_pages/parent/' . $parentId . '/page/' . $pageId, $formData);
 		$this->assertStatusCode($this->response, 200);
 	}
 
@@ -567,6 +583,24 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @param int    $collectiveId
+	 * @param string $parentPath
+	 *
+	 * @return int
+	 */
+	private function getParentId(int $collectiveId, string $parentPath): int {
+		$this->sendRequest('GET', '/apps/collectives/_collectives/' . $collectiveId . '/_pages');
+		$jsonBody = json_decode($this->response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
+		foreach ($jsonBody['data'] as $page) {
+			$path = $page['filePath'] ? $page['filePath'] . '/' . $page['fileName'] : $page['fileName'];
+			if ($parentPath === $path) {
+				return $page['id'];
+			}
+		}
+		throw new RuntimeException('Could not get parent page id for ' . $parentPath);
+	}
+
+	/**
 	 * @param Response $response
 	 * @param int      $statusCode
 	 * @param string   $message
@@ -595,19 +629,19 @@ class FeatureContext implements Context {
 
 	/**
 	 * @param Response  $response
-	 * @param string    $title
+	 * @param string    $path
 	 * @param bool|null $revert
 	 */
-	private function assertPageByTitle(Response $response, string $title, ?bool $revert = false): void {
+	private function assertPageByPath(Response $response, string $path, ?bool $revert = false): void {
 		$jsonBody = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
-		$pageTitles = [];
+		$pagePaths = [];
 		foreach ($jsonBody['data'] as $page) {
-			$pageTitles[] = $page['title'];
+			$pagePaths[] = $page['filePath'] ? $page['filePath'] . '/' . $page['fileName'] : $page['fileName'];
 		}
 		if (false === $revert) {
-			Assert::assertContains($title, $pageTitles);
+			Assert::assertContains($path, $pagePaths);
 		} else {
-			Assert::assertNotContains($title, $pageTitles);
+			Assert::assertNotContains($path, $pagePaths);
 		}
 	}
 

@@ -7,32 +7,30 @@ use OC\Files\Node\File;
 use OC\Files\Node\Folder;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
+use OCA\Collectives\Db\Page;
 use OCA\Collectives\Db\PageMapper;
 use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Model\PageFile;
-use OCA\Collectives\Service\NotFoundException;
-use OCA\Collectives\Service\PageDoesNotExistException;
 use OCA\Collectives\Service\PageService;
-use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\AppFramework\Db\MultipleObjectsReturnedException;
-use OCP\Files\AlreadyExistsException;
 use PHPUnit\Framework\TestCase;
 
 class PageServiceTest extends TestCase {
+	private $pageMapper;
+	private $nodeHelper;
 	private $collectiveFolder;
 	private $service;
 	private $userId = 'jane';
 	private $collective;
 
 	protected function setUp(): void {
-		$pageMapper = $this->getMockBuilder(PageMapper::class)
+		$this->pageMapper = $this->getMockBuilder(PageMapper::class)
 			->disableOriginalConstructor()
 			->getMock();
-		$pageMapper->method('findByFileId')
+		$this->pageMapper->method('findByFileId')
 			->willReturn(null);
 
-		$nodeHelper = $this->getMockBuilder(NodeHelper::class)
+		$this->nodeHelper = $this->getMockBuilder(NodeHelper::class)
 			->disableOriginalConstructor()
 			->getMock();
 
@@ -55,42 +53,125 @@ class PageServiceTest extends TestCase {
 		$userFolderHelper->method('get')
 			->willReturn($userFolder);
 
-		$this->service = new PageService($pageMapper, $nodeHelper, $collectiveMapper, $userFolderHelper);
+		$this->service = new PageService($this->pageMapper, $this->nodeHelper, $collectiveMapper, $userFolderHelper);
 
 		$this->collective = new Collective();
 		$this->collective->setCircleUniqueId('circleUniqueId');
 	}
 
-	public function testIsPage(): void {
-		$mountPoint = $this->getMockBuilder(MountPoint::class)
+	public function testGetFolder(): void {
+		$folder = $this->getMockBuilder(Folder::class)
 			->disableOriginalConstructor()
 			->getMock();
-		$mountPoint->method('getMountPoint')->willReturn('');
+		$file = $this->getMockBuilder(File::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$file->method('getParent')
+			->willReturn($folder);
+		$this->nodeHelper->method('getFileById')
+			->willReturn($file);
+		self::assertEquals($this->collectiveFolder, $this->service->getFolder($this->userId, $this->collective, 0));
+		self::assertEquals($folder, $this->service->getFolder($this->userId, $this->collective, 1));
+	}
 
+	public function testInitSubFolder(): void {
+		$subFolder = $this->getMockBuilder(Folder::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$folder = $this->getMockBuilder(Folder::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$folder->method('newFolder')
+			->willReturn($subFolder);
+		$indexFile = $this->getMockBuilder(File::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$indexFile->method('getParent')
+			->willReturn($folder);
+		$indexFile->method('getName')
+			->willReturn(PageFile::INDEX_PAGE_TITLE . PageFile::SUFFIX);
+		$otherFile = $this->getMockBuilder(File::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$otherFile->method('getParent')
+			->willReturn($folder);
+		$otherFile->method('getName')
+			->willReturn('something.md');
+
+		self::assertEquals($folder, $this->service->initSubFolder($indexFile));
+		self::assertEquals($subFolder, $this->service->initSubFolder($otherFile));
+	}
+
+	public function testIsPage(): void {
 		$file = $this->getMockBuilder(File::class)
 			->disableOriginalConstructor()
 			->getMock();
 		$file->method('getName')
 			->willReturnOnConsecutiveCalls(
-				'page.md', 'image.jpg'
+				'page.md', 'image.gz'
 			);
-		$file->method('getMountPoint')
-			->willReturn($mountPoint);
 
-		self::assertTrue($this->service->isPage($file));
-		self::assertFalse($this->service->isPage($file));
+		self::assertTrue(PageService::isPage($file));
+		self::assertFalse(PageService::isPage($file));
 	}
 
-	public function testFindAll(): void {
-		$fileNameList = [ 'page1.md', 'page2.md', 'page3.md', 'image.png', 'text.txt' ];
+	public function testIsIndexPage(): void {
+		$file = $this->getMockBuilder(File::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$file->method('getName')
+			->willReturnOnConsecutiveCalls(
+				'Readme.md', 'page.md'
+			);
+		self::assertTrue(PageService::isIndexPage($file));
+		self::assertFalse(PageService::isIndexPage($file));
+	}
+
+	public function testRecurseFolder(): void {
 		$filesNotJustMd = [];
 		$filesJustMd = [];
 		$pageFiles = [];
+
+		$folder = $this->getMockBuilder(Folder::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$folder->method('getParent')
+			->willReturn($folder);
+		$folder->method('getName')
+			->willReturn('testfolder');
+
+		$mountPoint = $this->getMockBuilder(MountPoint::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$mountPoint->method('getMountPoint')->willReturn('/files/user/Collectives/collective/');
+
+		$indexFile = $this->getMockBuilder(File::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$indexFile->method('getId')
+			->willReturn('101');
+		$indexFile->method('getName')
+			->willReturn('Readme.md');
+		$folder->method('get')
+			->willReturn($indexFile);
+		$indexFile->method('getParent')
+			->willReturn($folder);
+		$indexFile->method('getMountPoint')
+			->willReturn($mountPoint);
+		$indexPage = new Page();
+		$this->pageMapper->method('findByFileId')
+			->willReturn($indexPage);
+		$indexPageFile = new PageFile();
+		$indexPageFile->fromFile($indexFile, 1);
+		$indexPageFile->setParentId(101);
+		$indexPageFile->setTitle('testfolder');
+
+		$filesJustMd[] = $indexPageFile;
+		$filesNotJustMd[] = $indexPageFile;
+		$pageFiles[] = $indexPageFile;
+
+		$fileNameList = [ 'page1.md', 'page2.md', 'page3.md', 'another.jpg', 'whatever.txt' ];
 		foreach ($fileNameList as $fileName) {
-			$mountPoint = $this->getMockBuilder(MountPoint::class)
-				->disableOriginalConstructor()
-				->getMock();
-			$mountPoint->method('getMountPoint')->willReturn('/files/user/Collectives/collective/');
 
 			// Add all files to $filesNotJustMd
 			$file = $this->getMockBuilder(File::class)
@@ -100,53 +181,32 @@ class PageServiceTest extends TestCase {
 				->willReturn(1);
 			$file->method('getName')
 				->willReturn($fileName);
+			$file->method('getParent')
+				->willReturn($folder);
 			$file->method('getMountPoint')
 				->willReturn($mountPoint);
 			$filesNotJustMd[] = $file;
 
 			// Only add markdown files to $filesJustMd
-			if (!$this->service->isPage($file)) {
+			if (!PageService::isPage($file)) {
 				continue;
 			}
+
 			$filesJustMd[] = $file;
 
 			$pageFile = new PageFile();
-			$pageFile->fromFile($file, null);
+			$pageFile->fromFile($file, 1);
+			$pageFile->setParentId(101);
 			$pageFiles[] = $pageFile;
 		}
 
-		$this->collectiveFolder->method('getDirectoryListing')
+		$folder->method('getDirectoryListing')
 			->willReturnOnConsecutiveCalls(
 				$filesJustMd,
-				$filesNotJustMd
+				$filesNotJustMd,
 			);
 
-		self::assertEquals($pageFiles, $this->service->findAll($this->userId, $this->collective));
-		self::assertEquals($pageFiles, $this->service->findAll($this->userId, $this->collective));
-	}
-
-	public function testHandleExceptionDoesNotExistException(): void {
-		self::assertInstanceOf(NotFoundException::class,
-			$this->service->handleException(new DoesNotExistException('msg')));
-	}
-
-	public function testHandleExceptionMultipleObjectsReturnedException(): void {
-		self::assertInstanceOf(NotFoundException::class,
-			$this->service->handleException(new MultipleObjectsReturnedException('msg')));
-	}
-
-	public function testHandleExceptionAlreadyExistsException(): void {
-		self::assertInstanceOf(NotFoundException::class,
-			$this->service->handleException(new AlreadyExistsException('msg')));
-	}
-
-	public function testHandleExceptionPageDoesNotExistException(): void {
-		self::assertInstanceOf(NotFoundException::class,
-			$this->service->handleException(new PageDoesNotExistException('msg')));
-	}
-
-	public function testHandleExceptionOtherException(): void {
-		self::assertInstanceOf(\RuntimeException::class,
-			$this->service->handleException(new \RuntimeException('msg')));
+		self::assertEquals($pageFiles, $this->service->recurseFolder($this->userId, $folder));
+		self::assertEquals($pageFiles, $this->service->recurseFolder($this->userId, $folder));
 	}
 }
