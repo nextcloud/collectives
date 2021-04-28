@@ -71,12 +71,6 @@
     </UndefinedDocblockClass>
   </file>
   <file src="lib/Db/PageMapper.php">
-    <InvalidReturnStatement occurrences="1">
-      <code>$this-&gt;findEntities($qb)</code>
-    </InvalidReturnStatement>
-    <InvalidReturnType occurrences="1">
-      <code>Page[]</code>
-    </InvalidReturnType>
     <MoreSpecificImplementedParamType occurrences="1"/>
   </file>
   <file src="lib/Fs/UserFolderHelper.php">
