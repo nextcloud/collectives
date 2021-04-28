@@ -15,7 +15,7 @@ use OCP\AppFramework\Db\Entity;
  * @method string getCircleUniqueId()
  * @method void setCircleUniqueId(string $value)
  * @method int|null getTrashTimestamp()
- * @method void setTrashTimestamp(int $value = null)
+ * @method void setTrashTimestamp(?int $value)
  */
 class Collective extends Entity implements JsonSerializable {
 	/** @var string */
@@ -24,7 +24,7 @@ class Collective extends Entity implements JsonSerializable {
 	/** @var string */
 	protected $emoji;
 
-	/** @var int */
+	/** @var int|null */
 	protected $trashTimestamp;
 
 	/**

@@ -80,12 +80,6 @@
       <code>IRootFolder</code>
     </MissingDependency>
   </file>
-  <file src="lib/Model/CollectiveInfo.php">
-    <InvalidPropertyAssignmentValue occurrences="2">
-      <code>$collective-&gt;getEmoji()</code>
-      <code>$collective-&gt;getTrashTimestamp()</code>
-    </InvalidPropertyAssignmentValue>
-  </file>
   <file src="lib/Mount/CollectiveFolderManager.php">
     <InvalidArgument occurrences="3"/>
     <MissingDependency occurrences="4">

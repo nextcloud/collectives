@@ -168,7 +168,7 @@ class CollectiveMapper extends QBMapper {
 	 * @return Collective
 	 */
 	public function restore(Collective $collective): Collective {
-		$collective->setTrashTimestamp();
+		$collective->setTrashTimestamp(null);
 		return $this->update($collective);
 	}
 
