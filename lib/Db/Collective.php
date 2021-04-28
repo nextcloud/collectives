@@ -8,13 +8,13 @@ use OCP\AppFramework\Db\Entity;
 
 /**
  * Class Collective
- * @method integer getId()
- * @method void setId(integer $value)
- * @method integer getEmoji()
+ * @method int getId()
+ * @method void setId(int $value)
+ * @method string getEmoji()
  * @method void setEmoji(string $value)
  * @method string getCircleUniqueId()
  * @method void setCircleUniqueId(string $value)
- * @method string getTrashTimestamp()
+ * @method int|null getTrashTimestamp()
  * @method void setTrashTimestamp(int $value = null)
  */
 class Collective extends Entity implements JsonSerializable {

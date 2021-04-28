@@ -8,10 +8,10 @@ use OCP\AppFramework\Db\Entity;
 
 /**
  * Class Collective
- * @method integer getId()
- * @method void setId(integer $value)
- * @method integer getFileId()
- * @method void setFileId(integer $value)
+ * @method int getId()
+ * @method void setId(int $value)
+ * @method int getFileId()
+ * @method void setFileId(int $value)
  * @method string getLastUserId()
  * @method void setLastUserId(string $value)
  */

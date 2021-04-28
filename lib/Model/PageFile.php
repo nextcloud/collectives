@@ -11,13 +11,13 @@ use OCP\Files\NotFoundException;
 
 /**
  * Class PageFile
- * @method integer getId()
- * @method void setId(integer $value)
+ * @method int getId()
+ * @method void setId(int $value)
  * @method string getTitle()
  * @method void setTitle(string $value)
- * @method string getTimestamp()
+ * @method int getTimestamp()
  * @method void setTimestamp(int $value)
- * @method string getSize()
+ * @method int getSize()
  * @method void setSize(int $value)
  * @method string getFileName()
  * @method void setFileName(string $value)
