@@ -80,7 +80,7 @@ class PageService {
 	 * @return PageFile
 	 * @throws InvalidPathException
 	 */
-	private function getPage(File $file): PageFile {
+	private function getPageByFile(File $file): PageFile {
 		$pageFile = new PageFile();
 		$page = $this->pageMapper->findByFileId($file->getId());
 		$lastUserId = ($page !== null) ? $page->getLastUserId() : null;
@@ -124,7 +124,7 @@ class PageService {
 		$pageFiles = [];
 		foreach ($folder->getDirectoryListing() as $file) {
 			if ($file instanceof File && $this->isPage($file)) {
-				$pageFiles[] = $this->getPage($file);
+				$pageFiles[] = $this->getPageByFile($file);
 			}
 		}
 		return $pageFiles;
@@ -164,7 +164,7 @@ class PageService {
 	 */
 	public function find(string $userId, Collective $collective, int $id): PageFile {
 		$folder = $this->getCollectiveFolder($userId, $collective);
-		return $this->getPage($this->nodeHelper->getFileById($folder, $id));
+		return $this->getPageByFile($this->nodeHelper->getFileById($folder, $id));
 	}
 
 	/**
@@ -253,7 +253,7 @@ class PageService {
 
 			$this->updatePage($file->getId(), $userId);
 
-			return $this->getPage($file);
+			return $this->getPageByFile($file);
 		} catch (Exception $e) {
 			throw $this->handleException($e);
 		}
