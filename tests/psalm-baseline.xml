@@ -153,11 +153,6 @@
     </UndefinedDocblockClass>
   </file>
   <file src="lib/Service/PageService.php">
-    <InvalidReturnType occurrences="3">
-      <code>PageFile</code>
-      <code>PageFile</code>
-      <code>PageFile</code>
-    </InvalidReturnType>
     <UndefinedDocblockClass occurrences="4">
       <code>CircleDoesNotExistException</code>
       <code>CircleDoesNotExistException</code>

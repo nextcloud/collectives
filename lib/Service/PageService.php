@@ -89,22 +89,6 @@ class PageService {
 	}
 
 	/**
-	 * @param $e
-	 *
-	 * @throws NotFoundException
-	 */
-	public function handleException(Exception $e): void {
-		if ($e instanceof DoesNotExistException ||
-			$e instanceof MultipleObjectsReturnedException ||
-			$e instanceof AlreadyExistsException ||
-			$e instanceof PageDoesNotExistException) {
-			throw new NotFoundException($e->getMessage());
-		}
-
-		throw $e;
-	}
-
-	/**
 	 * @param string     $userId
 	 * @param Collective $collective
 	 *
@@ -168,6 +152,22 @@ class PageService {
 	}
 
 	/**
+	 * @param Exception $e
+	 *
+	 * @return Exception
+	 */
+	public function handleException(Exception $e): Exception {
+		if ($e instanceof DoesNotExistException ||
+			$e instanceof MultipleObjectsReturnedException ||
+			$e instanceof AlreadyExistsException ||
+			$e instanceof PageDoesNotExistException) {
+			return new NotFoundException($e->getMessage());
+		}
+
+		return $e;
+	}
+
+	/**
 	 * @param string     $userId
 	 * @param Collective $collective
 	 * @param string     $title
@@ -209,7 +209,7 @@ class PageService {
 			$this->updatePage($pageFile->getId(), $userId);
 			return $pageFile;
 		} catch (Exception $e) {
-			$this->handleException($e);
+			throw $this->handleException($e);
 		}
 	}
 
@@ -243,7 +243,7 @@ class PageService {
 
 			return $this->getPage($file);
 		} catch (Exception $e) {
-			$this->handleException($e);
+			throw $this->handleException($e);
 		}
 	}
 
@@ -266,7 +266,7 @@ class PageService {
 			$this->pageMapper->deleteByFileId($pageFile->getId());
 			return $pageFile;
 		} catch (Exception $e) {
-			$this->handleException($e);
+			throw $this->handleException($e);
 		}
 	}
 }
