@@ -27,7 +27,7 @@ use OCP\Files\NotFoundException;
  * @method void setLastUserId(string $value)
  */
 class PageFile extends Entity implements JsonSerializable {
-	private const SUFFIX = '.md';
+	public const SUFFIX = '.md';
 
 	protected $title;
 	protected $timestamp;

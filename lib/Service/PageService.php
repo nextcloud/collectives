@@ -19,7 +19,6 @@ use OCP\Files\NotPermittedException;
 
 class PageService {
 	private const DEFAULT_PAGE_TITLE = 'New Page';
-	private const SUFFIX = '.md';
 
 	/** @var PageMapper */
 	private $pageMapper;
@@ -84,8 +83,8 @@ class PageService {
 	 */
 	public function isPage(File $file): bool {
 		$name = $file->getName();
-		$length = strlen(self::SUFFIX);
-		return (substr($name, -$length) === self::SUFFIX);
+		$length = strlen(PageFile::SUFFIX);
+		return (substr($name, -$length) === PageFile::SUFFIX);
 	}
 
 	/**
@@ -192,9 +191,9 @@ class PageService {
 			$this->collectiveMapper->circleUniqueIdToName($collective->getCircleUniqueId()),
 			$userId);
 		$safeTitle = $this->nodeHelper->sanitiseFilename($title, self::DEFAULT_PAGE_TITLE);
-		$filename = NodeHelper::generateFilename($folder, $safeTitle, self::SUFFIX);
+		$filename = NodeHelper::generateFilename($folder, $safeTitle, PageFile::SUFFIX);
 
-		$file = $folder->newFile($filename . self::SUFFIX);
+		$file = $folder->newFile($filename . PageFile::SUFFIX);
 
 		$pageFile = new PageFile();
 		$pageFile->fromFile($file, $userId);
@@ -248,9 +247,9 @@ class PageService {
 			$safeTitle = $this->nodeHelper->sanitiseFilename($title, self::DEFAULT_PAGE_TITLE);
 
 			// Rename file if title changed
-			if ($safeTitle . self::SUFFIX !== $file->getName()) {
-				$newFilename = NodeHelper::generateFilename($folder, $safeTitle, self::SUFFIX);
-				$file->move($folder->getPath() . '/' . $newFilename . self::SUFFIX);
+			if ($safeTitle . PageFile::SUFFIX !== $file->getName()) {
+				$newFilename = NodeHelper::generateFilename($folder, $safeTitle, PageFile::SUFFIX);
+				$file->move($folder->getPath() . '/' . $newFilename . PageFile::SUFFIX);
 				$pageFile->setTitle($newFilename);
 			}
 
