@@ -197,13 +197,14 @@ class CollectiveFolderManager {
 	 * @throws NotPermittedException
 	 */
 	public function createFolder(int $id, string $lang): void {
-		$landingPageFileName = self::LANDING_PAGE_TITLE . self::SUFFIX;
 		try {
 			$folder = $this->getFolder($id);
 		} catch (NotFoundException $e) {
 			$folder = $this->getSkeletonFolder($this->getRootFolder())
 				->copy($this->getRootFolder()->getPath() . '/' . $id);
 		}
+
+		$landingPageFileName = self::LANDING_PAGE_TITLE . self::SUFFIX;
 		if (!$folder->nodeExists($landingPageFileName)) {
 			$landingPageDir = __DIR__ . '/../../' . self::SKELETON_DIR;
 			$landingPagePath = $this->getLandingPagePath($landingPageDir, $lang);

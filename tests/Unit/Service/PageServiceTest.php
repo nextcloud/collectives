@@ -40,17 +40,23 @@ class PageServiceTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
-		$userFolderHelper = $this->getMockBuilder(UserFolderHelper::class)
-			->disableOriginalConstructor()
-			->getMock();
-
-		$this->service = new PageService($pageMapper, $nodeHelper, $collectiveMapper, $userFolderHelper);
-
 		$this->collectiveFolder = $this->getMockBuilder(Folder::class)
 			->disableOriginalConstructor()
 			->getMock();
-		$userFolderHelper->method('getCollectiveFolder')
+
+		$userFolder = $this->getMockBuilder(Folder::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$userFolder->method('get')
 			->willReturn($this->collectiveFolder);
+		$userFolderHelper = $this->getMockBuilder(UserFolderHelper::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$userFolderHelper->method('get')
+			->willReturn($userFolder);
+
+		$this->service = new PageService($pageMapper, $nodeHelper, $collectiveMapper, $userFolderHelper);
+
 		$this->collective = new Collective();
 		$this->collective->setCircleUniqueId('circleUniqueId');
 	}
@@ -120,27 +126,27 @@ class PageServiceTest extends TestCase {
 	}
 
 	public function testHandleExceptionDoesNotExistException(): void {
-		$this->expectException(NotFoundException::class);
-		$this->service->handleException(new DoesNotExistException('msg'));
+		self::assertInstanceOf(NotFoundException::class,
+			$this->service->handleException(new DoesNotExistException('msg')));
 	}
 
 	public function testHandleExceptionMultipleObjectsReturnedException(): void {
-		$this->expectException(NotFoundException::class);
-		$this->service->handleException(new MultipleObjectsReturnedException('msg'));
+		self::assertInstanceOf(NotFoundException::class,
+			$this->service->handleException(new MultipleObjectsReturnedException('msg')));
 	}
 
 	public function testHandleExceptionAlreadyExistsException(): void {
-		$this->expectException(NotFoundException::class);
-		$this->service->handleException(new AlreadyExistsException('msg'));
+		self::assertInstanceOf(NotFoundException::class,
+			$this->service->handleException(new AlreadyExistsException('msg')));
 	}
 
 	public function testHandleExceptionPageDoesNotExistException(): void {
-		$this->expectException(NotFoundException::class);
-		$this->service->handleException(new PageDoesNotExistException('msg'));
+		self::assertInstanceOf(NotFoundException::class,
+			$this->service->handleException(new PageDoesNotExistException('msg')));
 	}
 
 	public function testHandleExceptionOtherException(): void {
-		$this->expectException(\RuntimeException::class);
-		$this->service->handleException(new \RuntimeException('msg'));
+		self::assertInstanceOf(\RuntimeException::class,
+			$this->service->handleException(new \RuntimeException('msg')));
 	}
 }

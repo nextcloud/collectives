@@ -79,9 +79,6 @@
       <code>IRootFolder</code>
       <code>IRootFolder</code>
     </MissingDependency>
-    <UndefinedClass occurrences="1">
-      <code>NoUserException</code>
-    </UndefinedClass>
   </file>
   <file src="lib/Model/CollectiveInfo.php">
     <InvalidPropertyAssignmentValue occurrences="2">
@@ -153,12 +150,9 @@
     </UndefinedDocblockClass>
   </file>
   <file src="lib/Service/PageService.php">
-    <UndefinedDocblockClass occurrences="4">
+    <UndefinedClass occurrences="1">
       <code>CircleDoesNotExistException</code>
-      <code>CircleDoesNotExistException</code>
-      <code>CircleDoesNotExistException</code>
-      <code>CircleDoesNotExistException</code>
-    </UndefinedDocblockClass>
+    </UndefinedClass>
   </file>
   <file src="lib/Versions/CollectiveVersion.php">
     <UndefinedClass occurrences="1">
