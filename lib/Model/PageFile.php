@@ -11,29 +11,45 @@ use OCP\Files\NotFoundException;
 
 /**
  * Class PageFile
- * @method integer getId()
- * @method void setId(integer $value)
+ * @method int getId()
+ * @method void setId(int $value)
  * @method string getTitle()
  * @method void setTitle(string $value)
- * @method string getTimestamp()
+ * @method int getTimestamp()
  * @method void setTimestamp(int $value)
- * @method string getSize()
+ * @method int getSize()
  * @method void setSize(int $value)
  * @method string getFileName()
  * @method void setFileName(string $value)
  * @method string getFilePath()
  * @method void setFilePath(string $value)
+ * @method string getCollectivePath()
+ * @method void setCollectivePath(string $value)
  * @method string getLastUserId()
  * @method void setLastUserId(string $value)
  */
 class PageFile extends Entity implements JsonSerializable {
-	private const SUFFIX = '.md';
+	public const SUFFIX = '.md';
 
+	/** @var string */
 	protected $title;
+
+	/** @var int */
 	protected $timestamp;
+
+	/** @var int */
 	protected $size;
+
+	/** @var string */
 	protected $fileName;
+
+	/** @var string */
 	protected $filePath;
+
+	/** @var string */
+	protected $collectivePath;
+
+	/** @var string */
 	protected $lastUserId;
 
 	public function jsonSerialize() {
@@ -44,6 +60,7 @@ class PageFile extends Entity implements JsonSerializable {
 			'size' => $this->size,
 			'fileName' => $this->fileName,
 			'filePath' => $this->filePath,
+			'collectivePath' => $this->collectivePath,
 			'lastUserId' => $this->lastUserId,
 		];
 	}
@@ -61,7 +78,8 @@ class PageFile extends Entity implements JsonSerializable {
 		$this->setTimestamp($file->getMTime());
 		$this->setSize($file->getSize());
 		$this->setFileName($file->getName());
-		$this->setFilePath($file->getMountPoint()->getMountPoint() . $file->getInternalPath());
+		$this->setCollectivePath(explode('/', $file->getMountPoint()->getMountPoint(), 4)[3]);
+		$this->setFilePath($file->getInternalPath());
 		if (null !== $lastUserId) {
 			$this->setLastUserId($lastUserId);
 		}

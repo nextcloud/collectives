@@ -6,10 +6,10 @@ use OCA\Collectives\Db\Collective;
 
 /**
  * Class CollectiveInfo
- * @method integer getAdmin()
- * @method void setAdmin(bool $value)
  * @method string getName()
  * @method void setName(string $value)
+ * @method int getAdmin()
+ * @method void setAdmin(bool $value)
  */
 class CollectiveInfo extends Collective {
 	/** @var string */

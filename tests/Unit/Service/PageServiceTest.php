@@ -23,6 +23,7 @@ class PageServiceTest extends TestCase {
 	private $collectiveFolder;
 	private $service;
 	private $userId = 'jane';
+	private $collective;
 
 	protected function setUp(): void {
 		$pageMapper = $this->getMockBuilder(PageMapper::class)
@@ -39,25 +40,25 @@ class PageServiceTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
-		$userFolderHelper = $this->getMockBuilder(UserFolderHelper::class)
-			->disableOriginalConstructor()
-			->getMock();
-
-		$this->service = new PageService($pageMapper, $nodeHelper, $collectiveMapper, $userFolderHelper);
-
 		$this->collectiveFolder = $this->getMockBuilder(Folder::class)
 			->disableOriginalConstructor()
 			->getMock();
-		$userFolderHelper->method('getCollectiveFolder')
+
+		$userFolder = $this->getMockBuilder(Folder::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$userFolder->method('get')
 			->willReturn($this->collectiveFolder);
-		$collective = new Collective();
-		$collective->setCircleUniqueId('circleUniqueId');
-		$collectiveMapper->method('findById')
-			->willReturnMap([
-				[1, $this->userId, $collective],
-				[2, $this->userId, $collective],
-				[3, $this->userId, null]
-			]);
+		$userFolderHelper = $this->getMockBuilder(UserFolderHelper::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$userFolderHelper->method('get')
+			->willReturn($userFolder);
+
+		$this->service = new PageService($pageMapper, $nodeHelper, $collectiveMapper, $userFolderHelper);
+
+		$this->collective = new Collective();
+		$this->collective->setCircleUniqueId('circleUniqueId');
 	}
 
 	public function testIsPage(): void {
@@ -89,7 +90,7 @@ class PageServiceTest extends TestCase {
 			$mountPoint = $this->getMockBuilder(MountPoint::class)
 				->disableOriginalConstructor()
 				->getMock();
-			$mountPoint->method('getMountPoint')->willReturn('');
+			$mountPoint->method('getMountPoint')->willReturn('/files/user/Collectives/collective/');
 
 			// Add all files to $filesNotJustMd
 			$file = $this->getMockBuilder(File::class)
@@ -120,37 +121,32 @@ class PageServiceTest extends TestCase {
 				$filesNotJustMd
 			);
 
-		self::assertEquals($pageFiles, $this->service->findAll($this->userId, 1));
-		self::assertEquals($pageFiles, $this->service->findAll($this->userId, 2));
-	}
-
-	public function testFindAllCollectiveNotFoundException(): void {
-		$this->expectException(NotFoundException::class);
-		$this->service->findAll($this->userId, 3);
+		self::assertEquals($pageFiles, $this->service->findAll($this->userId, $this->collective));
+		self::assertEquals($pageFiles, $this->service->findAll($this->userId, $this->collective));
 	}
 
 	public function testHandleExceptionDoesNotExistException(): void {
-		$this->expectException(NotFoundException::class);
-		$this->service->handleException(new DoesNotExistException('msg'));
+		self::assertInstanceOf(NotFoundException::class,
+			$this->service->handleException(new DoesNotExistException('msg')));
 	}
 
 	public function testHandleExceptionMultipleObjectsReturnedException(): void {
-		$this->expectException(NotFoundException::class);
-		$this->service->handleException(new MultipleObjectsReturnedException('msg'));
+		self::assertInstanceOf(NotFoundException::class,
+			$this->service->handleException(new MultipleObjectsReturnedException('msg')));
 	}
 
 	public function testHandleExceptionAlreadyExistsException(): void {
-		$this->expectException(NotFoundException::class);
-		$this->service->handleException(new AlreadyExistsException('msg'));
+		self::assertInstanceOf(NotFoundException::class,
+			$this->service->handleException(new AlreadyExistsException('msg')));
 	}
 
 	public function testHandleExceptionPageDoesNotExistException(): void {
-		$this->expectException(NotFoundException::class);
-		$this->service->handleException(new PageDoesNotExistException('msg'));
+		self::assertInstanceOf(NotFoundException::class,
+			$this->service->handleException(new PageDoesNotExistException('msg')));
 	}
 
 	public function testHandleExceptionOtherException(): void {
-		$this->expectException(\RuntimeException::class);
-		$this->service->handleException(new \RuntimeException('msg'));
+		self::assertInstanceOf(\RuntimeException::class,
+			$this->service->handleException(new \RuntimeException('msg')));
 	}
 }

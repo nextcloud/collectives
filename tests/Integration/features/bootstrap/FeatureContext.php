@@ -492,7 +492,12 @@ class FeatureContext implements Context {
 		}
 
 		// Add Xdebug trigger variable as GET parameter
-		$fullUrl .= '?XDEBUG_SESSION=PHPSTORM';
+		$xdebugSession = 'XDEBUG_SESSION=PHPSTORM';
+		if (false !== strpos($fullUrl, '?')) {
+			$fullUrl .= '&' . $xdebugSession;
+		} else {
+			$fullUrl .= '?' . $xdebugSession;
+		}
 
 		try {
 			$this->response = $client->{$verb}($fullUrl, $options);

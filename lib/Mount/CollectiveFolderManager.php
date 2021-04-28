@@ -14,8 +14,8 @@ use OCP\IDBConnection;
 
 class CollectiveFolderManager {
 	private const SKELETON_DIR = 'skeleton';
-	private const LANDING_PAGE = 'Readme';
-	private const LANDING_PAGE_SUFFIX = 'md';
+	private const LANDING_PAGE_TITLE = 'Readme';
+	private const SUFFIX = '.md';
 
 	/** @var IRootFolder */
 	private $rootFolder;
@@ -114,13 +114,14 @@ class CollectiveFolderManager {
 	}
 
 	/**
+	 * @param string $path
 	 * @param string $lang
 	 *
 	 * @return string
 	 */
 	public function getLandingPagePath(string $path, string $lang): string {
-		$landingPagePathEnglish = $path . '/' . self::LANDING_PAGE . '.en.' . self::LANDING_PAGE_SUFFIX;
-		$landingPagePathLocalized = $path . '/' . self::LANDING_PAGE . '.' . $lang . '.' . self::LANDING_PAGE_SUFFIX;
+		$landingPagePathEnglish = $path . '/' . self::LANDING_PAGE_TITLE . '.en' . self::SUFFIX;
+		$landingPagePathLocalized = $path . '/' . self::LANDING_PAGE_TITLE . '.' . $lang . self::SUFFIX;
 
 		return file_exists($landingPagePathLocalized) ? $landingPagePathLocalized : $landingPagePathEnglish;
 	}
@@ -129,7 +130,6 @@ class CollectiveFolderManager {
 	 * @param int $id
 	 *
 	 * @return array
-	 *
 	 * @throws NotFoundException
 	 */
 	public function getFolderFileCache(int $id): array {
@@ -196,14 +196,15 @@ class CollectiveFolderManager {
 	 * @throws InvalidPathException
 	 * @throws NotPermittedException
 	 */
-	public function createFolder(int $id, string $lang) {
-		$landingPageFileName = self::LANDING_PAGE . '.' . self::LANDING_PAGE_SUFFIX;
+	public function createFolder(int $id, string $lang): void {
 		try {
 			$folder = $this->getFolder($id);
 		} catch (NotFoundException $e) {
 			$folder = $this->getSkeletonFolder($this->getRootFolder())
 				->copy($this->getRootFolder()->getPath() . '/' . $id);
 		}
+
+		$landingPageFileName = self::LANDING_PAGE_TITLE . self::SUFFIX;
 		if (!$folder->nodeExists($landingPageFileName)) {
 			$landingPageDir = __DIR__ . '/../../' . self::SKELETON_DIR;
 			$landingPagePath = $this->getLandingPagePath($landingPageDir, $lang);

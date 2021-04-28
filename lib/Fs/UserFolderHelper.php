@@ -3,7 +3,6 @@
 
 namespace OCA\Collectives\Fs;
 
-use OC\User\NoUserException;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
@@ -44,6 +43,7 @@ class UserFolderHelper {
 	 * @param string $userId
 	 *
 	 * @return Folder
+	 * @throws NotPermittedException
 	 */
 	private function initialize(string $userId): Folder {
 		$userFolder = $this->rootFolder->getUserFolder($userId);
@@ -54,8 +54,8 @@ class UserFolderHelper {
 			$userCollectivesFolder = $userFolder->get($userCollectivesPath);
 			// Rename existing node if it's not a folder
 			if (!$userCollectivesFolder instanceof Folder) {
-				$newFolderName = NodeHelper::generateFilename($userFolder, $userCollectivesPath);
-				$userCollectivesFolder->move($userFolder->getPath() . '/' . $newFolderName);
+				$new = NodeHelper::generateFilename($userFolder, $userCollectivesPath);
+				$userCollectivesFolder->move($userFolder->getPath() . '/' . $new);
 				$userCollectivesFolder = $userFolder->newFolder($userCollectivesPath);
 			}
 		} catch (NotFoundException $e) {
@@ -69,6 +69,7 @@ class UserFolderHelper {
 	 * @param string $userId
 	 *
 	 * @return Folder
+	 * @throws NotPermittedException
 	 */
 	public function get(string $userId): Folder {
 		if (!$this->userCollectivesFolder) {
@@ -76,25 +77,5 @@ class UserFolderHelper {
 		}
 
 		return $this->userCollectivesFolder;
-	}
-
-	/**
-	 * @param string $collectiveName
-	 * @param string $userId
-	 *
-	 * @return Folder
-	 * @throws NotFoundException
-	 */
-	public function getCollectiveFolder(string $collectiveName, string $userId): Folder {
-		try {
-			$folder = $this->get($userId)->get($collectiveName);
-		} catch (\OCP\Files\NotFoundException | NotPermittedException | NoUserException $e) {
-			throw new NotFoundException('Folder not found for collective ' . $collectiveName);
-		}
-
-		if (!($folder instanceof Folder)) {
-			throw new NotFoundException('Folder not found for collective ' . $collectiveName);
-		}
-		return $folder;
 	}
 }

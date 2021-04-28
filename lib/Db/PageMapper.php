@@ -9,11 +9,10 @@ use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
 /**
- * @method Page insert(Page $page) : Page
- * @method Page update(Page $page) : Page
- * @method Page delete(Page $page) : Page
- * @method Page findEntities(IQueryBuilder $query) : Page[]
- * @method Page findEntity(IQueryBuilder $query) : Page
+ * @method Page insert(Page $page)
+ * @method Page update(Page $page)
+ * @method Page delete(Page $page)
+ * @method Page findEntity(IQueryBuilder $query)
  */
 class PageMapper extends QBMapper {
 	/**

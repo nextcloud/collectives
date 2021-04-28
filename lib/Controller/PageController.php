@@ -2,6 +2,9 @@
 
 namespace OCA\Collectives\Controller;
 
+use OCA\Collectives\Db\Collective;
+use OCA\Collectives\Db\CollectiveMapper;
+use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\PageService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
@@ -12,6 +15,9 @@ use Psr\Log\LoggerInterface;
 class PageController extends Controller {
 	/** @var PageService */
 	private $service;
+
+	/** @var CollectiveMapper */
+	private $collectiveMapper;
 
 	/** @var IUserSession */
 	private $userSession;
@@ -24,10 +30,12 @@ class PageController extends Controller {
 	public function __construct(string $appName,
 								IRequest $request,
 								PageService $service,
+								CollectiveMapper $collectiveMapper,
 								IUserSession $userSession,
 								LoggerInterface $logger) {
 		parent::__construct($appName, $request);
 		$this->service = $service;
+		$this->collectiveMapper = $collectiveMapper;
 		$this->userSession = $userSession;
 		$this->logger = $logger;
 	}
@@ -40,13 +48,29 @@ class PageController extends Controller {
 	}
 
 	/**
+	 * @param int $collectiveId
+	 *
+	 * @return Collective
+	 * @throws NotFoundException
+	 */
+	private function getCollective(int $collectiveId): Collective {
+		if (null === $collective = $this->collectiveMapper->findById($collectiveId, $this->getUserId())) {
+			throw new NotFoundException('Collective not found: '. $collectiveId);
+		}
+
+		return $collective;
+	}
+
+	/**
 	 * @NoAdminRequired
 	 *
 	 * @param int $collectiveId
+	 *
+	 * @return DataResponse
 	 */
 	public function index(int $collectiveId): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId) {
-			$pages = $this->service->findAll($this->getUserId(), $collectiveId);
+			$pages = $this->service->findAll($this->getUserId(), $this->getCollective($collectiveId));
 			return [
 				"data" => $pages
 			];
@@ -63,7 +87,7 @@ class PageController extends Controller {
 	 */
 	public function get(int $collectiveId, int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $id) {
-			$page = $this->service->find($this->getUserId(), $collectiveId, $id);
+			$page = $this->service->find($this->getUserId(), $this->getCollective($collectiveId), $id);
 			return [
 				"data" => $page
 			];
@@ -80,7 +104,7 @@ class PageController extends Controller {
 	 */
 	public function create(int $collectiveId, string $title): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $title) {
-			$page = $this->service->create($this->getUserId(), $collectiveId, $title);
+			$page = $this->service->create($this->getUserId(), $this->getCollective($collectiveId), $title);
 			return [
 				"data" => $page
 			];
@@ -97,7 +121,7 @@ class PageController extends Controller {
 	 */
 	public function touch(int $collectiveId, int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $id) {
-			$page = $this->service->touch($this->getUserId(), $collectiveId, $id);
+			$page = $this->service->touch($this->getUserId(), $this->getCollective($collectiveId), $id);
 			return [
 				"data" => $page
 			];
@@ -115,7 +139,7 @@ class PageController extends Controller {
 	 */
 	public function rename(int $collectiveId, int $id, string $title): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $id, $title) {
-			$page = $this->service->rename($this->getUserId(), $collectiveId, $id, $title);
+			$page = $this->service->rename($this->getUserId(), $this->getCollective($collectiveId), $id, $title);
 			return [
 				"data" => $page
 			];
@@ -132,7 +156,7 @@ class PageController extends Controller {
 	 */
 	public function destroy(int $collectiveId, int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $id) {
-			$page = $this->service->delete($this->getUserId(), $collectiveId, $id);
+			$page = $this->service->delete($this->getUserId(), $this->getCollective($collectiveId), $id);
 			return [
 				"data" => $page
 			];

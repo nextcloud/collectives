@@ -16,10 +16,10 @@ use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
 /**
- * @method Collective insert(Collective $collective) : Collective
- * @method Collective delete(Collective $collective) : Collective
- * @method Collective findEntity(IQueryBuilder $query) : Collective
- * @method Collective update(Collective $collective) : Collective
+ * @method Collective insert(Collective $collective)
+ * @method Collective delete(Collective $collective)
+ * @method Collective findEntity(IQueryBuilder $query)
+ * @method Collective update(Collective $collective)
  */
 class CollectiveMapper extends QBMapper {
 	/** @var CirclesRequest */
@@ -168,7 +168,7 @@ class CollectiveMapper extends QBMapper {
 	 * @return Collective
 	 */
 	public function restore(Collective $collective): Collective {
-		$collective->setTrashTimestamp();
+		$collective->setTrashTimestamp(null);
 		return $this->update($collective);
 	}
 
