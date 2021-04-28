@@ -164,7 +164,8 @@
       <code>PageFile</code>
       <code>PageFile</code>
     </InvalidReturnType>
-    <UndefinedDocblockClass occurrences="3">
+    <UndefinedDocblockClass occurrences="4">
+      <code>CircleDoesNotExistException</code>
       <code>CircleDoesNotExistException</code>
       <code>CircleDoesNotExistException</code>
       <code>CircleDoesNotExistException</code>

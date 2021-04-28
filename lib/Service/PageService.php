@@ -4,6 +4,7 @@ namespace OCA\Collectives\Service;
 
 use Exception;
 use OCA\Circles\Exceptions\CircleDoesNotExistException;
+use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Db\Page;
 use OCA\Collectives\Db\PageMapper;
@@ -104,19 +105,15 @@ class PageService {
 	}
 
 	/**
-	 * @param string $userId
-	 * @param int    $collectiveId
+	 * @param string     $userId
+	 * @param Collective $collective
 	 *
 	 * @return array
 	 * @throws CircleDoesNotExistException
 	 * @throws InvalidPathException
-	 * @throws NotFoundException
 	 * @throws \OCP\Files\NotFoundException
 	 */
-	public function findAll(string $userId, int $collectiveId): array {
-		if (null === $collective = $this->collectiveMapper->findById($collectiveId, $userId)) {
-			throw new NotFoundException('Collective not found: '. $collectiveId);
-		}
+	public function findAll(string $userId, Collective $collective): array {
 		$folder = $this->userFolderHelper->getCollectiveFolder(
 			$this->collectiveMapper->circleUniqueIdToName($collective->getCircleUniqueId()),
 			$userId);
@@ -130,16 +127,17 @@ class PageService {
 	}
 
 	/**
-	 * @param string $userId
-	 * @param int    $collectiveId
-	 * @param string $search
+	 * @param string     $userId
+	 * @param Collective $collective
+	 * @param string     $search
 	 *
 	 * @return PageFile[]
-	 * @throws NotFoundException
+	 * @throws CircleDoesNotExistException
+	 * @throws InvalidPathException
 	 * @throws \OCP\Files\NotFoundException
 	 */
-	public function findByString(string $userId, int $collectiveId, string $search): array {
-		$allPageFiles = $this->findAll($userId, $collectiveId);
+	public function findByString(string $userId, Collective $collective, string $search): array {
+		$allPageFiles = $this->findAll($userId, $collective);
 		$pageFiles = [];
 		foreach ($allPageFiles as $page) {
 			if (stripos($page->getFileName(), $search) === false) {
@@ -152,19 +150,17 @@ class PageService {
 	}
 
 	/**
-	 * @param string $userId
-	 * @param int    $collectiveId
-	 * @param int    $id
+	 * @param string     $userId
+	 * @param Collective $collective
+	 * @param int        $id
 	 *
 	 * @return PageFile
 	 * @throws CircleDoesNotExistException
-	 * @throws NotFoundException
+	 * @throws InvalidPathException
 	 * @throws PageDoesNotExistException
+	 * @throws \OCP\Files\NotFoundException
 	 */
-	public function find(string $userId, int $collectiveId, int $id): PageFile {
-		if (null === $collective = $this->collectiveMapper->findById($collectiveId, $userId)) {
-			throw new NotFoundException('Collective not found: '. $collectiveId);
-		}
+	public function find(string $userId, Collective $collective, int $id): PageFile {
 		$folder = $this->userFolderHelper->getCollectiveFolder(
 			$this->collectiveMapper->circleUniqueIdToName($collective->getCircleUniqueId()),
 			$userId);
@@ -172,21 +168,17 @@ class PageService {
 	}
 
 	/**
-	 * @param string $userId
-	 * @param int    $collectiveId
-	 * @param string $title
+	 * @param string     $userId
+	 * @param Collective $collective
+	 * @param string     $title
 	 *
 	 * @return PageFile
 	 * @throws CircleDoesNotExistException
 	 * @throws InvalidPathException
-	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 * @throws \OCP\Files\NotFoundException
 	 */
-	public function create(string $userId, int $collectiveId, string $title): PageFile {
-		if (null === $collective = $this->collectiveMapper->findById($collectiveId, $userId)) {
-			throw new NotFoundException('Collective not found: '. $collectiveId);
-		}
+	public function create(string $userId, Collective $collective, string $title): PageFile {
 		$folder = $this->userFolderHelper->getCollectiveFolder(
 			$this->collectiveMapper->circleUniqueIdToName($collective->getCircleUniqueId()),
 			$userId);
@@ -203,19 +195,16 @@ class PageService {
 	}
 
 	/**
-	 * @param string $userId
-	 * @param int    $collectiveId
-	 * @param int    $id
+	 * @param string     $userId
+	 * @param Collective $collective
+	 * @param int        $id
 	 *
 	 * @return PageFile
 	 * @throws NotFoundException
 	 */
-	public function touch(string $userId, int $collectiveId, int $id): PageFile {
-		if (null === $this->collectiveMapper->findById($collectiveId, $userId)) {
-			throw new NotFoundException('Collective not found: ' . $collectiveId);
-		}
+	public function touch(string $userId, Collective $collective, int $id): PageFile {
 		try {
-			$pageFile = $this->find($userId, $collectiveId, $id);
+			$pageFile = $this->find($userId, $collective, $id);
 			$pageFile->setLastUserId($userId);
 			$this->updatePage($pageFile->getId(), $userId);
 			return $pageFile;
@@ -225,20 +214,17 @@ class PageService {
 	}
 
 	/**
-	 * @param string $userId
-	 * @param int    $collectiveId
-	 * @param int    $id
-	 * @param string $title
+	 * @param string     $userId
+	 * @param Collective $collective
+	 * @param int        $id
+	 * @param string     $title
 	 *
 	 * @return PageFile
 	 * @throws NotFoundException
 	 */
-	public function rename(string $userId, int $collectiveId, int $id, string $title): PageFile {
-		if (null === $collective = $this->collectiveMapper->findById($collectiveId, $userId)) {
-			throw new NotFoundException('Collective not found: '. $collectiveId);
-		}
+	public function rename(string $userId, Collective $collective, int $id, string $title): PageFile {
 		try {
-			$pageFile = $this->find($userId, $collectiveId, $id);
+			$pageFile = $this->find($userId, $collective, $id);
 
 			$folder = $this->userFolderHelper->getCollectiveFolder(
 				$this->collectiveMapper->circleUniqueIdToName($collective->getCircleUniqueId()),
@@ -262,19 +248,16 @@ class PageService {
 	}
 
 	/**
-	 * @param string $userId
-	 * @param int    $collectiveId
-	 * @param int    $id
+	 * @param string     $userId
+	 * @param Collective $collective
+	 * @param int        $id
 	 *
 	 * @return PageFile
 	 * @throws NotFoundException
 	 */
-	public function delete(string $userId, int $collectiveId, int $id): PageFile {
-		if (null === $collective = $this->collectiveMapper->findById($collectiveId, $userId)) {
-			throw new NotFoundException('Collective not found: '. $collectiveId);
-		}
+	public function delete(string $userId, Collective $collective, int $id): PageFile {
 		try {
-			$pageFile = $this->find($userId, $collectiveId, $id);
+			$pageFile = $this->find($userId, $collective, $id);
 			$folder = $this->userFolderHelper->getCollectiveFolder(
 				$this->collectiveMapper->circleUniqueIdToName($collective->getCircleUniqueId()),
 				$userId);

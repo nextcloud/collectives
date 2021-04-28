@@ -95,7 +95,7 @@ class PageProvider implements IProvider {
 
 		$pageSearchResults = [];
 		foreach ($collectiveInfos as $collective) {
-			$pages = $this->pageService->findByString($user->getUID(), $collective->getId(), $query->getTerm());
+			$pages = $this->pageService->findByString($user->getUID(), $collective, $query->getTerm());
 			foreach ($pages as $page) {
 				$pageSearchResults[] = new SearchResultEntry(
 					$this->urlGenerator->imagePath(

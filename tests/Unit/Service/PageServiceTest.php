@@ -23,6 +23,7 @@ class PageServiceTest extends TestCase {
 	private $collectiveFolder;
 	private $service;
 	private $userId = 'jane';
+	private $collective;
 
 	protected function setUp(): void {
 		$pageMapper = $this->getMockBuilder(PageMapper::class)
@@ -50,14 +51,8 @@ class PageServiceTest extends TestCase {
 			->getMock();
 		$userFolderHelper->method('getCollectiveFolder')
 			->willReturn($this->collectiveFolder);
-		$collective = new Collective();
-		$collective->setCircleUniqueId('circleUniqueId');
-		$collectiveMapper->method('findById')
-			->willReturnMap([
-				[1, $this->userId, $collective],
-				[2, $this->userId, $collective],
-				[3, $this->userId, null]
-			]);
+		$this->collective = new Collective();
+		$this->collective->setCircleUniqueId('circleUniqueId');
 	}
 
 	public function testIsPage(): void {
@@ -120,13 +115,8 @@ class PageServiceTest extends TestCase {
 				$filesNotJustMd
 			);
 
-		self::assertEquals($pageFiles, $this->service->findAll($this->userId, 1));
-		self::assertEquals($pageFiles, $this->service->findAll($this->userId, 2));
-	}
-
-	public function testFindAllCollectiveNotFoundException(): void {
-		$this->expectException(NotFoundException::class);
-		$this->service->findAll($this->userId, 3);
+		self::assertEquals($pageFiles, $this->service->findAll($this->userId, $this->collective));
+		self::assertEquals($pageFiles, $this->service->findAll($this->userId, $this->collective));
 	}
 
 	public function testHandleExceptionDoesNotExistException(): void {
