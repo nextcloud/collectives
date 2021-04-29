@@ -1,41 +1,37 @@
 <template>
-	<AppContentList :class="{loading: loading('collective')}"
-		:show-details="showing('details')">
-		<PagesListItem v-if="currentCollective"
-			key="Readme"
-			:to="`/${encodeURIComponent(collectiveParam)}`"
-			:title="currentCollective.name"
-			:level="0"
-			:collapsed="false"
+	<div>
+		<PagesListItem key="page.title"
+			:to="`/${encodeURIComponent(collectiveParam)}/${pagePath}`"
+			:collapsible="isCollapsible"
+			:page-id="page.id"
+			:level="level"
+			:title="page.title"
+			:collapsed="collapsed"
+			@toggleCollapsed="toggleCollapsed"
 			@click.native="show('details')">
-			<template v-if="currentCollective.emoji" #icon>
-				{{ currentCollective.emoji }}
-			</template>
-			<template v-if="collectivePage" #line-two>
-				<LastUpdate :timestamp="collectivePage.timestamp"
-					:user="collectivePage.lastUserId" />
+			<template #line-two>
+				<LastUpdate :timestamp="page.timestamp"
+					:user="page.lastUserId" />
 			</template>
 			<template #actions>
 				<ActionButton class="primary"
 					icon="icon-add"
-					@click="newPage(collectivePage)">
+					@click="newPage(page)">
 					{{ t('collectives', 'Add a subpage') }}
 				</ActionButton>
 			</template>
 		</PagesListItem>
-		<SubPagesList v-for="page in subpages"
-			:key="page.id"
-			:page="page"
-			:level="1" />
-	</AppContentList>
+		<SubPagesList v-for="subpage in subpagesView"
+			:key="subpage.id"
+			:page="subpage"
+			:level="level+1" />
+	</div>
 </template>
 
 <script>
 
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
-import AppContentList from '@nextcloud/vue/dist/Components/AppContentList'
 import LastUpdate from './LastUpdate'
-import SubPagesList from './SubPagesList'
 import PagesListItem from './PagesListItem'
 
 import { showError } from '@nextcloud/dialogs'
@@ -43,31 +39,68 @@ import { mapGetters, mapMutations } from 'vuex'
 import { NEW_PAGE } from '../store/actions'
 
 export default {
-	name: 'PagesList',
+	name: 'SubPagesList',
 
 	components: {
 		ActionButton,
-		AppContentList,
 		LastUpdate,
 		PagesListItem,
-		SubPagesList,
+	},
+
+	props: {
+		page: {
+			type: Object,
+			required: true,
+		},
+		level: {
+			type: Number,
+			required: true,
+		},
+	},
+
+	data() {
+		return {
+			collapsed: true,
+		}
 	},
 
 	computed: {
 		...mapGetters([
 			'collectiveParam',
-			'collectivePage',
-			'currentCollective',
 			'loading',
 			'mostRecentSubpages',
-			'showing',
 		]),
+
 		subpages() {
-			if (this.collectivePage) {
-				return this.mostRecentSubpages(this.collectivePage.id)
-			} else {
+			return this.mostRecentSubpages(this.page.id)
+		},
+
+		subpagesView() {
+			// Only display subpages if not collapsed
+			if (this.collapsed) {
 				return []
+			} else {
+				return this.subpages
 			}
+		},
+
+		isCollapsible() {
+			return !!this.subpages.length
+		},
+
+		/**
+		 * Path to the page
+		 * @returns {string}
+		 */
+		pagePath() {
+			const parts = this.page.filePath.split('/')
+			if (this.page.fileName !== 'Readme.md') {
+				parts.push(this.page.title)
+			}
+			return parts
+				.filter(Boolean)
+				.map(p => encodeURIComponent(p))
+				.join('/')
 		},
 	},
 
@@ -81,7 +114,7 @@ export default {
 		async newPage(parentPage) {
 			const page = {
 				title: t('collectives', 'New Page'),
-				filePath: '',
+				filePath: [parentPage.filePath, parentPage.title].filter(Boolean).join('/'),
 				parentId: parentPage.id,
 			}
 			try {
@@ -91,6 +124,10 @@ export default {
 				console.error(e)
 				showError(t('collectives', 'Could not create the page'))
 			}
+		},
+
+		toggleCollapsed() {
+			this.collapsed = !this.collapsed
 		},
 	},
 }

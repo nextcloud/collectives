@@ -40,7 +40,7 @@ const routes = [
 				component: CircleDash,
 			},
 			{
-				path: ':collective/:page',
+				path: ':collective/:page*',
 				component: CircleDash,
 			},
 		],

@@ -169,7 +169,7 @@ export default {
 		 * @returns {string}
 		 */
 		filePath() {
-			return this.page.collectivePath + this.page.filePath
+			return this.page.collectivePath + this.page.filePath + '/' + this.page.fileName
 		},
 
 		/**
