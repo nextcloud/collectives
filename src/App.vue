@@ -15,6 +15,10 @@
 		min-height: 100%;
 	}
 
+	#titleform button {
+		margin-top: 0px;
+	}
+
 	.app-content-details div #editor-container,
 	.app-content-details div #text-container {
 		position: absolute;

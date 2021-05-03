@@ -5,18 +5,20 @@
 				type="text"
 				disabled
 				:value="versionTitle">
-			<Actions class="top-bar__button">
-				<ActionButton
-					icon="icon-history"
-					@click="revertVersion">
-					{{ t('collectives', 'Restore this version') }}
-				</ActionButton>
-			</Actions>
+			<button
+				type="button"
+				class="button warn"
+				:title="t('collectives', 'Restore this version')"
+				@click="revertVersion">
+				<span class="icon icon-history" />
+				{{ t('collectives', 'Restore') }}
+			</button>
 			<Actions>
 				<ActionButton
-					icon="icon-play-next"
-					@click="$emit('showCurrent')">
-					{{ t('collectives', 'Back to current version') }}
+					icon="icon-menu"
+					:close-after-click="true"
+					@click="$emit('showCurrent'); hide('sidebar')">
+					{{ t('collectives', 'Close sidebar') }}
 				</ActionButton>
 			</Actions>
 		</h1>
@@ -35,6 +37,7 @@ import { getCurrentUser } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { generateRemoteUrl } from '@nextcloud/router'
+import { mapGetters, mapMutations } from 'vuex'
 
 export default {
 	name: 'Version',
@@ -58,14 +61,10 @@ export default {
 	},
 
 	computed: {
-
-		page() {
-			return this.$store.getters.currentPage
-		},
-
-		collective() {
-			return this.$store.getters.currentCollective
-		},
+		...mapGetters({
+			page: 'currentPage',
+			collective: 'currentCollective',
+		}),
 
 		/**
 		 * Return the URL for currently selected page version
@@ -102,6 +101,7 @@ export default {
 	},
 
 	methods: {
+		...mapMutations(['hide']),
 		/**
 		 * Revert page to an old version
 		 */
