@@ -30,16 +30,16 @@
 				{{ t('collectives', 'Edit') }}
 			</button>
 			<Actions :force-menu="true">
-				<ActionButton v-if="!landingPage"
-					icon="icon-delete"
-					@click="$emit('deletePage')">
-					{{ t('collectives', 'Delete page') }}
-				</ActionButton>
 				<ActionButton
 					icon="icon-menu"
 					:close-after-click="true"
 					@click="show('sidebar')">
 					{{ t('collectives', 'Show old versions') }}
+				</ActionButton>
+				<ActionButton v-if="!landingPage"
+					icon="icon-delete"
+					@click="$emit('deletePage')">
+					{{ t('collectives', 'Delete page') }}
 				</ActionButton>
 			</Actions>
 		</h1>
