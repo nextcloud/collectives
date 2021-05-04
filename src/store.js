@@ -40,6 +40,7 @@ export default new Vuex.Store({
 		messages: {},
 		showing: {},
 		loading: {},
+		version: null,
 	},
 
 	getters: {
@@ -94,6 +95,7 @@ export default new Vuex.Store({
 
 		loading: (state) => (aspect) => state.loading[aspect],
 		showing: (state) => (aspect) => state.showing[aspect],
+		version: (state) => state.version,
 
 		mostRecentPages(_state, getters) {
 			return getters.visiblePages.sort((a, b) => b.timestamp - a.timestamp)
@@ -209,6 +211,9 @@ export default new Vuex.Store({
 		},
 		deletePage(state, id) {
 			state.pages.splice(state.pages.findIndex(p => p.id === id), 1)
+		},
+		version(state, version) {
+			state.version = version
 		},
 	},
 

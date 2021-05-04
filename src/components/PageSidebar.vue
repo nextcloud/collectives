@@ -14,9 +14,7 @@
 			:page-id="page.id"
 			:page-title="page.title"
 			:page-timestamp="page.timestamp"
-			:page-size="page.size"
-			:current-version-timestamp="currentVersionTimestamp"
-			@preview-version="emitVersion" />
+			:page-size="page.size" />
 	</AppSidebar>
 </template>
 
@@ -34,13 +32,6 @@ export default {
 		ActionButton,
 		AppSidebar,
 		SidebarVersionsTab,
-	},
-
-	props: {
-		currentVersionTimestamp: {
-			type: Number,
-			required: true,
-		},
 	},
 
 	computed: {
@@ -67,7 +58,7 @@ export default {
 		 * Load the current version and close the sidebar
 		 */
 		close() {
-			this.emitVersion(null)
+			this.$store.commit('version', null)
 			this.hide('sidebar')
 		},
 
@@ -84,14 +75,6 @@ export default {
 				console.error(e)
 				showError(t('collectives', 'Could not delete the page'))
 			}
-		},
-
-		/**
-		 * Emit page version URL to the parent component
-		 * @param {object} version Page version object
-		 */
-		emitVersion(version) {
-			this.$emit('preview-version', version)
 		},
 	},
 }

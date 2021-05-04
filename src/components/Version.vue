@@ -48,22 +48,11 @@ export default {
 		RichText,
 	},
 
-	props: {
-		version: {
-			type: Object,
-			required: false,
-			default: null,
-		},
-		currentVersionTimestamp: {
-			type: Number,
-			required: true,
-		},
-	},
-
 	computed: {
 		...mapGetters({
 			page: 'currentPage',
 			collective: 'currentCollective',
+			version: 'version',
 		}),
 
 		/**
@@ -91,7 +80,7 @@ export default {
 		},
 
 		landingPage() {
-			return !this.$store.getters.pageParam
+			return !this.pageParam
 		},
 
 		versionTitle() {
@@ -106,23 +95,24 @@ export default {
 		 * Revert page to an old version
 		 */
 		async revertVersion() {
+			const target = this.version
 			try {
 				await axios({
 					method: 'MOVE',
-					url: this.version.downloadUrl,
+					url: target.downloadUrl,
 					headers: {
 						Destination: this.restoreFolderUrl,
 					},
 				})
-				this.$emit('resetVersion')
+				this.$store.commit('version', null)
 				showSuccess(t('collectives', 'Reverted {page} to revision {timestamp}.', {
 					page: this.page.title,
-					timestamp: this.version.relativeTimestamp,
+					timestamp: target.relativeTimestamp,
 				}))
 			} catch (e) {
 				showError(t('collectives', 'Failed to revert {page} to revision {timestamp}.', {
 					page: this.page.title,
-					timestamp: this.version.relativeTimestamp,
+					timestamp: target.relativeTimestamp,
 				}))
 				console.error('Failed to move page to restore folder', e)
 			}
