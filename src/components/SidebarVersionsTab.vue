@@ -66,16 +66,18 @@
 		</template>
 
 		<!-- no versions found -->
-		<div v-else class="emptycontent">
-			<div class="icon icon-history" />
+		<EmptyContent v-else icon="icon-history">
 			<h2>{{ t('collectives', 'No other versions available') }}</h2>
-		</div>
+			<template #desc>
+				{{ t( 'collectives', 'After editing you can find old versions of the page here.') }}
+			</template>
+		</EmptyContent>
 	</div>
 	<!-- </AppSidebarTab> -->
 </template>
 
 <script>
-// import AppSidebarTab from '@nextcloud/vue/dist/Components/AppSidebarTab'
+import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 import { getCurrentUser } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
 import { generateRemoteUrl } from '@nextcloud/router'
@@ -85,9 +87,9 @@ import { formatFileSize } from '@nextcloud/files'
 export default {
 	name: 'SidebarVersionsTab',
 
-	/* components: {
-		AppSidebarTab,
-	}, */
+	 components: {
+		EmptyContent,
+	},
 
 	props: {
 		pageId: {
