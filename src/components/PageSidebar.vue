@@ -1,7 +1,7 @@
 <template>
 	<AppSidebar
 		ref="sidebar"
-		:title="page.title"
+		:title="title"
 		@close="close">
 		<template #secondary-actions>
 			<ActionButton v-if="!landingPage"
@@ -36,19 +36,15 @@ export default {
 
 	computed: {
 		...mapGetters([
-			'pageParam',
 			'currentPage',
 			'collectiveParam',
+			'title',
+			'landingPage',
 		]),
 
 		page() {
 			return this.currentPage
 		},
-
-		landingPage() {
-			return !this.pageParam || this.pageParam === 'Readme'
-		},
-
 	},
 
 	methods: {

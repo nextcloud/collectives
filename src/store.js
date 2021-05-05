@@ -76,6 +76,16 @@ export default new Vuex.Store({
 			return state.route.params.page
 		},
 
+		landingPage(_state, getters) {
+			return !getters.pageParam || getters.pageParam === 'Readme'
+		},
+
+		title(_state, getters) {
+			return getters.landingPage
+				? getters.currentCollective.name
+				: getters.currentPage.title
+		},
+
 		currentPage(state, getters) {
 			const title = getters.pageParam || 'Readme'
 			return state.pages.find(

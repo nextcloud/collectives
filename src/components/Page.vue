@@ -101,12 +101,9 @@ export default {
 			'pageParam',
 			'currentPage',
 			'currentCollective',
+			'landingPage',
 			'updatedPagePath',
 		]),
-
-		landingPage() {
-			return !this.pageParam || this.pageParam === 'Readme'
-		},
 
 		page() {
 			return this.currentPage

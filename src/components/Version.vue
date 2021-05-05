@@ -51,6 +51,7 @@ export default {
 			page: 'currentPage',
 			collective: 'currentCollective',
 			version: 'version',
+			title: 'title',
 		}),
 
 		/**
@@ -77,13 +78,8 @@ export default {
 			return getCurrentUser().uid
 		},
 
-		landingPage() {
-			return !this.pageParam
-		},
-
 		versionTitle() {
-			const title = this.landingPage ? this.collective.name : this.page.title
-			return `${title} (${this.version.relativeTimestamp})`
+			return `${this.title} (${this.version.relativeTimestamp})`
 		},
 	},
 
