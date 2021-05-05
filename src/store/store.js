@@ -25,7 +25,7 @@ import Vuex from 'vuex'
 
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
-import * as circles from './circles'
+import circles from './circles'
 
 Vue.use(Vuex)
 
