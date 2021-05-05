@@ -1,3 +1,6 @@
+import { GET_CIRCLES } from './actions'
+import { DELETE_CIRCLE_FOR, SET_CIRCLES } from './mutations'
+
 export default {
 	state: {
 		circles: [],
@@ -17,10 +20,10 @@ export default {
 	},
 
 	mutations: {
-		circles(state, circles) {
+		[SET_CIRCLES](state, circles) {
 			state.circles = circles
 		},
-		deleteCircleFor(state, collective) {
+		[DELETE_CIRCLE_FOR](state, collective) {
 			state.circles.splice(state.circles.findIndex(c => c.unique_id === collective.circleUniqueId), 1)
 		},
 	},
@@ -29,10 +32,10 @@ export default {
 		/**
 		 * Get list of all circles
 		 */
-		async getCircles({ commit }) {
+		async [GET_CIRCLES]({ commit }) {
 			const api = OCA.Circles.api
 			api.listCircles('all', '', 9, response => {
-				commit('circles', response.data)
+				commit(SET_CIRCLES, response.data)
 			})
 		},
 	},

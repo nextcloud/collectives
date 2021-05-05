@@ -71,6 +71,7 @@
 
 <script>
 import { ActionButton, Actions, AppNavigationItem, Multiselect } from '@nextcloud/vue'
+import { GET_CIRCLES } from '../store/actions'
 import EmojiPicker from '@nextcloud/vue/dist/Components/EmojiPicker'
 import EmoticonOutline from 'vue-material-design-icons/EmoticonOutline'
 import displayError from '../util/displayError'
@@ -126,7 +127,7 @@ export default {
 		 * @returns {Promise}
 		 */
 		getCircles() {
-			return this.$store.dispatch('getCircles')
+			return this.$store.dispatch(GET_CIRCLES)
 				.catch(displayError('Could not fetch circles'))
 		},
 

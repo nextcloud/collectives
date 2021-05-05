@@ -1,0 +1,2 @@
+export const SET_CIRCLES = 'SET_CIRCLES'
+export const DELETE_CIRCLE_FOR = 'DELETE_CIRCLE_FOR'

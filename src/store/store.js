@@ -26,6 +26,7 @@ import Vuex from 'vuex'
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 import circles from './circles'
+import { DELETE_CIRCLE_FOR } from './mutations'
 
 Vue.use(Vuex)
 
@@ -339,7 +340,7 @@ export default new Vuex.Store({
 			const response = await axios.delete(generateUrl('/apps/collectives/_collectives/trash/' + id + doCircle))
 			commit('deleteCollective', response.data.data)
 			if (circle) {
-				commit('deleteCircleFor', response.data.data)
+				commit(DELETE_CIRCLE_FOR, response.data.data)
 			}
 		},
 	},
