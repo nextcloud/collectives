@@ -17,9 +17,7 @@
 				<ActionButton
 					icon="icon-menu"
 					:close-after-click="true"
-					@click="$emit('showCurrent'); hide('sidebar')">
-					{{ t('collectives', 'Close sidebar') }}
-				</ActionButton>
+					@click="$emit('showCurrent'); hide('sidebar')" />
 			</Actions>
 		</h1>
 		<RichText :page-id="page.id"

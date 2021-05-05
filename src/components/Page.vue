@@ -20,7 +20,7 @@
 				type="button"
 				@click="stopEdit">
 				<span class="icon icon-checkmark-white" />
-				{{ t('collectives', 'Save') }}
+				{{ t('collectives', 'Done') }}
 			</button>
 			<button v-else
 				type="button"
@@ -33,9 +33,7 @@
 				<ActionButton
 					icon="icon-menu"
 					:close-after-click="true"
-					@click="toggle('sidebar')">
-					{{ t('collectives', 'Toggle sidebar') }}
-				</ActionButton>
+					@click="toggle('sidebar')" />
 			</Actions>
 		</h1>
 		<RichText v-if="readOnly"
