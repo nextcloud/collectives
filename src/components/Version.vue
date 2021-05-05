@@ -5,19 +5,19 @@
 				type="text"
 				disabled
 				:value="versionTitle">
-			<Actions class="top-bar__button">
-				<ActionButton
-					icon="icon-history"
-					@click="revertVersion">
-					{{ t('collectives', 'Restore this version') }}
-				</ActionButton>
-			</Actions>
+			<button
+				type="button"
+				class="button warn"
+				:title="t('collectives', 'Restore this version')"
+				@click="revertVersion">
+				<span class="icon icon-history" />
+				{{ t('collectives', 'Restore') }}
+			</button>
 			<Actions>
 				<ActionButton
-					icon="icon-play-next"
-					@click="$emit('showCurrent')">
-					{{ t('collectives', 'Back to current version') }}
-				</ActionButton>
+					icon="icon-menu"
+					:close-after-click="true"
+					@click="$emit('showCurrent'); hide('sidebar')" />
 			</Actions>
 		</h1>
 		<RichText :page-id="page.id"
@@ -35,6 +35,7 @@ import { getCurrentUser } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { generateRemoteUrl } from '@nextcloud/router'
+import { mapGetters, mapMutations } from 'vuex'
 
 export default {
 	name: 'Version',
@@ -45,27 +46,13 @@ export default {
 		RichText,
 	},
 
-	props: {
-		version: {
-			type: Object,
-			required: false,
-			default: null,
-		},
-		currentVersionTimestamp: {
-			type: Number,
-			required: true,
-		},
-	},
-
 	computed: {
-
-		page() {
-			return this.$store.getters.currentPage
-		},
-
-		collective() {
-			return this.$store.getters.currentCollective
-		},
+		...mapGetters({
+			page: 'currentPage',
+			collective: 'currentCollective',
+			version: 'version',
+			title: 'title',
+		}),
 
 		/**
 		 * Return the URL for currently selected page version
@@ -91,38 +78,35 @@ export default {
 			return getCurrentUser().uid
 		},
 
-		landingPage() {
-			return !this.$store.getters.pageParam
-		},
-
 		versionTitle() {
-			const title = this.landingPage ? this.collective.name : this.page.title
-			return `${title} (${this.version.relativeTimestamp})`
+			return `${this.title} (${this.version.relativeTimestamp})`
 		},
 	},
 
 	methods: {
+		...mapMutations(['hide']),
 		/**
 		 * Revert page to an old version
 		 */
 		async revertVersion() {
+			const target = this.version
 			try {
 				await axios({
 					method: 'MOVE',
-					url: this.version.downloadUrl,
+					url: target.downloadUrl,
 					headers: {
 						Destination: this.restoreFolderUrl,
 					},
 				})
-				this.$emit('resetVersion')
+				this.$store.commit('version', null)
 				showSuccess(t('collectives', 'Reverted {page} to revision {timestamp}.', {
 					page: this.page.title,
-					timestamp: this.version.relativeTimestamp,
+					timestamp: target.relativeTimestamp,
 				}))
 			} catch (e) {
 				showError(t('collectives', 'Failed to revert {page} to revision {timestamp}.', {
 					page: this.page.title,
-					timestamp: this.version.relativeTimestamp,
+					timestamp: target.relativeTimestamp,
 				}))
 				console.error('Failed to move page to restore folder', e)
 			}

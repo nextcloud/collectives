@@ -21,8 +21,8 @@
 
 		<!-- versions content -->
 		<template v-else-if="!loading && versions">
-			<ul :key="pageId + currentVersionTimestamp">
-				<li :key="pageId + pageSize">
+			<ul>
+				<li :class="{active: !version}">
 					<div class="icon-container">
 						<img class="icon"
 							:src="iconUrl"
@@ -42,7 +42,9 @@
 						</div>
 					</div>
 				</li>
-				<li v-for="version in versions" :key="version.downloadUrl">
+				<li v-for="v in versions"
+					:key="v.downloadUrl"
+					:class="{active: (version && v.timestamp === version.timestamp)}">
 					<div class="icon-container">
 						<img class="icon"
 							:src="iconUrl"
@@ -51,14 +53,14 @@
 					</div>
 					<div class="version-container">
 						<div>
-							<a class="openVersion" @click="clickPreviewVersion(version)">
-								<span class="versiondate has-tooltip live-relative-timestamp" :data-timestamp="version.millisecondsTimestamp" :title="version.formattedTimestamp">
-									{{ version.relativeTimestamp }}
+							<a class="openVersion" @click="clickPreviewVersion(v)">
+								<span class="versiondate has-tooltip live-relative-timestamp" :data-timestamp="v.millisecondsTimestamp" :title="v.formattedTimestamp">
+									{{ v.relativeTimestamp }}
 								</span>
 							</a>
 						</div>
 						<div class="version-details">
-							<span class="size has-tooltip" :title="version.altSize">{{ version.humanReadableSize }}</span>
+							<span class="size has-tooltip" :title="v.altSize">{{ v.humanReadableSize }}</span>
 						</div>
 					</div>
 				</li>
@@ -66,28 +68,31 @@
 		</template>
 
 		<!-- no versions found -->
-		<div v-else class="emptycontent">
-			<div class="icon icon-history" />
+		<EmptyContent v-else icon="icon-history">
 			<h2>{{ t('collectives', 'No other versions available') }}</h2>
-		</div>
+			<template #desc>
+				{{ t( 'collectives', 'After editing you can find old versions of the page here.') }}
+			</template>
+		</EmptyContent>
 	</div>
 	<!-- </AppSidebarTab> -->
 </template>
 
 <script>
-// import AppSidebarTab from '@nextcloud/vue/dist/Components/AppSidebarTab'
+import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 import { getCurrentUser } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
 import { generateRemoteUrl } from '@nextcloud/router'
 import moment from '@nextcloud/moment'
 import { formatFileSize } from '@nextcloud/files'
+import { mapGetters } from 'vuex'
 
 export default {
 	name: 'SidebarVersionsTab',
 
-	/* components: {
-		AppSidebarTab,
-	}, */
+	 components: {
+		EmptyContent,
+	},
 
 	props: {
 		pageId: {
@@ -106,10 +111,6 @@ export default {
 			type: Number,
 			required: true,
 		},
-		currentVersionTimestamp: {
-			type: Number,
-			required: true,
-		},
 	},
 
 	data() {
@@ -121,6 +122,10 @@ export default {
 	},
 
 	computed: {
+		...mapGetters([
+			'version',
+		]),
+
 		/**
 		 * @returns {object}
 		 */
@@ -159,9 +164,6 @@ export default {
 
 	watch: {
 		'pageId'() {
-			this.getPageVersions()
-		},
-		'currentVersionTimestamp'() {
 			this.getPageVersions()
 		},
 	},
@@ -278,7 +280,7 @@ export default {
  </d:prop>
 </d:propfind>`,
 				})
-				this.versions = this.xmlToVersionsList(response.data)
+				this.versions = this.xmlToVersionsList(response.data).reverse()
 				this.loading = false
 			} catch (e) {
 				this.error = t('collectives', 'Could not get page versions')
@@ -288,11 +290,11 @@ export default {
 		},
 
 		/**
-		 * Emit page version object to the parent component
+		 * Select page version object to display
 		 * @param {object} version Page version object
 		 */
 		clickPreviewVersion(version) {
-			this.$emit('preview-version', version)
+			this.$store.commit('version', version)
 		},
 	},
 }
@@ -314,6 +316,10 @@ export default {
 
 	li:last-child {
 		border-bottom: none;
+	}
+
+	li.active {
+		background-color: var(--color-background-dark);
 	}
 
 	a, div > span {

@@ -20,7 +20,7 @@
 				type="button"
 				@click="stopEdit">
 				<span class="icon icon-checkmark-white" />
-				{{ t('collectives', 'Save') }}
+				{{ t('collectives', 'Done') }}
 			</button>
 			<button v-else
 				type="button"
@@ -29,18 +29,11 @@
 				<span class="icon icon-rename-white" />
 				{{ t('collectives', 'Edit') }}
 			</button>
-			<Actions :force-menu="true">
-				<ActionButton v-if="!landingPage"
-					icon="icon-delete"
-					@click="$emit('deletePage')">
-					{{ t('collectives', 'Delete page') }}
-				</ActionButton>
+			<Actions>
 				<ActionButton
 					icon="icon-menu"
 					:close-after-click="true"
-					@click="show('sidebar')">
-					{{ t('collectives', 'Show old versions') }}
-				</ActionButton>
+					@click="toggle('sidebar')" />
 			</Actions>
 		</h1>
 		<RichText v-if="readOnly"
@@ -70,7 +63,7 @@ import Actions from '@nextcloud/vue/dist/Components/Actions'
 import AppContent from '@nextcloud/vue/dist/Components/AppContent'
 import RichText from './RichText'
 
-import { showSuccess, showError } from '@nextcloud/dialogs'
+import { showError } from '@nextcloud/dialogs'
 import { mapGetters, mapMutations } from 'vuex'
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateRemoteUrl } from '@nextcloud/router'
@@ -108,12 +101,9 @@ export default {
 			'pageParam',
 			'currentPage',
 			'currentCollective',
+			'landingPage',
 			'updatedPagePath',
 		]),
-
-		landingPage() {
-			return !this.pageParam || this.pageParam === 'Readme'
-		},
 
 		page() {
 			return this.currentPage
@@ -215,7 +205,7 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['show']),
+		...mapMutations(['show', 'toggle']),
 		init() {
 			const parts = [
 				this.collective.name,
@@ -255,21 +245,6 @@ export default {
 
 		focusEditor() {
 			this.$el.querySelector('.ProseMirror').focus()
-		},
-
-		/**
-		 * Delete the current page,
-		 * remove it from the frontend and show a hint
-		 */
-		async deletePage() {
-			try {
-				await this.$store.dispatch('deletePage')
-				this.$router.push(`/${this.collectiveParam}`)
-				showSuccess(t('collectives', 'Page deleted'))
-			} catch (e) {
-				console.error(e)
-				showError(t('collectives', 'Could not delete the page'))
-			}
 		},
 
 		/**
@@ -332,10 +307,6 @@ export default {
 		max-width: 670px;
 		margin-bottom: -50px;
 		display: flex;
-	}
-
-	#titleform button.primary {
-		margin-top: 0px;
 	}
 
 	#action-menu button {

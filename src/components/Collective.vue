@@ -2,12 +2,7 @@
 	<div id="app-content-wrapper">
 		<PagesList @newPage="newPage" />
 		<AppContentDetails v-if="currentPage">
-			<Version v-if="currentVersion"
-				:page="currentPage"
-				:version="currentVersion"
-				:current-version-timestamp="currentVersionTimestamp"
-				@showCurrent="$emit('preview-version', null)"
-				@resetVersion="resetVersion" />
+			<Version v-if="version" :page="currentPage" />
 			<Page v-else
 				key="currentPage.timestamp"
 				:edit="edit"
@@ -20,6 +15,7 @@
 <script>
 
 import { showError } from '@nextcloud/dialogs'
+import { mapGetters } from 'vuex'
 import AppContentDetails from '@nextcloud/vue/dist/Components/AppContentDetails'
 import Page from '../components/Page'
 import PagesList from '../components/PagesList'
@@ -37,17 +33,6 @@ export default {
 		Version,
 	},
 
-	props: {
-		currentVersion: {
-			type: Object,
-			default: null,
-		},
-		currentVersionTimestamp: {
-			type: Number,
-			required: true,
-		},
-	},
-
 	data() {
 		return {
 			editToggle: EditState.Unset,
@@ -55,30 +40,12 @@ export default {
 	},
 
 	computed: {
-
-		/**
-		 * Return the currently selected collective
-		 * @returns {Object|undefined}
-		 */
-		currentCollective() {
-			return this.$store.getters.currentCollective
-		},
-
-		/**
-		 * Return the url param for the currently selected page
-		 * @returns {String|undefined}
-		 */
-		pageParam() {
-			return this.$store.getters.pageParam
-		},
-
-		/**
-		 * Return the currently selected page object
-		 * @returns {Object|undefined}
-		 */
-		currentPage() {
-			return this.$store.getters.currentPage
-		},
+		...mapGetters([
+			'currentCollective',
+			'currentPage',
+			'pageParam',
+			'version',
+		]),
 
 		edit: {
 			get() {
@@ -129,14 +96,6 @@ export default {
 				console.error(e)
 				showError(t('collectives', 'Could not create the page'))
 			}
-		},
-
-		/**
-		 * reload current page in order to update page properties and reset the version
-		 */
-		resetVersion() {
-			this.getPage(this.currentPage.id)
-			this.$emit('resetVersion')
 		},
 	},
 }

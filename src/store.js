@@ -40,6 +40,7 @@ export default new Vuex.Store({
 		messages: {},
 		showing: {},
 		loading: {},
+		version: null,
 	},
 
 	getters: {
@@ -75,6 +76,16 @@ export default new Vuex.Store({
 			return state.route.params.page
 		},
 
+		landingPage(_state, getters) {
+			return !getters.pageParam || getters.pageParam === 'Readme'
+		},
+
+		title(_state, getters) {
+			return getters.landingPage
+				? getters.currentCollective.name
+				: getters.currentPage.title
+		},
+
 		currentPage(state, getters) {
 			const title = getters.pageParam || 'Readme'
 			return state.pages.find(
@@ -94,6 +105,7 @@ export default new Vuex.Store({
 
 		loading: (state) => (aspect) => state.loading[aspect],
 		showing: (state) => (aspect) => state.showing[aspect],
+		version: (state) => state.version,
 
 		mostRecentPages(_state, getters) {
 			return getters.visiblePages.sort((a, b) => b.timestamp - a.timestamp)
@@ -157,6 +169,9 @@ export default new Vuex.Store({
 		hide(state, aspect) {
 			Vue.set(state.showing, aspect, false)
 		},
+		toggle(state, aspect) {
+			Vue.set(state.showing, aspect, !state.showing[aspect])
+		},
 		collectives(state, collectives) {
 			state.collectives = collectives
 		},
@@ -206,6 +221,9 @@ export default new Vuex.Store({
 		},
 		deletePage(state, id) {
 			state.pages.splice(state.pages.findIndex(p => p.id === id), 1)
+		},
+		version(state, version) {
+			state.version = version
 		},
 	},
 

@@ -7,11 +7,7 @@
 			@click.stop.prevent="hide('details')" />
 		<Nav />
 		<AppContent>
-			<Collective v-if="collectiveParam"
-				:current-version="currentVersion"
-				:current-version-timestamp="currentVersionTimestamp"
-				@preview-version="setCurrentVersion"
-				@resetVersion="resetVersion" />
+			<Collective v-if="collectiveParam" />
 			<EmptyContent v-else-if="!isMobile" icon="icon-ant">
 				{{ t('collectives', 'No collective selected') }}
 				<template #desc>
@@ -19,10 +15,7 @@
 				</template>
 			</EmptyContent>
 		</AppContent>
-		<PageSidebar v-if="currentPage"
-			v-show="showing('sidebar')"
-			:current-version-timestamp="currentVersionTimestamp"
-			@preview-version="setCurrentVersion" />
+		<PageSidebar v-if="currentPage" v-show="showing('sidebar')" />
 	</Content>
 </template>
 
@@ -56,13 +49,6 @@ export default {
 		isMobile,
 	],
 
-	data() {
-		return {
-			currentVersion: null,
-			currentVersionTimestamp: 0,
-		}
-	},
-
 	computed: {
 		...mapGetters([
 			'collectiveParam',
@@ -71,6 +57,7 @@ export default {
 			'messages',
 			'pageParam',
 			'showing',
+			'version',
 		]),
 
 		info() {
@@ -89,7 +76,7 @@ export default {
 			}
 		},
 		'pageParam'() {
-			this.setCurrentVersion(null)
+			this.$store.commit('version', null)
 		},
 		'info'() {
 			if (this.info) {
@@ -138,22 +125,6 @@ export default {
 			}
 			return this.$store.dispatch('getPages')
 				.catch(displayError('Could not fetch pages'))
-		},
-
-		/**
-		 * Reset the version
-		 */
-		resetVersion() {
-			this.setCurrentVersion(null)
-		},
-
-		/**
-		 * Set specific version of currentPage (passed to Page component)
-		 * @param {object} version Page version object
-		 */
-		setCurrentVersion(version) {
-			this.currentVersion = version
-			this.currentVersionTimestamp = (version ? version.timestamp : 0)
 		},
 
 		closeNav() {
