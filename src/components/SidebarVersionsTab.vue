@@ -20,7 +20,7 @@
 		</div>
 
 		<!-- versions content -->
-		<template v-else-if="!loading && versions">
+		<template v-else-if="!loading && versions.length">
 			<ul>
 				<li :class="{active: !version}">
 					<div class="icon-container">
@@ -117,7 +117,7 @@ export default {
 		return {
 			error: '',
 			loading: true,
-			versions: null,
+			versions: [],
 		}
 	},
 
@@ -257,7 +257,7 @@ export default {
 					altSize: n('files', '%n byte', '%n bytes', size),
 				})
 			}
-			return (result.length ? result : null)
+			return result
 		},
 
 		/**
