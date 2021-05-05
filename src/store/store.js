@@ -25,13 +25,17 @@ import Vuex from 'vuex'
 
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
+import * as circles from './circles'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
 
+	modules: {
+		circles,
+	},
+
 	state: {
-		circles: [],
 		collectives: [],
 		trashCollectives: [],
 		updatedCollective: {},
@@ -58,11 +62,11 @@ export default new Vuex.Store({
 		},
 
 		circles(state) {
-			return state.circles
+			return state.circles.circles
 		},
 
-		availableCircles(state) {
-			return state.circles.filter(circle => {
+		availableCircles(state, getters) {
+			return getters.circles.filter(circle => {
 			    const matchUniqueId = c => {
 					return (c.circleUniqueId === circle.unique_id)
 				}
@@ -175,9 +179,6 @@ export default new Vuex.Store({
 		collectives(state, collectives) {
 			state.collectives = collectives
 		},
-		circles(state, circles) {
-			state.circles = circles
-		},
 		trashCollectives(state, trashCollectives) {
 			state.trashCollectives = trashCollectives
 		},
@@ -200,9 +201,6 @@ export default new Vuex.Store({
 		},
 		deleteCollective(state, collective) {
 			state.trashCollectives.splice(state.trashCollectives.findIndex(c => c.id === collective.id), 1)
-		},
-		deleteCircleFor(state, collective) {
-			state.circles.splice(state.circles.findIndex(c => c.unique_id === collective.circleUniqueId), 1)
 		},
 		pages(state, pages) {
 			state.pages = pages
@@ -300,16 +298,6 @@ export default new Vuex.Store({
 			const response = await axios.get(generateUrl('/apps/collectives/_collectives'))
 			commit('collectives', response.data.data)
 			commit('done', 'collectives')
-		},
-
-		/**
-		 * Get list of all circles
-		 */
-		async getCircles({ commit }) {
-			const api = OCA.Circles.api
-			api.listCircles('all', '', 9, response => {
-				commit('circles', response.data)
-			})
 		},
 
 		/**
