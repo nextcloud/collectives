@@ -1,4 +1,4 @@
-import { NEW_COLLECTIVE, TRASH_COLLECTIVE, DELETE_COLLECTIVE }
+import { NEW_COLLECTIVE, TRASH_COLLECTIVE, DELETE_COLLECTIVE, NEW_PAGE }
 	from '../../src/store/actions'
 
 const url = Cypress.config('baseUrl').replace(/\/index.php\/?$/g, '')
@@ -45,7 +45,7 @@ Cypress.Commands.add('seedPage', (name) => {
 	cy.window()
 		.its('app')
 		.then(async app => {
-			await app.$store.dispatch('newPage', { title: name })
+			await app.$store.dispatch(NEW_PAGE, { title: name })
 		})
 })
 

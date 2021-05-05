@@ -1,6 +1,6 @@
 <template>
 	<div id="app-content-wrapper">
-		<PagesList @newPage="newPage" />
+		<PagesList />
 		<AppContentDetails v-if="currentPage">
 			<Version v-if="version" :page="currentPage" />
 			<Page v-else
@@ -82,21 +82,6 @@ export default {
 			}
 		},
 
-		/**
-		 * Create a new page and focus the page  automatically
-		 */
-		async newPage() {
-			const page = {
-				title: t('collectives', 'New Page'),
-			}
-			try {
-				await this.$store.dispatch('newPage', page)
-				this.$router.push(this.$store.getters.updatedPagePath)
-			} catch (e) {
-				console.error(e)
-				showError(t('collectives', 'Could not create the page'))
-			}
-		},
 	},
 }
 </script>
