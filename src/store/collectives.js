@@ -32,6 +32,19 @@ export default {
 				(collective) => collective.name === getters.collectiveParam
 			)
 		},
+
+		updatedCollectivePath(state) {
+			const collective = state.updatedCollective
+			return collective && `/${collective.name}`
+		},
+
+		collectiveChanged(state, getters) {
+			const updated = state.updatedCollective
+				&& state.updatedCollective.name
+			const current = getters.currentCollective
+				&& getters.currentCollective.name
+			return updated && (updated !== current)
+		},
 	},
 	mutations: {
 		[SET_COLLECTIVES](state, collectives) {
