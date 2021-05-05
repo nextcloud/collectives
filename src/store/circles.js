@@ -12,8 +12,8 @@ export default {
 				const matchUniqueId = c => {
 					return (c.circleUniqueId === circle.unique_id)
 				}
-				const alive = rootState.collectives.find(matchUniqueId)
-				const trashed = rootState.trashCollectives.find(matchUniqueId)
+				const alive = rootState.collectives.collectives.find(matchUniqueId)
+				const trashed = rootState.collectives.trashCollectives.find(matchUniqueId)
 				return !alive && !trashed
 			})
 		},

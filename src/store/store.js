@@ -26,7 +26,7 @@ import Vuex from 'vuex'
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 import circles from './circles'
-import { DELETE_CIRCLE_FOR } from './mutations'
+import collectives from './collectives'
 
 Vue.use(Vuex)
 
@@ -34,12 +34,10 @@ export default new Vuex.Store({
 
 	modules: {
 		circles,
+		collectives,
 	},
 
 	state: {
-		collectives: [],
-		trashCollectives: [],
-		updatedCollective: {},
 		pages: [],
 		updatedPage: {},
 		messages: {},
@@ -50,16 +48,12 @@ export default new Vuex.Store({
 
 	getters: {
 
+		collectiveParam(state, rootState) {
+			return state.route.params.collective
+		},
+
 		messages(state) {
 			return state.messages
-		},
-
-		collectives(state) {
-			return state.collectives
-		},
-
-		trashCollectives(state) {
-			return state.trashCollectives
 		},
 
 		pageParam(state) {
@@ -80,16 +74,6 @@ export default new Vuex.Store({
 			const title = getters.pageParam || 'Readme'
 			return state.pages.find(
 				(page) => page.title === title
-			)
-		},
-
-		collectiveParam(state) {
-			return state.route.params.collective
-		},
-
-		currentCollective(_state, getters) {
-			return getters.collectives.find(
-				(collective) => collective.name === getters.collectiveParam
 			)
 		},
 
@@ -128,13 +112,13 @@ export default new Vuex.Store({
 		},
 
 		updatedCollectivePath(state, getters) {
-			const collective = state.updatedCollective
+			const collective = state.collectives.updatedCollective
 			return collective && `/${collective.name}`
 		},
 
 		collectiveChanged(state, getters) {
-			const updated = state.updatedCollective
-				&& state.updatedCollective.name
+			const updated = state.collectives.updatedCollective
+				&& state.collectives.updatedCollective.name
 			const current = getters.currentCollective
 				&& getters.currentCollective.name
 			return updated && (updated !== current)
@@ -161,32 +145,6 @@ export default new Vuex.Store({
 		},
 		toggle(state, aspect) {
 			Vue.set(state.showing, aspect, !state.showing[aspect])
-		},
-		collectives(state, collectives) {
-			state.collectives = collectives
-		},
-		trashCollectives(state, trashCollectives) {
-			state.trashCollectives = trashCollectives
-		},
-		addOrUpdateCollective(state, collective) {
-			const cur = state.collectives.findIndex(c => c.id === collective.id)
-			if (cur === -1) {
-				state.collectives.unshift(collective)
-			} else {
-				state.collectives.splice(cur, 1, collective)
-			}
-			state.updatedCollective = collective
-		},
-		trashCollective(state, collective) {
-			state.collectives.splice(state.collectives.findIndex(c => c.id === collective.id), 1)
-			state.trashCollectives.unshift(collective)
-		},
-		restoreCollective(state, collective) {
-			state.trashCollectives.splice(state.trashCollectives.findIndex(c => c.id === collective.id), 1)
-			state.collectives.unshift(collective)
-		},
-		deleteCollective(state, collective) {
-			state.trashCollectives.splice(state.trashCollectives.findIndex(c => c.id === collective.id), 1)
 		},
 		pages(state, pages) {
 			state.pages = pages
@@ -274,74 +232,6 @@ export default new Vuex.Store({
 			await axios.delete(getters.pageUrl(getters.currentPage.id))
 			commit('deletePage', getters.currentPage.id)
 			commit('done', 'page')
-		},
-
-		/**
-		 * Get list of all collectives
-		 */
-		async getCollectives({ commit }) {
-			commit('load', 'collectives')
-			const response = await axios.get(generateUrl('/apps/collectives/_collectives'))
-			commit('collectives', response.data.data)
-			commit('done', 'collectives')
-		},
-
-		/**
-		 * Get list of all collectives in trash
-		 */
-		async getTrashCollectives({ commit }) {
-			commit('load', 'collectiveTrash')
-			const response = await axios.get(generateUrl('/apps/collectives/_collectives/trash'))
-			commit('trashCollectives', response.data.data)
-			commit('done', 'collectiveTrash')
-		},
-
-		/**
-		 * Create a new collective with the given properties
-		 * @param {Object} collective Properties for the new collective (name for now)
-		 */
-		async newCollective({ commit }, collective) {
-			const response = await axios.post(
-				generateUrl('/apps/collectives/_collectives'),
-				collective,
-			)
-			commit('info', response.data.message)
-			commit('addOrUpdateCollective', response.data.data)
-		},
-
-		/**
-		 * Trash a collective with the given id
-		 * @param {Number} id ID of the colletive to be trashed
-		 */
-		async trashCollective({ commit }, { id }) {
-			const response = await axios.delete(generateUrl('/apps/collectives/_collectives/' + id))
-			commit('trashCollective', response.data.data)
-		},
-
-		/**
-		 * Restore a collective with the given id from trash
-		 * @param {Number} id ID of the colletive to be trashed
-		 */
-		async restoreCollective({ commit }, { id }) {
-			const response = await axios.patch(generateUrl('/apps/collectives/_collectives/trash/' + id))
-			commit('restoreCollective', response.data.data)
-		},
-
-		/**
-		 * Delete a collective with the given id from trash
-		 * @param {Number} id ID of the colletive to be trashed
-		 * @param {boolean} circle Whether to delete the circle as well
-		 */
-		async deleteCollective({ commit }, { id, circle }) {
-			let doCircle = ''
-			if (circle) {
-				doCircle = '?circle=1'
-			}
-			const response = await axios.delete(generateUrl('/apps/collectives/_collectives/trash/' + id + doCircle))
-			commit('deleteCollective', response.data.data)
-			if (circle) {
-				commit(DELETE_CIRCLE_FOR, response.data.data)
-			}
 		},
 	},
 

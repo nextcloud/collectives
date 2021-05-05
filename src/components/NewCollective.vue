@@ -71,7 +71,7 @@
 
 <script>
 import { ActionButton, Actions, AppNavigationItem, Multiselect } from '@nextcloud/vue'
-import { GET_CIRCLES } from '../store/actions'
+import { GET_CIRCLES, NEW_COLLECTIVE } from '../store/actions'
 import EmojiPicker from '@nextcloud/vue/dist/Components/EmojiPicker'
 import EmoticonOutline from 'vue-material-design-icons/EmoticonOutline'
 import displayError from '../util/displayError'
@@ -161,7 +161,7 @@ export default {
 				this.loading = false
 			}
 			this.loading = true
-			this.$store.dispatch('newCollective',
+			this.$store.dispatch(NEW_COLLECTIVE,
 				{ name: this.name, emoji: this.emoji })
 				.then(updateCollective)
 				.catch(displayError('Could not create the collective'))

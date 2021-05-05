@@ -24,6 +24,7 @@
 import { emit } from '@nextcloud/event-bus'
 import { showInfo } from '@nextcloud/dialogs'
 import { mapGetters, mapMutations } from 'vuex'
+import { GET_COLLECTIVES, GET_TRASH_COLLECTIVES } from '../store/actions'
 import AppContent from '@nextcloud/vue/dist/Components/AppContent'
 import Content from '@nextcloud/vue/dist/Components/Content'
 import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
@@ -102,7 +103,7 @@ export default {
 		 * @returns {Promise}
 		 */
 		getCollectives() {
-			return this.$store.dispatch('getCollectives')
+			return this.$store.dispatch(GET_COLLECTIVES)
 				.catch(displayError('Could not fetch collectives'))
 		},
 
@@ -111,7 +112,7 @@ export default {
 		 * @returns {Promise}
 		 */
 		getTrashCollectives() {
-			return this.$store.dispatch('getTrashCollectives')
+			return this.$store.dispatch(GET_TRASH_COLLECTIVES)
 				.catch(displayError('Could not fetch collectives from trash'))
 		},
 
