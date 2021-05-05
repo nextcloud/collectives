@@ -2,6 +2,19 @@ export const state = {
 	circles: [],
 }
 
+export const getters = {
+	availableCircles(state, _getters, rootState) {
+		return state.circles.filter(circle => {
+			const matchUniqueId = c => {
+				return (c.circleUniqueId === circle.unique_id)
+			}
+			const alive = rootState.collectives.find(matchUniqueId)
+			const trashed = rootState.trashCollectives.find(matchUniqueId)
+			return !alive && !trashed
+		})
+	},
+}
+
 export const mutations = {
 	circles(state, circles) {
 		state.circles = circles

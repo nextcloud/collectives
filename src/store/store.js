@@ -61,21 +61,6 @@ export default new Vuex.Store({
 			return state.trashCollectives
 		},
 
-		circles(state) {
-			return state.circles.circles
-		},
-
-		availableCircles(state, getters) {
-			return getters.circles.filter(circle => {
-			    const matchUniqueId = c => {
-					return (c.circleUniqueId === circle.unique_id)
-				}
-				const alive = state.collectives.find(matchUniqueId)
-				const trashed = state.trashCollectives.find(matchUniqueId)
-				return !alive && !trashed
-			})
-		},
-
 		pageParam(state) {
 			return state.route.params.page
 		},
