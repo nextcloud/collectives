@@ -17,7 +17,7 @@
 				<ActionButton
 					icon="icon-menu"
 					:close-after-click="true"
-					@click="$emit('showCurrent'); hide('sidebar')" />
+					@click="closeVersions" />
 			</Actions>
 		</h1>
 		<RichText :page-id="page.id"
@@ -37,6 +37,7 @@ import { showError, showSuccess } from '@nextcloud/dialogs'
 import { generateRemoteUrl } from '@nextcloud/router'
 import { mapGetters, mapMutations } from 'vuex'
 import { SELECT_VERSION } from '../store/mutations'
+import { GET_VERSIONS } from '../store/actions'
 
 export default {
 	name: 'Version',
@@ -86,6 +87,10 @@ export default {
 
 	methods: {
 		...mapMutations(['hide']),
+		closeVersions() {
+			this.$store.commit(SELECT_VERSION, null)
+			this.hide('sidebar')
+		},
 		/**
 		 * Revert page to an old version
 		 */
@@ -100,6 +105,7 @@ export default {
 					},
 				})
 				this.$store.commit(SELECT_VERSION, null)
+				this.$store.dispatch(GET_VERSIONS, this.page.id)
 				showSuccess(t('collectives', 'Reverted {page} to revision {timestamp}.', {
 					page: this.page.title,
 					timestamp: target.relativeTimestamp,

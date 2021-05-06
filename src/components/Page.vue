@@ -67,6 +67,7 @@ import { showError } from '@nextcloud/dialogs'
 import { mapGetters, mapMutations } from 'vuex'
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateRemoteUrl } from '@nextcloud/router'
+import { RENAME_PAGE, TOUCH_PAGE, GET_VERSIONS } from '../store/actions'
 
 export default {
 	name: 'Page',
@@ -231,7 +232,7 @@ export default {
 				return
 			}
 			try {
-				await this.$store.dispatch('renamePage', newTitle)
+				await this.$store.dispatch(RENAME_PAGE, newTitle)
 				this.$router.push(this.updatedPagePath)
 			} catch (e) {
 				console.error(e)
@@ -269,11 +270,15 @@ export default {
 		async stopEdit() {
 			const wrapper = this.$refs.editor.$children[0]
 			const doc = wrapper.$data.document
-			if (wrapper.$data.dirty) {
+			const wasDirty = wrapper.$data.dirty
+
+			if (wasDirty) {
 				await wrapper.close()
-				this.$store.dispatch('touchPage')
-			} else if (doc.lastSavedVersionTime !== this.previousSaveTimestamp) {
-				this.$store.dispatch('touchPage')
+			}
+			if (doc.lastSavedVersionTime !== this.previousSaveTimestamp
+				|| wasDirty) {
+				this.$store.dispatch(TOUCH_PAGE)
+				this.$store.dispatch(GET_VERSIONS, this.page.id)
 			}
 			this.$emit('toggleEdit')
 		},
