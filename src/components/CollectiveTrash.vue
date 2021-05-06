@@ -45,6 +45,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
 import AppNavigationSettings from '@nextcloud/vue/dist/Components/AppNavigationSettings'
@@ -64,11 +65,9 @@ export default {
 			modalCollective: null,
 		}
 	},
-	computed: {
-		trashCollectives() {
-			return this.$store.getters.trashCollectives
-		},
-	},
+	computed: mapState({
+		trashCollectives: (state) => state.collectives.trashCollectives,
+	}),
 	methods: {
 		icon(collective) {
 			return collective.emoji ? '' : 'icon-star'

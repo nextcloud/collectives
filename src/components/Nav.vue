@@ -33,7 +33,9 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
+import { TRASH_COLLECTIVE, RESTORE_COLLECTIVE, DELETE_COLLECTIVE }
+	from '../store/actions'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import AppNavigation from '@nextcloud/vue/dist/Components/AppNavigation'
 import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
@@ -55,11 +57,13 @@ export default {
 		NewCollective,
 	},
 	computed: {
+		...mapState({
+			collectives: (state) => state.collectives.collectives,
+			trashCollectives: (state) => state.collectives.trashCollectives,
+		}),
 		...mapGetters([
 			'loading',
-			'collectives',
 			'collectiveParam',
-			'trashCollectives',
 		]),
 
 		displayTrash() {
@@ -88,7 +92,7 @@ export default {
 			if (this.collectiveParam === collective.name) {
 				this.$router.push('/')
 			}
-			return this.$store.dispatch('trashCollective', collective)
+			return this.$store.dispatch(TRASH_COLLECTIVE, collective)
 				.catch(displayError('Could not move the collective to trash'))
 		},
 
@@ -98,7 +102,7 @@ export default {
 		 * @returns {Promise}
 		 */
 		restoreCollective(collective) {
-			return this.$store.dispatch('restoreCollective', collective)
+			return this.$store.dispatch(RESTORE_COLLECTIVE, collective)
 				.catch(displayError('Could not restore collective from trash'))
 		},
 
@@ -109,7 +113,7 @@ export default {
 		 * @returns {Promise}
 		 */
 		deleteCollective(collective, circle) {
-			return this.$store.dispatch('deleteCollective', { ...collective, circle })
+			return this.$store.dispatch(DELETE_COLLECTIVE, { ...collective, circle })
 				.catch(displayError('Could not delete collective from trash'))
 		},
 	},

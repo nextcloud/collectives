@@ -80,12 +80,11 @@
 
 <script>
 import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
-import { getCurrentUser } from '@nextcloud/auth'
-import axios from '@nextcloud/axios'
-import { generateRemoteUrl } from '@nextcloud/router'
 import moment from '@nextcloud/moment'
 import { formatFileSize } from '@nextcloud/files'
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
+import { SELECT_VERSION } from '../store/mutations'
+import { GET_VERSIONS } from '../store/actions'
 
 export default {
 	name: 'SidebarVersionsTab',
@@ -117,11 +116,13 @@ export default {
 		return {
 			error: '',
 			loading: true,
-			versions: [],
 		}
 	},
 
 	computed: {
+		...mapState({
+			versions: (state) => state.versions.versions,
+		}),
 		...mapGetters([
 			'version',
 		]),
@@ -173,92 +174,6 @@ export default {
 	},
 
 	methods: {
-		/**
-		 * Convert an XML DOM object into a JSON object
-		 * Copied from apps/workflowengine/src/components/Checks/MultiselectTag/api.js
-		 * @param {object} xml XML object
-		 * @returns {object}
-		 */
-		xmlToJson(xml) {
-			let obj = {}
-
-			if (xml.nodeType === 1) {
-				if (xml.attributes.length > 0) {
-					obj['@attributes'] = {}
-					for (let j = 0; j < xml.attributes.length; j++) {
-						const attribute = xml.attributes.item(j)
-						obj['@attributes'][attribute.nodeName] = attribute.nodeValue
-					}
-				}
-			} else if (xml.nodeType === 3) {
-				obj = xml.nodeValue
-			}
-
-			if (xml.hasChildNodes()) {
-				for (let i = 0; i < xml.childNodes.length; i++) {
-					const item = xml.childNodes.item(i)
-					const nodeName = item.nodeName
-					if (typeof (obj[nodeName]) === 'undefined') {
-						obj[nodeName] = this.xmlToJson(item)
-					} else {
-						if (typeof obj[nodeName].push === 'undefined') {
-							const old = obj[nodeName]
-							obj[nodeName] = []
-							obj[nodeName].push(old)
-						}
-						obj[nodeName].push(this.xmlToJson(item))
-					}
-				}
-			}
-			return obj
-		},
-
-		/**
-		 * Read string with XML content into DOMParser()
-		 * Copied from apps/workflowengine/src/components/Checks/MultiselectTag/api.js
-		 * @param {string} xml XML string
-		 * @returns {object|null}
-		 */
-		parseXml(xml) {
-			let dom = null
-			try {
-				dom = (new DOMParser()).parseFromString(xml, 'text/xml')
-			} catch (e) {
-				console.error('Failed to parse xml document', e)
-			}
-			return dom
-		},
-
-		/**
-		 * Extract list of versions from an XML-encoded Nextcloud DAV API response
-		 * @param {string} xml XML string
-		 * @returns {array|null}
-		 */
-		xmlToVersionsList(xml) {
-			const json = this.xmlToJson(this.parseXml(xml))
-			const list = json['d:multistatus']['d:response']
-			const result = []
-			for (const index in list) {
-				const version = list[index]['d:propstat']
-
-				if (!version || version['d:status']['#text'] !== 'HTTP/1.1 200 OK') {
-					continue
-				}
-				const url = list[index]['d:href']['#text']
-				const time = moment.unix(url.split('/').pop())
-				const size = version['d:prop']['d:getcontentlength']['#text']
-				result.push({
-					downloadUrl: generateRemoteUrl(url.split('remote.php/', 2)[1]),
-					formattedTimestamp: time.format('LLL'),
-					relativeTimestamp: time.fromNow(),
-					timestamp: time.unix(),
-					millisecondsTimestamp: time.valueOf(),
-					humanReadableSize: formatFileSize(size),
-					altSize: n('files', '%n byte', '%n bytes', size),
-				})
-			}
-			return result
-		},
 
 		/**
 		 * Get versions of a page
@@ -266,21 +181,7 @@ export default {
 		async getPageVersions() {
 			try {
 				this.loading = true
-				const user = getCurrentUser().uid
-				const versionsUrl = generateRemoteUrl(`dav/versions/${user}/versions/${this.pageId}`)
-				const response = await axios({
-					method: 'PROPFIND',
-					url: versionsUrl,
-					data: `<?xml version="1.0"?>
-<d:propfind xmlns:d="DAV:" xmlns:oc="http://owncloud.org/ns">
- <d:prop>
-  <d:getcontentlength />
-  <d:getcontenttype />
-  <d:getlastmodified />
- </d:prop>
-</d:propfind>`,
-				})
-				this.versions = this.xmlToVersionsList(response.data).reverse()
+				this.$store.dispatch(GET_VERSIONS, this.pageId)
 				this.loading = false
 			} catch (e) {
 				this.error = t('collectives', 'Could not get page versions')
@@ -294,7 +195,7 @@ export default {
 		 * @param {object} version Page version object
 		 */
 		clickPreviewVersion(version) {
-			this.$store.commit('version', version)
+			this.$store.commit(SELECT_VERSION, version)
 		},
 	},
 }

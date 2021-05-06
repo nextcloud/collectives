@@ -1,24 +1,5 @@
-/**
- * @copyright Copyright (c) 2019 John Molakvoæ <skjnldsv@protonmail.com>
- *
- * @author John Molakvoæ <skjnldsv@protonmail.com>
- *
- * @license GNU AGPL version 3 or any later version
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *
- */
+import { NEW_COLLECTIVE, TRASH_COLLECTIVE, DELETE_COLLECTIVE, NEW_PAGE }
+	from '../../src/store/actions'
 
 const url = Cypress.config('baseUrl').replace(/\/index.php\/?$/g, '')
 Cypress.env('baseUrl', url)
@@ -48,7 +29,7 @@ Cypress.Commands.add('seedCollective', (name) => {
 	cy.window()
 		.its('app')
 		.then(async app => {
-			await app.$store.dispatch('newCollective', { name })
+			await app.$store.dispatch(NEW_COLLECTIVE, { name })
 				.catch(e => {
 					if (e.request && e.request.status === 422) {
 						// The collective already existed... carry on.
@@ -64,7 +45,7 @@ Cypress.Commands.add('seedPage', (name) => {
 	cy.window()
 		.its('app')
 		.then(async app => {
-			await app.$store.dispatch('newPage', { title: name })
+			await app.$store.dispatch(NEW_PAGE, { title: name })
 		})
 })
 
@@ -72,9 +53,9 @@ Cypress.Commands.add('deleteCollective', (name) => {
 	cy.window()
 		.its('app')
 		.then(async app => {
-			const id = app.$store.getters.collectives.find(c => c.name === name).id
-			await app.$store.dispatch('trashCollective', { id })
-			await app.$store.dispatch('deleteCollective', { id, circle: true })
+			const id = app.$store.state.collectives.collectives.find(c => c.name === name).id
+			await app.$store.dispatch(TRASH_COLLECTIVE, { id })
+			await app.$store.dispatch(DELETE_COLLECTIVE, { id, circle: true })
 		})
 })
 

@@ -23,7 +23,8 @@
 
 import { emit } from '@nextcloud/event-bus'
 import { showInfo } from '@nextcloud/dialogs'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapState, mapGetters, mapMutations } from 'vuex'
+import { GET_COLLECTIVES, GET_TRASH_COLLECTIVES, GET_PAGES } from '../store/actions'
 import AppContent from '@nextcloud/vue/dist/Components/AppContent'
 import Content from '@nextcloud/vue/dist/Components/Content'
 import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
@@ -50,11 +51,13 @@ export default {
 	],
 
 	computed: {
+		...mapState([
+			'messages',
+		]),
 		...mapGetters([
 			'collectiveParam',
 			'currentCollective',
 			'currentPage',
-			'messages',
 			'pageParam',
 			'showing',
 			'version',
@@ -102,7 +105,7 @@ export default {
 		 * @returns {Promise}
 		 */
 		getCollectives() {
-			return this.$store.dispatch('getCollectives')
+			return this.$store.dispatch(GET_COLLECTIVES)
 				.catch(displayError('Could not fetch collectives'))
 		},
 
@@ -111,7 +114,7 @@ export default {
 		 * @returns {Promise}
 		 */
 		getTrashCollectives() {
-			return this.$store.dispatch('getTrashCollectives')
+			return this.$store.dispatch(GET_TRASH_COLLECTIVES)
 				.catch(displayError('Could not fetch collectives from trash'))
 		},
 
@@ -123,7 +126,7 @@ export default {
 			if (!this.currentCollective) {
 				return new Promise((resolve) => { resolve() })
 			}
-			return this.$store.dispatch('getPages')
+			return this.$store.dispatch(GET_PAGES)
 				.catch(displayError('Could not fetch pages'))
 		},
 

@@ -16,7 +16,7 @@
 			<template #actions>
 				<ActionButton class="primary"
 					icon="icon-add"
-					@click="$emit('newPage')">
+					@click="newPage">
 					{{ t('collectives', 'Add a page') }}
 				</ActionButton>
 			</template>
@@ -43,7 +43,9 @@ import AppContentList from '@nextcloud/vue/dist/Components/AppContentList'
 import LastUpdate from './LastUpdate'
 import PagesListItem from './PagesListItem'
 
+import { showError } from '@nextcloud/dialogs'
 import { mapGetters, mapMutations } from 'vuex'
+import { NEW_PAGE } from '../store/actions'
 
 export default {
 	name: 'PagesList',
@@ -69,7 +71,24 @@ export default {
 		},
 	},
 
-	methods: mapMutations(['show']),
+	methods: {
+		...mapMutations(['show']),
+		/**
+		 * Create a new page and focus the page  automatically
+		 */
+		async newPage() {
+			const page = {
+				title: t('collectives', 'New Page'),
+			}
+			try {
+				await this.$store.dispatch(NEW_PAGE, page)
+				this.$router.push(this.$store.getters.updatedPagePath)
+			} catch (e) {
+				console.error(e)
+				showError(t('collectives', 'Could not create the page'))
+			}
+		},
+	},
 }
 
 </script>
