@@ -86,6 +86,7 @@ import { generateRemoteUrl } from '@nextcloud/router'
 import moment from '@nextcloud/moment'
 import { formatFileSize } from '@nextcloud/files'
 import { mapGetters } from 'vuex'
+import { SELECT_VERSION } from '../store/mutations'
 
 export default {
 	name: 'SidebarVersionsTab',
@@ -294,7 +295,7 @@ export default {
 		 * @param {object} version Page version object
 		 */
 		clickPreviewVersion(version) {
-			this.$store.commit('version', version)
+			this.$store.commit(SELECT_VERSION, version)
 		},
 	},
 }

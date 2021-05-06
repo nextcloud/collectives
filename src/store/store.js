@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 import circles from './circles'
 import collectives from './collectives'
 import pages from './pages'
+import versions from './versions'
 
 Vue.use(Vuex)
 
@@ -13,19 +14,18 @@ export default new Vuex.Store({
 		circles,
 		collectives,
 		pages,
+		versions,
 	},
 
 	state: {
 		messages: {},
 		showing: {},
 		loading: {},
-		version: null,
 	},
 
 	getters: {
 		loading: (state) => (aspect) => state.loading[aspect],
 		showing: (state) => (aspect) => state.showing[aspect],
-		version: (state) => state.version,
 
 		collectiveParam: (state) => state.route.params.collective,
 		pageParam: (state) => state.route.params.page,
@@ -47,9 +47,5 @@ export default new Vuex.Store({
 		hide: (state, aspect) => Vue.set(state.showing, aspect, false),
 		toggle: (state, aspect) =>
 			Vue.set(state.showing, aspect, !state.showing[aspect]),
-
-		version(state, version) {
-			state.version = version
-		},
 	},
 })
