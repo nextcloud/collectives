@@ -1,8 +1,9 @@
-import { SELECT_VERSION } from './mutations'
+import { SELECT_VERSION, SET_VERSIONS } from './mutations'
 
 export default {
 	state: {
 		version: null,
+		versions: [],
 	},
 
 	getters: {
@@ -14,5 +15,8 @@ export default {
 			state.version = version
 		},
 
+		[SET_VERSIONS](state, versions) {
+			state.versions = versions
+		},
 	},
 }

@@ -85,8 +85,8 @@ import axios from '@nextcloud/axios'
 import { generateRemoteUrl } from '@nextcloud/router'
 import moment from '@nextcloud/moment'
 import { formatFileSize } from '@nextcloud/files'
-import { mapGetters } from 'vuex'
-import { SELECT_VERSION } from '../store/mutations'
+import { mapState, mapGetters } from 'vuex'
+import { SELECT_VERSION, SET_VERSIONS } from '../store/mutations'
 
 export default {
 	name: 'SidebarVersionsTab',
@@ -118,11 +118,13 @@ export default {
 		return {
 			error: '',
 			loading: true,
-			versions: [],
 		}
 	},
 
 	computed: {
+		...mapState({
+			versions: (state) => state.versions.versions,
+		}),
 		...mapGetters([
 			'version',
 		]),
@@ -281,7 +283,8 @@ export default {
  </d:prop>
 </d:propfind>`,
 				})
-				this.versions = this.xmlToVersionsList(response.data).reverse()
+				const versions = this.xmlToVersionsList(response.data).reverse()
+				this.$store.commit(SET_VERSIONS, versions)
 				this.loading = false
 			} catch (e) {
 				this.error = t('collectives', 'Could not get page versions')
