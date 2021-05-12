@@ -89,7 +89,7 @@ describe('Collective', function() {
 		})
 		it('Allows creation of pages', function() {
 			cy.get('.app-content-list button.primary')
-				.should('contain', 'Add a page')
+				.should('contain', 'Add a subpage')
 		})
 	})
 
