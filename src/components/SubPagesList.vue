@@ -68,6 +68,7 @@ export default {
 		...mapGetters([
 			'collectiveParam',
 			'loading',
+			'currentPagePath',
 			'mostRecentSubpages',
 		]),
 
@@ -104,6 +105,10 @@ export default {
 		},
 	},
 
+	mounted() {
+		this.initCollapsed()
+	},
+
 	methods: {
 		...mapMutations(['show']),
 
@@ -128,6 +133,12 @@ export default {
 
 		toggleCollapsed() {
 			this.collapsed = !this.collapsed
+		},
+
+		initCollapsed() {
+			if (this.currentPagePath.includes(this.page)) {
+				this.collapsed = false
+			}
 		},
 	},
 }
