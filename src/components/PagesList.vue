@@ -9,7 +9,9 @@
 			:collapsed="false"
 			@click.native="show('details')">
 			<template v-if="currentCollective.emoji" #icon>
-				{{ currentCollective.emoji }}
+				<div>
+					{{ currentCollective.emoji }}
+				</div>
 			</template>
 			<template v-if="collectivePage" #line-two>
 				<LastUpdate :timestamp="collectivePage.timestamp"

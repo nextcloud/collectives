@@ -1,20 +1,21 @@
 <template>
-	<div :class="{active: isActive}"
-		class="app-content-list-item"
+	<div class="app-content-list-item"
+		:class="{active: isActive}"
 		:style="indentItem"
 		@mouseover="hover = true"
 		@mouseleave="hover = false">
 		<div class="app-content-list-item-icon"
-			:style="indentIcon">
-			<button v-if="isCollapsible"
-				class="icon-collapse icon-triangle-s"
-				:class="{'icon-collapse--rotated':collapsed}"
-				@click="toggleCollapsed" />
-			<slot v-else name="icon">
-				<div :style="iconStyle">
+			:style="indentIcon"
+			@[isClickable]="toggleCollapsed">
+			<slot name="icon">
+				<div :class="{'page-icon-collapsible': isCollapsible}"
+					:style="iconStyle">
 					{{ firstGrapheme }}
 				</div>
 			</slot>
+			<div v-if="isCollapsible"
+				class="page-icon-badge icon-triangle-s"
+				:class="{'page-icon-badge--rotated': collapsed}" />
 		</div>
 		<router-link :to="to">
 			<div class="app-content-list-item-line-one">
@@ -120,7 +121,11 @@ export default {
 
 		isCollapsible() {
 			// Collective landing page is not collapsible
-			return (this.level === 0) ? false : this.collapsible
+			return (this.level > 0 && this.collapsible)
+		},
+
+		isClickable() {
+			return this.isCollapsible ? 'click' : null
 		},
 	},
 
@@ -168,25 +173,29 @@ export default {
 		cursor: default;
 	}
 
-	// Copied over from @nextcloud-vue component AppNavigationIconCollapsible
-	.icon-collapse {
-		transition: opacity var(--animation-quick) ease-in-out;
-		color: var(--color-main-text);
-		border: none;
-		width: 100%;
-		height: 100%;
-		background-size: contain;
+	.page-icon-collapsible {
+		cursor: pointer;
+	}
+
+	.page-icon-badge {
+		position: absolute;
+		width: 34px;
+		bottom: -7px;
+		right: -16px;
+		padding: 5px 10px;
+		background-size: cover;
+		cursor: pointer;
 
 		&:hover{
-			color: var(--color-primary);
+			background-color: var(--color-main-background);
 		}
 		&--rotated {
+			bottom: -4px;
 			-webkit-transform: rotate(-90deg);
 			-ms-transform: rotate(-90deg);
 			transform: rotate(-90deg);
-			color: var(--color-main-text);
 			&:hover{
-				color: var(--color-primary);
+				background-color: var(--color-main-background);
 			}
 		}
 	}
