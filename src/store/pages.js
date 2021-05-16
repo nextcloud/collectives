@@ -28,19 +28,29 @@ export default {
 			return getters.pageParam || 'Readme'
 		},
 
-		currentPage(state, getters) {
+		currentPagePath(state, getters) {
 			// Return landing page
 			if (getters.pagePath === 'Readme') {
-				return getters.collectivePage
+				return [getters.collectivePage]
 			}
 
 			// Iterate through all path levels to find the correct page
+			const pages = []
 			const parts = getters.pagePath.split('/').filter(Boolean)
 			let page = getters.collectivePage
 			for (const i in parts) {
 				page = state.pages.find(p => (p.parentId === page.id && p.title === parts[i]))
+				if (page) {
+					pages.push(page)
+				} else {
+					return []
+				}
 			}
-			return page
+			return pages
+		},
+
+		currentPage(_state, getters) {
+			return getters.currentPagePath[getters.currentPagePath.length - 1]
 		},
 
 		mostRecentSubpages: (state, getters) => (parentId) => {
