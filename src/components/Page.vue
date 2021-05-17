@@ -102,6 +102,7 @@ export default {
 			'pageParam',
 			'currentPage',
 			'currentCollective',
+			'indexPage',
 			'landingPage',
 			'updatedPagePath',
 		]),
@@ -214,7 +215,11 @@ export default {
 				'Nextcloud',
 			]
 			if (!this.landingPage) {
-				parts.unshift(this.page.title)
+				if (this.indexPage) {
+					parts.unshift(this.page.filePath ? this.page.filePath : this.page.title)
+				} else {
+					parts.unshift(this.page.filePath ? this.page.filePath + '/' + this.page.title : this.page.title)
+				}
 			}
 			document.title = parts.join(' - ')
 			this.preview = true

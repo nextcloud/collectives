@@ -119,7 +119,7 @@ export default {
 		async newPage(parentPage) {
 			const page = {
 				title: t('collectives', 'New Page'),
-				filePath: [parentPage.filePath, parentPage.title].filter(Boolean).join('/'),
+				filePath: [encodeURI(parentPage.filePath), encodeURIComponent(parentPage.title)].filter(Boolean).join('/'),
 				parentId: parentPage.id,
 			}
 			try {
