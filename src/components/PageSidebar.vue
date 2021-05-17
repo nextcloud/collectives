@@ -65,7 +65,7 @@ export default {
 		async deletePage() {
 			try {
 				await this.$store.dispatch('deletePage')
-				this.$router.push(`/${this.collectiveParam}`)
+				this.$router.push(`/${encodeURIComponent(this.collectiveParam)}`)
 				showSuccess(t('collectives', 'Page deleted'))
 			} catch (e) {
 				console.error(e)
