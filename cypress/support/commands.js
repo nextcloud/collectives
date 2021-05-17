@@ -1,4 +1,4 @@
-import { NEW_COLLECTIVE, TRASH_COLLECTIVE, DELETE_COLLECTIVE, NEW_PAGE }
+import { NEW_COLLECTIVE, TRASH_COLLECTIVE, DELETE_COLLECTIVE, GET_PAGES, NEW_PAGE }
 	from '../../src/store/actions'
 
 const url = Cypress.config('baseUrl').replace(/\/index.php\/?$/g, '')
@@ -41,11 +41,13 @@ Cypress.Commands.add('seedCollective', (name) => {
 		})
 })
 
-Cypress.Commands.add('seedPage', (name) => {
+Cypress.Commands.add('seedPage', (name, parentFilePath, parentFileName) => {
 	cy.window()
 		.its('app')
 		.then(async app => {
-			await app.$store.dispatch(NEW_PAGE, { title: name })
+			await app.$store.dispatch(GET_PAGES)
+			const parentId = app.$store.state.pages.pages.find(p => (p.filePath === parentFilePath && p.fileName === parentFileName)).id
+			await app.$store.dispatch(NEW_PAGE, { title: name, pagePath: name, parentId })
 		})
 })
 

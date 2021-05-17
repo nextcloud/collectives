@@ -88,6 +88,8 @@ describe('Collective', function() {
 			cy.get('#text h1').should('contain', 'Welcome to your new collective')
 		})
 		it('Allows creation of pages', function() {
+			cy.get('.app-content-list-item')
+				.trigger('mouseover')
 			cy.get('.app-content-list button.primary')
 				.should('contain', 'Add a subpage')
 		})
