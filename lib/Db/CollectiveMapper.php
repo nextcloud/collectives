@@ -28,7 +28,8 @@ class CollectiveMapper extends QBMapper {
 	/**
 	 * CollectiveMapper constructor.
 	 *
-	 * @param IDBConnection    $db
+	 * @param IDBConnection  $db
+	 * @param CirclesRequest $circlesRequest
 	 */
 	public function __construct(
 		IDBConnection $db,
