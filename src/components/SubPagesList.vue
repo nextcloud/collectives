@@ -124,6 +124,7 @@ export default {
 			}
 			try {
 				await this.$store.dispatch(NEW_PAGE, page)
+				this.collapsed = false
 				this.$router.push(this.$store.getters.updatedPagePath)
 			} catch (e) {
 				console.error(e)
