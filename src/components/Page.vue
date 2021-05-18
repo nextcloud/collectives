@@ -170,7 +170,7 @@ export default {
 		 * @returns {string}
 		 */
 		filePath() {
-			return this.page.collectivePath + this.page.filePath + '/' + this.page.fileName
+			return [this.page.collectivePath, this.page.filePath, this.page.fileName].filter(Boolean).join('/')
 		},
 
 		/**

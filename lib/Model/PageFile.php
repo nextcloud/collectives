@@ -94,7 +94,7 @@ class PageFile extends Entity implements JsonSerializable {
 		$this->setTimestamp($file->getMTime());
 		$this->setSize($file->getSize());
 		$this->setFileName($file->getName());
-		$this->setCollectivePath(explode('/', $file->getMountPoint()->getMountPoint(), 4)[3]);
+		$this->setCollectivePath(rtrim(explode('/', $file->getMountPoint()->getMountPoint(), 4)[3], '/'));
 		$this->setFilePath($file->getParent()->getInternalPath());
 		if (null !== $lastUserId) {
 			$this->setLastUserId($lastUserId);
