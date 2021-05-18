@@ -24,41 +24,72 @@ export default {
 	},
 
 	getters: {
-		currentPage(state, getters) {
-			const title = getters.pageParam || 'Readme'
-			return state.pages.find(
-				(page) => page.title === title
-			)
+		pagePath(_state, getters) {
+			return getters.pageParam || 'Readme'
 		},
 
-		mostRecentPages(_state, getters) {
-			return getters.visiblePages.sort((a, b) => b.timestamp - a.timestamp)
+		currentPagePath(state, getters) {
+			// Return landing page
+			if (getters.pagePath === 'Readme') {
+				return [getters.collectivePage]
+			}
+
+			// Iterate through all path levels to find the correct page
+			const pages = []
+			const parts = getters.pagePath.split('/').filter(Boolean)
+			let page = getters.collectivePage
+			for (const i in parts) {
+				page = state.pages.find(p => (p.parentId === page.id && p.title === decodeURIComponent(parts[i])))
+				if (page) {
+					pages.push(page)
+				} else {
+					return []
+				}
+			}
+			return pages
+		},
+
+		currentPage(_state, getters) {
+			return getters.currentPagePath[getters.currentPagePath.length - 1]
+		},
+
+		mostRecentSubpages: (state, getters) => (parentId) => {
+			return getters.visibleSubpages(parentId).sort((a, b) => b.timestamp - a.timestamp)
 		},
 
 		collectivePage(state) {
-			return state.pages.find((p) => p.title === 'Readme')
+			return state.pages.find(p => (p.parentId === 0 && p.title === 'Readme'))
 		},
 
-		visiblePages(state) {
-			return state.pages.filter((p) => p.title !== 'Readme')
+		visibleSubpages: (state) => (parentId) => {
+			return state.pages.filter(p => p.parentId === parentId)
 		},
 
 		updatedPagePath(state, getters) {
 			const collective = getters.collectiveParam
-			const { title, id } = state.updatedPage
-			return `/${collective}/${title}?fileId=${id}`
+			const { filePath, title, id } = state.updatedPage
+			const pagePath = [
+				encodeURIComponent(collective),
+				encodeURI(filePath),
+				encodeURIComponent(title),
+			].filter(Boolean).join('/')
+			return `/${pagePath}?fileId=${id}`
 		},
 
 		pagesUrl(_state, getters) {
 			return generateUrl(`/apps/collectives/_collectives/${getters.currentCollective.id}/_pages`)
 		},
 
+		pageCreateUrl(_state, getters) {
+			return parentId => `${getters.pagesUrl}/parent/${parentId}`
+		},
+
 		pageUrl(_state, getters) {
-			return (pageId) => `${getters.pagesUrl}/${pageId}`
+			return (parentId, pageId) => `${getters.pagesUrl}/parent/${parentId}/page/${pageId}`
 		},
 
 		touchUrl(_state, getters) {
-			return `${getters.pageUrl(getters.currentPage.id)}/touch`
+			return `${getters.pageUrl(getters.currentPage.parentId, getters.currentPage.id)}/touch`
 		},
 
 	},
@@ -102,11 +133,12 @@ export default {
 
 		/**
 		 * Get a single page and update it in the store
+		 * @param {number} parentId Parent ID
 		 * @param {number} pageId Page ID
 		 */
-		async [GET_PAGE]({ commit, getters, state }, pageId) {
+		async [GET_PAGE]({ commit, getters, state }, { parentId, pageId }) {
 			commit('load', 'page', { root: true })
-			const response = await axios.get(getters.pageUrl(pageId))
+			const response = await axios.get(getters.pageUrl(parentId, pageId))
 			commit(UPDATE_PAGE, response.data.data)
 			commit('done', 'page', { root: true })
 		},
@@ -117,7 +149,7 @@ export default {
 		 */
 		async [NEW_PAGE]({ commit, getters }, page) {
 			commit('load', 'page', { root: true })
-			const response = await axios.post(getters.pagesUrl, page)
+			const response = await axios.post(getters.pageCreateUrl(page.parentId), page)
 			// Add new page to the beginning of pages array
 			commit(ADD_PAGE, { newTitle: '', ...response.data.data })
 			commit('done', 'page', { root: true })
@@ -137,7 +169,7 @@ export default {
 			const page = getters.currentPage
 			page.title = newTitle
 			delete page.newTitle
-			const response = await axios.put(getters.pageUrl(page.id), page)
+			const response = await axios.put(getters.pageUrl(page.parentId, page.id), page)
 			commit(UPDATE_PAGE, response.data.data)
 			commit('done', 'page', { root: true })
 		},
@@ -147,7 +179,7 @@ export default {
 		 */
 		async [DELETE_PAGE]({ commit, getters, state }) {
 			commit('load', 'page', { root: true })
-			await axios.delete(getters.pageUrl(getters.currentPage.id))
+			await axios.delete(getters.pageUrl(getters.currentPage.parentId, getters.currentPage.id))
 			commit(DELETE_PAGE_BY_ID, getters.currentPage.id)
 			commit('done', 'page', { root: true })
 		},

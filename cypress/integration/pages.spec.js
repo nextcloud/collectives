@@ -28,10 +28,10 @@ describe('Page', function() {
 	before(function() {
 		cy.login('bob', 'bob', '/apps/collectives')
 		cy.seedCollective('drei')
-		cy.seedPage('vier')
+		cy.seedPage('vier', '', 'Readme.md')
 	})
 
-	describe.only('visited from collective home', function() {
+	describe('visited from collective home', function() {
 		before(function() {
 			cy.login('bob', 'bob', '/apps/collectives/drei')
 			cy.get('.app-content-list')
@@ -45,19 +45,22 @@ describe('Page', function() {
 		})
 	})
 
-	describe('Creating a new page', function() {
+	describe('Creating a new subpage', function() {
 		before(function() {
 			cy.login('bob', 'bob', '/apps/collectives/drei')
 			cy.get('#text h1').should('contain', 'Welcome to your new collective')
-			cy.get('.app-content-list button.primary').click()
+			cy.contains('.app-content-list-item', 'vier').trigger('mouseover')
+			cy.contains('.app-content-list-item', 'vier').find('button.primary').click()
 			cy.get('#titleform input').should('have.value', 'New Page')
-			cy.focused().should('have.value', 'Title')
-			cy.type('This is a page with a particular long title{enter}')
+			// cy.focused().should('have.value', 'Title')
+			// cy.type('This is a page with a particular long title{enter}')
 		})
-		it('Shows the title in the enabled titleform', function() {
-			cy.get('.app-content-list-item').should('contain', 'This is a page with a particular long title')
-			cy.get('#titleform input').should('have.value', 'This is a page with a particular long title')
-			cy.get('#titleform input').should('not.have.attr', 'disabled')
+		it('Shows the title in the enabled titleform and full path in browser title', function() {
+			// cy.get('.app-content-list-item').should('contain', 'This is a page with a particular long title')
+			// cy.get('#titleform input').should('have.value', 'This is a page with a particular long title')
+			// cy.get('#titleform input').should('not.have.attr', 'disabled')
+			// cy.get('title').should('contain', 'vier/This is a page with a particular long title - drei - Collectives - Nextcloud')
+			cy.get('title').should('contain', 'vier/New Page - drei - Collectives - Nextcloud')
 		})
 	})
 

@@ -144,7 +144,8 @@
     </UndefinedDocblockClass>
   </file>
   <file src="lib/Service/PageService.php">
-    <UndefinedClass occurrences="1">
+    <UndefinedClass occurrences="2">
+      <code>$e</code>
       <code>CircleDoesNotExistException</code>
     </UndefinedClass>
   </file>

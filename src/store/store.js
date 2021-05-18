@@ -30,6 +30,9 @@ export default new Vuex.Store({
 		collectiveParam: (state) => state.route.params.collective,
 		pageParam: (state) => state.route.params.page,
 
+		indexPage: (_state, get) =>
+			get.currentPage.fileName === 'Readme.md',
+
 		landingPage: (_state, get) =>
 			!get.pageParam || get.pageParam === 'Readme',
 

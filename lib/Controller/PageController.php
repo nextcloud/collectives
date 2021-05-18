@@ -81,13 +81,14 @@ class PageController extends Controller {
 	 * @NoAdminRequired
 	 *
 	 * @param int $collectiveId
+	 * @param int $parentId
 	 * @param int $id
 	 *
 	 * @return DataResponse
 	 */
-	public function get(int $collectiveId, int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId, $id) {
-			$page = $this->service->find($this->getUserId(), $this->getCollective($collectiveId), $id);
+	public function get(int $collectiveId, int $parentId, int $id): DataResponse {
+		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $id) {
+			$page = $this->service->find($this->getUserId(), $this->getCollective($collectiveId), $parentId, $id);
 			return [
 				"data" => $page
 			];
@@ -98,13 +99,14 @@ class PageController extends Controller {
 	 * @NoAdminRequired
 	 *
 	 * @param int    $collectiveId
+	 * @param int    $parentId
 	 * @param string $title
 	 *
 	 * @return DataResponse
 	 */
-	public function create(int $collectiveId, string $title): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId, $title) {
-			$page = $this->service->create($this->getUserId(), $this->getCollective($collectiveId), $title);
+	public function create(int $collectiveId, int $parentId, string $title): DataResponse {
+		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $title) {
+			$page = $this->service->create($this->getUserId(), $this->getCollective($collectiveId), $parentId, $title);
 			return [
 				"data" => $page
 			];
@@ -115,13 +117,14 @@ class PageController extends Controller {
 	 * @NoAdminRequired
 	 *
 	 * @param int $collectiveId
+	 * @param int $parentId
 	 * @param int $id
 	 *
 	 * @return DataResponse
 	 */
-	public function touch(int $collectiveId, int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId, $id) {
-			$page = $this->service->touch($this->getUserId(), $this->getCollective($collectiveId), $id);
+	public function touch(int $collectiveId, int $parentId, int $id): DataResponse {
+		return $this->handleErrorResponse(function () use ($collectiveId, $parentId,  $id) {
+			$page = $this->service->touch($this->getUserId(), $this->getCollective($collectiveId), $parentId, $id);
 			return [
 				"data" => $page
 			];
@@ -132,14 +135,15 @@ class PageController extends Controller {
 	 * @NoAdminRequired
 	 *
 	 * @param int    $collectiveId
+	 * @param int    $parentId
 	 * @param int    $id
 	 * @param string $title
 	 *
 	 * @return DataResponse
 	 */
-	public function rename(int $collectiveId, int $id, string $title): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId, $id, $title) {
-			$page = $this->service->rename($this->getUserId(), $this->getCollective($collectiveId), $id, $title);
+	public function rename(int $collectiveId, int $parentId, int $id, string $title): DataResponse {
+		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $id, $title) {
+			$page = $this->service->rename($this->getUserId(), $this->getCollective($collectiveId), $parentId, $id, $title);
 			return [
 				"data" => $page
 			];
@@ -150,13 +154,14 @@ class PageController extends Controller {
 	 * @NoAdminRequired
 	 *
 	 * @param int $collectiveId
+	 * @param int $parentId
 	 * @param int $id
 	 *
 	 * @return DataResponse
 	 */
-	public function destroy(int $collectiveId, int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId, $id) {
-			$page = $this->service->delete($this->getUserId(), $this->getCollective($collectiveId), $id);
+	public function delete(int $collectiveId, int $parentId, int $id): DataResponse {
+		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $id) {
+			$page = $this->service->delete($this->getUserId(), $this->getCollective($collectiveId), $parentId, $id);
 			return [
 				"data" => $page
 			];

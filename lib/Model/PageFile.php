@@ -27,8 +27,11 @@ use OCP\Files\NotFoundException;
  * @method void setCollectivePath(string $value)
  * @method string getLastUserId()
  * @method void setLastUserId(string $value)
+ * @method string getParentId()
+ * @method void setParentId(string $value)
  */
 class PageFile extends Entity implements JsonSerializable {
+	public const INDEX_PAGE_TITLE = 'Readme';
 	public const SUFFIX = '.md';
 
 	/** @var string */
@@ -52,6 +55,12 @@ class PageFile extends Entity implements JsonSerializable {
 	/** @var string */
 	protected $lastUserId;
 
+	/** @var int */
+	protected $parentId;
+
+	/**
+	 * @return array
+	 */
 	public function jsonSerialize() {
 		return [
 			'id' => $this->id,
@@ -62,26 +71,34 @@ class PageFile extends Entity implements JsonSerializable {
 			'filePath' => $this->filePath,
 			'collectivePath' => $this->collectivePath,
 			'lastUserId' => $this->lastUserId,
+			'parentId' => $this->parentId,
 		];
 	}
 
 	/**
 	 * @param File        $file
+	 * @param int         $parentId
 	 * @param string|null $lastUserId
 	 *
 	 * @throws InvalidPathException
 	 * @throws NotFoundException
 	 */
-	public function fromFile(File $file, ?string $lastUserId = null): void {
+	public function fromFile(File $file, int $parentId, ?string $lastUserId = null): void {
 		$this->setId($file->getId());
-		$this->setTitle(basename($file->getName(), self::SUFFIX));
+		// Set folder name as title for all index pages except the collective landing page
+		if ($parentId !== 0 && 0 === strcmp($file->getName(), self::INDEX_PAGE_TITLE . self::SUFFIX)) {
+			$this->setTitle($file->getParent()->getName());
+		} else {
+			$this->setTitle(basename($file->getName(), self::SUFFIX));
+		}
 		$this->setTimestamp($file->getMTime());
 		$this->setSize($file->getSize());
 		$this->setFileName($file->getName());
-		$this->setCollectivePath(explode('/', $file->getMountPoint()->getMountPoint(), 4)[3]);
-		$this->setFilePath($file->getInternalPath());
+		$this->setCollectivePath(rtrim(explode('/', $file->getMountPoint()->getMountPoint(), 4)[3], '/'));
+		$this->setFilePath($file->getParent()->getInternalPath());
 		if (null !== $lastUserId) {
 			$this->setLastUserId($lastUserId);
 		}
+		$this->setParentId($parentId);
 	}
 }

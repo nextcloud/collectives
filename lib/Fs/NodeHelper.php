@@ -2,7 +2,7 @@
 
 namespace OCA\Collectives\Fs;
 
-use OCA\Collectives\Service\PageDoesNotExistException;
+use OCA\Collectives\Service\NotFoundException;
 use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\IDBConnection;
@@ -31,13 +31,13 @@ class NodeHelper {
 	 * @param int    $id
 	 *
 	 * @return File
-	 * @throws PageDoesNotExistException
+	 * @throws NotFoundException
 	 */
 	public function getFileById(Folder $folder, int $id): File {
 		$file = $folder->getById($id);
 
 		if (count($file) <= 0 || !($file[0] instanceof File)) {
-			throw new PageDoesNotExistException('page does not exist');
+			throw new NotFoundException('Page not found: ' . $id);
 		}
 		return $file[0];
 	}
@@ -51,7 +51,7 @@ class NodeHelper {
 	 */
 	public static function generateFilename(Folder $folder, string $filename, string $suffix = ''): string {
 		$path = $filename . $suffix;
-		if (!$folder->nodeExists($path)) {
+		if (!$folder->nodeExists($filename) && !$folder->nodeExists($path)) {
 			return $filename;
 		}
 

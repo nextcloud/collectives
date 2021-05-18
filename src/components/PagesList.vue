@@ -5,9 +5,13 @@
 			key="Readme"
 			:to="`/${encodeURIComponent(collectiveParam)}`"
 			:title="currentCollective.name"
+			:level="0"
+			:collapsed="false"
 			@click.native="show('details')">
 			<template v-if="currentCollective.emoji" #icon>
-				{{ currentCollective.emoji }}
+				<div>
+					{{ currentCollective.emoji }}
+				</div>
 			</template>
 			<template v-if="collectivePage" #line-two>
 				<LastUpdate :timestamp="collectivePage.timestamp"
@@ -16,23 +20,15 @@
 			<template #actions>
 				<ActionButton class="primary"
 					icon="icon-add"
-					@click="newPage">
-					{{ t('collectives', 'Add a page') }}
+					@click="newPage(collectivePage)">
+					{{ t('collectives', 'Add a subpage') }}
 				</ActionButton>
 			</template>
 		</PagesListItem>
-		<PagesListItem v-for="page in pages"
-			:key="page.title"
-			:to="`/${encodeURIComponent(collectiveParam)}/${encodeURIComponent(page.title)}`"
-			:page-id="page.id"
-			:indent="1"
-			:title="page.title"
-			@click.native="show('details')">
-			<template #line-two>
-				<LastUpdate :timestamp="page.timestamp"
-					:user="page.lastUserId" />
-			</template>
-		</PagesListItem>
+		<SubPagesList v-for="page in subpages"
+			:key="page.id"
+			:page="page"
+			:level="1" />
 	</AppContentList>
 </template>
 
@@ -41,6 +37,7 @@
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import AppContentList from '@nextcloud/vue/dist/Components/AppContentList'
 import LastUpdate from './LastUpdate'
+import SubPagesList from './SubPagesList'
 import PagesListItem from './PagesListItem'
 
 import { showError } from '@nextcloud/dialogs'
@@ -55,6 +52,7 @@ export default {
 		AppContentList,
 		LastUpdate,
 		PagesListItem,
+		SubPagesList,
 	},
 
 	computed: {
@@ -63,22 +61,30 @@ export default {
 			'collectivePage',
 			'currentCollective',
 			'loading',
+			'mostRecentSubpages',
 			'showing',
-			'mostRecentPages',
 		]),
-		pages() {
-			return this.mostRecentPages
+		subpages() {
+			if (this.collectivePage) {
+				return this.mostRecentSubpages(this.collectivePage.id)
+			} else {
+				return []
+			}
 		},
 	},
 
 	methods: {
 		...mapMutations(['show']),
+
 		/**
-		 * Create a new page and focus the page  automatically
+		 * Create a new page and focus the page automatically
+		 * @param {Object} parentPage Parent page
 		 */
-		async newPage() {
+		async newPage(parentPage) {
 			const page = {
 				title: t('collectives', 'New Page'),
+				filePath: '',
+				parentId: parentPage.id,
 			}
 			try {
 				await this.$store.dispatch(NEW_PAGE, page)
