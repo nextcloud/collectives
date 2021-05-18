@@ -94,7 +94,7 @@ class CollectiveProvider implements IProvider {
 			$collectiveSearchResults[] = new SearchResultEntry(
 				$this->urlGenerator->imagePath(
 					'collectives',
-					'ant.svg'
+					'collectives-blue.svg'
 				),
 				$collective->getName(),
 				'',
