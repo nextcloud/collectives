@@ -186,12 +186,12 @@ export default {
 
 	.material-design-icon.page-icon-badge {
 		width: 16px;
-		height: 34px;
+		transform: scale(1, 0.8);
 	}
 
 	.material-design-icon.page-icon-badge > .material-design-icon__svg {
 		width: 16px;
-		height: 34px;
+		transform: scale(1, 0.8);
 	}
 
 	.page-icon-badge {
