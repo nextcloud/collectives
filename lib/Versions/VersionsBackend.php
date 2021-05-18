@@ -23,9 +23,6 @@ class VersionsBackend implements IVersionBackend {
 	/** @var CollectiveFolderManager */
 	private $collectiveFolderManager;
 
-	/** @var MountProvider */
-	private $mountProvider;
-
 	/** @var ITimeFactory */
 	private $timeFactory;
 
@@ -33,14 +30,11 @@ class VersionsBackend implements IVersionBackend {
 	 * VersionsBackend constructor.
 	 *
 	 * @param CollectiveFolderManager $collectiveFolderManager
-	 * @param MountProvider           $mountProvider
 	 * @param ITimeFactory            $timeFactory
 	 */
 	public function __construct(CollectiveFolderManager $collectiveFolderManager,
-								MountProvider $mountProvider,
 								ITimeFactory $timeFactory) {
 		$this->collectiveFolderManager = $collectiveFolderManager;
-		$this->mountProvider = $mountProvider;
 		$this->timeFactory = $timeFactory;
 	}
 
@@ -202,7 +196,7 @@ class VersionsBackend implements IVersionBackend {
 	public function getAllVersionedFiles(array $folder): array {
 		$versionsFolder = $this->getVersionsFolder($folder['id']);
 		// TODO: correct?
-		$mount = $this->mountProvider->getMount($folder['id'], '/dummyuser/files/Collectives/' . $folder['mount_point']);
+		$mount = $this->collectiveFolderManager->getMount($folder['id'], '/dummyuser/files/Collectives/' . $folder['mount_point']);
 		try {
 			$contents = $versionsFolder->getDirectoryListing();
 		} catch (NotFoundException $e) {

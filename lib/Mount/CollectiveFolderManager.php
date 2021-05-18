@@ -2,15 +2,20 @@
 
 namespace OCA\Collectives\Mount;
 
+use OC\Files\Cache\CacheEntry;
 use OC\Files\Node\LazyFolder;
+use OC\Files\Storage\Wrapper\Jail;
 use OC\SystemConfig;
 use OCA\Collectives\Fs\NodeHelper;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\Files\InvalidPathException;
+use OCP\Files\Mount\IMountPoint;
 use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
+use OCP\Files\Storage\IStorageFactory;
 use OCP\IDBConnection;
+use OCP\IUser;
 
 class CollectiveFolderManager {
 	private const SKELETON_DIR = 'skeleton';
@@ -77,6 +82,55 @@ class CollectiveFolderManager {
 				return $rootFolder->newFolder($this->getRootPath());
 			}
 		}));
+	}
+
+	/**
+	 * @param int                  $id
+	 * @param string               $mountPoint
+	 * @param CacheEntry|null      $cacheEntry
+	 * @param IStorageFactory|null $loader
+	 * @param IUser|null           $user
+	 *
+	 * @return IMountPoint
+	 * @throws NotFoundException
+	 * @throws \Exception
+	 */
+	public function getMount(int $id,
+							 string $mountPoint,
+							 CacheEntry $cacheEntry = null,
+							 IStorageFactory $loader = null,
+							 IUser $user = null): IMountPoint {
+
+		$baseStorage = new Jail([
+			'storage' => $this->getRootFolder()->getStorage(),
+			'root' => $this->getJailPath($id)
+		]);
+
+		$collectiveStorage = new CollectiveStorage([
+			'storage' => $baseStorage,
+			'folder_id' => $id,
+			'rootCacheEntry' => $cacheEntry,
+			'mountOwner' => $user
+		]);
+
+		return new CollectiveMountPoint(
+			$id,
+			$this,
+			$collectiveStorage,
+			$mountPoint,
+			null,
+			$loader
+		);
+	}
+
+
+	/**
+	 * @param int $folderId
+	 *
+	 * @return string
+	 */
+	private function getJailPath(int $folderId): string {
+		return $this->getRootFolder()->getInternalPath() . '/' . $folderId;
 	}
 
 	/**

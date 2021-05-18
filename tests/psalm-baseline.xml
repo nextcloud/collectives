@@ -62,12 +62,10 @@
       <code>Circle</code>
       <code>Circles</code>
       <code>Circles</code>
-      <code>CirclesRequest</code>
+      <code>Circles</code>
     </UndefinedClass>
-    <UndefinedDocblockClass occurrences="3">
-      <code>$this-&gt;circlesRequest</code>
+    <UndefinedDocblockClass occurrences="1">
       <code>CircleDoesNotExistException</code>
-      <code>CirclesRequest</code>
     </UndefinedDocblockClass>
   </file>
   <file src="lib/Db/PageMapper.php">
@@ -88,7 +86,8 @@
       <code>IRootFolder</code>
       <code>IRootFolder</code>
     </MissingDependency>
-    <UndefinedClass occurrences="2">
+    <UndefinedClass occurrences="3">
+      <code>CacheEntry|null</code>
       <code>LazyFolder</code>
       <code>SystemConfig</code>
     </UndefinedClass>
@@ -108,9 +107,8 @@
     </UndefinedClass>
   </file>
   <file src="lib/Mount/MountProvider.php">
-    <UndefinedClass occurrences="2">
+    <UndefinedClass occurrences="1">
       <code>Cache</code>
-      <code>CacheEntry|null</code>
     </UndefinedClass>
   </file>
   <file src="lib/Mount/RootEntryCache.php">

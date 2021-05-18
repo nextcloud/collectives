@@ -140,6 +140,19 @@ API PHP 8.0 Nextcloud 21:
     - "Static PHP Analysis"
     - "Unit Test PHP 8.0 Nextcloud 21"
 
+OCC CLI Test:
+  <<: *php
+  stage: test
+  script:
+    - sudo -u www-data $NEXTCLOUD_SOURCE/occ app:enable collectives
+    - sudo -u www-data $NEXTCLOUD_SOURCE/occ app:disable circles
+    - sudo -u www-data $NEXTCLOUD_SOURCE/occ app:list
+  before_script:
+    - make composer
+    - ln -s `pwd` $NEXTCLOUD_SOURCE/apps/collectives
+  services:
+    - mariadb:latest
+
 .browser-test: &browser-test
   <<: *node
   image: cypress/browsers:node14.16.0-chrome89-ff86

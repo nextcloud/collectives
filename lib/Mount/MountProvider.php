@@ -3,8 +3,6 @@
 namespace OCA\Collectives\Mount;
 
 use OC\Files\Cache\Cache;
-use OC\Files\Cache\CacheEntry;
-use OC\Files\Storage\Wrapper\Jail;
 use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Service\CollectiveHelper;
@@ -97,7 +95,7 @@ class MountProvider implements IMountProvider {
 		$folders = $this->getFoldersForUser($user);
 
 		return array_map(function ($folder) use ($user, $loader) {
-			return $this->getMount(
+			return $this->collectiveFolderManager->getMount(
 				$folder['folder_id'],
 				'/' . $user->getUID() . '/files/' . $folder['mount_point'],
 				$folder['rootCacheEntry'],
@@ -107,53 +105,4 @@ class MountProvider implements IMountProvider {
 		}, $folders);
 	}
 
-	/**
-	 * @param int                  $id
-	 * @param string               $mountPoint
-	 * @param CacheEntry|null      $cacheEntry
-	 * @param IStorageFactory|null $loader
-	 * @param IUser|null           $user
-	 *
-	 * @return IMountPoint
-	 * @throws NotFoundException
-	 * @throws \Exception
-	 */
-	public function getMount(int $id,
-							 string $mountPoint,
-							 CacheEntry $cacheEntry = null,
-							 IStorageFactory $loader = null,
-							 IUser $user = null): IMountPoint {
-		$storage = $this->collectiveFolderManager->getRootFolder()->getStorage();
-
-		$rootPath = $this->getJailPath($id);
-
-		$baseStorage = new Jail([
-			'storage' => $storage,
-			'root' => $rootPath
-		]);
-		$collectiveStorage = new CollectiveStorage([
-			'storage' => $baseStorage,
-			'folder_id' => $id,
-			'rootCacheEntry' => $cacheEntry,
-			'mountOwner' => $user
-		]);
-
-		return new CollectiveMountPoint(
-			$id,
-			$this->collectiveFolderManager,
-			$collectiveStorage,
-			$mountPoint,
-			null,
-			$loader
-		);
-	}
-
-	/**
-	 * @param int $folderId
-	 *
-	 * @return string
-	 */
-	public function getJailPath(int $folderId): string {
-		return $this->collectiveFolderManager->getRootFolder()->getInternalPath() . '/' . $folderId;
-	}
 }

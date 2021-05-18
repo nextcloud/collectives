@@ -29,12 +29,13 @@ class CollectiveHelper {
 	 */
 	public function getCollectivesForUser(string $userId, bool $getAdmin = true): array {
 		$collectiveInfos = [];
-		$joinedCircleIds = Circles::joinedCircleIds($userId);
-		foreach ($joinedCircleIds as $cId) {
-			if (null !== $c = $this->collectiveMapper->findByCircleId($cId)) {
+		$joinedCircles = Circles::joinedCircles($userId);
+		foreach ($joinedCircles as $circle) {
+			$id = $circle->getUniqueId();
+			if (null !== $c = $this->collectiveMapper->findByCircleId($id)) {
 				$admin = $getAdmin && $this->collectiveMapper->isAdmin($c, $userId);
 				$collectiveInfos[] = new CollectiveInfo($c,
-					$this->collectiveMapper->circleUniqueIdToName($c->getCircleUniqueId()),
+					$circle->getName(),
 					$admin);
 			}
 		}
