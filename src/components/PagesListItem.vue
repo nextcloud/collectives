@@ -2,19 +2,23 @@
 	<div class="app-content-list-item"
 		:class="{active: isActive}"
 		:style="indentItem"
-		@mouseover="hover = true"
-		@mouseleave="hover = false">
+		@mouseover="hoverItem = true"
+		@mouseleave="hoverItem = false">
 		<div class="app-content-list-item-icon"
 			:style="indentIcon"
-			@[isClickable]="toggleCollapsed">
+			@[isClickable]="toggleCollapsed"
+			@mouseover="hoverIcon = true"
+			@mouseleave="hoverIcon = false">
 			<slot name="icon">
 				<div :class="{'page-icon-collapsible': isCollapsible}"
 					:style="iconStyle">
 					{{ firstGrapheme }}
 				</div>
 			</slot>
-			<div v-if="isCollapsible"
-				class="page-icon-badge icon-triangle-s"
+			<TriangleIcon v-if="isCollapsible"
+				:title="collapsed ? 'Expand subpage list' : 'Collapse subpage list'"
+				:fill-color="hoverIcon ? 'var(--color-primary)' : 'var(--color-main-text)'"
+				class="page-icon-badge"
 				:class="{'page-icon-badge--rotated': collapsed}" />
 		</div>
 		<router-link :to="to">
@@ -27,7 +31,7 @@
 			</div>
 		</router-link>
 		<div class="page-list-item-actions">
-			<Actions v-if="isActive || isMobile || hover">
+			<Actions v-if="isActive || isMobile || hoverItem">
 				<slot name="actions" />
 			</Actions>
 		</div>
@@ -39,12 +43,14 @@
 import Actions from '@nextcloud/vue/dist/Components/Actions'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile'
 import { mapGetters } from 'vuex'
+import TriangleIcon from 'vue-material-design-icons/Triangle'
 
 export default {
 	name: 'PagesListItem',
 
 	components: {
 		Actions,
+		TriangleIcon,
 	},
 
 	mixins: [
@@ -80,7 +86,8 @@ export default {
 
 	data() {
 		return {
-			hover: false,
+			hoverItem: false,
+			hoverIcon: false,
 		}
 	},
 
@@ -177,26 +184,32 @@ export default {
 		cursor: pointer;
 	}
 
+	.material-design-icon.page-icon-badge {
+		width: 16px;
+		height: 34px;
+	}
+
+	.material-design-icon.page-icon-badge > .material-design-icon__svg {
+		width: 16px;
+		height: 34px;
+	}
+
 	.page-icon-badge {
 		position: absolute;
-		width: 34px;
-		bottom: -7px;
-		right: -16px;
+		bottom: -20px;
+		right: -13px;
 		padding: 5px 10px;
 		background-size: cover;
 		cursor: pointer;
+		-webkit-transform: rotate(180deg);
+		-ms-transform: rotate(180deg);
+		transform: rotate(180deg);
 
-		&:hover{
-			background-color: var(--color-main-background);
-		}
 		&--rotated {
-			bottom: -4px;
-			-webkit-transform: rotate(-90deg);
-			-ms-transform: rotate(-90deg);
-			transform: rotate(-90deg);
-			&:hover{
-				background-color: var(--color-main-background);
-			}
+			bottom: -6px;
+			-webkit-transform: rotate(90deg);
+			-ms-transform: rotate(90deg);
+			transform: rotate(90deg);
 		}
 	}
 
