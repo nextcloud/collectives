@@ -1,14 +1,10 @@
 <template>
 	<div class="app-content-list-item"
 		:class="{active: isActive}"
-		:style="indentItem"
-		@mouseover="hoverItem = true"
-		@mouseleave="hoverItem = false">
+		:style="indentItem">
 		<div class="app-content-list-item-icon"
 			:style="indentIcon"
-			@[isClickable]="toggleCollapsed"
-			@mouseover="hoverIcon = true"
-			@mouseleave="hoverIcon = false">
+			@[isClickable]="toggleCollapsed">
 			<slot name="icon">
 				<div :class="{'page-icon-collapsible': isCollapsible}"
 					:style="iconStyle">
@@ -17,7 +13,6 @@
 			</slot>
 			<TriangleIcon v-if="isCollapsible"
 				:title="collapsed ? 'Expand subpage list' : 'Collapse subpage list'"
-				:fill-color="hoverIcon ? 'var(--color-primary)' : 'var(--color-main-text)'"
 				class="page-icon-badge"
 				:class="{'page-icon-badge--rotated': collapsed}" />
 		</div>
@@ -30,8 +25,9 @@
 				<slot name="line-two" />
 			</div>
 		</router-link>
-		<div class="page-list-item-actions">
-			<Actions v-if="isActive || isMobile || hoverItem">
+		<div class="page-list-item-actions"
+			:class="{'page-list-item-actions--display': isActive || isMobile}">
+			<Actions>
 				<slot name="actions" />
 			</Actions>
 		</div>
@@ -82,13 +78,6 @@ export default {
 			type: Number,
 			default: 0,
 		},
-	},
-
-	data() {
-		return {
-			hoverItem: false,
-			hoverIcon: false,
-		}
 	},
 
 	computed: {
@@ -166,10 +155,22 @@ export default {
 	}
 
 	.page-list-item-actions {
+		visibility: hidden;
 		position: absolute;
 		top: 0;
 		right: 0;
 		margin: 0;
+		&--display {
+			// Always display page actions if active or on mobile
+			visibility: visible;
+		}
+	}
+
+	// Display page actions on hovering the page list item
+	.app-content-list-item:hover {
+		.page-list-item-actions {
+			visibility: visible;
+		}
 	}
 
 	div.app-content-list-item:hover {
@@ -180,24 +181,16 @@ export default {
 		cursor: default;
 	}
 
+	// Set pointer cursor on page icon if isCollapsible
 	.page-icon-collapsible {
 		cursor: pointer;
 	}
 
-	.material-design-icon.page-icon-badge {
-		width: 16px;
-		transform: scale(1, 0.8);
-	}
-
-	.material-design-icon.page-icon-badge > .material-design-icon__svg {
-		width: 16px;
-		transform: scale(1, 0.8);
-	}
-
+	// Configure collapse/expand badge
 	.page-icon-badge {
 		position: absolute;
 		bottom: -20px;
-		right: -13px;
+		right: -14px;
 		padding: 5px 10px;
 		background-size: cover;
 		cursor: pointer;
@@ -206,11 +199,23 @@ export default {
 		transform: rotate(180deg);
 
 		&--rotated {
-			bottom: -6px;
+			bottom: -21px;
 			-webkit-transform: rotate(90deg);
 			-ms-transform: rotate(90deg);
 			transform: rotate(90deg);
 		}
 	}
 
+	.material-design-icon.page-icon-badge > .material-design-icon__svg {
+		width: 16px;
+		transform: scale(1, 0.7);
+		fill: var(--color-main-text);
+	}
+
+	// Change color of collapse/expand badge when hovering over page icon
+	.app-content-list-item-icon:hover {
+		.material-design-icon.page-icon-badge > .material-design-icon__svg {
+			fill: var(--color-primary);
+		}
+	}
 </style>
