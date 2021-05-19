@@ -96,7 +96,7 @@ export default {
 		pagePath() {
 			const parts = this.page.filePath.split('/')
 			if (this.page.fileName !== 'Readme.md') {
-				parts.push(encodeURI(this.page.title))
+				parts.push(this.page.title)
 			}
 			return parts
 				.filter(Boolean)
