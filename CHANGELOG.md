@@ -1,22 +1,37 @@
 # Changelog
 
+## 0.6.0 - 2021-05-19
+
+### ✨New
+- 📝 Create subpages to organize your shared knowledge.
+- 🏛️ Restructured page sidebar and version history.
+- 🌄 Many small user interface improvements.
+
+### Fixes
+- 🧱 Don't break OCC commandline when Circles app is missing.
+- ⭐ Use app icon as placeholder for collectives without emojis.
+- 🗑️ Don't display empty list of deleted collectives.
+- 👷 Huge code refactoring under the hood.
+- 🔎 Use app icon for collectives-related search results.
+
+### Updates
+- 🔌 Update all dependencies.
+
+
 ## 0.5.1 - 2021-04-26
 
 ### Fixes
-
 - ✂️  Fix migration step to split emojis from collective names.
 
 ## 0.5.0 - 2021-04-26
 
 ### ✨New
-
 - ⭕ Pick an existing circle when creating a new collective.
 - 🗑️ Dialog to decide if the circle should be deleted when deleting a collective.
 - 📋 Cleaner pages list, including info for the start page.
 - 📱 Better workflows for mobile use.
 
 ### Fixes
-
 - ✂️  Split emojis from collective names.
 - 🧽 Always use sanitized filename for mountpoint.
 - 📲 Fix overlapping elements in mobile view.
@@ -24,7 +39,6 @@
 - ⏱️ Show loading spinner when list of collectives isn't available yet.
 
 ### Updates
-
 - 🔌 Update all dependencies.
 
 
