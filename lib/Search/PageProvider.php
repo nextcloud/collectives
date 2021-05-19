@@ -104,7 +104,12 @@ class PageProvider implements IProvider {
 					),
 					$page->getTitle(),
 					str_replace('{collective}', $collective->getName(), $this->l10n->t('in {collective}')),
-					$this->urlGenerator->linkToRoute('collectives.start.index') . '/' . rawurlencode($collective->getName()) . '/' . rawurlencode($page->getTitle())
+					implode('/', array_filter([
+						$this->urlGenerator->linkToRoute('collectives.start.index'),
+						rawurlencode($collective->getName()),
+						rawurlencode($page->getFilePath()),
+						rawurlencode($page->getTitle()),
+						]))
 				);
 			}
 		}
