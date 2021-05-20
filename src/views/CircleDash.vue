@@ -25,6 +25,7 @@ import { emit } from '@nextcloud/event-bus'
 import { showInfo } from '@nextcloud/dialogs'
 import { mapState, mapGetters, mapMutations } from 'vuex'
 import { GET_COLLECTIVES, GET_TRASH_COLLECTIVES, GET_PAGES } from '../store/actions'
+import { SELECT_VERSION } from '../store/mutations'
 import AppContent from '@nextcloud/vue/dist/Components/AppContent'
 import Content from '@nextcloud/vue/dist/Components/Content'
 import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
@@ -79,7 +80,7 @@ export default {
 			}
 		},
 		'pageParam'() {
-			this.$store.commit('version', null)
+			this.$store.commit(SELECT_VERSION, null)
 		},
 		'info'() {
 			if (this.info) {

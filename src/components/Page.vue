@@ -48,7 +48,7 @@
 			:key="'editor-' + page.id + '-' + page.timestamp"
 			:fileid="page.id"
 			:basename="page.fileName"
-			:filename="filePath"
+			:filename="`/${filePath}`"
 			:has-preview="true"
 			:active="true"
 			mime="text/markdown"
@@ -170,7 +170,11 @@ export default {
 		 * @returns {string}
 		 */
 		filePath() {
-			return [this.page.collectivePath, this.page.filePath, this.page.fileName].filter(Boolean).join('/')
+			return [
+				this.page.collectivePath,
+				this.page.filePath,
+				this.page.fileName,
+			].filter(Boolean).join('/')
 		},
 
 		/**
