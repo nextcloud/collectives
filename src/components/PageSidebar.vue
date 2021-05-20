@@ -21,6 +21,7 @@
 <script>
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { mapGetters, mapMutations } from 'vuex'
+import { SELECT_VERSION } from '../store/mutations'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import AppSidebar from '@nextcloud/vue/dist/Components/AppSidebar'
 import SidebarVersionsTab from './SidebarVersionsTab'
@@ -54,7 +55,7 @@ export default {
 		 * Load the current version and close the sidebar
 		 */
 		close() {
-			this.$store.commit('version', null)
+			this.$store.commit(SELECT_VERSION, null)
 			this.hide('sidebar')
 		},
 
