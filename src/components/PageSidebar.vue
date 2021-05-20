@@ -21,6 +21,7 @@
 <script>
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { mapGetters, mapMutations } from 'vuex'
+import { DELETE_PAGE } from '../store/actions'
 import { SELECT_VERSION } from '../store/mutations'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import AppSidebar from '@nextcloud/vue/dist/Components/AppSidebar'
@@ -65,7 +66,7 @@ export default {
 		 */
 		async deletePage() {
 			try {
-				await this.$store.dispatch('deletePage')
+				await this.$store.dispatch(DELETE_PAGE)
 				this.$router.push(`/${encodeURIComponent(this.collectiveParam)}`)
 				showSuccess(t('collectives', 'Page deleted'))
 			} catch (e) {

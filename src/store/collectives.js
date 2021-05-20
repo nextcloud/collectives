@@ -120,7 +120,7 @@ export default {
 		 */
 		async [TRASH_COLLECTIVE]({ commit }, { id }) {
 			const response = await axios.delete(generateUrl('/apps/collectives/_collectives/' + id))
-			commit('MOVE_COLLECTIVE_INTO_TRASH', response.data.data)
+			commit(MOVE_COLLECTIVE_INTO_TRASH, response.data.data)
 		},
 
 		/**
@@ -129,7 +129,7 @@ export default {
 		 */
 		async [RESTORE_COLLECTIVE]({ commit }, { id }) {
 			const response = await axios.patch(generateUrl('/apps/collectives/_collectives/trash/' + id))
-			commit('RESTORE_COLLECTIVE_FROM_TRASH', response.data.data)
+			commit(RESTORE_COLLECTIVE_FROM_TRASH, response.data.data)
 		},
 
 		/**
