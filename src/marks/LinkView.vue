@@ -40,7 +40,7 @@ export default {
 	name: 'LinkView',
 	props: ['node', 'updateAttrs', 'view'], // eslint-disable-line
 	computed: {
-		...mapGetters(['collectiveParam', 'pageParam']),
+		...mapGetters(['collectiveParam', 'pageParam', 'currentPage']),
 		schema() { return this.view.state.schema },
 		href() {
 			return this.node.attrs.href
@@ -50,7 +50,6 @@ export default {
 		},
 		collectiveLink() {
 			return this.href.includes('.md?fileId=')
-				&& !this.href.includes('/') // for now we stay inside the Collective dir
 		},
 		leaveHref() {
 			// empty
@@ -71,9 +70,13 @@ export default {
 			return relPath && unescape(relPath)
 		},
 		routerHref() {
-			// prefix relative route with the collectiveParam
-			// if we are on the collective landing page.
-			const prefix = this.pageParam ? '' : this.collectiveParam + '/'
+			// prefix relative route with the last part of the path
+			// if it is ommitting the 'Readme.md'.
+			const shortened = this.currentPage.fileName === 'Readme.md'
+				&& this.pageParam !== 'Readme.md'
+			const prefix = shortened
+				? (this.pageParam || this.collectiveParam) + '/'
+			    : ''
 			return prefix + this.href.replace('.md?', '?')
 		},
 		viewerHref() {
