@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.6.1 - 2021-05-20
+
+### Fixes
+- 🗑️ Deleting pages.
+- 🌐 Creating Links between Pages.
+- 🧷 Opening Links in the page preview.
+
+
 ## 0.6.0 - 2021-05-19
 
 ### ✨New
