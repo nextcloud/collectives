@@ -14,7 +14,6 @@
 
 <script>
 
-import { showError } from '@nextcloud/dialogs'
 import { mapGetters } from 'vuex'
 import AppContentDetails from '@nextcloud/vue/dist/Components/AppContentDetails'
 import Page from '../components/Page'
@@ -41,7 +40,6 @@ export default {
 
 	computed: {
 		...mapGetters([
-			'currentCollective',
 			'currentPage',
 			'pageParam',
 			'version',
@@ -64,24 +62,5 @@ export default {
 		},
 	},
 
-	methods: {
-
-		/**
-		 * Fetch and update one particular page
-		 * @param {number} pageId Page ID
-		 */
-		async getPage(pageId) {
-			if (!this.currentCollective) {
-				return
-			}
-			try {
-				await this.$store.dispatch('getPage', pageId)
-			} catch (e) {
-				console.error(e)
-				showError(t('collectives', `Could not fetch page ${pageId}`))
-			}
-		},
-
-	},
 }
 </script>
