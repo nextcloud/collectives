@@ -1,24 +1,24 @@
-# Welcome to your new collective
+# Velkommen til din nye gemenskap
 
-*Come, organize and build shared knowledge!*
-
-
-### 🐾 Add your comrades to the collective
-
-Members can be managed in the [Circle App](/index.php/apps/circles/).
-
-### 🌱 Bring life to your collective
-
-Create pages and share the knowledge that really matters.
-
-### 🛋️ Edit this landing page to feel like home
-
-Push the pencil button to get started. ↗️
+*Ta del, organiser og bygg delt kunnskap!*
 
 
-## Also good to know
+### 🐾 Legg til dine venner i kollektivet
 
-* Link local pages by selecting text and choosing "link file".
-* Multiple people can edit the same page simultaneously.
-* Find out more about this App in the [documentation](https://collectivecloud.gitlab.io/collectives/).
-* Ask [the community](https://help.nextcloud.com/c/apps/collectives/174) for help in case of questions.
+Medlemmer kan håndteres i [Sirkelprogrammet](/index.php/apps/circles/).
+
+### 🌱 Gi liv til din gemenskap
+
+Opprett sider og del kunnskap som betyr noe.
+
+### 🛋️ Rediger denne landingssiden for å gjøre ting innbydende
+
+Trykk på blyanten for å begynne. ↗️
+
+
+## Også nyttig å vite
+
+* Lenk sammen lokale sider ved først å velge tekst, og så «lenk fil».
+* Flere kan redigere samme side samtidig.
+* Finn ut mer om dette programmet i [dokumentasjonen](https://collectivecloud.gitlab.io/collectives/).
+* Spør [gemenskapen](https://help.nextcloud.com/c/apps/collectives/174) om hjelp i fall du har problemer.
