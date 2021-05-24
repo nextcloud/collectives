@@ -158,7 +158,7 @@ export default {
 	},
 
 	watch: {
-		page(val, oldVal) {
+		pageParam() {
 			this.init()
 		},
 	},

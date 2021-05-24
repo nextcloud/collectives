@@ -70,14 +70,8 @@ export default {
 	},
 
 	watch: {
-		'currentCollective'() {
-			if (this.currentCollective) {
-				this.getPages()
-				this.closeNav()
-				this.show('details')
-			} else {
-				this.openNav()
-			}
+		'collectiveParam'() {
+			this.initCollective()
 		},
 		'pageParam'() {
 			this.$store.commit(SELECT_VERSION, null)
@@ -91,12 +85,8 @@ export default {
 	},
 
 	mounted() {
-		this.openNav()
-		this.getCollectives()
+		this.getCollectives().then(this.initCollective)
 		this.getTrashCollectives()
-		this.$nextTick(function() {
-			this.openNav()
-		})
 	},
 
 	methods: {
@@ -119,14 +109,21 @@ export default {
 				.catch(displayError('Could not fetch collectives from trash'))
 		},
 
+		initCollective() {
+			if (this.currentCollective) {
+				this.getPages()
+				this.closeNav()
+				this.show('details')
+			} else {
+				this.openNav()
+			}
+		},
+
 		/**
 		 * Get list of all pages
 		 * @returns {Promise}
 		 */
 		getPages() {
-			if (!this.currentCollective) {
-				return new Promise((resolve) => { resolve() })
-			}
 			return this.$store.dispatch(GET_PAGES)
 				.catch(displayError('Could not fetch pages'))
 		},
