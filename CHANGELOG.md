@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.6.2 - 2021-05-20
+
+### Fixes
+- 📝 Loading the text editor on some instances.
+
+### Tests
+- ✅ Make a flaky test pass more reliably.
+
 ## 0.6.1 - 2021-05-20
 
 ### Fixes
