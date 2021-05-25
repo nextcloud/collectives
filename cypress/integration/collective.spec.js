@@ -112,6 +112,7 @@ describe('Collective', function() {
 			cy.createCollective('Delete me')
 		})
 		it('Allows moving the collective to trash', function() {
+			cy.get('.app-navigation__list').should('be.hidden')
 			cy.get('.app-navigation-toggle')
 				.click()
 			cy.get('.collectives_list_item')
