@@ -128,11 +128,11 @@ export default {
 		},
 
 		/**
-		 * Fetch handlers for 'text/markdown' from Viewer app
+		 * Fetch text app handler from Viewer app
 		 * @returns {object}
 		 */
 		handler() {
-			return OCA.Viewer.availableHandlers.filter(h => h.mimes.indexOf('text/markdown') !== -1)[0]
+			return OCA.Viewer.availableHandlers.find(h => h.id === 'text')
 		},
 
 		/**
