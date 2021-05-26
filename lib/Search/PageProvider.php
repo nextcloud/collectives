@@ -111,7 +111,7 @@ class PageProvider implements IProvider {
 						rawurlencode($collective->getName()),
 						rawurlencode($page->getFilePath()),
 						rawurlencode($page->getTitle()),
-						]))
+					]))
 				);
 			}
 		}

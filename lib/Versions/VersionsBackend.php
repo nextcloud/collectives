@@ -4,7 +4,6 @@ namespace OCA\Collectives\Versions;
 
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Mount\CollectiveMountPoint;
-use OCA\Collectives\Mount\MountProvider;
 use OCA\Files_Versions\Versions\IVersion;
 use OCA\Files_Versions\Versions\IVersionBackend;
 use OCP\AppFramework\Utility\ITimeFactory;
