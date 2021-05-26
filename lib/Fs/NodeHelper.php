@@ -3,10 +3,15 @@
 namespace OCA\Collectives\Fs;
 
 use OCA\Collectives\Service\NotFoundException;
+use OCA\Collectives\Service\NotPermittedException;
 use OCP\Files\File;
 use OCP\Files\Folder;
+use OCP\Files\InvalidPathException;
+use OCP\Files\NotFoundException as FilesNotFoundException;
+use OCP\Files\NotPermittedException as FilesNotPermittedException;
 use OCP\IDBConnection;
 use OCP\IL10N;
+use OCP\Lock\LockedException;
 
 class NodeHelper {
 	/** @var IDBConnection */
@@ -111,5 +116,41 @@ class NodeHelper {
 		}
 
 		return $name;
+	}
+
+	/**
+	 * Most of the logic copied from `lib/Service/Note.php` from the Notes app
+	 *
+	 * @param File $file
+	 *
+	 * @return string
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public static function getContent(File $file): string {
+		try {
+			$content = $file->getContent();
+		} catch (FilesNotPermittedException | LockedException $e) {
+			throw new NotPermittedException('Failed to read file content for ' . $file->getPath());
+		}
+
+		// blank files return false when using object storage as primary storage
+		try {
+			if ($file->getSize() === 0) {
+				$content = '';
+			}
+		} catch (InvalidPathException | FilesNotFoundException $e) {
+			throw new NotFoundException('Failed to read file content for ' . $file->getPath());
+		}
+
+		if (!is_string($content)) {
+			throw new NotFoundException('Failed to read file content for ' . $file->getPath());
+		}
+
+		if (!mb_check_encoding($content, 'UTF-8')) {
+			$content = mb_convert_encoding($content, 'UTF-8');
+		}
+
+		return $content;
 	}
 }

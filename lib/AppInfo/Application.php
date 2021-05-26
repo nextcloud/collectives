@@ -13,6 +13,7 @@ use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Mount\MountProvider;
 use OCA\Collectives\Search\CollectiveProvider;
 use OCA\Collectives\Search\PageProvider;
+use OCA\Collectives\Search\PageContentProvider;
 use OCA\Collectives\Service\CollectiveHelper;
 use OCA\Collectives\Versions\VersionsBackend;
 use OCA\Files\Event\LoadAdditionalScriptsEvent;
@@ -59,6 +60,7 @@ class Application extends App implements IBootstrap {
 
 		$context->registerSearchProvider(CollectiveProvider::class);
 		$context->registerSearchProvider(PageProvider::class);
+		$context->registerSearchProvider(PageContentProvider::class);
 
 		$cacheListener = $this->getContainer()->get(CacheListener::class);
 		$cacheListener->listen();

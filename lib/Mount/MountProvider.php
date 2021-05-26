@@ -104,5 +104,4 @@ class MountProvider implements IMountProvider {
 			);
 		}, $folders);
 	}
-
 }

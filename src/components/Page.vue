@@ -38,7 +38,7 @@
 		</h1>
 		<RichText v-if="readOnly"
 			:page-id="page.id"
-			:page-url="pageUrl"
+			:page-url="currentPageDavUrl"
 			:as-placeholder="preview && edit"
 			@edit="$emit('edit')"
 			@empty="emptyPreview" />
@@ -48,7 +48,7 @@
 			:key="'editor-' + page.id + '-' + page.timestamp"
 			:fileid="page.id"
 			:basename="page.fileName"
-			:filename="`/${filePath}`"
+			:filename="`/${currentPageFilePath}`"
 			:has-preview="true"
 			:active="true"
 			mime="text/markdown"
@@ -65,8 +65,6 @@ import RichText from './RichText'
 
 import { showError } from '@nextcloud/dialogs'
 import { mapGetters, mapMutations } from 'vuex'
-import { getCurrentUser } from '@nextcloud/auth'
-import { generateRemoteUrl } from '@nextcloud/router'
 import { RENAME_PAGE, TOUCH_PAGE, GET_VERSIONS } from '../store/actions'
 
 export default {
@@ -101,6 +99,8 @@ export default {
 		...mapGetters([
 			'pageParam',
 			'currentPage',
+			'currentPageFilePath',
+			'currentPageDavUrl',
 			'currentCollective',
 			'indexPage',
 			'landingPage',
@@ -141,47 +141,6 @@ export default {
 		 */
 		savePossible() {
 			return this.page && this.page.title !== ''
-		},
-
-		/**
-		 * Return the URL for currently selected page object
-		 * @returns {string}
-		 */
-		pageUrl() {
-			return generateRemoteUrl(
-				`dav/files/${this.davPath}`
-			)
-		},
-
-		/**
-		 * Path of the file via dav
-		 * @returns {string}
-		 */
-		davPath() {
-			const parts = this.filePath.split('/')
-			parts.unshift(this.getUser)
-			return parts
-				.map(p => encodeURIComponent(p))
-				.join('/')
-		},
-
-		/**
-		 * Path of the file inside users home dir
-		 * @returns {string}
-		 */
-		filePath() {
-			return [
-				this.page.collectivePath,
-				this.page.filePath,
-				this.page.fileName,
-			].filter(Boolean).join('/')
-		},
-
-		/**
-		 * @returns {string}
-		 */
-		getUser() {
-			return getCurrentUser().uid
 		},
 
 		emptyTitle() {

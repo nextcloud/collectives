@@ -1,5 +1,6 @@
 import { NEW_COLLECTIVE, TRASH_COLLECTIVE, DELETE_COLLECTIVE, GET_PAGES, NEW_PAGE }
 	from '../../src/store/actions'
+import axios from '@nextcloud/axios'
 
 const url = Cypress.config('baseUrl').replace(/\/index.php\/?$/g, '')
 Cypress.env('baseUrl', url)
@@ -48,6 +49,19 @@ Cypress.Commands.add('seedPage', (name, parentFilePath, parentFileName) => {
 			await app.$store.dispatch(GET_PAGES)
 			const parentId = app.$store.state.pages.pages.find(p => (p.filePath === parentFilePath && p.fileName === parentFileName)).id
 			await app.$store.dispatch(NEW_PAGE, { title: name, pagePath: name, parentId })
+		})
+})
+
+Cypress.Commands.add('seedPageContent', (user, pagePath, content) => {
+	cy.window()
+		.its('app')
+		.then(async app => {
+			await axios.put(`${Cypress.env('baseUrl')}/remote.php/dav/files/${user}/Collectives/${pagePath}`, content, {
+				headers: {
+					requesttoken: app.OC.requestToken,
+					'Content-Type': 'text/markdown'
+				}
+			})
 		})
 })
 

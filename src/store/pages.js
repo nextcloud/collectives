@@ -1,5 +1,6 @@
+import { getCurrentUser } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
-import { generateUrl } from '@nextcloud/router'
+import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
 
 import {
 	SET_PAGES,
@@ -53,6 +54,26 @@ export default {
 			return getters.currentPagePath[getters.currentPagePath.length - 1]
 		},
 
+		currentPageFilePath(_state, getters) {
+			return [
+				getters.currentPage.collectivePath,
+				getters.currentPage.filePath,
+				getters.currentPage.fileName,
+			].filter(Boolean).join('/')
+		},
+
+		currentPageDavPath(_state, getters) {
+			const parts = getters.currentPageFilePath.split('/')
+			parts.unshift(getCurrentUser().uid)
+			return parts
+				.map(p => encodeURIComponent(p))
+				.join('/')
+		},
+
+		currentPageDavUrl(_state, getters) {
+			return generateRemoteUrl(`dav/files/${getters.currentPageDavPath}`)
+		},
+
 		mostRecentSubpages: (state, getters) => (parentId) => {
 			return getters.visibleSubpages(parentId).sort((a, b) => b.timestamp - a.timestamp)
 		},
@@ -91,7 +112,6 @@ export default {
 		touchUrl(_state, getters) {
 			return `${getters.pageUrl(getters.currentPage.parentId, getters.currentPage.id)}/touch`
 		},
-
 	},
 
 	mutations: {
@@ -183,5 +203,6 @@ export default {
 			commit(DELETE_PAGE_BY_ID, getters.currentPage.id)
 			commit('done', 'page', { root: true })
 		},
+
 	},
 }
