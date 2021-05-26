@@ -203,5 +203,6 @@ export default {
 			commit(DELETE_PAGE_BY_ID, getters.currentPage.id)
 			commit('done', 'page', { root: true })
 		},
+
 	},
 }

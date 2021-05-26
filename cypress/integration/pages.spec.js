@@ -29,6 +29,8 @@ describe('Page', function() {
 		cy.login('bob', 'bob', '/apps/collectives')
 		cy.seedCollective('drei')
 		cy.seedPage('vier', '', 'Readme.md')
+		cy.seedPage('fuenf', '', 'Readme.md')
+		cy.seedPageContent('bob', 'drei/fuenf.md', 'A test string with fuenf in the middle.')
 	})
 
 	describe('visited from collective home', function() {
@@ -60,6 +62,19 @@ describe('Page', function() {
 			// cy.get('#titleform input').should('not.have.attr', 'disabled')
 			// cy.get('title').should('contain', 'vier/This is a page with a particular long title - drei - Collectives - Nextcloud')
 			cy.get('title').should('contain', 'vier/New Page - drei - Collectives - Nextcloud')
+		})
+	})
+
+	describe('Using the search providers', function() {
+		before(function() {
+			cy.login('bob', 'bob', '/apps/collectives/drei/fuenf')
+		})
+		it('Search for page and page content', function() {
+			cy.get('.unified-search a').click()
+			cy.get('.unified-search__form input')
+				.type('fuenf')
+			cy.get('.unified-search__results-collectives_pages').should('contain', 'fuenf')
+			cy.get('.unified-search__results-collectives_pages_content').should('contain', 'with fuenf in')
 		})
 	})
 
