@@ -6,6 +6,7 @@ import {
 	SET_PAGES,
 	ADD_PAGE,
 	UPDATE_PAGE,
+	CLEAR_UPDATED_PAGE,
 	DELETE_PAGE_BY_ID,
 } from './mutations'
 
@@ -21,7 +22,7 @@ import {
 export default {
 	state: {
 		pages: [],
-		updatedPage: {},
+		updatedPage: undefined,
 	},
 
 	getters: {
@@ -50,8 +51,9 @@ export default {
 			return pages
 		},
 
-		currentPage(_state, getters) {
+		currentPage(state, getters) {
 			return getters.currentPagePath[getters.currentPagePath.length - 1]
+			    || state.updatedPage
 		},
 
 		currentPageFilePath(_state, getters) {
@@ -120,12 +122,16 @@ export default {
 		},
 
 		[UPDATE_PAGE](state, page) {
+			state.updatedPage = page
 			state.pages.splice(
 				state.pages.findIndex(p => p.id === page.id),
 				1,
 				page
 			)
-			state.updatedPage = page
+		},
+
+		[CLEAR_UPDATED_PAGE](state) {
+			state.updatedPage = undefined
 		},
 
 		[ADD_PAGE](state, page) {
