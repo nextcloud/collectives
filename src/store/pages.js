@@ -187,10 +187,9 @@ export default {
 		async [RENAME_PAGE]({ commit, getters, state }, newTitle) {
 			commit('load', 'page', { root: true })
 			const page = getters.currentPage
-			page.title = newTitle
-			delete page.newTitle
-			const response = await axios.put(getters.pageUrl(page.parentId, page.id), page)
-			commit(UPDATE_PAGE, response.data.data)
+			const url = getters.pageUrl(page.parentId, page.id)
+			const response = await axios.put(url, { title: page.newTitle })
+			await commit(UPDATE_PAGE, response.data.data)
 			commit('done', 'page', { root: true })
 		},
 
