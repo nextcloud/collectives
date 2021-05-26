@@ -2,8 +2,10 @@
 
 namespace OCA\Collectives\Search;
 
+use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Service\CollectiveHelper;
 use OCA\Collectives\Service\NotFoundException;
+use OCA\Collectives\Service\NotPermittedException;
 use OCA\Collectives\Service\PageService;
 use OCP\App\IAppManager;
 use OCP\AppFramework\QueryException;
@@ -15,7 +17,7 @@ use OCP\Search\ISearchQuery;
 use OCP\Search\SearchResult;
 use OCP\Search\SearchResultEntry;
 
-class PageProvider implements IProvider {
+class PageContentProvider implements IProvider {
 	/** @var IL10N */
 	private $l10n;
 
@@ -28,6 +30,9 @@ class PageProvider implements IProvider {
 	/** @var PageService */
 	private $pageService;
 
+	/** @var NodeHelper */
+	private $nodeHelper;
+
 	/** @var IAppManager */
 	private $appManager;
 
@@ -38,17 +43,20 @@ class PageProvider implements IProvider {
 	 * @param IURLGenerator    $urlGenerator
 	 * @param CollectiveHelper $collectiveHelper
 	 * @param PageService      $pageService
+	 * @param NodeHelper       $nodeHelper
 	 * @param IAppManager      $appManager
 	 */
 	public function __construct(IL10N $l10n,
 								IURLGenerator $urlGenerator,
 								CollectiveHelper $collectiveHelper,
 								PageService $pageService,
+								NodeHelper $nodeHelper,
 								IAppManager $appManager) {
 		$this->l10n = $l10n;
 		$this->urlGenerator = $urlGenerator;
 		$this->collectiveHelper = $collectiveHelper;
 		$this->pageService = $pageService;
+		$this->nodeHelper = $nodeHelper;
 		$this->appManager = $appManager;
 	}
 
@@ -56,14 +64,14 @@ class PageProvider implements IProvider {
 	 * @return string
 	 */
 	public function getId(): string {
-		return 'collectives_pages';
+		return 'collectives_pages_content';
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getName(): string {
-		return $this->l10n->t('Collectives: pages');
+		return $this->l10n->t('Collectives: page content');
 	}
 
 	/**
@@ -87,6 +95,7 @@ class PageProvider implements IProvider {
 	 * @return SearchResult
 	 * @throws QueryException
 	 * @throws NotFoundException
+	 * @throws NotPermittedException
 	 */
 	public function search(IUser $user, ISearchQuery $query): SearchResult {
 		if ($this->appManager->isEnabledForUser('circles', $user)) {
@@ -97,27 +106,30 @@ class PageProvider implements IProvider {
 
 		$pageSearchResults = [];
 		foreach ($collectiveInfos as $collective) {
-			$pages = $this->pageService->findByString($user->getUID(), $collective, $query->getTerm());
+			$pages = $this->pageService->findAll($user->getUID(), $collective);
 			foreach ($pages as $page) {
-				$pageSearchResults[] = new SearchResultEntry(
-					$this->urlGenerator->imagePath(
-						'collectives',
-						'collectives-blue.svg'
-					),
-					$page->getTitle(),
-					str_replace('{collective}', $collective->getName(), $this->l10n->t('in Collective {collective}')),
-					implode('/', array_filter([
-						$this->urlGenerator->linkToRoute('collectives.start.index'),
-						rawurlencode($collective->getName()),
-						rawurlencode($page->getFilePath()),
-						rawurlencode($page->getTitle()),
+				$file = $this->nodeHelper->getFileById($this->pageService->getFolder($user->getUID(), $collective, $page->getId()), $page->getId());
+				if (preg_match('/(\S+\s+)?(\S+\s*)?' . $query->getTerm() . '(\S*)?(\s+\S+)?/i', NodeHelper::getContent($file), $matches)) {
+					$pageSearchResults[] = new SearchResultEntry(
+						$this->urlGenerator->imagePath(
+							'collectives',
+							'collectives-blue.svg'
+						),
+						$matches[0],
+						str_replace('{page}', $page->getTitle(), str_replace('{collective}', $collective->getName(), $this->l10n->t('in page {page} from collective {collective}'))),
+						implode('/', array_filter([
+							$this->urlGenerator->linkToRoute('collectives.start.index'),
+							rawurlencode($collective->getName()),
+							rawurlencode($page->getFilePath()),
+							rawurlencode($page->getTitle()),
 						]))
-				);
+					);
+				}
 			}
 		}
 
 		return SearchResult::complete(
-			$this->l10n->t('Collectives: pages'),
+			$this->l10n->t('Collectives: page content'),
 			$pageSearchResults
 		);
 	}
