@@ -55,8 +55,7 @@ export default {
 	},
 
 	watch: {
-
-		'pageParam'() {
+		'currentPage.id'() {
 			this.editToggle = EditState.Unset
 		},
 	},

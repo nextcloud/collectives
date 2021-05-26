@@ -42,8 +42,8 @@
 			@empty="emptyPreview" />
 		<component :is="handler.component"
 			v-show="!readOnly"
+			:key="`editor-${page.id}`"
 			ref="editor"
-			:key="'editor-' + page.id + '-' + page.timestamp"
 			:fileid="page.id"
 			:basename="page.fileName"
 			:filename="`/${currentPageFilePath}`"
@@ -64,6 +64,7 @@ import RichText from './RichText'
 import { showError } from '@nextcloud/dialogs'
 import { mapGetters, mapMutations } from 'vuex'
 import { RENAME_PAGE, TOUCH_PAGE, GET_VERSIONS } from '../store/actions'
+import { CLEAR_UPDATED_PAGE } from '../store/mutations'
 
 export default {
 	name: 'Page',
@@ -95,7 +96,6 @@ export default {
 
 	computed: {
 		...mapGetters([
-			'pageParam',
 			'currentPage',
 			'currentPageFilePath',
 			'currentPageDavUrl',
@@ -141,24 +141,10 @@ export default {
 			return this.page && this.page.title !== ''
 		},
 
-		emptyTitle() {
-			return this.page.newTitle === ''
-		},
-
-		newTitle: {
-			get() {
-				return (typeof this.page.newTitle === 'string')
-					? this.page.newTitle
-					: this.page.title
-			},
-			set(val) {
-				this.page.newTitle = val
-			},
-		},
 	},
 
 	watch: {
-		pageParam() {
+		'currentPage.id'() {
 			this.init()
 		},
 	},
@@ -200,6 +186,7 @@ export default {
 			try {
 				await this.$store.dispatch(RENAME_PAGE, newTitle)
 				this.$router.push(this.updatedPagePath)
+				this.$store.commit(CLEAR_UPDATED_PAGE)
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not rename the page'))
