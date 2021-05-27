@@ -51,7 +51,7 @@ describe('Page', function() {
 		before(function() {
 			cy.login('bob', 'bob', '/apps/collectives/drei')
 			cy.get('#text h1').should('contain', 'Welcome to your new collective')
-			cy.contains('.app-content-list-item', 'vier').find('button.primary').click({ force: true })
+			cy.contains('.app-content-list-item', 'vier').find('button.icon-add').click({ force: true })
 			cy.get('#titleform input').should('have.value', 'New Page')
 			// cy.focused().should('have.value', 'Title')
 			// cy.type('This is a page with a particular long title{enter}')
