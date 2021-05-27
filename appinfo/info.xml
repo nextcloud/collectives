@@ -59,6 +59,7 @@ In your Nextcloud instance, simply navigate to **»Apps«**, find the
 		<navigation>
 			<name>Collectives</name>
 			<route>collectives.start.index</route>
+			<order>12</order>
 		</navigation>
 	</navigations>
 	<versions>
