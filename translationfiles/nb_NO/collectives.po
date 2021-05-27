@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2021-05-27 17:57+0200\n"
-"PO-Revision-Date: 2021-05-21 19:55+0000\n"
-"Last-Translator: Jonas Meurer <jonas@freesources.org>\n"
+"PO-Revision-Date: 2021-05-28 12:11+0000\n"
+"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
 "collectives/collectives-app/nb_NO/>\n"
 "Language: nb_NO\n"
@@ -25,34 +25,30 @@ msgstr ""
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:2
 #: /collectives/specialVueFakeDummyForL10nScript.js:20
 msgid "Collectives"
-msgstr "Gemenskaper"
+msgstr "Kollektiver"
 
 #: /collectives/lib/Search/PageContentProvider.php:74
 #: /collectives/lib/Search/PageContentProvider.php:133
-#, fuzzy
 msgid "Collectives: page content"
-msgstr "Gemenskapsside"
+msgstr "Kollektiver: sideinnhold"
 
 #: /collectives/lib/Search/PageContentProvider.php:120
-#, fuzzy
 msgid "in page {page} from collective {collective}"
-msgstr "Slett gemenskape «{collective}» for godt?"
+msgstr "på siden {page} fra kollektivet {collective}"
 
 #: /collectives/lib/Search/PageProvider.php:66
 #: /collectives/lib/Search/PageProvider.php:120
-#, fuzzy
 msgid "Collectives: pages"
-msgstr "Gemenskapsside"
+msgstr "Kollektiver: sider"
 
 #: /collectives/lib/Search/PageProvider.php:108
-#, fuzzy
 msgid "in Collective {collective}"
-msgstr "i {collective}"
+msgstr "i kollektivet {collective}"
 
 #: /collectives/lib/Service/CollectiveService.php:104
 #, php-format
 msgid "Created collective \"%s\" for existing circle."
-msgstr "Opprettet gemenskapen «%s» for eksisterende sirkel."
+msgstr "Opprettet kollektivet «%s» for eksisterende sirkel."
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:3
 msgid "A place for activist and community projects to build shared knowledge"
@@ -79,10 +75,10 @@ msgid ""
 "In your Nextcloud instance, simply navigate to **»Apps«**, find the\n"
 "**»Circles«** and **»Collectives«** apps and enable them."
 msgstr ""
-"Gemenskaper er et Nextcloud-program tiltenkt organisering av aktivist- og "
+"Kollektiver er et Nextcloud-program tiltenkt organisering av aktivist- og "
 "gemenskapsprosjekter.\n"
 "Knytt deg til fellesskap i gemenskaper for å bygge delt kunnskap.\n"
-"* 👥 **Gemenskapsdrevet grasrotsarbeidsflyt**: Gemenskaper er\n"
+"* 👥 **Gemenskapsdrevet grasrotsarbeidsflyt**: Kollektiver er\n"
 "  knyttet til en [Nextcloud-sirkel](https://github.com/nextcloud/circles) "
 "og\n"
 "  eid av gemenskapen.\n"
@@ -94,11 +90,11 @@ msgstr ""
 "##Installasjon\n"
 "\n"
 "I din Nextcloud-instans går du til **«Programmer»**, finner\n"
-"**«Sirkler»** og **«Gemenskaper»**-programmene og skrur dem på."
+"**«Sirkler»** og **«Kollektiver»**-programmene og skrur dem på."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:1
 msgid "Deleted collectives"
-msgstr "Slettede gemenskaper"
+msgstr "Slettede kollektiver"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:2
 #: /collectives/specialVueFakeDummyForL10nScript.js:38
@@ -110,13 +106,12 @@ msgid "Delete permanently"
 msgstr "Slett for godt"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:4
-#, fuzzy
 msgid "Permanently delete collective »{collective}«"
-msgstr "Slett gemenskape «{collective}» for godt?"
+msgstr "Slett kollektivet «{collective}» for godt?"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:5
 msgid "Delete corresponding circle along with the collective?"
-msgstr "Slett motsvarende sirkel sammen med gemenskapen?"
+msgstr "Slett motsvarende sirkel sammen med kollektivet?"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:6
 msgid "Cancel"
@@ -124,11 +119,11 @@ msgstr "Avbryt"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:7
 msgid "Only collective"
-msgstr "Kun gemenskapen"
+msgstr "Kun kollektivet"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:8
 msgid "Collective and circle"
-msgstr "Gemenskapen og sirkelen"
+msgstr "Kollektivet og sirkelen"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:9
 msgid "Last edited by {user}"
@@ -136,7 +131,7 @@ msgstr "Sist endret av {user}"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:10
 msgid "Select a collective"
-msgstr "Velg en gemenskap"
+msgstr "Velg et kollektiv"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:11
 msgid "Delete"
@@ -144,11 +139,11 @@ msgstr "Slett"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:12
 msgid "Create new collective"
-msgstr "Opprett ny gemenskap"
+msgstr "Opprett nytt kollektiv"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:13
 msgid "Create collective for existing circle"
-msgstr "Opprett gemenskap for eksisterende sirkel"
+msgstr "Opprett kollektiv for eksisterende sirkel"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:14
 msgid "Add emoji"
@@ -156,7 +151,7 @@ msgstr "Legg til emoji"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:15
 msgid "New collective name"
-msgstr "Nytt gemenskapsnavn"
+msgstr "Nytt navn på kollektiv"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:16
 msgid "Select circle..."
@@ -191,9 +186,8 @@ msgid "Could not delete the page"
 msgstr "Kunne ikke slette siden"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:25
-#, fuzzy
 msgid "Add a page"
-msgstr "Legg til en underside"
+msgstr "Legg til en side"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:26
 #: /collectives/specialVueFakeDummyForL10nScript.js:35
@@ -207,11 +201,11 @@ msgstr "Kunne ikke opprette siden"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:28
 msgid "Expand subpage list"
-msgstr ""
+msgstr "Utvid undersideliste"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:28
 msgid "Collapse subpage list"
-msgstr ""
+msgstr "Fold sammen undersidelisten"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:29
 msgid "Current version"
@@ -254,11 +248,11 @@ msgstr "Klarte ikke å tilbakestille {page} til versjon {timestamp}."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:41
 msgid "No collective selected"
-msgstr "Ingen gemenskaper valgt"
+msgstr "Ingen kollektiver valgt"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:42
 msgid "Select a collective or create a new one on the left."
-msgstr "Velg en gemenskap eller opprett en til venstre."
+msgstr "Velg et kollektiv, eller opprett ett til venstre."
 
 #: /collectives/templates/error.php:4
 msgid "Error: Missing apps"
