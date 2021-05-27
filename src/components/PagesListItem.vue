@@ -19,7 +19,8 @@
 				:class="{'page-icon-badge--rotated': collapsed}" />
 		</div>
 		<router-link :to="to">
-			<div class="app-content-list-item-line-one">
+			<div class="app-content-list-item-line-one"
+				:class="{'app-content-list-item-line-one--level0': level === 0 }">
 				{{ title }}
 			</div>
 			<div v-if="$scopedSlots['line-two']"
@@ -150,6 +151,9 @@ export default {
 
 	.app-content-list .app-content-list-item .app-content-list-item-line-one {
 		font-size: 120%;
+		&--level0 {
+			font-weight: bold;
+		}
 	}
 
 	.app-content-list .app-content-list-item .app-content-list-item-line-two {
