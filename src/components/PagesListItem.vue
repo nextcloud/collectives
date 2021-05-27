@@ -92,8 +92,8 @@ export default {
 		},
 
 		indent() {
-			// Limit indention to three to prevent nasty subtrees
-			return Math.min(this.level, 3)
+			// Start indention at level 2. And limit to 5 to prevent nasty subtrees
+			return Math.min(Math.max(0, this.level - 1), 4)
 		},
 
 		indentIcon() {
