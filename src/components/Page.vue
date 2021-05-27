@@ -102,6 +102,7 @@ export default {
 			'indexPage',
 			'landingPage',
 			'updatedPagePath',
+			'showing',
 		]),
 
 		page() {
@@ -158,7 +159,7 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['show', 'toggle']),
+		...mapMutations(['hide', 'show', 'toggle']),
 		init() {
 			const parts = [
 				this.collective.name,
@@ -173,7 +174,7 @@ export default {
 				}
 			}
 			document.title = parts.join(' - ')
-			if (this.emptyTitle) {
+			if (this.showing('titlePlaceholder')) {
 				this.$nextTick(this.focusTitle)
 			}
 		},
@@ -218,7 +219,7 @@ export default {
 		},
 
 		emptyPreview() {
-			if (!this.emptyTitle) {
+			if (!this.showing('titlePlaceholder')) {
 				this.$emit('edit')
 			}
 		},
