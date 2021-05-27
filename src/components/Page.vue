@@ -1,20 +1,21 @@
 <template>
 	<div>
 		<h1 id="titleform" class="page-title">
-			<input v-if="landingPage"
-				class="title"
-				type="text"
-				disabled
-				:value="collectiveTitle">
-			<input v-else
-				ref="title"
-				v-model="newTitle"
-				class="title"
-				:placeholder="t('collectives', 'Title')"
-				type="text"
-				:disabled="updating || !savePossible"
-				@keypress.13="focusEditor"
-				@blur="renamePage">
+			<form @submit.prevent="renamePage">
+				<input v-if="landingPage"
+					class="title"
+					type="text"
+					disabled
+					:value="collectiveTitle">
+				<input v-else
+					ref="title"
+					v-model="newTitle"
+					class="title"
+					:placeholder="t('collectives', 'Title')"
+					type="text"
+					:disabled="!savePossible"
+					@keypress.13="focusEditor">
+			</form>
 			<button v-if="edit"
 				class="edit-button primary"
 				@click="stopEdit">
@@ -76,10 +77,6 @@ export default {
 	},
 
 	props: {
-		updating: {
-			type: Boolean,
-			required: false,
-		},
 		edit: {
 			type: Boolean,
 			required: false,
@@ -90,6 +87,8 @@ export default {
 		return {
 			previousSaveTimestamp: null,
 			preview: true,
+			newTitle: '',
+			titleHasFocus: false,
 		}
 	},
 
@@ -101,8 +100,9 @@ export default {
 			'currentCollective',
 			'indexPage',
 			'landingPage',
+			'pageParam',
 			'updatedPagePath',
-			'showing',
+			'loading',
 		]),
 
 		page() {
@@ -144,8 +144,11 @@ export default {
 	},
 
 	watch: {
+		'pageParam'() {
+			this.initDocumentTitle()
+		},
 		'currentPage.id'() {
-			this.init()
+			this.initTitleEntry()
 		},
 		'edit'(current, previous) {
 			if (current && !previous && !this.preview) {
@@ -159,8 +162,9 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['hide', 'show', 'toggle']),
-		init() {
+		...mapMutations(['done', 'load', 'toggle']),
+
+		initDocumentTitle() {
 			const parts = [
 				this.collective.name,
 				t('collectives', 'Collectives'),
@@ -174,8 +178,15 @@ export default {
 				}
 			}
 			document.title = parts.join(' - ')
-			if (this.showing('titlePlaceholder')) {
+		},
+
+		initTitleEntry() {
+			if (this.loading('newPage')) {
+				this.newTitle = ''
 				this.$nextTick(this.focusTitle)
+				this.done('newPage')
+			} else {
+				this.newTitle = this.page.title
 			}
 		},
 
@@ -183,15 +194,15 @@ export default {
 		 * Rename currentPage on the server
 		 */
 		async renamePage() {
-			const newTitle = this.page.newTitle
-			if (!newTitle || newTitle === this.page.title) {
+			this.titleHasFocus = false
+			if (!this.newTitle || this.newTitle === this.page.title) {
 				return
 			}
 			try {
-				await this.$store.dispatch(RENAME_PAGE, newTitle)
+				await this.$store.dispatch(RENAME_PAGE, this.newTitle)
 				this.$router.push(this.updatedPagePath)
 				this.$store.commit(CLEAR_UPDATED_PAGE)
-				if (!this.preview) {
+				if (this.page.size === 0) {
 					this.$emit('edit')
 				}
 			} catch (e) {
@@ -202,10 +213,14 @@ export default {
 
 		focusTitle() {
 			this.$refs.title.focus()
+			this.titleHasFocus = true
 		},
 
 		focusEditor() {
-			this.$el.querySelector('.ProseMirror').focus()
+			const editor = this.$el.querySelector('.ProseMirror')
+			if (editor) {
+				editor.focus()
+			}
 		},
 
 		/**
@@ -219,7 +234,7 @@ export default {
 		},
 
 		emptyPreview() {
-			if (!this.showing('titlePlaceholder')) {
+			if (!this.titleHasFocus) {
 				this.$emit('edit')
 			}
 		},

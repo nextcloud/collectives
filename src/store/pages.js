@@ -174,11 +174,11 @@ export default {
 		 * @param {Object} page Properties for the new page (title for now)
 		 */
 		async [NEW_PAGE]({ commit, getters }, page) {
-			commit('load', 'page', { root: true })
+			// We'll be done when the title form has focus.
+			commit('load', 'newPage', { root: true })
 			const response = await axios.post(getters.pageCreateUrl(page.parentId), page)
 			// Add new page to the beginning of pages array
-			commit(ADD_PAGE, { newTitle: '', ...response.data.data })
-			commit('done', 'page', { root: true })
+			commit(ADD_PAGE, response.data.data)
 		},
 
 		async [TOUCH_PAGE]({ commit, getters }) {
@@ -194,7 +194,7 @@ export default {
 			commit('load', 'page', { root: true })
 			const page = getters.currentPage
 			const url = getters.pageUrl(page.parentId, page.id)
-			const response = await axios.put(url, { title: page.newTitle })
+			const response = await axios.put(url, { title: newTitle })
 			await commit(UPDATE_PAGE, response.data.data)
 			commit('done', 'page', { root: true })
 		},
