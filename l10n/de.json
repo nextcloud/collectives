@@ -33,6 +33,8 @@
     "Add a page" : "Seite hinzufügen",
     "New Page" : "Neue Seite",
     "Could not create the page" : "Anlegen der Seite fehlgeschlagen",
+    "Expand subpage list" : "Klappe Unterseiten-Liste auf",
+    "Collapse subpage list" : "Klappe Unterseiten-Liste ein",
     "Current version" : "Aktuelle Version",
     "No other versions available" : "Keine weiteren Versionen vorhanden",
     "After editing you can find old versions of the page here." : "Nach dem Bearbeiten werden alte Versionen hier angezeigt.",

@@ -14,7 +14,7 @@
 				</div>
 			</slot>
 			<TriangleIcon v-if="isCollapsible"
-				:title="collapsed ? 'Expand subpage list' : 'Collapse subpage list'"
+				:title="collapsed ? t('collectives', 'Expand subpage list') : t('collectives', 'Collapse subpage list')"
 				class="page-icon-badge"
 				:class="{'page-icon-badge--rotated': collapsed}" />
 		</div>
