@@ -16,15 +16,13 @@
 				@keypress.13="focusEditor"
 				@blur="renamePage">
 			<button v-if="edit"
-				class="button primary"
-				type="button"
+				class="edit-button primary"
 				@click="stopEdit">
 				<span class="icon icon-checkmark-white" />
 				{{ t('collectives', 'Done') }}
 			</button>
 			<button v-else
-				type="button"
-				class="button primary"
+				class="edit-button primary"
 				@click="startEdit">
 				<span class="icon icon-rename-white" />
 				{{ t('collectives', 'Edit') }}
@@ -254,7 +252,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 	#editor-container .editor__content {
 		border: 2px solid var(--color-border);
 		border-radius: var(--border-radius);
@@ -284,5 +282,15 @@ export default {
 
 	#action-menu button {
 		z-index: 1;
+	}
+
+	.edit-button {
+		min-width: max-content;
+		height: 44px;
+
+		.icon {
+			opacity: 1;
+			margin-right: 8px;
+		}
 	}
 </style>
