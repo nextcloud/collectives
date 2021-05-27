@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2021-05-26 13:04+0200\n"
+"POT-Creation-Date: 2021-05-27 17:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,11 +27,11 @@ msgid "Collectives"
 msgstr ""
 
 #: /collectives/lib/Search/PageContentProvider.php:74
-#: /collectives/lib/Search/PageContentProvider.php:132
+#: /collectives/lib/Search/PageContentProvider.php:133
 msgid "Collectives: page content"
 msgstr ""
 
-#: /collectives/lib/Search/PageContentProvider.php:119
+#: /collectives/lib/Search/PageContentProvider.php:120
 msgid "in page {page} from collective {collective}"
 msgstr ""
 
@@ -168,8 +168,7 @@ msgid "Could not delete the page"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:25
-#: /collectives/specialVueFakeDummyForL10nScript.js:33
-msgid "Add a subpage"
+msgid "Add a page"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:26
@@ -204,6 +203,10 @@ msgid "%n byte"
 msgid_plural "%n bytes"
 msgstr[0] ""
 msgstr[1] ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:33
+msgid "Add a subpage"
+msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:36
 msgid "Restore this version"

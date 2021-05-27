@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2021-05-12 14:33+0200\n"
+"POT-Creation-Date: 2021-05-27 17:25+0200\n"
 "PO-Revision-Date: 2021-05-26 13:38+0000\n"
 "Last-Translator: J. Lavoie <j.lavoie@net-c.ca>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/collectives/"
@@ -28,11 +28,11 @@ msgid "Collectives"
 msgstr "Kollektive"
 
 #: /collectives/lib/Search/PageContentProvider.php:74
-#: /collectives/lib/Search/PageContentProvider.php:132
+#: /collectives/lib/Search/PageContentProvider.php:133
 msgid "Collectives: page content"
 msgstr "Kollektive: Seiten-Inhalte"
 
-#: /collectives/lib/Search/PageContentProvider.php:119
+#: /collectives/lib/Search/PageContentProvider.php:120
 msgid "in page {page} from collective {collective}"
 msgstr "in Seite {page} des Kollektivs {collective}"
 
@@ -83,8 +83,8 @@ msgstr ""
 "  mit einem [Nextcloud Zirkel](https://github.com/nextcloud/circles) "
 "verknüpft\n"
 "  und unter Kontrolle des Kollektivs.\n"
-"* 📝 **Kollaboratives Bearbeiten von Seiten** (wie etwa von Etherpad bekannt)"
-"\n"
+"* 📝 **Kollaboratives Bearbeiten von Seiten** (wie etwa von Etherpad "
+"bekannt)\n"
 "  dank der [Text app](https://github.com/nextcloud/text).\n"
 "* 🔤 **Wohlbekannte [Markdown](https://en.wikipedia.org/wiki/Markdown) "
 "Syntax**\n"
@@ -189,9 +189,8 @@ msgid "Could not delete the page"
 msgstr "Seite konnte nicht entfernt werden"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:25
-#: /collectives/specialVueFakeDummyForL10nScript.js:33
-msgid "Add a subpage"
-msgstr "Unterseite hinzufügen"
+msgid "Add a page"
+msgstr "Seite hinzufügen"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:26
 #: /collectives/specialVueFakeDummyForL10nScript.js:34
@@ -225,6 +224,10 @@ msgid "%n byte"
 msgid_plural "%n bytes"
 msgstr[0] "%n Byte"
 msgstr[1] "%n Bytes"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:33
+msgid "Add a subpage"
+msgstr "Unterseite hinzufügen"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:36
 msgid "Restore this version"
