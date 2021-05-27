@@ -66,6 +66,7 @@ export default {
 
 	computed: {
 		...mapGetters([
+			'pageParam',
 			'collectiveParam',
 			'loading',
 			'currentPagePath',
@@ -105,6 +106,13 @@ export default {
 		},
 	},
 
+	watch: {
+		// Reinitate collapsed state when route changes (to expand currentPage if applicable)
+		'pageParam'() {
+			this.initCollapsed()
+		},
+	},
+
 	mounted() {
 		this.initCollapsed()
 	},
@@ -137,6 +145,7 @@ export default {
 		},
 
 		initCollapsed() {
+			// Expand subpages if they're in the path to currentPage
 			if (this.currentPagePath.includes(this.page)) {
 				this.collapsed = false
 			}
