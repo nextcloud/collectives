@@ -4,6 +4,8 @@
 		:style="indentItem">
 		<div class="app-content-list-item-icon"
 			:style="indentIcon"
+			:tabindex="isClickable ? '0' : null"
+			@keypress.13="toggleCollapsed"
 			@[isClickable]="toggleCollapsed">
 			<slot name="icon">
 				<div :class="{'page-icon-collapsible': isCollapsible}"
