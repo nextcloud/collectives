@@ -98,7 +98,8 @@ class PageContentProvider implements IProvider {
 	 * @throws NotPermittedException
 	 */
 	public function search(IUser $user, ISearchQuery $query): SearchResult {
-		if ($this->appManager->isEnabledForUser('circles', $user)) {
+		if ($this->appManager->isEnabledForUser('circles', $user) &&
+			strpos($query->getRoute(), 'collectives.') === 0) {
 			$collectiveInfos = $this->collectiveHelper->getCollectivesForUser($user->getUID(), false);
 		} else {
 			$collectiveInfos = [];
