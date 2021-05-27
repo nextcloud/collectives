@@ -1,0 +1,275 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the Nextcloud package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Nextcloud 3.14159\n"
+"Report-Msgid-Bugs-To: translations\\@example.com\n"
+"POT-Creation-Date: 2021-05-12 14:35+0200\n"
+"PO-Revision-Date: 2021-05-21 19:55+0000\n"
+"Last-Translator: Jonas Meurer <jonas@freesources.org>\n"
+"Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
+"collectives/collectives-app/nb_NO/>\n"
+"Language: nb_NO\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.7-dev\n"
+
+#: /collectives-files.js:1
+msgid "img"
+msgid_plural ".svg"
+msgstr[0] "img"
+msgstr[1] ".svg"
+
+#: /collectives-main.js:2
+msgid "seconds"
+msgstr "sekunder"
+
+#: /collectives/lib/Fs/UserFolderHelper.php:52
+#: /collectives/lib/Search/CollectiveProvider.php:58
+#: /collectives/lib/Search/CollectiveProvider.php:106
+#: /collectives/specialAppInfoFakeDummyForL10nScript.php:2
+#: /collectives/lib/Fs/UserFolderHelper.php:52
+#: /collectives/lib/Search/CollectiveProvider.php:58
+#: /collectives/lib/Search/CollectiveProvider.php:106
+#: /collectives/specialAppInfoFakeDummyForL10nScript.php:2
+#: /collectives/specialVueFakeDummyForL10nScript.js:21
+msgid "Collectives"
+msgstr "Gemenskaper"
+
+#: /collectives/lib/Search/PageProvider.php:65
+#: /collectives/lib/Search/PageProvider.php:113
+#: /collectives/lib/Search/PageProvider.php:65
+#: /collectives/lib/Search/PageProvider.php:113
+msgid "Collective Pages"
+msgstr "Gemenskapsside"
+
+#: /collectives/lib/Search/PageProvider.php:106
+#: /collectives/lib/Search/PageProvider.php:106
+msgid "in {collective}"
+msgstr "i {collective}"
+
+#: /collectives/lib/Service/CollectiveService.php:104
+#: /collectives/lib/Service/CollectiveService.php:104
+#, php-format
+msgid "Created collective \"%s\" for existing circle."
+msgstr "Opprettet gemenskapen «%s» for eksisterende sirkel."
+
+#: /collectives/specialAppInfoFakeDummyForL10nScript.php:3
+#: /collectives/specialAppInfoFakeDummyForL10nScript.php:3
+msgid "A place for activist and community projects to build shared knowledge"
+msgstr ""
+"Et sted for aktivist- og gemenskapsprosjekter for bygging av delt kunnskap"
+
+#: /collectives/specialAppInfoFakeDummyForL10nScript.php:4
+#: /collectives/specialAppInfoFakeDummyForL10nScript.php:4
+msgid ""
+"Collectives is a Nextcloud App for activist and community projects to "
+"organize together.\n"
+"Come and gather in collectives to build shared knowledge.\n"
+"\n"
+"* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n"
+"  tied to a [Nextcloud Circle](https://github.com/nextcloud/circles) and\n"
+"  owned by the collective.\n"
+"* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n"
+"  [Text app](https://github.com/nextcloud/text).\n"
+"* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) "
+"syntax**\n"
+"  for page formatting.\n"
+"\n"
+"## Installation\n"
+"\n"
+"In your Nextcloud instance, simply navigate to **»Apps«**, find the\n"
+"**»Circles«** and **»Collectives«** apps and enable them."
+msgstr ""
+"Gemenskaper er et Nextcloud-program tiltenkt organisering av aktivist- og "
+"gemenskapsprosjekter.\n"
+"Knytt deg til fellesskap i gemenskaper for å bygge delt kunnskap.\n"
+"* 👥 **Gemenskapsdrevet grasrotsarbeidsflyt**: Gemenskaper er\n"
+"  knyttet til en [Nextcloud-sirkel](https://github.com/nextcloud/circles) "
+"og\n"
+"  eid av gemenskapen.\n"
+"* 📝 **Samarbeidsredigering av sider** som på Etherpad, takket være\n"
+"  [Tekst-programmet](https://github.com/nextcloud/text).\n"
+"* 🔤 **Velkjent [Markdown](https://en.wikipedia.org/wiki/Markdown)-syntaks**\n"
+"  for sideformatering.\n"
+"\n"
+"##Installasjon\n"
+"\n"
+"I din Nextcloud-instans går du til **«Programmer»**, finner\n"
+"**«Sirkler»** og **«Gemenskaper»**-programmene og skrur dem på."
+
+#: /collectives/templates/error.php:4
+#: /collectives/templates/error.php:4
+msgid "Error: Missing apps"
+msgstr "Feil: Manglende programmer"
+
+#: /collectives/templates/error.php:9
+#: /collectives/templates/error.php:9
+msgid "The following dependency apps are missing: "
+msgstr "Følgende avhengigheter mangler: "
+
+#: /collectives/templates/error.php:27
+#: /collectives/templates/error.php:27
+msgid "Please ask the administrator to enable these apps."
+msgstr "Spør en administrator om å skru på disse programmene."
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:1
+msgid "Could not fetch page ${pageId}"
+msgstr "Kunne ikke hente siden ${pageId}"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:2
+msgid "Deleted collectives"
+msgstr "Slettede gemenskaper"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:3
+#: /collectives/specialVueFakeDummyForL10nScript.js:38
+msgid "Restore"
+msgstr "Gjenopprett"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:4
+msgid "Delete permanently"
+msgstr "Slett for godt"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:5
+#, fuzzy
+msgid "Permanently delete collective »{collective}«"
+msgstr "Slett gemenskape «{collective}» for godt?"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:6
+msgid "Delete corresponding circle along with the collective?"
+msgstr "Slett motsvarende sirkel sammen med gemenskapen?"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:7
+msgid "Cancel"
+msgstr "Avbryt"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:8
+msgid "Only collective"
+msgstr "Kun gemenskapen"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:9
+msgid "Collective and circle"
+msgstr "Gemenskapen og sirkelen"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:10
+msgid "Last edited by {user}"
+msgstr "Sist endret av {user}"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:11
+msgid "Select a collective"
+msgstr "Velg en gemenskap"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:12
+msgid "Delete"
+msgstr "Slett"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:13
+msgid "Create new collective"
+msgstr "Opprett ny gemenskap"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:14
+msgid "Create collective for existing circle"
+msgstr "Opprett gemenskap for eksisterende sirkel"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:15
+msgid "Add emoji"
+msgstr "Legg til emoji"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:16
+msgid "New collective name"
+msgstr "Nytt gemenskapsnavn"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:17
+msgid "Select circle..."
+msgstr "Velg sirkel …"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:18
+msgid "Title"
+msgstr "Navn"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:19
+msgid "Done"
+msgstr "Ferdig"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:20
+msgid "Edit"
+msgstr "Rediger"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:22
+msgid "Could not rename the page"
+msgstr "Kunne ikke gi siden nytt navn"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:23
+msgid "Delete page"
+msgstr "Slett side"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:24
+msgid "Page deleted"
+msgstr "Siden ble slettet"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:25
+msgid "Could not delete the page"
+msgstr "Kunne ikke slette siden"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:26
+#: /collectives/specialVueFakeDummyForL10nScript.js:34
+msgid "Add a subpage"
+msgstr "Legg til en underside"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:27
+#: /collectives/specialVueFakeDummyForL10nScript.js:35
+msgid "New Page"
+msgstr "Ny side"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:28
+#: /collectives/specialVueFakeDummyForL10nScript.js:36
+msgid "Could not create the page"
+msgstr "Kunne ikke opprette siden"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:29
+msgid "Current version"
+msgstr "Nåværende versjon"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:30
+msgid "No other versions available"
+msgstr "Ingen andre versjoner tilgjengelig"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:31
+msgid "After editing you can find old versions of the page here."
+msgstr "Etter redigering kan du finne gamle versjoner av siden her."
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:32
+msgid "Could not get page versions"
+msgstr "Kunne ikke hente sideversjonering"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:33
+#: /collectives/src/util/xmlToVersionsList.js:29
+msgid "%n byte"
+msgid_plural "%n bytes"
+msgstr[0] "%n byte"
+msgstr[1] "%n byte"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:37
+msgid "Restore this version"
+msgstr "Gjenopprett denne versjonen"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:39
+msgid "Reverted {page} to revision {timestamp}."
+msgstr "Gjenoppretet {page} til versjon {timestamp}."
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:40
+msgid "Failed to revert {page} to revision {timestamp}."
+msgstr "Klarte ikke å tilbakestille {page} til versjon {timestamp}."
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:41
+msgid "No collective selected"
+msgstr "Ingen gemenskaper valgt"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:42
+msgid "Select a collective or create a new one on the left."
+msgstr "Velg en gemenskap eller opprett en til venstre."
