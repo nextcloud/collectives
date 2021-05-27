@@ -103,6 +103,7 @@ test-cypress-watch:
 # Cleaning
 clean:
 	rm -rf js/*
+	rm -rf $(release_dir)/collectives
 
 # Same as clean but also removes dependencies installed by composer and npm
 distclean: clean
@@ -172,3 +173,4 @@ release: js/collectives.js
 		openssl dgst -sha512 -sign $(cert_dir)/$(app_name).key \
 			$(release_dir)/$(app_name)-$(VERSION).tar.gz | openssl base64; \
 	fi
+	rm -rf $(release_dir)/collectives
