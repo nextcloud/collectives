@@ -8,15 +8,17 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2021-05-27 18:00+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2021-05-28 12:11+0000\n"
+"Last-Translator: Artem <KovalevArtem.ru@gmail.com>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/collectives/"
+"collectives-app/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.7-dev\n"
 
 #: /collectives/lib/Fs/UserFolderHelper.php:52
 #: /collectives/lib/Search/CollectiveProvider.php:58
@@ -81,11 +83,11 @@ msgstr ""
 #: /collectives/specialVueFakeDummyForL10nScript.js:2
 #: /collectives/specialVueFakeDummyForL10nScript.js:38
 msgid "Restore"
-msgstr ""
+msgstr "Восстановить"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:3
 msgid "Delete permanently"
-msgstr ""
+msgstr "Удалить навсегда"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:4
 msgid "Permanently delete collective »{collective}«"
@@ -97,7 +99,7 @@ msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:6
 msgid "Cancel"
-msgstr ""
+msgstr "Отмена"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:7
 msgid "Only collective"
@@ -117,7 +119,7 @@ msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:11
 msgid "Delete"
-msgstr ""
+msgstr "Удалить"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:12
 msgid "Create new collective"
@@ -129,7 +131,7 @@ msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:14
 msgid "Add emoji"
-msgstr ""
+msgstr "Добавить эмодзи"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:15
 msgid "New collective name"
@@ -141,11 +143,11 @@ msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:17
 msgid "Title"
-msgstr ""
+msgstr "Название"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:18
 msgid "Done"
-msgstr ""
+msgstr "Готово"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:19
 msgid "Edit"
@@ -157,24 +159,24 @@ msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:22
 msgid "Delete page"
-msgstr ""
+msgstr "Удалить страницу"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:23
 msgid "Page deleted"
-msgstr ""
+msgstr "Страница удалена"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:24
 msgid "Could not delete the page"
-msgstr ""
+msgstr "Не удалось удалить страницу"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:25
 msgid "Add a page"
-msgstr ""
+msgstr "Добавить страницу"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:26
 #: /collectives/specialVueFakeDummyForL10nScript.js:35
 msgid "New Page"
-msgstr ""
+msgstr "Новая страница"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:27
 #: /collectives/specialVueFakeDummyForL10nScript.js:36
@@ -191,7 +193,7 @@ msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:29
 msgid "Current version"
-msgstr ""
+msgstr "Текущая версия"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:30
 msgid "No other versions available"
@@ -209,9 +211,9 @@ msgstr ""
 #: /collectives/src/util/xmlToVersionsList.js:29
 msgid "%n byte"
 msgid_plural "%n bytes"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%n байт"
+msgstr[1] "%n байта"
+msgstr[2] "%n байт"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:34
 msgid "Add a subpage"
@@ -219,7 +221,7 @@ msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:37
 msgid "Restore this version"
-msgstr ""
+msgstr "Восстановить эту версию"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:39
 msgid "Reverted {page} to revision {timestamp}."
@@ -247,4 +249,4 @@ msgstr ""
 
 #: /collectives/templates/error.php:27
 msgid "Please ask the administrator to enable these apps."
-msgstr ""
+msgstr "Пожалуйста, попросите администратора включить эти приложения."
