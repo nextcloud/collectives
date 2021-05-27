@@ -62,7 +62,7 @@ build-js-production:
 	$(NPM) run build
 
 # Builds translation template from source code and update
-po:
+po: clean
 	php $(build_tools_dir)/translationtool.phar create-pot-files
 	sed -i 's/^#: .*\/collectives/#: \/collectives/' $(CURDIR)/translationfiles/templates/collectives.pot
 	for pofile in $(CURDIR)/translationfiles/*/collectives.po; do \
