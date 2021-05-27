@@ -90,8 +90,8 @@ describe('Collective', function() {
 		it('Allows creation of pages', function() {
 			cy.get('.app-content-list-item')
 				.trigger('mouseover')
-			cy.get('.app-content-list button.primary')
-				.should('contain', 'Add a subpage')
+			cy.get('.app-content-list button.icon-add')
+				.should('contain', 'Add a page')
 		})
 	})
 

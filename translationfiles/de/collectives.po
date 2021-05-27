@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2021-05-12 14:33+0200\n"
+"POT-Creation-Date: 2021-05-27 17:57+0200\n"
 "PO-Revision-Date: 2021-05-26 13:38+0000\n"
 "Last-Translator: J. Lavoie <j.lavoie@net-c.ca>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/collectives/"
@@ -28,11 +28,11 @@ msgid "Collectives"
 msgstr "Kollektive"
 
 #: /collectives/lib/Search/PageContentProvider.php:74
-#: /collectives/lib/Search/PageContentProvider.php:132
+#: /collectives/lib/Search/PageContentProvider.php:133
 msgid "Collectives: page content"
 msgstr "Kollektive: Seiten-Inhalte"
 
-#: /collectives/lib/Search/PageContentProvider.php:119
+#: /collectives/lib/Search/PageContentProvider.php:120
 msgid "in page {page} from collective {collective}"
 msgstr "in Seite {page} des Kollektivs {collective}"
 
@@ -83,8 +83,8 @@ msgstr ""
 "  mit einem [Nextcloud Zirkel](https://github.com/nextcloud/circles) "
 "verknüpft\n"
 "  und unter Kontrolle des Kollektivs.\n"
-"* 📝 **Kollaboratives Bearbeiten von Seiten** (wie etwa von Etherpad bekannt)"
-"\n"
+"* 📝 **Kollaboratives Bearbeiten von Seiten** (wie etwa von Etherpad "
+"bekannt)\n"
 "  dank der [Text app](https://github.com/nextcloud/text).\n"
 "* 🔤 **Wohlbekannte [Markdown](https://en.wikipedia.org/wiki/Markdown) "
 "Syntax**\n"
@@ -100,7 +100,7 @@ msgid "Deleted collectives"
 msgstr "Gelöschte Kollektive"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:2
-#: /collectives/specialVueFakeDummyForL10nScript.js:37
+#: /collectives/specialVueFakeDummyForL10nScript.js:38
 msgid "Restore"
 msgstr "Wiederherstellen"
 
@@ -189,62 +189,73 @@ msgid "Could not delete the page"
 msgstr "Seite konnte nicht entfernt werden"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:25
-#: /collectives/specialVueFakeDummyForL10nScript.js:33
-msgid "Add a subpage"
-msgstr "Unterseite hinzufügen"
+msgid "Add a page"
+msgstr "Seite hinzufügen"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:26
-#: /collectives/specialVueFakeDummyForL10nScript.js:34
+#: /collectives/specialVueFakeDummyForL10nScript.js:35
 msgid "New Page"
 msgstr "Neue Seite"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:27
-#: /collectives/specialVueFakeDummyForL10nScript.js:35
+#: /collectives/specialVueFakeDummyForL10nScript.js:36
 msgid "Could not create the page"
 msgstr "Anlegen der Seite fehlgeschlagen"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:28
+msgid "Expand subpage list"
+msgstr "Klappe Unterseiten-Liste auf"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:28
+msgid "Collapse subpage list"
+msgstr "Klappe Unterseiten-Liste ein"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:29
 msgid "Current version"
 msgstr "Aktuelle Version"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:29
+#: /collectives/specialVueFakeDummyForL10nScript.js:30
 msgid "No other versions available"
 msgstr "Keine weiteren Versionen vorhanden"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:30
+#: /collectives/specialVueFakeDummyForL10nScript.js:31
 msgid "After editing you can find old versions of the page here."
 msgstr "Nach dem Bearbeiten werden alte Versionen hier angezeigt."
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:31
+#: /collectives/specialVueFakeDummyForL10nScript.js:32
 msgid "Could not get page versions"
 msgstr "Konnte Versionen der Seite nicht laden"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:32
+#: /collectives/specialVueFakeDummyForL10nScript.js:33
 #: /collectives/src/util/xmlToVersionsList.js:29
 msgid "%n byte"
 msgid_plural "%n bytes"
 msgstr[0] "%n Byte"
 msgstr[1] "%n Bytes"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:36
+#: /collectives/specialVueFakeDummyForL10nScript.js:34
+msgid "Add a subpage"
+msgstr "Unterseite hinzufügen"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:37
 msgid "Restore this version"
 msgstr "Diese Version wiederherstellen"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:38
+#: /collectives/specialVueFakeDummyForL10nScript.js:39
 msgid "Reverted {page} to revision {timestamp}."
 msgstr "Seite {page} auf Version {timestamp} zurücksetzen."
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:39
+#: /collectives/specialVueFakeDummyForL10nScript.js:40
 msgid "Failed to revert {page} to revision {timestamp}."
 msgstr ""
 "Das Zurücksetzen der Seite {page} auf die Version {timestamp} ist "
 "fehlgeschlagen."
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:40
+#: /collectives/specialVueFakeDummyForL10nScript.js:41
 msgid "No collective selected"
 msgstr "Kein Kollektiv ausgewählt"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:41
+#: /collectives/specialVueFakeDummyForL10nScript.js:42
 msgid "Select a collective or create a new one on the left."
 msgstr "Wähle ein Kollektiv aus oder lege links ein neues an."
 

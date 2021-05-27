@@ -14,7 +14,7 @@
 					:user="page.lastUserId" />
 			</template>
 			<template #actions>
-				<ActionButton class="primary"
+				<ActionButton
 					icon="icon-add"
 					@click="newPage(page)">
 					{{ t('collectives', 'Add a subpage') }}

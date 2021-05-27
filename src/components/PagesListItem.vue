@@ -14,12 +14,13 @@
 				</div>
 			</slot>
 			<TriangleIcon v-if="isCollapsible"
-				:title="collapsed ? 'Expand subpage list' : 'Collapse subpage list'"
+				:title="collapsed ? t('collectives', 'Expand subpage list') : t('collectives', 'Collapse subpage list')"
 				class="page-icon-badge"
 				:class="{'page-icon-badge--rotated': collapsed}" />
 		</div>
 		<router-link :to="to">
-			<div class="app-content-list-item-line-one">
+			<div class="app-content-list-item-line-one"
+				:class="{'app-content-list-item-line-one--level0': level === 0 }">
 				{{ title }}
 			</div>
 			<div v-if="$scopedSlots['line-two']"
@@ -28,7 +29,7 @@
 			</div>
 		</router-link>
 		<div class="page-list-item-actions"
-			:class="{'page-list-item-actions--display': isActive || isMobile}">
+			:class="{'page-list-item-actions--display': level === 0 || isActive || isMobile}">
 			<Actions>
 				<slot name="actions" />
 			</Actions>
@@ -92,8 +93,8 @@ export default {
 		},
 
 		indent() {
-			// Limit indention to three to prevent nasty subtrees
-			return Math.min(this.level, 3)
+			// Start indention at level 2. And limit to 5 to prevent nasty subtrees
+			return Math.min(Math.max(0, this.level - 1), 4)
 		},
 
 		indentIcon() {
@@ -150,6 +151,9 @@ export default {
 
 	.app-content-list .app-content-list-item .app-content-list-item-line-one {
 		font-size: 120%;
+		&--level0 {
+			font-weight: bold;
+		}
 	}
 
 	.app-content-list .app-content-list-item .app-content-list-item-line-two {
@@ -168,15 +172,16 @@ export default {
 		}
 	}
 
+	.app-content-list-item.active {
+		background-color: var(--color-primary-light);
+	}
+
 	// Display page actions on hovering the page list item
 	.app-content-list-item:hover {
+		background-color: var(--color-background-hover);
 		.page-list-item-actions {
 			visibility: visible;
 		}
-	}
-
-	div.app-content-list-item:hover {
-		background-color: var(--color-main-background);
 	}
 
 	div.app-content-list-item {
