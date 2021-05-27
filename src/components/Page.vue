@@ -38,7 +38,6 @@
 			:page-id="page.id"
 			:page-url="currentPageDavUrl"
 			:as-placeholder="preview && edit"
-			@edit="$emit('edit')"
 			@empty="emptyPreview" />
 		<component :is="handler.component"
 			v-show="!readOnly"
@@ -147,6 +146,11 @@ export default {
 		'currentPage.id'() {
 			this.init()
 		},
+		'edit'(current, previous) {
+			if (current && !previous && !this.preview) {
+				this.$nextTick(this.focusEditor)
+			}
+		},
 	},
 
 	mounted() {
@@ -169,7 +173,6 @@ export default {
 				}
 			}
 			document.title = parts.join(' - ')
-			this.preview = true
 			if (this.emptyTitle) {
 				this.$nextTick(this.focusTitle)
 			}
@@ -187,6 +190,9 @@ export default {
 				await this.$store.dispatch(RENAME_PAGE, newTitle)
 				this.$router.push(this.updatedPagePath)
 				this.$store.commit(CLEAR_UPDATED_PAGE)
+				if (!this.preview) {
+					this.$emit('edit')
+				}
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not rename the page'))
@@ -206,6 +212,9 @@ export default {
 		 */
 		hidePreview() {
 			this.preview = false
+			if (this.edit) {
+				this.focusEditor()
+			}
 		},
 
 		emptyPreview() {
