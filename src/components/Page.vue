@@ -272,12 +272,20 @@ export default {
 	}
 
 	.page-title {
-		padding: 8px 2px 2px 40px;
+		padding: 8px 2px 2px 8px;
 		position: relative;
 		margin: auto;
 		max-width: 670px;
 		margin-bottom: -50px;
 		display: flex;
+	}
+
+	// Leave space for page list toggle on small screens
+	// Editor/View: 670px, page list/details toggle: 44px
+	@media only screen and (max-width: 670px + 44px) {
+		.page-title {
+			padding: 8px 2px 2px 40px;
+		}
 	}
 
 	#action-menu button {
