@@ -172,15 +172,16 @@ export default {
 		}
 	}
 
+	.app-content-list-item.active {
+		background-color: var(--color-primary-light);
+	}
+
 	// Display page actions on hovering the page list item
 	.app-content-list-item:hover {
+		background-color: var(--color-background-hover);
 		.page-list-item-actions {
 			visibility: visible;
 		}
-	}
-
-	div.app-content-list-item:hover {
-		background-color: var(--color-main-background);
 	}
 
 	div.app-content-list-item {
