@@ -29,7 +29,7 @@
 			</div>
 		</router-link>
 		<div class="page-list-item-actions"
-			:class="{'page-list-item-actions--display': isActive || isMobile}">
+			:class="{'page-list-item-actions--display': level === 0 || isActive || isMobile}">
 			<Actions>
 				<slot name="actions" />
 			</Actions>

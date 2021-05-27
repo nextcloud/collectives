@@ -21,7 +21,7 @@
 				<ActionButton class="primary"
 					icon="icon-add"
 					@click="newPage(collectivePage)">
-					{{ t('collectives', 'Add a subpage') }}
+					{{ t('collectives', 'Add a page') }}
 				</ActionButton>
 			</template>
 		</PagesListItem>
