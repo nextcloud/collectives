@@ -13,7 +13,11 @@
 
 <script>
 
-import { mapGetters } from 'vuex'
+import { emit } from '@nextcloud/event-bus'
+import { mapGetters, mapMutations } from 'vuex'
+import { GET_PAGES } from '../store/actions'
+import { SELECT_VERSION } from '../store/mutations'
+import displayError from '../util/displayError'
 import AppContentDetails from '@nextcloud/vue/dist/Components/AppContentDetails'
 import Page from '../components/Page'
 import PagesList from '../components/PagesList'
@@ -39,8 +43,8 @@ export default {
 
 	computed: {
 		...mapGetters([
+			'currentCollective',
 			'currentPage',
-			'pageParam',
 			'version',
 		]),
 
@@ -55,9 +59,49 @@ export default {
 	},
 
 	watch: {
+		'currentCollective.id'() {
+			this.initCollective()
+		},
 		'currentPage.id'() {
 			this.editToggle = EditState.Unset
+			this.$store.commit(SELECT_VERSION, null)
 		},
+	},
+
+	mounted() {
+		this.initCollective()
+	},
+
+	methods: {
+		...mapMutations(['show']),
+
+		initCollective() {
+			if (this.currentCollective) {
+				this.getPages()
+				this.closeNav()
+				this.show('details')
+			} else {
+				this.openNav()
+			}
+		},
+
+		/**
+		 * Get list of all pages
+		 * @returns {Promise}
+		 */
+		getPages() {
+			return this.$store.dispatch(GET_PAGES)
+				.catch(displayError('Could not fetch pages'))
+		},
+
+		closeNav() {
+			emit('toggle-navigation', { open: false })
+		},
+
+		openNav() {
+			emit('toggle-navigation', { open: true })
+		},
+
 	},
 
 }

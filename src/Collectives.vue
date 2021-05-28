@@ -1,5 +1,5 @@
 <template>
-	<Content app-name="collective">
+	<Content app-name="collectives">
 		<!-- go back to list when in details mode -->
 		<a v-if="showing('details') && isMobile"
 			class="app-details-toggle icon-toggle-filelist"
@@ -7,42 +7,29 @@
 			@click.stop.prevent="hide('details')" />
 		<Nav />
 		<AppContent>
-			<Collective v-if="collectiveParam" />
-			<EmptyContent v-else-if="!isMobile" icon="icon-ant">
-				{{ t('collectives', 'No collective selected') }}
-				<template #desc>
-					{{ t('collectives', 'Select a collective or create a new one on the left.') }}
-				</template>
-			</EmptyContent>
+			<router-view />
 		</AppContent>
 		<PageSidebar v-if="currentPage" v-show="showing('sidebar')" />
 	</Content>
 </template>
 
 <script>
-
-import { emit } from '@nextcloud/event-bus'
 import { showInfo } from '@nextcloud/dialogs'
 import { mapState, mapGetters, mapMutations } from 'vuex'
-import { GET_COLLECTIVES, GET_TRASH_COLLECTIVES, GET_PAGES } from '../store/actions'
-import { SELECT_VERSION } from '../store/mutations'
-import AppContent from '@nextcloud/vue/dist/Components/AppContent'
+import { GET_COLLECTIVES, GET_TRASH_COLLECTIVES } from './store/actions'
+import displayError from './util/displayError'
 import Content from '@nextcloud/vue/dist/Components/Content'
-import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
-import Collective from '../components/Collective'
+import AppContent from '@nextcloud/vue/dist/Components/AppContent'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile'
-import Nav from '../components/Nav'
-import PageSidebar from '../components/PageSidebar'
-import displayError from '../util/displayError'
+import Nav from './components/Nav'
+import PageSidebar from './components/PageSidebar'
 
 export default {
-	name: 'CircleDash',
+	name: 'Collectives',
 
 	components: {
 		AppContent,
 		Content,
-		Collective,
-		EmptyContent,
 		Nav,
 		PageSidebar,
 	},
@@ -56,41 +43,31 @@ export default {
 			'messages',
 		]),
 		...mapGetters([
-			'collectiveParam',
-			'currentCollective',
-			'currentPage',
-			'pageParam',
 			'showing',
-			'version',
+			'currentPage',
 		]),
-
 		info() {
 			return this.messages.info
 		},
 	},
 
 	watch: {
-		'collectiveParam'() {
-			this.initCollective()
-		},
-		'pageParam'() {
-			this.$store.commit(SELECT_VERSION, null)
-		},
-		'info'() {
-			if (this.info) {
-				showInfo(this.info)
+		'info'(current) {
+			if (current) {
+				showInfo(current)
 				this.$store.commit('info', null)
 			}
 		},
 	},
 
 	mounted() {
-		this.getCollectives().then(this.initCollective)
+		this.getCollectives()
 		this.getTrashCollectives()
 	},
 
 	methods: {
-		...mapMutations(['show', 'hide']),
+		...mapMutations(['hide']),
+
 		/**
 		 * Get list of all collectives
 		 * @returns {Promise}
@@ -109,36 +86,79 @@ export default {
 				.catch(displayError('Could not fetch collectives from trash'))
 		},
 
-		initCollective() {
-			if (this.currentCollective) {
-				this.getPages()
-				this.closeNav()
-				this.show('details')
-			} else {
-				this.openNav()
-			}
-		},
-
-		/**
-		 * Get list of all pages
-		 * @returns {Promise}
-		 */
-		getPages() {
-			return this.$store.dispatch(GET_PAGES)
-				.catch(displayError('Could not fetch pages'))
-		},
-
-		closeNav() {
-			emit('toggle-navigation', { open: false })
-		},
-
-		openNav() {
-			emit('toggle-navigation', { open: true })
-		},
-
 	},
+
 }
 </script>
+
+<style>
+	.app-content-details {
+		position: relative;
+		flex: 1 1 524px;
+	}
+
+	#app-content-wrapper {
+		display: flex;
+		position: relative;
+		align-items: stretch;
+		min-height: 100%;
+	}
+
+	#titleform button {
+		margin-top: 0px;
+	}
+
+	.app-content-details div #editor-container,
+	.app-content-details div #text-container {
+		position: absolute;
+		top: 54px;
+		height: calc(100% - 56px);
+	}
+
+	#editor-container #editor {
+		max-width: 800px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	#editor-container #editor .menubar {
+		z-index: 100;
+	}
+
+	#editor-wrapper #editor div.ProseMirror {
+		margin-top: 5px;
+	}
+
+	#text-wrapper #text div.ProseMirror {
+		margin-top: 5px;
+		padding-bottom: 50px;
+	}
+
+	#version-title, #titleform input[type='text'] {
+		font-size: 35px;
+		border: none;
+		color: var(--color-main-text);
+		width: 100%;
+		height: 43px;
+		opacity: 0.8;
+	}
+
+	.page-title {
+		width: 100%;
+	}
+
+	#titleform input[type='text']:disabled {
+		background-color: var(--color-main-background);
+		color: var(--color-text-lighter);
+		margin: 3px 3px 3px 0;
+		padding: 7px 6px;
+	}
+
+	#action-menu {
+		position: absolute;
+		right: 0;
+	}
+</style>
 
 <style lang="scss" scoped>
 .app-details-toggle {

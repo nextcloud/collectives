@@ -21,7 +21,7 @@
  */
 
 import Vue from 'vue'
-import App from './App'
+import Collectives from './Collectives'
 import router from './router'
 import store from './store/store'
 import { sync } from 'vuex-router-sync'
@@ -37,7 +37,7 @@ const app = new Vue({
 	el: '#content',
 	router,
 	store,
-	render: h => h(App),
+	render: h => h(Collectives),
 })
 
 // Expose the app during E2E tests
