@@ -137,7 +137,7 @@ js/collectives.js:
 	$(NPM) run build
 
 # Builds the source package for the app store
-release: js/collectives.js
+release: npm-init js/collectives.js
 	mkdir -p $(release_dir)
 	rsync -a --delete --delete-excluded \
 		--exclude=".[a-z]*" \
