@@ -2,9 +2,8 @@
 	<div id="app-content-wrapper">
 		<PagesList />
 		<AppContentDetails v-if="currentPage">
-			<Version v-if="version" :page="currentPage" />
+			<Version v-if="version" />
 			<Page v-else
-				key="currentPage.timestamp"
 				:edit="edit"
 				@edit="edit = true"
 				@toggleEdit="edit = !edit" />
@@ -56,8 +55,7 @@ export default {
 	},
 
 	watch: {
-
-		'pageParam'() {
+		'currentPage.id'() {
 			this.editToggle = EditState.Unset
 		},
 	},

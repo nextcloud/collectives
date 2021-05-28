@@ -36,7 +36,7 @@ import PagesListItem from './PagesListItem'
 
 import { showError } from '@nextcloud/dialogs'
 import { mapGetters, mapMutations } from 'vuex'
-import { NEW_PAGE } from '../store/actions'
+import { NEW_PAGE, GET_PAGES } from '../store/actions'
 
 export default {
 	name: 'SubPagesList',
@@ -134,6 +134,9 @@ export default {
 				await this.$store.dispatch(NEW_PAGE, page)
 				this.collapsed = false
 				this.$router.push(this.$store.getters.updatedPagePath)
+				// The parents location changes when the first subpage
+				// is created.
+				this.$store.dispatch(GET_PAGES)
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not create the page'))

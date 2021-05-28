@@ -1,20 +1,21 @@
 <template>
 	<div>
 		<h1 id="titleform" class="page-title">
-			<input v-if="landingPage"
-				class="title"
-				type="text"
-				disabled
-				:value="collectiveTitle">
-			<input v-else
-				ref="title"
-				v-model="newTitle"
-				class="title"
-				:placeholder="t('collectives', 'Title')"
-				type="text"
-				:disabled="updating || !savePossible"
-				@keypress.13="focusEditor"
-				@blur="renamePage">
+			<form @submit.prevent="renamePage">
+				<input v-if="landingPage"
+					class="title"
+					type="text"
+					disabled
+					:value="collectiveTitle">
+				<input v-else
+					ref="title"
+					v-model="newTitle"
+					class="title"
+					:placeholder="t('collectives', 'Title')"
+					type="text"
+					:disabled="!savePossible"
+					@keypress.13="focusEditor">
+			</form>
 			<button v-if="edit"
 				class="edit-button primary"
 				@click="stopEdit">
@@ -38,12 +39,11 @@
 			:page-id="page.id"
 			:page-url="currentPageDavUrl"
 			:as-placeholder="preview && edit"
-			@edit="$emit('edit')"
 			@empty="emptyPreview" />
 		<component :is="handler.component"
 			v-show="!readOnly"
+			:key="`editor-${page.id}`"
 			ref="editor"
-			:key="'editor-' + page.id + '-' + page.timestamp"
 			:fileid="page.id"
 			:basename="page.fileName"
 			:filename="`/${currentPageFilePath}`"
@@ -64,6 +64,7 @@ import RichText from './RichText'
 import { showError } from '@nextcloud/dialogs'
 import { mapGetters, mapMutations } from 'vuex'
 import { RENAME_PAGE, TOUCH_PAGE, GET_VERSIONS } from '../store/actions'
+import { CLEAR_UPDATED_PAGE } from '../store/mutations'
 
 export default {
 	name: 'Page',
@@ -76,10 +77,6 @@ export default {
 	},
 
 	props: {
-		updating: {
-			type: Boolean,
-			required: false,
-		},
 		edit: {
 			type: Boolean,
 			required: false,
@@ -90,19 +87,22 @@ export default {
 		return {
 			previousSaveTimestamp: null,
 			preview: true,
+			newTitle: '',
+			titleHasFocus: false,
 		}
 	},
 
 	computed: {
 		...mapGetters([
-			'pageParam',
 			'currentPage',
 			'currentPageFilePath',
 			'currentPageDavUrl',
 			'currentCollective',
 			'indexPage',
 			'landingPage',
+			'pageParam',
 			'updatedPagePath',
+			'loading',
 		]),
 
 		page() {
@@ -141,25 +141,19 @@ export default {
 			return this.page && this.page.title !== ''
 		},
 
-		emptyTitle() {
-			return this.page.newTitle === ''
-		},
-
-		newTitle: {
-			get() {
-				return (typeof this.page.newTitle === 'string')
-					? this.page.newTitle
-					: this.page.title
-			},
-			set(val) {
-				this.page.newTitle = val
-			},
-		},
 	},
 
 	watch: {
-		page(val, oldVal) {
-			this.init()
+		'pageParam'() {
+			this.initDocumentTitle()
+		},
+		'currentPage.id'() {
+			this.initTitleEntry()
+		},
+		'edit'(current, previous) {
+			if (current && !previous && !this.preview) {
+				this.$nextTick(this.focusEditor)
+			}
 		},
 	},
 
@@ -168,8 +162,9 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['show', 'toggle']),
-		init() {
+		...mapMutations(['done', 'load', 'toggle']),
+
+		initDocumentTitle() {
 			const parts = [
 				this.collective.name,
 				t('collectives', 'Collectives'),
@@ -183,9 +178,15 @@ export default {
 				}
 			}
 			document.title = parts.join(' - ')
-			this.preview = true
-			if (this.emptyTitle) {
+		},
+
+		initTitleEntry() {
+			if (this.loading('newPage')) {
+				this.newTitle = ''
 				this.$nextTick(this.focusTitle)
+				this.done('newPage')
+			} else {
+				this.newTitle = this.page.title
 			}
 		},
 
@@ -193,13 +194,17 @@ export default {
 		 * Rename currentPage on the server
 		 */
 		async renamePage() {
-			const newTitle = this.page.newTitle
-			if (!newTitle || newTitle === this.page.title) {
+			this.titleHasFocus = false
+			if (!this.newTitle || this.newTitle === this.page.title) {
 				return
 			}
 			try {
-				await this.$store.dispatch(RENAME_PAGE, newTitle)
+				await this.$store.dispatch(RENAME_PAGE, this.newTitle)
 				this.$router.push(this.updatedPagePath)
+				this.$store.commit(CLEAR_UPDATED_PAGE)
+				if (this.page.size === 0) {
+					this.$emit('edit')
+				}
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not rename the page'))
@@ -208,10 +213,14 @@ export default {
 
 		focusTitle() {
 			this.$refs.title.focus()
+			this.titleHasFocus = true
 		},
 
 		focusEditor() {
-			this.$el.querySelector('.ProseMirror').focus()
+			const editor = this.$el.querySelector('.ProseMirror')
+			if (editor) {
+				editor.focus()
+			}
 		},
 
 		/**
@@ -219,10 +228,13 @@ export default {
 		 */
 		hidePreview() {
 			this.preview = false
+			if (this.edit) {
+				this.focusEditor()
+			}
 		},
 
 		emptyPreview() {
-			if (!this.emptyTitle) {
+			if (!this.titleHasFocus) {
 				this.$emit('edit')
 			}
 		},

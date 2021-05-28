@@ -6,6 +6,7 @@ import {
 	SET_PAGES,
 	ADD_PAGE,
 	UPDATE_PAGE,
+	CLEAR_UPDATED_PAGE,
 	DELETE_PAGE_BY_ID,
 } from './mutations'
 
@@ -21,7 +22,7 @@ import {
 export default {
 	state: {
 		pages: [],
-		updatedPage: {},
+		updatedPage: undefined,
 	},
 
 	getters: {
@@ -50,8 +51,9 @@ export default {
 			return pages
 		},
 
-		currentPage(_state, getters) {
+		currentPage(state, getters) {
 			return getters.currentPagePath[getters.currentPagePath.length - 1]
+			    || state.updatedPage
 		},
 
 		currentPageFilePath(_state, getters) {
@@ -120,12 +122,16 @@ export default {
 		},
 
 		[UPDATE_PAGE](state, page) {
+			state.updatedPage = page
 			state.pages.splice(
 				state.pages.findIndex(p => p.id === page.id),
 				1,
 				page
 			)
-			state.updatedPage = page
+		},
+
+		[CLEAR_UPDATED_PAGE](state) {
+			state.updatedPage = undefined
 		},
 
 		[ADD_PAGE](state, page) {
@@ -168,11 +174,11 @@ export default {
 		 * @param {Object} page Properties for the new page (title for now)
 		 */
 		async [NEW_PAGE]({ commit, getters }, page) {
-			commit('load', 'page', { root: true })
+			// We'll be done when the title form has focus.
+			commit('load', 'newPage', { root: true })
 			const response = await axios.post(getters.pageCreateUrl(page.parentId), page)
 			// Add new page to the beginning of pages array
-			commit(ADD_PAGE, { newTitle: '', ...response.data.data })
-			commit('done', 'page', { root: true })
+			commit(ADD_PAGE, response.data.data)
 		},
 
 		async [TOUCH_PAGE]({ commit, getters }) {
@@ -187,10 +193,9 @@ export default {
 		async [RENAME_PAGE]({ commit, getters, state }, newTitle) {
 			commit('load', 'page', { root: true })
 			const page = getters.currentPage
-			page.title = newTitle
-			delete page.newTitle
-			const response = await axios.put(getters.pageUrl(page.parentId, page.id), page)
-			commit(UPDATE_PAGE, response.data.data)
+			const url = getters.pageUrl(page.parentId, page.id)
+			const response = await axios.put(url, { title: newTitle })
+			await commit(UPDATE_PAGE, response.data.data)
 			commit('done', 'page', { root: true })
 		},
 
