@@ -7,16 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2021-05-27 17:57+0200\n"
+"POT-Creation-Date: 2021-05-27 18:00+0200\n"
 "PO-Revision-Date: 2021-05-28 12:11+0000\n"
-"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
-"Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
-"collectives/collectives-app/nb_NO/>\n"
-"Language: nb_NO\n"
+"Last-Translator: Artem <KovalevArtem.ru@gmail.com>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/collectives/"
+"collectives-app/ru/>\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Weblate 4.7-dev\n"
 
 #: /collectives/lib/Fs/UserFolderHelper.php:52
@@ -25,35 +26,34 @@ msgstr ""
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:2
 #: /collectives/specialVueFakeDummyForL10nScript.js:20
 msgid "Collectives"
-msgstr "Kollektiver"
+msgstr ""
 
 #: /collectives/lib/Search/PageContentProvider.php:74
 #: /collectives/lib/Search/PageContentProvider.php:133
 msgid "Collectives: page content"
-msgstr "Kollektiver: sideinnhold"
+msgstr ""
 
 #: /collectives/lib/Search/PageContentProvider.php:120
 msgid "in page {page} from collective {collective}"
-msgstr "på siden {page} fra kollektivet {collective}"
+msgstr ""
 
 #: /collectives/lib/Search/PageProvider.php:66
 #: /collectives/lib/Search/PageProvider.php:120
 msgid "Collectives: pages"
-msgstr "Kollektiver: sider"
+msgstr ""
 
 #: /collectives/lib/Search/PageProvider.php:108
 msgid "in Collective {collective}"
-msgstr "i kollektivet {collective}"
+msgstr ""
 
 #: /collectives/lib/Service/CollectiveService.php:104
 #, php-format
 msgid "Created collective \"%s\" for existing circle."
-msgstr "Opprettet kollektivet «%s» for eksisterende sirkel."
+msgstr ""
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:3
 msgid "A place for activist and community projects to build shared knowledge"
 msgstr ""
-"Et sted for aktivist- og gemenskapsprosjekter for bygging av delt kunnskap"
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:4
 msgid ""
@@ -75,204 +75,178 @@ msgid ""
 "In your Nextcloud instance, simply navigate to **»Apps«**, find the\n"
 "**»Circles«** and **»Collectives«** apps and enable them."
 msgstr ""
-"Kollektiver er et Nextcloud-program tiltenkt organisering av aktivist- og "
-"gemenskapsprosjekter.\n"
-"Knytt deg til fellesskap i gemenskaper for å bygge delt kunnskap.\n"
-"* 👥 **Gemenskapsdrevet grasrotsarbeidsflyt**: Kollektiver er\n"
-"  knyttet til en [Nextcloud-sirkel](https://github.com/nextcloud/circles) "
-"og\n"
-"  eid av gemenskapen.\n"
-"* 📝 **Samarbeidsredigering av sider** som på Etherpad, takket være\n"
-"  [Tekst-programmet](https://github.com/nextcloud/text).\n"
-"* 🔤 **Velkjent [Markdown](https://en.wikipedia.org/wiki/Markdown)-syntaks**\n"
-"  for sideformatering.\n"
-"\n"
-"##Installasjon\n"
-"\n"
-"I din Nextcloud-instans går du til **«Programmer»**, finner\n"
-"**«Sirkler»** og **«Kollektiver»**-programmene og skrur dem på."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:1
 msgid "Deleted collectives"
-msgstr "Slettede kollektiver"
+msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:2
 #: /collectives/specialVueFakeDummyForL10nScript.js:38
 msgid "Restore"
-msgstr "Gjenopprett"
+msgstr "Восстановить"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:3
 msgid "Delete permanently"
-msgstr "Slett for godt"
+msgstr "Удалить навсегда"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:4
 msgid "Permanently delete collective »{collective}«"
-msgstr "Slett kollektivet «{collective}» for godt?"
+msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:5
 msgid "Delete corresponding circle along with the collective?"
-msgstr "Slett motsvarende sirkel sammen med kollektivet?"
+msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:6
 msgid "Cancel"
-msgstr "Avbryt"
+msgstr "Отмена"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:7
 msgid "Only collective"
-msgstr "Kun kollektivet"
+msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:8
 msgid "Collective and circle"
-msgstr "Kollektivet og sirkelen"
+msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:9
 msgid "Last edited by {user}"
-msgstr "Sist endret av {user}"
+msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:10
 msgid "Select a collective"
-msgstr "Velg et kollektiv"
+msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:11
 msgid "Delete"
-msgstr "Slett"
+msgstr "Удалить"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:12
 msgid "Create new collective"
-msgstr "Opprett nytt kollektiv"
+msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:13
 msgid "Create collective for existing circle"
-msgstr "Opprett kollektiv for eksisterende sirkel"
+msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:14
 msgid "Add emoji"
-msgstr "Legg til emoji"
+msgstr "Добавить эмодзи"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:15
 msgid "New collective name"
-msgstr "Nytt navn på kollektiv"
+msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:16
 msgid "Select circle..."
-msgstr "Velg sirkel …"
+msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:17
 msgid "Title"
-msgstr "Navn"
+msgstr "Название"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:18
 msgid "Done"
-msgstr "Ferdig"
+msgstr "Готово"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:19
 msgid "Edit"
-msgstr "Rediger"
+msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:21
 msgid "Could not rename the page"
-msgstr "Kunne ikke gi siden nytt navn"
+msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:22
 msgid "Delete page"
-msgstr "Slett side"
+msgstr "Удалить страницу"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:23
 msgid "Page deleted"
-msgstr "Siden ble slettet"
+msgstr "Страница удалена"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:24
 msgid "Could not delete the page"
-msgstr "Kunne ikke slette siden"
+msgstr "Не удалось удалить страницу"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:25
 msgid "Add a page"
-msgstr "Legg til en side"
+msgstr "Добавить страницу"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:26
 #: /collectives/specialVueFakeDummyForL10nScript.js:35
 msgid "New Page"
-msgstr "Ny side"
+msgstr "Новая страница"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:27
 #: /collectives/specialVueFakeDummyForL10nScript.js:36
 msgid "Could not create the page"
-msgstr "Kunne ikke opprette siden"
+msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:28
 msgid "Expand subpage list"
-msgstr "Utvid undersideliste"
+msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:28
 msgid "Collapse subpage list"
-msgstr "Fold sammen undersidelisten"
+msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:29
 msgid "Current version"
-msgstr "Nåværende versjon"
+msgstr "Текущая версия"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:30
 msgid "No other versions available"
-msgstr "Ingen andre versjoner tilgjengelig"
+msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:31
 msgid "After editing you can find old versions of the page here."
-msgstr "Etter redigering kan du finne gamle versjoner av siden her."
+msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:32
 msgid "Could not get page versions"
-msgstr "Kunne ikke hente sideversjonering"
+msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:33
 #: /collectives/src/util/xmlToVersionsList.js:29
 msgid "%n byte"
 msgid_plural "%n bytes"
-msgstr[0] "%n byte"
-msgstr[1] "%n byte"
+msgstr[0] "%n байт"
+msgstr[1] "%n байта"
+msgstr[2] "%n байт"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:34
 msgid "Add a subpage"
-msgstr "Legg til en underside"
+msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:37
 msgid "Restore this version"
-msgstr "Gjenopprett denne versjonen"
+msgstr "Восстановить эту версию"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:39
 msgid "Reverted {page} to revision {timestamp}."
-msgstr "Gjenoppretet {page} til versjon {timestamp}."
+msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:40
 msgid "Failed to revert {page} to revision {timestamp}."
-msgstr "Klarte ikke å tilbakestille {page} til versjon {timestamp}."
+msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:41
 msgid "No collective selected"
-msgstr "Ingen kollektiver valgt"
+msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:42
 msgid "Select a collective or create a new one on the left."
-msgstr "Velg et kollektiv, eller opprett ett til venstre."
+msgstr ""
 
 #: /collectives/templates/error.php:4
 msgid "Error: Missing apps"
-msgstr "Feil: Manglende programmer"
+msgstr ""
 
 #: /collectives/templates/error.php:9
 msgid "The following dependency apps are missing: "
-msgstr "Følgende avhengigheter mangler: "
+msgstr ""
 
 #: /collectives/templates/error.php:27
 msgid "Please ask the administrator to enable these apps."
-msgstr "Spør en administrator om å skru på disse programmene."
-
-#~ msgid "img"
-#~ msgid_plural ".svg"
-#~ msgstr[0] "img"
-#~ msgstr[1] ".svg"
-
-#~ msgid "seconds"
-#~ msgstr "sekunder"
-
-#~ msgid "Could not fetch page ${pageId}"
-#~ msgstr "Kunne ikke hente siden ${pageId}"
+msgstr "Пожалуйста, попросите администратора включить эти приложения."
