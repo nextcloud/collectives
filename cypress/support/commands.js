@@ -59,8 +59,8 @@ Cypress.Commands.add('seedPageContent', (user, pagePath, content) => {
 			await axios.put(`${Cypress.env('baseUrl')}/remote.php/dav/files/${user}/Collectives/${pagePath}`, content, {
 				headers: {
 					requesttoken: app.OC.requestToken,
-					'Content-Type': 'text/markdown'
-				}
+					'Content-Type': 'text/markdown',
+				},
 			})
 		})
 })

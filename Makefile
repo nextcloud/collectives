@@ -5,140 +5,119 @@
 VERSION?=$(shell sed -ne 's/^\s*<version>\(.*\)<\/version>/\1/p' appinfo/info.xml)
 OCC?=php ../../occ
 NPM?=npm
-COMMIT_IMAGE?=nextcloud-collectives:latest
-LATEST_IMAGE?=nextcloud-collectives:latest
 
-app_name=$(notdir $(CURDIR))
-project_dir=$(CURDIR)/../$(app_name)
-build_dir=$(CURDIR)/build
-build_tools_dir=$(build_dir)/tools
-source_dir=$(build_dir)/source
-release_dir=$(build_dir)/release
-cert_dir=$(HOME)/.nextcloud/certificates
-composer=$(shell which composer 2> /dev/null)
-translationtool_url=https://github.com/nextcloud/docker-ci/raw/master/translations/translationtool/translationtool.phar
+# Release variables
+GITLAB_GROUP:=collectivecloud
+GITLAB_PROJECT:=collectives
+GITLAB_PROJECT_ID:=17827012
+GITLAB_URL:=https://gitlab.com
+GITLAB_API_URL:=$(GITLAB_URL)/api/v4/projects/$(GITLAB_PROJECT_ID)
 
-all: dev-setup lint build test
+# Internal variables
+APP_NAME:=$(notdir $(CURDIR))
+PROJECT_DIR:=$(CURDIR)/../$(APP_NAME)
+BUILD_DIR:=$(CURDIR)/build
+BUILD_TOOLS_DIR:=$(BUILD_DIR)/tools
+RELEASE_DIR:=$(BUILD_DIR)/release
+CERT_DIR:=$(HOME)/.nextcloud/certificates
 
-dev-setup: distclean composer npm-init translationtool
+# Meta targets
+all: setup-dev lint build test
 
-build-dev: build-js
+setup-dev: composer-install node-modules
 
-# Installs and updates the composer dependencies. If composer is not installed
-# a copy is fetched from the web
+# Install build tools
 composer:
-ifeq (, $(composer))
-	@echo "No composer command available, downloading a copy from the web"
-	mkdir -p $(build_tools_dir)
-	curl -sS https://getcomposer.org/installer | php
-	mv composer.phar $(build_tools_dir)
-	php $(build_tools_dir)/composer.phar install --prefer-dist
-else
-	composer install --prefer-dist
+ifeq (, $(wildcard $(BUILD_TOOLS_DIR)/composer.phar))
+	mkdir -p $(BUILD_TOOLS_DIR)
+	cd $(BUILD_TOOLS_DIR) && curl -sS https://getcomposer.org/installer | php
 endif
 
-npm-init:
-	$(NPM) ci
+translationtool:
+ifeq (, $(wildcard $(BUILD_TOOLS_DIR)/translationtool.phar))
+	mkdir -p $(BUILD_TOOLS_DIR)
+	curl https://github.com/nextcloud/docker-ci/raw/master/translations/translationtool/translationtool.phar \
+		--silent --location --output $(BUILD_TOOLS_DIR)/translationtool.phar
+endif
 
-node_modules: package.json package-lock.json
+# Install dependencies
+node-modules:
 	$(NPM) install
 
-# Installs nextclouds translation tool
-translationtool:
-ifeq (, $(wildcard $(build_tools_dir)/translationtool.phar))
-	mkdir -p $(build_tools_dir)
-	curl $(translationtool_url) --silent --location --output $(build_tools_dir)/translationtool.phar
-endif
+composer-install: composer
+	php $(BUILD_TOOLS_DIR)/composer.phar install --prefer-dist
 
-# Linting
-lint:
+# Clean build artifacts
+clean:
+	rm -rf js/*
+	rm -rf $(RELEASE_DIR)/collectives
+
+# Also remove build tools and dependencies
+distclean: clean
+	rm -rf $(BUILD_TOOLS_DIR)
+	rm -rf node_modules
+	rm -rf vendor
+
+# Lint
+lint: lint-js
+
+lint-js:
 	$(NPM) run lint
 
-# Building
-build-js:
+# Build
+build: build-js-dev
+
+build-js-dev:
 	$(NPM) run dev
 
 build-js-production:
 	$(NPM) run build
 
-# Builds translation template from source code and update
-po: clean
-	php $(build_tools_dir)/translationtool.phar create-pot-files
+# Testing
+test: test-php test-js
+
+test-php: test-php-unit test-php-integration
+
+test-php-unit:
+	$(CURDIR)/vendor/bin/phpunit --configuration phpunit.xml
+
+test-php-integration:
+	$(CURDIR)/vendor/bin/behat --config=tests/Integration/config/behat.yml
+
+test-js:
+	$(NPM) test
+
+test-js-cypress:
+	cd cypress && ./runLocal.sh run
+
+test-js-cypress-watch:
+	cd cypress && ./runLocal.sh open
+
+# Development
+
+# Build and update translation template from source code
+po: translationtool clean
+	php $(BUILD_TOOLS_DIR)/translationtool.phar create-pot-files
 	sed -i 's/^#: .*\/collectives/#: \/collectives/' $(CURDIR)/translationfiles/templates/collectives.pot
 	for pofile in $(CURDIR)/translationfiles/*/collectives.po; do \
 		msgmerge --backup=none --update "$$pofile" translationfiles/templates/collectives.pot; \
 	done
 
+# Update l10n files from translation templates
 l10n: po
-	php $(build_tools_dir)/translationtool.phar convert-po-files
+	php $(BUILD_TOOLS_DIR)/translationtool.phar convert-po-files
 
 # Update psalm baseline
-psalm-baseline:
+php-psalm-baseline:
 	$(CURDIR)/vendor/bin/psalm.phar --set-baseline=tests/psalm-baseline.xml
 	$(CURDIR)/vendor/bin/psalm.phar --update-baseline
 
 text-app-includes:
 	for n in `cat .files_from_text`; do cp ../../apps/text/$$n $$n ; done
 
-# Testing
-test: php-test test-js
-
-php-test: php-unit-test php-integration-test
-
-php-unit-test:
-	$(CURDIR)/vendor/bin/phpunit --configuration phpunit.xml
-
-php-integration-test:
-	$(CURDIR)/vendor/bin/behat --config=tests/Integration/config/behat.yml
-
-test-js: node_modules
-	$(NPM) test
-
-test-cypress:
-	cd cypress && ./runLocal.sh run
-
-test-cypress-watch:
-	cd cypress && ./runLocal.sh open
-
-# Cleaning
-clean:
-	rm -rf js/*
-	rm -rf $(release_dir)/collectives
-
-# Same as clean but also removes dependencies installed by composer and npm
-distclean: clean
-	rm -rf $(build_tools_dir)
-	rm -rf $(source_dir)
-	rm -rf node_modules
-	rm -rf vendor
-
-# Builds the source and release package
-dist:
-	make source
-	make release
-
-# Builds the source package
-source:
-	mkdir -p $(source_dir)
-	rsync -a --delete --delete-excluded \
-		--exclude=".git*" \
-		--exclude=".php_cs.cache" \
-		--exclude="build" \
-		--exclude="cypress/screenshots" \
-		--exclude="cypress/videos" \
-		--exclude="js/*" \
-		--exclude="node_modules" \
-		--exclude="vendor" \
-	$(project_dir) $(source_dir)/
-	tar -czf $(source_dir)/$(app_name)-$(VERSION).tar.gz \
-		-C $(source_dir) $(app_name)
-
-js/collectives.js:
-	$(NPM) run build
-
-# Builds the source package for the app store
-release: js/collectives.js
-	mkdir -p $(release_dir)
+# Build a release package
+build: node-modules build-js-production
+	mkdir -p $(RELEASE_DIR)
 	rsync -a --delete --delete-excluded \
 		--exclude=".[a-z]*" \
 		--exclude="Makefile" \
@@ -159,18 +138,38 @@ release: js/collectives.js
 		--exclude="tests" \
 		--exclude="vendor" \
 		--exclude="webpack.*" \
-	$(project_dir) $(release_dir)/
-	@if [ -f $(cert_dir)/$(app_name).key ]; then \
+	$(PROJECT_DIR) $(RELEASE_DIR)/
+	@if [ -f $(CERT_DIR)/$(APP_NAME).key ]; then \
 		echo "Signing code…"; \
-		$(OCC) integrity:sign-app --privateKey="$(cert_dir)/$(app_name).key" \
-			--certificate="$(cert_dir)/$(app_name).crt" \
-			--path="$(release_dir)/$(app_name)"; \
+		$(OCC) integrity:sign-app --privateKey="$(CERT_DIR)/$(APP_NAME).key" \
+			--certificate="$(CERT_DIR)/$(APP_NAME).crt" \
+			--path="$(RELEASE_DIR)/$(APP_NAME)"; \
 	fi
-	tar -czf $(release_dir)/$(app_name)-$(VERSION).tar.gz \
-		-C $(release_dir) $(app_name)
-	@if [ -f $(cert_dir)/$(app_name).key ]; then \
+	tar -czf $(RELEASE_DIR)/$(APP_NAME)-$(VERSION).tar.gz \
+		-C $(RELEASE_DIR) $(APP_NAME)
+	# Sign the release tarball
+	@if [ -f $(CERT_DIR)/$(APP_NAME).key ]; then \
 		echo "Signing release tarball…"; \
-		openssl dgst -sha512 -sign $(cert_dir)/$(app_name).key \
-			$(release_dir)/$(app_name)-$(VERSION).tar.gz | openssl base64; \
+		openssl dgst -sha512 -sign $(CERT_DIR)/$(APP_NAME).key \
+			$(RELEASE_DIR)/$(APP_NAME)-$(VERSION).tar.gz | openssl base64; \
 	fi
-	rm -rf $(release_dir)/collectives
+	rm -rf $(RELEASE_DIR)/collectives
+
+# Prepare the release package for the app store
+release: build
+	# Upload the release tarball
+	$(eval UPLOAD_PATH:=$(shell curl -s -X POST -H "PRIVATE-TOKEN: $(GITLAB_API_TOKEN)" \
+			--form "file=@build/release/collectives-$(VERSION).tar.gz" $(GITLAB_API_URL)/uploads | jq -r '.full_path'))
+
+	# Git tag and push
+	$(eval GIT_TAG:="v$(shell echo $(VERSION) | sed -e 's/~/-/g')")
+	git tag $(GIT_TAG) && git push --tags
+
+	# Publish the release on Gitlab
+	curl -s -X POST -H "PRIVATE-TOKEN: $(GITLAB_API_TOKEN)" \
+		-H "Content-Type: application/json" \
+		--data "{ \"tag_name\": \"$(GIT_TAG)\", \"assets\": {\"links\": [ {\"name\": \"App Store Package\", \"url\": \"$(GITLAB_URL)$(UPLOAD_PATH)\", \"link_type\": \"package\"} ] } }" "$(GITLAB_API_URL)/releases" | jq .
+
+	@echo "URL to release tarball (for app store): $(GITLAB_URL)$(UPLOAD_PATH)"
+
+.PHONY: all setup-dev composer translationtool node-modules composer-install clean distclean lint lint-js build build-js-dev build-js-production test test-php test-php-unit test-php-integration test-js test-js-cypress test-js-cypress-watch po l10n php-psalm-baseline text-app-includes build release
