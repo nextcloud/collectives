@@ -6,13 +6,20 @@ VERSION?=$(shell sed -ne 's/^\s*<version>\(.*\)<\/version>/\1/p' appinfo/info.xm
 OCC?=php ../../occ
 NPM?=npm
 
+# Release variables
+GITLAB_GROUP:=collectivecloud
+GITLAB_PROJECT:=collectives
+GITLAB_PROJECT_ID:=17827012
+GITLAB_URL:=https://gitlab.com
+GITLAB_API_URL:=$(GITLAB_URL)/api/v4/projects/$(GITLAB_PROJECT_ID)
+
 # Internal variables
-APP_NAME=$(notdir $(CURDIR))
-PROJECT_DIR=$(CURDIR)/../$(APP_NAME)
-BUILD_DIR=$(CURDIR)/build
-BUILD_TOOLS_DIR=$(BUILD_DIR)/tools
-RELEASE_DIR=$(BUILD_DIR)/release
-CERT_DIR=$(HOME)/.nextcloud/certificates
+APP_NAME:=$(notdir $(CURDIR))
+PROJECT_DIR:=$(CURDIR)/../$(APP_NAME)
+BUILD_DIR:=$(CURDIR)/build
+BUILD_TOOLS_DIR:=$(BUILD_DIR)/tools
+RELEASE_DIR:=$(BUILD_DIR)/release
+CERT_DIR:=$(HOME)/.nextcloud/certificates
 
 # Meta targets
 all: setup-dev lint build test
@@ -148,4 +155,21 @@ build: node-modules build-js-production
 	fi
 	rm -rf $(RELEASE_DIR)/collectives
 
-.PHONY: all setup-dev composer translationtool node-modules composer-install clean distclean lint lint-js build build-js-dev build-js-production test test-php test-php-unit test-php-integration test-js test-js-cypress test-js-cypress-watch po l10n php-psalm-baseline text-app-includes build
+# Prepare the release package for the app store
+release: build
+	# Upload the release tarball
+	$(eval UPLOAD_PATH:=$(shell curl -s -X POST -H "PRIVATE-TOKEN: $(GITLAB_API_TOKEN)" \
+			--form "file=@build/release/collectives-$(VERSION).tar.gz" $(GITLAB_API_URL)/uploads | jq -r '.full_path'))
+
+	# Git tag and push
+	$(eval GIT_TAG:="v$(shell echo $(VERSION) | sed -e 's/~/-/g')")
+	git tag $(GIT_TAG) && git push --tags
+
+	# Publish the release on Gitlab
+	curl -s -X POST -H "PRIVATE-TOKEN: $(GITLAB_API_TOKEN)" \
+		-H "Content-Type: application/json" \
+		--data "{ \"tag_name\": \"$(GIT_TAG)\", \"assets\": {\"links\": [ {\"name\": \"App Store Package\", \"url\": \"$(GITLAB_URL)$(UPLOAD_PATH)\", \"link_type\": \"package\"} ] } }" "$(GITLAB_API_URL)/releases" | jq .
+
+	@echo "URL to release tarball (for app store): $(GITLAB_URL)$(UPLOAD_PATH)"
+
+.PHONY: all setup-dev composer translationtool node-modules composer-install clean distclean lint lint-js build build-js-dev build-js-production test test-php test-php-unit test-php-integration test-js test-js-cypress test-js-cypress-watch po l10n php-psalm-baseline text-app-includes build release
