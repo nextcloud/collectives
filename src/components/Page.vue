@@ -158,7 +158,8 @@ export default {
 	},
 
 	mounted() {
-		this.init()
+		this.initDocumentTitle()
+		this.initTitleEntry()
 	},
 
 	methods: {
