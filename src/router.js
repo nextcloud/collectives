@@ -22,28 +22,24 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import { generateUrl } from '@nextcloud/router'
-import CircleDash from './views/CircleDash'
+import Home from './views/Home'
+import Collective from './views/Collective'
 
 Vue.use(VueRouter)
 
 const routes = [
 	{
 		path: '/',
-		component: CircleDash,
+		component: Home,
+	},
+	{
+		path: '/:collective',
+		component: Collective,
 		props: (route) => ({
 			...route.params,
 			fileId: Number(route.query.fileId),
 		}),
-		children: [
-			{
-				path: ':collective',
-				component: CircleDash,
-			},
-			{
-				path: ':collective/:page*',
-				component: CircleDash,
-			},
-		],
+		children: [{ path: ':page*' }],
 	},
 ]
 
