@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import { TRASH_COLLECTIVE, RESTORE_COLLECTIVE, DELETE_COLLECTIVE }
 	from '../store/actions'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
@@ -57,13 +57,11 @@ export default {
 		NewCollective,
 	},
 	computed: {
-		...mapState({
-			collectives: (state) => state.collectives.collectives,
-			trashCollectives: (state) => state.collectives.trashCollectives,
-		}),
 		...mapGetters([
 			'loading',
 			'collectiveParam',
+			'collectives',
+			'trashCollectives',
 		]),
 
 		displayTrash() {

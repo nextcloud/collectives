@@ -1,5 +1,6 @@
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
+import { byName } from '../util/sortOrders'
 
 import {
 	SET_COLLECTIVES,
@@ -31,6 +32,14 @@ export default {
 			return state.collectives.find(
 				(collective) => collective.name === getters.collectiveParam
 			)
+		},
+
+		collectives(state, getters) {
+			return state.collectives.sort(byName)
+		},
+
+		trashCollectives(state, getters) {
+			return state.trashCollectives.sort(byName)
 		},
 
 		updatedCollectivePath(state) {
