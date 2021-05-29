@@ -1,6 +1,7 @@
 import { getCurrentUser } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
 import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
+import { byTimestamp } from '../util/sortOrders'
 
 import {
 	SET_PAGES,
@@ -77,7 +78,7 @@ export default {
 		},
 
 		mostRecentSubpages: (state, getters) => (parentId) => {
-			return getters.visibleSubpages(parentId).sort((a, b) => b.timestamp - a.timestamp)
+			return getters.visibleSubpages(parentId).sort(byTimestamp)
 		},
 
 		collectivePage(state) {
