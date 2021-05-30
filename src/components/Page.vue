@@ -14,7 +14,7 @@
 					:placeholder="t('collectives', 'Title')"
 					type="text"
 					:disabled="!savePossible"
-					@keypress.13="focusEditor">
+					@keypress.enter="focusEditor">
 			</form>
 			<button v-if="edit"
 				class="edit-button primary"
