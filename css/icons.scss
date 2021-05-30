@@ -1,7 +1,9 @@
+@include icon-black-white('access-time', 'collectives', 1);
 @include icon-black-white('ant', 'collectives', 1);
-@include icon-black-white('collectives', 'collectives', 1);
 @include icon-black-white('circles', 'circles', 1);
+@include icon-black-white('collectives', 'collectives', 1);
+@include icon-black-white('sort-by-alpha', 'collectives', 1);
 
-.icon-circles {
+.icon-circles, .icon-sort-by-alpha, .icon-access-time {
 	background-size: 16px;
 }

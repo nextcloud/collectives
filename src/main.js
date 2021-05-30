@@ -25,11 +25,13 @@ import Collectives from './Collectives'
 import router from './router'
 import store from './store/store'
 import { sync } from 'vuex-router-sync'
+import { Tooltip } from '@nextcloud/vue'
 
 Vue.prototype.t = t
 Vue.prototype.n = n
 Vue.prototype.OC = OC
 Vue.prototype.OCA = OCA
+Vue.directive('tooltip', Tooltip)
 
 sync(store, router)
 
