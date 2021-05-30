@@ -24,6 +24,7 @@
 		<SubPagesList v-for="subpage in subpagesView"
 			:key="subpage.id"
 			:page="subpage"
+			:sort-order="sortOrder"
 			:level="level+1" />
 	</div>
 </template>
@@ -56,6 +57,10 @@ export default {
 			type: Number,
 			required: true,
 		},
+		sortOrder: {
+			type: Function,
+			required: true,
+		},
 	},
 
 	data() {
@@ -70,11 +75,12 @@ export default {
 			'collectiveParam',
 			'loading',
 			'currentPagePath',
-			'mostRecentSubpages',
+			'visibleSubpages',
 		]),
 
 		subpages() {
-			return this.mostRecentSubpages(this.page.id)
+			return this.visibleSubpages(this.page.id)
+				.sort(this.sortOrder)
 		},
 
 		subpagesView() {

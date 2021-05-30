@@ -12,7 +12,7 @@ Cypress.Commands.add('login', (user, password, route = '/apps/files') => {
 	cy.get('input[name=password]').type(password)
 	cy.get('#submit-wrapper input[type=submit]').click()
 	cy.url().should('not.include', 'index.php/login?redirect_url')
-	cy.url().should('include', route)
+	cy.url().should('include', route.replaceAll(' ', '%20'))
 })
 
 Cypress.Commands.add('logout', () => {

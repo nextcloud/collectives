@@ -27,31 +27,48 @@
 describe('Page', function() {
 	before(function() {
 		cy.login('bob', 'bob', '/apps/collectives')
-		cy.seedCollective('drei')
-		cy.seedPage('vier', '', 'Readme.md')
-		cy.seedPage('fuenf', '', 'Readme.md')
-		cy.seedPageContent('bob', 'drei/fuenf.md', 'A test string with fuenf in the middle.')
+		cy.seedCollective('Our Garden')
+		cy.seedPage('Day 1', '', 'Readme.md')
+		cy.seedPage('Day 2', '', 'Readme.md')
+		cy.seedPageContent('bob', 'Our Garden/Day 2.md', 'A test string with Day 2 in the middle.')
 	})
 
 	describe('visited from collective home', function() {
 		before(function() {
-			cy.login('bob', 'bob', '/apps/collectives/drei')
+			cy.login('bob', 'bob', '/apps/collectives/Our Garden')
 			cy.get('.app-content-list')
 				.get('.app-content-list-item')
-				.should('contain', 'vier')
-			cy.get('.app-content-list-item').contains('vier').click()
+				.should('contain', 'Day 1')
+			cy.get('.app-content-list-item').contains('Day 1').click()
 		})
 		it('Shows the title in the enabled titleform', function() {
-			cy.get('#titleform input').should('have.value', 'vier')
+			cy.get('.app-content-list-item').contains('Day 1').click()
+			cy.get('#titleform input').should('have.value', 'Day 1')
 			cy.get('#titleform input').should('not.have.attr', 'disabled')
+		})
+	})
+
+	describe('Sort order', function() {
+		beforeEach(function() {
+			cy.login('bob', 'bob', '/apps/collectives/Our Garden')
+		})
+		it('sorts pages by timestamp by default', function() {
+			cy.get('.app-content-list-item:last-child')
+				.should('contain', 'Day 1')
+		})
+		it('can sort pages by title', function() {
+			cy.get('button.icon-access-time').click()
+			cy.get('.icon-sort-by-alpha').click()
+			cy.get('.app-content-list-item:last-child')
+				.should('contain', 'Day 2')
 		})
 	})
 
 	describe('Creating a new subpage', function() {
 		before(function() {
-			cy.login('bob', 'bob', '/apps/collectives/drei')
+			cy.login('bob', 'bob', '/apps/collectives/Our Garden')
 			cy.get('#text h1').should('contain', 'Welcome to your new collective')
-			cy.contains('.app-content-list-item', 'vier').find('button.icon-add').click({ force: true })
+			cy.contains('.app-content-list-item', 'Day 1').find('button.icon-add').click({ force: true })
 			cy.focused().should('have.value', '')
 			cy.focused().type('Subpage Title{enter}')
 		})
@@ -59,25 +76,25 @@ describe('Page', function() {
 			cy.get('.app-content-list-item').should('contain', 'Subpage Title')
 			cy.get('#titleform input').should('have.value', 'Subpage Title')
 			cy.get('#titleform input').should('not.have.attr', 'disabled')
-			cy.title().should('eq', 'vier/Subpage Title - drei - Collectives - Nextcloud')
+			cy.title().should('eq', 'Day 1/Subpage Title - Our Garden - Collectives - Nextcloud')
 		})
 	})
 
 	describe('Using the search providers', function() {
 		before(function() {
-			cy.login('bob', 'bob', '/apps/collectives/drei/fuenf')
+			cy.login('bob', 'bob', '/apps/collectives/Our Garden/Day 2')
 		})
 		it('Search for page and page content', function() {
 			cy.get('.unified-search a').click()
 			cy.get('.unified-search__form input')
-				.type('fuenf')
-			cy.get('.unified-search__results-collectives_pages').should('contain', 'fuenf')
-			cy.get('.unified-search__results-collectives_pages_content').should('contain', 'with fuenf in')
+				.type('Day 2')
+			cy.get('.unified-search__results-collectives_pages').should('contain', 'Day 2')
+			cy.get('.unified-search__results-collectives_pages_content').should('contain', 'with Day 2 in')
 		})
 	})
 
 	after(function() {
-		cy.deleteCollective('drei')
+		cy.deleteCollective('Our Garden')
 	})
 
 })

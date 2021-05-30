@@ -1,7 +1,6 @@
 import { getCurrentUser } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
 import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
-import { byTimestamp } from '../util/sortOrders'
 
 import {
 	SET_PAGES,
@@ -75,10 +74,6 @@ export default {
 
 		currentPageDavUrl(_state, getters) {
 			return generateRemoteUrl(`dav/files/${getters.currentPageDavPath}`)
-		},
-
-		mostRecentSubpages: (state, getters) => (parentId) => {
-			return getters.visibleSubpages(parentId).sort(byTimestamp)
 		},
 
 		collectivePage(state) {

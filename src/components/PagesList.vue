@@ -1,6 +1,25 @@
 <template>
 	<AppContentList :class="{loading: loading('collective')}"
 		:show-details="showing('details')">
+		<Actions class="toggle"
+			:force-menu="true"
+			:aria-label="t('collectives', 'Sort order')"
+			:default-icon="sortBy === 'byTitle' ? 'icon-sort-by-alpha' : 'icon-access-time'">
+			<ActionButton
+				class="sort"
+				:class="{selected: sortBy === 'byTimestamp'}"
+				icon="icon-access-time"
+				@click="sortBy = 'byTimestamp'">
+				{{ t('collectives', 'Sort by last modification') }}
+			</ActionButton>
+			<ActionButton
+				class="sort"
+				:class="{selected: sortBy === 'byTitle'}"
+				icon="icon-sort-by-alpha"
+				@click="sortBy = 'byTitle'">
+				{{ t('collectives', 'Sort by title') }}
+			</ActionButton>
+		</Actions>
 		<PagesListItem v-if="currentCollective"
 			key="Readme"
 			:to="`/${encodeURIComponent(collectiveParam)}`"
@@ -28,6 +47,7 @@
 		<SubPagesList v-for="page in subpages"
 			:key="page.id"
 			:page="page"
+			:sort-order="sortOrder"
 			:level="1" />
 	</AppContentList>
 </template>
@@ -35,24 +55,30 @@
 <script>
 
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
+import Actions from '@nextcloud/vue/dist/Components/Actions'
 import AppContentList from '@nextcloud/vue/dist/Components/AppContentList'
 import LastUpdate from './LastUpdate'
 import SubPagesList from './SubPagesList'
 import PagesListItem from './PagesListItem'
-
 import { showError } from '@nextcloud/dialogs'
 import { mapGetters, mapMutations } from 'vuex'
 import { NEW_PAGE } from '../store/actions'
+import * as sortOrders from '../util/sortOrders'
 
 export default {
 	name: 'PagesList',
 
 	components: {
+		Actions,
 		ActionButton,
 		AppContentList,
 		LastUpdate,
 		PagesListItem,
 		SubPagesList,
+	},
+
+	data() {
+		return { sortBy: 'byTimestamp' }
 	},
 
 	computed: {
@@ -61,15 +87,25 @@ export default {
 			'collectivePage',
 			'currentCollective',
 			'loading',
-			'mostRecentSubpages',
+			'visibleSubpages',
 			'showing',
 		]),
 		subpages() {
 			if (this.collectivePage) {
-				return this.mostRecentSubpages(this.collectivePage.id)
+				return this.visibleSubpages(this.collectivePage.id)
+					.sort(this.sortOrder)
 			} else {
 				return []
 			}
+		},
+		sortOrder() {
+			switch (this.sortBy) {
+			case 'byTimestamp':
+				return sortOrders.byTimestamp
+			case 'byTitle':
+				return sortOrders.byTitle
+			}
+			return sortOrders.byTimestamp
 		},
 	},
 
@@ -101,8 +137,19 @@ export default {
 
 <style lang="scss" scoped>
 
-	.app-content-list {
-		padding-top: 40px;
+	.toggle {
+		height: 44px;
+		width: 44px;
+		padding: 0;
+		margin: 0 0 0 auto;
+	}
+
+	.toggle:hover {
+		opacity: 1;
+	}
+
+	li.sort.selected {
+		background-color: var(--color-primary-light);
 	}
 
 </style>

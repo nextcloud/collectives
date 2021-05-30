@@ -4,7 +4,14 @@
 			<EmptyContent icon="icon-loading" />
 		</template>
 		<template v-else #list>
-			<AppNavigationCaption :title="t('collectives', 'Select a collective')" />
+			<AppNavigationCaption :title="t('collectives', 'Select a collective')">
+				<ActionButton v-if="sortBy != 'time'"
+					slot="actions"
+					icon="icon-access-time"
+					@click="sortBy = 'time'">
+					Sort by last modified
+				</ActionButton>
+			</AppNavigationCaption>
 			<AppNavigationItem v-for="collective in collectives"
 				:key="collective.circleUniqueId"
 				:title="collective.name"
@@ -55,6 +62,9 @@ export default {
 		CollectiveTrash,
 		EmptyContent,
 		NewCollective,
+	},
+	data() {
+		return { sortBy: 'name' }
 	},
 	computed: {
 		...mapGetters([
