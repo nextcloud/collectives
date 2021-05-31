@@ -2,13 +2,13 @@
 	<AppContentList :class="{loading: loading('collective')}"
 		:show-details="showing('details')">
 		<Actions class="toggle"
-			:force-menu="true"
 			:aria-label="t('collectives', 'Sort order')"
 			:default-icon="sortBy === 'byTitle' ? 'icon-sort-by-alpha' : 'icon-access-time'">
 			<ActionButton
 				class="sort"
 				:class="{selected: sortBy === 'byTimestamp'}"
 				icon="icon-access-time"
+				:close-after-click="true"
 				@click="sortBy = 'byTimestamp'">
 				{{ t('collectives', 'Sort by last modification') }}
 			</ActionButton>
@@ -16,6 +16,7 @@
 				class="sort"
 				:class="{selected: sortBy === 'byTitle'}"
 				icon="icon-sort-by-alpha"
+				:close-after-click="true"
 				@click="sortBy = 'byTitle'">
 				{{ t('collectives', 'Sort by title') }}
 			</ActionButton>
