@@ -5,11 +5,11 @@
 
 ### 👥 Invite new people to the collective
 
-Whether you want to add your friends or whole groups, head over to [the Circles app](/index.php/apps/circles/) to do so.
+Whether you want to add your friends or whole groups, head over to [the Circles app](/index.php/apps/circles/) to add new members.
 
 ### 🌱 Bring life to your collective
 
-Create pages and share the knowledge that really matters. Whether you want to write a handbook for your organization, document something for yourself, or have a wiki among friends – Collectives works!
+Create pages and share your thoughts that really matter. Whether it's a shared knowledge repository for the community or a handbook for your organisation – Collectives works!
 
 ### 🛋️ Edit this landing page to feel like home
 
