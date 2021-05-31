@@ -29,6 +29,10 @@ for help in case of questions.
 
 Documentation for developers can be found at [DEVELOPING.md](DEVELOPING.md).
 
+## Translations
+
+Project translations are [managed on Weblate](https://hosted.weblate.org/engage/collectives/).
+
 ## Maintainers
 
 * Azul and Jonas <collectivecloud@systemli.org>
