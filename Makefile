@@ -42,7 +42,7 @@ endif
 
 # Install dependencies
 node-modules:
-	$(NPM) install
+	$(NPM) ci
 
 composer-install: composer
 	php $(BUILD_TOOLS_DIR)/composer.phar install --prefer-dist
