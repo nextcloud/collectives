@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.7.0 - 2021.05.31
+
+### ✨New
+* 🔎 Fulltext search support in app context.
+* 🔝 Sort pages by activity or alphabetically.
+* 📋 Sort collectives alphabetically.
+* 💘 Add app navigation order '11'.
+
+### 🌎Translations
+* 🗣️ Initial Norwegian translation thanks to Allan Nordhøy.
+* 🗣️ Initial Russion translation thanks to Artem.
+* 🗣️ Improved German translation thanks to J. Lavoie.
+
+### 🏗️Fixes
+* 👓 Allow to expand/collapse subpage lists with keyboard.
+* 📛 Fix renaming pages with subpages.
+* 📝 Improve page list and editor handling in frontend.
+* 🏗️ Various fixes regarding subpages support.
+
+### 🚧Updates
+* 👷 Refactored Makefile.
+
+
 ## 0.6.2 - 2021-05-20
 
 ### Fixes
@@ -7,6 +30,7 @@
 
 ### Tests
 - ✅ Make a flaky test pass more reliably.
+
 
 ## 0.6.1 - 2021-05-20
 
