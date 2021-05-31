@@ -5,11 +5,11 @@
 
 ### 👥 Ladet weitere Personen ins Kollektiv ein
 
-Mitglieder können in der [Circles-App](/index.php/apps/circles/) verwaltet werden.
+Egal ob ihr Freund:innen oder ganze Gruppen zufügen wollt, Mitglieder könnt ihr in der [Circles-App](/index.php/apps/circles/) verwalten.
 
 ### 🌱 Füllt euer Kollektiv mit Leben
 
-Erstellt Seiten und teilt euer wertvolles Wissen. Egal ob ihr ein Handbuch für eine Organisation erstellen möchtet, oder etwas für euch selber dokumentiert, oder ein Wiki unter Freunden einrichtet – mit einem Kollektiv klappt das!
+Erstellt Seiten und teilt eure wertvollen Gedanken. Ob als gemeinsame Wissensablage der Community oder Handbuch für eure Organisation — mit einem Kollektiv klappt das!
 
 ### 🛋️ Verändert die Startseite und fühlt euch wie Zuhause
 
