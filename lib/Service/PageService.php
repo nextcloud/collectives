@@ -411,15 +411,16 @@ class PageService {
 	}
 
 	/**
-	 * @param Folder     $collectiveFolder
-	 * @param int        $parentId
-	 * @param File       $file
-	 * @param string     $title
+	 * @param Folder $collectiveFolder
+	 * @param int    $parentId
+	 * @param File   $file
+	 * @param string $title
 	 *
+	 * @return bool
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	private function renamePage(Folder $collectiveFolder, int $parentId, File $file, string $title) {
+	private function renamePage(Folder $collectiveFolder, int $parentId, File $file, string $title): bool {
 		$moveFolder = false;
 		if ($parentId !== $this->getParentPageId($file)) {
 			$newFolder = $this->initSubFolder($this->nodeHelper->getFileById($collectiveFolder, $parentId));
@@ -427,23 +428,28 @@ class PageService {
 		} else {
 			$newFolder = $this->nodeHelper->getFileById($collectiveFolder, $parentId)->getParent();
 		}
-		$safeTitle = $this->nodeHelper->sanitiseFilename($title, self::DEFAULT_PAGE_TITLE);
-		$node = $this->isIndexPage($file) ? $file->getParent() : $file;
-		$suffix = $this->isIndexPage($file) ? '' : PageFile::SUFFIX;
-		$newName = $safeTitle . $suffix;
 
-		// Nothing to do
-		if (!$moveFolder && $newName === $node->getName()) {
-			return;
+		$safeTitle = $this->nodeHelper->sanitiseFilename($title, self::DEFAULT_PAGE_TITLE);
+		// If processing an index page, then rename the parent folder, otherwise the file itself
+		$node = self::isIndexPage($file) ? $file->getParent() : $file;
+		$suffix = self::isIndexPage($file) ? '' : PageFile::SUFFIX;
+		$newSafeName = $safeTitle . $suffix;
+
+		// Neither path nor title changed, nothing to do
+		if (!$moveFolder && $newSafeName === $node->getName()) {
+			return false;
 		}
-		$availableName = NodeHelper::generateFilename($newFolder, $safeTitle, PageFile::SUFFIX);
+
+		$newFileName = NodeHelper::generateFilename($newFolder, $safeTitle, PageFile::SUFFIX);
 		try {
-			$file->move($newFolder->getPath() . '/' . $availableName . $suffix);
+			$node->move($newFolder->getPath() . '/' . $newFileName . $suffix);
 		} catch (InvalidPathException | FilesNotFoundException | LockedException $e) {
 			throw new NotFoundException($e->getMessage());
 		} catch (FilesNotPermittedException $e) {
 			throw new NotPermittedException($e->getMessage());
 		}
+
+		return true;
 	}
 
 	/**
@@ -460,7 +466,10 @@ class PageService {
 	public function rename(string $userId, Collective $collective, int $parentId, int $id, string $title): PageFile {
 		$collectiveFolder = $this->getCollectiveFolder($userId, $collective);
 		$file = $this->nodeHelper->getFileById($collectiveFolder, $id);
-		$this->renamePage($collectiveFolder, $parentId, $file, $title);
+		if ($this->renamePage($collectiveFolder, $parentId, $file, $title)) {
+			// Refresh the file after it has been renamed
+			$file = $this->nodeHelper->getFileById($collectiveFolder, $id);
+		}
 		try {
 			$this->updatePage($userId, $file->getId());
 		} catch (InvalidPathException | FilesNotFoundException $e) {
