@@ -1,19 +1,19 @@
 # Willkommen in eurem neuen Kollektiv
 
-*Kommt vorbei, organisiert euch und teilt euer Wissen!*
+**Kommt vorbei, organisiert euch und teilt euer Wissen!**
 
 
-### 🐾 Ladet eure Genoss:innen ins Kollektiv ein
+### 👥 Ladet weitere Personen ins Kollektiv ein
 
-Mitglieder können in der [Circle App](/index.php/apps/circles/) verwaltet werden.
+Mitglieder können in der [Circles-App](/index.php/apps/circles/) verwaltet werden.
 
 ### 🌱 Füllt euer Kollektiv mit Leben
 
-Erstellt Seiten und teilt euer wertvolles Wissen.
+Erstellt Seiten und teilt euer wertvolles Wissen. Egal ob ihr ein Handbuch für eine Organisation erstellen möchtet, oder etwas für euch selber dokumentiert, oder ein Wiki unter Freunden einrichtet – mit einem Kollektiv klappt das!
 
 ### 🛋️ Verändert die Startseite und fühlt euch wie Zuhause
 
-Wechselt in den Editier-Modus um loszulegen. ↗️
+Wechselt in den Editier-Modus, um loszulegen! ↗️
 
 
 ## Auch gut zu wissen
