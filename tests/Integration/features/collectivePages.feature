@@ -33,11 +33,18 @@ Feature: collectivePages
     When user "jane" fails to delete page "firstpage" with parentPath "Readme.md" in "mycollective"
     Then user "jane" sees pagePath "firstpage/Readme.md" in "mycollective"
 
+  Scenario: Rename parent page
+    When user "jane" renames page "firstpage" to "parentpage" with parentPath "Readme.md" in "mycollective"
+    Then user "jane" sees pagePath "parentpage/Readme.md" in "mycollective"
+    And user "jane" sees pagePath "parentpage/subpage.md" in "mycollective"
+    And user "jane" doesn't see pagePath "firstpage/subpage.md" in "mycollective"
+    And user "jane" doesn't see pagePath "firstpage/parentpage.md" in "mycollective"
+
   Scenario: Delete all subpages
-    When user "jane" deletes page "subpage" with parentPath "firstpage/Readme.md" in "mycollective"
-    And user "jane" deletes page "subpage2" with parentPath "firstpage/Readme.md" in "mycollective"
-    Then user "jane" doesn't see pagePath "firstpage/Readme.md" in "mycollective"
-    Then user "jane" sees pagePath "firstpage.md" in "mycollective"
+    When user "jane" deletes page "subpage" with parentPath "parentpage/Readme.md" in "mycollective"
+    And user "jane" deletes page "subpage2" with parentPath "parentpage/Readme.md" in "mycollective"
+    Then user "jane" doesn't see pagePath "parentpage/Readme.md" in "mycollective"
+    Then user "jane" sees pagePath "parentpage.md" in "mycollective"
 
   Scenario: Trash and delete collective and circle with all remaining pages
     Then user "jane" trashes collective "mycollective"
