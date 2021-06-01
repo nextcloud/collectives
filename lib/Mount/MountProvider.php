@@ -73,8 +73,8 @@ class MountProvider implements IMountProvider {
 		}
 		$collectiveInfos = $this->collectiveHelper->getCollectivesForUser($user->getUID(), false);
 		foreach ($collectiveInfos as $c) {
-			$cacheEntry = $this->collectiveFolderManager->getFolderFileCache($c->getId());
 			$mountPointName = $this->nodeHelper->sanitiseFilename($c->getName());
+			$cacheEntry = $this->collectiveFolderManager->getFolderFileCache($c->getId(), $mountPointName);
 			$folders[] = [
 				'folder_id' => $c->getId(),
 				'mount_point' => $this->userFolderHelper->get($user->getUID())->getName() . '/' . $mountPointName,

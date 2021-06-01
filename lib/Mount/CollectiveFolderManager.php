@@ -180,31 +180,32 @@ class CollectiveFolderManager {
 	}
 
 	/**
-	 * @param int $id
+	 * @param int    $id
+	 * @param string $name
 	 *
 	 * @return array
 	 * @throws NotFoundException
+	 * @throws \OCP\DB\Exception
 	 */
-	public function getFolderFileCache(int $id): array {
+	public function getFolderFileCache(int $id, string $name): array {
 		$qb = $this->connection->getQueryBuilder();
 		$qb->select(
-			'co.id AS folder_id', 'ci.name AS mount_point', 'fileid', 'storage', 'path', 'fc.name AS name',
+			'co.id AS folder_id', 'fileid', 'storage', 'path', 'fc.name AS name',
 			'mimetype', 'mimepart', 'size', 'mtime', 'storage_mtime', 'etag', 'encrypted', 'parent', 'permissions')
 			->from('collectives', 'co')
-			->leftJoin('co', 'circle_circles', 'ci', $qb->expr()->andX(
-				$qb->expr()->eq('co.circle_unique_id', 'ci.unique_id')))
 			->leftJoin('co', 'filecache', 'fc', $qb->expr()->andX(
 				// concat with empty string to work around missing cast to string
 				$qb->expr()->eq('fc.name', $qb->func()->concat('co.id', $qb->expr()->literal(''))),
 				$qb->expr()->eq('parent', $qb->createNamedParameter($this->getRootFolderStorageId()))))
 			->where($qb->expr()->eq('co.id', $qb->createNamedParameter($id)));
 		$cache = $qb->execute()->fetch();
-		$cache['mount_point'] = $this->nodeHelper->sanitiseFilename($cache['mount_point']);
+		$cache['mount_point'] = $name;
 		return $cache;
 	}
 
 	/**
 	 * @return array
+	 * @throws \OCP\DB\Exception
 	 */
 	public function getAllFolders(): array {
 		$qb = $this->connection->getQueryBuilder();
