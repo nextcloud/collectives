@@ -29,7 +29,7 @@
 			:collapsed="false"
 			@click.native="show('details')">
 			<template v-if="currentCollective.emoji" #icon>
-				<div>
+				<div class="emoji">
 					{{ currentCollective.emoji }}
 				</div>
 			</template>
@@ -151,6 +151,10 @@ export default {
 
 	li.sort.selected {
 		background-color: var(--color-primary-light);
+	}
+
+	.emoji {
+		margin: -3px
 	}
 
 </style>

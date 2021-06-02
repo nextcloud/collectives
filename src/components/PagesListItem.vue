@@ -8,7 +8,7 @@
 			@keypress.enter="toggleCollapsed"
 			@[isClickable]="toggleCollapsed">
 			<slot name="icon">
-				<div :class="isCollapsible ? 'icon-pages-white' : 'icon-page-white'" />
+				<div :class="isCollapsible ? 'icon-documents-white' : 'icon-document-white'" />
 			</slot>
 			<TriangleIcon v-if="isCollapsible"
 				:title="collapsed ? t('collectives', 'Expand subpage list') : t('collectives', 'Collapse subpage list')"
@@ -137,9 +137,12 @@ export default {
 <style lang="scss" scoped>
 	.app-content-list-item .app-content-list-item-icon {
 		line-height: 40px;
-		width: 30px;
+		width: 26px;
+		height: 34px;
 		left: 12px;
 		font-size: 24px;
+		background-color: var(--color-background-darker);
+		border-radius: 4px;
 	}
 
 	.app-content-list-item .app-content-list-item-icon div {
@@ -183,12 +186,6 @@ export default {
 
 	div.app-content-list-item {
 		cursor: default;
-	}
-
-	.icon-page-white, .icon-pages-white {
-		background-position: top;
-		background-size: 40px;
-		opacity: .3;
 	}
 
 	// Set pointer cursor on page icon if isCollapsible
