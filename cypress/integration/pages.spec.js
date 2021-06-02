@@ -67,7 +67,6 @@ describe('Page', function() {
 	describe('Creating a new subpage', function() {
 		before(function() {
 			cy.login('bob', 'bob', '/apps/collectives/Our Garden')
-			cy.get('#text h1').should('contain', 'Welcome to your new collective')
 			cy.contains('.app-content-list-item', 'Day 1').find('button.icon-add').click({ force: true })
 			cy.focused().should('have.value', '')
 			cy.focused().type('Subpage Title{enter}')
