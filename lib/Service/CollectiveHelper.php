@@ -50,9 +50,10 @@ class CollectiveHelper {
 	 */
 	public function getCollectivesTrashForUser(string $userId): array {
 		$collectiveInfos = [];
-		$joinedCircleIds = Circles::joinedCircleIds($userId);
-		foreach ($joinedCircleIds as $cId) {
-			if ((null !== $c = $this->collectiveMapper->findTrashByCircleId($cId, $userId))) {
+		$joinedCircles = Circles::joinedCircles($userId);
+		foreach ($joinedCircles as $circle) {
+			$id = $circle->getUniqueId();
+			if ((null !== $c = $this->collectiveMapper->findTrashByCircleId($id, $userId))) {
 				$collectiveInfos[] = new CollectiveInfo($c,
 					$this->collectiveMapper->circleUniqueIdToName($c->getCircleUniqueId()),
 					true);
