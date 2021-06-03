@@ -86,11 +86,12 @@ export default {
 
 		updatedPagePath(state, getters) {
 			const collective = getters.collectiveParam
-			const { filePath, title, id } = state.updatedPage
+			const { filePath, fileName, title, id } = state.updatedPage
+			const titlePart = fileName === 'Readme.md' ? '' : title
 			const pagePath = [
 				encodeURIComponent(collective),
 				encodeURI(filePath),
-				encodeURIComponent(title),
+				encodeURIComponent(titlePart),
 			].filter(Boolean).join('/')
 			return `/${pagePath}?fileId=${id}`
 		},
