@@ -1,3 +1,5 @@
+import axios from '@nextcloud/axios'
+import { generateOcsUrl } from '@nextcloud/router'
 import { GET_CIRCLES } from './actions'
 import { DELETE_CIRCLE_FOR, SET_CIRCLES } from './mutations'
 
@@ -33,10 +35,8 @@ export default {
 		 * Get list of all circles
 		 */
 		async [GET_CIRCLES]({ commit }) {
-			const api = OCA.Circles.api
-			api.listCircles('all', '', 9, response => {
-				commit(SET_CIRCLES, response.data)
-			})
+			const response = await axios.get(generateOcsUrl('apps/circles/circles'))
+			commit(SET_CIRCLES, response.data.ocs.data)
 		},
 	},
 }
