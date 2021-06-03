@@ -22,7 +22,7 @@ In your Nextcloud instance, simply navigate to **»Apps«**, find the
 **»Circles«** and **»Collectives«** apps and enable them.
 
 	]]></description>
-	<version>0.8.0-beta1</version>
+	<version>0.8.0-beta2</version>
 	<licence>agpl</licence>
 	<author>CollectiveCloud Team</author>
 	<namespace>Collectives</namespace>
@@ -43,7 +43,7 @@ In your Nextcloud instance, simply navigate to **»Apps«**, find the
 		https://collectivecloud.gitlab.io/collectives/images/screenshot.png
 	</screenshot>
 	<dependencies>
-		<nextcloud min-version="20" max-version="22" />
+		<nextcloud min-version="22" max-version="22" />
 	</dependencies>
 	<background-jobs>
 		<job>OCA\Collectives\BackgroundJob\ExpirePageVersions</job>

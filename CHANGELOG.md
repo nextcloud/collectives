@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.8.0-beta2 - 2021.06.03
+
+### 🏗️Fixes
+* Dirty hack to fix creating collectives with Circles 22.
+
 ## 0.8.0-beta1 - 2021.06.03
 
 ### ✨New
