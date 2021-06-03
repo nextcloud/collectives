@@ -52,6 +52,14 @@ Cache node_modules:
     refs:
       - main
 
+Validate AppInfo:
+  stage: prepare
+  before_script:
+    - DEBIAN_FRONTEND=noninteractive apt-get update
+    - DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install libxml2-utils curl
+  script:
+    - make lint-appinfo
+
 Build App:
   <<: *node
   stage: prepare
