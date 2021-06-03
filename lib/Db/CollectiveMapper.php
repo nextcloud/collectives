@@ -3,7 +3,6 @@
 namespace OCA\Collectives\Db;
 
 use OCA\Circles\Api\v1\Circles;
-use OCA\Circles\Exceptions\CircleAlreadyExistsException;
 use OCA\Circles\Exceptions\CircleDoesNotExistException;
 use OCA\Circles\Exceptions\MemberDoesNotExistException;
 use OCA\Circles\Model\Circle;
@@ -164,16 +163,6 @@ class CollectiveMapper extends QBMapper {
 	public function restore(Collective $collective): Collective {
 		$collective->setTrashTimestamp(null);
 		return $this->update($collective);
-	}
-
-	/**
-	 * @param string $name
-	 *
-	 * @return Circle
-	 * @throws CircleAlreadyExistsException
-	 */
-	public function createCircle(string $name): Circle {
-		return Circles::createCircle(Circles::CIRCLES_SECRET, $name);
 	}
 
 	/**

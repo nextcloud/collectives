@@ -2,19 +2,25 @@
 
 namespace OCA\Collectives\Service;
 
-use OCA\Circles\Api\v1\Circles;
 use OCA\Circles\Exceptions\CircleAlreadyExistsException;
 use OCA\Circles\Exceptions\CircleDoesNotExistException;
+use OCA\Circles\Service\CircleService;
+use OCA\Circles\Service\FederatedUserService;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Model\CollectiveInfo;
 use OCA\Collectives\Mount\CollectiveFolderManager;
+use OCP\IUser;
 use OCP\AppFramework\QueryException;
 use OCP\Files\InvalidPathException;
 use OCP\Files\NotPermittedException as FilesNotPermittedException;
 use OCP\IL10N;
+use OCP\IUserSession;
 
 class CollectiveService {
+	/** @var IUserSession */
+	private $userSession;
+
 	/** @var CollectiveMapper */
 	private $collectiveMapper;
 
@@ -24,26 +30,48 @@ class CollectiveService {
 	/** @var CollectiveFolderManager */
 	private $collectiveFolderManager;
 
+	/** @var CircleService */
+	private $circleService;
+
+	/** @var FederatedUserService */
+	private $federatedUserService;
+
 	/** @var IL10N */
 	private $l10n;
 
 	/**
 	 * CollectiveService constructor.
 	 *
-	 * @param CollectiveMapper         $collectiveMapper
-	 * @param CollectiveHelper         $collectiveHelper
-	 * @param CollectiveFolderManager  $collectiveFolderManager
-	 * @param IL10N                    $l10n
+	 * @param IUserSession            $userSession
+	 * @param CollectiveMapper        $collectiveMapper
+	 * @param CollectiveHelper        $collectiveHelper
+	 * @param CollectiveFolderManager $collectiveFolderManager
+	 * @param CircleService           $circleService
+	 * @param FederatedUserService    $federatedUserService
+	 * @param IL10N                   $l10n
 	 */
 	public function __construct(
+		IUserSession $userSession,
 		CollectiveMapper $collectiveMapper,
 		CollectiveHelper $collectiveHelper,
 		CollectiveFolderManager $collectiveFolderManager,
+		CircleService $circleService,
+		FederatedUserService $federatedUserService,
 		IL10N $l10n) {
+		$this->userSession = $userSession;
 		$this->collectiveMapper = $collectiveMapper;
 		$this->collectiveHelper = $collectiveHelper;
 		$this->collectiveFolderManager = $collectiveFolderManager;
+		$this->circleService = $circleService;
+		$this->federatedUserService = $federatedUserService;
 		$this->l10n = $l10n;
+	}
+
+	/**
+	 * @return \OCP\IUser
+	 */
+	private function getUser(): IUser {
+		return $this->userSession->getUser();
 	}
 
 	/**
@@ -87,7 +115,9 @@ class CollectiveService {
 		$circle = null;
 		$message = '';
 		try {
-			$circle = $this->collectiveMapper->createCircle($safeName);
+			$this->federatedUserService->setLocalCurrentUser($this->getUser());
+			$circleOutcome = $this->circleService->create($safeName, null, false, true);
+			$circle = $this->circleService->getCircle($circleOutcome['id']);
 		} catch (CircleAlreadyExistsException $e) {
 			$circle = $this->collectiveMapper->findCircle($safeName);
 			if (null === $circle) {
@@ -163,7 +193,7 @@ class CollectiveService {
 		$name = $this->collectiveMapper->circleUniqueIdToName($collective->getCircleUniqueId());
 
 		if ($deleteCircle) {
-			Circles::destroyCircle($collective->getCircleUniqueId());
+			$this->circleService->destroy($collective->getCircleUniqueId());
 		}
 
 		// Delete collective folder and its contents
