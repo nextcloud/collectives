@@ -40,6 +40,11 @@ ifeq (, $(wildcard $(BUILD_TOOLS_DIR)/translationtool.phar))
 		--silent --location --output $(BUILD_TOOLS_DIR)/translationtool.phar
 endif
 
+$(BUILD_TOOLS_DIR)/info.xsd:
+	mkdir -p $(BUILD_TOOLS_DIR)
+	curl https://apps.nextcloud.com/schema/apps/info.xsd \
+	--silent --location --output $(BUILD_TOOLS_DIR)/info.xsd
+
 # Install dependencies
 node-modules:
 	$(NPM) ci
@@ -59,10 +64,14 @@ distclean: clean
 	rm -rf vendor
 
 # Lint
-lint: lint-js
+lint: lint-js lint-appinfo
 
 lint-js:
 	$(NPM) run lint
+
+lint-appinfo: $(BUILD_TOOLS_DIR)/info.xsd
+	xmllint appinfo/info.xml --noout \
+		--schema $(BUILD_TOOLS_DIR)/info.xsd
 
 # Build
 build: build-js-dev
