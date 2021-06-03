@@ -63,7 +63,12 @@ import RichText from './RichText'
 
 import { showError } from '@nextcloud/dialogs'
 import { mapGetters, mapMutations } from 'vuex'
-import { RENAME_PAGE, TOUCH_PAGE, GET_VERSIONS } from '../store/actions'
+import {
+	RENAME_PAGE,
+	TOUCH_PAGE,
+	GET_PAGES,
+	GET_VERSIONS,
+} from '../store/actions'
 import { CLEAR_UPDATED_PAGE } from '../store/mutations'
 
 export default {
@@ -206,6 +211,7 @@ export default {
 				if (this.page.size === 0) {
 					this.$emit('edit')
 				}
+				this.$store.dispatch(GET_PAGES)
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not rename the page'))
