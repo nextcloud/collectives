@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.8.0-beta1 - 2021.06.03
+
+### ✨New
+* Use SVG Icons for single page and page with subpages.
+* Support Nextcloud 22
+
+### 🏗️Fixes
+* MountProvider works with Nextcloud 22.
+* Use correct links in page list after rename of parent page.
+
 ## 0.7.0 - 2021.05.31
 
 ### ✨New
