@@ -62,6 +62,7 @@ Validate AppInfo:
     - DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install libxml2-utils curl
   script:
     - make lint-appinfo
+  needs: []
 
 Build App:
   <<: *node
@@ -104,16 +105,21 @@ Static PHP Analysis:
 Unit Test PHP 7.3 Nextcloud 20:
   <<: *php-unit
   image: registry.gitlab.com/collectivecloud/docker-builds:php7.3-nc20
+  needs:
+    - "Static PHP Analysis"
 
 Unit Test PHP 8.0 Nextcloud 21:
   <<: *php-unit
   image: registry.gitlab.com/collectivecloud/docker-builds:php8.0-nc21
+  needs:
+    - "Static PHP Analysis"
 
 Lint Javascript:
   <<: *node
   stage: lint
   script:
     - make lint-js
+  needs: []
 
 Unit Test Javascript:
   <<: *node
@@ -121,6 +127,8 @@ Unit Test Javascript:
   script:
     - make node-modules
     - make test-js
+  needs:
+    - "Lint Javascript"
 
 .php-integration: &php-integration
   <<: *php
@@ -141,7 +149,6 @@ API PHP 7.3 Nextcloud 20:
   <<: *php-integration
   image: registry.gitlab.com/collectivecloud/docker-builds:php7.3-nc20
   needs:
-    - "Static PHP Analysis"
     - "Unit Test PHP 7.3 Nextcloud 20"
 
 API PHP 8.0 Nextcloud 21:
@@ -149,7 +156,6 @@ API PHP 8.0 Nextcloud 21:
   image: registry.gitlab.com/collectivecloud/docker-builds:php8.0-nc21
   allow_failure: true
   needs:
-    - "Static PHP Analysis"
     - "Unit Test PHP 8.0 Nextcloud 21"
 
 OCC CLI Test:
@@ -164,6 +170,9 @@ OCC CLI Test:
     - ln -s `pwd` $NEXTCLOUD_SOURCE/apps/collectives
   services:
     - mariadb:latest
+  needs:
+    - "Unit Test PHP 7.3 Nextcloud 20"
+    - "Unit Test PHP 8.0 Nextcloud 21"
 
 .browser-test: &browser-test
   <<: *node
