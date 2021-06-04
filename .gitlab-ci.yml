@@ -1,8 +1,11 @@
 
 stages:
   - cache
-  - prepare
-  - test
+  - build
+  - lint
+  - test units
+  - test integration
+  - test end to end
   - deploy
 
 # Settings for all jobs in a php based containers
@@ -53,7 +56,7 @@ Cache node_modules:
       - main
 
 Validate AppInfo:
-  stage: prepare
+  stage: lint
   before_script:
     - DEBIAN_FRONTEND=noninteractive apt-get update
     - DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install libxml2-utils curl
@@ -62,7 +65,7 @@ Validate AppInfo:
 
 Build App:
   <<: *node
-  stage: prepare
+  stage: build
   script:
     - DEBIAN_FRONTEND=noninteractive apt-get update
     - DEBIAN_FRONTEND=noninteractive apt-get -y --no-install-recommends install make rsync
@@ -79,7 +82,7 @@ Build App:
 
 Static PHP Analysis:
   <<: *php
-  stage: prepare
+  stage: lint
   script:
     - vendor/bin/psalm.phar
   before_script:
@@ -88,7 +91,7 @@ Static PHP Analysis:
 
 .php-unit: &php-unit
   <<: *php
-  stage: prepare
+  stage: test units
   script:
     - vendor/bin/phpunit --configuration phpunit.xml --coverage-text --colors=never
   before_script:
@@ -108,20 +111,20 @@ Unit Test PHP 8.0 Nextcloud 21:
 
 Lint Javascript:
   <<: *node
-  stage: prepare
+  stage: lint
   script:
     - make lint-js
 
 Unit Test Javascript:
   <<: *node
-  stage: prepare
+  stage: test units
   script:
     - make node-modules
     - make test-js
 
 .php-integration: &php-integration
   <<: *php
-  stage: test
+  stage: test integration
   script:
     - vendor/bin/behat --config=tests/Integration/config/behat.yml --profile ci
   before_script:
@@ -151,7 +154,7 @@ API PHP 8.0 Nextcloud 21:
 
 OCC CLI Test:
   <<: *php
-  stage: test
+  stage: test integration
   script:
     - sudo -u www-data $NEXTCLOUD_SOURCE/occ app:enable collectives
     - sudo -u www-data $NEXTCLOUD_SOURCE/occ app:disable circles
@@ -165,7 +168,7 @@ OCC CLI Test:
 .browser-test: &browser-test
   <<: *node
   image: cypress/browsers:node14.16.0-chrome89-ff86
-  stage: test
+  stage: test end to end
   variables:
     CYPRESS_baseUrl: http://nextcloud.local/index.php
     APP_SOURCE_URL: "https://gitlab.com/collectivecloud/collectives/-/jobs/${BUILD_JOB_ID}/artifacts/raw/build/release/collectives-${BUILD_VERSION}.tar.gz"
