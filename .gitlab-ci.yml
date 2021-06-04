@@ -154,7 +154,6 @@ API PHP 7.3 Nextcloud 20:
 API PHP 8.0 Nextcloud 21:
   <<: *php-integration
   image: registry.gitlab.com/collectivecloud/docker-builds:php8.0-nc21
-  allow_failure: true
   needs:
     - "Unit Test PHP 8.0 Nextcloud 21"
 
@@ -191,7 +190,6 @@ OCC CLI Test:
     - "Build App"
   artifacts:
     paths:
-      - cypress/videos
       - cypress/screenshots
     expire_in: 1 day
     when: on_failure
@@ -202,7 +200,6 @@ Browser PHP 8.0 Nextcloud 21:
     - name: registry.gitlab.com/collectivecloud/docker-builds:php8.0-nc21
       alias: nextcloud.local
       entrypoint: ["/usr/local/bin/run.sh"]
-  allow_failure: true
 
 Browser PHP 7.3 Nextcloud 21:
   <<: *browser-test
