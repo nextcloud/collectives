@@ -186,8 +186,6 @@ OCC CLI Test:
     - $(npm bin)/cypress verify
     - $(npm bin)/wait-on -i 500 -t 240000 $CYPRESS_baseUrl
     - $(npm bin)/cypress run --browser chrome --config video=false
-  needs:
-    - "Build App"
   artifacts:
     paths:
       - cypress/screenshots
