@@ -92,7 +92,7 @@ export default {
 	methods: {
 		openViewer() {
 			const file = absolutePath('/Collective', this.relPath)
-			this.OCA.Viewer.open(file)
+			this.OCA.Viewer.open({ path: file })
 		},
 	},
 }
