@@ -42,7 +42,7 @@ import { mapGetters } from 'vuex'
 import TriangleIcon from 'vue-material-design-icons/Triangle'
 
 export default {
-	name: 'PagesListItem',
+	name: 'Item',
 
 	components: {
 		Actions,
