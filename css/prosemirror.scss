@@ -50,7 +50,7 @@ div.ProseMirror {
 			cursor: pointer;
 		}
 		&.checked:before {
-			background-image: url('../../img/checkbox-mark.svg');
+			background-image: url('../../../img/checkbox-mark.svg');
 			background-color: var(--color-primary-element);
 			border-color: var(--color-primary-element);
 		}

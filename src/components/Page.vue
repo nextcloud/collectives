@@ -59,7 +59,7 @@
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import Actions from '@nextcloud/vue/dist/Components/Actions'
 import AppContent from '@nextcloud/vue/dist/Components/AppContent'
-import RichText from './RichText'
+import RichText from './Page/RichText'
 
 import { showError } from '@nextcloud/dialogs'
 import { mapGetters, mapMutations } from 'vuex'

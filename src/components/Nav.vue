@@ -47,9 +47,9 @@ import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import AppNavigation from '@nextcloud/vue/dist/Components/AppNavigation'
 import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
 import AppNavigationCaption from '@nextcloud/vue/dist/Components/AppNavigationCaption'
-import CollectiveTrash from '../components/CollectiveTrash'
 import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
-import NewCollective from './NewCollective'
+import CollectiveTrash from './Nav/CollectiveTrash'
+import NewCollective from './Nav/NewCollective'
 import displayError from '../util/displayError'
 
 export default {

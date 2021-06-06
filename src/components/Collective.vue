@@ -19,8 +19,8 @@ import { SELECT_VERSION } from '../store/mutations'
 import displayError from '../util/displayError'
 import AppContentDetails from '@nextcloud/vue/dist/Components/AppContentDetails'
 import Page from '../components/Page'
+import Version from '../components/Page/Version'
 import PagesList from '../components/PagesList'
-import Version from '../components/Version'
 
 const EditState = { Unset: 0, Edit: 1, Read: 2 }
 
