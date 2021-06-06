@@ -1,33 +1,10 @@
 <template>
 	<div>
 		<h1 id="titleform" class="page-title">
-			<form @submit.prevent="renamePage">
-				<input v-if="landingPage"
-					class="title"
-					type="text"
-					disabled
-					:value="collectiveTitle">
-				<input v-else
-					ref="title"
-					v-model="newTitle"
-					class="title"
-					:placeholder="t('collectives', 'Title')"
-					type="text"
-					:disabled="!savePossible"
-					@keypress.enter="focusEditor">
-			</form>
-			<button v-if="edit"
-				class="edit-button primary"
-				@click="stopEdit">
-				<span class="icon icon-checkmark-white" />
-				{{ t('collectives', 'Done') }}
-			</button>
-			<button v-else
-				class="edit-button primary"
-				@click="startEdit">
-				<span class="icon icon-rename-white" />
-				{{ t('collectives', 'Edit') }}
-			</button>
+			<TitleForm
+				@typing="titleHasFocus = true"
+				@done="focusEditor" />
+			<EditToggle :edit="edit" @start="startEdit" @stop="stopEdit" />
 			<Actions>
 				<ActionButton
 					icon="icon-menu"
@@ -36,16 +13,14 @@
 			</Actions>
 		</h1>
 		<RichText v-if="readOnly"
-			:page-id="page.id"
-			:page-url="currentPageDavUrl"
 			:as-placeholder="preview && edit"
 			@empty="emptyPreview" />
 		<component :is="handler.component"
 			v-show="!readOnly"
-			:key="`editor-${page.id}`"
+			:key="`editor-${currentPage.id}`"
 			ref="editor"
-			:fileid="page.id"
-			:basename="page.fileName"
+			:fileid="currentPage.id"
+			:basename="currentPage.fileName"
 			:filename="`/${currentPageFilePath}`"
 			:has-preview="true"
 			:active="true"
@@ -56,20 +31,20 @@
 </template>
 
 <script>
-import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
-import Actions from '@nextcloud/vue/dist/Components/Actions'
 import AppContent from '@nextcloud/vue/dist/Components/AppContent'
+import Actions from '@nextcloud/vue/dist/Components/Actions'
+import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
+import EditToggle from './Page/EditToggle'
 import RichText from './Page/RichText'
+import TitleForm from './Page/TitleForm'
 
-import { showError } from '@nextcloud/dialogs'
 import { mapGetters, mapMutations } from 'vuex'
 import {
-	RENAME_PAGE,
 	TOUCH_PAGE,
-	GET_PAGES,
 	GET_VERSIONS,
 } from '../store/actions'
-import { CLEAR_UPDATED_PAGE } from '../store/mutations'
+
+const EditState = { Unset: 0, Edit: 1, Read: 2 }
 
 export default {
 	name: 'Page',
@@ -78,22 +53,17 @@ export default {
 		ActionButton,
 		Actions,
 		AppContent,
+		EditToggle,
 		RichText,
-	},
-
-	props: {
-		edit: {
-			type: Boolean,
-			required: false,
-		},
+		TitleForm,
 	},
 
 	data() {
 		return {
 			previousSaveTimestamp: null,
 			preview: true,
-			newTitle: '',
 			titleHasFocus: false,
+			editToggle: EditState.Unset,
 		}
 	},
 
@@ -101,30 +71,11 @@ export default {
 		...mapGetters([
 			'currentPage',
 			'currentPageFilePath',
-			'currentPageDavUrl',
 			'currentCollective',
 			'indexPage',
 			'landingPage',
 			'pageParam',
-			'updatedPagePath',
-			'loading',
 		]),
-
-		page() {
-			return this.currentPage
-		},
-
-		collective() {
-			return this.currentCollective
-		},
-
-		collectiveTitle() {
-			if (this.collective.emoji) {
-				return `${this.collective.emoji} ${this.collective.name}`
-			} else {
-				return this.collective.name
-			}
-		},
 
 		readOnly() {
 			return this.preview || !this.edit
@@ -138,92 +89,56 @@ export default {
 			return OCA.Viewer.availableHandlers.find(h => h.id === 'text')
 		},
 
-		/**
-		 * Return true if a page is selected and its title is not empty
-		 * @returns {boolean}
-		 */
-		savePossible() {
-			return this.page && this.page.title !== ''
+		edit: {
+			get() {
+				return this.editToggle === EditState.Edit
+			},
+			set(val) {
+				this.editToggle = val ? EditState.Edit : EditState.Read
+			},
 		},
-
 	},
 
 	watch: {
 		'pageParam'() {
 			this.initDocumentTitle()
 		},
-		'currentPage.id'() {
-			this.initTitleEntry()
-		},
 		'edit'(current, previous) {
 			if (current && !previous && !this.preview) {
 				this.$nextTick(this.focusEditor)
 			}
 		},
+		'currentPage.id'() {
+			this.editToggle = EditState.Unset
+		},
 	},
 
 	mounted() {
 		this.initDocumentTitle()
-		this.initTitleEntry()
 	},
 
 	methods: {
 		...mapMutations(['done', 'load', 'toggle']),
 
 		initDocumentTitle() {
+			const { filePath, title } = this.currentPage
 			const parts = [
-				this.collective.name,
+				this.currentCollective.name,
 				t('collectives', 'Collectives'),
 				'Nextcloud',
 			]
 			if (!this.landingPage) {
 				if (this.indexPage) {
-					parts.unshift(this.page.filePath ? this.page.filePath : this.page.title)
+					parts.unshift(filePath || title)
 				} else {
-					parts.unshift(this.page.filePath ? this.page.filePath + '/' + this.page.title : this.page.title)
+					parts.unshift(filePath ? filePath + '/' + title : title)
 				}
 			}
 			document.title = parts.join(' - ')
 		},
 
-		initTitleEntry() {
-			if (this.loading('newPage')) {
-				this.newTitle = ''
-				this.$nextTick(this.focusTitle)
-				this.done('newPage')
-			} else {
-				this.newTitle = this.page.title
-			}
-		},
-
-		/**
-		 * Rename currentPage on the server
-		 */
-		async renamePage() {
-			this.titleHasFocus = false
-			if (!this.newTitle || this.newTitle === this.page.title) {
-				return
-			}
-			try {
-				await this.$store.dispatch(RENAME_PAGE, this.newTitle)
-				this.$router.push(this.updatedPagePath)
-				this.$store.commit(CLEAR_UPDATED_PAGE)
-				if (this.page.size === 0) {
-					this.$emit('edit')
-				}
-				this.$store.dispatch(GET_PAGES)
-			} catch (e) {
-				console.error(e)
-				showError(t('collectives', 'Could not rename the page'))
-			}
-		},
-
-		focusTitle() {
-			this.$refs.title.focus()
-			this.titleHasFocus = true
-		},
-
 		focusEditor() {
+			this.titleHasFocus = false
 			const editor = this.$el.querySelector('.ProseMirror')
 			if (editor) {
 				editor.focus()
@@ -241,15 +156,15 @@ export default {
 		},
 
 		emptyPreview() {
-			if (!this.titleHasFocus) {
-				this.$emit('edit')
+			if (!this.titleHasFocus && this.editToggle === EditState.Unset) {
+				this.edit = true
 			}
 		},
 
 		startEdit() {
 			const doc = this.$refs.editor.$children[0].$data.document
 			this.previousSaveTimestamp = doc.lastSavedVersionTime
-			this.$emit('toggleEdit')
+			this.edit = true
 		},
 
 		async stopEdit() {
@@ -263,9 +178,9 @@ export default {
 			if (doc.lastSavedVersionTime !== this.previousSaveTimestamp
 				|| wasDirty) {
 				this.$store.dispatch(TOUCH_PAGE)
-				this.$store.dispatch(GET_VERSIONS, this.page.id)
+				this.$store.dispatch(GET_VERSIONS, this.currentPage.id)
 			}
-			this.$emit('toggleEdit')
+			this.edit = false
 		},
 	},
 }
@@ -311,13 +226,4 @@ export default {
 		z-index: 1;
 	}
 
-	.edit-button {
-		min-width: max-content;
-		height: 44px;
-
-		.icon {
-			opacity: 1;
-			margin-right: 8px;
-		}
-	}
 </style>

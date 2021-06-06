@@ -123,6 +123,7 @@ export default {
 
 	#editor-wrapper #editor div.ProseMirror {
 		margin-top: 5px;
+		padding-bottom: 50px;
 	}
 
 	#text-wrapper #text div.ProseMirror {

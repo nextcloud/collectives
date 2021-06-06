@@ -3,10 +3,7 @@
 		<PageList />
 		<AppContentDetails v-if="currentPage">
 			<Version v-if="version" />
-			<Page v-else
-				:edit="edit"
-				@edit="edit = true"
-				@toggleEdit="edit = !edit" />
+			<Page v-else />
 		</AppContentDetails>
 	</div>
 </template>
@@ -22,8 +19,6 @@ import Page from '../components/Page'
 import Version from '../components/Page/Version'
 import PageList from '../components/PageList'
 
-const EditState = { Unset: 0, Edit: 1, Read: 2 }
-
 export default {
 	name: 'Collective',
 
@@ -34,12 +29,6 @@ export default {
 		Version,
 	},
 
-	data() {
-		return {
-			editToggle: EditState.Unset,
-		}
-	},
-
 	computed: {
 		...mapGetters([
 			'currentCollective',
@@ -47,14 +36,6 @@ export default {
 			'version',
 		]),
 
-		edit: {
-			get() {
-				return this.editToggle === EditState.Edit
-			},
-			set(val) {
-				this.editToggle = val ? EditState.Edit : EditState.Read
-			},
-		},
 	},
 
 	watch: {
@@ -62,7 +43,6 @@ export default {
 			this.initCollective()
 		},
 		'currentPage.id'() {
-			this.editToggle = EditState.Unset
 			this.$store.commit(SELECT_VERSION, null)
 		},
 	},
