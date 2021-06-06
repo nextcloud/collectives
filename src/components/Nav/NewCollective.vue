@@ -71,10 +71,10 @@
 
 <script>
 import { ActionButton, Actions, AppNavigationItem, Multiselect } from '@nextcloud/vue'
-import { GET_CIRCLES, NEW_COLLECTIVE } from '../store/actions'
+import { GET_CIRCLES, NEW_COLLECTIVE } from '../../store/actions'
 import EmojiPicker from '@nextcloud/vue/dist/Components/EmojiPicker'
 import EmoticonOutline from 'vue-material-design-icons/EmoticonOutline'
-import displayError from '../util/displayError'
+import displayError from '../../util/displayError'
 
 const randomColor = () => '#' + ((1 << 24) * Math.random() | 0).toString(16)
 

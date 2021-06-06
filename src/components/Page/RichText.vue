@@ -36,8 +36,8 @@ import {
 	Strike,
 	Bold,
 } from 'tiptap-extensions'
-import { Image } from '../nodes'
-import Link from '../marks/link'
+import { Image } from '../../nodes'
+import Link from '../../marks/link'
 
 export default {
 	name: 'RichText',
