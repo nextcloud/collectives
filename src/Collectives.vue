@@ -6,9 +6,7 @@
 			href="#"
 			@click.stop.prevent="hide('details')" />
 		<Nav />
-		<AppContent>
-			<router-view />
-		</AppContent>
+		<router-view />
 		<PageSidebar v-if="currentPage" v-show="showing('sidebar')" />
 	</Content>
 </template>
@@ -19,7 +17,6 @@ import { mapState, mapGetters, mapMutations } from 'vuex'
 import { GET_COLLECTIVES, GET_TRASH_COLLECTIVES } from './store/actions'
 import displayError from './util/displayError'
 import Content from '@nextcloud/vue/dist/Components/Content'
-import AppContent from '@nextcloud/vue/dist/Components/AppContent'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile'
 import Nav from './components/Nav'
 import PageSidebar from './components/PageSidebar'
@@ -28,7 +25,6 @@ export default {
 	name: 'Collectives',
 
 	components: {
-		AppContent,
 		Content,
 		Nav,
 		PageSidebar,

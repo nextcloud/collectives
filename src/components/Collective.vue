@@ -12,7 +12,6 @@
 </template>
 
 <script>
-
 import { emit } from '@nextcloud/event-bus'
 import { mapGetters, mapMutations } from 'vuex'
 import { GET_PAGES } from '../store/actions'
