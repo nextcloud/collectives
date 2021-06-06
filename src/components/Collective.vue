@@ -1,6 +1,6 @@
 <template>
 	<div id="app-content-wrapper">
-		<PagesList />
+		<PageList />
 		<AppContentDetails v-if="currentPage">
 			<Version v-if="version" />
 			<Page v-else
@@ -20,7 +20,7 @@ import displayError from '../util/displayError'
 import AppContentDetails from '@nextcloud/vue/dist/Components/AppContentDetails'
 import Page from '../components/Page'
 import Version from '../components/Page/Version'
-import PagesList from '../components/PagesList'
+import PageList from '../components/PageList'
 
 const EditState = { Unset: 0, Edit: 1, Read: 2 }
 
@@ -30,7 +30,7 @@ export default {
 	components: {
 		AppContentDetails,
 		Page,
-		PagesList,
+		PageList,
 		Version,
 	},
 

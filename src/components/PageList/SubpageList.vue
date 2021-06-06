@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<PagesListItem key="page.title"
+		<Item key="page.title"
 			:to="`/${encodeURIComponent(collectiveParam)}/${pagePath}`"
 			:collapsible="isCollapsible"
 			:page-id="page.id"
@@ -20,8 +20,8 @@
 					{{ t('collectives', 'Add a subpage') }}
 				</ActionButton>
 			</template>
-		</PagesListItem>
-		<SubPagesList v-for="subpage in subpagesView"
+		</Item>
+		<SubpageList v-for="subpage in subpagesView"
 			:key="subpage.id"
 			:page="subpage"
 			:sort-order="sortOrder"
@@ -33,19 +33,19 @@
 
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import LastUpdate from './LastUpdate'
-import PagesListItem from './PagesListItem'
+import Item from './Item'
 
 import { showError } from '@nextcloud/dialogs'
 import { mapGetters, mapMutations } from 'vuex'
-import { NEW_PAGE, GET_PAGES } from '../store/actions'
+import { NEW_PAGE, GET_PAGES } from '../../store/actions'
 
 export default {
-	name: 'SubPagesList',
+	name: 'SubpageList',
 
 	components: {
 		ActionButton,
 		LastUpdate,
-		PagesListItem,
+		Item,
 	},
 
 	props: {
