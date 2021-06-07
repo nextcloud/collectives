@@ -15,25 +15,16 @@
 		<RichText v-if="readOnly"
 			:as-placeholder="preview && edit"
 			@empty="emptyPreview" />
-		<component :is="handler.component"
-			v-show="!readOnly"
-			:key="`editor-${currentPage.id}`"
+		<Editor v-show="!readOnly"
 			ref="editor"
-			:fileid="currentPage.id"
-			:basename="currentPage.fileName"
-			:filename="`/${currentPageFilePath}`"
-			:has-preview="true"
-			:active="true"
-			mime="text/markdown"
-			class="file-view active"
 			@ready="hidePreview" />
 	</div>
 </template>
 
 <script>
-import AppContent from '@nextcloud/vue/dist/Components/AppContent'
 import Actions from '@nextcloud/vue/dist/Components/Actions'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
+import Editor from './Page/Editor'
 import EditToggle from './Page/EditToggle'
 import RichText from './Page/RichText'
 import TitleForm from './Page/TitleForm'
@@ -52,7 +43,7 @@ export default {
 	components: {
 		ActionButton,
 		Actions,
-		AppContent,
+		Editor,
 		EditToggle,
 		RichText,
 		TitleForm,
@@ -70,23 +61,18 @@ export default {
 	computed: {
 		...mapGetters([
 			'currentPage',
-			'currentPageFilePath',
 			'currentCollective',
 			'indexPage',
 			'landingPage',
 			'pageParam',
 		]),
 
-		readOnly() {
-			return this.preview || !this.edit
+		doc() {
+			return this.wrapper.$data.document
 		},
 
-		/**
-		 * Fetch text app handler from Viewer app
-		 * @returns {object}
-		 */
-		handler() {
-			return OCA.Viewer.availableHandlers.find(h => h.id === 'text')
+		readOnly() {
+			return this.preview || !this.edit
 		},
 
 		edit: {
@@ -96,6 +82,10 @@ export default {
 			set(val) {
 				this.editToggle = val ? EditState.Edit : EditState.Read
 			},
+		},
+
+		wrapper() {
+			return this.$refs.editor.$children[0].$children[0]
 		},
 	},
 
@@ -162,20 +152,17 @@ export default {
 		},
 
 		startEdit() {
-			const doc = this.$refs.editor.$children[0].$data.document
-			this.previousSaveTimestamp = doc.lastSavedVersionTime
+			this.previousSaveTimestamp = this.doc.lastSavedVersionTime
 			this.edit = true
 		},
 
 		async stopEdit() {
-			const wrapper = this.$refs.editor.$children[0]
-			const doc = wrapper.$data.document
-			const wasDirty = wrapper.$data.dirty
+			const wasDirty = this.wrapper.$data.dirty
 
 			if (wasDirty) {
-				await wrapper.close()
+				await this.wrapper.close()
 			}
-			if (doc.lastSavedVersionTime !== this.previousSaveTimestamp
+			if (this.doc.lastSavedVersionTime !== this.previousSaveTimestamp
 				|| wasDirty) {
 				this.$store.dispatch(TOUCH_PAGE)
 				this.$store.dispatch(GET_VERSIONS, this.currentPage.id)
@@ -187,14 +174,6 @@ export default {
 </script>
 
 <style lang="scss">
-	#editor-container .editor__content {
-		border: 2px solid var(--color-border);
-		border-radius: var(--border-radius);
-	}
-
-	#editor-container .menububble {
-		margin-bottom: 0px;
-	}
 
 	#text-container .editor__content {
 		border: 2px solid var(--color-main-background);

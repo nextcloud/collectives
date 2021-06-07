@@ -1,0 +1,49 @@
+<template>
+	<component :is="handler.component"
+		:key="`editor-${currentPage.id}`"
+		:fileid="currentPage.id"
+		:basename="currentPage.fileName"
+		:filename="`/${currentPageFilePath}`"
+		:has-preview="true"
+		:active="true"
+		mime="text/markdown"
+		class="file-view active"
+		@ready="$emit('ready')" />
+</template>
+
+<script>
+import { mapGetters } from 'vuex'
+
+export default {
+	name: 'Editor',
+
+	computed: {
+		...mapGetters([
+			'currentPage',
+			'currentPageFilePath',
+		]),
+
+		/**
+		 * Fetch text app handler from Viewer app
+		 * @returns {object}
+		 */
+		handler() {
+			return OCA.Viewer.availableHandlers.find(h => h.id === 'text')
+		},
+	},
+}
+
+</script>
+
+<style lang="scss">
+
+	#editor-container .editor__content {
+		border: 2px solid var(--color-border);
+		border-radius: var(--border-radius);
+	}
+
+	#editor-container .menububble {
+		margin-bottom: 0px;
+	}
+
+</style>
