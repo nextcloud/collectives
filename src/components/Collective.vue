@@ -59,13 +59,9 @@ export default {
 		...mapMutations(['show']),
 
 		initCollective() {
-			if (this.currentCollective) {
-				this.getPages()
-				this.closeNav()
-				this.show('details')
-			} else {
-				this.openNav()
-			}
+			this.getPages()
+			this.closeNav()
+			this.show('details')
 		},
 
 		/**
