@@ -1,12 +1,10 @@
 <template>
 	<div id="app-content-wrapper">
 		<PageList />
-		<AppContentDetails v-if="currentPage">
-			<Version v-if="version" />
-			<Page v-else
-				:edit="edit"
-				@edit="edit = true"
-				@toggleEdit="edit = !edit" />
+		<AppContentDetails>
+			<Version v-if="currentPage && version" />
+			<Page v-else-if="currentPage" />
+			<PageNotFound v-else />
 		</AppContentDetails>
 	</div>
 </template>
@@ -20,9 +18,8 @@ import displayError from '../util/displayError'
 import AppContentDetails from '@nextcloud/vue/dist/Components/AppContentDetails'
 import Page from '../components/Page'
 import Version from '../components/Page/Version'
+import PageNotFound from '../components/Page/PageNotFound'
 import PageList from '../components/PageList'
-
-const EditState = { Unset: 0, Edit: 1, Read: 2 }
 
 export default {
 	name: 'Collective',
@@ -31,30 +28,18 @@ export default {
 		AppContentDetails,
 		Page,
 		PageList,
+		PageNotFound,
 		Version,
-	},
-
-	data() {
-		return {
-			editToggle: EditState.Unset,
-		}
 	},
 
 	computed: {
 		...mapGetters([
 			'currentCollective',
 			'currentPage',
+			'pageParam',
 			'version',
 		]),
 
-		edit: {
-			get() {
-				return this.editToggle === EditState.Edit
-			},
-			set(val) {
-				this.editToggle = val ? EditState.Edit : EditState.Read
-			},
-		},
 	},
 
 	watch: {
@@ -62,7 +47,6 @@ export default {
 			this.initCollective()
 		},
 		'currentPage.id'() {
-			this.editToggle = EditState.Unset
 			this.$store.commit(SELECT_VERSION, null)
 		},
 	},
