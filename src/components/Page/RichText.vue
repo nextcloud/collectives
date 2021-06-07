@@ -1,5 +1,5 @@
 <template>
-	<div id="text-container" :key="'text-' + pageId">
+	<div id="text-container" :key="'text-' + currentPage.id">
 		<div id="text-wrapper" class="richEditor">
 			<div id="text" class="editor">
 				<div :class="{menubar: true, loading}">
@@ -38,6 +38,7 @@ import {
 } from 'tiptap-extensions'
 import { Image } from '../../nodes'
 import Link from '../../marks/link'
+import { mapGetters } from 'vuex'
 
 export default {
 	name: 'RichText',
@@ -53,14 +54,6 @@ export default {
 			type: Boolean,
 			required: false,
 		},
-		pageId: {
-			type: Number,
-			required: true,
-		},
-		pageUrl: {
-			type: String,
-			required: true,
-		},
 	},
 
 	data() {
@@ -71,6 +64,11 @@ export default {
 	},
 
 	computed: {
+		...mapGetters([
+			'currentPage',
+			'currentPageDavUrl',
+		]),
+
 		/**
 		 * @returns {boolean}
 		 */
@@ -124,7 +122,7 @@ export default {
 	},
 
 	watch: {
-		'pageUrl'() {
+		'currentPageDavUrl'() {
 			this.getPageContent()
 		},
 	},
@@ -140,7 +138,7 @@ export default {
 		async getPageContent() {
 			try {
 				this.contentLoading = true
-				const content = await axios.get(this.pageUrl)
+				const content = await axios.get(this.currentPageDavUrl)
 				// content.data will attempt to parse as json
 				// but we want the raw text.
 				this.pageContent = content.request.responseText
@@ -149,7 +147,7 @@ export default {
 				}
 				this.contentLoading = false
 			} catch (e) {
-				console.error(`Failed to fetch content of page ${this.pageId}`, e)
+				console.error(`Failed to fetch content of page ${this.currentPage.id}`, e)
 			}
 		},
 	},
