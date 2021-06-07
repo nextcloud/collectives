@@ -7,6 +7,8 @@
 @include icon-black-white('sort-by-alpha', 'collectives', 1);
 @include icon-black-white('page-white', 'collectives', 1);
 @include icon-black-white('pages-white', 'collectives', 1);
+@include icon-black-white('document', 'collectives', 1);
+@include icon-black-white('documents', 'collectives', 1);
 @include icon-black-white('document-white', 'collectives', 1);
 @include icon-black-white('documents-white', 'collectives', 1);
 
@@ -24,4 +26,8 @@
 	background-size: 20px;
 	width: 26px;
 	height: 34px;
+}
+
+.icon-document, .icon-documents {
+	background-size: 44px;
 }

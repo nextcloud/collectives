@@ -1,9 +1,10 @@
 <template>
 	<div id="app-content-wrapper">
 		<PageList />
-		<AppContentDetails v-if="currentPage">
-			<Version v-if="version" />
-			<Page v-else />
+		<AppContentDetails>
+			<Version v-if="currentPage && version" />
+			<Page v-else-if="currentPage" />
+			<PageNotFound v-else />
 		</AppContentDetails>
 	</div>
 </template>
@@ -17,6 +18,7 @@ import displayError from '../util/displayError'
 import AppContentDetails from '@nextcloud/vue/dist/Components/AppContentDetails'
 import Page from '../components/Page'
 import Version from '../components/Page/Version'
+import PageNotFound from '../components/Page/PageNotFound'
 import PageList from '../components/PageList'
 
 export default {
@@ -26,6 +28,7 @@ export default {
 		AppContentDetails,
 		Page,
 		PageList,
+		PageNotFound,
 		Version,
 	},
 
@@ -33,6 +36,7 @@ export default {
 		...mapGetters([
 			'currentCollective',
 			'currentPage',
+			'pageParam',
 			'version',
 		]),
 
