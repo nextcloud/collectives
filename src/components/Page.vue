@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<h1 id="titleform" class="page-title">
-			<form @submit.prevent="renamePage">
+			<form @submit.prevent="renamePage(); focusEditor()">
 				<input v-if="landingPage"
 					class="title"
 					type="text"
@@ -12,21 +12,13 @@
 					v-model="newTitle"
 					class="title"
 					:placeholder="t('collectives', 'Title')"
-					type="text"
-					:disabled="!savePossible"
-					@keypress.enter="focusEditor">
+					type="text">
 			</form>
-			<button v-if="edit"
-				class="edit-button primary"
-				@click="stopEdit">
-				<span class="icon icon-checkmark-white" />
-				{{ t('collectives', 'Done') }}
-			</button>
-			<button v-else
-				class="edit-button primary"
-				@click="startEdit">
-				<span class="icon icon-rename-white" />
-				{{ t('collectives', 'Edit') }}
+			<button class="edit-button primary"
+				@click="edit ? stopEdit() : startEdit()">
+				<span class="icon icon-white"
+					:class="`icon-${toggleIcon}`" />
+				{{ t('collectives', edit ? 'Done' : 'Edit') }}
 			</button>
 			<Actions>
 				<ActionButton
@@ -36,9 +28,11 @@
 			</Actions>
 		</h1>
 		<RichText v-if="readOnly"
+			:key="`show-${currentPage.id}-${reloadCounter}`"
 			:as-placeholder="preview && edit"
 			@empty="emptyPreview" />
 		<Editor v-show="!readOnly"
+			:key="`edit-${currentPage.id}-${reloadCounter}`"
 			ref="editor"
 			@ready="hidePreview" />
 	</div>
@@ -75,9 +69,10 @@ export default {
 		return {
 			previousSaveTimestamp: null,
 			preview: true,
+			previewWasEmpty: false,
 			newTitle: '',
-			titleHasFocus: false,
 			editToggle: EditState.Unset,
+			reloadCounter: 0,
 		}
 	},
 
@@ -93,13 +88,21 @@ export default {
 			'loading',
 		]),
 
-		doc() {
-			return this.wrapper.$data.document
-		},
-
 		collectiveTitle() {
 			const { emoji, name } = this.currentCollective
 			return emoji ? `${emoji} ${name}` : name
+		},
+
+		titleChanged() {
+			return this.newTitle && this.newTitle !== this.currentPage.title
+		},
+
+		toggleIcon() {
+			if (this.loading('pageUpdate')) {
+				return 'loading'
+			} else {
+				return this.edit ? 'checkmark' : 'rename'
+			}
 		},
 
 		readOnly() {
@@ -114,18 +117,6 @@ export default {
 				this.editToggle = val ? EditState.Edit : EditState.Read
 			},
 		},
-
-		/**
-		 * Return true if a page is selected and its title is not empty
-		 * @returns {boolean}
-		 */
-		savePossible() {
-			return this.currentPage && this.currentPage.title !== ''
-		},
-
-		wrapper() {
-			return this.$refs.editor.$children[0].$children[0]
-		},
 	},
 
 	watch: {
@@ -136,9 +127,9 @@ export default {
 			this.initTitleEntry()
 			this.editToggle = EditState.Unset
 		},
-		'edit'(current, previous) {
-			if (current && !previous && !this.preview) {
-				this.$nextTick(this.focusEditor)
+		'titleChanged'(current, previous) {
+			if (current && !previous) {
+				this.edit = true
 			}
 		},
 	},
@@ -150,6 +141,16 @@ export default {
 
 	methods: {
 		...mapMutations(['done', 'load', 'toggle']),
+
+		// this is a method so it does not get cached
+		doc() {
+			return this.wrapper().$data.document
+		},
+
+		// this is a method so it does not get cached
+		wrapper() {
+			return this.$refs.editor.$children[0].$children[0]
+		},
 
 		initDocumentTitle() {
 			const { filePath, title } = this.currentPage
@@ -171,32 +172,9 @@ export default {
 		initTitleEntry() {
 			if (this.loading('newPage')) {
 				this.newTitle = ''
-				this.$nextTick(this.focusTitle)
 				this.done('newPage')
 			} else {
 				this.newTitle = this.currentPage.title
-			}
-		},
-
-		/**
-		 * Rename currentPage on the server
-		 */
-		async renamePage() {
-			this.titleHasFocus = false
-			if (!this.newTitle || this.newTitle === this.currentPage.title) {
-				return
-			}
-			try {
-				await this.$store.dispatch(RENAME_PAGE, this.newTitle)
-				this.$router.push(this.updatedPagePath)
-				this.$store.commit(CLEAR_UPDATED_PAGE)
-				if (this.currentPage.size === 0) {
-					this.$emit('edit')
-				}
-				this.$store.dispatch(GET_PAGES)
-			} catch (e) {
-				console.error(e)
-				showError(t('collectives', 'Could not rename the page'))
 			}
 		},
 
@@ -206,7 +184,6 @@ export default {
 		},
 
 		focusEditor() {
-			this.titleHasFocus = false
 			const editor = this.$el.querySelector('.ProseMirror')
 			if (editor) {
 				editor.focus()
@@ -219,39 +196,81 @@ export default {
 		hidePreview() {
 			this.preview = false
 			if (this.edit) {
+				if (this.doc()) {
+					this.previousSaveTimestamp = this.doc().lastSavedVersionTime
+				}
 				this.focusEditor()
 			}
 		},
 
 		emptyPreview() {
-			if (!this.titleHasFocus && this.editToggle === EditState.Unset) {
-				this.edit = true
+			this.previewWasEmpty = true
+			if (this.editToggle === EditState.Unset) {
+				this.startEdit()
 			}
 		},
 
 		startEdit() {
-			this.previousSaveTimestamp = this.doc.lastSavedVersionTime
+			if (this.doc()) {
+				this.previousSaveTimestamp = this.doc().lastSavedVersionTime
+			}
 			this.edit = true
+			this.$nextTick(this.focusEditor)
 		},
 
 		async stopEdit() {
-			const wasDirty = this.wrapper.$data.dirty
-
-			if (wasDirty) {
-				await this.wrapper.close()
+			this.renamePage()
+			const wasDirty = this.wrapper().$data.dirty
+			const changed = wasDirty
+				|| this.doc().lastSavedVersionTime !== this.previousSaveTimestamp
+			// if there is still no page content we remind the user
+		    if (this.previewWasEmpty && !changed) {
+				this.focusEditor()
+				return
 			}
-			if (this.doc.lastSavedVersionTime !== this.previousSaveTimestamp
-				|| wasDirty) {
+			if (wasDirty) {
+				this.load('pageUpdate')
+				await this.wrapper().close()
+				this.done('pageUpdate')
+			}
+			if (changed) {
+				this.reloadCounter += 1
+				this.previewWasEmpty = false
 				this.$store.dispatch(TOUCH_PAGE)
 				this.$store.dispatch(GET_VERSIONS, this.currentPage.id)
 			}
 			this.edit = false
 		},
+
+		/**
+		 * Rename currentPage on the server
+		 */
+		async renamePage() {
+			if (!this.titleChanged) {
+				return
+			}
+			try {
+				await this.$store.dispatch(RENAME_PAGE, this.newTitle)
+				// The resulting title may be different due to sanitizing
+				this.newTitle = this.currentPage.title
+				this.$router.push(this.updatedPagePath)
+				this.$store.commit(CLEAR_UPDATED_PAGE)
+				this.$store.dispatch(GET_PAGES)
+			} catch (e) {
+				console.error(e)
+				showError(t('collectives', 'Could not rename the page'))
+			}
+		},
+
 	},
 }
 </script>
 
 <style lang="scss">
+
+	#titleform form {
+		flex: auto;
+	}
 
 	#text-container .editor__content {
 		border: 2px solid var(--color-main-background);
