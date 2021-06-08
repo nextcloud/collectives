@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2021-05-27 17:57+0200\n"
+"POT-Creation-Date: 2021-06-08 09:03+0200\n"
 "PO-Revision-Date: 2021-05-28 12:11+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
@@ -97,7 +97,7 @@ msgid "Deleted collectives"
 msgstr "Slettede kollektiver"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:2
-#: /collectives/specialVueFakeDummyForL10nScript.js:38
+#: /collectives/specialVueFakeDummyForL10nScript.js:41
 msgid "Restore"
 msgstr "Gjenopprett"
 
@@ -186,71 +186,83 @@ msgid "Could not delete the page"
 msgstr "Kunne ikke slette siden"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:25
+msgid "Sort order"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:26
+msgid "Sort by last modification"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:27
+msgid "Sort by title"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:28
 msgid "Add a page"
 msgstr "Legg til en side"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:26
-#: /collectives/specialVueFakeDummyForL10nScript.js:35
+#: /collectives/specialVueFakeDummyForL10nScript.js:29
+#: /collectives/specialVueFakeDummyForL10nScript.js:38
 msgid "New Page"
 msgstr "Ny side"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:27
-#: /collectives/specialVueFakeDummyForL10nScript.js:36
+#: /collectives/specialVueFakeDummyForL10nScript.js:30
+#: /collectives/specialVueFakeDummyForL10nScript.js:39
 msgid "Could not create the page"
 msgstr "Kunne ikke opprette siden"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:28
+#: /collectives/specialVueFakeDummyForL10nScript.js:31
 msgid "Expand subpage list"
 msgstr "Utvid undersideliste"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:28
+#: /collectives/specialVueFakeDummyForL10nScript.js:31
 msgid "Collapse subpage list"
 msgstr "Fold sammen undersidelisten"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:29
+#: /collectives/specialVueFakeDummyForL10nScript.js:32
 msgid "Current version"
 msgstr "Nåværende versjon"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:30
+#: /collectives/specialVueFakeDummyForL10nScript.js:33
 msgid "No other versions available"
 msgstr "Ingen andre versjoner tilgjengelig"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:31
+#: /collectives/specialVueFakeDummyForL10nScript.js:34
 msgid "After editing you can find old versions of the page here."
 msgstr "Etter redigering kan du finne gamle versjoner av siden her."
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:32
+#: /collectives/specialVueFakeDummyForL10nScript.js:35
 msgid "Could not get page versions"
 msgstr "Kunne ikke hente sideversjonering"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:33
+#: /collectives/specialVueFakeDummyForL10nScript.js:36
 #: /collectives/src/util/xmlToVersionsList.js:29
 msgid "%n byte"
 msgid_plural "%n bytes"
 msgstr[0] "%n byte"
 msgstr[1] "%n byte"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:34
+#: /collectives/specialVueFakeDummyForL10nScript.js:37
 msgid "Add a subpage"
 msgstr "Legg til en underside"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:37
+#: /collectives/specialVueFakeDummyForL10nScript.js:40
 msgid "Restore this version"
 msgstr "Gjenopprett denne versjonen"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:39
+#: /collectives/specialVueFakeDummyForL10nScript.js:42
 msgid "Reverted {page} to revision {timestamp}."
 msgstr "Gjenoppretet {page} til versjon {timestamp}."
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:40
+#: /collectives/specialVueFakeDummyForL10nScript.js:43
 msgid "Failed to revert {page} to revision {timestamp}."
 msgstr "Klarte ikke å tilbakestille {page} til versjon {timestamp}."
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:41
+#: /collectives/specialVueFakeDummyForL10nScript.js:44
 msgid "No collective selected"
 msgstr "Ingen kollektiver valgt"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:42
+#: /collectives/specialVueFakeDummyForL10nScript.js:45
 msgid "Select a collective or create a new one on the left."
 msgstr "Velg et kollektiv, eller opprett ett til venstre."
 

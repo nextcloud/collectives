@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2021-05-27 18:00+0200\n"
+"POT-Creation-Date: 2021-06-08 09:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -79,7 +79,7 @@ msgid "Deleted collectives"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:2
-#: /collectives/specialVueFakeDummyForL10nScript.js:38
+#: /collectives/specialVueFakeDummyForL10nScript.js:41
 msgid "Restore"
 msgstr ""
 
@@ -168,71 +168,83 @@ msgid "Could not delete the page"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:25
-msgid "Add a page"
+msgid "Sort order"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:26
-#: /collectives/specialVueFakeDummyForL10nScript.js:35
-msgid "New Page"
+msgid "Sort by last modification"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:27
-#: /collectives/specialVueFakeDummyForL10nScript.js:36
-msgid "Could not create the page"
+msgid "Sort by title"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:28
-msgid "Expand subpage list"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:28
-msgid "Collapse subpage list"
+msgid "Add a page"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:29
-msgid "Current version"
+#: /collectives/specialVueFakeDummyForL10nScript.js:38
+msgid "New Page"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:30
-msgid "No other versions available"
+#: /collectives/specialVueFakeDummyForL10nScript.js:39
+msgid "Could not create the page"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:31
-msgid "After editing you can find old versions of the page here."
+msgid "Expand subpage list"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:31
+msgid "Collapse subpage list"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:32
-msgid "Could not get page versions"
+msgid "Current version"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:33
+msgid "No other versions available"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:34
+msgid "After editing you can find old versions of the page here."
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:35
+msgid "Could not get page versions"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:36
 #: /collectives/src/util/xmlToVersionsList.js:29
 msgid "%n byte"
 msgid_plural "%n bytes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:34
+#: /collectives/specialVueFakeDummyForL10nScript.js:37
 msgid "Add a subpage"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:37
+#: /collectives/specialVueFakeDummyForL10nScript.js:40
 msgid "Restore this version"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:39
+#: /collectives/specialVueFakeDummyForL10nScript.js:42
 msgid "Reverted {page} to revision {timestamp}."
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:40
+#: /collectives/specialVueFakeDummyForL10nScript.js:43
 msgid "Failed to revert {page} to revision {timestamp}."
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:41
+#: /collectives/specialVueFakeDummyForL10nScript.js:44
 msgid "No collective selected"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:42
+#: /collectives/specialVueFakeDummyForL10nScript.js:45
 msgid "Select a collective or create a new one on the left."
 msgstr ""
 
