@@ -63,6 +63,12 @@ export default {
 		'currentPage.id'() {
 			this.initTitleEntry()
 		},
+		'titleChanged'(current, previous) {
+			if (current && !previous) {
+				this.$emit('typing')
+			}
+		},
+
 	},
 
 	mounted() {

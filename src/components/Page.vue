@@ -103,6 +103,7 @@ export default {
 		},
 		'currentPage.id'() {
 			this.editToggle = EditState.Unset
+			this.titleHasFocus = false
 		},
 	},
 
