@@ -165,7 +165,7 @@ build: node-modules build-js-production
 	rm -rf $(RELEASE_DIR)/collectives
 
 # Prepare the release package for the app store
-release: build
+release: lint-appinfo build
 	# Upload the release tarball
 	$(eval UPLOAD_PATH:=$(shell curl -s -X POST -H "PRIVATE-TOKEN: $(GITLAB_API_TOKEN)" \
 			--form "file=@build/release/collectives-$(VERSION).tar.gz" $(GITLAB_API_URL)/uploads | jq -r '.full_path'))
@@ -181,4 +181,4 @@ release: build
 
 	@echo "URL to release tarball (for app store): $(GITLAB_URL)$(UPLOAD_PATH)"
 
-.PHONY: all setup-dev composer translationtool node-modules composer-install clean distclean lint lint-js build build-js-dev build-js-production test test-php test-php-unit test-php-integration test-js test-js-cypress test-js-cypress-watch po l10n php-psalm-baseline text-app-includes build release
+.PHONY: all setup-dev composer translationtool node-modules composer-install clean distclean lint lint-js lint-appinfo build build-js-dev build-js-production test test-php test-php-unit test-php-integration test-js test-js-cypress test-js-cypress-watch po l10n php-psalm-baseline text-app-includes build release
