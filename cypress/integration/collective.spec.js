@@ -35,7 +35,7 @@ describe('Collective', function() {
 		it('Reports existing circle', function() {
 			cy.login('bob', 'bob', '/apps/collectives')
 			cy.createCollective('Preexisting Collective')
-			cy.get('main .empty-content').should('contain', 'No collective selected')
+			cy.get('main .empty-content').should('contain', 'build shared knowledge')
 			cy.get('.toast-warning').should('contain', 'Could not create the collective')
 			cy.get('.toast-warning').should('contain', 'A circle with that name exists')
 		})
@@ -128,6 +128,10 @@ describe('Collective', function() {
 				.click()
 			cy.get('.collectives_trash_list_item')
 				.should('contain', 'Delete me')
+		})
+		it('Does not show the collective when in trash', function() {
+			cy.login('bob', 'bob', '/apps/collectives/Delete%20me')
+			cy.get('main .empty-content').should('contain', 'Collective not found')
 		})
 		it('Allows restoring the collective from trash', function() {
 			cy.login('bob', 'bob', '/apps/collectives')

@@ -33,9 +33,10 @@
 		</template>
 	</AppNavigationItem>
 	<div v-else class="collective-create">
-		<form @submit.prevent.stop="createCollective">
+		<form v-show="editing" @submit.prevent.stop="createCollective">
 			<EmojiPicker :show-preview="true" @select="addEmoji">
 				<button
+					class="emoji"
 					type="button"
 					:aria-label="t('collectives', 'Add emoji')"
 					:aria-haspopup="true">
@@ -70,11 +71,12 @@
 </template>
 
 <script>
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { ActionButton, Actions, AppNavigationItem, Multiselect } from '@nextcloud/vue'
-import { GET_CIRCLES, NEW_COLLECTIVE } from '../store/actions'
+import { GET_CIRCLES, NEW_COLLECTIVE } from '../../store/actions'
 import EmojiPicker from '@nextcloud/vue/dist/Components/EmojiPicker'
 import EmoticonOutline from 'vue-material-design-icons/EmoticonOutline'
-import displayError from '../util/displayError'
+import displayError from '../../util/displayError'
 
 const randomColor = () => '#' + ((1 << 24) * Math.random() | 0).toString(16)
 
@@ -89,7 +91,6 @@ export default {
 		Multiselect,
 	},
 	directives: {},
-	props: {},
 	data() {
 		return {
 			classes: [],
@@ -117,10 +118,16 @@ export default {
 			return this.circles.length > 0
 		},
 	},
-	watch: {},
+
 	mounted() {
 		this.getCircles()
+		subscribe('start-new-collective', this.startCreateCollective)
 	},
+
+	unmounted() {
+		unsubscribe('start-new-collective', this.startCreateCollective)
+	},
+
 	methods: {
 		/**
 		 * Get list of all circles
@@ -188,6 +195,7 @@ export default {
 	order: 1;
 	display: flex;
 	height: 44px;
+	box-shadow: 0 0 40px --var(--color-primary-light);
 
 	form {
 		display: flex;
@@ -204,4 +212,10 @@ export default {
 	border: none;
 	font-size: 14px;
 }
+
+button.emoji {
+	background-color: transparent;
+	border: none;
+}
+
 </style>
