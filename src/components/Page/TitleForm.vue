@@ -9,9 +9,15 @@
 			ref="title"
 			v-model="newTitle"
 			class="title"
+			:class="{ inactive: !focussed && !titleChanged }"
+			style="height: 43px;"
 			:placeholder="t('collectives', 'Title')"
-			type="text"
-			:disabled="!savePossible">
+			type="text">
+		<input type="submit"
+			value=""
+			class="icon-confirm"
+			:class="{ inactive: !focussed && !titleChanged }"
+			style="height: 43px;">
 	</form>
 </template>
 
@@ -27,6 +33,7 @@ export default {
 	data() {
 		return {
 			newTitle: '',
+			focussed: false,
 		}
 	},
 
@@ -46,12 +53,8 @@ export default {
 			return emoji ? `${emoji} ${name}` : name
 		},
 
-		/**
-		 * Return true if a page is selected and its title is not empty
-		 * @returns {boolean}
-		 */
-		savePossible() {
-			return this.currentPage && this.currentPage.title !== ''
+		titleChanged() {
+			return this.newTitle && this.newTitle !== this.currentPage.title
 		},
 
 	},
@@ -70,6 +73,7 @@ export default {
 		...mapMutations(['done', 'load', 'toggle']),
 
 		initTitleEntry() {
+			this.focussed = false
 			if (this.loading('newPage')) {
 				this.newTitle = ''
 				this.$nextTick(this.focusTitle)
@@ -81,6 +85,7 @@ export default {
 
 		focusTitle() {
 			this.$refs.title.focus()
+			this.focussed = true
 			this.$emit('typing')
 		},
 
@@ -88,10 +93,11 @@ export default {
 		 * Rename currentPage on the server
 		 */
 		async renamePage() {
-			this.$emit('done')
-			if (!this.newTitle || this.newTitle === this.currentPage.title) {
+			if (!this.titleChanged) {
 				return
 			}
+			this.focussed = false
+			this.$emit('done')
 			try {
 				await this.$store.dispatch(RENAME_PAGE, this.newTitle)
 				this.$router.push(this.updatedPagePath)
@@ -109,3 +115,39 @@ export default {
 	},
 }
 </script>
+
+<style scoped>
+
+form {
+	flex: auto;
+	display: flex;
+}
+
+input[type=text] {
+	font-size: 35px;
+	border-right: none;
+	color: var(--color-main-text);
+	width: 100%;
+	height: 43px;
+	opacity: 0.8;
+	flex: auto;
+}
+
+input[type=submit] {
+	flex: initial;
+	margin-right: 20px;
+}
+
+input.inactive {
+	border-color: transparent;
+}
+
+input.inactive.icon-confirm {
+	background-image: none;
+}
+
+button, input {
+	margin-top: 0px;
+}
+
+</style>

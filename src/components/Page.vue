@@ -4,7 +4,10 @@
 			<TitleForm
 				@typing="titleHasFocus = true"
 				@done="focusEditor" />
-			<EditToggle :edit="edit" @start="startEdit" @stop="stopEdit" />
+			<EditToggle :edit="edit"
+				:primary="!titleHasFocus"
+				@start="startEdit"
+				@stop="stopEdit" />
 			<Actions>
 				<ActionButton
 					icon="icon-menu"

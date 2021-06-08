@@ -1,6 +1,8 @@
 <template>
-	<button class="edit-button primary" @click="toggle">
-		<span class="icon" :class="iconClass" />
+	<button class="edit-button"
+		:class="{ primary }"
+		@click="toggle">
+		<span class="icon" :class="iconClasses" />
 		{{ t('collectives', edit ? 'Done' : 'Edit') }}
 	</button>
 </template>
@@ -13,13 +15,21 @@ export default {
 	props: {
 		edit: {
 			type: Boolean,
-			required: false,
+			required: true,
+		},
+		primary: {
+			type: Boolean,
+			default: false,
 		},
 	},
 
 	computed: {
-		'iconClass'() {
-			return this.edit ? 'icon-checkmark-white' : 'icon-rename-white'
+		'iconClasses'() {
+			return {
+				'icon-checkmark': this.edit,
+				'icon-rename': !this.edit,
+				'icon-white': this.primary,
+			}
 		},
 	},
 
@@ -35,6 +45,7 @@ export default {
 	.edit-button {
 		min-width: max-content;
 		height: 44px;
+		margin-top: 0px;
 
 		.icon {
 			opacity: 1;

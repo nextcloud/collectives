@@ -100,10 +100,6 @@ export default {
 		min-height: 100%;
 	}
 
-	#titleform button {
-		margin-top: 0px;
-	}
-
 	.app-content-details div #editor-container,
 	.app-content-details div #text-container {
 		position: absolute;
@@ -131,7 +127,7 @@ export default {
 		padding-bottom: 50px;
 	}
 
-	#version-title, #titleform input[type='text'] {
+	#version-title {
 		font-size: 35px;
 		border: none;
 		color: var(--color-main-text);
