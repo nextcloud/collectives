@@ -6,7 +6,6 @@ use OC\Files\Cache\CacheEntry;
 use OC\Files\Node\LazyFolder;
 use OC\Files\Storage\Wrapper\Jail;
 use OC\SystemConfig;
-use OCA\Collectives\Fs\NodeHelper;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\Files\InvalidPathException;
@@ -31,9 +30,6 @@ class CollectiveFolderManager {
 	/** @var SystemConfig */
 	private $systemConfig;
 
-	/** @var NodeHelper */
-	private $nodeHelper;
-
 	/** @var string */
 	private $rootPath;
 
@@ -43,17 +39,14 @@ class CollectiveFolderManager {
 	 * @param IRootFolder   $rootFolder
 	 * @param IDBConnection $connection
 	 * @param SystemConfig  $systemConfig
-	 * @param NodeHelper    $nodeHelper
 	 */
 	public function __construct(
 		IRootFolder $rootFolder,
 		IDBConnection $connection,
-		SystemConfig $systemConfig,
-		NodeHelper $nodeHelper) {
+		SystemConfig $systemConfig) {
 		$this->rootFolder = $rootFolder;
 		$this->connection = $connection;
 		$this->systemConfig = $systemConfig;
-		$this->nodeHelper = $nodeHelper;
 	}
 
 	public function getRootPath(): string {
@@ -201,31 +194,6 @@ class CollectiveFolderManager {
 		$cache = $qb->execute()->fetch();
 		$cache['mount_point'] = $name;
 		return $cache;
-	}
-
-	/**
-	 * @return array
-	 * @throws \OCP\DB\Exception
-	 */
-	public function getAllFolders(): array {
-		$qb = $this->connection->getQueryBuilder();
-		$qb->select('co.id AS id', 'circle_unique_id', 'ci.name AS name')
-			->from('collectives', 'co')
-			->leftJoin('co', 'circle_circles', 'ci', $qb->expr()->andX(
-				$qb->expr()->eq('co.circle_unique_id', 'ci.unique_id')
-			));
-		$rows = $qb->execute()->fetchAll();
-
-		$folderMap = [];
-		foreach ($rows as $row) {
-			$id = (int)$row['id'];
-			$folderMap[$id] = [
-				'id' => $id,
-				'mount_point' => $this->nodeHelper->sanitiseFilename($row['name']),
-			];
-		}
-
-		return $folderMap;
 	}
 
 	/**
