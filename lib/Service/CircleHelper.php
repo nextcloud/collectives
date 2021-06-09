@@ -4,6 +4,7 @@
 namespace OCA\Collectives\Service;
 
 use OCA\Circles\Api\v1\Circles;
+use OCA\Circles\Exceptions\CircleAlreadyExistsException;
 use OCA\Circles\Exceptions\CircleDoesNotExistException;
 use OCA\Circles\Exceptions\MemberDoesNotExistException;
 use OCA\Circles\Model\Circle;
@@ -71,6 +72,7 @@ class CircleHelper {
 	 * @return Circle
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
+	 * @throws CircleAlreadyExistsException
 	 */
 	public function createCircle(string $name, ?string $userId = null): Circle {
 		return Circles::createCircle(Circles::CIRCLES_SECRET, $name);

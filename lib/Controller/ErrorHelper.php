@@ -4,6 +4,7 @@ namespace OCA\Collectives\Controller;
 
 use Closure;
 
+use OCA\Circles\Exceptions\CircleAlreadyExistsException;
 use OCA\Collectives\Service\UnprocessableEntityException;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
@@ -26,7 +27,7 @@ trait ErrorHelper {
 			return new DataResponse($e->getMessage(), Http::STATUS_FORBIDDEN);
 		} catch (NotFoundException $e) {
 			return new DataResponse($e->getMessage(), Http::STATUS_NOT_FOUND);
-		} catch (QueryException | UnprocessableEntityException $e) {
+		} catch (CircleAlreadyExistsException | QueryException | UnprocessableEntityException $e) {
 			return new DataResponse($e->getMessage(), Http::STATUS_UNPROCESSABLE_ENTITY);
 		} catch (\Throwable $e) {
 			if ($logger) {

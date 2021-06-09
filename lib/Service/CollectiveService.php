@@ -2,6 +2,7 @@
 
 namespace OCA\Collectives\Service;
 
+use OCA\Circles\Exceptions\CircleAlreadyExistsException;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Model\CollectiveInfo;
@@ -80,6 +81,7 @@ class CollectiveService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 * @throws UnprocessableEntityException
+	 * @throws CircleAlreadyExistsException
 	 */
 	public function createCollective(string $userId, string $userLang, string $safeName, string $emoji = null): array {
 		if (empty($safeName)) {
