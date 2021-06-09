@@ -2,13 +2,14 @@
 
 namespace Unit\Service;
 
-use OCA\Circles\Exceptions\CircleAlreadyExistsException;
 use OCA\Circles\Model\Circle;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Mount\CollectiveFolderManager;
+use OCA\Collectives\Service\CircleHelper;
 use OCA\Collectives\Service\CollectiveHelper;
 use OCA\Collectives\Service\CollectiveService;
+use OCA\Collectives\Service\NotPermittedException;
 use OCA\Collectives\Service\UnprocessableEntityException;
 use OCP\IL10N;
 use PHPUnit\Framework\TestCase;
@@ -17,6 +18,7 @@ class CollectiveServiceTest extends TestCase {
 	private $service;
 	private $userId = 'jane';
 	private $collectiveMapper;
+	private $circleHelper;
 	private $l10n;
 
 	protected function setUp(): void {
@@ -32,6 +34,10 @@ class CollectiveServiceTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
+		$this->circleHelper = $this->getMockBuilder(CircleHelper::class)
+			->disableOriginalConstructor()
+			->getMock();
+
 		$this->l10n = $this->getMockBuilder(IL10N::class)
 			->disableOriginalConstructor()
 			->getMock();
@@ -40,6 +46,7 @@ class CollectiveServiceTest extends TestCase {
 			$this->collectiveMapper,
 			$collectiveHelper,
 			$collectiveFolderManager,
+			$this->circleHelper,
 			$this->l10n
 		);
 	}
@@ -51,12 +58,12 @@ class CollectiveServiceTest extends TestCase {
 	}
 
 	public function testCreateWithExistingCircle(): void {
-		$this->collectiveMapper->method('createCircle')
-			->will(self::throwException(new CircleAlreadyExistsException('A circle with that name already exists.')));
-		$this->collectiveMapper->method('findCircle')
-			->willReturn(null);
-		$this->expectException(CircleAlreadyExistsException::class);
-		$this->expectExceptionMessage('A circle with that name already exists.');
+		$this->circleHelper->method('findCircle')
+			->willReturn(new Circle());
+		$this->circleHelper->method('isAdmin')
+			->willReturn(false);
+		$this->expectException(NotPermittedException::class);
+		$this->expectExceptionMessage('Not allowed to create collective for existing circle.');
 		$this->service->createCollective($this->userId, 'de', 'taken');
 	}
 
@@ -70,10 +77,10 @@ class CollectiveServiceTest extends TestCase {
 			->willReturn('own');
 		$collective = new Collective();
 		$collective->setId(123);
-		$this->collectiveMapper->method('createCircle')
-			->will(self::throwException(new CircleAlreadyExistsException('A circle with that name already exists.')));
-		$this->collectiveMapper->method('findCircle')
+		$this->circleHelper->method('findCircle')
 			->willReturn($circle);
+		$this->circleHelper->method('isAdmin')
+			->willReturn(true);
 		$this->collectiveMapper->method('findByCircleId')
 			->willReturn(null);
 		$this->collectiveMapper
@@ -103,7 +110,7 @@ class CollectiveServiceTest extends TestCase {
 			->willReturn('free');
 		$collective = new Collective();
 		$collective->setId(123);
-		$this->collectiveMapper->method('createCircle')
+		$this->circleHelper->method('createCircle')
 			->willReturn($circle);
 		$this->collectiveMapper
 			->expects(self::once())

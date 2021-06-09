@@ -2,22 +2,26 @@
 
 namespace OCA\Collectives\Service;
 
-use OCA\Circles\Api\v1\Circles;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Model\CollectiveInfo;
-use OCP\AppFramework\QueryException;
 
 class CollectiveHelper {
 	/** @var CollectiveMapper */
 	private $collectiveMapper;
 
+	/** @var CircleHelper */
+	private $circleHelper;
+
 	/**
 	 * CollectiveHelper constructor.
 	 *
 	 * @param CollectiveMapper $collectiveMapper
+	 * @param CircleHelper     $circleHelper
 	 */
-	public function __construct(CollectiveMapper $collectiveMapper) {
+	public function __construct(CollectiveMapper $collectiveMapper,
+								CircleHelper $circleHelper) {
 		$this->collectiveMapper = $collectiveMapper;
+		$this->circleHelper = $circleHelper;
 	}
 
 	/**
@@ -25,15 +29,16 @@ class CollectiveHelper {
 	 * @param bool   $getAdmin
 	 *
 	 * @return CollectiveInfo[]
-	 * @throws QueryException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
 	 */
 	public function getCollectivesForUser(string $userId, bool $getAdmin = true): array {
 		$collectiveInfos = [];
-		$joinedCircles = Circles::joinedCircles($userId);
-		foreach ($joinedCircles as $circle) {
-			$id = $circle->getUniqueId();
-			if (null !== $c = $this->collectiveMapper->findByCircleId($id)) {
-				$admin = $getAdmin && $this->collectiveMapper->isAdmin($c, $userId);
+		$circles = $this->circleHelper->getCircles($userId);
+		foreach ($circles as $circle) {
+			$cid = $circle->getUniqueId();
+			if (null !== $c = $this->collectiveMapper->findByCircleId($cid)) {
+				$admin = $getAdmin && $this->circleHelper->isAdmin($c->getCircleUniqueId(), $userId);
 				$collectiveInfos[] = new CollectiveInfo($c,
 					$circle->getName(),
 					$admin);
@@ -46,14 +51,15 @@ class CollectiveHelper {
 	 * @param string $userId
 	 *
 	 * @return CollectiveInfo[]
-	 * @throws QueryException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
 	 */
 	public function getCollectivesTrashForUser(string $userId): array {
 		$collectiveInfos = [];
-		$joinedCircles = Circles::joinedCircles($userId);
-		foreach ($joinedCircles as $circle) {
-			$id = $circle->getUniqueId();
-			if ((null !== $c = $this->collectiveMapper->findTrashByCircleId($id, $userId))) {
+		$circles = $this->circleHelper->getCircles($userId);
+		foreach ($circles as $circle) {
+			$cid = $circle->getUniqueId();
+			if ((null !== $c = $this->collectiveMapper->findTrashByCircleId($cid, $userId))) {
 				$collectiveInfos[] = new CollectiveInfo($c,
 					$this->collectiveMapper->circleUniqueIdToName($c->getCircleUniqueId()),
 					true);
