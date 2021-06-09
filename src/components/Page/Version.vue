@@ -36,8 +36,8 @@ import axios from '@nextcloud/axios'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { generateRemoteUrl } from '@nextcloud/router'
 import { mapGetters, mapMutations } from 'vuex'
-import { SELECT_VERSION } from '../store/mutations'
-import { GET_VERSIONS } from '../store/actions'
+import { SELECT_VERSION } from '../../store/mutations'
+import { GET_VERSIONS } from '../../store/actions'
 
 export default {
 	name: 'Version',

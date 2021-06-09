@@ -23,7 +23,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import { generateUrl } from '@nextcloud/router'
 import Home from './views/Home'
-import Collective from './views/Collective'
+import CollectiveView from './views/CollectiveView'
 
 Vue.use(VueRouter)
 
@@ -34,7 +34,7 @@ const routes = [
 	},
 	{
 		path: '/:collective',
-		component: Collective,
+		component: CollectiveView,
 		props: (route) => ({
 			...route.params,
 			fileId: Number(route.query.fileId),

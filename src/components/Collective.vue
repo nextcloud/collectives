@@ -1,61 +1,50 @@
 <template>
 	<div id="app-content-wrapper">
-		<PagesList />
-		<AppContentDetails v-if="currentPage">
-			<Version v-if="version" />
-			<Page v-else
-				:edit="edit"
-				@edit="edit = true"
-				@toggleEdit="edit = !edit" />
+		<PageList />
+		<AppContentDetails>
+			<Version v-if="currentPage && version" />
+			<Page v-else-if="currentPage" />
+			<EmptyContent v-else-if="loading('collective')"
+				icon="icon-loading" />
+			<PageNotFound v-else />
 		</AppContentDetails>
 	</div>
 </template>
 
 <script>
-
 import { emit } from '@nextcloud/event-bus'
 import { mapGetters, mapMutations } from 'vuex'
 import { GET_PAGES } from '../store/actions'
 import { SELECT_VERSION } from '../store/mutations'
 import displayError from '../util/displayError'
 import AppContentDetails from '@nextcloud/vue/dist/Components/AppContentDetails'
+import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 import Page from '../components/Page'
-import PagesList from '../components/PagesList'
-import Version from '../components/Version'
-
-const EditState = { Unset: 0, Edit: 1, Read: 2 }
+import Version from '../components/Page/Version'
+import PageNotFound from '../components/Page/PageNotFound'
+import PageList from '../components/PageList'
 
 export default {
 	name: 'Collective',
 
 	components: {
 		AppContentDetails,
+		EmptyContent,
 		Page,
-		PagesList,
+		PageList,
+		PageNotFound,
 		Version,
-	},
-
-	data() {
-		return {
-			editToggle: EditState.Unset,
-		}
 	},
 
 	computed: {
 		...mapGetters([
 			'currentCollective',
 			'currentPage',
+			'loading',
+			'pageParam',
 			'version',
 		]),
 
-		edit: {
-			get() {
-				return this.editToggle === EditState.Edit
-			},
-			set(val) {
-				this.editToggle = val ? EditState.Edit : EditState.Read
-			},
-		},
 	},
 
 	watch: {
@@ -63,7 +52,6 @@ export default {
 			this.initCollective()
 		},
 		'currentPage.id'() {
-			this.editToggle = EditState.Unset
 			this.$store.commit(SELECT_VERSION, null)
 		},
 	},
@@ -76,13 +64,9 @@ export default {
 		...mapMutations(['show']),
 
 		initCollective() {
-			if (this.currentCollective) {
-				this.getPages()
-				this.closeNav()
-				this.show('details')
-			} else {
-				this.openNav()
-			}
+			this.getPages()
+			this.closeNav()
+			this.show('details')
 		},
 
 		/**

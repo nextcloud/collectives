@@ -21,7 +21,7 @@
 				{{ t('collectives', 'Sort by title') }}
 			</ActionButton>
 		</Actions>
-		<PagesListItem v-if="currentCollective"
+		<Item v-if="currentCollective"
 			key="Readme"
 			:to="`/${encodeURIComponent(collectiveParam)}`"
 			:title="currentCollective.name"
@@ -44,8 +44,8 @@
 					{{ t('collectives', 'Add a page') }}
 				</ActionButton>
 			</template>
-		</PagesListItem>
-		<SubPagesList v-for="page in subpages"
+		</Item>
+		<SubpageList v-for="page in subpages"
 			:key="page.id"
 			:page="page"
 			:sort-order="sortOrder"
@@ -58,24 +58,24 @@
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import Actions from '@nextcloud/vue/dist/Components/Actions'
 import AppContentList from '@nextcloud/vue/dist/Components/AppContentList'
-import LastUpdate from './LastUpdate'
-import SubPagesList from './SubPagesList'
-import PagesListItem from './PagesListItem'
+import LastUpdate from './PageList/LastUpdate'
+import SubpageList from './PageList/SubpageList'
+import Item from './PageList/Item'
 import { showError } from '@nextcloud/dialogs'
 import { mapGetters, mapMutations } from 'vuex'
 import { NEW_PAGE } from '../store/actions'
 import * as sortOrders from '../util/sortOrders'
 
 export default {
-	name: 'PagesList',
+	name: 'PageList',
 
 	components: {
 		Actions,
 		ActionButton,
 		AppContentList,
 		LastUpdate,
-		PagesListItem,
-		SubPagesList,
+		Item,
+		SubpageList,
 	},
 
 	data() {
