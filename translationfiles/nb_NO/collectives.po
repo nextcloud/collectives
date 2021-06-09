@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2021-06-08 10:59+0200\n"
-"PO-Revision-Date: 2021-05-28 12:11+0000\n"
+"PO-Revision-Date: 2021-06-10 08:02+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
 "collectives/collectives-app/nb_NO/>\n"
@@ -100,7 +100,7 @@ msgstr "Kollektiver"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:2
 msgid "You're not part of a collective with that name."
-msgstr ""
+msgstr "Du er ikke med i noe kollektiv med dette navnet."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:3
 msgid "Select a collective or create a new one on the left."
@@ -170,7 +170,7 @@ msgstr "Velg et kollektiv"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:19
 msgid "Page not found:"
-msgstr ""
+msgstr "Fant ikke siden:"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:20
 #, fuzzy
@@ -230,15 +230,17 @@ msgstr "Kunne ikke opprette siden"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:34
 msgid "Sort order"
-msgstr ""
+msgstr "Sorteringsrekkefølge"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:35
+#, fuzzy
 msgid "Sort by last modification"
-msgstr ""
+msgstr "Etter sist endret"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:36
+#, fuzzy
 msgid "Sort by title"
-msgstr ""
+msgstr "Etter tittel"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:37
 msgid "Add a page"
@@ -281,7 +283,7 @@ msgstr[1] "%n byte"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:49
 msgid "Come, organize and build shared knowledge!"
-msgstr ""
+msgstr "Ta del, organiser, og bygg delt kunnskap."
 
 #: /collectives/templates/error.php:4
 msgid "Error: Missing apps"
