@@ -172,6 +172,11 @@ export default {
 		initTitleEntry() {
 			if (this.loading('newPage')) {
 				this.newTitle = ''
+				// Older versions of text do not pass on the autofocus prop.
+				// Only focus the title if the editor won't steal the focus.
+				if (!this.wrapper().autofocus) {
+					this.$nextTick(this.focusTitle)
+				}
 				this.done('newPage')
 			} else {
 				this.newTitle = this.currentPage.title
@@ -180,7 +185,6 @@ export default {
 
 		focusTitle() {
 			this.$refs.title.focus()
-			this.titleHasFocus = true
 		},
 
 		focusEditor() {

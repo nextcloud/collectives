@@ -6,6 +6,7 @@
 		:filename="`/${currentPageFilePath}`"
 		:has-preview="true"
 		:active="true"
+		:autofocus="false"
 		mime="text/markdown"
 		class="file-view active"
 		@ready="$emit('ready')" />
