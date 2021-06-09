@@ -22,6 +22,9 @@ class FeatureContext implements Context {
 	/** @var string */
 	private $baseUrl;
 
+	/** @var string */
+	private $ocsUrl;
+
 	/** @var CookieJar[] */
 	private $cookieJars;
 
@@ -37,10 +40,12 @@ class FeatureContext implements Context {
 	 * You can also pass arbitrary arguments to the
 	 * context constructor through behat.yml.
 	 *
-	 * @param $baseUrl
+	 * @param string $baseUrl
+	 * @param string $ocsUrl
 	 */
-	public function __construct($baseUrl) {
+	public function __construct(string $baseUrl, string $ocsUrl) {
 		$this->baseUrl = $baseUrl;
+		$this->ocsUrl = $ocsUrl;
 		$this->clientOptions = ['verify' => false];
 	}
 
@@ -361,15 +366,15 @@ class FeatureContext implements Context {
 	 */
 	public function userJoinsCircle(string $user, string $name, string $admin): void {
 		$this->setCurrentUser($admin);
-		$circleUniqueId = $this->circleUniqueIdByName($name);
-		Assert::assertNotNull($circleUniqueId);
+		$circleId = $this->circleIdByName($name);
+		Assert::assertNotNull($circleId);
 
 		$data = new TableNode([
 			['ident', $user],
 			['type', 1],
 			['instance', '']
 		]);
-		$this->sendRequest('PUT', '/apps/circles/v1/circles/' . $circleUniqueId . '/member', $data);
+		$this->sendRequest('PUT', '/apps/circles/v1/circles/' . $circleId . '/member', $data);
 		$this->assertStatusCode($this->response, 201);
 	}
 
@@ -383,8 +388,8 @@ class FeatureContext implements Context {
 	 */
 	public function userIsMemberOfCircle(string $user, string $name): void {
 		$this->setCurrentUser($user);
-		$circleUniqueId = $this->circleUniqueIdByName($name);
-		Assert::assertNotNull($circleUniqueId);
+		$circleId = $this->circleIdByName($name);
+		Assert::assertNotNull($circleId);
 	}
 
 	/**
@@ -397,9 +402,9 @@ class FeatureContext implements Context {
 	 */
 	public function userDeletesCircle(string $user, string $name): void {
 		$this->setCurrentUser($user);
-		$circleUniqueId = $this->circleUniqueIdByName($name);
-		Assert::assertNotNull($circleUniqueId);
-		$this->sendRequest('DELETE', '/apps/circles/v1/circles/' . $circleUniqueId);
+		$circleId = $this->circleIdByName($name);
+		Assert::assertNotNull($circleId);
+		$this->sendRequest('DELETE', '/apps/circles/v1/circles/' . $circleId);
 		$this->assertStatusCode($this->response, 201);
 	}
 
@@ -409,7 +414,7 @@ class FeatureContext implements Context {
 	 * @return string|null
 	 * @throws GuzzleException
 	 */
-	private function circleUniqueIdByName(string $name): ?string {
+	private function circleIdByName(string $name): ?string {
 		$this->sendRequest('GET', '/apps/circles/v1/circles?type=14');
 		if (201 !== $this->response->getStatusCode()) {
 			throw new RuntimeException('Unable to get list of circles');
@@ -484,7 +489,49 @@ class FeatureContext implements Context {
 								 array $headers = [],
 								 ?bool $auth = true): void {
 		$fullUrl = $this->baseUrl . $url;
+		$this->sendRequestBase($verb, $fullUrl, $body, $headers, $auth);
+	}
 
+	/**
+	 * @param string         $verb
+	 * @param string         $url
+	 * @param TableNode|null $body
+	 * @param array          $headers
+	 * @param bool|null      $auth
+	 *
+	 * @throws GuzzleException
+	 */
+	private function sendOcsRequest(string $verb,
+									 string $url,
+									 ?TableNode $body = null,
+									 array $headers = [],
+									 ?bool $auth = true): void {
+		$fullUrl = $this->ocsUrl . $url;
+
+		// Add Xdebug trigger variable as GET parameter
+		$ocsJsonFormat = 'format=json';
+		if (false !== strpos($fullUrl, '?')) {
+			$fullUrl .= '&' . $ocsJsonFormat;
+		} else {
+			$fullUrl .= '?' . $ocsJsonFormat;
+		}
+		$this->sendRequestBase($verb, $fullUrl, $body, $headers, $auth);
+	}
+
+	/**
+	 * @param string         $verb
+	 * @param string         $url
+	 * @param TableNode|null $body
+	 * @param array          $headers
+	 * @param bool|null      $auth
+	 *
+	 * @throws GuzzleException
+	 */
+	private function sendRequestBase(string $verb,
+								 string $url,
+								 ?TableNode $body = null,
+								 array $headers = [],
+								 ?bool $auth = true): void {
 		$client = new Client($this->clientOptions);
 
 		if (!isset($this->cookieJars[$this->currentUser])) {
@@ -509,14 +556,14 @@ class FeatureContext implements Context {
 
 		// Add Xdebug trigger variable as GET parameter
 		$xdebugSession = 'XDEBUG_SESSION=PHPSTORM';
-		if (false !== strpos($fullUrl, '?')) {
-			$fullUrl .= '&' . $xdebugSession;
+		if (false !== strpos($url, '?')) {
+			$url .= '&' . $xdebugSession;
 		} else {
-			$fullUrl .= '?' . $xdebugSession;
+			$url .= '?' . $xdebugSession;
 		}
 
 		try {
-			$this->response = $client->{$verb}($fullUrl, $options);
+			$this->response = $client->{$verb}($url, $options);
 		} catch (ClientException $e) {
 			$this->response = $e->getResponse();
 		}
