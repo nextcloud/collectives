@@ -119,6 +119,8 @@ export default {
 
 	#editor-container #editor .menubar {
 		z-index: 100;
+		max-width: 670px;
+		margin: auto;
 	}
 
 	#editor-wrapper #editor div.ProseMirror {

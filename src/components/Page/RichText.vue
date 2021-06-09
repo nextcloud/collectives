@@ -17,6 +17,7 @@
 
 <script>
 import axios from '@nextcloud/axios'
+import { mapGetters } from 'vuex'
 
 import MarkdownIt from 'markdown-it'
 import taskLists from 'markdown-it-task-lists'
@@ -38,7 +39,6 @@ import {
 } from 'tiptap-extensions'
 import { Image } from '../../nodes'
 import Link from '../../marks/link'
-import { mapGetters } from 'vuex'
 
 export default {
 	name: 'RichText',
@@ -147,7 +147,8 @@ export default {
 				}
 				this.contentLoading = false
 			} catch (e) {
-				console.error(`Failed to fetch content of page ${this.currentPage.id}`, e)
+				const { id } = this.currentPage
+				console.error(`Failed to fetch content of page ${id}`, e)
 			}
 		},
 	},
