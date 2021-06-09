@@ -38,35 +38,17 @@
       <code>Base</code>
     </UndefinedClass>
   </file>
-  <file src="lib/Controller/ErrorHelper.php">
-    <UndefinedClass occurrences="2">
-      <code>$e</code>
-      <code>CircleAlreadyExistsException</code>
-    </UndefinedClass>
-  </file>
   <file src="lib/Controller/StartController.php">
     <UndefinedClass occurrences="2">
       <code>LoadViewer</code>
       <code>LoadViewer</code>
     </UndefinedClass>
   </file>
-  <file src="lib/Db/CollectiveGarbageCollector.php">
-    <UndefinedClass occurrences="1">
-      <code>CircleDoesNotExistException</code>
-    </UndefinedClass>
-  </file>
   <file src="lib/Db/CollectiveMapper.php">
     <MoreSpecificImplementedParamType occurrences="1"/>
-    <UndefinedClass occurrences="5">
-      <code>?Circle</code>
-      <code>Circle</code>
-      <code>Circles</code>
-      <code>Circles</code>
-      <code>Circles</code>
+    <UndefinedClass occurrences="1">
+      <code>$circle</code>
     </UndefinedClass>
-    <UndefinedDocblockClass occurrences="1">
-      <code>CircleDoesNotExistException</code>
-    </UndefinedDocblockClass>
   </file>
   <file src="lib/Db/PageMapper.php">
     <MoreSpecificImplementedParamType occurrences="1"/>
@@ -77,9 +59,13 @@
       <code>IRootFolder</code>
       <code>IRootFolder</code>
     </MissingDependency>
+    <UndefinedClass occurrences="2">
+      <code>$e</code>
+      <code>NoUserException</code>
+    </UndefinedClass>
   </file>
   <file src="lib/Mount/CollectiveFolderManager.php">
-    <InvalidArgument occurrences="3"/>
+    <InvalidArgument occurrences="2"/>
     <MissingDependency occurrences="4">
       <code>$rootFolder</code>
       <code>$rootFolder</code>
@@ -116,35 +102,32 @@
       <code>CacheWrapper</code>
     </UndefinedClass>
   </file>
-  <file src="lib/Service/CollectiveHelper.php">
-    <UndefinedClass occurrences="2">
+  <file src="lib/Service/CircleHelper.php">
+    <UndefinedClass occurrences="6">
+      <code>?Circle</code>
+      <code>Circle</code>
+      <code>Circle</code>
       <code>Circles</code>
       <code>Circles</code>
-    </UndefinedClass>
-  </file>
-  <file src="lib/Service/CollectiveService.php">
-    <InvalidThrow occurrences="2">
-      <code>throw $e;</code>
-      <code>throw $e;</code>
-    </InvalidThrow>
-    <UndefinedClass occurrences="5">
-      <code>$circle</code>
-      <code>$circle</code>
-      <code>$circle</code>
-      <code>CircleAlreadyExistsException</code>
       <code>Circles</code>
     </UndefinedClass>
-    <UndefinedDocblockClass occurrences="4">
-      <code>CircleAlreadyExistsException</code>
-      <code>CircleDoesNotExistException</code>
-      <code>CircleDoesNotExistException</code>
-      <code>CircleDoesNotExistException</code>
+    <UndefinedDocblockClass occurrences="1">
+      <code>Circle[]</code>
     </UndefinedDocblockClass>
   </file>
-  <file src="lib/Service/PageService.php">
-    <UndefinedClass occurrences="2">
-      <code>$e</code>
-      <code>CircleDoesNotExistException</code>
+  <file src="lib/Service/CollectiveHelper.php">
+    <UndefinedDocblockClass occurrences="3">
+      <code>$circle</code>
+      <code>$circle</code>
+      <code>$circle</code>
+    </UndefinedDocblockClass>
+  </file>
+  <file src="lib/Service/CollectiveService.php">
+    <UndefinedClass occurrences="4">
+      <code>$circle</code>
+      <code>$circle</code>
+      <code>$circle</code>
+      <code>$circle</code>
     </UndefinedClass>
   </file>
   <file src="lib/Versions/CollectiveVersion.php">
