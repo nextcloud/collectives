@@ -1,6 +1,6 @@
 <template>
 	<AppNavigationItem
-		:key="collective.circleUniqueId"
+		:key="collective.circleId"
 		:title="collective.name"
 		:class="{active: isActive(collective)}"
 		:to="`/${encodeURIComponent(collective.name)}`"
