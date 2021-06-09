@@ -17,7 +17,8 @@ class CollectiveGarbageCollector {
 	/**
 	 * CollectiveGarbageCollector constructor.
 	 *
-	 * @param CollectiveMapper $collectiveMapper
+	 * @param CollectiveMapper        $collectiveMapper
+	 * @param CollectiveFolderManager $collectiveFolderManager
 	 */
 	public function __construct(CollectiveMapper $collectiveMapper,
 								CollectiveFolderManager $collectiveFolderManager) {
