@@ -61,7 +61,7 @@ class CollectiveHelper {
 			$cid = $circle->getUniqueId();
 			if ((null !== $c = $this->collectiveMapper->findTrashByCircleId($cid, $userId))) {
 				$collectiveInfos[] = new CollectiveInfo($c,
-					$this->collectiveMapper->circleUniqueIdToName($c->getCircleUniqueId()),
+					$this->collectiveMapper->circleIdToName($c->getCircleUniqueId()),
 					true);
 			}
 		}

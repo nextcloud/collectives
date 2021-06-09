@@ -137,7 +137,7 @@ class CollectiveService {
 		if (null === $collective = $this->collectiveMapper->findById($id, $userId)) {
 			throw new NotFoundException('Collective not found: ' . $id);
 		}
-		$name = $this->collectiveMapper->circleUniqueIdToName($collective->getCircleUniqueId());
+		$name = $this->collectiveMapper->circleIdToName($collective->getCircleUniqueId());
 
 		if (!$this->circleHelper->isAdmin($collective->getCircleUniqueId(), $userId)) {
 			throw new NotPermittedException('Member ' . $userId . ' not allowed to delete collective: ' . $id);
@@ -161,7 +161,7 @@ class CollectiveService {
 		if (null === $collective = $this->collectiveMapper->findTrashById($id, $userId)) {
 			throw new NotFoundException('Collective not found in trash: ' . $id);
 		}
-		$name = $this->collectiveMapper->circleUniqueIdToName($collective->getCircleUniqueId());
+		$name = $this->collectiveMapper->circleIdToName($collective->getCircleUniqueId());
 
 		if ($deleteCircle) {
 			$this->circleHelper->destroyCircle($collective->getCircleUniqueId());
@@ -190,7 +190,7 @@ class CollectiveService {
 		if (null === $collective = $this->collectiveMapper->findTrashById($id, $userId)) {
 			throw new NotFoundException('Collective not found in trash: ' . $id);
 		}
-		$name = $this->collectiveMapper->circleUniqueIdToName($collective->getCircleUniqueId());
+		$name = $this->collectiveMapper->circleIdToName($collective->getCircleUniqueId());
 
 		return new CollectiveInfo($this->collectiveMapper->restore($collective),
 			$name,

@@ -72,7 +72,7 @@ class CollectiveServiceTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 		$circle->method('getUniqueId')
-			->willReturn('CircleUniqueId');
+			->willReturn('CircleId');
 		$circle->method('getName')
 			->willReturn('own');
 		$collective = new Collective();
@@ -88,7 +88,7 @@ class CollectiveServiceTest extends TestCase {
 			->method('insert')
 			->with(self::callback(function ($collective) {
 				return is_callable([$collective, 'getCircleUniqueId']) &&
-					$collective->getCircleUniqueId() === 'CircleUniqueId';
+					$collective->getCircleUniqueId() === 'CircleId';
 			}))
 			->willReturn($collective);
 		$this->l10n
@@ -105,7 +105,7 @@ class CollectiveServiceTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 		$circle->method('getUniqueId')
-			->willReturn('CircleUniqueId');
+			->willReturn('CircleId');
 		$circle->method('getName')
 			->willReturn('free');
 		$collective = new Collective();
@@ -117,7 +117,7 @@ class CollectiveServiceTest extends TestCase {
 			->method('insert')
 			->with(self::callback(function ($collective) {
 				return is_callable([$collective, 'getCircleUniqueId']) &&
-					$collective->getCircleUniqueId() === 'CircleUniqueId';
+					$collective->getCircleUniqueId() === 'CircleId';
 			}))
 			->willReturn($collective);
 		[$collective, $info] = $this->service->createCollective($this->userId, 'de', 'free');

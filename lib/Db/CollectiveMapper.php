@@ -60,7 +60,7 @@ class CollectiveMapper extends QBMapper {
 	}
 
 	/**
-	 * @param string      $circleUniqueId
+	 * @param string      $circleId
 	 * @param string|null $userId
 	 * @param bool        $includeTrash
 	 *
@@ -68,10 +68,10 @@ class CollectiveMapper extends QBMapper {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function findByCircleId(string $circleUniqueId, string $userId = null, bool $includeTrash = false): ?Collective {
+	public function findByCircleId(string $circleId, string $userId = null, bool $includeTrash = false): ?Collective {
 		$qb = $this->db->getQueryBuilder();
 		$where = $qb->expr()->andX();
-		$where->add($qb->expr()->eq('circle_unique_id', $qb->createNamedParameter($circleUniqueId, IQueryBuilder::PARAM_STR)));
+		$where->add($qb->expr()->eq('circle_unique_id', $qb->createNamedParameter($circleId, IQueryBuilder::PARAM_STR)));
 		if (!$includeTrash) {
 			$where->add($qb->expr()->isNull('trash_timestamp'));
 		}
@@ -82,17 +82,17 @@ class CollectiveMapper extends QBMapper {
 	}
 
 	/**
-	 * @param string $circleUniqueId
+	 * @param string $circleId
 	 * @param string $userId
 	 *
 	 * @return Collective|null
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function findTrashByCircleId(string $circleUniqueId, string $userId): ?Collective {
+	public function findTrashByCircleId(string $circleId, string $userId): ?Collective {
 		$qb = $this->db->getQueryBuilder();
 		$where = $qb->expr()->andX();
-		$where->add($qb->expr()->eq('circle_unique_id', $qb->createNamedParameter($circleUniqueId, IQueryBuilder::PARAM_STR)));
+		$where->add($qb->expr()->eq('circle_unique_id', $qb->createNamedParameter($circleId, IQueryBuilder::PARAM_STR)));
 		$where->add($qb->expr()->isNotNull('trash_timestamp'));
 		$qb->select('*')
 			->from($this->tableName)
@@ -155,7 +155,7 @@ class CollectiveMapper extends QBMapper {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function circleUniqueIdToName(string $circleId): string {
+	public function circleIdToName(string $circleId): string {
 		return $this->circleHelper->getCircle($circleId)->getName();
 	}
 

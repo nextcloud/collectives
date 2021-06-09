@@ -15,10 +15,10 @@ class CollectiveGarbageCollectorTest extends TestCase {
 	public function testPurgeObsoleteCollectives(): void {
 		$cruftCollective = new Collective();
 		$cruftCollective->setId(1);
-		$cruftCollective->setCircleUniqueId('cruftCircleUniqueId');
+		$cruftCollective->setCircleUniqueId('cruftCircleId');
 		$noCruftCollective = new Collective();
 		$noCruftCollective->setId(2);
-		$noCruftCollective->setCircleUniqueId('noCruftCircleUniqueId');
+		$noCruftCollective->setCircleUniqueId('noCruftCircleId');
 		$this->collectiveList = [$cruftCollective, $noCruftCollective];
 
 		$mapper = $this->getMockBuilder(CollectiveMapper::class)
@@ -26,9 +26,9 @@ class CollectiveGarbageCollectorTest extends TestCase {
 			->getMock();
 		$mapper->method('getAll')
 			->willReturn($this->collectiveList);
-		$mapper->method('circleUniqueIdToName')
-			->willReturnCallback(function ($circleUniqueId) {
-				if ($circleUniqueId === 'cruftCircleUniqueId') {
+		$mapper->method('circleIdToName')
+			->willReturnCallback(function ($circleId) {
+				if ($circleId === 'cruftCircleId') {
 					throw new CircleDoesNotExistException();
 				}
 				return 'noCruftCollective';
