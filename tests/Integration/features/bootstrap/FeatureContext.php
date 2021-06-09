@@ -623,7 +623,7 @@ class FeatureContext implements Context {
 		$jsonBody = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
 		foreach ($jsonBody['data'] as $collective) {
 			if ($name === $collective['name']) {
-				return $collective['circleUniqueId'];
+				return $collective['circleId'];
 			}
 		}
 		return null;

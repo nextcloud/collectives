@@ -87,8 +87,8 @@ class CollectiveServiceTest extends TestCase {
 			->expects(self::once())
 			->method('insert')
 			->with(self::callback(function ($collective) {
-				return is_callable([$collective, 'getCircleUniqueId']) &&
-					$collective->getCircleUniqueId() === 'CircleId';
+				return is_callable([$collective, 'getCircleId']) &&
+					$collective->getCircleId() === 'CircleId';
 			}))
 			->willReturn($collective);
 		$this->l10n
@@ -116,8 +116,8 @@ class CollectiveServiceTest extends TestCase {
 			->expects(self::once())
 			->method('insert')
 			->with(self::callback(function ($collective) {
-				return is_callable([$collective, 'getCircleUniqueId']) &&
-					$collective->getCircleUniqueId() === 'CircleId';
+				return is_callable([$collective, 'getCircleId']) &&
+					$collective->getCircleId() === 'CircleId';
 			}))
 			->willReturn($collective);
 		[$collective, $info] = $this->service->createCollective($this->userId, 'de', 'free');
@@ -125,7 +125,7 @@ class CollectiveServiceTest extends TestCase {
 		self::assertEqualsCanonicalizing([
 			'id' => 123,
 			'emoji' => null,
-			'circleUniqueId' => null,
+			'circleId' => null,
 			'trashTimestamp' => null,
 			'name' => 'free',
 			'admin' => true

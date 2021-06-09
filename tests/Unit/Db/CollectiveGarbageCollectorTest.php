@@ -2,11 +2,11 @@
 
 namespace Unit\Db;
 
-use OCA\Circles\Exceptions\CircleDoesNotExistException;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveGarbageCollector;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Mount\CollectiveFolderManager;
+use OCA\Collectives\Service\NotFoundException;
 use PHPUnit\Framework\TestCase;
 
 class CollectiveGarbageCollectorTest extends TestCase {
@@ -15,10 +15,10 @@ class CollectiveGarbageCollectorTest extends TestCase {
 	public function testPurgeObsoleteCollectives(): void {
 		$cruftCollective = new Collective();
 		$cruftCollective->setId(1);
-		$cruftCollective->setCircleUniqueId('cruftCircleId');
+		$cruftCollective->setCircleId('cruftCircleId');
 		$noCruftCollective = new Collective();
 		$noCruftCollective->setId(2);
-		$noCruftCollective->setCircleUniqueId('noCruftCircleId');
+		$noCruftCollective->setCircleId('noCruftCircleId');
 		$this->collectiveList = [$cruftCollective, $noCruftCollective];
 
 		$mapper = $this->getMockBuilder(CollectiveMapper::class)
@@ -29,7 +29,7 @@ class CollectiveGarbageCollectorTest extends TestCase {
 		$mapper->method('circleIdToName')
 			->willReturnCallback(function ($circleId) {
 				if ($circleId === 'cruftCircleId') {
-					throw new CircleDoesNotExistException();
+					throw new NotFoundException();
 				}
 				return 'noCruftCollective';
 			});

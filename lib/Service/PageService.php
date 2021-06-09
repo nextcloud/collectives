@@ -60,7 +60,7 @@ class PageService {
 	 */
 	private function getCollectiveFolder(string $userId, Collective $collective): Folder {
 		try {
-			$collectiveName = $this->collectiveMapper->circleIdToName($collective->getCircleUniqueId());
+			$collectiveName = $this->collectiveMapper->circleIdToName($collective->getCircleId());
 			$folder = $this->userFolderHelper->get($userId)->get($collectiveName);
 		} catch (FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage());

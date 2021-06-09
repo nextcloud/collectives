@@ -20,7 +20,7 @@ class CollectiveInfo extends Collective {
 
 	public function __construct(Collective $collective, string $name, bool $admin = false) {
 		$this->id = $collective->getId();
-		$this->circleUniqueId = $collective->getCircleUniqueId();
+		$this->circleUniqueId = $collective->getCircleId();
 		$this->emoji = $collective->getEmoji();
 		$this->trashTimestamp = $collective->getTrashTimestamp();
 		$this->name = $name;
@@ -30,7 +30,7 @@ class CollectiveInfo extends Collective {
 	public function jsonSerialize() {
 		return [
 			'id' => $this->id,
-			'circleUniqueId' => $this->circleUniqueId,
+			'circleId' => $this->circleUniqueId,
 			'emoji' => $this->emoji,
 			'trashTimestamp' => $this->trashTimestamp,
 			'name' => $this->name,

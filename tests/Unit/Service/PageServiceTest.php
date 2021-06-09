@@ -56,7 +56,7 @@ class PageServiceTest extends TestCase {
 		$this->service = new PageService($this->pageMapper, $this->nodeHelper, $collectiveMapper, $userFolderHelper);
 
 		$this->collective = new Collective();
-		$this->collective->setCircleUniqueId('circleUniqueId');
+		$this->collective->setCircleId('circleId');
 	}
 
 	public function testGetFolder(): void {

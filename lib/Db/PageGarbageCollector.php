@@ -28,7 +28,6 @@ class PageGarbageCollector {
 	public function purgeObsoletePages(): int {
 		$purgeCount = 0;
 		$rootFolder = $this->folderManager->getRootFolder();
-		/** @var Page $page */
 		foreach ($this->pageMapper->getAll() as $page) {
 			if (empty($rootFolder->getById($page->getFileId()))) {
 				$purgeCount++;

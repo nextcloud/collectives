@@ -50,10 +50,10 @@ class CollectiveMapper extends QBMapper {
 			}
 			// Return all member collectives if `$admin` is false
 			if (!$admin) {
-				return ($this->circleHelper->isMember($collective->getCircleUniqueId(), $userId)) ? $collective : null;
+				return ($this->circleHelper->isMember($collective->getCircleId(), $userId)) ? $collective : null;
 			}
 			// Return only admin collectives if `$admin` is true
-			return ($this->circleHelper->isAdmin($collective->getCircleUniqueId(), $userId)) ? $collective : null;
+			return ($this->circleHelper->isAdmin($collective->getCircleId(), $userId)) ? $collective : null;
 		} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
 			return null;
 		}
@@ -156,7 +156,8 @@ class CollectiveMapper extends QBMapper {
 	 * @throws NotPermittedException
 	 */
 	public function circleIdToName(string $circleId): string {
-		return $this->circleHelper->getCircle($circleId)->getName();
+		$circle = $this->circleHelper->getCircle($circleId);
+		return $circle->getName();
 	}
 
 	/**

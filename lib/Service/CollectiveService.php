@@ -32,7 +32,7 @@ class CollectiveService {
 	 * @param CollectiveMapper        $collectiveMapper
 	 * @param CollectiveHelper        $collectiveHelper
 	 * @param CollectiveFolderManager $collectiveFolderManager
-	 * @param CircleHelper           $circleHelper
+	 * @param CircleHelper            $circleHelper
 	 * @param IL10N                   $l10n
 	 */
 	public function __construct(
@@ -106,7 +106,7 @@ class CollectiveService {
 
 		// Create collective object
 		$collective = new Collective();
-		$collective->setCircleUniqueId($circle->getUniqueId());
+		$collective->setCircleId($circle->getUniqueId());
 		if ($emoji) {
 			$collective->setEmoji($emoji);
 		}
@@ -137,9 +137,9 @@ class CollectiveService {
 		if (null === $collective = $this->collectiveMapper->findById($id, $userId)) {
 			throw new NotFoundException('Collective not found: ' . $id);
 		}
-		$name = $this->collectiveMapper->circleIdToName($collective->getCircleUniqueId());
+		$name = $this->collectiveMapper->circleIdToName($collective->getCircleId());
 
-		if (!$this->circleHelper->isAdmin($collective->getCircleUniqueId(), $userId)) {
+		if (!$this->circleHelper->isAdmin($collective->getCircleId(), $userId)) {
 			throw new NotPermittedException('Member ' . $userId . ' not allowed to delete collective: ' . $id);
 		}
 
@@ -161,10 +161,10 @@ class CollectiveService {
 		if (null === $collective = $this->collectiveMapper->findTrashById($id, $userId)) {
 			throw new NotFoundException('Collective not found in trash: ' . $id);
 		}
-		$name = $this->collectiveMapper->circleIdToName($collective->getCircleUniqueId());
+		$name = $this->collectiveMapper->circleIdToName($collective->getCircleId());
 
 		if ($deleteCircle) {
-			$this->circleHelper->destroyCircle($collective->getCircleUniqueId());
+			$this->circleHelper->destroyCircle($collective->getCircleId());
 		}
 
 		// Delete collective folder and its contents
@@ -190,7 +190,7 @@ class CollectiveService {
 		if (null === $collective = $this->collectiveMapper->findTrashById($id, $userId)) {
 			throw new NotFoundException('Collective not found in trash: ' . $id);
 		}
-		$name = $this->collectiveMapper->circleIdToName($collective->getCircleUniqueId());
+		$name = $this->collectiveMapper->circleIdToName($collective->getCircleId());
 
 		return new CollectiveInfo($this->collectiveMapper->restore($collective),
 			$name,
