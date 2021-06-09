@@ -3,7 +3,7 @@
 		<template v-if="loading('collectives')" #default>
 			<EmptyContent icon="icon-loading" />
 		</template>
-		<template v-else #list>
+		<template #list>
 			<AppNavigationCaption
 				:title="t('collectives', 'Select a collective')" />
 			<CollectiveListItem v-for="collective in collectives"
