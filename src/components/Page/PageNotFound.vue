@@ -31,3 +31,9 @@ export default {
 	},
 }
 </script>
+
+<style>
+.empty-content__icon.icon-document {
+	background-size:44px;
+}
+</style>
