@@ -28,7 +28,7 @@
 			</Actions>
 		</h1>
 		<RichText v-if="readOnly"
-			:key="`show-${currentPage.id}-${reloadCounter}`"
+			:key="`show-${currentPage.id}-${currentPage.timestamp}`"
 			:as-placeholder="preview && edit"
 			@empty="emptyPreview" />
 		<Editor v-show="!readOnly"
