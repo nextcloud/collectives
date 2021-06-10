@@ -38,12 +38,6 @@
       <code>Base</code>
     </UndefinedClass>
   </file>
-  <file src="lib/Controller/ErrorHelper.php">
-    <UndefinedClass occurrences="2">
-      <code>$e</code>
-      <code>CircleAlreadyExistsException</code>
-    </UndefinedClass>
-  </file>
   <file src="lib/Controller/StartController.php">
     <UndefinedClass occurrences="2">
       <code>LoadViewer</code>
@@ -71,7 +65,7 @@
     </UndefinedClass>
   </file>
   <file src="lib/Mount/CollectiveFolderManager.php">
-    <InvalidArgument occurrences="2"/>
+    <InvalidArgument occurrences="1"/>
     <MissingDependency occurrences="4">
       <code>$rootFolder</code>
       <code>$rootFolder</code>
@@ -129,15 +123,11 @@
     </UndefinedDocblockClass>
   </file>
   <file src="lib/Service/CollectiveService.php">
-    <UndefinedClass occurrences="4">
-      <code>$circle</code>
+    <UndefinedClass occurrences="3">
       <code>$circle</code>
       <code>$circle</code>
       <code>$circle</code>
     </UndefinedClass>
-    <UndefinedDocblockClass occurrences="1">
-      <code>CircleAlreadyExistsException</code>
-    </UndefinedDocblockClass>
   </file>
   <file src="lib/Versions/CollectiveVersion.php">
     <UndefinedClass occurrences="1">

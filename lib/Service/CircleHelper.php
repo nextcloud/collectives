@@ -72,10 +72,16 @@ class CircleHelper {
 	 * @return Circle
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
-	 * @throws CircleAlreadyExistsException
+	 * @throws CircleExistsException
 	 */
 	public function createCircle(string $name, ?string $userId = null): Circle {
-		return Circles::createCircle(Circles::CIRCLES_SECRET, $name);
+		try {
+			$circle = Circles::createCircle(Circles::CIRCLES_SECRET, $name);
+		} catch (CircleAlreadyExistsException $e) {
+			throw new CircleExistsException($e->getMessage());
+		}
+
+		return $circle;
 	}
 
 	/**

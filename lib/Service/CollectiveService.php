@@ -2,7 +2,6 @@
 
 namespace OCA\Collectives\Service;
 
-use OCA\Circles\Exceptions\CircleAlreadyExistsException;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Model\CollectiveInfo;
@@ -78,10 +77,10 @@ class CollectiveService {
 	 * @param string|null $emoji
 	 *
 	 * @return array [CollectiveInfo, string]
+	 * @throws CircleExistsException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 * @throws UnprocessableEntityException
-	 * @throws CircleAlreadyExistsException
 	 */
 	public function createCollective(string $userId, string $userLang, string $safeName, string $emoji = null): array {
 		if (empty($safeName)) {
@@ -90,20 +89,23 @@ class CollectiveService {
 
 		// Create a new circle
 		$message = '';
-		$circle = $this->circleHelper->findCircle($safeName, $userId);
-		if (null === $circle) {
-			$circle = $this->circleHelper->createCircle($safeName);
-		} elseif (!$this->circleHelper->isAdmin($circle->getUniqueId(), $userId)) {
-			// We don't have admin access to the circle.
-			throw new NotPermittedException('Not allowed to create collective for existing circle.');
-		} elseif (null !== $this->collectiveMapper->findByCircleId($circle->getUniqueId(), null, true)) {
-			// There's already a collective with that name.
-			throw new UnprocessableEntityException('Collective already exists.');
-		} else {
+		try {
+			$circle = $this->circleHelper->createCircle($safeName, $userId);
+		} catch (CircleExistsException $e) {
+			$circle = $this->circleHelper->findCircle($safeName, $userId);
+			if (null === $circle) {
+				// We don't have admin access to the circle
+				throw $e;
+			}
 			$message = $this->l10n->t(
 				'Created collective "%s" for existing circle.',
 				[$safeName]
 			);
+		}
+
+		if (null !== $this->collectiveMapper->findByCircleId($circle->getUniqueId(), null, true)) {
+			// There's already a collective with that name.
+			throw new UnprocessableEntityException('Collective already exists.');
 		}
 
 		// Create collective object

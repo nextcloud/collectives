@@ -6,10 +6,10 @@ use OCA\Circles\Model\Circle;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Mount\CollectiveFolderManager;
+use OCA\Collectives\Service\CircleExistsException;
 use OCA\Collectives\Service\CircleHelper;
 use OCA\Collectives\Service\CollectiveHelper;
 use OCA\Collectives\Service\CollectiveService;
-use OCA\Collectives\Service\NotPermittedException;
 use OCA\Collectives\Service\UnprocessableEntityException;
 use OCP\IL10N;
 use PHPUnit\Framework\TestCase;
@@ -58,12 +58,12 @@ class CollectiveServiceTest extends TestCase {
 	}
 
 	public function testCreateWithExistingCircle(): void {
+		$this->circleHelper->method('createCircle')
+			->willThrowException(new CircleExistsException('A circle with that name exists'));
 		$this->circleHelper->method('findCircle')
-			->willReturn(new Circle());
-		$this->circleHelper->method('isAdmin')
-			->willReturn(false);
-		$this->expectException(NotPermittedException::class);
-		$this->expectExceptionMessage('Not allowed to create collective for existing circle.');
+			->willReturn(null);
+		$this->expectException(CircleExistsException::class);
+		$this->expectExceptionMessage('A circle with that name exists');
 		$this->service->createCollective($this->userId, 'de', 'taken');
 	}
 
@@ -77,6 +77,8 @@ class CollectiveServiceTest extends TestCase {
 			->willReturn('own');
 		$collective = new Collective();
 		$collective->setId(123);
+		$this->circleHelper->method('createCircle')
+			->willThrowException(new CircleExistsException('A circle with that name exists'));
 		$this->circleHelper->method('findCircle')
 			->willReturn($circle);
 		$this->circleHelper->method('isAdmin')
