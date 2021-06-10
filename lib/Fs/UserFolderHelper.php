@@ -3,12 +3,17 @@
 
 namespace OCA\Collectives\Fs;
 
+use OC\User\NoUserException;
+use OCA\Collectives\Service\NotFoundException;
+use OCA\Collectives\Service\NotPermittedException;
 use OCP\Files\Folder;
+use OCP\Files\InvalidPathException;
 use OCP\Files\IRootFolder;
-use OCP\Files\NotFoundException;
-use OCP\Files\NotPermittedException;
+use OCP\Files\NotFoundException as FilesNotFoundException;
+use OCP\Files\NotPermittedException as FilesNotPermittedException;
 use OCP\L10N\IFactory;
 use OCP\IUserManager;
+use OCP\Lock\LockedException;
 
 class UserFolderHelper {
 	/** @var IRootFolder */
@@ -44,9 +49,14 @@ class UserFolderHelper {
 	 *
 	 * @return Folder
 	 * @throws NotPermittedException
+	 * @throws NotFoundException
 	 */
 	private function initialize(string $userId): Folder {
-		$userFolder = $this->rootFolder->getUserFolder($userId);
+		try {
+			$userFolder = $this->rootFolder->getUserFolder($userId);
+		} catch (FilesNotPermittedException | NoUserException $e) {
+			throw new NotPermittedException($e->getMessage());
+		}
 		$userLang = $this->l10nFactory->getUserLanguage($this->userManager->get($userId));
 		$l10n = $this->l10nFactory->get('collectives', $userLang);
 		$userCollectivesPath = $l10n->t('Collectives');
@@ -58,8 +68,16 @@ class UserFolderHelper {
 				$userCollectivesFolder->move($userFolder->getPath() . '/' . $new);
 				$userCollectivesFolder = $userFolder->newFolder($userCollectivesPath);
 			}
-		} catch (NotFoundException $e) {
-			$userCollectivesFolder = $userFolder->newFolder($userCollectivesPath);
+		} catch (FilesNotFoundException $e) {
+			try {
+				$userCollectivesFolder = $userFolder->newFolder($userCollectivesPath);
+			} catch (FilesNotPermittedException $e) {
+				throw new NotPermittedException($e->getMessage());
+			}
+		} catch (InvalidPathException $e) {
+			throw new NotFoundException($e->getMessage());
+		} catch (FilesNotPermittedException | LockedException $e) {
+			throw new NotPermittedException($e->getMessage());
 		}
 
 		return $userCollectivesFolder;
@@ -70,6 +88,7 @@ class UserFolderHelper {
 	 *
 	 * @return Folder
 	 * @throws NotPermittedException
+	 * @throws NotFoundException
 	 */
 	public function get(string $userId): Folder {
 		if (!$this->userCollectivesFolder) {

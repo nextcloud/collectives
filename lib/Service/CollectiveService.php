@@ -2,14 +2,10 @@
 
 namespace OCA\Collectives\Service;
 
-use OCA\Circles\Api\v1\Circles;
-use OCA\Circles\Exceptions\CircleAlreadyExistsException;
-use OCA\Circles\Exceptions\CircleDoesNotExistException;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Model\CollectiveInfo;
 use OCA\Collectives\Mount\CollectiveFolderManager;
-use OCP\AppFramework\QueryException;
 use OCP\Files\InvalidPathException;
 use OCP\Files\NotPermittedException as FilesNotPermittedException;
 use OCP\IL10N;
@@ -24,25 +20,31 @@ class CollectiveService {
 	/** @var CollectiveFolderManager */
 	private $collectiveFolderManager;
 
+	/** @var CircleHelper */
+	private $circleHelper;
+
 	/** @var IL10N */
 	private $l10n;
 
 	/**
 	 * CollectiveService constructor.
 	 *
-	 * @param CollectiveMapper         $collectiveMapper
-	 * @param CollectiveHelper         $collectiveHelper
-	 * @param CollectiveFolderManager  $collectiveFolderManager
-	 * @param IL10N                    $l10n
+	 * @param CollectiveMapper        $collectiveMapper
+	 * @param CollectiveHelper        $collectiveHelper
+	 * @param CollectiveFolderManager $collectiveFolderManager
+	 * @param CircleHelper            $circleHelper
+	 * @param IL10N                   $l10n
 	 */
 	public function __construct(
 		CollectiveMapper $collectiveMapper,
 		CollectiveHelper $collectiveHelper,
 		CollectiveFolderManager $collectiveFolderManager,
+		CircleHelper $circleHelper,
 		IL10N $l10n) {
 		$this->collectiveMapper = $collectiveMapper;
 		$this->collectiveHelper = $collectiveHelper;
 		$this->collectiveFolderManager = $collectiveFolderManager;
+		$this->circleHelper = $circleHelper;
 		$this->l10n = $l10n;
 	}
 
@@ -50,7 +52,8 @@ class CollectiveService {
 	 * @param string $userId
 	 *
 	 * @return CollectiveInfo[]
-	 * @throws QueryException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
 	 */
 	public function getCollectives(string $userId): array {
 		return $this->collectiveHelper->getCollectivesForUser($userId);
@@ -60,7 +63,8 @@ class CollectiveService {
 	 * @param string $userId
 	 *
 	 * @return CollectiveInfo[]
-	 * @throws QueryException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
 	 */
 	public function getCollectivesTrash(string $userId): array {
 		return $this->collectiveHelper->getCollectivesTrashForUser($userId);
@@ -73,9 +77,9 @@ class CollectiveService {
 	 * @param string|null $emoji
 	 *
 	 * @return array [CollectiveInfo, string]
-	 * @throws CircleAlreadyExistsException
-	 * @throws FilesNotPermittedException
-	 * @throws InvalidPathException
+	 * @throws CircleExistsException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
 	 * @throws UnprocessableEntityException
 	 */
 	public function createCollective(string $userId, string $userLang, string $safeName, string $emoji = null): array {
@@ -83,21 +87,14 @@ class CollectiveService {
 			throw new UnprocessableEntityException('Empty collective name is not allowed');
 		}
 
-		// Create a new secret circle
-		$circle = null;
+		// Create a new circle
 		$message = '';
 		try {
-			$circle = $this->collectiveMapper->createCircle($safeName);
-		} catch (CircleAlreadyExistsException $e) {
-			$circle = $this->collectiveMapper->findCircle($safeName);
+			$circle = $this->circleHelper->createCircle($safeName, $userId);
+		} catch (CircleExistsException $e) {
+			$circle = $this->circleHelper->findCircle($safeName, $userId);
 			if (null === $circle) {
-				// We do not have access to the circle.
-				throw $e;
-			}
-			$circleId = $circle->getUniqueId();
-			$collective = $this->collectiveMapper->findByCircleId($circleId, null, true);
-			if (null !== $collective) {
-				// There's already a collective with that name.
+				// We don't have admin access to the circle
 				throw $e;
 			}
 			$message = $this->l10n->t(
@@ -106,9 +103,14 @@ class CollectiveService {
 			);
 		}
 
+		if (null !== $this->collectiveMapper->findByCircleId($circle->getUniqueId(), null, true)) {
+			// There's already a collective with that name.
+			throw new UnprocessableEntityException('Collective already exists.');
+		}
+
 		// Create collective object
 		$collective = new Collective();
-		$collective->setCircleUniqueId($circle->getUniqueId());
+		$collective->setCircleId($circle->getUniqueId());
 		if ($emoji) {
 			$collective->setEmoji($emoji);
 		}
@@ -118,7 +120,11 @@ class CollectiveService {
 		$collectiveInfo = new CollectiveInfo($collective, $circle->getName(), true);
 
 		// Create folder for collective and optionally copy default landing page
-		$this->collectiveFolderManager->createFolder($collective->getId(), $userLang);
+		try {
+			$this->collectiveFolderManager->createFolder($collective->getId(), $userLang);
+		} catch (InvalidPathException | FilesNotPermittedException $e) {
+			throw new NotPermittedException($e->getMessage());
+		}
 
 		return [$collectiveInfo, $message];
 	}
@@ -130,15 +136,14 @@ class CollectiveService {
 	 * @return CollectiveInfo
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
-	 * @throws CircleDoesNotExistException
 	 */
 	public function trashCollective(string $userId, int $id): CollectiveInfo {
 		if (null === $collective = $this->collectiveMapper->findById($id, $userId)) {
 			throw new NotFoundException('Collective not found: ' . $id);
 		}
-		$name = $this->collectiveMapper->circleUniqueIdToName($collective->getCircleUniqueId());
+		$name = $this->collectiveMapper->circleIdToName($collective->getCircleId());
 
-		if (!$this->collectiveMapper->isAdmin($collective, $userId)) {
+		if (!$this->circleHelper->isAdmin($collective->getCircleId(), $userId)) {
 			throw new NotPermittedException('Member ' . $userId . ' not allowed to delete collective: ' . $id);
 		}
 
@@ -154,16 +159,16 @@ class CollectiveService {
 	 *
 	 * @return CollectiveInfo
 	 * @throws NotFoundException
-	 * @throws CircleDoesNotExistException
+	 * @throws NotPermittedException
 	 */
 	public function deleteCollective(string $userId, int $id, bool $deleteCircle): CollectiveInfo {
 		if (null === $collective = $this->collectiveMapper->findTrashById($id, $userId)) {
 			throw new NotFoundException('Collective not found in trash: ' . $id);
 		}
-		$name = $this->collectiveMapper->circleUniqueIdToName($collective->getCircleUniqueId());
+		$name = $this->collectiveMapper->circleIdToName($collective->getCircleId());
 
 		if ($deleteCircle) {
-			Circles::destroyCircle($collective->getCircleUniqueId());
+			$this->circleHelper->destroyCircle($collective->getCircleId());
 		}
 
 		// Delete collective folder and its contents
@@ -183,13 +188,13 @@ class CollectiveService {
 	 *
 	 * @return CollectiveInfo
 	 * @throws NotFoundException
-	 * @throws CircleDoesNotExistException
+	 * @throws NotPermittedException
 	 */
 	public function restoreCollective(string $userId, int $id): CollectiveInfo {
 		if (null === $collective = $this->collectiveMapper->findTrashById($id, $userId)) {
 			throw new NotFoundException('Collective not found in trash: ' . $id);
 		}
-		$name = $this->collectiveMapper->circleUniqueIdToName($collective->getCircleUniqueId());
+		$name = $this->collectiveMapper->circleIdToName($collective->getCircleId());
 
 		return new CollectiveInfo($this->collectiveMapper->restore($collective),
 			$name,

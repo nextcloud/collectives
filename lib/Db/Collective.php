@@ -28,6 +28,20 @@ class Collective extends Entity implements JsonSerializable {
 	protected $trashTimestamp;
 
 	/**
+	 * @return string|null
+	 */
+	public function getCircleId(): ?string {
+		return $this->getCircleUniqueId();
+	}
+
+	/**
+	 * @param string $circleId
+	 */
+	public function setCircleId(string $circleId): void {
+		$this->setCircleUniqueId($circleId);
+	}
+
+	/**
 	 * @return bool
 	 */
 	public function isTrashed(): bool {
@@ -38,7 +52,7 @@ class Collective extends Entity implements JsonSerializable {
 		return [
 			'id' => $this->id,
 			'emoji' => $this->emoji,
-			'circleUniqueId' => $this->circleUniqueId,
+			'circleId' => $this->circleUniqueId,
 			'trashTimestamp' => $this->trashTimestamp
 		];
 	}

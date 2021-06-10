@@ -2,10 +2,11 @@
 
 namespace OCA\Collectives\Db;
 
-use OCA\Circles\Exceptions\CircleDoesNotExistException;
 use OCA\Collectives\Mount\CollectiveFolderManager;
+use OCA\Collectives\Service\NotFoundException;
+use OCA\Collectives\Service\NotPermittedException;
 use OCP\Files\InvalidPathException;
-use OCP\Files\NotFoundException;
+use OCP\Files\NotFoundException as FilesNotFoundException;
 
 class CollectiveGarbageCollector {
 	/** @var CollectiveMapper */
@@ -17,7 +18,8 @@ class CollectiveGarbageCollector {
 	/**
 	 * CollectiveGarbageCollector constructor.
 	 *
-	 * @param CollectiveMapper $collectiveMapper
+	 * @param CollectiveMapper        $collectiveMapper
+	 * @param CollectiveFolderManager $collectiveFolderManager
 	 */
 	public function __construct(CollectiveMapper $collectiveMapper,
 								CollectiveFolderManager $collectiveFolderManager) {
@@ -27,18 +29,19 @@ class CollectiveGarbageCollector {
 
 	/**
 	 * @return int
+	 * @throws NotPermittedException
 	 */
 	public function purgeObsoleteCollectives(): int {
 		$purgeCount = 0;
 		foreach ($this->collectiveMapper->getAll() as $collective) {
 			try {
-				$this->collectiveMapper->circleUniqueIdToName($collective->getCircleUniqueId());
-			} catch (CircleDoesNotExistException $e) {
+				$this->collectiveMapper->circleIdToName($collective->getCircleId());
+			} catch (NotFoundException $e) {
 				// Try to find collective folder
 				$collectiveFolder = null;
 				try {
 					$collectiveFolder = $this->collectiveFolderManager->getFolder($collective->getId());
-				} catch (InvalidPathException | NotFoundException $e) {
+				} catch (InvalidPathException | FilesNotFoundException $e) {
 				}
 
 				// Delete collective

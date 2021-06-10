@@ -2,7 +2,6 @@
 
 namespace OCA\Collectives\Service;
 
-use OCA\Circles\Exceptions\CircleDoesNotExistException;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Db\Page;
@@ -57,12 +56,13 @@ class PageService {
 	 *
 	 * @return Folder
 	 * @throws NotFoundException
+	 * @throws NotPermittedException
 	 */
 	private function getCollectiveFolder(string $userId, Collective $collective): Folder {
 		try {
-			$collectiveName = $this->collectiveMapper->circleUniqueIdToName($collective->getCircleUniqueId());
+			$collectiveName = $this->collectiveMapper->circleIdToName($collective->getCircleId());
 			$folder = $this->userFolderHelper->get($userId)->get($collectiveName);
-		} catch (FilesNotFoundException | FilesNotPermittedException | CircleDoesNotExistException $e) {
+		} catch (FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage());
 		}
 
@@ -79,6 +79,7 @@ class PageService {
 	 *
 	 * @return Folder
 	 * @throws NotFoundException
+	 * @throws NotPermittedException
 	 */
 	public function getFolder(string $userId, Collective $collective, int $fileId): Folder {
 		$collectiveFolder = $this->getCollectiveFolder($userId, $collective);
@@ -105,7 +106,9 @@ class PageService {
 			if (self::isLandingPage($file)) {
 				// Return `0` for landing page
 				return 0;
-			} elseif (self::isIndexPage($file)) {
+			}
+
+			if (self::isIndexPage($file)) {
 				// Go down two levels if index page but not landing page
 				return $this->getIndexPageFile($file->getParent()->getParent())->getId();
 			}
@@ -327,6 +330,7 @@ class PageService {
 	 *
 	 * @return array
 	 * @throws NotFoundException
+	 * @throws NotPermittedException
 	 */
 	public function findAll(string $userId, Collective $collective): array {
 		$folder = $this->getCollectiveFolder($userId, $collective);
@@ -344,6 +348,7 @@ class PageService {
 	 *
 	 * @return PageFile[]
 	 * @throws NotFoundException
+	 * @throws NotPermittedException
 	 */
 	public function findByString(string $userId, Collective $collective, string $search): array {
 		$allPageFiles = $this->findAll($userId, $collective);
@@ -366,6 +371,7 @@ class PageService {
 	 *
 	 * @return PageFile
 	 * @throws NotFoundException
+	 * @throws NotPermittedException
 	 */
 	public function find(string $userId, Collective $collective, int $parentId, int $id): PageFile {
 		$folder = $this->getFolder($userId, $collective, $parentId);
@@ -400,6 +406,7 @@ class PageService {
 	 *
 	 * @return PageFile
 	 * @throws NotFoundException
+	 * @throws NotPermittedException
 	 */
 	public function touch(string $userId, Collective $collective, int $parentId, int $id): PageFile {
 		$folder = $this->getFolder($userId, $collective, $parentId);

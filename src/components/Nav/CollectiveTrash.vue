@@ -2,7 +2,7 @@
 	<AppNavigationSettings :title="t('collectives', 'Deleted collectives')">
 		<ul class="app-navigation__list">
 			<AppNavigationItem v-for="collective in trashCollectives"
-				:key="collective.circleUniqueId"
+				:key="collective.circleId"
 				:title="collective.name"
 				:icon="icon(collective)"
 				:force-menu="true"
