@@ -36,6 +36,16 @@ export default {
 		Version,
 	},
 
+	data() {
+		return {
+			backgroundFetching: false,
+			/** @type {number} */
+			pollInterval: 60000, // milliseconds
+			/** @type {null|number} */
+			intervalId: null,
+		}
+	},
+
 	computed: {
 		...mapGetters([
 			'currentCollective',
@@ -58,6 +68,11 @@ export default {
 
 	mounted() {
 		this.initCollective()
+		this.setupBackgroundFetcher()
+	},
+
+	unmounted() {
+		this.teardownBackgroundFetcher()
 	},
 
 	methods: {
@@ -67,6 +82,26 @@ export default {
 			this.getPages()
 			this.closeNav()
 			this.show('details')
+		},
+
+		setupBackgroundFetcher() {
+			if (OC.config.session_keepalive) {
+				console.debug('Started background fetcher as session_keepalive is enabled')
+				this.intervalId = window.setInterval(
+					this.getPages.bind(this),
+					this.pollInterval
+				)
+			} else {
+				console.debug('Did not start background fetcher as session_keepalive is off')
+			}
+		},
+
+		teardownBackgroundFetcher() {
+			console.debug('Stopping background fetcher.')
+			if (this.interval) {
+				window.clearInterval(this.interval)
+				this.interval = null
+			}
 		},
 
 		/**
