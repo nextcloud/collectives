@@ -31,13 +31,22 @@ describe('Collective', function() {
 			cy.seedCollective('Preexisting Collective')
 			cy.seedCircle('Preexisting Circle')
 			cy.seedCircle('History Club')
+			cy.login('jane', 'jane', '/apps/collectives')
+			cy.seedCircle('Foreign Circle')
 		})
 		it('Reports existing circle', function() {
+			cy.login('bob', 'bob', '/apps/collectives')
+			cy.createCollective('Foreign Circle')
+			cy.get('main .empty-content').should('contain', 'build shared knowledge')
+			cy.get('.toast-warning').should('contain', 'Could not create the collective')
+			cy.get('.toast-warning').should('contain', 'A circle with that name exists')
+		})
+		it('Reports existing collective', function() {
 			cy.login('bob', 'bob', '/apps/collectives')
 			cy.createCollective('Preexisting Collective')
 			cy.get('main .empty-content').should('contain', 'build shared knowledge')
 			cy.get('.toast-warning').should('contain', 'Could not create the collective')
-			cy.get('.toast-warning').should('contain', 'A circle with that name exists')
+			cy.get('.toast-warning').should('contain', 'Collective already exists')
 		})
 
 		it('creates collectives by picking circle',
