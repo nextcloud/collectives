@@ -370,12 +370,11 @@ class FeatureContext implements Context {
 		Assert::assertNotNull($circleId);
 
 		$data = new TableNode([
-			['ident', $user],
+			['userId', $user],
 			['type', 1],
-			['instance', '']
 		]);
-		$this->sendRequest('PUT', '/apps/circles/v1/circles/' . $circleId . '/member', $data);
-		$this->assertStatusCode($this->response, 201);
+		$this->sendOcsRequest('POST', '/apps/circles/circles/' . $circleId . '/members', $data);
+		$this->assertStatusCode($this->response, 200);
 	}
 
 	/**
@@ -404,8 +403,8 @@ class FeatureContext implements Context {
 		$this->setCurrentUser($user);
 		$circleId = $this->circleIdByName($name);
 		Assert::assertNotNull($circleId);
-		$this->sendRequest('DELETE', '/apps/circles/v1/circles/' . $circleId);
-		$this->assertStatusCode($this->response, 201);
+		$this->sendOcsRequest('DELETE', '/apps/circles/circles/' . $circleId);
+		$this->assertStatusCode($this->response, 200);
 	}
 
 	/**
@@ -415,14 +414,14 @@ class FeatureContext implements Context {
 	 * @throws GuzzleException
 	 */
 	private function circleIdByName(string $name): ?string {
-		$this->sendRequest('GET', '/apps/circles/v1/circles?type=14');
-		if (201 !== $this->response->getStatusCode()) {
+		$this->sendOcsRequest('GET', '/apps/circles/circles');
+		if (200 !== $this->response->getStatusCode()) {
 			throw new RuntimeException('Unable to get list of circles');
 		}
 		$jsonBody = json_decode($this->response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
-		foreach ($jsonBody['data'] as $circle) {
+		foreach ($jsonBody['ocs']['data'] as $circle) {
 			if ($name === $circle['name']) {
-				return $circle['unique_id'];
+				return $circle['id'];
 			}
 		}
 		return null;
