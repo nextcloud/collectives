@@ -13,6 +13,9 @@ GITLAB_PROJECT_ID:=17827012
 GITLAB_URL:=https://gitlab.com
 GITLAB_API_URL:=$(GITLAB_URL)/api/v4/projects/$(GITLAB_PROJECT_ID)
 
+# So far just for removing releases again
+NEXTCLOUD_API_URL:=https://apps.nextcloud.com/api/v1/apps/collectives
+
 # Internal variables
 APP_NAME:=$(notdir $(CURDIR))
 PROJECT_DIR:=$(CURDIR)/../$(APP_NAME)
@@ -166,6 +169,9 @@ build: node-modules build-js-production
 
 # Prepare the release package for the app store
 release: lint-appinfo build
+ifndef GITLAB_API_TOKEN
+	  $(error Missing $$GITLAB_API_TOKEN)
+endif
 	# Upload the release tarball
 	$(eval UPLOAD_PATH:=$(shell curl -s -X POST -H "PRIVATE-TOKEN: $(GITLAB_API_TOKEN)" \
 			--form "file=@build/release/collectives-$(VERSION).tar.gz" $(GITLAB_API_URL)/uploads | jq -r '.full_path'))
@@ -181,4 +187,28 @@ release: lint-appinfo build
 
 	@echo "URL to release tarball (for app store): $(GITLAB_URL)$(UPLOAD_PATH)"
 
-.PHONY: all setup-dev composer translationtool node-modules composer-install clean distclean lint lint-js lint-appinfo build build-js-dev build-js-production test test-php test-php-unit test-php-integration test-js test-js-cypress test-js-cypress-watch po l10n php-psalm-baseline text-app-includes build release
+delete-release: delete-release-from-gitlab delete-release-from-appstore
+
+delete-release-from-gitlab:
+ifndef RELEASE_NAME
+	  $(error Please specify the release to remove with $$RELEASE_NAME)
+endif
+ifndef GITLAB_API_TOKEN
+	  $(error Missing $$GITLAB_API_TOKEN)
+endif
+	echo 'Removing release from gitlab.'
+	curl -s -X DELETE -H "PRIVATE-TOKEN: $(GITLAB_API_TOKEN)" \
+		$(GITLAB_API_URL)/releases/v$(RELEASE_NAME)
+
+delete-release-from-appstore:
+ifndef RELEASE_NAME
+	  $(error Please specify the release to remove with $$RELEASE_NAME)
+endif
+ifndef NEXTCLOUD_PASSWORD
+	  $(error Missing $NEXTCLOUD_PASSWORD)
+endif
+	echo 'Removing release from nextcloud app store.'
+	curl -s -X DELETE $(NEXTCLOUD_API_URL)/releases/$(RELEASE_NAME) \
+		-u 'collectivecloud:$(NEXTCLOUD_PASSWORD)'
+
+.PHONY: all setup-dev composer translationtool node-modules composer-install clean distclean lint lint-js lint-appinfo build build-js-dev build-js-production test test-php test-php-unit test-php-integration test-js test-js-cypress test-js-cypress-watch po l10n php-psalm-baseline text-app-includes build release delete-release delete-release-from-gitlab delete-release-from-appstore
