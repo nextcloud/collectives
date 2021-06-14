@@ -41,5 +41,5 @@ Project translations are [managed on Weblate](https://hosted.weblate.org/engage/
 
 AGPL v3 or later. See [COPYING](COPYING) for the full licence text.
 
-The app logo and corresponding icons were contributed by Jörg Schmidt from
-Institut für Gebrauchsgrafik <info@institut.gebrauchsgrafik.org>.
+The app logo and page icons were designed and contributed by Jörg Schmidt
+from Institut für Gebrauchsgrafik <info@institut.gebrauchsgrafik.org>.
