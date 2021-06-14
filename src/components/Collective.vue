@@ -98,9 +98,9 @@ export default {
 
 		teardownBackgroundFetcher() {
 			console.debug('Stopping background fetcher.')
-			if (this.interval) {
-				window.clearInterval(this.interval)
-				this.interval = null
+			if (this.intervalId) {
+				window.clearInterval(this.intervalId)
+				this.intervalId = null
 			}
 		},
 
