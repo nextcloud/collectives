@@ -1,5 +1,5 @@
 <template>
-	<EmptyContent icon="icon-document">
+	<EmptyContent icon="icon-page">
 		{{ t('collectives', 'Page not found:') }}
 		{{ pageParam }}
 		<template #desc>
@@ -33,7 +33,7 @@ export default {
 </script>
 
 <style>
-.empty-content__icon.icon-document {
+.empty-content__icon.icon-page {
 	background-size:44px;
 }
 </style>
