@@ -105,11 +105,8 @@ class NodeHelper {
               )%xs', '', $name);
 		}
 
-		// remove leading spaces or dots to prevent hidden files
-		$name = preg_replace('/^[\. ]+/mu', '', $name);
-
-		// remove leading and trailing spaces
-		$name = trim($name);
+		// remove leading+trailing spaces and dots to prevent hidden files
+		$name = trim($name, ' .');
 
 		if (empty($name)) {
 			$name = $this->l10n->t($default);
