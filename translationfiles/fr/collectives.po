@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2021-06-08 11:11+0200\n"
+"POT-Creation-Date: 2021-06-14 23:19+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 
-#: /collectives/lib/Fs/UserFolderHelper.php:52
+#: /collectives/lib/Fs/UserFolderHelper.php:62
 #: /collectives/lib/Search/CollectiveProvider.php:58
 #: /collectives/lib/Search/CollectiveProvider.php:106
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:2
-#: /collectives/specialVueFakeDummyForL10nScript.js:28
+#: /collectives/specialVueFakeDummyForL10nScript.js:27
 #: /collectives/specialVueFakeDummyForL10nScript.js:48
 msgid "Collectives"
 msgstr ""
@@ -44,7 +44,7 @@ msgstr ""
 msgid "in Collective {collective}"
 msgstr ""
 
-#: /collectives/lib/Service/CollectiveService.php:104
+#: /collectives/lib/Service/CollectiveService.php:101
 #, php-format
 msgid "Created collective \"%s\" for existing circle."
 msgstr ""
@@ -95,7 +95,7 @@ msgid "Deleted collectives"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:6
-#: /collectives/specialVueFakeDummyForL10nScript.js:25
+#: /collectives/specialVueFakeDummyForL10nScript.js:23
 msgid "Restore"
 msgstr ""
 
@@ -161,23 +161,23 @@ msgid "Select a page from the list or create a new one."
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:22
-msgid "Title"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:23
-msgid "Could not rename the page"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:24
 msgid "Restore this version"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:26
+#: /collectives/specialVueFakeDummyForL10nScript.js:24
 msgid "Reverted {page} to revision {timestamp}."
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:27
+#: /collectives/specialVueFakeDummyForL10nScript.js:25
 msgid "Failed to revert {page} to revision {timestamp}."
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:26
+msgid "Title"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:28
+msgid "Could not rename the page"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:29
