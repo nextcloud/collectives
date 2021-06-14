@@ -8,7 +8,7 @@
 			@keypress.enter="toggleCollapsed"
 			@[isClickable]="toggleCollapsed">
 			<slot name="icon">
-				<div :class="isCollapsible ? 'icon-documents-white' : 'icon-document-white'" />
+				<div :class="isCollapsible ? 'icon-pages-white' : 'icon-page-white'" />
 			</slot>
 			<TriangleIcon v-if="isCollapsible"
 				:title="collapsed ? t('collectives', 'Expand subpage list') : t('collectives', 'Collapse subpage list')"

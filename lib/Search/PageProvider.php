@@ -102,7 +102,7 @@ class PageProvider implements IProvider {
 				$pageSearchResults[] = new SearchResultEntry(
 					$this->urlGenerator->imagePath(
 						'collectives',
-						'collectives-blue.svg'
+						'app-blue.svg'
 					),
 					$page->getTitle(),
 					str_replace('{collective}', $collective->getName(), $this->l10n->t('in Collective {collective}')),

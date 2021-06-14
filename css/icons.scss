@@ -1,33 +1,22 @@
 @include icon-black-white('access-time', 'collectives', 1);
-@include icon-black-white('ant', 'collectives', 1);
 @include icon-black-white('circles', 'circles', 1);
-@include icon-black-white('collectives', 'collectives', 1);
+@include icon-black-white('app', 'collectives', 1);
+@include icon-black-white('sort-by-alpha', 'collectives', 1);
 @include icon-black-white('page', 'collectives', 1);
 @include icon-black-white('pages', 'collectives', 1);
-@include icon-black-white('sort-by-alpha', 'collectives', 1);
 @include icon-black-white('page-white', 'collectives', 1);
 @include icon-black-white('pages-white', 'collectives', 1);
-@include icon-black-white('document', 'collectives', 1);
-@include icon-black-white('documents', 'collectives', 1);
-@include icon-black-white('document-white', 'collectives', 1);
-@include icon-black-white('documents-white', 'collectives', 1);
 
 .icon-circles, .icon-sort-by-alpha, .icon-access-time {
 	background-size: 16px;
 }
 
-.icon-page, .icon-pages, .icon-page-white, .icon-pages-white{
-	background-size: 24px;
-	width: 26px;
-	height: 26px;
-}
-
-.icon-document-white, .icon-documents-white {
+.icon-page-white, .icon-pages-white {
 	background-size: 20px;
 	width: 26px;
 	height: 34px;
 }
 
-.icon-document, .icon-documents {
+.icon-page, .icon-pages {
 	background-size: 44px;
 }
