@@ -150,13 +150,14 @@ class CollectiveMapper extends QBMapper {
 
 	/**
 	 * @param string $circleId
+	 * @param bool   $super
 	 *
 	 * @return string
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function circleIdToName(string $circleId): string {
-		$circle = $this->circleHelper->getCircle($circleId);
+	public function circleIdToName(string $circleId, bool $super = false): string {
+		$circle = $this->circleHelper->getCircle($circleId, null, $super);
 		return $circle->getName();
 	}
 
