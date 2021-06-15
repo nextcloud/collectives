@@ -29,12 +29,13 @@ class CircleHelper {
 	/**
 	 * @param string      $circleId
 	 * @param string|null $userId
+	 * @param bool        $super
 	 *
 	 * @return Circle
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function getCircle(string $circleId, ?string $userId = null): Circle {
+	public function getCircle(string $circleId, ?string $userId = null, bool $super = false): Circle {
 		try {
 			return Circles::detailsCircle($circleId, true);
 		} catch (CircleDoesNotExistException $e) {
