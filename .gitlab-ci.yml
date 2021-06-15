@@ -166,6 +166,8 @@ OCC CLI Test:
     - sudo -u www-data $NEXTCLOUD_SOURCE/occ collectives:purge-obsolete
     - sudo -u www-data $NEXTCLOUD_SOURCE/occ collectives:pages:purge-obsolete
     - sudo -u www-data $NEXTCLOUD_SOURCE/occ collectives:pages:expire
+    - sudo -u www-data $NEXTCLOUD_SOURCE/occ app:disable circles
+    - sudo -u www-data $NEXTCLOUD_SOURCE/occ app:list
   before_script:
     - make composer-install
     - ln -s `pwd` $NEXTCLOUD_SOURCE/apps/collectives
