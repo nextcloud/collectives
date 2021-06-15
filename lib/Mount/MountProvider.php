@@ -3,7 +3,6 @@
 namespace OCA\Collectives\Mount;
 
 use OC\Files\Cache\Cache;
-use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Service\CollectiveHelper;
 use OCA\Collectives\Service\NotFoundException;
@@ -34,9 +33,6 @@ class MountProvider implements IMountProvider {
 	/** @var UserFolderHelper */
 	private $userFolderHelper;
 
-	/** @var NodeHelper */
-	private $nodeHelper;
-
 	/**
 	 * MountProvider constructor.
 	 *
@@ -45,21 +41,18 @@ class MountProvider implements IMountProvider {
 	 * @param IMimeTypeLoader         $mimeTypeLoader
 	 * @param IAppManager             $appManager
 	 * @param UserFolderHelper        $userFolderHelper
-	 * @param NodeHelper              $nodeHelper
 	 */
 	public function __construct(
 		CollectiveHelper $collectiveHelper,
 		CollectiveFolderManager $collectiveFolderManager,
 		IMimeTypeLoader $mimeTypeLoader,
 		IAppManager $appManager,
-		UserFolderHelper $userFolderHelper,
-		NodeHelper $nodeHelper) {
+		UserFolderHelper $userFolderHelper) {
 		$this->collectiveHelper = $collectiveHelper;
 		$this->collectiveFolderManager = $collectiveFolderManager;
 		$this->mimeTypeLoader = $mimeTypeLoader;
 		$this->appManager = $appManager;
 		$this->userFolderHelper = $userFolderHelper;
-		$this->nodeHelper = $nodeHelper;
 	}
 
 	/**
@@ -80,7 +73,7 @@ class MountProvider implements IMountProvider {
 			throw new NotFoundException($e->getMessage());
 		}
 		foreach ($collectiveInfos as $c) {
-			$mountPointName = $this->nodeHelper->sanitiseFilename($c->getName());
+			$mountPointName = $c->getName();
 			try {
 				$cacheEntry = $this->collectiveFolderManager->getFolderFileCache($c->getId(), $mountPointName);
 			} catch (FilesNotFoundException | Exception $e) {
