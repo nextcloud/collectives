@@ -230,6 +230,10 @@ OCC CLI Test:
   stage: test integration
   script:
     - sudo -u www-data $NEXTCLOUD_SOURCE/occ app:enable collectives
+    - sudo -u www-data $NEXTCLOUD_SOURCE/occ app:list
+    - sudo -u www-data $NEXTCLOUD_SOURCE/occ collectives:purge-obsolete
+    - sudo -u www-data $NEXTCLOUD_SOURCE/occ collectives:pages:purge-obsolete
+    - sudo -u www-data $NEXTCLOUD_SOURCE/occ collectives:pages:expire
     - sudo -u www-data $NEXTCLOUD_SOURCE/occ app:disable circles
     - sudo -u www-data $NEXTCLOUD_SOURCE/occ app:list
   before_script:
