@@ -125,9 +125,10 @@
       <code>RequestBuilderException</code>
       <code>SingleCircleNotFoundException</code>
     </UndefinedClass>
-    <UndefinedDocblockClass occurrences="10">
+    <UndefinedDocblockClass occurrences="16">
       <code>$federatedUser</code>
       <code>$federatedUser</code>
+      <code>$this-&gt;circlesManager</code>
       <code>$this-&gt;circlesManager</code>
       <code>$this-&gt;circlesManager</code>
       <code>$this-&gt;circlesManager</code>
@@ -135,7 +136,12 @@
       <code>$this-&gt;circlesManager</code>
       <code>$this-&gt;circlesManager</code>
       <code>Circle[]</code>
-      <code>CirclesManager</code>
+      <code>CirclesManager | null</code>
+      <code>FederatedUserException</code>
+      <code>FederatedUserNotFoundException</code>
+      <code>InvalidIdException</code>
+      <code>RequestBuilderException</code>
+      <code>SingleCircleNotFoundException</code>
     </UndefinedDocblockClass>
   </file>
   <file src="lib/Service/CollectiveHelper.php">
