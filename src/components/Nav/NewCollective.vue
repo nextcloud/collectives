@@ -112,7 +112,7 @@ export default {
 			}
 		},
 		circles() {
-			return this.$store.getters.availableCircles.map(c => c.name)
+			return this.$store.getters.availableCircles.map(c => c.sanitizedName)
 		},
 		anyCircle() {
 			return this.circles.length > 0
