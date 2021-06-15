@@ -17,6 +17,7 @@ class CircleHelper {
 	 * @return Circle[]
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
+	 * @throws MissingDependencyException
 	 */
 	public function getCircles(?string $userId = null): array {
 		try {
@@ -34,6 +35,7 @@ class CircleHelper {
 	 * @return Circle
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
+	 * @throws MissingDependencyException
 	 */
 	public function getCircle(string $circleId, ?string $userId = null, bool $super = false): Circle {
 		try {
@@ -51,6 +53,7 @@ class CircleHelper {
 	 * @return Circle|null
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
+	 * @throws MissingDependencyException
 	 */
 	public function findCircle(string $name, string $userId, bool $admin = true): ?Circle {
 		$circles = Circles::listCircles(
@@ -73,6 +76,7 @@ class CircleHelper {
 	 * @return Circle
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
+	 * @throws MissingDependencyException
 	 * @throws CircleExistsException
 	 */
 	public function createCircle(string $name, ?string $userId = null): Circle {
@@ -91,6 +95,7 @@ class CircleHelper {
 	 *
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
+	 * @throws MissingDependencyException
 	 */
 	public function destroyCircle(string $circleId, ?string $userId = null): void {
 		try {
@@ -108,6 +113,7 @@ class CircleHelper {
 	 * @return bool
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
+	 * @throws MissingDependencyException
 	 */
 	public function isMember(string $circleId, string $userId, bool $admin = false): bool {
 		try {
@@ -129,6 +135,7 @@ class CircleHelper {
 	 * @return bool
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
+	 * @throws MissingDependencyException
 	 */
 	public function isAdmin(string $circleId, string $userId): bool {
 		try {

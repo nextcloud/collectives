@@ -8,6 +8,7 @@ use OC\Core\Command\Base;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
 use OCA\Files_Versions\Versions\IVersion;
+use OCA\Collectives\Service\MissingDependencyException;
 use OCA\Collectives\Versions\CollectiveVersionsExpireManager;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -50,7 +51,16 @@ class ExpirePageVersions extends Base {
 			$output->writeln("<info>Cleaning up page versions for no longer existing file with id $id</info>");
 		});
 
-		$this->expireManager->expireAll();
-		return 0;
+		try {
+			$this->expireManager->expireAll();
+			return 0;
+		} catch (MissingDependencyException $e) {
+			$output->writeln('');
+			$output->writeln('<error>  Looks like the circles app is not active.  </error>');
+			$output->writeln('<info>  Please enable it:  </info>');
+			$output->writeln('<info>      occ app:enable circles  </info>');
+			$output->writeln($e->getMessage());
+			return 1;
+		}
 	}
 }
