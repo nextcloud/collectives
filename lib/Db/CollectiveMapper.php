@@ -158,7 +158,7 @@ class CollectiveMapper extends QBMapper {
 	 */
 	public function circleIdToName(string $circleId, bool $super = false): string {
 		$circle = $this->circleHelper->getCircle($circleId, null, $super);
-		return $circle->getName();
+		return $circle->getSanitizedName();
 	}
 
 	/**
