@@ -15,4 +15,4 @@ ci:
             contexts:
                 - FeatureContext:
                     baseUrl: 'http://nextcloud.local/index.php'
-                    ocsUrl: 'https://nextcloud.local/ocs/v2.php'
+                    ocsUrl: 'http://nextcloud.local/ocs/v2.php'
