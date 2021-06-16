@@ -16,13 +16,25 @@ use OCA\Circles\Exceptions\SingleCircleNotFoundException;
 use OCA\Circles\Model\Circle;
 use OCA\Circles\Model\FederatedUser;
 use OCA\Circles\Model\Member;
+use OCP\AppFramework\QueryException;
+use Psr\Container\ContainerInterface;
 
 class CircleHelper {
-	/** @var CirclesManager */
+	/** @var CirclesManager | null */
 	private $circlesManager;
 
-	public function __construct(CirclesManager $circlesManager) {
-		$this->circlesManager = $circlesManager;
+	/** @var String | null */
+	private $dependencyInjectionError;
+
+
+
+	public function __construct(ContainerInterface $appContainer) {
+		try {
+			$this->circlesManager = $appContainer->get(CirclesManager::class);
+		} catch (QueryException $e) {
+			// Could not instantiate - probably circles app is disabled
+			$this->dependencyInjectionError = $e->getMessage();
+		}
 	}
 
 	/**
@@ -50,14 +62,42 @@ class CircleHelper {
 	/**
 	 * @param string|null $userId
 	 *
+	 * @throws MissingDependencyException
+	 * @throws FederatedUserNotFoundException
+	 * @throws SingleCircleNotFoundException
+	 * @throws RequestBuilderException
+	 * @throws InvalidIdException
+	 * @throws FederatedUserException
+	 */
+	private function startSession(?string $userId = null) {
+		if (is_null($this->circlesManager)) {
+			throw new MissingDependencyException($this->dependencyInjectionError);
+		}
+		$federatedUser = $this->getFederatedUser($userId);
+		$this->circlesManager->startSession($federatedUser);
+	}
+
+	/**
+	 * @throws MissingDependencyException
+	 */
+	private function startSuperSession() {
+		if (is_null($this->circlesManager)) {
+			throw new MissingDependencyException($this->dependencyInjectionError);
+		}
+		$this->circlesManager->startSuperSession();
+	}
+
+	/**
+	 * @param string|null $userId
+	 *
 	 * @return Circle[]
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
+	 * @throws MissingDependencyException
 	 */
 	public function getCircles(?string $userId = null): array {
-		$federatedUser = $this->getFederatedUser($userId);
 		try {
-			$this->circlesManager->startSession($federatedUser);
+			$this->startSession($userId);
 			$circles = $this->circlesManager->getCircles();
 		} catch (FederatedUserNotFoundException |
 				 SingleCircleNotFoundException |
@@ -80,14 +120,14 @@ class CircleHelper {
 	 * @return Circle
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
+	 * @throws MissingDependencyException
 	 */
 	public function getCircle(string $circleId, ?string $userId = null, bool $super = false): Circle {
-		$federatedUser = $this->getFederatedUser($userId);
 		try {
 			if ($super) {
-				$this->circlesManager->startSuperSession();
+				$this->startSuperSession();
 			} else {
-				$this->circlesManager->startSession($federatedUser);
+				$this->startSession($userId);
 			}
 			$circle = $this->circlesManager->getCircle($circleId);
 		} catch (CircleNotFoundException $e) {
@@ -113,6 +153,7 @@ class CircleHelper {
 	 * @return Circle|null
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
+	 * @throws MissingDependencyException
 	 */
 	public function findCircle(string $name, string $userId, bool $admin = true): ?Circle {
 		$circles = $this->getCircles($userId);
@@ -161,14 +202,14 @@ class CircleHelper {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 * @throws CircleExistsException
+	 * @throws MissingDependencyException
 	 */
 	public function createCircle(string $name, ?string $userId = null): Circle {
-		$federatedUser = $this->getFederatedUser($userId);
 		try {
 			if ($this->existsCircle($name)) {
 				throw new CircleExistsException('A circle with that name exists');
 			}
-			$this->circlesManager->startSession($federatedUser);
+			$this->startSession($userId);
 			$circle = $this->circlesManager->createCircle($name, null, false, false);
 		} catch (CircleNotFoundException $e) {
 			throw new NotFoundException($e->getMessage());
@@ -193,11 +234,11 @@ class CircleHelper {
 	 *
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
+	 * @throws MissingDependencyException
 	 */
 	public function destroyCircle(string $circleId, ?string $userId = null): void {
-		$federatedUser = $this->getFederatedUser($userId);
 		try {
-			$this->circlesManager->startSession($federatedUser);
+			$this->startSession($userId);
 			$this->circlesManager->destroyCircle($circleId);
 		} catch (CircleNotFoundException $e) {
 			throw new NotFoundException($e->getMessage());
@@ -221,8 +262,12 @@ class CircleHelper {
 	 * @return bool
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
+	 * @throws MissingDependencyException
 	 */
 	public function isMember(string $circleId, string $userId, bool $admin = false): bool {
+		if (is_null($this->circlesManager)) {
+			throw new MissingDependencyException($this->dependencyInjectionError);
+		}
 		/** @var FederatedUser $federatedUser */
 		$federatedUser = $this->getFederatedUser($userId);
 
@@ -244,6 +289,7 @@ class CircleHelper {
 	 * @return bool
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
+	 * @throws MissingDependencyException
 	 */
 	public function isAdmin(string $circleId, string $userId): bool {
 		return $this->isMember($circleId, $userId, true);
