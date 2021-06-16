@@ -76,11 +76,15 @@ Cypress.Commands.add('deleteCollective', (name) => {
 })
 
 Cypress.Commands.add('seedCircle', (name) => {
-	cy.visit('/apps/circles')
+	cy.visit('/apps/collectives')
 	cy.window()
-		.its('OCA.Circles.api')
-		.then(async api => {
-			api.createCircle(4, name)
+		.its('app')
+		.then(async app => {
+			await axios.post(
+				`${Cypress.env('baseUrl')}/ocs/v2.php/apps/circles/circles`,
+				{ name, personal: false, local: true },
+				{ headers: { requesttoken: app.OC.requestToken } },
+			)
 		})
 })
 
@@ -90,10 +94,12 @@ Cypress.Commands.add('createCollective', (name) => {
 })
 
 Cypress.Commands.add('addGroupToCollective', ({ group, collective }) => {
-	cy.visit('/apps/circles')
-	cy.get('#circle-navigation .circle .title')
-		.contains(collective).click()
-	cy.get('#circle-actions-group').click()
-	cy.get('input#linkgroup').type(`${group}{enter}`)
-	cy.get('#groupslist_table .groupid').should('contain', group)
+	cy.visit('/apps/contacts')
+	cy.contains('.app-navigation-entry a', collective).click()
+	cy.get('.app-content-list button.icon-add').click()
+	cy.get('.entity-picker input').type(`${group}`)
+	cy.get('.user-bubble__title').contains(group).click()
+	cy.get('.entity-picker button.primary').click()
+	cy.get(`.members-list [user="${group}"] button.action-item__menutoggle `).click()
+	cy.contains('.popover .action button', 'Promote to Admin').click()
 })

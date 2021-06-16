@@ -209,14 +209,14 @@ describe('Collective', function() {
 			cy.get('#fileList').should('contain', 'Readme.md')
 		})
 	})
-	describe('in the circles app', function() {
+	describe('in the contacts app', function() {
 		before(function() {
-			cy.login('bob', 'bob', '/apps/circles')
+			cy.login('bob', 'bob', '/apps/contacts')
 		})
 		it('has a matching circle', function() {
-			cy.get('.circle .title').should('contain', 'Preexisting Collective')
-			cy.get('.circle .title').contains('Preexisting Collective').click()
-			cy.get('#memberslist .username').should('contain', 'bob')
+			cy.contains('.app-navigation-entry a', 'Preexisting Collective').click()
+			cy.get('.contact-header h2 input').should('have.value', 'Preexisting Collective')
+			cy.get('.members-list').should('contain', 'bob')
 		})
 	})
 })
