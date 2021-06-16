@@ -32,7 +32,7 @@
 describe('Pages are accessible via group membership to circle', function() {
 	before(function() {
 		cy.login('jane', 'jane', '/apps/collectives')
-		cy.createCollective('Group Collective')
+		cy.seedCollective('Group Collective')
 		cy.addGroupToCollective({
 			group: 'Bobs Group',
 			collective: 'Group Collective',

@@ -27,9 +27,9 @@ describe('The app is properly installed and responding', function() {
 			.should('have.value', 'Disable')
 	})
 
-	it('allows creating a new collective', function() {
-		cy.login('jane', 'jane', '/apps/circles')
-		cy.get('#app-content')
-			.should('contain', 'No circle selected')
+	it('shows circles in the contacts app', function() {
+		cy.login('jane', 'jane', '/apps/contacts')
+		cy.get('.app-navigation')
+			.should('contain', 'Circles')
 	})
 })
