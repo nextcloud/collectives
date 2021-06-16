@@ -25,15 +25,47 @@
  */
 
 describe('Collective', function() {
-	describe('name conflicts', function() {
+
+	before(function() {
+		cy.login('bob', 'bob', '/apps/collectives')
+		cy.seedCollective('Preexisting Collective')
+		cy.seedCircle('Preexisting Circle')
+		cy.seedCircle('History Club')
+		cy.screenshot()
+		cy.login('jane', 'jane', '/apps/collectives')
+		cy.seedCircle('Foreign Circle')
+	})
+
+	describe('in the files app', function() {
 		before(function() {
-			cy.login('bob', 'bob', '/apps/collectives')
-			cy.seedCollective('Preexisting Collective')
-			cy.seedCircle('Preexisting Circle')
-			cy.seedCircle('History Club')
-			cy.login('jane', 'jane', '/apps/collectives')
-			cy.seedCircle('Foreign Circle')
+			cy.login('bob', 'bob', '/apps/files')
 		})
+		it('has a matching folder', function() {
+			cy.get('#fileList').should('contain', 'Collectives')
+			cy.get('#fileList a').contains('Collectives').click()
+			cy.get('#controls .breadcrumb').should('contain', 'Collectives')
+			cy.get('#fileList').should('contain', 'Preexisting Collective')
+			cy.get('#fileList a').contains('Preexisting Collective').click()
+			cy.get('#controls .breadcrumb').should('contain', 'Preexisting Collective')
+			cy.get('#fileList').should('contain', 'Readme.md')
+		})
+	})
+
+	describe('in the contacts app', function() {
+		before(function() {
+			cy.login('bob', 'bob', '/apps/contacts')
+		})
+		it('has a matching circle', function() {
+			cy.contains('.app-navigation-entry a',
+				'Preexisting Collective',
+				{ timeout: 8000 }
+			).click()
+			cy.get('.contact-header h2 input').should('have.value', 'Preexisting Collective')
+			cy.get('.members-list').should('contain', 'bob')
+		})
+	})
+
+	describe('name conflicts', function() {
 		it('Reports existing circle', function() {
 			cy.login('bob', 'bob', '/apps/collectives')
 			cy.createCollective('Foreign Circle')
@@ -48,7 +80,6 @@ describe('Collective', function() {
 			cy.get('.toast-warning').should('contain', 'Could not create the collective')
 			cy.get('.toast-warning').should('contain', 'Collective already exists')
 		})
-
 		it('creates collectives by picking circle',
 			function() {
 				cy.login('bob', 'bob', '/apps/collectives')
@@ -60,7 +91,6 @@ describe('Collective', function() {
 					'Created collective "History Club" for existing circle.'
 				)
 			})
-
 		it('creates collectives for admins of corresponding circle',
 			function() {
 				cy.login('bob', 'bob', '/apps/collectives')
@@ -70,7 +100,6 @@ describe('Collective', function() {
 					'Created collective "Preexisting Circle" for existing circle.'
 				)
 			})
-
 		after(function() {
 			cy.deleteCollective('Preexisting Circle')
 			cy.deleteCollective('History Club')
@@ -206,31 +235,6 @@ describe('Collective', function() {
 			cy.get('.collectives_list_item')
 				.should('not.contain', 'Delete me')
 			cy.get('#app-navigation-vue .settings-button').should('not.exist')
-		})
-	})
-
-	describe('in the files app', function() {
-		before(function() {
-			cy.login('bob', 'bob', '/apps/files')
-		})
-		it('has a matching folder', function() {
-			cy.get('#fileList').should('contain', 'Collectives')
-			cy.get('#fileList a').contains('Collectives').click()
-			cy.get('#controls .breadcrumb').should('contain', 'Collectives')
-			cy.get('#fileList').should('contain', 'Preexisting Collective')
-			cy.get('#fileList a').contains('Preexisting Collective').click()
-			cy.get('#controls .breadcrumb').should('contain', 'Preexisting Collective')
-			cy.get('#fileList').should('contain', 'Readme.md')
-		})
-	})
-	describe('in the circles app', function() {
-		before(function() {
-			cy.login('bob', 'bob', '/apps/circles')
-		})
-		it('has a matching circle', function() {
-			cy.get('.circle .title').should('contain', 'Preexisting Collective')
-			cy.get('.circle .title').contains('Preexisting Collective').click()
-			cy.get('#memberslist .username').should('contain', 'bob')
 		})
 	})
 })
