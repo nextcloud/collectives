@@ -47,7 +47,10 @@ Cypress.Commands.add('seedPage', (name, parentFilePath, parentFileName) => {
 		.its('app')
 		.then(async app => {
 			await app.$store.dispatch(GET_PAGES)
-			const parentId = app.$store.state.pages.pages.find(p => (p.filePath === parentFilePath && p.fileName === parentFileName)).id
+			const parentId = app.$store.state.pages.pages.find(function(p) {
+				return p.filePath === parentFilePath
+					&& p.fileName === parentFileName
+			}).id
 			await app.$store.dispatch(NEW_PAGE, { title: name, pagePath: name, parentId })
 		})
 })
