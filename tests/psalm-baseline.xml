@@ -103,16 +103,45 @@
     </UndefinedClass>
   </file>
   <file src="lib/Service/CircleHelper.php">
-    <UndefinedClass occurrences="6">
+    <UndefinedClass occurrences="20">
+      <code>$e</code>
+      <code>$e</code>
+      <code>$e</code>
       <code>?Circle</code>
+      <code>?FederatedUser</code>
       <code>Circle</code>
       <code>Circle</code>
-      <code>Circles</code>
-      <code>Circles</code>
-      <code>Circles</code>
+      <code>CircleNotFoundException</code>
+      <code>CirclesManager</code>
+      <code>FederatedItemException</code>
+      <code>FederatedUserException</code>
+      <code>FederatedUserNotFoundException</code>
+      <code>InitiatorNotFoundException</code>
+      <code>InitiatorNotFoundException</code>
+      <code>InvalidIdException</code>
+      <code>Member</code>
+      <code>Member</code>
+      <code>RequestBuilderException</code>
+      <code>RequestBuilderException</code>
+      <code>SingleCircleNotFoundException</code>
     </UndefinedClass>
-    <UndefinedDocblockClass occurrences="1">
+    <UndefinedDocblockClass occurrences="16">
+      <code>$federatedUser</code>
+      <code>$federatedUser</code>
+      <code>$this-&gt;circlesManager</code>
+      <code>$this-&gt;circlesManager</code>
+      <code>$this-&gt;circlesManager</code>
+      <code>$this-&gt;circlesManager</code>
+      <code>$this-&gt;circlesManager</code>
+      <code>$this-&gt;circlesManager</code>
+      <code>$this-&gt;circlesManager</code>
       <code>Circle[]</code>
+      <code>CirclesManager | null</code>
+      <code>FederatedUserException</code>
+      <code>FederatedUserNotFoundException</code>
+      <code>InvalidIdException</code>
+      <code>RequestBuilderException</code>
+      <code>SingleCircleNotFoundException</code>
     </UndefinedDocblockClass>
   </file>
   <file src="lib/Service/CollectiveHelper.php">

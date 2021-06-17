@@ -6,6 +6,7 @@ namespace OCA\Collectives\Command;
 
 use OC\Core\Command\Base;
 use OCA\Files_Versions\Versions\IVersion;
+use OCA\Collectives\Service\MissingDependencyException;
 use OCA\Collectives\Versions\CollectiveVersionsExpireManager;
 use OCP\Files\InvalidPathException;
 use OCP\Files\NotFoundException;
@@ -51,6 +52,14 @@ class ExpirePageVersions extends Base {
 			$output->writeln("<info>Cleaning up page versions for no longer existing file with id $id</info>");
 		});
 
-		$this->expireManager->expireAll();
+		try {
+			$this->expireManager->expireAll();
+		} catch (MissingDependencyException $e) {
+			$output->writeln('');
+			$output->writeln('<error>  Looks like the circles app is not active.  </error>');
+			$output->writeln('<info>  Please enable it:  </info>');
+			$output->writeln('<info>      occ app:enable circles  </info>');
+			$output->writeln($e->getMessage());
+		}
 	}
 }

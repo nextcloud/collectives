@@ -2,7 +2,7 @@ version: '3'
 
 services:
   nextcloud-cypress:
-    image: registry.gitlab.com/collectivecloud/docker-builds:php7.3-nc21
+    image: registry.gitlab.com/collectivecloud/docker-builds:php7.3-ncmaster
     entrypoint:
       - /usr/local/bin/run.sh
     restart: always
