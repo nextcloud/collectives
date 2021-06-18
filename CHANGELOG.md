@@ -1,14 +1,27 @@
 # Changelog
 
-## 0.8.0-beta1 - 2021.06.03
+## 0.8.21 - 2021.06.18
 
 ### ✨New
-* Use SVG Icons for single page and page with subpages.
-* Support Nextcloud 22
+* 👁️ Use SVG Icons for single page and page with subpages.
+* 🔎 Meaningful collective not found and page not found messages.
+* ✨ Improved startpage with button to create a collective.
+* 🛡️ Save text and title with a single button.
+* 📝 Update list of pages every 60 seconds.
+
+### 🌎Translations
+* 🗣️ Initial French translation thanks to shiromarieke and Nathan Bonnemains.
+* 🗣️ Updated Norwegian translation thanks to Allan Nordhøy.
 
 ### 🏗️Fixes
-* MountProvider works with Nextcloud 22.
-* Use correct links in page list after rename of parent page.
+* 💽 MountProvider works with Nextcloud 22.
+* 🧷 Use correct links in page list after rename of parent page.
+* 💱 Rename parent pages properly - do not create another subpage.
+* ✅ Browser error due to duplicate subscription of an event handler.
+
+### 🚧Updates & Tooling
+* 👷 Refactor to ease support for Nextcloud 22.
+* 🗑️ Make task to remove releases.
 
 ## 0.7.0 - 2021.05.31
 
