@@ -76,9 +76,6 @@ lint-appinfo: $(BUILD_TOOLS_DIR)/info.xsd
 	xmllint appinfo/info.xml --noout \
 		--schema $(BUILD_TOOLS_DIR)/info.xsd
 
-# Build
-build: build-js-dev
-
 build-js-dev:
 	$(NPM) run dev
 
