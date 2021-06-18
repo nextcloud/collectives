@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.8.21 - 2021.06.18
+## 0.8.22 - 2021.06.18
 
 ### ✨New
 * 👁️ Use SVG Icons for single page and page with subpages.
@@ -18,8 +18,11 @@
 * 🧷 Use correct links in page list after rename of parent page.
 * 💱 Rename parent pages properly - do not create another subpage.
 * ✅ Browser error due to duplicate subscription of an event handler.
+- 🚀 Make sure `occ` works even if circles app is missing.
+* ✅ Work around some bugs in the CI so all tests pass.
 
 ### 🚧Updates & Tooling
+* 🔌 Migrate to Circles API for Nextcloud 22.
 * 👷 Refactor to ease support for Nextcloud 22.
 * 🗑️ Make task to remove releases.
 
