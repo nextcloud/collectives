@@ -265,7 +265,6 @@ export default {
 				showError(t('collectives', 'Could not rename the page'))
 			}
 		},
-
 	},
 }
 </script>
@@ -312,6 +311,12 @@ export default {
 	.icon {
 		opacity: 1;
 		margin-right: 8px;
+	}
+}
+
+@media print {
+	.edit-button, .action-item {
+		display: none !important;
 	}
 }
 </style>

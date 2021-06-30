@@ -156,6 +156,21 @@ export default {
 	position: absolute;
 	right: 0;
 }
+
+@page {
+	size: auto;
+	margin: 3mm;
+}
+
+@media print {
+	#header {
+		display: none !important;
+	}
+
+	#content-vue {
+		display: block !important;
+	}
+}
 </style>
 
 <style lang="scss" scoped>

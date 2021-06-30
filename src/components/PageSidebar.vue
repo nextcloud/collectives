@@ -78,3 +78,11 @@ export default {
 }
 
 </script>
+
+<style>
+@media print {
+	.app-content-list {
+		display: none !important;
+	}
+}
+</style>

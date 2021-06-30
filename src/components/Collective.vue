@@ -125,3 +125,22 @@ export default {
 
 }
 </script>
+
+<style>
+@media print {
+	#app-content-vue {
+		display: block !important;
+		overflow: visible !important;
+		padding: 0 !important;
+		margin: 0 !important;
+	}
+
+	#app-content-wrapper {
+		display: block !important;
+	}
+
+	#app-sidebar-vue {
+		display: none !important;
+	}
+}
+</style>

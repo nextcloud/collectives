@@ -239,4 +239,15 @@ export default {
 	height: calc(100% - 50px);
 	top: 50px;
 }
+
+@media print {
+	.menubar {
+		display: none !important;
+	}
+
+	#editor-wrapper, #text-wrapper {
+		display: block !important;
+		overflow: visible !important;
+	}
+}
 </style>
