@@ -137,24 +137,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.toggle {
+	height: 44px;
+	width: 44px;
+	padding: 0;
+	margin: 0 0 0 auto;
+}
 
-	.toggle {
-		height: 44px;
-		width: 44px;
-		padding: 0;
-		margin: 0 0 0 auto;
-	}
+.toggle:hover {
+	opacity: 1;
+}
 
-	.toggle:hover {
-		opacity: 1;
-	}
+li.sort.selected {
+	background-color: var(--color-primary-light);
+}
 
-	li.sort.selected {
-		background-color: var(--color-primary-light);
-	}
-
-	.emoji {
-		margin: -3px
-	}
-
+.emoji {
+	margin: -3px
+}
 </style>

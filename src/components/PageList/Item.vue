@@ -135,94 +135,94 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	.app-content-list-item .app-content-list-item-icon {
-		line-height: 40px;
-		width: 26px;
-		height: 34px;
-		left: 12px;
-		font-size: 24px;
-		background-color: var(--color-background-darker);
-		border-radius: 4px;
-	}
+.app-content-list-item .app-content-list-item-icon {
+	line-height: 40px;
+	width: 26px;
+	height: 34px;
+	left: 12px;
+	font-size: 24px;
+	background-color: var(--color-background-darker);
+	border-radius: 4px;
+}
 
-	.app-content-list-item .app-content-list-item-icon div {
-		border-radius: 3px 12px 3px 3px;
-	}
+.app-content-list-item .app-content-list-item-icon div {
+	border-radius: 3px 12px 3px 3px;
+}
 
-	.app-content-list .app-content-list-item .app-content-list-item-line-one {
-		font-size: 120%;
-		&--level0 {
-			font-weight: bold;
-		}
+.app-content-list .app-content-list-item .app-content-list-item-line-one {
+	font-size: 120%;
+	&--level0 {
+		font-weight: bold;
 	}
+}
 
-	.app-content-list .app-content-list-item .app-content-list-item-line-two {
-		opacity: 1;
+.app-content-list .app-content-list-item .app-content-list-item-line-two {
+	opacity: 1;
+}
+
+.page-list-item-actions {
+	visibility: hidden;
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin: 0;
+	&--display {
+		// Always display page actions if active or on mobile
+		visibility: visible;
 	}
+}
 
+.app-content-list-item.active {
+	background-color: var(--color-primary-light);
+}
+
+// Display page actions on hovering the page list item
+.app-content-list-item:hover {
+	background-color: var(--color-background-hover);
 	.page-list-item-actions {
-		visibility: hidden;
-		position: absolute;
-		top: 0;
-		right: 0;
-		margin: 0;
-		&--display {
-			// Always display page actions if active or on mobile
-			visibility: visible;
-		}
+		visibility: visible;
 	}
+}
 
-	.app-content-list-item.active {
-		background-color: var(--color-primary-light);
+div.app-content-list-item {
+	cursor: default;
+}
+
+// Set pointer cursor on page icon if isCollapsible
+.page-icon-collapsible {
+	cursor: pointer;
+}
+
+// Configure collapse/expand badge
+.page-icon-badge {
+	position: absolute;
+	bottom: -20px;
+	right: -14px;
+	padding: 5px 10px;
+	background-size: cover;
+	cursor: pointer;
+	-webkit-transform: rotate(180deg);
+	-ms-transform: rotate(180deg);
+	transform: rotate(180deg);
+
+	&--rotated {
+		bottom: -21px;
+		-webkit-transform: rotate(90deg);
+		-ms-transform: rotate(90deg);
+		transform: rotate(90deg);
 	}
+}
 
-	// Display page actions on hovering the page list item
-	.app-content-list-item:hover {
-		background-color: var(--color-background-hover);
-		.page-list-item-actions {
-			visibility: visible;
-		}
-	}
+.material-design-icon.page-icon-badge > .material-design-icon__svg {
+	width: 16px;
+	transform: scale(1, 0.7);
+	fill: var(--color-main-text);
+}
 
-	div.app-content-list-item {
-		cursor: default;
-	}
-
-	// Set pointer cursor on page icon if isCollapsible
-	.page-icon-collapsible {
-		cursor: pointer;
-	}
-
-	// Configure collapse/expand badge
-	.page-icon-badge {
-		position: absolute;
-		bottom: -20px;
-		right: -14px;
-		padding: 5px 10px;
-		background-size: cover;
-		cursor: pointer;
-		-webkit-transform: rotate(180deg);
-		-ms-transform: rotate(180deg);
-		transform: rotate(180deg);
-
-		&--rotated {
-			bottom: -21px;
-			-webkit-transform: rotate(90deg);
-			-ms-transform: rotate(90deg);
-			transform: rotate(90deg);
-		}
-	}
-
+// Change color of collapse/expand badge when hovering over page icon
+.app-content-list-item-icon:hover {
 	.material-design-icon.page-icon-badge > .material-design-icon__svg {
-		width: 16px;
-		transform: scale(1, 0.7);
-		fill: var(--color-main-text);
+		fill: var(--color-primary);
 	}
-
-	// Change color of collapse/expand badge when hovering over page icon
-	.app-content-list-item-icon:hover {
-		.material-design-icon.page-icon-badge > .material-design-icon__svg {
-			fill: var(--color-primary);
-		}
-	}
+}
 </style>

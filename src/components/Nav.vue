@@ -82,3 +82,11 @@ export default {
 	},
 }
 </script>
+
+<style>
+@media print {
+	#app-navigation-vue {
+		display: none !important;
+	}
+}
+</style>

@@ -165,9 +165,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-	.app-content-list {
-		padding-top: 40px;
-	}
-
+.app-content-list {
+	padding-top: 40px;
+}
 </style>

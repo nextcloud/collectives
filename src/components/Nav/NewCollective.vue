@@ -189,8 +189,8 @@ export default {
 	},
 }
 </script>
-<style lang="scss" scoped>
 
+<style lang="scss" scoped>
 .collective-create {
 	order: 1;
 	display: flex;
@@ -216,5 +216,4 @@ button.emoji {
 	background-color: transparent;
 	border: none;
 }
-
 </style>

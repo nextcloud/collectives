@@ -37,14 +37,12 @@ export default {
 </script>
 
 <style lang="scss">
+#editor-container .editor__content {
+	border: 2px solid var(--color-border);
+	border-radius: var(--border-radius);
+}
 
-	#editor-container .editor__content {
-		border: 2px solid var(--color-border);
-		border-radius: var(--border-radius);
-	}
-
-	#editor-container .menububble {
-		margin-bottom: 0px;
-	}
-
+#editor-container .menububble {
+	margin-bottom: 0px;
+}
 </style>
