@@ -55,17 +55,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.update {
+	opacity: .5;
+}
 
-	.update {
-		opacity: .5;
-	}
+.update.active {
+	opacity: 1;
+}
 
-	.update.active {
-		opacity: 1;
-	}
-
-	div .avatardiv {
-		vertical-align: text-bottom;
-	}
-
+div .avatardiv {
+	vertical-align: text-bottom;
+}
 </style>

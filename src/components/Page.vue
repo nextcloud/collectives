@@ -271,48 +271,47 @@ export default {
 </script>
 
 <style lang="scss">
+#titleform form {
+	flex: auto;
+}
 
-	#titleform form {
-		flex: auto;
-	}
+#text-container .editor__content {
+	border: 2px solid var(--color-main-background);
+	border-radius: var(--border-radius);
+}
 
-	#text-container .editor__content {
-		border: 2px solid var(--color-main-background);
-		border-radius: var(--border-radius);
-	}
+.editor__content {
+	border: 2px;
+}
 
-	.editor__content {
-		border: 2px;
-	}
+.page-title {
+	padding: 8px 2px 2px 8px;
+	position: relative;
+	margin: auto;
+	max-width: 670px;
+	margin-bottom: -50px;
+	display: flex;
+}
 
+// Leave space for page list toggle on small screens
+// Editor/View: 670px, page list/details toggle: 44px
+@media only screen and (max-width: 670px + 44px) {
 	.page-title {
-		padding: 8px 2px 2px 8px;
-		position: relative;
-		margin: auto;
-		max-width: 670px;
-		margin-bottom: -50px;
-		display: flex;
+		padding: 8px 2px 2px 40px;
 	}
+}
 
-	// Leave space for page list toggle on small screens
-	// Editor/View: 670px, page list/details toggle: 44px
-	@media only screen and (max-width: 670px + 44px) {
-		.page-title {
-			padding: 8px 2px 2px 40px;
-		}
+#action-menu button {
+	z-index: 1;
+}
+
+.edit-button {
+	min-width: max-content;
+	height: 44px;
+
+	.icon {
+		opacity: 1;
+		margin-right: 8px;
 	}
-
-	#action-menu button {
-		z-index: 1;
-	}
-
-	.edit-button {
-		min-width: max-content;
-		height: 44px;
-
-		.icon {
-			opacity: 1;
-			margin-right: 8px;
-		}
-	}
+}
 </style>

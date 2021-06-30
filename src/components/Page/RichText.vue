@@ -156,88 +156,87 @@ export default {
 </script>
 
 <style scoped lang="scss">
-	#text-container {
-		display: block;
-		width: 100%;
-		max-width: 100%;
-		left: 0;
-		margin: 0 auto;
-		background-color: var(--color-main-background);
-	}
+#text-container {
+	display: block;
+	width: 100%;
+	max-width: 100%;
+	left: 0;
+	margin: 0 auto;
+	background-color: var(--color-main-background);
+}
 
-	.menubar {
-		position: fixed;
-		position: -webkit-sticky;
-		position: sticky;
-		top: 0;
-		display: flex;
-		background-color: var(--color-main-background-translucent);
-		height: 44px;
-	}
+.menubar {
+	position: fixed;
+	position: -webkit-sticky;
+	position: sticky;
+	top: 0;
+	display: flex;
+	background-color: var(--color-main-background-translucent);
+	height: 44px;
+}
 
-	.menubar.loading {
-		opacity: 100%;
-	}
+.menubar.loading {
+	opacity: 100%;
+}
 
+.menubar .menubar-icons {
+	flex-grow: 1;
+	margin-left: calc((100% - 660px) / 2);
+}
+
+.menubar-icons button {
+	opacity: .4;
+	background-color: var(--color-background-dark);
+}
+
+@media (max-width: 660px) {
 	.menubar .menubar-icons {
-		flex-grow: 1;
-		margin-left: calc((100% - 660px) / 2);
+		margin-left: 0;
 	}
+}
 
-	.menubar-icons button {
-		opacity: .4;
-		background-color: var(--color-background-dark);
-	}
+#text-wrapper {
+	display: flex;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	position: absolute;
+}
 
-	@media (max-width: 660px) {
-		.menubar .menubar-icons {
-			margin-left: 0;
-		}
-	}
+#text-wrapper.icon-loading #editor {
+	opacity: 0.3;
+}
 
-	#text-wrapper {
-		display: flex;
-		width: 100%;
-		height: 100%;
-		overflow: hidden;
-		position: absolute;
-	}
+#text, .editor {
+	background: var(--color-main-background);
+	color: var(--color-main-text);
+	background-clip: padding-box;
+	border-radius: var(--border-radius);
+	padding: 0;
+	position: relative;
+	overflow-y: auto;
+	overflow-x: hidden;
+	width: 100%;
+}
 
-	#text-wrapper.icon-loading #editor {
-		opacity: 0.3;
-	}
+.editor__content {
+	max-width: 670px;
+	margin: auto;
+	position: relative;
+}
 
-	#text, .editor {
-		background: var(--color-main-background);
-		color: var(--color-main-text);
-		background-clip: padding-box;
-		border-radius: var(--border-radius);
-		padding: 0;
-		position: relative;
-		overflow-y: auto;
-		overflow-x: hidden;
-		width: 100%;
-	}
-
-	.editor__content {
-		max-width: 670px;
-		margin: auto;
-		position: relative;
-	}
-
-	.text-revision {
-		background-color: lightcoral;
-	}
+.text-revision {
+	background-color: lightcoral;
+}
 </style>
 
 <style lang="scss">
-	#text-wrapper {
-		@import './css/prosemirror';
-	}
+#text-wrapper {
+	@import './css/prosemirror';
+}
 
-	#text-container {
-		height: calc(100% - 50px);
-		top: 50px;
-	}
-
+#text-container {
+	height: calc(100% - 50px);
+	top: 50px;
+}
 </style>

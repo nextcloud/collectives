@@ -203,67 +203,67 @@ export default {
 
 // Copied from apps/files_versions/src/css/versions.css
 <style lang="scss" scoped>
-	.clear-float {
-		clear: both;
-	}
+.clear-float {
+	clear: both;
+}
 
-	li {
-		width: 100%;
-		cursor: default;
-		height: 56px;
-		float: left;
-		border-bottom: 1px solid rgba(100,100,100,.1);
-	}
+li {
+	width: 100%;
+	cursor: default;
+	height: 56px;
+	float: left;
+	border-bottom: 1px solid rgba(100,100,100,.1);
+}
 
-	li:last-child {
-		border-bottom: none;
-	}
+li:last-child {
+	border-bottom: none;
+}
 
-	li.active {
-		background-color: var(--color-background-dark);
-	}
+li.active {
+	background-color: var(--color-background-dark);
+}
 
-	a, div > span {
-		vertical-align: middle;
-		opacity: .5;
-	}
+a, div > span {
+	vertical-align: middle;
+	opacity: .5;
+}
 
-	li a {
-		padding: 15px 10px 11px;
-	}
+li a {
+	padding: 15px 10px 11px;
+}
 
-	a:hover, a:focus {
-		opacity: 1;
-	}
+a:hover, a:focus {
+	opacity: 1;
+}
 
-	.icon-container {
-		display: inline-block;
-		vertical-align: top;
-	}
+.icon-container {
+	display: inline-block;
+	vertical-align: top;
+}
 
-	img {
-		cursor: pointer;
-		padding-right: 4px;
-	}
+img {
+	cursor: pointer;
+	padding-right: 4px;
+}
 
-	img.icon {
-		cursor: default;
-	}
+img.icon {
+	cursor: default;
+}
 
-	.version-container {
-		display: inline-block;
-	}
+.version-container {
+	display: inline-block;
+}
 
-	.versiondate {
-		min-width: 100px;
-		vertical-align: super;
-	}
+.versiondate {
+	min-width: 100px;
+	vertical-align: super;
+}
 
-	.version-details {
-		text-align: left;
-	}
+.version-details {
+	text-align: left;
+}
 
-	.version-details > span {
-		padding: 0 10px;
-	}
+.version-details > span {
+	padding: 0 10px;
+}
 </style>

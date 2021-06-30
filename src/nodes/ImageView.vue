@@ -175,69 +175,69 @@ export default {
 </script>
 
 <style scoped lang="scss">
-	.image {
-		margin: 0;
-		padding: 0;
-	}
+.image {
+	margin: 0;
+	padding: 0;
+}
 
-	.image__caption {
+.image__caption {
+	text-align: center;
+	color: var(--color-text-lighter);
+	input[type='text'] {
+		width: 100%;
+		border: none;
 		text-align: center;
-		color: var(--color-text-lighter);
-		input[type='text'] {
-			width: 100%;
-			border: none;
-			text-align: center;
-		}
 	}
+}
 
-	.icon-image {
-		margin-top: 10px;
-		height: 32px;
-		padding: 20px;
-		background-size: contain;
+.icon-image {
+	margin-top: 10px;
+	height: 32px;
+	padding: 20px;
+	background-size: contain;
+}
+
+.image__loading {
+	height: 100px;
+}
+
+.image__view {
+	text-align: center;
+
+	.image__main {
+		max-height: 40vh;
 	}
+}
 
-	.image__loading {
-		height: 100px;
+.image__placeholder {
+	a {
+		display: flex;
 	}
-
-	.image__view {
+	.image__main {
+		background-color: var(--color-background-dark);
 		text-align: center;
+		padding: 5px;
+		border-radius: var(--border-radius);
 
-		.image__main {
-			max-height: 40vh;
+		.icon-image {
+			margin: 0;
+		}
+
+		p {
+			padding: 10px;
 		}
 	}
+}
 
-	.image__placeholder {
-		a {
-			display: flex;
-		}
-		.image__main {
-			background-color: var(--color-background-dark);
-			text-align: center;
-			padding: 5px;
-			border-radius: var(--border-radius);
+.fade-enter-active {
+	transition: opacity .3s ease-in-out;
+}
 
-			.icon-image {
-				margin: 0;
-			}
+.fade-enter-to {
+	opacity: 1;
+}
 
-			p {
-				padding: 10px;
-			}
-		}
-	}
-
-	.fade-enter-active {
-		transition: opacity .3s ease-in-out;
-	}
-
-	.fade-enter-to {
-		opacity: 1;
-	}
-
-	.fade-enter {
-		opacity: 0;
-	}
+.fade-enter {
+	opacity: 0;
+}
 </style>
