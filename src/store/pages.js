@@ -26,19 +26,30 @@ export default {
 	},
 
 	getters: {
-		pagePath(_state, getters) {
+		currentPagePath(_state, getters) {
 			return getters.pageParam || 'Readme'
 		},
 
-		currentPagePath(state, getters) {
+		pagePath: (_state) => (page) => {
+			const parts = page.filePath.split('/')
+			if (page.fileName !== 'Readme.md') {
+				parts.push(page.title)
+			}
+			return parts
+				.filter(Boolean)
+				.map(p => encodeURIComponent(p))
+				.join('/')
+		},
+
+		currentPages(state, getters) {
 			// Return landing page
-			if (getters.pagePath === 'Readme') {
+			if (getters.currentPagePath === 'Readme') {
 				return [getters.collectivePage]
 			}
 
 			// Iterate through all path levels to find the correct page
 			const pages = []
-			const parts = getters.pagePath.split('/').filter(Boolean)
+			const parts = getters.currentPagePath.split('/').filter(Boolean)
 			let page = getters.collectivePage
 			for (const i in parts) {
 				page = state.pages.find(p => (p.parentId === page.id && p.title === parts[i]))
@@ -52,7 +63,7 @@ export default {
 		},
 
 		currentPage(state, getters) {
-			return getters.currentPagePath[getters.currentPagePath.length - 1]
+			return getters.currentPages[getters.currentPages.length - 1]
 			    || state.updatedPage
 		},
 
