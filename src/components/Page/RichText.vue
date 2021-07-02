@@ -82,9 +82,11 @@ export default {
 			return (this.pageLoading || this.contentLoading)
 		},
 
+		/**
+		 * @returns {string}
+		 */
 		davUrl() {
 			return (this.pageUrl !== null ? this.pageUrl : this.currentPageDavUrl)
-
 		},
 
 		/**
