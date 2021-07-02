@@ -34,6 +34,8 @@ OC.L10N.register(
     "Reverted {page} to revision {timestamp}." : "Gjenoppretet {page} til versjon {timestamp}.",
     "Failed to revert {page} to revision {timestamp}." : "Klarte ikke å tilbakestille {page} til versjon {timestamp}.",
     "Title" : "Navn",
+    "Done" : "Ferdig",
+    "Edit" : "Rediger",
     "Could not rename the page" : "Kunne ikke gi siden nytt navn",
     "Expand subpage list" : "Utvid undersideliste",
     "Collapse subpage list" : "Fold sammen undersidelisten",
