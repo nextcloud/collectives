@@ -54,6 +54,12 @@ export default {
 			type: Boolean,
 			required: false,
 		},
+
+		pageUrl: {
+			type: String,
+			required: false,
+			default: null,
+		},
 	},
 
 	data() {
@@ -74,6 +80,11 @@ export default {
 		 */
 		loading() {
 			return (this.pageLoading || this.contentLoading)
+		},
+
+		davUrl() {
+			return (this.pageUrl !== null ? this.pageUrl : this.currentPageDavUrl)
+
 		},
 
 		/**
@@ -122,7 +133,7 @@ export default {
 	},
 
 	watch: {
-		'currentPageDavUrl'() {
+		'davUrl'() {
 			this.getPageContent()
 		},
 	},
@@ -138,7 +149,7 @@ export default {
 		async getPageContent() {
 			try {
 				this.contentLoading = true
-				const content = await axios.get(this.currentPageDavUrl)
+				const content = await axios.get(this.davUrl)
 				// content.data will attempt to parse as json
 				// but we want the raw text.
 				this.pageContent = content.request.responseText

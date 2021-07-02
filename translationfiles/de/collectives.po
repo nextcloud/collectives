@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2021-06-14 23:19+0200\n"
+"POT-Creation-Date: 2021-07-02 10:41+0200\n"
 "PO-Revision-Date: 2021-05-26 13:38+0000\n"
 "Last-Translator: J. Lavoie <j.lavoie@net-c.ca>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/collectives/"
@@ -23,8 +23,8 @@ msgstr ""
 #: /collectives/lib/Search/CollectiveProvider.php:58
 #: /collectives/lib/Search/CollectiveProvider.php:106
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:2
-#: /collectives/specialVueFakeDummyForL10nScript.js:27
-#: /collectives/specialVueFakeDummyForL10nScript.js:48
+#: /collectives/specialVueFakeDummyForL10nScript.js:29
+#: /collectives/specialVueFakeDummyForL10nScript.js:50
 msgid "Collectives"
 msgstr "Kollektive"
 
@@ -146,7 +146,7 @@ msgid "Collective and circle"
 msgstr "Kollektiv und Kreis"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:13
-#: /collectives/specialVueFakeDummyForL10nScript.js:50
+#: /collectives/specialVueFakeDummyForL10nScript.js:52
 msgid "Create new collective"
 msgstr "Erstelle ein neues Kollektiv"
 
@@ -200,88 +200,104 @@ msgstr ""
 msgid "Title"
 msgstr "Titel"
 
+#: /collectives/specialVueFakeDummyForL10nScript.js:27
+msgid "Stop editing"
+msgstr "Bearbeiten beenden"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:27
+msgid "Start editing"
+msgstr "Bearbeiten starten"
+
 #: /collectives/specialVueFakeDummyForL10nScript.js:28
+msgid "Done"
+msgstr "Fertig"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:28
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:30
 msgid "Could not rename the page"
 msgstr "Umbenennen der Seite fehlgeschlagen"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:29
+#: /collectives/specialVueFakeDummyForL10nScript.js:31
 msgid "Expand subpage list"
 msgstr "Klappe Unterseiten-Liste auf"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:29
+#: /collectives/specialVueFakeDummyForL10nScript.js:31
 msgid "Collapse subpage list"
 msgstr "Klappe Unterseiten-Liste ein"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:30
+#: /collectives/specialVueFakeDummyForL10nScript.js:32
 msgid "Last edited by {user}"
 msgstr "Zuletzt bearbeitet von {user}"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:31
+#: /collectives/specialVueFakeDummyForL10nScript.js:33
 msgid "Add a subpage"
 msgstr "Unterseite hinzufügen"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:32
-#: /collectives/specialVueFakeDummyForL10nScript.js:38
+#: /collectives/specialVueFakeDummyForL10nScript.js:34
+#: /collectives/specialVueFakeDummyForL10nScript.js:40
 msgid "New Page"
 msgstr "Neue Seite"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:33
-#: /collectives/specialVueFakeDummyForL10nScript.js:39
+#: /collectives/specialVueFakeDummyForL10nScript.js:35
+#: /collectives/specialVueFakeDummyForL10nScript.js:41
 msgid "Could not create the page"
 msgstr "Anlegen der Seite fehlgeschlagen"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:34
+#: /collectives/specialVueFakeDummyForL10nScript.js:36
 msgid "Sort order"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:35
+#: /collectives/specialVueFakeDummyForL10nScript.js:37
 msgid "Sort by last modification"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:36
+#: /collectives/specialVueFakeDummyForL10nScript.js:38
 msgid "Sort by title"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:37
+#: /collectives/specialVueFakeDummyForL10nScript.js:39
 msgid "Add a page"
 msgstr "Seite hinzufügen"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:40
+#: /collectives/specialVueFakeDummyForL10nScript.js:42
 msgid "Delete page"
 msgstr "Seite entfernen"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:41
+#: /collectives/specialVueFakeDummyForL10nScript.js:43
 msgid "Page deleted"
 msgstr "Seite entfernt"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:42
+#: /collectives/specialVueFakeDummyForL10nScript.js:44
 msgid "Could not delete the page"
 msgstr "Seite konnte nicht entfernt werden"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:43
+#: /collectives/specialVueFakeDummyForL10nScript.js:45
 msgid "Current version"
 msgstr "Aktuelle Version"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:44
+#: /collectives/specialVueFakeDummyForL10nScript.js:46
 msgid "No other versions available"
 msgstr "Keine weiteren Versionen vorhanden"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:45
+#: /collectives/specialVueFakeDummyForL10nScript.js:47
 msgid "After editing you can find old versions of the page here."
 msgstr "Nach dem Bearbeiten werden alte Versionen hier angezeigt."
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:46
+#: /collectives/specialVueFakeDummyForL10nScript.js:48
 msgid "Could not get page versions"
 msgstr "Konnte Versionen der Seite nicht laden"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:47
+#: /collectives/specialVueFakeDummyForL10nScript.js:49
 #: /collectives/src/util/xmlToVersionsList.js:29
 msgid "%n byte"
 msgid_plural "%n bytes"
 msgstr[0] "%n Byte"
 msgstr[1] "%n Bytes"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:49
+#: /collectives/specialVueFakeDummyForL10nScript.js:51
 msgid "Come, organize and build shared knowledge!"
 msgstr "Kommt vorbei, organisiert euch und teilt euer Wissen!"
 
@@ -296,12 +312,6 @@ msgstr "Die folgenden notwendigen Apps fehlen:"
 #: /collectives/templates/error.php:27
 msgid "Please ask the administrator to enable these apps."
 msgstr "Bitte frage die Admins, ob sie diese Apps aktivieren können."
-
-#~ msgid "Done"
-#~ msgstr "Fertig"
-
-#~ msgid "Edit"
-#~ msgstr "Bearbeiten"
 
 #~ msgid "No collective selected"
 #~ msgstr "Kein Kollektiv ausgewählt"

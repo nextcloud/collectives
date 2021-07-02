@@ -5,9 +5,7 @@
 				type="text"
 				disabled
 				:value="versionTitle">
-			<button
-				type="button"
-				class="button warn"
+			<button class="restore-button warn"
 				:title="t('collectives', 'Restore this version')"
 				@click="revertVersion">
 				<span class="icon icon-history" />
@@ -121,3 +119,15 @@ export default {
 	},
 }
 </script>
+
+<style lang="scss">
+.restore-button {
+	min-width: max-content;
+	height: 44px;
+
+	.icon {
+		opacity: 1;
+		margin-right: 8px;
+	}
+}
+</style>
