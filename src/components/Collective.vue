@@ -2,7 +2,8 @@
 	<div id="app-content-wrapper">
 		<PageList />
 		<AppContentDetails>
-			<Version v-if="currentPage && version" />
+			<AllPages v-if="collectivePage && allPagesView" />
+			<Version v-else-if="currentPage && version" />
 			<Page v-else-if="currentPage" />
 			<EmptyContent v-else-if="loading('collective')"
 				icon="icon-loading" />
@@ -19,6 +20,7 @@ import { SELECT_VERSION } from '../store/mutations'
 import displayError from '../util/displayError'
 import AppContentDetails from '@nextcloud/vue/dist/Components/AppContentDetails'
 import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
+import AllPages from '../components/AllPages'
 import Page from '../components/Page'
 import Version from '../components/Page/Version'
 import PageNotFound from '../components/Page/PageNotFound'
@@ -28,6 +30,7 @@ export default {
 	name: 'Collective',
 
 	components: {
+		AllPages,
 		AppContentDetails,
 		EmptyContent,
 		Page,
@@ -50,7 +53,9 @@ export default {
 		...mapGetters([
 			'currentCollective',
 			'currentPage',
+			'collectivePage',
 			'loading',
+			'allPagesView',
 			'pageParam',
 			'version',
 		]),

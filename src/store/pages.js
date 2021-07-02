@@ -75,8 +75,25 @@ export default {
 			].filter(Boolean).join('/')
 		},
 
+		pageFilePath: (state) => (pageId) => {
+			const page = state.pages.find(p => (p.id === pageId))
+			return [
+				page.collectivePath,
+				page.filePath,
+				page.fileName,
+			].filter(Boolean).join('/')
+		},
+
 		currentPageDavPath(_state, getters) {
 			const parts = getters.currentPageFilePath.split('/')
+			parts.unshift(getCurrentUser().uid)
+			return parts
+				.map(p => encodeURIComponent(p))
+				.join('/')
+		},
+
+		pageDavPath: (_state, getters) => (pageId) => {
+			const parts = getters.pageFilePath(pageId).split('/')
 			parts.unshift(getCurrentUser().uid)
 			return parts
 				.map(p => encodeURIComponent(p))
@@ -87,12 +104,25 @@ export default {
 			return generateRemoteUrl(`dav/files/${getters.currentPageDavPath}`)
 		},
 
+		pageDavUrl: (_state, getters) => (pageId) => {
+			return generateRemoteUrl(`dav/files/${getters.pageDavPath(pageId)}`)
+		},
+
 		collectivePage(state) {
 			return state.pages.find(p => (p.parentId === 0 && p.title === 'Readme'))
 		},
 
 		visibleSubpages: (state) => (parentId) => {
 			return state.pages.filter(p => p.parentId === parentId)
+		},
+
+		visiblePageTree: (state, getters) => (pageId) => {
+			const pages = state.pages.filter(p => p.id === pageId)
+			const subpages = state.pages.filter(p => p.parentId === pageId)
+			for (const i in subpages) {
+				pages.splice(pages.length, 0, ...getters.visiblePageTree(subpages[i].id))
+			}
+			return pages
 		},
 
 		updatedPagePath(state, getters) {

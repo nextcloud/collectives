@@ -54,6 +54,9 @@ export default {
 				this.$store.commit('info', null)
 			}
 		},
+		'$route'(to, from) {
+			this.hideAllPages()
+		},
 	},
 
 	mounted() {
@@ -67,7 +70,7 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['hide']),
+		...mapMutations(['hide', 'hideAllPages']),
 
 		/**
 		 * Get list of all collectives

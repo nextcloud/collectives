@@ -213,7 +213,8 @@ export default {
 	width: 100%;
 	height: 100%;
 	overflow: hidden;
-	position: absolute;
+	// TODO: was this important? If so, instead override it in `AllPages.vue`
+	// position: absolute;
 }
 
 #text-wrapper.icon-loading #editor {
@@ -261,6 +262,14 @@ export default {
 	#editor-wrapper, #text-wrapper {
 		display: block !important;
 		overflow: visible !important;
+	}
+
+	#titleform-allpages {
+		page-break-after: avoid;
+	}
+
+	h1, h2, h3 {
+		page-break-after: avoid;
 	}
 }
 </style>

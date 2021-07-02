@@ -11,6 +11,12 @@
 			{{ collective.emoji }}
 		</template>
 		<template #actions>
+			<ActionRouter icon="icon-pages"
+				:to="`/${encodeURIComponent(collective.name)}`"
+				:close-after-click="true"
+				@click="showAllPages">
+				{{ t('collectives', 'All pages view') }}
+			</ActionRouter>
 			<ActionLink v-if="isContactsInstalled"
 				:href="circleLink"
 				icon="icon-circles">
@@ -26,11 +32,12 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import { TRASH_COLLECTIVE } from '../../store/actions'
 import displayError from '../../util/displayError'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import ActionLink from '@nextcloud/vue/dist/Components/ActionLink'
+import ActionRouter from '@nextcloud/vue/dist/Components/ActionRouter'
 import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
 import { generateUrl } from '@nextcloud/router'
 
@@ -40,6 +47,7 @@ export default {
 	components: {
 		ActionButton,
 		ActionLink,
+		ActionRouter,
 		AppNavigationItem,
 	},
 
@@ -65,6 +73,8 @@ export default {
 	},
 
 	methods: {
+		...mapMutations(['showAllPages']),
+
 		isActive(collective) {
 			return this.collectiveParam === collective.name
 		},
