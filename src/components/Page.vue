@@ -15,10 +15,11 @@
 					type="text">
 			</form>
 			<button class="edit-button primary"
+				:title="edit ? t('collectives', 'Stop editing') : t('collectives', 'Start editing')"
 				@click="edit ? stopEdit() : startEdit()">
 				<span class="icon icon-white"
 					:class="`icon-${toggleIcon}`" />
-				{{ t('collectives', edit ? 'Done' : 'Edit') }}
+				{{ edit ? t('collectives', 'Done') : t('collectives', 'Edit') }}
 			</button>
 			<Actions>
 				<ActionButton
