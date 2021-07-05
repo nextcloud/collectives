@@ -1,5 +1,16 @@
 <template>
-	<div>
+	<div class="allpages">
+		<button class="close-button"
+			:title="t('collectives', 'Close')"
+			@click="hideAllPages">
+			<span class="icon icon-close" />
+		</button>
+		<button class="print-button"
+			:title="t('collectives', 'Print collective')"
+			@click="printAllPages()">
+			<span class="icon icon-category-office" />
+			{{ t('collectives', 'Print') }}
+		</button>
 		<div v-for="page in subpages" :key="`page-${page.id}`" class="page-allpages">
 			<h1 id="titleform-allpages" class="page-title-allpages">
 				{{ pageTitle(page) }}
@@ -41,7 +52,7 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['hide']),
+		...mapMutations(['hide', 'hideAllPages']),
 
 		pageTitle(page) {
 			return page.title === 'Readme' || page.title === '' ? this.collectiveTitle : page.title
@@ -50,11 +61,15 @@ export default {
 		pageUrl(pageId) {
 			return this.pageDavUrl(pageId)
 		},
+
+		printAllPages() {
+			window.print()
+		},
 	},
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 #titleform-allpages {
 	font-size: 35px;
 	width: 100%;
@@ -72,9 +87,33 @@ export default {
 	position: revert;
 }
 
+.allpages {
+	margin-top: 8px;
+}
+
+.print-button, .close-button {
+	position: relative;
+	float: right;
+	z-index: 10002;
+	min-width: max-content;
+	height: 44px;
+
+	.icon {
+		opacity: 1;
+	}
+}
+
+.print-button .icon {
+	margin-right: 8px;
+}
+
 @media print {
 	div .page-allpages {
 		page-break-after: always;
+	}
+
+	.print-button, .close-button {
+		display: none !important;
 	}
 }
 </style>

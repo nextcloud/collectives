@@ -2,12 +2,18 @@
 	<div id="app-content-wrapper">
 		<PageList />
 		<AppContentDetails>
-			<AllPages v-if="collectivePage && allPagesView" />
-			<Version v-else-if="currentPage && version" />
+			<Version v-if="currentPage && version" />
 			<Page v-else-if="currentPage" />
 			<EmptyContent v-else-if="loading('collective')"
 				icon="icon-loading" />
 			<PageNotFound v-else />
+
+			<Modal v-if="collectivePage && allPages"
+				size="full"
+				class="all-pages-modal"
+				@close="hideAllPages">
+				<AllPages />
+			</Modal>
 		</AppContentDetails>
 	</div>
 </template>
@@ -20,6 +26,7 @@ import { SELECT_VERSION } from '../store/mutations'
 import displayError from '../util/displayError'
 import AppContentDetails from '@nextcloud/vue/dist/Components/AppContentDetails'
 import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
+import Modal from '@nextcloud/vue/dist/Components/Modal'
 import AllPages from '../components/AllPages'
 import Page from '../components/Page'
 import Version from '../components/Page/Version'
@@ -30,9 +37,10 @@ export default {
 	name: 'Collective',
 
 	components: {
-		AllPages,
 		AppContentDetails,
 		EmptyContent,
+		Modal,
+		AllPages,
 		Page,
 		PageList,
 		PageNotFound,
@@ -55,7 +63,7 @@ export default {
 			'currentPage',
 			'collectivePage',
 			'loading',
-			'allPagesView',
+			'allPages',
 			'pageParam',
 			'version',
 		]),
@@ -81,7 +89,7 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['show']),
+		...mapMutations(['show', 'hideAllPages']),
 
 		initCollective() {
 			this.getPages()
@@ -132,6 +140,10 @@ export default {
 </script>
 
 <style>
+div.modal-wrapper.modal-wrapper--full div.modal-container {
+	overflow: scroll;
+}
+
 @media print {
 	#app-content-vue {
 		display: block !important;
@@ -146,6 +158,16 @@ export default {
 
 	#app-sidebar-vue {
 		display: none !important;
+	}
+
+	div.modal-mask.all-pages-modal {
+		position: absolute;
+	}
+
+	div.modal-wrapper.modal-wrapper--full div.modal-container {
+		overflow: visible !important;
+		width: 100%;
+		box-shadow: unset;
 	}
 }
 </style>

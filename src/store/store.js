@@ -21,13 +21,13 @@ export default new Vuex.Store({
 		messages: {},
 		showing: {},
 		loading: {},
-		allPagesView: false,
+		allPages: false,
 	},
 
 	getters: {
 		loading: (state) => (aspect) => state.loading[aspect],
 		showing: (state) => (aspect) => state.showing[aspect],
-		allPagesView: (state) => state.allPagesView,
+		allPages: (state) => state.allPages,
 
 		collectiveParam: (state) => state.route.params.collective,
 		pageParam: (state) => state.route.params.page,
@@ -54,11 +54,11 @@ export default new Vuex.Store({
 			Vue.set(state.showing, aspect, !state.showing[aspect]),
 
 		showAllPages(state) {
-			state.allPagesView = true
+			state.allPages = true
 		},
 
 		hideAllPages(state) {
-			state.allPagesView = false
+			state.allPages = false
 		},
 	},
 })
