@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2021-07-02 10:41+0200\n"
-"PO-Revision-Date: 2021-06-16 19:34+0000\n"
+"PO-Revision-Date: 2021-07-05 10:33+0000\n"
 "Last-Translator: Nathan <bonnemainsnathan@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/fr/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.8-dev\n"
 
 #: /collectives/lib/Fs/UserFolderHelper.php:62
 #: /collectives/lib/Search/CollectiveProvider.php:58
@@ -202,19 +202,19 @@ msgstr "Nom"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:27
 msgid "Stop editing"
-msgstr ""
+msgstr "Arrêter la modification"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:27
 msgid "Start editing"
-msgstr ""
+msgstr "Commencer la modification"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:28
 msgid "Done"
-msgstr ""
+msgstr "Terminé"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:28
 msgid "Edit"
-msgstr ""
+msgstr "Modifier"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:30
 msgid "Could not rename the page"
