@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.9.21 - 2021.07.06
+
+### ✨New
+* 🖨️ Bring proper formatting to print pages.
+
+### 🌎Translations
+* 🗣️ Updated Russion translation thanks to Artem.
+* 🗣️ Updated French translation thanks to Nathan.
+
+### 🏗️Fixes
+* 👁️ Display app icon for collectives without emoji.
+* 🏛️ Fix view of an old page version, improve UI.
+
+### 🚧Updates
+* 🔌 Update all dependencies and migrate to Node.js 14.
+
 ## 0.8.21 - 2021.06.18
 
 ### ✨New
