@@ -2,7 +2,7 @@
 	<div class="allpages">
 		<button class="close-button"
 			:title="t('collectives', 'Close')"
-			@click="hideAllPages">
+			@click="hide('all_pages')">
 			<span class="icon icon-close" />
 		</button>
 		<button class="print-button"
@@ -52,7 +52,7 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['hide', 'hideAllPages']),
+		...mapMutations(['hide']),
 
 		pageTitle(page) {
 			return page.title === 'Readme' || page.title === '' ? this.collectiveTitle : page.title

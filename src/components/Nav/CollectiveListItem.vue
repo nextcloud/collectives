@@ -14,7 +14,7 @@
 			<ActionRouter icon="icon-pages"
 				:to="`/${encodeURIComponent(collective.name)}`"
 				:close-after-click="true"
-				@click="showAllPages">
+				@click="show('all_pages')">
 				{{ t('collectives', 'All pages view') }}
 			</ActionRouter>
 			<ActionLink v-if="isContactsInstalled"
@@ -73,7 +73,7 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['showAllPages']),
+		...mapMutations(['show']),
 
 		isActive(collective) {
 			return this.collectiveParam === collective.name

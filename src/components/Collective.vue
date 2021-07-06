@@ -8,10 +8,10 @@
 				icon="icon-loading" />
 			<PageNotFound v-else />
 
-			<Modal v-if="collectivePage && allPages"
+			<Modal v-if="collectivePage && showing('all_pages')"
 				size="full"
 				class="all-pages-modal"
-				@close="hideAllPages">
+				@close="hide('all_pages')">
 				<AllPages />
 			</Modal>
 		</AppContentDetails>
@@ -63,8 +63,8 @@ export default {
 			'currentPage',
 			'collectivePage',
 			'loading',
-			'allPages',
 			'pageParam',
+			'showing',
 			'version',
 		]),
 
@@ -89,7 +89,7 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['show', 'hideAllPages']),
+		...mapMutations(['show', 'hide']),
 
 		initCollective() {
 			this.getPages()
