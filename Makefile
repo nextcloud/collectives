@@ -7,6 +7,7 @@ OCC?=php ../../occ
 NPM?=npm
 
 # Release variables
+VERSION_CHANGELOG:=$(shell sed -ne 's/^\#\#\s\([0-9\.]\+\)\s-\s.*$$/\1/p' CHANGELOG.md | head -n1 )
 GITLAB_GROUP:=collectivecloud
 GITLAB_PROJECT:=collectives
 GITLAB_PROJECT_ID:=17827012
@@ -164,11 +165,16 @@ build: node-modules build-js-production
 	fi
 	rm -rf $(RELEASE_DIR)/collectives
 
-# Prepare the release package for the app store
-release: lint-appinfo build
+release-checks:
+ifneq ($(VERSION),$(VERSION_CHANGELOG))
+	  $(error Version missmatch between `appinfo/info.xml` and `CHANGELOG.md`)
+endif
 ifndef GITLAB_API_TOKEN
 	  $(error Missing $$GITLAB_API_TOKEN)
 endif
+
+# Prepare the release package for the app store
+release: release-checks lint-appinfo build
 	# Upload the release tarball
 	$(eval UPLOAD_PATH:=$(shell curl -s -X POST -H "PRIVATE-TOKEN: $(GITLAB_API_TOKEN)" \
 			--form "file=@build/release/collectives-$(VERSION).tar.gz" $(GITLAB_API_URL)/uploads | jq -r '.full_path'))
