@@ -202,7 +202,7 @@ ifndef RELEASE_NAME
 	  $(error Please specify the release to remove with $$RELEASE_NAME)
 endif
 ifndef NEXTCLOUD_PASSWORD
-	  $(error Missing $NEXTCLOUD_PASSWORD)
+	  $(error Missing $$NEXTCLOUD_PASSWORD)
 endif
 	echo 'Removing release from nextcloud app store.'
 	curl -s -X DELETE $(NEXTCLOUD_API_URL)/releases/$(RELEASE_NAME) \
