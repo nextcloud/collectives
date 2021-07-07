@@ -26,8 +26,8 @@
     "@nextcloud/moment": "^1.1.1",
     "@nextcloud/paths": "^2.0.0",
     "@nextcloud/router": "^2.0.0",
-    "@nextcloud/vue": "^4.0.2",
-    "markdown-it": "^12.0.6",
+    "@nextcloud/vue": "^4.0.3",
+    "markdown-it": "^12.1.0",
     "markdown-it-task-lists": "^2.1.1",
     "stylelint-config-recommended-scss": "^4.2.0",
     "stylelint-scss": "^3.19.0",
@@ -56,7 +56,7 @@
     "cypress": "^7.6.0",
     "eslint-plugin-cypress": "^2.11.3",
     "eslint-plugin-promise": "^4.3.1",
-    "jest": "^27.0.5",
+    "jest": "^27.0.6",
     "vue-jest": "^3.0.7"
   }
 }
