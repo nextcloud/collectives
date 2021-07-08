@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<Item key="page.title"
-			:to="`/${encodeURIComponent(collectiveParam)}/${pagePath(page)}`"
+			:to="pagePath(page)"
 			:collapsible="isCollapsible"
 			:page-id="page.id"
 			:level="level"

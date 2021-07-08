@@ -2,7 +2,9 @@
 	<div class="subpages">
 		<div v-for="page in subpages" :key="`page-${page.id}`" class="subpage">
 			<h2 class="subpage-title">
-				{{ page.title }}
+				<router-link :to="pagePath(page)">
+					{{ page.title }}
+				</router-link>
 			</h2>
 			<RichText :page-url="pageUrl(page.id)" />
 			<Subpages :page-id="page.id" />
@@ -34,6 +36,7 @@ export default {
 			'currentCollective',
 			'currentPage',
 			'pageDavUrl',
+			'pagePath',
 			'visibleSubpages',
 		]),
 
@@ -60,13 +63,14 @@ export default {
 <style lang="scss" scoped>
 
 .subpage-title {
-	font-size: 35px;
+	font-size: 30px;
+	line-height: 45px;
 	width: 100%;
-	height: 43px;
 	opacity: 0.8;
 	padding: 8px 2px 2px 8px;
 	margin: auto;
 	max-width: 670px;
+	font-weight: normal;
 }
 
 .app-content-details div #text-container {

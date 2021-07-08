@@ -30,12 +30,13 @@ export default {
 			return getters.pageParam || 'Readme'
 		},
 
-		pagePath: (_state) => (page) => {
-			const parts = page.filePath.split('/')
-			if (page.fileName !== 'Readme.md') {
-				parts.push(page.title)
-			}
-			return parts
+		pagePath: (_state, getters) => (page) => {
+			const parts = [
+				getters.collectiveParam,
+				...page.filePath.split('/'),
+				page.fileName !== 'Readme.md' && page.title,
+			]
+			return '/' + parts
 				.filter(Boolean)
 				.map(p => encodeURIComponent(p))
 				.join('/')
