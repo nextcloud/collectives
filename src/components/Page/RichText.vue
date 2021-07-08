@@ -1,15 +1,13 @@
 <template>
-	<div id="text-container" :key="'text-' + currentPage.id">
-		<div id="text-wrapper" class="richEditor">
-			<div id="text" class="editor">
-				<div :class="{menubar: true, loading}">
-					<div class="menubar-icons" />
-				</div>
-				<div v-if="!loading">
-					<EditorContent
-						class="editor__content"
-						:editor="editor" />
-				</div>
+	<div id="text-wrapper" class="richEditor">
+		<div id="text" class="editor">
+			<div :class="{menubar: true, loading}">
+				<div class="menubar-icons" />
+			</div>
+			<div v-if="!loading">
+				<EditorContent
+					class="editor__content"
+					:editor="editor" />
 			</div>
 		</div>
 	</div>
@@ -64,7 +62,7 @@ export default {
 
 	data() {
 		return {
-			contentLoading: true,
+			loading: true,
 			pageContent: null,
 		}
 	},
@@ -74,13 +72,6 @@ export default {
 			'currentPage',
 			'currentPageDavUrl',
 		]),
-
-		/**
-		 * @returns {boolean}
-		 */
-		loading() {
-			return (this.pageLoading || this.contentLoading)
-		},
 
 		/**
 		 * @returns {string}
@@ -150,7 +141,7 @@ export default {
 		 */
 		async getPageContent() {
 			try {
-				this.contentLoading = true
+				this.loading = true
 				const content = await axios.get(this.davUrl)
 				// content.data will attempt to parse as json
 				// but we want the raw text.
@@ -158,7 +149,8 @@ export default {
 				if (!this.pageContent) {
 					this.$emit('empty')
 				}
-				this.contentLoading = false
+				this.loading = false
+				this.$emit('ready')
 			} catch (e) {
 				const { id } = this.currentPage
 				console.error(`Failed to fetch content of page ${id}`, e)
@@ -169,14 +161,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-#text-container {
-	display: block;
-	width: 100%;
-	max-width: 100%;
-	left: 0;
-	margin: 0 auto;
-	background-color: var(--color-main-background);
-}
 
 .menubar {
 	position: fixed;
@@ -211,10 +195,7 @@ export default {
 #text-wrapper {
 	display: flex;
 	width: 100%;
-	height: 100%;
 	overflow: hidden;
-	// TODO: was this important? If so, instead override it in `AllPages.vue`
-	// position: absolute;
 }
 
 #text-wrapper.icon-loading #editor {
@@ -247,11 +228,6 @@ export default {
 <style lang="scss">
 #text-wrapper {
 	@import './css/prosemirror';
-}
-
-#text-container {
-	height: calc(100% - 50px);
-	top: 50px;
 }
 
 @media print {

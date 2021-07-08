@@ -7,13 +7,6 @@
 			<EmptyContent v-else-if="loading('collective')"
 				icon="icon-loading" />
 			<PageNotFound v-else />
-
-			<Modal v-if="collectivePage && showing('all_pages')"
-				size="full"
-				class="all-pages-modal"
-				@close="hide('all_pages')">
-				<AllPages />
-			</Modal>
 		</AppContentDetails>
 	</div>
 </template>
@@ -26,8 +19,6 @@ import { SELECT_VERSION } from '../store/mutations'
 import displayError from '../util/displayError'
 import AppContentDetails from '@nextcloud/vue/dist/Components/AppContentDetails'
 import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
-import Modal from '@nextcloud/vue/dist/Components/Modal'
-import AllPages from '../components/AllPages'
 import Page from '../components/Page'
 import Version from '../components/Page/Version'
 import PageNotFound from '../components/Page/PageNotFound'
@@ -39,8 +30,6 @@ export default {
 	components: {
 		AppContentDetails,
 		EmptyContent,
-		Modal,
-		AllPages,
 		Page,
 		PageList,
 		PageNotFound,
@@ -64,7 +53,6 @@ export default {
 			'collectivePage',
 			'loading',
 			'pageParam',
-			'showing',
 			'version',
 		]),
 

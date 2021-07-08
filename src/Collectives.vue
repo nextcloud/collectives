@@ -105,15 +105,22 @@ export default {
 	min-height: 100%;
 }
 
+#titleform {
+	z-index: 1;
+}
+
 #titleform button {
 	margin-top: 0px;
 }
 
-.app-content-details div #editor-container,
-.app-content-details div #text-container {
+.app-content-details div #editor-container {
 	position: absolute;
 	top: 54px;
 	height: calc(100% - 56px);
+}
+
+.app-content-details div #text-container {
+	margin-top: 51px;
 }
 
 #editor-container #editor {

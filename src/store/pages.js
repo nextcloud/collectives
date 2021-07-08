@@ -116,15 +116,6 @@ export default {
 			return state.pages.filter(p => p.parentId === parentId)
 		},
 
-		visiblePageTree: (state, getters) => (pageId) => {
-			const pages = state.pages.filter(p => p.id === pageId)
-			const subpages = state.pages.filter(p => p.parentId === pageId)
-			for (const i in subpages) {
-				pages.splice(pages.length, 0, ...getters.visiblePageTree(subpages[i].id))
-			}
-			return pages
-		},
-
 		updatedPagePath(state, getters) {
 			const collective = getters.collectiveParam
 			const { filePath, fileName, title, id } = state.updatedPage
