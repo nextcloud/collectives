@@ -77,6 +77,20 @@ describe('Collective', function() {
 		})
 	})
 
+	describe('non ascii characters', function() {
+		const special = 'stupid !@#$%^&()_ special chars'
+
+		it('can handle special chars in collective name',
+			function() {
+				cy.login('bob', 'bob', '/apps/collectives')
+				cy.createCollective(special)
+				cy.get('#titleform input').should('have.value', special)
+			})
+
+		after(function() {
+			cy.deleteCollective(special)
+		})
+	})
 	// Note: the different assertions in here
 	// all happen without any page reload or navigation.
 	//
