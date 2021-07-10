@@ -78,7 +78,7 @@ describe('Page', function() {
 		before(function() {
 			cy.login('bob', 'bob', '/apps/collectives/Our Garden')
 			cy.get('#text h1').should('contain', 'Welcome to your new collective')
-			cy.contains('.app-content-list-item', 'Day 1')
+			cy.contains('.app-content-list-item', '#% special chars')
 				.find('button.icon-add')
 				.click({ force: true })
 			// wait for the editor to load - so it cannot steal our focus.
@@ -94,7 +94,7 @@ describe('Page', function() {
 			cy.get('.app-content-list-item').should('contain', 'Subpage Title')
 			cy.get('#titleform input').should('have.value', 'Subpage Title')
 			cy.get('#titleform input').should('not.have.attr', 'disabled')
-			cy.title().should('eq', 'Day 1/Subpage Title - Our Garden - Collectives - Nextcloud')
+			cy.title().should('eq', '#% special chars/Subpage Title - Our Garden - Collectives - Nextcloud')
 		})
 	})
 
