@@ -41,7 +41,7 @@ export default {
 			const parts = getters.pagePath.split('/').filter(Boolean)
 			let page = getters.collectivePage
 			for (const i in parts) {
-				page = state.pages.find(p => (p.parentId === page.id && p.title === decodeURIComponent(parts[i])))
+				page = state.pages.find(p => (p.parentId === page.id && p.title === parts[i]))
 				if (page) {
 					pages.push(page)
 				} else {
@@ -87,12 +87,12 @@ export default {
 		updatedPagePath(state, getters) {
 			const collective = getters.collectiveParam
 			const { filePath, fileName, title, id } = state.updatedPage
-			const titlePart = fileName === 'Readme.md' ? '' : title
+			const titlePart = fileName !== 'Readme.md' && title
 			const pagePath = [
-				encodeURIComponent(collective),
-				encodeURI(filePath),
-				encodeURIComponent(titlePart),
-			].filter(Boolean).join('/')
+				collective,
+				...filePath.split('/'),
+				titlePart,
+			].filter(Boolean).map(encodeURIComponent).join('/')
 			return `/${pagePath}?fileId=${id}`
 		},
 

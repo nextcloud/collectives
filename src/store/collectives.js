@@ -44,7 +44,7 @@ export default {
 
 		updatedCollectivePath(state) {
 			const collective = state.updatedCollective
-			return collective && `/${collective.name}`
+			return collective && `/${encodeURIComponent(collective.name)}`
 		},
 
 		collectiveChanged(state, getters) {

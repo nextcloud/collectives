@@ -30,6 +30,7 @@ describe('Page', function() {
 		cy.seedCollective('Our Garden')
 		cy.seedPage('Day 1', '', 'Readme.md')
 		cy.seedPage('Day 2', '', 'Readme.md')
+		cy.seedPage('#% special chars', '', 'Readme.md')
 		cy.seedPageContent('bob', 'Our Garden/Day 2.md', 'A test string with Day 2 in the middle.')
 	})
 
@@ -64,17 +65,26 @@ describe('Page', function() {
 		})
 	})
 
-	describe.only('Creating a new subpage', function() {
+	describe('with special chars', function() {
+		it('loads well', function() {
+			cy.login('bob', 'bob', '/apps/collectives/Our Garden')
+			cy.contains('.app-content-list-item a', '#% special chars').click()
+			cy.get('.app-content-list-item').should('contain', '#% special chars')
+			cy.get('#titleform input').should('have.value', '#% special chars')
+		})
+	})
+
+	describe('Creating a new subpage', function() {
 		before(function() {
 			cy.login('bob', 'bob', '/apps/collectives/Our Garden')
 			cy.get('#text h1').should('contain', 'Welcome to your new collective')
-			cy.contains('.app-content-list-item', 'Day 1').find('button.icon-add').click({ force: true })
-			// wait for the editor to load - so it cannot steal our focus.
-			// TODO: remove the next three lines once
-			// https://github.com/nextcloud/text/pull/1645 landet.
-			cy.get('.ProseMirror[contenteditable=true]').click()
-			cy.focused().type('Some Text')
-			cy.get('#titleform input').click()
+			cy.contains('.app-content-list-item', '#% special chars')
+				.find('button.icon-add')
+				.click({ force: true })
+			// TODO: remove the next line once
+			// https://github.com/nextcloud/text/pull/1645 has been
+			// backported to NC 21.
+			cy.focusTitle()
 			cy.focused().should('have.value', '')
 			cy.focused().type('Subpage Title{enter}')
 		})
@@ -82,7 +92,7 @@ describe('Page', function() {
 			cy.get('.app-content-list-item').should('contain', 'Subpage Title')
 			cy.get('#titleform input').should('have.value', 'Subpage Title')
 			cy.get('#titleform input').should('not.have.attr', 'disabled')
-			cy.title().should('eq', 'Day 1/Subpage Title - Our Garden - Collectives - Nextcloud')
+			cy.title().should('eq', '#% special chars/Subpage Title - Our Garden - Collectives - Nextcloud')
 		})
 	})
 
