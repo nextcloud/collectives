@@ -81,12 +81,10 @@ describe('Page', function() {
 			cy.contains('.app-content-list-item', '#% special chars')
 				.find('button.icon-add')
 				.click({ force: true })
-			// wait for the editor to load - so it cannot steal our focus.
-			// TODO: remove the next three lines once
-			// https://github.com/nextcloud/text/pull/1645 landet.
-			cy.get('.ProseMirror[contenteditable=true]').click()
-			cy.focused().type('Some Text')
-			cy.get('#titleform input').click()
+			// TODO: remove the next line once
+			// https://github.com/nextcloud/text/pull/1645 has been
+			// backported to NC 21.
+			cy.focusTitle()
 			cy.focused().should('have.value', '')
 			cy.focused().type('Subpage Title{enter}')
 		})

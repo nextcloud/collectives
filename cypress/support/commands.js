@@ -97,3 +97,10 @@ Cypress.Commands.add('addGroupToCollective', ({ group, collective }) => {
 	cy.get('input#linkgroup').type(`${group}{enter}`)
 	cy.get('#groupslist_table .groupid').should('contain', group)
 })
+
+Cypress.Commands.add('focusTitle', () => {
+	// wait for the editor to load - so it cannot steal our focus.
+	cy.get('.ProseMirror[contenteditable=true]', { timeout: 10000 }).click()
+	cy.focused().type('Some Text')
+	cy.get('#titleform input').click()
+})
