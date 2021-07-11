@@ -6,7 +6,7 @@
 					{{ page.title }}
 				</router-link>
 			</h2>
-			<RichText :page-url="pageUrl(page.id)" />
+			<RichText :page-url="pageDavUrl(page)" />
 			<Subpages :page-id="page.id" />
 		</div>
 	</div>
@@ -52,10 +52,6 @@ export default {
 
 	methods: {
 		...mapMutations(['hide']),
-
-		pageUrl(pageId) {
-			return this.pageDavUrl(pageId)
-		},
 	},
 }
 </script>

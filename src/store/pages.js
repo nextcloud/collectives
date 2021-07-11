@@ -69,15 +69,10 @@ export default {
 		},
 
 		currentPageFilePath(_state, getters) {
-			return [
-				getters.currentPage.collectivePath,
-				getters.currentPage.filePath,
-				getters.currentPage.fileName,
-			].filter(Boolean).join('/')
+			return getters.pageFilePath(getters.currentPage)
 		},
 
-		pageFilePath: (state) => (pageId) => {
-			const page = state.pages.find(p => (p.id === pageId))
+		pageFilePath: (state) => (page) => {
 			return [
 				page.collectivePath,
 				page.filePath,
@@ -86,15 +81,11 @@ export default {
 		},
 
 		currentPageDavPath(_state, getters) {
-			const parts = getters.currentPageFilePath.split('/')
-			parts.unshift(getCurrentUser().uid)
-			return parts
-				.map(p => encodeURIComponent(p))
-				.join('/')
+			return getters.pageDavPath(getters.currentPage)
 		},
 
-		pageDavPath: (_state, getters) => (pageId) => {
-			const parts = getters.pageFilePath(pageId).split('/')
+		pageDavPath: (_state, getters) => (page) => {
+			const parts = getters.pageFilePath(page).split('/')
 			parts.unshift(getCurrentUser().uid)
 			return parts
 				.map(p => encodeURIComponent(p))
@@ -105,8 +96,8 @@ export default {
 			return generateRemoteUrl(`dav/files/${getters.currentPageDavPath}`)
 		},
 
-		pageDavUrl: (_state, getters) => (pageId) => {
-			return generateRemoteUrl(`dav/files/${getters.pageDavPath(pageId)}`)
+		pageDavUrl: (_state, getters) => (page) => {
+			return generateRemoteUrl(`dav/files/${getters.pageDavPath(page)}`)
 		},
 
 		collectivePage(state) {
