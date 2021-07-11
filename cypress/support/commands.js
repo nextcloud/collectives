@@ -99,8 +99,10 @@ Cypress.Commands.add('addGroupToCollective', ({ group, collective }) => {
 })
 
 Cypress.Commands.add('focusTitle', () => {
+	// Make sure the new page loaded
+	cy.get('#titleform input').should('have.value', '')
 	// wait for the editor to load - so it cannot steal our focus.
-	cy.get('.ProseMirror[contenteditable=true]', { timeout: 10000 }).click()
+	cy.get('.ProseMirror[contenteditable=true]').click()
 	cy.focused().type('Some Text')
 	cy.get('#titleform input').click()
 })
