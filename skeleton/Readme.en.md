@@ -5,7 +5,7 @@
 
 ### 👥 Invite new people to the collective
 
-Whether you want to add your friends or whole groups, head over to [the Circles app](/index.php/apps/circles/) to add new members.
+Whether you want to add your friends or whole groups, follow the "manage members" link that you find in the action menu inside the collectives list on the left.
 
 ### 🌱 Bring life to your collective
 
