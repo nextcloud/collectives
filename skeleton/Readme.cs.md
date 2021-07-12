@@ -1,24 +1,24 @@
-# Welcome to your new collective
+# Vítejte ve vašem novém kolektivu
 
-**Come, organize and build shared knowledge!**
-
-
-### 👥 Invite new people to the collective
-
-Whether you want to add your friends or whole groups, head over to [the Circles app](/index.php/apps/circles/) to add new members.
-
-### 🌱 Bring life to your collective
-
-Create pages and share your thoughts that really matter. Whether it's a shared knowledge repository for the community or a handbook for your organisation – Collectives works!
-
-### 🛋️ Edit this landing page to feel like home
-
-Push the pencil button to get started! ↗️
+**Organizujte se a vytvářejte sdílené znalosti!**
 
 
-## Also good to know
+### 👥 Pozvěte do kolektivu nové lidi
 
-* Link local pages by selecting text and choosing "link file".
-* Multiple people can edit the same page simultaneously.
-* Find out more about this App in the [documentation](https://collectivecloud.gitlab.io/collectives/).
-* Ask [the community](https://help.nextcloud.com/c/apps/collectives/174) for help in case of questions.
+Ať už chcete přidat své přátele či celé skupiny, jděte do [aplikace Okruhy](/index.php/apps/circles/) a přidejte nové členy.
+
+### 🌱 Vdechněte svému kolektivu život
+
+Vytvářejte stránky a sdílejte své myšlenky, které jsou opravdu důležité. Ať už se jedná o repozitář sdílených znalostí pro komunitu nebo příručka pro vaši organizaci – Kolektivy fungují!
+
+### 🛋️ Upravte si tuto úvodní stránku tak, aby vám vyhovovala
+
+Klikněte na tlačítko tužky a začněte! ↗️
+
+
+## Také dobré vědět
+
+* Odkazujte na lokální stránky vybráním textu a zvolením „odkázat na soubor“.
+* Stejnou stránku může upravovat vícero lidí naráz.
+* Další informace o této aplikaci naleznete v [dokumentaci](https://collectivecloud.gitlab.io/collectives/).
+* Pokud máte dotazy, obraťte se o pomoc na [komunitu](https://help.nextcloud.com/c/apps/collectives/174).
