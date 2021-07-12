@@ -1,6 +1,7 @@
 import { getCurrentUser } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
 import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
+import * as sortOrders from '../util/sortOrders'
 
 import {
 	SET_PAGES,
@@ -23,6 +24,7 @@ export default {
 	state: {
 		pages: [],
 		updatedPage: undefined,
+		sortBy: 'byTimestamp',
 	},
 
 	getters: {
@@ -104,8 +106,18 @@ export default {
 			return state.pages.find(p => (p.parentId === 0 && p.title === 'Readme'))
 		},
 
-		visibleSubpages: (state) => (parentId) => {
-			return state.pages.filter(p => p.parentId === parentId)
+		visibleSubpages: (state, getters) => (parentId) => {
+			return state.pages
+				.filter(p => p.parentId === parentId)
+				.sort(getters.sortOrder)
+		},
+
+		sortOrder(state) {
+			if (state.sortBy === 'byTitle') {
+				return sortOrders.byTitle
+			} else {
+				return sortOrders.byTimestamp
+			}
 		},
 
 		updatedPagePath(state, getters) {
@@ -162,6 +174,11 @@ export default {
 
 		[DELETE_PAGE_BY_ID](state, id) {
 			state.pages.splice(state.pages.findIndex(p => p.id === id), 1)
+		},
+
+		// using camel case name so this works nicely with mapMutations
+		sortPages(state, order) {
+			state.sortBy = order
 		},
 
 	},

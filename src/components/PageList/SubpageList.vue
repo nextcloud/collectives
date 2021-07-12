@@ -24,7 +24,6 @@
 		<SubpageList v-for="subpage in subpagesView"
 			:key="subpage.id"
 			:page="subpage"
-			:sort-order="sortOrder"
 			:level="level+1" />
 	</div>
 </template>
@@ -57,10 +56,6 @@ export default {
 			type: Number,
 			required: true,
 		},
-		sortOrder: {
-			type: Function,
-			required: true,
-		},
 	},
 
 	data() {
@@ -81,7 +76,6 @@ export default {
 
 		subpages() {
 			return this.visibleSubpages(this.page.id)
-				.sort(this.sortOrder)
 		},
 
 		subpagesView() {

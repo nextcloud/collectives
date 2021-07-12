@@ -9,7 +9,7 @@
 				:class="{selected: sortBy === 'byTimestamp'}"
 				icon="icon-access-time"
 				:close-after-click="true"
-				@click="sortBy = 'byTimestamp'">
+				@click="sortPages('byTimestamp')">
 				{{ t('collectives', 'Sort by last modification') }}
 			</ActionButton>
 			<ActionButton
@@ -17,7 +17,7 @@
 				:class="{selected: sortBy === 'byTitle'}"
 				icon="icon-sort-by-alpha"
 				:close-after-click="true"
-				@click="sortBy = 'byTitle'">
+				@click="sortPages('byTitle')">
 				{{ t('collectives', 'Sort by title') }}
 			</ActionButton>
 		</Actions>
@@ -48,7 +48,6 @@
 		<SubpageList v-for="page in subpages"
 			:key="page.id"
 			:page="page"
-			:sort-order="sortOrder"
 			:level="1" />
 	</AppContentList>
 </template>
@@ -64,7 +63,6 @@ import Item from './PageList/Item'
 import { showError } from '@nextcloud/dialogs'
 import { mapGetters, mapMutations } from 'vuex'
 import { NEW_PAGE } from '../store/actions'
-import * as sortOrders from '../util/sortOrders'
 
 export default {
 	name: 'PageList',
@@ -94,24 +92,14 @@ export default {
 		subpages() {
 			if (this.collectivePage) {
 				return this.visibleSubpages(this.collectivePage.id)
-					.sort(this.sortOrder)
 			} else {
 				return []
 			}
 		},
-		sortOrder() {
-			switch (this.sortBy) {
-			case 'byTimestamp':
-				return sortOrders.byTimestamp
-			case 'byTitle':
-				return sortOrders.byTitle
-			}
-			return sortOrders.byTimestamp
-		},
 	},
 
 	methods: {
-		...mapMutations(['show']),
+		...mapMutations(['show', 'sortPages']),
 
 		/**
 		 * Create a new page and focus the page automatically
