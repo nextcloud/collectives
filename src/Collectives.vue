@@ -60,7 +60,7 @@ export default {
 		this.getCollectives()
 		this.getTrashCollectives()
 
-		if (!('circles' in this.OC.appswebroots)) {
+		if (!('contacts' in this.OC.appswebroots)) {
 			console.error('The contacts app is required to manage members')
 			showError(t('collectives', 'The contacts app is required to manage members'))
 		}
