@@ -61,11 +61,11 @@ export default {
 		]),
 
 		isContactsInstalled() {
-			return 'circles' in this.OC.appswebroots
+			return 'contacts' in this.OC.appswebroots
 		},
 
 		circleLink() {
-			return generateUrl('/apps/circles')
+			return generateUrl('/apps/contacts/direct/circle/' + this.collective.circleId)
 		},
 	},
 
