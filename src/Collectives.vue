@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { showInfo } from '@nextcloud/dialogs'
+import { showInfo, showError } from '@nextcloud/dialogs'
 import { mapState, mapGetters, mapMutations } from 'vuex'
 import { GET_COLLECTIVES, GET_TRASH_COLLECTIVES } from './store/actions'
 import displayError from './util/displayError'
@@ -59,6 +59,11 @@ export default {
 	mounted() {
 		this.getCollectives()
 		this.getTrashCollectives()
+
+		if (!('circles' in this.OC.appswebroots)) {
+			console.error('The contacts app is required to manage members')
+			showError(t('collectives', 'The contacts app is required to manage members'))
+		}
 	},
 
 	methods: {

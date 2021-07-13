@@ -5,7 +5,7 @@
 
 ### 👥 Ladet weitere Personen ins Kollektiv ein
 
-Egal ob ihr Freund:innen oder ganze Gruppen zufügen wollt, Mitglieder könnt ihr in der [Circles-App](/index.php/apps/circles/) verwalten.
+Egal ob ihr Freund:innen oder ganze Gruppen zufügen wollt, folgt dem "Mitglieder verwalten" Link. Er ist im Aktionsmenü der Kollektiv-Liste links zu finden.
 
 ### 🌱 Füllt euer Kollektiv mit Leben
 
