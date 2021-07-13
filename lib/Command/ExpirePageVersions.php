@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace OCA\Collectives\Command;
 
 use OC\Core\Command\Base;
+use OCA\Collectives\Service\NotFoundException;
+use OCA\Collectives\Service\NotPermittedException;
 use OCA\Files_Versions\Versions\IVersion;
 use OCA\Collectives\Versions\CollectiveVersionsExpireManager;
-use OCP\Files\InvalidPathException;
-use OCP\Files\NotFoundException;
-use OCP\Files\NotPermittedException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -33,7 +32,6 @@ class ExpirePageVersions extends Base {
 	 * @param InputInterface  $input
 	 * @param OutputInterface $output
 	 *
-	 * @throws InvalidPathException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */

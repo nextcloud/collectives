@@ -108,7 +108,7 @@ class VersionsBackend implements IVersionBackend {
 				/** @var Folder $versionFolder */
 				$versionFolder = $versionsFolder->get($file->getId());
 			} catch (NotFoundException $e) {
-				$versionFolder = $versionsFolder->newFolder($file->getId());
+				$versionFolder = $versionsFolder->newFolder((string)$file->getId());
 			}
 
 			$versionMount = $versionFolder->getMountPoint();
@@ -245,7 +245,7 @@ class VersionsBackend implements IVersionBackend {
 		} catch (NotFoundException $e) {
 			/** @var Folder $versionsFolder */
 			$versionsFolder = $this->getAppFolder()->nodeExists('versions') ? $this->getAppFolder()->get('versions') : $this->getAppFolder()->newFolder('versions');
-			return $versionsFolder->newFolder($folderId);
+			return $versionsFolder->newFolder((string)$folderId);
 		}
 	}
 }
