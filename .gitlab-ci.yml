@@ -181,7 +181,7 @@ OCC CLI Test:
   stage: test end to end
   variables:
     CYPRESS_baseUrl: http://nextcloud.local/index.php
-    APP_SOURCE_URL: "https://gitlab.com/collectivecloud/collectives/-/jobs/${BUILD_JOB_ID}/artifacts/raw/build/release/collectives-${BUILD_VERSION}.tar.gz"
+    APP_SOURCE_URL: "${CI_PROJECT_URL}/-/jobs/${BUILD_JOB_ID}/artifacts/raw/build/release/collectives-${BUILD_VERSION}.tar.gz"
   script:
     - npm install -g npm # install newest NPM (>=7)
     - npm install --no-save wait-on
