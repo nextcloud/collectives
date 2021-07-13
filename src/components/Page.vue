@@ -33,17 +33,21 @@
 				:key="`show-${currentPage.id}-${currentPage.timestamp}`"
 				:as-placeholder="preview && edit"
 				@empty="emptyPreview"
-				@ready="previewReady = true" />
-			<div v-if="previewReady && hasSubpages"
+				@loading="waitingFor.push('preview')"
+				@ready="ready('preview')" />
+			<button v-if="!('preview' in waitingFor) && hasSubpages"
 				href="#"
 				class="load-more"
-				@click="showSubpages = !showSubpages">
-				{{ showSubpages
-					? t('collectives', 'Hide subpages')
-					: t('collectives', 'Show subpages')
+				@click="toggle('subpages')">
+				{{ showing('subpages')
+					? t('collectives', 'Hide all subpages')
+					: t('collectives', 'Show all subpages')
 				}}
-			</div>
-			<Subpages v-if="showSubpages" :page-id="currentPage.id" />
+			</button>
+			<Subpages v-if="showing('subpages')"
+				:page-id="currentPage.id"
+				@loading="waitingFor.push('subpages')"
+				@ready="ready('subpages')" />
 		</div>
 		<Editor v-show="!readOnly"
 			:key="`edit-${currentPage.id}-${reloadCounter}`"
@@ -86,11 +90,10 @@ export default {
 			previousSaveTimestamp: null,
 			preview: true,
 			previewWasEmpty: false,
-			previewReady: false,
 			newTitle: '',
 			editToggle: EditState.Unset,
 			reloadCounter: 0,
-			showSubpages: false,
+			waitingFor: [],
 		}
 	},
 
@@ -105,6 +108,7 @@ export default {
 			'updatedPagePath',
 			'loading',
 			'visibleSubpages',
+			'showing',
 		]),
 
 		collectiveTitle() {
@@ -149,8 +153,11 @@ export default {
 		'currentPage.id'() {
 			this.initTitleEntry()
 			this.editToggle = EditState.Unset
-			this.showSubpages = false
-			this.previewReady = false
+			if (this.showing('print')) {
+				this.show('subpages')
+			} else {
+				this.hide('subpages')
+			}
 		},
 		'titleChanged'(current, previous) {
 			if (current && !previous) {
@@ -165,7 +172,7 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['done', 'load', 'toggle']),
+		...mapMutations(['done', 'load', 'toggle', 'show', 'hide']),
 
 		// this is a method so it does not get cached
 		doc() {
@@ -239,13 +246,23 @@ export default {
 			}
 		},
 
+		ready(part) {
+			this.waitingFor.splice(this.waitingFor.indexOf(part), 1)
+			if (!this.waitingFor.length && this.showing('print')) {
+				this.$nextTick(() => {
+					window.print()
+					this.hide('print')
+				})
+			}
+		},
+
 		startEdit() {
 			if (this.doc()) {
 				this.previousSaveTimestamp = this.doc().lastSavedVersionTime
 			}
 			this.edit = true
 			this.$nextTick(this.focusEditor)
-			this.showSubpages = false
+			this.hide('subpages')
 		},
 
 		async stopEdit() {
@@ -303,7 +320,7 @@ export default {
 #text-container {
 	display: block;
 	width: 100%;
-	max-width: 100%;
+	max-width: 670px;
 	left: 0;
 	margin: 0 auto;
 	background-color: var(--color-main-background);
@@ -330,10 +347,8 @@ export default {
 }
 
 .load-more {
-	text-align: center;
 	margin-top: 10px;
-	cursor: pointer;
-	color: var(--color-text-maxcontrast);
+	margin-bottom: 10px;
 }
 
 // Leave space for page list toggle on small screens

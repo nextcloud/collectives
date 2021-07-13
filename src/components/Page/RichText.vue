@@ -132,6 +132,7 @@ export default {
 	},
 
 	mounted() {
+		this.$emit('loading')
 		this.getPageContent()
 	},
 
@@ -150,7 +151,7 @@ export default {
 					this.$emit('empty')
 				}
 				this.loading = false
-				this.$emit('ready')
+				this.$nextTick(() => { this.$emit('ready') })
 			} catch (e) {
 				const { id } = this.currentPage
 				console.error(`Failed to fetch content of page ${id}`, e)

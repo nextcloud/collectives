@@ -6,8 +6,12 @@
 					{{ page.title }}
 				</router-link>
 			</h2>
-			<RichText :page-url="pageDavUrl(page)" />
-			<Subpages :page-id="page.id" />
+			<RichText :page-url="pageDavUrl(page)"
+				@loading="waitingFor.push(`page-${page.id}`)"
+				@ready="ready(`page-${page.id}`)" />
+			<Subpages :page-id="page.id"
+				@loading="waitingFor.push(`subpages-${page.id}`)"
+				@ready="ready(`subpages-${page.id}`)" />
 		</div>
 	</div>
 </template>
@@ -31,6 +35,12 @@ export default {
 		},
 	},
 
+	data() {
+		return {
+			waitingFor: [],
+		}
+	},
+
 	computed: {
 		...mapGetters([
 			'currentCollective',
@@ -50,8 +60,22 @@ export default {
 		},
 	},
 
+	mounted() {
+		// if there are no subpages - there's nothing to load.
+		if (this.subpages.length) {
+			this.$emit('loading')
+		}
+	},
+
 	methods: {
 		...mapMutations(['hide']),
+
+		ready(part) {
+			this.waitingFor.splice(this.waitingFor.indexOf(part), 1)
+			if (!this.waitingFor.length) {
+				this.$emit('ready')
+			}
+		},
 	},
 }
 </script>
@@ -64,8 +88,6 @@ export default {
 	width: 100%;
 	opacity: 0.8;
 	padding: 8px 2px 2px 8px;
-	margin: auto;
-	max-width: 670px;
 	font-weight: normal;
 }
 

@@ -11,12 +11,11 @@
 			{{ collective.emoji }}
 		</template>
 		<template #actions>
-			<ActionRouter icon="icon-pages"
-				:to="`/${encodeURIComponent(collective.name)}`"
+			<ActionButton icon="icon-pages"
 				:close-after-click="true"
-				@click="show('all_pages')">
-				{{ t('collectives', 'All pages view') }}
-			</ActionRouter>
+				@click="print">
+				{{ t('collectives', 'Print') }}
+			</ActionButton>
 			<ActionLink v-if="isContactsInstalled"
 				:href="circleLink"
 				icon="icon-circles">
@@ -37,7 +36,6 @@ import { TRASH_COLLECTIVE } from '../../store/actions'
 import displayError from '../../util/displayError'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import ActionLink from '@nextcloud/vue/dist/Components/ActionLink'
-import ActionRouter from '@nextcloud/vue/dist/Components/ActionRouter'
 import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
 import { generateUrl } from '@nextcloud/router'
 
@@ -47,7 +45,6 @@ export default {
 	components: {
 		ActionButton,
 		ActionLink,
-		ActionRouter,
 		AppNavigationItem,
 	},
 
@@ -98,6 +95,15 @@ export default {
 			}
 			return this.$store.dispatch(TRASH_COLLECTIVE, collective)
 				.catch(displayError('Could not move the collective to trash'))
+		},
+
+		print() {
+			this.$router.push(`/${encodeURIComponent(this.collective.name)}`,
+				() => {
+					this.show('subpages')
+					this.show('print')
+				}
+			)
 		},
 
 	},
