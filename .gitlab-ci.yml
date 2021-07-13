@@ -15,6 +15,20 @@ stages:
     paths:
       - vendor/
     key: composer
+  only:
+    refs: [merge_requests]
+    changes:
+      - composer.json
+      - composer.lock
+      - .gitlab-ci.yml
+      - libs/**/*
+      - Makefile
+      - phpunit.xml
+      - psalm.xml
+      - skeleton/**/*
+      - templates/**/*
+      - tests/**/*
+      - translationfiles/**/*
 
 # Settings for all jobs in node based containers
 .node: &node
@@ -65,6 +79,11 @@ Validate AppInfo:
   script:
     - make lint-appinfo
   needs: []
+  only:
+    refs: [merge_requests]
+    changes:
+      - appinfo/**/*
+      - Makefile
 
 Build App:
   <<: *node
@@ -80,6 +99,27 @@ Build App:
       dotenv: build.env
     paths:
       - build/release/collectives-${CI_COMMIT_SHORT_SHA}.tar.gz
+  only:
+    refs: [merge_requests]
+    changes:
+      - babel.config.js
+      - composer.json
+      - composer.lock
+      - cypress.json
+      - cypress/**/*
+      - .gitlab-ci.yml
+      - jest.config.json
+      - l10n/**/*
+      - libs/**/*
+      - Makefile
+      - package.json
+      - package-lock.json
+      - src/**/*
+      - stylelint.config.js
+      - skeleton/**/*
+      - templates/**/*
+      - translationfiles/**/*
+      - webpack.js
 
 # PHP jobs
 
@@ -122,6 +162,19 @@ Lint Javascript:
   script:
     - make lint-js
   needs: []
+  only:
+    refs: [merge_requests]
+    changes:
+      - babel.config.js
+      - cypress/**/*
+      - .gitlab-ci.yml
+      - jest.config.json
+      - Makefile
+      - package.json
+      - package-lock.json
+      - src/**/*
+      - stylelint.config.js
+      - webpack.js
 
 Unit Test Javascript:
   <<: *node
@@ -131,6 +184,19 @@ Unit Test Javascript:
     - make test-js
   needs:
     - "Lint Javascript"
+  only:
+    refs: [merge_requests]
+    changes:
+      - babel.config.js
+      - cypress/**/*
+      - .gitlab-ci.yml
+      - jest.config.json
+      - Makefile
+      - package.json
+      - package-lock.json
+      - src/**/*
+      - stylelint.config.js
+      - webpack.js
 
 .php-integration: &php-integration
   <<: *php
@@ -194,6 +260,26 @@ OCC CLI Test:
       - cypress/screenshots
     expire_in: 1 day
     when: on_failure
+  only:
+    refs: [merge_requests]
+    changes:
+      - babel.config.js
+      - composer.json
+      - composer.lock
+      - cypress.json
+      - cypress/**/*
+      - .gitlab-ci.yml
+      - jest.config.json
+      - l10n/**/*
+      - libs/**/*
+      - Makefile
+      - package.json
+      - package-lock.json
+      - src/**/*
+      - stylelint.config.js
+      - skeleton/**/*
+      - templates/**/*
+      - translationfiles/**/*
 
 Browser PHP 8.0 Nextcloud 21:
   <<: *browser-test
@@ -230,5 +316,9 @@ pages:
     paths:
       - public
   only:
-    - main
+    refs: [main]
+    changes:
+      - DEVELOPING.md
+      - docs/**/*
+      - .gitlab-ci.yml
   needs: []
