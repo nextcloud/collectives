@@ -21,7 +21,7 @@ stages:
       - composer.json
       - composer.lock
       - .gitlab-ci.yml
-      - libs/**/*
+      - lib/**/*
       - Makefile
       - phpunit.xml
       - psalm.xml
@@ -110,7 +110,7 @@ Build App:
       - .gitlab-ci.yml
       - jest.config.json
       - l10n/**/*
-      - libs/**/*
+      - lib/**/*
       - Makefile
       - package.json
       - package-lock.json
@@ -271,7 +271,7 @@ OCC CLI Test:
       - .gitlab-ci.yml
       - jest.config.json
       - l10n/**/*
-      - libs/**/*
+      - lib/**/*
       - Makefile
       - package.json
       - package-lock.json
