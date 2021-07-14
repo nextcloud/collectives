@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<Item key="page.title"
-			:to="`/${encodeURIComponent(collectiveParam)}/${pagePath}`"
+			:to="pagePath(page)"
 			:collapsible="isCollapsible"
 			:page-id="page.id"
 			:level="level"
@@ -24,7 +24,6 @@
 		<SubpageList v-for="subpage in subpagesView"
 			:key="subpage.id"
 			:page="subpage"
-			:sort-order="sortOrder"
 			:level="level+1" />
 	</div>
 </template>
@@ -57,10 +56,6 @@ export default {
 			type: Number,
 			required: true,
 		},
-		sortOrder: {
-			type: Function,
-			required: true,
-		},
 	},
 
 	data() {
@@ -74,13 +69,13 @@ export default {
 			'pageParam',
 			'collectiveParam',
 			'loading',
-			'currentPagePath',
+			'pagePath',
+			'currentPages',
 			'visibleSubpages',
 		]),
 
 		subpages() {
 			return this.visibleSubpages(this.page.id)
-				.sort(this.sortOrder)
 		},
 
 		subpagesView() {
@@ -94,21 +89,6 @@ export default {
 
 		isCollapsible() {
 			return !!this.subpages.length
-		},
-
-		/**
-		 * Path to the page
-		 * @returns {string}
-		 */
-		pagePath() {
-			const parts = this.page.filePath.split('/')
-			if (this.page.fileName !== 'Readme.md') {
-				parts.push(this.page.title)
-			}
-			return parts
-				.filter(Boolean)
-				.map(p => encodeURIComponent(p))
-				.join('/')
 		},
 	},
 
@@ -155,7 +135,7 @@ export default {
 
 		initCollapsed() {
 			// Expand subpages if they're in the path to currentPage
-			if (this.currentPagePath.includes(this.page)) {
+			if (this.currentPages.includes(this.page)) {
 				this.collapsed = false
 			}
 		},

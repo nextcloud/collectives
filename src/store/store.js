@@ -50,5 +50,6 @@ export default new Vuex.Store({
 		hide: (state, aspect) => Vue.set(state.showing, aspect, false),
 		toggle: (state, aspect) =>
 			Vue.set(state.showing, aspect, !state.showing[aspect]),
+
 	},
 })

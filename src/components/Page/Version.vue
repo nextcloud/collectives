@@ -18,9 +18,11 @@
 					@click="closeVersions" />
 			</Actions>
 		</h1>
-		<RichText :page-id="page.id"
-			:page-url="pageUrl"
-			:is-version="true" />
+		<div id="text-container">
+			<RichText :page-id="page.id"
+				:page-url="pageUrl"
+				:is-version="true" />
+		</div>
 	</div>
 </template>
 

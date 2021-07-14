@@ -11,6 +11,11 @@
 			{{ collective.emoji }}
 		</template>
 		<template #actions>
+			<ActionButton icon="icon-pages"
+				:close-after-click="true"
+				@click="print">
+				{{ t('collectives', 'Print') }}
+			</ActionButton>
 			<ActionLink v-if="isContactsInstalled"
 				:href="circleLink"
 				icon="icon-circles">
@@ -26,7 +31,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import { TRASH_COLLECTIVE } from '../../store/actions'
 import displayError from '../../util/displayError'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
@@ -65,6 +70,8 @@ export default {
 	},
 
 	methods: {
+		...mapMutations(['show']),
+
 		isActive(collective) {
 			return this.collectiveParam === collective.name
 		},
@@ -88,6 +95,15 @@ export default {
 			}
 			return this.$store.dispatch(TRASH_COLLECTIVE, collective)
 				.catch(displayError('Could not move the collective to trash'))
+		},
+
+		print() {
+			this.$router.push(`/${encodeURIComponent(this.collective.name)}`,
+				() => {
+					this.show('subpages')
+					this.show('print')
+				}
+			)
 		},
 
 	},

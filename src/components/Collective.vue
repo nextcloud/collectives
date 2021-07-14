@@ -50,6 +50,7 @@ export default {
 		...mapGetters([
 			'currentCollective',
 			'currentPage',
+			'collectivePage',
 			'loading',
 			'pageParam',
 			'version',
@@ -76,7 +77,7 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['show']),
+		...mapMutations(['show', 'hide']),
 
 		initCollective() {
 			this.getPages()
@@ -127,6 +128,10 @@ export default {
 </script>
 
 <style>
+div.modal-wrapper.modal-wrapper--full div.modal-container {
+	overflow: scroll;
+}
+
 @media print {
 	#app-content-vue {
 		display: block !important;
@@ -141,6 +146,16 @@ export default {
 
 	#app-sidebar-vue {
 		display: none !important;
+	}
+
+	div.modal-mask.all-pages-modal {
+		position: absolute;
+	}
+
+	div.modal-wrapper.modal-wrapper--full div.modal-container {
+		overflow: visible !important;
+		width: 100%;
+		box-shadow: unset;
 	}
 }
 </style>

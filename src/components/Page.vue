@@ -28,10 +28,27 @@
 					@click="toggle('sidebar')" />
 			</Actions>
 		</h1>
-		<RichText v-if="readOnly"
-			:key="`show-${currentPage.id}-${currentPage.timestamp}`"
-			:as-placeholder="preview && edit"
-			@empty="emptyPreview" />
+		<div v-if="readOnly" id="text-container" :key="'text-' + currentPage.id">
+			<RichText
+				:key="`show-${currentPage.id}-${currentPage.timestamp}`"
+				:as-placeholder="preview && edit"
+				@empty="emptyPreview"
+				@loading="waitingFor.push('preview')"
+				@ready="ready('preview')" />
+			<button v-if="!('preview' in waitingFor) && hasSubpages"
+				href="#"
+				class="load-more"
+				@click="toggle('subpages')">
+				{{ showing('subpages')
+					? t('collectives', 'Hide all subpages')
+					: t('collectives', 'Show all subpages')
+				}}
+			</button>
+			<Subpages v-if="showing('subpages')"
+				:page-id="currentPage.id"
+				@loading="waitingFor.push('subpages')"
+				@ready="ready('subpages')" />
+		</div>
 		<Editor v-show="!readOnly"
 			:key="`edit-${currentPage.id}-${reloadCounter}`"
 			ref="editor"
@@ -44,6 +61,7 @@ import Actions from '@nextcloud/vue/dist/Components/Actions'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import Editor from './Page/Editor'
 import RichText from './Page/RichText'
+import Subpages from './Page/Subpages'
 import { showError } from '@nextcloud/dialogs'
 import { mapGetters, mapMutations } from 'vuex'
 import {
@@ -62,6 +80,7 @@ export default {
 	components: {
 		ActionButton,
 		Actions,
+		Subpages,
 		Editor,
 		RichText,
 	},
@@ -74,6 +93,7 @@ export default {
 			newTitle: '',
 			editToggle: EditState.Unset,
 			reloadCounter: 0,
+			waitingFor: [],
 		}
 	},
 
@@ -87,6 +107,8 @@ export default {
 			'pageParam',
 			'updatedPagePath',
 			'loading',
+			'visibleSubpages',
+			'showing',
 		]),
 
 		collectiveTitle() {
@@ -118,6 +140,10 @@ export default {
 				this.editToggle = val ? EditState.Edit : EditState.Read
 			},
 		},
+
+		hasSubpages() {
+			return this.visibleSubpages(this.currentPage.id).length
+		},
 	},
 
 	watch: {
@@ -127,6 +153,11 @@ export default {
 		'currentPage.id'() {
 			this.initTitleEntry()
 			this.editToggle = EditState.Unset
+			if (this.showing('print')) {
+				this.show('subpages')
+			} else {
+				this.hide('subpages')
+			}
 		},
 		'titleChanged'(current, previous) {
 			if (current && !previous) {
@@ -141,7 +172,7 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['done', 'load', 'toggle']),
+		...mapMutations(['done', 'load', 'toggle', 'show', 'hide']),
 
 		// this is a method so it does not get cached
 		doc() {
@@ -215,12 +246,23 @@ export default {
 			}
 		},
 
+		ready(part) {
+			this.waitingFor.splice(this.waitingFor.indexOf(part), 1)
+			if (!this.waitingFor.length && this.showing('print')) {
+				this.$nextTick(() => {
+					window.print()
+					this.hide('print')
+				})
+			}
+		},
+
 		startEdit() {
 			if (this.doc()) {
 				this.previousSaveTimestamp = this.doc().lastSavedVersionTime
 			}
 			this.edit = true
 			this.$nextTick(this.focusEditor)
+			this.hide('subpages')
 		},
 
 		async stopEdit() {
@@ -275,6 +317,17 @@ export default {
 	flex: auto;
 }
 
+#text-container {
+	display: block;
+	width: 100%;
+	max-width: 670px;
+	left: 0;
+	margin: 0 auto;
+	background-color: var(--color-main-background);
+	height: calc(100% - 50px);
+	top: 50px;
+}
+
 #text-container .editor__content {
 	border: 2px solid var(--color-main-background);
 	border-radius: var(--border-radius);
@@ -291,6 +344,11 @@ export default {
 	max-width: 670px;
 	margin-bottom: -50px;
 	display: flex;
+}
+
+.load-more {
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
 // Leave space for page list toggle on small screens
@@ -316,7 +374,7 @@ export default {
 }
 
 @media print {
-	.edit-button, .action-item {
+	.edit-button, .action-item, .load-more {
 		display: none !important;
 	}
 }

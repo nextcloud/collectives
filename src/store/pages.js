@@ -1,6 +1,7 @@
 import { getCurrentUser } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
 import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
+import * as sortOrders from '../util/sortOrders'
 
 import {
 	SET_PAGES,
@@ -23,22 +24,35 @@ export default {
 	state: {
 		pages: [],
 		updatedPage: undefined,
+		sortBy: 'byTimestamp',
 	},
 
 	getters: {
-		pagePath(_state, getters) {
+		currentPagePath(_state, getters) {
 			return getters.pageParam || 'Readme'
 		},
 
-		currentPagePath(state, getters) {
+		pagePath: (_state, getters) => (page) => {
+			const parts = [
+				getters.collectiveParam,
+				...page.filePath.split('/'),
+				page.fileName !== 'Readme.md' && page.title,
+			]
+			return '/' + parts
+				.filter(Boolean)
+				.map(p => encodeURIComponent(p))
+				.join('/')
+		},
+
+		currentPages(state, getters) {
 			// Return landing page
-			if (getters.pagePath === 'Readme') {
+			if (getters.currentPagePath === 'Readme') {
 				return [getters.collectivePage]
 			}
 
 			// Iterate through all path levels to find the correct page
 			const pages = []
-			const parts = getters.pagePath.split('/').filter(Boolean)
+			const parts = getters.currentPagePath.split('/').filter(Boolean)
 			let page = getters.collectivePage
 			for (const i in parts) {
 				page = state.pages.find(p => (p.parentId === page.id && p.title === parts[i]))
@@ -52,20 +66,28 @@ export default {
 		},
 
 		currentPage(state, getters) {
-			return getters.currentPagePath[getters.currentPagePath.length - 1]
+			return getters.currentPages[getters.currentPages.length - 1]
 			    || state.updatedPage
 		},
 
 		currentPageFilePath(_state, getters) {
+			return getters.pageFilePath(getters.currentPage)
+		},
+
+		pageFilePath: (state) => (page) => {
 			return [
-				getters.currentPage.collectivePath,
-				getters.currentPage.filePath,
-				getters.currentPage.fileName,
+				page.collectivePath,
+				page.filePath,
+				page.fileName,
 			].filter(Boolean).join('/')
 		},
 
 		currentPageDavPath(_state, getters) {
-			const parts = getters.currentPageFilePath.split('/')
+			return getters.pageDavPath(getters.currentPage)
+		},
+
+		pageDavPath: (_state, getters) => (page) => {
+			const parts = getters.pageFilePath(page).split('/')
 			parts.unshift(getCurrentUser().uid)
 			return parts
 				.map(p => encodeURIComponent(p))
@@ -76,12 +98,26 @@ export default {
 			return generateRemoteUrl(`dav/files/${getters.currentPageDavPath}`)
 		},
 
+		pageDavUrl: (_state, getters) => (page) => {
+			return generateRemoteUrl(`dav/files/${getters.pageDavPath(page)}`)
+		},
+
 		collectivePage(state) {
 			return state.pages.find(p => (p.parentId === 0 && p.title === 'Readme'))
 		},
 
-		visibleSubpages: (state) => (parentId) => {
-			return state.pages.filter(p => p.parentId === parentId)
+		visibleSubpages: (state, getters) => (parentId) => {
+			return state.pages
+				.filter(p => p.parentId === parentId)
+				.sort(getters.sortOrder)
+		},
+
+		sortOrder(state) {
+			if (state.sortBy === 'byTitle') {
+				return sortOrders.byTitle
+			} else {
+				return sortOrders.byTimestamp
+			}
 		},
 
 		updatedPagePath(state, getters) {
@@ -138,6 +174,11 @@ export default {
 
 		[DELETE_PAGE_BY_ID](state, id) {
 			state.pages.splice(state.pages.findIndex(p => p.id === id), 1)
+		},
+
+		// using camel case name so this works nicely with mapMutations
+		sortPages(state, order) {
+			state.sortBy = order
 		},
 
 	},
