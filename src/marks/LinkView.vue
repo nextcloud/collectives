@@ -46,10 +46,15 @@ export default {
 			return this.node.attrs.href
 		},
 		useRouter() {
-			return this.collectiveLink
+			return this.collectiveLink || this.relativeMarkdownLink
 		},
 		collectiveLink() {
-			return this.href.includes('.md?fileId=')
+	        return this.href.startsWith(this.routerBase)
+		},
+		relativeMarkdownLink() {
+			const full = new URL(this.href, window.location)
+			return full.origin === window.location.origin
+				&& this.href.includes('.md?fileId=')
 		},
 		leaveHref() {
 			// empty
@@ -69,7 +74,17 @@ export default {
 			const relPath = this.hrefMatches[1]
 			return relPath && unescape(relPath)
 		},
+		routerBase() {
+			return new URL(
+				generateUrl('/apps/collectives'),
+				window.location
+			).href
+		},
 		routerHref() {
+			// handle absolute urls
+	        if (this.href.startsWith(this.routerBase)) {
+				return this.href.replace(this.routerBase, '')
+			}
 			// prefix relative route with the last part of the path
 			// if it is ommitting the 'Readme.md'.
 			const shortened = this.currentPage.fileName === 'Readme.md'
