@@ -1,7 +1,9 @@
 <template>
 	<div class="app-content-list-item"
 		:class="{active: isActive}"
-		:style="indentItem">
+		:style="indentItem"
+		draggable
+		@dragstart="setDragData">
 		<div class="app-content-list-item-icon"
 			:style="indentIcon"
 			:tabindex="isClickable ? '0' : null"
@@ -38,6 +40,7 @@
 
 import Actions from '@nextcloud/vue/dist/Components/Actions'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile'
+import { generateUrl } from '@nextcloud/router'
 import { mapGetters } from 'vuex'
 import TriangleIcon from 'vue-material-design-icons/Triangle'
 
@@ -128,6 +131,17 @@ export default {
 	methods: {
 		toggleCollapsed() {
 			this.$emit('toggleCollapsed')
+		},
+
+		setDragData(ev) {
+			const path = generateUrl(`/apps/collectives${this.to}`)
+			const href = new URL(path, window.location).href
+			const html = `<a href=${href}>${this.title}</a>`
+			console.debug(html)
+			ev.dataTransfer.effectAllowed = 'move'
+			ev.dataTransfer.setData('text/plain', href)
+			ev.dataTransfer.setData('text/uri-list', href)
+			ev.dataTransfer.setData('text/html', html)
 		},
 	},
 }
