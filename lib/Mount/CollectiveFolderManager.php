@@ -94,7 +94,7 @@ class CollectiveFolderManager {
 							 IStorageFactory $loader = null,
 							 IUser $user = null): IMountPoint {
 		$baseStorage = new Jail([
-			'storage' => $this->getRootFolder()->getStorage(),
+			'storage' => new NoExcludePropagatorStorageWrapper(['storage' => $this->getRootFolder()->getStorage()]),
 			'root' => $this->getJailPath($id)
 		]);
 

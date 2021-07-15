@@ -97,6 +97,11 @@
       <code>Cache</code>
     </UndefinedClass>
   </file>
+  <file src="lib/Mount/NoExcludePropagatorStorageWrapper.php">
+    <UndefinedClass occurrences="1">
+      <code>Wrapper</code>
+    </UndefinedClass>
+  </file>
   <file src="lib/Mount/RootEntryCache.php">
     <UndefinedClass occurrences="1">
       <code>CacheWrapper</code>
