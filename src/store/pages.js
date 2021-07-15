@@ -33,15 +33,15 @@ export default {
 		},
 
 		pagePath: (_state, getters) => (page) => {
-			const parts = [
-				getters.collectiveParam,
-				...page.filePath.split('/'),
-				page.fileName !== 'Readme.md' && page.title,
-			]
-			return '/' + parts
-				.filter(Boolean)
-				.map(p => encodeURIComponent(p))
-				.join('/')
+			const collective = getters.collectiveParam
+			const { filePath, fileName, title, id } = page
+			const titlePart = fileName !== 'Readme.md' && title
+			const pagePath = [
+				collective,
+				...filePath.split('/'),
+				titlePart,
+			].filter(Boolean).map(encodeURIComponent).join('/')
+			return `/${pagePath}?fileId=${id}`
 		},
 
 		currentPages(state, getters) {
@@ -121,15 +121,7 @@ export default {
 		},
 
 		updatedPagePath(state, getters) {
-			const collective = getters.collectiveParam
-			const { filePath, fileName, title, id } = state.updatedPage
-			const titlePart = fileName !== 'Readme.md' && title
-			const pagePath = [
-				collective,
-				...filePath.split('/'),
-				titlePart,
-			].filter(Boolean).map(encodeURIComponent).join('/')
-			return `/${pagePath}?fileId=${id}`
+			return getters.pagePath(state.updatedPage)
 		},
 
 		pagesUrl(_state, getters) {
