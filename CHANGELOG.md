@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.9.21 - 2021.07.06
+## 0.9.22 - 2021.07.06
 
 ### ✨New
 * 🖨️ Bring proper formatting to print pages.
@@ -15,6 +15,7 @@
 
 ### 🚧Updates
 * 🔌 Update all dependencies and migrate to Node.js 14.
+* 🔌 Migrate to Circles API for Nextcloud 22.
 
 ## 0.8.21 - 2021.06.18
 
@@ -34,8 +35,11 @@
 * 🧷 Use correct links in page list after rename of parent page.
 * 💱 Rename parent pages properly - do not create another subpage.
 * ✅ Browser error due to duplicate subscription of an event handler.
+- 🚀 Make sure `occ` works even if circles app is missing.
+* ✅ Work around some bugs in the CI so all tests pass.
 
 ### 🚧Updates & Tooling
+* 🔌 Migrate to Circles API for Nextcloud 22.
 * 👷 Refactor to ease support for Nextcloud 22.
 * 🗑️ Make task to remove releases.
 

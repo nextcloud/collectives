@@ -108,7 +108,7 @@ class CollectiveServiceTest extends TestCase {
 			->getMock();
 		$circle->method('getUniqueId')
 			->willReturn('CircleId');
-		$circle->method('getName')
+		$circle->method('getSanitizedName')
 			->willReturn('free');
 		$collective = new Collective();
 		$collective->setId(123);

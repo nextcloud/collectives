@@ -40,7 +40,7 @@ class CollectiveHelper {
 			if (null !== $c = $this->collectiveMapper->findByCircleId($cid)) {
 				$admin = $getAdmin && $this->circleHelper->isAdmin($c->getCircleId(), $userId);
 				$collectiveInfos[] = new CollectiveInfo($c,
-					$circle->getName(),
+					$circle->getSanitizedName(),
 					$admin);
 			}
 		}

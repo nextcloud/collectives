@@ -117,7 +117,7 @@ class CollectiveService {
 		$collective = $this->collectiveMapper->insert($collective);
 
 		// Read in collectiveInfo object
-		$collectiveInfo = new CollectiveInfo($collective, $circle->getName(), true);
+		$collectiveInfo = new CollectiveInfo($collective, $circle->getSanitizedName(), true);
 
 		// Create folder for collective and optionally copy default landing page
 		try {
