@@ -12,13 +12,14 @@
 </template>
 
 <script>
-import { emit } from '@nextcloud/event-bus'
+import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { listen } from '@nextcloud/notify_push'
+import AppContentDetails from '@nextcloud/vue/dist/Components/AppContentDetails'
+import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 import { mapGetters, mapMutations } from 'vuex'
 import { GET_PAGES } from '../store/actions'
 import { SELECT_VERSION } from '../store/mutations'
 import displayError from '../util/displayError'
-import AppContentDetails from '@nextcloud/vue/dist/Components/AppContentDetails'
-import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 import Page from '../components/Page'
 import Version from '../components/Page/Version'
 import PageNotFound from '../components/Page/PageNotFound'
@@ -40,7 +41,8 @@ export default {
 		return {
 			backgroundFetching: false,
 			/** @type {number} */
-			pollInterval: 60000, // milliseconds
+			pollIntervalBase: 60 * 1000, // milliseconds
+			pollIntervalCurrent: 60 * 1000, // milliseconds
 			/** @type {null|number} */
 			intervalId: null,
 		}
@@ -79,11 +81,20 @@ export default {
 
 	mounted() {
 		this.initCollective()
-		this.setupBackgroundFetcher()
+		const hasPush = listen('notify_file', this.getPages.bind(this))
+		if (hasPush) {
+			console.debug('Has notify_push enabled, slowing polling to 15 minutes')
+			this.pollIntervalBase = 15 * 60 * 1000
+		}
+		this._setPollingInterval(this.pollIntervalBase)
+		subscribe('networkOffline', this.handleNetworkOffline)
+		subscribe('networkOnline', this.handleNetworkOnline)
 	},
 
-	unmounted() {
+	beforeDestroy() {
 		this.teardownBackgroundFetcher()
+		unsubscribe('networkOffline', this.handleNetworkOffline)
+		unsubscribe('networkOnline', this.handleNetworkOnline)
 	},
 
 	methods: {
@@ -95,12 +106,43 @@ export default {
 			this.show('details')
 		},
 
+		handleNetworkOffline() {
+			// If we poll less than every 10 Minutes
+			// - do not slow down further.
+			if (this.pollIntervalBase > 10 * 60 * 1000) {
+				return
+			}
+			console.debug('Network is offline.')
+			this._setPollingInterval(this.pollIntervalBase * 10)
+		},
+
+		handleNetworkOnline() {
+			this.getPages()
+			console.debug('Network is online.')
+			this._setPollingInterval(this.pollIntervalBase)
+		},
+
+		_setPollingInterval(pollInterval) {
+			console.debug(`Polling every ${pollInterval / 1000} seconds.`)
+			if (this.interval && pollInterval === this.pollIntervalCurrent) {
+				return
+			}
+
+			if (this.interval) {
+				window.clearInterval(this.interval)
+				this.interval = null
+			}
+
+			this.pollIntervalCurrent = pollInterval
+			this.setupBackgroundFetcher()
+		},
+
 		setupBackgroundFetcher() {
 			if (OC.config.session_keepalive) {
 				console.debug('Started background fetcher as session_keepalive is enabled')
 				this.intervalId = window.setInterval(
 					this.getPages.bind(this),
-					this.pollInterval
+					this.pollIntervalCurrent
 				)
 			} else {
 				console.debug('Did not start background fetcher as session_keepalive is off')
