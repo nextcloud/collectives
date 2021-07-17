@@ -295,7 +295,7 @@ export default {
 				await this.$store.dispatch(RENAME_PAGE, this.newTitle)
 				// The resulting title may be different due to sanitizing
 				this.newTitle = this.currentPage.title
-				this.$store.dispatch(GET_PAGES)
+				await this.$store.dispatch(GET_PAGES)
 				this.$router.replace(this.updatedPagePath)
 				this.$store.commit(CLEAR_UPDATED_PAGE)
 			} catch (e) {

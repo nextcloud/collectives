@@ -37,6 +37,7 @@ import Item from './Item'
 import { showError } from '@nextcloud/dialogs'
 import { mapGetters, mapMutations } from 'vuex'
 import { NEW_PAGE, GET_PAGES } from '../../store/actions'
+import { CLEAR_UPDATED_PAGE } from '../../store/mutations'
 
 export default {
 	name: 'SubpageList',
@@ -119,10 +120,11 @@ export default {
 			try {
 				await this.$store.dispatch(NEW_PAGE, page)
 				this.collapsed = false
-				this.$router.push(this.$store.getters.updatedPagePath)
 				// The parents location changes when the first subpage
 				// is created.
-				this.$store.dispatch(GET_PAGES)
+				await this.$store.dispatch(GET_PAGES)
+				this.$router.push(this.$store.getters.updatedPagePath)
+				this.$store.commit(CLEAR_UPDATED_PAGE)
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not create the page'))
