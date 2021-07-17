@@ -7,7 +7,6 @@ import {
 	SET_PAGES,
 	ADD_PAGE,
 	UPDATE_PAGE,
-	CLEAR_UPDATED_PAGE,
 	DELETE_PAGE_BY_ID,
 } from './mutations'
 
@@ -23,7 +22,7 @@ import {
 export default {
 	state: {
 		pages: [],
-		updatedPage: undefined,
+		newPage: undefined,
 		sortBy: 'byTimestamp',
 	},
 
@@ -64,7 +63,6 @@ export default {
 
 		currentPage(state, getters) {
 			return getters.currentPages[getters.currentPages.length - 1]
-			    || state.updatedPage
 		},
 
 		currentPageFilePath(_state, getters) {
@@ -103,6 +101,11 @@ export default {
 			return state.pages.find(p => (p.parentId === 0 && p.title === 'Readme'))
 		},
 
+		currentFileIdPage(state, _getters, rootState) {
+			const fileId = Number(rootState.route.query.fileId)
+			return state.pages.find(p => (p.id === fileId))
+		},
+
 		visibleSubpages: (state, getters) => (parentId) => {
 			return state.pages
 				.filter(p => p.parentId === parentId)
@@ -117,8 +120,8 @@ export default {
 			}
 		},
 
-		updatedPagePath(state, getters) {
-			return state.updatedPage && getters.pagePath(state.updatedPage)
+		newPagePath(state, getters) {
+			return state.newPage && getters.pagePath(state.newPage)
 		},
 
 		pagesUrl(_state, getters) {
@@ -139,16 +142,11 @@ export default {
 	},
 
 	mutations: {
-		[SET_PAGES](state, { pages, current }) {
-			// keep track of the current page in case it was renamed.
-			if (current) {
-				state.updatedPage = pages.find(p => p.id === current.id)
-			}
+		[SET_PAGES](state, { pages }) {
 			state.pages = pages
 		},
 
 		[UPDATE_PAGE](state, page) {
-			state.updatedPage = page
 			state.pages.splice(
 				state.pages.findIndex(p => p.id === page.id),
 				1,
@@ -156,13 +154,9 @@ export default {
 			)
 		},
 
-		[CLEAR_UPDATED_PAGE](state) {
-			state.updatedPage = undefined
-		},
-
 		[ADD_PAGE](state, page) {
 			state.pages.unshift(page)
-			state.updatedPage = page
+			state.newPage = page
 		},
 
 		[DELETE_PAGE_BY_ID](state, id) {

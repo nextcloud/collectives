@@ -15,7 +15,7 @@
 import { emit } from '@nextcloud/event-bus'
 import { mapGetters, mapMutations } from 'vuex'
 import { GET_PAGES } from '../store/actions'
-import { SELECT_VERSION, CLEAR_UPDATED_PAGE } from '../store/mutations'
+import { SELECT_VERSION } from '../store/mutations'
 import displayError from '../util/displayError'
 import AppContentDetails from '@nextcloud/vue/dist/Components/AppContentDetails'
 import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
@@ -49,13 +49,18 @@ export default {
 	computed: {
 		...mapGetters([
 			'currentCollective',
+			'currentFileIdPage',
 			'currentPage',
 			'collectivePage',
 			'loading',
 			'pageParam',
-			'updatedPagePath',
+			'pagePath',
 			'version',
 		]),
+
+		notFound() {
+			return !this.loading('collective') && !this.currentPage
+		},
 	},
 
 	watch: {
@@ -64,6 +69,11 @@ export default {
 		},
 		'currentPage.id'() {
 			this.$store.commit(SELECT_VERSION, null)
+		},
+		'notFound'(current) {
+			if (current && this.currentFileIdPage) {
+				this.$router.replace(this.pagePath(this.currentFileIdPage))
+			}
 		},
 	},
 
@@ -111,12 +121,6 @@ export default {
 		async getPages() {
 			await this.$store.dispatch(GET_PAGES)
 				.catch(displayError('Could not fetch pages'))
-			// handle renames of current page
-			if (this.updatedPagePath
-				&& !window.location.href.includes(this.updatedPagePath)) {
-				this.$router.replace(this.updatedPagePath)
-				this.$store.commit(CLEAR_UPDATED_PAGE)
-			}
 		},
 
 		closeNav() {

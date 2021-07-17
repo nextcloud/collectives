@@ -70,7 +70,6 @@ import {
 	GET_PAGES,
 	GET_VERSIONS,
 } from '../store/actions'
-import { CLEAR_UPDATED_PAGE } from '../store/mutations'
 
 const EditState = { Unset: 0, Edit: 1, Read: 2 }
 
@@ -105,7 +104,6 @@ export default {
 			'indexPage',
 			'landingPage',
 			'pageParam',
-			'updatedPagePath',
 			'loading',
 			'visibleSubpages',
 			'showing',
@@ -296,8 +294,6 @@ export default {
 				// The resulting title may be different due to sanitizing
 				this.newTitle = this.currentPage.title
 				this.$store.dispatch(GET_PAGES)
-				this.$router.replace(this.updatedPagePath)
-				this.$store.commit(CLEAR_UPDATED_PAGE)
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not rename the page'))
