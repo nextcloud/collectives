@@ -49,13 +49,19 @@ export default {
 	computed: {
 		...mapGetters([
 			'currentCollective',
+			'currentFileIdPage',
 			'currentPage',
 			'collectivePage',
 			'loading',
 			'pageParam',
+			'pagePath',
 			'updatedPagePath',
 			'version',
 		]),
+
+		notFound() {
+			return !this.loading('collective') && !this.currentPage
+		},
 	},
 
 	watch: {
@@ -64,6 +70,11 @@ export default {
 		},
 		'currentPage.id'() {
 			this.$store.commit(SELECT_VERSION, null)
+		},
+		'notFound'(current) {
+			if (current && this.currentFileIdPage) {
+				this.$router.replace(this.pagePath(this.currentFileIdPage))
+			}
 		},
 	},
 
@@ -115,8 +126,8 @@ export default {
 			if (this.updatedPagePath
 				&& !window.location.href.includes(this.updatedPagePath)) {
 				this.$router.replace(this.updatedPagePath)
-				this.$store.commit(CLEAR_UPDATED_PAGE)
 			}
+			this.$store.commit(CLEAR_UPDATED_PAGE)
 		},
 
 		closeNav() {
