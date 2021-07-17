@@ -28,10 +28,6 @@ export default {
 	},
 
 	getters: {
-		currentPagePath(_state, getters) {
-			return getters.pageParam || 'Readme'
-		},
-
 		pagePath: (_state, getters) => (page) => {
 			const collective = getters.collectiveParam
 			const { filePath, fileName, title, id } = page
@@ -46,13 +42,14 @@ export default {
 
 		currentPages(state, getters) {
 			// Return landing page
-			if (getters.currentPagePath === 'Readme') {
+			if (!getters.pageParam
+				|| getters.pageParam === 'Readme') {
 				return [getters.collectivePage]
 			}
 
 			// Iterate through all path levels to find the correct page
 			const pages = []
-			const parts = getters.currentPagePath.split('/').filter(Boolean)
+			const parts = getters.pageParam.split('/').filter(Boolean)
 			let page = getters.collectivePage
 			for (const i in parts) {
 				page = state.pages.find(p => (p.parentId === page.id && p.title === parts[i]))
@@ -121,7 +118,7 @@ export default {
 		},
 
 		updatedPagePath(state, getters) {
-			return getters.pagePath(state.updatedPage)
+			return state.updatedPage && getters.pagePath(state.updatedPage)
 		},
 
 		pagesUrl(_state, getters) {
@@ -142,7 +139,11 @@ export default {
 	},
 
 	mutations: {
-		[SET_PAGES](state, pages) {
+		[SET_PAGES](state, { pages, current }) {
+			// keep track of the current page in case it was renamed.
+			if (current) {
+				state.updatedPage = pages.find(p => p.id === current.id)
+			}
 			state.pages = pages
 		},
 
@@ -183,7 +184,10 @@ export default {
 		async [GET_PAGES]({ commit, getters }) {
 			commit('load', 'collective', { root: true })
 			const response = await axios.get(getters.pagesUrl)
-			commit(SET_PAGES, response.data.data)
+			commit(SET_PAGES, {
+				pages: response.data.data,
+				current: getters.currentPage,
+			})
 			commit('done', 'collective', { root: true })
 		},
 
