@@ -118,8 +118,8 @@ export default {
 			}
 			try {
 				await this.$store.dispatch(NEW_PAGE, page)
+				this.$router.push(this.$store.getters.newPagePath)
 				this.collapsed = false
-				this.$router.push(this.$store.getters.updatedPagePath)
 				// The parents location changes when the first subpage
 				// is created.
 				this.$store.dispatch(GET_PAGES)

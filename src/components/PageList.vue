@@ -113,7 +113,7 @@ export default {
 			}
 			try {
 				await this.$store.dispatch(NEW_PAGE, page)
-				this.$router.push(this.$store.getters.updatedPagePath)
+				this.$router.push(this.$store.getters.newPagePath)
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not create the page'))

@@ -4,6 +4,9 @@
 		:title="title"
 		@close="close">
 		<template #secondary-actions>
+			<ActionLink :href="filesUrl(page)"
+				icon="icon-files-dark"
+				:title="t('collectives', 'Show in Files')" />
 			<ActionButton v-if="!landingPage"
 				icon="icon-delete"
 				@click="deletePage">
@@ -23,7 +26,9 @@ import { showSuccess, showError } from '@nextcloud/dialogs'
 import { mapGetters, mapMutations } from 'vuex'
 import { DELETE_PAGE } from '../store/actions'
 import { SELECT_VERSION } from '../store/mutations'
+import { generateUrl } from '@nextcloud/router'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
+import ActionLink from '@nextcloud/vue/dist/Components/ActionLink'
 import AppSidebar from '@nextcloud/vue/dist/Components/AppSidebar'
 import SidebarVersionsTab from './SidebarVersionsTab'
 
@@ -32,6 +37,7 @@ export default {
 
 	components: {
 		ActionButton,
+		ActionLink,
 		AppSidebar,
 		SidebarVersionsTab,
 	},
@@ -73,6 +79,10 @@ export default {
 				console.error(e)
 				showError(t('collectives', 'Could not delete the page'))
 			}
+		},
+
+		filesUrl(page) {
+			return generateUrl(`/apps/files/?fileid=${page.id}`)
 		},
 	},
 }

@@ -7,7 +7,6 @@ import {
 	SET_PAGES,
 	ADD_PAGE,
 	UPDATE_PAGE,
-	CLEAR_UPDATED_PAGE,
 	DELETE_PAGE_BY_ID,
 } from './mutations'
 
@@ -23,15 +22,11 @@ import {
 export default {
 	state: {
 		pages: [],
-		updatedPage: undefined,
+		newPage: undefined,
 		sortBy: 'byTimestamp',
 	},
 
 	getters: {
-		currentPagePath(_state, getters) {
-			return getters.pageParam || 'Readme'
-		},
-
 		pagePath: (_state, getters) => (page) => {
 			const collective = getters.collectiveParam
 			const { filePath, fileName, title, id } = page
@@ -46,13 +41,14 @@ export default {
 
 		currentPages(state, getters) {
 			// Return landing page
-			if (getters.currentPagePath === 'Readme') {
+			if (!getters.pageParam
+				|| getters.pageParam === 'Readme') {
 				return [getters.collectivePage]
 			}
 
 			// Iterate through all path levels to find the correct page
 			const pages = []
-			const parts = getters.currentPagePath.split('/').filter(Boolean)
+			const parts = getters.pageParam.split('/').filter(Boolean)
 			let page = getters.collectivePage
 			for (const i in parts) {
 				page = state.pages.find(p => (p.parentId === page.id && p.title === parts[i]))
@@ -67,7 +63,6 @@ export default {
 
 		currentPage(state, getters) {
 			return getters.currentPages[getters.currentPages.length - 1]
-			    || state.updatedPage
 		},
 
 		currentPageFilePath(_state, getters) {
@@ -106,6 +101,11 @@ export default {
 			return state.pages.find(p => (p.parentId === 0 && p.title === 'Readme'))
 		},
 
+		currentFileIdPage(state, _getters, rootState) {
+			const fileId = Number(rootState.route.query.fileId)
+			return state.pages.find(p => (p.id === fileId))
+		},
+
 		visibleSubpages: (state, getters) => (parentId) => {
 			return state.pages
 				.filter(p => p.parentId === parentId)
@@ -120,8 +120,8 @@ export default {
 			}
 		},
 
-		updatedPagePath(state, getters) {
-			return getters.pagePath(state.updatedPage)
+		newPagePath(state, getters) {
+			return state.newPage && getters.pagePath(state.newPage)
 		},
 
 		pagesUrl(_state, getters) {
@@ -142,12 +142,11 @@ export default {
 	},
 
 	mutations: {
-		[SET_PAGES](state, pages) {
+		[SET_PAGES](state, { pages }) {
 			state.pages = pages
 		},
 
 		[UPDATE_PAGE](state, page) {
-			state.updatedPage = page
 			state.pages.splice(
 				state.pages.findIndex(p => p.id === page.id),
 				1,
@@ -155,13 +154,9 @@ export default {
 			)
 		},
 
-		[CLEAR_UPDATED_PAGE](state) {
-			state.updatedPage = undefined
-		},
-
 		[ADD_PAGE](state, page) {
 			state.pages.unshift(page)
-			state.updatedPage = page
+			state.newPage = page
 		},
 
 		[DELETE_PAGE_BY_ID](state, id) {
@@ -183,7 +178,10 @@ export default {
 		async [GET_PAGES]({ commit, getters }) {
 			commit('load', 'collective', { root: true })
 			const response = await axios.get(getters.pagesUrl)
-			commit(SET_PAGES, response.data.data)
+			commit(SET_PAGES, {
+				pages: response.data.data,
+				current: getters.currentPage,
+			})
 			commit('done', 'collective', { root: true })
 		},
 

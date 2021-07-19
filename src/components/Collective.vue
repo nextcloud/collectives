@@ -49,13 +49,18 @@ export default {
 	computed: {
 		...mapGetters([
 			'currentCollective',
+			'currentFileIdPage',
 			'currentPage',
 			'collectivePage',
 			'loading',
 			'pageParam',
+			'pagePath',
 			'version',
 		]),
 
+		notFound() {
+			return !this.loading('collective') && !this.currentPage
+		},
 	},
 
 	watch: {
@@ -64,6 +69,11 @@ export default {
 		},
 		'currentPage.id'() {
 			this.$store.commit(SELECT_VERSION, null)
+		},
+		'notFound'(current) {
+			if (current && this.currentFileIdPage) {
+				this.$router.replace(this.pagePath(this.currentFileIdPage))
+			}
 		},
 	},
 
@@ -107,10 +117,9 @@ export default {
 
 		/**
 		 * Get list of all pages
-		 * @returns {Promise}
 		 */
-		getPages() {
-			return this.$store.dispatch(GET_PAGES)
+		async getPages() {
+			await this.$store.dispatch(GET_PAGES)
 				.catch(displayError('Could not fetch pages'))
 		},
 

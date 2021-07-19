@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<h1 id="titleform" class="page-title">
-			<form @submit.prevent="renamePage(); focusEditor()">
+			<form @submit.prevent="renamePage(); startEdit()">
 				<input v-if="landingPage"
 					class="title"
 					type="text"
@@ -70,7 +70,6 @@ import {
 	GET_PAGES,
 	GET_VERSIONS,
 } from '../store/actions'
-import { CLEAR_UPDATED_PAGE } from '../store/mutations'
 
 const EditState = { Unset: 0, Edit: 1, Read: 2 }
 
@@ -105,7 +104,6 @@ export default {
 			'indexPage',
 			'landingPage',
 			'pageParam',
-			'updatedPagePath',
 			'loading',
 			'visibleSubpages',
 			'showing',
@@ -149,19 +147,14 @@ export default {
 	watch: {
 		'pageParam'() {
 			this.initDocumentTitle()
+			this.initTitleEntry()
 		},
 		'currentPage.id'() {
-			this.initTitleEntry()
 			this.editToggle = EditState.Unset
 			if (this.showing('print')) {
 				this.show('subpages')
 			} else {
 				this.hide('subpages')
-			}
-		},
-		'titleChanged'(current, previous) {
-			if (current && !previous) {
-				this.edit = true
 			}
 		},
 	},
@@ -300,8 +293,6 @@ export default {
 				await this.$store.dispatch(RENAME_PAGE, this.newTitle)
 				// The resulting title may be different due to sanitizing
 				this.newTitle = this.currentPage.title
-				this.$router.push(this.updatedPagePath)
-				this.$store.commit(CLEAR_UPDATED_PAGE)
 				this.$store.dispatch(GET_PAGES)
 			} catch (e) {
 				console.error(e)
