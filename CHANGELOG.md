@@ -1,5 +1,32 @@
 # Changelog
 
+## 0.10.22 - 2021.07.19
+
+### ✨New
+
+* 🖨️ Print an entire collective or create a pdf from it.
+* 🧷 Drag page entry into the current page to create a link.
+* 📋 Toggle to list all subpages below the current page.
+* 📂 Button to show the current page in files.
+* 👥 Direct link to the circle for membership management.
+
+### 🏗️Fixes
+
+* 💽 Synchronizing collectives to the desktop app.
+* 🔎 Find pages by `fileId` if they cannot be found by path.
+* 🧽 Update title when other people rename current page.
+* ⛳ Use urls with fileId in the pages list.
+* 🚀 Faster loading of absolute links within the collectives app.
+* 💯 Handling of special chars in collective and page names.
+
+### 🌎Translations
+* 🗣️ Complete Czech translation thanks to Pavel Borecki.
+
+### 🚧Updates & Tooling
+* ✅ Fix test runs in forks.
+* ✂️ Only run tests relevant for the changed files.
+* 🔌 Update all js dependencies that we can.
+
 ## 0.9.22 - 2021.07.06
 
 ### ✨New
