@@ -137,7 +137,6 @@ export default {
 			const path = generateUrl(`/apps/collectives${this.to}`)
 			const href = new URL(path, window.location).href
 			const html = `<a href=${href}>${this.title}</a>`
-			console.debug(html)
 			ev.dataTransfer.effectAllowed = 'move'
 			ev.dataTransfer.setData('text/plain', href)
 			ev.dataTransfer.setData('text/uri-list', href)
