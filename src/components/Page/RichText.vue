@@ -25,17 +25,15 @@ import {
 	HardBreak,
 	Heading,
 	Code,
-	BulletList,
 	OrderedList,
 	Blockquote,
 	CodeBlock,
 	HorizontalRule,
 	Italic,
-	ListItem,
 	Strike,
 	Bold,
 } from 'tiptap-extensions'
-import { Image } from '../../nodes'
+import { BulletList, Image, ListItem } from '../../nodes'
 import Link from '../../marks/link'
 
 export default {
