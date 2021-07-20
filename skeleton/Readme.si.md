@@ -1,4 +1,4 @@
-# Welcome to your new collective
+# ඔබගේ නව සාමූහිකයට සාදරයෙන් පිළිගනිමු
 
 **Come, organize and build shared knowledge!**
 
