@@ -157,10 +157,11 @@
     </UndefinedDocblockClass>
   </file>
   <file src="lib/Service/CollectiveService.php">
-    <UndefinedClass occurrences="3">
+    <UndefinedClass occurrences="4">
       <code>$circle</code>
       <code>$circle</code>
       <code>$circle</code>
+      <code>File</code>
     </UndefinedClass>
   </file>
   <file src="lib/Versions/CollectiveVersion.php">

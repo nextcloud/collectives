@@ -2,9 +2,12 @@
 
 namespace Unit\Service;
 
+use OC\Files\Node\File;
+use OC\Files\Node\Folder;
 use OCA\Circles\Model\Circle;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
+use OCA\Collectives\Db\PageMapper;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Service\CircleExistsException;
 use OCA\Collectives\Service\CircleHelper;
@@ -34,7 +37,22 @@ class CollectiveServiceTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
+		$folder = $this->getMockBuilder(Folder::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$file = $this->getMockBuilder(File::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$folder->method('get')
+			->willReturn($file);
+		$collectiveFolderManager->method('createFolder')
+			->willReturn($folder);
+
 		$this->circleHelper = $this->getMockBuilder(CircleHelper::class)
+			->disableOriginalConstructor()
+			->getMock();
+
+		$pageMapper = $this->getMockBuilder(PageMapper::class)
 			->disableOriginalConstructor()
 			->getMock();
 
@@ -47,6 +65,7 @@ class CollectiveServiceTest extends TestCase {
 			$collectiveHelper,
 			$collectiveFolderManager,
 			$this->circleHelper,
+			$pageMapper,
 			$this->l10n
 		);
 	}

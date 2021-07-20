@@ -2,11 +2,16 @@
 
 namespace OCA\Collectives\Service;
 
+use OC\Files\Node\File;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
+use OCA\Collectives\Db\Page;
+use OCA\Collectives\Db\PageMapper;
 use OCA\Collectives\Model\CollectiveInfo;
+use OCA\Collectives\Model\PageFile;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCP\Files\InvalidPathException;
+use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\Files\NotPermittedException as FilesNotPermittedException;
 use OCP\IL10N;
 
@@ -23,6 +28,9 @@ class CollectiveService {
 	/** @var CircleHelper */
 	private $circleHelper;
 
+	/** @var PageMapper */
+	private $pageMapper;
+
 	/** @var IL10N */
 	private $l10n;
 
@@ -33,6 +41,7 @@ class CollectiveService {
 	 * @param CollectiveHelper        $collectiveHelper
 	 * @param CollectiveFolderManager $collectiveFolderManager
 	 * @param CircleHelper            $circleHelper
+	 * @param PageMapper              $pageMapper
 	 * @param IL10N                   $l10n
 	 */
 	public function __construct(
@@ -40,11 +49,13 @@ class CollectiveService {
 		CollectiveHelper $collectiveHelper,
 		CollectiveFolderManager $collectiveFolderManager,
 		CircleHelper $circleHelper,
+		PageMapper $pageMapper,
 		IL10N $l10n) {
 		$this->collectiveMapper = $collectiveMapper;
 		$this->collectiveHelper = $collectiveHelper;
 		$this->collectiveFolderManager = $collectiveFolderManager;
 		$this->circleHelper = $circleHelper;
+		$this->pageMapper = $pageMapper;
 		$this->l10n = $l10n;
 	}
 
@@ -121,9 +132,24 @@ class CollectiveService {
 
 		// Create folder for collective and optionally copy default landing page
 		try {
-			$this->collectiveFolderManager->createFolder($collective->getId(), $userLang);
+			$collectiveFolder = $this->collectiveFolderManager->createFolder($collective->getId(), $userLang);
 		} catch (InvalidPathException | FilesNotPermittedException $e) {
 			throw new NotPermittedException($e->getMessage());
+		}
+
+		// Register landing page
+		try {
+			$file = $collectiveFolder->get(PageFile::INDEX_PAGE_TITLE . PageFile::SUFFIX);
+			if (!$file instanceof File) {
+				throw new NotFoundException('Unable to get landing page for collective');
+			}
+
+			$page = new Page();
+			$page->setFileId($file->getId());
+			$page->setLastUserId($userId);
+			$this->pageMapper->updateOrInsert($page);
+		} catch (FilesNotFoundException | InvalidPathException $e) {
+			throw new NotFoundException($e->getMessage());
 		}
 
 		return [$collectiveInfo, $message];
