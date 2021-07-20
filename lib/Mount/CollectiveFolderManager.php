@@ -212,13 +212,14 @@ class CollectiveFolderManager {
 	}
 
 	/**
-	 * @param int  $id
+	 * @param int    $id
 	 * @param string $lang
 	 *
+	 * @return Folder
 	 * @throws InvalidPathException
 	 * @throws NotPermittedException
 	 */
-	public function createFolder(int $id, string $lang): void {
+	public function createFolder(int $id, string $lang): Folder {
 		try {
 			$folder = $this->getFolder($id);
 		} catch (NotFoundException $e) {
@@ -234,5 +235,7 @@ class CollectiveFolderManager {
 				$folder->newFile($landingPageFileName, $content);
 			}
 		}
+
+		return $folder;
 	}
 }
