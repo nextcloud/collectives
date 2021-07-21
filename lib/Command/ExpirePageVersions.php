@@ -36,7 +36,7 @@ class ExpirePageVersions extends Base {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	protected function execute(InputInterface $input, OutputInterface $output): void {
+	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$this->expireManager->listen(CollectiveVersionsExpireManager::class, 'enterFolder', function (array $folder) use ($output) {
 			$output->writeln("<info>Expiring old page versions in '${folder['mount_point']}'</info>");
 		});
@@ -52,12 +52,14 @@ class ExpirePageVersions extends Base {
 
 		try {
 			$this->expireManager->expireAll();
+			return 0;
 		} catch (MissingDependencyException $e) {
 			$output->writeln('');
 			$output->writeln('<error>  Looks like the circles app is not active.  </error>');
 			$output->writeln('<info>  Please enable it:  </info>');
 			$output->writeln('<info>      occ app:enable circles  </info>');
 			$output->writeln($e->getMessage());
+			return 1;
 		}
 	}
 }
