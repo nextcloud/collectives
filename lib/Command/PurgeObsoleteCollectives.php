@@ -29,10 +29,11 @@ class PurgeObsoleteCollectives extends Base {
 	 * @param InputInterface  $input
 	 * @param OutputInterface $output
 	 */
-	protected function execute(InputInterface $input, OutputInterface $output): void {
+	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$output->write('Start to purge cruft collectives from database ...');
 		$count = $this->garbageCollector->purgeObsoleteCollectives();
 		$output->writeln('done.');
 		$output->writeln(sprintf('Purged %d cruft collectives from database.', $count));
+		return 0;
 	}
 }

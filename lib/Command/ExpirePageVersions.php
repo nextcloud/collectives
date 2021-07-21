@@ -35,7 +35,7 @@ class ExpirePageVersions extends Base {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	protected function execute(InputInterface $input, OutputInterface $output): void {
+	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$this->expireManager->listen(CollectiveVersionsExpireManager::class, 'enterFolder', function (array $folder) use ($output) {
 			$output->writeln("<info>Expiring old page versions in '${folder['mount_point']}'</info>");
 		});
@@ -50,5 +50,6 @@ class ExpirePageVersions extends Base {
 		});
 
 		$this->expireManager->expireAll();
+		return 0;
 	}
 }
