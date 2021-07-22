@@ -128,19 +128,25 @@ class PageServiceTest extends TestCase {
 	}
 
 	public function testHasSubPages(): void {
-		$childFile1= $this->getMockBuilder(File::class)
+		$childFile1 = $this->getMockBuilder(File::class)
 			->disableOriginalConstructor()
 			->getMock();
 		$childFile1->method('getName')
-			->willReturn('File1.txt');
+			->willReturn('Readme.md');
 
-		$childFile2= $this->getMockBuilder(File::class)
+		$childFile2 = $this->getMockBuilder(File::class)
 			->disableOriginalConstructor()
 			->getMock();
 		$childFile2->method('getName')
 			->willReturn('File2.md');
 
-		$children = [$childFile1, $childFile2];
+		$childFile3 = $this->getMockBuilder(File::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$childFile3->method('getName')
+			->willReturn('File3.txt');
+
+		$children = [$childFile1, $childFile2, $childFile3];
 		$parentFolder = $this->getMockBuilder(Folder::class)
 			->disableOriginalConstructor()
 			->getMock();
@@ -157,7 +163,10 @@ class PageServiceTest extends TestCase {
 				$children,
 				[],
 				$children,
-				[$childFile1]
+				[$childFile1],
+				$children,
+				$children,
+				$children
 			);
 		self::assertTrue($this->service->pageHasOtherContent($file));
 		// Test `pageHasOtherContent()` without any children
@@ -168,6 +177,11 @@ class PageServiceTest extends TestCase {
 			->getMock();
 		$subfolder->method('getDirectoryListing')
 			->willReturn([$parentFolder]);
+		$subfolder->method('getName')
+			->willReturn('subfolder');
+		$subfolder->method('nodeExists')
+			->with('Readme.md')
+			->willReturn(true);
 		$folder = $this->getMockBuilder(Folder::class)
 			->disableOriginalConstructor()
 			->getMock();
@@ -175,9 +189,14 @@ class PageServiceTest extends TestCase {
 			->willReturn([$subfolder]);
 
 		// Test `folderHasSubPages()` with page in grandchildren
-		self::assertTrue($this->service->folderHasSubPages($folder));
+		self::assertTrue(PageService::folderHasSubPages($folder));
 		// Test `folderHasSubPages()` without page in grandchildren
-		self::assertFalse($this->service->folderHasSubPages($folder));
+		self::assertFalse(PageService::folderHasSubPages($folder));
+
+		// Test `folderHasSubPage()`
+		self::assertEquals(0, PageService::folderHasSubPage($parentFolder, 'File3'));
+		self::assertEquals(1, PageService::folderHasSubPage($parentFolder, 'File2'));
+		self::assertEquals(2, PageService::folderHasSubPage($folder, 'subfolder'));
 	}
 
 	public function testRecurseFolder(): void {

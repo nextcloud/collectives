@@ -40,6 +40,12 @@ Feature: collectivePages
     And user "jane" doesn't see pagePath "firstpage/subpage.md" in "mycollective"
     And user "jane" doesn't see pagePath "firstpage/parentpage.md" in "mycollective"
 
+  Scenario: Create and use template page
+    When user "jane" creates page "Template" with parentPath "Readme.md" in "mycollective"
+    And user "jane" creates page "Subtemplate" with parentPath "Template.md" in "mycollective"
+    And user "jane" creates page "anotherpage" with parentPath "Readme.md" in "mycollective"
+    Then user "jane" sees pagePath "anotherpage/Subtemplate.md" in "mycollective"
+
   Scenario: Delete all subpages
     When user "jane" deletes page "subpage" with parentPath "parentpage/Readme.md" in "mycollective"
     And user "jane" deletes page "subpage2" with parentPath "parentpage/Readme.md" in "mycollective"
