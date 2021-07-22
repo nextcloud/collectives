@@ -40,6 +40,8 @@ OC.L10N.register(
     "Start editing" : "Bearbeiten starten",
     "Done" : "Fertig",
     "Edit" : "Bearbeiten",
+    "Hide all subpages" : "Unterseite hinzufügen",
+    "Show all subpages" : "Unterseite hinzufügen",
     "Could not rename the page" : "Umbenennen der Seite fehlgeschlagen",
     "Expand subpage list" : "Klappe Unterseiten-Liste auf",
     "Collapse subpage list" : "Klappe Unterseiten-Liste ein",
