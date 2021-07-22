@@ -210,7 +210,7 @@ class PageService {
 					$this->revertSubFolders($node);
 				} elseif ($node instanceof File) {
 					// Move index page without subpages into the parent folder (if's not the landing page)
-					if (self::isIndexPage($node) && !self::isLandingPage($node) && !$this->hasSubPages($node)) {
+					if (self::isIndexPage($node) && !self::isLandingPage($node) && !$this->pageHasOtherContent($node)) {
 						$filename = NodeHelper::generateFilename($folder, $folder->getName(), PageFile::SUFFIX);
 						$node->move($folder->getParent()->getPath() . '/' . $filename . PageFile::SUFFIX);
 						$folder->delete();
@@ -281,11 +281,40 @@ class PageService {
 	 *
 	 * @return bool
 	 */
-	private function hasSubPages(File $file): bool {
+	public function pageHasOtherContent(File $file): bool {
 		try {
 			foreach ($file->getParent()->getDirectoryListing() as $node) {
+				if ($node instanceof File &&
+					self::isPage($node) &&
+					!self::isIndexPage($node)) {
+					return true;
+				}
 				if ($node->getName() !== PageFile::INDEX_PAGE_TITLE . PageFile::SUFFIX) {
 					return true;
+				}
+			}
+		} catch (FilesNotFoundException $e) {
+		}
+
+		return false;
+	}
+
+	/**
+	 * @param Folder $folder
+	 *
+	 * @return bool
+	 */
+	public function folderHasSubPages(Folder $folder): bool {
+		try {
+			foreach ($folder->getDirectoryListing() as $node) {
+				if ($node instanceof File &&
+					self::isPage($node) &&
+					!self::isIndexPage($node)) {
+					return true;
+				}
+
+				if ($node instanceof Folder) {
+					return $this->folderHasSubPages($node);
 				}
 			}
 		} catch (FilesNotFoundException $e) {
@@ -303,13 +332,18 @@ class PageService {
 	 * @throws NotPermittedException
 	 */
 	public function recurseFolder(string $userId, Folder $folder): array {
+		// Find index page or create it if we have subpages but it doesn't exist
 		try {
 			$indexPage = $this->getPageByFile($this->getIndexPageFile($folder));
 		} catch (NotFoundException $e) {
+			if (!$this->folderHasSubPages($folder)) {
+				return [];
+			}
 			$indexPage = $this->newPageFile($userId, $folder, PageFile::INDEX_PAGE_TITLE);
 		}
 		$pageFiles = [$indexPage];
 
+		// Add subpages and recurse over subfolders
 		try {
 			foreach ($folder->getDirectoryListing() as $node) {
 				if ($node instanceof File && self::isPage($node) && !self::isIndexPage($node)) {
@@ -321,6 +355,7 @@ class PageService {
 		} catch (FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage());
 		}
+
 		return $pageFiles;
 	}
 
@@ -505,7 +540,7 @@ class PageService {
 		try {
 			if (self::isIndexPage($file)) {
 				// Don't delete if still page has subpages
-				if ($this->hasSubPages($file)) {
+				if ($this->pageHasOtherContent($file)) {
 					throw new NotPermittedException('Failed to delete page ' . $id . ' with subpages');
 				} else {
 					// Delete folder if it's an index page without subpages
