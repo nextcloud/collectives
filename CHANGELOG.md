@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.11.22-beta1 - 2021.07.22
+
+### ✨New
+* ♻️lUpdate page list when it changes on the server.
+
+### 🏗️Fixes
+* 👤 Show avatar of person who created the collective.
+* ✅ Display todo items with checkbox in preview.
+
+### 🌎Translations
+* 🗣️ Initial Sinhala translation thanks to HelaBasa
+
+### 🚧Updates & Tooling
+* 😎 Check if versions match before building new release.
+
 ## 0.10.22 - 2021.07.19
 
 ### ✨New
