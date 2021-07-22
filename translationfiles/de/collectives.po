@@ -114,7 +114,7 @@ msgstr "Wähle ein Kollektiv aus oder lege links ein neues an."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:5
 msgid "Print"
-msgstr ""
+msgstr "Drucken"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:6
 msgid "Manage members"
@@ -229,14 +229,12 @@ msgid "Edit"
 msgstr "Bearbeiten"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:32
-#, fuzzy
 msgid "Hide all subpages"
-msgstr "Unterseite hinzufügen"
+msgstr "Alle Unterseiten verbergen"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:33
-#, fuzzy
 msgid "Show all subpages"
-msgstr "Unterseite hinzufügen"
+msgstr "Zeige alle Unterseiten"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:35
 msgid "Could not rename the page"
@@ -286,7 +284,7 @@ msgstr "Seite hinzufügen"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:47
 msgid "Show in Files"
-msgstr ""
+msgstr "Zeige in Dateien"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:48
 msgid "Delete page"
