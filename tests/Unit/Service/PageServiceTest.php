@@ -127,6 +127,59 @@ class PageServiceTest extends TestCase {
 		self::assertFalse(PageService::isIndexPage($file));
 	}
 
+	public function testHasSubPages(): void {
+		$childFile1= $this->getMockBuilder(File::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$childFile1->method('getName')
+			->willReturn('File1.txt');
+
+		$childFile2= $this->getMockBuilder(File::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$childFile2->method('getName')
+			->willReturn('File2.md');
+
+		$children = [$childFile1, $childFile2];
+		$parentFolder = $this->getMockBuilder(Folder::class)
+			->disableOriginalConstructor()
+			->getMock();
+
+		$file = $this->getMockBuilder(File::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$file->method('getParent')
+			->willReturn($parentFolder);
+
+		// Test `pageHasOtherContent()` with page in children
+		$parentFolder->method('getDirectoryListing')
+			->willReturnOnConsecutiveCalls(
+				$children,
+				[],
+				$children,
+				[$childFile1]
+			);
+		self::assertTrue($this->service->pageHasOtherContent($file));
+		// Test `pageHasOtherContent()` without any children
+		self::assertFalse($this->service->pageHasOtherContent($file));
+
+		$subfolder = $this->getMockBuilder(Folder::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$subfolder->method('getDirectoryListing')
+			->willReturn([$parentFolder]);
+		$folder = $this->getMockBuilder(Folder::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$folder->method('getDirectoryListing')
+			->willReturn([$subfolder]);
+
+		// Test `folderHasSubPages()` with page in grandchildren
+		self::assertTrue($this->service->folderHasSubPages($folder));
+		// Test `folderHasSubPages()` without page in grandchildren
+		self::assertFalse($this->service->folderHasSubPages($folder));
+	}
+
 	public function testRecurseFolder(): void {
 		$filesNotJustMd = [];
 		$filesJustMd = [];
