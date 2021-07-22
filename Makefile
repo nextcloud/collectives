@@ -7,7 +7,7 @@ OCC?=php ../../occ
 NPM?=npm
 
 # Release variables
-VERSION_CHANGELOG:=$(shell sed -ne 's/^\#\#\s\([0-9\.]\+\)\s-\s.*$$/\1/p' CHANGELOG.md | head -n1 )
+VERSION_CHANGELOG:=$(shell sed -ne 's/^\#\#\s\([0-9\.]\+-*\w*\)\s-\s.*$$/\1/p' CHANGELOG.md | head -n1 )
 GITLAB_GROUP:=collectivecloud
 GITLAB_PROJECT:=collectives
 GITLAB_PROJECT_ID:=17827012
@@ -167,10 +167,10 @@ build: node-modules build-js-production
 
 release-checks:
 ifneq ($(VERSION),$(VERSION_CHANGELOG))
-	  $(error Version missmatch between `appinfo/info.xml` and `CHANGELOG.md`)
+	$(error Version missmatch between `appinfo/info.xml`: $(VERSION) and `CHANGELOG.md`: $(VERSION_CHANGELOG))
 endif
 ifndef GITLAB_API_TOKEN
-	  $(error Missing $$GITLAB_API_TOKEN)
+	$(error Missing $$GITLAB_API_TOKEN)
 endif
 
 # Prepare the release package for the app store
