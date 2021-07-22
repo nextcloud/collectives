@@ -34,6 +34,8 @@
     "Title" : "Navn",
     "Done" : "Ferdig",
     "Edit" : "Rediger",
+    "Hide all subpages" : "Legg til en underside",
+    "Show all subpages" : "Legg til en underside",
     "Could not rename the page" : "Kunne ikke gi siden nytt navn",
     "Expand subpage list" : "Utvid undersideliste",
     "Collapse subpage list" : "Fold sammen undersidelisten",
