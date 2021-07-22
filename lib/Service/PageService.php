@@ -89,7 +89,7 @@ class PageService {
 
 		$file = $this->nodeHelper->getFileById($collectiveFolder, $fileId);
 		if (!($file instanceof File) || !($file->getParent() instanceof Folder)) {
-			throw new NotFoundException("Error getting parent folder for file " . $fileId . " in collective " . $collective->getId());
+			throw new NotFoundException('Error getting parent folder for file ' . $fileId . ' in collective ' . $collective->getId());
 		}
 
 		return $file->getParent();
@@ -163,13 +163,34 @@ class PageService {
 	 * @throws NotPermittedException
 	 */
 	private function newPageFile(string $userId, Folder $folder, string $filename): PageFile {
+		$hasTemplate = self::folderHasSubPage($folder, PageFile::TEMPLATE_PAGE_TITLE);
 		try {
-			$file = $folder->newFile($filename . PageFile::SUFFIX);
-			$pageFile = new PageFile();
-			$pageFile->fromFile($file, $this->getParentPageId($file), $userId);
-			$this->updatePage($userId, $file->getId());
-		} catch (FilesNotFoundException | FilesNotPermittedException | InvalidPathException $e) {
+			if ($hasTemplate === 1) {
+				$template = $folder->get(PageFile::TEMPLATE_PAGE_TITLE . PageFile::SUFFIX);
+				$newFile = $template->copy($folder->getPath() . '/' . $filename . PageFile::SUFFIX);
+			} elseif ($hasTemplate === 2) {
+				$template = $folder->get(PageFile::TEMPLATE_PAGE_TITLE);
+				$newFolder = $template->copy($folder->getPath() . '/' . $filename);
+				if ($newFolder instanceof Folder) {
+					$newFile = $newFolder->get(PageFile::INDEX_PAGE_TITLE . PageFile::SUFFIX);
+				} else {
+					throw new NotFoundException('Failed to get Template folder');
+				}
+			} else {
+				$newFile = $folder->newFile($filename . PageFile::SUFFIX);
+			}
+		} catch (FilesNotFoundException $e) {
+			throw new NotFoundException($e->getMessage());
+		} catch (FilesNotPermittedException $e) {
 			throw new NotPermittedException($e->getMessage());
+		}
+
+		$pageFile = new PageFile();
+		try {
+			$pageFile->fromFile($newFile, $this->getParentPageId($newFile), $userId);
+			$this->updatePage($userId, $newFile->getId());
+		} catch (FilesNotFoundException | InvalidPathException $e) {
+			throw new NotFoundException($e->getMessage());
 		}
 
 		return $pageFile;
@@ -304,7 +325,7 @@ class PageService {
 	 *
 	 * @return bool
 	 */
-	public function folderHasSubPages(Folder $folder): bool {
+	public static function folderHasSubPages(Folder $folder): bool {
 		try {
 			foreach ($folder->getDirectoryListing() as $node) {
 				if ($node instanceof File &&
@@ -314,13 +335,39 @@ class PageService {
 				}
 
 				if ($node instanceof Folder) {
-					return $this->folderHasSubPages($node);
+					return self::folderHasSubPages($node);
 				}
 			}
 		} catch (FilesNotFoundException $e) {
 		}
 
 		return false;
+	}
+
+	/**
+	 * @param Folder $folder
+	 * @param string $title
+	 *
+	 * @return int
+	 */
+	public static function folderHasSubPage(Folder $folder, string $title): int {
+		try {
+			foreach ($folder->getDirectoryListing() as $node) {
+				if ($node instanceof File &&
+					strcmp($node->getName(), $title . PageFile::SUFFIX) === 0) {
+					return 1;
+				}
+
+				if ($node instanceof Folder &&
+					strcmp($node->getName(), $title) === 0 &&
+					$node->nodeExists(PageFile::INDEX_PAGE_TITLE . PageFile::SUFFIX)) {
+					return 2;
+				}
+			}
+		} catch (FilesNotFoundException $e) {
+		}
+
+		return 0;
 	}
 
 	/**
@@ -336,7 +383,7 @@ class PageService {
 		try {
 			$indexPage = $this->getPageByFile($this->getIndexPageFile($folder));
 		} catch (NotFoundException $e) {
-			if (!$this->folderHasSubPages($folder)) {
+			if (!self::folderHasSubPages($folder)) {
 				return [];
 			}
 			$indexPage = $this->newPageFile($userId, $folder, PageFile::INDEX_PAGE_TITLE);
