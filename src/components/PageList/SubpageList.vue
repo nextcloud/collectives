@@ -7,6 +7,7 @@
 			:level="level"
 			:title="page.title"
 			:collapsed="collapsed"
+			:is-template="isTemplate"
 			@toggleCollapsed="toggleCollapsed"
 			@click.native="show('details')">
 			<template #line-two>
@@ -21,10 +22,16 @@
 				</ActionButton>
 			</template>
 		</Item>
+		<SubpageList v-if="templateView"
+			:key="templateView.id"
+			:page="templateView"
+			:level="level+1"
+			:is-template="true" />
 		<SubpageList v-for="subpage in subpagesView"
 			:key="subpage.id"
 			:page="subpage"
-			:level="level+1" />
+			:level="level+1"
+			:is-template="isTemplate" />
 	</div>
 </template>
 
@@ -56,6 +63,10 @@ export default {
 			type: Number,
 			required: true,
 		},
+		isTemplate: {
+			type: Boolean,
+			default: false,
+		},
 	},
 
 	data() {
@@ -71,8 +82,18 @@ export default {
 			'loading',
 			'pagePath',
 			'currentPages',
+			'templatePage',
 			'visibleSubpages',
 		]),
+
+		templateView() {
+			// Only display if not collapsed
+			if (this.collapsed) {
+				return null
+			} else {
+				return this.templatePage(this.page.id)
+			}
+		},
 
 		subpages() {
 			return this.visibleSubpages(this.page.id)

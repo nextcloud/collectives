@@ -7,6 +7,11 @@
 					type="text"
 					disabled
 					:value="collectiveTitle">
+				<input v-else-if="isTemplate"
+					class="title"
+					type="text"
+					disabled
+					:value="newTitle">
 				<input v-else
 					ref="title"
 					v-model="newTitle"
@@ -141,6 +146,10 @@ export default {
 
 		hasSubpages() {
 			return this.visibleSubpages(this.currentPage.id).length
+		},
+
+		isTemplate() {
+			return this.currentPage.title === 'Template'
 		},
 	},
 

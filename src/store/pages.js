@@ -101,6 +101,10 @@ export default {
 			return state.pages.find(p => (p.parentId === 0 && p.title === 'Readme'))
 		},
 
+		templatePage: (state) => (parentId) => {
+			return state.pages.find(p => (p.parentId === parentId && p.title === 'Template'))
+		},
+
 		currentFileIdPage(state, _getters, rootState) {
 			const fileId = Number(rootState.route.query.fileId)
 			return state.pages.find(p => (p.id === fileId))
@@ -109,6 +113,7 @@ export default {
 		visibleSubpages: (state, getters) => (parentId) => {
 			return state.pages
 				.filter(p => p.parentId === parentId)
+				.filter(p => p.title !== 'Template')
 				.sort(getters.sortOrder)
 		},
 

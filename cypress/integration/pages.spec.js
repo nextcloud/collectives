@@ -32,6 +32,8 @@ describe('Page', function() {
 		cy.seedPage('Day 2', '', 'Readme.md')
 		cy.seedPage('#% special chars', '', 'Readme.md')
 		cy.seedPageContent('bob', 'Our Garden/Day 2.md', 'A test string with Day 2 in the middle.')
+		cy.seedPage('Template', '', 'Readme.md')
+		cy.seedPageContent('bob', 'Our Garden/Template.md', 'This is going to be our template.')
 	})
 
 	describe('visited from collective home', function() {
@@ -71,6 +73,24 @@ describe('Page', function() {
 			cy.contains('.app-content-list-item a', '#% special chars').click()
 			cy.get('.app-content-list-item').should('contain', '#% special chars')
 			cy.get('#titleform input').should('have.value', '#% special chars')
+		})
+	})
+
+	describe('Creating a page from template', function() {
+		before(function() {
+			cy.login('bob', 'bob', '/apps/collectives/Our Garden')
+			cy.contains('.app-content-list-item', 'Our Garden')
+				.find('button.icon-add')
+				.click()
+			// TODO: remove the next line once
+			// https://github.com/nextcloud/text/pull/1645 has been
+			// backported to NC 21.
+			cy.get('#titleform input').click()
+			cy.focused().should('have.value', '')
+			cy.focused().type('New page from Template{enter}')
+		})
+		it('New page has template content', function() {
+			cy.get('.editor__content').contains('This is going to be our template.')
 		})
 	})
 
