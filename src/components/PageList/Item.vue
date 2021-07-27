@@ -10,7 +10,8 @@
 			@keypress.enter="toggleCollapsed"
 			@[isClickable]="toggleCollapsed">
 			<slot name="icon">
-				<div :class="isCollapsible ? 'icon-pages-white' : 'icon-page-white'" />
+				<div v-if="isTemplate" :class="isCollapsible ? 'icon-pages-template-white' : 'icon-page-template-white'" />
+				<div v-else :class="isCollapsible ? 'icon-pages-white' : 'icon-page-white'" />
 			</slot>
 			<TriangleIcon v-if="isCollapsible"
 				:title="collapsed ? t('collectives', 'Expand subpage list') : t('collectives', 'Collapse subpage list')"
@@ -80,6 +81,10 @@ export default {
 		pageId: {
 			type: Number,
 			default: 0,
+		},
+		isTemplate: {
+			type: Boolean,
+			default: false,
 		},
 	},
 

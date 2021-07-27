@@ -45,6 +45,11 @@
 				</ActionButton>
 			</template>
 		</Item>
+		<SubpageList v-if="template"
+			:key="template.id"
+			:page="template"
+			:level="1"
+			:is-template="true" />
 		<SubpageList v-for="page in subpages"
 			:key="page.id"
 			:page="page"
@@ -80,6 +85,7 @@ export default {
 		...mapGetters([
 			'collectiveParam',
 			'collectivePage',
+			'templatePage',
 			'currentCollective',
 			'loading',
 			'visibleSubpages',
@@ -91,6 +97,13 @@ export default {
 				return this.visibleSubpages(this.collectivePage.id)
 			} else {
 				return []
+			}
+		},
+		template() {
+			if (this.collectivePage) {
+				return this.templatePage(this.collectivePage.id)
+			} else {
+				return null
 			}
 		},
 	},
