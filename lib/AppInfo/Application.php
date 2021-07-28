@@ -6,7 +6,6 @@ namespace OCA\Collectives\AppInfo;
 
 use Closure;
 use OCA\Collectives\CacheListener;
-use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Listeners\LoadAdditionalScriptsListener;
 use OCA\Collectives\Mount\CollectiveFolderManager;
@@ -46,8 +45,7 @@ class Application extends App implements IBootstrap {
 				$c->get(CollectiveFolderManager::class),
 				$c->get(IMimeTypeLoader::class),
 				$c->get(IAppManager::class),
-				$c->get(UserFolderHelper::class),
-				$c->get(NodeHelper::class)
+				$c->get(UserFolderHelper::class)
 			);
 		});
 
