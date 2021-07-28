@@ -8,14 +8,17 @@ use OC\Hooks\BasicEmitter;
 use OC\User\User;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Mount\CollectiveFolderManager;
+use OCA\Collectives\Service\MissingDependencyException;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
+use OCP\AppFramework\QueryException;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Files\FileInfo;
 use OCP\Files\InvalidPathException;
 use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\Files\NotPermittedException as FilesNotPermittedException;
 use OCP\IDBConnection;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class CollectiveVersionsExpireManager extends BasicEmitter {
@@ -40,31 +43,38 @@ class CollectiveVersionsExpireManager extends BasicEmitter {
 	/** @var EventDispatcherInterface */
 	private $dispatcher;
 
+	/** @var string|null */
+	private $dependencyInjectionError;
+
 	/**
 	 * CollectiveVersionsExpireManager constructor.
 	 *
+	 * @param ContainerInterface       $appContainer
 	 * @param CollectiveFolderManager  $folderManager
 	 * @param ExpireManager            $expireManager
-	 * @param VersionsBackend          $versionsBackend
 	 * @param IDBConnection            $connection
 	 * @param CollectiveMapper         $collectiveMapper
 	 * @param ITimeFactory             $timeFactory
 	 * @param EventDispatcherInterface $dispatcher
 	 */
-	public function __construct(CollectiveFolderManager $folderManager,
+	public function __construct(ContainerInterface $appContainer,
+								CollectiveFolderManager $folderManager,
 								ExpireManager $expireManager,
-								VersionsBackend $versionsBackend,
 								IDBConnection $connection,
 								CollectiveMapper $collectiveMapper,
 								ITimeFactory $timeFactory,
 								EventDispatcherInterface $dispatcher) {
 		$this->folderManager = $folderManager;
 		$this->expireManager = $expireManager;
-		$this->versionsBackend = $versionsBackend;
 		$this->connection = $connection;
 		$this->collectiveMapper = $collectiveMapper;
 		$this->timeFactory = $timeFactory;
 		$this->dispatcher = $dispatcher;
+		try {
+			$this->versionsBackend = $appContainer->get(VersionsBackend::class);
+		} catch (QueryException $e) {
+			$this->dependencyInjectionError = $e->getMessage();
+		}
 	}
 
 	/**
@@ -108,8 +118,13 @@ class CollectiveVersionsExpireManager extends BasicEmitter {
 	 *
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
+	 * @throws MissingDependencyException
 	 */
 	public function expireFolder(array $folder): void {
+		if (isNull($this->versionsBackend)) {
+			throw new MissingDependencyException($this->dependencyInjectionError);
+		}
+
 		// TODO: Fix view path
 		$view = new View('/' . $this->folderManager->getRootPath() . '/versions/' . $folder['id']);
 		try {
