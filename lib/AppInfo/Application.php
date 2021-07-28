@@ -6,7 +6,6 @@ namespace OCA\Collectives\AppInfo;
 
 use Closure;
 use OCA\Collectives\CacheListener;
-use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Listeners\LoadAdditionalScriptsListener;
 use OCA\Collectives\Mount\CollectiveFolderManager;
@@ -46,16 +45,18 @@ class Application extends App implements IBootstrap {
 				$c->get(CollectiveFolderManager::class),
 				$c->get(IMimeTypeLoader::class),
 				$c->get(IAppManager::class),
-				$c->get(UserFolderHelper::class),
-				$c->get(NodeHelper::class)
+				$c->get(UserFolderHelper::class)
 			);
 		});
 
 		$context->registerService(VersionsBackend::class, function (ContainerInterface $c) {
-			return new VersionsBackend(
-				$c->get(CollectiveFolderManager::class),
-				$c->get(ITimeFactory::class)
-			);
+			$appManager = $c->get(IAppManager::class);
+			if ($appManager->isEnabledForUser('files_versions')) {
+				return new VersionsBackend(
+					$c->get(CollectiveFolderManager::class),
+					$c->get(ITimeFactory::class)
+				);
+			}
 		});
 
 		$context->registerSearchProvider(CollectiveProvider::class);
