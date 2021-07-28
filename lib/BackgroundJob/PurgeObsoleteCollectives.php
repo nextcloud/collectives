@@ -2,6 +2,7 @@
 
 namespace OCA\Collectives\BackgroundJob;
 
+use OCA\Collectives\Service\NotPermittedException;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\TimedJob;
 use OCA\Collectives\Db\CollectiveGarbageCollector;
@@ -22,6 +23,8 @@ class PurgeObsoleteCollectives extends TimedJob {
 
 	/**
 	 * @param $argument
+	 *
+	 * @throws NotPermittedException
 	 */
 	protected function run($argument): void {
 		$this->garbageCollector->purgeObsoleteCollectives();

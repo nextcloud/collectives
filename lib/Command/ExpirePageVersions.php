@@ -32,6 +32,7 @@ class ExpirePageVersions extends Base {
 	 * @param InputInterface  $input
 	 * @param OutputInterface $output
 	 *
+	 * @return int
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
