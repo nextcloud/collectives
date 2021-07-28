@@ -212,7 +212,11 @@ export default {
 		 */
 		async [NEW_PAGE]({ commit, getters }, page) {
 			// We'll be done when the title form has focus.
-			commit('load', 'newPage', { root: true })
+			if (page.title === 'Template') {
+				commit('load', 'newTemplatePage', { root: true })
+			} else {
+				commit('load', 'newPage', { root: true })
+			}
 			const response = await axios.post(getters.pageCreateUrl(page.parentId), page)
 			// Add new page to the beginning of pages array
 			commit(ADD_PAGE, response.data.data)

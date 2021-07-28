@@ -66,7 +66,7 @@ export default {
 		isTemplate: {
 			type: Boolean,
 			default: false,
-		},
+		}
 	},
 
 	data() {
