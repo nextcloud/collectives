@@ -76,10 +76,6 @@ export default {
 		SubpageList,
 	},
 
-	data() {
-		return { sortBy: 'byTimestamp' }
-	},
-
 	computed: {
 		...mapGetters([
 			'collectiveParam',
@@ -87,6 +83,7 @@ export default {
 			'currentCollective',
 			'loading',
 			'visibleSubpages',
+			'sortBy',
 			'showing',
 		]),
 		subpages() {
