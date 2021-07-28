@@ -50,10 +50,13 @@ class Application extends App implements IBootstrap {
 		});
 
 		$context->registerService(VersionsBackend::class, function (ContainerInterface $c) {
-			return new VersionsBackend(
-				$c->get(CollectiveFolderManager::class),
-				$c->get(ITimeFactory::class)
-			);
+			$appManager = $c->get(IAppManager::class);
+			if ($appManager->isEnabledForUser('files_versions')) {
+				return new VersionsBackend(
+					$c->get(CollectiveFolderManager::class),
+					$c->get(ITimeFactory::class)
+				);
+			}
 		});
 
 		$context->registerSearchProvider(CollectiveProvider::class);

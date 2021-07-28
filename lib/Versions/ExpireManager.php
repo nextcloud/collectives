@@ -2,8 +2,11 @@
 
 namespace OCA\Collectives\Versions;
 
+use OCA\Collectives\Service\MissingDependencyException;
 use OCA\Files_Versions\Expiration;
 use OCA\Files_Versions\Versions\IVersion;
+use OCP\AppFramework\QueryException;
+use Psr\Container\ContainerInterface;
 
 class ExpireManager {
 	public const MAX_VERSIONS_PER_INTERVAL = [
@@ -24,8 +27,16 @@ class ExpireManager {
 	/** @var Expiration */
 	private $expiration;
 
-	public function __construct(Expiration $expiration) {
-		$this->expiration = $expiration;
+	/** @var string|null */
+	private $dependencyInjectionError;
+
+	public function __construct(ContainerInterface $appContainer) {
+		try {
+			$this->expiration = $appContainer->get(Expiration::class);
+		} catch (QueryException $e) {
+			// Could not instantiate - probably files_versions app is disabled
+			$this->dependencyInjectionError = $e->getMessage();
+		}
 	}
 
 	/**
@@ -95,8 +106,13 @@ class ExpireManager {
 	 * @param bool       $quotaExceeded
 	 *
 	 * @return IVersion[]
+	 * @throws MissingDependencyException
 	 */
 	public function getExpiredVersion(array $versions, int $time, bool $quotaExceeded): array {
+		if (is_null($this->expiration)) {
+			throw new MissingDependencyException($this->dependencyInjectionError);
+		}
+
 		if ($this->expiration->shouldAutoExpire()) {
 			$autoExpire = $this->getAutoExpireList($time, $versions);
 		} else {
