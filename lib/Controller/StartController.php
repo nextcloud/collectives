@@ -40,7 +40,7 @@ class StartController extends Controller {
 	 * @return TemplateResponse
 	 */
 	public function index(string $path): TemplateResponse {
-		if ($appsMissing = $this->checkDependencies(['circles', 'text', 'viewer'])) {
+		if ($appsMissing = $this->checkDependencies()) {
 			return new TemplateResponse('collectives', 'error', ['appsMissing' => $appsMissing]);  // templates/error.php
 		}
 		$this->eventDispatcher->dispatch(LoadViewer::class, new LoadViewer());
@@ -48,11 +48,10 @@ class StartController extends Controller {
 	}
 
 	/**
-	 * @param string[] $apps
-	 *
 	 * @return array
 	 */
-	private function checkDependencies(array $apps): array {
+	private function checkDependencies(): array {
+		$apps = ['circles', 'files_versions', 'text', 'viewer'];
 		$appsMissing = [];
 		foreach ($apps as $app) {
 			if (!$this->appManager->isEnabledForUser($app)) {
