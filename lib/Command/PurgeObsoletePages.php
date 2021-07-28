@@ -28,6 +28,8 @@ class PurgeObsoletePages extends Base {
 	/**
 	 * @param InputInterface  $input
 	 * @param OutputInterface $output
+	 *
+	 * @return int
 	 */
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$output->write('Start to purge cruft pages from database ...');

@@ -7,6 +7,7 @@ namespace OCA\Collectives\Command;
 use OC\Core\Command\Base;
 use OCA\Collectives\Db\CollectiveGarbageCollector;
 use OCA\Collectives\Service\MissingDependencyException;
+use OCA\Collectives\Service\NotPermittedException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -29,6 +30,9 @@ class PurgeObsoleteCollectives extends Base {
 	/**
 	 * @param InputInterface  $input
 	 * @param OutputInterface $output
+	 *
+	 * @return int
+	 * @throws NotPermittedException
 	 */
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$output->write('Start to purge cruft collectives from database ...');
