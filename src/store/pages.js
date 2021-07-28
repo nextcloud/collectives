@@ -120,6 +120,10 @@ export default {
 			}
 		},
 
+		sortBy(state) {
+			return state.sortBy
+		},
+
 		newPagePath(state, getters) {
 			return state.newPage && getters.pagePath(state.newPage)
 		},
