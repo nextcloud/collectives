@@ -6,9 +6,18 @@
 		<template #secondary-actions>
 			<ActionLink :href="filesUrl(page)"
 				icon="icon-files-dark"
-				:title="t('collectives', 'Show in Files')" />
+				:close-after-click="true">
+				{{ t('collectives', 'Show in Files') }}
+			</ActionLink>
+			<ActionButton v-if="!isTemplatePage"
+				icon="icon-pages-template"
+				:close-after-click="true"
+				@click="editTemplatePage(page)">
+				{{ t('collectives', 'Edit template for subpages') }}
+			</ActionButton>
 			<ActionButton v-if="!landingPage"
 				icon="icon-delete"
+				:close-after-click="true"
 				@click="deletePage">
 				{{ t('collectives', 'Delete page') }}
 			</ActionButton>
@@ -24,7 +33,7 @@
 <script>
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { mapGetters, mapMutations } from 'vuex'
-import { DELETE_PAGE } from '../store/actions'
+import { NEW_PAGE, DELETE_PAGE, GET_PAGES } from '../store/actions'
 import { SELECT_VERSION } from '../store/mutations'
 import { generateUrl } from '@nextcloud/router'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
@@ -44,10 +53,13 @@ export default {
 
 	computed: {
 		...mapGetters([
+			'pagePath',
 			'currentPage',
 			'collectiveParam',
 			'title',
 			'landingPage',
+			'templatePage',
+			'isTemplatePage',
 		]),
 
 		page() {
@@ -83,6 +95,29 @@ export default {
 
 		filesUrl(page) {
 			return generateUrl(`/apps/files/?fileid=${page.id}`)
+		},
+
+		async editTemplatePage(parentPage) {
+			if (this.templatePage(parentPage.id)) {
+				this.$router.push(this.pagePath(this.templatePage(parentPage.id)))
+				return
+			}
+
+			const page = {
+				title: 'Template',
+				filePath: [parentPage.filePath, parentPage.title].filter(Boolean).join('/'),
+				parentId: parentPage.id,
+			}
+			try {
+				await this.$store.dispatch(NEW_PAGE, page)
+				this.$router.push(this.$store.getters.newPagePath)
+				// The parents location changes when the first subpage
+				// is created.
+				this.$store.dispatch(GET_PAGES)
+			} catch (e) {
+				console.error(e)
+				showError(t('collectives', 'Could not create page'))
+			}
 		},
 	},
 }

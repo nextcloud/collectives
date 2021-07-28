@@ -3,6 +3,8 @@
 @include icon-black-white('sort-by-alpha', 'collectives', 1);
 @include icon-black-white('page', 'collectives', 1);
 @include icon-black-white('pages', 'collectives', 1);
+@include icon-black-white('page-template', 'collectives', 1);
+@include icon-black-white('pages-template', 'collectives', 1);
 @include icon-black-white('page-template-white', 'collectives', 1);
 @include icon-black-white('pages-template-white', 'collectives', 1);
 @include icon-black-white('page-white', 'collectives', 1);
@@ -22,6 +24,6 @@
 	height: 34px;
 }
 
-.icon-page, .icon-pages {
+.icon-page, .icon-pages, .icon-page-template, .icon-pages-template {
 	background-size: 44px;
 }

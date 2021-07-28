@@ -212,9 +212,13 @@ export default {
 					this.$nextTick(this.focusTitle)
 				}
 				this.done('newPage')
-			} else {
-				this.newTitle = this.currentPage.title
+				return
+			} else if (this.loading('newTemplatePage')) {
+				// TODO: apparently focussing the editor doesn't work as expected
+				this.$nextTick(this.focusEditor)
+				this.done('newTemplatePage')
 			}
+			this.newTitle = this.currentPage.title
 		},
 
 		focusTitle() {
