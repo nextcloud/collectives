@@ -7,6 +7,8 @@
 @include icon-black-white('pages-template', 'collectives', 1);
 @include icon-black-white('page-template-white', 'collectives', 1);
 @include icon-black-white('pages-template-white', 'collectives', 1);
+@include icon-black-white('pages-template-grey', 'collectives', 1);
+@include icon-black-white('pages-template-dark-grey', 'collectives', 1);
 @include icon-black-white('page-white', 'collectives', 1);
 @include icon-black-white('pages-white', 'collectives', 1);
 
@@ -14,7 +16,7 @@
 	@include icon-color('app', 'collectives', '#000', 1);
 }
 
-.icon-circles, .icon-sort-by-alpha, .icon-access-time {
+.icon-circles, .icon-sort-by-alpha, .icon-access-time, {
 	background-size: 16px;
 }
 
@@ -24,6 +26,6 @@
 	height: 34px;
 }
 
-.icon-page, .icon-pages, .icon-page-template, .icon-pages-template {
+.icon-page, .icon-pages, .icon-page-template, .icon-pages-template, .icon-pages-templates-dark-grey {
 	background-size: 44px;
 }

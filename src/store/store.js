@@ -37,7 +37,7 @@ export default new Vuex.Store({
 			!get.pageParam || get.pageParam === 'Readme',
 
 		isTemplatePage: (_state, get) =>
-			get.currentPage.fileName === 'Template.md',
+			get.currentPage.title === 'Template',
 
 		title: (_state, get) =>
 			get.landingPage ? get.currentCollective.name : get.currentPage.title,
