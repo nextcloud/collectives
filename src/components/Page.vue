@@ -11,7 +11,7 @@
 					class="title"
 					type="text"
 					disabled
-					:value="newTitle">
+					:value="t('collectives', 'Template')">
 				<input v-else
 					ref="title"
 					v-model="newTitle"
