@@ -20,8 +20,8 @@
 		</div>
 		<router-link :to="to">
 			<div class="app-content-list-item-line-one"
-				:class="{'app-content-list-item-line-one--level0': level === 0 }">
-				{{ title }}
+				:class="{ 'app-content-list-item-line-one--level0': level === 0, 'app-content-list-item-template': isTemplate }">
+				{{ title === 'Template' ? t('collectives', 'Template') : title }}
 			</div>
 			<div v-if="$scopedSlots['line-two']"
 				class="app-content-list-item-line-two">
@@ -167,6 +167,10 @@ export default {
 	&--level0 {
 		font-weight: bold;
 	}
+}
+
+.app-content-list-item-template {
+	color: var(--color-text-lighter);
 }
 
 .app-content-list .app-content-list-item .app-content-list-item-line-two {
