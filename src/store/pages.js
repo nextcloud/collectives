@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import { getCurrentUser } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
 import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
@@ -24,6 +25,7 @@ export default {
 		pages: [],
 		newPage: undefined,
 		sortBy: 'byTimestamp',
+		collapsed: {},
 	},
 
 	getters: {
@@ -148,6 +150,10 @@ export default {
 		touchUrl(_state, getters) {
 			return `${getters.pageUrl(getters.currentPage.parentId, getters.currentPage.id)}/touch`
 		},
+
+		collapsed(state) {
+			return pageId => state.collapsed[pageId] != null ? state.collapsed[pageId] : true
+		},
 	},
 
 	mutations: {
@@ -177,6 +183,9 @@ export default {
 			state.sortBy = order
 		},
 
+		collapse: (state, pageId) => Vue.set(state.collapsed, pageId, true),
+		expand: (state, pageId) => Vue.set(state.collapsed, pageId, false),
+		toggleCollapsed: (state, pageId) => Vue.set(state.collapsed, pageId, !state.collapsed[pageId]),
 	},
 
 	actions: {

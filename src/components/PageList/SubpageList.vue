@@ -6,9 +6,9 @@
 			:page-id="page.id"
 			:level="level"
 			:title="page.title"
-			:collapsed="collapsed"
+			:collapsed="collapsed(page.id)"
 			:is-template="isTemplate"
-			@toggleCollapsed="toggleCollapsed"
+			@toggleCollapsed="toggleCollapsed(page.id)"
 			@click.native="show('details')">
 			<template #line-two>
 				<LastUpdate :timestamp="page.timestamp"
@@ -66,13 +66,7 @@ export default {
 		isTemplate: {
 			type: Boolean,
 			default: false,
-		}
-	},
-
-	data() {
-		return {
-			collapsed: true,
-		}
+		},
 	},
 
 	computed: {
@@ -84,11 +78,12 @@ export default {
 			'currentPages',
 			'templatePage',
 			'visibleSubpages',
+			'collapsed',
 		]),
 
 		templateView() {
 			// Only display if not collapsed
-			if (this.collapsed) {
+			if (this.collapsed(this.page.id)) {
 				return null
 			} else {
 				return this.templatePage(this.page.id)
@@ -101,7 +96,7 @@ export default {
 
 		subpagesView() {
 			// Only display subpages if not collapsed
-			if (this.collapsed) {
+			if (this.collapsed(this.page.id)) {
 				return []
 			} else {
 				return this.subpages
@@ -114,7 +109,7 @@ export default {
 	},
 
 	watch: {
-		// Reinitate collapsed state when route changes (to expand currentPage if applicable)
+		// Reinitate collapsed state when route changes
 		'pageParam'() {
 			this.initCollapsed()
 		},
@@ -125,7 +120,7 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['show']),
+		...mapMutations(['collapse', 'expand', 'toggleCollapsed', 'show']),
 
 		/**
 		 * Create a new page and focus the page automatically
@@ -140,7 +135,7 @@ export default {
 			try {
 				await this.$store.dispatch(NEW_PAGE, page)
 				this.$router.push(this.$store.getters.newPagePath)
-				this.collapsed = false
+				this.expand(page.id)
 				// The parents location changes when the first subpage
 				// is created.
 				this.$store.dispatch(GET_PAGES)
@@ -150,14 +145,10 @@ export default {
 			}
 		},
 
-		toggleCollapsed() {
-			this.collapsed = !this.collapsed
-		},
-
 		initCollapsed() {
 			// Expand subpages if they're in the path to currentPage
 			if (this.currentPages.includes(this.page)) {
-				this.collapsed = false
+				this.expand(this.page.id)
 			}
 		},
 	},
