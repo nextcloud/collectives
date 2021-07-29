@@ -7,16 +7,16 @@
 		<div class="app-content-list-item-icon"
 			:style="indentIcon"
 			:tabindex="isClickable ? '0' : null"
-			@keypress.enter="toggleCollapsed"
-			@[isClickable]="toggleCollapsed">
+			@keypress.enter="toggleCollapsed(pageId)"
+			@[isClickable]="toggleCollapsed(pageId)">
 			<slot name="icon">
 				<div v-if="isTemplate" :class="isCollapsible ? 'icon-pages-template-white' : 'icon-page-template-white'" />
 				<div v-else :class="isCollapsible ? 'icon-pages-white' : 'icon-page-white'" />
 			</slot>
 			<TriangleIcon v-if="isCollapsible"
-				:title="collapsed ? t('collectives', 'Expand subpage list') : t('collectives', 'Collapse subpage list')"
+				:title="collapsed(pageId) ? t('collectives', 'Expand subpage list') : t('collectives', 'Collapse subpage list')"
 				class="page-icon-badge"
-				:class="{'page-icon-badge--rotated': collapsed}" />
+				:class="{'page-icon-badge--rotated': collapsed(pageId)}" />
 		</div>
 		<router-link :to="to">
 			<div class="app-content-list-item-line-one"
@@ -42,7 +42,7 @@
 import Actions from '@nextcloud/vue/dist/Components/Actions'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile'
 import { generateUrl } from '@nextcloud/router'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import TriangleIcon from 'vue-material-design-icons/Triangle'
 
 export default {
@@ -66,10 +66,6 @@ export default {
 			type: Boolean,
 			default: false,
 		},
-		collapsed: {
-			type: Boolean,
-			required: true,
-		},
 		title: {
 			type: String,
 			required: true,
@@ -91,6 +87,7 @@ export default {
 	computed: {
 		...mapGetters([
 			'currentPage',
+			'collapsed',
 		]),
 
 		isActive() {
@@ -134,9 +131,7 @@ export default {
 	},
 
 	methods: {
-		toggleCollapsed() {
-			this.$emit('toggleCollapsed')
-		},
+		...mapMutations(['toggleCollapsed']),
 
 		setDragData(ev) {
 			const path = generateUrl(`/apps/collectives${this.to}`)
