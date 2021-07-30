@@ -28,8 +28,8 @@ Afterwards, you can enable the app from the Nextcloud app management menu.
 
 With the app available in the Nextcloud app management
 you should be able to run the unit tests with
-```sh
-make php-unit-test
+```
+make test-php-unit
 ```
 
 In order to run the integration tests you either need to configure your
@@ -39,8 +39,8 @@ or you need to change the `default` config for behat in
 to use a different `baseUrl`.
 
 Then you can run them with
-```sh
-make php-integration-test
+```
+make test-php-integration
 ```
 
 The integration tests rely test data installed to the server.
