@@ -18,7 +18,8 @@ Wechselt in den Editier-Modus, um loszulegen! ↗️
 
 ## Auch gut zu wissen
 
-* Verlinkt lokale Seiten, indem ihr Text markiert und "Datei verknüpfen" wählt.
 * Mehrere Menschen können gleichzeitig die selbe Seite bearbeiten.
+* Verlinkt lokale Seiten, indem ihr Text markiert und "Datei verknüpfen" wählt. Ihr könnt auch Seiten aus der Seitenliste einfach in den Texteditor ziehen.
+* Erstellt Vorlagen für zukünftige Seiten, indem ihr eine "Template" Seite anlegt.
 * Findet mehr über diese App heraus und schaut in die [Dokumentation](https://collectivecloud.gitlab.io/collectives/).
 * Fragt [die Community](https://help.nextcloud.com/c/apps/collectives/174) um Hilfe, wenn ihr weitere Fragen habt.
