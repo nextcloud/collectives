@@ -6,8 +6,9 @@
 			:page-id="page.id"
 			:level="level"
 			:title="page.title"
-			:collapsed="collapsed"
-			@toggleCollapsed="toggleCollapsed"
+			:collapsed="collapsed(page.id)"
+			:is-template="isTemplate"
+			@toggleCollapsed="toggleCollapsed(page.id)"
 			@click.native="show('details')">
 			<template #line-two>
 				<LastUpdate :timestamp="page.timestamp"
@@ -19,12 +20,23 @@
 					@click="newPage(page)">
 					{{ t('collectives', 'Add a subpage') }}
 				</ActionButton>
+				<ActionButton v-if="showTemplates && !isTemplate"
+					icon="icon-pages-template-dark-grey"
+					@click="editTemplate(page)">
+					{{ editTemplateString }}
+				</ActionButton>
 			</template>
 		</Item>
+		<SubpageList v-if="templateView"
+			:key="templateView.id"
+			:page="templateView"
+			:level="level+1"
+			:is-template="true" />
 		<SubpageList v-for="subpage in subpagesView"
 			:key="subpage.id"
 			:page="subpage"
-			:level="level+1" />
+			:level="level+1"
+			:is-template="isTemplate" />
 	</div>
 </template>
 
@@ -36,7 +48,7 @@ import Item from './Item'
 
 import { showError } from '@nextcloud/dialogs'
 import { mapGetters, mapMutations } from 'vuex'
-import { NEW_PAGE, GET_PAGES } from '../../store/actions'
+import { NEW_PAGE, NEW_TEMPLATE, GET_PAGES } from '../../store/actions'
 
 export default {
 	name: 'SubpageList',
@@ -56,23 +68,32 @@ export default {
 			type: Number,
 			required: true,
 		},
-	},
-
-	data() {
-		return {
-			collapsed: true,
-		}
+		isTemplate: {
+			type: Boolean,
+			default: false,
+		},
 	},
 
 	computed: {
 		...mapGetters([
 			'pageParam',
 			'collectiveParam',
-			'loading',
 			'pagePath',
 			'currentPages',
+			'templatePage',
 			'visibleSubpages',
+			'collapsed',
+			'showTemplates',
 		]),
+
+		templateView() {
+			// Only display if not collapsed
+			if (!this.showTemplates || this.collapsed(this.page.id)) {
+				return null
+			} else {
+				return this.templatePage(this.page.id)
+			}
+		},
 
 		subpages() {
 			return this.visibleSubpages(this.page.id)
@@ -80,7 +101,7 @@ export default {
 
 		subpagesView() {
 			// Only display subpages if not collapsed
-			if (this.collapsed) {
+			if (this.collapsed(this.page.id)) {
 				return []
 			} else {
 				return this.subpages
@@ -90,10 +111,18 @@ export default {
 		isCollapsible() {
 			return !!this.subpages.length
 		},
+
+		editTemplateString() {
+			if (this.templateView) {
+				return t('collectives', 'Edit template for subpages')
+			} else {
+				return t('collectives', 'Add template for subpages')
+			}
+		},
 	},
 
 	watch: {
-		// Reinitate collapsed state when route changes (to expand currentPage if applicable)
+		// Reinitate collapsed state when route changes
 		'pageParam'() {
 			this.initCollapsed()
 		},
@@ -104,22 +133,22 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['show']),
+		...mapMutations(['collapse', 'expand', 'toggleCollapsed', 'show']),
 
 		/**
-		 * Create a new page and focus the page automatically
+		 * Open existing or create new template page
 		 * @param {Object} parentPage Parent page
 		 */
-		async newPage(parentPage) {
-			const page = {
-				title: t('collectives', 'New Page'),
-				filePath: [parentPage.filePath, parentPage.title].filter(Boolean).join('/'),
-				parentId: parentPage.id,
+		async editTemplate(parentPage) {
+			if (this.templatePage(parentPage.id)) {
+				this.$router.push(this.pagePath(this.templatePage(parentPage.id)))
+				return
 			}
+
 			try {
-				await this.$store.dispatch(NEW_PAGE, page)
+				await this.$store.dispatch(NEW_TEMPLATE, parentPage)
 				this.$router.push(this.$store.getters.newPagePath)
-				this.collapsed = false
+				this.expand(this.page.id)
 				// The parents location changes when the first subpage
 				// is created.
 				this.$store.dispatch(GET_PAGES)
@@ -129,14 +158,32 @@ export default {
 			}
 		},
 
-		toggleCollapsed() {
-			this.collapsed = !this.collapsed
+		/**
+		 * Create a new page and focus the page automatically
+		 * @param {Object} parentPage Parent page
+		 */
+		async newPage(parentPage) {
+			const page = {
+				title: t('collectives', 'New Page'),
+				parentId: parentPage.id,
+			}
+			try {
+				await this.$store.dispatch(NEW_PAGE, page)
+				this.$router.push(this.$store.getters.newPagePath)
+				this.expand(this.page.id)
+				// The parents location changes when the first subpage
+				// is created.
+				this.$store.dispatch(GET_PAGES)
+			} catch (e) {
+				console.error(e)
+				showError(t('collectives', 'Could not create the page'))
+			}
 		},
 
 		initCollapsed() {
 			// Expand subpages if they're in the path to currentPage
 			if (this.currentPages.includes(this.page)) {
-				this.collapsed = false
+				this.expand(this.page.id)
 			}
 		},
 	},

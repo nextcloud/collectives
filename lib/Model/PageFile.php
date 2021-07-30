@@ -32,6 +32,7 @@ use OCP\Files\NotFoundException;
  */
 class PageFile extends Entity implements JsonSerializable {
 	public const INDEX_PAGE_TITLE = 'Readme';
+	public const TEMPLATE_PAGE_TITLE = 'Template';
 	public const SUFFIX = '.md';
 
 	/** @var string */

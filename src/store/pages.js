@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import { getCurrentUser } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
 import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
@@ -14,16 +15,21 @@ import {
 	GET_PAGES,
 	GET_PAGE,
 	NEW_PAGE,
+	NEW_TEMPLATE,
 	TOUCH_PAGE,
 	RENAME_PAGE,
 	DELETE_PAGE,
 } from './actions'
+
+export const TEMPLATE_PAGE = 'Template'
 
 export default {
 	state: {
 		pages: [],
 		newPage: undefined,
 		sortBy: 'byTimestamp',
+		collapsed: {},
+		showTemplates: false,
 	},
 
 	getters: {
@@ -101,6 +107,10 @@ export default {
 			return state.pages.find(p => (p.parentId === 0 && p.title === 'Readme'))
 		},
 
+		templatePage: (state) => (parentId) => {
+			return state.pages.find(p => (p.parentId === parentId && p.title === TEMPLATE_PAGE))
+		},
+
 		currentFileIdPage(state, _getters, rootState) {
 			const fileId = Number(rootState.route.query.fileId)
 			return state.pages.find(p => (p.id === fileId))
@@ -109,6 +119,7 @@ export default {
 		visibleSubpages: (state, getters) => (parentId) => {
 			return state.pages
 				.filter(p => p.parentId === parentId)
+				.filter(p => p.title !== TEMPLATE_PAGE)
 				.sort(getters.sortOrder)
 		},
 
@@ -143,6 +154,15 @@ export default {
 		touchUrl(_state, getters) {
 			return `${getters.pageUrl(getters.currentPage.parentId, getters.currentPage.id)}/touch`
 		},
+
+		collapsed(state) {
+			// Default to 'true' if unset
+			return pageId => state.collapsed[pageId] != null ? state.collapsed[pageId] : true
+		},
+
+		showTemplates(state) {
+			return state.showTemplates
+		},
 	},
 
 	mutations: {
@@ -172,6 +192,15 @@ export default {
 			state.sortBy = order
 		},
 
+		toggleTemplates(state) {
+			state.showTemplates = !state.showTemplates
+		},
+
+		collapse: (state, pageId) => Vue.set(state.collapsed, pageId, true),
+		expand: (state, pageId) => Vue.set(state.collapsed, pageId, false),
+		toggleCollapsed: (state, pageId) =>
+			// Default to 'false' if unset
+			Vue.set(state.collapsed, pageId, state.collapsed[pageId] == null ? false : !state.collapsed[pageId]),
 	},
 
 	actions: {
@@ -208,6 +237,25 @@ export default {
 		async [NEW_PAGE]({ commit, getters }, page) {
 			// We'll be done when the title form has focus.
 			commit('load', 'newPage', { root: true })
+
+			const response = await axios.post(getters.pageCreateUrl(page.parentId), page)
+			// Add new page to the beginning of pages array
+			commit(ADD_PAGE, response.data.data)
+		},
+
+		/**
+		 * Create a new page
+		 * @param {Object} parentPage Parent page for new template
+		 */
+		async [NEW_TEMPLATE]({ commit, getters }, parentPage) {
+			const page = {
+				title: 'Template',
+				parentId: parentPage.id,
+			}
+
+			// We'll be done when the editor has focus.
+			commit('load', 'editTemplate', { root: true })
+
 			const response = await axios.post(getters.pageCreateUrl(page.parentId), page)
 			// Add new page to the beginning of pages array
 			commit(ADD_PAGE, response.data.data)

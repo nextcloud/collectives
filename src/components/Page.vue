@@ -7,6 +7,11 @@
 					type="text"
 					disabled
 					:value="collectiveTitle">
+				<input v-else-if="isTemplatePage"
+					class="title"
+					type="text"
+					disabled
+					:value="t('collectives', 'Template')">
 				<input v-else
 					ref="title"
 					v-model="newTitle"
@@ -107,6 +112,7 @@ export default {
 			'loading',
 			'visibleSubpages',
 			'showing',
+			'isTemplatePage',
 		]),
 
 		collectiveTitle() {
@@ -203,9 +209,13 @@ export default {
 					this.$nextTick(this.focusTitle)
 				}
 				this.done('newPage')
-			} else {
-				this.newTitle = this.currentPage.title
+				return
+			} else if (this.loading('newTemplate')) {
+				// TODO: apparently focussing the editor doesn't work as expected
+				this.$nextTick(this.focusEditor)
+				this.done('newTemplate')
 			}
+			this.newTitle = this.currentPage.title
 		},
 
 		focusTitle() {
