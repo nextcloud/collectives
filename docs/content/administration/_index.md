@@ -11,6 +11,8 @@ This app requires the following apps to be enabled:
 
 * [**Circles**](https://apps.nextcloud.com/apps/circles)
 * [**Text**](https://apps.nextcloud.com/apps/text)
+* **Viewer**
+* **files_versions**
 
 ## Install Nextcloud Collectives
 
