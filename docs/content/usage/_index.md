@@ -33,8 +33,7 @@ Create pages and share the knowledge that really matters.
 Click the "Create a Page" button in the upper left
 and a new page will appear.
 
-You can type in a title right away
-or add some content first
+You can type in a title right away or add some content first
 and settle on a title later.
 
 ## 🛋️ Edit the landing page to feel like home
@@ -48,7 +47,7 @@ to adjust it to your collectives needs.
 Follow the "manage members" link that you find in the action menu inside
 the collectives list on the left to manage members.
 
-If your nextcloud instance is configured to allow groups in circles
+If your Nextcloud instance is configured to allow groups in circles
 you can even add entire groups to your collectives.
 
 ## Also good to know
