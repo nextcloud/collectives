@@ -165,7 +165,6 @@ export default {
 		async newPage(parentPage) {
 			const page = {
 				title: t('collectives', 'New Page'),
-				filePath: [parentPage.filePath, parentPage.title].filter(Boolean).join('/'),
 				parentId: parentPage.id,
 			}
 			try {

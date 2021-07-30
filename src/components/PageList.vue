@@ -163,7 +163,6 @@ export default {
 		async newPage(parentPage) {
 			const page = {
 				title: t('collectives', 'New Page'),
-				filePath: '',
 				parentId: parentPage.id,
 			}
 			try {
