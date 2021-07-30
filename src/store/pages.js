@@ -250,7 +250,6 @@ export default {
 		async [NEW_TEMPLATE]({ commit, getters }, parentPage) {
 			const page = {
 				title: 'Template',
-				filePath: '',
 				parentId: parentPage.id,
 			}
 
