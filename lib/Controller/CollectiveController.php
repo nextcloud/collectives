@@ -109,6 +109,27 @@ class CollectiveController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 *
+	 * @param int         $id
+	 * @param string|null $emoji
+	 *
+	 * @return DataResponse
+	 */
+	public function update(int $id, string $emoji = null): DataResponse {
+		return $this->prepareResponse(function () use ($id, $emoji) {
+			$collective = $this->service->updateCollective(
+				$this->getUserId(),
+				$id,
+				$emoji
+			);
+			return [
+				"data" => $collective,
+			];
+		});
+	}
+
+	/**
+	 * @NoAdminRequired
+	 *
 	 * @param int $id
 	 *
 	 * @return DataResponse
