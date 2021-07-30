@@ -91,7 +91,8 @@ export default {
 		]),
 
 		isActive() {
-			return this.pageId === this.currentPage.id
+			return this.currentPage
+				&& this.currentPage.id === this.pageId
 		},
 
 		indent() {
