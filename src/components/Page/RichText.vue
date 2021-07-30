@@ -78,6 +78,11 @@ export default {
 			return (this.pageUrl !== null ? this.pageUrl : this.currentPageDavUrl)
 		},
 
+		currentDirectory() {
+			const { collectivePath, filePath } = this.currentPage
+			return [collectivePath, filePath].filter(Boolean).join('/')
+		},
+
 		/**
 		 * @returns {object}
 		 */
@@ -116,7 +121,7 @@ export default {
 					new Link({
 						openOnClick: true,
 					}),
-					new Image(),
+					new Image({ currentDirectory: this.currentDirectory }),
 				],
 				content: this.htmlContent,
 			})
