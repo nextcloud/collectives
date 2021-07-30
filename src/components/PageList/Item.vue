@@ -91,7 +91,7 @@ export default {
 		]),
 
 		isActive() {
-			return this.$store.state.route.path === this.to
+			return this.pageId === this.currentPage.id
 		},
 
 		indent() {
