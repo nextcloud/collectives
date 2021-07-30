@@ -11,6 +11,8 @@ return [
 		// collectives
 		['name' => 'collective#index', 'url' => '/_collectives', 'verb' => 'GET'],
 		['name' => 'collective#create', 'url' => '/_collectives', 'verb' => 'POST'],
+		['name' => 'collective#update', 'url' => '/_collectives/{id}', 'verb' => 'PUT',
+			'requirements' => ['id' => '\d+']],
 		['name' => 'collective#trash', 'url' => '/_collectives/{id}', 'verb' => 'DELETE',
 			'requirements' => ['id' => '\d+']],
 

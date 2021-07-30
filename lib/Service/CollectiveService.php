@@ -156,6 +156,34 @@ class CollectiveService {
 	}
 
 	/**
+	 * @param string      $userId
+	 * @param int         $id
+	 * @param string|null $emoji
+	 *
+	 * @return CollectiveInfo
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function updateCollective(string $userId, int $id, string $emoji = null): CollectiveInfo {
+		if (null === $collective = $this->collectiveMapper->findById($id, $userId)) {
+			throw new NotFoundException('Collective not found: ' . $id);
+		}
+		$name = $this->collectiveMapper->circleIdToName($collective->getCircleId());
+
+		if (!$this->circleHelper->isAdmin($collective->getCircleId(), $userId)) {
+			throw new NotPermittedException('Member ' . $userId . ' not allowed to delete collective: ' . $id);
+		}
+
+		if ($emoji) {
+			$collective->setEmoji($emoji);
+		}
+
+		return new CollectiveInfo($this->collectiveMapper->update($collective),
+			$name,
+			true);
+
+	}
+	/**
 	 * @param string $userId
 	 * @param int    $id
 	 *
