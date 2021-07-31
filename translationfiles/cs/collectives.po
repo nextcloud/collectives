@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2021-07-29 22:25+0200\n"
-"PO-Revision-Date: 2021-07-13 08:19+0000\n"
+"PO-Revision-Date: 2021-07-31 19:52+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/cs/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.7.2-dev\n"
+"X-Generator: Weblate 4.8-dev\n"
 
 #: /collectives/lib/Fs/UserFolderHelper.php:62
 #: /collectives/lib/Search/CollectiveProvider.php:58
@@ -99,6 +99,7 @@ msgstr ""
 #: /collectives/specialVueFakeDummyForL10nScript.js:1
 msgid "The contacts app is required to manage members"
 msgstr ""
+"Aby bylo možné spravovat členy, je zapotřebí nainstalovat aplikaci Kontakty"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:2
 msgid "Collective not found:"
@@ -114,11 +115,11 @@ msgstr "Vyberte kolektiv nebo (vlevo) vytvořte nový."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:5
 msgid "Print"
-msgstr ""
+msgstr "Tisk"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:6
 msgid "Manage members"
-msgstr ""
+msgstr "Spravovat členy"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:7
 msgid "Delete"
@@ -209,7 +210,7 @@ msgstr "Stránku {page} se nepodařilo vrátit do podoby k revizi {timestamp}."
 #: /collectives/specialVueFakeDummyForL10nScript.js:29
 #: /collectives/specialVueFakeDummyForL10nScript.js:38
 msgid "Template"
-msgstr ""
+msgstr "Šablona"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:30
 msgid "Title"
@@ -232,14 +233,12 @@ msgid "Edit"
 msgstr "Upravit"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:33
-#, fuzzy
 msgid "Hide all subpages"
-msgstr "Přidat podstránku"
+msgstr "Skrýt všechny podstránky"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:34
-#, fuzzy
 msgid "Show all subpages"
-msgstr "Přidat podstránku"
+msgstr "Zobrazit všechny podstránky"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:36
 msgid "Could not rename the page"
@@ -265,13 +264,12 @@ msgstr "Přidat podstránku"
 #: /collectives/specialVueFakeDummyForL10nScript.js:52
 #: /collectives/specialVueFakeDummyForL10nScript.js:58
 msgid "Edit template for subpages"
-msgstr ""
+msgstr "Upravit šablonu pro všechny podstránky"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:42
 #: /collectives/specialVueFakeDummyForL10nScript.js:53
-#, fuzzy
 msgid "Add template for subpages"
-msgstr "Přidat podstránku"
+msgstr "Přidat šablonu pro podstránky"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:43
 #: /collectives/specialVueFakeDummyForL10nScript.js:45
@@ -289,12 +287,12 @@ msgstr "Nová stránka"
 #: /collectives/specialVueFakeDummyForL10nScript.js:46
 #: /collectives/specialVueFakeDummyForL10nScript.js:47
 msgid "Hide templates"
-msgstr ""
+msgstr "Skrýt šablony"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:46
 #: /collectives/specialVueFakeDummyForL10nScript.js:47
 msgid "Show templates"
-msgstr ""
+msgstr "Zobrazit šablony"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:48
 msgid "Sort order"
@@ -314,7 +312,7 @@ msgstr "Přidat stránku"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:57
 msgid "Show in Files"
-msgstr ""
+msgstr "Zobrazit v Souborech"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:59
 msgid "Delete page"
