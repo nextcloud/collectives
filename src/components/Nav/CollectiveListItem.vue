@@ -4,11 +4,29 @@
 		:title="collective.name"
 		:class="{active: isActive(collective)}"
 		:to="`/${encodeURIComponent(collective.name)}`"
-		:icon="icon(collective)"
+		:icon="icon"
 		:force-menu="true"
 		class="collectives_list_item">
-		<template v-if="collective.emoji" #icon>
-			{{ collective.emoji }}
+		<template #icon>
+			<EmojiPicker
+				v-if="collective.admin"
+				:show-preview="true"
+				@select="updateEmoji">
+				<button class="emoji"
+					type="button"
+					:aria-label="emojiTitle"
+					:aria-haspopup="true"
+					:title="emojiTitle"
+					@click.prevent>
+					{{ collective.emoji }}
+				</button>
+			</EmojiPicker>
+			<button v-else
+				class="emoji"
+				type="button"
+				@click.prevent>
+				{{ collective.emoji }}
+			</button>
 		</template>
 		<template #actions>
 			<ActionButton icon="icon-pages"
@@ -32,10 +50,11 @@
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
-import { TRASH_COLLECTIVE } from '../../store/actions'
+import { UPDATE_COLLECTIVE, TRASH_COLLECTIVE } from '../../store/actions'
 import displayError from '../../util/displayError'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import ActionLink from '@nextcloud/vue/dist/Components/ActionLink'
+import EmojiPicker from '@nextcloud/vue/dist/Components/EmojiPicker'
 import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
 import { generateUrl } from '@nextcloud/router'
 
@@ -46,6 +65,7 @@ export default {
 		ActionButton,
 		ActionLink,
 		AppNavigationItem,
+		EmojiPicker,
 	},
 
 	props: {
@@ -67,6 +87,14 @@ export default {
 		circleLink() {
 			return generateUrl('/apps/circles')
 		},
+
+		emojiTitle() {
+			return this.collective.emoji ? t('collectives', 'Change emoji') : t('collectives', 'Add emoji')
+		},
+
+		icon() {
+			return this.collective.emoji ? '' : 'icon-collectives'
+		},
 	},
 
 	methods: {
@@ -80,8 +108,16 @@ export default {
 			this.$emit('newCollective', collective)
 		},
 
-		icon(collective) {
-			return collective.emoji ? '' : 'icon-collectives'
+		/**
+		 * Update the emoji of a collective
+		 * @param {String} emoji Emoji
+		 * @returns {Promise}
+		 */
+		updateEmoji(emoji) {
+			const collective = this.collective
+			collective.emoji = emoji
+			return this.$store.dispatch(UPDATE_COLLECTIVE, collective)
+				.catch(displayError('Could not update emoji for the collective'))
 		},
 
 		/**
@@ -109,3 +145,12 @@ export default {
 	},
 }
 </script>
+
+<style scoped>
+button.emoji {
+	font-size: 15px;
+	padding-left: 19px;
+	background-color: transparent;
+	border: none;
+}
+</style>

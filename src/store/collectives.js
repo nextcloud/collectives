@@ -16,6 +16,7 @@ import {
 	GET_COLLECTIVES,
 	GET_TRASH_COLLECTIVES,
 	NEW_COLLECTIVE,
+	UPDATE_COLLECTIVE,
 	TRASH_COLLECTIVE,
 	DELETE_COLLECTIVE,
 	RESTORE_COLLECTIVE,
@@ -112,7 +113,7 @@ export default {
 
 		/**
 		 * Create a new collective with the given properties
-		 * @param {Object} collective Properties for the new collective (name for now)
+		 * @param {Object} collective Properties for the new collective
 		 */
 		async [NEW_COLLECTIVE]({ commit }, collective) {
 			const response = await axios.post(
@@ -120,6 +121,18 @@ export default {
 				collective,
 			)
 			commit('info', response.data.message, { root: true })
+			commit(ADD_OR_UPDATE_COLLECTIVE, response.data.data)
+		},
+
+		/**
+		 * Update a collective with the given properties
+		 * @param {Object} collective Properties for the collective
+		 */
+		async [UPDATE_COLLECTIVE]({ commit }, collective) {
+			const response = await axios.put(
+				generateUrl('/apps/collectives/_collectives/' + collective.id),
+				collective,
+			)
 			commit(ADD_OR_UPDATE_COLLECTIVE, response.data.data)
 		},
 
