@@ -16,7 +16,7 @@
 				@click="print">
 				{{ t('collectives', 'Print') }}
 			</ActionButton>
-			<ActionLink v-if="isContactsInstalled"
+			<ActionLink v-if="collective.admin && isContactsInstalled"
 				:href="circleLink"
 				icon="icon-circles">
 				{{ t('collectives', 'Manage members') }}
