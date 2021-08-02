@@ -1,25 +1,25 @@
-# Willkommen in eurem neuen Kollektiv
+# Willkommen zu deinem neuen Kollektiv
 
-**Kommt vorbei, organisiert euch und teilt euer Wissen!**
+**Mach' mit, organisiere und baue gemeinsames Wissen auf!**
 
 
-### 👥 Ladet weitere Personen ins Kollektiv ein
+### 👥 Lade weitere Personen ins Kollektiv ein
 
-Egal ob ihr Freund:innen oder ganze Gruppen zufügen wollt, folgt dem "Mitglieder verwalten" Link. Er ist im Aktionsmenü der Kollektiv-Liste links zu finden.
+Wenn du deine Freunde oder ganze Gruppen hinzufügen möchtest, klicke auf den Link "Mitglieder verwalten", den du im Aktionsmenü in der Kollektivliste links findest.
 
-### 🌱 Füllt euer Kollektiv mit Leben
+### 🌱 Bringe Leben in dein Kollektiv
 
-Erstellt Seiten und teilt eure wertvollen Gedanken. Ob als gemeinsame Wissensablage der Community oder Handbuch für eure Organisation — mit einem Kollektiv klappt das!
+Erstelle Seiten und teile deine wirklich wichtigen Gedanken. Ob eine gemeinsame Wissensdatenbank für die Community oder ein Handbuch für deine Organisation – Kollektive funktioniert!
 
-### 🛋️ Verändert die Startseite und fühlt euch wie Zuhause
+Bearbeite Diese Startseite, um dich wie zu Hause zu fühlen
 
-Wechselt in den Editier-Modus, um loszulegen! ↗️
+Klicke auf den Stift um los zulegen! ↗️
 
 
 ## Auch gut zu wissen
 
-* Mehrere Menschen können gleichzeitig die selbe Seite bearbeiten.
-* Verlinkt lokale Seiten, indem ihr Text markiert und "Datei verknüpfen" wählt. Ihr könnt auch Seiten aus der Seitenliste einfach in den Texteditor ziehen.
-* Erstellt Vorlagen für zukünftige Seiten, indem ihr eine "Template" Seite anlegt.
-* Findet mehr über diese App heraus und schaut in die [Dokumentation](https://collectivecloud.gitlab.io/collectives/).
-* Fragt [die Community](https://help.nextcloud.com/c/apps/collectives/174) um Hilfe, wenn ihr weitere Fragen habt.
+* Multiple people can edit the same page simultaneously.
+* Link local pages by selecting text and choosing "link file". Drag & drop from page list into the editor also works.
+* Create templates for future pages by adding a "Template" page.
+* Find out more about this App in the [documentation](https://collectivecloud.gitlab.io/collectives/).
+* Ask [the community](https://help.nextcloud.com/c/apps/collectives/174) for help in case of questions.
