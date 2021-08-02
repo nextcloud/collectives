@@ -113,16 +113,26 @@ for Nextcloud 20+21 and backport all changes to this branch before doing a new
 release.
 
 The last backported commit is tagged as `backported`. In order to backport all
-subsequent commits, do the following:
+subsequent commits and prepare the `stable21` branch for a new release, do the
+following:
 
-```
-git checkout origin/main -b backport/stable21
-git rebase --onto stable21 backported -i
-git push origin backport/stable21
-git tag -d backported
-git tag backported origin/main
-git push origin --tags
-```
+1. Backport commits since `backported`:
+   ```
+   git checkout origin/main -b backport/stable21
+   git rebase --onto stable21 backported -i
+   git push origin backport/stable21
+   git tag -d backported
+   git push origin --delete backported
+   git tag backported origin/main
+   git push origin --tags
+   ```
+2. Create a merge request from `backport/stable21` to `stable21`. Merge after
+   pipeline succeeds.
+3. Remove temporary branches:
+   ```
+   git branch -D backport/stable21
+   git push origin --delete backport/stable21
+   ```
 
 ## Update javascript dependencies
 
