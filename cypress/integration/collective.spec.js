@@ -158,6 +158,20 @@ describe('Collective', function() {
 		})
 	})
 
+	describe('set emoji', function() {
+		before(function() {
+			cy.login('bob', 'bob', '/apps/collectives')
+		})
+		it('Allows setting an emoji', function() {
+			cy.contains('.app-navigation-entry', 'Preexisting Collective')
+				.find('.app-navigation-entry-icon').click()
+			cy.contains('.emoji-popover span.emoji-mart-emoji', '🥰').click()
+			cy.reload()
+			cy.contains('.app-navigation-entry', 'Preexisting Collective')
+				.find('.app-navigation-entry-icon').should('contain', '🥰')
+		})
+	})
+
 	describe('move collective to trash and restore', function() {
 		before(function() {
 			cy.login('bob', 'bob', '/apps/collectives')

@@ -2,10 +2,10 @@ OC.L10N.register(
     "collectives",
     {
     "Delete" : "Удалить",
+    "Add emoji" : "Добавить эмодзи",
     "Restore" : "Восстановить",
     "Delete permanently" : "Удалить навсегда",
     "Cancel" : "Отмена",
-    "Add emoji" : "Добавить эмодзи",
     "Could not find the Page." : "Не удалось найти страницу.",
     "Restore this version" : "Восстановить эту версию",
     "Title" : "Название",
