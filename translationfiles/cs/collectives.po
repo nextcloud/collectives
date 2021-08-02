@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2021-07-29 22:25+0200\n"
+"POT-Creation-Date: 2021-08-02 15:49+0200\n"
 "PO-Revision-Date: 2021-07-31 19:52+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/collectives/"
@@ -23,8 +23,8 @@ msgstr ""
 #: /collectives/lib/Search/CollectiveProvider.php:58
 #: /collectives/lib/Search/CollectiveProvider.php:106
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:2
-#: /collectives/specialVueFakeDummyForL10nScript.js:35
-#: /collectives/specialVueFakeDummyForL10nScript.js:68
+#: /collectives/specialVueFakeDummyForL10nScript.js:36
+#: /collectives/specialVueFakeDummyForL10nScript.js:69
 msgid "Collectives"
 msgstr "Kolektivy"
 
@@ -126,223 +126,228 @@ msgid "Delete"
 msgstr "Smazat"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:8
-msgid "Deleted collectives"
-msgstr "Smazané kolektivy"
+msgid "Change emoji"
+msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:9
-#: /collectives/specialVueFakeDummyForL10nScript.js:26
-msgid "Restore"
-msgstr "Obnovit"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:10
-msgid "Delete permanently"
-msgstr "Nadobro smazat"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:11
-msgid "Permanently delete collective »{collective}«"
-msgstr "Nadobro smazat kolektiv „{collective}“"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:12
-msgid "Delete corresponding circle along with the collective?"
-msgstr "Současně s kolektivem, smazat i odpovídající okruh?"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:13
-msgid "Cancel"
-msgstr "Storno"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:14
-msgid "Only collective"
-msgstr "Pouze kolektiv"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:15
-msgid "Collective and circle"
-msgstr "Kolektiv a okruh"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:16
-#: /collectives/specialVueFakeDummyForL10nScript.js:70
-msgid "Create new collective"
-msgstr "Vytvořit nový kolektiv"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:17
-msgid "Create collective for existing circle"
-msgstr "Vytvořit kolektiv pro existující okruh"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:18
+#: /collectives/specialVueFakeDummyForL10nScript.js:8
+#: /collectives/specialVueFakeDummyForL10nScript.js:19
 msgid "Add emoji"
 msgstr "Přidat emotikonu"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:19
+#: /collectives/specialVueFakeDummyForL10nScript.js:9
+msgid "Deleted collectives"
+msgstr "Smazané kolektivy"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:10
+#: /collectives/specialVueFakeDummyForL10nScript.js:27
+msgid "Restore"
+msgstr "Obnovit"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:11
+msgid "Delete permanently"
+msgstr "Nadobro smazat"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:12
+msgid "Permanently delete collective »{collective}«"
+msgstr "Nadobro smazat kolektiv „{collective}“"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:13
+msgid "Delete corresponding circle along with the collective?"
+msgstr "Současně s kolektivem, smazat i odpovídající okruh?"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:14
+msgid "Cancel"
+msgstr "Storno"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:15
+msgid "Only collective"
+msgstr "Pouze kolektiv"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:16
+msgid "Collective and circle"
+msgstr "Kolektiv a okruh"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:17
+#: /collectives/specialVueFakeDummyForL10nScript.js:71
+msgid "Create new collective"
+msgstr "Vytvořit nový kolektiv"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:18
+msgid "Create collective for existing circle"
+msgstr "Vytvořit kolektiv pro existující okruh"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:20
 msgid "New collective name"
 msgstr "Název pro nový kolektiv"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:20
+#: /collectives/specialVueFakeDummyForL10nScript.js:21
 msgid "Select circle..."
 msgstr "Vybrat okruh…"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:21
+#: /collectives/specialVueFakeDummyForL10nScript.js:22
 msgid "Select a collective"
 msgstr "Vybrat kolektiv"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:22
+#: /collectives/specialVueFakeDummyForL10nScript.js:23
 msgid "Page not found:"
 msgstr "Stránka nenalezena:"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:23
+#: /collectives/specialVueFakeDummyForL10nScript.js:24
 msgid "Could not find the Page."
 msgstr "Stránku se nedaří nalézt."
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:24
+#: /collectives/specialVueFakeDummyForL10nScript.js:25
 msgid "Select a page from the list or create a new one."
 msgstr "Vyberte stránku ze seznamu nebo vytvořte novou."
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:25
+#: /collectives/specialVueFakeDummyForL10nScript.js:26
 msgid "Restore this version"
 msgstr "Obnovit do podoby v této verzi"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:27
+#: /collectives/specialVueFakeDummyForL10nScript.js:28
 msgid "Reverted {page} to revision {timestamp}."
 msgstr "Stránka {page} obnovena do podoby k revizi {timestamp}."
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:28
+#: /collectives/specialVueFakeDummyForL10nScript.js:29
 msgid "Failed to revert {page} to revision {timestamp}."
 msgstr "Stránku {page} se nepodařilo vrátit do podoby k revizi {timestamp}."
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:29
-#: /collectives/specialVueFakeDummyForL10nScript.js:38
+#: /collectives/specialVueFakeDummyForL10nScript.js:30
+#: /collectives/specialVueFakeDummyForL10nScript.js:39
 msgid "Template"
 msgstr "Šablona"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:30
+#: /collectives/specialVueFakeDummyForL10nScript.js:31
 msgid "Title"
 msgstr "Nadpis"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:31
+#: /collectives/specialVueFakeDummyForL10nScript.js:32
 msgid "Stop editing"
 msgstr "Ukončit upravování"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:31
+#: /collectives/specialVueFakeDummyForL10nScript.js:32
 msgid "Start editing"
 msgstr "Zahájit upravování"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:32
+#: /collectives/specialVueFakeDummyForL10nScript.js:33
 msgid "Done"
 msgstr "Hotovo"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:32
+#: /collectives/specialVueFakeDummyForL10nScript.js:33
 msgid "Edit"
 msgstr "Upravit"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:33
+#: /collectives/specialVueFakeDummyForL10nScript.js:34
 msgid "Hide all subpages"
 msgstr "Skrýt všechny podstránky"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:34
+#: /collectives/specialVueFakeDummyForL10nScript.js:35
 msgid "Show all subpages"
 msgstr "Zobrazit všechny podstránky"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:36
+#: /collectives/specialVueFakeDummyForL10nScript.js:37
 msgid "Could not rename the page"
 msgstr "Stránku se nedaří přejmenovat"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:37
+#: /collectives/specialVueFakeDummyForL10nScript.js:38
 msgid "Expand subpage list"
 msgstr "Rozbalit seznam podstránek"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:37
+#: /collectives/specialVueFakeDummyForL10nScript.js:38
 msgid "Collapse subpage list"
 msgstr "Sbalit seznam podstránek"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:39
+#: /collectives/specialVueFakeDummyForL10nScript.js:40
 msgid "Last edited by {user}"
 msgstr "Naposledy upravil(a) {user}"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:40
+#: /collectives/specialVueFakeDummyForL10nScript.js:41
 msgid "Add a subpage"
 msgstr "Přidat podstránku"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:41
-#: /collectives/specialVueFakeDummyForL10nScript.js:52
-#: /collectives/specialVueFakeDummyForL10nScript.js:58
+#: /collectives/specialVueFakeDummyForL10nScript.js:42
+#: /collectives/specialVueFakeDummyForL10nScript.js:53
+#: /collectives/specialVueFakeDummyForL10nScript.js:59
 msgid "Edit template for subpages"
 msgstr "Upravit šablonu pro všechny podstránky"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:42
-#: /collectives/specialVueFakeDummyForL10nScript.js:53
+#: /collectives/specialVueFakeDummyForL10nScript.js:43
+#: /collectives/specialVueFakeDummyForL10nScript.js:54
 msgid "Add template for subpages"
 msgstr "Přidat šablonu pro podstránky"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:43
-#: /collectives/specialVueFakeDummyForL10nScript.js:45
-#: /collectives/specialVueFakeDummyForL10nScript.js:54
-#: /collectives/specialVueFakeDummyForL10nScript.js:56
-#: /collectives/specialVueFakeDummyForL10nScript.js:62
+#: /collectives/specialVueFakeDummyForL10nScript.js:44
+#: /collectives/specialVueFakeDummyForL10nScript.js:46
+#: /collectives/specialVueFakeDummyForL10nScript.js:55
+#: /collectives/specialVueFakeDummyForL10nScript.js:57
+#: /collectives/specialVueFakeDummyForL10nScript.js:63
 msgid "Could not create the page"
 msgstr "Stránku se nedaří vytvořit"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:44
-#: /collectives/specialVueFakeDummyForL10nScript.js:55
+#: /collectives/specialVueFakeDummyForL10nScript.js:45
+#: /collectives/specialVueFakeDummyForL10nScript.js:56
 msgid "New Page"
 msgstr "Nová stránka"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:46
 #: /collectives/specialVueFakeDummyForL10nScript.js:47
+#: /collectives/specialVueFakeDummyForL10nScript.js:48
 msgid "Hide templates"
 msgstr "Skrýt šablony"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:46
 #: /collectives/specialVueFakeDummyForL10nScript.js:47
+#: /collectives/specialVueFakeDummyForL10nScript.js:48
 msgid "Show templates"
 msgstr "Zobrazit šablony"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:48
+#: /collectives/specialVueFakeDummyForL10nScript.js:49
 msgid "Sort order"
 msgstr "Pořadí řazení"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:49
+#: /collectives/specialVueFakeDummyForL10nScript.js:50
 msgid "Sort by last modification"
 msgstr "Řadit podle okamžiku poslední úpravy"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:50
+#: /collectives/specialVueFakeDummyForL10nScript.js:51
 msgid "Sort by title"
 msgstr "Řadit podle nadpisu"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:51
+#: /collectives/specialVueFakeDummyForL10nScript.js:52
 msgid "Add a page"
 msgstr "Přidat stránku"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:57
+#: /collectives/specialVueFakeDummyForL10nScript.js:58
 msgid "Show in Files"
 msgstr "Zobrazit v Souborech"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:59
+#: /collectives/specialVueFakeDummyForL10nScript.js:60
 msgid "Delete page"
 msgstr "Smazat stránku"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:60
+#: /collectives/specialVueFakeDummyForL10nScript.js:61
 msgid "Page deleted"
 msgstr "Stránka smazána"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:61
+#: /collectives/specialVueFakeDummyForL10nScript.js:62
 msgid "Could not delete the page"
 msgstr "Stránku se nepodařilo smazat"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:63
+#: /collectives/specialVueFakeDummyForL10nScript.js:64
 msgid "Current version"
 msgstr "Stávající verze"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:64
+#: /collectives/specialVueFakeDummyForL10nScript.js:65
 msgid "No other versions available"
 msgstr "Nejsou k dispozici žádné jiné verze"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:65
+#: /collectives/specialVueFakeDummyForL10nScript.js:66
 msgid "After editing you can find old versions of the page here."
 msgstr "Po upravení naleznete starší verze stránky zde."
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:66
+#: /collectives/specialVueFakeDummyForL10nScript.js:67
 msgid "Could not get page versions"
 msgstr "Nedaří se načíst verze stránky"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:67
+#: /collectives/specialVueFakeDummyForL10nScript.js:68
 #: /collectives/src/util/xmlToVersionsList.js:29
 msgid "%n byte"
 msgid_plural "%n bytes"
@@ -350,7 +355,7 @@ msgstr[0] "%n bajt"
 msgstr[1] "%n bajty"
 msgstr[2] "%n bajtů"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:69
+#: /collectives/specialVueFakeDummyForL10nScript.js:70
 msgid "Come, organize and build shared knowledge!"
 msgstr "Organizujte se a vytvářejte sdílené znalosti!"
 
