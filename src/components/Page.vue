@@ -124,6 +124,23 @@ export default {
 			return this.newTitle && this.newTitle !== this.currentPage.title
 		},
 
+		documentTitle() {
+			const { filePath, title } = this.currentPage
+			const parts = [
+				this.currentCollective.name,
+				t('collectives', 'Collectives'),
+				'Nextcloud',
+			]
+			if (!this.landingPage) {
+				if (this.indexPage) {
+					parts.unshift(filePath || title)
+				} else {
+					parts.unshift(filePath ? filePath + '/' + title : title)
+				}
+			}
+			return parts.join(' - ')
+		},
+
 		toggleIcon() {
 			if (this.loading('pageUpdate')) {
 				return 'loading'
@@ -152,7 +169,6 @@ export default {
 
 	watch: {
 		'pageParam'() {
-			this.initDocumentTitle()
 			this.initTitleEntry()
 		},
 		'currentPage.id'() {
@@ -163,10 +179,13 @@ export default {
 				this.hide('subpages')
 			}
 		},
+		'documentTitle'() {
+			document.title = this.documentTitle
+		},
 	},
 
 	mounted() {
-		this.initDocumentTitle()
+		document.title = this.documentTitle
 		this.initTitleEntry()
 	},
 
@@ -181,23 +200,6 @@ export default {
 		// this is a method so it does not get cached
 		wrapper() {
 			return this.$refs.editor.$children[0].$children[0]
-		},
-
-		initDocumentTitle() {
-			const { filePath, title } = this.currentPage
-			const parts = [
-				this.currentCollective.name,
-				t('collectives', 'Collectives'),
-				'Nextcloud',
-			]
-			if (!this.landingPage) {
-				if (this.indexPage) {
-					parts.unshift(filePath || title)
-				} else {
-					parts.unshift(filePath ? filePath + '/' + title : title)
-				}
-			}
-			document.title = parts.join(' - ')
 		},
 
 		initTitleEntry() {
