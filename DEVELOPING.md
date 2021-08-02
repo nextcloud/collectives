@@ -105,6 +105,25 @@ Releasing a new version contains the following steps:
 * Upload release tarball to Gitlab, add release tag and publish releas on Gitlab
 * Publish new app version in Nextcloud App Store
 
+## Backport changes to `stable21` branch
+
+App development happens in the `main` branch. Since the circles integration
+changed between Nextcloud 21 and 22, he currently maintain a `stable21` branch
+for Nextcloud 20+21 and backport all changes to this branch before doing a new
+release.
+
+The last backported commit is tagged as `backported`. In order to backport all
+subsequent commits, do the following:
+
+```
+git checkout origin/main -b backport/stable21
+git rebase --onto stable21 backported -i
+git push origin backport/stable21
+git tag -d backported
+git tag backported origin/main
+git push origin --tags
+```
+
 ## Update javascript dependencies
 
 Update all dependencies right after a release
