@@ -1,6 +1,5 @@
 <template>
-	<AppContentList :class="{loading: loading('collective')}"
-		:show-details="showing('details')">
+	<AppContentList :show-details="showing('details')">
 		<div class="togglebar">
 			<Actions class="toggle">
 				<ActionButton
