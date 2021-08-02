@@ -1,19 +1,34 @@
 # Changelog
 
-## 0.11.21-beta1 - 2021.07.22
+## 0.11.21 - 2021.08.02
 
 ### ✨New
-* ♻️lUpdate page list when it changes on the server.
+* 📝 Page templates (#66).
+* ♻️ Update page list when it changes on the server (#50).
+* 🙂 Allow to change emoji of collectives (#210).
 
 ### 🏗️Fixes
-* 👤 Show avatar of person who created the collective.
-* ✅ Display todo items with checkbox in preview.
+* 📂 Ignore folders without markdown files in page tree (#171).
+* 👤 Show avatar of person who created the collective (#197).
+* ✅ Display todo items with checkbox in preview (#178).
+* 📜 Highlight active page in page list (#208).
+* 🔝 Highlight selected page order (#205).
+* 🔌 Add files_versions to list of required apps (#193).
+* 🖼️ Display animated gifs and webp graphics (#202).
+* 👥 Show member management link only to admins (#212).
+* 🧽 Update document title when changing collective (#211).
+* 🔂 Don't repeat page content after updating the page list (#214).
+* 💱 Allow to rename pages without explicit save (#206).
+* 🌀 Remove spinning wheel in page list.
 
 ### 🌎Translations
-* 🗣️ Initial Sinhala translation thanks to HelaBasa
+* 🗣️ Initial Sinhala translation thanks to HelaBasa.
+* 🗣️ Updated Czech translation thanks to Pavel Borecki.
 
 ### 🚧Updates & Tooling
 * 😎 Check if versions match before building new release.
+* 📋 Screenshots and documentation updates.
+
 
 ## 0.10.21 - 2021.07.19
 
@@ -41,6 +56,7 @@
 * ✂️ Only run tests relevant for the changed files.
 * 🔌 Update all js dependencies that we can.
 
+
 ## 0.9.21 - 2021.07.06
 
 ### ✨New
@@ -56,6 +72,7 @@
 
 ### 🚧Updates
 * 🔌 Update all dependencies and migrate to Node.js 14.
+
 
 ## 0.8.21 - 2021.06.18
 
@@ -79,6 +96,7 @@
 ### 🚧Updates & Tooling
 * 👷 Refactor to ease support for Nextcloud 22.
 * 🗑️ Make task to remove releases.
+
 
 ## 0.7.0 - 2021.05.31
 
@@ -142,6 +160,7 @@
 
 ### Fixes
 - ✂️  Fix migration step to split emojis from collective names.
+
 
 ## 0.5.0 - 2021-04-26
 
