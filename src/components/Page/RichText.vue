@@ -5,7 +5,7 @@
 				<div class="menubar-icons" />
 			</div>
 			<div v-if="!loading">
-				<EditorContent
+				<EditorContent v-if="editor"
 					class="editor__content"
 					:editor="editor" />
 			</div>
@@ -62,6 +62,7 @@ export default {
 		return {
 			loading: true,
 			pageContent: null,
+			editor: null,
 		}
 	},
 
@@ -99,33 +100,6 @@ export default {
 			return this.markdownit.render(this.pageContent)
 		},
 
-		/**
-		 * @returns {object}
-		 */
-		editor() {
-			return new Editor({
-				editable: false,
-				extensions: [
-					new Heading(),
-					new Code(),
-					new Bold(),
-					new Italic(),
-					new Strike(),
-					new HardBreak(),
-					new HorizontalRule(),
-					new BulletList(),
-					new OrderedList(),
-					new Blockquote(),
-					new CodeBlock(),
-					new ListItem(),
-					new Link({
-						openOnClick: true,
-					}),
-					new Image({ currentDirectory: this.currentDirectory }),
-				],
-				content: this.htmlContent,
-			})
-		},
 	},
 
 	watch: {
@@ -154,12 +128,42 @@ export default {
 					this.$emit('empty')
 				}
 				this.loading = false
+				this.editor = this.createEditor()
 				this.$nextTick(() => { this.$emit('ready') })
 			} catch (e) {
 				const { id } = this.currentPage
 				console.error(`Failed to fetch content of page ${id}`, e)
 			}
 		},
+
+		/**
+		 * @returns {object}
+		 */
+		createEditor() {
+			return new Editor({
+				editable: false,
+				extensions: [
+					new Heading(),
+					new Code(),
+					new Bold(),
+					new Italic(),
+					new Strike(),
+					new HardBreak(),
+					new HorizontalRule(),
+					new BulletList(),
+					new OrderedList(),
+					new Blockquote(),
+					new CodeBlock(),
+					new ListItem(),
+					new Link({
+						openOnClick: true,
+					}),
+					new Image({ currentDirectory: this.currentDirectory }),
+				],
+				content: this.htmlContent,
+			})
+		},
+
 	},
 }
 </script>
