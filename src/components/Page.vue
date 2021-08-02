@@ -17,7 +17,8 @@
 					v-model="newTitle"
 					class="title"
 					:placeholder="t('collectives', 'Title')"
-					type="text">
+					type="text"
+					@blur="renamePageOnBlur();">
 			</form>
 			<button class="edit-button primary"
 				:title="edit ? t('collectives', 'Stop editing') : t('collectives', 'Start editing')"
@@ -292,6 +293,14 @@ export default {
 				this.$store.dispatch(GET_VERSIONS, this.currentPage.id)
 			}
 			this.edit = false
+		},
+
+	    renamePageOnBlur() {
+			// Cypress tests in ci trigger blur events randomly.
+			if (window.Cypress) {
+				return
+			}
+			return this.renamePage()
 		},
 
 		/**
