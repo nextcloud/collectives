@@ -171,7 +171,7 @@ class CollectiveService {
 		$name = $this->collectiveMapper->circleIdToName($collective->getCircleId());
 
 		if (!$this->circleHelper->isAdmin($collective->getCircleId(), $userId)) {
-			throw new NotPermittedException('Member ' . $userId . ' not allowed to delete collective: ' . $id);
+			throw new NotPermittedException('Member ' . $userId . ' not allowed to update collective: ' . $id);
 		}
 
 		if ($emoji) {
