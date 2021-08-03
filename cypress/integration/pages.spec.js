@@ -82,10 +82,6 @@ describe('Page', function() {
 			cy.contains('.app-content-list-item', 'Our Garden')
 				.find('button.icon-add')
 				.click()
-			// TODO: remove the next line once
-			// https://github.com/nextcloud/text/pull/1645 has been
-			// backported to NC 21.
-			cy.get('#titleform input').click()
 			cy.focused().should('have.value', '')
 			cy.focused().type('New page from Template{enter}')
 		})
@@ -101,10 +97,6 @@ describe('Page', function() {
 			cy.contains('.app-content-list-item', '#% special chars')
 				.find('button.icon-add')
 				.click({ force: true })
-			// TODO: remove the next line once
-			// https://github.com/nextcloud/text/pull/1645 has been
-			// backported to NC 21.
-			cy.focusTitle()
 			cy.focused().should('have.value', '')
 			cy.focused().type('Subpage Title{enter}')
 		})
