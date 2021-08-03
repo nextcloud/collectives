@@ -20,7 +20,7 @@ In your Nextcloud instance, simply navigate to **»Apps«**, find the
 
 ## Documentation and help
 
-Take a look at our [online documention](https://collectivecloud.gitlab.io/collectives/).
+Take a look at our [online documentation](https://collectivecloud.gitlab.io/collectives/).
 
 Also, don't hesitate to ask [the community](https://help.nextcloud.com/c/apps/collectives/174)
 for help in case of questions.
