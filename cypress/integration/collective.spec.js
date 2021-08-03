@@ -51,20 +51,6 @@ describe('Collective', function() {
 		})
 	})
 
-	describe('in the contacts app', function() {
-		before(function() {
-			cy.login('bob', 'bob', '/apps/contacts')
-		})
-		it('has a matching circle', function() {
-			cy.contains('.app-navigation-entry a',
-				'Preexisting Collective',
-				{ timeout: 8000 }
-			).click()
-			cy.get('.contact-header h2 input').should('have.value', 'Preexisting Collective')
-			cy.get('.members-list').should('contain', 'bob')
-		})
-	})
-
 	describe('name conflicts', function() {
 		it('Reports existing circle', function() {
 			cy.login('bob', 'bob', '/apps/collectives')
@@ -251,4 +237,19 @@ describe('Collective', function() {
 			cy.get('#app-navigation-vue .settings-button').should('not.exist')
 		})
 	})
+
+	describe('in the contacts app', function() {
+		before(function() {
+			cy.login('bob', 'bob', '/apps/contacts')
+		})
+		it('has a matching circle', function() {
+			cy.contains('.app-navigation-entry a',
+				'Preexisting Collective',
+				{ timeout: 8000 }
+			).click()
+			cy.get('.contact-header h2 input').should('have.value', 'Preexisting Collective')
+			cy.get('.members-list').should('contain', 'bob')
+		})
+	})
+
 })
