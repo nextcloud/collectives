@@ -16,6 +16,7 @@ OC.L10N.register(
     "Print" : "Tisk",
     "Manage members" : "Spravovat členy",
     "Delete" : "Smazat",
+    "Change emoji" : "Změnit emotikonu",
     "Add emoji" : "Přidat emotikonu",
     "Deleted collectives" : "Smazané kolektivy",
     "Restore" : "Obnovit",
