@@ -16,6 +16,7 @@ OC.L10N.register(
     "Print" : "Drucken",
     "Manage members" : "Mitglieder verwalten",
     "Delete" : "Löschen",
+    "Change emoji" : "Ändere den Emoji",
     "Add emoji" : "Wähle einen Emoji",
     "Deleted collectives" : "Gelöschte Kollektive",
     "Restore" : "Wiederherstellen",
@@ -70,7 +71,7 @@ OC.L10N.register(
     "_%n byte_::_%n bytes_" : ["%n Byte","%n Bytes"],
     "Come, organize and build shared knowledge!" : "Kommt vorbei, organisiert euch und teilt euer Wissen!",
     "Error: Missing apps" : "Fehler: Apps fehlen",
-    "The following dependency apps are missing: " : "Die folgenden notwendigen Apps fehlen:",
+    "The following dependency apps are missing: " : "Die folgenden notwendigen Apps fehlen: ",
     "Please ask the administrator to enable these apps." : "Bitte frage die Admins, ob sie diese Apps aktivieren können."
 },
 "nplurals=2; plural=n != 1;");
