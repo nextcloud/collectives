@@ -35,6 +35,7 @@
 			:to="`/${encodeURIComponent(collectiveParam)}`"
 			:title="currentCollective.name"
 			:level="0"
+			:page-id="collectivePage ? collectivePage.id : 0"
 			@click.native="show('details')">
 			<template v-if="currentCollective.emoji" #icon>
 				<div class="emoji">
