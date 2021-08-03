@@ -110,12 +110,6 @@ export default {
 			return `padding-left: ${left}px`
 		},
 
-		iconStyle() {
-			const id = `Page-${this.pageId}`
-			const c = id.toRgb()
-			return `background-color: rgb(${c.r}, ${c.g}, ${c.b})`
-		},
-
 		// UTF8 friendly way of getting first 'letter'
 		firstGrapheme() {
 			return this.title[Symbol.iterator]().next().value
