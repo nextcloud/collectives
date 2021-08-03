@@ -1,4 +1,3 @@
-
 stages:
   - cache
   - build
@@ -7,6 +6,24 @@ stages:
   - test integration
   - test end to end
   - deploy
+
+# Enable Gitlab static application security testing (SAST)
+include:
+  - template: Security/SAST.gitlab-ci.yml
+
+# Override SAST job template to put it into stage `lint`
+sast:
+  stage: lint
+  artifacts:
+    reports:
+      sast: gl-sast-report.json
+  rules:
+    - when: never
+  variables:
+    SEARCH_MAX_DEPTH: 4
+  script:
+    - echo "$CI_JOB_NAME is used for configuration only, and its script should not be executed"
+    - exit 1
 
 # Settings for all jobs in a php based containers
 .php: &php
