@@ -5,21 +5,21 @@
 
 ### 👥 Invite new people to the collective
 
-Whether you want to add your friends or whole groups, follow the "manage members" link that you find in the action menu inside the collectives list on the left.
+Wenn du deine Freund:innen oder ganze Gruppen hinzufügen möchtest, klicke auf den Link "Mitglieder verwalten", den du im Aktionsmenü in der Kollektivliste links findest.
 
 ### 🌱 Bring life to your collective
 
-Erstelle Seiten und teile deine wertvollen Gedanken. Ob eine gemeinsame Wissensdatenbank für die Community oder ein Handbuch für deine Organisation – Kollektive funktioniert!
+Create pages and share your thoughts that really matter. Whether it's a shared knowledge repository for the community or a handbook for your organisation – Collectives works!
 
-### 🛋️ Bearbeite Diese Startseite, um dich wie zu Hause zu fühlen
+### 🛋️ Bearbeite diese Startseite, um dich wie zu Hause zu fühlen
 
 Push the pencil button to get started! ↗️
 
 
 ## Also good to know
 
-* Dieselbe Seite kann von mehreren Personen gemeinsam bearbeitet werden.
-* Verlinke lokale Seiten, indem du Text auswählst und "Datei verknüpfen" wählst. Drag & Drop aus der Seitenliste in den Editor funktioniert ebenfalls.
-* Erstelle Vorlagen für künftige Seiten, indem du eine "Template" Seite erstellst.
-* Erfahre in der [Dokumentation](https://collectivecloud.gitlab.io/collectives/) mehr über diese App.
-* Frage [im Forum](https://help.nextcloud.com/c/apps/collectives/174) um Hilfe, oder falls du eine Frage hast.
+* Multiple people can edit the same page simultaneously.
+* Link local pages by selecting text and choosing "link file". Drag & drop from page list into the editor also works.
+* Create templates for future pages by adding a "Template" page.
+* Find out more about this App in the [documentation](https://collectivecloud.gitlab.io/collectives/).
+* Ask [the community](https://help.nextcloud.com/c/apps/collectives/174) for help in case of questions.
