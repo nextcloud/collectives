@@ -16,7 +16,10 @@ stages:
       - vendor/
     key: composer
   only:
-    refs: [merge_requests]
+    refs:
+      - merge_requests
+      - main
+      - web
     changes:
       - composer.json
       - composer.lock
@@ -80,7 +83,10 @@ Validate AppInfo:
     - make lint-appinfo
   needs: []
   only:
-    refs: [merge_requests]
+    refs:
+      - merge_requests
+      - main
+      - web
     changes:
       - appinfo/**/*
       - Makefile
@@ -100,7 +106,10 @@ Build App:
     paths:
       - build/release/collectives-${CI_COMMIT_SHORT_SHA}.tar.gz
   only:
-    refs: [merge_requests]
+    refs:
+      - merge_requests
+      - main
+      - web
     changes:
       - babel.config.js
       - composer.json
@@ -163,7 +172,10 @@ Lint Javascript:
     - make lint-js
   needs: []
   only:
-    refs: [merge_requests]
+    refs:
+      - merge_requests
+      - main
+      - web
     changes:
       - babel.config.js
       - cypress/**/*
@@ -185,7 +197,10 @@ Unit Test Javascript:
   needs:
     - "Lint Javascript"
   only:
-    refs: [merge_requests]
+    refs:
+      - merge_requests
+      - main
+      - web
     changes:
       - babel.config.js
       - cypress/**/*
@@ -261,7 +276,10 @@ OCC CLI Test:
     expire_in: 1 day
     when: on_failure
   only:
-    refs: [merge_requests]
+    refs:
+      - merge_requests
+      - main
+      - web
     changes:
       - babel.config.js
       - composer.json
