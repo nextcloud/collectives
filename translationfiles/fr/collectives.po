@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2021-08-02 15:49+0200\n"
-"PO-Revision-Date: 2021-07-05 10:33+0000\n"
+"PO-Revision-Date: 2021-08-04 20:33+0000\n"
 "Last-Translator: Nathan <bonnemainsnathan@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/fr/>\n"
@@ -100,7 +100,7 @@ msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:1
 msgid "The contacts app is required to manage members"
-msgstr ""
+msgstr "L'application Contacts est requise pour gérer les membres"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:2
 msgid "Collective not found:"
@@ -116,11 +116,11 @@ msgstr "Sélectionnez un collectif ou créez en un sur la gauche."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:5
 msgid "Print"
-msgstr ""
+msgstr "Imprimer"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:6
 msgid "Manage members"
-msgstr ""
+msgstr "Gérer les membres"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:7
 msgid "Delete"
@@ -128,7 +128,7 @@ msgstr "Supprimer"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:8
 msgid "Change emoji"
-msgstr ""
+msgstr "Modifier l'émoji"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:8
 #: /collectives/specialVueFakeDummyForL10nScript.js:19
@@ -216,7 +216,7 @@ msgstr "Échec de la restauration de {page} à la révision {timestamp}."
 #: /collectives/specialVueFakeDummyForL10nScript.js:30
 #: /collectives/specialVueFakeDummyForL10nScript.js:39
 msgid "Template"
-msgstr ""
+msgstr "Modèle"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:31
 msgid "Title"
@@ -239,14 +239,12 @@ msgid "Edit"
 msgstr "Modifier"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:34
-#, fuzzy
 msgid "Hide all subpages"
-msgstr "Ajouter une sous-page"
+msgstr "Masquer toutes les sous-pages"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:35
-#, fuzzy
 msgid "Show all subpages"
-msgstr "Ajouter une sous-page"
+msgstr "Afficher toutes les sous-pages"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:37
 msgid "Could not rename the page"
@@ -272,13 +270,12 @@ msgstr "Ajouter une sous-page"
 #: /collectives/specialVueFakeDummyForL10nScript.js:53
 #: /collectives/specialVueFakeDummyForL10nScript.js:59
 msgid "Edit template for subpages"
-msgstr ""
+msgstr "Modifier le modèle pour les sous-pages"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:43
 #: /collectives/specialVueFakeDummyForL10nScript.js:54
-#, fuzzy
 msgid "Add template for subpages"
-msgstr "Ajouter une sous-page"
+msgstr "Ajouter un modèle de sous-page"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:44
 #: /collectives/specialVueFakeDummyForL10nScript.js:46
@@ -296,12 +293,12 @@ msgstr "Nouvelle page"
 #: /collectives/specialVueFakeDummyForL10nScript.js:47
 #: /collectives/specialVueFakeDummyForL10nScript.js:48
 msgid "Hide templates"
-msgstr ""
+msgstr "Masquer les modèles"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:47
 #: /collectives/specialVueFakeDummyForL10nScript.js:48
 msgid "Show templates"
-msgstr ""
+msgstr "Afficher les modèles"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:49
 msgid "Sort order"
@@ -321,7 +318,7 @@ msgstr "Ajouter une page"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:58
 msgid "Show in Files"
-msgstr ""
+msgstr "Afficher dans Fichiers"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:60
 msgid "Delete page"
