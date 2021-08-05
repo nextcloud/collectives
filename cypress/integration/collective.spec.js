@@ -31,7 +31,6 @@ describe('Collective', function() {
 		cy.seedCollective('Preexisting Collective')
 		cy.seedCircle('Preexisting Circle')
 		cy.seedCircle('History Club')
-		cy.screenshot()
 		cy.login('jane', 'jane', '/apps/collectives')
 		cy.seedCircle('Foreign Circle')
 	})
