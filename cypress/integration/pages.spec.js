@@ -36,14 +36,13 @@ describe('Page', function() {
 		cy.seedPageContent('bob', 'Our Garden/Template.md', 'This is going to be our template.')
 	})
 
+	beforeEach(function() {
+		cy.login('bob', 'bob', '/apps/collectives/Our Garden')
+		// make sure the page list loaded properly
+		cy.contains('.app-content-list-item a', 'Day 1')
+	})
+
 	describe('visited from collective home', function() {
-		before(function() {
-			cy.login('bob', 'bob', '/apps/collectives/Our Garden')
-			cy.get('.app-content-list')
-				.get('.app-content-list-item')
-				.should('contain', 'Day 1')
-			cy.get('.app-content-list-item').contains('Day 1').click()
-		})
 		it('Shows the title in the enabled titleform', function() {
 			cy.get('.app-content-list-item').contains('Day 1').click()
 			cy.get('#titleform input').should('have.value', 'Day 1')
@@ -52,9 +51,6 @@ describe('Page', function() {
 	})
 
 	describe('Sort order', function() {
-		beforeEach(function() {
-			cy.login('bob', 'bob', '/apps/collectives/Our Garden')
-		})
 		it('sorts pages by timestamp by default', function() {
 			cy.get('.app-content-list-item:last-child')
 				.should('contain', 'Day 1')
@@ -69,7 +65,6 @@ describe('Page', function() {
 
 	describe('with special chars', function() {
 		it('loads well', function() {
-			cy.login('bob', 'bob', '/apps/collectives/Our Garden')
 			cy.contains('.app-content-list-item a', '#% special chars').click()
 			cy.get('.app-content-list-item').should('contain', '#% special chars')
 			cy.get('#titleform input').should('have.value', '#% special chars')
@@ -77,30 +72,23 @@ describe('Page', function() {
 	})
 
 	describe('Creating a page from template', function() {
-		before(function() {
-			cy.login('bob', 'bob', '/apps/collectives/Our Garden')
+		it('New page has template content', function() {
 			cy.contains('.app-content-list-item', 'Our Garden')
 				.find('button.icon-add')
 				.click()
 			cy.focused().should('have.value', '')
 			cy.focused().type('New page from Template{enter}')
-		})
-		it('New page has template content', function() {
 			cy.get('.editor__content').contains('This is going to be our template.')
 		})
 	})
 
 	describe('Creating a new subpage', function() {
-		before(function() {
-			cy.login('bob', 'bob', '/apps/collectives/Our Garden')
-			cy.get('#text h1').should('contain', 'Welcome to your new collective')
+		it('Shows the title in the enabled titleform and full path in browser title', function() {
 			cy.contains('.app-content-list-item', '#% special chars')
 				.find('button.icon-add')
 				.click({ force: true })
 			cy.focused().should('have.value', '')
 			cy.focused().type('Subpage Title{enter}')
-		})
-		it('Shows the title in the enabled titleform and full path in browser title', function() {
 			cy.get('.app-content-list-item').should('contain', 'Subpage Title')
 			cy.get('#titleform input').should('have.value', 'Subpage Title')
 			cy.get('#titleform input').should('not.have.attr', 'disabled')
@@ -109,9 +97,6 @@ describe('Page', function() {
 	})
 
 	describe('Using the search providers', function() {
-		before(function() {
-			cy.login('bob', 'bob', '/apps/collectives/Our Garden/Day 2')
-		})
 		it('Search for page and page content', function() {
 			cy.get('.unified-search a').click()
 			cy.get('.unified-search__form input')
