@@ -46,8 +46,11 @@
   </file>
   <file src="lib/Db/CollectiveMapper.php">
     <MoreSpecificImplementedParamType occurrences="1"/>
-    <UndefinedClass occurrences="1">
+    <UndefinedClass occurrences="4">
       <code>$circle</code>
+      <code>Member</code>
+      <code>Member</code>
+      <code>Member</code>
     </UndefinedClass>
   </file>
   <file src="lib/Db/PageMapper.php">
@@ -62,6 +65,11 @@
     <UndefinedClass occurrences="2">
       <code>$e</code>
       <code>NoUserException</code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Model/CollectiveInfo.php">
+    <UndefinedClass occurrences="1">
+      <code>Member</code>
     </UndefinedClass>
   </file>
   <file src="lib/Mount/CollectiveFolderManager.php">
@@ -108,13 +116,16 @@
     </UndefinedClass>
   </file>
   <file src="lib/Service/CircleHelper.php">
-    <UndefinedClass occurrences="6">
+    <UndefinedClass occurrences="9">
       <code>?Circle</code>
       <code>Circle</code>
       <code>Circle</code>
       <code>Circles</code>
       <code>Circles</code>
-      <code>Circles</code>
+      <code>Member</code>
+      <code>Member</code>
+      <code>Member</code>
+      <code>Member</code>
     </UndefinedClass>
     <UndefinedDocblockClass occurrences="1">
       <code>Circle[]</code>
@@ -128,11 +139,13 @@
     </UndefinedDocblockClass>
   </file>
   <file src="lib/Service/CollectiveService.php">
-    <UndefinedClass occurrences="4">
+    <UndefinedClass occurrences="6">
+      <code>$circle</code>
       <code>$circle</code>
       <code>$circle</code>
       <code>$circle</code>
       <code>File</code>
+      <code>Member</code>
     </UndefinedClass>
   </file>
   <file src="lib/Versions/CollectiveVersion.php">

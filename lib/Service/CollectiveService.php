@@ -3,6 +3,7 @@
 namespace OCA\Collectives\Service;
 
 use OC\Files\Node\File;
+use OCA\Circles\Model\Member;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Db\Page;
@@ -103,7 +104,7 @@ class CollectiveService {
 		try {
 			$circle = $this->circleHelper->createCircle($safeName, $userId);
 		} catch (CircleExistsException $e) {
-			$circle = $this->circleHelper->findCircle($safeName, $userId);
+			$circle = $this->circleHelper->findCircle($safeName, $userId, Member::LEVEL_ADMIN);
 			if (null === $circle) {
 				// We don't have admin access to the circle
 				throw $e;
@@ -128,7 +129,10 @@ class CollectiveService {
 		$collective = $this->collectiveMapper->insert($collective);
 
 		// Read in collectiveInfo object
-		$collectiveInfo = new CollectiveInfo($collective, $circle->getName(), true);
+		$collectiveInfo = new CollectiveInfo(
+			$collective,
+			$circle->getName(),
+			$this->circleHelper->getLevel($circle->getUniqueId(), $userId));
 
 		// Create folder for collective and optionally copy default landing page
 		try {
@@ -222,7 +226,7 @@ class CollectiveService {
 		$name = $this->collectiveMapper->circleIdToName($collective->getCircleId());
 
 		if ($deleteCircle) {
-			$this->circleHelper->destroyCircle($collective->getCircleId());
+			$this->circleHelper->destroyCircle($collective->getCircleId(), $userId);
 		}
 
 		// Delete collective folder and its contents

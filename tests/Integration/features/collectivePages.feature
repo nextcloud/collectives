@@ -6,7 +6,7 @@ Feature: collectivePages
     Then user "jane" sees pagePath "firstpage.md" in "mycollective"
 
   Scenario: Share collective (with pages) and create subpage
-    When user "alice" joins circle "mycollective" with admin "jane"
+    When user "alice" joins circle "mycollective" with owner "jane"
     And user "alice" creates page "subpage" with parentPath "firstpage.md" in "mycollective"
     Then user "jane" sees pagePath "firstpage/subpage.md" in "mycollective"
     And user "jane" doesn't see pagePath "firstpage.md" in "mycollective"

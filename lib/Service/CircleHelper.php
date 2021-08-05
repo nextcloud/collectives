@@ -8,6 +8,7 @@ use OCA\Circles\Exceptions\CircleAlreadyExistsException;
 use OCA\Circles\Exceptions\CircleDoesNotExistException;
 use OCA\Circles\Exceptions\MemberDoesNotExistException;
 use OCA\Circles\Model\Circle;
+use OCA\Circles\Model\Member;
 use OCP\AppFramework\QueryException;
 
 class CircleHelper {
@@ -47,19 +48,19 @@ class CircleHelper {
 
 	/**
 	 * @param string $name
-	 * @param bool   $admin
 	 * @param string $userId
+	 * @param int    $level
 	 *
 	 * @return Circle|null
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 * @throws MissingDependencyException
 	 */
-	public function findCircle(string $name, string $userId, bool $admin = true): ?Circle {
+	public function findCircle(string $name, string $userId, int $level = Member::LEVEL_MEMBER): ?Circle {
 		$circles = Circles::listCircles(
 			Circles::CIRCLES_ALL & ~Circles::CIRCLES_PERSONAL,
 			$name,
-			Circles::LEVEL_ADMIN
+			$level
 		);
 		foreach ($circles as $circle) {
 			if (strtolower($circle->getName()) === strtolower($name)) {
@@ -70,8 +71,8 @@ class CircleHelper {
 	}
 
 	/**
-	 * @param string      $name
-	 * @param string|null $userId
+	 * @param string $name
+	 * @param string $userId
 	 *
 	 * @return Circle
 	 * @throws NotFoundException
@@ -79,7 +80,7 @@ class CircleHelper {
 	 * @throws MissingDependencyException
 	 * @throws CircleExistsException
 	 */
-	public function createCircle(string $name, ?string $userId = null): Circle {
+	public function createCircle(string $name, string $userId): Circle {
 		try {
 			$circle = Circles::createCircle(Circles::CIRCLES_SECRET, $name);
 		} catch (CircleAlreadyExistsException $e) {
@@ -90,14 +91,17 @@ class CircleHelper {
 	}
 
 	/**
-	 * @param string      $circleId
-	 * @param string|null $userId
+	 * @param string $circleId
+	 * @param string $userId
 	 *
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 * @throws MissingDependencyException
 	 */
-	public function destroyCircle(string $circleId, ?string $userId = null): void {
+	public function destroyCircle(string $circleId, string $userId): void {
+		if (!$this->isOwner($circleId, $userId)) {
+			throw new NotPermittedException('Not allowed to destroy circle ' . $circleId);
+		}
 		try {
 			Circles::destroyCircle($circleId);
 		} catch (CircleDoesNotExistException $e) {
@@ -107,7 +111,6 @@ class CircleHelper {
 
 	/**
 	 * @param string $circleId
-	 * @param bool   $admin
 	 * @param string $userId
 	 *
 	 * @return bool
@@ -115,17 +118,43 @@ class CircleHelper {
 	 * @throws NotPermittedException
 	 * @throws MissingDependencyException
 	 */
-	public function isMember(string $circleId, string $userId, bool $admin = false): bool {
+	public function getLevel(string $circleId, string $userId): int {
+		try {
+			$member = Circles::getMember(
+				$circleId,
+				$userId,
+				Member::TYPE_USER);
+			return $member->getLevel();
+		} catch (MemberDoesNotExistException $e) {
+		}
+
+		// Can still be member of a group that is member.
 		try {
 			$joinedCircles = Circles::joinedCircles($userId);
 			foreach ($joinedCircles as $jc) {
 				if ($circleId === $jc->getUniqueId()) {
-					return true;
+					// Circles < 22 doesn't provide an easy way to get indirect membership level.
+					// So let's just assume simple "member" level.
+					return Member::LEVEL_MEMBER;
 				}
 			}
 		} catch (QueryException $e) {
 		}
-		return false;
+
+		return Member::LEVEL_NONE;
+	}
+
+	/**
+	 * @param string $circleId
+	 * @param string $userId
+	 * @param int    $level
+	 *
+	 * @return bool
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function hasLevel(string $circleId, string $userId, int $level = Member::LEVEL_MEMBER): bool {
+		return $this->getLevel($circleId, $userId) >= $level;
 	}
 
 	/**
@@ -138,15 +167,18 @@ class CircleHelper {
 	 * @throws MissingDependencyException
 	 */
 	public function isAdmin(string $circleId, string $userId): bool {
-		try {
-			$member = Circles::getMember(
-				$circleId,
-				$userId,
-				Circles::TYPE_USER);
-			// For now only circle owners are admins for the collective
-			return ($member !== null && $member->getLevel() >= Circles::LEVEL_OWNER);
-		} catch (MemberDoesNotExistException $e) {
-			return false;
-		}
+		return $this->hasLevel($circleId, $userId, Member::LEVEL_ADMIN);
+	}
+
+	/**
+	 * @param string $circleId
+	 * @param string $userId
+	 *
+	 * @return bool
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function isOwner(string $circleId, string $userId): bool {
+		return $this->hasLevel($circleId, $userId, Member::LEVEL_OWNER);
 	}
 }

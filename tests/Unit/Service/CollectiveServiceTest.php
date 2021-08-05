@@ -5,6 +5,7 @@ namespace Unit\Service;
 use OC\Files\Node\File;
 use OC\Files\Node\Folder;
 use OCA\Circles\Model\Circle;
+use OCA\Circles\Model\Member;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Db\PageMapper;
@@ -100,8 +101,6 @@ class CollectiveServiceTest extends TestCase {
 			->willThrowException(new CircleExistsException('A circle with that name exists'));
 		$this->circleHelper->method('findCircle')
 			->willReturn($circle);
-		$this->circleHelper->method('isAdmin')
-			->willReturn(true);
 		$this->collectiveMapper->method('findByCircleId')
 			->willReturn(null);
 		$this->collectiveMapper
@@ -133,6 +132,8 @@ class CollectiveServiceTest extends TestCase {
 		$collective->setId(123);
 		$this->circleHelper->method('createCircle')
 			->willReturn($circle);
+		$this->circleHelper->method('getLevel')
+			->willReturn(Member::LEVEL_OWNER);
 		$this->collectiveMapper
 			->expects(self::once())
 			->method('insert')
@@ -149,7 +150,7 @@ class CollectiveServiceTest extends TestCase {
 			'circleId' => null,
 			'trashTimestamp' => null,
 			'name' => 'free',
-			'admin' => true
+			'level' => Member::LEVEL_OWNER
 		], $collective->jsonSerialize());
 	}
 }

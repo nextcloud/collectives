@@ -2,7 +2,7 @@ Feature: collective
 
   Scenario: Create and share a collective
     When user "jane" creates collective "mycollective"
-    And user "alice" joins circle "mycollective" with admin "jane"
+    And user "alice" joins circle "mycollective" with owner "jane"
     Then user "jane" sees collective "mycollective"
     And user "alice" sees collective "mycollective"
     And user "jane" sees pagePath "Readme.md" in "mycollective"
@@ -29,6 +29,10 @@ Feature: collective
   Scenario: Trash an owned collective
     When user "jane" trashes collective "mycollective"
 
+  Scenario: Fail to delete a collective+circle as admin
+    When user "bob" joins circle "mycollective" with owner "jane" with level "Admin"
+    Then user "bob" fails to delete selfadmin collective+circle "mycollective"
+
   Scenario: Fail to delete a collective as simple member
     And user "alice" fails to delete collective "mycollective" with admin "jane"
     And user "alice" fails to delete collective+circle "mycollective" with admin "jane"
@@ -44,7 +48,7 @@ Feature: collective
 
   Scenario: Recreate a collective based on a leftover circle
     When user "jane" creates collective "Phoenix"
-    And user "alice" joins circle "Phoenix" with admin "jane"
+    And user "alice" joins circle "Phoenix" with owner "jane"
     And user "jane" trashes collective "Phoenix"
     And user "jane" deletes collective "Phoenix"
     And user "jane" is member of circle "Phoenix"
