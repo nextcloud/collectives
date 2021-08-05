@@ -9,7 +9,7 @@
 		class="collectives_list_item">
 		<template #icon>
 			<EmojiPicker
-				v-if="collective.admin"
+				v-if="collective.level >= memberLevels.LEVEL_ADMIN"
 				:show-preview="true"
 				@select="updateEmoji">
 				<button class="emoji"
@@ -34,12 +34,12 @@
 				@click="print">
 				{{ t('collectives', 'Print') }}
 			</ActionButton>
-			<ActionLink v-if="collective.admin && isContactsInstalled"
+			<ActionLink v-if="collective.level >= memberLevels.LEVEL_ADMIN && isContactsInstalled"
 				:href="circleLink"
 				icon="icon-circles">
 				{{ t('collectives', 'Manage members') }}
 			</ActionLink>
-			<ActionButton v-if="collective.admin"
+			<ActionButton v-if="collective.level >= memberLevels.LEVEL_ADMIN"
 				icon="icon-delete"
 				@click="trashCollective(collective)">
 				{{ t('collectives', 'Delete') }}
@@ -57,6 +57,7 @@ import ActionLink from '@nextcloud/vue/dist/Components/ActionLink'
 import EmojiPicker from '@nextcloud/vue/dist/Components/EmojiPicker'
 import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
 import { generateUrl } from '@nextcloud/router'
+import { memberLevels } from '../../constants'
 
 export default {
 	name: 'CollectiveListItem',
@@ -73,6 +74,12 @@ export default {
 			type: Object,
 			required: true,
 		},
+	},
+
+	data() {
+		return {
+			memberLevels,
+		}
 	},
 
 	computed: {

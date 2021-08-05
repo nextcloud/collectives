@@ -35,7 +35,15 @@
 					<button class="error primary" @click="deleteCollective(modalCollective, false)">
 						{{ t('collectives', 'Only collective') }}
 					</button>
-					<button class="error primary" @click="deleteCollective(modalCollective, true)">
+					<button v-if="modalCollective.level >= memberLevels.LEVEL_OWNER"
+						class="error primary"
+						@click="deleteCollective(modalCollective, true)">
+						{{ t('collectives', 'Collective and circle') }}
+					</button>
+					<button v-else
+						class="error primary"
+						disabled
+						:title="t('collectives', 'Only circle owners can delete a circle')">
 						{{ t('collectives', 'Collective and circle') }}
 					</button>
 				</div>
@@ -50,6 +58,7 @@ import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
 import AppNavigationSettings from '@nextcloud/vue/dist/Components/AppNavigationSettings'
 import Modal from '@nextcloud/vue/dist/Components/Modal'
+import { memberLevels } from '../../constants'
 
 export default {
 	name: 'CollectiveTrash',
@@ -63,6 +72,7 @@ export default {
 		return {
 			deleteModal: false,
 			modalCollective: null,
+			memberLevels,
 		}
 	},
 	computed: mapState({
