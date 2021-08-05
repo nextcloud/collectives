@@ -203,7 +203,6 @@ Unit Test Javascript:
       - web
     changes:
       - babel.config.js
-      - cypress/**/*
       - .gitlab-ci.yml
       - jest.config.json
       - Makefile
