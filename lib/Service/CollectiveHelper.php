@@ -26,22 +26,23 @@ class CollectiveHelper {
 
 	/**
 	 * @param string $userId
-	 * @param bool   $getAdmin
+	 * @param bool   $getLevel
 	 *
 	 * @return CollectiveInfo[]
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
+	 * @throws MissingDependencyException
 	 */
-	public function getCollectivesForUser(string $userId, bool $getAdmin = true): array {
+	public function getCollectivesForUser(string $userId, bool $getLevel = true): array {
 		$collectiveInfos = [];
 		$circles = $this->circleHelper->getCircles($userId);
 		foreach ($circles as $circle) {
 			$cid = $circle->getUniqueId();
 			if (null !== $c = $this->collectiveMapper->findByCircleId($cid)) {
-				$admin = $getAdmin && $this->circleHelper->isAdmin($c->getCircleId(), $userId);
+				$level = $getLevel ? $this->circleHelper->getLevel($c->getCircleId(), $userId): 0;
 				$collectiveInfos[] = new CollectiveInfo($c,
 					$circle->getSanitizedName(),
-					$admin);
+					$level);
 			}
 		}
 		return $collectiveInfos;
@@ -53,6 +54,7 @@ class CollectiveHelper {
 	 * @return CollectiveInfo[]
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
+	 * @throws MissingDependencyException
 	 */
 	public function getCollectivesTrashForUser(string $userId): array {
 		$collectiveInfos = [];
@@ -62,7 +64,7 @@ class CollectiveHelper {
 			if ((null !== $c = $this->collectiveMapper->findTrashByCircleId($cid, $userId))) {
 				$collectiveInfos[] = new CollectiveInfo($c,
 					$this->collectiveMapper->circleIdToName($c->getCircleId()),
-					true);
+					$this->circleHelper->getLevel($cid, $userId));
 			}
 		}
 		return $collectiveInfos;

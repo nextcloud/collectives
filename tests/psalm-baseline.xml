@@ -46,8 +46,11 @@
   </file>
   <file src="lib/Db/CollectiveMapper.php">
     <MoreSpecificImplementedParamType occurrences="1"/>
-    <UndefinedClass occurrences="1">
+    <UndefinedClass occurrences="4">
       <code>$circle</code>
+      <code>Member</code>
+      <code>Member</code>
+      <code>Member</code>
     </UndefinedClass>
   </file>
   <file src="lib/Db/PageMapper.php">
@@ -62,6 +65,11 @@
     <UndefinedClass occurrences="2">
       <code>$e</code>
       <code>NoUserException</code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Model/CollectiveInfo.php">
+    <UndefinedClass occurrences="1">
+      <code>Member</code>
     </UndefinedClass>
   </file>
   <file src="lib/Mount/CollectiveFolderManager.php">
@@ -108,7 +116,9 @@
     </UndefinedClass>
   </file>
   <file src="lib/Service/CircleHelper.php">
-    <UndefinedClass occurrences="20">
+    <UndefinedClass occurrences="31">
+      <code>$e</code>
+      <code>$e</code>
       <code>$e</code>
       <code>$e</code>
       <code>$e</code>
@@ -117,22 +127,30 @@
       <code>Circle</code>
       <code>Circle</code>
       <code>CircleNotFoundException</code>
+      <code>CircleNotFoundException</code>
       <code>CirclesManager</code>
       <code>FederatedItemException</code>
       <code>FederatedUserException</code>
+      <code>FederatedUserException</code>
+      <code>FederatedUserNotFoundException</code>
       <code>FederatedUserNotFoundException</code>
       <code>InitiatorNotFoundException</code>
       <code>InitiatorNotFoundException</code>
+      <code>InitiatorNotFoundException</code>
+      <code>InvalidIdException</code>
       <code>InvalidIdException</code>
       <code>Member</code>
       <code>Member</code>
+      <code>Member</code>
+      <code>Member</code>
+      <code>RequestBuilderException</code>
       <code>RequestBuilderException</code>
       <code>RequestBuilderException</code>
       <code>SingleCircleNotFoundException</code>
+      <code>SingleCircleNotFoundException</code>
     </UndefinedClass>
-    <UndefinedDocblockClass occurrences="16">
-      <code>$federatedUser</code>
-      <code>$federatedUser</code>
+    <UndefinedDocblockClass occurrences="15">
+      <code>$this-&gt;circlesManager</code>
       <code>$this-&gt;circlesManager</code>
       <code>$this-&gt;circlesManager</code>
       <code>$this-&gt;circlesManager</code>
@@ -157,11 +175,13 @@
     </UndefinedDocblockClass>
   </file>
   <file src="lib/Service/CollectiveService.php">
-    <UndefinedClass occurrences="4">
+    <UndefinedClass occurrences="6">
+      <code>$circle</code>
       <code>$circle</code>
       <code>$circle</code>
       <code>$circle</code>
       <code>File</code>
+      <code>Member</code>
     </UndefinedClass>
   </file>
   <file src="lib/Versions/CollectiveVersion.php">

@@ -2,12 +2,15 @@
 
 namespace OCA\Collectives\Db;
 
+use OCA\Circles\Model\Member;
 use OCA\Collectives\Service\CircleHelper;
+use OCA\Collectives\Service\MissingDependencyException;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\AppFramework\Db\QBMapper;
+use OCP\DB\Exception;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
@@ -35,27 +38,26 @@ class CollectiveMapper extends QBMapper {
 	/**
 	 * @param IQueryBuilder $qb
 	 * @param string|null   $userId
-	 * @param bool          $admin
+	 * @param int           $level
 	 *
 	 * @return Collective|null
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
+	 * @throws MissingDependencyException
 	 */
-	private function findBy(IQueryBuilder $qb, ?string $userId = null, bool $admin = false): ?Collective {
+	private function findBy(IQueryBuilder $qb, ?string $userId = null, int $level = Member::LEVEL_MEMBER): ?Collective {
 		try {
 			$collective = $this->findEntity($qb);
 			// Return all found collectives if `$userId` is unset
 			if (null === $userId) {
 				return $collective;
 			}
-			// Return all member collectives if `$admin` is false
-			if (!$admin) {
-				return ($this->circleHelper->isMember($collective->getCircleId(), $userId)) ? $collective : null;
-			}
-			// Return only admin collectives if `$admin` is true
-			return ($this->circleHelper->isAdmin($collective->getCircleId(), $userId)) ? $collective : null;
+			// Return member collectives with at least level `level`
+			return ($this->circleHelper->hasLevel($collective->getCircleId(), $userId, $level)) ? $collective : null;
 		} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
 			return null;
+		} catch (Exception $e) {
+			throw new NotFoundException('Failed to run database query.');
 		}
 	}
 
@@ -67,6 +69,7 @@ class CollectiveMapper extends QBMapper {
 	 * @return Collective|null
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
+	 * @throws MissingDependencyException
 	 */
 	public function findByCircleId(string $circleId, string $userId = null, bool $includeTrash = false): ?Collective {
 		$qb = $this->db->getQueryBuilder();
@@ -88,6 +91,7 @@ class CollectiveMapper extends QBMapper {
 	 * @return Collective|null
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
+	 * @throws MissingDependencyException
 	 */
 	public function findTrashByCircleId(string $circleId, string $userId): ?Collective {
 		$qb = $this->db->getQueryBuilder();
@@ -97,7 +101,7 @@ class CollectiveMapper extends QBMapper {
 		$qb->select('*')
 			->from($this->tableName)
 			->where($where);
-		return $this->findBy($qb, $userId, true);
+		return $this->findBy($qb, $userId, Member::LEVEL_ADMIN);
 	}
 
 	/**
@@ -107,6 +111,7 @@ class CollectiveMapper extends QBMapper {
 	 * @return Collective|null
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
+	 * @throws MissingDependencyException
 	 */
 	public function findById(int $id, string $userId = null): ?Collective {
 		$qb = $this->db->getQueryBuilder();
@@ -126,6 +131,7 @@ class CollectiveMapper extends QBMapper {
 	 * @return Collective|null
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
+	 * @throws MissingDependencyException
 	 */
 	public function findTrashById(int $id, string $userId): ?Collective {
 		$qb = $this->db->getQueryBuilder();
@@ -135,7 +141,7 @@ class CollectiveMapper extends QBMapper {
 		$qb->select('*')
 			->from($this->tableName)
 			->where($where);
-		return $this->findBy($qb, $userId, true);
+		return $this->findBy($qb, $userId, Member::LEVEL_ADMIN);
 	}
 
 	/**
@@ -155,6 +161,7 @@ class CollectiveMapper extends QBMapper {
 	 * @return string
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
+	 * @throws MissingDependencyException
 	 */
 	public function circleIdToName(string $circleId, bool $super = false): string {
 		$circle = $this->circleHelper->getCircle($circleId, null, $super);

@@ -26,8 +26,6 @@ class CircleHelper {
 	/** @var String | null */
 	private $dependencyInjectionError;
 
-
-
 	public function __construct(ContainerInterface $appContainer) {
 		try {
 			$this->circlesManager = $appContainer->get(CirclesManager::class);
@@ -63,13 +61,15 @@ class CircleHelper {
 	 * @param string|null $userId
 	 *
 	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
 	 * @throws FederatedUserNotFoundException
 	 * @throws SingleCircleNotFoundException
 	 * @throws RequestBuilderException
 	 * @throws InvalidIdException
 	 * @throws FederatedUserException
 	 */
-	private function startSession(?string $userId = null) {
+	private function startSession(?string $userId = null): void {
 		if (is_null($this->circlesManager)) {
 			throw new MissingDependencyException($this->dependencyInjectionError);
 		}
@@ -80,7 +80,7 @@ class CircleHelper {
 	/**
 	 * @throws MissingDependencyException
 	 */
-	private function startSuperSession() {
+	private function startSuperSession(): void {
 		if (is_null($this->circlesManager)) {
 			throw new MissingDependencyException($this->dependencyInjectionError);
 		}
@@ -147,7 +147,7 @@ class CircleHelper {
 
 	/**
 	 * @param string $name
-	 * @param bool   $admin
+	 * @param int    $level
 	 * @param string $userId
 	 *
 	 * @return Circle|null
@@ -155,12 +155,12 @@ class CircleHelper {
 	 * @throws NotPermittedException
 	 * @throws MissingDependencyException
 	 */
-	public function findCircle(string $name, string $userId, bool $admin = true): ?Circle {
+	public function findCircle(string $name, string $userId, int $level = Member::LEVEL_MEMBER): ?Circle {
 		$circles = $this->getCircles($userId);
 		foreach ($circles as $circle) {
 			if (!strcmp(strtolower($circle->getName()), strtolower($name)) ||
 				!strcmp(strtolower($circle->getSanitizedName()), strtolower($name))) {
-				if ($admin && !$this->isAdmin($circle->getSingleId(), $userId)) {
+				if (!$this->hasLevel($circle->getSingleId(), $userId, $level)) {
 					return null;
 				}
 				return $circle;
@@ -195,8 +195,8 @@ class CircleHelper {
 	}
 
 	/**
-	 * @param string      $name
-	 * @param string|null $userId
+	 * @param string $name
+	 * @param string $userId
 	 *
 	 * @return Circle
 	 * @throws NotFoundException
@@ -204,7 +204,7 @@ class CircleHelper {
 	 * @throws CircleExistsException
 	 * @throws MissingDependencyException
 	 */
-	public function createCircle(string $name, ?string $userId = null): Circle {
+	public function createCircle(string $name, string $userId): Circle {
 		try {
 			if ($this->existsCircle($name)) {
 				throw new CircleExistsException('A circle with that name exists');
@@ -220,7 +220,7 @@ class CircleHelper {
 				 FederatedUserException |
 				 InitiatorNotFoundException |
 				 FederatedItemException |
-				 InvalidItemException $e) {
+				 \ArtificialOwl\MySmallPhpTools\Exceptions\InvalidItemException $e) {
 			throw new NotPermittedException($e->getMessage());
 		}
 		$this->circlesManager->stopSession();
@@ -229,14 +229,17 @@ class CircleHelper {
 	}
 
 	/**
-	 * @param string      $circleId
-	 * @param string|null $userId
+	 * @param string $circleId
+	 * @param string $userId
 	 *
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 * @throws MissingDependencyException
 	 */
-	public function destroyCircle(string $circleId, ?string $userId = null): void {
+	public function destroyCircle(string $circleId, string $userId): void {
+		if (!$this->isOwner($circleId, $userId)) {
+			throw new NotPermittedException('Not allowed to destroy circle ' . $circleId);
+		}
 		try {
 			$this->startSession($userId);
 			$this->circlesManager->destroyCircle($circleId);
@@ -256,7 +259,39 @@ class CircleHelper {
 
 	/**
 	 * @param string $circleId
-	 * @param bool   $admin
+	 * @param string $userId
+	 *
+	 * @return int
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 * @throws MissingDependencyException
+	 */
+	public function getLevel(string $circleId, string $userId): int {
+		if (is_null($this->circlesManager)) {
+			throw new MissingDependencyException($this->dependencyInjectionError);
+		}
+
+		try {
+			$this->startSession($userId);
+			$circle = $this->circlesManager->getCircle($circleId);
+			$member = $circle->getInitiator();
+		} catch (CircleNotFoundException $e) {
+			throw new NotFoundException($e->getMessage());
+		} catch (FederatedUserNotFoundException |
+			SingleCircleNotFoundException |
+			RequestBuilderException |
+			InvalidIdException |
+			FederatedUserException |
+			InitiatorNotFoundException $e) {
+			throw new NotPermittedException($e->getMessage());
+		}
+
+		return $member->getLevel();
+	}
+
+	/**
+	 * @param string $circleId
+	 * @param int    $level
 	 * @param string $userId
 	 *
 	 * @return bool
@@ -264,22 +299,8 @@ class CircleHelper {
 	 * @throws NotPermittedException
 	 * @throws MissingDependencyException
 	 */
-	public function isMember(string $circleId, string $userId, bool $admin = false): bool {
-		if (is_null($this->circlesManager)) {
-			throw new MissingDependencyException($this->dependencyInjectionError);
-		}
-		/** @var FederatedUser $federatedUser */
-		$federatedUser = $this->getFederatedUser($userId);
-
-		$level = $admin ? Member::LEVEL_OWNER : Member::LEVEL_MEMBER;
-		$memberships = $federatedUser->getMemberships();
-		foreach ($memberships as $membership) {
-			if ($membership->getCircleId() === $circleId &&
-				$membership->getLevel() >= $level) {
-				return true;
-			}
-		}
-		return false;
+	public function hasLevel(string $circleId, string $userId, int $level = Member::LEVEL_MEMBER): bool {
+		return $this->getLevel($circleId, $userId) >= $level;
 	}
 
 	/**
@@ -292,6 +313,19 @@ class CircleHelper {
 	 * @throws MissingDependencyException
 	 */
 	public function isAdmin(string $circleId, string $userId): bool {
-		return $this->isMember($circleId, $userId, true);
+		return $this->hasLevel($circleId, $userId, Member::LEVEL_ADMIN);
+	}
+
+	/**
+	 * @param string $circleId
+	 * @param string $userId
+	 *
+	 * @return bool
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 * @throws MissingDependencyException
+	 */
+	public function isOwner(string $circleId, string $userId): bool {
+		return $this->hasLevel($circleId, $userId, Member::LEVEL_OWNER);
 	}
 }
