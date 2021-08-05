@@ -46,10 +46,10 @@
 * 🧽 Update title when other people rename current page.
 * ⛳ Use urls with fileId in the pages list.
 * 🚀 Faster loading of absolute links within the collectives app.
-* #️⃣ Handling of special chars in collective and page names.
+* 💯 Handling of special chars in collective and page names.
 
 ### 🌎Translations
-* 🗣️ Complete Czech translation thanks to Pavel Borecki
+* 🗣️ Complete Czech translation thanks to Pavel Borecki.
 
 ### 🚧Updates & Tooling
 * ✅ Fix test runs in forks.
