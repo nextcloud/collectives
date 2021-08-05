@@ -242,15 +242,17 @@ class FeatureContext implements Context {
 	 * @When user :user deletes collective+circle :collective
 	 * @When user :user :fails to delete collective+circle :collective
 	 * @When user :user :fails to delete collective+circle :collective with admin :admin
+	 * @When user :user :fails to delete :selfadmin collective+circle :collective
 	 *
 	 * @param string      $user
 	 * @param string      $collective
 	 * @param string|null $fail
 	 * @param string|null $admin
+	 * @param string|null $selfadmin
 	 *
 	 * @throws GuzzleException
 	 */
-	public function userDeletesCollectiveAndCircle(string $user, string $collective, ?string $fail = null, ?string $admin = null): void {
+	public function userDeletesCollectiveAndCircle(string $user, string $collective, ?string $fail = null, ?string $admin = null, ?string $selfadmin = null): void {
 		$this->setCurrentUser($admin ?: $user);
 		$collectiveId = $this->collectiveIdByName($collective, true);
 		if (null === $collectiveId) {
@@ -259,7 +261,7 @@ class FeatureContext implements Context {
 		$this->setCurrentUser($user);
 		$this->sendRequest('DELETE', '/apps/collectives/_collectives/trash/' . $collectiveId . '?circle=1');
 		if ("fails" === $fail) {
-			$this->assertStatusCode($this->response, 404);
+			$this->assertStatusCode($this->response, $selfadmin ? 403 : 404);
 		} else {
 			$this->assertStatusCode($this->response, 200);
 		}
@@ -356,16 +358,18 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user joins circle :name with admin :admin
+	 * @When user :user joins circle :name with owner :owner
+	 * @When user :user joins circle :name with owner :owner with level :level
 	 *
-	 * @param string $user
-	 * @param string $name
-	 * @param string $admin
+	 * @param string      $user
+	 * @param string      $name
+	 * @param string      $owner
+	 * @param string|null $level
 	 *
 	 * @throws GuzzleException
 	 */
-	public function userJoinsCircle(string $user, string $name, string $admin): void {
-		$this->setCurrentUser($admin);
+	public function userJoinsCircle(string $user, string $name, string $owner, ?string $level = null): void {
+		$this->setCurrentUser($owner);
 		$circleId = $this->circleIdByName($name);
 		Assert::assertNotNull($circleId);
 
@@ -373,8 +377,20 @@ class FeatureContext implements Context {
 			['userId', $user],
 			['type', 1],
 		]);
+
 		$this->sendOcsRequest('POST', '/apps/circles/circles/' . $circleId . '/members', $data);
 		$this->assertStatusCode($this->response, 200);
+
+		if ($level) {
+			$jsonBody = json_decode($this->response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
+			$memberId = $jsonBody['ocs']['data']['id'];
+			$data = new TableNode([
+				['level', $level],
+			]);
+
+			$this->sendOcsRequest('PUT', '/apps/circles/circles/' . $circleId . '/members/' . $memberId . '/level', $data);
+			$this->assertStatusCode($this->response, 200);
+		}
 	}
 
 	/**

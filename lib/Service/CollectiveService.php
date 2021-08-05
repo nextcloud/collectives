@@ -3,6 +3,7 @@
 namespace OCA\Collectives\Service;
 
 use OC\Files\Node\File;
+use OCA\Circles\Model\Member;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Db\Page;
@@ -65,6 +66,7 @@ class CollectiveService {
 	 * @return CollectiveInfo[]
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
+	 * @throws MissingDependencyException
 	 */
 	public function getCollectives(string $userId): array {
 		return $this->collectiveHelper->getCollectivesForUser($userId);
@@ -76,6 +78,7 @@ class CollectiveService {
 	 * @return CollectiveInfo[]
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
+	 * @throws MissingDependencyException
 	 */
 	public function getCollectivesTrash(string $userId): array {
 		return $this->collectiveHelper->getCollectivesTrashForUser($userId);
@@ -91,6 +94,7 @@ class CollectiveService {
 	 * @throws CircleExistsException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
+	 * @throws MissingDependencyException
 	 * @throws UnprocessableEntityException
 	 */
 	public function createCollective(string $userId, string $userLang, string $safeName, string $emoji = null): array {
@@ -103,7 +107,7 @@ class CollectiveService {
 		try {
 			$circle = $this->circleHelper->createCircle($safeName, $userId);
 		} catch (CircleExistsException $e) {
-			$circle = $this->circleHelper->findCircle($safeName, $userId);
+			$circle = $this->circleHelper->findCircle($safeName, $userId, Member::LEVEL_ADMIN);
 			if (null === $circle) {
 				// We don't have admin access to the circle
 				throw $e;
@@ -128,7 +132,10 @@ class CollectiveService {
 		$collective = $this->collectiveMapper->insert($collective);
 
 		// Read in collectiveInfo object
-		$collectiveInfo = new CollectiveInfo($collective, $circle->getSanitizedName(), true);
+		$collectiveInfo = new CollectiveInfo(
+			$collective,
+			$circle->getSanitizedName(),
+			$this->circleHelper->getLevel($circle->getUniqueId(), $userId));
 
 		// Create folder for collective and optionally copy default landing page
 		try {
@@ -163,6 +170,7 @@ class CollectiveService {
 	 * @return CollectiveInfo
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
+	 * @throws MissingDependencyException
 	 */
 	public function updateCollective(string $userId, int $id, string $emoji = null): CollectiveInfo {
 		if (null === $collective = $this->collectiveMapper->findById($id, $userId)) {
@@ -190,6 +198,7 @@ class CollectiveService {
 	 * @return CollectiveInfo
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
+	 * @throws MissingDependencyException
 	 */
 	public function trashCollective(string $userId, int $id): CollectiveInfo {
 		if (null === $collective = $this->collectiveMapper->findById($id, $userId)) {
@@ -214,6 +223,7 @@ class CollectiveService {
 	 * @return CollectiveInfo
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
+	 * @throws MissingDependencyException
 	 */
 	public function deleteCollective(string $userId, int $id, bool $deleteCircle): CollectiveInfo {
 		if (null === $collective = $this->collectiveMapper->findTrashById($id, $userId)) {
@@ -222,7 +232,7 @@ class CollectiveService {
 		$name = $this->collectiveMapper->circleIdToName($collective->getCircleId());
 
 		if ($deleteCircle) {
-			$this->circleHelper->destroyCircle($collective->getCircleId());
+			$this->circleHelper->destroyCircle($collective->getCircleId(), $userId);
 		}
 
 		// Delete collective folder and its contents
@@ -243,6 +253,7 @@ class CollectiveService {
 	 * @return CollectiveInfo
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
+	 * @throws MissingDependencyException
 	 */
 	public function restoreCollective(string $userId, int $id): CollectiveInfo {
 		if (null === $collective = $this->collectiveMapper->findTrashById($id, $userId)) {
