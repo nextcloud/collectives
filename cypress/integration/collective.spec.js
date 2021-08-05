@@ -29,6 +29,7 @@ describe('Collective', function() {
 	before(function() {
 		cy.login('bob', 'bob', '/apps/collectives')
 		cy.seedCollective('Preexisting Collective')
+		cy.seedCircle('Preexisting Circle')
 		cy.seedCircle('History Club')
 		cy.login('jane', 'jane', '/apps/collectives')
 		cy.seedCircle('Foreign Circle')
@@ -95,7 +96,6 @@ describe('Collective', function() {
 					'Created collective "Preexisting Circle" for existing circle.'
 				)
 			})
-
 		after(function() {
 			cy.deleteCollective('Preexisting Circle')
 			cy.deleteCollective('History Club')
