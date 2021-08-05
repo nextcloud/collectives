@@ -44,7 +44,7 @@ stages:
     policy: pull
   before_script:
     - npm install -g npm # install newest NPM (>=7)
-    - npm ci
+    - npm install
 
 # Set any variables we need
 
@@ -192,7 +192,6 @@ Unit Test Javascript:
   <<: *node
   stage: test units
   script:
-    - make node-modules
     - make test-js
   needs:
     - "Lint Javascript"
@@ -203,7 +202,6 @@ Unit Test Javascript:
       - web
     changes:
       - babel.config.js
-      - cypress/**/*
       - .gitlab-ci.yml
       - jest.config.json
       - Makefile
@@ -268,12 +266,11 @@ OCC CLI Test:
     CYPRESS_baseUrl: http://nextcloud.local/index.php
     APP_SOURCE_URL: "${CI_PROJECT_URL}/-/jobs/${BUILD_JOB_ID}/artifacts/raw/build/release/collectives-${BUILD_VERSION}.tar.gz"
   script:
-    - npm install -g npm # install newest NPM (>=7)
     - npm install --no-save wait-on
     - $(npm bin)/cypress install
     - $(npm bin)/cypress verify
     - $(npm bin)/wait-on -i 500 -t 240000 $CYPRESS_baseUrl
-    - $(npm bin)/cypress run --browser chrome --config video=false
+    - $(npm bin)/cypress run --browser chrome --config video=false,defaultCommandTimeout=10000
   artifacts:
     paths:
       - cypress/screenshots
