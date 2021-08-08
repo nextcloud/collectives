@@ -67,6 +67,8 @@ export default {
 
 	watch: {
 		'currentCollective.id'() {
+			this.load('collective')
+			this.unsetPages()
 			this.initCollective()
 		},
 		'currentPage.id'() {
@@ -98,7 +100,7 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['show', 'hide']),
+		...mapMutations(['show', 'hide', 'load', 'unsetPages']),
 
 		initCollective() {
 			this.getPages()
