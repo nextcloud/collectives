@@ -188,6 +188,10 @@ export default {
 		},
 
 		// using camel case name so this works nicely with mapMutations
+		unsetPages(state) {
+			state.pages = []
+		},
+
 		sortPages(state, order) {
 			state.sortBy = order
 		},
