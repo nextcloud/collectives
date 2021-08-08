@@ -81,7 +81,7 @@ export default {
 
 	mounted() {
 		this.initCollective()
-		const hasPush = listen('notify_file', this.getPages.bind(this))
+		const hasPush = listen('notify_file', this.getPagesBackground.bind(this))
 		if (hasPush) {
 			console.debug('Has notify_push enabled, slowing polling to 15 minutes')
 			this.pollIntervalBase = 15 * 60 * 1000
@@ -141,7 +141,7 @@ export default {
 			if (OC.config.session_keepalive) {
 				console.debug('Started background fetcher as session_keepalive is enabled')
 				this.intervalId = window.setInterval(
-					this.getPages.bind(this),
+					this.getPagesBackground.bind(this),
 					this.pollIntervalCurrent
 				)
 			} else {
@@ -162,6 +162,14 @@ export default {
 		 */
 		async getPages() {
 			await this.$store.dispatch(GET_PAGES)
+				.catch(displayError('Could not fetch pages'))
+		},
+
+		/**
+		 * Get list of all pages without loading indicator
+		 */
+		async getPagesBackground() {
+			await this.$store.dispatch(GET_PAGES, false)
 				.catch(displayError('Could not fetch pages'))
 		},
 
