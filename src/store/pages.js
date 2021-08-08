@@ -188,6 +188,10 @@ export default {
 		},
 
 		// using camel case name so this works nicely with mapMutations
+		unsetPages(state) {
+			state.pages = []
+		},
+
 		sortPages(state, order) {
 			state.sortBy = order
 		},
@@ -207,9 +211,12 @@ export default {
 
 		/**
 		 * Get list of all pages
+		 * @param {Boolean} setLoading Whether to set loading('collective')
 		 */
-		async [GET_PAGES]({ commit, getters }) {
-			commit('load', 'collective', { root: true })
+		async [GET_PAGES]({ commit, getters }, setLoading = true) {
+			if (setLoading) {
+				commit('load', 'collective', { root: true })
+			}
 			const response = await axios.get(getters.pagesUrl)
 			commit(SET_PAGES, {
 				pages: response.data.data,
