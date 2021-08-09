@@ -36,6 +36,8 @@ return [
 			'verb' => 'PUT', 'requirements' => ['collectiveId' => '\d+', 'parentId' => '\d+', 'id' => '\d+']],
 		['name' => 'page#delete', 'url' => '/_collectives/{collectiveId}/_pages/parent/{parentId}/page/{id}',
 			'verb' => 'DELETE', 'requirements' => ['collectiveId' => '\d+', 'parentId' => '\d+', 'id' => '\d+']],
+		['name' => 'page#getBacklinks', 'url' => '/_collectives/{collectiveId}/_pages/parent/{parentId}/page/{id}/backlinks',
+			'verb' => 'GET', 'requirements' => ['collectiveId' => '\d+', 'parentId' => '\d+', 'id' => '\d+']],
 
 		// default route
 		['name' => 'start#index', 'url' => '/{path}', 'verb' => 'GET',
