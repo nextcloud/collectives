@@ -167,4 +167,22 @@ class PageController extends Controller {
 			];
 		}, $this->logger);
 	}
+
+	/**
+	 * @NoAdminRequired
+	 *
+	 * @param int $collectiveId
+	 * @param int $parentId
+	 * @param int $id
+	 *
+	 * @return DataResponse
+	 */
+	public function getBacklinks(int $collectiveId, int $parentId, int $id): DataResponse {
+		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $id) {
+			$backlinks = $this->service->getBacklinks($this->getUserId(), $this->getCollective($collectiveId), $parentId, $id);
+			return [
+				"data" => $backlinks
+			];
+		}, $this->logger);
+	}
 }
