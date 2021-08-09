@@ -56,6 +56,11 @@ export default {
 			required: false,
 			default: null,
 		},
+
+		timestamp: {
+			type: Number,
+			required: true,
+		},
 	},
 
 	data() {
@@ -104,13 +109,16 @@ export default {
 
 	watch: {
 		'davUrl'() {
-			this.getPageContent()
+			this.initPageContent()
+		},
+		'timestamp'() {
+			this.updatePageContent()
 		},
 	},
 
 	mounted() {
 		this.$emit('loading')
-		this.getPageContent()
+		this.initPageContent()
 	},
 
 	methods: {
@@ -119,7 +127,6 @@ export default {
 		 */
 		async getPageContent() {
 			try {
-				this.loading = true
 				const content = await axios.get(this.davUrl)
 				// content.data will attempt to parse as json
 				// but we want the raw text.
@@ -127,13 +134,26 @@ export default {
 				if (!this.pageContent) {
 					this.$emit('empty')
 				}
-				this.loading = false
-				this.editor = this.createEditor()
-				this.$nextTick(() => { this.$emit('ready') })
 			} catch (e) {
 				const { id } = this.currentPage
 				console.error(`Failed to fetch content of page ${id}`, e)
 			}
+		},
+
+		async initPageContent() {
+			this.loading = true
+			await this.getPageContent()
+			this.loading = false
+			this.editor = this.createEditor()
+			this.$nextTick(() => { this.$emit('ready') })
+		},
+
+		/**
+		 * Update markdown content of page
+		 */
+		async updatePageContent() {
+			await this.getPageContent()
+			this.editor.setContent(this.htmlContent)
 		},
 
 		/**
