@@ -9,6 +9,14 @@ Feature: collective
     And user "alice" sees pagePath "Readme.md" in "mycollective"
     And user "john" doesn't see collective "mycollective"
 
+  Scenario: Update a collectives emoji
+    When user "jane" sets "emoji" to "🌊" for collective "mycollective"
+    Then user "alice" sees collective "mycollective" with "emoji" set to "🌊"
+
+  Scenario: Update a collectives conversation token
+    When user "jane" sets "conversationToken" to "12345678" for collective "mycollective"
+    Then user "alice" sees collective "mycollective" with "conversationToken" set to "12345678"
+
   Scenario: Fail to trash a collective as simple member
     And user "alice" fails to trash collective "mycollective"
 

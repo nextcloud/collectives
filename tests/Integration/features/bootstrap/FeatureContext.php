@@ -74,6 +74,24 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @When user :user sets :key to :value for collective :collective
+	 *
+	 * @param string $user
+	 * @param string $key
+	 * @param string $value
+	 * @param string $collective
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userUpdatesCollective(string $user, string $key, string $value, string $collective): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$formData = new TableNode([[$key, $value]]);
+		$this->sendRequest('PUT', '/apps/collectives/_collectives/' . $collectiveId , $formData);
+		$this->assertStatusCode(200);
+	}
+
+	/**
 	 * @When user :user creates page :page with parentPath :parentPath in :collective
 	 *
 	 * @param string $user
@@ -96,14 +114,17 @@ class FeatureContext implements Context {
 	/**
 	 * @Then user :user sees collective :collective
 	 * @Then user :user sees collective :collective in :trash
+	 * @Then user :user sees collective :collective with :key set to :value
 	 *
 	 * @param string      $user
 	 * @param string      $collective
 	 * @param string|null $trash
+	 * @param string|null $key
+	 * @param string|null $value
 	 *
 	 * @throws GuzzleException
 	 */
-	public function userSeesCollective(string $user, string $collective, ?string $trash = null): void {
+	public function userSeesCollective(string $user, string $collective, ?string $trash = null, ?string $key = null, ?string $value = null): void {
 		$this->setCurrentUser($user);
 		if ($trash) {
 			$this->sendRequest('GET', '/apps/collectives/_collectives/trash');
@@ -112,6 +133,9 @@ class FeatureContext implements Context {
 		}
 		$this->assertStatusCode(200);
 		$this->assertCollectiveByName($collective);
+		if ($key && $value) {
+			$this->assertCollectiveProperty($collective, $key, $value);
+		}
 	}
 
 	/**
@@ -686,6 +710,23 @@ class FeatureContext implements Context {
 			Assert::assertContains($name, $collectiveNames);
 		} else {
 			Assert::assertNotContains($name, $collectiveNames);
+		}
+	}
+
+	/**
+	 * @param string    $name
+	 * @param string    $key
+	 * @param string    $value
+	 */
+	private function assertCollectiveProperty(string $name, string $key, string $value): void {
+		$jsonBody = $this->getJson();
+		foreach ($jsonBody['data'] as $collective) {
+			if ($collective['name'] === $name) {
+				Assert::assertEquals($collective[$key], $value,
+					'Expected ' . $key . ' to be ' . $value . ' in ' .
+					json_encode($collective, JSON_PRETTY_PRINT)
+				);
+			}
 		}
 	}
 
