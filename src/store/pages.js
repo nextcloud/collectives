@@ -9,6 +9,7 @@ import {
 	ADD_PAGE,
 	UPDATE_PAGE,
 	DELETE_PAGE_BY_ID,
+	SET_BACKLINKS,
 } from './mutations'
 
 import {
@@ -19,6 +20,7 @@ import {
 	TOUCH_PAGE,
 	RENAME_PAGE,
 	DELETE_PAGE,
+	GET_BACKLINKS,
 } from './actions'
 
 export const TEMPLATE_PAGE = 'Template'
@@ -30,6 +32,7 @@ export default {
 		sortBy: 'byTimestamp',
 		collapsed: {},
 		showTemplates: false,
+		backlinks: [],
 	},
 
 	getters: {
@@ -43,6 +46,12 @@ export default {
 				titlePart,
 			].filter(Boolean).map(encodeURIComponent).join('/')
 			return `/${pagePath}?fileId=${id}`
+		},
+
+		pagePathTitle: (_state, getters) => (page) => {
+			const { filePath, fileName, title } = page
+			const titlePart = fileName !== 'Readme.md' && title
+			return [filePath, titlePart].filter(Boolean).join('/')
 		},
 
 		currentPages(state, getters) {
@@ -155,6 +164,10 @@ export default {
 			return `${getters.pageUrl(getters.currentPage.parentId, getters.currentPage.id)}/touch`
 		},
 
+		backlinksUrl(_state, getters) {
+			return (parentId, pageId) => `${getters.pageUrl(parentId, pageId)}/backlinks`
+		},
+
 		collapsed(state) {
 			// Default to 'true' if unset
 			return pageId => state.collapsed[pageId] != null ? state.collapsed[pageId] : true
@@ -187,6 +200,10 @@ export default {
 			state.pages.splice(state.pages.findIndex(p => p.id === id), 1)
 		},
 
+		[SET_BACKLINKS](state, { pages }) {
+			state.backlinks = pages
+		},
+
 		// using camel case name so this works nicely with mapMutations
 		unsetPages(state) {
 			state.pages = []
@@ -194,6 +211,10 @@ export default {
 
 		sortPages(state, order) {
 			state.sortBy = order
+		},
+
+		unsetBacklinks(state) {
+			state.backlinks = []
 		},
 
 		toggleTemplates(state) {
@@ -296,5 +317,15 @@ export default {
 			commit('done', 'page', { root: true })
 		},
 
+		/**
+		 * Get list of backlinks for a page
+		 * @param {Object} page Page to get backlinks for
+		 */
+		async [GET_BACKLINKS]({ commit, getters, state }, page) {
+			commit('load', 'backlinks', { root: true })
+			const response = await axios.get(getters.backlinksUrl(page.parentId, page.id))
+			commit(SET_BACKLINKS, { pages: response.data.data })
+			commit('done', 'backlinks', { root: true })
+		},
 	},
 }
