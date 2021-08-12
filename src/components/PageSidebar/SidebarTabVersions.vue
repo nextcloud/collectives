@@ -1,12 +1,4 @@
 <template>
-	<!-- We're the only tab so far, so no need for AppSidebarTab
-	<AppSidebarTab
-		id="versions"
-		name="Versions"
-		icon="icon-history"
-		:active-tab="activeTab"
-		:class="{ 'icon-loading': loading }">
-	-->
 	<div id="versions">
 		<!-- loading -->
 		<div v-if="loading" class="emptycontent">
@@ -75,7 +67,6 @@
 			</template>
 		</EmptyContent>
 	</div>
-	<!-- </AppSidebarTab> -->
 </template>
 
 <script>
@@ -83,11 +74,11 @@ import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 import moment from '@nextcloud/moment'
 import { formatFileSize } from '@nextcloud/files'
 import { mapState, mapGetters } from 'vuex'
-import { SELECT_VERSION } from '../store/mutations'
-import { GET_VERSIONS } from '../store/actions'
+import { SELECT_VERSION } from '../../store/mutations'
+import { GET_VERSIONS } from '../../store/actions'
 
 export default {
-	name: 'SidebarVersionsTab',
+	name: 'SidebarTabVersions',
 
 	 components: {
 		EmptyContent,
