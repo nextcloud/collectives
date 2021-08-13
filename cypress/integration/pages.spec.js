@@ -31,7 +31,7 @@ describe('Page', function() {
 		cy.seedPage('Day 1', '', 'Readme.md')
 		cy.seedPage('Day 2', '', 'Readme.md')
 		cy.seedPage('#% special chars', '', 'Readme.md')
-		cy.seedPageContent('bob', 'Our Garden/Day 2.md', 'A test string with Day 2 in the middle.')
+		cy.seedPageContent('bob', 'Our Garden/Day 2.md', 'A test string with Day 2 in the middle and a [link to Day 1](/index.php/apps/collectives/Our%20Garden/Day%201).')
 		cy.seedPage('Template', '', 'Readme.md')
 		cy.seedPageContent('bob', 'Our Garden/Template.md', 'This is going to be our template.')
 	})
@@ -105,6 +105,14 @@ describe('Page', function() {
 				.type('Day 2')
 			cy.get('.unified-search__results-collectives_pages').should('contain', 'Day 2')
 			cy.get('.unified-search__results-collectives_pages_content').should('contain', 'with Day 2 in')
+		})
+	})
+
+	describe('Displaying backlinks', function() {
+		it('Lists backlinks for a page', function() {
+			cy.visit('/apps/collectives/Our%20Garden/Day%201')
+			cy.get('button.action-item.action-item--single.icon-menu').click()
+			cy.get('.app-sidebar-tabs__content').should('contain', 'Day 2')
 		})
 	})
 

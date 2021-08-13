@@ -13,12 +13,14 @@ use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Model\PageFile;
 use OCA\Collectives\Service\PageService;
+use OCP\IConfig;
 use PHPUnit\Framework\TestCase;
 
 class PageServiceTest extends TestCase {
 	private $pageMapper;
 	private $nodeHelper;
 	private $collectiveFolder;
+	private $config;
 	private $service;
 	private $userId = 'jane';
 	private $collective;
@@ -53,7 +55,11 @@ class PageServiceTest extends TestCase {
 		$userFolderHelper->method('get')
 			->willReturn($userFolder);
 
-		$this->service = new PageService($this->pageMapper, $this->nodeHelper, $collectiveMapper, $userFolderHelper);
+		$this->config = $this->getMockBuilder(IConfig::class)
+			->disableOriginalConstructor()
+			->getMock();
+
+		$this->service = new PageService($this->pageMapper, $this->nodeHelper, $collectiveMapper, $userFolderHelper, $this->config);
 
 		$this->collective = new Collective();
 		$this->collective->setCircleId('circleId');
@@ -280,5 +286,63 @@ class PageServiceTest extends TestCase {
 
 		self::assertEquals($pageFiles, $this->service->recurseFolder($this->userId, $folder));
 		self::assertEquals($pageFiles, $this->service->recurseFolder($this->userId, $folder));
+	}
+
+	public function testMatchBacklinks(): void {
+		$this->config->method('getSystemValue')
+			->willReturn(['nextcloud.local']);
+
+		$pageFile = new PageFile();
+		$pageFile->setId(123);
+		$pageFile->setCollectivePath('Collectives/mycollective');
+		$pageFile->setFilePath('page1/pageX');
+		$pageFile->setFileName('subpage2.md');
+		$pageFile->setTitle('subpage2');
+
+		$urlPathBase = '/apps/collectives/mycollective';
+		$urlPath = $urlPathBase . '/page1/pageX/subpage2';
+
+		// Relative link with fileId
+		self::assertTrue($this->service->matchBacklinks($pageFile, 'content with [a link](' . $urlPath . '?fileId=123).'));
+		self::assertTrue($this->service->matchBacklinks($pageFile, 'content with [a link](/index.php' . $urlPath . '?fileId=123).'));
+		self::assertTrue($this->service->matchBacklinks($pageFile, 'content with [a link to wrong path but correct fileId](' . $urlPathBase . '/subpage2?fileId=123).'));
+		self::assertTrue($this->service->matchBacklinks($pageFile, 'content with [a relative link](pageX/subpage2?fileId=123).'));
+		self::assertFalse($this->service->matchBacklinks($pageFile, 'content with [a link to wrong fileId](' . $urlPath . '?fileId=345).'));
+		self::assertFalse($this->service->matchBacklinks($pageFile, 'content with [a broken link(' . $urlPath . '?fileId=123).'));
+		self::assertFalse($this->service->matchBacklinks($pageFile, 'content with [a broken link] (' . $urlPath . '?fileId=123).'));
+
+		// Relative link without fileId
+		self::assertTrue($this->service->matchBacklinks($pageFile, 'content with [a link](' . $urlPath . ') in it.'));
+		self::assertFalse($this->service->matchBacklinks($pageFile, 'content with [a link to wrong path](' . $urlPathBase . '/page1/subpage2) in it.'));
+		self::assertFalse($this->service->matchBacklinks($pageFile, 'content with [a link to wrong webroot](/index.php/instance2' . $urlPath . ') in it.'));
+
+		// Absolute link with fileId
+		self::assertTrue($this->service->matchBacklinks($pageFile, 'content with [a link](http://nextcloud.local' . $urlPath . '?fileId=123) in it.'));
+		self::assertTrue($this->service->matchBacklinks($pageFile, 'content with [a link](https://nextcloud.local' . $urlPath . '?fileId=123) in it.'));
+		self::assertTrue($this->service->matchBacklinks($pageFile, 'content with [a link](https://nextcloud.local/index.php' . $urlPath . '?fileId=123) in it.'));
+		self::assertFalse($this->service->matchBacklinks($pageFile, 'content with [a link to wrong host (with fileId)](https://example.org/' . $urlPath . 'fileId=123) in it.'));
+
+		// Absolute link without fileId
+		self::assertTrue($this->service->matchBacklinks($pageFile, 'content with [a link](http://nextcloud.local' . $urlPath . ') in it.'));
+		self::assertTrue($this->service->matchBacklinks($pageFile, 'content with [a link](https://nextcloud.local' . $urlPath . ') in it.'));
+		self::assertTrue($this->service->matchBacklinks($pageFile, 'content with [a link with many slashes](https://nextcloud.local/////' . str_replace('/', '//', $urlPath) . ') in it.'));
+		self::assertFalse($this->service->matchBacklinks($pageFile, 'content with [a broken link](https://nextcloud.local' . $urlPath . ' in it.'));
+		self::assertFalse($this->service->matchBacklinks($pageFile, 'content with [a link to wrong instance](https://nextcloud.local/instance2' . $urlPath . ') in it.'));
+		self::assertFalse($this->service->matchBacklinks($pageFile, 'content with [a link to wrong host](https://anothercloud.com' . $urlPath . ') in it.'));
+		self::assertFalse($this->service->matchBacklinks($pageFile, 'content with [a link to wrong host](anothercloud.com' . $urlPath . ') in it.'));
+
+		\OC::$WEBROOT = 'mycloud';
+
+		// Relative link with fileId with webroot
+		self::assertTrue($this->service->matchBacklinks($pageFile, 'content with [a link with webroot](' . \OC::$WEBROOT . $urlPath . '?fileId=123).'));
+		// Relative link without fileId with webroot
+		self::assertTrue($this->service->matchBacklinks($pageFile, 'content with [a link with webroot](' . \OC::$WEBROOT . $urlPath . ') in it.'));
+		self::assertFalse($this->service->matchBacklinks($pageFile, 'content with [a link with missing webroot](' . $urlPath . ') in it.'));
+		// Absolute link with fileId with webroot
+		self::assertTrue($this->service->matchBacklinks($pageFile, 'content with [a link with webroot](http://nextcloud.local' . \OC::$WEBROOT . $urlPath . '?fileId=123) in it.'));
+		self::assertFalse($this->service->matchBacklinks($pageFile, 'content with [a link with missing webroot](http://nextcloud.local' . $urlPath . '?fileId=123) in it.'));
+		// Absolute link without fileId with webroot
+		self::assertTrue($this->service->matchBacklinks($pageFile, 'content with [a link with webroot](http://nextcloud.local' . \OC::$WEBROOT . $urlPath . ') in it.'));
+		self::assertFalse($this->service->matchBacklinks($pageFile, 'content with [a link with missing webroot](http://nextcloud.local' . $urlPath . ') in it.'));
 	}
 }

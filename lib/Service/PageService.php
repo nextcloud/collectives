@@ -14,6 +14,7 @@ use OCP\Files\Folder;
 use OCP\Files\InvalidPathException;
 use OCP\Files\NotPermittedException as FilesNotPermittedException;
 use OCP\Files\NotFoundException as FilesNotFoundException;
+use OCP\IConfig;
 use OCP\Lock\LockedException;
 
 class PageService {
@@ -31,6 +32,9 @@ class PageService {
 	/** @var UserFolderHelper */
 	private $userFolderHelper;
 
+	/** @var IConfig */
+	private $config;
+
 	/**
 	 * PageService constructor.
 	 *
@@ -38,15 +42,18 @@ class PageService {
 	 * @param NodeHelper       $nodeHelper
 	 * @param CollectiveMapper $collectiveMapper
 	 * @param UserFolderHelper $userFolderHelper
+	 * @param IConfig          $config
 	 */
 	public function __construct(PageMapper $pageMapper,
 								NodeHelper $nodeHelper,
 								CollectiveMapper $collectiveMapper,
-								UserFolderHelper $userFolderHelper) {
+								UserFolderHelper $userFolderHelper,
+								IConfig  $config) {
 		$this->pageMapper = $pageMapper;
 		$this->nodeHelper = $nodeHelper;
 		$this->collectiveMapper = $collectiveMapper;
 		$this->userFolderHelper = $userFolderHelper;
+		$this->config = $config;
 	}
 
 
@@ -379,7 +386,7 @@ class PageService {
 	 * @throws NotPermittedException
 	 */
 	public function recurseFolder(string $userId, Folder $folder): array {
-		// Find index page or create it if we have subpages but it doesn't exist
+		// Find index page or create it if we have subpages, but it doesn't exist
 		try {
 			$indexPage = $this->getPageByFile($this->getIndexPageFile($folder));
 		} catch (NotFoundException $e) {
@@ -410,7 +417,7 @@ class PageService {
 	 * @param string     $userId
 	 * @param Collective $collective
 	 *
-	 * @return array
+	 * @return PageFile[]
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
@@ -604,5 +611,80 @@ class PageService {
 
 		$this->revertSubFolders($folder);
 		return $pageFile;
+	}
+
+	/**
+	 * @param PageFile $page
+	 * @param string   $content
+	 *
+	 * @return bool
+	 */
+	public function matchBacklinks(PageFile $page, string $content): bool {
+		$prefix = '/\[[^\]]+\]\(';
+		$suffix = '\)/';
+
+		$protocol = 'https?:\/\/';
+		$trustedDomainConfig = (array)$this->config->getSystemValue('trusted_domains', []);
+		$trustedDomains = !empty($trustedDomainConfig) ? '(' . implode('|', $trustedDomainConfig) . ')' : 'localhost';
+
+		$basePath = str_replace('/', '/+', str_replace('/', '/+', preg_quote(trim(\OC::$WEBROOT, '/'), '/'))) . '(\/+index\.php)?';
+
+		$relativeUrl = '(?!' . $protocol . '[^\/]+)';
+		$absoluteUrl = $protocol . $trustedDomains . '(:[0-9]+)?';
+
+		$appPath = '\/+apps\/+collectives\/+';
+
+		// path t
+		$pagePath = str_replace('/', '/+', preg_quote(
+			implode('/', array_map(
+				'rawurlencode',
+				explode('/', explode('/', $page->getCollectivePath())[1])
+			)) .
+			($page->getFilePath() ? '/' : '') .
+			implode('/', array_map(
+				'rawurlencode',
+				explode('/', $page->getFilePath())
+			)) .
+			(($page->getFileName() === PageFile::INDEX_PAGE_TITLE . PageFile::SUFFIX) ? '' : '/' . rawurlencode($page->getTitle())),
+			'/'));
+
+		$fileId = '.+\?fileId=' . $page->getId();
+
+		$relativeFileIdPattern = $prefix . $relativeUrl . $fileId . $suffix;
+		$absoluteFileIdPattern = $prefix . $absoluteUrl . $basePath . $appPath . $fileId . $suffix;
+
+		$relativePathPattern = $prefix . $relativeUrl . $basePath . $appPath . $pagePath . $suffix;
+		$absolutePathPattern = $prefix . $absoluteUrl . $basePath . $appPath . $pagePath . $suffix;
+
+		return preg_match($relativeFileIdPattern, $content, $linkMatches) ||
+			preg_match($relativePathPattern, $content, $linkMatches) ||
+			preg_match($absoluteFileIdPattern, $content, $linkMatches) ||
+			preg_match($absolutePathPattern, $content, $linkMatches);
+	}
+
+	/**
+	 * @param string     $userId
+	 * @param Collective $collective
+	 * @param int        $parentId
+	 * @param int        $id
+	 *
+	 * @return PageFile[]
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function getBacklinks(string $userId, Collective $collective, int $parentId, int $id): array {
+		$page = $this->find($userId, $collective, $parentId, $id);
+		$allPages = $this->findAll($userId, $collective);
+
+		$backlinks = [];
+		foreach ($allPages as $p) {
+			$file = $this->nodeHelper->getFileById($this->getFolder($userId, $collective, $p->getId()), $p->getId());
+			$content = NodeHelper::getContent($file);
+			if ($this->matchBacklinks($page, $content)) {
+				$backlinks[] = $p;
+			}
+		}
+
+		return $backlinks;
 	}
 }
