@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.12.22 - 2021.08.16
+
+### ✨New
+* 🔗 Show backlinks to a page (#220).
+* 🎩 Allow circle admins to create, update and delete collectives (#217).
+
+### 🏗️Fixes
+* 📜 Highlight the landing page when it's active (#215).
+* 🧹 Clear page list when switching the collective (#221).
+* ♻️  Improvements to page list loading indicator.
+* 📝 Don't reload editor on page updates in preview mode (#222).
+
+### 🌎Translations
+* 🗣️ Initial German (formal) translation thanks to Joachim Sokolowski.
+* 🗣️ Updated Czech translation thanks to Pavel Borecki.
+* 🗣️ Updated French translation thanks to Nathan.
+
+### 🚧Updates & Tooling
+* ✅ Improvements on CI testing.
+* 🔌 Update all js dependencies that we can.
+
+
 ## 0.11.22 - 2021.08.02
 
 ### ✨New
