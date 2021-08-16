@@ -5,7 +5,7 @@
 
 ### 👥 Pozvěte do kolektivu nové lidi
 
-Ať už chcete přidat své přátele či celé skupiny, jděte do [aplikace Okruhy](/index.php/apps/circles/) a přidejte nové členy.
+Whether you want to add your friends or whole groups, follow the "manage members" link that you find in the action menu inside the collectives list on the left.
 
 ### 🌱 Vdechněte svému kolektivu život
 
@@ -18,7 +18,8 @@ Klikněte na tlačítko tužky a začněte! ↗️
 
 ## Také dobré vědět
 
-* Odkazujte na lokální stránky vybráním textu a zvolením „odkázat na soubor“.
-* Stejnou stránku může upravovat vícero lidí naráz.
-* Další informace o této aplikaci naleznete v [dokumentaci](https://collectivecloud.gitlab.io/collectives/).
+* Stránky je možné upravovat ve vícero lidech naráz.
+* Na místní stránky je možné se odkazovat označením textu a zvolením „odkázat na soubor“. Funguje i přetažení ze seznamu stránek do editoru.
+* Je možné přidávat šablony pro budoucí podstránky („Zobrazit šablony“ -> „Přidat šablonu pro podstránky“)
+* Více k aplikaci naleznete v [dokumentaci](https://collectivecloud.gitlab.io/collectives/).
 * Pokud máte dotazy, obraťte se o pomoc na [komunitu](https://help.nextcloud.com/c/apps/collectives/174).
