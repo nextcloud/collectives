@@ -1,22 +1,22 @@
-# Welcome to your new collective
+# Vítejte ve vašem novém kolektivu
 
-**Come, organize and build shared knowledge!**
+**Organizujte se a vytvářejte sdílené znalosti!**
 
 
-### 👥 Invite new people to the collective
+### 👥 Pozvěte do kolektivu nové lidi
 
 Whether you want to add your friends or whole groups, follow the "manage members" link that you find in the action menu inside the collectives list on the left.
 
-### 🌱 Bring life to your collective
+### 🌱 Vdechněte svému kolektivu život
 
-Create pages and share your thoughts that really matter. Whether it's a shared knowledge repository for the community or a handbook for your organisation – Collectives works!
+Vytvářejte stránky a sdílejte své myšlenky, které jsou opravdu důležité. Ať už se jedná o repozitář sdílených znalostí pro komunitu nebo příručka pro vaši organizaci – Kolektivy fungují!
 
-### 🛋️ Edit this landing page to feel like home
+### 🛋️ Upravte si tuto úvodní stránku tak, aby vám vyhovovala
 
-Push the pencil button to get started! ↗️
+Klikněte na tlačítko tužky a začněte! ↗️
 
 
-## Also good to know
+## Také dobré vědět
 
 * Stránky je možné upravovat ve vícero lidech naráz.
 * Na místní stránky je možné se odkazovat označením textu a zvolením „odkázat na soubor“. Funguje i přetažení ze seznamu stránek do editoru.
