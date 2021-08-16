@@ -22,6 +22,7 @@ class CollectiveInfo extends Collective {
 	public function __construct(Collective $collective, string $name, int $level = Member::LEVEL_MEMBER) {
 		$this->id = $collective->getId();
 		$this->circleUniqueId = $collective->getCircleId();
+		$this->conversationToken = $collective->getConversationToken();
 		$this->emoji = $collective->getEmoji();
 		$this->trashTimestamp = $collective->getTrashTimestamp();
 		$this->name = $name;
@@ -32,6 +33,7 @@ class CollectiveInfo extends Collective {
 		return [
 			'id' => $this->id,
 			'circleId' => $this->circleUniqueId,
+			'conversationToken' => $this->conversationToken,
 			'emoji' => $this->emoji,
 			'trashTimestamp' => $this->trashTimestamp,
 			'name' => $this->name,

@@ -148,6 +148,7 @@ class CollectiveServiceTest extends TestCase {
 			'id' => 123,
 			'emoji' => null,
 			'circleId' => null,
+			'conversationToken' => null,
 			'trashTimestamp' => null,
 			'name' => 'free',
 			'level' => Member::LEVEL_OWNER

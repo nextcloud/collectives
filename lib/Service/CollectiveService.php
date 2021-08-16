@@ -166,13 +166,14 @@ class CollectiveService {
 	 * @param string      $userId
 	 * @param int         $id
 	 * @param string|null $emoji
+	 * @param string|null $conversationToken
 	 *
 	 * @return CollectiveInfo
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 * @throws MissingDependencyException
 	 */
-	public function updateCollective(string $userId, int $id, string $emoji = null): CollectiveInfo {
+	public function updateCollective(string $userId, int $id, string $emoji = null, string $conversationToken = null): CollectiveInfo {
 		if (null === $collective = $this->collectiveMapper->findById($id, $userId)) {
 			throw new NotFoundException('Collective not found: ' . $id);
 		}
@@ -184,6 +185,10 @@ class CollectiveService {
 
 		if ($emoji) {
 			$collective->setEmoji($emoji);
+		}
+
+		if ($conversationToken) {
+			$collective->setConversationToken($conversationToken);
 		}
 
 		return new CollectiveInfo($this->collectiveMapper->update($collective),
