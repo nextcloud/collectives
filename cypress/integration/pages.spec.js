@@ -111,7 +111,7 @@ describe('Page', function() {
 	describe('Displaying backlinks', function() {
 		it('Lists backlinks for a page', function() {
 			cy.visit('/apps/collectives/Our%20Garden/Day%201')
-			cy.get('button.action-item.action-item--single.icon-menu').click()
+			cy.get('button.action-item.action-item--single.icon-menu-sidebar').click()
 			cy.get('.app-sidebar-tabs__content').should('contain', 'Day 2')
 		})
 	})
