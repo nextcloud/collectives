@@ -113,7 +113,6 @@ export default {
 }
 </script>
 
-// Copied from apps/files_versions/src/css/versions.css
 <style lang="scss" scoped>
 .app-content-list {
 	max-width: none;
@@ -141,15 +140,15 @@ export default {
 .app-content-list .app-content-list-item .app-content-list-item-link {
 	overflow: hidden;
 	text-overflow: ellipsis;
+}
+
+.app-content-list .app-content-list-item .app-content-list-item-line-one {
+	font-size: 120%;
 
 	// Crop the string at the beginning, not end
 	// TODO: Untested with RTL script
 	text-align: left;
 	direction: rtl;
-}
-
-.app-content-list .app-content-list-item .app-content-list-item-line-one {
-	font-size: 120%;
 }
 
 .app-content-list .app-content-list-item .app-content-list-item-line-two {

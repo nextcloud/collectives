@@ -1,7 +1,7 @@
 <template>
-	<div id="versions">
+	<AppContentList>
 		<!-- loading -->
-		<div v-if="loading" class="emptycontent">
+		<div v-if="loading('versions')" class="emptycontent">
 			<div class="icon icon-loading" />
 		</div>
 
@@ -11,52 +11,38 @@
 			<h2>{{ error }}</h2>
 		</div>
 
-		<!-- versions content -->
-		<template v-else-if="!loading && versions.length">
-			<ul>
-				<li :class="{active: !version}">
-					<div class="icon-container">
-						<img class="icon"
-							:src="iconUrl"
-							width="44"
-							height="44">
+		<!-- versions list -->
+		<template v-else-if="!loading('versions') && versions.length">
+			<div class="app-content-list-item"
+				:class="{active: !version}">
+				<div class="app-content-list-item-icon">
+					<div class="icon-page-white" />
+				</div>
+				<a class="app-content-list-item-link" @click="clickPreviewVersion(null)">
+					<div class="app-content-list-item-line-one" :title="pageFormattedTimestamp">
+						{{ t('collectives', 'Current version') }}
 					</div>
-					<div class="version-container">
-						<div>
-							<a class="openVersion" @click="clickPreviewVersion(null)">
-								<span class="versiondate has-tooltip" :title="pageFormattedTimestamp">
-									{{ t('collectives', 'Current version') }}
-								</span>
-							</a>
-						</div>
-						<div class="version-details">
-							<span class="size has-tooltip" :title="pageAltSize">{{ pageHumanReadableSize }}</span>
-						</div>
+					<div class="app-content-list-item-line-two" :title="pageAltSize">
+						{{ pageHumanReadableSize }}
 					</div>
-				</li>
-				<li v-for="v in versions"
-					:key="v.downloadUrl"
-					:class="{active: (version && v.timestamp === version.timestamp)}">
-					<div class="icon-container">
-						<img class="icon"
-							:src="iconUrl"
-							width="44"
-							height="44">
+				</a>
+			</div>
+			<div v-for="v in versions"
+				:key="v.downloadUrl"
+				class="app-content-list-item"
+				:class="{active: (version && v.timestamp === version.timestamp)}">
+				<div class="app-content-list-item-icon">
+					<div class="icon-page-white" />
+				</div>
+				<a class="app-content-list-item-link" @click="clickPreviewVersion(v)">
+					<div class="app-content-list-item-line-one live-relative-timestamp" :data-timestamp="v.millisecondsTimestamp" :title="v.formattedTimestamp">
+						{{ v.relativeTimestamp }}
 					</div>
-					<div class="version-container">
-						<div>
-							<a class="openVersion" @click="clickPreviewVersion(v)">
-								<span class="versiondate has-tooltip live-relative-timestamp" :data-timestamp="v.millisecondsTimestamp" :title="v.formattedTimestamp">
-									{{ v.relativeTimestamp }}
-								</span>
-							</a>
-						</div>
-						<div class="version-details">
-							<span class="size has-tooltip" :title="v.altSize">{{ v.humanReadableSize }}</span>
-						</div>
+					<div class="app-content-list-item-line-two" :title="v.altSize">
+						{{ v.humanReadableSize }}
 					</div>
-				</li>
-			</ul>
+				</a>
+			</div>
 		</template>
 
 		<!-- no versions found -->
@@ -66,14 +52,15 @@
 				{{ t( 'collectives', 'After editing you can find old versions of the page here.') }}
 			</template>
 		</EmptyContent>
-	</div>
+	</AppContentList>
 </template>
 
 <script>
+import AppContentList from '@nextcloud/vue/dist/Components/AppContentList'
 import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 import moment from '@nextcloud/moment'
 import { formatFileSize } from '@nextcloud/files'
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapMutations } from 'vuex'
 import { SELECT_VERSION } from '../../store/mutations'
 import { GET_VERSIONS } from '../../store/actions'
 
@@ -81,6 +68,7 @@ export default {
 	name: 'SidebarTabVersions',
 
 	 components: {
+		AppContentList,
 		EmptyContent,
 	},
 
@@ -106,7 +94,6 @@ export default {
 	data() {
 		return {
 			error: '',
-			loading: true,
 		}
 	},
 
@@ -115,28 +102,15 @@ export default {
 			versions: (state) => state.versions.versions,
 		}),
 		...mapGetters([
+			'loading',
 			'version',
 		]),
-
-		/**
-		 * @returns {object}
-		 */
-		pageTime() {
-			return moment.unix(this.pageTimestamp)
-		},
 
 		/**
 		 * @returns {string}
 		 */
 		pageFormattedTimestamp() {
-			return this.pageTime.format('LLL')
-		},
-
-		/**
-		 * @returns {string}
-		 */
-		iconUrl() {
-			return OC.MimeType.getIconUrl('text/markdown')
+			return moment.unix(this.pageTimestamp).format('LLL')
 		},
 
 		/**
@@ -165,20 +139,20 @@ export default {
 	},
 
 	methods: {
+		...mapMutations(['load', 'done']),
 
 		/**
 		 * Get versions of a page
 		 */
 		async getPageVersions() {
+			this.load('versions')
 			try {
-				this.loading = true
 				this.$store.dispatch(GET_VERSIONS, this.pageId)
-				this.loading = false
 			} catch (e) {
 				this.error = t('collectives', 'Could not get page versions')
-				this.loading = false
 				console.error('Failed to get page versions', e)
 			}
+			this.done('versions')
 		},
 
 		/**
@@ -194,67 +168,52 @@ export default {
 
 // Copied from apps/files_versions/src/css/versions.css
 <style lang="scss" scoped>
-.clear-float {
-	clear: both;
+.app-content-list {
+	max-width: none;
+	border-right: none;
 }
 
-li {
-	width: 100%;
-	cursor: default;
-	height: 56px;
-	float: left;
-	border-bottom: 1px solid rgba(100,100,100,.1);
+.app-content-list-item {
+	border-bottom: 1px solid rgba(100, 100, 100, 0.1);
 }
 
-li:last-child {
-	border-bottom: none;
+.app-content-list-item .app-content-list-item-icon {
+	line-height: 40px;
+	width: 26px;
+	height: 34px;
+	left: 12px;
+	font-size: 24px;
+	background-color: var(--color-background-darker);
+	border-radius: 4px;
 }
 
-li.active {
-	background-color: var(--color-background-dark);
+.app-content-list-item .app-content-list-item-icon div {
+	border-radius: 3px 12px 3px 3px;
 }
 
-a, div > span {
-	vertical-align: middle;
+.app-content-list .app-content-list-item .app-content-list-item-link {
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.app-content-list .app-content-list-item .app-content-list-item-line-one {
+	font-size: 120%;
+
+	// Crop the string at the beginning, not end
+	// TODO: Untested with RTL script
+	text-align: left;
+	direction: rtl;
+}
+
+.app-content-list .app-content-list-item .app-content-list-item-line-two {
 	opacity: .5;
 }
 
-li a {
-	padding: 15px 10px 11px;
+.app-content-list-item:hover {
+	background-color: var(--color-background-hover);
 }
 
-a:hover, a:focus {
-	opacity: 1;
-}
-
-.icon-container {
-	display: inline-block;
-	vertical-align: top;
-}
-
-img {
-	cursor: pointer;
-	padding-right: 4px;
-}
-
-img.icon {
-	cursor: default;
-}
-
-.version-container {
-	display: inline-block;
-}
-
-.versiondate {
-	min-width: 100px;
-	vertical-align: super;
-}
-
-.version-details {
-	text-align: left;
-}
-
-.version-details > span {
-	padding: 0 10px;
+.app-content-list-item .active {
+	background-color: var(--color-background-dark);
 }
 </style>
