@@ -1,24 +1,25 @@
-# Vítejte ve vašem novém kolektivu
+# Welcome to your new collective
 
-**Organizujte se a vytvářejte sdílené znalosti!**
-
-
-### 👥 Pozvěte do kolektivu nové lidi
-
-Ať už chcete přidat své přátele či celé skupiny, jděte do [aplikace Okruhy](/index.php/apps/circles/) a přidejte nové členy.
-
-### 🌱 Vdechněte svému kolektivu život
-
-Vytvářejte stránky a sdílejte své myšlenky, které jsou opravdu důležité. Ať už se jedná o repozitář sdílených znalostí pro komunitu nebo příručka pro vaši organizaci – Kolektivy fungují!
-
-### 🛋️ Upravte si tuto úvodní stránku tak, aby vám vyhovovala
-
-Klikněte na tlačítko tužky a začněte! ↗️
+**Come, organize and build shared knowledge!**
 
 
-## Také dobré vědět
+### 👥 Invite new people to the collective
 
-* Odkazujte na lokální stránky vybráním textu a zvolením „odkázat na soubor“.
-* Stejnou stránku může upravovat vícero lidí naráz.
-* Další informace o této aplikaci naleznete v [dokumentaci](https://collectivecloud.gitlab.io/collectives/).
+Whether you want to add your friends or whole groups, follow the "manage members" link that you find in the action menu inside the collectives list on the left.
+
+### 🌱 Bring life to your collective
+
+Create pages and share your thoughts that really matter. Whether it's a shared knowledge repository for the community or a handbook for your organisation – Collectives works!
+
+### 🛋️ Edit this landing page to feel like home
+
+Push the pencil button to get started! ↗️
+
+
+## Also good to know
+
+* Stránky je možné upravovat ve vícero lidech naráz.
+* Na místní stránky je možné se odkazovat označením textu a zvolením „odkázat na soubor“. Funguje i přetažení ze seznamu stránek do editoru.
+* Je možné přidávat šablony pro budoucí podstránky („Zobrazit šablony“ -> „Přidat šablonu pro podstránky“)
+* Více k aplikaci naleznete v [dokumentaci](https://collectivecloud.gitlab.io/collectives/).
 * Pokud máte dotazy, obraťte se o pomoc na [komunitu](https://help.nextcloud.com/c/apps/collectives/174).
