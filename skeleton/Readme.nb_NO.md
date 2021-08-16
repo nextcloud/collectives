@@ -1,22 +1,22 @@
-# Welcome to your new collective
+# Velkommen til din nye gemenskap
 
-**Come, organize and build shared knowledge!**
+*Ta del, organiser og bygg delt kunnskap!*
 
 
-### 👥 Invite new people to the collective
+### 🐾 Legg til dine venner i kollektivet
 
 Whether you want to add your friends or whole groups, follow the "manage members" link that you find in the action menu inside the collectives list on the left.
 
-### 🌱 Bring life to your collective
+### 🌱 Gi liv til din gemenskap
 
-Create pages and share your thoughts that really matter. Whether it's a shared knowledge repository for the community or a handbook for your organisation – Collectives works!
+Opprett sider og del kunnskap som betyr noe.
 
-### 🛋️ Edit this landing page to feel like home
+### 🛋️ Rediger denne landingssiden for å gjøre ting innbydende
 
-Push the pencil button to get started! ↗️
+Trykk på blyanten for å begynne. ↗️
 
 
-## Also good to know
+## Også nyttig å vite
 
 * Flere kan redigere samme side samtidig.
 * Lenk sammen lokale sider ved først å velge tekst, og så «lenk fil».
