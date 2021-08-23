@@ -16,6 +16,7 @@ use OCP\Files\Mount\IMountPoint;
 use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\Files\Storage\IStorageFactory;
 use OCP\IUser;
+use Psr\Log\LoggerInterface;
 
 class MountProvider implements IMountProvider {
 	/** @var CollectiveHelper */
@@ -23,6 +24,9 @@ class MountProvider implements IMountProvider {
 
 	/** @var CollectiveFolderManager */
 	private $collectiveFolderManager;
+
+	/** @var LoggerInterface */
+	private $logger;
 
 	/** @var IMimeTypeLoader */
 	private $mimeTypeLoader;
@@ -40,6 +44,7 @@ class MountProvider implements IMountProvider {
 	 * @param CollectiveFolderManager $collectiveFolderManager
 	 * @param IMimeTypeLoader         $mimeTypeLoader
 	 * @param IAppManager             $appManager
+	 * @param LoggerInterface         $logger
 	 * @param UserFolderHelper        $userFolderHelper
 	 */
 	public function __construct(
@@ -47,11 +52,13 @@ class MountProvider implements IMountProvider {
 		CollectiveFolderManager $collectiveFolderManager,
 		IMimeTypeLoader $mimeTypeLoader,
 		IAppManager $appManager,
+		LoggerInterface $logger,
 		UserFolderHelper $userFolderHelper) {
 		$this->collectiveHelper = $collectiveHelper;
 		$this->collectiveFolderManager = $collectiveFolderManager;
 		$this->mimeTypeLoader = $mimeTypeLoader;
 		$this->appManager = $appManager;
+		$this->logger = $logger;
 		$this->userFolderHelper = $userFolderHelper;
 	}
 
@@ -59,8 +66,6 @@ class MountProvider implements IMountProvider {
 	 * @param IUser $user
 	 *
 	 * @return array
-	 * @throws NotFoundException
-	 * @throws NotPermittedException
 	 */
 	public function getFoldersForUser(IUser $user): array {
 		$folders = [];
@@ -70,18 +75,27 @@ class MountProvider implements IMountProvider {
 		try {
 			$collectiveInfos = $this->collectiveHelper->getCollectivesForUser($user->getUID(), false);
 		} catch (QueryException $e) {
-			throw new NotFoundException($e->getMessage());
+			$this->log($e);
+			return $folders;
+		}
+		try {
+			$userFolder = $this->userFolderHelper->get($user->getUID());
+		} catch (NotPermittedException $e){
+			$this->log($e);
+			return $folders;
 		}
 		foreach ($collectiveInfos as $c) {
 			$mountPointName = $c->getName();
 			try {
 				$cacheEntry = $this->collectiveFolderManager->getFolderFileCache($c->getId(), $mountPointName);
 			} catch (FilesNotFoundException | Exception $e) {
-				throw new NotFoundException($e->getMessage());
+				$this->log($e);
+				// maybe some other caches can be found.
+				continue;
 			}
 			$folders[] = [
 				'folder_id' => $c->getId(),
-				'mount_point' => $this->userFolderHelper->get($user->getUID())->getName() . '/' . $mountPointName,
+				'mount_point' => $userFolder->getName() . '/' . $mountPointName,
 				'rootCacheEntry' => (isset($cacheEntry['fileid'])) ? Cache::cacheEntryFromData($cacheEntry, $this->mimeTypeLoader) : null
 			];
 		}
@@ -93,8 +107,6 @@ class MountProvider implements IMountProvider {
 	 * @param IStorageFactory $loader
 	 *
 	 * @return IMountPoint[]
-	 * @throws NotFoundException
-	 * @throws NotPermittedException
 	 */
 	public function getMountsForUser(IUser $user, IStorageFactory $loader) {
 		$folders = $this->getFoldersForUser($user);
@@ -110,7 +122,17 @@ class MountProvider implements IMountProvider {
 				);
 			}, $folders);
 		} catch (FilesNotFoundException | \Exception $e) {
-			throw new NotFoundException($e->getMessage());
+			$this->log($e);
+			return [];
 		}
+	}
+
+	/**
+	 * @param \Exception $e
+	 */
+	protected function log(\Exception $e) {
+		$this->logger->error('Collectives App Error: ' . $e->getMessage(),
+			['exception' => $e]
+		);
 	}
 }
