@@ -76,9 +76,6 @@ class MountProvider implements IMountProvider {
 	 */
 	public function getFoldersForUser(IUser $user): array {
 		$folders = [];
-		if (!$this->appManager->isEnabledForUser('circles', $user)) {
-			return $folders;
-		}
 		try {
 			$collectiveInfos = $this->collectiveHelper->getCollectivesForUser($user->getUID(), false);
 		} catch (QueryException $e) {
@@ -116,8 +113,11 @@ class MountProvider implements IMountProvider {
 	 * @return IMountPoint[]
 	 */
 	public function getMountsForUser(IUser $user, IStorageFactory $loader) {
-		$folders = $this->getFoldersForUser($user);
+		if (!$this->isEnabledForUser($user)) {
+			return [];
+		}
 
+		$folders = $this->getFoldersForUser($user);
 		try {
 			return array_map(function ($folder) use ($user, $loader) {
 				return $this->collectiveFolderManager->getMount(
@@ -132,6 +132,17 @@ class MountProvider implements IMountProvider {
 			$this->log($e);
 			return [];
 		}
+	}
+
+	/**
+	 * @param IUser $user
+	 *
+	 * @return bool
+	 */
+	protected function isEnabledForUser($user) {
+		return $this->appManager->isEnabledForUser('circles', $user)
+			&& $this->appManager->isEnabledForUser('collectives', $user)
+			&& $user->getQuota() != '0 B';
 	}
 
 	/**
