@@ -25,6 +25,7 @@ use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Files\Config\IMountProviderCollection;
 use OCP\Files\IMimeTypeLoader;
 use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 
 class Application extends App implements IBootstrap {
 	public const APP_NAME = 'collectives';
@@ -45,6 +46,7 @@ class Application extends App implements IBootstrap {
 				$c->get(CollectiveFolderManager::class),
 				$c->get(IMimeTypeLoader::class),
 				$c->get(IAppManager::class),
+				$c->get(LoggerInterface::class),
 				$c->get(UserFolderHelper::class)
 			);
 		});
