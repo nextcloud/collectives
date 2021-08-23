@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2021-08-16 11:30+0200\n"
-"PO-Revision-Date: 2021-08-04 20:33+0000\n"
+"PO-Revision-Date: 2021-08-23 09:29+0000\n"
 "Last-Translator: Nathan <bonnemainsnathan@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/fr/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.8.1-dev\n"
 
 #: /collectives/lib/Fs/UserFolderHelper.php:62
 #: /collectives/lib/Search/CollectiveProvider.php:58
@@ -171,7 +171,7 @@ msgstr "Le collectif et le cercle"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:17
 msgid "Only circle owners can delete a circle"
-msgstr ""
+msgstr "Seuls les propriétaires de cercles peuvent supprimer un cercle"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:19
 #: /collectives/specialVueFakeDummyForL10nScript.js:80
@@ -322,18 +322,16 @@ msgid "Add a page"
 msgstr "Ajouter une page"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:60
-#, fuzzy
 msgid "No backlinks available"
-msgstr "Aucune autre version disponible"
+msgstr "Aucun lien de maillage disponible"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:61
 msgid "If other pages link to this one, they will be listed here."
-msgstr ""
+msgstr "Si d'autres pages font référence à celle-ci, elles seront listées ici."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:62
-#, fuzzy
 msgid "Could not get page backlinks"
-msgstr "Impossible de récupérer les versions de la page"
+msgstr "Impossible de récupérer les liens de maillage de la page"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:63
 msgid "Current version"
@@ -370,19 +368,19 @@ msgstr "Supprimer la page"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:71
 msgid "Backlinks"
-msgstr ""
+msgstr "Liens de maillage"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:72
 msgid "Pages that link to this one"
-msgstr ""
+msgstr "Pages qui font référence à celle-ci"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:73
 msgid "Versions"
-msgstr ""
+msgstr "Versions"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:74
 msgid "Old versions of this page"
-msgstr ""
+msgstr "Anciennes versions de cette page"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:75
 msgid "Page deleted"
