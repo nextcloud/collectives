@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.13.22 - 2021.08.24
+
+### 🏗️Fixes
+* 💽 Do not try to create collectives folder if quota is 0 (#229).
+
+### 🌎Translations
+* 🗣️ Updated Czech translation thanks to Pavel Borecki.
+
 ## 0.12.22 - 2021.08.16
 
 ### ✨New
