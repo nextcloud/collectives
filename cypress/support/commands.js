@@ -78,16 +78,31 @@ Cypress.Commands.add('deleteCollective', (name) => {
 		})
 })
 
-Cypress.Commands.add('seedCircle', (name) => {
+Cypress.Commands.add('seedCircle', (name, config = null) => {
 	cy.visit('/apps/collectives')
 	cy.window()
 		.its('app')
 		.then(async app => {
-			await axios.post(
-				`${Cypress.env('baseUrl')}/ocs/v2.php/apps/circles/circles`,
+			const api = `${Cypress.env('baseUrl')}/ocs/v2.php/apps/circles/circles`
+			const response = await axios.post(api,
 				{ name, personal: false, local: true },
 				{ headers: { requesttoken: app.OC.requestToken } },
 			)
+			if (config) {
+				const circleId = response.data.ocs.data.id
+				// For now we only set the visibility
+				const bits = [
+					['visible', 8],
+					['open', 16],
+				]
+				const value = bits
+					.filter(([k, v]) => config[k])
+					.reduce((sum, [k, v]) => sum + v, 0)
+				await axios.put(`${api}/${circleId}/config`,
+					{ value },
+					{ headers: { requesttoken: app.OC.requestToken } },
+				)
+			}
 		})
 })
 

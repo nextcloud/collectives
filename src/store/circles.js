@@ -10,14 +10,16 @@ export default {
 
 	getters: {
 		availableCircles(state, _getters, rootState) {
-			return state.circles.filter(circle => {
-				const matchCircleId = c => {
-					return (c.circleId === circle.id)
-				}
-				const alive = rootState.collectives.collectives.find(matchCircleId)
-				const trashed = rootState.collectives.trashCollectives.find(matchCircleId)
-				return !alive && !trashed
-			})
+			return state.circles
+				.filter(circle => circle.initiator) // only circles i am a member of
+				.filter(circle => {
+					const matchCircleId = c => {
+						return (c.circleId === circle.id)
+					}
+					const alive = rootState.collectives.collectives.find(matchCircleId)
+					const trashed = rootState.collectives.trashCollectives.find(matchCircleId)
+					return !alive && !trashed
+				})
 		},
 	},
 
