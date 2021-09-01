@@ -5,6 +5,7 @@ namespace OCA\Collectives\Service;
 
 use daita\MySmallPhpTools\Exceptions\InvalidItemException;
 use OCA\Circles\CirclesManager;
+use OCA\Circles\Model\Probes\CircleProbe;
 use OCA\Circles\Exceptions\CircleNotFoundException;
 use OCA\Circles\Exceptions\FederatedItemException;
 use OCA\Circles\Exceptions\FederatedUserException;
@@ -98,7 +99,9 @@ class CircleHelper {
 	public function getCircles(?string $userId = null): array {
 		try {
 			$this->startSession($userId);
-			$circles = $this->circlesManager->getCircles();
+			$probe = new CircleProbe();
+			$probe->mustBeMember();
+			$circles = $this->circlesManager->getCircles($probe);
 		} catch (FederatedUserNotFoundException |
 				 SingleCircleNotFoundException |
 				 RequestBuilderException |

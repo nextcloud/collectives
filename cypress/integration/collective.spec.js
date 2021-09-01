@@ -30,9 +30,9 @@ describe('Collective', function() {
 		cy.login('bob', 'bob', '/apps/collectives')
 		cy.seedCollective('Preexisting Collective')
 		cy.seedCircle('Preexisting Circle')
-		cy.seedCircle('History Club')
+		cy.seedCircle('History Club', { visible: true, open: true })
 		cy.login('jane', 'jane', '/apps/collectives')
-		cy.seedCircle('Foreign Circle')
+		cy.seedCircle('Foreign Circle', { visible: true, open: true })
 	})
 
 	describe('in the files app', function() {
@@ -83,12 +83,19 @@ describe('Collective', function() {
 			function() {
 				cy.login('bob', 'bob', '/apps/collectives')
 				cy.get('button.icon-circles').click()
+				cy.get('.multiselect__option').should('not.contain', 'Foreign')
 				cy.get('.multiselect__option [title*=History]').click()
 				cy.get('input.icon-confirm').click()
 				cy.get('#titleform input').should('have.value', 'History Club')
 				cy.get('.toast-info').should('contain',
 					'Created collective "History Club" for existing circle.'
 				)
+			})
+		it('collectives of visible circles only show for members',
+			function() {
+				cy.login('jane', 'jane', '/apps/collectives')
+				cy.get('button.icon-circles')
+				cy.get('.app-navigation-entry').should('not.contain', 'History Club')
 			})
 		it('creates collectives for admins of corresponding circle',
 			function() {
