@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.14.21 - 2021.09.02
+
+### 🚧Tooling
+* 🏷️ Handle existing tags better in Makefile.
+
 ## 0.13.21 - 2021.08.24
 
 ### 🏗️Fixes
