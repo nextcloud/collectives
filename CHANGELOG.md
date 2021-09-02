@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.14.22 - 2021.09.02
+
+### 🏗️Fixes
+* 🧷 Only display collective if user is in circle (#230).
+
+### 🚧Tooling
+* 🏷️ Handle existing tags better in Makefile.
+
 ## 0.13.22 - 2021.08.24
 
 ### 🏗️Fixes
