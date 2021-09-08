@@ -7,12 +7,12 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2021-08-16 11:30+0200\n"
-"PO-Revision-Date: 2021-08-23 09:29+0000\n"
-"Last-Translator: Nathan <bonnemainsnathan@gmail.com>\n"
-"Language-Team: French <https://hosted.weblate.org/projects/collectives/"
-"collectives-app/fr/>\n"
-"Language: fr\n"
+"POT-Creation-Date: 2021-08-23 09:40+0200\n"
+"PO-Revision-Date: 2021-09-05 02:32+0000\n"
+"Last-Translator: Leonardo Colman <leonardo.dev@colman.com.br>\n"
+"Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
+"collectives/collectives-app/pt_BR/>\n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -26,36 +26,36 @@ msgstr ""
 #: /collectives/specialVueFakeDummyForL10nScript.js:38
 #: /collectives/specialVueFakeDummyForL10nScript.js:78
 msgid "Collectives"
-msgstr "Collectifs"
+msgstr "Coletivos"
 
 #: /collectives/lib/Search/PageContentProvider.php:74
 #: /collectives/lib/Search/PageContentProvider.php:133
 msgid "Collectives: page content"
-msgstr "Collectifs : Contenu de page"
+msgstr "Coletivos: conteúdo da página"
 
 #: /collectives/lib/Search/PageContentProvider.php:120
 msgid "in page {page} from collective {collective}"
-msgstr "dans la page {page} du collectif {collective}"
+msgstr "na página {page} do coletivo {collective}"
 
 #: /collectives/lib/Search/PageProvider.php:66
 #: /collectives/lib/Search/PageProvider.php:120
 msgid "Collectives: pages"
-msgstr "Collectifs : Pages"
+msgstr "Coletivos: páginas"
 
 #: /collectives/lib/Search/PageProvider.php:108
 msgid "in Collective {collective}"
-msgstr "dans le collectif {collective}"
+msgstr "no Coletivo {collective}"
 
 #: /collectives/lib/Service/CollectiveService.php:116
 #, php-format
 msgid "Created collective \"%s\" for existing circle."
-msgstr "Collectif « %s » créé pour le cercle existant."
+msgstr "Coletivo \"%s\" criado para o círculo."
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:3
 msgid "A place for activist and community projects to build shared knowledge"
 msgstr ""
-"Un lieu où les projets des activistes et des communautés peuvent développer "
-"des connaissances communes"
+"Um local para ativistas e projetos comunitários construírem uma base de "
+"conhecimentos"
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:4
 msgid ""
@@ -77,210 +77,207 @@ msgid ""
 "In your Nextcloud instance, simply navigate to **»Apps«**, find the\n"
 "**»Circles«** and **»Collectives«** apps and enable them."
 msgstr ""
-"Collectifs est une application Nextcloud qui permet aux activistes et aux "
-"projets communautaires de s'organiser ensemble.\n"
-"Venez et rassemblez-vous en collectifs pour développer des connaissances "
-"partagées.\n"
+"Coletivos é um aplicativo do Nextcloud para ativistas e projetos da "
+"comunidade para facilitar a organização.\n"
+"Venha e se una a coletivos para criar conhecimento compartilhado\n"
 "\n"
-"* 👥 **Fonctionnement collectif et non hiérarchique** : Les collectifs sont\n"
-"  liés à un [Cercle Nextcloud] (https://github.com/nextcloud/circles) qui\n"
-"  appartient au collectif.\n"
-"* 📝 **Édition collaborative de pages** comme on le connaît sur Etherpad "
-"grâce à\n"
-"  l'[application Texte] (https://github.com/nextcloud/text).\n"
-"* 🔤 **Syntaxe bien connue de [Markdown](https://en.wikipedia.org/wiki/"
+"* 👥 **Coletivo com fluxos não-hierarquicos**:  Coletivos estão sempre "
+"ligados a um [Círculo Nextcloud](https://github.com/nextcloud/circles) e são "
+"de propriedade do mesmo.\n"
+"* 📝 **Edição de página colaborativa** semelhante ao Etherpad graças ao ["
+"Aplicativo de Texto](https://github.com/nextcloud/text)\n"
+"* 🔤 **Sintaxe bem conhecida [Markdown](https://en.wikipedia.org/wiki/"
 "Markdown)**\n"
-"  pour le formatage des pages.\n"
+"  para formatação.\n"
 "\n"
-"## Installation\n"
+"## Instalação\n"
 "\n"
-"Dans votre instance Nextcloud, rendez-vous simplement dans "
-"**« Applications »**, trouvez les\n"
-"applications **« Cercles »** et **« Collectifs »** et activez-les."
+"No seu  Nextcloud, navege para **Aplicativos**, encontre  **Círculos** e  "
+"**Coletivos** e habilite-os."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:1
 msgid "The contacts app is required to manage members"
-msgstr "L'application Contacts est requise pour gérer les membres"
+msgstr "O aplicativo Contatos é necessário para gerrenciar membros"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:2
 msgid "Collective not found:"
-msgstr "Collectif introuvable :"
+msgstr "Coletivo não encontrado:"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:3
 msgid "You're not part of a collective with that name."
-msgstr "Vous ne faites pas partie d'un collectif portant ce nom."
+msgstr "Você não faz parte de um coletivo com este nome."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:4
 msgid "Select a collective or create a new one on the left."
-msgstr "Sélectionnez un collectif ou créez en un sur la gauche."
+msgstr "Escolha um coletivo ou crie um novo à esquerda."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:5
 msgid "Print"
-msgstr "Imprimer"
+msgstr "Imprimir"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:6
 msgid "Manage members"
-msgstr "Gérer les membres"
+msgstr "Gerenciar membros"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:7
 msgid "Delete"
-msgstr "Supprimer"
+msgstr "Excluir"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:8
 msgid "Change emoji"
-msgstr "Modifier l'émoji"
+msgstr "Mudar emoji"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:8
 #: /collectives/specialVueFakeDummyForL10nScript.js:21
 msgid "Add emoji"
-msgstr "Ajouter un émoji"
+msgstr "Adicionar emoji"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:9
 msgid "Deleted collectives"
-msgstr "Collectifs supprimés"
+msgstr "Excluir coletivos"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:10
 #: /collectives/specialVueFakeDummyForL10nScript.js:29
 msgid "Restore"
-msgstr "Restaurer"
+msgstr "Recuperar"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:11
 msgid "Delete permanently"
-msgstr "Supprimer définitivement"
+msgstr "Remover permanentemente"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:12
 msgid "Permanently delete collective »{collective}«"
-msgstr "Supprimer définitivement le collectif « {collective} »"
+msgstr "Coletivo {collective} removido permanentemente"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:13
 msgid "Delete corresponding circle along with the collective?"
-msgstr "Supprimer le cercle correspondant avec le collectif ?"
+msgstr "Remover o círculo junto com o coletivo?"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:14
 msgid "Cancel"
-msgstr "Annuler"
+msgstr "Cancelar"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:15
 msgid "Only collective"
-msgstr "Seulement le collectif"
+msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:16
 #: /collectives/specialVueFakeDummyForL10nScript.js:18
 msgid "Collective and circle"
-msgstr "Le collectif et le cercle"
+msgstr "Coletivo e círculo"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:17
 msgid "Only circle owners can delete a circle"
-msgstr "Seuls les propriétaires de cercles peuvent supprimer un cercle"
+msgstr "Apenas donos de círculos podem remover um círculo"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:19
 #: /collectives/specialVueFakeDummyForL10nScript.js:80
 msgid "Create new collective"
-msgstr "Créer un nouveau collectif"
+msgstr "Criar novo coletivo"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:20
 msgid "Create collective for existing circle"
-msgstr "Créer un collectif pour un cercle existant"
+msgstr "Criar coletivo para círculo existente"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:22
 msgid "New collective name"
-msgstr "Nom du nouveau collectif"
+msgstr "Novo nome para o coletivo"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:23
 msgid "Select circle..."
-msgstr "Sélectionner un cercle…"
+msgstr "Selecionar círculo..."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:24
 msgid "Select a collective"
-msgstr "Sélectionner un collectif"
+msgstr "Selecionar um coletivo"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:25
 msgid "Page not found:"
-msgstr "Page introuvable :"
+msgstr "Página não encontrada:"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:26
 msgid "Could not find the Page."
-msgstr "Impossible de trouver la page."
+msgstr "Não foi possível encontrar a página."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:27
 msgid "Select a page from the list or create a new one."
-msgstr "Sélectionnez une page de la liste ou créez-en une nouvelle."
+msgstr "Selecione uma página da lista ou crie uma nova."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:28
 msgid "Restore this version"
-msgstr "Restaurer cette version"
+msgstr "Recuperar esta versão"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:30
 msgid "Reverted {page} to revision {timestamp}."
-msgstr "{page} restaurée à la révision {timestamp}."
+msgstr "Página {page} revertida para revisão imestamp}."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:31
 msgid "Failed to revert {page} to revision {timestamp}."
-msgstr "Échec de la restauration de {page} à la révision {timestamp}."
+msgstr "Reversão de {page} para revisão {timestamp} falhou."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:32
 #: /collectives/specialVueFakeDummyForL10nScript.js:41
 msgid "Template"
-msgstr "Modèle"
+msgstr "Template"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:33
 msgid "Title"
-msgstr "Nom"
+msgstr "Título"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:34
 msgid "Stop editing"
-msgstr "Arrêter la modification"
+msgstr "Parar de editar"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:34
 msgid "Start editing"
-msgstr "Commencer la modification"
+msgstr "Começar a editar"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:35
 msgid "Done"
-msgstr "Terminé"
+msgstr "Concluído"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:35
 msgid "Edit"
-msgstr "Modifier"
+msgstr "Editar"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:36
 msgid "Hide all subpages"
-msgstr "Masquer toutes les sous-pages"
+msgstr "Esconder todas as subpáginas"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:37
 msgid "Show all subpages"
-msgstr "Afficher toutes les sous-pages"
+msgstr "Mostrar todas as subpáginas"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:39
 msgid "Could not rename the page"
-msgstr "Impossible de renommer la page"
+msgstr "Não foi possível renomear a página"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:40
 msgid "Expand subpage list"
-msgstr "Étendre la liste des sous-pages"
+msgstr "Expandir lista de subpáginas"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:40
 msgid "Collapse subpage list"
-msgstr "Fermer la liste des sous-pages"
+msgstr "Esconder lista de subpáginas"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:42
 msgid "Last edited by {user}"
-msgstr "Dernière modification par {user}"
+msgstr "Editador pela última vez por {user}"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:43
 msgid "Add a subpage"
-msgstr "Ajouter une sous-page"
+msgstr "Adicionar subpágina"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:44
 #: /collectives/specialVueFakeDummyForL10nScript.js:55
 #: /collectives/specialVueFakeDummyForL10nScript.js:69
 msgid "Edit template for subpages"
-msgstr "Modifier le modèle pour les sous-pages"
+msgstr "Editar template para subpáginas"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:45
 #: /collectives/specialVueFakeDummyForL10nScript.js:56
 msgid "Add template for subpages"
-msgstr "Ajouter un modèle de sous-page"
+msgstr "Adicionar template para subpáginas"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:46
 #: /collectives/specialVueFakeDummyForL10nScript.js:48
@@ -288,120 +285,118 @@ msgstr "Ajouter un modèle de sous-page"
 #: /collectives/specialVueFakeDummyForL10nScript.js:59
 #: /collectives/specialVueFakeDummyForL10nScript.js:77
 msgid "Could not create the page"
-msgstr "Impossible de créer la page"
+msgstr "Não foi possível criar a página"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:47
 #: /collectives/specialVueFakeDummyForL10nScript.js:58
 msgid "New Page"
-msgstr "Nouvelle page"
+msgstr "Nova página"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:49
 #: /collectives/specialVueFakeDummyForL10nScript.js:50
 msgid "Hide templates"
-msgstr "Masquer les modèles"
+msgstr "Esconder templates"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:49
 #: /collectives/specialVueFakeDummyForL10nScript.js:50
 msgid "Show templates"
-msgstr "Afficher les modèles"
+msgstr "Mostrar templates"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:51
 msgid "Sort order"
-msgstr "Ordre de tri"
+msgstr "Ordenar"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:52
 msgid "Sort by last modification"
-msgstr "Trier par date de dernière modification"
+msgstr "Ordenar por última modificação"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:53
 msgid "Sort by title"
-msgstr "Trier par nom"
+msgstr "Ordenar por título"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:54
 msgid "Add a page"
-msgstr "Ajouter une page"
+msgstr "Adicionar página"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:60
 msgid "No backlinks available"
-msgstr "Aucun lien de maillage disponible"
+msgstr "Nenhum backling disponível"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:61
 msgid "If other pages link to this one, they will be listed here."
-msgstr "Si d'autres pages font référence à celle-ci, elles seront listées ici."
+msgstr "Se outras páginas fizerem link para esta, elas estarão listadas aqui."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:62
 msgid "Could not get page backlinks"
-msgstr "Impossible de récupérer les liens de maillage de la page"
+msgstr "Não foi possível recuperar backlinks"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:63
 msgid "Current version"
-msgstr "Version actuelle"
+msgstr "Versão atual"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:64
 msgid "No other versions available"
-msgstr "Aucune autre version disponible"
+msgstr "Não há outras versões disponíveis"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:65
 msgid "After editing you can find old versions of the page here."
-msgstr ""
-"Après l'avoir modifiée vous trouverez les anciennes versions de cette page "
-"ici."
+msgstr "Após editar vocẽ pode encontrar versões antigas da página aqui."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:66
 msgid "Could not get page versions"
-msgstr "Impossible de récupérer les versions de la page"
+msgstr "Não foi possível recuperar versões das páginas"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:67
 #: /collectives/src/util/xmlToVersionsList.js:29
 msgid "%n byte"
 msgid_plural "%n bytes"
-msgstr[0] "%n octet"
-msgstr[1] "%n octets"
+msgstr[0] "%n byte"
+msgstr[1] "%n bytes"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:68
 msgid "Show in Files"
-msgstr "Afficher dans Fichiers"
+msgstr "Mostrar em Arquivos"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:70
 msgid "Delete page"
-msgstr "Supprimer la page"
+msgstr "Remover página"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:71
 msgid "Backlinks"
-msgstr "Liens de maillage"
+msgstr "Backlinks"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:72
 msgid "Pages that link to this one"
-msgstr "Pages qui font référence à celle-ci"
+msgstr "Páginas que fazem referência a essa"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:73
 msgid "Versions"
-msgstr "Versions"
+msgstr "Versões"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:74
 msgid "Old versions of this page"
-msgstr "Anciennes versions de cette page"
+msgstr "Versões antigas desta página"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:75
 msgid "Page deleted"
-msgstr "Page supprimée"
+msgstr "Página removida"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:76
 msgid "Could not delete the page"
-msgstr "Impossible de supprimer la page"
+msgstr "Não foi possível remover página"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:79
 msgid "Come, organize and build shared knowledge!"
-msgstr "Venez, organisez et développez des connaissances partagées !"
+msgstr "Venha, organize e construa conhecimento compartilhado!"
 
 #: /collectives/templates/error.php:4
 msgid "Error: Missing apps"
-msgstr "Erreur : Applications manquantes"
+msgstr "Erro: Apps faltando"
 
 #: /collectives/templates/error.php:9
 msgid "The following dependency apps are missing: "
-msgstr "Les dépendances d'application suivantes sont manquantes : "
+msgstr "Os seguintes aplicativos não foram encontrados: "
 
 #: /collectives/templates/error.php:27
 msgid "Please ask the administrator to enable these apps."
-msgstr "Veuillez demander à l'administrateur d'activer ces applications."
+msgstr "Por favor solicite a um administrador que habilite estes apps."
