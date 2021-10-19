@@ -241,6 +241,12 @@ API PHP 8.0 Nextcloud 22:
   needs:
     - "Unit Test PHP 8.0 Nextcloud 22"
 
+API PHP 8.0 Nextcloud Master:
+  <<: *php-integration
+  image: registry.gitlab.com/collectivecloud/docker-builds:php8.0-ncmaster
+  needs:
+    - "Unit Test PHP 8.0 Nextcloud 22"
+
 OCC CLI Test:
   <<: *php
   stage: test integration
@@ -303,6 +309,13 @@ OCC CLI Test:
       - skeleton/**/*
       - templates/**/*
       - translationfiles/**/*
+
+Browser PHP 8.0 Nextcloud Master:
+  <<: *browser-test
+  services:
+    - name: registry.gitlab.com/collectivecloud/docker-builds:php8.0-ncmaster
+      alias: nextcloud.local
+      entrypoint: ["/usr/local/bin/run.sh"]
 
 Browser PHP 8.0 Nextcloud 22:
   <<: *browser-test
