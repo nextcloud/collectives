@@ -43,7 +43,7 @@ In your Nextcloud instance, simply navigate to **»Apps«**, find the
 		https://collectivecloud.gitlab.io/collectives/images/screenshot.png
 	</screenshot>
 	<dependencies>
-		<nextcloud min-version="22" max-version="22" />
+		<nextcloud min-version="22" max-version="23" />
 	</dependencies>
 	<background-jobs>
 		<job>OCA\Collectives\BackgroundJob\ExpirePageVersions</job>
