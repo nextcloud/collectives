@@ -92,10 +92,10 @@ class CollectiveVersionsExpireManager extends BasicEmitter {
 				$id = (int)$row['id'];
 				$folderMap[$id] = [
 					'id' => $id,
-					'mount_point' => $this->collectiveMapper->circleIdToName($row['circle_unique_id']),
+					'mount_point' => $this->collectiveMapper->circleIdToName($row['circle_unique_id'], true),
 				];
 			}
-		} catch (NotFoundException | NotPermittedException $e) {
+		} catch (NotFoundException $e) {
 		}
 
 		return $folderMap;
@@ -121,7 +121,7 @@ class CollectiveVersionsExpireManager extends BasicEmitter {
 	 * @throws MissingDependencyException
 	 */
 	public function expireFolder(array $folder): void {
-		if (isNull($this->versionsBackend)) {
+		if (is_null($this->versionsBackend)) {
 			throw new MissingDependencyException($this->dependencyInjectionError);
 		}
 
