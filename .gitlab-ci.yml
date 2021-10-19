@@ -45,6 +45,9 @@ stages:
   before_script:
     - npm install -g npm # install newest NPM (>=7)
     - npm install
+    - npm --version
+    - node --version
+    - git --version
 
 # Set any variables we need
 
