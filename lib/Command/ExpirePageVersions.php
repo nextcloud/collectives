@@ -7,7 +7,6 @@ namespace OCA\Collectives\Command;
 use OC\Core\Command\Base;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
-use OCA\Files_Versions\Versions\IVersion;
 use OCA\Collectives\Service\MissingDependencyException;
 use OCA\Collectives\Versions\CollectiveVersionsExpireManager;
 use Symfony\Component\Console\Input\InputInterface;
@@ -38,21 +37,10 @@ class ExpirePageVersions extends Base {
 	 * @throws NotPermittedException
 	 */
 	protected function execute(InputInterface $input, OutputInterface $output): int {
-		$this->expireManager->listen(CollectiveVersionsExpireManager::class, 'enterFolder', function (array $folder) use ($output) {
-			$output->writeln("<info>Expiring old page versions in '${folder['mount_point']}'</info>");
-		});
-		$this->expireManager->listen(CollectiveVersionsExpireManager::class, 'deleteVersion', function (IVersion $version) use ($output) {
-			$id = $version->getRevisionId();
-			$file = $version->getSourceFileName();
-			$output->writeln("<info>Expiring page version $id for '$file'</info>");
-		});
-
-		$this->expireManager->listen(CollectiveVersionsExpireManager::class, 'deleteFile', function ($id) use ($output) {
-			$output->writeln("<info>Cleaning up page versions for no longer existing file with id $id</info>");
-		});
-
 		try {
+			$output->write('<info>Expiring old page versions ... </info>');
 			$this->expireManager->expireAll();
+			$output->writeln('<info>done</info>');
 			return 0;
 		} catch (MissingDependencyException $e) {
 			$output->writeln('');
