@@ -43,7 +43,7 @@ stages:
     key: npm
     policy: pull
   before_script:
-    - npm install -g npm # install newest NPM (>=7)
+    - npm install -g "npm@7" # install newest npm of the 7.x.x series
     - npm install
     - npm --version
     - node --version
