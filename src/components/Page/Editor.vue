@@ -26,7 +26,8 @@ export default {
 
 		/**
 		 * Fetch text app handler from Viewer app
-		 * @returns {object}
+		 *
+		 * @return {object}
 		 */
 		handler() {
 			return OCA.Viewer.availableHandlers.find(h => h.id === 'text')

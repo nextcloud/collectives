@@ -71,7 +71,8 @@ export default {
 
 		/**
 		 * Get list of all collectives
-		 * @returns {Promise}
+		 *
+		 * @return {Promise}
 		 */
 		getCollectives() {
 			return this.$store.dispatch(GET_COLLECTIVES)
@@ -80,7 +81,8 @@ export default {
 
 		/**
 		 * Get list of all collectives in trash
-		 * @returns {Promise}
+		 *
+		 * @return {Promise}
 		 */
 		getTrashCollectives() {
 			return this.$store.dispatch(GET_TRASH_COLLECTIVES)

@@ -232,7 +232,8 @@ export default {
 
 		/**
 		 * Get list of all pages
-		 * @param {Boolean} setLoading Whether to set loading('collective')
+		 *
+		 * @param {boolean} setLoading Whether to set loading('collective')
 		 */
 		async [GET_PAGES]({ commit, getters }, setLoading = true) {
 			if (setLoading) {
@@ -248,6 +249,7 @@ export default {
 
 		/**
 		 * Get a single page and update it in the store
+		 *
 		 * @param {number} parentId Parent ID
 		 * @param {number} pageId Page ID
 		 */
@@ -260,7 +262,10 @@ export default {
 
 		/**
 		 * Create a new page
-		 * @param {Object} page Properties for the new page (title for now)
+		 *
+		 * @param page.commit
+		 * @param page.getters
+		 * @param {object} page Properties for the new page (title for now)
 		 */
 		async [NEW_PAGE]({ commit, getters }, page) {
 			// We'll be done when the title form has focus.
@@ -273,7 +278,10 @@ export default {
 
 		/**
 		 * Create a new page
-		 * @param {Object} parentPage Parent page for new template
+		 *
+		 * @param parentPage.commit
+		 * @param parentPage.getters
+		 * @param {object} parentPage Parent page for new template
 		 */
 		async [NEW_TEMPLATE]({ commit, getters }, parentPage) {
 			const page = {
@@ -296,6 +304,7 @@ export default {
 
 		/**
 		 * Rename the current page
+		 *
 		 * @param {string} newTitle new title for the page
 		 */
 		async [RENAME_PAGE]({ commit, getters, state }, newTitle) {
@@ -309,6 +318,11 @@ export default {
 
 		/**
 		 * Delete the current page
+		 *
+		 * @param root0
+		 * @param root0.commit
+		 * @param root0.getters
+		 * @param root0.state
 		 */
 		async [DELETE_PAGE]({ commit, getters, state }) {
 			commit('load', 'page', { root: true })
@@ -319,7 +333,11 @@ export default {
 
 		/**
 		 * Get list of backlinks for a page
-		 * @param {Object} page Page to get backlinks for
+		 *
+		 * @param page.commit
+		 * @param page.getters
+		 * @param {object} page Page to get backlinks for
+		 * @param page.state
 		 */
 		async [GET_BACKLINKS]({ commit, getters, state }, page) {
 			commit('load', 'backlinks', { root: true })

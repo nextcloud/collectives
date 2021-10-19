@@ -124,7 +124,8 @@ export default {
 
 		/**
 		 * Open existing or create new template page
-		 * @param {Object} parentPage Parent page
+		 *
+		 * @param {object} parentPage Parent page
 		 */
 		async editTemplate(parentPage) {
 			if (this.templatePage(parentPage.id)) {

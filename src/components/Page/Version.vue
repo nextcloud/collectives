@@ -58,14 +58,15 @@ export default {
 
 		/**
 		 * Return the URL for currently selected page version
-		 * @returns {string}
+		 *
+		 * @return {string}
 		 */
 		pageUrl() {
 			return this.version.downloadUrl
 		},
 
 		/**
-		 * @returns {string}
+		 * @return {string}
 		 */
 		restoreFolderUrl() {
 			return generateRemoteUrl(
@@ -74,7 +75,7 @@ export default {
 		},
 
 		/**
-		 * @returns {string}
+		 * @return {string}
 		 */
 		getUser() {
 			return getCurrentUser().uid

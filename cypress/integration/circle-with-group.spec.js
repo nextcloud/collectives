@@ -21,14 +21,14 @@
  */
 
 /**
-  * Regression test for #121.
-  * When user is not a direct member of a circle,
-  * but is a member of a group linked to the circle,
-  * then access to the collective only works half-way:
-  * You can see the collective on the list,
-  * but you can't see a list of pages or access any page.
-  *
-  */
+ * Regression test for #121.
+ * When user is not a direct member of a circle,
+ * but is a member of a group linked to the circle,
+ * then access to the collective only works half-way:
+ * You can see the collective on the list,
+ * but you can't see a list of pages or access any page.
+ *
+ */
 describe('Pages are accessible via group membership to circle', function() {
 	before(function() {
 		cy.login('jane', 'jane', '/apps/collectives')
