@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.15.22 - unreleased
+
+### 🌎Translations
+* 🗣️ Italian translation started thanks to Marco Trevisan.
+* 🗣️ Catalan translation completed thanks to Jordán.
+* 🗣️ Portuguese (Brazil) translation started thanks to Leonardo Colman.
+* 🗣️ French translation updated thanks to Nathan.
+
 ## 0.14.22 - 2021.09.02
 
 ### 🏗️Fixes
