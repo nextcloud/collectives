@@ -15,7 +15,9 @@ GITLAB_PROJECT_ID:=17827012
 GITLAB_URL:=https://gitlab.com
 GITLAB_API_URL:=$(GITLAB_URL)/api/v4/projects/$(GITLAB_PROJECT_ID)
 
-GIT_BRANCH:=$(shell git branch --show-current)
+# Upgrade: once we have git >= 2.22 everywhere we can use the more
+# readable GIT_BRANCH:=$(shell git branch --show-current)
+GIT_BRANCH:=$(shell git rev-parse --abbrev-ref HEAD)
 GIT_REMOTE:=$(shell git config --get "branch.${GIT_BRANCH}.remote")
 
 # So far just for removing releases again
