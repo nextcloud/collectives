@@ -3,7 +3,10 @@
 ## 0.15.22 - unreleased
 
 ### ✨New
-* Occ command to create new collectives.
+* ✨ Occ command to create new collectives.
+
+### 🏗️Fixes
+* 🧹 Fix ExpirePageVersions background job (#247).
 
 ### 🌎Translations
 * 🗣️ Italian translation started thanks to Marco Trevisan.
