@@ -35,6 +35,9 @@ export default {
 	actions: {
 		/**
 		 * Get list of all circles
+		 *
+		 * @param root0
+		 * @param root0.commit
 		 */
 		async [GET_CIRCLES]({ commit }) {
 			const response = await axios.get(generateOcsUrl('apps/circles/circles'))

@@ -4,8 +4,9 @@ import { formatFileSize } from '@nextcloud/files'
 
 /**
  * Extract list of versions from an XML-encoded Nextcloud DAV API response
+ *
  * @param {string} xml XML string
- * @returns {array|null}
+ * @return {Array | null}
  */
 export default function(xml) {
 	const json = xmlToJson(parseXml(xml))
@@ -35,8 +36,9 @@ export default function(xml) {
 /**
  * Convert an XML DOM object into a JSON object
  * Copied from apps/workflowengine/src/components/Checks/MultiselectTag/api.js
+ *
  * @param {object} xml XML object
- * @returns {object}
+ * @return {object}
  */
 function xmlToJson(xml) {
 	let obj = {}
@@ -73,8 +75,9 @@ function xmlToJson(xml) {
 /**
  * Read string with XML content into DOMParser()
  * Copied from apps/workflowengine/src/components/Checks/MultiselectTag/api.js
+ *
  * @param {string} xml XML string
- * @returns {object|null}
+ * @return {object|null}
  */
 function parseXml(xml) {
 	let dom = null

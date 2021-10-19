@@ -3,7 +3,7 @@
  *
  * @author Azul <azul@riseup.net>
  *
- * @license GNU AGPL version 3 or any later version
+ * @license AGPL-3.0-or-later
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -21,12 +21,12 @@
  */
 
 /**
-  * Regression test for #110 and #117.
-  * Without the circles app the whole server became unresponsive.
-  * If we have this regression this test will not only fail
-  * it will also break all following tests.
-  *
-  */
+ * Regression test for #110 and #117.
+ * Without the circles app the whole server became unresponsive.
+ * If we have this regression this test will not only fail
+ * it will also break all following tests.
+ *
+ */
 describe('Disabled circles app does not break files view', function() {
 
 	before(function() {

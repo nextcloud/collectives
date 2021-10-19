@@ -3,7 +3,7 @@
  *
  * @author Azul <azul@riseup.net>
  *
- * @license GNU AGPL version 3 or any later version
+ * @license AGPL-3.0-or-later
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -33,16 +33,29 @@ const trailingEmojiRegexp = new RegExp(
 	`${flexibleEmoji}(‍${flexibleEmoji})*$`, 'u'
 )
 
+/**
+ * @param name
+ */
 function emoji(name) {
 	const match = name.match(trailingEmojiRegexp)
 	return match && !match[0].match(/\d/) ? match[0] : ''
 }
 
 // name without the emoji if there is one
+/**
+ * @param name
+ */
 function title(name) {
 	return name.replace(new RegExp(`${emoji(name)}$`), '').trim()
 }
 
+/**
+ * @param root0
+ * @param root0.id
+ * @param root0.name
+ * @param root0.circleId
+ * @param root0.level
+ */
 export default function({ id, name, circleId, level }) {
 	return {
 		id,
