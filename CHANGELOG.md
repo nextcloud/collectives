@@ -1,6 +1,18 @@
 # Changelog
 
+## 0.15.21 - unreleased
+
+### 🌎Translations
+* 🗣️ Italian translation started thanks to Marco Trevisan.
+* 🗣️ Catalan translation completed thanks to Jordán.
+* 🗣️ Portuguese (Brazil) translation started thanks to Leonardo Colman.
+* 🗣️ French translation updated thanks to Nathan.
+
 ## 0.14.21 - 2021.09.02
+
+### 🏗️Fixes
+* 🧷 Only display collective if user is in circle (#230).
+>>>>>>> 3e220af (Update L10N files with new languages)
 
 ### 🚧Tooling
 * 🏷️ Handle existing tags better in Makefile.
