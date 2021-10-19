@@ -121,7 +121,7 @@ class CollectiveVersionsExpireManager extends BasicEmitter {
 	 * @throws MissingDependencyException
 	 */
 	public function expireFolder(array $folder): void {
-		if (isNull($this->versionsBackend)) {
+		if (is_null($this->versionsBackend)) {
 			throw new MissingDependencyException($this->dependencyInjectionError);
 		}
 
