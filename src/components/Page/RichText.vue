@@ -78,7 +78,7 @@ export default {
 		]),
 
 		/**
-		 * @returns {string}
+		 * @return {string}
 		 */
 		davUrl() {
 			return (this.pageUrl !== null ? this.pageUrl : this.currentPageDavUrl)
@@ -90,7 +90,7 @@ export default {
 		},
 
 		/**
-		 * @returns {object}
+		 * @return {object}
 		 */
 		markdownit() {
 			return MarkdownIt('commonmark', { html: false, breaks: false })
@@ -99,7 +99,7 @@ export default {
 		},
 
 		/**
-		 * @returns {string}
+		 * @return {string}
 		 */
 		htmlContent() {
 			return this.markdownit.render(this.pageContent)
@@ -157,7 +157,7 @@ export default {
 		},
 
 		/**
-		 * @returns {object}
+		 * @return {object}
 		 */
 		createEditor() {
 			return new Editor({

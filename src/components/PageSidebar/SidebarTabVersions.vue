@@ -107,21 +107,21 @@ export default {
 		]),
 
 		/**
-		 * @returns {string}
+		 * @return {string}
 		 */
 		pageFormattedTimestamp() {
 			return moment.unix(this.pageTimestamp).format('LLL')
 		},
 
 		/**
-		 * @returns {string}
+		 * @return {string}
 		 */
 		pageHumanReadableSize() {
 			return formatFileSize(this.pageSize)
 		},
 
 		/**
-		 * @returns {string}
+		 * @return {string}
 		 */
 		pageAltSize() {
 			return n('files', '%n byte', '%n bytes', this.pageSize)
@@ -157,6 +157,7 @@ export default {
 
 		/**
 		 * Select page version object to display
+		 *
 		 * @param {object} version Page version object
 		 */
 		clickPreviewVersion(version) {

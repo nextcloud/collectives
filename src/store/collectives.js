@@ -93,6 +93,9 @@ export default {
 	actions: {
 		/**
 		 * Get list of all collectives
+		 *
+		 * @param root0
+		 * @param root0.commit
 		 */
 		async [GET_COLLECTIVES]({ commit }) {
 			commit('load', 'collectives', { root: true })
@@ -103,6 +106,9 @@ export default {
 
 		/**
 		 * Get list of all collectives in trash
+		 *
+		 * @param root0
+		 * @param root0.commit
 		 */
 		async [GET_TRASH_COLLECTIVES]({ commit }) {
 			commit('load', 'collectiveTrash')
@@ -113,7 +119,9 @@ export default {
 
 		/**
 		 * Create a new collective with the given properties
-		 * @param {Object} collective Properties for the new collective
+		 *
+		 * @param collective.commit
+		 * @param {object} collective Properties for the new collective
 		 */
 		async [NEW_COLLECTIVE]({ commit }, collective) {
 			const response = await axios.post(
@@ -126,7 +134,9 @@ export default {
 
 		/**
 		 * Update a collective with the given properties
-		 * @param {Object} collective Properties for the collective
+		 *
+		 * @param collective.commit
+		 * @param {object} collective Properties for the collective
 		 */
 		async [UPDATE_COLLECTIVE]({ commit }, collective) {
 			const response = await axios.put(
@@ -138,7 +148,11 @@ export default {
 
 		/**
 		 * Trash a collective with the given id
-		 * @param {Number} id ID of the colletive to be trashed
+		 *
+		 * @param root0
+		 * @param root0.id
+		 * @param root0.commit
+		 * @param {number} id ID of the colletive to be trashed
 		 */
 		async [TRASH_COLLECTIVE]({ commit }, { id }) {
 			const response = await axios.delete(generateUrl('/apps/collectives/_collectives/' + id))
@@ -147,7 +161,11 @@ export default {
 
 		/**
 		 * Restore a collective with the given id from trash
-		 * @param {Number} id ID of the colletive to be trashed
+		 *
+		 * @param root0
+		 * @param root0.id
+		 * @param root0.commit
+		 * @param {number} id ID of the colletive to be trashed
 		 */
 		async [RESTORE_COLLECTIVE]({ commit }, { id }) {
 			const response = await axios.patch(generateUrl('/apps/collectives/_collectives/trash/' + id))
@@ -156,7 +174,8 @@ export default {
 
 		/**
 		 * Delete a collective with the given id from trash
-		 * @param {Number} id ID of the colletive to be trashed
+		 *
+		 * @param {number} id ID of the colletive to be trashed
 		 * @param {boolean} circle Whether to delete the circle as well
 		 */
 		async [DELETE_COLLECTIVE]({ commit }, { id, circle }) {

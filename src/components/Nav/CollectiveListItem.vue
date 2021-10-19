@@ -113,8 +113,9 @@ export default {
 
 		/**
 		 * Update the emoji of a collective
-		 * @param {String} emoji Emoji
-		 * @returns {Promise}
+		 *
+		 * @param {string} emoji Emoji
+		 * @return {Promise}
 		 */
 		updateEmoji(emoji) {
 			const collective = this.collective
@@ -125,8 +126,9 @@ export default {
 
 		/**
 		 * Trash a collective with the given name
-		 * @param {Object} collective Properties of the collective
-		 * @returns {Promise}
+		 *
+		 * @param {object} collective Properties of the collective
+		 * @return {Promise}
 		 */
 		trashCollective(collective) {
 			if (this.collectiveParam === collective.name) {

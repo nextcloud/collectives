@@ -61,8 +61,9 @@ export default {
 
 		/**
 		 * Restore a collective with the given name from trash
-		 * @param {Object} collective Properties of the collective
-		 * @returns {Promise}
+		 *
+		 * @param {object} collective Properties of the collective
+		 * @return {Promise}
 		 */
 		restoreCollective(collective) {
 			return this.$store.dispatch(RESTORE_COLLECTIVE, collective)
@@ -71,9 +72,10 @@ export default {
 
 		/**
 		 * Delete a collective with the given name from trash
-		 * @param {Object} collective Properties of the collective
+		 *
+		 * @param {object} collective Properties of the collective
 		 * @param {boolean} circle Whether to delete the circle as well
-		 * @returns {Promise}
+		 * @return {Promise}
 		 */
 		deleteCollective(collective, circle) {
 			return this.$store.dispatch(DELETE_COLLECTIVE, { ...collective, circle })
