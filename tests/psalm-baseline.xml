@@ -23,6 +23,11 @@
       <code>CollectiveStorage</code>
     </MissingDependency>
   </file>
+  <file src="lib/Command/CreateCollective.php">
+    <UndefinedClass occurrences="1">
+      <code>Base</code>
+    </UndefinedClass>
+  </file>
   <file src="lib/Command/ExpirePageVersions.php">
     <UndefinedClass occurrences="1">
       <code>Base</code>

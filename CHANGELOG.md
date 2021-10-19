@@ -2,6 +2,9 @@
 
 ## 0.15.21 - unreleased
 
+### ✨New
+* Occ command to create new collectives.
+
 ### 🌎Translations
 * 🗣️ Italian translation started thanks to Marco Trevisan.
 * 🗣️ Catalan translation completed thanks to Jordán.
