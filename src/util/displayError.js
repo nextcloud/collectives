@@ -1,8 +1,8 @@
 import { showWarning, showError } from '@nextcloud/dialogs'
 
 /**
- * @param msg
- * @param details
+ * @param {string} msg the error message
+ * @param {string} details details to be provided with the error
  */
 function content(msg, details) {
 	return details
@@ -11,7 +11,7 @@ function content(msg, details) {
 }
 
 /**
- * @param details
+ * @param {string} details details to be provided with the error
  */
 function options(details) {
 	return {
@@ -20,8 +20,8 @@ function options(details) {
 }
 
 /**
- * @param msg
- * @param e
+ * @param {string} msg the error message
+ * @param {Error} e request exception from axios
  */
 function showRequestException(msg, e) {
 	const details = e.response && e.response.data

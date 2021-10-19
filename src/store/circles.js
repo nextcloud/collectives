@@ -36,8 +36,8 @@ export default {
 		/**
 		 * Get list of all circles
 		 *
-		 * @param root0
-		 * @param root0.commit
+		 * @param {object} store the vuex store
+		 * @param {Function} store.commit commit changes
 		 */
 		async [GET_CIRCLES]({ commit }) {
 			const response = await axios.get(generateOcsUrl('apps/circles/circles'))
