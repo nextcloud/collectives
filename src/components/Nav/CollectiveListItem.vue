@@ -111,10 +111,6 @@ export default {
 			return this.collectiveParam === collective.name
 		},
 
-		newCollective(collective) {
-			this.$emit('newCollective', collective)
-		},
-
 		/**
 		 * Update the emoji of a collective
 		 * @param {String} emoji Emoji
