@@ -83,10 +83,10 @@ export default {
 			return collective.emoji ? '' : 'icon-star'
 		},
 		restoreCollective(collective) {
-			this.$emit('restoreCollective', collective)
+			this.$emit('restore-collective', collective)
 		},
 		deleteCollective(collective, circle) {
-			this.$emit('deleteCollective', collective, circle)
+			this.$emit('delete-collective', collective, circle)
 			this.closeDeleteModal()
 		},
 		showDeleteModal(collective) {

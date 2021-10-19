@@ -13,8 +13,8 @@
 		</template>
 		<template v-if="displayTrash" #footer>
 			<CollectiveTrash
-				@restoreCollective="restoreCollective"
-				@deleteCollective="deleteCollective" />
+				@restore-collective="restoreCollective"
+				@delete-collective="deleteCollective" />
 		</template>
 	</AppNavigation>
 </template>
