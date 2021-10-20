@@ -2,9 +2,6 @@
 
 ## 0.15.21 - 2021.10.20
 
-### ✨New
-* ✨ Occ command to create new collectives.
-
 ### 🏗️Fixes
 * 🧹 Fix ExpirePageVersions background job (#247).
 * 🔎 Fix broken links from search results (#249).

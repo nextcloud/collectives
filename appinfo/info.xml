@@ -51,7 +51,6 @@ In your Nextcloud instance, simply navigate to **»Apps«**, find the
 		<job>OCA\Collectives\BackgroundJob\PurgeObsoletePages</job>
 	</background-jobs>
 	<commands>
-		<command>OCA\Collectives\Command\CreateCollective</command>
 		<command>OCA\Collectives\Command\ExpirePageVersions</command>
 		<command>OCA\Collectives\Command\PurgeObsoleteCollectives</command>
 		<command>OCA\Collectives\Command\PurgeObsoletePages</command>
