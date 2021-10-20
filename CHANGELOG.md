@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.15.22 - unreleased
+## 0.15.22 - 2021.10.20
 
 ### ✨New
 * ✨ Occ command to create new collectives.
