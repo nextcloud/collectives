@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.15.21 - unreleased
+## 0.15.21 - 2021.10.20
 
 ### ✨New
 * ✨ Occ command to create new collectives.
@@ -19,7 +19,6 @@
 
 ### 🏗️Fixes
 * 🧷 Only display collective if user is in circle (#230).
->>>>>>> 3e220af (Update L10N files with new languages)
 
 ### 🚧Tooling
 * 🏷️ Handle existing tags better in Makefile.
