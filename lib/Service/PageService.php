@@ -15,7 +15,6 @@ use OCP\Files\InvalidPathException;
 use OCP\Files\NotPermittedException as FilesNotPermittedException;
 use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\IConfig;
-use OCP\IURLGenerator;
 use OCP\Lock\LockedException;
 
 class PageService {
