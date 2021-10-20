@@ -15,6 +15,7 @@
 * 🗣️ Portuguese (Brazil) translation started thanks to Leonardo Colman.
 * 🗣️ French translation updated thanks to Nathan.
 
+
 ## 0.14.22 - 2021.09.02
 
 ### 🏗️Fixes
@@ -23,6 +24,7 @@
 ### 🚧Tooling
 * 🏷️ Handle existing tags better in Makefile.
 
+
 ## 0.13.22 - 2021.08.24
 
 ### 🏗️Fixes
@@ -30,6 +32,7 @@
 
 ### 🌎Translations
 * 🗣️ Updated Czech translation thanks to Pavel Borecki.
+
 
 ## 0.12.22 - 2021.08.16
 
