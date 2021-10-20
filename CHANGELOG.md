@@ -7,6 +7,7 @@
 
 ### 🏗️Fixes
 * 🧹 Fix ExpirePageVersions background job (#247).
+* 🔎 Fix broken links from search results (#249).
 
 ### 🌎Translations
 * 🗣️ Italian translation started thanks to Marco Trevisan.
