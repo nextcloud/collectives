@@ -31,6 +31,9 @@ export default {
 	actions: {
 		/**
 		 * Get list of all circles
+		 *
+		 * @param {object} store the vuex store
+		 * @param {Function} store.commit commit changes
 		 */
 		async [GET_CIRCLES]({ commit }) {
 			const api = OCA.Circles.api

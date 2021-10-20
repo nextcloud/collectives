@@ -288,6 +288,27 @@ class PageServiceTest extends TestCase {
 		self::assertEquals($pageFiles, $this->service->recurseFolder($this->userId, $folder));
 	}
 
+	public function testGetPageLink(): void {
+		$collectiveName = 'My Collective';
+		$pageFile1 = new PageFile();
+		$pageFile1->setId(123);
+		$pageFile1->setFilePath('page one');
+		$pageFile1->setFileName('subpage2.md');
+		$pageFile1->setTitle('subpage2');
+
+		self::assertEquals('My%20Collective/page%20one/subpage2?fileId=123',
+			$this->service->getPageLink($collectiveName, $pageFile1));
+
+		$pageFile2 = new PageFile();
+		$pageFile2->setId(124);
+		$pageFile2->setFilePath('page two/with another layer/and#spec!al_ch@rs?;');
+		$pageFile2->setFileName('Readme.md');
+		$pageFile2->setTitle('page');
+
+		self::assertEquals('My%20Collective/page%20two/with%20another%20layer/and%23spec%21al_ch%40rs%3F%3B/page?fileId=124',
+			$this->service->getPageLink($collectiveName, $pageFile2));
+	}
+
 	public function testMatchBacklinks(): void {
 		$this->config->method('getSystemValue')
 			->willReturn(['nextcloud.local']);

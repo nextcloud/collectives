@@ -4,6 +4,7 @@ namespace OCA\Collectives\Search;
 
 use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Service\CollectiveHelper;
+use OCA\Collectives\Service\MissingDependencyException;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
 use OCA\Collectives\Service\PageService;
@@ -93,7 +94,7 @@ class PageContentProvider implements IProvider {
 	 * @param ISearchQuery $query
 	 *
 	 * @return SearchResult
-	 * @throws QueryException
+	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
@@ -120,9 +121,7 @@ class PageContentProvider implements IProvider {
 						str_replace('{page}', $page->getTitle(), str_replace('{collective}', $collective->getName(), $this->l10n->t('in page {page} from collective {collective}'))),
 						implode('/', array_filter([
 							$this->urlGenerator->linkToRoute('collectives.start.index'),
-							rawurlencode($collective->getName()),
-							rawurlencode($page->getFilePath()),
-							rawurlencode($page->getTitle()),
+							$this->pageService->getPageLink($collective->getName(), $page)
 						]))
 					);
 				}

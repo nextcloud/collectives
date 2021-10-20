@@ -1,11 +1,11 @@
-# Vítejte ve vašem novém kolektivu
+# Vítejte ve svém novém kolektivu
 
 **Organizujte se a vytvářejte sdílené znalosti!**
 
 
 ### 👥 Pozvěte do kolektivu nové lidi
 
-Whether you want to add your friends or whole groups, follow the "manage members" link that you find in the action menu inside the collectives list on the left.
+Ať už chcete přidat své přátele či celé skupiny, následujte odkaz „spravovat členy“, který naleznete v nabídce akcí v rámci seznamu kolektivů vlevo.
 
 ### 🌱 Vdechněte svému kolektivu život
 

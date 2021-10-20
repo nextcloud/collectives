@@ -131,7 +131,8 @@ export default {
 	methods: {
 		/**
 		 * Get list of all circles
-		 * @returns {Promise}
+		 *
+		 * @return {Promise}
 		 */
 		getCircles() {
 			return this.$store.dispatch(GET_CIRCLES)
@@ -155,6 +156,7 @@ export default {
 
 		/**
 		 * Create a new collective with the name given in the input
+		 *
 		 * @param {Event} e - trigger event
 		 */
 		createCollective(e) {

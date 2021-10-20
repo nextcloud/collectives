@@ -232,7 +232,8 @@ export default {
 
 		/**
 		 * Get list of all pages
-		 * @param {Boolean} setLoading Whether to set loading('collective')
+		 *
+		 * @param {boolean} setLoading Whether to set loading('collective')
 		 */
 		async [GET_PAGES]({ commit, getters }, setLoading = true) {
 			if (setLoading) {
@@ -248,6 +249,7 @@ export default {
 
 		/**
 		 * Get a single page and update it in the store
+		 *
 		 * @param {number} parentId Parent ID
 		 * @param {number} pageId Page ID
 		 */
@@ -260,7 +262,11 @@ export default {
 
 		/**
 		 * Create a new page
-		 * @param {Object} page Properties for the new page (title for now)
+		 *
+		 * @param {object} store the vuex store
+		 * @param {Function} store.commit commit changes
+		 * @param {object} store.getters getters of the store
+		 * @param {object} page Properties for the new page (title for now)
 		 */
 		async [NEW_PAGE]({ commit, getters }, page) {
 			// We'll be done when the title form has focus.
@@ -273,7 +279,11 @@ export default {
 
 		/**
 		 * Create a new page
-		 * @param {Object} parentPage Parent page for new template
+		 *
+		 * @param {object} store the vuex store
+		 * @param {Function} store.commit commit changes
+		 * @param {object} store.getters getters of the store
+		 * @param {object} parentPage Parent page for new template
 		 */
 		async [NEW_TEMPLATE]({ commit, getters }, parentPage) {
 			const page = {
@@ -296,9 +306,13 @@ export default {
 
 		/**
 		 * Rename the current page
+		 *
+		 * @param {object} store the vuex store
+		 * @param {Function} store.commit commit changes
+		 * @param {object} store.getters getters of the store
 		 * @param {string} newTitle new title for the page
 		 */
-		async [RENAME_PAGE]({ commit, getters, state }, newTitle) {
+		async [RENAME_PAGE]({ commit, getters }, newTitle) {
 			commit('load', 'page', { root: true })
 			const page = getters.currentPage
 			const url = getters.pageUrl(page.parentId, page.id)
@@ -309,8 +323,12 @@ export default {
 
 		/**
 		 * Delete the current page
+		 *
+		 * @param {object} store the vuex store
+		 * @param {Function} store.commit commit changes
+		 * @param {object} store.getters getters of the store
 		 */
-		async [DELETE_PAGE]({ commit, getters, state }) {
+		async [DELETE_PAGE]({ commit, getters }) {
 			commit('load', 'page', { root: true })
 			await axios.delete(getters.pageUrl(getters.currentPage.parentId, getters.currentPage.id))
 			commit(DELETE_PAGE_BY_ID, getters.currentPage.id)
@@ -319,9 +337,13 @@ export default {
 
 		/**
 		 * Get list of backlinks for a page
-		 * @param {Object} page Page to get backlinks for
+		 *
+		 * @param {object} store the vuex store
+		 * @param {Function} store.commit commit changes
+		 * @param {object} store.getters getters of the store
+		 * @param {object} page Page to get backlinks for
 		 */
-		async [GET_BACKLINKS]({ commit, getters, state }, page) {
+		async [GET_BACKLINKS]({ commit, getters }, page) {
 			commit('load', 'backlinks', { root: true })
 			const response = await axios.get(getters.backlinksUrl(page.parentId, page.id))
 			commit(SET_BACKLINKS, { pages: response.data.data })

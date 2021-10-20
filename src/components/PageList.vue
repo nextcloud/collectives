@@ -140,7 +140,8 @@ export default {
 
 		/**
 		 * Open existing or create new template page
-		 * @param {Object} parentPage Parent page
+		 *
+		 * @param {object} parentPage Parent page
 		 */
 		async editTemplate(parentPage) {
 			if (this.templatePage(parentPage.id)) {
@@ -159,7 +160,8 @@ export default {
 
 		/**
 		 * Create a new page and focus the page automatically
-		 * @param {Object} parentPage Parent page
+		 *
+		 * @param {object} parentPage Parent page
 		 */
 		async newPage(parentPage) {
 			const page = {

@@ -1,5 +1,33 @@
 # Changelog
 
+## 0.15.21 - 2021.10.20
+
+### 🏗️Fixes
+* 🧹 Fix ExpirePageVersions background job (#247).
+* 🔎 Fix broken links from search results (#249).
+
+### 🌎Translations
+* 🗣️ Italian translation started thanks to Marco Trevisan.
+* 🗣️ Catalan translation completed thanks to Jordán.
+* 🗣️ Portuguese (Brazil) translation started thanks to Leonardo Colman.
+* 🗣️ French translation updated thanks to Nathan.
+
+## 0.14.21 - 2021.09.02
+
+### 🏗️Fixes
+* 🧷 Only display collective if user is in circle (#230).
+
+### 🚧Tooling
+* 🏷️ Handle existing tags better in Makefile.
+
+## 0.13.21 - 2021.08.24
+
+### 🏗️Fixes
+* 💽 Do not try to create collectives folder if quota is 0 (#229).
+
+### 🌎Translations
+* 🗣️ Updated Czech translation thanks to Pavel Borecki.
+
 ## 0.12.21 - 2021.08.16
 
 ### ✨New

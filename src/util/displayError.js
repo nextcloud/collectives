@@ -1,17 +1,28 @@
 import { showWarning, showError } from '@nextcloud/dialogs'
 
+/**
+ * @param {string} msg the error message
+ * @param {string} details details to be provided with the error
+ */
 function content(msg, details) {
 	return details
 		? `<div>${msg}</div><div>${details}</div>`
 		: msg
 }
 
+/**
+ * @param {string} details details to be provided with the error
+ */
 function options(details) {
 	return {
 		isHTML: !!details,
 	}
 }
 
+/**
+ * @param {string} msg the error message
+ * @param {Error} e request exception from axios
+ */
 function showRequestException(msg, e) {
 	const details = e.response && e.response.data
 	if (e.response && e.response.status < 500) {
@@ -25,8 +36,9 @@ function showRequestException(msg, e) {
 /**
  * Error handler function to display a translation of the message
  * alongside the error itself.
- * @param {String} msg translation key for the error message
- * @returns {Function} error handler function
+ *
+ * @param {string} msg translation key for the error message
+ * @return {Function} error handler function
  */
 export default function(msg) {
 	return e => showRequestException(t('collectives', msg), e)

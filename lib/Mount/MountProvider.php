@@ -17,6 +17,7 @@ use OCP\Files\Mount\IMountPoint;
 use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\Files\Storage\IStorageFactory;
 use OCP\IUser;
+use Psr\Log\LoggerInterface;
 
 class MountProvider implements IMountProvider {
 	/** @var CollectiveHelper */
@@ -24,6 +25,9 @@ class MountProvider implements IMountProvider {
 
 	/** @var CollectiveFolderManager */
 	private $collectiveFolderManager;
+
+	/** @var LoggerInterface */
+	private $logger;
 
 	/** @var IMimeTypeLoader */
 	private $mimeTypeLoader;
@@ -44,6 +48,7 @@ class MountProvider implements IMountProvider {
 	 * @param CollectiveFolderManager $collectiveFolderManager
 	 * @param IMimeTypeLoader         $mimeTypeLoader
 	 * @param IAppManager             $appManager
+	 * @param LoggerInterface         $logger
 	 * @param UserFolderHelper        $userFolderHelper
 	 * @param NodeHelper              $nodeHelper
 	 */
@@ -52,12 +57,14 @@ class MountProvider implements IMountProvider {
 		CollectiveFolderManager $collectiveFolderManager,
 		IMimeTypeLoader $mimeTypeLoader,
 		IAppManager $appManager,
+		LoggerInterface $logger,
 		UserFolderHelper $userFolderHelper,
 		NodeHelper $nodeHelper) {
 		$this->collectiveHelper = $collectiveHelper;
 		$this->collectiveFolderManager = $collectiveFolderManager;
 		$this->mimeTypeLoader = $mimeTypeLoader;
 		$this->appManager = $appManager;
+		$this->logger = $logger;
 		$this->userFolderHelper = $userFolderHelper;
 		$this->nodeHelper = $nodeHelper;
 	}
@@ -66,29 +73,33 @@ class MountProvider implements IMountProvider {
 	 * @param IUser $user
 	 *
 	 * @return array
-	 * @throws NotFoundException
-	 * @throws NotPermittedException
 	 */
 	public function getFoldersForUser(IUser $user): array {
 		$folders = [];
-		if (!$this->appManager->isEnabledForUser('circles', $user)) {
-			return $folders;
-		}
 		try {
 			$collectiveInfos = $this->collectiveHelper->getCollectivesForUser($user->getUID(), false);
 		} catch (QueryException $e) {
-			throw new NotFoundException($e->getMessage());
+			$this->log($e);
+			return $folders;
+		}
+		try {
+			$userFolder = $this->userFolderHelper->get($user->getUID());
+		} catch (NotPermittedException $e){
+			$this->log($e);
+			return $folders;
 		}
 		foreach ($collectiveInfos as $c) {
 			$mountPointName = $this->nodeHelper->sanitiseFilename($c->getName());
 			try {
 				$cacheEntry = $this->collectiveFolderManager->getFolderFileCache($c->getId(), $mountPointName);
 			} catch (FilesNotFoundException | Exception $e) {
-				throw new NotFoundException($e->getMessage());
+				$this->log($e);
+				// maybe some other caches can be found.
+				continue;
 			}
 			$folders[] = [
 				'folder_id' => $c->getId(),
-				'mount_point' => $this->userFolderHelper->get($user->getUID())->getName() . '/' . $mountPointName,
+				'mount_point' => $userFolder->getName() . '/' . $mountPointName,
 				'rootCacheEntry' => (isset($cacheEntry['fileid'])) ? Cache::cacheEntryFromData($cacheEntry, $this->mimeTypeLoader) : null
 			];
 		}
@@ -100,12 +111,13 @@ class MountProvider implements IMountProvider {
 	 * @param IStorageFactory $loader
 	 *
 	 * @return IMountPoint[]
-	 * @throws NotFoundException
-	 * @throws NotPermittedException
 	 */
 	public function getMountsForUser(IUser $user, IStorageFactory $loader) {
-		$folders = $this->getFoldersForUser($user);
+		if (!$this->isEnabledForUser($user)) {
+			return [];
+		}
 
+		$folders = $this->getFoldersForUser($user);
 		try {
 			return array_map(function ($folder) use ($user, $loader) {
 				return $this->collectiveFolderManager->getMount(
@@ -117,7 +129,28 @@ class MountProvider implements IMountProvider {
 				);
 			}, $folders);
 		} catch (FilesNotFoundException | \Exception $e) {
-			throw new NotFoundException($e->getMessage());
+			$this->log($e);
+			return [];
 		}
+	}
+
+	/**
+	 * @param IUser $user
+	 *
+	 * @return bool
+	 */
+	protected function isEnabledForUser($user) {
+		return $this->appManager->isEnabledForUser('circles', $user)
+			&& $this->appManager->isEnabledForUser('collectives', $user)
+			&& $user->getQuota() != '0 B';
+	}
+
+	/**
+	 * @param \Exception $e
+	 */
+	protected function log(\Exception $e) {
+		$this->logger->error('Collectives App Error: ' . $e->getMessage(),
+			['exception' => $e]
+		);
 	}
 }

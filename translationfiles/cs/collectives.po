@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2021-08-16 11:30+0200\n"
-"PO-Revision-Date: 2021-08-02 17:21+0000\n"
+"PO-Revision-Date: 2021-08-20 13:47+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/cs/>\n"
@@ -170,7 +170,7 @@ msgstr "Kolektiv a okruh"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:17
 msgid "Only circle owners can delete a circle"
-msgstr ""
+msgstr "Okruh mohou smazat pouze jeho vlastníci"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:19
 #: /collectives/specialVueFakeDummyForL10nScript.js:80
@@ -321,18 +321,18 @@ msgid "Add a page"
 msgstr "Přidat stránku"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:60
-#, fuzzy
 msgid "No backlinks available"
-msgstr "Nejsou k dispozici žádné jiné verze"
+msgstr "Nejsou k dispozici žádné zpětné odkazy"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:61
 msgid "If other pages link to this one, they will be listed here."
 msgstr ""
+"Pokud je na tuto stránku odkazováno z jiných stránek, měly by být vypsány "
+"zde."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:62
-#, fuzzy
 msgid "Could not get page backlinks"
-msgstr "Nedaří se načíst verze stránky"
+msgstr "Nedaří se získat zpětné odkazy pro stránku"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:63
 msgid "Current version"
@@ -368,19 +368,19 @@ msgstr "Smazat stránku"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:71
 msgid "Backlinks"
-msgstr ""
+msgstr "Zpětné odkazy"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:72
 msgid "Pages that link to this one"
-msgstr ""
+msgstr "Stránky, které odkazují na tuto"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:73
 msgid "Versions"
-msgstr ""
+msgstr "Verze"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:74
 msgid "Old versions of this page"
-msgstr ""
+msgstr "Staré verze této stránky"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:75
 msgid "Page deleted"

@@ -3,6 +3,7 @@
 
 # Variables that can be overridden by env variables
 VERSION?=$(shell sed -ne 's/^\s*<version>\(.*\)<\/version>/\1/p' appinfo/info.xml)
+GIT_TAG?=v$(VERSION)
 OCC?=php ../../occ
 NPM?=npm
 
@@ -13,6 +14,11 @@ GITLAB_PROJECT:=collectives
 GITLAB_PROJECT_ID:=17827012
 GITLAB_URL:=https://gitlab.com
 GITLAB_API_URL:=$(GITLAB_URL)/api/v4/projects/$(GITLAB_PROJECT_ID)
+
+# Upgrade: once we have git >= 2.22 everywhere we can use the more
+# readable GIT_BRANCH:=$(shell git branch --show-current)
+GIT_BRANCH:=$(shell git rev-parse --abbrev-ref HEAD)
+GIT_REMOTE:=$(shell git config --get "branch.${GIT_BRANCH}.remote")
 
 # So far just for removing releases again
 NEXTCLOUD_API_URL:=https://apps.nextcloud.com/api/v1/apps/collectives
@@ -172,6 +178,16 @@ endif
 ifndef GITLAB_API_TOKEN
 	$(error Missing $$GITLAB_API_TOKEN)
 endif
+	@if git tag | grep $(GIT_TAG); then \
+		echo "Git tag already exists!"; \
+		echo "Delete it with 'git tag -d $(GIT_TAG)'"; \
+		exit 1; \
+	fi
+	@if git ls-remote --tags $(GIT_REMOTE) "refs/tags/$(GIT_TAG)" | grep $(GIT_TAG); then \
+		echo "Git tag already exists on remote $(GIT_REMOTE)!"; \
+		echo "Delete it with 'git push $(GIT_REMOTE) :$(GIT_TAG)'"; \
+		exit 1; \
+	fi
 
 # Prepare the release package for the app store
 release: release-checks lint-appinfo build
@@ -180,8 +196,7 @@ release: release-checks lint-appinfo build
 			--form "file=@build/release/collectives-$(VERSION).tar.gz" $(GITLAB_API_URL)/uploads | jq -r '.full_path'))
 
 	# Git tag and push
-	$(eval GIT_TAG:="v$(shell echo $(VERSION) | sed -e 's/~/-/g')")
-	git tag $(GIT_TAG) && git push --tags
+	git tag $(GIT_TAG) -m "Version $(VERSION)" && git push $(GIT_REMOTE) $(GIT_TAG)
 
 	# Publish the release on Gitlab
 	curl -s -X POST -H "PRIVATE-TOKEN: $(GITLAB_API_TOKEN)" \
