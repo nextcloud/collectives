@@ -443,7 +443,7 @@ class PageService {
 		$allPageFiles = $this->findAll($userId, $collective);
 		$pageFiles = [];
 		foreach ($allPageFiles as $page) {
-			if (stripos($page->getFileName(), $search) === false) {
+			if (stripos($page->getTitle(), $search) === false) {
 				continue;
 			}
 			$pageFiles[] = $page;
