@@ -15,6 +15,7 @@ use OCP\Files\InvalidPathException;
 use OCP\Files\NotPermittedException as FilesNotPermittedException;
 use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\IConfig;
+use OCP\IURLGenerator;
 use OCP\Lock\LockedException;
 
 class PageService {
@@ -611,6 +612,26 @@ class PageService {
 
 		$this->revertSubFolders($folder);
 		return $pageFile;
+	}
+
+
+	/**
+	 * @param string   $collectiveName
+	 * @param PageFile $page
+	 *
+	 * @return string
+	 */
+	public function getPageLink(string $collectiveName, PageFile $page): string {
+		$collectiveRoute = rawurlencode($collectiveName);
+		$pagePathRoute = implode('/', array_map('rawurlencode', explode('/', $page->getFilePath())));
+		$pageTitleRoute = rawurlencode($page->getTitle());
+		$fullRoute = implode('/', array_filter([
+			$collectiveRoute,
+			$pagePathRoute,
+			$pageTitleRoute
+		]));
+
+		return $fullRoute . '?fileId=' . $page->getId();
 	}
 
 	/**
