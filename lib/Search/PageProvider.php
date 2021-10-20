@@ -3,7 +3,9 @@
 namespace OCA\Collectives\Search;
 
 use OCA\Collectives\Service\CollectiveHelper;
+use OCA\Collectives\Service\MissingDependencyException;
 use OCA\Collectives\Service\NotFoundException;
+use OCA\Collectives\Service\NotPermittedException;
 use OCA\Collectives\Service\PageService;
 use OCP\App\IAppManager;
 use OCP\AppFramework\QueryException;
@@ -85,8 +87,9 @@ class PageProvider implements IProvider {
 	 * @param ISearchQuery $query
 	 *
 	 * @return SearchResult
-	 * @throws QueryException
+	 * @throws MissingDependencyException
 	 * @throws NotFoundException
+	 * @throws NotPermittedException
 	 */
 	public function search(IUser $user, ISearchQuery $query): SearchResult {
 		if ($this->appManager->isEnabledForUser('circles', $user)) {
@@ -108,9 +111,7 @@ class PageProvider implements IProvider {
 					str_replace('{collective}', $collective->getName(), $this->l10n->t('in Collective {collective}')),
 					implode('/', array_filter([
 						$this->urlGenerator->linkToRoute('collectives.start.index'),
-						rawurlencode($collective->getName()),
-						rawurlencode($page->getFilePath()),
-						rawurlencode($page->getTitle()),
+						$this->pageService->getPageLink($collective->getName(), $page)
 					]))
 				);
 			}

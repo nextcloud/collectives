@@ -15,6 +15,7 @@ use OCP\Files\InvalidPathException;
 use OCP\Files\NotPermittedException as FilesNotPermittedException;
 use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\IConfig;
+use OCP\IURLGenerator;
 use OCP\Lock\LockedException;
 
 class PageService {
@@ -443,7 +444,7 @@ class PageService {
 		$allPageFiles = $this->findAll($userId, $collective);
 		$pageFiles = [];
 		foreach ($allPageFiles as $page) {
-			if (stripos($page->getFileName(), $search) === false) {
+			if (stripos($page->getTitle(), $search) === false) {
 				continue;
 			}
 			$pageFiles[] = $page;
@@ -613,6 +614,27 @@ class PageService {
 		return $pageFile;
 	}
 
+
+	/**
+	 * @param string   $collectiveName
+	 * @param PageFile $page
+	 * @param bool     $withFileId
+	 *
+	 * @return string
+	 */
+	public function getPageLink(string $collectiveName, PageFile $page, bool $withFileId = true): string {
+		$collectiveRoute = rawurlencode($collectiveName);
+		$pagePathRoute = implode('/', array_map('rawurlencode', explode('/', $page->getFilePath())));
+		$pageTitleRoute = rawurlencode($page->getTitle());
+		$fullRoute = implode('/', array_filter([
+			$collectiveRoute,
+			$pagePathRoute,
+			$pageTitleRoute
+		]));
+
+		return $withFileId ? $fullRoute . '?fileId=' . $page->getId() : $fullRoute;
+	}
+
 	/**
 	 * @param PageFile $page
 	 * @param string   $content
@@ -634,20 +656,7 @@ class PageService {
 
 		$appPath = '\/+apps\/+collectives\/+';
 
-		// path t
-		$pagePath = str_replace('/', '/+', preg_quote(
-			implode('/', array_map(
-				'rawurlencode',
-				explode('/', explode('/', $page->getCollectivePath())[1])
-			)) .
-			($page->getFilePath() ? '/' : '') .
-			implode('/', array_map(
-				'rawurlencode',
-				explode('/', $page->getFilePath())
-			)) .
-			(($page->getFileName() === PageFile::INDEX_PAGE_TITLE . PageFile::SUFFIX) ? '' : '/' . rawurlencode($page->getTitle())),
-			'/'));
-
+		$pagePath = str_replace('/', '/+', preg_quote($this->getPageLink(explode('/', $page->getCollectivePath())[1], $page, false), '/'));
 		$fileId = '.+\?fileId=' . $page->getId();
 
 		$relativeFileIdPattern = $prefix . $relativeUrl . $fileId . $suffix;
