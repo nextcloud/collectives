@@ -62,6 +62,26 @@ class CollectiveService {
 
 	/**
 	 * @param string $userId
+	 * @param int    $id
+	 *
+	 * @return CollectiveInfo
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function getCollective(string $userId, int $id): CollectiveInfo
+	{
+		if (null === $collective = $this->collectiveMapper->findById($id, $userId)) {
+			throw new NotFoundException('Collective not found: ' . $id);
+		}
+		$name = $this->collectiveMapper->circleIdToName($collective->getCircleId(), $userId);
+
+		// Only used by PublicCollectiveController so far, thus no need to return membership level
+		return new CollectiveInfo($collective, $name);
+	}
+
+	/**
+	 * @param string $userId
 	 *
 	 * @return CollectiveInfo[]
 	 * @throws NotFoundException
@@ -242,7 +262,7 @@ class CollectiveService {
 		try {
 			$collectiveFolder = $this->collectiveFolderManager->getFolder($collective->getId());
 			$collectiveFolder->delete();
-		} catch (InvalidPathException | \OCP\Files\NotFoundException | FilesNotPermittedException $e) {
+		} catch (InvalidPathException | FilesNotFoundException | FilesNotPermittedException $e) {
 			throw new NotFoundException('Failed to delete collective folder');
 		}
 

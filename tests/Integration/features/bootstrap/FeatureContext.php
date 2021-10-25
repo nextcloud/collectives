@@ -37,6 +37,9 @@ class FeatureContext implements Context {
 	/** @var array */
 	private $clientOptions;
 
+	/** @var array */
+	private $store;
+
 	/**
 	 * Initializes context.
 	 * Every scenario gets its own context instance.
@@ -427,6 +430,106 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @When user :user creates public share for :collective
+	 * @When user :user :fails to create public share for :collective
+	 *
+	 * @param string $user
+	 * @param string $collective
+	 * @param string|null $fail
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userCreatesPublicShare(string $user, string $collective, ?string $fail = null): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$this->sendRequest('POST', '/apps/collectives/_api/' . $collectiveId . '/share');
+		if ("fails" === $fail) {
+			$this->assertStatusCode(403);
+		} else {
+			$this->assertStatusCode(200);
+		}
+	}
+
+	/**
+	 * @When user :user stores token for public share :collective
+	 *
+	 * @param string $user
+	 * @param string $collective
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userStoresPublicShareToken(string $user, string $collective): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$this->store['shareToken'] = $this->getCollectiveShareToken($collectiveId);
+	}
+
+	/**
+	 * @When user :user deletes public share for :collective
+	 *
+	 * @param string $user
+	 * @param string $collective
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userDeletesPublicShare(string $user, string $collective): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$token = $this->getCollectiveShareToken($collectiveId);
+		$this->sendRequest('DELETE', '/apps/collectives/_api/' . $collectiveId . '/share/' . $token);
+		$this->assertStatusCode(200);
+	}
+
+	/**
+	 * @When anonymous sees public collective :collective with owner :owner
+	 *
+	 * @param string      $collective
+	 * @param string      $owner
+	 *
+	 * @throws GuzzleException
+	 */
+	public function anonymousSeesPublicCollective(string $collective, string $owner): void {
+		$this->setCurrentUser($owner);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$token = $this->getCollectiveShareToken($collectiveId);
+		$this->sendRequest('GET', '/apps/collectives/_api/p/' . $token, null, [], false);
+		$this->assertStatusCode(200);
+		$this->assertCollectiveByName($collective);
+	}
+
+	/**
+	 * @When anonymous fails to see public collective :collective with stored token
+	 *
+	 * @param string $collective
+	 *
+	 * @throws GuzzleException
+	 */
+	public function anonymousFailsToSeePublicCollective(string $collective): void {
+		Assert::assertArrayHasKey('shareToken', $this->store);
+		Assert::assertNotEmpty($this->store['shareToken']);
+		$this->sendRequest('GET', '/apps/collectives/_api/p/' . $this->store['shareToken'], null, [], false);
+		$this->assertStatusCode(404);
+	}
+
+	/**
+	 * @When anonymous sees pagePath :path in public collective :collective with owner :owner
+	 *
+	 * @param string $path
+	 * @param string $collective
+	 * @param string $owner
+	 *
+	 * @throws GuzzleException
+	 */
+	public function anonymousSeesPublicCollectivePages(string $path, string $collective, string $owner): void {
+		$this->setCurrentUser($owner);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$token = $this->getCollectiveShareToken($collectiveId);
+		$this->sendRequest('GET', '/apps/collectives/_api/p/' . $token . '/_pages', null, [], false);
+		$this->assertStatusCode(200);
+		$this->assertPageByPath($path);
+	}
+
+	/**
 	 * @return array
 	 * @throws JsonException
 	 */
@@ -563,7 +666,7 @@ class FeatureContext implements Context {
 								 ?bool $auth = true): void {
 		$client = new Client($this->clientOptions);
 
-		if (!isset($this->cookieJars[$this->currentUser])) {
+		if (true === $auth && !isset($this->cookieJars[$this->currentUser])) {
 			$this->cookieJars[$this->currentUser] = new CookieJar();
 		}
 
@@ -663,7 +766,21 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @param Response $response
+	 * @param int    $collectiveId
+	 *
+	 * @return string|null
+	 */
+	private function getCollectiveShareToken(int $collectiveId): string {
+		$this->sendRequest('GET', '/apps/collectives/_api/' . $collectiveId . '/share');
+		$jsonBody = $this->getJson();
+		if (!$jsonBody['data'] || !array_key_exists('token', $jsonBody['data'])) {
+			throw new RuntimeException('Could not get public share token for ' . $collectiveId);
+		}
+
+		return $jsonBody['data']['token'];
+	}
+
+	/**
 	 * @param int      $statusCode
 	 * @param string   $message
 	 */
@@ -672,7 +789,6 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @param Response  $response
 	 * @param string    $name
 	 * @param bool|null $revert
 	 */
@@ -690,7 +806,6 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @param Response  $response
 	 * @param string    $path
 	 * @param bool|null $revert
 	 */
@@ -708,7 +823,6 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @param Response  $response
 	 * @param string    $title
 	 * @param string    $user
 	 */

@@ -150,7 +150,8 @@ class CollectiveServiceTest extends TestCase {
 			'circleId' => null,
 			'trashTimestamp' => null,
 			'name' => 'free',
-			'level' => Member::LEVEL_OWNER
+			'level' => Member::LEVEL_OWNER,
+			'shareToken' => null,
 		], $collective->jsonSerialize());
 	}
 }

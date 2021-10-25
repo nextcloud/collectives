@@ -43,8 +43,16 @@
       <code>Base</code>
     </UndefinedClass>
   </file>
+  <file src="lib/Controller/PublicPageController.php">
+    <InvalidCatch occurrences="1"/>
+    <MissingDependency occurrences="1">
+      <code>ShareNotFound</code>
+    </MissingDependency>
+  </file>
   <file src="lib/Controller/StartController.php">
-    <UndefinedClass occurrences="2">
+    <UndefinedClass occurrences="4">
+      <code>LoadViewer</code>
+      <code>LoadViewer</code>
       <code>LoadViewer</code>
       <code>LoadViewer</code>
     </UndefinedClass>
@@ -57,6 +65,9 @@
       <code>Member</code>
       <code>Member</code>
     </UndefinedClass>
+  </file>
+  <file src="lib/Db/CollectiveShareMapper.php">
+    <MoreSpecificImplementedParamType occurrences="1"/>
   </file>
   <file src="lib/Db/PageMapper.php">
     <MoreSpecificImplementedParamType occurrences="1"/>
@@ -188,6 +199,15 @@
       <code>File</code>
       <code>Member</code>
     </UndefinedClass>
+  </file>
+  <file src="lib/Share/CollectiveShareService.php">
+    <InvalidCatch occurrences="3"/>
+    <MissingDependency occurrences="4">
+      <code>$e</code>
+      <code>GenericShareException</code>
+      <code>ShareNotFound</code>
+      <code>ShareNotFound</code>
+    </MissingDependency>
   </file>
   <file src="lib/Versions/CollectiveVersion.php">
     <UndefinedClass occurrences="1">
