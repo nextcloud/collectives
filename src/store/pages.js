@@ -149,7 +149,7 @@ export default {
 		},
 
 		pagesUrl(_state, getters) {
-			return generateUrl(`/apps/collectives/_collectives/${getters.currentCollective.id}/_pages`)
+			return generateUrl(`/apps/collectives/_api/${getters.currentCollective.id}/_pages`)
 		},
 
 		pageCreateUrl(_state, getters) {

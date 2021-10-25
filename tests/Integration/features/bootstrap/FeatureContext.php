@@ -65,7 +65,7 @@ class FeatureContext implements Context {
 	public function userCreatesCollective(string $user, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$formData = new TableNode([['name', $collective]]);
-		$this->sendRequest('POST', '/apps/collectives/_collectives', $formData);
+		$this->sendRequest('POST', '/apps/collectives/_api', $formData);
 		if ("fails" === $fail) {
 			$this->assertStatusCode(422);
 		} else {
@@ -89,7 +89,7 @@ class FeatureContext implements Context {
 		$parentId = $this->getParentId($collectiveId, $parentPath);
 
 		$formData = new TableNode([['title', $page], ['parentId', $parentId]]);
-		$this->sendRequest('POST', '/apps/collectives/_collectives/' . $collectiveId . '/_pages/parent/' . $parentId, $formData);
+		$this->sendRequest('POST', '/apps/collectives/_api/' . $collectiveId . '/_pages/parent/' . $parentId, $formData);
 		$this->assertStatusCode(200);
 	}
 
@@ -106,9 +106,9 @@ class FeatureContext implements Context {
 	public function userSeesCollective(string $user, string $collective, ?string $trash = null): void {
 		$this->setCurrentUser($user);
 		if ($trash) {
-			$this->sendRequest('GET', '/apps/collectives/_collectives/trash');
+			$this->sendRequest('GET', '/apps/collectives/_api/trash');
 		} else {
-			$this->sendRequest('GET', '/apps/collectives/_collectives');
+			$this->sendRequest('GET', '/apps/collectives/_api');
 		}
 		$this->assertStatusCode(200);
 		$this->assertCollectiveByName($collective);
@@ -126,7 +126,7 @@ class FeatureContext implements Context {
 	public function userSeesPagePath(string $user, string $pagePath, string $collective): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
-		$this->sendRequest('GET', '/apps/collectives/_collectives/' . $collectiveId . '/_pages');
+		$this->sendRequest('GET', '/apps/collectives/_api/' . $collectiveId . '/_pages');
 		$this->assertStatusCode(200);
 		$this->assertPageByPath($pagePath);
 	}
@@ -144,9 +144,9 @@ class FeatureContext implements Context {
 	public function userDoesntSeeCollective(string $user, string $collective, ?string $trash = null): void {
 		$this->setCurrentUser($user);
 		if ($trash) {
-			$this->sendRequest('GET', '/apps/collectives/_collectives/trash');
+			$this->sendRequest('GET', '/apps/collectives/_api/trash');
 		} else {
-			$this->sendRequest('GET', '/apps/collectives/_collectives');
+			$this->sendRequest('GET', '/apps/collectives/_api');
 		}
 		$this->assertStatusCode(200);
 		$this->assertCollectiveByName($collective, true);
@@ -164,7 +164,7 @@ class FeatureContext implements Context {
 	public function userDoesntSeePagePath(string $user, string $pagePath, string $collective): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
-		$this->sendRequest('GET', '/apps/collectives/_collectives/' . $collectiveId . '/_pages');
+		$this->sendRequest('GET', '/apps/collectives/_api/' . $collectiveId . '/_pages');
 		$this->assertStatusCode(200);
 		$this->assertPageByPath($pagePath, true);
 	}
@@ -181,7 +181,7 @@ class FeatureContext implements Context {
 	public function userLastEditedPage(string $user, string $page, string $collective): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
-		$this->sendRequest('GET', '/apps/collectives/_collectives/' . $collectiveId . '/_pages');
+		$this->sendRequest('GET', '/apps/collectives/_api/' . $collectiveId . '/_pages');
 		$this->assertStatusCode(200);
 		$this->assertPageLastEditedByUser($page, $user);
 	}
@@ -205,7 +205,7 @@ class FeatureContext implements Context {
 			throw new RuntimeException('Could not get collectiveId for ' . $collective);
 		}
 		$this->setCurrentUser($user);
-		$this->sendRequest('DELETE', '/apps/collectives/_collectives/' . $collectiveId);
+		$this->sendRequest('DELETE', '/apps/collectives/_api/' . $collectiveId);
 		if ("fails" === $fail) {
 			$this->assertStatusCode($member ? 404 : 403);
 		} else {
@@ -233,7 +233,7 @@ class FeatureContext implements Context {
 		}
 		$this->setCurrentUser($user);
 
-		$this->sendRequest('DELETE', '/apps/collectives/_collectives/trash/' . $collectiveId);
+		$this->sendRequest('DELETE', '/apps/collectives/_api/trash/' . $collectiveId);
 		if ("fails" === $fail) {
 			$this->assertStatusCode(404);
 		} else {
@@ -262,7 +262,7 @@ class FeatureContext implements Context {
 			throw new RuntimeException('Could not get collectiveId for ' . $collective);
 		}
 		$this->setCurrentUser($user);
-		$this->sendRequest('DELETE', '/apps/collectives/_collectives/trash/' . $collectiveId . '?circle=1');
+		$this->sendRequest('DELETE', '/apps/collectives/_api/trash/' . $collectiveId . '?circle=1');
 		if ("fails" === $fail) {
 			$this->assertStatusCode($selfadmin ? 403 : 404);
 		} else {
@@ -286,7 +286,7 @@ class FeatureContext implements Context {
 		if (null === $collectiveId) {
 			throw new RuntimeException('Could not get collectiveId for ' . $collective);
 		}
-		$this->sendRequest('PATCH', '/apps/collectives/_collectives/trash/' . $collectiveId);
+		$this->sendRequest('PATCH', '/apps/collectives/_api/trash/' . $collectiveId);
 		if ("fails" === $fail) {
 			$this->assertStatusCode(404);
 		} else {
@@ -311,7 +311,7 @@ class FeatureContext implements Context {
 		$collectiveId = $this->collectiveIdByName($collective);
 		$pageId = $this->pageIdByName($collectiveId, $page);
 		$parentId = $this->getParentId($collectiveId, $parentPath);
-		$this->sendRequest('DELETE', '/apps/collectives/_collectives/' . $collectiveId . '/_pages/parent/' . $parentId . '/page/' . $pageId);
+		$this->sendRequest('DELETE', '/apps/collectives/_api/' . $collectiveId . '/_pages/parent/' . $parentId . '/page/' . $pageId);
 		if ("fails" === $fail) {
 			$this->assertStatusCode(403);
 		} else {
@@ -335,7 +335,7 @@ class FeatureContext implements Context {
 		$collectiveId = $this->collectiveIdByName($collective);
 		$pageId = $this->pageIdByName($collectiveId, $page);
 		$parentId = $this->getParentId($collectiveId, $parentPath);
-		$this->sendRequest('GET', '/apps/collectives/_collectives/' . $collectiveId . '/_pages/parent/' . $parentId . '/page/' . $pageId . '/touch');
+		$this->sendRequest('GET', '/apps/collectives/_api/' . $collectiveId . '/_pages/parent/' . $parentId . '/page/' . $pageId . '/touch');
 		$this->assertStatusCode(200);
 	}
 
@@ -356,7 +356,7 @@ class FeatureContext implements Context {
 		$pageId = $this->pageIdByName($collectiveId, $page);
 		$parentId = $this->getParentId($collectiveId, $parentPath);
 		$formData = new TableNode([['title', $newtitle]]);
-		$this->sendRequest('PUT', '/apps/collectives/_collectives/' . $collectiveId . '/_pages/parent/' . $parentId . '/page/' . $pageId, $formData);
+		$this->sendRequest('PUT', '/apps/collectives/_api/' . $collectiveId . '/_pages/parent/' . $parentId . '/page/' . $pageId, $formData);
 		$this->assertStatusCode(200);
 	}
 
@@ -466,9 +466,9 @@ class FeatureContext implements Context {
 	 */
 	private function collectiveIdByName(string $name, bool $trash = false): ?int {
 		if ($trash) {
-			$this->sendRequest('GET', '/apps/collectives/_collectives/trash');
+			$this->sendRequest('GET', '/apps/collectives/_api/trash');
 		} else {
-			$this->sendRequest('GET', '/apps/collectives/_collectives');
+			$this->sendRequest('GET', '/apps/collectives/_api');
 		}
 		if (200 !== $this->response->getStatusCode()) {
 			throw new RuntimeException('Unable to get list of collectives');
@@ -490,7 +490,7 @@ class FeatureContext implements Context {
 	 * @throws GuzzleException
 	 */
 	private function pageIdByName(int $collectiveId, string $name): ?int {
-		$this->sendRequest('GET', '/apps/collectives/_collectives/' . $collectiveId . '/_pages');
+		$this->sendRequest('GET', '/apps/collectives/_api/' . $collectiveId . '/_pages');
 		if (200 !== $this->response->getStatusCode()) {
 			throw new RuntimeException('Unable to get list of pages for collective ' . $collectiveId);
 		}
@@ -651,7 +651,7 @@ class FeatureContext implements Context {
 	 * @return int
 	 */
 	private function getParentId(int $collectiveId, string $parentPath): int {
-		$this->sendRequest('GET', '/apps/collectives/_collectives/' . $collectiveId . '/_pages');
+		$this->sendRequest('GET', '/apps/collectives/_api/' . $collectiveId . '/_pages');
 		$jsonBody = $this->getJson();
 		foreach ($jsonBody['data'] as $page) {
 			$path = $page['filePath'] ? $page['filePath'] . '/' . $page['fileName'] : $page['fileName'];

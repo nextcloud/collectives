@@ -9,34 +9,34 @@
 return [
 	'routes' => [
 		// collectives
-		['name' => 'collective#index', 'url' => '/_collectives', 'verb' => 'GET'],
-		['name' => 'collective#create', 'url' => '/_collectives', 'verb' => 'POST'],
-		['name' => 'collective#update', 'url' => '/_collectives/{id}', 'verb' => 'PUT',
+		['name' => 'collective#index', 'url' => '/_api', 'verb' => 'GET'],
+		['name' => 'collective#create', 'url' => '/_api', 'verb' => 'POST'],
+		['name' => 'collective#update', 'url' => '/_api/{id}', 'verb' => 'PUT',
 			'requirements' => ['id' => '\d+']],
-		['name' => 'collective#trash', 'url' => '/_collectives/{id}', 'verb' => 'DELETE',
+		['name' => 'collective#trash', 'url' => '/_api/{id}', 'verb' => 'DELETE',
 			'requirements' => ['id' => '\d+']],
 
 		// collectives trash
-		['name' => 'trash#index', 'url' => '/_collectives/trash', 'verb' => 'GET'],
-		['name' => 'trash#delete', 'url' => '/_collectives/trash/{id}', 'verb' => 'DELETE',
+		['name' => 'trash#index', 'url' => '/_api/trash', 'verb' => 'GET'],
+		['name' => 'trash#delete', 'url' => '/_api/trash/{id}', 'verb' => 'DELETE',
 			'requirements' => ['id' => '\d+']],
-		['name' => 'trash#restore', 'url' => '/_collectives/trash/{id}', 'verb' => 'PATCH',
+		['name' => 'trash#restore', 'url' => '/_api/trash/{id}', 'verb' => 'PATCH',
 			'requirements' => ['id' => '\d+']],
 
 		// pages
-		['name' => 'page#index', 'url' => '/_collectives/{collectiveId}/_pages',
+		['name' => 'page#index', 'url' => '/_api/{collectiveId}/_pages',
 			'verb' => 'GET', 'requirements' => ['collectiveId' => '\d+']],
-		['name' => 'page#get', 'url' => '/_collectives/{collectiveId}/_pages/parent/{parentId}/page/{id}',
+		['name' => 'page#get', 'url' => '/_api/{collectiveId}/_pages/parent/{parentId}/page/{id}',
 			'verb' => 'GET', 'requirements' => ['collectiveId' => '\d+', 'parentId' => '\d+', 'id' => '\d+']],
-		['name' => 'page#create', 'url' => '/_collectives/{collectiveId}/_pages/parent/{parentId}',
+		['name' => 'page#create', 'url' => '/_api/{collectiveId}/_pages/parent/{parentId}',
 			'verb' => 'POST', 'requirements' => ['collectiveId' => '\d+', 'parentId' => '\d+']],
-		['name' => 'page#touch', 'url' => '/_collectives/{collectiveId}/_pages/parent/{parentId}/page/{id}/touch',
+		['name' => 'page#touch', 'url' => '/_api/{collectiveId}/_pages/parent/{parentId}/page/{id}/touch',
 			'verb' => 'GET', 'requirements' => ['collectiveId' => '\d+', 'parentId' => '\d+', 'id' => '\d+']],
-		['name' => 'page#rename', 'url' => '/_collectives/{collectiveId}/_pages/parent/{parentId}/page/{id}',
+		['name' => 'page#rename', 'url' => '/_api/{collectiveId}/_pages/parent/{parentId}/page/{id}',
 			'verb' => 'PUT', 'requirements' => ['collectiveId' => '\d+', 'parentId' => '\d+', 'id' => '\d+']],
-		['name' => 'page#delete', 'url' => '/_collectives/{collectiveId}/_pages/parent/{parentId}/page/{id}',
+		['name' => 'page#delete', 'url' => '/_api/{collectiveId}/_pages/parent/{parentId}/page/{id}',
 			'verb' => 'DELETE', 'requirements' => ['collectiveId' => '\d+', 'parentId' => '\d+', 'id' => '\d+']],
-		['name' => 'page#getBacklinks', 'url' => '/_collectives/{collectiveId}/_pages/parent/{parentId}/page/{id}/backlinks',
+		['name' => 'page#getBacklinks', 'url' => '/_api/{collectiveId}/_pages/parent/{parentId}/page/{id}/backlinks',
 			'verb' => 'GET', 'requirements' => ['collectiveId' => '\d+', 'parentId' => '\d+', 'id' => '\d+']],
 
 		// default route
