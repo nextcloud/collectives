@@ -99,7 +99,7 @@ export default {
 		 */
 		async [GET_COLLECTIVES]({ commit }) {
 			commit('load', 'collectives', { root: true })
-			const response = await axios.get(generateUrl('/apps/collectives/_collectives'))
+			const response = await axios.get(generateUrl('/apps/collectives/_api'))
 			commit(SET_COLLECTIVES, response.data.data)
 			commit('done', 'collectives', { root: true })
 		},
@@ -112,7 +112,7 @@ export default {
 		 */
 		async [GET_TRASH_COLLECTIVES]({ commit }) {
 			commit('load', 'collectiveTrash')
-			const response = await axios.get(generateUrl('/apps/collectives/_collectives/trash'))
+			const response = await axios.get(generateUrl('/apps/collectives/_api/trash'))
 			commit(SET_TRASH_COLLECTIVES, response.data.data)
 			commit('done', 'collectiveTrash')
 		},
@@ -126,7 +126,7 @@ export default {
 		 */
 		async [NEW_COLLECTIVE]({ commit }, collective) {
 			const response = await axios.post(
-				generateUrl('/apps/collectives/_collectives'),
+				generateUrl('/apps/collectives/_api'),
 				collective,
 			)
 			commit('info', response.data.message, { root: true })
@@ -142,7 +142,7 @@ export default {
 		 */
 		async [UPDATE_COLLECTIVE]({ commit }, collective) {
 			const response = await axios.put(
-				generateUrl('/apps/collectives/_collectives/' + collective.id),
+				generateUrl('/apps/collectives/_api/' + collective.id),
 				collective,
 			)
 			commit(ADD_OR_UPDATE_COLLECTIVE, response.data.data)
@@ -157,7 +157,7 @@ export default {
 		 * @param {number} collective.id ID of the colletive to be trashed
 		 */
 		async [TRASH_COLLECTIVE]({ commit }, { id }) {
-			const response = await axios.delete(generateUrl('/apps/collectives/_collectives/' + id))
+			const response = await axios.delete(generateUrl('/apps/collectives/_api/' + id))
 			commit(MOVE_COLLECTIVE_INTO_TRASH, response.data.data)
 		},
 
@@ -170,7 +170,7 @@ export default {
 		 * @param {number} collective.id ID of the colletive to be restored
 		 */
 		async [RESTORE_COLLECTIVE]({ commit }, { id }) {
-			const response = await axios.patch(generateUrl('/apps/collectives/_collectives/trash/' + id))
+			const response = await axios.patch(generateUrl('/apps/collectives/_api/trash/' + id))
 			commit(RESTORE_COLLECTIVE_FROM_TRASH, response.data.data)
 		},
 
@@ -188,7 +188,7 @@ export default {
 			if (circle) {
 				doCircle = '?circle=1'
 			}
-			const response = await axios.delete(generateUrl('/apps/collectives/_collectives/trash/' + id + doCircle))
+			const response = await axios.delete(generateUrl('/apps/collectives/_api/trash/' + id + doCircle))
 			commit(DELETE_COLLECTIVE_FROM_TRASH, response.data.data)
 			if (circle) {
 				commit(DELETE_CIRCLE_FOR, response.data.data, { root: true })
