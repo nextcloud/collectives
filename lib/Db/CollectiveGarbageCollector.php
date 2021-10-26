@@ -35,7 +35,7 @@ class CollectiveGarbageCollector {
 		$purgeCount = 0;
 		foreach ($this->collectiveMapper->getAll() as $collective) {
 			try {
-				$this->collectiveMapper->circleIdToName($collective->getCircleId(), true);
+				$this->collectiveMapper->circleIdToName($collective->getCircleId(), null, true);
 			} catch (NotFoundException $e) {
 				// Try to find collective folder
 				$collectiveFolder = null;

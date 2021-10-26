@@ -176,7 +176,7 @@ class CollectiveService {
 		if (null === $collective = $this->collectiveMapper->findById($id, $userId)) {
 			throw new NotFoundException('Collective not found: ' . $id);
 		}
-		$name = $this->collectiveMapper->circleIdToName($collective->getCircleId());
+		$name = $this->collectiveMapper->circleIdToName($collective->getCircleId(), $userId);
 		$level = $this->circleHelper->getLevel($collective->getCircleId(), $userId);
 
 		if (!$this->circleHelper->isAdmin($collective->getCircleId(), $userId)) {
@@ -205,7 +205,7 @@ class CollectiveService {
 		if (null === $collective = $this->collectiveMapper->findById($id, $userId)) {
 			throw new NotFoundException('Collective not found: ' . $id);
 		}
-		$name = $this->collectiveMapper->circleIdToName($collective->getCircleId());
+		$name = $this->collectiveMapper->circleIdToName($collective->getCircleId(), $userId);
 		$level = $this->circleHelper->getLevel($collective->getCircleId(), $userId);
 
 		if (!$this->circleHelper->isAdmin($collective->getCircleId(), $userId)) {
@@ -231,7 +231,7 @@ class CollectiveService {
 		if (null === $collective = $this->collectiveMapper->findTrashById($id, $userId)) {
 			throw new NotFoundException('Collective not found in trash: ' . $id);
 		}
-		$name = $this->collectiveMapper->circleIdToName($collective->getCircleId());
+		$name = $this->collectiveMapper->circleIdToName($collective->getCircleId(), $userId);
 		$level = $this->circleHelper->getLevel($collective->getCircleId(), $userId);
 
 		if ($deleteCircle) {
@@ -262,7 +262,7 @@ class CollectiveService {
 		if (null === $collective = $this->collectiveMapper->findTrashById($id, $userId)) {
 			throw new NotFoundException('Collective not found in trash: ' . $id);
 		}
-		$name = $this->collectiveMapper->circleIdToName($collective->getCircleId());
+		$name = $this->collectiveMapper->circleIdToName($collective->getCircleId(), $userId);
 		$level = $this->circleHelper->getLevel($collective->getCircleId(), $userId);
 
 		return new CollectiveInfo($this->collectiveMapper->restore($collective),

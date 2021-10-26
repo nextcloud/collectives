@@ -92,7 +92,7 @@ class CollectiveVersionsExpireManager extends BasicEmitter {
 				$id = (int)$row['id'];
 				$folderMap[$id] = [
 					'id' => $id,
-					'mount_point' => $this->collectiveMapper->circleIdToName($row['circle_unique_id'], true),
+					'mount_point' => $this->collectiveMapper->circleIdToName($row['circle_unique_id'], null, true),
 				];
 			}
 		} catch (NotFoundException $e) {

@@ -155,16 +155,17 @@ class CollectiveMapper extends QBMapper {
 	}
 
 	/**
-	 * @param string $circleId
-	 * @param bool   $super
+	 * @param string      $circleId
+	 * @param string|null $userId
+	 * @param bool        $super
 	 *
 	 * @return string
+	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
-	 * @throws MissingDependencyException
 	 */
-	public function circleIdToName(string $circleId, bool $super = false): string {
-		$circle = $this->circleHelper->getCircle($circleId, null, $super);
+	public function circleIdToName(string $circleId, string $userId = null, bool $super = false): string {
+		$circle = $this->circleHelper->getCircle($circleId, $userId, $super);
 		return $circle->getSanitizedName();
 	}
 
