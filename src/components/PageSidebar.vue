@@ -78,8 +78,8 @@ export default {
 	computed: {
 		...mapGetters([
 			'pagePath',
+			'currentCollective',
 			'currentPage',
-			'collectiveParam',
 			'title',
 			'landingPage',
 			'templatePage',
@@ -110,7 +110,7 @@ export default {
 		async deletePage() {
 			try {
 				await this.$store.dispatch(DELETE_PAGE)
-				this.$router.push(`/${encodeURIComponent(this.collectiveParam)}`)
+				this.$router.push(`/${encodeURIComponent(this.currentCollective.name)}`)
 				showSuccess(t('collectives', 'Page deleted'))
 			} catch (e) {
 				console.error(e)

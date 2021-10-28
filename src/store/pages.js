@@ -37,7 +37,7 @@ export default {
 
 	getters: {
 		pagePath: (_state, getters) => (page) => {
-			const collective = getters.collectiveParam
+			const collective = getters.currentCollective.name
 			const { filePath, fileName, title, id } = page
 			const titlePart = fileName !== 'Readme.md' && title
 			const pagePath = [

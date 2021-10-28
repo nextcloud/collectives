@@ -33,7 +33,7 @@
 		</div>
 		<Item v-if="currentCollective"
 			key="Readme"
-			:to="`/${encodeURIComponent(collectiveParam)}`"
+			:to="`/${encodeURIComponent(currentCollective.name)}`"
 			:title="currentCollective.name"
 			:level="0"
 			:page-id="collectivePage ? collectivePage.id : 0"
@@ -98,7 +98,6 @@ export default {
 
 	computed: {
 		...mapGetters([
-			'collectiveParam',
 			'collectivePage',
 			'templatePage',
 			'currentCollective',

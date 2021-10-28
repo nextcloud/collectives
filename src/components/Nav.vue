@@ -46,7 +46,6 @@ export default {
 		...mapGetters([
 			'loading',
 			'collectives',
-			'collectiveParam',
 			'trashCollectives',
 		]),
 
