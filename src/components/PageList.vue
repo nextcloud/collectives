@@ -33,7 +33,7 @@
 		</div>
 		<Item v-if="currentCollective"
 			key="Readme"
-			:to="`/${encodeURIComponent(currentCollective.name)}`"
+			:to="currentCollectivePath"
 			:title="currentCollective.name"
 			:level="0"
 			:page-id="collectivePage ? collectivePage.id : 0"
@@ -101,6 +101,7 @@ export default {
 			'collectivePage',
 			'templatePage',
 			'currentCollective',
+			'currentCollectivePath',
 			'loading',
 			'pagePath',
 			'visibleSubpages',

@@ -55,6 +55,10 @@ return [
 		['name' => 'publicPage#getBacklinks', 'url' => '/_api/p/{token}/_pages/parent/{parentId}/page/{id}/backlinks',
 			'verb' => 'GET', 'requirements' => ['parentId' => '\d+', 'id' => '\d+']],
 
+		// default public route (Vue.js frontend)
+		['name' => 'publicStart#publicIndex', 'url' => '/p/{token}/{path}', 'verb' => 'GET',
+			'requirements' => ['path' => '.*'],	'defaults' => ['path' => '']],
+
 		// default route (Vue.js frontend)
 		['name' => 'start#index', 'url' => '/{path}', 'verb' => 'GET',
 			'requirements' => ['path' => '.*'],

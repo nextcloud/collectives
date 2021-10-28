@@ -7,6 +7,7 @@
 		:has-preview="true"
 		:active="true"
 		:autofocus="false"
+		:share-token="shareTokenParam"
 		mime="text/markdown"
 		class="file-view active"
 		@ready="$emit('ready')" />
@@ -22,6 +23,7 @@ export default {
 		...mapGetters([
 			'currentPage',
 			'currentPageFilePath',
+			'shareTokenParam',
 		]),
 
 		/**

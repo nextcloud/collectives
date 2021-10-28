@@ -43,16 +43,19 @@
       <code>Base</code>
     </UndefinedClass>
   </file>
-  <file src="lib/Controller/PublicPageController.php">
-    <InvalidCatch occurrences="1"/>
-    <MissingDependency occurrences="1">
-      <code>ShareNotFound</code>
-    </MissingDependency>
+  <file src="lib/Controller/PublicCollectiveController.php">
+    <UndefinedClass occurrences="1">
+      <code>Member</code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Controller/PublicStartController.php">
+    <UndefinedClass occurrences="2">
+      <code>LoadViewer</code>
+      <code>LoadViewer</code>
+    </UndefinedClass>
   </file>
   <file src="lib/Controller/StartController.php">
-    <UndefinedClass occurrences="4">
-      <code>LoadViewer</code>
-      <code>LoadViewer</code>
+    <UndefinedClass occurrences="2">
       <code>LoadViewer</code>
       <code>LoadViewer</code>
     </UndefinedClass>

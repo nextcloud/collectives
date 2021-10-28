@@ -35,6 +35,14 @@ export default {
 			)
 		},
 
+		currentCollectivePath(state, getters) {
+			if (getters.isPublic) {
+				return `/p/${getters.shareTokenParam}/${encodeURIComponent(getters.currentCollective.name)}`
+			} else {
+				return `/${encodeURIComponent(getters.currentCollective.name)}`
+			}
+		},
+
 		collectives(state, getters) {
 			return state.collectives.sort(byName)
 		},
@@ -96,12 +104,18 @@ export default {
 		 *
 		 * @param {object} store the vuex store
 		 * @param {Function} store.commit commit changes
+		 * @param {object} store.getters getters of the store
 		 */
-		async [GET_COLLECTIVES]({ commit }) {
+		async [GET_COLLECTIVES]({ commit, getters }) {
 			commit('load', 'collectives')
-			const response = await axios.get(generateUrl('/apps/collectives/_api'))
-			commit(SET_COLLECTIVES, response.data.data)
-			commit('done', 'collectives')
+			try {
+				const response = getters.isPublic
+					? await axios.get(generateUrl(`/apps/collectives/_api/p/${getters.shareTokenParam}`))
+					: await axios.get(generateUrl('/apps/collectives/_api'))
+				commit(SET_COLLECTIVES, response.data.data)
+			} finally {
+				commit('done', 'collectives')
+			}
 		},
 
 		/**
@@ -109,8 +123,12 @@ export default {
 		 *
 		 * @param {object} store the vuex store
 		 * @param {Function} store.commit commit changes
+		 * @param {object} store.getters getters of the store
 		 */
-		async [GET_TRASH_COLLECTIVES]({ commit }) {
+		async [GET_TRASH_COLLECTIVES]({ commit, getters }) {
+			if (getters.isPublic) {
+				return
+			}
 			commit('load', 'collectiveTrash')
 			const response = await axios.get(generateUrl('/apps/collectives/_api/trash'))
 			commit(SET_TRASH_COLLECTIVES, response.data.data)
