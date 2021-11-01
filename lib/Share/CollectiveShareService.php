@@ -106,7 +106,7 @@ class CollectiveShareService {
 	 */
 	public function findShare(string $userId, int $collectiveId): ?CollectiveShare {
 		try {
-			$collectiveShare = $this->collectiveShareMapper->findByCollectiveIdAndUser($collectiveId, $userId);
+			$collectiveShare = $this->collectiveShareMapper->findOneByCollectiveIdAndUser($collectiveId, $userId);
 		} catch (DoesNotExistException | MultipleObjectsReturnedException | Exception $e) {
 			return null;
 		}
@@ -145,6 +145,18 @@ class CollectiveShareService {
 	}
 
 	/**
+	 * @param string $token
+	 */
+	private function deleteFileShare(string $token): void {
+		try {
+			$share = $this->shareManager->getShareByToken($token);
+			$this->shareManager->deleteShare($share);
+		} catch (ShareNotFound $e) {
+			// Corresponding folder share is already gone.
+		}
+	}
+
+	/**
 	 * @param string $userId
 	 * @param int    $collectiveId
 	 * @param string $token
@@ -155,7 +167,7 @@ class CollectiveShareService {
 	 */
 	public function deleteShare(string $userId, int $collectiveId, string $token): CollectiveShare {
 		try {
-			$collectiveShare = $this->collectiveShareMapper->findByCollectiveIdAndTokenAndUser($collectiveId, $token, $userId);
+			$collectiveShare = $this->collectiveShareMapper->findOneByCollectiveIdAndTokenAndUser($collectiveId, $token, $userId);
 			$this->collectiveShareMapper->delete($collectiveShare);
 		} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
 			throw new NotFoundException('Failed to find collective share ' . $token);
@@ -163,13 +175,25 @@ class CollectiveShareService {
 			throw new NotPermittedException('Failed to delete collective share ' . $token);
 		}
 
-		try {
-			$share = $this->shareManager->getShareByToken($token);
-			$this->shareManager->deleteShare($share);
-		} catch (ShareNotFound $e) {
-			// Corresponding folder share is already gone.
-		}
+		$this->deleteFileShare($collectiveShare->getToken());
 
 		return $collectiveShare;
+	}
+
+	/**
+	 * @param int $collectiveId
+	 *
+	 * @throws NotPermittedException
+	 */
+	public function deleteShareByCollectiveId(int $collectiveId): void {
+		try {
+			$collectiveShares = $this->collectiveShareMapper->findByCollectiveId($collectiveId);
+			foreach ($collectiveShares as $collectiveShare) {
+				$this->collectiveShareMapper->delete($collectiveShare);
+				$this->deleteFileShare($collectiveShare->getToken());
+			}
+		} catch (Exception $e) {
+			throw new NotPermittedException('Failed to delete collective share for ' . $collectiveId);
+		}
 	}
 }

@@ -52,7 +52,7 @@ class PublicCollectiveController extends PublicShareController {
 	 */
 	public function isValidToken(): bool {
 		try {
-			$this->collectiveShareMapper->findByToken($this->getToken());
+			$this->collectiveShareMapper->findOneByToken($this->getToken());
 		} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
 			return false;
 		}
@@ -84,7 +84,7 @@ class PublicCollectiveController extends PublicShareController {
 	public function get(): DataResponse {
 		return $this->prepareResponse(function () {
 			try {
-				$share = $this->collectiveShareMapper->findByToken($this->getToken());
+				$share = $this->collectiveShareMapper->findOneByToken($this->getToken());
 			} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
 				throw new NotFoundException('Failed to get shared collective');
 			}

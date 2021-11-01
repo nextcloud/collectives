@@ -27,19 +27,16 @@ class CollectiveShareMapper extends QBMapper {
 	/**
 	 * @param int $collectiveId
 	 *
-	 * @return CollectiveShare
-	 * @throws DoesNotExistException
-	 * @throws MultipleObjectsReturnedException
-	 * @throws Exception
+	 * @return CollectiveShare[]
 	 */
-	public function findByCollectiveId(int $collectiveId): CollectiveShare {
+	public function findByCollectiveId(int $collectiveId): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from($this->tableName)
 			->where(
 				$qb->expr()->eq('collective_id', $qb->createNamedParameter($collectiveId, IQueryBuilder::PARAM_INT))
 			);
-		return $this->findEntity($qb);
+		return $this->findEntities($qb);
 	}
 
 	/**
@@ -51,7 +48,7 @@ class CollectiveShareMapper extends QBMapper {
 	 * @throws MultipleObjectsReturnedException
 	 * @throws Exception
 	 */
-	public function findByCollectiveIdAndUser(int $collectiveId, string $userId): CollectiveShare {
+	public function findOneByCollectiveIdAndUser(int $collectiveId, string $userId): CollectiveShare {
 		$qb = $this->db->getQueryBuilder();
 		$where = $qb->expr()->andX();
 		$where->add($qb->expr()->eq('collective_id', $qb->createNamedParameter($collectiveId, IQueryBuilder::PARAM_INT)));
@@ -70,7 +67,7 @@ class CollectiveShareMapper extends QBMapper {
 	 * @throws MultipleObjectsReturnedException
 	 * @throws Exception
 	 */
-	public function findByToken(string $token): CollectiveShare {
+	public function findOneByToken(string $token): CollectiveShare {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from($this->tableName)
@@ -90,7 +87,7 @@ class CollectiveShareMapper extends QBMapper {
 	 * @throws Exception
 	 * @throws MultipleObjectsReturnedException
 	 */
-	public function findByCollectiveIdAndTokenAndUser(int $collectiveId, string $token, string $userId): CollectiveShare {
+	public function findOneByCollectiveIdAndTokenAndUser(int $collectiveId, string $token, string $userId): CollectiveShare {
 		$qb = $this->db->getQueryBuilder();
 		$where = $qb->expr()->andX();
 		$where->add($qb->expr()->eq('collective_id', $qb->createNamedParameter($collectiveId, IQueryBuilder::PARAM_INT)));
