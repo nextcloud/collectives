@@ -14,7 +14,7 @@
 <script>
 import { showInfo, showError } from '@nextcloud/dialogs'
 import { mapState, mapGetters, mapMutations } from 'vuex'
-import { GET_COLLECTIVES, GET_TRASH_COLLECTIVES } from './store/actions'
+import { GET_COLLECTIVES, GET_TRASH_COLLECTIVES, GET_COLLECTIVES_SHARES } from './store/actions'
 import displayError from './util/displayError'
 import Content from '@nextcloud/vue/dist/Components/Content'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile'
@@ -58,7 +58,9 @@ export default {
 	},
 
 	mounted() {
-		this.getCollectives()
+		this.getCollectives().then(() => {
+			this.getCollectivesShares()
+		})
 		this.getTrashCollectives()
 
 		if (!this.isPublic && !('contacts' in this.OC.appswebroots)) {
@@ -90,6 +92,15 @@ export default {
 				.catch(displayError('Could not fetch collectives from trash'))
 		},
 
+		/**
+		 * Get shares of all collectives
+		 *
+		 * @return {Promise}
+		 */
+		getCollectivesShares() {
+			return this.$store.dispatch(GET_COLLECTIVES_SHARES)
+				.catch(displayError('Could not fetch collective shares'))
+		},
 	},
 
 }

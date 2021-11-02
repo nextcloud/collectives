@@ -29,6 +29,27 @@
 			</button>
 		</template>
 		<template #actions>
+			<ActionButton v-if="!isPublic"
+				v-show="!collectiveShare(collective)"
+				:icon="shareIcon"
+				:close-after-click="false"
+				@click="share(collective)">
+				{{ t('collectives', 'Share link') }}
+			</ActionButton>
+			<ActionButton v-if="!isPublic"
+				v-show="collectiveShare(collective)"
+				:icon="copyLinkIcon"
+				:close-after-click="false"
+				@click.stop.prevent="copyShare(collective)">
+				{{ copyButtonText }}
+			</ActionButton>
+			<ActionButton v-if="!isPublic"
+				v-show="collectiveShare(collective)"
+				:icon="unshareIcon"
+				:close-after-click="false"
+				@click="unshare(collective)">
+				{{ t('collectives', 'Unshare') }}
+			</ActionButton>
 			<ActionButton icon="icon-pages"
 				:close-after-click="true"
 				@click="print">
@@ -50,7 +71,7 @@
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
-import { UPDATE_COLLECTIVE, TRASH_COLLECTIVE } from '../../store/actions'
+import { UPDATE_COLLECTIVE, TRASH_COLLECTIVE, SHARE_COLLECTIVE, UNSHARE_COLLECTIVE } from '../../store/actions'
 import displayError from '../../util/displayError'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import ActionLink from '@nextcloud/vue/dist/Components/ActionLink'
@@ -58,6 +79,7 @@ import EmojiPicker from '@nextcloud/vue/dist/Components/EmojiPicker'
 import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
 import { generateUrl } from '@nextcloud/router'
 import { memberLevels } from '../../constants'
+import CopyToClipboardMixin from '../../mixins/CopyToClipboardMixin'
 
 export default {
 	name: 'CollectiveListItem',
@@ -68,6 +90,8 @@ export default {
 		AppNavigationItem,
 		EmojiPicker,
 	},
+
+	mixins: [CopyToClipboardMixin],
 
 	props: {
 		collective: {
@@ -84,7 +108,11 @@ export default {
 
 	computed: {
 		...mapGetters([
+			'isPublic',
 			'collectives',
+			'collectiveShare',
+			'collectiveShareUrl',
+			'loading',
 		]),
 
 		isContactsInstalled() {
@@ -101,6 +129,23 @@ export default {
 
 		icon() {
 			return this.collective.emoji ? '' : 'icon-collectives'
+		},
+
+		shareIcon() {
+			return this.loading('share') ? 'icon-loading-small' : 'icon-public'
+		},
+
+		unshareIcon() {
+			return this.loading('unshare') ? 'icon-loading-small' : 'icon-public'
+		},
+
+		copyButtonText() {
+			if (this.copied) {
+				return this.copySuccess
+					? t('collectives', 'Copied')
+					: t('collectives', 'Cannot copy')
+			}
+			return t('collectives', 'Copy share link')
 		},
 	},
 
@@ -147,6 +192,19 @@ export default {
 			)
 		},
 
+		share(collective) {
+			return this.$store.dispatch(SHARE_COLLECTIVE, collective)
+				.catch(displayError('Could not share the collective'))
+		},
+
+		unshare(collective) {
+			return this.$store.dispatch(UNSHARE_COLLECTIVE, collective)
+				.catch(displayError('Could not share the collective'))
+		},
+
+		copyShare(collective) {
+			this.copyToClipboard(window.location.origin + this.collectiveShareUrl(collective))
+		},
 	},
 }
 </script>
