@@ -98,10 +98,10 @@ export default {
 		 * @param {Function} store.commit commit changes
 		 */
 		async [GET_COLLECTIVES]({ commit }) {
-			commit('load', 'collectives', { root: true })
+			commit('load', 'collectives')
 			const response = await axios.get(generateUrl('/apps/collectives/_api'))
 			commit(SET_COLLECTIVES, response.data.data)
-			commit('done', 'collectives', { root: true })
+			commit('done', 'collectives')
 		},
 
 		/**
@@ -129,7 +129,7 @@ export default {
 				generateUrl('/apps/collectives/_api'),
 				collective,
 			)
-			commit('info', response.data.message, { root: true })
+			commit('info', response.data.message)
 			commit(ADD_OR_UPDATE_COLLECTIVE, response.data.data)
 		},
 
@@ -191,7 +191,7 @@ export default {
 			const response = await axios.delete(generateUrl('/apps/collectives/_api/trash/' + id + doCircle))
 			commit(DELETE_COLLECTIVE_FROM_TRASH, response.data.data)
 			if (circle) {
-				commit(DELETE_CIRCLE_FOR, response.data.data, { root: true })
+				commit(DELETE_CIRCLE_FOR, response.data.data)
 			}
 		},
 	},
