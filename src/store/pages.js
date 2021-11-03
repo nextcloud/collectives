@@ -237,14 +237,14 @@ export default {
 		 */
 		async [GET_PAGES]({ commit, getters }, setLoading = true) {
 			if (setLoading) {
-				commit('load', 'collective', { root: true })
+				commit('load', 'collective')
 			}
 			const response = await axios.get(getters.pagesUrl)
 			commit(SET_PAGES, {
 				pages: response.data.data,
 				current: getters.currentPage,
 			})
-			commit('done', 'collective', { root: true })
+			commit('done', 'collective')
 		},
 
 		/**
@@ -254,10 +254,10 @@ export default {
 		 * @param {number} pageId Page ID
 		 */
 		async [GET_PAGE]({ commit, getters, state }, { parentId, pageId }) {
-			commit('load', 'page', { root: true })
+			commit('load', 'page')
 			const response = await axios.get(getters.pageUrl(parentId, pageId))
 			commit(UPDATE_PAGE, response.data.data)
-			commit('done', 'page', { root: true })
+			commit('done', 'page')
 		},
 
 		/**
@@ -270,7 +270,7 @@ export default {
 		 */
 		async [NEW_PAGE]({ commit, getters }, page) {
 			// We'll be done when the title form has focus.
-			commit('load', 'newPage', { root: true })
+			commit('load', 'newPage')
 
 			const response = await axios.post(getters.pageCreateUrl(page.parentId), page)
 			// Add new page to the beginning of pages array
@@ -292,7 +292,7 @@ export default {
 			}
 
 			// We'll be done when the editor has focus.
-			commit('load', 'editTemplate', { root: true })
+			commit('load', 'editTemplate')
 
 			const response = await axios.post(getters.pageCreateUrl(page.parentId), page)
 			// Add new page to the beginning of pages array
@@ -313,12 +313,12 @@ export default {
 		 * @param {string} newTitle new title for the page
 		 */
 		async [RENAME_PAGE]({ commit, getters }, newTitle) {
-			commit('load', 'page', { root: true })
+			commit('load', 'page')
 			const page = getters.currentPage
 			const url = getters.pageUrl(page.parentId, page.id)
 			const response = await axios.put(url, { title: newTitle })
 			await commit(UPDATE_PAGE, response.data.data)
-			commit('done', 'page', { root: true })
+			commit('done', 'page')
 		},
 
 		/**
@@ -329,10 +329,10 @@ export default {
 		 * @param {object} store.getters getters of the store
 		 */
 		async [DELETE_PAGE]({ commit, getters }) {
-			commit('load', 'page', { root: true })
+			commit('load', 'page')
 			await axios.delete(getters.pageUrl(getters.currentPage.parentId, getters.currentPage.id))
 			commit(DELETE_PAGE_BY_ID, getters.currentPage.id)
-			commit('done', 'page', { root: true })
+			commit('done', 'page')
 		},
 
 		/**
@@ -344,10 +344,10 @@ export default {
 		 * @param {object} page Page to get backlinks for
 		 */
 		async [GET_BACKLINKS]({ commit, getters }, page) {
-			commit('load', 'backlinks', { root: true })
+			commit('load', 'backlinks')
 			const response = await axios.get(getters.backlinksUrl(page.parentId, page.id))
 			commit(SET_BACKLINKS, { pages: response.data.data })
-			commit('done', 'backlinks', { root: true })
+			commit('done', 'backlinks')
 		},
 	},
 }
