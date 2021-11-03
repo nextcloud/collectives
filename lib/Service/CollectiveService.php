@@ -177,6 +177,7 @@ class CollectiveService {
 			throw new NotFoundException('Collective not found: ' . $id);
 		}
 		$name = $this->collectiveMapper->circleIdToName($collective->getCircleId());
+		$level = $this->circleHelper->getLevel($collective->getCircleId(), $userId);
 
 		if (!$this->circleHelper->isAdmin($collective->getCircleId(), $userId)) {
 			throw new NotPermittedException('Member ' . $userId . ' not allowed to update collective: ' . $id);
@@ -188,7 +189,7 @@ class CollectiveService {
 
 		return new CollectiveInfo($this->collectiveMapper->update($collective),
 			$name,
-			true);
+			$level);
 
 	}
 	/**
@@ -205,6 +206,7 @@ class CollectiveService {
 			throw new NotFoundException('Collective not found: ' . $id);
 		}
 		$name = $this->collectiveMapper->circleIdToName($collective->getCircleId());
+		$level = $this->circleHelper->getLevel($collective->getCircleId(), $userId);
 
 		if (!$this->circleHelper->isAdmin($collective->getCircleId(), $userId)) {
 			throw new NotPermittedException('Member ' . $userId . ' not allowed to delete collective: ' . $id);
@@ -212,7 +214,7 @@ class CollectiveService {
 
 		return new CollectiveInfo($this->collectiveMapper->trash($collective),
 			$name,
-			true);
+			$level);
 	}
 
 	/**
@@ -230,6 +232,7 @@ class CollectiveService {
 			throw new NotFoundException('Collective not found in trash: ' . $id);
 		}
 		$name = $this->collectiveMapper->circleIdToName($collective->getCircleId());
+		$level = $this->circleHelper->getLevel($collective->getCircleId(), $userId);
 
 		if ($deleteCircle) {
 			$this->circleHelper->destroyCircle($collective->getCircleId(), $userId);
@@ -243,7 +246,7 @@ class CollectiveService {
 			throw new NotFoundException('Failed to delete collective folder');
 		}
 
-		return new CollectiveInfo($this->collectiveMapper->delete($collective), $name, true);
+		return new CollectiveInfo($this->collectiveMapper->delete($collective), $name, $level);
 	}
 
 	/**
@@ -260,9 +263,10 @@ class CollectiveService {
 			throw new NotFoundException('Collective not found in trash: ' . $id);
 		}
 		$name = $this->collectiveMapper->circleIdToName($collective->getCircleId());
+		$level = $this->circleHelper->getLevel($collective->getCircleId(), $userId);
 
 		return new CollectiveInfo($this->collectiveMapper->restore($collective),
 			$name,
-			true);
+			$level);
 	}
 }
