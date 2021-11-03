@@ -2,14 +2,12 @@
 
 declare(strict_types=1);
 
-namespace OCA\Collectives\Share;
+namespace OCA\Collectives\Service;
 
 use OCA\Collectives\Db\CollectiveShare;
 use OCA\Collectives\Db\CollectiveShareMapper;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Model\CollectiveInfo;
-use OCA\Collectives\Service\NotFoundException;
-use OCA\Collectives\Service\NotPermittedException;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\Constants;

@@ -6,7 +6,7 @@ use Closure;
 
 use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Service\CollectiveService;
-use OCA\Collectives\Share\CollectiveShareService;
+use OCA\Collectives\Service\CollectiveShareService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;

@@ -12,7 +12,7 @@ use OCA\Collectives\Events\CollectiveDeletedEvent;
 use OCA\Collectives\Model\CollectiveInfo;
 use OCA\Collectives\Model\PageFile;
 use OCA\Collectives\Mount\CollectiveFolderManager;
-use OCA\Collectives\Share\CollectiveShareService;
+use OCA\Collectives\Service\CollectiveShareService;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\InvalidPathException;
 use OCP\Files\NotFoundException as FilesNotFoundException;

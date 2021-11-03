@@ -8,7 +8,7 @@ namespace OCA\Collectives\Listeners;
 use OCA\Collectives\Events\CollectiveDeletedEvent;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
-use OCA\Collectives\Share\CollectiveShareService;
+use OCA\Collectives\Service\CollectiveShareService;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
 

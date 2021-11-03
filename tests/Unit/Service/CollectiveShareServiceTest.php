@@ -12,7 +12,7 @@ use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Model\CollectiveInfo;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
-use OCA\Collectives\Share\CollectiveShareService;
+use OCA\Collectives\Service\CollectiveShareService;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\Lock\LockedException;

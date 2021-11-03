@@ -203,7 +203,7 @@
       <code>Member</code>
     </UndefinedClass>
   </file>
-  <file src="lib/Share/CollectiveShareService.php">
+  <file src="lib/Service/CollectiveShareService.php">
     <InvalidCatch occurrences="3"/>
     <MissingDependency occurrences="4">
       <code>$e</code>
