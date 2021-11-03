@@ -447,6 +447,8 @@ class FeatureContext implements Context {
 			$this->assertStatusCode(403);
 		} else {
 			$this->assertStatusCode(200);
+			$jsonBody = $this->getJson();
+			Assert::assertNotEmpty($jsonBody['data']['shareToken']);
 		}
 	}
 
@@ -478,6 +480,8 @@ class FeatureContext implements Context {
 		$token = $this->getCollectiveShareToken($collectiveId);
 		$this->sendRequest('DELETE', '/apps/collectives/_api/' . $collectiveId . '/share/' . $token);
 		$this->assertStatusCode(200);
+		$jsonBody = $this->getJson();
+		Assert::assertEmpty($jsonBody['data']['shareToken']);
 	}
 
 	/**
@@ -770,14 +774,18 @@ class FeatureContext implements Context {
 	 *
 	 * @return string|null
 	 */
-	private function getCollectiveShareToken(int $collectiveId): string {
-		$this->sendRequest('GET', '/apps/collectives/_api/' . $collectiveId . '/share');
-		$jsonBody = $this->getJson();
-		if (!$jsonBody['data'] || !array_key_exists('token', $jsonBody['data'])) {
-			throw new RuntimeException('Could not get public share token for ' . $collectiveId);
+	private function getCollectiveShareToken(int $collectiveId): ?string {
+		$this->sendRequest('GET', '/apps/collectives/_api');
+		if (200 !== $this->response->getStatusCode()) {
+			throw new RuntimeException('Unable to get list of collectives');
 		}
-
-		return $jsonBody['data']['token'];
+		$jsonBody = $this->getJson();
+		foreach ($jsonBody['data'] as $collective) {
+			if ($collectiveId === $collective['id']) {
+				return $collective['shareToken'];
+			}
+		}
+		return null;
 	}
 
 	/**

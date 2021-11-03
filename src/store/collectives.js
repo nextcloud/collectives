@@ -6,12 +6,10 @@ import {
 	SET_COLLECTIVES,
 	SET_TRASH_COLLECTIVES,
 	ADD_OR_UPDATE_COLLECTIVE,
-	ADD_OR_UPDATE_COLLECTIVE_SHARE,
 	MOVE_COLLECTIVE_INTO_TRASH,
 	RESTORE_COLLECTIVE_FROM_TRASH,
 	DELETE_COLLECTIVE_FROM_TRASH,
 	DELETE_CIRCLE_FOR,
-	DELETE_COLLECTIVE_SHARE,
 } from './mutations'
 
 import {
@@ -22,7 +20,6 @@ import {
 	TRASH_COLLECTIVE,
 	DELETE_COLLECTIVE,
 	RESTORE_COLLECTIVE,
-	GET_COLLECTIVES_SHARES,
 	SHARE_COLLECTIVE,
 	UNSHARE_COLLECTIVE,
 } from './actions'
@@ -77,8 +74,8 @@ export default {
 		},
 
 		collectiveShareUrl: (state, getters) => (collective) => {
-			if (getters.collectiveShare(collective)) {
-				return generateUrl(`/apps/collectives/p/${getters.collectiveShare(collective).token}/${collective.name}`)
+			if (collective.shareToken) {
+				return generateUrl(`/apps/collectives/p/${collective.shareToken}/${collective.name}`)
 			} else {
 				return null
 			}
@@ -103,15 +100,6 @@ export default {
 			state.updatedCollective = collective
 		},
 
-		[ADD_OR_UPDATE_COLLECTIVE_SHARE](state, collectiveShare) {
-			const cur = state.collectiveShares.findIndex(s => s.id === collectiveShare.id)
-			if (cur === -1) {
-				state.collectiveShares.unshift(collectiveShare)
-			} else {
-				state.collectiveShares.splice(cur, 1, collectiveShare)
-			}
-		},
-
 		[MOVE_COLLECTIVE_INTO_TRASH](state, collective) {
 			state.collectives.splice(state.collectives.findIndex(c => c.id === collective.id), 1)
 			state.trashCollectives.unshift(collective)
@@ -125,11 +113,6 @@ export default {
 		[DELETE_COLLECTIVE_FROM_TRASH](state, collective) {
 			state.trashCollectives.splice(state.trashCollectives.findIndex(c => c.id === collective.id), 1)
 		},
-
-		[DELETE_COLLECTIVE_SHARE](state, { id }) {
-			state.collectiveShares.splice(state.collectiveShares.findIndex(s => s.id === id), 1)
-		},
-
 	},
 
 	actions: {
@@ -248,26 +231,6 @@ export default {
 		},
 
 		/**
-		 * Get a public collective share
-		 *
-		 * @param {object} store the vuex store
-		 * @param {Function} store.commit commit changes
-		 * @param {object} store.getters getters of the store
-		 * @param {object} store.state the store data
-		 */
-		async [GET_COLLECTIVES_SHARES]({ commit, getters, state }) {
-			if (getters.isPublic) {
-				return
-			}
-			for (const collective of state.collectives) {
-				const response = await axios.get(generateUrl('/apps/collectives/_api/' + collective.id + '/share'))
-				if (response.data.data) {
-					commit(ADD_OR_UPDATE_COLLECTIVE_SHARE, response.data.data)
-				}
-			}
-		},
-
-		/**
 		 * Create a public collective share
 		 *
 		 * @param {object} store the vuex store
@@ -278,7 +241,7 @@ export default {
 		async [SHARE_COLLECTIVE]({ commit }, { id }) {
 			commit('load', 'share')
 			const response = await axios.post(generateUrl('/apps/collectives/_api/' + id + '/share'))
-			commit(ADD_OR_UPDATE_COLLECTIVE_SHARE, response.data.data)
+			commit(ADD_OR_UPDATE_COLLECTIVE, response.data.data)
 			commit('done', 'share')
 		},
 
@@ -293,9 +256,9 @@ export default {
 		async [UNSHARE_COLLECTIVE]({ commit, getters }, collective) {
 			commit('load', 'unshare')
 			const response = await axios.delete(
-				generateUrl('/apps/collectives/_api/' + collective.id + '/share/' + getters.collectiveShare(collective).token)
+				generateUrl('/apps/collectives/_api/' + collective.id + '/share/' + collective.shareToken)
 			)
-			commit(DELETE_COLLECTIVE_SHARE, response.data.data)
+			commit(ADD_OR_UPDATE_COLLECTIVE, response.data.data)
 			commit('done', 'unshare')
 		},
 	},

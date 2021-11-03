@@ -14,6 +14,7 @@ use OCA\Collectives\Service\CircleExistsException;
 use OCA\Collectives\Service\CircleHelper;
 use OCA\Collectives\Service\CollectiveHelper;
 use OCA\Collectives\Service\CollectiveService;
+use OCA\Collectives\Service\CollectiveShareService;
 use OCA\Collectives\Service\UnprocessableEntityException;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IL10N;
@@ -54,6 +55,10 @@ class CollectiveServiceTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
+		$shareService = $this->getMockBuilder(CollectiveShareService::class)
+			->disableOriginalConstructor()
+			->getMock();
+
 		$pageMapper = $this->getMockBuilder(PageMapper::class)
 			->disableOriginalConstructor()
 			->getMock();
@@ -71,6 +76,7 @@ class CollectiveServiceTest extends TestCase {
 			$collectiveHelper,
 			$collectiveFolderManager,
 			$this->circleHelper,
+			$shareService,
 			$pageMapper,
 			$this->l10n,
 			$dispatcher

@@ -30,21 +30,21 @@
 		</template>
 		<template #actions>
 			<ActionButton v-if="!isPublic"
-				v-show="!collectiveShare(collective)"
+				v-show="!collective.shareToken"
 				:icon="shareIcon"
 				:close-after-click="false"
 				@click="share(collective)">
 				{{ t('collectives', 'Share link') }}
 			</ActionButton>
 			<ActionButton v-if="!isPublic"
-				v-show="collectiveShare(collective)"
+				v-show="collective.shareToken"
 				:icon="copyLinkIcon"
 				:close-after-click="false"
 				@click.stop.prevent="copyShare(collective)">
 				{{ copyButtonText }}
 			</ActionButton>
 			<ActionButton v-if="!isPublic"
-				v-show="collectiveShare(collective)"
+				v-show="collective.shareToken"
 				:icon="unshareIcon"
 				:close-after-click="false"
 				@click="unshare(collective)">
@@ -110,7 +110,6 @@ export default {
 		...mapGetters([
 			'isPublic',
 			'collectives',
-			'collectiveShare',
 			'collectiveShareUrl',
 			'loading',
 		]),

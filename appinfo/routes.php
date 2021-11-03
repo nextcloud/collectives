@@ -15,8 +15,6 @@ return [
 			'requirements' => ['id' => '\d+']],
 		['name' => 'collective#trash', 'url' => '/_api/{id}', 'verb' => 'DELETE',
 			'requirements' => ['id' => '\d+']],
-		['name' => 'collective#getShare', 'url' => '/_api/{id}/share', 'verb' => 'GET',
-			'requirements' => ['id' => '\d+']],
 		['name' => 'collective#createShare', 'url' => '/_api/{id}/share', 'verb' => 'POST',
 			'requirements' => ['id' => '\d+']],
 		['name' => 'collective#deleteShare', 'url' => '/_api/{id}/share/{token}', 'verb' => 'DELETE',

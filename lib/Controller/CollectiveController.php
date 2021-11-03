@@ -83,7 +83,7 @@ class CollectiveController extends Controller {
 	public function index(): DataResponse {
 		return $this->prepareResponse(function () {
 			return [
-				"data" => $this->service->getCollectives($this->getUserId()),
+				"data" => $this->service->getCollectivesWithShares($this->getUserId()),
 			];
 		});
 	}
@@ -156,32 +156,14 @@ class CollectiveController extends Controller {
 	 *
 	 * @return DataResponse
 	 */
-	public function getShare(int $id): DataResponse {
-		return $this->prepareResponse(function () use ($id) {
-			$userId = $this->getUserId();
-			// Get collective first to error out if it doesn't exist
-			$collective = $this->service->getCollective($userId, $id);
-			$share = $this->shareService->findShare($userId, $collective->getId());
-			return [
-				"data" => $share
-			];
-		});
-	}
-
-	/**
-	 * @NoAdminRequired
-	 *
-	 * @param int $id
-	 *
-	 * @return DataResponse
-	 */
 	public function createShare(int $id): DataResponse {
 		return $this->prepareResponse(function () use ($id) {
 			$userId = $this->getUserId();
 			$collective = $this->service->getCollective($userId, $id);
 			$share = $this->shareService->createShare($userId, $collective);
+			$collective->setShareToken($share->getToken());
 			return [
-				"data" => $share
+				"data" => $collective
 			];
 		});
 	}
@@ -196,9 +178,11 @@ class CollectiveController extends Controller {
 	 */
 	public function deleteShare(int $id, string $token): DataResponse {
 		return $this->prepareResponse(function () use ($id, $token) {
-			$share = $this->shareService->deleteShare($this->getUserId(), $id, $token);
+			$userId = $this->getUserId();
+			$collective = $this->service->getCollective($userId, $id);
+			$this->shareService->deleteShare($userId, $id, $token);
 			return [
-				"data" => $share
+				"data" => $collective
 			];
 		});
 	}

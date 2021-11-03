@@ -12,6 +12,7 @@ use OCA\Collectives\Events\CollectiveDeletedEvent;
 use OCA\Collectives\Model\CollectiveInfo;
 use OCA\Collectives\Model\PageFile;
 use OCA\Collectives\Mount\CollectiveFolderManager;
+use OCA\Collectives\Share\CollectiveShareService;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\InvalidPathException;
 use OCP\Files\NotFoundException as FilesNotFoundException;
@@ -31,6 +32,9 @@ class CollectiveService {
 	/** @var CircleHelper */
 	private $circleHelper;
 
+	/** @var CollectiveShareService */
+	private $shareService;
+
 	/** @var PageMapper */
 	private $pageMapper;
 
@@ -47,6 +51,7 @@ class CollectiveService {
 	 * @param CollectiveHelper        $collectiveHelper
 	 * @param CollectiveFolderManager $collectiveFolderManager
 	 * @param CircleHelper            $circleHelper
+	 * @param CollectiveShareService  $shareService
 	 * @param PageMapper              $pageMapper
 	 * @param IL10N                   $l10n
 	 * @param IEventDispatcher        $dispatcher
@@ -56,6 +61,7 @@ class CollectiveService {
 		CollectiveHelper $collectiveHelper,
 		CollectiveFolderManager $collectiveFolderManager,
 		CircleHelper $circleHelper,
+		CollectiveShareService $shareService,
 		PageMapper $pageMapper,
 		IL10N $l10n,
 		IEventDispatcher $dispatcher) {
@@ -63,6 +69,7 @@ class CollectiveService {
 		$this->collectiveHelper = $collectiveHelper;
 		$this->collectiveFolderManager = $collectiveFolderManager;
 		$this->circleHelper = $circleHelper;
+		$this->shareService = $shareService;
 		$this->pageMapper = $pageMapper;
 		$this->l10n = $l10n;
 		$this->dispatcher = $dispatcher;
@@ -98,6 +105,26 @@ class CollectiveService {
 	 */
 	public function getCollectives(string $userId): array {
 		return $this->collectiveHelper->getCollectivesForUser($userId);
+	}
+
+	/**
+	 * @param string $userId
+	 *
+	 * @return CollectiveInfo[]
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 * @throws MissingDependencyException
+	 */
+	public function getCollectivesWithShares(string $userId): array {
+		$collectives = $this->collectiveHelper->getCollectivesForUser($userId);
+		foreach ($collectives as $c) {
+			if (null !== $share = $this->shareService->findShare($userId, $c->getId())) {
+				$c->setShareToken($share->getToken());
+			}
+		}
+		//$this->shareService->deleteShareByCollectiveId($collective->getId());
+
+		return $collectives;
 	}
 
 	/**
