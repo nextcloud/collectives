@@ -8,12 +8,9 @@ use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Db\Page;
 use OCA\Collectives\Db\PageMapper;
-use OCA\Collectives\Events\CollectiveDeletedEvent;
 use OCA\Collectives\Model\CollectiveInfo;
 use OCA\Collectives\Model\PageFile;
 use OCA\Collectives\Mount\CollectiveFolderManager;
-use OCA\Collectives\Service\CollectiveShareService;
-use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\InvalidPathException;
 use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\Files\NotPermittedException as FilesNotPermittedException;
@@ -41,9 +38,6 @@ class CollectiveService {
 	/** @var IL10N */
 	private $l10n;
 
-	/** @var IEventDispatcher */
-	private $dispatcher;
-
 	/**
 	 * CollectiveService constructor.
 	 *
@@ -54,7 +48,6 @@ class CollectiveService {
 	 * @param CollectiveShareService  $shareService
 	 * @param PageMapper              $pageMapper
 	 * @param IL10N                   $l10n
-	 * @param IEventDispatcher        $dispatcher
 	 */
 	public function __construct(
 		CollectiveMapper $collectiveMapper,
@@ -63,8 +56,7 @@ class CollectiveService {
 		CircleHelper $circleHelper,
 		CollectiveShareService $shareService,
 		PageMapper $pageMapper,
-		IL10N $l10n,
-		IEventDispatcher $dispatcher) {
+		IL10N $l10n) {
 		$this->collectiveMapper = $collectiveMapper;
 		$this->collectiveHelper = $collectiveHelper;
 		$this->collectiveFolderManager = $collectiveFolderManager;
@@ -72,7 +64,6 @@ class CollectiveService {
 		$this->shareService = $shareService;
 		$this->pageMapper = $pageMapper;
 		$this->l10n = $l10n;
-		$this->dispatcher = $dispatcher;
 	}
 
 	/**
@@ -300,7 +291,7 @@ class CollectiveService {
 		} catch (InvalidPathException | FilesNotFoundException | FilesNotPermittedException $e) {
 			throw new NotFoundException('Failed to delete collective folder');
 		} finally {
-			$this->dispatcher->dispatchTyped(new CollectiveDeletedEvent($collective));
+			$this->shareService->deleteShareByCollectiveId($collective->getId());
 		}
 
 		return new CollectiveInfo($this->collectiveMapper->delete($collective), $name, $level);

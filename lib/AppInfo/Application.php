@@ -6,9 +6,7 @@ namespace OCA\Collectives\AppInfo;
 
 use Closure;
 use OCA\Collectives\CacheListener;
-use OCA\Collectives\Events\CollectiveDeletedEvent;
 use OCA\Collectives\Fs\UserFolderHelper;
-use OCA\Collectives\Listeners\CollectiveDeletedListener;
 use OCA\Collectives\Listeners\LoadAdditionalScriptsListener;
 use OCA\Collectives\Listeners\ShareDeletedListener;
 use OCA\Collectives\Mount\CollectiveFolderManager;
@@ -44,7 +42,6 @@ class Application extends App implements IBootstrap {
 	public function register(IRegistrationContext $context): void {
 		$context->registerEventListener(LoadAdditionalScriptsEvent::class, LoadAdditionalScriptsListener::class);
 		$context->registerEventListener(ShareDeletedEvent::class, ShareDeletedListener::class);
-		$context->registerEventListener(CollectiveDeletedEvent::class, CollectiveDeletedListener::class);
 
 		$context->registerService(MountProvider::class, function (ContainerInterface $c) {
 			return new MountProvider(
