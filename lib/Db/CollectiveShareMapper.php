@@ -115,4 +115,20 @@ class CollectiveShareMapper extends QBMapper {
 
 		return $this->insert($share);
 	}
+
+	/**
+	 * @param string $token
+	 *
+	 * @return CollectiveShare
+	 * @throws Exception
+	 */
+	public function deleteByToken(string $token): ?CollectiveShare {
+		try {
+			$share = $this->findOneByToken($token);
+			return $this->delete($share);
+		} catch (MultipleObjectsReturnedException | DoesNotExistException $e) {
+		}
+
+		return null;
+	}
 }
