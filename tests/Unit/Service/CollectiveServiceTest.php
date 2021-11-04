@@ -16,7 +16,6 @@ use OCA\Collectives\Service\CollectiveHelper;
 use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\CollectiveShareService;
 use OCA\Collectives\Service\UnprocessableEntityException;
-use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IL10N;
 use PHPUnit\Framework\TestCase;
 
@@ -67,10 +66,6 @@ class CollectiveServiceTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
-		$dispatcher = $this->getMockBuilder(IEventDispatcher::class)
-			->disableOriginalConstructor()
-			->getMock();
-
 		$this->service = new CollectiveService(
 			$this->collectiveMapper,
 			$collectiveHelper,
@@ -78,8 +73,7 @@ class CollectiveServiceTest extends TestCase {
 			$this->circleHelper,
 			$shareService,
 			$pageMapper,
-			$this->l10n,
-			$dispatcher
+			$this->l10n
 		);
 	}
 

@@ -15,6 +15,7 @@ use OCA\Collectives\Service\NotPermittedException;
 use OCA\Collectives\Service\CollectiveShareService;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
+use OCP\IL10N;
 use OCP\Lock\LockedException;
 use OCP\Share\Exceptions\GenericShareException;
 use OCP\Share\Exceptions\ShareNotFound;
@@ -46,10 +47,15 @@ class CollectiveShareServiceTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
+		$l10n = $this->getMockBuilder(IL10N::class)
+			->disableOriginalConstructor()
+			->getMock();
+
 		$this->service = new CollectiveShareService(
 			$this->shareManager,
 			$this->userFolderHelper,
-			$this->collectiveShareMapper
+			$this->collectiveShareMapper,
+			$l10n
 		);
 
 		$collective = new Collective();

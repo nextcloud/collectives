@@ -13,6 +13,7 @@ use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\Constants;
 use OCP\DB\Exception;
 use OCP\Files\NotFoundException as FilesNotFoundException;
+use OCP\IL10N;
 use OCP\Lock\ILockingProvider;
 use OCP\Lock\LockedException;
 use OCP\Share\Exceptions\GenericShareException;
@@ -30,12 +31,17 @@ class CollectiveShareService {
 	/** @var CollectiveShareMapper */
 	private $collectiveShareMapper;
 
+	/** @var IL10N */
+	private $l10n;
+
 	public function __construct(IShareManager $shareManager,
 								UserFolderHelper $userFolderHelper,
-								CollectiveShareMapper $collectiveShareMapper) {
+								CollectiveShareMapper $collectiveShareMapper,
+								IL10N $l10n) {
 		$this->shareManager = $shareManager;
 		$this->userFolderHelper = $userFolderHelper;
 		$this->collectiveShareMapper = $collectiveShareMapper;
+		$this->l10n = $l10n;
 	}
 
 	/**
@@ -75,7 +81,7 @@ class CollectiveShareService {
 
 		$share->setShareType(IShare::TYPE_LINK);
 		$share->setSharedBy($userId);
-		$share->setLabel('collective ' . $collectiveName);
+		$share->setLabel($this->l10n->t('Collective Share'));
 
 		try {
 			$share = $this->shareManager->createShare($share);
