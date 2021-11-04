@@ -73,6 +73,8 @@ export default {
 
 	computed: {
 		...mapGetters([
+			'isPublic',
+			'shareTokenParam',
 			'currentPage',
 			'currentPageDavUrl',
 		]),
@@ -126,8 +128,18 @@ export default {
 		 * Get markdown content of page
 		 */
 		async getPageContent() {
+			// Authenticate via share token for public shares
+			let axiosConfig = {}
+			if (this.isPublic) {
+				axiosConfig = {
+					auth: {
+						username: this.shareTokenParam,
+					},
+				}
+			}
+
 			try {
-				const content = await axios.get(this.davUrl)
+				const content = await axios.get(this.davUrl, axiosConfig)
 				// content.data will attempt to parse as json
 				// but we want the raw text.
 				this.pageContent = content.request.responseText

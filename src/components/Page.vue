@@ -18,9 +18,11 @@
 					class="title"
 					:placeholder="t('collectives', 'Title')"
 					type="text"
+					:disabled="isPublic"
 					@blur="renamePageOnBlur();">
 			</form>
-			<button class="edit-button primary"
+			<button v-if="!isPublic"
+				class="edit-button primary"
 				:title="edit ? t('collectives', 'Stop editing') : t('collectives', 'Start editing')"
 				@click="edit ? stopEdit() : startEdit()">
 				<span class="icon icon-white"
@@ -105,6 +107,7 @@ export default {
 
 	computed: {
 		...mapGetters([
+			'isPublic',
 			'currentPage',
 			'currentPageFilePath',
 			'currentCollective',

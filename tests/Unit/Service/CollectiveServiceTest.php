@@ -14,6 +14,7 @@ use OCA\Collectives\Service\CircleExistsException;
 use OCA\Collectives\Service\CircleHelper;
 use OCA\Collectives\Service\CollectiveHelper;
 use OCA\Collectives\Service\CollectiveService;
+use OCA\Collectives\Service\CollectiveShareService;
 use OCA\Collectives\Service\UnprocessableEntityException;
 use OCP\IL10N;
 use PHPUnit\Framework\TestCase;
@@ -53,6 +54,10 @@ class CollectiveServiceTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
+		$shareService = $this->getMockBuilder(CollectiveShareService::class)
+			->disableOriginalConstructor()
+			->getMock();
+
 		$pageMapper = $this->getMockBuilder(PageMapper::class)
 			->disableOriginalConstructor()
 			->getMock();
@@ -66,6 +71,7 @@ class CollectiveServiceTest extends TestCase {
 			$collectiveHelper,
 			$collectiveFolderManager,
 			$this->circleHelper,
+			$shareService,
 			$pageMapper,
 			$this->l10n
 		);
@@ -150,7 +156,8 @@ class CollectiveServiceTest extends TestCase {
 			'circleId' => null,
 			'trashTimestamp' => null,
 			'name' => 'free',
-			'level' => Member::LEVEL_OWNER
+			'level' => Member::LEVEL_OWNER,
+			'shareToken' => null,
 		], $collective->jsonSerialize());
 	}
 }

@@ -6,6 +6,7 @@ use Closure;
 
 use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Service\CollectiveService;
+use OCA\Collectives\Service\CollectiveShareService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
@@ -29,6 +30,9 @@ class CollectiveController extends Controller {
 	/** @var NodeHelper */
 	private $nodeHelper;
 
+	/** @var CollectiveShareService */
+	private $shareService;
+
 	use ErrorHelper;
 
 	public function __construct(string $AppName,
@@ -37,13 +41,15 @@ class CollectiveController extends Controller {
 								IUserSession $userSession,
 								IFactory $l10nFactory,
 								LoggerInterface $logger,
-								NodeHelper $nodeHelper) {
+								NodeHelper $nodeHelper,
+								CollectiveShareService $shareService) {
 		parent::__construct($AppName, $request);
 		$this->service = $service;
 		$this->userSession = $userSession;
 		$this->l10nFactory = $l10nFactory;
 		$this->logger = $logger;
 		$this->nodeHelper = $nodeHelper;
+		$this->shareService = $shareService;
 	}
 
 	/**
@@ -77,7 +83,7 @@ class CollectiveController extends Controller {
 	public function index(): DataResponse {
 		return $this->prepareResponse(function () {
 			return [
-				"data" => $this->service->getCollectives($this->getUserId()),
+				"data" => $this->service->getCollectivesWithShares($this->getUserId()),
 			];
 		});
 	}
@@ -137,6 +143,44 @@ class CollectiveController extends Controller {
 	public function trash(int $id): DataResponse {
 		return $this->prepareResponse(function () use ($id) {
 			$collective = $this->service->trashCollective($this->getUserId(), $id);
+			return [
+				"data" => $collective
+			];
+		});
+	}
+
+	/**
+	 * @NoAdminRequired
+	 *
+	 * @param int $id
+	 *
+	 * @return DataResponse
+	 */
+	public function createShare(int $id): DataResponse {
+		return $this->prepareResponse(function () use ($id) {
+			$userId = $this->getUserId();
+			$collective = $this->service->getCollective($userId, $id);
+			$share = $this->shareService->createShare($userId, $collective);
+			$collective->setShareToken($share->getToken());
+			return [
+				"data" => $collective
+			];
+		});
+	}
+
+	/**
+	 * @NoAdminRequired
+	 *
+	 * @param int    $id
+	 * @param string $token
+	 *
+	 * @return DataResponse
+	 */
+	public function deleteShare(int $id, string $token): DataResponse {
+		return $this->prepareResponse(function () use ($id, $token) {
+			$userId = $this->getUserId();
+			$collective = $this->service->getCollective($userId, $id);
+			$this->shareService->deleteShare($userId, $id, $token);
 			return [
 				"data" => $collective
 			];

@@ -29,6 +29,9 @@ class CollectiveService {
 	/** @var CircleHelper */
 	private $circleHelper;
 
+	/** @var CollectiveShareService */
+	private $shareService;
+
 	/** @var PageMapper */
 	private $pageMapper;
 
@@ -42,6 +45,7 @@ class CollectiveService {
 	 * @param CollectiveHelper        $collectiveHelper
 	 * @param CollectiveFolderManager $collectiveFolderManager
 	 * @param CircleHelper            $circleHelper
+	 * @param CollectiveShareService  $shareService
 	 * @param PageMapper              $pageMapper
 	 * @param IL10N                   $l10n
 	 */
@@ -50,14 +54,36 @@ class CollectiveService {
 		CollectiveHelper $collectiveHelper,
 		CollectiveFolderManager $collectiveFolderManager,
 		CircleHelper $circleHelper,
+		CollectiveShareService $shareService,
 		PageMapper $pageMapper,
 		IL10N $l10n) {
 		$this->collectiveMapper = $collectiveMapper;
 		$this->collectiveHelper = $collectiveHelper;
 		$this->collectiveFolderManager = $collectiveFolderManager;
 		$this->circleHelper = $circleHelper;
+		$this->shareService = $shareService;
 		$this->pageMapper = $pageMapper;
 		$this->l10n = $l10n;
+	}
+
+	/**
+	 * @param string $userId
+	 * @param int    $id
+	 *
+	 * @return CollectiveInfo
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function getCollective(string $userId, int $id): CollectiveInfo
+	{
+		if (null === $collective = $this->collectiveMapper->findById($id, $userId)) {
+			throw new NotFoundException('Collective not found: ' . $id);
+		}
+		$name = $this->collectiveMapper->circleIdToName($collective->getCircleId(), $userId);
+
+		// Only used by PublicCollectiveController so far, thus no need to return membership level
+		return new CollectiveInfo($collective, $name);
 	}
 
 	/**
@@ -70,6 +96,26 @@ class CollectiveService {
 	 */
 	public function getCollectives(string $userId): array {
 		return $this->collectiveHelper->getCollectivesForUser($userId);
+	}
+
+	/**
+	 * @param string $userId
+	 *
+	 * @return CollectiveInfo[]
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 * @throws MissingDependencyException
+	 */
+	public function getCollectivesWithShares(string $userId): array {
+		$collectives = $this->collectiveHelper->getCollectivesForUser($userId);
+		foreach ($collectives as $c) {
+			if (null !== $share = $this->shareService->findShare($userId, $c->getId())) {
+				$c->setShareToken($share->getToken());
+			}
+		}
+		//$this->shareService->deleteShareByCollectiveId($collective->getId());
+
+		return $collectives;
 	}
 
 	/**
@@ -176,7 +222,7 @@ class CollectiveService {
 		if (null === $collective = $this->collectiveMapper->findById($id, $userId)) {
 			throw new NotFoundException('Collective not found: ' . $id);
 		}
-		$name = $this->collectiveMapper->circleIdToName($collective->getCircleId());
+		$name = $this->collectiveMapper->circleIdToName($collective->getCircleId(), $userId);
 		$level = $this->circleHelper->getLevel($collective->getCircleId(), $userId);
 
 		if (!$this->circleHelper->isAdmin($collective->getCircleId(), $userId)) {
@@ -205,7 +251,7 @@ class CollectiveService {
 		if (null === $collective = $this->collectiveMapper->findById($id, $userId)) {
 			throw new NotFoundException('Collective not found: ' . $id);
 		}
-		$name = $this->collectiveMapper->circleIdToName($collective->getCircleId());
+		$name = $this->collectiveMapper->circleIdToName($collective->getCircleId(), $userId);
 		$level = $this->circleHelper->getLevel($collective->getCircleId(), $userId);
 
 		if (!$this->circleHelper->isAdmin($collective->getCircleId(), $userId)) {
@@ -231,7 +277,7 @@ class CollectiveService {
 		if (null === $collective = $this->collectiveMapper->findTrashById($id, $userId)) {
 			throw new NotFoundException('Collective not found in trash: ' . $id);
 		}
-		$name = $this->collectiveMapper->circleIdToName($collective->getCircleId());
+		$name = $this->collectiveMapper->circleIdToName($collective->getCircleId(), $userId);
 		$level = $this->circleHelper->getLevel($collective->getCircleId(), $userId);
 
 		if ($deleteCircle) {
@@ -242,8 +288,10 @@ class CollectiveService {
 		try {
 			$collectiveFolder = $this->collectiveFolderManager->getFolder($collective->getId());
 			$collectiveFolder->delete();
-		} catch (InvalidPathException | \OCP\Files\NotFoundException | FilesNotPermittedException $e) {
+		} catch (InvalidPathException | FilesNotFoundException | FilesNotPermittedException $e) {
 			throw new NotFoundException('Failed to delete collective folder');
+		} finally {
+			$this->shareService->deleteShareByCollectiveId($collective->getId());
 		}
 
 		return new CollectiveInfo($this->collectiveMapper->delete($collective), $name, $level);
@@ -262,7 +310,7 @@ class CollectiveService {
 		if (null === $collective = $this->collectiveMapper->findTrashById($id, $userId)) {
 			throw new NotFoundException('Collective not found in trash: ' . $id);
 		}
-		$name = $this->collectiveMapper->circleIdToName($collective->getCircleId());
+		$name = $this->collectiveMapper->circleIdToName($collective->getCircleId(), $userId);
 		$level = $this->circleHelper->getLevel($collective->getCircleId(), $userId);
 
 		return new CollectiveInfo($this->collectiveMapper->restore($collective),

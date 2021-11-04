@@ -38,8 +38,12 @@ export default {
 		 *
 		 * @param {object} store the vuex store
 		 * @param {Function} store.commit commit changes
+		 * @param {object} store.getters getters of the store
 		 */
-		async [GET_CIRCLES]({ commit }) {
+		async [GET_CIRCLES]({ commit, getters }) {
+			if (getters.isPublic) {
+				return
+			}
 			const response = await axios.get(generateOcsUrl('apps/circles/circles'))
 			commit(SET_CIRCLES, response.data.ocs.data)
 		},

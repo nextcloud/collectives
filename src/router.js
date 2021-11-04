@@ -33,6 +33,15 @@ const routes = [
 		component: Home,
 	},
 	{
+		path: '/p/:token/:collective',
+		component: CollectiveView,
+		props: (route) => ({
+			...route.params,
+			fileId: Number(route.query.fileId),
+		}),
+		children: [{ path: ':page*' }],
+	},
+	{
 		path: '/:collective',
 		component: CollectiveView,
 		props: (route) => ({

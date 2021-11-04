@@ -3,7 +3,7 @@
 		ref="sidebar"
 		:title="title"
 		@close="close">
-		<template #secondary-actions>
+		<template v-if="!isPublic" #secondary-actions>
 			<ActionLink :href="filesUrl(page)"
 				icon="icon-files-dark"
 				:close-after-click="true">
@@ -33,7 +33,8 @@
 				v-if="showing('sidebar')"
 				:page="page" />
 		</AppSidebarTab>
-		<AppSidebarTab id="versions"
+		<AppSidebarTab v-if="!isPublic"
+			id="versions"
 			:order="1"
 			:name="t('collectives', 'Versions')"
 			icon="icon-history">
@@ -77,9 +78,10 @@ export default {
 
 	computed: {
 		...mapGetters([
+			'isPublic',
 			'pagePath',
+			'currentCollective',
 			'currentPage',
-			'collectiveParam',
 			'title',
 			'landingPage',
 			'templatePage',
@@ -110,7 +112,7 @@ export default {
 		async deletePage() {
 			try {
 				await this.$store.dispatch(DELETE_PAGE)
-				this.$router.push(`/${encodeURIComponent(this.collectiveParam)}`)
+				this.$router.push(`/${encodeURIComponent(this.currentCollective.name)}`)
 				showSuccess(t('collectives', 'Page deleted'))
 			} catch (e) {
 				console.error(e)

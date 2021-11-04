@@ -39,6 +39,7 @@ export default {
 			'messages',
 		]),
 		...mapGetters([
+			'isPublic',
 			'showing',
 			'currentPage',
 		]),
@@ -60,7 +61,7 @@ export default {
 		this.getCollectives()
 		this.getTrashCollectives()
 
-		if (!('contacts' in this.OC.appswebroots)) {
+		if (!this.isPublic && !('contacts' in this.OC.appswebroots)) {
 			console.error('The contacts app is required to manage members')
 			showError(t('collectives', 'The contacts app is required to manage members'))
 		}
@@ -88,7 +89,6 @@ export default {
 			return this.$store.dispatch(GET_TRASH_COLLECTIVES)
 				.catch(displayError('Could not fetch collectives from trash'))
 		},
-
 	},
 
 }

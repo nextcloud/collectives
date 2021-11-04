@@ -20,12 +20,15 @@ import {
 	TRASH_COLLECTIVE,
 	DELETE_COLLECTIVE,
 	RESTORE_COLLECTIVE,
+	SHARE_COLLECTIVE,
+	UNSHARE_COLLECTIVE,
 } from './actions'
 
 export default {
 	state: {
 		collectives: [],
 		trashCollectives: [],
+		collectiveShares: [],
 		updatedCollective: {},
 	},
 	getters: {
@@ -33,6 +36,14 @@ export default {
 			return state.collectives.find(
 				(collective) => collective.name === getters.collectiveParam
 			)
+		},
+
+		currentCollectivePath(state, getters) {
+			if (getters.isPublic) {
+				return `/p/${getters.shareTokenParam}/${encodeURIComponent(getters.currentCollective.name)}`
+			} else {
+				return `/${encodeURIComponent(getters.currentCollective.name)}`
+			}
 		},
 
 		collectives(state, getters) {
@@ -54,6 +65,20 @@ export default {
 			const current = getters.currentCollective
 				&& getters.currentCollective.name
 			return updated && (updated !== current)
+		},
+
+		collectiveShare: (state) => ({ id }) => {
+			return state.collectiveShares.find(
+				(collectiveShare) => collectiveShare.collectiveId === id
+			)
+		},
+
+		collectiveShareUrl: (state, getters) => (collective) => {
+			if (collective.shareToken) {
+				return generateUrl(`/apps/collectives/p/${collective.shareToken}/${collective.name}`)
+			} else {
+				return null
+			}
 		},
 	},
 	mutations: {
@@ -96,12 +121,18 @@ export default {
 		 *
 		 * @param {object} store the vuex store
 		 * @param {Function} store.commit commit changes
+		 * @param {object} store.getters getters of the store
 		 */
-		async [GET_COLLECTIVES]({ commit }) {
+		async [GET_COLLECTIVES]({ commit, getters }) {
 			commit('load', 'collectives')
-			const response = await axios.get(generateUrl('/apps/collectives/_api'))
-			commit(SET_COLLECTIVES, response.data.data)
-			commit('done', 'collectives')
+			try {
+				const response = getters.isPublic
+					? await axios.get(generateUrl(`/apps/collectives/_api/p/${getters.shareTokenParam}`))
+					: await axios.get(generateUrl('/apps/collectives/_api'))
+				commit(SET_COLLECTIVES, response.data.data)
+			} finally {
+				commit('done', 'collectives')
+			}
 		},
 
 		/**
@@ -109,8 +140,12 @@ export default {
 		 *
 		 * @param {object} store the vuex store
 		 * @param {Function} store.commit commit changes
+		 * @param {object} store.getters getters of the store
 		 */
-		async [GET_TRASH_COLLECTIVES]({ commit }) {
+		async [GET_TRASH_COLLECTIVES]({ commit, getters }) {
+			if (getters.isPublic) {
+				return
+			}
 			commit('load', 'collectiveTrash')
 			const response = await axios.get(generateUrl('/apps/collectives/_api/trash'))
 			commit(SET_TRASH_COLLECTIVES, response.data.data)
@@ -193,6 +228,38 @@ export default {
 			if (circle) {
 				commit(DELETE_CIRCLE_FOR, response.data.data)
 			}
+		},
+
+		/**
+		 * Create a public collective share
+		 *
+		 * @param {object} store the vuex store
+		 * @param {Function} store.commit commit changes
+		 * @param {object} collective the collective with id
+		 * @param {number} collective.id ID of the colletive to be unshared
+		 */
+		async [SHARE_COLLECTIVE]({ commit }, { id }) {
+			commit('load', 'share')
+			const response = await axios.post(generateUrl('/apps/collectives/_api/' + id + '/share'))
+			commit(ADD_OR_UPDATE_COLLECTIVE, response.data.data)
+			commit('done', 'share')
+		},
+
+		/**
+		 * Delete a public collective share
+		 *
+		 * @param {object} store the vuex store
+		 * @param {Function} store.commit commit changes
+		 * @param {object} store.getters getters of the store
+		 * @param {object} collective the collective with id
+		 */
+		async [UNSHARE_COLLECTIVE]({ commit, getters }, collective) {
+			commit('load', 'unshare')
+			const response = await axios.delete(
+				generateUrl('/apps/collectives/_api/' + collective.id + '/share/' + collective.shareToken)
+			)
+			commit(ADD_OR_UPDATE_COLLECTIVE, response.data.data)
+			commit('done', 'unshare')
 		},
 	},
 

@@ -29,6 +29,8 @@ use OCP\Files\NotFoundException;
  * @method void setLastUserId(string $value)
  * @method string getParentId()
  * @method void setParentId(string $value)
+ * @method int getShareToken()
+ * @method void setShareToken(string $value)
  */
 class PageFile extends Entity implements JsonSerializable {
 	public const INDEX_PAGE_TITLE = 'Readme';
@@ -59,6 +61,9 @@ class PageFile extends Entity implements JsonSerializable {
 	/** @var int */
 	protected $parentId;
 
+	/** @var string */
+	protected $shareToken;
+
 	/**
 	 * @return array
 	 */
@@ -73,6 +78,7 @@ class PageFile extends Entity implements JsonSerializable {
 			'collectivePath' => $this->collectivePath,
 			'lastUserId' => $this->lastUserId,
 			'parentId' => $this->parentId,
+			'shareToken' => $this->shareToken,
 		];
 	}
 

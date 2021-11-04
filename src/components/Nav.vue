@@ -9,7 +9,7 @@
 			<CollectiveListItem v-for="collective in collectives"
 				:key="collective.id"
 				:collective="collective" />
-			<NewCollective />
+			<NewCollective v-if="!isPublic" />
 		</template>
 		<template v-if="displayTrash" #footer>
 			<CollectiveTrash
@@ -44,14 +44,15 @@ export default {
 
 	computed: {
 		...mapGetters([
+			'isPublic',
 			'loading',
 			'collectives',
-			'collectiveParam',
 			'trashCollectives',
 		]),
 
 		displayTrash() {
-			return this.trashCollectives.length
+			return !this.isPublic
+				&& this.trashCollectives.length
 				&& !this.loading('collectives')
 				&& !this.loading('collectiveTrash')
 		},

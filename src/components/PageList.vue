@@ -33,7 +33,7 @@
 		</div>
 		<Item v-if="currentCollective"
 			key="Readme"
-			:to="`/${encodeURIComponent(collectiveParam)}`"
+			:to="currentCollectivePath"
 			:title="currentCollective.name"
 			:level="0"
 			:page-id="collectivePage ? collectivePage.id : 0"
@@ -47,7 +47,7 @@
 				<LastUpdate :timestamp="collectivePage.timestamp"
 					:user="collectivePage.lastUserId" />
 			</template>
-			<template #actions>
+			<template v-if="!isPublic" #actions>
 				<ActionButton
 					icon="icon-add"
 					@click="newPage(collectivePage)">
@@ -98,10 +98,11 @@ export default {
 
 	computed: {
 		...mapGetters([
-			'collectiveParam',
+			'isPublic',
 			'collectivePage',
 			'templatePage',
 			'currentCollective',
+			'currentCollectivePath',
 			'loading',
 			'pagePath',
 			'visibleSubpages',

@@ -37,10 +37,13 @@ export default {
 
 	getters: {
 		pagePath: (_state, getters) => (page) => {
-			const collective = getters.collectiveParam
+			const collective = getters.currentCollective.name
 			const { filePath, fileName, title, id } = page
 			const titlePart = fileName !== 'Readme.md' && title
+			// For public collectives, prepend `/p/{shareToken}`
 			const pagePath = [
+				getters.isPublic ? 'p' : null,
+				getters.isPublic ? getters.shareTokenParam : null,
 				collective,
 				...filePath.split('/'),
 				titlePart,
@@ -98,18 +101,27 @@ export default {
 
 		pageDavPath: (_state, getters) => (page) => {
 			const parts = getters.pageFilePath(page).split('/')
-			parts.unshift(getCurrentUser().uid)
+			// For public collectives, the dav path doesn't contain a username
+			if (!getters.isPublic) {
+				parts.unshift(getCurrentUser().uid)
+			}
 			return parts
 				.map(p => encodeURIComponent(p))
 				.join('/')
 		},
 
 		currentPageDavUrl(_state, getters) {
-			return generateRemoteUrl(`dav/files/${getters.currentPageDavPath}`)
+			return getters.isPublic
+				? generateRemoteUrl(`webdav/${getters.currentPageDavPath}`)
+					.replace('/remote.php', '/public.php')
+				: generateRemoteUrl(`dav/files/${getters.currentPageDavPath}`)
 		},
 
 		pageDavUrl: (_state, getters) => (page) => {
-			return generateRemoteUrl(`dav/files/${getters.pageDavPath(page)}`)
+			return getters.isPublic
+				? generateRemoteUrl(`webdav/${getters.pageDavPath(page)}`)
+					.replace('/remote.php', '/public.php')
+				: generateRemoteUrl(`dav/files/${getters.pageDavPath(page)}`)
 		},
 
 		collectivePage(state) {
@@ -149,7 +161,9 @@ export default {
 		},
 
 		pagesUrl(_state, getters) {
-			return generateUrl(`/apps/collectives/_api/${getters.currentCollective.id}/_pages`)
+			return getters.isPublic
+				? generateUrl(`/apps/collectives/_api/p/${getters.shareTokenParam}/_pages`)
+				: generateUrl(`/apps/collectives/_api/${getters.currentCollective.id}/_pages`)
 		},
 
 		pageCreateUrl(_state, getters) {

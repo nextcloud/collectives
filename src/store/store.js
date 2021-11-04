@@ -29,6 +29,7 @@ export default new Vuex.Store({
 
 		collectiveParam: (state) => state.route.params.collective,
 		pageParam: (state) => state.route.params.page,
+		shareTokenParam: (state) => state.route.params.token,
 
 		indexPage: (_state, get) =>
 			get.currentPage.fileName === 'Readme.md',
@@ -41,6 +42,9 @@ export default new Vuex.Store({
 
 		title: (_state, get) =>
 			get.landingPage ? get.currentCollective.name : get.currentPage.title,
+
+		isPublic: (_state, get) =>
+			!!get.shareTokenParam,
 	},
 
 	mutations: {

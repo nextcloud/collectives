@@ -8,6 +8,7 @@ use Closure;
 use OCA\Collectives\CacheListener;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Listeners\LoadAdditionalScriptsListener;
+use OCA\Collectives\Listeners\ShareDeletedListener;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Mount\MountProvider;
 use OCA\Collectives\Search\CollectiveProvider;
@@ -24,6 +25,7 @@ use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Files\Config\IMountProviderCollection;
 use OCP\Files\IMimeTypeLoader;
+use OCP\Share\Events\ShareDeletedEvent;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 
@@ -39,6 +41,7 @@ class Application extends App implements IBootstrap {
 	 */
 	public function register(IRegistrationContext $context): void {
 		$context->registerEventListener(LoadAdditionalScriptsEvent::class, LoadAdditionalScriptsListener::class);
+		$context->registerEventListener(ShareDeletedEvent::class, ShareDeletedListener::class);
 
 		$context->registerService(MountProvider::class, function (ContainerInterface $c) {
 			return new MountProvider(
