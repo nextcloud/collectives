@@ -28,6 +28,7 @@
     "@nextcloud/paths": "^2.1.0",
     "@nextcloud/router": "^2.0.0",
     "@nextcloud/vue": "^4.2.0",
+    "escape-html": "^1.0.3",
     "markdown-it": "^12.2.0",
     "markdown-it-task-lists": "^2.1.1",
     "stylelint-config-recommended-scss": "^4.3.0",
