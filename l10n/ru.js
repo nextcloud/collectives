@@ -18,6 +18,7 @@ OC.L10N.register(
     "Delete page" : "Удалить страницу",
     "Page deleted" : "Страница удалена",
     "Could not delete the page" : "Не удалось удалить страницу",
+    "Could not copy link to the clipboard:" : "Не удалось удалить страницу",
     "Please ask the administrator to enable these apps." : "Пожалуйста, попросите администратора включить эти приложения."
 },
 "nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;");

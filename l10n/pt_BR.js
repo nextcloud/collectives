@@ -7,6 +7,7 @@ OC.L10N.register(
     "Collectives: pages" : "Coletivos: páginas",
     "in Collective {collective}" : "no Coletivo {collective}",
     "Created collective \"%s\" for existing circle." : "Coletivo \"%s\" criado para o círculo.",
+    "Collective Share" : "Coletivos: páginas",
     "A place for activist and community projects to build shared knowledge" : "Um local para ativistas e projetos comunitários construírem uma base de conhecimentos",
     "Collectives is a Nextcloud App for activist and community projects to organize together.\nCome and gather in collectives to build shared knowledge.\n\n* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n  tied to a [Nextcloud Circle](https://github.com/nextcloud/circles) and\n  owned by the collective.\n* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**\n  for page formatting.\n\n## Installation\n\nIn your Nextcloud instance, simply navigate to **»Apps«**, find the\n**»Circles«** and **»Collectives«** apps and enable them." : "Coletivos é um aplicativo do Nextcloud para ativistas e projetos da comunidade para facilitar a organização.\nVenha e se una a coletivos para criar conhecimento compartilhado\n\n* 👥 **Coletivo com fluxos não-hierarquicos**:  Coletivos estão sempre ligados a um [Círculo Nextcloud](https://github.com/nextcloud/circles) e são de propriedade do mesmo.\n* 📝 **Edição de página colaborativa** semelhante ao Etherpad graças ao [Aplicativo de Texto](https://github.com/nextcloud/text)\n* 🔤 **Sintaxe bem conhecida [Markdown](https://en.wikipedia.org/wiki/Markdown)**\n  para formatação.\n\n## Instalação\n\nNo seu  Nextcloud, navege para **Aplicativos**, encontre  **Círculos** e  **Coletivos** e habilite-os.",
     "The contacts app is required to manage members" : "O aplicativo Contatos é necessário para gerrenciar membros",
@@ -77,6 +78,7 @@ OC.L10N.register(
     "Page deleted" : "Página removida",
     "Could not delete the page" : "Não foi possível remover página",
     "Come, organize and build shared knowledge!" : "Venha, organize e construa conhecimento compartilhado!",
+    "Could not copy link to the clipboard:" : "Não foi possível criar a página",
     "Error: Missing apps" : "Erro: Apps faltando",
     "The following dependency apps are missing: " : "Os seguintes aplicativos não foram encontrados: ",
     "Please ask the administrator to enable these apps." : "Por favor solicite a um administrador que habilite estes apps."

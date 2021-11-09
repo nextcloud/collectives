@@ -7,6 +7,7 @@ OC.L10N.register(
     "Collectives: pages" : "Kolektivy: stránky",
     "in Collective {collective}" : "V kolektivu {collective}",
     "Created collective \"%s\" for existing circle." : "Vytvořen kolektiv „%s“ pro existující okruh.",
+    "Collective Share" : "Kolektivy: stránky",
     "A place for activist and community projects to build shared knowledge" : "Místo pro aktivistické a komunitní projekty, pro vytváření sdílených znalostí",
     "Collectives is a Nextcloud App for activist and community projects to organize together.\nCome and gather in collectives to build shared knowledge.\n\n* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n  tied to a [Nextcloud Circle](https://github.com/nextcloud/circles) and\n  owned by the collective.\n* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**\n  for page formatting.\n\n## Installation\n\nIn your Nextcloud instance, simply navigate to **»Apps«**, find the\n**»Circles«** and **»Collectives«** apps and enable them." : "Kolektivy je Nextcloud aplikace pro společné organizování aktivistických a komunitních projektů.\nSdružujte se do kolektivů a vytvářejte společné znalosti.\n\n* 👥 **Kolektivy a přirozeně nehierarchické pracovní postupy**: Kolektivy jsou\n  navázané na [Nextcloud okruhy](https://github.com/nextcloud/circles)\n  a vlastněné kolektivem.\n* 📝 **Upravování stránek ve spolupráci vícero lidí naráz** (podobně jako v aplikaci Etherpad)\n  díky [aplikaci Text](https://github.com/nextcloud/text).\n* 🔤 **Dobře známá forma zápisu [Markdown](https://en.wikipedia.org/wiki/Markdown)**\n  pro formátování stránky.\n\n## Instalace\n\nVe vaší instanci Nextcloud stačí přejít do **»Aplikace«**, najít aplikace\n**»Okruhy«** a **»Kolektivy«** a aktivovat je.",
     "The contacts app is required to manage members" : "Aby bylo možné spravovat členy, je zapotřebí nainstalovat aplikaci Kontakty",
@@ -78,6 +79,7 @@ OC.L10N.register(
     "Page deleted" : "Stránka smazána",
     "Could not delete the page" : "Stránku se nepodařilo smazat",
     "Come, organize and build shared knowledge!" : "Organizujte se a vytvářejte sdílené znalosti!",
+    "Could not copy link to the clipboard:" : "Stránku se nedaří vytvořit",
     "Error: Missing apps" : "Chyba: chybějící aplikace",
     "The following dependency apps are missing: " : "Chybí následující aplikace, které tato potřebuje pro své fungování: ",
     "Please ask the administrator to enable these apps." : "Požádejte správce vámi využívané instance aby tyto aplikace zapnul."

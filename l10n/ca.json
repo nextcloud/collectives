@@ -5,6 +5,7 @@
     "Collectives: pages" : "Col·lectius: pàgines",
     "in Collective {collective}" : "al Col·lectiu {collective}",
     "Created collective \"%s\" for existing circle." : "Creat col·lectiu \"%s\" pel cercle existent.",
+    "Collective Share" : "Col·lectius: pàgines",
     "A place for activist and community projects to build shared knowledge" : "Un espai per activistes i projectes comunitaris per crear contingut compartit",
     "Collectives is a Nextcloud App for activist and community projects to organize together.\nCome and gather in collectives to build shared knowledge.\n\n* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n  tied to a [Nextcloud Circle](https://github.com/nextcloud/circles) and\n  owned by the collective.\n* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**\n  for page formatting.\n\n## Installation\n\nIn your Nextcloud instance, simply navigate to **»Apps«**, find the\n**»Circles«** and **»Collectives«** apps and enable them." : "Collectives és una app de Nextcloud per activistes i projectes comunitaris per treballar col·laborativament.\nVine a reunir-te en col·lectius per construir coneixement compartit.\n\n* 👥 **Flux de treball Col·lectiu i no jeràrquic **: Col·lectius estan\n  enllaçats a [Nextcloud Circle](https://github.com/nextcloud/circles) i\n  el col·lectiu n'és el propietari.\n* 📝 **Edició Col·laborativa de pàgina** com al conegut Etherpad i gràcies a\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Amb sintaxis [Markdown](https://en.wikipedia.org/wiki/Markdown)**\n  per al format de text de pàgina.\n\n## Instal·lació\n\nAl teu Nextcloud, simplement navega a les **»Apps«**, cerca les apps\n**»Circles«** i **»Collectives«** i actívalas.",
     "The contacts app is required to manage members" : "L'App de contactes es requereix per gestionar membres.",
@@ -76,6 +77,7 @@
     "Page deleted" : "Pàgina esborrada",
     "Could not delete the page" : "No s'ha pogut esborrar la pàgina",
     "Come, organize and build shared knowledge!" : "Vine, organitza i crea coneixement compartit!",
+    "Could not copy link to the clipboard:" : "No s'ha pogut crear la pàgina",
     "Error: Missing apps" : "Error: Apps faltants.",
     "The following dependency apps are missing: " : "Falten les aplicacions amb dependència següents: ",
     "Please ask the administrator to enable these apps." : "Si us plau pregunti a l'administrador/a per activar aquestes apps."

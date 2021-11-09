@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2021-10-19 09:52+0200\n"
+"POT-Creation-Date: 2021-11-09 13:07+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,32 +22,36 @@ msgstr ""
 #: /collectives/lib/Search/CollectiveProvider.php:58
 #: /collectives/lib/Search/CollectiveProvider.php:106
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:2
-#: /collectives/specialVueFakeDummyForL10nScript.js:38
-#: /collectives/specialVueFakeDummyForL10nScript.js:78
+#: /collectives/specialVueFakeDummyForL10nScript.js:43
+#: /collectives/specialVueFakeDummyForL10nScript.js:83
 msgid "Collectives"
 msgstr ""
 
-#: /collectives/lib/Search/PageContentProvider.php:74
-#: /collectives/lib/Search/PageContentProvider.php:133
+#: /collectives/lib/Search/PageContentProvider.php:75
+#: /collectives/lib/Search/PageContentProvider.php:132
 msgid "Collectives: page content"
 msgstr ""
 
-#: /collectives/lib/Search/PageContentProvider.php:120
+#: /collectives/lib/Search/PageContentProvider.php:121
 msgid "in page {page} from collective {collective}"
 msgstr ""
 
-#: /collectives/lib/Search/PageProvider.php:66
-#: /collectives/lib/Search/PageProvider.php:120
+#: /collectives/lib/Search/PageProvider.php:68
+#: /collectives/lib/Search/PageProvider.php:121
 msgid "Collectives: pages"
 msgstr ""
 
-#: /collectives/lib/Search/PageProvider.php:108
+#: /collectives/lib/Search/PageProvider.php:111
 msgid "in Collective {collective}"
 msgstr ""
 
-#: /collectives/lib/Service/CollectiveService.php:116
+#: /collectives/lib/Service/CollectiveService.php:162
 #, php-format
 msgid "Created collective \"%s\" for existing circle."
+msgstr ""
+
+#: /collectives/lib/Service/CollectiveShareService.php:84
+msgid "Collective Share"
 msgstr ""
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:3
@@ -92,281 +96,309 @@ msgid "Select a collective or create a new one on the left."
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:5
-msgid "Print"
+msgid "Share link"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:6
-msgid "Manage members"
+msgid "Unshare"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:7
-msgid "Delete"
+msgid "Print"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:8
-msgid "Change emoji"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:8
-#: /collectives/specialVueFakeDummyForL10nScript.js:21
-msgid "Add emoji"
+msgid "Manage members"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:9
-msgid "Deleted collectives"
+msgid "Delete"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:10
-#: /collectives/specialVueFakeDummyForL10nScript.js:29
-msgid "Restore"
+msgid "Change emoji"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:10
+#: /collectives/specialVueFakeDummyForL10nScript.js:26
+msgid "Add emoji"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:11
-msgid "Delete permanently"
+msgid "Copied"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:12
-msgid "Permanently delete collective »{collective}«"
+msgid "Cannot copy"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:13
-msgid "Delete corresponding circle along with the collective?"
+msgid "Copy share link"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:14
-msgid "Cancel"
+msgid "Deleted collectives"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:15
-msgid "Only collective"
+#: /collectives/specialVueFakeDummyForL10nScript.js:34
+msgid "Restore"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:16
-#: /collectives/specialVueFakeDummyForL10nScript.js:18
-msgid "Collective and circle"
+msgid "Delete permanently"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:17
-msgid "Only circle owners can delete a circle"
+msgid "Permanently delete collective »{collective}«"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:18
+msgid "Delete corresponding circle along with the collective?"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:19
-#: /collectives/specialVueFakeDummyForL10nScript.js:80
-msgid "Create new collective"
+msgid "Cancel"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:20
-msgid "Create collective for existing circle"
+msgid "Only collective"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:21
+#: /collectives/specialVueFakeDummyForL10nScript.js:23
+msgid "Collective and circle"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:22
-msgid "New collective name"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:23
-msgid "Select circle..."
+msgid "Only circle owners can delete a circle"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:24
-msgid "Select a collective"
+#: /collectives/specialVueFakeDummyForL10nScript.js:85
+msgid "Create new collective"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:25
-msgid "Page not found:"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:26
-msgid "Could not find the Page."
+msgid "Create collective for existing circle"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:27
-msgid "Select a page from the list or create a new one."
+msgid "New collective name"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:28
-msgid "Restore this version"
+msgid "Select circle..."
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:29
+msgid "Select a collective"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:30
-msgid "Reverted {page} to revision {timestamp}."
+msgid "Page not found:"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:31
-msgid "Failed to revert {page} to revision {timestamp}."
+msgid "Could not find the Page."
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:32
-#: /collectives/specialVueFakeDummyForL10nScript.js:41
-msgid "Template"
+msgid "Select a page from the list or create a new one."
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:33
-msgid "Title"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:34
-msgid "Stop editing"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:34
-msgid "Start editing"
+msgid "Restore this version"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:35
-msgid "Done"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:35
-msgid "Edit"
+msgid "Reverted {page} to revision {timestamp}."
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:36
-msgid "Hide all subpages"
+msgid "Failed to revert {page} to revision {timestamp}."
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:37
-msgid "Show all subpages"
+#: /collectives/specialVueFakeDummyForL10nScript.js:46
+msgid "Template"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:38
+msgid "Title"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:39
-msgid "Could not rename the page"
+msgid "Stop editing"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:39
+msgid "Start editing"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:40
-msgid "Expand subpage list"
+msgid "Done"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:40
-msgid "Collapse subpage list"
+msgid "Edit"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:41
+msgid "Hide all subpages"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:42
-msgid "Last edited by {user}"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:43
-msgid "Add a subpage"
+msgid "Show all subpages"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:44
-#: /collectives/specialVueFakeDummyForL10nScript.js:55
-#: /collectives/specialVueFakeDummyForL10nScript.js:69
-msgid "Edit template for subpages"
+msgid "Could not rename the page"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:45
-#: /collectives/specialVueFakeDummyForL10nScript.js:56
-msgid "Add template for subpages"
+msgid "Expand subpage list"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:46
-#: /collectives/specialVueFakeDummyForL10nScript.js:48
-#: /collectives/specialVueFakeDummyForL10nScript.js:57
-#: /collectives/specialVueFakeDummyForL10nScript.js:59
-#: /collectives/specialVueFakeDummyForL10nScript.js:77
-msgid "Could not create the page"
+#: /collectives/specialVueFakeDummyForL10nScript.js:45
+msgid "Collapse subpage list"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:47
-#: /collectives/specialVueFakeDummyForL10nScript.js:58
-msgid "New Page"
+msgid "Last edited by {user}"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:48
+msgid "Add a subpage"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:49
-#: /collectives/specialVueFakeDummyForL10nScript.js:50
-msgid "Hide templates"
+#: /collectives/specialVueFakeDummyForL10nScript.js:60
+#: /collectives/specialVueFakeDummyForL10nScript.js:74
+msgid "Edit template for subpages"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:49
 #: /collectives/specialVueFakeDummyForL10nScript.js:50
-msgid "Show templates"
+#: /collectives/specialVueFakeDummyForL10nScript.js:61
+msgid "Add template for subpages"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:51
-msgid "Sort order"
+#: /collectives/specialVueFakeDummyForL10nScript.js:53
+#: /collectives/specialVueFakeDummyForL10nScript.js:62
+#: /collectives/specialVueFakeDummyForL10nScript.js:64
+#: /collectives/specialVueFakeDummyForL10nScript.js:82
+msgid "Could not create the page"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:52
-msgid "Sort by last modification"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:53
-msgid "Sort by title"
+#: /collectives/specialVueFakeDummyForL10nScript.js:63
+msgid "New Page"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:54
+#: /collectives/specialVueFakeDummyForL10nScript.js:55
+msgid "Hide templates"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:54
+#: /collectives/specialVueFakeDummyForL10nScript.js:55
+msgid "Show templates"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:56
+msgid "Sort order"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:57
+msgid "Sort by last modification"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:58
+msgid "Sort by title"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:59
 msgid "Add a page"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:60
+#: /collectives/specialVueFakeDummyForL10nScript.js:65
 msgid "No backlinks available"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:61
+#: /collectives/specialVueFakeDummyForL10nScript.js:66
 msgid "If other pages link to this one, they will be listed here."
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:62
+#: /collectives/specialVueFakeDummyForL10nScript.js:67
 msgid "Could not get page backlinks"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:63
+#: /collectives/specialVueFakeDummyForL10nScript.js:68
 msgid "Current version"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:64
+#: /collectives/specialVueFakeDummyForL10nScript.js:69
 msgid "No other versions available"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:65
+#: /collectives/specialVueFakeDummyForL10nScript.js:70
 msgid "After editing you can find old versions of the page here."
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:66
+#: /collectives/specialVueFakeDummyForL10nScript.js:71
 msgid "Could not get page versions"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:67
-#: /collectives/src/util/xmlToVersionsList.js:29
+#: /collectives/specialVueFakeDummyForL10nScript.js:72
+#: /collectives/src/util/xmlToVersionsList.js:30
 msgid "%n byte"
 msgid_plural "%n bytes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:68
+#: /collectives/specialVueFakeDummyForL10nScript.js:73
 msgid "Show in Files"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:70
+#: /collectives/specialVueFakeDummyForL10nScript.js:75
 msgid "Delete page"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:71
+#: /collectives/specialVueFakeDummyForL10nScript.js:76
 msgid "Backlinks"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:72
+#: /collectives/specialVueFakeDummyForL10nScript.js:77
 msgid "Pages that link to this one"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:73
+#: /collectives/specialVueFakeDummyForL10nScript.js:78
 msgid "Versions"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:74
+#: /collectives/specialVueFakeDummyForL10nScript.js:79
 msgid "Old versions of this page"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:75
+#: /collectives/specialVueFakeDummyForL10nScript.js:80
 msgid "Page deleted"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:76
+#: /collectives/specialVueFakeDummyForL10nScript.js:81
 msgid "Could not delete the page"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:79
+#: /collectives/specialVueFakeDummyForL10nScript.js:84
 msgid "Come, organize and build shared knowledge!"
+msgstr ""
+
+#: /collectives/src/mixins/CopyToClipboardMixin.js:42
+msgid "Link copied to the clipboard."
+msgstr ""
+
+#: /collectives/src/mixins/CopyToClipboardMixin.js:47
+msgid "Could not copy link to the clipboard:"
 msgstr ""
 
 #: /collectives/templates/error.php:4
