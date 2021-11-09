@@ -81,5 +81,10 @@ describe('Collective Share', function() {
 						.contains('Unshare').should('not.be.visible')
 				})
 		})
+		it('Opening unshared collective fails', function() {
+			cy.visit(shareUrl, { failOnStatusCode: false })
+			cy.get('.body-login-container').should('contain', 'File not found')
+			cy.get('.infogroup').should('contain', 'The document could not be found on the server.')
+		})
 	})
 })
