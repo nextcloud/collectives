@@ -7,6 +7,7 @@ OC.L10N.register(
     "Collectives: pages" : "Kollektiver: sider",
     "in Collective {collective}" : "i kollektivet {collective}",
     "Created collective \"%s\" for existing circle." : "Opprettet kollektivet «%s» for eksisterende sirkel.",
+    "Collective Share" : "Kollektiver: sider",
     "A place for activist and community projects to build shared knowledge" : "Et sted for aktivist- og gemenskapsprosjekter for bygging av delt kunnskap",
     "Collectives is a Nextcloud App for activist and community projects to organize together.\nCome and gather in collectives to build shared knowledge.\n\n* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n  tied to a [Nextcloud Circle](https://github.com/nextcloud/circles) and\n  owned by the collective.\n* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**\n  for page formatting.\n\n## Installation\n\nIn your Nextcloud instance, simply navigate to **»Apps«**, find the\n**»Circles«** and **»Collectives«** apps and enable them." : "Kollektiver er et Nextcloud-program tiltenkt organisering av aktivist- og gemenskapsprosjekter.\nKnytt deg til fellesskap i gemenskaper for å bygge delt kunnskap.\n* 👥 **Gemenskapsdrevet grasrotsarbeidsflyt**: Kollektiver er\n  knyttet til en [Nextcloud-sirkel](https://github.com/nextcloud/circles) og\n  eid av gemenskapen.\n* 📝 **Samarbeidsredigering av sider** som på Etherpad, takket være\n  [Tekst-programmet](https://github.com/nextcloud/text).\n* 🔤 **Velkjent [Markdown](https://en.wikipedia.org/wiki/Markdown)-syntaks**\n  for sideformatering.\n\n##Installasjon\n\nI din Nextcloud-instans går du til **«Programmer»**, finner\n**«Sirkler»** og **«Kollektiver»**-programmene og skrur dem på.",
     "Collective not found:" : "Kollektiver",
@@ -61,6 +62,7 @@ OC.L10N.register(
     "Page deleted" : "Siden ble slettet",
     "Could not delete the page" : "Kunne ikke slette siden",
     "Come, organize and build shared knowledge!" : "Ta del, organiser, og bygg delt kunnskap.",
+    "Could not copy link to the clipboard:" : "Kunne ikke opprette siden",
     "Error: Missing apps" : "Feil: Manglende programmer",
     "The following dependency apps are missing: " : "Følgende avhengigheter mangler: ",
     "Please ask the administrator to enable these apps." : "Spør en administrator om å skru på disse programmene."

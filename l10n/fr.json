@@ -5,6 +5,7 @@
     "Collectives: pages" : "Collectifs : Pages",
     "in Collective {collective}" : "dans le collectif {collective}",
     "Created collective \"%s\" for existing circle." : "Collectif « %s » créé pour le cercle existant.",
+    "Collective Share" : "Collectifs : Pages",
     "A place for activist and community projects to build shared knowledge" : "Un lieu où les projets des activistes et des communautés peuvent développer des connaissances communes",
     "Collectives is a Nextcloud App for activist and community projects to organize together.\nCome and gather in collectives to build shared knowledge.\n\n* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n  tied to a [Nextcloud Circle](https://github.com/nextcloud/circles) and\n  owned by the collective.\n* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**\n  for page formatting.\n\n## Installation\n\nIn your Nextcloud instance, simply navigate to **»Apps«**, find the\n**»Circles«** and **»Collectives«** apps and enable them." : "Collectifs est une application Nextcloud qui permet aux activistes et aux projets communautaires de s'organiser ensemble.\nVenez et rassemblez-vous en collectifs pour développer des connaissances partagées.\n\n* 👥 **Fonctionnement collectif et non hiérarchique** : Les collectifs sont\n  liés à un [Cercle Nextcloud] (https://github.com/nextcloud/circles) qui\n  appartient au collectif.\n* 📝 **Édition collaborative de pages** comme on le connaît sur Etherpad grâce à\n  l'[application Texte] (https://github.com/nextcloud/text).\n* 🔤 **Syntaxe bien connue de [Markdown](https://en.wikipedia.org/wiki/Markdown)**\n  pour le formatage des pages.\n\n## Installation\n\nDans votre instance Nextcloud, rendez-vous simplement dans **« Applications »**, trouvez les\napplications **« Cercles »** et **« Collectifs »** et activez-les.",
     "The contacts app is required to manage members" : "L'application Contacts est requise pour gérer les membres",
@@ -76,6 +77,7 @@
     "Page deleted" : "Page supprimée",
     "Could not delete the page" : "Impossible de supprimer la page",
     "Come, organize and build shared knowledge!" : "Venez, organisez et développez des connaissances partagées !",
+    "Could not copy link to the clipboard:" : "Impossible de créer la page",
     "Error: Missing apps" : "Erreur : Applications manquantes",
     "The following dependency apps are missing: " : "Les dépendances d'application suivantes sont manquantes : ",
     "Please ask the administrator to enable these apps." : "Veuillez demander à l'administrateur d'activer ces applications."
