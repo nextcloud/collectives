@@ -81,9 +81,10 @@ class CollectiveService {
 			throw new NotFoundException('Collective not found: ' . $id);
 		}
 		$name = $this->collectiveMapper->circleIdToName($collective->getCircleId(), $userId);
+		$level = $this->circleHelper->getLevel($collective->getCircleId(), $userId);
 
 		// Only used by PublicCollectiveController so far, thus no need to return membership level
-		return new CollectiveInfo($collective, $name);
+		return new CollectiveInfo($collective, $name, $level);
 	}
 
 	/**
