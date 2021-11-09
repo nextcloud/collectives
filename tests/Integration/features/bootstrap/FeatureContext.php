@@ -59,8 +59,8 @@ class FeatureContext implements Context {
 	 * @When user :user creates collective :collective
 	 * @When user :user :fails to create collective :collective
 	 *
-	 * @param string $user
-	 * @param string $collective
+	 * @param string      $user
+	 * @param string      $collective
 	 * @param string|null $fail
 	 *
 	 * @throws GuzzleException
@@ -73,6 +73,7 @@ class FeatureContext implements Context {
 			$this->assertStatusCode(422);
 		} else {
 			$this->assertStatusCode(200);
+			$this->assertCollectiveLevel($collective, 9);
 		}
 	}
 
@@ -213,6 +214,7 @@ class FeatureContext implements Context {
 			$this->assertStatusCode($member ? 404 : 403);
 		} else {
 			$this->assertStatusCode(200);
+			$this->assertCollectiveLevel($collective, 9);
 		}
 	}
 
@@ -241,6 +243,7 @@ class FeatureContext implements Context {
 			$this->assertStatusCode(404);
 		} else {
 			$this->assertStatusCode(200);
+			$this->assertCollectiveLevel($collective, 9);
 		}
 	}
 
@@ -270,6 +273,7 @@ class FeatureContext implements Context {
 			$this->assertStatusCode($selfadmin ? 403 : 404);
 		} else {
 			$this->assertStatusCode(200);
+			$this->assertCollectiveLevel($collective, 9);
 		}
 	}
 
@@ -294,6 +298,7 @@ class FeatureContext implements Context {
 			$this->assertStatusCode(404);
 		} else {
 			$this->assertStatusCode(200);
+			$this->assertCollectiveLevel($collective, 9);
 		}
 	}
 
@@ -447,6 +452,7 @@ class FeatureContext implements Context {
 			$this->assertStatusCode(403);
 		} else {
 			$this->assertStatusCode(200);
+			$this->assertCollectiveLevel($collective, 9);
 			$jsonBody = $this->getJson();
 			Assert::assertNotEmpty($jsonBody['data']['shareToken']);
 		}
@@ -480,6 +486,7 @@ class FeatureContext implements Context {
 		$token = $this->getCollectiveShareToken($collectiveId);
 		$this->sendRequest('DELETE', '/apps/collectives/_api/' . $collectiveId . '/share/' . $token);
 		$this->assertStatusCode(200);
+		$this->assertCollectiveLevel($collective, 9);
 		$jsonBody = $this->getJson();
 		Assert::assertEmpty($jsonBody['data']['shareToken']);
 	}
@@ -499,6 +506,7 @@ class FeatureContext implements Context {
 		$this->sendRequest('GET', '/apps/collectives/_api/p/' . $token, null, [], false);
 		$this->assertStatusCode(200);
 		$this->assertCollectiveByName($collective);
+		$this->assertCollectiveLevel($collective, 1);
 	}
 
 	/**
@@ -811,6 +819,23 @@ class FeatureContext implements Context {
 		} else {
 			Assert::assertNotContains($name, $collectiveNames);
 		}
+	}
+
+	/**
+	 * @param string $name
+	 * @param int    $level
+	 */
+	private function assertCollectiveLevel(string $name, int $level): void {
+		$data = $this->getJson()['data'];
+		// Dirty hack. We don't know whether $data contains the collective (e.g. after collective#create)
+		// or an array of collectives (e.g. after collectives#index or publicCollectives#get)
+		if (array_key_exists(0, $data) && !array_key_exists('name', $data)) {
+			$collective = $data[0];
+		} else {
+			$collective = $data;
+		}
+		Assert::assertEquals($name, $collective['name']);
+		Assert::assertEquals($level, $collective['level']);
 	}
 
 	/**
