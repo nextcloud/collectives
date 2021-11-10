@@ -80,6 +80,8 @@ describe('Page', function() {
 				.should('have.value', '')
 				.type('New page from Template{enter}')
 			cy.get('.editor__content').contains('This is going to be our template.')
+			cy.get('.app-content-list-item:first-child')
+				.should('contain', 'New page from Template')
 		})
 	})
 
