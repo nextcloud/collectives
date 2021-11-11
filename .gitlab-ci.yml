@@ -343,7 +343,7 @@ update_l10n:
     - make l10n
     - git add l10n/ translationfiles/
     - git commit -m "Update translation/language files in Gitlab CI"
-    - git push origin "$CI_COMMIT_REF_NAME" -o ci.skip
+    - git push origin HEAD:"$CI_COMMIT_REF_NAME" -o ci.skip
   only:
     #refs: [weblate-collectives-collectives-app]
     refs: [merge_requests]
