@@ -1,4 +1,5 @@
 import { showWarning, showError } from '@nextcloud/dialogs'
+import escapeHtml from 'escape-html'
 
 /**
  * @param {string} msg the error message
@@ -6,7 +7,7 @@ import { showWarning, showError } from '@nextcloud/dialogs'
  */
 function content(msg, details) {
 	return details
-		? `<div>${msg}</div><div>${details}</div>`
+		? `<div>${escapeHtml(msg)}</div><div>${escapeHtml(details)}</div>`
 		: msg
 }
 
