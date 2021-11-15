@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2021-11-09 13:00+0100\n"
-"PO-Revision-Date: 2021-08-23 09:29+0000\n"
+"PO-Revision-Date: 2021-11-16 11:50+0000\n"
 "Last-Translator: Nathan <bonnemainsnathan@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/fr/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.8.1-dev\n"
+"X-Generator: Weblate 4.9.1-dev\n"
 
 #: /collectives/lib/Fs/UserFolderHelper.php:62
 #: /collectives/lib/Search/CollectiveProvider.php:58
@@ -52,9 +52,8 @@ msgid "Created collective \"%s\" for existing circle."
 msgstr "Collectif « %s » créé pour le cercle existant."
 
 #: /collectives/lib/Service/CollectiveShareService.php:84
-#, fuzzy
 msgid "Collective Share"
-msgstr "Collectifs : Pages"
+msgstr "Partage de collectif"
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:3
 msgid "A place for activist and community projects to build shared knowledge"
@@ -121,11 +120,11 @@ msgstr "Sélectionnez un collectif ou créez en un sur la gauche."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:5
 msgid "Share link"
-msgstr ""
+msgstr "Lien de partage"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:6
 msgid "Unshare"
-msgstr ""
+msgstr "Ne plus partager"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:7
 msgid "Print"
@@ -150,15 +149,15 @@ msgstr "Ajouter un émoji"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:11
 msgid "Copied"
-msgstr ""
+msgstr "Copié"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:12
 msgid "Cannot copy"
-msgstr ""
+msgstr "Impossible d'effectuer la copie"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:13
 msgid "Copy share link"
-msgstr ""
+msgstr "Copier le lien de partage"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:14
 msgid "Deleted collectives"
@@ -421,12 +420,11 @@ msgstr "Venez, organisez et développez des connaissances partagées !"
 
 #: /collectives/src/mixins/CopyToClipboardMixin.js:42
 msgid "Link copied to the clipboard."
-msgstr ""
+msgstr "Lien copié dans le presse-papiers."
 
 #: /collectives/src/mixins/CopyToClipboardMixin.js:47
-#, fuzzy
 msgid "Could not copy link to the clipboard:"
-msgstr "Impossible de créer la page"
+msgstr "Impossible de copier le lien dans le presse-papiers :"
 
 #: /collectives/templates/error.php:4
 msgid "Error: Missing apps"
