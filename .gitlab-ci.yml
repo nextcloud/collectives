@@ -222,7 +222,7 @@ Unit Test Javascript:
   before_script:
     - make composer-install
     - ln -s `pwd` $NEXTCLOUD_SOURCE/apps/collectives
-    - sudo -u www-data $NEXTCLOUD_SOURCE/occ app:enable collectives
+    - sudo -u www-data $NEXTCLOUD_SOURCE/occ app:enable --force collectives
     - INTERNAL_IP_ADDRESS="$(ip a show type veth | grep -o "inet [0-9]*\.[0-9]*\.[0-9]*\.[0-9]*" | grep -o "[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*")"
     - echo "$INTERNAL_IP_ADDRESS nextcloud.local" >>/etc/hosts
     - /etc/init.d/apache2 start
@@ -251,7 +251,7 @@ OCC CLI Test:
   <<: *php
   stage: test integration
   script:
-    - sudo -u www-data $NEXTCLOUD_SOURCE/occ app:enable collectives
+    - sudo -u www-data $NEXTCLOUD_SOURCE/occ app:enable --force collectives
     - sudo -u www-data $NEXTCLOUD_SOURCE/occ app:list
     - sudo -u www-data $NEXTCLOUD_SOURCE/occ collectives:create --owner alice NewCollective
     - sudo -u www-data $NEXTCLOUD_SOURCE/occ collectives:purge-obsolete
