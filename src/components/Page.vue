@@ -29,7 +29,8 @@
 					:class="`icon-${toggleIcon}`" />
 				{{ edit ? t('collectives', 'Done') : t('collectives', 'Edit') }}
 			</button>
-			<Actions>
+			<PageActions v-if="!isPublic" />
+			<Actions v-show="!showing('sidebar')">
 				<ActionButton
 					icon="icon-menu-sidebar"
 					:close-after-click="true"
@@ -70,6 +71,7 @@ import Actions from '@nextcloud/vue/dist/Components/Actions'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import Editor from './Page/Editor'
 import RichText from './Page/RichText'
+import PageActions from './Page/PageActions'
 import Subpages from './Page/Subpages'
 import { showError } from '@nextcloud/dialogs'
 import { mapGetters, mapMutations } from 'vuex'
@@ -88,9 +90,10 @@ export default {
 	components: {
 		ActionButton,
 		Actions,
-		Subpages,
 		Editor,
 		RichText,
+		PageActions,
+		Subpages,
 	},
 
 	data() {

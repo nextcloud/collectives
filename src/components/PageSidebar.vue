@@ -3,25 +3,6 @@
 		ref="sidebar"
 		:title="title"
 		@close="close">
-		<template v-if="!isPublic" #secondary-actions>
-			<ActionLink :href="filesUrl(page)"
-				icon="icon-files-dark"
-				:close-after-click="true">
-				{{ t('collectives', 'Show in Files') }}
-			</ActionLink>
-			<ActionButton v-if="!isTemplatePage"
-				icon="icon-pages-template"
-				:close-after-click="true"
-				@click="editTemplate(page)">
-				{{ t('collectives', 'Edit template for subpages') }}
-			</ActionButton>
-			<ActionButton v-if="!landingPage"
-				icon="icon-delete"
-				:close-after-click="true"
-				@click="deletePage">
-				{{ t('collectives', 'Delete page') }}
-			</ActionButton>
-		</template>
 		<AppSidebarTab id="backlinks"
 			:order="0"
 			:name="t('collectives', 'Backlinks')"
@@ -52,13 +33,8 @@
 </template>
 
 <script>
-import { showSuccess, showError } from '@nextcloud/dialogs'
 import { mapGetters, mapMutations } from 'vuex'
-import { NEW_TEMPLATE, DELETE_PAGE, GET_PAGES } from '../store/actions'
 import { SELECT_VERSION } from '../store/mutations'
-import { generateUrl } from '@nextcloud/router'
-import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
-import ActionLink from '@nextcloud/vue/dist/Components/ActionLink'
 import AppSidebar from '@nextcloud/vue/dist/Components/AppSidebar'
 import AppSidebarTab from '@nextcloud/vue/dist/Components/AppSidebarTab'
 import SidebarTabBacklinks from './PageSidebar/SidebarTabBacklinks'
@@ -68,8 +44,6 @@ export default {
 	name: 'PageSidebar',
 
 	components: {
-		ActionButton,
-		ActionLink,
 		AppSidebar,
 		AppSidebarTab,
 		SidebarTabBacklinks,
@@ -79,13 +53,8 @@ export default {
 	computed: {
 		...mapGetters([
 			'isPublic',
-			'pagePath',
-			'currentCollective',
 			'currentPage',
 			'title',
-			'landingPage',
-			'templatePage',
-			'isTemplatePage',
 			'showing',
 		]),
 
@@ -95,7 +64,7 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['hide', 'expand']),
+		...mapMutations(['hide']),
 
 		/**
 		 * Load the current version and close the sidebar
@@ -104,52 +73,8 @@ export default {
 			this.$store.commit(SELECT_VERSION, null)
 			this.hide('sidebar')
 		},
-
-		/**
-		 * Delete the current page,
-		 * remove it from the frontend and show a hint
-		 */
-		async deletePage() {
-			try {
-				await this.$store.dispatch(DELETE_PAGE)
-				this.$router.push(`/${encodeURIComponent(this.currentCollective.name)}`)
-				showSuccess(t('collectives', 'Page deleted'))
-			} catch (e) {
-				console.error(e)
-				showError(t('collectives', 'Could not delete the page'))
-			}
-		},
-
-		filesUrl(page) {
-			return generateUrl(`/apps/files/?fileid=${page.id}`)
-		},
-
-		/**
-		 * Open existing or create new template page
-		 *
-		 * @param {object} parentPage Parent page
-		 */
-		async editTemplate(parentPage) {
-			if (this.templatePage(parentPage.id)) {
-				this.$router.push(this.pagePath(this.templatePage(parentPage.id)))
-				return
-			}
-
-			try {
-				await this.$store.dispatch(NEW_TEMPLATE, parentPage)
-				this.$router.push(this.$store.getters.newPagePath)
-				this.expand(this.page.id)
-				// The parents location changes when the first subpage
-				// is created.
-				this.$store.dispatch(GET_PAGES)
-			} catch (e) {
-				console.error(e)
-				showError(t('collectives', 'Could not create the page'))
-			}
-		},
 	},
 }
-
 </script>
 
 <style>
