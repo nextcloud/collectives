@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2021-11-09 13:00+0100\n"
+"POT-Creation-Date: 2021-11-29 11:34+0100\n"
 "PO-Revision-Date: 2021-06-10 08:02+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
@@ -23,7 +23,7 @@ msgstr ""
 #: /collectives/lib/Search/CollectiveProvider.php:58
 #: /collectives/lib/Search/CollectiveProvider.php:106
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:2
-#: /collectives/specialVueFakeDummyForL10nScript.js:43
+#: /collectives/specialVueFakeDummyForL10nScript.js:49
 #: /collectives/specialVueFakeDummyForL10nScript.js:83
 msgid "Collectives"
 msgstr "Kollektiver"
@@ -46,7 +46,7 @@ msgstr "Kollektiver: sider"
 msgid "in Collective {collective}"
 msgstr "i kollektivet {collective}"
 
-#: /collectives/lib/Service/CollectiveService.php:162
+#: /collectives/lib/Service/CollectiveService.php:163
 #, php-format
 msgid "Created collective \"%s\" for existing circle."
 msgstr "Opprettet kollektivet «%s» for eksisterende sirkel."
@@ -161,7 +161,7 @@ msgid "Deleted collectives"
 msgstr "Slettede kollektiver"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:15
-#: /collectives/specialVueFakeDummyForL10nScript.js:34
+#: /collectives/specialVueFakeDummyForL10nScript.js:40
 msgid "Restore"
 msgstr "Gjenopprett"
 
@@ -216,207 +216,207 @@ msgid "Select a collective"
 msgstr "Velg et kollektiv"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:30
+msgid "Show in Files"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:31
+#: /collectives/specialVueFakeDummyForL10nScript.js:55
+#: /collectives/specialVueFakeDummyForL10nScript.js:66
+msgid "Edit template for subpages"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:32
+msgid "Delete page"
+msgstr "Slett side"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:33
+msgid "Page deleted"
+msgstr "Siden ble slettet"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:34
+msgid "Could not delete the page"
+msgstr "Kunne ikke slette siden"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:35
+#: /collectives/specialVueFakeDummyForL10nScript.js:57
+#: /collectives/specialVueFakeDummyForL10nScript.js:59
+#: /collectives/specialVueFakeDummyForL10nScript.js:68
+#: /collectives/specialVueFakeDummyForL10nScript.js:70
+msgid "Could not create the page"
+msgstr "Kunne ikke opprette siden"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:36
 msgid "Page not found:"
 msgstr "Fant ikke siden:"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:31
+#: /collectives/specialVueFakeDummyForL10nScript.js:37
 #, fuzzy
 msgid "Could not find the Page."
 msgstr "Kunne ikke gi siden nytt navn"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:32
+#: /collectives/specialVueFakeDummyForL10nScript.js:38
 #, fuzzy
 msgid "Select a page from the list or create a new one."
 msgstr "Velg et kollektiv, eller opprett ett til venstre."
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:33
+#: /collectives/specialVueFakeDummyForL10nScript.js:39
 msgid "Restore this version"
 msgstr "Gjenopprett denne versjonen"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:35
+#: /collectives/specialVueFakeDummyForL10nScript.js:41
 msgid "Reverted {page} to revision {timestamp}."
 msgstr "Gjenoppretet {page} til versjon {timestamp}."
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:36
+#: /collectives/specialVueFakeDummyForL10nScript.js:42
 msgid "Failed to revert {page} to revision {timestamp}."
 msgstr "Klarte ikke å tilbakestille {page} til versjon {timestamp}."
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:37
-#: /collectives/specialVueFakeDummyForL10nScript.js:46
+#: /collectives/specialVueFakeDummyForL10nScript.js:43
+#: /collectives/specialVueFakeDummyForL10nScript.js:52
 msgid "Template"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:38
+#: /collectives/specialVueFakeDummyForL10nScript.js:44
 msgid "Title"
 msgstr "Navn"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:39
+#: /collectives/specialVueFakeDummyForL10nScript.js:45
 msgid "Stop editing"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:39
+#: /collectives/specialVueFakeDummyForL10nScript.js:45
 msgid "Start editing"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:40
+#: /collectives/specialVueFakeDummyForL10nScript.js:46
 msgid "Done"
 msgstr "Ferdig"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:40
+#: /collectives/specialVueFakeDummyForL10nScript.js:46
 msgid "Edit"
 msgstr "Rediger"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:41
+#: /collectives/specialVueFakeDummyForL10nScript.js:47
 #, fuzzy
 msgid "Hide all subpages"
 msgstr "Legg til en underside"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:42
+#: /collectives/specialVueFakeDummyForL10nScript.js:48
 #, fuzzy
 msgid "Show all subpages"
 msgstr "Legg til en underside"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:44
+#: /collectives/specialVueFakeDummyForL10nScript.js:50
 msgid "Could not rename the page"
 msgstr "Kunne ikke gi siden nytt navn"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:45
+#: /collectives/specialVueFakeDummyForL10nScript.js:51
 msgid "Expand subpage list"
 msgstr "Utvid undersideliste"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:45
+#: /collectives/specialVueFakeDummyForL10nScript.js:51
 msgid "Collapse subpage list"
 msgstr "Fold sammen undersidelisten"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:47
+#: /collectives/specialVueFakeDummyForL10nScript.js:53
 msgid "Last edited by {user}"
 msgstr "Sist endret av {user}"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:48
+#: /collectives/specialVueFakeDummyForL10nScript.js:54
 msgid "Add a subpage"
 msgstr "Legg til en underside"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:49
-#: /collectives/specialVueFakeDummyForL10nScript.js:60
-#: /collectives/specialVueFakeDummyForL10nScript.js:74
-msgid "Edit template for subpages"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:50
-#: /collectives/specialVueFakeDummyForL10nScript.js:61
+#: /collectives/specialVueFakeDummyForL10nScript.js:56
+#: /collectives/specialVueFakeDummyForL10nScript.js:67
 #, fuzzy
 msgid "Add template for subpages"
 msgstr "Legg til en underside"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:51
-#: /collectives/specialVueFakeDummyForL10nScript.js:53
-#: /collectives/specialVueFakeDummyForL10nScript.js:62
-#: /collectives/specialVueFakeDummyForL10nScript.js:64
-#: /collectives/specialVueFakeDummyForL10nScript.js:82
-msgid "Could not create the page"
-msgstr "Kunne ikke opprette siden"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:52
-#: /collectives/specialVueFakeDummyForL10nScript.js:63
+#: /collectives/specialVueFakeDummyForL10nScript.js:58
+#: /collectives/specialVueFakeDummyForL10nScript.js:69
 msgid "New Page"
 msgstr "Ny side"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:54
-#: /collectives/specialVueFakeDummyForL10nScript.js:55
+#: /collectives/specialVueFakeDummyForL10nScript.js:60
+#: /collectives/specialVueFakeDummyForL10nScript.js:61
 msgid "Hide templates"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:54
-#: /collectives/specialVueFakeDummyForL10nScript.js:55
+#: /collectives/specialVueFakeDummyForL10nScript.js:60
+#: /collectives/specialVueFakeDummyForL10nScript.js:61
 msgid "Show templates"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:56
+#: /collectives/specialVueFakeDummyForL10nScript.js:62
 msgid "Sort order"
 msgstr "Sorteringsrekkefølge"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:57
+#: /collectives/specialVueFakeDummyForL10nScript.js:63
 #, fuzzy
 msgid "Sort by last modification"
 msgstr "Etter sist endret"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:58
+#: /collectives/specialVueFakeDummyForL10nScript.js:64
 #, fuzzy
 msgid "Sort by title"
 msgstr "Etter tittel"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:59
+#: /collectives/specialVueFakeDummyForL10nScript.js:65
 msgid "Add a page"
 msgstr "Legg til en side"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:65
+#: /collectives/specialVueFakeDummyForL10nScript.js:71
 #, fuzzy
 msgid "No backlinks available"
 msgstr "Ingen andre versjoner tilgjengelig"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:66
+#: /collectives/specialVueFakeDummyForL10nScript.js:72
 msgid "If other pages link to this one, they will be listed here."
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:67
+#: /collectives/specialVueFakeDummyForL10nScript.js:73
 #, fuzzy
 msgid "Could not get page backlinks"
 msgstr "Kunne ikke hente sideversjonering"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:68
+#: /collectives/specialVueFakeDummyForL10nScript.js:74
 msgid "Current version"
 msgstr "Nåværende versjon"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:69
+#: /collectives/specialVueFakeDummyForL10nScript.js:75
 msgid "No other versions available"
 msgstr "Ingen andre versjoner tilgjengelig"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:70
+#: /collectives/specialVueFakeDummyForL10nScript.js:76
 msgid "After editing you can find old versions of the page here."
 msgstr "Etter redigering kan du finne gamle versjoner av siden her."
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:71
+#: /collectives/specialVueFakeDummyForL10nScript.js:77
 msgid "Could not get page versions"
 msgstr "Kunne ikke hente sideversjonering"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:72
+#: /collectives/specialVueFakeDummyForL10nScript.js:78
 #: /collectives/src/util/xmlToVersionsList.js:30
 msgid "%n byte"
 msgid_plural "%n bytes"
 msgstr[0] "%n byte"
 msgstr[1] "%n byte"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:73
-msgid "Show in Files"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:75
-msgid "Delete page"
-msgstr "Slett side"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:76
+#: /collectives/specialVueFakeDummyForL10nScript.js:79
 msgid "Backlinks"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:77
+#: /collectives/specialVueFakeDummyForL10nScript.js:80
 msgid "Pages that link to this one"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:78
+#: /collectives/specialVueFakeDummyForL10nScript.js:81
 msgid "Versions"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:79
+#: /collectives/specialVueFakeDummyForL10nScript.js:82
 msgid "Old versions of this page"
 msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:80
-msgid "Page deleted"
-msgstr "Siden ble slettet"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:81
-msgid "Could not delete the page"
-msgstr "Kunne ikke slette siden"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:84
 msgid "Come, organize and build shared knowledge!"
