@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2021-11-29 11:34+0100\n"
-"PO-Revision-Date: 2021-08-20 13:47+0000\n"
+"PO-Revision-Date: 2021-12-01 18:51+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/cs/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.10-dev\n"
 
 #: /collectives/lib/Fs/UserFolderHelper.php:62
 #: /collectives/lib/Search/CollectiveProvider.php:58
@@ -52,9 +52,8 @@ msgid "Created collective \"%s\" for existing circle."
 msgstr "Vytvořen kolektiv „%s“ pro existující okruh."
 
 #: /collectives/lib/Service/CollectiveShareService.php:84
-#, fuzzy
 msgid "Collective Share"
-msgstr "Kolektivy: stránky"
+msgstr "Sdílení kolektivu"
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:3
 msgid "A place for activist and community projects to build shared knowledge"
@@ -120,11 +119,11 @@ msgstr "Vyberte kolektiv nebo (vlevo) vytvořte nový."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:5
 msgid "Share link"
-msgstr ""
+msgstr "Odkaz na sdílení"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:6
 msgid "Unshare"
-msgstr ""
+msgstr "Přestat sdílet"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:7
 msgid "Print"
@@ -149,15 +148,15 @@ msgstr "Přidat emotikonu"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:11
 msgid "Copied"
-msgstr ""
+msgstr "Zkopírováno"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:12
 msgid "Cannot copy"
-msgstr ""
+msgstr "Nedaří se zkopírovat"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:13
 msgid "Copy share link"
-msgstr ""
+msgstr "Zkopírovat odkaz na sdílení"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:14
 msgid "Deleted collectives"
@@ -421,12 +420,11 @@ msgstr "Organizujte se a vytvářejte sdílené znalosti!"
 
 #: /collectives/src/mixins/CopyToClipboardMixin.js:42
 msgid "Link copied to the clipboard."
-msgstr ""
+msgstr "Odkaz na sdílení zkopírován do schránky."
 
 #: /collectives/src/mixins/CopyToClipboardMixin.js:47
-#, fuzzy
 msgid "Could not copy link to the clipboard:"
-msgstr "Stránku se nedaří vytvořit"
+msgstr "Odkaz se nedaří zkopírovat do schránky:"
 
 #: /collectives/templates/error.php:4
 msgid "Error: Missing apps"
