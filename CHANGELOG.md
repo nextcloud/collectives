@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.16.22 - 2021.11.29
+
+### ✨New
+* 🎁 Link to share an entire collective (#199).
+* 🎯 Page actions menu next to edit/done button (#256).
+* ✨ Support Nextcloud Version 23.
+
+### 🏗️Fixes
+* 🔓 Return correct privilege level for trashed collectives (#260).
+* 🚨 Fix rendering of error messages.
+
+### 🚧Tooling
+* ⛓️ More robust tests (#263).
+* 🛰️ Change API routes from `/_collectives` to `/_api`.
+
+### 🌎Translations
+* 🗣️ Italian translation updated thanks to Marco Trevisan.
+* 🗣️ Brasilian-Portuguese translation updated thanks to Leonardo Colman.
+* 🗣️ French translation updated thanks to Nathan.
+
+
 ## 0.15.22 - 2021.10.20
 
 ### ✨New
