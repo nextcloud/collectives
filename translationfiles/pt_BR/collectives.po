@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2021-11-09 13:00+0100\n"
-"PO-Revision-Date: 2021-09-05 02:32+0000\n"
+"PO-Revision-Date: 2021-11-10 22:52+0000\n"
 "Last-Translator: Leonardo Colman <leonardo.dev@colman.com.br>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "collectives/collectives-app/pt_BR/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.8.1-dev\n"
+"X-Generator: Weblate 4.9.1-dev\n"
 
 #: /collectives/lib/Fs/UserFolderHelper.php:62
 #: /collectives/lib/Search/CollectiveProvider.php:58
@@ -102,7 +102,7 @@ msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:1
 msgid "The contacts app is required to manage members"
-msgstr "O aplicativo Contatos é necessário para gerrenciar membros"
+msgstr "O aplicativo Contatos é necessário para gerenciar membros"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:2
 msgid "Collective not found:"
@@ -118,11 +118,11 @@ msgstr "Escolha um coletivo ou crie um novo à esquerda."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:5
 msgid "Share link"
-msgstr ""
+msgstr "Compartilhar link"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:6
 msgid "Unshare"
-msgstr ""
+msgstr "Descompartilhar"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:7
 msgid "Print"
@@ -147,15 +147,15 @@ msgstr "Adicionar emoji"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:11
 msgid "Copied"
-msgstr ""
+msgstr "Copiado"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:12
 msgid "Cannot copy"
-msgstr ""
+msgstr "Não foi possível copiar"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:13
 msgid "Copy share link"
-msgstr ""
+msgstr "Copiar link de compartilhamento"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:14
 msgid "Deleted collectives"
@@ -184,7 +184,7 @@ msgstr "Cancelar"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:20
 msgid "Only collective"
-msgstr ""
+msgstr "Apenas o coletivo"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:21
 #: /collectives/specialVueFakeDummyForL10nScript.js:23
@@ -416,12 +416,11 @@ msgstr "Venha, organize e construa conhecimento compartilhado!"
 
 #: /collectives/src/mixins/CopyToClipboardMixin.js:42
 msgid "Link copied to the clipboard."
-msgstr ""
+msgstr "Link copiado para a área de transferência."
 
 #: /collectives/src/mixins/CopyToClipboardMixin.js:47
-#, fuzzy
 msgid "Could not copy link to the clipboard:"
-msgstr "Não foi possível criar a página"
+msgstr "Não foi possível copiar link para área de transferência:"
 
 #: /collectives/templates/error.php:4
 msgid "Error: Missing apps"
