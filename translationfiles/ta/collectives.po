@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2021-11-29 11:34+0100\n"
-"PO-Revision-Date: 2021-12-01 18:51+0000\n"
+"PO-Revision-Date: 2021-12-04 13:53+0000\n"
 "Last-Translator: Rajasekaran Karunanithi <rajasekaran86@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/ta/>\n"
@@ -98,23 +98,23 @@ msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:5
 msgid "Share link"
-msgstr ""
+msgstr "இணைப்பைப் பகிரவும்"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:6
 msgid "Unshare"
-msgstr ""
+msgstr "பகிர்வதை நீக்கு"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:7
 msgid "Print"
-msgstr ""
+msgstr "அச்சிடவும்"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:8
 msgid "Manage members"
-msgstr ""
+msgstr "உறுப்பினர்களை நிர்வகிக்கவும்"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:9
 msgid "Delete"
-msgstr ""
+msgstr "நீக்கு"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:10
 msgid "Change emoji"
@@ -127,7 +127,7 @@ msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:11
 msgid "Copied"
-msgstr ""
+msgstr "நகலெடுக்கப்பட்டது"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:12
 msgid "Cannot copy"
@@ -135,7 +135,7 @@ msgstr "நகலெடுக்க முடியாது"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:13
 msgid "Copy share link"
-msgstr ""
+msgstr "பகிர்வு இணைப்பை நகலெடுக்கவும்"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:14
 msgid "Deleted collectives"
