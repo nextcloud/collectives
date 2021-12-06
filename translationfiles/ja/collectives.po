@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2021-12-02 20:02+0100\n"
-"PO-Revision-Date: 2021-12-04 13:53+0000\n"
+"PO-Revision-Date: 2021-12-06 06:38+0000\n"
 "Last-Translator: あわしろいくや <ikunya@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/ja/>\n"
@@ -26,12 +26,12 @@ msgstr ""
 #: /collectives/specialVueFakeDummyForL10nScript.js:49
 #: /collectives/specialVueFakeDummyForL10nScript.js:83
 msgid "Collectives"
-msgstr "共同"
+msgstr "コレクティブ"
 
 #: /collectives/lib/Search/PageContentProvider.php:75
 #: /collectives/lib/Search/PageContentProvider.php:132
 msgid "Collectives: page content"
-msgstr ""
+msgstr "コレクティブ: ページの内容"
 
 #: /collectives/lib/Search/PageContentProvider.php:121
 msgid "in page {page} from collective {collective}"
@@ -40,7 +40,7 @@ msgstr ""
 #: /collectives/lib/Search/PageProvider.php:68
 #: /collectives/lib/Search/PageProvider.php:121
 msgid "Collectives: pages"
-msgstr ""
+msgstr "コレクティブ: ページ"
 
 #: /collectives/lib/Search/PageProvider.php:111
 msgid "in Collective {collective}"
@@ -49,11 +49,11 @@ msgstr ""
 #: /collectives/lib/Service/CollectiveService.php:163
 #, php-format
 msgid "Created collective \"%s\" for existing circle."
-msgstr ""
+msgstr "コレクティブ \"%s\" を既存のサークルに作成します。"
 
 #: /collectives/lib/Service/CollectiveShareService.php:84
 msgid "Collective Share"
-msgstr ""
+msgstr "コレクティブの共有"
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:3
 msgid "A place for activist and community projects to build shared knowledge"
@@ -82,11 +82,11 @@ msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:1
 msgid "The contacts app is required to manage members"
-msgstr ""
+msgstr "メンバー管理には連絡先アプリが必要です"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:2
 msgid "Collective not found:"
-msgstr ""
+msgstr "コレクティブが見つかりません:"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:3
 msgid "You're not part of a collective with that name."
@@ -98,61 +98,61 @@ msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:5
 msgid "Share link"
-msgstr ""
+msgstr "共有リンク"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:6
 msgid "Unshare"
-msgstr ""
+msgstr "共有の解除"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:7
 msgid "Print"
-msgstr ""
+msgstr "印刷"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:8
 msgid "Manage members"
-msgstr ""
+msgstr "メンバーの管理"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:9
 msgid "Delete"
-msgstr ""
+msgstr "削除"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:10
 msgid "Change emoji"
-msgstr ""
+msgstr "絵文字の変更"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:10
 #: /collectives/specialVueFakeDummyForL10nScript.js:26
 msgid "Add emoji"
-msgstr ""
+msgstr "絵文字の追加"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:11
 msgid "Copied"
-msgstr ""
+msgstr "コピー"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:12
 msgid "Cannot copy"
-msgstr ""
+msgstr "コピーできません"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:13
 msgid "Copy share link"
-msgstr ""
+msgstr "共有リンクのコピー"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:14
 msgid "Deleted collectives"
-msgstr ""
+msgstr "コレクティブの削除"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:15
 #: /collectives/specialVueFakeDummyForL10nScript.js:40
 msgid "Restore"
-msgstr ""
+msgstr "復元"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:16
 msgid "Delete permanently"
-msgstr ""
+msgstr "永久に削除"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:17
 msgid "Permanently delete collective »{collective}«"
-msgstr ""
+msgstr "»{collective}« コレクティブを永久に削除しました"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:18
 msgid "Delete corresponding circle along with the collective?"
@@ -160,63 +160,63 @@ msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:19
 msgid "Cancel"
-msgstr ""
+msgstr "キャンセル"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:20
 msgid "Only collective"
-msgstr ""
+msgstr "コレクティブのみ"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:21
 #: /collectives/specialVueFakeDummyForL10nScript.js:23
 msgid "Collective and circle"
-msgstr ""
+msgstr "コレクティブとサークル"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:22
 msgid "Only circle owners can delete a circle"
-msgstr ""
+msgstr "サークルの所有者のみがサークルを削除できます"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:24
 #: /collectives/specialVueFakeDummyForL10nScript.js:85
 msgid "Create new collective"
-msgstr ""
+msgstr "新しいコレクティブの作成"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:25
 msgid "Create collective for existing circle"
-msgstr ""
+msgstr "既存のサークルにコレクティブを作成"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:27
 msgid "New collective name"
-msgstr ""
+msgstr "新規コレクティブの名称"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:28
 msgid "Select circle..."
-msgstr ""
+msgstr "サークルを選択..."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:29
 msgid "Select a collective"
-msgstr ""
+msgstr "コレクティブを選択"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:30
 msgid "Show in Files"
-msgstr ""
+msgstr "ファイルで表示"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:31
 #: /collectives/specialVueFakeDummyForL10nScript.js:55
 #: /collectives/specialVueFakeDummyForL10nScript.js:66
 msgid "Edit template for subpages"
-msgstr ""
+msgstr "サブページのテンプレートを編集"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:32
 msgid "Delete page"
-msgstr ""
+msgstr "ページの削除"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:33
 msgid "Page deleted"
-msgstr ""
+msgstr "ページを削除しました"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:34
 msgid "Could not delete the page"
-msgstr ""
+msgstr "ページを削除できません"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:35
 #: /collectives/specialVueFakeDummyForL10nScript.js:57
@@ -224,191 +224,191 @@ msgstr ""
 #: /collectives/specialVueFakeDummyForL10nScript.js:68
 #: /collectives/specialVueFakeDummyForL10nScript.js:70
 msgid "Could not create the page"
-msgstr ""
+msgstr "ページを作成できません"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:36
 msgid "Page not found:"
-msgstr ""
+msgstr "ページが見つかりません:"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:37
 msgid "Could not find the Page."
-msgstr ""
+msgstr "ページが見つかりません。"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:38
 msgid "Select a page from the list or create a new one."
-msgstr ""
+msgstr "リストか新規に作成してページを選択してください。"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:39
 msgid "Restore this version"
-msgstr ""
+msgstr "このバージョンを戻す"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:41
 msgid "Reverted {page} to revision {timestamp}."
-msgstr ""
+msgstr "{page} をリビジョン{timestamp}に戻します。"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:42
 msgid "Failed to revert {page} to revision {timestamp}."
-msgstr ""
+msgstr "{page} をリビジョン{timestamp}に戻せませんでした。"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:43
 #: /collectives/specialVueFakeDummyForL10nScript.js:52
 msgid "Template"
-msgstr ""
+msgstr "テンプレート"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:44
 msgid "Title"
-msgstr ""
+msgstr "タイトル"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:45
 msgid "Stop editing"
-msgstr ""
+msgstr "編集終了"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:45
 msgid "Start editing"
-msgstr ""
+msgstr "編集開始"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:46
 msgid "Done"
-msgstr ""
+msgstr "完了"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:46
 msgid "Edit"
-msgstr ""
+msgstr "編集"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:47
 msgid "Hide all subpages"
-msgstr ""
+msgstr "すべてのサブページを隠す"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:48
 msgid "Show all subpages"
-msgstr ""
+msgstr "すべてのサブページを表示"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:50
 msgid "Could not rename the page"
-msgstr ""
+msgstr "ページ名を変更できません"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:51
 msgid "Expand subpage list"
-msgstr ""
+msgstr "サブページリストを開く"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:51
 msgid "Collapse subpage list"
-msgstr ""
+msgstr "サブページリストを閉じる"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:53
 msgid "Last edited by {user}"
-msgstr ""
+msgstr "最終編集者 {user}"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:54
 msgid "Add a subpage"
-msgstr ""
+msgstr "サブページの追加"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:56
 #: /collectives/specialVueFakeDummyForL10nScript.js:67
 msgid "Add template for subpages"
-msgstr ""
+msgstr "サブページのテンプレートを追加"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:58
 #: /collectives/specialVueFakeDummyForL10nScript.js:69
 msgid "New Page"
-msgstr ""
+msgstr "新規ページ"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:60
 #: /collectives/specialVueFakeDummyForL10nScript.js:61
 msgid "Hide templates"
-msgstr ""
+msgstr "テンプレートを隠す"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:60
 #: /collectives/specialVueFakeDummyForL10nScript.js:61
 msgid "Show templates"
-msgstr ""
+msgstr "テンプレートの表示"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:62
 msgid "Sort order"
-msgstr ""
+msgstr "ソート順"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:63
 msgid "Sort by last modification"
-msgstr ""
+msgstr "最終更新でソート"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:64
 msgid "Sort by title"
-msgstr ""
+msgstr "タイトルでソート"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:65
 msgid "Add a page"
-msgstr ""
+msgstr "ページの追加"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:71
 msgid "No backlinks available"
-msgstr ""
+msgstr "バックリンクはありません"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:72
 msgid "If other pages link to this one, they will be listed here."
-msgstr ""
+msgstr "他のページからこのページへのリンクがあると、ここに表示されます。"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:73
 msgid "Could not get page backlinks"
-msgstr ""
+msgstr "バックリンクが取得できません"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:74
 msgid "Current version"
-msgstr ""
+msgstr "現在のバージョン"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:75
 msgid "No other versions available"
-msgstr ""
+msgstr "他のバージョンはありません"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:76
 msgid "After editing you can find old versions of the page here."
-msgstr ""
+msgstr "編集後、古いバージョンがここに表示されます。"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:77
 msgid "Could not get page versions"
-msgstr ""
+msgstr "ページのバージョンが取得できません"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:78
 #: /collectives/src/util/xmlToVersionsList.js:30
 msgid "%n byte"
 msgid_plural "%n bytes"
-msgstr[0] ""
+msgstr[0] "%n バイト"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:79
 msgid "Backlinks"
-msgstr ""
+msgstr "バックリンク"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:80
 msgid "Pages that link to this one"
-msgstr ""
+msgstr "ここにリンクされているページ"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:81
 msgid "Versions"
-msgstr ""
+msgstr "バージョン"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:82
 msgid "Old versions of this page"
-msgstr ""
+msgstr "このページの古いバージョン"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:84
 msgid "Come, organize and build shared knowledge!"
-msgstr ""
+msgstr "皆で寄ってたかって知識を共有しましょう！"
 
 #: /collectives/src/mixins/CopyToClipboardMixin.js:42
 msgid "Link copied to the clipboard."
-msgstr ""
+msgstr "クリップボードにリンクをコピーしました。"
 
 #: /collectives/src/mixins/CopyToClipboardMixin.js:47
 msgid "Could not copy link to the clipboard:"
-msgstr ""
+msgstr "クリップボードにリンクをコピーできませんでした:"
 
 #: /collectives/templates/error.php:4
 msgid "Error: Missing apps"
-msgstr ""
+msgstr "エラー: アプリが見つかりません"
 
 #: /collectives/templates/error.php:9
 msgid "The following dependency apps are missing: "
-msgstr ""
+msgstr "次の依存アプリが見つかりません: "
 
 #: /collectives/templates/error.php:27
 msgid "Please ask the administrator to enable these apps."
-msgstr ""
+msgstr "これらのアプリを有効にするために管理者に問い合わせてください。"
