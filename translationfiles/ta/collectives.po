@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2021-11-29 11:34+0100\n"
-"PO-Revision-Date: 2021-12-04 13:53+0000\n"
+"PO-Revision-Date: 2021-12-07 13:50+0000\n"
 "Last-Translator: Rajasekaran Karunanithi <rajasekaran86@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/ta/>\n"
@@ -26,12 +26,12 @@ msgstr ""
 #: /collectives/specialVueFakeDummyForL10nScript.js:49
 #: /collectives/specialVueFakeDummyForL10nScript.js:83
 msgid "Collectives"
-msgstr ""
+msgstr "தொகுப்புகள்"
 
 #: /collectives/lib/Search/PageContentProvider.php:75
 #: /collectives/lib/Search/PageContentProvider.php:132
 msgid "Collectives: page content"
-msgstr ""
+msgstr "தொகுப்புகள்: பக்க உள்ளடக்கம்"
 
 #: /collectives/lib/Search/PageContentProvider.php:121
 msgid "in page {page} from collective {collective}"
@@ -40,16 +40,16 @@ msgstr ""
 #: /collectives/lib/Search/PageProvider.php:68
 #: /collectives/lib/Search/PageProvider.php:121
 msgid "Collectives: pages"
-msgstr ""
+msgstr "தொகுப்புகள்: பக்கங்கள்"
 
 #: /collectives/lib/Search/PageProvider.php:111
 msgid "in Collective {collective}"
-msgstr ""
+msgstr "தொகுப்பில் {தொகுப்பு}"
 
 #: /collectives/lib/Service/CollectiveService.php:163
 #, php-format
 msgid "Created collective \"%s\" for existing circle."
-msgstr ""
+msgstr "ஏற்கனவே உள்ள வட்டத்திற்காக \"%s\" தொகுப்பு உருவாக்கப்பட்டது."
 
 #: /collectives/lib/Service/CollectiveShareService.php:84
 msgid "Collective Share"
