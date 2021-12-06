@@ -1,4 +1,4 @@
-# Welcome to your new collective
+# ようこそ新しいコレクティブへ
 
 **Come, organize and build shared knowledge!**
 
