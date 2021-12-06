@@ -229,4 +229,20 @@ endif
 	curl -s -X DELETE $(NEXTCLOUD_API_URL)/releases/$(RELEASE_NAME) \
 		-u 'collectivecloud:$(NEXTCLOUD_PASSWORD)'
 
-.PHONY: all setup-dev composer translationtool node-modules composer-install clean distclean lint lint-js lint-appinfo build build-js-dev build-js-production test test-php test-php-unit test-php-integration test-js test-js-cypress test-js-cypress-watch po l10n php-psalm-baseline text-app-includes build release delete-release delete-release-from-gitlab delete-release-from-appstore
+update-l10n:
+ifeq (, $(shell which python-gitlab))
+	  $(error python-gitlab not installed)
+endif
+	echo 'Updating l10n files.'
+	git checkout -b update/l10n
+	make l10n
+	git add l10n
+	git commit -m "Update language files" l10n translationfiles
+	git push --set-upstream origin update/l10n
+	$(eval GITLAB_IID:=$(shell python-gitlab project-merge-request create --project-id $(GITLAB_PROJECT_ID) --source-branch update/l10n --target-branch main --title 'Update language files' | cut -d ' ' -f2))
+	sleep 5
+	python-gitlab project-merge-request merge --project-id $(GITLAB_PROJECT_ID) --iid $(GITLAB_IID) --should-remove-source-branch true --merge-when-pipeline-succeeds true
+	git checkout main
+	git branch -D update/l10n
+
+.PHONY: all setup-dev composer translationtool node-modules composer-install clean distclean lint lint-js lint-appinfo build build-js-dev build-js-production test test-php test-php-unit test-php-integration test-js test-js-cypress test-js-cypress-watch po l10n php-psalm-baseline text-app-includes build release delete-release delete-release-from-gitlab delete-release-from-appstore update-l10n
