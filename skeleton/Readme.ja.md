@@ -1,25 +1,25 @@
-# ようこそ新しいコレクティブへ
+# Welcome to your new collective
 
-**Come, organize and build shared knowledge!**
-
-
-### 👥 Invite new people to the collective
-
-Whether you want to add your friends or whole groups, follow the "manage members" link that you find in the action menu inside the collectives list on the left.
-
-### 🌱 Bring life to your collective
-
-Create pages and share your thoughts that really matter. Whether it's a shared knowledge repository for the community or a handbook for your organisation – Collectives works!
-
-### 🛋️ Edit this landing page to feel like home
-
-Push the pencil button to get started! ↗️
+**皆で寄ってたかって知識を共有しましょう**
 
 
-## Also good to know
+### 👥 新しいメンバーを招待しましょう
 
-* Multiple people can edit the same page simultaneously.
-* Link local pages by selecting text and choosing "link file". Drag & drop from page list into the editor also works.
-* Add templates for future subpages ("Show templates" -> "Add template for subpages")
-* Find out more about this App in the [documentation](https://collectivecloud.gitlab.io/collectives/).
-* Ask [the community](https://help.nextcloud.com/c/apps/collectives/174) for help in case of questions.
+左側のコレクティブリストにあるアクションメニュー内の「メンバーの管理」から、メンバーやグループを追加しましょう。
+
+### 🌱 コレクティブに頼ろう
+
+ページを作成して考えを共有することはとても大切です。コミュニティ向け、または組織のハンドブックとしての知識リポジトリの両方に -- コレクティブは機能します！
+
+### 🛋️この最初のページをホームのように編集しましょう
+
+えんぴつボタンを押して開始します↗️
+
+
+## 知っておくと便利なこと
+
+* 複数人で同時に同じページを編集できます。
+* ローカルページのリンクには、テキストを選択した状態で「ファイルのリンク」をクリックします。ページリストからエディターにドラッグ＆ドロップするのも同様に機能します。
+* サブページにテンプレートを追加できます（"テンプレートの表示"→"サブページにテンプレートを追加"）
+* [ドキュメント](https://collectivecloud.gitlab.io/collectives/)（英語）にこのアプリに関する詳細な情報があります。
+* 質問がある場合は[コミュニティ](https://help.nextcloud.com/c/apps/collectives/174)（英語）で尋ねましょう。
