@@ -1,6 +1,11 @@
 OC.L10N.register(
     "collectives",
     {
+    "Collectives" : "தொகுப்புகள்",
+    "Collectives: page content" : "தொகுப்புகள்: பக்க உள்ளடக்கம்",
+    "Collectives: pages" : "தொகுப்புகள்: பக்கங்கள்",
+    "in Collective {collective}" : "தொகுப்பில் {தொகுப்பு}",
+    "Created collective \"%s\" for existing circle." : "ஏற்கனவே உள்ள வட்டத்திற்காக \"%s\" தொகுப்பு உருவாக்கப்பட்டது.",
     "Share link" : "இணைப்பைப் பகிரவும்",
     "Unshare" : "பகிர்வதை நீக்கு",
     "Print" : "அச்சிடவும்",
