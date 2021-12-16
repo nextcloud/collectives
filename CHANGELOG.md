@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.17.22 - 2021.12.16
+
+### 🏗️Fixes
+* 🧹 Ignore empty share tokens in ShareDeletedListener (#265).
+
+### 🌎Translations
+* 🗣️ Tamil translation started thanks to Rajasekaran Karunanithi.
+* 🗣️ Updated Czech translation thanks to Pavel Borecki.
+* 🗣️ Japanese translation started thanks to あわしろいくや.
+
+
 ## 0.16.22 - 2021.11.29
 
 ### ✨New
