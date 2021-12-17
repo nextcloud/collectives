@@ -8,15 +8,17 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2021-12-16 11:17+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2021-12-18 12:51+0000\n"
+"Last-Translator: Matej U <mateju@svn.gnome.org>\n"
+"Language-Team: Slovenian <https://hosted.weblate.org/projects/collectives/"
+"collectives-app/sl/>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n"
 "%100==4 ? 2 : 3;\n"
+"X-Generator: Weblate 4.10\n"
 
 #: /collectives/lib/Fs/UserFolderHelper.php:62
 #: /collectives/lib/Search/CollectiveProvider.php:58
@@ -25,34 +27,34 @@ msgstr ""
 #: /collectives/specialVueFakeDummyForL10nScript.js:49
 #: /collectives/specialVueFakeDummyForL10nScript.js:83
 msgid "Collectives"
-msgstr ""
+msgstr "Zbirke"
 
 #: /collectives/lib/Search/PageContentProvider.php:75
 #: /collectives/lib/Search/PageContentProvider.php:132
 msgid "Collectives: page content"
-msgstr ""
+msgstr "zbirke: vsebina strani"
 
 #: /collectives/lib/Search/PageContentProvider.php:121
 msgid "in page {page} from collective {collective}"
-msgstr ""
+msgstr "na strani {page} v zbirki {collective}"
 
 #: /collectives/lib/Search/PageProvider.php:68
 #: /collectives/lib/Search/PageProvider.php:121
 msgid "Collectives: pages"
-msgstr ""
+msgstr "Zbirke: strani"
 
 #: /collectives/lib/Search/PageProvider.php:111
 msgid "in Collective {collective}"
-msgstr ""
+msgstr "v Zbirki {collective}"
 
 #: /collectives/lib/Service/CollectiveService.php:163
 #, php-format
 msgid "Created collective \"%s\" for existing circle."
-msgstr ""
+msgstr "Za obstoječi krog je ustvarjena zbirka »%s«."
 
 #: /collectives/lib/Service/CollectiveShareService.php:84
 msgid "Collective Share"
-msgstr ""
+msgstr "Souporaba Zbirke"
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:3
 msgid "A place for activist and community projects to build shared knowledge"
@@ -81,11 +83,11 @@ msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:1
 msgid "The contacts app is required to manage members"
-msgstr ""
+msgstr "Za urejanje stikov je zahtevan program Stiki."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:2
 msgid "Collective not found:"
-msgstr ""
+msgstr "Zbirke ni mogoče najti:"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:3
 msgid "You're not part of a collective with that name."
@@ -97,125 +99,125 @@ msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:5
 msgid "Share link"
-msgstr ""
+msgstr "Povezava za souporabo"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:6
 msgid "Unshare"
-msgstr ""
+msgstr "Odstrani povezavo"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:7
 msgid "Print"
-msgstr ""
+msgstr "Natisni"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:8
 msgid "Manage members"
-msgstr ""
+msgstr "Uredi člane"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:9
 msgid "Delete"
-msgstr ""
+msgstr "Izbriši"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:10
 msgid "Change emoji"
-msgstr ""
+msgstr "Spremeni izrazno ikono"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:10
 #: /collectives/specialVueFakeDummyForL10nScript.js:26
 msgid "Add emoji"
-msgstr ""
+msgstr "Dodaj izrazno ikono"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:11
 msgid "Copied"
-msgstr ""
+msgstr "Kopirano"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:12
 msgid "Cannot copy"
-msgstr ""
+msgstr "Kopiranje ni mogoče"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:13
 msgid "Copy share link"
-msgstr ""
+msgstr "Kopiraj povezavo souporabe"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:14
 msgid "Deleted collectives"
-msgstr ""
+msgstr "Izbrisane zbirke"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:15
 #: /collectives/specialVueFakeDummyForL10nScript.js:40
 msgid "Restore"
-msgstr ""
+msgstr "Obnovi"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:16
 msgid "Delete permanently"
-msgstr ""
+msgstr "Trajno izbriši"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:17
 msgid "Permanently delete collective »{collective}«"
-msgstr ""
+msgstr "Trajno izbriši zbirko »{collective}«"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:18
 msgid "Delete corresponding circle along with the collective?"
-msgstr ""
+msgstr "Ali želite izbrisati tudi z zbirko povezan krog?"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:19
 msgid "Cancel"
-msgstr ""
+msgstr "Prekliči"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:20
 msgid "Only collective"
-msgstr ""
+msgstr "Le zbirko"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:21
 #: /collectives/specialVueFakeDummyForL10nScript.js:23
 msgid "Collective and circle"
-msgstr ""
+msgstr "Zbirko in krog"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:22
 msgid "Only circle owners can delete a circle"
-msgstr ""
+msgstr "Le lastnik kroga lahko krog izbriše."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:24
 #: /collectives/specialVueFakeDummyForL10nScript.js:85
 msgid "Create new collective"
-msgstr ""
+msgstr "Ustvari novo zbirko"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:25
 msgid "Create collective for existing circle"
-msgstr ""
+msgstr "Ustvari zbirko za obstoječ krog"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:27
 msgid "New collective name"
-msgstr ""
+msgstr "Ime nove zbirke"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:28
 msgid "Select circle..."
-msgstr ""
+msgstr "Izbor kroga ..."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:29
 msgid "Select a collective"
-msgstr ""
+msgstr "Izbor zbirke"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:30
 msgid "Show in Files"
-msgstr ""
+msgstr "Pokaži v Datotekah"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:31
 #: /collectives/specialVueFakeDummyForL10nScript.js:55
 #: /collectives/specialVueFakeDummyForL10nScript.js:66
 msgid "Edit template for subpages"
-msgstr ""
+msgstr "Uredi predlogo podstrani"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:32
 msgid "Delete page"
-msgstr ""
+msgstr "Izbriši stran"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:33
 msgid "Page deleted"
-msgstr ""
+msgstr "Stran je izbrisana."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:34
 msgid "Could not delete the page"
-msgstr ""
+msgstr "Strani ni mogoče izbrisati."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:35
 #: /collectives/specialVueFakeDummyForL10nScript.js:57
@@ -223,124 +225,124 @@ msgstr ""
 #: /collectives/specialVueFakeDummyForL10nScript.js:68
 #: /collectives/specialVueFakeDummyForL10nScript.js:70
 msgid "Could not create the page"
-msgstr ""
+msgstr "Strani ni mogoče ustvariti."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:36
 msgid "Page not found:"
-msgstr ""
+msgstr "Strani ni mogoče najti:"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:37
 msgid "Could not find the Page."
-msgstr ""
+msgstr "Strani ni mogoče najti."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:38
 msgid "Select a page from the list or create a new one."
-msgstr ""
+msgstr "Izberite stran na seznamu, ali pa ustvarite novo."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:39
 msgid "Restore this version"
-msgstr ""
+msgstr "Obnovi to različico"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:41
 msgid "Reverted {page} to revision {timestamp}."
-msgstr ""
+msgstr "Povrni stran {page} na predelavo {timestamp}."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:42
 msgid "Failed to revert {page} to revision {timestamp}."
-msgstr ""
+msgstr "Obnovitev strani {page} na predelavo {timestamp} je spodletela."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:43
 #: /collectives/specialVueFakeDummyForL10nScript.js:52
 msgid "Template"
-msgstr ""
+msgstr "Predloga"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:44
 msgid "Title"
-msgstr ""
+msgstr "Naslov"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:45
 msgid "Stop editing"
-msgstr ""
+msgstr "Zaključi z urejanjem"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:45
 msgid "Start editing"
-msgstr ""
+msgstr "Začni z urejanjem"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:46
 msgid "Done"
-msgstr ""
+msgstr "Končano"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:46
 msgid "Edit"
-msgstr ""
+msgstr "Uredi"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:47
 msgid "Hide all subpages"
-msgstr ""
+msgstr "Skrij vse podstrani"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:48
 msgid "Show all subpages"
-msgstr ""
+msgstr "Pokaži vse podstrani"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:50
 msgid "Could not rename the page"
-msgstr ""
+msgstr "Strani ni mogoče preimenovati."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:51
 msgid "Expand subpage list"
-msgstr ""
+msgstr "Razširi seznam podstrani"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:51
 msgid "Collapse subpage list"
-msgstr ""
+msgstr "Zloži seznam podstrani"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:53
 msgid "Last edited by {user}"
-msgstr ""
+msgstr "Nazadnje urejano: {user}"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:54
 msgid "Add a subpage"
-msgstr ""
+msgstr "Dodaj podstran"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:56
 #: /collectives/specialVueFakeDummyForL10nScript.js:67
 msgid "Add template for subpages"
-msgstr ""
+msgstr "Dodaj predlogo za podstran"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:58
 #: /collectives/specialVueFakeDummyForL10nScript.js:69
 msgid "New Page"
-msgstr ""
+msgstr "Nova stran"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:60
 #: /collectives/specialVueFakeDummyForL10nScript.js:61
 msgid "Hide templates"
-msgstr ""
+msgstr "Skrij predloge"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:60
 #: /collectives/specialVueFakeDummyForL10nScript.js:61
 msgid "Show templates"
-msgstr ""
+msgstr "Pokaži predloge"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:62
 msgid "Sort order"
-msgstr ""
+msgstr "Razvrščanje"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:63
 msgid "Sort by last modification"
-msgstr ""
+msgstr "Po zadnji spremembi"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:64
 msgid "Sort by title"
-msgstr ""
+msgstr "Po naslovu"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:65
 msgid "Add a page"
-msgstr ""
+msgstr "Dodaj stran"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:71
 msgid "No backlinks available"
-msgstr ""
+msgstr "Ni povratnih povezav"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:72
 msgid "If other pages link to this one, they will be listed here."
@@ -352,11 +354,11 @@ msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:74
 msgid "Current version"
-msgstr ""
+msgstr "Trenutna različica"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:75
 msgid "No other versions available"
-msgstr ""
+msgstr "Ni drugih različic"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:76
 msgid "After editing you can find old versions of the page here."
@@ -364,32 +366,32 @@ msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:77
 msgid "Could not get page versions"
-msgstr ""
+msgstr "Ni mogoče pridobiti različic strani"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:78
 #: /collectives/src/util/xmlToVersionsList.js:30
 msgid "%n byte"
 msgid_plural "%n bytes"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%n bajt"
+msgstr[1] "%n bajta"
+msgstr[2] "%n bajti"
+msgstr[3] "%n bajtov"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:79
 msgid "Backlinks"
-msgstr ""
+msgstr "Povratne povezave"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:80
 msgid "Pages that link to this one"
-msgstr ""
+msgstr "Strani, ki se povezujejo na to stran"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:81
 msgid "Versions"
-msgstr ""
+msgstr "Različice"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:82
 msgid "Old versions of this page"
-msgstr ""
+msgstr "Stare različice te strani"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:84
 msgid "Come, organize and build shared knowledge!"
@@ -397,20 +399,20 @@ msgstr ""
 
 #: /collectives/src/mixins/CopyToClipboardMixin.js:42
 msgid "Link copied to the clipboard."
-msgstr ""
+msgstr "Povezava je kopirana v odložišče."
 
 #: /collectives/src/mixins/CopyToClipboardMixin.js:47
 msgid "Could not copy link to the clipboard:"
-msgstr ""
+msgstr "Povezave ni mogoče kopirati v odložišče:"
 
 #: /collectives/templates/error.php:4
 msgid "Error: Missing apps"
-msgstr ""
+msgstr "Napaka: manjkajo programi"
 
 #: /collectives/templates/error.php:9
 msgid "The following dependency apps are missing: "
-msgstr ""
+msgstr "Manjkajo navedeni odvisni programi: "
 
 #: /collectives/templates/error.php:27
 msgid "Please ask the administrator to enable these apps."
-msgstr ""
+msgstr "Programe lahko omogoči le skrbnik sistema."
