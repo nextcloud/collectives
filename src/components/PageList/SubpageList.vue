@@ -22,6 +22,7 @@
 				</ActionButton>
 				<ActionButton v-if="showTemplates && !isTemplate"
 					icon="icon-pages-template-dark-grey"
+					class="action-button__template"
 					@click="editTemplate(page)">
 					{{ editTemplateString }}
 				</ActionButton>
@@ -197,5 +198,10 @@ export default {
 <style lang="scss" scoped>
 .app-content-list {
 	padding-top: 40px;
+}
+
+// template icon appears too big with default size (16px)
+.action-button__template::v-deep .icon-pages-template-dark-grey {
+	background-size: 14px;
 }
 </style>

@@ -66,6 +66,7 @@
 				</ActionButton>
 				<ActionButton v-if="showTemplates"
 					icon="icon-pages-template-dark-grey"
+					class="action-button__template"
 					@click="editTemplate(collectivePage)">
 					{{ editTemplateString }}
 				</ActionButton>
@@ -226,5 +227,10 @@ li.sort.selected {
 .icon-pages-template-dark-grey, .icon-pages-template-grey {
 	background-size: 12px;
 	height: revert;
+}
+
+// template icon appears too big with default size (16px)
+.action-button__template::v-deep .icon-pages-template-dark-grey {
+	background-size: 14px;
 }
 </style>
