@@ -56,8 +56,8 @@ describe('Page', function() {
 				.should('contain', 'Day 1')
 		})
 		it('can sort pages by title', function() {
-			cy.get('button.icon-access-time').click()
-			cy.get('.icon-sort-by-alpha').click()
+			cy.get('span.sort-clock-ascending-outline-icon').click()
+			cy.get('.sort-alphabetical-ascending-icon').click()
 			cy.get('.app-content-list-item:last-child')
 				.should('contain', 'Day 2')
 		})

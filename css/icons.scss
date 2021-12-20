@@ -1,6 +1,4 @@
-@include icon-black-white('access-time', 'collectives', 1);
 @include icon-black-white('circles', 'circles', 1);
-@include icon-black-white('sort-by-alpha', 'collectives', 1);
 @include icon-black-white('page', 'collectives', 1);
 @include icon-black-white('pages', 'collectives', 1);
 @include icon-black-white('page-template', 'collectives', 1);
@@ -16,7 +14,7 @@
 	@include icon-color('app', 'collectives', '#000', 1);
 }
 
-.icon-circles, .icon-sort-by-alpha, .icon-access-time, {
+.icon-circles {
 	background-size: 16px;
 }
 
