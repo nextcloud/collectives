@@ -6,7 +6,7 @@
 				{{ t('collectives', 'Come, organize and build shared knowledge!') }}
 			</template>
 		</EmptyContent>
-		<div class="action">
+		<div class="new_collective">
 			<button :class="{ primary }" @click="newCollective">
 				{{ t('collectives', 'Create new collective') }}
 			</button>
@@ -57,10 +57,10 @@ export default {
 }
 </script>
 
-<style>
-.action {
+<style scoped>
+.new_collective {
 	text-align: center;
 	width: 100%;
-	margin-top:10px;
+	margin-top: 10px;
 }
 </style>
