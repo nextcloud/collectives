@@ -2,7 +2,8 @@
 	<router-link
 		v-if="useRouter"
 		:to="routerHref" />
-	<a v-else-if="leaveHref" :href="href" />
+	<a v-else-if="switchAppHref" :href="href" />
+	<a v-else-if="leaveNcHref" :href="href" target="_blank" />
 	<a v-else-if="hrefFileId" :href="viewerHref" @click.prevent="openViewer" />
 	<a v-else :href="href" />
 </template>
@@ -56,11 +57,15 @@ export default {
 			return full.origin === window.location.origin
 				&& this.href.includes('.md?fileId=')
 		},
-		leaveHref() {
+		switchAppHref() {
+			// not collectives link but on instance
+			return !this.collectiveLink && this.href.match('/^' + window.location.origin + '/')
+		},
+		leaveNcHref() {
 			// empty
 			return !this.href
-				// starting with protocol:
-				|| this.href.match(/^[a-zA-Z]*:/)
+				// not on instance and starts with protocol
+				|| (!this.switchAppHref && this.href.match(/^[a-zA-Z]*:/))
 		},
 		// returns an Array of the vars in the href:
 		// [full string, relPath, fileId]
