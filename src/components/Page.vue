@@ -27,7 +27,7 @@
 				@click="edit ? stopEdit() : startEdit()">
 				<span class="icon icon-white"
 					:class="`icon-${toggleIcon}`" />
-				{{ edit ? t('collectives', 'Done') : t('collectives', 'Edit') }}
+				{{ edit && !waitForEdit ? t('collectives', 'Done') : t('collectives', 'Edit') }}
 			</button>
 			<PageActions v-if="!isPublic" />
 			<Actions v-show="!showing('sidebar')">
@@ -150,11 +150,15 @@ export default {
 		},
 
 		toggleIcon() {
-			if (this.loading('pageUpdate')) {
-				return 'loading'
+			if (this.loading('pageUpdate') || this.waitForEdit) {
+				return 'loading-small'
 			} else {
 				return this.edit ? 'checkmark' : 'rename'
 			}
+		},
+
+		waitForEdit() {
+			return this.preview && this.edit
 		},
 
 		readOnly() {
