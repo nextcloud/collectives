@@ -50,10 +50,12 @@
 				@click="unshare(collective)">
 				{{ t('collectives', 'Unshare') }}
 			</ActionButton>
-			<ActionButton icon="icon-pages"
-				:close-after-click="true"
+			<ActionButton :close-after-click="true"
 				@click="print">
 				{{ t('collectives', 'Print') }}
+				<PrinterIcon slot="icon"
+					:size="16"
+					decorative />
 			</ActionButton>
 			<ActionLink v-if="collective.level >= memberLevels.LEVEL_ADMIN && isContactsInstalled"
 				:href="circleLink"
@@ -80,6 +82,7 @@ import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
 import { generateUrl } from '@nextcloud/router'
 import { memberLevels } from '../../constants'
 import CopyToClipboardMixin from '../../mixins/CopyToClipboardMixin'
+import PrinterIcon from 'vue-material-design-icons/Printer'
 
 export default {
 	name: 'CollectiveListItem',
@@ -89,6 +92,7 @@ export default {
 		ActionLink,
 		AppNavigationItem,
 		EmojiPicker,
+		PrinterIcon,
 	},
 
 	mixins: [CopyToClipboardMixin],

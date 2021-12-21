@@ -7,6 +7,7 @@
 		</ActionLink>
 		<ActionButton v-if="!isTemplatePage"
 			icon="icon-pages-template"
+			class="action-button__template"
 			:close-after-click="true"
 			@click="editTemplate">
 			{{ t('collectives', 'Edit template for subpages') }}
@@ -99,3 +100,10 @@ export default {
 	},
 }
 </script>
+
+<style lang="scss" scoped>
+// template icon appears too big with default size (16px)
+.action-button__template::v-deep .icon-pages-template {
+	background-size: 14px;
+}
+</style>

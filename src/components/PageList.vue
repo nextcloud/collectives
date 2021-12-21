@@ -11,23 +11,34 @@
 					@click="toggleTemplates()" />
 			</Actions>
 			<Actions class="toggle"
-				:aria-label="t('collectives', 'Sort order')"
-				:default-icon="sortBy === 'byTitle' ? 'icon-sort-by-alpha' : 'icon-access-time'">
+				:aria-label="t('collectives', 'Sort order')">
+				<SortAlphabeticalAscendingIcon v-if="sortBy === 'byTitle'"
+					slot="icon"
+					:size="16"
+					decorative />
+				<SortClockAscendingOutlineIcon v-else
+					slot="icon"
+					:size="16"
+					decorative />
 				<ActionButton
 					class="sort"
 					:class="{selected: sortBy === 'byTimestamp'}"
-					icon="icon-access-time"
 					:close-after-click="true"
 					@click="sortPages('byTimestamp')">
 					{{ t('collectives', 'Sort by last modification') }}
+					<SortClockAscendingOutlineIcon slot="icon"
+						:size="16"
+						decorative />
 				</ActionButton>
 				<ActionButton
 					class="sort"
 					:class="{selected: sortBy === 'byTitle'}"
-					icon="icon-sort-by-alpha"
 					:close-after-click="true"
 					@click="sortPages('byTitle')">
 					{{ t('collectives', 'Sort by title') }}
+					<SortAlphabeticalAscendingIcon slot="icon"
+						:size="16"
+						decorative />
 				</ActionButton>
 			</Actions>
 		</div>
@@ -55,6 +66,7 @@
 				</ActionButton>
 				<ActionButton v-if="showTemplates"
 					icon="icon-pages-template-dark-grey"
+					class="action-button__template"
 					@click="editTemplate(collectivePage)">
 					{{ editTemplateString }}
 				</ActionButton>
@@ -83,6 +95,8 @@ import Item from './PageList/Item'
 import { showError } from '@nextcloud/dialogs'
 import { mapGetters, mapMutations } from 'vuex'
 import { NEW_PAGE, NEW_TEMPLATE } from '../store/actions'
+import SortAlphabeticalAscendingIcon from 'vue-material-design-icons/SortAlphabeticalAscending'
+import SortClockAscendingOutlineIcon from 'vue-material-design-icons/SortClockAscendingOutline'
 
 export default {
 	name: 'PageList',
@@ -94,6 +108,8 @@ export default {
 		LastUpdate,
 		Item,
 		SubpageList,
+		SortAlphabeticalAscendingIcon,
+		SortClockAscendingOutlineIcon,
 	},
 
 	computed: {
@@ -211,5 +227,10 @@ li.sort.selected {
 .icon-pages-template-dark-grey, .icon-pages-template-grey {
 	background-size: 12px;
 	height: revert;
+}
+
+// template icon appears too big with default size (16px)
+.action-button__template::v-deep .icon-pages-template-dark-grey {
+	background-size: 14px;
 }
 </style>
