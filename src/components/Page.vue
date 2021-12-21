@@ -367,6 +367,11 @@ export default {
 	max-width: 670px;
 	margin-bottom: -50px;
 	display: flex;
+
+	.title {
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
 }
 
 .load-more {

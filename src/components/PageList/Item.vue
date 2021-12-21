@@ -18,7 +18,10 @@
 				class="page-icon-badge"
 				:class="{'page-icon-badge--rotated': collapsed(pageId)}" />
 		</div>
-		<router-link :to="to">
+		<router-link
+			:to="to"
+			class="app-content-list-item-link"
+			:class="{'app-content-list-item-link-with-actions': displayActions}">
 			<div class="app-content-list-item-line-one"
 				:class="{ 'app-content-list-item-line-one--level0': level === 0, 'app-content-list-item-template': isTemplate }">
 				{{ title === 'Template' ? t('collectives', 'Template') : title }}
@@ -29,7 +32,7 @@
 			</div>
 		</router-link>
 		<div class="page-list-item-actions"
-			:class="{'page-list-item-actions--display': level === 0 || isActive || isMobile}">
+			:class="{'page-list-item-actions--display': displayActions}">
 			<Actions>
 				<slot name="actions" />
 			</Actions>
@@ -98,6 +101,10 @@ export default {
 		indent() {
 			// Start indention at level 2. And limit to 5 to prevent nasty subtrees
 			return Math.min(Math.max(0, this.level - 1), 4)
+		},
+
+		displayActions() {
+			return this.level === 0 || this.isActive || this.isMobile
 		},
 
 		indentIcon() {
@@ -188,16 +195,35 @@ export default {
 	background-color: var(--color-primary-light);
 }
 
-// Display page actions on hovering the page list item
-.app-content-list-item:hover {
-	background-color: var(--color-background-hover);
-	.page-list-item-actions {
-		visibility: visible;
+.app-content-list-item {
+	&:hover, &:focus, &:active {
+		background-color: var(--color-background-hover);
+
+		// Display page actions on hovering the page list item
+		.page-list-item-actions {
+			visibility: visible;
+		}
+
+		// Shorter width to prevent collision with actions
+		.app-content-list-item-link {
+			width: calc(100% - 28px);
+		}
 	}
 }
 
 div.app-content-list-item {
 	cursor: default;
+}
+
+.app-content-list-item-link {
+	width: 100%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+
+	// Shorter width to prevent collision with actions
+	&-with-actions {
+		width: calc(100% - 28px);
+	}
 }
 
 // Set pointer cursor on page icon if isCollapsible
@@ -232,9 +258,11 @@ div.app-content-list-item {
 }
 
 // Change color of collapse/expand badge when hovering over page icon
-.app-content-list-item-icon:hover {
-	.material-design-icon.page-icon-badge > .material-design-icon__svg {
-		fill: var(--color-primary);
+.app-content-list-item-icon {
+	&:hover, &:focus, &:active {
+		.material-design-icon.page-icon-badge > .material-design-icon__svg {
+			fill: var(--color-primary);
+		}
 	}
 }
 </style>
