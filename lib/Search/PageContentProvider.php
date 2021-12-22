@@ -9,7 +9,6 @@ use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
 use OCA\Collectives\Service\PageService;
 use OCP\App\IAppManager;
-use OCP\AppFramework\QueryException;
 use OCP\IL10N;
 use OCP\IURLGenerator;
 use OCP\IUser;
