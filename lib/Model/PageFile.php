@@ -27,8 +27,8 @@ use OCP\Files\NotFoundException;
  * @method void setCollectivePath(string $value)
  * @method string getLastUserId()
  * @method void setLastUserId(string $value)
- * @method string getParentId()
- * @method void setParentId(string $value)
+ * @method int getParentId()
+ * @method void setParentId(int $value)
  * @method int getShareToken()
  * @method void setShareToken(string $value)
  */

@@ -140,7 +140,7 @@ class MountProvider implements IMountProvider {
 	/**
 	 * @param \Exception $e
 	 */
-	protected function log(\Exception $e) {
+	protected function log(\Exception $e): void {
 		$this->logger->error('Collectives App Error: ' . $e->getMessage(),
 			['exception' => $e]
 		);
