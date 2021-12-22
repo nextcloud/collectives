@@ -75,8 +75,7 @@ class CollectiveService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function getCollective(string $userId, int $id): CollectiveInfo
-	{
+	public function getCollective(string $userId, int $id): CollectiveInfo {
 		if (null === $collective = $this->collectiveMapper->findById($id, $userId)) {
 			throw new NotFoundException('Collective not found: ' . $id);
 		}
@@ -237,7 +236,6 @@ class CollectiveService {
 		return new CollectiveInfo($this->collectiveMapper->update($collective),
 			$name,
 			$level);
-
 	}
 	/**
 	 * @param string $userId

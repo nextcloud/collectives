@@ -3,7 +3,6 @@
 
 namespace OCA\Collectives\Service;
 
-use daita\MySmallPhpTools\Exceptions\InvalidItemException;
 use OCA\Circles\CirclesManager;
 use OCA\Circles\Model\Probes\CircleProbe;
 use OCA\Circles\Exceptions\CircleNotFoundException;

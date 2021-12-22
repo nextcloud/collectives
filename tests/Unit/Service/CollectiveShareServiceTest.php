@@ -132,8 +132,7 @@ class CollectiveShareServiceTest extends TestCase {
 		self::assertEquals($share, $this->service->createFolderShare($this->userId, $this->collectiveName));
 	}
 
-	public function testFindShareDoesNotExistException(): void
-	{
+	public function testFindShareDoesNotExistException(): void {
 		// Return null when collective share is not found
 		$this->collectiveShareMapper->method('findOneByCollectiveIdAndUser')
 			->willThrowException(new DoesNotExistException(''));
@@ -141,8 +140,7 @@ class CollectiveShareServiceTest extends TestCase {
 		self::assertNull($this->service->findShare($this->userId, $this->collectiveId));
 	}
 
-	public function testFindShareMultipleObjectsReturnedException(): void
-	{
+	public function testFindShareMultipleObjectsReturnedException(): void {
 		// Return null when more than one collective shares found
 		$this->collectiveShareMapper->method('findOneByCollectiveIdAndUser')
 			->willThrowException(new MultipleObjectsReturnedException(''));
@@ -150,8 +148,7 @@ class CollectiveShareServiceTest extends TestCase {
 		self::assertNull($this->service->findShare($this->userId, $this->collectiveId));
 	}
 
-	public function testFindShareShareNotFoundException(): void
-	{
+	public function testFindShareShareNotFoundException(): void {
 		$collectiveShare = $this->getMockBuilder(CollectiveShare::class)
 			->disableOriginalConstructor()
 			->getMock();

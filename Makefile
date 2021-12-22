@@ -125,8 +125,8 @@ l10n: po
 
 # Update psalm baseline
 php-psalm-baseline:
-	$(CURDIR)/vendor/bin/psalm.phar --set-baseline=tests/psalm-baseline.xml
-	$(CURDIR)/vendor/bin/psalm.phar --update-baseline
+	$(CURDIR)/vendor/bin/psalm.phar --set-baseline=tests/psalm-baseline.xml lib/
+	$(CURDIR)/vendor/bin/psalm.phar --update-baseline lib/
 
 text-app-includes:
 	for n in `cat .files_from_text`; do cp ../../apps/text/$$n $$n ; done

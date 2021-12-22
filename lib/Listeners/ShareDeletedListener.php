@@ -22,7 +22,7 @@ class ShareDeletedListener implements IEventListener {
 	 * @param Event $event
 	 */
 	public function handle(Event $event): void {
-		if (!($event instanceOf ShareDeletedEvent) ||
+		if (!($event instanceof ShareDeletedEvent) ||
 			!$event->getShare()->getToken()) {
 			return;
 		}
