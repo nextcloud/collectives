@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files psalm-version="4.x-dev@">
   <file src="lib/AppInfo/Application.php">
+    <InvalidArgument occurrences="1">
+      <code>registerEventListener</code>
+    </InvalidArgument>
     <MissingDependency occurrences="2">
       <code>VersionsBackend</code>
       <code>VersionsBackend</code>
@@ -61,7 +64,9 @@
     </UndefinedClass>
   </file>
   <file src="lib/Db/CollectiveMapper.php">
-    <MoreSpecificImplementedParamType occurrences="1"/>
+    <MoreSpecificImplementedParamType occurrences="1">
+      <code>Collective insert(Collective $collective)</code>
+    </MoreSpecificImplementedParamType>
     <UndefinedClass occurrences="4">
       <code>$circle</code>
       <code>Member</code>
@@ -70,10 +75,14 @@
     </UndefinedClass>
   </file>
   <file src="lib/Db/CollectiveShareMapper.php">
-    <MoreSpecificImplementedParamType occurrences="1"/>
+    <MoreSpecificImplementedParamType occurrences="1">
+      <code>CollectiveShare insert(CollectiveShare $share)</code>
+    </MoreSpecificImplementedParamType>
   </file>
   <file src="lib/Db/PageMapper.php">
-    <MoreSpecificImplementedParamType occurrences="1"/>
+    <MoreSpecificImplementedParamType occurrences="1">
+      <code>Page insert(Page $page)</code>
+    </MoreSpecificImplementedParamType>
   </file>
   <file src="lib/Fs/UserFolderHelper.php">
     <MissingDependency occurrences="3">

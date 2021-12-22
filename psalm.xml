@@ -9,9 +9,17 @@
 >
     <projectFiles>
         <directory name="lib" />
+        <ignoreFiles>
+            <directory name="vendor" />
+        </ignoreFiles>
     </projectFiles>
     <extraFiles>
-        <directory name="vendor/christophwurst/nextcloud" />
+        <directory name="vendor" />
+        <ignoreFiles>
+            <directory name="vendor/bin" />
+            <directory name="vendor/phpunit" />
+            <directory name="vendor/psalm" />
+        </ignoreFiles>
     </extraFiles>
     <issueHandlers>
         <UndefinedClass>

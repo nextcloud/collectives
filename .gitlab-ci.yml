@@ -139,7 +139,7 @@ Static PHP Analysis:
   <<: *php
   stage: lint
   script:
-    - vendor/bin/psalm.phar
+    - vendor/bin/psalm.phar lib/
   before_script:
     - make composer-install
   needs: []
