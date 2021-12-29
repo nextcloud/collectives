@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files psalm-version="4.x-dev@">
+  <file src="lib/ACL/ACLCacheWrapper.php">
+    <UndefinedClass occurrences="1">
+      <code>CacheWrapper</code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/ACL/ACLStorageWrapper.php">
+    <UndefinedClass occurrences="1">
+      <code>Wrapper</code>
+    </UndefinedClass>
+  </file>
   <file src="lib/AppInfo/Application.php">
     <InvalidArgument occurrences="2">
       <code>registerEventListener</code>
@@ -64,6 +74,12 @@
       <code>LoadViewer</code>
     </UndefinedClass>
   </file>
+  <file src="lib/Db/Collective.php">
+    <UndefinedClass occurrences="2">
+      <code>Member</code>
+      <code>Member</code>
+    </UndefinedClass>
+  </file>
   <file src="lib/Db/CollectiveMapper.php">
     <MoreSpecificImplementedParamType occurrences="1">
       <code>Collective insert(Collective $collective)</code>
@@ -97,7 +113,13 @@
     </UndefinedClass>
   </file>
   <file src="lib/Model/CollectiveInfo.php">
-    <UndefinedClass occurrences="1">
+    <UndefinedClass occurrences="7">
+      <code>Member</code>
+      <code>Member</code>
+      <code>Member</code>
+      <code>Member</code>
+      <code>Member</code>
+      <code>Member</code>
       <code>Member</code>
     </UndefinedClass>
   </file>

@@ -5,7 +5,9 @@ namespace OCA\Collectives\Mount;
 use OC\Files\Cache\CacheEntry;
 use OC\Files\Node\LazyFolder;
 use OC\Files\Storage\Wrapper\Jail;
+use OC\Files\Storage\Wrapper\PermissionsMask;
 use OC\SystemConfig;
+use OCA\Collectives\ACL\ACLStorageWrapper;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\Files\InvalidPathException;
@@ -14,7 +16,9 @@ use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
 use OCP\Files\Storage\IStorageFactory;
 use OCP\IDBConnection;
+use OCP\IRequest;
 use OCP\IUser;
+use OCP\IUserSession;
 
 class CollectiveFolderManager {
 	private const SKELETON_DIR = 'skeleton';
@@ -33,20 +37,32 @@ class CollectiveFolderManager {
 	/** @var string */
 	private $rootPath;
 
+	/** @var IUserSession */
+	private $userSession;
+
+	/** @var IRequest */
+	private $request;
+
 	/**
 	 * CollectiveFolderManager constructor.
 	 *
 	 * @param IRootFolder   $rootFolder
 	 * @param IDBConnection $connection
 	 * @param SystemConfig  $systemConfig
+	 * @param IUserSession  $userSession
+	 * @param IRequest      $request
 	 */
 	public function __construct(
 		IRootFolder $rootFolder,
 		IDBConnection $connection,
-		SystemConfig $systemConfig) {
+		SystemConfig $systemConfig,
+		IUserSession $userSession,
+		IRequest $request) {
 		$this->rootFolder = $rootFolder;
 		$this->connection = $connection;
 		$this->systemConfig = $systemConfig;
+		$this->userSession = $userSession;
+		$this->request = $request;
 	}
 
 	public function getRootPath(): string {
@@ -78,37 +94,87 @@ class CollectiveFolderManager {
 	}
 
 	/**
+	 * @return string|null
+	 */
+	private function getCurrentUID(): ?string {
+		try {
+			// wopi requests are not logged in, instead we need to get the editor user from the access token
+			if (strpos($this->request->getRawPathInfo(), 'apps/richdocuments/wopi') && class_exists('OCA\Richdocuments\Db\WopiMapper')) {
+				$wopiMapper = \OC::$server->query('OCA\Richdocuments\Db\WopiMapper');
+				$token = $this->request->getParam('access_token');
+				if ($token) {
+					$wopi = $wopiMapper->getPathForToken($token);
+					return $wopi->getEditorUid();
+				}
+			}
+		} catch (\Exception $e) {
+		}
+
+		$user = $this->userSession->getUser();
+		return $user ? $user->getUID() : null;
+	}
+
+	/**
 	 * @param int                  $id
 	 * @param string               $mountPoint
+	 * @param int                  $permissions
 	 * @param CacheEntry|null      $cacheEntry
 	 * @param IStorageFactory|null $loader
 	 * @param IUser|null           $user
 	 *
-	 * @return IMountPoint
+	 * @return IMountPoint|null
+	 * @throws InvalidPathException
 	 * @throws NotFoundException
-	 * @throws \Exception
 	 */
 	public function getMount(int $id,
 							 string $mountPoint,
-							 CacheEntry $cacheEntry = null,
+							 int $permissions,
+							 ?CacheEntry $cacheEntry = null,
 							 IStorageFactory $loader = null,
-							 IUser $user = null): IMountPoint {
-		$baseStorage = new Jail([
-			'storage' => new NoExcludePropagatorStorageWrapper(['storage' => $this->getRootFolder()->getStorage()]),
-			'root' => $this->getJailPath($id)
-		]);
+							 IUser $user = null): ?IMountPoint {
+		if (!$cacheEntry) {
+			try {
+				$folder = $this->getOrCreateFolder($id);
+			} catch (InvalidPathException | NotPermittedException $e) {
+				return null;
+			}
+			$cacheEntry = $this->getRootFolder()->getStorage()->getCache()->get($folder->getId());
+		}
 
+		$storage = new NoExcludePropagatorStorageWrapper(['storage' => $this->getRootFolder()->getStorage()]);
+
+		$rootPath = $this->getJailPath($id);
+
+		// apply acl before jail
+		if ($user) {
+			$inShare = $this->getCurrentUID() === null || $this->getCurrentUID() !== $user->getUID();
+			$storage = new ACLStorageWrapper([
+				'storage' => $storage,
+				'permissions' => $permissions,
+				'in_share' => $inShare
+			]);
+			$cacheEntry['permissions'] &= $permissions;
+		}
+
+		$baseStorage = new Jail([
+			'storage' => $storage,
+			'root' => $rootPath
+		]);
 		$collectiveStorage = new CollectiveStorage([
 			'storage' => $baseStorage,
 			'folder_id' => $id,
 			'rootCacheEntry' => $cacheEntry,
 			'mountOwner' => $user
 		]);
+		$maskedStorage = new PermissionsMask([
+			'storage' => $collectiveStorage,
+			'mask' => $permissions
+		]);
 
 		return new CollectiveMountPoint(
 			$id,
 			$this,
-			$collectiveStorage,
+			$maskedStorage,
 			$mountPoint,
 			null,
 			$loader
@@ -184,7 +250,7 @@ class CollectiveFolderManager {
 		$qb = $this->connection->getQueryBuilder();
 		$qb->select(
 			'co.id AS folder_id', 'fileid', 'storage', 'path', 'fc.name AS name',
-			'mimetype', 'mimepart', 'size', 'mtime', 'storage_mtime', 'etag', 'encrypted', 'parent', 'permissions')
+			'mimetype', 'mimepart', 'size', 'mtime', 'storage_mtime', 'etag', 'encrypted', 'parent', 'fc.permissions AS permissions')
 			->from('collectives', 'co')
 			->leftJoin('co', 'filecache', 'fc', $qb->expr()->andX(
 				// concat with empty string to work around missing cast to string
@@ -212,6 +278,24 @@ class CollectiveFolderManager {
 	}
 
 	/**
+	 * @param int $id
+	 *
+	 * @return Folder
+	 * @throws InvalidPathException
+	 * @throws NotPermittedException
+	 */
+	public function getOrCreateFolder(int $id): Folder {
+		try {
+			$folder = $this->getFolder($id);
+		} catch (NotFoundException $e) {
+			$folder = $this->getSkeletonFolder($this->getRootFolder())
+				->copy($this->getRootFolder()->getPath() . '/' . $id);
+		}
+
+		return $folder;
+	}
+
+	/**
 	 * @param int    $id
 	 * @param string $lang
 	 *
@@ -219,13 +303,8 @@ class CollectiveFolderManager {
 	 * @throws InvalidPathException
 	 * @throws NotPermittedException
 	 */
-	public function createFolder(int $id, string $lang): Folder {
-		try {
-			$folder = $this->getFolder($id);
-		} catch (NotFoundException $e) {
-			$folder = $this->getSkeletonFolder($this->getRootFolder())
-				->copy($this->getRootFolder()->getPath() . '/' . $id);
-		}
+	public function initializeFolder(int $id, string $lang): Folder {
+		$folder = $this->getOrCreateFolder($id);
 
 		$landingPageFileName = self::LANDING_PAGE_TITLE . self::SUFFIX;
 		if (!$folder->nodeExists($landingPageFileName)) {

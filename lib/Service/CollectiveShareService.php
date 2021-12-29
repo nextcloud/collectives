@@ -136,7 +136,11 @@ class CollectiveShareService {
 	 */
 	public function createShare(string $userId, CollectiveInfo $collective): CollectiveShare {
 		if (null !== $this->findShare($userId, $collective->getId())) {
-			throw new NotPermittedException('A share for the collective exists already');
+			throw new NotPermittedException($this->l10n->t('A share for collective %s exists already', $collective->getName()));
+		}
+
+		if ($collective->getLevel() < $collective->getSharePermissionLevel()) {
+			throw new NotPermittedException($this->l10n->t('You are not allowed to share %s', $collective->getName()));
 		}
 
 		$folderShare = $this->createFolderShare($userId, $collective->getName());

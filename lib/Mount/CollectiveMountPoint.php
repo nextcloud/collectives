@@ -3,6 +3,7 @@
 namespace OCA\Collectives\Mount;
 
 use OC\Files\Mount\MountPoint;
+use OC\Files\Storage\Storage;
 use OCP\Files\Storage\IStorageFactory;
 
 class CollectiveMountPoint extends MountPoint {
@@ -17,7 +18,7 @@ class CollectiveMountPoint extends MountPoint {
 	 *
 	 * @param int|null                $folderId
 	 * @param CollectiveFolderManager $collectiveFolderManager
-	 * @param CollectiveStorage       $storage
+	 * @param Storage                 $storage
 	 * @param string                  $mountPoint
 	 * @param array|null              $arguments
 	 * @param IStorageFactory|null    $loader
@@ -28,7 +29,7 @@ class CollectiveMountPoint extends MountPoint {
 	 */
 	public function __construct(?int $folderId,
 								CollectiveFolderManager $collectiveFolderManager,
-								CollectiveStorage $storage,
+								Storage $storage,
 								string $mountPoint,
 								array $arguments = null,
 								IStorageFactory $loader = null,
