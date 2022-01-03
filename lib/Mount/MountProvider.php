@@ -131,10 +131,10 @@ class MountProvider implements IMountProvider {
 	 *
 	 * @return bool
 	 */
-	protected function isEnabledForUser($user) {
+	protected function isEnabledForUser(IUser $user): bool {
 		return $this->appManager->isEnabledForUser('circles', $user)
 			&& $this->appManager->isEnabledForUser('collectives', $user)
-			&& $user->getQuota() != '0 B';
+			&& $user->getQuota() !== '0 B';
 	}
 
 	/**
