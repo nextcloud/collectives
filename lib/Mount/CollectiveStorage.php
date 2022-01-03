@@ -3,6 +3,8 @@
 namespace OCA\Collectives\Mount;
 
 use OC\Files\Cache\Scanner;
+use OC\Files\ObjectStore\NoopScanner;
+use OC\Files\ObjectStore\ObjectStoreStorage;
 use OC\Files\Storage\Wrapper\Wrapper;
 use OCP\Files\Cache\ICacheEntry;
 use OCP\IUser;
@@ -76,7 +78,9 @@ class CollectiveStorage extends Wrapper {
 		if (!$storage) {
 			$storage = $this;
 		}
-		if (!isset($storage->scanner)) {
+		if ($storage->instanceOfStorage(ObjectStoreStorage::class)) {
+			$storage->scanner = new NoopScanner($storage);
+		} elseif (!isset($storage->scanner)) {
 			$storage->scanner = new Scanner($storage);
 		}
 		return $storage->scanner;
