@@ -113,7 +113,6 @@ class CollectiveService {
 				$c->setShareToken($share->getToken());
 			}
 		}
-		//$this->shareService->deleteShareByCollectiveId($collective->getId());
 
 		return $collectives;
 	}
@@ -138,12 +137,15 @@ class CollectiveService {
 	 *
 	 * @return array [CollectiveInfo, string]
 	 * @throws CircleExistsException
+	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
-	 * @throws MissingDependencyException
 	 * @throws UnprocessableEntityException
 	 */
-	public function createCollective(string $userId, string $userLang, string $safeName, string $emoji = null): array {
+	public function createCollective(string $userId,
+									 string $userLang,
+									 string $safeName,
+									 string $emoji = null): array {
 		if (empty($safeName)) {
 			throw new UnprocessableEntityException('Empty collective name is not allowed');
 		}
@@ -172,6 +174,7 @@ class CollectiveService {
 		// Create collective object
 		$collective = new Collective();
 		$collective->setCircleId($circle->getUniqueId());
+		$collective->setPermissions(Collective::defaultPermissions);
 		if ($emoji) {
 			$collective->setEmoji($emoji);
 		}
@@ -214,11 +217,13 @@ class CollectiveService {
 	 * @param string|null $emoji
 	 *
 	 * @return CollectiveInfo
+	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
-	 * @throws MissingDependencyException
 	 */
-	public function updateCollective(string $userId, int $id, string $emoji = null): CollectiveInfo {
+	public function updateCollective(string $userId,
+									 int $id,
+									 string $emoji = null): CollectiveInfo {
 		if (null === $collective = $this->collectiveMapper->findById($id, $userId)) {
 			throw new NotFoundException('Collective not found: ' . $id);
 		}
@@ -237,6 +242,40 @@ class CollectiveService {
 			$name,
 			$level);
 	}
+
+	/**
+	 * @param string $userId
+	 * @param int    $id
+	 * @param int    $permissionLevel
+	 * @param int    $permission
+	 *
+	 * @return CollectiveInfo
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function setPermissionLevel(string $userId,
+									  int $id,
+									  int $permissionLevel,
+									  int $permission): CollectiveInfo {
+		if (null === $collective = $this->collectiveMapper->findById($id, $userId)) {
+			throw new NotFoundException('Collective not found: ' . $id);
+		}
+		$name = $this->collectiveMapper->circleIdToName($collective->getCircleId(), $userId);
+		$level = $this->circleHelper->getLevel($collective->getCircleId(), $userId);
+
+		if (!$this->circleHelper->isAdmin($collective->getCircleId(), $userId)) {
+			throw new NotPermittedException('Member ' . $userId . ' not allowed to update collective: ' . $id);
+		}
+
+		$oldPermissions = $collective->getPermissions();
+		$collective->updatePermissionLevel($permissionLevel, $permission);
+
+		return new CollectiveInfo($this->collectiveMapper->update($collective),
+			$name,
+			$level);
+	}
+
 	/**
 	 * @param string $userId
 	 * @param int    $id

@@ -4,11 +4,13 @@ namespace OCA\Collectives\Controller;
 
 use Closure;
 
+use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\CollectiveShareService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
+use OCP\Constants;
 use OCP\IRequest;
 use OCP\IUserSession;
 use OCP\L10N\IFactory;
@@ -126,6 +128,50 @@ class CollectiveController extends Controller {
 				$this->getUserId(),
 				$id,
 				$emoji
+			);
+			return [
+				"data" => $collective,
+			];
+		});
+	}
+
+	/**
+	 * @NoAdminRequired
+	 *
+	 * @param int $id
+	 * @param int $level
+	 *
+	 * @return DataResponse
+	 */
+	public function editLevel(int $id, int $level): DataResponse {
+		return $this->prepareResponse(function () use ($id, $level): array {
+			$collective = $this->service->setPermissionLevel(
+				$this->getUserId(),
+				$id,
+				$level,
+				Collective::editPermissions
+			);
+			return [
+				"data" => $collective,
+			];
+		});
+	}
+
+	/**
+	 * @NoAdminRequired
+	 *
+	 * @param int $id
+	 * @param int $level
+	 *
+	 * @return DataResponse
+	 */
+	public function shareLevel(int $id, int $level): DataResponse {
+		return $this->prepareResponse(function () use ($id, $level): array {
+			$collective = $this->service->setPermissionLevel(
+				$this->getUserId(),
+				$id,
+				$level,
+				Constants::PERMISSION_SHARE
 			);
 			return [
 				"data" => $collective,
