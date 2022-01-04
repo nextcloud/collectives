@@ -26,6 +26,9 @@ class FeatureContext implements Context {
 	private $baseUrl;
 
 	/** @var string */
+	private $remoteUrl;
+
+	/** @var string */
 	private $ocsUrl;
 
 	/** @var CookieJar[] */
@@ -40,6 +43,13 @@ class FeatureContext implements Context {
 	/** @var array */
 	private $store;
 
+	private const CIRCLE_MEMBER_LEVEL = [
+		1 => 'Member',
+		4 => 'Moderator',
+		8 => 'Admin',
+		9 => 'Owner'
+	];
+
 	/**
 	 * Initializes context.
 	 * Every scenario gets its own context instance.
@@ -47,10 +57,12 @@ class FeatureContext implements Context {
 	 * context constructor through behat.yml.
 	 *
 	 * @param string $baseUrl
+	 * @param string $remoteUrl
 	 * @param string $ocsUrl
 	 */
-	public function __construct(string $baseUrl, string $ocsUrl) {
+	public function __construct(string $baseUrl, string $remoteUrl, string $ocsUrl) {
 		$this->baseUrl = $baseUrl;
+		$this->remoteUrl = $remoteUrl;
 		$this->ocsUrl = $ocsUrl;
 		$this->clientOptions = ['verify' => false];
 	}
@@ -75,6 +87,33 @@ class FeatureContext implements Context {
 			$this->assertStatusCode(200);
 			$this->assertCollectiveLevel($collective, 9);
 		}
+	}
+
+	/**
+	 * @When user :user sets :type level in collective :collective to :level
+	 *
+	 * @param string $user
+	 * @param string $type
+	 * @param string $collective
+	 * @param string $level
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userUpdatesCollectivePermissionLevel(string $user, string $type, string $collective, string $level): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+
+		$intLevel = array_search($level, self::CIRCLE_MEMBER_LEVEL, true);
+		if (!$intLevel) {
+			throw new \RuntimeException('Could not verify circle member level ' . $level);
+		}
+
+		$formData = new TableNode([['level', $intLevel]]);
+		$this->sendRequest('PUT', '/apps/collectives/_api/' . $collectiveId . '/' . $type . 'Level', $formData);
+		$this->assertStatusCode(200);
+
+		$this->sendRequest('GET', '/apps/collectives/_api');
+		$this->assertCollectiveKeyValue($collective, $type . 'PermissionLevel', $intLevel);
 	}
 
 	/**
@@ -587,6 +626,45 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @When user :user has webdav access to :collective with permissions :permissions
+	 *
+	 * @param string $collective
+	 * @param string $user
+	 * @param string $permissions
+	 *
+	 * @throws GuzzleException
+	 */
+	public function hasWebdavAccess(string $collective, string $user, string $permissions): void {
+		$this->setCurrentUser($user);
+		$headers = [
+			'Content-Type' => 'Content-Type: text/xml; charset="utf-8"',
+			'Depth' => 0,
+		];
+		$dom = new \DOMDocument('1.0', 'UTF-8');
+		$xPropfind = $dom->createElementNS('DAV:', 'D:propfind');
+		$xProp = $dom->createElement('D:prop');
+		$xProp->setAttribute('xmlns:oc', 'http://owncloud.org/ns');
+		$xProp->appendChild($dom->createElement('oc:permissions'));
+		$dom->appendChild($xPropfind)->appendChild($xProp);
+		$body = $dom->saveXML();
+		$userCollectivesPath = 'Collectives';
+
+		// Dirty hack to not break it on local dev setup
+		$lang = $this->getUserLanguage($user);
+		if ($lang === 'de') {
+			$userCollectivesPath = 'Kollektive';
+		}
+
+		$this->sendRemoteRequest('PROPFIND', '/dav/files/' . $user . '/' . $userCollectivesPath . '/' . urlencode($collective) . '/', $body, $headers);
+		$this->assertStatusCode(207);
+
+		// simplexml_load_string() would be better than preg_replace
+		$folderPermissions = preg_replace('/.*<oc:permissions>(.*)<\/oc:permissions>.*/sm', '\1', $this->response->getBody()->getContents());
+
+		Assert::assertEquals($permissions, $folderPermissions);
+	}
+
+	/**
 	 * @return array
 	 * @throws JsonException
 	 */
@@ -682,6 +760,24 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @param string      $verb
+	 * @param string      $url
+	 * @param string|null $body
+	 * @param array       $headers
+	 * @param bool|null   $auth
+	 *
+	 * @throws GuzzleException
+	 */
+	private function sendRemoteRequest(string $verb,
+								 string $url,
+								 ?string $body = null,
+								 array $headers = [],
+								 ?bool $auth = true): void {
+		$fullUrl = $this->remoteUrl . $url;
+		$this->sendRequestBase($verb, $fullUrl, $body, $headers, $auth);
+	}
+
+	/**
 	 * @param string         $verb
 	 * @param string         $url
 	 * @param TableNode|null $body
@@ -708,17 +804,17 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @param string         $verb
-	 * @param string         $url
-	 * @param TableNode|null $body
-	 * @param array          $headers
-	 * @param bool|null      $auth
+	 * @param string                $verb
+	 * @param string                $url
+	 * @param TableNode|string|null $body
+	 * @param array                 $headers
+	 * @param bool|null             $auth
 	 *
 	 * @throws GuzzleException
 	 */
 	private function sendRequestBase(string $verb,
 								 string $url,
-								 ?TableNode $body = null,
+								 $body = null,
 								 array $headers = [],
 								 ?bool $auth = true): void {
 		$client = new Client($this->clientOptions);
@@ -738,9 +834,11 @@ class FeatureContext implements Context {
 			'requesttoken' => $this->requestTokens[$this->currentUser],
 		]);
 
-		if (null !== $body) {
+		if ($body instanceof TableNode) {
 			$fd = $body->getRowsHash();
 			$options['form_params'] = $fd;
+		} elseif (is_string($body)) {
+			$options['body'] = $body;
 		}
 
 		// Add Xdebug trigger variable as GET parameter
@@ -754,7 +852,11 @@ class FeatureContext implements Context {
 		// clear the cached json response
 		$this->json = null;
 		try {
-			$this->response = $client->{$verb}($url, $options);
+			if ($verb === 'PROPFIND') {
+				$this->response = $client->request('PROPFIND', $url, $options);
+			} else {
+				$this->response = $client->{$verb}($url, $options);
+			}
 		} catch (ClientException $e) {
 			$this->response = $e->getResponse();
 		}
@@ -795,6 +897,19 @@ class FeatureContext implements Context {
 
 			$this->requestTokens[$user] = substr(preg_replace('/(.*)data-requesttoken="(.*)">(.*)/sm', '\2', $this->response->getBody()->getContents()), 0, 89);
 		}
+	}
+
+	/**
+	 * @param string $user
+	 *
+	 * @return string
+	 */
+	private function getUserLanguage(string $user): string {
+		$this->sendOcsRequest('GET', '/cloud/users/' . $user);
+		$this->assertStatusCode(200);
+
+		$jsonBody = $this->getJson();
+		return $jsonBody['ocs']['data']['language'];
 	}
 
 	/**
@@ -866,6 +981,31 @@ class FeatureContext implements Context {
 		}
 	}
 
+
+	/**
+	 * @param string    $name
+	 * @param string    $key
+	 * @param string    $value
+	 * @param bool|null $revert
+	 */
+	private function assertCollectiveKeyValue(string $name, string $key, string $value, ?bool $revert = false): void {
+		$jsonBody = $this->getJson();
+		foreach ($jsonBody['data'] as $c) {
+			if ($c['name'] === $name) {
+				$collective = $c;
+			}
+		}
+
+		if (!isset($collective)) {
+			throw new RuntimeException('Unable to find collective ' . $collective);
+		}
+
+		if (false === $revert) {
+			Assert::assertEquals($value, $collective[$key]);
+		} else {
+			Assert::assertNotEquals($value, $collective[$key]);
+		}
+	}
 	/**
 	 * @param string $name
 	 * @param int    $level

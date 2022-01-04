@@ -1,6 +1,6 @@
 Feature: collective
 
-  Scenario: Create and share a collective
+  Scenario: Create a collective and add members
     When user "jane" creates collective "mycollective"
     And user "alice" joins circle "mycollective" with owner "jane"
     Then user "jane" sees collective "mycollective"

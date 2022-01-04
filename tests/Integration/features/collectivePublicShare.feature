@@ -9,6 +9,11 @@ Feature: collectivePublicShare
   Scenario: Fail to create a second public share
     Then user "jane" fails to create public share for "Public Collective"
 
+  Scenario: Fail to share a collective if sharing permissions are missing
+    When user "jane" sets "share" level in collective "Public Collective" to "Admin"
+    And user "john" joins circle "Public Collective" with owner "jane" with level "Moderator"
+    Then user "john" fails to create public share for "Public Collective"
+
   Scenario: Delete a public share
     When user "jane" stores token for public share "Public Collective"
     And user "jane" deletes public share for "Public Collective"
