@@ -31,7 +31,10 @@ class ACLStorageWrapper extends Wrapper {
 	private function checkPermissions(int $permissions): bool {
 		// if there is no read permissions, then deny everything
 		if ($this->inShare) {
-			$canRead = $this->permissions & (Constants::PERMISSION_READ + Constants::PERMISSION_SHARE);
+			// Check if owner of the share is actually allowed to share
+			// $canRead = $this->permissions & (Constants::PERMISSION_READ + Constants::PERMISSION_SHARE);
+			$canRead = ($this->permissions & Constants::PERMISSION_READ) &&
+				($this->permissions & Constants::PERMISSION_SHARE);
 		} else {
 			$canRead = $this->permissions & Constants::PERMISSION_READ;
 		}
