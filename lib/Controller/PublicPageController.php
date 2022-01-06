@@ -116,7 +116,7 @@ class PublicPageController extends PublicShareController {
 	 * @return DataResponse
 	 */
 	public function index(): DataResponse {
-		return $this->handleErrorResponse(function () {
+		return $this->handleErrorResponse(function (): array {
 			$pages = $this->service->findAll($this->getShare()->getOwner(), $this->getCollective());
 			foreach ($pages as $page) {
 				// Shares don't have a collective path
@@ -138,7 +138,7 @@ class PublicPageController extends PublicShareController {
 	 * @return DataResponse
 	 */
 	public function get(int $parentId, int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($parentId, $id) {
+		return $this->handleErrorResponse(function () use ($parentId, $id): array {
 			$page = $this->service->find($this->getShare()->getOwner(), $this->getCollective(), $parentId, $id);
 			$page->setShareToken($this->getToken());
 			return [
@@ -156,7 +156,7 @@ class PublicPageController extends PublicShareController {
 	 * @return DataResponse
 	 */
 	public function getBacklinks(int $parentId, int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($parentId, $id) {
+		return $this->handleErrorResponse(function () use ($parentId, $id): array {
 			$backlinks = $this->service->getBacklinks($this->getShare()->getOwner(), $this->getCollective(), $parentId, $id);
 			return [
 				"data" => $backlinks

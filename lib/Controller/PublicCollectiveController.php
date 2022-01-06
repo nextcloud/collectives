@@ -82,7 +82,7 @@ class PublicCollectiveController extends PublicShareController {
 	 * @return DataResponse
 	 */
 	public function get(): DataResponse {
-		return $this->prepareResponse(function () {
+		return $this->prepareResponse(function (): array {
 			try {
 				$share = $this->collectiveShareMapper->findOneByToken($this->getToken());
 			} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {

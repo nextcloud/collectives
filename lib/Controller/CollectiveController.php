@@ -81,7 +81,7 @@ class CollectiveController extends Controller {
 	 * @return DataResponse
 	 */
 	public function index(): DataResponse {
-		return $this->prepareResponse(function () {
+		return $this->prepareResponse(function (): array {
 			return [
 				"data" => $this->service->getCollectivesWithShares($this->getUserId()),
 			];
@@ -97,7 +97,7 @@ class CollectiveController extends Controller {
 	 * @return DataResponse
 	 */
 	public function create(string $name, string $emoji = null): DataResponse {
-		return $this->prepareResponse(function () use ($name, $emoji) {
+		return $this->prepareResponse(function () use ($name, $emoji): array {
 			$safeName = $this->nodeHelper->sanitiseFilename($name);
 			[$collective, $info] = $this->service->createCollective(
 				$this->getUserId(),
@@ -121,7 +121,7 @@ class CollectiveController extends Controller {
 	 * @return DataResponse
 	 */
 	public function update(int $id, string $emoji = null): DataResponse {
-		return $this->prepareResponse(function () use ($id, $emoji) {
+		return $this->prepareResponse(function () use ($id, $emoji): array {
 			$collective = $this->service->updateCollective(
 				$this->getUserId(),
 				$id,
@@ -141,7 +141,7 @@ class CollectiveController extends Controller {
 	 * @return DataResponse
 	 */
 	public function trash(int $id): DataResponse {
-		return $this->prepareResponse(function () use ($id) {
+		return $this->prepareResponse(function () use ($id): array {
 			$collective = $this->service->trashCollective($this->getUserId(), $id);
 			return [
 				"data" => $collective
@@ -157,7 +157,7 @@ class CollectiveController extends Controller {
 	 * @return DataResponse
 	 */
 	public function createShare(int $id): DataResponse {
-		return $this->prepareResponse(function () use ($id) {
+		return $this->prepareResponse(function () use ($id): array {
 			$userId = $this->getUserId();
 			$collective = $this->service->getCollective($userId, $id);
 			$share = $this->shareService->createShare($userId, $collective);
@@ -177,7 +177,7 @@ class CollectiveController extends Controller {
 	 * @return DataResponse
 	 */
 	public function deleteShare(int $id, string $token): DataResponse {
-		return $this->prepareResponse(function () use ($id, $token) {
+		return $this->prepareResponse(function () use ($id, $token): array {
 			$userId = $this->getUserId();
 			$collective = $this->service->getCollective($userId, $id);
 			$this->shareService->deleteShare($userId, $id, $token);
