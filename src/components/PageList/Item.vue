@@ -1,6 +1,6 @@
 <template>
 	<div class="app-content-list-item"
-		:class="{active: isActive}"
+		:class="{active: isActive, mobile: isMobile, toplevel: level === 0}"
 		:style="indentItem"
 		draggable
 		@dragstart="setDragData">
@@ -20,8 +20,7 @@
 		</div>
 		<router-link
 			:to="to"
-			class="app-content-list-item-link"
-			:class="{'app-content-list-item-link-with-actions': displayActions}">
+			class="app-content-list-item-link">
 			<div class="app-content-list-item-line-one"
 				:class="{ 'app-content-list-item-line-one--level0': level === 0, 'app-content-list-item-template': isTemplate }">
 				{{ title === 'Template' ? t('collectives', 'Template') : title }}
@@ -103,10 +102,6 @@ export default {
 			return Math.min(Math.max(0, this.level - 1), 4)
 		},
 
-		displayActions() {
-			return this.level === 0 || this.isActive || this.isMobile
-		},
-
 		indentIcon() {
 			const left = 12 + 12 * this.indent
 			return `left: ${left}px`
@@ -185,10 +180,6 @@ export default {
 	top: 0;
 	right: 0;
 	margin: 0;
-	&--display {
-		// Always display page actions if active or on mobile
-		visibility: visible;
-	}
 }
 
 .app-content-list-item.active {
@@ -198,8 +189,9 @@ export default {
 .app-content-list-item {
 	&:hover, &:focus, &:active {
 		background-color: var(--color-background-hover);
+	}
 
-		// Display page actions on hovering the page list item
+	&.active, &.toplevel, &.mobile, &:hover, &:focus, &:active {
 		.page-list-item-actions {
 			visibility: visible;
 		}
@@ -219,11 +211,6 @@ div.app-content-list-item {
 	width: 100%;
 	overflow: hidden;
 	text-overflow: ellipsis;
-
-	// Shorter width to prevent collision with actions
-	&-with-actions {
-		width: calc(100% - 28px);
-	}
 }
 
 // Set pointer cursor on page icon if isCollapsible
