@@ -69,7 +69,7 @@ class PageController extends Controller {
 	 * @return DataResponse
 	 */
 	public function index(int $collectiveId): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId) {
+		return $this->handleErrorResponse(function () use ($collectiveId): array {
 			$pages = $this->service->findAll($this->getUserId(), $this->getCollective($collectiveId));
 			return [
 				"data" => $pages
@@ -87,7 +87,7 @@ class PageController extends Controller {
 	 * @return DataResponse
 	 */
 	public function get(int $collectiveId, int $parentId, int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $id) {
+		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $id): array {
 			$page = $this->service->find($this->getUserId(), $this->getCollective($collectiveId), $parentId, $id);
 			return [
 				"data" => $page
@@ -105,7 +105,7 @@ class PageController extends Controller {
 	 * @return DataResponse
 	 */
 	public function create(int $collectiveId, int $parentId, string $title): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $title) {
+		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $title): array {
 			$page = $this->service->create($this->getUserId(), $this->getCollective($collectiveId), $parentId, $title);
 			return [
 				"data" => $page
@@ -123,7 +123,7 @@ class PageController extends Controller {
 	 * @return DataResponse
 	 */
 	public function touch(int $collectiveId, int $parentId, int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId, $parentId,  $id) {
+		return $this->handleErrorResponse(function () use ($collectiveId, $parentId,  $id): array {
 			$page = $this->service->touch($this->getUserId(), $this->getCollective($collectiveId), $parentId, $id);
 			return [
 				"data" => $page
@@ -142,7 +142,7 @@ class PageController extends Controller {
 	 * @return DataResponse
 	 */
 	public function rename(int $collectiveId, int $parentId, int $id, string $title): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $id, $title) {
+		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $id, $title): array {
 			$page = $this->service->rename($this->getUserId(), $this->getCollective($collectiveId), $parentId, $id, $title);
 			return [
 				"data" => $page
@@ -160,7 +160,7 @@ class PageController extends Controller {
 	 * @return DataResponse
 	 */
 	public function delete(int $collectiveId, int $parentId, int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $id) {
+		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $id): array {
 			$page = $this->service->delete($this->getUserId(), $this->getCollective($collectiveId), $parentId, $id);
 			return [
 				"data" => $page
@@ -178,7 +178,7 @@ class PageController extends Controller {
 	 * @return DataResponse
 	 */
 	public function getBacklinks(int $collectiveId, int $parentId, int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $id) {
+		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $id): array {
 			$backlinks = $this->service->getBacklinks($this->getUserId(), $this->getCollective($collectiveId), $parentId, $id);
 			return [
 				"data" => $backlinks

@@ -17,6 +17,7 @@ use OCP\Files\NotPermittedException;
 use OCP\Files\Storage\IStorage;
 use OCP\IUser;
 use OCP\Lock\LockedException;
+use Psr\Log\LoggerInterface;
 
 class VersionsBackend implements IVersionBackend {
 	/** @var CollectiveFolderManager */
@@ -25,16 +26,22 @@ class VersionsBackend implements IVersionBackend {
 	/** @var ITimeFactory */
 	private $timeFactory;
 
+	/** @var LoggerInterface */
+	private $logger;
+
 	/**
 	 * VersionsBackend constructor.
 	 *
 	 * @param CollectiveFolderManager $collectiveFolderManager
 	 * @param ITimeFactory            $timeFactory
+	 * @param LoggerInterface         $logger
 	 */
 	public function __construct(CollectiveFolderManager $collectiveFolderManager,
-								ITimeFactory $timeFactory) {
+								ITimeFactory $timeFactory,
+								LoggerInterface $logger) {
 		$this->collectiveFolderManager = $collectiveFolderManager;
 		$this->timeFactory = $timeFactory;
+		$this->logger = $logger;
 	}
 
 	/**
@@ -59,7 +66,6 @@ class VersionsBackend implements IVersionBackend {
 	 *
 	 * @return array
 	 * @throws InvalidPathException
-	 * @throws NotPermittedException
 	 */
 	public function getVersionsForFile(IUser $user, FileInfo $file): array {
 		$mount = $file->getMountPoint();
@@ -68,7 +74,10 @@ class VersionsBackend implements IVersionBackend {
 				$folderId = $mount->getFolderId();
 				/** var Folder $versionsFolder */
 				$versionsFolder = $this->getVersionsFolder($mount->getFolderId())->get((string)$file->getId());
-				return array_map(function (File $versionFile) use ($file, $user, $folderId) {
+				return array_map(function (Node $versionFile) use ($file, $user, $folderId) {
+					if ($versionFile instanceOf Folder) {
+						$this->logger->error('Found an unexpected subfolder inside the collective version folder');
+					}
 					return new CollectiveVersion(
 						(int)$versionFile->getName(),
 						(int)$versionFile->getName(),
@@ -95,7 +104,6 @@ class VersionsBackend implements IVersionBackend {
 	 * @param IUser    $user
 	 * @param FileInfo $file
 	 *
-	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
 	public function createVersion(IUser $user, FileInfo $file): void {
@@ -127,13 +135,13 @@ class VersionsBackend implements IVersionBackend {
 	/**
 	 * @param IVersion $version
 	 *
-	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
 	public function rollback(IVersion $version): void {
 		if ($version instanceof CollectiveVersion) {
 			$this->createVersion($version->getUser(), $version->getSourceFile());
 
+			/** @var CollectiveMountPoint $targetMount */
 			$targetMount = $version->getSourceFile()->getMountPoint();
 			$targetCache = $targetMount->getStorage()->getCache();
 			$versionMount = $version->getVersionFile()->getMountPoint();
@@ -168,20 +176,18 @@ class VersionsBackend implements IVersionBackend {
 	 * @param int|string $revision
 	 *
 	 * @return File
-	 * @throws NotPermittedException
 	 */
 	public function getVersionFile(IUser $user, FileInfo $sourceFile, $revision): File {
 		$mount = $sourceFile->getMountPoint();
-		if ($mount instanceof CollectiveMountPoint) {
-			try {
-				/** @var Folder $versionsFolder */
-				$versionsFolder = $this->getVersionsFolder($mount->getFolderId())->get($sourceFile->getId());
-				return $versionsFolder->get((string)$revision);
-			} catch (NotFoundException $e) {
-				return null;
-			}
-		} else {
-			return null;
+		if (!($mount instanceof CollectiveMountPoint)) {
+			throw new \LogicException('Trying to getVersionFile from a file not in a mounted collective folder');
+		}
+		try {
+			/** @var Folder $versionsFolder */
+			$versionsFolder = $this->getVersionsFolder($mount->getFolderId())->get((string)$sourceFile->getId());
+			return $versionsFolder->get((string)$revision);
+		} catch (NotFoundException $e) {
+			throw new \LogicException('Trying to getVersionFile from a file that doesn\'t exist');
 		}
 	}
 
@@ -190,12 +196,16 @@ class VersionsBackend implements IVersionBackend {
 	 *
 	 * @return array (FileInfo|null)[] [$fileId => FileInfo|null]
 	 * @throws NotFoundException
-	 * @throws NotPermittedException
+	 * @throws InvalidPathException
 	 */
 	public function getAllVersionedFiles(array $folder): array {
 		$versionsFolder = $this->getVersionsFolder($folder['id']);
 		// TODO: correct?
 		$mount = $this->collectiveFolderManager->getMount($folder['id'], '/dummyuser/files/Collectives/' . $folder['mount_point']);
+		if ($mount === null) {
+			$this->logger->error('Tried to get all the versioned files from a non existing mountpoint');
+			return [];
+		}
 		try {
 			$contents = $versionsFolder->getDirectoryListing();
 		} catch (NotFoundException $e) {
@@ -222,7 +232,6 @@ class VersionsBackend implements IVersionBackend {
 	 *
 	 * @throws InvalidPathException
 	 * @throws NotPermittedException
-	 * @throws NotFoundException
 	 */
 	public function deleteAllVersionsForFile(int $folderId, int $fileId): void {
 		$versionsFolder = $this->getVersionsFolder($folderId);

@@ -59,7 +59,8 @@ class Application extends App implements IBootstrap {
 			if ($appManager->isEnabledForUser('files_versions')) {
 				return new VersionsBackend(
 					$c->get(CollectiveFolderManager::class),
-					$c->get(ITimeFactory::class)
+					$c->get(ITimeFactory::class),
+					$c->get(LoggerInterface::class)
 				);
 			}
 		});

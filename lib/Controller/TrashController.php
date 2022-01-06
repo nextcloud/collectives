@@ -45,7 +45,7 @@ class TrashController extends Controller {
 	 * @return DataResponse
 	 */
 	public function index(): DataResponse {
-		return $this->handleErrorResponse(function () {
+		return $this->handleErrorResponse(function (): array {
 			$collectives = $this->service->getCollectivesTrash($this->getUserId());
 			return [
 				"data" => $collectives,
@@ -62,7 +62,7 @@ class TrashController extends Controller {
 	 * @return DataResponse
 	 */
 	public function delete(int $id, bool $circle = false): DataResponse {
-		return $this->handleErrorResponse(function () use ($circle, $id) {
+		return $this->handleErrorResponse(function () use ($circle, $id): array {
 			$collective = $this->service->deleteCollective($this->getUserId(), $id, $circle);
 			return [
 				"data" => $collective,
@@ -78,7 +78,7 @@ class TrashController extends Controller {
 	 * @return DataResponse
 	 */
 	public function restore(int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($id) {
+		return $this->handleErrorResponse(function () use ($id): array {
 			$collective = $this->service->restoreCollective($this->getUserId(), $id);
 			return [
 				"data" => $collective,
