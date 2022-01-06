@@ -18,10 +18,10 @@
 					class="title"
 					:placeholder="t('collectives', 'Title')"
 					type="text"
-					:disabled="isPublic"
+					:disabled="isCurrentCollectiveReadOnly"
 					@blur="renamePageOnBlur();">
 			</form>
-			<button v-if="!isPublic"
+			<button v-if="!isCurrentCollectiveReadOnly"
 				class="edit-button primary"
 				:title="edit ? t('collectives', 'Stop editing') : t('collectives', 'Start editing')"
 				@click="edit ? stopEdit() : startEdit()">
@@ -29,7 +29,7 @@
 					:class="`icon-${toggleIcon}`" />
 				{{ edit && !waitForEdit ? t('collectives', 'Done') : t('collectives', 'Edit') }}
 			</button>
-			<PageActions v-if="!isPublic" />
+			<PageActions v-if="!isCurrentCollectiveReadOnly" />
 			<Actions v-show="!showing('sidebar')">
 				<ActionButton
 					icon="icon-menu-sidebar"
@@ -110,7 +110,7 @@ export default {
 
 	computed: {
 		...mapGetters([
-			'isPublic',
+			'isCurrentCollectiveReadOnly',
 			'currentPage',
 			'currentPageFilePath',
 			'currentCollective',

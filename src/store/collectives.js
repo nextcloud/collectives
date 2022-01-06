@@ -49,6 +49,14 @@ export default {
 			}
 		},
 
+		isCurrentCollectiveReadOnly(state, getters) {
+			return getters.isCollectiveReadOnly(getters.currentCollective)
+		},
+
+		isCurrentCollectiveSharable(state, getters) {
+			return getters.isCollectiveSharable(getters.currentCollective)
+		},
+
 		collectives(state, getters) {
 			return state.collectives.sort(byName)
 		},
@@ -90,6 +98,14 @@ export default {
 
 		isCollectiveOwner: (state, getters) => (collective) => {
 			return collective.level >= memberLevels.LEVEL_OWNER
+		},
+
+		isCollectiveReadOnly: (state, getters) => (collective) => {
+			return getters.isPublic || collective.level < collective.writePermissionLevel
+		},
+
+		isCollectiveSharable: (state, getters) => (collective) => {
+			return !getters.isPublic && collective.level >= collective.sharePermissionLevel
 		},
 	},
 	mutations: {

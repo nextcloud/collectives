@@ -11,7 +11,7 @@
 			{{ collective.emoji }}
 		</template>
 		<template #actions>
-			<ActionButton v-if="!isPublic"
+			<ActionButton v-if="isCollectiveSharable(collective)"
 				v-show="!collective.shareToken"
 				:icon="shareIcon"
 				:close-after-click="false"
@@ -104,6 +104,7 @@ export default {
 			'collectives',
 			'collectiveShareUrl',
 			'isCollectiveAdmin',
+			'isCollectiveSharable',
 			'loading',
 		]),
 
@@ -165,12 +166,12 @@ export default {
 
 		share(collective) {
 			return this.$store.dispatch(SHARE_COLLECTIVE, collective)
-				.catch(displayError('Could not share the collective'))
+				.catch(displayError(t('collectives', 'Could not share the collective')))
 		},
 
 		unshare(collective) {
 			return this.$store.dispatch(UNSHARE_COLLECTIVE, collective)
-				.catch(displayError('Could not share the collective'))
+				.catch(displayError(t('collectives', 'Could not unshare the collective')))
 		},
 
 		copyShare(collective) {

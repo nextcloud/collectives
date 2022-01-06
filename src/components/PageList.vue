@@ -58,7 +58,7 @@
 				<LastUpdate :timestamp="collectivePage.timestamp"
 					:user="collectivePage.lastUserId" />
 			</template>
-			<template v-if="!isPublic" #actions>
+			<template v-if="!isCurrentCollectiveReadOnly" #actions>
 				<ActionButton
 					icon="icon-add"
 					@click="newPage(collectivePage)">
@@ -114,7 +114,7 @@ export default {
 
 	computed: {
 		...mapGetters([
-			'isPublic',
+			'isCurrentCollectiveReadOnly',
 			'collectivePage',
 			'templatePage',
 			'currentCollective',
