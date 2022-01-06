@@ -5,6 +5,8 @@ namespace OCA\Collectives\Mount;
 use OC\Files\Cache\Cache;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Service\CollectiveHelper;
+use OCA\Collectives\Service\MissingDependencyException;
+use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
 use OCP\App\IAppManager;
 use OCP\AppFramework\QueryException;
@@ -68,18 +70,26 @@ class MountProvider implements IMountProvider {
 	 */
 	public function getFoldersForUser(IUser $user): array {
 		$folders = [];
+
 		try {
 			$collectiveInfos = $this->collectiveHelper->getCollectivesForUser($user->getUID(), false);
-		} catch (QueryException $e) {
+		} catch (QueryException | MissingDependencyException | NotFoundException | NotPermittedException $e) {
 			$this->log($e);
 			return $folders;
 		}
+
+		// Stop here if no collectives were found
+		if (empty($collectiveInfos)) {
+			return $folders;
+		}
+
 		try {
 			$userFolder = $this->userFolderHelper->get($user->getUID());
 		} catch (NotPermittedException $e) {
 			$this->log($e);
 			return $folders;
 		}
+
 		foreach ($collectiveInfos as $c) {
 			$mountPointName = $c->getName();
 			try {
