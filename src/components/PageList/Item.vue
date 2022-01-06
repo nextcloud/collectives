@@ -30,8 +30,7 @@
 				<slot name="line-two" />
 			</div>
 		</router-link>
-		<div class="page-list-item-actions"
-			:class="{'page-list-item-actions--display': displayActions}">
+		<div class="page-list-item-actions">
 			<Actions>
 				<slot name="actions" />
 			</Actions>
