@@ -8,6 +8,7 @@ use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
+use OCP\IConfig;
 use OCP\IL10N;
 use OCP\IUser;
 use OCP\IUserManager;
@@ -56,6 +57,10 @@ class UserFolderHelperTest extends TestCase {
 		$userManager->method('get')
 			->willReturn($user);
 
+		$config = $this->getMockBuilder(IConfig::class)
+			->disableOriginalConstructor()
+			->getMock();
+
 		$l10n = $this->getMockBuilder(IL10N::class)
 			->disableOriginalConstructor()
 			->getMock();
@@ -67,7 +72,7 @@ class UserFolderHelperTest extends TestCase {
 		$l10nFactory->method('get')
 			->willReturn($l10n);
 
-		$this->helper = new UserFolderHelper($rootFolder, $userManager, $l10nFactory);
+		$this->helper = new UserFolderHelper($rootFolder, $userManager, $config, $l10nFactory);
 	}
 
 	public function testGetFolderExists(): void {

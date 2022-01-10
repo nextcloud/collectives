@@ -11,9 +11,11 @@ use OCP\Files\InvalidPathException;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\Files\NotPermittedException as FilesNotPermittedException;
+use OCP\IConfig;
 use OCP\L10N\IFactory;
 use OCP\IUserManager;
 use OCP\Lock\LockedException;
+use OCP\PreConditionNotMetException;
 
 class UserFolderHelper {
 	/** @var IRootFolder */
@@ -25,6 +27,9 @@ class UserFolderHelper {
 	/** @var IUserManager */
 	private $userManager;
 
+	/** @var IConfig */
+	private $config;
+
 	/** @var IFactory */
 	private $l10nFactory;
 
@@ -33,15 +38,41 @@ class UserFolderHelper {
 	 *
 	 * @param IRootFolder  $rootFolder
 	 * @param IUserManager $userManager
+	 * @param IConfig      $config
 	 * @param IFactory     $l10nFactory
 	 */
 	public function __construct(
 		IRootFolder $rootFolder,
 		IUserManager $userManager,
+		IConfig $config,
 		IFactory $l10nFactory) {
 		$this->rootFolder = $rootFolder;
 		$this->userManager = $userManager;
+		$this->config = $config;
 		$this->l10nFactory = $l10nFactory;
+	}
+
+	/**
+	 * @param $userId
+	 *
+	 * @return string
+	 * @throws NotPermittedException
+	 */
+	public function getUserFolderSetting($userId): string {
+		// Get collectives user folder from settings and default to translated 'Collectives'
+		$userCollectivesPath = $this->config->getUserValue($userId, 'collectives', 'user_folder', '');
+		if ($userCollectivesPath === '') {
+			$userLang = $this->l10nFactory->getUserLanguage($this->userManager->get($userId));
+			$l10n = $this->l10nFactory->get('collectives', $userLang);
+			$userCollectivesPath = '/' . $l10n->t('Collectives');
+			try {
+				$this->config->setUserValue($userId, 'collectives', 'user_folder', $userCollectivesPath);
+			} catch (PreConditionNotMetException | \UnexpectedValueException $e) {
+				throw new NotPermittedException($e->getMessage());
+			}
+		}
+
+		return $userCollectivesPath;
 	}
 
 	/**
@@ -57,9 +88,9 @@ class UserFolderHelper {
 		} catch (FilesNotPermittedException | NoUserException $e) {
 			throw new NotPermittedException($e->getMessage());
 		}
-		$userLang = $this->l10nFactory->getUserLanguage($this->userManager->get($userId));
-		$l10n = $this->l10nFactory->get('collectives', $userLang);
-		$userCollectivesPath = $l10n->t('Collectives');
+
+		$userCollectivesPath = $this->getUserFolderSetting($userId);
+
 		try {
 			$userCollectivesFolder = $userFolder->get($userCollectivesPath);
 			// Rename existing node if it's not a folder
