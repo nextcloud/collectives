@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 import circles from './circles'
 import collectives from './collectives'
 import pages from './pages'
+import settings from './settings'
 import versions from './versions'
 
 Vue.use(Vuex)
@@ -14,6 +15,7 @@ export default new Vuex.Store({
 		circles,
 		collectives,
 		pages,
+		settings,
 		versions,
 	},
 

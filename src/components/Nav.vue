@@ -11,10 +11,11 @@
 				:collective="collective" />
 			<NewCollective v-if="!isPublic" />
 		</template>
-		<template v-if="displayTrash" #footer>
-			<CollectiveTrash
+		<template #footer>
+			<CollectiveTrash v-if="displayTrash"
 				@restore-collective="restoreCollective"
 				@delete-collective="deleteCollective" />
+			<CollectiveSettings v-if="!isPublic" />
 		</template>
 	</AppNavigation>
 </template>
@@ -27,6 +28,7 @@ import AppNavigationCaption from '@nextcloud/vue/dist/Components/AppNavigationCa
 import NewCollective from './Nav/NewCollective'
 import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 import CollectiveListItem from './Nav/CollectiveListItem'
+import CollectiveSettings from './Nav/CollectiveSettings'
 import CollectiveTrash from './Nav/CollectiveTrash'
 import displayError from '../util/displayError'
 
@@ -38,6 +40,7 @@ export default {
 		AppNavigationCaption,
 		NewCollective,
 		CollectiveListItem,
+		CollectiveSettings,
 		CollectiveTrash,
 		EmptyContent,
 	},

@@ -14,7 +14,7 @@
 <script>
 import { showInfo, showError } from '@nextcloud/dialogs'
 import { mapState, mapGetters, mapMutations } from 'vuex'
-import { GET_COLLECTIVES, GET_TRASH_COLLECTIVES } from './store/actions'
+import { GET_COLLECTIVES_FOLDER, GET_COLLECTIVES, GET_TRASH_COLLECTIVES } from './store/actions'
 import displayError from './util/displayError'
 import Content from '@nextcloud/vue/dist/Components/Content'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile'
@@ -58,6 +58,7 @@ export default {
 	},
 
 	mounted() {
+		this.getCollectivesFolder()
 		this.getCollectives()
 		this.getTrashCollectives()
 
@@ -69,6 +70,16 @@ export default {
 
 	methods: {
 		...mapMutations(['hide']),
+
+		/**
+		 * Get collective folder for user
+		 *
+		 * @return {Promise}
+		 */
+		getCollectivesFolder() {
+			return this.$store.dispatch(GET_COLLECTIVES_FOLDER)
+				.catch(displayError('Could not fetch collectives folder'))
+		},
 
 		/**
 		 * Get list of all collectives
