@@ -6,6 +6,7 @@ use OC\Files\Node\File;
 use OC\Files\Node\Folder;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Fs\UserFolderHelper;
+use OCA\Collectives\Service\NotPermittedException;
 use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
 use OCP\IConfig;
@@ -13,11 +14,14 @@ use OCP\IL10N;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\L10N\IFactory;
+use OCP\PreConditionNotMetException;
 use PHPUnit\Framework\TestCase;
 
 class UserFolderHelperTest extends TestCase {
 	private $collectivesUserFolder;
 	private $userFolder;
+	private $l10n;
+	private $config;
 	private $helper;
 
 	protected function setUp(): void {
@@ -57,22 +61,33 @@ class UserFolderHelperTest extends TestCase {
 		$userManager->method('get')
 			->willReturn($user);
 
-		$config = $this->getMockBuilder(IConfig::class)
+		$this->config = $this->getMockBuilder(IConfig::class)
 			->disableOriginalConstructor()
 			->getMock();
+		$this->config->method('getUserValue')
+			->willReturn('');
 
-		$l10n = $this->getMockBuilder(IL10N::class)
+		$this->l10n = $this->getMockBuilder(IL10N::class)
 			->disableOriginalConstructor()
 			->getMock();
-		$l10n->method('t')
-			->willReturn('Collectives');
 		$l10nFactory = $this->getMockBuilder(IFactory::class)
 			->disableOriginalConstructor()
 			->getMock();
 		$l10nFactory->method('get')
-			->willReturn($l10n);
+			->willReturn($this->l10n);
 
-		$this->helper = new UserFolderHelper($rootFolder, $userManager, $config, $l10nFactory);
+		$this->helper = new UserFolderHelper($rootFolder, $userManager, $this->config, $l10nFactory);
+	}
+
+	public function testGetUserFolderSetting(): void {
+		$this->l10n->method('t')
+			->willReturn('Collectif');
+		self::assertEquals('/Collectif', $this->helper->getUserFolderSetting('jane'));
+
+		$this->config->method('setUserValue')
+			->willThrowException(new PreConditionNotMetException(''));
+		$this->expectException(NotPermittedException::class);
+		$this->helper->getUserFolderSetting('jane');
 	}
 
 	public function testGetFolderExists(): void {
