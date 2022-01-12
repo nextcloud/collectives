@@ -19,7 +19,7 @@ Klicken Sie auf den Stift um zu beginnen! ↗️
 ## Auch gut zu wissen
 
 * Dieselbe Seite kann von mehreren Personen gemeinsam bearbeitet werden.
-* Verlinken Sie lokale Seiten, indem Sie Text auswählen und auf "Datei verknüpfen" klicken. Drag & Drop aus der Seitenliste in den Editor funktioniert ebenfalls. 
-* Erstellen Sie Vorlagen für künftige Seiten, indem Sie eine "Template" Seite erstellen. 
+* Verlinken Sie lokale Seiten, indem Sie Text auswählen und "Datei verknüpfen" wählen. Drag & Drop aus der Seitenliste in den Editor funktioniert ebenfalls. 
+* Erstelle Vorlagen für künftige Seiten, indem Sie eine "Template" Seite erstellen. 
 * Erfahren Sie in der [Dokumentation](https://collectivecloud.gitlab.io/collectives/) mehr über diese App. 
 * Bitten Sie [im Forum](https://help.nextcloud.com/c/apps/collectives/174) um Hilfe, falls Sie eine Frage haben.
