@@ -1,8 +1,8 @@
 { "translations": {
     "Collectives" : "Kollektive",
-    "Collectives: page content" : "Kollektive: Seiten-Inhalte",
+    "Collectives - Page content" : "Kollektive - Seiten-Inhalte",
     "in page {page} from collective {collective}" : "in Seite {page} des Kollektivs {collective}",
-    "Collectives: pages" : "Kollektive: Seiten",
+    "Collectives - Pages" : "Kollektive - Seiten",
     "in Collective {collective}" : "in Kollektiv {collective}",
     "Created collective \"%s\" for existing circle." : "Kollektiv „%s“ für bestehenden Kreis angelegt.",
     "Collective Share" : "Geteiltes Kollektiv",

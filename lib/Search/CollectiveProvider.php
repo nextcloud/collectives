@@ -3,8 +3,10 @@
 namespace OCA\Collectives\Search;
 
 use OCA\Collectives\Service\CollectiveHelper;
+use OCA\Collectives\Service\MissingDependencyException;
+use OCA\Collectives\Service\NotFoundException;
+use OCA\Collectives\Service\NotPermittedException;
 use OCP\App\IAppManager;
-use OCP\AppFramework\QueryException;
 use OCP\IL10N;
 use OCP\IURLGenerator;
 use OCP\IUser;
@@ -66,8 +68,8 @@ class CollectiveProvider implements IProvider {
 	 */
 	public function getOrder(string $route, array $routeParameters): int {
 		if ($route === 'collectives.Start.index') {
-			// Collectives first
-			return 0;
+			// Collectives first when the app is active
+			return -3;
 		}
 		return 4;
 	}
@@ -77,7 +79,9 @@ class CollectiveProvider implements IProvider {
 	 * @param ISearchQuery $query
 	 *
 	 * @return SearchResult
-	 * @throws QueryException
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
 	 */
 	public function search(IUser $user, ISearchQuery $query): SearchResult {
 		if ($this->appManager->isEnabledForUser('circles', $user)) {
@@ -92,18 +96,16 @@ class CollectiveProvider implements IProvider {
 				continue;
 			}
 			$collectiveSearchResults[] = new SearchResultEntry(
-				$this->urlGenerator->imagePath(
-					'collectives',
-					'app-blue.svg'
-				),
+				'',
 				$collective->getName(),
 				'',
-				$this->urlGenerator->linkToRoute('collectives.start.index') . '/' . rawurlencode($collective->getName())
+				$this->urlGenerator->linkToRoute('collectives.start.index') . '/' . rawurlencode($collective->getName()),
+				'collectives-search-icon icon-collectives'
 			);
 		}
 
 		return SearchResult::complete(
-			$this->l10n->t('Collectives'),
+			$this->getName(),
 			$collectiveSearchResults
 		);
 	}

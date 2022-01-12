@@ -1,0 +1,11 @@
+.unified-search {
+	.collectives-search-icon {
+		.icon-collectives {
+			@include icon-color('app', 'collectives', '#000', 1);
+		}
+
+		.icon-pages {
+			@include icon-color('pages', 'collectives', '#000', 1);
+		}
+	}
+}

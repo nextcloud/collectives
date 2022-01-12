@@ -1,8 +1,8 @@
 { "translations": {
     "Collectives" : "Cuadernos",
-    "Collectives: page content" : "Cuadernos colectivos: contenido de la página",
+    "Collectives - Page content" : "Cuadernos colectivos: contenido de la página",
     "in page {page} from collective {collective}" : "en la página {page} del cuaderno {collective}",
-    "Collectives: pages" : "Cuadernos colectivos: páginas",
+    "Collectives - Pages" : "Cuadernos colectivos: páginas",
     "in Collective {collective}" : "en Cuaderno colectivo {collective}",
     "Created collective \"%s\" for existing circle." : "Cuaderno colectivo \"%s\" creado para el círculo existente.",
     "Collective Share" : "Cuadernos colectivos",

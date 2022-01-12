@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2022-01-12 16:30+0100\n"
+"POT-Creation-Date: 2022-01-12 18:53+0100\n"
 "PO-Revision-Date: 2021-10-23 16:44+0000\n"
 "Last-Translator: marcotrevisan <mrctrevisan@yahoo.it>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/collectives/"
@@ -20,8 +20,7 @@ msgstr ""
 "X-Generator: Weblate 4.9-dev\n"
 
 #: /collectives/lib/Fs/UserFolderHelper.php:67
-#: /collectives/lib/Search/CollectiveProvider.php:58
-#: /collectives/lib/Search/CollectiveProvider.php:106
+#: /collectives/lib/Search/CollectiveProvider.php:60
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:2
 #: /collectives/specialVueFakeDummyForL10nScript.js:54
 #: /collectives/specialVueFakeDummyForL10nScript.js:88
@@ -29,20 +28,20 @@ msgid "Collectives"
 msgstr "Collettivi"
 
 #: /collectives/lib/Search/PageContentProvider.php:74
-#: /collectives/lib/Search/PageContentProvider.php:131
-msgid "Collectives: page content"
+#, fuzzy
+msgid "Collectives - Page content"
 msgstr "Collettivi: contenuto della pagina"
 
-#: /collectives/lib/Search/PageContentProvider.php:120
+#: /collectives/lib/Search/PageContentProvider.php:119
 msgid "in page {page} from collective {collective}"
 msgstr "nella pagina {page} dal collettivo {collective}"
 
 #: /collectives/lib/Search/PageProvider.php:67
-#: /collectives/lib/Search/PageProvider.php:120
-msgid "Collectives: pages"
+#, fuzzy
+msgid "Collectives - Pages"
 msgstr "Collettivi: pagine"
 
-#: /collectives/lib/Search/PageProvider.php:110
+#: /collectives/lib/Search/PageProvider.php:107
 msgid "in Collective {collective}"
 msgstr "nel Collettivo {collective}"
 
