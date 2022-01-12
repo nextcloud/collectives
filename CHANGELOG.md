@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.18.22 - 2022.01.12
+
+### ✨New
+* 📂 Allow to configure folder for collectives per user (#275).
+
+### 🏗️Fixes
+* ▶️ Only initialize collectives folder if user has collectives (#238).
+* 🌄 Various minor UI tweaks. Thanks to ya-d for suggestions (#271).
+* ✏️ Improve edit button experience while loading editor (#268).
+* 🔗 Open external links in new window.
+* 🗣️ Fixed usage of german formal translation (#227).
+* 📄 Ellipsise long page titles (#255).
+* ⚡️ Numerous fixes to the storage backend implementation.
+* 🔎 Improve unified search experience (#277).
+
+### 🌎Translations
+* 🗣️ Slovenian translation added thanks to Matej U.
+* 🗣️ Spanisch translation added thanks to larusalka.
+* 🗣️ German translation updated thanks to Joachim Sokolowski.
+
+
 ## 0.17.22 - 2021.12.16
 
 ### 🏗️Fixes
