@@ -2,8 +2,8 @@ OC.L10N.register(
     "collectives",
     {
     "Collectives" : "コレクティブ",
-    "Collectives: page content" : "コレクティブ: ページの内容",
-    "Collectives: pages" : "コレクティブ: ページ",
+    "Collectives - Page content" : "コレクティブ: ページの内容",
+    "Collectives - Pages" : "コレクティブ: ページ",
     "Created collective \"%s\" for existing circle." : "コレクティブ \"%s\" を既存のサークルに作成します。",
     "Collective Share" : "コレクティブの共有",
     "The contacts app is required to manage members" : "メンバー管理には連絡先アプリが必要です",

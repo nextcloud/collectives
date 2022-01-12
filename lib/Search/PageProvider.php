@@ -57,14 +57,14 @@ class PageProvider implements IProvider {
 	 * @return string
 	 */
 	public function getId(): string {
-		return 'collectives_pages';
+		return 'collectives-pages';
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getName(): string {
-		return $this->l10n->t('Collectives: pages');
+		return $this->l10n->t('Collectives - Pages');
 	}
 
 	/**
@@ -75,10 +75,10 @@ class PageProvider implements IProvider {
 	 */
 	public function getOrder(string $route, array $routeParameters): int {
 		if ($route === 'collectives.Start.index') {
-			// Collective pages first
-			return 0;
+			// Collective pages second when the app is active
+			return -2;
 		}
-		return 5;
+		return 4;
 	}
 
 	/**
@@ -102,22 +102,20 @@ class PageProvider implements IProvider {
 			$pages = $this->pageService->findByString($user->getUID(), $collective, $query->getTerm());
 			foreach ($pages as $page) {
 				$pageSearchResults[] = new SearchResultEntry(
-					$this->urlGenerator->imagePath(
-						'collectives',
-						'app-blue.svg'
-					),
+					'',
 					$page->getTitle(),
 					str_replace('{collective}', $collective->getName(), $this->l10n->t('in Collective {collective}')),
 					implode('/', array_filter([
 						$this->urlGenerator->linkToRoute('collectives.start.index'),
 						$this->pageService->getPageLink($collective->getName(), $page)
-					]))
+					])),
+					'collectives-search-icon icon-pages'
 				);
 			}
 		}
 
 		return SearchResult::complete(
-			$this->l10n->t('Collectives: pages'),
+			$this->getName(),
 			$pageSearchResults
 		);
 	}

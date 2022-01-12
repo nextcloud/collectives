@@ -2,9 +2,9 @@ OC.L10N.register(
     "collectives",
     {
     "Collectives" : "Zbirke",
-    "Collectives: page content" : "zbirke: vsebina strani",
+    "Collectives - Page content" : "zbirke: vsebina strani",
     "in page {page} from collective {collective}" : "na strani {page} v zbirki {collective}",
-    "Collectives: pages" : "Zbirke: strani",
+    "Collectives - Pages" : "Zbirke: strani",
     "in Collective {collective}" : "v Zbirki {collective}",
     "Created collective \"%s\" for existing circle." : "Za obstoječi krog je ustvarjena zbirka »%s«.",
     "Collective Share" : "Souporaba Zbirke",
