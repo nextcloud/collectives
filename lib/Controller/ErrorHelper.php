@@ -29,6 +29,8 @@ trait ErrorHelper {
 			return new DataResponse($e->getMessage(), Http::STATUS_NOT_FOUND);
 		} catch (CircleExistsException | QueryException | UnprocessableEntityException $e) {
 			return new DataResponse($e->getMessage(), Http::STATUS_UNPROCESSABLE_ENTITY);
+		} catch (\InvalidArgumentException $e) {
+			return new DataResponse($e->getMessage(), Http::STATUS_BAD_REQUEST);
 		} catch (\Throwable $e) {
 			if ($logger) {
 				$logger->error('Collectives App Error: ' . $e->getMessage(), ['exception' => $e]);

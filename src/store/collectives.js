@@ -22,6 +22,7 @@ import {
 	RESTORE_COLLECTIVE,
 	SHARE_COLLECTIVE,
 	UNSHARE_COLLECTIVE,
+	GET_COLLECTIVES_FOLDER,
 } from './actions'
 
 export default {
@@ -157,15 +158,21 @@ export default {
 		 *
 		 * @param {object} store the vuex store
 		 * @param {Function} store.commit commit changes
+		 * @param {object} store.rootState root state of the store
+		 * @param {Function} store.dispatch dispatch actions
 		 * @param {object} collective Properties for the new collective
 		 */
-		async [NEW_COLLECTIVE]({ commit }, collective) {
+		async [NEW_COLLECTIVE]({ commit, rootState, dispatch }, collective) {
 			const response = await axios.post(
 				generateUrl('/apps/collectives/_api'),
 				collective,
 			)
 			commit('info', response.data.message)
 			commit(ADD_OR_UPDATE_COLLECTIVE, response.data.data)
+			// If collectives folder wasn't initialized already, now it should be there
+			if (!rootState.settings.collectivesFolder) {
+				dispatch(GET_COLLECTIVES_FOLDER)
+			}
 		},
 
 		/**

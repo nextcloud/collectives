@@ -369,6 +369,51 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @When user :user gets setting :key with value :value
+	 *
+	 * @param string $user
+	 * @param string $key
+	 * @param string $value
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userGetsSetting(string $user, string $key, string $value): void {
+		$this->setCurrentUser($user);
+
+		$this->sendOcsRequest('GET', '/apps/collectives/api/v1.0/settings/user/' . $key);
+		$this->assertStatusCode(200);
+
+		$jsonBody = $this->getJson();
+		Assert::assertEquals($value, $jsonBody['ocs']['data']);
+	}
+
+	/**
+	 * @When user :user sets setting :key to value :value
+	 * @When user :user :fails to set setting :key to value :value
+	 *
+	 * @param string      $user
+	 * @param string      $key
+	 * @param string      $value
+	 * @param string|null $fails
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userSetsSetting(string $user, string $key, string $value, ?string $fails = null): void {
+		$this->setCurrentUser($user);
+
+		$data = new TableNode([
+			['key', $key],
+			['value', $value],
+		]);
+		$this->sendOcsRequest('POST', '/apps/collectives/api/v1.0/settings/user', $data);
+		if ($fails !== "fails") {
+			$this->assertStatusCode(200);
+		} else {
+			$this->assertStatusCode(400);
+		}
+	}
+
+	/**
 	 * @When user :user joins circle :name with owner :owner
 	 * @When user :user joins circle :name with owner :owner with level :level
 	 *

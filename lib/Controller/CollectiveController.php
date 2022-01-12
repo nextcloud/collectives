@@ -67,7 +67,7 @@ class CollectiveController extends Controller {
 	}
 
 	/**
-	 * @param Closure              $callback
+	 * @param Closure $callback
 	 *
 	 * @return DataResponse
 	 */

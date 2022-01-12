@@ -1,5 +1,5 @@
 <template>
-	<AppNavigationSettings :title="t('collectives', 'Deleted collectives')">
+	<AppNavigationSettings id="collectives-trash" :title="t('collectives', 'Deleted collectives')">
 		<ul class="app-navigation__list">
 			<AppNavigationItem v-for="collective in trashCollectives"
 				:key="collective.circleId"
@@ -101,13 +101,23 @@ export default {
 }
 </script>
 
-<style lang="scss">
-#app-settings-header .settings-button {
+<style lang="scss" scoped>
+::v-deep #app-settings__header .settings-button .settings-button__icon {
+	visibility: hidden;
 	background-image: var(--icon-delete-000);
 }
-</style>
 
-<style lang="scss" scoped>
+::v-deep #app-settings__header .settings-button .settings-button__icon:before {
+	visibility: visible;
+	content: '';
+	width: 44px;
+	height: 44px;
+	background-image: var(--icon-delete-000);
+	background-repeat: no-repeat;
+	background-position: center;
+	margin-left: 10px;
+}
+
 .modal__content {
 	background: var(--color-main-background);
 	color: var(--color-text-light);

@@ -75,7 +75,7 @@ class VersionsBackend implements IVersionBackend {
 				/** var Folder $versionsFolder */
 				$versionsFolder = $this->getVersionsFolder($mount->getFolderId())->get((string)$file->getId());
 				return array_map(function (Node $versionFile) use ($file, $user, $folderId) {
-					if ($versionFile instanceOf Folder) {
+					if ($versionFile instanceof Folder) {
 						$this->logger->error('Found an unexpected subfolder inside the collective version folder');
 					}
 					return new CollectiveVersion(

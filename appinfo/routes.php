@@ -61,5 +61,11 @@ return [
 		['name' => 'start#index', 'url' => '/{path}', 'verb' => 'GET',
 			'requirements' => ['path' => '.*'],
 			'defaults' => ['path' => '']],
+	],
+	'ocs' => [
+		['name' => 'settings#getUserSetting', 'url' => '/api/v{apiVersion}/settings/user/{key}', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '1.0']],
+		['name' => 'settings#setUserSetting', 'url' => '/api/v{apiVersion}/settings/user', 'verb' => 'POST',
+			'requirements' => ['apiVersion' => '1.0']],
 	]
 ];
