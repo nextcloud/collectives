@@ -1,8 +1,8 @@
 { "translations": {
     "Collectives" : "Kolektivy",
-    "Collectives: page content" : "Kolektivy: obsah stránky",
+    "Collectives - Page content" : "Kolektivy: obsah stránky",
     "in page {page} from collective {collective}" : "na stránce {page} z kolektivu {collective}",
-    "Collectives: pages" : "Kolektivy: stránky",
+    "Collectives - Pages" : "Kolektivy: stránky",
     "in Collective {collective}" : "V kolektivu {collective}",
     "Created collective \"%s\" for existing circle." : "Vytvořen kolektiv „%s“ pro existující okruh.",
     "Collective Share" : "Sdílení kolektivu",

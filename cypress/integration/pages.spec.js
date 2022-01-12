@@ -105,8 +105,8 @@ describe('Page', function() {
 			cy.get('.unified-search a').click()
 			cy.get('.unified-search__form input')
 				.type('Day 2')
-			cy.get('.unified-search__results-collectives_pages').should('contain', 'Day 2')
-			cy.get('.unified-search__results-collectives_pages_content').should('contain', 'with Day 2 in')
+			cy.get('.unified-search__results-collectives-pages').should('contain', 'Day 2')
+			cy.get('.unified-search__results-collectives-page-content').should('contain', 'with Day 2 in')
 		})
 	})
 
