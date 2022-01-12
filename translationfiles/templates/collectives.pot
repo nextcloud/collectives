@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2022-01-12 16:36+0100\n"
+"POT-Creation-Date: 2022-01-12 18:54+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,8 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
 #: /collectives/lib/Fs/UserFolderHelper.php:67
-#: /collectives/lib/Search/CollectiveProvider.php:58
-#: /collectives/lib/Search/CollectiveProvider.php:106
+#: /collectives/lib/Search/CollectiveProvider.php:60
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:2
 #: /collectives/specialVueFakeDummyForL10nScript.js:54
 #: /collectives/specialVueFakeDummyForL10nScript.js:88
@@ -28,20 +27,18 @@ msgid "Collectives"
 msgstr ""
 
 #: /collectives/lib/Search/PageContentProvider.php:74
-#: /collectives/lib/Search/PageContentProvider.php:131
-msgid "Collectives: page content"
+msgid "Collectives - Page content"
 msgstr ""
 
-#: /collectives/lib/Search/PageContentProvider.php:120
+#: /collectives/lib/Search/PageContentProvider.php:119
 msgid "in page {page} from collective {collective}"
 msgstr ""
 
 #: /collectives/lib/Search/PageProvider.php:67
-#: /collectives/lib/Search/PageProvider.php:120
-msgid "Collectives: pages"
+msgid "Collectives - Pages"
 msgstr ""
 
-#: /collectives/lib/Search/PageProvider.php:110
+#: /collectives/lib/Search/PageProvider.php:107
 msgid "in Collective {collective}"
 msgstr ""
 

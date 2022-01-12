@@ -2,9 +2,9 @@ OC.L10N.register(
     "collectives",
     {
     "Collectives" : "Collettivi",
-    "Collectives: page content" : "Collettivi: contenuto della pagina",
+    "Collectives - Page content" : "Collettivi: contenuto della pagina",
     "in page {page} from collective {collective}" : "nella pagina {page} dal collettivo {collective}",
-    "Collectives: pages" : "Collettivi: pagine",
+    "Collectives - Pages" : "Collettivi: pagine",
     "in Collective {collective}" : "nel Collettivo {collective}",
     "Created collective \"%s\" for existing circle." : "Creato collettivo \"%s\" per una cerchia esistente.",
     "Collective Share" : "Collettivi: pagine",

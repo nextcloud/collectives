@@ -64,14 +64,14 @@ class PageContentProvider implements IProvider {
 	 * @return string
 	 */
 	public function getId(): string {
-		return 'collectives_pages_content';
+		return 'collectives-page-content';
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getName(): string {
-		return $this->l10n->t('Collectives: page content');
+		return $this->l10n->t('Collectives - Page content');
 	}
 
 	/**
@@ -82,10 +82,11 @@ class PageContentProvider implements IProvider {
 	 */
 	public function getOrder(string $route, array $routeParameters): int {
 		if ($route === 'collectives.Start.index') {
-			// Collective pages first
-			return 0;
+			// Page content third when the app is active
+			return -1;
 		}
-		return 5;
+		// Page content search isn't enabled outside the app anyway
+		return 99;
 	}
 
 	/**
@@ -98,6 +99,7 @@ class PageContentProvider implements IProvider {
 	 * @throws NotPermittedException
 	 */
 	public function search(IUser $user, ISearchQuery $query): SearchResult {
+		// Only search for page content if the app is active
 		if ($this->appManager->isEnabledForUser('circles', $user) &&
 			strpos($query->getRoute(), 'collectives.') === 0) {
 			$collectiveInfos = $this->collectiveHelper->getCollectivesForUser($user->getUID(), false);
@@ -112,23 +114,21 @@ class PageContentProvider implements IProvider {
 				$file = $this->nodeHelper->getFileById($this->pageService->getFolder($user->getUID(), $collective, $page->getId()), $page->getId());
 				if (preg_match('/(\S+\s+)?(\S+\s*)?' . $query->getTerm() . '(\S*)?(\s+\S+)?/i', NodeHelper::getContent($file), $matches)) {
 					$pageSearchResults[] = new SearchResultEntry(
-						$this->urlGenerator->imagePath(
-							'collectives',
-							'app-blue.svg'
-						),
+						'',
 						$matches[0],
 						str_replace('{page}', $page->getTitle(), str_replace('{collective}', $collective->getName(), $this->l10n->t('in page {page} from collective {collective}'))),
 						implode('/', array_filter([
 							$this->urlGenerator->linkToRoute('collectives.start.index'),
 							$this->pageService->getPageLink($collective->getName(), $page)
-						]))
+						])),
+						'collectives-search-icon icon-pages'
 					);
 				}
 			}
 		}
 
 		return SearchResult::complete(
-			$this->l10n->t('Collectives: page content'),
+			$this->getName(),
 			$pageSearchResults
 		);
 	}

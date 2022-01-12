@@ -2,9 +2,9 @@ OC.L10N.register(
     "collectives",
     {
     "Collectives" : "Kollektiver",
-    "Collectives: page content" : "Kollektiver: sideinnhold",
+    "Collectives - Page content" : "Kollektiver: sideinnhold",
     "in page {page} from collective {collective}" : "på siden {page} fra kollektivet {collective}",
-    "Collectives: pages" : "Kollektiver: sider",
+    "Collectives - Pages" : "Kollektiver: sider",
     "in Collective {collective}" : "i kollektivet {collective}",
     "Created collective \"%s\" for existing circle." : "Opprettet kollektivet «%s» for eksisterende sirkel.",
     "Collective Share" : "Kollektiver: sider",
