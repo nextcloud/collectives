@@ -7,9 +7,10 @@ use OC\Files\ObjectStore\NoopScanner;
 use OC\Files\ObjectStore\ObjectStoreStorage;
 use OC\Files\Storage\Wrapper\Wrapper;
 use OCP\Files\Cache\ICacheEntry;
+use OCP\Files\Storage\IDisableEncryptionStorage;
 use OCP\IUser;
 
-class CollectiveStorage extends Wrapper {
+class CollectiveStorage extends Wrapper implements IDisableEncryptionStorage {
 	/** @var int */
 	private $folderId;
 
