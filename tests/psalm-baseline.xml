@@ -21,9 +21,7 @@
     </MissingDependency>
   </file>
   <file src="lib/CacheListener.php">
-    <MissingDependency occurrences="3">
-      <code>CacheInsertEvent</code>
-      <code>CacheUpdateEvent</code>
+    <MissingDependency occurrences="1">
       <code>CollectiveStorage</code>
     </MissingDependency>
   </file>
@@ -65,7 +63,9 @@
     </UndefinedClass>
   </file>
   <file src="lib/Db/CollectiveMapper.php">
-    <MoreSpecificImplementedParamType occurrences="1">
+    <MoreSpecificImplementedParamType occurrences="3">
+      <code>Collective insert(Collective $collective)</code>
+      <code>Collective insert(Collective $collective)</code>
       <code>Collective insert(Collective $collective)</code>
     </MoreSpecificImplementedParamType>
     <UndefinedClass occurrences="4">
@@ -76,12 +76,15 @@
     </UndefinedClass>
   </file>
   <file src="lib/Db/CollectiveShareMapper.php">
-    <MoreSpecificImplementedParamType occurrences="1">
+    <MoreSpecificImplementedParamType occurrences="2">
+      <code>CollectiveShare insert(CollectiveShare $share)</code>
       <code>CollectiveShare insert(CollectiveShare $share)</code>
     </MoreSpecificImplementedParamType>
   </file>
   <file src="lib/Db/PageMapper.php">
-    <MoreSpecificImplementedParamType occurrences="1">
+    <MoreSpecificImplementedParamType occurrences="3">
+      <code>Page insert(Page $page)</code>
+      <code>Page insert(Page $page)</code>
       <code>Page insert(Page $page)</code>
     </MoreSpecificImplementedParamType>
   </file>
@@ -102,7 +105,6 @@
     </UndefinedClass>
   </file>
   <file src="lib/Mount/CollectiveFolderManager.php">
-    <InvalidArgument occurrences="1"/>
     <MissingDependency occurrences="4">
       <code>$rootFolder</code>
       <code>$rootFolder</code>
