@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-01-12 18:53+0100\n"
-"PO-Revision-Date: 2021-11-16 11:50+0000\n"
+"PO-Revision-Date: 2022-01-18 07:54+0000\n"
 "Last-Translator: Nathan <bonnemainsnathan@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/fr/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.9.1-dev\n"
+"X-Generator: Weblate 4.11-dev\n"
 
 #: /collectives/lib/Fs/UserFolderHelper.php:67
 #: /collectives/lib/Search/CollectiveProvider.php:60
@@ -28,18 +28,16 @@ msgid "Collectives"
 msgstr "Collectifs"
 
 #: /collectives/lib/Search/PageContentProvider.php:74
-#, fuzzy
 msgid "Collectives - Page content"
-msgstr "Collectifs : Contenu de page"
+msgstr "Collectifs - Contenu de la page"
 
 #: /collectives/lib/Search/PageContentProvider.php:119
 msgid "in page {page} from collective {collective}"
 msgstr "dans la page {page} du collectif {collective}"
 
 #: /collectives/lib/Search/PageProvider.php:67
-#, fuzzy
 msgid "Collectives - Pages"
-msgstr "Collectifs : Pages"
+msgstr "Collectifs - Pages"
 
 #: /collectives/lib/Search/PageProvider.php:107
 msgid "in Collective {collective}"
@@ -159,28 +157,26 @@ msgid "Copy share link"
 msgstr "Copier le lien de partage"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:14
-#, fuzzy
 msgid "Settings"
-msgstr "Arrêter la modification"
+msgstr "Paramètres"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:15
-#, fuzzy
 msgid "Collectives Folder"
-msgstr "Collectifs"
+msgstr "Dossier des collectifs"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:16
-#, fuzzy
 msgid "Create a collective first"
-msgstr "Créer un nouveau collectif"
+msgstr "Créez d'abord un collectif"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:17
-#, fuzzy
 msgid "Select location for collectives"
-msgstr "Sélectionner un collectif"
+msgstr "Sélectionnez l'emplacement des collectifs"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:18
 msgid "Invalid path selected. Only folders on first level are supported."
 msgstr ""
+"Chemin sélectionné invalide. Seuls les dossiers de premier niveau sont pris "
+"en charge."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:19
 msgid "Deleted collectives"
