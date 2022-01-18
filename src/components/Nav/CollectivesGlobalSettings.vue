@@ -25,7 +25,7 @@ import displayError from '../../util/displayError'
 import AppNavigationSettings from '@nextcloud/vue/dist/Components/AppNavigationSettings'
 
 export default {
-	name: 'CollectiveSettings',
+	name: 'CollectivesGlobalSettings',
 	components: {
 		AppNavigationSettings,
 	},

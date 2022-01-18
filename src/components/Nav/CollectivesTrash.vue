@@ -61,7 +61,7 @@ import Modal from '@nextcloud/vue/dist/Components/Modal'
 import { memberLevels } from '../../constants'
 
 export default {
-	name: 'CollectiveTrash',
+	name: 'CollectivesTrash',
 	components: {
 		ActionButton,
 		AppNavigationItem,
