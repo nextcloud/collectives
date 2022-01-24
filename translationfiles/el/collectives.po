@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2022-01-12 18:53+0100\n"
+"POT-Creation-Date: 2022-01-24 14:37+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -20,8 +20,8 @@ msgstr ""
 #: /collectives/lib/Fs/UserFolderHelper.php:67
 #: /collectives/lib/Search/CollectiveProvider.php:60
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:2
-#: /collectives/specialVueFakeDummyForL10nScript.js:54
-#: /collectives/specialVueFakeDummyForL10nScript.js:88
+#: /collectives/specialVueFakeDummyForL10nScript.js:63
+#: /collectives/specialVueFakeDummyForL10nScript.js:97
 msgid "Collectives"
 msgstr ""
 
@@ -76,6 +76,7 @@ msgid ""
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:1
+#: /collectives/specialVueFakeDummyForL10nScript.js:22
 msgid "The contacts app is required to manage members"
 msgstr ""
 
@@ -108,304 +109,333 @@ msgid "Manage members"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:9
-msgid "Delete"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:10
-msgid "Change emoji"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:10
-#: /collectives/specialVueFakeDummyForL10nScript.js:31
-msgid "Add emoji"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:11
-msgid "Copied"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:12
-msgid "Cannot copy"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:13
-msgid "Copy share link"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:14
+#: /collectives/specialVueFakeDummyForL10nScript.js:23
 msgid "Settings"
 msgstr ""
 
+#: /collectives/specialVueFakeDummyForL10nScript.js:10
+msgid "Copied"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:11
+msgid "Cannot copy"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:12
+msgid "Copy share link"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:13
+msgid "Collective settings"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:14
+msgid "Details"
+msgstr ""
+
 #: /collectives/specialVueFakeDummyForL10nScript.js:15
-msgid "Collectives Folder"
+msgid "Members"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:16
-msgid "Create a collective first"
+msgid "Members can be managed in the Contacts app."
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:17
-msgid "Select location for collectives"
+msgid "Open Contacts"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:18
-msgid "Invalid path selected. Only folders on first level are supported."
+msgid "Danger zone"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:19
-msgid "Deleted collectives"
+msgid "Delete collective"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:20
-#: /collectives/specialVueFakeDummyForL10nScript.js:45
-msgid "Restore"
+msgid "Change emoji"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:20
+#: /collectives/specialVueFakeDummyForL10nScript.js:40
+msgid "Add emoji"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:21
-msgid "Delete permanently"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:22
-msgid "Permanently delete collective »{collective}«"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:23
-msgid "Delete corresponding circle along with the collective?"
+msgid "Renaming is limited to owners of the circle"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:24
-msgid "Cancel"
+msgid "Collectives Folder"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:25
-msgid "Only collective"
+msgid "Create a collective first"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:26
-#: /collectives/specialVueFakeDummyForL10nScript.js:28
-msgid "Collective and circle"
+msgid "Select location for collectives"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:27
-msgid "Only circle owners can delete a circle"
+msgid "Invalid path selected. Only folders on first level are supported."
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:28
+msgid "Deleted collectives"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:29
-#: /collectives/specialVueFakeDummyForL10nScript.js:90
-msgid "Create new collective"
+#: /collectives/specialVueFakeDummyForL10nScript.js:54
+msgid "Restore"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:30
-msgid "Create collective for existing circle"
+msgid "Delete permanently"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:31
+msgid "Permanently delete collective »{collective}«"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:32
-msgid "New collective name"
+msgid "Delete corresponding circle along with the collective?"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:33
-msgid "Select circle..."
+msgid "Cancel"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:34
-msgid "Select a collective"
+msgid "Only collective"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:35
-msgid "Show in Files"
+#: /collectives/specialVueFakeDummyForL10nScript.js:37
+msgid "Collective and circle"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:36
-#: /collectives/specialVueFakeDummyForL10nScript.js:60
-#: /collectives/specialVueFakeDummyForL10nScript.js:71
-msgid "Edit template for subpages"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:37
-msgid "Delete page"
+msgid "Only circle owners can delete a circle"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:38
-msgid "Page deleted"
+#: /collectives/specialVueFakeDummyForL10nScript.js:99
+msgid "Create new collective"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:39
-msgid "Could not delete the page"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:40
-#: /collectives/specialVueFakeDummyForL10nScript.js:62
-#: /collectives/specialVueFakeDummyForL10nScript.js:64
-#: /collectives/specialVueFakeDummyForL10nScript.js:73
-#: /collectives/specialVueFakeDummyForL10nScript.js:75
-msgid "Could not create the page"
+msgid "Create collective for existing circle"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:41
-msgid "Page not found:"
+msgid "New collective name"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:42
-msgid "Could not find the Page."
+msgid "Select circle..."
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:43
-msgid "Select a page from the list or create a new one."
+msgid "Select a collective"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:44
-msgid "Restore this version"
+msgid "Show in Files"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:45
+#: /collectives/specialVueFakeDummyForL10nScript.js:69
+#: /collectives/specialVueFakeDummyForL10nScript.js:80
+msgid "Edit template for subpages"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:46
-msgid "Reverted {page} to revision {timestamp}."
+msgid "Delete page"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:47
-msgid "Failed to revert {page} to revision {timestamp}."
+msgid "Page deleted"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:48
-#: /collectives/specialVueFakeDummyForL10nScript.js:57
-msgid "Template"
+msgid "Could not delete the page"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:49
-msgid "Title"
+#: /collectives/specialVueFakeDummyForL10nScript.js:71
+#: /collectives/specialVueFakeDummyForL10nScript.js:73
+#: /collectives/specialVueFakeDummyForL10nScript.js:82
+#: /collectives/specialVueFakeDummyForL10nScript.js:84
+msgid "Could not create the page"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:50
-msgid "Stop editing"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:50
-msgid "Start editing"
+msgid "Page not found:"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:51
-msgid "Done"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:51
-msgid "Edit"
+msgid "Could not find the Page."
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:52
-msgid "Hide all subpages"
+msgid "Select a page from the list or create a new one."
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:53
-msgid "Show all subpages"
+msgid "Restore this version"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:55
-msgid "Could not rename the page"
+msgid "Reverted {page} to revision {timestamp}."
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:56
-msgid "Expand subpage list"
+msgid "Failed to revert {page} to revision {timestamp}."
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:56
-msgid "Collapse subpage list"
+#: /collectives/specialVueFakeDummyForL10nScript.js:57
+#: /collectives/specialVueFakeDummyForL10nScript.js:66
+msgid "Template"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:58
-msgid "Last edited by {user}"
+msgid "Title"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:59
-msgid "Add a subpage"
+msgid "Stop editing"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:59
+msgid "Start editing"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:60
+msgid "Done"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:60
+msgid "Edit"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:61
-#: /collectives/specialVueFakeDummyForL10nScript.js:72
-msgid "Add template for subpages"
+msgid "Hide all subpages"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:63
-#: /collectives/specialVueFakeDummyForL10nScript.js:74
-msgid "New Page"
+#: /collectives/specialVueFakeDummyForL10nScript.js:62
+msgid "Show all subpages"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:65
-#: /collectives/specialVueFakeDummyForL10nScript.js:66
-msgid "Hide templates"
+#: /collectives/specialVueFakeDummyForL10nScript.js:64
+msgid "Could not rename the page"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:65
-#: /collectives/specialVueFakeDummyForL10nScript.js:66
-msgid "Show templates"
+msgid "Expand subpage list"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:65
+msgid "Collapse subpage list"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:67
-msgid "Sort order"
+msgid "Last edited by {user}"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:68
-msgid "Sort by last modification"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:69
-msgid "Sort by title"
+msgid "Add a subpage"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:70
-msgid "Add a page"
+#: /collectives/specialVueFakeDummyForL10nScript.js:81
+msgid "Add template for subpages"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:72
+#: /collectives/specialVueFakeDummyForL10nScript.js:83
+msgid "New Page"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:74
+#: /collectives/specialVueFakeDummyForL10nScript.js:75
+msgid "Hide templates"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:74
+#: /collectives/specialVueFakeDummyForL10nScript.js:75
+msgid "Show templates"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:76
-msgid "No backlinks available"
+msgid "Sort order"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:77
-msgid "If other pages link to this one, they will be listed here."
+msgid "Sort by last modification"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:78
-msgid "Could not get page backlinks"
+msgid "Sort by title"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:79
+msgid "Add a page"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:85
+msgid "No backlinks available"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:86
+msgid "If other pages link to this one, they will be listed here."
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:87
+msgid "Could not get page backlinks"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:88
 msgid "Current version"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:80
+#: /collectives/specialVueFakeDummyForL10nScript.js:89
 msgid "No other versions available"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:81
+#: /collectives/specialVueFakeDummyForL10nScript.js:90
 msgid "After editing you can find old versions of the page here."
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:82
+#: /collectives/specialVueFakeDummyForL10nScript.js:91
 msgid "Could not get page versions"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:83
+#: /collectives/specialVueFakeDummyForL10nScript.js:92
 #: /collectives/src/util/xmlToVersionsList.js:30
 msgid "%n byte"
 msgid_plural "%n bytes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:84
+#: /collectives/specialVueFakeDummyForL10nScript.js:93
 msgid "Backlinks"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:85
+#: /collectives/specialVueFakeDummyForL10nScript.js:94
 msgid "Pages that link to this one"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:86
+#: /collectives/specialVueFakeDummyForL10nScript.js:95
 msgid "Versions"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:87
+#: /collectives/specialVueFakeDummyForL10nScript.js:96
 msgid "Old versions of this page"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:89
+#: /collectives/specialVueFakeDummyForL10nScript.js:98
 msgid "Come, organize and build shared knowledge!"
 msgstr ""
 

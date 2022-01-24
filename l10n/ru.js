@@ -1,7 +1,6 @@
 OC.L10N.register(
     "collectives",
     {
-    "Delete" : "Удалить",
     "Add emoji" : "Добавить эмодзи",
     "Restore" : "Восстановить",
     "Delete permanently" : "Удалить навсегда",

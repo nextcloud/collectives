@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2022-01-12 18:53+0100\n"
+"POT-Creation-Date: 2022-01-24 14:37+0100\n"
 "PO-Revision-Date: 2021-12-07 13:50+0000\n"
 "Last-Translator: Rajasekaran Karunanithi <rajasekaran86@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/collectives/"
@@ -22,8 +22,8 @@ msgstr ""
 #: /collectives/lib/Fs/UserFolderHelper.php:67
 #: /collectives/lib/Search/CollectiveProvider.php:60
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:2
-#: /collectives/specialVueFakeDummyForL10nScript.js:54
-#: /collectives/specialVueFakeDummyForL10nScript.js:88
+#: /collectives/specialVueFakeDummyForL10nScript.js:63
+#: /collectives/specialVueFakeDummyForL10nScript.js:97
 msgid "Collectives"
 msgstr "தொகுப்புகள்"
 
@@ -80,6 +80,7 @@ msgid ""
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:1
+#: /collectives/specialVueFakeDummyForL10nScript.js:22
 msgid "The contacts app is required to manage members"
 msgstr ""
 
@@ -112,307 +113,339 @@ msgid "Manage members"
 msgstr "உறுப்பினர்களை நிர்வகிக்கவும்"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:9
-msgid "Delete"
-msgstr "நீக்கு"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:10
-msgid "Change emoji"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:10
-#: /collectives/specialVueFakeDummyForL10nScript.js:31
-msgid "Add emoji"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:11
-msgid "Copied"
-msgstr "நகலெடுக்கப்பட்டது"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:12
-msgid "Cannot copy"
-msgstr "நகலெடுக்க முடியாது"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:13
-msgid "Copy share link"
-msgstr "பகிர்வு இணைப்பை நகலெடுக்கவும்"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:14
+#: /collectives/specialVueFakeDummyForL10nScript.js:23
 #, fuzzy
 msgid "Settings"
 msgstr "திருத்துவதை நிறுத்து"
 
+#: /collectives/specialVueFakeDummyForL10nScript.js:10
+msgid "Copied"
+msgstr "நகலெடுக்கப்பட்டது"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:11
+msgid "Cannot copy"
+msgstr "நகலெடுக்க முடியாது"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:12
+msgid "Copy share link"
+msgstr "பகிர்வு இணைப்பை நகலெடுக்கவும்"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:13
+#, fuzzy
+msgid "Collective settings"
+msgstr "தொகுப்புகள்"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:14
+msgid "Details"
+msgstr ""
+
 #: /collectives/specialVueFakeDummyForL10nScript.js:15
+#, fuzzy
+msgid "Members"
+msgstr "உறுப்பினர்களை நிர்வகிக்கவும்"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:16
+msgid "Members can be managed in the Contacts app."
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:17
+msgid "Open Contacts"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:18
+msgid "Danger zone"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:19
+#, fuzzy
+msgid "Delete collective"
+msgstr "தொகுப்பில் {தொகுப்பு}"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:20
+msgid "Change emoji"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:20
+#: /collectives/specialVueFakeDummyForL10nScript.js:40
+msgid "Add emoji"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:21
+msgid "Renaming is limited to owners of the circle"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:24
 #, fuzzy
 msgid "Collectives Folder"
 msgstr "தொகுப்புகள்"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:16
+#: /collectives/specialVueFakeDummyForL10nScript.js:25
 #, fuzzy
 msgid "Create a collective first"
 msgstr "ஏற்கனவே உள்ள வட்டத்திற்காக \"%s\" தொகுப்பு உருவாக்கப்பட்டது."
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:17
+#: /collectives/specialVueFakeDummyForL10nScript.js:26
 msgid "Select location for collectives"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:18
+#: /collectives/specialVueFakeDummyForL10nScript.js:27
 msgid "Invalid path selected. Only folders on first level are supported."
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:19
+#: /collectives/specialVueFakeDummyForL10nScript.js:28
 msgid "Deleted collectives"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:20
-#: /collectives/specialVueFakeDummyForL10nScript.js:45
+#: /collectives/specialVueFakeDummyForL10nScript.js:29
+#: /collectives/specialVueFakeDummyForL10nScript.js:54
 msgid "Restore"
 msgstr "மீட்டெடு"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:21
+#: /collectives/specialVueFakeDummyForL10nScript.js:30
 msgid "Delete permanently"
 msgstr "நிரந்தரமாக நீக்கவும்"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:22
+#: /collectives/specialVueFakeDummyForL10nScript.js:31
 msgid "Permanently delete collective »{collective}«"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:23
+#: /collectives/specialVueFakeDummyForL10nScript.js:32
 msgid "Delete corresponding circle along with the collective?"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:24
+#: /collectives/specialVueFakeDummyForL10nScript.js:33
 msgid "Cancel"
 msgstr "ரத்து செய்"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:25
+#: /collectives/specialVueFakeDummyForL10nScript.js:34
 msgid "Only collective"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:26
-#: /collectives/specialVueFakeDummyForL10nScript.js:28
+#: /collectives/specialVueFakeDummyForL10nScript.js:35
+#: /collectives/specialVueFakeDummyForL10nScript.js:37
 msgid "Collective and circle"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:27
+#: /collectives/specialVueFakeDummyForL10nScript.js:36
 msgid "Only circle owners can delete a circle"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:29
-#: /collectives/specialVueFakeDummyForL10nScript.js:90
+#: /collectives/specialVueFakeDummyForL10nScript.js:38
+#: /collectives/specialVueFakeDummyForL10nScript.js:99
 msgid "Create new collective"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:30
+#: /collectives/specialVueFakeDummyForL10nScript.js:39
 msgid "Create collective for existing circle"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:32
+#: /collectives/specialVueFakeDummyForL10nScript.js:41
 msgid "New collective name"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:33
+#: /collectives/specialVueFakeDummyForL10nScript.js:42
 msgid "Select circle..."
 msgstr "வட்டத்தைத் தேர்ந்தெடுக்கவும்..."
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:34
+#: /collectives/specialVueFakeDummyForL10nScript.js:43
 msgid "Select a collective"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:35
+#: /collectives/specialVueFakeDummyForL10nScript.js:44
 msgid "Show in Files"
 msgstr "கோப்புகளில் காட்டவும்"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:36
-#: /collectives/specialVueFakeDummyForL10nScript.js:60
-#: /collectives/specialVueFakeDummyForL10nScript.js:71
+#: /collectives/specialVueFakeDummyForL10nScript.js:45
+#: /collectives/specialVueFakeDummyForL10nScript.js:69
+#: /collectives/specialVueFakeDummyForL10nScript.js:80
 msgid "Edit template for subpages"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:37
+#: /collectives/specialVueFakeDummyForL10nScript.js:46
 msgid "Delete page"
 msgstr "பக்கத்தை நீக்கு"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:38
+#: /collectives/specialVueFakeDummyForL10nScript.js:47
 msgid "Page deleted"
 msgstr "பக்கம் நீக்கப்பட்டது"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:39
+#: /collectives/specialVueFakeDummyForL10nScript.js:48
 msgid "Could not delete the page"
 msgstr "பக்கத்தை நீக்க முடியவில்லை"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:40
-#: /collectives/specialVueFakeDummyForL10nScript.js:62
-#: /collectives/specialVueFakeDummyForL10nScript.js:64
+#: /collectives/specialVueFakeDummyForL10nScript.js:49
+#: /collectives/specialVueFakeDummyForL10nScript.js:71
 #: /collectives/specialVueFakeDummyForL10nScript.js:73
-#: /collectives/specialVueFakeDummyForL10nScript.js:75
+#: /collectives/specialVueFakeDummyForL10nScript.js:82
+#: /collectives/specialVueFakeDummyForL10nScript.js:84
 msgid "Could not create the page"
 msgstr "பக்கத்தை உருவாக்க முடியவில்லை"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:41
+#: /collectives/specialVueFakeDummyForL10nScript.js:50
 msgid "Page not found:"
 msgstr "பக்கம் கிடைக்கவில்லை:"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:42
+#: /collectives/specialVueFakeDummyForL10nScript.js:51
 msgid "Could not find the Page."
 msgstr "பக்கத்தைக் கண்டுபிடிக்க முடியவில்லை."
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:43
+#: /collectives/specialVueFakeDummyForL10nScript.js:52
 msgid "Select a page from the list or create a new one."
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:44
+#: /collectives/specialVueFakeDummyForL10nScript.js:53
 msgid "Restore this version"
 msgstr "இந்தப் பதிப்பை மீட்டெடுக்கவும்"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:46
+#: /collectives/specialVueFakeDummyForL10nScript.js:55
 msgid "Reverted {page} to revision {timestamp}."
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:47
+#: /collectives/specialVueFakeDummyForL10nScript.js:56
 msgid "Failed to revert {page} to revision {timestamp}."
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:48
 #: /collectives/specialVueFakeDummyForL10nScript.js:57
+#: /collectives/specialVueFakeDummyForL10nScript.js:66
 msgid "Template"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:49
+#: /collectives/specialVueFakeDummyForL10nScript.js:58
 msgid "Title"
 msgstr "தலைப்பு"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:50
+#: /collectives/specialVueFakeDummyForL10nScript.js:59
 msgid "Stop editing"
 msgstr "திருத்துவதை நிறுத்து"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:50
+#: /collectives/specialVueFakeDummyForL10nScript.js:59
 msgid "Start editing"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:51
+#: /collectives/specialVueFakeDummyForL10nScript.js:60
 msgid "Done"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:51
+#: /collectives/specialVueFakeDummyForL10nScript.js:60
 msgid "Edit"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:52
+#: /collectives/specialVueFakeDummyForL10nScript.js:61
 msgid "Hide all subpages"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:53
+#: /collectives/specialVueFakeDummyForL10nScript.js:62
 msgid "Show all subpages"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:55
+#: /collectives/specialVueFakeDummyForL10nScript.js:64
 msgid "Could not rename the page"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:56
+#: /collectives/specialVueFakeDummyForL10nScript.js:65
 msgid "Expand subpage list"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:56
+#: /collectives/specialVueFakeDummyForL10nScript.js:65
 msgid "Collapse subpage list"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:58
+#: /collectives/specialVueFakeDummyForL10nScript.js:67
 msgid "Last edited by {user}"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:59
+#: /collectives/specialVueFakeDummyForL10nScript.js:68
 msgid "Add a subpage"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:61
-#: /collectives/specialVueFakeDummyForL10nScript.js:72
+#: /collectives/specialVueFakeDummyForL10nScript.js:70
+#: /collectives/specialVueFakeDummyForL10nScript.js:81
 msgid "Add template for subpages"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:63
-#: /collectives/specialVueFakeDummyForL10nScript.js:74
+#: /collectives/specialVueFakeDummyForL10nScript.js:72
+#: /collectives/specialVueFakeDummyForL10nScript.js:83
 msgid "New Page"
 msgstr "புதிய பக்கம்"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:65
-#: /collectives/specialVueFakeDummyForL10nScript.js:66
+#: /collectives/specialVueFakeDummyForL10nScript.js:74
+#: /collectives/specialVueFakeDummyForL10nScript.js:75
 msgid "Hide templates"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:65
-#: /collectives/specialVueFakeDummyForL10nScript.js:66
+#: /collectives/specialVueFakeDummyForL10nScript.js:74
+#: /collectives/specialVueFakeDummyForL10nScript.js:75
 msgid "Show templates"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:67
+#: /collectives/specialVueFakeDummyForL10nScript.js:76
 msgid "Sort order"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:68
+#: /collectives/specialVueFakeDummyForL10nScript.js:77
 msgid "Sort by last modification"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:69
+#: /collectives/specialVueFakeDummyForL10nScript.js:78
 msgid "Sort by title"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:70
+#: /collectives/specialVueFakeDummyForL10nScript.js:79
 msgid "Add a page"
 msgstr "ஒரு பக்கத்தைச் சேர்க்கவும்"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:76
+#: /collectives/specialVueFakeDummyForL10nScript.js:85
 msgid "No backlinks available"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:77
+#: /collectives/specialVueFakeDummyForL10nScript.js:86
 msgid "If other pages link to this one, they will be listed here."
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:78
+#: /collectives/specialVueFakeDummyForL10nScript.js:87
 msgid "Could not get page backlinks"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:79
+#: /collectives/specialVueFakeDummyForL10nScript.js:88
 msgid "Current version"
 msgstr "தற்போதைய பதிப்பு"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:80
+#: /collectives/specialVueFakeDummyForL10nScript.js:89
 msgid "No other versions available"
 msgstr "வேறு பதிப்புகள் இல்லை"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:81
+#: /collectives/specialVueFakeDummyForL10nScript.js:90
 msgid "After editing you can find old versions of the page here."
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:82
+#: /collectives/specialVueFakeDummyForL10nScript.js:91
 msgid "Could not get page versions"
 msgstr "பக்க பதிப்புகளைப் பெற முடியவில்லை"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:83
+#: /collectives/specialVueFakeDummyForL10nScript.js:92
 #: /collectives/src/util/xmlToVersionsList.js:30
 msgid "%n byte"
 msgid_plural "%n bytes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:84
+#: /collectives/specialVueFakeDummyForL10nScript.js:93
 msgid "Backlinks"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:85
+#: /collectives/specialVueFakeDummyForL10nScript.js:94
 msgid "Pages that link to this one"
 msgstr "இதை  இணைக்கும் பக்கங்கள்"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:86
+#: /collectives/specialVueFakeDummyForL10nScript.js:95
 msgid "Versions"
 msgstr "பதிப்புகள்"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:87
+#: /collectives/specialVueFakeDummyForL10nScript.js:96
 msgid "Old versions of this page"
 msgstr "இந்தப் பக்கத்தின் பழைய பதிப்புகள்"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:89
+#: /collectives/specialVueFakeDummyForL10nScript.js:98
 msgid "Come, organize and build shared knowledge!"
 msgstr "வாருங்கள், ஒழுங்கமைத்து பகிர்ந்த அறிவை உருவாக்குங்கள்!"
 
@@ -435,3 +468,6 @@ msgstr ""
 #: /collectives/templates/error.php:27
 msgid "Please ask the administrator to enable these apps."
 msgstr ""
+
+#~ msgid "Delete"
+#~ msgstr "நீக்கு"
