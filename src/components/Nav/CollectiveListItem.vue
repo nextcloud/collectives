@@ -7,26 +7,8 @@
 		:icon="icon"
 		:force-menu="true"
 		class="collectives_list_item">
-		<template #icon>
-			<EmojiPicker
-				v-if="collective.level >= memberLevels.LEVEL_ADMIN"
-				:show-preview="true"
-				@select="updateEmoji">
-				<button class="emoji"
-					type="button"
-					:aria-label="emojiTitle"
-					:aria-haspopup="true"
-					:title="emojiTitle"
-					@click.prevent>
-					{{ collective.emoji }}
-				</button>
-			</EmojiPicker>
-			<button v-else
-				class="emoji"
-				type="button"
-				@click.prevent>
-				{{ collective.emoji }}
-			</button>
+		<template v-if="collective.emoji" #icon>
+			{{ collective.emoji }}
 		</template>
 		<template #actions>
 			<ActionButton v-if="!isPublic"
@@ -57,32 +39,37 @@
 					:size="16"
 					decorative />
 			</ActionButton>
-			<ActionLink v-if="collective.level >= memberLevels.LEVEL_ADMIN && isContactsInstalled"
+			<ActionLink v-if="isCollectiveAdmin(collective) && isContactsInstalled"
 				:href="circleLink"
 				icon="icon-circles">
 				{{ t('collectives', 'Manage members') }}
 			</ActionLink>
-			<ActionButton v-if="collective.level >= memberLevels.LEVEL_ADMIN"
-				icon="icon-delete"
-				@click="trashCollective(collective)">
-				{{ t('collectives', 'Delete') }}
+			<ActionButton v-if="isCollectiveAdmin(collective)"
+				icon="icon-settings"
+				:close-after-click="true"
+				@click="toggleCollectiveSettings(collective)">
+				{{ t('collectives', 'Settings') }}
 			</ActionButton>
+		</template>
+		<template #extra>
+			<CollectiveSettings
+				:open.sync="showCollectiveSettings"
+				:collective="collective" />
 		</template>
 	</AppNavigationItem>
 </template>
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
-import { UPDATE_COLLECTIVE, TRASH_COLLECTIVE, SHARE_COLLECTIVE, UNSHARE_COLLECTIVE } from '../../store/actions'
+import { SHARE_COLLECTIVE, UNSHARE_COLLECTIVE } from '../../store/actions'
 import displayError from '../../util/displayError'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import ActionLink from '@nextcloud/vue/dist/Components/ActionLink'
-import EmojiPicker from '@nextcloud/vue/dist/Components/EmojiPicker'
 import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
 import { generateUrl } from '@nextcloud/router'
-import { memberLevels } from '../../constants'
 import CopyToClipboardMixin from '../../mixins/CopyToClipboardMixin'
 import PrinterIcon from 'vue-material-design-icons/Printer'
+import CollectiveSettings from './CollectiveSettings'
 
 export default {
 	name: 'CollectiveListItem',
@@ -91,7 +78,7 @@ export default {
 		ActionButton,
 		ActionLink,
 		AppNavigationItem,
-		EmojiPicker,
+		CollectiveSettings,
 		PrinterIcon,
 	},
 
@@ -106,15 +93,17 @@ export default {
 
 	data() {
 		return {
-			memberLevels,
+			showCollectiveSettings: false,
 		}
 	},
 
 	computed: {
 		...mapGetters([
 			'isPublic',
+			'collectiveParam',
 			'collectives',
 			'collectiveShareUrl',
+			'isCollectiveAdmin',
 			'loading',
 		]),
 
@@ -124,10 +113,6 @@ export default {
 
 		circleLink() {
 			return generateUrl('/apps/contacts/direct/circle/' + this.collective.circleId)
-		},
-
-		emojiTitle() {
-			return this.collective.emoji ? t('collectives', 'Change emoji') : t('collectives', 'Add emoji')
 		},
 
 		icon() {
@@ -159,33 +144,6 @@ export default {
 			return this.collectiveParam === collective.name
 		},
 
-		/**
-		 * Update the emoji of a collective
-		 *
-		 * @param {string} emoji Emoji
-		 * @return {Promise}
-		 */
-		updateEmoji(emoji) {
-			const collective = this.collective
-			collective.emoji = emoji
-			return this.$store.dispatch(UPDATE_COLLECTIVE, collective)
-				.catch(displayError('Could not update emoji for the collective'))
-		},
-
-		/**
-		 * Trash a collective with the given name
-		 *
-		 * @param {object} collective Properties of the collective
-		 * @return {Promise}
-		 */
-		trashCollective(collective) {
-			if (this.collectiveParam === collective.name) {
-				this.$router.push('/')
-			}
-			return this.$store.dispatch(TRASH_COLLECTIVE, collective)
-				.catch(displayError('Could not move the collective to trash'))
-		},
-
 		print() {
 			this.$router.push(`/${encodeURIComponent(this.collective.name)}`,
 				() => {
@@ -208,15 +166,10 @@ export default {
 		copyShare(collective) {
 			this.copyToClipboard(window.location.origin + this.collectiveShareUrl(collective))
 		},
+
+		toggleCollectiveSettings() {
+			this.showCollectiveSettings = true
+		},
 	},
 }
 </script>
-
-<style scoped>
-button.emoji {
-	font-size: 15px;
-	padding-left: 19px;
-	background-color: transparent;
-	border: none;
-}
-</style>

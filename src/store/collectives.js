@@ -1,11 +1,13 @@
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 import { byName } from '../util/sortOrders'
+import { memberLevels } from '../constants'
 
 import {
 	SET_COLLECTIVES,
 	SET_TRASH_COLLECTIVES,
 	ADD_OR_UPDATE_COLLECTIVE,
+	PATCH_COLLECTIVE_WITH_CIRCLE,
 	MOVE_COLLECTIVE_INTO_TRASH,
 	RESTORE_COLLECTIVE_FROM_TRASH,
 	DELETE_COLLECTIVE_FROM_TRASH,
@@ -81,6 +83,14 @@ export default {
 				return null
 			}
 		},
+
+		isCollectiveAdmin: (state, getters) => (collective) => {
+			return collective.level >= memberLevels.LEVEL_ADMIN
+		},
+
+		isCollectiveOwner: (state, getters) => (collective) => {
+			return collective.level >= memberLevels.LEVEL_OWNER
+		},
 	},
 	mutations: {
 		[SET_COLLECTIVES](state, collectives) {
@@ -99,6 +109,10 @@ export default {
 				state.collectives.splice(cur, 1, collective)
 			}
 			state.updatedCollective = collective
+		},
+
+		[PATCH_COLLECTIVE_WITH_CIRCLE](state, circle) {
+			state.collectives.find(c => c.circleId === circle.id).name = circle.sanitizedName
 		},
 
 		[MOVE_COLLECTIVE_INTO_TRASH](state, collective) {
