@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-01-12 18:53+0100\n"
-"PO-Revision-Date: 2021-12-06 06:38+0000\n"
+"PO-Revision-Date: 2022-01-21 01:53+0000\n"
 "Last-Translator: あわしろいくや <ikunya@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/ja/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.10-dev\n"
+"X-Generator: Weblate 4.11-dev\n"
 
 #: /collectives/lib/Fs/UserFolderHelper.php:67
 #: /collectives/lib/Search/CollectiveProvider.php:60
@@ -28,7 +28,6 @@ msgid "Collectives"
 msgstr "コレクティブ"
 
 #: /collectives/lib/Search/PageContentProvider.php:74
-#, fuzzy
 msgid "Collectives - Page content"
 msgstr "コレクティブ: ページの内容"
 
@@ -37,7 +36,6 @@ msgid "in page {page} from collective {collective}"
 msgstr ""
 
 #: /collectives/lib/Search/PageProvider.php:67
-#, fuzzy
 msgid "Collectives - Pages"
 msgstr "コレクティブ: ページ"
 
@@ -137,28 +135,24 @@ msgid "Copy share link"
 msgstr "共有リンクのコピー"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:14
-#, fuzzy
 msgid "Settings"
-msgstr "編集終了"
+msgstr "設定"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:15
-#, fuzzy
 msgid "Collectives Folder"
-msgstr "コレクティブ"
+msgstr "コレクティブ フォルダー"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:16
-#, fuzzy
 msgid "Create a collective first"
-msgstr "新しいコレクティブの作成"
+msgstr "まずコレクティブを作成する"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:17
-#, fuzzy
 msgid "Select location for collectives"
-msgstr "コレクティブを選択"
+msgstr "コレクティブの場所を選択"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:18
 msgid "Invalid path selected. Only folders on first level are supported."
-msgstr ""
+msgstr "誤ったパスが選択されています。一番上の階層にあるフォルダーのみをサポートしています。"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:19
 msgid "Deleted collectives"
@@ -179,7 +173,7 @@ msgstr "»{collective}« コレクティブを永久に削除しました"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:23
 msgid "Delete corresponding circle along with the collective?"
-msgstr ""
+msgstr "このコレクティブに対応するサークルも削除しますか？"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:24
 msgid "Cancel"

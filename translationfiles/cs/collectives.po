@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-01-12 18:53+0100\n"
-"PO-Revision-Date: 2021-12-01 18:51+0000\n"
+"PO-Revision-Date: 2022-01-14 10:54+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/cs/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.10-dev\n"
+"X-Generator: Weblate 4.10.1\n"
 
 #: /collectives/lib/Fs/UserFolderHelper.php:67
 #: /collectives/lib/Search/CollectiveProvider.php:60
@@ -28,18 +28,16 @@ msgid "Collectives"
 msgstr "Kolektivy"
 
 #: /collectives/lib/Search/PageContentProvider.php:74
-#, fuzzy
 msgid "Collectives - Page content"
-msgstr "Kolektivy: obsah stránky"
+msgstr "Kolektivy – obsah stránky"
 
 #: /collectives/lib/Search/PageContentProvider.php:119
 msgid "in page {page} from collective {collective}"
 msgstr "na stránce {page} z kolektivu {collective}"
 
 #: /collectives/lib/Search/PageProvider.php:67
-#, fuzzy
 msgid "Collectives - Pages"
-msgstr "Kolektivy: stránky"
+msgstr "Kolektivy – stránky"
 
 #: /collectives/lib/Search/PageProvider.php:107
 msgid "in Collective {collective}"
@@ -158,28 +156,25 @@ msgid "Copy share link"
 msgstr "Zkopírovat odkaz na sdílení"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:14
-#, fuzzy
 msgid "Settings"
-msgstr "Ukončit upravování"
+msgstr "Nastavení"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:15
-#, fuzzy
 msgid "Collectives Folder"
-msgstr "Kolektivy"
+msgstr "Složka pro Kolektivy"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:16
-#, fuzzy
 msgid "Create a collective first"
-msgstr "Vytvořit nový kolektiv"
+msgstr "Nejprve vytvořte nový kolektiv"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:17
-#, fuzzy
 msgid "Select location for collectives"
-msgstr "Vybrat kolektiv"
+msgstr "Vyberte umístění pro kolektivy"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:18
 msgid "Invalid path selected. Only folders on first level are supported."
 msgstr ""
+"Vybráno neplatné umístění. Podporovány jsou pouze složky na první úrovni."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:19
 msgid "Deleted collectives"
