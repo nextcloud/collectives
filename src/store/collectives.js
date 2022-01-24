@@ -1,6 +1,7 @@
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 import { byName } from '../util/sortOrders'
+import { memberLevels } from '../constants'
 
 import {
 	SET_COLLECTIVES,
@@ -81,6 +82,14 @@ export default {
 			} else {
 				return null
 			}
+		},
+
+		isCollectiveAdmin: (state, getters) => (collective) => {
+			return collective.level >= memberLevels.LEVEL_ADMIN
+		},
+
+		isCollectiveOwner: (state, getters) => (collective) => {
+			return collective.level >= memberLevels.LEVEL_OWNER
 		},
 	},
 	mutations: {

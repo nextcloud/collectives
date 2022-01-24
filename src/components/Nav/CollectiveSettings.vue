@@ -23,14 +23,14 @@
 						v-model="newCollectiveName"
 						v-tooltip="renameDisabledTooltip"
 						type="text"
-						:disabled="collective.level < memberLevels.LEVEL_OWNER"
+						:disabled="!isCollectiveOwner(collective)"
 						required>
 					<input v-tooltip="renameDisabledTooltip"
 						type="submit"
 						value=""
 						class="icon-rename"
 						:class="{ 'icon-loading-small': loading }"
-						:disabled="collective.level < memberLevels.LEVEL_OWNER">
+						:disabled="!isCollectiveOwner(collective)">
 				</form>
 			</div>
 		</AppSettingsSection>
@@ -70,7 +70,6 @@ import { generateUrl } from '@nextcloud/router'
 import EmoticonOutline from 'vue-material-design-icons/EmoticonOutline'
 import { RENAME_CIRCLE, UPDATE_COLLECTIVE, TRASH_COLLECTIVE } from '../../store/actions'
 import displayError from '../../util/displayError'
-import { memberLevels } from '../../constants'
 
 export default {
 	name: 'CollectiveSettings',
@@ -101,7 +100,6 @@ export default {
 		return {
 			newCollectiveName: this.collective.name,
 			loading: false,
-			memberLevels,
 			showSettings: false,
 		}
 	},
@@ -115,6 +113,7 @@ export default {
 		...mapGetters([
 			'collectiveParam',
 			'pageParam',
+			'isCollectiveOwner',
 		]),
 
 		emojiTitle() {
@@ -122,7 +121,7 @@ export default {
 		},
 
 		renameDisabledTooltip() {
-			return this.collective.level < memberLevels.LEVEL_OWNER
+			return !this.isCollectiveOwner(this.collective)
 				&& t('collectives', 'Renaming is limited to owners of the circle')
 		},
 

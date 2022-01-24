@@ -35,7 +35,7 @@
 					<button class="error primary" @click="deleteCollective(modalCollective, false)">
 						{{ t('collectives', 'Only collective') }}
 					</button>
-					<button v-if="modalCollective.level >= memberLevels.LEVEL_OWNER"
+					<button v-if="isCollectiveOwner(modalCollective)"
 						class="error primary"
 						@click="deleteCollective(modalCollective, true)">
 						{{ t('collectives', 'Collective and circle') }}
@@ -53,12 +53,11 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
 import AppNavigationSettings from '@nextcloud/vue/dist/Components/AppNavigationSettings'
 import Modal from '@nextcloud/vue/dist/Components/Modal'
-import { memberLevels } from '../../constants'
 
 export default {
 	name: 'CollectivesTrash',
@@ -72,12 +71,17 @@ export default {
 		return {
 			deleteModal: false,
 			modalCollective: null,
-			memberLevels,
 		}
 	},
-	computed: mapState({
-		trashCollectives: (state) => state.collectives.trashCollectives,
-	}),
+	computed: {
+		...mapState({
+			trashCollectives: (state) => state.collectives.trashCollectives,
+		}),
+		...mapGetters([
+			'isCollectiveOwner',
+		]),
+	},
+
 	methods: {
 		icon(collective) {
 			return collective.emoji ? '' : 'icon-star'

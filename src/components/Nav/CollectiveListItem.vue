@@ -39,12 +39,12 @@
 					:size="16"
 					decorative />
 			</ActionButton>
-			<ActionLink v-if="collective.level >= memberLevels.LEVEL_ADMIN && isContactsInstalled"
+			<ActionLink v-if="isCollectiveAdmin(collective) && isContactsInstalled"
 				:href="circleLink"
 				icon="icon-circles">
 				{{ t('collectives', 'Manage members') }}
 			</ActionLink>
-			<ActionButton v-if="collective.level >= memberLevels.LEVEL_ADMIN"
+			<ActionButton v-if="isCollectiveAdmin(collective)"
 				icon="icon-settings"
 				:close-after-click="true"
 				@click="toggleCollectiveSettings(collective)">
@@ -67,7 +67,6 @@ import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import ActionLink from '@nextcloud/vue/dist/Components/ActionLink'
 import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
 import { generateUrl } from '@nextcloud/router'
-import { memberLevels } from '../../constants'
 import CopyToClipboardMixin from '../../mixins/CopyToClipboardMixin'
 import PrinterIcon from 'vue-material-design-icons/Printer'
 import CollectiveSettings from './CollectiveSettings'
@@ -94,7 +93,6 @@ export default {
 
 	data() {
 		return {
-			memberLevels,
 			showCollectiveSettings: false,
 		}
 	},
@@ -105,6 +103,7 @@ export default {
 			'collectiveParam',
 			'collectives',
 			'collectiveShareUrl',
+			'isCollectiveAdmin',
 			'loading',
 		]),
 
