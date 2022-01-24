@@ -1,6 +1,7 @@
 
 stages:
   - cache
+  - update l10n
   - build
   - lint
   - test units
@@ -330,6 +331,25 @@ Browser PHP 7.3 Nextcloud 22:
     - name: registry.gitlab.com/collectivecloud/docker-builds:php7.3-nc22
       alias: nextcloud.local
       entrypoint: ["/usr/local/bin/run.sh"]
+
+# Job to update l10n files in weblate merge requests
+update_l10n:
+  <<: *php
+  stage: update l10n
+  before_script:
+    - git config --global user.email "collectivecloud@systemli.org"
+    - git config --global user.name "Gitlab CI"
+  script:
+    - make l10n
+    - git add l10n/ translationfiles/
+    - git commit -m "Update translation/language files in Gitlab CI"
+    - git push origin HEAD:"$CI_COMMIT_REF_NAME" -o ci.skip
+  only:
+    #refs: [weblate-collectives-collectives-app]
+    refs: [merge_requests]
+    changes:
+      - l10n/**/*
+      - translationfiles/**/*
 
 # Job to build documentation website on Gitlab pages
 pages:

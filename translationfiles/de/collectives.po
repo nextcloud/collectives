@@ -25,7 +25,7 @@ msgstr ""
 #: /collectives/specialVueFakeDummyForL10nScript.js:54
 #: /collectives/specialVueFakeDummyForL10nScript.js:88
 msgid "Collectives"
-msgstr "Kollektive"
+msgstr "KollektiveABC"
 
 #: /collectives/lib/Search/PageContentProvider.php:74
 msgid "Collectives - Page content"
