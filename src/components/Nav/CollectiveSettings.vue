@@ -35,6 +35,78 @@
 			</div>
 		</AppSettingsSection>
 
+		<AppSettingsSection :title="t('collectives', 'Permissions')">
+			<div class="permissions-header">
+				{{ t('collectives', 'Allow editing for') }}
+			</div>
+
+			<div class="permissions-input-edit">
+				<input id="edit_admins"
+					v-model="editPermissions"
+					type="radio"
+					class="radio"
+					:value="memberLevels.LEVEL_ADMIN">
+				<label :class="{ primary: parseInt(editPermissions) === memberLevels.LEVEL_ADMIN }" for="edit_admins">
+					{{ t('collectives', 'Admins only') }}
+				</label>
+			</div>
+			<div>
+				<input id="edit_moderators"
+					v-model="editPermissions"
+					type="radio"
+					class="radio"
+					:value="memberLevels.LEVEL_MODERATOR">
+				<label :class="{ primary: parseInt(editPermissions) === memberLevels.LEVEL_MODERATOR }" for="edit_moderators">
+					{{ t('collectives', 'Admins and moderaters') }}
+				</label>
+			</div>
+			<div>
+				<input id="edit_members"
+					v-model="editPermissions"
+					type="radio"
+					class="radio"
+					:value="memberLevels.LEVEL_MEMBER">
+				<label :class="{ primary: parseInt(editPermissions) === memberLevels.LEVEL_MEMBER }" for="edit_members">
+					{{ t('collectives', 'All members') }}
+				</label>
+			</div>
+
+			<div class="permissions-header permissions-header__second">
+				{{ t('collectives', 'Allow sharing for') }}
+			</div>
+
+			<div class="permissions-input-share">
+				<input id="share_admins"
+					v-model="sharePermissions"
+					type="radio"
+					class="radio"
+					:value="memberLevels.LEVEL_ADMIN">
+				<label :class="{ primary: parseInt(sharePermissions) === memberLevels.LEVEL_ADMIN }" for="share_admins">
+					{{ t('collectives', 'Admins only') }}
+				</label>
+			</div>
+			<div>
+				<input id="share_moderators"
+					v-model="sharePermissions"
+					type="radio"
+					class="radio"
+					:value="memberLevels.LEVEL_MODERATOR">
+				<label :class="{ primary: parseInt(sharePermissions) === memberLevels.LEVEL_MODERATOR }" for="share_moderators">
+					{{ t('collectives', 'Admins and moderaters') }}
+				</label>
+			</div>
+			<div>
+				<input id="share_members"
+					v-model="sharePermissions"
+					type="radio"
+					class="radio"
+					:value="memberLevels.LEVEL_MEMBER">
+				<label :class="{ primary: parseInt(sharePermissions) === memberLevels.LEVEL_MEMBER }" for="share_members">
+					{{ t('collectives', 'All members') }}
+				</label>
+			</div>
+		</AppSettingsSection>
+
 		<AppSettingsSection :title="t('collectives', 'Members')">
 			<div>
 				{{ t('collectives', 'Members can be managed in the Contacts app.') }}
@@ -61,14 +133,22 @@
 </template>
 
 <script>
+import { memberLevels } from '../../constants'
 import { mapGetters, mapState } from 'vuex'
+import { showError, showSuccess } from '@nextcloud/dialogs'
 import AppSettingsDialog from '@nextcloud/vue/dist/Components/AppSettingsDialog'
 import AppSettingsSection from '@nextcloud/vue/dist/Components/AppSettingsSection'
 import EmojiPicker from '@nextcloud/vue/dist/Components/EmojiPicker'
 import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip'
 import { generateUrl } from '@nextcloud/router'
 import EmoticonOutline from 'vue-material-design-icons/EmoticonOutline'
-import { RENAME_CIRCLE, UPDATE_COLLECTIVE, TRASH_COLLECTIVE } from '../../store/actions'
+import {
+	RENAME_CIRCLE,
+	UPDATE_COLLECTIVE,
+	TRASH_COLLECTIVE,
+	UPDATE_COLLECTIVE_EDIT_PERMISSIONS,
+	UPDATE_COLLECTIVE_SHARE_PERMISSIONS,
+} from '../../store/actions'
 import displayError from '../../util/displayError'
 
 export default {
@@ -98,9 +178,12 @@ export default {
 
 	data() {
 		return {
+			memberLevels,
 			newCollectiveName: this.collective.name,
 			loading: false,
 			showSettings: false,
+			editPermissions: this.collective.editPermissionLevel,
+			sharePermissions: this.collective.sharePermissionLevel,
 		}
 	},
 
@@ -145,6 +228,24 @@ export default {
 			if (value) {
 				this.showSettings = true
 			}
+		},
+		editPermissions(val) {
+			this.$store.dispatch(UPDATE_COLLECTIVE_EDIT_PERMISSIONS, { id: this.collective.id, level: parseInt(val) }).then(() => {
+				showSuccess(t('collectives', 'Editing permissions updated'))
+			}).catch((error) => {
+				showError('Could not update editing permissions')
+				this.editPermissions = this.collective.editPermissionLevel
+				throw error
+			})
+		},
+		sharePermissions(val) {
+			this.$store.dispatch(UPDATE_COLLECTIVE_SHARE_PERMISSIONS, { id: this.collective.id, level: parseInt(val) }).then(() => {
+				showSuccess(t('collectives', 'Sharing permissions updated'))
+			}).catch((error) => {
+				showError('Could not update sharing permissions')
+				this.sharePermissions = this.collective.sharePermissionLevel
+				throw error
+			})
 		},
 	},
 
@@ -213,17 +314,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep .modal-container {
-	display: block;
+::v-deep .modal-wrapper.modal-wrapper--normal .modal-container {
+	display: flex;
 }
 
 .app-settings-section {
 	margin-bottom: 45px;
-	&__title {
-		overflow: hidden;
-		white-space: nowrap;
-		text-overflow: ellipsis;
-	}
 }
 
 button.emoji {
@@ -297,6 +393,13 @@ button.emoji {
 				}
 			}
 		}
+	}
+}
+
+.permissions-header {
+	margin-bottom: 12px;
+	&__second {
+		margin-top: 12px;
 	}
 }
 </style>
