@@ -1,6 +1,8 @@
 OC.L10N.register(
     "collectives",
     {
+    "Could not share the collective" : "Не удалось удалить страницу",
+    "Could not unshare the collective" : "Не удалось найти страницу.",
     "Add emoji" : "Добавить эмодзи",
     "Restore" : "Восстановить",
     "Delete permanently" : "Удалить навсегда",

@@ -28,7 +28,7 @@
 					<input v-tooltip="renameDisabledTooltip"
 						type="submit"
 						value=""
-						class="icon-rename"
+						class="icon-confirm"
 						:class="{ 'icon-loading-small': loading }"
 						:disabled="!isCollectiveOwner(collective)">
 				</form>
@@ -109,7 +109,7 @@
 
 		<AppSettingsSection :title="t('collectives', 'Members')">
 			<div>
-				{{ t('collectives', 'Members can be managed in the Contacts app.') }}
+				{{ t('collectives', 'Members can be managed via the connected circle in the Contacts app.') }}
 			</div>
 			<div>
 				<!-- TODO: Use secondary button from @nextcloud/vue 5.0 once it's there -->
@@ -117,7 +117,7 @@
 					class="button"
 					:disabled="!isContactsInstalled"
 					@click="openCircleLink">
-					{{ t('collectives', 'Open Contacts') }}
+					{{ t('collectives', 'Open circle in Contacts') }}
 				</button>
 			</div>
 		</AppSettingsSection>
@@ -340,58 +340,6 @@ button.emoji {
 
 		input[type='text'] {
 			flex-grow: 1;
-
-			// Copied from `core/cs/inputs.scss` for `icon-confirm`
-			+ .icon-rename {
-				margin-left: -8px !important;
-				border-left-color: transparent !important;
-				border-radius: 0 var(--border-radius) var(--border-radius) 0 !important;
-				background-clip: padding-box;
-				/* Avoid background under border */
-				background-color: var(--color-main-background) !important;
-				opacity: 1;
-				height: 34px;
-				width: 34px;
-				padding: 7px 6px;
-				cursor: pointer;
-				margin-right: 0;
-				&:disabled {
-					cursor: default;
-				}
-			}
-
-			/* only show rename borders if input is not focussed */
-			&:not(:active):not(:hover):not(:focus) {
-				&:invalid {
-					+ .icon-rename {
-						border-color: var(--color-error);
-					}
-				}
-				+ .icon-rename {
-					&:active,
-					&:hover,
-					&:focus {
-						border-color: var(--color-primary-element) !important;
-						border-radius: var(--border-radius) !important;
-						&:disabled {
-							border-color: var(--color-background-dark) !important;
-						}
-					}
-				}
-			}
-			&:active,
-			&:hover,
-			&:focus {
-				+ .icon-rename {
-					border-color: var(--color-primary-element) !important;
-					border-left-color: transparent !important;
-					/* above previous input */
-					z-index: 2;
-					&:disabled {
-						border-color: var(--color-background-darker) !important;
-					}
-				}
-			}
 		}
 	}
 }
