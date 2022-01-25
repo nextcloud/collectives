@@ -29,7 +29,7 @@
 						type="submit"
 						value=""
 						class="icon-confirm"
-						:class="{ 'icon-loading-small': loading }"
+						:class="{ 'icon-loading-small': renameLoading }"
 						:disabled="!isCollectiveOwner(collective)">
 				</form>
 			</div>
@@ -41,34 +41,30 @@
 			</div>
 
 			<div class="permissions-input-edit">
-				<input id="edit_admins"
-					v-model="editPermissions"
-					type="radio"
-					class="radio"
-					:value="memberLevels.LEVEL_ADMIN">
-				<label :class="{ primary: parseInt(editPermissions) === memberLevels.LEVEL_ADMIN }" for="edit_admins">
+				<CheckboxRadioSwitch
+					:checked.sync="editPermissions"
+					:value="String(memberLevels.LEVEL_ADMIN)"
+					:loading="editPermissionLoading[memberLevels.LEVEL_ADMIN]"
+					name="edit_admins"
+					type="radio">
 					{{ t('collectives', 'Admins only') }}
-				</label>
-			</div>
-			<div>
-				<input id="edit_moderators"
-					v-model="editPermissions"
-					type="radio"
-					class="radio"
-					:value="memberLevels.LEVEL_MODERATOR">
-				<label :class="{ primary: parseInt(editPermissions) === memberLevels.LEVEL_MODERATOR }" for="edit_moderators">
+				</CheckboxRadioSwitch>
+				<CheckboxRadioSwitch
+					:checked.sync="editPermissions"
+					:value="String(memberLevels.LEVEL_MODERATOR)"
+					:loading="editPermissionLoading[memberLevels.LEVEL_MODERATOR]"
+					name="edit_moderators"
+					type="radio">
 					{{ t('collectives', 'Admins and moderaters') }}
-				</label>
-			</div>
-			<div>
-				<input id="edit_members"
-					v-model="editPermissions"
-					type="radio"
-					class="radio"
-					:value="memberLevels.LEVEL_MEMBER">
-				<label :class="{ primary: parseInt(editPermissions) === memberLevels.LEVEL_MEMBER }" for="edit_members">
+				</CheckboxRadioSwitch>
+				<CheckboxRadioSwitch
+					:checked.sync="editPermissions"
+					:value="String(memberLevels.LEVEL_MEMBER)"
+					:loading="editPermissionLoading[memberLevels.LEVEL_MEMBER]"
+					name="edit_members"
+					type="radio">
 					{{ t('collectives', 'All members') }}
-				</label>
+				</CheckboxRadioSwitch>
 			</div>
 
 			<div class="permissions-header permissions-header__second">
@@ -76,34 +72,30 @@
 			</div>
 
 			<div class="permissions-input-share">
-				<input id="share_admins"
-					v-model="sharePermissions"
-					type="radio"
-					class="radio"
-					:value="memberLevels.LEVEL_ADMIN">
-				<label :class="{ primary: parseInt(sharePermissions) === memberLevels.LEVEL_ADMIN }" for="share_admins">
+				<CheckboxRadioSwitch
+					:checked.sync="sharePermissions"
+					:value="String(memberLevels.LEVEL_ADMIN)"
+					:loading="sharePermissionLoading[memberLevels.LEVEL_ADMIN]"
+					name="share_admins"
+					type="radio">
 					{{ t('collectives', 'Admins only') }}
-				</label>
-			</div>
-			<div>
-				<input id="share_moderators"
-					v-model="sharePermissions"
-					type="radio"
-					class="radio"
-					:value="memberLevels.LEVEL_MODERATOR">
-				<label :class="{ primary: parseInt(sharePermissions) === memberLevels.LEVEL_MODERATOR }" for="share_moderators">
+				</CheckboxRadioSwitch>
+				<CheckboxRadioSwitch
+					:checked.sync="sharePermissions"
+					:value="String(memberLevels.LEVEL_MODERATOR)"
+					:loading="sharePermissionLoading[memberLevels.LEVEL_MODERATOR]"
+					name="share_moderators"
+					type="radio">
 					{{ t('collectives', 'Admins and moderaters') }}
-				</label>
-			</div>
-			<div>
-				<input id="share_members"
-					v-model="sharePermissions"
-					type="radio"
-					class="radio"
-					:value="memberLevels.LEVEL_MEMBER">
-				<label :class="{ primary: parseInt(sharePermissions) === memberLevels.LEVEL_MEMBER }" for="share_members">
+				</CheckboxRadioSwitch>
+				<CheckboxRadioSwitch
+					:checked.sync="sharePermissions"
+					:value="String(memberLevels.LEVEL_MEMBER)"
+					:loading="sharePermissionLoading[memberLevels.LEVEL_MEMBER]"
+					name="share_members"
+					type="radio">
 					{{ t('collectives', 'All members') }}
-				</label>
+				</CheckboxRadioSwitch>
 			</div>
 		</AppSettingsSection>
 
@@ -139,6 +131,7 @@ import { showError, showSuccess } from '@nextcloud/dialogs'
 import AppSettingsDialog from '@nextcloud/vue/dist/Components/AppSettingsDialog'
 import AppSettingsSection from '@nextcloud/vue/dist/Components/AppSettingsSection'
 import EmojiPicker from '@nextcloud/vue/dist/Components/EmojiPicker'
+import CheckboxRadioSwitch from '@nextcloud/vue/dist/Components/CheckboxRadioSwitch'
 import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip'
 import { generateUrl } from '@nextcloud/router'
 import EmoticonOutline from 'vue-material-design-icons/EmoticonOutline'
@@ -159,6 +152,7 @@ export default {
 		AppSettingsSection,
 		EmojiPicker,
 		EmoticonOutline,
+		CheckboxRadioSwitch,
 	},
 
 	directives: {
@@ -180,10 +174,12 @@ export default {
 		return {
 			memberLevels,
 			newCollectiveName: this.collective.name,
-			loading: false,
+			renameLoading: false,
 			showSettings: false,
-			editPermissions: this.collective.editPermissionLevel,
-			sharePermissions: this.collective.sharePermissionLevel,
+			editPermissions: String(this.collective.editPermissionLevel),
+			sharePermissions: String(this.collective.sharePermissionLevel),
+			editPermissionLoading: [],
+			sharePermissionLoading: [],
 		}
 	},
 
@@ -230,22 +226,28 @@ export default {
 			}
 		},
 		editPermissions(val) {
+			this.editPermissionLoading[val] = true
 			this.$store.dispatch(UPDATE_COLLECTIVE_EDIT_PERMISSIONS, { id: this.collective.id, level: parseInt(val) }).then(() => {
 				showSuccess(t('collectives', 'Editing permissions updated'))
 			}).catch((error) => {
 				showError('Could not update editing permissions')
-				this.editPermissions = this.collective.editPermissionLevel
+				this.editPermissions = String(this.collective.editPermissionLevel)
+				this.editPermissionLoading[val] = false
 				throw error
 			})
+			this.editPermissionLoading[val] = false
 		},
 		sharePermissions(val) {
+			this.sharePermissionLoading[val] = true
 			this.$store.dispatch(UPDATE_COLLECTIVE_SHARE_PERMISSIONS, { id: this.collective.id, level: parseInt(val) }).then(() => {
 				showSuccess(t('collectives', 'Sharing permissions updated'))
 			}).catch((error) => {
 				showError('Could not update sharing permissions')
-				this.sharePermissions = this.collective.sharePermissionLevel
+				this.sharePermissions = String(this.collective.sharePermissionLevel)
+				this.sharePermissionLoading[val] = false
 				throw error
 			})
+			this.sharePermissionLoading[val] = false
 		},
 	},
 
@@ -271,7 +273,7 @@ export default {
 				return
 			}
 
-			this.loading = true
+			this.renameLoading = true
 
 			// If currentCollective is renamed, we need to update the router path later
 			const redirect = this.collectiveParam === this.collective.name
@@ -292,7 +294,7 @@ export default {
 				)
 			}
 
-			this.loading = false
+			this.renameLoading = false
 		},
 
 		openCircleLink() {
