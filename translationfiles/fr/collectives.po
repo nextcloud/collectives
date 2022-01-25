@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-01-24 14:37+0100\n"
-"PO-Revision-Date: 2022-01-18 07:54+0000\n"
+"PO-Revision-Date: 2022-01-26 09:54+0000\n"
 "Last-Translator: Nathan <bonnemainsnathan@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/fr/>\n"
@@ -150,35 +150,32 @@ msgid "Copy share link"
 msgstr "Copier le lien de partage"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:13
-#, fuzzy
 msgid "Collective settings"
-msgstr "Collectifs"
+msgstr "Paramètres des collectifs"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:14
 msgid "Details"
-msgstr ""
+msgstr "Informations"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:15
-#, fuzzy
 msgid "Members"
-msgstr "Gérer les membres"
+msgstr "Membres"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:16
 msgid "Members can be managed in the Contacts app."
-msgstr ""
+msgstr "Les membres peuvent être gérés dans l'application Contacts."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:17
 msgid "Open Contacts"
-msgstr ""
+msgstr "Ouvrir Contacts"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:18
 msgid "Danger zone"
-msgstr ""
+msgstr "Zone de danger"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:19
-#, fuzzy
 msgid "Delete collective"
-msgstr "Collectifs supprimés"
+msgstr "Supprimer le collectif"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:20
 msgid "Change emoji"
@@ -191,7 +188,7 @@ msgstr "Ajouter un émoji"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:21
 msgid "Renaming is limited to owners of the circle"
-msgstr ""
+msgstr "Seuls les propriétaires du cercle peuvent renommer"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:24
 msgid "Collectives Folder"
