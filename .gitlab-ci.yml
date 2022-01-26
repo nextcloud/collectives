@@ -162,9 +162,9 @@ Unit Test PHP 7.3 Nextcloud 22:
   needs:
     - "Static PHP Analysis"
 
-Unit Test PHP 8.0 Nextcloud 22:
+Unit Test PHP 8.0 Nextcloud 23:
   <<: *php-unit
-  image: registry.gitlab.com/collectivecloud/docker-builds:php8.0-nc22
+  image: registry.gitlab.com/collectivecloud/docker-builds:php8.0-nc23
   needs:
     - "Static PHP Analysis"
 
@@ -235,17 +235,17 @@ API PHP 7.3 Nextcloud 22:
   needs:
     - "Unit Test PHP 7.3 Nextcloud 22"
 
-API PHP 8.0 Nextcloud 22:
+API PHP 8.0 Nextcloud 23:
   <<: *php-integration
-  image: registry.gitlab.com/collectivecloud/docker-builds:php8.0-nc22
+  image: registry.gitlab.com/collectivecloud/docker-builds:php8.0-nc23
   needs:
-    - "Unit Test PHP 8.0 Nextcloud 22"
+    - "Unit Test PHP 8.0 Nextcloud 23"
 
 API PHP 8.0 Nextcloud Master:
   <<: *php-integration
   image: registry.gitlab.com/collectivecloud/docker-builds:php8.0-ncmaster
   needs:
-    - "Unit Test PHP 8.0 Nextcloud 22"
+    - "Unit Test PHP 8.0 Nextcloud 23"
 
 OCC CLI Test:
   <<: *php
@@ -266,7 +266,7 @@ OCC CLI Test:
     - mariadb:latest
   needs:
     - "Unit Test PHP 7.3 Nextcloud 22"
-    - "Unit Test PHP 8.0 Nextcloud 22"
+    - "Unit Test PHP 8.0 Nextcloud 23"
 
 .browser-test: &browser-test
   <<: *node
@@ -310,26 +310,27 @@ OCC CLI Test:
       - templates/**/*
       - translationfiles/**/*
 
-Browser PHP 8.0 Nextcloud Master:
-  <<: *browser-test
-  services:
-    - name: registry.gitlab.com/collectivecloud/docker-builds:php8.0-ncmaster
-      alias: nextcloud.local
-      entrypoint: ["/usr/local/bin/run.sh"]
-
-Browser PHP 8.0 Nextcloud 22:
-  <<: *browser-test
-  services:
-    - name: registry.gitlab.com/collectivecloud/docker-builds:php8.0-nc22
-      alias: nextcloud.local
-      entrypoint: ["/usr/local/bin/run.sh"]
-
 Browser PHP 7.3 Nextcloud 22:
   <<: *browser-test
   services:
     - name: registry.gitlab.com/collectivecloud/docker-builds:php7.3-nc22
       alias: nextcloud.local
       entrypoint: ["/usr/local/bin/run.sh"]
+
+Browser PHP 8.0 Nextcloud 23:
+  <<: *browser-test
+  services:
+    - name: registry.gitlab.com/collectivecloud/docker-builds:php8.0-nc23
+      alias: nextcloud.local
+      entrypoint: ["/usr/local/bin/run.sh"]
+
+Browser PHP 8.0 Nextcloud Master:
+  <<: *browser-test
+  services:
+    - name: registry.gitlab.com/collectivecloud/docker-builds:php8.0-ncmaster
+      alias: nextcloud.local
+      entrypoint: ["/usr/local/bin/run.sh"]
+  allow_failure: true
 
 # Job to build documentation website on Gitlab pages
 pages:
