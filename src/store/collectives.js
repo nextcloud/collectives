@@ -32,7 +32,7 @@ export default {
 		collectives: [],
 		trashCollectives: [],
 		collectiveShares: [],
-		updatedCollective: {},
+		updatedCollective: undefined,
 	},
 	getters: {
 		currentCollective(state, getters) {
