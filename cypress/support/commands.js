@@ -1,5 +1,13 @@
-import { NEW_COLLECTIVE, TRASH_COLLECTIVE, DELETE_COLLECTIVE, GET_PAGES, NEW_PAGE }
-	from '../../src/store/actions'
+import {
+	NEW_COLLECTIVE,
+	TRASH_COLLECTIVE,
+	DELETE_COLLECTIVE,
+	UPDATE_COLLECTIVE_EDIT_PERMISSIONS,
+	UPDATE_COLLECTIVE_SHARE_PERMISSIONS,
+	GET_PAGES,
+	NEW_PAGE,
+	GET_CIRCLES,
+} from '../../src/store/actions'
 import axios from '@nextcloud/axios'
 
 const url = Cypress.config('baseUrl').replace(/\/index.php\/?$/g, '')
@@ -39,11 +47,24 @@ Cypress.Commands.add('seedCollective', (name) => {
 					}
 				})
 			const updatedCollectivePath = app.$store.getters.updatedCollectivePath
-			if (updatedCollectivePath) {
+			if (updatedCollectivePath && updatedCollectivePath !== '/undefined') {
 				app.$router.push(updatedCollectivePath)
 			} else {
 				// Fallback - if collective exists, updatedCollectivePath is undefined
 				app.$router.push(`/${name}`)
+			}
+		})
+})
+
+Cypress.Commands.add('seedCollectivePermissions', (name, type, level) => {
+	cy.window()
+		.its('app')
+		.then(async app => {
+			const id = app.$store.state.collectives.collectives.find(c => c.name === name).id
+			if (type === 'edit') {
+				await app.$store.dispatch(UPDATE_COLLECTIVE_EDIT_PERMISSIONS, { id, level })
+			} else if (type === 'share') {
+				await app.$store.dispatch(UPDATE_COLLECTIVE_SHARE_PERMISSIONS, { id, level })
 			}
 		})
 })
@@ -109,6 +130,26 @@ Cypress.Commands.add('seedCircle', (name, config = null) => {
 					{ headers: { requesttoken: app.OC.requestToken } },
 				)
 			}
+		})
+})
+
+Cypress.Commands.add('seedCircleMember', (name, userId) => {
+	cy.window()
+		.its('app')
+		.then(async app => {
+			await app.$store.dispatch(GET_CIRCLES)
+			const circleId = app.$store.state.circles.circles.find(c => c.name === name).id
+			const api = `${Cypress.env('baseUrl')}/ocs/v2.php/apps/circles/circles/${circleId}/members`
+			await axios.post(api,
+				{ userId, type: 1 },
+				{ headers: { requesttoken: app.OC.requestToken } },
+			).catch(e => {
+				if (e.request && e.request.status === 400) {
+					// The member already got added... carry on.
+				} else {
+					throw e
+				}
+			})
 		})
 })
 
