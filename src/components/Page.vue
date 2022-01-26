@@ -162,7 +162,7 @@ export default {
 		},
 
 		readOnly() {
-			return this.preview || !this.edit
+			return this.isCurrentCollectiveReadOnly || this.preview || !this.edit
 		},
 
 		edit: {
