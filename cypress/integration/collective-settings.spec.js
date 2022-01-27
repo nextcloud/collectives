@@ -24,7 +24,7 @@
  *  Tests for Collectives settings.
  */
 
-describe('Collective', function() {
+describe('Collective settings', function() {
 	before(function() {
 		cy.login('bob', 'bob', '/apps/collectives')
 		cy.seedCollective('Change me')
