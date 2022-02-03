@@ -114,7 +114,7 @@ class VersionsBackend implements IVersionBackend {
 
 			try {
 				/** @var Folder $versionFolder */
-				$versionFolder = $versionsFolder->get($file->getId());
+				$versionFolder = $versionsFolder->get((string)$file->getId());
 			} catch (NotFoundException $e) {
 				$versionFolder = $versionsFolder->newFolder((string)$file->getId());
 			}
