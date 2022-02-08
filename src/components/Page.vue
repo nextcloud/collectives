@@ -269,6 +269,7 @@ export default {
 				this.$nextTick(() => {
 					window.print()
 					this.hide('print')
+					this.hide('subpages')
 				})
 			}
 		},

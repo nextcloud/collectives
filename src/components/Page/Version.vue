@@ -21,6 +21,7 @@
 		<div id="text-container">
 			<RichText :page-id="page.id"
 				:page-url="pageUrl"
+				:timestamp="page.timestamp"
 				:is-version="true" />
 		</div>
 	</div>

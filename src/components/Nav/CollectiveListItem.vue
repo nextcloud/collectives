@@ -144,11 +144,21 @@ export default {
 			return this.collectiveParam === collective.name
 		},
 
+		showSubpagesAndPrint() {
+			this.show('subpages')
+			this.show('print')
+		},
+
 		print() {
 			this.$router.push(`/${encodeURIComponent(this.collective.name)}`,
-				() => {
-					this.show('subpages')
-					this.show('print')
+				() => this.showSubpagesAndPrint(),
+				(err) => {
+					// Navigation is aborted since navigating to same route, but we still want to print
+					if (err.name === 'NavigationDuplicated') {
+						this.showSubpagesAndPrint()
+					} else {
+						throw err
+					}
 				}
 			)
 		},

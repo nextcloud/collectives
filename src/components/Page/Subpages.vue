@@ -7,6 +7,7 @@
 				</router-link>
 			</h2>
 			<RichText :page-url="pageDavUrl(page)"
+				:timestamp="page.timestamp"
 				@loading="waitingFor.push(`page-${page.id}`)"
 				@ready="ready(`page-${page.id}`)" />
 			<Subpages :page-id="page.id"
