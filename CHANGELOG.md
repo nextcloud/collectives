@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.19.22 - 2022.02.08
+
+### ✨New
+* ⚙️ Settings for a collective moved into a modal (#258)
+* 💱 Collectives can be renamed from their settings (#162)
+* 🙂 The emoji of a collective can be changed in its settings (#257)
+
+### 🏗️Fixes
+* 🏛️ Fix argument type for folders in VersionsBackend
+
+### 🌎Translations
+* 🗣️ Czech translation updaed thanks to Pavel Borecki.
+* 🗣️ French translation updated thanks to Nathan.
+* 🗣️ German translation updated thanks to Joachim Sokolowski.
+* 🗣️ Japanese translation updated thanks to あわしろいくや.
+
+
 ## 0.18.22 - 2022.01.12
 
 ### ✨New
