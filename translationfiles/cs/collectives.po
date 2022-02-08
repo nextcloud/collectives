@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-01-24 14:37+0100\n"
-"PO-Revision-Date: 2022-01-14 10:54+0000\n"
+"PO-Revision-Date: 2022-01-26 09:54+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/cs/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.11-dev\n"
 
 #: /collectives/lib/Fs/UserFolderHelper.php:67
 #: /collectives/lib/Search/CollectiveProvider.php:60
@@ -149,35 +149,32 @@ msgid "Copy share link"
 msgstr "Zkopírovat odkaz na sdílení"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:13
-#, fuzzy
 msgid "Collective settings"
-msgstr "Kolektivy"
+msgstr "Nastavení pro kolektiv"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:14
 msgid "Details"
-msgstr ""
+msgstr "Podrobnosti"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:15
-#, fuzzy
 msgid "Members"
-msgstr "Spravovat členy"
+msgstr "Členové"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:16
 msgid "Members can be managed in the Contacts app."
-msgstr ""
+msgstr "Členy lze spravovat v aplikaci Kontakty."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:17
 msgid "Open Contacts"
-msgstr ""
+msgstr "Otevřít Kontakty"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:18
 msgid "Danger zone"
-msgstr ""
+msgstr "Nebezpečná zóna"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:19
-#, fuzzy
 msgid "Delete collective"
-msgstr "Smazané kolektivy"
+msgstr "Smazat kolektiv"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:20
 msgid "Change emoji"
@@ -190,7 +187,7 @@ msgstr "Přidat emotikonu"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:21
 msgid "Renaming is limited to owners of the circle"
-msgstr ""
+msgstr "Přejmenovávat mohu pouze vlastníci okruhu"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:24
 msgid "Collectives Folder"
