@@ -34,15 +34,16 @@
 	</AppNavigationItem>
 	<div v-else class="collective-create">
 		<form v-show="editing" @submit.prevent.stop="createCollective">
-			<EmojiPicker :show-preview="true" @select="addEmoji">
-				<button
-					class="emoji"
-					type="button"
-					:aria-label="t('collectives', 'Add emoji')"
-					:aria-haspopup="true">
-					<span v-if="emoji">{{ emoji }}</span>
-					<EmoticonOutline v-else :size="20" />
-				</button>
+			<EmojiPicker
+				:show-preview="true"
+				@select="addEmoji">
+				<Button type="tertiary"
+					:aria-label="t('collectives', 'Select emoji for collective')"
+					:title="t('collectives', 'Select emoji')"
+					class="button-emoji"
+					@click.prevent>
+					{{ emoji }}
+				</Button>
 			</EmojiPicker>
 
 			<input v-if="!pickCircle"
@@ -50,7 +51,8 @@
 				v-model="text"
 				:placeholder="t('collectives', 'New collective name')"
 				type="text"
-				required>
+				required
+				@keypress.enter.prevent="createCollective">
 			<Multiselect v-else
 				ref="circleSelector"
 				v-model="circle"
@@ -73,9 +75,10 @@
 <script>
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { ActionButton, Actions, AppNavigationItem, Multiselect } from '@nextcloud/vue'
-import { GET_CIRCLES, NEW_COLLECTIVE } from '../../store/actions'
+import Button from '@nextcloud/vue/dist/Components/Button'
 import EmojiPicker from '@nextcloud/vue/dist/Components/EmojiPicker'
-import EmoticonOutline from 'vue-material-design-icons/EmoticonOutline'
+import { mapGetters } from 'vuex'
+import { GET_CIRCLES, NEW_COLLECTIVE } from '../../store/actions'
 import displayError from '../../util/displayError'
 
 const randomColor = () => '#' + ((1 << 24) * Math.random() | 0).toString(16)
@@ -86,8 +89,8 @@ export default {
 		AppNavigationItem,
 		ActionButton,
 		Actions,
+		Button,
 		EmojiPicker,
-		EmoticonOutline,
 		Multiselect,
 	},
 	directives: {},
@@ -104,6 +107,9 @@ export default {
 		}
 	},
 	computed: {
+		...mapGetters([
+			'randomCollectiveEmoji',
+		]),
 		name() {
 			if (this.pickCircle) {
 				return this.circle
@@ -141,6 +147,7 @@ export default {
 
 		startCreateCollective(e) {
 			this.editing = true
+			this.emoji = this.randomCollectiveEmoji()
 			this.$nextTick(() => {
 				this.$refs.nameField.focus()
 			})
@@ -148,6 +155,7 @@ export default {
 
 		startSelectCircle(e) {
 			this.editing = true
+			this.emoji = this.randomCollectiveEmoji()
 			this.pickCircle = true
 			this.$nextTick(() => {
 				this.$refs.circleSelector.$el.focus()
@@ -214,8 +222,8 @@ export default {
 	font-size: 14px;
 }
 
-button.emoji {
-	background-color: transparent;
-	border: none;
+.button-emoji {
+	font-size: 20px;
+	padding: 0;
 }
 </style>

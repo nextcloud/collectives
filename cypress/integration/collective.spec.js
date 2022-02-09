@@ -96,7 +96,7 @@ describe('Collective', function() {
 				cy.get('.multiselect__option').should('not.contain', 'Foreign')
 				cy.get('.multiselect__option [title*=History]').click()
 				cy.get('input.icon-confirm').click()
-				cy.get('#titleform input').should('have.value', 'History Club')
+				cy.get('#titleform input').invoke('val').should('contain', 'History Club')
 				cy.get('.toast-info').should('contain',
 					'Created collective "History Club" for existing circle.'
 				)
@@ -111,7 +111,7 @@ describe('Collective', function() {
 			function() {
 				cy.login('bob', 'bob', '/apps/collectives')
 				cy.createCollective('Preexisting Circle')
-				cy.get('#titleform input').should('have.value', 'Preexisting Circle')
+				cy.get('#titleform input').invoke('val').should('contain', 'Preexisting Circle')
 				cy.get('.toast-info').should('contain',
 					'Created collective "Preexisting Circle" for existing circle.'
 				)
@@ -129,7 +129,7 @@ describe('Collective', function() {
 			function() {
 				cy.login('bob', 'bob', '/apps/collectives')
 				cy.createCollective(special)
-				cy.get('#titleform input').should('have.value', special)
+				cy.get('#titleform input').invoke('val').should('contain', special)
 			})
 
 		after(function() {
@@ -149,7 +149,7 @@ describe('Collective', function() {
 			cy.createCollective(name)
 		})
 		it('Shows the name in the disabled titleform', function() {
-			cy.get('#titleform input').should('have.value', `${name}`)
+			cy.get('#titleform input').invoke('val').should('contain', name)
 			cy.get('#titleform input').should('have.attr', 'disabled')
 		})
 		it('Has an initial Readme.md', function() {

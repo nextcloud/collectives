@@ -1,6 +1,7 @@
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 import { byName } from '../util/sortOrders'
+import randomEmoji from '../util/randomEmoji'
 import { memberLevels } from '../constants'
 
 import {
@@ -111,6 +112,15 @@ export default {
 
 		isCollectiveSharable: (state, getters) => (collective) => {
 			return !getters.isPublic && collective.level >= collective.sharePermissionLevel
+		},
+
+		allCollectiveEmojis(state) {
+			return state.collectives.filter(c => c.emoji).map(c => c.emoji)
+		},
+
+		// Return a function (with empty arguments list) to prevent caching the result
+		randomCollectiveEmoji: (state, getters) => () => {
+			return randomEmoji(getters.allCollectiveEmojis)
 		},
 	},
 	mutations: {

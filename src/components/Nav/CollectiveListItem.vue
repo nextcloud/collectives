@@ -184,3 +184,13 @@ export default {
 	},
 }
 </script>
+
+<style lang="scss" scoped>
+::v-deep .app-navigation-entry-icon {
+	font-size: 20px;
+
+	&.icon-collectives {
+		background-size: 20px 20px;
+	}
+}
+</style>
