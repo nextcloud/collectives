@@ -47,7 +47,7 @@ Cypress.Commands.add('seedCollective', (name) => {
 					}
 				})
 			const updatedCollectivePath = app.$store.getters.updatedCollectivePath
-			if (updatedCollectivePath && updatedCollectivePath !== '/undefined') {
+			if (updatedCollectivePath) {
 				app.$router.push(updatedCollectivePath)
 			} else {
 				// Fallback - if collective exists, updatedCollectivePath is undefined
