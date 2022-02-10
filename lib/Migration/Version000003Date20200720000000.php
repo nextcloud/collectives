@@ -6,6 +6,7 @@ namespace OCA\Collectives\Migration;
 
 use Closure;
 use Doctrine\DBAL\Types\Types;
+use OCA\Collectives\Db\Collective;
 use OCP\DB\ISchemaWrapper;
 use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
@@ -28,13 +29,21 @@ class Version000003Date20200720000000 extends SimpleMigrationStep {
 				'autoincrement' => true,
 				'notnull' => true,
 			]);
-			$table->addColumn('name', Types::STRING, [
-				'notnull' => true,
-				'length' => 128,
-			]);
 			$table->addColumn('circle_unique_id', Types::STRING, [
 				'notnull' => true,
-				'length' => 15,
+				'length' => 31,
+			]);
+			$table->addColumn('permissions', Types::INTEGER, [
+				'notnull' => true,
+				// Grant full access to all member levels per default
+				'default' => Collective::defaultPermissions,
+			]);
+			$table->addColumn('emoji', Types::STRING, [
+				'notnull' => false,
+				'length' => 8,
+			]);
+			$table->addColumn('trash_timestamp', Types::INTEGER, [
+				'notnull' => false,
 			]);
 
 			$table->setPrimaryKey(['id']);
