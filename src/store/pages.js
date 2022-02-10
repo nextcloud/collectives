@@ -29,7 +29,7 @@ export default {
 	state: {
 		pages: [],
 		newPage: undefined,
-		sortBy: 'byTimestamp',
+		sortBy: undefined,
 		collapsed: {},
 		showTemplates: false,
 		backlinks: [],
@@ -144,16 +144,16 @@ export default {
 				.sort(getters.sortOrder)
 		},
 
-		sortOrder(state) {
-			if (state.sortBy === 'byTitle') {
+		sortOrder(state, getters) {
+			if (getters.sortBy === 'byTitle') {
 				return sortOrders.byTitle
 			} else {
 				return sortOrders.byTimestamp
 			}
 		},
 
-		sortBy(state) {
-			return state.sortBy
+		sortBy(state, getters) {
+			return state.sortBy ? state.sortBy : sortOrders.pageOrdersByNumber[getters.currentCollective.pageOrder]
 		},
 
 		newPagePath(state, getters) {

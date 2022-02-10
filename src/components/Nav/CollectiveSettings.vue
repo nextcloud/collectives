@@ -3,7 +3,7 @@
 		:open.sync="showSettings"
 		:aria-label="t('collectives', 'Collective settings')"
 		:show-navigation="true">
-		<AppSettingsSection :title="t('collectives', 'Details')">
+		<AppSettingsSection :title="t('collectives', 'Name and emoji')">
 			<div class="collective-name">
 				<EmojiPicker
 					:show-preview="true"
@@ -33,6 +33,27 @@
 						:class="{ 'icon-loading-small': loading('renameCollective') }"
 						:disabled="!isCollectiveOwner(collective)">
 				</form>
+			</div>
+		</AppSettingsSection>
+
+		<AppSettingsSection :title="t('collectives', 'Default page order')">
+			<div class="page-order">
+				<CheckboxRadioSwitch
+					:checked.sync="pageOrder"
+					:value="String(pageOrders.byTimestamp)"
+					:loading="loading('updateCollectivePageOrder_' + String(pageOrders.byTimestamp))"
+					name="page_order_timestamp"
+					type="radio">
+					{{ t('collectives', 'Sort by last modification') }}
+				</CheckboxRadioSwitch>
+				<CheckboxRadioSwitch
+					:checked.sync="pageOrder"
+					:value="String(pageOrders.byTitle)"
+					:loading="loading('updateCollectivePageOrder_' + String(pageOrders.byTitle))"
+					name="page_order_title"
+					type="radio">
+					{{ t('collectives', 'Sort by title') }}
+				</CheckboxRadioSwitch>
 			</div>
 		</AppSettingsSection>
 
@@ -127,6 +148,7 @@
 
 <script>
 import { memberLevels } from '../../constants'
+import { pageOrders, pageOrdersByNumber } from '../../util/sortOrders'
 import { mapGetters, mapMutations, mapState } from 'vuex'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import AppSettingsDialog from '@nextcloud/vue/dist/Components/AppSettingsDialog'
@@ -174,10 +196,12 @@ export default {
 	data() {
 		return {
 			memberLevels,
+			pageOrders,
 			newCollectiveName: this.collective.name,
 			showSettings: false,
 			editPermissions: String(this.collective.editPermissionLevel),
 			sharePermissions: String(this.collective.sharePermissionLevel),
+			pageOrder: String(this.collective.pageOrder),
 		}
 	},
 
@@ -250,10 +274,26 @@ export default {
 				throw error
 			})
 		},
+		pageOrder(val, oldVal) {
+			const pageOrder = String(val)
+			this.load('updateCollectivePageOrder_' + pageOrder)
+			const collective = { id: this.collective.id }
+			collective.pageOrder = parseInt(pageOrder)
+			this.$store.dispatch(UPDATE_COLLECTIVE, collective).then(() => {
+				this.sortPages(pageOrdersByNumber[pageOrder])
+				showSuccess(t('collectives', 'Default page order updated'))
+				this.done('updateCollectivePageOrder_' + pageOrder)
+			}).catch((error) => {
+				showError('Could not update default page order')
+				this.pageOrder = String(this.collective.pageOrder)
+				this.done('updateCollectivePageOrder_' + pageOrder)
+				throw error
+			})
+		},
 	},
 
 	methods: {
-		...mapMutations(['load', 'done']),
+		...mapMutations(['load', 'done', 'sortPages']),
 
 		/**
 		 * Update the emoji of a collective
@@ -262,7 +302,7 @@ export default {
 		 */
 		updateEmoji(emoji) {
 			this.load('updateCollectiveEmoji')
-			const collective = { ...this.collective }
+			const collective = { id: this.collective.id }
 			collective.emoji = emoji
 			this.$store.dispatch(UPDATE_COLLECTIVE, collective).then(() => {
 				showSuccess(t('collectives', 'Emoji updated'))
@@ -363,6 +403,7 @@ button.emoji {
 }
 
 .subsection-header {
+	font-weight: bold;
 	margin-bottom: 12px;
 	&__second {
 		margin-top: 12px;

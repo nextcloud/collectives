@@ -119,15 +119,17 @@ class CollectiveController extends Controller {
 	 *
 	 * @param int         $id
 	 * @param string|null $emoji
+	 * @param int|null    $pageOrder
 	 *
 	 * @return DataResponse
 	 */
-	public function update(int $id, string $emoji = null): DataResponse {
-		return $this->prepareResponse(function () use ($id, $emoji): array {
+	public function update(int $id, string $emoji = null, int $pageOrder = null): DataResponse {
+		return $this->prepareResponse(function () use ($id, $emoji, $pageOrder): array {
 			$collective = $this->service->updateCollective(
 				$this->getUserId(),
 				$id,
-				$emoji
+				$emoji,
+				$pageOrder
 			);
 			return [
 				"data" => $collective,

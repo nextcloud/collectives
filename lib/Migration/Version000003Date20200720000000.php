@@ -42,6 +42,10 @@ class Version000003Date20200720000000 extends SimpleMigrationStep {
 				'notnull' => false,
 				'length' => 8,
 			]);
+			$table->addColumn('page_order', Types::INTEGER, [
+				'notnull' => true,
+				'default' => Collective::defaultPageOrder,
+			]);
 			$table->addColumn('trash_timestamp', Types::INTEGER, [
 				'notnull' => false,
 			]);

@@ -215,6 +215,7 @@ class CollectiveService {
 	 * @param string      $userId
 	 * @param int         $id
 	 * @param string|null $emoji
+	 * @param int|null    $pageOrder
 	 *
 	 * @return CollectiveInfo
 	 * @throws MissingDependencyException
@@ -223,7 +224,8 @@ class CollectiveService {
 	 */
 	public function updateCollective(string $userId,
 									 int $id,
-									 string $emoji = null): CollectiveInfo {
+									 string $emoji = null,
+									 int $pageOrder = null): CollectiveInfo {
 		if (null === $collective = $this->collectiveMapper->findById($id, $userId)) {
 			throw new NotFoundException('Collective not found: ' . $id);
 		}
@@ -236,6 +238,14 @@ class CollectiveService {
 
 		if ($emoji) {
 			$collective->setEmoji($emoji);
+		}
+
+		if ($pageOrder) {
+			try {
+				$collective->setPageOrder($pageOrder);
+			} catch (\RuntimeException $e) {
+				throw new NotPermittedException('Failed to update collective with invalid page order');
+			}
 		}
 
 		return new CollectiveInfo($this->collectiveMapper->update($collective),
@@ -268,7 +278,6 @@ class CollectiveService {
 			throw new NotPermittedException('Member ' . $userId . ' not allowed to update collective: ' . $id);
 		}
 
-		$oldPermissions = $collective->getPermissions();
 		$collective->updatePermissionLevel($permissionLevel, $permission);
 
 		return new CollectiveInfo($this->collectiveMapper->update($collective),
