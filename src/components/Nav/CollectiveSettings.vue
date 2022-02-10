@@ -13,6 +13,7 @@
 						:aria-label="emojiTitle"
 						:aria-haspopup="true"
 						:title="emojiTitle"
+						:class="{'loading': loading('updateCollectiveEmoji')}"
 						@click.prevent>
 						<span v-if="collective.emoji">{{ collective.emoji }}</span>
 						<EmoticonOutline v-else :size="20" />
@@ -29,14 +30,14 @@
 						type="submit"
 						value=""
 						class="icon-confirm"
-						:class="{ 'icon-loading-small': renameLoading }"
+						:class="{ 'icon-loading-small': loading('renameCollective') }"
 						:disabled="!isCollectiveOwner(collective)">
 				</form>
 			</div>
 		</AppSettingsSection>
 
 		<AppSettingsSection :title="t('collectives', 'Permissions')">
-			<div class="permissions-header">
+			<div class="subsection-header">
 				{{ t('collectives', 'Allow editing for') }}
 			</div>
 
@@ -44,7 +45,7 @@
 				<CheckboxRadioSwitch
 					:checked.sync="editPermissions"
 					:value="String(memberLevels.LEVEL_ADMIN)"
-					:loading="editPermissionLoading[memberLevels.LEVEL_ADMIN]"
+					:loading="loading('updateCollectiveEditPermissions_' + String(memberLevels.LEVEL_ADMIN))"
 					name="edit_admins"
 					type="radio">
 					{{ t('collectives', 'Admins only') }}
@@ -52,7 +53,7 @@
 				<CheckboxRadioSwitch
 					:checked.sync="editPermissions"
 					:value="String(memberLevels.LEVEL_MODERATOR)"
-					:loading="editPermissionLoading[memberLevels.LEVEL_MODERATOR]"
+					:loading="loading('updateCollectiveEditPermissions_' + String(memberLevels.LEVEL_MODERATOR))"
 					name="edit_moderators"
 					type="radio">
 					{{ t('collectives', 'Admins and moderaters') }}
@@ -60,14 +61,14 @@
 				<CheckboxRadioSwitch
 					:checked.sync="editPermissions"
 					:value="String(memberLevels.LEVEL_MEMBER)"
-					:loading="editPermissionLoading[memberLevels.LEVEL_MEMBER]"
+					:loading="loading('updateCollectiveEditPermissions_' + String(memberLevels.LEVEL_MEMBER))"
 					name="edit_members"
 					type="radio">
 					{{ t('collectives', 'All members') }}
 				</CheckboxRadioSwitch>
 			</div>
 
-			<div class="permissions-header permissions-header__second">
+			<div class="subsection-header subsection-header__second">
 				{{ t('collectives', 'Allow sharing for') }}
 			</div>
 
@@ -75,7 +76,7 @@
 				<CheckboxRadioSwitch
 					:checked.sync="sharePermissions"
 					:value="String(memberLevels.LEVEL_ADMIN)"
-					:loading="sharePermissionLoading[memberLevels.LEVEL_ADMIN]"
+					:loading="loading('updateCollectiveSharePermissions_' + String(memberLevels.LEVEL_ADMIN))"
 					name="share_admins"
 					type="radio">
 					{{ t('collectives', 'Admins only') }}
@@ -83,7 +84,7 @@
 				<CheckboxRadioSwitch
 					:checked.sync="sharePermissions"
 					:value="String(memberLevels.LEVEL_MODERATOR)"
-					:loading="sharePermissionLoading[memberLevels.LEVEL_MODERATOR]"
+					:loading="loading('updateCollectiveSharePermissions_' + String(memberLevels.LEVEL_MODERATOR))"
 					name="share_moderators"
 					type="radio">
 					{{ t('collectives', 'Admins and moderaters') }}
@@ -91,7 +92,7 @@
 				<CheckboxRadioSwitch
 					:checked.sync="sharePermissions"
 					:value="String(memberLevels.LEVEL_MEMBER)"
-					:loading="sharePermissionLoading[memberLevels.LEVEL_MEMBER]"
+					:loading="loading('updateCollectiveSharePermissions_' + String(memberLevels.LEVEL_MEMBER))"
 					name="share_members"
 					type="radio">
 					{{ t('collectives', 'All members') }}
@@ -126,7 +127,7 @@
 
 <script>
 import { memberLevels } from '../../constants'
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters, mapMutations, mapState } from 'vuex'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import AppSettingsDialog from '@nextcloud/vue/dist/Components/AppSettingsDialog'
 import AppSettingsSection from '@nextcloud/vue/dist/Components/AppSettingsSection'
@@ -174,12 +175,9 @@ export default {
 		return {
 			memberLevels,
 			newCollectiveName: this.collective.name,
-			renameLoading: false,
 			showSettings: false,
 			editPermissions: String(this.collective.editPermissionLevel),
 			sharePermissions: String(this.collective.sharePermissionLevel),
-			editPermissionLoading: [],
-			sharePermissionLoading: [],
 		}
 	},
 
@@ -193,6 +191,7 @@ export default {
 			'collectiveParam',
 			'pageParam',
 			'isCollectiveOwner',
+			'loading',
 		]),
 
 		emojiTitle() {
@@ -226,42 +225,53 @@ export default {
 			}
 		},
 		editPermissions(val) {
-			this.editPermissionLoading[val] = true
-			this.$store.dispatch(UPDATE_COLLECTIVE_EDIT_PERMISSIONS, { id: this.collective.id, level: parseInt(val) }).then(() => {
+			const permission = String(val)
+			this.load('updateCollectiveEditPermissions_' + permission)
+			this.$store.dispatch(UPDATE_COLLECTIVE_EDIT_PERMISSIONS, { id: this.collective.id, level: parseInt(permission) }).then(() => {
+				this.done('updateCollectiveEditPermissions_' + permission)
 				showSuccess(t('collectives', 'Editing permissions updated'))
 			}).catch((error) => {
-				showError('Could not update editing permissions')
 				this.editPermissions = String(this.collective.editPermissionLevel)
-				this.editPermissionLoading[val] = false
+				this.done('updateCollectiveEditPermissions_' + permission)
+				showError('Could not update editing permissions')
 				throw error
 			})
-			this.editPermissionLoading[val] = false
 		},
 		sharePermissions(val) {
-			this.sharePermissionLoading[val] = true
-			this.$store.dispatch(UPDATE_COLLECTIVE_SHARE_PERMISSIONS, { id: this.collective.id, level: parseInt(val) }).then(() => {
+			const permission = String(val)
+			this.load('updateCollectiveSharePermissions_' + permission)
+			this.$store.dispatch(UPDATE_COLLECTIVE_SHARE_PERMISSIONS, { id: this.collective.id, level: parseInt(permission) }).then(() => {
 				showSuccess(t('collectives', 'Sharing permissions updated'))
+				this.done('updateCollectiveSharePermissions_' + permission)
 			}).catch((error) => {
-				showError('Could not update sharing permissions')
 				this.sharePermissions = String(this.collective.sharePermissionLevel)
-				this.sharePermissionLoading[val] = false
+				this.done('updateCollectiveSharePermissions_' + permission)
+				showError('Could not update sharing permissions')
 				throw error
 			})
-			this.sharePermissionLoading[val] = false
 		},
 	},
 
 	methods: {
+		...mapMutations(['load', 'done']),
+
 		/**
 		 * Update the emoji of a collective
 		 *
 		 * @param {string} emoji Emoji
 		 */
 		updateEmoji(emoji) {
-			const collective = this.collective
+			this.load('updateCollectiveEmoji')
+			const collective = { ...this.collective }
 			collective.emoji = emoji
-			this.$store.dispatch(UPDATE_COLLECTIVE, collective)
-				.catch(displayError('Could not update emoji for the collective'))
+			this.$store.dispatch(UPDATE_COLLECTIVE, collective).then(() => {
+				showSuccess(t('collectives', 'Emoji updated'))
+				this.done('updateCollectiveEmoji')
+			}).catch((error) => {
+				showError('Could not update emoji for the collective')
+				this.done('updateCollectiveEmoji')
+				throw error
+			})
 		},
 
 		/**
@@ -273,7 +283,7 @@ export default {
 				return
 			}
 
-			this.renameLoading = true
+			this.load('renameCollective')
 
 			// If currentCollective is renamed, we need to update the router path later
 			const redirect = this.collectiveParam === this.collective.name
@@ -281,7 +291,13 @@ export default {
 			// Wait for circle rename (also patches store with updated collective and pages)
 			const collective = { ...this.collective }
 			collective.name = this.newCollectiveName
-			await this.$store.dispatch(RENAME_CIRCLE, collective)
+			await this.$store.dispatch(RENAME_CIRCLE, collective).then(() => {
+				showSuccess('Collective renamed')
+			}).catch((error) => {
+				showError('Could not rename the collective')
+				this.done('renameCollective')
+				throw error
+			})
 
 			// Name might have changed (due to circle name conflicts), update input field
 			this.newCollectiveName = this.collective.name
@@ -294,7 +310,7 @@ export default {
 				)
 			}
 
-			this.renameLoading = false
+			this.done('renameCollective')
 		},
 
 		openCircleLink() {
@@ -346,7 +362,7 @@ button.emoji {
 	}
 }
 
-.permissions-header {
+.subsection-header {
 	margin-bottom: 12px;
 	&__second {
 		margin-top: 12px;
