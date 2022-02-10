@@ -3,10 +3,11 @@
 namespace Unit\Mount;
 
 use OC\SystemConfig;
-use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCP\Files\IRootFolder;
 use OCP\IDBConnection;
+use OCP\IRequest;
+use OCP\IUserSession;
 use PHPUnit\Framework\TestCase;
 
 class CollectiveFolderManagerTest extends TestCase {
@@ -24,11 +25,14 @@ class CollectiveFolderManagerTest extends TestCase {
 		$systemConfig = $this->getMockBuilder(SystemConfig::class)
 			->disableOriginalConstructor()
 			->getMock();
-		$nodeHelper = $this->getMockBuilder(NodeHelper::class)
+		$userSession = $this->getMockBuilder(IUserSession::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$request = $this->getMockBuilder(IRequest::class)
 			->disableOriginalConstructor()
 			->getMock();
 
-		$this->manager = new CollectiveFolderManager($rootFolder, $connection, $systemConfig, $nodeHelper);
+		$this->manager = new CollectiveFolderManager($rootFolder, $connection, $systemConfig, $userSession, $request);
 	}
 
 	protected function tearDown(): void {

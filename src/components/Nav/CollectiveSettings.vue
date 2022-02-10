@@ -28,16 +28,80 @@
 					<input v-tooltip="renameDisabledTooltip"
 						type="submit"
 						value=""
-						class="icon-rename"
-						:class="{ 'icon-loading-small': loading }"
+						class="icon-confirm"
+						:class="{ 'icon-loading-small': renameLoading }"
 						:disabled="!isCollectiveOwner(collective)">
 				</form>
 			</div>
 		</AppSettingsSection>
 
+		<AppSettingsSection :title="t('collectives', 'Permissions')">
+			<div class="permissions-header">
+				{{ t('collectives', 'Allow editing for') }}
+			</div>
+
+			<div class="permissions-input-edit">
+				<CheckboxRadioSwitch
+					:checked.sync="editPermissions"
+					:value="String(memberLevels.LEVEL_ADMIN)"
+					:loading="editPermissionLoading[memberLevels.LEVEL_ADMIN]"
+					name="edit_admins"
+					type="radio">
+					{{ t('collectives', 'Admins only') }}
+				</CheckboxRadioSwitch>
+				<CheckboxRadioSwitch
+					:checked.sync="editPermissions"
+					:value="String(memberLevels.LEVEL_MODERATOR)"
+					:loading="editPermissionLoading[memberLevels.LEVEL_MODERATOR]"
+					name="edit_moderators"
+					type="radio">
+					{{ t('collectives', 'Admins and moderaters') }}
+				</CheckboxRadioSwitch>
+				<CheckboxRadioSwitch
+					:checked.sync="editPermissions"
+					:value="String(memberLevels.LEVEL_MEMBER)"
+					:loading="editPermissionLoading[memberLevels.LEVEL_MEMBER]"
+					name="edit_members"
+					type="radio">
+					{{ t('collectives', 'All members') }}
+				</CheckboxRadioSwitch>
+			</div>
+
+			<div class="permissions-header permissions-header__second">
+				{{ t('collectives', 'Allow sharing for') }}
+			</div>
+
+			<div class="permissions-input-share">
+				<CheckboxRadioSwitch
+					:checked.sync="sharePermissions"
+					:value="String(memberLevels.LEVEL_ADMIN)"
+					:loading="sharePermissionLoading[memberLevels.LEVEL_ADMIN]"
+					name="share_admins"
+					type="radio">
+					{{ t('collectives', 'Admins only') }}
+				</CheckboxRadioSwitch>
+				<CheckboxRadioSwitch
+					:checked.sync="sharePermissions"
+					:value="String(memberLevels.LEVEL_MODERATOR)"
+					:loading="sharePermissionLoading[memberLevels.LEVEL_MODERATOR]"
+					name="share_moderators"
+					type="radio">
+					{{ t('collectives', 'Admins and moderaters') }}
+				</CheckboxRadioSwitch>
+				<CheckboxRadioSwitch
+					:checked.sync="sharePermissions"
+					:value="String(memberLevels.LEVEL_MEMBER)"
+					:loading="sharePermissionLoading[memberLevels.LEVEL_MEMBER]"
+					name="share_members"
+					type="radio">
+					{{ t('collectives', 'All members') }}
+				</CheckboxRadioSwitch>
+			</div>
+		</AppSettingsSection>
+
 		<AppSettingsSection :title="t('collectives', 'Members')">
 			<div>
-				{{ t('collectives', 'Members can be managed in the Contacts app.') }}
+				{{ t('collectives', 'Members can be managed via the connected circle in the Contacts app.') }}
 			</div>
 			<div>
 				<!-- TODO: Use secondary button from @nextcloud/vue 5.0 once it's there -->
@@ -45,7 +109,7 @@
 					class="button"
 					:disabled="!isContactsInstalled"
 					@click="openCircleLink">
-					{{ t('collectives', 'Open Contacts') }}
+					{{ t('collectives', 'Open circle in Contacts') }}
 				</button>
 			</div>
 		</AppSettingsSection>
@@ -61,14 +125,23 @@
 </template>
 
 <script>
+import { memberLevels } from '../../constants'
 import { mapGetters, mapState } from 'vuex'
+import { showError, showSuccess } from '@nextcloud/dialogs'
 import AppSettingsDialog from '@nextcloud/vue/dist/Components/AppSettingsDialog'
 import AppSettingsSection from '@nextcloud/vue/dist/Components/AppSettingsSection'
 import EmojiPicker from '@nextcloud/vue/dist/Components/EmojiPicker'
+import CheckboxRadioSwitch from '@nextcloud/vue/dist/Components/CheckboxRadioSwitch'
 import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip'
 import { generateUrl } from '@nextcloud/router'
 import EmoticonOutline from 'vue-material-design-icons/EmoticonOutline'
-import { RENAME_CIRCLE, UPDATE_COLLECTIVE, TRASH_COLLECTIVE } from '../../store/actions'
+import {
+	RENAME_CIRCLE,
+	UPDATE_COLLECTIVE,
+	TRASH_COLLECTIVE,
+	UPDATE_COLLECTIVE_EDIT_PERMISSIONS,
+	UPDATE_COLLECTIVE_SHARE_PERMISSIONS,
+} from '../../store/actions'
 import displayError from '../../util/displayError'
 
 export default {
@@ -79,6 +152,7 @@ export default {
 		AppSettingsSection,
 		EmojiPicker,
 		EmoticonOutline,
+		CheckboxRadioSwitch,
 	},
 
 	directives: {
@@ -98,9 +172,14 @@ export default {
 
 	data() {
 		return {
+			memberLevels,
 			newCollectiveName: this.collective.name,
-			loading: false,
+			renameLoading: false,
 			showSettings: false,
+			editPermissions: String(this.collective.editPermissionLevel),
+			sharePermissions: String(this.collective.sharePermissionLevel),
+			editPermissionLoading: [],
+			sharePermissionLoading: [],
 		}
 	},
 
@@ -146,6 +225,30 @@ export default {
 				this.showSettings = true
 			}
 		},
+		editPermissions(val) {
+			this.editPermissionLoading[val] = true
+			this.$store.dispatch(UPDATE_COLLECTIVE_EDIT_PERMISSIONS, { id: this.collective.id, level: parseInt(val) }).then(() => {
+				showSuccess(t('collectives', 'Editing permissions updated'))
+			}).catch((error) => {
+				showError('Could not update editing permissions')
+				this.editPermissions = String(this.collective.editPermissionLevel)
+				this.editPermissionLoading[val] = false
+				throw error
+			})
+			this.editPermissionLoading[val] = false
+		},
+		sharePermissions(val) {
+			this.sharePermissionLoading[val] = true
+			this.$store.dispatch(UPDATE_COLLECTIVE_SHARE_PERMISSIONS, { id: this.collective.id, level: parseInt(val) }).then(() => {
+				showSuccess(t('collectives', 'Sharing permissions updated'))
+			}).catch((error) => {
+				showError('Could not update sharing permissions')
+				this.sharePermissions = String(this.collective.sharePermissionLevel)
+				this.sharePermissionLoading[val] = false
+				throw error
+			})
+			this.sharePermissionLoading[val] = false
+		},
 	},
 
 	methods: {
@@ -170,7 +273,7 @@ export default {
 				return
 			}
 
-			this.loading = true
+			this.renameLoading = true
 
 			// If currentCollective is renamed, we need to update the router path later
 			const redirect = this.collectiveParam === this.collective.name
@@ -191,7 +294,7 @@ export default {
 				)
 			}
 
-			this.loading = false
+			this.renameLoading = false
 		},
 
 		openCircleLink() {
@@ -213,17 +316,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep .modal-container {
-	display: block;
+::v-deep .modal-wrapper.modal-wrapper--normal .modal-container {
+	display: flex;
 }
 
 .app-settings-section {
 	margin-bottom: 45px;
-	&__title {
-		overflow: hidden;
-		white-space: nowrap;
-		text-overflow: ellipsis;
-	}
 }
 
 button.emoji {
@@ -244,59 +342,14 @@ button.emoji {
 
 		input[type='text'] {
 			flex-grow: 1;
-
-			// Copied from `core/cs/inputs.scss` for `icon-confirm`
-			+ .icon-rename {
-				margin-left: -8px !important;
-				border-left-color: transparent !important;
-				border-radius: 0 var(--border-radius) var(--border-radius) 0 !important;
-				background-clip: padding-box;
-				/* Avoid background under border */
-				background-color: var(--color-main-background) !important;
-				opacity: 1;
-				height: 34px;
-				width: 34px;
-				padding: 7px 6px;
-				cursor: pointer;
-				margin-right: 0;
-				&:disabled {
-					cursor: default;
-				}
-			}
-
-			/* only show rename borders if input is not focussed */
-			&:not(:active):not(:hover):not(:focus) {
-				&:invalid {
-					+ .icon-rename {
-						border-color: var(--color-error);
-					}
-				}
-				+ .icon-rename {
-					&:active,
-					&:hover,
-					&:focus {
-						border-color: var(--color-primary-element) !important;
-						border-radius: var(--border-radius) !important;
-						&:disabled {
-							border-color: var(--color-background-dark) !important;
-						}
-					}
-				}
-			}
-			&:active,
-			&:hover,
-			&:focus {
-				+ .icon-rename {
-					border-color: var(--color-primary-element) !important;
-					border-left-color: transparent !important;
-					/* above previous input */
-					z-index: 2;
-					&:disabled {
-						border-color: var(--color-background-darker) !important;
-					}
-				}
-			}
 		}
+	}
+}
+
+.permissions-header {
+	margin-bottom: 12px;
+	&__second {
+		margin-top: 12px;
 	}
 }
 </style>

@@ -50,6 +50,7 @@ class CollectiveShareServiceTest extends TestCase {
 		$l10n = $this->getMockBuilder(IL10N::class)
 			->disableOriginalConstructor()
 			->getMock();
+		$l10n->method('t')->willReturnArgument(0);
 
 		$this->service = new CollectiveShareService(
 			$this->shareManager,
@@ -192,7 +193,7 @@ class CollectiveShareServiceTest extends TestCase {
 			->willReturn($folderShare);
 
 		$this->expectException(NotPermittedException::class);
-		$this->expectExceptionMessage('A share for the collective exists already');
+		$this->expectExceptionMessage('A share for collective %s exists already');
 		$this->service->createShare($this->userId, $this->collectiveInfo);
 	}
 }

@@ -72,7 +72,7 @@ class MountProvider implements IMountProvider {
 		$folders = [];
 
 		try {
-			$collectiveInfos = $this->collectiveHelper->getCollectivesForUser($user->getUID(), false);
+			$collectiveInfos = $this->collectiveHelper->getCollectivesForUser($user->getUID());
 		} catch (QueryException | MissingDependencyException | NotFoundException | NotPermittedException $e) {
 			$this->log($e);
 			return $folders;
@@ -102,6 +102,7 @@ class MountProvider implements IMountProvider {
 			$folders[] = [
 				'folder_id' => $c->getId(),
 				'mount_point' => $userFolder->getName() . '/' . $mountPointName,
+				'permissions' => $c->getUserPermissions(),
 				'rootCacheEntry' => (isset($cacheEntry['fileid'])) ? Cache::cacheEntryFromData($cacheEntry, $this->mimeTypeLoader) : null
 			];
 		}
@@ -112,9 +113,9 @@ class MountProvider implements IMountProvider {
 	 * @param IUser           $user
 	 * @param IStorageFactory $loader
 	 *
-	 * @return IMountPoint[]
+	 * @return IMountPoint[]|null[]
 	 */
-	public function getMountsForUser(IUser $user, IStorageFactory $loader) {
+	public function getMountsForUser(IUser $user, IStorageFactory $loader): array {
 		if (!$this->isEnabledForUser($user)) {
 			return [];
 		}
@@ -125,6 +126,7 @@ class MountProvider implements IMountProvider {
 				return $this->collectiveFolderManager->getMount(
 					$folder['folder_id'],
 					'/' . $user->getUID() . '/files/' . $folder['mount_point'],
+					$folder['permissions'],
 					$folder['rootCacheEntry'],
 					$loader,
 					$user

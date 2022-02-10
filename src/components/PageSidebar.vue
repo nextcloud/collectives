@@ -14,7 +14,7 @@
 				v-if="showing('sidebar')"
 				:page="page" />
 		</AppSidebarTab>
-		<AppSidebarTab v-if="!isPublic"
+		<AppSidebarTab v-if="!isCurrentCollectiveReadOnly"
 			id="versions"
 			:order="1"
 			:name="t('collectives', 'Versions')"
@@ -52,7 +52,7 @@ export default {
 
 	computed: {
 		...mapGetters([
-			'isPublic',
+			'isCurrentCollectiveReadOnly',
 			'currentPage',
 			'title',
 			'showing',

@@ -1,6 +1,8 @@
 OC.L10N.register(
     "collectives",
     {
+    "Could not share the collective" : "පිටුව නැවත නම් කිරීමට නොහැකි විය",
+    "Could not unshare the collective" : "පිටුව නැවත නම් කිරීමට නොහැකි විය",
     "Cancel" : "අවලංගු",
     "Edit" : "සංස්කරණය",
     "Could not rename the page" : "පිටුව නැවත නම් කිරීමට නොහැකි විය",

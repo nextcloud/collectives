@@ -7,6 +7,7 @@ use OCA\Collectives\Mount\CollectiveMountPoint;
 use OCA\Files_Versions\Versions\IVersion;
 use OCA\Files_Versions\Versions\IVersionBackend;
 use OCP\AppFramework\Utility\ITimeFactory;
+use OCP\Constants;
 use OCP\Files\File;
 use OCP\Files\FileInfo;
 use OCP\Files\Folder;
@@ -200,8 +201,11 @@ class VersionsBackend implements IVersionBackend {
 	 */
 	public function getAllVersionedFiles(array $folder): array {
 		$versionsFolder = $this->getVersionsFolder($folder['id']);
-		// TODO: correct?
-		$mount = $this->collectiveFolderManager->getMount($folder['id'], '/dummyuser/files/Collectives/' . $folder['mount_point']);
+		$mount = $this->collectiveFolderManager->getMount(
+			$folder['id'],
+			'/dummyuser/files/Collectives/' . $folder['mount_point'],
+			Constants::PERMISSION_ALL
+		);
 		if ($mount === null) {
 			$this->logger->error('Tried to get all the versioned files from a non existing mountpoint');
 			return [];

@@ -14,7 +14,7 @@
 				<LastUpdate :timestamp="page.timestamp"
 					:user="page.lastUserId" />
 			</template>
-			<template v-if="!isPublic" #actions>
+			<template v-if="!isCurrentCollectiveReadOnly" #actions>
 				<ActionButton
 					icon="icon-add"
 					@click="newPage(page)">
@@ -77,7 +77,7 @@ export default {
 
 	computed: {
 		...mapGetters([
-			'isPublic',
+			'isCurrentCollectiveReadOnly',
 			'pageParam',
 			'collectiveParam',
 			'pagePath',

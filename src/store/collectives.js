@@ -24,6 +24,8 @@ import {
 	RESTORE_COLLECTIVE,
 	SHARE_COLLECTIVE,
 	UNSHARE_COLLECTIVE,
+	UPDATE_COLLECTIVE_EDIT_PERMISSIONS,
+	UPDATE_COLLECTIVE_SHARE_PERMISSIONS,
 	GET_COLLECTIVES_FOLDER,
 } from './actions'
 
@@ -49,6 +51,14 @@ export default {
 			}
 		},
 
+		isCurrentCollectiveReadOnly(state, getters) {
+			return getters.isCollectiveReadOnly(getters.currentCollective)
+		},
+
+		isCurrentCollectiveSharable(state, getters) {
+			return getters.isCollectiveSharable(getters.currentCollective)
+		},
+
 		collectives(state, getters) {
 			return state.collectives.sort(byName)
 		},
@@ -59,7 +69,7 @@ export default {
 
 		updatedCollectivePath(state) {
 			const collective = state.updatedCollective
-			return collective && `/${encodeURIComponent(collective.name)}`
+			return collective?.name && `/${encodeURIComponent(collective.name)}`
 		},
 
 		collectiveChanged(state, getters) {
@@ -90,6 +100,17 @@ export default {
 
 		isCollectiveOwner: (state, getters) => (collective) => {
 			return collective.level >= memberLevels.LEVEL_OWNER
+		},
+
+		isCollectiveReadOnly: (state, getters) => (collective) => {
+			if (!collective) {
+				return true
+			}
+			return getters.isPublic || collective.level < collective.editPermissionLevel
+		},
+
+		isCollectiveSharable: (state, getters) => (collective) => {
+			return !getters.isPublic && collective.level >= collective.sharePermissionLevel
 		},
 	},
 	mutations: {
@@ -281,6 +302,36 @@ export default {
 			)
 			commit(ADD_OR_UPDATE_COLLECTIVE, response.data.data)
 			commit('done', 'unshare')
+		},
+
+		/**
+		 * @param {object} store the vuex store
+		 * @param {Function} store.commit commit changes
+		 * @param {object} data the data object
+		 * @param {number} data.id ID of the colletive to be updated
+		 * @param {number} data.level new minimum level for sharing
+		 */
+		async [UPDATE_COLLECTIVE_EDIT_PERMISSIONS]({ commit }, { id, level }) {
+			const response = await axios.put(
+				generateUrl('/apps/collectives/_api/' + id + '/editLevel'),
+				{ level }
+			)
+			commit(ADD_OR_UPDATE_COLLECTIVE, response.data.data)
+		},
+
+		/**
+		 * @param {object} store the vuex store
+		 * @param {Function} store.commit commit changes
+		 * @param {object} data the data object
+		 * @param {number} data.id ID of the colletive to be updated
+		 * @param {number} data.level new minimum level for sharing
+		 */
+		async [UPDATE_COLLECTIVE_SHARE_PERMISSIONS]({ commit }, { id, level }) {
+			const response = await axios.put(
+				generateUrl('/apps/collectives/_api/' + id + '/shareLevel'),
+				{ level }
+			)
+			commit(ADD_OR_UPDATE_COLLECTIVE, response.data.data)
 		},
 	},
 

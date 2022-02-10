@@ -47,7 +47,7 @@ class CollectiveServiceTest extends TestCase {
 			->getMock();
 		$folder->method('get')
 			->willReturn($file);
-		$collectiveFolderManager->method('createFolder')
+		$collectiveFolderManager->method('initializeFolder')
 			->willReturn($folder);
 
 		$this->circleHelper = $this->getMockBuilder(CircleHelper::class)
@@ -136,6 +136,7 @@ class CollectiveServiceTest extends TestCase {
 			->willReturn('free');
 		$collective = new Collective();
 		$collective->setId(123);
+		$collective->setPermissions(Collective::defaultPermissions);
 		$this->circleHelper->method('createCircle')
 			->willReturn($circle);
 		$this->circleHelper->method('getLevel')
@@ -152,11 +153,13 @@ class CollectiveServiceTest extends TestCase {
 		self::assertIsCallable([$collective, 'jsonSerialize']);
 		self::assertEqualsCanonicalizing([
 			'id' => 123,
-			'emoji' => null,
 			'circleId' => null,
+			'emoji' => null,
 			'trashTimestamp' => null,
 			'name' => 'free',
 			'level' => Member::LEVEL_OWNER,
+			'editPermissionLevel' => 1,
+			'sharePermissionLevel' => 1,
 			'shareToken' => null,
 		], $collective->jsonSerialize());
 	}

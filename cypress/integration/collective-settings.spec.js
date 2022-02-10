@@ -24,7 +24,7 @@
  *  Tests for Collectives settings.
  */
 
-describe('Collective', function() {
+describe('Collective settings', function() {
 	before(function() {
 		cy.login('bob', 'bob', '/apps/collectives')
 		cy.seedCollective('Change me')
@@ -63,6 +63,38 @@ describe('Collective', function() {
 			cy.reload()
 			cy.get('.collectives_list_item')
 				.should('contain', 'Change me now')
+		})
+	})
+
+	describe('change edit permissions', function() {
+		it('Allows to change editing permissions', function() {
+			cy.login('bob', 'bob', '/apps/collectives')
+			cy.get('.collectives_list_item')
+				.contains('li', 'Change me now')
+				.find('.action-item__menutoggle')
+				.click()
+			cy.get('button.action-button')
+				.contains('Settings')
+				.click()
+			cy.get('div.permissions-input-edit > :first-child > .checkbox-radio-switch__label')
+				.click()
+			cy.get('div.toast-success').should('contain', 'Editing permissions updated')
+		})
+	})
+
+	describe('change share permissions', function() {
+		it('Allows to change sharing permissions', function() {
+			cy.login('bob', 'bob', '/apps/collectives')
+			cy.get('.collectives_list_item')
+				.contains('li', 'Change me now')
+				.find('.action-item__menutoggle')
+				.click()
+			cy.get('button.action-button')
+				.contains('Settings')
+				.click()
+			cy.get('div.permissions-input-share > :first-child > .checkbox-radio-switch__label')
+				.click()
+			cy.get('div.toast-success').should('contain', 'Sharing permissions updated')
 		})
 	})
 })
