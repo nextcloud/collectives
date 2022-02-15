@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-01-25 13:04+0100\n"
-"PO-Revision-Date: 2021-08-03 14:18+0000\n"
+"PO-Revision-Date: 2022-02-16 07:57+0000\n"
 "Last-Translator: Joachim Sokolowski <weblate@of99.de>\n"
 "Language-Team: German (formal) <https://hosted.weblate.org/projects/"
-"collectives/collectives-app/de_DE/>\n"
+"collectives/collectives-app/de@formal/>\n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.11-dev\n"
 
 #: /collectives/lib/Fs/UserFolderHelper.php:67
 #: /collectives/lib/Search/CollectiveProvider.php:60
@@ -55,12 +55,12 @@ msgstr "Geteiltes Kollektiv"
 #: /collectives/lib/Service/CollectiveShareService.php:139
 #, php-format
 msgid "A share for collective %s exists already"
-msgstr ""
+msgstr "Eine Freigabe für Kollektiv %s existiert bereits"
 
 #: /collectives/lib/Service/CollectiveShareService.php:143
 #, php-format
 msgid "You are not allowed to share %s"
-msgstr ""
+msgstr "Sie dürfen %s nicht teilen"
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:3
 msgid "A place for activist and community projects to build shared knowledge"
@@ -238,11 +238,11 @@ msgstr "Nur Besitzer:innen des Kreises dürfen umbenennen"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:34
 msgid "Editing permissions updated"
-msgstr ""
+msgstr "Bearbeitungsberechtigungen aktualisiert"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:35
 msgid "Sharing permissions updated"
-msgstr ""
+msgstr "Freigabeberechtigungen aktualisiert"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:37
 msgid "Collectives Folder"
