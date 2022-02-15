@@ -25,7 +25,7 @@
 					:class="{selected: sortBy === 'byTimestamp'}"
 					:close-after-click="true"
 					@click="sortPages('byTimestamp')">
-					{{ t('collectives', 'Sort by last modification') }}
+					{{ t('collectives', 'Sort recently changed first') }}
 					<SortClockAscendingOutlineIcon slot="icon"
 						:size="16"
 						decorative />

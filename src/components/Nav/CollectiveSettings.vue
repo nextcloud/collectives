@@ -44,7 +44,7 @@
 					:loading="loading('updateCollectivePageOrder_' + String(pageOrders.byTimestamp))"
 					name="page_order_timestamp"
 					type="radio">
-					{{ t('collectives', 'Sort by last modification') }}
+					{{ t('collectives', 'Sort recently changed first') }}
 				</CheckboxRadioSwitch>
 				<CheckboxRadioSwitch
 					:checked.sync="pageOrder"
