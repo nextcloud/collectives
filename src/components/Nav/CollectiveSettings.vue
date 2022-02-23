@@ -14,8 +14,10 @@
 						:class="{'loading': loading('updateCollectiveEmoji')}"
 						class="button-emoji"
 						@click.prevent>
-						<span v-if="collective.emoji">{{ collective.emoji }}</span>
-						<EmoticonOutline v-else :size="20" />
+						{{ collective.emoji }}
+						<template v-if="!collective.emoji" #icon>
+							<EmoticonOutline :size="20" />
+						</template>
 					</Button>
 				</EmojiPicker>
 				<form @submit.prevent.stop="renameCollective()">
@@ -126,7 +128,7 @@
 			</div>
 			<div>
 				<Button v-tooltip="membersDisabledTooltip"
-					type="secondary"
+					:aria-label="t('collectives', 'Open circle in Contacts')"
 					:disabled="!isContactsInstalled"
 					@click="openCircleLink">
 					{{ t('collectives', 'Open circle in Contacts') }}
@@ -136,7 +138,9 @@
 
 		<AppSettingsSection :title="t('collectives', 'Danger zone')">
 			<div>
-				<Button type="error" @click="trashCollective()">
+				<Button type="error"
+					:aria-label="t('collectives', 'Delete collective')"
+					@click="trashCollective()">
 					{{ t('collectives', 'Delete collective') }}
 				</Button>
 			</div>
