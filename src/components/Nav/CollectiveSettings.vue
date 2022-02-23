@@ -8,16 +8,15 @@
 				<EmojiPicker
 					:show-preview="true"
 					@select="updateEmoji">
-					<button class="emoji"
-						type="button"
-						:aria-label="emojiTitle"
-						:aria-haspopup="true"
+					<Button type="tertiary"
+						:aria-label="t('collectives', 'Select emoji for collective')"
 						:title="emojiTitle"
 						:class="{'loading': loading('updateCollectiveEmoji')}"
+						class="button-emoji"
 						@click.prevent>
 						<span v-if="collective.emoji">{{ collective.emoji }}</span>
 						<EmoticonOutline v-else :size="20" />
-					</button>
+					</Button>
 				</EmojiPicker>
 				<form @submit.prevent.stop="renameCollective()">
 					<input ref="nameField"
@@ -122,25 +121,24 @@
 		</AppSettingsSection>
 
 		<AppSettingsSection :title="t('collectives', 'Members')">
-			<div>
+			<div class="section-description">
 				{{ t('collectives', 'Members can be managed via the connected circle in the Contacts app.') }}
 			</div>
 			<div>
-				<!-- TODO: Use secondary button from @nextcloud/vue 5.0 once it's there -->
-				<button v-tooltip="membersDisabledTooltip"
-					class="button"
+				<Button v-tooltip="membersDisabledTooltip"
+					type="secondary"
 					:disabled="!isContactsInstalled"
 					@click="openCircleLink">
 					{{ t('collectives', 'Open circle in Contacts') }}
-				</button>
+				</Button>
 			</div>
 		</AppSettingsSection>
 
 		<AppSettingsSection :title="t('collectives', 'Danger zone')">
 			<div>
-				<button class="error primary" @click="trashCollective()">
+				<Button type="error" @click="trashCollective()">
 					{{ t('collectives', 'Delete collective') }}
-				</button>
+				</Button>
 			</div>
 		</AppSettingsSection>
 	</AppSettingsDialog>
@@ -153,11 +151,12 @@ import { mapGetters, mapMutations, mapState } from 'vuex'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import AppSettingsDialog from '@nextcloud/vue/dist/Components/AppSettingsDialog'
 import AppSettingsSection from '@nextcloud/vue/dist/Components/AppSettingsSection'
-import EmojiPicker from '@nextcloud/vue/dist/Components/EmojiPicker'
+import Button from '@nextcloud/vue/dist/Components/Button'
 import CheckboxRadioSwitch from '@nextcloud/vue/dist/Components/CheckboxRadioSwitch'
+import EmojiPicker from '@nextcloud/vue/dist/Components/EmojiPicker'
+import EmoticonOutline from 'vue-material-design-icons/EmoticonOutline'
 import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip'
 import { generateUrl } from '@nextcloud/router'
-import EmoticonOutline from 'vue-material-design-icons/EmoticonOutline'
 import {
 	RENAME_CIRCLE,
 	UPDATE_COLLECTIVE,
@@ -173,9 +172,10 @@ export default {
 	components: {
 		AppSettingsDialog,
 		AppSettingsSection,
+		Button,
+		CheckboxRadioSwitch,
 		EmojiPicker,
 		EmoticonOutline,
-		CheckboxRadioSwitch,
 	},
 
 	directives: {
@@ -380,11 +380,8 @@ export default {
 	margin-bottom: 45px;
 }
 
-button.emoji {
-	font-size: 15px;
-	padding-left: 19px;
-	background-color: transparent;
-	border: none;
+.button-emoji {
+	font-size: 20px;
 }
 
 .collective-name {
@@ -408,5 +405,9 @@ button.emoji {
 	&__second {
 		margin-top: 12px;
 	}
+}
+
+.section-description {
+	margin-bottom: 12px;
 }
 </style>

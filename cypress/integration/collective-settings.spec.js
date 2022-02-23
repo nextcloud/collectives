@@ -40,7 +40,7 @@ describe('Collective settings', function() {
 			cy.get('button.action-button')
 				.contains('Settings')
 				.click()
-			cy.get('button.emoji')
+			cy.get('button.button-emoji')
 				.click()
 			cy.contains('.emoji-popover span.emoji-mart-emoji', '🥰').click()
 			cy.reload()
