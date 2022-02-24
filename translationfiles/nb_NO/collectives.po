@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2022-01-25 13:04+0100\n"
+"POT-Creation-Date: 2022-02-24 12:57+0100\n"
 "PO-Revision-Date: 2021-06-10 08:02+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
@@ -22,8 +22,8 @@ msgstr ""
 #: /collectives/lib/Fs/UserFolderHelper.php:67
 #: /collectives/lib/Search/CollectiveProvider.php:60
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:2
-#: /collectives/specialVueFakeDummyForL10nScript.js:76
-#: /collectives/specialVueFakeDummyForL10nScript.js:110
+#: /collectives/specialVueFakeDummyForL10nScript.js:85
+#: /collectives/specialVueFakeDummyForL10nScript.js:119
 msgid "Collectives"
 msgstr "Kollektiver"
 
@@ -108,7 +108,7 @@ msgstr ""
 "**«Sirkler»** og **«Kollektiver»**-programmene og skrur dem på."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:1
-#: /collectives/specialVueFakeDummyForL10nScript.js:33
+#: /collectives/specialVueFakeDummyForL10nScript.js:39
 msgid "The contacts app is required to manage members"
 msgstr ""
 
@@ -142,7 +142,7 @@ msgid "Manage members"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:9
-#: /collectives/specialVueFakeDummyForL10nScript.js:36
+#: /collectives/specialVueFakeDummyForL10nScript.js:44
 msgid "Settings"
 msgstr ""
 
@@ -174,360 +174,386 @@ msgid "Collective settings"
 msgstr "Kollektiver"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:16
-msgid "Details"
-msgstr ""
+#, fuzzy
+msgid "Name and emoji"
+msgstr "Legg til emoji"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:17
-msgid "Permissions"
-msgstr ""
+#: /collectives/specialVueFakeDummyForL10nScript.js:61
+#, fuzzy
+msgid "Select emoji for collective"
+msgstr "Velg et kollektiv"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:18
-msgid "Allow editing for"
-msgstr ""
+#, fuzzy
+msgid "Default page order"
+msgstr "Slett side"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:19
-#: /collectives/specialVueFakeDummyForL10nScript.js:23
-msgid "Admins only"
+#: /collectives/specialVueFakeDummyForL10nScript.js:99
+msgid "Sort recently changed first"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:20
-#: /collectives/specialVueFakeDummyForL10nScript.js:24
-msgid "Admins and moderaters"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:21
-#: /collectives/specialVueFakeDummyForL10nScript.js:25
-msgid "All members"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:22
-msgid "Allow sharing for"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:26
-msgid "Members"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:27
-msgid "Members can be managed via the connected circle in the Contacts app."
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:28
-msgid "Open circle in Contacts"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:29
-msgid "Danger zone"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:30
-#, fuzzy
-msgid "Delete collective"
-msgstr "Slettede kollektiver"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:31
-msgid "Change emoji"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:31
-#: /collectives/specialVueFakeDummyForL10nScript.js:53
-msgid "Add emoji"
-msgstr "Legg til emoji"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:32
-msgid "Renaming is limited to owners of the circle"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:34
-msgid "Editing permissions updated"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:35
-msgid "Sharing permissions updated"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:37
-#, fuzzy
-msgid "Collectives Folder"
-msgstr "Kollektiver"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:38
-#, fuzzy
-msgid "Create a collective first"
-msgstr "Opprett nytt kollektiv"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:39
-#, fuzzy
-msgid "Select location for collectives"
-msgstr "Velg et kollektiv"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:40
-msgid "Invalid path selected. Only folders on first level are supported."
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:41
-msgid "Deleted collectives"
-msgstr "Slettede kollektiver"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:42
-#: /collectives/specialVueFakeDummyForL10nScript.js:67
-msgid "Restore"
-msgstr "Gjenopprett"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:43
-msgid "Delete permanently"
-msgstr "Slett for godt"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:44
-msgid "Permanently delete collective »{collective}«"
-msgstr "Slett kollektivet «{collective}» for godt?"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:45
-msgid "Delete corresponding circle along with the collective?"
-msgstr "Slett motsvarende sirkel sammen med kollektivet?"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:46
-msgid "Cancel"
-msgstr "Avbryt"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:47
-msgid "Only collective"
-msgstr "Kun kollektivet"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:48
-#: /collectives/specialVueFakeDummyForL10nScript.js:50
-msgid "Collective and circle"
-msgstr "Kollektivet og sirkelen"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:49
-msgid "Only circle owners can delete a circle"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:51
-#: /collectives/specialVueFakeDummyForL10nScript.js:112
-msgid "Create new collective"
-msgstr "Opprett nytt kollektiv"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:52
-msgid "Create collective for existing circle"
-msgstr "Opprett kollektiv for eksisterende sirkel"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:54
-msgid "New collective name"
-msgstr "Nytt navn på kollektiv"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:55
-msgid "Select circle..."
-msgstr "Velg sirkel …"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:56
-msgid "Select a collective"
-msgstr "Velg et kollektiv"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:57
-msgid "Show in Files"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:58
-#: /collectives/specialVueFakeDummyForL10nScript.js:82
-#: /collectives/specialVueFakeDummyForL10nScript.js:93
-msgid "Edit template for subpages"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:59
-msgid "Delete page"
-msgstr "Slett side"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:60
-msgid "Page deleted"
-msgstr "Siden ble slettet"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:61
-msgid "Could not delete the page"
-msgstr "Kunne ikke slette siden"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:62
-#: /collectives/specialVueFakeDummyForL10nScript.js:84
-#: /collectives/specialVueFakeDummyForL10nScript.js:86
-#: /collectives/specialVueFakeDummyForL10nScript.js:95
-#: /collectives/specialVueFakeDummyForL10nScript.js:97
-msgid "Could not create the page"
-msgstr "Kunne ikke opprette siden"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:63
-msgid "Page not found:"
-msgstr "Fant ikke siden:"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:64
-#, fuzzy
-msgid "Could not find the Page."
-msgstr "Kunne ikke gi siden nytt navn"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:65
-#, fuzzy
-msgid "Select a page from the list or create a new one."
-msgstr "Velg et kollektiv, eller opprett ett til venstre."
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:66
-msgid "Restore this version"
-msgstr "Gjenopprett denne versjonen"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:68
-msgid "Reverted {page} to revision {timestamp}."
-msgstr "Gjenoppretet {page} til versjon {timestamp}."
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:69
-msgid "Failed to revert {page} to revision {timestamp}."
-msgstr "Klarte ikke å tilbakestille {page} til versjon {timestamp}."
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:70
-#: /collectives/specialVueFakeDummyForL10nScript.js:79
-msgid "Template"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:71
-msgid "Title"
-msgstr "Navn"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:72
-msgid "Stop editing"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:72
-msgid "Start editing"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:73
-msgid "Done"
-msgstr "Ferdig"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:73
-msgid "Edit"
-msgstr "Rediger"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:74
-#, fuzzy
-msgid "Hide all subpages"
-msgstr "Legg til en underside"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:75
-#, fuzzy
-msgid "Show all subpages"
-msgstr "Legg til en underside"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:77
-msgid "Could not rename the page"
-msgstr "Kunne ikke gi siden nytt navn"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:78
-msgid "Expand subpage list"
-msgstr "Utvid undersideliste"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:78
-msgid "Collapse subpage list"
-msgstr "Fold sammen undersidelisten"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:80
-msgid "Last edited by {user}"
-msgstr "Sist endret av {user}"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:81
-msgid "Add a subpage"
-msgstr "Legg til en underside"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:83
-#: /collectives/specialVueFakeDummyForL10nScript.js:94
-#, fuzzy
-msgid "Add template for subpages"
-msgstr "Legg til en underside"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:85
-#: /collectives/specialVueFakeDummyForL10nScript.js:96
-msgid "New Page"
-msgstr "Ny side"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:87
-#: /collectives/specialVueFakeDummyForL10nScript.js:88
-msgid "Hide templates"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:87
-#: /collectives/specialVueFakeDummyForL10nScript.js:88
-msgid "Show templates"
-msgstr ""
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:89
-msgid "Sort order"
-msgstr "Sorteringsrekkefølge"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:90
-#, fuzzy
-msgid "Sort by last modification"
-msgstr "Etter sist endret"
-
-#: /collectives/specialVueFakeDummyForL10nScript.js:91
+#: /collectives/specialVueFakeDummyForL10nScript.js:100
 #, fuzzy
 msgid "Sort by title"
 msgstr "Etter tittel"
 
+#: /collectives/specialVueFakeDummyForL10nScript.js:21
+msgid "Permissions"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:22
+msgid "Allow editing for"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:23
+#: /collectives/specialVueFakeDummyForL10nScript.js:27
+msgid "Admins only"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:24
+#: /collectives/specialVueFakeDummyForL10nScript.js:28
+msgid "Admins and moderaters"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:25
+#: /collectives/specialVueFakeDummyForL10nScript.js:29
+msgid "All members"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:26
+msgid "Allow sharing for"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:30
+msgid "Members"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:31
+msgid "Members can be managed via the connected circle in the Contacts app."
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:32
+#: /collectives/specialVueFakeDummyForL10nScript.js:33
+msgid "Open circle in Contacts"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:34
+msgid "Danger zone"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:35
+#: /collectives/specialVueFakeDummyForL10nScript.js:36
+#, fuzzy
+msgid "Delete collective"
+msgstr "Slettede kollektiver"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:37
+msgid "Change emoji"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:37
+msgid "Add emoji"
+msgstr "Legg til emoji"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:38
+msgid "Renaming is limited to owners of the circle"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:40
+msgid "Editing permissions updated"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:41
+msgid "Sharing permissions updated"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:42
+msgid "Default page order updated"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:43
+msgid "Emoji updated"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:45
+#, fuzzy
+msgid "Collectives Folder"
+msgstr "Kollektiver"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:46
+#, fuzzy
+msgid "Create a collective first"
+msgstr "Opprett nytt kollektiv"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:47
+#, fuzzy
+msgid "Select location for collectives"
+msgstr "Velg et kollektiv"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:48
+msgid "Invalid path selected. Only folders on first level are supported."
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:49
+msgid "Deleted collectives"
+msgstr "Slettede kollektiver"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:50
+#: /collectives/specialVueFakeDummyForL10nScript.js:76
+msgid "Restore"
+msgstr "Gjenopprett"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:51
+msgid "Delete permanently"
+msgstr "Slett for godt"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:52
+msgid "Permanently delete collective »{collective}«"
+msgstr "Slett kollektivet «{collective}» for godt?"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:53
+msgid "Delete corresponding circle along with the collective?"
+msgstr "Slett motsvarende sirkel sammen med kollektivet?"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:54
+msgid "Cancel"
+msgstr "Avbryt"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:55
+msgid "Only collective"
+msgstr "Kun kollektivet"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:56
+#: /collectives/specialVueFakeDummyForL10nScript.js:58
+msgid "Collective and circle"
+msgstr "Kollektivet og sirkelen"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:57
+msgid "Only circle owners can delete a circle"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:59
+#: /collectives/specialVueFakeDummyForL10nScript.js:121
+msgid "Create new collective"
+msgstr "Opprett nytt kollektiv"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:60
+msgid "Create collective for existing circle"
+msgstr "Opprett kollektiv for eksisterende sirkel"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:62
+msgid "Select emoji"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:63
+msgid "New collective name"
+msgstr "Nytt navn på kollektiv"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:64
+msgid "Select circle..."
+msgstr "Velg sirkel …"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:65
+msgid "Select a collective"
+msgstr "Velg et kollektiv"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:66
+msgid "Show in Files"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:67
+#: /collectives/specialVueFakeDummyForL10nScript.js:91
+#: /collectives/specialVueFakeDummyForL10nScript.js:102
+msgid "Edit template for subpages"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:68
+msgid "Delete page"
+msgstr "Slett side"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:69
+msgid "Page deleted"
+msgstr "Siden ble slettet"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:70
+msgid "Could not delete the page"
+msgstr "Kunne ikke slette siden"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:71
+#: /collectives/specialVueFakeDummyForL10nScript.js:93
+#: /collectives/specialVueFakeDummyForL10nScript.js:95
+#: /collectives/specialVueFakeDummyForL10nScript.js:104
+#: /collectives/specialVueFakeDummyForL10nScript.js:106
+msgid "Could not create the page"
+msgstr "Kunne ikke opprette siden"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:72
+msgid "Page not found:"
+msgstr "Fant ikke siden:"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:73
+#, fuzzy
+msgid "Could not find the Page."
+msgstr "Kunne ikke gi siden nytt navn"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:74
+#, fuzzy
+msgid "Select a page from the list or create a new one."
+msgstr "Velg et kollektiv, eller opprett ett til venstre."
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:75
+msgid "Restore this version"
+msgstr "Gjenopprett denne versjonen"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:77
+msgid "Reverted {page} to revision {timestamp}."
+msgstr "Gjenoppretet {page} til versjon {timestamp}."
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:78
+msgid "Failed to revert {page} to revision {timestamp}."
+msgstr "Klarte ikke å tilbakestille {page} til versjon {timestamp}."
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:79
+#: /collectives/specialVueFakeDummyForL10nScript.js:88
+msgid "Template"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:80
+msgid "Title"
+msgstr "Navn"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:81
+msgid "Stop editing"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:81
+msgid "Start editing"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:82
+msgid "Done"
+msgstr "Ferdig"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:82
+msgid "Edit"
+msgstr "Rediger"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:83
+#, fuzzy
+msgid "Hide all subpages"
+msgstr "Legg til en underside"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:84
+#, fuzzy
+msgid "Show all subpages"
+msgstr "Legg til en underside"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:86
+msgid "Could not rename the page"
+msgstr "Kunne ikke gi siden nytt navn"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:87
+msgid "Expand subpage list"
+msgstr "Utvid undersideliste"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:87
+msgid "Collapse subpage list"
+msgstr "Fold sammen undersidelisten"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:89
+msgid "Last edited by {user}"
+msgstr "Sist endret av {user}"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:90
+msgid "Add a subpage"
+msgstr "Legg til en underside"
+
 #: /collectives/specialVueFakeDummyForL10nScript.js:92
+#: /collectives/specialVueFakeDummyForL10nScript.js:103
+#, fuzzy
+msgid "Add template for subpages"
+msgstr "Legg til en underside"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:94
+#: /collectives/specialVueFakeDummyForL10nScript.js:105
+msgid "New Page"
+msgstr "Ny side"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:96
+#: /collectives/specialVueFakeDummyForL10nScript.js:97
+msgid "Hide templates"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:96
+#: /collectives/specialVueFakeDummyForL10nScript.js:97
+msgid "Show templates"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:98
+msgid "Sort order"
+msgstr "Sorteringsrekkefølge"
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:101
 msgid "Add a page"
 msgstr "Legg til en side"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:98
+#: /collectives/specialVueFakeDummyForL10nScript.js:107
 #, fuzzy
 msgid "No backlinks available"
 msgstr "Ingen andre versjoner tilgjengelig"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:99
+#: /collectives/specialVueFakeDummyForL10nScript.js:108
 msgid "If other pages link to this one, they will be listed here."
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:100
+#: /collectives/specialVueFakeDummyForL10nScript.js:109
 #, fuzzy
 msgid "Could not get page backlinks"
 msgstr "Kunne ikke hente sideversjonering"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:101
+#: /collectives/specialVueFakeDummyForL10nScript.js:110
 msgid "Current version"
 msgstr "Nåværende versjon"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:102
+#: /collectives/specialVueFakeDummyForL10nScript.js:111
 msgid "No other versions available"
 msgstr "Ingen andre versjoner tilgjengelig"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:103
+#: /collectives/specialVueFakeDummyForL10nScript.js:112
 msgid "After editing you can find old versions of the page here."
 msgstr "Etter redigering kan du finne gamle versjoner av siden her."
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:104
+#: /collectives/specialVueFakeDummyForL10nScript.js:113
 msgid "Could not get page versions"
 msgstr "Kunne ikke hente sideversjonering"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:105
+#: /collectives/specialVueFakeDummyForL10nScript.js:114
 #: /collectives/src/util/xmlToVersionsList.js:30
 msgid "%n byte"
 msgid_plural "%n bytes"
 msgstr[0] "%n byte"
 msgstr[1] "%n byte"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:106
+#: /collectives/specialVueFakeDummyForL10nScript.js:115
 msgid "Backlinks"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:107
+#: /collectives/specialVueFakeDummyForL10nScript.js:116
 msgid "Pages that link to this one"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:108
+#: /collectives/specialVueFakeDummyForL10nScript.js:117
 msgid "Versions"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:109
+#: /collectives/specialVueFakeDummyForL10nScript.js:118
 msgid "Old versions of this page"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:111
+#: /collectives/specialVueFakeDummyForL10nScript.js:120
 msgid "Come, organize and build shared knowledge!"
 msgstr "Ta del, organiser, og bygg delt kunnskap."
 
@@ -551,6 +577,10 @@ msgstr "Følgende avhengigheter mangler: "
 #: /collectives/templates/error.php:27
 msgid "Please ask the administrator to enable these apps."
 msgstr "Spør en administrator om å skru på disse programmene."
+
+#, fuzzy
+#~ msgid "Sort by last modification"
+#~ msgstr "Etter sist endret"
 
 #~ msgid "Delete"
 #~ msgstr "Slett"

@@ -17,6 +17,8 @@ OC.L10N.register(
     "Could not share the collective" : "பக்கத்தை உருவாக்க முடியவில்லை",
     "Could not unshare the collective" : "பக்கத்தை உருவாக்க முடியவில்லை",
     "Collective settings" : "தொகுப்புகள்",
+    "Select emoji for collective" : "தொகுப்பில் {தொகுப்பு}",
+    "Default page order" : "பக்கத்தை நீக்கு",
     "Permissions" : "பதிப்புகள்",
     "Allow editing for" : "திருத்துவதை நிறுத்து",
     "All members" : "உறுப்பினர்களை நிர்வகிக்கவும்",
