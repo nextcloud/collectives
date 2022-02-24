@@ -123,7 +123,7 @@ class PageController extends Controller {
 	 * @return DataResponse
 	 */
 	public function touch(int $collectiveId, int $parentId, int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId, $parentId,  $id): array {
+		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $id): array {
 			$page = $this->service->touch($this->getUserId(), $this->getCollective($collectiveId), $parentId, $id);
 			return [
 				"data" => $page
