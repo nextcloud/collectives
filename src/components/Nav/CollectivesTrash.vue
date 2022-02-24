@@ -29,23 +29,23 @@
 					<p>{{ t('collectives', 'Delete corresponding circle along with the collective?') }}</p>
 				</div>
 				<div class="modal__content__buttonrow threebuttons">
-					<button @click="closeDeleteModal">
+					<Button @click="closeDeleteModal">
 						{{ t('collectives', 'Cancel') }}
-					</button>
-					<button class="error primary" @click="deleteCollective(modalCollective, false)">
+					</Button>
+					<Button type="error" @click="deleteCollective(modalCollective, false)">
 						{{ t('collectives', 'Only collective') }}
-					</button>
-					<button v-if="isCollectiveOwner(modalCollective)"
-						class="error primary"
+					</Button>
+					<Button v-if="isCollectiveOwner(modalCollective)"
+						type="error"
 						@click="deleteCollective(modalCollective, true)">
 						{{ t('collectives', 'Collective and circle') }}
-					</button>
-					<button v-else
-						class="error primary"
+					</Button>
+					<Button v-else
+						type="primary"
 						disabled
 						:title="t('collectives', 'Only circle owners can delete a circle')">
 						{{ t('collectives', 'Collective and circle') }}
-					</button>
+					</Button>
 				</div>
 			</div>
 		</Modal>
@@ -57,6 +57,7 @@ import { mapGetters, mapState } from 'vuex'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
 import AppNavigationSettings from '@nextcloud/vue/dist/Components/AppNavigationSettings'
+import Button from '@nextcloud/vue/dist/Components/Button'
 import Modal from '@nextcloud/vue/dist/Components/Modal'
 
 export default {
@@ -65,6 +66,7 @@ export default {
 		ActionButton,
 		AppNavigationItem,
 		AppNavigationSettings,
+		Button,
 		Modal,
 	},
 	data() {
@@ -154,14 +156,6 @@ export default {
 
 	&.threebuttons {
 		justify-content: space-between;
-	}
-
-	button {
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		height: 44px;
-		min-width: 44px;
 	}
 }
 
