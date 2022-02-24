@@ -20,15 +20,15 @@
 				</template>
 			</AppNavigationItem>
 		</ul>
-		<Modal v-if="deleteModal" @close="closeDeleteModal">
+		<Modal v-if="deleteModal" size="small" @close="closeDeleteModal">
 			<div class="modal__content">
-				<h2 class="modal__content__title">
+				<h2>
 					{{ t('collectives', 'Permanently delete collective »{collective}«', { collective: modalCollective.name }) }}
 				</h2>
-				<div class="modal__content__content">
-					<p>{{ t('collectives', 'Delete corresponding circle along with the collective?') }}</p>
+				<div>
+					{{ t('collectives', 'Delete corresponding circle along with the collective?') }}
 				</div>
-				<div class="modal__content__buttonrow threebuttons">
+				<div class="three_buttons">
 					<Button @click="closeDeleteModal">
 						{{ t('collectives', 'Cancel') }}
 					</Button>
@@ -124,43 +124,20 @@ export default {
 	margin-left: 10px;
 }
 
-.modal__content {
-	background: var(--color-main-background);
-	color: var(--color-text-light);
-	border-radius: var(--border-radius-large);
-	box-shadow: 0 0 30px var(--color-box-shadow);
-	padding: 15px;
-	font-size: 100%;
-	min-width: 200px;
-	max-height: calc(100% - 20px);
-	max-width: calc(100% - 20px);
-	overflow: auto;
-	position: relative;
-}
-
-.modal__content__title {
-	background: var(--color-main-background);
-}
-
-.modal__content__buttonrow {
-	position: relative;
-	display: flex;
-	background: transparent;
-	right: 0;
-	bottom: 0;
-	padding: 0;
-	padding-top: 10px;
-	box-sizing: border-box;
-	width: 100%;
-	background-image: linear-gradient(rgba(255, 255, 255, 0.0), var(--color-main-background));
-
-	&.threebuttons {
-		justify-content: space-between;
+::v-deep .modal-wrapper--small {
+	.modal-container {
+		max-width: 90%;
+		width: 600px;
 	}
 }
 
-.modal__content__content {
-	width: 100%;
-	max-width: 550px;
+.modal__content {
+	margin: 15px;
+}
+
+.three_buttons {
+	display: flex;
+	justify-content: space-between;
+	padding-top: 10px;
 }
 </style>
