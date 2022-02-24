@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2022-01-25 13:04+0100\n"
-"PO-Revision-Date: 2022-02-16 07:57+0000\n"
-"Last-Translator: Joachim Sokolowski <weblate@of99.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/collectives/"
-"collectives-app/de/>\n"
-"Language: de\n"
+"POT-Creation-Date: 2022-02-09 12:46+0100\n"
+"PO-Revision-Date: 2022-02-12 10:57+0000\n"
+"Last-Translator: Wang Jiaxiang <iwangjiaxiang@outlook.com>\n"
+"Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
+"collectives/collectives-app/zh_Hans/>\n"
+"Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 4.11-dev\n"
 
 #: /collectives/lib/Fs/UserFolderHelper.php:67
@@ -25,50 +25,49 @@ msgstr ""
 #: /collectives/specialVueFakeDummyForL10nScript.js:76
 #: /collectives/specialVueFakeDummyForL10nScript.js:110
 msgid "Collectives"
-msgstr "Kollektive"
+msgstr "知识库"
 
 #: /collectives/lib/Search/PageContentProvider.php:74
 msgid "Collectives - Page content"
-msgstr "Kollektive - Seiten-Inhalte"
+msgstr "知识库 - 页面内容"
 
 #: /collectives/lib/Search/PageContentProvider.php:119
 msgid "in page {page} from collective {collective}"
-msgstr "in Seite {page} des Kollektivs {collective}"
+msgstr "在知识库 {collective} 的页面 {page}"
 
 #: /collectives/lib/Search/PageProvider.php:67
 msgid "Collectives - Pages"
-msgstr "Kollektive - Seiten"
+msgstr "知识库 - 页面"
 
 #: /collectives/lib/Search/PageProvider.php:107
 msgid "in Collective {collective}"
-msgstr "in Kollektiv {collective}"
+msgstr "在知识库 {collective}"
 
 #: /collectives/lib/Service/CollectiveService.php:164
 #, php-format
 msgid "Created collective \"%s\" for existing circle."
-msgstr "Kollektiv „%s“ für bestehenden Kreis angelegt."
+msgstr "为已有的圈子创建知识库%s"
 
 #: /collectives/lib/Service/CollectiveShareService.php:84
 msgid "Collective Share"
-msgstr "Geteiltes Kollektiv"
+msgstr "知识库共享"
 
 #: /collectives/lib/Service/CollectiveShareService.php:139
 #, php-format
 msgid "A share for collective %s exists already"
-msgstr "Eine Freigabe für Kollektiv %s existiert bereits"
+msgstr "知识库 %s 的共享已经存在"
 
 #: /collectives/lib/Service/CollectiveShareService.php:143
 #, php-format
 msgid "You are not allowed to share %s"
-msgstr "Sie dürfen %s nicht teilen"
+msgstr "你不被允许共享 %s"
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:3
 msgid "A place for activist and community projects to build shared knowledge"
-msgstr ""
-"Ein Ort für Aktivst:innen und Community-Projekte um gemeinsames Wissen "
-"aufzubauen"
+msgstr "一个共享知识的地方"
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:4
+#, fuzzy
 msgid ""
 "Collectives is a Nextcloud App for activist and community projects to "
 "organize together.\n"
@@ -88,258 +87,254 @@ msgid ""
 "In your Nextcloud instance, simply navigate to **»Apps«**, find the\n"
 "**»Circles«** and **»Collectives«** apps and enable them."
 msgstr ""
-"Kollektive ist eine Nextcloud-Anwendung für Aktivist:innen und "
-"Gemeinschaftsprojekte, um sich gemeinsam zu organisieren.\n"
-"Komm vorbei und verbünde dich in Kollektiven um gemeinsames Wissen "
-"aufzubauen.\n"
+"Collectives is a Nextcloud App for activist and community projects to "
+"organize together.\n"
+"Come and gather in collectives to build shared knowledge.\n"
 "\n"
-"* 👥 **Kollektive und hierarchie-arme Arbeitsweise**: Kollektive sind\n"
-"  mit einem [Nextcloud Kreis](https://github.com/nextcloud/circles) "
-"verknüpft\n"
-"  und unter Kontrolle des Kollektivs.\n"
-"* 📝 **Kollaboratives Bearbeiten von Seiten** (wie etwa von Etherpad "
-"bekannt)\n"
-"  dank der [Text app](https://github.com/nextcloud/text).\n"
-"* 🔤 **Wohlbekannte [Markdown](https://en.wikipedia.org/wiki/Markdown) "
-"Syntax**\n"
-"  zum Formatieren von Seiten.\n"
+"* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n"
+"  tied to a [Nextcloud Circle](https://github.com/nextcloud/circles) and\n"
+"  owned by the collective.\n"
+"* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n"
+"  [Text app](https://github.com/nextcloud/text).\n"
+"* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**"
+"\n"
+"  for page formatting.\n"
 "\n"
 "## Installation\n"
 "\n"
-"Gehe in deiner Nextcloud-Instanz zu **»Apps«**, suche die Anwendungen\n"
-"**»Circles«** und **»Collectives«** und aktiviere sie."
+"In your Nextcloud instance, simply navigate to **»Apps«**, find the\n"
+"**»Circles«** and **»Collectives«** apps and enable them."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:1
 #: /collectives/specialVueFakeDummyForL10nScript.js:33
 msgid "The contacts app is required to manage members"
-msgstr "Die Kontakte App ist erforderlich um Mitglieder zu verwalten"
+msgstr "需要联系人（contacts）应用程序来管理成员"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:2
 msgid "Collective not found:"
-msgstr "Kollektiv nicht gefunden:"
+msgstr "未找到知识库："
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:3
 msgid "You're not part of a collective with that name."
-msgstr "Du bist nicht Teil eines Kollektives mit diesem Namen."
+msgstr "你不在该知识库中。"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:4
 msgid "Select a collective or create a new one on the left."
-msgstr "Wähle ein Kollektiv aus oder lege links ein Neues an."
+msgstr "选择一个知识库或在左侧创建一个新知识库。"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:5
 msgid "Share link"
-msgstr "Link teilen"
+msgstr "共享链接"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:6
 msgid "Unshare"
-msgstr "Freigabe aufheben"
+msgstr "取消分享"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:7
 msgid "Print"
-msgstr "Drucken"
+msgstr "打印"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:8
 msgid "Manage members"
-msgstr "Mitglieder verwalten"
+msgstr "管理成员"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:9
 #: /collectives/specialVueFakeDummyForL10nScript.js:36
 msgid "Settings"
-msgstr "Einstellungen"
+msgstr "设置"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:10
 msgid "Copied"
-msgstr "Kopiert"
+msgstr "已复制"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:11
 msgid "Cannot copy"
-msgstr "Kopieren nicht möglich"
+msgstr "无法复制"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:12
 msgid "Copy share link"
-msgstr "Freigabe-Link kopieren"
+msgstr "复制共享链接"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:13
 msgid "Could not share the collective"
-msgstr "Teilen des Kollektivs fehlgeschlagen"
+msgstr "无法共享该知识库"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:14
 msgid "Could not unshare the collective"
-msgstr "Freigabe des Kollektivs aufheben fehlgeschlagen"
+msgstr "无法取消共享该知识库"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:15
 msgid "Collective settings"
-msgstr "Kollektiv-Einstellungen"
+msgstr "知识库设置"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:16
 msgid "Details"
-msgstr "Details"
+msgstr "细节"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:17
 msgid "Permissions"
-msgstr "Rechte"
+msgstr "权限"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:18
 msgid "Allow editing for"
-msgstr "Bearbeiten erlauben für"
+msgstr "允许编辑"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:19
 #: /collectives/specialVueFakeDummyForL10nScript.js:23
 msgid "Admins only"
-msgstr "Nur Admins"
+msgstr "仅管理员"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:20
 #: /collectives/specialVueFakeDummyForL10nScript.js:24
 msgid "Admins and moderaters"
-msgstr "Admins und Moderator:innen"
+msgstr "管理员和审核员"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:21
 #: /collectives/specialVueFakeDummyForL10nScript.js:25
 msgid "All members"
-msgstr "Alle Mitglieder"
+msgstr "所有成员"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:22
 msgid "Allow sharing for"
-msgstr "Teilen erlauben für"
+msgstr "允许共享"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:26
 msgid "Members"
-msgstr "Mitglieder"
+msgstr "成员"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:27
 msgid "Members can be managed via the connected circle in the Contacts app."
-msgstr "Mitglieder können in dem zugehörigen Kreis in der Kontakte-App verwaltet werden."
+msgstr "成员可以通过\"联系人（Contacts）\"应用中连接的圈子进行管理。"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:28
 msgid "Open circle in Contacts"
-msgstr "Öffne Kreis in Kontakte-App"
+msgstr "在“联系人（Contacts）”应用中打开圈子"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:29
 msgid "Danger zone"
-msgstr "Gefahrenzone"
+msgstr "慎重区域"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:30
 msgid "Delete collective"
-msgstr "Kollektiv löschen"
+msgstr "删除知识库"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:31
 msgid "Change emoji"
-msgstr "Den Emoji ändern"
+msgstr "改变表情"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:31
 #: /collectives/specialVueFakeDummyForL10nScript.js:53
 msgid "Add emoji"
-msgstr "Ein Emoji auswählen"
+msgstr "添加表情"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:32
 msgid "Renaming is limited to owners of the circle"
-msgstr "Nur Besitzer:innen des Kreises dürfen umbenennen"
+msgstr "重命名仅限于圈子的所有者"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:34
 msgid "Editing permissions updated"
-msgstr "Bearbeitungsberechtigungen aktualisiert"
+msgstr "编辑权限已更新"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:35
 msgid "Sharing permissions updated"
-msgstr "Freigabeberechtigungen aktualisiert"
+msgstr "共享权限已更新"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:37
 msgid "Collectives Folder"
-msgstr "Ordner für Kollektive"
+msgstr "知识库文件夹路径"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:38
 msgid "Create a collective first"
-msgstr "Erstelle erst ein neues Kollektiv"
+msgstr "请先创建一个知识库"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:39
 msgid "Select location for collectives"
-msgstr "Wähle den Ort für Kollektive"
+msgstr "选择知识库的位置"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:40
 msgid "Invalid path selected. Only folders on first level are supported."
-msgstr ""
-"Der ausgewählte Ort ist ungültig. Nur Ordner auf oberster Ebene sind erlaubt."
+msgstr "所选路径无效。仅支持第一级的文件夹。"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:41
 msgid "Deleted collectives"
-msgstr "Gelöschte Kollektive"
+msgstr "已删除的知识库"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:42
 #: /collectives/specialVueFakeDummyForL10nScript.js:67
 msgid "Restore"
-msgstr "Wiederherstellen"
+msgstr "恢复"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:43
 msgid "Delete permanently"
-msgstr "Endgültig löschen"
+msgstr "彻底删除"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:44
 msgid "Permanently delete collective »{collective}«"
-msgstr "Kollektiv »{collective}« endgültig löschen"
+msgstr "彻底删除知识库 »{collective}«"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:45
 msgid "Delete corresponding circle along with the collective?"
-msgstr "Den zum Kollektiv gehörenden Kreis ebenfalls löschen?"
+msgstr "删除相应的圈子以及知识库？"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:46
 msgid "Cancel"
-msgstr "Abbrechen"
+msgstr "取消"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:47
 msgid "Only collective"
-msgstr "Nur Kollektiv"
+msgstr "仅知识库"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:48
 #: /collectives/specialVueFakeDummyForL10nScript.js:50
 msgid "Collective and circle"
-msgstr "Kollektiv und Kreis"
+msgstr "知识库和圈子"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:49
 msgid "Only circle owners can delete a circle"
-msgstr "Kreise können nur von ihren Besitzer:innen gelöscht werden"
+msgstr "只有圈子所有者才能删除圈子"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:51
 #: /collectives/specialVueFakeDummyForL10nScript.js:112
 msgid "Create new collective"
-msgstr "Ein neues Kollektiv erstellen"
+msgstr "创建新知识库"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:52
 msgid "Create collective for existing circle"
-msgstr "Kollektiv für einen bestehenden Kreis anlegen"
+msgstr "为已有圈子创建知识库"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:54
 msgid "New collective name"
-msgstr "Name des neuen Kollektivs"
+msgstr "新知识库名称"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:55
 msgid "Select circle..."
-msgstr "Wähle Kreis..."
+msgstr "选择圈子..."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:56
 msgid "Select a collective"
-msgstr "Wähle ein Kollektiv aus"
+msgstr "选择知识库"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:57
 msgid "Show in Files"
-msgstr "Zeige in Dateien"
+msgstr "在文件视图中显示"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:58
 #: /collectives/specialVueFakeDummyForL10nScript.js:82
 #: /collectives/specialVueFakeDummyForL10nScript.js:93
 msgid "Edit template for subpages"
-msgstr "Vorlage für Unterseite bearbeiten"
+msgstr "为子页面编辑模板"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:59
 msgid "Delete page"
-msgstr "Seite entfernen"
+msgstr "删除页面"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:60
 msgid "Page deleted"
-msgstr "Seite entfernt"
+msgstr "页面已删除"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:61
 msgid "Could not delete the page"
-msgstr "Seite konnte nicht entfernt werden"
+msgstr "无法删除该页面"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:62
 #: /collectives/specialVueFakeDummyForL10nScript.js:84
@@ -347,197 +342,191 @@ msgstr "Seite konnte nicht entfernt werden"
 #: /collectives/specialVueFakeDummyForL10nScript.js:95
 #: /collectives/specialVueFakeDummyForL10nScript.js:97
 msgid "Could not create the page"
-msgstr "Anlegen der Seite fehlgeschlagen"
+msgstr "无法创建页面"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:63
 msgid "Page not found:"
-msgstr "Seite nicht gefunden:"
+msgstr "未找到页面："
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:64
 msgid "Could not find the Page."
-msgstr "Seite nicht gefunden."
+msgstr "无法找到页面。"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:65
 msgid "Select a page from the list or create a new one."
-msgstr "Wähle eine Seite aus der Liste oder lege eine neue an."
+msgstr "从列表中选择一个页面或创建一个新页面。"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:66
 msgid "Restore this version"
-msgstr "Diese Version wiederherstellen"
+msgstr "还原此版本"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:68
 msgid "Reverted {page} to revision {timestamp}."
-msgstr "Seite {page} auf Version {timestamp} zurücksetzen."
+msgstr "将页面 {page} 还原为版本 {timestamp}。"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:69
 msgid "Failed to revert {page} to revision {timestamp}."
-msgstr ""
-"Das Zurücksetzen der Seite {page} auf die Version {timestamp} ist "
-"fehlgeschlagen."
+msgstr "还原页面 {page} 还原到版本 {timestamp} 失败。"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:70
 #: /collectives/specialVueFakeDummyForL10nScript.js:79
 msgid "Template"
-msgstr "Vorlage"
+msgstr "模板"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:71
 msgid "Title"
-msgstr "Titel"
+msgstr "标题"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:72
 msgid "Stop editing"
-msgstr "Bearbeiten beenden"
+msgstr "停止编辑"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:72
 msgid "Start editing"
-msgstr "Bearbeiten starten"
+msgstr "开始编辑"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:73
 msgid "Done"
-msgstr "Fertig"
+msgstr "完成"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:73
 msgid "Edit"
-msgstr "Bearbeiten"
+msgstr "编辑"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:74
 msgid "Hide all subpages"
-msgstr "Alle Unterseiten verbergen"
+msgstr "隐藏子页面"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:75
 msgid "Show all subpages"
-msgstr "Zeige alle Unterseiten"
+msgstr "显示子页面"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:77
 msgid "Could not rename the page"
-msgstr "Umbenennen der Seite fehlgeschlagen"
+msgstr "无法重命名页面"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:78
 msgid "Expand subpage list"
-msgstr "Klappe Unterseiten-Liste auf"
+msgstr "展开子页面列表"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:78
 msgid "Collapse subpage list"
-msgstr "Klappe Unterseiten-Liste ein"
+msgstr "折叠子页面列表"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:80
 msgid "Last edited by {user}"
-msgstr "Zuletzt bearbeitet von {user}"
+msgstr "最后被 {user} 编辑"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:81
 msgid "Add a subpage"
-msgstr "Unterseite hinzufügen"
+msgstr "添加一个子页面"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:83
 #: /collectives/specialVueFakeDummyForL10nScript.js:94
 msgid "Add template for subpages"
-msgstr "Vorlage für Unterseite hinzufügen"
+msgstr "为子页面添加模板"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:85
 #: /collectives/specialVueFakeDummyForL10nScript.js:96
 msgid "New Page"
-msgstr "Neue Seite"
+msgstr "新建页面"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:87
 #: /collectives/specialVueFakeDummyForL10nScript.js:88
 msgid "Hide templates"
-msgstr "Vorlagen ausblenden"
+msgstr "隐藏模板"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:87
 #: /collectives/specialVueFakeDummyForL10nScript.js:88
 msgid "Show templates"
-msgstr "Vorlagen anzeigen"
+msgstr "显示模板"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:89
 msgid "Sort order"
-msgstr "Sortierung"
+msgstr "排序"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:90
 msgid "Sort by last modification"
-msgstr "Sortiere nach letzter Änderung"
+msgstr "最后修改日期"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:91
 msgid "Sort by title"
-msgstr "Sortiere nach Titel"
+msgstr "标题"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:92
 msgid "Add a page"
-msgstr "Seite hinzufügen"
+msgstr "添加页面"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:98
 msgid "No backlinks available"
-msgstr "Keine Rückverweise vorhanden"
+msgstr "没有可用的反向链接"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:99
 msgid "If other pages link to this one, they will be listed here."
-msgstr "Liste von Seiten, die auf diese Seite verweisen."
+msgstr "如果其他页面链接到此页面，则它们将在此处列出。"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:100
 msgid "Could not get page backlinks"
-msgstr "Konnte Rückverweise der Seite nicht laden"
+msgstr "无法获取页面反向链接"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:101
 msgid "Current version"
-msgstr "Aktuelle Version"
+msgstr "当前版本"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:102
 msgid "No other versions available"
-msgstr "Keine weiteren Versionen vorhanden"
+msgstr "没有其他可用版本"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:103
 msgid "After editing you can find old versions of the page here."
-msgstr "Nach dem Bearbeiten werden alte Versionen hier angezeigt."
+msgstr "编辑后，您可以在此处找到页面的旧版本。"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:104
 msgid "Could not get page versions"
-msgstr "Konnte Versionen der Seite nicht laden"
+msgstr "无法获取页面版本"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:105
 #: /collectives/src/util/xmlToVersionsList.js:30
 msgid "%n byte"
 msgid_plural "%n bytes"
-msgstr[0] "%n Byte"
-msgstr[1] "%n Bytes"
+msgstr[0] "%n bytes"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:106
 msgid "Backlinks"
-msgstr "Rückverweise"
+msgstr "反向链接"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:107
 msgid "Pages that link to this one"
-msgstr "Seiten, die auf diese Seite verweisen"
+msgstr "链接到此页面的页面"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:108
 msgid "Versions"
-msgstr "Historie"
+msgstr "版本"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:109
 msgid "Old versions of this page"
-msgstr "Frühere Versionen dieser Seite"
+msgstr "此页面的旧版本"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:111
 msgid "Come, organize and build shared knowledge!"
-msgstr "Kommt vorbei, organisiert euch und teilt euer Wissen!"
+msgstr "来吧，组织和建立共享的知识库！"
 
 #: /collectives/src/mixins/CopyToClipboardMixin.js:42
 msgid "Link copied to the clipboard."
-msgstr "Link in die Zwischenablage kopiert."
+msgstr "链接到剪贴板。"
 
 #: /collectives/src/mixins/CopyToClipboardMixin.js:47
 msgid "Could not copy link to the clipboard:"
-msgstr "Link in die Zwischenablage kopieren fehlgeschlagen:"
+msgstr "无法将链接复制到剪贴板："
 
 #: /collectives/templates/error.php:4
 msgid "Error: Missing apps"
-msgstr "Fehler: Apps fehlen"
+msgstr "错误：缺少应用"
 
 #: /collectives/templates/error.php:9
 msgid "The following dependency apps are missing: "
-msgstr "Die folgenden erforderlichen Apps fehlen: "
+msgstr "缺少以下依赖项应用： "
 
 #: /collectives/templates/error.php:27
 msgid "Please ask the administrator to enable these apps."
-msgstr "Bitte die Admins, diese Apps zu aktivieren."
-
-#~ msgid "Delete"
-#~ msgstr "Löschen"
+msgstr "请让管理员启用这些应用。"

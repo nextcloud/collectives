@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-02-09 12:46+0100\n"
-"PO-Revision-Date: 2022-01-26 09:54+0000\n"
+"PO-Revision-Date: 2022-02-12 10:57+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/cs/>\n"
@@ -55,12 +55,12 @@ msgstr "Sdílení kolektivu"
 #: /collectives/lib/Service/CollectiveShareService.php:139
 #, php-format
 msgid "A share for collective %s exists already"
-msgstr ""
+msgstr "Sdílení pro kolektiv %s už existuje"
 
 #: /collectives/lib/Service/CollectiveShareService.php:143
 #, php-format
 msgid "You are not allowed to share %s"
-msgstr ""
+msgstr "Nejste oprávněni sdílet %s"
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:3
 msgid "A place for activist and community projects to build shared knowledge"
@@ -159,14 +159,12 @@ msgid "Copy share link"
 msgstr "Zkopírovat odkaz na sdílení"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:13
-#, fuzzy
 msgid "Could not share the collective"
-msgstr "Stránku se nedaří vytvořit"
+msgstr "Kolektiv se nedaří nasdílet"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:14
-#, fuzzy
 msgid "Could not unshare the collective"
-msgstr "Stránku se nedaří přejmenovat"
+msgstr "Sdílení kolektivu se nedaří zrušit"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:15
 msgid "Collective settings"
@@ -177,47 +175,44 @@ msgid "Details"
 msgstr "Podrobnosti"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:17
-#, fuzzy
 msgid "Permissions"
-msgstr "Verze"
+msgstr "Oprávnění"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:18
-#, fuzzy
 msgid "Allow editing for"
-msgstr "Ukončit upravování"
+msgstr "Povolit úpravy pro"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:19
 #: /collectives/specialVueFakeDummyForL10nScript.js:23
 msgid "Admins only"
-msgstr ""
+msgstr "Pouze správci"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:20
 #: /collectives/specialVueFakeDummyForL10nScript.js:24
 msgid "Admins and moderaters"
-msgstr ""
+msgstr "Správci a moderátoři"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:21
 #: /collectives/specialVueFakeDummyForL10nScript.js:25
-#, fuzzy
 msgid "All members"
-msgstr "Spravovat členy"
+msgstr "Všichni členové"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:22
 msgid "Allow sharing for"
-msgstr ""
+msgstr "Umožnit sdílení pro"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:26
-#, fuzzy
 msgid "Members"
 msgstr "Členové"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:27
 msgid "Members can be managed via the connected circle in the Contacts app."
 msgstr ""
+"Členy lze spravovat prostřednictvím připojeného kruhu v aplikaci Kontakty."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:28
 msgid "Open circle in Contacts"
-msgstr ""
+msgstr "Otevřít okruh v Kontaktech"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:29
 msgid "Danger zone"
@@ -242,11 +237,11 @@ msgstr "Přejmenovávat mohu pouze vlastníci okruhu"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:34
 msgid "Editing permissions updated"
-msgstr ""
+msgstr "Oprávnění pro úpravy zaktualizována"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:35
 msgid "Sharing permissions updated"
-msgstr ""
+msgstr "Oprávnění pro sdílení zaktualizována"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:37
 msgid "Collectives Folder"

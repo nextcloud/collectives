@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-02-09 12:46+0100\n"
-"PO-Revision-Date: 2022-01-26 09:54+0000\n"
+"PO-Revision-Date: 2022-02-12 10:57+0000\n"
 "Last-Translator: Nathan <bonnemainsnathan@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/fr/>\n"
@@ -55,12 +55,12 @@ msgstr "Partage de collectif"
 #: /collectives/lib/Service/CollectiveShareService.php:139
 #, php-format
 msgid "A share for collective %s exists already"
-msgstr ""
+msgstr "Il existe déjà un lien de partage pour le collectif %s"
 
 #: /collectives/lib/Service/CollectiveShareService.php:143
 #, php-format
 msgid "You are not allowed to share %s"
-msgstr ""
+msgstr "Vous n'êtes pas autorisé à partager %s"
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:3
 msgid "A place for activist and community projects to build shared knowledge"
@@ -160,14 +160,12 @@ msgid "Copy share link"
 msgstr "Copier le lien de partage"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:13
-#, fuzzy
 msgid "Could not share the collective"
-msgstr "Impossible de créer la page"
+msgstr "Impossible de partager le collectif"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:14
-#, fuzzy
 msgid "Could not unshare the collective"
-msgstr "Impossible de renommer la page"
+msgstr "Impossible d'arrêter le partage du collectif"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:15
 msgid "Collective settings"
@@ -178,34 +176,31 @@ msgid "Details"
 msgstr "Informations"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:17
-#, fuzzy
 msgid "Permissions"
-msgstr "Versions"
+msgstr "Autorisations"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:18
-#, fuzzy
 msgid "Allow editing for"
-msgstr "Arrêter la modification"
+msgstr "Autoriser l'édition pour"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:19
 #: /collectives/specialVueFakeDummyForL10nScript.js:23
 msgid "Admins only"
-msgstr ""
+msgstr "Administrateurs uniquement"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:20
 #: /collectives/specialVueFakeDummyForL10nScript.js:24
 msgid "Admins and moderaters"
-msgstr ""
+msgstr "Administrateurs et modérateurs"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:21
 #: /collectives/specialVueFakeDummyForL10nScript.js:25
-#, fuzzy
 msgid "All members"
-msgstr "Gérer les membres"
+msgstr "Tous les membres"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:22
 msgid "Allow sharing for"
-msgstr ""
+msgstr "Autoriser le partage pour"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:26
 msgid "Members"
@@ -214,10 +209,12 @@ msgstr "Membres"
 #: /collectives/specialVueFakeDummyForL10nScript.js:27
 msgid "Members can be managed via the connected circle in the Contacts app."
 msgstr ""
+"Les membres peuvent être gérés via le cercle connecté dans l'application "
+"Contacts."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:28
 msgid "Open circle in Contacts"
-msgstr ""
+msgstr "Ouvrir le cercle dans Contacts"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:29
 msgid "Danger zone"
@@ -242,11 +239,11 @@ msgstr "Seuls les propriétaires du cercle peuvent renommer"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:34
 msgid "Editing permissions updated"
-msgstr ""
+msgstr "Autorisations d'édition mises à jour"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:35
 msgid "Sharing permissions updated"
-msgstr ""
+msgstr "Autorisations de partage mises à jour"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:37
 msgid "Collectives Folder"
