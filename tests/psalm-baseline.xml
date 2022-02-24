@@ -25,6 +25,16 @@
       <code>CollectiveVersionsExpireManager</code>
     </MissingDependency>
   </file>
+  <file src="lib/BackgroundJob/PurgeObsoleteCollectives.php">
+    <UndefinedConstant occurrences="1">
+      <code>self::TIME_INSENSITIVE</code>
+    </UndefinedConstant>
+  </file>
+  <file src="lib/BackgroundJob/PurgeObsoletePages.php">
+    <UndefinedConstant occurrences="1">
+      <code>self::TIME_INSENSITIVE</code>
+    </UndefinedConstant>
+  </file>
   <file src="lib/CacheListener.php">
     <MissingDependency occurrences="1">
       <code>CollectiveStorage</code>
