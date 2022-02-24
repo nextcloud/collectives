@@ -151,17 +151,13 @@ export default {
 		},
 
 		print() {
-			this.$router.push(`/${encodeURIComponent(this.collective.name)}`,
-				() => this.showSubpagesAndPrint(),
-				(err) => {
+			this.$router.push(`/${encodeURIComponent(this.collective.name)}`)
+				.catch((err) => {
 					// Navigation is aborted since navigating to same route, but we still want to print
-					if (err.name === 'NavigationDuplicated') {
-						this.showSubpagesAndPrint()
-					} else {
+					if (err.name !== 'NavigationDuplicated') {
 						throw err
 					}
-				}
-			)
+				}).then(() => this.showSubpagesAndPrint())
 		},
 
 		share(collective) {
