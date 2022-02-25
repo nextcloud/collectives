@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-02-24 12:57+0100\n"
-"PO-Revision-Date: 2022-02-12 10:57+0000\n"
+"PO-Revision-Date: 2022-02-26 12:54+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/cs/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.11-dev\n"
+"X-Generator: Weblate 4.11.1-dev\n"
 
 #: /collectives/lib/Fs/UserFolderHelper.php:67
 #: /collectives/lib/Search/CollectiveProvider.php:60
@@ -171,25 +171,22 @@ msgid "Collective settings"
 msgstr "Nastavení pro kolektiv"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:16
-#, fuzzy
 msgid "Name and emoji"
-msgstr "Změnit emotikonu"
+msgstr "Název a emotikona"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:17
 #: /collectives/specialVueFakeDummyForL10nScript.js:61
-#, fuzzy
 msgid "Select emoji for collective"
-msgstr "Vyberte umístění pro kolektivy"
+msgstr "Vyberte emotikonu pro kolektiv"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:18
-#, fuzzy
 msgid "Default page order"
-msgstr "Smazat stránku"
+msgstr "Výchozí pořadí stránek"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:19
 #: /collectives/specialVueFakeDummyForL10nScript.js:99
 msgid "Sort recently changed first"
-msgstr ""
+msgstr "Řadit nedávno změněné jako první"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:20
 #: /collectives/specialVueFakeDummyForL10nScript.js:100
@@ -268,11 +265,11 @@ msgstr "Oprávnění pro sdílení zaktualizována"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:42
 msgid "Default page order updated"
-msgstr ""
+msgstr "Výchozí pořadí stránek zaktualizováno"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:43
 msgid "Emoji updated"
-msgstr ""
+msgstr "Emotikona zaktualizována"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:45
 msgid "Collectives Folder"
@@ -340,7 +337,7 @@ msgstr "Vytvořit kolektiv pro existující okruh"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:62
 msgid "Select emoji"
-msgstr ""
+msgstr "Vyberte emotikonu"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:63
 msgid "New collective name"
