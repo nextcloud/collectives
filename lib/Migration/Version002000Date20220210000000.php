@@ -27,7 +27,7 @@ class Version002000Date20220210000000 extends SimpleMigrationStep {
 		if (!$table->hasColumn('page_order')) {
 			$table->addColumn('page_order', Types::INTEGER, [
 				'notnull' => true,
-				'default' => Collective::defaultPageOrder,
+				'default' => 1,
 			]);
 		}
 		return $schema;
