@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.21.22 - 2022.03.03
+
+### ✨New
+* ✨ Support Nextcloud Version 23.
+
+### 🏗️Fixes
+- ✂️  Fix migration when upgrading from 0.20.22 to 0.21.22 (#293)
+
 ## 0.20.22 - 2022.03.03
 
 ### ✨New
