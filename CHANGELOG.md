@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.20.22 - 2022.03.03
+
+### ✨New
+* 🛂 Permission management for collectives. (#191)
+* 🔝 Allow to configure default page order for collectives. (#273)
+* 🙂 Assign a random emoji to new collectives. (#281)
+
+### 🏗️Fixes
+* ⚙️ Several improvements to the collective settings.
+* 📝 Don't load editor in view mode.
+* 🚚 Improve database initialization on initial installation.
+* 🧹 Mark background jobs as time insensitive.
+
+### 🌎Translations
+* 🗣️ Chinese translation added thanks to Wang Jiaxiang.
+* 🗣️ French translation updated thanks to Nathan.
+* 🗣️ Czech translation updaed thanks to Pavel Borecki.
+* 🗣️ German translation updated thanks to Joachim Sokolowski.
+
+### 🚧Updates & Tooling
+* 🔌 Update all possible javascript dependencies.
+* 🔌 Update all possible PHP dependencies.
+
+
 ## 0.19.22 - 2022.02.08
 
 ### ✨New
