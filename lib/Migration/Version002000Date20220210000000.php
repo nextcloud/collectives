@@ -6,12 +6,13 @@ namespace OCA\Collectives\Migration;
 
 use Closure;
 use Doctrine\DBAL\Types\Types;
-use OCA\Collectives\Db\Collective;
 use OCP\DB\ISchemaWrapper;
 use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
 
 class Version002000Date20220210000000 extends SimpleMigrationStep {
+	private const defaultPageOrder = 1;
+
 	/**
 	 * @param IOutput $output
 	 * @param Closure $schemaClosure The `\Closure` returns a `ISchemaWrapper`
@@ -27,7 +28,7 @@ class Version002000Date20220210000000 extends SimpleMigrationStep {
 		if (!$table->hasColumn('page_order')) {
 			$table->addColumn('page_order', Types::INTEGER, [
 				'notnull' => true,
-				'default' => 1,
+				'default' => self::defaultPageOrder,
 			]);
 		}
 		return $schema;

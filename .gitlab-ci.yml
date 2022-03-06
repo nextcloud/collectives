@@ -277,7 +277,6 @@ App Update Test:
     - sudo -u www-data $NEXTCLOUD_SOURCE/occ collectives:create --owner bob AnotherNewCollective
     - rm -rf $NEXTCLOUD_SOURCE/apps/collectives
     - ln -s `pwd` $NEXTCLOUD_SOURCE/apps/collectives
-    - sudo -u www-data $NEXTCLOUD_SOURCE/occ update:check
     - sudo -u www-data $NEXTCLOUD_SOURCE/occ upgrade
     - sudo -u www-data $NEXTCLOUD_SOURCE/occ app:list
     - sudo -u www-data $NEXTCLOUD_SOURCE/occ collectives:create --owner alice YetAnotherNewCollective

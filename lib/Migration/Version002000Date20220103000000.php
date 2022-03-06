@@ -6,12 +6,17 @@ namespace OCA\Collectives\Migration;
 
 use Closure;
 use Doctrine\DBAL\Types\Types;
-use OCA\Collectives\Db\Collective;
+use OCP\Constants;
 use OCP\DB\ISchemaWrapper;
 use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
 
 class Version002000Date20220103000000 extends SimpleMigrationStep {
+	/** @var int */
+	private const defaultPermissions =
+		Constants::PERMISSION_ALL * 100 + // Moderator
+		Constants::PERMISSION_ALL;        // Member
+
 	/**
 	 * @param IOutput $output
 	 * @param Closure $schemaClosure The `\Closure` returns a `ISchemaWrapper`
@@ -28,7 +33,7 @@ class Version002000Date20220103000000 extends SimpleMigrationStep {
 			$table->addColumn('permissions', Types::INTEGER, [
 				'notnull' => true,
 				// Grant full access to all member levels per default
-				'default' => Collective::defaultPermissions,
+				'default' => self::defaultPermissions,
 			]);
 		}
 		return $schema;
