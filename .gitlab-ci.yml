@@ -268,6 +268,27 @@ OCC CLI Test:
     - "Unit Test PHP 7.3 Nextcloud 22"
     - "Unit Test PHP 8.0 Nextcloud 23"
 
+App Update Test:
+  <<: *php
+  stage: test integration
+  script:
+    - sudo -u www-data $NEXTCLOUD_SOURCE/occ app:enable --force collectives
+    - sudo -u www-data $NEXTCLOUD_SOURCE/occ collectives:create --owner alice NewCollective
+    - sudo -u www-data $NEXTCLOUD_SOURCE/occ collectives:create --owner bob AnotherNewCollective
+    - rm -rf $NEXTCLOUD_SOURCE/apps/collectives
+    - ln -s `pwd` $NEXTCLOUD_SOURCE/apps/collectives
+    - sudo -u www-data $NEXTCLOUD_SOURCE/occ update:check
+    - sudo -u www-data $NEXTCLOUD_SOURCE/occ upgrade
+    - sudo -u www-data $NEXTCLOUD_SOURCE/occ app:list
+    - sudo -u www-data $NEXTCLOUD_SOURCE/occ collectives:create --owner alice YetAnotherNewCollective
+  before_script:
+    - make composer-install
+  services:
+    - mariadb:latest
+  needs:
+    - "Unit Test PHP 7.3 Nextcloud 22"
+    - "Unit Test PHP 8.0 Nextcloud 23"
+
 .browser-test: &browser-test
   <<: *node
   image: cypress/browsers:node14.16.0-chrome89-ff86
