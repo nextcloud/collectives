@@ -108,6 +108,7 @@ export default {
 
 	computed: {
 		...mapGetters([
+			'isPublic',
 			'isCurrentCollectiveReadOnly',
 			'currentPage',
 			'currentPageFilePath',
@@ -300,7 +301,9 @@ export default {
 				this.reloadCounter += 1
 				this.previewWasEmpty = false
 				this.$store.dispatch(TOUCH_PAGE)
-				this.$store.dispatch(GET_VERSIONS, this.currentPage.id)
+				if (!this.isPublic) {
+					this.$store.dispatch(GET_VERSIONS, this.currentPage.id)
+				}
 			}
 			this.edit = false
 		},
