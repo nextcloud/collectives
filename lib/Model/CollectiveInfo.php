@@ -14,6 +14,8 @@ use OCP\Constants;
  * @method void setLevel(int $level)
  * @method int getShareToken()
  * @method void setShareToken(string $shareToken)
+ * @method bool getShareEditable()
+ * @method void setShareEditable(bool $shareEditable)
  */
 class CollectiveInfo extends Collective {
 	/** @var string */
@@ -25,10 +27,14 @@ class CollectiveInfo extends Collective {
 	/** @var string */
 	protected $shareToken;
 
+	/** @var bool */
+	protected $shareEditable;
+
 	public function __construct(Collective $collective,
 								string $name,
 								int $level = Member::LEVEL_MEMBER,
-								string $shareToken = null) {
+								string $shareToken = null,
+								bool $shareEditable = false) {
 		$this->id = $collective->getId();
 		$this->circleUniqueId = $collective->getCircleId();
 		$this->emoji = $collective->getEmoji();
@@ -38,6 +44,7 @@ class CollectiveInfo extends Collective {
 		$this->name = $name;
 		$this->level = $level;
 		$this->shareToken = $shareToken;
+		$this->shareEditable = $shareEditable;
 	}
 
 	/**
@@ -76,7 +83,7 @@ class CollectiveInfo extends Collective {
 	 * @return int
 	 */
 	public function getEditPermissionLevel(): int {
-		return$this->getPermissionLevel(Collective::editPermissions);
+		return $this->getPermissionLevel(Collective::editPermissions);
 	}
 
 	/**
@@ -84,6 +91,20 @@ class CollectiveInfo extends Collective {
 	 */
 	public function getSharePermissionLevel(): int {
 		return $this->getPermissionLevel(Constants::PERMISSION_SHARE);
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function canEdit(): bool {
+		return $this->level >= $this->getEditPermissionLevel();
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function canShare(): bool {
+		return $this->level >= $this->getSharePermissionLevel();
 	}
 
 	/**
@@ -100,7 +121,10 @@ class CollectiveInfo extends Collective {
 			'level' => $this->level,
 			'editPermissionLevel' => $this->getEditPermissionLevel(),
 			'sharePermissionLevel' => $this->getSharePermissionLevel(),
+			'canEdit' => $this->canEdit(),
+			'canShare' => $this->canShare(),
 			'shareToken' => $this->shareToken,
+			'shareEditable' => $this->canEdit() && $this->shareEditable,
 		];
 	}
 }

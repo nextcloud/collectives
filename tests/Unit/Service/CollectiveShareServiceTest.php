@@ -10,6 +10,7 @@ use OCA\Collectives\Db\CollectiveShare;
 use OCA\Collectives\Db\CollectiveShareMapper;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Model\CollectiveInfo;
+use OCA\Collectives\Model\CollectiveShareInfo;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
 use OCA\Collectives\Service\CollectiveShareService;
@@ -169,14 +170,19 @@ class CollectiveShareServiceTest extends TestCase {
 			->getMock();
 		$this->collectiveShareMapper->method('findOneByCollectiveIdAndUser')
 			->willReturn($collectiveShare);
-
 		$folderShare = $this->getMockBuilder(Share::class)
 			->disableOriginalConstructor()
 			->getMock();
 		$this->shareManager->method('getShareByToken')
 			->willReturn($folderShare);
 
-		self::assertEquals($collectiveShare, $this->service->findShare($this->userId, $this->collectiveId));
+		self::assertEquals(new CollectiveShareInfo($collectiveShare), $this->service->findShare($this->userId, $this->collectiveId));
+
+		// Test with share write permissions
+		$folderShare->method('getPermissions')
+			->willReturn(15);
+
+		self::assertEquals(new CollectiveShareInfo($collectiveShare, true), $this->service->findShare($this->userId, $this->collectiveId));
 	}
 
 	public function testCreateShareExistsAlready(): void {
@@ -195,5 +201,28 @@ class CollectiveShareServiceTest extends TestCase {
 		$this->expectException(NotPermittedException::class);
 		$this->expectExceptionMessage('A share for collective %s exists already');
 		$this->service->createShare($this->userId, $this->collectiveInfo);
+	}
+
+	public function testUpdateShare(): void {
+		$collectiveShare = $this->getMockBuilder(CollectiveShare::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$this->collectiveShareMapper->method('findOneByCollectiveIdAndTokenAndUser')
+			->willReturn($collectiveShare);
+
+		$folderShare = $this->getMockBuilder(Share::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$this->shareManager->method('getShareByToken')
+			->willReturn($folderShare);
+
+		// Without share write permissions
+		self::assertEquals(new CollectiveShareInfo($collectiveShare, false), $this->service->updateShare($this->userId, $this->collectiveInfo, 'token', false));
+
+		// With share write permissions
+		$permissions = 15;
+		$folderShare->method('getPermissions')
+			->willReturn($permissions);
+		self::assertEquals(new CollectiveShareInfo($collectiveShare, true), $this->service->updateShare($this->userId, $this->collectiveInfo, 'token', true));
 	}
 }

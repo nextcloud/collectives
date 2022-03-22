@@ -161,7 +161,10 @@ class CollectiveServiceTest extends TestCase {
 			'level' => Member::LEVEL_OWNER,
 			'editPermissionLevel' => 1,
 			'sharePermissionLevel' => 1,
+			'canEdit' => true,
+			'canShare' => true,
 			'shareToken' => null,
+			'shareEditable' => false,
 		], $collective->jsonSerialize());
 	}
 }

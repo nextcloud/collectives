@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Service;
 
-use OCA\Collectives\Db\CollectiveShare;
+use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveShareMapper;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Model\CollectiveInfo;
+use OCA\Collectives\Model\CollectiveShareInfo;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\Constants;
@@ -57,8 +58,8 @@ class CollectiveShareService {
 	public function createFolderShare(string $userId, string $collectiveName): IShare {
 		$share = $this->shareManager->newShare();
 
-		// Stick to read permissions for now
-		$share->setPermissions(Constants::PERMISSION_READ);
+		$permissions = Constants::PERMISSION_READ;
+		$share->setPermissions($permissions);
 
 		// Can we even share link?
 		if (!$this->shareManager->shareApiAllowLinks()) {
@@ -106,9 +107,9 @@ class CollectiveShareService {
 	 * @param string $userId
 	 * @param int    $collectiveId
 	 *
-	 * @return CollectiveShare|null
+	 * @return CollectiveShareInfo|null
 	 */
-	public function findShare(string $userId, int $collectiveId): ?CollectiveShare {
+	public function findShare(string $userId, int $collectiveId): ?CollectiveShareInfo {
 		try {
 			$collectiveShare = $this->collectiveShareMapper->findOneByCollectiveIdAndUser($collectiveId, $userId);
 		} catch (DoesNotExistException | MultipleObjectsReturnedException | Exception $e) {
@@ -116,40 +117,116 @@ class CollectiveShareService {
 		}
 
 		try {
-			$this->shareManager->getShareByToken($collectiveShare->getToken());
+			$folderShare = $this->shareManager->getShareByToken($collectiveShare->getToken());
 		} catch (ShareNotFound $e) {
 			// Corresponding folder share not found, delete the collective share as well.
 			$this->collectiveShareMapper->delete($collectiveShare);
 			return null;
 		}
 
-		return $collectiveShare;
+		return new CollectiveShareInfo($collectiveShare, $this->isShareEditable($folderShare));
+	}
+
+	/**
+	 * @param string $token
+	 *
+	 * @return CollectiveShareInfo|null
+	 */
+	public function findShareByToken(string $token): ?CollectiveShareInfo {
+		try {
+			$collectiveShare = $this->collectiveShareMapper->findOneByToken($token);
+		} catch (DoesNotExistException | MultipleObjectsReturnedException | Exception $e) {
+			return null;
+		}
+
+		try {
+			$folderShare = $this->shareManager->getShareByToken($collectiveShare->getToken());
+		} catch (ShareNotFound $e) {
+			// Corresponding folder share not found, delete the collective share as well.
+			$this->collectiveShareMapper->delete($collectiveShare);
+			return null;
+		}
+
+		return new CollectiveShareInfo($collectiveShare, $this->isShareEditable($folderShare));
+	}
+
+	/**
+	 * @param IShare $folderShare
+	 *
+	 * @return bool
+	 */
+	private function isShareEditable(IShare $folderShare): bool {
+		$folderSharePermissions = $folderShare->getPermissions();
+		return ($folderShare->getPermissions() & Collective::editPermissions) === Collective::editPermissions;
 	}
 
 	/**
 	 * @param string         $userId
 	 * @param CollectiveInfo $collective
 	 *
-	 * @return CollectiveShare
+	 * @return CollectiveShareInfo
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function createShare(string $userId, CollectiveInfo $collective): CollectiveShare {
-		if (null !== $this->findShare($userId, $collective->getId())) {
-			throw new NotPermittedException($this->l10n->t('A share for collective %s exists already', $collective->getName()));
+	public function createShare(string $userId, CollectiveInfo $collective): CollectiveShareInfo {
+		if (!$collective->canShare()) {
+			throw new NotPermittedException($this->l10n->t('You are not allowed to share %s', $collective->getName()));
 		}
 
-		if ($collective->getLevel() < $collective->getSharePermissionLevel()) {
-			throw new NotPermittedException($this->l10n->t('You are not allowed to share %s', $collective->getName()));
+		if (null !== $this->findShare($userId, $collective->getId())) {
+			throw new NotPermittedException($this->l10n->t('A share for collective %s exists already', $collective->getName()));
 		}
 
 		$folderShare = $this->createFolderShare($userId, $collective->getName());
 
 		try {
-			return $this->collectiveShareMapper->create($collective->getId(), $folderShare->getToken(), $userId);
+			return new CollectiveShareInfo($this->collectiveShareMapper->create($collective->getId(), $folderShare->getToken(), $userId));
 		} catch (Exception $e) {
 			throw new NotPermittedException('Failed to create collective share for ' . $collective->getName());
 		}
+	}
+
+	/**
+	 * @param string         $userId
+	 * @param CollectiveInfo $collective
+	 * @param string         $token
+	 * @param bool           $editable
+	 *
+	 * @return CollectiveShareInfo
+	 * @throws DoesNotExistException
+	 * @throws Exception
+	 * @throws MultipleObjectsReturnedException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function updateShare(string $userId, CollectiveInfo $collective, string $token, bool $editable = false): CollectiveShareInfo {
+		if (!$collective->canShare()) {
+			throw new NotPermittedException($this->l10n->t('You are not allowed to share %s', $collective->getName()));
+		}
+
+		if (!$collective->canEdit()) {
+			throw new NotPermittedException($this->l10n->t('You are not allowed to edit %s', $collective->getName()));
+		}
+
+		if (null === $share = $this->collectiveShareMapper->findOneByCollectiveIdAndTokenAndUser($collective->getId(), $token, $userId)) {
+			throw new NotFoundException($this->l10n->t('Share not found for user'));
+		}
+
+		try {
+			$folderShare = $this->shareManager->getShareByToken($token);
+		} catch (ShareNotFound $e) {
+			throw new NotFoundException($this->l10n->t('Share not found for user'));
+		}
+
+		$permissions = Constants::PERMISSION_READ;
+		if ($editable) {
+			$permissions |= Collective::editPermissions;
+		}
+
+		$folderShare->setPermissions($permissions);
+		$this->shareManager->updateShare($folderShare);
+
+		return new CollectiveShareInfo($share, $this->isShareEditable($folderShare));
 	}
 
 	/**
@@ -169,11 +246,11 @@ class CollectiveShareService {
 	 * @param int    $collectiveId
 	 * @param string $token
 	 *
-	 * @return CollectiveShare
+	 * @return CollectiveShareInfo
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function deleteShare(string $userId, int $collectiveId, string $token): CollectiveShare {
+	public function deleteShare(string $userId, int $collectiveId, string $token): CollectiveShareInfo {
 		try {
 			$collectiveShare = $this->collectiveShareMapper->findOneByCollectiveIdAndTokenAndUser($collectiveId, $token, $userId);
 			$this->collectiveShareMapper->delete($collectiveShare);
@@ -185,7 +262,7 @@ class CollectiveShareService {
 
 		$this->deleteFileShare($collectiveShare->getToken());
 
-		return $collectiveShare;
+		return new CollectiveShareInfo($collectiveShare);
 	}
 
 	/**

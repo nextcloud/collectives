@@ -536,10 +536,26 @@ class FeatureContext implements Context {
 			$this->assertStatusCode(403);
 		} else {
 			$this->assertStatusCode(200);
-			$this->assertCollectiveLevel($collective, 9);
 			$jsonBody = $this->getJson();
 			Assert::assertNotEmpty($jsonBody['data']['shareToken']);
 		}
+	}
+
+	/**
+	 * @When user :user sets editing permissions for collective :collective
+	 *
+	 * @param string $user
+	 * @param string $collective
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userSetsPublicShareEditPermissions(string $user, string $collective): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$token = $this->getCollectiveShareToken($collectiveId);
+		$formData = new TableNode([['editable', true]]);
+		$this->sendRequest('PUT', '/apps/collectives/_api/' . $collectiveId . '/share/' . $token, $formData);
+		$this->assertStatusCode(200);
 	}
 
 	/**
@@ -623,6 +639,60 @@ class FeatureContext implements Context {
 		$this->sendRequest('GET', '/apps/collectives/_api/p/' . $token . '/_pages', null, [], false);
 		$this->assertStatusCode(200);
 		$this->assertPageByPath($path);
+	}
+
+	/**
+	 * @When anonymous creates page :page with parentPath :parentPath in public collective :collective with owner :owner
+	 * @When anonymous :fails to create page :page with parentPath :parentPath in public collective :collective with owner :owner
+	 *
+	 * @param string $page
+	 * @param string $parentPath
+	 * @param string $collective
+	 * @param string $owner
+	 * @param string|null $fail
+	 *
+	 * @throws GuzzleException
+	 */
+	public function anonymousCreatesPublicCollectivePage(string $page, string $parentPath, string $collective, string $owner, ?string $fail = null): void {
+		$this->setCurrentUser($owner);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$token = $this->getCollectiveShareToken($collectiveId);
+		$parentId = $this->getParentId($collectiveId, $parentPath);
+
+		$formData = new TableNode([['title', $page], ['parentId', $parentId]]);
+		$this->sendRequest('POST', '/apps/collectives/_api/p/' . $token . '/_pages/parent/' . $parentId, $formData, [], false);
+		if ("fails" === $fail) {
+			$this->assertStatusCode(403);
+		} else {
+			$this->assertStatusCode(200);
+		}
+	}
+
+	/**
+	 * @When anonymous deletes page :page with parentPath :parentPath in public collective :collective with owner :owner
+	 * @When anonymous :fails to delete page :page with parentPath :parentPath in public collective :collective with owner :owner
+	 *
+	 * @param string      $page
+	 * @param string      $collective
+	 * @param string      $parentPath
+	 * @param string      $owner
+	 * @param string|null $fail
+	 *
+	 * @throws GuzzleException
+	 */
+	public function anonymousDeletesPublicCollectivePage(string $page, string $collective, string $parentPath, string $owner, ?string $fail = null): void {
+		$this->setCurrentUser($owner);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$token = $this->getCollectiveShareToken($collectiveId);
+		$pageId = $this->pageIdByName($collectiveId, $page);
+		$parentId = $this->getParentId($collectiveId, $parentPath);
+
+		$this->sendRequest('DELETE', '/apps/collectives/_api/p/' . $token . '/_pages/parent/' . $parentId . '/page/' . $pageId, null, [], false);
+		if ("fails" === $fail) {
+			$this->assertStatusCode(403);
+		} else {
+			$this->assertStatusCode(200);
+		}
 	}
 
 	/**

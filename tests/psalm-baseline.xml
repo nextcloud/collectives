@@ -243,10 +243,12 @@
     </UndefinedClass>
   </file>
   <file src="lib/Service/CollectiveShareService.php">
-    <InvalidCatch occurrences="3"/>
-    <MissingDependency occurrences="4">
+    <InvalidCatch occurrences="5"/>
+    <MissingDependency occurrences="6">
       <code>$e</code>
       <code>GenericShareException</code>
+      <code>ShareNotFound</code>
+      <code>ShareNotFound</code>
       <code>ShareNotFound</code>
       <code>ShareNotFound</code>
     </MissingDependency>

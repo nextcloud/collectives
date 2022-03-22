@@ -82,8 +82,26 @@ class CollectiveService {
 		$name = $this->collectiveMapper->circleIdToName($collective->getCircleId(), $userId);
 		$level = $this->circleHelper->getLevel($collective->getCircleId(), $userId);
 
-		// Only used by PublicCollectiveController so far, thus no need to return membership level
 		return new CollectiveInfo($collective, $name, $level);
+	}
+
+	/**
+	 * @param string $userId
+	 * @param int    $id
+	 *
+	 * @return CollectiveInfo
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function getCollectiveWithShare(string $userId, int $id): CollectiveInfo {
+		$collective = $this->getCollective($userId, $id);
+		if (null !== $share = $this->shareService->findShare($userId, $id)) {
+			$collective->setShareToken($share->getToken());
+			$collective->setShareEditable($share->getEditable());
+		}
+
+		return $collective;
 	}
 
 	/**
@@ -111,6 +129,7 @@ class CollectiveService {
 		foreach ($collectives as $c) {
 			if (null !== $share = $this->shareService->findShare($userId, $c->getId())) {
 				$c->setShareToken($share->getToken());
+				$c->setShareEditable($share->getEditable());
 			}
 		}
 
