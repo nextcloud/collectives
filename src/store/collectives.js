@@ -189,9 +189,6 @@ export default {
 		 * @param {object} store.getters getters of the store
 		 */
 		async [GET_TRASH_COLLECTIVES]({ commit, getters }) {
-			if (getters.isPublic) {
-				return
-			}
 			commit('load', 'collectiveTrash')
 			const response = await axios.get(generateUrl('/apps/collectives/_api/trash'))
 			commit(SET_TRASH_COLLECTIVES, response.data.data)
@@ -288,7 +285,7 @@ export default {
 		 * @param {object} store the vuex store
 		 * @param {Function} store.commit commit changes
 		 * @param {object} collective the collective with id
-		 * @param {number} collective.id ID of the colletive to be unshared
+		 * @param {number} collective.id ID of the colletive to be shared
 		 */
 		async [SHARE_COLLECTIVE]({ commit }, { id }) {
 			commit('load', 'share')

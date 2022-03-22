@@ -58,9 +58,11 @@ export default {
 	},
 
 	mounted() {
-		this.getCollectivesFolder()
 		this.getCollectives()
-		this.getTrashCollectives()
+		if (!this.isPublic) {
+			this.getCollectivesFolder()
+			this.getTrashCollectives()
+		}
 
 		if (!this.isPublic && !('contacts' in this.OC.appswebroots)) {
 			console.error('The contacts app is required to manage members')
