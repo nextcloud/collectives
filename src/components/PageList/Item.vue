@@ -18,8 +18,7 @@
 				class="page-icon-badge"
 				:class="{'page-icon-badge--rotated': collapsed(pageId)}" />
 		</div>
-		<router-link
-			:to="to"
+		<router-link :to="to"
 			class="app-content-list-item-link">
 			<div class="app-content-list-item-line-one"
 				:class="{ 'app-content-list-item-line-one--level0': level === 0, 'app-content-list-item-template': isTemplate }">

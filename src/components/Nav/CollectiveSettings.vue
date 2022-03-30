@@ -1,12 +1,10 @@
 <template>
-	<AppSettingsDialog
-		:open.sync="showSettings"
+	<AppSettingsDialog :open.sync="showSettings"
 		:aria-label="t('collectives', 'Collective settings')"
 		:show-navigation="true">
 		<AppSettingsSection :title="t('collectives', 'Name and emoji')">
 			<div class="collective-name">
-				<EmojiPicker
-					:show-preview="true"
+				<EmojiPicker :show-preview="true"
 					@select="updateEmoji">
 					<Button type="tertiary"
 						:aria-label="t('collectives', 'Select emoji for collective')"
@@ -39,16 +37,14 @@
 
 		<AppSettingsSection :title="t('collectives', 'Default page order')">
 			<div class="page-order">
-				<CheckboxRadioSwitch
-					:checked.sync="pageOrder"
+				<CheckboxRadioSwitch :checked.sync="pageOrder"
 					:value="String(pageOrders.byTimestamp)"
 					:loading="loading('updateCollectivePageOrder_' + String(pageOrders.byTimestamp))"
 					name="page_order_timestamp"
 					type="radio">
 					{{ t('collectives', 'Sort recently changed first') }}
 				</CheckboxRadioSwitch>
-				<CheckboxRadioSwitch
-					:checked.sync="pageOrder"
+				<CheckboxRadioSwitch :checked.sync="pageOrder"
 					:value="String(pageOrders.byTitle)"
 					:loading="loading('updateCollectivePageOrder_' + String(pageOrders.byTitle))"
 					name="page_order_title"
@@ -64,24 +60,21 @@
 			</div>
 
 			<div class="permissions-input-edit">
-				<CheckboxRadioSwitch
-					:checked.sync="editPermissions"
+				<CheckboxRadioSwitch :checked.sync="editPermissions"
 					:value="String(memberLevels.LEVEL_ADMIN)"
 					:loading="loading('updateCollectiveEditPermissions_' + String(memberLevels.LEVEL_ADMIN))"
 					name="edit_admins"
 					type="radio">
 					{{ t('collectives', 'Admins only') }}
 				</CheckboxRadioSwitch>
-				<CheckboxRadioSwitch
-					:checked.sync="editPermissions"
+				<CheckboxRadioSwitch :checked.sync="editPermissions"
 					:value="String(memberLevels.LEVEL_MODERATOR)"
 					:loading="loading('updateCollectiveEditPermissions_' + String(memberLevels.LEVEL_MODERATOR))"
 					name="edit_moderators"
 					type="radio">
 					{{ t('collectives', 'Admins and moderaters') }}
 				</CheckboxRadioSwitch>
-				<CheckboxRadioSwitch
-					:checked.sync="editPermissions"
+				<CheckboxRadioSwitch :checked.sync="editPermissions"
 					:value="String(memberLevels.LEVEL_MEMBER)"
 					:loading="loading('updateCollectiveEditPermissions_' + String(memberLevels.LEVEL_MEMBER))"
 					name="edit_members"
@@ -95,24 +88,21 @@
 			</div>
 
 			<div class="permissions-input-share">
-				<CheckboxRadioSwitch
-					:checked.sync="sharePermissions"
+				<CheckboxRadioSwitch :checked.sync="sharePermissions"
 					:value="String(memberLevels.LEVEL_ADMIN)"
 					:loading="loading('updateCollectiveSharePermissions_' + String(memberLevels.LEVEL_ADMIN))"
 					name="share_admins"
 					type="radio">
 					{{ t('collectives', 'Admins only') }}
 				</CheckboxRadioSwitch>
-				<CheckboxRadioSwitch
-					:checked.sync="sharePermissions"
+				<CheckboxRadioSwitch :checked.sync="sharePermissions"
 					:value="String(memberLevels.LEVEL_MODERATOR)"
 					:loading="loading('updateCollectiveSharePermissions_' + String(memberLevels.LEVEL_MODERATOR))"
 					name="share_moderators"
 					type="radio">
 					{{ t('collectives', 'Admins and moderaters') }}
 				</CheckboxRadioSwitch>
-				<CheckboxRadioSwitch
-					:checked.sync="sharePermissions"
+				<CheckboxRadioSwitch :checked.sync="sharePermissions"
 					:value="String(memberLevels.LEVEL_MEMBER)"
 					:loading="loading('updateCollectiveSharePermissions_' + String(memberLevels.LEVEL_MEMBER))"
 					name="share_members"

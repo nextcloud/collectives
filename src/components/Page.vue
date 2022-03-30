@@ -31,15 +31,13 @@
 			</button>
 			<PageActions v-if="!isCurrentCollectiveReadOnly" />
 			<Actions v-show="!showing('sidebar')">
-				<ActionButton
-					icon="icon-menu-sidebar"
+				<ActionButton icon="icon-menu-sidebar"
 					:close-after-click="true"
 					@click="toggle('sidebar')" />
 			</Actions>
 		</h1>
 		<div v-if="readOnly" id="text-container" :key="'text-' + currentPage.id">
-			<RichText
-				:key="`show-${currentPage.id}`"
+			<RichText :key="`show-${currentPage.id}`"
 				:as-placeholder="preview && edit"
 				:timestamp="currentPage.timestamp"
 				@empty="emptyPreview"

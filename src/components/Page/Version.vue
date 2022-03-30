@@ -12,8 +12,7 @@
 				{{ t('collectives', 'Restore') }}
 			</button>
 			<Actions>
-				<ActionButton
-					icon="icon-menu-sidebar"
+				<ActionButton icon="icon-menu-sidebar"
 					:close-after-click="true"
 					@click="closeVersions" />
 			</Actions>

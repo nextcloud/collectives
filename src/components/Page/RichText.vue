@@ -266,9 +266,7 @@ export default {
 </style>
 
 <style lang="scss">
-#text-wrapper {
-	@import './css/prosemirror';
-}
+@import './css/prosemirror';
 
 @media print {
 	.menubar {

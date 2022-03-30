@@ -1,6 +1,5 @@
 <template>
-	<AppSidebar
-		ref="sidebar"
+	<AppSidebar ref="sidebar"
 		:title="title"
 		@close="close">
 		<AppSidebarTab id="backlinks"
@@ -10,8 +9,7 @@
 			<div class="app-sidebar-tab-desc">
 				{{ t('collectives', 'Pages that link to this one') }}
 			</div>
-			<SidebarTabBacklinks
-				v-if="showing('sidebar')"
+			<SidebarTabBacklinks v-if="showing('sidebar')"
 				:page="page" />
 		</AppSidebarTab>
 		<AppSidebarTab v-if="!isCurrentCollectiveReadOnly"
@@ -22,8 +20,7 @@
 			<div class="app-sidebar-tab-desc">
 				{{ t('collectives', 'Old versions of this page') }}
 			</div>
-			<SidebarTabVersions
-				v-if="showing('sidebar')"
+			<SidebarTabVersions v-if="showing('sidebar')"
 				:page-id="page.id"
 				:page-title="page.title"
 				:page-timestamp="page.timestamp"

@@ -1,6 +1,5 @@
 <template>
-	<AppNavigationItem
-		:key="collective.circleId"
+	<AppNavigationItem :key="collective.circleId"
 		:title="collective.name"
 		:class="{active: isActive(collective)}"
 		:to="`/${encodeURIComponent(collective.name)}`"
@@ -52,8 +51,7 @@
 			</ActionButton>
 		</template>
 		<template #extra>
-			<CollectiveSettings
-				:open.sync="showCollectiveSettings"
+			<CollectiveSettings :open.sync="showCollectiveSettings"
 				:collective="collective" />
 		</template>
 	</AppNavigationItem>

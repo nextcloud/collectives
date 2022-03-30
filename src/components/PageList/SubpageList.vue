@@ -15,8 +15,7 @@
 					:user="page.lastUserId" />
 			</template>
 			<template v-if="!isCurrentCollectiveReadOnly" #actions>
-				<ActionButton
-					icon="icon-add"
+				<ActionButton icon="icon-add"
 					@click="newPage(page)">
 					{{ t('collectives', 'Add a subpage') }}
 				</ActionButton>

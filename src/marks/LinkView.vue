@@ -1,6 +1,5 @@
 <template>
-	<router-link
-		v-if="useRouter"
+	<router-link v-if="useRouter"
 		:to="routerHref" />
 	<a v-else-if="switchAppHref" :href="href" />
 	<a v-else-if="leaveNcHref" :href="href" target="_blank" />
