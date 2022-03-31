@@ -1,8 +1,4 @@
 import { showError, showSuccess } from '@nextcloud/dialogs'
-import Vue from 'vue'
-import VueClipboard from 'vue-clipboard2'
-
-Vue.use(VueClipboard)
 
 export default {
 	data() {
@@ -32,9 +28,7 @@ export default {
 
 			// copy link to clipboard
 			try {
-				// Unfortunately, $copyText closes the action menu.
-				// See https://github.com/Inndy/vue-clipboard2/issues/46
-				await this.$copyText(url)
+				navigator.clipboard.writeText(url)
 				this.copySuccess = true
 				this.copied = true
 

@@ -35,7 +35,6 @@
     "tiptap-extensions": "^1.35.2",
     "tiptap-utils": "^1.13.1",
     "vue": "^2.6.14",
-    "vue-clipboard2": "^0.3.3",
     "vue-material-design-icons": "^5.0.0",
     "vue-router": "^3.5.3",
     "vuex": "^3.6.2",
