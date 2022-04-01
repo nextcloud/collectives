@@ -34,8 +34,7 @@
 	</AppNavigationItem>
 	<div v-else class="collective-create">
 		<form v-show="editing" @submit.prevent.stop="createCollective">
-			<EmojiPicker
-				:show-preview="true"
+			<EmojiPicker :show-preview="true"
 				@select="addEmoji">
 				<Button type="tertiary"
 					:aria-label="t('collectives', 'Select emoji for collective')"
@@ -60,8 +59,7 @@
 				open-direction="below"
 				:placeholder="t('collectives', 'Select circle...')"
 				required />
-			<input
-				type="submit"
+			<input type="submit"
 				value=""
 				class="icon-confirm"
 				:class="{ 'icon-loading-small': loading }">

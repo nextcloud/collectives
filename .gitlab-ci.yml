@@ -290,7 +290,7 @@ App Update Test:
 
 .browser-test: &browser-test
   <<: *node
-  image: cypress/browsers:node14.16.0-chrome89-ff86
+  image: cypress/browsers:node16.13.2-chrome100-ff98
   stage: test end to end
   variables:
     CYPRESS_baseUrl: http://nextcloud.local/index.php

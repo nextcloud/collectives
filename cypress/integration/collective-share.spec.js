@@ -35,6 +35,23 @@ describe('Collective Share', function() {
 	describe('collective share', function() {
 		it('Allows sharing a collective', function() {
 			cy.login('bob', 'bob', '/apps/collectives')
+			cy.visit('/apps/collectives', {
+				onBeforeLoad(win) {
+					// navigator.clipboard doesn't exist on HTTP requests (in CI), so let's create it
+					if (!win.navigator.clipboard) {
+						win.navigator.clipboard = {
+							__proto__: {
+								writeText: () => {},
+							},
+						}
+					}
+					// overwrite navigator.clipboard.writeText with cypress stub
+					cy.stub(win.navigator.clipboard, 'writeText', (text) => {
+						shareUrl = text
+					})
+						.as('clipBoardWriteText')
+				},
+			})
 			cy.get('.collectives_list_item')
 				.contains('li', 'Share me')
 				.find('.action-item__menutoggle')
@@ -52,12 +69,11 @@ describe('Collective Share', function() {
 			cy.get('button')
 				.contains('Copy share link')
 				.click().then(() => {
-					cy.get('.toast-error').should('contain',
-						'Could not copy link to the clipboard:'
-					).then(($error) => {
-						shareUrl = $error.contents()[1].textContent
-					})
+					cy.get('.toast-success').should('contain',
+						'Link copied to the clipboard.'
+					)
 				})
+			cy.get('@clipBoardWriteText').should('have.been.calledOnce')
 		})
 		it('Allows opening a shared collective', function() {
 			cy.visit(shareUrl)

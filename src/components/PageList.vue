@@ -3,8 +3,7 @@
 		:show-details="showing('details')">
 		<div class="togglebar">
 			<Actions class="toggle">
-				<ActionButton
-					class="sort"
+				<ActionButton class="sort"
 					:aria-label="showTemplates ? t('collectives', 'Hide templates') : t('collectives', 'Show templates')"
 					:icon="showTemplates ? 'icon-pages-template-dark-grey' : 'icon-pages-template-grey'"
 					:title="showTemplates ? t('collectives', 'Hide templates') : t('collectives', 'Show templates')"
@@ -20,8 +19,7 @@
 					slot="icon"
 					:size="16"
 					decorative />
-				<ActionButton
-					class="sort"
+				<ActionButton class="sort"
 					:class="{selected: sortBy === 'byTimestamp'}"
 					:close-after-click="true"
 					@click="sortPages('byTimestamp')">
@@ -30,8 +28,7 @@
 						:size="16"
 						decorative />
 				</ActionButton>
-				<ActionButton
-					class="sort"
+				<ActionButton class="sort"
 					:class="{selected: sortBy === 'byTitle'}"
 					:close-after-click="true"
 					@click="sortPages('byTitle')">
@@ -59,8 +56,7 @@
 					:user="collectivePage.lastUserId" />
 			</template>
 			<template v-if="!isCurrentCollectiveReadOnly" #actions>
-				<ActionButton
-					icon="icon-add"
+				<ActionButton icon="icon-add"
 					@click="newPage(collectivePage)">
 					{{ t('collectives', 'Add a page') }}
 				</ActionButton>

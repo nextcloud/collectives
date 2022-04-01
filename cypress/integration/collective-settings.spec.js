@@ -42,7 +42,7 @@ describe('Collective settings', function() {
 				.click()
 			cy.get('button.button-emoji')
 				.click()
-			cy.contains('.emoji-popover span.emoji-mart-emoji', '🥰').click()
+			cy.contains('.emoji-mart-scroll .emoji-mart-emoji', '🥰').click()
 			cy.reload()
 			cy.contains('.app-navigation-entry', 'Change me')
 				.find('.app-navigation-entry-icon').should('contain', '🥰')

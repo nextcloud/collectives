@@ -4,8 +4,7 @@
 			<EmptyContent icon="icon-loading" />
 		</template>
 		<template #list>
-			<AppNavigationCaption
-				:title="t('collectives', 'Select a collective')" />
+			<AppNavigationCaption :title="t('collectives', 'Select a collective')" />
 			<CollectiveListItem v-for="collective in collectives"
 				:key="collective.id"
 				:collective="collective" />

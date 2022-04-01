@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import Vuex from 'vuex'
+import Vuex, { Store } from 'vuex'
 
 import circles from './circles'
 import collectives from './collectives'
@@ -9,7 +9,7 @@ import versions from './versions'
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({
+export default new Store({
 
 	modules: {
 		circles,
