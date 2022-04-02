@@ -1,5 +1,6 @@
 <template>
-	<div class="app-content-list-item"
+	<div :id="`page-${pageId}`"
+		class="app-content-list-item"
 		:class="{active: isActive, mobile: isMobile, toplevel: level === 0}"
 		:style="indentItem"
 		draggable
@@ -44,6 +45,7 @@ import isMobile from '@nextcloud/vue/dist/Mixins/isMobile'
 import { generateUrl } from '@nextcloud/router'
 import { mapGetters, mapMutations } from 'vuex'
 import TriangleIcon from 'vue-material-design-icons/Triangle'
+import scrollToElement from '../../util/scrollToElement'
 
 export default {
 	name: 'Item',
@@ -123,6 +125,13 @@ export default {
 		isClickable() {
 			return this.isCollapsible ? 'click' : null
 		},
+	},
+
+	mounted() {
+		// Scroll to item at initial mount if it's currentPage
+		if (this.isActive) {
+			scrollToElement(this.$el)
+		}
 	},
 
 	methods: {

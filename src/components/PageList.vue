@@ -22,7 +22,7 @@
 				<ActionButton class="sort"
 					:class="{selected: sortBy === 'byTimestamp'}"
 					:close-after-click="true"
-					@click="sortPages('byTimestamp')">
+					@click="sortPagesAndScroll('byTimestamp')">
 					{{ t('collectives', 'Sort recently changed first') }}
 					<SortClockAscendingOutlineIcon slot="icon"
 						:size="16"
@@ -31,7 +31,7 @@
 				<ActionButton class="sort"
 					:class="{selected: sortBy === 'byTitle'}"
 					:close-after-click="true"
-					@click="sortPages('byTitle')">
+					@click="sortPagesAndScroll('byTitle')">
 					{{ t('collectives', 'Sort by title') }}
 					<SortAlphabeticalAscendingIcon slot="icon"
 						:size="16"
@@ -95,6 +95,7 @@ import { mapGetters, mapMutations } from 'vuex'
 import { NEW_PAGE, NEW_TEMPLATE } from '../store/actions'
 import SortAlphabeticalAscendingIcon from 'vue-material-design-icons/SortAlphabeticalAscending'
 import SortClockAscendingOutlineIcon from 'vue-material-design-icons/SortClockAscendingOutline'
+import scrollToElement from '../util/scrollToElement'
 
 export default {
 	name: 'PageList',
@@ -117,6 +118,7 @@ export default {
 			'templatePage',
 			'currentCollective',
 			'currentCollectivePath',
+			'currentPage',
 			'loading',
 			'pagePath',
 			'visibleSubpages',
@@ -152,6 +154,18 @@ export default {
 
 	methods: {
 		...mapMutations(['show', 'sortPages', 'toggleTemplates']),
+
+		/**
+		 * Change page sort order and scroll to current page
+		 *
+		 * @param { string } order Sort order
+		 */
+		sortPagesAndScroll(order) {
+			this.sortPages(order)
+			this.$nextTick(() => {
+				scrollToElement(document.getElementById(`page-${this.currentPage.id}`))
+			})
+		},
 
 		/**
 		 * Open existing or create new template page
