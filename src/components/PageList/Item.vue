@@ -62,7 +62,7 @@ export default {
 			type: String,
 			default: '',
 		},
-		collapsible: {
+		hasChildren: {
 			type: Boolean,
 			default: false,
 		},
@@ -117,7 +117,7 @@ export default {
 
 		isCollapsible() {
 			// Collective landing page is not collapsible
-			return (this.level > 0 && this.collapsible)
+			return (this.level > 0 && this.hasChildren)
 		},
 
 		isClickable() {
@@ -216,8 +216,19 @@ div.app-content-list-item {
 	cursor: pointer;
 }
 
+// Change color of collapse/expand badge when hovering over page icon
+.app-content-list-item-icon {
+	&:hover, &:focus, &:active {
+		.material-design-icon.page-icon-badge > .material-design-icon__svg {
+			fill: var(--color-primary);
+		}
+	}
+}
+</style>
+
+<style lang="scss">
 // Configure collapse/expand badge
-.page-icon-badge {
+.material-design-icon.page-icon-badge {
 	position: absolute;
 	bottom: -20px;
 	right: -14px;
@@ -240,14 +251,5 @@ div.app-content-list-item {
 	width: 16px;
 	transform: scale(1, 0.7);
 	fill: var(--color-main-text);
-}
-
-// Change color of collapse/expand badge when hovering over page icon
-.app-content-list-item-icon {
-	&:hover, &:focus, &:active {
-		.material-design-icon.page-icon-badge > .material-design-icon__svg {
-			fill: var(--color-primary);
-		}
-	}
 }
 </style>

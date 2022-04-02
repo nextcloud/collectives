@@ -2,7 +2,7 @@
 	<div>
 		<Item key="page.title"
 			:to="pagePath(page)"
-			:collapsible="isCollapsible"
+			:has-children="hasChildren"
 			:page-id="page.id"
 			:level="level"
 			:title="page.title"
@@ -109,7 +109,7 @@ export default {
 			}
 		},
 
-		isCollapsible() {
+		hasChildren() {
 			return !!this.subpages.length
 		},
 
