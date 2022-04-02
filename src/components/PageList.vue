@@ -1,7 +1,7 @@
 <template>
 	<AppContentList :class="{loading: loading('collective')}"
 		:show-details="showing('details')">
-		<div class="togglebar">
+		<div class="page-list-togglebar">
 			<Actions class="toggle">
 				<ActionButton class="sort"
 					:aria-label="showTemplates ? t('collectives', 'Hide templates') : t('collectives', 'Show templates')"
@@ -39,44 +39,46 @@
 				</ActionButton>
 			</Actions>
 		</div>
-		<Item v-if="currentCollective"
-			key="Readme"
-			:to="currentCollectivePath"
-			:title="currentCollective.name"
-			:level="0"
-			:page-id="collectivePage ? collectivePage.id : 0"
-			@click.native="show('details')">
-			<template v-if="currentCollective.emoji" #icon>
-				<div class="emoji">
-					{{ currentCollective.emoji }}
-				</div>
-			</template>
-			<template v-if="collectivePage" #line-two>
-				<LastUpdate :timestamp="collectivePage.timestamp"
-					:user="collectivePage.lastUserId" />
-			</template>
-			<template v-if="!isCurrentCollectiveReadOnly" #actions>
-				<ActionButton icon="icon-add"
-					@click="newPage(collectivePage)">
-					{{ t('collectives', 'Add a page') }}
-				</ActionButton>
-				<ActionButton v-if="showTemplates"
-					icon="icon-pages-template-dark-grey"
-					class="action-button__template"
-					@click="editTemplate(collectivePage)">
-					{{ editTemplateString }}
-				</ActionButton>
-			</template>
-		</Item>
-		<SubpageList v-if="templateView"
-			:key="templateView.id"
-			:page="templateView"
-			:level="1"
-			:is-template="true" />
-		<SubpageList v-for="page in subpages"
-			:key="page.id"
-			:page="page"
-			:level="1" />
+		<div class="page-list">
+			<Item v-if="currentCollective"
+				key="Readme"
+				:to="currentCollectivePath"
+				:title="currentCollective.name"
+				:level="0"
+				:page-id="collectivePage ? collectivePage.id : 0"
+				@click.native="show('details')">
+				<template v-if="currentCollective.emoji" #icon>
+					<div class="emoji">
+						{{ currentCollective.emoji }}
+					</div>
+				</template>
+				<template v-if="collectivePage" #line-two>
+					<LastUpdate :timestamp="collectivePage.timestamp"
+						:user="collectivePage.lastUserId" />
+				</template>
+				<template v-if="!isCurrentCollectiveReadOnly" #actions>
+					<ActionButton icon="icon-add"
+						@click="newPage(collectivePage)">
+						{{ t('collectives', 'Add a page') }}
+					</ActionButton>
+					<ActionButton v-if="showTemplates"
+						icon="icon-pages-template-dark-grey"
+						class="action-button__template"
+						@click="editTemplate(collectivePage)">
+						{{ editTemplateString }}
+					</ActionButton>
+				</template>
+			</Item>
+			<SubpageList v-if="templateView"
+				:key="templateView.id"
+				:page="templateView"
+				:level="1"
+				:is-template="true" />
+			<SubpageList v-for="page in subpages"
+				:key="page.id"
+				:page="page"
+				:level="1" />
+		</div>
 	</AppContentList>
 </template>
 
@@ -195,10 +197,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.togglebar {
+.page-list-togglebar {
 	display: flex;
 	flex-direction: row;
 	margin: 0 0 0 auto;
+}
+
+.page-list {
+	overflow: scroll;
 }
 
 .toggle {
