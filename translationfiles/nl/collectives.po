@@ -8,14 +8,16 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-03-03 10:20+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2022-04-04 07:10+0000\n"
+"Last-Translator: Jeroen Bos <jeroen@groningen.network>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/collectives/"
+"collectives-app/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.12-dev\n"
 
 #: /collectives/lib/Fs/UserFolderHelper.php:67
 #: /collectives/lib/Search/CollectiveProvider.php:60
@@ -23,46 +25,46 @@ msgstr ""
 #: /collectives/specialVueFakeDummyForL10nScript.js:85
 #: /collectives/specialVueFakeDummyForL10nScript.js:119
 msgid "Collectives"
-msgstr ""
+msgstr "Collectives"
 
 #: /collectives/lib/Search/PageContentProvider.php:74
 msgid "Collectives - Page content"
-msgstr ""
+msgstr "Collectives- Pagina inhoud"
 
 #: /collectives/lib/Search/PageContentProvider.php:119
 msgid "in page {page} from collective {collective}"
-msgstr ""
+msgstr "op pagina {page} van collectief {collective}"
 
 #: /collectives/lib/Search/PageProvider.php:67
 msgid "Collectives - Pages"
-msgstr ""
+msgstr "Collectives - Paginas"
 
 #: /collectives/lib/Search/PageProvider.php:107
 msgid "in Collective {collective}"
-msgstr ""
+msgstr "in Collectief {collective}"
 
 #: /collectives/lib/Service/CollectiveService.php:164
 #, php-format
 msgid "Created collective \"%s\" for existing circle."
-msgstr ""
+msgstr "Gemaakt collectief \"%s\" voor bestaande circle."
 
 #: /collectives/lib/Service/CollectiveShareService.php:84
 msgid "Collective Share"
-msgstr ""
+msgstr "Gedeeld collectief"
 
 #: /collectives/lib/Service/CollectiveShareService.php:139
 #, php-format
 msgid "A share for collective %s exists already"
-msgstr ""
+msgstr "Gedeeld collectief %s bestaat al"
 
 #: /collectives/lib/Service/CollectiveShareService.php:143
 #, php-format
 msgid "You are not allowed to share %s"
-msgstr ""
+msgstr "Je hebt geen toestemming om %s te delen"
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:3
 msgid "A place for activist and community projects to build shared knowledge"
-msgstr ""
+msgstr "Een plek voor communities om kennis te delen"
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:4
 msgid ""
@@ -84,269 +86,291 @@ msgid ""
 "In your Nextcloud instance, simply navigate to **»Apps«**, find the\n"
 "**»Circles«** and **»Collectives«** apps and enable them."
 msgstr ""
+"Collectives is een Nextcloud-app om communityprojecten gezamenlijk te "
+"organiseren.\n"
+"Kom en bouw collectives om gedeelde kennis te verzamelen.\n"
+"\n"
+"* 👥 **Standaard collectieve en niet-hiërarchische workflow**: Collectives "
+"zijn\n"
+"   gekoppeld aan een [Nextcloud Circle](https://github.com/nextcloud/circles)"
+" en\n"
+"   eigendom van het collectief.\n"
+"* 📝 **Gezamenlijke paginabewerking** zoals bekend van Etherpad dankzij de\n"
+"  [Text app](https://github.com/nextcloud/text).\n"
+"* 🔤 **Het bekende [Markdown](https://en.wikipedia.org/wiki/Markdown) "
+"syntax**\n"
+" voor de pagina-opmaak.\n"
+"\n"
+"## Installatie\n"
+"\n"
+"Navigeer in de Nextcloud-installatie naar **»Apps«**, zoek de\n"
+"**»Circles«** en **»Collectives«** apps en schakel ze in."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:1
 #: /collectives/specialVueFakeDummyForL10nScript.js:39
 msgid "The contacts app is required to manage members"
-msgstr ""
+msgstr "De contacten-app is vereist om leden te beheren"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:2
 msgid "Collective not found:"
-msgstr ""
+msgstr "Collectief niet gevonden:"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:3
 msgid "You're not part of a collective with that name."
-msgstr ""
+msgstr "Je maakt geen deel uit van een collectief met die naam."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:4
 msgid "Select a collective or create a new one on the left."
-msgstr ""
+msgstr "Selecteer een collectief of maak aan de linkerkant een nieuwe aan."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:5
 msgid "Share link"
-msgstr ""
+msgstr "Deel link"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:6
 msgid "Unshare"
-msgstr ""
+msgstr "Delen opheffen"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:7
 msgid "Print"
-msgstr ""
+msgstr "Afdrukken"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:8
 msgid "Manage members"
-msgstr ""
+msgstr "Leden beheren"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:9
 #: /collectives/specialVueFakeDummyForL10nScript.js:44
 msgid "Settings"
-msgstr ""
+msgstr "Instellingen"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:10
 msgid "Copied"
-msgstr ""
+msgstr "Gekopieerd"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:11
 msgid "Cannot copy"
-msgstr ""
+msgstr "Kan niet kopiëren"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:12
 msgid "Copy share link"
-msgstr ""
+msgstr "Kopieer de deellink"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:13
 msgid "Could not share the collective"
-msgstr ""
+msgstr "Kan het collectief niet delen"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:14
 msgid "Could not unshare the collective"
-msgstr ""
+msgstr "Kan het delen van het collectief niet ongedaan maken"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:15
 msgid "Collective settings"
-msgstr ""
+msgstr "Collectief instellingen"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:16
 msgid "Name and emoji"
-msgstr ""
+msgstr "Naam en emoji"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:17
 #: /collectives/specialVueFakeDummyForL10nScript.js:61
 msgid "Select emoji for collective"
-msgstr ""
+msgstr "Selecteer emoji voor collectief"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:18
 msgid "Default page order"
-msgstr ""
+msgstr "Standaard paginavolgorde"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:19
 #: /collectives/specialVueFakeDummyForL10nScript.js:99
 msgid "Sort recently changed first"
-msgstr ""
+msgstr "Sorteer recentelijk gewijzigd eerst"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:20
 #: /collectives/specialVueFakeDummyForL10nScript.js:100
 msgid "Sort by title"
-msgstr ""
+msgstr "Sorteren op titel"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:21
 msgid "Permissions"
-msgstr ""
+msgstr "Rechten"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:22
 msgid "Allow editing for"
-msgstr ""
+msgstr "Bewerken toestaan voor"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:23
 #: /collectives/specialVueFakeDummyForL10nScript.js:27
 msgid "Admins only"
-msgstr ""
+msgstr "Alleen beheerders"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:24
 #: /collectives/specialVueFakeDummyForL10nScript.js:28
 msgid "Admins and moderaters"
-msgstr ""
+msgstr "Beheerders en moderators"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:25
 #: /collectives/specialVueFakeDummyForL10nScript.js:29
 msgid "All members"
-msgstr ""
+msgstr "Alle leden"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:26
 msgid "Allow sharing for"
-msgstr ""
+msgstr "Delen toestaan voor"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:30
 msgid "Members"
-msgstr ""
+msgstr "Leden"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:31
 msgid "Members can be managed via the connected circle in the Contacts app."
 msgstr ""
+"Leden kunnen worden beheerd via de verbonden cirkel in de app Contacten."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:32
 #: /collectives/specialVueFakeDummyForL10nScript.js:33
 msgid "Open circle in Contacts"
-msgstr ""
+msgstr "Cirkel openen in Contacten"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:34
 msgid "Danger zone"
-msgstr ""
+msgstr "Gevarenzone"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:35
 #: /collectives/specialVueFakeDummyForL10nScript.js:36
 msgid "Delete collective"
-msgstr ""
+msgstr "Collectief verwijderen"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:37
 msgid "Change emoji"
-msgstr ""
+msgstr "Emoji wijzigen"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:37
 msgid "Add emoji"
-msgstr ""
+msgstr "Emoji toevoegen"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:38
 msgid "Renaming is limited to owners of the circle"
-msgstr ""
+msgstr "Hernoemen is beperkt tot eigenaren van de cirkel"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:40
 msgid "Editing permissions updated"
-msgstr ""
+msgstr "Bewerkingsrechten bijgewerkt"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:41
 msgid "Sharing permissions updated"
-msgstr ""
+msgstr "Rechten voor delen geüpdatet"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:42
 msgid "Default page order updated"
-msgstr ""
+msgstr "Standaard paginavolgorde bijgewerkt"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:43
 msgid "Emoji updated"
-msgstr ""
+msgstr "Emoji bijgewerkt"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:45
 msgid "Collectives Folder"
-msgstr ""
+msgstr "Collectives Map"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:46
 msgid "Create a collective first"
-msgstr ""
+msgstr "Maak eerst een collectief"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:47
 msgid "Select location for collectives"
-msgstr ""
+msgstr "Selecteer locatie voor collectieven"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:48
 msgid "Invalid path selected. Only folders on first level are supported."
 msgstr ""
+"Ongeldig pad geselecteerd. Alleen mappen op het eerste niveau worden "
+"ondersteund."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:49
 msgid "Deleted collectives"
-msgstr ""
+msgstr "Verwijderde collectieven"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:50
 #: /collectives/specialVueFakeDummyForL10nScript.js:76
 msgid "Restore"
-msgstr ""
+msgstr "Herstellen"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:51
 msgid "Delete permanently"
-msgstr ""
+msgstr "Permanent verwijderen"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:52
 msgid "Permanently delete collective »{collective}«"
-msgstr ""
+msgstr "Collectief definitief verwijderen »{collective}«"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:53
 msgid "Delete corresponding circle along with the collective?"
-msgstr ""
+msgstr "De bijbehorende cirkel samen met het collectief verwijderen?"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:54
 msgid "Cancel"
-msgstr ""
+msgstr "Annuleren"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:55
 msgid "Only collective"
-msgstr ""
+msgstr "Alleen collectief"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:56
 #: /collectives/specialVueFakeDummyForL10nScript.js:58
 msgid "Collective and circle"
-msgstr ""
+msgstr "Collectief en cirkel"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:57
 msgid "Only circle owners can delete a circle"
-msgstr ""
+msgstr "Alleen circle eigenaren kunnen een circle verwijderen"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:59
 #: /collectives/specialVueFakeDummyForL10nScript.js:121
 msgid "Create new collective"
-msgstr ""
+msgstr "Nieuw collectief maken"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:60
 msgid "Create collective for existing circle"
-msgstr ""
+msgstr "Collectief maken voor bestaande circle"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:62
 msgid "Select emoji"
-msgstr ""
+msgstr "Selecteer emoji"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:63
 msgid "New collective name"
-msgstr ""
+msgstr "Nieuwe naam collectief"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:64
 msgid "Select circle..."
-msgstr ""
+msgstr "Selecteer cirkel..."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:65
 msgid "Select a collective"
-msgstr ""
+msgstr "Selecteer een collectief"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:66
 msgid "Show in Files"
-msgstr ""
+msgstr "Weergeven in bestanden"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:67
 #: /collectives/specialVueFakeDummyForL10nScript.js:91
 #: /collectives/specialVueFakeDummyForL10nScript.js:102
 msgid "Edit template for subpages"
-msgstr ""
+msgstr "Template voor subpagina's bewerken"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:68
 msgid "Delete page"
-msgstr ""
+msgstr "Pagina verwijderen"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:69
 msgid "Page deleted"
-msgstr ""
+msgstr "Pagina verwijderd"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:70
 msgid "Could not delete the page"
-msgstr ""
+msgstr "Kan de pagina niet verwijderen"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:71
 #: /collectives/specialVueFakeDummyForL10nScript.js:93
@@ -354,184 +378,184 @@ msgstr ""
 #: /collectives/specialVueFakeDummyForL10nScript.js:104
 #: /collectives/specialVueFakeDummyForL10nScript.js:106
 msgid "Could not create the page"
-msgstr ""
+msgstr "Kan de pagina niet maken"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:72
 msgid "Page not found:"
-msgstr ""
+msgstr "Pagina niet gevonden:"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:73
 msgid "Could not find the Page."
-msgstr ""
+msgstr "Kan de pagina niet vinden."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:74
 msgid "Select a page from the list or create a new one."
-msgstr ""
+msgstr "Selecteer een pagina uit de lijst of maak een nieuwe aan."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:75
 msgid "Restore this version"
-msgstr ""
+msgstr "Deze versie herstellen"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:77
 msgid "Reverted {page} to revision {timestamp}."
-msgstr ""
+msgstr "Teruggezet op {pagina} naar revisie {timestamp}."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:78
 msgid "Failed to revert {page} to revision {timestamp}."
-msgstr ""
+msgstr "Kan {page} niet terugzetten naar revisie {timestamp}."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:79
 #: /collectives/specialVueFakeDummyForL10nScript.js:88
 msgid "Template"
-msgstr ""
+msgstr "Sjabloon"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:80
 msgid "Title"
-msgstr ""
+msgstr "Titel"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:81
 msgid "Stop editing"
-msgstr ""
+msgstr "Stop met bewerken"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:81
 msgid "Start editing"
-msgstr ""
+msgstr "Begin met bewerken"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:82
 msgid "Done"
-msgstr ""
+msgstr "Klaar"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:82
 msgid "Edit"
-msgstr ""
+msgstr "Bewerken"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:83
 msgid "Hide all subpages"
-msgstr ""
+msgstr "Alle subpagina's verbergen"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:84
 msgid "Show all subpages"
-msgstr ""
+msgstr "Toon alle subpagina's"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:86
 msgid "Could not rename the page"
-msgstr ""
+msgstr "Kan de naam van de pagina niet wijzigen"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:87
 msgid "Expand subpage list"
-msgstr ""
+msgstr "Subpaginalijst uitvouwen"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:87
 msgid "Collapse subpage list"
-msgstr ""
+msgstr "Lijst met subpagina's samenvouwen"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:89
 msgid "Last edited by {user}"
-msgstr ""
+msgstr "Laatst bewerkt door {user}"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:90
 msgid "Add a subpage"
-msgstr ""
+msgstr "Een subpagina toevoegen"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:92
 #: /collectives/specialVueFakeDummyForL10nScript.js:103
 msgid "Add template for subpages"
-msgstr ""
+msgstr "Sjabloon voor subpagina's toevoegen"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:94
 #: /collectives/specialVueFakeDummyForL10nScript.js:105
 msgid "New Page"
-msgstr ""
+msgstr "Nieuwe Pagina"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:96
 #: /collectives/specialVueFakeDummyForL10nScript.js:97
 msgid "Hide templates"
-msgstr ""
+msgstr "Sjablonen verbergen"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:96
 #: /collectives/specialVueFakeDummyForL10nScript.js:97
 msgid "Show templates"
-msgstr ""
+msgstr "Sjablonen weergeven"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:98
 msgid "Sort order"
-msgstr ""
+msgstr "Sorteervolgorde"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:101
 msgid "Add a page"
-msgstr ""
+msgstr "Een pagina toevoegen"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:107
 msgid "No backlinks available"
-msgstr ""
+msgstr "Geen backlinks beschikbaar"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:108
 msgid "If other pages link to this one, they will be listed here."
-msgstr ""
+msgstr "Als andere pagina's naar deze linken, worden ze hier vermeld."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:109
 msgid "Could not get page backlinks"
-msgstr ""
+msgstr "Kan geen pagina-backlinks krijgen"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:110
 msgid "Current version"
-msgstr ""
+msgstr "Huidige versie"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:111
 msgid "No other versions available"
-msgstr ""
+msgstr "Geen andere versies beschikbaar"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:112
 msgid "After editing you can find old versions of the page here."
-msgstr ""
+msgstr "Na bewerking kun je hier oude versies van de pagina vinden."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:113
 msgid "Could not get page versions"
-msgstr ""
+msgstr "Kan geen paginaversies ophalen"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:114
 #: /collectives/src/util/xmlToVersionsList.js:30
 msgid "%n byte"
 msgid_plural "%n bytes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%n byte"
+msgstr[1] "%n bytes"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:115
 msgid "Backlinks"
-msgstr ""
+msgstr "backlinks"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:116
 msgid "Pages that link to this one"
-msgstr ""
+msgstr "Pagina's die naar deze linken"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:117
 msgid "Versions"
-msgstr ""
+msgstr "Versies"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:118
 msgid "Old versions of this page"
-msgstr ""
+msgstr "Oude versies van deze pagina"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:120
 msgid "Come, organize and build shared knowledge!"
-msgstr ""
+msgstr "Kom, organiseer en bouw gedeelde kennis op!"
 
 #: /collectives/src/mixins/CopyToClipboardMixin.js:42
 msgid "Link copied to the clipboard."
-msgstr ""
+msgstr "Link gekopieerd naar het klembord."
 
 #: /collectives/src/mixins/CopyToClipboardMixin.js:47
 msgid "Could not copy link to the clipboard:"
-msgstr ""
+msgstr "Kan link niet naar het klembord kopiëren:"
 
 #: /collectives/templates/error.php:4
 msgid "Error: Missing apps"
-msgstr ""
+msgstr "Fout: ontbrekende apps"
 
 #: /collectives/templates/error.php:9
 msgid "The following dependency apps are missing: "
-msgstr ""
+msgstr "De volgende apps ontbreken: "
 
 #: /collectives/templates/error.php:27
 msgid "Please ask the administrator to enable these apps."
-msgstr ""
+msgstr "Vraag de beheerder om deze apps in te schakelen."
