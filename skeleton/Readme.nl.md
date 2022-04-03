@@ -1,25 +1,25 @@
-# Welcome to your new collective
+# Welkom bij je nieuwe collectief
 
-**Come, organize and build shared knowledge!**
-
-
-### 👥 Invite new people to the collective
-
-Whether you want to add your friends or whole groups, follow the "manage members" link that you find in the action menu inside the collectives list on the left.
-
-### 🌱 Bring life to your collective
-
-Create pages and share your thoughts that really matter. Whether it's a shared knowledge repository for the community or a handbook for your organisation – Collectives works!
-
-### 🛋️ Edit this landing page to feel like home
-
-Push the pencil button to get started! ↗️
+**Kom, organiseer en deel verzamelde kennis!**
 
 
-## Also good to know
+### 👥 Nodig nieuwe mensen uit voor het collectief
 
-* Multiple people can edit the same page simultaneously.
-* Link local pages by selecting text and choosing "link file". Drag & drop from page list into the editor also works.
-* Add templates for future subpages ("Show templates" -> "Add template for subpages")
-* Find out more about this App in the [documentation](https://collectivecloud.gitlab.io/collectives/).
-* Ask [the community](https://help.nextcloud.com/c/apps/collectives/174) for help in case of questions.
+Of je nu je vrienden of hele groepen wilt toevoegen, volg de link "leden beheren" die je vindt in het actiemenu in de lijst met collectives aan de linkerkant.
+
+### 🌱 Breng je collectief tot leven
+
+Maak pagina's en deel uw gedachten die er echt toe doen. Of het nu gaat om een gedeelde kennisbank voor een community of een handboek voor uw organisatie – Collectives werkt!
+
+### 🛋️ Bewerk deze landingspagina om je thuis te voelen
+
+Druk op de potloodknop om te beginnen! ️
+
+
+## Ook goed om te weten
+
+* Meerdere mensen kunnen dezelfde pagina tegelijkertijd bewerken.
+* Link lokale pagina's door tekst te selecteren en "link bestand" te kiezen. Drag & drop van de paginalijst naar de editor werkt ook.
+* Sjablonen voor toekomstige subpagina's toevoegen ("Sjablonen weergeven" -> "Sjabloon voor subpagina's toevoegen")
+* Lees meer over deze app in de [documentatie](https://collectivecloud.gitlab.io/collectives/).
+* Vraag [de community](https://help.nextcloud.com/c/apps/collectives/174) om hulp bij vragen.
