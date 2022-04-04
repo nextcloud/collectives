@@ -1,12 +1,13 @@
 <template>
 	<div>
-		<Item key="page.title"
+		<Item v-show="pageInFilterString"
+			key="page.title"
 			:to="pagePath(page)"
 			:has-children="hasChildren"
 			:page-id="page.id"
 			:level="level"
+			:filtered-view="filterString !== ''"
 			:title="page.title"
-			:collapsed="collapsed(page.id)"
 			:is-template="isTemplate"
 			@toggleCollapsed="toggleCollapsed(page.id)"
 			@click.native="show('details')">
@@ -31,11 +32,13 @@
 			:key="templateView.id"
 			:page="templateView"
 			:level="level+1"
+			:filter-string="filterString"
 			:is-template="true" />
 		<SubpageList v-for="subpage in subpagesView"
 			:key="subpage.id"
 			:page="subpage"
 			:level="level+1"
+			:filter-string="filterString"
 			:is-template="isTemplate" />
 	</div>
 </template>
@@ -68,6 +71,10 @@ export default {
 			type: Number,
 			required: true,
 		},
+		filterString: {
+			type: String,
+			default: '',
+		},
 		isTemplate: {
 			type: Boolean,
 			default: false,
@@ -87,9 +94,17 @@ export default {
 			'showTemplates',
 		]),
 
+		pageInFilterString() {
+			return this.page.title.toLowerCase().includes(this.filterString.toLowerCase())
+		},
+
+		hideSubpages() {
+			return this.filterString === '' && this.collapsed(this.page.id)
+		},
+
 		templateView() {
-			// Only display if not collapsed
-			if (!this.showTemplates || this.collapsed(this.page.id)) {
+			// Only display template if either in filtered view or not collapsed
+			if (!this.showTemplates || this.hideSubpages) {
 				return null
 			} else {
 				return this.templatePage(this.page.id)
@@ -101,8 +116,8 @@ export default {
 		},
 
 		subpagesView() {
-			// Only display subpages if not collapsed
-			if (this.collapsed(this.page.id)) {
+			// Only display subpages if either in filtered view or not collapsed
+			if (this.hideSubpages) {
 				return []
 			} else {
 				return this.subpages

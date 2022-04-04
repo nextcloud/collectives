@@ -1,9 +1,13 @@
 <template>
 	<AppContentList :class="{loading: loading('collective')}"
 		:show-details="showing('details')">
-		<div class="page-list-togglebar">
-			<Actions class="toggle">
-				<ActionButton class="sort"
+		<div class="page-list-headerbar">
+			<input v-model="filterString"
+				class="page-filter"
+				:placeholder="t('collectives', 'Search pages ...')"
+				type="text">
+			<Actions class="toggle toggle-push-to-right">
+				<ActionButton class="toggle-button"
 					:aria-label="showTemplates ? t('collectives', 'Hide templates') : t('collectives', 'Show templates')"
 					:icon="showTemplates ? 'icon-pages-template-dark-grey' : 'icon-pages-template-grey'"
 					:title="showTemplates ? t('collectives', 'Hide templates') : t('collectives', 'Show templates')"
@@ -19,7 +23,7 @@
 					slot="icon"
 					:size="16"
 					decorative />
-				<ActionButton class="sort"
+				<ActionButton class="toggle-button"
 					:class="{selected: sortBy === 'byTimestamp'}"
 					:close-after-click="true"
 					@click="sortPagesAndScroll('byTimestamp')">
@@ -28,7 +32,7 @@
 						:size="16"
 						decorative />
 				</ActionButton>
-				<ActionButton class="sort"
+				<ActionButton class="toggle-button"
 					:class="{selected: sortBy === 'byTitle'}"
 					:close-after-click="true"
 					@click="sortPagesAndScroll('byTitle')">
@@ -45,6 +49,7 @@
 				:to="currentCollectivePath"
 				:title="currentCollective.name"
 				:level="0"
+				:filtered-view="false"
 				:page-id="collectivePage ? collectivePage.id : 0"
 				@click.native="show('details')">
 				<template v-if="currentCollective.emoji" #icon>
@@ -73,11 +78,13 @@
 				:key="templateView.id"
 				:page="templateView"
 				:level="1"
+				:filter-string="filterString"
 				:is-template="true" />
 			<SubpageList v-for="page in subpages"
 				:key="page.id"
 				:page="page"
-				:level="1" />
+				:level="1"
+				:filter-string="filterString" />
 		</div>
 	</AppContentList>
 </template>
@@ -109,6 +116,12 @@ export default {
 		SubpageList,
 		SortAlphabeticalAscendingIcon,
 		SortClockAscendingOutlineIcon,
+	},
+
+	data() {
+		return {
+			filterString: '',
+		}
 	},
 
 	computed: {
@@ -211,33 +224,39 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.page-list-togglebar {
+.page-list-headerbar {
 	display: flex;
 	flex-direction: row;
-	margin: 0 0 0 auto;
 }
 
 .page-list {
 	overflow: scroll;
 }
 
+.page-filter {
+	margin-left: 48px;
+}
+
 .toggle {
 	height: 44px;
 	width: 44px;
 	padding: 0;
-	margin: 0 0 0 auto;
 }
 
 .toggle:hover {
 	opacity: 1;
 }
 
-li.sort.selected {
+.action-item--single.toggle-push-to-right {
+	margin-left: auto;
+}
+
+li.toggle-button.selected {
 	background-color: var(--color-primary-light);
 }
 
 .emoji {
-	margin: -3px
+	margin: -3px;
 }
 
 .icon-pages-template-dark-grey, .icon-pages-template-grey {

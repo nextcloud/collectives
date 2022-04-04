@@ -15,6 +15,7 @@
 				<div v-else :class="isCollapsible ? 'icon-pages-white' : 'icon-page-white'" />
 			</slot>
 			<TriangleIcon v-if="isCollapsible"
+				v-show="!filteredView"
 				:title="collapsed(pageId) ? t('collectives', 'Expand subpage list') : t('collectives', 'Collapse subpage list')"
 				class="page-icon-badge"
 				:class="{'page-icon-badge--rotated': collapsed(pageId)}" />
@@ -74,6 +75,10 @@ export default {
 		},
 		level: {
 			type: Number,
+			required: true,
+		},
+		filteredView: {
+			type: Boolean,
 			required: true,
 		},
 		pageId: {
