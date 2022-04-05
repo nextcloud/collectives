@@ -221,6 +221,27 @@ class CollectiveController extends Controller {
 	 *
 	 * @param int    $id
 	 * @param string $token
+	 * @param bool   $editable
+	 *
+	 * @return DataResponse
+	 */
+	public function updateShare(int $id, string $token, bool $editable = false): DataResponse {
+		return $this->prepareResponse(function () use ($id, $token, $editable): array {
+			$userId = $this->getUserId();
+			$collective = $this->service->getCollective($userId, $id);
+			$this->shareService->updateShare($userId, $collective, $token, $editable);
+			$collective = $this->service->getCollectiveWithShare($userId, $id);
+			return [
+				"data" => $collective
+			];
+		});
+	}
+
+	/**
+	 * @NoAdminRequired
+	 *
+	 * @param int    $id
+	 * @param string $token
 	 *
 	 * @return DataResponse
 	 */

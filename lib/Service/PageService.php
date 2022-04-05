@@ -604,8 +604,10 @@ class PageService {
 				// Delete file if it's not an index page
 				$file->delete();
 			}
-		} catch (InvalidPathException | FilesNotFoundException | FilesNotPermittedException $e) {
+		} catch (InvalidPathException | FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage());
+		} catch (FilesNotPermittedException $e) {
+			throw new NotPermittedException($e->getMessage());
 		}
 		$this->pageMapper->deleteByFileId($pageFile->getId());
 

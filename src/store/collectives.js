@@ -24,6 +24,7 @@ import {
 	DELETE_COLLECTIVE,
 	RESTORE_COLLECTIVE,
 	SHARE_COLLECTIVE,
+	UPDATE_SHARE_COLLECTIVE,
 	UNSHARE_COLLECTIVE,
 	UPDATE_COLLECTIVE_EDIT_PERMISSIONS,
 	UPDATE_COLLECTIVE_SHARE_PERMISSIONS,
@@ -107,7 +108,8 @@ export default {
 			if (!collective) {
 				return true
 			}
-			return getters.isPublic || collective.level < collective.editPermissionLevel
+			return (getters.isPublic && !collective.shareEditable)
+				|| (collective.level < collective.editPermissionLevel)
 		},
 
 		isCollectiveSharable: (state, getters) => (collective) => {
@@ -292,6 +294,27 @@ export default {
 			const response = await axios.post(generateUrl('/apps/collectives/_api/' + id + '/share'))
 			commit(ADD_OR_UPDATE_COLLECTIVE, response.data.data)
 			commit('done', 'share')
+		},
+
+		/**
+		 * Create a public collective share
+		 *
+		 * @param {object} store the vuex store
+		 * @param {Function} store.commit commit changes
+		 * @param {object} collective the collective with id
+		 * @param {number} collective.id ID of the colletive
+		 * @param {string} collective.shareToken Token of the share to be updated
+		 * @param {boolean} collective.shareEditable Is collective share editable
+		 */
+		async [UPDATE_SHARE_COLLECTIVE]({ commit }, { id, shareToken, shareEditable }) {
+			commit('load', 'shareEditable')
+			const response = await axios.put(
+				generateUrl('/apps/collectives/_api/' + id + '/share/' + shareToken),
+				{ editable: shareEditable }
+
+			)
+			commit(ADD_OR_UPDATE_COLLECTIVE, response.data.data)
+			commit('done', 'shareEditable')
 		},
 
 		/**

@@ -21,6 +21,8 @@ return [
 			'requirements' => ['id' => '\d+']],
 		['name' => 'collective#createShare', 'url' => '/_api/{id}/share', 'verb' => 'POST',
 			'requirements' => ['id' => '\d+']],
+		['name' => 'collective#updateShare', 'url' => '/_api/{id}/share/{token}', 'verb' => 'PUT',
+			'requirements' => ['id' => '\d+']],
 		['name' => 'collective#deleteShare', 'url' => '/_api/{id}/share/{token}', 'verb' => 'DELETE',
 			'requirements' => ['id' => '\d+']],
 
@@ -54,6 +56,14 @@ return [
 		['name' => 'publicPage#index', 'url' => '/_api/p/{token}/_pages', 'verb' => 'GET'],
 		['name' => 'publicPage#get', 'url' => '/_api/p/{token}/_pages/parent/{parentId}/page/{id}',
 			'verb' => 'GET', 'requirements' => ['parentId' => '\d+', 'id' => '\d+']],
+		['name' => 'publicPage#create', 'url' => '/_api/p/{token}/_pages/parent/{parentId}',
+			'verb' => 'POST', 'requirements' => ['parentId' => '\d+']],
+		['name' => 'publicPage#touch', 'url' => '/_api/p/{token}/_pages/parent/{parentId}/page/{id}/touch',
+			'verb' => 'GET', 'requirements' => ['parentId' => '\d+', 'id' => '\d+']],
+		['name' => 'publicPage#rename', 'url' => '/_api/p/{token}/_pages/parent/{parentId}/page/{id}',
+			'verb' => 'PUT', 'requirements' => ['parentId' => '\d+', 'id' => '\d+']],
+		['name' => 'publicPage#delete', 'url' => '/_api/p/{token}/_pages/parent/{parentId}/page/{id}',
+			'verb' => 'DELETE', 'requirements' => ['parentId' => '\d+', 'id' => '\d+']],
 		['name' => 'publicPage#getBacklinks', 'url' => '/_api/p/{token}/_pages/parent/{parentId}/page/{id}/backlinks',
 			'verb' => 'GET', 'requirements' => ['parentId' => '\d+', 'id' => '\d+']],
 
