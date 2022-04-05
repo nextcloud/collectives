@@ -2,8 +2,10 @@
 
 namespace Unit\Fs;
 
+use OC\Files\Node\File;
 use OC\Files\Node\Folder;
 use OCA\Collectives\Fs\NodeHelper;
+use OCA\Collectives\Service\NotFoundException;
 use OCP\IDBConnection;
 use OCP\IL10N;
 use PHPUnit\Framework\TestCase;
@@ -56,6 +58,25 @@ class NodeHelperTest extends TestCase {
 		self::assertEquals('New Page', $this->helper->sanitiseFilename('', 'New Page'));
 	}
 
+	public function testGetFileById(): void {
+		$file = $this->getMockBuilder(File::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$folder = $this->getMockBuilder(Folder::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$folder->method('getById')
+			->willReturnMap([
+				[1, [$file]],
+				[2, []],
+			]);
+
+		self::assertEquals($file, $this->helper->getFileById($folder, 1));
+
+		$this->expectException(NotFoundException::class);
+		$this->helper->getFileById($folder, 2);
+	}
+
 	public function filenameProvider(): array {
 		return [
 			['File exists1', 'File exists1 (2)'],
@@ -65,8 +86,7 @@ class NodeHelperTest extends TestCase {
 			['File exists4 (9)', 'File exists4 (10)'],
 			['File exists5 (1i)', 'File exists5 (1i) (2)'],
 			['File new', 'File new'],
-			[' (2)', ' (3)']
-		];
+			[' (2)', ' (3)'] ];
 	}
 
 	/**
