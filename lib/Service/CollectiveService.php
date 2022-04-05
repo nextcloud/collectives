@@ -16,10 +16,7 @@ use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\Files\NotPermittedException as FilesNotPermittedException;
 use OCP\IL10N;
 
-class CollectiveService {
-	/** @var CollectiveMapper */
-	private $collectiveMapper;
-
+class CollectiveService extends CollectiveServiceBase {
 	/** @var CollectiveHelper */
 	private $collectiveHelper;
 
@@ -57,7 +54,7 @@ class CollectiveService {
 		CollectiveShareService $shareService,
 		PageMapper $pageMapper,
 		IL10N $l10n) {
-		$this->collectiveMapper = $collectiveMapper;
+		parent::__construct($collectiveMapper);
 		$this->collectiveHelper = $collectiveHelper;
 		$this->collectiveFolderManager = $collectiveFolderManager;
 		$this->circleHelper = $circleHelper;
@@ -75,10 +72,8 @@ class CollectiveService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function getCollective(string $userId, int $id): CollectiveInfo {
-		if (null === $collective = $this->collectiveMapper->findById($id, $userId)) {
-			throw new NotFoundException('Collective not found: ' . $id);
-		}
+	public function getCollectiveInfo(string $userId, int $id): CollectiveInfo {
+		$collective = $this->getCollective($userId, $id);
 		$name = $this->collectiveMapper->circleIdToName($collective->getCircleId(), $userId);
 		$level = $this->circleHelper->getLevel($collective->getCircleId(), $userId);
 

@@ -2,9 +2,7 @@
 
 namespace OCA\Collectives\Controller;
 
-use OCA\Collectives\Db\Collective;
-use OCA\Collectives\Db\CollectiveMapper;
-use OCA\Collectives\Service\NotFoundException;
+use OCA\Collectives\Service\CollectiveServiceBase;
 use OCA\Collectives\Service\PageService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
@@ -13,11 +11,11 @@ use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
 
 class PageController extends Controller {
+	/** @var CollectiveServiceBase */
+	private $collectiveService;
+
 	/** @var PageService */
 	private $service;
-
-	/** @var CollectiveMapper */
-	private $collectiveMapper;
 
 	/** @var IUserSession */
 	private $userSession;
@@ -27,15 +25,15 @@ class PageController extends Controller {
 
 	use ErrorHelper;
 
-	public function __construct(string $appName,
-								IRequest $request,
-								PageService $service,
-								CollectiveMapper $collectiveMapper,
-								IUserSession $userSession,
-								LoggerInterface $logger) {
+	public function __construct(string                $appName,
+								IRequest              $request,
+								CollectiveServiceBase $collectiveService,
+								PageService           $service,
+								IUserSession          $userSession,
+								LoggerInterface       $logger) {
 		parent::__construct($appName, $request);
+		$this->collectiveService = $collectiveService;
 		$this->service = $service;
-		$this->collectiveMapper = $collectiveMapper;
 		$this->userSession = $userSession;
 		$this->logger = $logger;
 	}
@@ -48,20 +46,6 @@ class PageController extends Controller {
 	}
 
 	/**
-	 * @param int $collectiveId
-	 *
-	 * @return Collective
-	 * @throws NotFoundException
-	 */
-	private function getCollective(int $collectiveId): Collective {
-		if (null === $collective = $this->collectiveMapper->findById($collectiveId, $this->getUserId())) {
-			throw new NotFoundException('Collective not found: '. $collectiveId);
-		}
-
-		return $collective;
-	}
-
-	/**
 	 * @NoAdminRequired
 	 *
 	 * @param int $collectiveId
@@ -70,7 +54,8 @@ class PageController extends Controller {
 	 */
 	public function index(int $collectiveId): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId): array {
-			$pages = $this->service->findAll($this->getUserId(), $this->getCollective($collectiveId));
+			$userId = $this->getUserId();
+			$pages = $this->service->findAll($userId, $this->collectiveService->getCollective($collectiveId, $userId));
 			return [
 				"data" => $pages
 			];
@@ -88,7 +73,8 @@ class PageController extends Controller {
 	 */
 	public function get(int $collectiveId, int $parentId, int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $id): array {
-			$page = $this->service->find($this->getUserId(), $this->getCollective($collectiveId), $parentId, $id);
+			$userId = $this->getUserId();
+			$page = $this->service->find($userId, $this->collectiveService->getCollective($collectiveId, $userId), $parentId, $id);
 			return [
 				"data" => $page
 			];
@@ -106,7 +92,8 @@ class PageController extends Controller {
 	 */
 	public function create(int $collectiveId, int $parentId, string $title): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $title): array {
-			$page = $this->service->create($this->getUserId(), $this->getCollective($collectiveId), $parentId, $title);
+			$userId = $this->getUserId();
+			$page = $this->service->create($userId, $this->collectiveService->getCollective($collectiveId, $userId), $parentId, $title);
 			return [
 				"data" => $page
 			];
@@ -124,7 +111,8 @@ class PageController extends Controller {
 	 */
 	public function touch(int $collectiveId, int $parentId, int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $id): array {
-			$page = $this->service->touch($this->getUserId(), $this->getCollective($collectiveId), $parentId, $id);
+			$userId = $this->getUserId();
+			$page = $this->service->touch($userId, $this->collectiveService->getCollective($collectiveId, $userId), $parentId, $id);
 			return [
 				"data" => $page
 			];
@@ -143,7 +131,8 @@ class PageController extends Controller {
 	 */
 	public function rename(int $collectiveId, int $parentId, int $id, string $title): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $id, $title): array {
-			$page = $this->service->rename($this->getUserId(), $this->getCollective($collectiveId), $parentId, $id, $title);
+			$userId = $this->getUserId();
+			$page = $this->service->rename($userId, $this->collectiveService->getCollective($collectiveId, $userId), $parentId, $id, $title);
 			return [
 				"data" => $page
 			];
@@ -161,7 +150,8 @@ class PageController extends Controller {
 	 */
 	public function delete(int $collectiveId, int $parentId, int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $id): array {
-			$page = $this->service->delete($this->getUserId(), $this->getCollective($collectiveId), $parentId, $id);
+			$userId = $this->getUserId();
+			$page = $this->service->delete($userId, $this->collectiveService->getCollective($collectiveId, $userId), $parentId, $id);
 			return [
 				"data" => $page
 			];
@@ -179,7 +169,8 @@ class PageController extends Controller {
 	 */
 	public function getBacklinks(int $collectiveId, int $parentId, int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $id): array {
-			$backlinks = $this->service->getBacklinks($this->getUserId(), $this->getCollective($collectiveId), $parentId, $id);
+			$userId = $this->getUserId();
+			$backlinks = $this->service->getBacklinks($userId, $this->collectiveService->getCollective($collectiveId, $userId), $parentId, $id);
 			return [
 				"data" => $backlinks
 			];

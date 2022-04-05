@@ -207,7 +207,7 @@ class CollectiveController extends Controller {
 	public function createShare(int $id): DataResponse {
 		return $this->prepareResponse(function () use ($id): array {
 			$userId = $this->getUserId();
-			$collective = $this->service->getCollective($userId, $id);
+			$collective = $this->service->getCollectiveInfo($userId, $id);
 			$share = $this->shareService->createShare($userId, $collective);
 			$collective->setShareToken($share->getToken());
 			return [
@@ -248,7 +248,7 @@ class CollectiveController extends Controller {
 	public function deleteShare(int $id, string $token): DataResponse {
 		return $this->prepareResponse(function () use ($id, $token): array {
 			$userId = $this->getUserId();
-			$collective = $this->service->getCollective($userId, $id);
+			$collective = $this->service->getCollectiveInfo($userId, $id);
 			$this->shareService->deleteShare($userId, $id, $token);
 			return [
 				"data" => $collective
