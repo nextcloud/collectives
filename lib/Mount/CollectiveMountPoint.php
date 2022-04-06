@@ -37,7 +37,7 @@ class CollectiveMountPoint extends MountPoint {
 								int $mountId = null) {
 		$this->folderId = $folderId;
 		$this->collectiveFolderManager = $collectiveFolderManager;
-		parent::__construct($storage, $mountPoint, $arguments, $loader, $mountOptions, $mountId);
+		parent::__construct($storage, $mountPoint, $arguments, $loader, $mountOptions, $mountId, MountProvider::class);
 	}
 
 	/**
