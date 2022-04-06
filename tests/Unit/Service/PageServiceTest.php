@@ -76,8 +76,8 @@ class PageServiceTest extends TestCase {
 			->willReturn($folder);
 		$this->nodeHelper->method('getFileById')
 			->willReturn($file);
-		self::assertEquals($this->collectiveFolder, $this->service->getFolder($this->userId, $this->collective, 0));
-		self::assertEquals($folder, $this->service->getFolder($this->userId, $this->collective, 1));
+		self::assertEquals($this->collectiveFolder, $this->service->getFolder($this->collective, 0, $this->userId));
+		self::assertEquals($folder, $this->service->getFolder($this->collective, 1, $this->userId));
 	}
 
 	public function testInitSubFolder(): void {
@@ -284,8 +284,8 @@ class PageServiceTest extends TestCase {
 				$filesNotJustMd,
 			);
 
-		self::assertEquals($pageInfos, $this->service->recurseFolder($this->userId, $folder));
-		self::assertEquals($pageInfos, $this->service->recurseFolder($this->userId, $folder));
+		self::assertEquals($pageInfos, $this->service->recurseFolder($folder, $this->userId));
+		self::assertEquals($pageInfos, $this->service->recurseFolder($folder, $this->userId));
 	}
 
 	public function testGetPageLink(): void {

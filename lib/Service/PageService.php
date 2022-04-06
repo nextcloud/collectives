@@ -58,14 +58,14 @@ class PageService {
 
 
 	/**
-	 * @param string     $userId
 	 * @param Collective $collective
+	 * @param string     $userId
 	 *
 	 * @return Folder
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	private function getCollectiveFolder(string $userId, Collective $collective): Folder {
+	private function getCollectiveFolder(Collective $collective, string $userId): Folder {
 		try {
 			$collectiveName = $this->collectiveMapper->circleIdToName($collective->getCircleId(), $userId);
 			$folder = $this->userFolderHelper->get($userId)->get($collectiveName);
@@ -80,16 +80,16 @@ class PageService {
 	}
 
 	/**
-	 * @param string     $userId
 	 * @param Collective $collective
 	 * @param int        $fileId
+	 * @param string     $userId
 	 *
 	 * @return Folder
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function getFolder(string $userId, Collective $collective, int $fileId): Folder {
-		$collectiveFolder = $this->getCollectiveFolder($userId, $collective);
+	public function getFolder(Collective $collective, int $fileId, string $userId): Folder {
+		$collectiveFolder = $this->getCollectiveFolder($collective, $userId);
 		if ($fileId === 0) {
 			return $collectiveFolder;
 		}
@@ -150,10 +150,10 @@ class PageService {
 	}
 
 	/**
-	 * @param string $userId
 	 * @param int    $fileId
+	 * @param string $userId
 	 */
-	private function updatePage(string $userId, int $fileId): void {
+	private function updatePage(int $fileId, string $userId): void {
 		$page = new Page();
 		$page->setFileId($fileId);
 		$page->setLastUserId($userId);
@@ -161,15 +161,15 @@ class PageService {
 	}
 
 	/**
-	 * @param string $userId
 	 * @param Folder $folder
 	 * @param string $filename
+	 * @param string $userId
 	 *
 	 * @return PageInfo
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	private function newPage(string $userId, Folder $folder, string $filename): PageInfo {
+	private function newPage(Folder $folder, string $filename, string $userId): PageInfo {
 		$hasTemplate = self::folderHasSubPage($folder, PageInfo::TEMPLATE_PAGE_TITLE);
 		try {
 			if ($hasTemplate === 1) {
@@ -195,7 +195,7 @@ class PageService {
 		$pageInfo = new PageInfo();
 		try {
 			$pageInfo->fromFile($newFile, $this->getParentPageId($newFile), $userId);
-			$this->updatePage($userId, $newFile->getId());
+			$this->updatePage($newFile->getId(), $userId);
 		} catch (FilesNotFoundException | InvalidPathException $e) {
 			throw new NotFoundException($e->getMessage());
 		}
@@ -378,14 +378,14 @@ class PageService {
 	}
 
 	/**
-	 * @param string $userId
 	 * @param Folder $folder
+	 * @param string $userId
 	 *
 	 * @return array
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function recurseFolder(string $userId, Folder $folder): array {
+	public function recurseFolder(Folder $folder, string $userId): array {
 		// Find index page or create it if we have subpages, but it doesn't exist
 		try {
 			$indexPage = $this->getPageByFile($this->getIndexPageFile($folder));
@@ -393,7 +393,7 @@ class PageService {
 			if (!self::folderHasSubPages($folder)) {
 				return [];
 			}
-			$indexPage = $this->newPage($userId, $folder, PageInfo::INDEX_PAGE_TITLE);
+			$indexPage = $this->newPage($folder, PageInfo::INDEX_PAGE_TITLE, $userId);
 		}
 		$pageInfos = [$indexPage];
 
@@ -403,7 +403,7 @@ class PageService {
 				if ($node instanceof File && self::isPage($node) && !self::isIndexPage($node)) {
 					$pageInfos[] = $this->getPageByFile($node);
 				} elseif ($node instanceof Folder) {
-					array_push($pageInfos, ...$this->recurseFolder($userId, $node));
+					array_push($pageInfos, ...$this->recurseFolder($node, $userId));
 				}
 			}
 		} catch (FilesNotFoundException $e) {
@@ -414,33 +414,33 @@ class PageService {
 	}
 
 	/**
-	 * @param string     $userId
 	 * @param Collective $collective
+	 * @param string     $userId
 	 *
 	 * @return PageInfo[]
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function findAll(string $userId, Collective $collective): array {
-		$folder = $this->getCollectiveFolder($userId, $collective);
+	public function findAll(Collective $collective, string $userId): array {
+		$folder = $this->getCollectiveFolder($collective, $userId);
 		try {
-			return $this->recurseFolder($userId, $folder);
+			return $this->recurseFolder($folder, $userId);
 		} catch (NotPermittedException $e) {
 			throw new NotFoundException($e->getMessage());
 		}
 	}
 
 	/**
-	 * @param string     $userId
 	 * @param Collective $collective
 	 * @param string     $search
+	 * @param string     $userId
 	 *
 	 * @return PageInfo[]
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function findByString(string $userId, Collective $collective, string $search): array {
-		$allPages = $this->findAll($userId, $collective);
+	public function findByString(Collective $collective, string $search, string $userId): array {
+		$allPages = $this->findAll($collective, $userId);
 		$pageInfos = [];
 		foreach ($allPages as $page) {
 			if (stripos($page->getTitle(), $search) === false) {
@@ -453,56 +453,56 @@ class PageService {
 	}
 
 	/**
-	 * @param string     $userId
 	 * @param Collective $collective
 	 * @param int        $parentId
 	 * @param int        $id
+	 * @param string     $userId
 	 *
 	 * @return PageInfo
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function find(string $userId, Collective $collective, int $parentId, int $id): PageInfo {
-		$folder = $this->getFolder($userId, $collective, $parentId);
+	public function find(Collective $collective, int $parentId, int $id, string $userId): PageInfo {
+		$folder = $this->getFolder($collective, $parentId, $userId);
 		return $this->getPageByFile($this->nodeHelper->getFileById($folder, $id));
 	}
 
 	/**
-	 * @param string     $userId
 	 * @param Collective $collective
 	 * @param int        $parentId
 	 * @param string     $title
+	 * @param string     $userId
 	 *
 	 * @return PageInfo
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function create(string $userId, Collective $collective, int $parentId, string $title): PageInfo {
-		$folder = $this->getFolder($userId, $collective, $parentId);
+	public function create(Collective $collective, int $parentId, string $title, string $userId): PageInfo {
+		$folder = $this->getFolder($collective, $parentId, $userId);
 		$parentFile = $this->nodeHelper->getFileById($folder, $parentId);
 		$folder = $this->initSubFolder($parentFile);
 		$safeTitle = $this->nodeHelper->sanitiseFilename($title, self::DEFAULT_PAGE_TITLE);
 		$filename = NodeHelper::generateFilename($folder, $safeTitle, PageInfo::SUFFIX);
 
-		return $this->newPage($userId, $folder, $filename);
+		return $this->newPage($folder, $filename, $userId);
 	}
 
 	/**
-	 * @param string     $userId
 	 * @param Collective $collective
 	 * @param int        $parentId
 	 * @param int        $id
+	 * @param string     $userId
 	 *
 	 * @return PageInfo
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function touch(string $userId, Collective $collective, int $parentId, int $id): PageInfo {
-		$folder = $this->getFolder($userId, $collective, $parentId);
+	public function touch(Collective $collective, int $parentId, int $id, string $userId): PageInfo {
+		$folder = $this->getFolder($collective, $parentId, $userId);
 		$file = $this->nodeHelper->getFileById($folder, $id);
 		$pageInfo = $this->getPageByFile($file);
 		$pageInfo->setLastUserId($userId);
-		$this->updatePage($userId, $pageInfo->getId());
+		$this->updatePage($pageInfo->getId(), $userId);
 		return $pageInfo;
 	}
 
@@ -549,25 +549,25 @@ class PageService {
 	}
 
 	/**
-	 * @param string     $userId
 	 * @param Collective $collective
 	 * @param int        $parentId
 	 * @param int        $id
 	 * @param string     $title
+	 * @param string     $userId
 	 *
 	 * @return PageInfo
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function rename(string $userId, Collective $collective, int $parentId, int $id, string $title): PageInfo {
-		$collectiveFolder = $this->getCollectiveFolder($userId, $collective);
+	public function rename(Collective $collective, int $parentId, int $id, string $title, string $userId): PageInfo {
+		$collectiveFolder = $this->getCollectiveFolder($collective, $userId);
 		$file = $this->nodeHelper->getFileById($collectiveFolder, $id);
 		if ($this->renamePage($collectiveFolder, $parentId, $file, $title)) {
 			// Refresh the file after it has been renamed
 			$file = $this->nodeHelper->getFileById($collectiveFolder, $id);
 		}
 		try {
-			$this->updatePage($userId, $file->getId());
+			$this->updatePage($file->getId(), $userId);
 		} catch (InvalidPathException | FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage());
 		}
@@ -577,17 +577,17 @@ class PageService {
 	}
 
 	/**
-	 * @param string     $userId
 	 * @param Collective $collective
 	 * @param int        $parentId
 	 * @param int        $id
+	 * @param string     $userId
 	 *
 	 * @return PageInfo
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function delete(string $userId, Collective $collective, int $parentId, int $id): PageInfo {
-		$folder = $this->getFolder($userId, $collective, $parentId);
+	public function delete(Collective $collective, int $parentId, int $id, string $userId): PageInfo {
+		$folder = $this->getFolder($collective, $parentId, $userId);
 		$file = $this->nodeHelper->getFileById($folder, $id);
 		$pageInfo = $this->getPageByFile($file);
 
@@ -673,22 +673,22 @@ class PageService {
 	}
 
 	/**
-	 * @param string     $userId
 	 * @param Collective $collective
 	 * @param int        $parentId
 	 * @param int        $id
+	 * @param string     $userId
 	 *
 	 * @return PageInfo[]
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function getBacklinks(string $userId, Collective $collective, int $parentId, int $id): array {
-		$page = $this->find($userId, $collective, $parentId, $id);
-		$allPages = $this->findAll($userId, $collective);
+	public function getBacklinks(Collective $collective, int $parentId, int $id, string $userId): array {
+		$page = $this->find($collective, $parentId, $id, $userId);
+		$allPages = $this->findAll($collective, $userId);
 
 		$backlinks = [];
 		foreach ($allPages as $p) {
-			$file = $this->nodeHelper->getFileById($this->getFolder($userId, $collective, $p->getId()), $p->getId());
+			$file = $this->nodeHelper->getFileById($this->getFolder($collective, $p->getId(), $userId), $p->getId());
 			$content = NodeHelper::getContent($file);
 			if ($this->matchBacklinks($page, $content)) {
 				$backlinks[] = $p;

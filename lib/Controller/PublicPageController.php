@@ -117,7 +117,7 @@ class PublicPageController extends PublicShareController {
 		return $this->handleErrorResponse(function (): array {
 			$owner = $this->getShare()->getOwner();
 			$collectiveId = $this->getShare()->getCollectiveId();
-			$pages = $this->service->findAll($owner, $this->collectiveService->getCollective($collectiveId, $owner));
+			$pages = $this->service->findAll($this->collectiveService->getCollective($collectiveId, $owner), $owner);
 			foreach ($pages as $page) {
 				// Shares don't have a collective path
 				$page->setCollectivePath('');
@@ -141,7 +141,7 @@ class PublicPageController extends PublicShareController {
 		return $this->handleErrorResponse(function () use ($parentId, $id): array {
 			$owner = $this->getShare()->getOwner();
 			$collectiveId = $this->getShare()->getCollectiveId();
-			$page = $this->service->find($owner, $this->collectiveService->getCollective($collectiveId, $owner), $parentId, $id);
+			$page = $this->service->find($this->collectiveService->getCollective($collectiveId, $owner), $parentId, $id, $owner);
 			// Shares don't have a collective path
 			$page->setCollectivePath('');
 			$page->setShareToken($this->getToken());
@@ -164,7 +164,7 @@ class PublicPageController extends PublicShareController {
 			$this->checkEditPermissions();
 			$owner = $this->getShare()->getOwner();
 			$collectiveId = $this->getShare()->getCollectiveId();
-			$page = $this->service->create($owner, $this->collectiveService->getCollective($collectiveId, $owner), $parentId, $title);
+			$page = $this->service->create($this->collectiveService->getCollective($collectiveId, $owner), $parentId, $title, $owner);
 			// Shares don't have a collective path
 			$page->setCollectivePath('');
 			$page->setShareToken($this->getToken());
@@ -187,7 +187,7 @@ class PublicPageController extends PublicShareController {
 			$this->checkEditPermissions();
 			$owner = $this->getShare()->getOwner();
 			$collectiveId = $this->getShare()->getCollectiveId();
-			$page = $this->service->touch($owner, $this->collectiveService->getCollective($collectiveId, $owner), $parentId, $id);
+			$page = $this->service->touch($this->collectiveService->getCollective($collectiveId, $owner), $parentId, $id, $owner);
 			// Shares don't have a collective path
 			$page->setCollectivePath('');
 			$page->setShareToken($this->getToken());
@@ -211,7 +211,7 @@ class PublicPageController extends PublicShareController {
 			$this->checkEditPermissions();
 			$owner = $this->getShare()->getOwner();
 			$collectiveId = $this->getShare()->getCollectiveId();
-			$page = $this->service->rename($owner, $this->collectiveService->getCollective($collectiveId, $owner), $parentId, $id, $title);
+			$page = $this->service->rename($this->collectiveService->getCollective($collectiveId, $owner), $parentId, $id, $title, $owner);
 			// Shares don't have a collective path
 			$page->setCollectivePath('');
 			$page->setShareToken($this->getToken());
@@ -234,7 +234,7 @@ class PublicPageController extends PublicShareController {
 			$this->checkEditPermissions();
 			$owner = $this->getShare()->getOwner();
 			$collectiveId = $this->getShare()->getCollectiveId();
-			$page = $this->service->delete($owner, $this->collectiveService->getCollective($collectiveId, $owner), $parentId, $id);
+			$page = $this->service->delete($this->collectiveService->getCollective($collectiveId, $owner), $parentId, $id, $owner);
 			// Shares don't have a collective path
 			$page->setCollectivePath('');
 			$page->setShareToken($this->getToken());
@@ -256,7 +256,7 @@ class PublicPageController extends PublicShareController {
 		return $this->handleErrorResponse(function () use ($parentId, $id): array {
 			$owner = $this->getShare()->getOwner();
 			$collectiveId = $this->getShare()->getCollectiveId();
-			$backlinks = $this->service->getBacklinks($owner, $this->collectiveService->getCollective($collectiveId, $owner), $parentId, $id);
+			$backlinks = $this->service->getBacklinks($this->collectiveService->getCollective($collectiveId, $owner), $parentId, $id, $owner);
 			return [
 				"data" => $backlinks
 			];
