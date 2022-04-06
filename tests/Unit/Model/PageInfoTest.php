@@ -3,12 +3,12 @@
 namespace Unit\Model;
 
 use OC\Files\Mount\MountPoint;
-use OCA\Collectives\Model\PageFile;
+use OCA\Collectives\Model\PageInfo;
 use OCP\Files\File;
 use OCP\Files\Folder;
 use PHPUnit\Framework\TestCase;
 
-class PageFileTest extends TestCase {
+class PageInfoTest extends TestCase {
 	public function testFromFile(): void {
 		$fileId = 1;
 		$fileTitle = 'name';
@@ -40,15 +40,15 @@ class PageFileTest extends TestCase {
 		$file->method('getMountPoint')->willReturn($mountPoint);
 		$file->method('getParent')->willReturn($parent);
 
-		$pageFile = new PageFile();
-		$pageFile->fromFile($file, 1, $userId);
+		$pageInfo = new PageInfo();
+		$pageInfo->fromFile($file, 1, $userId);
 
-		self::assertEquals($fileId, $pageFile->getId());
-		self::assertEquals($fileTitle, $pageFile->getTitle());
-		self::assertEquals($fileMTime, $pageFile->getTimestamp());
-		self::assertEquals($fileSize, $pageFile->getSize());
-		self::assertEquals($fileName, $pageFile->getFileName());
-		self::assertEquals($parentInternalPath, $pageFile->getFilePath());
-		self::assertEquals($fileCollectivePath, $pageFile->getCollectivePath());
+		self::assertEquals($fileId, $pageInfo->getId());
+		self::assertEquals($fileTitle, $pageInfo->getTitle());
+		self::assertEquals($fileMTime, $pageInfo->getTimestamp());
+		self::assertEquals($fileSize, $pageInfo->getSize());
+		self::assertEquals($fileName, $pageInfo->getFileName());
+		self::assertEquals($parentInternalPath, $pageInfo->getFilePath());
+		self::assertEquals($fileCollectivePath, $pageInfo->getCollectivePath());
 	}
 }

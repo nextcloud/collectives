@@ -9,7 +9,7 @@ use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Db\Page;
 use OCA\Collectives\Db\PageMapper;
 use OCA\Collectives\Model\CollectiveInfo;
-use OCA\Collectives\Model\PageFile;
+use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCP\Files\InvalidPathException;
 use OCP\Files\NotFoundException as FilesNotFoundException;
@@ -209,7 +209,7 @@ class CollectiveService extends CollectiveServiceBase {
 
 		// Register landing page
 		try {
-			$file = $collectiveFolder->get(PageFile::INDEX_PAGE_TITLE . PageFile::SUFFIX);
+			$file = $collectiveFolder->get(PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX);
 			if (!$file instanceof File) {
 				throw new NotFoundException('Unable to get landing page for collective');
 			}

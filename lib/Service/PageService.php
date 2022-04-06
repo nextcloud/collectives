@@ -8,7 +8,7 @@ use OCA\Collectives\Db\Page;
 use OCA\Collectives\Db\PageMapper;
 use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Fs\UserFolderHelper;
-use OCA\Collectives\Model\PageFile;
+use OCA\Collectives\Model\PageInfo;
 use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\InvalidPathException;
@@ -129,11 +129,11 @@ class PageService {
 	/**
 	 * @param File $file
 	 *
-	 * @return PageFile
+	 * @return PageInfo
 	 * @throws NotFoundException
 	 */
-	private function getPageByFile(File $file): PageFile {
-		$pageFile = new PageFile();
+	private function getPageByFile(File $file): PageInfo {
+		$pageInfo = new PageInfo();
 		try {
 			$page = $this->pageMapper->findByFileId($file->getId());
 		} catch (InvalidPathException | FilesNotFoundException $e) {
@@ -141,12 +141,12 @@ class PageService {
 		}
 		$lastUserId = ($page !== null) ? $page->getLastUserId() : null;
 		try {
-			$pageFile->fromFile($file, $this->getParentPageId($file), $lastUserId);
+			$pageInfo->fromFile($file, $this->getParentPageId($file), $lastUserId);
 		} catch (FilesNotFoundException | InvalidPathException $e) {
 			throw new NotFoundException($e->getMessage());
 		}
 
-		return $pageFile;
+		return $pageInfo;
 	}
 
 	/**
@@ -165,26 +165,26 @@ class PageService {
 	 * @param Folder $folder
 	 * @param string $filename
 	 *
-	 * @return PageFile
+	 * @return PageInfo
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	private function newPageFile(string $userId, Folder $folder, string $filename): PageFile {
-		$hasTemplate = self::folderHasSubPage($folder, PageFile::TEMPLATE_PAGE_TITLE);
+	private function newPage(string $userId, Folder $folder, string $filename): PageInfo {
+		$hasTemplate = self::folderHasSubPage($folder, PageInfo::TEMPLATE_PAGE_TITLE);
 		try {
 			if ($hasTemplate === 1) {
-				$template = $folder->get(PageFile::TEMPLATE_PAGE_TITLE . PageFile::SUFFIX);
-				$newFile = $template->copy($folder->getPath() . '/' . $filename . PageFile::SUFFIX);
+				$template = $folder->get(PageInfo::TEMPLATE_PAGE_TITLE . PageInfo::SUFFIX);
+				$newFile = $template->copy($folder->getPath() . '/' . $filename . PageInfo::SUFFIX);
 			} elseif ($hasTemplate === 2) {
-				$template = $folder->get(PageFile::TEMPLATE_PAGE_TITLE);
+				$template = $folder->get(PageInfo::TEMPLATE_PAGE_TITLE);
 				$newFolder = $template->copy($folder->getPath() . '/' . $filename);
 				if ($newFolder instanceof Folder) {
-					$newFile = $newFolder->get(PageFile::INDEX_PAGE_TITLE . PageFile::SUFFIX);
+					$newFile = $newFolder->get(PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX);
 				} else {
 					throw new NotFoundException('Failed to get Template folder');
 				}
 			} else {
-				$newFile = $folder->newFile($filename . PageFile::SUFFIX);
+				$newFile = $folder->newFile($filename . PageInfo::SUFFIX);
 			}
 		} catch (FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage());
@@ -192,15 +192,15 @@ class PageService {
 			throw new NotPermittedException($e->getMessage());
 		}
 
-		$pageFile = new PageFile();
+		$pageInfo = new PageInfo();
 		try {
-			$pageFile->fromFile($newFile, $this->getParentPageId($newFile), $userId);
+			$pageInfo->fromFile($newFile, $this->getParentPageId($newFile), $userId);
 			$this->updatePage($userId, $newFile->getId());
 		} catch (FilesNotFoundException | InvalidPathException $e) {
 			throw new NotFoundException($e->getMessage());
 		}
 
-		return $pageFile;
+		return $pageInfo;
 	}
 
 	/**
@@ -216,9 +216,9 @@ class PageService {
 		}
 
 		try {
-			$folderName = NodeHelper::generateFilename($folder, basename($file->getName(), PageFile::SUFFIX));
+			$folderName = NodeHelper::generateFilename($folder, basename($file->getName(), PageInfo::SUFFIX));
 			$subFolder = $folder->newFolder($folderName);
-			$file->move($subFolder->getPath() . '/' . PageFile::INDEX_PAGE_TITLE . PageFile::SUFFIX);
+			$file->move($subFolder->getPath() . '/' . PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX);
 		} catch (InvalidPathException | FilesNotFoundException | FilesNotPermittedException | LockedException $e) {
 			throw new NotPermittedException($e->getMessage());
 		}
@@ -239,8 +239,8 @@ class PageService {
 				} elseif ($node instanceof File) {
 					// Move index page without subpages into the parent folder (if's not the landing page)
 					if (self::isIndexPage($node) && !self::isLandingPage($node) && !$this->pageHasOtherContent($node)) {
-						$filename = NodeHelper::generateFilename($folder, $folder->getName(), PageFile::SUFFIX);
-						$node->move($folder->getParent()->getPath() . '/' . $filename . PageFile::SUFFIX);
+						$filename = NodeHelper::generateFilename($folder, $folder->getName(), PageInfo::SUFFIX);
+						$node->move($folder->getParent()->getPath() . '/' . $filename . PageInfo::SUFFIX);
 						$folder->delete();
 						break;
 					}
@@ -260,8 +260,8 @@ class PageService {
 	 */
 	public static function isPage(File $file): bool {
 		$name = $file->getName();
-		$length = strlen(PageFile::SUFFIX);
-		return (substr($name, -$length) === PageFile::SUFFIX);
+		$length = strlen(PageInfo::SUFFIX);
+		return (substr($name, -$length) === PageInfo::SUFFIX);
 	}
 
 	/**
@@ -271,7 +271,7 @@ class PageService {
 	 */
 	public static function isLandingPage(File $file): bool {
 		$internalPath = $file->getInternalPath();
-		return ($internalPath === PageFile::INDEX_PAGE_TITLE . PageFile::SUFFIX);
+		return ($internalPath === PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX);
 	}
 
 	/**
@@ -281,7 +281,7 @@ class PageService {
 	 */
 	public static function isIndexPage(File $file): bool {
 		$name = $file->getName();
-		return ($name === PageFile::INDEX_PAGE_TITLE . PageFile::SUFFIX);
+		return ($name === PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX);
 	}
 
 	/**
@@ -292,7 +292,7 @@ class PageService {
 	 */
 	private function getIndexPageFile(Folder $folder): File {
 		try {
-			$file = $folder->get(PageFile::INDEX_PAGE_TITLE . PageFile::SUFFIX);
+			$file = $folder->get(PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX);
 		} catch (FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage());
 		}
@@ -317,7 +317,7 @@ class PageService {
 					!self::isIndexPage($node)) {
 					return true;
 				}
-				if ($node->getName() !== PageFile::INDEX_PAGE_TITLE . PageFile::SUFFIX) {
+				if ($node->getName() !== PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX) {
 					return true;
 				}
 			}
@@ -361,13 +361,13 @@ class PageService {
 		try {
 			foreach ($folder->getDirectoryListing() as $node) {
 				if ($node instanceof File &&
-					strcmp($node->getName(), $title . PageFile::SUFFIX) === 0) {
+					strcmp($node->getName(), $title . PageInfo::SUFFIX) === 0) {
 					return 1;
 				}
 
 				if ($node instanceof Folder &&
 					strcmp($node->getName(), $title) === 0 &&
-					$node->nodeExists(PageFile::INDEX_PAGE_TITLE . PageFile::SUFFIX)) {
+					$node->nodeExists(PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX)) {
 					return 2;
 				}
 			}
@@ -393,31 +393,31 @@ class PageService {
 			if (!self::folderHasSubPages($folder)) {
 				return [];
 			}
-			$indexPage = $this->newPageFile($userId, $folder, PageFile::INDEX_PAGE_TITLE);
+			$indexPage = $this->newPage($userId, $folder, PageInfo::INDEX_PAGE_TITLE);
 		}
-		$pageFiles = [$indexPage];
+		$pageInfos = [$indexPage];
 
 		// Add subpages and recurse over subfolders
 		try {
 			foreach ($folder->getDirectoryListing() as $node) {
 				if ($node instanceof File && self::isPage($node) && !self::isIndexPage($node)) {
-					$pageFiles[] = $this->getPageByFile($node);
+					$pageInfos[] = $this->getPageByFile($node);
 				} elseif ($node instanceof Folder) {
-					array_push($pageFiles, ...$this->recurseFolder($userId, $node));
+					array_push($pageInfos, ...$this->recurseFolder($userId, $node));
 				}
 			}
 		} catch (FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage());
 		}
 
-		return $pageFiles;
+		return $pageInfos;
 	}
 
 	/**
 	 * @param string     $userId
 	 * @param Collective $collective
 	 *
-	 * @return PageFile[]
+	 * @return PageInfo[]
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
@@ -435,21 +435,21 @@ class PageService {
 	 * @param Collective $collective
 	 * @param string     $search
 	 *
-	 * @return PageFile[]
+	 * @return PageInfo[]
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
 	public function findByString(string $userId, Collective $collective, string $search): array {
-		$allPageFiles = $this->findAll($userId, $collective);
-		$pageFiles = [];
-		foreach ($allPageFiles as $page) {
+		$allPages = $this->findAll($userId, $collective);
+		$pageInfos = [];
+		foreach ($allPages as $page) {
 			if (stripos($page->getTitle(), $search) === false) {
 				continue;
 			}
-			$pageFiles[] = $page;
+			$pageInfos[] = $page;
 		}
 
-		return $pageFiles;
+		return $pageInfos;
 	}
 
 	/**
@@ -458,11 +458,11 @@ class PageService {
 	 * @param int        $parentId
 	 * @param int        $id
 	 *
-	 * @return PageFile
+	 * @return PageInfo
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function find(string $userId, Collective $collective, int $parentId, int $id): PageFile {
+	public function find(string $userId, Collective $collective, int $parentId, int $id): PageInfo {
 		$folder = $this->getFolder($userId, $collective, $parentId);
 		return $this->getPageByFile($this->nodeHelper->getFileById($folder, $id));
 	}
@@ -473,18 +473,18 @@ class PageService {
 	 * @param int        $parentId
 	 * @param string     $title
 	 *
-	 * @return PageFile
+	 * @return PageInfo
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function create(string $userId, Collective $collective, int $parentId, string $title): PageFile {
+	public function create(string $userId, Collective $collective, int $parentId, string $title): PageInfo {
 		$folder = $this->getFolder($userId, $collective, $parentId);
 		$parentFile = $this->nodeHelper->getFileById($folder, $parentId);
 		$folder = $this->initSubFolder($parentFile);
 		$safeTitle = $this->nodeHelper->sanitiseFilename($title, self::DEFAULT_PAGE_TITLE);
-		$filename = NodeHelper::generateFilename($folder, $safeTitle, PageFile::SUFFIX);
+		$filename = NodeHelper::generateFilename($folder, $safeTitle, PageInfo::SUFFIX);
 
-		return $this->newPageFile($userId, $folder, $filename);
+		return $this->newPage($userId, $folder, $filename);
 	}
 
 	/**
@@ -493,17 +493,17 @@ class PageService {
 	 * @param int        $parentId
 	 * @param int        $id
 	 *
-	 * @return PageFile
+	 * @return PageInfo
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function touch(string $userId, Collective $collective, int $parentId, int $id): PageFile {
+	public function touch(string $userId, Collective $collective, int $parentId, int $id): PageInfo {
 		$folder = $this->getFolder($userId, $collective, $parentId);
 		$file = $this->nodeHelper->getFileById($folder, $id);
-		$pageFile = $this->getPageByFile($file);
-		$pageFile->setLastUserId($userId);
-		$this->updatePage($userId, $pageFile->getId());
-		return $pageFile;
+		$pageInfo = $this->getPageByFile($file);
+		$pageInfo->setLastUserId($userId);
+		$this->updatePage($userId, $pageInfo->getId());
+		return $pageInfo;
 	}
 
 	/**
@@ -528,7 +528,7 @@ class PageService {
 		$safeTitle = $this->nodeHelper->sanitiseFilename($title, self::DEFAULT_PAGE_TITLE);
 		// If processing an index page, then rename the parent folder, otherwise the file itself
 		$node = self::isIndexPage($file) ? $file->getParent() : $file;
-		$suffix = self::isIndexPage($file) ? '' : PageFile::SUFFIX;
+		$suffix = self::isIndexPage($file) ? '' : PageInfo::SUFFIX;
 		$newSafeName = $safeTitle . $suffix;
 
 		// Neither path nor title changed, nothing to do
@@ -536,7 +536,7 @@ class PageService {
 			return false;
 		}
 
-		$newFileName = NodeHelper::generateFilename($newFolder, $safeTitle, PageFile::SUFFIX);
+		$newFileName = NodeHelper::generateFilename($newFolder, $safeTitle, PageInfo::SUFFIX);
 		try {
 			$node->move($newFolder->getPath() . '/' . $newFileName . $suffix);
 		} catch (InvalidPathException | FilesNotFoundException | LockedException $e) {
@@ -555,11 +555,11 @@ class PageService {
 	 * @param int        $id
 	 * @param string     $title
 	 *
-	 * @return PageFile
+	 * @return PageInfo
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function rename(string $userId, Collective $collective, int $parentId, int $id, string $title): PageFile {
+	public function rename(string $userId, Collective $collective, int $parentId, int $id, string $title): PageInfo {
 		$collectiveFolder = $this->getCollectiveFolder($userId, $collective);
 		$file = $this->nodeHelper->getFileById($collectiveFolder, $id);
 		if ($this->renamePage($collectiveFolder, $parentId, $file, $title)) {
@@ -582,14 +582,14 @@ class PageService {
 	 * @param int        $parentId
 	 * @param int        $id
 	 *
-	 * @return PageFile
+	 * @return PageInfo
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function delete(string $userId, Collective $collective, int $parentId, int $id): PageFile {
+	public function delete(string $userId, Collective $collective, int $parentId, int $id): PageInfo {
 		$folder = $this->getFolder($userId, $collective, $parentId);
 		$file = $this->nodeHelper->getFileById($folder, $id);
-		$pageFile = $this->getPageByFile($file);
+		$pageInfo = $this->getPageByFile($file);
 
 		try {
 			if (self::isIndexPage($file)) {
@@ -609,21 +609,21 @@ class PageService {
 		} catch (FilesNotPermittedException $e) {
 			throw new NotPermittedException($e->getMessage());
 		}
-		$this->pageMapper->deleteByFileId($pageFile->getId());
+		$this->pageMapper->deleteByFileId($pageInfo->getId());
 
 		$this->revertSubFolders($folder);
-		return $pageFile;
+		return $pageInfo;
 	}
 
 
 	/**
 	 * @param string   $collectiveName
-	 * @param PageFile $page
+	 * @param PageInfo $page
 	 * @param bool     $withFileId
 	 *
 	 * @return string
 	 */
-	public function getPageLink(string $collectiveName, PageFile $page, bool $withFileId = true): string {
+	public function getPageLink(string $collectiveName, PageInfo $page, bool $withFileId = true): string {
 		$collectiveRoute = rawurlencode($collectiveName);
 		$pagePathRoute = implode('/', array_map('rawurlencode', explode('/', $page->getFilePath())));
 		$pageTitleRoute = rawurlencode($page->getTitle());
@@ -637,12 +637,12 @@ class PageService {
 	}
 
 	/**
-	 * @param PageFile $page
+	 * @param PageInfo $page
 	 * @param string   $content
 	 *
 	 * @return bool
 	 */
-	public function matchBacklinks(PageFile $page, string $content): bool {
+	public function matchBacklinks(PageInfo $page, string $content): bool {
 		$prefix = '/\[[^\]]+\]\(';
 		$suffix = '\)/';
 
@@ -678,7 +678,7 @@ class PageService {
 	 * @param int        $parentId
 	 * @param int        $id
 	 *
-	 * @return PageFile[]
+	 * @return PageInfo[]
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
