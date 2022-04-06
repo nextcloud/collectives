@@ -4,7 +4,6 @@ namespace OCA\Collectives\Controller;
 
 use OCA\Collectives\Db\CollectiveShareMapper;
 use OCA\Collectives\Model\CollectiveShareInfo;
-use OCA\Collectives\Service\CollectiveServiceBase;
 use OCA\Collectives\Service\CollectiveShareService;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
@@ -18,9 +17,6 @@ use OCP\ISession;
 use Psr\Log\LoggerInterface;
 
 class PublicPageController extends PublicShareController {
-	/** @var CollectiveServiceBase */
-	private $collectiveService;
-
 	/** @var CollectiveShareMapper */
 	private $collectiveShareMapper;
 
@@ -40,14 +36,12 @@ class PublicPageController extends PublicShareController {
 
 	public function __construct(string                $appName,
 								IRequest              $request,
-								CollectiveServiceBase $collectiveService,
 								CollectiveShareMapper $collectiveShareMapper,
 								CollectiveShareService $collectiveShareService,
 								PageService $service,
 								ISession $session,
 								LoggerInterface $logger) {
 		parent::__construct($appName, $request, $session);
-		$this->collectiveService = $collectiveService;
 		$this->collectiveShareMapper = $collectiveShareMapper;
 		$this->collectiveShareService = $collectiveShareService;
 		$this->service = $service;
@@ -117,7 +111,7 @@ class PublicPageController extends PublicShareController {
 		return $this->handleErrorResponse(function (): array {
 			$owner = $this->getShare()->getOwner();
 			$collectiveId = $this->getShare()->getCollectiveId();
-			$pages = $this->service->findAll($this->collectiveService->getCollective($collectiveId, $owner), $owner);
+			$pages = $this->service->findAll($collectiveId, $owner);
 			foreach ($pages as $page) {
 				// Shares don't have a collective path
 				$page->setCollectivePath('');
@@ -141,7 +135,7 @@ class PublicPageController extends PublicShareController {
 		return $this->handleErrorResponse(function () use ($parentId, $id): array {
 			$owner = $this->getShare()->getOwner();
 			$collectiveId = $this->getShare()->getCollectiveId();
-			$page = $this->service->find($this->collectiveService->getCollective($collectiveId, $owner), $parentId, $id, $owner);
+			$page = $this->service->find($collectiveId, $parentId, $id, $owner);
 			// Shares don't have a collective path
 			$page->setCollectivePath('');
 			$page->setShareToken($this->getToken());
@@ -164,7 +158,7 @@ class PublicPageController extends PublicShareController {
 			$this->checkEditPermissions();
 			$owner = $this->getShare()->getOwner();
 			$collectiveId = $this->getShare()->getCollectiveId();
-			$page = $this->service->create($this->collectiveService->getCollective($collectiveId, $owner), $parentId, $title, $owner);
+			$page = $this->service->create($collectiveId, $parentId, $title, $owner);
 			// Shares don't have a collective path
 			$page->setCollectivePath('');
 			$page->setShareToken($this->getToken());
@@ -187,7 +181,7 @@ class PublicPageController extends PublicShareController {
 			$this->checkEditPermissions();
 			$owner = $this->getShare()->getOwner();
 			$collectiveId = $this->getShare()->getCollectiveId();
-			$page = $this->service->touch($this->collectiveService->getCollective($collectiveId, $owner), $parentId, $id, $owner);
+			$page = $this->service->touch($collectiveId, $parentId, $id, $owner);
 			// Shares don't have a collective path
 			$page->setCollectivePath('');
 			$page->setShareToken($this->getToken());
@@ -211,7 +205,7 @@ class PublicPageController extends PublicShareController {
 			$this->checkEditPermissions();
 			$owner = $this->getShare()->getOwner();
 			$collectiveId = $this->getShare()->getCollectiveId();
-			$page = $this->service->rename($this->collectiveService->getCollective($collectiveId, $owner), $parentId, $id, $title, $owner);
+			$page = $this->service->rename($collectiveId, $parentId, $id, $title, $owner);
 			// Shares don't have a collective path
 			$page->setCollectivePath('');
 			$page->setShareToken($this->getToken());
@@ -234,7 +228,7 @@ class PublicPageController extends PublicShareController {
 			$this->checkEditPermissions();
 			$owner = $this->getShare()->getOwner();
 			$collectiveId = $this->getShare()->getCollectiveId();
-			$page = $this->service->delete($this->collectiveService->getCollective($collectiveId, $owner), $parentId, $id, $owner);
+			$page = $this->service->delete($collectiveId, $parentId, $id, $owner);
 			// Shares don't have a collective path
 			$page->setCollectivePath('');
 			$page->setShareToken($this->getToken());
@@ -256,7 +250,7 @@ class PublicPageController extends PublicShareController {
 		return $this->handleErrorResponse(function () use ($parentId, $id): array {
 			$owner = $this->getShare()->getOwner();
 			$collectiveId = $this->getShare()->getCollectiveId();
-			$backlinks = $this->service->getBacklinks($this->collectiveService->getCollective($collectiveId, $owner), $parentId, $id, $owner);
+			$backlinks = $this->service->getBacklinks($collectiveId, $parentId, $id, $owner);
 			return [
 				"data" => $backlinks
 			];

@@ -99,7 +99,7 @@ class PageProvider implements IProvider {
 
 		$pageSearchResults = [];
 		foreach ($collectiveInfos as $collective) {
-			$pages = $this->pageService->findByString($collective, $query->getTerm(), $user->getUID());
+			$pages = $this->pageService->findByString($collective->getId(), $query->getTerm(), $user->getUID());
 			foreach ($pages as $page) {
 				$pageSearchResults[] = new SearchResultEntry(
 					'',

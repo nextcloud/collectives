@@ -12,6 +12,7 @@ use OCA\Collectives\Db\PageMapper;
 use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Model\PageInfo;
+use OCA\Collectives\Service\CollectiveServiceBase;
 use OCA\Collectives\Service\PageService;
 use OCP\IConfig;
 use PHPUnit\Framework\TestCase;
@@ -23,7 +24,7 @@ class PageServiceTest extends TestCase {
 	private $config;
 	private $service;
 	private $userId = 'jane';
-	private $collective;
+	private $collectiveId = 1;
 
 	protected function setUp(): void {
 		$this->pageMapper = $this->getMockBuilder(PageMapper::class)
@@ -36,7 +37,7 @@ class PageServiceTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
-		$collectiveMapper = $this->getMockBuilder(CollectiveMapper::class)
+		$collectiveService = $this->getMockBuilder(CollectiveServiceBase::class)
 			->disableOriginalConstructor()
 			->getMock();
 
@@ -59,10 +60,7 @@ class PageServiceTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
-		$this->service = new PageService($this->pageMapper, $this->nodeHelper, $collectiveMapper, $userFolderHelper, $this->config);
-
-		$this->collective = new Collective();
-		$this->collective->setCircleId('circleId');
+		$this->service = new PageService($this->pageMapper, $this->nodeHelper, $collectiveService, $userFolderHelper, $this->config);
 	}
 
 	public function testGetFolder(): void {
@@ -76,8 +74,8 @@ class PageServiceTest extends TestCase {
 			->willReturn($folder);
 		$this->nodeHelper->method('getFileById')
 			->willReturn($file);
-		self::assertEquals($this->collectiveFolder, $this->service->getFolder($this->collective, 0, $this->userId));
-		self::assertEquals($folder, $this->service->getFolder($this->collective, 1, $this->userId));
+		self::assertEquals($this->collectiveFolder, $this->service->getFolder($this->collectiveId, 0, $this->userId));
+		self::assertEquals($folder, $this->service->getFolder($this->collectiveId, 1, $this->userId));
 	}
 
 	public function testInitSubFolder(): void {

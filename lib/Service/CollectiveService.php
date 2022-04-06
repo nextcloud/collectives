@@ -23,9 +23,6 @@ class CollectiveService extends CollectiveServiceBase {
 	/** @var CollectiveFolderManager */
 	private $collectiveFolderManager;
 
-	/** @var CircleHelper */
-	private $circleHelper;
-
 	/** @var CollectiveShareService */
 	private $shareService;
 
@@ -54,47 +51,12 @@ class CollectiveService extends CollectiveServiceBase {
 		CollectiveShareService $shareService,
 		PageMapper $pageMapper,
 		IL10N $l10n) {
-		parent::__construct($collectiveMapper);
+		parent::__construct($collectiveMapper, $circleHelper);
 		$this->collectiveHelper = $collectiveHelper;
 		$this->collectiveFolderManager = $collectiveFolderManager;
-		$this->circleHelper = $circleHelper;
 		$this->shareService = $shareService;
 		$this->pageMapper = $pageMapper;
 		$this->l10n = $l10n;
-	}
-
-	/**
-	 * @param int    $id
-	 * @param string $userId
-	 *
-	 * @return CollectiveInfo
-	 * @throws MissingDependencyException
-	 * @throws NotFoundException
-	 * @throws NotPermittedException
-	 */
-	public function getCollectiveInfo(int $id, string $userId): CollectiveInfo {
-		$collective = $this->getCollective($id, $userId);
-		$name = $this->collectiveMapper->circleIdToName($collective->getCircleId(), $userId);
-		$level = $this->circleHelper->getLevel($collective->getCircleId(), $userId);
-
-		return new CollectiveInfo($collective, $name, $level);
-	}
-
-	/**
-	 * @param int    $id
-	 * @param string $userId
-	 *
-	 * @return CollectiveInfo
-	 * @throws MissingDependencyException
-	 * @throws NotFoundException
-	 * @throws NotPermittedException
-	 */
-	public function getCollectiveInfoFromTrash(int $id, string $userId): CollectiveInfo {
-		$collective = $this->getCollectiveFromTrash($id, $userId);
-		$name = $this->collectiveMapper->circleIdToName($collective->getCircleId(), $userId);
-		$level = $this->circleHelper->getLevel($collective->getCircleId(), $userId);
-
-		return new CollectiveInfo($collective, $name, $level);
 	}
 
 	/**
