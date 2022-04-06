@@ -67,8 +67,8 @@ class PageService {
 	 */
 	private function getCollectiveFolder(int $collectiveId, string $userId): Folder {
 		try {
-			$collective = $this->collectiveService->getCollectiveInfo($collectiveId, $userId);
-			$folder = $this->userFolderHelper->get($userId)->get($collective->getName());
+			$collectiveInfo = $this->collectiveService->getCollectiveInfo($collectiveId, $userId);
+			$folder = $this->userFolderHelper->get($userId)->get($collectiveInfo->getName());
 		} catch (FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage());
 		}
