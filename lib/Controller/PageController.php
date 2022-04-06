@@ -16,6 +16,9 @@ class PageController extends Controller {
 	/** @var PageService */
 	private $service;
 
+	/** @var int */
+	private $collectiveId;
+
 	/** @var CollectiveMapper */
 	private $collectiveMapper;
 
@@ -24,8 +27,6 @@ class PageController extends Controller {
 
 	/** @var LoggerInterface */
 	private $logger;
-
-	use ErrorHelper;
 
 	public function __construct(string $appName,
 								IRequest $request,
@@ -43,7 +44,7 @@ class PageController extends Controller {
 	/**
 	 * @return string
 	 */
-	private function getUserId(): string {
+	protected function getUserId(): string {
 		return $this->userSession->getUser()->getUID();
 	}
 
@@ -53,12 +54,34 @@ class PageController extends Controller {
 	 * @return Collective
 	 * @throws NotFoundException
 	 */
-	private function getCollective(int $collectiveId): Collective {
-		if (null === $collective = $this->collectiveMapper->findById($collectiveId, $this->getUserId())) {
+	protected function getCollective(): Collective {
+		if (null === $collective = $this->collectiveMapper->findById($this->collectiveId, $this->getUserId())) {
 			throw new NotFoundException('Collective not found: '. $collectiveId);
 		}
-
 		return $collective;
+	}
+
+	/**
+	 * @return void
+	 *
+	 * @param PageFile $page
+	 */
+	protected function decoratePage($page): void {
+		// noop - we can return the page as is.
+	}
+
+	/**
+	 * @return PageService
+	 */
+	protected function getService(): PageService {
+		return $this->service;
+	}
+
+	/**
+	 * @return void
+	 */
+	protected function checkEditPermissions(): void {
+		// noop - permission checks are performed by the service in the actions.
 	}
 
 	/**
@@ -69,12 +92,8 @@ class PageController extends Controller {
 	 * @return DataResponse
 	 */
 	public function index(int $collectiveId): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId): array {
-			$pages = $this->service->findAll($this->getUserId(), $this->getCollective($collectiveId));
-			return [
-				"data" => $pages
-			];
-		}, $this->logger);
+		$this->collectiveId = $collectiveId;
+		return $this->pageIndex();
 	}
 
 	/**
@@ -87,12 +106,8 @@ class PageController extends Controller {
 	 * @return DataResponse
 	 */
 	public function get(int $collectiveId, int $parentId, int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $id): array {
-			$page = $this->service->find($this->getUserId(), $this->getCollective($collectiveId), $parentId, $id);
-			return [
-				"data" => $page
-			];
-		}, $this->logger);
+		$this->collectiveId = $collectiveId;
+		return $this->getPage($parentId, $id);
 	}
 
 	/**
@@ -105,12 +120,8 @@ class PageController extends Controller {
 	 * @return DataResponse
 	 */
 	public function create(int $collectiveId, int $parentId, string $title): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $title): array {
-			$page = $this->service->create($this->getUserId(), $this->getCollective($collectiveId), $parentId, $title);
-			return [
-				"data" => $page
-			];
-		}, $this->logger);
+		$this->collectiveId = $collectiveId;
+		return $this->createPage($parentId, $title);
 	}
 
 	/**
@@ -123,12 +134,8 @@ class PageController extends Controller {
 	 * @return DataResponse
 	 */
 	public function touch(int $collectiveId, int $parentId, int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $id): array {
-			$page = $this->service->touch($this->getUserId(), $this->getCollective($collectiveId), $parentId, $id);
-			return [
-				"data" => $page
-			];
-		}, $this->logger);
+		$this->collectiveId = $collectiveId;
+		return $this->touchPage($parentId, $id);
 	}
 
 	/**
@@ -142,12 +149,8 @@ class PageController extends Controller {
 	 * @return DataResponse
 	 */
 	public function rename(int $collectiveId, int $parentId, int $id, string $title): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $id, $title): array {
-			$page = $this->service->rename($this->getUserId(), $this->getCollective($collectiveId), $parentId, $id, $title);
-			return [
-				"data" => $page
-			];
-		}, $this->logger);
+		$this->collectiveId = $collectiveId;
+		return $this->renamePage($parentId, $id, $title);
 	}
 
 	/**
@@ -160,12 +163,8 @@ class PageController extends Controller {
 	 * @return DataResponse
 	 */
 	public function delete(int $collectiveId, int $parentId, int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $id): array {
-			$page = $this->service->delete($this->getUserId(), $this->getCollective($collectiveId), $parentId, $id);
-			return [
-				"data" => $page
-			];
-		}, $this->logger);
+		$this->collectiveId = $collectiveId;
+		return $this->deletePage($parentId, $id, $title);
 	}
 
 	/**
@@ -178,11 +177,7 @@ class PageController extends Controller {
 	 * @return DataResponse
 	 */
 	public function getBacklinks(int $collectiveId, int $parentId, int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $id): array {
-			$backlinks = $this->service->getBacklinks($this->getUserId(), $this->getCollective($collectiveId), $parentId, $id);
-			return [
-				"data" => $backlinks
-			];
-		}, $this->logger);
+		$this->collectiveId = $collectiveId;
+		return $this->getPageBacklinks($parentId, $id);
 	}
 }
