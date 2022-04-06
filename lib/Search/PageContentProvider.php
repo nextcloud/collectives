@@ -109,9 +109,9 @@ class PageContentProvider implements IProvider {
 
 		$pageSearchResults = [];
 		foreach ($collectiveInfos as $collective) {
-			$pages = $this->pageService->findAll($user->getUID(), $collective);
+			$pages = $this->pageService->findAll($collective->getId(), $user->getUID());
 			foreach ($pages as $page) {
-				$file = $this->nodeHelper->getFileById($this->pageService->getFolder($user->getUID(), $collective, $page->getId()), $page->getId());
+				$file = $this->nodeHelper->getFileById($this->pageService->getFolder($collective->getId(), $page->getId(), $user->getUID()), $page->getId());
 				if (preg_match('/(\S+\s+)?(\S+\s*)?' . $query->getTerm() . '(\S*)?(\s+\S+)?/i', NodeHelper::getContent($file), $matches)) {
 					$pageSearchResults[] = new SearchResultEntry(
 						'',

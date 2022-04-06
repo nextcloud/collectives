@@ -101,14 +101,14 @@ class CollectiveController extends Controller {
 	public function create(string $name, string $emoji = null): DataResponse {
 		return $this->prepareResponse(function () use ($name, $emoji): array {
 			$safeName = $this->nodeHelper->sanitiseFilename($name);
-			[$collective, $info] = $this->service->createCollective(
+			[$collectiveInfo, $info] = $this->service->createCollective(
 				$this->getUserId(),
 				$this->getUserLang(),
 				$safeName,
 				$emoji
 			);
 			return [
-				"data" => $collective,
+				"data" => $collectiveInfo,
 				"message" => $info,
 			];
 		});
@@ -125,14 +125,14 @@ class CollectiveController extends Controller {
 	 */
 	public function update(int $id, string $emoji = null, int $pageOrder = null): DataResponse {
 		return $this->prepareResponse(function () use ($id, $emoji, $pageOrder): array {
-			$collective = $this->service->updateCollective(
-				$this->getUserId(),
+			$collectiveInfo = $this->service->updateCollective(
 				$id,
+				$this->getUserId(),
 				$emoji,
 				$pageOrder
 			);
 			return [
-				"data" => $collective,
+				"data" => $collectiveInfo,
 			];
 		});
 	}
@@ -147,14 +147,14 @@ class CollectiveController extends Controller {
 	 */
 	public function editLevel(int $id, int $level): DataResponse {
 		return $this->prepareResponse(function () use ($id, $level): array {
-			$collective = $this->service->setPermissionLevel(
-				$this->getUserId(),
+			$collectiveInfo = $this->service->setPermissionLevel(
 				$id,
+				$this->getUserId(),
 				$level,
 				Collective::editPermissions
 			);
 			return [
-				"data" => $collective,
+				"data" => $collectiveInfo,
 			];
 		});
 	}
@@ -169,14 +169,14 @@ class CollectiveController extends Controller {
 	 */
 	public function shareLevel(int $id, int $level): DataResponse {
 		return $this->prepareResponse(function () use ($id, $level): array {
-			$collective = $this->service->setPermissionLevel(
-				$this->getUserId(),
+			$collectiveInfo = $this->service->setPermissionLevel(
 				$id,
+				$this->getUserId(),
 				$level,
 				Constants::PERMISSION_SHARE
 			);
 			return [
-				"data" => $collective,
+				"data" => $collectiveInfo,
 			];
 		});
 	}
@@ -190,9 +190,9 @@ class CollectiveController extends Controller {
 	 */
 	public function trash(int $id): DataResponse {
 		return $this->prepareResponse(function () use ($id): array {
-			$collective = $this->service->trashCollective($this->getUserId(), $id);
+			$collectiveInfo = $this->service->trashCollective($id, $this->getUserId());
 			return [
-				"data" => $collective
+				"data" => $collectiveInfo
 			];
 		});
 	}
@@ -207,11 +207,11 @@ class CollectiveController extends Controller {
 	public function createShare(int $id): DataResponse {
 		return $this->prepareResponse(function () use ($id): array {
 			$userId = $this->getUserId();
-			$collective = $this->service->getCollective($userId, $id);
-			$share = $this->shareService->createShare($userId, $collective);
-			$collective->setShareToken($share->getToken());
+			$collectiveInfo = $this->service->getCollectiveInfo($id, $userId);
+			$share = $this->shareService->createShare($userId, $collectiveInfo);
+			$collectiveInfo->setShareToken($share->getToken());
 			return [
-				"data" => $collective
+				"data" => $collectiveInfo
 			];
 		});
 	}
@@ -228,11 +228,11 @@ class CollectiveController extends Controller {
 	public function updateShare(int $id, string $token, bool $editable = false): DataResponse {
 		return $this->prepareResponse(function () use ($id, $token, $editable): array {
 			$userId = $this->getUserId();
-			$collective = $this->service->getCollective($userId, $id);
-			$this->shareService->updateShare($userId, $collective, $token, $editable);
-			$collective = $this->service->getCollectiveWithShare($userId, $id);
+			$collectiveInfo = $this->service->getCollectiveInfo($id, $userId);
+			$this->shareService->updateShare($userId, $collectiveInfo, $token, $editable);
+			$collectiveInfo = $this->service->getCollectiveWithShare($id, $userId);
 			return [
-				"data" => $collective
+				"data" => $collectiveInfo
 			];
 		});
 	}
@@ -248,10 +248,10 @@ class CollectiveController extends Controller {
 	public function deleteShare(int $id, string $token): DataResponse {
 		return $this->prepareResponse(function () use ($id, $token): array {
 			$userId = $this->getUserId();
-			$collective = $this->service->getCollective($userId, $id);
+			$collectiveInfo = $this->service->getCollectiveInfo($id, $userId);
 			$this->shareService->deleteShare($userId, $id, $token);
 			return [
-				"data" => $collective
+				"data" => $collectiveInfo
 			];
 		});
 	}

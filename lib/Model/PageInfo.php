@@ -10,7 +10,6 @@ use OCP\Files\InvalidPathException;
 use OCP\Files\NotFoundException;
 
 /**
- * Class PageFile
  * @method int getId()
  * @method void setId(int $value)
  * @method string getTitle()
@@ -32,7 +31,7 @@ use OCP\Files\NotFoundException;
  * @method int getShareToken()
  * @method void setShareToken(string $value)
  */
-class PageFile extends Entity implements JsonSerializable {
+class PageInfo extends Entity implements JsonSerializable {
 	public const INDEX_PAGE_TITLE = 'Readme';
 	public const TEMPLATE_PAGE_TITLE = 'Template';
 	public const SUFFIX = '.md';
