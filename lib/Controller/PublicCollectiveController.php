@@ -88,8 +88,8 @@ class PublicCollectiveController extends PublicShareController {
 			} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
 				throw new NotFoundException('Failed to get shared collective');
 			}
-			$collective = $this->service->getCollectiveWithShare($share->getOwner(),
-				$share->getCollectiveId());
+			$collective = $this->service->getCollectiveWithShare($share->getCollectiveId(),
+				$share->getOwner());
 			// Explicitly set member level
 			$collective->setLevel(Member::LEVEL_MEMBER);
 			return [

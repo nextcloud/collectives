@@ -596,10 +596,10 @@ class PageService {
 				// Don't delete if still page has subpages
 				if ($this->pageHasOtherContent($file)) {
 					throw new NotPermittedException('Failed to delete page ' . $id . ' with subpages');
-				} else {
-					// Delete folder if it's an index page without subpages
-					$file->getParent()->delete();
 				}
+
+				// Delete folder if it's an index page without subpages
+				$file->getParent()->delete();
 			} else {
 				// Delete file if it's not an index page
 				$file->delete();

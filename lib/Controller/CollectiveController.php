@@ -126,8 +126,8 @@ class CollectiveController extends Controller {
 	public function update(int $id, string $emoji = null, int $pageOrder = null): DataResponse {
 		return $this->prepareResponse(function () use ($id, $emoji, $pageOrder): array {
 			$collective = $this->service->updateCollective(
-				$this->getUserId(),
 				$id,
+				$this->getUserId(),
 				$emoji,
 				$pageOrder
 			);
@@ -148,8 +148,8 @@ class CollectiveController extends Controller {
 	public function editLevel(int $id, int $level): DataResponse {
 		return $this->prepareResponse(function () use ($id, $level): array {
 			$collective = $this->service->setPermissionLevel(
-				$this->getUserId(),
 				$id,
+				$this->getUserId(),
 				$level,
 				Collective::editPermissions
 			);
@@ -170,8 +170,8 @@ class CollectiveController extends Controller {
 	public function shareLevel(int $id, int $level): DataResponse {
 		return $this->prepareResponse(function () use ($id, $level): array {
 			$collective = $this->service->setPermissionLevel(
-				$this->getUserId(),
 				$id,
+				$this->getUserId(),
 				$level,
 				Constants::PERMISSION_SHARE
 			);
@@ -190,7 +190,7 @@ class CollectiveController extends Controller {
 	 */
 	public function trash(int $id): DataResponse {
 		return $this->prepareResponse(function () use ($id): array {
-			$collective = $this->service->trashCollective($this->getUserId(), $id);
+			$collective = $this->service->trashCollective($id, $this->getUserId());
 			return [
 				"data" => $collective
 			];
@@ -207,7 +207,7 @@ class CollectiveController extends Controller {
 	public function createShare(int $id): DataResponse {
 		return $this->prepareResponse(function () use ($id): array {
 			$userId = $this->getUserId();
-			$collective = $this->service->getCollectiveInfo($userId, $id);
+			$collective = $this->service->getCollectiveInfo($id, $userId);
 			$share = $this->shareService->createShare($userId, $collective);
 			$collective->setShareToken($share->getToken());
 			return [
@@ -228,9 +228,9 @@ class CollectiveController extends Controller {
 	public function updateShare(int $id, string $token, bool $editable = false): DataResponse {
 		return $this->prepareResponse(function () use ($id, $token, $editable): array {
 			$userId = $this->getUserId();
-			$collective = $this->service->getCollective($userId, $id);
+			$collective = $this->service->getCollectiveInfo($id, $userId);
 			$this->shareService->updateShare($userId, $collective, $token, $editable);
-			$collective = $this->service->getCollectiveWithShare($userId, $id);
+			$collective = $this->service->getCollectiveWithShare($id, $userId);
 			return [
 				"data" => $collective
 			];
@@ -248,7 +248,7 @@ class CollectiveController extends Controller {
 	public function deleteShare(int $id, string $token): DataResponse {
 		return $this->prepareResponse(function () use ($id, $token): array {
 			$userId = $this->getUserId();
-			$collective = $this->service->getCollectiveInfo($userId, $id);
+			$collective = $this->service->getCollectiveInfo($id, $userId);
 			$this->shareService->deleteShare($userId, $id, $token);
 			return [
 				"data" => $collective
