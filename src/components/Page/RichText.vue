@@ -5,9 +5,8 @@
 				<div class="menubar-icons" />
 			</div>
 			<div v-if="!loading">
-				<EditorContent v-if="editor"
-					class="editor__content"
-					:editor="editor" />
+				<ReadOnlyEditor class="editor__content"
+					:content="content" />
 			</div>
 		</div>
 	</div>
@@ -16,31 +15,13 @@
 <script>
 import axios from '@nextcloud/axios'
 import { mapGetters } from 'vuex'
-
-import MarkdownIt from 'markdown-it'
-import taskLists from 'markdown-it-task-lists'
-
-import { Editor, EditorContent } from 'tiptap'
-import {
-	HardBreak,
-	Heading,
-	Code,
-	OrderedList,
-	Blockquote,
-	CodeBlock,
-	HorizontalRule,
-	Italic,
-	Strike,
-	Bold,
-} from 'tiptap-extensions'
-import { BulletList, Image, ListItem } from '../../nodes'
-import Link from '../../marks/link'
+import ReadOnlyEditor from '@nextcloud/text/package/components/ReadOnlyEditor'
 
 export default {
 	name: 'RichText',
 
 	components: {
-		EditorContent,
+		ReadOnlyEditor,
 	},
 
 	props: {
@@ -66,8 +47,7 @@ export default {
 	data() {
 		return {
 			loading: true,
-			pageContent: null,
-			editor: null,
+			content: null,
 		}
 	},
 
@@ -91,22 +71,6 @@ export default {
 			return [collectivePath, filePath].filter(Boolean).join('/')
 		},
 
-		/**
-		 * @return {object}
-		 */
-		markdownit() {
-			return MarkdownIt('commonmark', { html: false, breaks: false })
-				.enable('strikethrough')
-				.use(taskLists, { enable: true, labelAfter: true })
-		},
-
-		/**
-		 * @return {string}
-		 */
-		htmlContent() {
-			return this.markdownit.render(this.pageContent)
-		},
-
 	},
 
 	watch: {
@@ -114,7 +78,7 @@ export default {
 			this.initPageContent()
 		},
 		'timestamp'() {
-			this.updatePageContent()
+			this.getPageContent()
 		},
 	},
 
@@ -142,8 +106,8 @@ export default {
 				const content = await axios.get(this.davUrl, axiosConfig)
 				// content.data will attempt to parse as json
 				// but we want the raw text.
-				this.pageContent = content.request.responseText
-				if (!this.pageContent) {
+				this.content = content.request.responseText
+				if (!this.content) {
 					this.$emit('empty')
 				}
 			} catch (e) {
@@ -156,44 +120,7 @@ export default {
 			this.loading = true
 			await this.getPageContent()
 			this.loading = false
-			this.editor = this.createEditor()
 			this.$nextTick(() => { this.$emit('ready') })
-		},
-
-		/**
-		 * Update markdown content of page
-		 */
-		async updatePageContent() {
-			await this.getPageContent()
-			this.editor.setContent(this.htmlContent)
-		},
-
-		/**
-		 * @return {object}
-		 */
-		createEditor() {
-			return new Editor({
-				editable: false,
-				extensions: [
-					new Heading(),
-					new Code(),
-					new Bold(),
-					new Italic(),
-					new Strike(),
-					new HardBreak(),
-					new HorizontalRule(),
-					new BulletList(),
-					new OrderedList(),
-					new Blockquote(),
-					new CodeBlock(),
-					new ListItem(),
-					new Link({
-						openOnClick: true,
-					}),
-					new Image({ currentDirectory: this.currentDirectory }),
-				],
-				content: this.htmlContent,
-			})
 		},
 
 	},
@@ -266,7 +193,6 @@ export default {
 </style>
 
 <style lang="scss">
-@import './css/prosemirror';
 
 @media print {
 	.menubar {
