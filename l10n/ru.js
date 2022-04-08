@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Could not change the collective share editing permissions" : "Не удалось удалить страницу",
     "Could not share the collective" : "Не удалось удалить страницу",
     "Could not unshare the collective" : "Не удалось найти страницу.",
     "Name and emoji" : "Добавить эмодзи",
@@ -18,6 +19,7 @@ OC.L10N.register(
     "Done" : "Готово",
     "New Page" : "Новая страница",
     "Add a page" : "Добавить страницу",
+    "Could not get page attachments" : "Не удалось удалить страницу",
     "Could not get page backlinks" : "Не удалось удалить страницу",
     "Current version" : "Текущая версия",
     "_%n byte_::_%n bytes_" : ["%n байт","%n байта","%n байт"],
