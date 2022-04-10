@@ -168,6 +168,12 @@ Unit Test PHP 8.0 Nextcloud 23:
   needs:
     - "Static PHP Analysis"
 
+Unit Test PHP 8.1 Nextcloud Master:
+  <<: *php-unit
+  image: registry.gitlab.com/collectivecloud/docker-builds:php8.1-ncmaster
+  needs:
+    - "Static PHP Analysis"
+
 Lint Javascript:
   <<: *node
   stage: lint
@@ -246,6 +252,12 @@ API PHP 8.0 Nextcloud Master:
   image: registry.gitlab.com/collectivecloud/docker-builds:php8.0-ncmaster
   needs:
     - "Unit Test PHP 8.0 Nextcloud 23"
+
+API PHP 8.1 Nextcloud Master:
+  <<: *php-integration
+  image: registry.gitlab.com/collectivecloud/docker-builds:php8.0-ncmaster
+  needs:
+    - "Unit Test PHP 8.1 Nextcloud Master"
 
 OCC CLI Test:
   <<: *php
