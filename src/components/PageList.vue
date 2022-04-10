@@ -43,37 +43,37 @@
 				</ActionButton>
 			</Actions>
 		</div>
-		<div class="page-list">
-			<Item v-if="currentCollective"
-				key="Readme"
-				:to="currentCollectivePath"
-				:title="currentCollective.name"
-				:level="0"
-				:filtered-view="false"
-				:page-id="collectivePage ? collectivePage.id : 0"
-				@click.native="show('details')">
-				<template v-if="currentCollective.emoji" #icon>
-					<div class="emoji">
-						{{ currentCollective.emoji }}
-					</div>
-				</template>
-				<template v-if="collectivePage" #line-two>
-					<LastUpdate :timestamp="collectivePage.timestamp"
-						:user="collectivePage.lastUserId" />
-				</template>
-				<template v-if="!isCurrentCollectiveReadOnly" #actions>
-					<ActionButton icon="icon-add"
-						@click="newPage(collectivePage)">
-						{{ t('collectives', 'Add a page') }}
-					</ActionButton>
-					<ActionButton v-if="showTemplates"
-						icon="icon-pages-template-dark-grey"
-						class="action-button__template"
-						@click="editTemplate(collectivePage)">
-						{{ editTemplateString }}
-					</ActionButton>
-				</template>
-			</Item>
+		<Item v-if="currentCollective"
+			key="Readme"
+			:to="currentCollectivePath"
+			:title="currentCollective.name"
+			:level="0"
+			:filtered-view="false"
+			:page-id="collectivePage ? collectivePage.id : 0"
+			@click.native="show('details')">
+			<template v-if="currentCollective.emoji" #icon>
+				<div class="emoji">
+					{{ currentCollective.emoji }}
+				</div>
+			</template>
+			<template v-if="collectivePage" #line-two>
+				<LastUpdate :timestamp="collectivePage.timestamp"
+					:user="collectivePage.lastUserId" />
+			</template>
+			<template v-if="!isCurrentCollectiveReadOnly" #actions>
+				<ActionButton icon="icon-add"
+					@click="newPage(collectivePage)">
+					{{ t('collectives', 'Add a page') }}
+				</ActionButton>
+				<ActionButton v-if="showTemplates"
+					icon="icon-pages-template-dark-grey"
+					class="action-button__template"
+					@click="editTemplate(collectivePage)">
+					{{ editTemplateString }}
+				</ActionButton>
+			</template>
+		</Item>
+		<div class="sub-page-list">
 			<SubpageList v-if="templateView"
 				:key="templateView.id"
 				:page="templateView"
@@ -229,8 +229,8 @@ export default {
 	flex-direction: row;
 }
 
-.page-list {
-	overflow: scroll;
+.sub-page-list {
+	overflow-y: scroll;
 }
 
 .page-filter {
