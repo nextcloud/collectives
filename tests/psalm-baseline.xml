@@ -6,39 +6,32 @@
     </UndefinedClass>
   </file>
   <file src="lib/AppInfo/Application.php">
-    <InvalidArgument occurrences="2">
-      <code>registerEventListener</code>
-      <code>registerEventListener</code>
-    </InvalidArgument>
-    <MissingDependency occurrences="2">
-      <code>VersionsBackend</code>
-      <code>VersionsBackend</code>
-    </MissingDependency>
-    <UndefinedClass occurrences="1">
-      <code>LoadAdditionalScriptsEvent</code>
+    <UndefinedClass occurrences="2">
+      <code>App</code>
+      <code>IBootstrap</code>
     </UndefinedClass>
   </file>
   <file src="lib/BackgroundJob/ExpirePageVersions.php">
-    <MissingDependency occurrences="3">
-      <code>$this-&gt;expireManager</code>
-      <code>CollectiveVersionsExpireManager</code>
-      <code>CollectiveVersionsExpireManager</code>
-    </MissingDependency>
+    <UndefinedClass occurrences="1">
+      <code>TimedJob</code>
+    </UndefinedClass>
   </file>
   <file src="lib/BackgroundJob/PurgeObsoleteCollectives.php">
-    <UndefinedConstant occurrences="1">
-      <code>self::TIME_INSENSITIVE</code>
-    </UndefinedConstant>
+    <UndefinedClass occurrences="1">
+      <code>TimedJob</code>
+    </UndefinedClass>
   </file>
   <file src="lib/BackgroundJob/PurgeObsoletePages.php">
-    <UndefinedConstant occurrences="1">
-      <code>self::TIME_INSENSITIVE</code>
-    </UndefinedConstant>
+    <UndefinedClass occurrences="1">
+      <code>TimedJob</code>
+    </UndefinedClass>
   </file>
   <file src="lib/CacheListener.php">
-    <MissingDependency occurrences="1">
-      <code>CollectiveStorage</code>
-    </MissingDependency>
+    <UndefinedClass occurrences="3">
+      <code>CacheInsertEvent</code>
+      <code>CacheUpdateEvent</code>
+      <code>ICacheEvent</code>
+    </UndefinedClass>
   </file>
   <file src="lib/Command/CreateCollective.php">
     <UndefinedClass occurrences="1">
@@ -60,92 +53,254 @@
       <code>Base</code>
     </UndefinedClass>
   </file>
+  <file src="lib/Controller/CollectiveController.php">
+    <UndefinedClass occurrences="1">
+      <code>Controller</code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Controller/PageController.php">
+    <UndefinedClass occurrences="1">
+      <code>Controller</code>
+    </UndefinedClass>
+  </file>
   <file src="lib/Controller/PublicCollectiveController.php">
     <UndefinedClass occurrences="1">
-      <code>Member</code>
+      <code>PublicShareController</code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Controller/PublicPageController.php">
+    <UndefinedClass occurrences="1">
+      <code>PublicShareController</code>
     </UndefinedClass>
   </file>
   <file src="lib/Controller/PublicStartController.php">
-    <UndefinedClass occurrences="2">
-      <code>LoadViewer</code>
-      <code>LoadViewer</code>
+    <UndefinedClass occurrences="1">
+      <code>PublicShareController</code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Controller/SettingsController.php">
+    <UndefinedClass occurrences="1">
+      <code>OCSController</code>
     </UndefinedClass>
   </file>
   <file src="lib/Controller/StartController.php">
-    <UndefinedClass occurrences="2">
-      <code>LoadViewer</code>
-      <code>LoadViewer</code>
+    <UndefinedClass occurrences="1">
+      <code>Controller</code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Controller/TrashController.php">
+    <UndefinedClass occurrences="1">
+      <code>Controller</code>
     </UndefinedClass>
   </file>
   <file src="lib/Db/Collective.php">
-    <UndefinedClass occurrences="2">
-      <code>Member</code>
-      <code>Member</code>
+    <UndefinedClass occurrences="1">
+      <code>Entity</code>
     </UndefinedClass>
   </file>
+  <file src="lib/Db/CollectiveGarbageCollector.php">
+    <MissingDependency occurrences="5">
+      <code>$this-&gt;collectiveMapper</code>
+      <code>$this-&gt;collectiveMapper</code>
+      <code>$this-&gt;collectiveMapper</code>
+      <code>CollectiveMapper</code>
+      <code>CollectiveMapper</code>
+    </MissingDependency>
+    <UndefinedClass occurrences="3">
+      <code>$collectiveFolder</code>
+      <code>FilesNotFoundException</code>
+      <code>InvalidPathException</code>
+    </UndefinedClass>
+    <UndefinedMethod occurrences="1">
+      <code>delete</code>
+    </UndefinedMethod>
+  </file>
   <file src="lib/Db/CollectiveMapper.php">
-    <MoreSpecificImplementedParamType occurrences="3">
-      <code>Collective insert(Collective $collective)</code>
-      <code>Collective insert(Collective $collective)</code>
-      <code>Collective insert(Collective $collective)</code>
-    </MoreSpecificImplementedParamType>
-    <UndefinedClass occurrences="4">
-      <code>$circle</code>
-      <code>Member</code>
-      <code>Member</code>
-      <code>Member</code>
+    <UndefinedClass occurrences="1">
+      <code>QBMapper</code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Db/CollectiveShare.php">
+    <UndefinedClass occurrences="1">
+      <code>Entity</code>
     </UndefinedClass>
   </file>
   <file src="lib/Db/CollectiveShareMapper.php">
-    <MoreSpecificImplementedParamType occurrences="2">
-      <code>CollectiveShare insert(CollectiveShare $share)</code>
-      <code>CollectiveShare insert(CollectiveShare $share)</code>
-    </MoreSpecificImplementedParamType>
+    <UndefinedClass occurrences="1">
+      <code>QBMapper</code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Db/Page.php">
+    <UndefinedClass occurrences="1">
+      <code>Entity</code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Db/PageGarbageCollector.php">
+    <MissingDependency occurrences="4">
+      <code>$this-&gt;pageMapper</code>
+      <code>$this-&gt;pageMapper</code>
+      <code>PageMapper</code>
+      <code>PageMapper</code>
+    </MissingDependency>
+    <UndefinedClass occurrences="1">
+      <code>$rootFolder</code>
+    </UndefinedClass>
+    <UndefinedMethod occurrences="1">
+      <code>delete</code>
+    </UndefinedMethod>
   </file>
   <file src="lib/Db/PageMapper.php">
-    <MoreSpecificImplementedParamType occurrences="3">
-      <code>Page insert(Page $page)</code>
-      <code>Page insert(Page $page)</code>
-      <code>Page insert(Page $page)</code>
-    </MoreSpecificImplementedParamType>
+    <UndefinedClass occurrences="1">
+      <code>QBMapper</code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Fs/NodeHelper.php">
+    <UndefinedClass occurrences="6">
+      <code>File</code>
+      <code>File</code>
+      <code>Folder</code>
+      <code>Folder</code>
+      <code>IDBConnection</code>
+      <code>IL10N</code>
+    </UndefinedClass>
+    <UndefinedDocblockClass occurrences="3">
+      <code>$this-&gt;l10n</code>
+      <code>IDBConnection</code>
+      <code>IL10N</code>
+    </UndefinedDocblockClass>
   </file>
   <file src="lib/Fs/UserFolderHelper.php">
-    <MissingDependency occurrences="3">
-      <code>$this-&gt;rootFolder</code>
-      <code>IRootFolder</code>
-      <code>IRootFolder</code>
-    </MissingDependency>
-    <UndefinedClass occurrences="2">
+    <UndefinedClass occurrences="8">
       <code>$e</code>
-      <code>NoUserException</code>
+      <code>Folder</code>
+      <code>Folder</code>
+      <code>IConfig</code>
+      <code>IFactory</code>
+      <code>IRootFolder</code>
+      <code>IUserManager</code>
+      <code>PreConditionNotMetException</code>
+    </UndefinedClass>
+    <UndefinedDocblockClass occurrences="10">
+      <code>$this-&gt;config</code>
+      <code>$this-&gt;config</code>
+      <code>$this-&gt;l10nFactory</code>
+      <code>$this-&gt;l10nFactory</code>
+      <code>$this-&gt;userManager</code>
+      <code>Folder</code>
+      <code>IConfig</code>
+      <code>IFactory</code>
+      <code>IRootFolder</code>
+      <code>IUserManager</code>
+    </UndefinedDocblockClass>
+  </file>
+  <file src="lib/Listeners/LoadAdditionalScriptsListener.php">
+    <UndefinedClass occurrences="1">
+      <code>IEventListener</code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Listeners/ShareDeletedListener.php">
+    <UndefinedClass occurrences="1">
+      <code>IEventListener</code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Listeners/UnifiedSearchCSSLoader.php">
+    <UndefinedClass occurrences="1">
+      <code>IEventListener</code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Migration/Version000003Date20200720000000.php">
+    <UndefinedClass occurrences="1">
+      <code>SimpleMigrationStep</code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Migration/Version000200Date20200822000000.php">
+    <UndefinedClass occurrences="1">
+      <code>SimpleMigrationStep</code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Migration/Version000400Date20210324000000.php">
+    <UndefinedClass occurrences="1">
+      <code>SimpleMigrationStep</code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Migration/Version000400Date20210412000000.php">
+    <UndefinedClass occurrences="1">
+      <code>SimpleMigrationStep</code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Migration/Version000500Date20210421000000.php">
+    <UndefinedClass occurrences="1">
+      <code>SimpleMigrationStep</code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Migration/Version000900Date20210614000000.php">
+    <UndefinedClass occurrences="1">
+      <code>SimpleMigrationStep</code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Migration/Version001600Date20211025000000.php">
+    <UndefinedClass occurrences="1">
+      <code>SimpleMigrationStep</code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Migration/Version002000Date20220103000000.php">
+    <UndefinedClass occurrences="1">
+      <code>SimpleMigrationStep</code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Migration/Version002000Date20220210000000.php">
+    <UndefinedClass occurrences="1">
+      <code>SimpleMigrationStep</code>
     </UndefinedClass>
   </file>
   <file src="lib/Model/CollectiveInfo.php">
-    <UndefinedClass occurrences="7">
-      <code>Member</code>
-      <code>Member</code>
-      <code>Member</code>
-      <code>Member</code>
-      <code>Member</code>
-      <code>Member</code>
-      <code>Member</code>
+    <MissingDependency occurrences="1">
+      <code>Collective</code>
+    </MissingDependency>
+  </file>
+  <file src="lib/Model/CollectiveShareInfo.php">
+    <MissingDependency occurrences="1">
+      <code>CollectiveShare</code>
+    </MissingDependency>
+  </file>
+  <file src="lib/Model/PageInfo.php">
+    <UndefinedClass occurrences="1">
+      <code>Entity</code>
     </UndefinedClass>
   </file>
   <file src="lib/Mount/CollectiveFolderManager.php">
-    <MissingDependency occurrences="4">
-      <code>$rootFolder</code>
-      <code>$rootFolder</code>
-      <code>IRootFolder</code>
-      <code>IRootFolder</code>
-    </MissingDependency>
-    <UndefinedClass occurrences="3">
+    <UndefinedClass occurrences="17">
+      <code>$this-&gt;getRootFolder()</code>
+      <code>$this-&gt;getRootFolder()</code>
+      <code>?IMountPoint</code>
       <code>CacheEntry|null</code>
-      <code>LazyFolder</code>
+      <code>Folder</code>
+      <code>Folder</code>
+      <code>Folder</code>
+      <code>Folder</code>
+      <code>Folder</code>
+      <code>Folder</code>
+      <code>IDBConnection</code>
+      <code>IRequest</code>
+      <code>IRootFolder</code>
+      <code>IStorageFactory|null</code>
+      <code>IUserSession</code>
+      <code>IUser|null</code>
       <code>SystemConfig</code>
     </UndefinedClass>
-    <UndefinedDocblockClass occurrences="2">
+    <UndefinedDocblockClass occurrences="12">
+      <code>$this-&gt;connection</code>
+      <code>$this-&gt;connection</code>
+      <code>$this-&gt;request</code>
       <code>$this-&gt;systemConfig</code>
+      <code>IDBConnection</code>
+      <code>IRequest</code>
+      <code>IRootFolder</code>
+      <code>IUserSession</code>
+      <code>NotFoundException</code>
+      <code>NotFoundException</code>
       <code>SystemConfig</code>
+      <code>\OCP\DB\Exception</code>
     </UndefinedDocblockClass>
   </file>
   <file src="lib/Mount/CollectiveMountPoint.php">
@@ -154,13 +309,14 @@
     </UndefinedClass>
   </file>
   <file src="lib/Mount/CollectiveStorage.php">
-    <UndefinedClass occurrences="1">
+    <UndefinedClass occurrences="2">
+      <code>IDisableEncryptionStorage</code>
       <code>Wrapper</code>
     </UndefinedClass>
   </file>
   <file src="lib/Mount/MountProvider.php">
     <UndefinedClass occurrences="1">
-      <code>Cache</code>
+      <code>IMountProvider</code>
     </UndefinedClass>
   </file>
   <file src="lib/Mount/NoExcludePropagatorStorageWrapper.php">
@@ -173,8 +329,24 @@
       <code>CacheWrapper</code>
     </UndefinedClass>
   </file>
+  <file src="lib/Search/CollectiveProvider.php">
+    <UndefinedClass occurrences="1">
+      <code>IProvider</code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Search/PageContentProvider.php">
+    <UndefinedClass occurrences="1">
+      <code>IProvider</code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Search/PageProvider.php">
+    <UndefinedClass occurrences="1">
+      <code>IProvider</code>
+    </UndefinedClass>
+  </file>
   <file src="lib/Service/CircleHelper.php">
-    <UndefinedClass occurrences="31">
+    <UndefinedClass occurrences="33">
+      <code>$e</code>
       <code>$e</code>
       <code>$e</code>
       <code>$e</code>
@@ -201,6 +373,7 @@
       <code>Member</code>
       <code>Member</code>
       <code>Member</code>
+      <code>QueryException</code>
       <code>RequestBuilderException</code>
       <code>RequestBuilderException</code>
       <code>RequestBuilderException</code>
@@ -226,32 +399,139 @@
     </UndefinedDocblockClass>
   </file>
   <file src="lib/Service/CollectiveHelper.php">
-    <UndefinedDocblockClass occurrences="3">
-      <code>$circle</code>
-      <code>$circle</code>
-      <code>$circle</code>
-    </UndefinedDocblockClass>
+    <MissingDependency occurrences="4">
+      <code>CollectiveInfo[]</code>
+      <code>CollectiveInfo[]</code>
+      <code>CollectiveMapper</code>
+      <code>CollectiveMapper</code>
+    </MissingDependency>
   </file>
   <file src="lib/Service/CollectiveService.php">
-    <UndefinedClass occurrences="6">
+    <MissingDependency occurrences="19">
+      <code>$this-&gt;collectiveMapper</code>
+      <code>$this-&gt;collectiveMapper</code>
+      <code>Collective</code>
+      <code>Collective</code>
+      <code>CollectiveInfo</code>
+      <code>CollectiveInfo</code>
+      <code>CollectiveInfo</code>
+      <code>CollectiveInfo</code>
+      <code>CollectiveInfo</code>
+      <code>CollectiveInfo</code>
+      <code>CollectiveInfo</code>
+      <code>CollectiveInfo[]</code>
+      <code>CollectiveInfo[]</code>
+      <code>CollectiveInfo[]</code>
+      <code>CollectiveMapper</code>
+      <code>PageInfo</code>
+      <code>PageInfo</code>
+      <code>PageMapper</code>
+      <code>PageMapper</code>
+    </MissingDependency>
+    <UndefinedClass occurrences="11">
       <code>$circle</code>
       <code>$circle</code>
       <code>$circle</code>
       <code>$circle</code>
+      <code>$collectiveFolder</code>
+      <code>$e</code>
       <code>File</code>
+      <code>FilesNotPermittedException</code>
+      <code>IL10N</code>
+      <code>InvalidPathException</code>
       <code>Member</code>
     </UndefinedClass>
+    <UndefinedDocblockClass occurrences="2">
+      <code>$this-&gt;l10n</code>
+      <code>IL10N</code>
+    </UndefinedDocblockClass>
+  </file>
+  <file src="lib/Service/CollectiveServiceBase.php">
+    <MissingDependency occurrences="6">
+      <code>Collective</code>
+      <code>Collective</code>
+      <code>CollectiveInfo</code>
+      <code>CollectiveInfo</code>
+      <code>CollectiveMapper</code>
+      <code>CollectiveMapper</code>
+    </MissingDependency>
   </file>
   <file src="lib/Service/CollectiveShareService.php">
-    <InvalidCatch occurrences="5"/>
-    <MissingDependency occurrences="6">
-      <code>$e</code>
-      <code>GenericShareException</code>
-      <code>ShareNotFound</code>
-      <code>ShareNotFound</code>
-      <code>ShareNotFound</code>
-      <code>ShareNotFound</code>
+    <MissingDependency occurrences="11">
+      <code>$this-&gt;collectiveShareMapper</code>
+      <code>$this-&gt;collectiveShareMapper</code>
+      <code>?CollectiveShareInfo</code>
+      <code>?CollectiveShareInfo</code>
+      <code>CollectiveInfo</code>
+      <code>CollectiveInfo</code>
+      <code>CollectiveShareInfo</code>
+      <code>CollectiveShareInfo</code>
+      <code>CollectiveShareInfo</code>
+      <code>CollectiveShareMapper</code>
+      <code>CollectiveShareMapper</code>
     </MissingDependency>
+    <UndefinedClass occurrences="6">
+      <code>Exception</code>
+      <code>IL10N</code>
+      <code>IShare</code>
+      <code>IShare</code>
+      <code>IShareManager</code>
+      <code>ShareNotFound</code>
+    </UndefinedClass>
+    <UndefinedDocblockClass occurrences="4">
+      <code>$this-&gt;shareManager</code>
+      <code>$this-&gt;shareManager</code>
+      <code>IL10N</code>
+      <code>IShareManager</code>
+    </UndefinedDocblockClass>
+    <UndefinedMethod occurrences="1">
+      <code>delete</code>
+    </UndefinedMethod>
+  </file>
+  <file src="lib/Service/PageService.php">
+    <MissingDependency occurrences="16">
+      <code>$this-&gt;pageMapper</code>
+      <code>Page</code>
+      <code>PageInfo</code>
+      <code>PageInfo</code>
+      <code>PageInfo</code>
+      <code>PageInfo</code>
+      <code>PageInfo</code>
+      <code>PageInfo</code>
+      <code>PageInfo</code>
+      <code>PageInfo</code>
+      <code>PageInfo</code>
+      <code>PageInfo[]</code>
+      <code>PageInfo[]</code>
+      <code>PageInfo[]</code>
+      <code>PageMapper</code>
+      <code>PageMapper</code>
+    </MissingDependency>
+    <UndefinedClass occurrences="20">
+      <code>File</code>
+      <code>File</code>
+      <code>File</code>
+      <code>File</code>
+      <code>File</code>
+      <code>File</code>
+      <code>File</code>
+      <code>File</code>
+      <code>File</code>
+      <code>Folder</code>
+      <code>Folder</code>
+      <code>Folder</code>
+      <code>Folder</code>
+      <code>Folder</code>
+      <code>Folder</code>
+      <code>Folder</code>
+      <code>Folder</code>
+      <code>Folder</code>
+      <code>Folder</code>
+      <code>IConfig</code>
+    </UndefinedClass>
+    <UndefinedDocblockClass occurrences="1">
+      <code>IConfig</code>
+    </UndefinedDocblockClass>
   </file>
   <file src="lib/Versions/CollectiveVersion.php">
     <UndefinedClass occurrences="1">
@@ -264,8 +544,10 @@
     </UndefinedClass>
   </file>
   <file src="lib/Versions/ExpireManager.php">
-    <UndefinedClass occurrences="1">
+    <UndefinedClass occurrences="3">
+      <code>$e</code>
       <code>Expiration</code>
+      <code>QueryException</code>
     </UndefinedClass>
     <UndefinedDocblockClass occurrences="5">
       <code>Expiration</code>
