@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2022-04-08 18:05+0200\n"
+"POT-Creation-Date: 2022-04-11 23:10+0200\n"
 "PO-Revision-Date: 2022-02-16 07:57+0000\n"
 "Last-Translator: Joachim Sokolowski <weblate@of99.de>\n"
 "Language-Team: German (formal) <https://hosted.weblate.org/projects/"
@@ -64,15 +64,14 @@ msgid "A share for collective %s exists already"
 msgstr "Eine Freigabe für Kollektiv %s existiert bereits"
 
 #: /collectives/lib/Service/CollectiveShareService.php:208
-#, fuzzy, php-format
+#, php-format
 msgid "You are not allowed to edit %s"
-msgstr "Sie dürfen %s nicht teilen"
+msgstr "Sie dürfen %s nicht editieren"
 
 #: /collectives/lib/Service/CollectiveShareService.php:212
 #: /collectives/lib/Service/CollectiveShareService.php:218
-#, fuzzy
 msgid "Share not found for user"
-msgstr "Seite nicht gefunden:"
+msgstr "Freigabe für Benutzer nicht gefunden"
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:3
 msgid "A place for activist and community projects to build shared knowledge"
@@ -148,9 +147,8 @@ msgid "Share link"
 msgstr "Link teilen"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:7
-#, fuzzy
 msgid "Allow editing"
-msgstr "Bearbeiten erlauben für"
+msgstr "Bearbeiten erlauben"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:8
 msgid "Unshare"
@@ -178,9 +176,10 @@ msgid "Copy share link"
 msgstr "Freigabe-Link kopieren"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:14
-#, fuzzy
 msgid "Could not change the collective share editing permissions"
-msgstr "Kollektiv konnte nicht geteilt werden"
+msgstr ""
+"Die Editier-Rechte für die Freigabe des Kollektivs konnten nicht verändert "
+"werden"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:15
 msgid "Could not share the collective"
@@ -515,7 +514,7 @@ msgstr "Seite hinzufügen"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:109
 msgid "Upload new files"
-msgstr ""
+msgstr "Laden Sie neue Dateien hoch"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:110
 #, fuzzy
@@ -524,12 +523,11 @@ msgstr "Keine Rückverweise vorhanden"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:111
 msgid "Upload one ..."
-msgstr ""
+msgstr "Laden Sie einen hoch ..."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:112
-#, fuzzy
 msgid "Could not get page attachments"
-msgstr "Konnte Rückverweise der Seite nicht laden"
+msgstr "Konnte Anhänge der Seite nicht laden"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:113
 msgid "No backlinks available"
@@ -605,6 +603,9 @@ msgstr "Die folgenden erforderlichen Apps fehlen: "
 #: /collectives/templates/error.php:27
 msgid "Please ask the administrator to enable these apps."
 msgstr "Bitten Sie Ihre Admins, diese Apps zu aktivieren."
+
+#~ msgid "Keine Anhänge vorhanden"
+#~ msgstr "Keine Rückverweise vorhanden"
 
 #~ msgid "Details"
 #~ msgstr "Details"
