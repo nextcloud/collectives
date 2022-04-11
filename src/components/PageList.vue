@@ -60,7 +60,7 @@
 				<LastUpdate :timestamp="collectivePage.timestamp"
 					:user="collectivePage.lastUserId" />
 			</template>
-			<template v-if="!isCurrentCollectiveReadOnly" #actions>
+			<template v-if="currentCollectiveCanEdit" #actions>
 				<ActionButton icon="icon-add"
 					@click="newPage(collectivePage)">
 					{{ t('collectives', 'Add a page') }}
@@ -126,7 +126,7 @@ export default {
 
 	computed: {
 		...mapGetters([
-			'isCurrentCollectiveReadOnly',
+			'currentCollectiveCanEdit',
 			'collectivePage',
 			'templatePage',
 			'currentCollective',

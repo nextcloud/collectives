@@ -16,7 +16,7 @@
 				{{ t('collectives', 'Manage members') }}
 			</ActionLink>
 			<ActionSeparator v-if="showManageMembers" />
-			<ActionButton v-if="isCollectiveSharable(collective)"
+			<ActionButton v-if="collectiveCanShare(collective)"
 				v-show="!isShared"
 				:icon="shareIcon"
 				:close-after-click="false"
@@ -31,7 +31,7 @@
 				{{ copyButtonText }}
 			</ActionButton>
 			<ActionCheckbox v-if="!isPublic"
-				v-show="isShared && !isCollectiveReadOnly(collective)"
+				v-show="isShared && collectiveCanEdit(collective)"
 				id="shareEditable"
 				:disabled="loading('shareEditable')"
 				:checked.sync="shareEditable">
@@ -44,7 +44,7 @@
 				@click="unshare(collective)">
 				{{ t('collectives', 'Unshare') }}
 			</ActionButton>
-			<ActionSeparator v-if="isCollectiveSharable(collective)" />
+			<ActionSeparator v-if="collectiveCanShare(collective)" />
 			<ActionButton :close-after-click="true"
 				@click="print">
 				{{ t('collectives', 'Print') }}
@@ -115,9 +115,9 @@ export default {
 			'collectiveParam',
 			'collectives',
 			'collectiveShareUrl',
+			'collectiveCanEdit',
+			'collectiveCanShare',
 			'isCollectiveAdmin',
-			'isCollectiveReadOnly',
-			'isCollectiveSharable',
 			'loading',
 		]),
 

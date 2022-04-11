@@ -12,7 +12,7 @@
 			<SidebarTabBacklinks v-if="showing('sidebar')"
 				:page="page" />
 		</AppSidebarTab>
-		<AppSidebarTab v-if="!isPublic && !isCurrentCollectiveReadOnly"
+		<AppSidebarTab v-if="!isPublic && currentCollectiveCanEdit"
 			id="versions"
 			:order="1"
 			:name="t('collectives', 'Versions')"
@@ -50,7 +50,7 @@ export default {
 	computed: {
 		...mapGetters([
 			'isPublic',
-			'isCurrentCollectiveReadOnly',
+			'currentCollectiveCanEdit',
 			'currentPage',
 			'title',
 			'showing',

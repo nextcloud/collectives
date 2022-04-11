@@ -53,12 +53,12 @@ export default {
 			}
 		},
 
-		isCurrentCollectiveReadOnly(state, getters) {
-			return getters.isCollectiveReadOnly(getters.currentCollective)
+		currentCollectiveCanEdit(state, getters) {
+			return getters.collectiveCanEdit(getters.currentCollective)
 		},
 
-		isCurrentCollectiveSharable(state, getters) {
-			return getters.isCollectiveSharable(getters.currentCollective)
+		currentCollectiveCanShare(state, getters) {
+			return getters.collectiveCanShare(getters.currentCollective)
 		},
 
 		collectives(state, getters) {
@@ -104,16 +104,22 @@ export default {
 			return collective.level >= memberLevels.LEVEL_OWNER
 		},
 
-		isCollectiveReadOnly: (state, getters) => (collective) => {
+		collectiveCanEdit: (state, getters) => (collective) => {
 			if (!collective) {
-				return true
+				return false
 			}
-			return (getters.isPublic && !collective.shareEditable)
-				|| (collective.level < collective.editPermissionLevel)
+			// For public collectives, take shareEditable into account
+			if (getters.isPublic && !collective.shareEditable) {
+				return false
+			}
+			return collective.canEdit
 		},
 
-		isCollectiveSharable: (state, getters) => (collective) => {
-			return !getters.isPublic && collective.level >= collective.sharePermissionLevel
+		collectiveCanShare: (state) => (collective) => {
+			if (!collective) {
+				return false
+			}
+			return collective.canShare
 		},
 
 		allCollectiveEmojis(state) {
