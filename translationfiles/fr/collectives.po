@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-04-08 18:05+0200\n"
-"PO-Revision-Date: 2022-02-26 12:54+0000\n"
+"PO-Revision-Date: 2022-04-11 21:43+0000\n"
 "Last-Translator: Nathan <bonnemainsnathan@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/fr/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.11.1-dev\n"
+"X-Generator: Weblate 4.12-dev\n"
 
 #: /collectives/lib/Fs/UserFolderHelper.php:67
 #: /collectives/lib/Search/CollectiveProvider.php:60
@@ -56,7 +56,7 @@ msgstr "Partage de collectif"
 #: /collectives/lib/Service/CollectiveShareService.php:204
 #, php-format
 msgid "You are not allowed to share %s"
-msgstr "Vous n'êtes pas autorisé à partager %s"
+msgstr "Vous n'avez pas l'autorisation de partager %s"
 
 #: /collectives/lib/Service/CollectiveShareService.php:177
 #, php-format
@@ -64,15 +64,14 @@ msgid "A share for collective %s exists already"
 msgstr "Il existe déjà un lien de partage pour le collectif %s"
 
 #: /collectives/lib/Service/CollectiveShareService.php:208
-#, fuzzy, php-format
+#, php-format
 msgid "You are not allowed to edit %s"
-msgstr "Vous n'êtes pas autorisé à partager %s"
+msgstr "Vous n'avez pas l'autorisation de modifier %s"
 
 #: /collectives/lib/Service/CollectiveShareService.php:212
 #: /collectives/lib/Service/CollectiveShareService.php:218
-#, fuzzy
 msgid "Share not found for user"
-msgstr "Page introuvable :"
+msgstr "Partage non trouvé pour l'utilisateur"
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:3
 msgid "A place for activist and community projects to build shared knowledge"
@@ -147,9 +146,8 @@ msgid "Share link"
 msgstr "Lien de partage"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:7
-#, fuzzy
 msgid "Allow editing"
-msgstr "Autoriser l'édition pour"
+msgstr "Autoriser l'édition"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:8
 msgid "Unshare"
@@ -177,9 +175,9 @@ msgid "Copy share link"
 msgstr "Copier le lien de partage"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:14
-#, fuzzy
 msgid "Could not change the collective share editing permissions"
-msgstr "Impossible de partager le collectif"
+msgstr ""
+"Impossible de modifier les autorisations de partage et d'édition du collectif"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:15
 msgid "Could not share the collective"
@@ -513,21 +511,19 @@ msgstr "Ajouter une page"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:109
 msgid "Upload new files"
-msgstr ""
+msgstr "Importer de nouveaux fichiers"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:110
-#, fuzzy
 msgid "No attachments available"
-msgstr "Aucun lien de maillage disponible"
+msgstr "Aucune pièce jointe disponible"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:111
 msgid "Upload one ..."
-msgstr ""
+msgstr "En importer un…"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:112
-#, fuzzy
 msgid "Could not get page attachments"
-msgstr "Impossible de récupérer les liens de maillage de la page"
+msgstr "Impossible de récupérer les pièces jointes de la page"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:113
 msgid "No backlinks available"
