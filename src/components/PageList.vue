@@ -1,9 +1,13 @@
 <template>
 	<AppContentList :class="{loading: loading('collective')}"
 		:show-details="showing('details')">
-		<div class="togglebar">
-			<Actions class="toggle">
-				<ActionButton class="sort"
+		<div class="page-list-headerbar">
+			<input v-model="filterString"
+				class="page-filter"
+				:placeholder="t('collectives', 'Search pages ...')"
+				type="text">
+			<Actions class="toggle toggle-push-to-right">
+				<ActionButton class="toggle-button"
 					:aria-label="showTemplates ? t('collectives', 'Hide templates') : t('collectives', 'Show templates')"
 					:icon="showTemplates ? 'icon-pages-template-dark-grey' : 'icon-pages-template-grey'"
 					:title="showTemplates ? t('collectives', 'Hide templates') : t('collectives', 'Show templates')"
@@ -19,19 +23,19 @@
 					slot="icon"
 					:size="16"
 					decorative />
-				<ActionButton class="sort"
+				<ActionButton class="toggle-button"
 					:class="{selected: sortBy === 'byTimestamp'}"
 					:close-after-click="true"
-					@click="sortPages('byTimestamp')">
+					@click="sortPagesAndScroll('byTimestamp')">
 					{{ t('collectives', 'Sort recently changed first') }}
 					<SortClockAscendingOutlineIcon slot="icon"
 						:size="16"
 						decorative />
 				</ActionButton>
-				<ActionButton class="sort"
+				<ActionButton class="toggle-button"
 					:class="{selected: sortBy === 'byTitle'}"
 					:close-after-click="true"
-					@click="sortPages('byTitle')">
+					@click="sortPagesAndScroll('byTitle')">
 					{{ t('collectives', 'Sort by title') }}
 					<SortAlphabeticalAscendingIcon slot="icon"
 						:size="16"
@@ -44,6 +48,7 @@
 			:to="currentCollectivePath"
 			:title="currentCollective.name"
 			:level="0"
+			:filtered-view="false"
 			:page-id="collectivePage ? collectivePage.id : 0"
 			@click.native="show('details')">
 			<template v-if="currentCollective.emoji" #icon>
@@ -55,7 +60,7 @@
 				<LastUpdate :timestamp="collectivePage.timestamp"
 					:user="collectivePage.lastUserId" />
 			</template>
-			<template v-if="!isCurrentCollectiveReadOnly" #actions>
+			<template v-if="currentCollectiveCanEdit" #actions>
 				<ActionButton icon="icon-add"
 					@click="newPage(collectivePage)">
 					{{ t('collectives', 'Add a page') }}
@@ -68,15 +73,19 @@
 				</ActionButton>
 			</template>
 		</Item>
-		<SubpageList v-if="templateView"
-			:key="templateView.id"
-			:page="templateView"
-			:level="1"
-			:is-template="true" />
-		<SubpageList v-for="page in subpages"
-			:key="page.id"
-			:page="page"
-			:level="1" />
+		<div class="sub-page-list">
+			<SubpageList v-if="templateView"
+				:key="templateView.id"
+				:page="templateView"
+				:level="1"
+				:filter-string="filterString"
+				:is-template="true" />
+			<SubpageList v-for="page in subpages"
+				:key="page.id"
+				:page="page"
+				:level="1"
+				:filter-string="filterString" />
+		</div>
 	</AppContentList>
 </template>
 
@@ -93,6 +102,7 @@ import { mapGetters, mapMutations } from 'vuex'
 import { NEW_PAGE, NEW_TEMPLATE } from '../store/actions'
 import SortAlphabeticalAscendingIcon from 'vue-material-design-icons/SortAlphabeticalAscending'
 import SortClockAscendingOutlineIcon from 'vue-material-design-icons/SortClockAscendingOutline'
+import scrollToElement from '../util/scrollToElement'
 
 export default {
 	name: 'PageList',
@@ -108,13 +118,20 @@ export default {
 		SortClockAscendingOutlineIcon,
 	},
 
+	data() {
+		return {
+			filterString: '',
+		}
+	},
+
 	computed: {
 		...mapGetters([
-			'isCurrentCollectiveReadOnly',
+			'currentCollectiveCanEdit',
 			'collectivePage',
 			'templatePage',
 			'currentCollective',
 			'currentCollectivePath',
+			'currentPage',
 			'loading',
 			'pagePath',
 			'visibleSubpages',
@@ -150,6 +167,18 @@ export default {
 
 	methods: {
 		...mapMutations(['show', 'sortPages', 'toggleTemplates']),
+
+		/**
+		 * Change page sort order and scroll to current page
+		 *
+		 * @param { string } order Sort order
+		 */
+		sortPagesAndScroll(order) {
+			this.sortPages(order)
+			this.$nextTick(() => {
+				scrollToElement(document.getElementById(`page-${this.currentPage.id}`))
+			})
+		},
 
 		/**
 		 * Open existing or create new template page
@@ -195,29 +224,39 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.togglebar {
+.page-list-headerbar {
 	display: flex;
 	flex-direction: row;
-	margin: 0 0 0 auto;
+}
+
+.sub-page-list {
+	overflow-y: scroll;
+}
+
+.page-filter {
+	margin-left: 48px;
 }
 
 .toggle {
 	height: 44px;
 	width: 44px;
 	padding: 0;
-	margin: 0 0 0 auto;
 }
 
 .toggle:hover {
 	opacity: 1;
 }
 
-li.sort.selected {
+.action-item--single.toggle-push-to-right {
+	margin-left: auto;
+}
+
+li.toggle-button.selected {
 	background-color: var(--color-primary-light);
 }
 
 .emoji {
-	margin: -3px
+	margin: -3px;
 }
 
 .icon-pages-template-dark-grey, .icon-pages-template-grey {

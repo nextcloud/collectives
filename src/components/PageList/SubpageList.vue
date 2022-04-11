@@ -1,12 +1,13 @@
 <template>
 	<div>
-		<Item key="page.title"
+		<Item v-show="pageInFilterString"
+			key="page.title"
 			:to="pagePath(page)"
-			:collapsible="isCollapsible"
+			:has-children="hasChildren"
 			:page-id="page.id"
 			:level="level"
+			:filtered-view="filterString !== ''"
 			:title="page.title"
-			:collapsed="collapsed(page.id)"
 			:is-template="isTemplate"
 			@toggleCollapsed="toggleCollapsed(page.id)"
 			@click.native="show('details')">
@@ -14,7 +15,7 @@
 				<LastUpdate :timestamp="page.timestamp"
 					:user="page.lastUserId" />
 			</template>
-			<template v-if="!isCurrentCollectiveReadOnly" #actions>
+			<template v-if="currentCollectiveCanEdit" #actions>
 				<ActionButton icon="icon-add"
 					@click="newPage(page)">
 					{{ t('collectives', 'Add a subpage') }}
@@ -31,11 +32,13 @@
 			:key="templateView.id"
 			:page="templateView"
 			:level="level+1"
+			:filter-string="filterString"
 			:is-template="true" />
 		<SubpageList v-for="subpage in subpagesView"
 			:key="subpage.id"
 			:page="subpage"
 			:level="level+1"
+			:filter-string="filterString"
 			:is-template="isTemplate" />
 	</div>
 </template>
@@ -68,6 +71,10 @@ export default {
 			type: Number,
 			required: true,
 		},
+		filterString: {
+			type: String,
+			default: '',
+		},
 		isTemplate: {
 			type: Boolean,
 			default: false,
@@ -76,7 +83,7 @@ export default {
 
 	computed: {
 		...mapGetters([
-			'isCurrentCollectiveReadOnly',
+			'currentCollectiveCanEdit',
 			'pageParam',
 			'collectiveParam',
 			'pagePath',
@@ -87,30 +94,36 @@ export default {
 			'showTemplates',
 		]),
 
-		templateView() {
-			// Only display if not collapsed
-			if (!this.showTemplates || this.collapsed(this.page.id)) {
-				return null
-			} else {
-				return this.templatePage(this.page.id)
-			}
+		pageInFilterString() {
+			return this.page.title.toLowerCase().includes(this.filterString.toLowerCase())
 		},
 
-		subpages() {
-			return this.visibleSubpages(this.page.id)
+		showSubpages() {
+			// Display subpages if either in filtered view or not collapsed
+			return this.filterString !== '' || !this.collapsed(this.page.id)
 		},
 
 		subpagesView() {
-			// Only display subpages if not collapsed
-			if (this.collapsed(this.page.id)) {
-				return []
-			} else {
-				return this.subpages
+			if (this.showSubpages) {
+				return this.visibleSubpages(this.page.id)
 			}
+			return []
 		},
 
-		isCollapsible() {
-			return !!this.subpages.length
+		considerTemplate() {
+			// Consider template in view if it exists and templates view is true
+			return this.templatePage(this.page.id) && this.showTemplates
+		},
+
+		templateView() {
+			if (this.considerTemplate && this.showSubpages) {
+				return this.templatePage(this.page.id)
+			}
+			return null
+		},
+
+		hasChildren() {
+			return !!this.visibleSubpages(this.page.id).length || this.considerTemplate
 		},
 
 		editTemplateString() {

@@ -1,5 +1,6 @@
 <template>
-	<div class="app-content-list-item"
+	<div :id="`page-${pageId}`"
+		class="app-content-list-item"
 		:class="{active: isActive, mobile: isMobile, toplevel: level === 0}"
 		:style="indentItem"
 		draggable
@@ -14,6 +15,7 @@
 				<div v-else :class="isCollapsible ? 'icon-pages-white' : 'icon-page-white'" />
 			</slot>
 			<TriangleIcon v-if="isCollapsible"
+				v-show="!filteredView"
 				:title="collapsed(pageId) ? t('collectives', 'Expand subpage list') : t('collectives', 'Collapse subpage list')"
 				class="page-icon-badge"
 				:class="{'page-icon-badge--rotated': collapsed(pageId)}" />
@@ -44,6 +46,7 @@ import isMobile from '@nextcloud/vue/dist/Mixins/isMobile'
 import { generateUrl } from '@nextcloud/router'
 import { mapGetters, mapMutations } from 'vuex'
 import TriangleIcon from 'vue-material-design-icons/Triangle'
+import scrollToElement from '../../util/scrollToElement'
 
 export default {
 	name: 'Item',
@@ -62,7 +65,7 @@ export default {
 			type: String,
 			default: '',
 		},
-		collapsible: {
+		hasChildren: {
 			type: Boolean,
 			default: false,
 		},
@@ -72,6 +75,10 @@ export default {
 		},
 		level: {
 			type: Number,
+			required: true,
+		},
+		filteredView: {
+			type: Boolean,
 			required: true,
 		},
 		pageId: {
@@ -117,12 +124,19 @@ export default {
 
 		isCollapsible() {
 			// Collective landing page is not collapsible
-			return (this.level > 0 && this.collapsible)
+			return (this.level > 0 && this.hasChildren)
 		},
 
 		isClickable() {
 			return this.isCollapsible ? 'click' : null
 		},
+	},
+
+	mounted() {
+		// Scroll to item at initial mount if it's currentPage
+		if (this.isActive) {
+			scrollToElement(this.$el)
+		}
 	},
 
 	methods: {
@@ -216,8 +230,19 @@ div.app-content-list-item {
 	cursor: pointer;
 }
 
+// Change color of collapse/expand badge when hovering over page icon
+.app-content-list-item-icon {
+	&:hover, &:focus, &:active {
+		.material-design-icon.page-icon-badge > .material-design-icon__svg {
+			fill: var(--color-primary);
+		}
+	}
+}
+</style>
+
+<style lang="scss">
 // Configure collapse/expand badge
-.page-icon-badge {
+.material-design-icon.page-icon-badge {
 	position: absolute;
 	bottom: -20px;
 	right: -14px;
@@ -240,14 +265,5 @@ div.app-content-list-item {
 	width: 16px;
 	transform: scale(1, 0.7);
 	fill: var(--color-main-text);
-}
-
-// Change color of collapse/expand badge when hovering over page icon
-.app-content-list-item-icon {
-	&:hover, &:focus, &:active {
-		.material-design-icon.page-icon-badge > .material-design-icon__svg {
-			fill: var(--color-primary);
-		}
-	}
 }
 </style>
