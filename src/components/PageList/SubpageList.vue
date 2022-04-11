@@ -99,16 +99,15 @@ export default {
 		},
 
 		hideSubpages() {
+			// Only display subpages if either in filtered view or not collapsed
 			return this.filterString === '' && this.collapsed(this.page.id)
 		},
 
 		templateView() {
-			// Only display template if either in filtered view or not collapsed
-			if (!this.showTemplates || this.hideSubpages) {
-				return null
-			} else {
+			if (this.showTemplates && !this.hideSubpages) {
 				return this.templatePage(this.page.id)
 			}
+			return null
 		},
 
 		subpages() {
@@ -116,12 +115,10 @@ export default {
 		},
 
 		subpagesView() {
-			// Only display subpages if either in filtered view or not collapsed
-			if (this.hideSubpages) {
-				return []
-			} else {
+			if (!this.hideSubpages) {
 				return this.subpages
 			}
+			return []
 		},
 
 		hasChildren() {
