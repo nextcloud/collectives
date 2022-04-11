@@ -22,7 +22,7 @@ class Page extends Entity implements JsonSerializable {
 	/** @var string */
 	protected $lastUserId;
 
-	public function jsonSerialize() {
+	public function jsonSerialize(): array {
 		return [
 			'id' => $this->id,
 			'fileId' => $this->fileId,
