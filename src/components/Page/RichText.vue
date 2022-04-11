@@ -6,7 +6,9 @@
 			</div>
 			<div v-if="!loading">
 				<ReadOnlyEditor class="editor__content"
-					:content="content" />
+					:content="content"
+					:rich-text-options="richTextOptions"
+					@click-link.stop.prevent="followLink" />
 			</div>
 		</div>
 	</div>
@@ -66,6 +68,12 @@ export default {
 			return (this.pageUrl !== null ? this.pageUrl : this.currentPageDavUrl)
 		},
 
+		richTextOptions() {
+			return {
+				currentDirectory: this.currentDirector,
+			}
+		},
+
 		currentDirectory() {
 			const { collectivePath, filePath } = this.currentPage
 			return [collectivePath, filePath].filter(Boolean).join('/')
@@ -121,6 +129,12 @@ export default {
 			await this.getPageContent()
 			this.loading = false
 			this.$nextTick(() => { this.$emit('ready') })
+		},
+
+		followLink(event, attrs) {
+			console.debug(event)
+			console.debug(attrs)
+			console.debug(this)
 		},
 
 	},
