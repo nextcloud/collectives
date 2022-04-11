@@ -98,13 +98,13 @@ export default {
 			return this.page.title.toLowerCase().includes(this.filterString.toLowerCase())
 		},
 
-		hideSubpages() {
-			// Only display subpages if either in filtered view or not collapsed
-			return this.filterString === '' && this.collapsed(this.page.id)
+		showSubpages() {
+			// Display subpages if either in filtered view or not collapsed
+			return this.filterString !== '' || !this.collapsed(this.page.id)
 		},
 
 		templateView() {
-			if (this.showTemplates && !this.hideSubpages) {
+			if (this.showTemplates && this.showSubpages) {
 				return this.templatePage(this.page.id)
 			}
 			return null
@@ -115,14 +115,14 @@ export default {
 		},
 
 		subpagesView() {
-			if (!this.hideSubpages) {
+			if (this.showSubpages) {
 				return this.subpages
 			}
 			return []
 		},
 
 		hasChildren() {
-			return !!this.subpages.length
+			return !!this.subpages.length || (this.templatePage(this.page.id) && this.showTemplates)
 		},
 
 		editTemplateString() {
