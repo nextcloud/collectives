@@ -16,7 +16,6 @@
         "nextcloud/coding-standard": "^1.0.0",
         "behat/behat": "^3.8",
         "guzzlehttp/guzzle": "^7.2",
-        "christophwurst/nextcloud": "^22.1",
         "psalm/phar": "^4.15",
         "ext-dom": "*"
     },
