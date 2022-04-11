@@ -103,26 +103,27 @@ export default {
 			return this.filterString !== '' || !this.collapsed(this.page.id)
 		},
 
+		subpagesView() {
+			if (this.showSubpages) {
+				return this.visibleSubpages(this.page.id)
+			}
+			return []
+		},
+
+		considerTemplate() {
+			// Consider template in view if it exists and templates view is true
+			return this.templatePage(this.page.id) && this.showTemplates
+		},
+
 		templateView() {
-			if (this.showTemplates && this.showSubpages) {
+			if (this.considerTemplate && this.showSubpages) {
 				return this.templatePage(this.page.id)
 			}
 			return null
 		},
 
-		subpages() {
-			return this.visibleSubpages(this.page.id)
-		},
-
-		subpagesView() {
-			if (this.showSubpages) {
-				return this.subpages
-			}
-			return []
-		},
-
 		hasChildren() {
-			return !!this.subpages.length || (this.templatePage(this.page.id) && this.showTemplates)
+			return !!this.visibleSubpages(this.page.id).length || this.considerTemplate
 		},
 
 		editTemplateString() {
