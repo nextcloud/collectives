@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2022-04-08 18:05+0200\n"
+"POT-Creation-Date: 2022-04-12 14:17+0200\n"
 "PO-Revision-Date: 2021-12-18 12:51+0000\n"
 "Last-Translator: Matej U <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian <https://hosted.weblate.org/projects/collectives/"
@@ -24,7 +24,7 @@ msgstr ""
 #: /collectives/lib/Search/CollectiveProvider.php:60
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:2
 #: /collectives/specialVueFakeDummyForL10nScript.js:87
-#: /collectives/specialVueFakeDummyForL10nScript.js:125
+#: /collectives/specialVueFakeDummyForL10nScript.js:126
 msgid "Collectives"
 msgstr "Zbirke"
 
@@ -195,12 +195,12 @@ msgid "Default page order"
 msgstr "Izbriši stran"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:21
-#: /collectives/specialVueFakeDummyForL10nScript.js:101
+#: /collectives/specialVueFakeDummyForL10nScript.js:102
 msgid "Sort recently changed first"
 msgstr ""
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:22
-#: /collectives/specialVueFakeDummyForL10nScript.js:102
+#: /collectives/specialVueFakeDummyForL10nScript.js:103
 msgid "Sort by title"
 msgstr "Po naslovu"
 
@@ -344,7 +344,7 @@ msgid "Only circle owners can delete a circle"
 msgstr "Le lastnik kroga lahko krog izbriše."
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:61
-#: /collectives/specialVueFakeDummyForL10nScript.js:127
+#: /collectives/specialVueFakeDummyForL10nScript.js:128
 msgid "Create new collective"
 msgstr "Ustvari novo zbirko"
 
@@ -374,7 +374,7 @@ msgstr "Pokaži v Datotekah"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:69
 #: /collectives/specialVueFakeDummyForL10nScript.js:93
-#: /collectives/specialVueFakeDummyForL10nScript.js:104
+#: /collectives/specialVueFakeDummyForL10nScript.js:105
 msgid "Edit template for subpages"
 msgstr "Uredi predlogo podstrani"
 
@@ -393,8 +393,8 @@ msgstr "Strani ni mogoče izbrisati."
 #: /collectives/specialVueFakeDummyForL10nScript.js:73
 #: /collectives/specialVueFakeDummyForL10nScript.js:95
 #: /collectives/specialVueFakeDummyForL10nScript.js:97
-#: /collectives/specialVueFakeDummyForL10nScript.js:106
-#: /collectives/specialVueFakeDummyForL10nScript.js:108
+#: /collectives/specialVueFakeDummyForL10nScript.js:107
+#: /collectives/specialVueFakeDummyForL10nScript.js:109
 msgid "Could not create the page"
 msgstr "Strani ni mogoče ustvariti."
 
@@ -476,80 +476,84 @@ msgid "Add a subpage"
 msgstr "Dodaj podstran"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:94
-#: /collectives/specialVueFakeDummyForL10nScript.js:105
+#: /collectives/specialVueFakeDummyForL10nScript.js:106
 msgid "Add template for subpages"
 msgstr "Dodaj predlogo za podstran"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:96
-#: /collectives/specialVueFakeDummyForL10nScript.js:107
+#: /collectives/specialVueFakeDummyForL10nScript.js:108
 msgid "New Page"
 msgstr "Nova stran"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:98
+msgid "Search pages ..."
+msgstr ""
+
 #: /collectives/specialVueFakeDummyForL10nScript.js:99
+#: /collectives/specialVueFakeDummyForL10nScript.js:100
 msgid "Hide templates"
 msgstr "Skrij predloge"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:98
 #: /collectives/specialVueFakeDummyForL10nScript.js:99
+#: /collectives/specialVueFakeDummyForL10nScript.js:100
 msgid "Show templates"
 msgstr "Pokaži predloge"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:100
+#: /collectives/specialVueFakeDummyForL10nScript.js:101
 msgid "Sort order"
 msgstr "Razvrščanje"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:103
+#: /collectives/specialVueFakeDummyForL10nScript.js:104
 msgid "Add a page"
 msgstr "Dodaj stran"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:109
+#: /collectives/specialVueFakeDummyForL10nScript.js:110
 msgid "Upload new files"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:110
+#: /collectives/specialVueFakeDummyForL10nScript.js:111
 #, fuzzy
 msgid "No attachments available"
 msgstr "Ni povratnih povezav"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:111
+#: /collectives/specialVueFakeDummyForL10nScript.js:112
 msgid "Upload one ..."
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:112
+#: /collectives/specialVueFakeDummyForL10nScript.js:113
 #, fuzzy
 msgid "Could not get page attachments"
 msgstr "Ni mogoče pridobiti različic strani"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:113
+#: /collectives/specialVueFakeDummyForL10nScript.js:114
 msgid "No backlinks available"
 msgstr "Ni povratnih povezav"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:114
+#: /collectives/specialVueFakeDummyForL10nScript.js:115
 msgid "If other pages link to this one, they will be listed here."
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:115
+#: /collectives/specialVueFakeDummyForL10nScript.js:116
 msgid "Could not get page backlinks"
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:116
+#: /collectives/specialVueFakeDummyForL10nScript.js:117
 msgid "Current version"
 msgstr "Trenutna različica"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:117
+#: /collectives/specialVueFakeDummyForL10nScript.js:118
 msgid "No other versions available"
 msgstr "Ni drugih različic"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:118
+#: /collectives/specialVueFakeDummyForL10nScript.js:119
 msgid "After editing you can find old versions of the page here."
 msgstr ""
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:119
+#: /collectives/specialVueFakeDummyForL10nScript.js:120
 msgid "Could not get page versions"
 msgstr "Ni mogoče pridobiti različic strani"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:120
+#: /collectives/specialVueFakeDummyForL10nScript.js:121
 #: /collectives/src/util/xmlToVersionsList.js:30
 msgid "%n byte"
 msgid_plural "%n bytes"
@@ -558,23 +562,23 @@ msgstr[1] "%n bajta"
 msgstr[2] "%n bajti"
 msgstr[3] "%n bajtov"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:121
+#: /collectives/specialVueFakeDummyForL10nScript.js:122
 msgid "Backlinks"
 msgstr "Povratne povezave"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:122
+#: /collectives/specialVueFakeDummyForL10nScript.js:123
 msgid "Pages that link to this one"
 msgstr "Strani, ki se povezujejo na to stran"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:123
+#: /collectives/specialVueFakeDummyForL10nScript.js:124
 msgid "Versions"
 msgstr "Različice"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:124
+#: /collectives/specialVueFakeDummyForL10nScript.js:125
 msgid "Old versions of this page"
 msgstr "Stare različice te strani"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:126
+#: /collectives/specialVueFakeDummyForL10nScript.js:127
 msgid "Come, organize and build shared knowledge!"
 msgstr ""
 
