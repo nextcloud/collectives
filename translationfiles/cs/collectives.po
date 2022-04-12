@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-04-08 18:05+0200\n"
-"PO-Revision-Date: 2022-02-26 12:54+0000\n"
+"PO-Revision-Date: 2022-04-12 07:26+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/cs/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.11.1-dev\n"
+"X-Generator: Weblate 4.12-dev\n"
 
 #: /collectives/lib/Fs/UserFolderHelper.php:67
 #: /collectives/lib/Search/CollectiveProvider.php:60
@@ -64,15 +64,14 @@ msgid "A share for collective %s exists already"
 msgstr "Sdílení pro kolektiv %s už existuje"
 
 #: /collectives/lib/Service/CollectiveShareService.php:208
-#, fuzzy, php-format
+#, php-format
 msgid "You are not allowed to edit %s"
-msgstr "Nejste oprávněni sdílet %s"
+msgstr "Nejste oprávněni upravovat %s"
 
 #: /collectives/lib/Service/CollectiveShareService.php:212
 #: /collectives/lib/Service/CollectiveShareService.php:218
-#, fuzzy
 msgid "Share not found for user"
-msgstr "Stránka nenalezena:"
+msgstr "Sdílení nenalezeno pro uživatele"
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:3
 msgid "A place for activist and community projects to build shared knowledge"
@@ -146,9 +145,8 @@ msgid "Share link"
 msgstr "Odkaz na sdílení"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:7
-#, fuzzy
 msgid "Allow editing"
-msgstr "Povolit úpravy pro"
+msgstr "Umožnit úpravy"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:8
 msgid "Unshare"
@@ -176,9 +174,8 @@ msgid "Copy share link"
 msgstr "Zkopírovat odkaz na sdílení"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:14
-#, fuzzy
 msgid "Could not change the collective share editing permissions"
-msgstr "Kolektiv se nedaří nasdílet"
+msgstr "Nedaří se změnit oprávnění k úpravám sdílení kolektivu"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:15
 msgid "Could not share the collective"
@@ -510,21 +507,19 @@ msgstr "Přidat stránku"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:109
 msgid "Upload new files"
-msgstr ""
+msgstr "Nahrát nové soubory"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:110
-#, fuzzy
 msgid "No attachments available"
-msgstr "Nejsou k dispozici žádné zpětné odkazy"
+msgstr "Nejsou k dispozici žádné přílohy"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:111
 msgid "Upload one ..."
-msgstr ""
+msgstr "Nahrát nějakou…"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:112
-#, fuzzy
 msgid "Could not get page attachments"
-msgstr "Nedaří se získat zpětné odkazy pro stránku"
+msgstr "Nedaří se získat přílohy stránky"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:113
 msgid "No backlinks available"
