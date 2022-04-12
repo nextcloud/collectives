@@ -8,7 +8,7 @@
 				<ReadOnlyEditor class="editor__content"
 					:content="content"
 					:rich-text-options="richTextOptions"
-					@click-link.stop.prevent="followLink" />
+					@click-link="followLink" />
 			</div>
 		</div>
 	</div>
@@ -18,6 +18,7 @@
 import axios from '@nextcloud/axios'
 import { mapGetters } from 'vuex'
 import ReadOnlyEditor from '@nextcloud/text/package/components/ReadOnlyEditor'
+import { generateUrl } from '@nextcloud/router'
 
 export default {
 	name: 'RichText',
@@ -59,6 +60,8 @@ export default {
 			'shareTokenParam',
 			'currentPage',
 			'currentPageDavUrl',
+			'pageParam',
+			'collectiveParam',
 		]),
 
 		/**
@@ -131,10 +134,18 @@ export default {
 			this.$nextTick(() => { this.$emit('ready') })
 		},
 
-		followLink(event, attrs) {
-			console.debug(event)
-			console.debug(attrs)
-			console.debug(this)
+		followLink(_event, attrs) {
+			const pageParamOmitsReadme = this.currentPage.fileName === 'Readme.md'
+				&& this.pageParam !== 'Readme.md'
+			const prefix = pageParamOmitsReadme
+				? (this.pageParam || this.collectiveParam) + '/'
+				: ''
+			const baseUrl = new URL(generateUrl('/apps/collectives'), window.location)
+			const to = attrs.href.startsWith(baseUrl.href)
+				? attrs.href.replace(baseUrl.href, '')
+				: prefix + attrs.href.replace('.md?', '?')
+			this.$router.push(to)
+			return true
 		},
 
 	},
