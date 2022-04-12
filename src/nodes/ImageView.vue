@@ -228,7 +228,7 @@ export default {
 
 .image__caption {
 	text-align: center;
-	color: var(--color-text-lighter);
+	color: var(--color-text-maxcontrast);
 	input[type='text'] {
 		width: 100%;
 		border: none;

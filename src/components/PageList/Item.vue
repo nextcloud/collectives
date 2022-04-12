@@ -179,7 +179,7 @@ export default {
 }
 
 .app-content-list-item-template {
-	color: var(--color-text-lighter);
+	color: var(--color-text-maxcontrast);
 }
 
 .app-content-list .app-content-list-item .app-content-list-item-line-two {
