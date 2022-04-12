@@ -1,5 +1,30 @@
 # Changelog
 
+## 1.0.0 - 2022.04.12
+
+### ✨New
+* 📝 Link shares can be editable now.
+* 🔎 Add a search field to filter the page list. (#302)
+* 🥟 Improve page list UX via sticky header bar and landing page. (#305)
+* ⬆️ Add support for PHP 8.1.
+
+### 🐛Fixes
+* 📋 Fix styling of collapse/expand badge in page list. (#306)
+* 📜 Scroll selected page into view after sorting page list. (#309)
+* 💄 Minor fixes when viewing a shared collective.
+* 👽 Fix mountpoint setup with mountpoint improvements in Nextcloud 24.
+
+### 🚧Updates & Tooling
+* 🔌 Update all possible javascript dependencies.
+* 📋 Use modern browser clipboard interface.
+* ♻️ Refactorings in the backend code.
+
+### 🌎Translations
+* 🗣️ Dutch translation added thanks to Jeroen Bos.
+* 🗣️ French translation updated thanks to Nathan.
+* 🗣️ Czech translation updaed thanks to Pavel Borecki.
+
+
 ## 0.22.22 - 2022.03.06
 
 ### 🏗️Fixes
