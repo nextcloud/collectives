@@ -102,7 +102,7 @@ describe('Collective Share', function() {
 			cy.get('#titleform input.title')
 				.should('have.value', '')
 				.type('New page')
-			cy.get('#editor > > .editor__content > div.ProseMirror')
+			cy.get('#editor > > .editor__content > div.ProseMirror', { timeout: Cypress.config('defaultCommandTimeout') * 2 })
 				.type('New content')
 			cy.get('button.edit-button')
 				.click()
