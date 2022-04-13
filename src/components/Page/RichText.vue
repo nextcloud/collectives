@@ -20,6 +20,25 @@ import { mapGetters } from 'vuex'
 import ReadOnlyEditor from '@nextcloud/text/package/components/ReadOnlyEditor'
 import { generateUrl } from '@nextcloud/router'
 
+const resolvePath = function(from, rel) {
+	if (!rel) {
+		return from
+	}
+	if (rel[0] === '/') {
+		return rel
+	}
+	from = from.split('/')
+	from.pop()
+	rel = rel.split('/')
+	while (rel[0] === '..' || rel[0] === '.') {
+		if (rel[0] === '..') {
+			from.pop()
+		}
+		rel.shift()
+	}
+	return from.concat(rel).join('/')
+}
+
 export default {
 	name: 'RichText',
 
@@ -60,6 +79,7 @@ export default {
 			'shareTokenParam',
 			'currentPage',
 			'currentPageDavUrl',
+			'currentPageFilePath',
 			'pageParam',
 			'collectiveParam',
 		]),
@@ -135,19 +155,50 @@ export default {
 		},
 
 		followLink(_event, attrs) {
-			const pageParamOmitsReadme = this.currentPage.fileName === 'Readme.md'
-				&& this.pageParam !== 'Readme.md'
-			const prefix = pageParamOmitsReadme
-				? (this.pageParam || this.collectiveParam) + '/'
-				: ''
-			const baseUrl = new URL(generateUrl('/apps/collectives'), window.location)
-			const to = attrs.href.startsWith(baseUrl.href)
-				? attrs.href.replace(baseUrl.href, '')
-				: prefix + attrs.href.replace('.md?', '?')
-			this.$router.push(to)
-			return true
+			return this.handleCollectiveLink(attrs)
+				|| this.handleRelativeMarkdownLink(attrs)
+				|| this.handleSameOriginLink(attrs)
+				|| this.handleRelativeFileLink(attrs)
+				|| window.open(attrs.href, '_blank')
 		},
 
+		handleCollectiveLink({ href }) {
+			const baseUrl = new URL(generateUrl('/apps/collectives'), window.location)
+			if (href.startsWith(baseUrl.href)) {
+				this.$router.push(href.replace(baseUrl.href, ''))
+				return true
+			}
+		},
+
+		handleRelativeMarkdownLink({ href }) {
+			const full = new URL(href, window.location)
+			if (full.origin === window.location.origin
+				&& href.includes('.md?fileId=')) {
+				const pageParamOmitsReadme = this.currentPage.fileName === 'Readme.md'
+					&& this.pageParam !== 'Readme.md'
+				const prefix = pageParamOmitsReadme
+					? (this.pageParam || this.collectiveParam) + '/'
+					: ''
+				this.$router.push(prefix + href.replace('.md?', '?'))
+				return true
+			}
+		},
+
+		handleSameOriginLink({ href }) {
+			if (href.match('/^' + window.location.origin + '/')) {
+				window.open(href)
+			}
+		},
+
+		handleRelativeFileLink({ href }) {
+			if (!href.match(/^[a-zA-Z]*:/)) {
+				const encodedRelPath = href.match(/^([^?]*)\?fileId=(\d+)/)[1]
+				const relPath = decodeURI(encodedRelPath)
+				const path = resolvePath(`/${this.currentPageFilePath}`, relPath)
+				this.OCA.Viewer.open({ path })
+				return true
+			}
+		},
 	},
 }
 </script>
