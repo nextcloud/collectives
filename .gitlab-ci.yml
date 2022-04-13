@@ -47,7 +47,6 @@ stages:
     - npm install
     - npm --version
     - node --version
-    - git --version
 
 # Set any variables we need
 
@@ -302,7 +301,7 @@ App Update Test:
 
 .browser-test: &browser-test
   <<: *node
-  image: cypress/browsers:node16.13.2-chrome100-ff98
+  image: cypress/browsers:node14.17.6-chrome100-ff98
   stage: test end to end
   variables:
     CYPRESS_baseUrl: http://nextcloud.local/index.php
