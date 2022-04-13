@@ -312,7 +312,7 @@ App Update Test:
     - $(npm bin)/cypress install
     - $(npm bin)/cypress verify
     - $(npm bin)/wait-on -i 500 -t 240000 $CYPRESS_baseUrl
-    - $(npm bin)/cypress run --browser chrome --config video=false,defaultCommandTimeout=10000
+    - $(npm bin)/cypress run --browser chrome --config video=false,defaultCommandTimeout=20000
   artifacts:
     paths:
       - cypress/screenshots
