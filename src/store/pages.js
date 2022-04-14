@@ -305,16 +305,16 @@ export default {
 		 * @param {object} store the vuex store
 		 * @param {Function} store.commit commit changes
 		 * @param {object} store.getters getters of the store
-		 * @param {object} parentPage Parent page for new template
+		 * @param {number} parentPageId ID of parent page for new template
 		 */
-		async [NEW_TEMPLATE]({ commit, getters }, parentPage) {
+		async [NEW_TEMPLATE]({ commit, getters }, parentPageId) {
 			const page = {
 				title: 'Template',
-				parentId: parentPage.id,
+				parentId: parentPageId,
 			}
 
 			// We'll be done when the editor has focus.
-			commit('load', 'editTemplate')
+			commit('load', 'newTemplate')
 
 			const response = await axios.post(getters.pageCreateUrl(page.parentId), page)
 			// Add new page to the beginning of pages array

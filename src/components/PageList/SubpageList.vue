@@ -17,13 +17,15 @@
 			</template>
 			<template v-if="currentCollectiveCanEdit" #actions>
 				<ActionButton icon="icon-add"
-					@click="newPage(page)">
+					:close-after-click="true"
+					@click="newPage(page.id)">
 					{{ t('collectives', 'Add a subpage') }}
 				</ActionButton>
 				<ActionButton v-if="showTemplates && !isTemplate"
 					icon="icon-pages-template-dark-grey"
 					class="action-button__template"
-					@click="editTemplate(page)">
+					:close-after-click="true"
+					@click="editTemplate(page.id)">
 					{{ editTemplateString }}
 				</ActionButton>
 			</template>
@@ -49,9 +51,8 @@ import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import LastUpdate from './LastUpdate'
 import Item from './Item'
 
-import { showError } from '@nextcloud/dialogs'
-import { mapGetters, mapMutations, mapState } from 'vuex'
-import { NEW_PAGE, NEW_TEMPLATE, GET_PAGES } from '../../store/actions'
+import { mapGetters, mapMutations } from 'vuex'
+import pageMixin from '../../mixins/pageMixin'
 
 export default {
 	name: 'SubpageList',
@@ -61,6 +62,10 @@ export default {
 		LastUpdate,
 		Item,
 	},
+
+	mixins: [
+		pageMixin,
+	],
 
 	props: {
 		page: {
@@ -82,16 +87,10 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			newPageId: (state) => state.pages.newPage.id,
-		}),
-
 		...mapGetters([
 			'currentCollectiveCanEdit',
 			'pageParam',
-			'collectiveParam',
 			'pagePath',
-			'newPagePath',
 			'currentPages',
 			'templatePage',
 			'visibleSubpages',
@@ -153,67 +152,10 @@ export default {
 
 	methods: {
 		...mapMutations([
-			'collapse',
 			'expand',
 			'toggleCollapsed',
-			'scrollToPage',
 			'show',
 		]),
-
-		/**
-		 * Open existing or create new template page
-		 *
-		 * @param {object} parentPage Parent page
-		 */
-		async editTemplate(parentPage) {
-			const templatePage = this.templatePage(this.page.id)
-			if (templatePage) {
-				this.$router.push(this.pagePath(templatePage))
-				if (this.showTemplates) {
-					this.$nextTick(() => this.scrollToPage(templatePage.id))
-				}
-				return
-			}
-
-			try {
-				await this.$store.dispatch(NEW_TEMPLATE, parentPage)
-				this.$router.push(this.newPagePath)
-				this.expand(this.page.id)
-				// The parents location changes when the first subpage
-				// is created.
-				this.$store.dispatch(GET_PAGES)
-				if (this.showTemplates) {
-					this.$nextTick(() => this.scrollToPage(this.newPageId))
-				}
-			} catch (e) {
-				console.error(e)
-				showError(t('collectives', 'Could not create the page'))
-			}
-		},
-
-		/**
-		 * Create a new page and focus the page automatically
-		 *
-		 * @param {object} parentPage Parent page
-		 */
-		async newPage(parentPage) {
-			const page = {
-				title: t('collectives', 'New Page'),
-				parentId: parentPage.id,
-			}
-			try {
-				await this.$store.dispatch(NEW_PAGE, page)
-				this.$router.push(this.newPagePath)
-				this.expand(this.page.id)
-				// The parents location changes when the first subpage
-				// is created.
-				this.$store.dispatch(GET_PAGES)
-				this.$nextTick(() => this.scrollToPage(this.newPageId))
-			} catch (e) {
-				console.error(e)
-				showError(t('collectives', 'Could not create the page'))
-			}
-		},
 
 		initCollapsed() {
 			// Expand subpages if they're in the path to currentPage
