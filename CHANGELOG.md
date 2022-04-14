@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.1.0-beta1 - 2022.04.14
+
+### ✨New
+* 🔢 Display tables (can be created with Nextcloud 24)
+* ⚠️ Display callouts (can be created with Nextcloud 24)
+
+### 🐛Fixes
+* 👓 Open file links in viewer directly from the page view.
+
+### 🚧Updates & Tooling
+* 🔌 Use the new @nextcloud/text package instead of our custom preview
+
+
 ## 1.0.0 - 2022.04.12
 
 ### ✨New
