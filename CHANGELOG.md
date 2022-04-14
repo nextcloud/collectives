@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.0-beta2 - 2022.04.14
+
+### 🐛Fixes
+* 🔗 Fix opening links with latest @nextcloud/text
+
+
 ## 1.1.0-beta1 - 2022.04.14
 
 ### ✨New
