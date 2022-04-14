@@ -23,7 +23,7 @@
 
 <script>
 import { showSuccess, showError } from '@nextcloud/dialogs'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapMutations, mapState } from 'vuex'
 import { NEW_TEMPLATE, DELETE_PAGE, GET_PAGES } from '../../store/actions'
 import Actions from '@nextcloud/vue/dist/Components/Actions'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
@@ -40,12 +40,17 @@ export default {
 	},
 
 	computed: {
+		...mapState({
+			newPageId: (state) => state.pages.newPage.id,
+		}),
+
 		...mapGetters([
 			'currentPage',
 			'currentCollective',
 			'isTemplatePage',
 			'landingPage',
 			'pagePath',
+			'showTemplates',
 			'templatePage',
 		]),
 
@@ -59,7 +64,10 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['expand']),
+		...mapMutations([
+			'expand',
+			'scrollToPage',
+		]),
 
 		/**
 		 * Delete the current page,
@@ -80,8 +88,12 @@ export default {
 		 * Open existing or create new template page
 		 */
 		async editTemplate() {
-			if (this.templatePage(this.page.id)) {
-				this.$router.push(this.pagePath(this.templatePage(this.page.id)))
+			const templatePage = this.templatePage(this.page.id)
+			if (templatePage) {
+				this.$router.push(this.pagePath(templatePage))
+				if (this.showTemplates) {
+					this.$nextTick(() => this.scrollToPage(templatePage.id))
+				}
 				return
 			}
 
@@ -92,6 +104,9 @@ export default {
 				// The parents location changes when the first subpage
 				// is created.
 				this.$store.dispatch(GET_PAGES)
+				if (this.showTemplates) {
+					this.$nextTick(() => this.scrollToPage(this.newPageId))
+				}
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not create the page'))

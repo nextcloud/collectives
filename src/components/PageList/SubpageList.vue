@@ -50,7 +50,7 @@ import LastUpdate from './LastUpdate'
 import Item from './Item'
 
 import { showError } from '@nextcloud/dialogs'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapMutations, mapState } from 'vuex'
 import { NEW_PAGE, NEW_TEMPLATE, GET_PAGES } from '../../store/actions'
 
 export default {
@@ -82,11 +82,16 @@ export default {
 	},
 
 	computed: {
+		...mapState({
+			newPageId: (state) => state.pages.newPage.id,
+		}),
+
 		...mapGetters([
 			'currentCollectiveCanEdit',
 			'pageParam',
 			'collectiveParam',
 			'pagePath',
+			'newPagePath',
 			'currentPages',
 			'templatePage',
 			'visibleSubpages',
@@ -147,7 +152,13 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['collapse', 'expand', 'toggleCollapsed', 'show']),
+		...mapMutations([
+			'collapse',
+			'expand',
+			'toggleCollapsed',
+			'scrollToPage',
+			'show',
+		]),
 
 		/**
 		 * Open existing or create new template page
@@ -155,18 +166,25 @@ export default {
 		 * @param {object} parentPage Parent page
 		 */
 		async editTemplate(parentPage) {
-			if (this.templatePage(parentPage.id)) {
-				this.$router.push(this.pagePath(this.templatePage(parentPage.id)))
+			const templatePage = this.templatePage(this.page.id)
+			if (templatePage) {
+				this.$router.push(this.pagePath(templatePage))
+				if (this.showTemplates) {
+					this.$nextTick(() => this.scrollToPage(templatePage.id))
+				}
 				return
 			}
 
 			try {
 				await this.$store.dispatch(NEW_TEMPLATE, parentPage)
-				this.$router.push(this.$store.getters.newPagePath)
+				this.$router.push(this.newPagePath)
 				this.expand(this.page.id)
 				// The parents location changes when the first subpage
 				// is created.
 				this.$store.dispatch(GET_PAGES)
+				if (this.showTemplates) {
+					this.$nextTick(() => this.scrollToPage(this.newPageId))
+				}
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not create the page'))
@@ -185,11 +203,12 @@ export default {
 			}
 			try {
 				await this.$store.dispatch(NEW_PAGE, page)
-				this.$router.push(this.$store.getters.newPagePath)
+				this.$router.push(this.newPagePath)
 				this.expand(this.page.id)
 				// The parents location changes when the first subpage
 				// is created.
 				this.$store.dispatch(GET_PAGES)
+				this.$nextTick(() => this.scrollToPage(this.newPageId))
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not create the page'))
