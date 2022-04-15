@@ -1,6 +1,6 @@
 # Welcome to your new collective
 
-**Bouw samen aan en deel verzamelde kennis!**
+**Come, organize and build shared knowledge!**
 
 
 ### 👥 Invite new people to the collective
@@ -9,7 +9,7 @@ Whether you want to add your friends or whole groups, follow the "manage members
 
 ### 🌱 Bring life to your collective
 
-Create pages and share your thoughts that really matter. Whether it's a shared knowledge repository for the community or a handbook for your organisation – Collectives works!
+Maak pagina's en deel je gedachten die er echt toe doen. Of het nu gaat om een gedeelde kennisbank voor een community of een handboek voor je organisatie – Collectives werkt!
 
 ### 🛋️ Edit this landing page to feel like home
 
