@@ -40,12 +40,14 @@ export default {
 </script>
 
 <style lang="scss">
+#editor-container .document-status {
+	width: 670px;
+	padding: 0 2px;
+	margin: auto;
+}
+
 #editor-container .editor__content {
 	border: 2px solid var(--color-border);
 	border-radius: var(--border-radius);
-}
-
-#editor-container .menububble {
-	margin-bottom: 0px;
 }
 </style>
