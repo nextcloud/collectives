@@ -93,7 +93,7 @@ export default {
 
 		richTextOptions() {
 			return {
-				currentDirectory: this.currentDirector,
+				currentDirectory: this.currentDirectory,
 			}
 		},
 
