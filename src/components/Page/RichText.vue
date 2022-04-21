@@ -5,9 +5,10 @@
 				<div class="menubar-icons" />
 			</div>
 			<div v-if="!loading">
-				<EditorContent v-if="editor"
-					class="editor__content"
-					:editor="editor" />
+				<ReadOnlyEditor class="editor__content"
+					:content="content"
+					:rich-text-options="richTextOptions"
+					@click-link="followLink" />
 			</div>
 		</div>
 	</div>
@@ -16,31 +17,33 @@
 <script>
 import axios from '@nextcloud/axios'
 import { mapGetters } from 'vuex'
+import ReadOnlyEditor from '@nextcloud/text/package/components/ReadOnlyEditor'
+import { generateUrl } from '@nextcloud/router'
 
-import MarkdownIt from 'markdown-it'
-import taskLists from 'markdown-it-task-lists'
-
-import { Editor, EditorContent } from 'tiptap'
-import {
-	HardBreak,
-	Heading,
-	Code,
-	OrderedList,
-	Blockquote,
-	CodeBlock,
-	HorizontalRule,
-	Italic,
-	Strike,
-	Bold,
-} from 'tiptap-extensions'
-import { BulletList, Image, ListItem } from '../../nodes'
-import Link from '../../marks/link'
+const resolvePath = function(from, rel) {
+	if (!rel) {
+		return from
+	}
+	if (rel[0] === '/') {
+		return rel
+	}
+	from = from.split('/')
+	from.pop()
+	rel = rel.split('/')
+	while (rel[0] === '..' || rel[0] === '.') {
+		if (rel[0] === '..') {
+			from.pop()
+		}
+		rel.shift()
+	}
+	return from.concat(rel).join('/')
+}
 
 export default {
 	name: 'RichText',
 
 	components: {
-		EditorContent,
+		ReadOnlyEditor,
 	},
 
 	props: {
@@ -66,8 +69,7 @@ export default {
 	data() {
 		return {
 			loading: true,
-			pageContent: null,
-			editor: null,
+			content: null,
 		}
 	},
 
@@ -77,6 +79,9 @@ export default {
 			'shareTokenParam',
 			'currentPage',
 			'currentPageDavUrl',
+			'currentPageFilePath',
+			'pageParam',
+			'collectiveParam',
 		]),
 
 		/**
@@ -86,25 +91,15 @@ export default {
 			return (this.pageUrl !== null ? this.pageUrl : this.currentPageDavUrl)
 		},
 
+		richTextOptions() {
+			return {
+				currentDirectory: this.currentDirectory,
+			}
+		},
+
 		currentDirectory() {
 			const { collectivePath, filePath } = this.currentPage
 			return [collectivePath, filePath].filter(Boolean).join('/')
-		},
-
-		/**
-		 * @return {object}
-		 */
-		markdownit() {
-			return MarkdownIt('commonmark', { html: false, breaks: false })
-				.enable('strikethrough')
-				.use(taskLists, { enable: true, labelAfter: true })
-		},
-
-		/**
-		 * @return {string}
-		 */
-		htmlContent() {
-			return this.markdownit.render(this.pageContent)
 		},
 
 	},
@@ -114,7 +109,7 @@ export default {
 			this.initPageContent()
 		},
 		'timestamp'() {
-			this.updatePageContent()
+			this.getPageContent()
 		},
 	},
 
@@ -142,8 +137,8 @@ export default {
 				const content = await axios.get(this.davUrl, axiosConfig)
 				// content.data will attempt to parse as json
 				// but we want the raw text.
-				this.pageContent = content.request.responseText
-				if (!this.pageContent) {
+				this.content = content.request.responseText
+				if (!this.content) {
 					this.$emit('empty')
 				}
 			} catch (e) {
@@ -156,46 +151,54 @@ export default {
 			this.loading = true
 			await this.getPageContent()
 			this.loading = false
-			this.editor = this.createEditor()
 			this.$nextTick(() => { this.$emit('ready') })
 		},
 
-		/**
-		 * Update markdown content of page
-		 */
-		async updatePageContent() {
-			await this.getPageContent()
-			this.editor.setContent(this.htmlContent)
+		followLink(_event, attrs) {
+			return this.handleCollectiveLink(attrs)
+				|| this.handleRelativeMarkdownLink(attrs)
+				|| this.handleSameOriginLink(attrs)
+				|| this.handleRelativeFileLink(attrs)
+				|| window.open(attrs.href, '_blank')
 		},
 
-		/**
-		 * @return {object}
-		 */
-		createEditor() {
-			return new Editor({
-				editable: false,
-				extensions: [
-					new Heading(),
-					new Code(),
-					new Bold(),
-					new Italic(),
-					new Strike(),
-					new HardBreak(),
-					new HorizontalRule(),
-					new BulletList(),
-					new OrderedList(),
-					new Blockquote(),
-					new CodeBlock(),
-					new ListItem(),
-					new Link({
-						openOnClick: true,
-					}),
-					new Image({ currentDirectory: this.currentDirectory }),
-				],
-				content: this.htmlContent,
-			})
+		handleCollectiveLink({ href }) {
+			const baseUrl = new URL(generateUrl('/apps/collectives'), window.location)
+			if (href.startsWith(baseUrl.href)) {
+				this.$router.push(href.replace(baseUrl.href, ''))
+				return true
+			}
 		},
 
+		handleRelativeMarkdownLink({ href }) {
+			const full = new URL(href, window.location)
+			if (full.origin === window.location.origin
+				&& href.includes('.md?fileId=')) {
+				const pageParamOmitsReadme = this.currentPage.fileName === 'Readme.md'
+					&& this.pageParam !== 'Readme.md'
+				const prefix = pageParamOmitsReadme
+					? (this.pageParam || this.collectiveParam) + '/'
+					: ''
+				this.$router.push(prefix + href.replace('.md?', '?'))
+				return true
+			}
+		},
+
+		handleSameOriginLink({ href }) {
+			if (href.match('/^' + window.location.origin + '/')) {
+				window.open(href)
+			}
+		},
+
+		handleRelativeFileLink({ href }) {
+			if (!href.match(/^[a-zA-Z]*:/)) {
+				const encodedRelPath = href.match(/^([^?]*)\?fileId=(\d+)/)[1]
+				const relPath = decodeURI(encodedRelPath)
+				const path = resolvePath(`/${this.currentPageFilePath}`, relPath)
+				this.OCA.Viewer.open({ path })
+				return true
+			}
+		},
 	},
 }
 </script>
@@ -266,7 +269,6 @@ export default {
 </style>
 
 <style lang="scss">
-@import './css/prosemirror';
 
 @media print {
 	.menubar {
