@@ -46,6 +46,12 @@ export default {
 		ReadOnlyEditor,
 	},
 
+	provide() {
+		return {
+			fileId: this.currentPage.id,
+		}
+	},
+
 	props: {
 		// RichText is rendered as a placeholder
 		// with a spinning wheel where the toolbar would be.
@@ -60,10 +66,11 @@ export default {
 			default: null,
 		},
 
-		timestamp: {
-			type: Number,
+		currentPage: {
+			type: Object,
 			required: true,
 		},
+
 	},
 
 	data() {
@@ -77,7 +84,6 @@ export default {
 		...mapGetters([
 			'isPublic',
 			'shareTokenParam',
-			'currentPage',
 			'currentPageDavUrl',
 			'currentPageFilePath',
 			'pageParam',
@@ -108,7 +114,7 @@ export default {
 		'davUrl'() {
 			this.initPageContent()
 		},
-		'timestamp'() {
+		'currentPage.timestamp'() {
 			this.getPageContent()
 		},
 	},
