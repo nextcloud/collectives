@@ -10,7 +10,7 @@ stages:
 
 # Settings for all jobs in a php based containers
 .php: &php
-  image: registry.gitlab.com/collectivecloud/docker-builds:php8.0-nc22
+  image: registry.gitlab.com/collectivecloud/docker-builds:php8.1-nc24
   cache:
     paths:
       - vendor/
@@ -167,6 +167,12 @@ Unit Test PHP 8.0 Nextcloud 23:
   needs:
     - "Static PHP Analysis"
 
+Unit Test PHP 8.1 Nextcloud 24:
+  <<: *php-unit
+  image: registry.gitlab.com/collectivecloud/docker-builds:php8.1-nc24
+  needs:
+    - "Static PHP Analysis"
+
 Unit Test PHP 8.1 Nextcloud Master:
   <<: *php-unit
   image: registry.gitlab.com/collectivecloud/docker-builds:php8.1-ncmaster
@@ -246,15 +252,15 @@ API PHP 8.0 Nextcloud 23:
   needs:
     - "Unit Test PHP 8.0 Nextcloud 23"
 
-API PHP 8.0 Nextcloud Master:
+API PHP 8.1 Nextcloud 24:
   <<: *php-integration
-  image: registry.gitlab.com/collectivecloud/docker-builds:php8.0-ncmaster
+  image: registry.gitlab.com/collectivecloud/docker-builds:php8.1-nc24
   needs:
-    - "Unit Test PHP 8.0 Nextcloud 23"
+    - "Unit Test PHP 8.1 Nextcloud 24"
 
 API PHP 8.1 Nextcloud Master:
   <<: *php-integration
-  image: registry.gitlab.com/collectivecloud/docker-builds:php8.0-ncmaster
+  image: registry.gitlab.com/collectivecloud/docker-builds:php8.1-ncmaster
   needs:
     - "Unit Test PHP 8.1 Nextcloud Master"
 
@@ -277,7 +283,7 @@ OCC CLI Test:
     - mariadb:latest
   needs:
     - "Unit Test PHP 7.3 Nextcloud 22"
-    - "Unit Test PHP 8.0 Nextcloud 23"
+    - "Unit Test PHP 8.1 Nextcloud 24"
 
 App Update Test:
   <<: *php
@@ -297,7 +303,7 @@ App Update Test:
     - mariadb:latest
   needs:
     - "Unit Test PHP 7.3 Nextcloud 22"
-    - "Unit Test PHP 8.0 Nextcloud 23"
+    - "Unit Test PHP 8.1 Nextcloud 24"
 
 .browser-test: &browser-test
   <<: *node
@@ -355,10 +361,17 @@ Browser PHP 8.0 Nextcloud 23:
       alias: nextcloud.local
       entrypoint: ["/usr/local/bin/run.sh"]
 
-Browser PHP 8.0 Nextcloud Master:
+Browser PHP 8.1 Nextcloud 24:
   <<: *browser-test
   services:
-    - name: registry.gitlab.com/collectivecloud/docker-builds:php8.0-ncmaster
+    - name: registry.gitlab.com/collectivecloud/docker-builds:php8.1-nc24
+      alias: nextcloud.local
+      entrypoint: ["/usr/local/bin/run.sh"]
+
+Browser PHP 8.1 Nextcloud Master:
+  <<: *browser-test
+  services:
+    - name: registry.gitlab.com/collectivecloud/docker-builds:php8.1-ncmaster
       alias: nextcloud.local
       entrypoint: ["/usr/local/bin/run.sh"]
   allow_failure: true
