@@ -44,7 +44,7 @@
 import AppContentList from '@nextcloud/vue/dist/Components/AppContentList'
 import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 import moment from '@nextcloud/moment'
-import { mapState, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { GET_BACKLINKS } from '../../store/actions'
 
 export default {
@@ -98,12 +98,16 @@ export default {
 	methods: {
 		...mapMutations(['load', 'unsetBacklinks']),
 
+		...mapActions({
+			dispatchGetBacklinks: GET_BACKLINKS,
+		}),
+
 		/**
 		 * Get backlinks for a page
 		 */
 		async getBacklinks() {
 			try {
-				this.$store.dispatch(GET_BACKLINKS, this.page)
+				this.dispatchGetBacklinks(this.page)
 			} catch (e) {
 				this.error = t('collectives', 'Could not get page backlinks')
 				console.error('Failed to get page backlinks', e)

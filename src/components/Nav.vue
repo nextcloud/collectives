@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { RESTORE_COLLECTIVE, DELETE_COLLECTIVE } from '../store/actions'
 import AppNavigation from '@nextcloud/vue/dist/Components/AppNavigation'
 import AppNavigationCaption from '@nextcloud/vue/dist/Components/AppNavigationCaption'
@@ -61,6 +61,10 @@ export default {
 	},
 
 	methods: {
+		...mapActions({
+			dispatchRestoreCollective: RESTORE_COLLECTIVE,
+			dispatchDeleteCollective: DELETE_COLLECTIVE,
+		}),
 
 		/**
 		 * Restore a collective with the given name from trash
@@ -69,7 +73,7 @@ export default {
 		 * @return {Promise}
 		 */
 		restoreCollective(collective) {
-			return this.$store.dispatch(RESTORE_COLLECTIVE, collective)
+			return this.dispatchRestoreCollective(collective)
 				.catch(displayError('Could not restore collective from trash'))
 		},
 
@@ -81,7 +85,7 @@ export default {
 		 * @return {Promise}
 		 */
 		deleteCollective(collective, circle) {
-			return this.$store.dispatch(DELETE_COLLECTIVE, { ...collective, circle })
+			return this.dispatchDeleteCollective({ ...collective, circle })
 				.catch(displayError('Could not delete collective from trash'))
 		},
 	},

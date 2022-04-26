@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import { UPDATE_COLLECTIVES_FOLDER } from '../../store/actions'
 import { getFilePickerBuilder, showError } from '@nextcloud/dialogs'
 import displayError from '../../util/displayError'
@@ -51,6 +51,10 @@ export default {
 	},
 
 	methods: {
+		...mapActions({
+			dispatchUpdateCollectivesFolder: UPDATE_COLLECTIVES_FOLDER,
+		}),
+
 		selectCollectivesFolder() {
 			const picker = getFilePickerBuilder(t('collectives', 'Select location for collectives'))
 				.setMultiSelect(false)
@@ -72,7 +76,7 @@ export default {
 					}
 
 					this.collectivesFolderLoading = true
-					this.$store.dispatch(UPDATE_COLLECTIVES_FOLDER, path)
+					this.dispatchUpdateCollectivesFolder(path)
 						.catch(displayError('Could not update collectives folder'))
 					this.collectivesFolderLoading = false
 				})

@@ -72,7 +72,7 @@ import RichText from './Page/RichText'
 import PageActions from './Page/PageActions'
 import Subpages from './Page/Subpages'
 import { showError } from '@nextcloud/dialogs'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import {
 	RENAME_PAGE,
 	TOUCH_PAGE,
@@ -203,6 +203,13 @@ export default {
 	methods: {
 		...mapMutations(['done', 'load', 'toggle', 'show', 'hide']),
 
+		...mapActions({
+			dispatchRenamePage: RENAME_PAGE,
+			dispatchTouchPage: TOUCH_PAGE,
+			dispatchGetPages: GET_PAGES,
+			dispatchGetVersions: GET_VERSIONS,
+		}),
+
 		// this is a method so it does not get cached
 		doc() {
 			return this.wrapper().$data.document
@@ -300,9 +307,9 @@ export default {
 			if (changed) {
 				this.reloadCounter += 1
 				this.previewWasEmpty = false
-				this.$store.dispatch(TOUCH_PAGE)
+				this.dispatchTouchPage()
 				if (!this.isPublic) {
-					this.$store.dispatch(GET_VERSIONS, this.currentPage.id)
+					this.dispatchGetVersions(this.currentPage.id)
 				}
 			}
 			this.edit = false
@@ -324,10 +331,10 @@ export default {
 				return
 			}
 			try {
-				await this.$store.dispatch(RENAME_PAGE, this.newTitle)
+				await this.dispatchRenamePage(this.newTitle)
 				// The resulting title may be different due to sanitizing
 				this.newTitle = this.currentPage.title
-				this.$store.dispatch(GET_PAGES)
+				this.dispatchGetPages()
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not rename the page'))

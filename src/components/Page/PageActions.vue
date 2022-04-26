@@ -26,7 +26,7 @@ import Actions from '@nextcloud/vue/dist/Components/Actions'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import ActionLink from '@nextcloud/vue/dist/Components/ActionLink'
 
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { generateUrl } from '@nextcloud/router'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { DELETE_PAGE } from '../../store/actions'
@@ -61,13 +61,17 @@ export default {
 	},
 
 	methods: {
+		...mapActions({
+			dispatchDeletePage: DELETE_PAGE,
+		}),
+
 		/**
 		 * Delete the current page,
 		 * remove it from the frontend and show a hint
 		 */
 		async deletePage() {
 			try {
-				await this.$store.dispatch(DELETE_PAGE)
+				await this.dispatchDeletePage()
 				this.$router.push(`/${encodeURIComponent(this.currentCollective.name)}`)
 				showSuccess(t('collectives', 'Page deleted'))
 			} catch (e) {

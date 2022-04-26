@@ -13,7 +13,7 @@
 
 <script>
 import { showInfo, showError } from '@nextcloud/dialogs'
-import { mapState, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { GET_COLLECTIVES_FOLDER, GET_COLLECTIVES, GET_TRASH_COLLECTIVES } from './store/actions'
 import displayError from './util/displayError'
 import Content from '@nextcloud/vue/dist/Components/Content'
@@ -73,13 +73,19 @@ export default {
 	methods: {
 		...mapMutations(['hide']),
 
+		...mapActions({
+			dispatchGetCollectives: GET_COLLECTIVES,
+			dispatchGetCollectivesFolder: GET_COLLECTIVES_FOLDER,
+			dispatchGetTrashCollectives: GET_TRASH_COLLECTIVES,
+		}),
+
 		/**
 		 * Get collective folder for user
 		 *
 		 * @return {Promise}
 		 */
 		getCollectivesFolder() {
-			return this.$store.dispatch(GET_COLLECTIVES_FOLDER)
+			return this.dispatchGetCollectivesFolder()
 				.catch(displayError('Could not fetch collectives folder'))
 		},
 
@@ -89,7 +95,7 @@ export default {
 		 * @return {Promise}
 		 */
 		getCollectives() {
-			return this.$store.dispatch(GET_COLLECTIVES)
+			return this.dispatchGetCollectives()
 				.catch(displayError('Could not fetch collectives'))
 		},
 
@@ -99,7 +105,7 @@ export default {
 		 * @return {Promise}
 		 */
 		getTrashCollectives() {
-			return this.$store.dispatch(GET_TRASH_COLLECTIVES)
+			return this.dispatchGetTrashCollectives()
 				.catch(displayError('Could not fetch collectives from trash'))
 		},
 	},

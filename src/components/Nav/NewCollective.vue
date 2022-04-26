@@ -75,7 +75,7 @@ import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { ActionButton, Actions, AppNavigationItem, Multiselect } from '@nextcloud/vue'
 import Button from '@nextcloud/vue/dist/Components/Button'
 import EmojiPicker from '@nextcloud/vue/dist/Components/EmojiPicker'
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { GET_CIRCLES, NEW_COLLECTIVE } from '../../store/actions'
 import displayError from '../../util/displayError'
 
@@ -133,13 +133,18 @@ export default {
 	},
 
 	methods: {
+		...mapActions({
+			dispatchGetCircles: GET_CIRCLES,
+			dispatchNewCollective: NEW_COLLECTIVE,
+		}),
+
 		/**
 		 * Get list of all circles
 		 *
 		 * @return {Promise}
 		 */
 		getCircles() {
-			return this.$store.dispatch(GET_CIRCLES)
+			return this.dispatchGetCircles()
 				.catch(displayError('Could not fetch circles'))
 		},
 
@@ -176,8 +181,7 @@ export default {
 				this.loading = false
 			}
 			this.loading = true
-			this.$store.dispatch(NEW_COLLECTIVE,
-				{ name: this.name, emoji: this.emoji })
+			this.dispatchNewCollective({ name: this.name, emoji: this.emoji })
 				.then(updateCollective)
 				.catch(displayError('Could not create the collective'))
 				.finally(done)

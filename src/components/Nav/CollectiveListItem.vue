@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { SHARE_COLLECTIVE, UPDATE_SHARE_COLLECTIVE, UNSHARE_COLLECTIVE } from '../../store/actions'
 import displayError from '../../util/displayError'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
@@ -164,7 +164,7 @@ export default {
 			if (val !== undefined) {
 				const collective = { ...this.collective }
 				collective.shareEditable = val
-				return this.$store.dispatch(UPDATE_SHARE_COLLECTIVE, collective)
+				return this.dispatchUpdateShareCollective(collective)
 					.catch(displayError(t('collectives', 'Could not change the collective share editing permissions')))
 			}
 		},
@@ -172,6 +172,12 @@ export default {
 
 	methods: {
 		...mapMutations(['show']),
+
+		...mapActions({
+			dispatchShareCollective: SHARE_COLLECTIVE,
+			dispatchUnshareCollective: UNSHARE_COLLECTIVE,
+			dispatchUpdateShareCollective: UPDATE_SHARE_COLLECTIVE,
+		}),
 
 		isActive(collective) {
 			return this.collectiveParam === collective.name
@@ -193,13 +199,13 @@ export default {
 		},
 
 		share(collective) {
-			return this.$store.dispatch(SHARE_COLLECTIVE, collective)
+			return this.dispatchShareCollective(collective)
 				.catch(displayError(t('collectives', 'Could not share the collective')))
 		},
 
 		unshare(collective) {
 			this.shareEditable = undefined
-			return this.$store.dispatch(UNSHARE_COLLECTIVE, collective)
+			return this.dispatchUnshareCollective(collective)
 				.catch(displayError(t('collectives', 'Could not unshare the collective')))
 		},
 

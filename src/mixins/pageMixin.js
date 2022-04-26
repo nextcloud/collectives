@@ -1,4 +1,4 @@
-import { mapGetters, mapMutations, mapState } from 'vuex'
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { showError } from '@nextcloud/dialogs'
 import { GET_PAGES, NEW_PAGE, NEW_TEMPLATE } from '../store/actions'
 
@@ -21,6 +21,12 @@ export default {
 			'scrollToPage',
 		]),
 
+		...mapActions({
+			dispatchGetPages: GET_PAGES,
+			dispatchNewPage: NEW_PAGE,
+			dispatchNewTemplate: NEW_TEMPLATE,
+		}),
+
 		/**
 		 * Open existing or create new template page
 		 *
@@ -37,7 +43,7 @@ export default {
 			}
 
 			try {
-				await this.$store.dispatch(NEW_TEMPLATE, parentPageId)
+				await this.dispatchNewTemplate(parentPageId)
 				this.$router.push(this.newPagePath)
 				this.expand(parentPageId)
 				if (this.showTemplates) {
@@ -45,7 +51,7 @@ export default {
 				}
 
 				// Parents location changes when the first subpage is created.
-				this.$store.dispatch(GET_PAGES)
+				this.dispatchGetPages()
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not create the page'))
@@ -63,13 +69,13 @@ export default {
 				parentId: parentPageId,
 			}
 			try {
-				await this.$store.dispatch(NEW_PAGE, page)
+				await this.dispatchNewPage(page)
 				this.$router.push(this.newPagePath)
 				this.expand(parentPageId)
 				this.$nextTick(() => this.scrollToPage(this.newPageId))
 
 				// Parents location changes when the first subpage is created.
-				this.$store.dispatch(GET_PAGES)
+				this.dispatchGetPages()
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not create the page'))
