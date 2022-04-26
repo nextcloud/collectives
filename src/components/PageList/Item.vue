@@ -46,7 +46,7 @@ import isMobile from '@nextcloud/vue/dist/Mixins/isMobile'
 import { generateUrl } from '@nextcloud/router'
 import { mapGetters, mapMutations } from 'vuex'
 import TriangleIcon from 'vue-material-design-icons/Triangle'
-import scrollToElement from '../../util/scrollToElement'
+import { scrollToPage } from '../../util/scrollToElement'
 
 export default {
 	name: 'Item',
@@ -135,12 +135,14 @@ export default {
 	mounted() {
 		// Scroll to item at initial mount if it's currentPage
 		if (this.isActive) {
-			scrollToElement(this.$el)
+			scrollToPage(this.pageId)
 		}
 	},
 
 	methods: {
-		...mapMutations(['toggleCollapsed']),
+		...mapMutations([
+			'toggleCollapsed',
+		]),
 
 		setDragData(ev) {
 			const path = generateUrl(`/apps/collectives${this.to}`)

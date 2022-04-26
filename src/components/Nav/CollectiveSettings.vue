@@ -141,7 +141,7 @@
 <script>
 import { memberLevels } from '../../constants'
 import { pageOrders, pageOrdersByNumber } from '../../util/sortOrders'
-import { mapGetters, mapMutations, mapState } from 'vuex'
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import AppSettingsDialog from '@nextcloud/vue/dist/Components/AppSettingsDialog'
 import AppSettingsSection from '@nextcloud/vue/dist/Components/AppSettingsSection'
@@ -245,7 +245,7 @@ export default {
 		editPermissions(val) {
 			const permission = String(val)
 			this.load('updateCollectiveEditPermissions_' + permission)
-			this.$store.dispatch(UPDATE_COLLECTIVE_EDIT_PERMISSIONS, { id: this.collective.id, level: parseInt(permission) }).then(() => {
+			this.dispatchUpdateCollectiveEditPermissions({ id: this.collective.id, level: parseInt(permission) }).then(() => {
 				this.done('updateCollectiveEditPermissions_' + permission)
 				showSuccess(t('collectives', 'Editing permissions updated'))
 			}).catch((error) => {
@@ -258,7 +258,7 @@ export default {
 		sharePermissions(val) {
 			const permission = String(val)
 			this.load('updateCollectiveSharePermissions_' + permission)
-			this.$store.dispatch(UPDATE_COLLECTIVE_SHARE_PERMISSIONS, { id: this.collective.id, level: parseInt(permission) }).then(() => {
+			this.dispatchUpdateCollectiveSharePermissions({ id: this.collective.id, level: parseInt(permission) }).then(() => {
 				showSuccess(t('collectives', 'Sharing permissions updated'))
 				this.done('updateCollectiveSharePermissions_' + permission)
 			}).catch((error) => {
@@ -273,7 +273,7 @@ export default {
 			this.load('updateCollectivePageOrder_' + pageOrder)
 			const collective = { id: this.collective.id }
 			collective.pageOrder = parseInt(pageOrder)
-			this.$store.dispatch(UPDATE_COLLECTIVE, collective).then(() => {
+			this.dispatchUpdateCollective(collective).then(() => {
 				this.sortPages(pageOrdersByNumber[pageOrder])
 				showSuccess(t('collectives', 'Default page order updated'))
 				this.done('updateCollectivePageOrder_' + pageOrder)
@@ -289,6 +289,14 @@ export default {
 	methods: {
 		...mapMutations(['load', 'done', 'sortPages']),
 
+		...mapActions({
+			dispatchRenameCircle: RENAME_CIRCLE,
+			dispatchUpdateCollective: UPDATE_COLLECTIVE,
+			dispatchTrashCollective: TRASH_COLLECTIVE,
+			dispatchUpdateCollectiveEditPermissions: UPDATE_COLLECTIVE_EDIT_PERMISSIONS,
+			dispatchUpdateCollectiveSharePermissions: UPDATE_COLLECTIVE_SHARE_PERMISSIONS,
+		}),
+
 		/**
 		 * Update the emoji of a collective
 		 *
@@ -298,7 +306,7 @@ export default {
 			this.load('updateCollectiveEmoji')
 			const collective = { id: this.collective.id }
 			collective.emoji = emoji
-			this.$store.dispatch(UPDATE_COLLECTIVE, collective).then(() => {
+			this.dispatchUpdateCollective(collective).then(() => {
 				showSuccess(t('collectives', 'Emoji updated'))
 				this.done('updateCollectiveEmoji')
 			}).catch((error) => {
@@ -325,7 +333,7 @@ export default {
 			// Wait for circle rename (also patches store with updated collective and pages)
 			const collective = { ...this.collective }
 			collective.name = this.newCollectiveName
-			await this.$store.dispatch(RENAME_CIRCLE, collective).then(() => {
+			await this.dispatchRenameCircle(collective).then(() => {
 				showSuccess('Collective renamed')
 			}).catch((error) => {
 				showError('Could not rename the collective')
@@ -358,7 +366,7 @@ export default {
 			if (this.collectiveParam === this.collective.name) {
 				this.$router.push('/')
 			}
-			this.$store.dispatch(TRASH_COLLECTIVE, this.collective)
+			this.dispatchTrashCollective(this.collective)
 				.catch(displayError('Could not move the collective to trash'))
 		},
 	},

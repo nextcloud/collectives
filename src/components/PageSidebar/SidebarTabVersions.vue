@@ -60,7 +60,7 @@ import AppContentList from '@nextcloud/vue/dist/Components/AppContentList'
 import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 import moment from '@nextcloud/moment'
 import { formatFileSize } from '@nextcloud/files'
-import { mapState, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { SELECT_VERSION } from '../../store/mutations'
 import { GET_VERSIONS } from '../../store/actions'
 
@@ -141,13 +141,17 @@ export default {
 	methods: {
 		...mapMutations(['load', 'done']),
 
+		...mapActions({
+			dispatchGetVersions: GET_VERSIONS,
+		}),
+
 		/**
 		 * Get versions of a page
 		 */
 		async getPageVersions() {
 			this.load('versions')
 			try {
-				this.$store.dispatch(GET_VERSIONS, this.pageId)
+				this.dispatchGetVersions(this.pageId)
 			} catch (e) {
 				this.error = t('collectives', 'Could not get page versions')
 				console.error('Failed to get page versions', e)

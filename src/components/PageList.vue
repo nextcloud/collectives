@@ -62,13 +62,15 @@
 			</template>
 			<template v-if="currentCollectiveCanEdit" #actions>
 				<ActionButton icon="icon-add"
-					@click="newPage(collectivePage)">
+					:close-after-click="true"
+					@click="newPage(collectivePage.id)">
 					{{ t('collectives', 'Add a page') }}
 				</ActionButton>
 				<ActionButton v-if="showTemplates"
 					icon="icon-pages-template-dark-grey"
 					class="action-button__template"
-					@click="editTemplate(collectivePage)">
+					:close-after-click="true"
+					@click="editTemplate(collectivePage.id)">
 					{{ editTemplateString }}
 				</ActionButton>
 			</template>
@@ -97,12 +99,11 @@ import AppContentList from '@nextcloud/vue/dist/Components/AppContentList'
 import LastUpdate from './PageList/LastUpdate'
 import SubpageList from './PageList/SubpageList'
 import Item from './PageList/Item'
-import { showError } from '@nextcloud/dialogs'
 import { mapGetters, mapMutations } from 'vuex'
-import { NEW_PAGE, NEW_TEMPLATE } from '../store/actions'
 import SortAlphabeticalAscendingIcon from 'vue-material-design-icons/SortAlphabeticalAscending'
 import SortClockAscendingOutlineIcon from 'vue-material-design-icons/SortClockAscendingOutline'
-import scrollToElement from '../util/scrollToElement'
+import { scrollToPage } from '../util/scrollToElement'
+import pageMixin from '../mixins/pageMixin'
 
 export default {
 	name: 'PageList',
@@ -117,6 +118,10 @@ export default {
 		SortAlphabeticalAscendingIcon,
 		SortClockAscendingOutlineIcon,
 	},
+
+	mixins: [
+		pageMixin,
+	],
 
 	data() {
 		return {
@@ -133,7 +138,6 @@ export default {
 			'currentCollectivePath',
 			'currentPage',
 			'loading',
-			'pagePath',
 			'visibleSubpages',
 			'sortBy',
 			'showing',
@@ -166,7 +170,11 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['show', 'sortPages', 'toggleTemplates']),
+		...mapMutations([
+			'show',
+			'sortPages',
+			'toggleTemplates',
+		]),
 
 		/**
 		 * Change page sort order and scroll to current page
@@ -176,47 +184,8 @@ export default {
 		sortPagesAndScroll(order) {
 			this.sortPages(order)
 			this.$nextTick(() => {
-				scrollToElement(document.getElementById(`page-${this.currentPage.id}`))
+				scrollToPage(this.currentPage.id)
 			})
-		},
-
-		/**
-		 * Open existing or create new template page
-		 *
-		 * @param {object} parentPage Parent page
-		 */
-		async editTemplate(parentPage) {
-			if (this.templatePage(parentPage.id)) {
-				this.$router.push(this.pagePath(this.templatePage(parentPage.id)))
-				return
-			}
-
-			try {
-				await this.$store.dispatch(NEW_TEMPLATE, parentPage)
-				this.$router.push(this.$store.getters.newPagePath)
-			} catch (e) {
-				console.error(e)
-				showError(t('collectives', 'Could not create the page'))
-			}
-		},
-
-		/**
-		 * Create a new page and focus the page automatically
-		 *
-		 * @param {object} parentPage Parent page
-		 */
-		async newPage(parentPage) {
-			const page = {
-				title: t('collectives', 'New Page'),
-				parentId: parentPage.id,
-			}
-			try {
-				await this.$store.dispatch(NEW_PAGE, page)
-				this.$router.push(this.$store.getters.newPagePath)
-			} catch (e) {
-				console.error(e)
-				showError(t('collectives', 'Could not create the page'))
-			}
 		},
 	},
 }

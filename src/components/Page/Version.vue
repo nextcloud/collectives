@@ -35,7 +35,7 @@ import { getCurrentUser } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { generateRemoteUrl } from '@nextcloud/router'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { SELECT_VERSION } from '../../store/mutations'
 import { GET_VERSIONS } from '../../store/actions'
 
@@ -88,6 +88,11 @@ export default {
 
 	methods: {
 		...mapMutations(['hide']),
+
+		...mapActions({
+			dispatchGetVersions: GET_VERSIONS,
+		}),
+
 		closeVersions() {
 			this.$store.commit(SELECT_VERSION, null)
 			this.hide('sidebar')
@@ -106,7 +111,7 @@ export default {
 					},
 				})
 				this.$store.commit(SELECT_VERSION, null)
-				this.$store.dispatch(GET_VERSIONS, this.page.id)
+				this.dispatchGetVersions(this.page.id)
 				showSuccess(t('collectives', 'Reverted {page} to revision {timestamp}.', {
 					page: this.page.title,
 					timestamp: target.relativeTimestamp,

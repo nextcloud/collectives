@@ -9,7 +9,7 @@
 			icon="icon-pages-template"
 			class="action-button__template"
 			:close-after-click="true"
-			@click="editTemplate">
+			@click="editTemplate(currentPage.id)">
 			{{ t('collectives', 'Edit template for subpages') }}
 		</ActionButton>
 		<ActionButton v-if="!landingPage"
@@ -22,13 +22,15 @@
 </template>
 
 <script>
-import { showSuccess, showError } from '@nextcloud/dialogs'
-import { mapGetters, mapMutations } from 'vuex'
-import { NEW_TEMPLATE, DELETE_PAGE, GET_PAGES } from '../../store/actions'
 import Actions from '@nextcloud/vue/dist/Components/Actions'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import ActionLink from '@nextcloud/vue/dist/Components/ActionLink'
+
+import { mapActions, mapGetters } from 'vuex'
 import { generateUrl } from '@nextcloud/router'
+import { showSuccess, showError } from '@nextcloud/dialogs'
+import { DELETE_PAGE } from '../../store/actions'
+import pageMixin from '../../mixins/pageMixin'
 
 export default {
 	name: 'PageActions',
@@ -39,27 +41,29 @@ export default {
 		ActionLink,
 	},
 
+	mixins: [
+		pageMixin,
+	],
+
 	computed: {
 		...mapGetters([
 			'currentPage',
 			'currentCollective',
 			'isTemplatePage',
 			'landingPage',
-			'pagePath',
+			'showTemplates',
 			'templatePage',
 		]),
 
-		page() {
-			return this.currentPage
-		},
-
 		filesUrl() {
-			return generateUrl(`/apps/files/?fileid=${this.page.id}`)
+			return generateUrl(`/apps/files/?fileid=${this.currentPage.id}`)
 		},
 	},
 
 	methods: {
-		...mapMutations(['expand']),
+		...mapActions({
+			dispatchDeletePage: DELETE_PAGE,
+		}),
 
 		/**
 		 * Delete the current page,
@@ -67,34 +71,12 @@ export default {
 		 */
 		async deletePage() {
 			try {
-				await this.$store.dispatch(DELETE_PAGE)
+				await this.dispatchDeletePage()
 				this.$router.push(`/${encodeURIComponent(this.currentCollective.name)}`)
 				showSuccess(t('collectives', 'Page deleted'))
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not delete the page'))
-			}
-		},
-
-		/**
-		 * Open existing or create new template page
-		 */
-		async editTemplate() {
-			if (this.templatePage(this.page.id)) {
-				this.$router.push(this.pagePath(this.templatePage(this.page.id)))
-				return
-			}
-
-			try {
-				await this.$store.dispatch(NEW_TEMPLATE, this.page)
-				this.$router.push(this.$store.getters.newPagePath)
-				this.expand(this.page.id)
-				// The parents location changes when the first subpage
-				// is created.
-				this.$store.dispatch(GET_PAGES)
-			} catch (e) {
-				console.error(e)
-				showError(t('collectives', 'Could not create the page'))
 			}
 		},
 	},

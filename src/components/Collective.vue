@@ -16,7 +16,7 @@ import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { listen } from '@nextcloud/notify_push'
 import AppContentDetails from '@nextcloud/vue/dist/Components/AppContentDetails'
 import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { GET_PAGES } from '../store/actions'
 import { SELECT_VERSION } from '../store/mutations'
 import displayError from '../util/displayError'
@@ -102,6 +102,10 @@ export default {
 	methods: {
 		...mapMutations(['show', 'hide', 'load', 'unsetPages']),
 
+		...mapActions({
+			dispatchGetPages: GET_PAGES,
+		}),
+
 		initCollective() {
 			this.getPages()
 			this.closeNav()
@@ -163,7 +167,7 @@ export default {
 		 * Get list of all pages
 		 */
 		async getPages() {
-			await this.$store.dispatch(GET_PAGES)
+			await this.dispatchGetPages()
 				.catch(displayError('Could not fetch pages'))
 		},
 
@@ -171,7 +175,7 @@ export default {
 		 * Get list of all pages without loading indicator
 		 */
 		async getPagesBackground() {
-			await this.$store.dispatch(GET_PAGES, false)
+			await this.dispatchGetPages(false)
 				.catch(displayError('Could not fetch pages'))
 		},
 
