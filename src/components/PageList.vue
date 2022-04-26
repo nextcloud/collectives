@@ -102,6 +102,7 @@ import Item from './PageList/Item'
 import { mapGetters, mapMutations } from 'vuex'
 import SortAlphabeticalAscendingIcon from 'vue-material-design-icons/SortAlphabeticalAscending'
 import SortClockAscendingOutlineIcon from 'vue-material-design-icons/SortClockAscendingOutline'
+import { scrollToPage } from '../util/scrollToElement'
 import pageMixin from '../mixins/pageMixin'
 
 export default {
@@ -170,7 +171,6 @@ export default {
 
 	methods: {
 		...mapMutations([
-			'scrollToPage',
 			'show',
 			'sortPages',
 			'toggleTemplates',
@@ -184,7 +184,7 @@ export default {
 		sortPagesAndScroll(order) {
 			this.sortPages(order)
 			this.$nextTick(() => {
-				this.scrollToPage(this.currentPage.id)
+				scrollToPage(this.currentPage.id)
 			})
 		},
 	},

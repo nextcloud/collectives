@@ -3,7 +3,6 @@ import { getCurrentUser } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
 import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
 import * as sortOrders from '../util/sortOrders'
-import scrollToElement from '../util/scrollToElement'
 
 import {
 	SET_PAGES,
@@ -243,11 +242,6 @@ export default {
 		toggleCollapsed: (state, pageId) =>
 			// Default to 'false' if unset
 			Vue.set(state.collapsed, pageId, state.collapsed[pageId] == null ? false : !state.collapsed[pageId]),
-
-		scrollToPage(_state, pageId) {
-			const pageListItem = document.getElementById(`page-${pageId}`)
-			scrollToElement(pageListItem)
-		},
 	},
 
 	actions: {

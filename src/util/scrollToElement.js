@@ -1,4 +1,14 @@
 /**
+ * Scroll to page in page list
+ *
+ * @param {number} pageId ID of page to scroll
+ */
+export function scrollToPage(pageId) {
+	const pageListItem = document.getElementById(`page-${pageId}`)
+	scrollToElement(pageListItem)
+}
+
+/**
  * Scroll element into center if not visible
  *
  * @param {Element} element DOM element to scroll

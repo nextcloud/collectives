@@ -1,6 +1,7 @@
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { showError } from '@nextcloud/dialogs'
 import { GET_PAGES, NEW_PAGE, NEW_TEMPLATE } from '../store/actions'
+import { scrollToPage } from '../util/scrollToElement'
 
 export default {
 	computed: {
@@ -18,7 +19,6 @@ export default {
 	methods: {
 		...mapMutations([
 			'expand',
-			'scrollToPage',
 		]),
 
 		...mapActions({
@@ -37,7 +37,7 @@ export default {
 			if (templatePage) {
 				this.$router.push(this.pagePath(templatePage))
 				if (this.showTemplates) {
-					this.$nextTick(() => this.scrollToPage(templatePage.id))
+					this.$nextTick(() => scrollToPage(templatePage.id))
 				}
 				return
 			}
@@ -47,7 +47,7 @@ export default {
 				this.$router.push(this.newPagePath)
 				this.expand(parentPageId)
 				if (this.showTemplates) {
-					this.$nextTick(() => this.scrollToPage(this.newPageId))
+					this.$nextTick(() => scrollToPage(this.newPageId))
 				}
 
 				// Parents location changes when the first subpage is created.
@@ -72,7 +72,7 @@ export default {
 				await this.dispatchNewPage(page)
 				this.$router.push(this.newPagePath)
 				this.expand(parentPageId)
-				this.$nextTick(() => this.scrollToPage(this.newPageId))
+				this.$nextTick(() => scrollToPage(this.newPageId))
 
 				// Parents location changes when the first subpage is created.
 				this.dispatchGetPages()
