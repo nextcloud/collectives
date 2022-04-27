@@ -50,6 +50,7 @@
 			:level="0"
 			:filtered-view="false"
 			:page-id="collectivePage ? collectivePage.id : 0"
+			:style="landingPageItemStyle"
 			@click.native="show('details')">
 			<template v-if="currentCollective.emoji" #icon>
 				<div class="emoji">
@@ -75,7 +76,7 @@
 				</ActionButton>
 			</template>
 		</Item>
-		<div class="sub-page-list">
+		<div ref="subPageList" class="sub-page-list">
 			<SubpageList v-if="templateView"
 				:key="templateView.id"
 				:page="templateView"
@@ -126,6 +127,7 @@ export default {
 	data() {
 		return {
 			filterString: '',
+			pageListHasScrollbar: false,
 		}
 	},
 
@@ -167,6 +169,29 @@ export default {
 				return t('collectives', 'Add template for subpages')
 			}
 		},
+
+		scrollBarWidth() {
+			const element = document.createElement('div')
+			element.className = 'scrollbar-measure'
+			document.body.appendChild(element)
+			const width = element.offsetWidth - element.clientWidth
+			document.body.removeChild(element)
+			return width
+		},
+
+		landingPageItemStyle() {
+			return this.pageListHasScrollbar
+				? `margin-right: ${this.scrollBarWidth}px`
+				: ''
+		},
+	},
+
+	watch: {
+		'subpages'() {
+			this.$nextTick(() => {
+				this.updatePageListHasScrollbar()
+			})
+		},
 	},
 
 	methods: {
@@ -187,6 +212,12 @@ export default {
 				scrollToPage(this.currentPage.id)
 			})
 		},
+
+		// This is a method so it doesn't get cached
+		updatePageListHasScrollbar() {
+			const element = this.$refs.subPageList
+			this.pageListHasScrollbar = element.scrollHeight > element.clientHeight
+		},
 	},
 }
 
@@ -199,7 +230,7 @@ export default {
 }
 
 .sub-page-list {
-	overflow-y: scroll;
+	overflow-y: auto;
 }
 
 .page-filter {
@@ -236,5 +267,15 @@ li.toggle-button.selected {
 // template icon appears too big with default size (16px)
 .action-button__template::v-deep .icon-pages-template-dark-grey {
 	background-size: 14px;
+}
+</style>
+
+<style>
+.scrollbar-measure {
+	width: 100px;
+	height: 100px;
+	overflow: scroll;
+	position: absolute;
+	top: -9999px;
 }
 </style>
