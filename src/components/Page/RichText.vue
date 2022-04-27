@@ -1,5 +1,9 @@
 <template>
 	<div id="text-wrapper" class="richEditor">
+		<input id="sharingToken"
+			type="hidden"
+			name="sharingToken"
+			:value="shareTokenParam">
 		<div id="text" class="editor">
 			<div :class="{menubar: true, loading}">
 				<div class="menubar-icons" />
