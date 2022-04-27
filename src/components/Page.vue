@@ -43,15 +43,6 @@
 				@empty="emptyPreview"
 				@loading="waitingFor.push('preview')"
 				@ready="ready('preview')" />
-			<button v-if="!('preview' in waitingFor) && hasSubpages"
-				href="#"
-				class="load-more"
-				@click="toggle('subpages')">
-				{{ showing('subpages')
-					? t('collectives', 'Hide all subpages')
-					: t('collectives', 'Show all subpages')
-				}}
-			</button>
 			<Subpages v-if="showing('subpages')"
 				:page-id="currentPage.id"
 				@loading="waitingFor.push('subpages')"
@@ -383,11 +374,6 @@ export default {
 	}
 }
 
-.load-more {
-	margin-top: 10px;
-	margin-bottom: 10px;
-}
-
 // Leave space for page list toggle on small screens
 // Editor/View: 670px, page list/details toggle: 44px
 @media only screen and (max-width: 670px + 44px) {
@@ -411,7 +397,7 @@ export default {
 }
 
 @media print {
-	.edit-button, .action-item, .load-more {
+	.edit-button, .action-item {
 		display: none !important;
 	}
 }
