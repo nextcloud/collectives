@@ -223,6 +223,7 @@ export default {
 	display: flex;
 	background-color: var(--color-main-background-translucent);
 	height: 44px;
+	z-index: 100;
 }
 
 .menubar.loading {
@@ -246,8 +247,10 @@ export default {
 }
 
 #text-wrapper {
+	position: absolute;
 	display: flex;
 	width: 100%;
+	height: 100%;
 	overflow: hidden;
 }
 
@@ -265,6 +268,9 @@ export default {
 	overflow-y: auto;
 	overflow-x: hidden;
 	width: 100%;
+	max-width: 800px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 #read-only-editor {

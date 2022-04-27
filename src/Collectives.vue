@@ -141,7 +141,10 @@ export default {
 }
 
 .app-content-details div #text-container {
-	margin-top: 51px;
+	position: absolute;
+	top: 54px;
+	height: calc(100% - 56px);
+	max-width: 100%;
 }
 
 #editor-container #editor {

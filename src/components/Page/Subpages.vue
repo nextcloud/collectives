@@ -90,6 +90,8 @@ export default {
 	opacity: 0.8;
 	padding: 8px 2px 2px 8px;
 	font-weight: normal;
+	max-width: 670px;
+	margin: auto;
 }
 
 .app-content-details div #text-container {
