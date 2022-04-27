@@ -1,5 +1,9 @@
 <template>
 	<div id="text-wrapper" class="richEditor">
+		<input id="sharingToken"
+			type="hidden"
+			name="sharingToken"
+			:value="shareTokenParam">
 		<div id="text" class="editor">
 			<div :class="{menubar: true, loading}">
 				<div class="menubar-icons" />
@@ -46,6 +50,12 @@ export default {
 		ReadOnlyEditor,
 	},
 
+	provide() {
+		return {
+			fileId: this.currentPage.id,
+		}
+	},
+
 	props: {
 		// RichText is rendered as a placeholder
 		// with a spinning wheel where the toolbar would be.
@@ -60,10 +70,11 @@ export default {
 			default: null,
 		},
 
-		timestamp: {
-			type: Number,
+		currentPage: {
+			type: Object,
 			required: true,
 		},
+
 	},
 
 	data() {
@@ -77,7 +88,6 @@ export default {
 		...mapGetters([
 			'isPublic',
 			'shareTokenParam',
-			'currentPage',
 			'currentPageDavUrl',
 			'currentPageFilePath',
 			'pageParam',
@@ -108,7 +118,7 @@ export default {
 		'davUrl'() {
 			this.initPageContent()
 		},
-		'timestamp'() {
+		'currentPage.timestamp'() {
 			this.getPageContent()
 		},
 	},
