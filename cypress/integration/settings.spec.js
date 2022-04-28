@@ -39,6 +39,7 @@ describe('Settings', function() {
 				.click()
 			cy.get('div[data-dir=""] > a')
 				.click()
+			cy.get('div[data-dir="/Collectives"]').should('not.exist')
 			cy.get('#oc-dialog-filepicker-content > span > span > a.button-add')
 				.click()
 			cy.get('nav.newFolderMenu > ul > li > form > input[type="text"]')
