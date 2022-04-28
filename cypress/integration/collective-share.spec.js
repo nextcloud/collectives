@@ -106,6 +106,8 @@ describe('Collective Share', function() {
 				.type('New content')
 			cy.get('button.edit-button')
 				.click()
+			cy.get('button.edit-button')
+				.should('contain', 'Edit')
 		})
 		it('Allows unsharing a collective', function() {
 			cy.login('bob', 'bob', '/apps/collectives')

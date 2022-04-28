@@ -322,7 +322,7 @@ App Update Test:
     paths:
       - cypress/screenshots
     expire_in: 1 day
-    when: on_failure
+    when: always
   only:
     refs:
       - merge_requests
