@@ -26,7 +26,7 @@
 
 describe('Page', function() {
 	before(function() {
-		cy.login('bob', 'bob', '/apps/collectives')
+		cy.login('bob', { route: '/apps/collectives' })
 		cy.seedCollective('Our Garden')
 		cy.seedPage('Day 1', '', 'Readme.md')
 		cy.seedPage('Day 2', '', 'Readme.md')
@@ -37,7 +37,7 @@ describe('Page', function() {
 	})
 
 	beforeEach(function() {
-		cy.login('bob', 'bob', '/apps/collectives/Our Garden')
+		cy.login('bob', { route: '/apps/collectives/Our Garden' })
 		// make sure the page list loaded properly
 		cy.contains('.app-content-list-item a', 'Day 1')
 	})

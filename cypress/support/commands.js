@@ -13,23 +13,28 @@ import axios from '@nextcloud/axios'
 const url = Cypress.config('baseUrl').replace(/\/index.php\/?$/g, '')
 Cypress.env('baseUrl', url)
 
-Cypress.Commands.add('login', (user, password, route = '/apps/files') => {
-	cy.clearCookies()
-	cy.visit(route)
-	cy.get('input[name=user]').type(user)
-	cy.get('input[name=password]').type(password)
-	cy.get('form[name=login] input[type=submit]').click()
-	cy.url().should('not.include', 'index.php/login?redirect_url')
-	cy.url().should('include', route.replaceAll(' ', '%20'))
+Cypress.Commands.add('login', (user, { password, route, onBeforeLoad } = {}) => {
+	route = route || '/apps/collectives'
+	password = password || user
+	cy.session(user, function() {
+		cy.visit(route)
+		cy.get('input[name=user]').type(user)
+		cy.get('input[name=password]').type(password)
+		cy.get('form[name=login] input[type=submit]').click()
+		cy.url().should('not.include', 'index.php/login?redirect_url')
+		cy.url().should('include', route.replaceAll(' ', '%20'))
+	})
+	// in case the session already existed but we are on a different route...
+	cy.visit(route, { onBeforeLoad })
 })
 
 Cypress.Commands.add('logout', () => {
-	cy.clearLocalStorage()
-	cy.clearCookies()
+	cy.session('_guest', function() {
+	})
 })
 
 Cypress.Commands.add('toggleApp', (appName) => {
-	cy.login('admin', 'admin', `/settings/apps/installed/${appName}`)
+	cy.login('admin', { route: `/settings/apps/installed/${appName}` })
 	cy.get('#app-sidebar-vue .app-details input.enable').click()
 	cy.logout()
 })
