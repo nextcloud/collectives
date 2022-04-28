@@ -43,39 +43,40 @@
 				</ActionButton>
 			</Actions>
 		</div>
-		<Item v-if="currentCollective"
-			key="Readme"
-			:to="currentCollectivePath"
-			:title="currentCollective.name"
-			:level="0"
-			:filtered-view="false"
-			:page-id="collectivePage ? collectivePage.id : 0"
-			@click.native="show('details')">
-			<template v-if="currentCollective.emoji" #icon>
-				<div class="emoji">
-					{{ currentCollective.emoji }}
-				</div>
-			</template>
-			<template v-if="collectivePage" #line-two>
-				<LastUpdate :timestamp="collectivePage.timestamp"
-					:user="collectivePage.lastUserId" />
-			</template>
-			<template v-if="currentCollectiveCanEdit" #actions>
-				<ActionButton icon="icon-add"
-					:close-after-click="true"
-					@click="newPage(collectivePage.id)">
-					{{ t('collectives', 'Add a page') }}
-				</ActionButton>
-				<ActionButton v-if="showTemplates"
-					icon="icon-pages-template-dark-grey"
-					class="action-button__template"
-					:close-after-click="true"
-					@click="editTemplate(collectivePage.id)">
-					{{ editTemplateString }}
-				</ActionButton>
-			</template>
-		</Item>
-		<div class="sub-page-list">
+		<div class="page-list">
+			<Item v-if="currentCollective"
+				key="Readme"
+				:to="currentCollectivePath"
+				:title="currentCollective.name"
+				:level="0"
+				:filtered-view="false"
+				:page-id="collectivePage ? collectivePage.id : 0"
+				class="page-list-landing-page"
+				@click.native="show('details')">
+				<template v-if="currentCollective.emoji" #icon>
+					<div class="emoji">
+						{{ currentCollective.emoji }}
+					</div>
+				</template>
+				<template v-if="collectivePage" #line-two>
+					<LastUpdate :timestamp="collectivePage.timestamp"
+						:user="collectivePage.lastUserId" />
+				</template>
+				<template v-if="currentCollectiveCanEdit" #actions>
+					<ActionButton icon="icon-add"
+						:close-after-click="true"
+						@click="newPage(collectivePage.id)">
+						{{ t('collectives', 'Add a page') }}
+					</ActionButton>
+					<ActionButton v-if="showTemplates"
+						icon="icon-pages-template-dark-grey"
+						class="action-button__template"
+						:close-after-click="true"
+						@click="editTemplate(collectivePage.id)">
+						{{ editTemplateString }}
+					</ActionButton>
+				</template>
+			</Item>
 			<SubpageList v-if="templateView"
 				:key="templateView.id"
 				:page="templateView"
@@ -198,10 +199,6 @@ export default {
 	flex-direction: row;
 }
 
-.sub-page-list {
-	overflow-y: scroll;
-}
-
 .page-filter {
 	margin-left: 48px;
 }
@@ -224,10 +221,6 @@ li.toggle-button.selected {
 	background-color: var(--color-primary-light);
 }
 
-.emoji {
-	margin: -3px;
-}
-
 .icon-pages-template-dark-grey, .icon-pages-template-grey {
 	background-size: 12px;
 	height: revert;
@@ -236,5 +229,20 @@ li.toggle-button.selected {
 // template icon appears too big with default size (16px)
 .action-button__template::v-deep .icon-pages-template-dark-grey {
 	background-size: 14px;
+}
+
+.page-list {
+	overflow-y: auto;
+}
+
+.page-list-landing-page {
+	height: 68px;
+	position: sticky;
+	top: 0;
+	z-index: 1;
+}
+
+.emoji {
+	margin: -3px;
 }
 </style>

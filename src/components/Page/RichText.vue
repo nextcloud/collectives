@@ -267,6 +267,10 @@ export default {
 	width: 100%;
 }
 
+#read-only-editor {
+	overflow-x: hidden;
+}
+
 .editor__content {
 	max-width: 670px;
 	margin: auto;
@@ -279,7 +283,6 @@ export default {
 </style>
 
 <style lang="scss">
-
 @media print {
 	.menubar {
 		display: none !important;
