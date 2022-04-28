@@ -22,13 +22,13 @@
 
 describe('The app is properly installed and responding', function() {
 	it('shows up in the app list', function() {
-		cy.login('admin', 'admin', 'settings/apps/installed/collectives')
+		cy.login('admin', { route: 'settings/apps/installed/collectives' })
 		cy.get('#app-sidebar-vue .app-details input.enable')
 			.should('have.value', 'Disable')
 	})
 
 	it('allows creating a new collective', function() {
-		cy.login('jane', 'jane', '/apps/collectives')
+		cy.login('jane')
 		cy.get('#app-navigation-vue')
 			.should('contain', 'Create new collective')
 	})

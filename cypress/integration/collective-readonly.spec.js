@@ -23,7 +23,7 @@
 describe('Read-only collective', function() {
 
 	before(function() {
-		cy.login('alice', 'alice', '/apps/collectives')
+		cy.login('alice')
 		cy.seedCollective('PermissionCollective')
 		cy.seedPage('SecondPage', '', 'Readme.md')
 		cy.seedCollectivePermissions('PermissionCollective', 'edit', 4)
@@ -33,7 +33,7 @@ describe('Read-only collective', function() {
 
 	describe('in read-only collective', function() {
 		before(function() {
-			cy.login('bob', 'bob', '/apps/collectives/PermissionCollective/SecondPage')
+			cy.login('bob', { route: '/apps/collectives/PermissionCollective/SecondPage' })
 		})
 		it('not able to edit collective', function() {
 			cy.get('#titleform input').should('have.attr', 'disabled')

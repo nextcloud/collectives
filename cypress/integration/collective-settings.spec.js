@@ -26,7 +26,7 @@
 
 describe('Collective settings', function() {
 	before(function() {
-		cy.login('bob', 'bob', '/apps/collectives')
+		cy.login('bob')
 		cy.seedCollective('Change me')
 	})
 
@@ -51,7 +51,7 @@ describe('Collective settings', function() {
 
 	describe('rename collective', function() {
 		it('Allows to rename the collective', function() {
-			cy.login('bob', 'bob', '/apps/collectives')
+			cy.login('bob')
 			cy.get('.collectives_list_item')
 				.contains('li', 'Change me')
 				.find('.action-item__menutoggle')
@@ -68,7 +68,7 @@ describe('Collective settings', function() {
 
 	describe('change edit permissions', function() {
 		it('Allows to change editing permissions', function() {
-			cy.login('bob', 'bob', '/apps/collectives')
+			cy.login('bob')
 			cy.get('.collectives_list_item')
 				.contains('li', 'Change me now')
 				.find('.action-item__menutoggle')
@@ -84,7 +84,7 @@ describe('Collective settings', function() {
 
 	describe('change share permissions', function() {
 		it('Allows to change sharing permissions', function() {
-			cy.login('bob', 'bob', '/apps/collectives')
+			cy.login('bob')
 			cy.get('.collectives_list_item')
 				.contains('li', 'Change me now')
 				.find('.action-item__menutoggle')

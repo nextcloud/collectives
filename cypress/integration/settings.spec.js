@@ -26,13 +26,13 @@
 
 describe('Settings', function() {
 	before(function() {
-		cy.login('bob', 'bob', '/apps/collectives')
+		cy.login('bob')
 		cy.seedCollective('A Collective')
 	})
 
 	describe('Collectives folder setting', function() {
 		it('Allows changing the collective user folder', function() {
-			cy.login('bob', 'bob', '/apps/collectives')
+			cy.login('bob')
 			cy.get('#app-settings')
 				.click()
 			cy.get('input#userFolder')

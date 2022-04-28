@@ -28,13 +28,13 @@ describe('Collective Share', function() {
 	let shareUrl
 
 	before(function() {
-		cy.login('bob', 'bob', '/apps/collectives')
+		cy.login('bob')
 		cy.seedCollective('Share me')
 	})
 
 	describe('collective share', function() {
 		it('Allows sharing a collective', function() {
-			cy.login('bob', 'bob', '/apps/collectives')
+			cy.login('bob')
 			cy.visit('/apps/collectives', {
 				onBeforeLoad(win) {
 					// navigator.clipboard doesn't exist on HTTP requests (in CI), so let's create it
@@ -83,7 +83,7 @@ describe('Collective Share', function() {
 			cy.get('#editor-container').should('not.be.visible')
 		})
 		it('Allows toggling the editable flag for a collective share', function() {
-			cy.login('bob', 'bob', '/apps/collectives')
+			cy.login('bob')
 			cy.get('.collectives_list_item')
 				.contains('li', 'Share me')
 				.find('.action-item__menutoggle')
@@ -108,7 +108,7 @@ describe('Collective Share', function() {
 				.click()
 		})
 		it('Allows unsharing a collective', function() {
-			cy.login('bob', 'bob', '/apps/collectives')
+			cy.login('bob')
 			cy.get('.collectives_list_item')
 				.contains('li', 'Share me')
 				.find('.action-item__menutoggle')

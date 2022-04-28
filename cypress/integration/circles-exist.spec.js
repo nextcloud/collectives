@@ -22,13 +22,13 @@
 
 describe('The app is properly installed and responding', function() {
 	it('shows up in the app list', function() {
-		cy.login('admin', 'admin', 'settings/apps/installed/circles')
+		cy.login('admin', { route: 'settings/apps/installed/circles' })
 		cy.get('#app-sidebar-vue .app-details input.enable')
 			.should('have.value', 'Disable')
 	})
 
 	it('shows circles in the contacts app', function() {
-		cy.login('jane', 'jane', '/apps/contacts')
+		cy.login('jane', { route: '/apps/contacts' })
 		cy.get('.app-navigation')
 			.should('contain', 'Circles')
 	})
