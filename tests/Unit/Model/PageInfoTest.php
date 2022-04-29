@@ -18,6 +18,7 @@ class PageInfoTest extends TestCase {
 		$fileMountPoint = '/files/user/Collectives/collective/';
 		$fileCollectivePath = 'Collectives/collective';
 		$parentInternalPath = 'path/to/file';
+		$internalPath = $parentInternalPath . '/' . $fileName;
 		$userId = 'jane';
 
 		$mountPoint = $this->getMockBuilder(MountPoint::class)
@@ -39,6 +40,7 @@ class PageInfoTest extends TestCase {
 		$file->method('getName')->willReturn($fileName);
 		$file->method('getMountPoint')->willReturn($mountPoint);
 		$file->method('getParent')->willReturn($parent);
+		$file->method('getInternalPath')->willReturn($internalPath);
 
 		$pageInfo = new PageInfo();
 		$pageInfo->fromFile($file, 1, $userId);

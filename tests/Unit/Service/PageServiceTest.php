@@ -242,6 +242,8 @@ class PageServiceTest extends TestCase {
 			->willReturn($folder);
 		$indexFile->method('getMountPoint')
 			->willReturn($mountPoint);
+		$indexFile->method('getInternalPath')
+			->willReturn('Collectives/testfolder/Readme.md');
 		$indexPage = new Page();
 		$this->pageMapper->method('findByFileId')
 			->willReturn($indexPage);
@@ -268,6 +270,9 @@ class PageServiceTest extends TestCase {
 				->willReturn($folder);
 			$file->method('getMountPoint')
 				->willReturn($mountPoint);
+			$file->method('getInternalPath')
+				->willReturn('Collectives/testfolder/Readme.md');
+
 			$filesNotJustMd[] = $file;
 
 			// Only add markdown files to $filesJustMd
