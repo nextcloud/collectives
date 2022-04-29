@@ -17,7 +17,8 @@
         "behat/behat": "^3.8",
         "guzzlehttp/guzzle": "^7.2",
         "psalm/phar": "^4.15",
-        "ext-dom": "*"
+        "ext-dom": "*",
+        "christophwurst/nextcloud": "dev-stable24"
     },
     "scripts": {
       "lint": "find . -name \\*.php -not -path './vendor/*' -exec php -l \"{}\" \\;",
