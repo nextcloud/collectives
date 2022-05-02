@@ -124,6 +124,15 @@ export default {
 				: generateRemoteUrl(`dav/files/${getters.pageDavPath(page)}`)
 		},
 
+		currentPageDirectory(_state, getters) {
+			return getters.pageDirectory(getters.currentPage)
+		},
+
+		pageDirectory: () => (page) => {
+			const { collectivePath, filePath } = page
+			return [collectivePath, filePath].filter(Boolean).join('/')
+		},
+
 		collectivePage(state) {
 			return state.pages.find(p => (p.parentId === 0 && p.title === 'Readme'))
 		},
@@ -135,6 +144,17 @@ export default {
 		currentFileIdPage(state, _getters, rootState) {
 			const fileId = Number(rootState.route.query.fileId)
 			return state.pages.find(p => (p.id === fileId))
+		},
+
+		pagesTreeWalk: (_state, getters) => (parentId = 0) => {
+			const pages = []
+			for (const page of getters.visibleSubpages(parentId).sort(getters.sortOrderDefault)) {
+				pages.push(page)
+				for (const subpage of getters.pagesTreeWalk(page.id)) {
+					pages.push(subpage)
+				}
+			}
+			return pages
 		},
 
 		visibleSubpages: (state, getters) => (parentId) => {
@@ -152,8 +172,20 @@ export default {
 			}
 		},
 
+		sortOrderDefault(state, getters) {
+			if (getters.sortByDefault === 'byTitle') {
+				return sortOrders.byTitle
+			} else {
+				return sortOrders.byTimestamp
+			}
+		},
+
+		sortByDefault(_state, getters) {
+			return sortOrders.pageOrdersByNumber[getters.currentCollective.pageOrder]
+		},
+
 		sortBy(state, getters) {
-			return state.sortBy ? state.sortBy : sortOrders.pageOrdersByNumber[getters.currentCollective.pageOrder]
+			return state.sortBy ? state.sortBy : getters.sortByDefault
 		},
 
 		newPagePath(state, getters) {

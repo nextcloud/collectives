@@ -6,7 +6,7 @@
 					class="title"
 					type="text"
 					disabled
-					:value="collectiveTitle">
+					:value="currentCollectiveTitle">
 				<input v-else-if="isTemplatePage"
 					class="title"
 					type="text"
@@ -40,13 +40,7 @@
 			<RichText :key="`show-${currentPage.id}`"
 				:as-placeholder="preview && edit"
 				:current-page="currentPage"
-				@empty="emptyPreview"
-				@loading="waitingFor.push('preview')"
-				@ready="ready('preview')" />
-			<Subpages v-if="showing('subpages')"
-				:page-id="currentPage.id"
-				@loading="waitingFor.push('subpages')"
-				@ready="ready('subpages')" />
+				@empty="emptyPreview" />
 		</div>
 		<Editor v-show="!readOnly"
 			:key="`edit-${currentPage.id}-${reloadCounter}`"
@@ -61,7 +55,6 @@ import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import Editor from './Page/Editor'
 import RichText from './Page/RichText'
 import PageActions from './Page/PageActions'
-import Subpages from './Page/Subpages'
 import { showError } from '@nextcloud/dialogs'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import {
@@ -82,7 +75,6 @@ export default {
 		Editor,
 		RichText,
 		PageActions,
-		Subpages,
 	},
 
 	data() {
@@ -93,7 +85,6 @@ export default {
 			newTitle: '',
 			editToggle: EditState.Unset,
 			reloadCounter: 0,
-			waitingFor: [],
 		}
 	},
 
@@ -104,6 +95,7 @@ export default {
 			'currentPageFilePath',
 			'currentCollective',
 			'currentCollectiveCanEdit',
+			'currentCollectiveTitle',
 			'indexPage',
 			'landingPage',
 			'pageParam',
@@ -112,11 +104,6 @@ export default {
 			'showing',
 			'isTemplatePage',
 		]),
-
-		collectiveTitle() {
-			const { emoji, name } = this.currentCollective
-			return emoji ? `${emoji} ${name}` : name
-		},
 
 		titleChanged() {
 			return this.newTitle && this.newTitle !== this.currentPage.title
@@ -175,11 +162,6 @@ export default {
 		},
 		'currentPage.id'() {
 			this.editToggle = EditState.Unset
-			if (this.showing('print')) {
-				this.show('subpages')
-			} else {
-				this.hide('subpages')
-			}
 		},
 		'documentTitle'() {
 			document.title = this.documentTitle
@@ -192,7 +174,7 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['done', 'load', 'toggle', 'show', 'hide']),
+		...mapMutations(['done', 'load', 'toggle']),
 
 		...mapActions({
 			dispatchRenamePage: RENAME_PAGE,
@@ -260,24 +242,12 @@ export default {
 			}
 		},
 
-		ready(part) {
-			this.waitingFor.splice(this.waitingFor.indexOf(part), 1)
-			if (!this.waitingFor.length && this.showing('print')) {
-				this.$nextTick(() => {
-					window.print()
-					this.hide('print')
-					this.hide('subpages')
-				})
-			}
-		},
-
 		startEdit() {
 			if (this.doc()) {
 				this.previousSaveTimestamp = this.doc().lastSavedVersionTime
 			}
 			this.edit = true
 			this.$nextTick(this.focusEditor)
-			this.hide('subpages')
 		},
 
 		async stopEdit() {

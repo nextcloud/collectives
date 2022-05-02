@@ -89,6 +89,7 @@ export default {
 			'isPublic',
 			'shareTokenParam',
 			'currentPageDavUrl',
+			'currentPageDirectory',
 			'currentPageFilePath',
 			'pageParam',
 			'collectiveParam',
@@ -103,13 +104,8 @@ export default {
 
 		richTextOptions() {
 			return {
-				currentDirectory: this.currentDirectory,
+				currentDirectory: this.currentPageDirectory,
 			}
-		},
-
-		currentDirectory() {
-			const { collectivePath, filePath } = this.currentPage
-			return [collectivePath, filePath].filter(Boolean).join('/')
 		},
 
 	},

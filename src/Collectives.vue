@@ -5,7 +5,7 @@
 			class="app-details-toggle icon-toggle-filelist"
 			href="#"
 			@click.stop.prevent="hide('details')" />
-		<Nav />
+		<Nav v-if="!printView" />
 		<router-view />
 		<PageSidebar v-if="currentPage" v-show="showing('sidebar')" />
 	</Content>
@@ -36,6 +36,7 @@ export default {
 
 	computed: {
 		...mapState([
+			'printView',
 			'messages',
 		]),
 		...mapGetters([
