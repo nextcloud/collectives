@@ -188,7 +188,7 @@ export default {
 
 		// this is a method so it does not get cached
 		doc() {
-			return this.wrapper().$data.document
+			return this.wrapper()?.$data.document
 		},
 
 		// this is a method so it does not get cached
