@@ -1,6 +1,13 @@
 <template>
 	<div>
-		<div v-for="page in pagesTreeWalk()" :key="page.id">
+		<input id="sharingToken"
+			type="hidden"
+			name="sharingToken"
+			:value="shareTokenParam">
+		<EmptyContent v-show="loading" icon="icon-loading">
+			<h1>{{ t('collectives', 'Preparing collective print') }}</h1>
+		</EmptyContent>
+		<div v-for="page in pagesTreeWalk()" v-show="!loading" :key="page.id">
 			<PagePrint :page="page"
 				@loading="waitingFor.push(page.id)"
 				@ready="ready(page.id)" />
@@ -10,6 +17,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 import PagePrint from './PagePrint'
 import { GET_PAGES } from '../store/actions'
 import displayError from '../util/displayError'
@@ -18,11 +26,13 @@ export default {
 	name: 'CollectivePrint',
 
 	components: {
+		EmptyContent,
 		PagePrint,
 	},
 
 	data() {
 		return {
+			loading: true,
 			waitingFor: [],
 		}
 	},
@@ -30,6 +40,7 @@ export default {
 	computed: {
 		...mapGetters([
 			'pagesTreeWalk',
+			'shareTokenParam',
 		]),
 	},
 
@@ -55,12 +66,15 @@ export default {
 				this.waitingFor.splice(this.waitingFor.indexOf(pageId), 1)
 			}
 			if (!this.waitingFor.length) {
-				// Scroll back to the beginning of the document
-				document.getElementById('page-title-collective').scrollIntoView()
-				// Wait a bit for loading imgages
-				setTimeout(() => {
-					window.print()
-				}, 100)
+				this.loading = false
+				this.$nextTick(() => {
+					// Wait a few milliseconds to load images
+					setTimeout(() => {
+						document.getElementById('content-vue').scrollIntoView()
+						// Scroll back to the beginning of the document
+						window.print()
+					}, 600)
+				})
 			}
 		},
 	},

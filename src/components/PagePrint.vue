@@ -115,6 +115,10 @@ export default {
 	}
 }
 
+#read-only-editor {
+	overflow-x: hidden;
+}
+
 ::v-deep #read-only-editor div.ProseMirror {
 	margin-top: revert;
 }
