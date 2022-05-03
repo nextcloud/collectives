@@ -96,6 +96,7 @@ export default {
 			'currentCollective',
 			'currentCollectiveCanEdit',
 			'currentCollectiveTitle',
+			'hasVersionsLoaded',
 			'indexPage',
 			'landingPage',
 			'pageParam',
@@ -269,7 +270,7 @@ export default {
 				this.reloadCounter += 1
 				this.previewWasEmpty = false
 				this.dispatchTouchPage()
-				if (!this.isPublic) {
+				if (!this.isPublic && this.hasVersionsLoaded) {
 					this.dispatchGetVersions(this.currentPage.id)
 				}
 			}

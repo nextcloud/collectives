@@ -18,9 +18,10 @@
 			</Actions>
 		</h1>
 		<div id="text-container">
-			<RichText :page-id="page.id"
+			<RichText :key="`show-${currentPage.id}-${currentPage.timestamp}`"
 				:page-url="pageUrl"
-				:timestamp="page.timestamp"
+				:current-page="currentPage"
+				:timestamp="currentPage.timestamp"
 				:is-version="true" />
 		</div>
 	</div>
@@ -49,12 +50,11 @@ export default {
 	},
 
 	computed: {
-		...mapGetters({
-			page: 'currentPage',
-			collective: 'currentCollective',
-			version: 'version',
-			title: 'title',
-		}),
+		...mapGetters([
+			'currentPage',
+			'version',
+			'title',
+		]),
 
 		/**
 		 * Return the URL for currently selected page version
@@ -70,7 +70,7 @@ export default {
 		 */
 		restoreFolderUrl() {
 			return generateRemoteUrl(
-				`dav/versions/${this.getUser}/restore/${this.page.id}`
+				`dav/versions/${this.getUser}/restore/${this.currentPage.id}`
 			)
 		},
 
@@ -111,14 +111,14 @@ export default {
 					},
 				})
 				this.$store.commit(SELECT_VERSION, null)
-				this.dispatchGetVersions(this.page.id)
+				this.dispatchGetVersions(this.currentPage.id)
 				showSuccess(t('collectives', 'Reverted {page} to revision {timestamp}.', {
-					page: this.page.title,
+					page: this.currentPage.title,
 					timestamp: target.relativeTimestamp,
 				}))
 			} catch (e) {
 				showError(t('collectives', 'Failed to revert {page} to revision {timestamp}.', {
-					page: this.page.title,
+					page: this.currentPage.title,
 					timestamp: target.relativeTimestamp,
 				}))
 				console.error('Failed to move page to restore folder', e)
