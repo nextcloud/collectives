@@ -40,7 +40,8 @@
 			<RichText :key="`show-${currentPage.id}`"
 				:as-placeholder="preview && edit"
 				:current-page="currentPage"
-				@empty="emptyPreview" />
+				@empty="emptyPreview"
+				@ready="readyPreview" />
 		</div>
 		<Editor v-show="!readOnly"
 			:key="`edit-${currentPage.id}-${reloadCounter}`"
@@ -85,6 +86,7 @@ export default {
 			newTitle: '',
 			editToggle: EditState.Unset,
 			reloadCounter: 0,
+			scrollTop: 0,
 		}
 	},
 
@@ -243,12 +245,23 @@ export default {
 			}
 		},
 
+		readyPreview() {
+			// Wait a few milliseconds to load images
+			setTimeout(() => {
+				document.getElementById('text')?.scrollTo(0, this.scrollTop)
+			}, 90)
+		},
+
 		startEdit() {
+			this.scrollTop = document.getElementById('text')?.scrollTop || 0
 			if (this.doc()) {
 				this.previousSaveTimestamp = this.doc().lastSavedVersionTime
 			}
 			this.edit = true
-			this.$nextTick(this.focusEditor)
+			this.$nextTick(() => {
+				this.focusEditor()
+				document.getElementById('editor')?.scrollTo(0, this.scrollTop)
+			})
 		},
 
 		async stopEdit() {
@@ -266,6 +279,7 @@ export default {
 				await this.wrapper().close()
 				this.done('pageUpdate')
 			}
+			this.scrollTop = document.getElementById('editor')?.scrollTop || 0
 			if (changed) {
 				this.reloadCounter += 1
 				this.previewWasEmpty = false

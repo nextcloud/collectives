@@ -57,7 +57,10 @@ export default {
 			if (!this.waitingFor.length) {
 				// Scroll back to the beginning of the document
 				document.getElementById('page-title-collective').scrollIntoView()
-				window.print()
+				// Wait a bit for loading imgages
+				setTimeout(() => {
+					window.print()
+				}, 100)
 			}
 		},
 	},

@@ -121,7 +121,11 @@ export default {
 
 	mounted() {
 		this.$emit('loading')
-		this.initPageContent()
+		this.initPageContent().then(() => {
+			this.$nextTick(() => {
+				this.$emit('ready')
+			})
+		})
 	},
 
 	methods: {
@@ -157,7 +161,6 @@ export default {
 			this.loading = true
 			await this.getPageContent()
 			this.loading = false
-			this.$nextTick(() => { this.$emit('ready') })
 		},
 
 		followLink(_event, attrs) {
