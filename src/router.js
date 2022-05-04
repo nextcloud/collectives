@@ -23,6 +23,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import { generateUrl } from '@nextcloud/router'
 import Home from './views/Home'
+import CollectivePrintView from './views/CollectivePrintView'
 import CollectiveView from './views/CollectiveView'
 
 Vue.use(VueRouter)
@@ -33,21 +34,25 @@ const routes = [
 		component: Home,
 	},
 	{
+		path: '/_/print/:collective',
+		component: CollectivePrintView,
+		props: (route) => route.params,
+	},
+	{
+		path: '/p/:token/print/:collective',
+		component: CollectivePrintView,
+		props: (route) => route.params,
+	},
+	{
 		path: '/p/:token/:collective',
 		component: CollectiveView,
-		props: (route) => ({
-			...route.params,
-			fileId: Number(route.query.fileId),
-		}),
+		props: (route) => route.params,
 		children: [{ path: ':page*' }],
 	},
 	{
 		path: '/:collective',
 		component: CollectiveView,
-		props: (route) => ({
-			...route.params,
-			fileId: Number(route.query.fileId),
-		}),
+		props: (route) => route.params,
 		children: [{ path: ':page*' }],
 	},
 ]

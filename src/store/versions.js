@@ -13,6 +13,7 @@ export default {
 
 	getters: {
 		version: (state) => state.version,
+		hasVersionsLoaded: (state) => !!state.versions.length,
 	},
 
 	mutations: {

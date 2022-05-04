@@ -6,7 +6,7 @@
 					class="title"
 					type="text"
 					disabled
-					:value="collectiveTitle">
+					:value="currentCollectiveTitle">
 				<input v-else-if="isTemplatePage"
 					class="title"
 					type="text"
@@ -41,23 +41,9 @@
 				:as-placeholder="preview && edit"
 				:current-page="currentPage"
 				@empty="emptyPreview"
-				@loading="waitingFor.push('preview')"
-				@ready="ready('preview')" />
-			<button v-if="!('preview' in waitingFor) && hasSubpages"
-				href="#"
-				class="load-more"
-				@click="toggle('subpages')">
-				{{ showing('subpages')
-					? t('collectives', 'Hide all subpages')
-					: t('collectives', 'Show all subpages')
-				}}
-			</button>
-			<Subpages v-if="showing('subpages')"
-				:page-id="currentPage.id"
-				@loading="waitingFor.push('subpages')"
-				@ready="ready('subpages')" />
+				@ready="readyPreview" />
 		</div>
-		<Editor v-show="!readOnly"
+		<Editor v-show="!readOnly || waitForPreview"
 			:key="`edit-${currentPage.id}-${reloadCounter}`"
 			ref="editor"
 			@ready="hidePreview" />
@@ -70,7 +56,6 @@ import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import Editor from './Page/Editor'
 import RichText from './Page/RichText'
 import PageActions from './Page/PageActions'
-import Subpages from './Page/Subpages'
 import { showError } from '@nextcloud/dialogs'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import {
@@ -91,7 +76,6 @@ export default {
 		Editor,
 		RichText,
 		PageActions,
-		Subpages,
 	},
 
 	data() {
@@ -102,7 +86,8 @@ export default {
 			newTitle: '',
 			editToggle: EditState.Unset,
 			reloadCounter: 0,
-			waitingFor: [],
+			scrollTop: 0,
+			waitForPreview: false,
 		}
 	},
 
@@ -113,6 +98,8 @@ export default {
 			'currentPageFilePath',
 			'currentCollective',
 			'currentCollectiveCanEdit',
+			'currentCollectiveTitle',
+			'hasVersionsLoaded',
 			'indexPage',
 			'landingPage',
 			'pageParam',
@@ -121,11 +108,6 @@ export default {
 			'showing',
 			'isTemplatePage',
 		]),
-
-		collectiveTitle() {
-			const { emoji, name } = this.currentCollective
-			return emoji ? `${emoji} ${name}` : name
-		},
 
 		titleChanged() {
 			return this.newTitle && this.newTitle !== this.currentPage.title
@@ -184,11 +166,6 @@ export default {
 		},
 		'currentPage.id'() {
 			this.editToggle = EditState.Unset
-			if (this.showing('print')) {
-				this.show('subpages')
-			} else {
-				this.hide('subpages')
-			}
 		},
 		'documentTitle'() {
 			document.title = this.documentTitle
@@ -201,7 +178,7 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['done', 'load', 'toggle', 'show', 'hide']),
+		...mapMutations(['done', 'load', 'toggle']),
 
 		...mapActions({
 			dispatchRenamePage: RENAME_PAGE,
@@ -212,7 +189,7 @@ export default {
 
 		// this is a method so it does not get cached
 		doc() {
-			return this.wrapper().$data.document
+			return this.wrapper()?.$data.document
 		},
 
 		// this is a method so it does not get cached
@@ -269,24 +246,24 @@ export default {
 			}
 		},
 
-		ready(part) {
-			this.waitingFor.splice(this.waitingFor.indexOf(part), 1)
-			if (!this.waitingFor.length && this.showing('print')) {
-				this.$nextTick(() => {
-					window.print()
-					this.hide('print')
-					this.hide('subpages')
-				})
-			}
+		readyPreview() {
+			this.waitForPreview = false
+			// Wait a few milliseconds to load images
+			setTimeout(() => {
+				document.getElementById('text')?.scrollTo(0, this.scrollTop)
+			}, 90)
 		},
 
 		startEdit() {
+			this.scrollTop = document.getElementById('text')?.scrollTop || 0
 			if (this.doc()) {
 				this.previousSaveTimestamp = this.doc().lastSavedVersionTime
 			}
 			this.edit = true
-			this.$nextTick(this.focusEditor)
-			this.hide('subpages')
+			this.$nextTick(() => {
+				this.focusEditor()
+				document.getElementById('editor')?.scrollTo(0, this.scrollTop)
+			})
 		},
 
 		async stopEdit() {
@@ -304,14 +281,16 @@ export default {
 				await this.wrapper().close()
 				this.done('pageUpdate')
 			}
+			this.scrollTop = document.getElementById('editor')?.scrollTop || 0
 			if (changed) {
 				this.reloadCounter += 1
 				this.previewWasEmpty = false
 				this.dispatchTouchPage()
-				if (!this.isPublic) {
+				if (!this.isPublic && this.hasVersionsLoaded) {
 					this.dispatchGetVersions(this.currentPage.id)
 				}
 			}
+			this.waitForPreview = true
 			this.edit = false
 		},
 
@@ -383,11 +362,6 @@ export default {
 	}
 }
 
-.load-more {
-	margin-top: 10px;
-	margin-bottom: 10px;
-}
-
 // Leave space for page list toggle on small screens
 // Editor/View: 670px, page list/details toggle: 44px
 @media only screen and (max-width: 670px + 44px) {
@@ -411,7 +385,7 @@ export default {
 }
 
 @media print {
-	.edit-button, .action-item, .load-more {
+	.edit-button, .action-item {
 		display: none !important;
 	}
 }

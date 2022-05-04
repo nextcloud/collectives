@@ -23,6 +23,7 @@ export default new Store({
 		messages: {},
 		showing: {},
 		loading: {},
+		printView: false,
 	},
 
 	getters: {
@@ -59,6 +60,9 @@ export default new Store({
 		hide: (state, aspect) => Vue.set(state.showing, aspect, false),
 		toggle: (state, aspect) =>
 			Vue.set(state.showing, aspect, !state.showing[aspect]),
+		setPrintView: (state) => {
+			state.printView = true
+		},
 
 	},
 })

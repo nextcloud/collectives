@@ -89,6 +89,7 @@ export default {
 			'isPublic',
 			'shareTokenParam',
 			'currentPageDavUrl',
+			'currentPageDirectory',
 			'currentPageFilePath',
 			'pageParam',
 			'collectiveParam',
@@ -103,13 +104,8 @@ export default {
 
 		richTextOptions() {
 			return {
-				currentDirectory: this.currentDirectory,
+				currentDirectory: this.currentPageDirectory,
 			}
-		},
-
-		currentDirectory() {
-			const { collectivePath, filePath } = this.currentPage
-			return [collectivePath, filePath].filter(Boolean).join('/')
 		},
 
 	},
@@ -125,7 +121,11 @@ export default {
 
 	mounted() {
 		this.$emit('loading')
-		this.initPageContent()
+		this.initPageContent().then(() => {
+			this.$nextTick(() => {
+				this.$emit('ready')
+			})
+		})
 	},
 
 	methods: {
@@ -161,7 +161,6 @@ export default {
 			this.loading = true
 			await this.getPageContent()
 			this.loading = false
-			this.$nextTick(() => { this.$emit('ready') })
 		},
 
 		followLink(_event, attrs) {
@@ -223,6 +222,7 @@ export default {
 	display: flex;
 	background-color: var(--color-main-background-translucent);
 	height: 44px;
+	z-index: 100;
 }
 
 .menubar.loading {
@@ -246,8 +246,10 @@ export default {
 }
 
 #text-wrapper {
+	position: absolute;
 	display: flex;
 	width: 100%;
+	height: 100%;
 	overflow: hidden;
 }
 
@@ -265,6 +267,9 @@ export default {
 	overflow-y: auto;
 	overflow-x: hidden;
 	width: 100%;
+	max-width: 800px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 #read-only-editor {

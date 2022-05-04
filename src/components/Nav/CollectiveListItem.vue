@@ -45,13 +45,14 @@
 				{{ t('collectives', 'Unshare') }}
 			</ActionButton>
 			<ActionSeparator v-if="collectiveCanShare(collective)" />
-			<ActionButton :close-after-click="true"
-				@click="print">
+			<ActionLink :close-after-click="true"
+				:href="printLink"
+				target="_blank">
 				{{ t('collectives', 'Print') }}
 				<PrinterIcon slot="icon"
 					:size="16"
 					decorative />
-			</ActionButton>
+			</ActionLink>
 			<ActionButton v-if="isCollectiveAdmin(collective)"
 				icon="icon-settings"
 				:close-after-click="true"
@@ -67,7 +68,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { SHARE_COLLECTIVE, UPDATE_SHARE_COLLECTIVE, UNSHARE_COLLECTIVE } from '../../store/actions'
 import displayError from '../../util/displayError'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
@@ -119,6 +120,7 @@ export default {
 			'collectiveCanShare',
 			'isCollectiveAdmin',
 			'loading',
+			'shareTokenParam',
 		]),
 
 		isContactsInstalled() {
@@ -135,6 +137,12 @@ export default {
 
 		circleLink() {
 			return generateUrl('/apps/contacts/direct/circle/' + this.collective.circleId)
+		},
+
+		printLink() {
+			return this.isPublic
+				? generateUrl(`/apps/collectives/p/${this.shareTokenParam}/print/${this.collective.name}`)
+				: generateUrl(`/apps/collectives/_/print/${this.collective.name}`)
 		},
 
 		icon() {
@@ -171,8 +179,6 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['show']),
-
 		...mapActions({
 			dispatchShareCollective: SHARE_COLLECTIVE,
 			dispatchUnshareCollective: UNSHARE_COLLECTIVE,
@@ -181,21 +187,6 @@ export default {
 
 		isActive(collective) {
 			return this.collectiveParam === collective.name
-		},
-
-		showSubpagesAndPrint() {
-			this.show('subpages')
-			this.show('print')
-		},
-
-		print() {
-			this.$router.push(`/${encodeURIComponent(this.collective.name)}`)
-				.catch((err) => {
-					// Navigation is aborted since navigating to same route, but we still want to print
-					if (err.name !== 'NavigationDuplicated') {
-						throw err
-					}
-				}).then(() => this.showSubpagesAndPrint())
 		},
 
 		share(collective) {

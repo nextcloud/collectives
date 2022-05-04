@@ -53,6 +53,11 @@ export default {
 			}
 		},
 
+		currentCollectiveTitle(_state, getters) {
+			const { emoji, name } = getters.currentCollective
+			return emoji ? `${emoji} ${name}` : name
+		},
+
 		currentCollectiveCanEdit(state, getters) {
 			return getters.collectiveCanEdit(getters.currentCollective)
 		},
