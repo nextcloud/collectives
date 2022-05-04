@@ -17,13 +17,12 @@ OC.L10N.register(
     "Restore this version" : "Восстановить эту версию",
     "Title" : "Название",
     "Done" : "Готово",
-    "New Page" : "Новая страница",
     "Add a page" : "Добавить страницу",
-    "Could not get page attachments" : "Не удалось удалить страницу",
     "Could not get page backlinks" : "Не удалось удалить страницу",
     "Current version" : "Текущая версия",
     "_%n byte_::_%n bytes_" : ["%n байт","%n байта","%n байт"],
     "Could not copy link to the clipboard:" : "Не удалось удалить страницу",
+    "New Page" : "Новая страница",
     "Please ask the administrator to enable these apps." : "Пожалуйста, попросите администратора включить эти приложения."
 },
 "nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;");
