@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-04-12 14:17+0200\n"
-"PO-Revision-Date: 2022-04-11 21:43+0000\n"
+"PO-Revision-Date: 2022-04-20 08:13+0000\n"
 "Last-Translator: Nathan <bonnemainsnathan@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/fr/>\n"
@@ -493,7 +493,7 @@ msgstr "Nouvelle page"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:98
 msgid "Search pages ..."
-msgstr ""
+msgstr "Rechercher des pages…"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:99
 #: /collectives/specialVueFakeDummyForL10nScript.js:100
