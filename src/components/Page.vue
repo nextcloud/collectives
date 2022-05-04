@@ -43,7 +43,7 @@
 				@empty="emptyPreview"
 				@ready="readyPreview" />
 		</div>
-		<Editor v-show="!readOnly"
+		<Editor v-show="!readOnly || waitForPreview"
 			:key="`edit-${currentPage.id}-${reloadCounter}`"
 			ref="editor"
 			@ready="hidePreview" />
@@ -87,6 +87,7 @@ export default {
 			editToggle: EditState.Unset,
 			reloadCounter: 0,
 			scrollTop: 0,
+			waitForPreview: false,
 		}
 	},
 
@@ -246,6 +247,7 @@ export default {
 		},
 
 		readyPreview() {
+			this.waitForPreview = false
 			// Wait a few milliseconds to load images
 			setTimeout(() => {
 				document.getElementById('text')?.scrollTo(0, this.scrollTop)
@@ -288,6 +290,7 @@ export default {
 					this.dispatchGetVersions(this.currentPage.id)
 				}
 			}
+			this.waitForPreview = true
 			this.edit = false
 		},
 
