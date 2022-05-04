@@ -178,7 +178,7 @@ endif
 ifndef GITLAB_API_TOKEN
 	$(error Missing $$GITLAB_API_TOKEN)
 endif
-	@if git tag | grep $(GIT_TAG); then \
+	@if git tag | grep -qFx $(GIT_TAG); then \
 		echo "Git tag already exists!"; \
 		echo "Delete it with 'git tag -d $(GIT_TAG)'"; \
 		exit 1; \
