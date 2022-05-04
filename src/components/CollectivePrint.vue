@@ -4,14 +4,21 @@
 			type="hidden"
 			name="sharingToken"
 			:value="shareTokenParam">
-		<EmptyContent v-show="loading" icon="icon-loading">
-			<h1>{{ t('collectives', 'Preparing collective print') }}</h1>
+		<EmptyContent v-show="loading">
+			<template #icon>
+				<PrinterIcon />
+			</template>
+			<h1>{{ t('collectives', 'Preparing collective for printing') }}</h1>
+			<ProgressBar :value="loadingProgress" size="medium">
+				{{ loadingProgress }}
+			</ProgressBar>
 			<template #desc>
-				<ul>
+				<ul class="load-messages">
 					<li v-for="task in [loadPages, loadImages]"
+						v-show="task.total"
 						:key="task.message">
 						{{ task.message }}
-						{{ task.total ? `( ${task.count} / ${task.total} )` : '' }}
+						{{ task.total ? `${task.count} / ${task.total}` : '' }}
 					</li>
 				</ul>
 			</template>
@@ -27,6 +34,8 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
+import ProgressBar from '@nextcloud/vue/dist/Components/ProgressBar'
+import PrinterIcon from 'vue-material-design-icons/Printer'
 import PagePrint from './PagePrint'
 import { GET_PAGES } from '../store/actions'
 import displayError from '../util/displayError'
@@ -37,6 +46,8 @@ export default {
 	components: {
 		EmptyContent,
 		PagePrint,
+		PrinterIcon,
+		ProgressBar,
 	},
 
 	data() {
@@ -44,12 +55,12 @@ export default {
 			loading: true,
 			waitingFor: [],
 			loadPages: {
-				message: t('collectives', 'Loading Pages...'),
+				message: t('collectives', 'Loading pages:'),
 				count: 0,
 				total: 0,
 			},
 			loadImages: {
-				message: t('collectives', 'Loading Images...'),
+				message: t('collectives', 'Loading images:'),
 				count: 0,
 				total: 0,
 			},
@@ -61,6 +72,20 @@ export default {
 			'pagesTreeWalk',
 			'shareTokenParam',
 		]),
+
+		loadingCount() {
+			return this.loadPages.count + this.loadImages.count
+		},
+
+		loadingTotal() {
+			return this.loadPages.total + this.loadImages.total
+		},
+
+		loadingProgress() {
+			return this.loadingTotal
+				? this.loadingCount / this.loadingTotal * 100
+				: 0
+		},
 	},
 
 	mounted() {
@@ -96,6 +121,11 @@ export default {
 			const loading = document.querySelectorAll('#text-container div.image.icon-loading')
 			this.loadImages.total = images.length
 			this.loadImages.count = images.length - loading.length
+
+			if (!loading.length) {
+				this.allImagesLoaded()
+			}
+
 			for (const el of loading) {
 				// Hook into the capture phase as `load` events do not bubble up.
 				el.addEventListener('load', this.imageLoaded, { capture: true })
@@ -126,3 +156,13 @@ export default {
 	},
 }
 </script>
+
+<style scoped>
+.progress-bar {
+	margin-top: 8px;
+}
+
+.load-messages {
+	color: var(--color-text-lighter);
+}
+</style>
