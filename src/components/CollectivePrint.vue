@@ -6,6 +6,15 @@
 			:value="shareTokenParam">
 		<EmptyContent v-show="loading" icon="icon-loading">
 			<h1>{{ t('collectives', 'Preparing collective print') }}</h1>
+			<template #desc>
+				<ul>
+					<li v-for="task in [loadPages, loadImages]"
+						:key="task.message">
+						{{ task.message }}
+						{{ task.total ? `( ${task.count} / ${task.total} )` : '' }}
+					</li>
+				</ul>
+			</template>
 		</EmptyContent>
 		<div v-for="page in pagesTreeWalk()" v-show="!loading" :key="page.id">
 			<PagePrint :page="page"
@@ -34,6 +43,16 @@ export default {
 		return {
 			loading: true,
 			waitingFor: [],
+			loadPages: {
+				message: t('collectives', 'Loading Pages...'),
+				count: 0,
+				total: 0,
+			},
+			loadImages: {
+				message: t('collectives', 'Loading Images...'),
+				count: 0,
+				total: 0,
+			},
 		}
 	},
 
@@ -59,23 +78,50 @@ export default {
 		async getPages() {
 			await this.dispatchGetPages()
 				.catch(displayError('Could not fetch pages'))
+			this.loadPages.total = this.pagesTreeWalk().length
 		},
 
 		ready(pageId) {
 			if (this.waitingFor.indexOf(pageId) >= 0) {
 				this.waitingFor.splice(this.waitingFor.indexOf(pageId), 1)
+				this.loadPages.count += 1
 			}
 			if (!this.waitingFor.length) {
-				this.loading = false
+				this.$nextTick(this.waitForImages)
+			}
+		},
+
+		waitForImages() {
+			const images = document.querySelectorAll('#text-container div.image')
+			const loading = document.querySelectorAll('#text-container div.image.icon-loading')
+			this.loadImages.total = images.length
+			this.loadImages.count = images.length - loading.length
+			for (const el of loading) {
+				// Hook into the capture phase as `load` events do not bubble up.
+				el.addEventListener('load', this.imageLoaded, { capture: true })
+			}
+		},
+
+		imageLoaded(event) {
+			if (!event.target.classList.contains('image__main')) {
+				return
+			}
+			this.loadImages.count += 1
+			if (this.loadImages.count >= this.loadImages.total) {
+				// Finish loading the image
 				this.$nextTick(() => {
-					// Wait a few milliseconds to load images
-					setTimeout(() => {
-						document.getElementById('content-vue').scrollIntoView()
-						// Scroll back to the beginning of the document
-						window.print()
-					}, 600)
+					setTimeout(this.allImagesLoaded, 100)
 				})
 			}
+		},
+
+		allImagesLoaded() {
+			this.loading = false
+			this.$nextTick(() => {
+				// Scroll back to the beginning of the document
+				document.getElementById('content-vue').scrollIntoView()
+				window.print()
+			})
 		},
 	},
 }
