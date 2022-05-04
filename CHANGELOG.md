@@ -1,5 +1,34 @@
 # Changelog
 
+## 1.1.0 - 2022.05.04
+
+### ✨New
+* 🖨️ Completely rework print collective functionality.
+* 🌄 Rework view mode layout, sticky title bar. (#291)
+* 📝 Retain scroll position when switching between view and edit mode.
+* 🖱️ Always scroll active page into viewport in pagelist.
+
+### 🐛Fixes
+* 🖼️ Render images in view mode. (#296)
+* 📶 Fix alignment of document status message. (#315)
+* ❌ Don't expose image delete button in view mode.
+* 🖱️ Remove superfluous horizontal scrollbar in view mode. (#320)
+* 📜 Fix view of older page versions.
+* 🆕 Fix an error when loading editor for existing empty pages.
+* 📝 Fix layout of sticky landing page list. (#324)
+
+### 🌎Translations
+* 🗣️ Swedish translation added thanks to Simon N.
+* 🗣️ Dutch translation updated thanks to Jeroen Bos.
+* 🗣️ French translation updated thanks to Nathan.
+* 🗣️ Czech translation updaed thanks to Pavel Borecki.
+* 🗣️ German translation updated thanks to Joachim Sokolowski.
+
+### 🚧Updates & Tooling
+* 🔌 Update @nextcloud/text to 0.1.0.
+* 🔌 Various improvements to our tests.
+
+
 ## 1.1.0-beta2 - 2022.04.14
 
 ### 🐛Fixes
