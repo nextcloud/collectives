@@ -72,9 +72,12 @@
 
 <script>
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { ActionButton, Actions, AppNavigationItem, Multiselect } from '@nextcloud/vue'
+import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
+import Actions from '@nextcloud/vue/dist/Components/Actions'
+import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
 import Button from '@nextcloud/vue/dist/Components/Button'
 import EmojiPicker from '@nextcloud/vue/dist/Components/EmojiPicker'
+import Multiselect from '@nextcloud/vue/dist/Components/Multiselect'
 import { mapActions, mapGetters } from 'vuex'
 import { GET_CIRCLES, NEW_COLLECTIVE } from '../../store/actions'
 import displayError from '../../util/displayError'
