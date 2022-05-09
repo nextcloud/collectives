@@ -5,15 +5,15 @@
 			name="sharingToken"
 			:value="shareTokenParam">
 		<div id="text" class="editor">
-			<div :class="{menubar: true, loading: asPlaceholder}">
+			<div class="menubar">
 				<div class="menubar-icons" />
 			</div>
-			<div v-if="!loading">
-				<ReadOnlyEditor class="editor__content"
-					:content="content"
-					:rich-text-options="richTextOptions"
-					@click-link="followLink" />
-			</div>
+			<EmptyContent v-show="loading" icon="icon-loading" />
+			<ReadOnlyEditor v-if="!loading"
+				class="editor__content"
+				:content="content"
+				:rich-text-options="richTextOptions"
+				@click-link="followLink" />
 		</div>
 	</div>
 </template>
@@ -21,6 +21,7 @@
 <script>
 import axios from '@nextcloud/axios'
 import { mapGetters } from 'vuex'
+import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 import ReadOnlyEditor from '@nextcloud/text/package/components/ReadOnlyEditor'
 import { generateUrl } from '@nextcloud/router'
 
@@ -47,6 +48,7 @@ export default {
 	name: 'RichText',
 
 	components: {
+		EmptyContent,
 		ReadOnlyEditor,
 	},
 
@@ -128,7 +130,6 @@ export default {
 				return
 			}
 
-			console.debug('richtext reloadContent')
 			this.initPageContent().then(() => {
 				this.$nextTick(() => {
 					this.$emit('ready')
@@ -240,10 +241,6 @@ export default {
 	background-color: var(--color-main-background-translucent);
 	height: 44px;
 	z-index: 100;
-}
-
-.menubar.loading {
-	opacity: 100%;
 }
 
 .menubar .menubar-icons {
