@@ -13,36 +13,36 @@
 
 		<!-- versions list -->
 		<template v-else-if="!loading('versions') && versions.length">
-			<div class="app-content-list-item"
-				:class="{active: !version}">
-				<div class="app-content-list-item-icon">
-					<div class="icon-page-white" />
-				</div>
-				<a class="app-content-list-item-link" @click="clickPreviewVersion(null)">
+			<a @click="clickPreviewVersion(null)">
+				<div class="app-content-list-item"
+					:class="{active: !version}">
+					<div class="app-content-list-item-icon">
+						<div class="icon-page-white" />
+					</div>
 					<div class="app-content-list-item-line-one" :title="pageFormattedTimestamp">
 						{{ t('collectives', 'Current version') }}
 					</div>
 					<div class="app-content-list-item-line-two" :title="pageAltSize">
 						{{ pageHumanReadableSize }}
 					</div>
-				</a>
-			</div>
-			<div v-for="v in versions"
-				:key="v.downloadUrl"
-				class="app-content-list-item"
-				:class="{active: (version && v.timestamp === version.timestamp)}">
-				<div class="app-content-list-item-icon">
-					<div class="icon-page-white" />
 				</div>
-				<a class="app-content-list-item-link" @click="clickPreviewVersion(v)">
+			</a>
+			<a v-for="v in versions"
+				:key="v.downloadUrl"
+				@click="clickPreviewVersion(v)">
+				<div class="app-content-list-item"
+					:class="{active: (version && v.timestamp === version.timestamp)}">
+					<div class="app-content-list-item-icon">
+						<div class="icon-page-white" />
+					</div>
 					<div class="app-content-list-item-line-one live-relative-timestamp" :data-timestamp="v.millisecondsTimestamp" :title="v.formattedTimestamp">
 						{{ v.relativeTimestamp }}
 					</div>
 					<div class="app-content-list-item-line-two" :title="v.altSize">
 						{{ v.humanReadableSize }}
 					</div>
-				</a>
-			</div>
+				</div>
+			</a>
 		</template>
 
 		<!-- no versions found -->
@@ -196,18 +196,8 @@ export default {
 	border-radius: 3px 12px 3px 3px;
 }
 
-.app-content-list .app-content-list-item .app-content-list-item-link {
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-
 .app-content-list .app-content-list-item .app-content-list-item-line-one {
 	font-size: 120%;
-
-	// Crop the string at the beginning, not end
-	// TODO: Untested with RTL script
-	text-align: left;
-	direction: rtl;
 }
 
 .app-content-list .app-content-list-item .app-content-list-item-line-two {
