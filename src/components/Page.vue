@@ -268,7 +268,8 @@ export default {
 
 		async stopEdit() {
 			this.renamePage()
-			const wasDirty = this.wrapper().$data.dirty
+			const wasDirty = this.wrapper()._computedWatchers.hasUnpushedChanges.value
+				|| this.wrapper()._computedWatchers.hasUnsavedChanges.value
 			const changed = wasDirty
 				|| this.doc().lastSavedVersionTime !== this.previousSaveTimestamp
 			// if there is still no page content we remind the user
