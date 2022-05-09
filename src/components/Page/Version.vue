@@ -20,9 +20,7 @@
 		<div id="text-container">
 			<RichText :key="`show-${currentPage.id}-${currentPage.timestamp}`"
 				:page-url="pageUrl"
-				:current-page="currentPage"
-				:timestamp="currentPage.timestamp"
-				:is-version="true" />
+				:current-page="currentPage" />
 		</div>
 	</div>
 </template>

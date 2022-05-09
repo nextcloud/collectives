@@ -57,13 +57,6 @@ export default {
 	},
 
 	props: {
-		// RichText is rendered as a placeholder
-		// with a spinning wheel where the toolbar would be.
-		asPlaceholder: {
-			type: Boolean,
-			required: false,
-		},
-
 		pageUrl: {
 			type: String,
 			required: false,
@@ -74,7 +67,6 @@ export default {
 			type: Object,
 			required: true,
 		},
-
 	},
 
 	data() {
@@ -120,7 +112,6 @@ export default {
 	},
 
 	mounted() {
-		this.$emit('loading')
 		this.initPageContent().then(() => {
 			this.$nextTick(() => {
 				this.$emit('ready')
