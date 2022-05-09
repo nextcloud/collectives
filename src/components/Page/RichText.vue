@@ -67,6 +67,12 @@ export default {
 			type: Object,
 			required: true,
 		},
+
+		reloadContent: {
+			type: Boolean,
+			required: false,
+			default: false,
+		},
 	},
 
 	data() {
@@ -108,6 +114,18 @@ export default {
 		},
 		'currentPage.timestamp'() {
 			this.getPageContent()
+		},
+		'reloadContent'(val) {
+			if (val !== true) {
+				return
+			}
+
+			console.debug('richtext reloadContent')
+			this.initPageContent().then(() => {
+				this.$nextTick(() => {
+					this.$emit('ready')
+				})
+			})
 		},
 	},
 

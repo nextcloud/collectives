@@ -36,8 +36,9 @@
 					@click="toggle('sidebar')" />
 			</Actions>
 		</h1>
-		<div v-if="readOnly" id="text-container" :key="'text-' + currentPage.id">
+		<div v-show="readOnly" id="text-container" :key="'text-' + currentPage.id">
 			<RichText :key="`show-${currentPage.id}`"
+				:reload-content="waitForPreview"
 				:current-page="currentPage"
 				@empty="emptyPreview"
 				@ready="readyPreview" />
@@ -85,6 +86,7 @@ export default {
 			newTitle: '',
 			editToggle: EditState.Unset,
 			reloadCounter: 0,
+			changed: false,
 			scrollTop: 0,
 			waitForPreview: false,
 		}
@@ -247,6 +249,10 @@ export default {
 
 		readyPreview() {
 			this.waitForPreview = false
+			if (this.changed) {
+				this.reloadCounter += 1
+				this.changed = false
+			}
 			// Wait a few milliseconds to load images
 			setTimeout(() => {
 				document.getElementById('text')?.scrollTo(0, this.scrollTop)
@@ -276,14 +282,14 @@ export default {
 				this.focusEditor()
 				return
 			}
+			this.scrollTop = document.getElementById('editor')?.scrollTop || 0
 			if (wasDirty) {
 				this.load('pageUpdate')
 				await this.wrapper().close()
 				this.done('pageUpdate')
 			}
-			this.scrollTop = document.getElementById('editor')?.scrollTop || 0
 			if (changed) {
-				this.reloadCounter += 1
+				this.changed = true
 				this.previewWasEmpty = false
 				this.dispatchTouchPage()
 				if (!this.isPublic && this.hasVersionsLoaded) {
