@@ -23,11 +23,11 @@
 			</form>
 			<button v-if="currentCollectiveCanEdit"
 				class="edit-button primary"
-				:title="edit ? t('collectives', 'Stop editing') : t('collectives', 'Start editing')"
-				@click="edit ? stopEdit() : startEdit()">
+				:title="editMode ? t('collectives', 'Stop editing') : t('collectives', 'Start editing')"
+				@click="editMode ? stopEdit() : startEdit()">
 				<span class="icon icon-white"
 					:class="`icon-${toggleIcon}`" />
-				{{ edit && !waitForEdit ? t('collectives', 'Done') : t('collectives', 'Edit') }}
+				{{ editMode && !waitForEditor ? t('collectives', 'Done') : t('collectives', 'Edit') }}
 			</button>
 			<PageActions v-if="currentCollectiveCanEdit" />
 			<Actions v-show="!showing('sidebar')">
@@ -36,18 +36,18 @@
 					@click="toggle('sidebar')" />
 			</Actions>
 		</h1>
-		<div v-show="readOnly" id="text-container" :key="'text-' + currentPage.id">
+		<div v-show="showRichText" id="text-container" :key="'text-' + currentPage.id">
 			<RichText :key="`show-${currentPage.id}`"
-				:as-placeholder="preview && edit"
-				:reload-content="waitForPreview"
+				:as-placeholder="waitForEditor"
+				:reload-content="waitForRichText"
 				:current-page="currentPage"
-				@empty="emptyPreview"
-				@ready="readyPreview" />
+				@empty="emptyRichText"
+				@ready="readyRichText" />
 		</div>
-		<Editor v-show="!readOnly || waitForPreview"
+		<Editor v-show="showEditor"
 			:key="`edit-${currentPage.id}-${reloadCounter}`"
 			ref="editor"
-			@ready="hidePreview" />
+			@ready="hideRichText" />
 	</div>
 </template>
 
@@ -82,14 +82,14 @@ export default {
 	data() {
 		return {
 			previousSaveTimestamp: null,
-			preview: true,
-			previewWasEmpty: false,
+			readMode: true,
+			richTextWasEmpty: false,
 			newTitle: '',
 			editToggle: EditState.Unset,
 			reloadCounter: 0,
 			changed: false,
 			scrollTop: 0,
-			waitForPreview: false,
+			waitForRichText: false,
 		}
 	},
 
@@ -97,7 +97,6 @@ export default {
 		...mapGetters([
 			'isPublic',
 			'currentPage',
-			'currentPageFilePath',
 			'currentCollective',
 			'currentCollectiveCanEdit',
 			'currentCollectiveTitle',
@@ -106,7 +105,6 @@ export default {
 			'landingPage',
 			'pageParam',
 			'loading',
-			'visibleSubpages',
 			'showing',
 			'isTemplatePage',
 		]),
@@ -133,32 +131,36 @@ export default {
 		},
 
 		toggleIcon() {
-			if (this.loading('pageUpdate') || this.waitForEdit) {
+			if (this.loading('pageUpdate') || this.waitForEditor) {
 				return 'loading-small'
 			} else {
-				return this.edit ? 'checkmark' : 'rename'
+				return this.editMode ? 'checkmark' : 'rename'
 			}
 		},
 
-		waitForEdit() {
-			return this.preview && this.edit
+		showRichText() {
+			return this.readOnly
+		},
+
+		showEditor() {
+			return !this.readOnly || this.waitForRichText
+		},
+
+		waitForEditor() {
+			return this.readMode && this.editMode
 		},
 
 		readOnly() {
-			return !this.currentCollectiveCanEdit || this.preview || !this.edit
+			return !this.currentCollectiveCanEdit || this.readMode || !this.editMode
 		},
 
-		edit: {
+		editMode: {
 			get() {
 				return this.editToggle === EditState.Edit
 			},
 			set(val) {
 				this.editToggle = val ? EditState.Edit : EditState.Read
 			},
-		},
-
-		hasSubpages() {
-			return this.visibleSubpages(this.currentPage.id).length
 		},
 	},
 
@@ -229,11 +231,11 @@ export default {
 		},
 
 		/**
-		 * Set preview to false
+		 * Set readMode to false
 		 */
-		hidePreview() {
-			this.preview = false
-			if (this.edit) {
+		hideRichText() {
+			this.readMode = false
+			if (this.editMode) {
 				if (this.doc()) {
 					this.previousSaveTimestamp = this.doc().lastSavedVersionTime
 				}
@@ -241,15 +243,15 @@ export default {
 			}
 		},
 
-		emptyPreview() {
-			this.previewWasEmpty = true
+		emptyRichText() {
+			this.richTextWasEmpty = true
 			if (this.editToggle === EditState.Unset) {
 				this.startEdit()
 			}
 		},
 
-		readyPreview() {
-			this.waitForPreview = false
+		readyRichText() {
+			this.waitForRichText = false
 			if (this.changed) {
 				this.reloadCounter += 1
 				this.changed = false
@@ -265,7 +267,7 @@ export default {
 			if (this.doc()) {
 				this.previousSaveTimestamp = this.doc().lastSavedVersionTime
 			}
-			this.edit = true
+			this.editMode = true
 			this.$nextTick(() => {
 				this.focusEditor()
 				document.getElementById('editor')?.scrollTo(0, this.scrollTop)
@@ -279,7 +281,7 @@ export default {
 			const changed = wasDirty
 				|| this.doc().lastSavedVersionTime !== this.previousSaveTimestamp
 			// if there is still no page content we remind the user
-		    if (this.previewWasEmpty && !changed) {
+		    if (this.richTextWasEmpty && !changed) {
 				this.focusEditor()
 				return
 			}
@@ -291,14 +293,14 @@ export default {
 			}
 			if (changed) {
 				this.changed = true
-				this.previewWasEmpty = false
+				this.richTextWasEmpty = false
 				this.dispatchTouchPage()
 				if (!this.isPublic && this.hasVersionsLoaded) {
 					this.dispatchGetVersions(this.currentPage.id)
 				}
 			}
-			this.waitForPreview = true
-			this.edit = false
+			this.waitForRichText = true
+			this.editMode = false
 		},
 
 	    renamePageOnBlur() {
