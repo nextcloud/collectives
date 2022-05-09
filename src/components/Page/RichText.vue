@@ -5,7 +5,7 @@
 			name="sharingToken"
 			:value="shareTokenParam">
 		<div id="text" class="editor">
-			<div :class="{menubar: true, loading}">
+			<div :class="{menubar: true, loading: asPlaceholder}">
 				<div class="menubar-icons" />
 			</div>
 			<div v-if="!loading">
@@ -57,6 +57,14 @@ export default {
 	},
 
 	props: {
+		// RichText is rendered as a placeholder
+		// with the spinning wheel where the toolbar would be.
+		asPlaceholder: {
+			type: Boolean,
+			required: false,
+			default: false,
+		},
+
 		pageUrl: {
 			type: String,
 			required: false,

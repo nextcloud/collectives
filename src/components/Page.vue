@@ -38,6 +38,7 @@
 		</h1>
 		<div v-show="readOnly" id="text-container" :key="'text-' + currentPage.id">
 			<RichText :key="`show-${currentPage.id}`"
+				:as-placeholder="preview && edit"
 				:reload-content="waitForPreview"
 				:current-page="currentPage"
 				@empty="emptyPreview"
