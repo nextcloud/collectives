@@ -204,6 +204,12 @@ export default {
 		}),
 
 		// this is a method so it does not get cached
+		syncService() {
+			// `$syncService` in Nexcloud 24+, `syncService` beforehands
+			return this.wrapper()?.$syncService ?? this.wrapper()?.syncService
+		},
+
+		// this is a method so it does not get cached
 		doc() {
 			return this.wrapper()?.$data.document
 		},
@@ -235,10 +241,12 @@ export default {
 
 		focusEditor() {
 			// `$editor` in Nexcloud 24+, `editor` beforehands
-			if (this.wrapper().$editor) {
-				this.wrapper().$editor?.commands.focus()
+			if (this.wrapper()?.$editor) {
+				this.wrapper()?.$editor.commands.focus()
+			} else if (this.wrapper()?.tiptap) {
+				this.wrapper()?.tiptap.focus()
 			} else {
-				this.wrapper().editor?.commands.focus()
+				this.$el.querySelector('.ProseMirror')?.focus()
 			}
 		},
 
@@ -248,7 +256,7 @@ export default {
 		readyEditor() {
 			// Set pageContent if it's been empty before
 			if (!this.pageContent) {
-				this.pageContent = this.wrapper().$syncService._getContent()
+				this.pageContent = this.syncService()._getContent()
 			}
 			this.readMode = false
 			if (this.loading('newPage')) {
@@ -303,7 +311,7 @@ export default {
 
 			this.scrollTop = document.getElementById('editor')?.scrollTop || 0
 
-			const pageContent = this.wrapper().$syncService._getContent()
+			const pageContent = this.syncService()._getContent()
 			const changed = this.pageContent !== pageContent
 
 			// if there is still no page content we remind the user
@@ -319,7 +327,7 @@ export default {
 				}
 
 				// TODO: detect missing connection and display warning
-				this.wrapper().$syncService.save()
+				this.syncService().save()
 
 				this.pageContent = pageContent
 				this.waitForRichText = true
