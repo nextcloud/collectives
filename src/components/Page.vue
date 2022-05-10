@@ -210,7 +210,7 @@ export default {
 
 		// this is a method so it does not get cached
 		wrapper() {
-			return this.$refs.editor.$children[0].$children[0]
+			return this.$refs.editor?.$children[0].$children[0]
 		},
 
 		initTitleEntry() {
@@ -235,10 +235,10 @@ export default {
 
 		focusEditor() {
 			// `$editor` in Nexcloud 24+, `editor` beforehands
-			if (this.wrapper()?.$editor) {
+			if (this.wrapper().$editor) {
 				this.wrapper().$editor?.commands.focus()
 			} else {
-				this.wrapper()?.editor?.commands.focus()
+				this.wrapper().editor?.commands.focus()
 			}
 		},
 
