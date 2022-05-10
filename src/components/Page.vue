@@ -243,6 +243,9 @@ export default {
 			}
 		},
 
+		/**
+		 * Show editor if RichText reported empty content
+		 */
 		emptyRichText() {
 			this.richTextWasEmpty = true
 			if (this.editToggle === EditState.Unset) {
@@ -250,6 +253,9 @@ export default {
 			}
 		},
 
+		/**
+		 * Hide editor and increment reloadCounter (to update Editor component) once RichText is ready
+		 */
 		readyRichText() {
 			this.waitForRichText = false
 			if (this.changed) {
