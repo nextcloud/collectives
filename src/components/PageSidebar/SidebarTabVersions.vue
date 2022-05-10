@@ -16,7 +16,7 @@
 			<a @click="clickPreviewVersion(null)">
 				<div class="app-content-list-item"
 					:class="{active: !version}">
-					<div class="app-content-list-item-icon">
+					<div class="app-content-list-item-icon item-icon-page">
 						<div class="icon-page-white" />
 					</div>
 					<div class="app-content-list-item-line-one" :title="pageFormattedTimestamp">
@@ -32,7 +32,11 @@
 				@click="clickPreviewVersion(v)">
 				<div class="app-content-list-item"
 					:class="{active: (version && v.timestamp === version.timestamp)}">
-					<div class="app-content-list-item-icon">
+					<div v-if="loading(`version-${pageId}-${v.timestamp}`)"
+						class="app-content-list-item-icon item-icon-loading">
+						<div class="icon-loading" />
+					</div>
+					<div v-else class="app-content-list-item-icon item-icon-page">
 						<div class="icon-page-white" />
 					</div>
 					<div class="app-content-list-item-line-one live-relative-timestamp" :data-timestamp="v.millisecondsTimestamp" :title="v.formattedTimestamp">
@@ -185,11 +189,18 @@ export default {
 .app-content-list-item .app-content-list-item-icon {
 	line-height: 40px;
 	width: 26px;
-	height: 34px;
 	left: 12px;
-	font-size: 24px;
-	background-color: var(--color-background-darker);
-	border-radius: 4px;
+
+	&.item-icon-page {
+		height: 34px;
+		font-size: 24px;
+		background-color: var(--color-background-darker);
+		border-radius: 4px;
+	}
+
+	&.item-icon-loading {
+		padding-top: 10px;
+	}
 }
 
 .app-content-list-item .app-content-list-item-icon div {

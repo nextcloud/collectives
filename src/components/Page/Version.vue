@@ -91,7 +91,7 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['hide']),
+		...mapMutations(['done', 'load', 'hide']),
 
 		...mapActions({
 			dispatchGetVersions: GET_VERSIONS,
@@ -130,7 +130,9 @@ export default {
 		},
 
 		async getPageContent() {
+			this.load(`version-${this.currentPage.id}-${this.version.timestamp}`)
 			this.pageVersionContent = await this.fetchPageContent(this.version.downloadUrl)
+			this.done(`version-${this.currentPage.id}-${this.version.timestamp}`)
 		},
 	},
 }
