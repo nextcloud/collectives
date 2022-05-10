@@ -18,9 +18,9 @@
 			</Actions>
 		</h1>
 		<div id="text-container">
-			<RichText :key="`show-${currentPage.id}-${currentPage.timestamp}`"
-				:page-url="pageUrl"
-				:current-page="currentPage" />
+			<RichText :key="`show-${currentPage.id}-${version.timestamp}`"
+				:current-page="currentPage"
+				:page-content="pageVersionContent" />
 		</div>
 	</div>
 </template>
@@ -37,6 +37,7 @@ import { generateRemoteUrl } from '@nextcloud/router'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { SELECT_VERSION } from '../../store/mutations'
 import { GET_VERSIONS } from '../../store/actions'
+import pageContentMixin from '../../mixins/pageContentMixin'
 
 export default {
 	name: 'Version',
@@ -47,6 +48,16 @@ export default {
 		RichText,
 	},
 
+	mixins: [
+		pageContentMixin,
+	],
+
+	data() {
+		return {
+			pageVersionContent: '',
+		}
+	},
+
 	computed: {
 		...mapGetters([
 			'currentPage',
@@ -54,27 +65,12 @@ export default {
 			'title',
 		]),
 
-		/**
-		 * Return the URL for currently selected page version
-		 *
-		 * @return {string}
-		 */
-		pageUrl() {
-			return this.version.downloadUrl
-		},
-
-		/**
-		 * @return {string}
-		 */
 		restoreFolderUrl() {
 			return generateRemoteUrl(
 				`dav/versions/${this.getUser}/restore/${this.currentPage.id}`
 			)
 		},
 
-		/**
-		 * @return {string}
-		 */
 		getUser() {
 			return getCurrentUser().uid
 		},
@@ -82,6 +78,16 @@ export default {
 		versionTitle() {
 			return `${this.title} (${this.version.relativeTimestamp})`
 		},
+	},
+
+	watch: {
+		'version.timestamp'() {
+			this.getPageContent()
+		},
+	},
+
+	mounted() {
+		this.getPageContent()
 	},
 
 	methods: {
@@ -121,6 +127,10 @@ export default {
 				}))
 				console.error('Failed to move page to restore folder', e)
 			}
+		},
+
+		async getPageContent() {
+			this.pageVersionContent = await this.fetchPageContent(this.version.downloadUrl)
 		},
 	},
 }

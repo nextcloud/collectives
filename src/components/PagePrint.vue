@@ -6,9 +6,9 @@
 		<h1 v-else class="page-title page-title-subpage">
 			{{ page.title }}
 		</h1>
-		<ReadOnlyEditor v-if="content"
+		<ReadOnlyEditor v-if="pageContent"
 			class="editor__content"
-			:content="content"
+			:content="pageContent"
 			:rich-text-options="richTextOptions" />
 	</div>
 </template>
@@ -16,7 +16,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import ReadOnlyEditor from '@nextcloud/text/package/components/ReadOnlyEditor'
-import axios from '@nextcloud/axios'
+import pageContentMixin from '../mixins/pageContentMixin'
 
 export default {
 	name: 'PagePrint',
@@ -24,6 +24,10 @@ export default {
 	components: {
 		ReadOnlyEditor,
 	},
+
+	mixins: [
+		pageContentMixin,
+	],
 
 	provide() {
 		return {
@@ -40,7 +44,7 @@ export default {
 
 	data() {
 		return {
-			content: null,
+			pageContent: null,
 		}
 	},
 
@@ -62,34 +66,14 @@ export default {
 
 	mounted() {
 		this.$emit('loading')
-		// TODO: only emit ready after images have been loaded
-		this.getPageContent().then(() => this.$emit('ready'))
+		this.getPageContent().then(() => {
+			this.$emit('ready')
+		})
 	},
 
 	methods: {
-		/**
-		 * Get markdown content of page
-		 */
 		async getPageContent() {
-			// Authenticate via share token for public shares
-			let axiosConfig = {}
-			if (this.isPublic) {
-				axiosConfig = {
-					auth: {
-						username: this.shareTokenParam,
-					},
-				}
-			}
-
-			try {
-				const content = await axios.get(this.pageDavUrl(this.page), axiosConfig)
-				// content.data will attempt to parse as json
-				// but we want the raw text.
-				this.content = content.request.responseText
-			} catch (e) {
-				const { id } = this.page
-				console.error(`Failed to fetch content of page ${id}`, e)
-			}
+			this.pageContent = await this.fetchPageContent(this.pageDavUrl(this.page))
 		},
 	},
 }

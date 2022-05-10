@@ -39,13 +39,13 @@
 		<div v-show="showRichText" id="text-container" :key="'text-' + currentPage.id">
 			<RichText :key="`show-${currentPage.id}`"
 				:as-placeholder="waitForEditor"
-				:reload-content="waitForRichText"
 				:current-page="currentPage"
-				@empty="emptyRichText"
+				:page-content="pageContent"
 				@ready="readyRichText" />
 		</div>
-		<Editor v-show="showEditor"
-			:key="`edit-${currentPage.id}-${reloadCounter}`"
+		<Editor v-if="currentCollectiveCanEdit"
+			v-show="showEditor"
+			:key="`edit-${currentPage.id}`"
 			ref="editor"
 			@ready="readyEditor" />
 	</div>
@@ -65,6 +65,7 @@ import {
 	GET_PAGES,
 	GET_VERSIONS,
 } from '../store/actions'
+import pageContentMixin from '../mixins/pageContentMixin'
 
 const EditState = { Unset: 0, Edit: 1, Read: 2 }
 
@@ -79,17 +80,19 @@ export default {
 		PageActions,
 	},
 
+	mixins: [
+		pageContentMixin,
+	],
+
 	data() {
 		return {
 			previousSaveTimestamp: null,
 			readMode: true,
-			richTextWasEmpty: false,
 			newTitle: '',
 			editToggle: EditState.Unset,
-			reloadCounter: 0,
-			changed: false,
 			scrollTop: 0,
 			waitForRichText: false,
+			pageContent: '',
 		}
 	},
 
@@ -97,6 +100,7 @@ export default {
 		...mapGetters([
 			'isPublic',
 			'currentPage',
+			'currentPageDavUrl',
 			'currentCollective',
 			'currentCollectiveCanEdit',
 			'currentCollectiveTitle',
@@ -170,6 +174,13 @@ export default {
 		},
 		'currentPage.id'() {
 			this.editToggle = EditState.Unset
+			this.getPageContent()
+			this.scrollTop = 0
+		},
+		'currentPage.timestamp'() {
+			if (this.currentPage.timestamp > this.previousSaveTimestamp) {
+				this.getPageContent()
+			}
 		},
 		'documentTitle'() {
 			document.title = this.documentTitle
@@ -179,6 +190,7 @@ export default {
 	mounted() {
 		document.title = this.documentTitle
 		this.initTitleEntry()
+		this.getPageContent()
 	},
 
 	methods: {
@@ -222,13 +234,22 @@ export default {
 		},
 
 		focusEditor() {
-			this.wrapper()?.$editor?.commands.focus()
+			// `$editor` in Nexcloud 24+, `editor` beforehands
+			if (this.wrapper()?.$editor) {
+				this.wrapper().$editor?.commands.focus()
+			} else {
+				this.wrapper()?.editor?.commands.focus()
+			}
 		},
 
 		/**
 		 * Set readMode to false
 		 */
 		readyEditor() {
+			// Set pageContent if it's been empty before
+			if (!this.pageContent) {
+				this.pageContent = this.wrapper().$syncService._getContent()
+			}
 			this.readMode = false
 			if (this.loading('newPage')) {
 				// Don't steal the focus from title if a new page
@@ -244,24 +265,19 @@ export default {
 		},
 
 		/**
-		 * Show editor if RichText reported empty content
+		 * Show editor if empty content
 		 */
-		emptyRichText() {
-			this.richTextWasEmpty = true
+		emptyContent() {
 			if (this.editToggle === EditState.Unset) {
 				this.startEdit()
 			}
 		},
 
 		/**
-		 * Hide editor and increment reloadCounter (to update Editor component) once RichText is ready
+		 * Hide editor once RichText is ready
 		 */
 		readyRichText() {
 			this.waitForRichText = false
-			if (this.changed) {
-				this.changed = false
-				this.reloadCounter += 1
-			}
 			// Wait a few milliseconds to load images
 			setTimeout(() => {
 				document.getElementById('text')?.scrollTo(0, this.scrollTop)
@@ -276,7 +292,6 @@ export default {
 			this.editMode = true
 			this.$nextTick(() => {
 				if (this.scrollTop === 0) {
-					// TODO: do we want to focus the editor after toggeling edit?
 					this.focusEditor()
 				}
 				document.getElementById('editor')?.scrollTo(0, this.scrollTop)
@@ -285,28 +300,28 @@ export default {
 
 		async stopEdit() {
 			this.renamePage()
-			const wasDirty = this.wrapper()._computedWatchers.hasUnpushedChanges.value
-				|| this.wrapper()._computedWatchers.hasUnsavedChanges.value
-			const changed = wasDirty
-				|| this.doc().lastSavedVersionTime !== this.previousSaveTimestamp
+
+			this.scrollTop = document.getElementById('editor')?.scrollTop || 0
+
+			const pageContent = this.wrapper().$syncService._getContent()
+			const changed = this.pageContent !== pageContent
+
 			// if there is still no page content we remind the user
-		    if (this.richTextWasEmpty && !changed) {
+			if (!pageContent) {
 				this.focusEditor()
 				return
 			}
-			this.scrollTop = document.getElementById('editor')?.scrollTop || 0
-			if (wasDirty) {
-				this.load('pageUpdate')
-				await this.wrapper().close()
-				this.done('pageUpdate')
-			}
+
 			if (changed) {
-				this.changed = true
-				this.richTextWasEmpty = false
 				this.dispatchTouchPage()
 				if (!this.isPublic && this.hasVersionsLoaded) {
 					this.dispatchGetVersions(this.currentPage.id)
 				}
+
+				// TODO: detect missing connection and display warning
+				this.wrapper().$syncService.save()
+
+				this.pageContent = pageContent
 				this.waitForRichText = true
 			}
 			this.editMode = false
@@ -335,6 +350,13 @@ export default {
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not rename the page'))
+			}
+		},
+
+		async getPageContent() {
+			this.pageContent = await this.fetchPageContent(this.currentPageDavUrl)
+			if (!this.pageContent) {
+				this.emptyContent()
 			}
 		},
 	},
