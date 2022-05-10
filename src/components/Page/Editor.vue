@@ -10,7 +10,7 @@
 		:share-token="shareTokenParam"
 		mime="text/markdown"
 		class="file-view active"
-		@ready="$emit('ready')" />
+		@ready="ready" />
 </template>
 
 <script>
@@ -33,6 +33,14 @@ export default {
 		 */
 		handler() {
 			return OCA.Viewer.availableHandlers.find(h => h.id === 'text')
+		},
+	},
+
+	methods: {
+		ready() {
+			this.$nextTick(() => {
+				this.$emit('ready')
+			})
 		},
 	},
 }

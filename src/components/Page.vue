@@ -47,7 +47,7 @@
 		<Editor v-show="showEditor"
 			:key="`edit-${currentPage.id}-${reloadCounter}`"
 			ref="editor"
-			@ready="hideRichText" />
+			@ready="readyEditor" />
 	</div>
 </template>
 
@@ -209,10 +209,8 @@ export default {
 				if (!this.wrapper().autofocus) {
 					this.$nextTick(this.focusTitle)
 				}
-				this.done('newPage')
 				return
 			} else if (this.loading('newTemplate')) {
-				// TODO: apparently focussing the editor doesn't work as expected
 				this.$nextTick(this.focusEditor)
 				this.done('newTemplate')
 			}
@@ -224,22 +222,24 @@ export default {
 		},
 
 		focusEditor() {
-			const editor = this.$el.querySelector('.ProseMirror')
-			if (editor) {
-				editor.focus()
-			}
+			this.wrapper()?.$editor?.commands.focus()
 		},
 
 		/**
 		 * Set readMode to false
 		 */
-		hideRichText() {
+		readyEditor() {
 			this.readMode = false
+			if (this.loading('newPage')) {
+				// Don't steal the focus from title if a new page
+				this.done('newPage')
+				return
+			}
 			if (this.editMode) {
 				if (this.doc()) {
 					this.previousSaveTimestamp = this.doc().lastSavedVersionTime
 				}
-				this.focusEditor()
+				this.$nextTick(this.focusEditor())
 			}
 		},
 
@@ -253,8 +253,8 @@ export default {
 		readyRichText() {
 			this.waitForRichText = false
 			if (this.changed) {
-				this.reloadCounter += 1
 				this.changed = false
+				this.reloadCounter += 1
 			}
 			// Wait a few milliseconds to load images
 			setTimeout(() => {
@@ -269,7 +269,10 @@ export default {
 			}
 			this.editMode = true
 			this.$nextTick(() => {
-				this.focusEditor()
+				if (this.scrollTop === 0) {
+					// TODO: do we want to focus the editor after toggeling edit?
+					this.focusEditor()
+				}
 				document.getElementById('editor')?.scrollTo(0, this.scrollTop)
 			})
 		},
@@ -298,8 +301,8 @@ export default {
 				if (!this.isPublic && this.hasVersionsLoaded) {
 					this.dispatchGetVersions(this.currentPage.id)
 				}
+				this.waitForRichText = true
 			}
-			this.waitForRichText = true
 			this.editMode = false
 		},
 
