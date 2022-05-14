@@ -23,11 +23,11 @@
 			</form>
 			<button v-if="currentCollectiveCanEdit"
 				class="edit-button primary"
-				:title="edit ? t('collectives', 'Stop editing') : t('collectives', 'Start editing')"
-				@click="edit ? stopEdit() : startEdit()">
+				:title="editMode ? t('collectives', 'Stop editing') : t('collectives', 'Start editing')"
+				@click="editMode ? stopEdit() : startEdit()">
 				<span class="icon icon-white"
 					:class="`icon-${toggleIcon}`" />
-				{{ edit && !waitForEdit ? t('collectives', 'Done') : t('collectives', 'Edit') }}
+				{{ editMode && !waitForEditor ? t('collectives', 'Done') : t('collectives', 'Edit') }}
 			</button>
 			<PageActions v-if="currentCollectiveCanEdit" />
 			<Actions v-show="!showing('sidebar')">
@@ -36,17 +36,18 @@
 					@click="toggle('sidebar')" />
 			</Actions>
 		</h1>
-		<div v-if="readOnly" id="text-container" :key="'text-' + currentPage.id">
+		<div v-show="showRichText" id="text-container" :key="'text-' + currentPage.id">
 			<RichText :key="`show-${currentPage.id}`"
-				:as-placeholder="preview && edit"
+				:as-placeholder="waitForEditor"
 				:current-page="currentPage"
-				@empty="emptyPreview"
-				@ready="readyPreview" />
+				:page-content="pageContent"
+				@ready="readyRichText" />
 		</div>
-		<Editor v-show="!readOnly || waitForPreview"
-			:key="`edit-${currentPage.id}-${reloadCounter}`"
+		<Editor v-if="currentCollectiveCanEdit"
+			v-show="showEditor"
+			:key="`edit-${currentPage.id}`"
 			ref="editor"
-			@ready="hidePreview" />
+			@ready="readyEditor" />
 	</div>
 </template>
 
@@ -64,6 +65,7 @@ import {
 	GET_PAGES,
 	GET_VERSIONS,
 } from '../store/actions'
+import pageContentMixin from '../mixins/pageContentMixin'
 
 const EditState = { Unset: 0, Edit: 1, Read: 2 }
 
@@ -78,16 +80,19 @@ export default {
 		PageActions,
 	},
 
+	mixins: [
+		pageContentMixin,
+	],
+
 	data() {
 		return {
 			previousSaveTimestamp: null,
-			preview: true,
-			previewWasEmpty: false,
+			readMode: true,
 			newTitle: '',
 			editToggle: EditState.Unset,
-			reloadCounter: 0,
 			scrollTop: 0,
-			waitForPreview: false,
+			waitForRichText: false,
+			pageContent: '',
 		}
 	},
 
@@ -95,7 +100,7 @@ export default {
 		...mapGetters([
 			'isPublic',
 			'currentPage',
-			'currentPageFilePath',
+			'currentPageDavUrl',
 			'currentCollective',
 			'currentCollectiveCanEdit',
 			'currentCollectiveTitle',
@@ -104,7 +109,6 @@ export default {
 			'landingPage',
 			'pageParam',
 			'loading',
-			'visibleSubpages',
 			'showing',
 			'isTemplatePage',
 		]),
@@ -131,32 +135,36 @@ export default {
 		},
 
 		toggleIcon() {
-			if (this.loading('pageUpdate') || this.waitForEdit) {
+			if (this.loading('pageUpdate') || this.waitForEditor) {
 				return 'loading-small'
 			} else {
-				return this.edit ? 'checkmark' : 'rename'
+				return this.editMode ? 'checkmark' : 'rename'
 			}
 		},
 
-		waitForEdit() {
-			return this.preview && this.edit
+		showRichText() {
+			return this.readOnly
+		},
+
+		showEditor() {
+			return !this.readOnly || this.waitForRichText
+		},
+
+		waitForEditor() {
+			return this.readMode && this.editMode
 		},
 
 		readOnly() {
-			return !this.currentCollectiveCanEdit || this.preview || !this.edit
+			return !this.currentCollectiveCanEdit || this.readMode || !this.editMode
 		},
 
-		edit: {
+		editMode: {
 			get() {
 				return this.editToggle === EditState.Edit
 			},
 			set(val) {
 				this.editToggle = val ? EditState.Edit : EditState.Read
 			},
-		},
-
-		hasSubpages() {
-			return this.visibleSubpages(this.currentPage.id).length
 		},
 	},
 
@@ -166,6 +174,13 @@ export default {
 		},
 		'currentPage.id'() {
 			this.editToggle = EditState.Unset
+			this.getPageContent()
+			this.scrollTop = 0
+		},
+		'currentPage.timestamp'() {
+			if (this.currentPage.timestamp > this.previousSaveTimestamp) {
+				this.getPageContent()
+			}
 		},
 		'documentTitle'() {
 			document.title = this.documentTitle
@@ -175,6 +190,7 @@ export default {
 	mounted() {
 		document.title = this.documentTitle
 		this.initTitleEntry()
+		this.getPageContent()
 	},
 
 	methods: {
@@ -188,13 +204,19 @@ export default {
 		}),
 
 		// this is a method so it does not get cached
+		syncService() {
+			// `$syncService` in Nexcloud 24+, `syncService` beforehands
+			return this.wrapper()?.$syncService ?? this.wrapper()?.syncService
+		},
+
+		// this is a method so it does not get cached
 		doc() {
 			return this.wrapper()?.$data.document
 		},
 
 		// this is a method so it does not get cached
 		wrapper() {
-			return this.$refs.editor.$children[0].$children[0]
+			return this.$refs.editor?.$children[0].$children[0]
 		},
 
 		initTitleEntry() {
@@ -205,10 +227,8 @@ export default {
 				if (!this.wrapper().autofocus) {
 					this.$nextTick(this.focusTitle)
 				}
-				this.done('newPage')
 				return
 			} else if (this.loading('newTemplate')) {
-				// TODO: apparently focussing the editor doesn't work as expected
 				this.$nextTick(this.focusEditor)
 				this.done('newTemplate')
 			}
@@ -220,34 +240,52 @@ export default {
 		},
 
 		focusEditor() {
-			const editor = this.$el.querySelector('.ProseMirror')
-			if (editor) {
-				editor.focus()
+			// `$editor` in Nexcloud 24+, `editor` beforehands
+			if (this.wrapper()?.$editor) {
+				this.wrapper()?.$editor.commands.focus()
+			} else if (this.wrapper()?.tiptap) {
+				this.wrapper()?.tiptap.focus()
+			} else {
+				this.$el.querySelector('.ProseMirror')?.focus()
 			}
 		},
 
 		/**
-		 * Set preview to false
+		 * Set readMode to false
 		 */
-		hidePreview() {
-			this.preview = false
-			if (this.edit) {
+		readyEditor() {
+			// Set pageContent if it's been empty before
+			if (!this.pageContent) {
+				this.pageContent = this.syncService()._getContent()
+			}
+			this.readMode = false
+			if (this.loading('newPage')) {
+				// Don't steal the focus from title if a new page
+				this.done('newPage')
+				return
+			}
+			if (this.editMode) {
 				if (this.doc()) {
 					this.previousSaveTimestamp = this.doc().lastSavedVersionTime
 				}
-				this.focusEditor()
+				this.$nextTick(this.focusEditor())
 			}
 		},
 
-		emptyPreview() {
-			this.previewWasEmpty = true
+		/**
+		 * Show editor if empty content
+		 */
+		emptyContent() {
 			if (this.editToggle === EditState.Unset) {
 				this.startEdit()
 			}
 		},
 
-		readyPreview() {
-			this.waitForPreview = false
+		/**
+		 * Hide editor once RichText is ready
+		 */
+		readyRichText() {
+			this.waitForRichText = false
 			// Wait a few milliseconds to load images
 			setTimeout(() => {
 				document.getElementById('text')?.scrollTo(0, this.scrollTop)
@@ -259,39 +297,42 @@ export default {
 			if (this.doc()) {
 				this.previousSaveTimestamp = this.doc().lastSavedVersionTime
 			}
-			this.edit = true
+			this.editMode = true
 			this.$nextTick(() => {
-				this.focusEditor()
+				if (this.scrollTop === 0) {
+					this.focusEditor()
+				}
 				document.getElementById('editor')?.scrollTo(0, this.scrollTop)
 			})
 		},
 
 		async stopEdit() {
 			this.renamePage()
-			const wasDirty = this.wrapper().$data.dirty
-			const changed = wasDirty
-				|| this.doc().lastSavedVersionTime !== this.previousSaveTimestamp
+
+			this.scrollTop = document.getElementById('editor')?.scrollTop || 0
+
+			const pageContent = this.syncService()._getContent()
+			const changed = this.pageContent !== pageContent
+
 			// if there is still no page content we remind the user
-		    if (this.previewWasEmpty && !changed) {
+			if (!pageContent) {
 				this.focusEditor()
 				return
 			}
-			if (wasDirty) {
-				this.load('pageUpdate')
-				await this.wrapper().close()
-				this.done('pageUpdate')
-			}
-			this.scrollTop = document.getElementById('editor')?.scrollTop || 0
+
 			if (changed) {
-				this.reloadCounter += 1
-				this.previewWasEmpty = false
 				this.dispatchTouchPage()
 				if (!this.isPublic && this.hasVersionsLoaded) {
 					this.dispatchGetVersions(this.currentPage.id)
 				}
+
+				// TODO: detect missing connection and display warning
+				this.syncService().save()
+
+				this.pageContent = pageContent
+				this.waitForRichText = true
 			}
-			this.waitForPreview = true
-			this.edit = false
+			this.editMode = false
 		},
 
 	    renamePageOnBlur() {
@@ -317,6 +358,13 @@ export default {
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not rename the page'))
+			}
+		},
+
+		async getPageContent() {
+			this.pageContent = await this.fetchPageContent(this.currentPageDavUrl)
+			if (!this.pageContent) {
+				this.emptyContent()
 			}
 		},
 	},

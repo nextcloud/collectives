@@ -13,21 +13,21 @@
 
 		<!-- backlinks list -->
 		<template v-else-if="!loading('backlinks') && backlinks.length">
-			<div v-for="backlinkPage in backlinks"
+			<router-link v-for="backlinkPage in backlinks"
 				:key="backlinkPage.id"
-				class="app-content-list-item">
-				<div class="app-content-list-item-icon">
-					<div class="icon-page-white" />
-				</div>
-				<router-link class="app-content-list-item-link" :to="pagePath(backlinkPage)">
+				:to="pagePath(backlinkPage)">
+				<div class="app-content-list-item">
+					<div class="app-content-list-item-icon">
+						<div class="icon-page-white" />
+					</div>
 					<div class="app-content-list-item-line-one">
 						{{ pagePathTitle(backlinkPage) }}
 					</div>
 					<div class="app-content-list-item-line-two">
 						{{ lastUpdate(page) }}
 					</div>
-				</router-link>
-			</div>
+				</div>
+			</router-link>
 		</template>
 
 		<!-- no backlinks found -->
@@ -141,13 +141,11 @@ export default {
 	border-radius: 3px 12px 3px 3px;
 }
 
-.app-content-list .app-content-list-item .app-content-list-item-link {
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-
 .app-content-list .app-content-list-item .app-content-list-item-line-one {
 	font-size: 120%;
+
+	overflow: hidden;
+	text-overflow: ellipsis;
 
 	// Crop the string at the beginning, not end
 	// TODO: Untested with RTL script

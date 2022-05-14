@@ -18,11 +18,9 @@
 			</Actions>
 		</h1>
 		<div id="text-container">
-			<RichText :key="`show-${currentPage.id}-${currentPage.timestamp}`"
-				:page-url="pageUrl"
+			<RichText :key="`show-${currentPage.id}-${version.timestamp}`"
 				:current-page="currentPage"
-				:timestamp="currentPage.timestamp"
-				:is-version="true" />
+				:page-content="pageVersionContent" />
 		</div>
 	</div>
 </template>
@@ -39,6 +37,7 @@ import { generateRemoteUrl } from '@nextcloud/router'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { SELECT_VERSION } from '../../store/mutations'
 import { GET_VERSIONS } from '../../store/actions'
+import pageContentMixin from '../../mixins/pageContentMixin'
 
 export default {
 	name: 'Version',
@@ -49,6 +48,16 @@ export default {
 		RichText,
 	},
 
+	mixins: [
+		pageContentMixin,
+	],
+
+	data() {
+		return {
+			pageVersionContent: '',
+		}
+	},
+
 	computed: {
 		...mapGetters([
 			'currentPage',
@@ -56,27 +65,12 @@ export default {
 			'title',
 		]),
 
-		/**
-		 * Return the URL for currently selected page version
-		 *
-		 * @return {string}
-		 */
-		pageUrl() {
-			return this.version.downloadUrl
-		},
-
-		/**
-		 * @return {string}
-		 */
 		restoreFolderUrl() {
 			return generateRemoteUrl(
 				`dav/versions/${this.getUser}/restore/${this.currentPage.id}`
 			)
 		},
 
-		/**
-		 * @return {string}
-		 */
 		getUser() {
 			return getCurrentUser().uid
 		},
@@ -86,8 +80,18 @@ export default {
 		},
 	},
 
+	watch: {
+		'version.timestamp'() {
+			this.getPageContent()
+		},
+	},
+
+	mounted() {
+		this.getPageContent()
+	},
+
 	methods: {
-		...mapMutations(['hide']),
+		...mapMutations(['done', 'load', 'hide']),
 
 		...mapActions({
 			dispatchGetVersions: GET_VERSIONS,
@@ -123,6 +127,12 @@ export default {
 				}))
 				console.error('Failed to move page to restore folder', e)
 			}
+		},
+
+		async getPageContent() {
+			this.load(`version-${this.currentPage.id}-${this.version.timestamp}`)
+			this.pageVersionContent = await this.fetchPageContent(this.version.downloadUrl)
+			this.done(`version-${this.currentPage.id}-${this.version.timestamp}`)
 		},
 	},
 }

@@ -5,21 +5,19 @@
 			name="sharingToken"
 			:value="shareTokenParam">
 		<div id="text" class="editor">
-			<div :class="{menubar: true, loading}">
+			<div class="menubar">
 				<div class="menubar-icons" />
 			</div>
-			<div v-if="!loading">
-				<ReadOnlyEditor class="editor__content"
-					:content="content"
-					:rich-text-options="richTextOptions"
-					@click-link="followLink" />
-			</div>
+			<ReadOnlyEditor v-if="!loading"
+				class="editor__content"
+				:content="pageContent"
+				:rich-text-options="richTextOptions"
+				@click-link="followLink" />
 		</div>
 	</div>
 </template>
 
 <script>
-import axios from '@nextcloud/axios'
 import { mapGetters } from 'vuex'
 import ReadOnlyEditor from '@nextcloud/text/package/components/ReadOnlyEditor'
 import { generateUrl } from '@nextcloud/router'
@@ -58,16 +56,11 @@ export default {
 
 	props: {
 		// RichText is rendered as a placeholder
-		// with a spinning wheel where the toolbar would be.
+		// with the spinning wheel where the toolbar would be.
 		asPlaceholder: {
 			type: Boolean,
 			required: false,
-		},
-
-		pageUrl: {
-			type: String,
-			required: false,
-			default: null,
+			default: false,
 		},
 
 		currentPage: {
@@ -75,32 +68,27 @@ export default {
 			required: true,
 		},
 
+		pageContent: {
+			type: String,
+			required: false,
+			default: null,
+		},
 	},
 
 	data() {
 		return {
 			loading: true,
-			content: null,
 		}
 	},
 
 	computed: {
 		...mapGetters([
-			'isPublic',
 			'shareTokenParam',
-			'currentPageDavUrl',
 			'currentPageDirectory',
 			'currentPageFilePath',
 			'pageParam',
 			'collectiveParam',
 		]),
-
-		/**
-		 * @return {string}
-		 */
-		davUrl() {
-			return (this.pageUrl !== null ? this.pageUrl : this.currentPageDavUrl)
-		},
 
 		richTextOptions() {
 			return {
@@ -111,56 +99,26 @@ export default {
 	},
 
 	watch: {
-		'davUrl'() {
-			this.initPageContent()
-		},
-		'currentPage.timestamp'() {
-			this.getPageContent()
+		// enforce reactivity
+		'pageContent'() {
+			this.updatedPageContent()
 		},
 	},
 
 	mounted() {
-		this.$emit('loading')
-		this.initPageContent().then(() => {
-			this.$nextTick(() => {
-				this.$emit('ready')
-			})
+		this.$nextTick(() => {
+			this.loading = false
+			this.$emit('ready')
 		})
 	},
 
 	methods: {
-		/**
-		 * Get markdown content of page
-		 */
-		async getPageContent() {
-			// Authenticate via share token for public shares
-			let axiosConfig = {}
-			if (this.isPublic) {
-				axiosConfig = {
-					auth: {
-						username: this.shareTokenParam,
-					},
-				}
-			}
-
-			try {
-				const content = await axios.get(this.davUrl, axiosConfig)
-				// content.data will attempt to parse as json
-				// but we want the raw text.
-				this.content = content.request.responseText
-				if (!this.content) {
-					this.$emit('empty')
-				}
-			} catch (e) {
-				const { id } = this.currentPage
-				console.error(`Failed to fetch content of page ${id}`, e)
-			}
-		},
-
-		async initPageContent() {
+		updatedPageContent() {
 			this.loading = true
-			await this.getPageContent()
-			this.loading = false
+			this.$nextTick(() => {
+				this.loading = false
+				this.$emit('ready')
+			})
 		},
 
 		followLink(_event, attrs) {
@@ -223,10 +181,6 @@ export default {
 	background-color: var(--color-main-background-translucent);
 	height: 44px;
 	z-index: 100;
-}
-
-.menubar.loading {
-	opacity: 100%;
 }
 
 .menubar .menubar-icons {
