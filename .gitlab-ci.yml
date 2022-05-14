@@ -271,7 +271,6 @@ OCC CLI Test:
     - sudo -u www-data $NEXTCLOUD_SOURCE/occ app:enable --force collectives
     - sudo -u www-data $NEXTCLOUD_SOURCE/occ app:list
     - sudo -u www-data $NEXTCLOUD_SOURCE/occ collectives:create --owner alice NewCollective
-    - sudo -u www-data $NEXTCLOUD_SOURCE/occ collectives:purge-obsolete
     - sudo -u www-data $NEXTCLOUD_SOURCE/occ collectives:pages:purge-obsolete
     - sudo -u www-data $NEXTCLOUD_SOURCE/occ collectives:pages:expire
     - sudo -u www-data $NEXTCLOUD_SOURCE/occ app:disable circles

@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace OCA\Collectives\AppInfo;
 
 use Closure;
+use OCA\Circles\Events\CircleDestroyedEvent;
 use OCA\Collectives\CacheListener;
 use OCA\Collectives\Fs\UserFolderHelper;
+use OCA\Collectives\Listeners\CircleDestroyedListener;
 use OCA\Collectives\Listeners\LoadAdditionalScriptsListener;
 use OCA\Collectives\Listeners\ShareDeletedListener;
 use OCA\Collectives\Listeners\UnifiedSearchCSSLoader;
@@ -44,6 +46,7 @@ class Application extends App implements IBootstrap {
 	public function register(IRegistrationContext $context): void {
 		$context->registerEventListener(BeforeTemplateRenderedEvent::class, UnifiedSearchCSSLoader::class);
 		$context->registerEventListener(LoadAdditionalScriptsEvent::class, LoadAdditionalScriptsListener::class);
+		$context->registerEventListener(CircleDestroyedEvent::class, CircleDestroyedListener::class);
 		$context->registerEventListener(ShareDeletedEvent::class, ShareDeletedListener::class);
 
 		$context->registerService(MountProvider::class, function (ContainerInterface $c) {

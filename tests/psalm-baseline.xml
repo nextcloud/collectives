@@ -16,11 +16,6 @@
       <code>TimedJob</code>
     </UndefinedClass>
   </file>
-  <file src="lib/BackgroundJob/PurgeObsoleteCollectives.php">
-    <UndefinedClass occurrences="1">
-      <code>TimedJob</code>
-    </UndefinedClass>
-  </file>
   <file src="lib/BackgroundJob/PurgeObsoletePages.php">
     <UndefinedClass occurrences="1">
       <code>TimedJob</code>
@@ -39,11 +34,6 @@
     </UndefinedClass>
   </file>
   <file src="lib/Command/ExpirePageVersions.php">
-    <UndefinedClass occurrences="1">
-      <code>Base</code>
-    </UndefinedClass>
-  </file>
-  <file src="lib/Command/PurgeObsoleteCollectives.php">
     <UndefinedClass occurrences="1">
       <code>Base</code>
     </UndefinedClass>
@@ -97,23 +87,6 @@
     <UndefinedClass occurrences="1">
       <code>Entity</code>
     </UndefinedClass>
-  </file>
-  <file src="lib/Db/CollectiveGarbageCollector.php">
-    <MissingDependency occurrences="5">
-      <code>$this-&gt;collectiveMapper</code>
-      <code>$this-&gt;collectiveMapper</code>
-      <code>$this-&gt;collectiveMapper</code>
-      <code>CollectiveMapper</code>
-      <code>CollectiveMapper</code>
-    </MissingDependency>
-    <UndefinedClass occurrences="3">
-      <code>$collectiveFolder</code>
-      <code>FilesNotFoundException</code>
-      <code>InvalidPathException</code>
-    </UndefinedClass>
-    <UndefinedMethod occurrences="1">
-      <code>delete</code>
-    </UndefinedMethod>
   </file>
   <file src="lib/Db/CollectiveMapper.php">
     <UndefinedClass occurrences="1">
@@ -192,6 +165,11 @@
       <code>IRootFolder</code>
       <code>IUserManager</code>
     </UndefinedDocblockClass>
+  </file>
+  <file src="lib/Listeners/CircleDestroyedListener.php">
+    <UndefinedClass occurrences="1">
+      <code>IEventListener</code>
+    </UndefinedClass>
   </file>
   <file src="lib/Listeners/LoadAdditionalScriptsListener.php">
     <UndefinedClass occurrences="1">
