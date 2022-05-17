@@ -8,10 +8,9 @@
 			<div class="menubar">
 				<div class="menubar-icons" />
 			</div>
-			<ReadOnlyEditor v-if="!loading"
+			<RichtextReader v-if="!loading"
 				class="editor__content"
 				:content="pageContent"
-				:rich-text-options="richTextOptions"
 				@click-link="followLink" />
 		</div>
 	</div>
@@ -19,7 +18,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import ReadOnlyEditor from '@nextcloud/text/package/components/ReadOnlyEditor'
+import { RichtextReader } from '@nextcloud/text'
 import { generateUrl } from '@nextcloud/router'
 
 const resolvePath = function(from, rel) {
@@ -45,12 +44,13 @@ export default {
 	name: 'RichText',
 
 	components: {
-		ReadOnlyEditor,
+		RichtextReader,
 	},
 
 	provide() {
 		return {
 			fileId: this.currentPage.id,
+			currentDirectory: this.currentPageDirectory,
 		}
 	},
 
@@ -89,13 +89,6 @@ export default {
 			'pageParam',
 			'collectiveParam',
 		]),
-
-		richTextOptions() {
-			return {
-				currentDirectory: this.currentPageDirectory,
-			}
-		},
-
 	},
 
 	watch: {
@@ -171,6 +164,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import '~@nextcloud/text/dist/style.css';
 
 .menubar {
 	position: fixed;
