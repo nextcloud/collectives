@@ -15,4 +15,4 @@ npm install --no-save wait-on
 echo "starting to wait for server $CYPRESS_baseUrl"
 $(npm bin)/wait-on -i 500 -t 300000 $CYPRESS_baseUrl || (docker-compose logs && exit 1)
 
-(cd .. && $(npm bin)/cypress $@)
+(cd .. && $(npm bin)/cypress $@ --config defaultCommandTimeout=10000)
