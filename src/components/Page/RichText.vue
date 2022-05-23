@@ -91,13 +91,6 @@ export default {
 		]),
 	},
 
-	watch: {
-		// enforce reactivity
-		'pageContent'() {
-			this.updatedPageContent()
-		},
-	},
-
 	mounted() {
 		this.$nextTick(() => {
 			this.loading = false
@@ -106,14 +99,6 @@ export default {
 	},
 
 	methods: {
-		updatedPageContent() {
-			this.loading = true
-			this.$nextTick(() => {
-				this.loading = false
-				this.$emit('ready')
-			})
-		},
-
 		followLink(_event, attrs) {
 			return this.handleCollectiveLink(attrs)
 				|| this.handleRelativeMarkdownLink(attrs)
