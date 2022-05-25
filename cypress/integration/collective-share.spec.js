@@ -88,11 +88,13 @@ describe('Collective Share', function() {
 				.contains('li', 'Share me')
 				.find('.action-item__menutoggle')
 				.click()
+			cy.intercept('PUT', '**/_api/*/share/*').as('updateShare')
 			cy.get('input#shareEditable')
 				.check({ force: true }).then(() => {
 					cy.get('input#shareEditable')
 						.should('be.checked')
 				})
+			cy.wait('@updateShare')
 		})
 		it('Allows opening and editing a shared (editable) collective', function() {
 			cy.visit(shareUrl)
