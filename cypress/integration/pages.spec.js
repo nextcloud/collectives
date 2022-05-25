@@ -103,8 +103,9 @@ describe('Page', function() {
 	describe('Editing a page', function() {
 		it('Supports page content editing and switching to read mode', function() {
 			cy.visit('/apps/collectives/Our%20Garden/Day%201')
-			cy.get('#read-only-editor.editor__content').should('not.be.visible')
-			cy.get('#editor > > .editor__content').should('be.visible')
+			cy.get('#read-only-editor.editor__content > .ProseMirror').should('not.be.visible')
+			cy.get('#editor > > .editor__content > .ProseMirror').should('be.visible')
+				.should('have.focus')
 				.type('# Heading{enter}')
 
 			cy.log('Inserting an image')
@@ -116,8 +117,8 @@ describe('Page', function() {
 			cy.log('Changing to read mode')
 			cy.get('button.edit-button')
 				.click()
-			cy.get('#editor > > .editor__content').should('not.be.visible')
-			cy.get('#read-only-editor.editor__content').should('be.visible')
+			cy.get('#editor > > .editor__content > .ProseMirror').should('not.be.visible')
+			cy.get('#read-only-editor.editor__content > .ProseMirror').should('be.visible')
 				.should('contain', 'Heading')
 			cy.get('#read-only-editor.editor__content > .ProseMirror')
 				.find('img.image__main')
