@@ -308,9 +308,6 @@ App Update Test:
   <<: *node
   image: cypress/browsers:node14.17.6-chrome100-ff98
   stage: test end to end
-  variables:
-    CYPRESS_baseUrl: http://nextcloud.local/index.php
-    APP_SOURCE_URL: "${CI_PROJECT_URL}/-/jobs/${BUILD_JOB_ID}/artifacts/raw/build/release/collectives-${BUILD_VERSION}.tar.gz"
   script:
     - npm install --no-save wait-on
     - $(npm bin)/cypress install
@@ -348,6 +345,10 @@ App Update Test:
 
 Browser PHP 7.3 Nextcloud 22:
   <<: *browser-test
+  variables:
+    CYPRESS_baseUrl: http://nextcloud.local/index.php
+    CYPRESS_ncVersion: 22
+    APP_SOURCE_URL: "${CI_PROJECT_URL}/-/jobs/${BUILD_JOB_ID}/artifacts/raw/build/release/collectives-${BUILD_VERSION}.tar.gz"
   services:
     - name: registry.gitlab.com/collectivecloud/docker-builds:php7.3-nc22
       alias: nextcloud.local
@@ -355,6 +356,10 @@ Browser PHP 7.3 Nextcloud 22:
 
 Browser PHP 8.0 Nextcloud 23:
   <<: *browser-test
+  variables:
+    CYPRESS_baseUrl: http://nextcloud.local/index.php
+    CYPRESS_ncVersion: 23
+    APP_SOURCE_URL: "${CI_PROJECT_URL}/-/jobs/${BUILD_JOB_ID}/artifacts/raw/build/release/collectives-${BUILD_VERSION}.tar.gz"
   services:
     - name: registry.gitlab.com/collectivecloud/docker-builds:php8.0-nc23
       alias: nextcloud.local
@@ -362,6 +367,10 @@ Browser PHP 8.0 Nextcloud 23:
 
 Browser PHP 8.1 Nextcloud 24:
   <<: *browser-test
+  variables:
+    CYPRESS_baseUrl: http://nextcloud.local/index.php
+    CYPRESS_ncVersion: 24
+    APP_SOURCE_URL: "${CI_PROJECT_URL}/-/jobs/${BUILD_JOB_ID}/artifacts/raw/build/release/collectives-${BUILD_VERSION}.tar.gz"
   services:
     - name: registry.gitlab.com/collectivecloud/docker-builds:php8.1-nc24
       alias: nextcloud.local
@@ -369,6 +378,10 @@ Browser PHP 8.1 Nextcloud 24:
 
 Browser PHP 8.1 Nextcloud Master:
   <<: *browser-test
+  variables:
+    CYPRESS_baseUrl: http://nextcloud.local/index.php
+    CYPRESS_ncVersion: master
+    APP_SOURCE_URL: "${CI_PROJECT_URL}/-/jobs/${BUILD_JOB_ID}/artifacts/raw/build/release/collectives-${BUILD_VERSION}.tar.gz"
   services:
     - name: registry.gitlab.com/collectivecloud/docker-builds:php8.1-ncmaster
       alias: nextcloud.local
