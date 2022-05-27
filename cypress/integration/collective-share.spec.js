@@ -74,6 +74,7 @@ describe('Collective Share', function() {
 			cy.get('@clipBoardWriteText').should('have.been.calledOnce')
 		})
 		it('Allows opening a shared (non-editable) collective', function() {
+			cy.logout()
 			cy.visit(shareUrl)
 			cy.get('#titleform input').should('have.value', 'Share me')
 			cy.get('button.edit-button').should('not.exist')
@@ -97,6 +98,7 @@ describe('Collective Share', function() {
 			cy.wait('@updateShare')
 		})
 		it('Allows opening and editing a shared (editable) collective', function() {
+			cy.logout()
 			cy.visit(shareUrl)
 			cy.contains('.app-content-list-item', 'Share me')
 				.find('button.icon-add')
@@ -128,6 +130,7 @@ describe('Collective Share', function() {
 				.contains('Unshare').should('not.be.visible')
 		})
 		it('Opening unshared collective fails', function() {
+			cy.logout()
 			cy.visit(shareUrl, { failOnStatusCode: false })
 			cy.get('.body-login-container').should('contain', 'File not found')
 			cy.get('.infogroup').should('contain', 'The document could not be found on the server.')
