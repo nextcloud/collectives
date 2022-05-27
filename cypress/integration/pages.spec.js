@@ -100,6 +100,38 @@ describe('Page', function() {
 		})
 	})
 
+	describe('Editing a page', function() {
+		it('Supports page content editing and switching to read mode', function() {
+			cy.visit('/apps/collectives/Our%20Garden/Day%201')
+			cy.get('#read-only-editor.editor__content > .ProseMirror').should('not.be.visible')
+			cy.get('#editor > > .editor__content > .ProseMirror').should('be.visible')
+				.should('have.focus')
+				.type('# Heading{enter}')
+
+			// Only run image tests on Nextcloud 24+
+			cy.log(`ncVersion: ${Cypress.env('ncVersion')}`)
+			if (!['22', '23'].includes(String(Cypress.env('ncVersion')))) {
+				cy.log('Inserting an image')
+				cy.intercept({ method: 'POST', url: '**/upload' }).as('imageUpload')
+				cy.get('.menubar > input[type="file"]')
+					.selectFile('cypress/fixtures/test.png', { force: true })
+				cy.wait('@imageUpload')
+			}
+
+			cy.log('Changing to read mode')
+			cy.get('button.edit-button')
+				.click()
+			cy.get('#editor > > .editor__content > .ProseMirror').should('not.be.visible')
+			cy.get('#read-only-editor.editor__content > .ProseMirror').should('be.visible')
+				.should('contain', 'Heading')
+			if (!['22', '23'].includes(String(Cypress.env('ncVersion')))) {
+				cy.get('#read-only-editor.editor__content > .ProseMirror')
+					.find('img.image__main')
+					.should('be.visible')
+			}
+		})
+	})
+
 	describe('Using the search providers', function() {
 		it('Search for page and page content', function() {
 			cy.get('.unified-search a').click()

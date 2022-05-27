@@ -6,23 +6,22 @@
 		<h1 v-else class="page-title page-title-subpage">
 			{{ page.title }}
 		</h1>
-		<ReadOnlyEditor v-if="pageContent"
+		<RichtextReader v-if="pageContent"
 			class="editor__content"
-			:content="pageContent"
-			:rich-text-options="richTextOptions" />
+			:content="pageContent" />
 	</div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import ReadOnlyEditor from '@nextcloud/text/package/components/ReadOnlyEditor'
+import { RichtextReader } from '@nextcloud/text'
 import pageContentMixin from '../mixins/pageContentMixin'
 
 export default {
 	name: 'PagePrint',
 
 	components: {
-		ReadOnlyEditor,
+		RichtextReader,
 	},
 
 	mixins: [
@@ -32,6 +31,7 @@ export default {
 	provide() {
 		return {
 			fileId: this.page.id,
+			currentDirectory: this.pageDirectory(this.page),
 		}
 	},
 
@@ -56,12 +56,6 @@ export default {
 			'isPublic',
 			'shareTokenParam',
 		]),
-
-		richTextOptions() {
-			return {
-				currentDirectory: this.pageDirectory(this.page),
-			}
-		},
 	},
 
 	mounted() {
@@ -80,6 +74,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '~@nextcloud/text/dist/style.css';
+
 .page-title {
 	font-size: 30px;
 	line-height: 45px;

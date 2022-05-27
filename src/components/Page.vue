@@ -40,8 +40,7 @@
 			<RichText :key="`show-${currentPage.id}`"
 				:as-placeholder="waitForEditor"
 				:current-page="currentPage"
-				:page-content="pageContent"
-				@ready="readyRichText" />
+				:page-content="pageContent" />
 		</div>
 		<Editor v-if="currentCollectiveCanEdit"
 			v-show="showEditor"
@@ -91,7 +90,6 @@ export default {
 			newTitle: '',
 			editToggle: EditState.Unset,
 			scrollTop: 0,
-			waitForRichText: false,
 			pageContent: '',
 		}
 	},
@@ -147,7 +145,7 @@ export default {
 		},
 
 		showEditor() {
-			return !this.readOnly || this.waitForRichText
+			return !this.readOnly
 		},
 
 		waitForEditor() {
@@ -281,17 +279,6 @@ export default {
 			}
 		},
 
-		/**
-		 * Hide editor once RichText is ready
-		 */
-		readyRichText() {
-			this.waitForRichText = false
-			// Wait a few milliseconds to load images
-			setTimeout(() => {
-				document.getElementById('text')?.scrollTo(0, this.scrollTop)
-			}, 90)
-		},
-
 		startEdit() {
 			this.scrollTop = document.getElementById('text')?.scrollTop || 0
 			if (this.doc()) {
@@ -326,13 +313,17 @@ export default {
 					this.dispatchGetVersions(this.currentPage.id)
 				}
 
+				// Save pending changes in editor
 				// TODO: detect missing connection and display warning
 				this.syncService().save()
 
 				this.pageContent = pageContent
-				this.waitForRichText = true
 			}
 			this.editMode = false
+
+			this.$nextTick(() => {
+				document.getElementById('text')?.scrollTo(0, this.scrollTop)
+			})
 		},
 
 	    renamePageOnBlur() {
