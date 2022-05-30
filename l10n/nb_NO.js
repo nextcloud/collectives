@@ -14,7 +14,7 @@ OC.L10N.register(
     "Collective not found:" : "Kollektiver",
     "You're not part of a collective with that name." : "Du er ikke med i noe kollektiv med dette navnet.",
     "Select a collective or create a new one on the left." : "Velg et kollektiv, eller opprett ett til venstre.",
-    "Preparing collective for printing" : "Opprett kollektiv for eksisterende sirkel",
+    "Preparing collective for exporting or printing" : "Opprett kollektiv for eksisterende sirkel",
     "Could not change the collective share editing permissions" : "Kunne ikke opprette siden",
     "Could not share the collective" : "Kunne ikke opprette siden",
     "Could not unshare the collective" : "Kunne ikke gi siden nytt navn",

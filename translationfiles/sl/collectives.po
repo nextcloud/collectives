@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2022-05-04 10:23+0000\n"
+"POT-Creation-Date: 2022-05-30 22:31+0200\n"
 "PO-Revision-Date: 2021-12-18 12:51+0000\n"
 "Last-Translator: Matej U <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian <https://hosted.weblate.org/projects/collectives/"
@@ -16,11 +16,11 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n"
-"%100==4 ? 2 : 3;\n"
+"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
+"n%100==4 ? 2 : 3;\n"
 "X-Generator: Weblate 4.10\n"
 
-#. TRANSLATORS src/components/Page.vue:120
+#. TRANSLATORS src/components/Page.vue:122
 #. TRANSLATORS src/views/Home.vue:4
 #: /collectives/lib/Fs/UserFolderHelper.php:67
 #: /collectives/lib/Search/CollectiveProvider.php:60
@@ -129,7 +129,7 @@ msgstr ""
 #. TRANSLATORS src/components/CollectivePrint.vue:11
 #: /collectives/specialVueFakeDummyForL10nScript.js:10
 #, fuzzy
-msgid "Preparing collective for printing"
+msgid "Preparing collective for exporting or printing"
 msgstr "Ustvari zbirko za obstoječ krog"
 
 #. TRANSLATORS src/components/CollectivePrint.vue:58
@@ -165,8 +165,8 @@ msgstr "Odstrani povezavo"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:51
 #: /collectives/specialVueFakeDummyForL10nScript.js:24
-msgid "Print"
-msgstr "Natisni"
+msgid "Export or print"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:60
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:2
@@ -502,12 +502,12 @@ msgstr "Izberite stran na seznamu, ali pa ustvarite novo."
 msgid "Restore this version"
 msgstr "Obnovi to različico"
 
-#. TRANSLATORS src/components/Page/Version.vue:115
+#. TRANSLATORS src/components/Page/Version.vue:119
 #: /collectives/specialVueFakeDummyForL10nScript.js:162
 msgid "Reverted {page} to revision {timestamp}."
 msgstr "Povrni stran {page} na predelavo {timestamp}."
 
-#. TRANSLATORS src/components/Page/Version.vue:120
+#. TRANSLATORS src/components/Page/Version.vue:124
 #: /collectives/specialVueFakeDummyForL10nScript.js:164
 msgid "Failed to revert {page} to revision {timestamp}."
 msgstr "Obnovitev strani {page} na predelavo {timestamp} je spodletela."
@@ -542,7 +542,7 @@ msgstr "Končano"
 msgid "Edit"
 msgstr "Uredi"
 
-#. TRANSLATORS src/components/Page.vue:319
+#. TRANSLATORS src/components/Page.vue:351
 #: /collectives/specialVueFakeDummyForL10nScript.js:176
 msgid "Could not rename the page"
 msgstr "Strani ni mogoče preimenovati."
@@ -619,22 +619,22 @@ msgstr ""
 msgid "Current version"
 msgstr "Trenutna različica"
 
-#. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:50
+#. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:54
 #: /collectives/specialVueFakeDummyForL10nScript.js:216
 msgid "No other versions available"
 msgstr "Ni drugih različic"
 
-#. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:52
+#. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:56
 #: /collectives/specialVueFakeDummyForL10nScript.js:218
 msgid "After editing you can find old versions of the page here."
 msgstr ""
 
-#. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:156
+#. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:160
 #: /collectives/specialVueFakeDummyForL10nScript.js:220
 msgid "Could not get page versions"
 msgstr "Ni mogoče pridobiti različic strani"
 
-#. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:127
+#. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:131
 #: /collectives/specialVueFakeDummyForL10nScript.js:222
 #: /collectives/src/util/xmlToVersionsList.js:30
 msgid "%n byte"
@@ -697,6 +697,9 @@ msgstr "Manjkajo navedeni odvisni programi: "
 #: /collectives/templates/error.php:27
 msgid "Please ask the administrator to enable these apps."
 msgstr "Programe lahko omogoči le skrbnik sistema."
+
+#~ msgid "Print"
+#~ msgstr "Natisni"
 
 #~ msgid "Hide all subpages"
 #~ msgstr "Skrij vse podstrani"

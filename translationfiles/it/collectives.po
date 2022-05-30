@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2022-05-04 10:23+0000\n"
+"POT-Creation-Date: 2022-05-30 22:31+0200\n"
 "PO-Revision-Date: 2021-10-23 16:44+0000\n"
 "Last-Translator: marcotrevisan <mrctrevisan@yahoo.it>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/collectives/"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 4.9-dev\n"
 
-#. TRANSLATORS src/components/Page.vue:120
+#. TRANSLATORS src/components/Page.vue:122
 #. TRANSLATORS src/views/Home.vue:4
 #: /collectives/lib/Fs/UserFolderHelper.php:67
 #: /collectives/lib/Search/CollectiveProvider.php:60
@@ -114,8 +114,8 @@ msgstr ""
 "  di proprietà del collettivo.\n"
 "* 📝 **Modifica collaborativa delle pagine** come su Etherpad grazie alla\n"
 "  [app Text](https://github.com/nextcloud/text).\n"
-"* 🔤 **Sintassi [Markdown](https://en.wikipedia.org/wiki/Markdown) ben nota e "
-"consolidata**\n"
+"* 🔤 **Sintassi [Markdown](https://en.wikipedia.org/wiki/Markdown) ben nota "
+"e consolidata**\n"
 "  per la formattazione della pagina.\n"
 "\n"
 "## Installazione\n"
@@ -149,7 +149,7 @@ msgstr "Seleziona un collettivo o creane uno di nuovo a sinistra."
 #. TRANSLATORS src/components/CollectivePrint.vue:11
 #: /collectives/specialVueFakeDummyForL10nScript.js:10
 #, fuzzy
-msgid "Preparing collective for printing"
+msgid "Preparing collective for exporting or printing"
 msgstr "Crea un collettivo per una cerchia esistente"
 
 #. TRANSLATORS src/components/CollectivePrint.vue:58
@@ -185,8 +185,8 @@ msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:51
 #: /collectives/specialVueFakeDummyForL10nScript.js:24
-msgid "Print"
-msgstr "Stampa"
+msgid "Export or print"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:60
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:2
@@ -522,12 +522,12 @@ msgstr "Seleziona una pagina dalla lista o creane una di nuova."
 msgid "Restore this version"
 msgstr "Ripristina questa versione"
 
-#. TRANSLATORS src/components/Page/Version.vue:115
+#. TRANSLATORS src/components/Page/Version.vue:119
 #: /collectives/specialVueFakeDummyForL10nScript.js:162
 msgid "Reverted {page} to revision {timestamp}."
 msgstr "Ripristinata {page} alla revisione {timestamp}."
 
-#. TRANSLATORS src/components/Page/Version.vue:120
+#. TRANSLATORS src/components/Page/Version.vue:124
 #: /collectives/specialVueFakeDummyForL10nScript.js:164
 msgid "Failed to revert {page} to revision {timestamp}."
 msgstr ""
@@ -563,7 +563,7 @@ msgstr "Fatto"
 msgid "Edit"
 msgstr "Modifica"
 
-#. TRANSLATORS src/components/Page.vue:319
+#. TRANSLATORS src/components/Page.vue:351
 #: /collectives/specialVueFakeDummyForL10nScript.js:176
 msgid "Could not rename the page"
 msgstr "Impossibile rinominare la pagina"
@@ -640,23 +640,23 @@ msgstr "Non è stato possibile ottenere i backlink della pagina"
 msgid "Current version"
 msgstr "Versione corrente"
 
-#. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:50
+#. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:54
 #: /collectives/specialVueFakeDummyForL10nScript.js:216
 msgid "No other versions available"
 msgstr "Non sono disponibili altre versioni"
 
-#. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:52
+#. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:56
 #: /collectives/specialVueFakeDummyForL10nScript.js:218
 msgid "After editing you can find old versions of the page here."
 msgstr ""
 "Dopo le modifiche puoi trovare le versioni precedenti della pagina qui."
 
-#. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:156
+#. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:160
 #: /collectives/specialVueFakeDummyForL10nScript.js:220
 msgid "Could not get page versions"
 msgstr "Non è stato possibile ottenere le versioni della pagina"
 
-#. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:127
+#. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:131
 #: /collectives/specialVueFakeDummyForL10nScript.js:222
 #: /collectives/src/util/xmlToVersionsList.js:30
 msgid "%n byte"
@@ -718,6 +718,9 @@ msgstr "Le seguenti app propedeutiche risultano mancanti: "
 #: /collectives/templates/error.php:27
 msgid "Please ask the administrator to enable these apps."
 msgstr "Contatta l'amministratore per abilitare queste app."
+
+#~ msgid "Print"
+#~ msgstr "Stampa"
 
 #~ msgid "Hide all subpages"
 #~ msgstr "Nascondi tutte le sottopagine"

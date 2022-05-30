@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2022-05-04 10:23+0000\n"
+"POT-Creation-Date: 2022-05-30 22:31+0200\n"
 "PO-Revision-Date: 2022-04-20 08:13+0000\n"
 "Last-Translator: Nathan <bonnemainsnathan@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/collectives/"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: Weblate 4.12-dev\n"
 
-#. TRANSLATORS src/components/Page.vue:120
+#. TRANSLATORS src/components/Page.vue:122
 #. TRANSLATORS src/views/Home.vue:4
 #: /collectives/lib/Fs/UserFolderHelper.php:67
 #: /collectives/lib/Search/CollectiveProvider.php:60
@@ -147,7 +147,7 @@ msgstr "Sélectionnez un collectif ou créez en un sur la gauche."
 #. TRANSLATORS src/components/CollectivePrint.vue:11
 #: /collectives/specialVueFakeDummyForL10nScript.js:10
 #, fuzzy
-msgid "Preparing collective for printing"
+msgid "Preparing collective for exporting or printing"
 msgstr "Créer un collectif pour un cercle existant"
 
 #. TRANSLATORS src/components/CollectivePrint.vue:58
@@ -182,8 +182,8 @@ msgstr "Ne plus partager"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:51
 #: /collectives/specialVueFakeDummyForL10nScript.js:24
-msgid "Print"
-msgstr "Imprimer"
+msgid "Export or print"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:60
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:2
@@ -508,12 +508,12 @@ msgstr "Sélectionnez une page de la liste ou créez-en une nouvelle."
 msgid "Restore this version"
 msgstr "Restaurer cette version"
 
-#. TRANSLATORS src/components/Page/Version.vue:115
+#. TRANSLATORS src/components/Page/Version.vue:119
 #: /collectives/specialVueFakeDummyForL10nScript.js:162
 msgid "Reverted {page} to revision {timestamp}."
 msgstr "{page} restaurée à la révision {timestamp}."
 
-#. TRANSLATORS src/components/Page/Version.vue:120
+#. TRANSLATORS src/components/Page/Version.vue:124
 #: /collectives/specialVueFakeDummyForL10nScript.js:164
 msgid "Failed to revert {page} to revision {timestamp}."
 msgstr "Échec de la restauration de {page} à la révision {timestamp}."
@@ -548,7 +548,7 @@ msgstr "Terminé"
 msgid "Edit"
 msgstr "Modifier"
 
-#. TRANSLATORS src/components/Page.vue:319
+#. TRANSLATORS src/components/Page.vue:351
 #: /collectives/specialVueFakeDummyForL10nScript.js:176
 msgid "Could not rename the page"
 msgstr "Impossible de renommer la page"
@@ -625,24 +625,24 @@ msgstr "Impossible de récupérer les liens de maillage de la page"
 msgid "Current version"
 msgstr "Version actuelle"
 
-#. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:50
+#. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:54
 #: /collectives/specialVueFakeDummyForL10nScript.js:216
 msgid "No other versions available"
 msgstr "Aucune autre version disponible"
 
-#. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:52
+#. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:56
 #: /collectives/specialVueFakeDummyForL10nScript.js:218
 msgid "After editing you can find old versions of the page here."
 msgstr ""
 "Après l'avoir modifiée vous trouverez les anciennes versions de cette page "
 "ici."
 
-#. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:156
+#. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:160
 #: /collectives/specialVueFakeDummyForL10nScript.js:220
 msgid "Could not get page versions"
 msgstr "Impossible de récupérer les versions de la page"
 
-#. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:127
+#. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:131
 #: /collectives/specialVueFakeDummyForL10nScript.js:222
 #: /collectives/src/util/xmlToVersionsList.js:30
 msgid "%n byte"
@@ -703,6 +703,9 @@ msgstr "Les dépendances d'application suivantes sont manquantes : "
 #: /collectives/templates/error.php:27
 msgid "Please ask the administrator to enable these apps."
 msgstr "Veuillez demander à l'administrateur d'activer ces applications."
+
+#~ msgid "Print"
+#~ msgstr "Imprimer"
 
 #~ msgid "Hide all subpages"
 #~ msgstr "Masquer toutes les sous-pages"
