@@ -6,9 +6,9 @@
 			:value="shareTokenParam">
 		<EmptyContent v-show="loading">
 			<template #icon>
-				<PrinterIcon />
+				<DownloadIcon />
 			</template>
-			<h1>{{ t('collectives', 'Preparing collective for printing') }}</h1>
+			<h1>{{ t('collectives', 'Preparing collective for exporting or printing') }}</h1>
 			<ProgressBar :value="loadingProgress" size="medium">
 				{{ loadingProgress }}
 			</ProgressBar>
@@ -35,7 +35,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 import ProgressBar from '@nextcloud/vue/dist/Components/ProgressBar'
-import PrinterIcon from 'vue-material-design-icons/Printer'
+import DownloadIcon from 'vue-material-design-icons/Download'
 import PagePrint from './PagePrint'
 import { GET_PAGES } from '../store/actions'
 import displayError from '../util/displayError'
@@ -46,7 +46,7 @@ export default {
 	components: {
 		EmptyContent,
 		PagePrint,
-		PrinterIcon,
+		DownloadIcon,
 		ProgressBar,
 	},
 

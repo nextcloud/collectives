@@ -48,8 +48,8 @@
 			<ActionLink :close-after-click="true"
 				:href="printLink"
 				target="_blank">
-				{{ t('collectives', 'Print') }}
-				<PrinterIcon slot="icon"
+				{{ t('collectives', 'Export or print') }}
+				<DownloadIcon slot="icon"
 					:size="16"
 					decorative />
 			</ActionLink>
@@ -78,7 +78,7 @@ import ActionSeparator from '@nextcloud/vue/dist/Components/ActionSeparator'
 import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
 import { generateUrl } from '@nextcloud/router'
 import CopyToClipboardMixin from '../../mixins/CopyToClipboardMixin'
-import PrinterIcon from 'vue-material-design-icons/Printer'
+import DownloadIcon from 'vue-material-design-icons/Download'
 import CollectiveSettings from './CollectiveSettings'
 
 export default {
@@ -91,7 +91,7 @@ export default {
 		ActionSeparator,
 		AppNavigationItem,
 		CollectiveSettings,
-		PrinterIcon,
+		DownloadIcon,
 	},
 
 	mixins: [CopyToClipboardMixin],
