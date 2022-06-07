@@ -11,7 +11,10 @@
 			@keypress.enter="toggleCollapsed(pageId)"
 			@[isClickable]="toggleCollapsed(pageId)">
 			<slot name="icon">
-				<div v-if="isTemplate" :class="isCollapsible ? 'icon-pages-template-white' : 'icon-page-template-white'" />
+				<template v-if="isTemplate">
+					<PagesTemplateIcon v-if="isCollapsible" size="26" fill-color="var(--color-main-background)" />
+					<PageTemplateIcon v-else size="26" fill-color="var(--color-main-background)" />
+				</template>
 				<template v-else>
 					<PagesIcon v-if="isCollapsible" size="26" fill-color="var(--color-main-background)" />
 					<PageIcon v-else size="26" fill-color="var(--color-main-background)" />
@@ -51,6 +54,8 @@ import { mapGetters, mapMutations } from 'vuex'
 import TriangleIcon from 'vue-material-design-icons/Triangle'
 import PageIcon from '../Icon/PageIcon'
 import PagesIcon from '../Icon/PagesIcon'
+import PageTemplateIcon from '../Icon/PageTemplateIcon'
+import PagesTemplateIcon from '../Icon/PagesTemplateIcon'
 import { scrollToPage } from '../../util/scrollToElement'
 
 export default {
@@ -60,6 +65,8 @@ export default {
 		Actions,
 		PageIcon,
 		PagesIcon,
+		PageTemplateIcon,
+		PagesTemplateIcon,
 		TriangleIcon,
 	},
 

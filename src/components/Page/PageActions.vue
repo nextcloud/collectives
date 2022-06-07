@@ -6,10 +6,12 @@
 			{{ t('collectives', 'Show in Files') }}
 		</ActionLink>
 		<ActionButton v-if="!isTemplatePage"
-			icon="icon-pages-template"
 			class="action-button__template"
 			:close-after-click="true"
 			@click="editTemplate(currentPage.id)">
+			<template #icon>
+				<PagesTemplateIcon :size="14" />
+			</template>
 			{{ t('collectives', 'Edit template for subpages') }}
 		</ActionButton>
 		<ActionButton v-if="!landingPage"
@@ -29,6 +31,7 @@ import ActionLink from '@nextcloud/vue/dist/Components/ActionLink'
 import { mapActions, mapGetters } from 'vuex'
 import { generateUrl } from '@nextcloud/router'
 import { showSuccess, showError } from '@nextcloud/dialogs'
+import PagesTemplateIcon from '../Icon/PagesTemplateIcon'
 import { DELETE_PAGE } from '../../store/actions'
 import pageMixin from '../../mixins/pageMixin'
 
@@ -39,6 +42,7 @@ export default {
 		Actions,
 		ActionButton,
 		ActionLink,
+		PagesTemplateIcon,
 	},
 
 	mixins: [
@@ -82,10 +86,3 @@ export default {
 	},
 }
 </script>
-
-<style lang="scss" scoped>
-// template icon appears too big with default size (16px)
-.action-button__template::v-deep .icon-pages-template {
-	background-size: 14px;
-}
-</style>
