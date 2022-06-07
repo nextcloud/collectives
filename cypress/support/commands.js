@@ -96,9 +96,11 @@ Cypress.Commands.add('deleteCollective', (name) => {
 	cy.window()
 		.its('app')
 		.then(async app => {
-			const id = app.$store.state.collectives.collectives.find(c => c.name === name).id
-			await app.$store.dispatch(TRASH_COLLECTIVE, { id })
-			await app.$store.dispatch(DELETE_COLLECTIVE, { id, circle: true })
+			const id = app.$store.state.collectives.collectives.find(c => c.name === name)?.id
+			if (id) {
+				await app.$store.dispatch(TRASH_COLLECTIVE, { id })
+				await app.$store.dispatch(DELETE_COLLECTIVE, { id, circle: true })
+			}
 		})
 })
 
