@@ -50,8 +50,7 @@
 				v-model="text"
 				:placeholder="t('collectives', 'New collective name')"
 				type="text"
-				required
-				@keypress.enter.prevent="createCollective">
+				required>
 			<Multiselect v-else
 				ref="circleSelector"
 				v-model="circle"
