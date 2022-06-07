@@ -15,8 +15,10 @@
 		</template>
 		<template #actions>
 			<ActionLink v-if="showManageMembers"
-				:href="circleLink"
-				icon="icon-circles">
+				:href="circleLink">
+				<template #icon>
+					<CirclesIcon size="16" />
+				</template>
 				{{ t('collectives', 'Manage members') }}
 			</ActionLink>
 			<ActionSeparator v-if="showManageMembers" />
@@ -83,6 +85,7 @@ import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
 import { generateUrl } from '@nextcloud/router'
 import CopyToClipboardMixin from '../../mixins/CopyToClipboardMixin'
 import DownloadIcon from 'vue-material-design-icons/Download'
+import CirclesIcon from '../Icon/CirclesIcon'
 import CollectiveSettings from './CollectiveSettings'
 import CollectivesIcon from '../Icon/CollectivesIcon'
 
@@ -95,6 +98,7 @@ export default {
 		ActionLink,
 		ActionSeparator,
 		AppNavigationItem,
+		CirclesIcon,
 		CollectiveSettings,
 		CollectivesIcon,
 		DownloadIcon,

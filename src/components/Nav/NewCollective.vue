@@ -26,8 +26,10 @@
 		@click.prevent.stop="startCreateCollective">
 		<template #actions>
 			<ActionButton v-if="anyCircle"
-				icon="icon-circles"
 				@click.stop.prevent="startSelectCircle">
+				<template #icon>
+					<CirclesIcon size="16" />
+				</template>
 				{{ t('collectives', 'Create collective for existing circle') }}
 			</ActionButton>
 		</template>
@@ -78,6 +80,7 @@ import Button from '@nextcloud/vue/dist/Components/Button'
 import EmojiPicker from '@nextcloud/vue/dist/Components/EmojiPicker'
 import Multiselect from '@nextcloud/vue/dist/Components/Multiselect'
 import { mapActions, mapGetters } from 'vuex'
+import CirclesIcon from '../Icon/CirclesIcon'
 import { GET_CIRCLES, NEW_COLLECTIVE } from '../../store/actions'
 import displayError from '../../util/displayError'
 
@@ -90,6 +93,7 @@ export default {
 		ActionButton,
 		Actions,
 		Button,
+		CirclesIcon,
 		EmojiPicker,
 		Multiselect,
 	},
