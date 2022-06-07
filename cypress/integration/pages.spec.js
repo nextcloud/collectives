@@ -109,7 +109,6 @@ describe('Page', function() {
 				.type('# Heading{enter}')
 
 			// Only run image tests on Nextcloud 24+
-			cy.log(`ncVersion: ${Cypress.env('ncVersion')}`)
 			if (!['22', '23'].includes(String(Cypress.env('ncVersion')))) {
 				cy.log('Inserting an image')
 				cy.intercept({ method: 'POST', url: '**/upload' }).as('imageUpload')
@@ -125,9 +124,11 @@ describe('Page', function() {
 			cy.get('#read-only-editor.editor__content > .ProseMirror').should('be.visible')
 				.should('contain', 'Heading')
 			if (!['22', '23'].includes(String(Cypress.env('ncVersion')))) {
+				/*
 				cy.get('#read-only-editor.editor__content > .ProseMirror')
 					.find('img.image__main')
 					.should('be.visible')
+				 */
 			}
 		})
 	})
