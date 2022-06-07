@@ -61,20 +61,17 @@ class PageService {
 	 * @param string $userId
 	 *
 	 * @return Folder
+	 * @throws FilesNotFoundException
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
 	private function getCollectiveFolder(int $collectiveId, string $userId): Folder {
-		try {
-			$collectiveInfo = $this->collectiveService->getCollectiveInfo($collectiveId, $userId);
-			$folder = $this->userFolderHelper->get($userId)->get($collectiveInfo->getName());
-		} catch (FilesNotFoundException $e) {
-			throw new NotFoundException($e->getMessage());
-		}
+		$collectiveInfo = $this->collectiveService->getCollectiveInfo($collectiveId, $userId);
+		$folder = $this->userFolderHelper->get($userId)->get($collectiveInfo->getName());
 
 		if (!($folder instanceof Folder)) {
-			throw new NotFoundException('Folder not found for collective ' . $collectiveId);
+			throw new FilesNotFoundException('Folder not found for collective ' . $collectiveId);
 		}
 		return $folder;
 	}
@@ -383,6 +380,7 @@ class PageService {
 	 * @param string $userId
 	 *
 	 * @return array
+	 * @throws FilesNotFoundException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
@@ -399,16 +397,12 @@ class PageService {
 		$pageInfos = [$indexPage];
 
 		// Add subpages and recurse over subfolders
-		try {
-			foreach ($folder->getDirectoryListing() as $node) {
-				if ($node instanceof File && self::isPage($node) && !self::isIndexPage($node)) {
-					$pageInfos[] = $this->getPageByFile($node);
-				} elseif ($node instanceof Folder) {
-					array_push($pageInfos, ...$this->recurseFolder($node, $userId));
-				}
+		foreach ($folder->getDirectoryListing() as $node) {
+			if ($node instanceof File && self::isPage($node) && !self::isIndexPage($node)) {
+				$pageInfos[] = $this->getPageByFile($node);
+			} elseif ($node instanceof Folder) {
+				array_push($pageInfos, ...$this->recurseFolder($node, $userId));
 			}
-		} catch (FilesNotFoundException $e) {
-			throw new NotFoundException($e->getMessage());
 		}
 
 		return $pageInfos;
