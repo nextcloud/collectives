@@ -27,7 +27,7 @@
 describe('Page', function() {
 	before(function() {
 		cy.login('bob', { route: '/apps/collectives' })
-		cy.seedCollective('Our Garden')
+		cy.deleteAndSeedCollective('Our Garden')
 		cy.seedPage('Day 1', '', 'Readme.md')
 		cy.seedPage('Day 2', '', 'Readme.md')
 		cy.seedPage('#% special chars', '', 'Readme.md')
@@ -149,9 +149,4 @@ describe('Page', function() {
 			cy.get('.app-sidebar-tabs__content').should('contain', 'Day 2')
 		})
 	})
-
-	after(function() {
-		cy.deleteCollective('Our Garden')
-	})
-
 })

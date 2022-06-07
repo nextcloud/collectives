@@ -13,6 +13,9 @@ import axios from '@nextcloud/axios'
 const url = Cypress.config('baseUrl').replace(/\/index.php\/?$/g, '')
 Cypress.env('baseUrl', url)
 
+/**
+ * Login a user to Nextcloud and visit a given route
+ */
 Cypress.Commands.add('login', (user, { password, route, onBeforeLoad } = {}) => {
 	route = route || '/apps/collectives'
 	password = password || user
@@ -28,17 +31,34 @@ Cypress.Commands.add('login', (user, { password, route, onBeforeLoad } = {}) => 
 	cy.visit(route, { onBeforeLoad })
 })
 
+/**
+ * Logout a user from Nextcloud
+ */
 Cypress.Commands.add('logout', () => {
 	cy.session('_guest', function() {
 	})
 })
 
+/**
+ * Enable/disable a Nextcloud app
+ */
 Cypress.Commands.add('toggleApp', (appName) => {
 	cy.login('admin', { route: `/settings/apps/installed/${appName}` })
 	cy.get('#app-sidebar-vue .app-details input.enable').click()
 	cy.logout()
 })
 
+/**
+ * First delete, then seed a collective (to start fresh)
+ */
+Cypress.Commands.add('deleteAndSeedCollective', (name) => {
+	cy.deleteCollective(name)
+	cy.seedCollective(name)
+})
+
+/**
+ * Create a collective if it doesn't exist
+ */
 Cypress.Commands.add('seedCollective', (name) => {
 	cy.window()
 		.its('app')
@@ -61,6 +81,33 @@ Cypress.Commands.add('seedCollective', (name) => {
 		})
 })
 
+/**
+ * Create a collective via UI
+ */
+Cypress.Commands.add('createCollective', (name) => {
+	cy.get('a [title="Create new collective"]').click()
+	cy.get('.collective-create input[type="text"]').type(`${name}{enter}`)
+})
+
+/**
+ * Delete a collective if it exists
+ */
+Cypress.Commands.add('deleteCollective', (name) => {
+	cy.window()
+		.its('app')
+		.then(async app => {
+			const id = app.$store.state.collectives.collectives.find(c => c.name === name)?.id
+			if (id) {
+				cy.log(`Deleting collective ${name}`)
+				await app.$store.dispatch(TRASH_COLLECTIVE, { id })
+				await app.$store.dispatch(DELETE_COLLECTIVE, { id, circle: true })
+			}
+		})
+})
+
+/**
+ * Change permission settings for a collective
+ */
 Cypress.Commands.add('seedCollectivePermissions', (name, type, level) => {
 	cy.window()
 		.its('app')
@@ -74,6 +121,9 @@ Cypress.Commands.add('seedCollectivePermissions', (name, type, level) => {
 		})
 })
 
+/**
+ * Add a page to a collective
+ */
 Cypress.Commands.add('seedPage', (name, parentFilePath, parentFileName) => {
 	cy.window()
 		.its('app')
@@ -87,6 +137,9 @@ Cypress.Commands.add('seedPage', (name, parentFilePath, parentFileName) => {
 		})
 })
 
+/**
+ * Upload content of a page
+ */
 Cypress.Commands.add('seedPageContent', (user, pagePath, content) => {
 	cy.window()
 		.its('app')
@@ -100,28 +153,28 @@ Cypress.Commands.add('seedPageContent', (user, pagePath, content) => {
 		})
 })
 
-Cypress.Commands.add('deleteCollective', (name) => {
-	cy.window()
-		.its('app')
-		.then(async app => {
-			const id = app.$store.state.collectives.collectives.find(c => c.name === name).id
-			await app.$store.dispatch(TRASH_COLLECTIVE, { id })
-			await app.$store.dispatch(DELETE_COLLECTIVE, { id, circle: true })
-		})
-})
-
+/**
+ * Create a circle (optionally with given config)
+ */
 Cypress.Commands.add('seedCircle', (name, config = null) => {
 	cy.visit('/apps/collectives')
 	cy.window()
 		.its('app')
 		.then(async app => {
+			await app.$store.dispatch(GET_CIRCLES)
+			const circle = app.$store.state.circles.circles.find(c => c.sanitizedName === name)
 			const api = `${Cypress.env('baseUrl')}/ocs/v2.php/apps/circles/circles`
-			const response = await axios.post(api,
-				{ name, personal: false, local: true },
-				{ headers: { requesttoken: app.OC.requestToken } },
-			)
+			let circleId
+			if (!circle) {
+				const response = await axios.post(api,
+					{ name, personal: false, local: true },
+					{ headers: { requesttoken: app.OC.requestToken } },
+				)
+				circleId = response.data.ocs.data.id
+			} else {
+				circleId = circle.id
+			}
 			if (config) {
-				const circleId = response.data.ocs.data.id
 				// For now we only set the visibility
 				const bits = [
 					['visible', 8],
@@ -138,12 +191,15 @@ Cypress.Commands.add('seedCircle', (name, config = null) => {
 		})
 })
 
+/**
+ * Add someone to a circle
+ */
 Cypress.Commands.add('seedCircleMember', (name, userId) => {
 	cy.window()
 		.its('app')
 		.then(async app => {
 			await app.$store.dispatch(GET_CIRCLES)
-			const circleId = app.$store.state.circles.circles.find(c => c.name === name).id
+			const circleId = app.$store.state.circles.circles.find(c => c.sanitizedName === name).id
 			const api = `${Cypress.env('baseUrl')}/ocs/v2.php/apps/circles/circles/${circleId}/members`
 			await axios.post(api,
 				{ userId, type: 1 },
@@ -158,11 +214,9 @@ Cypress.Commands.add('seedCircleMember', (name, userId) => {
 		})
 })
 
-Cypress.Commands.add('createCollective', (name) => {
-	cy.get('a [title="Create new collective"]').click()
-	cy.get('.collective-create input[type="text"]').type(`${name}{enter}`)
-})
-
+/**
+ * Add a group to the circle of a collective
+ */
 Cypress.Commands.add('addGroupToCollective', ({ group, collective }) => {
 	cy.visit('/apps/contacts')
 	cy.contains('.app-navigation-entry a', collective).click()

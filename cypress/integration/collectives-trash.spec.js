@@ -28,7 +28,7 @@ describe('Collective', function() {
 	describe('move collective to trash and restore', function() {
 		before(function() {
 			cy.login('bob')
-			cy.seedCollective('Delete me')
+			cy.deleteAndSeedCollective('Delete me')
 		})
 		it('Allows moving the collective to trash', function() {
 			cy.visit('/apps/collectives')

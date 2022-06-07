@@ -27,7 +27,8 @@
 describe('Collective settings', function() {
 	before(function() {
 		cy.login('bob')
-		cy.seedCollective('Change me')
+		cy.deleteCollective('Change me now')
+		cy.deleteAndSeedCollective('Change me')
 	})
 
 	describe('set emoji', function() {

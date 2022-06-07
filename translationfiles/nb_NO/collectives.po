@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2022-05-04 10:23+0000\n"
+"POT-Creation-Date: 2022-05-30 22:31+0200\n"
 "PO-Revision-Date: 2021-06-10 08:02+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 4.7-dev\n"
 
-#. TRANSLATORS src/components/Page.vue:120
+#. TRANSLATORS src/components/Page.vue:122
 #. TRANSLATORS src/views/Home.vue:4
 #: /collectives/lib/Fs/UserFolderHelper.php:67
 #: /collectives/lib/Search/CollectiveProvider.php:60
@@ -113,7 +113,8 @@ msgstr ""
 "  eid av gemenskapen.\n"
 "* 📝 **Samarbeidsredigering av sider** som på Etherpad, takket være\n"
 "  [Tekst-programmet](https://github.com/nextcloud/text).\n"
-"* 🔤 **Velkjent [Markdown](https://en.wikipedia.org/wiki/Markdown)-syntaks**\n"
+"* 🔤 **Velkjent [Markdown](https://en.wikipedia.org/wiki/Markdown)-"
+"syntaks**\n"
 "  for sideformatering.\n"
 "\n"
 "##Installasjon\n"
@@ -147,7 +148,7 @@ msgstr "Velg et kollektiv, eller opprett ett til venstre."
 #. TRANSLATORS src/components/CollectivePrint.vue:11
 #: /collectives/specialVueFakeDummyForL10nScript.js:10
 #, fuzzy
-msgid "Preparing collective for printing"
+msgid "Preparing collective for exporting or printing"
 msgstr "Opprett kollektiv for eksisterende sirkel"
 
 #. TRANSLATORS src/components/CollectivePrint.vue:58
@@ -182,7 +183,7 @@ msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:51
 #: /collectives/specialVueFakeDummyForL10nScript.js:24
-msgid "Print"
+msgid "Export or print"
 msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:60
@@ -517,12 +518,12 @@ msgstr "Velg et kollektiv, eller opprett ett til venstre."
 msgid "Restore this version"
 msgstr "Gjenopprett denne versjonen"
 
-#. TRANSLATORS src/components/Page/Version.vue:115
+#. TRANSLATORS src/components/Page/Version.vue:119
 #: /collectives/specialVueFakeDummyForL10nScript.js:162
 msgid "Reverted {page} to revision {timestamp}."
 msgstr "Gjenoppretet {page} til versjon {timestamp}."
 
-#. TRANSLATORS src/components/Page/Version.vue:120
+#. TRANSLATORS src/components/Page/Version.vue:124
 #: /collectives/specialVueFakeDummyForL10nScript.js:164
 msgid "Failed to revert {page} to revision {timestamp}."
 msgstr "Klarte ikke å tilbakestille {page} til versjon {timestamp}."
@@ -557,7 +558,7 @@ msgstr "Ferdig"
 msgid "Edit"
 msgstr "Rediger"
 
-#. TRANSLATORS src/components/Page.vue:319
+#. TRANSLATORS src/components/Page.vue:351
 #: /collectives/specialVueFakeDummyForL10nScript.js:176
 msgid "Could not rename the page"
 msgstr "Kunne ikke gi siden nytt navn"
@@ -637,22 +638,22 @@ msgstr "Kunne ikke hente sideversjonering"
 msgid "Current version"
 msgstr "Nåværende versjon"
 
-#. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:50
+#. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:54
 #: /collectives/specialVueFakeDummyForL10nScript.js:216
 msgid "No other versions available"
 msgstr "Ingen andre versjoner tilgjengelig"
 
-#. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:52
+#. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:56
 #: /collectives/specialVueFakeDummyForL10nScript.js:218
 msgid "After editing you can find old versions of the page here."
 msgstr "Etter redigering kan du finne gamle versjoner av siden her."
 
-#. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:156
+#. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:160
 #: /collectives/specialVueFakeDummyForL10nScript.js:220
 msgid "Could not get page versions"
 msgstr "Kunne ikke hente sideversjonering"
 
-#. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:127
+#. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:131
 #: /collectives/specialVueFakeDummyForL10nScript.js:222
 #: /collectives/src/util/xmlToVersionsList.js:30
 msgid "%n byte"

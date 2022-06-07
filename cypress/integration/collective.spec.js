@@ -25,13 +25,18 @@
  */
 
 describe('Collective', function() {
+	const specialCollective = 'stupid !@#$%^&()_ special chars'
 
 	before(function() {
 		cy.login('bob')
-		cy.seedCollective('Preexisting Collective')
+		cy.deleteCollective('Preexisting Circle')
+		cy.deleteCollective('History Club')
+		cy.deleteCollective(specialCollective)
+		cy.deleteAndSeedCollective('Preexisting Collective')
 		cy.seedCircle('Preexisting Circle')
 		cy.seedCircle('History Club', { visible: true, open: true })
 		cy.login('jane')
+		cy.deleteCollective('Foreign Circle')
 		cy.seedCircle('Foreign Circle', { visible: true, open: true })
 	})
 
@@ -123,17 +128,15 @@ describe('Collective', function() {
 	})
 
 	describe('non ascii characters', function() {
-		const special = 'stupid !@#$%^&()_ special chars'
-
 		it('can handle special chars in collective name',
 			function() {
 				cy.login('bob')
-				cy.createCollective(special)
-				cy.get('#titleform input').invoke('val').should('contain', special)
+				cy.createCollective(specialCollective)
+				cy.get('#titleform input').invoke('val').should('contain', specialCollective)
 			})
 
 		after(function() {
-			cy.deleteCollective(special)
+			cy.deleteCollective(specialCollective)
 		})
 	})
 	// Note: the different assertions in here
@@ -143,12 +146,12 @@ describe('Collective', function() {
 	// So in all but the first run it block
 	// bob will be logged out.
 	describe('after creation', function() {
-		const name = 'Created just now ' + Math.random().toString(36).substr(2, 4)
+		const randomName = 'Created just now ' + Math.random().toString(36).substr(2, 4)
 		it('has all the ui elements', function() {
 			cy.login('bob')
-			cy.createCollective(name)
+			cy.createCollective(randomName)
 			cy.log('Check name in the disabled titleform')
-			cy.get('#titleform input').invoke('val').should('contain', name)
+			cy.get('#titleform input').invoke('val').should('contain', randomName)
 			cy.get('#titleform input').should('have.attr', 'disabled')
 			cy.log('Check initial Readme.md')
 			cy.get('#text h1').should('contain', 'Welcome to your new collective')
@@ -157,6 +160,7 @@ describe('Collective', function() {
 				.trigger('mouseover')
 			cy.get('.app-content-list button.icon-add')
 				.should('contain', 'Add a page')
+			cy.deleteCollective(randomName)
 		})
 	})
 
