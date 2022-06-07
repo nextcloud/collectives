@@ -27,7 +27,7 @@
 describe('Settings', function() {
 	before(function() {
 		cy.login('bob')
-		cy.seedCollective('A Collective')
+		cy.deleteAndSeedCollective('A Collective')
 	})
 
 	describe('Collectives folder setting', function() {

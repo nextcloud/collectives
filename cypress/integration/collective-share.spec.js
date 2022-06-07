@@ -29,7 +29,7 @@ describe('Collective Share', function() {
 
 	before(function() {
 		cy.login('bob')
-		cy.seedCollective('Share me')
+		cy.deleteAndSeedCollective('Share me')
 	})
 
 	describe('collective share', function() {

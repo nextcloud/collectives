@@ -98,6 +98,7 @@ Cypress.Commands.add('deleteCollective', (name) => {
 		.then(async app => {
 			const id = app.$store.state.collectives.collectives.find(c => c.name === name)?.id
 			if (id) {
+				cy.log(`Deleting collective ${name}`)
 				await app.$store.dispatch(TRASH_COLLECTIVE, { id })
 				await app.$store.dispatch(DELETE_COLLECTIVE, { id, circle: true })
 			}
@@ -160,13 +161,20 @@ Cypress.Commands.add('seedCircle', (name, config = null) => {
 	cy.window()
 		.its('app')
 		.then(async app => {
+			await app.$store.dispatch(GET_CIRCLES)
+			const circle = app.$store.state.circles.circles.find(c => c.sanitizedName === name)
 			const api = `${Cypress.env('baseUrl')}/ocs/v2.php/apps/circles/circles`
-			const response = await axios.post(api,
-				{ name, personal: false, local: true },
-				{ headers: { requesttoken: app.OC.requestToken } },
-			)
+			let circleId
+			if (!circle) {
+				const response = await axios.post(api,
+					{ name, personal: false, local: true },
+					{ headers: { requesttoken: app.OC.requestToken } },
+				)
+				circleId = response.data.ocs.data.id
+			} else {
+				circleId = circle.id
+			}
 			if (config) {
-				const circleId = response.data.ocs.data.id
 				// For now we only set the visibility
 				const bits = [
 					['visible', 8],
@@ -191,7 +199,7 @@ Cypress.Commands.add('seedCircleMember', (name, userId) => {
 		.its('app')
 		.then(async app => {
 			await app.$store.dispatch(GET_CIRCLES)
-			const circleId = app.$store.state.circles.circles.find(c => c.name === name).id
+			const circleId = app.$store.state.circles.circles.find(c => c.sanitizedName === name).id
 			const api = `${Cypress.env('baseUrl')}/ocs/v2.php/apps/circles/circles/${circleId}/members`
 			await axios.post(api,
 				{ userId, type: 1 },

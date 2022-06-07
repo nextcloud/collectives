@@ -24,7 +24,7 @@ describe('Read-only collective', function() {
 
 	before(function() {
 		cy.login('alice')
-		cy.seedCollective('PermissionCollective')
+		cy.deleteAndSeedCollective('PermissionCollective')
 		cy.seedPage('SecondPage', '', 'Readme.md')
 		cy.seedCollectivePermissions('PermissionCollective', 'edit', 4)
 		cy.seedCircleMember('PermissionCollective', 'bob')
