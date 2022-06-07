@@ -36,14 +36,15 @@ class CollectiveHelper {
 	public function getCollectivesForUser(string $userId, bool $getLevel = true): array {
 		$collectiveInfos = [];
 		$circles = $this->circleHelper->getCircles($userId);
-		foreach ($circles as $circle) {
-			$cid = $circle->getSingleId();
-			if (null !== $c = $this->collectiveMapper->findByCircleId($cid)) {
-				$level = $getLevel ? $this->circleHelper->getLevel($c->getCircleId(), $userId): 0;
-				$collectiveInfos[] = new CollectiveInfo($c,
-					$circle->getSanitizedName(),
-					$level);
-			}
+		$cids = array_map(fn($circle) => $circle->getUniqueId(), $circles);
+		$circles = array_combine($cids, $circles);
+		$collectives = $this->collectiveMapper->findByCircleIds($cids);
+		foreach ($collectives as $c) {
+			$cid = $c->getCircleId();
+			$level = $getLevel ? $this->circleHelper->getLevel($cid, $userId): 0;
+			$collectiveInfos[] = new CollectiveInfo($c,
+				$circles[$cid]->getSanitizedName(),
+				$level);
 		}
 		return $collectiveInfos;
 	}
