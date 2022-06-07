@@ -44,6 +44,4 @@ AGPL v3 or later. See [COPYING](COPYING) for the full licence text.
 The app logo and page icons were designed and contributed by Jörg Schmidt
 from Institut für Gebrauchsgrafik <info@institut.gebrauchsgrafik.org>.
 
-For rendering the page previews we reuse the [checkbox mark](https://github.com/nextcloud/text/blob/master/img/checkbox-mark.svg) from the [text app](https://github.com/nextcloud/text).
-
 We also use [Material Icons](https://fonts.google.com/icons?selected=Material) such as [Access Time](https://fonts.google.com/icons?selected=Material%20Icons%3Aaccess_time) and [Sort by Alpha](https://fonts.google.com/icons?selected=Material%20Icons%3Asort_by_alpha).
