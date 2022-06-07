@@ -12,12 +12,12 @@
 			@[isClickable]="toggleCollapsed(pageId)">
 			<slot name="icon">
 				<template v-if="isTemplate">
-					<PagesTemplateIcon v-if="isCollapsible" size="26" fill-color="var(--color-main-background)" />
-					<PageTemplateIcon v-else size="26" fill-color="var(--color-main-background)" />
+					<PagesTemplateIcon v-if="isCollapsible" :size="26" fill-color="var(--color-main-background)" />
+					<PageTemplateIcon v-else :size="26" fill-color="var(--color-main-background)" />
 				</template>
 				<template v-else>
-					<PagesIcon v-if="isCollapsible" size="26" fill-color="var(--color-main-background)" />
-					<PageIcon v-else size="26" fill-color="var(--color-main-background)" />
+					<PagesIcon v-if="isCollapsible" :size="26" fill-color="var(--color-main-background)" />
+					<PageIcon v-else :size="26" fill-color="var(--color-main-background)" />
 				</template>
 			</slot>
 			<TriangleIcon v-if="isCollapsible"

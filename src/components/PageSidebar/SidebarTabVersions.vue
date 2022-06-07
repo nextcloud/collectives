@@ -17,7 +17,7 @@
 				<div class="app-content-list-item"
 					:class="{active: !version}">
 					<div class="app-content-list-item-icon item-icon-page">
-						<PageIcon size="26" fill-color="var(--color-main-background)" />
+						<PageIcon :size="26" fill-color="var(--color-main-background)" />
 					</div>
 					<div class="app-content-list-item-line-one" :title="pageFormattedTimestamp">
 						{{ t('collectives', 'Current version') }}
@@ -37,7 +37,7 @@
 						<div class="icon-loading" />
 					</div>
 					<div v-else class="app-content-list-item-icon item-icon-page">
-						<PageIcon size="26" fill-color="var(--color-main-background)" />
+						<PageIcon :size="26" fill-color="var(--color-main-background)" />
 					</div>
 					<div class="app-content-list-item-line-one live-relative-timestamp" :data-timestamp="v.millisecondsTimestamp" :title="v.formattedTimestamp">
 						{{ v.relativeTimestamp }}

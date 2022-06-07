@@ -18,7 +18,7 @@
 				:to="pagePath(backlinkPage)">
 				<div class="app-content-list-item">
 					<div class="app-content-list-item-icon">
-						<PageIcon size="26" fill-color="var(--color-main-background)" />
+						<PageIcon :size="26" fill-color="var(--color-main-background)" />
 					</div>
 					<div class="app-content-list-item-line-one">
 						{{ pagePathTitle(backlinkPage) }}

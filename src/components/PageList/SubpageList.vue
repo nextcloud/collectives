@@ -26,7 +26,7 @@
 					:close-after-click="true"
 					@click="editTemplate(page.id)">
 					<template #icon>
-						<PagesTemplateIcon size="14" />
+						<PagesTemplateIcon :size="14" />
 					</template>
 					{{ editTemplateString }}
 				</ActionButton>

@@ -10,14 +10,14 @@
 				{{ collective.emoji }}
 			</template>
 			<template v-else>
-				<CollectivesIcon size="20" />
+				<CollectivesIcon :size="20" />
 			</template>
 		</template>
 		<template #actions>
 			<ActionLink v-if="showManageMembers"
 				:href="circleLink">
 				<template #icon>
-					<CirclesIcon size="16" />
+					<CirclesIcon :size="16" />
 				</template>
 				{{ t('collectives', 'Manage members') }}
 			</ActionLink>

@@ -12,7 +12,7 @@
 					:title="showTemplates ? t('collectives', 'Hide templates') : t('collectives', 'Show templates')"
 					@click="toggleTemplates()">
 					<template #icon>
-						<PagesTemplateIcon size="12" :fill-color="showTemplates ? 'currentColor' : 'var(--color-text-lighter)'" />
+						<PagesTemplateIcon :size="12" :fill-color="showTemplates ? 'currentColor' : 'var(--color-text-lighter)'" />
 					</template>
 				</ActionButton>
 			</Actions>
@@ -76,7 +76,7 @@
 						:close-after-click="true"
 						@click="editTemplate(collectivePage.id)">
 						<template #icon>
-							<PagesTemplateIcon size="14" />
+							<PagesTemplateIcon :size="14" />
 						</template>
 						{{ editTemplateString }}
 					</ActionButton>
