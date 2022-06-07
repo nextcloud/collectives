@@ -17,7 +17,7 @@
 				<div class="app-content-list-item"
 					:class="{active: !version}">
 					<div class="app-content-list-item-icon item-icon-page">
-						<div class="icon-page-white" />
+						<PageIcon size="26" fill-color="var(--color-main-background)" />
 					</div>
 					<div class="app-content-list-item-line-one" :title="pageFormattedTimestamp">
 						{{ t('collectives', 'Current version') }}
@@ -37,7 +37,7 @@
 						<div class="icon-loading" />
 					</div>
 					<div v-else class="app-content-list-item-icon item-icon-page">
-						<div class="icon-page-white" />
+						<PageIcon size="26" fill-color="var(--color-main-background)" />
 					</div>
 					<div class="app-content-list-item-line-one live-relative-timestamp" :data-timestamp="v.millisecondsTimestamp" :title="v.formattedTimestamp">
 						{{ v.relativeTimestamp }}
@@ -65,6 +65,7 @@ import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 import moment from '@nextcloud/moment'
 import { formatFileSize } from '@nextcloud/files'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
+import PageIcon from '../Icon/PageIcon'
 import { SELECT_VERSION } from '../../store/mutations'
 import { GET_VERSIONS } from '../../store/actions'
 
@@ -74,6 +75,7 @@ export default {
 	 components: {
 		AppContentList,
 		EmptyContent,
+		PageIcon,
 	},
 
 	props: {
@@ -192,8 +194,8 @@ export default {
 	left: 12px;
 
 	&.item-icon-page {
+		display: flex;
 		height: 34px;
-		font-size: 24px;
 		background-color: var(--color-background-darker);
 		border-radius: 4px;
 	}
@@ -201,10 +203,6 @@ export default {
 	&.item-icon-loading {
 		padding-top: 10px;
 	}
-}
-
-.app-content-list-item .app-content-list-item-icon div {
-	border-radius: 3px 12px 3px 3px;
 }
 
 .app-content-list .app-content-list-item .app-content-list-item-line-one {

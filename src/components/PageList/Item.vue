@@ -12,7 +12,10 @@
 			@[isClickable]="toggleCollapsed(pageId)">
 			<slot name="icon">
 				<div v-if="isTemplate" :class="isCollapsible ? 'icon-pages-template-white' : 'icon-page-template-white'" />
-				<div v-else :class="isCollapsible ? 'icon-pages-white' : 'icon-page-white'" />
+				<template v-else>
+					<PagesIcon v-if="isCollapsible" size="26" fill-color="var(--color-main-background)" />
+					<PageIcon v-else size="26" fill-color="var(--color-main-background)" />
+				</template>
 			</slot>
 			<TriangleIcon v-if="isCollapsible"
 				v-show="!filteredView"
@@ -46,6 +49,8 @@ import isMobile from '@nextcloud/vue/dist/Mixins/isMobile'
 import { generateUrl } from '@nextcloud/router'
 import { mapGetters, mapMutations } from 'vuex'
 import TriangleIcon from 'vue-material-design-icons/Triangle'
+import PageIcon from '../Icon/PageIcon'
+import PagesIcon from '../Icon/PagesIcon'
 import { scrollToPage } from '../../util/scrollToElement'
 
 export default {
@@ -53,6 +58,8 @@ export default {
 
 	components: {
 		Actions,
+		PageIcon,
+		PagesIcon,
 		TriangleIcon,
 	},
 
@@ -160,6 +167,7 @@ export default {
 
 <style lang="scss" scoped>
 .app-content-list-item .app-content-list-item-icon {
+	display: flex;
 	line-height: 40px;
 	width: 26px;
 	height: 34px;
@@ -167,10 +175,6 @@ export default {
 	font-size: 24px;
 	background-color: var(--color-background-darker);
 	border-radius: 4px;
-}
-
-.app-content-list-item .app-content-list-item-icon div {
-	border-radius: 3px 12px 3px 3px;
 }
 
 .app-content-list .app-content-list-item .app-content-list-item-line-one {
@@ -225,6 +229,10 @@ div.app-content-list-item {
 	width: 100%;
 	overflow: hidden;
 	text-overflow: ellipsis;
+}
+
+.page-icon-outer {
+	display: flex;
 }
 
 // Set pointer cursor on page icon if isCollapsible

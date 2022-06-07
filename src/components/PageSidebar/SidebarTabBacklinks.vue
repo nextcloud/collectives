@@ -18,7 +18,7 @@
 				:to="pagePath(backlinkPage)">
 				<div class="app-content-list-item">
 					<div class="app-content-list-item-icon">
-						<div class="icon-page-white" />
+						<PageIcon size="26" fill-color="var(--color-main-background)" />
 					</div>
 					<div class="app-content-list-item-line-one">
 						{{ pagePathTitle(backlinkPage) }}
@@ -45,6 +45,7 @@ import AppContentList from '@nextcloud/vue/dist/Components/AppContentList'
 import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 import moment from '@nextcloud/moment'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
+import PageIcon from '../Icon/PageIcon'
 import { GET_BACKLINKS } from '../../store/actions'
 
 export default {
@@ -53,6 +54,7 @@ export default {
 	 components: {
 		AppContentList,
 		EmptyContent,
+		PageIcon,
 	},
 
 	props: {
@@ -128,6 +130,7 @@ export default {
 }
 
 .app-content-list-item .app-content-list-item-icon {
+	display: flex;
 	line-height: 40px;
 	width: 26px;
 	height: 34px;
@@ -135,10 +138,6 @@ export default {
 	font-size: 24px;
 	background-color: var(--color-background-darker);
 	border-radius: 4px;
-}
-
-.app-content-list-item .app-content-list-item-icon div {
-	border-radius: 3px 12px 3px 3px;
 }
 
 .app-content-list .app-content-list-item .app-content-list-item-line-one {
