@@ -1,29 +1,21 @@
 @include icon-black-white('circles', 'circles', 1);
-@include icon-black-white('page', 'collectives', 1);
-@include icon-black-white('pages', 'collectives', 1);
 @include icon-black-white('page-template', 'collectives', 1);
 @include icon-black-white('pages-template', 'collectives', 1);
 @include icon-black-white('page-template-white', 'collectives', 1);
 @include icon-black-white('pages-template-white', 'collectives', 1);
 @include icon-black-white('pages-template-grey', 'collectives', 1);
 @include icon-black-white('pages-template-dark-grey', 'collectives', 1);
-@include icon-black-white('page-white', 'collectives', 1);
-@include icon-black-white('pages-white', 'collectives', 1);
-
-.icon-collectives {
-	@include icon-color('app', 'collectives', '#000', 1);
-}
 
 .icon-circles {
 	background-size: 16px;
 }
 
-.icon-page-white, .icon-pages-white, .icon-page-template-white, .icon-pages-template-white {
+.icon-page-template-white, .icon-pages-template-white {
 	background-size: 20px;
 	width: 26px;
 	height: 34px;
 }
 
-.icon-page, .icon-pages, .icon-page-template, .icon-pages-template, .icon-pages-templates-dark-grey {
+.icon-page-template, .icon-pages-template, .icon-pages-templates-dark-grey {
 	background-size: 44px;
 }

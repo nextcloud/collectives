@@ -3,11 +3,15 @@
 		:title="collective.name"
 		:class="{active: isActive(collective)}"
 		:to="`/${encodeURIComponent(collective.name)}`"
-		:icon="icon"
 		:force-menu="true"
 		class="collectives_list_item">
-		<template v-if="collective.emoji" #icon>
-			{{ collective.emoji }}
+		<template #icon>
+			<template v-if="collective.emoji">
+				{{ collective.emoji }}
+			</template>
+			<template v-else>
+				<CollectivesIcon size="20" />
+			</template>
 		</template>
 		<template #actions>
 			<ActionLink v-if="showManageMembers"
@@ -80,6 +84,7 @@ import { generateUrl } from '@nextcloud/router'
 import CopyToClipboardMixin from '../../mixins/CopyToClipboardMixin'
 import DownloadIcon from 'vue-material-design-icons/Download'
 import CollectiveSettings from './CollectiveSettings'
+import CollectivesIcon from '../Icon/CollectivesIcon'
 
 export default {
 	name: 'CollectiveListItem',
@@ -91,6 +96,7 @@ export default {
 		ActionSeparator,
 		AppNavigationItem,
 		CollectiveSettings,
+		CollectivesIcon,
 		DownloadIcon,
 	},
 
@@ -214,9 +220,5 @@ export default {
 <style lang="scss" scoped>
 ::v-deep .app-navigation-entry-icon {
 	font-size: 20px;
-
-	&.icon-collectives {
-		background-size: 20px 20px;
-	}
 }
 </style>
