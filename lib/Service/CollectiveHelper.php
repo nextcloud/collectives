@@ -36,7 +36,7 @@ class CollectiveHelper {
 	public function getCollectivesForUser(string $userId, bool $getLevel = true): array {
 		$collectiveInfos = [];
 		$circles = $this->circleHelper->getCircles($userId);
-		$cids = array_map(fn($circle) => $circle->getUniqueId(), $circles);
+		$cids = array_map(function($circle) { return $circle->getUniqueId(); }, $circles);
 		$circles = array_combine($cids, $circles);
 		$collectives = $this->collectiveMapper->findByCircleIds($cids);
 		foreach ($collectives as $c) {
