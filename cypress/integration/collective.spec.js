@@ -97,7 +97,7 @@ describe('Collective', function() {
 		it('creates collectives by picking circle',
 			function() {
 				cy.login('bob')
-				cy.get('button.icon-circles').click()
+				cy.get('button.action-item > span.circles-icon').click()
 				cy.get('.multiselect__option').should('not.contain', 'Foreign')
 				cy.get('.multiselect__option [title*=History]').click()
 				cy.get('input.icon-confirm').click()
@@ -109,7 +109,6 @@ describe('Collective', function() {
 		it('collectives of visible circles only show for members',
 			function() {
 				cy.login('jane')
-				cy.get('button.icon-circles')
 				cy.get('.app-navigation-entry').should('not.contain', 'History Club')
 			})
 		it('creates collectives for admins of corresponding circle',

@@ -432,7 +432,7 @@ export default {
 }
 
 @media print {
-	.edit-button, .action-item {
+	.titleform-button, .action-item {
 		display: none !important;
 	}
 }

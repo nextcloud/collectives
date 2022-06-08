@@ -77,7 +77,7 @@ describe('Collective Share', function() {
 			cy.logout()
 			cy.visit(shareUrl)
 			cy.get('#titleform input').should('have.value', 'Share me')
-			cy.get('button.edit-button').should('not.exist')
+			cy.get('button.titleform-button').should('not.exist')
 			cy.get('#text h1').should('contain', 'Welcome to your new collective')
 			cy.get('.app-content-list-item.toplevel')
 				.get('button.icon.add').should('not.exist')
@@ -108,7 +108,7 @@ describe('Collective Share', function() {
 				.type('New page')
 			cy.get('#editor > > .editor__content > div.ProseMirror', { timeout: Cypress.config('defaultCommandTimeout') * 2 })
 				.type('New content')
-			cy.get('button.edit-button')
+			cy.get('button.titleform-button')
 				.click()
 		})
 		it('Allows unsharing a collective', function() {

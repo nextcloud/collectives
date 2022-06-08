@@ -118,7 +118,7 @@ describe('Page', function() {
 			}
 
 			cy.log('Changing to read mode')
-			cy.get('button.edit-button')
+			cy.get('button.titleform-button')
 				.click()
 			cy.get('#editor > > .editor__content > .ProseMirror').should('not.be.visible')
 			cy.get('#read-only-editor.editor__content > .ProseMirror').should('be.visible')
