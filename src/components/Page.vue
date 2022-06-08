@@ -21,14 +21,19 @@
 					:disabled="!currentCollectiveCanEdit"
 					@blur="renamePageOnBlur();">
 			</form>
-			<button v-if="currentCollectiveCanEdit"
-				class="edit-button primary"
-				:title="editMode ? t('collectives', 'Stop editing') : t('collectives', 'Start editing')"
+			<Button v-if="currentCollectiveCanEdit"
+				v-tooltip="editMode ? t('collectives', 'Stop editing') : t('collectives', 'Start editing')"
+				:aria-label="editMode ? t('collectives', 'Stop editing') : t('collectives', 'Start editing')"
+				class="titleform-button"
+				type="primary"
 				@click="editMode ? stopEdit() : startEdit()">
-				<span class="icon icon-white"
-					:class="`icon-${toggleIcon}`" />
+				<template #icon>
+					<LoadingIcon v-if="loading('pageUpdate') || waitForEditor" class="animation-rotate" :size="20" />
+					<CheckIcon v-else-if="editMode" :size="20" />
+					<PencilIcon v-else :size="20" />
+				</template>
 				{{ editMode && !waitForEditor ? t('collectives', 'Done') : t('collectives', 'Edit') }}
-			</button>
+			</Button>
 			<PageActions v-if="currentCollectiveCanEdit" />
 			<Actions v-show="!showing('sidebar')">
 				<ActionButton icon="icon-menu-sidebar"
@@ -53,6 +58,11 @@
 <script>
 import Actions from '@nextcloud/vue/dist/Components/Actions'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
+import Button from '@nextcloud/vue/dist/Components/Button'
+import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip'
+import CheckIcon from 'vue-material-design-icons/Check'
+import LoadingIcon from 'vue-material-design-icons/Loading'
+import PencilIcon from 'vue-material-design-icons/Pencil'
 import Editor from './Page/Editor'
 import RichText from './Page/RichText'
 import PageActions from './Page/PageActions'
@@ -74,9 +84,17 @@ export default {
 	components: {
 		ActionButton,
 		Actions,
+		Button,
+		CheckIcon,
 		Editor,
+		LoadingIcon,
+		PencilIcon,
 		RichText,
 		PageActions,
+	},
+
+	directives: {
+		Tooltip,
 	},
 
 	mixins: [
@@ -130,14 +148,6 @@ export default {
 				}
 			}
 			return parts.join(' - ')
-		},
-
-		toggleIcon() {
-			if (this.loading('pageUpdate') || this.waitForEditor) {
-				return 'loading-small'
-			} else {
-				return this.editMode ? 'checkmark' : 'rename'
-			}
 		},
 
 		showRichText() {
@@ -413,14 +423,12 @@ export default {
 	z-index: 1;
 }
 
-.edit-button {
-	min-width: max-content;
+.titleform-button {
 	height: 44px;
+}
 
-	.icon {
-		opacity: 1;
-		margin-right: 8px;
-	}
+.animation-rotate {
+	animation: rotate var(--animation-duration, 0.8s) linear infinite;
 }
 
 @media print {

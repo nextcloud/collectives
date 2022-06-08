@@ -5,12 +5,15 @@
 				type="text"
 				disabled
 				:value="versionTitle">
-			<button class="restore-button warn"
-				:title="t('collectives', 'Restore this version')"
+			<Button v-tooltip="t('collectives', 'Restore this version')"
+				:aria-label="t('collectives', 'Restore this version')"
+				class="titleform-button"
 				@click="revertVersion">
-				<span class="icon icon-history" />
+				<template #icon>
+					<RestoreIcon :size="20" />
+				</template>
 				{{ t('collectives', 'Restore') }}
-			</button>
+			</Button>
 			<Actions>
 				<ActionButton icon="icon-menu-sidebar"
 					:close-after-click="true"
@@ -28,6 +31,9 @@
 <script>
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import Actions from '@nextcloud/vue/dist/Components/Actions'
+import Button from '@nextcloud/vue/dist/Components/Button'
+import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip'
+import RestoreIcon from 'vue-material-design-icons/Restore'
 import RichText from './RichText'
 
 import { getCurrentUser } from '@nextcloud/auth'
@@ -45,7 +51,13 @@ export default {
 	components: {
 		ActionButton,
 		Actions,
+		Button,
+		RestoreIcon,
 		RichText,
+	},
+
+	directives: {
+		Tooltip,
 	},
 
 	mixins: [
@@ -138,14 +150,8 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.restore-button {
-	min-width: max-content;
+<style scoped>
+.titleform-button {
 	height: 44px;
-
-	.icon {
-		opacity: 1;
-		margin-right: 8px;
-	}
 }
 </style>
