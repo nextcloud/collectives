@@ -6,10 +6,12 @@
 		</div>
 
 		<!-- error message -->
-		<div v-else-if="error" class="emptycontent">
-			<div class="icon icon-error" />
+		<EmptyContent v-else-if="error">
+			<template #icon>
+				<AlertOctagonIcon />
+			</template>
 			<h2>{{ error }}</h2>
-		</div>
+		</EmptyContent>
 
 		<!-- versions list -->
 		<template v-else-if="!loading('versions') && versions.length">
@@ -50,7 +52,10 @@
 		</template>
 
 		<!-- no versions found -->
-		<EmptyContent v-else icon="icon-history">
+		<EmptyContent v-else>
+			<template #icon>
+				<RestoreIcon />
+			</template>
 			<h2>{{ t('collectives', 'No other versions available') }}</h2>
 			<template #desc>
 				{{ t( 'collectives', 'After editing you can find old versions of the page here.') }}
@@ -66,16 +71,20 @@ import moment from '@nextcloud/moment'
 import { formatFileSize } from '@nextcloud/files'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import PageIcon from '../Icon/PageIcon'
+import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagon'
+import RestoreIcon from 'vue-material-design-icons/Restore'
 import { SELECT_VERSION } from '../../store/mutations'
 import { GET_VERSIONS } from '../../store/actions'
 
 export default {
 	name: 'SidebarTabVersions',
 
-	 components: {
+	components: {
+		AlertOctagonIcon,
 		AppContentList,
 		EmptyContent,
 		PageIcon,
+		RestoreIcon,
 	},
 
 	props: {

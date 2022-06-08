@@ -6,10 +6,12 @@
 		</div>
 
 		<!-- error message -->
-		<div v-else-if="error" class="emptycontent">
-			<div class="icon icon-error" />
+		<EmptyContent v-else-if="error">
+			<template #icon>
+				<AlertOctagonIcon />
+			</template>
 			<h2>{{ error }}</h2>
-		</div>
+		</EmptyContent>
 
 		<!-- backlinks list -->
 		<template v-else-if="!loading('backlinks') && backlinks.length">
@@ -31,7 +33,10 @@
 		</template>
 
 		<!-- no backlinks found -->
-		<EmptyContent v-else icon="icon-search">
+		<EmptyContent v-else>
+			<template #icon>
+				<MagnifyIcon />
+			</template>
 			<h2>{{ t('collectives', 'No backlinks available') }}</h2>
 			<template #desc>
 				{{ t( 'collectives', 'If other pages link to this one, they will be listed here.') }}
@@ -45,15 +50,19 @@ import AppContentList from '@nextcloud/vue/dist/Components/AppContentList'
 import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 import moment from '@nextcloud/moment'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
+import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagon'
+import MagnifyIcon from 'vue-material-design-icons/Magnify'
 import PageIcon from '../Icon/PageIcon'
 import { GET_BACKLINKS } from '../../store/actions'
 
 export default {
 	name: 'SidebarTabBacklinks',
 
-	 components: {
+	components: {
+		AlertOctagonIcon,
 		AppContentList,
 		EmptyContent,
+		MagnifyIcon,
 		PageIcon,
 	},
 
