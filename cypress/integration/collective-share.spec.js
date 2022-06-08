@@ -100,11 +100,16 @@ describe('Collective Share', function() {
 		it('Allows opening and editing a shared (editable) collective', function() {
 			cy.logout()
 			cy.visit(shareUrl)
+			// Do some handstands to ensure that new page with editor is loaded before we edit the title
 			cy.intercept('POST', '**/_api/p/*/_pages/parent/*').as('createPage')
+			cy.intercept('PUT', '**/apps/text/public/session/create').as('textCreateSession')
 			cy.contains('.app-content-list-item', 'Share me')
 				.find('button.icon-add')
 				.click()
 			cy.wait('@createPage')
+			cy.wait('@textCreateSession')
+			cy.get('.editor__content > .ProseMirror')
+				.should('be.visible')
 			cy.get('#titleform input.title')
 				.should('not.have.attr', 'disabled')
 			cy.get('#titleform input.title')
