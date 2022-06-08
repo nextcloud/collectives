@@ -1,4 +1,5 @@
 import {
+	GET_COLLECTIVES,
 	NEW_COLLECTIVE,
 	TRASH_COLLECTIVE,
 	DELETE_COLLECTIVE,
@@ -96,6 +97,7 @@ Cypress.Commands.add('deleteCollective', (name) => {
 	cy.window()
 		.its('app')
 		.then(async app => {
+			await app.$store.dispatch(GET_COLLECTIVES)
 			const id = app.$store.state.collectives.collectives.find(c => c.name === name)?.id
 			if (id) {
 				cy.log(`Deleting collective ${name}`)
