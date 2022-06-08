@@ -15,9 +15,11 @@
 			{{ t('collectives', 'Edit template for subpages') }}
 		</ActionButton>
 		<ActionButton v-if="!landingPage"
-			icon="icon-delete"
 			:close-after-click="true"
 			@click="deletePage">
+			<template #icon>
+				<DeleteIcon :size="20" />
+			</template>
 			{{ t('collectives', 'Delete page') }}
 		</ActionButton>
 	</Actions>
@@ -31,6 +33,7 @@ import ActionLink from '@nextcloud/vue/dist/Components/ActionLink'
 import { mapActions, mapGetters } from 'vuex'
 import { generateUrl } from '@nextcloud/router'
 import { showSuccess, showError } from '@nextcloud/dialogs'
+import DeleteIcon from 'vue-material-design-icons/Delete'
 import PagesTemplateIcon from '../Icon/PagesTemplateIcon'
 import { DELETE_PAGE } from '../../store/actions'
 import pageMixin from '../../mixins/pageMixin'
@@ -42,6 +45,7 @@ export default {
 		Actions,
 		ActionButton,
 		ActionLink,
+		DeleteIcon,
 		PagesTemplateIcon,
 	},
 
