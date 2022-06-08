@@ -100,9 +100,11 @@ describe('Collective Share', function() {
 		it('Allows opening and editing a shared (editable) collective', function() {
 			cy.logout()
 			cy.visit(shareUrl)
+			cy.intercept('POST', '**/_api/p/*/_pages/parent/*').as('createPage')
 			cy.contains('.app-content-list-item', 'Share me')
 				.find('button.icon-add')
 				.click()
+			cy.wait('@createPage')
 			cy.get('#titleform input.title')
 				.should('have.value', '')
 				.type('New page')

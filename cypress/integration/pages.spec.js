@@ -73,9 +73,11 @@ describe('Page', function() {
 
 	describe('Creating a page from template', function() {
 		it('New page has template content', function() {
+			cy.intercept('POST', '**/_api/*/_pages/parent/*').as('createPage')
 			cy.contains('.app-content-list-item', 'Our Garden')
 				.find('button.icon-add')
 				.click()
+			cy.wait('@createPage')
 			cy.get('#titleform input.title')
 				.should('have.value', '')
 				.type('New page from Template{enter}')
@@ -87,9 +89,11 @@ describe('Page', function() {
 
 	describe('Creating a new subpage', function() {
 		it('Shows the title in the enabled titleform and full path in browser title', function() {
+			cy.intercept('POST', '**/_api/*/_pages/parent/*').as('createPage')
 			cy.contains('.app-content-list-item', '#% special chars')
 				.find('button.icon-add')
 				.click({ force: true })
+			cy.wait('@createPage')
 			cy.get('#titleform input.title')
 				.should('have.value', '')
 				.type('Subpage Title{enter}')
@@ -111,7 +115,7 @@ describe('Page', function() {
 			// Only run image tests on Nextcloud 24+
 			if (!['22', '23'].includes(String(Cypress.env('ncVersion')))) {
 				cy.log('Inserting an image')
-				cy.intercept({ method: 'POST', url: '**/upload' }).as('imageUpload')
+				cy.intercept({ method: 'POST', url: '**upload' }).as('imageUpload')
 				cy.get('.menubar > input[type="file"]')
 					.selectFile('cypress/fixtures/test.png', { force: true })
 				cy.wait('@imageUpload')
