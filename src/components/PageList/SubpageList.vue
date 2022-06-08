@@ -22,10 +22,12 @@
 					{{ t('collectives', 'Add a subpage') }}
 				</ActionButton>
 				<ActionButton v-if="showTemplates && !isTemplate"
-					icon="icon-pages-template-dark-grey"
 					class="action-button__template"
 					:close-after-click="true"
 					@click="editTemplate(page.id)">
+					<template #icon>
+						<PagesTemplateIcon :size="14" />
+					</template>
 					{{ editTemplateString }}
 				</ActionButton>
 			</template>
@@ -50,6 +52,7 @@
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import LastUpdate from './LastUpdate'
 import Item from './Item'
+import PagesTemplateIcon from '../Icon/PagesTemplateIcon'
 
 import { mapGetters, mapMutations } from 'vuex'
 import pageMixin from '../../mixins/pageMixin'
@@ -59,8 +62,9 @@ export default {
 
 	components: {
 		ActionButton,
-		LastUpdate,
 		Item,
+		LastUpdate,
+		PagesTemplateIcon,
 	},
 
 	mixins: [
@@ -171,10 +175,5 @@ export default {
 <style lang="scss" scoped>
 .app-content-list {
 	padding-top: 40px;
-}
-
-// template icon appears too big with default size (16px)
-.action-button__template::v-deep .icon-pages-template-dark-grey {
-	background-size: 14px;
 }
 </style>

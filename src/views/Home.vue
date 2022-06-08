@@ -7,9 +7,11 @@
 			</template>
 		</EmptyContent>
 		<div class="new_collective">
-			<button :class="{ primary }" @click="newCollective">
+			<Button :aria-label="t('collectives', 'Create new collective')"
+				:type="buttonType"
+				@click="newCollective">
 				{{ t('collectives', 'Create new collective') }}
-			</button>
+			</Button>
 		</div>
 	</AppContent>
 </template>
@@ -18,6 +20,7 @@
 
 import { emit } from '@nextcloud/event-bus'
 import AppContent from '@nextcloud/vue/dist/Components/AppContent'
+import Button from '@nextcloud/vue/dist/Components/Button'
 import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile'
 import { mapGetters } from 'vuex'
@@ -27,6 +30,7 @@ export default {
 
 	components: {
 		AppContent,
+		Button,
 		EmptyContent,
 	},
 
@@ -36,7 +40,7 @@ export default {
 
 	data() {
 		return {
-			primary: true,
+			buttonType: 'primary',
 		}
 	},
 
@@ -50,7 +54,7 @@ export default {
 		newCollective() {
 			emit('toggle-navigation', { open: true })
 			emit('start-new-collective')
-			this.primary = false
+			this.buttonType = 'secondary'
 		},
 	},
 
@@ -59,8 +63,8 @@ export default {
 
 <style scoped>
 .new_collective {
-	text-align: center;
-	width: 100%;
+	display: flex;
+	justify-content: center;
 	margin-top: 10px;
 }
 </style>

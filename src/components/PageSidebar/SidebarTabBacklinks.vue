@@ -6,10 +6,12 @@
 		</div>
 
 		<!-- error message -->
-		<div v-else-if="error" class="emptycontent">
-			<div class="icon icon-error" />
+		<EmptyContent v-else-if="error">
+			<template #icon>
+				<AlertOctagonIcon />
+			</template>
 			<h2>{{ error }}</h2>
-		</div>
+		</EmptyContent>
 
 		<!-- backlinks list -->
 		<template v-else-if="!loading('backlinks') && backlinks.length">
@@ -18,7 +20,7 @@
 				:to="pagePath(backlinkPage)">
 				<div class="app-content-list-item">
 					<div class="app-content-list-item-icon">
-						<div class="icon-page-white" />
+						<PageIcon :size="26" fill-color="var(--color-main-background)" />
 					</div>
 					<div class="app-content-list-item-line-one">
 						{{ pagePathTitle(backlinkPage) }}
@@ -31,7 +33,10 @@
 		</template>
 
 		<!-- no backlinks found -->
-		<EmptyContent v-else icon="icon-search">
+		<EmptyContent v-else>
+			<template #icon>
+				<MagnifyIcon />
+			</template>
 			<h2>{{ t('collectives', 'No backlinks available') }}</h2>
 			<template #desc>
 				{{ t( 'collectives', 'If other pages link to this one, they will be listed here.') }}
@@ -45,14 +50,20 @@ import AppContentList from '@nextcloud/vue/dist/Components/AppContentList'
 import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 import moment from '@nextcloud/moment'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
+import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagon'
+import MagnifyIcon from 'vue-material-design-icons/Magnify'
+import PageIcon from '../Icon/PageIcon'
 import { GET_BACKLINKS } from '../../store/actions'
 
 export default {
 	name: 'SidebarTabBacklinks',
 
-	 components: {
+	components: {
+		AlertOctagonIcon,
 		AppContentList,
 		EmptyContent,
+		MagnifyIcon,
+		PageIcon,
 	},
 
 	props: {
@@ -128,6 +139,7 @@ export default {
 }
 
 .app-content-list-item .app-content-list-item-icon {
+	display: flex;
 	line-height: 40px;
 	width: 26px;
 	height: 34px;
@@ -135,10 +147,6 @@ export default {
 	font-size: 24px;
 	background-color: var(--color-background-darker);
 	border-radius: 4px;
-}
-
-.app-content-list-item .app-content-list-item-icon div {
-	border-radius: 3px 12px 3px 3px;
 }
 
 .app-content-list .app-content-list-item .app-content-list-item-line-one {

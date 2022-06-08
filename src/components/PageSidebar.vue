@@ -4,8 +4,10 @@
 		@close="close">
 		<AppSidebarTab id="backlinks"
 			:order="0"
-			:name="t('collectives', 'Backlinks')"
-			icon="icon-search">
+			:name="t('collectives', 'Backlinks')">
+			<template #icon>
+				<MagnifyIcon :size="16" />
+			</template>
 			<div class="app-sidebar-tab-desc">
 				{{ t('collectives', 'Pages that link to this one') }}
 			</div>
@@ -15,8 +17,10 @@
 		<AppSidebarTab v-if="!isPublic && currentCollectiveCanEdit"
 			id="versions"
 			:order="1"
-			:name="t('collectives', 'Versions')"
-			icon="icon-history">
+			:name="t('collectives', 'Versions')">
+			<template #icon>
+				<RestoreIcon :size="16" />
+			</template>
 			<div class="app-sidebar-tab-desc">
 				{{ t('collectives', 'Old versions of this page') }}
 			</div>
@@ -34,6 +38,8 @@ import { mapGetters, mapMutations } from 'vuex'
 import { SELECT_VERSION } from '../store/mutations'
 import AppSidebar from '@nextcloud/vue/dist/Components/AppSidebar'
 import AppSidebarTab from '@nextcloud/vue/dist/Components/AppSidebarTab'
+import RestoreIcon from 'vue-material-design-icons/Restore'
+import MagnifyIcon from 'vue-material-design-icons/Magnify'
 import SidebarTabBacklinks from './PageSidebar/SidebarTabBacklinks'
 import SidebarTabVersions from './PageSidebar/SidebarTabVersions'
 
@@ -43,6 +49,8 @@ export default {
 	components: {
 		AppSidebar,
 		AppSidebarTab,
+		RestoreIcon,
+		MagnifyIcon,
 		SidebarTabBacklinks,
 		SidebarTabVersions,
 	},

@@ -9,9 +9,12 @@
 			<Actions class="toggle toggle-push-to-right">
 				<ActionButton class="toggle-button"
 					:aria-label="showTemplates ? t('collectives', 'Hide templates') : t('collectives', 'Show templates')"
-					:icon="showTemplates ? 'icon-pages-template-dark-grey' : 'icon-pages-template-grey'"
 					:title="showTemplates ? t('collectives', 'Hide templates') : t('collectives', 'Show templates')"
-					@click="toggleTemplates()" />
+					@click="toggleTemplates()">
+					<template #icon>
+						<PagesTemplateIcon :size="12" :fill-color="showTemplates ? 'currentColor' : 'var(--color-text-lighter)'" />
+					</template>
+				</ActionButton>
 			</Actions>
 			<Actions class="toggle"
 				:aria-label="t('collectives', 'Sort order')">
@@ -69,10 +72,12 @@
 						{{ t('collectives', 'Add a page') }}
 					</ActionButton>
 					<ActionButton v-if="showTemplates"
-						icon="icon-pages-template-dark-grey"
 						class="action-button__template"
 						:close-after-click="true"
 						@click="editTemplate(collectivePage.id)">
+						<template #icon>
+							<PagesTemplateIcon :size="14" />
+						</template>
 						{{ editTemplateString }}
 					</ActionButton>
 				</template>
@@ -100,6 +105,7 @@ import AppContentList from '@nextcloud/vue/dist/Components/AppContentList'
 import LastUpdate from './PageList/LastUpdate'
 import SubpageList from './PageList/SubpageList'
 import Item from './PageList/Item'
+import PagesTemplateIcon from './Icon/PagesTemplateIcon'
 import { mapGetters, mapMutations } from 'vuex'
 import SortAlphabeticalAscendingIcon from 'vue-material-design-icons/SortAlphabeticalAscending'
 import SortClockAscendingOutlineIcon from 'vue-material-design-icons/SortClockAscendingOutline'
@@ -115,6 +121,7 @@ export default {
 		AppContentList,
 		LastUpdate,
 		Item,
+		PagesTemplateIcon,
 		SubpageList,
 		SortAlphabeticalAscendingIcon,
 		SortClockAscendingOutlineIcon,
@@ -219,16 +226,6 @@ export default {
 
 li.toggle-button.selected {
 	background-color: var(--color-primary-light);
-}
-
-.icon-pages-template-dark-grey, .icon-pages-template-grey {
-	background-size: 12px;
-	height: revert;
-}
-
-// template icon appears too big with default size (16px)
-.action-button__template::v-deep .icon-pages-template-dark-grey {
-	background-size: 14px;
 }
 
 .page-list {

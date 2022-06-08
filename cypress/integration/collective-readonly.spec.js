@@ -37,7 +37,7 @@ describe('Read-only collective', function() {
 		})
 		it('not able to edit collective', function() {
 			cy.get('#titleform input').should('have.attr', 'disabled')
-			cy.get('button.edit-button').should('not.exist')
+			cy.get('button.titleform-button').should('not.exist')
 			cy.get('.app-content-list-item.toplevel')
 				.get('button.icon.add').should('not.exist')
 			cy.get('#editor-container').should('not.exist')

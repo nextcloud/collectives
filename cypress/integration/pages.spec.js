@@ -73,12 +73,20 @@ describe('Page', function() {
 
 	describe('Creating a page from template', function() {
 		it('New page has template content', function() {
+			// Do some handstands to ensure that new page with editor is loaded before we edit the title
+			cy.intercept('POST', '**/_api/*/_pages/parent/*').as('createPage')
+			cy.intercept('PUT', '**/apps/text/session/create').as('textCreateSession')
 			cy.contains('.app-content-list-item', 'Our Garden')
 				.find('button.icon-add')
 				.click()
+			cy.wait('@createPage')
+			cy.wait('@textCreateSession')
+			cy.get('.editor__content > .ProseMirror')
+				.should('be.visible')
 			cy.get('#titleform input.title')
-				.should('have.value', '')
-				.type('New page from Template{enter}')
+				.should('not.have.attr', 'disabled')
+			cy.get('#titleform input.title')
+				.type('{selectAll}New page from Template{enter}')
 			cy.get('.editor__content').contains('This is going to be our template.')
 			cy.get('.app-content-list-item:first-child')
 				.should('contain', 'New page from Template')
@@ -87,12 +95,20 @@ describe('Page', function() {
 
 	describe('Creating a new subpage', function() {
 		it('Shows the title in the enabled titleform and full path in browser title', function() {
+			// Do some handstands to ensure that new page with editor is loaded before we edit the title
+			cy.intercept('POST', '**/_api/*/_pages/parent/*').as('createPage')
+			cy.intercept('PUT', '**/apps/text/session/create').as('textCreateSession')
 			cy.contains('.app-content-list-item', '#% special chars')
 				.find('button.icon-add')
 				.click({ force: true })
+			cy.wait('@createPage')
+			cy.wait('@textCreateSession')
+			cy.get('.editor__content > .ProseMirror')
+				.should('be.visible')
 			cy.get('#titleform input.title')
-				.should('have.value', '')
-				.type('Subpage Title{enter}')
+				.should('not.have.attr', 'disabled')
+			cy.get('#titleform input.title')
+				.type('{selectAll}Subpage Title{enter}')
 			cy.get('.app-content-list-item').should('contain', 'Subpage Title')
 			cy.get('#titleform input').should('have.value', 'Subpage Title')
 			cy.get('#titleform input').should('not.have.attr', 'disabled')
@@ -111,14 +127,14 @@ describe('Page', function() {
 			// Only run image tests on Nextcloud 24+
 			if (!['22', '23'].includes(String(Cypress.env('ncVersion')))) {
 				cy.log('Inserting an image')
-				cy.intercept({ method: 'POST', url: '**/upload' }).as('imageUpload')
+				cy.intercept({ method: 'POST', url: '**upload' }).as('imageUpload')
 				cy.get('.menubar > input[type="file"]')
 					.selectFile('cypress/fixtures/test.png', { force: true })
 				cy.wait('@imageUpload')
 			}
 
 			cy.log('Changing to read mode')
-			cy.get('button.edit-button')
+			cy.get('button.titleform-button')
 				.click()
 			cy.get('#editor > > .editor__content > .ProseMirror').should('not.be.visible')
 			cy.get('#read-only-editor.editor__content > .ProseMirror').should('be.visible')
