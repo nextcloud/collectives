@@ -48,7 +48,7 @@ class CollectiveMapper extends QBMapper {
 	private function findBy(IQueryBuilder $qb, ?string $userId = null, int $level = Member::LEVEL_MEMBER): ?Collective {
 		try {
 			$collective = $this->findEntity($qb);
-			// Return all found collectives if `$userId` is unset
+			// Return any found collective if $userId is null
 			if (null === $userId) {
 				return $collective;
 			}
@@ -62,16 +62,13 @@ class CollectiveMapper extends QBMapper {
 	}
 
 	/**
-	 * @param string      $circleId
-	 * @param string|null $userId
-	 * @param bool        $includeTrash
+	 * @param string $circleId
+	 * @param bool   $includeTrash
 	 *
 	 * @return Collective|null
 	 * @throws NotFoundException
-	 * @throws NotPermittedException
-	 * @throws MissingDependencyException
 	 */
-	public function findByCircleId(string $circleId, string $userId = null, bool $includeTrash = false): ?Collective {
+	public function findByCircleId(string $circleId, bool $includeTrash = false): ?Collective {
 		$qb = $this->db->getQueryBuilder();
 		$where = $qb->expr()->andX();
 		$where->add($qb->expr()->eq('circle_unique_id', $qb->createNamedParameter($circleId, IQueryBuilder::PARAM_STR)));
@@ -81,7 +78,13 @@ class CollectiveMapper extends QBMapper {
 		$qb->select('*')
 			->from($this->tableName)
 			->where($where);
-		return $this->findBy($qb, $userId);
+		try {
+			return $this->findEntity($qb);
+		} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
+			return null;
+		} catch (Exception $e) {
+			throw new NotFoundException('Failed to run database query.');
+		}
 	}
 
 	/**
@@ -93,7 +96,7 @@ class CollectiveMapper extends QBMapper {
 	 * @throws NotPermittedException
 	 * @throws MissingDependencyException
 	 */
-	public function findTrashByCircleId(string $circleId, string $userId): ?Collective {
+	public function findTrashByCircleIdAndUser(string $circleId, string $userId): ?Collective {
 		$qb = $this->db->getQueryBuilder();
 		$where = $qb->expr()->andX();
 		$where->add($qb->expr()->eq('circle_unique_id', $qb->createNamedParameter($circleId, IQueryBuilder::PARAM_STR)));
@@ -113,7 +116,7 @@ class CollectiveMapper extends QBMapper {
 	 * @throws NotPermittedException
 	 * @throws MissingDependencyException
 	 */
-	public function findById(int $id, string $userId = null): ?Collective {
+	public function findByIdAndUser(int $id, string $userId = null): ?Collective {
 		$qb = $this->db->getQueryBuilder();
 		$where = $qb->expr()->andX();
 		$where->add($qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
@@ -133,7 +136,7 @@ class CollectiveMapper extends QBMapper {
 	 * @throws NotPermittedException
 	 * @throws MissingDependencyException
 	 */
-	public function findTrashById(int $id, string $userId): ?Collective {
+	public function findTrashByIdAndUser(int $id, string $userId): ?Collective {
 		$qb = $this->db->getQueryBuilder();
 		$where = $qb->expr()->andX();
 		$where->add($qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
@@ -165,8 +168,7 @@ class CollectiveMapper extends QBMapper {
 	 * @throws NotPermittedException
 	 */
 	public function circleIdToName(string $circleId, string $userId = null, bool $super = false): string {
-		$circle = $this->circleHelper->getCircle($circleId, $userId, $super);
-		return $circle->getSanitizedName();
+		return $this->circleHelper->getCircle($circleId, $userId, $super)->getSanitizedName();
 	}
 
 	/**

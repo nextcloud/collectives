@@ -28,7 +28,7 @@ class CollectiveServiceBase {
 	 * @throws NotPermittedException
 	 */
 	public function getCollective(int $collectiveId, string $userId): Collective {
-		if (null === $collective = $this->collectiveMapper->findById($collectiveId, $userId)) {
+		if (null === $collective = $this->collectiveMapper->findByIdAndUser($collectiveId, $userId)) {
 			throw new NotFoundException('Collective not found: '. $collectiveId);
 		}
 
@@ -61,7 +61,7 @@ class CollectiveServiceBase {
 	 * @throws NotPermittedException
 	 */
 	public function getCollectiveFromTrash(int $collectiveId, string $userId): Collective {
-		if (null === $collective = $this->collectiveMapper->findTrashById($collectiveId, $userId)) {
+		if (null === $collective = $this->collectiveMapper->findTrashByIdAndUser($collectiveId, $userId)) {
 			throw new NotFoundException('Collective not found in trash: '. $collectiveId);
 		}
 
