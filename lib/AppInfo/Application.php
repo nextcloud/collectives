@@ -44,6 +44,7 @@ class Application extends App implements IBootstrap {
 	 * @param IRegistrationContext $context
 	 */
 	public function register(IRegistrationContext $context): void {
+		require_once(__DIR__  . '/../../vendor/autoload.php');
 		$context->registerEventListener(BeforeTemplateRenderedEvent::class, UnifiedSearchCSSLoader::class);
 		$context->registerEventListener(LoadAdditionalScriptsEvent::class, LoadAdditionalScriptsListener::class);
 		$context->registerEventListener(CircleDestroyedEvent::class, CircleDestroyedListener::class);
