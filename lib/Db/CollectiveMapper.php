@@ -111,23 +111,31 @@ class CollectiveMapper extends QBMapper {
 	}
 
 	/**
-	 * @param string $circleId
+	 * @param array  $circleIds
 	 * @param string $userId
 	 *
-	 * @return Collective|null
+	 * @return Collective[]
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 * @throws MissingDependencyException
 	 */
-	public function findTrashByCircleIdAndUser(string $circleId, string $userId): ?Collective {
+	public function findTrashByCircleIdsAndUser(array $circleIds, string $userId): array {
 		$qb = $this->db->getQueryBuilder();
 		$where = $qb->expr()->andX();
-		$where->add($qb->expr()->eq('circle_unique_id', $qb->createNamedParameter($circleId, IQueryBuilder::PARAM_STR)));
+		$where->add($qb->expr()->in('circle_unique_id', $qb->createNamedParameter($circleIds, IQueryBuilder::PARAM_STR_ARRAY)));
 		$where->add($qb->expr()->isNotNull('trash_timestamp'));
 		$qb->select('*')
 			->from($this->tableName)
 			->where($where);
-		return $this->findBy($qb, $userId, Member::LEVEL_ADMIN);
+		try {
+			$collectives = $this->findEntities($qb);
+		} catch (Exception $e) {
+			throw new NotFoundException('Failed to run database query');
+		}
+
+		return array_filter($collectives, function (Collective $c) use ($userId) {
+			return $this->circleHelper->hasLevel($c->getCircleId(), $userId, Member::LEVEL_ADMIN);
+		});
 	}
 
 	/**

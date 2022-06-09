@@ -60,13 +60,15 @@ class CollectiveHelper {
 	public function getCollectivesTrashForUser(string $userId): array {
 		$collectiveInfos = [];
 		$circles = $this->circleHelper->getCircles($userId);
-		foreach ($circles as $circle) {
-			$cid = $circle->getSingleId();
-			if ((null !== $c = $this->collectiveMapper->findTrashByCircleIdAndUser($cid, $userId))) {
-				$collectiveInfos[] = new CollectiveInfo($c,
-					$this->collectiveMapper->circleIdToName($c->getCircleId(), $userId),
-					$this->circleHelper->getLevel($cid, $userId));
-			}
+		$cids = array_map(function($circle) { return $circle->getSingleId(); }, $circles);
+		$circles = array_combine($cids, $circles);
+		$collectives = $this->collectiveMapper->findTrashByCircleIdsAndUser($cids, $userId);
+		foreach ($collectives as $c) {
+			$cid = $c->getCircleId();
+			$collectiveInfos[] = new CollectiveInfo($c,
+				$circles[$cid]->getSanitizedName(),
+				$this->circleHelper->getLevel($cid, $userId)
+			);
 		}
 		return $collectiveInfos;
 	}
