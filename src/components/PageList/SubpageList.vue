@@ -50,12 +50,12 @@
 <script>
 
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
-import LastUpdate from './LastUpdate'
-import Item from './Item'
-import PagesTemplateIcon from '../Icon/PagesTemplateIcon'
+import LastUpdate from './LastUpdate.vue'
+import Item from './Item.vue'
+import PagesTemplateIcon from '../Icon/PagesTemplateIcon.vue'
 
 import { mapGetters, mapMutations } from 'vuex'
-import pageMixin from '../../mixins/pageMixin'
+import pageMixin from '../../mixins/pageMixin.js'
 
 export default {
 	name: 'SubpageList',

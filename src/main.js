@@ -21,9 +21,9 @@
  */
 
 import Vue from 'vue'
-import Collectives from './Collectives'
-import router from './router'
-import store from './store/store'
+import Collectives from './Collectives.vue'
+import router from './router.js'
+import store from './store/store.js'
 import { sync } from 'vuex-router-sync'
 
 Vue.prototype.t = t

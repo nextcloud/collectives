@@ -8,7 +8,7 @@ import {
 	GET_PAGES,
 	NEW_PAGE,
 	GET_CIRCLES,
-} from '../../src/store/actions'
+} from '../../src/store/actions.js'
 import axios from '@nextcloud/axios'
 
 const url = Cypress.config('baseUrl').replace(/\/index.php\/?$/g, '')

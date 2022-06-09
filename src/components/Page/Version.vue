@@ -34,16 +34,16 @@ import Actions from '@nextcloud/vue/dist/Components/Actions'
 import Button from '@nextcloud/vue/dist/Components/Button'
 import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip'
 import RestoreIcon from 'vue-material-design-icons/Restore'
-import RichText from './RichText'
+import RichText from './RichText.vue'
 
 import { getCurrentUser } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { generateRemoteUrl } from '@nextcloud/router'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
-import { SELECT_VERSION } from '../../store/mutations'
-import { GET_VERSIONS } from '../../store/actions'
-import pageContentMixin from '../../mixins/pageContentMixin'
+import { SELECT_VERSION } from '../../store/mutations.js'
+import { GET_VERSIONS } from '../../store/actions.js'
+import pageContentMixin from '../../mixins/pageContentMixin.js'
 
 export default {
 	name: 'Version',

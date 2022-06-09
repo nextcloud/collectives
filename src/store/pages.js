@@ -2,7 +2,7 @@ import Vue from 'vue'
 import { getCurrentUser } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
 import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
-import * as sortOrders from '../util/sortOrders'
+import * as sortOrders from '../util/sortOrders.js'
 
 import {
 	SET_PAGES,
@@ -10,7 +10,7 @@ import {
 	UPDATE_PAGE,
 	DELETE_PAGE_BY_ID,
 	SET_BACKLINKS,
-} from './mutations'
+} from './mutations.js'
 
 import {
 	GET_PAGES,
@@ -21,7 +21,7 @@ import {
 	RENAME_PAGE,
 	DELETE_PAGE,
 	GET_BACKLINKS,
-} from './actions'
+} from './actions.js'
 
 export const TEMPLATE_PAGE = 'Template'
 

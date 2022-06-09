@@ -139,8 +139,8 @@
 </template>
 
 <script>
-import { memberLevels } from '../../constants'
-import { pageOrders, pageOrdersByNumber } from '../../util/sortOrders'
+import { memberLevels } from '../../constants.js'
+import { pageOrders, pageOrdersByNumber } from '../../util/sortOrders.js'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import AppSettingsDialog from '@nextcloud/vue/dist/Components/AppSettingsDialog'
@@ -157,8 +157,8 @@ import {
 	TRASH_COLLECTIVE,
 	UPDATE_COLLECTIVE_EDIT_PERMISSIONS,
 	UPDATE_COLLECTIVE_SHARE_PERMISSIONS,
-} from '../../store/actions'
-import displayError from '../../util/displayError'
+} from '../../store/actions.js'
+import displayError from '../../util/displayError.js'
 
 export default {
 	name: 'CollectiveSettings',

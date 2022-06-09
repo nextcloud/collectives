@@ -70,11 +70,11 @@ import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 import moment from '@nextcloud/moment'
 import { formatFileSize } from '@nextcloud/files'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
-import PageIcon from '../Icon/PageIcon'
+import PageIcon from '../Icon/PageIcon.vue'
 import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagon'
 import RestoreIcon from 'vue-material-design-icons/Restore'
-import { SELECT_VERSION } from '../../store/mutations'
-import { GET_VERSIONS } from '../../store/actions'
+import { SELECT_VERSION } from '../../store/mutations.js'
+import { GET_VERSIONS } from '../../store/actions.js'
 
 export default {
 	name: 'SidebarTabVersions',

@@ -75,19 +75,19 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { SHARE_COLLECTIVE, UPDATE_SHARE_COLLECTIVE, UNSHARE_COLLECTIVE } from '../../store/actions'
-import displayError from '../../util/displayError'
+import { SHARE_COLLECTIVE, UPDATE_SHARE_COLLECTIVE, UNSHARE_COLLECTIVE } from '../../store/actions.js'
+import displayError from '../../util/displayError.js'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import ActionCheckbox from '@nextcloud/vue/dist/Components/ActionCheckbox'
 import ActionLink from '@nextcloud/vue/dist/Components/ActionLink'
 import ActionSeparator from '@nextcloud/vue/dist/Components/ActionSeparator'
 import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
 import { generateUrl } from '@nextcloud/router'
-import CopyToClipboardMixin from '../../mixins/CopyToClipboardMixin'
+import CopyToClipboardMixin from '../../mixins/CopyToClipboardMixin.js'
 import DownloadIcon from 'vue-material-design-icons/Download'
-import CirclesIcon from '../Icon/CirclesIcon'
-import CollectiveSettings from './CollectiveSettings'
-import CollectivesIcon from '../Icon/CollectivesIcon'
+import CirclesIcon from '../Icon/CirclesIcon.vue'
+import CollectiveSettings from './CollectiveSettings.vue'
+import CollectivesIcon from '../Icon/CollectivesIcon.vue'
 
 export default {
 	name: 'CollectiveListItem',

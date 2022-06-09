@@ -1,9 +1,9 @@
 import axios from '@nextcloud/axios'
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateRemoteUrl } from '@nextcloud/router'
-import { SELECT_VERSION, SET_VERSIONS } from './mutations'
-import { GET_VERSIONS } from './actions'
-import xmlToVersionsList from '../util/xmlToVersionsList'
+import { SELECT_VERSION, SET_VERSIONS } from './mutations.js'
+import { GET_VERSIONS } from './actions.js'
+import xmlToVersionsList from '../util/xmlToVersionsList.js'
 
 export default {
 	state: {

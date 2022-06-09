@@ -102,15 +102,15 @@
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import Actions from '@nextcloud/vue/dist/Components/Actions'
 import AppContentList from '@nextcloud/vue/dist/Components/AppContentList'
-import LastUpdate from './PageList/LastUpdate'
-import SubpageList from './PageList/SubpageList'
-import Item from './PageList/Item'
-import PagesTemplateIcon from './Icon/PagesTemplateIcon'
+import LastUpdate from './PageList/LastUpdate.vue'
+import SubpageList from './PageList/SubpageList.vue'
+import Item from './PageList/Item.vue'
+import PagesTemplateIcon from './Icon/PagesTemplateIcon.vue'
 import { mapGetters, mapMutations } from 'vuex'
 import SortAlphabeticalAscendingIcon from 'vue-material-design-icons/SortAlphabeticalAscending'
 import SortClockAscendingOutlineIcon from 'vue-material-design-icons/SortClockAscendingOutline'
-import { scrollToPage } from '../util/scrollToElement'
-import pageMixin from '../mixins/pageMixin'
+import { scrollToPage } from '../util/scrollToElement.js'
+import pageMixin from '../mixins/pageMixin.js'
 
 export default {
 	name: 'PageList',

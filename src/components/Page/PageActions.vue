@@ -34,9 +34,9 @@ import { mapActions, mapGetters } from 'vuex'
 import { generateUrl } from '@nextcloud/router'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import DeleteIcon from 'vue-material-design-icons/Delete'
-import PagesTemplateIcon from '../Icon/PagesTemplateIcon'
-import { DELETE_PAGE } from '../../store/actions'
-import pageMixin from '../../mixins/pageMixin'
+import PagesTemplateIcon from '../Icon/PagesTemplateIcon.vue'
+import { DELETE_PAGE } from '../../store/actions.js'
+import pageMixin from '../../mixins/pageMixin.js'
 
 export default {
 	name: 'PageActions',

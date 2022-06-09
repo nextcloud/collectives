@@ -63,9 +63,9 @@ import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip'
 import CheckIcon from 'vue-material-design-icons/Check'
 import LoadingIcon from 'vue-material-design-icons/Loading'
 import PencilIcon from 'vue-material-design-icons/Pencil'
-import Editor from './Page/Editor'
-import RichText from './Page/RichText'
-import PageActions from './Page/PageActions'
+import Editor from './Page/Editor.vue'
+import RichText from './Page/RichText.vue'
+import PageActions from './Page/PageActions.vue'
 import { showError } from '@nextcloud/dialogs'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import {
@@ -73,8 +73,8 @@ import {
 	TOUCH_PAGE,
 	GET_PAGES,
 	GET_VERSIONS,
-} from '../store/actions'
-import pageContentMixin from '../mixins/pageContentMixin'
+} from '../store/actions.js'
+import pageContentMixin from '../mixins/pageContentMixin.js'
 
 const EditState = { Unset: 0, Edit: 1, Read: 2 }
 

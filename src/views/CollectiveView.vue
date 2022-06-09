@@ -11,8 +11,8 @@
 
 import { mapGetters } from 'vuex'
 import AppContent from '@nextcloud/vue/dist/Components/AppContent'
-import Collective from '../components/Collective'
-import CollectiveNotFound from '../components/CollectiveNotFound'
+import Collective from '../components/Collective.vue'
+import CollectiveNotFound from '../components/CollectiveNotFound.vue'
 import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 
 export default {

@@ -11,8 +11,8 @@
 
 import { mapGetters, mapMutations } from 'vuex'
 import AppContent from '@nextcloud/vue/dist/Components/AppContent'
-import CollectivePrint from '../components/CollectivePrint'
-import CollectiveNotFound from '../components/CollectiveNotFound'
+import CollectivePrint from '../components/CollectivePrint.vue'
+import CollectiveNotFound from '../components/CollectiveNotFound.vue'
 import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 
 export default {

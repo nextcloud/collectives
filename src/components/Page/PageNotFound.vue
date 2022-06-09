@@ -19,7 +19,7 @@
 <script>
 import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 import { mapGetters } from 'vuex'
-import PageIcon from '../Icon/PageIcon'
+import PageIcon from '../Icon/PageIcon.vue'
 
 export default {
 	name: 'PageNotFound',
