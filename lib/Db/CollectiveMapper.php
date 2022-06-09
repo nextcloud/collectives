@@ -87,6 +87,12 @@ class CollectiveMapper extends QBMapper {
 		}
 	}
 
+	/**
+	 * @param array $circleIds
+	 * @param bool  $includeTrash
+	 *
+	 * @return array
+	 */
 	public function findByCircleIds(array $circleIds, bool $includeTrash = false): array {
 		$qb = $this->db->getQueryBuilder();
 		$where = $qb->expr()->andX();
@@ -97,7 +103,11 @@ class CollectiveMapper extends QBMapper {
 		$qb->select('*')
 			->from($this->tableName)
 			->where($where);
-		return $this->findEntities($qb);
+		try {
+			return $this->findEntities($qb);
+		} catch (Exception $e) {
+			throw new NotFoundException('Failed to run database query');
+		}
 	}
 
 	/**
