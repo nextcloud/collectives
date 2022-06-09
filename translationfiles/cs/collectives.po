@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-05-30 22:31+0200\n"
-"PO-Revision-Date: 2022-04-14 14:07+0000\n"
+"PO-Revision-Date: 2022-05-05 12:14+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/cs/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.12.1\n"
 
 #. TRANSLATORS src/components/Page.vue:122
 #. TRANSLATORS src/views/Home.vue:4
@@ -147,17 +147,17 @@ msgstr "Vyberte kolektiv nebo (vlevo) vytvořte nový."
 #: /collectives/specialVueFakeDummyForL10nScript.js:10
 #, fuzzy
 msgid "Preparing collective for exporting or printing"
-msgstr "Vytvořit kolektiv pro existující okruh"
+msgstr "Připravuje se tisk kolektivu"
 
 #. TRANSLATORS src/components/CollectivePrint.vue:58
 #: /collectives/specialVueFakeDummyForL10nScript.js:12
 msgid "Loading pages:"
-msgstr ""
+msgstr "Načítání stránek:"
 
 #. TRANSLATORS src/components/CollectivePrint.vue:63
 #: /collectives/specialVueFakeDummyForL10nScript.js:14
 msgid "Loading images:"
-msgstr ""
+msgstr "Načítání obrázků:"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:16
 #: /collectives/specialVueFakeDummyForL10nScript.js:16

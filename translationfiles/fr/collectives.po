@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-05-30 22:31+0200\n"
-"PO-Revision-Date: 2022-04-20 08:13+0000\n"
+"PO-Revision-Date: 2022-05-10 21:33+0000\n"
 "Last-Translator: Nathan <bonnemainsnathan@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/fr/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.12.1\n"
 
 #. TRANSLATORS src/components/Page.vue:122
 #. TRANSLATORS src/views/Home.vue:4
@@ -148,17 +148,17 @@ msgstr "Sélectionnez un collectif ou créez en un sur la gauche."
 #: /collectives/specialVueFakeDummyForL10nScript.js:10
 #, fuzzy
 msgid "Preparing collective for exporting or printing"
-msgstr "Créer un collectif pour un cercle existant"
+msgstr "Préparation du collectif pour l'impression"
 
 #. TRANSLATORS src/components/CollectivePrint.vue:58
 #: /collectives/specialVueFakeDummyForL10nScript.js:12
 msgid "Loading pages:"
-msgstr ""
+msgstr "Chargement des pages :"
 
 #. TRANSLATORS src/components/CollectivePrint.vue:63
 #: /collectives/specialVueFakeDummyForL10nScript.js:14
 msgid "Loading images:"
-msgstr ""
+msgstr "Chargement des images :"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:16
 #: /collectives/specialVueFakeDummyForL10nScript.js:16
