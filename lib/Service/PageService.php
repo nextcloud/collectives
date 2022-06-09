@@ -2,7 +2,6 @@
 
 namespace OCA\Collectives\Service;
 
-use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\Page;
 use OCA\Collectives\Db\PageMapper;
 use OCA\Collectives\Fs\NodeHelper;
