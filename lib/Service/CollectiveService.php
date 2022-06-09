@@ -159,14 +159,14 @@ class CollectiveService extends CollectiveServiceBase {
 			);
 		}
 
-		if (null !== $this->collectiveMapper->findByCircleId($circle->getUniqueId(), null, true)) {
+		if (null !== $this->collectiveMapper->findByCircleId($circle->getSingleId(), true)) {
 			// There's already a collective with that name.
 			throw new UnprocessableEntityException('Collective already exists.');
 		}
 
 		// Create collective object
 		$collective = new Collective();
-		$collective->setCircleId($circle->getUniqueId());
+		$collective->setCircleId($circle->getSingleId());
 		$collective->setPermissions(Collective::defaultPermissions);
 		if ($emoji) {
 			$collective->setEmoji($emoji);
@@ -177,7 +177,7 @@ class CollectiveService extends CollectiveServiceBase {
 		$collectiveInfo = new CollectiveInfo(
 			$collective,
 			$circle->getSanitizedName(),
-			$this->circleHelper->getLevel($circle->getUniqueId(), $userId));
+			$this->circleHelper->getLevel($circle->getSingleId(), $userId));
 
 		// Create folder for collective and optionally copy default landing page
 		try {

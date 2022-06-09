@@ -37,7 +37,7 @@ class CollectiveHelper {
 		$collectiveInfos = [];
 		$circles = $this->circleHelper->getCircles($userId);
 		foreach ($circles as $circle) {
-			$cid = $circle->getUniqueId();
+			$cid = $circle->getSingleId();
 			if (null !== $c = $this->collectiveMapper->findByCircleId($cid)) {
 				$level = $getLevel ? $this->circleHelper->getLevel($c->getCircleId(), $userId): 0;
 				$collectiveInfos[] = new CollectiveInfo($c,
@@ -60,8 +60,8 @@ class CollectiveHelper {
 		$collectiveInfos = [];
 		$circles = $this->circleHelper->getCircles($userId);
 		foreach ($circles as $circle) {
-			$cid = $circle->getUniqueId();
-			if ((null !== $c = $this->collectiveMapper->findTrashByCircleId($cid, $userId))) {
+			$cid = $circle->getSingleId();
+			if ((null !== $c = $this->collectiveMapper->findTrashByCircleIdAndUser($cid, $userId))) {
 				$collectiveInfos[] = new CollectiveInfo($c,
 					$this->collectiveMapper->circleIdToName($c->getCircleId(), $userId),
 					$this->circleHelper->getLevel($cid, $userId));

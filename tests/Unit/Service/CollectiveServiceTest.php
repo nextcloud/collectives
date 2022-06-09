@@ -97,7 +97,7 @@ class CollectiveServiceTest extends TestCase {
 		$circle = $this->getMockBuilder(Circle::class)
 			->disableOriginalConstructor()
 			->getMock();
-		$circle->method('getUniqueId')
+		$circle->method('getSingleId')
 			->willReturn('CircleId');
 		$circle->method('getName')
 			->willReturn('own');
@@ -130,7 +130,7 @@ class CollectiveServiceTest extends TestCase {
 		$circle = $this->getMockBuilder(Circle::class)
 			->disableOriginalConstructor()
 			->getMock();
-		$circle->method('getUniqueId')
+		$circle->method('getSingleId')
 			->willReturn('CircleId');
 		$circle->method('getSanitizedName')
 			->willReturn('free');
