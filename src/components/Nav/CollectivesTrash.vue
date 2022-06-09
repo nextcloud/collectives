@@ -3,7 +3,7 @@
 		v-click-outside="clickOutsideConfig"
 		:class="{ open }">
 		<div id="collectives-trash__header">
-			<Button type="button" class="collectives-trash-button" @click="toggleTrash">
+			<Button type="tertiary" class="collectives-trash-button" @click="toggleTrash">
 				<template #icon>
 					<DeleteIcon class="collectives-trash-button__icon" :size="20" decorative />
 				</template>
