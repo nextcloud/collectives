@@ -9,6 +9,7 @@
         }
     ],
     "require": {
+        "php": ">=7.3",
         "ext-json": "*"
     },
     "require-dev": {
