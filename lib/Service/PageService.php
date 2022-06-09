@@ -140,7 +140,7 @@ class PageService {
 	 * @return int
 	 * @throws NotFoundException
 	 */
-	private function getParentPageId(File $file): int {
+	public function getParentPageId(File $file): int {
 		try {
 			if (self::isLandingPage($file)) {
 				// Return `0` for landing page
