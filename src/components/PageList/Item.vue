@@ -52,11 +52,11 @@ import isMobile from '@nextcloud/vue/dist/Mixins/isMobile'
 import { generateUrl } from '@nextcloud/router'
 import { mapGetters, mapMutations } from 'vuex'
 import TriangleIcon from 'vue-material-design-icons/Triangle'
-import PageIcon from '../Icon/PageIcon'
-import PagesIcon from '../Icon/PagesIcon'
-import PageTemplateIcon from '../Icon/PageTemplateIcon'
-import PagesTemplateIcon from '../Icon/PagesTemplateIcon'
-import { scrollToPage } from '../../util/scrollToElement'
+import PageIcon from '../Icon/PageIcon.vue'
+import PagesIcon from '../Icon/PagesIcon.vue'
+import PageTemplateIcon from '../Icon/PageTemplateIcon.vue'
+import PagesTemplateIcon from '../Icon/PagesTemplateIcon.vue'
+import { scrollToPage } from '../../util/scrollToElement.js'
 
 export default {
 	name: 'Item',

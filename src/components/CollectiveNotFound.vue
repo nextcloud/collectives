@@ -19,7 +19,7 @@
 <script>
 import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 import { mapGetters } from 'vuex'
-import CollectivesIcon from './Icon/CollectivesIcon'
+import CollectivesIcon from './Icon/CollectivesIcon.vue'
 
 export default {
 	name: 'CollectiveNotFound',

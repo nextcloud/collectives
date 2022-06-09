@@ -35,13 +35,13 @@
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
-import { SELECT_VERSION } from '../store/mutations'
+import { SELECT_VERSION } from '../store/mutations.js'
 import AppSidebar from '@nextcloud/vue/dist/Components/AppSidebar'
 import AppSidebarTab from '@nextcloud/vue/dist/Components/AppSidebarTab'
 import RestoreIcon from 'vue-material-design-icons/Restore'
 import MagnifyIcon from 'vue-material-design-icons/Magnify'
-import SidebarTabBacklinks from './PageSidebar/SidebarTabBacklinks'
-import SidebarTabVersions from './PageSidebar/SidebarTabVersions'
+import SidebarTabBacklinks from './PageSidebar/SidebarTabBacklinks.vue'
+import SidebarTabVersions from './PageSidebar/SidebarTabVersions.vue'
 
 export default {
 	name: 'PageSidebar',

@@ -52,8 +52,8 @@ import moment from '@nextcloud/moment'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagon'
 import MagnifyIcon from 'vue-material-design-icons/Magnify'
-import PageIcon from '../Icon/PageIcon'
-import { GET_BACKLINKS } from '../../store/actions'
+import PageIcon from '../Icon/PageIcon.vue'
+import { GET_BACKLINKS } from '../../store/actions.js'
 
 export default {
 	name: 'SidebarTabBacklinks',

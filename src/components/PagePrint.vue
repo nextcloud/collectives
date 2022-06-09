@@ -15,7 +15,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { RichtextReader } from '@nextcloud/text'
-import pageContentMixin from '../mixins/pageContentMixin'
+import pageContentMixin from '../mixins/pageContentMixin.js'
 
 export default {
 	name: 'PagePrint',

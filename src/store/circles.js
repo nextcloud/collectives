@@ -1,12 +1,12 @@
 import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
-import { GET_CIRCLES, RENAME_CIRCLE, GET_PAGES } from './actions'
+import { GET_CIRCLES, RENAME_CIRCLE, GET_PAGES } from './actions.js'
 import {
 	SET_CIRCLES,
 	UPDATE_CIRCLE,
 	DELETE_CIRCLE_FOR,
 	PATCH_COLLECTIVE_WITH_CIRCLE,
-} from './mutations'
+} from './mutations.js'
 
 export default {
 	state: {

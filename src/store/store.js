@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import Vuex, { Store } from 'vuex'
 
-import circles from './circles'
-import collectives from './collectives'
-import pages from './pages'
-import settings from './settings'
-import versions from './versions'
+import circles from './circles.js'
+import collectives from './collectives.js'
+import pages from './pages.js'
+import settings from './settings.js'
+import versions from './versions.js'
 
 Vue.use(Vuex)
 

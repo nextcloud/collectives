@@ -20,7 +20,7 @@
  *
  */
 
-import randomEmoji from '../../util/randomEmoji'
+import randomEmoji from '../../util/randomEmoji.js'
 
 test('returns an emoji', () => {
 	const emojis = ['🥳']

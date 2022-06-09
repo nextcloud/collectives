@@ -80,9 +80,9 @@ import Button from '@nextcloud/vue/dist/Components/Button'
 import EmojiPicker from '@nextcloud/vue/dist/Components/EmojiPicker'
 import Multiselect from '@nextcloud/vue/dist/Components/Multiselect'
 import { mapActions, mapGetters } from 'vuex'
-import CirclesIcon from '../Icon/CirclesIcon'
-import { GET_CIRCLES, NEW_COLLECTIVE } from '../../store/actions'
-import displayError from '../../util/displayError'
+import CirclesIcon from '../Icon/CirclesIcon.vue'
+import { GET_CIRCLES, NEW_COLLECTIVE } from '../../store/actions.js'
+import displayError from '../../util/displayError.js'
 
 const randomColor = () => '#' + ((1 << 24) * Math.random() | 0).toString(16)
 

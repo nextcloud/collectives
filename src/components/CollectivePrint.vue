@@ -36,9 +36,9 @@ import { mapGetters, mapActions } from 'vuex'
 import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 import ProgressBar from '@nextcloud/vue/dist/Components/ProgressBar'
 import DownloadIcon from 'vue-material-design-icons/Download'
-import PagePrint from './PagePrint'
-import { GET_PAGES } from '../store/actions'
-import displayError from '../util/displayError'
+import PagePrint from './PagePrint.vue'
+import { GET_PAGES } from '../store/actions.js'
+import displayError from '../util/displayError.js'
 
 export default {
 	name: 'CollectivePrint',

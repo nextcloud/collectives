@@ -3,8 +3,8 @@ import { generateOcsUrl } from '@nextcloud/router'
 import {
 	GET_COLLECTIVES_FOLDER,
 	UPDATE_COLLECTIVES_FOLDER,
-} from './actions'
-import { SET_COLLECTIVES_FOLDER } from './mutations'
+} from './actions.js'
+import { SET_COLLECTIVES_FOLDER } from './mutations.js'
 
 export default {
 	state: {

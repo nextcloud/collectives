@@ -3,7 +3,7 @@
 		v-click-outside="clickOutsideConfig"
 		:class="{ open }">
 		<div id="collectives-trash__header">
-			<Button type="button" class="collectives-trash-button" @click="toggleTrash">
+			<Button type="tertiary" class="collectives-trash-button" @click="toggleTrash">
 				<template #icon>
 					<DeleteIcon class="collectives-trash-button__icon" :size="20" decorative />
 				</template>
@@ -83,7 +83,7 @@ import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
 import Button from '@nextcloud/vue/dist/Components/Button'
 import Modal from '@nextcloud/vue/dist/Components/Modal'
-import CollectivesIcon from '../Icon/CollectivesIcon'
+import CollectivesIcon from '../Icon/CollectivesIcon.vue'
 import DeleteIcon from 'vue-material-design-icons/Delete'
 import RestoreIcon from 'vue-material-design-icons/Restore'
 import { directive as ClickOutside } from 'v-click-outside'

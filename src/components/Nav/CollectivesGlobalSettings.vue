@@ -19,9 +19,9 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import { UPDATE_COLLECTIVES_FOLDER } from '../../store/actions'
+import { UPDATE_COLLECTIVES_FOLDER } from '../../store/actions.js'
 import { getFilePickerBuilder, showError } from '@nextcloud/dialogs'
-import displayError from '../../util/displayError'
+import displayError from '../../util/displayError.js'
 import AppNavigationSettings from '@nextcloud/vue/dist/Components/AppNavigationSettings'
 
 export default {

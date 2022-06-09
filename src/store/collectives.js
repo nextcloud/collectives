@@ -1,8 +1,8 @@
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
-import { byName } from '../util/sortOrders'
-import randomEmoji from '../util/randomEmoji'
-import { memberLevels } from '../constants'
+import { byName } from '../util/sortOrders.js'
+import randomEmoji from '../util/randomEmoji.js'
+import { memberLevels } from '../constants.js'
 
 import {
 	SET_COLLECTIVES,
@@ -13,7 +13,7 @@ import {
 	RESTORE_COLLECTIVE_FROM_TRASH,
 	DELETE_COLLECTIVE_FROM_TRASH,
 	DELETE_CIRCLE_FOR,
-} from './mutations'
+} from './mutations.js'
 
 import {
 	GET_COLLECTIVES,
@@ -29,7 +29,7 @@ import {
 	UPDATE_COLLECTIVE_EDIT_PERMISSIONS,
 	UPDATE_COLLECTIVE_SHARE_PERMISSIONS,
 	GET_COLLECTIVES_FOLDER,
-} from './actions'
+} from './actions.js'
 
 export default {
 	state: {

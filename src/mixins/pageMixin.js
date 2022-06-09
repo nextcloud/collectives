@@ -1,7 +1,7 @@
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { showError } from '@nextcloud/dialogs'
-import { GET_PAGES, NEW_PAGE, NEW_TEMPLATE } from '../store/actions'
-import { scrollToPage } from '../util/scrollToElement'
+import { GET_PAGES, NEW_PAGE, NEW_TEMPLATE } from '../store/actions.js'
+import { scrollToPage } from '../util/scrollToElement.js'
 
 export default {
 	computed: {
