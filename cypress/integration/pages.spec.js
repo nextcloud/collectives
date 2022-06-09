@@ -30,6 +30,7 @@ describe('Page', function() {
 		cy.deleteAndSeedCollective('Our Garden')
 		cy.seedPage('Day 1', '', 'Readme.md')
 		cy.seedPage('Day 2', '', 'Readme.md')
+		cy.seedPage('Page Title', '', 'Readme.md')
 		cy.seedPage('#% special chars', '', 'Readme.md')
 		cy.seedPageContent('bob', 'Our Garden/Day 2.md', 'A test string with Day 2 in the middle and a [link to Day 1](/index.php/apps/collectives/Our%20Garden/Day%201).')
 		cy.seedPage('Template', '', 'Readme.md')
@@ -146,6 +147,20 @@ describe('Page', function() {
 					.should('be.visible')
 				 */
 			}
+		})
+	})
+
+	describe('Using the page list filter', function() {
+		it('Shows only landing page and (sub)pages matching the filter string', function() {
+			cy.get('input.page-filter')
+				.type('Title')
+			cy.get('.app-content-list-item-line-one:visible').should('have.length', 3)
+			cy.get('.app-content-list-item-line-one:visible').eq(0)
+				.should('contain', 'Our Garden')
+			cy.get('.app-content-list-item-line-one:visible').eq(1)
+				.should('contain', 'Subpage Title')
+			cy.get('.app-content-list-item-line-one:visible').eq(2)
+				.should('contain', 'Page Title')
 		})
 	})
 
