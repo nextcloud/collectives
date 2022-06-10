@@ -59,16 +59,16 @@ class FileSearcher extends TNTSearch {
 	}
 
 	/**
-	 * @param $path
+	 * @param $indexName
 	 * @return FileIndexer
 	 * @throws FileSearchException
 	 */
-	public function selectIndex($path): FileIndexer {
-		$pathToIndex = $path;
+	public function selectIndex($indexName): FileIndexer {
+		$pathToIndex = $indexName;
 		if (!file_exists($pathToIndex)) {
 			throw new FileSearchException('Could not find an index for the collective.');
 		}
-		$this->index = new PDO('sqlite:' . $path);
+		$this->index = new PDO('sqlite:' . $indexName);
 		$this->index->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 		$this->indexer->setIndex($this->index);

@@ -21,6 +21,11 @@
       <code>TimedJob</code>
     </UndefinedClass>
   </file>
+  <file src="lib/BackgroundJob/IndexCollectives.php">
+    <UndefinedClass occurrences="1">
+      <code>TimedJob</code>
+    </UndefinedClass>
+  </file>
   <file src="lib/CacheListener.php">
     <UndefinedClass occurrences="3">
       <code>CacheInsertEvent</code>
@@ -39,6 +44,11 @@
     </UndefinedClass>
   </file>
   <file src="lib/Command/PurgeObsoletePages.php">
+    <UndefinedClass occurrences="1">
+      <code>Base</code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Command/IndexCollectives.php">
     <UndefinedClass occurrences="1">
       <code>Base</code>
     </UndefinedClass>
@@ -605,4 +615,36 @@
       <code>IVersionBackend</code>
     </UndefinedClass>
   </file>
+	<file src="lib/Search/FileSearch/FileIndexer.php">
+		<UndefinedClass occurrences="2">
+			<code>Folder</code>
+			<code>Folder</code>
+		</UndefinedClass>
+		<UndefinedDocblockClass occurrences="1">
+			<code>File[]</code>
+		</UndefinedDocblockClass>
+	</file>
+	<file src="lib/Search/FileSearch/FileSearcher.php">
+		<UndefinedClass occurrences="1">
+			<code>File</code>
+		</UndefinedClass>
+	</file>
+	<file src="lib/Service/SearchService.php">
+		<UndefinedClass occurrences="3">
+			<code>ITempManager</code>
+			<code>?File</code>
+			<code>?File</code>
+		</UndefinedClass>
+		<UndefinedDocblockClass occurrences="1">
+			<code>ITempManager</code>
+		</UndefinedDocblockClass>
+		<MissingDependency occurrences="6">
+			<code>Collective</code>
+			<code>Collective</code>
+			<code>Collective</code>
+			<code>Collective</code>
+			<code>Collective</code>
+			<code>Collective</code>
+		</MissingDependency>
+	</file>
 </files>
