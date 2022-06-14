@@ -323,6 +323,13 @@
     </UndefinedClass>
   </file>
   <file src="lib/Service/CircleHelper.php">
+    <InvalidArgument occurrences="5">
+      <code>$e</code>
+      <code>$e</code>
+      <code>$e</code>
+      <code>$e</code>
+      <code>$e</code>
+    </InvalidArgument>
     <UndefinedClass occurrences="33">
       <code>$e</code>
       <code>$e</code>
@@ -385,6 +392,9 @@
     </MissingDependency>
   </file>
   <file src="lib/Service/CollectiveService.php">
+    <InvalidArgument occurrences="1">
+      <code>$e</code>
+    </InvalidArgument>
     <MissingDependency occurrences="19">
       <code>$this-&gt;collectiveMapper</code>
       <code>$this-&gt;collectiveMapper</code>
@@ -435,6 +445,9 @@
     </MissingDependency>
   </file>
   <file src="lib/Service/CollectiveShareService.php">
+    <InvalidArgument occurrences="1">
+      <code>$e</code>
+    </InvalidArgument>
     <MissingDependency occurrences="11">
       <code>$this-&gt;collectiveShareMapper</code>
       <code>$this-&gt;collectiveShareMapper</code>
