@@ -388,15 +388,6 @@ export default {
 	top: 50px;
 }
 
-#text-container .editor__content {
-	border: 2px solid var(--color-main-background);
-	border-radius: var(--border-radius);
-}
-
-.editor__content {
-	border: 2px;
-}
-
 .page-title {
 	padding: 8px 2px 2px 8px;
 	position: relative;

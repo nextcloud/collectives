@@ -194,7 +194,6 @@ export default {
 	background: var(--color-main-background);
 	color: var(--color-main-text);
 	background-clip: padding-box;
-	border-radius: var(--border-radius);
 	padding: 0;
 	position: relative;
 	overflow-y: auto;
