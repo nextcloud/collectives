@@ -86,7 +86,7 @@ class PublicCollectiveController extends PublicShareController {
 			try {
 				$share = $this->collectiveShareMapper->findOneByToken($this->getToken());
 			} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
-				throw new NotFoundException('Failed to get shared collective');
+				throw new NotFoundException('Failed to get shared collective', 0, $e);
 			}
 			$collective = $this->service->getCollectiveWithShare($share->getCollectiveId(),
 				$share->getOwner());

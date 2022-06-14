@@ -128,7 +128,7 @@ class NodeHelper {
 		try {
 			$content = $file->getContent();
 		} catch (FilesNotPermittedException | LockedException $e) {
-			throw new NotPermittedException('Failed to read file content for ' . $file->getPath());
+			throw new NotPermittedException('Failed to read file content for ' . $file->getPath(), 0, $e);
 		}
 
 		// blank files return false when using object storage as primary storage
@@ -137,7 +137,7 @@ class NodeHelper {
 				$content = '';
 			}
 		} catch (InvalidPathException | FilesNotFoundException $e) {
-			throw new NotFoundException('Failed to read file content for ' . $file->getPath());
+			throw new NotFoundException('Failed to read file content for ' . $file->getPath(), 0, $e);
 		}
 
 		if (!is_string($content)) {

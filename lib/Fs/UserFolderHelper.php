@@ -68,7 +68,7 @@ class UserFolderHelper {
 			try {
 				$this->config->setUserValue($userId, 'collectives', 'user_folder', $userCollectivesPath);
 			} catch (PreConditionNotMetException | \UnexpectedValueException $e) {
-				throw new NotPermittedException($e->getMessage());
+				throw new NotPermittedException($e->getMessage(), 0, $e);
 			}
 		}
 
@@ -86,7 +86,7 @@ class UserFolderHelper {
 		try {
 			$userFolder = $this->rootFolder->getUserFolder($userId);
 		} catch (FilesNotPermittedException | NoUserException $e) {
-			throw new NotPermittedException($e->getMessage());
+			throw new NotPermittedException($e->getMessage(), 0, $e);
 		}
 
 		$userCollectivesPath = $this->getUserFolderSetting($userId);
@@ -103,12 +103,12 @@ class UserFolderHelper {
 			try {
 				$userCollectivesFolder = $userFolder->newFolder($userCollectivesPath);
 			} catch (FilesNotPermittedException $e) {
-				throw new NotPermittedException($e->getMessage());
+				throw new NotPermittedException($e->getMessage(), 0, $e);
 			}
 		} catch (InvalidPathException $e) {
-			throw new NotFoundException($e->getMessage());
+			throw new NotFoundException($e->getMessage(), 0, $e);
 		} catch (FilesNotPermittedException | LockedException $e) {
-			throw new NotPermittedException($e->getMessage());
+			throw new NotPermittedException($e->getMessage(), 0, $e);
 		}
 
 		return $userCollectivesFolder;

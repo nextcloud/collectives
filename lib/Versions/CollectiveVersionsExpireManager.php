@@ -130,9 +130,9 @@ class CollectiveVersionsExpireManager extends BasicEmitter {
 		try {
 			$files = $this->versionsBackend->getAllVersionedFiles($folder);
 		} catch (FilesNotFoundException $e) {
-			throw new NotFoundException($e->getMessage());
+			throw new NotFoundException($e->getMessage(), 0, $e);
 		} catch (FilesNotPermittedException $e) {
-			throw new NotPermittedException($e->getMessage());
+			throw new NotPermittedException($e->getMessage(), 0, $e);
 		}
 		$dummyUser = new User('', null, $this->dispatcher);
 		foreach ($files as $fileId => $file) {
@@ -140,7 +140,7 @@ class CollectiveVersionsExpireManager extends BasicEmitter {
 				try {
 					$versions = $this->versionsBackend->getVersionsForFile($dummyUser, $file);
 				} catch (FilesNotPermittedException | InvalidPathException $e) {
-					throw new NotPermittedException($e->getMessage());
+					throw new NotPermittedException($e->getMessage(), 0, $e);
 				}
 				$expireVersions = $this->expireManager->getExpiredVersion($versions, $this->timeFactory->getTime(), false);
 				foreach ($expireVersions as $version) {
@@ -154,9 +154,9 @@ class CollectiveVersionsExpireManager extends BasicEmitter {
 				try {
 					$this->versionsBackend->deleteAllVersionsForFile($folder['id'], $fileId);
 				} catch (FilesNotPermittedException | InvalidPathException $e) {
-					throw new NotPermittedException($e->getMessage());
+					throw new NotPermittedException($e->getMessage(), 0, $e);
 				} catch (FilesNotFoundException $e) {
-					throw new NotFoundException($e->getMessage());
+					throw new NotFoundException($e->getMessage(), 0, $e);
 				}
 			}
 		}

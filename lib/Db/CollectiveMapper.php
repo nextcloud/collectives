@@ -57,7 +57,7 @@ class CollectiveMapper extends QBMapper {
 		} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
 			return null;
 		} catch (Exception $e) {
-			throw new NotFoundException('Failed to run database query.');
+			throw new NotFoundException('Failed to run database query.', 0, $e);
 		}
 	}
 
@@ -83,7 +83,7 @@ class CollectiveMapper extends QBMapper {
 		} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
 			return null;
 		} catch (Exception $e) {
-			throw new NotFoundException('Failed to run database query.');
+			throw new NotFoundException('Failed to run database query.', 0, $e);
 		}
 	}
 
@@ -106,7 +106,7 @@ class CollectiveMapper extends QBMapper {
 		try {
 			return $this->findEntities($qb);
 		} catch (Exception $e) {
-			throw new NotFoundException('Failed to run database query');
+			throw new NotFoundException('Failed to run database query', 0, $e);
 		}
 	}
 
@@ -130,7 +130,7 @@ class CollectiveMapper extends QBMapper {
 		try {
 			$collectives = $this->findEntities($qb);
 		} catch (Exception $e) {
-			throw new NotFoundException('Failed to run database query');
+			throw new NotFoundException('Failed to run database query', 0, $e);
 		}
 
 		return array_filter($collectives, function (Collective $c) use ($userId) {
