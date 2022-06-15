@@ -342,6 +342,47 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @When user :user collective :collective property :property is :value
+	 *
+	 * @param string $user
+	 * @param string $collective
+	 * @param string $property
+	 * @param string $value
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userCollectiveProperty(string $user, string $collective, string $property, string $value): void {
+		$this->setCurrentUser($user);
+		$this->sendRequest('GET', '/apps/collectives/_api');
+		if (200 !== $this->response->getStatusCode()) {
+			throw new RuntimeException('Unable to get list of collectives');
+		}
+		$this->assertCollectiveKeyValue($collective, $property, $value);
+	}
+
+	/**
+	 * @When user :user sets userSetting :userSetting for collective :collective to :value
+	 *
+	 * @param string $user
+	 * @param string $userSetting
+	 * @param string $collective
+	 * @param string $value
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userSetsCollectiveUserSetting(string $user, string $userSetting, string $collective, string $value): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$formData = new TableNode([[$userSetting, $value]]);
+		$this->sendRequest('PUT', '/apps/collectives/_api/' . $collectiveId . '/_userSettings/' . $userSetting, $formData);
+		if (200 !== $this->response->getStatusCode()) {
+			throw new RuntimeException('Unable to set userSetting for collective');
+		}
+
+		$this->userCollectiveProperty($user, $collective, 'user' . ucfirst($userSetting), $value);
+	}
+
+	/**
 	 * @When user :user deletes page :page with parentPath :parentPath in :collective
 	 * @When user :user :fails to delete page :page with parentPath :parentPath in :collective
 	 *
