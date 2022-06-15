@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-06-09 17:14+0200\n"
-"PO-Revision-Date: 2022-05-05 12:14+0000\n"
+"PO-Revision-Date: 2022-06-15 10:28+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/cs/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.12.1\n"
+"X-Generator: Weblate 4.13-dev\n"
 
 #. TRANSLATORS src/components/Page.vue:140
 #. TRANSLATORS src/views/Home.vue:4
@@ -145,9 +145,8 @@ msgstr "Vyberte kolektiv nebo (vlevo) vytvořte nový."
 
 #. TRANSLATORS src/components/CollectivePrint.vue:11
 #: /collectives/specialVueFakeDummyForL10nScript.js:10
-#, fuzzy
 msgid "Preparing collective for exporting or printing"
-msgstr "Připravuje se tisk kolektivu"
+msgstr "Kolektiv je připravován pro export či tisk"
 
 #. TRANSLATORS src/components/CollectivePrint.vue:58
 #: /collectives/specialVueFakeDummyForL10nScript.js:12
@@ -182,7 +181,7 @@ msgstr "Přestat sdílet"
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:57
 #: /collectives/specialVueFakeDummyForL10nScript.js:24
 msgid "Export or print"
-msgstr ""
+msgstr "Exportovat nebo vytisknout"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:66
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:2
