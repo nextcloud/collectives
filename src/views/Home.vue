@@ -50,6 +50,16 @@ export default {
 		]),
 	},
 
+	watch: {
+		// Open the navigation if we already have collectives.
+		// Only has an effect on mobile (where navigation is closed per default).
+		'collectives'(val, oldval) {
+			if (oldval.length === 0 && val.length > 0) {
+				emit('toggle-navigation', { open: true })
+			}
+		},
+	},
+
 	methods: {
 		newCollective() {
 			emit('toggle-navigation', { open: true })
