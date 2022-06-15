@@ -106,11 +106,14 @@ import LastUpdate from './PageList/LastUpdate.vue'
 import SubpageList from './PageList/SubpageList.vue'
 import Item from './PageList/Item.vue'
 import PagesTemplateIcon from './Icon/PagesTemplateIcon.vue'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import SortAlphabeticalAscendingIcon from 'vue-material-design-icons/SortAlphabeticalAscending'
 import SortClockAscendingOutlineIcon from 'vue-material-design-icons/SortClockAscendingOutline'
+import { showError } from '@nextcloud/dialogs'
 import { scrollToPage } from '../util/scrollToElement.js'
 import pageMixin from '../mixins/pageMixin.js'
+import { SET_COLLECTIVE_USER_SETTING_PAGE_ORDER } from '../store/actions.js'
+import { pageOrders } from '../util/sortOrders.js'
 
 export default {
 	name: 'PageList',
@@ -184,6 +187,10 @@ export default {
 			'toggleTemplates',
 		]),
 
+		...mapActions({
+			dispatchSetUserPageOrder: SET_COLLECTIVE_USER_SETTING_PAGE_ORDER,
+		}),
+
 		/**
 		 * Change page sort order and scroll to current page
 		 *
@@ -191,6 +198,11 @@ export default {
 		 */
 		sortPagesAndScroll(order) {
 			this.sortPages(order)
+			this.dispatchSetUserPageOrder({ id: this.currentCollective.id, pageOrder: pageOrders[order] })
+				.catch((error) => {
+					console.error(error)
+					showError(t('collectives', 'Could not save page order for collective'))
+				})
 			this.$nextTick(() => {
 				scrollToPage(this.currentPage.id)
 			})
