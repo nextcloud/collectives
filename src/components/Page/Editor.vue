@@ -53,9 +53,4 @@ export default {
 	padding: 0 2px;
 	margin: auto;
 }
-
-#editor-container .editor__content {
-	border: 2px solid var(--color-border);
-	border-radius: var(--border-radius);
-}
 </style>
