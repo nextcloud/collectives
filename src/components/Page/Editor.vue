@@ -44,6 +44,8 @@ export default {
 		ready() {
 			this.$nextTick(() => {
 				// scroll text div from outer text-wrapper div
+				// Try to remove event listener first to cleanup earlier ones and prevent possible memory leaks
+				document.getElementById('editor-wrapper').removeEventListener('wheel', this.scrollEditorFromOutside)
 				document.getElementById('editor-wrapper').addEventListener('wheel', this.scrollEditorFromOutside)
 				this.$emit('ready')
 			})
