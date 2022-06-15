@@ -77,7 +77,7 @@ export default {
 			)
 			commit(UPDATE_CIRCLE, response.data.ocs.data)
 
-			if (collective.id === getters.currentCollective.id) {
+			if (collective.id === getters.currentCollective?.id) {
 				// Update page list, properties like `collectivePath` might have changed
 				await dispatch(GET_PAGES)
 			}
