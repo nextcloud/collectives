@@ -8,7 +8,7 @@
 			<div class="menubar">
 				<div class="menubar-icons" />
 			</div>
-			<RichtextReader v-if="!loading"
+			<RichTextReader v-if="!loading"
 				class="editor__content"
 				:content="pageContent"
 				@click-link="followLink" />
@@ -18,7 +18,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { RichtextReader } from '@nextcloud/text'
+import { RichTextReader, ImageResolver, IMAGE_RESOLVER } from '@nextcloud/text'
+import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl } from '@nextcloud/router'
 
 const resolvePath = function(from, rel) {
@@ -44,14 +45,15 @@ export default {
 	name: 'RichText',
 
 	components: {
-		RichtextReader,
+		RichTextReader,
 	},
 
 	provide() {
-		return {
-			fileId: this.currentPage.id,
-			currentDirectory: this.currentPageDirectory,
-		}
+		const val = {}
+		Object.defineProperties(val, {
+			[IMAGE_RESOLVER]: { get: () => this.imageResolver },
+		})
+		return val
 	},
 
 	props: {
@@ -89,6 +91,16 @@ export default {
 			'pageParam',
 			'collectiveParam',
 		]),
+
+		imageResolver() {
+			return new ImageResolver({
+				fileId: this.currentPage.id,
+				currentDirectory: '/' + this.currentPageDirectory,
+				user: getCurrentUser(),
+				shareToken: this.shareTokenParam,
+			})
+		},
+
 	},
 
 	mounted() {

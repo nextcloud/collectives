@@ -6,7 +6,7 @@
 		<h1 v-else class="page-title page-title-subpage">
 			{{ page.title }}
 		</h1>
-		<RichtextReader v-if="pageContent"
+		<RichTextReader v-if="pageContent"
 			class="editor__content"
 			:content="pageContent" />
 	</div>
@@ -14,14 +14,15 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { RichtextReader } from '@nextcloud/text'
+import { RichTextReader, ImageResolver, IMAGE_RESOLVER } from '@nextcloud/text'
+import { getCurrentUser } from '@nextcloud/auth'
 import pageContentMixin from '../mixins/pageContentMixin.js'
 
 export default {
 	name: 'PagePrint',
 
 	components: {
-		RichtextReader,
+		RichTextReader,
 	},
 
 	mixins: [
@@ -29,10 +30,11 @@ export default {
 	],
 
 	provide() {
-		return {
-			fileId: this.page.id,
-			currentDirectory: this.pageDirectory(this.page),
-		}
+		const val = {}
+		Object.defineProperties(val, {
+			[IMAGE_RESOLVER]: { get: () => this.imageResolver },
+		})
+		return val
 	},
 
 	props: {
@@ -56,6 +58,15 @@ export default {
 			'isPublic',
 			'shareTokenParam',
 		]),
+
+		imageResolver() {
+			return new ImageResolver({
+				fileId: this.page.id,
+				currentDirectory: '/' + this.pageDirectory(this.page),
+				user: getCurrentUser(),
+				shareToken: this.shareTokenParam,
+			})
+		},
 	},
 
 	mounted() {
