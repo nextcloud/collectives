@@ -72,7 +72,7 @@ class MountProvider implements IMountProvider {
 		$folders = [];
 
 		try {
-			$collectiveInfos = $this->collectiveHelper->getCollectivesForUser($user->getUID());
+			$collectiveInfos = $this->collectiveHelper->getCollectivesForUser($user->getUID(), true, false);
 		} catch (QueryException | MissingDependencyException | NotFoundException | NotPermittedException $e) {
 			$this->log($e);
 			return $folders;

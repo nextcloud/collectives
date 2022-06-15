@@ -8,6 +8,7 @@ use OCA\Circles\Model\Circle;
 use OCA\Circles\Model\Member;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
+use OCA\Collectives\Db\CollectiveUserSettingsMapper;
 use OCA\Collectives\Db\PageMapper;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Service\CircleExistsException;
@@ -58,6 +59,10 @@ class CollectiveServiceTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
+		$collectiveUserSettingsMapper = $this->getMockBuilder(CollectiveUserSettingsMapper::class)
+			->disableOriginalConstructor()
+			->getMock();
+
 		$pageMapper = $this->getMockBuilder(PageMapper::class)
 			->disableOriginalConstructor()
 			->getMock();
@@ -72,6 +77,7 @@ class CollectiveServiceTest extends TestCase {
 			$collectiveFolderManager,
 			$this->circleHelper,
 			$shareService,
+			$collectiveUserSettingsMapper,
 			$pageMapper,
 			$this->l10n
 		);
@@ -165,6 +171,7 @@ class CollectiveServiceTest extends TestCase {
 			'canShare' => true,
 			'shareToken' => null,
 			'shareEditable' => false,
+			'userPageOrder' => null,
 		], $collective->jsonSerialize());
 	}
 }

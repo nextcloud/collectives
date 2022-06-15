@@ -6,6 +6,7 @@ use OC\Files\Node\File;
 use OCA\Circles\Model\Member;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
+use OCA\Collectives\Db\CollectiveUserSettingsMapper;
 use OCA\Collectives\Db\Page;
 use OCA\Collectives\Db\PageMapper;
 use OCA\Collectives\Model\CollectiveInfo;
@@ -26,6 +27,9 @@ class CollectiveService extends CollectiveServiceBase {
 	/** @var CollectiveShareService */
 	private $shareService;
 
+	/** @var CollectiveUserSettingsMapper */
+	private $collectiveUserSettingsMapper;
+
 	/** @var PageMapper */
 	private $pageMapper;
 
@@ -33,15 +37,14 @@ class CollectiveService extends CollectiveServiceBase {
 	private $l10n;
 
 	/**
-	 * CollectiveService constructor.
-	 *
-	 * @param CollectiveMapper        $collectiveMapper
-	 * @param CollectiveHelper        $collectiveHelper
-	 * @param CollectiveFolderManager $collectiveFolderManager
-	 * @param CircleHelper            $circleHelper
-	 * @param CollectiveShareService  $shareService
-	 * @param PageMapper              $pageMapper
-	 * @param IL10N                   $l10n
+	 * @param CollectiveMapper             $collectiveMapper
+	 * @param CollectiveHelper             $collectiveHelper
+	 * @param CollectiveFolderManager      $collectiveFolderManager
+	 * @param CircleHelper                 $circleHelper
+	 * @param CollectiveShareService       $shareService
+	 * @param CollectiveUserSettingsMapper $collectiveUserSettingsMapper
+	 * @param PageMapper                   $pageMapper
+	 * @param IL10N                        $l10n
 	 */
 	public function __construct(
 		CollectiveMapper $collectiveMapper,
@@ -49,11 +52,13 @@ class CollectiveService extends CollectiveServiceBase {
 		CollectiveFolderManager $collectiveFolderManager,
 		CircleHelper $circleHelper,
 		CollectiveShareService $shareService,
+		CollectiveUserSettingsMapper $collectiveUserSettingsMapper,
 		PageMapper $pageMapper,
 		IL10N $l10n) {
 		parent::__construct($collectiveMapper, $circleHelper);
 		$this->collectiveHelper = $collectiveHelper;
 		$this->collectiveFolderManager = $collectiveFolderManager;
+		$this->collectiveUserSettingsMapper = $collectiveUserSettingsMapper;
 		$this->shareService = $shareService;
 		$this->pageMapper = $pageMapper;
 		$this->l10n = $l10n;
@@ -239,7 +244,8 @@ class CollectiveService extends CollectiveServiceBase {
 
 		return new CollectiveInfo($this->collectiveMapper->update($collectiveInfo),
 			$collectiveInfo->getName(),
-			$collectiveInfo->getLevel());
+			$collectiveInfo->getLevel(),
+			$collectiveInfo->getUserPageOrder());
 	}
 
 	/**
@@ -267,7 +273,8 @@ class CollectiveService extends CollectiveServiceBase {
 
 		return new CollectiveInfo($this->collectiveMapper->update($collectiveInfo),
 			$collectiveInfo->getName(),
-			$collectiveInfo->getLevel());
+			$collectiveInfo->getLevel(),
+			$collectiveInfo->getUserPageOrder());
 	}
 
 	/**
@@ -288,7 +295,8 @@ class CollectiveService extends CollectiveServiceBase {
 
 		return new CollectiveInfo($this->collectiveMapper->trash($collectiveInfo),
 			$collectiveInfo->getName(),
-			$collectiveInfo->getLevel());
+			$collectiveInfo->getLevel(),
+			$collectiveInfo->getUserPageOrder());
 	}
 
 	/**
@@ -316,11 +324,13 @@ class CollectiveService extends CollectiveServiceBase {
 			throw new NotFoundException('Failed to delete collective folder', 0, $e);
 		} finally {
 			$this->shareService->deleteShareByCollectiveId($collectiveInfo->getId());
+			$this->collectiveUserSettingsMapper->deleteByCollectiveId($collectiveInfo->getId());
 		}
 
 		return new CollectiveInfo($this->collectiveMapper->delete($collectiveInfo),
 			$collectiveInfo->getName(),
-			$collectiveInfo->getLevel());
+			$collectiveInfo->getLevel(),
+			$collectiveInfo->getUserPageOrder());
 	}
 
 	/**
@@ -337,6 +347,7 @@ class CollectiveService extends CollectiveServiceBase {
 
 		return new CollectiveInfo($this->collectiveMapper->restore($collectiveInfo),
 			$collectiveInfo->getName(),
-			$collectiveInfo->getLevel());
+			$collectiveInfo->getLevel(),
+			$collectiveInfo->getUserPageOrder());
 	}
 }

@@ -85,7 +85,7 @@ class CollectiveProvider implements IProvider {
 	 */
 	public function search(IUser $user, ISearchQuery $query): SearchResult {
 		if ($this->appManager->isEnabledForUser('circles', $user)) {
-			$collectiveInfos = $this->collectiveHelper->getCollectivesForUser($user->getUID(), false);
+			$collectiveInfos = $this->collectiveHelper->getCollectivesForUser($user->getUID(), false, false);
 		} else {
 			$collectiveInfos = [];
 		}

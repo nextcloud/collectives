@@ -16,6 +16,7 @@ use OCP\Constants;
  * @method void setShareToken(string $shareToken)
  * @method bool getShareEditable()
  * @method void setShareEditable(bool $shareEditable)
+ * @method bool getUserPageOrder()
  */
 class CollectiveInfo extends Collective {
 	/** @var string */
@@ -30,11 +31,15 @@ class CollectiveInfo extends Collective {
 	/** @var bool */
 	protected $shareEditable;
 
+	/** @var int|null */
+	protected $userPageOrder;
+
 	public function __construct(Collective $collective,
 								string $name,
 								int $level = Member::LEVEL_MEMBER,
 								string $shareToken = null,
-								bool $shareEditable = false) {
+								bool $shareEditable = false,
+								?int $userPageOrder = null) {
 		$this->id = $collective->getId();
 		$this->circleUniqueId = $collective->getCircleId();
 		$this->emoji = $collective->getEmoji();
@@ -45,6 +50,7 @@ class CollectiveInfo extends Collective {
 		$this->level = $level;
 		$this->shareToken = $shareToken;
 		$this->shareEditable = $shareEditable;
+		$this->userPageOrder = $userPageOrder;
 	}
 
 	/**
@@ -108,6 +114,16 @@ class CollectiveInfo extends Collective {
 	}
 
 	/**
+	 * @param int $userPageOrder
+	 */
+	public function setUserPageOrder(int $userPageOrder): void {
+		if (!array_key_exists($userPageOrder, Collective::pageOrders)) {
+			throw new \RuntimeException('Invalid userPageOrder value: ' . $userPageOrder);
+		}
+		$this->userPageOrder = $userPageOrder;
+	}
+
+	/**
 	 * @return array
 	 */
 	public function jsonSerialize(): array {
@@ -125,6 +141,7 @@ class CollectiveInfo extends Collective {
 			'canShare' => $this->canShare(),
 			'shareToken' => $this->shareToken,
 			'shareEditable' => $this->canEdit() && $this->shareEditable,
+			'userPageOrder' => $this->userPageOrder,
 		];
 	}
 }
