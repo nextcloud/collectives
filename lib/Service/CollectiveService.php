@@ -183,7 +183,7 @@ class CollectiveService extends CollectiveServiceBase {
 		try {
 			$collectiveFolder = $this->collectiveFolderManager->initializeFolder($collective->getId(), $userLang);
 		} catch (InvalidPathException | FilesNotPermittedException $e) {
-			throw new NotPermittedException($e->getMessage());
+			throw new NotPermittedException($e->getMessage(), 0, $e);
 		}
 
 		// Register landing page
@@ -198,7 +198,7 @@ class CollectiveService extends CollectiveServiceBase {
 			$page->setLastUserId($userId);
 			$this->pageMapper->updateOrInsert($page);
 		} catch (FilesNotFoundException | InvalidPathException $e) {
-			throw new NotFoundException($e->getMessage());
+			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
 
 		return [$collectiveInfo, $message];
@@ -233,7 +233,7 @@ class CollectiveService extends CollectiveServiceBase {
 			try {
 				$collectiveInfo->setPageOrder($pageOrder);
 			} catch (\RuntimeException $e) {
-				throw new NotPermittedException('Failed to update collective with invalid page order');
+				throw new NotPermittedException('Failed to update collective with invalid page order', 0, $e);
 			}
 		}
 
@@ -313,7 +313,7 @@ class CollectiveService extends CollectiveServiceBase {
 			$collectiveFolder = $this->collectiveFolderManager->getFolder($collectiveInfo->getId());
 			$collectiveFolder->delete();
 		} catch (InvalidPathException | FilesNotFoundException | FilesNotPermittedException $e) {
-			throw new NotFoundException('Failed to delete collective folder');
+			throw new NotFoundException('Failed to delete collective folder', 0, $e);
 		} finally {
 			$this->shareService->deleteShareByCollectiveId($collectiveInfo->getId());
 		}

@@ -70,14 +70,14 @@ class CollectiveShareService {
 		try {
 			$path = $userFolder->get($collectiveName);
 		} catch (FilesNotFoundException $e) {
-			throw new NotFoundException('Wrong path, collective folder doesn\'t exist');
+			throw new NotFoundException('Wrong path, collective folder doesn\'t exist', 0, $e);
 		}
 		$share->setNode($path);
 
 		try {
 			$share->getNode()->lock(ILockingProvider::LOCK_SHARED);
 		} catch (FilesNotFoundException | LockedException $e) {
-			throw new NotFoundException('Could not create share');
+			throw new NotFoundException('Could not create share', 0, $e);
 		}
 
 		$share->setShareType(IShare::TYPE_LINK);
@@ -87,16 +87,16 @@ class CollectiveShareService {
 		try {
 			$share = $this->shareManager->createShare($share);
 		} catch (GenericShareException $e) {
-			throw new NotFoundException($e->getHint());
+			throw new NotFoundException($e->getHint(), 0, $e);
 		} catch (\Exception $e) {
-			throw new NotPermittedException($e->getMessage());
+			throw new NotPermittedException($e->getMessage(), 0, $e);
 		} finally {
 			try {
 				$share->getNode()->unlock(ILockingProvider::LOCK_SHARED);
 			} catch (FilesNotFoundException $e) {
-				throw new NotFoundException('Could not get share');
+				throw new NotFoundException('Could not get share', 0, $e);
 			} catch (LockedException $e) {
-				throw new NotPermittedException('Failed to unlock share');
+				throw new NotPermittedException('Failed to unlock share', 0, $e);
 			}
 		}
 
@@ -182,7 +182,7 @@ class CollectiveShareService {
 		try {
 			return new CollectiveShareInfo($this->collectiveShareMapper->create($collective->getId(), $folderShare->getToken(), $userId));
 		} catch (Exception $e) {
-			throw new NotPermittedException('Failed to create collective share for ' . $collective->getName());
+			throw new NotPermittedException('Failed to create collective share for ' . $collective->getName(), 0, $e);
 		}
 	}
 
@@ -215,7 +215,7 @@ class CollectiveShareService {
 		try {
 			$folderShare = $this->shareManager->getShareByToken($token);
 		} catch (ShareNotFound $e) {
-			throw new NotFoundException($this->l10n->t('Share not found for user'));
+			throw new NotFoundException($this->l10n->t('Share not found for user'), 0, $e);
 		}
 
 		$permissions = Constants::PERMISSION_READ;
@@ -255,9 +255,9 @@ class CollectiveShareService {
 			$collectiveShare = $this->collectiveShareMapper->findOneByCollectiveIdAndTokenAndUser($collectiveId, $token, $userId);
 			$this->collectiveShareMapper->delete($collectiveShare);
 		} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
-			throw new NotFoundException('Failed to find collective share ' . $token);
+			throw new NotFoundException('Failed to find collective share ' . $token, 0, $e);
 		} catch (Exception $e) {
-			throw new NotPermittedException('Failed to delete collective share ' . $token);
+			throw new NotPermittedException('Failed to delete collective share ' . $token, 0, $e);
 		}
 
 		$this->deleteFileShare($collectiveShare->getToken());
@@ -278,7 +278,7 @@ class CollectiveShareService {
 				$this->deleteFileShare($collectiveShare->getToken());
 			}
 		} catch (Exception $e) {
-			throw new NotPermittedException('Failed to delete collective share for ' . $collectiveId);
+			throw new NotPermittedException('Failed to delete collective share for ' . $collectiveId, 0, $e);
 		}
 	}
 }

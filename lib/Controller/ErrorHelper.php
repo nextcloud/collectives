@@ -24,12 +24,24 @@ trait ErrorHelper {
 		try {
 			return new DataResponse($callback());
 		} catch (NotPermittedException $e) {
+			if ($logger) {
+				$logger->debug('Collectives App NotPermitted Error: ' . $e->getMessage(), ['exception' => $e]);
+			}
 			return new DataResponse($e->getMessage(), Http::STATUS_FORBIDDEN);
 		} catch (NotFoundException $e) {
+			if ($logger) {
+				$logger->debug('Collectives App NotFound Error: ' . $e->getMessage(), ['exception' => $e]);
+			}
 			return new DataResponse($e->getMessage(), Http::STATUS_NOT_FOUND);
 		} catch (CircleExistsException | QueryException | UnprocessableEntityException $e) {
+			if ($logger) {
+				$logger->debug('Collectives App CircleExists Error: ' . $e->getMessage(), ['exception' => $e]);
+			}
 			return new DataResponse($e->getMessage(), Http::STATUS_UNPROCESSABLE_ENTITY);
 		} catch (\InvalidArgumentException $e) {
+			if ($logger) {
+				$logger->debug('Collectives App InvalidArgument Error: ' . $e->getMessage(), ['exception' => $e]);
+			}
 			return new DataResponse($e->getMessage(), Http::STATUS_BAD_REQUEST);
 		} catch (\Throwable $e) {
 			if ($logger) {
