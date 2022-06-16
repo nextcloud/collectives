@@ -67,7 +67,9 @@ Cache node_modules:
       - node_modules/
     key: npm
   script:
-    - npm install -g npm # install newest NPM (>=7)
+    - npm install -g "npm@7" # install newest npm of the 7.x.x series
+    - npm --version
+    - node --version
     - npm ci --cache .npm --prefer-offline
   only:
     changes:
