@@ -75,6 +75,7 @@ Cache node_modules:
     changes:
       - package.json
       - package-lock.json
+      - .gitlab-ci.yml
     refs:
       - main
 
@@ -94,6 +95,7 @@ Validate AppInfo:
     changes:
       - appinfo/**/*
       - Makefile
+      - .gitlab-ci.yml
 
 Build App:
   <<: *node
