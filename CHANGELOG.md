@@ -1,5 +1,39 @@
 # Changelog
 
+## 1.2.0 - 2022.06.17
+
+### ✨New
+* 🔝 Make user-selected page order for collectives persistent. (#342)
+
+### 🐛Fixes
+* 🖼️ Fix displaying images in read mode with latest Nextcloud 24. (#336)
+* 🔗 Open non-empty list of collectives on app start on mobile. (#341)
+* 🔲 Remove textarea border around editor. (#345)
+* 🖱️ Scroll page content when scrolling whitespace on the side. (#338)
+* 📝 Further improvements to the view/edit switch.
+* 🆕 Focus editor when opening an empty page. (#325)
+* 🧹 Delete cruft collectives by listening to CircleDestroyed event. (#326, #327)
+* 📄 Always load latest page content when switching to read mode.
+* 📜 Improve accessibility of version and backlinks lists.
+* 🔻 Shrink app package by about 1MB.
+* 🖨️ Expose "Export or print" function in collective actions.
+* 🚫 Prevent creating an empty collective. (#331)
+* ⚠️ Several improvements to backend exception handling and logging.
+* 🐎 Improved performance when fetching Collectives, thanks to Claus-Justus Heine.
+
+### 🌎Translations
+* 🗣️ Czech translation updated thanks to Pavel Borecki.
+* 🗣️ Brasilian-Portuguese translation updated thanks to Alexandre Lopes.
+* 🗣️ French translation updated thanks to Nathan.
+* 🗣️ German translations updated thanks to Joachim Sokolowski.
+
+### 🚧Updates & Tooling
+* 🔌 Update @nextcloud/text to 25.0.0-alpha.3.
+* 🔌 Update all possible javascript dependencies.
+* ☝️ Migrate icons from SCSS mixins to Vue components.
+* 🖼️ Update Collectives app screenshots.
+
+
 ## 1.1.0 - 2022.05.04
 
 ### ✨New
