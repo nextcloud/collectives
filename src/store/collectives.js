@@ -9,6 +9,7 @@ import {
 	SET_TRASH_COLLECTIVES,
 	ADD_OR_UPDATE_COLLECTIVE,
 	PATCH_COLLECTIVE_WITH_CIRCLE,
+	PATCH_COLLECTIVE_WITH_PROPERTY,
 	MOVE_COLLECTIVE_INTO_TRASH,
 	RESTORE_COLLECTIVE_FROM_TRASH,
 	DELETE_COLLECTIVE_FROM_TRASH,
@@ -28,6 +29,7 @@ import {
 	UNSHARE_COLLECTIVE,
 	UPDATE_COLLECTIVE_EDIT_PERMISSIONS,
 	UPDATE_COLLECTIVE_SHARE_PERMISSIONS,
+	SET_COLLECTIVE_USER_SETTING_PAGE_ORDER,
 	GET_COLLECTIVES_FOLDER,
 } from './actions.js'
 
@@ -157,6 +159,10 @@ export default {
 
 		[PATCH_COLLECTIVE_WITH_CIRCLE](state, circle) {
 			state.collectives.find(c => c.circleId === circle.id).name = circle.sanitizedName
+		},
+
+		[PATCH_COLLECTIVE_WITH_PROPERTY](state, id, property, value) {
+			state.collectives.find(c => c.id === id)[property] = value
 		},
 
 		[MOVE_COLLECTIVE_INTO_TRASH](state, collective) {
@@ -373,6 +379,14 @@ export default {
 				{ level }
 			)
 			commit(ADD_OR_UPDATE_COLLECTIVE, response.data.data)
+		},
+
+		async [SET_COLLECTIVE_USER_SETTING_PAGE_ORDER]({ commit }, { id, pageOrder }) {
+			await axios.put(
+				generateUrl('/apps/collectives/_api/' + id + '/_userSettings/pageOrder'),
+				{ pageOrder }
+			)
+			commit(PATCH_COLLECTIVE_WITH_PROPERTY, 'userPageOrder', pageOrder)
 		},
 	},
 

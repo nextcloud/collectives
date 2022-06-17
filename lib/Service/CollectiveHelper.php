@@ -3,11 +3,16 @@
 namespace OCA\Collectives\Service;
 
 use OCA\Collectives\Db\CollectiveMapper;
+use OCA\Collectives\Db\CollectiveUserSettingsMapper;
 use OCA\Collectives\Model\CollectiveInfo;
 
 class CollectiveHelper {
 	/** @var CollectiveMapper */
 	private $collectiveMapper;
+
+
+	/** @var CollectiveUserSettingsMapper */
+	private $collectiveUserSettingsMapper;
 
 	/** @var CircleHelper */
 	private $circleHelper;
@@ -19,21 +24,24 @@ class CollectiveHelper {
 	 * @param CircleHelper     $circleHelper
 	 */
 	public function __construct(CollectiveMapper $collectiveMapper,
+								CollectiveUserSettingsMapper $collectiveUserSettingsMapper,
 								CircleHelper $circleHelper) {
 		$this->collectiveMapper = $collectiveMapper;
+		$this->collectiveUserSettingsMapper = $collectiveUserSettingsMapper;
 		$this->circleHelper = $circleHelper;
 	}
 
 	/**
 	 * @param string $userId
 	 * @param bool   $getLevel
+	 * @param bool   $getUserSettings
 	 *
 	 * @return CollectiveInfo[]
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 * @throws MissingDependencyException
 	 */
-	public function getCollectivesForUser(string $userId, bool $getLevel = true): array {
+	public function getCollectivesForUser(string $userId, bool $getLevel = true, bool $getUserSettings = true): array {
 		$collectiveInfos = [];
 		$circles = $this->circleHelper->getCircles($userId);
 		$cids = array_map(function($circle) { return $circle->getSingleId(); }, $circles);
@@ -42,9 +50,17 @@ class CollectiveHelper {
 		foreach ($collectives as $c) {
 			$cid = $c->getCircleId();
 			$level = $getLevel ? $this->circleHelper->getLevel($cid, $userId): 0;
+			$userPageOrder = null;
+			if ($getUserSettings) {
+				// TODO: merge queries for collective and user settings into one?
+				$userPageOrder = $this->collectiveUserSettingsMapper->getPageOrder($c->getId(), $userId) ?: $c->getPageOrder();
+			}
 			$collectiveInfos[] = new CollectiveInfo($c,
 				$circles[$cid]->getSanitizedName(),
-				$level);
+				$level,
+				null,
+				false,
+				$userPageOrder);
 		}
 		return $collectiveInfos;
 	}

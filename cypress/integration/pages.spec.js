@@ -29,6 +29,8 @@ describe('Page', function() {
 		cy.login('bob', { route: '/apps/collectives' })
 		cy.deleteAndSeedCollective('Our Garden')
 		cy.seedPage('Day 1', '', 'Readme.md')
+		// Wait 1 second to make sure that page order by time is right
+		cy.wait(1000) // eslint-disable-line cypress/no-unnecessary-waiting
 		cy.seedPage('Day 2', '', 'Readme.md')
 		cy.seedPage('Page Title', '', 'Readme.md')
 		cy.seedPage('#% special chars', '', 'Readme.md')
@@ -53,14 +55,24 @@ describe('Page', function() {
 
 	describe('Sort order', function() {
 		it('sorts pages by timestamp by default', function() {
-			cy.get('.app-content-list-item:last-child')
+			cy.get('.app-content-list-item').last()
 				.should('contain', 'Day 1')
 		})
-		it('can sort pages by title', function() {
+		it('can sort pages by title and sort order is persistent', function() {
 			cy.get('span.sort-clock-ascending-outline-icon').click()
 			cy.get('.sort-alphabetical-ascending-icon').click()
-			cy.get('.app-content-list-item:last-child')
-				.should('contain', 'Day 2')
+			cy.get('.app-content-list-item').last()
+				.should('contain', 'Page Title')
+
+			cy.intercept('GET', '**/_api/*/_pages').as('getPages')
+			cy.reload()
+			cy.wait('@getPages')
+			cy.get('.app-content-list-item').last()
+				.should('contain', 'Page Title')
+			cy.get('span.sort-alphabetical-ascending-icon').click()
+			cy.get('button.action-button > span.sort-clock-ascending-outline-icon').click()
+			cy.get('.app-content-list-item').last()
+				.should('contain', 'Day 1')
 		})
 	})
 
@@ -89,7 +101,7 @@ describe('Page', function() {
 			cy.get('#titleform input.title')
 				.type('{selectAll}New page from Template{enter}')
 			cy.get('.editor__content').contains('This is going to be our template.')
-			cy.get('.app-content-list-item:first-child')
+			cy.get('.app-content-list-item').eq(1)
 				.should('contain', 'New page from Template')
 		})
 	})

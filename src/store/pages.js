@@ -181,7 +181,7 @@ export default {
 		},
 
 		sortByDefault(_state, getters) {
-			return sortOrders.pageOrdersByNumber[getters.currentCollective.pageOrder]
+			return sortOrders.pageOrdersByNumber[getters.currentCollective.userPageOrder]
 		},
 
 		sortBy(state, getters) {

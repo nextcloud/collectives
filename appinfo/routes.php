@@ -33,6 +33,10 @@ return [
 		['name' => 'trash#restore', 'url' => '/_api/trash/{id}', 'verb' => 'PATCH',
 			'requirements' => ['id' => '\d+']],
 
+		// collectives userSettings API
+		['name' => 'collectiveUserSettings#pageOrder', 'url' => '/_api/{id}/_userSettings/pageOrder', 'verb' => 'PUT',
+			'requirements' => ['id' => '\d+']],
+
 		// pages API
 		['name' => 'page#index', 'url' => '/_api/{collectiveId}/_pages',
 			'verb' => 'GET', 'requirements' => ['collectiveId' => '\d+']],

@@ -102,7 +102,7 @@ class PageContentProvider implements IProvider {
 		// Only search for page content if the app is active
 		if ($this->appManager->isEnabledForUser('circles', $user) &&
 			strpos($query->getRoute(), 'collectives.') === 0) {
-			$collectiveInfos = $this->collectiveHelper->getCollectivesForUser($user->getUID(), false);
+			$collectiveInfos = $this->collectiveHelper->getCollectivesForUser($user->getUID(), false, false);
 		} else {
 			$collectiveInfos = [];
 		}
