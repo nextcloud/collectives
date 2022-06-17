@@ -1,4 +1,4 @@
-# Bienvenue dans votre nouveau collectif
+# Bienvenue sur votre nouveau collectif
 
 **Venez, organisez et construisez des connaissances partagées !**
 

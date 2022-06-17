@@ -1,4 +1,4 @@
-# Willkommen zu deinem neuen Kollektiv
+# Willkommen zu Deinem neuen Kollektiv
 
 **Mach' mit, organisiere und baue gemeinsames Wissen auf!**
 
