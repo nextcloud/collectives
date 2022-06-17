@@ -83,6 +83,7 @@ OC.L10N.register(
     "Show templates" : "Mostrar plantillas",
     "Sort order" : "Ordenar",
     "Add a page" : "Añadir página",
+    "Could not save page order for collective" : "No se pudo crear la página",
     "No backlinks available" : "No hay enlaces entrantes",
     "If other pages link to this one, they will be listed here." : "Si otras páginas enlazan a esta, aparecerán en esta lista.",
     "Could not get page backlinks" : "No se encontraron enlaces entrantes",

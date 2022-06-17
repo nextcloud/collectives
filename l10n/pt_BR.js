@@ -103,6 +103,7 @@ OC.L10N.register(
     "Show templates" : "Mostrar templates",
     "Sort order" : "Ordem",
     "Add a page" : "Adicionar página",
+    "Could not save page order for collective" : "Não foi possível compartilhar o coletivo",
     "No backlinks available" : "Nenhuma referência disponível",
     "If other pages link to this one, they will be listed here." : "Se outras páginas fizerem link para esta, elas estarão listadas aqui.",
     "Could not get page backlinks" : "Não foi possível recuperar backlinks",

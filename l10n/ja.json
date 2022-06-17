@@ -76,6 +76,7 @@
     "Show templates" : "テンプレートの表示",
     "Sort order" : "ソート順",
     "Add a page" : "ページの追加",
+    "Could not save page order for collective" : "ページを作成できません",
     "No backlinks available" : "バックリンクはありません",
     "If other pages link to this one, they will be listed here." : "他のページからこのページへのリンクがあると、ここに表示されます。",
     "Could not get page backlinks" : "バックリンクが取得できません",

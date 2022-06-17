@@ -18,6 +18,7 @@ OC.L10N.register(
     "Title" : "Название",
     "Done" : "Готово",
     "Add a page" : "Добавить страницу",
+    "Could not save page order for collective" : "Не удалось удалить страницу",
     "Could not get page backlinks" : "Не удалось удалить страницу",
     "Current version" : "Текущая версия",
     "_%n byte_::_%n bytes_" : ["%n байт","%n байта","%n байт"],

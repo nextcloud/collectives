@@ -61,6 +61,7 @@ OC.L10N.register(
     "Add template for subpages" : "Legg til en underside",
     "Sort order" : "Sorteringsrekkefølge",
     "Add a page" : "Legg til en side",
+    "Could not save page order for collective" : "Kunne ikke opprette siden",
     "No backlinks available" : "Ingen andre versjoner tilgjengelig",
     "Could not get page backlinks" : "Kunne ikke hente sideversjonering",
     "Current version" : "Nåværende versjon",

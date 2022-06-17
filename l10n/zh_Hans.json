@@ -94,6 +94,7 @@
     "Show templates" : "显示模板",
     "Sort order" : "排序",
     "Add a page" : "添加页面",
+    "Could not save page order for collective" : "无法共享该知识库",
     "No backlinks available" : "没有可用的反向链接",
     "If other pages link to this one, they will be listed here." : "如果其他页面链接到此页面，则它们将在此处列出。",
     "Could not get page backlinks" : "无法获取页面反向链接",
