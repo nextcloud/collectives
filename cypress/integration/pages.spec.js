@@ -138,10 +138,17 @@ describe('Page', function() {
 				.type('# Heading{enter}')
 
 			// Only run image tests on Nextcloud 24+
-			if (!['22', '23'].includes(String(Cypress.env('ncVersion')))) {
+			// Selector changed between Nextcloud 24 and 25
+			if (String(Cypress.env('ncVersion')) === '24') {
 				cy.log('Inserting an image')
 				cy.intercept({ method: 'POST', url: '**upload' }).as('imageUpload')
 				cy.get('.menubar > input[type="file"]')
+					.selectFile('cypress/fixtures/test.png', { force: true })
+				cy.wait('@imageUpload')
+			} else if (!['22', '23', '24'].includes(String(Cypress.env('ncVersion')))) {
+				cy.log('Inserting an image')
+				cy.intercept({ method: 'POST', url: '**upload' }).as('imageUpload')
+				cy.get('input[data-text-el="image-file-input"]')
 					.selectFile('cypress/fixtures/test.png', { force: true })
 				cy.wait('@imageUpload')
 			}
