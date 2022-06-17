@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2022-06-09 17:14+0200\n"
+"POT-Creation-Date: 2022-06-17 13:05+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,7 +24,7 @@ msgstr ""
 #: /collectives/lib/Search/CollectiveProvider.php:60
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:2
 #: /collectives/specialVueFakeDummyForL10nScript.js:178
-#: /collectives/specialVueFakeDummyForL10nScript.js:236
+#: /collectives/specialVueFakeDummyForL10nScript.js:238
 msgid "Collectives"
 msgstr ""
 
@@ -44,7 +44,7 @@ msgstr ""
 msgid "in Collective {collective}"
 msgstr ""
 
-#: /collectives/lib/Service/CollectiveService.php:157
+#: /collectives/lib/Service/CollectiveService.php:162
 #, php-format
 msgid "Created collective \"%s\" for existing circle."
 msgstr ""
@@ -402,8 +402,8 @@ msgstr ""
 #. TRANSLATORS src/views/Home.vue:10
 #. TRANSLATORS src/views/Home.vue:13
 #: /collectives/specialVueFakeDummyForL10nScript.js:128
-#: /collectives/specialVueFakeDummyForL10nScript.js:240
 #: /collectives/specialVueFakeDummyForL10nScript.js:242
+#: /collectives/specialVueFakeDummyForL10nScript.js:244
 msgid "Create new collective"
 msgstr ""
 
@@ -439,7 +439,7 @@ msgstr ""
 
 #. TRANSLATORS src/components/Page/PageActions.vue:15
 #. TRANSLATORS src/components/PageList/SubpageList.vue:139
-#. TRANSLATORS src/components/PageList.vue:173
+#. TRANSLATORS src/components/PageList.vue:176
 #: /collectives/specialVueFakeDummyForL10nScript.js:144
 #: /collectives/specialVueFakeDummyForL10nScript.js:190
 #: /collectives/specialVueFakeDummyForL10nScript.js:208
@@ -549,7 +549,7 @@ msgid "Add a subpage"
 msgstr ""
 
 #. TRANSLATORS src/components/PageList/SubpageList.vue:141
-#. TRANSLATORS src/components/PageList.vue:175
+#. TRANSLATORS src/components/PageList.vue:178
 #: /collectives/specialVueFakeDummyForL10nScript.js:192
 #: /collectives/specialVueFakeDummyForL10nScript.js:210
 msgid "Add template for subpages"
@@ -581,43 +581,48 @@ msgstr ""
 msgid "Add a page"
 msgstr ""
 
-#. TRANSLATORS src/components/PageSidebar/SidebarTabBacklinks.vue:40
+#. TRANSLATORS src/components/PageList.vue:204
 #: /collectives/specialVueFakeDummyForL10nScript.js:212
+msgid "Could not save page order for collective"
+msgstr ""
+
+#. TRANSLATORS src/components/PageSidebar/SidebarTabBacklinks.vue:40
+#: /collectives/specialVueFakeDummyForL10nScript.js:214
 msgid "No backlinks available"
 msgstr ""
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabBacklinks.vue:42
-#: /collectives/specialVueFakeDummyForL10nScript.js:214
+#: /collectives/specialVueFakeDummyForL10nScript.js:216
 msgid "If other pages link to this one, they will be listed here."
 msgstr ""
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabBacklinks.vue:123
-#: /collectives/specialVueFakeDummyForL10nScript.js:216
+#: /collectives/specialVueFakeDummyForL10nScript.js:218
 msgid "Could not get page backlinks"
 msgstr ""
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:25
-#: /collectives/specialVueFakeDummyForL10nScript.js:218
+#: /collectives/specialVueFakeDummyForL10nScript.js:220
 msgid "Current version"
 msgstr ""
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:59
-#: /collectives/specialVueFakeDummyForL10nScript.js:220
+#: /collectives/specialVueFakeDummyForL10nScript.js:222
 msgid "No other versions available"
 msgstr ""
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:61
-#: /collectives/specialVueFakeDummyForL10nScript.js:222
+#: /collectives/specialVueFakeDummyForL10nScript.js:224
 msgid "After editing you can find old versions of the page here."
 msgstr ""
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:171
-#: /collectives/specialVueFakeDummyForL10nScript.js:224
+#: /collectives/specialVueFakeDummyForL10nScript.js:226
 msgid "Could not get page versions"
 msgstr ""
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:142
-#: /collectives/specialVueFakeDummyForL10nScript.js:226
+#: /collectives/specialVueFakeDummyForL10nScript.js:228
 #: /collectives/src/util/xmlToVersionsList.js:30
 msgid "%n byte"
 msgid_plural "%n bytes"
@@ -625,27 +630,27 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. TRANSLATORS src/components/PageSidebar.vue:7
-#: /collectives/specialVueFakeDummyForL10nScript.js:228
+#: /collectives/specialVueFakeDummyForL10nScript.js:230
 msgid "Backlinks"
 msgstr ""
 
 #. TRANSLATORS src/components/PageSidebar.vue:12
-#: /collectives/specialVueFakeDummyForL10nScript.js:230
+#: /collectives/specialVueFakeDummyForL10nScript.js:232
 msgid "Pages that link to this one"
 msgstr ""
 
 #. TRANSLATORS src/components/PageSidebar.vue:20
-#: /collectives/specialVueFakeDummyForL10nScript.js:232
+#: /collectives/specialVueFakeDummyForL10nScript.js:234
 msgid "Versions"
 msgstr ""
 
 #. TRANSLATORS src/components/PageSidebar.vue:25
-#: /collectives/specialVueFakeDummyForL10nScript.js:234
+#: /collectives/specialVueFakeDummyForL10nScript.js:236
 msgid "Old versions of this page"
 msgstr ""
 
 #. TRANSLATORS src/views/Home.vue:6
-#: /collectives/specialVueFakeDummyForL10nScript.js:238
+#: /collectives/specialVueFakeDummyForL10nScript.js:240
 msgid "Come, organize and build shared knowledge!"
 msgstr ""
 

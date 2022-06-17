@@ -79,6 +79,7 @@ OC.L10N.register(
     "Show templates" : "Pokaži predloge",
     "Sort order" : "Razvrščanje",
     "Add a page" : "Dodaj stran",
+    "Could not save page order for collective" : "Strani ni mogoče ustvariti.",
     "No backlinks available" : "Ni povratnih povezav",
     "Current version" : "Trenutna različica",
     "No other versions available" : "Ni drugih različic",

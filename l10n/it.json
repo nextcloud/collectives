@@ -76,6 +76,7 @@
     "Show templates" : "Mostra i modelli",
     "Sort order" : "Ordinamento",
     "Add a page" : "Aggiungi una pagina",
+    "Could not save page order for collective" : "Non è stato possibile creare la pagina",
     "No backlinks available" : "Non sono disponibili link entranti",
     "If other pages link to this one, they will be listed here." : "Se altre pagine hanno link verso questa pagina, verranno elencate qui.",
     "Could not get page backlinks" : "Non è stato possibile ottenere i backlink della pagina",

@@ -78,6 +78,7 @@ OC.L10N.register(
     "Show templates" : "Mostrar plantilles",
     "Sort order" : "Ordenar per:",
     "Add a page" : "Afegir una Pàgina",
+    "Could not save page order for collective" : "No s'ha pogut crear la pàgina",
     "No backlinks available" : "No hi ha enllaços d'entrada disponibles",
     "If other pages link to this one, they will be listed here." : "Si hi ha altres pàgines que enllacen amb aquesta, es mostraran aquí.",
     "Could not get page backlinks" : "No s'han pogut obtenir enllaços d'entrada de pàgina",
