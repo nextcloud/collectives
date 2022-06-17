@@ -99,6 +99,7 @@ Validate AppInfo:
 
 Build App:
   <<: *node
+  <<: *php
   stage: build
   script:
     - DEBIAN_FRONTEND=noninteractive apt-get update
@@ -310,6 +311,7 @@ App Update Test:
 
 .browser-test: &browser-test
   <<: *node
+  <<: *php
   image: cypress/browsers:node14.17.6-chrome100-ff98
   stage: test end to end
   script:
