@@ -33,7 +33,7 @@ describe('Pages are accessible via group membership to circle', function() {
 	before(function() {
 		cy.login('jane')
 		cy.deleteAndSeedCollective('Group Collective')
-		cy.seedCircleMember('Group Collective', 'Bobs Group', 2)
+		cy.seedCircleMember('Group Collective', 'Bobs Group', 2, 8)
 		cy.logout()
 		cy.clearCookies()
 		cy.getCookies().should('be.empty')

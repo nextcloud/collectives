@@ -202,15 +202,16 @@ Cypress.Commands.add('seedCircle', (name, config = null) => {
 /**
  * Add someone to a circle
  */
-Cypress.Commands.add('seedCircleMember', (name, userId, type = 1) => {
+Cypress.Commands.add('seedCircleMember', (name, userId, type = 1, level) => {
 	cy.log(`Seeding circle member ${name} of type ${type}`)
 	cy.window()
 		.its('app')
 		.then(async app => {
 			await app.$store.dispatch(GET_CIRCLES)
 			const circleId = app.$store.state.circles.circles.find(c => c.sanitizedName === name).id
+			cy.log(`circleId: ${circleId}`)
 			const api = `${Cypress.env('baseUrl')}/ocs/v2.php/apps/circles/circles/${circleId}/members`
-			await axios.post(api,
+			const response = await axios.post(api,
 				{ userId, type },
 				{ headers: { requesttoken: app.OC.requestToken } },
 			).catch(e => {
@@ -220,5 +221,14 @@ Cypress.Commands.add('seedCircleMember', (name, userId, type = 1) => {
 					throw e
 				}
 			})
+			if (level) {
+				const memberId = response.data.ocs.data.id
+				cy.log(memberId)
+				cy.log(`Setting circle ${name} member ${userId} level to ${level}`)
+				await axios.put(`${api}/${memberId}/level`,
+					{ level },
+					{ headers: { requesttoken: app.OC.requestToken } },
+				)
+			}
 		})
 })
