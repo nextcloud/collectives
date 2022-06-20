@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2022-06-17 13:05+0200\n"
+"POT-Creation-Date: 2022-06-20 12:52+0200\n"
 "PO-Revision-Date: 2022-01-21 01:53+0000\n"
 "Last-Translator: あわしろいくや <ikunya@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/collectives/"
@@ -72,9 +72,8 @@ msgstr ""
 
 #: /collectives/lib/Service/CollectiveShareService.php:212
 #: /collectives/lib/Service/CollectiveShareService.php:218
-#, fuzzy
 msgid "Share not found for user"
-msgstr "ページが見つかりません:"
+msgstr ""
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:3
 msgid "A place for activist and community projects to build shared knowledge"
@@ -125,9 +124,8 @@ msgstr ""
 
 #. TRANSLATORS src/components/CollectivePrint.vue:11
 #: /collectives/specialVueFakeDummyForL10nScript.js:10
-#, fuzzy
 msgid "Preparing collective for exporting or printing"
-msgstr "既存のサークルにコレクティブを作成"
+msgstr ""
 
 #. TRANSLATORS src/components/CollectivePrint.vue:58
 #: /collectives/specialVueFakeDummyForL10nScript.js:12
@@ -151,9 +149,8 @@ msgstr "共有リンク"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:44
 #: /collectives/specialVueFakeDummyForL10nScript.js:20
-#, fuzzy
 msgid "Allow editing"
-msgstr "編集終了"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:51
 #: /collectives/specialVueFakeDummyForL10nScript.js:22
@@ -189,47 +186,40 @@ msgstr "共有リンクのコピー"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:186
 #: /collectives/specialVueFakeDummyForL10nScript.js:34
-#, fuzzy
 msgid "Could not change the collective share editing permissions"
-msgstr "ページを作成できません"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:204
 #: /collectives/specialVueFakeDummyForL10nScript.js:36
-#, fuzzy
 msgid "Could not share the collective"
-msgstr "ページを作成できません"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:210
 #: /collectives/specialVueFakeDummyForL10nScript.js:38
-#, fuzzy
 msgid "Could not unshare the collective"
-msgstr "ページ名を変更できません"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:3
 #: /collectives/specialVueFakeDummyForL10nScript.js:40
-#, fuzzy
 msgid "Collective settings"
-msgstr "コレクティブ"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:5
 #: /collectives/specialVueFakeDummyForL10nScript.js:42
-#, fuzzy
 msgid "Name and emoji"
-msgstr "絵文字の変更"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:10
 #. TRANSLATORS src/components/Nav/NewCollective.vue:42
 #: /collectives/specialVueFakeDummyForL10nScript.js:44
 #: /collectives/specialVueFakeDummyForL10nScript.js:132
-#, fuzzy
 msgid "Select emoji for collective"
-msgstr "コレクティブの場所を選択"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:38
 #: /collectives/specialVueFakeDummyForL10nScript.js:46
-#, fuzzy
 msgid "Default page order"
-msgstr "ページの削除"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:45
 #. TRANSLATORS src/components/PageList.vue:33
@@ -247,15 +237,13 @@ msgstr "タイトルでソート"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:57
 #: /collectives/specialVueFakeDummyForL10nScript.js:52
-#, fuzzy
 msgid "Permissions"
-msgstr "バージョン"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:59
 #: /collectives/specialVueFakeDummyForL10nScript.js:54
-#, fuzzy
 msgid "Allow editing for"
-msgstr "編集終了"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:68
 #: /collectives/specialVueFakeDummyForL10nScript.js:56
@@ -272,9 +260,8 @@ msgstr ""
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:82
 #: /collectives/specialVueFakeDummyForL10nScript.js:60
 #: /collectives/specialVueFakeDummyForL10nScript.js:68
-#, fuzzy
 msgid "All members"
-msgstr "メンバーの管理"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:87
 #: /collectives/specialVueFakeDummyForL10nScript.js:62
@@ -283,9 +270,8 @@ msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:115
 #: /collectives/specialVueFakeDummyForL10nScript.js:70
-#, fuzzy
 msgid "Members"
-msgstr "メンバーの管理"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:117
 #: /collectives/specialVueFakeDummyForL10nScript.js:72
@@ -308,9 +294,8 @@ msgstr ""
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:134
 #: /collectives/specialVueFakeDummyForL10nScript.js:80
 #: /collectives/specialVueFakeDummyForL10nScript.js:82
-#, fuzzy
 msgid "Delete collective"
-msgstr "コレクティブの削除"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:216
 #: /collectives/specialVueFakeDummyForL10nScript.js:84
@@ -601,9 +586,8 @@ msgstr "ページの追加"
 
 #. TRANSLATORS src/components/PageList.vue:204
 #: /collectives/specialVueFakeDummyForL10nScript.js:212
-#, fuzzy
 msgid "Could not save page order for collective"
-msgstr "ページを作成できません"
+msgstr ""
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabBacklinks.vue:40
 #: /collectives/specialVueFakeDummyForL10nScript.js:214
@@ -709,14 +693,6 @@ msgstr "これらのアプリを有効にするために管理者に問い合わ
 
 #~ msgid "Show all subpages"
 #~ msgstr "すべてのサブページを表示"
-
-#, fuzzy
-#~ msgid "No attachments available"
-#~ msgstr "バックリンクはありません"
-
-#, fuzzy
-#~ msgid "Could not get page attachments"
-#~ msgstr "バックリンクが取得できません"
 
 #~ msgid "Sort by last modification"
 #~ msgstr "最終更新でソート"

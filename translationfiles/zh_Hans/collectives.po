@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2022-06-17 13:05+0200\n"
+"POT-Creation-Date: 2022-06-20 12:52+0200\n"
 "PO-Revision-Date: 2022-02-12 10:57+0000\n"
 "Last-Translator: Wang Jiaxiang <iwangjiaxiang@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
@@ -66,22 +66,20 @@ msgid "A share for collective %s exists already"
 msgstr "知识库 %s 的共享已经存在"
 
 #: /collectives/lib/Service/CollectiveShareService.php:208
-#, fuzzy, php-format
+#, php-format
 msgid "You are not allowed to edit %s"
-msgstr "你不被允许共享 %s"
+msgstr ""
 
 #: /collectives/lib/Service/CollectiveShareService.php:212
 #: /collectives/lib/Service/CollectiveShareService.php:218
-#, fuzzy
 msgid "Share not found for user"
-msgstr "未找到页面："
+msgstr ""
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:3
 msgid "A place for activist and community projects to build shared knowledge"
 msgstr "一个共享知识的地方"
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:4
-#, fuzzy
 msgid ""
 "Collectives is a Nextcloud App for activist and community projects to "
 "organize together.\n"
@@ -101,23 +99,6 @@ msgid ""
 "In your Nextcloud instance, simply navigate to **»Apps«**, find the\n"
 "**»Circles«** and **»Collectives«** apps and enable them."
 msgstr ""
-"Collectives is a Nextcloud App for activist and community projects to "
-"organize together.\n"
-"Come and gather in collectives to build shared knowledge.\n"
-"\n"
-"* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n"
-"  tied to a [Nextcloud Circle](https://github.com/nextcloud/circles) and\n"
-"  owned by the collective.\n"
-"* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n"
-"  [Text app](https://github.com/nextcloud/text).\n"
-"* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) "
-"syntax**\n"
-"  for page formatting.\n"
-"\n"
-"## Installation\n"
-"\n"
-"In your Nextcloud instance, simply navigate to **»Apps«**, find the\n"
-"**»Circles«** and **»Collectives«** apps and enable them."
 
 #. TRANSLATORS src/Collectives.vue:70
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:226
@@ -143,9 +124,8 @@ msgstr "选择一个知识库或在左侧创建一个新知识库。"
 
 #. TRANSLATORS src/components/CollectivePrint.vue:11
 #: /collectives/specialVueFakeDummyForL10nScript.js:10
-#, fuzzy
 msgid "Preparing collective for exporting or printing"
-msgstr "为已有圈子创建知识库"
+msgstr ""
 
 #. TRANSLATORS src/components/CollectivePrint.vue:58
 #: /collectives/specialVueFakeDummyForL10nScript.js:12
@@ -169,9 +149,8 @@ msgstr "共享链接"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:44
 #: /collectives/specialVueFakeDummyForL10nScript.js:20
-#, fuzzy
 msgid "Allow editing"
-msgstr "允许编辑"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:51
 #: /collectives/specialVueFakeDummyForL10nScript.js:22
@@ -207,9 +186,8 @@ msgstr "复制共享链接"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:186
 #: /collectives/specialVueFakeDummyForL10nScript.js:34
-#, fuzzy
 msgid "Could not change the collective share editing permissions"
-msgstr "无法共享该知识库"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:204
 #: /collectives/specialVueFakeDummyForL10nScript.js:36
@@ -228,23 +206,20 @@ msgstr "知识库设置"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:5
 #: /collectives/specialVueFakeDummyForL10nScript.js:42
-#, fuzzy
 msgid "Name and emoji"
-msgstr "改变表情"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:10
 #. TRANSLATORS src/components/Nav/NewCollective.vue:42
 #: /collectives/specialVueFakeDummyForL10nScript.js:44
 #: /collectives/specialVueFakeDummyForL10nScript.js:132
-#, fuzzy
 msgid "Select emoji for collective"
-msgstr "选择知识库的位置"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:38
 #: /collectives/specialVueFakeDummyForL10nScript.js:46
-#, fuzzy
 msgid "Default page order"
-msgstr "删除页面"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:45
 #. TRANSLATORS src/components/PageList.vue:33
@@ -609,9 +584,8 @@ msgstr "添加页面"
 
 #. TRANSLATORS src/components/PageList.vue:204
 #: /collectives/specialVueFakeDummyForL10nScript.js:212
-#, fuzzy
 msgid "Could not save page order for collective"
-msgstr "无法共享该知识库"
+msgstr ""
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabBacklinks.vue:40
 #: /collectives/specialVueFakeDummyForL10nScript.js:214
@@ -717,14 +691,6 @@ msgstr "请让管理员启用这些应用。"
 
 #~ msgid "Show all subpages"
 #~ msgstr "显示子页面"
-
-#, fuzzy
-#~ msgid "No attachments available"
-#~ msgstr "没有可用的反向链接"
-
-#, fuzzy
-#~ msgid "Could not get page attachments"
-#~ msgstr "无法获取页面反向链接"
 
 #~ msgid "Details"
 #~ msgstr "细节"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2022-06-17 13:05+0200\n"
+"POT-Creation-Date: 2022-06-20 12:52+0200\n"
 "PO-Revision-Date: 2021-07-21 12:37+0000\n"
 "Last-Translator: HelaBasa <R45XvezA@protonmail.ch>\n"
 "Language-Team: Sinhala <https://hosted.weblate.org/projects/collectives/"
@@ -186,21 +186,18 @@ msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:186
 #: /collectives/specialVueFakeDummyForL10nScript.js:34
-#, fuzzy
 msgid "Could not change the collective share editing permissions"
-msgstr "පිටුව නැවත නම් කිරීමට නොහැකි විය"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:204
 #: /collectives/specialVueFakeDummyForL10nScript.js:36
-#, fuzzy
 msgid "Could not share the collective"
-msgstr "පිටුව නැවත නම් කිරීමට නොහැකි විය"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:210
 #: /collectives/specialVueFakeDummyForL10nScript.js:38
-#, fuzzy
 msgid "Could not unshare the collective"
-msgstr "පිටුව නැවත නම් කිරීමට නොහැකි විය"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:3
 #: /collectives/specialVueFakeDummyForL10nScript.js:40
@@ -587,15 +584,13 @@ msgstr "පිටුවක් එකතු කරන්න"
 
 #. TRANSLATORS src/components/PageList.vue:204
 #: /collectives/specialVueFakeDummyForL10nScript.js:212
-#, fuzzy
 msgid "Could not save page order for collective"
-msgstr "පිටුව නැවත නම් කිරීමට නොහැකි විය"
+msgstr ""
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabBacklinks.vue:40
 #: /collectives/specialVueFakeDummyForL10nScript.js:214
-#, fuzzy
 msgid "No backlinks available"
-msgstr "වෙනත් අනුවාද නැත"
+msgstr ""
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabBacklinks.vue:42
 #: /collectives/specialVueFakeDummyForL10nScript.js:216
@@ -604,9 +599,8 @@ msgstr ""
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabBacklinks.vue:123
 #: /collectives/specialVueFakeDummyForL10nScript.js:218
-#, fuzzy
 msgid "Could not get page backlinks"
-msgstr "පිටුව නැවත නම් කිරීමට නොහැකි විය"
+msgstr ""
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:25
 #: /collectives/specialVueFakeDummyForL10nScript.js:220
@@ -689,11 +683,3 @@ msgstr ""
 #: /collectives/templates/error.php:27
 msgid "Please ask the administrator to enable these apps."
 msgstr ""
-
-#, fuzzy
-#~ msgid "No attachments available"
-#~ msgstr "වෙනත් අනුවාද නැත"
-
-#, fuzzy
-#~ msgid "Could not get page attachments"
-#~ msgstr "පිටුව නැවත නම් කිරීමට නොහැකි විය"

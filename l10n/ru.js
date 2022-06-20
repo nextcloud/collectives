@@ -1,11 +1,6 @@
 OC.L10N.register(
     "collectives",
     {
-    "Could not change the collective share editing permissions" : "Не удалось удалить страницу",
-    "Could not share the collective" : "Не удалось удалить страницу",
-    "Could not unshare the collective" : "Не удалось найти страницу.",
-    "Name and emoji" : "Добавить эмодзи",
-    "Default page order" : "Удалить страницу",
     "Add emoji" : "Добавить эмодзи",
     "Restore" : "Восстановить",
     "Delete permanently" : "Удалить навсегда",
@@ -18,11 +13,8 @@ OC.L10N.register(
     "Title" : "Название",
     "Done" : "Готово",
     "Add a page" : "Добавить страницу",
-    "Could not save page order for collective" : "Не удалось удалить страницу",
-    "Could not get page backlinks" : "Не удалось удалить страницу",
     "Current version" : "Текущая версия",
     "_%n byte_::_%n bytes_" : ["%n байт","%n байта","%n байт"],
-    "Could not copy link to the clipboard:" : "Не удалось удалить страницу",
     "New Page" : "Новая страница",
     "Please ask the administrator to enable these apps." : "Пожалуйста, попросите администратора включить эти приложения."
 },

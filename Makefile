@@ -116,7 +116,7 @@ po: translationtool clean
 	php $(BUILD_TOOLS_DIR)/translationtool.phar create-pot-files
 	sed -i 's/^#: .*\/collectives/#: \/collectives/' $(CURDIR)/translationfiles/templates/collectives.pot
 	for pofile in $(CURDIR)/translationfiles/*/collectives.po; do \
-		msgmerge --backup=none --update "$$pofile" translationfiles/templates/collectives.pot; \
+		msgmerge --backup=none --no-fuzzy-matching --update "$$pofile" translationfiles/templates/collectives.pot; \
 	done
 
 # Update l10n files from translation templates

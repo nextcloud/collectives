@@ -102,7 +102,7 @@
     "Show templates" : "Zobrazit šablony",
     "Sort order" : "Pořadí řazení",
     "Add a page" : "Přidat stránku",
-    "Could not save page order for collective" : "Kolektiv se nedaří nasdílet",
+    "Could not save page order for collective" : "Nepodařilo se uložit pořadí stránek v kolektivu",
     "No backlinks available" : "Nejsou k dispozici žádné zpětné odkazy",
     "If other pages link to this one, they will be listed here." : "Pokud je na tuto stránku odkazováno z jiných stránek, měly by být vypsány zde.",
     "Could not get page backlinks" : "Nedaří se získat zpětné odkazy pro stránku",

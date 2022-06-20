@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2022-06-17 13:05+0200\n"
+"POT-Creation-Date: 2022-06-20 12:52+0200\n"
 "PO-Revision-Date: 2021-09-13 14:36+0000\n"
 "Last-Translator: Jordán <coop2540@somtic.cat>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/collectives/"
@@ -30,18 +30,16 @@ msgid "Collectives"
 msgstr "Col·lectius"
 
 #: /collectives/lib/Search/PageContentProvider.php:74
-#, fuzzy
 msgid "Collectives - Page content"
-msgstr "Col·lectius: contingut de pàgina"
+msgstr ""
 
 #: /collectives/lib/Search/PageContentProvider.php:119
 msgid "in page {page} from collective {collective}"
 msgstr "A la pàgina {page} del collective {collective}"
 
 #: /collectives/lib/Search/PageProvider.php:67
-#, fuzzy
 msgid "Collectives - Pages"
-msgstr "Col·lectius: pàgines"
+msgstr ""
 
 #: /collectives/lib/Search/PageProvider.php:107
 msgid "in Collective {collective}"
@@ -53,9 +51,8 @@ msgid "Created collective \"%s\" for existing circle."
 msgstr "Creat col·lectiu \"%s\" pel cercle existent."
 
 #: /collectives/lib/Service/CollectiveShareService.php:85
-#, fuzzy
 msgid "Collective Share"
-msgstr "Col·lectius: pàgines"
+msgstr ""
 
 #: /collectives/lib/Service/CollectiveShareService.php:173
 #: /collectives/lib/Service/CollectiveShareService.php:204
@@ -75,9 +72,8 @@ msgstr ""
 
 #: /collectives/lib/Service/CollectiveShareService.php:212
 #: /collectives/lib/Service/CollectiveShareService.php:218
-#, fuzzy
 msgid "Share not found for user"
-msgstr "Pàgina no trobada:"
+msgstr ""
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:3
 msgid "A place for activist and community projects to build shared knowledge"
@@ -146,9 +142,8 @@ msgstr "Selecciona un col·lectiu o crea un de nou a l'esquerra."
 
 #. TRANSLATORS src/components/CollectivePrint.vue:11
 #: /collectives/specialVueFakeDummyForL10nScript.js:10
-#, fuzzy
 msgid "Preparing collective for exporting or printing"
-msgstr "Crear un Col·lectiu per al cercle existent"
+msgstr ""
 
 #. TRANSLATORS src/components/CollectivePrint.vue:58
 #: /collectives/specialVueFakeDummyForL10nScript.js:12
@@ -172,9 +167,8 @@ msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:44
 #: /collectives/specialVueFakeDummyForL10nScript.js:20
-#, fuzzy
 msgid "Allow editing"
-msgstr "Aturar l'edició"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:51
 #: /collectives/specialVueFakeDummyForL10nScript.js:22
@@ -190,9 +184,8 @@ msgstr ""
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:2
 #: /collectives/specialVueFakeDummyForL10nScript.js:26
 #: /collectives/specialVueFakeDummyForL10nScript.js:98
-#, fuzzy
 msgid "Settings"
-msgstr "Aturar l'edició"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:173
 #: /collectives/specialVueFakeDummyForL10nScript.js:28
@@ -211,47 +204,40 @@ msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:186
 #: /collectives/specialVueFakeDummyForL10nScript.js:34
-#, fuzzy
 msgid "Could not change the collective share editing permissions"
-msgstr "No s'ha pogut crear la pàgina"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:204
 #: /collectives/specialVueFakeDummyForL10nScript.js:36
-#, fuzzy
 msgid "Could not share the collective"
-msgstr "No s'ha pogut crear la pàgina"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:210
 #: /collectives/specialVueFakeDummyForL10nScript.js:38
-#, fuzzy
 msgid "Could not unshare the collective"
-msgstr "No s'ha pogut reanomenar la pàgina"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:3
 #: /collectives/specialVueFakeDummyForL10nScript.js:40
-#, fuzzy
 msgid "Collective settings"
-msgstr "Col·lectius"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:5
 #: /collectives/specialVueFakeDummyForL10nScript.js:42
-#, fuzzy
 msgid "Name and emoji"
-msgstr "Canviar emoji"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:10
 #. TRANSLATORS src/components/Nav/NewCollective.vue:42
 #: /collectives/specialVueFakeDummyForL10nScript.js:44
 #: /collectives/specialVueFakeDummyForL10nScript.js:132
-#, fuzzy
 msgid "Select emoji for collective"
-msgstr "Seleccionar un col·lectiu"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:38
 #: /collectives/specialVueFakeDummyForL10nScript.js:46
-#, fuzzy
 msgid "Default page order"
-msgstr "Esborrar pàgina"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:45
 #. TRANSLATORS src/components/PageList.vue:33
@@ -269,15 +255,13 @@ msgstr "Ordenar per títol"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:57
 #: /collectives/specialVueFakeDummyForL10nScript.js:52
-#, fuzzy
 msgid "Permissions"
-msgstr "Versions"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:59
 #: /collectives/specialVueFakeDummyForL10nScript.js:54
-#, fuzzy
 msgid "Allow editing for"
-msgstr "Aturar l'edició"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:68
 #: /collectives/specialVueFakeDummyForL10nScript.js:56
@@ -294,9 +278,8 @@ msgstr ""
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:82
 #: /collectives/specialVueFakeDummyForL10nScript.js:60
 #: /collectives/specialVueFakeDummyForL10nScript.js:68
-#, fuzzy
 msgid "All members"
-msgstr "Gestionar membres"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:87
 #: /collectives/specialVueFakeDummyForL10nScript.js:62
@@ -305,9 +288,8 @@ msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:115
 #: /collectives/specialVueFakeDummyForL10nScript.js:70
-#, fuzzy
 msgid "Members"
-msgstr "Gestionar membres"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:117
 #: /collectives/specialVueFakeDummyForL10nScript.js:72
@@ -330,9 +312,8 @@ msgstr ""
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:134
 #: /collectives/specialVueFakeDummyForL10nScript.js:80
 #: /collectives/specialVueFakeDummyForL10nScript.js:82
-#, fuzzy
 msgid "Delete collective"
-msgstr "Esborrar Col·lectius"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:216
 #: /collectives/specialVueFakeDummyForL10nScript.js:84
@@ -370,21 +351,18 @@ msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:6
 #: /collectives/specialVueFakeDummyForL10nScript.js:100
-#, fuzzy
 msgid "Collectives Folder"
-msgstr "Col·lectius"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:48
 #: /collectives/specialVueFakeDummyForL10nScript.js:102
-#, fuzzy
 msgid "Create a collective first"
-msgstr "Crear nou Col·lectiu"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:59
 #: /collectives/specialVueFakeDummyForL10nScript.js:104
-#, fuzzy
 msgid "Select location for collectives"
-msgstr "Seleccionar un col·lectiu"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:73
 #: /collectives/specialVueFakeDummyForL10nScript.js:106
@@ -624,9 +602,8 @@ msgstr "Afegir una Pàgina"
 
 #. TRANSLATORS src/components/PageList.vue:204
 #: /collectives/specialVueFakeDummyForL10nScript.js:212
-#, fuzzy
 msgid "Could not save page order for collective"
-msgstr "No s'ha pogut crear la pàgina"
+msgstr ""
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabBacklinks.vue:40
 #: /collectives/specialVueFakeDummyForL10nScript.js:214
@@ -701,9 +678,8 @@ msgid "Link copied to the clipboard."
 msgstr ""
 
 #: /collectives/src/mixins/CopyToClipboardMixin.js:41
-#, fuzzy
 msgid "Could not copy link to the clipboard:"
-msgstr "No s'ha pogut crear la pàgina"
+msgstr ""
 
 #: /collectives/src/mixins/pageMixin.js:57
 #: /collectives/src/mixins/pageMixin.js:81
@@ -734,14 +710,6 @@ msgstr "Si us plau pregunti a l'administrador/a per activar aquestes apps."
 
 #~ msgid "Show all subpages"
 #~ msgstr "Mostrar totes les subpàgines"
-
-#, fuzzy
-#~ msgid "No attachments available"
-#~ msgstr "No hi ha enllaços d'entrada disponibles"
-
-#, fuzzy
-#~ msgid "Could not get page attachments"
-#~ msgstr "No s'han pogut obtenir enllaços d'entrada de pàgina"
 
 #~ msgid "Sort by last modification"
 #~ msgstr "Ordenar per darrera modificació"
