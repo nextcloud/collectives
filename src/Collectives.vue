@@ -167,6 +167,8 @@ export default {
 #text-wrapper #text div.ProseMirror {
 	margin-top: 5px;
 	padding-bottom: 50px;
+	/* Add 2x (21px + 14px) for at least two trailing breaks */
+	padding-bottom: calc(200px + 70px);
 }
 
 #version-title, #titleform input[type='text'] {
