@@ -161,7 +161,7 @@ export default {
 			state.collectives.find(c => c.circleId === circle.id).name = circle.sanitizedName
 		},
 
-		[PATCH_COLLECTIVE_WITH_PROPERTY](state, id, property, value) {
+		[PATCH_COLLECTIVE_WITH_PROPERTY](state, { id, property, value }) {
 			state.collectives.find(c => c.id === id)[property] = value
 		},
 
@@ -386,7 +386,7 @@ export default {
 				generateUrl('/apps/collectives/_api/' + id + '/_userSettings/pageOrder'),
 				{ pageOrder }
 			)
-			commit(PATCH_COLLECTIVE_WITH_PROPERTY, 'userPageOrder', pageOrder)
+			commit(PATCH_COLLECTIVE_WITH_PROPERTY, { id, property: 'userPageOrder', value: pageOrder })
 		},
 	},
 
