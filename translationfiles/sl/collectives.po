@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2022-06-17 13:05+0200\n"
+"POT-Creation-Date: 2022-06-20 12:52+0200\n"
 "PO-Revision-Date: 2021-12-18 12:51+0000\n"
 "Last-Translator: Matej U <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian <https://hosted.weblate.org/projects/collectives/"
@@ -31,18 +31,16 @@ msgid "Collectives"
 msgstr "Zbirke"
 
 #: /collectives/lib/Search/PageContentProvider.php:74
-#, fuzzy
 msgid "Collectives - Page content"
-msgstr "zbirke: vsebina strani"
+msgstr ""
 
 #: /collectives/lib/Search/PageContentProvider.php:119
 msgid "in page {page} from collective {collective}"
 msgstr "na strani {page} v zbirki {collective}"
 
 #: /collectives/lib/Search/PageProvider.php:67
-#, fuzzy
 msgid "Collectives - Pages"
-msgstr "Zbirke: strani"
+msgstr ""
 
 #: /collectives/lib/Search/PageProvider.php:107
 msgid "in Collective {collective}"
@@ -75,9 +73,8 @@ msgstr ""
 
 #: /collectives/lib/Service/CollectiveShareService.php:212
 #: /collectives/lib/Service/CollectiveShareService.php:218
-#, fuzzy
 msgid "Share not found for user"
-msgstr "Strani ni mogoče najti:"
+msgstr ""
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:3
 msgid "A place for activist and community projects to build shared knowledge"
@@ -128,9 +125,8 @@ msgstr ""
 
 #. TRANSLATORS src/components/CollectivePrint.vue:11
 #: /collectives/specialVueFakeDummyForL10nScript.js:10
-#, fuzzy
 msgid "Preparing collective for exporting or printing"
-msgstr "Ustvari zbirko za obstoječ krog"
+msgstr ""
 
 #. TRANSLATORS src/components/CollectivePrint.vue:58
 #: /collectives/specialVueFakeDummyForL10nScript.js:12
@@ -154,9 +150,8 @@ msgstr "Povezava za souporabo"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:44
 #: /collectives/specialVueFakeDummyForL10nScript.js:20
-#, fuzzy
 msgid "Allow editing"
-msgstr "Zaključi z urejanjem"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:51
 #: /collectives/specialVueFakeDummyForL10nScript.js:22
@@ -172,9 +167,8 @@ msgstr ""
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:2
 #: /collectives/specialVueFakeDummyForL10nScript.js:26
 #: /collectives/specialVueFakeDummyForL10nScript.js:98
-#, fuzzy
 msgid "Settings"
-msgstr "Zaključi z urejanjem"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:173
 #: /collectives/specialVueFakeDummyForL10nScript.js:28
@@ -193,47 +187,40 @@ msgstr "Kopiraj povezavo souporabe"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:186
 #: /collectives/specialVueFakeDummyForL10nScript.js:34
-#, fuzzy
 msgid "Could not change the collective share editing permissions"
-msgstr "Strani ni mogoče ustvariti."
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:204
 #: /collectives/specialVueFakeDummyForL10nScript.js:36
-#, fuzzy
 msgid "Could not share the collective"
-msgstr "Strani ni mogoče ustvariti."
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:210
 #: /collectives/specialVueFakeDummyForL10nScript.js:38
-#, fuzzy
 msgid "Could not unshare the collective"
-msgstr "Strani ni mogoče preimenovati."
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:3
 #: /collectives/specialVueFakeDummyForL10nScript.js:40
-#, fuzzy
 msgid "Collective settings"
-msgstr "Zbirke"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:5
 #: /collectives/specialVueFakeDummyForL10nScript.js:42
-#, fuzzy
 msgid "Name and emoji"
-msgstr "Spremeni izrazno ikono"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:10
 #. TRANSLATORS src/components/Nav/NewCollective.vue:42
 #: /collectives/specialVueFakeDummyForL10nScript.js:44
 #: /collectives/specialVueFakeDummyForL10nScript.js:132
-#, fuzzy
 msgid "Select emoji for collective"
-msgstr "Izbor zbirke"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:38
 #: /collectives/specialVueFakeDummyForL10nScript.js:46
-#, fuzzy
 msgid "Default page order"
-msgstr "Izbriši stran"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:45
 #. TRANSLATORS src/components/PageList.vue:33
@@ -251,15 +238,13 @@ msgstr "Po naslovu"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:57
 #: /collectives/specialVueFakeDummyForL10nScript.js:52
-#, fuzzy
 msgid "Permissions"
-msgstr "Različice"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:59
 #: /collectives/specialVueFakeDummyForL10nScript.js:54
-#, fuzzy
 msgid "Allow editing for"
-msgstr "Zaključi z urejanjem"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:68
 #: /collectives/specialVueFakeDummyForL10nScript.js:56
@@ -276,9 +261,8 @@ msgstr ""
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:82
 #: /collectives/specialVueFakeDummyForL10nScript.js:60
 #: /collectives/specialVueFakeDummyForL10nScript.js:68
-#, fuzzy
 msgid "All members"
-msgstr "Uredi člane"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:87
 #: /collectives/specialVueFakeDummyForL10nScript.js:62
@@ -287,9 +271,8 @@ msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:115
 #: /collectives/specialVueFakeDummyForL10nScript.js:70
-#, fuzzy
 msgid "Members"
-msgstr "Uredi člane"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:117
 #: /collectives/specialVueFakeDummyForL10nScript.js:72
@@ -312,9 +295,8 @@ msgstr ""
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:134
 #: /collectives/specialVueFakeDummyForL10nScript.js:80
 #: /collectives/specialVueFakeDummyForL10nScript.js:82
-#, fuzzy
 msgid "Delete collective"
-msgstr "Izbrisane zbirke"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:216
 #: /collectives/specialVueFakeDummyForL10nScript.js:84
@@ -352,21 +334,18 @@ msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:6
 #: /collectives/specialVueFakeDummyForL10nScript.js:100
-#, fuzzy
 msgid "Collectives Folder"
-msgstr "Zbirke"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:48
 #: /collectives/specialVueFakeDummyForL10nScript.js:102
-#, fuzzy
 msgid "Create a collective first"
-msgstr "Ustvari novo zbirko"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:59
 #: /collectives/specialVueFakeDummyForL10nScript.js:104
-#, fuzzy
 msgid "Select location for collectives"
-msgstr "Izbor zbirke"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:73
 #: /collectives/specialVueFakeDummyForL10nScript.js:106
@@ -606,9 +585,8 @@ msgstr "Dodaj stran"
 
 #. TRANSLATORS src/components/PageList.vue:204
 #: /collectives/specialVueFakeDummyForL10nScript.js:212
-#, fuzzy
 msgid "Could not save page order for collective"
-msgstr "Strani ni mogoče ustvariti."
+msgstr ""
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabBacklinks.vue:40
 #: /collectives/specialVueFakeDummyForL10nScript.js:214
@@ -717,14 +695,6 @@ msgstr "Programe lahko omogoči le skrbnik sistema."
 
 #~ msgid "Show all subpages"
 #~ msgstr "Pokaži vse podstrani"
-
-#, fuzzy
-#~ msgid "No attachments available"
-#~ msgstr "Ni povratnih povezav"
-
-#, fuzzy
-#~ msgid "Could not get page attachments"
-#~ msgstr "Ni mogoče pridobiti različic strani"
 
 #~ msgid "Sort by last modification"
 #~ msgstr "Po zadnji spremembi"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2022-06-17 13:05+0200\n"
+"POT-Creation-Date: 2022-06-20 12:52+0200\n"
 "PO-Revision-Date: 2022-05-20 20:17+0000\n"
 "Last-Translator: Alexandre Lopes <alexandre@lopes.eng.br>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
@@ -143,9 +143,8 @@ msgstr "Escolha um coletivo ou crie um novo à esquerda."
 
 #. TRANSLATORS src/components/CollectivePrint.vue:11
 #: /collectives/specialVueFakeDummyForL10nScript.js:10
-#, fuzzy
 msgid "Preparing collective for exporting or printing"
-msgstr "Preparando Coletivo para impressão"
+msgstr ""
 
 #. TRANSLATORS src/components/CollectivePrint.vue:58
 #: /collectives/specialVueFakeDummyForL10nScript.js:12
@@ -606,9 +605,8 @@ msgstr "Adicionar página"
 
 #. TRANSLATORS src/components/PageList.vue:204
 #: /collectives/specialVueFakeDummyForL10nScript.js:212
-#, fuzzy
 msgid "Could not save page order for collective"
-msgstr "Não foi possível compartilhar o coletivo"
+msgstr ""
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabBacklinks.vue:40
 #: /collectives/specialVueFakeDummyForL10nScript.js:214
@@ -715,14 +713,6 @@ msgstr "Por favor solicite a um administrador que habilite estes apps."
 
 #~ msgid "Show all subpages"
 #~ msgstr "Mostrar todas as subpáginas"
-
-#, fuzzy
-#~ msgid "No attachments available"
-#~ msgstr "Nenhum backling disponível"
-
-#, fuzzy
-#~ msgid "Could not get page attachments"
-#~ msgstr "Não foi possível recuperar backlinks"
 
 #~ msgid "Sort by last modification"
 #~ msgstr "Ordenar por última modificação"

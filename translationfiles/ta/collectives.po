@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2022-06-17 13:05+0200\n"
+"POT-Creation-Date: 2022-06-20 12:52+0200\n"
 "PO-Revision-Date: 2021-12-07 13:50+0000\n"
 "Last-Translator: Rajasekaran Karunanithi <rajasekaran86@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/collectives/"
@@ -30,18 +30,16 @@ msgid "Collectives"
 msgstr "தொகுப்புகள்"
 
 #: /collectives/lib/Search/PageContentProvider.php:74
-#, fuzzy
 msgid "Collectives - Page content"
-msgstr "தொகுப்புகள்: பக்க உள்ளடக்கம்"
+msgstr ""
 
 #: /collectives/lib/Search/PageContentProvider.php:119
 msgid "in page {page} from collective {collective}"
 msgstr ""
 
 #: /collectives/lib/Search/PageProvider.php:67
-#, fuzzy
 msgid "Collectives - Pages"
-msgstr "தொகுப்புகள்: பக்கங்கள்"
+msgstr ""
 
 #: /collectives/lib/Search/PageProvider.php:107
 msgid "in Collective {collective}"
@@ -74,9 +72,8 @@ msgstr ""
 
 #: /collectives/lib/Service/CollectiveShareService.php:212
 #: /collectives/lib/Service/CollectiveShareService.php:218
-#, fuzzy
 msgid "Share not found for user"
-msgstr "பக்கம் கிடைக்கவில்லை:"
+msgstr ""
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:3
 msgid "A place for activist and community projects to build shared knowledge"
@@ -127,9 +124,8 @@ msgstr ""
 
 #. TRANSLATORS src/components/CollectivePrint.vue:11
 #: /collectives/specialVueFakeDummyForL10nScript.js:10
-#, fuzzy
 msgid "Preparing collective for exporting or printing"
-msgstr "ஏற்கனவே உள்ள வட்டத்திற்காக \"%s\" தொகுப்பு உருவாக்கப்பட்டது."
+msgstr ""
 
 #. TRANSLATORS src/components/CollectivePrint.vue:58
 #: /collectives/specialVueFakeDummyForL10nScript.js:12
@@ -153,9 +149,8 @@ msgstr "இணைப்பைப் பகிரவும்"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:44
 #: /collectives/specialVueFakeDummyForL10nScript.js:20
-#, fuzzy
 msgid "Allow editing"
-msgstr "திருத்துவதை நிறுத்து"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:51
 #: /collectives/specialVueFakeDummyForL10nScript.js:22
@@ -171,9 +166,8 @@ msgstr ""
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:2
 #: /collectives/specialVueFakeDummyForL10nScript.js:26
 #: /collectives/specialVueFakeDummyForL10nScript.js:98
-#, fuzzy
 msgid "Settings"
-msgstr "திருத்துவதை நிறுத்து"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:173
 #: /collectives/specialVueFakeDummyForL10nScript.js:28
@@ -192,27 +186,23 @@ msgstr "பகிர்வு இணைப்பை நகலெடுக்க�
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:186
 #: /collectives/specialVueFakeDummyForL10nScript.js:34
-#, fuzzy
 msgid "Could not change the collective share editing permissions"
-msgstr "பக்கத்தை உருவாக்க முடியவில்லை"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:204
 #: /collectives/specialVueFakeDummyForL10nScript.js:36
-#, fuzzy
 msgid "Could not share the collective"
-msgstr "பக்கத்தை உருவாக்க முடியவில்லை"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:210
 #: /collectives/specialVueFakeDummyForL10nScript.js:38
-#, fuzzy
 msgid "Could not unshare the collective"
-msgstr "பக்கத்தை உருவாக்க முடியவில்லை"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:3
 #: /collectives/specialVueFakeDummyForL10nScript.js:40
-#, fuzzy
 msgid "Collective settings"
-msgstr "தொகுப்புகள்"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:5
 #: /collectives/specialVueFakeDummyForL10nScript.js:42
@@ -223,15 +213,13 @@ msgstr ""
 #. TRANSLATORS src/components/Nav/NewCollective.vue:42
 #: /collectives/specialVueFakeDummyForL10nScript.js:44
 #: /collectives/specialVueFakeDummyForL10nScript.js:132
-#, fuzzy
 msgid "Select emoji for collective"
-msgstr "தொகுப்பில் {தொகுப்பு}"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:38
 #: /collectives/specialVueFakeDummyForL10nScript.js:46
-#, fuzzy
 msgid "Default page order"
-msgstr "பக்கத்தை நீக்கு"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:45
 #. TRANSLATORS src/components/PageList.vue:33
@@ -249,15 +237,13 @@ msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:57
 #: /collectives/specialVueFakeDummyForL10nScript.js:52
-#, fuzzy
 msgid "Permissions"
-msgstr "பதிப்புகள்"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:59
 #: /collectives/specialVueFakeDummyForL10nScript.js:54
-#, fuzzy
 msgid "Allow editing for"
-msgstr "திருத்துவதை நிறுத்து"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:68
 #: /collectives/specialVueFakeDummyForL10nScript.js:56
@@ -274,9 +260,8 @@ msgstr ""
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:82
 #: /collectives/specialVueFakeDummyForL10nScript.js:60
 #: /collectives/specialVueFakeDummyForL10nScript.js:68
-#, fuzzy
 msgid "All members"
-msgstr "உறுப்பினர்களை நிர்வகிக்கவும்"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:87
 #: /collectives/specialVueFakeDummyForL10nScript.js:62
@@ -285,9 +270,8 @@ msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:115
 #: /collectives/specialVueFakeDummyForL10nScript.js:70
-#, fuzzy
 msgid "Members"
-msgstr "உறுப்பினர்களை நிர்வகிக்கவும்"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:117
 #: /collectives/specialVueFakeDummyForL10nScript.js:72
@@ -310,9 +294,8 @@ msgstr ""
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:134
 #: /collectives/specialVueFakeDummyForL10nScript.js:80
 #: /collectives/specialVueFakeDummyForL10nScript.js:82
-#, fuzzy
 msgid "Delete collective"
-msgstr "தொகுப்பில் {தொகுப்பு}"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:216
 #: /collectives/specialVueFakeDummyForL10nScript.js:84
@@ -350,15 +333,13 @@ msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:6
 #: /collectives/specialVueFakeDummyForL10nScript.js:100
-#, fuzzy
 msgid "Collectives Folder"
-msgstr "தொகுப்புகள்"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:48
 #: /collectives/specialVueFakeDummyForL10nScript.js:102
-#, fuzzy
 msgid "Create a collective first"
-msgstr "ஏற்கனவே உள்ள வட்டத்திற்காக \"%s\" தொகுப்பு உருவாக்கப்பட்டது."
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:59
 #: /collectives/specialVueFakeDummyForL10nScript.js:104
@@ -603,9 +584,8 @@ msgstr "ஒரு பக்கத்தைச் சேர்க்கவும�
 
 #. TRANSLATORS src/components/PageList.vue:204
 #: /collectives/specialVueFakeDummyForL10nScript.js:212
-#, fuzzy
 msgid "Could not save page order for collective"
-msgstr "பக்கத்தை உருவாக்க முடியவில்லை"
+msgstr ""
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabBacklinks.vue:40
 #: /collectives/specialVueFakeDummyForL10nScript.js:214
@@ -706,14 +686,6 @@ msgstr ""
 
 #~ msgid "Print"
 #~ msgstr "அச்சிடவும்"
-
-#, fuzzy
-#~ msgid "No attachments available"
-#~ msgstr "வேறு பதிப்புகள் இல்லை"
-
-#, fuzzy
-#~ msgid "Could not get page attachments"
-#~ msgstr "பக்க பதிப்புகளைப் பெற முடியவில்லை"
 
 #~ msgid "Delete"
 #~ msgstr "நீக்கு"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2022-06-17 13:05+0200\n"
+"POT-Creation-Date: 2022-06-20 12:52+0200\n"
 "PO-Revision-Date: 2021-12-20 16:42+0000\n"
 "Last-Translator: larusalka <silvia.florez@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/collectives/"
@@ -30,18 +30,16 @@ msgid "Collectives"
 msgstr "Cuadernos"
 
 #: /collectives/lib/Search/PageContentProvider.php:74
-#, fuzzy
 msgid "Collectives - Page content"
-msgstr "Cuadernos colectivos: contenido de la página"
+msgstr ""
 
 #: /collectives/lib/Search/PageContentProvider.php:119
 msgid "in page {page} from collective {collective}"
 msgstr "en la página {page} del cuaderno {collective}"
 
 #: /collectives/lib/Search/PageProvider.php:67
-#, fuzzy
 msgid "Collectives - Pages"
-msgstr "Cuadernos colectivos: páginas"
+msgstr ""
 
 #: /collectives/lib/Search/PageProvider.php:107
 msgid "in Collective {collective}"
@@ -74,9 +72,8 @@ msgstr ""
 
 #: /collectives/lib/Service/CollectiveShareService.php:212
 #: /collectives/lib/Service/CollectiveShareService.php:218
-#, fuzzy
 msgid "Share not found for user"
-msgstr "No se encontró la página:"
+msgstr ""
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:3
 msgid "A place for activist and community projects to build shared knowledge"
@@ -152,9 +149,8 @@ msgstr ""
 
 #. TRANSLATORS src/components/CollectivePrint.vue:11
 #: /collectives/specialVueFakeDummyForL10nScript.js:10
-#, fuzzy
 msgid "Preparing collective for exporting or printing"
-msgstr "Crear cuaderno para círculo existente"
+msgstr ""
 
 #. TRANSLATORS src/components/CollectivePrint.vue:58
 #: /collectives/specialVueFakeDummyForL10nScript.js:12
@@ -178,9 +174,8 @@ msgstr "Compartir enlace"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:44
 #: /collectives/specialVueFakeDummyForL10nScript.js:20
-#, fuzzy
 msgid "Allow editing"
-msgstr "Parar de editar"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:51
 #: /collectives/specialVueFakeDummyForL10nScript.js:22
@@ -196,9 +191,8 @@ msgstr ""
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:2
 #: /collectives/specialVueFakeDummyForL10nScript.js:26
 #: /collectives/specialVueFakeDummyForL10nScript.js:98
-#, fuzzy
 msgid "Settings"
-msgstr "Parar de editar"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:173
 #: /collectives/specialVueFakeDummyForL10nScript.js:28
@@ -217,47 +211,40 @@ msgstr "Copiar enlace para compartir"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:186
 #: /collectives/specialVueFakeDummyForL10nScript.js:34
-#, fuzzy
 msgid "Could not change the collective share editing permissions"
-msgstr "No se pudo crear la página"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:204
 #: /collectives/specialVueFakeDummyForL10nScript.js:36
-#, fuzzy
 msgid "Could not share the collective"
-msgstr "No se pudo crear la página"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:210
 #: /collectives/specialVueFakeDummyForL10nScript.js:38
-#, fuzzy
 msgid "Could not unshare the collective"
-msgstr "No se pudo renombrar la página"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:3
 #: /collectives/specialVueFakeDummyForL10nScript.js:40
-#, fuzzy
 msgid "Collective settings"
-msgstr "Cuadernos"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:5
 #: /collectives/specialVueFakeDummyForL10nScript.js:42
-#, fuzzy
 msgid "Name and emoji"
-msgstr "Cambiar emoji"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:10
 #. TRANSLATORS src/components/Nav/NewCollective.vue:42
 #: /collectives/specialVueFakeDummyForL10nScript.js:44
 #: /collectives/specialVueFakeDummyForL10nScript.js:132
-#, fuzzy
 msgid "Select emoji for collective"
-msgstr "Seleccionar cuaderno"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:38
 #: /collectives/specialVueFakeDummyForL10nScript.js:46
-#, fuzzy
 msgid "Default page order"
-msgstr "Eliminar página"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:45
 #. TRANSLATORS src/components/PageList.vue:33
@@ -275,15 +262,13 @@ msgstr "Ordenar por título"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:57
 #: /collectives/specialVueFakeDummyForL10nScript.js:52
-#, fuzzy
 msgid "Permissions"
-msgstr "Versiones"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:59
 #: /collectives/specialVueFakeDummyForL10nScript.js:54
-#, fuzzy
 msgid "Allow editing for"
-msgstr "Parar de editar"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:68
 #: /collectives/specialVueFakeDummyForL10nScript.js:56
@@ -300,9 +285,8 @@ msgstr ""
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:82
 #: /collectives/specialVueFakeDummyForL10nScript.js:60
 #: /collectives/specialVueFakeDummyForL10nScript.js:68
-#, fuzzy
 msgid "All members"
-msgstr "Gestionar colaboradores"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:87
 #: /collectives/specialVueFakeDummyForL10nScript.js:62
@@ -311,9 +295,8 @@ msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:115
 #: /collectives/specialVueFakeDummyForL10nScript.js:70
-#, fuzzy
 msgid "Members"
-msgstr "Gestionar colaboradores"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:117
 #: /collectives/specialVueFakeDummyForL10nScript.js:72
@@ -336,9 +319,8 @@ msgstr ""
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:134
 #: /collectives/specialVueFakeDummyForL10nScript.js:80
 #: /collectives/specialVueFakeDummyForL10nScript.js:82
-#, fuzzy
 msgid "Delete collective"
-msgstr "Cuadernos eliminados"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:216
 #: /collectives/specialVueFakeDummyForL10nScript.js:84
@@ -376,21 +358,18 @@ msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:6
 #: /collectives/specialVueFakeDummyForL10nScript.js:100
-#, fuzzy
 msgid "Collectives Folder"
-msgstr "Cuadernos"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:48
 #: /collectives/specialVueFakeDummyForL10nScript.js:102
-#, fuzzy
 msgid "Create a collective first"
-msgstr "Crear nuevo cuaderno"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:59
 #: /collectives/specialVueFakeDummyForL10nScript.js:104
-#, fuzzy
 msgid "Select location for collectives"
-msgstr "Seleccionar cuaderno"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:73
 #: /collectives/specialVueFakeDummyForL10nScript.js:106
@@ -631,9 +610,8 @@ msgstr "Añadir página"
 
 #. TRANSLATORS src/components/PageList.vue:204
 #: /collectives/specialVueFakeDummyForL10nScript.js:212
-#, fuzzy
 msgid "Could not save page order for collective"
-msgstr "No se pudo crear la página"
+msgstr ""
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabBacklinks.vue:40
 #: /collectives/specialVueFakeDummyForL10nScript.js:214
@@ -742,14 +720,6 @@ msgstr "Pida a la administadora de la nube que habilite estas aplicaciones."
 
 #~ msgid "Show all subpages"
 #~ msgstr "Mostrar todas las subpáginas"
-
-#, fuzzy
-#~ msgid "No attachments available"
-#~ msgstr "No hay enlaces entrantes"
-
-#, fuzzy
-#~ msgid "Could not get page attachments"
-#~ msgstr "No se encontraron enlaces entrantes"
 
 #~ msgid "Sort by last modification"
 #~ msgstr "Ordenar por última modificación"

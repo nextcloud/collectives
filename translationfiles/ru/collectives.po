@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2022-06-17 13:05+0200\n"
+"POT-Creation-Date: 2022-06-20 12:52+0200\n"
 "PO-Revision-Date: 2021-06-27 10:32+0000\n"
 "Last-Translator: Artem <KovalevArtem.ru@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/collectives/"
@@ -187,21 +187,18 @@ msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:186
 #: /collectives/specialVueFakeDummyForL10nScript.js:34
-#, fuzzy
 msgid "Could not change the collective share editing permissions"
-msgstr "Не удалось удалить страницу"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:204
 #: /collectives/specialVueFakeDummyForL10nScript.js:36
-#, fuzzy
 msgid "Could not share the collective"
-msgstr "Не удалось удалить страницу"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:210
 #: /collectives/specialVueFakeDummyForL10nScript.js:38
-#, fuzzy
 msgid "Could not unshare the collective"
-msgstr "Не удалось найти страницу."
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:3
 #: /collectives/specialVueFakeDummyForL10nScript.js:40
@@ -210,9 +207,8 @@ msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:5
 #: /collectives/specialVueFakeDummyForL10nScript.js:42
-#, fuzzy
 msgid "Name and emoji"
-msgstr "Добавить эмодзи"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:10
 #. TRANSLATORS src/components/Nav/NewCollective.vue:42
@@ -223,9 +219,8 @@ msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:38
 #: /collectives/specialVueFakeDummyForL10nScript.js:46
-#, fuzzy
 msgid "Default page order"
-msgstr "Удалить страницу"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:45
 #. TRANSLATORS src/components/PageList.vue:33
@@ -590,9 +585,8 @@ msgstr "Добавить страницу"
 
 #. TRANSLATORS src/components/PageList.vue:204
 #: /collectives/specialVueFakeDummyForL10nScript.js:212
-#, fuzzy
 msgid "Could not save page order for collective"
-msgstr "Не удалось удалить страницу"
+msgstr ""
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabBacklinks.vue:40
 #: /collectives/specialVueFakeDummyForL10nScript.js:214
@@ -606,9 +600,8 @@ msgstr ""
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabBacklinks.vue:123
 #: /collectives/specialVueFakeDummyForL10nScript.js:218
-#, fuzzy
 msgid "Could not get page backlinks"
-msgstr "Не удалось удалить страницу"
+msgstr ""
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:25
 #: /collectives/specialVueFakeDummyForL10nScript.js:220
@@ -669,9 +662,8 @@ msgid "Link copied to the clipboard."
 msgstr ""
 
 #: /collectives/src/mixins/CopyToClipboardMixin.js:41
-#, fuzzy
 msgid "Could not copy link to the clipboard:"
-msgstr "Не удалось удалить страницу"
+msgstr ""
 
 #: /collectives/src/mixins/pageMixin.js:57
 #: /collectives/src/mixins/pageMixin.js:81
@@ -693,10 +685,6 @@ msgstr ""
 #: /collectives/templates/error.php:27
 msgid "Please ask the administrator to enable these apps."
 msgstr "Пожалуйста, попросите администратора включить эти приложения."
-
-#, fuzzy
-#~ msgid "Could not get page attachments"
-#~ msgstr "Не удалось удалить страницу"
 
 #~ msgid "Delete"
 #~ msgstr "Удалить"

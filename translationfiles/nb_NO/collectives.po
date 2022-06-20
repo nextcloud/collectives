@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2022-06-17 13:05+0200\n"
+"POT-Creation-Date: 2022-06-20 12:52+0200\n"
 "PO-Revision-Date: 2021-06-10 08:02+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
@@ -30,18 +30,16 @@ msgid "Collectives"
 msgstr "Kollektiver"
 
 #: /collectives/lib/Search/PageContentProvider.php:74
-#, fuzzy
 msgid "Collectives - Page content"
-msgstr "Kollektiver: sideinnhold"
+msgstr ""
 
 #: /collectives/lib/Search/PageContentProvider.php:119
 msgid "in page {page} from collective {collective}"
 msgstr "på siden {page} fra kollektivet {collective}"
 
 #: /collectives/lib/Search/PageProvider.php:67
-#, fuzzy
 msgid "Collectives - Pages"
-msgstr "Kollektiver: sider"
+msgstr ""
 
 #: /collectives/lib/Search/PageProvider.php:107
 msgid "in Collective {collective}"
@@ -53,9 +51,8 @@ msgid "Created collective \"%s\" for existing circle."
 msgstr "Opprettet kollektivet «%s» for eksisterende sirkel."
 
 #: /collectives/lib/Service/CollectiveShareService.php:85
-#, fuzzy
 msgid "Collective Share"
-msgstr "Kollektiver: sider"
+msgstr ""
 
 #: /collectives/lib/Service/CollectiveShareService.php:173
 #: /collectives/lib/Service/CollectiveShareService.php:204
@@ -75,9 +72,8 @@ msgstr ""
 
 #: /collectives/lib/Service/CollectiveShareService.php:212
 #: /collectives/lib/Service/CollectiveShareService.php:218
-#, fuzzy
 msgid "Share not found for user"
-msgstr "Fant ikke siden:"
+msgstr ""
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:3
 msgid "A place for activist and community projects to build shared knowledge"
@@ -131,9 +127,8 @@ msgstr ""
 
 #. TRANSLATORS src/components/CollectiveNotFound.vue:3
 #: /collectives/specialVueFakeDummyForL10nScript.js:4
-#, fuzzy
 msgid "Collective not found:"
-msgstr "Kollektiver"
+msgstr ""
 
 #. TRANSLATORS src/components/CollectiveNotFound.vue:10
 #: /collectives/specialVueFakeDummyForL10nScript.js:6
@@ -147,9 +142,8 @@ msgstr "Velg et kollektiv, eller opprett ett til venstre."
 
 #. TRANSLATORS src/components/CollectivePrint.vue:11
 #: /collectives/specialVueFakeDummyForL10nScript.js:10
-#, fuzzy
 msgid "Preparing collective for exporting or printing"
-msgstr "Opprett kollektiv for eksisterende sirkel"
+msgstr ""
 
 #. TRANSLATORS src/components/CollectivePrint.vue:58
 #: /collectives/specialVueFakeDummyForL10nScript.js:12
@@ -210,47 +204,40 @@ msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:186
 #: /collectives/specialVueFakeDummyForL10nScript.js:34
-#, fuzzy
 msgid "Could not change the collective share editing permissions"
-msgstr "Kunne ikke opprette siden"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:204
 #: /collectives/specialVueFakeDummyForL10nScript.js:36
-#, fuzzy
 msgid "Could not share the collective"
-msgstr "Kunne ikke opprette siden"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:210
 #: /collectives/specialVueFakeDummyForL10nScript.js:38
-#, fuzzy
 msgid "Could not unshare the collective"
-msgstr "Kunne ikke gi siden nytt navn"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:3
 #: /collectives/specialVueFakeDummyForL10nScript.js:40
-#, fuzzy
 msgid "Collective settings"
-msgstr "Kollektiver"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:5
 #: /collectives/specialVueFakeDummyForL10nScript.js:42
-#, fuzzy
 msgid "Name and emoji"
-msgstr "Legg til emoji"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:10
 #. TRANSLATORS src/components/Nav/NewCollective.vue:42
 #: /collectives/specialVueFakeDummyForL10nScript.js:44
 #: /collectives/specialVueFakeDummyForL10nScript.js:132
-#, fuzzy
 msgid "Select emoji for collective"
-msgstr "Velg et kollektiv"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:38
 #: /collectives/specialVueFakeDummyForL10nScript.js:46
-#, fuzzy
 msgid "Default page order"
-msgstr "Slett side"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:45
 #. TRANSLATORS src/components/PageList.vue:33
@@ -263,9 +250,8 @@ msgstr ""
 #. TRANSLATORS src/components/PageList.vue:42
 #: /collectives/specialVueFakeDummyForL10nScript.js:50
 #: /collectives/specialVueFakeDummyForL10nScript.js:204
-#, fuzzy
 msgid "Sort by title"
-msgstr "Etter tittel"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:57
 #: /collectives/specialVueFakeDummyForL10nScript.js:52
@@ -326,9 +312,8 @@ msgstr ""
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:134
 #: /collectives/specialVueFakeDummyForL10nScript.js:80
 #: /collectives/specialVueFakeDummyForL10nScript.js:82
-#, fuzzy
 msgid "Delete collective"
-msgstr "Slettede kollektiver"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:216
 #: /collectives/specialVueFakeDummyForL10nScript.js:84
@@ -366,21 +351,18 @@ msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:6
 #: /collectives/specialVueFakeDummyForL10nScript.js:100
-#, fuzzy
 msgid "Collectives Folder"
-msgstr "Kollektiver"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:48
 #: /collectives/specialVueFakeDummyForL10nScript.js:102
-#, fuzzy
 msgid "Create a collective first"
-msgstr "Opprett nytt kollektiv"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:59
 #: /collectives/specialVueFakeDummyForL10nScript.js:104
-#, fuzzy
 msgid "Select location for collectives"
-msgstr "Velg et kollektiv"
+msgstr ""
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:73
 #: /collectives/specialVueFakeDummyForL10nScript.js:106
@@ -505,15 +487,13 @@ msgstr "Fant ikke siden:"
 
 #. TRANSLATORS src/components/Page/PageNotFound.vue:10
 #: /collectives/specialVueFakeDummyForL10nScript.js:154
-#, fuzzy
 msgid "Could not find the Page."
-msgstr "Kunne ikke gi siden nytt navn"
+msgstr ""
 
 #. TRANSLATORS src/components/Page/PageNotFound.vue:13
 #: /collectives/specialVueFakeDummyForL10nScript.js:156
-#, fuzzy
 msgid "Select a page from the list or create a new one."
-msgstr "Velg et kollektiv, eller opprett ett til venstre."
+msgstr ""
 
 #. TRANSLATORS src/components/Page/Version.vue:8
 #: /collectives/specialVueFakeDummyForL10nScript.js:158
@@ -591,9 +571,8 @@ msgstr "Legg til en underside"
 #. TRANSLATORS src/components/PageList.vue:178
 #: /collectives/specialVueFakeDummyForL10nScript.js:192
 #: /collectives/specialVueFakeDummyForL10nScript.js:210
-#, fuzzy
 msgid "Add template for subpages"
-msgstr "Legg til en underside"
+msgstr ""
 
 #. TRANSLATORS src/components/PageList.vue:7
 #: /collectives/specialVueFakeDummyForL10nScript.js:194
@@ -623,15 +602,13 @@ msgstr "Legg til en side"
 
 #. TRANSLATORS src/components/PageList.vue:204
 #: /collectives/specialVueFakeDummyForL10nScript.js:212
-#, fuzzy
 msgid "Could not save page order for collective"
-msgstr "Kunne ikke opprette siden"
+msgstr ""
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabBacklinks.vue:40
 #: /collectives/specialVueFakeDummyForL10nScript.js:214
-#, fuzzy
 msgid "No backlinks available"
-msgstr "Ingen andre versjoner tilgjengelig"
+msgstr ""
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabBacklinks.vue:42
 #: /collectives/specialVueFakeDummyForL10nScript.js:216
@@ -640,9 +617,8 @@ msgstr ""
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabBacklinks.vue:123
 #: /collectives/specialVueFakeDummyForL10nScript.js:218
-#, fuzzy
 msgid "Could not get page backlinks"
-msgstr "Kunne ikke hente sideversjonering"
+msgstr ""
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:25
 #: /collectives/specialVueFakeDummyForL10nScript.js:220
@@ -702,9 +678,8 @@ msgid "Link copied to the clipboard."
 msgstr ""
 
 #: /collectives/src/mixins/CopyToClipboardMixin.js:41
-#, fuzzy
 msgid "Could not copy link to the clipboard:"
-msgstr "Kunne ikke opprette siden"
+msgstr ""
 
 #: /collectives/src/mixins/pageMixin.js:57
 #: /collectives/src/mixins/pageMixin.js:81
@@ -726,26 +701,6 @@ msgstr "Følgende avhengigheter mangler: "
 #: /collectives/templates/error.php:27
 msgid "Please ask the administrator to enable these apps."
 msgstr "Spør en administrator om å skru på disse programmene."
-
-#, fuzzy
-#~ msgid "Hide all subpages"
-#~ msgstr "Legg til en underside"
-
-#, fuzzy
-#~ msgid "Show all subpages"
-#~ msgstr "Legg til en underside"
-
-#, fuzzy
-#~ msgid "No attachments available"
-#~ msgstr "Ingen andre versjoner tilgjengelig"
-
-#, fuzzy
-#~ msgid "Could not get page attachments"
-#~ msgstr "Kunne ikke hente sideversjonering"
-
-#, fuzzy
-#~ msgid "Sort by last modification"
-#~ msgstr "Etter sist endret"
 
 #~ msgid "Delete"
 #~ msgstr "Slett"
