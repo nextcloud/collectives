@@ -104,7 +104,7 @@ OC.L10N.register(
     "Show templates" : "Vorlagen anzeigen",
     "Sort order" : "Sortierung",
     "Add a page" : "Seite hinzufügen",
-    "Could not save page order for collective" : "Kollektiv konnte nicht geteilt werden",
+    "Could not save page order for collective" : "Sortierung der Seiten für das Kollektiv konnte nicht gespeichert werden",
     "No backlinks available" : "Keine Rückverweise vorhanden",
     "If other pages link to this one, they will be listed here." : "Liste von Seiten, die auf diese Seite verweisen.",
     "Could not get page backlinks" : "Konnte Rückverweise der Seite nicht laden",

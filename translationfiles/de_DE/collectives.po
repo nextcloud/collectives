@@ -614,9 +614,8 @@ msgstr "Seite hinzufügen"
 
 #. TRANSLATORS src/components/PageList.vue:204
 #: /collectives/specialVueFakeDummyForL10nScript.js:212
-#, fuzzy
 msgid "Could not save page order for collective"
-msgstr "Kollektiv konnte nicht geteilt werden"
+msgstr "Sortierung der Seiten für das Kollektiv konnte nicht gespeichert werden"
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabBacklinks.vue:40
 #: /collectives/specialVueFakeDummyForL10nScript.js:214
