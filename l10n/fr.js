@@ -104,7 +104,6 @@ OC.L10N.register(
     "Show templates" : "Afficher les modèles",
     "Sort order" : "Ordre de tri",
     "Add a page" : "Ajouter une page",
-    "Could not save page order for collective" : "Impossible de partager le collectif",
     "No backlinks available" : "Aucun lien de maillage disponible",
     "If other pages link to this one, they will be listed here." : "Si d'autres pages font référence à celle-ci, elles seront listées ici.",
     "Could not get page backlinks" : "Impossible de récupérer les liens de maillage de la page",
