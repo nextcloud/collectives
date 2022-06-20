@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.2.1 - 2022.06.20
+
+### 🐛Fixes
+* 🔝 Fix persistent user-selected page order for collectives.
+* 🖱️ Harmonize bottom padding in edit and read mode to improve autoscroll.
+
+### 🌎Translations
+* 🗣️ Don't use fuzzy matching for translation strings.
+* 🗣️ Czech translation updated thanks to Pavel Borecki.
+* 🗣️ Dutch translation updated thanks to Jeroen Bos.
+* 🗣️ German translations updated.
+
+
 ## 1.2.0 - 2022.06.17
 
 ### ✨New
