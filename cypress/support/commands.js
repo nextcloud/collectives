@@ -196,7 +196,7 @@ Cypress.Commands.add('seedCircle', (name, config = null) => {
 /**
  * Add someone to a circle
  */
-Cypress.Commands.add('seedCircleMember', (name, userId) => {
+Cypress.Commands.add('seedCircleMember', (name, userId, type = 1) => {
 	cy.window()
 		.its('app')
 		.then(async app => {
@@ -204,7 +204,7 @@ Cypress.Commands.add('seedCircleMember', (name, userId) => {
 			const circleId = app.$store.state.circles.circles.find(c => c.sanitizedName === name).id
 			const api = `${Cypress.env('baseUrl')}/ocs/v2.php/apps/circles/circles/${circleId}/members`
 			await axios.post(api,
-				{ userId, type: 1 },
+				{ userId, type },
 				{ headers: { requesttoken: app.OC.requestToken } },
 			).catch(e => {
 				if (e.request && e.request.status === 400) {
@@ -214,18 +214,4 @@ Cypress.Commands.add('seedCircleMember', (name, userId) => {
 				}
 			})
 		})
-})
-
-/**
- * Add a group to the circle of a collective
- */
-Cypress.Commands.add('addGroupToCollective', ({ group, collective }) => {
-	cy.visit('/apps/contacts')
-	cy.contains('.app-navigation-entry a', collective).click()
-	cy.get('.app-content-list button.icon-add').click()
-	cy.get('.entity-picker input').type(`${group}`)
-	cy.get('.user-bubble__title').contains(group).click()
-	cy.get('.entity-picker button.primary').click()
-	cy.get(`.members-list [user="${group}"] button.action-item__menutoggle `).click()
-	cy.contains('.popover .action button', 'Promote to Admin').click()
 })
