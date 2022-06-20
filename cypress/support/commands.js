@@ -61,6 +61,7 @@ Cypress.Commands.add('deleteAndSeedCollective', (name) => {
  * Create a collective if it doesn't exist
  */
 Cypress.Commands.add('seedCollective', (name) => {
+	cy.log(`Seeding collective ${name}`)
 	cy.window()
 		.its('app')
 		.then(async app => {
@@ -86,6 +87,7 @@ Cypress.Commands.add('seedCollective', (name) => {
  * Create a collective via UI
  */
 Cypress.Commands.add('createCollective', (name) => {
+	cy.log(`Creating collective ${name}`)
 	cy.get('a [title="Create new collective"]').click()
 	cy.get('.collective-create input[type="text"]').type(`${name}{enter}`)
 })
@@ -94,13 +96,13 @@ Cypress.Commands.add('createCollective', (name) => {
  * Delete a collective if it exists
  */
 Cypress.Commands.add('deleteCollective', (name) => {
+	cy.log(`Deleting collective ${name}`)
 	cy.window()
 		.its('app')
 		.then(async app => {
 			await app.$store.dispatch(GET_COLLECTIVES)
 			const id = app.$store.state.collectives.collectives.find(c => c.name === name)?.id
 			if (id) {
-				cy.log(`Deleting collective ${name}`)
 				await app.$store.dispatch(TRASH_COLLECTIVE, { id })
 				await app.$store.dispatch(DELETE_COLLECTIVE, { id, circle: true })
 			}
@@ -111,6 +113,7 @@ Cypress.Commands.add('deleteCollective', (name) => {
  * Change permission settings for a collective
  */
 Cypress.Commands.add('seedCollectivePermissions', (name, type, level) => {
+	cy.log(`Seeding collective permissions for ${name}`)
 	cy.window()
 		.its('app')
 		.then(async app => {
@@ -127,6 +130,7 @@ Cypress.Commands.add('seedCollectivePermissions', (name, type, level) => {
  * Add a page to a collective
  */
 Cypress.Commands.add('seedPage', (name, parentFilePath, parentFileName) => {
+	cy.log(`Seeding collective page ${name}`)
 	cy.window()
 		.its('app')
 		.then(async app => {
@@ -143,6 +147,7 @@ Cypress.Commands.add('seedPage', (name, parentFilePath, parentFileName) => {
  * Upload content of a page
  */
 Cypress.Commands.add('seedPageContent', (user, pagePath, content) => {
+	cy.log(`Seeding collective page content for ${pagePath}`)
 	cy.window()
 		.its('app')
 		.then(async app => {
@@ -159,6 +164,7 @@ Cypress.Commands.add('seedPageContent', (user, pagePath, content) => {
  * Create a circle (optionally with given config)
  */
 Cypress.Commands.add('seedCircle', (name, config = null) => {
+	cy.log(`Seeding circle ${name}`)
 	cy.visit('/apps/collectives')
 	cy.window()
 		.its('app')
@@ -197,6 +203,7 @@ Cypress.Commands.add('seedCircle', (name, config = null) => {
  * Add someone to a circle
  */
 Cypress.Commands.add('seedCircleMember', (name, userId, type = 1) => {
+	cy.log(`Seeding circle member ${name} of type ${type}`)
 	cy.window()
 		.its('app')
 		.then(async app => {
