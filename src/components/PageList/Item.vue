@@ -32,10 +32,6 @@
 				:class="{ 'app-content-list-item-line-one--level0': level === 0, 'app-content-list-item-template': isTemplate }">
 				{{ title === 'Template' ? t('collectives', 'Template') : title }}
 			</div>
-			<div v-if="$scopedSlots['line-two']"
-				class="app-content-list-item-line-two">
-				<slot name="line-two" />
-			</div>
 		</router-link>
 		<div class="page-list-item-actions">
 			<Actions>
@@ -195,10 +191,6 @@ export default {
 	color: var(--color-text-maxcontrast);
 }
 
-.app-content-list .app-content-list-item .app-content-list-item-line-two {
-	opacity: 1;
-}
-
 .page-list-item-actions {
 	visibility: hidden;
 	position: absolute;
@@ -212,6 +204,8 @@ export default {
 }
 
 .app-content-list-item {
+	height: unset;
+
 	&:hover, &:focus, &:active {
 		background-color: var(--color-background-hover);
 	}

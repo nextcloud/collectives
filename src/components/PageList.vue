@@ -57,13 +57,9 @@
 				class="page-list-landing-page"
 				@click.native="show('details')">
 				<template v-if="currentCollective.emoji" #icon>
-					<div class="emoji">
+					<div class="landing-page-emoji">
 						{{ currentCollective.emoji }}
 					</div>
-				</template>
-				<template v-if="collectivePage" #line-two>
-					<LastUpdate :timestamp="collectivePage.timestamp"
-						:user="collectivePage.lastUserId" />
 				</template>
 				<template v-if="currentCollectiveCanEdit" #actions>
 					<ActionButton icon="icon-add"
@@ -102,7 +98,6 @@
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import Actions from '@nextcloud/vue/dist/Components/Actions'
 import AppContentList from '@nextcloud/vue/dist/Components/AppContentList'
-import LastUpdate from './PageList/LastUpdate.vue'
 import SubpageList from './PageList/SubpageList.vue'
 import Item from './PageList/Item.vue'
 import PagesTemplateIcon from './Icon/PagesTemplateIcon.vue'
@@ -122,7 +117,6 @@ export default {
 		Actions,
 		ActionButton,
 		AppContentList,
-		LastUpdate,
 		Item,
 		PagesTemplateIcon,
 		SubpageList,
@@ -242,17 +236,18 @@ li.toggle-button.selected {
 
 .page-list {
 	overflow-y: auto;
+	height: 100%;
 }
 
 .page-list-landing-page {
-	height: 68px;
 	position: sticky;
 	top: 0;
 	z-index: 1;
 	background-color: var(--color-main-background);
 }
 
-.emoji {
+.landing-page-emoji {
+	background-color: var(--color-main-background);
 	margin: -3px;
 }
 </style>
