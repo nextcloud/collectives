@@ -5,9 +5,7 @@
 			name="sharingToken"
 			:value="shareTokenParam">
 		<div id="text" class="editor">
-			<div class="menubar">
-				<div class="menubar-icons" />
-			</div>
+			<PageInfoBar :current-page="currentPage" />
 			<RichTextReader v-if="!loading"
 				class="editor__content"
 				:content="pageContent"
@@ -21,6 +19,7 @@ import { mapGetters } from 'vuex'
 import { RichTextReader, ImageResolver, IMAGE_RESOLVER } from '@nextcloud/text'
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl } from '@nextcloud/router'
+import PageInfoBar from './PageInfoBar.vue'
 
 const resolvePath = function(from, rel) {
 	if (!rel) {
@@ -45,6 +44,7 @@ export default {
 	name: 'RichText',
 
 	components: {
+		PageInfoBar,
 		RichTextReader,
 	},
 
@@ -100,7 +100,6 @@ export default {
 				shareToken: this.shareTokenParam,
 			})
 		},
-
 	},
 
 	mounted() {
@@ -174,33 +173,6 @@ export default {
 <style scoped lang="scss">
 @import '~@nextcloud/text/dist/style.css';
 
-.menubar {
-	position: fixed;
-	position: -webkit-sticky;
-	position: sticky;
-	top: 0;
-	display: flex;
-	background-color: var(--color-main-background-translucent);
-	height: 44px;
-	z-index: 100;
-}
-
-.menubar .menubar-icons {
-	flex-grow: 1;
-	margin-left: calc((100% - 660px) / 2);
-}
-
-.menubar-icons button {
-	opacity: .4;
-	background-color: var(--color-background-dark);
-}
-
-@media (max-width: 660px) {
-	.menubar .menubar-icons {
-		margin-left: 0;
-	}
-}
-
 #text-wrapper {
 	position: absolute;
 	display: flex;
@@ -244,10 +216,6 @@ export default {
 
 <style lang="scss">
 @media print {
-	.menubar {
-		display: none !important;
-	}
-
 	#editor-wrapper, #text-wrapper {
 		display: block !important;
 		overflow: visible !important;
