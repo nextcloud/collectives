@@ -7,9 +7,9 @@
 		@dragstart="setDragData">
 		<div class="app-content-list-item-icon"
 			:style="indentIcon"
-			:tabindex="isClickable ? '0' : null"
-			@keypress.enter="toggleCollapsed(pageId)"
-			@[isClickable]="toggleCollapsed(pageId)">
+			:tabindex="isCollapsible ? '0' : null"
+			@keypress.enter="toggleCollapsedOrRoute()"
+			@click="toggleCollapsedOrRoute()">
 			<slot name="icon">
 				<template v-if="isTemplate">
 					<PagesTemplateIcon v-if="isCollapsible" :size="26" fill-color="var(--color-main-background)" />
@@ -29,7 +29,7 @@
 		<router-link :to="to"
 			class="app-content-list-item-link">
 			<div class="app-content-list-item-line-one"
-				:class="{ 'app-content-list-item-line-one--level0': level === 0, 'app-content-list-item-template': isTemplate }">
+				:class="{ 'template': isTemplate }">
 				{{ title === 'Template' ? t('collectives', 'Template') : title }}
 			</div>
 		</router-link>
@@ -136,10 +136,6 @@ export default {
 			// Collective landing page is not collapsible
 			return (this.level > 0 && this.hasChildren)
 		},
-
-		isClickable() {
-			return this.isCollapsible ? 'click' : null
-		},
 	},
 
 	mounted() {
@@ -163,12 +159,58 @@ export default {
 			ev.dataTransfer.setData('text/uri-list', href)
 			ev.dataTransfer.setData('text/html', html)
 		},
+
+		toggleCollapsedOrRoute(ev) {
+			if (this.isCollapsible) {
+				event.stopPropagation()
+				this.toggleCollapsed(this.pageId)
+			} else {
+				if (this.currentPage.id !== this.pageId) {
+					this.$router.push(this.to)
+				}
+			}
+		},
 	},
 }
 
 </script>
 
 <style lang="scss" scoped>
+.app-content-list-item {
+	height: unset;
+
+	&.toplevel {
+		font-weight: bold;
+	}
+
+	&.active {
+		background-color: var(--color-primary-light);
+	}
+
+	&:hover, &:focus, &:active {
+		background-color: var(--color-background-hover);
+	}
+
+	&.active, &.toplevel, &.mobile, &:hover, &:focus, &:active {
+		// Shorter width to prevent collision with actions
+		.app-content-list-item-link {
+			width: calc(100% - 28px);
+		}
+
+		.page-list-item-actions {
+			visibility: visible;
+		}
+	}
+
+	.template {
+		color: var(--color-text-maxcontrast);
+	}
+
+	&-line-one {
+		font-size: 120%;
+	}
+}
+
 .app-content-list-item .app-content-list-item-icon {
 	display: flex;
 	line-height: 40px;
@@ -180,15 +222,10 @@ export default {
 	border-radius: 4px;
 }
 
-.app-content-list .app-content-list-item .app-content-list-item-line-one {
-	font-size: 120%;
-	&--level0 {
-		font-weight: bold;
-	}
-}
-
-.app-content-list-item-template {
-	color: var(--color-text-maxcontrast);
+.app-content-list-item-link {
+	width: 100%;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .page-list-item-actions {
@@ -197,39 +234,6 @@ export default {
 	top: 0;
 	right: 0;
 	margin: 0;
-}
-
-.app-content-list-item.active {
-	background-color: var(--color-primary-light);
-}
-
-.app-content-list-item {
-	height: unset;
-
-	&:hover, &:focus, &:active {
-		background-color: var(--color-background-hover);
-	}
-
-	&.active, &.toplevel, &.mobile, &:hover, &:focus, &:active {
-		.page-list-item-actions {
-			visibility: visible;
-		}
-
-		// Shorter width to prevent collision with actions
-		.app-content-list-item-link {
-			width: calc(100% - 28px);
-		}
-	}
-}
-
-div.app-content-list-item {
-	cursor: default;
-}
-
-.app-content-list-item-link {
-	width: 100%;
-	overflow: hidden;
-	text-overflow: ellipsis;
 }
 
 .page-icon-outer {
@@ -255,7 +259,7 @@ div.app-content-list-item {
 // Configure collapse/expand badge
 .material-design-icon.page-icon-badge {
 	position: absolute;
-	bottom: -20px;
+	bottom: -16px;
 	right: -14px;
 	padding: 5px 10px;
 	background-size: cover;
@@ -265,7 +269,7 @@ div.app-content-list-item {
 	transform: rotate(180deg);
 
 	&--rotated {
-		bottom: -21px;
+		bottom: -16px;
 		-webkit-transform: rotate(90deg);
 		-ms-transform: rotate(90deg);
 		transform: rotate(90deg);
