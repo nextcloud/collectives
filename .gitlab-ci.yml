@@ -99,6 +99,7 @@ Validate AppInfo:
 
 Build App:
   <<: *node
+  <<: *php
   stage: build
   script:
     - DEBIAN_FRONTEND=noninteractive apt-get update

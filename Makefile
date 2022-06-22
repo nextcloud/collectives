@@ -132,7 +132,7 @@ text-app-includes:
 	for n in `cat .files_from_text`; do cp ../../apps/text/$$n $$n ; done
 
 # Build a release package
-build: node-modules build-js-production
+build: node-modules build-js-production composer-install
 	mkdir -p $(RELEASE_DIR)
 	rsync -a --delete --delete-excluded \
 		--exclude=".[a-z]*" \
@@ -152,7 +152,6 @@ build: node-modules build-js-production
 		--exclude="psalm.xml" \
 		--exclude="src" \
 		--exclude="tests" \
-		--exclude="vendor" \
 		--exclude="webpack.*" \
 	$(PROJECT_DIR) $(RELEASE_DIR)/
 	@if [ -f $(CERT_DIR)/$(APP_NAME).key ]; then \
