@@ -12,19 +12,24 @@
 			@click="toggleCollapsedOrRoute()">
 			<slot name="icon">
 				<template v-if="isTemplate">
-					<PagesTemplateIcon v-if="isCollapsible" :size="26" fill-color="var(--color-main-background)" />
-					<PageTemplateIcon v-else :size="26" fill-color="var(--color-main-background)" />
+					<PageTemplateIcon :size="24" fill-color="var(--color-background-darker)" />
 				</template>
 				<template v-else>
-					<PagesIcon v-if="isCollapsible" :size="26" fill-color="var(--color-main-background)" />
-					<PageIcon v-else :size="26" fill-color="var(--color-main-background)" />
+					<PageIcon :size="24" fill-color="var(--color-background-darker)" />
 				</template>
 			</slot>
-			<TriangleIcon v-if="isCollapsible"
-				v-show="!filteredView"
-				:title="collapsed(pageId) ? t('collectives', 'Expand subpage list') : t('collectives', 'Collapse subpage list')"
-				class="page-icon-badge"
-				:class="{'page-icon-badge--rotated': collapsed(pageId)}" />
+			<template v-if="isCollapsible">
+				<ChevronRightIcon v-show="collapsed(pageId) && !filteredView"
+					:size="22"
+					fill-color="var(--color-main-text)"
+					:title="t('collectives', 'Expand subpage list')"
+					class="item-icon-badge collapsed" />
+				<ChevronDownIcon v-show="!collapsed(pageId) && !filteredView"
+					:size="22"
+					fill-color="var(--color-main-text)"
+					:title="t('collectives', 'Collapse subpage list')"
+					class="item-icon-badge expanded" />
+			</template>
 		</div>
 		<router-link :to="to"
 			class="app-content-list-item-link">
@@ -47,11 +52,10 @@ import Actions from '@nextcloud/vue/dist/Components/Actions'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile'
 import { generateUrl } from '@nextcloud/router'
 import { mapGetters, mapMutations } from 'vuex'
-import TriangleIcon from 'vue-material-design-icons/Triangle'
+import ChevronDownIcon from 'vue-material-design-icons/ChevronDown'
+import ChevronRightIcon from 'vue-material-design-icons/ChevronRight'
 import PageIcon from '../Icon/PageIcon.vue'
-import PagesIcon from '../Icon/PagesIcon.vue'
 import PageTemplateIcon from '../Icon/PageTemplateIcon.vue'
-import PagesTemplateIcon from '../Icon/PagesTemplateIcon.vue'
 import { scrollToPage } from '../../util/scrollToElement.js'
 
 export default {
@@ -59,11 +63,10 @@ export default {
 
 	components: {
 		Actions,
+		ChevronDownIcon,
+		ChevronRightIcon,
 		PageIcon,
-		PagesIcon,
 		PageTemplateIcon,
-		PagesTemplateIcon,
-		TriangleIcon,
 	},
 
 	mixins: [
@@ -118,7 +121,7 @@ export default {
 		},
 
 		indentIcon() {
-			const left = 12 + 12 * this.indent
+			const left = 12 * this.indent
 			return `left: ${left}px`
 		},
 
@@ -177,7 +180,9 @@ export default {
 
 <style lang="scss" scoped>
 .app-content-list-item {
+	margin: 4px 0;
 	height: unset;
+	border-radius: var(--border-radius-large);
 
 	&.toplevel {
 		font-weight: bold;
@@ -206,26 +211,46 @@ export default {
 		color: var(--color-text-maxcontrast);
 	}
 
-	&-line-one {
+	.app-content-list-item-icon {
+		display: flex;
+		justify-content: center;
+
+		.material-design-icon {
+			cursor: pointer;
+		}
+
+		// Configure collapse/expand badge
+		.item-icon-badge {
+			position: absolute;
+			bottom: 1px;
+			right: 2px;
+			cursor: pointer;
+
+			// Animate expand/collapse click
+			&.collapsed {
+				&:active {
+					animation: rotation-right 0.2s linear forwards;
+				}
+			}
+
+			&.expanded {
+				&:active {
+					animation: rotation-left 0.2s linear forwards;
+				}
+			}
+		}
+	}
+
+	.app-content-list-item-line-one {
+		padding-left: 36px;
 		font-size: 120%;
 	}
-}
 
-.app-content-list-item .app-content-list-item-icon {
-	display: flex;
-	line-height: 40px;
-	width: 26px;
-	height: 34px;
-	left: 12px;
-	font-size: 24px;
-	background-color: var(--color-background-darker);
-	border-radius: 4px;
-}
-
-.app-content-list-item-link {
-	width: 100%;
-	overflow: hidden;
-	text-overflow: ellipsis;
+	.app-content-list-item-link {
+		width: 100%;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
 }
 
 .page-list-item-actions {
@@ -236,49 +261,21 @@ export default {
 	margin: 0;
 }
 
-.page-icon-outer {
-	display: flex;
-}
-
-// Set pointer cursor on page icon if isCollapsible
-.page-icon-collapsible {
-	cursor: pointer;
-}
-
-// Change color of collapse/expand badge when hovering over page icon
-.app-content-list-item-icon {
-	&:hover, &:focus, &:active {
-		.material-design-icon.page-icon-badge > .material-design-icon__svg {
-			fill: var(--color-primary);
-		}
+@keyframes rotation-right {
+	0%{
+		transform: rotate(0);
 	}
-}
-</style>
-
-<style lang="scss">
-// Configure collapse/expand badge
-.material-design-icon.page-icon-badge {
-	position: absolute;
-	bottom: -16px;
-	right: -14px;
-	padding: 5px 10px;
-	background-size: cover;
-	cursor: pointer;
-	-webkit-transform: rotate(180deg);
-	-ms-transform: rotate(180deg);
-	transform: rotate(180deg);
-
-	&--rotated {
-		bottom: -16px;
-		-webkit-transform: rotate(90deg);
-		-ms-transform: rotate(90deg);
+	100%{
 		transform: rotate(90deg);
 	}
 }
 
-.material-design-icon.page-icon-badge > .material-design-icon__svg {
-	width: 16px;
-	transform: scale(1, 0.7);
-	fill: var(--color-main-text);
+@keyframes rotation-left {
+	0%{
+		transform: rotate(0);
+	}
+	100%{
+		transform: rotate(-90deg);
+	}
 }
 </style>

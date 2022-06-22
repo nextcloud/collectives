@@ -237,6 +237,7 @@ li.toggle-button.selected {
 .page-list {
 	overflow-y: auto;
 	height: 100%;
+	padding: 4px;
 }
 
 .page-list-landing-page {
@@ -247,7 +248,7 @@ li.toggle-button.selected {
 }
 
 .landing-page-emoji {
-	background-color: var(--color-main-background);
-	margin: -3px;
+	background-color: initial;
+	margin: -3px 0;
 }
 </style>
