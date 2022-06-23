@@ -118,22 +118,29 @@ class FeatureContext implements Context {
 
 	/**
 	 * @When user :user creates page :page with parentPath :parentPath in :collective
+	 * @When user :user :fails to create page :page with parentPath :parentPath in :collective
 	 *
-	 * @param string $user
-	 * @param string $page
-	 * @param string $parentPath
-	 * @param string $collective
+	 * @param string      $user
+	 * @param string      $page
+	 * @param string      $parentPath
+	 * @param string      $collective
+	 * @param string|null $fail
 	 *
 	 * @throws GuzzleException
 	 */
-	public function userCreatesPage(string $user, string $page, string $parentPath, string $collective): void {
+	public function userCreatesPage(string $user, string $page, string $parentPath, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$parentId = $this->getParentId($collectiveId, $parentPath);
 
 		$formData = new TableNode([['title', $page], ['parentId', $parentId]]);
 		$this->sendRequest('POST', '/apps/collectives/_api/' . $collectiveId . '/_pages/parent/' . $parentId, $formData);
-		$this->assertStatusCode(200);
+
+		if ("fails" === $fail) {
+			$this->assertStatusCode(403);
+		} else {
+			$this->assertStatusCode(200);
+		}
 	}
 
 	/**
@@ -409,64 +416,82 @@ class FeatureContext implements Context {
 
 	/**
 	 * @When user :user touches page :page with parentPath :parentPath in :collective
+	 * @When user :user :fails to touch page :page with parentPath :parentPath in :collective
 	 *
-	 * @param string $user
-	 * @param string $page
-	 * @param string $parentPath
-	 * @param string $collective
+	 * @param string      $user
+	 * @param string      $page
+	 * @param string      $parentPath
+	 * @param string      $collective
+	 * @param string|null $fail
 	 *
 	 * @throws GuzzleException
-	 * @throws JsonException
 	 */
-	public function userTouchesPage(string $user, string $page, string $parentPath, string $collective): void {
+	public function userTouchesPage(string $user, string $page, string $parentPath, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$pageId = $this->pageIdByName($collectiveId, $page);
 		$parentId = $this->getParentId($collectiveId, $parentPath);
 		$this->sendRequest('GET', '/apps/collectives/_api/' . $collectiveId . '/_pages/parent/' . $parentId . '/page/' . $pageId . '/touch');
-		$this->assertStatusCode(200);
+		if ("fails" === $fail) {
+			$this->assertStatusCode(403);
+		} else {
+			$this->assertStatusCode(200);
+		}
 	}
 
 	/**
 	 * @When user :user renames page :page to :newtitle with parentPath :parentPath in :collective
+	 * @When user :user :fails to rename page :page to :newtitle with parentPath :parentPath in :collective
 	 *
-	 * @param string $user
-	 * @param string $page
-	 * @param string $newtitle
-	 * @param string $parentPath
-	 * @param string $collective
+	 * @param string      $user
+	 * @param string      $page
+	 * @param string      $newtitle
+	 * @param string      $parentPath
+	 * @param string      $collective
+	 * @param string|null $fail
 	 *
 	 * @throws GuzzleException
 	 */
-	public function userRenamesPage(string $user, string $page, string $newtitle, string $parentPath, string $collective): void {
+	public function userRenamesPage(string $user, string $page, string $newtitle, string $parentPath, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$pageId = $this->pageIdByName($collectiveId, $page);
 		$parentId = $this->getParentId($collectiveId, $parentPath);
 		$formData = new TableNode([['title', $newtitle]]);
 		$this->sendRequest('PUT', '/apps/collectives/_api/' . $collectiveId . '/_pages/parent/' . $parentId . '/page/' . $pageId, $formData);
-		$this->assertStatusCode(200);
+		if ("fails" === $fail) {
+			$this->assertStatusCode(403);
+		} else {
+			$this->assertStatusCode(200);
+		}
 	}
 
 	/**
 	 * @When user :user sets emoji for page :page to :emoji with parentPath :parentPath in :collective
-	 * @param string $user
-	 * @param string $page
-	 * @param string $emoji
-	 * @param string $parentPath
-	 * @param string $collective
+	 * @When user :user :fails to set emoji for page :page to :emoji with parentPath :parentPath in :collective
+	 *
+	 * @param string      $user
+	 * @param string      $page
+	 * @param string      $emoji
+	 * @param string      $parentPath
+	 * @param string      $collective
+	 * @param string|null $fail
 	 *
 	 * @throws GuzzleException
 	 */
-	public function userSetsPageEmoji(string $user, string $page, string $emoji, string $parentPath, string $collective): void {
+	public function userSetsPageEmoji(string $user, string $page, string $emoji, string $parentPath, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$pageId = $this->pageIdByName($collectiveId, $page);
 		$parentId = $this->getParentId($collectiveId, $parentPath);
 		$formData = new TableNode([['emoji', $emoji]]);
 		$this->sendRequest('PUT', '/apps/collectives/_api/' . $collectiveId . '/_pages/parent/' . $parentId . '/page/' . $pageId . '/emoji', $formData);
-		$this->assertStatusCode(200);
-		$this->assertPageKeyValue($pageId, 'emoji', $emoji);
+		if ("fails" === $fail) {
+			$this->assertStatusCode(403);
+		} else {
+			$this->assertStatusCode(200);
+			$this->assertPageKeyValue($pageId, 'emoji', $emoji);
+		}
 	}
 
 	/**

@@ -6,6 +6,7 @@ use OCA\Collectives\Db\Page;
 use OCA\Collectives\Db\PageMapper;
 use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Fs\UserFolderHelper;
+use OCA\Collectives\Model\CollectiveInfo;
 use OCA\Collectives\Model\PageInfo;
 use OCP\Files\File;
 use OCP\Files\Folder;
@@ -33,6 +34,9 @@ class PageService {
 	/** @var IConfig */
 	private $config;
 
+	/** @var CollectiveInfo */
+	private $collectiveInfo;
+
 	/**
 	 * PageService constructor.
 	 *
@@ -59,6 +63,38 @@ class PageService {
 	 * @param int    $collectiveId
 	 * @param string $userId
 	 *
+	 * @return CollectiveInfo
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	private function getCollectiveInfo(int $collectiveId, string $userId): CollectiveInfo {
+		if (null === $this->collectiveInfo || $this->collectiveInfo->getId() !== $collectiveId) {
+			$this->collectiveInfo = $this->collectiveService->getCollectiveInfo($collectiveId, $userId);
+		}
+
+		return $this->collectiveInfo;
+	}
+
+	/**
+	 * @param int    $collectiveId
+	 * @param string $userId
+	 *
+	 * @return void
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	private function verifyEditPermissions(int $collectiveId, string $userId): void {
+		if (!$this->getCollectiveInfo($collectiveId, $userId)->canEdit()) {
+			throw new NotPermittedException('Not allowed to edit collective');
+		}
+	}
+
+	/**
+	 * @param int    $collectiveId
+	 * @param string $userId
+	 *
 	 * @return Folder
 	 * @throws FilesNotFoundException
 	 * @throws MissingDependencyException
@@ -66,8 +102,7 @@ class PageService {
 	 * @throws NotPermittedException
 	 */
 	private function getCollectiveFolder(int $collectiveId, string $userId): Folder {
-		$collectiveInfo = $this->collectiveService->getCollectiveInfo($collectiveId, $userId);
-		$folder = $this->userFolderHelper->get($userId)->get($collectiveInfo->getName());
+		$folder = $this->userFolderHelper->get($userId)->get($this->getCollectiveInfo($collectiveId, $userId)->getName());
 
 		if (!($folder instanceof Folder)) {
 			throw new FilesNotFoundException('Folder not found for collective ' . $collectiveId);
@@ -481,6 +516,7 @@ class PageService {
 	 * @throws NotPermittedException
 	 */
 	public function create(int $collectiveId, int $parentId, string $title, string $userId): PageInfo {
+		$this->verifyEditPermissions($collectiveId, $userId);
 		$folder = $this->getFolder($collectiveId, $parentId, $userId);
 		$parentFile = $this->nodeHelper->getFileById($folder, $parentId);
 		$folder = $this->initSubFolder($parentFile);
@@ -502,6 +538,7 @@ class PageService {
 	 * @throws NotPermittedException
 	 */
 	public function touch(int $collectiveId, int $parentId, int $id, string $userId): PageInfo {
+		$this->verifyEditPermissions($collectiveId, $userId);
 		$folder = $this->getFolder($collectiveId, $parentId, $userId);
 		$file = $this->nodeHelper->getFileById($folder, $id);
 		$pageInfo = $this->getPageByFile($file);
@@ -565,6 +602,7 @@ class PageService {
 	 * @throws NotPermittedException
 	 */
 	public function rename(int $collectiveId, int $parentId, int $id, string $title, string $userId): PageInfo {
+		$this->verifyEditPermissions($collectiveId, $userId);
 		$collectiveFolder = $this->getCollectiveFolder($collectiveId, $userId);
 		$file = $this->nodeHelper->getFileById($collectiveFolder, $id);
 		if ($this->renamePage($collectiveFolder, $parentId, $file, $title)) {
@@ -594,6 +632,7 @@ class PageService {
 	 * @throws NotPermittedException
 	 */
 	public function setEmoji(int $collectiveId, int $parentId, int $id, ?string $emoji, string $userId): PageInfo {
+		$this->verifyEditPermissions($collectiveId, $userId);
 		$folder = $this->getFolder($collectiveId, $parentId, $userId);
 		$file = $this->nodeHelper->getFileById($folder, $id);
 		$pageInfo = $this->getPageByFile($file);
@@ -615,6 +654,7 @@ class PageService {
 	 * @throws NotPermittedException
 	 */
 	public function delete(int $collectiveId, int $parentId, int $id, string $userId): PageInfo {
+		$this->verifyEditPermissions($collectiveId, $userId);
 		$folder = $this->getFolder($collectiveId, $parentId, $userId);
 		$file = $this->nodeHelper->getFileById($folder, $id);
 		$pageInfo = $this->getPageByFile($file);
