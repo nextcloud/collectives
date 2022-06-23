@@ -11,10 +11,6 @@
 			:is-template="isTemplate"
 			@toggleCollapsed="toggleCollapsed(page.id)"
 			@click.native="show('details')">
-			<template #line-two>
-				<LastUpdate :timestamp="page.timestamp"
-					:user="page.lastUserId" />
-			</template>
 			<template v-if="currentCollectiveCanEdit" #actions>
 				<ActionButton icon="icon-add"
 					:close-after-click="true"
@@ -50,7 +46,6 @@
 <script>
 
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
-import LastUpdate from './LastUpdate.vue'
 import Item from './Item.vue'
 import PagesTemplateIcon from '../Icon/PagesTemplateIcon.vue'
 
@@ -63,7 +58,6 @@ export default {
 	components: {
 		ActionButton,
 		Item,
-		LastUpdate,
 		PagesTemplateIcon,
 	},
 
