@@ -19,16 +19,12 @@
 				</template>
 			</slot>
 			<template v-if="isCollapsible">
-				<ChevronRightIcon v-show="collapsed(pageId) && !filteredView"
+				<ChevronRightIcon v-show="!filteredView"
 					:size="22"
 					fill-color="var(--color-main-text)"
 					:title="t('collectives', 'Expand subpage list')"
-					class="item-icon-badge collapsed" />
-				<ChevronDownIcon v-show="!collapsed(pageId) && !filteredView"
-					:size="22"
-					fill-color="var(--color-main-text)"
-					:title="t('collectives', 'Collapse subpage list')"
-					class="item-icon-badge expanded" />
+					class="item-icon-badge"
+					:class="collapsed(pageId) ? 'collapsed' : 'expanded'" />
 			</template>
 		</div>
 		<router-link :to="to"
@@ -52,7 +48,6 @@ import Actions from '@nextcloud/vue/dist/Components/Actions'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile'
 import { generateUrl } from '@nextcloud/router'
 import { mapGetters, mapMutations } from 'vuex'
-import ChevronDownIcon from 'vue-material-design-icons/ChevronDown'
 import ChevronRightIcon from 'vue-material-design-icons/ChevronRight'
 import PageIcon from '../Icon/PageIcon.vue'
 import PageTemplateIcon from '../Icon/PageTemplateIcon.vue'
@@ -63,7 +58,6 @@ export default {
 
 	components: {
 		Actions,
-		ChevronDownIcon,
 		ChevronRightIcon,
 		PageIcon,
 		PageTemplateIcon,
@@ -225,18 +219,10 @@ export default {
 			bottom: 1px;
 			right: 2px;
 			cursor: pointer;
-
-			// Animate expand/collapse click
-			&.collapsed {
-				&:active {
-					animation: rotation-right 0.2s linear forwards;
-				}
-			}
+			transition: transform var(--animation-slow);
 
 			&.expanded {
-				&:active {
-					animation: rotation-left 0.2s linear forwards;
-				}
+				transform: rotate(90deg);
 			}
 		}
 	}
@@ -259,23 +245,5 @@ export default {
 	top: 0;
 	right: 0;
 	margin: 0;
-}
-
-@keyframes rotation-right {
-	0%{
-		transform: rotate(0);
-	}
-	100%{
-		transform: rotate(90deg);
-	}
-}
-
-@keyframes rotation-left {
-	0%{
-		transform: rotate(0);
-	}
-	100%{
-		transform: rotate(-90deg);
-	}
 }
 </style>
