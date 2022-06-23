@@ -137,8 +137,9 @@ class PageService {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
 		$lastUserId = ($page !== null) ? $page->getLastUserId() : null;
+		$emoji = ($page !== null) ? $page->getEmoji() : null;
 		try {
-			$pageInfo->fromFile($file, $this->getParentPageId($file), $lastUserId);
+			$pageInfo->fromFile($file, $this->getParentPageId($file), $lastUserId, $emoji);
 		} catch (FilesNotFoundException | InvalidPathException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
@@ -147,13 +148,17 @@ class PageService {
 	}
 
 	/**
-	 * @param int    $fileId
-	 * @param string $userId
+	 * @param int         $fileId
+	 * @param string      $userId
+	 * @param string|null $emoji
 	 */
-	private function updatePage(int $fileId, string $userId): void {
+	private function updatePage(int $fileId, string $userId, ?string $emoji = null): void {
 		$page = new Page();
 		$page->setFileId($fileId);
 		$page->setLastUserId($userId);
+		if ($emoji) {
+			$page->setEmoji($emoji);
+		}
 		$this->pageMapper->updateOrInsert($page);
 	}
 
@@ -574,6 +579,28 @@ class PageService {
 
 		$this->revertSubFolders($collectiveFolder);
 		return $this->getPageByFile($file);
+	}
+
+	/**
+	 * @param int         $collectiveId
+	 * @param int         $parentId
+	 * @param int         $id
+	 * @param string|null $emoji
+	 * @param string      $userId
+	 *
+	 * @return PageInfo
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function setEmoji(int $collectiveId, int $parentId, int $id, ?string $emoji, string $userId): PageInfo {
+		$folder = $this->getFolder($collectiveId, $parentId, $userId);
+		$file = $this->nodeHelper->getFileById($folder, $id);
+		$pageInfo = $this->getPageByFile($file);
+		$pageInfo->setLastUserId($userId);
+		$pageInfo->setEmoji($emoji);
+		$this->updatePage($pageInfo->getId(), $userId, $emoji);
+		return $pageInfo;
 	}
 
 	/**

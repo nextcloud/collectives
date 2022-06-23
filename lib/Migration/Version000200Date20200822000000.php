@@ -35,6 +35,10 @@ class Version000200Date20200822000000 extends SimpleMigrationStep {
 				'notnull' => true,
 				'length' => 64,
 			]);
+			$table->addColumn('emoji', Types::STRING, [
+				'notnull' => false,
+				'length' => 8,
+			]);
 
 			$table->setPrimaryKey(['id']);
 			$table->addUniqueIndex(['file_id'], 'collectives_pages_file_index');

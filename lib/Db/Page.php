@@ -14,6 +14,8 @@ use OCP\AppFramework\Db\Entity;
  * @method void setFileId(int $value)
  * @method string getLastUserId()
  * @method void setLastUserId(string $value)
+ * @method string getEmoji()
+ * @method void setEmoji(string $value)
  */
 class Page extends Entity implements JsonSerializable {
 	/** @var int */
@@ -22,11 +24,15 @@ class Page extends Entity implements JsonSerializable {
 	/** @var string */
 	protected $lastUserId;
 
+	/** @var string */
+	protected $emoji;
+
 	public function jsonSerialize(): array {
 		return [
 			'id' => $this->id,
 			'fileId' => $this->fileId,
-			'lastUserId' => $this->lastUserId
+			'lastUserId' => $this->lastUserId,
+			'emoji' => $this->emoji,
 		];
 	}
 }

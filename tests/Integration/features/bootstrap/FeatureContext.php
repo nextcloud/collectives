@@ -449,6 +449,27 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @When user :user sets emoji for page :page to :emoji with parentPath :parentPath in :collective
+	 * @param string $user
+	 * @param string $page
+	 * @param string $emoji
+	 * @param string $parentPath
+	 * @param string $collective
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userSetsPageEmoji(string $user, string $page, string $emoji, string $parentPath, string $collective): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$pageId = $this->pageIdByName($collectiveId, $page);
+		$parentId = $this->getParentId($collectiveId, $parentPath);
+		$formData = new TableNode([['emoji', $emoji]]);
+		$this->sendRequest('PUT', '/apps/collectives/_api/' . $collectiveId . '/_pages/parent/' . $parentId . '/page/' . $pageId . '/emoji', $formData);
+		$this->assertStatusCode(200);
+		$this->assertPageKeyValue($pageId, 'emoji', $emoji);
+	}
+
+	/**
 	 * @When user :user gets setting :key with value :value
 	 *
 	 * @param string $user
@@ -706,6 +727,36 @@ class FeatureContext implements Context {
 			$this->assertStatusCode(403);
 		} else {
 			$this->assertStatusCode(200);
+		}
+	}
+
+	/**
+	 * @When anonymous sets emoji for page :page to :emoji with parentPath :parentPath in public collective :collective with owner :owner
+	 * @When anonymous :fails to set emoji for page :page to :emoji with parentPath :parentPath in public collective :collective with owner :owner
+	 *
+	 * @param string      $page
+	 * @param string      $emoji
+	 * @param string      $parentPath
+	 * @param string      $collective
+	 * @param string      $owner
+	 * @param string|null $fail
+	 *
+	 * @throws GuzzleException
+	 */
+	public function anonymousSetsPublicCollectivePageEmoji(string $page, string $emoji, string $parentPath, string $collective, $owner, ?string $fail = null): void {
+		$this->setCurrentUser($owner);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$token = $this->getCollectiveShareToken($collectiveId);
+		$pageId = $this->pageIdByName($collectiveId, $page);
+		$parentId = $this->getParentId($collectiveId, $parentPath);
+
+		$formData = new TableNode([['emoji', $emoji]]);
+		$this->sendRequest('PUT', '/apps/collectives/_api/p/' . $token . '/_pages/parent/' . $parentId . '/page/' . $pageId . '/emoji', $formData);
+		if ("fails" === $fail) {
+			$this->assertStatusCode(403);
+		} else {
+			$this->assertStatusCode(200);
+			$this->assertPageKeyValue($pageId, 'emoji', $emoji);
 		}
 	}
 
@@ -1108,7 +1159,7 @@ class FeatureContext implements Context {
 		}
 
 		if (!isset($collective)) {
-			throw new RuntimeException('Unable to find collective ' . $collective);
+			throw new RuntimeException('Unable to find collective ' . $name);
 		}
 
 		if (false === $revert) {
@@ -1117,6 +1168,7 @@ class FeatureContext implements Context {
 			Assert::assertNotEquals($value, $collective[$key]);
 		}
 	}
+
 	/**
 	 * @param string $name
 	 * @param int    $level
@@ -1148,6 +1200,27 @@ class FeatureContext implements Context {
 			Assert::assertContains($path, $pagePaths);
 		} else {
 			Assert::assertNotContains($path, $pagePaths);
+		}
+	}
+
+	/**
+	 * @param int       $id
+	 * @param string    $key
+	 * @param string    $value
+	 * @param bool|null $revert
+	 */
+	private function assertPageKeyValue(string $id, string $key, string $value, ?bool $revert = false): void {
+		$jsonBody = $this->getJson();
+		$page = $jsonBody['data'];
+
+		if (!isset($page)) {
+			throw new RuntimeException('Unable to find page with ID ' . $id);
+		}
+
+		if (false === $revert) {
+			Assert::assertEquals($value, $page[$key]);
+		} else {
+			Assert::assertNotEquals($value, $page[$key]);
 		}
 	}
 

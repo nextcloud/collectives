@@ -29,6 +29,10 @@ Feature: collectivePages
     Then user "jane" sees pagePath "firstpage/subpage2.md" in "mycollective"
     And user "jane" doesn't see pagePath "firstpage (2).md" in "mycollective"
 
+  Scenario: Change page emoji
+    When user "jane" sets emoji for page "firstpage" to "🍏" with parentPath "Readme.md" in "mycollective"
+    Then user "jane" sets emoji for page "firstpage" to "" with parentPath "Readme.md" in "mycollective"
+
   Scenario: Fail to delete a page with subpages
     When user "jane" fails to delete page "firstpage" with parentPath "Readme.md" in "mycollective"
     Then user "jane" sees pagePath "firstpage/Readme.md" in "mycollective"

@@ -136,6 +136,26 @@ class PageController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 *
+	 * @param int         $collectiveId
+	 * @param int         $parentId
+	 * @param int         $id
+	 * @param string|null $emoji
+	 *
+	 * @return DataResponse
+	 */
+	public function setEmoji(int $collectiveId, int $parentId, int $id, ?string $emoji = null): DataResponse {
+		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $id, $emoji): array {
+			$userId = $this->getUserId();
+			$page = $this->service->setEmoji($collectiveId, $parentId, $id, $emoji, $userId);
+			return [
+				"data" => $page
+			];
+		}, $this->logger);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 *
 	 * @param int $collectiveId
 	 * @param int $parentId
 	 * @param int $id
