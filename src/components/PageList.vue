@@ -237,7 +237,7 @@ li.toggle-button.selected {
 .page-list {
 	overflow-y: auto;
 	height: 100%;
-	padding: 4px;
+	padding: 0 4px;
 }
 
 .page-list-landing-page {
