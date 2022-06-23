@@ -175,7 +175,7 @@ export default {
 <style lang="scss" scoped>
 .app-content-list-item {
 	height: unset;
-	margin-bottom: 4px 0;
+	margin-bottom: 4px;
 	border-radius: var(--border-radius-large);
 
 	&.toplevel {
