@@ -6,6 +6,8 @@
 			:page-id="page.id"
 			:parent-page-id="page.parentId"
 			:title="page.title"
+			:timestamp="page.timestamp"
+			:last-user-id="page.lastUserId"
 			:emoji="page.emoji"
 			:level="level"
 			:can-edit="currentCollectiveCanEdit"

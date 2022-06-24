@@ -2,42 +2,26 @@
 	<div class="text-menubar">
 		<div v-if="currentPage.lastUserId" class="infobar-item infobar-lastupdate">
 			<div class="item-text">
-				<UserBubble :display-name="currentPage.lastUserId"
-					:user="currentPage.lastUserId"
-					:show-user-status="false">
-					{{ lastEditedUserMessage }}
-				</UserBubble>
-				{{ lastUpdate }}
+				<LastUserBubble :last-user-id="currentPage.lastUserId" :timestamp="currentPage.timestamp" />
 			</div>
 		</div>
 	</div>
 </template>
 
 <script>
-import UserBubble from '@nextcloud/vue/dist/Components/UserBubble'
-import moment from '@nextcloud/moment'
+import LastUserBubble from '../LastUserBubble.vue'
 
 export default {
 	name: 'PageInfoBar',
 
 	components: {
-		UserBubble,
+		LastUserBubble,
 	},
 
 	props: {
 		currentPage: {
 			type: Object,
 			required: true,
-		},
-	},
-
-	computed: {
-		lastEditedUserMessage() {
-			return t('collectives', 'Last edited by {user}', { user: this.currentPage.lastUserId })
-		},
-
-		lastUpdate() {
-			return moment.unix(this.currentPage.timestamp).fromNow()
 		},
 	},
 }

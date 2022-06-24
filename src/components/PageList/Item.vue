@@ -41,6 +41,8 @@
 		</router-link>
 		<PageListActions :page-id="pageId"
 			:parent-page-id="parentPageId"
+			:timestamp="timestamp"
+			:last-user-id="lastUserId"
 			:is-landing-page="isLandingPage"
 			:is-template="isTemplate"
 			:has-template="hasTemplate"
@@ -87,6 +89,14 @@ export default {
 			required: true,
 		},
 		title: {
+			type: String,
+			required: true,
+		},
+		timestamp: {
+			type: Number,
+			required: true,
+		},
+		lastUserId: {
 			type: String,
 			required: true,
 		},
