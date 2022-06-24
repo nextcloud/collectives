@@ -104,7 +104,7 @@ describe('Collective Share', function() {
 			cy.intercept('POST', '**/_api/p/*/_pages/parent/*').as('createPage')
 			cy.intercept('PUT', '**/apps/text/public/session/create').as('textCreateSession')
 			cy.contains('.app-content-list-item', 'Share me')
-				.find('button.icon-add')
+				.find('button.action-button-add')
 				.click()
 			cy.wait('@createPage')
 			cy.wait('@textCreateSession')
