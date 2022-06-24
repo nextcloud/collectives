@@ -76,6 +76,21 @@ describe('Page', function() {
 		})
 	})
 
+	describe('set page emoji', function() {
+		it('Allows setting a page emoji', function() {
+			cy.visit('/apps/collectives/Our%20Garden/Day%201')
+			cy.get('#titleform .page-title-icon')
+				.click()
+			cy.contains('.emoji-mart-scroll .emoji-mart-emoji', '🥰').click()
+			cy.reload()
+			cy.get('#titleform .page-title-icon')
+				.should('contain', '🥰')
+			cy.contains('.app-content-list-item', 'Day 1')
+				.find('.app-content-list-item-icon')
+				.should('contain', '🥰')
+		})
+	})
+
 	describe('with special chars', function() {
 		it('loads well', function() {
 			cy.contains('.app-content-list-item a', '#% special chars').click()

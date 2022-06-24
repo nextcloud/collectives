@@ -1,12 +1,41 @@
 <template>
 	<div>
 		<h1 id="titleform" class="page-title">
+			<div class="page-title-icon">
+				<div v-if="landingPage && currentCollective.emoji">
+					{{ currentCollective.emoji }}
+				</div>
+				<CollectivesIcon v-else-if="landingPage" :size="30" fill-color="var(--color-text-maxcontrast)" />
+				<PageTemplateIcon v-else-if="isTemplatePage" :size="30" fill-color="var(--color-text-maxcontrast)" />
+				<EmojiPicker v-else
+					:show-preview="true"
+					@select="setPageEmoji">
+					<Button type="tertiary"
+						:aria-label="t('collectives', 'Select emoji for page')"
+						:title="t('collectives', 'Select emoji')"
+						class="button-emoji-page"
+						@click.prevent>
+						<template #icon>
+							<LoadingIcon v-if="loading(`pageEmoji-${currentPage.id}`)"
+								class="animation-rotate"
+								:size="30"
+								fill-color="var(--color-text-maxcontrast)" />
+							<div v-else-if="currentPage.emoji">
+								{{ currentPage.emoji }}
+							</div>
+							<EmoticonOutlineIcon v-else
+								:size="30"
+								fill-color="var(--color-text-maxcontrast)" />
+						</template>
+					</Button>
+				</EmojiPicker>
+			</div>
 			<form @submit.prevent="renamePage(); startEdit()">
 				<input v-if="landingPage"
 					class="title"
 					type="text"
 					disabled
-					:value="currentCollectiveTitle">
+					:value="currentCollective.name">
 				<input v-else-if="isTemplatePage"
 					class="title"
 					type="text"
@@ -61,11 +90,15 @@ import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import Button from '@nextcloud/vue/dist/Components/Button'
 import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip'
 import CheckIcon from 'vue-material-design-icons/Check'
+import CollectivesIcon from './Icon/CollectivesIcon.vue'
+import EmojiPicker from '@nextcloud/vue/dist/Components/EmojiPicker'
+import EmoticonOutlineIcon from 'vue-material-design-icons/EmoticonOutline'
 import LoadingIcon from 'vue-material-design-icons/Loading'
 import PencilIcon from 'vue-material-design-icons/Pencil'
 import Editor from './Page/Editor.vue'
 import RichText from './Page/RichText.vue'
 import PageActions from './Page/PageActions.vue'
+import PageTemplateIcon from './Icon/PageTemplateIcon.vue'
 import { showError } from '@nextcloud/dialogs'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import {
@@ -74,6 +107,7 @@ import {
 	GET_PAGES,
 	GET_VERSIONS,
 } from '../store/actions.js'
+import pageMixin from '../mixins/pageMixin.js'
 import pageContentMixin from '../mixins/pageContentMixin.js'
 
 const EditState = { Unset: 0, Edit: 1, Read: 2 }
@@ -86,11 +120,15 @@ export default {
 		Actions,
 		Button,
 		CheckIcon,
+		CollectivesIcon,
 		Editor,
+		EmojiPicker,
+		EmoticonOutlineIcon,
 		LoadingIcon,
+		PageActions,
+		PageTemplateIcon,
 		PencilIcon,
 		RichText,
-		PageActions,
 	},
 
 	directives: {
@@ -98,6 +136,7 @@ export default {
 	},
 
 	mixins: [
+		pageMixin,
 		pageContentMixin,
 	],
 
@@ -368,6 +407,10 @@ export default {
 				this.emptyContent()
 			}
 		},
+
+		async setPageEmoji(emoji) {
+			await this.setEmoji(this.currentPage.parentId, this.currentPage.id, emoji)
+		},
 	},
 }
 </script>
@@ -395,6 +438,22 @@ export default {
 	max-width: 670px;
 	display: flex;
 	align-items: center;
+
+	.page-title-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 30px;
+		min-width: 44px;
+		height: 43px;
+		opacity: 0.8;
+
+		.button-emoji-page {
+			width: 44px;
+			padding: 0px 4px;
+			font-size: 30px;
+		}
+	}
 
 	.title {
 		overflow: hidden;

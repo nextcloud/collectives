@@ -3,12 +3,13 @@
 		<Item v-show="pageInFilterString"
 			key="page.title"
 			:to="pagePath(page)"
-			:has-children="hasChildren"
 			:page-id="page.id"
-			:level="level"
-			:filtered-view="filterString !== ''"
 			:title="page.title"
+			:emoji="page.emoji"
+			:level="level"
+			:has-children="hasChildren"
 			:is-template="isTemplate"
+			:filtered-view="filterString !== ''"
 			@toggleCollapsed="toggleCollapsed(page.id)"
 			@click.native="show('details')">
 			<template v-if="currentCollectiveCanEdit" #actions>

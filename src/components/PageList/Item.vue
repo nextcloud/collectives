@@ -14,6 +14,11 @@
 				<template v-if="isTemplate">
 					<PageTemplateIcon :size="24" fill-color="var(--color-background-darker)" />
 				</template>
+				<template v-else-if="emoji">
+					<div class="icon-emoji" :class="{'landing-page': isLandingPage}">
+						{{ emoji }}
+					</div>
+				</template>
 				<template v-else>
 					<PageIcon :size="24" fill-color="var(--color-background-darker)" />
 				</template>
@@ -72,29 +77,37 @@ export default {
 			type: String,
 			default: '',
 		},
-		hasChildren: {
-			type: Boolean,
-			default: false,
+		pageId: {
+			type: Number,
+			default: 0,
 		},
 		title: {
 			type: String,
 			required: true,
 		},
+		emoji: {
+			type: String,
+			default: '',
+		},
 		level: {
 			type: Number,
 			required: true,
 		},
-		filteredView: {
+		hasChildren: {
 			type: Boolean,
-			required: true,
-		},
-		pageId: {
-			type: Number,
-			default: 0,
+			default: false,
 		},
 		isTemplate: {
 			type: Boolean,
 			default: false,
+		},
+		isLandingPage: {
+			type: Boolean,
+			default: false,
+		},
+		filteredView: {
+			type: Boolean,
+			required: true,
 		},
 	},
 
@@ -209,6 +222,16 @@ export default {
 		display: flex;
 		justify-content: center;
 
+		.icon-emoji {
+			cursor: pointer;
+			font-size: 18px;
+
+			&.landing-page {
+				margin: -3px 0;
+				font-size: 24px;
+			}
+		}
+
 		.material-design-icon {
 			cursor: pointer;
 		}
@@ -216,7 +239,7 @@ export default {
 		// Configure collapse/expand badge
 		.item-icon-badge {
 			position: absolute;
-			bottom: 1px;
+			bottom: -2px;
 			right: 2px;
 			cursor: pointer;
 			transition: transform var(--animation-slow);

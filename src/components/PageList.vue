@@ -50,17 +50,14 @@
 			<Item v-if="currentCollective"
 				key="Readme"
 				:to="currentCollectivePath"
-				:title="currentCollective.name"
-				:level="0"
-				:filtered-view="false"
 				:page-id="collectivePage ? collectivePage.id : 0"
+				:title="currentCollective.name"
+				:emoji="currentCollective.emoji"
+				:level="0"
+				:is-landing-page="true"
+				:filtered-view="false"
 				class="page-list-landing-page"
 				@click.native="show('details')">
-				<template v-if="currentCollective.emoji" #icon>
-					<div class="landing-page-emoji">
-						{{ currentCollective.emoji }}
-					</div>
-				</template>
 				<template v-if="currentCollectiveCanEdit" #actions>
 					<ActionButton icon="icon-add"
 						:close-after-click="true"
@@ -245,10 +242,5 @@ li.toggle-button.selected {
 	top: 0;
 	z-index: 1;
 	background-color: var(--color-main-background);
-}
-
-.landing-page-emoji {
-	background-color: initial;
-	margin: -3px 0;
 }
 </style>

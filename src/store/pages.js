@@ -19,6 +19,7 @@ import {
 	NEW_TEMPLATE,
 	TOUCH_PAGE,
 	RENAME_PAGE,
+	SET_PAGE_EMOJI,
 	DELETE_PAGE,
 	GET_BACKLINKS,
 } from './actions.js'
@@ -206,6 +207,10 @@ export default {
 			return (parentId, pageId) => `${getters.pagesUrl}/parent/${parentId}/page/${pageId}`
 		},
 
+		emojiUrl(_state, getters) {
+			return (parentId, pageId) => `${getters.pageUrl(parentId, pageId)}/emoji`
+		},
+
 		touchUrl(_state, getters) {
 			return `${getters.pageUrl(getters.currentPage.parentId, getters.currentPage.id)}/touch`
 		},
@@ -347,6 +352,13 @@ export default {
 			commit(ADD_PAGE, response.data.data)
 		},
 
+		/**
+		 * Touch current page
+		 *
+		 * @param {object} store the vuex store
+		 * @param {Function} store.commit commit changes
+		 * @param {object} store.getters getters of the store
+		 */
 		async [TOUCH_PAGE]({ commit, getters }) {
 			const response = await axios.get(getters.touchUrl)
 			commit(UPDATE_PAGE, response.data.data)
@@ -367,6 +379,24 @@ export default {
 			const response = await axios.put(url, { title: newTitle })
 			await commit(UPDATE_PAGE, response.data.data)
 			commit('done', 'page')
+		},
+
+		/**
+		 * Set emoji for a page
+		 *
+		 * @param {object} store the vuex store
+		 * @param {Function} store.commit commit changes
+		 * @param {object} store.getters getters of the store
+		 * @param {object} page the page
+		 * @param {number} page.parentPageId ID of the parent page
+		 * @param {number} page.pageId ID of the page
+		 * @param {string} page.emoji emoji for the page
+		 */
+		async [SET_PAGE_EMOJI]({ commit, getters }, { parentPageId, pageId, emoji }) {
+			commit('load', `pageEmoji-${pageId}`)
+			const response = await axios.put(getters.emojiUrl(parentPageId, pageId), { emoji })
+			commit(UPDATE_PAGE, response.data.data)
+			commit('done', `pageEmoji-${pageId}`)
 		},
 
 		/**
