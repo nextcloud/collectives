@@ -389,12 +389,12 @@ export default {
 }
 
 .page-title {
-	padding: 8px 2px 2px 8px;
+	padding: 8px 0px 2px 8px;
 	position: relative;
 	margin: auto;
 	max-width: 670px;
-	margin-bottom: -50px;
 	display: flex;
+	align-items: center;
 
 	.title {
 		overflow: hidden;
@@ -406,7 +406,7 @@ export default {
 // Editor/View: 670px, page list/details toggle: 44px
 @media only screen and (max-width: 670px + 44px) {
 	.page-title {
-		padding: 8px 2px 2px 40px;
+		padding: 8px 0px 2px 30px;
 	}
 }
 
@@ -414,8 +414,9 @@ export default {
 	z-index: 1;
 }
 
-.titleform-button {
+button.button-vue.titleform-button {
 	height: 44px;
+	min-width: fit-content;
 }
 
 .animation-rotate {

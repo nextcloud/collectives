@@ -131,20 +131,16 @@ export default {
 	z-index: 1;
 }
 
-#titleform button {
-	margin-top: 0px;
-}
-
 .app-content-details div #editor-container {
 	position: absolute;
-	top: 54px;
-	height: calc(100% - 56px);
+	top: 60px;
+	height: calc(100% - 60px);
 }
 
 .app-content-details div #text-container {
 	position: absolute;
-	top: 54px;
-	height: calc(100% - 56px);
+	top: 60px;
+	height: calc(100% - 60px);
 	max-width: 100%;
 }
 
@@ -178,17 +174,12 @@ export default {
 	width: 100%;
 	height: 43px;
 	opacity: 0.8;
-}
-
-.page-title {
-	width: 100%;
+	text-overflow: unset;
 }
 
 #titleform input[type='text']:disabled {
 	background-color: var(--color-main-background);
 	color: var(--color-text-maxcontrast);
-	margin: 3px 3px 3px 0;
-	padding: 7px 6px;
 }
 
 #action-menu {
@@ -216,20 +207,16 @@ export default {
 .app-details-toggle {
 	position: absolute;
 	width: 44px;
-	height: 44px;
-	padding: 14px;
-	cursor: pointer;
+	height: 49px;
+	margin: 8px 0 2px 0;
 	opacity: .6;
-	font-size: 16px;
-	line-height: 17px;
-	// background-color: var(--color-main-background);
 	z-index: 2000;
 	&:active,
 	&:hover,
 	&:focus {
 		opacity: 1;
 	}
-	// Hide app-navigation toggle if shown
+	// Hide app-navigation toggle if app-details toggle is shown
 	&::v-deep + .app-navigation .app-navigation-toggle {
 		display: none;
 	}
