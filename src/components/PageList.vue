@@ -12,7 +12,7 @@
 					:title="showTemplates ? t('collectives', 'Hide templates') : t('collectives', 'Show templates')"
 					@click="toggleTemplates()">
 					<template #icon>
-						<PagesTemplateIcon :size="12" :fill-color="showTemplates ? 'currentColor' : 'var(--color-text-lighter)'" />
+						<PagesTemplateIcon :size="12" :fill-color="showTemplates ? 'currentColor' : 'var(--color-text-maxcontrast)'" />
 					</template>
 				</ActionButton>
 			</Actions>
@@ -54,27 +54,12 @@
 				:title="currentCollective.name"
 				:emoji="currentCollective.emoji"
 				:level="0"
+				:can-edit="currentCollectiveCanEdit"
 				:is-landing-page="true"
+				:has-template="hasTemplate"
 				:filtered-view="false"
 				class="page-list-landing-page"
-				@click.native="show('details')">
-				<template v-if="currentCollectiveCanEdit" #actions>
-					<ActionButton icon="icon-add"
-						:close-after-click="true"
-						@click="newPage(collectivePage.id)">
-						{{ t('collectives', 'Add a page') }}
-					</ActionButton>
-					<ActionButton v-if="showTemplates"
-						class="action-button__template"
-						:close-after-click="true"
-						@click="editTemplate(collectivePage.id)">
-						<template #icon>
-							<PagesTemplateIcon :size="14" />
-						</template>
-						{{ editTemplateString }}
-					</ActionButton>
-				</template>
-			</Item>
+				@click.native="show('details')" />
 			<SubpageList v-if="templateView"
 				:key="templateView.id"
 				:page="templateView"
@@ -92,19 +77,18 @@
 
 <script>
 
+import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { SET_COLLECTIVE_USER_SETTING_PAGE_ORDER } from '../store/actions.js'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import Actions from '@nextcloud/vue/dist/Components/Actions'
 import AppContentList from '@nextcloud/vue/dist/Components/AppContentList'
 import SubpageList from './PageList/SubpageList.vue'
 import Item from './PageList/Item.vue'
 import PagesTemplateIcon from './Icon/PagesTemplateIcon.vue'
-import { mapActions, mapGetters, mapMutations } from 'vuex'
 import SortAlphabeticalAscendingIcon from 'vue-material-design-icons/SortAlphabeticalAscending'
 import SortClockAscendingOutlineIcon from 'vue-material-design-icons/SortClockAscendingOutline'
 import { showError } from '@nextcloud/dialogs'
 import { scrollToPage } from '../util/scrollToElement.js'
-import pageMixin from '../mixins/pageMixin.js'
-import { SET_COLLECTIVE_USER_SETTING_PAGE_ORDER } from '../store/actions.js'
 import { pageOrders } from '../util/sortOrders.js'
 
 export default {
@@ -120,10 +104,6 @@ export default {
 		SortAlphabeticalAscendingIcon,
 		SortClockAscendingOutlineIcon,
 	},
-
-	mixins: [
-		pageMixin,
-	],
 
 	data() {
 		return {
@@ -154,19 +134,15 @@ export default {
 			}
 		},
 
+		hasTemplate() {
+			return !!this.templatePage(this.collectivePage ? this.collectivePage.id : 0)
+		},
+
 		templateView() {
 			if (this.showTemplates && this.collectivePage) {
 				return this.templatePage(this.collectivePage.id)
 			} else {
 				return null
-			}
-		},
-
-		editTemplateString() {
-			if (this.templateView) {
-				return t('collectives', 'Edit template for subpages')
-			} else {
-				return t('collectives', 'Add template for subpages')
 			}
 		},
 	},

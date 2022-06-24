@@ -40,21 +40,21 @@
 			</div>
 		</router-link>
 		<div class="page-list-item-actions">
-			<Actions>
-				<slot name="actions" />
-			</Actions>
+			<PageListActions :page-id="pageId"
+				:is-template="isTemplate"
+				:has-template="hasTemplate" />
 		</div>
 	</div>
 </template>
 
 <script>
 
-import Actions from '@nextcloud/vue/dist/Components/Actions'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile'
 import { generateUrl } from '@nextcloud/router'
 import { mapGetters, mapMutations } from 'vuex'
 import ChevronRightIcon from 'vue-material-design-icons/ChevronRight'
 import PageIcon from '../Icon/PageIcon.vue'
+import PageListActions from './PageListActions.vue'
 import PageTemplateIcon from '../Icon/PageTemplateIcon.vue'
 import { scrollToPage } from '../../util/scrollToElement.js'
 
@@ -62,9 +62,9 @@ export default {
 	name: 'Item',
 
 	components: {
-		Actions,
 		ChevronRightIcon,
 		PageIcon,
+		PageListActions,
 		PageTemplateIcon,
 	},
 
@@ -93,11 +93,19 @@ export default {
 			type: Number,
 			required: true,
 		},
+		canEdit: {
+			type: Boolean,
+			default: false,
+		},
 		hasChildren: {
 			type: Boolean,
 			default: false,
 		},
 		isTemplate: {
+			type: Boolean,
+			default: false,
+		},
+		hasTemplate: {
 			type: Boolean,
 			default: false,
 		},
