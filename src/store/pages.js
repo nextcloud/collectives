@@ -382,6 +382,7 @@ export default {
 		},
 
 		/**
+		 *
 		 * Set emoji for a page
 		 *
 		 * @param {object} store the vuex store
@@ -400,16 +401,20 @@ export default {
 		},
 
 		/**
+		 *
 		 * Delete the current page
 		 *
 		 * @param {object} store the vuex store
 		 * @param {Function} store.commit commit changes
 		 * @param {object} store.getters getters of the store
+		 * @param {object} page the page
+		 * @param {number} page.parentPageId ID of the parent page
+		 * @param {number} page.pageId ID of the page
 		 */
-		async [DELETE_PAGE]({ commit, getters }) {
+		async [DELETE_PAGE]({ commit, getters }, { parentPageId, pageId }) {
 			commit('load', 'page')
-			await axios.delete(getters.pageUrl(getters.currentPage.parentId, getters.currentPage.id))
-			commit(DELETE_PAGE_BY_ID, getters.currentPage.id)
+			await axios.delete(getters.pageUrl(parentPageId, pageId))
+			commit(DELETE_PAGE_BY_ID, pageId)
 			commit('done', 'page')
 		},
 

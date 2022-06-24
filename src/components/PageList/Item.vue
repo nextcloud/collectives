@@ -39,11 +39,12 @@
 				{{ title === 'Template' ? t('collectives', 'Template') : title }}
 			</div>
 		</router-link>
-		<div class="page-list-item-actions">
-			<PageListActions :page-id="pageId"
-				:is-template="isTemplate"
-				:has-template="hasTemplate" />
-		</div>
+		<PageListActions :page-id="pageId"
+			:parent-page-id="parentPageId"
+			:is-landing-page="isLandingPage"
+			:is-template="isTemplate"
+			:has-template="hasTemplate"
+			:has-subpages="hasSubpages" />
 	</div>
 </template>
 
@@ -79,7 +80,11 @@ export default {
 		},
 		pageId: {
 			type: Number,
-			default: 0,
+			required: true,
+		},
+		parentPageId: {
+			type: Number,
+			required: true,
 		},
 		title: {
 			type: String,
@@ -97,15 +102,19 @@ export default {
 			type: Boolean,
 			default: false,
 		},
-		hasChildren: {
-			type: Boolean,
-			default: false,
-		},
 		isTemplate: {
 			type: Boolean,
 			default: false,
 		},
 		hasTemplate: {
+			type: Boolean,
+			default: false,
+		},
+		hasSubpages: {
+			type: Boolean,
+			default: false,
+		},
+		hasVisibleSubpages: {
 			type: Boolean,
 			default: false,
 		},
@@ -152,7 +161,7 @@ export default {
 
 		isCollapsible() {
 			// Collective landing page is not collapsible
-			return (this.level > 0 && this.hasChildren)
+			return (this.level > 0 && this.hasVisibleSubpages)
 		},
 	},
 
@@ -214,7 +223,7 @@ export default {
 	&.active, &.toplevel, &.mobile, &:hover, &:focus, &:active {
 		// Shorter width to prevent collision with actions
 		.app-content-list-item-link {
-			width: calc(100% - 28px);
+			width: calc(100% - 64px);
 		}
 
 		.page-list-item-actions {

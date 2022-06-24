@@ -4,13 +4,15 @@
 			key="page.title"
 			:to="pagePath(page)"
 			:page-id="page.id"
+			:parent-page-id="page.parentId"
 			:title="page.title"
 			:emoji="page.emoji"
 			:level="level"
 			:can-edit="currentCollectiveCanEdit"
-			:has-children="hasChildren"
 			:is-template="isTemplate"
 			:has-template="hasTemplate"
+			:has-subpages="hasSubpages"
+			:has-visible-subpages="hasVisibleSubpages"
 			:filtered-view="filterString !== ''"
 			@toggleCollapsed="toggleCollapsed(page.id)"
 			@click.native="show('details')" />
@@ -103,8 +105,12 @@ export default {
 			return null
 		},
 
-		hasChildren() {
+		hasVisibleSubpages() {
 			return !!this.visibleSubpages(this.page.id).length || this.considerTemplate
+		},
+
+		hasSubpages() {
+			return this.hasVisibleSubpages || this.hasTemplate
 		},
 	},
 

@@ -51,6 +51,7 @@
 				key="Readme"
 				:to="currentCollectivePath"
 				:page-id="collectivePage ? collectivePage.id : 0"
+				:parent-page-id="0"
 				:title="currentCollective.name"
 				:emoji="currentCollective.emoji"
 				:level="0"

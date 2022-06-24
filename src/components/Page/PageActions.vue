@@ -12,15 +12,16 @@
 			<template #icon>
 				<PagesTemplateIcon :size="14" />
 			</template>
-			{{ t('collectives', 'Edit template for subpages') }}
+			{{ editTemplateString }}
 		</ActionButton>
 		<ActionButton v-if="!landingPage"
 			:close-after-click="true"
-			@click="deletePage">
+			:disabled="hasSubpages"
+			@click="deletePage(currentPage.parentId, currentPage.id)">
 			<template #icon>
 				<DeleteIcon :size="20" />
 			</template>
-			{{ t('collectives', 'Delete page') }}
+			{{ deletePageString }}
 		</ActionButton>
 	</Actions>
 </template>
@@ -30,12 +31,10 @@ import Actions from '@nextcloud/vue/dist/Components/Actions'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import ActionLink from '@nextcloud/vue/dist/Components/ActionLink'
 
-import { mapActions, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import { generateUrl } from '@nextcloud/router'
-import { showSuccess, showError } from '@nextcloud/dialogs'
 import DeleteIcon from 'vue-material-design-icons/Delete'
 import PagesTemplateIcon from '../Icon/PagesTemplateIcon.vue'
-import { DELETE_PAGE } from '../../store/actions.js'
 import pageMixin from '../../mixins/pageMixin.js'
 
 export default {
@@ -56,36 +55,36 @@ export default {
 	computed: {
 		...mapGetters([
 			'currentPage',
-			'currentCollective',
 			'isTemplatePage',
 			'landingPage',
-			'showTemplates',
 			'templatePage',
+			'visibleSubpages',
 		]),
 
 		filesUrl() {
 			return generateUrl(`/apps/files/?fileid=${this.currentPage.id}`)
 		},
-	},
 
-	methods: {
-		...mapActions({
-			dispatchDeletePage: DELETE_PAGE,
-		}),
+		hasTemplate() {
+			return !!this.templatePage(this.currentPage.id)
+		},
 
-		/**
-		 * Delete the current page,
-		 * remove it from the frontend and show a hint
-		 */
-		async deletePage() {
-			try {
-				await this.dispatchDeletePage()
-				this.$router.push(`/${encodeURIComponent(this.currentCollective.name)}`)
-				showSuccess(t('collectives', 'Page deleted'))
-			} catch (e) {
-				console.error(e)
-				showError(t('collectives', 'Could not delete the page'))
-			}
+		hasSubpages() {
+			return !!this.visibleSubpages(this.currentPage.id).length || !!this.hasTemplate
+		},
+
+		editTemplateString() {
+			return this.hasTemplate
+				? t('collectives', 'Edit template for subpages')
+				: t('collectives', 'Add template for subpages')
+		},
+
+		deletePageString() {
+			return this.hasSubpages
+				? t('collectives', 'Cannot delete page with subpages')
+				: this.isTemplatePage
+					? t('collectives', 'Delete template')
+					: t('collectives', 'Delete page')
 		},
 	},
 }

@@ -1,6 +1,6 @@
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
-import { showError } from '@nextcloud/dialogs'
-import { GET_PAGES, NEW_PAGE, NEW_TEMPLATE, SET_PAGE_EMOJI } from '../store/actions.js'
+import { showError, showSuccess } from '@nextcloud/dialogs'
+import { DELETE_PAGE, GET_PAGES, NEW_PAGE, NEW_TEMPLATE, SET_PAGE_EMOJI } from '../store/actions.js'
 import { scrollToPage } from '../util/scrollToElement.js'
 
 export default {
@@ -10,6 +10,8 @@ export default {
 		}),
 
 		...mapGetters([
+			'currentCollective',
+			'currentPage',
 			'newPagePath',
 			'pagePath',
 			'templatePage',
@@ -26,6 +28,7 @@ export default {
 			dispatchNewPage: NEW_PAGE,
 			dispatchNewTemplate: NEW_TEMPLATE,
 			dispatchSetPageEmoji: SET_PAGE_EMOJI,
+			dispatchDeletePage: DELETE_PAGE,
 		}),
 
 		/**
@@ -97,6 +100,30 @@ export default {
 				console.error(e)
 				showError(t('collectives', 'Could not save emoji for page'))
 			}
+		},
+
+		/**
+		 * Delete the current page,
+		 * remove it from the frontend and show a hint
+		 *
+		 * @param {number} parentPageId ID of the parent page
+		 * @param {number} pageId ID of the page
+		 */
+		async deletePage(parentPageId, pageId) {
+			const currentPageId = this.currentPage?.id
+
+			try {
+				await this.dispatchDeletePage({ parentPageId, pageId })
+			} catch (e) {
+				console.error(e)
+				showError(t('collectives', 'Could not delete the page'))
+			}
+
+			// Redirect to landing page if currentPage got deleted
+			if (currentPageId === pageId) {
+				this.$router.push(`/${encodeURIComponent(this.currentCollective.name)}`)
+			}
+			showSuccess(t('collectives', 'Page deleted'))
 		},
 	},
 }
