@@ -55,9 +55,9 @@
 				:href="printLink"
 				target="_blank">
 				{{ t('collectives', 'Export or print') }}
-				<DownloadIcon slot="icon"
-					:size="16"
-					decorative />
+				<template #icon>
+					<DownloadIcon :size="16" />
+				</template>
 			</ActionLink>
 			<ActionButton v-if="isCollectiveAdmin(collective)"
 				icon="icon-settings"

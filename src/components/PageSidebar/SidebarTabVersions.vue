@@ -8,7 +8,7 @@
 		<!-- error message -->
 		<EmptyContent v-else-if="error">
 			<template #icon>
-				<AlertOctagonIcon />
+				<AlertOctagonIcon decorative />
 			</template>
 			<h2>{{ error }}</h2>
 		</EmptyContent>
@@ -19,7 +19,7 @@
 				<div class="app-content-list-item"
 					:class="{active: !version}">
 					<div class="app-content-list-item-icon item-icon-page">
-						<PageIcon :size="26" fill-color="var(--color-main-background)" />
+						<PageIcon :size="26" fill-color="var(--color-main-background)" decorative />
 					</div>
 					<div class="app-content-list-item-line-one" :title="pageFormattedTimestamp">
 						{{ t('collectives', 'Current version') }}
@@ -39,7 +39,7 @@
 						<div class="icon-loading" />
 					</div>
 					<div v-else class="app-content-list-item-icon item-icon-page">
-						<PageIcon :size="26" fill-color="var(--color-main-background)" />
+						<PageIcon :size="26" fill-color="var(--color-main-background)" decorative />
 					</div>
 					<div class="app-content-list-item-line-one live-relative-timestamp" :data-timestamp="v.millisecondsTimestamp" :title="v.formattedTimestamp">
 						{{ v.relativeTimestamp }}
@@ -54,7 +54,7 @@
 		<!-- no versions found -->
 		<EmptyContent v-else>
 			<template #icon>
-				<RestoreIcon />
+				<RestoreIcon decorative />
 			</template>
 			<h2>{{ t('collectives', 'No other versions available') }}</h2>
 			<template #desc>

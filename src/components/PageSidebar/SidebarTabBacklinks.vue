@@ -8,7 +8,7 @@
 		<!-- error message -->
 		<EmptyContent v-else-if="error">
 			<template #icon>
-				<AlertOctagonIcon />
+				<AlertOctagonIcon decorative />
 			</template>
 			<h2>{{ error }}</h2>
 		</EmptyContent>
@@ -20,7 +20,7 @@
 				:to="pagePath(backlinkPage)">
 				<div class="app-content-list-item">
 					<div class="app-content-list-item-icon">
-						<PageIcon :size="26" fill-color="var(--color-main-background)" />
+						<PageIcon :size="26" fill-color="var(--color-main-background)" decorative />
 					</div>
 					<div class="app-content-list-item-line-one">
 						{{ pagePathTitle(backlinkPage) }}
@@ -35,7 +35,7 @@
 		<!-- no backlinks found -->
 		<EmptyContent v-else>
 			<template #icon>
-				<MagnifyIcon />
+				<ArrowBottomLeftIcon decorative />
 			</template>
 			<h2>{{ t('collectives', 'No backlinks available') }}</h2>
 			<template #desc>
@@ -51,7 +51,7 @@ import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 import moment from '@nextcloud/moment'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagon'
-import MagnifyIcon from 'vue-material-design-icons/Magnify'
+import ArrowBottomLeftIcon from 'vue-material-design-icons/ArrowBottomLeft'
 import PageIcon from '../Icon/PageIcon.vue'
 import { GET_BACKLINKS } from '../../store/actions.js'
 
@@ -62,7 +62,7 @@ export default {
 		AlertOctagonIcon,
 		AppContentList,
 		EmptyContent,
-		MagnifyIcon,
+		ArrowBottomLeftIcon,
 		PageIcon,
 	},
 

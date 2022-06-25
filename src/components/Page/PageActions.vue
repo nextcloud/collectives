@@ -10,7 +10,7 @@
 			:close-after-click="true"
 			@click="editTemplate(currentPage.id)">
 			<template #icon>
-				<PagesTemplateIcon :size="14" />
+				<PagesTemplateIcon :size="14" decorative />
 			</template>
 			{{ editTemplateString }}
 		</ActionButton>
@@ -19,7 +19,7 @@
 			:disabled="hasSubpages"
 			@click="deletePage(currentPage.parentId, currentPage.id)">
 			<template #icon>
-				<DeleteIcon :size="20" />
+				<DeleteIcon :size="20" decorative />
 			</template>
 			{{ deletePageString }}
 		</ActionButton>

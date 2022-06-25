@@ -6,7 +6,7 @@
 				:close-after-click="true"
 				@click="editTemplate(pageId)">
 				<template #icon>
-					<PagesTemplateIcon :size="14" />
+					<PagesTemplateIcon :size="14" decorative />
 				</template>
 				{{ editTemplateString }}
 			</ActionButton>
@@ -15,14 +15,14 @@
 				:disabled="hasSubpages"
 				@click="deletePage(parentPageId, pageId)">
 				<template #icon>
-					<DeleteIcon :size="20" />
+					<DeleteIcon :size="20" decorative />
 				</template>
 				{{ deletePageString }}
 			</ActionButton>
 			<ActionSeparator v-if="lastUserId" />
 			<li class="action action--user-bubble">
 				<button class="action-button action-button--user-bubble" type="button">
-					<ClockOutlineIcon :size="20" />
+					<ClockOutlineIcon :size="20" decorative />
 					<LastUserBubble :last-user-id="lastUserId" :timestamp="timestamp" />
 				</button>
 			</li>
@@ -30,7 +30,7 @@
 		<Actions>
 			<ActionButton class="action-button-add" @click="newPage(pageId)">
 				<template #icon>
-					<PlusIcon :size="20" fill-color="var(--color-main-text)" />
+					<PlusIcon :size="20" fill-color="var(--color-main-text)" decorative />
 				</template>
 				{{ addPageString }}
 			</ActionButton>

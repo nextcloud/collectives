@@ -19,13 +19,15 @@
 							<LoadingIcon v-if="loading(`pageEmoji-${currentPage.id}`)"
 								class="animation-rotate"
 								:size="30"
-								fill-color="var(--color-text-maxcontrast)" />
+								fill-color="var(--color-text-maxcontrast)"
+								decorative />
 							<div v-else-if="currentPage.emoji">
 								{{ currentPage.emoji }}
 							</div>
 							<EmoticonOutlineIcon v-else
 								:size="30"
-								fill-color="var(--color-text-maxcontrast)" />
+								fill-color="var(--color-text-maxcontrast)"
+								decorative />
 						</template>
 					</Button>
 				</EmojiPicker>
@@ -57,9 +59,12 @@
 				type="primary"
 				@click="editMode ? stopEdit() : startEdit()">
 				<template #icon>
-					<LoadingIcon v-if="loading('pageUpdate') || waitForEditor" class="animation-rotate" :size="20" />
-					<CheckIcon v-else-if="editMode" :size="20" />
-					<PencilIcon v-else :size="20" />
+					<LoadingIcon v-if="loading('pageUpdate') || waitForEditor"
+						class="animation-rotate"
+						:size="20"
+						decorative />
+					<CheckIcon v-else-if="editMode" :size="20" decorative />
+					<PencilIcon v-else :size="20" decorative />
 				</template>
 				{{ editMode && !waitForEditor ? t('collectives', 'Done') : t('collectives', 'Edit') }}
 			</Button>
