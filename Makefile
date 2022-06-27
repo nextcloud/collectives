@@ -150,7 +150,7 @@ build: node-modules build-js-production composer-install
 		--exclude="package.json" \
 		--exclude="phpunit.xml" \
 		--exclude="psalm.xml" \
-		--exclude="src" \
+		--exclude="/src" \
 		--exclude="tests" \
 		--exclude="webpack.*" \
 	$(PROJECT_DIR) $(RELEASE_DIR)/
