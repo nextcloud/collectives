@@ -40,6 +40,7 @@
 			</div>
 		</router-link>
 		<PageListActions :page-id="pageId"
+			:page-url="to"
 			:parent-page-id="parentPageId"
 			:timestamp="timestamp"
 			:last-user-id="lastUserId"

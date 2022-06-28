@@ -8,6 +8,7 @@
 				<CollectivesIcon v-else-if="landingPage" :size="30" fill-color="var(--color-text-maxcontrast)" />
 				<PageTemplateIcon v-else-if="isTemplatePage" :size="30" fill-color="var(--color-text-maxcontrast)" />
 				<EmojiPicker v-else
+					ref="page-emoji-picker"
 					:show-preview="true"
 					@select="setPageEmoji">
 					<Button type="tertiary"
@@ -106,6 +107,7 @@ import PageActions from './Page/PageActions.vue'
 import PageTemplateIcon from './Icon/PageTemplateIcon.vue'
 import { showError } from '@nextcloud/dialogs'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import {
 	RENAME_PAGE,
 	TOUCH_PAGE,
@@ -241,8 +243,13 @@ export default {
 
 	mounted() {
 		document.title = this.documentTitle
+		subscribe('toggle-page-emoji-picker', ({ open }) => this.togglePageEmojiPicker(open))
 		this.initTitleEntry()
 		this.getPageContent()
+	},
+
+	unmounted() {
+		unsubscribe('toggle-page-emoji-picker', this.togglePageEmojiPicker())
 	},
 
 	methods: {
@@ -415,6 +422,10 @@ export default {
 
 		async setPageEmoji(emoji) {
 			await this.setEmoji(this.currentPage.parentId, this.currentPage.id, emoji)
+		},
+
+		togglePageEmojiPicker(open) {
+			this.$refs['page-emoji-picker'].open = open
 		},
 	},
 }

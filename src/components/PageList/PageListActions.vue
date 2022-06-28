@@ -1,18 +1,29 @@
 <template>
 	<div class="page-list-item-actions">
-		<Actions :force-menu="true">
+		<Actions :force-menu="true" @click.native.stop>
 			<ActionButton v-if="!isTemplate"
-				class="action-button-template"
 				:close-after-click="true"
+				class="action-button-template"
+				@click.native="show('details')"
 				@click="editTemplate(pageId)">
 				<template #icon>
 					<PagesTemplateIcon :size="14" decorative />
 				</template>
 				{{ editTemplateString }}
 			</ActionButton>
+			<ActionButton v-if="!isTemplate"
+				:close-after-click="true"
+				@click.native="show('details')"
+				@click="gotoPageEmojiPicker">
+				<template #icon>
+					<EmoticonOutlineIcon :size="20" decorative />
+				</template>
+				{{ setEmojiString }}
+			</ActionButton>
 			<ActionButton v-if="!isLandingPage"
 				:close-after-click="true"
 				:disabled="hasSubpages"
+				@click.native="show('details')"
 				@click="deletePage(parentPageId, pageId)">
 				<template #icon>
 					<DeleteIcon :size="20" decorative />
@@ -39,12 +50,14 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
+import { emit } from '@nextcloud/event-bus'
 import Actions from '@nextcloud/vue/dist/Components/Actions'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import ActionSeparator from '@nextcloud/vue/dist/Components/ActionSeparator'
 import ClockOutlineIcon from 'vue-material-design-icons/ClockOutline'
 import DeleteIcon from 'vue-material-design-icons/Delete'
+import EmoticonOutlineIcon from 'vue-material-design-icons/EmoticonOutline'
 import PagesTemplateIcon from '../Icon/PagesTemplateIcon.vue'
 import PlusIcon from 'vue-material-design-icons/Plus'
 import LastUserBubble from '../LastUserBubble.vue'
@@ -59,6 +72,7 @@ export default {
 		ActionSeparator,
 		ClockOutlineIcon,
 		DeleteIcon,
+		EmoticonOutlineIcon,
 		PagesTemplateIcon,
 		PlusIcon,
 		LastUserBubble,
@@ -71,6 +85,10 @@ export default {
 	props: {
 		pageId: {
 			type: Number,
+			required: true,
+		},
+		pageUrl: {
+			type: String,
 			required: true,
 		},
 		parentPageId: {
@@ -105,6 +123,7 @@ export default {
 
 	computed: {
 		...mapGetters([
+			'loading',
 			'showTemplates',
 		]),
 
@@ -120,12 +139,29 @@ export default {
 				: t('collectives', 'Add template for subpages')
 		},
 
+		setEmojiString() {
+			return t('collective', 'Select emoji')
+		},
+
 		deletePageString() {
 			return this.hasSubpages
 				? t('collectives', 'Cannot delete page with subpages')
 				: this.isTemplate
 					? t('collectives', 'Delete template')
 					: t('collectives', 'Delete page')
+		},
+	},
+
+	methods: {
+		...mapMutations(['show']),
+
+		gotoPageEmojiPicker() {
+			if (this.currentPage.id !== this.pageId) {
+				this.$router.push(this.pageUrl)
+			}
+			this.$nextTick(() => {
+				emit('toggle-page-emoji-picker', { open: true })
+			})
 		},
 	},
 }
