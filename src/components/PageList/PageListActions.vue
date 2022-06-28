@@ -26,7 +26,8 @@
 				@click.native="show('details')"
 				@click="deletePage(parentPageId, pageId)">
 				<template #icon>
-					<DeleteIcon :size="20" decorative />
+					<DeleteOffIcon v-if="hasSubpages" :size="20" decorative />
+					<DeleteIcon v-else :size="20" decorative />
 				</template>
 				{{ deletePageString }}
 			</ActionButton>
@@ -57,6 +58,7 @@ import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import ActionSeparator from '@nextcloud/vue/dist/Components/ActionSeparator'
 import ClockOutlineIcon from 'vue-material-design-icons/ClockOutline'
 import DeleteIcon from 'vue-material-design-icons/Delete'
+import DeleteOffIcon from 'vue-material-design-icons/DeleteOff'
 import EmoticonOutlineIcon from 'vue-material-design-icons/EmoticonOutline'
 import PagesTemplateIcon from '../Icon/PagesTemplateIcon.vue'
 import PlusIcon from 'vue-material-design-icons/Plus'
@@ -72,6 +74,7 @@ export default {
 		ActionSeparator,
 		ClockOutlineIcon,
 		DeleteIcon,
+		DeleteOffIcon,
 		EmoticonOutlineIcon,
 		PagesTemplateIcon,
 		PlusIcon,

@@ -19,7 +19,8 @@
 			:disabled="hasSubpages"
 			@click="deletePage(currentPage.parentId, currentPage.id)">
 			<template #icon>
-				<DeleteIcon :size="20" decorative />
+				<DeleteOffIcon v-if="hasSubpages" :size="20" decorative />
+				<DeleteIcon v-else :size="20" decorative />
 			</template>
 			{{ deletePageString }}
 		</ActionButton>
@@ -34,6 +35,7 @@ import ActionLink from '@nextcloud/vue/dist/Components/ActionLink'
 import { mapGetters } from 'vuex'
 import { generateUrl } from '@nextcloud/router'
 import DeleteIcon from 'vue-material-design-icons/Delete'
+import DeleteOffIcon from 'vue-material-design-icons/DeleteOff'
 import PagesTemplateIcon from '../Icon/PagesTemplateIcon.vue'
 import pageMixin from '../../mixins/pageMixin.js'
 
@@ -45,6 +47,7 @@ export default {
 		ActionButton,
 		ActionLink,
 		DeleteIcon,
+		DeleteOffIcon,
 		PagesTemplateIcon,
 	},
 
