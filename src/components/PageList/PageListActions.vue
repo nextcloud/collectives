@@ -3,6 +3,15 @@
 		<Actions :force-menu="true" @click.native.stop>
 			<ActionButton v-if="!isTemplate"
 				:close-after-click="true"
+				@click.native="show('details')"
+				@click="gotoPageEmojiPicker">
+				<template #icon>
+					<EmoticonOutlineIcon :size="20" decorative />
+				</template>
+				{{ setEmojiString }}
+			</ActionButton>
+			<ActionButton v-if="!isTemplate"
+				:close-after-click="true"
 				class="action-button-template"
 				@click.native="show('details')"
 				@click="editTemplate(pageId)">
@@ -10,15 +19,6 @@
 					<PagesTemplateIcon :size="14" decorative />
 				</template>
 				{{ editTemplateString }}
-			</ActionButton>
-			<ActionButton v-if="!isTemplate"
-				:close-after-click="true"
-				@click.native="show('details')"
-				@click="gotoPageEmojiPicker">
-				<template #icon>
-					<EmoticonOutlineIcon :size="20" decorative />
-				</template>
-				{{ setEmojiString }}
 			</ActionButton>
 			<ActionButton v-if="!isLandingPage"
 				:close-after-click="true"
