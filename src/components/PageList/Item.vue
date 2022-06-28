@@ -34,12 +34,15 @@
 		</div>
 		<router-link :to="to"
 			class="app-content-list-item-link">
-			<div class="app-content-list-item-line-one"
+			<div ref="page-title"
+				v-tooltip="pageTitleIfTruncated"
+				class="app-content-list-item-line-one"
 				:class="{ 'template': isTemplate }">
-				{{ title === 'Template' ? t('collectives', 'Template') : title }}
+				{{ pageTitle }}
 			</div>
 		</router-link>
-		<PageListActions v-if="canEdit" :page-id="pageId"
+		<PageListActions v-if="canEdit"
+			:page-id="pageId"
 			:page-url="to"
 			:parent-page-id="parentPageId"
 			:timestamp="timestamp"
@@ -60,6 +63,7 @@ import MenuRightIcon from 'vue-material-design-icons/MenuRight'
 import PageIcon from '../Icon/PageIcon.vue'
 import PageListActions from './PageListActions.vue'
 import PageTemplateIcon from '../Icon/PageTemplateIcon.vue'
+import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip'
 import { scrollToPage } from '../../util/scrollToElement.js'
 
 export default {
@@ -70,6 +74,10 @@ export default {
 		PageIcon,
 		PageListActions,
 		PageTemplateIcon,
+	},
+
+	directives: {
+		Tooltip,
 	},
 
 	mixins: [
@@ -139,6 +147,12 @@ export default {
 		},
 	},
 
+	data() {
+		return {
+			pageTitleIsTruncated: false,
+		}
+	},
+
 	computed: {
 		...mapGetters([
 			'currentPage',
@@ -174,6 +188,14 @@ export default {
 			// Collective landing page is not collapsible
 			return (this.level > 0 && this.hasVisibleSubpages)
 		},
+
+		pageTitle() {
+			return this.title === 'Template' ? t('collectives', 'Template') : this.title
+		},
+
+		pageTitleIfTruncated() {
+			return this.pageTitleIsTruncated ? this.pageTitle : null
+		},
 	},
 
 	mounted() {
@@ -181,6 +203,8 @@ export default {
 		if (this.isActive) {
 			scrollToPage(this.pageId)
 		}
+
+		this.pageTitleIsTruncated = this.$refs['page-title'].scrollWidth > this.$refs['page-title'].clientWidth
 	},
 
 	methods: {

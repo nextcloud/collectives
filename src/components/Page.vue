@@ -35,6 +35,8 @@
 			</div>
 			<form @submit.prevent="renamePage(); startEdit()">
 				<input v-if="landingPage"
+					ref="landingPageTitle"
+					v-tooltip="titleIfTruncated(currentCollective.name)"
 					class="title"
 					type="text"
 					disabled
@@ -47,6 +49,7 @@
 				<input v-else
 					ref="title"
 					v-model="newTitle"
+					v-tooltip="titleIfTruncated(newTitle)"
 					class="title"
 					:placeholder="t('collectives', 'Title')"
 					type="text"
@@ -155,6 +158,7 @@ export default {
 			editToggle: EditState.Unset,
 			scrollTop: 0,
 			pageContent: '',
+			titleIsTruncated: false,
 		}
 	},
 
@@ -220,6 +224,10 @@ export default {
 				this.editToggle = val ? EditState.Edit : EditState.Read
 			},
 		},
+
+		titleIfTruncated() {
+			return (title) => this.titleIsTruncated ? title : null
+		},
 	},
 
 	watch: {
@@ -238,6 +246,16 @@ export default {
 		},
 		'documentTitle'() {
 			document.title = this.documentTitle
+		},
+		'newTitle'() {
+			this.$nextTick(() => {
+				if (this.$refs.title) {
+					this.titleIsTruncated = this.$refs.title.scrollWidth > this.$refs.title.clientWidth
+
+				} else if (this.$refs.landingPageTitle) {
+					this.titleIsTruncated = this.$refs.landingPageTitle.scrollWidth > this.$refs.landingPageTitle.clientWidth
+				}
+			})
 		},
 	},
 
