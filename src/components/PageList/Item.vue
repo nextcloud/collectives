@@ -39,7 +39,7 @@
 				{{ title === 'Template' ? t('collectives', 'Template') : title }}
 			</div>
 		</router-link>
-		<PageListActions :page-id="pageId"
+		<PageListActions v-if="canEdit" :page-id="pageId"
 			:page-url="to"
 			:parent-page-id="parentPageId"
 			:timestamp="timestamp"
