@@ -24,8 +24,8 @@
 				</template>
 			</slot>
 			<template v-if="isCollapsible">
-				<ChevronRightIcon v-show="!filteredView"
-					:size="22"
+				<MenuRightIcon v-show="!filteredView"
+					:size="18"
 					fill-color="var(--color-main-text)"
 					:title="t('collectives', 'Expand subpage list')"
 					class="item-icon-badge"
@@ -56,7 +56,7 @@
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile'
 import { generateUrl } from '@nextcloud/router'
 import { mapGetters, mapMutations } from 'vuex'
-import ChevronRightIcon from 'vue-material-design-icons/ChevronRight'
+import MenuRightIcon from 'vue-material-design-icons/MenuRight'
 import PageIcon from '../Icon/PageIcon.vue'
 import PageListActions from './PageListActions.vue'
 import PageTemplateIcon from '../Icon/PageTemplateIcon.vue'
@@ -66,7 +66,7 @@ export default {
 	name: 'Item',
 
 	components: {
-		ChevronRightIcon,
+		MenuRightIcon,
 		PageIcon,
 		PageListActions,
 		PageTemplateIcon,
@@ -225,10 +225,18 @@ export default {
 
 	&.active {
 		background-color: var(--color-primary-light);
+
+		span.item-icon-badge {
+			background-color: var(--color-primary-light);
+		}
 	}
 
 	&:hover, &:focus, &:active {
 		background-color: var(--color-background-hover);
+
+		span.item-icon-badge {
+			background-color: var(--color-background-hover);
+		}
 	}
 
 	&.active, &.toplevel, &.mobile, &:hover, &:focus, &:active {
@@ -268,8 +276,11 @@ export default {
 		.item-icon-badge {
 			position: absolute;
 			bottom: -2px;
-			right: 2px;
+			right: -1px;
 			cursor: pointer;
+			border: 0;
+			border-radius: 50%;
+			background-color: var(--color-main-background);
 			transition: transform var(--animation-slow);
 
 			&.expanded {
