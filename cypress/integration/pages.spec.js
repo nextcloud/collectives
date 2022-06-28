@@ -77,7 +77,7 @@ describe('Page', function() {
 	})
 
 	describe('set page emoji', function() {
-		it('Allows setting a page emoji', function() {
+		it('Allows setting a page emoji from title bar', function() {
 			cy.visit('/apps/collectives/Our%20Garden/Day%201')
 			cy.get('#titleform .page-title-icon')
 				.click()
@@ -88,6 +88,21 @@ describe('Page', function() {
 			cy.contains('.app-content-list-item', 'Day 1')
 				.find('.app-content-list-item-icon')
 				.should('contain', '🥰')
+		})
+		it('Allows setting a page emoji from page list', function() {
+			cy.contains('.app-content-list-item', 'Day 1')
+				.find('.action-item__menutoggle')
+				.click({ force: true })
+			cy.get('button.action-button')
+				.contains('Select emoji')
+				.click()
+			cy.contains('.emoji-mart-scroll .emoji-mart-emoji', '😀').click()
+			cy.reload()
+			cy.get('#titleform .page-title-icon')
+				.should('contain', '😀')
+			cy.contains('.app-content-list-item', 'Day 1')
+				.find('.app-content-list-item-icon')
+				.should('contain', '😀')
 		})
 	})
 
