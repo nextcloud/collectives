@@ -12,8 +12,6 @@
 			:level="level"
 			:can-edit="currentCollectiveCanEdit"
 			:is-template="isTemplate"
-			:has-template="hasTemplate"
-			:has-subpages="hasSubpages"
 			:has-visible-subpages="hasVisibleSubpages"
 			:filtered-view="filterString !== ''"
 			@toggleCollapsed="toggleCollapsed(page.id)"
@@ -109,10 +107,6 @@ export default {
 
 		hasVisibleSubpages() {
 			return !!this.visibleSubpages(this.page.id).length || this.considerTemplate
-		},
-
-		hasSubpages() {
-			return this.hasVisibleSubpages || this.hasTemplate
 		},
 	},
 

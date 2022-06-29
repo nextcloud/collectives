@@ -41,28 +41,39 @@
 				{{ pageTitle }}
 			</div>
 		</router-link>
-		<PageListActions v-if="canEdit"
-			:page-id="pageId"
-			:page-url="to"
-			:parent-page-id="parentPageId"
-			:timestamp="timestamp"
-			:last-user-id="lastUserId"
-			:is-landing-page="isLandingPage"
-			:is-template="isTemplate"
-			:has-template="hasTemplate"
-			:has-subpages="hasSubpages" />
+		<div v-if="canEdit" class="page-list-item-actions">
+			<PageActionMenu :page-id="pageId"
+				:page-url="to"
+				:parent-page-id="parentPageId"
+				:timestamp="timestamp"
+				:last-user-id="lastUserId"
+				:is-landing-page="isLandingPage"
+				:is-template="isTemplate" />
+			<Actions>
+				<ActionButton class="action-button-add" @click="newPage(pageId)">
+					<template #icon>
+						<PlusIcon :size="20" fill-color="var(--color-main-text)" decorative />
+					</template>
+					{{ addPageString }}
+				</ActionButton>
+			</Actions>
+		</div>
 	</div>
 </template>
 
 <script>
 
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile'
+import pageMixin from '../../mixins/pageMixin.js'
 import { generateUrl } from '@nextcloud/router'
 import { mapGetters, mapMutations } from 'vuex'
+import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
+import Actions from '@nextcloud/vue/dist/Components/Actions'
 import MenuRightIcon from 'vue-material-design-icons/MenuRight'
 import PageIcon from '../Icon/PageIcon.vue'
-import PageListActions from './PageListActions.vue'
+import PageActionMenu from '../Page/PageActionMenu.vue'
 import PageTemplateIcon from '../Icon/PageTemplateIcon.vue'
+import PlusIcon from 'vue-material-design-icons/Plus'
 import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip'
 import { scrollToPage } from '../../util/scrollToElement.js'
 
@@ -70,10 +81,13 @@ export default {
 	name: 'Item',
 
 	components: {
+		ActionButton,
+		Actions,
 		MenuRightIcon,
 		PageIcon,
-		PageListActions,
+		PageActionMenu,
 		PageTemplateIcon,
+		PlusIcon,
 	},
 
 	directives: {
@@ -82,6 +96,7 @@ export default {
 
 	mixins: [
 		isMobile,
+		pageMixin,
 	],
 
 	props: {
@@ -122,14 +137,6 @@ export default {
 			default: false,
 		},
 		isTemplate: {
-			type: Boolean,
-			default: false,
-		},
-		hasTemplate: {
-			type: Boolean,
-			default: false,
-		},
-		hasSubpages: {
 			type: Boolean,
 			default: false,
 		},
@@ -195,6 +202,12 @@ export default {
 
 		pageTitleIfTruncated() {
 			return this.pageTitleIsTruncated ? this.pageTitle : null
+		},
+
+		addPageString() {
+			return this.isLandingPage
+				? t('collectives', 'Add a page')
+				: t('collectives', 'Add a subpage')
 		},
 	},
 

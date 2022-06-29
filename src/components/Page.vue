@@ -72,7 +72,14 @@
 				</template>
 				{{ editMode && !waitForEditor ? t('collectives', 'Done') : t('collectives', 'Edit') }}
 			</Button>
-			<PageActions v-if="currentCollectiveCanEdit" />
+			<PageActionMenu v-if="currentCollectiveCanEdit"
+				:show-files-link="true"
+				:page-id="currentPage.id"
+				:parent-page-id="currentPage.parentId"
+				:timestamp="currentPage.timestamp"
+				:last-user-id="currentPage.lastUserId"
+				:is-landing-page="landingPage"
+				:is-template="isTemplatePage" />
 			<Actions v-show="!showing('sidebar')">
 				<ActionButton icon="icon-menu-sidebar"
 					:close-after-click="true"
@@ -106,7 +113,7 @@ import LoadingIcon from 'vue-material-design-icons/Loading'
 import PencilIcon from 'vue-material-design-icons/Pencil'
 import Editor from './Page/Editor.vue'
 import RichText from './Page/RichText.vue'
-import PageActions from './Page/PageActions.vue'
+import PageActionMenu from './Page/PageActionMenu.vue'
 import PageTemplateIcon from './Icon/PageTemplateIcon.vue'
 import { showError } from '@nextcloud/dialogs'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
@@ -135,7 +142,7 @@ export default {
 		EmojiPicker,
 		EmoticonOutlineIcon,
 		LoadingIcon,
-		PageActions,
+		PageActionMenu,
 		PageTemplateIcon,
 		PencilIcon,
 		RichText,
@@ -164,7 +171,6 @@ export default {
 
 	computed: {
 		...mapGetters([
-			'isPublic',
 			'currentPage',
 			'currentPageDavUrl',
 			'currentCollective',
@@ -172,11 +178,12 @@ export default {
 			'currentCollectiveTitle',
 			'hasVersionsLoaded',
 			'indexPage',
-			'landingPage',
-			'pageParam',
-			'loading',
-			'showing',
+			'isPublic',
 			'isTemplatePage',
+			'landingPage',
+			'loading',
+			'pageParam',
+			'showing',
 		]),
 
 		titleChanged() {
