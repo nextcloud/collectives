@@ -48,7 +48,6 @@
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
-import { emit } from '@nextcloud/event-bus'
 import { generateUrl } from '@nextcloud/router'
 import Actions from '@nextcloud/vue/dist/Components/Actions'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
@@ -163,7 +162,7 @@ export default {
 				this.$router.push(this.pageUrl)
 			}
 			this.$nextTick(() => {
-				emit('toggle-page-emoji-picker', { open: true })
+				this.show('pageEmojiPicker')
 			})
 		},
 	},

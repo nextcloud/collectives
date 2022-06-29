@@ -117,7 +117,6 @@ import PageActionMenu from './Page/PageActionMenu.vue'
 import PageTemplateIcon from './Icon/PageTemplateIcon.vue'
 import { showError } from '@nextcloud/dialogs'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
-import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import {
 	RENAME_PAGE,
 	TOUCH_PAGE,
@@ -243,6 +242,10 @@ export default {
 		titleFormButtonIsLoading() {
 			return this.loading('pageUpdate') || this.waitForEditor
 		},
+
+		showingPageEmojiPicker() {
+			return this.showing('pageEmojiPicker')
+		},
 	},
 
 	watch: {
@@ -272,21 +275,26 @@ export default {
 				}
 			})
 		},
+		'showingPageEmojiPicker'(val) {
+			if (val === true) {
+				this.openPageEmojiPicker()
+			}
+		},
 	},
 
 	mounted() {
 		document.title = this.documentTitle
-		subscribe('toggle-page-emoji-picker', ({ open }) => this.togglePageEmojiPicker(open))
 		this.initTitleEntry()
 		this.getPageContent()
 	},
 
-	unmounted() {
-		unsubscribe('toggle-page-emoji-picker', this.togglePageEmojiPicker())
-	},
-
 	methods: {
-		...mapMutations(['done', 'load', 'toggle']),
+		...mapMutations([
+			'done',
+			'hide',
+			'load',
+			'toggle',
+		]),
 
 		...mapActions({
 			dispatchRenamePage: RENAME_PAGE,
@@ -457,8 +465,9 @@ export default {
 			await this.setEmoji(this.currentPage.parentId, this.currentPage.id, emoji)
 		},
 
-		togglePageEmojiPicker(open) {
-			this.$refs['page-emoji-picker'].open = open
+		openPageEmojiPicker() {
+			this.$refs['page-emoji-picker'].open = true
+			this.hide('pageEmojiPicker')
 		},
 	},
 }
