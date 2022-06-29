@@ -19,11 +19,11 @@
 			<Actions class="toggle"
 				:aria-label="t('collectives', 'Sort order')">
 				<template #icon>
-					<SortAlphabeticalAscendingIcon v-if="sortBy === 'byTitle'" :size="16" decorative />
+					<SortAlphabeticalAscendingIcon v-if="sortedBy('byTitle')" :size="16" decorative />
 					<SortClockAscendingOutlineIcon v-else :size="16" decorative />
 				</template>
 				<ActionButton class="toggle-button"
-					:class="{selected: sortBy === 'byTimestamp'}"
+					:class="{selected: sortedBy('byTimestamp')}"
 					:close-after-click="true"
 					@click="sortPagesAndScroll('byTimestamp')">
 					<template #icon>
@@ -32,7 +32,7 @@
 					{{ t('collectives', 'Sort recently changed first') }}
 				</ActionButton>
 				<ActionButton class="toggle-button"
-					:class="{selected: sortBy === 'byTitle'}"
+					:class="{selected: sortedBy('byTitle')}"
 					:close-after-click="true"
 					@click="sortPagesAndScroll('byTitle')">
 					<template #icon>
@@ -143,6 +143,10 @@ export default {
 			} else {
 				return null
 			}
+		},
+
+		sortedBy() {
+			return (sortOrder) => this.sortBy === sortOrder
 		},
 	},
 

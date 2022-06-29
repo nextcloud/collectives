@@ -17,7 +17,7 @@
 						class="button-emoji-page"
 						@click.prevent>
 						<template #icon>
-							<LoadingIcon v-if="loading(`pageEmoji-${currentPage.id}`)"
+							<LoadingIcon v-if="emojiButtonIsLoading"
 								class="animation-rotate"
 								:size="30"
 								fill-color="var(--color-text-maxcontrast)"
@@ -63,7 +63,7 @@
 				type="primary"
 				@click="editMode ? stopEdit() : startEdit()">
 				<template #icon>
-					<LoadingIcon v-if="loading('pageUpdate') || waitForEditor"
+					<LoadingIcon v-if="titleFormButtonIsLoading"
 						class="animation-rotate"
 						:size="20"
 						decorative />
@@ -234,6 +234,14 @@ export default {
 
 		titleIfTruncated() {
 			return (title) => this.titleIsTruncated ? title : null
+		},
+
+		emojiButtonIsLoading() {
+			return this.loading(`pageEmoji-${this.currentPage.id}`)
+		},
+
+		titleFormButtonIsLoading() {
+			return this.loading('pageUpdate') || this.waitForEditor
 		},
 	},
 
