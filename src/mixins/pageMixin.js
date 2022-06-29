@@ -117,6 +117,7 @@ export default {
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not delete the page'))
+				return
 			}
 
 			// Redirect to landing page if currentPage got deleted
