@@ -144,6 +144,37 @@ Cypress.Commands.add('seedPage', (name, parentFilePath, parentFileName) => {
 })
 
 /**
+ * Upload a file
+ */
+Cypress.Commands.add('uploadFile', (path, mimeType) => {
+	// Get fixture
+	return cy.fixture(path, 'base64').then(file => {
+		// convert the base64 string to a blob
+		const blob = Cypress.Blob.base64StringToBlob(file, mimeType)
+		try {
+			const file = new File([blob], path, { type: mimeType })
+			return cy.window()
+				.its('app')
+				.then(async app => {
+					const response = await axios.put(`${Cypress.env('baseUrl')}/remote.php/webdav/${path}`, file, {
+						headers: {
+							requesttoken: app.OC.requestToken,
+							'Content-Type': mimeType,
+						},
+					})
+					cy.log(`Uploaded file to ${path}`)
+					const ocFileId = response.headers['oc-fileid']
+					const fileId = parseInt(ocFileId.substring(0, ocFileId.indexOf('oc')))
+					return fileId
+				})
+		} catch (error) {
+			cy.log(error)
+			throw new Error(`Unable to process file ${path}`)
+		}
+	})
+})
+
+/**
  * Upload content of a page
  */
 Cypress.Commands.add('seedPageContent', (pagePath, content) => {
