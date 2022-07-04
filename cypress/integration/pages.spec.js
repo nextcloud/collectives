@@ -34,9 +34,9 @@ describe('Page', function() {
 		cy.seedPage('Day 2', '', 'Readme.md')
 		cy.seedPage('Page Title', '', 'Readme.md')
 		cy.seedPage('#% special chars', '', 'Readme.md')
-		cy.seedPageContent('bob', 'Our Garden/Day 2.md', 'A test string with Day 2 in the middle and a [link to Day 1](/index.php/apps/collectives/Our%20Garden/Day%201).')
+		cy.seedPageContent('Our Garden/Day 2.md', 'A test string with Day 2 in the middle and a [link to Day 1](/index.php/apps/collectives/Our%20Garden/Day%201).')
 		cy.seedPage('Template', '', 'Readme.md')
-		cy.seedPageContent('bob', 'Our Garden/Template.md', 'This is going to be our template.')
+		cy.seedPageContent('Our Garden/Template.md', 'This is going to be our template.')
 	})
 
 	beforeEach(function() {
