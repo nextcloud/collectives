@@ -17,11 +17,13 @@ Feature: collectivePublicShare
 
   Scenario: Fail to create and delete page in read-only shared collective
     Then anonymous fails to create page "secondpage" with parentPath "Readme.md" in public collective "Public Collective" with owner "jane"
+    Then anonymous fails to set emoji for page "firstpage" to "🍏" with parentPath "Readme.md" in public collective "Public Collective" with owner "jane"
     And anonymous fails to delete page "firstpage" with parentPath "Readme.md" in public collective "Public Collective" with owner "jane"
 
-  Scenario: Create and delete page in editable shared collective
+  Scenario: Create page, edit emoji and delete page in editable shared collective
     When user "jane" sets editing permissions for collective "Public Collective"
     Then anonymous creates page "secondpage" with parentPath "Readme.md" in public collective "Public Collective" with owner "jane"
+    Then anonymous sets emoji for page "secondpage" to "🍏" with parentPath "Readme.md" in public collective "Public Collective" with owner "jane"
     And anonymous deletes page "secondpage" with parentPath "Readme.md" in public collective "Public Collective" with owner "jane"
 
   Scenario: Fail to create and delete page in editable shared collective if share owner misses editing permissions

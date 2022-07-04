@@ -157,7 +157,7 @@ describe('Collective', function() {
 			cy.log('Allows creation of pages')
 			cy.get('.app-content-list-item')
 				.trigger('mouseover')
-			cy.get('.app-content-list button.icon-add')
+			cy.get('.app-content-list button.action-button-add')
 				.should('contain', 'Add a page')
 			cy.deleteCollective(randomName)
 		})

@@ -24,18 +24,18 @@
 							{{ collective.emoji }}
 						</template>
 						<template v-else #icon>
-							<CollectivesIcon :size="20" />
+							<CollectivesIcon :size="20" decorative />
 						</template>
 						<template #actions>
 							<ActionButton :close-after-click="true" @click="restoreCollective(collective)">
 								<template #icon>
-									<RestoreIcon :size="20" />
+									<RestoreIcon :size="20" decorative />
 								</template>
 								{{ t('collectives', 'Restore') }}
 							</ActionButton>
 							<ActionButton :close-after-click="true" @click="showDeleteModal(collective)">
 								<template #icon>
-									<DeleteIcon :size="20" />
+									<DeleteIcon :size="20" decorative />
 								</template>
 								{{ t('collectives', 'Delete permanently') }}
 							</ActionButton>

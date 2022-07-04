@@ -12,15 +12,20 @@
 			@click="toggleCollapsedOrRoute()">
 			<slot name="icon">
 				<template v-if="isTemplate">
-					<PageTemplateIcon :size="24" fill-color="var(--color-background-darker)" />
+					<PageTemplateIcon :size="24" fill-color="var(--color-background-darker)" decorative />
+				</template>
+				<template v-else-if="emoji">
+					<div class="icon-emoji" :class="{'landing-page': isLandingPage}">
+						{{ emoji }}
+					</div>
 				</template>
 				<template v-else>
-					<PageIcon :size="24" fill-color="var(--color-background-darker)" />
+					<PageIcon :size="24" fill-color="var(--color-background-darker)" decorative />
 				</template>
 			</slot>
 			<template v-if="isCollapsible">
-				<ChevronRightIcon v-show="!filteredView"
-					:size="22"
+				<MenuRightIcon v-show="!filteredView"
+					:size="18"
 					fill-color="var(--color-main-text)"
 					:title="t('collectives', 'Expand subpage list')"
 					class="item-icon-badge"
@@ -29,14 +34,28 @@
 		</div>
 		<router-link :to="to"
 			class="app-content-list-item-link">
-			<div class="app-content-list-item-line-one"
+			<div ref="page-title"
+				v-tooltip="pageTitleIfTruncated"
+				class="app-content-list-item-line-one"
 				:class="{ 'template': isTemplate }">
-				{{ title === 'Template' ? t('collectives', 'Template') : title }}
+				{{ pageTitle }}
 			</div>
 		</router-link>
-		<div class="page-list-item-actions">
+		<div v-if="canEdit" class="page-list-item-actions">
+			<PageActionMenu :page-id="pageId"
+				:page-url="to"
+				:parent-page-id="parentPageId"
+				:timestamp="timestamp"
+				:last-user-id="lastUserId"
+				:is-landing-page="isLandingPage"
+				:is-template="isTemplate" />
 			<Actions>
-				<slot name="actions" />
+				<ActionButton class="action-button-add" @click="newPage(pageId)">
+					<template #icon>
+						<PlusIcon :size="20" fill-color="var(--color-main-text)" decorative />
+					</template>
+					{{ addPageString }}
+				</ActionButton>
 			</Actions>
 		</div>
 	</div>
@@ -44,27 +63,40 @@
 
 <script>
 
-import Actions from '@nextcloud/vue/dist/Components/Actions'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile'
+import pageMixin from '../../mixins/pageMixin.js'
 import { generateUrl } from '@nextcloud/router'
 import { mapGetters, mapMutations } from 'vuex'
-import ChevronRightIcon from 'vue-material-design-icons/ChevronRight'
+import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
+import Actions from '@nextcloud/vue/dist/Components/Actions'
+import MenuRightIcon from 'vue-material-design-icons/MenuRight'
 import PageIcon from '../Icon/PageIcon.vue'
+import PageActionMenu from '../Page/PageActionMenu.vue'
 import PageTemplateIcon from '../Icon/PageTemplateIcon.vue'
+import PlusIcon from 'vue-material-design-icons/Plus'
+import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip'
 import { scrollToPage } from '../../util/scrollToElement.js'
 
 export default {
 	name: 'Item',
 
 	components: {
+		ActionButton,
 		Actions,
-		ChevronRightIcon,
+		MenuRightIcon,
 		PageIcon,
+		PageActionMenu,
 		PageTemplateIcon,
+		PlusIcon,
+	},
+
+	directives: {
+		Tooltip,
 	},
 
 	mixins: [
 		isMobile,
+		pageMixin,
 	],
 
 	props: {
@@ -72,30 +104,60 @@ export default {
 			type: String,
 			default: '',
 		},
-		hasChildren: {
-			type: Boolean,
-			default: false,
+		pageId: {
+			type: Number,
+			required: true,
+		},
+		parentPageId: {
+			type: Number,
+			required: true,
 		},
 		title: {
 			type: String,
 			required: true,
 		},
+		timestamp: {
+			type: Number,
+			required: true,
+		},
+		lastUserId: {
+			type: String,
+			required: true,
+		},
+		emoji: {
+			type: String,
+			default: '',
+		},
 		level: {
 			type: Number,
 			required: true,
 		},
-		filteredView: {
+		canEdit: {
 			type: Boolean,
-			required: true,
-		},
-		pageId: {
-			type: Number,
-			default: 0,
+			default: false,
 		},
 		isTemplate: {
 			type: Boolean,
 			default: false,
 		},
+		hasVisibleSubpages: {
+			type: Boolean,
+			default: false,
+		},
+		isLandingPage: {
+			type: Boolean,
+			default: false,
+		},
+		filteredView: {
+			type: Boolean,
+			required: true,
+		},
+	},
+
+	data() {
+		return {
+			pageTitleIsTruncated: false,
+		}
 	},
 
 	computed: {
@@ -131,7 +193,21 @@ export default {
 
 		isCollapsible() {
 			// Collective landing page is not collapsible
-			return (this.level > 0 && this.hasChildren)
+			return (this.level > 0 && this.hasVisibleSubpages)
+		},
+
+		pageTitle() {
+			return this.title === 'Template' ? t('collectives', 'Template') : this.title
+		},
+
+		pageTitleIfTruncated() {
+			return this.pageTitleIsTruncated ? this.pageTitle : null
+		},
+
+		addPageString() {
+			return this.isLandingPage
+				? t('collectives', 'Add a page')
+				: t('collectives', 'Add a subpage')
 		},
 	},
 
@@ -140,6 +216,8 @@ export default {
 		if (this.isActive) {
 			scrollToPage(this.pageId)
 		}
+
+		this.pageTitleIsTruncated = this.$refs['page-title'].scrollWidth > this.$refs['page-title'].clientWidth
 	},
 
 	methods: {
@@ -184,16 +262,24 @@ export default {
 
 	&.active {
 		background-color: var(--color-primary-light);
+
+		span.item-icon-badge {
+			background-color: var(--color-primary-light);
+		}
 	}
 
 	&:hover, &:focus, &:active {
 		background-color: var(--color-background-hover);
+
+		span.item-icon-badge {
+			background-color: var(--color-background-hover);
+		}
 	}
 
 	&.active, &.toplevel, &.mobile, &:hover, &:focus, &:active {
 		// Shorter width to prevent collision with actions
 		.app-content-list-item-link {
-			width: calc(100% - 28px);
+			width: calc(100% - 64px);
 		}
 
 		.page-list-item-actions {
@@ -209,6 +295,16 @@ export default {
 		display: flex;
 		justify-content: center;
 
+		.icon-emoji {
+			cursor: pointer;
+			font-size: 18px;
+
+			&.landing-page {
+				margin: -3px 0;
+				font-size: 24px;
+			}
+		}
+
 		.material-design-icon {
 			cursor: pointer;
 		}
@@ -216,9 +312,12 @@ export default {
 		// Configure collapse/expand badge
 		.item-icon-badge {
 			position: absolute;
-			bottom: 1px;
-			right: 2px;
+			bottom: -2px;
+			right: -1px;
 			cursor: pointer;
+			border: 0;
+			border-radius: 50%;
+			background-color: var(--color-main-background);
 			transition: transform var(--animation-slow);
 
 			&.expanded {

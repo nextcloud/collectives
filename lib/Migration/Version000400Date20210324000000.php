@@ -18,7 +18,7 @@ class Version000400Date20210324000000 extends SimpleMigrationStep {
 	 * @param array $options
 	 * @return null|ISchemaWrapper
 	 */
-	public function changeSchema(IOutput $output, Closure $schemaClosure, array $options) {
+	public function changeSchema(IOutput $output, Closure $schemaClosure, array $options): ?ISchemaWrapper {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
 
@@ -27,7 +27,9 @@ class Version000400Date20210324000000 extends SimpleMigrationStep {
 			$table->addColumn('trash_timestamp', Types::INTEGER, [
 				'notnull' => false,
 			]);
+			return $schema;
 		}
-		return $schema;
+
+		return null;
 	}
 }

@@ -6,7 +6,7 @@
 			:order="0"
 			:name="t('collectives', 'Backlinks')">
 			<template #icon>
-				<MagnifyIcon :size="16" />
+				<ArrowBottomLeftIcon :size="16" decorative />
 			</template>
 			<div class="app-sidebar-tab-desc">
 				{{ t('collectives', 'Pages that link to this one') }}
@@ -19,7 +19,7 @@
 			:order="1"
 			:name="t('collectives', 'Versions')">
 			<template #icon>
-				<RestoreIcon :size="16" />
+				<RestoreIcon :size="16" decorative />
 			</template>
 			<div class="app-sidebar-tab-desc">
 				{{ t('collectives', 'Old versions of this page') }}
@@ -39,7 +39,7 @@ import { SELECT_VERSION } from '../store/mutations.js'
 import AppSidebar from '@nextcloud/vue/dist/Components/AppSidebar'
 import AppSidebarTab from '@nextcloud/vue/dist/Components/AppSidebarTab'
 import RestoreIcon from 'vue-material-design-icons/Restore'
-import MagnifyIcon from 'vue-material-design-icons/Magnify'
+import ArrowBottomLeftIcon from 'vue-material-design-icons/ArrowBottomLeft'
 import SidebarTabBacklinks from './PageSidebar/SidebarTabBacklinks.vue'
 import SidebarTabVersions from './PageSidebar/SidebarTabVersions.vue'
 
@@ -50,7 +50,7 @@ export default {
 		AppSidebar,
 		AppSidebarTab,
 		RestoreIcon,
-		MagnifyIcon,
+		ArrowBottomLeftIcon,
 		SidebarTabBacklinks,
 		SidebarTabVersions,
 	},

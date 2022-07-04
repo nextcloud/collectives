@@ -3,31 +3,19 @@
 		<Item v-show="pageInFilterString"
 			key="page.title"
 			:to="pagePath(page)"
-			:has-children="hasChildren"
 			:page-id="page.id"
-			:level="level"
-			:filtered-view="filterString !== ''"
+			:parent-page-id="page.parentId"
 			:title="page.title"
+			:timestamp="page.timestamp"
+			:last-user-id="page.lastUserId"
+			:emoji="page.emoji"
+			:level="level"
+			:can-edit="currentCollectiveCanEdit"
 			:is-template="isTemplate"
+			:has-visible-subpages="hasVisibleSubpages"
+			:filtered-view="filterString !== ''"
 			@toggleCollapsed="toggleCollapsed(page.id)"
-			@click.native="show('details')">
-			<template v-if="currentCollectiveCanEdit" #actions>
-				<ActionButton icon="icon-add"
-					:close-after-click="true"
-					@click="newPage(page.id)">
-					{{ t('collectives', 'Add a subpage') }}
-				</ActionButton>
-				<ActionButton v-if="showTemplates && !isTemplate"
-					class="action-button__template"
-					:close-after-click="true"
-					@click="editTemplate(page.id)">
-					<template #icon>
-						<PagesTemplateIcon :size="14" />
-					</template>
-					{{ editTemplateString }}
-				</ActionButton>
-			</template>
-		</Item>
+			@click.native="show('details')" />
 		<SubpageList v-if="templateView"
 			:key="templateView.id"
 			:page="templateView"
@@ -44,26 +32,15 @@
 </template>
 
 <script>
-
-import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
-import Item from './Item.vue'
-import PagesTemplateIcon from '../Icon/PagesTemplateIcon.vue'
-
 import { mapGetters, mapMutations } from 'vuex'
-import pageMixin from '../../mixins/pageMixin.js'
+import Item from './Item.vue'
 
 export default {
 	name: 'SubpageList',
 
 	components: {
-		ActionButton,
 		Item,
-		PagesTemplateIcon,
 	},
-
-	mixins: [
-		pageMixin,
-	],
 
 	props: {
 		page: {
@@ -112,9 +89,13 @@ export default {
 			return []
 		},
 
+		hasTemplate() {
+			return !!this.templatePage(this.page.id)
+		},
+
 		considerTemplate() {
-			// Consider template in view if it exists and templates view is true
-			return this.templatePage(this.page.id) && this.showTemplates
+			// Consider template in view if we show templates and we have one
+			return this.showTemplates && this.hasTemplate
 		},
 
 		templateView() {
@@ -124,16 +105,8 @@ export default {
 			return null
 		},
 
-		hasChildren() {
+		hasVisibleSubpages() {
 			return !!this.visibleSubpages(this.page.id).length || this.considerTemplate
-		},
-
-		editTemplateString() {
-			if (this.templateView) {
-				return t('collectives', 'Edit template for subpages')
-			} else {
-				return t('collectives', 'Add template for subpages')
-			}
 		},
 	},
 

@@ -1,7 +1,10 @@
 <template>
 	<AppContent>
-		<EmptyContent icon="icon-collectives">
+		<EmptyContent>
 			{{ t('collectives', 'Collectives') }}
+			<template #icon>
+				<CollectivesIcon decorative />
+			</template>
 			<template #desc>
 				{{ t('collectives', 'Come, organize and build shared knowledge!') }}
 			</template>
@@ -21,6 +24,7 @@
 import { emit } from '@nextcloud/event-bus'
 import AppContent from '@nextcloud/vue/dist/Components/AppContent'
 import Button from '@nextcloud/vue/dist/Components/Button'
+import CollectivesIcon from '../components/Icon/CollectivesIcon.vue'
 import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile'
 import { mapGetters } from 'vuex'
@@ -31,6 +35,7 @@ export default {
 	components: {
 		AppContent,
 		Button,
+		CollectivesIcon,
 		EmptyContent,
 	},
 

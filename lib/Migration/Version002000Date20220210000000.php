@@ -30,7 +30,9 @@ class Version002000Date20220210000000 extends SimpleMigrationStep {
 				'notnull' => true,
 				'default' => self::defaultPageOrder,
 			]);
+			return $schema;
 		}
-		return $schema;
+
+		return null;
 	}
 }

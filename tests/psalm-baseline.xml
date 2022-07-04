@@ -251,6 +251,11 @@
       <code>SimpleMigrationStep</code>
     </UndefinedClass>
   </file>
+  <file src="lib/Migration/Version010300Date20220623000000.php">
+    <UndefinedClass occurrences="1">
+      <code>SimpleMigrationStep</code>
+    </UndefinedClass>
+  </file>
   <file src="lib/Model/CollectiveInfo.php">
     <MissingDependency occurrences="1">
       <code>Collective</code>
@@ -520,9 +525,13 @@
     </UndefinedClass>
   </file>
   <file src="lib/Service/PageService.php">
-    <MissingDependency occurrences="16">
+    <MissingDependency occurrences="20">
+      <code>$this-&gt;getCollectiveInfo($collectiveId, $userId)</code>
       <code>$this-&gt;pageMapper</code>
+      <code>CollectiveInfo</code>
+      <code>CollectiveInfo</code>
       <code>Page</code>
+      <code>PageInfo</code>
       <code>PageInfo</code>
       <code>PageInfo</code>
       <code>PageInfo</code>

@@ -10,7 +10,7 @@
 				class="titleform-button"
 				@click="revertVersion">
 				<template #icon>
-					<RestoreIcon :size="20" />
+					<RestoreIcon :size="20" decorative />
 				</template>
 				{{ t('collectives', 'Restore') }}
 			</Button>

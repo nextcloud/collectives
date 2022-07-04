@@ -218,6 +218,30 @@ class PublicPageController extends PublicShareController {
 	/**
 	 * @PublicPage
 	 *
+	 * @param int         $parentId
+	 * @param int         $id
+	 * @param string|null $emoji
+	 *
+	 * @return DataResponse
+	 */
+	public function setEmoji(int $parentId, int $id, ?string $emoji = null): DataResponse {
+		return $this->handleErrorResponse(function () use ($parentId, $id, $emoji): array {
+			$this->checkEditPermissions();
+			$owner = $this->getShare()->getOwner();
+			$collectiveId = $this->getShare()->getCollectiveId();
+			$page = $this->service->setEmoji($collectiveId, $parentId, $id, $emoji, $owner);
+			// Shares don't have a collective path
+			$page->setCollectivePath('');
+			$page->setShareToken($this->getToken());
+			return [
+				"data" => $page
+			];
+		}, $this->logger);
+	}
+
+	/**
+	 * @PublicPage
+	 *
 	 * @param int $parentId
 	 * @param int $id
 	 *

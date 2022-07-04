@@ -1,12 +1,46 @@
 <template>
 	<div>
 		<h1 id="titleform" class="page-title">
+			<div class="page-title-icon">
+				<div v-if="landingPage && currentCollective.emoji">
+					{{ currentCollective.emoji }}
+				</div>
+				<CollectivesIcon v-else-if="landingPage" :size="30" fill-color="var(--color-text-maxcontrast)" />
+				<PageTemplateIcon v-else-if="isTemplatePage" :size="30" fill-color="var(--color-text-maxcontrast)" />
+				<EmojiPicker v-else
+					ref="page-emoji-picker"
+					:show-preview="true"
+					@select="setPageEmoji">
+					<Button type="tertiary"
+						:aria-label="t('collectives', 'Select emoji for page')"
+						:title="t('collectives', 'Select emoji')"
+						class="button-emoji-page"
+						@click.prevent>
+						<template #icon>
+							<LoadingIcon v-if="emojiButtonIsLoading"
+								class="animation-rotate"
+								:size="30"
+								fill-color="var(--color-text-maxcontrast)"
+								decorative />
+							<div v-else-if="currentPage.emoji">
+								{{ currentPage.emoji }}
+							</div>
+							<EmoticonOutlineIcon v-else
+								:size="30"
+								fill-color="var(--color-text-maxcontrast)"
+								decorative />
+						</template>
+					</Button>
+				</EmojiPicker>
+			</div>
 			<form @submit.prevent="renamePage(); startEdit()">
 				<input v-if="landingPage"
+					ref="landingPageTitle"
+					v-tooltip="titleIfTruncated(currentCollective.name)"
 					class="title"
 					type="text"
 					disabled
-					:value="currentCollectiveTitle">
+					:value="currentCollective.name">
 				<input v-else-if="isTemplatePage"
 					class="title"
 					type="text"
@@ -15,6 +49,7 @@
 				<input v-else
 					ref="title"
 					v-model="newTitle"
+					v-tooltip="titleIfTruncated(newTitle)"
 					class="title"
 					:placeholder="t('collectives', 'Title')"
 					type="text"
@@ -28,13 +63,23 @@
 				type="primary"
 				@click="editMode ? stopEdit() : startEdit()">
 				<template #icon>
-					<LoadingIcon v-if="loading('pageUpdate') || waitForEditor" class="animation-rotate" :size="20" />
-					<CheckIcon v-else-if="editMode" :size="20" />
-					<PencilIcon v-else :size="20" />
+					<LoadingIcon v-if="titleFormButtonIsLoading"
+						class="animation-rotate"
+						:size="20"
+						decorative />
+					<CheckIcon v-else-if="editMode" :size="20" decorative />
+					<PencilIcon v-else :size="20" decorative />
 				</template>
 				{{ editMode && !waitForEditor ? t('collectives', 'Done') : t('collectives', 'Edit') }}
 			</Button>
-			<PageActions v-if="currentCollectiveCanEdit" />
+			<PageActionMenu v-if="currentCollectiveCanEdit"
+				:show-files-link="true"
+				:page-id="currentPage.id"
+				:parent-page-id="currentPage.parentId"
+				:timestamp="currentPage.timestamp"
+				:last-user-id="currentPage.lastUserId"
+				:is-landing-page="landingPage"
+				:is-template="isTemplatePage" />
 			<Actions v-show="!showing('sidebar')">
 				<ActionButton icon="icon-menu-sidebar"
 					:close-after-click="true"
@@ -61,11 +106,15 @@ import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import Button from '@nextcloud/vue/dist/Components/Button'
 import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip'
 import CheckIcon from 'vue-material-design-icons/Check'
+import CollectivesIcon from './Icon/CollectivesIcon.vue'
+import EmojiPicker from '@nextcloud/vue/dist/Components/EmojiPicker'
+import EmoticonOutlineIcon from 'vue-material-design-icons/EmoticonOutline'
 import LoadingIcon from 'vue-material-design-icons/Loading'
 import PencilIcon from 'vue-material-design-icons/Pencil'
 import Editor from './Page/Editor.vue'
 import RichText from './Page/RichText.vue'
-import PageActions from './Page/PageActions.vue'
+import PageActionMenu from './Page/PageActionMenu.vue'
+import PageTemplateIcon from './Icon/PageTemplateIcon.vue'
 import { showError } from '@nextcloud/dialogs'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import {
@@ -74,6 +123,7 @@ import {
 	GET_PAGES,
 	GET_VERSIONS,
 } from '../store/actions.js'
+import pageMixin from '../mixins/pageMixin.js'
 import pageContentMixin from '../mixins/pageContentMixin.js'
 
 const EditState = { Unset: 0, Edit: 1, Read: 2 }
@@ -86,11 +136,15 @@ export default {
 		Actions,
 		Button,
 		CheckIcon,
+		CollectivesIcon,
 		Editor,
+		EmojiPicker,
+		EmoticonOutlineIcon,
 		LoadingIcon,
+		PageActionMenu,
+		PageTemplateIcon,
 		PencilIcon,
 		RichText,
-		PageActions,
 	},
 
 	directives: {
@@ -98,6 +152,7 @@ export default {
 	},
 
 	mixins: [
+		pageMixin,
 		pageContentMixin,
 	],
 
@@ -109,12 +164,12 @@ export default {
 			editToggle: EditState.Unset,
 			scrollTop: 0,
 			pageContent: '',
+			titleIsTruncated: false,
 		}
 	},
 
 	computed: {
 		...mapGetters([
-			'isPublic',
 			'currentPage',
 			'currentPageDavUrl',
 			'currentCollective',
@@ -122,11 +177,12 @@ export default {
 			'currentCollectiveTitle',
 			'hasVersionsLoaded',
 			'indexPage',
-			'landingPage',
-			'pageParam',
-			'loading',
-			'showing',
+			'isPublic',
 			'isTemplatePage',
+			'landingPage',
+			'loading',
+			'pageParam',
+			'showing',
 		]),
 
 		titleChanged() {
@@ -174,6 +230,22 @@ export default {
 				this.editToggle = val ? EditState.Edit : EditState.Read
 			},
 		},
+
+		titleIfTruncated() {
+			return (title) => this.titleIsTruncated ? title : null
+		},
+
+		emojiButtonIsLoading() {
+			return this.loading(`pageEmoji-${this.currentPage.id}`)
+		},
+
+		titleFormButtonIsLoading() {
+			return this.loading('pageUpdate') || this.waitForEditor
+		},
+
+		showingPageEmojiPicker() {
+			return this.showing('pageEmojiPicker')
+		},
 	},
 
 	watch: {
@@ -193,6 +265,21 @@ export default {
 		'documentTitle'() {
 			document.title = this.documentTitle
 		},
+		'newTitle'() {
+			this.$nextTick(() => {
+				if (this.$refs.title) {
+					this.titleIsTruncated = this.$refs.title.scrollWidth > this.$refs.title.clientWidth
+
+				} else if (this.$refs.landingPageTitle) {
+					this.titleIsTruncated = this.$refs.landingPageTitle.scrollWidth > this.$refs.landingPageTitle.clientWidth
+				}
+			})
+		},
+		'showingPageEmojiPicker'(val) {
+			if (val === true) {
+				this.openPageEmojiPicker()
+			}
+		},
 	},
 
 	mounted() {
@@ -202,7 +289,12 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['done', 'load', 'toggle']),
+		...mapMutations([
+			'done',
+			'hide',
+			'load',
+			'toggle',
+		]),
 
 		...mapActions({
 			dispatchRenamePage: RENAME_PAGE,
@@ -368,6 +460,15 @@ export default {
 				this.emptyContent()
 			}
 		},
+
+		async setPageEmoji(emoji) {
+			await this.setEmoji(this.currentPage.parentId, this.currentPage.id, emoji)
+		},
+
+		openPageEmojiPicker() {
+			this.$refs['page-emoji-picker'].open = true
+			this.hide('pageEmojiPicker')
+		},
 	},
 }
 </script>
@@ -389,12 +490,28 @@ export default {
 }
 
 .page-title {
-	padding: 8px 2px 2px 8px;
+	padding: 8px 0px 2px 8px;
 	position: relative;
 	margin: auto;
 	max-width: 670px;
-	margin-bottom: -50px;
 	display: flex;
+	align-items: center;
+
+	.page-title-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 30px;
+		min-width: 44px;
+		height: 43px;
+		opacity: 0.8;
+
+		.button-emoji-page {
+			width: 44px;
+			padding: 0px 4px;
+			font-size: 30px;
+		}
+	}
 
 	.title {
 		overflow: hidden;
@@ -406,7 +523,7 @@ export default {
 // Editor/View: 670px, page list/details toggle: 44px
 @media only screen and (max-width: 670px + 44px) {
 	.page-title {
-		padding: 8px 2px 2px 40px;
+		padding: 8px 0px 2px 30px;
 	}
 }
 
@@ -414,8 +531,9 @@ export default {
 	z-index: 1;
 }
 
-.titleform-button {
+button.button-vue.titleform-button {
 	height: 44px;
+	min-width: fit-content;
 }
 
 .animation-rotate {

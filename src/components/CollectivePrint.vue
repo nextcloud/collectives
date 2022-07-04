@@ -6,7 +6,7 @@
 			:value="shareTokenParam">
 		<EmptyContent v-show="loading">
 			<template #icon>
-				<DownloadIcon />
+				<DownloadIcon decorative />
 			</template>
 			<h1>{{ t('collectives', 'Preparing collective for exporting or printing') }}</h1>
 			<ProgressBar :value="loadingProgress" size="medium">
@@ -163,6 +163,6 @@ export default {
 }
 
 .load-messages {
-	color: var(--color-text-lighter);
+	color: var(--color-text-maxcontrast);
 }
 </style>

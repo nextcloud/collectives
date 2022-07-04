@@ -12,37 +12,33 @@
 					:title="showTemplates ? t('collectives', 'Hide templates') : t('collectives', 'Show templates')"
 					@click="toggleTemplates()">
 					<template #icon>
-						<PagesTemplateIcon :size="12" :fill-color="showTemplates ? 'currentColor' : 'var(--color-text-lighter)'" />
+						<PagesTemplateIcon :size="12" :fill-color="showTemplates ? 'currentColor' : 'var(--color-text-maxcontrast)'" decorative />
 					</template>
 				</ActionButton>
 			</Actions>
 			<Actions class="toggle"
 				:aria-label="t('collectives', 'Sort order')">
-				<SortAlphabeticalAscendingIcon v-if="sortBy === 'byTitle'"
-					slot="icon"
-					:size="16"
-					decorative />
-				<SortClockAscendingOutlineIcon v-else
-					slot="icon"
-					:size="16"
-					decorative />
+				<template #icon>
+					<SortAlphabeticalAscendingIcon v-if="sortedBy('byTitle')" :size="16" decorative />
+					<SortClockAscendingOutlineIcon v-else :size="16" decorative />
+				</template>
 				<ActionButton class="toggle-button"
-					:class="{selected: sortBy === 'byTimestamp'}"
+					:class="{selected: sortedBy('byTimestamp')}"
 					:close-after-click="true"
 					@click="sortPagesAndScroll('byTimestamp')">
+					<template #icon>
+						<SortClockAscendingOutlineIcon :size="16" decorative />
+					</template>
 					{{ t('collectives', 'Sort recently changed first') }}
-					<SortClockAscendingOutlineIcon slot="icon"
-						:size="16"
-						decorative />
 				</ActionButton>
 				<ActionButton class="toggle-button"
-					:class="{selected: sortBy === 'byTitle'}"
+					:class="{selected: sortedBy('byTitle')}"
 					:close-after-click="true"
 					@click="sortPagesAndScroll('byTitle')">
+					<template #icon>
+						<SortAlphabeticalAscendingIcon :size="16" decorative />
+					</template>
 					{{ t('collectives', 'Sort by title') }}
-					<SortAlphabeticalAscendingIcon slot="icon"
-						:size="16"
-						decorative />
 				</ActionButton>
 			</Actions>
 		</div>
@@ -50,34 +46,19 @@
 			<Item v-if="currentCollective"
 				key="Readme"
 				:to="currentCollectivePath"
-				:title="currentCollective.name"
-				:level="0"
-				:filtered-view="false"
 				:page-id="collectivePage ? collectivePage.id : 0"
+				:parent-page-id="0"
+				:title="currentCollective.name"
+				:timestamp="collectivePage ? collectivePage.timestamp : 0"
+				:last-user-id="collectivePage ? collectivePage.lastUserId : ''"
+				:emoji="currentCollective.emoji"
+				:level="0"
+				:can-edit="currentCollectiveCanEdit"
+				:is-landing-page="true"
+				:has-template="hasTemplate"
+				:filtered-view="false"
 				class="page-list-landing-page"
-				@click.native="show('details')">
-				<template v-if="currentCollective.emoji" #icon>
-					<div class="landing-page-emoji">
-						{{ currentCollective.emoji }}
-					</div>
-				</template>
-				<template v-if="currentCollectiveCanEdit" #actions>
-					<ActionButton icon="icon-add"
-						:close-after-click="true"
-						@click="newPage(collectivePage.id)">
-						{{ t('collectives', 'Add a page') }}
-					</ActionButton>
-					<ActionButton v-if="showTemplates"
-						class="action-button__template"
-						:close-after-click="true"
-						@click="editTemplate(collectivePage.id)">
-						<template #icon>
-							<PagesTemplateIcon :size="14" />
-						</template>
-						{{ editTemplateString }}
-					</ActionButton>
-				</template>
-			</Item>
+				@click.native="show('details')" />
 			<SubpageList v-if="templateView"
 				:key="templateView.id"
 				:page="templateView"
@@ -95,19 +76,18 @@
 
 <script>
 
+import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { SET_COLLECTIVE_USER_SETTING_PAGE_ORDER } from '../store/actions.js'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import Actions from '@nextcloud/vue/dist/Components/Actions'
 import AppContentList from '@nextcloud/vue/dist/Components/AppContentList'
 import SubpageList from './PageList/SubpageList.vue'
 import Item from './PageList/Item.vue'
 import PagesTemplateIcon from './Icon/PagesTemplateIcon.vue'
-import { mapActions, mapGetters, mapMutations } from 'vuex'
 import SortAlphabeticalAscendingIcon from 'vue-material-design-icons/SortAlphabeticalAscending'
 import SortClockAscendingOutlineIcon from 'vue-material-design-icons/SortClockAscendingOutline'
 import { showError } from '@nextcloud/dialogs'
 import { scrollToPage } from '../util/scrollToElement.js'
-import pageMixin from '../mixins/pageMixin.js'
-import { SET_COLLECTIVE_USER_SETTING_PAGE_ORDER } from '../store/actions.js'
 import { pageOrders } from '../util/sortOrders.js'
 
 export default {
@@ -123,10 +103,6 @@ export default {
 		SortAlphabeticalAscendingIcon,
 		SortClockAscendingOutlineIcon,
 	},
-
-	mixins: [
-		pageMixin,
-	],
 
 	data() {
 		return {
@@ -157,6 +133,10 @@ export default {
 			}
 		},
 
+		hasTemplate() {
+			return !!this.templatePage(this.collectivePage ? this.collectivePage.id : 0)
+		},
+
 		templateView() {
 			if (this.showTemplates && this.collectivePage) {
 				return this.templatePage(this.collectivePage.id)
@@ -165,12 +145,8 @@ export default {
 			}
 		},
 
-		editTemplateString() {
-			if (this.templateView) {
-				return t('collectives', 'Edit template for subpages')
-			} else {
-				return t('collectives', 'Add template for subpages')
-			}
+		sortedBy() {
+			return (sortOrder) => this.sortBy === sortOrder
 		},
 	},
 
@@ -245,10 +221,5 @@ li.toggle-button.selected {
 	top: 0;
 	z-index: 1;
 	background-color: var(--color-main-background);
-}
-
-.landing-page-emoji {
-	background-color: initial;
-	margin: -3px 0;
 }
 </style>

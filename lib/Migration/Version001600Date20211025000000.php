@@ -18,7 +18,7 @@ class Version001600Date20211025000000 extends SimpleMigrationStep {
 	 * @param array $options
 	 * @return null|ISchemaWrapper
 	 */
-	public function changeSchema(IOutput $output, Closure $schemaClosure, array $options) {
+	public function changeSchema(IOutput $output, Closure $schemaClosure, array $options): ?ISchemaWrapper {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
 
@@ -43,7 +43,9 @@ class Version001600Date20211025000000 extends SimpleMigrationStep {
 			$table->setPrimaryKey(['id']);
 			$table->addIndex(['owner'], 'collectives_shares_owner');
 			$table->addIndex(['token'], 'collectives_shares_token');
+			return $schema;
 		}
-		return $schema;
+
+		return null;
 	}
 }

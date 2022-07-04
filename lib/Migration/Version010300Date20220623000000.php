@@ -10,7 +10,7 @@ use OCP\DB\ISchemaWrapper;
 use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
 
-class Version000500Date20210421000000 extends SimpleMigrationStep {
+class Version010300Date20220623000000 extends SimpleMigrationStep {
 	/**
 	 * @param IOutput $output
 	 * @param Closure $schemaClosure The `\Closure` returns a `ISchemaWrapper`
@@ -22,7 +22,7 @@ class Version000500Date20210421000000 extends SimpleMigrationStep {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
 
-		$table = $schema->getTable('collectives');
+		$table = $schema->getTable('collectives_pages');
 		if (!$table->hasColumn('emoji')) {
 			$table->addColumn('emoji', Types::STRING, [
 				'notnull' => false,
