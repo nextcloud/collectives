@@ -43,7 +43,9 @@ class Version010200Date20220616000000 extends SimpleMigrationStep {
 
 			$table->setPrimaryKey(['id']);
 			$table->addUniqueIndex(['collective_id', 'user_id'], 'collectives_u_set_id_user_idx');
+			return $schema;
 		}
-		return $schema;
+
+		return null;
 	}
 }

@@ -26,7 +26,9 @@ class Version000900Date20210614000000 extends SimpleMigrationStep {
 			$table->changeColumn('circle_unique_id', [
 				'length' => 31,
 			]);
+			return $schema;
 		}
-		return $schema;
+
+		return null;
 	}
 }

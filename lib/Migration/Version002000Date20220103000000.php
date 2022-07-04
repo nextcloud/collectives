@@ -35,7 +35,9 @@ class Version002000Date20220103000000 extends SimpleMigrationStep {
 				// Grant full access to all member levels per default
 				'default' => self::defaultPermissions,
 			]);
+			return $schema;
 		}
-		return $schema;
+
+		return null;
 	}
 }

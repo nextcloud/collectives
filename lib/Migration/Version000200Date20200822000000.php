@@ -18,7 +18,7 @@ class Version000200Date20200822000000 extends SimpleMigrationStep {
 	 * @param array $options
 	 * @return null|ISchemaWrapper
 	 */
-	public function changeSchema(IOutput $output, Closure $schemaClosure, array $options) {
+	public function changeSchema(IOutput $output, Closure $schemaClosure, array $options): ?ISchemaWrapper {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
 
@@ -42,7 +42,9 @@ class Version000200Date20200822000000 extends SimpleMigrationStep {
 
 			$table->setPrimaryKey(['id']);
 			$table->addUniqueIndex(['file_id'], 'collectives_pages_file_index');
+			return $schema;
 		}
-		return $schema;
+
+		return null;
 	}
 }
