@@ -1,25 +1,25 @@
-# Welcome to your new collective
+# Bem vindo a sua nova coletividade
 
-**Come, organize and build shared knowledge!**
-
-
-### 👥 Invite new people to the collective
-
-Whether you want to add your friends or whole groups, follow the "manage members" link that you find in the action menu inside the collectives list on the left.
-
-### 🌱 Bring life to your collective
-
-Create pages and share your thoughts that really matter. Whether it's a shared knowledge repository for the community or a handbook for your organisation – Collectives works!
-
-### 🛋️ Edit this landing page to feel like home
-
-Push the pencil button to get started! ↗️
+**Venha, organize e construa conhecimento compartilhado!**
 
 
-## Also good to know
+### 👥 Convide novas pessoas para a coletividade
 
-* Multiple people can edit the same page simultaneously.
-* Link local pages by selecting text and choosing "link file". Drag & drop from page list into the editor also works.
-* Add templates for future subpages ("Show templates" -> "Add template for subpages")
-* Find out more about this App in the [documentation](https://collectivecloud.gitlab.io/collectives/).
-* Ask [the community](https://help.nextcloud.com/c/apps/collectives/174) for help in case of questions.
+Se deseja adicionar seus amigos ou grupos inteiros, siga o link "gerenciar membros" que você encontra no menu dentro da lista de coletividades à esquerda.
+
+### 🌱 Traga vida para sua coletividade
+
+Crie páginas e compartilhe seus pensamentos importantes. Isto pode ser um repositório de conhecimento compartilhado com a comunidade ou um manual para sua organização – Trabalho coletivo!
+
+### 🛋️ Edite esta página e deixe-a a sua cara
+
+Clique no botão do lápis para começar! ↗️
+
+
+## Também é bom saber
+
+* Várias pessoas podem editar a mesma página simultaneamente.
+* Crie links com páginas locais selecionando um texto e clicando em "vincular arquivo". Arrastar da lista de páginas e soltar aqui dentro do editor também funciona.
+* Adicione modelos para futuras subpáginas ("Exibir modelos" -> "Adicionar modelo para subpáginas")
+* Saiba mais sobre este aplicativo na [documentação](https://collectivecloud.gitlab.io/collectives/).
+* Pergunte para a [comunidade](https://help.nextcloud.com/c/apps/collectives/174) e obtenha ajuda em caso de dúvidas.
