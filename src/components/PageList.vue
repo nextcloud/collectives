@@ -189,7 +189,7 @@ export default {
 }
 
 .page-filter {
-	margin-left: 48px;
+	margin-left: 44px;
 }
 
 .toggle {

@@ -12,7 +12,7 @@
 			@click="toggleCollapsedOrRoute()">
 			<slot name="icon">
 				<template v-if="isTemplate">
-					<PageTemplateIcon :size="24" fill-color="var(--color-background-darker)" decorative />
+					<PageTemplateIcon :size="22" fill-color="var(--color-background-darker)" decorative />
 				</template>
 				<template v-else-if="emoji">
 					<div class="icon-emoji" :class="{'landing-page': isLandingPage}">
@@ -20,7 +20,7 @@
 					</div>
 				</template>
 				<template v-else>
-					<PageIcon :size="24" fill-color="var(--color-background-darker)" decorative />
+					<PageIcon :size="22" fill-color="var(--color-background-darker)" decorative />
 				</template>
 			</slot>
 			<template v-if="isCollapsible">
@@ -177,12 +177,12 @@ export default {
 		},
 
 		indentIcon() {
-			const left = 12 * this.indent
+			const left = 28 * this.indent
 			return `left: ${left}px`
 		},
 
 		indentItem() {
-			const left = 7 + 12 * this.indent
+			const left = 28 * this.indent
 			return `padding-left: ${left}px`
 		},
 
@@ -297,11 +297,11 @@ export default {
 
 		.icon-emoji {
 			cursor: pointer;
-			font-size: 18px;
+			font-size: 16px;
 
 			&.landing-page {
 				margin: -3px 0;
-				font-size: 24px;
+				font-size: 22px;
 			}
 		}
 
@@ -327,7 +327,7 @@ export default {
 	}
 
 	.app-content-list-item-line-one {
-		padding-left: 36px;
+		padding-left: 40px;
 		font-size: 120%;
 	}
 
