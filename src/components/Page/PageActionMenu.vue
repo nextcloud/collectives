@@ -37,7 +37,7 @@
 			{{ deletePageString }}
 		</ActionButton>
 		<ActionSeparator v-if="lastUserId" />
-		<li class="action action--user-bubble">
+		<li v-if="lastUserId" class="action action--user-bubble">
 			<button class="action-button action-button--user-bubble" type="button">
 				<ClockOutlineIcon :size="20" decorative />
 				<LastUserBubble :last-user-id="lastUserId" :timestamp="timestamp" />
@@ -100,7 +100,7 @@ export default {
 		},
 		lastUserId: {
 			type: String,
-			required: true,
+			default: null,
 		},
 		isLandingPage: {
 			type: Boolean,

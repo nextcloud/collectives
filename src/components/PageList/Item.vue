@@ -122,7 +122,7 @@ export default {
 		},
 		lastUserId: {
 			type: String,
-			required: true,
+			default: null,
 		},
 		emoji: {
 			type: String,
