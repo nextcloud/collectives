@@ -169,7 +169,6 @@ export default {
 			'currentPageDavUrl',
 			'currentCollective',
 			'currentCollectiveCanEdit',
-			'currentCollectiveTitle',
 			'hasVersionsLoaded',
 			'indexPage',
 			'isPublic',
@@ -468,29 +467,40 @@ export default {
 }
 </script>
 
-<style lang="scss">
-#titleform form {
-	flex: auto;
+<style lang="scss" scoped>
+#titleform {
+	z-index: 10022;
+
+	form {
+		flex: auto;
+	}
 }
 
 #text-container {
 	display: block;
 	width: 100%;
-	max-width: 670px;
+	max-width: 100%;
 	left: 0;
 	margin: 0 auto;
 	background-color: var(--color-main-background);
-	height: calc(100% - 50px);
-	top: 50px;
+	height: calc(100% - 59px);
+}
+
+#editor-container div#editor div.text-menubar {
+	max-width: 670px;
+	margin: auto;
+	top: calc(var(--header-height) + 59px);
 }
 
 .page-title {
 	padding: 8px 0px 2px 8px;
-	position: relative;
+	position: sticky;
 	margin: auto;
 	max-width: 670px;
 	display: flex;
 	align-items: center;
+	top: var(--header-height);
+	background-color: var(--color-main-background);
 
 	.page-title-icon {
 		display: flex;

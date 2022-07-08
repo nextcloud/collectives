@@ -174,11 +174,9 @@ export default {
 @import '~@nextcloud/text/dist/style.css';
 
 #text-wrapper {
-	position: absolute;
 	display: flex;
 	width: 100%;
 	height: 100%;
-	overflow: hidden;
 }
 
 #text-wrapper.icon-loading #editor {
@@ -197,6 +195,7 @@ export default {
 	max-width: 800px;
 	margin-left: auto;
 	margin-right: auto;
+	overflow: visible;
 }
 
 #read-only-editor {
@@ -219,10 +218,6 @@ export default {
 	#editor-wrapper, #text-wrapper {
 		display: block !important;
 		overflow: visible !important;
-	}
-
-	#titleform-allpages {
-		page-break-after: avoid;
 	}
 
 	h1, h2, h3 {

@@ -31,14 +31,14 @@ export default {
 .text-menubar {
 	--background-blur: blur(10px);
 	position: sticky;
-	top: 0;
+	top: calc(var(--header-height) + 59px);
 	z-index: 10021;
 	background-color: var(--color-main-background-translucent);
 	backdrop-filter: var(--background-blur);
 	height: 44px;
 	padding: 12px 8px 4px 14px;
 	display: flex;
-	width: 670px;
+	max-width: 670px;
 	margin: auto;
 	flex-wrap: nowrap;
 	align-items: center;

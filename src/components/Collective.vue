@@ -1,14 +1,11 @@
 <template>
-	<div id="app-content-wrapper">
-		<PageList />
-		<AppContentDetails>
-			<Version v-if="currentPage && version" />
-			<Page v-else-if="currentPage" />
-			<EmptyContent v-else-if="loading('collective')"
-				icon="icon-loading" />
-			<PageNotFound v-else />
-		</AppContentDetails>
-	</div>
+	<AppContentDetails>
+		<Version v-if="currentPage && version" />
+		<Page v-else-if="currentPage" />
+		<EmptyContent v-else-if="loading('collective')"
+			icon="icon-loading" />
+		<PageNotFound v-else />
+	</AppContentDetails>
 </template>
 
 <script>
@@ -23,7 +20,6 @@ import displayError from '../util/displayError.js'
 import Page from '../components/Page.vue'
 import Version from '../components/Page/Version.vue'
 import PageNotFound from '../components/Page/PageNotFound.vue'
-import PageList from '../components/PageList.vue'
 
 export default {
 	name: 'Collective',
@@ -32,7 +28,6 @@ export default {
 		AppContentDetails,
 		EmptyContent,
 		Page,
-		PageList,
 		PageNotFound,
 		Version,
 	},
@@ -203,10 +198,6 @@ div.modal-wrapper.modal-wrapper--full div.modal-container {
 		overflow: visible !important;
 		padding: 0 !important;
 		margin: 0 !important;
-	}
-
-	#app-content-wrapper {
-		display: block !important;
 	}
 
 	#app-sidebar-vue {
