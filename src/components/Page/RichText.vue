@@ -107,13 +107,6 @@ export default {
 			this.loading = false
 			this.$emit('ready')
 		})
-
-		// scroll text div from outer text-wrapper div
-		document.getElementById('text-wrapper').addEventListener('wheel', this.scrollTextFromOutside)
-	},
-
-	unmounted() {
-		document.getElementById('text-wrapper')?.removeEventListener('wheel', this.scrollTextFromOutside)
 	},
 
 	methods: {
@@ -161,10 +154,6 @@ export default {
 				this.OCA.Viewer.open({ path })
 				return true
 			}
-		},
-
-		scrollTextFromOutside(e) {
-			document.getElementById('text').scrollBy(e.deltaX, e.deltaY)
 		},
 	},
 }
