@@ -104,7 +104,6 @@
 import Actions from '@nextcloud/vue/dist/Components/Actions'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import Button from '@nextcloud/vue/dist/Components/Button'
-import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip'
 import CheckIcon from 'vue-material-design-icons/Check'
 import CollectivesIcon from './Icon/CollectivesIcon.vue'
 import EmojiPicker from '@nextcloud/vue/dist/Components/EmojiPicker'
@@ -145,10 +144,6 @@ export default {
 		PageTemplateIcon,
 		PencilIcon,
 		RichText,
-	},
-
-	directives: {
-		Tooltip,
 	},
 
 	mixins: [

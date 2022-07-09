@@ -32,7 +32,6 @@
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import Actions from '@nextcloud/vue/dist/Components/Actions'
 import Button from '@nextcloud/vue/dist/Components/Button'
-import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip'
 import RestoreIcon from 'vue-material-design-icons/Restore'
 import RichText from './RichText.vue'
 
@@ -54,10 +53,6 @@ export default {
 		Button,
 		RestoreIcon,
 		RichText,
-	},
-
-	directives: {
-		Tooltip,
 	},
 
 	mixins: [

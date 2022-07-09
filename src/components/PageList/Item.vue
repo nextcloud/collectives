@@ -74,7 +74,6 @@ import PageIcon from '../Icon/PageIcon.vue'
 import PageActionMenu from '../Page/PageActionMenu.vue'
 import PageTemplateIcon from '../Icon/PageTemplateIcon.vue'
 import PlusIcon from 'vue-material-design-icons/Plus'
-import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip'
 import { scrollToPage } from '../../util/scrollToElement.js'
 
 export default {
@@ -88,10 +87,6 @@ export default {
 		PageActionMenu,
 		PageTemplateIcon,
 		PlusIcon,
-	},
-
-	directives: {
-		Tooltip,
 	},
 
 	mixins: [

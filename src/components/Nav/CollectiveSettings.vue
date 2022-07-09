@@ -149,7 +149,6 @@ import Button from '@nextcloud/vue/dist/Components/Button'
 import CheckboxRadioSwitch from '@nextcloud/vue/dist/Components/CheckboxRadioSwitch'
 import EmojiPicker from '@nextcloud/vue/dist/Components/EmojiPicker'
 import EmoticonOutline from 'vue-material-design-icons/EmoticonOutline'
-import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip'
 import { generateUrl } from '@nextcloud/router'
 import {
 	RENAME_CIRCLE,
@@ -170,10 +169,6 @@ export default {
 		CheckboxRadioSwitch,
 		EmojiPicker,
 		EmoticonOutline,
-	},
-
-	directives: {
-		Tooltip,
 	},
 
 	props: {
