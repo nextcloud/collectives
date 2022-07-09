@@ -26,6 +26,7 @@
 								{{ currentPage.emoji }}
 							</div>
 							<EmoticonOutlineIcon v-else
+								class="emoji-picker-emoticon"
 								:size="30"
 								fill-color="var(--color-text-maxcontrast)"
 								decorative />
@@ -546,7 +547,7 @@ button.button-vue.titleform-button {
 }
 
 @media print {
-	.titleform-button, .action-item {
+	.titleform-button, .action-item, .emoji-picker-emoticon {
 		display: none !important;
 	}
 }

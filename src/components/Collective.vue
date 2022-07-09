@@ -204,6 +204,10 @@ div.modal-wrapper.modal-wrapper--full div.modal-container {
 		display: none !important;
 	}
 
+	div.splitpanes__pane-list, div.splitpanes__splitter {
+		display: none !important;
+	}
+
 	div.modal-mask.all-pages-modal {
 		position: absolute;
 	}
