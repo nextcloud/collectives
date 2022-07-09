@@ -107,13 +107,6 @@ export default {
 			this.loading = false
 			this.$emit('ready')
 		})
-
-		// scroll text div from outer text-wrapper div
-		document.getElementById('text-wrapper').addEventListener('wheel', this.scrollTextFromOutside)
-	},
-
-	unmounted() {
-		document.getElementById('text-wrapper')?.removeEventListener('wheel', this.scrollTextFromOutside)
 	},
 
 	methods: {
@@ -162,10 +155,6 @@ export default {
 				return true
 			}
 		},
-
-		scrollTextFromOutside(e) {
-			document.getElementById('text').scrollBy(e.deltaX, e.deltaY)
-		},
 	},
 }
 </script>
@@ -174,11 +163,9 @@ export default {
 @import '~@nextcloud/text/dist/style.css';
 
 #text-wrapper {
-	position: absolute;
 	display: flex;
 	width: 100%;
 	height: 100%;
-	overflow: hidden;
 }
 
 #text-wrapper.icon-loading #editor {
@@ -197,6 +184,7 @@ export default {
 	max-width: 800px;
 	margin-left: auto;
 	margin-right: auto;
+	overflow: visible;
 }
 
 #read-only-editor {
@@ -219,10 +207,6 @@ export default {
 	#editor-wrapper, #text-wrapper {
 		display: block !important;
 		overflow: visible !important;
-	}
-
-	#titleform-allpages {
-		page-break-after: avoid;
 	}
 
 	h1, h2, h3 {

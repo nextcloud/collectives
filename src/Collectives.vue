@@ -115,11 +115,6 @@ export default {
 </script>
 
 <style>
-.app-content-details {
-	position: relative;
-	flex: 1 1 524px;
-}
-
 #app-content-wrapper {
 	display: flex;
 	position: relative;
@@ -127,33 +122,16 @@ export default {
 	min-height: 100%;
 }
 
-#titleform {
-	z-index: 1;
-}
-
-.app-content-details div #editor-container {
-	position: absolute;
-	top: 60px;
-	height: calc(100% - 60px);
-}
-
-.app-content-details div #text-container {
-	position: absolute;
-	top: 60px;
-	height: calc(100% - 60px);
-	max-width: 100%;
+#editor-container #editor-wrapper {
+	position: static;
+	overflow: visible;
 }
 
 #editor-container #editor {
 	max-width: 800px;
 	margin-left: auto;
 	margin-right: auto;
-}
-
-#editor-container #editor .menubar {
-	z-index: 100;
-	max-width: 670px;
-	margin: auto;
+	overflow: visible;
 }
 
 #editor-wrapper #editor div.ProseMirror {
@@ -162,9 +140,7 @@ export default {
 
 #text-wrapper #text div.ProseMirror {
 	margin-top: 5px;
-	padding-bottom: 50px;
-	/* Add 2x (21px + 14px) for at least two trailing breaks */
-	padding-bottom: calc(200px + 70px);
+	padding-bottom: 200px;
 }
 
 #version-title, #titleform input[type='text'] {

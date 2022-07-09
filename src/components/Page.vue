@@ -26,6 +26,7 @@
 								{{ currentPage.emoji }}
 							</div>
 							<EmoticonOutlineIcon v-else
+								class="emoji-picker-emoticon"
 								:size="30"
 								fill-color="var(--color-text-maxcontrast)"
 								decorative />
@@ -104,7 +105,6 @@
 import Actions from '@nextcloud/vue/dist/Components/Actions'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import Button from '@nextcloud/vue/dist/Components/Button'
-import Tooltip from '@nextcloud/vue/dist/Directives/Tooltip'
 import CheckIcon from 'vue-material-design-icons/Check'
 import CollectivesIcon from './Icon/CollectivesIcon.vue'
 import EmojiPicker from '@nextcloud/vue/dist/Components/EmojiPicker'
@@ -147,10 +147,6 @@ export default {
 		RichText,
 	},
 
-	directives: {
-		Tooltip,
-	},
-
 	mixins: [
 		pageMixin,
 		pageContentMixin,
@@ -174,7 +170,6 @@ export default {
 			'currentPageDavUrl',
 			'currentCollective',
 			'currentCollectiveCanEdit',
-			'currentCollectiveTitle',
 			'hasVersionsLoaded',
 			'indexPage',
 			'isPublic',
@@ -473,29 +468,40 @@ export default {
 }
 </script>
 
-<style lang="scss">
-#titleform form {
-	flex: auto;
+<style lang="scss" scoped>
+#titleform {
+	z-index: 10022;
+
+	form {
+		flex: auto;
+	}
 }
 
 #text-container {
 	display: block;
 	width: 100%;
-	max-width: 670px;
+	max-width: 100%;
 	left: 0;
 	margin: 0 auto;
 	background-color: var(--color-main-background);
-	height: calc(100% - 50px);
-	top: 50px;
+	height: calc(100% - 59px);
+}
+
+#editor-container div#editor div.text-menubar {
+	max-width: 670px;
+	margin: auto;
+	top: calc(var(--header-height) + 59px);
 }
 
 .page-title {
 	padding: 8px 0px 2px 8px;
-	position: relative;
+	position: sticky;
 	margin: auto;
 	max-width: 670px;
 	display: flex;
 	align-items: center;
+	top: var(--header-height);
+	background-color: var(--color-main-background);
 
 	.page-title-icon {
 		display: flex;
@@ -541,7 +547,7 @@ button.button-vue.titleform-button {
 }
 
 @media print {
-	.titleform-button, .action-item {
+	.titleform-button, .action-item, .emoji-picker-emoticon {
 		display: none !important;
 	}
 }

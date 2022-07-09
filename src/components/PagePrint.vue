@@ -4,7 +4,7 @@
 			{{ currentCollectiveTitle }}
 		</h1>
 		<h1 v-else class="page-title page-title-subpage">
-			{{ page.title }}
+			{{ pageTitle }}
 		</h1>
 		<RichTextReader v-if="pageContent"
 			class="editor__content"
@@ -67,6 +67,10 @@ export default {
 				shareToken: this.shareTokenParam,
 			})
 		},
+
+		pageTitle() {
+			return this.page.emoji ? `${this.page.emoji} ${this.page.title}` : this.page.title
+		},
 	},
 
 	mounted() {
@@ -108,6 +112,12 @@ export default {
 
 #read-only-editor {
 	overflow-x: hidden;
+}
+
+.editor__content {
+	max-width: 670px;
+	margin: auto;
+	position: relative;
 }
 
 ::v-deep #read-only-editor div.ProseMirror {

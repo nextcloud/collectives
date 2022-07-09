@@ -26,6 +26,12 @@ import router from './router.js'
 import store from './store/store.js'
 import { sync } from 'vuex-router-sync'
 
+/** Global directives */
+import VTooltip from '@nextcloud/vue/dist/Directives/Tooltip'
+
+// Register global directives
+Vue.directive('Tooltip', VTooltip)
+
 Vue.prototype.t = t
 Vue.prototype.n = n
 Vue.prototype.OC = OC
