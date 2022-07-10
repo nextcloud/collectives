@@ -6,7 +6,7 @@
 			:close-after-click="true">
 			{{ t('collectives', 'Show in Files') }}
 		</ActionLink>
-		<ActionButton v-if="!isTemplate"
+		<ActionButton v-if="!isTemplate && !isLandingPage"
 			:close-after-click="true"
 			@click.native="show('details')"
 			@click="gotoPageEmojiPicker">
