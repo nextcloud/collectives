@@ -34,7 +34,7 @@
 					</Button>
 				</EmojiPicker>
 			</div>
-			<form @submit.prevent="renamePage(); startEdit()">
+			<form @submit.prevent="startEdit()">
 				<input v-if="landingPage"
 					ref="landingPageTitle"
 					v-tooltip="titleIfTruncated(currentCollective.name)"
@@ -55,7 +55,7 @@
 					:placeholder="t('collectives', 'Title')"
 					type="text"
 					:disabled="!currentCollectiveCanEdit"
-					@blur="renamePageOnBlur();">
+					@blur="renamePage()">
 			</form>
 			<Button v-if="currentCollectiveCanEdit"
 				v-tooltip="editMode ? t('collectives', 'Stop editing') : t('collectives', 'Start editing')"
@@ -421,14 +421,6 @@ export default {
 			this.$nextTick(() => {
 				document.getElementById('text')?.scrollTo(0, this.scrollTop)
 			})
-		},
-
-	    renamePageOnBlur() {
-			// Cypress tests in ci trigger blur events randomly.
-			if (window.Cypress) {
-				return
-			}
-			return this.renamePage()
 		},
 
 		/**
