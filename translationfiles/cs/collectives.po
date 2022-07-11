@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-07-11 12:09+0100\n"
-"PO-Revision-Date: 2022-06-18 19:18+0000\n"
+"PO-Revision-Date: 2022-07-12 21:20+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/cs/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.13.1-dev\n"
+"X-Generator: Weblate 4.14-dev\n"
 
 #. TRANSLATORS src/components/Page.vue:191
 #. TRANSLATORS src/views/Home.vue:4
@@ -483,12 +483,12 @@ msgstr "Přidat šablonu pro podstránky"
 #. TRANSLATORS src/components/Page/PageActionMenu.vue:142
 #: /collectives/specialVueFakeDummyForL10nScript.js:152
 msgid "Cannot delete page with subpages"
-msgstr ""
+msgstr "Není možné smazat stránku, která má podstránky"
 
 #. TRANSLATORS src/components/Page/PageActionMenu.vue:144
 #: /collectives/specialVueFakeDummyForL10nScript.js:154
 msgid "Delete template"
-msgstr ""
+msgstr "Smazat šablonu"
 
 #. TRANSLATORS src/components/Page/PageActionMenu.vue:145
 #: /collectives/specialVueFakeDummyForL10nScript.js:156
@@ -529,7 +529,7 @@ msgstr "Stránku {page} se nepodařilo vrátit do podoby k revizi {timestamp}."
 #. TRANSLATORS src/components/Page.vue:15
 #: /collectives/specialVueFakeDummyForL10nScript.js:174
 msgid "Select emoji for page"
-msgstr ""
+msgstr "Vyberte emotikonu pro stránku"
 
 #. TRANSLATORS src/components/Page.vue:49
 #. TRANSLATORS src/components/PageList/Item.vue:195
@@ -699,7 +699,7 @@ msgstr "Nová stránka"
 
 #: /collectives/src/mixins/pageMixin.js:101
 msgid "Could not save emoji for page"
-msgstr ""
+msgstr "Nedaří se uložit emotikonu pro stránku"
 
 #: /collectives/src/mixins/pageMixin.js:119
 msgid "Could not delete the page"
