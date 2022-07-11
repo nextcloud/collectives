@@ -16,8 +16,6 @@ OC.L10N.register(
     "Select circle..." : "வட்டத்தைத் தேர்ந்தெடுக்கவும்...",
     "Show in Files" : "கோப்புகளில் காட்டவும்",
     "Delete page" : "பக்கத்தை நீக்கு",
-    "Page deleted" : "பக்கம் நீக்கப்பட்டது",
-    "Could not delete the page" : "பக்கத்தை நீக்க முடியவில்லை",
     "Page not found:" : "பக்கம் கிடைக்கவில்லை:",
     "Could not find the Page." : "பக்கத்தைக் கண்டுபிடிக்க முடியவில்லை.",
     "Restore this version" : "இந்தப் பதிப்பை மீட்டெடுக்கவும்",
@@ -32,6 +30,8 @@ OC.L10N.register(
     "Old versions of this page" : "இந்தப் பக்கத்தின் பழைய பதிப்புகள்",
     "Come, organize and build shared knowledge!" : "வாருங்கள், ஒழுங்கமைத்து பகிர்ந்த அறிவை உருவாக்குங்கள்!",
     "Could not create the page" : "பக்கத்தை உருவாக்க முடியவில்லை",
-    "New Page" : "புதிய பக்கம்"
+    "New Page" : "புதிய பக்கம்",
+    "Could not delete the page" : "பக்கத்தை நீக்க முடியவில்லை",
+    "Page deleted" : "பக்கம் நீக்கப்பட்டது"
 },
 "nplurals=2; plural=n != 1;");
