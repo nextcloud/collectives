@@ -15,7 +15,7 @@
 					<PageTemplateIcon :size="22" fill-color="var(--color-background-darker)" decorative />
 				</template>
 				<template v-else-if="emoji">
-					<div class="icon-emoji" :class="{'landing-page': isLandingPage}">
+					<div class="item-icon-emoji" :class="{'landing-page': isLandingPage}">
 						{{ emoji }}
 					</div>
 				</template>
@@ -290,7 +290,7 @@ export default {
 		display: flex;
 		justify-content: center;
 
-		.icon-emoji {
+		.item-icon-emoji {
 			cursor: pointer;
 			font-size: 16px;
 
