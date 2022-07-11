@@ -196,10 +196,14 @@ export default {
 	top: 0;
 	z-index: 2;
 	background-color: var(--color-main-background);
+	align-items: center;
+	justify-content: space-between;
+	margin-right: 4px;
 }
 
 .page-filter {
 	margin-left: 44px;
+	width: calc(100% - 44px);
 }
 
 .toggle {

@@ -274,7 +274,7 @@ export default {
 	&.active, &.toplevel, &.mobile, &:hover, &:focus, &:active {
 		// Shorter width to prevent collision with actions
 		.app-content-list-item-link {
-			width: calc(100% - 64px);
+			width: calc(100% - 66px);
 		}
 
 		.page-list-item-actions {
@@ -335,6 +335,7 @@ export default {
 
 .page-list-item-actions {
 	visibility: hidden;
+	display: flex;
 	position: absolute;
 	top: 0;
 	right: 0;
