@@ -122,6 +122,10 @@ export default {
 	min-height: 100%;
 }
 
+.app-content-wrapper .app-details-toggle.icon-confirm {
+	display: none;
+}
+
 #editor-container #editor-wrapper {
 	position: static;
 	overflow: visible;
