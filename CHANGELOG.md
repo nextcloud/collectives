@@ -1,5 +1,33 @@
 # Changelog
 
+## 1.3.0 - 2022.07.11
+
+### ✨New
+* 📋 Major refactoring and improvements of page list.
+* 😀 Page list: Emojis for pages (#194).
+* 🎚️ Page list: Make resizable.
+* 👁️ Page list: Improved icons for pages and collapse/expand badge.
+* 🧹 Page list: Remove last edited info. (#344)
+* 🔨 Page list: Three-dot menu for actions on a page.
+* ℹ️ Page list: Add tooltip showing the full page title if it got truncated.
+* 🏛️ Display last edited information in page info bar between title and content.
+
+### 🐛Fixes
+* 🔗 Link handling fixes. (#286, #349)
+* 💱 Fix error when renaming pages. (#354)
+* 🌄 Page list: Make header and landingpage sticky on mobile.
+* ✏️ Fix edit/done button on mobile.
+* 🧹 Invalidate mountcache when list of collectives changed. (#332)
+
+### 🌎Translations
+* 🗣️ French translation updated thanks to Kaiz3r63.
+* 🗣️ Portuguese translation added thanks to leonardokr.
+* 🗣️ Brasilian-Portuguese translation updated thanks to leonardokr.
+
+### 🚧Updates & Tooling
+* ✅ Cypress test for link handling.
+
+
 ## 1.2.1 - 2022.06.20
 
 ### 🐛Fixes
@@ -40,6 +68,8 @@
 * 🗣️ French translation updated thanks to Nathan.
 * 🗣️ German translations updated thanks to Joachim Sokolowski.
 
+### 🌎Translations
+### 🚧Updates & Tooling
 ### 🚧Updates & Tooling
 * 🔌 Update @nextcloud/text to 25.0.0-alpha.3.
 * 🔌 Update all possible javascript dependencies.
