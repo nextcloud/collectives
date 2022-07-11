@@ -64,7 +64,6 @@ describe('Page', function() {
 	})
 
 	beforeEach(function() {
-		cy.logout('bob')
 		cy.login('bob', { route: '/apps/collectives/Link Testing/Link Source' })
 		// make sure the page list loaded properly
 		cy.contains('.app-content-list-item a', 'Link Target')
@@ -106,15 +105,15 @@ describe('Page', function() {
 		if (!absolute) {
 			href = `${Cypress.env('baseUrl')}${href}`
 		}
-		let openSpy = null
+		let openStub = null
 		cy.window().then(win => {
-			openSpy = cy.spy(win, 'open').as('redirect')
+			openStub = cy.stub(win, 'open').as('open')
 		})
 		clickLink(href, edit)
-		cy.get('@redirect')
+		cy.get('@open')
 			.should('be.calledWith', href)
 			.then(() => {
-				openSpy.restore()
+				openStub.restore()
 			})
 
 		cy.location('pathname').should('match', new RegExp(`^${sourceUrl}`))
