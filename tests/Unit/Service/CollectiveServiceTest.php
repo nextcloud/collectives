@@ -2,6 +2,7 @@
 
 namespace Unit\Service;
 
+use OC\EventDispatcher\EventDispatcher;
 use OC\Files\Node\File;
 use OC\Files\Node\Folder;
 use OCA\Circles\Model\Circle;
@@ -71,6 +72,10 @@ class CollectiveServiceTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
+		$eventDispatcher = $this->getMockBuilder(EventDispatcher::class)
+			->disableOriginalConstructor()
+			->getMock();
+
 		$this->service = new CollectiveService(
 			$this->collectiveMapper,
 			$collectiveHelper,
@@ -79,7 +84,8 @@ class CollectiveServiceTest extends TestCase {
 			$shareService,
 			$collectiveUserSettingsMapper,
 			$pageMapper,
-			$this->l10n
+			$this->l10n,
+			$eventDispatcher
 		);
 	}
 

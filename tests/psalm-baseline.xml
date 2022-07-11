@@ -445,21 +445,24 @@
       <code>PageMapper</code>
       <code>PageMapper</code>
     </MissingDependency>
-    <UndefinedClass occurrences="11">
+    <UndefinedClass occurrences="12">
       <code>$circle</code>
       <code>$circle</code>
       <code>$circle</code>
       <code>$circle</code>
       <code>$collectiveFolder</code>
       <code>$e</code>
+      <code>EventDispatcher</code>
       <code>File</code>
       <code>FilesNotPermittedException</code>
       <code>IL10N</code>
       <code>InvalidPathException</code>
       <code>Member</code>
     </UndefinedClass>
-    <UndefinedDocblockClass occurrences="2">
+    <UndefinedDocblockClass occurrences="4">
+      <code>$this-&gt;eventDispatcher</code>
       <code>$this-&gt;l10n</code>
+      <code>EventDispatcher</code>
       <code>IL10N</code>
     </UndefinedDocblockClass>
   </file>
