@@ -2,6 +2,7 @@
 
 namespace OCA\Collectives\Service;
 
+use OC\EventDispatcher\EventDispatcher;
 use OC\Files\Node\File;
 use OCA\Circles\Model\Member;
 use OCA\Collectives\Db\Collective;
@@ -12,6 +13,7 @@ use OCA\Collectives\Db\PageMapper;
 use OCA\Collectives\Model\CollectiveInfo;
 use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Mount\CollectiveFolderManager;
+use OCP\Files\Events\InvalidateMountCacheEvent;
 use OCP\Files\InvalidPathException;
 use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\Files\NotPermittedException as FilesNotPermittedException;
@@ -36,6 +38,9 @@ class CollectiveService extends CollectiveServiceBase {
 	/** @var IL10N */
 	private $l10n;
 
+	/** @var EventDispatcher */
+	private $eventDispatcher;
+
 	/**
 	 * @param CollectiveMapper             $collectiveMapper
 	 * @param CollectiveHelper             $collectiveHelper
@@ -54,7 +59,8 @@ class CollectiveService extends CollectiveServiceBase {
 		CollectiveShareService $shareService,
 		CollectiveUserSettingsMapper $collectiveUserSettingsMapper,
 		PageMapper $pageMapper,
-		IL10N $l10n) {
+		IL10N $l10n,
+		EventDispatcher $eventDispatcher) {
 		parent::__construct($collectiveMapper, $circleHelper);
 		$this->collectiveHelper = $collectiveHelper;
 		$this->collectiveFolderManager = $collectiveFolderManager;
@@ -62,6 +68,7 @@ class CollectiveService extends CollectiveServiceBase {
 		$this->shareService = $shareService;
 		$this->pageMapper = $pageMapper;
 		$this->l10n = $l10n;
+		$this->eventDispatcher = $eventDispatcher;
 	}
 
 	/**
@@ -169,6 +176,11 @@ class CollectiveService extends CollectiveServiceBase {
 			throw new UnprocessableEntityException('Collective already exists.');
 		}
 
+		// Invalidate mountpoint cache as we changed list of collectives
+		if (class_exists(InvalidateMountCacheEvent::class)) {
+			$this->eventDispatcher->dispatchTyped(new InvalidateMountCacheEvent(null));
+		}
+
 		// Create collective object
 		$collective = new Collective();
 		$collective->setCircleId($circle->getSingleId());
@@ -178,7 +190,7 @@ class CollectiveService extends CollectiveServiceBase {
 		}
 		$collective = $this->collectiveMapper->insert($collective);
 
-		// Read in collectiveInfo object
+		// Read collectiveInfo object
 		$collectiveInfo = new CollectiveInfo(
 			$collective,
 			$circle->getSanitizedName(),
@@ -293,6 +305,11 @@ class CollectiveService extends CollectiveServiceBase {
 			throw new NotPermittedException('Member ' . $userId . ' not allowed to delete collective: ' . $id);
 		}
 
+		// Invalidate mountpoint cache as we changed list of collectives
+		if (class_exists(InvalidateMountCacheEvent::class)) {
+			$this->eventDispatcher->dispatchTyped(new InvalidateMountCacheEvent(null));
+		}
+
 		return new CollectiveInfo($this->collectiveMapper->trash($collectiveInfo),
 			$collectiveInfo->getName(),
 			$collectiveInfo->getLevel(),
@@ -344,6 +361,11 @@ class CollectiveService extends CollectiveServiceBase {
 	 */
 	public function restoreCollective(int $id, string $userId): CollectiveInfo {
 		$collectiveInfo = $this->getCollectiveInfoFromTrash($id, $userId);
+
+		// Invalidate mountpoint cache as we changed list of collectives
+		if (class_exists(InvalidateMountCacheEvent::class)) {
+			$this->eventDispatcher->dispatchTyped(new InvalidateMountCacheEvent(null));
+		}
 
 		return new CollectiveInfo($this->collectiveMapper->restore($collectiveInfo),
 			$collectiveInfo->getName(),
