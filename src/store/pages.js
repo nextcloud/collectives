@@ -19,6 +19,7 @@ import {
 	NEW_TEMPLATE,
 	TOUCH_PAGE,
 	RENAME_PAGE,
+	MOVE_PAGE,
 	SET_PAGE_EMOJI,
 	DELETE_PAGE,
 	GET_BACKLINKS,
@@ -56,6 +57,16 @@ export default {
 			const { filePath, fileName, title } = page
 			const titlePart = fileName !== 'Readme.md' && title
 			return [filePath, titlePart].filter(Boolean).join('/')
+		},
+
+		pageParents: (state, getters) => (pageId) => {
+			const pageList = []
+			const parentId = state.pages.find(p => (p.id === pageId)).parentId
+			if (parentId && (parentId !== 0)) {
+				pageList.push(getters.pageParents(state.pages.find(p => (p.id === pageId)).parentId))
+			}
+			pageList.push(pageId)
+			return pageList.flat()
 		},
 
 		currentPages(state, getters) {
@@ -379,6 +390,28 @@ export default {
 			const response = await axios.put(url, { title: newTitle })
 			await commit(UPDATE_PAGE, response.data.data)
 			commit('done', 'page')
+		},
+
+		/**
+		 *
+		 * @param {object} store the vuex store
+		 * @param {Function} store.commit commit changes
+		 * @param {object} store.getters getters of the store
+		 * @param {Function} store.dispatch dispatch actions
+		 * @param {object} page the page
+		 * @param {number} page.newParentPageId ID of the new parent page
+		 * @param {number} page.pageId ID of the page
+		 */
+		async [MOVE_PAGE]({ commit, getters, dispatch }, { newParentPageId, pageId }) {
+			commit('load', 'pagelist')
+			const url = getters.pageUrl(newParentPageId, pageId)
+			const response = await axios.put(url)
+			commit(UPDATE_PAGE, response.data.data)
+			// Reload the page list if moved page had subpages (to get their updated paths)
+			if (getters.visibleSubpages(pageId).length > 0) {
+				await dispatch(GET_PAGES, false)
+			}
+			commit('done', 'pagelist')
 		},
 
 		/**
