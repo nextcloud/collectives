@@ -1,6 +1,6 @@
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { showError, showSuccess } from '@nextcloud/dialogs'
-import { DELETE_PAGE, GET_PAGES, NEW_PAGE, NEW_TEMPLATE, SET_PAGE_EMOJI } from '../store/actions.js'
+import { DELETE_PAGE, GET_PAGES, MOVE_PAGE, NEW_PAGE, NEW_TEMPLATE, SET_PAGE_EMOJI } from '../store/actions.js'
 import { scrollToPage } from '../util/scrollToElement.js'
 
 export default {
@@ -28,6 +28,7 @@ export default {
 			dispatchNewPage: NEW_PAGE,
 			dispatchNewTemplate: NEW_TEMPLATE,
 			dispatchSetPageEmoji: SET_PAGE_EMOJI,
+			dispatchMovePage: MOVE_PAGE,
 			dispatchDeletePage: DELETE_PAGE,
 		}),
 
@@ -99,6 +100,21 @@ export default {
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not save emoji for page'))
+			}
+		},
+
+		/**
+		 * Move a page to another parent
+		 *
+		 * @param {number} newParentPageId ID of the new parent page
+		 * @param {number} pageId ID of the page
+		 */
+		async movePage(newParentPageId, pageId) {
+			try {
+				await this.dispatchMovePage({ newParentPageId, pageId })
+			} catch (e) {
+				console.error(e)
+				showError(t('collectives', 'Could not move page'))
 			}
 		},
 

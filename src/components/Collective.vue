@@ -56,7 +56,7 @@ export default {
 		]),
 
 		notFound() {
-			return !this.loading('collective') && !this.currentPage
+			return !this.loading('collective') && !this.loading('pagelist') && !this.currentPage
 		},
 	},
 
@@ -181,7 +181,6 @@ export default {
 		openNav() {
 			emit('toggle-navigation', { open: true })
 		},
-
 	},
 
 }
