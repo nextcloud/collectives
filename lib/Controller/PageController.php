@@ -116,14 +116,14 @@ class PageController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 *
-	 * @param int    $collectiveId
-	 * @param int    $parentId
-	 * @param int    $id
-	 * @param string $title
+	 * @param int         $collectiveId
+	 * @param int         $parentId
+	 * @param int         $id
+	 * @param string|null $title
 	 *
 	 * @return DataResponse
 	 */
-	public function rename(int $collectiveId, int $parentId, int $id, string $title): DataResponse {
+	public function rename(int $collectiveId, int $parentId, int $id, ?string $title = null): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $id, $title): array {
 			$userId = $this->getUserId();
 			$pageInfo = $this->service->rename($collectiveId, $parentId, $id, $title, $userId);
