@@ -9,7 +9,6 @@
 		@dragleave.prevent="handleDragLeave"
 		@drop.prevent="handleDrop">
 		<div class="app-content-list-item-icon"
-			:style="indentIcon"
 			:tabindex="isCollapsible ? '0' : null"
 			@keypress.enter="toggleCollapsedOrRoute()"
 			@click="toggleCollapsedOrRoute()">
@@ -175,11 +174,6 @@ export default {
 		indent() {
 			// Start indention at level 2. And limit to 5 to prevent nasty subtrees
 			return Math.min(Math.max(0, this.level - 1), 4)
-		},
-
-		indentIcon() {
-			const left = 28 * this.indent
-			return `left: ${left}px`
 		},
 
 		indentItem() {
