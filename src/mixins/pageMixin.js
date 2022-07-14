@@ -14,6 +14,7 @@ export default {
 			'currentPage',
 			'newPagePath',
 			'pagePath',
+			'pageTitle',
 			'templatePage',
 		]),
 	},
@@ -115,7 +116,9 @@ export default {
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not move page'))
+				return
 			}
+			showSuccess(t('collectives', `Page ${this.pageTitle(pageId)} moved to ${this.pageTitle(newParentPageId)}`))
 		},
 
 		/**
