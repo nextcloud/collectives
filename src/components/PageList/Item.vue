@@ -42,7 +42,7 @@
 				v-tooltip="pageTitleIfTruncated"
 				class="app-content-list-item-line-one"
 				:class="{ 'template': isTemplate }">
-				{{ pageTitle }}
+				{{ pageTitleString }}
 			</div>
 		</router-link>
 		<div v-if="canEdit" class="page-list-item-actions">
@@ -197,12 +197,12 @@ export default {
 			return (this.level > 0 && this.hasVisibleSubpages)
 		},
 
-		pageTitle() {
+		pageTitleString() {
 			return this.title === 'Template' ? t('collectives', 'Template') : this.title
 		},
 
 		pageTitleIfTruncated() {
-			return this.pageTitleIsTruncated ? this.pageTitle : null
+			return this.pageTitleIsTruncated ? this.pageTitleString : null
 		},
 
 		addPageString() {

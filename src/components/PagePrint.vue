@@ -4,7 +4,7 @@
 			{{ currentCollectiveTitle }}
 		</h1>
 		<h1 v-else class="page-title page-title-subpage">
-			{{ pageTitle }}
+			{{ pageTitleString }}
 		</h1>
 		<RichTextReader v-if="pageContent"
 			class="editor__content"
@@ -68,7 +68,7 @@ export default {
 			})
 		},
 
-		pageTitle() {
+		pageTitleString() {
 			return this.page.emoji ? `${this.page.emoji} ${this.page.title}` : this.page.title
 		},
 	},
