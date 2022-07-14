@@ -5,7 +5,7 @@
 		<div id="collectives-trash__header">
 			<Button type="tertiary" class="collectives-trash-button" @click="toggleTrash">
 				<template #icon>
-					<DeleteIcon class="collectives-trash-button__icon" :size="20" decorative />
+					<DeleteIcon class="collectives-trash-button__icon" :size="20" />
 				</template>
 				<span class="collectives-trash-button__label">
 					{{ t('collectives', 'Deleted collectives') }}
@@ -24,18 +24,18 @@
 							{{ collective.emoji }}
 						</template>
 						<template v-else #icon>
-							<CollectivesIcon :size="20" decorative />
+							<CollectivesIcon :size="20" />
 						</template>
 						<template #actions>
 							<ActionButton :close-after-click="true" @click="restoreCollective(collective)">
 								<template #icon>
-									<RestoreIcon :size="20" decorative />
+									<RestoreIcon :size="20" />
 								</template>
 								{{ t('collectives', 'Restore') }}
 							</ActionButton>
 							<ActionButton :close-after-click="true" @click="showDeleteModal(collective)">
 								<template #icon>
-									<DeleteIcon :size="20" decorative />
+									<DeleteIcon :size="20" />
 								</template>
 								{{ t('collectives', 'Delete permanently') }}
 							</ActionButton>

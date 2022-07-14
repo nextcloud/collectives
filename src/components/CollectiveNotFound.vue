@@ -3,7 +3,7 @@
 		{{ t('collectives', 'Collective not found:') }}
 		{{ collectiveParam }}
 		<template #icon>
-			<CollectivesIcon decorative />
+			<CollectivesIcon />
 		</template>
 		<template #desc>
 			<div>

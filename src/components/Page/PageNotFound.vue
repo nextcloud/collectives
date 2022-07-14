@@ -3,7 +3,7 @@
 		{{ t('collectives', 'Page not found:') }}
 		{{ pageParam }}
 		<template #icon>
-			<PageIcon decorative />
+			<PageIcon />
 		</template>
 		<template #desc>
 			<div>

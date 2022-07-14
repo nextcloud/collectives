@@ -12,22 +12,22 @@
 					:title="showTemplates ? t('collectives', 'Hide templates') : t('collectives', 'Show templates')"
 					@click="toggleTemplates()">
 					<template #icon>
-						<PagesTemplateIcon :size="12" :fill-color="showTemplates ? 'currentColor' : 'var(--color-text-maxcontrast)'" decorative />
+						<PagesTemplateIcon :size="12" :fill-color="showTemplates ? 'currentColor' : 'var(--color-text-maxcontrast)'" />
 					</template>
 				</ActionButton>
 			</Actions>
 			<Actions class="toggle"
 				:aria-label="t('collectives', 'Sort order')">
 				<template #icon>
-					<SortAlphabeticalAscendingIcon v-if="sortedBy('byTitle')" :size="16" decorative />
-					<SortClockAscendingOutlineIcon v-else :size="16" decorative />
+					<SortAlphabeticalAscendingIcon v-if="sortedBy('byTitle')" :size="16" />
+					<SortClockAscendingOutlineIcon v-else :size="16" />
 				</template>
 				<ActionButton class="toggle-button"
 					:class="{selected: sortedBy('byTimestamp')}"
 					:close-after-click="true"
 					@click="sortPagesAndScroll('byTimestamp')">
 					<template #icon>
-						<SortClockAscendingOutlineIcon :size="16" decorative />
+						<SortClockAscendingOutlineIcon :size="16" />
 					</template>
 					{{ t('collectives', 'Sort recently changed first') }}
 				</ActionButton>
@@ -36,7 +36,7 @@
 					:close-after-click="true"
 					@click="sortPagesAndScroll('byTitle')">
 					<template #icon>
-						<SortAlphabeticalAscendingIcon :size="16" decorative />
+						<SortAlphabeticalAscendingIcon :size="16" />
 					</template>
 					{{ t('collectives', 'Sort by title') }}
 				</ActionButton>

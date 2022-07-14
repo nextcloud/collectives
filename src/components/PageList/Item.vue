@@ -12,7 +12,7 @@
 			@click="toggleCollapsedOrRoute()">
 			<slot name="icon">
 				<template v-if="isTemplate">
-					<PageTemplateIcon :size="22" fill-color="var(--color-background-darker)" decorative />
+					<PageTemplateIcon :size="22" fill-color="var(--color-background-darker)" />
 				</template>
 				<template v-else-if="emoji">
 					<div class="item-icon-emoji" :class="{'landing-page': isLandingPage}">
@@ -20,7 +20,7 @@
 					</div>
 				</template>
 				<template v-else>
-					<PageIcon :size="22" fill-color="var(--color-background-darker)" decorative />
+					<PageIcon :size="22" fill-color="var(--color-background-darker)" />
 				</template>
 			</slot>
 			<template v-if="isCollapsible">
@@ -52,7 +52,7 @@
 			<Actions>
 				<ActionButton class="action-button-add" @click="newPage(pageId)">
 					<template #icon>
-						<PlusIcon :size="20" fill-color="var(--color-main-text)" decorative />
+						<PlusIcon :size="20" fill-color="var(--color-main-text)" />
 					</template>
 					{{ addPageString }}
 				</ActionButton>

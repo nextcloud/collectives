@@ -11,7 +11,7 @@
 			@click.native="show('details')"
 			@click="gotoPageEmojiPicker">
 			<template #icon>
-				<EmoticonOutlineIcon :size="20" decorative />
+				<EmoticonOutlineIcon :size="20" />
 			</template>
 			{{ setEmojiString }}
 		</ActionButton>
@@ -21,7 +21,7 @@
 			@click.native="show('details')"
 			@click="editTemplate(pageId)">
 			<template #icon>
-				<PagesTemplateIcon :size="14" decorative />
+				<PagesTemplateIcon :size="14" />
 			</template>
 			{{ editTemplateString }}
 		</ActionButton>
@@ -31,15 +31,15 @@
 			@click.native="show('details')"
 			@click="deletePage(parentPageId, pageId)">
 			<template #icon>
-				<DeleteOffIcon v-if="hasSubpages" :size="20" decorative />
-				<DeleteIcon v-else :size="20" decorative />
+				<DeleteOffIcon v-if="hasSubpages" :size="20" />
+				<DeleteIcon v-else :size="20" />
 			</template>
 			{{ deletePageString }}
 		</ActionButton>
 		<ActionSeparator v-if="lastUserId" />
 		<li v-if="lastUserId" class="action action--user-bubble">
 			<button class="action-button action-button--user-bubble" type="button">
-				<ClockOutlineIcon :size="20" decorative />
+				<ClockOutlineIcon :size="20" />
 				<LastUserBubble :last-user-id="lastUserId" :timestamp="timestamp" />
 			</button>
 		</li>
