@@ -20,16 +20,14 @@
 							<LoadingIcon v-if="emojiButtonIsLoading"
 								class="animation-rotate"
 								:size="30"
-								fill-color="var(--color-text-maxcontrast)"
-								decorative />
+								fill-color="var(--color-text-maxcontrast)" />
 							<div v-else-if="currentPage.emoji">
 								{{ currentPage.emoji }}
 							</div>
 							<EmoticonOutlineIcon v-else
 								class="emoji-picker-emoticon"
 								:size="30"
-								fill-color="var(--color-text-maxcontrast)"
-								decorative />
+								fill-color="var(--color-text-maxcontrast)" />
 						</template>
 					</Button>
 				</EmojiPicker>
@@ -66,10 +64,9 @@
 				<template #icon>
 					<LoadingIcon v-if="titleFormButtonIsLoading"
 						class="animation-rotate"
-						:size="20"
-						decorative />
-					<CheckIcon v-else-if="editMode" :size="20" decorative />
-					<PencilIcon v-else :size="20" decorative />
+						:size="20" />
+					<CheckIcon v-else-if="editMode" :size="20" />
+					<PencilIcon v-else :size="20" />
 				</template>
 				{{ editMode && !waitForEditor ? t('collectives', 'Done') : t('collectives', 'Edit') }}
 			</Button>

@@ -3,7 +3,7 @@
 		<EmptyContent>
 			{{ t('collectives', 'Collectives') }}
 			<template #icon>
-				<CollectivesIcon decorative />
+				<CollectivesIcon />
 			</template>
 			<template #desc>
 				{{ t('collectives', 'Come, organize and build shared knowledge!') }}

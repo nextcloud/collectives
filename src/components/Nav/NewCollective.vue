@@ -28,7 +28,7 @@
 			<ActionButton v-if="anyCircle"
 				@click.stop.prevent="startSelectCircle">
 				<template #icon>
-					<CirclesIcon :size="16" decorative />
+					<CirclesIcon :size="16" />
 				</template>
 				{{ t('collectives', 'Create collective for existing circle') }}
 			</ActionButton>

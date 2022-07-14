@@ -6,7 +6,7 @@
 			:order="0"
 			:name="t('collectives', 'Backlinks')">
 			<template #icon>
-				<ArrowBottomLeftIcon :size="16" decorative />
+				<ArrowBottomLeftIcon :size="16" />
 			</template>
 			<div class="app-sidebar-tab-desc">
 				{{ t('collectives', 'Pages that link to this one') }}
@@ -19,7 +19,7 @@
 			:order="1"
 			:name="t('collectives', 'Versions')">
 			<template #icon>
-				<RestoreIcon :size="16" decorative />
+				<RestoreIcon :size="16" />
 			</template>
 			<div class="app-sidebar-tab-desc">
 				{{ t('collectives', 'Old versions of this page') }}

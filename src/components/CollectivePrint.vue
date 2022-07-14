@@ -6,7 +6,7 @@
 			:value="shareTokenParam">
 		<EmptyContent v-show="loading">
 			<template #icon>
-				<DownloadIcon decorative />
+				<DownloadIcon />
 			</template>
 			<h1>{{ t('collectives', 'Preparing collective for exporting or printing') }}</h1>
 			<ProgressBar :value="loadingProgress" size="medium">

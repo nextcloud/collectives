@@ -8,7 +8,7 @@
 		<!-- error message -->
 		<EmptyContent v-else-if="error">
 			<template #icon>
-				<AlertOctagonIcon decorative />
+				<AlertOctagonIcon />
 			</template>
 			<h2>{{ error }}</h2>
 		</EmptyContent>
@@ -20,7 +20,7 @@
 				:to="pagePath(backlinkPage)">
 				<div class="app-content-list-item">
 					<div class="app-content-list-item-icon">
-						<PageIcon :size="26" fill-color="var(--color-main-background)" decorative />
+						<PageIcon :size="26" fill-color="var(--color-main-background)" />
 					</div>
 					<div class="app-content-list-item-line-one">
 						{{ pagePathTitle(backlinkPage) }}
@@ -35,7 +35,7 @@
 		<!-- no backlinks found -->
 		<EmptyContent v-else>
 			<template #icon>
-				<ArrowBottomLeftIcon decorative />
+				<ArrowBottomLeftIcon />
 			</template>
 			<h2>{{ t('collectives', 'No backlinks available') }}</h2>
 			<template #desc>
