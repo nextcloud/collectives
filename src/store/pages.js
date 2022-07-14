@@ -146,7 +146,7 @@ export default {
 		},
 
 		collectivePage(state) {
-			return state.pages.find(p => (p.parentId === 0 && p.title === 'Readme'))
+			return state.pages.find(p => (p.parentId === 0))
 		},
 
 		templatePage: (state) => (parentId) => {
@@ -228,6 +228,13 @@ export default {
 
 		backlinksUrl(_state, getters) {
 			return (parentId, pageId) => `${getters.pageUrl(parentId, pageId)}/backlinks`
+		},
+
+		pageTitle(state, getters) {
+			return pageId => {
+				const page = state.pages.find(p => p.id === pageId)
+				return (page.parentId === 0) ? getters.collectiveParam : page.title
+			}
 		},
 
 		collapsed(state) {
