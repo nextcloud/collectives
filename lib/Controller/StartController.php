@@ -44,7 +44,10 @@ class StartController extends Controller {
 			return new TemplateResponse('collectives', 'error', ['appsMissing' => $appsMissing]);  // templates/error.php
 		}
 		$this->eventDispatcher->dispatch(LoadViewer::class, new LoadViewer());
-		return new TemplateResponse('collectives', 'main');  // templates/main.php
+		return new TemplateResponse('collectives', 'main', [ // templates/main.php
+			'id-app-content' => '#app-content-vue',
+			'id-app-navigation' => '#app-navigation-vue',
+		]);
 	}
 
 	/**
