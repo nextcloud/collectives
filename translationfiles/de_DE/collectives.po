@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-07-11 12:09+0100\n"
-"PO-Revision-Date: 2022-04-26 11:04+0000\n"
+"PO-Revision-Date: 2022-07-19 06:16+0000\n"
 "Last-Translator: Joachim Sokolowski <weblate@of99.de>\n"
 "Language-Team: German (formal) <https://hosted.weblate.org/projects/"
 "collectives/collectives-app/de@formal/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12.1-dev\n"
+"X-Generator: Weblate 4.14-dev\n"
 
 #. TRANSLATORS src/components/Page.vue:191
 #. TRANSLATORS src/views/Home.vue:4
@@ -488,12 +488,12 @@ msgstr "Vorlage für Unterseite hinzufügen"
 #. TRANSLATORS src/components/Page/PageActionMenu.vue:142
 #: /collectives/specialVueFakeDummyForL10nScript.js:152
 msgid "Cannot delete page with subpages"
-msgstr ""
+msgstr "Seite mit Unterseiten kann nicht gelöscht werden"
 
 #. TRANSLATORS src/components/Page/PageActionMenu.vue:144
 #: /collectives/specialVueFakeDummyForL10nScript.js:154
 msgid "Delete template"
-msgstr ""
+msgstr "Vorlage löschen"
 
 #. TRANSLATORS src/components/Page/PageActionMenu.vue:145
 #: /collectives/specialVueFakeDummyForL10nScript.js:156
@@ -536,7 +536,7 @@ msgstr ""
 #. TRANSLATORS src/components/Page.vue:15
 #: /collectives/specialVueFakeDummyForL10nScript.js:174
 msgid "Select emoji for page"
-msgstr ""
+msgstr "Emoji für Seite auswählen"
 
 #. TRANSLATORS src/components/Page.vue:49
 #. TRANSLATORS src/components/PageList/Item.vue:195
@@ -704,7 +704,7 @@ msgstr "Neue Seite"
 
 #: /collectives/src/mixins/pageMixin.js:101
 msgid "Could not save emoji for page"
-msgstr ""
+msgstr "Emoji für diese Seite konnte nicht gespeichert werden"
 
 #: /collectives/src/mixins/pageMixin.js:119
 msgid "Could not delete the page"
