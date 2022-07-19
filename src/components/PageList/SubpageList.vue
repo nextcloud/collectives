@@ -16,29 +16,42 @@
 			:filtered-view="filterString !== ''"
 			@toggleCollapsed="toggleCollapsed(page.id)"
 			@click.native="show('details')" />
-		<SubpageList v-if="templateView"
-			:key="templateView.id"
-			:page="templateView"
-			:level="level+1"
-			:filter-string="filterString"
-			:is-template="true" />
-		<SubpageList v-for="subpage in subpagesView"
-			:key="subpage.id"
-			:page="subpage"
-			:level="level+1"
-			:filter-string="filterString"
-			:is-template="isTemplate" />
+		<div class="page-list-indent">
+			<SubpageList v-if="templateView"
+				:key="templateView.id"
+				:page="templateView"
+				:level="level+1"
+				:filter-string="filterString"
+				:is-template="true"
+				:allow-sorting="false" />
+			<Draggable v-if="subpagesView"
+				:list="subpagesView"
+				:parent-page-id="page.id"
+				:allow-sorting="allowSorting"
+				:revert-on-spill="revertOnSpill">
+				<SubpageList v-for="subpage in subpagesView"
+					:key="subpage.id"
+					:page="subpage"
+					:level="level+1"
+					:filter-string="filterString"
+					:is-template="isTemplate"
+					:allow-sorting="allowSorting"
+					class="page-list-drag-item" />
+			</Draggable>
+		</div>
 	</div>
 </template>
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
+import Draggable from './Draggable.vue'
 import Item from './Item.vue'
 
 export default {
 	name: 'SubpageList',
 
 	components: {
+		Draggable,
 		Item,
 	},
 
@@ -56,6 +69,10 @@ export default {
 			default: '',
 		},
 		isTemplate: {
+			type: Boolean,
+			default: false,
+		},
+		allowSorting: {
 			type: Boolean,
 			default: false,
 		},
@@ -108,6 +125,12 @@ export default {
 		hasVisibleSubpages() {
 			return !!this.visibleSubpages(this.page.id).length || this.considerTemplate
 		},
+
+		revertOnSpill() {
+			// TODO: revertOnSpill on nested sublists is broken with `sort: false`
+			//       see https://github.com/SortableJS/Sortable/issues/2177
+			return this.allowSorting
+		},
 	},
 
 	watch: {
@@ -123,6 +146,7 @@ export default {
 
 	methods: {
 		...mapMutations([
+			'collapse',
 			'expand',
 			'toggleCollapsed',
 			'show',
@@ -138,3 +162,9 @@ export default {
 }
 
 </script>
+
+<style>
+.page-list-indent {
+	padding-left: 28px;
+}
+</style>

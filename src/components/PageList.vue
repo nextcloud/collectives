@@ -43,33 +43,44 @@
 			</Actions>
 		</div>
 		<div class="page-list">
-			<Item v-if="currentCollective"
-				key="Readme"
-				:to="currentCollectivePath"
-				:page-id="collectivePage ? collectivePage.id : 0"
-				:parent-id="0"
-				:title="currentCollective.name"
-				:timestamp="collectivePage ? collectivePage.timestamp : 0"
-				:last-user-id="collectivePage ? collectivePage.lastUserId : ''"
-				:emoji="currentCollective.emoji"
-				:level="0"
-				:can-edit="currentCollectiveCanEdit"
-				:is-landing-page="true"
-				:has-template="hasTemplate"
-				:filtered-view="false"
-				class="page-list-landing-page"
-				@click.native="show('details')" />
-			<SubpageList v-if="templateView"
-				:key="templateView.id"
-				:page="templateView"
-				:level="1"
-				:filter-string="filterString"
-				:is-template="true" />
-			<SubpageList v-for="page in subpages"
-				:key="page.id"
-				:page="page"
-				:level="1"
-				:filter-string="filterString" />
+			<Draggable v-if="subpages"
+				:list="subpages"
+				:parent-id="collectivePage ? collectivePage.id : 0"
+				:allow-sorting="allowSorting"
+				:revert-on-spill="true">
+				<template #header>
+					<Item v-if="currentCollective"
+						key="Readme"
+						:to="currentCollectivePath"
+						:page-id="collectivePage ? collectivePage.id : 0"
+						:parent-id="0"
+						:title="currentCollective.name"
+						:timestamp="collectivePage ? collectivePage.timestamp : 0"
+						:last-user-id="collectivePage ? collectivePage.lastUserId : ''"
+						:emoji="currentCollective.emoji"
+						:level="0"
+						:can-edit="currentCollectiveCanEdit"
+						:is-landing-page="true"
+						:has-template="hasTemplate"
+						:filtered-view="false"
+						class="page-list-landing-page page-list-nodrag-item"
+						@click.native="show('details')" />
+				</template>
+				<SubpageList v-if="templateView"
+					:key="templateView.id"
+					:page="templateView"
+					:level="1"
+					:filter-string="filterString"
+					:is-template="true"
+					:allow-sorting="false" />
+				<SubpageList v-for="page in subpages"
+					:key="page.id"
+					:page="page"
+					:level="1"
+					:filter-string="filterString"
+					:allow-sorting="allowSorting"
+					class="page-list-drag-item" />
+			</Draggable>
 		</div>
 	</AppContentList>
 </template>
@@ -81,6 +92,7 @@ import { SET_COLLECTIVE_USER_SETTING_PAGE_ORDER } from '../store/actions.js'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import Actions from '@nextcloud/vue/dist/Components/Actions'
 import AppContentList from '@nextcloud/vue/dist/Components/AppContentList'
+import Draggable from './PageList/Draggable.vue'
 import SubpageList from './PageList/SubpageList.vue'
 import Item from './PageList/Item.vue'
 import PagesTemplateIcon from './Icon/PagesTemplateIcon.vue'
@@ -97,6 +109,7 @@ export default {
 		Actions,
 		ActionButton,
 		AppContentList,
+		Draggable,
 		Item,
 		PagesTemplateIcon,
 		SubpageList,
@@ -107,6 +120,7 @@ export default {
 	data() {
 		return {
 			filterString: '',
+			allowSorting: false,
 		}
 	},
 
