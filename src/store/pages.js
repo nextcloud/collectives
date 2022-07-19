@@ -404,16 +404,26 @@ export default {
 		 * @param {object} store the vuex store
 		 * @param {Function} store.commit commit changes
 		 * @param {object} store.getters getters of the store
+		 * @param {object} store.state state of the store
 		 * @param {Function} store.dispatch dispatch actions
 		 * @param {object} page the page
 		 * @param {number} page.newParentPageId ID of the new parent page
 		 * @param {number} page.pageId ID of the page
 		 */
-		async [MOVE_PAGE]({ commit, getters, dispatch }, { newParentPageId, pageId }) {
+		async [MOVE_PAGE]({ commit, getters, state, dispatch }, { newParentPageId, pageId }) {
 			commit('load', 'pagelist')
 			const url = getters.pageUrl(newParentPageId, pageId)
-			const response = await axios.put(url)
-			commit(UPDATE_PAGE, response.data.data)
+			const page = { ...state.pages.find(p => p.id === pageId) }
+			const pageClone = { ...page }
+			pageClone.parentId = newParentPageId
+			commit(UPDATE_PAGE, pageClone)
+			try {
+				const response = await axios.put(url)
+				commit(UPDATE_PAGE, response.data.data)
+			} catch (e) {
+				commit(UPDATE_PAGE, page)
+				throw e
+			}
 			// Reload the page list if moved page had subpages (to get their updated paths)
 			if (getters.visibleSubpages(pageId).length > 0) {
 				await dispatch(GET_PAGES, false)

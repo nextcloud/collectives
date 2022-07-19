@@ -1,13 +1,10 @@
 <template>
 	<div :id="`page-${pageId}`"
+		:data-page-id="pageId"
 		class="app-content-list-item"
-		:class="{active: isActive, dragover: isDragOver, mobile: isMobile, toplevel: level === 0}"
-		:style="indentItem"
+		:class="{active: isActive, mobile: isMobile, toplevel: level === 0}"
 		draggable
-		@dragstart="setDragData"
-		@dragover.prevent="handleDragOver"
-		@dragleave.prevent="handleDragLeave"
-		@drop.prevent="handleDrop">
+		@dragstart="setDragData">
 		<div class="app-content-list-item-icon"
 			:tabindex="isCollapsible ? '0' : null"
 			@keypress.enter="toggleCollapsedOrRoute()"
@@ -154,7 +151,6 @@ export default {
 
 	data() {
 		return {
-			isDragOver: false,
 			pageTitleIsTruncated: false,
 		}
 	},
@@ -228,61 +224,6 @@ export default {
 			ev.dataTransfer.setData('text/plain', href)
 			ev.dataTransfer.setData('text/uri-list', href)
 			ev.dataTransfer.setData('text/html', html)
-			// Do not allow to move landingpage
-			if (!this.isLandingPage) {
-				ev.dataTransfer.setData('pageId', this.pageId)
-				ev.dataTransfer.setData('parentPageId', this.parentPageId)
-			}
-		},
-
-		validateDragMoveData(srcPageId, srcParentPageId) {
-			// Do not allow to move page to itself or its direct parent
-			if ((srcPageId === this.pageId) || (srcParentPageId === this.pageId)) {
-				return false
-			}
-
-			// Do not allow to move page to a subpage of itself
-			if (this.pageParents(this.pageId).includes(srcPageId)) {
-				return false
-			}
-
-			return true
-		},
-
-		handleDragOver(ev) {
-			ev.dataTransfer.dropEffect = 'move'
-			const srcPageId = Number(ev.dataTransfer.getData('pageId'))
-			const srcParentPageId = Number(ev.dataTransfer.getData('parentPageId'))
-
-			// Only regard events with pageId
-			if (!srcPageId) {
-				return
-			}
-
-			if (this.validateDragMoveData(srcPageId, srcParentPageId)) {
-				this.isDragOver = true
-			}
-		},
-
-		handleDragLeave(ev) {
-			this.isDragOver = false
-		},
-
-		handleDrop(ev) {
-			this.isDragOver = false
-			ev.dataTransfer.dropEffect = 'move'
-			const srcPageId = Number(ev.dataTransfer.getData('pageId'))
-			const srcParentPageId = Number(ev.dataTransfer.getData('parentPageId'))
-
-			// Only regard events with pageId
-			if (!srcPageId) {
-				return
-			}
-
-			if (this.validateDragMoveData(srcPageId, srcParentPageId)) {
-				const srcPageId = event.dataTransfer.getData('pageId')
-				this.movePage(Number(this.pageId), Number(srcPageId))
-			}
 		},
 
 		toggleCollapsedOrRoute(ev) {
@@ -304,13 +245,14 @@ export default {
 .app-content-list-item {
 	height: unset;
 	margin-bottom: 4px;
+	padding-left: 0;
 	border-radius: var(--border-radius-large);
 
 	&.toplevel {
 		font-weight: bold;
 	}
 
-	&.active, &.dragover {
+	&.active {
 		background-color: var(--color-primary-light);
 
 		span.item-icon-badge {
