@@ -31,6 +31,7 @@
 <script>
 import draggable from 'vuedraggable'
 import pageMixin from '../../mixins/pageMixin.js'
+import { mapGetters } from 'vuex'
 
 export default {
 	name: 'Draggable',
@@ -68,12 +69,26 @@ export default {
 		}
 	},
 
+	computed: {
+		...mapGetters([
+			'collapsed',
+		]),
+	},
+
 	methods: {
 		setData(dataTransfer, dragEl) {
 			dataTransfer.setData('pageId', dragEl.firstChild.dataset.pageId)
 		},
 
 		onMove(ev, origEv) {
+			const parentPageId = Number(ev.to.dataset.parentPageId)
+
+			// Expand subpage list
+			if (this.collapsed(parentPageId)) {
+				console.debug('expand', parentPageId)
+				this.expand(parentPageId)
+			}
+
 			if (!this.allowSorting) {
 				// Force-move items to the end of the list if sorting is disabled
 				if (ev.to !== ev.from) {
