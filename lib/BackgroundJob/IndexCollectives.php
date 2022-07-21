@@ -9,8 +9,6 @@ use OCA\Collectives\Search\FileSearch\FileSearchException;
 use OCA\Collectives\Service\SearchService;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\TimedJob;
-use OCP\Files\File;
-use OCP\Files\Folder;
 use OCP\Files\InvalidPathException;
 use OCP\Files\NotFoundException;
 use Psr\Log\LoggerInterface;
@@ -26,23 +24,25 @@ class IndexCollectives extends TimedJob {
 	/** @var LoggerInterface */
 	private $logger;
 
+	/**
+	 * @param ITimeFactory $time
+	 * @param CollectiveMapper $collectiveMapper
+	 * @param CollectiveFolderManager $collectiveFolderManager
+	 * @param LoggerInterface $logger
+	 * @param SearchService $searchService
+	 */
 	public function __construct(ITimeFactory $time,
 								CollectiveMapper $collectiveMapper,
 								CollectiveFolderManager $collectiveFolderManager,
 								LoggerInterface $logger,
 								SearchService $searchService) {
 		parent::__construct($time);
-
-		$this->setInterval(60 * 5);
-		// TODO: remove check with NC 24+
-		if (method_exists($this, 'setTimeSensitivity')) {
-			$this->setTimeSensitivity(self::TIME_INSENSITIVE);
-		}
-
 		$this->collectiveMapper = $collectiveMapper;
 		$this->collectiveFolderManager = $collectiveFolderManager;
 		$this->searchService = $searchService;
 		$this->logger = $logger;
+
+		$this->setInterval(60 * 5);
 	}
 
 	/**
@@ -64,6 +64,10 @@ class IndexCollectives extends TimedJob {
 		}
 	}
 
+	/**
+	 * @param Collective $collective
+	 * @return bool
+	 */
 	private function isOutdatedIndex(Collective $collective): bool {
 		$index = $this->searchService->getIndexForCollective($collective);
 		if (!$index) {
@@ -71,41 +75,11 @@ class IndexCollectives extends TimedJob {
 		}
 
 		try {
-			$folder = $this->collectiveFolderManager->getRootFolder()->get($collective->getId());
-			if ($folder instanceof Folder) {
-				return (bool) $this->findFileNewerThan($folder, $index->getMTime());
-			}
+			$folder = $this->collectiveFolderManager->getRootFolder()->get((string) $collective->getId());
+			return $folder->getMTime() > $index->getMTime();
 		} catch (NotFoundException|InvalidPathException $e) {
+			return false;
 		}
 
-		return true;
-	}
-
-	private function findFileNewerThan(Folder $folder, int $time): ?File {
-		$nodes = [];
-		try {
-			$nodes = $folder->getDirectoryListing();
-		} catch (NotFoundException $e) {
-		}
-
-		foreach ($nodes as $node) {
-			if ($node instanceof Folder) {
-				$file = $this->findFileNewerThan($node, $time);
-				if ($file) {
-					return $file;
-				}
-			}
-
-			if ($node instanceof File) {
-				try {
-					if ($node->getMTime() > $time) {
-						return $node;
-					}
-				} catch (InvalidPathException|NotFoundException $e) {
-					return $node;
-				}
-			}
-		}
-		return null;
 	}
 }

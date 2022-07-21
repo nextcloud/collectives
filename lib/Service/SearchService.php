@@ -7,6 +7,7 @@ use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Search\FileSearch\FileSearcher;
 use OCA\Collectives\Search\FileSearch\FileSearchException;
 use OCP\Files\File;
+use OCP\Files\Folder;
 use OCP\Files\GenericFileException;
 use OCP\Files\InvalidPathException;
 use OCP\ITempManager;
@@ -15,6 +16,8 @@ use PDO;
 use Psr\Log\LoggerInterface;
 
 class SearchService {
+	const INDICES_DIR_NAME = 'indices';
+
 	/** @var CollectiveFolderManager */
 	private $collectiveFolderManager;
 	/** @var ITempManager */
@@ -77,10 +80,14 @@ class SearchService {
 		return $searcher->search($term, $maxResults);
 	}
 
+	/**
+	 * @param Collective $collective
+	 * @return File|null
+	 * @throws FileSearchException
+	 */
 	public function getIndexForCollective(Collective $collective): ?File {
-		$rootFolder = $this->collectiveFolderManager->getRootFolder();
 		try {
-			$file = $rootFolder->get($this->getIndexName($collective));
+			$file = $this->getIndicesFolder()->get($this->getIndexName($collective));
 		} catch (\OCP\Files\NotFoundException $e) {
 			return null;
 		}
@@ -88,6 +95,10 @@ class SearchService {
 		return $file instanceof File ? $file : null;
 	}
 
+	/**
+	 * @param Collective $collective
+	 * @return string
+	 */
 	public function getIndexName(Collective $collective): string {
 		return 'index_' . $collective->getCircleId() . '.db';
 	}
@@ -111,18 +122,46 @@ class SearchService {
 		}
 	}
 
+	/**
+	 * @param Collective $collective
+	 * @return File|null
+	 * @throws FileSearchException
+	 */
 	private function getOrCreateIndexForCollective(Collective $collective): ?File {
-		$rootFolder = $this->collectiveFolderManager->getRootFolder();
 		$file = $this->getIndexForCollective($collective);
 
 		try {
-			$file = $rootFolder->newFile($this->getIndexName($collective));
+			$file = $this->getIndicesFolder()->newFile($this->getIndexName($collective));
 		} catch (\OCP\Files\NotPermittedException $e) {
 		}
 
 		return $file instanceof File ? $file : null;
 	}
 
+	/**
+	 * @return Folder
+	 * @throws FileSearchException
+	 */
+	private function getIndicesFolder(): Folder {
+		$rootFolder = $this->collectiveFolderManager->getRootFolder();
+		try {
+			$folder = $rootFolder->get(self::INDICES_DIR_NAME);
+			if ($folder instanceof Folder) {
+				return $folder;
+			}
+		} catch (\OCP\Files\NotFoundException $e) {
+		}
+
+		try {
+			return $rootFolder->newFolder(self::INDICES_DIR_NAME);
+		} catch (\OCP\Files\NotPermittedException $e) {
+			throw new FileSearchException('Could not find or create the indices directory.');
+		}
+	}
+
+	/**
+	 * @return bool
+	 */
 	private function isSqliteAvailable(): bool {
 		return in_array('sqlite', PDO::getAvailableDrivers(), true);
 	}
