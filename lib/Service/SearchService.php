@@ -54,6 +54,7 @@ class SearchService {
 		$indexer->runOnDirectory($collectiveFolder);
 
 		$this->saveIndex($collective, $indexPath);
+		$this->tempManager->clean();
 	}
 
 	/**

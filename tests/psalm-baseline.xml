@@ -630,8 +630,9 @@
 		</UndefinedClass>
 	</file>
 	<file src="lib/Service/SearchService.php">
-		<UndefinedClass occurrences="3">
+		<UndefinedClass occurrences="4">
 			<code>ITempManager</code>
+			<code>Folder</code>
 			<code>?File</code>
 			<code>?File</code>
 		</UndefinedClass>
