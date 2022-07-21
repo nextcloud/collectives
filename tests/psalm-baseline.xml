@@ -538,12 +538,13 @@
     </UndefinedClass>
   </file>
   <file src="lib/Service/PageService.php">
-    <MissingDependency occurrences="20">
+    <MissingDependency occurrences="21">
       <code>$this-&gt;getCollectiveInfo($collectiveId, $userId)</code>
       <code>$this-&gt;pageMapper</code>
       <code>CollectiveInfo</code>
       <code>CollectiveInfo</code>
       <code>Page</code>
+      <code>PageInfo</code>
       <code>PageInfo</code>
       <code>PageInfo</code>
       <code>PageInfo</code>
@@ -560,7 +561,8 @@
       <code>PageMapper</code>
       <code>PageMapper</code>
     </MissingDependency>
-    <UndefinedClass occurrences="20">
+    <UndefinedClass occurrences="21">
+      <code>File</code>
       <code>File</code>
       <code>File</code>
       <code>File</code>

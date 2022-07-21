@@ -207,19 +207,12 @@ class PageContentProvider implements IProvider {
 
 	/**
 	 * @param Collective $collective
-<<<<<<< HEAD
+
 	 * @param File $file
 	 * @param string $userId
 	 * @return PageInfo|null
 	 */
 	private function getPageInfo(Collective $collective, File $file, string $userId): ?PageInfo {
-=======
-	 * @param File $page
-	 * @param string $userId
-	 * @return PageInfo|null
-	 */
-	private function getPageInfo(Collective $collective, File $page, string $userId): ?PageInfo {
->>>>>>> Changes for code review:
 		try {
 			return $this->pageService->findByFile($collective->getId(), $file, $userId);
 		} catch (Exception $e) {

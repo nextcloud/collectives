@@ -505,6 +505,21 @@ class PageService {
 	}
 
 	/**
+	 * @param int $collectiveId
+	 * @param File $file
+	 * @param string $userId
+	 * @return PageInfo
+	 * @throws FilesNotFoundException
+	 * @throws InvalidPathException
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function findByFile(int $collectiveId, File $file, string $userId): PageInfo {
+		return $this->find($collectiveId, $this->getParentPageId($file), $file->getId(), $userId);
+	}
+
+	/**
 	 * @param int    $collectiveId
 	 * @param int    $parentId
 	 * @param string $title
