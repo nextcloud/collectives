@@ -1,5 +1,5 @@
 <template>
-	<AppNavigationSettings :title="t('collectives', 'Settings')">
+	<AppNavigationSettings :title="t('collectives', 'Collectives settings')">
 		<div>
 			<p>
 				<label for="userFolder">
