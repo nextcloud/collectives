@@ -111,14 +111,14 @@ class PublicPageController extends PublicShareController {
 		return $this->handleErrorResponse(function (): array {
 			$owner = $this->getShare()->getOwner();
 			$collectiveId = $this->getShare()->getCollectiveId();
-			$pages = $this->service->findAll($collectiveId, $owner);
-			foreach ($pages as $page) {
+			$pageInfos = $this->service->findAll($collectiveId, $owner);
+			foreach ($pageInfos as $pageInfo) {
 				// Shares don't have a collective path
-				$page->setCollectivePath('');
-				$page->setShareToken($this->getToken());
+				$pageInfo->setCollectivePath('');
+				$pageInfo->setShareToken($this->getToken());
 			}
 			return [
-				"data" => $pages
+				"data" => $pageInfos
 			];
 		}, $this->logger);
 	}
@@ -135,12 +135,12 @@ class PublicPageController extends PublicShareController {
 		return $this->handleErrorResponse(function () use ($parentId, $id): array {
 			$owner = $this->getShare()->getOwner();
 			$collectiveId = $this->getShare()->getCollectiveId();
-			$page = $this->service->find($collectiveId, $parentId, $id, $owner);
+			$pageInfo = $this->service->find($collectiveId, $parentId, $id, $owner);
 			// Shares don't have a collective path
-			$page->setCollectivePath('');
-			$page->setShareToken($this->getToken());
+			$pageInfo->setCollectivePath('');
+			$pageInfo->setShareToken($this->getToken());
 			return [
-				"data" => $page
+				"data" => $pageInfo
 			];
 		}, $this->logger);
 	}
@@ -158,12 +158,12 @@ class PublicPageController extends PublicShareController {
 			$this->checkEditPermissions();
 			$owner = $this->getShare()->getOwner();
 			$collectiveId = $this->getShare()->getCollectiveId();
-			$page = $this->service->create($collectiveId, $parentId, $title, $owner);
+			$pageInfo = $this->service->create($collectiveId, $parentId, $title, $owner);
 			// Shares don't have a collective path
-			$page->setCollectivePath('');
-			$page->setShareToken($this->getToken());
+			$pageInfo->setCollectivePath('');
+			$pageInfo->setShareToken($this->getToken());
 			return [
-				"data" => $page
+				"data" => $pageInfo
 			];
 		}, $this->logger);
 	}
@@ -181,12 +181,12 @@ class PublicPageController extends PublicShareController {
 			$this->checkEditPermissions();
 			$owner = $this->getShare()->getOwner();
 			$collectiveId = $this->getShare()->getCollectiveId();
-			$page = $this->service->touch($collectiveId, $parentId, $id, $owner);
+			$pageInfo = $this->service->touch($collectiveId, $parentId, $id, $owner);
 			// Shares don't have a collective path
-			$page->setCollectivePath('');
-			$page->setShareToken($this->getToken());
+			$pageInfo->setCollectivePath('');
+			$pageInfo->setShareToken($this->getToken());
 			return [
-				"data" => $page
+				"data" => $pageInfo
 			];
 		}, $this->logger);
 	}
@@ -205,12 +205,12 @@ class PublicPageController extends PublicShareController {
 			$this->checkEditPermissions();
 			$owner = $this->getShare()->getOwner();
 			$collectiveId = $this->getShare()->getCollectiveId();
-			$page = $this->service->rename($collectiveId, $parentId, $id, $title, $owner);
+			$pageInfo = $this->service->rename($collectiveId, $parentId, $id, $title, $owner);
 			// Shares don't have a collective path
-			$page->setCollectivePath('');
-			$page->setShareToken($this->getToken());
+			$pageInfo->setCollectivePath('');
+			$pageInfo->setShareToken($this->getToken());
 			return [
-				"data" => $page
+				"data" => $pageInfo
 			];
 		}, $this->logger);
 	}
@@ -229,12 +229,12 @@ class PublicPageController extends PublicShareController {
 			$this->checkEditPermissions();
 			$owner = $this->getShare()->getOwner();
 			$collectiveId = $this->getShare()->getCollectiveId();
-			$page = $this->service->setEmoji($collectiveId, $parentId, $id, $emoji, $owner);
+			$pageInfo = $this->service->setEmoji($collectiveId, $parentId, $id, $emoji, $owner);
 			// Shares don't have a collective path
-			$page->setCollectivePath('');
-			$page->setShareToken($this->getToken());
+			$pageInfo->setCollectivePath('');
+			$pageInfo->setShareToken($this->getToken());
 			return [
-				"data" => $page
+				"data" => $pageInfo
 			];
 		}, $this->logger);
 	}
@@ -252,12 +252,12 @@ class PublicPageController extends PublicShareController {
 			$this->checkEditPermissions();
 			$owner = $this->getShare()->getOwner();
 			$collectiveId = $this->getShare()->getCollectiveId();
-			$page = $this->service->delete($collectiveId, $parentId, $id, $owner);
+			$pageInfo = $this->service->delete($collectiveId, $parentId, $id, $owner);
 			// Shares don't have a collective path
-			$page->setCollectivePath('');
-			$page->setShareToken($this->getToken());
+			$pageInfo->setCollectivePath('');
+			$pageInfo->setShareToken($this->getToken());
 			return [
-				"data" => $page
+				"data" => $pageInfo
 			];
 		}, $this->logger);
 	}

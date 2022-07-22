@@ -109,17 +109,17 @@ class PageContentProvider implements IProvider {
 
 		$pageSearchResults = [];
 		foreach ($collectiveInfos as $collective) {
-			$pages = $this->pageService->findAll($collective->getId(), $user->getUID());
-			foreach ($pages as $page) {
-				$file = $this->nodeHelper->getFileById($this->pageService->getFolder($collective->getId(), $page->getId(), $user->getUID()), $page->getId());
+			$pageInfos = $this->pageService->findAll($collective->getId(), $user->getUID());
+			foreach ($pageInfos as $pageInfo) {
+				$file = $this->nodeHelper->getFileById($this->pageService->getFolder($collective->getId(), $pageInfo->getId(), $user->getUID()), $pageInfo->getId());
 				if (preg_match('/(\S+\s+)?(\S+\s*)?' . $query->getTerm() . '(\S*)?(\s+\S+)?/i', NodeHelper::getContent($file), $matches)) {
 					$pageSearchResults[] = new SearchResultEntry(
 						'',
 						$matches[0],
-						str_replace('{page}', $page->getTitle(), str_replace('{collective}', $collective->getName(), $this->l10n->t('in page {page} from collective {collective}'))),
+						str_replace('{page}', $pageInfo->getTitle(), str_replace('{collective}', $collective->getName(), $this->l10n->t('in page {page} from collective {collective}'))),
 						implode('/', array_filter([
 							$this->urlGenerator->linkToRoute('collectives.start.index'),
-							$this->pageService->getPageLink($collective->getName(), $page)
+							$this->pageService->getPageLink($collective->getName(), $pageInfo)
 						])),
 						'collectives-search-icon icon-pages'
 					);

@@ -49,9 +49,9 @@ class PageController extends Controller {
 	public function index(int $collectiveId): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId): array {
 			$userId = $this->getUserId();
-			$pages = $this->service->findAll($collectiveId, $userId);
+			$pageInfos = $this->service->findAll($collectiveId, $userId);
 			return [
-				"data" => $pages
+				"data" => $pageInfos
 			];
 		}, $this->logger);
 	}
@@ -68,9 +68,9 @@ class PageController extends Controller {
 	public function get(int $collectiveId, int $parentId, int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $id): array {
 			$userId = $this->getUserId();
-			$page = $this->service->find($collectiveId, $parentId, $id, $userId);
+			$pageInfo = $this->service->find($collectiveId, $parentId, $id, $userId);
 			return [
-				"data" => $page
+				"data" => $pageInfo
 			];
 		}, $this->logger);
 	}
@@ -87,9 +87,9 @@ class PageController extends Controller {
 	public function create(int $collectiveId, int $parentId, string $title): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $title): array {
 			$userId = $this->getUserId();
-			$page = $this->service->create($collectiveId, $parentId, $title, $userId);
+			$pageInfo = $this->service->create($collectiveId, $parentId, $title, $userId);
 			return [
-				"data" => $page
+				"data" => $pageInfo
 			];
 		}, $this->logger);
 	}
@@ -106,9 +106,9 @@ class PageController extends Controller {
 	public function touch(int $collectiveId, int $parentId, int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $id): array {
 			$userId = $this->getUserId();
-			$page = $this->service->touch($collectiveId, $parentId, $id, $userId);
+			$pageInfo = $this->service->touch($collectiveId, $parentId, $id, $userId);
 			return [
-				"data" => $page
+				"data" => $pageInfo
 			];
 		}, $this->logger);
 	}
@@ -126,9 +126,9 @@ class PageController extends Controller {
 	public function rename(int $collectiveId, int $parentId, int $id, string $title): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $id, $title): array {
 			$userId = $this->getUserId();
-			$page = $this->service->rename($collectiveId, $parentId, $id, $title, $userId);
+			$pageInfo = $this->service->rename($collectiveId, $parentId, $id, $title, $userId);
 			return [
-				"data" => $page
+				"data" => $pageInfo
 			];
 		}, $this->logger);
 	}
@@ -146,9 +146,9 @@ class PageController extends Controller {
 	public function setEmoji(int $collectiveId, int $parentId, int $id, ?string $emoji = null): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $id, $emoji): array {
 			$userId = $this->getUserId();
-			$page = $this->service->setEmoji($collectiveId, $parentId, $id, $emoji, $userId);
+			$pageInfo = $this->service->setEmoji($collectiveId, $parentId, $id, $emoji, $userId);
 			return [
-				"data" => $page
+				"data" => $pageInfo
 			];
 		}, $this->logger);
 	}
@@ -165,9 +165,9 @@ class PageController extends Controller {
 	public function delete(int $collectiveId, int $parentId, int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $id): array {
 			$userId = $this->getUserId();
-			$page = $this->service->delete($collectiveId, $parentId, $id, $userId);
+			$pageInfo = $this->service->delete($collectiveId, $parentId, $id, $userId);
 			return [
-				"data" => $page
+				"data" => $pageInfo
 			];
 		}, $this->logger);
 	}

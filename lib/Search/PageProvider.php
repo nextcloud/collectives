@@ -99,15 +99,15 @@ class PageProvider implements IProvider {
 
 		$pageSearchResults = [];
 		foreach ($collectiveInfos as $collective) {
-			$pages = $this->pageService->findByString($collective->getId(), $query->getTerm(), $user->getUID());
-			foreach ($pages as $page) {
+			$pageInfos = $this->pageService->findByString($collective->getId(), $query->getTerm(), $user->getUID());
+			foreach ($pageInfos as $pageInfo) {
 				$pageSearchResults[] = new SearchResultEntry(
 					'',
-					$page->getTitle(),
+					$pageInfo->getTitle(),
 					str_replace('{collective}', $collective->getName(), $this->l10n->t('in Collective {collective}')),
 					implode('/', array_filter([
 						$this->urlGenerator->linkToRoute('collectives.start.index'),
-						$this->pageService->getPageLink($collective->getName(), $page)
+						$this->pageService->getPageLink($collective->getName(), $pageInfo)
 					])),
 					'collectives-search-icon icon-pages'
 				);

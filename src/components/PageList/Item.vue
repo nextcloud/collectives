@@ -44,7 +44,7 @@
 		<div v-if="canEdit" class="page-list-item-actions">
 			<PageActionMenu :page-id="pageId"
 				:page-url="to"
-				:parent-page-id="parentPageId"
+				:parent-id="parentId"
 				:timestamp="timestamp"
 				:last-user-id="lastUserId"
 				:is-landing-page="isLandingPage"
@@ -103,7 +103,7 @@ export default {
 			type: Number,
 			required: true,
 		},
-		parentPageId: {
+		parentId: {
 			type: Number,
 			required: true,
 		},

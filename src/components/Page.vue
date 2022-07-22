@@ -73,7 +73,7 @@
 			<PageActionMenu v-if="currentCollectiveCanEdit"
 				:show-files-link="true"
 				:page-id="currentPage.id"
-				:parent-page-id="currentPage.parentId"
+				:parent-id="currentPage.parentId"
 				:timestamp="currentPage.timestamp"
 				:last-user-id="currentPage.lastUserId"
 				:is-landing-page="landingPage"
