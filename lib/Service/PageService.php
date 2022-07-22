@@ -476,13 +476,13 @@ class PageService {
 	 * @throws NotPermittedException
 	 */
 	public function findByString(int $collectiveId, string $search, string $userId): array {
-		$allPages = $this->findAll($collectiveId, $userId);
+		$allPageInfos = $this->findAll($collectiveId, $userId);
 		$pageInfos = [];
-		foreach ($allPages as $page) {
-			if (stripos($page->getTitle(), $search) === false) {
+		foreach ($allPageInfos as $pageInfo) {
+			if (stripos($pageInfo->getTitle(), $search) === false) {
 				continue;
 			}
-			$pageInfos[] = $page;
+			$pageInfos[] = $pageInfo;
 		}
 
 		return $pageInfos;
@@ -686,31 +686,31 @@ class PageService {
 
 	/**
 	 * @param string   $collectiveName
-	 * @param PageInfo $page
+	 * @param PageInfo $pageInfo
 	 * @param bool     $withFileId
 	 *
 	 * @return string
 	 */
-	public function getPageLink(string $collectiveName, PageInfo $page, bool $withFileId = true): string {
+	public function getPageLink(string $collectiveName, PageInfo $pageInfo, bool $withFileId = true): string {
 		$collectiveRoute = rawurlencode($collectiveName);
-		$pagePathRoute = implode('/', array_map('rawurlencode', explode('/', $page->getFilePath())));
-		$pageTitleRoute = rawurlencode($page->getTitle());
+		$pagePathRoute = implode('/', array_map('rawurlencode', explode('/', $pageInfo->getFilePath())));
+		$pageTitleRoute = rawurlencode($pageInfo->getTitle());
 		$fullRoute = implode('/', array_filter([
 			$collectiveRoute,
 			$pagePathRoute,
 			$pageTitleRoute
 		]));
 
-		return $withFileId ? $fullRoute . '?fileId=' . $page->getId() : $fullRoute;
+		return $withFileId ? $fullRoute . '?fileId=' . $pageInfo->getId() : $fullRoute;
 	}
 
 	/**
-	 * @param PageInfo $page
+	 * @param PageInfo $pageInfo
 	 * @param string   $content
 	 *
 	 * @return bool
 	 */
-	public function matchBacklinks(PageInfo $page, string $content): bool {
+	public function matchBacklinks(PageInfo $pageInfo, string $content): bool {
 		$prefix = '/\[[^\]]+\]\(';
 		$suffix = '\)/';
 
@@ -725,8 +725,8 @@ class PageService {
 
 		$appPath = '\/+apps\/+collectives\/+';
 
-		$pagePath = str_replace('/', '/+', preg_quote($this->getPageLink(explode('/', $page->getCollectivePath())[1], $page, false), '/'));
-		$fileId = '.+\?fileId=' . $page->getId();
+		$pagePath = str_replace('/', '/+', preg_quote($this->getPageLink(explode('/', $pageInfo->getCollectivePath())[1], $pageInfo, false), '/'));
+		$fileId = '.+\?fileId=' . $pageInfo->getId();
 
 		$relativeFileIdPattern = $prefix . $relativeUrl . $fileId . $suffix;
 		$absoluteFileIdPattern = $prefix . $absoluteUrl . $basePath . $appPath . $fileId . $suffix;

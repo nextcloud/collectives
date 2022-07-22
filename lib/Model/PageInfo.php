@@ -10,12 +10,12 @@ use OCP\Files\InvalidPathException;
 use OCP\Files\NotFoundException;
 
 /**
- * @method int getId()
- * @method void setId(int $value)
- * @method string getTitle()
- * @method void setTitle(string $value)
+ * @method string getLastUserId()
+ * @method void setLastUserId(string $value)
  * @method string getEmoji()
  * @method void setEmoji(string $value)
+ * @method string getTitle()
+ * @method void setTitle(string $value)
  * @method int getTimestamp()
  * @method void setTimestamp(int $value)
  * @method int getSize()
@@ -26,8 +26,6 @@ use OCP\Files\NotFoundException;
  * @method void setFilePath(string $value)
  * @method string getCollectivePath()
  * @method void setCollectivePath(string $value)
- * @method string getLastUserId()
- * @method void setLastUserId(string $value)
  * @method int getParentId()
  * @method void setParentId(int $value)
  * @method int getShareToken()
@@ -39,10 +37,13 @@ class PageInfo extends Entity implements JsonSerializable {
 	public const SUFFIX = '.md';
 
 	/** @var string */
-	protected $title;
+	protected $lastUserId;
 
 	/** @var string */
 	protected $emoji;
+
+	/** @var string */
+	protected $title;
 
 	/** @var int */
 	protected $timestamp;
@@ -59,9 +60,6 @@ class PageInfo extends Entity implements JsonSerializable {
 	/** @var string */
 	protected $collectivePath;
 
-	/** @var string */
-	protected $lastUserId;
-
 	/** @var int */
 	protected $parentId;
 
@@ -74,14 +72,14 @@ class PageInfo extends Entity implements JsonSerializable {
 	public function jsonSerialize(): array {
 		return [
 			'id' => $this->id,
-			'title' => $this->title,
+			'lastUserId' => $this->lastUserId,
 			'emoji' => $this->emoji,
+			'title' => $this->title,
 			'timestamp' => $this->timestamp,
 			'size' => $this->size,
 			'fileName' => $this->fileName,
 			'filePath' => $this->filePath,
 			'collectivePath' => $this->collectivePath,
-			'lastUserId' => $this->lastUserId,
 			'parentId' => $this->parentId,
 			'shareToken' => $this->shareToken,
 		];
