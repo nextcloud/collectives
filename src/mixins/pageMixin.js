@@ -34,10 +34,10 @@ export default {
 		/**
 		 * Open existing or create new template page
 		 *
-		 * @param {number} parentPageId ID of the parent page
+		 * @param {number} parentId ID of the parent page
 		 */
-		async editTemplate(parentPageId) {
-			const templatePage = this.templatePage(parentPageId)
+		async editTemplate(parentId) {
+			const templatePage = this.templatePage(parentId)
 			if (templatePage) {
 				this.$router.push(this.pagePath(templatePage))
 				if (this.showTemplates) {
@@ -47,9 +47,9 @@ export default {
 			}
 
 			try {
-				await this.dispatchNewTemplate(parentPageId)
+				await this.dispatchNewTemplate(parentId)
 				this.$router.push(this.newPagePath)
-				this.expand(parentPageId)
+				this.expand(parentId)
 				if (this.showTemplates) {
 					this.$nextTick(() => scrollToPage(this.newPageId))
 				}
@@ -65,17 +65,17 @@ export default {
 		/**
 		 * Create a new page and focus the page automatically
 		 *
-		 * @param {number} parentPageId ID of the parent page
+		 * @param {number} parentId ID of the parent page
 		 */
-		async newPage(parentPageId) {
+		async newPage(parentId) {
 			const page = {
 				title: t('collectives', 'New Page'),
-				parentId: parentPageId,
+				parentId,
 			}
 			try {
 				await this.dispatchNewPage(page)
 				this.$router.push(this.newPagePath)
-				this.expand(parentPageId)
+				this.expand(parentId)
 				this.$nextTick(() => scrollToPage(this.newPageId))
 
 				// Parents location changes when the first subpage is created.
@@ -89,13 +89,13 @@ export default {
 		/**
 		 * Set emoji for a page
 		 *
-		 * @param {number} parentPageId ID of the parent page
+		 * @param {number} parentId ID of the parent page
 		 * @param {number} pageId ID of the page
 		 * @param {string} emoji Emoji for the page
 		 */
-		async setEmoji(parentPageId, pageId, emoji) {
+		async setEmoji(parentId, pageId, emoji) {
 			try {
-				await this.dispatchSetPageEmoji({ parentPageId, pageId, emoji })
+				await this.dispatchSetPageEmoji({ parentId, pageId, emoji })
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not save emoji for page'))
@@ -106,14 +106,14 @@ export default {
 		 * Delete the current page,
 		 * remove it from the frontend and show a hint
 		 *
-		 * @param {number} parentPageId ID of the parent page
+		 * @param {number} parentId ID of the parent page
 		 * @param {number} pageId ID of the page
 		 */
-		async deletePage(parentPageId, pageId) {
+		async deletePage(parentId, pageId) {
 			const currentPageId = this.currentPage?.id
 
 			try {
-				await this.dispatchDeletePage({ parentPageId, pageId })
+				await this.dispatchDeletePage({ parentId, pageId })
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not delete the page'))

@@ -336,12 +336,12 @@ export default {
 		 * @param {object} store the vuex store
 		 * @param {Function} store.commit commit changes
 		 * @param {object} store.getters getters of the store
-		 * @param {number} parentPageId ID of parent page for new template
+		 * @param {number} parentId ID of parent page for new template
 		 */
-		async [NEW_TEMPLATE]({ commit, getters }, parentPageId) {
+		async [NEW_TEMPLATE]({ commit, getters }, parentId) {
 			const page = {
 				title: 'Template',
-				parentId: parentPageId,
+				parentId,
 			}
 
 			// We'll be done when the editor has focus.
@@ -389,13 +389,13 @@ export default {
 		 * @param {Function} store.commit commit changes
 		 * @param {object} store.getters getters of the store
 		 * @param {object} page the page
-		 * @param {number} page.parentPageId ID of the parent page
+		 * @param {number} page.parentId ID of the parent page
 		 * @param {number} page.pageId ID of the page
 		 * @param {string} page.emoji emoji for the page
 		 */
-		async [SET_PAGE_EMOJI]({ commit, getters }, { parentPageId, pageId, emoji }) {
+		async [SET_PAGE_EMOJI]({ commit, getters }, { parentId, pageId, emoji }) {
 			commit('load', `pageEmoji-${pageId}`)
-			const response = await axios.put(getters.emojiUrl(parentPageId, pageId), { emoji })
+			const response = await axios.put(getters.emojiUrl(parentId, pageId), { emoji })
 			commit(UPDATE_PAGE, response.data.data)
 			commit('done', `pageEmoji-${pageId}`)
 		},
@@ -408,12 +408,12 @@ export default {
 		 * @param {Function} store.commit commit changes
 		 * @param {object} store.getters getters of the store
 		 * @param {object} page the page
-		 * @param {number} page.parentPageId ID of the parent page
+		 * @param {number} page.parentId ID of the parent page
 		 * @param {number} page.pageId ID of the page
 		 */
-		async [DELETE_PAGE]({ commit, getters }, { parentPageId, pageId }) {
+		async [DELETE_PAGE]({ commit, getters }, { parentId, pageId }) {
 			commit('load', 'page')
-			await axios.delete(getters.pageUrl(parentPageId, pageId))
+			await axios.delete(getters.pageUrl(parentId, pageId))
 			commit(DELETE_PAGE_BY_ID, pageId)
 			commit('done', 'page')
 		},

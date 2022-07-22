@@ -29,7 +29,7 @@
 			:close-after-click="true"
 			:disabled="hasSubpages"
 			@click.native="show('details')"
-			@click="deletePage(parentPageId, pageId)">
+			@click="deletePage(parentId, pageId)">
 			<template #icon>
 				<DeleteOffIcon v-if="hasSubpages" :size="20" />
 				<DeleteIcon v-else :size="20" />
@@ -90,7 +90,7 @@ export default {
 			type: String,
 			default: null,
 		},
-		parentPageId: {
+		parentId: {
 			type: Number,
 			required: true,
 		},

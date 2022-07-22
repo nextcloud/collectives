@@ -4,7 +4,7 @@
 			key="page.title"
 			:to="pagePath(page)"
 			:page-id="page.id"
-			:parent-page-id="page.parentId"
+			:parent-id="page.parentId"
 			:title="page.title"
 			:timestamp="page.timestamp"
 			:last-user-id="page.lastUserId"
