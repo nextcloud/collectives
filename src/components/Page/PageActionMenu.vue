@@ -150,7 +150,7 @@ export default {
 		},
 
 		hasSubpages() {
-			return !!this.visibleSubpages(this.pageId.id).length || !!this.hasTemplate
+			return !!this.visibleSubpages(this.pageId).length || !!this.hasTemplate
 		},
 	},
 
