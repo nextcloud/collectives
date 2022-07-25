@@ -140,7 +140,7 @@ class PageService {
 	 * @return int
 	 * @throws NotFoundException
 	 */
-	private function getParentPageId(File $file): int {
+	public function getParentPageId(File $file): int {
 		try {
 			if (self::isLandingPage($file)) {
 				// Return `0` for landing page
@@ -502,6 +502,21 @@ class PageService {
 	public function find(int $collectiveId, int $parentId, int $id, string $userId): PageInfo {
 		$folder = $this->getFolder($collectiveId, $parentId, $userId);
 		return $this->getPageByFile($this->nodeHelper->getFileById($folder, $id));
+	}
+
+	/**
+	 * @param int $collectiveId
+	 * @param File $file
+	 * @param string $userId
+	 * @return PageInfo
+	 * @throws FilesNotFoundException
+	 * @throws InvalidPathException
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function findByFile(int $collectiveId, File $file, string $userId): PageInfo {
+		return $this->find($collectiveId, $this->getParentPageId($file), $file->getId(), $userId);
 	}
 
 	/**
