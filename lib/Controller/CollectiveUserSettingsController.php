@@ -4,7 +4,6 @@ namespace OCA\Collectives\Controller;
 
 use Closure;
 
-use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Service\CollectiveUserSettingsService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;

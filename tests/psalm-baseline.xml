@@ -266,6 +266,11 @@
       <code>SimpleMigrationStep</code>
     </UndefinedClass>
   </file>
+  <file src="lib/Migration/Version010400Date20220722000000.php">
+    <UndefinedClass occurrences="1">
+      <code>SimpleMigrationStep</code>
+    </UndefinedClass>
+  </file>
   <file src="lib/Model/CollectiveInfo.php">
     <MissingDependency occurrences="1">
       <code>Collective</code>
