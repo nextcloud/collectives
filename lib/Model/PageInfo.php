@@ -15,6 +15,8 @@ use OCP\Files\NotFoundException;
  * @method string getEmoji()
  * @method void setEmoji(string $value)
  * @method string getTitle()
+ * @method void setSubpageOrder(string $value)
+ * @method string getSubpageOrder()
  * @method void setTitle(string $value)
  * @method int getTimestamp()
  * @method void setTimestamp(int $value)
@@ -41,6 +43,9 @@ class PageInfo extends Entity implements JsonSerializable {
 
 	/** @var string */
 	protected $emoji;
+
+	/** @var string */
+	protected $subpageOrder;
 
 	/** @var string */
 	protected $title;
@@ -74,6 +79,7 @@ class PageInfo extends Entity implements JsonSerializable {
 			'id' => $this->id,
 			'lastUserId' => $this->lastUserId,
 			'emoji' => $this->emoji,
+			'subpageOrder' => json_decode($this->subpageOrder ?? '[]', true, 512, JSON_THROW_ON_ERROR),
 			'title' => $this->title,
 			'timestamp' => $this->timestamp,
 			'size' => $this->size,
@@ -90,11 +96,12 @@ class PageInfo extends Entity implements JsonSerializable {
 	 * @param int         $parentId
 	 * @param string|null $lastUserId
 	 * @param string|null $emoji
+	 * @param array|null  $subpageOrder
 	 *
 	 * @throws InvalidPathException
 	 * @throws NotFoundException
 	 */
-	public function fromFile(File $file, int $parentId, ?string $lastUserId = null, ?string $emoji = null): void {
+	public function fromFile(File $file, int $parentId, ?string $lastUserId = null, ?string $emoji = null, ?string $subpageOrder = null): void {
 		$this->setId($file->getId());
 		// Set folder name as title for all index pages except the collective landing page
 		if ($parentId !== 0 && 0 === strcmp($file->getName(), self::INDEX_PAGE_TITLE . self::SUFFIX)) {
@@ -112,6 +119,9 @@ class PageInfo extends Entity implements JsonSerializable {
 		}
 		if (null !== $emoji) {
 			$this->setEmoji($emoji);
+		}
+		if (null !== $subpageOrder) {
+			$this->setSubpageOrder($subpageOrder);
 		}
 		$this->setParentId($parentId);
 	}

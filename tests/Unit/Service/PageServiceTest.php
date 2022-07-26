@@ -449,4 +449,39 @@ class PageServiceTest extends TestCase {
 		$this->expectExceptionMessage('Not allowed to move a page to itself');
 		$this->service->rename($this->collectiveId, 1, 1, 'New title', $this->userId);
 	}
+
+	public function testVerifySubpageOrder() {
+		// valid
+		$this->service->verifySubpageOrder(null);
+		$this->service->verifySubpageOrder('[]');
+		$this->service->verifySubpageOrder('[1]');
+		$this->service->verifySubpageOrder('[1, 2]');
+		$this->service->verifySubpageOrder('[1,2,9999]');
+
+		$this->expectException(NotPermittedException::class);
+		$this->expectExceptionMessage('Invalid format of subpage order');
+
+		$this->service->verifySubpageOrder(1);
+	}
+
+	public function testVerifySubpageOrderInvalid() {
+		$this->expectException(NotPermittedException::class);
+		$this->expectExceptionMessage('Invalid format of subpage order');
+
+		$this->service->verifySubpageOrder('string');
+	}
+
+	public function testVerifySubpageOrderInvalid2() {
+		$this->expectException(NotPermittedException::class);
+		$this->expectExceptionMessage('Invalid format of subpage order');
+
+		$this->service->verifySubpageOrder('[string]');
+	}
+
+	public function testVerifySubpageOrderInvalid3() {
+		$this->expectException(NotPermittedException::class);
+		$this->expectExceptionMessage('Invalid format of subpage order');
+
+		$this->service->verifySubpageOrder('{a: b}');
+	}
 }

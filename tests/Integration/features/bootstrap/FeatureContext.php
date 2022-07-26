@@ -495,6 +495,34 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @When user :user sets subpageOrder for page :page to :subpageOrder with parentPath :parentPath in :collective
+	 * @When user :user :fails to set subpageOrder for page :page to :subpageOrder with parentPath :parentPath in :collective
+	 *
+	 * @param string      $user
+	 * @param string      $page
+	 * @param string      $subpageOrder
+	 * @param string      $parentPath
+	 * @param string      $collective
+	 * @param string|null $fail
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userSetsPageSubpageOrder(string $user, string $page, string $subpageOrder, string $parentPath, string $collective, ?string $fail = null): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$pageId = $this->pageIdByName($collectiveId, $page);
+		$parentId = $this->getParentId($collectiveId, $parentPath);
+		$formData = new TableNode([['subpageOrder', $subpageOrder]]);
+		$this->sendRequest('PUT', '/apps/collectives/_api/' . $collectiveId . '/_pages/parent/' . $parentId . '/page/' . $pageId . '/subpageOrder', $formData);
+		if ("fails" === $fail) {
+			$this->assertStatusCode(403);
+		} else {
+			$this->assertStatusCode(200);
+			$this->assertPageKeyValue($pageId, 'subpageOrder', json_decode($subpageOrder, true, 512, JSON_THROW_ON_ERROR));
+		}
+	}
+
+	/**
 	 * @When user :user gets setting :key with value :value
 	 *
 	 * @param string $user
@@ -1231,10 +1259,10 @@ class FeatureContext implements Context {
 	/**
 	 * @param int       $id
 	 * @param string    $key
-	 * @param string    $value
+	 * @param mixed     $value
 	 * @param bool|null $revert
 	 */
-	private function assertPageKeyValue(string $id, string $key, string $value, ?bool $revert = false): void {
+	private function assertPageKeyValue(int $id, string $key, $value, ?bool $revert = false): void {
 		$jsonBody = $this->getJson();
 		$page = $jsonBody['data'];
 

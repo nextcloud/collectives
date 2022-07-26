@@ -32,7 +32,12 @@ Feature: collectivePages
 
   Scenario: Change page emoji
     When user "jane" sets emoji for page "firstpage" to "🍏" with parentPath "Readme.md" in "mycollective"
-    Then user "jane" sets emoji for page "firstpage" to "" with parentPath "Readme.md" in "mycollective"
+    And user "jane" sets emoji for page "firstpage" to "" with parentPath "Readme.md" in "mycollective"
+
+  Scenario: Change page subpageOrder
+    When user "jane" sets subpageOrder for page "firstpage" to "[]" with parentPath "Readme.md" in "mycollective"
+    And user "jane" sets subpageOrder for page "firstpage" to "[1,2]" with parentPath "Readme.md" in "mycollective"
+    And user "jane" fails to set subpageOrder for page "firstpage" to "[invalid]" with parentPath "Readme.md" in "mycollective"
 
   Scenario: Fail to delete a page with subpages
     When user "jane" fails to delete page "firstpage" with parentPath "Readme.md" in "mycollective"
@@ -64,6 +69,7 @@ Feature: collectivePages
     And user "john" fails to touch page "secondpage" with parentPath "Readme.md" in "mycollective"
     And user "john" fails to rename page "secondpage" to "newnamepage" with parentPath "Readme.md" in "mycollective"
     And user "john" fails to set emoji for page "secondpage" to "🍏" with parentPath "Readme.md" in "mycollective"
+    And user "john" fails to set subpageOrder for page "secondpage" to "[]" with parentPath "Readme.md" in "mycollective"
     And user "john" fails to delete page "secondpage" with parentPath "Readme.md" in "mycollective"
 
   Scenario: Trash and delete collective and circle with all remaining pages

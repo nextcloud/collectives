@@ -34,6 +34,7 @@ class Collective extends Entity implements JsonSerializable {
 		Constants::PERMISSION_DELETE;
 
 	public const pageOrders = [
+		0 => 'byOrder',
 		1 => 'byTimestamp',
 		2 => 'byTitle',
 	];

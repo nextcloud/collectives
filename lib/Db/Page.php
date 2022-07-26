@@ -16,6 +16,8 @@ use OCP\AppFramework\Db\Entity;
  * @method void setLastUserId(string $value)
  * @method string getEmoji()
  * @method void setEmoji(string $value)
+ * @method string getSubpageOrder()
+ * @method void setSubpageOrder(string $value)
  */
 class Page extends Entity implements JsonSerializable {
 	/** @var int */
@@ -27,12 +29,16 @@ class Page extends Entity implements JsonSerializable {
 	/** @var string */
 	protected $emoji;
 
+	/** @var string */
+	protected $subpageOrder;
+
 	public function jsonSerialize(): array {
 		return [
 			'id' => $this->id,
 			'fileId' => $this->fileId,
 			'lastUserId' => $this->lastUserId,
 			'emoji' => $this->emoji,
+			'subpageOrder' => json_decode($this->getSubpageOrder() ?? '[]', true, 512, JSON_THROW_ON_ERROR),
 		];
 	}
 }

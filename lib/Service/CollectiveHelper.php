@@ -5,6 +5,8 @@ namespace OCA\Collectives\Service;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Db\CollectiveUserSettingsMapper;
 use OCA\Collectives\Model\CollectiveInfo;
+use OCP\AppFramework\Db\MultipleObjectsReturnedException;
+use OCP\DB\Exception;
 
 class CollectiveHelper {
 	/** @var CollectiveMapper */
@@ -53,7 +55,7 @@ class CollectiveHelper {
 			$userPageOrder = null;
 			if ($getUserSettings) {
 				// TODO: merge queries for collective and user settings into one?
-				$userPageOrder = $this->collectiveUserSettingsMapper->getPageOrder($c->getId(), $userId) ?: $c->getPageOrder();
+				$userPageOrder = $this->collectiveUserSettingsMapper->getPageOrder($c->getId(), $userId) ?? $c->getPageOrder();
 			}
 			$collectiveInfos[] = new CollectiveInfo($c,
 				$circles[$cid]->getSanitizedName(),
