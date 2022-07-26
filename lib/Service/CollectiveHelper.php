@@ -5,8 +5,6 @@ namespace OCA\Collectives\Service;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Db\CollectiveUserSettingsMapper;
 use OCA\Collectives\Model\CollectiveInfo;
-use OCP\AppFramework\Db\MultipleObjectsReturnedException;
-use OCP\DB\Exception;
 
 class CollectiveHelper {
 	/** @var CollectiveMapper */
@@ -46,7 +44,9 @@ class CollectiveHelper {
 	public function getCollectivesForUser(string $userId, bool $getLevel = true, bool $getUserSettings = true): array {
 		$collectiveInfos = [];
 		$circles = $this->circleHelper->getCircles($userId);
-		$cids = array_map(function($circle) { return $circle->getSingleId(); }, $circles);
+		$cids = array_map(function ($circle) {
+			return $circle->getSingleId();
+		}, $circles);
 		$circles = array_combine($cids, $circles);
 		$collectives = $this->collectiveMapper->findByCircleIds($cids);
 		foreach ($collectives as $c) {
@@ -78,7 +78,9 @@ class CollectiveHelper {
 	public function getCollectivesTrashForUser(string $userId): array {
 		$collectiveInfos = [];
 		$circles = $this->circleHelper->getCircles($userId);
-		$cids = array_map(function($circle) { return $circle->getSingleId(); }, $circles);
+		$cids = array_map(function ($circle) {
+			return $circle->getSingleId();
+		}, $circles);
 		$circles = array_combine($cids, $circles);
 		$collectives = $this->collectiveMapper->findTrashByCircleIdsAndUser($cids, $userId);
 		foreach ($collectives as $c) {
