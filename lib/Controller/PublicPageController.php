@@ -242,6 +242,30 @@ class PublicPageController extends PublicShareController {
 	/**
 	 * @PublicPage
 	 *
+	 * @param int         $parentId
+	 * @param int         $id
+	 * @param string|null $subpageOrder
+	 *
+	 * @return DataResponse
+	 */
+	public function setSubpageOrder(int $parentId, int $id, ?string $subpageOrder = null): DataResponse {
+		return $this->handleErrorResponse(function () use ($parentId, $id, $subpageOrder): array {
+			$this->checkEditPermissions();
+			$owner = $this->getShare()->getOwner();
+			$collectiveId = $this->getShare()->getCollectiveId();
+			$pageInfo = $this->service->setSubpageOrder($collectiveId, $parentId, $id, $subpageOrder, $owner);
+			// Shares don't have a collective path
+			$pageInfo->setCollectivePath('');
+			$pageInfo->setShareToken($this->getToken());
+			return [
+				"data" => $pageInfo
+			];
+		}, $this->logger);
+	}
+
+	/**
+	 * @PublicPage
+	 *
 	 * @param int $parentId
 	 * @param int $id
 	 *

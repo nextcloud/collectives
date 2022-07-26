@@ -174,8 +174,9 @@ class PageService {
 		}
 		$lastUserId = ($page !== null) ? $page->getLastUserId() : null;
 		$emoji = ($page !== null) ? $page->getEmoji() : null;
+		$subpageOrder = ($page !== null) ? $page->getSubpageOrder() : null;
 		try {
-			$pageInfo->fromFile($file, $this->getParentPageId($file), $lastUserId, $emoji);
+			$pageInfo->fromFile($file, $this->getParentPageId($file), $lastUserId, $emoji, $subpageOrder);
 		} catch (FilesNotFoundException | InvalidPathException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
@@ -187,13 +188,17 @@ class PageService {
 	 * @param int         $fileId
 	 * @param string      $userId
 	 * @param string|null $emoji
+	 * @param string|null $subpageOrder
 	 */
-	private function updatePage(int $fileId, string $userId, ?string $emoji = null): void {
+	private function updatePage(int $fileId, string $userId, ?string $emoji = null, ?string $subpageOrder = null): void {
 		$page = new Page();
 		$page->setFileId($fileId);
 		$page->setLastUserId($userId);
 		if ($emoji) {
 			$page->setEmoji($emoji);
+		}
+		if ($subpageOrder) {
+			$page->setSubpageOrder($subpageOrder);
 		}
 		$this->pageMapper->updateOrInsert($page);
 	}
@@ -702,6 +707,56 @@ class PageService {
 		$pageInfo->setLastUserId($userId);
 		$pageInfo->setEmoji($emoji);
 		$this->updatePage($pageInfo->getId(), $userId, $emoji);
+		return $pageInfo;
+	}
+
+	/**
+	 * @param string|null $subpageOrder
+	 *
+	 * @return void
+	 * @throws NotPermittedException
+	 */
+	public function verifySubpageOrder(?string $subpageOrder): void {
+		if ($subpageOrder) {
+			try {
+				$subpageOrderDecoded = json_decode($subpageOrder, true, 512, JSON_THROW_ON_ERROR);
+				if (!is_array($subpageOrderDecoded)) {
+					throw new NotPermittedException();
+				}
+				foreach ($subpageOrderDecoded as $pageId) {
+					if (!is_int($pageId)) {
+						throw new NotPermittedException();
+					}
+				}
+			} catch (\JsonException | NotPermittedException $e) {
+				throw new NotPermittedException('Invalid format of subpage order');
+			}
+		}
+	}
+
+	/**
+	 * @param int         $collectiveId
+	 * @param int         $parentId
+	 * @param int         $id
+	 * @param string|null $subpageOrder
+	 * @param string      $userId
+	 *
+	 * @return PageInfo
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function setSubpageOrder(int $collectiveId, int $parentId, int $id, ?string $subpageOrder, string $userId): PageInfo {
+		$this->verifyEditPermissions($collectiveId, $userId);
+		$folder = $this->getFolder($collectiveId, $parentId, $userId);
+		$file = $this->nodeHelper->getFileById($folder, $id);
+		$pageInfo = $this->getPageByFile($file);
+
+		$this->verifySubpageOrder($subpageOrder);
+
+		$pageInfo->setSubpageOrder($subpageOrder);
+		$pageInfo->setLastUserId($userId);
+		$this->updatePage($pageInfo->getId(), $userId, null, $subpageOrder);
 		return $pageInfo;
 	}
 

@@ -156,6 +156,26 @@ class PageController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 *
+	 * @param int         $collectiveId
+	 * @param int         $parentId
+	 * @param int         $id
+	 * @param string|null $subpageOrder
+	 *
+	 * @return DataResponse
+	 */
+	public function setSubpageOrder(int $collectiveId, int $parentId, int $id, ?string $subpageOrder = null): DataResponse {
+		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $id, $subpageOrder): array {
+			$userId = $this->getUserId();
+			$pageInfo = $this->service->setSubpageOrder($collectiveId, $parentId, $id, $subpageOrder, $userId);
+			return [
+				"data" => $pageInfo
+			];
+		}, $this->logger);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 *
 	 * @param int $collectiveId
 	 * @param int $parentId
 	 * @param int $id
