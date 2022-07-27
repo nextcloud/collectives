@@ -28,6 +28,7 @@
 					<input v-tooltip="renameDisabledTooltip"
 						type="submit"
 						value=""
+						:aria-label="t('collectives', 'Save new collective name')"
 						class="icon-confirm"
 						:class="{ 'icon-loading-small': loading('renameCollective') }"
 						:disabled="!isCollectiveOwner(collective)">

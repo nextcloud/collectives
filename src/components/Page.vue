@@ -78,13 +78,18 @@
 				:last-user-id="currentPage.lastUserId"
 				:is-landing-page="landingPage"
 				:is-template="isTemplatePage" />
-			<Actions v-show="!showing('sidebar')">
+			<Actions v-if="!showing('sidebar')">
 				<ActionButton icon="icon-menu-sidebar"
+					:aria-label="t('collectives', 'Toggle page sidebar')"
+					aria-controls="app-sidebar-vue"
 					:close-after-click="true"
 					@click="toggle('sidebar')" />
 			</Actions>
 		</h1>
-		<div v-show="showRichText" id="text-container" :key="'text-' + currentPage.id">
+		<div v-show="showRichText"
+			id="text-container"
+			:key="'text-' + currentPage.id"
+			:aria-label="t('collectives', 'Page content')">
 			<RichText :key="`show-${currentPage.id}`"
 				:as-placeholder="waitForEditor"
 				:current-page="currentPage"
