@@ -1,11 +1,20 @@
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { showError, showSuccess } from '@nextcloud/dialogs'
-import { DELETE_PAGE, GET_PAGES, MOVE_PAGE, NEW_PAGE, NEW_TEMPLATE, SET_PAGE_EMOJI } from '../store/actions.js'
+import {
+	DELETE_PAGE,
+	GET_PAGES,
+	MOVE_PAGE,
+	NEW_PAGE,
+	NEW_TEMPLATE,
+	SET_PAGE_EMOJI,
+	SET_PAGE_SUBPAGE_ORDER,
+} from '../store/actions.js'
 import { scrollToPage } from '../util/scrollToElement.js'
 
 export default {
 	computed: {
 		...mapState({
+			pages: (state) => state.pages.pages,
 			newPageId: (state) => state.pages.newPage.id,
 		}),
 
@@ -15,6 +24,7 @@ export default {
 			'newPagePath',
 			'pagePath',
 			'pageTitle',
+			'sortedSubpages',
 			'templatePage',
 		]),
 	},
@@ -29,6 +39,7 @@ export default {
 			dispatchNewPage: NEW_PAGE,
 			dispatchNewTemplate: NEW_TEMPLATE,
 			dispatchSetPageEmoji: SET_PAGE_EMOJI,
+			dispatchSetPageSubpageOrder: SET_PAGE_SUBPAGE_ORDER,
 			dispatchMovePage: MOVE_PAGE,
 			dispatchDeletePage: DELETE_PAGE,
 		}),
@@ -86,6 +97,9 @@ export default {
 				console.error(e)
 				showError(t('collectives', 'Could not create the page'))
 			}
+
+			// Append new page to parent page subpageOrder
+			await this.subpageOrderAdd(parentId, this.newPageId)
 		},
 
 		/**
@@ -107,18 +121,29 @@ export default {
 		/**
 		 * Move a page to another parent
 		 *
-		 * @param {number} newParentPageId ID of the new parent page
+		 * @param {number} oldParentId ID of the old parent page
+		 * @param {number} newParentId ID of the new parent page
 		 * @param {number} pageId ID of the page
+		 * @param {number} newIndex New index for pageId
 		 */
-		async movePage(newParentPageId, pageId) {
+		async movePage(oldParentId, newParentId, pageId, newIndex) {
+			// Add page to subpageOrder of old parent first to ensure correct sorting
+			// Don't await response in order to prevent jumping around
+			this.subpageOrderAdd(newParentId, pageId, newIndex)
+
+			// Move subpage to new parent
 			try {
-				await this.dispatchMovePage({ newParentPageId, pageId })
+				await this.dispatchMovePage({ newParentId, pageId })
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not move page'))
 				return
 			}
-			showSuccess(t('collectives', `Page ${this.pageTitle(pageId)} moved to ${this.pageTitle(newParentPageId)}`))
+
+			// Remove page from subpageOrder of old parent last (ensures correct sorting in case of errors)
+			await this.subpageOrderDelete(oldParentId, pageId)
+
+			showSuccess(t('collectives', `Page ${this.pageTitle(pageId)} moved to ${this.pageTitle(newParentId)}`))
 		},
 
 		/**
@@ -143,7 +168,102 @@ export default {
 			if (currentPageId === pageId) {
 				this.$router.push(`/${encodeURIComponent(this.currentCollective.name)}`)
 			}
+
+			// Delete pageId from parent page subpageOrder
+			await this.subpageOrderDelete(parentId, pageId)
+
 			showSuccess(t('collectives', 'Page deleted'))
+		},
+
+		/**
+		 * Delete pageId from subpageOrder of parent page
+		 *
+		 * @param {number} parentId ID of the parent page
+		 * @param {number} pageId ID of the page to remove
+		 */
+		async subpageOrderDelete(parentId, pageId) {
+			const parentPage = this.pages.find(p => (p.id === parentId))
+			const subpageOrder = parentPage.subpageOrder
+				.filter(id => (id !== pageId))
+
+			try {
+				await this.dispatchSetPageSubpageOrder({
+					parentId: parentPage.parentId,
+					pageId: parentId,
+					subpageOrder,
+				})
+			} catch (e) {
+				showError(t('collectives', 'Could not change page order'))
+				throw e
+			}
+		},
+
+		/**
+		 * Add pageId to subpageOrder of parent page at specified index
+		 * If no index is provided, append to the end.
+		 *
+		 * Build subpageOrder of parent page to maintain the displayed order. If no subpageOrder
+		 * was stored before or it missed pages, pages would jump around otherwise.
+		 *
+		 * @param {number} parentId ID of the parent page
+		 * @param {number} pageId ID of the page to remove
+		 * @param {number} newIndex New index for pageId
+		 */
+		async subpageOrderAdd(parentId, pageId, newIndex) {
+			const parentPage = this.pages.find(p => (p.id === parentId))
+
+			// Get current subpage order of parentId
+			const subpageOrder = this.sortedSubpages(parentId)
+				.map(p => p.id)
+				.filter(id => (id !== pageId))
+
+			if (newIndex) {
+				// Add pageId to index position
+				subpageOrder.splice(newIndex, 0, pageId)
+			} else {
+				// Append pageId to the end if no index is provided
+				subpageOrder.push(pageId)
+			}
+
+			try {
+				await this.dispatchSetPageSubpageOrder({
+					parentId: parentPage.parentId,
+					pageId: parentId,
+					subpageOrder,
+				})
+			} catch (e) {
+				showError(t('collectives', 'Could not change page order'))
+				throw e
+			}
+		},
+
+		/**
+		 * Move pageId to new index in subpageOrder of parent page
+		 *
+		 * Build subpageOrder of parent page to maintain the displayed order. If no subpageOrder
+		 * was stored before or it missed pages, pages would jump around otherwise.
+		 *
+		 * @param {number} parentId ID of the parent page
+		 * @param {number} pageId ID of the page to remove
+		 * @param {number} newIndex New index for pageId
+		 */
+		async subpageOrderUpdate(parentId, pageId, newIndex) {
+			const parentPage = this.pages.find(p => (p.id === parentId))
+			const subpageOrder = this.sortedSubpages(parentId)
+				.map(p => p.id)
+			subpageOrder.splice(subpageOrder.findIndex(id => id === pageId), 1)
+			subpageOrder.splice(newIndex, 0, pageId)
+
+			try {
+				await this.dispatchSetPageSubpageOrder({
+					parentId: parentPage.parentId,
+					pageId: parentId,
+					subpageOrder,
+				})
+			} catch (e) {
+				showError(t('collectives', 'Could not change page order'))
+				throw e
+			}
 		},
 	},
 }

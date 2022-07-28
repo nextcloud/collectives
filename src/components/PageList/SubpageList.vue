@@ -26,11 +26,12 @@
 				:allow-sorting="false" />
 			<Draggable v-if="subpagesView"
 				:list="subpagesView"
-				:parent-page-id="page.id"
+				:parent-id="page.id"
 				:allow-sorting="allowSorting"
 				:revert-on-spill="revertOnSpill">
 				<SubpageList v-for="subpage in subpagesView"
 					:key="subpage.id"
+					:data-page-id="subpage.id"
 					:page="subpage"
 					:level="level+1"
 					:filter-string="filterString"
