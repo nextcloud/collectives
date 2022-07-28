@@ -19,9 +19,19 @@
 			<Actions class="toggle"
 				:aria-label="t('collectives', 'Sort order')">
 				<template #icon>
-					<SortAlphabeticalAscendingIcon v-if="sortedBy('byTitle')" :size="16" />
+					<SortAscendingIcon v-if="sortedBy('byOrder')" :size="16" />
+					<SortAlphabeticalAscendingIcon v-else-if="sortedBy('byTitle')" :size="16" />
 					<SortClockAscendingOutlineIcon v-else :size="16" />
 				</template>
+				<ActionButton class="toggle-button"
+					:class="{selected: sortedBy('byOrder')}"
+					:close-after-click="true"
+					@click="sortPagesAndScroll('byOrder')">
+					<template #icon>
+						<SortAscendingIcon :size="16" />
+					</template>
+					{{ t('collectives', 'Sort by custom order') }}
+				</ActionButton>
 				<ActionButton class="toggle-button"
 					:class="{selected: sortedBy('byTimestamp')}"
 					:close-after-click="true"
@@ -75,6 +85,7 @@
 					:allow-sorting="false" />
 				<SubpageList v-for="page in subpages"
 					:key="page.id"
+					:data-page-id="page.id"
 					:page="page"
 					:level="1"
 					:filter-string="filterString"
@@ -97,6 +108,7 @@ import SubpageList from './PageList/SubpageList.vue'
 import Item from './PageList/Item.vue'
 import PagesTemplateIcon from './Icon/PagesTemplateIcon.vue'
 import SortAlphabeticalAscendingIcon from 'vue-material-design-icons/SortAlphabeticalAscending'
+import SortAscendingIcon from 'vue-material-design-icons/SortAscending'
 import SortClockAscendingOutlineIcon from 'vue-material-design-icons/SortClockAscendingOutline'
 import { showError } from '@nextcloud/dialogs'
 import { scrollToPage } from '../util/scrollToElement.js'
@@ -114,13 +126,14 @@ export default {
 		PagesTemplateIcon,
 		SubpageList,
 		SortAlphabeticalAscendingIcon,
+		SortAscendingIcon,
 		SortClockAscendingOutlineIcon,
 	},
 
 	data() {
 		return {
 			filterString: '',
-			allowSorting: false,
+			allowSorting: true,
 		}
 	},
 
@@ -167,8 +180,8 @@ export default {
 
 	methods: {
 		...mapMutations([
+			'setPageOrder',
 			'show',
-			'sortPages',
 			'toggleTemplates',
 		]),
 
@@ -182,7 +195,7 @@ export default {
 		 * @param { string } order Sort order
 		 */
 		sortPagesAndScroll(order) {
-			this.sortPages(order)
+			this.setPageOrder(order)
 			if (!this.isPublic) {
 				this.dispatchSetUserPageOrder({ id: this.currentCollective.id, pageOrder: pageOrders[order] })
 					.catch((error) => {

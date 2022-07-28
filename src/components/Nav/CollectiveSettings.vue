@@ -270,7 +270,7 @@ export default {
 			const collective = { id: this.collective.id }
 			collective.pageOrder = parseInt(pageOrder)
 			this.dispatchUpdateCollective(collective).then(() => {
-				this.sortPages(pageOrdersByNumber[pageOrder])
+				this.setPageOrder(pageOrdersByNumber[pageOrder])
 				showSuccess(t('collectives', 'Default page order updated'))
 				this.done('updateCollectivePageOrder_' + pageOrder)
 			}).catch((error) => {
@@ -283,7 +283,7 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['load', 'done', 'sortPages']),
+		...mapMutations(['load', 'done', 'setPageOrder']),
 
 		...mapActions({
 			dispatchRenameCircle: RENAME_CIRCLE,

@@ -1,6 +1,6 @@
 <template>
 	<draggable :list="list"
-		:data-parent-page-id="parentPageId"
+		:data-parent-id="parentId"
 		:disabled="disableDragging"
 		:group="{ name: 'page-list', pull: true, put: true }"
 		draggable=".page-list-drag-item"
@@ -13,13 +13,14 @@
 		:delay="500"
 		:delay-on-touch-only="true"
 		:touch-start-threshold="3"
-		:invert-swap="false"
+		:invert-swap="true"
 		:swap-threshold="0.65"
 		:fallback-on-body="true"
 		:empty-insert-threshold="4"
 		direction="vertical"
 		:set-data="setData"
 		:move="onMove"
+		@update="onUpdate"
 		@add="onAdd">
 		<template #header>
 			<slot name="header" />
@@ -49,7 +50,7 @@ export default {
 			type: Array,
 			required: true,
 		},
-		parentPageId: {
+		parentId: {
 			type: Number,
 			required: true,
 		},
@@ -72,6 +73,7 @@ export default {
 	computed: {
 		...mapGetters([
 			'collapsed',
+			'visibleSubpages',
 		]),
 	},
 
@@ -81,12 +83,10 @@ export default {
 		},
 
 		onMove(ev, origEv) {
-			const parentPageId = Number(ev.to.dataset.parentPageId)
-
 			// Expand subpage list
-			if (this.collapsed(parentPageId)) {
-				console.debug('expand', parentPageId)
-				this.expand(parentPageId)
+			const pageId = ev.related.dataset.pageId
+			if (this.collapsed(pageId)) {
+				this.expand(pageId)
 			}
 
 			if (!this.allowSorting) {
@@ -98,11 +98,22 @@ export default {
 			}
 		},
 
-		onAdd(ev) {
+		onUpdate(ev) {
+			// Sorting in one list
 			this.disableDragging = true
 			const pageId = Number(ev.originalEvent.dataTransfer.getData('pageId'))
-			const parentPageId = Number(ev.to.dataset.parentPageId)
-			this.movePage(parentPageId, pageId)
+			const parentId = Number(ev.to.dataset.parentId)
+			this.subpageOrderUpdate(parentId, pageId, ev.newDraggableIndex)
+			this.disableDragging = false
+		},
+
+		onAdd(ev) {
+			// Moving from one list to another
+			this.disableDragging = true
+			const pageId = Number(ev.originalEvent.dataTransfer.getData('pageId'))
+			const oldParentId = Number(ev.from.dataset.parentId)
+			const newParentId = Number(ev.to.dataset.parentId)
+			this.movePage(oldParentId, newParentId, pageId, ev.newDraggableIndex)
 			this.disableDragging = false
 		},
 	},

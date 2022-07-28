@@ -21,6 +21,7 @@ import {
 	RENAME_PAGE,
 	MOVE_PAGE,
 	SET_PAGE_EMOJI,
+	SET_PAGE_SUBPAGE_ORDER,
 	DELETE_PAGE,
 	GET_BACKLINKS,
 } from './actions.js'
@@ -148,9 +149,35 @@ export default {
 			return state.pages.find(p => (p.id === fileId))
 		},
 
+		sortedSubpages(state, getters) {
+			return (pageId) => {
+				const subpages = state.pages
+					.filter(p => p.parentId === pageId)
+					// Disregard template pages, they're listed first manually
+					.filter(p => p.title !== TEMPLATE_PAGE)
+
+				// Use personal sorting filter if applicable
+				if (getters.sortBy !== 'byOrder') {
+					return subpages.sort(getters.sortOrder)
+				}
+
+				const subpageOrder = state.pages.find(p => p.id === pageId).subpageOrder
+				const sortedPages = []
+				for (const id of subpageOrder) {
+					const page = subpages.find(p => p.id === id)
+					if (page) {
+						sortedPages.push(page)
+						subpages.splice(subpages.findIndex(p => p.id === page.id), 1)
+					}
+				}
+				// sort pages without custom order by title
+				return sortedPages.concat(subpages.sort(sortOrders.byTitle))
+			}
+		},
+
 		pagesTreeWalk: (_state, getters) => (parentId = 0) => {
 			const pages = []
-			for (const page of getters.visibleSubpages(parentId).sort(getters.sortOrderDefault)) {
+			for (const page of getters.visibleSubpages(parentId)) {
 				pages.push(page)
 				for (const subpage of getters.pagesTreeWalk(page.id)) {
 					pages.push(subpage)
@@ -160,25 +187,22 @@ export default {
 		},
 
 		visibleSubpages: (state, getters) => (parentId) => {
-			return state.pages
-				.filter(p => p.parentId === parentId)
-				.filter(p => p.title !== TEMPLATE_PAGE)
-				.sort(getters.sortOrder)
+			return getters.sortedSubpages(parentId)
 		},
 
 		sortOrder(state, getters) {
-			if (getters.sortBy === 'byTitle') {
-				return sortOrders.byTitle
-			} else {
+			if (getters.sortBy === 'byTimestamp') {
 				return sortOrders.byTimestamp
+			} else {
+				return getters.sortOrderDefault
 			}
 		},
 
 		sortOrderDefault(state, getters) {
-			if (getters.sortByDefault === 'byTitle') {
-				return sortOrders.byTitle
-			} else {
+			if (getters.sortByDefault === 'byTimestamp') {
 				return sortOrders.byTimestamp
+			} else {
+				return sortOrders.byTitle
 			}
 		},
 
@@ -210,6 +234,10 @@ export default {
 
 		emojiUrl(_state, getters) {
 			return (parentId, pageId) => `${getters.pageUrl(parentId, pageId)}/emoji`
+		},
+
+		subpageOrderUrl(_state, getters) {
+			return (parentId, pageId) => `${getters.pageUrl(parentId, pageId)}/subpageOrder`
 		},
 
 		touchUrl(_state, getters) {
@@ -268,7 +296,7 @@ export default {
 			state.pages = []
 		},
 
-		sortPages(state, order) {
+		setPageOrder(state, order) {
 			state.sortBy = order
 		},
 
@@ -290,7 +318,6 @@ export default {
 	},
 
 	actions: {
-
 		/**
 		 * Get list of all pages
 		 *
@@ -397,23 +424,29 @@ export default {
 		 * @param {object} store.state state of the store
 		 * @param {Function} store.dispatch dispatch actions
 		 * @param {object} page the page
-		 * @param {number} page.newParentPageId ID of the new parent page
+		 * @param {number} page.newParentId ID of the new parent page
 		 * @param {number} page.pageId ID of the page
 		 */
-		async [MOVE_PAGE]({ commit, getters, state, dispatch }, { newParentPageId, pageId }) {
+		async [MOVE_PAGE]({ commit, getters, state, dispatch }, { newParentId, pageId }) {
 			commit('load', 'pagelist')
-			const url = getters.pageUrl(newParentPageId, pageId)
 			const page = { ...state.pages.find(p => p.id === pageId) }
+
+			// Save a clone of the page to restore in case of errors
 			const pageClone = { ...page }
-			pageClone.parentId = newParentPageId
-			commit(UPDATE_PAGE, pageClone)
+
+			// Update page in store first to avoid page order jumping around
+			page.parentId = newParentId
+			commit(UPDATE_PAGE, page)
+
+			const url = getters.pageUrl(newParentId, pageId)
 			try {
 				const response = await axios.put(url)
 				commit(UPDATE_PAGE, response.data.data)
 			} catch (e) {
-				commit(UPDATE_PAGE, page)
+				commit(UPDATE_PAGE, pageClone)
 				throw e
 			}
+
 			// Reload the page list if moved page had subpages (to get their updated paths)
 			if (getters.visibleSubpages(pageId).length > 0) {
 				await dispatch(GET_PAGES, false)
@@ -438,6 +471,42 @@ export default {
 			const response = await axios.put(getters.emojiUrl(parentId, pageId), { emoji })
 			commit(UPDATE_PAGE, response.data.data)
 			commit('done', `pageEmoji-${pageId}`)
+		},
+
+		/**
+		 *
+		 * Set subpageOrder for a page
+		 *
+		 * @param {object} store the vuex store
+		 * @param {Function} store.commit commit changes
+		 * @param {object} store.getters getters of the store
+		 * @param {object} store.state state of the store
+		 * @param {object} page the page
+		 * @param {number} page.parentId ID of the parent page
+		 * @param {number} page.pageId ID of the page
+		 * @param {Array} page.subpageOrder subpage order for the page
+		 */
+		async [SET_PAGE_SUBPAGE_ORDER]({ commit, getters, state }, { parentId, pageId, subpageOrder }) {
+			const page = { ...state.pages.find(p => p.id === pageId) }
+
+			// Save a clone of the page to restore in case of errors
+			const pageClone = { ...page }
+
+			// Update page in store first to avoid page order jumping around
+			page.subpageOrder = subpageOrder
+			commit(UPDATE_PAGE, page)
+
+			try {
+				const response = await axios.put(
+					getters.subpageOrderUrl(parentId, pageId),
+					{ subpageOrder: JSON.stringify(subpageOrder) }
+				)
+				commit(UPDATE_PAGE, response.data.data)
+			} catch (e) {
+
+				commit(UPDATE_PAGE, pageClone)
+				throw e
+			}
 		},
 
 		/**
