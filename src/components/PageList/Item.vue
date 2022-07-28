@@ -159,7 +159,6 @@ export default {
 		...mapGetters([
 			'currentPage',
 			'collapsed',
-			'pageParents',
 		]),
 
 		isActive() {

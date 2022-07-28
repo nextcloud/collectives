@@ -59,16 +59,6 @@ export default {
 			return [filePath, titlePart].filter(Boolean).join('/')
 		},
 
-		pageParents: (state, getters) => (pageId) => {
-			const pageList = []
-			const parentId = state.pages.find(p => (p.id === pageId)).parentId
-			if (parentId && (parentId !== 0)) {
-				pageList.push(getters.pageParents(state.pages.find(p => (p.id === pageId)).parentId))
-			}
-			pageList.push(pageId)
-			return pageList.flat()
-		},
-
 		currentPages(state, getters) {
 			// Return landing page
 			if (!getters.pageParam
