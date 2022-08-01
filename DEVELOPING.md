@@ -18,7 +18,7 @@ To install the app manually:
 
 0. Install a [development setup](https://docs.nextcloud.com/server/21/developer_manual/app_development/tutorial.html#setup) of nextcloud.
 1. Clone this into the `apps` folder of your Nextcloud
-2. Install build tools and dependencies by running `make dev-setup`
+2. Install build tools and dependencies by running `make setup-dev`
 3. Compile NodeJS assets by running `make build`
 4. Install the circles app in Nextcloud.
 

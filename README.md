@@ -10,6 +10,7 @@ organize together. Come and gather in collectives to build shared knowledge.
   [Text app](https://github.com/nextcloud/text).
 * 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**
   for page formatting.
+* 🔎 Full-text search with automatic indexing to find content straight away.
 
 ![Screenshot of Nextcloud Collectives Version 0.2.1](https://gitlab.com/collectivecloud/collectives/-/raw/main/docs/static/images/screenshot.png)
 
@@ -17,6 +18,10 @@ organize together. Come and gather in collectives to build shared knowledge.
 
 In your Nextcloud instance, simply navigate to **»Apps«**, find the
 **»Circles«** and **»Collectives«** apps and enable them.
+
+## Requirements
+
+For full-text search to work the sqlite and pdo PHP extensions must be installed.
 
 ## Documentation and help
 
