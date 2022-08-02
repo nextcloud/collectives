@@ -22,13 +22,11 @@
 				:page="templateView"
 				:level="level+1"
 				:filter-string="filterString"
-				:is-template="true"
-				:allow-sorting="false" />
+				:is-template="true" />
 			<Draggable v-if="subpagesView"
 				:list="subpagesView"
 				:parent-id="page.id"
-				:allow-sorting="allowSorting"
-				:revert-on-spill="revertOnSpill">
+				:is-template="isTemplate">
 				<SubpageList v-for="subpage in subpagesView"
 					:key="subpage.id"
 					:data-page-id="subpage.id"
@@ -36,7 +34,6 @@
 					:level="level+1"
 					:filter-string="filterString"
 					:is-template="isTemplate"
-					:allow-sorting="allowSorting"
 					class="page-list-drag-item" />
 			</Draggable>
 		</div>
@@ -70,10 +67,6 @@ export default {
 			default: '',
 		},
 		isTemplate: {
-			type: Boolean,
-			default: false,
-		},
-		allowSorting: {
 			type: Boolean,
 			default: false,
 		},
@@ -125,12 +118,6 @@ export default {
 
 		hasVisibleSubpages() {
 			return !!this.visibleSubpages(this.page.id).length || this.considerTemplate
-		},
-
-		revertOnSpill() {
-			// TODO: revertOnSpill on nested sublists is broken with `sort: false`
-			//       see https://github.com/SortableJS/Sortable/issues/2177
-			return this.allowSorting
 		},
 	},
 

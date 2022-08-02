@@ -54,11 +54,7 @@ export default {
 			type: Number,
 			required: true,
 		},
-		allowSorting: {
-			type: Boolean,
-			default: false,
-		},
-		revertOnSpill: {
+		isTemplate: {
 			type: Boolean,
 			default: false,
 		},
@@ -73,8 +69,20 @@ export default {
 	computed: {
 		...mapGetters([
 			'collapsed',
+			'sortBy',
 			'visibleSubpages',
 		]),
+
+		revertOnSpill() {
+			// TODO: revertOnSpill on nested sublists is broken with `sort: false`
+			//       see https://github.com/SortableJS/Sortable/issues/2177
+			return this.allowSorting
+		},
+
+		allowSorting() {
+			// Disable sorting for templates and with alternative page orders
+			return !this.isTemplate && this.sortBy === 'byOrder'
+		}
 	},
 
 	methods: {

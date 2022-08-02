@@ -55,9 +55,7 @@
 		<div class="page-list">
 			<Draggable v-if="subpages"
 				:list="subpages"
-				:parent-id="collectivePage ? collectivePage.id : 0"
-				:allow-sorting="allowSorting"
-				:revert-on-spill="true">
+				:parent-id="collectivePage ? collectivePage.id : 0">
 				<template #header>
 					<Item v-if="currentCollective"
 						key="Readme"
@@ -81,15 +79,13 @@
 					:page="templateView"
 					:level="1"
 					:filter-string="filterString"
-					:is-template="true"
-					:allow-sorting="false" />
+					:is-template="true" />
 				<SubpageList v-for="page in subpages"
 					:key="page.id"
 					:data-page-id="page.id"
 					:page="page"
 					:level="1"
 					:filter-string="filterString"
-					:allow-sorting="allowSorting"
 					class="page-list-drag-item" />
 			</Draggable>
 		</div>
@@ -133,7 +129,6 @@ export default {
 	data() {
 		return {
 			filterString: '',
-			allowSorting: true,
 		}
 	},
 
