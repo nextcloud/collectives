@@ -73,6 +73,19 @@
 						:filtered-view="false"
 						class="page-list-landing-page page-list-nodrag-item"
 						@click.native="show('details')" />
+					<div v-if="!sortedBy('byOrder')" class="sort-order-container">
+						<span class="sort-order-chip">
+							{{ sortedBy('byTitle') ? t('collectives', 'Sorted by title') : t('collectives', 'Sorted by recently changed') }}
+							<Button :aria-label="t('collectives', 'Switch back to default sort order')"
+								type="tertiary-on-primary"
+								class="sort-oder-chip-button"
+								@click="sortPagesAndScroll('byOrder')">
+								<template #icon>
+									<CloseIcon :size="20" />
+								</template>
+							</Button>
+						</span>
+					</div>
 				</template>
 				<SubpageList v-if="templateView"
 					:key="templateView.id"
@@ -99,6 +112,8 @@ import { SET_COLLECTIVE_USER_SETTING_PAGE_ORDER } from '../store/actions.js'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import Actions from '@nextcloud/vue/dist/Components/Actions'
 import AppContentList from '@nextcloud/vue/dist/Components/AppContentList'
+import Button from '@nextcloud/vue/dist/Components/Button'
+import CloseIcon from 'vue-material-design-icons/Close'
 import Draggable from './PageList/Draggable.vue'
 import SubpageList from './PageList/SubpageList.vue'
 import Item from './PageList/Item.vue'
@@ -117,6 +132,8 @@ export default {
 		Actions,
 		ActionButton,
 		AppContentList,
+		Button,
+		CloseIcon,
 		Draggable,
 		Item,
 		PagesTemplateIcon,
@@ -258,5 +275,41 @@ li.toggle-button.selected {
 	top: 44px;
 	z-index: 1;
 	background-color: var(--color-main-background);
+}
+
+.sort-order-container {
+	display: flex;
+	align-items: center;
+
+	position: sticky;
+	top: 92px; // 2x 44px + 4px border-bottom
+	z-index: 1;
+	background-color: var(--color-main-background);
+	border-bottom: 4px solid var(--color-main-background);
+
+	.sort-order-chip {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+
+		height: 24px;
+		padding: 7px;
+		margin-left: 33px; // 40px - 7px
+		background-color: var(--color-primary-light);
+		border-radius: var(--border-radius-pill);
+
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+
+		.sort-oder-chip-button {
+			min-height: 20px;
+			min-width: 20px;
+			height: 20px;
+			width: 20px !important;
+			padding: 7px;
+			margin-left: 10px;
+		}
+	}
 }
 </style>
