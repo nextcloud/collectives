@@ -200,7 +200,7 @@ export default {
 
 		/**
 		 * Add pageId to subpageOrder of parent page at specified index
-		 * If no index is provided, append to the end.
+		 * If no index is provided, add to the beginning of the list.
 		 *
 		 * Build subpageOrder of parent page to maintain the displayed order. If no subpageOrder
 		 * was stored before or it missed pages, pages would jump around otherwise.
@@ -222,7 +222,7 @@ export default {
 				subpageOrder.splice(newIndex, 0, pageId)
 			} else {
 				// Append pageId to the end if no index is provided
-				subpageOrder.push(pageId)
+				subpageOrder.unshift(pageId)
 			}
 
 			try {
