@@ -243,7 +243,8 @@ export default {
 <style lang="scss" scoped>
 .app-content-list-item {
 	height: unset;
-	margin-bottom: 4px;
+	border-bottom: 4px solid var(--color-main-background);
+
 	padding-left: 0;
 	border-radius: var(--border-radius-large);
 

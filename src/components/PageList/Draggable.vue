@@ -82,7 +82,7 @@ export default {
 		allowSorting() {
 			// Disable sorting for templates and with alternative page orders
 			return !this.isTemplate && this.sortBy === 'byOrder'
-		}
+		},
 	},
 
 	methods: {
