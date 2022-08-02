@@ -62,10 +62,13 @@
 				required />
 			<input type="submit"
 				value=""
+				:aria-label="t('collectives', 'Create a new collective')"
 				class="icon-confirm"
 				:class="{ 'icon-loading-small': loading }">
 			<Actions>
-				<ActionButton icon="icon-close" @click.stop.prevent="cancelEdit" />
+				<ActionButton icon="icon-close"
+					:aria-label="t('collectives', 'Cancel creating a new collective')"
+					@click.stop.prevent="cancelEdit" />
 			</Actions>
 		</form>
 	</div>
