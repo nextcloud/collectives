@@ -365,7 +365,7 @@
       <code>$e</code>
       <code>$e</code>
     </InvalidArgument>
-    <UndefinedClass occurrences="33">
+    <UndefinedClass occurrences="34">
       <code>$e</code>
       <code>$e</code>
       <code>$e</code>
@@ -374,6 +374,7 @@
       <code>$e</code>
       <code>?Circle</code>
       <code>?FederatedUser</code>
+      <code>AutoloadNotAllowedException</code>
       <code>Circle</code>
       <code>Circle</code>
       <code>CircleNotFoundException</code>

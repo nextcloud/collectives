@@ -17,6 +17,7 @@ use OCA\Circles\Model\Circle;
 use OCA\Circles\Model\FederatedUser;
 use OCA\Circles\Model\Member;
 use OCP\AppFramework\QueryException;
+use OCP\AutoloadNotAllowedException;
 use Psr\Container\ContainerInterface;
 
 class CircleHelper {
@@ -29,7 +30,7 @@ class CircleHelper {
 	public function __construct(ContainerInterface $appContainer) {
 		try {
 			$this->circlesManager = $appContainer->get(CirclesManager::class);
-		} catch (QueryException $e) {
+		} catch (QueryException|AutoloadNotAllowedException $e) {
 			// Could not instantiate - probably circles app is disabled
 			$this->dependencyInjectionError = $e->getMessage();
 		}
