@@ -88,16 +88,16 @@
     "packages-dev": [
         {
             "name": "behat/behat",
-            "version": "v3.10.0",
+            "version": "v3.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Behat/Behat.git",
-                "reference": "a55661154079cf881ef643b303bfaf67bae3a09f"
+                "reference": "a19c72c78eb0cdf7b7c4dabfeec9eb3a282728fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Behat/Behat/zipball/a55661154079cf881ef643b303bfaf67bae3a09f",
-                "reference": "a55661154079cf881ef643b303bfaf67bae3a09f",
+                "url": "https://api.github.com/repos/Behat/Behat/zipball/a19c72c78eb0cdf7b7c4dabfeec9eb3a282728fc",
+                "reference": "a19c72c78eb0cdf7b7c4dabfeec9eb3a282728fc",
                 "shasum": ""
             },
             "require": {
@@ -105,7 +105,7 @@
                 "behat/transliterator": "^1.2",
                 "ext-mbstring": "*",
                 "php": "^7.2 || ^8.0",
-                "psr/container": "^1.0",
+                "psr/container": "^1.0 || ^2.0",
                 "symfony/config": "^4.4 || ^5.0 || ^6.0",
                 "symfony/console": "^4.4 || ^5.0 || ^6.0",
                 "symfony/dependency-injection": "^4.4 || ^5.0 || ^6.0",
@@ -114,7 +114,6 @@
                 "symfony/yaml": "^4.4 || ^5.0 || ^6.0"
             },
             "require-dev": {
-                "container-interop/container-interop": "^1.2",
                 "herrera-io/box": "~1.6.1",
                 "phpunit/phpunit": "^8.5 || ^9.0",
                 "symfony/process": "^4.4 || ^5.0 || ^6.0",
@@ -169,9 +168,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Behat/Behat/issues",
-                "source": "https://github.com/Behat/Behat/tree/v3.10.0"
+                "source": "https://github.com/Behat/Behat/tree/v3.11.0"
             },
-            "time": "2021-11-02T20:09:40+00:00"
+            "time": "2022-07-07T09:49:27+00:00"
         },
         {
             "name": "behat/gherkin",
@@ -505,16 +504,16 @@
         },
         {
             "name": "doctrine/annotations",
-            "version": "1.13.2",
+            "version": "1.13.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/annotations.git",
-                "reference": "5b668aef16090008790395c02c893b1ba13f7e08"
+                "reference": "648b0343343565c4a056bfc8392201385e8d89f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/annotations/zipball/5b668aef16090008790395c02c893b1ba13f7e08",
-                "reference": "5b668aef16090008790395c02c893b1ba13f7e08",
+                "url": "https://api.github.com/repos/doctrine/annotations/zipball/648b0343343565c4a056bfc8392201385e8d89f0",
+                "reference": "648b0343343565c4a056bfc8392201385e8d89f0",
                 "shasum": ""
             },
             "require": {
@@ -526,9 +525,10 @@
             "require-dev": {
                 "doctrine/cache": "^1.11 || ^2.0",
                 "doctrine/coding-standard": "^6.0 || ^8.1",
-                "phpstan/phpstan": "^0.12.20",
+                "phpstan/phpstan": "^1.4.10 || ^1.8.0",
                 "phpunit/phpunit": "^7.5 || ^8.0 || ^9.1.5",
-                "symfony/cache": "^4.4 || ^5.2"
+                "symfony/cache": "^4.4 || ^5.2",
+                "vimeo/psalm": "^4.10"
             },
             "type": "library",
             "autoload": {
@@ -571,9 +571,9 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/annotations/issues",
-                "source": "https://github.com/doctrine/annotations/tree/1.13.2"
+                "source": "https://github.com/doctrine/annotations/tree/1.13.3"
             },
-            "time": "2021-08-05T19:00:23+00:00"
+            "time": "2022-07-02T10:48:51+00:00"
         },
         {
             "name": "doctrine/instantiator",
@@ -2101,16 +2101,16 @@
         },
         {
             "name": "psalm/phar",
-            "version": "4.23.0",
+            "version": "4.26.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/psalm/phar.git",
-                "reference": "92700588da7c19107e4c465641ef10ac1a30e105"
+                "reference": "cb8af2e2d8ba2332b6e19938755c72269153aa34"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/psalm/phar/zipball/92700588da7c19107e4c465641ef10ac1a30e105",
-                "reference": "92700588da7c19107e4c465641ef10ac1a30e105",
+                "url": "https://api.github.com/repos/psalm/phar/zipball/cb8af2e2d8ba2332b6e19938755c72269153aa34",
+                "reference": "cb8af2e2d8ba2332b6e19938755c72269153aa34",
                 "shasum": ""
             },
             "require": {
@@ -2130,9 +2130,9 @@
             "description": "Composer-based Psalm Phar",
             "support": {
                 "issues": "https://github.com/psalm/phar/issues",
-                "source": "https://github.com/psalm/phar/tree/4.23.0"
+                "source": "https://github.com/psalm/phar/tree/4.26.0"
             },
-            "time": "2022-05-02T02:15:17+00:00"
+            "time": "2022-08-02T17:43:31+00:00"
         },
         {
             "name": "psr/cache",

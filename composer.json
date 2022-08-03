@@ -1,7 +1,8 @@
 {
     "name": "nextcloud/collectives",
+    "description": "Nextcloud Collectives",
     "type": "project",
-    "license": "AGPLv3",
+    "license": "AGPL-3.0-or-later",
     "authors": [
         {
             "name": "CollectiveCloud Team",
