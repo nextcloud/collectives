@@ -26,6 +26,7 @@
 			<Draggable v-if="subpagesView"
 				:list="subpagesView"
 				:parent-id="page.id"
+				:disable-sorting="disableSorting"
 				:is-template="isTemplate">
 				<SubpageList v-for="subpage in subpagesView"
 					:key="subpage.id"
@@ -118,6 +119,10 @@ export default {
 
 		hasVisibleSubpages() {
 			return !!this.visibleSubpages(this.page.id).length || this.considerTemplate
+		},
+
+		disableSorting() {
+			return this.filterString !== ''
 		},
 	},
 
