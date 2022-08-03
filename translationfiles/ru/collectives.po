@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-07-11 12:09+0100\n"
-"PO-Revision-Date: 2022-08-03 07:21+0000\n"
+"PO-Revision-Date: 2022-08-03 09:37+0000\n"
 "Last-Translator: Andrey Rozentals <rozenandrey@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/ru/>\n"
@@ -32,7 +32,7 @@ msgstr "Группы"
 
 #: /collectives/lib/Search/PageContentProvider.php:74
 msgid "Collectives - Page content"
-msgstr ""
+msgstr "Группы - страница содержания"
 
 #: /collectives/lib/Search/PageContentProvider.php:119
 msgid "in page {page} from collective {collective}"
@@ -40,45 +40,45 @@ msgstr ""
 
 #: /collectives/lib/Search/PageProvider.php:67
 msgid "Collectives - Pages"
-msgstr ""
+msgstr "Группы - страницы"
 
 #: /collectives/lib/Search/PageProvider.php:107
 msgid "in Collective {collective}"
-msgstr ""
+msgstr "в группе {collective}"
 
 #: /collectives/lib/Service/CollectiveService.php:162
 #, php-format
 msgid "Created collective \"%s\" for existing circle."
-msgstr ""
+msgstr "Создана группа \"%s\" для существующего круга."
 
 #: /collectives/lib/Service/CollectiveShareService.php:85
 msgid "Collective Share"
-msgstr ""
+msgstr "Групповой доступ"
 
 #: /collectives/lib/Service/CollectiveShareService.php:173
 #: /collectives/lib/Service/CollectiveShareService.php:204
 #, php-format
 msgid "You are not allowed to share %s"
-msgstr ""
+msgstr "У Вас нет прав делиться %s"
 
 #: /collectives/lib/Service/CollectiveShareService.php:177
 #, php-format
 msgid "A share for collective %s exists already"
-msgstr ""
+msgstr "Доступ группе %s открыт"
 
 #: /collectives/lib/Service/CollectiveShareService.php:208
 #, php-format
 msgid "You are not allowed to edit %s"
-msgstr ""
+msgstr "У вас нет прав на редактирование %s"
 
 #: /collectives/lib/Service/CollectiveShareService.php:212
 #: /collectives/lib/Service/CollectiveShareService.php:218
 msgid "Share not found for user"
-msgstr ""
+msgstr "Общий ресурс не найден для пользователя"
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:3
 msgid "A place for activist and community projects to build shared knowledge"
-msgstr ""
+msgstr "Место для общественных проектов по накоплению знаний"
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:4
 msgid ""
