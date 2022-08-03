@@ -1,7 +1,7 @@
 <template>
 	<draggable :list="list"
 		:data-parent-id="parentId"
-		:disabled="disableDragging"
+		:disabled="disabled"
 		:group="{ name: 'page-list', pull: true, put: true }"
 		draggable=".page-list-drag-item"
 		filter=".page-list-nodrag-item"
@@ -9,6 +9,7 @@
 		:revert-on-spill="revertOnSpill"
 		class="page-list-dragarea"
 		:remove-clone-on-hide="false"
+		:fallback-tolerance="5"
 		:animation="200"
 		:delay="500"
 		:delay-on-touch-only="true"
@@ -54,6 +55,10 @@ export default {
 			type: Number,
 			required: true,
 		},
+		disableSorting: {
+			type: Boolean,
+			default: false,
+		},
 		isTemplate: {
 			type: Boolean,
 			default: false,
@@ -62,7 +67,7 @@ export default {
 
 	data() {
 		return {
-			disableDragging: false,
+			sortableActive: false,
 		}
 	},
 
@@ -73,15 +78,24 @@ export default {
 			'visibleSubpages',
 		]),
 
+		allowSorting() {
+			// Disable sorting for templates and with alternative page orders
+			return !this.isTemplate && (this.sortBy === 'byOrder')
+		},
+
+		disabled() {
+			// Disable sortable during move/sort operation or if disabled by parent component (e.g. in filtered view)
+			// return this.sortableActive || this.disableSorting
+
+			// Also disable with alternative page orders for now.
+			// TODO: Smoothen UX if allowed to move but not to sort with alternative page orders
+			return this.sortableActive || this.disableSorting || (this.sortBy !== 'byOrder')
+		},
+
 		revertOnSpill() {
 			// TODO: revertOnSpill on nested sublists is broken with `sort: false`
 			//       see https://github.com/SortableJS/Sortable/issues/2177
 			return this.allowSorting
-		},
-
-		allowSorting() {
-			// Disable sorting for templates and with alternative page orders
-			return !this.isTemplate && this.sortBy === 'byOrder'
 		},
 	},
 
@@ -93,8 +107,10 @@ export default {
 		onMove(ev, origEv) {
 			// Expand subpage list
 			const pageId = ev.related.dataset.pageId
+
+			// Expand related page if collapsed
 			if (this.collapsed(pageId)) {
-				this.expand(pageId)
+				// this.expand(pageId)
 			}
 
 			if (!this.allowSorting) {
@@ -108,21 +124,26 @@ export default {
 
 		onUpdate(ev) {
 			// Sorting in one list
-			this.disableDragging = true
+			this.sortableActive = true
 			const pageId = Number(ev.originalEvent.dataTransfer.getData('pageId'))
 			const parentId = Number(ev.to.dataset.parentId)
 			this.subpageOrderUpdate(parentId, pageId, ev.newDraggableIndex)
-			this.disableDragging = false
+			this.sortableActive = false
 		},
 
 		onAdd(ev) {
 			// Moving from one list to another
-			this.disableDragging = true
+			this.sortableActive = true
 			const pageId = Number(ev.originalEvent.dataTransfer.getData('pageId'))
 			const oldParentId = Number(ev.from.dataset.parentId)
 			const newParentId = Number(ev.to.dataset.parentId)
-			this.movePage(oldParentId, newParentId, pageId, ev.newDraggableIndex)
-			this.disableDragging = false
+			let index = ev.newDraggableIndex
+			// Force-move items to the end of the list if sorting is disabled
+			if (!this.allowSorting) {
+				index = Infinity
+			}
+			this.movePage(oldParentId, newParentId, pageId, index)
+			this.sortableActive = false
 		},
 	},
 }

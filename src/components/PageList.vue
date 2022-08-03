@@ -55,7 +55,8 @@
 		<div class="page-list">
 			<Draggable v-if="subpages"
 				:list="subpages"
-				:parent-id="collectivePage ? collectivePage.id : 0">
+				:parent-id="collectivePage ? collectivePage.id : 0"
+				:disable-sorting="disableSorting">
 				<template #header>
 					<Item v-if="currentCollective"
 						key="Readme"
@@ -77,7 +78,7 @@
 						<span class="sort-order-chip">
 							{{ sortedBy('byTitle') ? t('collectives', 'Sorted by title') : t('collectives', 'Sorted by recently changed') }}
 							<Button :aria-label="t('collectives', 'Switch back to default sort order')"
-								type="tertiary-on-primary"
+								type="tertiary"
 								class="sort-oder-chip-button"
 								@click="sortPagesAndScroll('byOrder')">
 								<template #icon>
@@ -187,6 +188,10 @@ export default {
 
 		sortedBy() {
 			return (sortOrder) => this.sortBy === sortOrder
+		},
+
+		disableSorting() {
+			return this.filterString !== ''
 		},
 	},
 
