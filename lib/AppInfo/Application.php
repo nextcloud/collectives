@@ -9,9 +9,8 @@ use OCA\Circles\Events\CircleDestroyedEvent;
 use OCA\Collectives\CacheListener;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Listeners\CircleDestroyedListener;
-use OCA\Collectives\Listeners\LoadAdditionalScriptsListener;
+use OCA\Collectives\Listeners\BeforeTemplateRenderedListener;
 use OCA\Collectives\Listeners\ShareDeletedListener;
-use OCA\Collectives\Listeners\UnifiedSearchCSSLoader;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Mount\MountProvider;
 use OCA\Collectives\Search\CollectiveProvider;
@@ -19,7 +18,6 @@ use OCA\Collectives\Search\PageProvider;
 use OCA\Collectives\Search\PageContentProvider;
 use OCA\Collectives\Service\CollectiveHelper;
 use OCA\Collectives\Versions\VersionsBackend;
-use OCA\Files\Event\LoadAdditionalScriptsEvent;
 use OCP\App\IAppManager;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
@@ -45,8 +43,7 @@ class Application extends App implements IBootstrap {
 	 */
 	public function register(IRegistrationContext $context): void {
 		require_once(__DIR__  . '/../../vendor/autoload.php');
-		$context->registerEventListener(BeforeTemplateRenderedEvent::class, UnifiedSearchCSSLoader::class);
-		$context->registerEventListener(LoadAdditionalScriptsEvent::class, LoadAdditionalScriptsListener::class);
+		$context->registerEventListener(BeforeTemplateRenderedEvent::class, BeforeTemplateRenderedListener::class);
 		$context->registerEventListener(CircleDestroyedEvent::class, CircleDestroyedListener::class);
 		$context->registerEventListener(ShareDeletedEvent::class, ShareDeletedListener::class);
 

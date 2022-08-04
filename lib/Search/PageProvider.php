@@ -109,7 +109,7 @@ class PageProvider implements IProvider {
 						$this->urlGenerator->linkToRoute('collectives.start.index'),
 						$this->pageService->getPageLink($collective->getName(), $pageInfo)
 					])),
-					'collectives-search-icon icon-pages'
+					'icon-collectives-page'
 				);
 			}
 		}
