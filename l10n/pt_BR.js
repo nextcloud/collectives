@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Collectives" : "Coletivos",
     "Collectives - Page content" : "Coletivos - Conteúdo da página",
-    "in page {page} from collective {collective}" : "na página {page} do coletivo {collective}",
     "Collectives - Pages" : "Coletivos - Páginas",
     "in Collective {collective}" : "no Coletivo {collective}",
     "Created collective \"%s\" for existing circle." : "Coletivo \"%s\" criado para o círculo.",

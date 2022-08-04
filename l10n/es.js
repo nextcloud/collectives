@@ -2,7 +2,6 @@ OC.L10N.register(
     "collectives",
     {
     "Collectives" : "Cuadernos",
-    "in page {page} from collective {collective}" : "en la página {page} del cuaderno {collective}",
     "in Collective {collective}" : "en Cuaderno colectivo {collective}",
     "Created collective \"%s\" for existing circle." : "Cuaderno colectivo \"%s\" creado para el círculo existente.",
     "Collective Share" : "Cuadernos colectivos",
