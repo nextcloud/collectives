@@ -83,7 +83,7 @@ describe('Page', function() {
 	}
 
 	// Expected to open file in viewer and stay on same page
-	const testLinkToViewer = function(href, fileName, viewerFileElement, edit) {
+	const testLinkToViewer = function(href, { fileName, viewerFileElement, edit = false }) {
 		clickLink(href, edit)
 		cy.location('pathname').should('match', new RegExp(`^${sourceUrl}`))
 		cy.get('.modal-title').should('contain', fileName)
@@ -94,7 +94,7 @@ describe('Page', function() {
 	}
 
 	// Expected to open in same tab
-	const testLinkToSameTab = function(href, edit, isPublic = false) {
+	const testLinkToSameTab = function(href, { edit = false, isPublic = false } = {}) {
 		clickLink(`${Cypress.env('baseUrl')}${href}`, edit)
 		if (!isPublic) {
 			cy.location('pathname').should('match', new RegExp(`^${href}`))
@@ -106,7 +106,7 @@ describe('Page', function() {
 	}
 
 	// Expected to open in new tab
-	const testLinkToNewTab = function(href, edit, isPublic = false, absolute = false) {
+	const testLinkToNewTab = function(href, { edit = false, isPublic = false, absolute = false } = {}) {
 		if (!absolute) {
 			href = `${Cypress.env('baseUrl')}${href}`
 		}
@@ -134,33 +134,33 @@ describe('Page', function() {
 		if (!['22', '23'].includes(String(Cypress.env('ncVersion')))) {
 			it('Opens link to image in Nextcloud in viewer', function() {
 				const href = `/index.php/apps/files/?dir=/&openfile=${imageId}#relPath=//test.png`
-				testLinkToViewer(href, 'test.png', 'img', false)
-				testLinkToViewer(href, 'test.png', 'img', true)
+				testLinkToViewer(href, { fileName: 'test.png', viewerFileElement: 'img' })
+				testLinkToViewer(href, { fileName: 'test.png', viewerFileElement: 'img', edit: true })
 			})
 			it('Opens link to text file in Nextcloud in viewer', function() {
 				const href = `/index.php/apps/files/?dir=/&openfile=${textId}#relPath=//test.md`
-				testLinkToViewer(href, 'test.md', 'div#editor-container', false)
-				testLinkToViewer(href, 'test.md', 'div#editor-container', true)
+				testLinkToViewer(href, { fileName: 'test.md', viewerFileElement: 'div#editor-container' })
+				testLinkToViewer(href, { fileName: 'test.md', viewerFileElement: 'div#editor-container', edit: true })
 			})
 			it('Opens link to page in this collective in same/new tab depending on view/edit mode', function() {
 				const href = '/index.php/apps/collectives/Link%20Testing/Link%20Target'
-				testLinkToSameTab(href, false)
-				testLinkToNewTab(href, true)
+				testLinkToSameTab(href)
+				testLinkToNewTab(href, { edit: true })
 			})
 			it('Opens link to page in other collective in same/new tab depending on view/edit mode', function() {
 				const href = '/index.php/apps/collectives/Another%20Collective/First%20Page'
-				testLinkToSameTab(href, false)
-				testLinkToNewTab(href, true)
+				testLinkToSameTab(href)
+				testLinkToNewTab(href, { edit: true })
 			})
 			it('Opens link to another Nextcloud app in new tab', function() {
 				const href = '/index.php/apps/contacts'
-				testLinkToNewTab(href, false)
-				testLinkToNewTab(href, true)
+				testLinkToNewTab(href)
+				testLinkToNewTab(href, { edit: true })
 			})
 			it('Opens link to external page in new tab', function() {
 				const href = 'http://example.org/'
-				testLinkToNewTab(href, false, false, true)
-				testLinkToNewTab(href, true, false, true)
+				testLinkToNewTab(href, { absolute: true })
+				testLinkToNewTab(href, { edit: true, absolute: true })
 			})
 		}
 	})
@@ -213,15 +213,15 @@ describe('Page', function() {
 				cy.logout()
 				cy.visit(`${shareUrl}/Link Source`)
 				const href = '/index.php/apps/collectives/Link%20Testing/Link%20Target'
-				testLinkToSameTab(href, false, true)
-				// testLinkToNewTab(href, true, true)
+				testLinkToSameTab(href, { isPublic: true })
+				// testLinkToNewTab(href, { edit: true, isPublic: true })
 			})
 			it('Public share: opens link to external page in new tab', function() {
 				cy.logout()
 				cy.visit(`${shareUrl}/Link Source`)
 				const href = 'http://example.org/'
-				testLinkToNewTab(href, false, true, true)
-				testLinkToNewTab(href, true, true, true)
+				testLinkToNewTab(href, { isPublic: true, absolute: true })
+				testLinkToNewTab(href, { edit: true, isPublic: true, absolute: true })
 			})
 		}
 	})
