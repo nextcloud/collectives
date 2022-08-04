@@ -24,7 +24,7 @@ Cypress.Commands.add('login', (user, { password, route, onBeforeLoad } = {}) => 
 		cy.visit(route)
 		cy.get('input[name=user]').type(user)
 		cy.get('input[name=password]').type(password)
-		cy.get('form[name=login] input[type=submit]').click()
+		cy.get('form[name=login] [type=submit]').click()
 		cy.url().should('not.include', 'index.php/login?redirect_url')
 		cy.url().should('include', route.replaceAll(' ', '%20'))
 	})

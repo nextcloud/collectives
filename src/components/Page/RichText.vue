@@ -85,11 +85,13 @@ export default {
 
 	computed: {
 		...mapGetters([
-			'shareTokenParam',
+			'collectiveParam',
+			'currentCollective',
 			'currentPageDirectory',
 			'currentPageFilePath',
+			'isPublic',
 			'pageParam',
-			'collectiveParam',
+			'shareTokenParam',
 		]),
 
 		imageResolver() {
@@ -121,7 +123,20 @@ export default {
 		handleCollectiveLink({ href }) {
 			const baseUrl = new URL(generateUrl('/apps/collectives'), window.location)
 			if (href.startsWith(baseUrl.href)) {
-				this.$router.push(href.replace(baseUrl.href, ''))
+				let collectiveUrl = href.replace(baseUrl.href, '')
+				const publicUrlPrefix = `/p/${this.currentCollective.shareToken}`
+
+				if (this.isPublic
+					&& (collectiveUrl === `/${encodeURIComponent(this.collectiveParam)}`
+					|| collectiveUrl.startsWith(`/${encodeURIComponent(this.collectiveParam)}/`))) {
+					// In public share, rewrite link to own collective to a public link
+					collectiveUrl = `${publicUrlPrefix}${collectiveUrl}`
+				} else if (!this.isPublic && collectiveUrl.startsWith(publicUrlPrefix)) {
+					// When internal, rewrite link to public share of own collective to internal
+					collectiveUrl = collectiveUrl.replace(publicUrlPrefix, '')
+				}
+
+				this.$router.push(collectiveUrl)
 				return true
 			}
 		},

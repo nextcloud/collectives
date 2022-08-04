@@ -83,7 +83,7 @@ describe('Page', function() {
 	}
 
 	// Expected to open file in viewer and stay on same page
-	const testLinkToViewer = function(href, fileName, viewerFileElement, edit) {
+	const testLinkToViewer = function(href, { fileName, viewerFileElement, edit = false }) {
 		clickLink(href, edit)
 		cy.location('pathname').should('match', new RegExp(`^${sourceUrl}`))
 		cy.get('.modal-title').should('contain', fileName)
@@ -94,14 +94,19 @@ describe('Page', function() {
 	}
 
 	// Expected to open in same tab
-	const testLinkToSameTab = function(href, edit) {
+	const testLinkToSameTab = function(href, { edit = false, isPublic = false } = {}) {
 		clickLink(`${Cypress.env('baseUrl')}${href}`, edit)
-		cy.location('pathname').should('match', new RegExp(`^${href}`))
+		if (!isPublic) {
+			cy.location('pathname').should('match', new RegExp(`^${href}`))
+		} else {
+			const encodedCollectiveName = encodeURIComponent('Link Testing')
+			cy.location('pathname').should('match', new RegExp(`^${href.replace(`/${encodedCollectiveName}`, `/p/\\w+/${encodedCollectiveName}`)}`))
+		}
 		cy.go('back')
 	}
 
 	// Expected to open in new tab
-	const testLinkToNewTab = function(href, edit, absolute = false) {
+	const testLinkToNewTab = function(href, { edit = false, isPublic = false, absolute = false } = {}) {
 		if (!absolute) {
 			href = `${Cypress.env('baseUrl')}${href}`
 		}
@@ -116,41 +121,107 @@ describe('Page', function() {
 				openStub.restore()
 			})
 
-		cy.location('pathname').should('match', new RegExp(`^${sourceUrl}`))
+		if (!isPublic) {
+			cy.location('pathname').should('match', new RegExp(`^${sourceUrl}`))
+		} else {
+			const encodedCollectiveName = encodeURIComponent('Link Testing')
+			cy.location('pathname').should('match', new RegExp(`^${sourceUrl.replace(`/${encodedCollectiveName}`, `/p/\\w+/${encodedCollectiveName}`)}`))
+		}
 	}
 
-	describe('Link handling', function() {
+	describe('Link handling internal', function() {
 		// Only run link tests on Nextcloud 24+
 		if (!['22', '23'].includes(String(Cypress.env('ncVersion')))) {
 			it('Opens link to image in Nextcloud in viewer', function() {
 				const href = `/index.php/apps/files/?dir=/&openfile=${imageId}#relPath=//test.png`
-				testLinkToViewer(href, 'test.png', 'img', false)
-				testLinkToViewer(href, 'test.png', 'img', true)
+				testLinkToViewer(href, { fileName: 'test.png', viewerFileElement: 'img' })
+				testLinkToViewer(href, { fileName: 'test.png', viewerFileElement: 'img', edit: true })
 			})
 			it('Opens link to text file in Nextcloud in viewer', function() {
 				const href = `/index.php/apps/files/?dir=/&openfile=${textId}#relPath=//test.md`
-				testLinkToViewer(href, 'test.md', 'div#editor-container', false)
-				testLinkToViewer(href, 'test.md', 'div#editor-container', true)
+				testLinkToViewer(href, { fileName: 'test.md', viewerFileElement: 'div#editor-container' })
+				testLinkToViewer(href, { fileName: 'test.md', viewerFileElement: 'div#editor-container', edit: true })
 			})
 			it('Opens link to page in this collective in same/new tab depending on view/edit mode', function() {
 				const href = '/index.php/apps/collectives/Link%20Testing/Link%20Target'
-				testLinkToSameTab(href, false)
-				testLinkToNewTab(href, true)
+				testLinkToSameTab(href)
+				testLinkToNewTab(href, { edit: true })
 			})
 			it('Opens link to page in other collective in same/new tab depending on view/edit mode', function() {
 				const href = '/index.php/apps/collectives/Another%20Collective/First%20Page'
-				testLinkToSameTab(href, false)
-				testLinkToNewTab(href, true)
+				testLinkToSameTab(href)
+				testLinkToNewTab(href, { edit: true })
 			})
 			it('Opens link to another Nextcloud app in new tab', function() {
 				const href = '/index.php/apps/contacts'
-				testLinkToNewTab(href, false)
-				testLinkToNewTab(href, true)
+				testLinkToNewTab(href)
+				testLinkToNewTab(href, { edit: true })
 			})
 			it('Opens link to external page in new tab', function() {
 				const href = 'http://example.org/'
-				testLinkToNewTab(href, false, true)
-				testLinkToNewTab(href, true, true)
+				testLinkToNewTab(href, { absolute: true })
+				testLinkToNewTab(href, { edit: true, absolute: true })
+			})
+		}
+	})
+
+	describe('Link handling public share', function() {
+		// Only run link tests on Nextcloud 24+
+		if (!['22', '23'].includes(String(Cypress.env('ncVersion')))) {
+			let shareUrl
+
+			it('Share the collective', function() {
+				cy.visit('/apps/collectives', {
+					onBeforeLoad(win) {
+						// navigator.clipboard doesn't exist on HTTP requests (in CI), so let's create it
+						if (!win.navigator.clipboard) {
+							win.navigator.clipboard = {
+								__proto__: {
+									writeText: () => {},
+								},
+							}
+						}
+						// overwrite navigator.clipboard.writeText with cypress stub
+						cy.stub(win.navigator.clipboard, 'writeText', (text) => {
+							shareUrl = text
+						})
+							.as('clipBoardWriteText')
+					},
+				})
+				cy.get('.collectives_list_item')
+					.contains('li', 'Link Testing')
+					.find('.action-item__menutoggle')
+					.click()
+				cy.intercept('POST', '**/_api/*/share').as('createShare')
+				cy.get('button')
+					.contains('Share link')
+					.click()
+				cy.wait('@createShare')
+				cy.intercept('PUT', '**/_api/*/share/*').as('updateShare')
+				cy.get('input#shareEditable')
+					.check({ force: true }).then(() => {
+						cy.get('input#shareEditable')
+							.should('be.checked')
+					})
+				cy.wait('@updateShare')
+				cy.get('button')
+					.contains('Copy share link')
+					.click()
+				cy.get('@clipBoardWriteText').should('have.been.calledOnce')
+			})
+			it('Public share: opens link to page in this collective in same/new tab depending on view/edit mode', function() {
+				cy.logout()
+				cy.visit(`${shareUrl}/Link Source`)
+				const href = '/index.php/apps/collectives/Link%20Testing/Link%20Target'
+				testLinkToSameTab(href, { isPublic: true })
+				// testLinkToNewTab(href, { edit: true, isPublic: true })
+			})
+			it('Public share: opens link to external page in new tab', function() {
+				cy.logout()
+				cy.visit(`${shareUrl}/Link Source`)
+				const href = 'http://example.org/'
+				testLinkToNewTab(href, { isPublic: true, absolute: true })
+				testLinkToNewTab(href, { edit: true, isPublic: true, absolute: true })
 			})
 		}
 	})
