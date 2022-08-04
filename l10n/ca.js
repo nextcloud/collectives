@@ -2,7 +2,6 @@ OC.L10N.register(
     "collectives",
     {
     "Collectives" : "Col·lectius",
-    "in page {page} from collective {collective}" : "A la pàgina {page} del collective {collective}",
     "in Collective {collective}" : "al Col·lectiu {collective}",
     "Created collective \"%s\" for existing circle." : "Creat col·lectiu \"%s\" pel cercle existent.",
     "A place for activist and community projects to build shared knowledge" : "Un espai per activistes i projectes comunitaris per crear contingut compartit",

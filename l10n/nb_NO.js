@@ -2,7 +2,6 @@ OC.L10N.register(
     "collectives",
     {
     "Collectives" : "Kollektiver",
-    "in page {page} from collective {collective}" : "på siden {page} fra kollektivet {collective}",
     "in Collective {collective}" : "i kollektivet {collective}",
     "Created collective \"%s\" for existing circle." : "Opprettet kollektivet «%s» for eksisterende sirkel.",
     "A place for activist and community projects to build shared knowledge" : "Et sted for aktivist- og gemenskapsprosjekter for bygging av delt kunnskap",
