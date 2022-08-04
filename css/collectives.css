@@ -1,0 +1,9 @@
+.icon-collectives {
+	background-image: url('../img/collectives-dark.svg');
+	filter: var(--background-invert-if-dark);
+}
+
+.icon-collectives-page {
+	background-image: url('../img/page.svg');
+	filter: var(--background-invert-if-dark);
+}

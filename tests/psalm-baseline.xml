@@ -16,12 +16,12 @@
       <code>TimedJob</code>
     </UndefinedClass>
   </file>
-  <file src="lib/BackgroundJob/PurgeObsoletePages.php">
+  <file src="lib/BackgroundJob/IndexCollectives.php">
     <UndefinedClass occurrences="1">
       <code>TimedJob</code>
     </UndefinedClass>
   </file>
-  <file src="lib/BackgroundJob/IndexCollectives.php">
+  <file src="lib/BackgroundJob/PurgeObsoletePages.php">
     <UndefinedClass occurrences="1">
       <code>TimedJob</code>
     </UndefinedClass>
@@ -43,12 +43,12 @@
       <code>Base</code>
     </UndefinedClass>
   </file>
-  <file src="lib/Command/PurgeObsoletePages.php">
+  <file src="lib/Command/IndexCollectives.php">
     <UndefinedClass occurrences="1">
       <code>Base</code>
     </UndefinedClass>
   </file>
-  <file src="lib/Command/IndexCollectives.php">
+  <file src="lib/Command/PurgeObsoletePages.php">
     <UndefinedClass occurrences="1">
       <code>Base</code>
     </UndefinedClass>
@@ -191,22 +191,17 @@
       <code>IUserManager</code>
     </UndefinedDocblockClass>
   </file>
+  <file src="lib/Listeners/BeforeTemplateRenderedListener.php">
+    <UndefinedClass occurrences="1">
+      <code>IEventListener</code>
+    </UndefinedClass>
+  </file>
   <file src="lib/Listeners/CircleDestroyedListener.php">
     <UndefinedClass occurrences="1">
       <code>IEventListener</code>
     </UndefinedClass>
   </file>
-  <file src="lib/Listeners/LoadAdditionalScriptsListener.php">
-    <UndefinedClass occurrences="1">
-      <code>IEventListener</code>
-    </UndefinedClass>
-  </file>
   <file src="lib/Listeners/ShareDeletedListener.php">
-    <UndefinedClass occurrences="1">
-      <code>IEventListener</code>
-    </UndefinedClass>
-  </file>
-  <file src="lib/Listeners/UnifiedSearchCSSLoader.php">
     <UndefinedClass occurrences="1">
       <code>IEventListener</code>
     </UndefinedClass>
@@ -345,6 +340,20 @@
   <file src="lib/Search/CollectiveProvider.php">
     <UndefinedClass occurrences="1">
       <code>IProvider</code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Search/FileSearch/FileIndexer.php">
+    <UndefinedClass occurrences="2">
+      <code>Folder</code>
+      <code>Folder</code>
+    </UndefinedClass>
+    <UndefinedDocblockClass occurrences="1">
+      <code>File[]</code>
+    </UndefinedDocblockClass>
+  </file>
+  <file src="lib/Search/FileSearch/FileSearcher.php">
+    <UndefinedClass occurrences="1">
+      <code>File</code>
     </UndefinedClass>
   </file>
   <file src="lib/Search/PageContentProvider.php">
@@ -589,6 +598,25 @@
       <code>IConfig</code>
     </UndefinedDocblockClass>
   </file>
+  <file src="lib/Service/SearchService.php">
+    <MissingDependency occurrences="6">
+      <code>Collective</code>
+      <code>Collective</code>
+      <code>Collective</code>
+      <code>Collective</code>
+      <code>Collective</code>
+      <code>Collective</code>
+    </MissingDependency>
+    <UndefinedClass occurrences="4">
+      <code>?File</code>
+      <code>?File</code>
+      <code>Folder</code>
+      <code>ITempManager</code>
+    </UndefinedClass>
+    <UndefinedDocblockClass occurrences="1">
+      <code>ITempManager</code>
+    </UndefinedDocblockClass>
+  </file>
   <file src="lib/Versions/CollectiveVersion.php">
     <UndefinedClass occurrences="1">
       <code>Version</code>
@@ -618,37 +646,4 @@
       <code>IVersionBackend</code>
     </UndefinedClass>
   </file>
-	<file src="lib/Search/FileSearch/FileIndexer.php">
-		<UndefinedClass occurrences="2">
-			<code>Folder</code>
-			<code>Folder</code>
-		</UndefinedClass>
-		<UndefinedDocblockClass occurrences="1">
-			<code>File[]</code>
-		</UndefinedDocblockClass>
-	</file>
-	<file src="lib/Search/FileSearch/FileSearcher.php">
-		<UndefinedClass occurrences="1">
-			<code>File</code>
-		</UndefinedClass>
-	</file>
-	<file src="lib/Service/SearchService.php">
-		<UndefinedClass occurrences="4">
-			<code>ITempManager</code>
-			<code>Folder</code>
-			<code>?File</code>
-			<code>?File</code>
-		</UndefinedClass>
-		<UndefinedDocblockClass occurrences="1">
-			<code>ITempManager</code>
-		</UndefinedDocblockClass>
-		<MissingDependency occurrences="6">
-			<code>Collective</code>
-			<code>Collective</code>
-			<code>Collective</code>
-			<code>Collective</code>
-			<code>Collective</code>
-			<code>Collective</code>
-		</MissingDependency>
-	</file>
 </files>

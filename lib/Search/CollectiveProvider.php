@@ -100,7 +100,7 @@ class CollectiveProvider implements IProvider {
 				$collective->getName(),
 				'',
 				$this->urlGenerator->linkToRoute('collectives.start.index') . '/' . rawurlencode($collective->getName()),
-				'collectives-search-icon icon-collectives'
+				'icon-collectives'
 			);
 		}
 
