@@ -1,5 +1,29 @@
 # Changelog
 
+## 1.4.0 - 2022.08.04
+
+### ✨New
+* 🔎 Indexed full-text search, replacing the former inefficient search.
+
+### 🐛Fixes
+* 🔗 Fix links to pages in public share view. (#329, #337)
+* 😀 Remove emoji outline below page emojis. (#194)
+* 🤸 Several accessibility improvements.
+* ➖ Remove duplicate button to toggle app details.
+* 🚀 Fix occ commands when Circles app is disabled.
+
+### 🌎Translations
+* 🗣️ Czech translation updated thanks to Pavel Borecki.
+* 🗣️ Dutch translation updated thanks to Jeroen Bos.
+* 🗣️ German translations updated thanks to Joachim Sokolowski.
+* 🗣️ French translation updated thanks to Nathan.
+* 🗣️ Russian translation updated thanks to Andrey Rozentals.
+
+### 🚧Updates & Tooling
+* 🔌 Remove unnecessary NPM dependencies. Thanks to Ferdinand Thiessen.
+* 🔌 Update composer dependencies.
+
+
 ## 1.3.0 - 2022.07.11
 
 ### ✨New
@@ -68,8 +92,6 @@
 * 🗣️ French translation updated thanks to Nathan.
 * 🗣️ German translations updated thanks to Joachim Sokolowski.
 
-### 🌎Translations
-### 🚧Updates & Tooling
 ### 🚧Updates & Tooling
 * 🔌 Update @nextcloud/text to 25.0.0-alpha.3.
 * 🔌 Update all possible javascript dependencies.

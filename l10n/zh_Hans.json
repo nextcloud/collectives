@@ -1,7 +1,6 @@
 { "translations": {
     "Collectives" : "知识库",
     "Collectives - Page content" : "知识库 - 页面内容",
-    "in page {page} from collective {collective}" : "在知识库 {collective} 的页面 {page}",
     "Collectives - Pages" : "知识库 - 页面",
     "in Collective {collective}" : "在知识库 {collective}",
     "Created collective \"%s\" for existing circle." : "为已有的圈子创建知识库%s",
