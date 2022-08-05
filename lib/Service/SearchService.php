@@ -163,7 +163,7 @@ class SearchService {
 	/**
 	 * @return bool
 	 */
-	private function isSqliteAvailable(): bool {
+	public function isSqliteAvailable(): bool {
 		return in_array('sqlite', PDO::getAvailableDrivers(), true);
 	}
 }
