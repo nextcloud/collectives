@@ -481,8 +481,7 @@ export default {
 	height: calc(100% - 59px);
 }
 
-#editor-container div#editor div.text-menubar {
-	max-width: 670px;
+::v-deep #editor-container div#editor div.text-menubar {
 	margin: auto;
 	top: calc(var(--header-height) + 59px);
 }
