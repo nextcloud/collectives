@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.4.1 - 2022.08.05
+
+### 🐛Fixes
+* 🔎 Fix search errors when sqlite is not available.
+* 🥟 Fix sticky editor menubar. (#367)
+* ☝️ Migrate icons for search providers to pure CSS+SVG. (#366)
+
+### 🚧Updates & Tooling
+* 🔌 Update NPM dependencies.
+
+
 ## 1.4.0 - 2022.08.04
 
 ### ✨New
