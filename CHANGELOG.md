@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.2 - 2022.08.08
+
+### 🐛Fixes
+* 🥟 Really fix sticky editor menubar. (#367)
+* 💄 Fix sticky app-details toggle.
+
 ## 1.4.1 - 2022.08.05
 
 ### 🐛Fixes

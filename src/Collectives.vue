@@ -185,20 +185,17 @@ export default {
 
 <style lang="scss" scoped>
 .app-details-toggle {
-	position: absolute;
+	position: sticky;
+	top: 58px;
 	width: 44px;
 	height: 49px;
-	margin: 8px 0 2px 0;
+	margin-right: -44px;
 	opacity: .6;
 	z-index: 2000;
 	&:active,
 	&:hover,
 	&:focus {
 		opacity: 1;
-	}
-	// Hide app-navigation toggle if app-details toggle is shown
-	&::v-deep + .app-navigation .app-navigation-toggle {
-		display: none;
 	}
 }
 </style>

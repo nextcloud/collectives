@@ -481,9 +481,11 @@ export default {
 	height: calc(100% - 59px);
 }
 
-::v-deep #editor-container div#editor div.text-menubar {
-	margin: auto;
-	top: calc(var(--header-height) + 59px);
+::v-deep #editor-container div#editor {
+	div.text-menubar, div.menubar {
+		margin: auto;
+		top: calc(var(--header-height) + 59px);
+	}
 }
 
 .page-title {
