@@ -31,7 +31,9 @@ export default {
 
 	methods: {
 		...mapMutations([
+			'done',
 			'expand',
+			'load',
 		]),
 
 		...mapActions({
@@ -133,11 +135,14 @@ export default {
 
 			// Move subpage to new parent
 			try {
+				this.load('page')
 				await this.dispatchMovePage({ newParentId, pageId })
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not move page'))
 				return
+			} finally {
+				this.done('page')
 			}
 
 			// Remove page from subpageOrder of old parent last (ensures correct sorting in case of errors)
