@@ -2,7 +2,12 @@
 	<div :id="`page-${pageId}`"
 		:data-page-id="pageId"
 		class="app-content-list-item"
-		:class="{active: isActive, mobile: isMobile, toplevel: level === 0}"
+		:class="{
+			active: isActive,
+			mobile: isMobile,
+			toplevel: level === 0,
+			highlight: isHighlighted,
+		}"
 		draggable
 		@dragstart="setDragData">
 		<div class="app-content-list-item-icon"
@@ -66,7 +71,7 @@
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile'
 import pageMixin from '../../mixins/pageMixin.js'
 import { generateUrl } from '@nextcloud/router'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapMutations, mapState } from 'vuex'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import Actions from '@nextcloud/vue/dist/Components/Actions'
 import MenuRightIcon from 'vue-material-design-icons/MenuRight'
@@ -156,6 +161,10 @@ export default {
 	},
 
 	computed: {
+		...mapState({
+			'highlightPageId': (state) => state.pages.highlightPageId,
+		}),
+
 		...mapGetters([
 			'currentPage',
 			'collapsed',
@@ -198,6 +207,10 @@ export default {
 			return this.isLandingPage
 				? t('collectives', 'Add a page')
 				: t('collectives', 'Add a subpage')
+		},
+
+		isHighlighted() {
+			return this.highlightPageId === this.pageId
 		},
 	},
 
@@ -260,7 +273,7 @@ export default {
 		}
 	}
 
-	&:hover, &:focus, &:active {
+	&:hover, &:focus, &:active, &.highlight {
 		background-color: var(--color-background-hover);
 
 		span.item-icon-badge {

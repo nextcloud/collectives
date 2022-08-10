@@ -1,5 +1,6 @@
 <template>
 	<draggable :list="list"
+		:component-data="getComponentData()"
 		:data-parent-id="parentId"
 		:disabled="disabled"
 		:group="{ name: 'page-list', pull: true, put: true }"
@@ -22,7 +23,8 @@
 		:set-data="setData"
 		:move="onMove"
 		@update="onUpdate"
-		@add="onAdd">
+		@add="onAdd"
+		@end="onEnd">
 		<template #header>
 			<slot name="header" />
 		</template>
@@ -33,7 +35,7 @@
 <script>
 import draggable from 'vuedraggable'
 import pageMixin from '../../mixins/pageMixin.js'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 
 export default {
 	name: 'Draggable',
@@ -100,21 +102,33 @@ export default {
 	},
 
 	methods: {
+		...mapMutations([
+			'setHighlightPageId',
+		]),
+
+		getComponentData() {
+			return {
+				on: {
+					change: this.onChange,
+				},
+			}
+		},
+
 		setData(dataTransfer, dragEl) {
 			dataTransfer.setData('pageId', dragEl.firstChild.dataset.pageId)
 		},
 
-		onMove(ev, origEv) {
-			// Expand subpage list
-			const pageId = ev.related.dataset.pageId
-
-			// Expand related page if collapsed
-			if (this.collapsed(pageId)) {
-				// this.expand(pageId)
+		onChange(ev) {
+			// Highlight direct parent page when moving between subpages
+			this.setHighlightPageId(null)
+			if (ev.to !== ev.from) {
+				this.setHighlightPageId(Number(ev.to.dataset.parentId))
 			}
+		},
 
+		onMove(ev, origEv) {
+			// Force-move items to the end of the list if sorting is disabled (not effective for now, see `disabled()` method)
 			if (!this.allowSorting) {
-				// Force-move items to the end of the list if sorting is disabled
 				if (ev.to !== ev.from) {
 					ev.to.append(ev.dragged)
 					return false
@@ -144,6 +158,10 @@ export default {
 			}
 			this.movePage(oldParentId, newParentId, pageId, index)
 			this.sortableActive = false
+		},
+
+		onEnd(ev) {
+			this.setHighlightPageId(null)
 		},
 	},
 }
