@@ -2,7 +2,7 @@
 	<AppContentDetails>
 		<Version v-if="currentPage && version" />
 		<Page v-else-if="currentPage" />
-		<EmptyContent v-else-if="loading('collective')"
+		<EmptyContent v-else-if="loading('collective') || loading('page')"
 			icon="icon-loading" />
 		<PageNotFound v-else />
 	</AppContentDetails>
