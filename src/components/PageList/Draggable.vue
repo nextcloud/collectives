@@ -36,6 +36,7 @@
 import draggable from 'vuedraggable'
 import pageMixin from '../../mixins/pageMixin.js'
 import { mapGetters, mapMutations } from 'vuex'
+import debounce from 'debounce'
 
 export default {
 	name: 'Draggable',
@@ -70,6 +71,7 @@ export default {
 	data() {
 		return {
 			sortableActive: false,
+			dragoverPageId: 0,
 		}
 	},
 
@@ -127,6 +129,8 @@ export default {
 		},
 
 		onMove(ev, origEv) {
+			this.dragoverPageId = ev.related.dataset.pageId || ev.related.dataset.parentId
+
 			// Force-move items to the end of the list if sorting is disabled (not effective for now, see `disabled()` method)
 			if (!this.allowSorting) {
 				if (ev.to !== ev.from) {
@@ -163,7 +167,19 @@ export default {
 		onEnd(ev) {
 			this.setHighlightPageId(null)
 		},
+
+		onDragoverPage: debounce(function(val, oldval) {
+			if (val) {
+				this.expand(val)
+			}
+		}, 1500),
 	},
+
+	watch: {
+		'dragoverPageId'(val, oldval) {
+			this.onDragoverPage(val, oldval)
+		},
+	}
 }
 </script>
 
