@@ -36,6 +36,7 @@ export default {
 		collapsed: {},
 		showTemplates: false,
 		backlinks: [],
+		highlightPageId: null,
 	},
 
 	getters: {
@@ -315,6 +316,9 @@ export default {
 		toggleCollapsed: (state, pageId) =>
 			// Default to 'false' if unset
 			Vue.set(state.collapsed, pageId, state.collapsed[pageId] == null ? false : !state.collapsed[pageId]),
+
+		setHighlightPageId: (state, pageId) =>
+			state.highlightPageId = pageId,
 	},
 
 	actions: {
