@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2022-08-04 15:55+0200\n"
+"POT-Creation-Date: 2022-08-11 15:40+0200\n"
 "PO-Revision-Date: 2021-06-10 08:02+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
@@ -623,7 +623,7 @@ msgstr ""
 msgid "Sort order"
 msgstr "Sorteringsrekkefølge"
 
-#. TRANSLATORS src/components/PageList.vue:174
+#. TRANSLATORS src/components/PageList.vue:176
 #: /collectives/specialVueFakeDummyForL10nScript.js:222
 msgid "Could not save page order for collective"
 msgstr ""
