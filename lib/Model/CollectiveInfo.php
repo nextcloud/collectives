@@ -39,7 +39,7 @@ class CollectiveInfo extends Collective {
 								int $level = Member::LEVEL_MEMBER,
 								string $shareToken = null,
 								bool $shareEditable = false,
-								?int $userPageOrder = null) {
+								?int $userPageOrder = Collective::defaultPageOrder) {
 		$this->id = $collective->getId();
 		$this->circleUniqueId = $collective->getCircleId();
 		$this->emoji = $collective->getEmoji();
