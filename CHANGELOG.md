@@ -1,10 +1,23 @@
 # Changelog
 
+## 1.4.3 - 2022.08.11
+
+### 🐛Fixes
+* 🔝 Don't try to persist user-selected page order in public shares.
+* 🚀 Fix search index occ commands and background jobs without sqlite. (#371)
+
+### 🌎Translations
+* 🗣️ Czech translation updated thanks to Pavel Borecki.
+* 🗣️ Dutch translation updated thanks to Jeroen Bos.
+* 🗣️ French translation updated thanks to Nathan.
+
+
 ## 1.4.2 - 2022.08.08
 
 ### 🐛Fixes
 * 🥟 Really fix sticky editor menubar. (#367)
 * 💄 Fix sticky app-details toggle.
+
 
 ## 1.4.1 - 2022.08.05
 
