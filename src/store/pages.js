@@ -317,8 +317,9 @@ export default {
 			// Default to 'false' if unset
 			Vue.set(state.collapsed, pageId, state.collapsed[pageId] == null ? false : !state.collapsed[pageId]),
 
-		setHighlightPageId: (state, pageId) =>
-			state.highlightPageId = pageId,
+		setHighlightPageId(state, pageId) {
+			state.highlightPageId = pageId
+		},
 	},
 
 	actions: {

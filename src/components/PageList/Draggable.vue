@@ -103,6 +103,12 @@ export default {
 		},
 	},
 
+	watch: {
+		'dragoverPageId'(val, oldval) {
+			this.onDragoverPage(val, oldval)
+		},
+	},
+
 	methods: {
 		...mapMutations([
 			'setHighlightPageId',
@@ -174,12 +180,6 @@ export default {
 			}
 		}, 1500),
 	},
-
-	watch: {
-		'dragoverPageId'(val, oldval) {
-			this.onDragoverPage(val, oldval)
-		},
-	}
 }
 </script>
 

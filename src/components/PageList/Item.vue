@@ -162,7 +162,7 @@ export default {
 
 	computed: {
 		...mapState({
-			'highlightPageId': (state) => state.pages.highlightPageId,
+			highlightPageId: (state) => state.pages.highlightPageId,
 		}),
 
 		...mapGetters([
