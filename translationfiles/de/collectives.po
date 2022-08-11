@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2022-08-04 15:55+0200\n"
+"POT-Creation-Date: 2022-08-11 15:40+0200\n"
 "PO-Revision-Date: 2022-07-19 06:16+0000\n"
 "Last-Translator: Joachim Sokolowski <weblate@of99.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/collectives/"
@@ -634,7 +634,7 @@ msgstr "Vorlagen anzeigen"
 msgid "Sort order"
 msgstr "Sortierung"
 
-#. TRANSLATORS src/components/PageList.vue:174
+#. TRANSLATORS src/components/PageList.vue:176
 #: /collectives/specialVueFakeDummyForL10nScript.js:222
 msgid "Could not save page order for collective"
 msgstr "Die Seitenreihenfolge für Kollektiv konnte nicht gespeichert werden"
