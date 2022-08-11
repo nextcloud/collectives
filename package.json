@@ -31,6 +31,7 @@
     "@nextcloud/vue": "^5.3.1",
     "debounce": "^1.2.1",
     "escape-html": "^1.0.3",
+    "sortablejs": "^1.15.0",
     "v-click-outside": "^3.2.0",
     "vue": "^2.6.14",
     "vue-material-design-icons": "^5.0.0",
@@ -59,5 +60,8 @@
     "jest": "^28.1.2",
     "stylelint-webpack-plugin": "^3.3.0",
     "vue-jest": "^3.0.7"
+  },
+  "overrides": {
+    "sortablejs": "$sortablejs"
   }
 }
