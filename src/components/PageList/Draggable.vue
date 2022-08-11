@@ -177,7 +177,8 @@ export default {
 
 		onDragoverPage: debounce(function(val, oldval) {
 			if (val) {
-				this.expand(val)
+				// Disable automatic expansion of subpages on hover for now. There's still too many UX glitches.
+				// this.expand(val)
 			}
 		}, 1500),
 	},
