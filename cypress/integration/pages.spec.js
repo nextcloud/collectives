@@ -105,7 +105,7 @@ describe('Page', function() {
 				.should('contain', '🥰')
 		})
 		it('Allows setting a page emoji from page list', function() {
-			cy.contains('.app-content-list-item', 'Day 1')
+			cy.contains('.app-content-list-item', 'Day 2')
 				.find('.action-item__menutoggle')
 				.click({ force: true })
 			cy.get('button.action-button')
@@ -115,7 +115,7 @@ describe('Page', function() {
 			cy.reload()
 			cy.get('#titleform .page-title-icon')
 				.should('contain', '😀')
-			cy.contains('.app-content-list-item', 'Day 1')
+			cy.contains('.app-content-list-item', 'Day 2')
 				.find('.app-content-list-item-icon')
 				.should('contain', '😀')
 		})
