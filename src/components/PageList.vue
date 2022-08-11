@@ -118,6 +118,7 @@ export default {
 			'currentCollective',
 			'currentCollectivePath',
 			'currentPage',
+			'isPublic',
 			'loading',
 			'visibleSubpages',
 			'sortBy',
@@ -168,11 +169,13 @@ export default {
 		 */
 		sortPagesAndScroll(order) {
 			this.sortPages(order)
-			this.dispatchSetUserPageOrder({ id: this.currentCollective.id, pageOrder: pageOrders[order] })
-				.catch((error) => {
-					console.error(error)
-					showError(t('collectives', 'Could not save page order for collective'))
-				})
+			if (!this.isPublic) {
+				this.dispatchSetUserPageOrder({ id: this.currentCollective.id, pageOrder: pageOrders[order] })
+					.catch((error) => {
+						console.error(error)
+						showError(t('collectives', 'Could not save page order for collective'))
+					})
+			}
 			this.$nextTick(() => {
 				scrollToPage(this.currentPage.id)
 			})
