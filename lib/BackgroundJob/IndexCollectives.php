@@ -49,6 +49,10 @@ class IndexCollectives extends TimedJob {
 	 * @param $argument
 	 */
 	protected function run($argument): void {
+		if (!$this->searchService->areDependenciesMet()) {
+			return;
+		}
+
 		$collectives = $this->collectiveMapper->getAll();
 		foreach ($collectives as $collective) {
 			if ($this->isOutdatedIndex($collective)) {

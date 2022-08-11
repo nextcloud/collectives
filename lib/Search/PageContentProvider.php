@@ -176,7 +176,7 @@ class PageContentProvider implements IProvider {
 	 * @throws FileSearchException
 	 */
 	private function rankPages(string $term, array $pages): array {
-		if (!$this->indexedSearchService->isSqliteAvailable()) {
+		if (!$this->indexedSearchService->areDependenciesMet()) {
 			return $pages;
 		}
 

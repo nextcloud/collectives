@@ -46,6 +46,11 @@ class IndexCollectives extends Base {
 	 * @return int
 	 */
 	protected function execute(InputInterface $input, OutputInterface $output): int {
+		if (!$this->searchService->areDependenciesMet()) {
+			$output->writeln('<error>Could not index the collectives: PDO or SQLite extension not installed.</error>');
+			return 1;
+		}
+
 		$collectives = $this->collectiveMapper->getAll();
 		$name = $input->getArgument('name');
 

@@ -65,8 +65,8 @@ class SearchService {
 	 * @throws FileSearchException
 	 */
 	public function searchCollective(Collective $collective, string $term, int $maxResults = 15): array {
-		if (!$this->isSqliteAvailable()) {
-			$this->logger->warning('Collectives full-text search is not operational, because the sqlite driver not available.');
+		if (!$this->areDependenciesMet()) {
+			$this->logger->warning('Collectives full-text search is not operational, because the PDO SQLite driver is not available.');
 			return [];
 		}
 
@@ -163,7 +163,7 @@ class SearchService {
 	/**
 	 * @return bool
 	 */
-	public function isSqliteAvailable(): bool {
+	public function areDependenciesMet(): bool {
 		return in_array('sqlite', PDO::getAvailableDrivers(), true);
 	}
 }
