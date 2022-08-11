@@ -43,7 +43,6 @@ class CollectiveInfo extends Collective {
 		$this->id = $collective->getId();
 		$this->circleUniqueId = $collective->getCircleId();
 		$this->emoji = $collective->getEmoji();
-		$this->pageOrder = $collective->getPageOrder();
 		$this->permissions = $collective->getPermissions();
 		$this->trashTimestamp = $collective->getTrashTimestamp();
 		$this->name = $name;
@@ -131,7 +130,6 @@ class CollectiveInfo extends Collective {
 			'id' => $this->id,
 			'circleId' => $this->circleUniqueId,
 			'emoji' => $this->emoji,
-			'pageOrder' => $this->pageOrder,
 			'trashTimestamp' => $this->trashTimestamp,
 			'name' => $this->name,
 			'level' => $this->level,

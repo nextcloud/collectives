@@ -12,7 +12,6 @@ use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
 
 class Version000003Date20200720000000 extends SimpleMigrationStep {
-
 	/**
 	 * @param IOutput $output
 	 * @param Closure $schemaClosure The `\Closure` returns a `ISchemaWrapper`
@@ -41,10 +40,6 @@ class Version000003Date20200720000000 extends SimpleMigrationStep {
 			$table->addColumn('emoji', Types::STRING, [
 				'notnull' => false,
 				'length' => 8,
-			]);
-			$table->addColumn('page_order', Types::INTEGER, [
-				'notnull' => true,
-				'default' => Collective::defaultPageOrder,
 			]);
 			$table->addColumn('trash_timestamp', Types::INTEGER, [
 				'notnull' => false,
