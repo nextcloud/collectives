@@ -225,7 +225,6 @@ class CollectiveService extends CollectiveServiceBase {
 	 * @param int         $id
 	 * @param string      $userId
 	 * @param string|null $emoji
-	 * @param int|null    $pageOrder
 	 *
 	 * @return CollectiveInfo
 	 * @throws MissingDependencyException
@@ -234,8 +233,7 @@ class CollectiveService extends CollectiveServiceBase {
 	 */
 	public function updateCollective(int $id,
 									 string $userId,
-									 string $emoji = null,
-									 int $pageOrder = null): CollectiveInfo {
+									 string $emoji = null): CollectiveInfo {
 		$collectiveInfo = $this->getCollectiveInfo($id, $userId);
 
 		if (!$this->circleHelper->isAdmin($collectiveInfo->getCircleId(), $userId)) {
@@ -244,14 +242,6 @@ class CollectiveService extends CollectiveServiceBase {
 
 		if ($emoji) {
 			$collectiveInfo->setEmoji($emoji);
-		}
-
-		if ($pageOrder) {
-			try {
-				$collectiveInfo->setPageOrder($pageOrder);
-			} catch (\RuntimeException $e) {
-				throw new NotPermittedException('Failed to update collective with invalid page order', 0, $e);
-			}
 		}
 
 		return new CollectiveInfo($this->collectiveMapper->update($collectiveInfo),

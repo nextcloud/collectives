@@ -18,7 +18,6 @@ use OCP\Constants;
  * @method void setPermissions(int $permissions)
  * @method string getEmoji()
  * @method void setEmoji(string $emoji)
- * @method int getPageOrder()
  * @method int|null getTrashTimestamp()
  * @method void setTrashTimestamp(?int $trashTimestamp)
  */
@@ -38,7 +37,7 @@ class Collective extends Entity implements JsonSerializable {
 		1 => 'byTimestamp',
 		2 => 'byTitle',
 	];
-	public const defaultPageOrder = 1;
+	public const defaultPageOrder = 0;
 
 	/** @var string */
 	protected $circleUniqueId;
@@ -51,9 +50,6 @@ class Collective extends Entity implements JsonSerializable {
 
 	/** @var int|null */
 	protected $trashTimestamp;
-
-	/** @var int */
-	protected $pageOrder = self::defaultPageOrder;
 
 	/**
 	 * @return string|null
@@ -125,17 +121,6 @@ class Collective extends Entity implements JsonSerializable {
 	}
 
 	/**
-	 * @param int $pageOrder
-	 */
-	public function setPageOrder(int $pageOrder): void {
-		if (!array_key_exists($pageOrder, self::pageOrders)) {
-			throw new \RuntimeException('Invalid pageOrder value: ' . $pageOrder);
-		}
-		$this->pageOrder = $pageOrder;
-		$this->markFieldUpdated('pageOrder');
-	}
-
-	/**
 	 * @return bool
 	 */
 	public function isTrashed(): bool {
@@ -151,7 +136,6 @@ class Collective extends Entity implements JsonSerializable {
 			'circleId' => $this->circleUniqueId,
 			'permissions' => $this->permissions,
 			'emoji' => $this->emoji,
-			'pageOrder' => $this->pageOrder,
 			'trashTimestamp' => $this->trashTimestamp
 		];
 	}
