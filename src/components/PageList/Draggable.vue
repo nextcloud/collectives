@@ -166,6 +166,7 @@ export default {
 			if (!this.allowSorting) {
 				index = Infinity
 			}
+			this.expand(newParentId)
 			this.movePage(oldParentId, newParentId, pageId, index)
 			this.sortableActive = false
 		},
