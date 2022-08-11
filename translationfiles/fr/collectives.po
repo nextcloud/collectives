@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-08-04 15:55+0200\n"
-"PO-Revision-Date: 2022-07-22 08:47+0000\n"
+"PO-Revision-Date: 2022-08-10 14:20+0000\n"
 "Last-Translator: Nathan <bonnemainsnathan@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/fr/>\n"
@@ -241,7 +241,7 @@ msgstr "Sélectionnez une émoticône pour le collectif"
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:31
 #: /collectives/specialVueFakeDummyForL10nScript.js:48
 msgid "Save new collective name"
-msgstr ""
+msgstr "Définir un nouveau nom de collectif"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:39
 #: /collectives/specialVueFakeDummyForL10nScript.js:50
@@ -363,7 +363,7 @@ msgstr "Émoticône mise à jour"
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:2
 #: /collectives/specialVueFakeDummyForL10nScript.js:102
 msgid "Collectives settings"
-msgstr ""
+msgstr "Paramètres du collectif"
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:6
 #: /collectives/specialVueFakeDummyForL10nScript.js:104
@@ -471,12 +471,12 @@ msgstr "Sélectionner un cercle…"
 #. TRANSLATORS src/components/Nav/NewCollective.vue:65
 #: /collectives/specialVueFakeDummyForL10nScript.js:144
 msgid "Create a new collective"
-msgstr ""
+msgstr "Créer un nouveau collectif"
 
 #. TRANSLATORS src/components/Nav/NewCollective.vue:70
 #: /collectives/specialVueFakeDummyForL10nScript.js:146
 msgid "Cancel creating a new collective"
-msgstr ""
+msgstr "Annuler la création d'un nouveau collectif"
 
 #. TRANSLATORS src/components/Nav.vue:7
 #: /collectives/specialVueFakeDummyForL10nScript.js:148
@@ -584,12 +584,12 @@ msgstr "Editer"
 #. TRANSLATORS src/components/Page.vue:83
 #: /collectives/specialVueFakeDummyForL10nScript.js:194
 msgid "Toggle page sidebar"
-msgstr ""
+msgstr "Afficher/Masquer la barre latérale de la page"
 
 #. TRANSLATORS src/components/Page.vue:92
 #: /collectives/specialVueFakeDummyForL10nScript.js:196
 msgid "Page content"
-msgstr ""
+msgstr "Contenu de la page"
 
 #. TRANSLATORS src/components/Page.vue:442
 #: /collectives/specialVueFakeDummyForL10nScript.js:200
