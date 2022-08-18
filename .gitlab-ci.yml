@@ -302,7 +302,7 @@ App Update Test:
     - sudo -u www-data $NEXTCLOUD_SOURCE/occ app:list
     - sudo -u www-data $NEXTCLOUD_SOURCE/occ collectives:create --owner alice YetAnotherNewCollective
   before_script:
-    - make composer-install
+    - make composer-install--no-dev
   services:
     - mariadb:latest
   needs:
