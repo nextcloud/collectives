@@ -15,17 +15,19 @@
         "teamtnt/tntsearch": "^2.9"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.5",
-        "nextcloud/coding-standard": "^1.0.0",
+        "ext-dom": "*",
         "behat/behat": "^3.8",
+        "christophwurst/nextcloud": "v22.1.1",
         "guzzlehttp/guzzle": "^7.2",
-        "psalm/phar": "^4.15",
-        "ext-dom": "*"
+        "nextcloud/coding-standard": "^1.0.0",
+        "phpunit/phpunit": "^9.5",
+        "psalm/phar": "^4.15"
     },
     "scripts": {
       "lint": "find . -name \\*.php -not -path './vendor/*' -exec php -l \"{}\" \\;",
       "cs:check": "php-cs-fixer fix --dry-run --diff",
       "cs:fix": "php-cs-fixer fix",
-      "psalm": "psalm.phar"
+      "psalm": "psalm.phar",
+      "psalm:update-baseline": "psalm.phar --threads=1 --update-baseline --set-baseline=tests/psalm-baseline.xml"
     }
 }
