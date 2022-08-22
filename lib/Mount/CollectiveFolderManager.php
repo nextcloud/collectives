@@ -43,7 +43,8 @@ class CollectiveFolderManager {
 	/** @var IRequest */
 	private $request;
 
-	private ?int $rootFolderStorageId = null;
+	/** @var int|null */
+	private $rootFolderStorageId = null;
 
 	/**
 	 * CollectiveFolderManager constructor.
