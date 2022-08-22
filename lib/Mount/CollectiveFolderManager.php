@@ -43,6 +43,9 @@ class CollectiveFolderManager {
 	/** @var IRequest */
 	private $request;
 
+	/** @var int|null */
+	private $rootFolderStorageId = null;
+
 	/**
 	 * CollectiveFolderManager constructor.
 	 *
@@ -196,14 +199,18 @@ class CollectiveFolderManager {
 	 * @throws NotFoundException
 	 */
 	private function getRootFolderStorageId(): int {
-		$qb = $this->connection->getQueryBuilder();
+		if ($this->rootFolderStorageId === null) {
+			$qb = $this->connection->getQueryBuilder();
 
-		$qb->select('fileid')
-			->from('filecache')
-			->where($qb->expr()->eq('storage', $qb->createNamedParameter($this->getRootFolder()->getStorage()->getCache()->getNumericStorageId())))
-			->andWhere($qb->expr()->eq('path_hash', $qb->createNamedParameter(md5($this->getRootPath()))));
+			$qb->select('fileid')
+				->from('filecache')
+				->where($qb->expr()->eq('storage', $qb->createNamedParameter($this->getRootFolder()->getStorage()->getCache()->getNumericStorageId())))
+				->andWhere($qb->expr()->eq('path_hash', $qb->createNamedParameter(md5($this->getRootPath()))));
 
-		return (int)$qb->execute()->fetchColumn();
+			$this->rootFolderStorageId = (int)$qb->execute()->fetchColumn();
+		}
+
+		return $this->rootFolderStorageId;
 	}
 
 	/**

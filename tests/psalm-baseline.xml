@@ -571,7 +571,7 @@
       <code>PageMapper</code>
       <code>PageMapper</code>
     </MissingDependency>
-    <UndefinedClass occurrences="21">
+    <UndefinedClass occurrences="23">
       <code>File</code>
       <code>File</code>
       <code>File</code>
@@ -593,6 +593,8 @@
       <code>Folder</code>
       <code>Folder</code>
       <code>IConfig</code>
+      <code>Node|null</code>
+      <code>Node|null</code>
     </UndefinedClass>
     <UndefinedDocblockClass occurrences="1">
       <code>IConfig</code>
