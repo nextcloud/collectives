@@ -62,6 +62,9 @@ node-modules:
 composer-install: composer
 	php $(BUILD_TOOLS_DIR)/composer.phar install --prefer-dist
 
+composer-install-no-dev: composer
+	php $(BUILD_TOOLS_DIR)/composer.phar install --prefer-dist --no-dev
+
 # Clean build artifacts
 clean:
 	rm -rf js/*
