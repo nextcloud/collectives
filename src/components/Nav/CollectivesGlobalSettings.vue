@@ -1,5 +1,5 @@
 <template>
-	<AppNavigationSettings :title="t('collectives', 'Collectives settings')">
+	<NcAppNavigationSettings :title="t('collectives', 'Collectives settings')">
 		<div>
 			<p>
 				<label for="userFolder">
@@ -14,20 +14,20 @@
 				:disabled="disabledPicker"
 				@click="selectCollectivesFolder">
 		</div>
-	</AppNavigationSettings>
+	</NcAppNavigationSettings>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import { UPDATE_COLLECTIVES_FOLDER } from '../../store/actions.js'
 import { getFilePickerBuilder, showError } from '@nextcloud/dialogs'
+import NcAppNavigationSettings from '@nextcloud/vue/dist/Components/NcAppNavigationSettings'
+import { UPDATE_COLLECTIVES_FOLDER } from '../../store/actions.js'
 import displayError from '../../util/displayError.js'
-import AppNavigationSettings from '@nextcloud/vue/dist/Components/AppNavigationSettings'
 
 export default {
 	name: 'CollectivesGlobalSettings',
 	components: {
-		AppNavigationSettings,
+		NcAppNavigationSettings,
 	},
 
 	data() {

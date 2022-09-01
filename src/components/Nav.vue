@@ -1,10 +1,10 @@
 <template>
-	<AppNavigation>
+	<NcAppNavigation>
 		<template v-if="loading('collectives')" #default>
-			<EmptyContent icon="icon-loading" />
+			<NcEmptyContent icon="icon-loading" />
 		</template>
 		<template #list>
-			<AppNavigationCaption :title="t('collectives', 'Select a collective')" />
+			<NcAppNavigationCaption :title="t('collectives', 'Select a collective')" />
 			<CollectiveListItem v-for="collective in collectives"
 				:key="collective.id"
 				:collective="collective" />
@@ -16,16 +16,16 @@
 				@delete-collective="deleteCollective" />
 			<CollectivesGlobalSettings v-if="!isPublic" />
 		</template>
-	</AppNavigation>
+	</NcAppNavigation>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import { RESTORE_COLLECTIVE, DELETE_COLLECTIVE } from '../store/actions.js'
-import AppNavigation from '@nextcloud/vue/dist/Components/AppNavigation'
-import AppNavigationCaption from '@nextcloud/vue/dist/Components/AppNavigationCaption'
+import NcAppNavigation from '@nextcloud/vue/dist/Components/NcAppNavigation'
+import NcAppNavigationCaption from '@nextcloud/vue/dist/Components/NcAppNavigationCaption'
 import NewCollective from './Nav/NewCollective.vue'
-import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
+import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent'
 import CollectiveListItem from './Nav/CollectiveListItem.vue'
 import CollectivesGlobalSettings from './Nav/CollectivesGlobalSettings.vue'
 import CollectivesTrash from './Nav/CollectivesTrash.vue'
@@ -35,13 +35,13 @@ export default {
 	name: 'Nav',
 
 	components: {
-		AppNavigation,
-		AppNavigationCaption,
+		NcAppNavigation,
+		NcAppNavigationCaption,
 		NewCollective,
 		CollectiveListItem,
 		CollectivesGlobalSettings,
 		CollectivesTrash,
-		EmptyContent,
+		NcEmptyContent,
 	},
 
 	computed: {

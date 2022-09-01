@@ -4,14 +4,14 @@
 			type="hidden"
 			name="sharingToken"
 			:value="shareTokenParam">
-		<EmptyContent v-show="loading">
+		<NcEmptyContent v-show="loading">
 			<template #icon>
 				<DownloadIcon />
 			</template>
 			<h1>{{ t('collectives', 'Preparing collective for exporting or printing') }}</h1>
-			<ProgressBar :value="loadingProgress" size="medium">
+			<NcProgressBar :value="loadingProgress" size="medium">
 				{{ loadingProgress }}
-			</ProgressBar>
+			</NcProgressBar>
 			<template #desc>
 				<ul class="load-messages">
 					<li v-for="task in [loadPages, loadImages]"
@@ -22,7 +22,7 @@
 					</li>
 				</ul>
 			</template>
-		</EmptyContent>
+		</NcEmptyContent>
 		<div v-for="page in pagesTreeWalk()" v-show="!loading" :key="page.id">
 			<PagePrint :page="page"
 				@loading="waitingFor.push(page.id)"
@@ -33,8 +33,8 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
-import ProgressBar from '@nextcloud/vue/dist/Components/ProgressBar'
+import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent'
+import NcProgressBar from '@nextcloud/vue/dist/Components/NcProgressBar'
 import DownloadIcon from 'vue-material-design-icons/Download'
 import PagePrint from './PagePrint.vue'
 import { GET_PAGES } from '../store/actions.js'
@@ -44,10 +44,10 @@ export default {
 	name: 'CollectivePrint',
 
 	components: {
-		EmptyContent,
+		NcEmptyContent,
 		PagePrint,
 		DownloadIcon,
-		ProgressBar,
+		NcProgressBar,
 	},
 
 	data() {

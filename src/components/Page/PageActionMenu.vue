@@ -1,12 +1,12 @@
 <template>
-	<Actions :force-menu="true" @click.native.stop>
-		<ActionLink v-if="showFilesLink"
+	<NcActions :force-menu="true" @click.native.stop>
+		<NcActionLink v-if="showFilesLink"
 			:href="filesUrl"
 			icon="icon-files-dark"
 			:close-after-click="true">
 			{{ t('collectives', 'Show in Files') }}
-		</ActionLink>
-		<ActionButton v-if="!isTemplate && !isLandingPage"
+		</NcActionLink>
+		<NcActionButton v-if="!isTemplate && !isLandingPage"
 			:close-after-click="true"
 			@click.native="show('details')"
 			@click="gotoPageEmojiPicker">
@@ -14,8 +14,8 @@
 				<EmoticonOutlineIcon :size="20" />
 			</template>
 			{{ setEmojiString }}
-		</ActionButton>
-		<ActionButton v-if="!isTemplate"
+		</NcActionButton>
+		<NcActionButton v-if="!isTemplate"
 			:close-after-click="true"
 			class="action-button-template"
 			@click.native="show('details')"
@@ -24,8 +24,8 @@
 				<PagesTemplateIcon :size="14" />
 			</template>
 			{{ editTemplateString }}
-		</ActionButton>
-		<ActionButton v-if="!isLandingPage"
+		</NcActionButton>
+		<NcActionButton v-if="!isLandingPage"
 			:close-after-click="true"
 			:disabled="hasSubpages"
 			@click.native="show('details')"
@@ -35,24 +35,24 @@
 				<DeleteIcon v-else :size="20" />
 			</template>
 			{{ deletePageString }}
-		</ActionButton>
-		<ActionSeparator v-if="lastUserId" />
+		</NcActionButton>
+		<NcActionSeparator v-if="lastUserId" />
 		<li v-if="lastUserId" class="action action--user-bubble">
 			<button class="action-button action-button--user-bubble" type="button">
 				<ClockOutlineIcon :size="20" />
 				<LastUserBubble :last-user-id="lastUserId" :timestamp="timestamp" />
 			</button>
 		</li>
-	</Actions>
+	</NcActions>
 </template>
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
 import { generateUrl } from '@nextcloud/router'
-import Actions from '@nextcloud/vue/dist/Components/Actions'
-import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
-import ActionLink from '@nextcloud/vue/dist/Components/ActionLink'
-import ActionSeparator from '@nextcloud/vue/dist/Components/ActionSeparator'
+import NcActions from '@nextcloud/vue/dist/Components/NcActions'
+import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton'
+import NcActionLink from '@nextcloud/vue/dist/Components/NcActionLink'
+import NcActionSeparator from '@nextcloud/vue/dist/Components/NcActionSeparator'
 import ClockOutlineIcon from 'vue-material-design-icons/ClockOutline'
 import DeleteIcon from 'vue-material-design-icons/Delete'
 import DeleteOffIcon from 'vue-material-design-icons/DeleteOff'
@@ -65,10 +65,10 @@ export default {
 	name: 'PageActionMenu',
 
 	components: {
-		Actions,
-		ActionButton,
-		ActionLink,
-		ActionSeparator,
+		NcActions,
+		NcActionButton,
+		NcActionLink,
+		NcActionSeparator,
 		ClockOutlineIcon,
 		DeleteIcon,
 		DeleteOffIcon,

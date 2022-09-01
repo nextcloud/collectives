@@ -1,11 +1,10 @@
 <template>
-	<AppSettingsDialog :open.sync="showSettings"
+	<NcAppSettingsDialog :open.sync="showSettings"
 		:aria-label="t('collectives', 'Collective settings')"
 		:show-navigation="true">
-		<AppSettingsSection :title="t('collectives', 'Name and emoji')">
+		<NcAppSettingsSection :title="t('collectives', 'Name and emoji')">
 			<div class="collective-name">
-				<EmojiPicker :show-preview="true"
-					@select="updateEmoji">
+				<NcEmojiPicker :show-preview="true" @select="updateEmoji">
 					<Button type="tertiary"
 						:aria-label="t('collectives', 'Select emoji for collective')"
 						:title="emojiTitle"
@@ -17,7 +16,7 @@
 							<EmoticonOutline :size="20" />
 						</template>
 					</Button>
-				</EmojiPicker>
+				</NcEmojiPicker>
 				<form @submit.prevent.stop="renameCollective()">
 					<input ref="nameField"
 						v-model="newCollectiveName"
@@ -34,35 +33,35 @@
 						:disabled="!isCollectiveOwner(collective)">
 				</form>
 			</div>
-		</AppSettingsSection>
+		</NcAppSettingsSection>
 
-		<AppSettingsSection :title="t('collectives', 'Permissions')">
+		<NcAppSettingsSection :title="t('collectives', 'Permissions')">
 			<div class="subsection-header">
 				{{ t('collectives', 'Allow editing for') }}
 			</div>
 
 			<div class="permissions-input-edit">
-				<CheckboxRadioSwitch :checked.sync="editPermissions"
+				<NcCheckboxRadioSwitch :checked.sync="editPermissions"
 					:value="String(memberLevels.LEVEL_ADMIN)"
 					:loading="loading('updateCollectiveEditPermissions_' + String(memberLevels.LEVEL_ADMIN))"
 					name="edit_admins"
 					type="radio">
 					{{ t('collectives', 'Admins only') }}
-				</CheckboxRadioSwitch>
-				<CheckboxRadioSwitch :checked.sync="editPermissions"
+				</NcCheckboxRadioSwitch>
+				<NcCheckboxRadioSwitch :checked.sync="editPermissions"
 					:value="String(memberLevels.LEVEL_MODERATOR)"
 					:loading="loading('updateCollectiveEditPermissions_' + String(memberLevels.LEVEL_MODERATOR))"
 					name="edit_moderators"
 					type="radio">
 					{{ t('collectives', 'Admins and moderaters') }}
-				</CheckboxRadioSwitch>
-				<CheckboxRadioSwitch :checked.sync="editPermissions"
+				</NcCheckboxRadioSwitch>
+				<NcCheckboxRadioSwitch :checked.sync="editPermissions"
 					:value="String(memberLevels.LEVEL_MEMBER)"
 					:loading="loading('updateCollectiveEditPermissions_' + String(memberLevels.LEVEL_MEMBER))"
 					name="edit_members"
 					type="radio">
 					{{ t('collectives', 'All members') }}
-				</CheckboxRadioSwitch>
+				</NcCheckboxRadioSwitch>
 			</div>
 
 			<div class="subsection-header subsection-header__second">
@@ -70,31 +69,31 @@
 			</div>
 
 			<div class="permissions-input-share">
-				<CheckboxRadioSwitch :checked.sync="sharePermissions"
+				<NcCheckboxRadioSwitch :checked.sync="sharePermissions"
 					:value="String(memberLevels.LEVEL_ADMIN)"
 					:loading="loading('updateCollectiveSharePermissions_' + String(memberLevels.LEVEL_ADMIN))"
 					name="share_admins"
 					type="radio">
 					{{ t('collectives', 'Admins only') }}
-				</CheckboxRadioSwitch>
-				<CheckboxRadioSwitch :checked.sync="sharePermissions"
+				</NcCheckboxRadioSwitch>
+				<NcCheckboxRadioSwitch :checked.sync="sharePermissions"
 					:value="String(memberLevels.LEVEL_MODERATOR)"
 					:loading="loading('updateCollectiveSharePermissions_' + String(memberLevels.LEVEL_MODERATOR))"
 					name="share_moderators"
 					type="radio">
 					{{ t('collectives', 'Admins and moderaters') }}
-				</CheckboxRadioSwitch>
-				<CheckboxRadioSwitch :checked.sync="sharePermissions"
+				</NcCheckboxRadioSwitch>
+				<NcCheckboxRadioSwitch :checked.sync="sharePermissions"
 					:value="String(memberLevels.LEVEL_MEMBER)"
 					:loading="loading('updateCollectiveSharePermissions_' + String(memberLevels.LEVEL_MEMBER))"
 					name="share_members"
 					type="radio">
 					{{ t('collectives', 'All members') }}
-				</CheckboxRadioSwitch>
+				</NcCheckboxRadioSwitch>
 			</div>
-		</AppSettingsSection>
+		</NcAppSettingsSection>
 
-		<AppSettingsSection :title="t('collectives', 'Members')">
+		<NcAppSettingsSection :title="t('collectives', 'Members')">
 			<div class="section-description">
 				{{ t('collectives', 'Members can be managed via the connected circle in the Contacts app.') }}
 			</div>
@@ -106,29 +105,27 @@
 					{{ t('collectives', 'Open circle in Contacts') }}
 				</Button>
 			</div>
-		</AppSettingsSection>
+		</NcAppSettingsSection>
 
-		<AppSettingsSection :title="t('collectives', 'Danger zone')">
+		<NcAppSettingsSection :title="t('collectives', 'Danger zone')">
 			<div>
-				<Button type="error"
-					:aria-label="t('collectives', 'Delete collective')"
-					@click="trashCollective()">
+				<NcButton type="error" :aria-label="t('collectives', 'Delete collective')" @click="trashCollective()">
 					{{ t('collectives', 'Delete collective') }}
-				</Button>
+				</NcButton>
 			</div>
-		</AppSettingsSection>
-	</AppSettingsDialog>
+		</NcAppSettingsSection>
+	</NcAppSettingsDialog>
 </template>
 
 <script>
 import { memberLevels } from '../../constants.js'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { showError, showSuccess } from '@nextcloud/dialogs'
-import AppSettingsDialog from '@nextcloud/vue/dist/Components/AppSettingsDialog'
-import AppSettingsSection from '@nextcloud/vue/dist/Components/AppSettingsSection'
-import Button from '@nextcloud/vue/dist/Components/Button'
-import CheckboxRadioSwitch from '@nextcloud/vue/dist/Components/CheckboxRadioSwitch'
-import EmojiPicker from '@nextcloud/vue/dist/Components/EmojiPicker'
+import NcAppSettingsDialog from '@nextcloud/vue/dist/Components/NcAppSettingsDialog'
+import NcAppSettingsSection from '@nextcloud/vue/dist/Components/NcAppSettingsSection'
+import NcButton from '@nextcloud/vue/dist/Components/NcButton'
+import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch'
+import NcEmojiPicker from '@nextcloud/vue/dist/Components/NcEmojiPicker'
 import EmoticonOutline from 'vue-material-design-icons/EmoticonOutline'
 import { generateUrl } from '@nextcloud/router'
 import {
@@ -144,11 +141,11 @@ export default {
 	name: 'CollectiveSettings',
 
 	components: {
-		AppSettingsDialog,
-		AppSettingsSection,
-		Button,
-		CheckboxRadioSwitch,
-		EmojiPicker,
+		NcAppSettingsDialog,
+		NcAppSettingsSection,
+		NcButton,
+		NcCheckboxRadioSwitch,
+		NcEmojiPicker,
 		EmoticonOutline,
 	},
 

@@ -1,18 +1,18 @@
 <template>
-	<AppContentDetails>
+	<NcAppContentDetails>
 		<Version v-if="currentPage && version" />
 		<Page v-else-if="currentPage" />
-		<EmptyContent v-else-if="loading('collective') || loading('page')"
+		<NcEmptyContent v-else-if="loading('collective') || loading('page')"
 			icon="icon-loading" />
 		<PageNotFound v-else />
-	</AppContentDetails>
+	</NcAppContentDetails>
 </template>
 
 <script>
 import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { listen } from '@nextcloud/notify_push'
-import AppContentDetails from '@nextcloud/vue/dist/Components/AppContentDetails'
-import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
+import NcAppContentDetails from '@nextcloud/vue/dist/Components/NcAppContentDetails'
+import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { GET_PAGES } from '../store/actions.js'
 import { SELECT_VERSION } from '../store/mutations.js'
@@ -25,8 +25,8 @@ export default {
 	name: 'Collective',
 
 	components: {
-		AppContentDetails,
-		EmptyContent,
+		NcAppContentDetails,
+		NcEmptyContent,
 		Page,
 		PageNotFound,
 		Version,

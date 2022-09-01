@@ -1,5 +1,5 @@
 <template>
-	<Content app-name="collectives">
+	<NcContent app-name="collectives">
 		<!-- go back to list when in details mode -->
 		<a v-if="showing('details') && isMobile"
 			class="app-details-toggle icon-toggle-filelist"
@@ -8,7 +8,7 @@
 		<Nav v-if="!printView" />
 		<router-view />
 		<PageSidebar v-if="currentPage" v-show="showing('sidebar')" />
-	</Content>
+	</NcContent>
 </template>
 
 <script>
@@ -16,7 +16,7 @@ import { showInfo, showError } from '@nextcloud/dialogs'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { GET_COLLECTIVES_FOLDER, GET_COLLECTIVES, GET_TRASH_COLLECTIVES } from './store/actions.js'
 import displayError from './util/displayError.js'
-import Content from '@nextcloud/vue/dist/Components/Content'
+import NcContent from '@nextcloud/vue/dist/Components/NcContent'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile'
 import Nav from './components/Nav.vue'
 import PageSidebar from './components/PageSidebar.vue'
@@ -25,7 +25,7 @@ export default {
 	name: 'Collectives',
 
 	components: {
-		Content,
+		NcContent,
 		Nav,
 		PageSidebar,
 	},
@@ -180,6 +180,10 @@ export default {
 	#content-vue {
 		display: block !important;
 	}
+}
+
+.app-navigation .app-navigation-toggle {
+	top: 0 !important;
 }
 </style>
 

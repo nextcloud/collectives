@@ -54,39 +54,38 @@
 				:last-user-id="lastUserId"
 				:is-landing-page="isLandingPage"
 				:is-template="isTemplate" />
-			<Actions>
-				<ActionButton class="action-button-add" @click="newPage(pageId)">
+			<NcActions>
+				<NcActionButton class="action-button-add" @click="newPage(pageId)">
 					<template #icon>
 						<PlusIcon :size="20" fill-color="var(--color-main-text)" />
 					</template>
 					{{ addPageString }}
-				</ActionButton>
-			</Actions>
+				</NcActionButton>
+			</NcActions>
 		</div>
 	</div>
 </template>
 
 <script>
-
-import isMobile from '@nextcloud/vue/dist/Mixins/isMobile'
-import pageMixin from '../../mixins/pageMixin.js'
 import { generateUrl } from '@nextcloud/router'
 import { mapGetters, mapMutations, mapState } from 'vuex'
-import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
-import Actions from '@nextcloud/vue/dist/Components/Actions'
+import isMobile from '@nextcloud/vue/dist/Mixins/isMobile'
+import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton'
+import NcActions from '@nextcloud/vue/dist/Components/NcActions'
 import MenuRightIcon from 'vue-material-design-icons/MenuRight'
+import PlusIcon from 'vue-material-design-icons/Plus'
+import pageMixin from '../../mixins/pageMixin.js'
 import PageIcon from '../Icon/PageIcon.vue'
 import PageActionMenu from '../Page/PageActionMenu.vue'
 import PageTemplateIcon from '../Icon/PageTemplateIcon.vue'
-import PlusIcon from 'vue-material-design-icons/Plus'
 import { scrollToPage } from '../../util/scrollToElement.js'
 
 export default {
 	name: 'Item',
 
 	components: {
-		ActionButton,
-		Actions,
+		NcActionButton,
+		NcActions,
 		MenuRightIcon,
 		PageIcon,
 		PageActionMenu,

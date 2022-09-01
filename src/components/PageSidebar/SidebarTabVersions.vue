@@ -1,17 +1,17 @@
 <template>
-	<AppContentList>
+	<NcAppContentList>
 		<!-- loading -->
-		<div v-if="loading('versions')" class="emptycontent">
+		<div v-if="loading('versions')" class="Ncemptycontent">
 			<div class="icon icon-loading" />
 		</div>
 
 		<!-- error message -->
-		<EmptyContent v-else-if="error">
+		<NcEmptyContent v-else-if="error">
 			<template #icon>
 				<AlertOctagonIcon />
 			</template>
 			<h2>{{ error }}</h2>
-		</EmptyContent>
+		</NcEmptyContent>
 
 		<!-- versions list -->
 		<template v-else-if="!loading('versions') && versions.length">
@@ -52,7 +52,7 @@
 		</template>
 
 		<!-- no versions found -->
-		<EmptyContent v-else>
+		<NcEmptyContent v-else>
 			<template #icon>
 				<RestoreIcon />
 			</template>
@@ -60,19 +60,19 @@
 			<template #desc>
 				{{ t( 'collectives', 'After editing you can find old versions of the page here.') }}
 			</template>
-		</EmptyContent>
-	</AppContentList>
+		</NcEmptyContent>
+	</NcAppContentList>
 </template>
 
 <script>
-import AppContentList from '@nextcloud/vue/dist/Components/AppContentList'
-import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
-import moment from '@nextcloud/moment'
-import { formatFileSize } from '@nextcloud/files'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
-import PageIcon from '../Icon/PageIcon.vue'
+import { formatFileSize } from '@nextcloud/files'
+import NcAppContentList from '@nextcloud/vue/dist/Components/NcAppContentList'
+import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent'
+import moment from '@nextcloud/moment'
 import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagon'
 import RestoreIcon from 'vue-material-design-icons/Restore'
+import PageIcon from '../Icon/PageIcon.vue'
 import { SELECT_VERSION } from '../../store/mutations.js'
 import { GET_VERSIONS } from '../../store/actions.js'
 
@@ -81,8 +81,8 @@ export default {
 
 	components: {
 		AlertOctagonIcon,
-		AppContentList,
-		EmptyContent,
+		NcAppContentList,
+		NcEmptyContent,
 		PageIcon,
 		RestoreIcon,
 	},
