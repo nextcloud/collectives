@@ -1,5 +1,5 @@
 <template>
-	<EmptyContent>
+	<NcEmptyContent>
 		{{ t('collectives', 'Page not found:') }}
 		{{ pageParam }}
 		<template #icon>
@@ -13,11 +13,11 @@
 				{{ t('collectives', 'Select a page from the list or create a new one.') }}
 			</div>
 		</template>
-	</EmptyContent>
+	</NcEmptyContent>
 </template>
 
 <script>
-import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
+import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent'
 import { mapGetters } from 'vuex'
 import PageIcon from '../Icon/PageIcon.vue'
 
@@ -25,7 +25,7 @@ export default {
 	name: 'PageNotFound',
 
 	components: {
-		EmptyContent,
+		NcEmptyContent,
 		PageIcon,
 	},
 

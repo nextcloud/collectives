@@ -1,32 +1,32 @@
 <template>
-	<AppContent :show-details="showing('details')" :list-min-width="20">
+	<NcAppContent :show-details="showing('details')" :list-min-width="20">
 		<template #list>
 			<PageList v-if="currentCollective" />
 		</template>
 		<Collective v-if="currentCollective" />
-		<EmptyContent v-else-if="loading('collectives')"
+		<NcEmptyContent v-else-if="loading('collectives')"
 			icon="icon-loading" />
 		<CollectiveNotFound v-else />
-	</AppContent>
+	</NcAppContent>
 </template>
 
 <script>
 
 import { mapGetters } from 'vuex'
-import AppContent from '@nextcloud/vue/dist/Components/AppContent'
+import NcAppContent from '@nextcloud/vue/dist/Components/NcAppContent'
+import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent'
 import Collective from '../components/Collective.vue'
 import CollectiveNotFound from '../components/CollectiveNotFound.vue'
-import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 import PageList from '../components/PageList.vue'
 
 export default {
 	name: 'CollectiveView',
 
 	components: {
-		AppContent,
+		NcAppContent,
+		NcEmptyContent,
 		Collective,
 		CollectiveNotFound,
-		EmptyContent,
 		PageList,
 	},
 

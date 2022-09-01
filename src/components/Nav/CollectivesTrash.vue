@@ -3,19 +3,19 @@
 		v-click-outside="clickOutsideConfig"
 		:class="{ open }">
 		<div id="collectives-trash__header">
-			<Button type="tertiary" class="collectives-trash-button" @click="toggleTrash">
+			<NcButton type="tertiary" class="collectives-trash-button" @click="toggleTrash">
 				<template #icon>
 					<DeleteIcon class="collectives-trash-button__icon" :size="20" />
 				</template>
 				<span class="collectives-trash-button__label">
 					{{ t('collectives', 'Deleted collectives') }}
 				</span>
-			</Button>
+			</NcButton>
 		</div>
 		<transition name="slide-up">
 			<div v-show="open" id="collectives-trash__content">
 				<ul class="app-navigation__list">
-					<AppNavigationItem v-for="collective in trashCollectives"
+					<NcAppNavigationItem v-for="collective in trashCollectives"
 						:key="collective.circleId"
 						:title="collective.name"
 						:force-menu="true"
@@ -27,25 +27,25 @@
 							<CollectivesIcon :size="20" />
 						</template>
 						<template #actions>
-							<ActionButton :close-after-click="true" @click="restoreCollective(collective)">
+							<NcActionButton :close-after-click="true" @click="restoreCollective(collective)">
 								<template #icon>
 									<RestoreIcon :size="20" />
 								</template>
 								{{ t('collectives', 'Restore') }}
-							</ActionButton>
-							<ActionButton :close-after-click="true" @click="showDeleteModal(collective)">
+							</NcActionButton>
+							<NcActionButton :close-after-click="true" @click="showDeleteModal(collective)">
 								<template #icon>
 									<DeleteIcon :size="20" />
 								</template>
 								{{ t('collectives', 'Delete permanently') }}
-							</ActionButton>
+							</NcActionButton>
 						</template>
-					</AppNavigationItem>
+					</NcAppNavigationItem>
 				</ul>
 			</div>
 		</transition>
 
-		<Modal v-if="deleteModal" size="small" @close="closeDeleteModal">
+		<NcModal v-if="deleteModal" size="small" @close="closeDeleteModal">
 			<div class="modal__content">
 				<h2>
 					{{ t('collectives', 'Permanently delete collective »{collective}«', { collective: modalCollective.name }) }}
@@ -54,35 +54,35 @@
 					{{ t('collectives', 'Delete corresponding circle along with the collective?') }}
 				</div>
 				<div class="three_buttons">
-					<Button @click="closeDeleteModal">
+					<NcButton @click="closeDeleteModal">
 						{{ t('collectives', 'Cancel') }}
-					</Button>
-					<Button type="error" @click="deleteCollective(modalCollective, false)">
+					</NcButton>
+					<NcButton type="error" @click="deleteCollective(modalCollective, false)">
 						{{ t('collectives', 'Only collective') }}
-					</Button>
-					<Button v-if="isCollectiveOwner(modalCollective)"
+					</NcButton>
+					<NcButton v-if="isCollectiveOwner(modalCollective)"
 						type="error"
 						@click="deleteCollective(modalCollective, true)">
 						{{ t('collectives', 'Collective and circle') }}
-					</Button>
-					<Button v-else
+					</NcButton>
+					<NcButton v-else
 						type="primary"
 						disabled
 						:title="t('collectives', 'Only circle owners can delete a circle')">
 						{{ t('collectives', 'Collective and circle') }}
-					</Button>
+					</NcButton>
 				</div>
 			</div>
-		</Modal>
+		</NcModal>
 	</div>
 </template>
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
-import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
-import Button from '@nextcloud/vue/dist/Components/Button'
-import Modal from '@nextcloud/vue/dist/Components/Modal'
+import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton'
+import NcAppNavigationItem from '@nextcloud/vue/dist/Components/NcAppNavigationItem'
+import NcButton from '@nextcloud/vue/dist/Components/NcButton'
+import NcModal from '@nextcloud/vue/dist/Components/NcModal'
 import CollectivesIcon from '../Icon/CollectivesIcon.vue'
 import DeleteIcon from 'vue-material-design-icons/Delete'
 import RestoreIcon from 'vue-material-design-icons/Restore'
@@ -94,12 +94,12 @@ export default {
 		ClickOutside,
 	},
 	components: {
-		ActionButton,
-		AppNavigationItem,
-		Button,
+		NcActionButton,
+		NcAppNavigationItem,
+		NcButton,
 		CollectivesIcon,
 		DeleteIcon,
-		Modal,
+		NcModal,
 		RestoreIcon,
 	},
 	data() {

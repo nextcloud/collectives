@@ -1,8 +1,8 @@
 <template>
-	<AppSidebar ref="sidebar"
+	<NcAppSidebar ref="sidebar"
 		:title="title"
 		@close="close">
-		<AppSidebarTab id="backlinks"
+		<NcAppSidebarTab id="backlinks"
 			:order="0"
 			:name="t('collectives', 'Backlinks')">
 			<template #icon>
@@ -11,10 +11,9 @@
 			<div class="app-sidebar-tab-desc">
 				{{ t('collectives', 'Pages that link to this one') }}
 			</div>
-			<SidebarTabBacklinks v-if="showing('sidebar')"
-				:page="page" />
-		</AppSidebarTab>
-		<AppSidebarTab v-if="!isPublic && currentCollectiveCanEdit"
+			<SidebarTabBacklinks v-if="showing('sidebar')" :page="page" />
+		</NcAppSidebarTab>
+		<NcAppSidebarTab v-if="!isPublic && currentCollectiveCanEdit"
 			id="versions"
 			:order="1"
 			:name="t('collectives', 'Versions')">
@@ -28,17 +27,17 @@
 				:page-id="page.id"
 				:page-timestamp="page.timestamp"
 				:page-size="page.size" />
-		</AppSidebarTab>
-	</AppSidebar>
+		</NcAppSidebarTab>
+	</NcAppSidebar>
 </template>
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
-import { SELECT_VERSION } from '../store/mutations.js'
-import AppSidebar from '@nextcloud/vue/dist/Components/AppSidebar'
-import AppSidebarTab from '@nextcloud/vue/dist/Components/AppSidebarTab'
+import NcAppSidebar from '@nextcloud/vue/dist/Components/NcAppSidebar'
+import NcAppSidebarTab from '@nextcloud/vue/dist/Components/NcAppSidebarTab'
 import RestoreIcon from 'vue-material-design-icons/Restore'
 import ArrowBottomLeftIcon from 'vue-material-design-icons/ArrowBottomLeft'
+import { SELECT_VERSION } from '../store/mutations.js'
 import SidebarTabBacklinks from './PageSidebar/SidebarTabBacklinks.vue'
 import SidebarTabVersions from './PageSidebar/SidebarTabVersions.vue'
 
@@ -46,8 +45,8 @@ export default {
 	name: 'PageSidebar',
 
 	components: {
-		AppSidebar,
-		AppSidebarTab,
+		NcAppSidebar,
+		NcAppSidebarTab,
 		RestoreIcon,
 		ArrowBottomLeftIcon,
 		SidebarTabBacklinks,
