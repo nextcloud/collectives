@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-08-11 15:40+0200\n"
-"PO-Revision-Date: 2022-02-12 10:57+0000\n"
-"Last-Translator: Wang Jiaxiang <iwangjiaxiang@outlook.com>\n"
+"PO-Revision-Date: 2022-09-02 11:23+0000\n"
+"Last-Translator: Jason Clermont <lunme1008@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "collectives/collectives-app/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.11-dev\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 
 #. TRANSLATORS src/components/Page.vue:193
 #. TRANSLATORS src/views/Home.vue:4
@@ -64,12 +64,12 @@ msgstr "知识库 %s 的共享已经存在"
 #: /collectives/lib/Service/CollectiveShareService.php:208
 #, php-format
 msgid "You are not allowed to edit %s"
-msgstr ""
+msgstr "您无权编辑 %s"
 
 #: /collectives/lib/Service/CollectiveShareService.php:212
 #: /collectives/lib/Service/CollectiveShareService.php:218
 msgid "Share not found for user"
-msgstr ""
+msgstr "无法找到用户分享"
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:3
 msgid "A place for activist and community projects to build shared knowledge"
@@ -121,7 +121,7 @@ msgstr "选择一个知识库或在左侧创建一个新知识库。"
 #. TRANSLATORS src/components/CollectivePrint.vue:11
 #: /collectives/specialVueFakeDummyForL10nScript.js:10
 msgid "Preparing collective for exporting or printing"
-msgstr ""
+msgstr "准备导出或打印的collective"
 
 #. TRANSLATORS src/components/CollectivePrint.vue:58
 #: /collectives/specialVueFakeDummyForL10nScript.js:12
