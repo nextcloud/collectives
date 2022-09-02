@@ -1,25 +1,25 @@
-# Welcome to your new collective
+# Velkommen til dit nye kollektiv
 
-**Come, organize and build shared knowledge!**
-
-
-### 👥 Invite new people to the collective
-
-Whether you want to add your friends or whole groups, follow the "manage members" link that you find in the action menu inside the collectives list on the left.
-
-### 🌱 Bring life to your collective
-
-Create pages and share your thoughts that really matter. Whether it's a shared knowledge repository for the community or a handbook for your organisation – Collectives works!
-
-### 🛋️ Edit this landing page to feel like home
-
-Push the pencil button to get started! ↗️
+**Kom, organiser og opbyg fælles viden!**
 
 
-## Also good to know
+### 👥 Inviter nye personer til kollektivet
 
-* Multiple people can edit the same page simultaneously.
-* Link local pages by selecting text and choosing "link file". Drag & drop from page list into the editor also works.
-* Add templates for future subpages ("Show templates" -> "Add template for subpages")
-* Find out more about this App in the [documentation](https://collectivecloud.gitlab.io/collectives/).
-* Ask [the community](https://help.nextcloud.com/c/apps/collectives/174) for help in case of questions.
+Uanset om du vil tilføje dine venner eller hele grupper, skal du følge linket "administrer medlemmer", som du finder i handlingsmenuen inde i kollektivlisten til venstre.
+
+### 🌱 Bring liv til dit kollektiv
+
+Opret sider og del dine tanker, der virkelig betyder noget. Uanset om det er et delt videnlager for fællesskabet eller en håndbog for din organisation – Kollektiver fungerer!
+
+### 🛋️ Rediger og tilret denne startsside efter dine behov
+
+Tryk på blyantknappen for at komme i gang! ↗️
+
+
+## Også godt at vide
+
+* Flere personer kan redigere den samme side samtidigt.
+* Link lokale sider ved at vælge tekst og vælge "link fil". Træk og slip fra sideliste til editoren virker også.
+* Tilføj skabeloner til fremtidige undersider ("Vis skabeloner" -> "Tilføj skabelon til undersider")
+* Få mere at vide om denne app i [documentation](https://collectivecloud.gitlab.io/collectives/).
+* Spørg [fællesskabet](https://help.nextcloud.com/c/apps/collectives/174) om hjælp i tilfælde af spørgsmål.
