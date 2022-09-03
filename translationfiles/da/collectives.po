@@ -8,14 +8,16 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-08-11 15:40+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2022-09-04 11:17+0000\n"
+"Last-Translator: Jens Peter Nielsen <mail@jp-nielsen.dk>\n"
+"Language-Team: Danish <https://hosted.weblate.org/projects/collectives/"
+"collectives-app/da/>\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 
 #. TRANSLATORS src/components/Page.vue:193
 #. TRANSLATORS src/views/Home.vue:4
@@ -25,24 +27,24 @@ msgstr ""
 #: /collectives/specialVueFakeDummyForL10nScript.js:198
 #: /collectives/specialVueFakeDummyForL10nScript.js:248
 msgid "Collectives"
-msgstr ""
+msgstr "Kollektiver"
 
 #: /collectives/lib/Search/PageContentProvider.php:92
 msgid "Collectives - Page content"
-msgstr ""
+msgstr "Kollektiver - Side indhold"
 
 #: /collectives/lib/Search/PageProvider.php:67
 msgid "Collectives - Pages"
-msgstr ""
+msgstr "Kollektiver - Sider"
 
 #: /collectives/lib/Search/PageProvider.php:107
 msgid "in Collective {collective}"
-msgstr ""
+msgstr "i Kollektiv {collective}"
 
 #: /collectives/lib/Service/CollectiveService.php:169
 #, php-format
 msgid "Created collective \"%s\" for existing circle."
-msgstr ""
+msgstr "Oprettet kollektiv \"%s\" for eksisterende cirkel."
 
 #: /collectives/lib/Service/CollectiveShareService.php:85
 msgid "Collective Share"
@@ -52,26 +54,26 @@ msgstr ""
 #: /collectives/lib/Service/CollectiveShareService.php:204
 #, php-format
 msgid "You are not allowed to share %s"
-msgstr ""
+msgstr "Du har ikke tilladelse til at dele %s"
 
 #: /collectives/lib/Service/CollectiveShareService.php:177
 #, php-format
 msgid "A share for collective %s exists already"
-msgstr ""
+msgstr "En deling for kollektivet %s findes allerede"
 
 #: /collectives/lib/Service/CollectiveShareService.php:208
 #, php-format
 msgid "You are not allowed to edit %s"
-msgstr ""
+msgstr "Du har ikke tilladelse til at redigere  %s"
 
 #: /collectives/lib/Service/CollectiveShareService.php:212
 #: /collectives/lib/Service/CollectiveShareService.php:218
 msgid "Share not found for user"
-msgstr ""
+msgstr "Deling ikke fundet for bruger"
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:3
 msgid "A place for activist and community projects to build shared knowledge"
-msgstr ""
+msgstr "Et sted for aktivist- og samfundsprojekter til at opbygge fælles viden"
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:4
 msgid ""
@@ -99,47 +101,47 @@ msgstr ""
 #: /collectives/specialVueFakeDummyForL10nScript.js:2
 #: /collectives/specialVueFakeDummyForL10nScript.js:92
 msgid "The contacts app is required to manage members"
-msgstr ""
+msgstr "Kontakter appen er påkrævet for at administrere medlemmer"
 
 #. TRANSLATORS src/components/CollectiveNotFound.vue:3
 #: /collectives/specialVueFakeDummyForL10nScript.js:4
 msgid "Collective not found:"
-msgstr ""
+msgstr "Kollektiv ikke fundet:"
 
 #. TRANSLATORS src/components/CollectiveNotFound.vue:10
 #: /collectives/specialVueFakeDummyForL10nScript.js:6
 msgid "You're not part of a collective with that name."
-msgstr ""
+msgstr "Du er ikke en del af et kollektiv med det navn."
 
 #. TRANSLATORS src/components/CollectiveNotFound.vue:13
 #: /collectives/specialVueFakeDummyForL10nScript.js:8
 msgid "Select a collective or create a new one on the left."
-msgstr ""
+msgstr "Vælg et kollektiv eller opret et nyt."
 
 #. TRANSLATORS src/components/CollectivePrint.vue:11
 #: /collectives/specialVueFakeDummyForL10nScript.js:10
 msgid "Preparing collective for exporting or printing"
-msgstr ""
+msgstr "Klargøring af kollektiv til eksport eller print"
 
 #. TRANSLATORS src/components/CollectivePrint.vue:58
 #: /collectives/specialVueFakeDummyForL10nScript.js:12
 msgid "Loading pages:"
-msgstr ""
+msgstr "Indlæser sider:"
 
 #. TRANSLATORS src/components/CollectivePrint.vue:63
 #: /collectives/specialVueFakeDummyForL10nScript.js:14
 msgid "Loading images:"
-msgstr ""
+msgstr "Indlæser billeder:"
 
 #. TRANSLATORS src/components/LastUserBubble.vue:36
 #: /collectives/specialVueFakeDummyForL10nScript.js:16
 msgid "Last edited by {user}"
-msgstr ""
+msgstr "Sidst redigeret af {user}"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:22
 #: /collectives/specialVueFakeDummyForL10nScript.js:18
 msgid "Manage members"
-msgstr ""
+msgstr "Administrer medlemmer"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:30
 #: /collectives/specialVueFakeDummyForL10nScript.js:20
@@ -149,37 +151,37 @@ msgstr ""
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:44
 #: /collectives/specialVueFakeDummyForL10nScript.js:22
 msgid "Allow editing"
-msgstr ""
+msgstr "Tillad redigering"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:51
 #: /collectives/specialVueFakeDummyForL10nScript.js:24
 msgid "Unshare"
-msgstr ""
+msgstr "Fjern deling"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:57
 #: /collectives/specialVueFakeDummyForL10nScript.js:26
 msgid "Export or print"
-msgstr ""
+msgstr "Eksporter eller udskriv"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:66
 #: /collectives/specialVueFakeDummyForL10nScript.js:28
 msgid "Settings"
-msgstr ""
+msgstr "Indstillinger"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:173
 #: /collectives/specialVueFakeDummyForL10nScript.js:30
 msgid "Copied"
-msgstr ""
+msgstr "Kopieret"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:174
 #: /collectives/specialVueFakeDummyForL10nScript.js:32
 msgid "Cannot copy"
-msgstr ""
+msgstr "Kan ikke kopiere"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:176
 #: /collectives/specialVueFakeDummyForL10nScript.js:34
 msgid "Copy share link"
-msgstr ""
+msgstr "Kopiér delelink"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:186
 #: /collectives/specialVueFakeDummyForL10nScript.js:36
@@ -189,12 +191,12 @@ msgstr ""
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:204
 #: /collectives/specialVueFakeDummyForL10nScript.js:38
 msgid "Could not share the collective"
-msgstr ""
+msgstr "Kunne ikke dele kollektivet"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:210
 #: /collectives/specialVueFakeDummyForL10nScript.js:40
 msgid "Could not unshare the collective"
-msgstr ""
+msgstr "Kunne ikke ophæve deling af kollektivet"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:3
 #: /collectives/specialVueFakeDummyForL10nScript.js:42
@@ -204,191 +206,192 @@ msgstr ""
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:5
 #: /collectives/specialVueFakeDummyForL10nScript.js:44
 msgid "Name and emoji"
-msgstr ""
+msgstr "Navn og emoji"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:10
 #. TRANSLATORS src/components/Nav/NewCollective.vue:42
 #: /collectives/specialVueFakeDummyForL10nScript.js:46
 #: /collectives/specialVueFakeDummyForL10nScript.js:136
 msgid "Select emoji for collective"
-msgstr ""
+msgstr "Vælg emoji for kollektiv"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:31
 #: /collectives/specialVueFakeDummyForL10nScript.js:48
 msgid "Save new collective name"
-msgstr ""
+msgstr "Gem nyt Kollektiv navn"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:39
 #: /collectives/specialVueFakeDummyForL10nScript.js:50
 msgid "Default page order"
-msgstr ""
+msgstr "Standard siderækkefølge"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:46
 #. TRANSLATORS src/components/PageList.vue:32
 #: /collectives/specialVueFakeDummyForL10nScript.js:52
 #: /collectives/specialVueFakeDummyForL10nScript.js:218
 msgid "Sort recently changed first"
-msgstr ""
+msgstr "Sorter for nylig ændret først"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:53
 #. TRANSLATORS src/components/PageList.vue:41
 #: /collectives/specialVueFakeDummyForL10nScript.js:54
 #: /collectives/specialVueFakeDummyForL10nScript.js:220
 msgid "Sort by title"
-msgstr ""
+msgstr "Sorter efter titel"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:58
 #: /collectives/specialVueFakeDummyForL10nScript.js:56
 msgid "Permissions"
-msgstr ""
+msgstr "Tilladelser"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:60
 #: /collectives/specialVueFakeDummyForL10nScript.js:58
 msgid "Allow editing for"
-msgstr ""
+msgstr "Tillad redigering for"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:69
 #: /collectives/specialVueFakeDummyForL10nScript.js:60
 #: /collectives/specialVueFakeDummyForL10nScript.js:68
 msgid "Admins only"
-msgstr ""
+msgstr "Kun administratorer"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:76
 #: /collectives/specialVueFakeDummyForL10nScript.js:62
 #: /collectives/specialVueFakeDummyForL10nScript.js:70
 msgid "Admins and moderaters"
-msgstr ""
+msgstr "Administratorer og moderatorer"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:83
 #: /collectives/specialVueFakeDummyForL10nScript.js:64
 #: /collectives/specialVueFakeDummyForL10nScript.js:72
 msgid "All members"
-msgstr ""
+msgstr "Alle medlemmer"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:88
 #: /collectives/specialVueFakeDummyForL10nScript.js:66
 msgid "Allow sharing for"
-msgstr ""
+msgstr "Tillad deling for"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:116
 #: /collectives/specialVueFakeDummyForL10nScript.js:74
 msgid "Members"
-msgstr ""
+msgstr "Medlemmer"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:118
 #: /collectives/specialVueFakeDummyForL10nScript.js:76
 msgid "Members can be managed via the connected circle in the Contacts app."
 msgstr ""
+"Medlemmer kan administreres via den tilsluttede cirkel i appen Kontakter."
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:122
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:125
 #: /collectives/specialVueFakeDummyForL10nScript.js:78
 #: /collectives/specialVueFakeDummyForL10nScript.js:80
 msgid "Open circle in Contacts"
-msgstr ""
+msgstr "Åbn cirkel i Kontakter"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:130
 #: /collectives/specialVueFakeDummyForL10nScript.js:82
 msgid "Danger zone"
-msgstr ""
+msgstr "Farezone"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:133
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:135
 #: /collectives/specialVueFakeDummyForL10nScript.js:84
 #: /collectives/specialVueFakeDummyForL10nScript.js:86
 msgid "Delete collective"
-msgstr ""
+msgstr "Slet kollektiv"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:212
 #: /collectives/specialVueFakeDummyForL10nScript.js:88
 msgid "Change emoji"
-msgstr ""
+msgstr "Skift emoji"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:88
 msgid "Add emoji"
-msgstr ""
+msgstr "Tilføj emoji"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:217
 #: /collectives/specialVueFakeDummyForL10nScript.js:90
 msgid "Renaming is limited to owners of the circle"
-msgstr ""
+msgstr "Omdøbning er begrænset til ejere af cirklen"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:246
 #: /collectives/specialVueFakeDummyForL10nScript.js:94
 msgid "Editing permissions updated"
-msgstr ""
+msgstr "Redigeringstilladelser opdateret"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:258
 #: /collectives/specialVueFakeDummyForL10nScript.js:96
 msgid "Sharing permissions updated"
-msgstr ""
+msgstr "Delingstilladelser er opdateret"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:274
 #: /collectives/specialVueFakeDummyForL10nScript.js:98
 msgid "Default page order updated"
-msgstr ""
+msgstr "Standard siderækkefølge opdateret"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:306
 #: /collectives/specialVueFakeDummyForL10nScript.js:100
 msgid "Emoji updated"
-msgstr ""
+msgstr "Emoji opdateret"
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:2
 #: /collectives/specialVueFakeDummyForL10nScript.js:102
 msgid "Collectives settings"
-msgstr ""
+msgstr "Indstillinger"
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:6
 #: /collectives/specialVueFakeDummyForL10nScript.js:104
 msgid "Collectives Folder"
-msgstr ""
+msgstr "Mappe for Kollektiver"
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:48
 #: /collectives/specialVueFakeDummyForL10nScript.js:106
 msgid "Create a collective first"
-msgstr ""
+msgstr "Opret først et kollektiv"
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:59
 #: /collectives/specialVueFakeDummyForL10nScript.js:108
 msgid "Select location for collectives"
-msgstr ""
+msgstr "Vælg placering for kollektiver"
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:73
 #: /collectives/specialVueFakeDummyForL10nScript.js:110
 msgid "Invalid path selected. Only folders on first level are supported."
-msgstr ""
+msgstr "Ugyldig sti valgt. Kun mapper på første niveau understøttes."
 
 #. TRANSLATORS src/components/Nav/CollectivesTrash.vue:11
 #: /collectives/specialVueFakeDummyForL10nScript.js:112
 msgid "Deleted collectives"
-msgstr ""
+msgstr "Slettede kollektiver"
 
 #. TRANSLATORS src/components/Nav/CollectivesTrash.vue:34
 #. TRANSLATORS src/components/Page/Version.vue:15
 #: /collectives/specialVueFakeDummyForL10nScript.js:114
 #: /collectives/specialVueFakeDummyForL10nScript.js:174
 msgid "Restore"
-msgstr ""
+msgstr "Gendan"
 
 #. TRANSLATORS src/components/Nav/CollectivesTrash.vue:40
 #: /collectives/specialVueFakeDummyForL10nScript.js:116
 msgid "Delete permanently"
-msgstr ""
+msgstr "Slet permanent"
 
 #. TRANSLATORS src/components/Nav/CollectivesTrash.vue:51
 #: /collectives/specialVueFakeDummyForL10nScript.js:118
 msgid "Permanently delete collective »{collective}«"
-msgstr ""
+msgstr "Slet kollektiv permanent »{collective}«"
 
 #. TRANSLATORS src/components/Nav/CollectivesTrash.vue:54
 #: /collectives/specialVueFakeDummyForL10nScript.js:120
 msgid "Delete corresponding circle along with the collective?"
-msgstr ""
+msgstr "Vil du slette den tilsvarende cirkel sammen med kollektivet?"
 
 #. TRANSLATORS src/components/Nav/CollectivesTrash.vue:58
 #: /collectives/specialVueFakeDummyForL10nScript.js:122
 msgid "Cancel"
-msgstr ""
+msgstr "Annuller"
 
 #. TRANSLATORS src/components/Nav/CollectivesTrash.vue:61
 #: /collectives/specialVueFakeDummyForL10nScript.js:124
@@ -399,12 +402,12 @@ msgstr ""
 #: /collectives/specialVueFakeDummyForL10nScript.js:126
 #: /collectives/specialVueFakeDummyForL10nScript.js:130
 msgid "Collective and circle"
-msgstr ""
+msgstr "Kollektiv og cirkel"
 
 #. TRANSLATORS src/components/Nav/CollectivesTrash.vue:71
 #: /collectives/specialVueFakeDummyForL10nScript.js:128
 msgid "Only circle owners can delete a circle"
-msgstr ""
+msgstr "Kun cirkelejere kan slette en cirkel"
 
 #. TRANSLATORS src/components/Nav/NewCollective.vue:24
 #. TRANSLATORS src/views/Home.vue:13
@@ -413,12 +416,12 @@ msgstr ""
 #: /collectives/specialVueFakeDummyForL10nScript.js:252
 #: /collectives/specialVueFakeDummyForL10nScript.js:254
 msgid "Create new collective"
-msgstr ""
+msgstr "Opret nyt kollektiv"
 
 #. TRANSLATORS src/components/Nav/NewCollective.vue:33
 #: /collectives/specialVueFakeDummyForL10nScript.js:134
 msgid "Create collective for existing circle"
-msgstr ""
+msgstr "Opret kollektiv for eksisterende cirkel"
 
 #. TRANSLATORS src/components/Nav/NewCollective.vue:43
 #. TRANSLATORS src/components/Page/PageActionMenu.vue:137
@@ -427,12 +430,12 @@ msgstr ""
 #: /collectives/specialVueFakeDummyForL10nScript.js:156
 #: /collectives/specialVueFakeDummyForL10nScript.js:182
 msgid "Select emoji"
-msgstr ""
+msgstr "Vælg emoji"
 
 #. TRANSLATORS src/components/Nav/NewCollective.vue:53
 #: /collectives/specialVueFakeDummyForL10nScript.js:140
 msgid "New collective name"
-msgstr ""
+msgstr "Nyt Kollektiv navn"
 
 #. TRANSLATORS src/components/Nav/NewCollective.vue:61
 #: /collectives/specialVueFakeDummyForL10nScript.js:142
