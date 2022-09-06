@@ -27,9 +27,7 @@
 </template>
 
 <script>
-import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
-import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
-import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
+import { NcActionButton, NcActions, NcButton } from '@nextcloud/vue'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
 import RichText from './RichText.vue'
 

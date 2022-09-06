@@ -104,10 +104,7 @@
 </template>
 
 <script>
-import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
-import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
-import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
-import NcEmojiPicker from '@nextcloud/vue/dist/Components/NcEmojiPicker.js'
+import { NcActions, NcActionButton, NcButton, NcEmojiPicker } from '@nextcloud/vue'
 import CollectivesIcon from './Icon/CollectivesIcon.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 import EmoticonOutlineIcon from 'vue-material-design-icons/EmoticonOutline.vue'

@@ -9,11 +9,10 @@
 </template>
 
 <script>
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { listen } from '@nextcloud/notify_push'
-import NcAppContentDetails from '@nextcloud/vue/dist/Components/NcAppContentDetails.js'
-import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { NcAppContentDetails, NcEmptyContent } from '@nextcloud/vue'
 import { GET_PAGES } from '../store/actions.js'
 import { SELECT_VERSION } from '../store/mutations.js'
 import displayError from '../util/displayError.js'
