@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import Vue, { set } from 'vue'
 import Vuex, { Store } from 'vuex'
 
 import circles from './circles.js'
@@ -51,15 +51,15 @@ export default new Store({
 	},
 
 	mutations: {
-		info: (state, message) => Vue.set(state.messages, 'info', message),
+		info: (state, message) => set(state.messages, 'info', message),
 
-		load: (state, aspect) => Vue.set(state.loading, aspect, true),
-		done: (state, aspect) => Vue.set(state.loading, aspect, false),
+		load: (state, aspect) => set(state.loading, aspect, true),
+		done: (state, aspect) => set(state.loading, aspect, false),
 
-		show: (state, aspect) => Vue.set(state.showing, aspect, true),
-		hide: (state, aspect) => Vue.set(state.showing, aspect, false),
+		show: (state, aspect) => set(state.showing, aspect, true),
+		hide: (state, aspect) => set(state.showing, aspect, false),
 		toggle: (state, aspect) =>
-			Vue.set(state.showing, aspect, !state.showing[aspect]),
+			set(state.showing, aspect, !state.showing[aspect]),
 		setPrintView: (state) => {
 			state.printView = true
 		},
