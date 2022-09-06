@@ -33,10 +33,10 @@
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
-import NcAppSidebar from '@nextcloud/vue/dist/Components/NcAppSidebar'
-import NcAppSidebarTab from '@nextcloud/vue/dist/Components/NcAppSidebarTab'
-import RestoreIcon from 'vue-material-design-icons/Restore'
-import ArrowBottomLeftIcon from 'vue-material-design-icons/ArrowBottomLeft'
+import NcAppSidebar from '@nextcloud/vue/dist/Components/NcAppSidebar.js'
+import NcAppSidebarTab from '@nextcloud/vue/dist/Components/NcAppSidebarTab.js'
+import RestoreIcon from 'vue-material-design-icons/Restore.vue'
+import ArrowBottomLeftIcon from 'vue-material-design-icons/ArrowBottomLeft.vue'
 import { SELECT_VERSION } from '../store/mutations.js'
 import SidebarTabBacklinks from './PageSidebar/SidebarTabBacklinks.vue'
 import SidebarTabVersions from './PageSidebar/SidebarTabVersions.vue'

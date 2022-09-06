@@ -121,12 +121,12 @@
 import { memberLevels } from '../../constants.js'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { showError, showSuccess } from '@nextcloud/dialogs'
-import NcAppSettingsDialog from '@nextcloud/vue/dist/Components/NcAppSettingsDialog'
-import NcAppSettingsSection from '@nextcloud/vue/dist/Components/NcAppSettingsSection'
-import NcButton from '@nextcloud/vue/dist/Components/NcButton'
-import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch'
-import NcEmojiPicker from '@nextcloud/vue/dist/Components/NcEmojiPicker'
-import EmoticonOutline from 'vue-material-design-icons/EmoticonOutline'
+import NcAppSettingsDialog from '@nextcloud/vue/dist/Components/NcAppSettingsDialog.js'
+import NcAppSettingsSection from '@nextcloud/vue/dist/Components/NcAppSettingsSection.js'
+import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
+import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
+import NcEmojiPicker from '@nextcloud/vue/dist/Components/NcEmojiPicker.js'
+import EmoticonOutline from 'vue-material-design-icons/EmoticonOutline.vue'
 import { generateUrl } from '@nextcloud/router'
 import {
 	RENAME_CIRCLE,

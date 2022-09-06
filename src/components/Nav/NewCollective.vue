@@ -74,12 +74,12 @@
 
 <script>
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton'
-import NcActions from '@nextcloud/vue/dist/Components/NcActions'
-import NcAppNavigationItem from '@nextcloud/vue/dist/Components/NcAppNavigationItem'
-import NcButton from '@nextcloud/vue/dist/Components/NcButton'
-import NcEmojiPicker from '@nextcloud/vue/dist/Components/NcEmojiPicker'
-import NcMultiselect from '@nextcloud/vue/dist/Components/NcMultiselect'
+import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
+import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
+import NcAppNavigationItem from '@nextcloud/vue/dist/Components/NcAppNavigationItem.js'
+import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
+import NcEmojiPicker from '@nextcloud/vue/dist/Components/NcEmojiPicker.js'
+import NcMultiselect from '@nextcloud/vue/dist/Components/NcMultiselect.js'
 import { mapActions, mapGetters } from 'vuex'
 import CirclesIcon from '../Icon/CirclesIcon.vue'
 import { GET_CIRCLES, NEW_COLLECTIVE } from '../../store/actions.js'

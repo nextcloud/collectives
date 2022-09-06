@@ -13,8 +13,8 @@
 <script>
 
 import { mapGetters } from 'vuex'
-import NcAppContent from '@nextcloud/vue/dist/Components/NcAppContent'
-import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent'
+import NcAppContent from '@nextcloud/vue/dist/Components/NcAppContent.js'
+import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
 import Collective from '../components/Collective.vue'
 import CollectiveNotFound from '../components/CollectiveNotFound.vue'
 import PageList from '../components/PageList.vue'

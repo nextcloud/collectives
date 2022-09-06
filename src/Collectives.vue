@@ -5,7 +5,7 @@
 			class="app-details-toggle icon-toggle-filelist"
 			href="#"
 			@click.stop.prevent="hide('details')" />
-		<Nav v-if="!printView" />
+		<Navigation v-if="!printView" />
 		<router-view />
 		<PageSidebar v-if="currentPage" v-show="showing('sidebar')" />
 	</NcContent>
@@ -16,9 +16,9 @@ import { showInfo, showError } from '@nextcloud/dialogs'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { GET_COLLECTIVES_FOLDER, GET_COLLECTIVES, GET_TRASH_COLLECTIVES } from './store/actions.js'
 import displayError from './util/displayError.js'
-import NcContent from '@nextcloud/vue/dist/Components/NcContent'
-import isMobile from '@nextcloud/vue/dist/Mixins/isMobile'
-import Nav from './components/Nav.vue'
+import NcContent from '@nextcloud/vue/dist/Components/NcContent.js'
+import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
+import Navigation from './components/Navigation.vue'
 import PageSidebar from './components/PageSidebar.vue'
 
 export default {
@@ -26,7 +26,7 @@ export default {
 
 	components: {
 		NcContent,
-		Nav,
+		Navigation,
 		PageSidebar,
 	},
 

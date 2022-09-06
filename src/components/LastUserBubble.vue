@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import NcUserBubble from '@nextcloud/vue/dist/Components/NcUserBubble'
+import NcUserBubble from '@nextcloud/vue/dist/Components/NcUserBubble.js'
 import moment from '@nextcloud/moment'
 
 export default {

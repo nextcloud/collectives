@@ -104,15 +104,15 @@
 </template>
 
 <script>
-import NcActions from '@nextcloud/vue/dist/Components/NcActions'
-import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton'
-import NcButton from '@nextcloud/vue/dist/Components/NcButton'
-import NcEmojiPicker from '@nextcloud/vue/dist/Components/NcEmojiPicker'
+import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
+import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
+import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
+import NcEmojiPicker from '@nextcloud/vue/dist/Components/NcEmojiPicker.js'
 import CollectivesIcon from './Icon/CollectivesIcon.vue'
-import CheckIcon from 'vue-material-design-icons/Check'
-import EmoticonOutlineIcon from 'vue-material-design-icons/EmoticonOutline'
-import LoadingIcon from 'vue-material-design-icons/Loading'
-import PencilIcon from 'vue-material-design-icons/Pencil'
+import CheckIcon from 'vue-material-design-icons/Check.vue'
+import EmoticonOutlineIcon from 'vue-material-design-icons/EmoticonOutline.vue'
+import LoadingIcon from 'vue-material-design-icons/Loading.vue'
+import PencilIcon from 'vue-material-design-icons/Pencil.vue'
 import Editor from './Page/Editor.vue'
 import RichText from './Page/RichText.vue'
 import PageActionMenu from './Page/PageActionMenu.vue'

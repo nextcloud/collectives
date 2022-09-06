@@ -11,8 +11,8 @@
 <script>
 import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { listen } from '@nextcloud/notify_push'
-import NcAppContentDetails from '@nextcloud/vue/dist/Components/NcAppContentDetails'
-import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent'
+import NcAppContentDetails from '@nextcloud/vue/dist/Components/NcAppContentDetails.js'
+import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { GET_PAGES } from '../store/actions.js'
 import { SELECT_VERSION } from '../store/mutations.js'
