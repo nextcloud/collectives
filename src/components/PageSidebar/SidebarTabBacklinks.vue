@@ -47,11 +47,11 @@
 
 <script>
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
-import NcAppContentList from '@nextcloud/vue/dist/Components/NcAppContentList'
-import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent'
+import NcAppContentList from '@nextcloud/vue/dist/Components/NcAppContentList.js'
+import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
 import moment from '@nextcloud/moment'
-import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagon'
-import ArrowBottomLeftIcon from 'vue-material-design-icons/ArrowBottomLeft'
+import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagon.vue'
+import ArrowBottomLeftIcon from 'vue-material-design-icons/ArrowBottomLeft.vue'
 import PageIcon from '../Icon/PageIcon.vue'
 import { GET_BACKLINKS } from '../../store/actions.js'
 

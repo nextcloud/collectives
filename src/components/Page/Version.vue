@@ -27,10 +27,10 @@
 </template>
 
 <script>
-import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton'
-import NcActions from '@nextcloud/vue/dist/Components/NcActions'
-import NcButton from '@nextcloud/vue/dist/Components/NcButton'
-import RestoreIcon from 'vue-material-design-icons/Restore'
+import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
+import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
+import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
+import RestoreIcon from 'vue-material-design-icons/Restore.vue'
 import RichText from './RichText.vue'
 
 import { getCurrentUser } from '@nextcloud/auth'

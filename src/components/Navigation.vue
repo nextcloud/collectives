@@ -22,17 +22,17 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import { RESTORE_COLLECTIVE, DELETE_COLLECTIVE } from '../store/actions.js'
-import NcAppNavigation from '@nextcloud/vue/dist/Components/NcAppNavigation'
-import NcAppNavigationCaption from '@nextcloud/vue/dist/Components/NcAppNavigationCaption'
+import NcAppNavigation from '@nextcloud/vue/dist/Components/NcAppNavigation.js'
+import NcAppNavigationCaption from '@nextcloud/vue/dist/Components/NcAppNavigationCaption.js'
 import NewCollective from './Nav/NewCollective.vue'
-import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent'
+import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
 import CollectiveListItem from './Nav/CollectiveListItem.vue'
 import CollectivesGlobalSettings from './Nav/CollectivesGlobalSettings.vue'
 import CollectivesTrash from './Nav/CollectivesTrash.vue'
 import displayError from '../util/displayError.js'
 
 export default {
-	name: 'Nav',
+	name: 'Navigation',
 
 	components: {
 		NcAppNavigation,

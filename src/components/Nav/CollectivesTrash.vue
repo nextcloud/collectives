@@ -79,13 +79,13 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton'
-import NcAppNavigationItem from '@nextcloud/vue/dist/Components/NcAppNavigationItem'
-import NcButton from '@nextcloud/vue/dist/Components/NcButton'
-import NcModal from '@nextcloud/vue/dist/Components/NcModal'
+import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
+import NcAppNavigationItem from '@nextcloud/vue/dist/Components/NcAppNavigationItem.js'
+import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
+import NcModal from '@nextcloud/vue/dist/Components/NcModal.js'
 import CollectivesIcon from '../Icon/CollectivesIcon.vue'
-import DeleteIcon from 'vue-material-design-icons/Delete'
-import RestoreIcon from 'vue-material-design-icons/Restore'
+import DeleteIcon from 'vue-material-design-icons/Delete.vue'
+import RestoreIcon from 'vue-material-design-icons/Restore.vue'
 import { directive as ClickOutside } from 'v-click-outside'
 
 export default {

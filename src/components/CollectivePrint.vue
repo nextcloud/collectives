@@ -33,9 +33,9 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent'
-import NcProgressBar from '@nextcloud/vue/dist/Components/NcProgressBar'
-import DownloadIcon from 'vue-material-design-icons/Download'
+import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
+import NcProgressBar from '@nextcloud/vue/dist/Components/NcProgressBar.js'
+import DownloadIcon from 'vue-material-design-icons/Download.vue'
 import PagePrint from './PagePrint.vue'
 import { GET_PAGES } from '../store/actions.js'
 import displayError from '../util/displayError.js'
