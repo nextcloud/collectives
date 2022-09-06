@@ -49,10 +49,7 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex'
 import { generateUrl } from '@nextcloud/router'
-import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
-import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
-import NcActionLink from '@nextcloud/vue/dist/Components/NcActionLink.js'
-import NcActionSeparator from '@nextcloud/vue/dist/Components/NcActionSeparator.js'
+import { NcActions, NcActionButton, NcActionLink, NcActionSeparator } from '@nextcloud/vue'
 import ClockOutlineIcon from 'vue-material-design-icons/ClockOutline.vue'
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 import DeleteOffIcon from 'vue-material-design-icons/DeleteOff.vue'

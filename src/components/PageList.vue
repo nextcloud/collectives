@@ -111,10 +111,7 @@
 <script>
 
 import { mapActions, mapGetters, mapMutations } from 'vuex'
-import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
-import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
-import NcAppContentList from '@nextcloud/vue/dist/Components/NcAppContentList.js'
-import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
+import { NcActionButton, NcActions, NcAppContentList, NcButton } from '@nextcloud/vue'
 import { showError } from '@nextcloud/dialogs'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 import Draggable from './PageList/Draggable.vue'

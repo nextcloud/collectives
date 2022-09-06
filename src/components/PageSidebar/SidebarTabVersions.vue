@@ -67,8 +67,7 @@
 <script>
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { formatFileSize } from '@nextcloud/files'
-import NcAppContentList from '@nextcloud/vue/dist/Components/NcAppContentList.js'
-import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
+import { NcAppContentList, NcEmptyContent } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagon.vue'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
@@ -182,8 +181,8 @@ export default {
 }
 </script>
 
-// Copied from apps/files_versions/src/css/versions.css
 <style lang="scss" scoped>
+// Copied from apps/files_versions/src/css/versions.css
 .app-content-list {
 	max-width: none;
 	border-right: none;

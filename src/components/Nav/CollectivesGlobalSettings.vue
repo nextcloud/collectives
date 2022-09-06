@@ -20,7 +20,7 @@
 <script>
 import { mapActions, mapState } from 'vuex'
 import { getFilePickerBuilder, showError } from '@nextcloud/dialogs'
-import NcAppNavigationSettings from '@nextcloud/vue/dist/Components/NcAppNavigationSettings.js'
+import { NcAppNavigationSettings } from '@nextcloud/vue'
 import { UPDATE_COLLECTIVES_FOLDER } from '../../store/actions.js'
 import displayError from '../../util/displayError.js'
 

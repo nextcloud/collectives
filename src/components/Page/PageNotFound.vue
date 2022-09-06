@@ -17,8 +17,8 @@
 </template>
 
 <script>
-import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
 import { mapGetters } from 'vuex'
+import { NcEmptyContent } from '@nextcloud/vue'
 import PageIcon from '../Icon/PageIcon.vue'
 
 export default {

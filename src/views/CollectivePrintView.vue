@@ -10,10 +10,9 @@
 <script>
 
 import { mapGetters, mapMutations } from 'vuex'
-import NcAppContent from '@nextcloud/vue/dist/Components/NcAppContent.js'
+import { NcAppContent, NcEmptyContent } from '@nextcloud/vue'
 import CollectivePrint from '../components/CollectivePrint.vue'
 import CollectiveNotFound from '../components/CollectiveNotFound.vue'
-import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
 
 export default {
 	name: 'CollectivePrintView',
