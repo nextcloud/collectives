@@ -16,29 +16,41 @@
 			:filtered-view="filterString !== ''"
 			@toggleCollapsed="toggleCollapsed(page.id)"
 			@click.native="show('details')" />
-		<SubpageList v-if="templateView"
-			:key="templateView.id"
-			:page="templateView"
-			:level="level+1"
-			:filter-string="filterString"
-			:is-template="true" />
-		<SubpageList v-for="subpage in subpagesView"
-			:key="subpage.id"
-			:page="subpage"
-			:level="level+1"
-			:filter-string="filterString"
-			:is-template="isTemplate" />
+		<div class="page-list-indent">
+			<SubpageList v-if="templateView"
+				:key="templateView.id"
+				:page="templateView"
+				:level="level+1"
+				:filter-string="filterString"
+				:is-template="true" />
+			<Draggable v-if="subpagesView"
+				:list="subpagesView"
+				:parent-id="page.id"
+				:disable-sorting="disableSorting"
+				:is-template="isTemplate">
+				<SubpageList v-for="subpage in subpagesView"
+					:key="subpage.id"
+					:data-page-id="subpage.id"
+					:page="subpage"
+					:level="level+1"
+					:filter-string="filterString"
+					:is-template="isTemplate"
+					class="page-list-drag-item" />
+			</Draggable>
+		</div>
 	</div>
 </template>
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
+import Draggable from './Draggable.vue'
 import Item from './Item.vue'
 
 export default {
 	name: 'SubpageList',
 
 	components: {
+		Draggable,
 		Item,
 	},
 
@@ -108,6 +120,10 @@ export default {
 		hasVisibleSubpages() {
 			return !!this.visibleSubpages(this.page.id).length || this.considerTemplate
 		},
+
+		disableSorting() {
+			return this.filterString !== ''
+		},
 	},
 
 	watch: {
@@ -123,6 +139,7 @@ export default {
 
 	methods: {
 		...mapMutations([
+			'collapse',
 			'expand',
 			'toggleCollapsed',
 			'show',
@@ -138,3 +155,9 @@ export default {
 }
 
 </script>
+
+<style>
+.page-list-indent {
+	padding-left: 28px;
+}
+</style>

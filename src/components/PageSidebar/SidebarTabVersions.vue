@@ -92,10 +92,6 @@ export default {
 			type: Number,
 			required: true,
 		},
-		pageTitle: {
-			type: String,
-			required: true,
-		},
 		pageTimestamp: {
 			type: Number,
 			required: true,

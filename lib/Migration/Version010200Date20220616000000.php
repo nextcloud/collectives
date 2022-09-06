@@ -11,8 +11,6 @@ use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
 
 class Version010200Date20220616000000 extends SimpleMigrationStep {
-	private const defaultPageOrder = 1;
-
 	/**
 	 * @param IOutput $output
 	 * @param Closure $schemaClosure The `\Closure` returns a `ISchemaWrapper`

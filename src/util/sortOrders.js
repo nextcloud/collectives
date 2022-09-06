@@ -3,6 +3,7 @@ const byTitle = (a, b) => a.title.localeCompare(b.title, OC.getLanguage())
 const byTimestamp = (a, b) => b.timestamp - a.timestamp
 
 const pageOrders = {
+	byOrder: 0,
 	byTimestamp: 1,
 	byTitle: 2,
 }

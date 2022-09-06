@@ -1,12 +1,16 @@
 <template>
 	<div :id="`page-${pageId}`"
+		:data-page-id="pageId"
 		class="app-content-list-item"
-		:class="{active: isActive, mobile: isMobile, toplevel: level === 0}"
-		:style="indentItem"
+		:class="{
+			active: isActive,
+			mobile: isMobile,
+			toplevel: level === 0,
+			highlight: isHighlighted,
+		}"
 		draggable
 		@dragstart="setDragData">
 		<div class="app-content-list-item-icon"
-			:style="indentIcon"
 			:tabindex="isCollapsible ? '0' : null"
 			@keypress.enter="toggleCollapsedOrRoute()"
 			@click="toggleCollapsedOrRoute()">
@@ -33,12 +37,13 @@
 			</template>
 		</div>
 		<router-link :to="to"
+			draggable="false"
 			class="app-content-list-item-link">
 			<div ref="page-title"
 				v-tooltip="pageTitleIfTruncated"
 				class="app-content-list-item-line-one"
 				:class="{ 'template': isTemplate }">
-				{{ pageTitle }}
+				{{ pageTitleString }}
 			</div>
 		</router-link>
 		<div v-if="canEdit" class="page-list-item-actions">
@@ -66,7 +71,7 @@
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile'
 import pageMixin from '../../mixins/pageMixin.js'
 import { generateUrl } from '@nextcloud/router'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapMutations, mapState } from 'vuex'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import Actions from '@nextcloud/vue/dist/Components/Actions'
 import MenuRightIcon from 'vue-material-design-icons/MenuRight'
@@ -156,6 +161,10 @@ export default {
 	},
 
 	computed: {
+		...mapState({
+			highlightPageId: (state) => state.pages.highlightPageId,
+		}),
+
 		...mapGetters([
 			'currentPage',
 			'collapsed',
@@ -169,11 +178,6 @@ export default {
 		indent() {
 			// Start indention at level 2. And limit to 5 to prevent nasty subtrees
 			return Math.min(Math.max(0, this.level - 1), 4)
-		},
-
-		indentIcon() {
-			const left = 28 * this.indent
-			return `left: ${left}px`
 		},
 
 		indentItem() {
@@ -191,18 +195,22 @@ export default {
 			return (this.level > 0 && this.hasVisibleSubpages)
 		},
 
-		pageTitle() {
+		pageTitleString() {
 			return this.title === 'Template' ? t('collectives', 'Template') : this.title
 		},
 
 		pageTitleIfTruncated() {
-			return this.pageTitleIsTruncated ? this.pageTitle : null
+			return this.pageTitleIsTruncated ? this.pageTitleString : null
 		},
 
 		addPageString() {
 			return this.isLandingPage
 				? t('collectives', 'Add a page')
 				: t('collectives', 'Add a subpage')
+		},
+
+		isHighlighted() {
+			return this.highlightPageId === this.pageId
 		},
 	},
 
@@ -224,7 +232,7 @@ export default {
 			const path = generateUrl(`/apps/collectives${this.to}`)
 			const href = new URL(path, window.location).href
 			const html = `<a href=${href}>${this.title}</a>`
-			ev.dataTransfer.effectAllowed = 'move'
+			ev.dataTransfer.effectAllowed = 'copyMove'
 			ev.dataTransfer.setData('text/plain', href)
 			ev.dataTransfer.setData('text/uri-list', href)
 			ev.dataTransfer.setData('text/html', html)
@@ -248,7 +256,9 @@ export default {
 <style lang="scss" scoped>
 .app-content-list-item {
 	height: unset;
-	margin-bottom: 4px;
+	border-bottom: 4px solid var(--color-main-background);
+
+	padding-left: 0;
 	border-radius: var(--border-radius-large);
 
 	&.toplevel {
@@ -263,7 +273,7 @@ export default {
 		}
 	}
 
-	&:hover, &:focus, &:active {
+	&:hover, &:focus, &:active, &.highlight {
 		background-color: var(--color-background-hover);
 
 		span.item-icon-badge {

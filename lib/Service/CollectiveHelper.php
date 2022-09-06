@@ -2,6 +2,7 @@
 
 namespace OCA\Collectives\Service;
 
+use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Db\CollectiveUserSettingsMapper;
 use OCA\Collectives\Model\CollectiveInfo;
@@ -44,7 +45,9 @@ class CollectiveHelper {
 	public function getCollectivesForUser(string $userId, bool $getLevel = true, bool $getUserSettings = true): array {
 		$collectiveInfos = [];
 		$circles = $this->circleHelper->getCircles($userId);
-		$cids = array_map(function($circle) { return $circle->getSingleId(); }, $circles);
+		$cids = array_map(function ($circle) {
+			return $circle->getSingleId();
+		}, $circles);
 		$circles = array_combine($cids, $circles);
 		$collectives = $this->collectiveMapper->findByCircleIds($cids);
 		foreach ($collectives as $c) {
@@ -53,7 +56,7 @@ class CollectiveHelper {
 			$userPageOrder = null;
 			if ($getUserSettings) {
 				// TODO: merge queries for collective and user settings into one?
-				$userPageOrder = $this->collectiveUserSettingsMapper->getPageOrder($c->getId(), $userId) ?: $c->getPageOrder();
+				$userPageOrder = $this->collectiveUserSettingsMapper->getPageOrder($c->getId(), $userId) ?? Collective::defaultPageOrder;
 			}
 			$collectiveInfos[] = new CollectiveInfo($c,
 				$circles[$cid]->getSanitizedName(),
@@ -76,7 +79,9 @@ class CollectiveHelper {
 	public function getCollectivesTrashForUser(string $userId): array {
 		$collectiveInfos = [];
 		$circles = $this->circleHelper->getCircles($userId);
-		$cids = array_map(function($circle) { return $circle->getSingleId(); }, $circles);
+		$cids = array_map(function ($circle) {
+			return $circle->getSingleId();
+		}, $circles);
 		$circles = array_combine($cids, $circles);
 		$collectives = $this->collectiveMapper->findTrashByCircleIdsAndUser($cids, $userId);
 		foreach ($collectives as $c) {

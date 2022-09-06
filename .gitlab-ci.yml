@@ -35,7 +35,7 @@ stages:
 
 # Settings for all jobs in node based containers
 .node: &node
-  image: node:14
+  image: node:16
   cache:
     paths:
       - .npm/
@@ -43,7 +43,7 @@ stages:
     key: npm
     policy: pull
   before_script:
-    - npm install -g "npm@7" # install newest npm of the 7.x.x series
+    - npm install -g "npm@8" # install newest npm of the 8.x.x series
     - npm install
     - npm --version
     - node --version
@@ -60,14 +60,14 @@ variables:
 
 Cache node_modules:
   stage: cache
-  image: node:14
+  image: node:16
   cache:
     paths:
       - .npm/
       - node_modules/
     key: npm
   script:
-    - npm install -g "npm@7" # install newest npm of the 7.x.x series
+    - npm install -g "npm@8" # install newest npm of the 8.x.x series
     - npm --version
     - node --version
     - npm ci --cache .npm --prefer-offline
@@ -311,7 +311,7 @@ App Update Test:
 
 .browser-test: &browser-test
   <<: *node
-  image: cypress/browsers:node14.17.6-chrome100-ff98
+  image: cypress/browsers:node16.14.2-slim-chrome103-ff102
   stage: test end to end
   script:
     - npm install --no-save wait-on

@@ -54,25 +54,40 @@ describe('Page', function() {
 	})
 
 	describe('Sort order', function() {
-		it('sorts pages by timestamp by default', function() {
+		it('sorts pages by custom order by default', function() {
+			cy.get('.app-content-list-item').eq(1)
+				.should('contain', '#% special chars')
 			cy.get('.app-content-list-item').last()
-				.should('contain', 'Day 1')
+				.should('contain', 'Page Title')
 		})
-		it('can sort pages by title and sort order is persistent', function() {
-			cy.get('span.sort-clock-ascending-outline-icon').click()
+		it('can sort pages by title/timestamp and sort order is persistent', function() {
+			// Select sorting by title
+			cy.get('span.sort-ascending-icon').click()
 			cy.get('.sort-alphabetical-ascending-icon').click()
 			cy.get('.app-content-list-item').last()
 				.should('contain', 'Page Title')
 
+			// Reload to test persistance of sort order
 			cy.intercept('GET', '**/_api/*/_pages').as('getPages')
 			cy.reload()
 			cy.wait('@getPages')
 			cy.get('.app-content-list-item').last()
 				.should('contain', 'Page Title')
+
+			// Select sorting by timestamp
 			cy.get('span.sort-alphabetical-ascending-icon').click()
 			cy.get('button.action-button > span.sort-clock-ascending-outline-icon').click()
 			cy.get('.app-content-list-item').last()
 				.should('contain', 'Day 1')
+
+			// Remove alternative sort order
+			cy.get('span.sort-order-chip > button').click()
+			cy.get('span.sort-ascending-icon')
+				.should('be.visible')
+			cy.get('.app-content-list-item').eq(1)
+				.should('contain', '#% special chars')
+			cy.get('.app-content-list-item').last()
+				.should('contain', 'Page Title')
 		})
 	})
 
@@ -90,7 +105,7 @@ describe('Page', function() {
 				.should('contain', '🥰')
 		})
 		it('Allows setting a page emoji from page list', function() {
-			cy.contains('.app-content-list-item', 'Day 1')
+			cy.contains('.app-content-list-item', 'Day 2')
 				.find('.action-item__menutoggle')
 				.click({ force: true })
 			cy.get('button.action-button')
@@ -100,7 +115,7 @@ describe('Page', function() {
 			cy.reload()
 			cy.get('#titleform .page-title-icon')
 				.should('contain', '😀')
-			cy.contains('.app-content-list-item', 'Day 1')
+			cy.contains('.app-content-list-item', 'Day 2')
 				.find('.app-content-list-item-icon')
 				.should('contain', '😀')
 		})

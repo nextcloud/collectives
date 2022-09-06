@@ -45,13 +45,19 @@ describe('Collective', function() {
 			cy.login('bob', { route: '/apps/files' })
 		})
 		it('has a matching folder', function() {
-			cy.get('#fileList').should('contain', 'Collectives')
-			cy.get('#fileList a').contains('Collectives').click()
-			cy.get('#controls .breadcrumb').should('contain', 'Collectives')
-			cy.get('#fileList').should('contain', 'Preexisting Collective')
-			cy.get('#fileList a').contains('Preexisting Collective').click()
-			cy.get('#controls .breadcrumb').should('contain', 'Preexisting Collective')
-			cy.get('#fileList').should('contain', 'Readme.md')
+			let fileListSelector = '.files-fileList'
+			let controlsSelector = '.files-controls'
+			if (['22', '23', '24'].includes(String(Cypress.env('ncVersion')))) {
+				fileListSelector = '#fileList'
+				controlsSelector = '#controls'
+			}
+			cy.get(fileListSelector).should('contain', 'Collectives')
+			cy.get(`${fileListSelector} a`).contains('Collectives').click()
+			cy.get(`${controlsSelector} .breadcrumb`).should('contain', 'Collectives')
+			cy.get(fileListSelector).should('contain', 'Preexisting Collective')
+			cy.get(`${fileListSelector} a`).contains('Preexisting Collective').click()
+			cy.get(`${controlsSelector} .breadcrumb`).should('contain', 'Preexisting Collective')
+			cy.get(fileListSelector).should('contain', 'Readme.md')
 		})
 	})
 

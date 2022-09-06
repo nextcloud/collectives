@@ -19,9 +19,19 @@
 			<Actions class="toggle"
 				:aria-label="t('collectives', 'Sort order')">
 				<template #icon>
-					<SortAlphabeticalAscendingIcon v-if="sortedBy('byTitle')" :size="16" />
+					<SortAscendingIcon v-if="sortedBy('byOrder')" :size="16" />
+					<SortAlphabeticalAscendingIcon v-else-if="sortedBy('byTitle')" :size="16" />
 					<SortClockAscendingOutlineIcon v-else :size="16" />
 				</template>
+				<ActionButton class="toggle-button"
+					:class="{selected: sortedBy('byOrder')}"
+					:close-after-click="true"
+					@click="sortPagesAndScroll('byOrder')">
+					<template #icon>
+						<SortAscendingIcon :size="16" />
+					</template>
+					{{ t('collectives', 'Sort by custom order') }}
+				</ActionButton>
 				<ActionButton class="toggle-button"
 					:class="{selected: sortedBy('byTimestamp')}"
 					:close-after-click="true"
@@ -43,33 +53,55 @@
 			</Actions>
 		</div>
 		<div class="page-list">
-			<Item v-if="currentCollective"
-				key="Readme"
-				:to="currentCollectivePath"
-				:page-id="collectivePage ? collectivePage.id : 0"
-				:parent-id="0"
-				:title="currentCollective.name"
-				:timestamp="collectivePage ? collectivePage.timestamp : 0"
-				:last-user-id="collectivePage ? collectivePage.lastUserId : ''"
-				:emoji="currentCollective.emoji"
-				:level="0"
-				:can-edit="currentCollectiveCanEdit"
-				:is-landing-page="true"
-				:has-template="hasTemplate"
-				:filtered-view="false"
-				class="page-list-landing-page"
-				@click.native="show('details')" />
-			<SubpageList v-if="templateView"
-				:key="templateView.id"
-				:page="templateView"
-				:level="1"
-				:filter-string="filterString"
-				:is-template="true" />
-			<SubpageList v-for="page in subpages"
-				:key="page.id"
-				:page="page"
-				:level="1"
-				:filter-string="filterString" />
+			<Draggable v-if="subpages"
+				:list="subpages"
+				:parent-id="collectivePage ? collectivePage.id : 0"
+				:disable-sorting="disableSorting">
+				<template #header>
+					<Item v-if="currentCollective"
+						key="Readme"
+						:to="currentCollectivePath"
+						:page-id="collectivePage ? collectivePage.id : 0"
+						:parent-id="0"
+						:title="currentCollective.name"
+						:timestamp="collectivePage ? collectivePage.timestamp : 0"
+						:last-user-id="collectivePage ? collectivePage.lastUserId : ''"
+						:emoji="currentCollective.emoji"
+						:level="0"
+						:can-edit="currentCollectiveCanEdit"
+						:is-landing-page="true"
+						:has-template="hasTemplate"
+						:filtered-view="false"
+						class="page-list-landing-page page-list-nodrag-item"
+						@click.native="show('details')" />
+					<div v-if="!sortedBy('byOrder')" class="sort-order-container">
+						<span class="sort-order-chip">
+							{{ sortedBy('byTitle') ? t('collectives', 'Sorted by title') : t('collectives', 'Sorted by recently changed') }}
+							<Button :aria-label="t('collectives', 'Switch back to default sort order')"
+								type="tertiary"
+								class="sort-oder-chip-button"
+								@click="sortPagesAndScroll('byOrder')">
+								<template #icon>
+									<CloseIcon :size="20" />
+								</template>
+							</Button>
+						</span>
+					</div>
+				</template>
+				<SubpageList v-if="templateView"
+					:key="templateView.id"
+					:page="templateView"
+					:level="1"
+					:filter-string="filterString"
+					:is-template="true" />
+				<SubpageList v-for="page in subpages"
+					:key="page.id"
+					:data-page-id="page.id"
+					:page="page"
+					:level="1"
+					:filter-string="filterString"
+					class="page-list-drag-item" />
+			</Draggable>
 		</div>
 	</AppContentList>
 </template>
@@ -81,10 +113,14 @@ import { SET_COLLECTIVE_USER_SETTING_PAGE_ORDER } from '../store/actions.js'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import Actions from '@nextcloud/vue/dist/Components/Actions'
 import AppContentList from '@nextcloud/vue/dist/Components/AppContentList'
+import Button from '@nextcloud/vue/dist/Components/Button'
+import CloseIcon from 'vue-material-design-icons/Close'
+import Draggable from './PageList/Draggable.vue'
 import SubpageList from './PageList/SubpageList.vue'
 import Item from './PageList/Item.vue'
 import PagesTemplateIcon from './Icon/PagesTemplateIcon.vue'
 import SortAlphabeticalAscendingIcon from 'vue-material-design-icons/SortAlphabeticalAscending'
+import SortAscendingIcon from 'vue-material-design-icons/SortAscending'
 import SortClockAscendingOutlineIcon from 'vue-material-design-icons/SortClockAscendingOutline'
 import { showError } from '@nextcloud/dialogs'
 import { scrollToPage } from '../util/scrollToElement.js'
@@ -97,10 +133,14 @@ export default {
 		Actions,
 		ActionButton,
 		AppContentList,
+		Button,
+		CloseIcon,
+		Draggable,
 		Item,
 		PagesTemplateIcon,
 		SubpageList,
 		SortAlphabeticalAscendingIcon,
+		SortAscendingIcon,
 		SortClockAscendingOutlineIcon,
 	},
 
@@ -149,12 +189,16 @@ export default {
 		sortedBy() {
 			return (sortOrder) => this.sortBy === sortOrder
 		},
+
+		disableSorting() {
+			return this.filterString !== ''
+		},
 	},
 
 	methods: {
 		...mapMutations([
+			'setPageOrder',
 			'show',
-			'sortPages',
 			'toggleTemplates',
 		]),
 
@@ -168,7 +212,7 @@ export default {
 		 * @param { string } order Sort order
 		 */
 		sortPagesAndScroll(order) {
-			this.sortPages(order)
+			this.setPageOrder(order)
 			if (!this.isPublic) {
 				this.dispatchSetUserPageOrder({ id: this.currentCollective.id, pageOrder: pageOrders[order] })
 					.catch((error) => {
@@ -236,5 +280,41 @@ li.toggle-button.selected {
 	top: 44px;
 	z-index: 1;
 	background-color: var(--color-main-background);
+}
+
+.sort-order-container {
+	display: flex;
+	align-items: center;
+
+	position: sticky;
+	top: 92px; // 2x 44px + 4px border-bottom
+	z-index: 1;
+	background-color: var(--color-main-background);
+	border-bottom: 4px solid var(--color-main-background);
+
+	.sort-order-chip {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+
+		height: 24px;
+		padding: 7px;
+		margin-left: 33px; // 40px - 7px
+		background-color: var(--color-primary-light);
+		border-radius: var(--border-radius-pill);
+
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+
+		.sort-oder-chip-button {
+			min-height: 20px;
+			min-width: 20px;
+			height: 20px;
+			width: 20px !important;
+			padding: 7px;
+			margin-left: 10px;
+		}
+	}
 }
 </style>

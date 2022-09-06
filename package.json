@@ -29,11 +29,14 @@
     "@nextcloud/router": "^2.0.0",
     "@nextcloud/text": "^25.0.0-alpha.8",
     "@nextcloud/vue": "^5.3.1",
+    "debounce": "^1.2.1",
     "escape-html": "^1.0.3",
+    "sortablejs": "^1.15.0",
     "v-click-outside": "^3.2.0",
     "vue": "^2.6.14",
     "vue-material-design-icons": "^5.0.0",
     "vue-router": "^3.5.4",
+    "vuedraggable": "^2.24.3",
     "vuex": "^3.6.2",
     "vuex-router-sync": "^5.0.0"
   },
@@ -41,7 +44,7 @@
     "extends @nextcloud/browserslist-config"
   ],
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=16.0.0"
   },
   "devDependencies": {
     "@cypress/browserify-preprocessor": "^3.0.2",
@@ -57,5 +60,8 @@
     "jest": "^28.1.2",
     "stylelint-webpack-plugin": "^3.3.0",
     "vue-jest": "^3.0.7"
+  },
+  "overrides": {
+    "sortablejs": "$sortablejs"
   }
 }

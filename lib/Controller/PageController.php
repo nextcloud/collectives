@@ -116,14 +116,14 @@ class PageController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 *
-	 * @param int    $collectiveId
-	 * @param int    $parentId
-	 * @param int    $id
-	 * @param string $title
+	 * @param int         $collectiveId
+	 * @param int         $parentId
+	 * @param int         $id
+	 * @param string|null $title
 	 *
 	 * @return DataResponse
 	 */
-	public function rename(int $collectiveId, int $parentId, int $id, string $title): DataResponse {
+	public function rename(int $collectiveId, int $parentId, int $id, ?string $title = null): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $id, $title): array {
 			$userId = $this->getUserId();
 			$pageInfo = $this->service->rename($collectiveId, $parentId, $id, $title, $userId);
@@ -147,6 +147,26 @@ class PageController extends Controller {
 		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $id, $emoji): array {
 			$userId = $this->getUserId();
 			$pageInfo = $this->service->setEmoji($collectiveId, $parentId, $id, $emoji, $userId);
+			return [
+				"data" => $pageInfo
+			];
+		}, $this->logger);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 *
+	 * @param int         $collectiveId
+	 * @param int         $parentId
+	 * @param int         $id
+	 * @param string|null $subpageOrder
+	 *
+	 * @return DataResponse
+	 */
+	public function setSubpageOrder(int $collectiveId, int $parentId, int $id, ?string $subpageOrder = null): DataResponse {
+		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $id, $subpageOrder): array {
+			$userId = $this->getUserId();
+			$pageInfo = $this->service->setSubpageOrder($collectiveId, $parentId, $id, $subpageOrder, $userId);
 			return [
 				"data" => $pageInfo
 			];

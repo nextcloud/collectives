@@ -5,12 +5,16 @@ namespace Unit\Service;
 use OC\Files\Mount\MountPoint;
 use OC\Files\Node\File;
 use OC\Files\Node\Folder;
+use OCA\Circles\Model\Member;
+use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\Page;
 use OCA\Collectives\Db\PageMapper;
 use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Fs\UserFolderHelper;
+use OCA\Collectives\Model\CollectiveInfo;
 use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Service\CollectiveServiceBase;
+use OCA\Collectives\Service\NotPermittedException;
 use OCA\Collectives\Service\PageService;
 use OCP\IConfig;
 use PHPUnit\Framework\TestCase;
@@ -18,6 +22,7 @@ use PHPUnit\Framework\TestCase;
 class PageServiceTest extends TestCase {
 	private $pageMapper;
 	private $nodeHelper;
+	private $collectiveService;
 	private $collectiveFolder;
 	private $config;
 	private $service;
@@ -35,7 +40,7 @@ class PageServiceTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
-		$collectiveService = $this->getMockBuilder(CollectiveServiceBase::class)
+		$this->collectiveService = $this->getMockBuilder(CollectiveServiceBase::class)
 			->disableOriginalConstructor()
 			->getMock();
 
@@ -58,7 +63,7 @@ class PageServiceTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
-		$this->service = new PageService($this->pageMapper, $this->nodeHelper, $collectiveService, $userFolderHelper, $this->config);
+		$this->service = new PageService($this->pageMapper, $this->nodeHelper, $this->collectiveService, $userFolderHelper, $this->config);
 	}
 
 	public function testGetFolder(): void {
@@ -361,5 +366,122 @@ class PageServiceTest extends TestCase {
 		// Absolute link without fileId with webroot
 		self::assertTrue($this->service->matchBacklinks($pageInfo, 'content with [a link with webroot](http://nextcloud.local' . \OC::$WEBROOT . $urlPath . ') in it.'));
 		self::assertFalse($this->service->matchBacklinks($pageInfo, 'content with [a link with missing webroot](http://nextcloud.local' . $urlPath . ') in it.'));
+	}
+
+	public function testIsAncestorOf(): void {
+		// Allow testing the private function
+		$reflection = new \ReflectionClass($this->service);
+		$method = $reflection->getMethod('isAncestorOf');
+		$method->setAccessible(true);
+
+		$pageId = 1;
+		$targetId = 2;
+		$targetParentId = 1;
+
+		$pageParentFile = $this->getMockBuilder(File::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$pageParentFolder = $this->getMockBuilder(Folder::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$pageParentFolder->method('get')
+			->with(PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX)
+			->willReturn($pageParentFile);
+		$pageParentFile->method('getParent')
+			->willReturn($pageParentFolder);
+		$pageFile = $this->getMockBuilder(File::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$pageFile->method('getInternalPath')
+			->willReturn('Page' . PageInfo::SUFFIX);
+		$pageFile->method('getParent')
+			->willReturn($pageParentFile);
+
+		$this->nodeHelper->method('getFileById')
+			->with($this->collectiveFolder, $targetId)
+			->willReturn($pageParentFile);
+
+		// $pageId is ancestor of $targetId
+		$pageParentFile->method('getId')
+			->willReturn($targetParentId);
+		self::assertTrue($method->invokeArgs($this->service, [$this->collectiveFolder, $pageId, $targetId]));
+
+		// $targetId is landing page
+		$pageParentFile->method('getInternalPath')
+			->willReturn(PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX);
+		self::assertFalse($method->invokeArgs($this->service, [$this->collectiveFolder, $pageId, $targetId]));
+	}
+
+	public function testRenameLandingPageFails(): void {
+		$collective = new Collective();
+		$collectiveInfo = new CollectiveInfo($collective, 'Collective', Member::LEVEL_ADMIN);
+		$this->collectiveService->method('getCollectiveInfo')
+			->willReturn($collectiveInfo);
+
+		$file = $this->getMockBuilder(File::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$file->method('getInternalPath')
+			->willReturn(PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX);
+		$this->nodeHelper->method('getFileById')
+			->willReturn($file);
+
+		$this->expectException(NotPermittedException::class);
+		$this->expectExceptionMessage('Not allowed to rename landing page');
+		$this->service->rename($this->collectiveId, 1, 2, 'New title', $this->userId);
+	}
+
+	public function testRenamePageToItselfFails(): void {
+		$collective = new Collective();
+		$collectiveInfo = new CollectiveInfo($collective, 'Collective', Member::LEVEL_ADMIN);
+		$this->collectiveService->method('getCollectiveInfo')
+			->willReturn($collectiveInfo);
+
+		$file = $this->getMockBuilder(File::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$file->method('getId')
+			->willReturn(1);
+		$this->nodeHelper->method('getFileById')
+			->willReturn($file);
+
+		$this->expectException(NotPermittedException::class);
+		$this->expectExceptionMessage('Not allowed to move a page to itself');
+		$this->service->rename($this->collectiveId, 1, 1, 'New title', $this->userId);
+	}
+
+	public function testVerifySubpageOrder() {
+		// valid
+		$this->service->verifySubpageOrder(null);
+		$this->service->verifySubpageOrder('[]');
+		$this->service->verifySubpageOrder('[1]');
+		$this->service->verifySubpageOrder('[1, 2]');
+		$this->service->verifySubpageOrder('[1,2,9999]');
+
+		$this->expectException(NotPermittedException::class);
+		$this->expectExceptionMessage('Invalid format of subpage order');
+
+		$this->service->verifySubpageOrder(1);
+	}
+
+	public function testVerifySubpageOrderInvalid() {
+		$this->expectException(NotPermittedException::class);
+		$this->expectExceptionMessage('Invalid format of subpage order');
+
+		$this->service->verifySubpageOrder('string');
+	}
+
+	public function testVerifySubpageOrderInvalid2() {
+		$this->expectException(NotPermittedException::class);
+		$this->expectExceptionMessage('Invalid format of subpage order');
+
+		$this->service->verifySubpageOrder('[string]');
+	}
+
+	public function testVerifySubpageOrderInvalid3() {
+		$this->expectException(NotPermittedException::class);
+		$this->expectExceptionMessage('Invalid format of subpage order');
+
+		$this->service->verifySubpageOrder('{a: b}');
 	}
 }

@@ -2,7 +2,7 @@
 	<AppContentDetails>
 		<Version v-if="currentPage && version" />
 		<Page v-else-if="currentPage" />
-		<EmptyContent v-else-if="loading('collective')"
+		<EmptyContent v-else-if="loading('collective') || loading('page')"
 			icon="icon-loading" />
 		<PageNotFound v-else />
 	</AppContentDetails>
@@ -56,7 +56,7 @@ export default {
 		]),
 
 		notFound() {
-			return !this.loading('collective') && !this.currentPage
+			return !this.loading('collective') && !this.loading('pagelist') && !this.currentPage
 		},
 	},
 
@@ -181,7 +181,6 @@ export default {
 		openNav() {
 			emit('toggle-navigation', { open: true })
 		},
-
 	},
 
 }

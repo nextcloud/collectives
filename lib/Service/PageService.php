@@ -107,6 +107,7 @@ class PageService {
 		if (!($folder instanceof Folder)) {
 			throw new FilesNotFoundException('Folder not found for collective ' . $collectiveId);
 		}
+
 		return $folder;
 	}
 
@@ -173,8 +174,9 @@ class PageService {
 		}
 		$lastUserId = ($page !== null) ? $page->getLastUserId() : null;
 		$emoji = ($page !== null) ? $page->getEmoji() : null;
+		$subpageOrder = ($page !== null) ? $page->getSubpageOrder() : null;
 		try {
-			$pageInfo->fromFile($file, $this->getParentPageId($file), $lastUserId, $emoji);
+			$pageInfo->fromFile($file, $this->getParentPageId($file), $lastUserId, $emoji, $subpageOrder);
 		} catch (FilesNotFoundException | InvalidPathException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
@@ -186,13 +188,17 @@ class PageService {
 	 * @param int         $fileId
 	 * @param string      $userId
 	 * @param string|null $emoji
+	 * @param string|null $subpageOrder
 	 */
-	private function updatePage(int $fileId, string $userId, ?string $emoji = null): void {
+	private function updatePage(int $fileId, string $userId, ?string $emoji = null, ?string $subpageOrder = null): void {
 		$page = new Page();
 		$page->setFileId($fileId);
 		$page->setLastUserId($userId);
 		if ($emoji) {
 			$page->setEmoji($emoji);
+		}
+		if ($subpageOrder) {
+			$page->setSubpageOrder($subpageOrder);
 		}
 		$this->pageMapper->updateOrInsert($page);
 	}
@@ -564,15 +570,56 @@ class PageService {
 
 	/**
 	 * @param Folder $collectiveFolder
-	 * @param int    $parentId
-	 * @param File   $file
-	 * @param string $title
+	 * @param int    $ancestorId
+	 * @param int    $descendantId
+	 *
+	 * @return bool
+	 * @throws NotFoundException
+	 */
+	private function isAncestorOf(Folder $collectiveFolder, int $pageId, int $targetId): bool {
+		$targetFile = $this->nodeHelper->getFileById($collectiveFolder, $targetId);
+		if (self::isLandingPage($targetFile)) {
+			return false;
+		}
+
+		$targetParentPageId = $this->getParentPageId($targetFile);
+		if ($pageId === $targetParentPageId) {
+			return true;
+		}
+
+		return $this->isAncestorOf($collectiveFolder, $pageId, $targetParentPageId);
+	}
+
+	/**
+	 * @param Folder      $collectiveFolder
+	 * @param int         $parentId
+	 * @param File        $file
+	 * @param string|null $title
 	 *
 	 * @return bool
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	private function renamePage(Folder $collectiveFolder, int $parentId, File $file, string $title): bool {
+	private function renamePage(Folder $collectiveFolder, int $parentId, File $file, ?string $title): bool {
+		// Do not allow to move the landing page
+		if (self::isLandingPage($file)) {
+			throw new NotPermittedException('Not allowed to rename landing page');
+		}
+
+		// Do not allow to move a page to itself
+		try {
+			if ($parentId === $file->getId()) {
+				throw new NotPermittedException('Not allowed to move a page to itself');
+			}
+		} catch (InvalidPathException | FilesNotFoundException $e) {
+			throw new NotFoundException($e->getMessage(), 0, $e);
+		}
+
+		// Do not allow to move a page to a subpage of itself
+		if ($this->isAncestorOf($collectiveFolder, $file->getId(), $parentId)) {
+			throw new NotPermittedException('Not allowed to move a page to a subpage of itself');
+		}
+
 		$moveFolder = false;
 		if ($parentId !== $this->getParentPageId($file)) {
 			$newFolder = $this->initSubFolder($this->nodeHelper->getFileById($collectiveFolder, $parentId));
@@ -581,18 +628,23 @@ class PageService {
 			$newFolder = $this->nodeHelper->getFileById($collectiveFolder, $parentId)->getParent();
 		}
 
-		$safeTitle = $this->nodeHelper->sanitiseFilename($title, self::DEFAULT_PAGE_TITLE);
 		// If processing an index page, then rename the parent folder, otherwise the file itself
 		$node = self::isIndexPage($file) ? $file->getParent() : $file;
 		$suffix = self::isIndexPage($file) ? '' : PageInfo::SUFFIX;
-		$newSafeName = $safeTitle . $suffix;
+		if ($title) {
+			$safeTitle = $this->nodeHelper->sanitiseFilename($title, self::DEFAULT_PAGE_TITLE);
+			$newSafeName = $safeTitle . $suffix;
+			$newFileName = NodeHelper::generateFilename($newFolder, $safeTitle, PageInfo::SUFFIX);
+		} else {
+			$newSafeName = $node->getName();
+			$newFileName = basename($node->getName(), $suffix);
+		}
 
 		// Neither path nor title changed, nothing to do
 		if (!$moveFolder && $newSafeName === $node->getName()) {
 			return false;
 		}
 
-		$newFileName = NodeHelper::generateFilename($newFolder, $safeTitle, PageInfo::SUFFIX);
 		try {
 			$node->move($newFolder->getPath() . '/' . $newFileName . $suffix);
 		} catch (InvalidPathException | FilesNotFoundException | LockedException $e) {
@@ -605,18 +657,19 @@ class PageService {
 	}
 
 	/**
-	 * @param int    $collectiveId
-	 * @param int    $parentId
-	 * @param int    $id
-	 * @param string $title
-	 * @param string $userId
+	 * @param int         $collectiveId
+	 * @param int         $parentId
+	 * @param int         $id
+	 * @param string|null $title
+	 * @param string      $userId
 	 *
 	 * @return PageInfo
+	 * @throws FilesNotFoundException
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function rename(int $collectiveId, int $parentId, int $id, string $title, string $userId): PageInfo {
+	public function rename(int $collectiveId, int $parentId, int $id, ?string $title, string $userId): PageInfo {
 		$this->verifyEditPermissions($collectiveId, $userId);
 		$collectiveFolder = $this->getCollectiveFolder($collectiveId, $userId);
 		$file = $this->nodeHelper->getFileById($collectiveFolder, $id);
@@ -654,6 +707,56 @@ class PageService {
 		$pageInfo->setLastUserId($userId);
 		$pageInfo->setEmoji($emoji);
 		$this->updatePage($pageInfo->getId(), $userId, $emoji);
+		return $pageInfo;
+	}
+
+	/**
+	 * @param string|null $subpageOrder
+	 *
+	 * @return void
+	 * @throws NotPermittedException
+	 */
+	public function verifySubpageOrder(?string $subpageOrder): void {
+		if ($subpageOrder) {
+			try {
+				$subpageOrderDecoded = json_decode($subpageOrder, true, 512, JSON_THROW_ON_ERROR);
+				if (!is_array($subpageOrderDecoded)) {
+					throw new NotPermittedException();
+				}
+				foreach ($subpageOrderDecoded as $pageId) {
+					if (!is_int($pageId)) {
+						throw new NotPermittedException();
+					}
+				}
+			} catch (\JsonException | NotPermittedException $e) {
+				throw new NotPermittedException('Invalid format of subpage order');
+			}
+		}
+	}
+
+	/**
+	 * @param int         $collectiveId
+	 * @param int         $parentId
+	 * @param int         $id
+	 * @param string|null $subpageOrder
+	 * @param string      $userId
+	 *
+	 * @return PageInfo
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function setSubpageOrder(int $collectiveId, int $parentId, int $id, ?string $subpageOrder, string $userId): PageInfo {
+		$this->verifyEditPermissions($collectiveId, $userId);
+		$folder = $this->getFolder($collectiveId, $parentId, $userId);
+		$file = $this->nodeHelper->getFileById($folder, $id);
+		$pageInfo = $this->getPageByFile($file);
+
+		$this->verifySubpageOrder($subpageOrder);
+
+		$pageInfo->setSubpageOrder($subpageOrder);
+		$pageInfo->setLastUserId($userId);
+		$this->updatePage($pageInfo->getId(), $userId, null, $subpageOrder);
 		return $pageInfo;
 	}
 
