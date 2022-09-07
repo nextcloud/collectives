@@ -176,10 +176,6 @@ export default {
 		closeNav() {
 			emit('toggle-navigation', { open: false })
 		},
-
-		openNav() {
-			emit('toggle-navigation', { open: true })
-		},
 	},
 
 }
