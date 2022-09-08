@@ -2,7 +2,7 @@
 	<NcAppSettingsDialog :open.sync="showSettings"
 		:aria-label="t('collectives', 'Collective settings')"
 		:show-navigation="true">
-		<NcAppSettingsSection :title="t('collectives', 'Name and emoji')">
+		<NcAppSettingsSection id="name-and-emoji" :title="t('collectives', 'Name and emoji')">
 			<div class="collective-name">
 				<NcEmojiPicker :show-preview="true" @select="updateEmoji">
 					<Button type="tertiary"
@@ -35,7 +35,7 @@
 			</div>
 		</NcAppSettingsSection>
 
-		<NcAppSettingsSection :title="t('collectives', 'Permissions')">
+		<NcAppSettingsSection id="permissions" :title="t('collectives', 'Permissions')">
 			<div class="subsection-header">
 				{{ t('collectives', 'Allow editing for') }}
 			</div>
@@ -93,7 +93,7 @@
 			</div>
 		</NcAppSettingsSection>
 
-		<NcAppSettingsSection :title="t('collectives', 'Members')">
+		<NcAppSettingsSection id="members" :title="t('collectives', 'Members')">
 			<div class="section-description">
 				{{ t('collectives', 'Members can be managed via the connected circle in the Contacts app.') }}
 			</div>
@@ -107,7 +107,7 @@
 			</div>
 		</NcAppSettingsSection>
 
-		<NcAppSettingsSection :title="t('collectives', 'Danger zone')">
+		<NcAppSettingsSection id="danger-zone" :title="t('collectives', 'Danger zone')">
 			<div>
 				<NcButton type="error" :aria-label="t('collectives', 'Delete collective')" @click="trashCollective()">
 					{{ t('collectives', 'Delete collective') }}
