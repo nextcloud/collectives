@@ -1,5 +1,7 @@
 <template>
-	<NcAppContent :show-details="showing('details')" :list-min-width="20">
+	<NcAppContent :show-details="showing('details')"
+		:list-min-width="20"
+		@update:showDetails="hide('details')">
 		<template #list>
 			<PageList v-if="currentCollective" />
 		</template>
@@ -12,7 +14,7 @@
 
 <script>
 
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import { NcAppContent, NcEmptyContent } from '@nextcloud/vue'
 import Collective from '../components/Collective.vue'
 import CollectiveNotFound from '../components/CollectiveNotFound.vue'
@@ -36,10 +38,20 @@ export default {
 			'showing',
 		]),
 	},
+
+	methods: {
+		...mapMutations(['hide']),
+	},
 }
 </script>
 
-<style>
+<style lang="scss">
+button.app-details-toggle {
+	position: absolute !important;
+	z-index: 10023 !important;
+	top: 14px !important;
+}
+
 div.splitpanes.splitpanes--vertical div.splitpanes__pane.splitpanes__pane-details {
 	overflow: visible;
 }
