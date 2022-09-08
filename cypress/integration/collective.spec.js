@@ -45,12 +45,8 @@ describe('Collective', function() {
 			cy.login('bob', { route: '/apps/files' })
 		})
 		it('has a matching folder', function() {
-			let fileListSelector = '.files-fileList'
-			let controlsSelector = '.files-controls'
-			if (['22', '23', '24'].includes(String(Cypress.env('ncVersion')))) {
-				fileListSelector = '#fileList'
-				controlsSelector = '#controls'
-			}
+			const fileListSelector = '.files-fileList'
+			const controlsSelector = '.files-controls'
 			cy.get(fileListSelector).should('contain', 'Collectives')
 			cy.get(`${fileListSelector} a`).contains('Collectives').click()
 			cy.get(`${controlsSelector} .breadcrumb`).should('contain', 'Collectives')

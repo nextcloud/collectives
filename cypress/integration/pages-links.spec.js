@@ -130,39 +130,36 @@ describe('Page', function() {
 	}
 
 	describe('Link handling internal', function() {
-		// Only run link tests on Nextcloud 24+
-		if (!['22', '23'].includes(String(Cypress.env('ncVersion')))) {
-			it('Opens link to image in Nextcloud in viewer', function() {
-				const href = `/index.php/apps/files/?dir=/&openfile=${imageId}#relPath=//test.png`
-				testLinkToViewer(href, { fileName: 'test.png', viewerFileElement: 'img' })
-				testLinkToViewer(href, { fileName: 'test.png', viewerFileElement: 'img', edit: true })
-			})
-			it('Opens link to text file in Nextcloud in viewer', function() {
-				const href = `/index.php/apps/files/?dir=/&openfile=${textId}#relPath=//test.md`
-				testLinkToViewer(href, { fileName: 'test.md', viewerFileElement: 'div#editor-container' })
-				testLinkToViewer(href, { fileName: 'test.md', viewerFileElement: 'div#editor-container', edit: true })
-			})
-			it('Opens link to page in this collective in same/new tab depending on view/edit mode', function() {
-				const href = '/index.php/apps/collectives/Link%20Testing/Link%20Target'
-				testLinkToSameTab(href)
-				testLinkToNewTab(href, { edit: true })
-			})
-			it('Opens link to page in other collective in same/new tab depending on view/edit mode', function() {
-				const href = '/index.php/apps/collectives/Another%20Collective/First%20Page'
-				testLinkToSameTab(href)
-				testLinkToNewTab(href, { edit: true })
-			})
-			it('Opens link to another Nextcloud app in new tab', function() {
-				const href = '/index.php/apps/contacts'
-				testLinkToNewTab(href)
-				testLinkToNewTab(href, { edit: true })
-			})
-			it('Opens link to external page in new tab', function() {
-				const href = 'http://example.org/'
-				testLinkToNewTab(href, { absolute: true })
-				testLinkToNewTab(href, { edit: true, absolute: true })
-			})
-		}
+		it('Opens link to image in Nextcloud in viewer', function() {
+			const href = `/index.php/apps/files/?dir=/&openfile=${imageId}#relPath=//test.png`
+			testLinkToViewer(href, { fileName: 'test.png', viewerFileElement: 'img' })
+			testLinkToViewer(href, { fileName: 'test.png', viewerFileElement: 'img', edit: true })
+		})
+		it('Opens link to text file in Nextcloud in viewer', function() {
+			const href = `/index.php/apps/files/?dir=/&openfile=${textId}#relPath=//test.md`
+			testLinkToViewer(href, { fileName: 'test.md', viewerFileElement: 'div#editor-container' })
+			testLinkToViewer(href, { fileName: 'test.md', viewerFileElement: 'div#editor-container', edit: true })
+		})
+		it('Opens link to page in this collective in same/new tab depending on view/edit mode', function() {
+			const href = '/index.php/apps/collectives/Link%20Testing/Link%20Target'
+			testLinkToSameTab(href)
+			testLinkToNewTab(href, { edit: true })
+		})
+		it('Opens link to page in other collective in same/new tab depending on view/edit mode', function() {
+			const href = '/index.php/apps/collectives/Another%20Collective/First%20Page'
+			testLinkToSameTab(href)
+			testLinkToNewTab(href, { edit: true })
+		})
+		it('Opens link to another Nextcloud app in new tab', function() {
+			const href = '/index.php/apps/contacts'
+			testLinkToNewTab(href)
+			testLinkToNewTab(href, { edit: true })
+		})
+		it('Opens link to external page in new tab', function() {
+			const href = 'http://example.org/'
+			testLinkToNewTab(href, { absolute: true })
+			testLinkToNewTab(href, { edit: true, absolute: true })
+		})
 	})
 
 	describe('Link handling public share', function() {

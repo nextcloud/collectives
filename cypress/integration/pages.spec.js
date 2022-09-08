@@ -182,21 +182,11 @@ describe('Page', function() {
 				.should('have.focus')
 				.type('# Heading{enter}')
 
-			// Only run image tests on Nextcloud 24+
-			// Selector changed between Nextcloud 24 and 25
-			if (String(Cypress.env('ncVersion')) === '24') {
-				cy.log('Inserting an image')
-				cy.intercept({ method: 'POST', url: '**upload' }).as('imageUpload')
-				cy.get('.menubar > input[type="file"]')
-					.selectFile('cypress/fixtures/test.png', { force: true })
-				cy.wait('@imageUpload')
-			} else if (!['22', '23', '24'].includes(String(Cypress.env('ncVersion')))) {
-				cy.log('Inserting an image')
-				cy.intercept({ method: 'POST', url: '**upload' }).as('imageUpload')
-				cy.get('input[data-text-el="image-file-input"]')
-					.selectFile('cypress/fixtures/test.png', { force: true })
-				cy.wait('@imageUpload')
-			}
+			cy.log('Inserting an image')
+			cy.intercept({ method: 'POST', url: '**upload' }).as('imageUpload')
+			cy.get('input[data-text-el="image-file-input"]')
+				.selectFile('cypress/fixtures/test.png', { force: true })
+			cy.wait('@imageUpload')
 
 			cy.log('Changing to read mode')
 			cy.get('button.titleform-button')
@@ -204,11 +194,9 @@ describe('Page', function() {
 			cy.get('#editor > > .editor__content > .ProseMirror').should('not.be.visible')
 			cy.get('#read-only-editor.editor__content > .ProseMirror').should('be.visible')
 				.should('contain', 'Heading')
-			if (!['22', '23'].includes(String(Cypress.env('ncVersion')))) {
-				cy.get('#read-only-editor.editor__content > .ProseMirror')
-					.find('img.image__main')
-					.should('be.visible')
-			}
+			cy.get('#read-only-editor.editor__content > .ProseMirror')
+				.find('img.image__main')
+				.should('be.visible')
 		})
 	})
 
