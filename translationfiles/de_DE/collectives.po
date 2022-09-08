@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-08-11 15:40+0200\n"
-"PO-Revision-Date: 2022-07-19 06:16+0000\n"
+"PO-Revision-Date: 2022-08-28 10:14+0000\n"
 "Last-Translator: Joachim Sokolowski <weblate@of99.de>\n"
 "Language-Team: German (formal) <https://hosted.weblate.org/projects/"
 "collectives/collectives-app/de@formal/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 
 #. TRANSLATORS src/components/Page.vue:193
 #. TRANSLATORS src/views/Home.vue:4
@@ -243,7 +243,7 @@ msgstr "Wählen Sie ein Emoji für das Kollektiv"
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:31
 #: /collectives/specialVueFakeDummyForL10nScript.js:48
 msgid "Save new collective name"
-msgstr ""
+msgstr "Neuen Kollektv-Namen speichern"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:39
 #: /collectives/specialVueFakeDummyForL10nScript.js:50
@@ -365,7 +365,7 @@ msgstr "Emoji aktualisiert"
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:2
 #: /collectives/specialVueFakeDummyForL10nScript.js:102
 msgid "Collectives settings"
-msgstr ""
+msgstr "Kollektiv-Einstellungen"
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:6
 #: /collectives/specialVueFakeDummyForL10nScript.js:104
@@ -472,12 +472,12 @@ msgstr "Wähle Kreis..."
 #. TRANSLATORS src/components/Nav/NewCollective.vue:65
 #: /collectives/specialVueFakeDummyForL10nScript.js:144
 msgid "Create a new collective"
-msgstr ""
+msgstr "Neues Kollektiv erstellen"
 
 #. TRANSLATORS src/components/Nav/NewCollective.vue:70
 #: /collectives/specialVueFakeDummyForL10nScript.js:146
 msgid "Cancel creating a new collective"
-msgstr ""
+msgstr "Erstellung eines neuen Kollektivs abbrechen"
 
 #. TRANSLATORS src/components/Nav.vue:7
 #: /collectives/specialVueFakeDummyForL10nScript.js:148
@@ -587,12 +587,12 @@ msgstr "Bearbeiten"
 #. TRANSLATORS src/components/Page.vue:83
 #: /collectives/specialVueFakeDummyForL10nScript.js:194
 msgid "Toggle page sidebar"
-msgstr ""
+msgstr "Seitenleiste umschalten"
 
 #. TRANSLATORS src/components/Page.vue:92
 #: /collectives/specialVueFakeDummyForL10nScript.js:196
 msgid "Page content"
-msgstr ""
+msgstr "Seiteninhalt"
 
 #. TRANSLATORS src/components/Page.vue:442
 #: /collectives/specialVueFakeDummyForL10nScript.js:200
