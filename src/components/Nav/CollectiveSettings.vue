@@ -1,11 +1,11 @@
 <template>
 	<NcAppSettingsDialog :open.sync="showSettings"
-		:aria-label="t('collectives', 'Collective settings')"
+		:title="t('collectives', 'Collective settings')"
 		:show-navigation="true">
 		<NcAppSettingsSection id="name-and-emoji" :title="t('collectives', 'Name and emoji')">
 			<div class="collective-name">
 				<NcEmojiPicker :show-preview="true" @select="updateEmoji">
-					<Button type="tertiary"
+					<NcButton type="tertiary"
 						:aria-label="t('collectives', 'Select emoji for collective')"
 						:title="emojiTitle"
 						:class="{'loading': loading('updateCollectiveEmoji')}"
@@ -15,7 +15,7 @@
 						<template v-if="!collective.emoji" #icon>
 							<EmoticonOutline :size="20" />
 						</template>
-					</Button>
+					</NcButton>
 				</NcEmojiPicker>
 				<form @submit.prevent.stop="renameCollective()">
 					<input ref="nameField"
@@ -98,12 +98,12 @@
 				{{ t('collectives', 'Members can be managed via the connected circle in the Contacts app.') }}
 			</div>
 			<div>
-				<Button v-tooltip="membersDisabledTooltip"
+				<NcButton v-tooltip="membersDisabledTooltip"
 					:aria-label="t('collectives', 'Open circle in Contacts')"
 					:disabled="!isContactsInstalled"
 					@click="openCircleLink">
 					{{ t('collectives', 'Open circle in Contacts') }}
-				</Button>
+				</NcButton>
 			</div>
 		</NcAppSettingsSection>
 
@@ -325,22 +325,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep .modal-wrapper.modal-wrapper--normal .modal-container {
-	display: flex;
-}
-
-.app-settings-section {
-	margin-bottom: 45px;
-}
-
 .button-emoji {
 	font-size: 20px;
 }
 
 .collective-name {
-	order: 1;
 	display: flex;
-	height: 44px;
 
 	form {
 		display: flex;
