@@ -45,14 +45,10 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style>
 button.app-details-toggle {
 	position: absolute !important;
 	z-index: 10023 !important;
 	top: 14px !important;
-}
-
-div.splitpanes.splitpanes--vertical div.splitpanes__pane.splitpanes__pane-details {
-	overflow: visible;
 }
 </style>
