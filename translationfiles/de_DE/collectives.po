@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2022-08-11 15:40+0200\n"
+"POT-Creation-Date: 2022-09-08 11:47+0200\n"
 "PO-Revision-Date: 2022-08-28 10:14+0000\n"
 "Last-Translator: Joachim Sokolowski <weblate@of99.de>\n"
 "Language-Team: German (formal) <https://hosted.weblate.org/projects/"
@@ -24,8 +24,8 @@ msgstr ""
 #: /collectives/lib/Fs/UserFolderHelper.php:67
 #: /collectives/lib/Search/CollectiveProvider.php:60
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:2
-#: /collectives/specialVueFakeDummyForL10nScript.js:198
-#: /collectives/specialVueFakeDummyForL10nScript.js:248
+#: /collectives/specialVueFakeDummyForL10nScript.js:190
+#: /collectives/specialVueFakeDummyForL10nScript.js:246
 msgid "Collectives"
 msgstr "Kollektive"
 
@@ -120,9 +120,9 @@ msgstr ""
 "**»Circles«** und **»Collectives«** und aktivieren Sie sie."
 
 #. TRANSLATORS src/Collectives.vue:70
-#. TRANSLATORS src/components/Nav/CollectiveSettings.vue:222
+#. TRANSLATORS src/components/Nav/CollectiveSettings.vue:200
 #: /collectives/specialVueFakeDummyForL10nScript.js:2
-#: /collectives/specialVueFakeDummyForL10nScript.js:92
+#: /collectives/specialVueFakeDummyForL10nScript.js:86
 msgid "The contacts app is required to manage members"
 msgstr "Die Kontakte App ist erforderlich um Mitglieder zu verwalten"
 
@@ -236,7 +236,7 @@ msgstr "Name und Emoji"
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:10
 #. TRANSLATORS src/components/Nav/NewCollective.vue:42
 #: /collectives/specialVueFakeDummyForL10nScript.js:46
-#: /collectives/specialVueFakeDummyForL10nScript.js:136
+#: /collectives/specialVueFakeDummyForL10nScript.js:128
 msgid "Select emoji for collective"
 msgstr "Wählen Sie ein Emoji für das Kollektiv"
 
@@ -247,437 +247,442 @@ msgstr "Neuen Kollektv-Namen speichern"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:39
 #: /collectives/specialVueFakeDummyForL10nScript.js:50
-msgid "Default page order"
-msgstr "Standard-Sortierung der Seiten"
-
-#. TRANSLATORS src/components/Nav/CollectiveSettings.vue:46
-#. TRANSLATORS src/components/PageList.vue:32
-#: /collectives/specialVueFakeDummyForL10nScript.js:52
-#: /collectives/specialVueFakeDummyForL10nScript.js:218
-msgid "Sort recently changed first"
-msgstr "Sortiere nach letzten Änderungen"
-
-#. TRANSLATORS src/components/Nav/CollectiveSettings.vue:53
-#. TRANSLATORS src/components/PageList.vue:41
-#: /collectives/specialVueFakeDummyForL10nScript.js:54
-#: /collectives/specialVueFakeDummyForL10nScript.js:220
-msgid "Sort by title"
-msgstr "Sortiere nach Titel"
-
-#. TRANSLATORS src/components/Nav/CollectiveSettings.vue:58
-#: /collectives/specialVueFakeDummyForL10nScript.js:56
 msgid "Permissions"
 msgstr "Rechte"
 
-#. TRANSLATORS src/components/Nav/CollectiveSettings.vue:60
-#: /collectives/specialVueFakeDummyForL10nScript.js:58
+#. TRANSLATORS src/components/Nav/CollectiveSettings.vue:41
+#: /collectives/specialVueFakeDummyForL10nScript.js:52
 msgid "Allow editing for"
 msgstr "Bearbeiten erlauben für"
 
-#. TRANSLATORS src/components/Nav/CollectiveSettings.vue:69
-#: /collectives/specialVueFakeDummyForL10nScript.js:60
-#: /collectives/specialVueFakeDummyForL10nScript.js:68
+#. TRANSLATORS src/components/Nav/CollectiveSettings.vue:50
+#: /collectives/specialVueFakeDummyForL10nScript.js:54
+#: /collectives/specialVueFakeDummyForL10nScript.js:62
 msgid "Admins only"
 msgstr "Nur Admins"
 
-#. TRANSLATORS src/components/Nav/CollectiveSettings.vue:76
-#: /collectives/specialVueFakeDummyForL10nScript.js:62
-#: /collectives/specialVueFakeDummyForL10nScript.js:70
+#. TRANSLATORS src/components/Nav/CollectiveSettings.vue:57
+#: /collectives/specialVueFakeDummyForL10nScript.js:56
+#: /collectives/specialVueFakeDummyForL10nScript.js:64
 msgid "Admins and moderaters"
 msgstr "Admins und Moderator:innen"
 
-#. TRANSLATORS src/components/Nav/CollectiveSettings.vue:83
-#: /collectives/specialVueFakeDummyForL10nScript.js:64
-#: /collectives/specialVueFakeDummyForL10nScript.js:72
+#. TRANSLATORS src/components/Nav/CollectiveSettings.vue:64
+#: /collectives/specialVueFakeDummyForL10nScript.js:58
+#: /collectives/specialVueFakeDummyForL10nScript.js:66
 msgid "All members"
 msgstr "Alle Mitglieder"
 
-#. TRANSLATORS src/components/Nav/CollectiveSettings.vue:88
-#: /collectives/specialVueFakeDummyForL10nScript.js:66
+#. TRANSLATORS src/components/Nav/CollectiveSettings.vue:69
+#: /collectives/specialVueFakeDummyForL10nScript.js:60
 msgid "Allow sharing for"
 msgstr "Teilen erlauben für"
 
-#. TRANSLATORS src/components/Nav/CollectiveSettings.vue:116
-#: /collectives/specialVueFakeDummyForL10nScript.js:74
+#. TRANSLATORS src/components/Nav/CollectiveSettings.vue:97
+#: /collectives/specialVueFakeDummyForL10nScript.js:68
 msgid "Members"
 msgstr "Mitglieder"
 
-#. TRANSLATORS src/components/Nav/CollectiveSettings.vue:118
-#: /collectives/specialVueFakeDummyForL10nScript.js:76
+#. TRANSLATORS src/components/Nav/CollectiveSettings.vue:99
+#: /collectives/specialVueFakeDummyForL10nScript.js:70
 msgid "Members can be managed via the connected circle in the Contacts app."
 msgstr ""
 "Mitglieder können in dem zugehörigen Kreis in der Kontakte-App verwaltet "
 "werden."
 
-#. TRANSLATORS src/components/Nav/CollectiveSettings.vue:122
-#. TRANSLATORS src/components/Nav/CollectiveSettings.vue:125
-#: /collectives/specialVueFakeDummyForL10nScript.js:78
-#: /collectives/specialVueFakeDummyForL10nScript.js:80
+#. TRANSLATORS src/components/Nav/CollectiveSettings.vue:103
+#. TRANSLATORS src/components/Nav/CollectiveSettings.vue:106
+#: /collectives/specialVueFakeDummyForL10nScript.js:72
+#: /collectives/specialVueFakeDummyForL10nScript.js:74
 msgid "Open circle in Contacts"
 msgstr "Öffne Kreis in Kontakte-App"
 
-#. TRANSLATORS src/components/Nav/CollectiveSettings.vue:130
-#: /collectives/specialVueFakeDummyForL10nScript.js:82
+#. TRANSLATORS src/components/Nav/CollectiveSettings.vue:111
+#: /collectives/specialVueFakeDummyForL10nScript.js:76
 msgid "Danger zone"
 msgstr "Gefahrenzone"
 
-#. TRANSLATORS src/components/Nav/CollectiveSettings.vue:133
-#. TRANSLATORS src/components/Nav/CollectiveSettings.vue:135
-#: /collectives/specialVueFakeDummyForL10nScript.js:84
-#: /collectives/specialVueFakeDummyForL10nScript.js:86
+#. TRANSLATORS src/components/Nav/CollectiveSettings.vue:114
+#. TRANSLATORS src/components/Nav/CollectiveSettings.vue:116
+#: /collectives/specialVueFakeDummyForL10nScript.js:78
+#: /collectives/specialVueFakeDummyForL10nScript.js:80
 msgid "Delete collective"
 msgstr "Kollektiv löschen"
 
-#. TRANSLATORS src/components/Nav/CollectiveSettings.vue:212
-#: /collectives/specialVueFakeDummyForL10nScript.js:88
+#. TRANSLATORS src/components/Nav/CollectiveSettings.vue:190
+#: /collectives/specialVueFakeDummyForL10nScript.js:82
 msgid "Change emoji"
 msgstr "Den Emoji ändern"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:88
+#: /collectives/specialVueFakeDummyForL10nScript.js:82
 msgid "Add emoji"
 msgstr "Ein Emoji auswählen"
 
-#. TRANSLATORS src/components/Nav/CollectiveSettings.vue:217
-#: /collectives/specialVueFakeDummyForL10nScript.js:90
+#. TRANSLATORS src/components/Nav/CollectiveSettings.vue:195
+#: /collectives/specialVueFakeDummyForL10nScript.js:84
 msgid "Renaming is limited to owners of the circle"
 msgstr "Nur Besitzer:innen des Kreises dürfen umbenennen"
 
-#. TRANSLATORS src/components/Nav/CollectiveSettings.vue:246
-#: /collectives/specialVueFakeDummyForL10nScript.js:94
+#. TRANSLATORS src/components/Nav/CollectiveSettings.vue:224
+#: /collectives/specialVueFakeDummyForL10nScript.js:88
 msgid "Editing permissions updated"
 msgstr "Bearbeitungsberechtigungen aktualisiert"
 
-#. TRANSLATORS src/components/Nav/CollectiveSettings.vue:258
-#: /collectives/specialVueFakeDummyForL10nScript.js:96
+#. TRANSLATORS src/components/Nav/CollectiveSettings.vue:236
+#: /collectives/specialVueFakeDummyForL10nScript.js:90
 msgid "Sharing permissions updated"
 msgstr "Freigabeberechtigungen aktualisiert"
 
-#. TRANSLATORS src/components/Nav/CollectiveSettings.vue:274
-#: /collectives/specialVueFakeDummyForL10nScript.js:98
-msgid "Default page order updated"
-msgstr "Standard-Sortierung der Seiten aktualisiert"
-
-#. TRANSLATORS src/components/Nav/CollectiveSettings.vue:306
-#: /collectives/specialVueFakeDummyForL10nScript.js:100
+#. TRANSLATORS src/components/Nav/CollectiveSettings.vue:268
+#: /collectives/specialVueFakeDummyForL10nScript.js:92
 msgid "Emoji updated"
 msgstr "Emoji aktualisiert"
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:2
-#: /collectives/specialVueFakeDummyForL10nScript.js:102
+#: /collectives/specialVueFakeDummyForL10nScript.js:94
 msgid "Collectives settings"
 msgstr "Kollektiv-Einstellungen"
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:6
-#: /collectives/specialVueFakeDummyForL10nScript.js:104
+#: /collectives/specialVueFakeDummyForL10nScript.js:96
 msgid "Collectives Folder"
 msgstr "Ordner für Kollektive"
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:48
-#: /collectives/specialVueFakeDummyForL10nScript.js:106
+#: /collectives/specialVueFakeDummyForL10nScript.js:98
 msgid "Create a collective first"
 msgstr "Erstellen Sie erst ein neues Kollektiv"
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:59
-#: /collectives/specialVueFakeDummyForL10nScript.js:108
+#: /collectives/specialVueFakeDummyForL10nScript.js:100
 msgid "Select location for collectives"
 msgstr "Wählen Sie den Ort für Kollektiv"
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:73
-#: /collectives/specialVueFakeDummyForL10nScript.js:110
+#: /collectives/specialVueFakeDummyForL10nScript.js:102
 msgid "Invalid path selected. Only folders on first level are supported."
 msgstr ""
 "Der ausgewählte Ort ist ungültig. Nur Ordner auf oberster Ebene sind erlaubt."
 
 #. TRANSLATORS src/components/Nav/CollectivesTrash.vue:11
-#: /collectives/specialVueFakeDummyForL10nScript.js:112
+#: /collectives/specialVueFakeDummyForL10nScript.js:104
 msgid "Deleted collectives"
 msgstr "Gelöschte Kollektive"
 
 #. TRANSLATORS src/components/Nav/CollectivesTrash.vue:34
 #. TRANSLATORS src/components/Page/Version.vue:15
-#: /collectives/specialVueFakeDummyForL10nScript.js:114
-#: /collectives/specialVueFakeDummyForL10nScript.js:174
+#: /collectives/specialVueFakeDummyForL10nScript.js:106
+#: /collectives/specialVueFakeDummyForL10nScript.js:166
 msgid "Restore"
 msgstr "Wiederherstellen"
 
 #. TRANSLATORS src/components/Nav/CollectivesTrash.vue:40
-#: /collectives/specialVueFakeDummyForL10nScript.js:116
+#: /collectives/specialVueFakeDummyForL10nScript.js:108
 msgid "Delete permanently"
 msgstr "Endgültig löschen"
 
 #. TRANSLATORS src/components/Nav/CollectivesTrash.vue:51
-#: /collectives/specialVueFakeDummyForL10nScript.js:118
+#: /collectives/specialVueFakeDummyForL10nScript.js:110
 msgid "Permanently delete collective »{collective}«"
 msgstr "Kollektiv »{collective}« endgültig löschen"
 
 #. TRANSLATORS src/components/Nav/CollectivesTrash.vue:54
-#: /collectives/specialVueFakeDummyForL10nScript.js:120
+#: /collectives/specialVueFakeDummyForL10nScript.js:112
 msgid "Delete corresponding circle along with the collective?"
 msgstr "Den zum Kollektiv gehörenden Kreis ebenfalls löschen?"
 
 #. TRANSLATORS src/components/Nav/CollectivesTrash.vue:58
-#: /collectives/specialVueFakeDummyForL10nScript.js:122
+#: /collectives/specialVueFakeDummyForL10nScript.js:114
 msgid "Cancel"
 msgstr "Abbrechen"
 
 #. TRANSLATORS src/components/Nav/CollectivesTrash.vue:61
-#: /collectives/specialVueFakeDummyForL10nScript.js:124
+#: /collectives/specialVueFakeDummyForL10nScript.js:116
 msgid "Only collective"
 msgstr "Nur Kollektiv"
 
 #. TRANSLATORS src/components/Nav/CollectivesTrash.vue:66
-#: /collectives/specialVueFakeDummyForL10nScript.js:126
-#: /collectives/specialVueFakeDummyForL10nScript.js:130
+#: /collectives/specialVueFakeDummyForL10nScript.js:118
+#: /collectives/specialVueFakeDummyForL10nScript.js:122
 msgid "Collective and circle"
 msgstr "Kollektiv und Kreis"
 
 #. TRANSLATORS src/components/Nav/CollectivesTrash.vue:71
-#: /collectives/specialVueFakeDummyForL10nScript.js:128
+#: /collectives/specialVueFakeDummyForL10nScript.js:120
 msgid "Only circle owners can delete a circle"
 msgstr "Kreise können nur von ihren Besitzer:innen gelöscht werden"
 
 #. TRANSLATORS src/components/Nav/NewCollective.vue:24
 #. TRANSLATORS src/views/Home.vue:13
 #. TRANSLATORS src/views/Home.vue:16
-#: /collectives/specialVueFakeDummyForL10nScript.js:132
+#: /collectives/specialVueFakeDummyForL10nScript.js:124
+#: /collectives/specialVueFakeDummyForL10nScript.js:250
 #: /collectives/specialVueFakeDummyForL10nScript.js:252
-#: /collectives/specialVueFakeDummyForL10nScript.js:254
 msgid "Create new collective"
 msgstr "Ein neues Kollektiv erstellen"
 
 #. TRANSLATORS src/components/Nav/NewCollective.vue:33
-#: /collectives/specialVueFakeDummyForL10nScript.js:134
+#: /collectives/specialVueFakeDummyForL10nScript.js:126
 msgid "Create collective for existing circle"
 msgstr "Kollektiv für einen bestehenden Kreis anlegen"
 
 #. TRANSLATORS src/components/Nav/NewCollective.vue:43
 #. TRANSLATORS src/components/Page/PageActionMenu.vue:137
 #. TRANSLATORS src/components/Page.vue:16
-#: /collectives/specialVueFakeDummyForL10nScript.js:138
-#: /collectives/specialVueFakeDummyForL10nScript.js:156
-#: /collectives/specialVueFakeDummyForL10nScript.js:182
+#: /collectives/specialVueFakeDummyForL10nScript.js:130
+#: /collectives/specialVueFakeDummyForL10nScript.js:148
+#: /collectives/specialVueFakeDummyForL10nScript.js:174
 msgid "Select emoji"
 msgstr "Wähl Emoji"
 
 #. TRANSLATORS src/components/Nav/NewCollective.vue:53
-#: /collectives/specialVueFakeDummyForL10nScript.js:140
+#: /collectives/specialVueFakeDummyForL10nScript.js:132
 msgid "New collective name"
 msgstr "Name des neuen Kollektivs"
 
 #. TRANSLATORS src/components/Nav/NewCollective.vue:61
-#: /collectives/specialVueFakeDummyForL10nScript.js:142
+#: /collectives/specialVueFakeDummyForL10nScript.js:134
 msgid "Select circle..."
 msgstr "Wähle Kreis..."
 
 #. TRANSLATORS src/components/Nav/NewCollective.vue:65
-#: /collectives/specialVueFakeDummyForL10nScript.js:144
+#: /collectives/specialVueFakeDummyForL10nScript.js:136
 msgid "Create a new collective"
 msgstr "Neues Kollektiv erstellen"
 
 #. TRANSLATORS src/components/Nav/NewCollective.vue:70
-#: /collectives/specialVueFakeDummyForL10nScript.js:146
+#: /collectives/specialVueFakeDummyForL10nScript.js:138
 msgid "Cancel creating a new collective"
 msgstr "Erstellung eines neuen Kollektivs abbrechen"
 
 #. TRANSLATORS src/components/Nav.vue:7
-#: /collectives/specialVueFakeDummyForL10nScript.js:148
+#: /collectives/specialVueFakeDummyForL10nScript.js:140
 msgid "Select a collective"
 msgstr "Wählen Sie ein Kollektiv aus"
 
 #. TRANSLATORS src/components/Page/PageActionMenu.vue:7
-#: /collectives/specialVueFakeDummyForL10nScript.js:150
+#: /collectives/specialVueFakeDummyForL10nScript.js:142
 msgid "Show in Files"
 msgstr "Zeige in Dateien"
 
 #. TRANSLATORS src/components/Page/PageActionMenu.vue:132
-#: /collectives/specialVueFakeDummyForL10nScript.js:152
+#: /collectives/specialVueFakeDummyForL10nScript.js:144
 msgid "Edit template for subpages"
 msgstr "Vorlage für Unterseite bearbeiten"
 
 #. TRANSLATORS src/components/Page/PageActionMenu.vue:133
-#: /collectives/specialVueFakeDummyForL10nScript.js:154
+#: /collectives/specialVueFakeDummyForL10nScript.js:146
 msgid "Add template for subpages"
 msgstr "Vorlage für Unterseite hinzufügen"
 
 #. TRANSLATORS src/components/Page/PageActionMenu.vue:142
-#: /collectives/specialVueFakeDummyForL10nScript.js:158
+#: /collectives/specialVueFakeDummyForL10nScript.js:150
 msgid "Cannot delete page with subpages"
 msgstr "Seite mit Unterseiten kann nicht gelöscht werden"
 
 #. TRANSLATORS src/components/Page/PageActionMenu.vue:144
-#: /collectives/specialVueFakeDummyForL10nScript.js:160
+#: /collectives/specialVueFakeDummyForL10nScript.js:152
 msgid "Delete template"
 msgstr "Vorlage löschen"
 
 #. TRANSLATORS src/components/Page/PageActionMenu.vue:145
-#: /collectives/specialVueFakeDummyForL10nScript.js:162
+#: /collectives/specialVueFakeDummyForL10nScript.js:154
 msgid "Delete page"
 msgstr "Seite entfernen"
 
 #. TRANSLATORS src/components/Page/PageNotFound.vue:3
-#: /collectives/specialVueFakeDummyForL10nScript.js:164
+#: /collectives/specialVueFakeDummyForL10nScript.js:156
 msgid "Page not found:"
 msgstr "Seite nicht gefunden:"
 
 #. TRANSLATORS src/components/Page/PageNotFound.vue:10
-#: /collectives/specialVueFakeDummyForL10nScript.js:166
+#: /collectives/specialVueFakeDummyForL10nScript.js:158
 msgid "Could not find the Page."
 msgstr "Seite nicht gefunden."
 
 #. TRANSLATORS src/components/Page/PageNotFound.vue:13
-#: /collectives/specialVueFakeDummyForL10nScript.js:168
+#: /collectives/specialVueFakeDummyForL10nScript.js:160
 msgid "Select a page from the list or create a new one."
 msgstr "Wählen Sie eine Seite aus der Liste oder legen Sie eine neue an."
 
 #. TRANSLATORS src/components/Page/Version.vue:8
-#: /collectives/specialVueFakeDummyForL10nScript.js:170
-#: /collectives/specialVueFakeDummyForL10nScript.js:172
+#: /collectives/specialVueFakeDummyForL10nScript.js:162
+#: /collectives/specialVueFakeDummyForL10nScript.js:164
 msgid "Restore this version"
 msgstr "Diese Version wiederherstellen"
 
 #. TRANSLATORS src/components/Page/Version.vue:126
-#: /collectives/specialVueFakeDummyForL10nScript.js:176
+#: /collectives/specialVueFakeDummyForL10nScript.js:168
 msgid "Reverted {page} to revision {timestamp}."
 msgstr "Seite {page} auf Version {timestamp} zurücksetzen."
 
 #. TRANSLATORS src/components/Page/Version.vue:131
-#: /collectives/specialVueFakeDummyForL10nScript.js:178
+#: /collectives/specialVueFakeDummyForL10nScript.js:170
 msgid "Failed to revert {page} to revision {timestamp}."
 msgstr ""
 "Das Zurücksetzen der Seite {page} auf die Version {timestamp} ist "
 "fehlgeschlagen."
 
 #. TRANSLATORS src/components/Page.vue:15
-#: /collectives/specialVueFakeDummyForL10nScript.js:180
+#: /collectives/specialVueFakeDummyForL10nScript.js:172
 msgid "Select emoji for page"
 msgstr "Emoji für Seite auswählen"
 
 #. TRANSLATORS src/components/Page.vue:47
-#. TRANSLATORS src/components/PageList/Item.vue:195
-#: /collectives/specialVueFakeDummyForL10nScript.js:184
-#: /collectives/specialVueFakeDummyForL10nScript.js:204
+#. TRANSLATORS src/components/PageList/Item.vue:199
+#: /collectives/specialVueFakeDummyForL10nScript.js:176
+#: /collectives/specialVueFakeDummyForL10nScript.js:196
 msgid "Template"
 msgstr "Vorlage"
 
 #. TRANSLATORS src/components/Page.vue:53
-#: /collectives/specialVueFakeDummyForL10nScript.js:186
+#: /collectives/specialVueFakeDummyForL10nScript.js:178
 msgid "Title"
 msgstr "Titel"
 
 #. TRANSLATORS src/components/Page.vue:59
-#: /collectives/specialVueFakeDummyForL10nScript.js:188
-#: /collectives/specialVueFakeDummyForL10nScript.js:190
+#: /collectives/specialVueFakeDummyForL10nScript.js:180
+#: /collectives/specialVueFakeDummyForL10nScript.js:182
 msgid "Stop editing"
 msgstr "Bearbeiten beenden"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:188
-#: /collectives/specialVueFakeDummyForL10nScript.js:190
+#: /collectives/specialVueFakeDummyForL10nScript.js:180
+#: /collectives/specialVueFakeDummyForL10nScript.js:182
 msgid "Start editing"
 msgstr "Bearbeiten starten"
 
 #. TRANSLATORS src/components/Page.vue:71
-#: /collectives/specialVueFakeDummyForL10nScript.js:192
+#: /collectives/specialVueFakeDummyForL10nScript.js:184
 msgid "Done"
 msgstr "Fertig"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:192
+#: /collectives/specialVueFakeDummyForL10nScript.js:184
 msgid "Edit"
 msgstr "Bearbeiten"
 
 #. TRANSLATORS src/components/Page.vue:83
-#: /collectives/specialVueFakeDummyForL10nScript.js:194
+#: /collectives/specialVueFakeDummyForL10nScript.js:186
 msgid "Toggle page sidebar"
 msgstr "Seitenleiste umschalten"
 
 #. TRANSLATORS src/components/Page.vue:92
-#: /collectives/specialVueFakeDummyForL10nScript.js:196
+#: /collectives/specialVueFakeDummyForL10nScript.js:188
 msgid "Page content"
 msgstr "Seiteninhalt"
 
 #. TRANSLATORS src/components/Page.vue:442
-#: /collectives/specialVueFakeDummyForL10nScript.js:200
+#: /collectives/specialVueFakeDummyForL10nScript.js:192
 msgid "Could not rename the page"
 msgstr "Umbenennen der Seite fehlgeschlagen"
 
-#. TRANSLATORS src/components/PageList/Item.vue:30
-#: /collectives/specialVueFakeDummyForL10nScript.js:202
+#. TRANSLATORS src/components/PageList/Item.vue:34
+#: /collectives/specialVueFakeDummyForL10nScript.js:194
 msgid "Expand subpage list"
 msgstr "Klappe Unterseiten-Liste auf"
 
-#. TRANSLATORS src/components/PageList/Item.vue:204
-#: /collectives/specialVueFakeDummyForL10nScript.js:206
+#. TRANSLATORS src/components/PageList/Item.vue:208
+#: /collectives/specialVueFakeDummyForL10nScript.js:198
 msgid "Add a page"
 msgstr "Seite hinzufügen"
 
-#. TRANSLATORS src/components/PageList/Item.vue:205
-#: /collectives/specialVueFakeDummyForL10nScript.js:208
+#. TRANSLATORS src/components/PageList/Item.vue:209
+#: /collectives/specialVueFakeDummyForL10nScript.js:200
 msgid "Add a subpage"
 msgstr "Unterseite hinzufügen"
 
 #. TRANSLATORS src/components/PageList.vue:7
-#: /collectives/specialVueFakeDummyForL10nScript.js:210
+#: /collectives/specialVueFakeDummyForL10nScript.js:202
 msgid "Search pages ..."
 msgstr "Suche Seiten ..."
 
 #. TRANSLATORS src/components/PageList.vue:11
-#: /collectives/specialVueFakeDummyForL10nScript.js:212
-#: /collectives/specialVueFakeDummyForL10nScript.js:214
+#: /collectives/specialVueFakeDummyForL10nScript.js:204
+#: /collectives/specialVueFakeDummyForL10nScript.js:206
 msgid "Hide templates"
 msgstr "Vorlagen ausblenden"
 
-#: /collectives/specialVueFakeDummyForL10nScript.js:212
-#: /collectives/specialVueFakeDummyForL10nScript.js:214
+#: /collectives/specialVueFakeDummyForL10nScript.js:204
+#: /collectives/specialVueFakeDummyForL10nScript.js:206
 msgid "Show templates"
 msgstr "Vorlagen anzeigen"
 
 #. TRANSLATORS src/components/PageList.vue:20
-#: /collectives/specialVueFakeDummyForL10nScript.js:216
+#: /collectives/specialVueFakeDummyForL10nScript.js:208
 msgid "Sort order"
 msgstr "Sortierung"
 
-#. TRANSLATORS src/components/PageList.vue:176
-#: /collectives/specialVueFakeDummyForL10nScript.js:222
+#. TRANSLATORS src/components/PageList.vue:33
+#: /collectives/specialVueFakeDummyForL10nScript.js:210
+msgid "Sort by custom order"
+msgstr ""
+
+#. TRANSLATORS src/components/PageList.vue:42
+#: /collectives/specialVueFakeDummyForL10nScript.js:212
+msgid "Sort recently changed first"
+msgstr "Sortiere nach letzten Änderungen"
+
+#. TRANSLATORS src/components/PageList.vue:51
+#: /collectives/specialVueFakeDummyForL10nScript.js:214
+msgid "Sort by title"
+msgstr "Sortiere nach Titel"
+
+#. TRANSLATORS src/components/PageList.vue:79
+#: /collectives/specialVueFakeDummyForL10nScript.js:216
+msgid "Sorted by title"
+msgstr ""
+
+#: /collectives/specialVueFakeDummyForL10nScript.js:216
+msgid "Sorted by recently changed"
+msgstr ""
+
+#. TRANSLATORS src/components/PageList.vue:80
+#: /collectives/specialVueFakeDummyForL10nScript.js:218
+msgid "Switch back to default sort order"
+msgstr ""
+
+#. TRANSLATORS src/components/PageList.vue:220
+#: /collectives/specialVueFakeDummyForL10nScript.js:220
 msgid "Could not save page order for collective"
 msgstr ""
 "Sortierung der Seiten für das Kollektiv konnte nicht gespeichert werden"
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabBacklinks.vue:40
-#: /collectives/specialVueFakeDummyForL10nScript.js:224
+#: /collectives/specialVueFakeDummyForL10nScript.js:222
 msgid "No backlinks available"
 msgstr "Keine Rückverweise vorhanden"
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabBacklinks.vue:42
-#: /collectives/specialVueFakeDummyForL10nScript.js:226
+#: /collectives/specialVueFakeDummyForL10nScript.js:224
 msgid "If other pages link to this one, they will be listed here."
 msgstr "Liste von Seiten, die auf diese Seite verweisen."
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabBacklinks.vue:123
-#: /collectives/specialVueFakeDummyForL10nScript.js:228
+#: /collectives/specialVueFakeDummyForL10nScript.js:226
 msgid "Could not get page backlinks"
 msgstr "Konnte Rückverweise der Seite nicht laden"
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:25
-#: /collectives/specialVueFakeDummyForL10nScript.js:230
+#: /collectives/specialVueFakeDummyForL10nScript.js:228
 msgid "Current version"
 msgstr "Aktuelle Version"
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:59
-#: /collectives/specialVueFakeDummyForL10nScript.js:232
+#: /collectives/specialVueFakeDummyForL10nScript.js:230
 msgid "No other versions available"
 msgstr "Keine weiteren Versionen vorhanden"
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:61
-#: /collectives/specialVueFakeDummyForL10nScript.js:234
+#: /collectives/specialVueFakeDummyForL10nScript.js:232
 msgid "After editing you can find old versions of the page here."
 msgstr "Nach dem Bearbeiten werden alte Versionen hier angezeigt."
 
-#. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:171
-#: /collectives/specialVueFakeDummyForL10nScript.js:236
+#. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:167
+#: /collectives/specialVueFakeDummyForL10nScript.js:234
 msgid "Could not get page versions"
 msgstr "Konnte Versionen der Seite nicht laden"
 
-#. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:142
-#: /collectives/specialVueFakeDummyForL10nScript.js:238
+#. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:138
+#: /collectives/specialVueFakeDummyForL10nScript.js:236
 #: /collectives/src/util/xmlToVersionsList.js:30
 msgid "%n byte"
 msgid_plural "%n bytes"
@@ -685,27 +690,27 @@ msgstr[0] "%n Byte"
 msgstr[1] "%n Bytes"
 
 #. TRANSLATORS src/components/PageSidebar.vue:7
-#: /collectives/specialVueFakeDummyForL10nScript.js:240
+#: /collectives/specialVueFakeDummyForL10nScript.js:238
 msgid "Backlinks"
 msgstr "Rückverweise"
 
 #. TRANSLATORS src/components/PageSidebar.vue:12
-#: /collectives/specialVueFakeDummyForL10nScript.js:242
+#: /collectives/specialVueFakeDummyForL10nScript.js:240
 msgid "Pages that link to this one"
 msgstr "Seiten, die auf diese Seite verweisen"
 
 #. TRANSLATORS src/components/PageSidebar.vue:20
-#: /collectives/specialVueFakeDummyForL10nScript.js:244
+#: /collectives/specialVueFakeDummyForL10nScript.js:242
 msgid "Versions"
 msgstr "Historie"
 
 #. TRANSLATORS src/components/PageSidebar.vue:25
-#: /collectives/specialVueFakeDummyForL10nScript.js:246
+#: /collectives/specialVueFakeDummyForL10nScript.js:244
 msgid "Old versions of this page"
 msgstr "Frühere Versionen dieser Seite"
 
 #. TRANSLATORS src/views/Home.vue:9
-#: /collectives/specialVueFakeDummyForL10nScript.js:250
+#: /collectives/specialVueFakeDummyForL10nScript.js:248
 msgid "Come, organize and build shared knowledge!"
 msgstr "Kommen Sie vorbei, organisieren Sie sich und teilen Sie Ihr Wissen!"
 
@@ -717,26 +722,36 @@ msgstr "Link in die Zwischenablage kopiert."
 msgid "Could not copy link to the clipboard:"
 msgstr "Link in die Zwischenablage kopieren fehlgeschlagen:"
 
-#: /collectives/src/mixins/pageMixin.js:61
-#: /collectives/src/mixins/pageMixin.js:85
+#: /collectives/src/mixins/pageMixin.js:76
+#: /collectives/src/mixins/pageMixin.js:100
 msgid "Could not create the page"
 msgstr "Anlegen der Seite fehlgeschlagen"
 
-#: /collectives/src/mixins/pageMixin.js:72
+#: /collectives/src/mixins/pageMixin.js:87
 msgid "New Page"
 msgstr "Neue Seite"
 
-#: /collectives/src/mixins/pageMixin.js:101
+#: /collectives/src/mixins/pageMixin.js:119
 msgid "Could not save emoji for page"
 msgstr "Emoji für diese Seite konnte nicht gespeichert werden"
 
-#: /collectives/src/mixins/pageMixin.js:119
+#: /collectives/src/mixins/pageMixin.js:142
+msgid "Could not move page"
+msgstr ""
+
+#: /collectives/src/mixins/pageMixin.js:168
 msgid "Could not delete the page"
 msgstr "Seite konnte nicht entfernt werden"
 
-#: /collectives/src/mixins/pageMixin.js:127
+#: /collectives/src/mixins/pageMixin.js:180
 msgid "Page deleted"
 msgstr "Seite entfernt"
+
+#: /collectives/src/mixins/pageMixin.js:201
+#: /collectives/src/mixins/pageMixin.js:240
+#: /collectives/src/mixins/pageMixin.js:269
+msgid "Could not change page order"
+msgstr ""
 
 #: /collectives/templates/error.php:4
 msgid "Error: Missing apps"
@@ -749,6 +764,12 @@ msgstr "Die folgenden erforderlichen Apps fehlen: "
 #: /collectives/templates/error.php:27
 msgid "Please ask the administrator to enable these apps."
 msgstr "Bitten Sie Ihre Admins, diese Apps zu aktivieren."
+
+#~ msgid "Default page order"
+#~ msgstr "Standard-Sortierung der Seiten"
+
+#~ msgid "Default page order updated"
+#~ msgstr "Standard-Sortierung der Seiten aktualisiert"
 
 #~ msgid "in page {page} from collective {collective}"
 #~ msgstr "in Seite {page} des Kollektivs {collective}"
