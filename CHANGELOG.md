@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.5.0 - 2022.09.08
+
+### ✨New
+* Allow to sort pages in custom order. (#303)
+* Move pages between subpages via drag and drop. (#252)
+
+### 🌎Translations
+* 🗣️ Danish translation added thanks to Jens Peter Nielsen.
+* 🗣️ Dutch translation updated thanks to Jeroen Bos.
+* 🗣️ German translations updated thanks to Joachim Sokolowski.
+* 🗣️ Chinese translation updated thanks to Jason Clermont.
+
+
 ## 1.5.0-beta1 - 2022.08.11
 
 ### ✨New
