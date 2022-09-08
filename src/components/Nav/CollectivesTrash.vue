@@ -17,9 +17,7 @@
 				<ul class="app-navigation__list">
 					<NcAppNavigationItem v-for="collective in trashCollectives"
 						:key="collective.circleId"
-						:title="collective.name"
-						:force-menu="true"
-						class="collectives_trash_list_item">
+						:title="collective.name">
 						<template v-if="collective.emoji" #icon>
 							{{ collective.emoji }}
 						</template>
@@ -150,7 +148,7 @@ export default {
 
 	&__header {
 		box-sizing: border-box;
-		background-color: var(--color-main-background);
+		padding: calc(var(--default-grid-baseline, 4px) * 2);
 
 		.collectives-trash-button {
 			display: flex;
@@ -162,7 +160,10 @@ export default {
 			background-color: var(--color-main-background);
 			box-shadow: none;
 			border: 0;
-			border-radius: 0;
+			border-radius: var(--border-radius-pill);
+			// text-align: left;
+			// font-weight: normal;
+			// font-size: 100%;
 			color: var(--color-main-text);
 			padding-right: 14px;
 			line-height: 44px;
@@ -175,7 +176,6 @@ export default {
 			&:hover,
 			&:focus {
 				background-color: var(--color-background-hover);
-				border-radius: 0;
 			}
 
 			&__icon {
@@ -198,7 +198,6 @@ export default {
 	&__content {
 		display: block;
 		padding: 10px;
-		background-color: var(--color-main-background);
 		/* Restrict height of trash an make scrollable */
 		max-height: 300px;
 		overflow-y: auto;
@@ -221,7 +220,6 @@ export default {
 
 ::v-deep .modal-wrapper--small {
 	.modal-container {
-		max-width: 90%;
 		width: 600px;
 	}
 }
@@ -234,5 +232,6 @@ export default {
 	display: flex;
 	justify-content: space-between;
 	padding-top: 10px;
+	gap: 10px;
 }
 </style>
