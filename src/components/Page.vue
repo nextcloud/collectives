@@ -487,13 +487,13 @@ export default {
 }
 
 .page-title {
-	padding: 8px 0px 2px 8px;
 	position: sticky;
+	top: 0;
+	padding: 8px 0px 2px 8px;
 	margin: auto;
 	max-width: 670px;
 	display: flex;
 	align-items: center;
-	top: var(--header-height);
 	background-color: var(--color-main-background);
 
 	.page-title-icon {
@@ -522,7 +522,7 @@ export default {
 // Editor/View: 670px, page list/details toggle: 44px
 @media only screen and (max-width: 670px + 44px) {
 	.page-title {
-		padding: 8px 0px 2px 30px;
+		padding-left: 40px;
 	}
 }
 

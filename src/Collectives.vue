@@ -1,10 +1,5 @@
 <template>
 	<NcContent app-name="collectives">
-		<!-- go back to list when in details mode -->
-		<a v-if="showing('details') && isMobile"
-			class="app-details-toggle icon-toggle-filelist"
-			href="#"
-			@click.stop.prevent="hide('details')" />
 		<Navigation v-if="!printView" />
 		<router-view />
 		<PageSidebar v-if="currentPage" v-show="showing('sidebar')" />
@@ -13,11 +8,10 @@
 
 <script>
 import { showInfo, showError } from '@nextcloud/dialogs'
-import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 import { GET_COLLECTIVES_FOLDER, GET_COLLECTIVES, GET_TRASH_COLLECTIVES } from './store/actions.js'
 import displayError from './util/displayError.js'
 import { NcContent } from '@nextcloud/vue'
-import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import Navigation from './components/Navigation.vue'
 import PageSidebar from './components/PageSidebar.vue'
 
@@ -29,10 +23,6 @@ export default {
 		Navigation,
 		PageSidebar,
 	},
-
-	mixins: [
-		isMobile,
-	],
 
 	computed: {
 		...mapState([
@@ -72,8 +62,6 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['hide']),
-
 		...mapActions({
 			dispatchGetCollectives: GET_COLLECTIVES,
 			dispatchGetCollectivesFolder: GET_COLLECTIVES_FOLDER,
@@ -184,22 +172,5 @@ export default {
 
 .app-navigation .app-navigation-toggle {
 	top: 0 !important;
-}
-</style>
-
-<style lang="scss" scoped>
-.app-details-toggle {
-	position: sticky;
-	top: 58px;
-	width: 44px;
-	height: 49px;
-	margin-right: -44px;
-	opacity: .6;
-	z-index: 2000;
-	&:active,
-	&:hover,
-	&:focus {
-		opacity: 1;
-	}
 }
 </style>
