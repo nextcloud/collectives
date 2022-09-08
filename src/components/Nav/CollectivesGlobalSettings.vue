@@ -86,10 +86,6 @@ export default {
 </script>
 
 <style lang="scss">
-::v-deep .modal-container {
-	display: flex !important;
-}
-
 .user_folder__input {
 	width: 93%
 }
