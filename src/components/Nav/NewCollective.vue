@@ -74,7 +74,8 @@
 
 <script>
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { NcActionButton, NcActions, NcAppNavigationItem, NcButton, NcEmojiPicker, NcMultiselect } from '@nextcloud/vue'
+import { NcActionButton, NcActions, NcAppNavigationItem, NcButton, NcMultiselect } from '@nextcloud/vue'
+import NcEmojiPicker from '@nextcloud/vue/dist/Components/NcEmojiPicker.js'
 import { mapActions, mapGetters } from 'vuex'
 import CirclesIcon from '../Icon/CirclesIcon.vue'
 import { GET_CIRCLES, NEW_COLLECTIVE } from '../../store/actions.js'
@@ -206,15 +207,21 @@ export default {
 
 <style lang="scss" scoped>
 .collective-create {
-	order: 1;
-	display: flex;
-	height: 44px;
-
 	form {
 		display: flex;
-		flex-grow: 1;
 
 		input[type='text'] {
+			flex-grow: 1;
+		}
+
+		input[type='submit'] {
+			border-radius: var(--border-radius-large) !important;
+			border-width: 2px;
+			margin-right: 0;
+		}
+
+		.multiselect {
+			min-width: unset;
 			flex-grow: 1;
 		}
 	}
