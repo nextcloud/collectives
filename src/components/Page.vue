@@ -56,7 +56,7 @@
 					@blur="renamePage()">
 			</form>
 			<EditButton v-if="currentCollectiveCanEdit"
-				:editModeAndReady="editMode && !waitForEditor"
+				:edit-mode-and-ready="editMode && !waitForEditor"
 				:loading="titleFormButtonIsLoading"
 				:mobile="isMobile"
 				@click="editMode ? stopEdit() : startEdit()" />
@@ -468,7 +468,7 @@ export default {
 	background-color: var(--color-main-background);
 }
 
-::v-deep [data-text-el="editor-container"] div.editor {
+::v-deep [data-text-el='editor-container'] div.editor {
 	/* Adjust to page titlebar height */
 	div.text-menubar {
 		margin: auto;
