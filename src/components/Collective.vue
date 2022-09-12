@@ -181,11 +181,50 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 div.modal-wrapper.modal-wrapper--full div.modal-container {
 	overflow: scroll;
 }
 
+/* Format page title in Page.vue and Version.vue */
+.page-title {
+	position: sticky;
+	top: 0;
+	padding: 8px 0px 2px 8px;
+	margin: auto;
+	max-width: 670px;
+	display: flex;
+	align-items: center;
+	background-color: var(--color-main-background);
+
+	.page-title-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 30px;
+		min-width: 44px;
+		height: 43px;
+		opacity: 0.8;
+
+		.button-emoji-page {
+			width: 44px;
+			padding: 0px 4px;
+			font-size: 30px;
+		}
+	}
+
+	.title {
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+}
+
+/* Leave space for page list toggle on small screens (editor 670px + toggle 44px) */
+@media only screen and (max-width: 670px + 44px) {
+	.page-title {
+		padding-left: 40px;
+	}
+}
 @media print {
 	#app-content-vue {
 		display: block !important;
