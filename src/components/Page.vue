@@ -480,59 +480,11 @@ export default {
 }
 
 ::v-deep #editor-container div#editor {
+	/* Adjust to page titlebar height */
 	div.text-menubar, div.menubar {
 		margin: auto;
 		top: calc(var(--header-height) + 59px);
 	}
-}
-
-.page-title {
-	position: sticky;
-	top: 0;
-	padding: 8px 0px 2px 8px;
-	margin: auto;
-	max-width: 670px;
-	display: flex;
-	align-items: center;
-	background-color: var(--color-main-background);
-
-	.page-title-icon {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		font-size: 30px;
-		min-width: 44px;
-		height: 43px;
-		opacity: 0.8;
-
-		.button-emoji-page {
-			width: 44px;
-			padding: 0px 4px;
-			font-size: 30px;
-		}
-	}
-
-	.title {
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
-}
-
-// Leave space for page list toggle on small screens
-// Editor/View: 670px, page list/details toggle: 44px
-@media only screen and (max-width: 670px + 44px) {
-	.page-title {
-		padding-left: 40px;
-	}
-}
-
-#action-menu button {
-	z-index: 1;
-}
-
-button.button-vue.titleform-button {
-	height: 44px;
-	min-width: fit-content;
 }
 
 .animation-rotate {
@@ -540,6 +492,7 @@ button.button-vue.titleform-button {
 }
 
 @media print {
+	/* Don't print emoticon button (if page doesn't have an emoji set) */
 	.titleform-button, .action-item, .emoji-picker-emoticon {
 		display: none !important;
 	}
