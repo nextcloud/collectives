@@ -55,21 +55,11 @@
 					:disabled="!currentCollectiveCanEdit"
 					@blur="renamePage()">
 			</form>
-			<NcButton v-if="currentCollectiveCanEdit"
-				v-tooltip="editMode ? t('collectives', 'Stop editing') : t('collectives', 'Start editing')"
-				:aria-label="editMode ? t('collectives', 'Stop editing') : t('collectives', 'Start editing')"
-				class="titleform-button"
-				type="primary"
-				@click="editMode ? stopEdit() : startEdit()">
-				<template #icon>
-					<LoadingIcon v-if="titleFormButtonIsLoading"
-						class="animation-rotate"
-						:size="20" />
-					<CheckIcon v-else-if="editMode" :size="20" />
-					<PencilIcon v-else :size="20" />
-				</template>
-				{{ editMode && !waitForEditor ? t('collectives', 'Done') : t('collectives', 'Edit') }}
-			</NcButton>
+			<EditButton v-if="currentCollectiveCanEdit"
+				:editModeAndReady="editMode && !waitForEditor"
+				:loading="titleFormButtonIsLoading"
+				:mobile="isMobile"
+				@click="editMode ? stopEdit() : startEdit()" />
 			<PageActionMenu v-if="currentCollectiveCanEdit"
 				:show-files-link="true"
 				:page-id="currentPage.id"
@@ -104,13 +94,13 @@
 </template>
 
 <script>
+import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import { NcActions, NcActionButton, NcButton } from '@nextcloud/vue'
 import NcEmojiPicker from '@nextcloud/vue/dist/Components/NcEmojiPicker.js'
 import CollectivesIcon from './Icon/CollectivesIcon.vue'
-import CheckIcon from 'vue-material-design-icons/Check.vue'
 import EmoticonOutlineIcon from 'vue-material-design-icons/EmoticonOutline.vue'
 import LoadingIcon from 'vue-material-design-icons/Loading.vue'
-import PencilIcon from 'vue-material-design-icons/Pencil.vue'
+import EditButton from './Page/EditButton.vue'
 import Editor from './Page/Editor.vue'
 import RichText from './Page/RichText.vue'
 import PageActionMenu from './Page/PageActionMenu.vue'
@@ -136,18 +126,18 @@ export default {
 		NcActions,
 		NcButton,
 		NcEmojiPicker,
-		CheckIcon,
 		CollectivesIcon,
+		EditButton,
 		Editor,
 		EmoticonOutlineIcon,
 		LoadingIcon,
 		PageActionMenu,
 		PageTemplateIcon,
-		PencilIcon,
 		RichText,
 	},
 
 	mixins: [
+		isMobile,
 		pageMixin,
 		pageContentMixin,
 	],
@@ -485,10 +475,6 @@ export default {
 		margin: auto;
 		top: calc(var(--header-height) + 59px);
 	}
-}
-
-.animation-rotate {
-	animation: rotate var(--animation-duration, 0.8s) linear infinite;
 }
 
 @media print {
