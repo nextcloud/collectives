@@ -9,7 +9,7 @@
 				{{ t('collectives', 'Come, organize and build shared knowledge!') }}
 			</template>
 		</NcEmptyContent>
-		<div class="new_collective">
+		<div class="new_collective_button">
 			<NcButton :aria-label="t('collectives', 'Create new collective')" :type="buttonType" @click="newCollective">
 				{{ t('collectives', 'Create new collective') }}
 			</NcButton>
@@ -73,7 +73,7 @@ export default {
 </script>
 
 <style scoped>
-.new_collective {
+.new_collective_button {
 	display: flex;
 	justify-content: center;
 	margin-top: 10px;

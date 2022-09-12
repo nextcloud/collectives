@@ -466,14 +466,13 @@ export default {
 	left: 0;
 	margin: 0 auto;
 	background-color: var(--color-main-background);
-	height: calc(100% - 59px);
 }
 
-::v-deep #editor-container div#editor {
+::v-deep [data-text-el="editor-container"] div.editor {
 	/* Adjust to page titlebar height */
-	div.text-menubar, div.menubar {
+	div.text-menubar {
 		margin: auto;
-		top: calc(var(--header-height) + 59px);
+		top: 59px;
 	}
 }
 

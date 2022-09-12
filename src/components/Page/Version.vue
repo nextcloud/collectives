@@ -140,9 +140,3 @@ export default {
 	},
 }
 </script>
-
-<style scoped>
-.titleform-button {
-	height: 44px;
-}
-</style>

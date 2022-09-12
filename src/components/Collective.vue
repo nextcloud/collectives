@@ -182,10 +182,6 @@ export default {
 </script>
 
 <style lang="scss">
-div.modal-wrapper.modal-wrapper--full div.modal-container {
-	overflow: scroll;
-}
-
 /* Format page title in Page.vue and Version.vue */
 .page-title {
 	position: sticky;
@@ -225,6 +221,7 @@ div.modal-wrapper.modal-wrapper--full div.modal-container {
 		padding-left: 40px;
 	}
 }
+
 @media print {
 	#app-content-vue {
 		display: block !important;
