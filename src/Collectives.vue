@@ -103,24 +103,22 @@ export default {
 </script>
 
 <style>
-#editor-container #editor-wrapper {
-	position: static;
-	overflow: visible;
+[data-text-el="editor-container"] .text-editor__wrapper {
+	/* Required to allow scrolling the content */
+	position: static !important;
+	overflow: visible !important;
 }
 
-#editor-container #editor {
+[data-text-el="editor-container"] .editor {
 	max-width: 800px;
 	margin-left: auto;
 	margin-right: auto;
-	overflow: visible;
-}
-
-#editor-wrapper #editor div.ProseMirror {
-	margin-top: 5px;
+	/* Overflow is required for sticky menubar */
+	overflow: visible !important;
 }
 
 #text-wrapper #text div.ProseMirror {
-	margin-top: 5px;
+	/* Align read view bottom padding with editor */
 	padding-bottom: 200px;
 }
 
@@ -135,7 +133,6 @@ export default {
 }
 
 #titleform input[type='text']:disabled {
-	background-color: var(--color-main-background);
 	color: var(--color-text-maxcontrast);
 }
 
