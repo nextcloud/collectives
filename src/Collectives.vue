@@ -103,17 +103,6 @@ export default {
 </script>
 
 <style>
-#app-content-wrapper {
-	display: flex;
-	position: relative;
-	align-items: stretch;
-	min-height: 100%;
-}
-
-.app-content-wrapper .app-details-toggle.icon-confirm {
-	display: none;
-}
-
 #editor-container #editor-wrapper {
 	position: static;
 	overflow: visible;
@@ -150,11 +139,6 @@ export default {
 	color: var(--color-text-maxcontrast);
 }
 
-#action-menu {
-	position: absolute;
-	right: 0;
-}
-
 @page {
 	size: auto;
 	margin: 5mm;
@@ -170,6 +154,7 @@ export default {
 	}
 }
 
+/* Align toggle with page list header bar */
 .app-navigation .app-navigation-toggle {
 	top: 0 !important;
 }
