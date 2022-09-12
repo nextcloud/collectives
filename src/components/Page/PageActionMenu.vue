@@ -37,12 +37,7 @@
 			{{ deletePageString }}
 		</NcActionButton>
 		<NcActionSeparator v-if="lastUserId" />
-		<li v-if="lastUserId" class="action action--user-bubble">
-			<button class="action-button action-button--user-bubble" type="button">
-				<ClockOutlineIcon :size="20" />
-				<LastUserBubble :last-user-id="lastUserId" :timestamp="timestamp" />
-			</button>
-		</li>
+		<PageActionLastUser :last-user-id="lastUserId" :timestamp="timestamp" />
 	</NcActions>
 </template>
 
@@ -50,12 +45,11 @@
 import { mapGetters, mapMutations } from 'vuex'
 import { generateUrl } from '@nextcloud/router'
 import { NcActions, NcActionButton, NcActionLink, NcActionSeparator } from '@nextcloud/vue'
-import ClockOutlineIcon from 'vue-material-design-icons/ClockOutline.vue'
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 import DeleteOffIcon from 'vue-material-design-icons/DeleteOff.vue'
 import EmoticonOutlineIcon from 'vue-material-design-icons/EmoticonOutline.vue'
 import PagesTemplateIcon from '../Icon/PagesTemplateIcon.vue'
-import LastUserBubble from '../LastUserBubble.vue'
+import PageActionLastUser from './PageActionLastUser.vue'
 import pageMixin from '../../mixins/pageMixin.js'
 
 export default {
@@ -66,12 +60,11 @@ export default {
 		NcActionButton,
 		NcActionLink,
 		NcActionSeparator,
-		ClockOutlineIcon,
 		DeleteIcon,
 		DeleteOffIcon,
 		EmoticonOutlineIcon,
 		PagesTemplateIcon,
-		LastUserBubble,
+		PageActionLastUser,
 	},
 
 	mixins: [
@@ -165,40 +158,3 @@ export default {
 	},
 }
 </script>
-
-<style lang="scss" scoped>
-.action-item--single {
-	&.action-button-add {
-		opacity: 1;
-	}
-}
-
-.action--user-bubble {
-	pointer-events: none;
-}
-
-.action-button--user-bubble {
-	display: flex;
-	align-items: flex-start;
-	width: 100%;
-	height: auto;
-	margin: 0;
-	padding: 0;
-	padding-right: 14px;
-	box-sizing: border-box;
-	white-space: nowrap;
-	opacity: .7;
-	border: 0;
-	border-radius: 0;
-	background-color: transparent;
-	box-shadow: none;
-	font-weight: normal;
-	font-size: var(--default-font-size);
-	line-height: 44px;
-
-	.material-design-icon {
-		width: 44px;
-		height: 44px;
-	}
-}
-</style>
