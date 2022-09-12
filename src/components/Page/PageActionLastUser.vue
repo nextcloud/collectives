@@ -12,7 +12,7 @@ import ClockOutlineIcon from 'vue-material-design-icons/ClockOutline.vue'
 import LastUserBubble from '../LastUserBubble.vue'
 
 export default {
-	name: 'PageActionMenu',
+	name: 'PageActionLastUser',
 
 	components: {
 		ClockOutlineIcon,
