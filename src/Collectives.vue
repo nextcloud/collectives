@@ -110,9 +110,6 @@ export default {
 }
 
 [data-text-el="editor-container"] .editor {
-	max-width: 800px;
-	margin-left: auto;
-	margin-right: auto;
 	/* Overflow is required for sticky menubar */
 	overflow: visible !important;
 }

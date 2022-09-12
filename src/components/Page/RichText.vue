@@ -196,10 +196,10 @@ export default {
 	overflow-y: auto;
 	overflow-x: hidden;
 	width: 100%;
-	max-width: 800px;
 	margin-left: auto;
 	margin-right: auto;
-	overflow: visible;
+	/* Overflow is required for sticky menubar */
+	overflow: visible !important;
 }
 
 #read-only-editor {
