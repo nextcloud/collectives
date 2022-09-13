@@ -89,7 +89,7 @@ describe('Page', function() {
 		cy.get('.modal-title').should('contain', fileName)
 		cy.get(`.viewer__content > ${viewerFileElement}.viewer__file`).should('exist')
 
-		cy.get('.modal-header > .icons-menu >> .close-icon')
+		cy.get('.modal-header > .icons-menu > button.header-close')
 			.click()
 	}
 
