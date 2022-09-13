@@ -1,19 +1,16 @@
 <template>
 	<NcAppContent>
-		<NcEmptyContent>
-			{{ t('collectives', 'Collectives') }}
+		<NcEmptyContent :title="t('collectives', 'Collectives')"
+			:description="t('collectives', 'Come, organize and build shared knowledge!')">
 			<template #icon>
 				<CollectivesIcon />
 			</template>
-			<template #desc>
-				{{ t('collectives', 'Come, organize and build shared knowledge!') }}
+			<template #action>
+				<NcButton :aria-label="t('collectives', 'Create new collective')" :type="buttonType" @click="newCollective">
+					{{ t('collectives', 'Create new collective') }}
+				</NcButton>
 			</template>
 		</NcEmptyContent>
-		<div class="new_collective_button">
-			<NcButton :aria-label="t('collectives', 'Create new collective')" :type="buttonType" @click="newCollective">
-				{{ t('collectives', 'Create new collective') }}
-			</NcButton>
-		</div>
 	</NcAppContent>
 </template>
 
@@ -71,11 +68,3 @@ export default {
 
 }
 </script>
-
-<style scoped>
-.new_collective_button {
-	display: flex;
-	justify-content: center;
-	margin-top: 10px;
-}
-</style>
