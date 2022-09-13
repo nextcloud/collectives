@@ -103,8 +103,13 @@ export default {
 </script>
 
 <style>
+.app-content-wrapper.app-content-wrapper--mobile {
+	/* Required to allow scrolling long content on mobile */
+	overflow-y: auto;
+}
+
 [data-text-el='editor-container'] .text-editor__wrapper {
-	/* Required to allow scrolling the content */
+	/* Required to allow scrolling long content in text editor */
 	position: static !important;
 	overflow: visible !important;
 }
