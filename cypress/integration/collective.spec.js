@@ -99,7 +99,7 @@ describe('Collective', function() {
 		it('creates collectives by picking circle',
 			function() {
 				cy.login('bob')
-				cy.get('button.action-item > span.circles-icon').click()
+				cy.get('button.action-item span.circles-icon').click({ force: true })
 				cy.get('.multiselect__option').should('not.contain', 'Foreign')
 				cy.get('.multiselect__option [title*=History]').click()
 				cy.get('input.icon-confirm').click()
