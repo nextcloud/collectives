@@ -103,13 +103,13 @@ export default {
 </script>
 
 <style>
-[data-text-el="editor-container"] .text-editor__wrapper {
+[data-text-el='editor-container'] .text-editor__wrapper {
 	/* Required to allow scrolling the content */
 	position: static !important;
 	overflow: visible !important;
 }
 
-[data-text-el="editor-container"] .editor {
+[data-text-el='editor-container'] .editor {
 	/* Overflow is required for sticky menubar */
 	overflow: visible !important;
 }
