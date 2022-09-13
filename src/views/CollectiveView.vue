@@ -50,5 +50,6 @@ export default {
 button.app-details-toggle {
 	z-index: 10023 !important;
 	top: 61px !important;
+	position: fixed !important;
 }
 </style>
