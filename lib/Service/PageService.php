@@ -8,6 +8,7 @@ use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Model\CollectiveInfo;
 use OCA\Collectives\Model\PageInfo;
+use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\InvalidPathException;
@@ -37,23 +38,29 @@ class PageService {
 	/** @var CollectiveInfo */
 	private $collectiveInfo;
 
+	/** @var CollectiveFolderManager */
+	private $collectiveFolderManager;
+
 	/**
 	 * PageService constructor.
 	 *
-	 * @param PageMapper            $pageMapper
-	 * @param NodeHelper            $nodeHelper
-	 * @param CollectiveServiceBase $collectiveService
-	 * @param UserFolderHelper      $userFolderHelper
-	 * @param IConfig               $config
+	 * @param PageMapper              $pageMapper
+	 * @param NodeHelper              $nodeHelper
+	 * @param CollectiveFolderManager $collectiveFolderManager
+	 * @param CollectiveServiceBase   $collectiveService
+	 * @param UserFolderHelper        $userFolderHelper
+	 * @param IConfig                 $config
 	 */
 	public function __construct(PageMapper $pageMapper,
 								NodeHelper $nodeHelper,
 								CollectiveServiceBase $collectiveService,
+								CollectiveFolderManager $collectiveFolderManager,
 								UserFolderHelper $userFolderHelper,
 								IConfig  $config) {
 		$this->pageMapper = $pageMapper;
 		$this->nodeHelper = $nodeHelper;
 		$this->collectiveService = $collectiveService;
+		$this->collectiveFolderManager = $collectiveFolderManager;
 		$this->userFolderHelper = $userFolderHelper;
 		$this->config = $config;
 	}
@@ -143,7 +150,7 @@ class PageService {
 	 */
 	public function getParentPageId(File $file): int {
 		try {
-			if (self::isLandingPage($file)) {
+			if ($this->isLandingPage($file)) {
 				// Return `0` for landing page
 				return 0;
 			}
@@ -281,7 +288,7 @@ class PageService {
 					$this->revertSubFolders($node);
 				} elseif ($node instanceof File) {
 					// Move index page without subpages into the parent folder (if's not the landing page)
-					if (self::isIndexPage($node) && !self::isLandingPage($node) && !$this->pageHasOtherContent($node)) {
+					if (self::isIndexPage($node) && !$this->isLandingPage($node) && !$this->pageHasOtherContent($node)) {
 						$filename = NodeHelper::generateFilename($folder, $folder->getName(), PageInfo::SUFFIX);
 						$node->move($folder->getParent()->getPath() . '/' . $filename . PageInfo::SUFFIX);
 						$folder->delete();
@@ -312,9 +319,16 @@ class PageService {
 	 *
 	 * @return bool
 	 */
-	public static function isLandingPage(File $file): bool {
-		$internalPath = $file->getInternalPath();
-		return ($internalPath === PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX);
+	public function isLandingPage(File $file): bool {
+		if (!self::isIndexPage($file)) {
+			return false;
+		}
+
+		try {
+			return !empty($this->collectiveFolderManager->getRootFolder()->getById($file->getParent()->getId()));
+		} catch (InvalidPathException|FilesNotFoundException $e) {
+			return false;
+		}
 	}
 
 	/**
@@ -578,7 +592,7 @@ class PageService {
 	 */
 	private function isAncestorOf(Folder $collectiveFolder, int $pageId, int $targetId): bool {
 		$targetFile = $this->nodeHelper->getFileById($collectiveFolder, $targetId);
-		if (self::isLandingPage($targetFile)) {
+		if ($this->isLandingPage($targetFile)) {
 			return false;
 		}
 
@@ -602,7 +616,7 @@ class PageService {
 	 */
 	private function renamePage(Folder $collectiveFolder, int $parentId, File $file, ?string $title): bool {
 		// Do not allow to move the landing page
-		if (self::isLandingPage($file)) {
+		if ($this->isLandingPage($file)) {
 			throw new NotPermittedException('Not allowed to rename landing page');
 		}
 

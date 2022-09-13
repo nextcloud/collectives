@@ -13,10 +13,12 @@ use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Model\CollectiveInfo;
 use OCA\Collectives\Model\PageInfo;
+use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Service\CollectiveServiceBase;
 use OCA\Collectives\Service\NotPermittedException;
 use OCA\Collectives\Service\PageService;
 use OCP\IConfig;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class PageServiceTest extends TestCase {
@@ -24,6 +26,7 @@ class PageServiceTest extends TestCase {
 	private $nodeHelper;
 	private $collectiveService;
 	private $collectiveFolder;
+	private $collectiveFolderManager;
 	private $config;
 	private $service;
 	private $userId = 'jane';
@@ -63,7 +66,11 @@ class PageServiceTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
-		$this->service = new PageService($this->pageMapper, $this->nodeHelper, $this->collectiveService, $userFolderHelper, $this->config);
+		$this->collectiveFolderManager = $this->getMockBuilder(CollectiveFolderManager::class)
+			->disableOriginalConstructor()
+			->getMock();
+
+		$this->service = new PageService($this->pageMapper, $this->nodeHelper, $this->collectiveService, $this->collectiveFolderManager, $userFolderHelper, $this->config);
 	}
 
 	public function testGetFolder(): void {
@@ -387,6 +394,8 @@ class PageServiceTest extends TestCase {
 		$pageParentFolder->method('get')
 			->with(PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX)
 			->willReturn($pageParentFile);
+		$pageParentFolder->method('getId')
+			->willReturn(4242);
 		$pageParentFile->method('getParent')
 			->willReturn($pageParentFolder);
 		$pageFile = $this->getMockBuilder(File::class)
@@ -394,8 +403,16 @@ class PageServiceTest extends TestCase {
 			->getMock();
 		$pageFile->method('getInternalPath')
 			->willReturn('Page' . PageInfo::SUFFIX);
-		$pageFile->method('getParent')
-			->willReturn($pageParentFile);
+
+
+		$rootFolder = $this->getMockBuilder(Folder::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$rootFolder->method('getById')
+			->with($pageParentFolder->getId())
+			->willReturn([$pageParentFolder]);
+
+		$this->collectiveFolderManager->method('getRootFolder')->willReturn($rootFolder);
 
 		$this->nodeHelper->method('getFileById')
 			->with($this->collectiveFolder, $targetId)
@@ -407,7 +424,7 @@ class PageServiceTest extends TestCase {
 		self::assertTrue($method->invokeArgs($this->service, [$this->collectiveFolder, $pageId, $targetId]));
 
 		// $targetId is landing page
-		$pageParentFile->method('getInternalPath')
+		$pageParentFile->method('getName')
 			->willReturn(PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX);
 		self::assertFalse($method->invokeArgs($this->service, [$this->collectiveFolder, $pageId, $targetId]));
 	}
@@ -421,10 +438,28 @@ class PageServiceTest extends TestCase {
 		$file = $this->getMockBuilder(File::class)
 			->disableOriginalConstructor()
 			->getMock();
-		$file->method('getInternalPath')
+		$file->method('getName')
 			->willReturn(PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX);
 		$this->nodeHelper->method('getFileById')
 			->willReturn($file);
+
+		$pageParentFolder = $this->getMockBuilder(Folder::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$pageParentFolder->method('getId')
+			->willReturn(4242);
+
+		$file->method('getParent')
+			->willReturn($pageParentFolder);
+
+		$rootFolder = $this->getMockBuilder(Folder::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$rootFolder->method('getById')
+			->with($pageParentFolder->getId())
+			->willReturn([$pageParentFolder]);
+
+		$this->collectiveFolderManager->method('getRootFolder')->willReturn($rootFolder);
 
 		$this->expectException(NotPermittedException::class);
 		$this->expectExceptionMessage('Not allowed to rename landing page');
