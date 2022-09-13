@@ -17,8 +17,7 @@
 						class="button-emoji-page"
 						@click.prevent>
 						<template #icon>
-							<LoadingIcon v-if="emojiButtonIsLoading"
-								class="animation-rotate"
+							<NcLoadingIcon v-if="emojiButtonIsLoading"
 								:size="30"
 								fill-color="var(--color-text-maxcontrast)" />
 							<div v-else-if="currentPage.emoji">
@@ -95,11 +94,10 @@
 
 <script>
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
-import { NcActions, NcActionButton, NcButton } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcButton, NcLoadingIcon } from '@nextcloud/vue'
 import NcEmojiPicker from '@nextcloud/vue/dist/Components/NcEmojiPicker.js'
 import CollectivesIcon from './Icon/CollectivesIcon.vue'
 import EmoticonOutlineIcon from 'vue-material-design-icons/EmoticonOutline.vue'
-import LoadingIcon from 'vue-material-design-icons/Loading.vue'
 import EditButton from './Page/EditButton.vue'
 import Editor from './Page/Editor.vue'
 import RichText from './Page/RichText.vue'
@@ -130,7 +128,7 @@ export default {
 		EditButton,
 		Editor,
 		EmoticonOutlineIcon,
-		LoadingIcon,
+		NcLoadingIcon,
 		PageActionMenu,
 		PageTemplateIcon,
 		RichText,

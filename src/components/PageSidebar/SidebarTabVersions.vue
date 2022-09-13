@@ -1,16 +1,17 @@
 <template>
 	<NcAppContentList>
 		<!-- loading -->
-		<div v-if="loading('versions')" class="Ncemptycontent">
-			<div class="icon icon-loading" />
-		</div>
+		<NcEmptyContent v-if="loading('versions')">
+			<template #icon>
+				<NcLoadingIcon />
+			</template>
+		</NcEmptyContent>
 
 		<!-- error message -->
-		<NcEmptyContent v-else-if="error">
+		<NcEmptyContent v-else-if="error" :title="error">
 			<template #icon>
 				<AlertOctagonIcon />
 			</template>
-			<h2>{{ error }}</h2>
 		</NcEmptyContent>
 
 		<!-- versions list -->
@@ -36,7 +37,7 @@
 					:class="{active: (version && v.timestamp === version.timestamp)}">
 					<div v-if="loading(`version-${pageId}-${v.timestamp}`)"
 						class="app-content-list-item-icon item-icon-loading">
-						<div class="icon-loading" />
+						<NcLoadingIcon :size="26" fill-color="var(--color-main-background)" />
 					</div>
 					<div v-else class="app-content-list-item-icon item-icon-page">
 						<PageIcon :size="26" fill-color="var(--color-main-background)" />
@@ -52,13 +53,11 @@
 		</template>
 
 		<!-- no versions found -->
-		<NcEmptyContent v-else>
+		<NcEmptyContent v-else
+			:title="t('collectives', 'No other versions available')"
+			:description="t( 'collectives', 'After editing you can find old versions of the page here.')">
 			<template #icon>
 				<RestoreIcon />
-			</template>
-			<h2>{{ t('collectives', 'No other versions available') }}</h2>
-			<template #desc>
-				{{ t( 'collectives', 'After editing you can find old versions of the page here.') }}
 			</template>
 		</NcEmptyContent>
 	</NcAppContentList>
@@ -67,7 +66,7 @@
 <script>
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { formatFileSize } from '@nextcloud/files'
-import { NcAppContentList, NcEmptyContent } from '@nextcloud/vue'
+import { NcAppContentList, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagon.vue'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
@@ -82,6 +81,7 @@ export default {
 		AlertOctagonIcon,
 		NcAppContentList,
 		NcEmptyContent,
+		NcLoadingIcon,
 		PageIcon,
 		RestoreIcon,
 	},
@@ -205,7 +205,7 @@ export default {
 	}
 
 	&.item-icon-loading {
-		padding-top: 10px;
+		padding-top: 6px;
 	}
 }
 

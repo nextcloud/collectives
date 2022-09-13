@@ -32,9 +32,13 @@
 			</NcActionButton>
 			<NcActionButton v-if="!isPublic"
 				v-show="isShared"
-				:icon="copyLinkIcon"
 				:close-after-click="false"
 				@click.stop.prevent="copyShare(collective)">
+				<template #icon>
+					<CheckIcon v-if="copySuccess" :size="16" />
+					<NcLoadingIcon v-else-if="copyLoading" :size="16" />
+					<ContentPasteIcon v-else :size="16" />
+				</template>
 				{{ copyButtonText }}
 			</NcActionButton>
 			<NcActionCheckbox v-if="!isPublic"
@@ -76,9 +80,11 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { NcActionButton, NcActionCheckbox, NcActionLink, NcActionSeparator, NcAppNavigationItem } from '@nextcloud/vue'
+import { NcActionButton, NcActionCheckbox, NcActionLink, NcActionSeparator, NcAppNavigationItem, NcLoadingIcon } from '@nextcloud/vue'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import { generateUrl } from '@nextcloud/router'
+import ContentPasteIcon from 'vue-material-design-icons/ContentPaste.vue'
+import CheckIcon from 'vue-material-design-icons/Check.vue'
 import DownloadIcon from 'vue-material-design-icons/Download.vue'
 import { SHARE_COLLECTIVE, UPDATE_SHARE_COLLECTIVE, UNSHARE_COLLECTIVE } from '../../store/actions.js'
 import displayError from '../../util/displayError.js'
@@ -96,9 +102,12 @@ export default {
 		NcActionLink,
 		NcActionSeparator,
 		NcAppNavigationItem,
+		NcLoadingIcon,
 		CirclesIcon,
 		CollectiveSettings,
 		CollectivesIcon,
+		ContentPasteIcon,
+		CheckIcon,
 		DownloadIcon,
 	},
 

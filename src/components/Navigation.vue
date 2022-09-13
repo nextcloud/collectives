@@ -1,7 +1,11 @@
 <template>
 	<NcAppNavigation>
 		<template v-if="loading('collectives')" #default>
-			<NcEmptyContent icon="icon-loading" />
+			<NcEmptyContent>
+				<template #icon>
+					<NcLoadingIcon />
+				</template>
+			</NcEmptyContent>
 		</template>
 		<template #list>
 			<NcAppNavigationCaption :title="t('collectives', 'Select a collective')" />
@@ -22,7 +26,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import { RESTORE_COLLECTIVE, DELETE_COLLECTIVE } from '../store/actions.js'
-import { NcAppNavigation, NcAppNavigationCaption, NcEmptyContent } from '@nextcloud/vue'
+import { NcAppNavigation, NcAppNavigationCaption, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 import NewCollective from './Nav/NewCollective.vue'
 import CollectiveListItem from './Nav/CollectiveListItem.vue'
 import CollectivesGlobalSettings from './Nav/CollectivesGlobalSettings.vue'
@@ -40,6 +44,7 @@ export default {
 		CollectivesGlobalSettings,
 		CollectivesTrash,
 		NcEmptyContent,
+		NcLoadingIcon,
 	},
 
 	computed: {

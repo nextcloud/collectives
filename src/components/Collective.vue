@@ -2,8 +2,11 @@
 	<NcAppContentDetails>
 		<Version v-if="currentPage && version" />
 		<Page v-else-if="currentPage" />
-		<NcEmptyContent v-else-if="loading('collective') || loading('page')"
-			icon="icon-loading" />
+		<NcEmptyContent v-else-if="loading('collective') || loading('page')">
+			<template #icon>
+				<NcLoadingIcon />
+			</template>
+		</NcEmptyContent>
 		<PageNotFound v-else />
 	</NcAppContentDetails>
 </template>
@@ -12,7 +15,7 @@
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { listen } from '@nextcloud/notify_push'
-import { NcAppContentDetails, NcEmptyContent } from '@nextcloud/vue'
+import { NcAppContentDetails, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 import { GET_PAGES } from '../store/actions.js'
 import { SELECT_VERSION } from '../store/mutations.js'
 import displayError from '../util/displayError.js'
@@ -26,6 +29,7 @@ export default {
 	components: {
 		NcAppContentDetails,
 		NcEmptyContent,
+		NcLoadingIcon,
 		Page,
 		PageNotFound,
 		Version,

@@ -71,9 +71,3 @@ export default {
 	},
 }
 </script>
-
-<style scoped>
-.animation-rotate {
-	animation: rotate var(--animation-duration, 0.8s) linear infinite;
-}
-</style>

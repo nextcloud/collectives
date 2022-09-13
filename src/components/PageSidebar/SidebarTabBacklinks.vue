@@ -1,16 +1,17 @@
 <template>
 	<NcAppContentList>
 		<!-- loading -->
-		<div v-if="loading('backlinks')" class="Ncemptycontent">
-			<div class="icon icon-loading" />
-		</div>
+		<NcEmptyContent v-if="loading('backlinks')">
+			<template #icon>
+				<NcLoadingIcon />
+			</template>
+		</NcEmptyContent>
 
 		<!-- error message -->
-		<NcEmptyContent v-else-if="error">
+		<NcEmptyContent v-else-if="error" :title="error">
 			<template #icon>
 				<AlertOctagonIcon />
 			</template>
-			<h2>{{ error }}</h2>
 		</NcEmptyContent>
 
 		<!-- backlinks list -->
@@ -33,13 +34,11 @@
 		</template>
 
 		<!-- no backlinks found -->
-		<NcEmptyContent v-else>
+		<NcEmptyContent v-else
+			:title="t('collectives', 'No backlinks available')"
+			:description="t( 'collectives', 'If other pages link to this one, they will be listed here.')">
 			<template #icon>
 				<ArrowBottomLeftIcon />
-			</template>
-			<h2>{{ t('collectives', 'No backlinks available') }}</h2>
-			<template #desc>
-				{{ t( 'collectives', 'If other pages link to this one, they will be listed here.') }}
 			</template>
 		</NcEmptyContent>
 	</NcAppContentList>
@@ -47,7 +46,7 @@
 
 <script>
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
-import { NcAppContentList, NcEmptyContent } from '@nextcloud/vue'
+import { NcAppContentList, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagon.vue'
 import ArrowBottomLeftIcon from 'vue-material-design-icons/ArrowBottomLeft.vue'
@@ -61,6 +60,7 @@ export default {
 		AlertOctagonIcon,
 		NcAppContentList,
 		NcEmptyContent,
+		NcLoadingIcon,
 		ArrowBottomLeftIcon,
 		PageIcon,
 	},

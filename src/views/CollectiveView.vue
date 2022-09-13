@@ -6,8 +6,11 @@
 			<PageList v-if="currentCollective" />
 		</template>
 		<Collective v-if="currentCollective" />
-		<NcEmptyContent v-else-if="loading('collectives')"
-			icon="icon-loading" />
+		<NcEmptyContent v-else-if="loading('collectives')">
+			<template #icon>
+				<NcLoadingIcon />
+			</template>
+		</NcEmptyContent>
 		<CollectiveNotFound v-else />
 	</NcAppContent>
 </template>
@@ -15,7 +18,7 @@
 <script>
 
 import { mapGetters, mapMutations } from 'vuex'
-import { NcAppContent, NcEmptyContent } from '@nextcloud/vue'
+import { NcAppContent, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 import Collective from '../components/Collective.vue'
 import CollectiveNotFound from '../components/CollectiveNotFound.vue'
 import PageList from '../components/PageList.vue'
@@ -24,10 +27,11 @@ export default {
 	name: 'CollectiveView',
 
 	components: {
-		NcAppContent,
-		NcEmptyContent,
 		Collective,
 		CollectiveNotFound,
+		NcAppContent,
+		NcEmptyContent,
+		NcLoadingIcon,
 		PageList,
 	},
 
