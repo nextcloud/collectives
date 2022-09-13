@@ -14,7 +14,7 @@
     "lint": "eslint --ext .js,.vue src cypress --max-warnings=0",
     "lint:fix": "eslint --ext .js,.vue src cypress --fix",
     "test": "NODE_ENV=test jest --passWithNoTests src/",
-    "stylelint": "stylelint css/*.css css/*.scss src/**/*.scss src/**/*.vue",
+    "stylelint": "stylelint css/*.css css/*.scss src/**/*.scss src/*.vue src/**/*.vue",
     "stylelint:fix": "stylelint css/*.css css/*.scss src/**/*.scss src/**/*.vue --fix"
   },
   "dependencies": {
