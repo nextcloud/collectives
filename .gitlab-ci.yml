@@ -344,7 +344,6 @@ Browser PHP 8.1 Nextcloud Master:
     - name: registry.gitlab.com/collectivecloud/docker-builds:php8.1-ncmaster
       alias: nextcloud.local
       entrypoint: ["/usr/local/bin/run.sh"]
-  allow_failure: true
 
 # Job to build documentation website on Gitlab pages
 pages:
