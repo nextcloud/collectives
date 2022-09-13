@@ -4,6 +4,7 @@
 		:class="{active: isActive(collective)}"
 		:to="`/${encodeURIComponent(collective.name)}`"
 		:force-menu="true"
+		:force-display-actions="isMobile"
 		class="collectives_list_item">
 		<template #icon>
 			<template v-if="collective.emoji">
@@ -76,6 +77,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import { NcActionButton, NcActionCheckbox, NcActionLink, NcActionSeparator, NcAppNavigationItem } from '@nextcloud/vue'
+import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import { generateUrl } from '@nextcloud/router'
 import DownloadIcon from 'vue-material-design-icons/Download.vue'
 import { SHARE_COLLECTIVE, UPDATE_SHARE_COLLECTIVE, UNSHARE_COLLECTIVE } from '../../store/actions.js'
@@ -100,7 +102,10 @@ export default {
 		DownloadIcon,
 	},
 
-	mixins: [CopyToClipboardMixin],
+	mixins: [
+		CopyToClipboardMixin,
+		isMobile,
+	],
 
 	props: {
 		collective: {
