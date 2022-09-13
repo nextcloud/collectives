@@ -183,10 +183,10 @@ describe('Page', function() {
 				.type('# Heading{enter}')
 
 			cy.log('Inserting an image')
-			cy.intercept({ method: 'POST', url: '**upload' }).as('imageUpload')
-			cy.get('input[data-text-el="image-file-input"]')
+			cy.intercept({ method: 'POST', url: '**/text/attachment/upload*' }).as('attachmentUpload')
+			cy.get('input[data-text-el="attachment-file-input"]')
 				.selectFile('cypress/fixtures/test.png', { force: true })
-			cy.wait('@imageUpload')
+			cy.wait('@attachmentUpload')
 
 			cy.log('Changing to read mode')
 			cy.get('button.titleform-button')
@@ -230,7 +230,7 @@ describe('Page', function() {
 	describe('Displaying backlinks', function() {
 		it('Lists backlinks for a page', function() {
 			cy.visit('/apps/collectives/Our%20Garden/Day%201')
-			cy.get('button.action-item.action-item--single.icon-menu-sidebar').click()
+			cy.get('button.action-item .icon-menu-sidebar').click()
 			cy.get('.app-sidebar-tabs__content').should('contain', 'Day 2')
 		})
 	})

@@ -163,63 +163,60 @@ describe('Page', function() {
 	})
 
 	describe('Link handling public share', function() {
-		// Only run link tests on Nextcloud 24+
-		if (!['22', '23'].includes(String(Cypress.env('ncVersion')))) {
-			let shareUrl
+		let shareUrl
 
-			it('Share the collective', function() {
-				cy.visit('/apps/collectives', {
-					onBeforeLoad(win) {
-						// navigator.clipboard doesn't exist on HTTP requests (in CI), so let's create it
-						if (!win.navigator.clipboard) {
-							win.navigator.clipboard = {
-								__proto__: {
-									writeText: () => {},
-								},
-							}
+		it('Share the collective', function() {
+			cy.visit('/apps/collectives', {
+				onBeforeLoad(win) {
+					// navigator.clipboard doesn't exist on HTTP requests (in CI), so let's create it
+					if (!win.navigator.clipboard) {
+						win.navigator.clipboard = {
+							__proto__: {
+								writeText: () => {},
+							},
 						}
-						// overwrite navigator.clipboard.writeText with cypress stub
-						cy.stub(win.navigator.clipboard, 'writeText', (text) => {
-							shareUrl = text
-						})
-							.as('clipBoardWriteText')
-					},
-				})
-				cy.get('.collectives_list_item')
-					.contains('li', 'Link Testing')
-					.find('.action-item__menutoggle')
-					.click()
-				cy.intercept('POST', '**/_api/*/share').as('createShare')
-				cy.get('button')
-					.contains('Share link')
-					.click()
-				cy.wait('@createShare')
-				cy.intercept('PUT', '**/_api/*/share/*').as('updateShare')
-				cy.get('input#shareEditable')
-					.check({ force: true }).then(() => {
-						cy.get('input#shareEditable')
-							.should('be.checked')
+					}
+					// overwrite navigator.clipboard.writeText with cypress stub
+					cy.stub(win.navigator.clipboard, 'writeText', (text) => {
+						shareUrl = text
 					})
-				cy.wait('@updateShare')
-				cy.get('button')
-					.contains('Copy share link')
-					.click()
-				cy.get('@clipBoardWriteText').should('have.been.calledOnce')
+						.as('clipBoardWriteText')
+				},
 			})
-			it('Public share: opens link to page in this collective in same/new tab depending on view/edit mode', function() {
-				cy.logout()
-				cy.visit(`${shareUrl}/Link Source`)
-				const href = '/index.php/apps/collectives/Link%20Testing/Link%20Target'
-				testLinkToSameTab(href, { isPublic: true })
-				// testLinkToNewTab(href, { edit: true, isPublic: true })
-			})
-			it('Public share: opens link to external page in new tab', function() {
-				cy.logout()
-				cy.visit(`${shareUrl}/Link Source`)
-				const href = 'http://example.org/'
-				testLinkToNewTab(href, { isPublic: true, absolute: true })
-				testLinkToNewTab(href, { edit: true, isPublic: true, absolute: true })
-			})
-		}
+			cy.get('.collectives_list_item')
+				.contains('li', 'Link Testing')
+				.find('.action-item__menutoggle')
+				.click({ force: true })
+			cy.intercept('POST', '**/_api/*/share').as('createShare')
+			cy.get('button')
+				.contains('Share link')
+				.click()
+			cy.wait('@createShare')
+			cy.intercept('PUT', '**/_api/*/share/*').as('updateShare')
+			cy.get('input#shareEditable')
+				.check({ force: true }).then(() => {
+					cy.get('input#shareEditable')
+						.should('be.checked')
+				})
+			cy.wait('@updateShare')
+			cy.get('button')
+				.contains('Copy share link')
+				.click()
+			cy.get('@clipBoardWriteText').should('have.been.calledOnce')
+		})
+		it('Public share: opens link to page in this collective in same/new tab depending on view/edit mode', function() {
+			cy.logout()
+			cy.visit(`${shareUrl}/Link Source`)
+			const href = '/index.php/apps/collectives/Link%20Testing/Link%20Target'
+			testLinkToSameTab(href, { isPublic: true })
+			// testLinkToNewTab(href, { edit: true, isPublic: true })
+		})
+		it('Public share: opens link to external page in new tab', function() {
+			cy.logout()
+			cy.visit(`${shareUrl}/Link Source`)
+			const href = 'http://example.org/'
+			testLinkToNewTab(href, { isPublic: true, absolute: true })
+			testLinkToNewTab(href, { edit: true, isPublic: true, absolute: true })
+		})
 	})
 })
