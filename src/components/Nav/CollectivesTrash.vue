@@ -17,7 +17,8 @@
 				<ul class="app-navigation__list">
 					<NcAppNavigationItem v-for="collective in trashCollectives"
 						:key="collective.circleId"
-						:title="collective.name">
+						:title="collective.name"
+						class="collectives_trash_list_item">
 						<template v-if="collective.emoji" #icon>
 							{{ collective.emoji }}
 						</template>
