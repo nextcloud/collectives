@@ -81,7 +81,7 @@ describe('Collective Share', function() {
 			cy.get('#text h1').should('contain', 'Welcome to your new collective')
 			cy.get('.app-content-list-item.toplevel')
 				.get('button.icon.add').should('not.exist')
-			cy.get('#editor-container').should('not.exist')
+			cy.get('[data-text-el="editor-container"]').should('not.exist')
 		})
 		it('Allows toggling the editable flag for a collective share', function() {
 			cy.login('bob')
@@ -116,7 +116,7 @@ describe('Collective Share', function() {
 				.should('have.value', '')
 			cy.get('#titleform input.title')
 				.type('New page')
-			cy.get('#editor > > .editor__content > div.ProseMirror', { timeout: Cypress.config('defaultCommandTimeout') * 2 })
+			cy.get('.editor > > .editor__content > div.ProseMirror', { timeout: Cypress.config('defaultCommandTimeout') * 2 })
 				.type('New content')
 			cy.get('button.titleform-button')
 				.click()

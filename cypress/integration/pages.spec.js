@@ -178,7 +178,7 @@ describe('Page', function() {
 		it('Supports page content editing and switching to read mode', function() {
 			cy.visit('/apps/collectives/Our%20Garden/Day%201')
 			cy.get('#read-only-editor.editor__content > .ProseMirror').should('not.be.visible')
-			cy.get('#editor > > .editor__content > .ProseMirror').should('be.visible')
+			cy.get('.editor > > .editor__content > .ProseMirror').should('be.visible')
 				.should('have.focus')
 				.type('# Heading{enter}')
 
@@ -191,7 +191,7 @@ describe('Page', function() {
 			cy.log('Changing to read mode')
 			cy.get('button.titleform-button')
 				.click()
-			cy.get('#editor > > .editor__content > .ProseMirror').should('not.be.visible')
+			cy.get('.editor > > .editor__content > .ProseMirror').should('not.be.visible')
 			cy.get('#read-only-editor.editor__content > .ProseMirror').should('be.visible')
 				.should('contain', 'Heading')
 			cy.get('#read-only-editor.editor__content > .ProseMirror')

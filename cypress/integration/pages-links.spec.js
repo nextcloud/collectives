@@ -74,7 +74,7 @@ describe('Page', function() {
 			// Change to edit mode
 			cy.get('button.titleform-button').contains('Edit')
 				.click()
-			cy.get(`#editor > > .editor__content > .ProseMirror a[href="${href}"]`)
+			cy.get(`.editor > > .editor__content > .ProseMirror a[href="${href}"]`)
 				.click()
 		} else {
 			cy.get(`#read-only-editor > .ProseMirror a[href="${href}"]`)
@@ -137,8 +137,8 @@ describe('Page', function() {
 		})
 		it('Opens link to text file in Nextcloud in viewer', function() {
 			const href = `/index.php/apps/files/?dir=/&openfile=${textId}#relPath=//test.md`
-			testLinkToViewer(href, { fileName: 'test.md', viewerFileElement: 'div#editor-container' })
-			testLinkToViewer(href, { fileName: 'test.md', viewerFileElement: 'div#editor-container', edit: true })
+			testLinkToViewer(href, { fileName: 'test.md', viewerFileElement: '[data-text-el="editor-container"]' })
+			testLinkToViewer(href, { fileName: 'test.md', viewerFileElement: '[data-text-el="editor-container"]', edit: true })
 		})
 		it('Opens link to page in this collective in same/new tab depending on view/edit mode', function() {
 			const href = '/index.php/apps/collectives/Link%20Testing/Link%20Target'
