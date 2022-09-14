@@ -16,7 +16,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { RichTextReader, ImageResolver, IMAGE_RESOLVER } from '@nextcloud/text'
+import { RichTextReader, AttachmentResolver, ATTACHMENT_RESOLVER } from '@nextcloud/text'
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl } from '@nextcloud/router'
 import PageInfoBar from './PageInfoBar.vue'
@@ -51,7 +51,7 @@ export default {
 	provide() {
 		const val = {}
 		Object.defineProperties(val, {
-			[IMAGE_RESOLVER]: { get: () => this.imageResolver },
+			[ATTACHMENT_RESOLVER]: { get: () => this.attachmentResolver },
 		})
 		return val
 	},
@@ -94,8 +94,8 @@ export default {
 			'shareTokenParam',
 		]),
 
-		imageResolver() {
-			return new ImageResolver({
+		attachmentResolver() {
+			return new AttachmentResolver({
 				fileId: this.currentPage.id,
 				currentDirectory: '/' + this.currentPageDirectory,
 				user: getCurrentUser(),
