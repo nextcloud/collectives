@@ -8,17 +8,17 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-09-08 11:47+0200\n"
-"PO-Revision-Date: 2021-12-18 12:51+0000\n"
-"Last-Translator: Matej U <mateju@svn.gnome.org>\n"
+"PO-Revision-Date: 2022-09-17 21:16+0000\n"
+"Last-Translator: Matej U <mateju@src.gnome.org>\n"
 "Language-Team: Slovenian <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/sl/>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
-"n%100==4 ? 2 : 3;\n"
-"X-Generator: Weblate 4.10\n"
+"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n"
+"%100==4 ? 2 : 3;\n"
+"X-Generator: Weblate 4.14.1\n"
 
 #. TRANSLATORS src/components/Page.vue:193
 #. TRANSLATORS src/views/Home.vue:4
@@ -32,11 +32,11 @@ msgstr "Zbirke"
 
 #: /collectives/lib/Search/PageContentProvider.php:92
 msgid "Collectives - Page content"
-msgstr ""
+msgstr "Zbirke – vsebina strani"
 
 #: /collectives/lib/Search/PageProvider.php:67
 msgid "Collectives - Pages"
-msgstr ""
+msgstr "Zbirke – strani"
 
 #: /collectives/lib/Search/PageProvider.php:107
 msgid "in Collective {collective}"
@@ -55,7 +55,7 @@ msgstr "Souporaba Zbirke"
 #: /collectives/lib/Service/CollectiveShareService.php:204
 #, php-format
 msgid "You are not allowed to share %s"
-msgstr ""
+msgstr "Ni ustreznih dovoljenj za souporabo zbirke %s"
 
 #: /collectives/lib/Service/CollectiveShareService.php:177
 #, php-format
@@ -127,12 +127,12 @@ msgstr ""
 #. TRANSLATORS src/components/CollectivePrint.vue:58
 #: /collectives/specialVueFakeDummyForL10nScript.js:12
 msgid "Loading pages:"
-msgstr ""
+msgstr "Nalaganje strani:"
 
 #. TRANSLATORS src/components/CollectivePrint.vue:63
 #: /collectives/specialVueFakeDummyForL10nScript.js:14
 msgid "Loading images:"
-msgstr ""
+msgstr "Nalaganje slik:"
 
 #. TRANSLATORS src/components/LastUserBubble.vue:36
 #: /collectives/specialVueFakeDummyForL10nScript.js:16
@@ -152,7 +152,7 @@ msgstr "Povezava za souporabo"
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:44
 #: /collectives/specialVueFakeDummyForL10nScript.js:22
 msgid "Allow editing"
-msgstr ""
+msgstr "Dovoli urejanje"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:51
 #: /collectives/specialVueFakeDummyForL10nScript.js:24
@@ -162,12 +162,12 @@ msgstr "Odstrani povezavo"
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:57
 #: /collectives/specialVueFakeDummyForL10nScript.js:26
 msgid "Export or print"
-msgstr ""
+msgstr "Izvozi ali natisni"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:66
 #: /collectives/specialVueFakeDummyForL10nScript.js:28
 msgid "Settings"
-msgstr ""
+msgstr "Nastavitve"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:173
 #: /collectives/specialVueFakeDummyForL10nScript.js:30
@@ -224,40 +224,40 @@ msgstr ""
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:39
 #: /collectives/specialVueFakeDummyForL10nScript.js:50
 msgid "Permissions"
-msgstr ""
+msgstr "Dovoljenja"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:41
 #: /collectives/specialVueFakeDummyForL10nScript.js:52
 msgid "Allow editing for"
-msgstr ""
+msgstr "Dovoli urejanje za"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:50
 #: /collectives/specialVueFakeDummyForL10nScript.js:54
 #: /collectives/specialVueFakeDummyForL10nScript.js:62
 msgid "Admins only"
-msgstr ""
+msgstr "le skrbnike"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:57
 #: /collectives/specialVueFakeDummyForL10nScript.js:56
 #: /collectives/specialVueFakeDummyForL10nScript.js:64
 msgid "Admins and moderaters"
-msgstr ""
+msgstr "skrbnike in moderatorje"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:64
 #: /collectives/specialVueFakeDummyForL10nScript.js:58
 #: /collectives/specialVueFakeDummyForL10nScript.js:66
 msgid "All members"
-msgstr ""
+msgstr "vse člane"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:69
 #: /collectives/specialVueFakeDummyForL10nScript.js:60
 msgid "Allow sharing for"
-msgstr ""
+msgstr "Dovoli souporabo"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:97
 #: /collectives/specialVueFakeDummyForL10nScript.js:68
 msgid "Members"
-msgstr ""
+msgstr "Članom"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:99
 #: /collectives/specialVueFakeDummyForL10nScript.js:70
@@ -269,19 +269,19 @@ msgstr ""
 #: /collectives/specialVueFakeDummyForL10nScript.js:72
 #: /collectives/specialVueFakeDummyForL10nScript.js:74
 msgid "Open circle in Contacts"
-msgstr ""
+msgstr "Odpri krog med stiki"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:111
 #: /collectives/specialVueFakeDummyForL10nScript.js:76
 msgid "Danger zone"
-msgstr ""
+msgstr "Nevarno območje"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:114
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:116
 #: /collectives/specialVueFakeDummyForL10nScript.js:78
 #: /collectives/specialVueFakeDummyForL10nScript.js:80
 msgid "Delete collective"
-msgstr ""
+msgstr "Izbriši zbirko"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:190
 #: /collectives/specialVueFakeDummyForL10nScript.js:82
@@ -315,17 +315,17 @@ msgstr ""
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:2
 #: /collectives/specialVueFakeDummyForL10nScript.js:94
 msgid "Collectives settings"
-msgstr ""
+msgstr "Nastavitve zbirk"
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:6
 #: /collectives/specialVueFakeDummyForL10nScript.js:96
 msgid "Collectives Folder"
-msgstr ""
+msgstr "Mapa zbirk"
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:48
 #: /collectives/specialVueFakeDummyForL10nScript.js:98
 msgid "Create a collective first"
-msgstr ""
+msgstr "Najprej je treba ustvariti zbirko"
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:59
 #: /collectives/specialVueFakeDummyForL10nScript.js:100
@@ -406,7 +406,7 @@ msgstr "Ustvari zbirko za obstoječ krog"
 #: /collectives/specialVueFakeDummyForL10nScript.js:148
 #: /collectives/specialVueFakeDummyForL10nScript.js:174
 msgid "Select emoji"
-msgstr ""
+msgstr "Izbor izrazne ikone"
 
 #. TRANSLATORS src/components/Nav/NewCollective.vue:53
 #: /collectives/specialVueFakeDummyForL10nScript.js:132
@@ -421,7 +421,7 @@ msgstr "Izbor kroga ..."
 #. TRANSLATORS src/components/Nav/NewCollective.vue:65
 #: /collectives/specialVueFakeDummyForL10nScript.js:136
 msgid "Create a new collective"
-msgstr ""
+msgstr "Ustvari novo zbirko"
 
 #. TRANSLATORS src/components/Nav/NewCollective.vue:70
 #: /collectives/specialVueFakeDummyForL10nScript.js:138
@@ -451,12 +451,12 @@ msgstr "Dodaj predlogo za podstran"
 #. TRANSLATORS src/components/Page/PageActionMenu.vue:142
 #: /collectives/specialVueFakeDummyForL10nScript.js:150
 msgid "Cannot delete page with subpages"
-msgstr ""
+msgstr "Ni mogoče izbrisati strani s podstranmi"
 
 #. TRANSLATORS src/components/Page/PageActionMenu.vue:144
 #: /collectives/specialVueFakeDummyForL10nScript.js:152
 msgid "Delete template"
-msgstr ""
+msgstr "Izbriši predlogo"
 
 #. TRANSLATORS src/components/Page/PageActionMenu.vue:145
 #: /collectives/specialVueFakeDummyForL10nScript.js:154
@@ -534,12 +534,12 @@ msgstr "Uredi"
 #. TRANSLATORS src/components/Page.vue:83
 #: /collectives/specialVueFakeDummyForL10nScript.js:186
 msgid "Toggle page sidebar"
-msgstr ""
+msgstr "Preklopi bočno okno strani"
 
 #. TRANSLATORS src/components/Page.vue:92
 #: /collectives/specialVueFakeDummyForL10nScript.js:188
 msgid "Page content"
-msgstr ""
+msgstr "Vsebina strani"
 
 #. TRANSLATORS src/components/Page.vue:442
 #: /collectives/specialVueFakeDummyForL10nScript.js:192
@@ -564,7 +564,7 @@ msgstr "Dodaj podstran"
 #. TRANSLATORS src/components/PageList.vue:7
 #: /collectives/specialVueFakeDummyForL10nScript.js:202
 msgid "Search pages ..."
-msgstr ""
+msgstr "Preišči strani ..."
 
 #. TRANSLATORS src/components/PageList.vue:11
 #: /collectives/specialVueFakeDummyForL10nScript.js:204
@@ -600,7 +600,7 @@ msgstr "Po naslovu"
 #. TRANSLATORS src/components/PageList.vue:79
 #: /collectives/specialVueFakeDummyForL10nScript.js:216
 msgid "Sorted by title"
-msgstr ""
+msgstr "Razvrščeno po naslovu"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:216
 msgid "Sorted by recently changed"
