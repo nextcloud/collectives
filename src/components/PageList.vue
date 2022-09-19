@@ -2,10 +2,9 @@
 	<NcAppContentList :class="{loading: loading('collective')}"
 		:show-details="showing('details')">
 		<div class="page-list-headerbar">
-			<input v-model="filterString"
+			<NcTextField :value.sync="filterString"
 				class="page-filter"
-				:placeholder="t('collectives', 'Search pages ...')"
-				type="text">
+				:placeholder="t('collectives', 'Search pages ...')" />
 			<NcActions class="toggle toggle-push-to-right">
 				<NcActionButton class="toggle-button"
 					:aria-label="labels.showTemplates"
@@ -111,7 +110,7 @@
 <script>
 
 import { mapActions, mapGetters, mapMutations } from 'vuex'
-import { NcActionButton, NcActions, NcAppContentList, NcButton } from '@nextcloud/vue'
+import { NcActionButton, NcActions, NcAppContentList, NcButton, NcTextField } from '@nextcloud/vue'
 import { showError } from '@nextcloud/dialogs'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 import Draggable from './PageList/Draggable.vue'
@@ -133,6 +132,7 @@ export default {
 		NcActionButton,
 		NcAppContentList,
 		NcButton,
+		NcTextField,
 		CloseIcon,
 		Draggable,
 		Item,
@@ -254,7 +254,6 @@ export default {
 
 	.page-filter {
 		margin-left: 50px !important;
-		width: calc(100% - 50px);
 	}
 }
 
