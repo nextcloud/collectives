@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-09-08 11:47+0200\n"
-"PO-Revision-Date: 2022-09-17 21:16+0000\n"
+"PO-Revision-Date: 2022-09-22 13:17+0000\n"
 "Last-Translator: Matej U <mateju@src.gnome.org>\n"
 "Language-Team: Slovenian <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/sl/>\n"
@@ -60,21 +60,21 @@ msgstr "Ni ustreznih dovoljenj za souporabo zbirke %s"
 #: /collectives/lib/Service/CollectiveShareService.php:177
 #, php-format
 msgid "A share for collective %s exists already"
-msgstr ""
+msgstr "Mesto souporabe zbirke %s že obstaja"
 
 #: /collectives/lib/Service/CollectiveShareService.php:208
 #, php-format
 msgid "You are not allowed to edit %s"
-msgstr ""
+msgstr "Ni ustreznih dovoljenj za urejanje %s"
 
 #: /collectives/lib/Service/CollectiveShareService.php:212
 #: /collectives/lib/Service/CollectiveShareService.php:218
 msgid "Share not found for user"
-msgstr ""
+msgstr "Za uporabnika ni najdenega mesta souporabe"
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:3
 msgid "A place for activist and community projects to build shared knowledge"
-msgstr ""
+msgstr "Mesto za skupno izgrajevanje vsebine in znanja"
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:4
 msgid ""
@@ -96,6 +96,22 @@ msgid ""
 "In your Nextcloud instance, simply navigate to **»Apps«**, find the\n"
 "**»Circles«** and **»Collectives«** apps and enable them."
 msgstr ""
+"Program Zbirke je projekt za okolje Nextcloud, ki omogoča sodelovalno in "
+"skupno urejanje vsebine.\n"
+"Skupaj je mogoče izgraditi pomembno znanje.\n"
+"\n"
+"* 👥 **Zbirke in nehierarhično razdeljeno delo**: Zbirke so vezane na [Kroge "
+"Nextcloud](https://github.com/nextcloud/circles) in so skupno lastništvo "
+"članov.\n"
+"* 📝 **Sodelovalno urejanje vsebine** kot je bilo to mogoče v programu "
+"Etherpad zahvaljujoč [programu Text](https://github.com/nextcloud/text).\n"
+"* 🔤 **Uporabljena je znana skladnja [Markdown](https://en.wikipedia.org/"
+"wiki/Markdown)** za oblikovanje strani.\n"
+"\n"
+"## Namestitev\n"
+"\n"
+"V okolju Nextcloud enostavno izberite program **»Zbirke«** v razdelku "
+"Programov, izberite tudi program **»Krogi«** in oba namestite in omogočite."
 
 #. TRANSLATORS src/Collectives.vue:70
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:200
@@ -112,17 +128,17 @@ msgstr "Zbirke ni mogoče najti:"
 #. TRANSLATORS src/components/CollectiveNotFound.vue:10
 #: /collectives/specialVueFakeDummyForL10nScript.js:6
 msgid "You're not part of a collective with that name."
-msgstr ""
+msgstr "Niste član zbirke s tem imenom."
 
 #. TRANSLATORS src/components/CollectiveNotFound.vue:13
 #: /collectives/specialVueFakeDummyForL10nScript.js:8
 msgid "Select a collective or create a new one on the left."
-msgstr ""
+msgstr "Izberite zbirko, ali pa ustvarite novo v meniju na levi."
 
 #. TRANSLATORS src/components/CollectivePrint.vue:11
 #: /collectives/specialVueFakeDummyForL10nScript.js:10
 msgid "Preparing collective for exporting or printing"
-msgstr ""
+msgstr "Pripravljanje zbirke za izvoz oziroma tiskanje"
 
 #. TRANSLATORS src/components/CollectivePrint.vue:58
 #: /collectives/specialVueFakeDummyForL10nScript.js:12
@@ -187,39 +203,39 @@ msgstr "Kopiraj povezavo souporabe"
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:186
 #: /collectives/specialVueFakeDummyForL10nScript.js:36
 msgid "Could not change the collective share editing permissions"
-msgstr ""
+msgstr "Ni mogoče spremeniti dovoljen souporabe zbirke"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:204
 #: /collectives/specialVueFakeDummyForL10nScript.js:38
 msgid "Could not share the collective"
-msgstr ""
+msgstr "Ni mogoče omogočiti souporabe zbirke"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:210
 #: /collectives/specialVueFakeDummyForL10nScript.js:40
 msgid "Could not unshare the collective"
-msgstr ""
+msgstr "Ni mogoče preklicati souporabe zbirke"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:3
 #: /collectives/specialVueFakeDummyForL10nScript.js:42
 msgid "Collective settings"
-msgstr ""
+msgstr "Nastavitve Zbirke"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:5
 #: /collectives/specialVueFakeDummyForL10nScript.js:44
 msgid "Name and emoji"
-msgstr ""
+msgstr "Ime in izrazne ikone"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:10
 #. TRANSLATORS src/components/Nav/NewCollective.vue:42
 #: /collectives/specialVueFakeDummyForL10nScript.js:46
 #: /collectives/specialVueFakeDummyForL10nScript.js:128
 msgid "Select emoji for collective"
-msgstr ""
+msgstr "Izbor izrazne ikone zbirk"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:31
 #: /collectives/specialVueFakeDummyForL10nScript.js:48
 msgid "Save new collective name"
-msgstr ""
+msgstr "Shrani novo ime zbirke"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:39
 #: /collectives/specialVueFakeDummyForL10nScript.js:50
@@ -229,40 +245,40 @@ msgstr "Dovoljenja"
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:41
 #: /collectives/specialVueFakeDummyForL10nScript.js:52
 msgid "Allow editing for"
-msgstr "Dovoli urejanje za"
+msgstr "Dovoli urejanje"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:50
 #: /collectives/specialVueFakeDummyForL10nScript.js:54
 #: /collectives/specialVueFakeDummyForL10nScript.js:62
 msgid "Admins only"
-msgstr "le skrbnike"
+msgstr "le skrbnikom"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:57
 #: /collectives/specialVueFakeDummyForL10nScript.js:56
 #: /collectives/specialVueFakeDummyForL10nScript.js:64
 msgid "Admins and moderaters"
-msgstr "skrbnike in moderatorje"
+msgstr "skrbnikom in moderatorjem"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:64
 #: /collectives/specialVueFakeDummyForL10nScript.js:58
 #: /collectives/specialVueFakeDummyForL10nScript.js:66
 msgid "All members"
-msgstr "vse člane"
+msgstr "vsem članom"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:69
 #: /collectives/specialVueFakeDummyForL10nScript.js:60
 msgid "Allow sharing for"
-msgstr "Dovoli souporabo"
+msgstr "Dovoli omogočanje souporabe"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:97
 #: /collectives/specialVueFakeDummyForL10nScript.js:68
 msgid "Members"
-msgstr "Članom"
+msgstr "Člani"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:99
 #: /collectives/specialVueFakeDummyForL10nScript.js:70
 msgid "Members can be managed via the connected circle in the Contacts app."
-msgstr ""
+msgstr "Člane je mogoče urejati v povezanem krogu programa Stiki."
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:103
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:106
@@ -295,22 +311,22 @@ msgstr "Dodaj izrazno ikono"
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:195
 #: /collectives/specialVueFakeDummyForL10nScript.js:84
 msgid "Renaming is limited to owners of the circle"
-msgstr ""
+msgstr "Preimenovanje je dovoljeno le lastnikom kroga"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:224
 #: /collectives/specialVueFakeDummyForL10nScript.js:88
 msgid "Editing permissions updated"
-msgstr ""
+msgstr "Dovoljenja za urejanje so posodobljena"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:236
 #: /collectives/specialVueFakeDummyForL10nScript.js:90
 msgid "Sharing permissions updated"
-msgstr ""
+msgstr "Dovoljenja za omogočanj souporabe so posodobljena"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:268
 #: /collectives/specialVueFakeDummyForL10nScript.js:92
 msgid "Emoji updated"
-msgstr ""
+msgstr "Izrazna ikona je posodobljena"
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:2
 #: /collectives/specialVueFakeDummyForL10nScript.js:94
@@ -330,12 +346,14 @@ msgstr "Najprej je treba ustvariti zbirko"
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:59
 #: /collectives/specialVueFakeDummyForL10nScript.js:100
 msgid "Select location for collectives"
-msgstr ""
+msgstr "Izbor mesta datotek zbirke"
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:73
 #: /collectives/specialVueFakeDummyForL10nScript.js:102
 msgid "Invalid path selected. Only folders on first level are supported."
 msgstr ""
+"Izbrana je neveljavna pot. Podprte so le mape na prvi ravni drevesne "
+"strukture."
 
 #. TRANSLATORS src/components/Nav/CollectivesTrash.vue:11
 #: /collectives/specialVueFakeDummyForL10nScript.js:104
@@ -426,7 +444,7 @@ msgstr "Ustvari novo zbirko"
 #. TRANSLATORS src/components/Nav/NewCollective.vue:70
 #: /collectives/specialVueFakeDummyForL10nScript.js:138
 msgid "Cancel creating a new collective"
-msgstr ""
+msgstr "Prekliči ustvarjanje nove zbirke"
 
 #. TRANSLATORS src/components/Nav.vue:7
 #: /collectives/specialVueFakeDummyForL10nScript.js:140
@@ -497,7 +515,7 @@ msgstr "Obnovitev strani {page} na predelavo {timestamp} je spodletela."
 #. TRANSLATORS src/components/Page.vue:15
 #: /collectives/specialVueFakeDummyForL10nScript.js:172
 msgid "Select emoji for page"
-msgstr ""
+msgstr "Izbor izrazne ikone za spletno stran"
 
 #. TRANSLATORS src/components/Page.vue:47
 #. TRANSLATORS src/components/PageList/Item.vue:199
@@ -585,12 +603,12 @@ msgstr "Razvrščanje"
 #. TRANSLATORS src/components/PageList.vue:33
 #: /collectives/specialVueFakeDummyForL10nScript.js:210
 msgid "Sort by custom order"
-msgstr ""
+msgstr "Po meri"
 
 #. TRANSLATORS src/components/PageList.vue:42
 #: /collectives/specialVueFakeDummyForL10nScript.js:212
 msgid "Sort recently changed first"
-msgstr ""
+msgstr "Najprej nedavno spremenjene"
 
 #. TRANSLATORS src/components/PageList.vue:51
 #: /collectives/specialVueFakeDummyForL10nScript.js:214
@@ -604,17 +622,17 @@ msgstr "Razvrščeno po naslovu"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:216
 msgid "Sorted by recently changed"
-msgstr ""
+msgstr "Razvrščeno po času zadnje spremembe"
 
 #. TRANSLATORS src/components/PageList.vue:80
 #: /collectives/specialVueFakeDummyForL10nScript.js:218
 msgid "Switch back to default sort order"
-msgstr ""
+msgstr "Preklopi na privzet način razvrščanja"
 
 #. TRANSLATORS src/components/PageList.vue:220
 #: /collectives/specialVueFakeDummyForL10nScript.js:220
 msgid "Could not save page order for collective"
-msgstr ""
+msgstr "Ni mogoče shraniti razvrstitve strani za to zbirko"
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabBacklinks.vue:40
 #: /collectives/specialVueFakeDummyForL10nScript.js:222
@@ -624,12 +642,12 @@ msgstr "Ni povratnih povezav"
 #. TRANSLATORS src/components/PageSidebar/SidebarTabBacklinks.vue:42
 #: /collectives/specialVueFakeDummyForL10nScript.js:224
 msgid "If other pages link to this one, they will be listed here."
-msgstr ""
+msgstr "Če se na to stran povezujejo druge strani, bodo izpisane na tem mestu."
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabBacklinks.vue:123
 #: /collectives/specialVueFakeDummyForL10nScript.js:226
 msgid "Could not get page backlinks"
-msgstr ""
+msgstr "Ni mogoče pridobiti povratnih povezav strani"
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:25
 #: /collectives/specialVueFakeDummyForL10nScript.js:228
@@ -644,7 +662,7 @@ msgstr "Ni drugih različic"
 #. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:61
 #: /collectives/specialVueFakeDummyForL10nScript.js:232
 msgid "After editing you can find old versions of the page here."
-msgstr ""
+msgstr "Po urejanju so starejše kopije strani zbrane na tem mestu."
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:167
 #: /collectives/specialVueFakeDummyForL10nScript.js:234
@@ -684,7 +702,7 @@ msgstr "Stare različice te strani"
 #. TRANSLATORS src/views/Home.vue:9
 #: /collectives/specialVueFakeDummyForL10nScript.js:248
 msgid "Come, organize and build shared knowledge!"
-msgstr ""
+msgstr "No, začnite izgrajevati skupno vsebino!"
 
 #: /collectives/src/mixins/CopyToClipboardMixin.js:36
 msgid "Link copied to the clipboard."
@@ -697,7 +715,7 @@ msgstr "Povezave ni mogoče kopirati v odložišče:"
 #: /collectives/src/mixins/pageMixin.js:76
 #: /collectives/src/mixins/pageMixin.js:100
 msgid "Could not create the page"
-msgstr "Strani ni mogoče ustvariti."
+msgstr "Strani ni mogoče ustvariti"
 
 #: /collectives/src/mixins/pageMixin.js:87
 msgid "New Page"
@@ -705,25 +723,25 @@ msgstr "Nova stran"
 
 #: /collectives/src/mixins/pageMixin.js:119
 msgid "Could not save emoji for page"
-msgstr ""
+msgstr "Ni mogoče shraniti izraznih ikon za to stran"
 
 #: /collectives/src/mixins/pageMixin.js:142
 msgid "Could not move page"
-msgstr ""
+msgstr "Ni mogoče premakniti strani"
 
 #: /collectives/src/mixins/pageMixin.js:168
 msgid "Could not delete the page"
-msgstr "Strani ni mogoče izbrisati."
+msgstr "Strani ni mogoče izbrisati"
 
 #: /collectives/src/mixins/pageMixin.js:180
 msgid "Page deleted"
-msgstr "Stran je izbrisana."
+msgstr "Stran je izbrisana"
 
 #: /collectives/src/mixins/pageMixin.js:201
 #: /collectives/src/mixins/pageMixin.js:240
 #: /collectives/src/mixins/pageMixin.js:269
 msgid "Could not change page order"
-msgstr ""
+msgstr "Ni mogoče spremeniti vrstnega reda strani"
 
 #: /collectives/templates/error.php:4
 msgid "Error: Missing apps"
