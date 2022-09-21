@@ -2,7 +2,8 @@
 	<NcAppContentList :class="{loading: loading('collective')}"
 		:show-details="showing('details')">
 		<div class="page-list-headerbar">
-			<NcTextField :value.sync="filterString"
+			<NcTextField name="pageFilter"
+				:value.sync="filterString"
 				class="page-filter"
 				:placeholder="t('collectives', 'Search pages ...')" />
 			<NcActions class="toggle toggle-push-to-right">

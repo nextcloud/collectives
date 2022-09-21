@@ -202,7 +202,7 @@ describe('Page', function() {
 
 	describe('Using the page list filter', function() {
 		it('Shows only landing page and (sub)pages matching the filter string', function() {
-			cy.get('input.page-filter')
+			cy.get('input[name="pageFilter"]')
 				.type('Title')
 			cy.get('.app-content-list-item-line-one:visible').should('have.length', 3)
 			cy.get('.app-content-list-item-line-one:visible').eq(0)
