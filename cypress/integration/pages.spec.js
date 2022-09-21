@@ -188,6 +188,16 @@ describe('Page', function() {
 				.selectFile('cypress/fixtures/test.png', { force: true })
 			cy.wait('@attachmentUpload')
 
+			cy.log('Inserting a user mention')
+			// Wait 1 second to prevent race condition with previous insertion
+			cy.wait(1000) // eslint-disable-line cypress/no-unnecessary-waiting
+			cy.get('.editor > > .editor__content > .ProseMirror').should('be.visible')
+				.should('have.focus')
+				.type('@admi')
+			cy.get('.tippy-content > .items')
+				.contains('admin')
+				.click()
+
 			cy.log('Changing to read mode')
 			cy.get('button.titleform-button')
 				.click()
@@ -197,6 +207,9 @@ describe('Page', function() {
 			cy.get('#read-only-editor.editor__content > .ProseMirror')
 				.find('img.image__main')
 				.should('be.visible')
+			cy.get('#read-only-editor.editor__content > .ProseMirror')
+				.find('.mention')
+				.should('contain', 'admin')
 		})
 	})
 
