@@ -206,7 +206,6 @@ class PageContentProvider implements IProvider {
 
 	/**
 	 * @param Collective $collective
-
 	 * @param File $file
 	 * @param string $userId
 	 * @return PageInfo|null

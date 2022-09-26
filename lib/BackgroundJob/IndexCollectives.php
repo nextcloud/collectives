@@ -12,7 +12,6 @@ use OCP\BackgroundJob\TimedJob;
 use OCP\Files\InvalidPathException;
 use OCP\Files\NotFoundException;
 use Psr\Log\LoggerInterface;
-use function method_exists;
 
 class IndexCollectives extends TimedJob {
 	/** @var CollectiveMapper */
@@ -84,6 +83,5 @@ class IndexCollectives extends TimedJob {
 		} catch (NotFoundException|InvalidPathException $e) {
 			return false;
 		}
-
 	}
 }
