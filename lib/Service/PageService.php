@@ -101,7 +101,7 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	private function getCollectiveFolder(int $collectiveId, string $userId): Folder {
+	public function getCollectiveFolder(int $collectiveId, string $userId): Folder {
 		$folder = $this->userFolderHelper->get($userId)->get($this->getCollectiveInfo($collectiveId, $userId)->getName());
 
 		if (!($folder instanceof Folder)) {

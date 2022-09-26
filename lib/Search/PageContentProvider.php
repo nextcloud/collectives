@@ -10,7 +10,6 @@ use OCA\Collectives\Search\FileSearch\FileSearcher;
 use OCA\Collectives\Search\FileSearch\FileSearchException;
 use OCA\Collectives\Service\SearchService;
 use OCP\Files\File;
-use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException;
 use Psr\Log\LoggerInterface;
 use TeamTNT\TNTSearch\Support\Highlighter;
@@ -44,27 +43,22 @@ class PageContentProvider implements IProvider {
 	/** @var SearchService */
 	private $indexedSearchService;
 
-	/** @var IRootFolder */
-	private $rootFolder;
 	/** @var LoggerInterface */
 	private $logger;
 
 	/**
-	 * CollectiveProvider constructor.
-	 *
 	 * @param IL10N            $l10n
 	 * @param IURLGenerator    $urlGenerator
 	 * @param CollectiveHelper $collectiveHelper
 	 * @param PageService      $pageService
-	 * @param IRootFolder      $rootFolder
 	 * @param SearchService    $indexedSearchService
+	 * @param LoggerInterface  $logger
 	 * @param IAppManager      $appManager
 	 */
 	public function __construct(IL10N $l10n,
 								IURLGenerator $urlGenerator,
 								CollectiveHelper $collectiveHelper,
 								PageService $pageService,
-								IRootFolder $rootFolder,
 								SearchService $indexedSearchService,
 								LoggerInterface $logger,
 								IAppManager $appManager) {
@@ -72,7 +66,6 @@ class PageContentProvider implements IProvider {
 		$this->urlGenerator = $urlGenerator;
 		$this->collectiveHelper = $collectiveHelper;
 		$this->pageService = $pageService;
-		$this->rootFolder = $rootFolder;
 		$this->indexedSearchService = $indexedSearchService;
 		$this->logger = $logger;
 		$this->appManager = $appManager;
@@ -125,9 +118,11 @@ class PageContentProvider implements IProvider {
 		$pages = [];
 		foreach ($collectiveInfos as $collective) {
 			try {
+				$collectiveRoot = $this->pageService->getCollectiveFolder($collective->getId(), $user->getUID());
 				$results = $this->indexedSearchService->searchCollective($collective, $query->getTerm());
 				foreach ($results as $fileId => $fileData) {
-					$pages[$fileId] = $this->rootFolder->get($fileData['path']);
+					$file = $collectiveRoot->getById($fileId);
+					$pages[$fileId] = reset($file);
 					$collectiveMap[$fileId] = $collective;
 				}
 			} catch (FileSearchException|NotFoundException $e) {
@@ -211,7 +206,6 @@ class PageContentProvider implements IProvider {
 
 	/**
 	 * @param Collective $collective
-
 	 * @param File $file
 	 * @param string $userId
 	 * @return PageInfo|null
