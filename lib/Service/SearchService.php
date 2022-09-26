@@ -16,7 +16,7 @@ use PDO;
 use Psr\Log\LoggerInterface;
 
 class SearchService {
-	const INDICES_DIR_NAME = 'indices';
+	private const INDICES_DIR_NAME = 'indices';
 
 	/** @var CollectiveFolderManager */
 	private $collectiveFolderManager;
