@@ -1,42 +1,35 @@
 <template>
-	<AppContent>
-		<EmptyContent>
-			{{ t('collectives', 'Collectives') }}
+	<NcAppContent>
+		<NcEmptyContent :title="t('collectives', 'Collectives')"
+			:description="t('collectives', 'Come, organize and build shared knowledge!')">
 			<template #icon>
 				<CollectivesIcon />
 			</template>
-			<template #desc>
-				{{ t('collectives', 'Come, organize and build shared knowledge!') }}
+			<template #action>
+				<NcButton :aria-label="t('collectives', 'Create new collective')" :type="buttonType" @click="newCollective">
+					{{ t('collectives', 'Create new collective') }}
+				</NcButton>
 			</template>
-		</EmptyContent>
-		<div class="new_collective">
-			<Button :aria-label="t('collectives', 'Create new collective')"
-				:type="buttonType"
-				@click="newCollective">
-				{{ t('collectives', 'Create new collective') }}
-			</Button>
-		</div>
-	</AppContent>
+		</NcEmptyContent>
+	</NcAppContent>
 </template>
 
 <script>
 
 import { emit } from '@nextcloud/event-bus'
-import AppContent from '@nextcloud/vue/dist/Components/AppContent'
-import Button from '@nextcloud/vue/dist/Components/Button'
+import { NcAppContent, NcEmptyContent, NcButton } from '@nextcloud/vue'
 import CollectivesIcon from '../components/Icon/CollectivesIcon.vue'
-import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
-import isMobile from '@nextcloud/vue/dist/Mixins/isMobile'
+import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import { mapGetters } from 'vuex'
 
 export default {
 	name: 'Home',
 
 	components: {
-		AppContent,
-		Button,
+		NcAppContent,
+		NcButton,
 		CollectivesIcon,
-		EmptyContent,
+		NcEmptyContent,
 	},
 
 	mixins: [
@@ -75,11 +68,3 @@ export default {
 
 }
 </script>
-
-<style scoped>
-.new_collective {
-	display: flex;
-	justify-content: center;
-	margin-top: 10px;
-}
-</style>

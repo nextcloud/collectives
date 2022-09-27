@@ -1,29 +1,31 @@
 <template>
-	<AppContentList :class="{loading: loading('collective')}"
+	<NcAppContentList :class="{loading: loading('collective')}"
 		:show-details="showing('details')">
 		<div class="page-list-headerbar">
-			<input v-model="filterString"
+			<NcTextField name="pageFilter"
+				:value.sync="filterString"
 				class="page-filter"
-				:placeholder="t('collectives', 'Search pages ...')"
-				type="text">
-			<Actions class="toggle toggle-push-to-right">
-				<ActionButton class="toggle-button"
-					:aria-label="showTemplates ? t('collectives', 'Hide templates') : t('collectives', 'Show templates')"
-					:title="showTemplates ? t('collectives', 'Hide templates') : t('collectives', 'Show templates')"
+				:placeholder="t('collectives', 'Search pages ...')" />
+			<NcActions class="toggle toggle-push-to-right">
+				<NcActionButton class="toggle-button"
+					:aria-label="labels.showTemplates"
+					:title="labels.showTemplates"
 					@click="toggleTemplates()">
 					<template #icon>
 						<PagesTemplateIcon :size="12" :fill-color="showTemplates ? 'currentColor' : 'var(--color-text-maxcontrast)'" />
 					</template>
-				</ActionButton>
-			</Actions>
-			<Actions class="toggle"
-				:aria-label="t('collectives', 'Sort order')">
+					{{ labels.showTemplates }}
+				</NcActionButton>
+			</NcActions>
+			<NcActions class="toggle"
+				:aria-label="t('collectives', 'Sort order')"
+				:title="t('collectives', 'Sort order')">
 				<template #icon>
 					<SortAscendingIcon v-if="sortedBy('byOrder')" :size="16" />
 					<SortAlphabeticalAscendingIcon v-else-if="sortedBy('byTitle')" :size="16" />
 					<SortClockAscendingOutlineIcon v-else :size="16" />
 				</template>
-				<ActionButton class="toggle-button"
+				<NcActionButton class="toggle-button"
 					:class="{selected: sortedBy('byOrder')}"
 					:close-after-click="true"
 					@click="sortPagesAndScroll('byOrder')">
@@ -31,8 +33,8 @@
 						<SortAscendingIcon :size="16" />
 					</template>
 					{{ t('collectives', 'Sort by custom order') }}
-				</ActionButton>
-				<ActionButton class="toggle-button"
+				</NcActionButton>
+				<NcActionButton class="toggle-button"
 					:class="{selected: sortedBy('byTimestamp')}"
 					:close-after-click="true"
 					@click="sortPagesAndScroll('byTimestamp')">
@@ -40,8 +42,8 @@
 						<SortClockAscendingOutlineIcon :size="16" />
 					</template>
 					{{ t('collectives', 'Sort recently changed first') }}
-				</ActionButton>
-				<ActionButton class="toggle-button"
+				</NcActionButton>
+				<NcActionButton class="toggle-button"
 					:class="{selected: sortedBy('byTitle')}"
 					:close-after-click="true"
 					@click="sortPagesAndScroll('byTitle')">
@@ -49,8 +51,8 @@
 						<SortAlphabeticalAscendingIcon :size="16" />
 					</template>
 					{{ t('collectives', 'Sort by title') }}
-				</ActionButton>
-			</Actions>
+				</NcActionButton>
+			</NcActions>
 		</div>
 		<div class="page-list">
 			<Draggable v-if="subpages"
@@ -77,14 +79,14 @@
 					<div v-if="!sortedBy('byOrder')" class="sort-order-container">
 						<span class="sort-order-chip">
 							{{ sortedBy('byTitle') ? t('collectives', 'Sorted by title') : t('collectives', 'Sorted by recently changed') }}
-							<Button :aria-label="t('collectives', 'Switch back to default sort order')"
+							<NcButton :aria-label="t('collectives', 'Switch back to default sort order')"
 								type="tertiary"
 								class="sort-oder-chip-button"
 								@click="sortPagesAndScroll('byOrder')">
 								<template #icon>
 									<CloseIcon :size="20" />
 								</template>
-							</Button>
+							</NcButton>
 						</span>
 					</div>
 				</template>
@@ -103,26 +105,23 @@
 					class="page-list-drag-item" />
 			</Draggable>
 		</div>
-	</AppContentList>
+	</NcAppContentList>
 </template>
 
 <script>
 
 import { mapActions, mapGetters, mapMutations } from 'vuex'
-import { SET_COLLECTIVE_USER_SETTING_PAGE_ORDER } from '../store/actions.js'
-import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
-import Actions from '@nextcloud/vue/dist/Components/Actions'
-import AppContentList from '@nextcloud/vue/dist/Components/AppContentList'
-import Button from '@nextcloud/vue/dist/Components/Button'
-import CloseIcon from 'vue-material-design-icons/Close'
+import { NcActionButton, NcActions, NcAppContentList, NcButton, NcTextField } from '@nextcloud/vue'
+import { showError } from '@nextcloud/dialogs'
+import CloseIcon from 'vue-material-design-icons/Close.vue'
 import Draggable from './PageList/Draggable.vue'
 import SubpageList from './PageList/SubpageList.vue'
 import Item from './PageList/Item.vue'
+import SortAlphabeticalAscendingIcon from 'vue-material-design-icons/SortAlphabeticalAscending.vue'
+import SortAscendingIcon from 'vue-material-design-icons/SortAscending.vue'
+import SortClockAscendingOutlineIcon from 'vue-material-design-icons/SortClockAscendingOutline.vue'
 import PagesTemplateIcon from './Icon/PagesTemplateIcon.vue'
-import SortAlphabeticalAscendingIcon from 'vue-material-design-icons/SortAlphabeticalAscending'
-import SortAscendingIcon from 'vue-material-design-icons/SortAscending'
-import SortClockAscendingOutlineIcon from 'vue-material-design-icons/SortClockAscendingOutline'
-import { showError } from '@nextcloud/dialogs'
+import { SET_COLLECTIVE_USER_SETTING_PAGE_ORDER } from '../store/actions.js'
 import { scrollToPage } from '../util/scrollToElement.js'
 import { pageOrders } from '../util/sortOrders.js'
 
@@ -130,10 +129,11 @@ export default {
 	name: 'PageList',
 
 	components: {
-		Actions,
-		ActionButton,
-		AppContentList,
-		Button,
+		NcActions,
+		NcActionButton,
+		NcAppContentList,
+		NcButton,
+		NcTextField,
 		CloseIcon,
 		Draggable,
 		Item,
@@ -176,6 +176,12 @@ export default {
 
 		hasTemplate() {
 			return !!this.templatePage(this.collectivePage ? this.collectivePage.id : 0)
+		},
+
+		labels() {
+			return {
+				showTemplates: this.showTemplates ? t('collectives', 'Hide templates') : t('collectives', 'Show templates'),
+			}
 		},
 
 		templateView() {
@@ -246,11 +252,10 @@ export default {
 	align-items: center;
 	justify-content: space-between;
 	margin-right: 4px;
-}
 
-.page-filter {
-	margin-left: 44px;
-	width: calc(100% - 44px);
+	.page-filter {
+		margin-left: 50px !important;
+	}
 }
 
 .toggle {

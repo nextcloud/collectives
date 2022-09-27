@@ -178,43 +178,44 @@ describe('Page', function() {
 		it('Supports page content editing and switching to read mode', function() {
 			cy.visit('/apps/collectives/Our%20Garden/Day%201')
 			cy.get('#read-only-editor.editor__content > .ProseMirror').should('not.be.visible')
-			cy.get('#editor > > .editor__content > .ProseMirror').should('be.visible')
+			cy.get('.editor > > .editor__content > .ProseMirror').should('be.visible')
 				.should('have.focus')
 				.type('# Heading{enter}')
 
-			// Only run image tests on Nextcloud 24+
-			// Selector changed between Nextcloud 24 and 25
-			if (String(Cypress.env('ncVersion')) === '24') {
-				cy.log('Inserting an image')
-				cy.intercept({ method: 'POST', url: '**upload' }).as('imageUpload')
-				cy.get('.menubar > input[type="file"]')
-					.selectFile('cypress/fixtures/test.png', { force: true })
-				cy.wait('@imageUpload')
-			} else if (!['22', '23', '24'].includes(String(Cypress.env('ncVersion')))) {
-				cy.log('Inserting an image')
-				cy.intercept({ method: 'POST', url: '**upload' }).as('imageUpload')
-				cy.get('input[data-text-el="image-file-input"]')
-					.selectFile('cypress/fixtures/test.png', { force: true })
-				cy.wait('@imageUpload')
-			}
+			cy.log('Inserting an image')
+			cy.intercept({ method: 'POST', url: '**/text/attachment/upload*' }).as('attachmentUpload')
+			cy.get('input[data-text-el="attachment-file-input"]')
+				.selectFile('cypress/fixtures/test.png', { force: true })
+			cy.wait('@attachmentUpload')
+
+			cy.log('Inserting a user mention')
+			// Wait 1 second to prevent race condition with previous insertion
+			cy.wait(1000) // eslint-disable-line cypress/no-unnecessary-waiting
+			cy.get('.editor > > .editor__content > .ProseMirror').should('be.visible')
+				.should('have.focus')
+				.type('@admi')
+			cy.get('.tippy-content > .items')
+				.contains('admin')
+				.click()
 
 			cy.log('Changing to read mode')
 			cy.get('button.titleform-button')
 				.click()
-			cy.get('#editor > > .editor__content > .ProseMirror').should('not.be.visible')
+			cy.get('.editor > > .editor__content > .ProseMirror').should('not.be.visible')
 			cy.get('#read-only-editor.editor__content > .ProseMirror').should('be.visible')
 				.should('contain', 'Heading')
-			if (!['22', '23'].includes(String(Cypress.env('ncVersion')))) {
-				cy.get('#read-only-editor.editor__content > .ProseMirror')
-					.find('img.image__main')
-					.should('be.visible')
-			}
+			cy.get('#read-only-editor.editor__content > .ProseMirror')
+				.find('img.image__main')
+				.should('be.visible')
+			cy.get('#read-only-editor.editor__content > .ProseMirror')
+				.find('.mention')
+				.should('contain', 'admin')
 		})
 	})
 
 	describe('Using the page list filter', function() {
 		it('Shows only landing page and (sub)pages matching the filter string', function() {
-			cy.get('input.page-filter')
+			cy.get('input[name="pageFilter"]')
 				.type('Title')
 			cy.get('.app-content-list-item-line-one:visible').should('have.length', 3)
 			cy.get('.app-content-list-item-line-one:visible').eq(0)
@@ -242,7 +243,7 @@ describe('Page', function() {
 	describe('Displaying backlinks', function() {
 		it('Lists backlinks for a page', function() {
 			cy.visit('/apps/collectives/Our%20Garden/Day%201')
-			cy.get('button.action-item.action-item--single.icon-menu-sidebar').click()
+			cy.get('button.action-item .icon-menu-sidebar').click()
 			cy.get('.app-sidebar-tabs__content').should('contain', 'Day 2')
 		})
 	})

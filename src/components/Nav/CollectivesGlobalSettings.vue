@@ -1,33 +1,26 @@
 <template>
-	<AppNavigationSettings :title="t('collectives', 'Collectives settings')">
-		<div>
-			<p>
-				<label for="userFolder">
-					{{ t('collectives', 'Collectives Folder') }}
-				</label>
-			</p>
-			<input id="userFolder"
-				type="text"
-				name="userFolder"
-				class="user_folder__input"
-				:value="userFolderValue"
-				:disabled="disabledPicker"
-				@click="selectCollectivesFolder">
-		</div>
-	</AppNavigationSettings>
+	<NcAppNavigationSettings :title="t('collectives', 'Collectives settings')">
+		<NcTextField name="userFolder"
+			:label="t('collectives', 'Collectives Folder')"
+			:label-visible="true"
+			:value="userFolderValue"
+			:disabled="disabledPicker"
+			@click="selectCollectivesFolder" />
+	</NcAppNavigationSettings>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import { UPDATE_COLLECTIVES_FOLDER } from '../../store/actions.js'
 import { getFilePickerBuilder, showError } from '@nextcloud/dialogs'
+import { NcAppNavigationSettings, NcTextField } from '@nextcloud/vue'
+import { UPDATE_COLLECTIVES_FOLDER } from '../../store/actions.js'
 import displayError from '../../util/displayError.js'
-import AppNavigationSettings from '@nextcloud/vue/dist/Components/AppNavigationSettings'
 
 export default {
 	name: 'CollectivesGlobalSettings',
 	components: {
-		AppNavigationSettings,
+		NcAppNavigationSettings,
+		NcTextField,
 	},
 
 	data() {
@@ -84,13 +77,3 @@ export default {
 	},
 }
 </script>
-
-<style lang="scss">
-::v-deep .modal-container {
-	display: flex !important;
-}
-
-.user_folder__input {
-	width: 93%
-}
-</style>

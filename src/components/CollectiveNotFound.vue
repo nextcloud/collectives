@@ -1,5 +1,5 @@
 <template>
-	<EmptyContent>
+	<NcEmptyContent>
 		{{ t('collectives', 'Collective not found:') }}
 		{{ collectiveParam }}
 		<template #icon>
@@ -13,11 +13,11 @@
 				{{ t('collectives', 'Select a collective or create a new one on the left.') }}
 			</div>
 		</template>
-	</EmptyContent>
+	</NcEmptyContent>
 </template>
 
 <script>
-import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
+import { NcEmptyContent } from '@nextcloud/vue'
 import { mapGetters } from 'vuex'
 import CollectivesIcon from './Icon/CollectivesIcon.vue'
 
@@ -26,7 +26,7 @@ export default {
 
 	components: {
 		CollectivesIcon,
-		EmptyContent,
+		NcEmptyContent,
 	},
 
 	computed: {

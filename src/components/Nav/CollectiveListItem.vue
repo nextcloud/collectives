@@ -1,9 +1,10 @@
 <template>
-	<AppNavigationItem :key="collective.circleId"
+	<NcAppNavigationItem :key="collective.circleId"
 		:title="collective.name"
 		:class="{active: isActive(collective)}"
 		:to="`/${encodeURIComponent(collective.name)}`"
 		:force-menu="true"
+		:force-display-actions="isMobile"
 		class="collectives_list_item">
 		<template #icon>
 			<template v-if="collective.emoji">
@@ -14,77 +15,80 @@
 			</template>
 		</template>
 		<template #actions>
-			<ActionLink v-if="showManageMembers"
+			<NcActionLink v-if="showManageMembers"
 				:href="circleLink">
 				<template #icon>
 					<CirclesIcon :size="16" />
 				</template>
 				{{ t('collectives', 'Manage members') }}
-			</ActionLink>
-			<ActionSeparator v-if="showManageMembers" />
-			<ActionButton v-if="collectiveCanShare(collective)"
+			</NcActionLink>
+			<NcActionSeparator v-if="showManageMembers" />
+			<NcActionButton v-if="collectiveCanShare(collective)"
 				v-show="!isShared"
 				:icon="shareIcon"
 				:close-after-click="false"
 				@click="share(collective)">
 				{{ t('collectives', 'Share link') }}
-			</ActionButton>
-			<ActionButton v-if="!isPublic"
+			</NcActionButton>
+			<NcActionButton v-if="!isPublic"
 				v-show="isShared"
-				:icon="copyLinkIcon"
 				:close-after-click="false"
 				@click.stop.prevent="copyShare(collective)">
+				<template #icon>
+					<CheckIcon v-if="copySuccess" :size="16" />
+					<NcLoadingIcon v-else-if="copyLoading" :size="16" />
+					<ContentPasteIcon v-else :size="16" />
+				</template>
 				{{ copyButtonText }}
-			</ActionButton>
-			<ActionCheckbox v-if="!isPublic"
+			</NcActionButton>
+			<NcActionCheckbox v-if="!isPublic"
 				v-show="isShared && collectiveCanEdit(collective)"
 				id="shareEditable"
 				:disabled="loading('shareEditable')"
 				:checked.sync="shareEditable">
 				{{ t('collectives', 'Allow editing') }}
-			</ActionCheckbox>
-			<ActionButton v-if="!isPublic"
+			</NcActionCheckbox>
+			<NcActionButton v-if="!isPublic"
 				v-show="isShared"
 				:icon="unshareIcon"
 				:close-after-click="false"
 				@click="unshare(collective)">
 				{{ t('collectives', 'Unshare') }}
-			</ActionButton>
-			<ActionSeparator v-if="collectiveCanShare(collective)" />
-			<ActionLink :close-after-click="true"
+			</NcActionButton>
+			<NcActionSeparator v-if="collectiveCanShare(collective)" />
+			<NcActionLink :close-after-click="true"
 				:href="printLink"
 				target="_blank">
 				{{ t('collectives', 'Export or print') }}
 				<template #icon>
 					<DownloadIcon :size="16" />
 				</template>
-			</ActionLink>
-			<ActionButton v-if="isCollectiveAdmin(collective)"
+			</NcActionLink>
+			<NcActionButton v-if="isCollectiveAdmin(collective)"
 				icon="icon-settings"
 				:close-after-click="true"
 				@click="toggleCollectiveSettings(collective)">
 				{{ t('collectives', 'Settings') }}
-			</ActionButton>
+			</NcActionButton>
 		</template>
 		<template #extra>
 			<CollectiveSettings :open.sync="showCollectiveSettings"
 				:collective="collective" />
 		</template>
-	</AppNavigationItem>
+	</NcAppNavigationItem>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { NcActionButton, NcActionCheckbox, NcActionLink, NcActionSeparator, NcAppNavigationItem, NcLoadingIcon } from '@nextcloud/vue'
+import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
+import { generateUrl } from '@nextcloud/router'
+import ContentPasteIcon from 'vue-material-design-icons/ContentPaste.vue'
+import CheckIcon from 'vue-material-design-icons/Check.vue'
+import DownloadIcon from 'vue-material-design-icons/Download.vue'
 import { SHARE_COLLECTIVE, UPDATE_SHARE_COLLECTIVE, UNSHARE_COLLECTIVE } from '../../store/actions.js'
 import displayError from '../../util/displayError.js'
-import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
-import ActionCheckbox from '@nextcloud/vue/dist/Components/ActionCheckbox'
-import ActionLink from '@nextcloud/vue/dist/Components/ActionLink'
-import ActionSeparator from '@nextcloud/vue/dist/Components/ActionSeparator'
-import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
-import { generateUrl } from '@nextcloud/router'
 import CopyToClipboardMixin from '../../mixins/CopyToClipboardMixin.js'
-import DownloadIcon from 'vue-material-design-icons/Download'
 import CirclesIcon from '../Icon/CirclesIcon.vue'
 import CollectiveSettings from './CollectiveSettings.vue'
 import CollectivesIcon from '../Icon/CollectivesIcon.vue'
@@ -93,18 +97,24 @@ export default {
 	name: 'CollectiveListItem',
 
 	components: {
-		ActionButton,
-		ActionCheckbox,
-		ActionLink,
-		ActionSeparator,
-		AppNavigationItem,
+		NcActionButton,
+		NcActionCheckbox,
+		NcActionLink,
+		NcActionSeparator,
+		NcAppNavigationItem,
+		NcLoadingIcon,
 		CirclesIcon,
 		CollectiveSettings,
 		CollectivesIcon,
+		ContentPasteIcon,
+		CheckIcon,
 		DownloadIcon,
 	},
 
-	mixins: [CopyToClipboardMixin],
+	mixins: [
+		CopyToClipboardMixin,
+		isMobile,
+	],
 
 	props: {
 		collective: {

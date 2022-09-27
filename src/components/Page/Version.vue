@@ -5,7 +5,7 @@
 				type="text"
 				disabled
 				:value="versionTitle">
-			<Button v-tooltip="t('collectives', 'Restore this version')"
+			<NcButton v-tooltip="t('collectives', 'Restore this version')"
 				:aria-label="t('collectives', 'Restore this version')"
 				class="titleform-button"
 				@click="revertVersion">
@@ -13,12 +13,10 @@
 					<RestoreIcon :size="20" />
 				</template>
 				{{ t('collectives', 'Restore') }}
-			</Button>
-			<Actions>
-				<ActionButton icon="icon-menu-sidebar"
-					:close-after-click="true"
-					@click="closeVersions" />
-			</Actions>
+			</NcButton>
+			<NcActions>
+				<NcActionButton icon="icon-menu-sidebar" :close-after-click="true" @click="closeVersions" />
+			</NcActions>
 		</h1>
 		<div id="text-container">
 			<RichText :key="`show-${currentPage.id}-${version.timestamp}`"
@@ -29,10 +27,8 @@
 </template>
 
 <script>
-import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
-import Actions from '@nextcloud/vue/dist/Components/Actions'
-import Button from '@nextcloud/vue/dist/Components/Button'
-import RestoreIcon from 'vue-material-design-icons/Restore'
+import { NcActionButton, NcActions, NcButton } from '@nextcloud/vue'
+import RestoreIcon from 'vue-material-design-icons/Restore.vue'
 import RichText from './RichText.vue'
 
 import { getCurrentUser } from '@nextcloud/auth'
@@ -48,9 +44,9 @@ export default {
 	name: 'Version',
 
 	components: {
-		ActionButton,
-		Actions,
-		Button,
+		NcActionButton,
+		NcActions,
+		NcButton,
 		RestoreIcon,
 		RichText,
 	},
@@ -144,9 +140,3 @@ export default {
 	},
 }
 </script>
-
-<style scoped>
-.titleform-button {
-	height: 44px;
-}
-</style>

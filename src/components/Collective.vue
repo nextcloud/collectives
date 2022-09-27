@@ -1,19 +1,21 @@
 <template>
-	<AppContentDetails>
+	<NcAppContentDetails>
 		<Version v-if="currentPage && version" />
 		<Page v-else-if="currentPage" />
-		<EmptyContent v-else-if="loading('collective') || loading('page')"
-			icon="icon-loading" />
+		<NcEmptyContent v-else-if="loading('collective') || loading('page')">
+			<template #icon>
+				<NcLoadingIcon />
+			</template>
+		</NcEmptyContent>
 		<PageNotFound v-else />
-	</AppContentDetails>
+	</NcAppContentDetails>
 </template>
 
 <script>
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { listen } from '@nextcloud/notify_push'
-import AppContentDetails from '@nextcloud/vue/dist/Components/AppContentDetails'
-import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { NcAppContentDetails, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 import { GET_PAGES } from '../store/actions.js'
 import { SELECT_VERSION } from '../store/mutations.js'
 import displayError from '../util/displayError.js'
@@ -25,8 +27,9 @@ export default {
 	name: 'Collective',
 
 	components: {
-		AppContentDetails,
-		EmptyContent,
+		NcAppContentDetails,
+		NcEmptyContent,
+		NcLoadingIcon,
 		Page,
 		PageNotFound,
 		Version,
@@ -177,18 +180,50 @@ export default {
 		closeNav() {
 			emit('toggle-navigation', { open: false })
 		},
-
-		openNav() {
-			emit('toggle-navigation', { open: true })
-		},
 	},
 
 }
 </script>
 
-<style>
-div.modal-wrapper.modal-wrapper--full div.modal-container {
-	overflow: scroll;
+<style lang="scss">
+/* Format page title in Page.vue and Version.vue */
+.page-title {
+	position: sticky;
+	top: 0;
+	padding: 8px 0px 2px 8px;
+	margin: auto;
+	max-width: 670px;
+	display: flex;
+	align-items: center;
+	background-color: var(--color-main-background);
+
+	.page-title-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 30px;
+		min-width: 44px;
+		height: 43px;
+		opacity: 0.8;
+
+		.button-emoji-page {
+			width: 44px;
+			padding: 0px 4px;
+			font-size: 30px;
+		}
+	}
+
+	.title {
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+}
+
+/* Leave space for page list toggle on small screens (editor 670px + toggle 44px) */
+@media only screen and (max-width: 670px + 44px) {
+	.page-title {
+		padding-left: 40px;
+	}
 }
 
 @media print {

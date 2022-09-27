@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.0-beta1 - 2022.09.12
+
+### ✨New
+* Migrate to Nextcloud 25 design.
+* Support Nextcloud version 25.
+* Drop support for Nextcloud version 24 and earlier.
+
+
 ## 1.5.0 - 2022.09.08
 
 ### ✨New

@@ -45,12 +45,8 @@ describe('Collective', function() {
 			cy.login('bob', { route: '/apps/files' })
 		})
 		it('has a matching folder', function() {
-			let fileListSelector = '.files-fileList'
-			let controlsSelector = '.files-controls'
-			if (['22', '23', '24'].includes(String(Cypress.env('ncVersion')))) {
-				fileListSelector = '#fileList'
-				controlsSelector = '#controls'
-			}
+			const fileListSelector = '.files-fileList'
+			const controlsSelector = '.files-controls'
 			cy.get(fileListSelector).should('contain', 'Collectives')
 			cy.get(`${fileListSelector} a`).contains('Collectives').click()
 			cy.get(`${controlsSelector} .breadcrumb`).should('contain', 'Collectives')
@@ -103,7 +99,7 @@ describe('Collective', function() {
 		it('creates collectives by picking circle',
 			function() {
 				cy.login('bob')
-				cy.get('button.action-item > span.circles-icon').click()
+				cy.get('button.action-item span.circles-icon').click({ force: true })
 				cy.get('.multiselect__option').should('not.contain', 'Foreign')
 				cy.get('.multiselect__option [title*=History]').click()
 				cy.get('input.icon-confirm').click()
@@ -164,7 +160,8 @@ describe('Collective', function() {
 			cy.get('.app-content-list-item')
 				.trigger('mouseover')
 			cy.get('.app-content-list button.action-button-add')
-				.should('contain', 'Add a page')
+				.should('have.attr', 'aria-label')
+				.and('contain', 'Add a page')
 			cy.deleteCollective(randomName)
 		})
 	})

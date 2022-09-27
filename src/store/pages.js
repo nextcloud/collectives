@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import { set } from 'vue'
 import { getCurrentUser } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
 import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
@@ -309,13 +309,13 @@ export default {
 			state.showTemplates = !state.showTemplates
 		},
 
-		collapse: (state, pageId) => Vue.set(state.collapsed, pageId, true),
+		collapse: (state, pageId) => set(state.collapsed, pageId, true),
 
-		expand: (state, pageId) => Vue.set(state.collapsed, pageId, false),
+		expand: (state, pageId) => set(state.collapsed, pageId, false),
 
 		toggleCollapsed: (state, pageId) =>
 			// Default to 'false' if unset
-			Vue.set(state.collapsed, pageId, state.collapsed[pageId] == null ? false : !state.collapsed[pageId]),
+			set(state.collapsed, pageId, state.collapsed[pageId] == null ? false : !state.collapsed[pageId]),
 
 		setHighlightPageId(state, pageId) {
 			state.highlightPageId = pageId

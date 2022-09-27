@@ -14,7 +14,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { RichTextReader, ImageResolver, IMAGE_RESOLVER } from '@nextcloud/text'
+import { RichTextReader, AttachmentResolver, ATTACHMENT_RESOLVER } from '@nextcloud/text'
 import { getCurrentUser } from '@nextcloud/auth'
 import pageContentMixin from '../mixins/pageContentMixin.js'
 
@@ -32,7 +32,7 @@ export default {
 	provide() {
 		const val = {}
 		Object.defineProperties(val, {
-			[IMAGE_RESOLVER]: { get: () => this.imageResolver },
+			[ATTACHMENT_RESOLVER]: { get: () => this.attachmentResolver },
 		})
 		return val
 	},
@@ -59,8 +59,8 @@ export default {
 			'shareTokenParam',
 		]),
 
-		imageResolver() {
-			return new ImageResolver({
+		attachmentResolver() {
+			return new AttachmentResolver({
 				fileId: this.page.id,
 				currentDirectory: '/' + this.pageDirectory(this.page),
 				user: getCurrentUser(),

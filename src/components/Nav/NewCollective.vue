@@ -20,32 +20,30 @@
   -
   -->
 <template>
-	<AppNavigationItem v-if="!editing"
+	<NcAppNavigationItem v-if="!editing"
 		:title="t('collectives', 'Create new collective')"
 		icon="icon-add"
 		@click.prevent.stop="startCreateCollective">
 		<template #actions>
-			<ActionButton v-if="anyCircle"
-				@click.stop.prevent="startSelectCircle">
+			<NcActionButton v-if="anyCircle" @click.stop.prevent="startSelectCircle">
 				<template #icon>
 					<CirclesIcon :size="16" />
 				</template>
 				{{ t('collectives', 'Create collective for existing circle') }}
-			</ActionButton>
+			</NcActionButton>
 		</template>
-	</AppNavigationItem>
+	</NcAppNavigationItem>
 	<div v-else class="collective-create">
 		<form v-show="editing" @submit.prevent.stop="createCollective">
-			<EmojiPicker :show-preview="true"
-				@select="addEmoji">
-				<Button type="tertiary"
+			<NcEmojiPicker :show-preview="true" @select="addEmoji">
+				<NcButton type="tertiary"
 					:aria-label="t('collectives', 'Select emoji for collective')"
 					:title="t('collectives', 'Select emoji')"
 					class="button-emoji"
 					@click.prevent>
 					{{ emoji }}
-				</Button>
-			</EmojiPicker>
+				</NcButton>
+			</NcEmojiPicker>
 
 			<input v-if="!pickCircle"
 				ref="nameField"
@@ -53,7 +51,7 @@
 				:placeholder="t('collectives', 'New collective name')"
 				type="text"
 				required>
-			<Multiselect v-else
+			<NcMultiselect v-else
 				ref="circleSelector"
 				v-model="circle"
 				:options="circles"
@@ -65,23 +63,19 @@
 				:aria-label="t('collectives', 'Create a new collective')"
 				class="icon-confirm"
 				:class="{ 'icon-loading-small': loading }">
-			<Actions>
-				<ActionButton icon="icon-close"
+			<NcActions>
+				<NcActionButton icon="icon-close"
 					:aria-label="t('collectives', 'Cancel creating a new collective')"
 					@click.stop.prevent="cancelEdit" />
-			</Actions>
+			</NcActions>
 		</form>
 	</div>
 </template>
 
 <script>
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
-import Actions from '@nextcloud/vue/dist/Components/Actions'
-import AppNavigationItem from '@nextcloud/vue/dist/Components/AppNavigationItem'
-import Button from '@nextcloud/vue/dist/Components/Button'
-import EmojiPicker from '@nextcloud/vue/dist/Components/EmojiPicker'
-import Multiselect from '@nextcloud/vue/dist/Components/Multiselect'
+import { NcActionButton, NcActions, NcAppNavigationItem, NcButton, NcMultiselect } from '@nextcloud/vue'
+import NcEmojiPicker from '@nextcloud/vue/dist/Components/NcEmojiPicker.js'
 import { mapActions, mapGetters } from 'vuex'
 import CirclesIcon from '../Icon/CirclesIcon.vue'
 import { GET_CIRCLES, NEW_COLLECTIVE } from '../../store/actions.js'
@@ -92,13 +86,13 @@ const randomColor = () => '#' + ((1 << 24) * Math.random() | 0).toString(16)
 export default {
 	name: 'NewCollective',
 	components: {
-		AppNavigationItem,
-		ActionButton,
-		Actions,
-		Button,
+		NcAppNavigationItem,
+		NcActionButton,
+		NcActions,
+		NcButton,
 		CirclesIcon,
-		EmojiPicker,
-		Multiselect,
+		NcEmojiPicker,
+		NcMultiselect,
 	},
 	directives: {},
 	data() {
@@ -213,15 +207,21 @@ export default {
 
 <style lang="scss" scoped>
 .collective-create {
-	order: 1;
-	display: flex;
-	height: 44px;
-
 	form {
 		display: flex;
-		flex-grow: 1;
 
 		input[type='text'] {
+			flex-grow: 1;
+		}
+
+		input[type='submit'] {
+			border-radius: var(--border-radius-large) !important;
+			border-width: 2px;
+			margin-right: 0;
+		}
+
+		.multiselect {
+			min-width: unset;
 			flex-grow: 1;
 		}
 	}

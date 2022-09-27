@@ -27,7 +27,7 @@ import store from './store/store.js'
 import { sync } from 'vuex-router-sync'
 
 /** Global directives */
-import VTooltip from '@nextcloud/vue/dist/Directives/Tooltip'
+import VTooltip from '@nextcloud/vue/dist/Directives/Tooltip.js'
 
 // Register global directives
 Vue.directive('Tooltip', VTooltip)

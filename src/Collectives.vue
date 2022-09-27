@@ -1,38 +1,28 @@
 <template>
-	<Content app-name="collectives">
-		<!-- go back to list when in details mode -->
-		<a v-if="showing('details') && isMobile"
-			class="app-details-toggle icon-toggle-filelist"
-			href="#"
-			@click.stop.prevent="hide('details')" />
-		<Nav v-if="!printView" />
+	<NcContent app-name="collectives">
+		<Navigation v-if="!printView" />
 		<router-view />
 		<PageSidebar v-if="currentPage" v-show="showing('sidebar')" />
-	</Content>
+	</NcContent>
 </template>
 
 <script>
 import { showInfo, showError } from '@nextcloud/dialogs'
-import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 import { GET_COLLECTIVES_FOLDER, GET_COLLECTIVES, GET_TRASH_COLLECTIVES } from './store/actions.js'
 import displayError from './util/displayError.js'
-import Content from '@nextcloud/vue/dist/Components/Content'
-import isMobile from '@nextcloud/vue/dist/Mixins/isMobile'
-import Nav from './components/Nav.vue'
+import { NcContent } from '@nextcloud/vue'
+import Navigation from './components/Navigation.vue'
 import PageSidebar from './components/PageSidebar.vue'
 
 export default {
 	name: 'Collectives',
 
 	components: {
-		Content,
-		Nav,
+		NcContent,
+		Navigation,
 		PageSidebar,
 	},
-
-	mixins: [
-		isMobile,
-	],
 
 	computed: {
 		...mapState([
@@ -72,8 +62,6 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['hide']),
-
 		...mapActions({
 			dispatchGetCollectives: GET_COLLECTIVES,
 			dispatchGetCollectivesFolder: GET_COLLECTIVES_FOLDER,
@@ -115,35 +103,24 @@ export default {
 </script>
 
 <style>
-#app-content-wrapper {
-	display: flex;
-	position: relative;
-	align-items: stretch;
-	min-height: 100%;
+.app-content-wrapper.app-content-wrapper--mobile {
+	/* Required to allow scrolling long content on mobile */
+	overflow-y: auto;
 }
 
-.app-content-wrapper .app-details-toggle.icon-confirm {
-	display: none;
+[data-text-el='editor-container'] .text-editor__wrapper {
+	/* Required to allow scrolling long content in text editor */
+	position: static !important;
+	overflow: visible !important;
 }
 
-#editor-container #editor-wrapper {
-	position: static;
-	overflow: visible;
-}
-
-#editor-container #editor {
-	max-width: 800px;
-	margin-left: auto;
-	margin-right: auto;
-	overflow: visible;
-}
-
-#editor-wrapper #editor div.ProseMirror {
-	margin-top: 5px;
+[data-text-el='editor-container'] .editor {
+	/* Overflow is required for sticky menubar */
+	overflow: visible !important;
 }
 
 #text-wrapper #text div.ProseMirror {
-	margin-top: 5px;
+	/* Align read view bottom padding with editor */
 	padding-bottom: 200px;
 }
 
@@ -158,13 +135,7 @@ export default {
 }
 
 #titleform input[type='text']:disabled {
-	background-color: var(--color-main-background);
 	color: var(--color-text-maxcontrast);
-}
-
-#action-menu {
-	position: absolute;
-	right: 0;
 }
 
 @page {
@@ -181,21 +152,9 @@ export default {
 		display: block !important;
 	}
 }
-</style>
 
-<style lang="scss" scoped>
-.app-details-toggle {
-	position: sticky;
-	top: 58px;
-	width: 44px;
-	height: 49px;
-	margin-right: -44px;
-	opacity: .6;
-	z-index: 2000;
-	&:active,
-	&:hover,
-	&:focus {
-		opacity: 1;
-	}
+/* Align toggle with page list header bar */
+.app-navigation .app-navigation-toggle {
+	top: 0 !important;
 }
 </style>

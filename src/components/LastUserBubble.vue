@@ -1,23 +1,23 @@
 <template>
 	<div>
-		<UserBubble :display-name="lastUserId"
+		<NcUserBubble :display-name="lastUserId"
 			:user="lastUserId"
 			:show-user-status="false">
 			{{ lastEditedUserMessage }}
-		</UserBubble>
+		</NcUserBubble>
 		{{ lastUpdate }}
 	</div>
 </template>
 
 <script>
-import UserBubble from '@nextcloud/vue/dist/Components/UserBubble'
+import { NcUserBubble } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 
 export default {
 	name: 'LastUserBubble',
 
 	components: {
-		UserBubble,
+		NcUserBubble,
 	},
 
 	props: {
@@ -42,7 +42,3 @@ export default {
 	},
 }
 </script>
-
-<style scoped>
-
-</style>

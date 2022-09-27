@@ -48,9 +48,13 @@ export default {
 </script>
 
 <style lang="scss">
-#editor-container .document-status {
-	width: 670px;
+[data-text-el='editor-container'] .document-status {
+	max-width: 670px;
 	padding: 0 2px;
 	margin: auto;
+}
+
+[data-text-el='editor-container'] .editor--outline {
+	top: revert !important;
 }
 </style>

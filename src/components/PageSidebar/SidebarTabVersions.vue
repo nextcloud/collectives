@@ -1,17 +1,18 @@
 <template>
-	<AppContentList>
+	<NcAppContentList>
 		<!-- loading -->
-		<div v-if="loading('versions')" class="emptycontent">
-			<div class="icon icon-loading" />
-		</div>
+		<NcEmptyContent v-if="loading('versions')">
+			<template #icon>
+				<NcLoadingIcon />
+			</template>
+		</NcEmptyContent>
 
 		<!-- error message -->
-		<EmptyContent v-else-if="error">
+		<NcEmptyContent v-else-if="error" :title="error">
 			<template #icon>
 				<AlertOctagonIcon />
 			</template>
-			<h2>{{ error }}</h2>
-		</EmptyContent>
+		</NcEmptyContent>
 
 		<!-- versions list -->
 		<template v-else-if="!loading('versions') && versions.length">
@@ -36,7 +37,7 @@
 					:class="{active: (version && v.timestamp === version.timestamp)}">
 					<div v-if="loading(`version-${pageId}-${v.timestamp}`)"
 						class="app-content-list-item-icon item-icon-loading">
-						<div class="icon-loading" />
+						<NcLoadingIcon :size="26" fill-color="var(--color-main-background)" />
 					</div>
 					<div v-else class="app-content-list-item-icon item-icon-page">
 						<PageIcon :size="26" fill-color="var(--color-main-background)" />
@@ -52,27 +53,24 @@
 		</template>
 
 		<!-- no versions found -->
-		<EmptyContent v-else>
+		<NcEmptyContent v-else
+			:title="t('collectives', 'No other versions available')"
+			:description="t( 'collectives', 'After editing you can find old versions of the page here.')">
 			<template #icon>
 				<RestoreIcon />
 			</template>
-			<h2>{{ t('collectives', 'No other versions available') }}</h2>
-			<template #desc>
-				{{ t( 'collectives', 'After editing you can find old versions of the page here.') }}
-			</template>
-		</EmptyContent>
-	</AppContentList>
+		</NcEmptyContent>
+	</NcAppContentList>
 </template>
 
 <script>
-import AppContentList from '@nextcloud/vue/dist/Components/AppContentList'
-import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
-import moment from '@nextcloud/moment'
-import { formatFileSize } from '@nextcloud/files'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
+import { formatFileSize } from '@nextcloud/files'
+import { NcAppContentList, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
+import moment from '@nextcloud/moment'
+import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagon.vue'
+import RestoreIcon from 'vue-material-design-icons/Restore.vue'
 import PageIcon from '../Icon/PageIcon.vue'
-import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagon'
-import RestoreIcon from 'vue-material-design-icons/Restore'
 import { SELECT_VERSION } from '../../store/mutations.js'
 import { GET_VERSIONS } from '../../store/actions.js'
 
@@ -81,8 +79,9 @@ export default {
 
 	components: {
 		AlertOctagonIcon,
-		AppContentList,
-		EmptyContent,
+		NcAppContentList,
+		NcEmptyContent,
+		NcLoadingIcon,
 		PageIcon,
 		RestoreIcon,
 	},
@@ -182,8 +181,8 @@ export default {
 }
 </script>
 
-// Copied from apps/files_versions/src/css/versions.css
 <style lang="scss" scoped>
+// Copied from apps/files_versions/src/css/versions.css
 .app-content-list {
 	max-width: none;
 	border-right: none;
@@ -206,7 +205,7 @@ export default {
 	}
 
 	&.item-icon-loading {
-		padding-top: 10px;
+		padding-top: 6px;
 	}
 }
 

@@ -1,17 +1,18 @@
 <template>
-	<AppContentList>
+	<NcAppContentList>
 		<!-- loading -->
-		<div v-if="loading('backlinks')" class="emptycontent">
-			<div class="icon icon-loading" />
-		</div>
+		<NcEmptyContent v-if="loading('backlinks')">
+			<template #icon>
+				<NcLoadingIcon />
+			</template>
+		</NcEmptyContent>
 
 		<!-- error message -->
-		<EmptyContent v-else-if="error">
+		<NcEmptyContent v-else-if="error" :title="error">
 			<template #icon>
 				<AlertOctagonIcon />
 			</template>
-			<h2>{{ error }}</h2>
-		</EmptyContent>
+		</NcEmptyContent>
 
 		<!-- backlinks list -->
 		<template v-else-if="!loading('backlinks') && backlinks.length">
@@ -33,25 +34,22 @@
 		</template>
 
 		<!-- no backlinks found -->
-		<EmptyContent v-else>
+		<NcEmptyContent v-else
+			:title="t('collectives', 'No backlinks available')"
+			:description="t( 'collectives', 'If other pages link to this one, they will be listed here.')">
 			<template #icon>
 				<ArrowBottomLeftIcon />
 			</template>
-			<h2>{{ t('collectives', 'No backlinks available') }}</h2>
-			<template #desc>
-				{{ t( 'collectives', 'If other pages link to this one, they will be listed here.') }}
-			</template>
-		</EmptyContent>
-	</AppContentList>
+		</NcEmptyContent>
+	</NcAppContentList>
 </template>
 
 <script>
-import AppContentList from '@nextcloud/vue/dist/Components/AppContentList'
-import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
-import moment from '@nextcloud/moment'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
-import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagon'
-import ArrowBottomLeftIcon from 'vue-material-design-icons/ArrowBottomLeft'
+import { NcAppContentList, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
+import moment from '@nextcloud/moment'
+import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagon.vue'
+import ArrowBottomLeftIcon from 'vue-material-design-icons/ArrowBottomLeft.vue'
 import PageIcon from '../Icon/PageIcon.vue'
 import { GET_BACKLINKS } from '../../store/actions.js'
 
@@ -60,8 +58,9 @@ export default {
 
 	components: {
 		AlertOctagonIcon,
-		AppContentList,
-		EmptyContent,
+		NcAppContentList,
+		NcEmptyContent,
+		NcLoadingIcon,
 		ArrowBottomLeftIcon,
 		PageIcon,
 	},

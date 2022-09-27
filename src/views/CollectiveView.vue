@@ -1,32 +1,37 @@
 <template>
-	<AppContent :show-details="showing('details')" :list-min-width="20">
+	<NcAppContent :show-details="showing('details')"
+		:list-min-width="20"
+		@update:showDetails="hide('details')">
 		<template #list>
 			<PageList v-if="currentCollective" />
 		</template>
 		<Collective v-if="currentCollective" />
-		<EmptyContent v-else-if="loading('collectives')"
-			icon="icon-loading" />
+		<NcEmptyContent v-else-if="loading('collectives')">
+			<template #icon>
+				<NcLoadingIcon />
+			</template>
+		</NcEmptyContent>
 		<CollectiveNotFound v-else />
-	</AppContent>
+	</NcAppContent>
 </template>
 
 <script>
 
-import { mapGetters } from 'vuex'
-import AppContent from '@nextcloud/vue/dist/Components/AppContent'
+import { mapGetters, mapMutations } from 'vuex'
+import { NcAppContent, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 import Collective from '../components/Collective.vue'
 import CollectiveNotFound from '../components/CollectiveNotFound.vue'
-import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 import PageList from '../components/PageList.vue'
 
 export default {
 	name: 'CollectiveView',
 
 	components: {
-		AppContent,
 		Collective,
 		CollectiveNotFound,
-		EmptyContent,
+		NcAppContent,
+		NcEmptyContent,
+		NcLoadingIcon,
 		PageList,
 	},
 
@@ -37,11 +42,18 @@ export default {
 			'showing',
 		]),
 	},
+
+	methods: {
+		...mapMutations(['hide']),
+	},
 }
 </script>
 
 <style>
-div.splitpanes.splitpanes--vertical div.splitpanes__pane.splitpanes__pane-details {
-	overflow: visible;
+/* Align details toggle button with page title bar (only relevant on mobile) */
+button.app-details-toggle {
+	z-index: 10023 !important;
+	top: 61px !important;
+	position: fixed !important;
 }
 </style>

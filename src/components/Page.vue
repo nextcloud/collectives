@@ -7,18 +7,17 @@
 				</div>
 				<CollectivesIcon v-else-if="landingPage" :size="30" fill-color="var(--color-text-maxcontrast)" />
 				<PageTemplateIcon v-else-if="isTemplatePage" :size="30" fill-color="var(--color-text-maxcontrast)" />
-				<EmojiPicker v-else
+				<NcEmojiPicker v-else
 					ref="page-emoji-picker"
 					:show-preview="true"
 					@select="setPageEmoji">
-					<Button type="tertiary"
+					<NcButton type="tertiary"
 						:aria-label="t('collectives', 'Select emoji for page')"
 						:title="t('collectives', 'Select emoji')"
 						class="button-emoji-page"
 						@click.prevent>
 						<template #icon>
-							<LoadingIcon v-if="emojiButtonIsLoading"
-								class="animation-rotate"
+							<NcLoadingIcon v-if="emojiButtonIsLoading"
 								:size="30"
 								fill-color="var(--color-text-maxcontrast)" />
 							<div v-else-if="currentPage.emoji">
@@ -29,8 +28,8 @@
 								:size="30"
 								fill-color="var(--color-text-maxcontrast)" />
 						</template>
-					</Button>
-				</EmojiPicker>
+					</NcButton>
+				</NcEmojiPicker>
 			</div>
 			<form @submit.prevent="startEdit()">
 				<input v-if="landingPage"
@@ -55,21 +54,11 @@
 					:disabled="!currentCollectiveCanEdit"
 					@blur="renamePage()">
 			</form>
-			<Button v-if="currentCollectiveCanEdit"
-				v-tooltip="editMode ? t('collectives', 'Stop editing') : t('collectives', 'Start editing')"
-				:aria-label="editMode ? t('collectives', 'Stop editing') : t('collectives', 'Start editing')"
-				class="titleform-button"
-				type="primary"
-				@click="editMode ? stopEdit() : startEdit()">
-				<template #icon>
-					<LoadingIcon v-if="titleFormButtonIsLoading"
-						class="animation-rotate"
-						:size="20" />
-					<CheckIcon v-else-if="editMode" :size="20" />
-					<PencilIcon v-else :size="20" />
-				</template>
-				{{ editMode && !waitForEditor ? t('collectives', 'Done') : t('collectives', 'Edit') }}
-			</Button>
+			<EditButton v-if="currentCollectiveCanEdit"
+				:edit-mode-and-ready="editMode && !waitForEditor"
+				:loading="titleFormButtonIsLoading"
+				:mobile="isMobile"
+				@click="editMode ? stopEdit() : startEdit()" />
 			<PageActionMenu v-if="currentCollectiveCanEdit"
 				:show-files-link="true"
 				:page-id="currentPage.id"
@@ -78,13 +67,13 @@
 				:last-user-id="currentPage.lastUserId"
 				:is-landing-page="landingPage"
 				:is-template="isTemplatePage" />
-			<Actions v-if="!showing('sidebar')">
-				<ActionButton icon="icon-menu-sidebar"
+			<NcActions v-if="!showing('sidebar')">
+				<NcActionButton icon="icon-menu-sidebar"
 					:aria-label="t('collectives', 'Toggle page sidebar')"
 					aria-controls="app-sidebar-vue"
 					:close-after-click="true"
 					@click="toggle('sidebar')" />
-			</Actions>
+			</NcActions>
 		</h1>
 		<div v-show="showRichText"
 			id="text-container"
@@ -104,15 +93,12 @@
 </template>
 
 <script>
-import Actions from '@nextcloud/vue/dist/Components/Actions'
-import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
-import Button from '@nextcloud/vue/dist/Components/Button'
-import CheckIcon from 'vue-material-design-icons/Check'
+import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
+import { NcActions, NcActionButton, NcButton, NcLoadingIcon } from '@nextcloud/vue'
+import NcEmojiPicker from '@nextcloud/vue/dist/Components/NcEmojiPicker.js'
 import CollectivesIcon from './Icon/CollectivesIcon.vue'
-import EmojiPicker from '@nextcloud/vue/dist/Components/EmojiPicker'
-import EmoticonOutlineIcon from 'vue-material-design-icons/EmoticonOutline'
-import LoadingIcon from 'vue-material-design-icons/Loading'
-import PencilIcon from 'vue-material-design-icons/Pencil'
+import EmoticonOutlineIcon from 'vue-material-design-icons/EmoticonOutline.vue'
+import EditButton from './Page/EditButton.vue'
 import Editor from './Page/Editor.vue'
 import RichText from './Page/RichText.vue'
 import PageActionMenu from './Page/PageActionMenu.vue'
@@ -134,22 +120,22 @@ export default {
 	name: 'Page',
 
 	components: {
-		ActionButton,
-		Actions,
-		Button,
-		CheckIcon,
+		NcActionButton,
+		NcActions,
+		NcButton,
+		NcEmojiPicker,
 		CollectivesIcon,
+		EditButton,
 		Editor,
-		EmojiPicker,
 		EmoticonOutlineIcon,
-		LoadingIcon,
+		NcLoadingIcon,
 		PageActionMenu,
 		PageTemplateIcon,
-		PencilIcon,
 		RichText,
 	},
 
 	mixins: [
+		isMobile,
 		pageMixin,
 		pageContentMixin,
 	],
@@ -478,70 +464,18 @@ export default {
 	left: 0;
 	margin: 0 auto;
 	background-color: var(--color-main-background);
-	height: calc(100% - 59px);
 }
 
-::v-deep #editor-container div#editor {
-	div.text-menubar, div.menubar {
+::v-deep [data-text-el='editor-container'] div.editor {
+	/* Adjust to page titlebar height */
+	div.text-menubar {
 		margin: auto;
-		top: calc(var(--header-height) + 59px);
+		top: 59px;
 	}
-}
-
-.page-title {
-	padding: 8px 0px 2px 8px;
-	position: sticky;
-	margin: auto;
-	max-width: 670px;
-	display: flex;
-	align-items: center;
-	top: var(--header-height);
-	background-color: var(--color-main-background);
-
-	.page-title-icon {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		font-size: 30px;
-		min-width: 44px;
-		height: 43px;
-		opacity: 0.8;
-
-		.button-emoji-page {
-			width: 44px;
-			padding: 0px 4px;
-			font-size: 30px;
-		}
-	}
-
-	.title {
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
-}
-
-// Leave space for page list toggle on small screens
-// Editor/View: 670px, page list/details toggle: 44px
-@media only screen and (max-width: 670px + 44px) {
-	.page-title {
-		padding: 8px 0px 2px 30px;
-	}
-}
-
-#action-menu button {
-	z-index: 1;
-}
-
-button.button-vue.titleform-button {
-	height: 44px;
-	min-width: fit-content;
-}
-
-.animation-rotate {
-	animation: rotate var(--animation-duration, 0.8s) linear infinite;
 }
 
 @media print {
+	/* Don't print emoticon button (if page doesn't have an emoji set) */
 	.titleform-button, .action-item, .emoji-picker-emoticon {
 		display: none !important;
 	}
