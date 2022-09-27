@@ -33,7 +33,8 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import { NcEmptyContent, NcProgressBar } from '@nextcloud/vue'
+import { NcEmptyContent } from '@nextcloud/vue'
+import NcProgressBar from '@nextcloud/vue/dist/Components/NcProgressBar.js'
 import DownloadIcon from 'vue-material-design-icons/Download.vue'
 import PagePrint from './PagePrint.vue'
 import { GET_PAGES } from '../store/actions.js'
