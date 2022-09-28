@@ -135,7 +135,7 @@ text-app-includes:
 	for n in `cat .files_from_text`; do cp ../../apps/text/$$n $$n ; done
 
 # Build a release package
-build: node-modules build-js-production composer-install
+build: node-modules build-js-production composer-install-no-dev
 	mkdir -p $(RELEASE_DIR)
 	rsync -a --delete --delete-excluded \
 		--exclude=".[a-z]*" \
