@@ -1,18 +1,35 @@
 # Changelog
 
+## 2.0.0-beta2 - 2022.09.28
+
+### 🐛Fixes
+* 🔎 Consider landing pages in fulltext search results. (#391)
+
+### 🌎Translations
+* 🗣️ Czech translation updated thanks to Pavel Borecki.
+* 🗣️ Dutch translation updated thanks to Jeroen Bos.
+* 🗣️ Danish translation updated thanks to Jens Peter Nielsen.
+* 🗣️ German translations updated thanks to Joachim Sokolowski.
+* 🗣️ Slovenian translation added thanks to Matej U.
+* 🗣️ Polish translation added thanks to Norbert Truszkiewicz.
+
+### 🚧Updates & Tooling
+* 🔌 Update NPM dependencies.
+* 👷 Don't include composer dev packages in release builds.
+
 ## 2.0.0-beta1 - 2022.09.12
 
 ### ✨New
-* Migrate to Nextcloud 25 design.
-* Support Nextcloud version 25.
-* Drop support for Nextcloud version 24 and earlier.
+* 💄 Migrate to Nextcloud 25 design.
+* 🍾 Support Nextcloud version 25.
+* 🧹 Drop support for Nextcloud version 24 and earlier.
 
 
 ## 1.5.0 - 2022.09.08
 
 ### ✨New
-* Allow to sort pages in custom order. (#303)
-* Move pages between subpages via drag and drop. (#252)
+* 🔃 Allow to sort pages in custom order. (#303)
+* 🖱️ Move pages between subpages via drag and drop. (#252)
 
 ### 🌎Translations
 * 🗣️ Danish translation added thanks to Jens Peter Nielsen.
@@ -24,8 +41,8 @@
 ## 1.5.0-beta1 - 2022.08.11
 
 ### ✨New
-* Allow to sort pages in custom order. (#303)
-* Move pages between subpages via drag and drop. (#252)
+* 🔃 Allow to sort pages in custom order. (#303)
+* 🖱️ Move pages between subpages via drag and drop. (#252)
 
 
 ## 1.4.3 - 2022.08.11
