@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-09-08 11:47+0200\n"
-"PO-Revision-Date: 2022-09-08 08:20+0000\n"
+"PO-Revision-Date: 2022-09-13 08:22+0000\n"
 "Last-Translator: Jens Peter Nielsen <mail@jp-nielsen.dk>\n"
 "Language-Team: Danish <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/da/>\n"
@@ -532,7 +532,7 @@ msgstr "Titel"
 #: /collectives/specialVueFakeDummyForL10nScript.js:180
 #: /collectives/specialVueFakeDummyForL10nScript.js:182
 msgid "Stop editing"
-msgstr "Stop med at redigere"
+msgstr "Afslut redigering"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:180
 #: /collectives/specialVueFakeDummyForL10nScript.js:182
@@ -602,7 +602,7 @@ msgstr "Sorteringsrækkefølge"
 #. TRANSLATORS src/components/PageList.vue:33
 #: /collectives/specialVueFakeDummyForL10nScript.js:210
 msgid "Sort by custom order"
-msgstr ""
+msgstr "Sorter efter tilpasset rækkefølge"
 
 #. TRANSLATORS src/components/PageList.vue:42
 #: /collectives/specialVueFakeDummyForL10nScript.js:212
@@ -617,16 +617,16 @@ msgstr "Sorter efter titel"
 #. TRANSLATORS src/components/PageList.vue:79
 #: /collectives/specialVueFakeDummyForL10nScript.js:216
 msgid "Sorted by title"
-msgstr ""
+msgstr "Sorteret efter titel"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:216
 msgid "Sorted by recently changed"
-msgstr ""
+msgstr "Sorteret efter nyligt ændret"
 
 #. TRANSLATORS src/components/PageList.vue:80
 #: /collectives/specialVueFakeDummyForL10nScript.js:218
 msgid "Switch back to default sort order"
-msgstr ""
+msgstr "Skift tilbage til standard sorteringsrækkefølge"
 
 #. TRANSLATORS src/components/PageList.vue:220
 #: /collectives/specialVueFakeDummyForL10nScript.js:220
@@ -724,7 +724,7 @@ msgstr "Kunne ikke gemme emoji til siden"
 
 #: /collectives/src/mixins/pageMixin.js:142
 msgid "Could not move page"
-msgstr ""
+msgstr "Siden kunne ikke flyttes"
 
 #: /collectives/src/mixins/pageMixin.js:168
 msgid "Could not delete the page"
@@ -738,7 +738,7 @@ msgstr "Side slettet"
 #: /collectives/src/mixins/pageMixin.js:240
 #: /collectives/src/mixins/pageMixin.js:269
 msgid "Could not change page order"
-msgstr ""
+msgstr "Siderækkefølgen kunne ikke ændres"
 
 #: /collectives/templates/error.php:4
 msgid "Error: Missing apps"

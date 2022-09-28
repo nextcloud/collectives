@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-09-08 11:47+0200\n"
-"PO-Revision-Date: 2022-09-22 13:17+0000\n"
-"Last-Translator: Matej U <mateju@src.gnome.org>\n"
-"Language-Team: Slovenian <https://hosted.weblate.org/projects/collectives/"
-"collectives-app/sl/>\n"
-"Language: sl\n"
+"PO-Revision-Date: 2022-09-28 10:22+0000\n"
+"Last-Translator: Norbert Truszkiewicz <n.t@rajpol.com.pl>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/collectives/"
+"collectives-app/pl/>\n"
+"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n"
-"%100==4 ? 2 : 3;\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2;\n"
 "X-Generator: Weblate 4.14.1\n"
 
 #. TRANSLATORS src/components/Page.vue:193
@@ -28,53 +28,54 @@ msgstr ""
 #: /collectives/specialVueFakeDummyForL10nScript.js:190
 #: /collectives/specialVueFakeDummyForL10nScript.js:246
 msgid "Collectives"
-msgstr "Zbirke"
+msgstr "Kolektywy"
 
 #: /collectives/lib/Search/PageContentProvider.php:92
 msgid "Collectives - Page content"
-msgstr "Zbirke – vsebina strani"
+msgstr "Kolektywy - Zawartość strony"
 
 #: /collectives/lib/Search/PageProvider.php:67
 msgid "Collectives - Pages"
-msgstr "Zbirke – strani"
+msgstr "Kolektywy - Strony"
 
 #: /collectives/lib/Search/PageProvider.php:107
 msgid "in Collective {collective}"
-msgstr "v Zbirki {collective}"
+msgstr "w Kolektywie {collective}"
 
 #: /collectives/lib/Service/CollectiveService.php:169
 #, php-format
 msgid "Created collective \"%s\" for existing circle."
-msgstr "Za obstoječi krog je ustvarjena zbirka »%s«."
+msgstr "Utworzono kolektyw \"%s\" dla istniejącego kręgu."
 
 #: /collectives/lib/Service/CollectiveShareService.php:85
 msgid "Collective Share"
-msgstr "Souporaba Zbirke"
+msgstr "Udostępnianie kolektywu"
 
 #: /collectives/lib/Service/CollectiveShareService.php:173
 #: /collectives/lib/Service/CollectiveShareService.php:204
 #, php-format
 msgid "You are not allowed to share %s"
-msgstr "Ni ustreznih dovoljenj za souporabo zbirke %s"
+msgstr "Nie masz uprawnień do udostępnienia %s"
 
 #: /collectives/lib/Service/CollectiveShareService.php:177
 #, php-format
 msgid "A share for collective %s exists already"
-msgstr "Mesto souporabe zbirke %s že obstaja"
+msgstr "Kolektyw %s jest już udostępniony"
 
 #: /collectives/lib/Service/CollectiveShareService.php:208
 #, php-format
 msgid "You are not allowed to edit %s"
-msgstr "Ni ustreznih dovoljenj za urejanje %s"
+msgstr "Nie masz uprawnień do edycji %s"
 
 #: /collectives/lib/Service/CollectiveShareService.php:212
 #: /collectives/lib/Service/CollectiveShareService.php:218
 msgid "Share not found for user"
-msgstr "Za uporabnika ni najdenega mesta souporabe"
+msgstr "Nie znaleziono udostępnienia dla użytkownika"
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:3
 msgid "A place for activist and community projects to build shared knowledge"
-msgstr "Mesto za skupno izgrajevanje vsebine in znanja"
+msgstr ""
+"Miejsce dla projektów aktywistów i społeczności budujących wspólną wiedzę"
 
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:4
 msgid ""
@@ -96,312 +97,314 @@ msgid ""
 "In your Nextcloud instance, simply navigate to **»Apps«**, find the\n"
 "**»Circles«** and **»Collectives«** apps and enable them."
 msgstr ""
-"Program Zbirke je projekt za okolje Nextcloud, ki omogoča sodelovalno in "
-"skupno urejanje vsebine.\n"
-"Skupaj je mogoče izgraditi pomembno znanje.\n"
+"Miejsce dla projektów aktywistów i społeczności budujących wspólną wiedzę \n"
+"Gromadź się w kolektywach, aby budować wspólną wiedzę. \n"
+" \n"
+"* 👥 **Zbiorowy i niehierarchiczny przepływ pracy z pamięci**: Kolektywy są\n"
+"  powiązane z [Nextcloud Circle](https://github.com/nextcloud/circles) i\n"
+"  własnością kolektywu.\n"
+"* 📝 **Kooperacyjna edycja stron** znana z Etherpad dzięki\n"
+"  [Text app](https://github.com/nextcloud/text).\n"
+"* 🔤 **Dobrze znana składnia [Markdown](https://en.wikipedia.org/wiki/"
+"Markdown) **\n"
+"  do formatowania strony.\n"
 "\n"
-"* 👥 **Zbirke in nehierarhično razdeljeno delo**: Zbirke so vezane na [Kroge "
-"Nextcloud](https://github.com/nextcloud/circles) in so skupno lastništvo "
-"članov.\n"
-"* 📝 **Sodelovalno urejanje vsebine** kot je bilo to mogoče v programu "
-"Etherpad zahvaljujoč [programu Text](https://github.com/nextcloud/text).\n"
-"* 🔤 **Uporabljena je znana skladnja [Markdown](https://en.wikipedia.org/"
-"wiki/Markdown)** za oblikovanje strani.\n"
+"## Instalacja\n"
 "\n"
-"## Namestitev\n"
-"\n"
-"V okolju Nextcloud enostavno izberite program **»Zbirke«** v razdelku "
-"Programov, izberite tudi program **»Krogi«** in oba namestite in omogočite."
+"W twojej instancji Nextcloud po prostu przejdź **»Aplikacje«**, znajdź "
+"aplikacje\n"
+"**»Kręgi«** i **»Kolektywy«** po czym włącz je."
 
 #. TRANSLATORS src/Collectives.vue:70
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:200
 #: /collectives/specialVueFakeDummyForL10nScript.js:2
 #: /collectives/specialVueFakeDummyForL10nScript.js:86
 msgid "The contacts app is required to manage members"
-msgstr "Za urejanje stikov je zahtevan program Stiki."
+msgstr "Aplikacja Kontakty jest wymagana do zarządzania członkami"
 
 #. TRANSLATORS src/components/CollectiveNotFound.vue:3
 #: /collectives/specialVueFakeDummyForL10nScript.js:4
 msgid "Collective not found:"
-msgstr "Zbirke ni mogoče najti:"
+msgstr "Nie znaleziono kolektywu:"
 
 #. TRANSLATORS src/components/CollectiveNotFound.vue:10
 #: /collectives/specialVueFakeDummyForL10nScript.js:6
 msgid "You're not part of a collective with that name."
-msgstr "Niste član zbirke s tem imenom."
+msgstr "Nie jesteś częścią kolektywu o tej nazwie."
 
 #. TRANSLATORS src/components/CollectiveNotFound.vue:13
 #: /collectives/specialVueFakeDummyForL10nScript.js:8
 msgid "Select a collective or create a new one on the left."
-msgstr "Izberite zbirko, ali pa ustvarite novo v meniju na levi."
+msgstr "Wybierz kolektyw lub utwórz nowy z lewej."
 
 #. TRANSLATORS src/components/CollectivePrint.vue:11
 #: /collectives/specialVueFakeDummyForL10nScript.js:10
 msgid "Preparing collective for exporting or printing"
-msgstr "Pripravljanje zbirke za izvoz oziroma tiskanje"
+msgstr "Przygotowanie kolektywu do eksportu lub druku"
 
 #. TRANSLATORS src/components/CollectivePrint.vue:58
 #: /collectives/specialVueFakeDummyForL10nScript.js:12
 msgid "Loading pages:"
-msgstr "Nalaganje strani:"
+msgstr "Ładowanie stron:"
 
 #. TRANSLATORS src/components/CollectivePrint.vue:63
 #: /collectives/specialVueFakeDummyForL10nScript.js:14
 msgid "Loading images:"
-msgstr "Nalaganje slik:"
+msgstr "Ładowanie obrazów:"
 
 #. TRANSLATORS src/components/LastUserBubble.vue:36
 #: /collectives/specialVueFakeDummyForL10nScript.js:16
 msgid "Last edited by {user}"
-msgstr "Nazadnje urejano: {user}"
+msgstr "Ostatnio edytowane przez użytkownika {user}"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:22
 #: /collectives/specialVueFakeDummyForL10nScript.js:18
 msgid "Manage members"
-msgstr "Uredi člane"
+msgstr "Zarządzaj członkami"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:30
 #: /collectives/specialVueFakeDummyForL10nScript.js:20
 msgid "Share link"
-msgstr "Povezava za souporabo"
+msgstr "Udostępnij link"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:44
 #: /collectives/specialVueFakeDummyForL10nScript.js:22
 msgid "Allow editing"
-msgstr "Dovoli urejanje"
+msgstr "Pozwól edytować"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:51
 #: /collectives/specialVueFakeDummyForL10nScript.js:24
 msgid "Unshare"
-msgstr "Odstrani povezavo"
+msgstr "Zatrzymaj udostępnianie"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:57
 #: /collectives/specialVueFakeDummyForL10nScript.js:26
 msgid "Export or print"
-msgstr "Izvozi ali natisni"
+msgstr "Eksportuj lub drukuj"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:66
 #: /collectives/specialVueFakeDummyForL10nScript.js:28
 msgid "Settings"
-msgstr "Nastavitve"
+msgstr "Ustawienia"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:173
 #: /collectives/specialVueFakeDummyForL10nScript.js:30
 msgid "Copied"
-msgstr "Kopirano"
+msgstr "Skopiowane"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:174
 #: /collectives/specialVueFakeDummyForL10nScript.js:32
 msgid "Cannot copy"
-msgstr "Kopiranje ni mogoče"
+msgstr "Nie można skopiować"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:176
 #: /collectives/specialVueFakeDummyForL10nScript.js:34
 msgid "Copy share link"
-msgstr "Kopiraj povezavo souporabe"
+msgstr "Skopiuj udostępniany link"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:186
 #: /collectives/specialVueFakeDummyForL10nScript.js:36
 msgid "Could not change the collective share editing permissions"
-msgstr "Ni mogoče spremeniti dovoljen souporabe zbirke"
+msgstr "Nie można zmienić uprawnień edycji udostępnionego kolektywu"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:204
 #: /collectives/specialVueFakeDummyForL10nScript.js:38
 msgid "Could not share the collective"
-msgstr "Ni mogoče omogočiti souporabe zbirke"
+msgstr "Nie można udostępnić tego kolektywu"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:210
 #: /collectives/specialVueFakeDummyForL10nScript.js:40
 msgid "Could not unshare the collective"
-msgstr "Ni mogoče preklicati souporabe zbirke"
+msgstr "Nie można zatrzymać udostępniania tego kolektywu"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:3
 #: /collectives/specialVueFakeDummyForL10nScript.js:42
 msgid "Collective settings"
-msgstr "Nastavitve Zbirke"
+msgstr "Ustawienia kolektywu"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:5
 #: /collectives/specialVueFakeDummyForL10nScript.js:44
 msgid "Name and emoji"
-msgstr "Ime in izrazne ikone"
+msgstr "Nazwa i emotikon"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:10
 #. TRANSLATORS src/components/Nav/NewCollective.vue:42
 #: /collectives/specialVueFakeDummyForL10nScript.js:46
 #: /collectives/specialVueFakeDummyForL10nScript.js:128
 msgid "Select emoji for collective"
-msgstr "Izbor izrazne ikone zbirk"
+msgstr "Wybierz emotikon dla kolektywu"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:31
 #: /collectives/specialVueFakeDummyForL10nScript.js:48
 msgid "Save new collective name"
-msgstr "Shrani novo ime zbirke"
+msgstr "Zapisz nową nazwę kolektywu"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:39
 #: /collectives/specialVueFakeDummyForL10nScript.js:50
 msgid "Permissions"
-msgstr "Dovoljenja"
+msgstr "Uprawnienia"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:41
 #: /collectives/specialVueFakeDummyForL10nScript.js:52
 msgid "Allow editing for"
-msgstr "Dovoli urejanje"
+msgstr "Pozwól na edycję"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:50
 #: /collectives/specialVueFakeDummyForL10nScript.js:54
 #: /collectives/specialVueFakeDummyForL10nScript.js:62
 msgid "Admins only"
-msgstr "le skrbnikom"
+msgstr "Tylko administratorzy"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:57
 #: /collectives/specialVueFakeDummyForL10nScript.js:56
 #: /collectives/specialVueFakeDummyForL10nScript.js:64
 msgid "Admins and moderaters"
-msgstr "skrbnikom in moderatorjem"
+msgstr "Administratorzy i moderatorzy"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:64
 #: /collectives/specialVueFakeDummyForL10nScript.js:58
 #: /collectives/specialVueFakeDummyForL10nScript.js:66
 msgid "All members"
-msgstr "vsem članom"
+msgstr "Wszyscy członkowie"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:69
 #: /collectives/specialVueFakeDummyForL10nScript.js:60
 msgid "Allow sharing for"
-msgstr "Dovoli omogočanje souporabe"
+msgstr "Pozwól udostępniać"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:97
 #: /collectives/specialVueFakeDummyForL10nScript.js:68
 msgid "Members"
-msgstr "Člani"
+msgstr "Członkowie"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:99
 #: /collectives/specialVueFakeDummyForL10nScript.js:70
 msgid "Members can be managed via the connected circle in the Contacts app."
-msgstr "Člane je mogoče urejati v povezanem krogu programa Stiki."
+msgstr ""
+"Członkowie mogą być zarządzani przez powiązane kręgi w aplikacji Kontakty."
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:103
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:106
 #: /collectives/specialVueFakeDummyForL10nScript.js:72
 #: /collectives/specialVueFakeDummyForL10nScript.js:74
 msgid "Open circle in Contacts"
-msgstr "Odpri krog med stiki"
+msgstr "Otwórz kręgi w Kontaktach"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:111
 #: /collectives/specialVueFakeDummyForL10nScript.js:76
 msgid "Danger zone"
-msgstr "Nevarno območje"
+msgstr "Strefa niebezpieczna"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:114
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:116
 #: /collectives/specialVueFakeDummyForL10nScript.js:78
 #: /collectives/specialVueFakeDummyForL10nScript.js:80
 msgid "Delete collective"
-msgstr "Izbriši zbirko"
+msgstr "Skasuj kolektyw"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:190
 #: /collectives/specialVueFakeDummyForL10nScript.js:82
 msgid "Change emoji"
-msgstr "Spremeni izrazno ikono"
+msgstr "Zmień emotikon"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:82
 msgid "Add emoji"
-msgstr "Dodaj izrazno ikono"
+msgstr "Dodaj emotikon"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:195
 #: /collectives/specialVueFakeDummyForL10nScript.js:84
 msgid "Renaming is limited to owners of the circle"
-msgstr "Preimenovanje je dovoljeno le lastnikom kroga"
+msgstr "Zmiana nazwy jest ograniczona do właściciela kręgu"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:224
 #: /collectives/specialVueFakeDummyForL10nScript.js:88
 msgid "Editing permissions updated"
-msgstr "Dovoljenja za urejanje so posodobljena"
+msgstr "Uprawnienia edycji zaktualizowane"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:236
 #: /collectives/specialVueFakeDummyForL10nScript.js:90
 msgid "Sharing permissions updated"
-msgstr "Dovoljenja za omogočanj souporabe so posodobljena"
+msgstr "Uprawnienia udostępniania zaktualizowane"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:268
 #: /collectives/specialVueFakeDummyForL10nScript.js:92
 msgid "Emoji updated"
-msgstr "Izrazna ikona je posodobljena"
+msgstr "Emotikon zaktualizowany"
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:2
 #: /collectives/specialVueFakeDummyForL10nScript.js:94
 msgid "Collectives settings"
-msgstr "Nastavitve zbirk"
+msgstr "Ustawienia kolektywów"
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:6
 #: /collectives/specialVueFakeDummyForL10nScript.js:96
 msgid "Collectives Folder"
-msgstr "Mapa zbirk"
+msgstr "Folder kolektywów"
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:48
 #: /collectives/specialVueFakeDummyForL10nScript.js:98
 msgid "Create a collective first"
-msgstr "Najprej je treba ustvariti zbirko"
+msgstr "Utwórz najpierw kolektyw"
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:59
 #: /collectives/specialVueFakeDummyForL10nScript.js:100
 msgid "Select location for collectives"
-msgstr "Izbor mesta datotek zbirke"
+msgstr "Wypierz lokację dla kolektywów"
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:73
 #: /collectives/specialVueFakeDummyForL10nScript.js:102
 msgid "Invalid path selected. Only folders on first level are supported."
 msgstr ""
-"Izbrana je neveljavna pot. Podprte so le mape na prvi ravni drevesne "
-"strukture."
+"Wybrano niepoprawną ścieżkę. Obsługiwane są tylko foldery na pierwszym "
+"poziomie."
 
 #. TRANSLATORS src/components/Nav/CollectivesTrash.vue:11
 #: /collectives/specialVueFakeDummyForL10nScript.js:104
 msgid "Deleted collectives"
-msgstr "Izbrisane zbirke"
+msgstr "Usunięte kolektywy"
 
 #. TRANSLATORS src/components/Nav/CollectivesTrash.vue:34
 #. TRANSLATORS src/components/Page/Version.vue:15
 #: /collectives/specialVueFakeDummyForL10nScript.js:106
 #: /collectives/specialVueFakeDummyForL10nScript.js:166
 msgid "Restore"
-msgstr "Obnovi"
+msgstr "Przywróć"
 
 #. TRANSLATORS src/components/Nav/CollectivesTrash.vue:40
 #: /collectives/specialVueFakeDummyForL10nScript.js:108
 msgid "Delete permanently"
-msgstr "Trajno izbriši"
+msgstr "Usuń bezpowrotnie"
 
 #. TRANSLATORS src/components/Nav/CollectivesTrash.vue:51
 #: /collectives/specialVueFakeDummyForL10nScript.js:110
 msgid "Permanently delete collective »{collective}«"
-msgstr "Trajno izbriši zbirko »{collective}«"
+msgstr "Usuń bezpowrotnie kolektyw »{collective}«"
 
 #. TRANSLATORS src/components/Nav/CollectivesTrash.vue:54
 #: /collectives/specialVueFakeDummyForL10nScript.js:112
 msgid "Delete corresponding circle along with the collective?"
-msgstr "Ali želite izbrisati tudi z zbirko povezan krog?"
+msgstr "Usunąć powiązany krąg wraz z kolektywem?"
 
 #. TRANSLATORS src/components/Nav/CollectivesTrash.vue:58
 #: /collectives/specialVueFakeDummyForL10nScript.js:114
 msgid "Cancel"
-msgstr "Prekliči"
+msgstr "Anuluj"
 
 #. TRANSLATORS src/components/Nav/CollectivesTrash.vue:61
 #: /collectives/specialVueFakeDummyForL10nScript.js:116
 msgid "Only collective"
-msgstr "Le zbirko"
+msgstr "Tylko kolektyw"
 
 #. TRANSLATORS src/components/Nav/CollectivesTrash.vue:66
 #: /collectives/specialVueFakeDummyForL10nScript.js:118
 #: /collectives/specialVueFakeDummyForL10nScript.js:122
 msgid "Collective and circle"
-msgstr "Zbirko in krog"
+msgstr "Kolektyw i krąg"
 
 #. TRANSLATORS src/components/Nav/CollectivesTrash.vue:71
 #: /collectives/specialVueFakeDummyForL10nScript.js:120
 msgid "Only circle owners can delete a circle"
-msgstr "Le lastnik kroga lahko krog izbriše."
+msgstr "Tylko właściciele kręgu mogą usunąć krąg"
 
 #. TRANSLATORS src/components/Nav/NewCollective.vue:24
 #. TRANSLATORS src/views/Home.vue:13
@@ -410,12 +413,12 @@ msgstr "Le lastnik kroga lahko krog izbriše."
 #: /collectives/specialVueFakeDummyForL10nScript.js:250
 #: /collectives/specialVueFakeDummyForL10nScript.js:252
 msgid "Create new collective"
-msgstr "Ustvari novo zbirko"
+msgstr "Utwórz nowy kolektyw"
 
 #. TRANSLATORS src/components/Nav/NewCollective.vue:33
 #: /collectives/specialVueFakeDummyForL10nScript.js:126
 msgid "Create collective for existing circle"
-msgstr "Ustvari zbirko za obstoječ krog"
+msgstr "Utwórz kolektyw dla istniejącego kręgu"
 
 #. TRANSLATORS src/components/Nav/NewCollective.vue:43
 #. TRANSLATORS src/components/Page/PageActionMenu.vue:137
@@ -424,354 +427,332 @@ msgstr "Ustvari zbirko za obstoječ krog"
 #: /collectives/specialVueFakeDummyForL10nScript.js:148
 #: /collectives/specialVueFakeDummyForL10nScript.js:174
 msgid "Select emoji"
-msgstr "Izbor izrazne ikone"
+msgstr "Wybierz emotikon"
 
 #. TRANSLATORS src/components/Nav/NewCollective.vue:53
 #: /collectives/specialVueFakeDummyForL10nScript.js:132
 msgid "New collective name"
-msgstr "Ime nove zbirke"
+msgstr "Nowa nazwa kolektywu"
 
 #. TRANSLATORS src/components/Nav/NewCollective.vue:61
 #: /collectives/specialVueFakeDummyForL10nScript.js:134
 msgid "Select circle..."
-msgstr "Izbor kroga ..."
+msgstr "Wybierz krąg..."
 
 #. TRANSLATORS src/components/Nav/NewCollective.vue:65
 #: /collectives/specialVueFakeDummyForL10nScript.js:136
 msgid "Create a new collective"
-msgstr "Ustvari novo zbirko"
+msgstr "Stwórz nowy kolektyw"
 
 #. TRANSLATORS src/components/Nav/NewCollective.vue:70
 #: /collectives/specialVueFakeDummyForL10nScript.js:138
 msgid "Cancel creating a new collective"
-msgstr "Prekliči ustvarjanje nove zbirke"
+msgstr "Anuluj tworzenie nowego kolektywu"
 
 #. TRANSLATORS src/components/Nav.vue:7
 #: /collectives/specialVueFakeDummyForL10nScript.js:140
 msgid "Select a collective"
-msgstr "Izbor zbirke"
+msgstr "Wybierz kolektyw"
 
 #. TRANSLATORS src/components/Page/PageActionMenu.vue:7
 #: /collectives/specialVueFakeDummyForL10nScript.js:142
 msgid "Show in Files"
-msgstr "Pokaži v Datotekah"
+msgstr "Pokarz w plikach"
 
 #. TRANSLATORS src/components/Page/PageActionMenu.vue:132
 #: /collectives/specialVueFakeDummyForL10nScript.js:144
 msgid "Edit template for subpages"
-msgstr "Uredi predlogo podstrani"
+msgstr "Edytuj szablon dla podstron"
 
 #. TRANSLATORS src/components/Page/PageActionMenu.vue:133
 #: /collectives/specialVueFakeDummyForL10nScript.js:146
 msgid "Add template for subpages"
-msgstr "Dodaj predlogo za podstran"
+msgstr "Dodaj szablon dla podstron"
 
 #. TRANSLATORS src/components/Page/PageActionMenu.vue:142
 #: /collectives/specialVueFakeDummyForL10nScript.js:150
 msgid "Cannot delete page with subpages"
-msgstr "Ni mogoče izbrisati strani s podstranmi"
+msgstr "Nie można usunąć strony z podstronami"
 
 #. TRANSLATORS src/components/Page/PageActionMenu.vue:144
 #: /collectives/specialVueFakeDummyForL10nScript.js:152
 msgid "Delete template"
-msgstr "Izbriši predlogo"
+msgstr "Usuń szablon"
 
 #. TRANSLATORS src/components/Page/PageActionMenu.vue:145
 #: /collectives/specialVueFakeDummyForL10nScript.js:154
 msgid "Delete page"
-msgstr "Izbriši stran"
+msgstr "Usuń stronę"
 
 #. TRANSLATORS src/components/Page/PageNotFound.vue:3
 #: /collectives/specialVueFakeDummyForL10nScript.js:156
 msgid "Page not found:"
-msgstr "Strani ni mogoče najti:"
+msgstr "Nie znaleziono strony:"
 
 #. TRANSLATORS src/components/Page/PageNotFound.vue:10
 #: /collectives/specialVueFakeDummyForL10nScript.js:158
 msgid "Could not find the Page."
-msgstr "Strani ni mogoče najti."
+msgstr "Nie można znaleźć strony."
 
 #. TRANSLATORS src/components/Page/PageNotFound.vue:13
 #: /collectives/specialVueFakeDummyForL10nScript.js:160
 msgid "Select a page from the list or create a new one."
-msgstr "Izberite stran na seznamu, ali pa ustvarite novo."
+msgstr "Zaznacz stronę z listy lub stwórz nową."
 
 #. TRANSLATORS src/components/Page/Version.vue:8
 #: /collectives/specialVueFakeDummyForL10nScript.js:162
 #: /collectives/specialVueFakeDummyForL10nScript.js:164
 msgid "Restore this version"
-msgstr "Obnovi to različico"
+msgstr "Przywróć tą wersję"
 
 #. TRANSLATORS src/components/Page/Version.vue:126
 #: /collectives/specialVueFakeDummyForL10nScript.js:168
 msgid "Reverted {page} to revision {timestamp}."
-msgstr "Povrni stran {page} na predelavo {timestamp}."
+msgstr "Przywrócono {page} do wersji {timestamp}."
 
 #. TRANSLATORS src/components/Page/Version.vue:131
 #: /collectives/specialVueFakeDummyForL10nScript.js:170
 msgid "Failed to revert {page} to revision {timestamp}."
-msgstr "Obnovitev strani {page} na predelavo {timestamp} je spodletela."
+msgstr "Nie udało się przywrócić {page} do wersji {timestamp}."
 
 #. TRANSLATORS src/components/Page.vue:15
 #: /collectives/specialVueFakeDummyForL10nScript.js:172
 msgid "Select emoji for page"
-msgstr "Izbor izrazne ikone za spletno stran"
+msgstr "Wybierz emotikon dla strony"
 
 #. TRANSLATORS src/components/Page.vue:47
 #. TRANSLATORS src/components/PageList/Item.vue:199
 #: /collectives/specialVueFakeDummyForL10nScript.js:176
 #: /collectives/specialVueFakeDummyForL10nScript.js:196
 msgid "Template"
-msgstr "Predloga"
+msgstr "Szablon"
 
 #. TRANSLATORS src/components/Page.vue:53
 #: /collectives/specialVueFakeDummyForL10nScript.js:178
 msgid "Title"
-msgstr "Naslov"
+msgstr "Tytuł"
 
 #. TRANSLATORS src/components/Page.vue:59
 #: /collectives/specialVueFakeDummyForL10nScript.js:180
 #: /collectives/specialVueFakeDummyForL10nScript.js:182
 msgid "Stop editing"
-msgstr "Zaključi z urejanjem"
+msgstr "Zatrzymaj edytowanie"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:180
 #: /collectives/specialVueFakeDummyForL10nScript.js:182
 msgid "Start editing"
-msgstr "Začni z urejanjem"
+msgstr "Zacznij edycję"
 
 #. TRANSLATORS src/components/Page.vue:71
 #: /collectives/specialVueFakeDummyForL10nScript.js:184
 msgid "Done"
-msgstr "Končano"
+msgstr "Zrobione"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:184
 msgid "Edit"
-msgstr "Uredi"
+msgstr "Edycja"
 
 #. TRANSLATORS src/components/Page.vue:83
 #: /collectives/specialVueFakeDummyForL10nScript.js:186
 msgid "Toggle page sidebar"
-msgstr "Preklopi bočno okno strani"
+msgstr "Przełącz pasek boczny strony"
 
 #. TRANSLATORS src/components/Page.vue:92
 #: /collectives/specialVueFakeDummyForL10nScript.js:188
 msgid "Page content"
-msgstr "Vsebina strani"
+msgstr "Zawartość strony"
 
 #. TRANSLATORS src/components/Page.vue:442
 #: /collectives/specialVueFakeDummyForL10nScript.js:192
 msgid "Could not rename the page"
-msgstr "Strani ni mogoče preimenovati."
+msgstr "Nie można zmienić nazwy strony"
 
 #. TRANSLATORS src/components/PageList/Item.vue:34
 #: /collectives/specialVueFakeDummyForL10nScript.js:194
 msgid "Expand subpage list"
-msgstr "Razširi seznam podstrani"
+msgstr "Rozwiń listę podstron"
 
 #. TRANSLATORS src/components/PageList/Item.vue:208
 #: /collectives/specialVueFakeDummyForL10nScript.js:198
 msgid "Add a page"
-msgstr "Dodaj stran"
+msgstr "Dodaj stronę"
 
 #. TRANSLATORS src/components/PageList/Item.vue:209
 #: /collectives/specialVueFakeDummyForL10nScript.js:200
 msgid "Add a subpage"
-msgstr "Dodaj podstran"
+msgstr "Dodaj podstronę"
 
 #. TRANSLATORS src/components/PageList.vue:7
 #: /collectives/specialVueFakeDummyForL10nScript.js:202
 msgid "Search pages ..."
-msgstr "Preišči strani ..."
+msgstr "Szukaj stron ..."
 
 #. TRANSLATORS src/components/PageList.vue:11
 #: /collectives/specialVueFakeDummyForL10nScript.js:204
 #: /collectives/specialVueFakeDummyForL10nScript.js:206
 msgid "Hide templates"
-msgstr "Skrij predloge"
+msgstr "Ukryj szablony"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:204
 #: /collectives/specialVueFakeDummyForL10nScript.js:206
 msgid "Show templates"
-msgstr "Pokaži predloge"
+msgstr "Pokaż szablony"
 
 #. TRANSLATORS src/components/PageList.vue:20
 #: /collectives/specialVueFakeDummyForL10nScript.js:208
 msgid "Sort order"
-msgstr "Razvrščanje"
+msgstr "Kolejność sortowania"
 
 #. TRANSLATORS src/components/PageList.vue:33
 #: /collectives/specialVueFakeDummyForL10nScript.js:210
 msgid "Sort by custom order"
-msgstr "Po meri"
+msgstr "Sortuj według własne porządku"
 
 #. TRANSLATORS src/components/PageList.vue:42
 #: /collectives/specialVueFakeDummyForL10nScript.js:212
 msgid "Sort recently changed first"
-msgstr "Najprej nedavno spremenjene"
+msgstr "Sortuj ostatnio zmienione jako pierwsze"
 
 #. TRANSLATORS src/components/PageList.vue:51
 #: /collectives/specialVueFakeDummyForL10nScript.js:214
 msgid "Sort by title"
-msgstr "Po naslovu"
+msgstr "Sortuj po tytule"
 
 #. TRANSLATORS src/components/PageList.vue:79
 #: /collectives/specialVueFakeDummyForL10nScript.js:216
 msgid "Sorted by title"
-msgstr "Razvrščeno po naslovu"
+msgstr "Posortowano po tytule"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:216
 msgid "Sorted by recently changed"
-msgstr "Razvrščeno po času zadnje spremembe"
+msgstr "Posortowano według ostatnio zmienionych"
 
 #. TRANSLATORS src/components/PageList.vue:80
 #: /collectives/specialVueFakeDummyForL10nScript.js:218
 msgid "Switch back to default sort order"
-msgstr "Preklopi na privzet način razvrščanja"
+msgstr "Przywróć domyślne sortowanie"
 
 #. TRANSLATORS src/components/PageList.vue:220
 #: /collectives/specialVueFakeDummyForL10nScript.js:220
 msgid "Could not save page order for collective"
-msgstr "Ni mogoče shraniti razvrstitve strani za to zbirko"
+msgstr "Nie można zachować kolejność stron dla kolektywu"
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabBacklinks.vue:40
 #: /collectives/specialVueFakeDummyForL10nScript.js:222
 msgid "No backlinks available"
-msgstr "Ni povratnih povezav"
+msgstr "Brak dostępnych linków wstecznych"
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabBacklinks.vue:42
 #: /collectives/specialVueFakeDummyForL10nScript.js:224
 msgid "If other pages link to this one, they will be listed here."
-msgstr "Če se na to stran povezujejo druge strani, bodo izpisane na tem mestu."
+msgstr "Jeśli inne strony prowadzą do tej strony, zostaną tutaj wymienione."
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabBacklinks.vue:123
 #: /collectives/specialVueFakeDummyForL10nScript.js:226
 msgid "Could not get page backlinks"
-msgstr "Ni mogoče pridobiti povratnih povezav strani"
+msgstr "Nie udało się uzyskać linków zwrotnych do strony"
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:25
 #: /collectives/specialVueFakeDummyForL10nScript.js:228
 msgid "Current version"
-msgstr "Trenutna različica"
+msgstr "Obecna wersja"
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:59
 #: /collectives/specialVueFakeDummyForL10nScript.js:230
 msgid "No other versions available"
-msgstr "Ni drugih različic"
+msgstr "Brak innych dostępnych wersji"
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:61
 #: /collectives/specialVueFakeDummyForL10nScript.js:232
 msgid "After editing you can find old versions of the page here."
-msgstr "Po urejanju so starejše kopije strani zbrane na tem mestu."
+msgstr "Po edycji możesz znaleźć stare wersje strony tutaj."
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:167
 #: /collectives/specialVueFakeDummyForL10nScript.js:234
 msgid "Could not get page versions"
-msgstr "Ni mogoče pridobiti različic strani"
+msgstr "Nie udało się pobrać wersji strony"
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:138
 #: /collectives/specialVueFakeDummyForL10nScript.js:236
 #: /collectives/src/util/xmlToVersionsList.js:30
 msgid "%n byte"
 msgid_plural "%n bytes"
-msgstr[0] "%n bajt"
-msgstr[1] "%n bajta"
-msgstr[2] "%n bajti"
-msgstr[3] "%n bajtov"
+msgstr[0] "bajt"
+msgstr[1] "bajty"
+msgstr[2] "bajtów"
 
 #. TRANSLATORS src/components/PageSidebar.vue:7
 #: /collectives/specialVueFakeDummyForL10nScript.js:238
 msgid "Backlinks"
-msgstr "Povratne povezave"
+msgstr "Linki wsteczne"
 
 #. TRANSLATORS src/components/PageSidebar.vue:12
 #: /collectives/specialVueFakeDummyForL10nScript.js:240
 msgid "Pages that link to this one"
-msgstr "Strani, ki se povezujejo na to stran"
+msgstr "Strony które kierują tutaj"
 
 #. TRANSLATORS src/components/PageSidebar.vue:20
 #: /collectives/specialVueFakeDummyForL10nScript.js:242
 msgid "Versions"
-msgstr "Različice"
+msgstr "Wersje"
 
 #. TRANSLATORS src/components/PageSidebar.vue:25
 #: /collectives/specialVueFakeDummyForL10nScript.js:244
 msgid "Old versions of this page"
-msgstr "Stare različice te strani"
+msgstr "Stara wersja tej strony"
 
 #. TRANSLATORS src/views/Home.vue:9
 #: /collectives/specialVueFakeDummyForL10nScript.js:248
 msgid "Come, organize and build shared knowledge!"
-msgstr "No, začnite izgrajevati skupno vsebino!"
+msgstr "Przyjdź, uporządkuj i buduj wspólną wiedzę!"
 
 #: /collectives/src/mixins/CopyToClipboardMixin.js:36
 msgid "Link copied to the clipboard."
-msgstr "Povezava je kopirana v odložišče."
+msgstr "Łącze skopiowane do schowka."
 
 #: /collectives/src/mixins/CopyToClipboardMixin.js:41
 msgid "Could not copy link to the clipboard:"
-msgstr "Povezave ni mogoče kopirati v odložišče:"
+msgstr "Nie można skopiować łącza do schowka:"
 
 #: /collectives/src/mixins/pageMixin.js:76
 #: /collectives/src/mixins/pageMixin.js:100
 msgid "Could not create the page"
-msgstr "Strani ni mogoče ustvariti"
+msgstr "Nie można utworzyć tej strony"
 
 #: /collectives/src/mixins/pageMixin.js:87
 msgid "New Page"
-msgstr "Nova stran"
+msgstr "Nowa strona"
 
 #: /collectives/src/mixins/pageMixin.js:119
 msgid "Could not save emoji for page"
-msgstr "Ni mogoče shraniti izraznih ikon za to stran"
+msgstr "Nie można zapisać emotikona dla tej strony"
 
 #: /collectives/src/mixins/pageMixin.js:142
 msgid "Could not move page"
-msgstr "Ni mogoče premakniti strani"
+msgstr "Nie można przenieść strony"
 
 #: /collectives/src/mixins/pageMixin.js:168
 msgid "Could not delete the page"
-msgstr "Strani ni mogoče izbrisati"
+msgstr "Nie można usunąć tej strony"
 
 #: /collectives/src/mixins/pageMixin.js:180
 msgid "Page deleted"
-msgstr "Stran je izbrisana"
+msgstr "Strona usunięta"
 
 #: /collectives/src/mixins/pageMixin.js:201
 #: /collectives/src/mixins/pageMixin.js:240
 #: /collectives/src/mixins/pageMixin.js:269
 msgid "Could not change page order"
-msgstr "Ni mogoče spremeniti vrstnega reda strani"
+msgstr "Nie można zmienić kolejności strony"
 
 #: /collectives/templates/error.php:4
 msgid "Error: Missing apps"
-msgstr "Napaka: manjkajo programi"
+msgstr "Błąd: Brakująca aplikacja"
 
 #: /collectives/templates/error.php:9
 msgid "The following dependency apps are missing: "
-msgstr "Manjkajo navedeni odvisni programi: "
+msgstr "Brakująca zależna aplikacja: "
 
 #: /collectives/templates/error.php:27
 msgid "Please ask the administrator to enable these apps."
-msgstr "Programe lahko omogoči le skrbnik sistema."
-
-#~ msgid "in page {page} from collective {collective}"
-#~ msgstr "na strani {page} v zbirki {collective}"
-
-#~ msgid "Collapse subpage list"
-#~ msgstr "Zloži seznam podstrani"
-
-#~ msgid "Print"
-#~ msgstr "Natisni"
-
-#~ msgid "Hide all subpages"
-#~ msgstr "Skrij vse podstrani"
-
-#~ msgid "Show all subpages"
-#~ msgstr "Pokaži vse podstrani"
-
-#~ msgid "Sort by last modification"
-#~ msgstr "Po zadnji spremembi"
-
-#~ msgid "Delete"
-#~ msgstr "Izbriši"
+msgstr "Proszę poproś administratora o włączenie tych aplikacji."

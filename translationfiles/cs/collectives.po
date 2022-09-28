@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-09-08 11:47+0200\n"
-"PO-Revision-Date: 2022-08-06 06:21+0000\n"
+"PO-Revision-Date: 2022-09-10 06:19+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/cs/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 
 #. TRANSLATORS src/components/Page.vue:193
 #. TRANSLATORS src/views/Home.vue:4
@@ -607,7 +607,7 @@ msgstr "Pořadí řazení"
 #. TRANSLATORS src/components/PageList.vue:33
 #: /collectives/specialVueFakeDummyForL10nScript.js:210
 msgid "Sort by custom order"
-msgstr ""
+msgstr "Uživatelsky určené pořadí"
 
 #. TRANSLATORS src/components/PageList.vue:42
 #: /collectives/specialVueFakeDummyForL10nScript.js:212
@@ -622,16 +622,16 @@ msgstr "Řadit podle nadpisu"
 #. TRANSLATORS src/components/PageList.vue:79
 #: /collectives/specialVueFakeDummyForL10nScript.js:216
 msgid "Sorted by title"
-msgstr ""
+msgstr "Seřazeno podle názvu"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:216
 msgid "Sorted by recently changed"
-msgstr ""
+msgstr "Seřazeno podle nedávné změny"
 
 #. TRANSLATORS src/components/PageList.vue:80
 #: /collectives/specialVueFakeDummyForL10nScript.js:218
 msgid "Switch back to default sort order"
-msgstr ""
+msgstr "Přepnout zpět na výchozí pořadí řazení"
 
 #. TRANSLATORS src/components/PageList.vue:220
 #: /collectives/specialVueFakeDummyForL10nScript.js:220
@@ -732,7 +732,7 @@ msgstr "Nedaří se uložit emotikonu pro stránku"
 
 #: /collectives/src/mixins/pageMixin.js:142
 msgid "Could not move page"
-msgstr ""
+msgstr "Stránku se nepodařilo přesunout"
 
 #: /collectives/src/mixins/pageMixin.js:168
 msgid "Could not delete the page"
@@ -746,7 +746,7 @@ msgstr "Stránka smazána"
 #: /collectives/src/mixins/pageMixin.js:240
 #: /collectives/src/mixins/pageMixin.js:269
 msgid "Could not change page order"
-msgstr ""
+msgstr "Nepodařilo se změnit pořadí stránek"
 
 #: /collectives/templates/error.php:4
 msgid "Error: Missing apps"

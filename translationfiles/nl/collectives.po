@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-09-08 11:47+0200\n"
-"PO-Revision-Date: 2022-08-07 09:19+0000\n"
+"PO-Revision-Date: 2022-09-10 06:19+0000\n"
 "Last-Translator: Jeroen Bos <jeroen@groningen.network>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/nl/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 
 #. TRANSLATORS src/components/Page.vue:193
 #. TRANSLATORS src/views/Home.vue:4
@@ -606,7 +606,7 @@ msgstr "Sorteervolgorde"
 #. TRANSLATORS src/components/PageList.vue:33
 #: /collectives/specialVueFakeDummyForL10nScript.js:210
 msgid "Sort by custom order"
-msgstr ""
+msgstr "Sorteren op aangepaste volgorde"
 
 #. TRANSLATORS src/components/PageList.vue:42
 #: /collectives/specialVueFakeDummyForL10nScript.js:212
@@ -621,16 +621,16 @@ msgstr "Sorteren op titel"
 #. TRANSLATORS src/components/PageList.vue:79
 #: /collectives/specialVueFakeDummyForL10nScript.js:216
 msgid "Sorted by title"
-msgstr ""
+msgstr "Gesorteerd op titel"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:216
 msgid "Sorted by recently changed"
-msgstr ""
+msgstr "Gesorteerd op recent gewijzigd"
 
 #. TRANSLATORS src/components/PageList.vue:80
 #: /collectives/specialVueFakeDummyForL10nScript.js:218
 msgid "Switch back to default sort order"
-msgstr ""
+msgstr "Terug naar standaard sorteervolgorde"
 
 #. TRANSLATORS src/components/PageList.vue:220
 #: /collectives/specialVueFakeDummyForL10nScript.js:220
@@ -728,7 +728,7 @@ msgstr "Kon emoji niet opslaan voor pagina"
 
 #: /collectives/src/mixins/pageMixin.js:142
 msgid "Could not move page"
-msgstr ""
+msgstr "Kan pagina niet verplaatsen"
 
 #: /collectives/src/mixins/pageMixin.js:168
 msgid "Could not delete the page"
@@ -742,7 +742,7 @@ msgstr "Pagina verwijderd"
 #: /collectives/src/mixins/pageMixin.js:240
 #: /collectives/src/mixins/pageMixin.js:269
 msgid "Could not change page order"
-msgstr ""
+msgstr "Kan paginavolgorde niet wijzigen"
 
 #: /collectives/templates/error.php:4
 msgid "Error: Missing apps"
