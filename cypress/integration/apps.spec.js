@@ -26,7 +26,7 @@ describe('The apps', function() {
 		it('shows up in the app list', function() {
 			cy.login('admin', { route: 'settings/apps/installed/circles' })
 			cy.get('#app-sidebar-vue .app-details input.enable')
-				.should('have.value', 'Disable')
+				.should('not.have.class', 'primary')
 		})
 
 		it('shows circles in the contacts app', function() {
@@ -41,7 +41,7 @@ describe('The apps', function() {
 		it('shows up in the app list', function() {
 			cy.login('admin', { route: 'settings/apps/installed/collectives' })
 			cy.get('#app-sidebar-vue .app-details input.enable')
-				.should('have.value', 'Disable')
+				.should('not.have.class', 'primary')
 		})
 
 		it('allows creating a new collective', function() {
@@ -61,11 +61,13 @@ describe('The apps', function() {
 	describe('Disabled circles app does not break files view', function() {
 
 		before(function() {
-			cy.toggleApp('circles')
+			cy.login('admin', { route: '/' })
+			cy.disableApp('circles')
 		})
 
 		after(function() {
-			cy.toggleApp('circles')
+			cy.login('admin', { route: '/' })
+			cy.enableApp('circles')
 		})
 
 		it('Renders the default files list', function() {

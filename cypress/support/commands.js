@@ -43,10 +43,17 @@ Cypress.Commands.add('logout', () => {
 /**
  * Enable/disable a Nextcloud app
  */
-Cypress.Commands.add('toggleApp', (appName) => {
-	cy.login('admin', { route: `/settings/apps/installed/${appName}` })
-	cy.get('#app-sidebar-vue .app-details input.enable').click()
-	cy.logout()
+Cypress.Commands.add('enableApp', appName => cy.setAppEnabled(appName))
+Cypress.Commands.add('disableApp', appName => cy.setAppEnabled(appName, false))
+Cypress.Commands.add('setAppEnabled', (appName, value = true) => {
+	cy.window().then(async win => {
+		const verb = value ? 'enable' : 'disable'
+		const api = `${Cypress.env('baseUrl')}/index.php/settings/apps/${verb}`
+		return axios.post(api,
+			{ appIds: [appName] },
+			{ headers: { requesttoken: win.OC.requestToken } },
+		)
+	})
 })
 
 /**
