@@ -1,25 +1,25 @@
 # Witaj w swoim nowym kolektywie
 
-**Come, organize and build shared knowledge!**
+**Gromadź się w kolektywach, aby budować wspólną wiedzę.**
 
 
-### 👥 Invite new people to the collective
+### 👥 Zapraszaj nowych ludzi do kolektywu
 
-Whether you want to add your friends or whole groups, follow the "manage members" link that you find in the action menu inside the collectives list on the left.
+Niezależnie od tego, czy chcesz dodać znajomych, czy całe grupy, kliknij link „zarządzaj członkami”, który znajdziesz w menu akcji na liście kolektywów po lewej stronie.
 
-### 🌱 Bring life to your collective
+### 🌱 Tchnij życie do twojego kolektywu
 
-Create pages and share your thoughts that really matter. Whether it's a shared knowledge repository for the community or a handbook for your organisation – Collectives works!
+Twórz strony i dziel się swoimi przemyśleniami, które naprawdę mają znaczenie. Niezależnie od tego, czy jest to wspólne repozytorium wiedzy dla społeczności, czy podręcznik dla Twojej organizacji – Kolektywy działają!
 
-### 🛋️ Edit this landing page to feel like home
+### 🛋️ Edytuj tę stronę, aby poczuć się jak w domu
 
-Push the pencil button to get started! ↗️
+Naciśnij przycisk ołówka, aby rozpocząć! ↗️
 
 
-## Also good to know
+## Również dobrze wiedzieć
 
-* Multiple people can edit the same page simultaneously.
-* Link local pages by selecting text and choosing "link file". Drag & drop from page list into the editor also works.
-* Add templates for future subpages ("Show templates" -> "Add template for subpages")
-* Find out more about this App in the [documentation](https://collectivecloud.gitlab.io/collectives/).
-* Ask [the community](https://help.nextcloud.com/c/apps/collectives/174) for help in case of questions.
+* Wiele osób może jednocześnie edytować tę samą stronę.
+* Połącz strony lokalne, zaznaczając tekst i wybierając „link do pliku”. Przeciągnij i upuść z listy stron do edytora również działa.
+* Dodaj szablony dla przyszłych podstron („Pokaż szablony” -> „Dodaj szablon dla podstron”)
+* Dowiedz się więcej o tej aplikacji w [dokumentacji] (https://collectivecloud.gitlab.io/collectives/).
+* W razie pytań poproś [społeczność](https://help.nextcloud.com/c/apps/collectives/174) o pomoc.
