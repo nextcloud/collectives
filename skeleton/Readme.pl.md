@@ -1,4 +1,4 @@
-# Welcome to your new collective
+# Witaj w swoim nowym kolektywie
 
 **Come, organize and build shared knowledge!**
 
