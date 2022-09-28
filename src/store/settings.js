@@ -26,7 +26,11 @@ export default {
 		 */
 		async [GET_COLLECTIVES_FOLDER]({ commit }) {
 			const response = await axios.get(generateOcsUrl('apps/collectives/api/v1.0/settings/user/user_folder'))
-			commit(SET_COLLECTIVES_FOLDER, response.data.ocs.data)
+			if (response.data.ocs) {
+				commit(SET_COLLECTIVES_FOLDER, response.data.ocs.data)
+			} else {
+				throw response.data
+			}
 		},
 
 		/**
