@@ -43,9 +43,12 @@ Cypress.Commands.add('logout', () => {
 /**
  * Enable/disable a Nextcloud app
  */
-Cypress.Commands.add('toggleApp', (appName) => {
+Cypress.Commands.add('setAppEnabled', (appName, value) => {
 	cy.login('admin', { route: `/settings/apps/installed/${appName}` })
-	cy.get('#app-sidebar-vue .app-details input.enable').click()
+	cy.get('#app-sidebar-vue .app-details input.enable')
+		.should(value ? 'have.class' : 'not.have.class', 'primary')
+		.click()
+		.should(value ? 'not.have.class' : 'have.class', 'primary')
 	cy.logout()
 })
 
