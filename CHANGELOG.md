@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.0.0-beta3 - 2022.09.30
+
+### 🐛Fixes
+
+* 🖱️ Fix moving pages in public shares.
+* 👽 Force-setup the full filesystem if collective folder not found. (#332)
+* 🎩 Start html title with actual page name. (#361)
+* 🧹 Hide unneeded UI elements in public share.
+* 🙍 Display users display name in frontend of user id. (#359).
+
 ## 2.0.0-beta2 - 2022.09.28
 
 ### 🐛Fixes
