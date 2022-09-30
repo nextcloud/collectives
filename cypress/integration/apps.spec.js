@@ -23,12 +23,6 @@
 describe('The apps', function() {
 	describe('Circles', function() {
 
-		it('shows up in the app list', function() {
-			cy.login('admin', { route: 'settings/apps/installed/circles' })
-			cy.get('#app-sidebar-vue .app-details input.enable')
-				.should('not.have.class', 'primary')
-		})
-
 		it('shows circles in the contacts app', function() {
 			cy.login('jane', { route: '/apps/contacts' })
 			cy.get('.app-navigation')
@@ -38,11 +32,6 @@ describe('The apps', function() {
 	})
 
 	describe('Collectives', function() {
-		it('shows up in the app list', function() {
-			cy.login('admin', { route: 'settings/apps/installed/collectives' })
-			cy.get('#app-sidebar-vue .app-details input.enable')
-				.should('not.have.class', 'primary')
-		})
 
 		it('allows creating a new collective', function() {
 			cy.login('jane')
