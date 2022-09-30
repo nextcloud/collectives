@@ -39,3 +39,13 @@ export default {
 	},
 }
 </script>
+
+<style>
+@media print {
+	#content-vue {
+		position: static;
+		overflow: visible;
+		height: auto;
+	}
+}
+</style>
