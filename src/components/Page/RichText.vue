@@ -219,10 +219,6 @@ export default {
 
 <style lang="scss">
 @media print {
-	#editor-wrapper, #text-wrapper {
-		display: block !important;
-		overflow: visible !important;
-	}
 
 	h1, h2, h3 {
 		page-break-after: avoid;
