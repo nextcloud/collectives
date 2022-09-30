@@ -1,11 +1,7 @@
 <template>
 	<NcAppContent>
 		<CollectivePrint v-if="currentCollective" />
-		<NcEmptyContent v-else-if="loading('collectives')">
-			<template #icon>
-				<NcLoadingIcon />
-			</template>
-		</NcEmptyContent>
+		<NcEmptyContent v-else-if="loading('collectives')" />
 		<CollectiveNotFound v-else />
 	</NcAppContent>
 </template>
@@ -13,7 +9,7 @@
 <script>
 
 import { mapGetters, mapMutations } from 'vuex'
-import { NcAppContent, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
+import { NcAppContent, NcEmptyContent } from '@nextcloud/vue'
 import CollectivePrint from '../components/CollectivePrint.vue'
 import CollectiveNotFound from '../components/CollectiveNotFound.vue'
 
@@ -25,7 +21,6 @@ export default {
 		CollectivePrint,
 		CollectiveNotFound,
 		NcEmptyContent,
-		NcLoadingIcon,
 	},
 
 	computed: {
@@ -44,3 +39,13 @@ export default {
 	},
 }
 </script>
+
+<style>
+@media print {
+	#content-vue {
+		position: static;
+		overflow: visible;
+		height: auto;
+	}
+}
+</style>

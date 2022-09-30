@@ -84,10 +84,4 @@ export default {
 .app-sidebar-tab-desc {
 	font-weight: bold;
 }
-
-@media print {
-	.app-content-list {
-		display: none !important;
-	}
-}
 </style>

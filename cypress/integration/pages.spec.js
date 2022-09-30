@@ -247,4 +247,23 @@ describe('Page', function() {
 			cy.get('.app-sidebar-tabs__content').should('contain', 'Day 2')
 		})
 	})
+
+	describe('Print view', function() {
+		it('renders all the pages', function() {
+			let printStub
+			cy.visit('/apps/collectives/_/print/Our%20Garden', {
+				onBeforeLoad: (win) => {
+					printStub = cy.stub(win, 'print').as('print')
+				},
+			})
+			cy.get('main')
+				.should('contain', 'Preparing collective for exporting or printing')
+			cy.get('#page-title-collective').should('contain', 'Our Garden')
+			cy.get('main').should('contain', 'Day 2')
+			cy.get('@print').should('be.called')
+				.then(() => {
+					printStub.restore()
+				})
+		})
+	})
 })

@@ -212,23 +212,18 @@ export default {
 		 *
 		 * @param {number} parentId ID of the parent page
 		 * @param {number} pageId ID of the page to remove
-		 * @param {number} newIndex New index for pageId
+		 * @param {number} newIndex New index for pageId (prepend by default)
 		 */
-		async subpageOrderAdd(parentId, pageId, newIndex) {
+		async subpageOrderAdd(parentId, pageId, newIndex = 0) {
 			const parentPage = this.pages.find(p => (p.id === parentId))
 
 			// Get current subpage order of parentId
-			const subpageOrder = this.sortedSubpages(parentId)
+			const subpageOrder = this.sortedSubpages(parentId, 'byOrder')
 				.map(p => p.id)
 				.filter(id => (id !== pageId))
 
-			if (newIndex) {
-				// Add pageId to index position
-				subpageOrder.splice(newIndex, 0, pageId)
-			} else {
-				// Append pageId to the end if no index is provided
-				subpageOrder.unshift(pageId)
-			}
+			// Add pageId to index position
+			subpageOrder.splice(newIndex, 0, pageId)
 
 			try {
 				await this.dispatchSetPageSubpageOrder({
