@@ -2,7 +2,9 @@
 	<div class="text-menubar">
 		<div v-if="currentPage.lastUserId" class="infobar-item infobar-lastupdate">
 			<div class="item-text">
-				<LastUserBubble :last-user-id="currentPage.lastUserId" :timestamp="currentPage.timestamp" />
+				<LastUserBubble :last-user-id="currentPage.lastUserId"
+					:last-user-display-name="currentPage.lastUserDisplayName"
+					:timestamp="currentPage.timestamp" />
 			</div>
 		</div>
 	</div>

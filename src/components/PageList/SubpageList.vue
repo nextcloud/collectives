@@ -8,6 +8,7 @@
 			:title="page.title"
 			:timestamp="page.timestamp"
 			:last-user-id="page.lastUserId"
+			:last-user-display-name="page.lastUserDisplayName"
 			:emoji="page.emoji"
 			:level="level"
 			:can-edit="currentCollectiveCanEdit"

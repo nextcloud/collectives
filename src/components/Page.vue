@@ -66,6 +66,7 @@
 				:parent-id="currentPage.parentId"
 				:timestamp="currentPage.timestamp"
 				:last-user-id="currentPage.lastUserId"
+				:last-user-display-name="currentPage.lastUserDisplayName"
 				:is-landing-page="landingPage"
 				:is-template="isTemplatePage" />
 			<NcActions v-if="!showing('sidebar')">

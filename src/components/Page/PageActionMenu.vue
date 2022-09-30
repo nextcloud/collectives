@@ -36,8 +36,8 @@
 			</template>
 			{{ deletePageString }}
 		</NcActionButton>
-		<NcActionSeparator v-if="lastUserId" />
-		<PageActionLastUser :last-user-id="lastUserId" :timestamp="timestamp" />
+		<NcActionSeparator v-if="lastUserId && lastUserDisplayName" />
+		<PageActionLastUser :last-user-id="lastUserId" :last-user-display-name="lastUserDisplayName" :timestamp="timestamp" />
 	</NcActions>
 </template>
 
@@ -87,6 +87,10 @@ export default {
 		timestamp: {
 			type: Number,
 			required: true,
+		},
+		lastUserDisplayName: {
+			type: String,
+			default: null,
 		},
 		lastUserId: {
 			type: String,

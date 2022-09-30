@@ -17,6 +17,7 @@ use OCA\Collectives\Service\CollectiveServiceBase;
 use OCA\Collectives\Service\NotPermittedException;
 use OCA\Collectives\Service\PageService;
 use OCP\IConfig;
+use OCP\IUserManager;
 use PHPUnit\Framework\TestCase;
 
 class PageServiceTest extends TestCase {
@@ -59,11 +60,15 @@ class PageServiceTest extends TestCase {
 		$userFolderHelper->method('get')
 			->willReturn($userFolder);
 
+		$userManager = $this->getMockBuilder(IUserManager::class)
+			->disableOriginalConstructor()
+			->getMock();
+
 		$this->config = $this->getMockBuilder(IConfig::class)
 			->disableOriginalConstructor()
 			->getMock();
 
-		$this->service = new PageService($this->pageMapper, $this->nodeHelper, $this->collectiveService, $userFolderHelper, $this->config);
+		$this->service = new PageService($this->pageMapper, $this->nodeHelper, $this->collectiveService, $userFolderHelper, $userManager, $this->config);
 	}
 
 	public function testGetFolder(): void {
