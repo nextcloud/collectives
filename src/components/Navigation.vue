@@ -95,7 +95,8 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+/* Don't print list of collectives */
 @media print {
 	#app-navigation-vue {
 		display: none !important;

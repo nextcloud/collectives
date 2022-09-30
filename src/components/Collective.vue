@@ -227,29 +227,14 @@ export default {
 }
 
 @media print {
-	#app-content-vue {
-		display: block !important;
-		overflow: visible !important;
-		padding: 0 !important;
-		margin: 0 !important;
-	}
-
+	/* Don't print page list */
 	#app-sidebar-vue {
 		display: none !important;
 	}
 
+	/* Fix alignment of app details for print */
 	div.splitpanes__pane-list, div.splitpanes__splitter {
 		display: none !important;
-	}
-
-	div.modal-mask.all-pages-modal {
-		position: absolute;
-	}
-
-	div.modal-wrapper.modal-wrapper--full div.modal-container {
-		overflow: visible !important;
-		width: 100%;
-		box-shadow: unset;
 	}
 }
 </style>
