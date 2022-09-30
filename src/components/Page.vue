@@ -58,6 +58,7 @@
 				:edit-mode-and-ready="editMode && !waitForEditor"
 				:loading="titleFormButtonIsLoading"
 				:mobile="isMobile"
+				class="edit-button"
 				@click="editMode ? stopEdit() : startEdit()" />
 			<PageActionMenu v-if="currentCollectiveCanEdit"
 				:show-files-link="!isPublic"
@@ -473,10 +474,12 @@ export default {
 		top: 59px;
 	}
 }
+</style>
 
+<style lang="scss">
 @media print {
 	/* Don't print emoticon button (if page doesn't have an emoji set) */
-	.titleform-button, .action-item, .emoji-picker-emoticon {
+	.edit-button, .action-item, .emoji-picker-emoticon {
 		display: none !important;
 	}
 }
