@@ -52,6 +52,7 @@
 				:parent-id="parentId"
 				:timestamp="timestamp"
 				:last-user-id="lastUserId"
+				:last-user-display-name="lastUserDisplayName"
 				:is-landing-page="isLandingPage"
 				:is-template="isTemplate" />
 			<NcActions>
@@ -119,6 +120,10 @@ export default {
 			required: true,
 		},
 		lastUserId: {
+			type: String,
+			default: null,
+		},
+		lastUserDisplayName: {
 			type: String,
 			default: null,
 		},

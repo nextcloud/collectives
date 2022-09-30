@@ -86,11 +86,6 @@
       <code>CircleDestroyedEvent</code>
     </UndefinedClass>
   </file>
-  <file src="lib/Model/PageInfo.php">
-    <InvalidArgument occurrences="1">
-      <code>$subpageOrder</code>
-    </InvalidArgument>
-  </file>
   <file src="lib/Mount/CollectiveFolderManager.php">
     <UndefinedClass occurrences="3">
       <code>CacheEntry|null</code>
@@ -202,12 +197,15 @@
     </MissingDependency>
   </file>
   <file src="lib/Service/PageService.php">
-    <InvalidArgument occurrences="1">
-      <code>$subpageOrder</code>
-    </InvalidArgument>
     <UndefinedClass occurrences="1">
       <code>\OC_Util</code>
     </UndefinedClass>
+    <UndefinedInterfaceMethod occurrences="4">
+      <code>getDisplayName</code>
+      <code>getDisplayName</code>
+      <code>getDisplayName</code>
+      <code>getDisplayName</code>
+    </UndefinedInterfaceMethod>
     <UndefinedPropertyFetch occurrences="1">
       <code>\OC::$WEBROOT</code>
     </UndefinedPropertyFetch>

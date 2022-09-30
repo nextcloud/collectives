@@ -68,6 +68,7 @@
 						:title="currentCollective.name"
 						:timestamp="collectivePage ? collectivePage.timestamp : 0"
 						:last-user-id="collectivePage ? collectivePage.lastUserId : ''"
+						:last-user-display-name="collectivePage ? collectivePage.lastUserDisplayName : ''"
 						:emoji="currentCollective.emoji"
 						:level="0"
 						:can-edit="currentCollectiveCanEdit"

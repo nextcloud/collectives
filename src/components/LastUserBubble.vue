@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<NcUserBubble :display-name="lastUserId"
+		<NcUserBubble :display-name="lastUserDisplayName"
 			:user="lastUserId"
 			:show-user-status="false">
 			{{ lastEditedUserMessage }}
@@ -25,6 +25,10 @@ export default {
 			type: String,
 			required: true,
 		},
+		lastUserDisplayName: {
+			type: String,
+			required: true,
+		},
 		timestamp: {
 			type: Number,
 			required: true,
@@ -33,7 +37,7 @@ export default {
 
 	computed: {
 		lastEditedUserMessage() {
-			return t('collectives', 'Last edited by {user}', { user: this.lastUserId })
+			return t('collectives', 'Last edited by {user}', { user: this.lastUserDisplayName })
 		},
 
 		lastUpdate() {

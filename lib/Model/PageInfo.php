@@ -12,6 +12,8 @@ use OCP\Files\NotFoundException;
 /**
  * @method string getLastUserId()
  * @method void setLastUserId(string $value)
+ * @method string getLastUserDisplayName()
+ * @method void setLastUserDisplayName(string $value)
  * @method string getEmoji()
  * @method void setEmoji(string $value)
  * @method string getTitle()
@@ -40,6 +42,9 @@ class PageInfo extends Entity implements JsonSerializable {
 
 	/** @var string */
 	protected $lastUserId;
+
+	/** @var string */
+	protected $lastUserDisplayName;
 
 	/** @var string */
 	protected $emoji;
@@ -78,6 +83,7 @@ class PageInfo extends Entity implements JsonSerializable {
 		return [
 			'id' => $this->id,
 			'lastUserId' => $this->lastUserId,
+			'lastUserDisplayName' => $this->lastUserDisplayName,
 			'emoji' => $this->emoji,
 			'subpageOrder' => json_decode($this->subpageOrder ?? '[]', true, 512, JSON_THROW_ON_ERROR),
 			'title' => $this->title,
@@ -96,12 +102,12 @@ class PageInfo extends Entity implements JsonSerializable {
 	 * @param int         $parentId
 	 * @param string|null $lastUserId
 	 * @param string|null $emoji
-	 * @param array|null  $subpageOrder
+	 * @param string|null  $subpageOrder
 	 *
 	 * @throws InvalidPathException
 	 * @throws NotFoundException
 	 */
-	public function fromFile(File $file, int $parentId, ?string $lastUserId = null, ?string $emoji = null, ?string $subpageOrder = null): void {
+	public function fromFile(File $file, int $parentId, ?string $lastUserId = null, ?string $lastUserDisplayName = null, ?string $emoji = null, ?string $subpageOrder = null): void {
 		$this->setId($file->getId());
 		// Set folder name as title for all index pages except the collective landing page
 		if ($parentId !== 0 && 0 === strcmp($file->getName(), self::INDEX_PAGE_TITLE . self::SUFFIX)) {
@@ -116,6 +122,9 @@ class PageInfo extends Entity implements JsonSerializable {
 		$this->setFilePath($file->getParent()->getInternalPath());
 		if (null !== $lastUserId) {
 			$this->setLastUserId($lastUserId);
+		}
+		if (null !== $lastUserDisplayName) {
+			$this->setLastUserDisplayName($lastUserDisplayName);
 		}
 		if (null !== $emoji) {
 			$this->setEmoji($emoji);

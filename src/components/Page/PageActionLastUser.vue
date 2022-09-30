@@ -1,8 +1,10 @@
 <template>
-	<li v-if="lastUserId" class="action action--user-bubble">
+	<li v-if="lastUserDisplayName" class="action action--user-bubble">
 		<button class="action-button action-button--user-bubble" type="button">
 			<ClockOutlineIcon :size="20" />
-			<LastUserBubble :last-user-id="lastUserId" :timestamp="timestamp" />
+			<LastUserBubble :last-user-id="lastUserId"
+				:last-user-display-name="lastUserDisplayName"
+				:timestamp="timestamp" />
 		</button>
 	</li>
 </template>
@@ -25,6 +27,10 @@ export default {
 			required: true,
 		},
 		lastUserId: {
+			type: String,
+			default: null,
+		},
+		lastUserDisplayName: {
 			type: String,
 			default: null,
 		},
