@@ -102,7 +102,14 @@ class PageService {
 	 * @throws NotPermittedException
 	 */
 	public function getCollectiveFolder(int $collectiveId, string $userId): Folder {
-		$folder = $this->userFolderHelper->get($userId)->get($this->getCollectiveInfo($collectiveId, $userId)->getName());
+		$collectiveName = $this->getCollectiveInfo($collectiveId, $userId)->getName();
+		try {
+			$folder = $this->userFolderHelper->get($userId)->get($collectiveName);
+		} catch (FilesNotFoundException $e) {
+			// Workaround https://gitlab.com/collectivecloud/collectives/-/issues/332
+			\OC_Util::setupFS($userId);
+			$folder = $this->userFolderHelper->get($userId)->get($collectiveName);
+		}
 
 		if (!($folder instanceof Folder)) {
 			throw new FilesNotFoundException('Folder not found for collective ' . $collectiveId);
