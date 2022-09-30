@@ -55,7 +55,7 @@
 				@click="unshare(collective)">
 				{{ t('collectives', 'Unshare') }}
 			</NcActionButton>
-			<NcActionSeparator v-if="collectiveCanShare(collective)" />
+			<NcActionSeparator v-if="collectiveCanShare(collective) && !isPublic" />
 			<NcActionLink :close-after-click="true"
 				:href="printLink"
 				target="_blank">
