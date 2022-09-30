@@ -4,15 +4,15 @@
 			type="hidden"
 			name="sharingToken"
 			:value="shareTokenParam">
-		<NcEmptyContent v-show="loading">
+		<NcEmptyContent v-show="loading"
+			:title="t('collectives', 'Preparing collective for exporting or printing')">
 			<template #icon>
 				<DownloadIcon />
 			</template>
-			<h1>{{ t('collectives', 'Preparing collective for exporting or printing') }}</h1>
-			<NcProgressBar :value="loadingProgress" size="medium">
-				{{ loadingProgress }}
-			</NcProgressBar>
-			<template #desc>
+			<template #action>
+				<NcProgressBar :value="loadingProgress" size="medium">
+					{{ loadingProgress }}
+				</NcProgressBar>
 				<ul class="load-messages">
 					<li v-for="task in [loadPages, loadImages]"
 						v-show="task.total"
