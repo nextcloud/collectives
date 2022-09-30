@@ -2,6 +2,7 @@ import Vue from 'vue'
 import { getCurrentUser } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
 import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
+/* eslint import/namespace: ['error', { allowComputed: true }] */
 import * as sortOrders from '../util/sortOrders.js'
 
 import {
@@ -151,28 +152,17 @@ export default {
 		},
 
 		sortedSubpages(state, getters) {
-			return (pageId) => {
-				const subpages = state.pages
-					.filter(p => p.parentId === pageId)
-					// Disregard template pages, they're listed first manually
+			return (parentId, sortOrder) => {
+				const parentPage = state.pages.find(p => p.id === parentId)
+				const customOrder = parentPage?.subpageOrder || []
+				return state.pages
+					.filter(p => p.parentId === parentId)
+					// disregard template pages, they're listed first manually
 					.filter(p => p.title !== TEMPLATE_PAGE)
-
-				// Use personal sorting filter if applicable
-				if (getters.sortBy !== 'byOrder') {
-					return subpages.sort(getters.sortOrder)
-				}
-
-				const subpageOrder = state.pages.find(p => p.id === pageId).subpageOrder
-				const sortedPages = []
-				for (const id of subpageOrder) {
-					const page = subpages.find(p => p.id === id)
-					if (page) {
-						sortedPages.push(page)
-						subpages.splice(subpages.findIndex(p => p.id === page.id), 1)
-					}
-				}
-				// sort pages without custom order by title
-				return sortedPages.concat(subpages.sort(sortOrders.byTitle))
+					// add the index from customOrder
+					.map(p => ({ ...p, index: customOrder.indexOf(p.id) }))
+					// sort by given order, fall back to user setting
+					.sort(sortOrders[sortOrder] || getters.sortOrder)
 			}
 		},
 
@@ -192,19 +182,7 @@ export default {
 		},
 
 		sortOrder(state, getters) {
-			if (getters.sortBy === 'byTimestamp') {
-				return sortOrders.byTimestamp
-			} else {
-				return getters.sortOrderDefault
-			}
-		},
-
-		sortOrderDefault(state, getters) {
-			if (getters.sortByDefault === 'byTimestamp') {
-				return sortOrders.byTimestamp
-			} else {
-				return sortOrders.byTitle
-			}
+			return sortOrders[getters.sortBy] || sortOrders.byOrder
 		},
 
 		sortByDefault(_state, getters) {
