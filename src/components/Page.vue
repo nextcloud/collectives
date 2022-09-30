@@ -71,7 +71,7 @@
 				{{ editMode && !waitForEditor ? t('collectives', 'Done') : t('collectives', 'Edit') }}
 			</Button>
 			<PageActionMenu v-if="currentCollectiveCanEdit"
-				:show-files-link="true"
+				:show-files-link="!isPublic"
 				:page-id="currentPage.id"
 				:parent-id="currentPage.parentId"
 				:timestamp="currentPage.timestamp"
