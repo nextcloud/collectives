@@ -287,7 +287,7 @@ export default {
 	&.active, &.toplevel, &.mobile, &:hover, &:focus, &:active {
 		// Shorter width to prevent collision with actions
 		.app-content-list-item-link {
-			width: calc(100% - 66px);
+			width: calc(100vw - 88px);
 		}
 
 		.page-list-item-actions {
