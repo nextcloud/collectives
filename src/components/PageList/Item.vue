@@ -42,7 +42,8 @@
 			<div ref="page-title"
 				v-tooltip="pageTitleIfTruncated"
 				class="app-content-list-item-line-one"
-				:class="{ 'template': isTemplate }">
+				:class="{ 'template': isTemplate }"
+				@click="expand(pageId)">
 				{{ pageTitleString }}
 			</div>
 		</router-link>
@@ -228,6 +229,7 @@ export default {
 
 	methods: {
 		...mapMutations([
+			'expand',
 			'toggleCollapsed',
 		]),
 
@@ -287,7 +289,7 @@ export default {
 	&.active, &.toplevel, &.mobile, &:hover, &:focus, &:active {
 		// Shorter width to prevent collision with actions
 		.app-content-list-item-link {
-			width: calc(100% - 66px);
+			width: calc(100vw - 88px);
 		}
 
 		.page-list-item-actions {
