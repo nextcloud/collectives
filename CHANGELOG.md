@@ -9,6 +9,7 @@
 ### 🐛Fixes
 * ⏪ Revert usage for users with quota 0B (e.g. guest users).
 * 📱 Improve and consolidate page title on mobile. (#388)
+* ✨ Fix creating new collectives with latest Circles app version.
 
 ### 🚧Updates & Tooling
 * 🔌 Downgrade TNTsearch to 2.9 to retain PHP 7.3 support.
