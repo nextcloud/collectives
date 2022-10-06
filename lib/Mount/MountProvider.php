@@ -91,6 +91,9 @@ class MountProvider implements IMountProvider {
 		}
 
 		foreach ($collectiveInfos as $c) {
+			$mountPointPath = ($this->userFolderHelper->getUserFolderSetting($user->getUID()) === '/')
+				? ''
+				: $userFolder->getName() . '/';
 			$mountPointName = $c->getName();
 			try {
 				$cacheEntry = $this->collectiveFolderManager->getFolderFileCache($c->getId(), $mountPointName);
@@ -101,7 +104,7 @@ class MountProvider implements IMountProvider {
 			}
 			$folders[] = [
 				'folder_id' => $c->getId(),
-				'mount_point' => $userFolder->getName() . '/' . $mountPointName,
+				'mount_point' => $mountPointPath . $mountPointName,
 				'permissions' => $c->getUserPermissions(),
 				'rootCacheEntry' => (isset($cacheEntry['fileid'])) ? Cache::cacheEntryFromData($cacheEntry, $this->mimeTypeLoader) : null
 			];
@@ -145,8 +148,7 @@ class MountProvider implements IMountProvider {
 	 */
 	protected function isEnabledForUser(IUser $user): bool {
 		return $this->appManager->isEnabledForUser('circles', $user)
-			&& $this->appManager->isEnabledForUser('collectives', $user)
-			&& $user->getQuota() !== '0 B';
+			&& $this->appManager->isEnabledForUser('collectives', $user);
 	}
 
 	/**
