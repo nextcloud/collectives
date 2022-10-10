@@ -21,6 +21,14 @@ The **Collectives** app can be installed from the [Nextcloud App Store](https://
 In your Nextcloud instance, simply navigate to **»Apps«**, find the
 **»Collectives«** app and enable it.
 
+## Collectives and guest users
+
+In order to allow guest users (as provided by the [guests](https://github.com/nextcloud/guests/)
+app) to access collectives, add the Collectives and Circles apps to the list
+of enabled apps for guest users in admin settings.
+
+Please note that this enables guest users to create new collectives.
+
 ## Configuration
 
 ### Initial Content for new collectives
