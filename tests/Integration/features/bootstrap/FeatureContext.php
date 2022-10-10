@@ -673,18 +673,24 @@ class FeatureContext implements Context {
 
 	/**
 	 * @When user :user deletes circle :name
+	 * @When user :user :fails to delete circle :name
 	 *
-	 * @param string $user
-	 * @param string $name
+	 * @param string      $user
+	 * @param string      $name
+	 * @param string|null $fails
 	 *
 	 * @throws GuzzleException
 	 */
-	public function userDeletesCircle(string $user, string $name): void {
+	public function userDeletesCircle(string $user, string $name, ?string $fails = null): void {
 		$this->setCurrentUser($user);
 		$circleId = $this->circleIdByName($name);
 		Assert::assertNotNull($circleId);
 		$this->sendOcsRequest('DELETE', '/apps/circles/circles/' . $circleId);
-		$this->assertStatusCode(200);
+		if ($fails !== "fails") {
+			$this->assertStatusCode(200);
+		} else {
+			$this->assertStatusCode(400);
+		}
 	}
 
 	/**

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.7.6@ae4ec68e00e4880e3f00b1edd2da891236d749ab">
+<files psalm-version="5.9.0@8b9ad1eb9e8b7d3101f949291da2b9f7767cd163">
   <file src="lib/AppInfo/Application.php">
     <MissingDependency>
       <code>SearchablePageReferenceProvider</code>
@@ -49,12 +49,6 @@
     <UndefinedClass>
       <code>ADiscoverableReferenceProvider</code>
       <code>ISearchableReferenceProvider</code>
-    </UndefinedClass>
-  </file>
-  <file src="lib/Service/CircleHelper.php">
-    <UndefinedClass>
-      <code>$e</code>
-      <code>\ArtificialOwl\MySmallPhpTools\Exceptions\InvalidItemException</code>
     </UndefinedClass>
   </file>
   <file src="lib/Service/CollectiveService.php">

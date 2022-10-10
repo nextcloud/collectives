@@ -40,6 +40,9 @@ Feature: collective
   Scenario: Trash an owned collective
     When user "jane" trashes collective "BehatCollective"
 
+  Scenario: Fail to delete a circle via Circles API
+    Then user "jane" fails to delete circle "BehatCollective"
+
   Scenario: Fail to delete a collective+circle as admin
     When user "bob" joins circle "BehatCollective" with owner "jane" with level "Admin"
     Then user "bob" fails to delete selfadmin collective+circle "BehatCollective"
@@ -52,10 +55,17 @@ Feature: collective
     And user "john" fails to delete collective "BehatCollective" with admin "jane"
     And user "john" fails to delete collective+circle "BehatCollective" with admin "jane"
 
-  Scenario: Delete an owned collective+circle with deleteTimestamp
+  Scenario: Delete an owned trashed collective+circle
     When user "jane" deletes collective+circle "BehatCollective"
     Then user "jane" doesn't see collective "BehatCollective"
     And user "alice" doesn't see collective "BehatCollective"
+
+  Scenario: Create and delete collective, keep circle
+    When user "jane" creates collective "BehatCollective2"
+    And user "jane" trashes collective "BehatCollective2"
+    And user "jane" deletes collective "BehatCollective2"
+    And user "jane" is member of circle "BehatCollective2"
+    Then user "jane" deletes circle "BehatCollective2"
 
   Scenario: Recreate a collective based on a leftover circle
     When user "jane" creates collective "BehatPhoenixCollective"
