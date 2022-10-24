@@ -178,9 +178,6 @@ describe('Page', function() {
 		it('Supports page content editing and switching to read mode', function() {
 			cy.visit('/apps/collectives/Our%20Garden/Day%201')
 			cy.get('#read-only-editor.editor__content > .ProseMirror').should('not.be.visible')
-			cy.get('.editor > > .editor__content > .ProseMirror').should('be.visible')
-				.should('have.focus')
-				.type('# Heading{enter}')
 
 			cy.log('Inserting an image')
 			cy.intercept({ method: 'POST', url: '**/text/attachment/upload*' }).as('attachmentUpload')
@@ -188,11 +185,15 @@ describe('Page', function() {
 				.selectFile('cypress/fixtures/test.png', { force: true })
 			cy.wait('@attachmentUpload')
 
+			cy.log('Inserting a heading')
+			cy.get('.editor > > .editor__content > .ProseMirror').should('be.visible')
+				.type('## Heading{enter}')
+				.focus()
+
 			cy.log('Inserting a user mention')
 			// Wait 1 second to prevent race condition with previous insertion
 			cy.wait(1000) // eslint-disable-line cypress/no-unnecessary-waiting
 			cy.get('.editor > > .editor__content > .ProseMirror').should('be.visible')
-				.should('have.focus')
 				.type('@admi')
 			cy.get('.tippy-content > .items')
 				.contains('admin')
@@ -201,12 +202,13 @@ describe('Page', function() {
 			cy.log('Changing to read mode')
 			cy.get('button.titleform-button')
 				.click()
+
 			cy.get('.editor > > .editor__content > .ProseMirror').should('not.be.visible')
-			cy.get('#read-only-editor.editor__content > .ProseMirror').should('be.visible')
-				.should('contain', 'Heading')
 			cy.get('#read-only-editor.editor__content > .ProseMirror')
 				.find('img.image__main')
 				.should('be.visible')
+			cy.get('#read-only-editor.editor__content > .ProseMirror').should('be.visible')
+				.should('contain', 'Heading')
 			cy.get('#read-only-editor.editor__content > .ProseMirror')
 				.find('.mention')
 				.should('contain', 'admin')
