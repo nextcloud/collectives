@@ -264,7 +264,7 @@ export default {
 	border-radius: var(--border-radius-large);
 
 	&.toplevel {
-		font-weight: bold;
+		font-size: 1.2em;
 	}
 
 	&.active {
@@ -304,11 +304,9 @@ export default {
 
 		.item-icon-emoji {
 			cursor: pointer;
-			font-size: 16px;
 
 			&.landing-page {
 				margin: -3px 0;
-				font-size: 22px;
 			}
 		}
 
@@ -335,7 +333,6 @@ export default {
 
 	.app-content-list-item-line-one {
 		padding-left: 40px;
-		font-size: 120%;
 	}
 
 	.app-content-list-item-link {
