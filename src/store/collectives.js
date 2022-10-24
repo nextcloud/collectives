@@ -97,7 +97,7 @@ export default {
 
 		collectiveShareUrl: (state, getters) => (collective) => {
 			if (collective.shareToken) {
-				return generateUrl(`/apps/collectives/p/${collective.shareToken}/${collective.name}`)
+				return generateUrl(`/apps/collectives/p/${collective.shareToken}/${encodeURIComponent(collective.name)}`)
 			} else {
 				return null
 			}
