@@ -78,7 +78,7 @@ export default {
 			'currentCollectiveCanEdit',
 			'pageParam',
 			'pagePath',
-			'currentPages',
+			'currentPageIds',
 			'templatePage',
 			'visibleSubpages',
 			'collapsed',
@@ -147,7 +147,7 @@ export default {
 
 		initCollapsed() {
 			// Expand subpages if they're in the path to currentPage
-			if (this.currentPages.includes(this.page)) {
+			if (this.currentPageIds.includes(this.page.id)) {
 				this.expand(this.page.id)
 			}
 		},
