@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2022-09-28 16:04+0200\n"
+"POT-Creation-Date: 2022-10-25 18:01+0200\n"
 "PO-Revision-Date: 2022-09-10 06:19+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/collectives/"
@@ -19,9 +19,9 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Weblate 4.14.1-dev\n"
 
-#. TRANSLATORS src/components/Page.vue:179
+#. TRANSLATORS src/components/Page.vue:181
 #. TRANSLATORS src/views/Home.vue:3
-#: /collectives/lib/Fs/UserFolderHelper.php:67
+#: /collectives/lib/Fs/UserFolderHelper.php:74
 #: /collectives/lib/Search/CollectiveProvider.php:60
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:2
 #: /collectives/specialVueFakeDummyForL10nScript.js:188
@@ -139,22 +139,22 @@ msgstr "Nejste součástí kolektivu s takovým názvem."
 msgid "Select a collective or create a new one on the left."
 msgstr "Vyberte kolektiv nebo (vlevo) vytvořte nový."
 
-#. TRANSLATORS src/components/CollectivePrint.vue:11
+#. TRANSLATORS src/components/CollectivePrint.vue:8
 #: /collectives/specialVueFakeDummyForL10nScript.js:10
 msgid "Preparing collective for exporting or printing"
 msgstr "Kolektiv je připravován pro export či tisk"
 
-#. TRANSLATORS src/components/CollectivePrint.vue:58
+#. TRANSLATORS src/components/CollectivePrint.vue:59
 #: /collectives/specialVueFakeDummyForL10nScript.js:12
 msgid "Loading pages:"
 msgstr "Načítání stránek:"
 
-#. TRANSLATORS src/components/CollectivePrint.vue:63
+#. TRANSLATORS src/components/CollectivePrint.vue:64
 #: /collectives/specialVueFakeDummyForL10nScript.js:14
 msgid "Loading images:"
 msgstr "Načítání obrázků:"
 
-#. TRANSLATORS src/components/LastUserBubble.vue:36
+#. TRANSLATORS src/components/LastUserBubble.vue:40
 #: /collectives/specialVueFakeDummyForL10nScript.js:16
 msgid "Last edited by {user}"
 msgstr "Naposledy upravil(a) {user}"
@@ -422,7 +422,7 @@ msgid "Create collective for existing circle"
 msgstr "Vytvořit kolektiv pro existující okruh"
 
 #. TRANSLATORS src/components/Nav/NewCollective.vue:41
-#. TRANSLATORS src/components/Page/PageActionMenu.vue:127
+#. TRANSLATORS src/components/Page/PageActionMenu.vue:131
 #. TRANSLATORS src/components/Page.vue:16
 #: /collectives/specialVueFakeDummyForL10nScript.js:130
 #: /collectives/specialVueFakeDummyForL10nScript.js:152
@@ -478,27 +478,27 @@ msgstr "Upravit"
 msgid "Show in Files"
 msgstr "Zobrazit v Souborech"
 
-#. TRANSLATORS src/components/Page/PageActionMenu.vue:122
+#. TRANSLATORS src/components/Page/PageActionMenu.vue:126
 #: /collectives/specialVueFakeDummyForL10nScript.js:148
 msgid "Edit template for subpages"
 msgstr "Upravit šablonu pro všechny podstránky"
 
-#. TRANSLATORS src/components/Page/PageActionMenu.vue:123
+#. TRANSLATORS src/components/Page/PageActionMenu.vue:127
 #: /collectives/specialVueFakeDummyForL10nScript.js:150
 msgid "Add template for subpages"
 msgstr "Přidat šablonu pro podstránky"
 
-#. TRANSLATORS src/components/Page/PageActionMenu.vue:132
+#. TRANSLATORS src/components/Page/PageActionMenu.vue:136
 #: /collectives/specialVueFakeDummyForL10nScript.js:154
 msgid "Cannot delete page with subpages"
 msgstr "Není možné smazat stránku, která má podstránky"
 
-#. TRANSLATORS src/components/Page/PageActionMenu.vue:134
+#. TRANSLATORS src/components/Page/PageActionMenu.vue:138
 #: /collectives/specialVueFakeDummyForL10nScript.js:156
 msgid "Delete template"
 msgstr "Smazat šablonu"
 
-#. TRANSLATORS src/components/Page/PageActionMenu.vue:135
+#. TRANSLATORS src/components/Page/PageActionMenu.vue:139
 #: /collectives/specialVueFakeDummyForL10nScript.js:158
 msgid "Delete page"
 msgstr "Smazat stránku"
@@ -540,7 +540,7 @@ msgid "Select emoji for page"
 msgstr "Vyberte emotikonu pro stránku"
 
 #. TRANSLATORS src/components/Page.vue:46
-#. TRANSLATORS src/components/PageList/Item.vue:197
+#. TRANSLATORS src/components/PageList/Item.vue:203
 #: /collectives/specialVueFakeDummyForL10nScript.js:180
 #: /collectives/specialVueFakeDummyForL10nScript.js:194
 msgid "Template"
@@ -551,17 +551,17 @@ msgstr "Šablona"
 msgid "Title"
 msgstr "Nadpis"
 
-#. TRANSLATORS src/components/Page.vue:72
+#. TRANSLATORS src/components/Page.vue:74
 #: /collectives/specialVueFakeDummyForL10nScript.js:184
 msgid "Toggle page sidebar"
 msgstr "Zobraz/nezobraz. postranní panel stránky"
 
-#. TRANSLATORS src/components/Page.vue:81
+#. TRANSLATORS src/components/Page.vue:83
 #: /collectives/specialVueFakeDummyForL10nScript.js:186
 msgid "Page content"
 msgstr "Obsah stránky"
 
-#. TRANSLATORS src/components/Page.vue:428
+#. TRANSLATORS src/components/Page.vue:430
 #: /collectives/specialVueFakeDummyForL10nScript.js:190
 msgid "Could not rename the page"
 msgstr "Stránku se nedaří přejmenovat"
@@ -571,12 +571,12 @@ msgstr "Stránku se nedaří přejmenovat"
 msgid "Expand subpage list"
 msgstr "Rozbalit seznam podstránek"
 
-#. TRANSLATORS src/components/PageList/Item.vue:206
+#. TRANSLATORS src/components/PageList/Item.vue:212
 #: /collectives/specialVueFakeDummyForL10nScript.js:196
 msgid "Add a page"
 msgstr "Přidat stránku"
 
-#. TRANSLATORS src/components/PageList/Item.vue:207
+#. TRANSLATORS src/components/PageList/Item.vue:213
 #: /collectives/specialVueFakeDummyForL10nScript.js:198
 msgid "Add a subpage"
 msgstr "Přidat podstránku"
@@ -607,7 +607,7 @@ msgstr "Řadit nedávno změněné jako první"
 msgid "Sort by title"
 msgstr "Řadit podle nadpisu"
 
-#. TRANSLATORS src/components/PageList.vue:81
+#. TRANSLATORS src/components/PageList.vue:82
 #: /collectives/specialVueFakeDummyForL10nScript.js:212
 msgid "Sorted by title"
 msgstr "Seřazeno podle názvu"
@@ -616,12 +616,12 @@ msgstr "Seřazeno podle názvu"
 msgid "Sorted by recently changed"
 msgstr "Seřazeno podle nedávné změny"
 
-#. TRANSLATORS src/components/PageList.vue:82
+#. TRANSLATORS src/components/PageList.vue:83
 #: /collectives/specialVueFakeDummyForL10nScript.js:214
 msgid "Switch back to default sort order"
 msgstr "Přepnout zpět na výchozí pořadí řazení"
 
-#. TRANSLATORS src/components/PageList.vue:183
+#. TRANSLATORS src/components/PageList.vue:184
 #: /collectives/specialVueFakeDummyForL10nScript.js:216
 msgid "Hide templates"
 msgstr "Skrýt šablony"
@@ -630,7 +630,7 @@ msgstr "Skrýt šablony"
 msgid "Show templates"
 msgstr "Zobrazit šablony"
 
-#. TRANSLATORS src/components/PageList.vue:226
+#. TRANSLATORS src/components/PageList.vue:227
 #: /collectives/specialVueFakeDummyForL10nScript.js:218
 msgid "Could not save page order for collective"
 msgstr "Nepodařilo se uložit pořadí stránek v kolektivu"
@@ -740,8 +740,8 @@ msgid "Page deleted"
 msgstr "Stránka smazána"
 
 #: /collectives/src/mixins/pageMixin.js:201
-#: /collectives/src/mixins/pageMixin.js:240
-#: /collectives/src/mixins/pageMixin.js:269
+#: /collectives/src/mixins/pageMixin.js:235
+#: /collectives/src/mixins/pageMixin.js:264
 msgid "Could not change page order"
 msgstr "Nepodařilo se změnit pořadí stránek"
 
