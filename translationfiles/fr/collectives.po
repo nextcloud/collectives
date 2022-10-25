@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-09-28 16:04+0200\n"
-"PO-Revision-Date: 2022-08-10 14:20+0000\n"
+"PO-Revision-Date: 2022-10-05 09:24+0000\n"
 "Last-Translator: Nathan <bonnemainsnathan@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/fr/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 4.14.1\n"
 
 #. TRANSLATORS src/components/Page.vue:179
 #. TRANSLATORS src/views/Home.vue:3
@@ -599,7 +599,7 @@ msgstr "Ordre de tri"
 #. TRANSLATORS src/components/PageList.vue:35
 #: /collectives/specialVueFakeDummyForL10nScript.js:206
 msgid "Sort by custom order"
-msgstr ""
+msgstr "Trier par ordre personnalisé"
 
 #. TRANSLATORS src/components/PageList.vue:44
 #: /collectives/specialVueFakeDummyForL10nScript.js:208
@@ -614,16 +614,16 @@ msgstr "Trier par nom"
 #. TRANSLATORS src/components/PageList.vue:81
 #: /collectives/specialVueFakeDummyForL10nScript.js:212
 msgid "Sorted by title"
-msgstr ""
+msgstr "Trié par nom"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:212
 msgid "Sorted by recently changed"
-msgstr ""
+msgstr "Trié par date de dernière modification"
 
 #. TRANSLATORS src/components/PageList.vue:82
 #: /collectives/specialVueFakeDummyForL10nScript.js:214
 msgid "Switch back to default sort order"
-msgstr ""
+msgstr "Revenir au tri par défaut"
 
 #. TRANSLATORS src/components/PageList.vue:183
 #: /collectives/specialVueFakeDummyForL10nScript.js:216
@@ -732,7 +732,7 @@ msgstr "Impossible d'enregistrer l'émoji pour la page"
 
 #: /collectives/src/mixins/pageMixin.js:142
 msgid "Could not move page"
-msgstr ""
+msgstr "Impossible de déplacer la page"
 
 #: /collectives/src/mixins/pageMixin.js:168
 msgid "Could not delete the page"
@@ -746,7 +746,7 @@ msgstr "Page supprimée"
 #: /collectives/src/mixins/pageMixin.js:240
 #: /collectives/src/mixins/pageMixin.js:269
 msgid "Could not change page order"
-msgstr ""
+msgstr "Impossible de modifier l'ordre de la page"
 
 #: /collectives/templates/error.php:4
 msgid "Error: Missing apps"
