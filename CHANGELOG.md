@@ -1,19 +1,26 @@
 # Changelog
 
-## 2.0.0-beta3 - 2022.09.30
+## 2.0.0 - 2022.10.25
+
+### ✨New
+* 💄 Migrate to Nextcloud 25 design.
+* 🍾 Support Nextcloud version 25.
+* 🧹 Drop support for Nextcloud version 24 and earlier.
 
 ### 🐛Fixes
 
+* 🔎 Consider landing pages in fulltext search results. (#391)
 * 🖱️ Fix moving pages in public shares.
 * 👽 Force-setup the full filesystem if collective folder not found. (#332)
 * 🎩 Start html title with actual page name. (#361)
 * 🧹 Hide unneeded UI elements in public share.
-* 🙍 Display users display name in frontend of user id. (#359).
-
-## 2.0.0-beta2 - 2022.09.28
-
-### 🐛Fixes
-* 🔎 Consider landing pages in fulltext search results. (#391)
+* 🙍 Display users display name in frontend of user id. (#359)
+* Fix max width of the page list item.
+* Fix auto-expansion of parent pages in page list.
+* Fix and document usage for users with quota 0B (e.g. guest users). (#231)
+* Use default font size for page list items. (#373)
+* Encode collective name in share URL. (#401)
+* Timeout when loading missing images in print view. (#333)
 
 ### 🌎Translations
 * 🗣️ Czech translation updated thanks to Pavel Borecki.
@@ -22,17 +29,11 @@
 * 🗣️ German translations updated thanks to Joachim Sokolowski.
 * 🗣️ Slovenian translation added thanks to Matej U.
 * 🗣️ Polish translation added thanks to Norbert Truszkiewicz.
+* 🗣️ French translation updated thanks to Nathan.
 
 ### 🚧Updates & Tooling
 * 🔌 Update NPM dependencies.
 * 👷 Don't include composer dev packages in release builds.
-
-## 2.0.0-beta1 - 2022.09.12
-
-### ✨New
-* 💄 Migrate to Nextcloud 25 design.
-* 🍾 Support Nextcloud version 25.
-* 🧹 Drop support for Nextcloud version 24 and earlier.
 
 
 ## 1.5.0 - 2022.09.08
