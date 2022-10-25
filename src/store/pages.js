@@ -62,30 +62,30 @@ export default {
 			return [filePath, titlePart].filter(Boolean).join('/')
 		},
 
-		currentPages(state, getters) {
+		currentPageIds(state, getters) {
 			// Return landing page
 			if (!getters.pageParam
 				|| getters.pageParam === 'Readme') {
-				return [getters.collectivePage]
+				return [getters.collectivePage.id]
 			}
 
 			// Iterate through all path levels to find the correct page
-			const pages = []
+			const pageIds = []
 			const parts = getters.pageParam.split('/').filter(Boolean)
 			let page = getters.collectivePage
 			for (const i in parts) {
 				page = state.pages.find(p => (p.parentId === page.id && p.title === parts[i]))
 				if (page) {
-					pages.push(page)
+					pageIds.push(page.id)
 				} else {
 					return []
 				}
 			}
-			return pages
+			return pageIds
 		},
 
 		currentPage(state, getters) {
-			return getters.currentPages[getters.currentPages.length - 1]
+			return state.pages.find(p => (p.id === getters.currentPageIds[getters.currentPageIds.length - 1]))
 		},
 
 		currentPageFilePath(_state, getters) {

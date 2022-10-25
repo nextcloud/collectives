@@ -142,8 +142,8 @@ describe('Collective Share', function() {
 		it('Opening unshared collective fails', function() {
 			cy.logout()
 			cy.visit(shareUrl, { failOnStatusCode: false })
-			cy.get('.body-login-container').should('contain', 'File not found')
-			cy.get('.infogroup').should('contain', 'The document could not be found on the server.')
+			cy.get('.body-login-container').contains(/(File|Page) not found/)
+			cy.get('.infogroup').contains(/The (document|page) could not be found on the server\./)
 		})
 	})
 })
