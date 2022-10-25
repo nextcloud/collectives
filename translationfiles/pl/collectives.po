@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2022-09-28 16:04+0200\n"
+"POT-Creation-Date: 2022-10-25 18:01+0200\n"
 "PO-Revision-Date: 2022-09-28 10:22+0000\n"
 "Last-Translator: Norbert Truszkiewicz <n.t@rajpol.com.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/collectives/"
@@ -20,9 +20,9 @@ msgstr ""
 "|| n%100>=20) ? 1 : 2;\n"
 "X-Generator: Weblate 4.14.1\n"
 
-#. TRANSLATORS src/components/Page.vue:179
+#. TRANSLATORS src/components/Page.vue:181
 #. TRANSLATORS src/views/Home.vue:3
-#: /collectives/lib/Fs/UserFolderHelper.php:67
+#: /collectives/lib/Fs/UserFolderHelper.php:74
 #: /collectives/lib/Search/CollectiveProvider.php:60
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:2
 #: /collectives/specialVueFakeDummyForL10nScript.js:188
@@ -137,22 +137,22 @@ msgstr "Nie jesteś częścią kolektywu o tej nazwie."
 msgid "Select a collective or create a new one on the left."
 msgstr "Wybierz kolektyw lub utwórz nowy z lewej."
 
-#. TRANSLATORS src/components/CollectivePrint.vue:11
+#. TRANSLATORS src/components/CollectivePrint.vue:8
 #: /collectives/specialVueFakeDummyForL10nScript.js:10
 msgid "Preparing collective for exporting or printing"
 msgstr "Przygotowanie kolektywu do eksportu lub druku"
 
-#. TRANSLATORS src/components/CollectivePrint.vue:58
+#. TRANSLATORS src/components/CollectivePrint.vue:59
 #: /collectives/specialVueFakeDummyForL10nScript.js:12
 msgid "Loading pages:"
 msgstr "Ładowanie stron:"
 
-#. TRANSLATORS src/components/CollectivePrint.vue:63
+#. TRANSLATORS src/components/CollectivePrint.vue:64
 #: /collectives/specialVueFakeDummyForL10nScript.js:14
 msgid "Loading images:"
 msgstr "Ładowanie obrazów:"
 
-#. TRANSLATORS src/components/LastUserBubble.vue:36
+#. TRANSLATORS src/components/LastUserBubble.vue:40
 #: /collectives/specialVueFakeDummyForL10nScript.js:16
 msgid "Last edited by {user}"
 msgstr "Ostatnio edytowane przez użytkownika {user}"
@@ -421,7 +421,7 @@ msgid "Create collective for existing circle"
 msgstr "Utwórz kolektyw dla istniejącego kręgu"
 
 #. TRANSLATORS src/components/Nav/NewCollective.vue:41
-#. TRANSLATORS src/components/Page/PageActionMenu.vue:127
+#. TRANSLATORS src/components/Page/PageActionMenu.vue:131
 #. TRANSLATORS src/components/Page.vue:16
 #: /collectives/specialVueFakeDummyForL10nScript.js:130
 #: /collectives/specialVueFakeDummyForL10nScript.js:152
@@ -477,27 +477,27 @@ msgstr "Edycja"
 msgid "Show in Files"
 msgstr "Pokarz w plikach"
 
-#. TRANSLATORS src/components/Page/PageActionMenu.vue:122
+#. TRANSLATORS src/components/Page/PageActionMenu.vue:126
 #: /collectives/specialVueFakeDummyForL10nScript.js:148
 msgid "Edit template for subpages"
 msgstr "Edytuj szablon dla podstron"
 
-#. TRANSLATORS src/components/Page/PageActionMenu.vue:123
+#. TRANSLATORS src/components/Page/PageActionMenu.vue:127
 #: /collectives/specialVueFakeDummyForL10nScript.js:150
 msgid "Add template for subpages"
 msgstr "Dodaj szablon dla podstron"
 
-#. TRANSLATORS src/components/Page/PageActionMenu.vue:132
+#. TRANSLATORS src/components/Page/PageActionMenu.vue:136
 #: /collectives/specialVueFakeDummyForL10nScript.js:154
 msgid "Cannot delete page with subpages"
 msgstr "Nie można usunąć strony z podstronami"
 
-#. TRANSLATORS src/components/Page/PageActionMenu.vue:134
+#. TRANSLATORS src/components/Page/PageActionMenu.vue:138
 #: /collectives/specialVueFakeDummyForL10nScript.js:156
 msgid "Delete template"
 msgstr "Usuń szablon"
 
-#. TRANSLATORS src/components/Page/PageActionMenu.vue:135
+#. TRANSLATORS src/components/Page/PageActionMenu.vue:139
 #: /collectives/specialVueFakeDummyForL10nScript.js:158
 msgid "Delete page"
 msgstr "Usuń stronę"
@@ -539,7 +539,7 @@ msgid "Select emoji for page"
 msgstr "Wybierz emotikon dla strony"
 
 #. TRANSLATORS src/components/Page.vue:46
-#. TRANSLATORS src/components/PageList/Item.vue:197
+#. TRANSLATORS src/components/PageList/Item.vue:203
 #: /collectives/specialVueFakeDummyForL10nScript.js:180
 #: /collectives/specialVueFakeDummyForL10nScript.js:194
 msgid "Template"
@@ -550,17 +550,17 @@ msgstr "Szablon"
 msgid "Title"
 msgstr "Tytuł"
 
-#. TRANSLATORS src/components/Page.vue:72
+#. TRANSLATORS src/components/Page.vue:74
 #: /collectives/specialVueFakeDummyForL10nScript.js:184
 msgid "Toggle page sidebar"
 msgstr "Przełącz pasek boczny strony"
 
-#. TRANSLATORS src/components/Page.vue:81
+#. TRANSLATORS src/components/Page.vue:83
 #: /collectives/specialVueFakeDummyForL10nScript.js:186
 msgid "Page content"
 msgstr "Zawartość strony"
 
-#. TRANSLATORS src/components/Page.vue:428
+#. TRANSLATORS src/components/Page.vue:430
 #: /collectives/specialVueFakeDummyForL10nScript.js:190
 msgid "Could not rename the page"
 msgstr "Nie można zmienić nazwy strony"
@@ -570,12 +570,12 @@ msgstr "Nie można zmienić nazwy strony"
 msgid "Expand subpage list"
 msgstr "Rozwiń listę podstron"
 
-#. TRANSLATORS src/components/PageList/Item.vue:206
+#. TRANSLATORS src/components/PageList/Item.vue:212
 #: /collectives/specialVueFakeDummyForL10nScript.js:196
 msgid "Add a page"
 msgstr "Dodaj stronę"
 
-#. TRANSLATORS src/components/PageList/Item.vue:207
+#. TRANSLATORS src/components/PageList/Item.vue:213
 #: /collectives/specialVueFakeDummyForL10nScript.js:198
 msgid "Add a subpage"
 msgstr "Dodaj podstronę"
@@ -606,7 +606,7 @@ msgstr "Sortuj ostatnio zmienione jako pierwsze"
 msgid "Sort by title"
 msgstr "Sortuj po tytule"
 
-#. TRANSLATORS src/components/PageList.vue:81
+#. TRANSLATORS src/components/PageList.vue:82
 #: /collectives/specialVueFakeDummyForL10nScript.js:212
 msgid "Sorted by title"
 msgstr "Posortowano po tytule"
@@ -615,12 +615,12 @@ msgstr "Posortowano po tytule"
 msgid "Sorted by recently changed"
 msgstr "Posortowano według ostatnio zmienionych"
 
-#. TRANSLATORS src/components/PageList.vue:82
+#. TRANSLATORS src/components/PageList.vue:83
 #: /collectives/specialVueFakeDummyForL10nScript.js:214
 msgid "Switch back to default sort order"
 msgstr "Przywróć domyślne sortowanie"
 
-#. TRANSLATORS src/components/PageList.vue:183
+#. TRANSLATORS src/components/PageList.vue:184
 #: /collectives/specialVueFakeDummyForL10nScript.js:216
 msgid "Hide templates"
 msgstr "Ukryj szablony"
@@ -629,7 +629,7 @@ msgstr "Ukryj szablony"
 msgid "Show templates"
 msgstr "Pokaż szablony"
 
-#. TRANSLATORS src/components/PageList.vue:226
+#. TRANSLATORS src/components/PageList.vue:227
 #: /collectives/specialVueFakeDummyForL10nScript.js:218
 msgid "Could not save page order for collective"
 msgstr "Nie można zachować kolejność stron dla kolektywu"
@@ -737,8 +737,8 @@ msgid "Page deleted"
 msgstr "Strona usunięta"
 
 #: /collectives/src/mixins/pageMixin.js:201
-#: /collectives/src/mixins/pageMixin.js:240
-#: /collectives/src/mixins/pageMixin.js:269
+#: /collectives/src/mixins/pageMixin.js:235
+#: /collectives/src/mixins/pageMixin.js:264
 msgid "Could not change page order"
 msgstr "Nie można zmienić kolejności strony"
 

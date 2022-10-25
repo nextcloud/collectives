@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
-"POT-Creation-Date: 2022-09-28 16:04+0200\n"
+"POT-Creation-Date: 2022-10-25 18:01+0200\n"
 "PO-Revision-Date: 2022-09-22 13:17+0000\n"
 "Last-Translator: Matej U <mateju@src.gnome.org>\n"
 "Language-Team: Slovenian <https://hosted.weblate.org/projects/collectives/"
@@ -20,9 +20,9 @@ msgstr ""
 "n%100==4 ? 2 : 3;\n"
 "X-Generator: Weblate 4.14.1\n"
 
-#. TRANSLATORS src/components/Page.vue:179
+#. TRANSLATORS src/components/Page.vue:181
 #. TRANSLATORS src/views/Home.vue:3
-#: /collectives/lib/Fs/UserFolderHelper.php:67
+#: /collectives/lib/Fs/UserFolderHelper.php:74
 #: /collectives/lib/Search/CollectiveProvider.php:60
 #: /collectives/specialAppInfoFakeDummyForL10nScript.php:2
 #: /collectives/specialVueFakeDummyForL10nScript.js:188
@@ -135,22 +135,22 @@ msgstr "Niste član zbirke s tem imenom."
 msgid "Select a collective or create a new one on the left."
 msgstr "Izberite zbirko, ali pa ustvarite novo v meniju na levi."
 
-#. TRANSLATORS src/components/CollectivePrint.vue:11
+#. TRANSLATORS src/components/CollectivePrint.vue:8
 #: /collectives/specialVueFakeDummyForL10nScript.js:10
 msgid "Preparing collective for exporting or printing"
 msgstr "Pripravljanje zbirke za izvoz oziroma tiskanje"
 
-#. TRANSLATORS src/components/CollectivePrint.vue:58
+#. TRANSLATORS src/components/CollectivePrint.vue:59
 #: /collectives/specialVueFakeDummyForL10nScript.js:12
 msgid "Loading pages:"
 msgstr "Nalaganje strani:"
 
-#. TRANSLATORS src/components/CollectivePrint.vue:63
+#. TRANSLATORS src/components/CollectivePrint.vue:64
 #: /collectives/specialVueFakeDummyForL10nScript.js:14
 msgid "Loading images:"
 msgstr "Nalaganje slik:"
 
-#. TRANSLATORS src/components/LastUserBubble.vue:36
+#. TRANSLATORS src/components/LastUserBubble.vue:40
 #: /collectives/specialVueFakeDummyForL10nScript.js:16
 msgid "Last edited by {user}"
 msgstr "Nazadnje urejano: {user}"
@@ -418,7 +418,7 @@ msgid "Create collective for existing circle"
 msgstr "Ustvari zbirko za obstoječ krog"
 
 #. TRANSLATORS src/components/Nav/NewCollective.vue:41
-#. TRANSLATORS src/components/Page/PageActionMenu.vue:127
+#. TRANSLATORS src/components/Page/PageActionMenu.vue:131
 #. TRANSLATORS src/components/Page.vue:16
 #: /collectives/specialVueFakeDummyForL10nScript.js:130
 #: /collectives/specialVueFakeDummyForL10nScript.js:152
@@ -474,27 +474,27 @@ msgstr "Uredi"
 msgid "Show in Files"
 msgstr "Pokaži v Datotekah"
 
-#. TRANSLATORS src/components/Page/PageActionMenu.vue:122
+#. TRANSLATORS src/components/Page/PageActionMenu.vue:126
 #: /collectives/specialVueFakeDummyForL10nScript.js:148
 msgid "Edit template for subpages"
 msgstr "Uredi predlogo podstrani"
 
-#. TRANSLATORS src/components/Page/PageActionMenu.vue:123
+#. TRANSLATORS src/components/Page/PageActionMenu.vue:127
 #: /collectives/specialVueFakeDummyForL10nScript.js:150
 msgid "Add template for subpages"
 msgstr "Dodaj predlogo za podstran"
 
-#. TRANSLATORS src/components/Page/PageActionMenu.vue:132
+#. TRANSLATORS src/components/Page/PageActionMenu.vue:136
 #: /collectives/specialVueFakeDummyForL10nScript.js:154
 msgid "Cannot delete page with subpages"
 msgstr "Ni mogoče izbrisati strani s podstranmi"
 
-#. TRANSLATORS src/components/Page/PageActionMenu.vue:134
+#. TRANSLATORS src/components/Page/PageActionMenu.vue:138
 #: /collectives/specialVueFakeDummyForL10nScript.js:156
 msgid "Delete template"
 msgstr "Izbriši predlogo"
 
-#. TRANSLATORS src/components/Page/PageActionMenu.vue:135
+#. TRANSLATORS src/components/Page/PageActionMenu.vue:139
 #: /collectives/specialVueFakeDummyForL10nScript.js:158
 msgid "Delete page"
 msgstr "Izbriši stran"
@@ -536,7 +536,7 @@ msgid "Select emoji for page"
 msgstr "Izbor izrazne ikone za spletno stran"
 
 #. TRANSLATORS src/components/Page.vue:46
-#. TRANSLATORS src/components/PageList/Item.vue:197
+#. TRANSLATORS src/components/PageList/Item.vue:203
 #: /collectives/specialVueFakeDummyForL10nScript.js:180
 #: /collectives/specialVueFakeDummyForL10nScript.js:194
 msgid "Template"
@@ -547,17 +547,17 @@ msgstr "Predloga"
 msgid "Title"
 msgstr "Naslov"
 
-#. TRANSLATORS src/components/Page.vue:72
+#. TRANSLATORS src/components/Page.vue:74
 #: /collectives/specialVueFakeDummyForL10nScript.js:184
 msgid "Toggle page sidebar"
 msgstr "Preklopi bočno okno strani"
 
-#. TRANSLATORS src/components/Page.vue:81
+#. TRANSLATORS src/components/Page.vue:83
 #: /collectives/specialVueFakeDummyForL10nScript.js:186
 msgid "Page content"
 msgstr "Vsebina strani"
 
-#. TRANSLATORS src/components/Page.vue:428
+#. TRANSLATORS src/components/Page.vue:430
 #: /collectives/specialVueFakeDummyForL10nScript.js:190
 msgid "Could not rename the page"
 msgstr "Strani ni mogoče preimenovati."
@@ -567,12 +567,12 @@ msgstr "Strani ni mogoče preimenovati."
 msgid "Expand subpage list"
 msgstr "Razširi seznam podstrani"
 
-#. TRANSLATORS src/components/PageList/Item.vue:206
+#. TRANSLATORS src/components/PageList/Item.vue:212
 #: /collectives/specialVueFakeDummyForL10nScript.js:196
 msgid "Add a page"
 msgstr "Dodaj stran"
 
-#. TRANSLATORS src/components/PageList/Item.vue:207
+#. TRANSLATORS src/components/PageList/Item.vue:213
 #: /collectives/specialVueFakeDummyForL10nScript.js:198
 msgid "Add a subpage"
 msgstr "Dodaj podstran"
@@ -603,7 +603,7 @@ msgstr "Najprej nedavno spremenjene"
 msgid "Sort by title"
 msgstr "Po naslovu"
 
-#. TRANSLATORS src/components/PageList.vue:81
+#. TRANSLATORS src/components/PageList.vue:82
 #: /collectives/specialVueFakeDummyForL10nScript.js:212
 msgid "Sorted by title"
 msgstr "Razvrščeno po naslovu"
@@ -612,12 +612,12 @@ msgstr "Razvrščeno po naslovu"
 msgid "Sorted by recently changed"
 msgstr "Razvrščeno po času zadnje spremembe"
 
-#. TRANSLATORS src/components/PageList.vue:82
+#. TRANSLATORS src/components/PageList.vue:83
 #: /collectives/specialVueFakeDummyForL10nScript.js:214
 msgid "Switch back to default sort order"
 msgstr "Preklopi na privzet način razvrščanja"
 
-#. TRANSLATORS src/components/PageList.vue:183
+#. TRANSLATORS src/components/PageList.vue:184
 #: /collectives/specialVueFakeDummyForL10nScript.js:216
 msgid "Hide templates"
 msgstr "Skrij predloge"
@@ -626,7 +626,7 @@ msgstr "Skrij predloge"
 msgid "Show templates"
 msgstr "Pokaži predloge"
 
-#. TRANSLATORS src/components/PageList.vue:226
+#. TRANSLATORS src/components/PageList.vue:227
 #: /collectives/specialVueFakeDummyForL10nScript.js:218
 msgid "Could not save page order for collective"
 msgstr "Ni mogoče shraniti razvrstitve strani za to zbirko"
@@ -735,8 +735,8 @@ msgid "Page deleted"
 msgstr "Stran je izbrisana"
 
 #: /collectives/src/mixins/pageMixin.js:201
-#: /collectives/src/mixins/pageMixin.js:240
-#: /collectives/src/mixins/pageMixin.js:269
+#: /collectives/src/mixins/pageMixin.js:235
+#: /collectives/src/mixins/pageMixin.js:264
 msgid "Could not change page order"
 msgstr "Ni mogoče spremeniti vrstnega reda strani"
 
