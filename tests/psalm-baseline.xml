@@ -87,15 +87,13 @@
     </UndefinedClass>
   </file>
   <file src="lib/Mount/CollectiveFolderManager.php">
-    <UndefinedClass occurrences="3">
+    <UndefinedClass occurrences="5">
+      <code>$this-&gt;systemConfig</code>
       <code>CacheEntry|null</code>
       <code>LazyFolder</code>
       <code>SystemConfig</code>
-    </UndefinedClass>
-    <UndefinedDocblockClass occurrences="2">
-      <code>$this-&gt;systemConfig</code>
       <code>SystemConfig</code>
-    </UndefinedDocblockClass>
+    </UndefinedClass>
   </file>
   <file src="lib/Mount/NoExcludePropagatorStorageWrapper.php">
     <ConstructorSignatureMismatch occurrences="1">
@@ -110,13 +108,22 @@
       <code>$e</code>
       <code>$e</code>
     </InvalidArgument>
-    <UndefinedClass occurrences="27">
+    <UndefinedClass occurrences="36">
       <code>$e</code>
       <code>$e</code>
       <code>$e</code>
       <code>$e</code>
       <code>$e</code>
+      <code>$this-&gt;circlesManager</code>
+      <code>$this-&gt;circlesManager</code>
+      <code>$this-&gt;circlesManager</code>
+      <code>$this-&gt;circlesManager</code>
+      <code>$this-&gt;circlesManager</code>
+      <code>$this-&gt;circlesManager</code>
+      <code>$this-&gt;circlesManager</code>
+      <code>$this-&gt;circlesManager</code>
       <code>?Circle</code>
+      <code>?CirclesManager</code>
       <code>?FederatedUser</code>
       <code>Circle</code>
       <code>Circle</code>
@@ -139,17 +146,8 @@
       <code>SingleCircleNotFoundException</code>
       <code>SingleCircleNotFoundException</code>
     </UndefinedClass>
-    <UndefinedDocblockClass occurrences="15">
-      <code>$this-&gt;circlesManager</code>
-      <code>$this-&gt;circlesManager</code>
-      <code>$this-&gt;circlesManager</code>
-      <code>$this-&gt;circlesManager</code>
-      <code>$this-&gt;circlesManager</code>
-      <code>$this-&gt;circlesManager</code>
-      <code>$this-&gt;circlesManager</code>
-      <code>$this-&gt;circlesManager</code>
+    <UndefinedDocblockClass occurrences="6">
       <code>Circle[]</code>
-      <code>CirclesManager | null</code>
       <code>FederatedUserException</code>
       <code>FederatedUserNotFoundException</code>
       <code>InvalidIdException</code>
@@ -166,20 +164,18 @@
     </UndefinedDocblockClass>
   </file>
   <file src="lib/Service/CollectiveService.php">
-    <UndefinedClass occurrences="6">
+    <UndefinedClass occurrences="10">
       <code>$circle</code>
       <code>$circle</code>
       <code>$circle</code>
       <code>$circle</code>
+      <code>$this-&gt;eventDispatcher</code>
+      <code>$this-&gt;eventDispatcher</code>
+      <code>$this-&gt;eventDispatcher</code>
+      <code>EventDispatcher</code>
       <code>EventDispatcher</code>
       <code>File</code>
     </UndefinedClass>
-    <UndefinedDocblockClass occurrences="4">
-      <code>$this-&gt;eventDispatcher</code>
-      <code>$this-&gt;eventDispatcher</code>
-      <code>$this-&gt;eventDispatcher</code>
-      <code>EventDispatcher</code>
-    </UndefinedDocblockClass>
   </file>
   <file src="lib/Service/CollectiveShareService.php">
     <InvalidArgument occurrences="2">
