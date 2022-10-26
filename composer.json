@@ -4,12 +4,12 @@
     "license": "AGPL-3.0-or-later",
     "config": {
         "platform": {
-            "php": "7.3"
+            "php": "7.4"
         },
         "sort-packages": true
     },
     "require": {
-        "php": ">=7.3",
+        "php": ">=7.4",
         "ext-json": "*",
         "ext-pdo": "*",
         "teamtnt/tntsearch": "^2.9"
