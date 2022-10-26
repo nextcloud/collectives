@@ -65,7 +65,6 @@ export default {
 				count: 0,
 				total: 0,
 			},
-			imageTimeout: () => {},
 		}
 	},
 
@@ -135,13 +134,13 @@ export default {
 
 			// Wait 1 sec for each image but max. 15 sec, timeout afterwards
 			const timeout = Math.min(loading.length * 1000, 15000)
-			this.imageTimeout = debounce(() => {
+			this.$imageTimeout = debounce(() => {
 				if (this.loadImages.count < this.loadImages.total) {
 					console.error(`Failed to load ${this.loadImages.total - this.loadImages.count} images`)
 					this.allImagesLoaded()
 				}
 			}, timeout)
-			this.imageTimeout()
+			this.$imageTimeout()
 		},
 
 		imageLoaded(event) {
@@ -150,7 +149,7 @@ export default {
 			}
 			this.loadImages.count += 1
 			if (this.loadImages.count >= this.loadImages.total) {
-				this.imageTimeout.clear()
+				this.$imageTimeout?.clear()
 				// Finish loading the image
 				this.$nextTick(() => {
 					setTimeout(this.allImagesLoaded, 100)
