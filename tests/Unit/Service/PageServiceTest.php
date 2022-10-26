@@ -256,7 +256,6 @@ class PageServiceTest extends TestCase {
 
 		$fileNameList = [ 'page1.md', 'page2.md', 'page3.md', 'another.jpg', 'whatever.txt' ];
 		foreach ($fileNameList as $fileName) {
-
 			// Add all files to $filesNotJustMd
 			$file = $this->getMockBuilder(File::class)
 				->disableOriginalConstructor()

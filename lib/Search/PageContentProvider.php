@@ -135,7 +135,7 @@ class PageContentProvider implements IProvider {
 
 			$pageSearchResults[] = new SearchResultEntry(
 				'',
-				 $highlighter->extractRelevant($query->getTerm(), $page->getContent(), $highlightLength, 5, ''),
+				$highlighter->extractRelevant($query->getTerm(), $page->getContent(), $highlightLength, 5, ''),
 				$collective->getName() . ' / ' . $pageInfo->getTitle(),
 				implode('/', array_filter([
 					$this->urlGenerator->linkToRoute('collectives.start.index'),

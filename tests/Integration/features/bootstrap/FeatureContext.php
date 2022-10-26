@@ -1120,7 +1120,6 @@ class FeatureContext implements Context {
 		$loginUrl = $this->baseUrl . '/login';
 
 		if (!isset($this->requestTokens[$user])) {
-
 			// Request a new session and extract CSRF token
 			$client = new Client($this->clientOptions);
 			$response = $client->get(
