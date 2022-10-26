@@ -7,11 +7,8 @@ use OC\Files\Storage\Storage;
 use OCP\Files\Storage\IStorageFactory;
 
 class CollectiveMountPoint extends MountPoint {
-	/** @var int */
-	private $folderId;
-
-	/** @var CollectiveFolderManager */
-	private $collectiveFolderManager;
+	private ?int $folderId;
+	private CollectiveFolderManager $collectiveFolderManager;
 
 	/**
 	 * CollectiveMountPoint constructor.

@@ -22,11 +22,11 @@ use OCP\IL10N;
 use PHPUnit\Framework\TestCase;
 
 class CollectiveServiceTest extends TestCase {
-	private $service;
-	private $userId = 'jane';
-	private $collectiveMapper;
-	private $circleHelper;
-	private $l10n;
+	private string $userId = 'jane';
+	private CollectiveMapper $collectiveMapper;
+	private CircleHelper $circleHelper;
+	private IL10N $l10n;
+	private CollectiveService $service;
 
 	protected function setUp(): void {
 		$this->collectiveMapper = $this->getMockBuilder(CollectiveMapper::class)

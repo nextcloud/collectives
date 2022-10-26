@@ -21,11 +21,22 @@ class FileIndexer extends TNTIndexer {
 		$this->disableOutput = true;
 	}
 
+	/**
+	 * @param array $config
+	 *
+	 * @return void
+	 */
 	public function loadConfig(array $config): void {
 		parent::loadConfig($config);
 		$this->config['storage'] = '';
 	}
 
+	/**
+	 * @param Folder $folder
+	 * @param bool   $recursive
+	 *
+	 * @return array
+	 */
 	private function getDirectoryFiles(Folder $folder, bool $recursive = false): array {
 		try {
 			$lsNodes = $folder->getDirectoryListing();
@@ -104,6 +115,9 @@ class FileIndexer extends TNTIndexer {
 		$this->index->commit();
 	}
 
+	/**
+	 * @return PDO|null
+	 */
 	public function getIndex(): ?PDO {
 		return $this->index;
 	}

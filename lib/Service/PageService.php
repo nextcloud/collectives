@@ -20,26 +20,13 @@ use OCP\Lock\LockedException;
 class PageService {
 	private const DEFAULT_PAGE_TITLE = 'New Page';
 
-	/** @var PageMapper */
-	private $pageMapper;
-
-	/** @var NodeHelper */
-	private $nodeHelper;
-
-	/** @var CollectiveServiceBase */
-	private $collectiveService;
-
-	/** @var UserFolderHelper */
-	private $userFolderHelper;
-
-	/** @var IUserManager */
-	private $userManager;
-
-	/** @var IConfig */
-	private $config;
-
-	/** @var CollectiveInfo */
-	private $collectiveInfo;
+	private PageMapper $pageMapper;
+	private NodeHelper $nodeHelper;
+	private CollectiveServiceBase $collectiveService;
+	private UserFolderHelper $userFolderHelper;
+	private IUserManager $userManager;
+	private IConfig $config;
+	private ?CollectiveInfo $collectiveInfo = null;
 
 	/**
 	 * @param PageMapper            $pageMapper

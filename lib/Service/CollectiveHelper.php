@@ -8,21 +8,16 @@ use OCA\Collectives\Db\CollectiveUserSettingsMapper;
 use OCA\Collectives\Model\CollectiveInfo;
 
 class CollectiveHelper {
-	/** @var CollectiveMapper */
-	private $collectiveMapper;
-
-
-	/** @var CollectiveUserSettingsMapper */
-	private $collectiveUserSettingsMapper;
-
-	/** @var CircleHelper */
-	private $circleHelper;
+	private CollectiveMapper $collectiveMapper;
+	private CollectiveUserSettingsMapper $collectiveUserSettingsMapper;
+	private CircleHelper $circleHelper;
 
 	/**
 	 * CollectiveHelper constructor.
 	 *
-	 * @param CollectiveMapper $collectiveMapper
-	 * @param CircleHelper     $circleHelper
+	 * @param CollectiveMapper             $collectiveMapper
+	 * @param CollectiveUserSettingsMapper $collectiveUserSettingsMapper
+	 * @param CircleHelper                 $circleHelper
 	 */
 	public function __construct(CollectiveMapper $collectiveMapper,
 								CollectiveUserSettingsMapper $collectiveUserSettingsMapper,

@@ -6,42 +6,23 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Cookie\CookieJar;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\Assert;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Defines application features from the specific context.
  */
 class FeatureContext implements Context {
-	/** @var Response */
-	private $response;
-
-	/** @var array */
-	private $json;
-
-	/** @var string */
-	private $currentUser;
-
-	/** @var string */
-	private $baseUrl;
-
-	/** @var string */
-	private $remoteUrl;
-
-	/** @var string */
-	private $ocsUrl;
-
-	/** @var CookieJar[] */
-	private $cookieJars;
-
-	/** @var string[] */
-	private $requestTokens;
-
-	/** @var array */
-	private $clientOptions;
-
-	/** @var array */
-	private $store;
+	private string $baseUrl;
+	private string $remoteUrl;
+	private string $ocsUrl;
+	private array $clientOptions;
+	private ?ResponseInterface $response = null;
+	private ?array $json = null;
+	private ?string $currentUser = null;
+	private array $cookieJars = [];
+	private array $requestTokens = [];
+	private array $store = [];
 
 	private const CIRCLE_MEMBER_LEVEL = [
 		1 => 'Member',

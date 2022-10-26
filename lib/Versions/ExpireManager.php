@@ -24,11 +24,8 @@ class ExpireManager {
 		6 => ['intervalEndsAfter' => -1, 'step' => 604800],
 	];
 
-	/** @var Expiration */
-	private $expiration;
-
-	/** @var string|null */
-	private $dependencyInjectionError;
+	private ?Expiration $expiration = null;
+	private string $dependencyInjectionError = '';
 
 	public function __construct(ContainerInterface $appContainer) {
 		try {
@@ -53,7 +50,7 @@ class ExpireManager {
 		}
 		$toDelete = []; // versions we want to delete
 
-		// ensure the versions are sorted newest first
+		// ensure the versions are sorted by newest first
 		usort($versions, static function (IVersion $a, IVersion $b) {
 			return $b->getTimestamp() <=> $a->getTimestamp();
 		});

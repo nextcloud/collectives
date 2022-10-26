@@ -7,11 +7,8 @@ use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Model\CollectiveInfo;
 
 class CollectiveServiceBase {
-	/** @var CollectiveMapper */
-	protected $collectiveMapper;
-
-	/** @var CircleHelper */
-	protected $circleHelper;
+	protected CollectiveMapper $collectiveMapper;
+	protected CircleHelper $circleHelper;
 
 	public function __construct(CollectiveMapper $collectiveMapper,
 								CircleHelper $circleHelper) {

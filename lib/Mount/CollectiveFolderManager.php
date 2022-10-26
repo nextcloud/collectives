@@ -25,23 +25,12 @@ class CollectiveFolderManager {
 	private const LANDING_PAGE_TITLE = 'Readme';
 	private const SUFFIX = '.md';
 
-	/** @var IRootFolder */
-	private $rootFolder;
-
-	/** @var IDBConnection */
-	private $connection;
-
-	/** @var SystemConfig */
-	private $systemConfig;
-
-	/** @var string */
-	private $rootPath;
-
-	/** @var IUserSession */
-	private $userSession;
-
-	/** @var IRequest */
-	private $request;
+	private IRootFolder $rootFolder;
+	private IDBConnection $connection;
+	private SystemConfig $systemConfig;
+	private IUserSession $userSession;
+	private IRequest $request;
+	private ?string $rootPath = null;
 
 	/**
 	 * CollectiveFolderManager constructor.

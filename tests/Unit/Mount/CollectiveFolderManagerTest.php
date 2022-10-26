@@ -11,7 +11,7 @@ use OCP\IUserSession;
 use PHPUnit\Framework\TestCase;
 
 class CollectiveFolderManagerTest extends TestCase {
-	private $manager;
+	private CollectiveFolderManager $manager;
 
 	protected function setUp(): void {
 		parent::setUp();

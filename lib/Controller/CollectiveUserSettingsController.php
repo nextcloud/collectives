@@ -12,14 +12,9 @@ use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
 
 class CollectiveUserSettingsController extends Controller {
-	/** @var CollectiveUserSettingsService */
-	private $service;
-
-	/** @var IUserSession */
-	private $userSession;
-
-	/** @var LoggerInterface */
-	private $logger;
+	private CollectiveUserSettingsService $service;
+	private IUserSession $userSession;
+	private LoggerInterface $logger;
 
 	use ErrorHelper;
 

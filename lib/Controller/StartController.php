@@ -10,10 +10,8 @@ use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IRequest;
 
 class StartController extends Controller {
-	/** @var IAppManager */
-	private $appManager;
-	/** @var IEventDispatcher */
-	private $eventDispatcher;
+	private IAppManager $appManager;
+	private IEventDispatcher $eventDispatcher;
 
 	public function __construct(string $AppName,
 								IRequest $request,

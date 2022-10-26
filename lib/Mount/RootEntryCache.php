@@ -9,8 +9,7 @@ use OCP\Files\Cache\ICache;
 use OCP\Files\Cache\ICacheEntry;
 
 class RootEntryCache extends CacheWrapper {
-	/** @var ICacheEntry|null */
-	private $rootEntry;
+	private ?ICacheEntry $rootEntry;
 
 	/**
 	 * RootEntryCache constructor.

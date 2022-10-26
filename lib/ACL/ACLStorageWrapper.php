@@ -11,11 +11,8 @@ use OC\Files\Storage\Wrapper\Wrapper;
 use OCP\Constants;
 
 class ACLStorageWrapper extends Wrapper {
-	/** @var int */
-	private $permissions;
-
-	/** @var bool */
-	private $inShare;
+	private int $permissions;
+	private bool $inShare;
 
 	public function __construct($arguments) {
 		parent::__construct($arguments);
@@ -143,7 +140,7 @@ class ACLStorageWrapper extends Wrapper {
 		$data = parent::getMetaData($path);
 
 		if ($data && isset($data['permissions'])) {
-			$data['scan_permissions'] = $data['scan_permissions'] ?? $data['permissions'];
+			$data['scan_permissions'] ??= $data['permissions'];
 			$data['permissions'] &= $this->permissions;
 		}
 		return $data;
@@ -235,7 +232,7 @@ class ACLStorageWrapper extends Wrapper {
 
 	public function getDirectoryContent($directory): \Traversable {
 		foreach ($this->getWrapperStorage()->getDirectoryContent($directory) as $data) {
-			$data['scan_permissions'] = $data['scan_permissions'] ?? $data['permissions'];
+			$data['scan_permissions'] ??= $data['permissions'];
 			$data['permissions'] &= $this->permissions;
 
 			yield $data;

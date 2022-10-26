@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 class SettingsControllerTest extends TestCase {
-	private $settingsController;
+	private SettingsController $settingsController;
 
 	protected function setUp(): void {
 		parent::setUp();

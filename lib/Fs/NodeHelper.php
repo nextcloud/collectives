@@ -14,14 +14,9 @@ use OCP\IL10N;
 use OCP\Lock\LockedException;
 
 class NodeHelper {
-	/** @var IDBConnection */
-	private $db;
-
-	/** @var IL10N */
-	private $l10n;
-
-	/** @var bool */
-	private $db4ByteSupport;
+	private IDBConnection $db;
+	private IL10N $l10n;
+	private bool $db4ByteSupport;
 
 	public function __construct(
 		IDBConnection $db,

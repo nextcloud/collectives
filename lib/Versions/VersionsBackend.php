@@ -21,14 +21,9 @@ use OCP\Lock\LockedException;
 use Psr\Log\LoggerInterface;
 
 class VersionsBackend implements IVersionBackend {
-	/** @var CollectiveFolderManager */
-	private $collectiveFolderManager;
-
-	/** @var ITimeFactory */
-	private $timeFactory;
-
-	/** @var LoggerInterface */
-	private $logger;
+	private CollectiveFolderManager $collectiveFolderManager;
+	private ITimeFactory $timeFactory;
+	private LoggerInterface $logger;
 
 	/**
 	 * VersionsBackend constructor.

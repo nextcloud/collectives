@@ -19,20 +19,11 @@ use OCP\Constants;
  * @method bool getUserPageOrder()
  */
 class CollectiveInfo extends Collective {
-	/** @var string */
-	protected $name;
-
-	/** @var int */
-	protected $level;
-
-	/** @var string */
-	protected $shareToken;
-
-	/** @var bool */
-	protected $shareEditable;
-
-	/** @var int|null */
-	protected $userPageOrder;
+	protected string $name;
+	protected int $level;
+	protected ?string $shareToken;
+	protected bool $shareEditable;
+	protected ?int $userPageOrder;
 
 	public function __construct(Collective $collective,
 								string $name,

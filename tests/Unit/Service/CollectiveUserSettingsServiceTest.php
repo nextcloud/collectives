@@ -11,9 +11,9 @@ use OCA\Collectives\Service\NotPermittedException;
 use PHPUnit\Framework\TestCase;
 
 class CollectiveUserSettingsServiceTest extends TestCase {
-	private $collectiveUserSettingsMapper;
-	private $collectiveMapper;
-	private $service;
+	private CollectiveUserSettingsMapper $collectiveUserSettingsMapper;
+	private CollectiveMapper $collectiveMapper;
+	private CollectiveUserSettingsService $service;
 
 	protected function setUp(): void {
 		$this->collectiveUserSettingsMapper = $this->getMockBuilder(CollectiveUserSettingsMapper::class)

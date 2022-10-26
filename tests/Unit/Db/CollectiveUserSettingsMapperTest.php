@@ -11,8 +11,8 @@ use OCP\IDBConnection;
 use PHPUnit\Framework\TestCase;
 
 class CollectiveUserSettingsMapperTest extends TestCase {
-	private $qb;
-	private $mapper;
+	private QueryBuilder $qb;
+	private CollectiveUserSettingsMapper $mapper;
 
 	public function setUp(): void {
 		$expr = $this->getMockBuilder(IExpressionBuilder::class)

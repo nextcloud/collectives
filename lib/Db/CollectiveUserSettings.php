@@ -17,14 +17,9 @@ use OCP\AppFramework\Db\Entity;
  * @method int getPageOrder()
  */
 class CollectiveUserSettings extends Entity implements JsonSerializable {
-	/** @var int */
-	protected $collectiveId;
-
-	/** @var string */
-	protected $userId;
-
-	/** @var int */
-	protected $pageOrder;
+	protected ?int $collectiveId = null;
+	protected ?string $userId = null;
+	protected ?int $pageOrder = null;
 
 	/**
 	 * @param int $pageOrder

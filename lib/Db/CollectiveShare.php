@@ -18,14 +18,9 @@ use OCP\AppFramework\Db\Entity;
  * @method void setOwner(string $value)
  */
 class CollectiveShare extends Entity implements JsonSerializable {
-	/** @var int */
-	protected $collectiveId;
-
-	/** @var string */
-	protected $token;
-
-	/** @var string */
-	protected $owner;
+	protected ?int $collectiveId = null;
+	protected ?string $token = null;
+	protected ?string $owner = null;
 
 	public function jsonSerialize(): array {
 		return [

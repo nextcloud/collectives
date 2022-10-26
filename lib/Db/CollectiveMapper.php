@@ -21,8 +21,7 @@ use OCP\IDBConnection;
  * @method Collective update(Collective $collective)
  */
 class CollectiveMapper extends QBMapper {
-	/** @var CircleHelper */
-	private $circleHelper;
+	private CircleHelper $circleHelper;
 
 	/**
 	 * CollectiveMapper constructor.

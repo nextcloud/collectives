@@ -10,8 +10,7 @@ use OCA\Collectives\Versions\CollectiveVersionsExpireManager;
 use function method_exists;
 
 class ExpirePageVersions extends TimedJob {
-	/** @var CollectiveVersionsExpireManager */
-	private $expireManager;
+	private CollectiveVersionsExpireManager $expireManager;
 
 	public function __construct(ITimeFactory $time,
 								CollectiveVersionsExpireManager $expireManager) {

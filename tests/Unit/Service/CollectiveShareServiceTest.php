@@ -24,16 +24,16 @@ use OCP\Share\IManager as IShareManager;
 use PHPUnit\Framework\TestCase;
 
 class CollectiveShareServiceTest extends TestCase {
-	private $shareManager;
-	private $userFolderHelper;
-	private $collectiveShareMapper;
-	private $service;
+	private IShareManager $shareManager;
+	private UserFolderHelper $userFolderHelper;
+	private CollectiveShareMapper $collectiveShareMapper;
+	private CollectiveShareService $service;
+	private CollectiveInfo $collectiveInfo;
 
-	private $userId = 'jane';
-	private $collectiveId = '123';
-	private $collectiveName = 'Test Collective';
-	private $collectiveInfo;
-	private $collectiveNode;
+	private string $userId = 'jane';
+	private string $collectiveId = '123';
+	private string $collectiveName = 'Test Collective';
+	private Node $collectiveNode;
 
 	protected function setUp(): void {
 		$this->shareManager = $this->getMockBuilder(IShareManager::class)

@@ -21,11 +21,8 @@ use OCP\AutoloadNotAllowedException;
 use Psr\Container\ContainerInterface;
 
 class CircleHelper {
-	/** @var CirclesManager | null */
-	private $circlesManager;
-
-	/** @var String | null */
-	private $dependencyInjectionError;
+	private ?CirclesManager $circlesManager = null;
+	private string $dependencyInjectionError = '';
 
 	public function __construct(ContainerInterface $appContainer) {
 		try {

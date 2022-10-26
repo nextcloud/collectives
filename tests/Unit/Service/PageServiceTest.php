@@ -21,14 +21,14 @@ use OCP\IUserManager;
 use PHPUnit\Framework\TestCase;
 
 class PageServiceTest extends TestCase {
-	private $pageMapper;
-	private $nodeHelper;
-	private $collectiveService;
-	private $collectiveFolder;
-	private $config;
-	private $service;
-	private $userId = 'jane';
-	private $collectiveId = 1;
+	private PageMapper $pageMapper;
+	private NodeHelper $nodeHelper;
+	private CollectiveServiceBase $collectiveService;
+	private Folder $collectiveFolder;
+	private IConfig $config;
+	private PageService $service;
+	private string $userId = 'jane';
+	private int $collectiveId = 1;
 
 	protected function setUp(): void {
 		$this->pageMapper = $this->getMockBuilder(PageMapper::class)

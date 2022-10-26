@@ -14,14 +14,9 @@ use OCP\IRequest;
 use OCP\ISession;
 
 class PublicStartController extends PublicShareController {
-	/** @var CollectiveShareMapper */
-	private $collectiveShareMapper;
-
-	/** @var IAppManager */
-	private $appManager;
-
-	/** @var IEventDispatcher */
-	private $eventDispatcher;
+	private CollectiveShareMapper $collectiveShareMapper;
+	private IAppManager $appManager;
+	private IEventDispatcher $eventDispatcher;
 
 	public function __construct(string $AppName,
 								IRequest $request,

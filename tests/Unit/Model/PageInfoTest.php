@@ -12,7 +12,7 @@ class PageInfoTest extends TestCase {
 	public function testFromFile(): void {
 		$fileId = 1;
 		$fileTitle = 'name';
-		$fileMTime = '';
+		$fileMTime = 0;
 		$fileSize = 100;
 		$fileName = 'name.md';
 		$fileMountPoint = '/files/user/Collectives/collective/';

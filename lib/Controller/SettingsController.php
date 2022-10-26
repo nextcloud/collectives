@@ -13,14 +13,9 @@ use OCP\IRequest;
 use Psr\Log\LoggerInterface;
 
 class SettingsController extends OCSController {
-	/** @var IConfig */
-	private $config;
-
-	/** @var LoggerInterface */
-	private $logger;
-
-	/** @var string */
-	private $userId;
+	private IConfig $config;
+	private LoggerInterface $logger;
+	private string $userId;
 
 	use ErrorHelper;
 

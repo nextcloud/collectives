@@ -5,16 +5,14 @@ namespace OCA\Collectives\Db;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 
 class PageGarbageCollector {
-	/** @var PageMapper */
-	private $pageMapper;
-
-	/** @var CollectiveFolderManager */
-	private $folderManager;
+	private PageMapper $pageMapper;
+	private CollectiveFolderManager $folderManager;
 
 	/**
 	 * PageGarbageCollector constructor.
 	 *
-	 * @param PageMapper $pageMapper
+	 * @param PageMapper              $pageMapper
+	 * @param CollectiveFolderManager $folderManager
 	 */
 	public function __construct(PageMapper $pageMapper,
 								CollectiveFolderManager $folderManager) {

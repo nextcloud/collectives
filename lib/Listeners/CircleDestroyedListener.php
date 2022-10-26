@@ -17,11 +17,8 @@ use OCP\Files\InvalidPathException;
 use OCP\Files\NotFoundException as FilesNotFoundException;
 
 class CircleDestroyedListener implements IEventListener {
-	/** @var CollectiveMapper */
-	private $collectiveMapper;
-
-	/** @var CollectiveFolderManager */
-	private $collectiveFolderManager;
+	private CollectiveMapper $collectiveMapper;
+	private CollectiveFolderManager $collectiveFolderManager;
 
 	public function __construct(CollectiveMapper $collectiveMapper,
 								CollectiveFolderManager $collectiveFolderManager) {

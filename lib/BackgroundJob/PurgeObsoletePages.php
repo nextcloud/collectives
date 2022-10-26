@@ -8,8 +8,7 @@ use OCA\Collectives\Db\PageGarbageCollector;
 use function method_exists;
 
 class PurgeObsoletePages extends TimedJob {
-	/** @var PageGarbageCollector */
-	private $garbageCollector;
+	private PageGarbageCollector $garbageCollector;
 
 	public function __construct(ITimeFactory $time,
 								PageGarbageCollector $garbageCollector) {

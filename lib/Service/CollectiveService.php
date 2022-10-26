@@ -20,26 +20,13 @@ use OCP\Files\NotPermittedException as FilesNotPermittedException;
 use OCP\IL10N;
 
 class CollectiveService extends CollectiveServiceBase {
-	/** @var CollectiveHelper */
-	private $collectiveHelper;
-
-	/** @var CollectiveFolderManager */
-	private $collectiveFolderManager;
-
-	/** @var CollectiveShareService */
-	private $shareService;
-
-	/** @var CollectiveUserSettingsMapper */
-	private $collectiveUserSettingsMapper;
-
-	/** @var PageMapper */
-	private $pageMapper;
-
-	/** @var IL10N */
-	private $l10n;
-
-	/** @var EventDispatcher */
-	private $eventDispatcher;
+	private CollectiveHelper $collectiveHelper;
+	private CollectiveFolderManager $collectiveFolderManager;
+	private CollectiveShareService $shareService;
+	private CollectiveUserSettingsMapper $collectiveUserSettingsMapper;
+	private PageMapper $pageMapper;
+	private IL10N $l10n;
+	private EventDispatcher $eventDispatcher;
 
 	/**
 	 * @param CollectiveMapper             $collectiveMapper
@@ -50,6 +37,7 @@ class CollectiveService extends CollectiveServiceBase {
 	 * @param CollectiveUserSettingsMapper $collectiveUserSettingsMapper
 	 * @param PageMapper                   $pageMapper
 	 * @param IL10N                        $l10n
+	 * @param EventDispatcher              $eventDispatcher
 	 */
 	public function __construct(
 		CollectiveMapper $collectiveMapper,
@@ -64,8 +52,8 @@ class CollectiveService extends CollectiveServiceBase {
 		parent::__construct($collectiveMapper, $circleHelper);
 		$this->collectiveHelper = $collectiveHelper;
 		$this->collectiveFolderManager = $collectiveFolderManager;
-		$this->collectiveUserSettingsMapper = $collectiveUserSettingsMapper;
 		$this->shareService = $shareService;
+		$this->collectiveUserSettingsMapper = $collectiveUserSettingsMapper;
 		$this->pageMapper = $pageMapper;
 		$this->l10n = $l10n;
 		$this->eventDispatcher = $eventDispatcher;

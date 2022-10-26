@@ -18,8 +18,8 @@ class FileSearcher extends TNTSearch {
 		'driver' => 'filesystem',
 		'storage' => ''
 	];
-	/** @var FileIndexer */
-	protected $indexer;
+
+	protected FileIndexer $indexer;
 
 	public function __construct() {
 		parent::__construct();
@@ -40,7 +40,7 @@ class FileSearcher extends TNTSearch {
 
 	/**
 	 * @param $phrase
-	 * @param $numOfResults
+	 * @param int $numOfResults
 	 * @return array
 	 */
 	public function search($phrase, $numOfResults = 1000): array {
@@ -69,7 +69,7 @@ class FileSearcher extends TNTSearch {
 	}
 
 	/**
-	 * @param $indexName
+	 * @param string $indexName
 	 * @return FileIndexer
 	 * @throws FileSearchException
 	 */
@@ -85,8 +85,8 @@ class FileSearcher extends TNTSearch {
 	}
 
 	/**
-	 * @param $indexName
-	 * @param $disableOutput
+	 * @param string $indexName
+	 * @param bool $disableOutput
 	 * @return FileIndexer
 	 */
 	public function createIndex($indexName = '', $disableOutput = false): FileIndexer {

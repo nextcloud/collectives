@@ -18,11 +18,11 @@ use OCP\PreConditionNotMetException;
 use PHPUnit\Framework\TestCase;
 
 class UserFolderHelperTest extends TestCase {
-	private $collectivesUserFolder;
-	private $userFolder;
-	private $l10n;
-	private $config;
-	private $helper;
+	private Folder $collectivesUserFolder;
+	private Folder $userFolder;
+	private IL10N $l10n;
+	private IConfig $config;
+	private UserFolderHelper $helper;
 
 	protected function setUp(): void {
 		parent::setUp();

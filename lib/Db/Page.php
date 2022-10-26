@@ -20,17 +20,10 @@ use OCP\AppFramework\Db\Entity;
  * @method void setSubpageOrder(string $value)
  */
 class Page extends Entity implements JsonSerializable {
-	/** @var int */
-	protected $fileId;
-
-	/** @var string */
-	protected $lastUserId;
-
-	/** @var string */
-	protected $emoji;
-
-	/** @var string */
-	protected $subpageOrder;
+	protected ?int $fileId = null;
+	protected ?string $lastUserId = null;
+	protected ?string $emoji = null;
+	protected ?string $subpageOrder = null;
 
 	public function jsonSerialize(): array {
 		return [

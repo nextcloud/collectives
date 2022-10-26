@@ -9,8 +9,7 @@ use OCA\Collectives\Db\CollectiveShare;
  * @method void setEditable(bool $editable)
  */
 class CollectiveShareInfo extends CollectiveShare {
-	/** @var bool */
-	protected $editable;
+	protected bool $editable;
 
 	public function __construct(CollectiveShare $collectiveShare,
 								bool $editable = false) {

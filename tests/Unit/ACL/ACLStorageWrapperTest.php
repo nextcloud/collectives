@@ -12,8 +12,7 @@ use OCP\IDBConnection;
 use PHPUnit\Framework\TestCase;
 
 class ACLStorageWrapperTest extends TestCase {
-	/** @var IStorage */
-	private $source;
+	private IStorage $source;
 
 	protected function setUp(): void {
 		parent::setUp();
