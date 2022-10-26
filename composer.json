@@ -12,7 +12,7 @@
         "php": ">=7.3",
         "ext-json": "*",
         "ext-pdo": "*",
-        "teamtnt/tntsearch": "^2.9"
+        "teamtnt/tntsearch": "^3.0"
     },
     "require-dev": {
         "ext-dom": "*",
