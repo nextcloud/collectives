@@ -2,9 +2,9 @@
 
 namespace Unit\Mount;
 
-use OC\SystemConfig;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCP\Files\IRootFolder;
+use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IRequest;
 use OCP\IUserSession;
@@ -22,7 +22,7 @@ class CollectiveFolderManagerTest extends TestCase {
 		$connection = $this->getMockBuilder(IDBConnection::class)
 			->disableOriginalConstructor()
 			->getMock();
-		$systemConfig = $this->getMockBuilder(SystemConfig::class)
+		$config = $this->getMockBuilder(IConfig::class)
 			->disableOriginalConstructor()
 			->getMock();
 		$userSession = $this->getMockBuilder(IUserSession::class)
@@ -32,7 +32,7 @@ class CollectiveFolderManagerTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
-		$this->manager = new CollectiveFolderManager($rootFolder, $connection, $systemConfig, $userSession, $request);
+		$this->manager = new CollectiveFolderManager($rootFolder, $connection, $config, $userSession, $request);
 	}
 
 	protected function tearDown(): void {

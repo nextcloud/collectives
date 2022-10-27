@@ -2,7 +2,6 @@
 
 namespace OCA\Collectives\Service;
 
-use OC\EventDispatcher\EventDispatcher;
 use OC\Files\Node\File;
 use OCA\Circles\Model\Member;
 use OCA\Collectives\Db\Collective;
@@ -13,6 +12,7 @@ use OCA\Collectives\Db\PageMapper;
 use OCA\Collectives\Model\CollectiveInfo;
 use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Mount\CollectiveFolderManager;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\Events\InvalidateMountCacheEvent;
 use OCP\Files\InvalidPathException;
 use OCP\Files\NotFoundException as FilesNotFoundException;
@@ -26,7 +26,7 @@ class CollectiveService extends CollectiveServiceBase {
 	private CollectiveUserSettingsMapper $collectiveUserSettingsMapper;
 	private PageMapper $pageMapper;
 	private IL10N $l10n;
-	private EventDispatcher $eventDispatcher;
+	private IEventDispatcher $eventDispatcher;
 
 	/**
 	 * @param CollectiveMapper             $collectiveMapper
@@ -37,7 +37,7 @@ class CollectiveService extends CollectiveServiceBase {
 	 * @param CollectiveUserSettingsMapper $collectiveUserSettingsMapper
 	 * @param PageMapper                   $pageMapper
 	 * @param IL10N                        $l10n
-	 * @param EventDispatcher              $eventDispatcher
+	 * @param IEventDispatcher             $eventDispatcher
 	 */
 	public function __construct(
 		CollectiveMapper $collectiveMapper,
@@ -48,7 +48,7 @@ class CollectiveService extends CollectiveServiceBase {
 		CollectiveUserSettingsMapper $collectiveUserSettingsMapper,
 		PageMapper $pageMapper,
 		IL10N $l10n,
-		EventDispatcher $eventDispatcher) {
+		IEventDispatcher $eventDispatcher) {
 		parent::__construct($collectiveMapper, $circleHelper);
 		$this->collectiveHelper = $collectiveHelper;
 		$this->collectiveFolderManager = $collectiveFolderManager;

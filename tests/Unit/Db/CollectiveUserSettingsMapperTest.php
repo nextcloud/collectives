@@ -2,23 +2,23 @@
 
 namespace Unit\Db;
 
-use OC\DB\QueryBuilder\QueryBuilder;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveUserSettings;
 use OCA\Collectives\Db\CollectiveUserSettingsMapper;
 use OCP\DB\QueryBuilder\IExpressionBuilder;
+use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use PHPUnit\Framework\TestCase;
 
 class CollectiveUserSettingsMapperTest extends TestCase {
-	private QueryBuilder $qb;
+	private IQueryBuilder $qb;
 	private CollectiveUserSettingsMapper $mapper;
 
 	public function setUp(): void {
 		$expr = $this->getMockBuilder(IExpressionBuilder::class)
 			->disableOriginalConstructor()
 			->getMock();
-		$this->qb = $this->getMockBuilder(QueryBuilder::class)
+		$this->qb = $this->getMockBuilder(IQueryBuilder::class)
 			->disableOriginalConstructor()
 			->getMock();
 		$this->qb->method('expr')

@@ -87,12 +87,9 @@
     </UndefinedClass>
   </file>
   <file src="lib/Mount/CollectiveFolderManager.php">
-    <UndefinedClass occurrences="5">
-      <code>$this-&gt;systemConfig</code>
+    <UndefinedClass occurrences="2">
       <code>CacheEntry|null</code>
       <code>LazyFolder</code>
-      <code>SystemConfig</code>
-      <code>SystemConfig</code>
     </UndefinedClass>
   </file>
   <file src="lib/Mount/NoExcludePropagatorStorageWrapper.php">
@@ -164,16 +161,11 @@
     </UndefinedDocblockClass>
   </file>
   <file src="lib/Service/CollectiveService.php">
-    <UndefinedClass occurrences="10">
+    <UndefinedClass occurrences="5">
       <code>$circle</code>
       <code>$circle</code>
       <code>$circle</code>
       <code>$circle</code>
-      <code>$this-&gt;eventDispatcher</code>
-      <code>$this-&gt;eventDispatcher</code>
-      <code>$this-&gt;eventDispatcher</code>
-      <code>EventDispatcher</code>
-      <code>EventDispatcher</code>
       <code>File</code>
     </UndefinedClass>
   </file>
