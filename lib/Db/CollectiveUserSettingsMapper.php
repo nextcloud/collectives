@@ -13,7 +13,7 @@ use OCP\IDBConnection;
 /**
  * @method Entity insert(Entity $settings)
  * @method Entity update(Entity $settings)
- * @method CollectiveUserSettings delete(CollectiveUserSettings $settings)
+ * @method CollectiveUserSettings delete(Entity $settings)
  * @method CollectiveUserSettings findEntity(IQueryBuilder $query)
  */
 class CollectiveUserSettingsMapper extends QBMapper {
@@ -32,16 +32,16 @@ class CollectiveUserSettingsMapper extends QBMapper {
 	 *
 	 * TODO: Migrate to using `CollectiveUserSettings` in type hints once we drop PHP7.3.
 	 *
-	 * @param Entity $settings
+	 * @param Entity $entity
 	 *
 	 * @return Entity
 	 * @throws Exception
 	 */
-	public function insertOrUpdate(Entity $settings): Entity {
-		if ($settings->getId() === null) {
-			return $this->insert($settings);
+	public function insertOrUpdate(Entity $entity): Entity {
+		if ($entity->getId() === null) {
+			return $this->insert($entity);
 		}
-		return $this->update($settings);
+		return $this->update($entity);
 	}
 
 	/**

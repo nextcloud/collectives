@@ -60,7 +60,7 @@ class VersionsBackend implements IVersionBackend {
 	 * @param IUser    $user
 	 * @param FileInfo $file
 	 *
-	 * @return array
+	 * @return CollectiveVersion[]
 	 * @throws InvalidPathException
 	 */
 	public function getVersionsForFile(IUser $user, FileInfo $file): array {
@@ -190,7 +190,7 @@ class VersionsBackend implements IVersionBackend {
 	/**
 	 * @param array $folder
 	 *
-	 * @return array (FileInfo|null)[] [$fileId => FileInfo|null]
+	 * @return (FileInfo|null)[] [$fileId => FileInfo|null]
 	 * @throws NotFoundException
 	 * @throws InvalidPathException
 	 */

@@ -8,6 +8,7 @@ use OCA\Collectives\Service\MissingDependencyException;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\Exception;
@@ -15,10 +16,10 @@ use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
 /**
- * @method Collective insert(Collective $collective)
- * @method Collective delete(Collective $collective)
+ * @method Collective insert(Entity $collective)
+ * @method Collective delete(Entity $collective)
  * @method Collective findEntity(IQueryBuilder $query)
- * @method Collective update(Collective $collective)
+ * @method Collective update(Entity $collective)
  */
 class CollectiveMapper extends QBMapper {
 	private CircleHelper $circleHelper;

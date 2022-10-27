@@ -3,6 +3,7 @@
 namespace OCA\Collectives\Db;
 
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\Exception;
@@ -10,8 +11,8 @@ use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
 /**
- * @method CollectiveShare insert(CollectiveShare $share)
- * @method CollectiveShare delete(CollectiveShare $share)
+ * @method CollectiveShare insert(Entity $share)
+ * @method CollectiveShare delete(Entity $share)
  * @method CollectiveShare findEntity(IQueryBuilder $query)
  */
 class CollectiveShareMapper extends QBMapper {

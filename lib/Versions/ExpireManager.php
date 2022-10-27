@@ -63,7 +63,6 @@ class ExpireManager {
 			$nextInterval = $time - self::MAX_VERSIONS_PER_INTERVAL[$interval]['intervalEndsAfter'];
 		}
 
-		/** @var IVersion $firstVersion */
 		$firstVersion = array_shift($versions);
 		$prevTimestamp = $firstVersion->getTimestamp();
 		$nextVersion = $firstVersion->getTimestamp() - $step;

@@ -7,9 +7,6 @@ use OC\Files\Storage\Storage;
 use OC\Files\Storage\Wrapper\Wrapper;
 
 class NoExcludePropagatorStorageWrapper extends Wrapper {
-	/** @var Storage */
-	protected $storage = null;
-
 	/**
 	 * get a propagator instance for the cache
 	 *

@@ -149,7 +149,7 @@ class CollectiveShareService {
 	 * @return bool
 	 */
 	private function isShareEditable(IShare $folderShare): bool {
-		$folderSharePermissions = $folderShare->getPermissions();
+		$folderShare->getPermissions();
 		return ($folderShare->getPermissions() & Collective::editPermissions) === Collective::editPermissions;
 	}
 
