@@ -5,19 +5,25 @@
       <code>registerEventListener</code>
       <code>registerEventListener</code>
     </InvalidArgument>
-    <UndefinedClass occurrences="1">
+    <MissingDependency occurrences="1">
       <code>CircleDestroyedEvent</code>
-    </UndefinedClass>
+    </MissingDependency>
   </file>
   <file src="lib/BackgroundJob/ExpirePageVersions.php">
     <UndefinedConstant occurrences="1">
-      <code>self::TIME_INSENSITIVE</code>
+      <code>IJob::TIME_INSENSITIVE</code>
     </UndefinedConstant>
+    <UndefinedMethod occurrences="1">
+      <code>setTimeSensitivity</code>
+    </UndefinedMethod>
   </file>
   <file src="lib/BackgroundJob/PurgeObsoletePages.php">
     <UndefinedConstant occurrences="1">
-      <code>self::TIME_INSENSITIVE</code>
+      <code>IJob::TIME_INSENSITIVE</code>
     </UndefinedConstant>
+    <UndefinedMethod occurrences="1">
+      <code>setTimeSensitivity</code>
+    </UndefinedMethod>
   </file>
   <file src="lib/Command/CreateCollective.php">
     <UndefinedMethod occurrences="1">
@@ -34,47 +40,6 @@
       <code>write</code>
     </UndefinedMethod>
   </file>
-  <file src="lib/Controller/PublicStartController.php">
-    <InvalidArgument occurrences="1">
-      <code>new LoadViewer()</code>
-    </InvalidArgument>
-  </file>
-  <file src="lib/Controller/StartController.php">
-    <InvalidArgument occurrences="1">
-      <code>new LoadViewer()</code>
-    </InvalidArgument>
-  </file>
-  <file src="lib/Db/CollectiveMapper.php">
-    <MoreSpecificImplementedParamType occurrences="3">
-      <code>Collective insert(Collective $collective)</code>
-      <code>Collective insert(Collective $collective)</code>
-      <code>Collective insert(Collective $collective)</code>
-    </MoreSpecificImplementedParamType>
-    <UndefinedClass occurrences="1">
-      <code>$this-&gt;circleHelper-&gt;getCircle($circleId, $userId, $super)</code>
-    </UndefinedClass>
-  </file>
-  <file src="lib/Db/CollectiveShareMapper.php">
-    <MoreSpecificImplementedParamType occurrences="2">
-      <code>CollectiveShare insert(CollectiveShare $share)</code>
-      <code>CollectiveShare insert(CollectiveShare $share)</code>
-    </MoreSpecificImplementedParamType>
-  </file>
-  <file src="lib/Db/CollectiveUserSettingsMapper.php">
-    <MoreSpecificImplementedParamType occurrences="1">
-      <code>Entity insert(Entity $settings)</code>
-    </MoreSpecificImplementedParamType>
-    <ParamNameMismatch occurrences="1">
-      <code>$settings</code>
-    </ParamNameMismatch>
-  </file>
-  <file src="lib/Db/PageMapper.php">
-    <MoreSpecificImplementedParamType occurrences="3">
-      <code>Page insert(Page $page)</code>
-      <code>Page insert(Page $page)</code>
-      <code>Page insert(Page $page)</code>
-    </MoreSpecificImplementedParamType>
-  </file>
   <file src="lib/Fs/UserFolderHelper.php">
     <UndefinedClass occurrences="2">
       <code>$e</code>
@@ -82,13 +47,15 @@
     </UndefinedClass>
   </file>
   <file src="lib/Listeners/CircleDestroyedListener.php">
-    <UndefinedClass occurrences="1">
+    <MissingDependency occurrences="1">
       <code>CircleDestroyedEvent</code>
-    </UndefinedClass>
+    </MissingDependency>
   </file>
   <file src="lib/Mount/CollectiveFolderManager.php">
-    <UndefinedClass occurrences="2">
-      <code>CacheEntry|null</code>
+    <InvalidArgument occurrences="1">
+      <code>$maskedStorage</code>
+    </InvalidArgument>
+    <UndefinedClass occurrences="1">
       <code>LazyFolder</code>
     </UndefinedClass>
   </file>
@@ -98,74 +65,13 @@
     </ConstructorSignatureMismatch>
   </file>
   <file src="lib/Service/CircleHelper.php">
-    <InvalidArgument occurrences="5">
+    <UndefinedClass occurrences="2">
       <code>$e</code>
-      <code>$e</code>
-      <code>$e</code>
-      <code>$e</code>
-      <code>$e</code>
-    </InvalidArgument>
-    <UndefinedClass occurrences="36">
-      <code>$e</code>
-      <code>$e</code>
-      <code>$e</code>
-      <code>$e</code>
-      <code>$e</code>
-      <code>$this-&gt;circlesManager</code>
-      <code>$this-&gt;circlesManager</code>
-      <code>$this-&gt;circlesManager</code>
-      <code>$this-&gt;circlesManager</code>
-      <code>$this-&gt;circlesManager</code>
-      <code>$this-&gt;circlesManager</code>
-      <code>$this-&gt;circlesManager</code>
-      <code>$this-&gt;circlesManager</code>
-      <code>?Circle</code>
-      <code>?CirclesManager</code>
-      <code>?FederatedUser</code>
-      <code>Circle</code>
-      <code>Circle</code>
-      <code>CircleNotFoundException</code>
-      <code>CircleNotFoundException</code>
-      <code>CirclesManager</code>
-      <code>FederatedItemException</code>
-      <code>FederatedUserException</code>
-      <code>FederatedUserException</code>
-      <code>FederatedUserNotFoundException</code>
-      <code>FederatedUserNotFoundException</code>
-      <code>InitiatorNotFoundException</code>
-      <code>InitiatorNotFoundException</code>
-      <code>InitiatorNotFoundException</code>
-      <code>InvalidIdException</code>
-      <code>InvalidIdException</code>
-      <code>RequestBuilderException</code>
-      <code>RequestBuilderException</code>
-      <code>RequestBuilderException</code>
-      <code>SingleCircleNotFoundException</code>
-      <code>SingleCircleNotFoundException</code>
+      <code>\ArtificialOwl\MySmallPhpTools\Exceptions\InvalidItemException</code>
     </UndefinedClass>
-    <UndefinedDocblockClass occurrences="6">
-      <code>Circle[]</code>
-      <code>FederatedUserException</code>
-      <code>FederatedUserNotFoundException</code>
-      <code>InvalidIdException</code>
-      <code>RequestBuilderException</code>
-      <code>SingleCircleNotFoundException</code>
-    </UndefinedDocblockClass>
-  </file>
-  <file src="lib/Service/CollectiveHelper.php">
-    <UndefinedDocblockClass occurrences="4">
-      <code>$circle</code>
-      <code>$circle</code>
-      <code>$circles[$cid]</code>
-      <code>$circles[$cid]</code>
-    </UndefinedDocblockClass>
   </file>
   <file src="lib/Service/CollectiveService.php">
-    <UndefinedClass occurrences="5">
-      <code>$circle</code>
-      <code>$circle</code>
-      <code>$circle</code>
-      <code>$circle</code>
+    <UndefinedClass occurrences="1">
       <code>File</code>
     </UndefinedClass>
   </file>
@@ -188,15 +94,6 @@
     <UndefinedClass occurrences="1">
       <code>\OC_Util</code>
     </UndefinedClass>
-    <UndefinedInterfaceMethod occurrences="4">
-      <code>getDisplayName</code>
-      <code>getDisplayName</code>
-      <code>getDisplayName</code>
-      <code>getDisplayName</code>
-    </UndefinedInterfaceMethod>
-    <UndefinedPropertyFetch occurrences="1">
-      <code>\OC::$WEBROOT</code>
-    </UndefinedPropertyFetch>
   </file>
   <file src="lib/Versions/VersionsBackend.php">
     <InvalidArgument occurrences="2">
