@@ -11,15 +11,9 @@ use OCP\Files\Storage\IDisableEncryptionStorage;
 use OCP\IUser;
 
 class CollectiveStorage extends Wrapper implements IDisableEncryptionStorage {
-	/** @var int */
-	private $folderId;
-
-	/** @var ICacheEntry */
-	private $rootEntry;
-
-	/** @var IUser */
-	private $mountOwner;
-
+	private int $folderId;
+	private ICacheEntry $rootEntry;
+	private ?IUser $mountOwner;
 	/** @var RootEntryCache */
 	public $cache;
 

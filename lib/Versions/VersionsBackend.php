@@ -21,14 +21,9 @@ use OCP\Lock\LockedException;
 use Psr\Log\LoggerInterface;
 
 class VersionsBackend implements IVersionBackend {
-	/** @var CollectiveFolderManager */
-	private $collectiveFolderManager;
-
-	/** @var ITimeFactory */
-	private $timeFactory;
-
-	/** @var LoggerInterface */
-	private $logger;
+	private CollectiveFolderManager $collectiveFolderManager;
+	private ITimeFactory $timeFactory;
+	private LoggerInterface $logger;
 
 	/**
 	 * VersionsBackend constructor.
@@ -65,7 +60,7 @@ class VersionsBackend implements IVersionBackend {
 	 * @param IUser    $user
 	 * @param FileInfo $file
 	 *
-	 * @return array
+	 * @return CollectiveVersion[]
 	 * @throws InvalidPathException
 	 */
 	public function getVersionsForFile(IUser $user, FileInfo $file): array {
@@ -195,7 +190,7 @@ class VersionsBackend implements IVersionBackend {
 	/**
 	 * @param array $folder
 	 *
-	 * @return array (FileInfo|null)[] [$fileId => FileInfo|null]
+	 * @return (FileInfo|null)[] [$fileId => FileInfo|null]
 	 * @throws NotFoundException
 	 * @throws InvalidPathException
 	 */

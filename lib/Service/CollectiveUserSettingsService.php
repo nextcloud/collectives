@@ -10,11 +10,8 @@ use OCA\Collectives\Db\CollectiveUserSettingsMapper;
 use OCP\DB\Exception;
 
 class CollectiveUserSettingsService {
-	/** @var CollectiveUserSettingsMapper */
-	private $collectiveUserSettingsMapper;
-
-	/** @var CollectiveMapper */
-	private $collectiveMapper;
+	private CollectiveUserSettingsMapper $collectiveUserSettingsMapper;
+	private CollectiveMapper $collectiveMapper;
 
 	public function __construct(CollectiveUserSettingsMapper $collectiveUserSettingsMapper,
 								CollectiveMapper $collectiveMapper) {

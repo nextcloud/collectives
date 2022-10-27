@@ -13,8 +13,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ExpirePageVersions extends Base {
-	/** @var CollectiveVersionsExpireManager */
-	private $expireManager;
+	private CollectiveVersionsExpireManager $expireManager;
 
 	public function __construct(CollectiveVersionsExpireManager $expireManager) {
 		parent::__construct();

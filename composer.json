@@ -4,22 +4,22 @@
     "license": "AGPL-3.0-or-later",
     "config": {
         "platform": {
-            "php": "7.3"
+            "php": "7.4"
         },
         "sort-packages": true
     },
     "require": {
-        "php": ">=7.3",
+        "php": ">=7.4",
         "ext-json": "*",
         "ext-pdo": "*",
-        "teamtnt/tntsearch": "^2.9"
+        "teamtnt/tntsearch": "^3.0"
     },
     "require-dev": {
         "ext-dom": "*",
         "behat/behat": "^3.8",
-        "christophwurst/nextcloud": "v22.1.1",
         "guzzlehttp/guzzle": "^7.2",
         "nextcloud/coding-standard": "^1.0.0",
+        "nextcloud/ocp": "^24.0",
         "phpunit/phpunit": "^9.5",
         "psalm/phar": "^4.15"
     },

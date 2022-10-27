@@ -17,14 +17,9 @@ use OCP\ISession;
 use Psr\Log\LoggerInterface;
 
 class PublicCollectiveController extends PublicShareController {
-	/** @var CollectiveShareMapper */
-	private $collectiveShareMapper;
-
-	/** @var CollectiveService */
-	private $service;
-
-	/** @var LoggerInterface */
-	private $logger;
+	private CollectiveShareMapper $collectiveShareMapper;
+	private CollectiveService $service;
+	private LoggerInterface $logger;
 
 	use ErrorHelper;
 

@@ -10,14 +10,9 @@ use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
 
 class TrashController extends Controller {
-	/** @var CollectiveService */
-	private $service;
-
-	/** @var IUserSession */
-	private $userSession;
-
-	/** @var LoggerInterface */
-	private $logger;
+	private CollectiveService $service;
+	private IUserSession $userSession;
+	private LoggerInterface $logger;
 
 	use ErrorHelper;
 

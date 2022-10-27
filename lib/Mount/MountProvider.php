@@ -20,23 +20,12 @@ use OCP\IUser;
 use Psr\Log\LoggerInterface;
 
 class MountProvider implements IMountProvider {
-	/** @var CollectiveHelper */
-	private $collectiveHelper;
-
-	/** @var CollectiveFolderManager */
-	private $collectiveFolderManager;
-
-	/** @var LoggerInterface */
-	private $logger;
-
-	/** @var IMimeTypeLoader */
-	private $mimeTypeLoader;
-
-	/** @var IAppManager */
-	private $appManager;
-
-	/** @var UserFolderHelper */
-	private $userFolderHelper;
+	private CollectiveHelper $collectiveHelper;
+	private CollectiveFolderManager $collectiveFolderManager;
+	private LoggerInterface $logger;
+	private IMimeTypeLoader $mimeTypeLoader;
+	private IAppManager $appManager;
+	private UserFolderHelper $userFolderHelper;
 
 	/**
 	 * MountProvider constructor.

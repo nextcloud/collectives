@@ -22,29 +22,14 @@ use Psr\Container\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class CollectiveVersionsExpireManager extends BasicEmitter {
-	/** @var CollectiveFolderManager */
-	private $folderManager;
-
-	/** @var ExpireManager */
-	private $expireManager;
-
-	/** @var VersionsBackend */
-	private $versionsBackend;
-
-	/** @var IDBConnection */
-	private $connection;
-
-	/** @var CollectiveMapper */
-	private $collectiveMapper;
-
-	/** @var ITimeFactory */
-	private $timeFactory;
-
-	/** @var EventDispatcherInterface */
-	private $dispatcher;
-
-	/** @var string|null */
-	private $dependencyInjectionError;
+	private CollectiveFolderManager $folderManager;
+	private ExpireManager $expireManager;
+	private IDBConnection $connection;
+	private CollectiveMapper $collectiveMapper;
+	private ITimeFactory $timeFactory;
+	private EventDispatcherInterface $dispatcher;
+	private ?VersionsBackend $versionsBackend = null;
+	private string $dependencyInjectionError = '';
 
 	/**
 	 * CollectiveVersionsExpireManager constructor.

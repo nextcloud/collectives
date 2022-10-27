@@ -18,20 +18,11 @@ use OCP\Lock\LockedException;
 use OCP\PreConditionNotMetException;
 
 class UserFolderHelper {
-	/** @var IRootFolder */
-	private $rootFolder;
-
-	/** @var Folder */
-	private $userCollectivesFolder;
-
-	/** @var IUserManager */
-	private $userManager;
-
-	/** @var IConfig */
-	private $config;
-
-	/** @var IFactory */
-	private $l10nFactory;
+	private IRootFolder $rootFolder;
+	private IUserManager $userManager;
+	private IConfig $config;
+	private IFactory $l10nFactory;
+	private ?Folder $userCollectivesFolder = null;
 
 	/**
 	 * UserFolderHelper constructor.

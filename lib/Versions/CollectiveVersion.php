@@ -9,11 +9,8 @@ use OCP\Files\FileInfo;
 use OCP\IUser;
 
 class CollectiveVersion extends Version {
-	/** @var File */
-	private $versionFile;
-
-	/** @var int */
-	private $folderId;
+	private File $versionFile;
+	private int $folderId;
 
 	/**
 	 * CollectiveVersion constructor.

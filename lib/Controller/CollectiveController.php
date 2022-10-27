@@ -17,23 +17,12 @@ use OCP\L10N\IFactory;
 use Psr\Log\LoggerInterface;
 
 class CollectiveController extends Controller {
-	/** @var CollectiveService */
-	private $service;
-
-	/** @var IUserSession */
-	private $userSession;
-
-	/** @var IFactory */
-	private $l10nFactory;
-
-	/** @var LoggerInterface */
-	private $logger;
-
-	/** @var NodeHelper */
-	private $nodeHelper;
-
-	/** @var CollectiveShareService */
-	private $shareService;
+	private CollectiveService $service;
+	private IUserSession $userSession;
+	private IFactory $l10nFactory;
+	private LoggerInterface $logger;
+	private NodeHelper $nodeHelper;
+	private CollectiveShareService $shareService;
 
 	use ErrorHelper;
 

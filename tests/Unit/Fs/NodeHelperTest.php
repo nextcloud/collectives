@@ -9,21 +9,20 @@ use OCP\IL10N;
 use PHPUnit\Framework\TestCase;
 
 class NodeHelperTest extends TestCase {
-	private $db;
-	private $l10n;
-	private $helper;
+	private IL10N $l10n;
+	private NodeHelper $helper;
 
 	protected function setUp(): void {
 		parent::setUp();
 
-		$this->db = $this->getMockBuilder(IDBConnection::class)
+		$db = $this->getMockBuilder(IDBConnection::class)
 			->disableOriginalConstructor()
 			->getMock();
 		$this->l10n = $this->getMockBuilder(IL10N::class)
 			->disableOriginalConstructor()
 			->getMock();
 
-		$this->helper = new NodeHelper($this->db, $this->l10n);
+		$this->helper = new NodeHelper($db, $this->l10n);
 	}
 
 	public function nameProvider(): array {

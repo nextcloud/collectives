@@ -2,12 +2,11 @@
 
 namespace OCA\Collectives\Mount;
 
-use OC\Files\Cache\CacheEntry;
 use OC\Files\Node\LazyFolder;
 use OC\Files\Storage\Wrapper\Jail;
 use OC\Files\Storage\Wrapper\PermissionsMask;
-use OC\SystemConfig;
 use OCA\Collectives\ACL\ACLStorageWrapper;
+use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\Files\InvalidPathException;
@@ -15,6 +14,7 @@ use OCP\Files\Mount\IMountPoint;
 use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
 use OCP\Files\Storage\IStorageFactory;
+use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IRequest;
 use OCP\IUser;
@@ -25,42 +25,31 @@ class CollectiveFolderManager {
 	private const LANDING_PAGE_TITLE = 'Readme';
 	private const SUFFIX = '.md';
 
-	/** @var IRootFolder */
-	private $rootFolder;
-
-	/** @var IDBConnection */
-	private $connection;
-
-	/** @var SystemConfig */
-	private $systemConfig;
-
-	/** @var string */
-	private $rootPath;
-
-	/** @var IUserSession */
-	private $userSession;
-
-	/** @var IRequest */
-	private $request;
+	private IRootFolder $rootFolder;
+	private IDBConnection $connection;
+	private IConfig $config;
+	private IUserSession $userSession;
+	private IRequest $request;
+	private ?string $rootPath = null;
 
 	/**
 	 * CollectiveFolderManager constructor.
 	 *
 	 * @param IRootFolder   $rootFolder
 	 * @param IDBConnection $connection
-	 * @param SystemConfig  $systemConfig
+	 * @param IConfig       $config
 	 * @param IUserSession  $userSession
 	 * @param IRequest      $request
 	 */
 	public function __construct(
 		IRootFolder $rootFolder,
 		IDBConnection $connection,
-		SystemConfig $systemConfig,
+		IConfig $config,
 		IUserSession $userSession,
 		IRequest $request) {
 		$this->rootFolder = $rootFolder;
 		$this->connection = $connection;
-		$this->systemConfig = $systemConfig;
+		$this->config = $config;
 		$this->userSession = $userSession;
 		$this->request = $request;
 	}
@@ -70,7 +59,7 @@ class CollectiveFolderManager {
 			return $this->rootPath;
 		}
 
-		$instanceId = $this->systemConfig->getValue('instanceid', null);
+		$instanceId = $this->config->getSystemValue('instanceid', null);
 		if (null === $instanceId) {
 			throw new \RuntimeException('no instance id!');
 		}
@@ -118,7 +107,7 @@ class CollectiveFolderManager {
 	 * @param int                  $id
 	 * @param string               $mountPoint
 	 * @param int                  $permissions
-	 * @param CacheEntry|null      $cacheEntry
+	 * @param ICacheEntry|null     $cacheEntry
 	 * @param IStorageFactory|null $loader
 	 * @param IUser|null           $user
 	 *
@@ -129,7 +118,7 @@ class CollectiveFolderManager {
 	public function getMount(int $id,
 							 string $mountPoint,
 							 int $permissions,
-							 ?CacheEntry $cacheEntry = null,
+							 ?ICacheEntry $cacheEntry = null,
 							 IStorageFactory $loader = null,
 							 IUser $user = null): ?IMountPoint {
 		if (!$cacheEntry) {

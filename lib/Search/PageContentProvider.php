@@ -25,26 +25,13 @@ use OCP\Search\SearchResult;
 use OCP\Search\SearchResultEntry;
 
 class PageContentProvider implements IProvider {
-	/** @var IL10N */
-	private $l10n;
-
-	/** @var IURLGenerator */
-	private $urlGenerator;
-
-	/** @var CollectiveHelper */
-	private $collectiveHelper;
-
-	/** @var PageService */
-	private $pageService;
-
-	/** @var IAppManager */
-	private $appManager;
-
-	/** @var SearchService */
-	private $indexedSearchService;
-
-	/** @var LoggerInterface */
-	private $logger;
+	private IL10N $l10n;
+	private IURLGenerator $urlGenerator;
+	private CollectiveHelper $collectiveHelper;
+	private PageService $pageService;
+	private SearchService $indexedSearchService;
+	private LoggerInterface $logger;
+	private IAppManager $appManager;
 
 	/**
 	 * @param IL10N            $l10n
@@ -148,7 +135,7 @@ class PageContentProvider implements IProvider {
 
 			$pageSearchResults[] = new SearchResultEntry(
 				'',
-				 $highlighter->extractRelevant($query->getTerm(), $page->getContent(), $highlightLength, 5, ''),
+				$highlighter->extractRelevant($query->getTerm(), $page->getContent(), $highlightLength, 5, ''),
 				$collective->getName() . ' / ' . $pageInfo->getTitle(),
 				implode('/', array_filter([
 					$this->urlGenerator->linkToRoute('collectives.start.index'),

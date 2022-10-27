@@ -40,41 +40,18 @@ class PageInfo extends Entity implements JsonSerializable {
 	public const TEMPLATE_PAGE_TITLE = 'Template';
 	public const SUFFIX = '.md';
 
-	/** @var string */
-	protected $lastUserId;
-
-	/** @var string */
-	protected $lastUserDisplayName;
-
-	/** @var string */
-	protected $emoji;
-
-	/** @var string */
-	protected $subpageOrder;
-
-	/** @var string */
-	protected $title;
-
-	/** @var int */
-	protected $timestamp;
-
-	/** @var int */
-	protected $size;
-
-	/** @var string */
-	protected $fileName;
-
-	/** @var string */
-	protected $filePath;
-
-	/** @var string */
-	protected $collectivePath;
-
-	/** @var int */
-	protected $parentId;
-
-	/** @var string */
-	protected $shareToken;
+	protected ?string $lastUserId = null;
+	protected ?string $lastUserDisplayName = null;
+	protected ?string $emoji = null;
+	protected ?string $subpageOrder = null;
+	protected ?string $title = null;
+	protected ?int $timestamp = null;
+	protected ?int $size = null;
+	protected ?string $fileName = null;
+	protected ?string $filePath = null;
+	protected ?string $collectivePath = null;
+	protected ?int $parentId = null;
+	protected ?string $shareToken = null;
 
 	/**
 	 * @return array

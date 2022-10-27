@@ -2,7 +2,6 @@
 
 namespace Unit\Service;
 
-use OC\EventDispatcher\EventDispatcher;
 use OC\Files\Node\File;
 use OC\Files\Node\Folder;
 use OCA\Circles\Model\Circle;
@@ -18,15 +17,16 @@ use OCA\Collectives\Service\CollectiveHelper;
 use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\CollectiveShareService;
 use OCA\Collectives\Service\UnprocessableEntityException;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IL10N;
 use PHPUnit\Framework\TestCase;
 
 class CollectiveServiceTest extends TestCase {
-	private $service;
-	private $userId = 'jane';
-	private $collectiveMapper;
-	private $circleHelper;
-	private $l10n;
+	private string $userId = 'jane';
+	private CollectiveMapper $collectiveMapper;
+	private CircleHelper $circleHelper;
+	private IL10N $l10n;
+	private CollectiveService $service;
 
 	protected function setUp(): void {
 		$this->collectiveMapper = $this->getMockBuilder(CollectiveMapper::class)
@@ -72,7 +72,7 @@ class CollectiveServiceTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
-		$eventDispatcher = $this->getMockBuilder(EventDispatcher::class)
+		$eventDispatcher = $this->getMockBuilder(IEventDispatcher::class)
 			->disableOriginalConstructor()
 			->getMock();
 

@@ -7,6 +7,12 @@ namespace OCA\Collectives\Search\FileSearch;
  * similarly to the bi-gram tokenizer.
  */
 class ClauseTokenizer extends WordTokenizer {
+	/**
+	 * @param string $text
+	 * @param array $stopwords
+	 *
+	 * @return array|string[]
+	 */
 	public function tokenize($text, $stopwords = []): array {
 		$words = parent::tokenize($text, $stopwords);
 

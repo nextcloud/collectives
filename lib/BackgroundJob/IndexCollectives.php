@@ -14,14 +14,10 @@ use OCP\Files\NotFoundException;
 use Psr\Log\LoggerInterface;
 
 class IndexCollectives extends TimedJob {
-	/** @var CollectiveMapper */
-	private $collectiveMapper;
-	/** @var CollectiveFolderManager */
-	private $collectiveFolderManager;
-	/** @var SearchService */
-	private $searchService;
-	/** @var LoggerInterface */
-	private $logger;
+	private CollectiveMapper $collectiveMapper;
+	private CollectiveFolderManager $collectiveFolderManager;
+	private SearchService $searchService;
+	private LoggerInterface $logger;
 
 	/**
 	 * @param ITimeFactory $time

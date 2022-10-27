@@ -17,20 +17,11 @@ use OCP\ISession;
 use Psr\Log\LoggerInterface;
 
 class PublicPageController extends PublicShareController {
-	/** @var CollectiveShareMapper */
-	private $collectiveShareMapper;
-
-	/** @var CollectiveShareService */
-	private $collectiveShareService;
-
-	/** @var PageService */
-	private $service;
-
-	/** @var LoggerInterface */
-	private $logger;
-
-	/** @var CollectiveShareInfo */
-	private $share;
+	private CollectiveShareMapper $collectiveShareMapper;
+	private CollectiveShareService $collectiveShareService;
+	private PageService $service;
+	private LoggerInterface $logger;
+	private ?CollectiveShareInfo $share = null;
 
 	use ErrorHelper;
 

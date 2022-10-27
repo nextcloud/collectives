@@ -57,30 +57,6 @@ describe('Collective', function() {
 		})
 	})
 
-	describe('in the contacts app', function() {
-		before(function() {
-			cy.login('bob', { route: '/apps/contacts' })
-		})
-		it('has a matching circle', function() {
-			// Get a circle from navigation list (ensure that cirlce list is loaded)
-			cy.get('.app-navigation__list .app-navigation-entry-icon .icon-circle').then(() => {
-				cy.get('.app-navigation__list').then($navList => {
-					// Click on 'Show all circles' if the button exists (only if enough circles are listed)
-					const allCirclesButton = $navList.find('.app-navigation__collapse span.app-navigation-entry__title:contains("Show all circles")')
-					if (allCirclesButton.length) {
-						cy.get(allCirclesButton).click()
-					}
-				})
-			})
-			cy.contains('.app-navigation-entry a',
-				'Preexisting Collective',
-				{ timeout: 8000 }
-			).click()
-			cy.get('.contact-header h2 input').should('have.value', 'Preexisting Collective')
-			cy.get('.members-list').should('contain', 'bob')
-		})
-	})
-
 	describe('name conflicts', function() {
 		it('Reports existing circle', function() {
 			cy.login('bob')

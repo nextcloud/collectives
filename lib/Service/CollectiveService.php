@@ -2,7 +2,6 @@
 
 namespace OCA\Collectives\Service;
 
-use OC\EventDispatcher\EventDispatcher;
 use OC\Files\Node\File;
 use OCA\Circles\Model\Member;
 use OCA\Collectives\Db\Collective;
@@ -13,6 +12,7 @@ use OCA\Collectives\Db\PageMapper;
 use OCA\Collectives\Model\CollectiveInfo;
 use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Mount\CollectiveFolderManager;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\Events\InvalidateMountCacheEvent;
 use OCP\Files\InvalidPathException;
 use OCP\Files\NotFoundException as FilesNotFoundException;
@@ -20,26 +20,13 @@ use OCP\Files\NotPermittedException as FilesNotPermittedException;
 use OCP\IL10N;
 
 class CollectiveService extends CollectiveServiceBase {
-	/** @var CollectiveHelper */
-	private $collectiveHelper;
-
-	/** @var CollectiveFolderManager */
-	private $collectiveFolderManager;
-
-	/** @var CollectiveShareService */
-	private $shareService;
-
-	/** @var CollectiveUserSettingsMapper */
-	private $collectiveUserSettingsMapper;
-
-	/** @var PageMapper */
-	private $pageMapper;
-
-	/** @var IL10N */
-	private $l10n;
-
-	/** @var EventDispatcher */
-	private $eventDispatcher;
+	private CollectiveHelper $collectiveHelper;
+	private CollectiveFolderManager $collectiveFolderManager;
+	private CollectiveShareService $shareService;
+	private CollectiveUserSettingsMapper $collectiveUserSettingsMapper;
+	private PageMapper $pageMapper;
+	private IL10N $l10n;
+	private IEventDispatcher $eventDispatcher;
 
 	/**
 	 * @param CollectiveMapper             $collectiveMapper
@@ -50,6 +37,7 @@ class CollectiveService extends CollectiveServiceBase {
 	 * @param CollectiveUserSettingsMapper $collectiveUserSettingsMapper
 	 * @param PageMapper                   $pageMapper
 	 * @param IL10N                        $l10n
+	 * @param IEventDispatcher             $eventDispatcher
 	 */
 	public function __construct(
 		CollectiveMapper $collectiveMapper,
@@ -60,12 +48,12 @@ class CollectiveService extends CollectiveServiceBase {
 		CollectiveUserSettingsMapper $collectiveUserSettingsMapper,
 		PageMapper $pageMapper,
 		IL10N $l10n,
-		EventDispatcher $eventDispatcher) {
+		IEventDispatcher $eventDispatcher) {
 		parent::__construct($collectiveMapper, $circleHelper);
 		$this->collectiveHelper = $collectiveHelper;
 		$this->collectiveFolderManager = $collectiveFolderManager;
-		$this->collectiveUserSettingsMapper = $collectiveUserSettingsMapper;
 		$this->shareService = $shareService;
+		$this->collectiveUserSettingsMapper = $collectiveUserSettingsMapper;
 		$this->pageMapper = $pageMapper;
 		$this->l10n = $l10n;
 		$this->eventDispatcher = $eventDispatcher;

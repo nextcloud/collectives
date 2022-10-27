@@ -23,17 +23,10 @@ use OCP\Share\IManager as IShareManager;
 use OCP\Share\IShare;
 
 class CollectiveShareService {
-	/** @var IShareManager */
-	private $shareManager;
-
-	/** @var UserFolderHelper */
-	private $userFolderHelper;
-
-	/** @var CollectiveShareMapper */
-	private $collectiveShareMapper;
-
-	/** @var IL10N */
-	private $l10n;
+	private IShareManager $shareManager;
+	private UserFolderHelper $userFolderHelper;
+	private CollectiveShareMapper $collectiveShareMapper;
+	private IL10N $l10n;
 
 	public function __construct(IShareManager $shareManager,
 								UserFolderHelper $userFolderHelper,
@@ -156,7 +149,7 @@ class CollectiveShareService {
 	 * @return bool
 	 */
 	private function isShareEditable(IShare $folderShare): bool {
-		$folderSharePermissions = $folderShare->getPermissions();
+		$folderShare->getPermissions();
 		return ($folderShare->getPermissions() & Collective::editPermissions) === Collective::editPermissions;
 	}
 

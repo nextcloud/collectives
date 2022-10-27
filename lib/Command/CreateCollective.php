@@ -16,20 +16,11 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class CreateCollective extends Base {
-	/** @var CollectiveService */
-	private $collectiveService;
-
-	/** @var NodeHelper */
-	private $nodeHelper;
-
-	/** @var IUserManager */
-	private $userManager;
-
-	/** @var IUserSession */
-	private $userSession;
-
-	/** @var IFactory */
-	private $l10nFactory;
+	private CollectiveService $collectiveService;
+	private NodeHelper $nodeHelper;
+	private IUserManager $userManager;
+	private IUserSession $userSession;
+	private IFactory $l10nFactory;
 
 	public function __construct(CollectiveService $collectiveService,
 								NodeHelper $nodeHelper,

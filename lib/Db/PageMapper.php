@@ -3,15 +3,16 @@
 namespace OCA\Collectives\Db;
 
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
 /**
- * @method Page insert(Page $page)
- * @method Page update(Page $page)
- * @method Page delete(Page $page)
+ * @method Page insert(Entity $page)
+ * @method Page update(Entity $page)
+ * @method Page delete(Entity $page)
  * @method Page findEntity(IQueryBuilder $query)
  */
 class PageMapper extends QBMapper {

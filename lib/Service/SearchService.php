@@ -18,12 +18,9 @@ use Psr\Log\LoggerInterface;
 class SearchService {
 	private const INDICES_DIR_NAME = 'indices';
 
-	/** @var CollectiveFolderManager */
-	private $collectiveFolderManager;
-	/** @var ITempManager */
-	private $tempManager;
-	/** @var LoggerInterface */
-	private $logger;
+	private CollectiveFolderManager $collectiveFolderManager;
+	private ITempManager $tempManager;
+	private LoggerInterface $logger;
 
 	public function __construct(
 		CollectiveFolderManager $collectiveFolderManager,

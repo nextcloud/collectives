@@ -9,8 +9,7 @@ use OCP\Files\Cache\ICache;
 use OCP\Files\Cache\ICacheEntry;
 
 class RootEntryCache extends CacheWrapper {
-	/** @var ICacheEntry|null */
-	private $rootEntry;
+	private ?ICacheEntry $rootEntry;
 
 	/**
 	 * RootEntryCache constructor.
@@ -38,14 +37,13 @@ class RootEntryCache extends CacheWrapper {
 
 	/**
 	 * @param string $file
+	 * @param array  $data
 	 *
 	 * @return int
 	 */
-	public function getId($file): int {
-		if ($file === '' && $this->rootEntry) {
-			return $this->rootEntry->getId();
-		}
-		return parent::getId($file);
+	public function insert($file, array $data): int {
+		$this->rootEntry = null;
+		return parent::insert($file, $data);
 	}
 
 	/**
@@ -59,12 +57,13 @@ class RootEntryCache extends CacheWrapper {
 
 	/**
 	 * @param string $file
-	 * @param array  $data
 	 *
 	 * @return int
 	 */
-	public function insert($file, array $data): int {
-		$this->rootEntry = null;
-		return parent::insert($file, $data);
+	public function getId($file): int {
+		if ($file === '' && $this->rootEntry) {
+			return $this->rootEntry->getId();
+		}
+		return parent::getId($file);
 	}
 }

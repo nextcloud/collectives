@@ -10,14 +10,9 @@ use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
 
 class PageController extends Controller {
-	/** @var PageService */
-	private $service;
-
-	/** @var IUserSession */
-	private $userSession;
-
-	/** @var LoggerInterface */
-	private $logger;
+	private PageService $service;
+	private IUserSession $userSession;
+	private LoggerInterface $logger;
 
 	use ErrorHelper;
 

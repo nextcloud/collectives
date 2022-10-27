@@ -16,17 +16,10 @@ use OCP\Search\SearchResult;
 use OCP\Search\SearchResultEntry;
 
 class CollectiveProvider implements IProvider {
-	/** @var IL10N */
-	private $l10n;
-
-	/** @var IURLGenerator */
-	private $urlGenerator;
-
-	/** @var CollectiveHelper */
-	private $collectiveHelper;
-
-	/** @var IAppManager */
-	private $appManager;
+	private IL10N $l10n;
+	private IURLGenerator $urlGenerator;
+	private CollectiveHelper $collectiveHelper;
+	private IAppManager $appManager;
 
 	/**
 	 * CollectiveProvider constructor.

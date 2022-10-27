@@ -9,7 +9,7 @@ use OCP\Files\Cache\ICacheEvent;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class CacheListener {
-	private $eventDispatcher;
+	private EventDispatcher $eventDispatcher;
 
 	/**
 	 * CacheListener constructor.

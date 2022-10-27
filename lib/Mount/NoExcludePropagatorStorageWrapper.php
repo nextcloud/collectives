@@ -8,11 +8,6 @@ use OC\Files\Storage\Wrapper\Wrapper;
 
 class NoExcludePropagatorStorageWrapper extends Wrapper {
 	/**
-	 * @var Storage
-	 */
-	protected $storage;
-
-	/**
 	 * get a propagator instance for the cache
 	 *
 	 * The default storage adds `appdata_<instanceid>` to the ignore list.
