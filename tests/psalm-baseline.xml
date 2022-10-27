@@ -1,29 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files psalm-version="4.x-dev@">
   <file src="lib/AppInfo/Application.php">
-    <InvalidArgument occurrences="2">
-      <code>registerEventListener</code>
-      <code>registerEventListener</code>
-    </InvalidArgument>
     <MissingDependency occurrences="1">
       <code>CircleDestroyedEvent</code>
     </MissingDependency>
-  </file>
-  <file src="lib/BackgroundJob/ExpirePageVersions.php">
-    <UndefinedConstant occurrences="1">
-      <code>IJob::TIME_INSENSITIVE</code>
-    </UndefinedConstant>
-    <UndefinedMethod occurrences="1">
-      <code>setTimeSensitivity</code>
-    </UndefinedMethod>
-  </file>
-  <file src="lib/BackgroundJob/PurgeObsoletePages.php">
-    <UndefinedConstant occurrences="1">
-      <code>IJob::TIME_INSENSITIVE</code>
-    </UndefinedConstant>
-    <UndefinedMethod occurrences="1">
-      <code>setTimeSensitivity</code>
-    </UndefinedMethod>
   </file>
   <file src="lib/Command/CreateCollective.php">
     <UndefinedMethod occurrences="1">
@@ -59,6 +39,11 @@
       <code>LazyFolder</code>
     </UndefinedClass>
   </file>
+  <file src="lib/Mount/CollectiveStorage.php">
+    <MoreSpecificImplementedParamType occurrences="1">
+      <code>$storage</code>
+    </MoreSpecificImplementedParamType>
+  </file>
   <file src="lib/Mount/NoExcludePropagatorStorageWrapper.php">
     <ConstructorSignatureMismatch occurrences="1">
       <code>NoExcludePropagatorStorageWrapper</code>
@@ -75,42 +60,12 @@
       <code>File</code>
     </UndefinedClass>
   </file>
-  <file src="lib/Service/CollectiveShareService.php">
-    <InvalidArgument occurrences="2">
-      <code>$e</code>
-      <code>$e</code>
-    </InvalidArgument>
-    <InvalidCatch occurrences="5"/>
-    <MissingDependency occurrences="6">
-      <code>$e</code>
-      <code>GenericShareException</code>
-      <code>ShareNotFound</code>
-      <code>ShareNotFound</code>
-      <code>ShareNotFound</code>
-      <code>ShareNotFound</code>
-    </MissingDependency>
-  </file>
   <file src="lib/Service/PageService.php">
     <UndefinedClass occurrences="1">
       <code>\OC_Util</code>
     </UndefinedClass>
   </file>
   <file src="lib/Versions/VersionsBackend.php">
-    <InvalidArgument occurrences="2">
-      <code>$mount-&gt;getStorage()</code>
-      <code>$versionMount-&gt;getStorage()</code>
-    </InvalidArgument>
-    <UndefinedDocblockClass occurrences="9">
-      <code>$mount-&gt;getStorage()</code>
-      <code>$mount-&gt;getStorage()</code>
-      <code>$sourceMount-&gt;getStorage()</code>
-      <code>$sourceMount-&gt;getStorage()</code>
-      <code>$versionMount-&gt;getStorage()</code>
-      <code>$versionMount-&gt;getStorage()</code>
-      <code>$versionMount-&gt;getStorage()</code>
-      <code>$versionMount-&gt;getStorage()</code>
-      <code>$versionMount-&gt;getStorage()</code>
-    </UndefinedDocblockClass>
     <UndefinedInterfaceMethod occurrences="1">
       <code>getDirectoryListing</code>
     </UndefinedInterfaceMethod>
