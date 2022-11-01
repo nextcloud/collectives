@@ -202,10 +202,6 @@ export default {
 	overflow: visible !important;
 }
 
-#read-only-editor {
-	overflow-x: hidden;
-}
-
 .editor__content {
 	max-width: 670px;
 	margin: auto;
