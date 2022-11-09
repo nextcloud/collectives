@@ -244,12 +244,16 @@ API PHP 7.3 Nextcloud 22:
   image: registry.gitlab.com/collectivecloud/docker-builds:php7.3-nc22
   needs:
     - "Unit Test PHP 7.3 Nextcloud 22"
+  # temporarily allow failure due to broken circles app
+  allow_failure: true
 
 API PHP 8.0 Nextcloud 23:
   <<: *php-integration
   image: registry.gitlab.com/collectivecloud/docker-builds:php8.0-nc23
   needs:
     - "Unit Test PHP 8.0 Nextcloud 23"
+  # temporarily allow failure due to broken circles app
+  allow_failure: true
 
 API PHP 8.1 Nextcloud 24:
   <<: *php-integration
@@ -346,6 +350,8 @@ Browser PHP 7.3 Nextcloud 22:
     - name: registry.gitlab.com/collectivecloud/docker-builds:php7.3-nc22
       alias: nextcloud.local
       entrypoint: ["/usr/local/bin/run.sh"]
+  # temporarily allow failure due to broken circles app
+  allow_failure: true
 
 Browser PHP 8.0 Nextcloud 23:
   <<: *browser-test
@@ -357,6 +363,8 @@ Browser PHP 8.0 Nextcloud 23:
     - name: registry.gitlab.com/collectivecloud/docker-builds:php8.0-nc23
       alias: nextcloud.local
       entrypoint: ["/usr/local/bin/run.sh"]
+  # temporarily allow failure due to broken circles app
+  allow_failure: true
 
 Browser PHP 8.1 Nextcloud 24:
   <<: *browser-test
