@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.5.1 - 2022.11.09
+
+### 🐛Fixes
+* 🖱️ Fix moving pages in public shares.
+* 👽 Force-setup the full filesystem if collective folder not found. (#332)
+* 🎩 Start html title with actual page name. (#361)
+* 🧹 Hide unneeded UI elements in public share.
+* 🔎 Consider landing pages in fulltext search results. (#391)
+* Fix max width of the page list item.
+* Fix auto-expansion of parent pages in page list.
+* Fix and document usage for users with quota 0B (e.g. guest users). (#231)
+* Use default font size for page list items. (#373)
+* Encode collective name in share URL. (#401)
+* Timeout when loading missing images in print view. (#333)
+
+### 🚧Updates & Tooling
+* 👷 Don't include composer dev packages in release builds.
+* 🔌 Update PHP composer dependencies.
+
+
 ## 1.5.0 - 2022.09.08
 
 ### ✨New
