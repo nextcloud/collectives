@@ -50,7 +50,7 @@
 				@click="unshare(collective)">
 				{{ t('collectives', 'Unshare') }}
 			</ActionButton>
-			<ActionSeparator v-if="collectiveCanShare(collective)" />
+			<ActionSeparator v-if="collectiveCanShare(collective) && !isPublic" />
 			<ActionLink :close-after-click="true"
 				:href="printLink"
 				target="_blank">

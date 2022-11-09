@@ -205,6 +205,9 @@
     <InvalidArgument occurrences="1">
       <code>$subpageOrder</code>
     </InvalidArgument>
+    <UndefinedClass occurrences="1">
+      <code>\OC_Util</code>
+    </UndefinedClass>
     <UndefinedPropertyFetch occurrences="1">
       <code>\OC::$WEBROOT</code>
     </UndefinedPropertyFetch>

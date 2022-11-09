@@ -194,13 +194,13 @@ class PublicPageController extends PublicShareController {
 	/**
 	 * @PublicPage
 	 *
-	 * @param int    $parentId
-	 * @param int    $id
-	 * @param string $title
+	 * @param int         $parentId
+	 * @param int         $id
+	 * @param string|null $title
 	 *
 	 * @return DataResponse
 	 */
-	public function rename(int $parentId, int $id, string $title): DataResponse {
+	public function rename(int $parentId, int $id, ?string $title = null): DataResponse {
 		return $this->handleErrorResponse(function () use ($parentId, $id, $title): array {
 			$this->checkEditPermissions();
 			$owner = $this->getShare()->getOwner();

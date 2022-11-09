@@ -36,6 +36,7 @@ import { mapGetters, mapActions } from 'vuex'
 import EmptyContent from '@nextcloud/vue/dist/Components/EmptyContent'
 import ProgressBar from '@nextcloud/vue/dist/Components/ProgressBar'
 import DownloadIcon from 'vue-material-design-icons/Download'
+import debounce from 'debounce'
 import PagePrint from './PagePrint.vue'
 import { GET_PAGES } from '../store/actions.js'
 import displayError from '../util/displayError.js'
@@ -130,6 +131,16 @@ export default {
 				// Hook into the capture phase as `load` events do not bubble up.
 				el.addEventListener('load', this.imageLoaded, { capture: true })
 			}
+
+			// Wait 1 sec for each image but max. 15 sec, timeout afterwards
+			const timeout = Math.min(loading.length * 1000, 15000)
+			this.$imageTimeout = debounce(() => {
+				if (this.loadImages.count < this.loadImages.total) {
+					console.error(`Failed to load ${this.loadImages.total - this.loadImages.count} images`)
+					this.allImagesLoaded()
+				}
+			}, timeout)
+			this.$imageTimeout()
 		},
 
 		imageLoaded(event) {
@@ -138,6 +149,7 @@ export default {
 			}
 			this.loadImages.count += 1
 			if (this.loadImages.count >= this.loadImages.total) {
+				this.$imageTimeout?.clear()
 				// Finish loading the image
 				this.$nextTick(() => {
 					setTimeout(this.allImagesLoaded, 100)

@@ -1,4 +1,5 @@
 <?php
+
 namespace OCA\Collectives\Search\FileSearch;
 
 use OCP\Files\File;

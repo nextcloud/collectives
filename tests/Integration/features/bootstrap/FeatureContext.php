@@ -604,6 +604,20 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @When user :user leaves circle :name with owner :owner
+	 */
+	public function userLeavesCircle(string $user, string $name, string $owner): void {
+		$this->setCurrentUser($owner);
+		$circleId = $this->circleIdByName($name);
+		Assert::assertNotNull($circleId);
+		$memberId = $this->circleMemberIdByName($circleId, $user);
+		Assert::assertNotNull($memberId);
+
+		$this->sendOcsRequest('DELETE', '/apps/circles/circles/' . $circleId . '/members/' . $memberId);
+		$this->assertStatusCode(200);
+	}
+
+	/**
 	 * @When user :user is member of circle :name
 	 *
 	 * @param string $user
@@ -630,6 +644,24 @@ class FeatureContext implements Context {
 		$circleId = $this->circleIdByName($name);
 		Assert::assertNotNull($circleId);
 		$this->sendOcsRequest('DELETE', '/apps/circles/circles/' . $circleId);
+		$this->assertStatusCode(200);
+	}
+
+	/**
+	 * @When user :user has quota :quota
+	 *
+	 * @param string $user
+	 * @param string $quota
+	 *
+	 * @throws GuzzleException
+	 */
+	public function setUserQuota(string $user, string $quota): void {
+		$this->setCurrentUser('admin');
+		$data = new TableNode([
+			['key', 'quota'],
+			['value', $quota],
+		]);
+		$this->sendOcsRequest('PUT', '/cloud/users/' . $user, $data);
 		$this->assertStatusCode(200);
 	}
 
@@ -905,6 +937,27 @@ class FeatureContext implements Context {
 		foreach ($jsonBody['ocs']['data'] as $circle) {
 			if ($name === $circle['name']) {
 				return $circle['id'];
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * @param string $circleId
+	 * @param string $userId
+	 *
+	 * @return string|null
+	 * @throws GuzzleException
+	 */
+	private function circleMemberIdByName(string $circleId, string $userId): ?string {
+		$this->sendOcsRequest('GET', '/apps/circles/circles/' . $circleId . '/members');
+		if (200 !== $this->response->getStatusCode()) {
+			throw new RuntimeException('Unable to get list of circle members');
+		}
+		$jsonBody = $this->getJson();
+		foreach ($jsonBody['ocs']['data'] as $member) {
+			if ($userId === $member['userId']) {
+				return $member['id'];
 			}
 		}
 		return null;

@@ -71,7 +71,7 @@
 				{{ editMode && !waitForEditor ? t('collectives', 'Done') : t('collectives', 'Edit') }}
 			</Button>
 			<PageActionMenu v-if="currentCollectiveCanEdit"
-				:show-files-link="true"
+				:show-files-link="!isPublic"
 				:page-id="currentPage.id"
 				:parent-id="currentPage.parentId"
 				:timestamp="currentPage.timestamp"
@@ -194,10 +194,10 @@ export default {
 				'Nextcloud',
 			]
 			if (!this.landingPage) {
-				if (this.indexPage) {
-					parts.unshift(filePath || title)
-				} else {
-					parts.unshift(filePath ? filePath + '/' + title : title)
+				// Add parent page names in reverse order
+				filePath.split('/').forEach(part => part && parts.unshift(part))
+				if (!this.indexPage) {
+					parts.unshift(title)
 				}
 			}
 			return parts.join(' - ')

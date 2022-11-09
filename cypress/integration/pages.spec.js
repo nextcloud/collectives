@@ -170,7 +170,7 @@ describe('Page', function() {
 			cy.get('.app-content-list-item').should('contain', 'Subpage Title')
 			cy.get('#titleform input').should('have.value', 'Subpage Title')
 			cy.get('#titleform input').should('not.have.attr', 'disabled')
-			cy.title().should('eq', '#% special chars/Subpage Title - Our Garden - Collectives - Nextcloud')
+			cy.title().should('eq', 'Subpage Title - #% special chars - Our Garden - Collectives - Nextcloud')
 		})
 	})
 
