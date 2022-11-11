@@ -16,6 +16,10 @@ Feature: collective
     And user "bob" leaves circle "mycollective" with owner "jane"
     And user "bob" has quota "default"
 
+  Scenario: Edit page mode as admin and fail to edit page mode as member
+    Then user "jane" sets pageMode for collective "mycollective" to "edit"
+    And user "alice" fails to set pageMode for collective "mycollective" to "edit"
+
   Scenario: Fail to trash a collective as simple member
     And user "alice" fails to trash collective "mycollective"
 

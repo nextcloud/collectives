@@ -20,6 +20,7 @@ use OCP\Constants;
  * @method void setEmoji(string $emoji)
  * @method int|null getTrashTimestamp()
  * @method void setTrashTimestamp(?int $trashTimestamp)
+ * @method int getPageMode()
  */
 class Collective extends Entity implements JsonSerializable {
 	/** @var int */
@@ -39,6 +40,13 @@ class Collective extends Entity implements JsonSerializable {
 	];
 	public const defaultPageOrder = 0;
 
+	public const pageModes = [
+		0 => 'view',
+		1 => 'edit',
+	];
+	/** @var int */
+	public const defaultPageMode = 0;
+
 	/** @var string */
 	protected $circleUniqueId;
 
@@ -50,6 +58,9 @@ class Collective extends Entity implements JsonSerializable {
 
 	/** @var int|null */
 	protected $trashTimestamp;
+
+	/** @var int */
+	protected $pageMode = self::defaultPageMode;
 
 	/**
 	 * @return string|null
@@ -121,6 +132,17 @@ class Collective extends Entity implements JsonSerializable {
 	}
 
 	/**
+	 * @param int $mode
+	 */
+	public function setPageMode(int $mode): void {
+		if (!array_key_exists($mode, Collective::pageModes)) {
+			throw new \RuntimeException('Invalid pageMode value: ' . $mode);
+		}
+		$this->pageMode = $mode;
+		$this->markFieldUpdated('pageMode');
+	}
+
+	/**
 	 * @return bool
 	 */
 	public function isTrashed(): bool {
@@ -136,7 +158,8 @@ class Collective extends Entity implements JsonSerializable {
 			'circleId' => $this->circleUniqueId,
 			'permissions' => $this->permissions,
 			'emoji' => $this->emoji,
-			'trashTimestamp' => $this->trashTimestamp
+			'trashTimestamp' => $this->trashTimestamp,
+			'pageMode' => $this->pageMode
 		];
 	}
 }

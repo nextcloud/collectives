@@ -50,6 +50,11 @@ class FeatureContext implements Context {
 		9 => 'Owner'
 	];
 
+	private const PAGE_MODE = [
+		0 => 'view',
+		1 => 'edit',
+	];
+
 	/**
 	 * Initializes context.
 	 * Every scenario gets its own context instance.
@@ -114,6 +119,39 @@ class FeatureContext implements Context {
 
 		$this->sendRequest('GET', '/apps/collectives/_api');
 		$this->assertCollectiveKeyValue($collective, $type . 'PermissionLevel', $intLevel);
+	}
+
+	/**
+	 * @When user :user sets pageMode for collective :collective to :mode
+	 * @When user :user :fails to set pageMode for collective :collective to :mode
+	 *
+	 * @param string      $user
+	 * @param string      $collective
+	 * @param string      $mode
+	 * @param string|null $fail
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userUpdatesCollectivePageMode(string $user, string $collective, string $mode, ?string $fail = null): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+
+		$intMode = array_search($mode, self::PAGE_MODE, true);
+		if (!$intMode) {
+			throw new \RuntimeException('Could not verify page mode ' . $mode);
+		}
+
+		$formData = new TableNode([['mode', $intMode]]);
+		$this->sendRequest('PUT', '/apps/collectives/_api/' . $collectiveId . '/pageMode', $formData);
+
+		if ("fails" === $fail) {
+			$this->assertStatusCode(403);
+		} else {
+			$this->assertStatusCode(200);
+
+			$this->sendRequest('GET', '/apps/collectives/_api');
+			$this->assertCollectiveKeyValue($collective, 'pageMode', $intMode);
+		}
 	}
 
 	/**
