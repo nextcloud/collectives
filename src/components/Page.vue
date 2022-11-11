@@ -358,9 +358,9 @@ export default {
 		},
 
 		/**
-		 * Show editor if empty content
+		 * Show editor if edit state isn't set already
 		 */
-		emptyContent() {
+		initEdit() {
 			if (this.editToggle === EditState.Unset) {
 				this.startEdit()
 			}
@@ -433,8 +433,8 @@ export default {
 
 		async getPageContent() {
 			this.pageContent = await this.fetchPageContent(this.currentPageDavUrl)
-			if (!this.pageContent) {
-				this.emptyContent()
+			if (!this.pageContent || this.currentCollective.pageMode === 1) {
+				this.initEdit()
 			}
 		},
 

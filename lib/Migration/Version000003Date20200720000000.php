@@ -44,6 +44,10 @@ class Version000003Date20200720000000 extends SimpleMigrationStep {
 			$table->addColumn('trash_timestamp', Types::INTEGER, [
 				'notnull' => false,
 			]);
+			$table->addColumn('page_mode', Types::INTEGER, [
+				'notnull' => true,
+				'default' => Collective::defaultPageMode,
+			]);
 
 			$table->setPrimaryKey(['id']);
 			$table->addUniqueIndex(['circle_unique_id'], 'collectives_circle_id_index');

@@ -17,6 +17,8 @@ return [
 			'requirements' => ['id' => '\d+']],
 		['name' => 'collective#shareLevel', 'url' => '/_api/{id}/shareLevel', 'verb' => 'PUT',
 			'requirements' => ['id' => '\d+']],
+		['name' => 'collective#pageMode', 'url' => '/_api/{id}/pageMode', 'verb' => 'PUT',
+			'requirements' => ['id' => '\d+']],
 		['name' => 'collective#trash', 'url' => '/_api/{id}', 'verb' => 'DELETE',
 			'requirements' => ['id' => '\d+']],
 		['name' => 'collective#createShare', 'url' => '/_api/{id}/share', 'verb' => 'POST',

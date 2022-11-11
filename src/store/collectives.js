@@ -29,6 +29,7 @@ import {
 	UNSHARE_COLLECTIVE,
 	UPDATE_COLLECTIVE_EDIT_PERMISSIONS,
 	UPDATE_COLLECTIVE_SHARE_PERMISSIONS,
+	UPDATE_COLLECTIVE_PAGE_MODE,
 	SET_COLLECTIVE_USER_SETTING_PAGE_ORDER,
 	GET_COLLECTIVES_FOLDER,
 } from './actions.js'
@@ -377,6 +378,21 @@ export default {
 			const response = await axios.put(
 				generateUrl('/apps/collectives/_api/' + id + '/shareLevel'),
 				{ level }
+			)
+			commit(ADD_OR_UPDATE_COLLECTIVE, response.data.data)
+		},
+
+		/**
+		 * @param {object} store the vuex store
+		 * @param {Function} store.commit commit changes
+		 * @param {object} data the data object
+		 * @param {number} data.id ID of the colletive to be updated
+		 * @param {number} data.mode page mode
+		 */
+		async [UPDATE_COLLECTIVE_PAGE_MODE]({ commit }, { id, mode }) {
+			const response = await axios.put(
+				generateUrl('/apps/collectives/_api/' + id + '/pageMode'),
+				{ mode }
 			)
 			commit(ADD_OR_UPDATE_COLLECTIVE, response.data.data)
 		},

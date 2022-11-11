@@ -168,6 +168,7 @@ class CollectiveServiceTest extends TestCase {
 			'circleId' => null,
 			'emoji' => null,
 			'trashTimestamp' => null,
+			'pageMode' => 0,
 			'name' => 'free',
 			'level' => Member::LEVEL_OWNER,
 			'editPermissionLevel' => 1,

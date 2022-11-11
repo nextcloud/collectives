@@ -172,6 +172,27 @@ class CollectiveController extends Controller {
 	 * @NoAdminRequired
 	 *
 	 * @param int $id
+	 * @param int $mode
+	 *
+	 * @return DataResponse
+	 */
+	public function pageMode(int $id, int $mode): DataResponse {
+		return $this->prepareResponse(function () use ($id, $mode): array {
+			$collectiveInfo = $this->service->setPageMode(
+				$id,
+				$this->getUserId(),
+				$mode,
+			);
+			return [
+				"data" => $collectiveInfo,
+			];
+		});
+	}
+
+	/**
+	 * @NoAdminRequired
+	 *
+	 * @param int $id
 	 *
 	 * @return DataResponse
 	 */

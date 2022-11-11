@@ -229,6 +229,22 @@ describe('Page', function() {
 		})
 	})
 
+	describe('With page mode set to edit', function() {
+		it('Opens edit mode per default', function() {
+			cy.seedCollectivePageMode('Our Garden', 1)
+			cy.visit('/apps/collectives/Our%20Garden/Day%202')
+			cy.get('.editor > > .editor__content > .ProseMirror').should('be.visible')
+			cy.get('#read-only-editor.editor__content > .ProseMirror').should('not.be.visible')
+		})
+
+		it('Opens view mode per default', function() {
+			cy.seedCollectivePageMode('Our Garden', 0)
+			cy.visit('/apps/collectives/Our%20Garden/Day%202')
+			cy.get('#read-only-editor.editor__content > .ProseMirror').should('be.visible')
+			cy.get('.editor > > .editor__content > .ProseMirror').should('not.be.visible')
+		})
+	})
+
 	describe('Using the search providers', function() {
 		it('Search for page and page content', function() {
 			cy.get('.unified-search a').click()
