@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import { RichTextReader, AttachmentResolver, ATTACHMENT_RESOLVER, OUTLINE_STATE, OUTLINE_ACTIONS } from '@nextcloud/text'
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl } from '@nextcloud/router'
@@ -52,7 +52,7 @@ export default {
 		Object.defineProperties(val, {
 			[ATTACHMENT_RESOLVER]: { get: () => this.attachmentResolver },
 			[OUTLINE_STATE]: { get: () => this.outline },
-			[OUTLINE_ACTIONS]: { get: () => ({ toggle: this.toggleOutline }) },
+			[OUTLINE_ACTIONS]: { get: () => ({ toggle: this.toggleOutlineFromTextComponent }) },
 		})
 		return val
 	},
@@ -71,10 +71,6 @@ export default {
 		pageContent: {
 			type: String,
 			default: null,
-		},
-		outlineToggled: {
-			type: Boolean,
-			default: false,
 		},
 	},
 
@@ -96,6 +92,7 @@ export default {
 			'currentPageFilePath',
 			'isPublic',
 			'pageParam',
+			'showing',
 			'shareTokenParam',
 		]),
 
@@ -107,12 +104,16 @@ export default {
 				shareToken: this.shareTokenParam,
 			})
 		},
+
+		showOutline() {
+			return this.showing('outline')
+		},
 	},
 
 	watch: {
-		'outlineToggled'() {
-			this.outline.visible = !this.outline.visible
-		}
+		'showOutline'() {
+			this.outline.visible = this.showing('outline')
+		},
 	},
 
 	mounted() {
@@ -123,6 +124,10 @@ export default {
 	},
 
 	methods: {
+		...mapMutations([
+			'toggle',
+		]),
+
 		followLink(_event, attrs) {
 			return this.handleCollectiveLink(attrs)
 				|| this.handleRelativeMarkdownLink(attrs)
@@ -182,8 +187,8 @@ export default {
 			}
 		},
 
-		toggleOutline() {
-			this.outline.visible = !this.outline.visible
+		toggleOutlineFromTextComponent() {
+			this.toggle('outline')
 		},
 	},
 }
