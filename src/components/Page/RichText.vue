@@ -7,7 +7,6 @@
 		<div id="text" class="editor">
 			<PageInfoBar :current-page="currentPage" />
 			<RichTextReader v-if="!loading"
-				class="editor__content"
 				:content="pageContent"
 				@click-link="followLink" />
 		</div>
@@ -16,7 +15,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { RichTextReader, AttachmentResolver, ATTACHMENT_RESOLVER } from '@nextcloud/text'
+import { RichTextReader, AttachmentResolver, ATTACHMENT_RESOLVER, OUTLINE_STATE, OUTLINE_ACTIONS } from '@nextcloud/text'
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl } from '@nextcloud/router'
 import PageInfoBar from './PageInfoBar.vue'
@@ -52,6 +51,8 @@ export default {
 		const val = {}
 		Object.defineProperties(val, {
 			[ATTACHMENT_RESOLVER]: { get: () => this.attachmentResolver },
+			[OUTLINE_STATE]: { get: () => this.outline },
+			[OUTLINE_ACTIONS]: { get: () => ({ toggle: this.toggleOutline }) },
 		})
 		return val
 	},
@@ -61,25 +62,29 @@ export default {
 		// with the spinning wheel where the toolbar would be.
 		asPlaceholder: {
 			type: Boolean,
-			required: false,
 			default: false,
 		},
-
 		currentPage: {
 			type: Object,
 			required: true,
 		},
-
 		pageContent: {
 			type: String,
-			required: false,
 			default: null,
+		},
+		outlineToggled: {
+			type: Boolean,
+			default: false,
 		},
 	},
 
 	data() {
 		return {
 			loading: true,
+			outline: {
+				visible: false,
+				enable: false,
+			},
 		}
 	},
 
@@ -102,6 +107,12 @@ export default {
 				shareToken: this.shareTokenParam,
 			})
 		},
+	},
+
+	watch: {
+		'outlineToggled'() {
+			this.outline.visible = !this.outline.visible
+		}
 	},
 
 	mounted() {
@@ -170,6 +181,10 @@ export default {
 				return true
 			}
 		},
+
+		toggleOutline() {
+			this.outline.visible = !this.outline.visible
+		},
 	},
 }
 </script>
@@ -200,12 +215,6 @@ export default {
 	margin-right: auto;
 	/* Overflow is required for sticky menubar */
 	overflow: visible !important;
-}
-
-.editor__content {
-	max-width: 670px;
-	margin: auto;
-	position: relative;
 }
 
 .text-revision {
