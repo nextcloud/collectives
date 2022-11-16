@@ -210,6 +210,14 @@ export default {
 			width: 44px;
 			padding: 0px 4px;
 			font-size: 30px;
+
+			&.mobile {
+				font-size: 25px;
+			}
+		}
+
+		&.mobile {
+			font-size: 25px;
 		}
 	}
 

@@ -102,7 +102,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 .app-content-wrapper.app-content-wrapper--mobile {
 	/* Required to allow scrolling long content on mobile */
 	overflow-y: auto;
@@ -132,6 +132,13 @@ export default {
 	height: 43px;
 	opacity: 0.8;
 	text-overflow: unset;
+
+	&.mobile {
+		font-size: 30px;
+		// Less padding to save some extra space
+		padding: 0;
+		padding-right: 4px;
+	}
 }
 
 #titleform input[type='text']:disabled {
