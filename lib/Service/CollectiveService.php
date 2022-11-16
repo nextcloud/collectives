@@ -270,6 +270,33 @@ class CollectiveService extends CollectiveServiceBase {
 	/**
 	 * @param int    $id
 	 * @param string $userId
+	 * @param int    $mode
+	 *
+	 * @return CollectiveInfo
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function setPageMode(int $id,
+								string $userId,
+								int $mode): CollectiveInfo {
+		$collectiveInfo = $this->getCollectiveInfo($id, $userId);
+
+		if (!$this->circleHelper->isAdmin($collectiveInfo->getCircleId(), $userId)) {
+			throw new NotPermittedException('Member ' . $userId . ' not allowed to update collective: ' . $id);
+		}
+
+		$collectiveInfo->setPageMode($mode);
+
+		return new CollectiveInfo($this->collectiveMapper->update($collectiveInfo),
+			$collectiveInfo->getName(),
+			$collectiveInfo->getLevel(),
+			$collectiveInfo->getUserPageOrder());
+	}
+
+	/**
+	 * @param int    $id
+	 * @param string $userId
 	 *
 	 * @return CollectiveInfo
 	 * @throws NotFoundException

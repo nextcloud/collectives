@@ -5,6 +5,7 @@ import {
 	DELETE_COLLECTIVE,
 	UPDATE_COLLECTIVE_EDIT_PERMISSIONS,
 	UPDATE_COLLECTIVE_SHARE_PERMISSIONS,
+	UPDATE_COLLECTIVE_PAGE_MODE,
 	GET_PAGES,
 	NEW_PAGE,
 	GET_CIRCLES,
@@ -130,6 +131,19 @@ Cypress.Commands.add('seedCollectivePermissions', (name, type, level) => {
 			} else if (type === 'share') {
 				await app.$store.dispatch(UPDATE_COLLECTIVE_SHARE_PERMISSIONS, { id, level })
 			}
+		})
+})
+
+/**
+ * Change default page mode for a collective
+ */
+Cypress.Commands.add('seedCollectivePageMode', (name, mode) => {
+	cy.log(`Seeding collective page mode for ${name}`)
+	cy.window()
+		.its('app')
+		.then(async app => {
+			const id = app.$store.state.collectives.collectives.find(c => c.name === name).id
+			await app.$store.dispatch(UPDATE_COLLECTIVE_PAGE_MODE, { id, mode })
 		})
 })
 
