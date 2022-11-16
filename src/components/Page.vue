@@ -1,12 +1,13 @@
 <template>
 	<div>
 		<h1 id="titleform" class="page-title">
-			<div class="page-title-icon">
+			<div class="page-title-icon"
+				:class="{ 'mobile': isMobile }">
 				<div v-if="landingPage && currentCollective.emoji">
 					{{ currentCollective.emoji }}
 				</div>
-				<CollectivesIcon v-else-if="landingPage" :size="30" fill-color="var(--color-text-maxcontrast)" />
-				<PageTemplateIcon v-else-if="isTemplatePage" :size="30" fill-color="var(--color-text-maxcontrast)" />
+				<CollectivesIcon v-else-if="landingPage" :size="pageTitleIconSize" fill-color="var(--color-text-maxcontrast)" />
+				<PageTemplateIcon v-else-if="isTemplatePage" :size="pageTitleIconSize" fill-color="var(--color-text-maxcontrast)" />
 				<EmojiPicker v-else
 					ref="page-emoji-picker"
 					:show-preview="true"
@@ -15,18 +16,19 @@
 						:aria-label="t('collectives', 'Select emoji for page')"
 						:title="t('collectives', 'Select emoji')"
 						class="button-emoji-page"
+						:class="{ 'mobile': isMobile }"
 						@click.prevent>
 						<template #icon>
 							<LoadingIcon v-if="emojiButtonIsLoading"
 								class="animation-rotate"
-								:size="30"
+								:size="pageTitleIconSize"
 								fill-color="var(--color-text-maxcontrast)" />
 							<div v-else-if="currentPage.emoji">
 								{{ currentPage.emoji }}
 							</div>
 							<EmoticonOutlineIcon v-else
 								class="emoji-picker-emoticon"
-								:size="30"
+								:size="pageTitleIconPage"
 								fill-color="var(--color-text-maxcontrast)" />
 						</template>
 					</Button>
@@ -37,11 +39,13 @@
 					ref="landingPageTitle"
 					v-tooltip="titleIfTruncated(currentCollective.name)"
 					class="title"
+					:class="{ 'mobile': isMobile }"
 					type="text"
 					disabled
 					:value="currentCollective.name">
 				<input v-else-if="isTemplatePage"
 					class="title"
+					:class="{ 'mobile': isMobile }"
 					type="text"
 					disabled
 					:value="t('collectives', 'Template')">
@@ -50,6 +54,7 @@
 					v-model="newTitle"
 					v-tooltip="titleIfTruncated(newTitle)"
 					class="title"
+					:class="{ 'mobile': isMobile }"
 					:placeholder="t('collectives', 'Title')"
 					type="text"
 					:disabled="!currentCollectiveCanEdit"
@@ -244,6 +249,10 @@ export default {
 
 		showingPageEmojiPicker() {
 			return this.showing('pageEmojiPicker')
+		},
+
+		pageTitleIconPage() {
+			return isMobile ? 25 : 30
 		},
 	},
 
@@ -487,46 +496,6 @@ export default {
 	div.text-menubar, div.menubar {
 		margin: auto;
 		top: calc(var(--header-height) + 59px);
-	}
-}
-
-.page-title {
-	padding: 8px 0px 2px 8px;
-	position: sticky;
-	margin: auto;
-	max-width: 670px;
-	display: flex;
-	align-items: center;
-	top: var(--header-height);
-	background-color: var(--color-main-background);
-
-	.page-title-icon {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		font-size: 30px;
-		min-width: 44px;
-		height: 43px;
-		opacity: 0.8;
-
-		.button-emoji-page {
-			width: 44px;
-			padding: 0px 4px;
-			font-size: 30px;
-		}
-	}
-
-	.title {
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
-}
-
-// Leave space for page list toggle on small screens
-// Editor/View: 670px, page list/details toggle: 44px
-@media only screen and (max-width: 670px + 44px) {
-	.page-title {
-		padding: 8px 0px 2px 30px;
 	}
 }
 
