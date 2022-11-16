@@ -69,9 +69,9 @@
 				:last-user-display-name="currentPage.lastUserDisplayName"
 				:is-landing-page="landingPage"
 				:is-template="isTemplatePage" />
-			<NcActions v-if="!showing('sidebar')">
+			<NcActions v-if="!showing('sidebar') && !isMobile">
 				<NcActionButton icon="icon-menu-sidebar"
-					:aria-label="t('collectives', 'Toggle page sidebar')"
+					:aria-label="t('collectives', 'Open page sidebar')"
 					aria-controls="app-sidebar-vue"
 					:close-after-click="true"
 					@click="toggle('sidebar')" />

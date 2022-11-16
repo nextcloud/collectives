@@ -1,5 +1,13 @@
 <template>
 	<NcActions :force-menu="true" @click.native.stop>
+		<NcActionButton v-if="!showing('sidebar') && isMobile"
+			icon="icon-menu-sidebar"
+			:aria-label="t('collectives', 'Open page sidebar')"
+			aria-controls="app-sidebar-vue"
+			:close-after-click="true"
+			@click="toggle('sidebar')">
+			{{ t('collectives', 'Open page sidebar') }}
+		</NcActionButton>
 		<NcActionLink v-if="showFilesLink"
 			:href="filesUrl"
 			icon="icon-files-dark"
@@ -45,6 +53,7 @@
 import { mapGetters, mapMutations } from 'vuex'
 import { generateUrl } from '@nextcloud/router'
 import { NcActions, NcActionButton, NcActionLink, NcActionSeparator } from '@nextcloud/vue'
+import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 import DeleteOffIcon from 'vue-material-design-icons/DeleteOff.vue'
 import EmoticonOutlineIcon from 'vue-material-design-icons/EmoticonOutline.vue'
@@ -68,6 +77,7 @@ export default {
 	},
 
 	mixins: [
+		isMobile,
 		pageMixin,
 	],
 
@@ -113,6 +123,7 @@ export default {
 	computed: {
 		...mapGetters([
 			'loading',
+			'showing',
 			'showTemplates',
 			'visibleSubpages',
 		]),
@@ -149,7 +160,7 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['show']),
+		...mapMutations(['show', 'toggle']),
 
 		gotoPageEmojiPicker() {
 			if (this.pageUrl && (this.currentPage.id !== this.pageId)) {
