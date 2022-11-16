@@ -78,9 +78,9 @@
 				:last-user-id="currentPage.lastUserId"
 				:is-landing-page="landingPage"
 				:is-template="isTemplatePage" />
-			<Actions v-if="!showing('sidebar')">
+			<Actions v-if="!showing('sidebar') && !isMobile">
 				<ActionButton icon="icon-menu-sidebar"
-					:aria-label="t('collectives', 'Toggle page sidebar')"
+					:aria-label="t('collectives', 'Open page sidebar')"
 					aria-controls="app-sidebar-vue"
 					:close-after-click="true"
 					@click="toggle('sidebar')" />
@@ -104,6 +104,7 @@
 </template>
 
 <script>
+import isMobile from '@nextcloud/vue/dist/Mixins/isMobile'
 import Actions from '@nextcloud/vue/dist/Components/Actions'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import Button from '@nextcloud/vue/dist/Components/Button'
@@ -150,6 +151,7 @@ export default {
 	},
 
 	mixins: [
+		isMobile,
 		pageMixin,
 		pageContentMixin,
 	],
