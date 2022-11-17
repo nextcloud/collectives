@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.6.0 - 2022.11.17
+
+### ✨New
+* 📝 Add collective setting for default page mode. (#418)
+* ❌ Remove support for Nextcloud 22 (not supported anymore).
+
+### 🐛Fixes
+* ⏪ Revert usage for users with quota 0B (e.g. guest users).
+* 📱 Improve and consolidate page title on mobile. (#388)
+
+### 🚧Updates & Tooling
+* 🔌 Downgrade TNTsearch to 2.9 to retain PHP 7.3 support.
+
+
 ## 1.5.1 - 2022.11.09
 
 ### 🐛Fixes
