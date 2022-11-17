@@ -301,6 +301,8 @@ export default {
 	.app-content-list-item-icon {
 		display: flex;
 		justify-content: center;
+		// Emojis are too big with default 1.5em
+		font-size: 1.3em;
 
 		.item-icon-emoji {
 			cursor: pointer;

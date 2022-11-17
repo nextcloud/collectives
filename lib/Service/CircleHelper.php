@@ -101,7 +101,7 @@ class CircleHelper {
 			$this->startSession($userId);
 			$probe = new CircleProbe();
 			$probe->mustBeMember();
-			$circles = $this->circlesManager->getCircles($probe);
+			$circles = $this->circlesManager->getCircles($probe, true);
 		} catch (FederatedUserNotFoundException |
 				 SingleCircleNotFoundException |
 				 RequestBuilderException |

@@ -1,5 +1,13 @@
 <template>
 	<Actions :force-menu="true" @click.native.stop>
+		<ActionButton v-if="!showing('sidebar') && isMobile"
+			icon="icon-menu-sidebar"
+			:aria-label="t('collectives', 'Open page sidebar')"
+			aria-controls="app-sidebar-vue"
+			:close-after-click="true"
+			@click="toggle('sidebar')">
+			{{ t('collectives', 'Open page sidebar') }}
+		</ActionButton>
 		<ActionLink v-if="showFilesLink"
 			:href="filesUrl"
 			icon="icon-files-dark"
@@ -53,6 +61,7 @@ import Actions from '@nextcloud/vue/dist/Components/Actions'
 import ActionButton from '@nextcloud/vue/dist/Components/ActionButton'
 import ActionLink from '@nextcloud/vue/dist/Components/ActionLink'
 import ActionSeparator from '@nextcloud/vue/dist/Components/ActionSeparator'
+import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import ClockOutlineIcon from 'vue-material-design-icons/ClockOutline'
 import DeleteIcon from 'vue-material-design-icons/Delete'
 import DeleteOffIcon from 'vue-material-design-icons/DeleteOff'
@@ -78,6 +87,7 @@ export default {
 	},
 
 	mixins: [
+		isMobile,
 		pageMixin,
 	],
 
@@ -119,6 +129,7 @@ export default {
 	computed: {
 		...mapGetters([
 			'loading',
+			'showing',
 			'showTemplates',
 			'visibleSubpages',
 		]),
@@ -155,7 +166,7 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['show']),
+		...mapMutations(['show', 'toggle']),
 
 		gotoPageEmojiPicker() {
 			if (this.pageUrl && (this.currentPage.id !== this.pageId)) {

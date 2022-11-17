@@ -2,6 +2,7 @@
 	<div>
 		<h1 id="titleform" class="page-title">
 			<input class="title"
+				:class="{ 'mobile': isMobile }"
 				type="text"
 				disabled
 				:value="versionTitle">
@@ -40,6 +41,7 @@ import axios from '@nextcloud/axios'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { generateRemoteUrl } from '@nextcloud/router'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
+import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import { SELECT_VERSION } from '../../store/mutations.js'
 import { GET_VERSIONS } from '../../store/actions.js'
 import pageContentMixin from '../../mixins/pageContentMixin.js'
@@ -56,6 +58,7 @@ export default {
 	},
 
 	mixins: [
+		isMobile,
 		pageContentMixin,
 	],
 

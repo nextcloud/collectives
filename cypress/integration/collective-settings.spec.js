@@ -98,4 +98,23 @@ describe('Collective settings', function() {
 			cy.get('div.toast-success').should('contain', 'Sharing permissions updated')
 		})
 	})
+
+	describe('change page mode', function() {
+		it('Allows to change page mode', function() {
+			cy.login('bob')
+			cy.get('.collectives_list_item')
+				.contains('li', 'Change me now')
+				.find('.action-item__menutoggle')
+				.click({ force: true })
+			cy.get('button.action-button')
+				.contains('Settings')
+				.click()
+			cy.get('a.navigation-list__link')
+				.contains('Page settings')
+				.click()
+			cy.get('div.edit-mode > :last-child > .checkbox-radio-switch__label')
+				.click()
+			cy.get('div.toast-success').should('contain', 'Default page mode updated')
+		})
+	})
 })

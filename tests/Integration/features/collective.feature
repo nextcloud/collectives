@@ -9,13 +9,6 @@ Feature: collective
     And user "alice" sees pagePath "Readme.md" in "mycollective"
     And user "john" doesn't see collective "mycollective"
 
-  Scenario: User with quota 0B sees collective
-    When user "bob" has quota '0 B'
-    And user "bob" joins circle "mycollective" with owner "jane"
-    Then user "bob" sees pagePath "Readme.md" in "mycollective"
-    And user "bob" leaves circle "mycollective" with owner "jane"
-    And user "bob" has quota "default"
-
   Scenario: Fail to trash a collective as simple member
     And user "alice" fails to trash collective "mycollective"
 

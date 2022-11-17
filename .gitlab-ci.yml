@@ -160,9 +160,9 @@ Static PHP Analysis:
     - mariadb:latest
   needs: []
 
-Unit Test PHP 7.3 Nextcloud 22:
+Unit Test PHP 7.3 Nextcloud 23:
   <<: *php-unit
-  image: registry.gitlab.com/collectivecloud/docker-builds:php7.3-nc22
+  image: registry.gitlab.com/collectivecloud/docker-builds:php7.3-nc23
   needs:
     - "Static PHP Analysis"
 
@@ -239,21 +239,17 @@ Unit Test Javascript:
   services:
     - mariadb:latest
 
-API PHP 7.3 Nextcloud 22:
+API PHP 7.3 Nextcloud 23:
   <<: *php-integration
-  image: registry.gitlab.com/collectivecloud/docker-builds:php7.3-nc22
+  image: registry.gitlab.com/collectivecloud/docker-builds:php7.3-nc23
   needs:
-    - "Unit Test PHP 7.3 Nextcloud 22"
-  # temporarily allow failure due to broken circles app
-  allow_failure: true
+    - "Unit Test PHP 7.3 Nextcloud 23"
 
 API PHP 8.0 Nextcloud 23:
   <<: *php-integration
   image: registry.gitlab.com/collectivecloud/docker-builds:php8.0-nc23
   needs:
     - "Unit Test PHP 8.0 Nextcloud 23"
-  # temporarily allow failure due to broken circles app
-  allow_failure: true
 
 API PHP 8.1 Nextcloud 24:
   <<: *php-integration
@@ -278,7 +274,7 @@ OCC CLI Test:
   services:
     - mariadb:latest
   needs:
-    - "Unit Test PHP 7.3 Nextcloud 22"
+    - "Unit Test PHP 7.3 Nextcloud 23"
     - "Unit Test PHP 8.1 Nextcloud 24"
 
 App Update Test:
@@ -298,7 +294,7 @@ App Update Test:
   services:
     - mariadb:latest
   needs:
-    - "Unit Test PHP 7.3 Nextcloud 22"
+    - "Unit Test PHP 7.3 Nextcloud 23"
     - "Unit Test PHP 8.1 Nextcloud 24"
 
 .browser-test: &browser-test
@@ -340,18 +336,16 @@ App Update Test:
       - templates/**/*
       - translationfiles/**/*
 
-Browser PHP 7.3 Nextcloud 22:
+Browser PHP 7.3 Nextcloud 23:
   <<: *browser-test
   variables:
     CYPRESS_baseUrl: http://nextcloud.local/index.php
-    CYPRESS_ncVersion: 22
+    CYPRESS_ncVersion: 23
     APP_SOURCE_URL: "${CI_PROJECT_URL}/-/jobs/${BUILD_JOB_ID}/artifacts/raw/build/release/collectives-${BUILD_VERSION}.tar.gz"
   services:
-    - name: registry.gitlab.com/collectivecloud/docker-builds:php7.3-nc22
+    - name: registry.gitlab.com/collectivecloud/docker-builds:php7.3-nc23
       alias: nextcloud.local
       entrypoint: ["/usr/local/bin/run.sh"]
-  # temporarily allow failure due to broken circles app
-  allow_failure: true
 
 Browser PHP 8.0 Nextcloud 23:
   <<: *browser-test
@@ -363,8 +357,6 @@ Browser PHP 8.0 Nextcloud 23:
     - name: registry.gitlab.com/collectivecloud/docker-builds:php8.0-nc23
       alias: nextcloud.local
       entrypoint: ["/usr/local/bin/run.sh"]
-  # temporarily allow failure due to broken circles app
-  allow_failure: true
 
 Browser PHP 8.1 Nextcloud 24:
   <<: *browser-test

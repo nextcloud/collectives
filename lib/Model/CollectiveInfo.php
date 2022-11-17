@@ -45,6 +45,7 @@ class CollectiveInfo extends Collective {
 		$this->emoji = $collective->getEmoji();
 		$this->permissions = $collective->getPermissions();
 		$this->trashTimestamp = $collective->getTrashTimestamp();
+		$this->pageMode = $collective->getPageMode();
 		$this->name = $name;
 		$this->level = $level;
 		$this->shareToken = $shareToken;
@@ -131,6 +132,7 @@ class CollectiveInfo extends Collective {
 			'circleId' => $this->circleUniqueId,
 			'emoji' => $this->emoji,
 			'trashTimestamp' => $this->trashTimestamp,
+			'pageMode' => $this->pageMode,
 			'name' => $this->name,
 			'level' => $this->level,
 			'editPermissionLevel' => $this->getEditPermissionLevel(),

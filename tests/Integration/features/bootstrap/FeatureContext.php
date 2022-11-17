@@ -50,6 +50,11 @@ class FeatureContext implements Context {
 		9 => 'Owner'
 	];
 
+	private const PAGE_MODE = [
+		0 => 'view',
+		1 => 'edit',
+	];
+
 	/**
 	 * Initializes context.
 	 * Every scenario gets its own context instance.
@@ -114,6 +119,39 @@ class FeatureContext implements Context {
 
 		$this->sendRequest('GET', '/apps/collectives/_api');
 		$this->assertCollectiveKeyValue($collective, $type . 'PermissionLevel', $intLevel);
+	}
+
+	/**
+	 * @When user :user sets pageMode for collective :collective to :mode
+	 * @When user :user :fails to set pageMode for collective :collective to :mode
+	 *
+	 * @param string      $user
+	 * @param string      $collective
+	 * @param string      $mode
+	 * @param string|null $fail
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userUpdatesCollectivePageMode(string $user, string $collective, string $mode, ?string $fail = null): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+
+		$intMode = array_search($mode, self::PAGE_MODE, true);
+		if (!$intMode) {
+			throw new \RuntimeException('Could not verify page mode ' . $mode);
+		}
+
+		$formData = new TableNode([['mode', $intMode]]);
+		$this->sendRequest('PUT', '/apps/collectives/_api/' . $collectiveId . '/pageMode', $formData);
+
+		if ("fails" === $fail) {
+			$this->assertStatusCode(403);
+		} else {
+			$this->assertStatusCode(200);
+
+			$this->sendRequest('GET', '/apps/collectives/_api');
+			$this->assertCollectiveKeyValue($collective, 'pageMode', $intMode);
+		}
 	}
 
 	/**
@@ -604,20 +642,6 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user leaves circle :name with owner :owner
-	 */
-	public function userLeavesCircle(string $user, string $name, string $owner): void {
-		$this->setCurrentUser($owner);
-		$circleId = $this->circleIdByName($name);
-		Assert::assertNotNull($circleId);
-		$memberId = $this->circleMemberIdByName($circleId, $user);
-		Assert::assertNotNull($memberId);
-
-		$this->sendOcsRequest('DELETE', '/apps/circles/circles/' . $circleId . '/members/' . $memberId);
-		$this->assertStatusCode(200);
-	}
-
-	/**
 	 * @When user :user is member of circle :name
 	 *
 	 * @param string $user
@@ -644,24 +668,6 @@ class FeatureContext implements Context {
 		$circleId = $this->circleIdByName($name);
 		Assert::assertNotNull($circleId);
 		$this->sendOcsRequest('DELETE', '/apps/circles/circles/' . $circleId);
-		$this->assertStatusCode(200);
-	}
-
-	/**
-	 * @When user :user has quota :quota
-	 *
-	 * @param string $user
-	 * @param string $quota
-	 *
-	 * @throws GuzzleException
-	 */
-	public function setUserQuota(string $user, string $quota): void {
-		$this->setCurrentUser('admin');
-		$data = new TableNode([
-			['key', 'quota'],
-			['value', $quota],
-		]);
-		$this->sendOcsRequest('PUT', '/cloud/users/' . $user, $data);
 		$this->assertStatusCode(200);
 	}
 
@@ -937,27 +943,6 @@ class FeatureContext implements Context {
 		foreach ($jsonBody['ocs']['data'] as $circle) {
 			if ($name === $circle['name']) {
 				return $circle['id'];
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * @param string $circleId
-	 * @param string $userId
-	 *
-	 * @return string|null
-	 * @throws GuzzleException
-	 */
-	private function circleMemberIdByName(string $circleId, string $userId): ?string {
-		$this->sendOcsRequest('GET', '/apps/circles/circles/' . $circleId . '/members');
-		if (200 !== $this->response->getStatusCode()) {
-			throw new RuntimeException('Unable to get list of circle members');
-		}
-		$jsonBody = $this->getJson();
-		foreach ($jsonBody['ocs']['data'] as $member) {
-			if ($userId === $member['userId']) {
-				return $member['id'];
 			}
 		}
 		return null;

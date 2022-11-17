@@ -94,6 +94,29 @@
 			</div>
 		</AppSettingsSection>
 
+		<AppSettingsSection id="page-settings" :title="t('collectives', 'Page settings')">
+			<div class="subsection-header">
+				{{ t('collectives', 'Default page mode') }}
+			</div>
+
+			<div class="edit-mode">
+				<CheckboxRadioSwitch :checked.sync="pageMode"
+					:value="String(pageModes.MODE_VIEW)"
+					:loading="loading('updateCollectivePageMode_' + String(pageModes.MODE_VIEW))"
+					name="page_mode_view"
+					type="radio">
+					{{ t('collectives', 'View') }}
+				</CheckboxRadioSwitch>
+				<CheckboxRadioSwitch :checked.sync="pageMode"
+					:value="String(pageModes.MODE_EDIT)"
+					:loading="loading('updateCollectivePageMode_' + String(pageModes.MODE_EDIT))"
+					name="page_mode_edit"
+					type="radio">
+					{{ t('collectives', 'Edit') }}
+				</CheckboxRadioSwitch>
+			</div>
+		</AppSettingsSection>
+
 		<AppSettingsSection :title="t('collectives', 'Members')">
 			<div class="section-description">
 				{{ t('collectives', 'Members can be managed via the connected circle in the Contacts app.') }}
@@ -121,7 +144,7 @@
 </template>
 
 <script>
-import { memberLevels } from '../../constants.js'
+import { memberLevels, pageModes } from '../../constants.js'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import AppSettingsDialog from '@nextcloud/vue/dist/Components/AppSettingsDialog'
@@ -137,6 +160,7 @@ import {
 	TRASH_COLLECTIVE,
 	UPDATE_COLLECTIVE_EDIT_PERMISSIONS,
 	UPDATE_COLLECTIVE_SHARE_PERMISSIONS,
+	UPDATE_COLLECTIVE_PAGE_MODE,
 } from '../../store/actions.js'
 import displayError from '../../util/displayError.js'
 
@@ -166,10 +190,12 @@ export default {
 	data() {
 		return {
 			memberLevels,
+			pageModes,
 			newCollectiveName: this.collective.name,
 			showSettings: false,
 			editPermissions: String(this.collective.editPermissionLevel),
 			sharePermissions: String(this.collective.sharePermissionLevel),
+			pageMode: String(this.collective.pageMode),
 		}
 	},
 
@@ -225,7 +251,7 @@ export default {
 			}).catch((error) => {
 				this.editPermissions = String(this.collective.editPermissionLevel)
 				this.done('updateCollectiveEditPermissions_' + permission)
-				showError('Could not update editing permissions')
+				showError(t('collectives', 'Could not update editing permissions'))
 				throw error
 			})
 		},
@@ -238,7 +264,20 @@ export default {
 			}).catch((error) => {
 				this.sharePermissions = String(this.collective.sharePermissionLevel)
 				this.done('updateCollectiveSharePermissions_' + permission)
-				showError('Could not update sharing permissions')
+				showError(t('collectives', 'Could not update sharing permissions'))
+				throw error
+			})
+		},
+		pageMode(val) {
+			const pageMode = String(val)
+			this.load('updateCollectivePageMode_' + pageMode)
+			this.dispatchUpdateCollectivePageMode({ id: this.collective.id, mode: parseInt(pageMode) }).then(() => {
+				this.done('updateCollectivePageMode_' + pageMode)
+				showSuccess(t('collectives', 'Default page mode updated'))
+			}).catch((error) => {
+				this.pageMode = String(this.collective.pageMode)
+				this.done('updateCollectivePageMode_' + pageMode)
+				showError(t('collectives', 'Could not update default page mode'))
 				throw error
 			})
 		},
@@ -253,6 +292,7 @@ export default {
 			dispatchTrashCollective: TRASH_COLLECTIVE,
 			dispatchUpdateCollectiveEditPermissions: UPDATE_COLLECTIVE_EDIT_PERMISSIONS,
 			dispatchUpdateCollectiveSharePermissions: UPDATE_COLLECTIVE_SHARE_PERMISSIONS,
+			dispatchUpdateCollectivePageMode: UPDATE_COLLECTIVE_PAGE_MODE,
 		}),
 
 		/**
@@ -268,7 +308,7 @@ export default {
 				showSuccess(t('collectives', 'Emoji updated'))
 				this.done('updateCollectiveEmoji')
 			}).catch((error) => {
-				showError('Could not update emoji for the collective')
+				showError(t('collectives', 'Could not update emoji for the collective'))
 				this.done('updateCollectiveEmoji')
 				throw error
 			})
@@ -294,7 +334,7 @@ export default {
 			await this.dispatchRenameCircle(collective).then(() => {
 				showSuccess('Collective renamed')
 			}).catch((error) => {
-				showError('Could not rename the collective')
+				showError(t('collectives', 'Could not rename the collective'))
 				this.done('renameCollective')
 				throw error
 			})
