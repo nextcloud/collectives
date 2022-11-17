@@ -62,14 +62,7 @@ class UserFolderHelper {
 		// Get collectives user folder from settings and default to translated 'Collectives'
 		$userCollectivesPath = $this->config->getUserValue($userId, 'collectives', 'user_folder', '');
 		if ($userCollectivesPath === '') {
-			$user = $this->userManager->get($userId);
-
-			// Guest users and others with null quota are not allowed to create a subdirectory
-			if ($user->getQuota() === '0 B') {
-				return '/';
-			}
-
-			$userLang = $this->l10nFactory->getUserLanguage($user);
+			$userLang = $this->l10nFactory->getUserLanguage($this->userManager->get($userId));
 			$l10n = $this->l10nFactory->get('collectives', $userLang);
 			$userCollectivesPath = '/' . $l10n->t('Collectives');
 			try {
@@ -97,10 +90,6 @@ class UserFolderHelper {
 		}
 
 		$userCollectivesPath = $this->getUserFolderSetting($userId);
-		// If collectives path is empty (due to null quota), return userFolder
-		if ($userCollectivesPath === '/') {
-			return $userFolder;
-		}
 
 		try {
 			$userCollectivesFolder = $userFolder->get($userCollectivesPath);
