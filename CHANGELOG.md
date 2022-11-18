@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.6.1 - 2022.11.18
+
+### 🐛Fixes
+* 🐛 Fix app upgrade through web installer. (#427)
+
+
 ## 1.6.0 - 2022.11.17
 
 ### ✨New
