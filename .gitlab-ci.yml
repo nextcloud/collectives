@@ -297,6 +297,26 @@ App Update Test:
     - "Unit Test PHP 7.3 Nextcloud 23"
     - "Unit Test PHP 8.1 Nextcloud 24"
 
+Nextcloud Update Test:
+  <<: *php
+  image: registry.gitlab.com/collectivecloud/docker-builds:php8.1-nc24-release
+  stage: test integration
+  script:
+    - sudo -u www-data $NEXTCLOUD_SOURCE/occ app:enable --force collectives
+    - sudo -u www-data $NEXTCLOUD_SOURCE/occ collectives:create --owner alice NewCollective
+    - sudo -u www-data $NEXTCLOUD_SOURCE/occ collectives:create --owner bob AnotherNewCollective
+    - sudo -u www-data "curl -L localhost || tail -n200 $NEXTCLOUD_SOURCE/log/nextcloud.log"
+    - sudo -u www-data php $NEXTCLOUD_SOURCE/updater/updater.phar --no-interaction
+    - sudo -u www-data $NEXTCLOUD_SOURCE/occ app:list
+    - sudo -u www-data $NEXTCLOUD_SOURCE/occ collectives:create --owner alice YetAnotherNewCollective
+    - sudo -u www-data "curl -L localhost || tail -n200 $NEXTCLOUD_SOURCE/log/nextcloud.log"
+  before_script:
+    - make composer-install-no-dev
+  services:
+    - mariadb:latest
+  needs:
+    - "Unit Test PHP 8.1 Nextcloud 24"
+
 .browser-test: &browser-test
   <<: *node
   image: cypress/browsers:node16.14.2-slim-chrome103-ff102
