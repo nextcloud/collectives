@@ -6,7 +6,6 @@ namespace OCA\Collectives\Migration;
 
 use Closure;
 use Doctrine\DBAL\Types\Types;
-use OCA\Collectives\Db\Collective;
 use OCP\DB\ISchemaWrapper;
 use OCP\Migration\IOutput;
 use OCP\Migration\SimpleMigrationStep;
@@ -27,7 +26,7 @@ class Version020100Date20221111000000 extends SimpleMigrationStep {
 		if (!$table->hasColumn('page_mode')) {
 			$table->addColumn('page_mode', Types::INTEGER, [
 				'notnull' => true,
-				'default' => Collective::defaultPageMode,
+				'default' => 0,
 			]);
 			return $schema;
 		}
