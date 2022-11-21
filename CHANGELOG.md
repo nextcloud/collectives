@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.6.2 - 2022.11.21
+
+### 🐛Fixes
+* 🥟 Again fix sticky editor menubar. (#428, #429)
+
+
 ## 1.6.1 - 2022.11.18
 
 ### 🐛Fixes

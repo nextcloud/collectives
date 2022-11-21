@@ -190,12 +190,12 @@ div.modal-wrapper.modal-wrapper--full div.modal-container {
 /* Format page title in Page.vue and Version.vue */
 .page-title {
 	position: sticky;
-	top: 0;
 	padding: 8px 0px 2px 8px;
 	margin: auto;
 	max-width: 670px;
 	display: flex;
 	align-items: center;
+	top: var(--header-height);
 	background-color: var(--color-main-background);
 
 	.page-title-icon {
