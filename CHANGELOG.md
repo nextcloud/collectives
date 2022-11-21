@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.1.0 - 2022.11.25
+
+### ✨New
+* 📝 Add collective setting for default page mode. (#418)
+* 🔥️️ Drop support for PHP 7.3, PHP 7.4 code enhancements.
+
+### 🐛Fixes
+* 📱 Improve and consolidate page title on mobile. (#388)
+
+### 🚧Updates & Tooling
+* 🔌 Update PHP composer dependencies.
+
 ## 2.0.0 - 2022.10.25
 
 ### ✨New
@@ -8,7 +20,6 @@
 * 🧹 Drop support for Nextcloud version 24 and earlier.
 
 ### 🐛Fixes
-
 * 🔎 Consider landing pages in fulltext search results. (#391)
 * 🖱️ Fix moving pages in public shares.
 * 👽 Force-setup the full filesystem if collective folder not found. (#332)
