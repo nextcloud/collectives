@@ -232,7 +232,7 @@ describe('Page', function() {
 		})
 	})
 
-	describe('With page mode set to edit', function() {
+	describe('Changing page mode', function() {
 		it('Opens edit mode per default', function() {
 			cy.seedCollectivePageMode('Our Garden', 1)
 			cy.visit('/apps/collectives/Our%20Garden/Day%202')
@@ -249,6 +249,38 @@ describe('Page', function() {
 				.should('be.visible')
 			cy.getEditor()
 				.should('not.be.visible')
+		})
+	})
+
+	describe('Display table of contents', function() {
+		it('Allows to display/close TOC and switch page modes in between', function() {
+			cy.seedPage('TableOfContents', '', 'Readme.md')
+			cy.seedPageContent('Our Garden/TableOfContents.md', '## Second-Level Heading')
+			cy.visit('/apps/collectives/Our%20Garden/TableOfContents')
+			cy.get('#titleform .action-item__menutoggle')
+				.click()
+
+			cy.log('Show outline in view mode')
+			cy.contains('button', 'Show outline')
+				.click()
+			cy.get('.editor--toc .editor--toc__item')
+				.should('contain', 'Second-Level Heading')
+
+			// Switch to edit mode
+			cy.switchPageMode(1)
+
+			cy.get('.editor--toc .editor--toc__item')
+				.should('contain', 'Second-Level Heading')
+
+			cy.log('Close outline in edit mode')
+			cy.get('.text-editor .editor--outline__header .close-icon')
+				.click()
+
+			// Switch back to view mode
+			cy.switchPageMode(0)
+
+			cy.get('.editor--toc')
+				.should('not.exist')
 		})
 	})
 
