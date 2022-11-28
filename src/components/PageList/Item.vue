@@ -54,7 +54,8 @@
 				:timestamp="timestamp"
 				:last-user-id="lastUserId"
 				:is-landing-page="isLandingPage"
-				:is-template="isTemplate" />
+				:is-template="isTemplate"
+				:in-page-list="true" />
 			<Actions>
 				<ActionButton class="action-button-add" @click="newPage(pageId)">
 					<template #icon>

@@ -1,6 +1,6 @@
 <template>
 	<Actions :force-menu="true" @click.native.stop>
-		<ActionButton v-if="!showing('sidebar') && isMobile"
+		<ActionButton v-if="!inPageList && !showing('sidebar') && isMobile"
 			icon="icon-menu-sidebar"
 			:aria-label="t('collectives', 'Open page sidebar')"
 			aria-controls="app-sidebar-vue"
@@ -121,6 +121,10 @@ export default {
 			default: false,
 		},
 		showFilesLink: {
+			type: Boolean,
+			default: false,
+		},
+		inPageList: {
 			type: Boolean,
 			default: false,
 		},
