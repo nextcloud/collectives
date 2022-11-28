@@ -248,6 +248,7 @@ export default {
 		},
 		'currentPage.id'() {
 			this.editToggle = EditState.Unset
+			this.pageContent = ''
 			this.getPageContent()
 			this.scrollTop = 0
 		},
