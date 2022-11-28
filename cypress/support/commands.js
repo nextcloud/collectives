@@ -83,6 +83,8 @@ Cypress.Commands.add('seedCollective', (name) => {
 				app.$router.push(`/${name}`)
 			}
 		})
+	// Make sure new collective is loaded
+	cy.get('#titleform input').should('have.value', name)
 })
 
 /**
