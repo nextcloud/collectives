@@ -3,6 +3,8 @@
 		<Navigation v-if="!printView" />
 		<router-view />
 		<PageSidebar v-if="currentPage" v-show="showing('sidebar')" />
+		<CollectiveSettings v-if="showCollectiveSettings"
+			:collective="settingsCollective" />
 	</NcContent>
 </template>
 
@@ -12,6 +14,7 @@ import { mapActions, mapGetters, mapState } from 'vuex'
 import { GET_COLLECTIVES_FOLDER, GET_COLLECTIVES, GET_TRASH_COLLECTIVES } from './store/actions.js'
 import displayError from './util/displayError.js'
 import { NcContent } from '@nextcloud/vue'
+import CollectiveSettings from './components/Nav/CollectiveSettings.vue'
 import Navigation from './components/Navigation.vue'
 import PageSidebar from './components/PageSidebar.vue'
 
@@ -19,6 +22,7 @@ export default {
 	name: 'Collectives',
 
 	components: {
+		CollectiveSettings,
 		NcContent,
 		Navigation,
 		PageSidebar,
@@ -29,13 +33,20 @@ export default {
 			'printView',
 			'messages',
 		]),
+
 		...mapGetters([
+			'currentPage',
 			'isPublic',
 			'showing',
-			'currentPage',
+			'settingsCollective',
 		]),
+
 		info() {
 			return this.messages.info
+		},
+
+		showCollectiveSettings() {
+			return !!this.settingsCollective
 		},
 	},
 
