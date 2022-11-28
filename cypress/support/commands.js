@@ -1,5 +1,6 @@
 import {
 	GET_COLLECTIVES,
+	GET_TRASH_COLLECTIVES,
 	NEW_COLLECTIVE,
 	TRASH_COLLECTIVE,
 	DELETE_COLLECTIVE,
@@ -97,15 +98,23 @@ Cypress.Commands.add('createCollective', (name) => {
  * Delete a collective if it exists
  */
 Cypress.Commands.add('deleteCollective', (name) => {
-	cy.log(`Deleting collective ${name}`)
 	cy.window()
 		.its('app')
 		.then(async app => {
 			await app.$store.dispatch(GET_COLLECTIVES)
 			const id = app.$store.state.collectives.collectives.find(c => c.name === name)?.id
 			if (id) {
+				cy.log(`Deleting collective ${name} (id ${id})`)
 				await app.$store.dispatch(TRASH_COLLECTIVE, { id })
-				await app.$store.dispatch(DELETE_COLLECTIVE, { id, circle: true })
+				return await app.$store.dispatch(DELETE_COLLECTIVE, { id, circle: true })
+			}
+
+			// Try to find and delete collective from trash
+			await app.$store.dispatch(GET_TRASH_COLLECTIVES)
+			const trashId = app.$store.state.collectives.trashCollectives.find(c => c.name === name)?.id
+			if (trashId) {
+				cy.log(`Deleting trashed collective ${name} (id ${trashId})`)
+				return await app.$store.dispatch(DELETE_COLLECTIVE, { id: trashId, circle: true })
 			}
 		})
 })
