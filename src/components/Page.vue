@@ -27,7 +27,7 @@
 							</div>
 							<EmoticonOutlineIcon v-else
 								class="emoji-picker-emoticon"
-								:size="pageTitleIconPage"
+								:size="pageTitleIconSize"
 								fill-color="var(--color-text-maxcontrast)" />
 						</template>
 					</NcButton>
@@ -237,7 +237,7 @@ export default {
 			return this.showing('pageEmojiPicker')
 		},
 
-		pageTitleIconPage() {
+		pageTitleIconSize() {
 			return isMobile ? 25 : 30
 		},
 	},
