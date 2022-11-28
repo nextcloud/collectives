@@ -31,6 +31,10 @@ describe('Collective settings', function() {
 		cy.deleteAndSeedCollective('Change me')
 	})
 
+	beforeEach(function() {
+		cy.login('bob')
+	})
+
 	describe('set emoji', function() {
 		it('Allows setting an emoji', function() {
 			cy.visit('/apps/collectives')
@@ -52,7 +56,6 @@ describe('Collective settings', function() {
 
 	describe('rename collective', function() {
 		it('Allows to rename the collective', function() {
-			cy.login('bob')
 			cy.get('.collectives_list_item')
 				.contains('li', 'Change me')
 				.find('.action-item__menutoggle')
@@ -69,7 +72,6 @@ describe('Collective settings', function() {
 
 	describe('change edit permissions', function() {
 		it('Allows to change editing permissions', function() {
-			cy.login('bob')
 			cy.get('.collectives_list_item')
 				.contains('li', 'Change me now')
 				.find('.action-item__menutoggle')
@@ -85,7 +87,6 @@ describe('Collective settings', function() {
 
 	describe('change share permissions', function() {
 		it('Allows to change sharing permissions', function() {
-			cy.login('bob')
 			cy.get('.collectives_list_item')
 				.contains('li', 'Change me now')
 				.find('.action-item__menutoggle')
@@ -101,7 +102,6 @@ describe('Collective settings', function() {
 
 	describe('change page mode', function() {
 		it('Allows to change page mode', function() {
-			cy.login('bob')
 			cy.get('.collectives_list_item')
 				.contains('li', 'Change me now')
 				.find('.action-item__menutoggle')
@@ -115,6 +115,19 @@ describe('Collective settings', function() {
 			cy.get('div.edit-mode > :last-child > .checkbox-radio-switch__label')
 				.click()
 			cy.get('div.toast-success').should('contain', 'Default page mode updated')
+		})
+	})
+
+	describe('open settings from landing page actions', function() {
+		it('Allows to open settings from landing page actions', function() {
+			cy.visit('/apps/collectives/Change%20me%20now')
+			cy.contains('.app-content-list-item', 'Change me now')
+				.find('.action-item__menutoggle')
+				.click({ force: true })
+			cy.get('button.action-button')
+				.contains('Settings')
+				.click({ force: true })
+			cy.get('div.permissions-input-edit')
 		})
 	})
 })

@@ -8,6 +8,8 @@
 			@click="toggle('sidebar')">
 			{{ t('collectives', 'Open page sidebar') }}
 		</ActionButton>
+		<CollectiveActions v-if="inPageList && isLandingPage"
+			:collective="currentCollective" />
 		<ActionLink v-if="showFilesLink"
 			:href="filesUrl"
 			icon="icon-files-dark"
@@ -63,6 +65,7 @@ import ActionLink from '@nextcloud/vue/dist/Components/ActionLink'
 import ActionSeparator from '@nextcloud/vue/dist/Components/ActionSeparator'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import ClockOutlineIcon from 'vue-material-design-icons/ClockOutline'
+import CollectiveActions from '../Collective/CollectiveActions.vue'
 import DeleteIcon from 'vue-material-design-icons/Delete'
 import DeleteOffIcon from 'vue-material-design-icons/DeleteOff'
 import EmoticonOutlineIcon from 'vue-material-design-icons/EmoticonOutline'
@@ -78,6 +81,7 @@ export default {
 		ActionButton,
 		ActionLink,
 		ActionSeparator,
+		CollectiveActions,
 		ClockOutlineIcon,
 		DeleteIcon,
 		DeleteOffIcon,
@@ -132,6 +136,7 @@ export default {
 
 	computed: {
 		...mapGetters([
+			'currentCollective',
 			'loading',
 			'showing',
 			'showTemplates',
