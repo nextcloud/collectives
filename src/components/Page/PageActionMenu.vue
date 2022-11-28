@@ -8,6 +8,8 @@
 			@click="toggle('sidebar')">
 			{{ t('collectives', 'Open page sidebar') }}
 		</NcActionButton>
+		<CollectiveActions v-if="inPageList && isLandingPage"
+			:collective="currentCollective" />
 		<NcActionLink v-if="showFilesLink"
 			:href="filesUrl"
 			icon="icon-files-dark"
@@ -54,6 +56,7 @@ import { mapGetters, mapMutations } from 'vuex'
 import { generateUrl } from '@nextcloud/router'
 import { NcActions, NcActionButton, NcActionLink, NcActionSeparator } from '@nextcloud/vue'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
+import CollectiveActions from '../Collective/CollectiveActions.vue'
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 import DeleteOffIcon from 'vue-material-design-icons/DeleteOff.vue'
 import EmoticonOutlineIcon from 'vue-material-design-icons/EmoticonOutline.vue'
@@ -65,6 +68,7 @@ export default {
 	name: 'PageActionMenu',
 
 	components: {
+		CollectiveActions,
 		NcActions,
 		NcActionButton,
 		NcActionLink,
@@ -126,6 +130,7 @@ export default {
 
 	computed: {
 		...mapGetters([
+			'currentCollective',
 			'loading',
 			'showing',
 			'showTemplates',

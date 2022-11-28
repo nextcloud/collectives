@@ -31,7 +31,7 @@
 			id="shareEditable"
 			:disabled="loading('shareEditable')"
 			:checked.sync="shareEditable">
-			{{ t('collectives', 'Allow editing') }}
+			{{ t('collectives', 'Allow editing in share') }}
 		</NcActionCheckbox>
 		<NcActionButton v-if="!isPublic"
 			v-show="isShared"
@@ -113,16 +113,16 @@ export default {
 			'loading',
 		]),
 
+		isContactsInstalled() {
+			return 'contacts' in this.OC.appswebroots
+		},
+
 		showManageMembers() {
 			return this.isCollectiveAdmin(this.collective) && this.isContactsInstalled
 		},
 
 		circleLink() {
 			return generateUrl('/apps/contacts/direct/circle/' + this.collective.circleId)
-		},
-
-		isContactsInstalled() {
-			return 'contacts' in this.OC.appswebroots
 		},
 
 		isShared() {
@@ -133,10 +133,6 @@ export default {
 			return this.loading('share') ? 'icon-loading-small' : 'icon-public'
 		},
 
-		unshareIcon() {
-			return this.loading('unshare') ? 'icon-loading-small' : 'icon-public'
-		},
-
 		copyButtonText() {
 			if (this.copied) {
 				return this.copySuccess
@@ -144,6 +140,10 @@ export default {
 					: t('collectives', 'Cannot copy')
 			}
 			return t('collectives', 'Copy share link')
+		},
+
+		unshareIcon() {
+			return this.loading('unshare') ? 'icon-loading-small' : 'icon-public'
 		},
 
 		printLink() {
