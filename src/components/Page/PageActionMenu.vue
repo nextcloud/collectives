@@ -1,6 +1,6 @@
 <template>
 	<NcActions :force-menu="true" @click.native.stop>
-		<NcActionButton v-if="!showing('sidebar') && isMobile"
+		<NcActionButton v-if="!inPageList && !showing('sidebar') && isMobile"
 			icon="icon-menu-sidebar"
 			:aria-label="t('collectives', 'Open page sidebar')"
 			aria-controls="app-sidebar-vue"
@@ -115,6 +115,10 @@ export default {
 			default: false,
 		},
 		showFilesLink: {
+			type: Boolean,
+			default: false,
+		},
+		inPageList: {
 			type: Boolean,
 			default: false,
 		},

@@ -55,7 +55,8 @@
 				:last-user-id="lastUserId"
 				:last-user-display-name="lastUserDisplayName"
 				:is-landing-page="isLandingPage"
-				:is-template="isTemplate" />
+				:is-template="isTemplate"
+				:in-page-list="true" />
 			<NcActions>
 				<NcActionButton class="action-button-add" @click="newPage(pageId)">
 					<template #icon>
