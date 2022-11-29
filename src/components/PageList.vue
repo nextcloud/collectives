@@ -55,20 +55,20 @@
 			</NcActions>
 		</div>
 		<div class="page-list">
-			<Draggable v-if="subpages"
+			<Draggable v-if="subpages && collectivePage"
 				:list="subpages"
-				:parent-id="collectivePage ? collectivePage.id : 0"
+				:parent-id="collectivePage.id"
 				:disable-sorting="disableSorting">
 				<template #header>
 					<Item v-if="currentCollective"
 						key="Readme"
 						:to="currentCollectivePath"
-						:page-id="collectivePage ? collectivePage.id : 0"
+						:page-id="collectivePage.id"
 						:parent-id="0"
 						:title="currentCollective.name"
-						:timestamp="collectivePage ? collectivePage.timestamp : 0"
-						:last-user-id="collectivePage ? collectivePage.lastUserId : ''"
-						:last-user-display-name="collectivePage ? collectivePage.lastUserDisplayName : ''"
+						:timestamp="collectivePage.timestamp"
+						:last-user-id="collectivePage.lastUserId"
+						:last-user-display-name="collectivePage.lastUserDisplayName"
 						:emoji="currentCollective.emoji"
 						:level="0"
 						:can-edit="currentCollectiveCanEdit"
