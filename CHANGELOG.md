@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.6.3 - 2022.11.29
+
+### 🐛Fixes
+* 📱 Fix width of page title in page list when actions are visible. (#425)
+* 🧹 Reset page content when switching pages. (#430)
+* 💄 Only show action to show page sidebar in page title actions menu.
+* 🎯 Show collective actions in actions menu of landing page. (#435)
+
+### 🌎Translations
+* 🗣️ Restore Dutch translation of skeleton file
+
+### 🚧Updates & Tooling
+* 🔌 Update NPM dependencies
+
+
 ## 1.6.2 - 2022.11.21
 
 ### 🐛Fixes
