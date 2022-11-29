@@ -1,6 +1,6 @@
 <template>
 	<Actions :force-menu="true" @click.native.stop>
-		<ActionButton v-if="!showing('sidebar') && isMobile"
+		<ActionButton v-if="!inPageList && !showing('sidebar') && isMobile"
 			icon="icon-menu-sidebar"
 			:aria-label="t('collectives', 'Open page sidebar')"
 			aria-controls="app-sidebar-vue"
@@ -8,6 +8,8 @@
 			@click="toggle('sidebar')">
 			{{ t('collectives', 'Open page sidebar') }}
 		</ActionButton>
+		<CollectiveActions v-if="inPageList && isLandingPage"
+			:collective="currentCollective" />
 		<ActionLink v-if="showFilesLink"
 			:href="filesUrl"
 			icon="icon-files-dark"
@@ -63,6 +65,7 @@ import ActionLink from '@nextcloud/vue/dist/Components/ActionLink'
 import ActionSeparator from '@nextcloud/vue/dist/Components/ActionSeparator'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import ClockOutlineIcon from 'vue-material-design-icons/ClockOutline'
+import CollectiveActions from '../Collective/CollectiveActions.vue'
 import DeleteIcon from 'vue-material-design-icons/Delete'
 import DeleteOffIcon from 'vue-material-design-icons/DeleteOff'
 import EmoticonOutlineIcon from 'vue-material-design-icons/EmoticonOutline'
@@ -78,6 +81,7 @@ export default {
 		ActionButton,
 		ActionLink,
 		ActionSeparator,
+		CollectiveActions,
 		ClockOutlineIcon,
 		DeleteIcon,
 		DeleteOffIcon,
@@ -124,10 +128,15 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		inPageList: {
+			type: Boolean,
+			default: false,
+		},
 	},
 
 	computed: {
 		...mapGetters([
+			'currentCollective',
 			'loading',
 			'showing',
 			'showTemplates',

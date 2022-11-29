@@ -17,9 +17,9 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { GET_PAGES } from '../store/actions.js'
 import { SELECT_VERSION } from '../store/mutations.js'
 import displayError from '../util/displayError.js'
-import Page from '../components/Page.vue'
-import Version from '../components/Page/Version.vue'
-import PageNotFound from '../components/Page/PageNotFound.vue'
+import Page from './Page.vue'
+import Version from './Page/Version.vue'
+import PageNotFound from './Page/PageNotFound.vue'
 
 export default {
 	name: 'Collective',

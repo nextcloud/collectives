@@ -181,10 +181,6 @@ export default {
 			required: true,
 			type: Object,
 		},
-		open: {
-			required: true,
-			type: Boolean,
-		},
 	},
 
 	data() {
@@ -192,7 +188,7 @@ export default {
 			memberLevels,
 			pageModes,
 			newCollectiveName: this.collective.name,
-			showSettings: false,
+			showSettings: true,
 			editPermissions: String(this.collective.editPermissionLevel),
 			sharePermissions: String(this.collective.sharePermissionLevel),
 			pageMode: String(this.collective.pageMode),
@@ -234,12 +230,7 @@ export default {
 	watch: {
 		showSettings(value) {
 			if (!value) {
-				this.$emit('update:open', value)
-			}
-		},
-		open(value) {
-			if (value) {
-				this.showSettings = true
+				this.setSettingsCollectiveId(null)
 			}
 		},
 		editPermissions(val) {
@@ -284,7 +275,11 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['load', 'done']),
+		...mapMutations([
+			'load',
+			'done',
+			'setSettingsCollectiveId',
+		]),
 
 		...mapActions({
 			dispatchRenameCircle: RENAME_CIRCLE,

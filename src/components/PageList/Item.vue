@@ -54,7 +54,8 @@
 				:timestamp="timestamp"
 				:last-user-id="lastUserId"
 				:is-landing-page="isLandingPage"
-				:is-template="isTemplate" />
+				:is-template="isTemplate"
+				:in-page-list="true" />
 			<Actions>
 				<ActionButton class="action-button-add" @click="newPage(pageId)">
 					<template #icon>
@@ -286,7 +287,7 @@ export default {
 	&.active, &.toplevel, &.mobile, &:hover, &:focus, &:active {
 		// Shorter width to prevent collision with actions
 		.app-content-list-item-link {
-			width: calc(100vw - 88px);
+			width: calc(100% - 88px);
 		}
 
 		.page-list-item-actions {

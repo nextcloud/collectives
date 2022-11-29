@@ -28,7 +28,7 @@
 							</div>
 							<EmoticonOutlineIcon v-else
 								class="emoji-picker-emoticon"
-								:size="pageTitleIconPage"
+								:size="pageTitleIconSize"
 								fill-color="var(--color-text-maxcontrast)" />
 						</template>
 					</Button>
@@ -251,7 +251,7 @@ export default {
 			return this.showing('pageEmojiPicker')
 		},
 
-		pageTitleIconPage() {
+		pageTitleIconSize() {
 			return isMobile ? 25 : 30
 		},
 	},
@@ -262,6 +262,7 @@ export default {
 		},
 		'currentPage.id'() {
 			this.editToggle = EditState.Unset
+			this.pageContent = ''
 			this.getPageContent()
 			this.scrollTop = 0
 		},

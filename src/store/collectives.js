@@ -40,7 +40,9 @@ export default {
 		trashCollectives: [],
 		collectiveShares: [],
 		updatedCollective: undefined,
+		settingsCollectiveId: undefined,
 	},
+
 	getters: {
 		currentCollective(state, getters) {
 			return state.collectives.find(
@@ -138,7 +140,14 @@ export default {
 		randomCollectiveEmoji: (state, getters) => () => {
 			return randomEmoji(getters.allCollectiveEmojis)
 		},
+
+		settingsCollective(state) {
+			return state.settingsCollectiveId
+				? state.collectives.find(c => c.id === state.settingsCollectiveId)
+				: null
+		},
 	},
+
 	mutations: {
 		[SET_COLLECTIVES](state, collectives) {
 			state.collectives = collectives
@@ -178,6 +187,10 @@ export default {
 
 		[DELETE_COLLECTIVE_FROM_TRASH](state, collective) {
 			state.trashCollectives.splice(state.trashCollectives.findIndex(c => c.id === collective.id), 1)
+		},
+
+		setSettingsCollectiveId(state, id) {
+			state.settingsCollectiveId = id
 		},
 	},
 
