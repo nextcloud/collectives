@@ -171,7 +171,6 @@ export default {
 			'isTemplatePage',
 			'landingPage',
 			'loading',
-			'pageParam',
 			'showing',
 		]),
 
@@ -243,14 +242,12 @@ export default {
 	},
 
 	watch: {
-		'pageParam'() {
-			this.initTitleEntry()
-		},
 		'currentPage.id'() {
 			this.editToggle = EditState.Unset
 			this.pageContent = ''
 			this.getPageContent()
 			this.scrollTop = 0
+			this.initTitleEntry()
 		},
 		'currentPage.timestamp'() {
 			if (this.currentPage.timestamp > this.previousSaveTimestamp) {
