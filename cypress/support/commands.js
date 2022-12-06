@@ -42,6 +42,14 @@ Cypress.Commands.add('logout', () => {
 	})
 })
 
+Cypress.Commands.add('getEditor', () => {
+	cy.get('[data-text-el="editor-container"] div.ProseMirror')
+})
+
+Cypress.Commands.add('getReadOnlyEditor', () => {
+	cy.get('#read-only-editor div.ProseMirror')
+})
+
 /**
  * Enable/disable a Nextcloud app
  */

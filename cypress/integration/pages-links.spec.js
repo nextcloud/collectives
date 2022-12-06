@@ -74,10 +74,12 @@ describe('Page', function() {
 			// Change to edit mode
 			cy.get('button.titleform-button').contains('Edit')
 				.click()
-			cy.get(`.editor > > .editor__content > .ProseMirror a[href="${href}"]`)
+			cy.getEditor()
+				.get(`a[href="${href}"]`)
 				.click()
 		} else {
-			cy.get(`#read-only-editor > .ProseMirror a[href="${href}"]`)
+			cy.getReadOnlyEditor()
+				.get(`a[href="${href}"]`)
 				.click()
 		}
 	}

@@ -40,7 +40,7 @@ describe('Read-only collective', function() {
 			cy.get('button.titleform-button').should('not.exist')
 			cy.get('.app-content-list-item.toplevel')
 				.get('button.icon.add').should('not.exist')
-			cy.get('[data-text-el="editor-container"]').should('not.exist')
+			cy.getEditor().should('not.exist')
 		})
 	})
 })
