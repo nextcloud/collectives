@@ -80,7 +80,8 @@ describe('Collective Share', function() {
 			cy.get('button.titleform-button').should('not.exist')
 			cy.get('#text h1').should('contain', 'Welcome to your new collective')
 			cy.get('.app-content-list-item.toplevel')
-				.get('button.icon.add').should('not.exist')
+				.find('button.icon.add')
+				.should('not.exist')
 			cy.getEditor().should('not.exist')
 		})
 		it('Allows toggling the editable flag for a collective share', function() {

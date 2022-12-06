@@ -75,11 +75,11 @@ describe('Page', function() {
 			cy.get('button.titleform-button').contains('Edit')
 				.click()
 			cy.getEditor()
-				.get(`a[href="${href}"]`)
+				.find(`a[href="${href}"]`)
 				.click()
 		} else {
 			cy.getReadOnlyEditor()
-				.get(`a[href="${href}"]`)
+				.find(`a[href="${href}"]`)
 				.click()
 		}
 	}
