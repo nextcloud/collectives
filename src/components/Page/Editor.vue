@@ -8,13 +8,15 @@
 		:active="true"
 		:autofocus="false"
 		:share-token="shareTokenParam"
+		:show-outline-outside="showOutline"
 		mime="text/markdown"
 		class="file-view active"
-		@ready="ready" />
+		@ready="ready"
+		@outline-toggled="toggleOutlineFromText" />
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 
 export default {
 	name: 'Editor',
@@ -24,6 +26,7 @@ export default {
 			'currentPage',
 			'currentPageFilePath',
 			'shareTokenParam',
+			'showing',
 		]),
 
 		/**
@@ -34,13 +37,31 @@ export default {
 		handler() {
 			return OCA.Viewer.availableHandlers.find(h => h.id === 'text')
 		},
+
+		showOutline() {
+			return this.showing('outline')
+		},
 	},
 
 	methods: {
+		...mapMutations([
+			'hide',
+			'show',
+			'toggle',
+		]),
+
 		ready() {
 			this.$nextTick(() => {
 				this.$emit('ready')
 			})
+		},
+
+		toggleOutlineFromText(visible) {
+			if (visible === true) {
+				this.show('outline')
+			} else if (visible === false) {
+				this.hide('outline')
+			}
 		},
 	},
 }

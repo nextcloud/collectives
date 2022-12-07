@@ -243,6 +243,7 @@ export default {
 
 	watch: {
 		'currentPage.id'() {
+			this.hide('outline')
 			this.editToggle = EditState.Unset
 			this.pageContent = ''
 			this.getPageContent()

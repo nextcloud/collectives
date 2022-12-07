@@ -10,6 +10,14 @@
 		</NcActionButton>
 		<CollectiveActions v-if="inPageList && isLandingPage"
 			:collective="currentCollective" />
+		<NcActionButton v-if="!inPageList"
+			:close-after-click="true"
+			@click.native="toggle('outline')">
+			<template #icon>
+				<FormatListBulletedIcon :size="20" />
+			</template>
+			{{ toggleOutlineString }}
+		</NcActionButton>
 		<NcActionLink v-if="showFilesLink"
 			:href="filesUrl"
 			icon="icon-files-dark"
@@ -60,6 +68,7 @@ import CollectiveActions from '../Collective/CollectiveActions.vue'
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 import DeleteOffIcon from 'vue-material-design-icons/DeleteOff.vue'
 import EmoticonOutlineIcon from 'vue-material-design-icons/EmoticonOutline.vue'
+import FormatListBulletedIcon from 'vue-material-design-icons/FormatListBulleted.vue'
 import PagesTemplateIcon from '../Icon/PagesTemplateIcon.vue'
 import PageActionLastUser from './PageActionLastUser.vue'
 import pageMixin from '../../mixins/pageMixin.js'
@@ -76,6 +85,7 @@ export default {
 		DeleteIcon,
 		DeleteOffIcon,
 		EmoticonOutlineIcon,
+		FormatListBulletedIcon,
 		PagesTemplateIcon,
 		PageActionLastUser,
 	},
@@ -136,6 +146,12 @@ export default {
 			'showTemplates',
 			'visibleSubpages',
 		]),
+
+		toggleOutlineString() {
+			return this.showing('outline')
+				? t('collectives', 'Hide outline')
+				: t('collectives', 'Show outline')
+		},
 
 		filesUrl() {
 			return generateUrl(`/apps/files/?fileid=${this.currentPage.id}`)

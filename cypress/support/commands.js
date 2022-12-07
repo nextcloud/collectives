@@ -42,12 +42,41 @@ Cypress.Commands.add('logout', () => {
 	})
 })
 
+/**
+ * Get the editor component
+ */
 Cypress.Commands.add('getEditor', () => {
 	cy.get('[data-text-el="editor-container"] div.ProseMirror')
 })
 
+/**
+ * Get the ReadOnlyEditor/RichTextReader component
+ */
 Cypress.Commands.add('getReadOnlyEditor', () => {
 	cy.get('#read-only-editor div.ProseMirror')
+})
+
+/**
+ * Switch page mode to view or edit
+ */
+Cypress.Commands.add('switchPageMode', (pageMode) => {
+	if (pageMode === 0) {
+		cy.log('Switch to view mode')
+		cy.get('button.titleform-button')
+			.should('contain', 'Done')
+			.click()
+		cy.getReadOnlyEditor()
+			.should('be.visible')
+	} else if (pageMode === 1) {
+		cy.log('Switch to edit mode')
+		cy.get('button.titleform-button')
+			.should('contain', 'Edit')
+			.click()
+		cy.getEditor()
+			.should('be.visible')
+	} else {
+		throw new Error(`Unknown page mode: ${pageMode}`)
+	}
 })
 
 /**

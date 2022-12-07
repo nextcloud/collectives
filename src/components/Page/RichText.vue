@@ -7,7 +7,6 @@
 		<div id="text" class="editor">
 			<PageInfoBar :current-page="currentPage" />
 			<RichTextReader v-if="!loading"
-				class="editor__content"
 				:content="pageContent"
 				@click-link="followLink" />
 		</div>
@@ -15,8 +14,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import { RichTextReader, AttachmentResolver, ATTACHMENT_RESOLVER } from '@nextcloud/text'
+import { mapGetters, mapMutations } from 'vuex'
+import { RichTextReader, AttachmentResolver, ATTACHMENT_RESOLVER, OUTLINE_STATE, OUTLINE_ACTIONS } from '@nextcloud/text'
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl } from '@nextcloud/router'
 import PageInfoBar from './PageInfoBar.vue'
@@ -52,6 +51,8 @@ export default {
 		const val = {}
 		Object.defineProperties(val, {
 			[ATTACHMENT_RESOLVER]: { get: () => this.attachmentResolver },
+			[OUTLINE_STATE]: { get: () => this.outline },
+			[OUTLINE_ACTIONS]: { get: () => ({ toggle: this.toggleOutlineFromTextComponent }) },
 		})
 		return val
 	},
@@ -61,18 +62,14 @@ export default {
 		// with the spinning wheel where the toolbar would be.
 		asPlaceholder: {
 			type: Boolean,
-			required: false,
 			default: false,
 		},
-
 		currentPage: {
 			type: Object,
 			required: true,
 		},
-
 		pageContent: {
 			type: String,
-			required: false,
 			default: null,
 		},
 	},
@@ -80,6 +77,10 @@ export default {
 	data() {
 		return {
 			loading: true,
+			outline: {
+				visible: false,
+				enable: false,
+			},
 		}
 	},
 
@@ -91,6 +92,7 @@ export default {
 			'currentPageFilePath',
 			'isPublic',
 			'pageParam',
+			'showing',
 			'shareTokenParam',
 		]),
 
@@ -102,6 +104,16 @@ export default {
 				shareToken: this.shareTokenParam,
 			})
 		},
+
+		showOutline() {
+			return this.showing('outline')
+		},
+	},
+
+	watch: {
+		'showOutline'() {
+			this.outline.visible = this.showing('outline')
+		},
 	},
 
 	mounted() {
@@ -112,6 +124,10 @@ export default {
 	},
 
 	methods: {
+		...mapMutations([
+			'toggle',
+		]),
+
 		followLink(_event, attrs) {
 			return this.handleCollectiveLink(attrs)
 				|| this.handleRelativeMarkdownLink(attrs)
@@ -170,6 +186,10 @@ export default {
 				return true
 			}
 		},
+
+		toggleOutlineFromTextComponent() {
+			this.toggle('outline')
+		},
 	},
 }
 </script>
@@ -202,18 +222,17 @@ export default {
 	overflow: visible !important;
 }
 
-.editor__content {
-	max-width: 670px;
-	margin: auto;
-	position: relative;
-}
-
 .text-revision {
 	background-color: lightcoral;
 }
 </style>
 
 <style lang="scss">
+:root {
+	// Required for read-only view where only RichTextReader and no Editor gets loaded
+	--text-editor-max-width: 670px;
+}
+
 @media print {
 
 	h1, h2, h3 {
