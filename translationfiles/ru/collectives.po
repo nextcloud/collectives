@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-10-25 18:01+0200\n"
 "PO-Revision-Date: 2022-12-12 16:19+0000\n"
-"Last-Translator: vfeshenko <vad_fesh@mail.ru>\n"
+"Last-Translator: Andrey Rozentals <rozenandrey@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/ru/>\n"
 "Language: ru\n"
@@ -476,7 +476,7 @@ msgstr "Не удается удалить страницу вместе с ра
 #. TRANSLATORS src/components/Page/PageActionMenu.vue:138
 #: /collectives/specialVueFakeDummyForL10nScript.js:156
 msgid "Delete template"
-msgstr ""
+msgstr "Удалить шаблон"
 
 #. TRANSLATORS src/components/Page/PageActionMenu.vue:139
 #: /collectives/specialVueFakeDummyForL10nScript.js:158
@@ -486,7 +486,7 @@ msgstr "Удалить страницу"
 #. TRANSLATORS src/components/Page/PageNotFound.vue:3
 #: /collectives/specialVueFakeDummyForL10nScript.js:160
 msgid "Page not found:"
-msgstr ""
+msgstr "Страница не найдена:"
 
 #. TRANSLATORS src/components/Page/PageNotFound.vue:10
 #: /collectives/specialVueFakeDummyForL10nScript.js:162
