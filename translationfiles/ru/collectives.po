@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-10-25 18:01+0200\n"
 "PO-Revision-Date: 2022-12-12 16:14+0000\n"
-"Last-Translator: vfeshenko <vad_fesh@mail.ru>\n"
+"Last-Translator: Andrey Rozentals <rozenandrey@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/ru/>\n"
 "Language: ru\n"
@@ -127,32 +127,32 @@ msgstr "Подготовка материалов для печати"
 #. TRANSLATORS src/components/CollectivePrint.vue:59
 #: /collectives/specialVueFakeDummyForL10nScript.js:12
 msgid "Loading pages:"
-msgstr ""
+msgstr "Загрузка страниц:"
 
 #. TRANSLATORS src/components/CollectivePrint.vue:64
 #: /collectives/specialVueFakeDummyForL10nScript.js:14
 msgid "Loading images:"
-msgstr ""
+msgstr "Загрузка изображений:"
 
 #. TRANSLATORS src/components/LastUserBubble.vue:40
 #: /collectives/specialVueFakeDummyForL10nScript.js:16
 msgid "Last edited by {user}"
-msgstr ""
+msgstr "Последний раз редактировалось {user}"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:23
 #: /collectives/specialVueFakeDummyForL10nScript.js:18
 msgid "Manage members"
-msgstr ""
+msgstr "Управление участниками"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:31
 #: /collectives/specialVueFakeDummyForL10nScript.js:20
 msgid "Share link"
-msgstr ""
+msgstr "Поделиться ссылкой"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:49
 #: /collectives/specialVueFakeDummyForL10nScript.js:22
 msgid "Allow editing"
-msgstr ""
+msgstr "Разрешить редактирование"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:56
 #: /collectives/specialVueFakeDummyForL10nScript.js:24
@@ -167,17 +167,17 @@ msgstr "Печать"
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:71
 #: /collectives/specialVueFakeDummyForL10nScript.js:28
 msgid "Settings"
-msgstr ""
+msgstr "Настройки"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:183
 #: /collectives/specialVueFakeDummyForL10nScript.js:30
 msgid "Copied"
-msgstr ""
+msgstr "Скопированный"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:184
 #: /collectives/specialVueFakeDummyForL10nScript.js:32
 msgid "Cannot copy"
-msgstr ""
+msgstr "Невозможно скопировать"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:186
 #: /collectives/specialVueFakeDummyForL10nScript.js:34
@@ -187,7 +187,7 @@ msgstr "Скопировать ссылку общего доступа"
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:196
 #: /collectives/specialVueFakeDummyForL10nScript.js:36
 msgid "Could not change the collective share editing permissions"
-msgstr ""
+msgstr "Не удалось изменить разрешения на редактирование общего ресурса"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:214
 #: /collectives/specialVueFakeDummyForL10nScript.js:38
@@ -197,7 +197,7 @@ msgstr "Невозможно поделиться группой"
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:220
 #: /collectives/specialVueFakeDummyForL10nScript.js:40
 msgid "Could not unshare the collective"
-msgstr ""
+msgstr "Не возможно разделить группу"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:3
 #: /collectives/specialVueFakeDummyForL10nScript.js:42
