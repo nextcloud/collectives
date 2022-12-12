@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-10-25 18:01+0200\n"
-"PO-Revision-Date: 2022-12-12 16:17+0000\n"
+"PO-Revision-Date: 2022-12-12 16:18+0000\n"
 "Last-Translator: Andrey Rozentals <rozenandrey@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/ru/>\n"
@@ -394,7 +394,7 @@ msgstr "Удалить круг могут только владельцы кр�
 #: /collectives/specialVueFakeDummyForL10nScript.js:248
 #: /collectives/specialVueFakeDummyForL10nScript.js:250
 msgid "Create new collective"
-msgstr ""
+msgstr "Создать группу"
 
 #. TRANSLATORS src/components/Nav/NewCollective.vue:32
 #: /collectives/specialVueFakeDummyForL10nScript.js:126
@@ -408,12 +408,12 @@ msgstr ""
 #: /collectives/specialVueFakeDummyForL10nScript.js:152
 #: /collectives/specialVueFakeDummyForL10nScript.js:178
 msgid "Select emoji"
-msgstr ""
+msgstr "Выберите эмодзи"
 
 #. TRANSLATORS src/components/Nav/NewCollective.vue:51
 #: /collectives/specialVueFakeDummyForL10nScript.js:132
 msgid "New collective name"
-msgstr ""
+msgstr "Новое название группы"
 
 #. TRANSLATORS src/components/Nav/NewCollective.vue:59
 #: /collectives/specialVueFakeDummyForL10nScript.js:134
@@ -433,16 +433,16 @@ msgstr ""
 #. TRANSLATORS src/components/Navigation.vue:11
 #: /collectives/specialVueFakeDummyForL10nScript.js:140
 msgid "Select a collective"
-msgstr ""
+msgstr "Выберите группу"
 
 #. TRANSLATORS src/components/Page/EditButton.vue:66
 #: /collectives/specialVueFakeDummyForL10nScript.js:142
 msgid "Stop editing"
-msgstr ""
+msgstr "Прекратить редактирование"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:142
 msgid "Start editing"
-msgstr ""
+msgstr "Начать редактирование"
 
 #. TRANSLATORS src/components/Page/EditButton.vue:69
 #: /collectives/specialVueFakeDummyForL10nScript.js:144
@@ -451,7 +451,7 @@ msgstr "Готово"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:144
 msgid "Edit"
-msgstr ""
+msgstr "Редактирование"
 
 #. TRANSLATORS src/components/Page/PageActionMenu.vue:7
 #: /collectives/specialVueFakeDummyForL10nScript.js:146
@@ -466,7 +466,7 @@ msgstr ""
 #. TRANSLATORS src/components/Page/PageActionMenu.vue:127
 #: /collectives/specialVueFakeDummyForL10nScript.js:150
 msgid "Add template for subpages"
-msgstr ""
+msgstr "Добавить шаблон для подстраниц"
 
 #. TRANSLATORS src/components/Page/PageActionMenu.vue:136
 #: /collectives/specialVueFakeDummyForL10nScript.js:154
