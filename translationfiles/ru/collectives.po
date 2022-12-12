@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-10-25 18:01+0200\n"
-"PO-Revision-Date: 2022-12-12 16:14+0000\n"
-"Last-Translator: Andrey Rozentals <rozenandrey@gmail.com>\n"
+"PO-Revision-Date: 2022-12-12 16:17+0000\n"
+"Last-Translator: vfeshenko <vad_fesh@mail.ru>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/ru/>\n"
 "Language: ru\n"
@@ -197,7 +197,7 @@ msgstr "Невозможно поделиться группой"
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:220
 #: /collectives/specialVueFakeDummyForL10nScript.js:40
 msgid "Could not unshare the collective"
-msgstr "Не возможно разделить группу"
+msgstr "Не удалось отозвать общий доступ группы"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:3
 #: /collectives/specialVueFakeDummyForL10nScript.js:42
@@ -219,57 +219,59 @@ msgstr ""
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:30
 #: /collectives/specialVueFakeDummyForL10nScript.js:48
 msgid "Save new collective name"
-msgstr ""
+msgstr "Сохранить новое название группы"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:38
 #: /collectives/specialVueFakeDummyForL10nScript.js:50
 msgid "Permissions"
-msgstr ""
+msgstr "Права"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:40
 #: /collectives/specialVueFakeDummyForL10nScript.js:52
 msgid "Allow editing for"
-msgstr ""
+msgstr "Разрешить редактировать"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:49
 #: /collectives/specialVueFakeDummyForL10nScript.js:54
 #: /collectives/specialVueFakeDummyForL10nScript.js:62
 msgid "Admins only"
-msgstr ""
+msgstr "Только администраторам"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:56
 #: /collectives/specialVueFakeDummyForL10nScript.js:56
 #: /collectives/specialVueFakeDummyForL10nScript.js:64
 msgid "Admins and moderaters"
-msgstr ""
+msgstr "Администраторам и модераторам"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:63
 #: /collectives/specialVueFakeDummyForL10nScript.js:58
 #: /collectives/specialVueFakeDummyForL10nScript.js:66
 msgid "All members"
-msgstr ""
+msgstr "Всем пользователям"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:68
 #: /collectives/specialVueFakeDummyForL10nScript.js:60
 msgid "Allow sharing for"
-msgstr ""
+msgstr "Разрешить делиться"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:96
 #: /collectives/specialVueFakeDummyForL10nScript.js:68
 msgid "Members"
-msgstr ""
+msgstr "Участники"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:98
 #: /collectives/specialVueFakeDummyForL10nScript.js:70
 msgid "Members can be managed via the connected circle in the Contacts app."
 msgstr ""
+"Участниками можно управлять через \\\"Окружения\\\" в приложении \\\"Контакты"
+"\\\"."
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:102
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:105
 #: /collectives/specialVueFakeDummyForL10nScript.js:72
 #: /collectives/specialVueFakeDummyForL10nScript.js:74
 msgid "Open circle in Contacts"
-msgstr ""
+msgstr "Открыть окружение в Контактах"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:110
 #: /collectives/specialVueFakeDummyForL10nScript.js:76
@@ -286,7 +288,7 @@ msgstr ""
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:184
 #: /collectives/specialVueFakeDummyForL10nScript.js:82
 msgid "Change emoji"
-msgstr ""
+msgstr "Выбрать эмодзи"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:82
 msgid "Add emoji"
@@ -295,7 +297,7 @@ msgstr "Добавить эмодзи"
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:189
 #: /collectives/specialVueFakeDummyForL10nScript.js:84
 msgid "Renaming is limited to owners of the circle"
-msgstr ""
+msgstr "Менять название разрешено только владельцам окружения"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:218
 #: /collectives/specialVueFakeDummyForL10nScript.js:88
@@ -305,7 +307,7 @@ msgstr ""
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:230
 #: /collectives/specialVueFakeDummyForL10nScript.js:90
 msgid "Sharing permissions updated"
-msgstr ""
+msgstr "Обновлены права на предоставление общего доступа"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:262
 #: /collectives/specialVueFakeDummyForL10nScript.js:92
@@ -315,7 +317,7 @@ msgstr ""
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:2
 #: /collectives/specialVueFakeDummyForL10nScript.js:94
 msgid "Collectives settings"
-msgstr ""
+msgstr "Настройки групп"
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:4
 #: /collectives/specialVueFakeDummyForL10nScript.js:96
@@ -335,7 +337,7 @@ msgstr ""
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:66
 #: /collectives/specialVueFakeDummyForL10nScript.js:102
 msgid "Invalid path selected. Only folders on first level are supported."
-msgstr ""
+msgstr "Выбран неверный путь. Поддерживаются только каталоги первого уровня."
 
 #. TRANSLATORS src/components/Nav/CollectivesTrash.vue:11
 #: /collectives/specialVueFakeDummyForL10nScript.js:104
@@ -357,12 +359,12 @@ msgstr "Удалить навсегда"
 #. TRANSLATORS src/components/Nav/CollectivesTrash.vue:50
 #: /collectives/specialVueFakeDummyForL10nScript.js:110
 msgid "Permanently delete collective »{collective}«"
-msgstr ""
+msgstr "Удалить навсегда группу »{collective}«"
 
 #. TRANSLATORS src/components/Nav/CollectivesTrash.vue:53
 #: /collectives/specialVueFakeDummyForL10nScript.js:112
 msgid "Delete corresponding circle along with the collective?"
-msgstr ""
+msgstr "Удалить соответствующее окружение вместе с группой?"
 
 #. TRANSLATORS src/components/Nav/CollectivesTrash.vue:57
 #: /collectives/specialVueFakeDummyForL10nScript.js:114
@@ -378,7 +380,7 @@ msgstr ""
 #: /collectives/specialVueFakeDummyForL10nScript.js:118
 #: /collectives/specialVueFakeDummyForL10nScript.js:122
 msgid "Collective and circle"
-msgstr ""
+msgstr "Группа и окружение"
 
 #. TRANSLATORS src/components/Nav/CollectivesTrash.vue:70
 #: /collectives/specialVueFakeDummyForL10nScript.js:120
