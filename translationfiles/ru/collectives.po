@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-10-25 18:01+0200\n"
-"PO-Revision-Date: 2022-12-12 16:12+0000\n"
+"PO-Revision-Date: 2022-12-12 16:14+0000\n"
 "Last-Translator: vfeshenko <vad_fesh@mail.ru>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/ru/>\n"
@@ -122,7 +122,7 @@ msgstr "Выберите группу или создайте новую сле�
 #. TRANSLATORS src/components/CollectivePrint.vue:8
 #: /collectives/specialVueFakeDummyForL10nScript.js:10
 msgid "Preparing collective for exporting or printing"
-msgstr "Подготовка материалов для экспорта или печати"
+msgstr "Подготовка материалов для печати"
 
 #. TRANSLATORS src/components/CollectivePrint.vue:59
 #: /collectives/specialVueFakeDummyForL10nScript.js:12
@@ -157,12 +157,12 @@ msgstr ""
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:56
 #: /collectives/specialVueFakeDummyForL10nScript.js:24
 msgid "Unshare"
-msgstr ""
+msgstr "Отозвать общий доступ"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:62
 #: /collectives/specialVueFakeDummyForL10nScript.js:26
 msgid "Export or print"
-msgstr ""
+msgstr "Печать"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:71
 #: /collectives/specialVueFakeDummyForL10nScript.js:28
@@ -182,7 +182,7 @@ msgstr ""
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:186
 #: /collectives/specialVueFakeDummyForL10nScript.js:34
 msgid "Copy share link"
-msgstr ""
+msgstr "Скопировать ссылку общего доступа"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:196
 #: /collectives/specialVueFakeDummyForL10nScript.js:36
@@ -192,7 +192,7 @@ msgstr ""
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:214
 #: /collectives/specialVueFakeDummyForL10nScript.js:38
 msgid "Could not share the collective"
-msgstr ""
+msgstr "Невозможно поделиться группой"
 
 #. TRANSLATORS src/components/Nav/CollectiveListItem.vue:220
 #: /collectives/specialVueFakeDummyForL10nScript.js:40
