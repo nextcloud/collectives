@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-10-25 18:01+0200\n"
 "PO-Revision-Date: 2022-12-12 16:22+0000\n"
-"Last-Translator: Andrey Rozentals <rozenandrey@gmail.com>\n"
+"Last-Translator: vfeshenko <vad_fesh@mail.ru>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/ru/>\n"
 "Language: ru\n"
@@ -507,12 +507,12 @@ msgstr "Восстановить эту версию"
 #. TRANSLATORS src/components/Page/Version.vue:122
 #: /collectives/specialVueFakeDummyForL10nScript.js:172
 msgid "Reverted {page} to revision {timestamp}."
-msgstr ""
+msgstr "Страница {page} возвращена к версии {timestamp}."
 
 #. TRANSLATORS src/components/Page/Version.vue:127
 #: /collectives/specialVueFakeDummyForL10nScript.js:174
 msgid "Failed to revert {page} to revision {timestamp}."
-msgstr ""
+msgstr "Не удается вернуть страницу {page} к версии {timestamp}."
 
 #. TRANSLATORS src/components/Page.vue:15
 #: /collectives/specialVueFakeDummyForL10nScript.js:176
@@ -534,12 +534,12 @@ msgstr "Название"
 #. TRANSLATORS src/components/Page.vue:74
 #: /collectives/specialVueFakeDummyForL10nScript.js:184
 msgid "Toggle page sidebar"
-msgstr ""
+msgstr "Переключить боковую панель страницы"
 
 #. TRANSLATORS src/components/Page.vue:83
 #: /collectives/specialVueFakeDummyForL10nScript.js:186
 msgid "Page content"
-msgstr ""
+msgstr "Содержимое страницы"
 
 #. TRANSLATORS src/components/Page.vue:430
 #: /collectives/specialVueFakeDummyForL10nScript.js:190
@@ -549,7 +549,7 @@ msgstr "Не удалось переименовать страницу"
 #. TRANSLATORS src/components/PageList/Item.vue:34
 #: /collectives/specialVueFakeDummyForL10nScript.js:192
 msgid "Expand subpage list"
-msgstr ""
+msgstr "Развернуть список разделов"
 
 #. TRANSLATORS src/components/PageList/Item.vue:212
 #: /collectives/specialVueFakeDummyForL10nScript.js:196
@@ -559,28 +559,28 @@ msgstr "Добавить страницу"
 #. TRANSLATORS src/components/PageList/Item.vue:213
 #: /collectives/specialVueFakeDummyForL10nScript.js:198
 msgid "Add a subpage"
-msgstr ""
+msgstr "Добавить раздел"
 
 #. TRANSLATORS src/components/PageList.vue:8
 #: /collectives/specialVueFakeDummyForL10nScript.js:200
 msgid "Search pages ..."
-msgstr ""
+msgstr "Поиск страниц ..."
 
 #. TRANSLATORS src/components/PageList.vue:21
 #: /collectives/specialVueFakeDummyForL10nScript.js:202
 #: /collectives/specialVueFakeDummyForL10nScript.js:204
 msgid "Sort order"
-msgstr ""
+msgstr "Сортировка"
 
 #. TRANSLATORS src/components/PageList.vue:35
 #: /collectives/specialVueFakeDummyForL10nScript.js:206
 msgid "Sort by custom order"
-msgstr ""
+msgstr "Сортировка в случайном порядке"
 
 #. TRANSLATORS src/components/PageList.vue:44
 #: /collectives/specialVueFakeDummyForL10nScript.js:208
 msgid "Sort recently changed first"
-msgstr ""
+msgstr "Сначала отсортировать недавно измененные"
 
 #. TRANSLATORS src/components/PageList.vue:53
 #: /collectives/specialVueFakeDummyForL10nScript.js:210
@@ -590,16 +590,16 @@ msgstr "По названию"
 #. TRANSLATORS src/components/PageList.vue:82
 #: /collectives/specialVueFakeDummyForL10nScript.js:212
 msgid "Sorted by title"
-msgstr ""
+msgstr "Отсортировано по названию"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:212
 msgid "Sorted by recently changed"
-msgstr ""
+msgstr "Отсортировано по недавним изменениям"
 
 #. TRANSLATORS src/components/PageList.vue:83
 #: /collectives/specialVueFakeDummyForL10nScript.js:214
 msgid "Switch back to default sort order"
-msgstr ""
+msgstr "Вернуться на способ сортировки по умолчанию"
 
 #. TRANSLATORS src/components/PageList.vue:184
 #: /collectives/specialVueFakeDummyForL10nScript.js:216
