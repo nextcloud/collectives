@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-10-25 18:01+0200\n"
 "PO-Revision-Date: 2022-12-12 16:24+0000\n"
-"Last-Translator: Andrey Rozentals <rozenandrey@gmail.com>\n"
+"Last-Translator: vfeshenko <vad_fesh@mail.ru>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/ru/>\n"
 "Language: ru\n"
@@ -613,22 +613,23 @@ msgstr "Показать шаблоны"
 #. TRANSLATORS src/components/PageList.vue:227
 #: /collectives/specialVueFakeDummyForL10nScript.js:218
 msgid "Could not save page order for collective"
-msgstr "Не удалось сохранить порядок страниц для группы"
+msgstr "Не удалось сохранить расположение страниц в группе"
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabBacklinks.vue:38
 #: /collectives/specialVueFakeDummyForL10nScript.js:220
 msgid "No backlinks available"
-msgstr ""
+msgstr "Обратных ссылок не обнаружено"
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabBacklinks.vue:39
 #: /collectives/specialVueFakeDummyForL10nScript.js:222
 msgid "If other pages link to this one, they will be listed here."
 msgstr ""
+"Если другие страницы ссылаются на эту страницу, они будут показаны здесь."
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabBacklinks.vue:122
 #: /collectives/specialVueFakeDummyForL10nScript.js:224
 msgid "Could not get page backlinks"
-msgstr ""
+msgstr "Не удалось получить обратные ссылки страницы"
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:26
 #: /collectives/specialVueFakeDummyForL10nScript.js:226
@@ -667,7 +668,7 @@ msgstr "Обратные ссылки"
 #. TRANSLATORS src/components/PageSidebar.vue:12
 #: /collectives/specialVueFakeDummyForL10nScript.js:238
 msgid "Pages that link to this one"
-msgstr ""
+msgstr "Страницы, которые ссылаются на текущий объект"
 
 #. TRANSLATORS src/components/PageSidebar.vue:19
 #: /collectives/specialVueFakeDummyForL10nScript.js:240
@@ -682,7 +683,7 @@ msgstr "Старые версии этой страницы"
 #. TRANSLATORS src/views/Home.vue:4
 #: /collectives/specialVueFakeDummyForL10nScript.js:246
 msgid "Come, organize and build shared knowledge!"
-msgstr ""
+msgstr "Присоединяйтесь, создавайте и наполняйте общую базу знаний!"
 
 #: /collectives/src/mixins/CopyToClipboardMixin.js:24
 msgid "Link copied to the clipboard."
@@ -707,7 +708,7 @@ msgstr "Не удалось сохранить эмодзи для страни�
 
 #: /collectives/src/mixins/pageMixin.js:142
 msgid "Could not move page"
-msgstr ""
+msgstr "Не удалось переместить страницу"
 
 #: /collectives/src/mixins/pageMixin.js:168
 msgid "Could not delete the page"
@@ -721,7 +722,7 @@ msgstr "Страница удалена"
 #: /collectives/src/mixins/pageMixin.js:235
 #: /collectives/src/mixins/pageMixin.js:264
 msgid "Could not change page order"
-msgstr ""
+msgstr "Не удалось изменить расположение страницы"
 
 #: /collectives/templates/error.php:4
 msgid "Error: Missing apps"
