@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-10-25 18:01+0200\n"
 "PO-Revision-Date: 2022-12-12 16:18+0000\n"
-"Last-Translator: Andrey Rozentals <rozenandrey@gmail.com>\n"
+"Last-Translator: vfeshenko <vad_fesh@mail.ru>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/ru/>\n"
 "Language: ru\n"
@@ -385,7 +385,7 @@ msgstr "Группа и окружение"
 #. TRANSLATORS src/components/Nav/CollectivesTrash.vue:70
 #: /collectives/specialVueFakeDummyForL10nScript.js:120
 msgid "Only circle owners can delete a circle"
-msgstr "Удалить круг могут только владельцы круга"
+msgstr "Удалить круг могут только владельцы окружения"
 
 #. TRANSLATORS src/components/Nav/NewCollective.vue:24
 #. TRANSLATORS src/views/Home.vue:9
@@ -399,7 +399,7 @@ msgstr "Создать группу"
 #. TRANSLATORS src/components/Nav/NewCollective.vue:32
 #: /collectives/specialVueFakeDummyForL10nScript.js:126
 msgid "Create collective for existing circle"
-msgstr ""
+msgstr "Создать группу для существующего окружения"
 
 #. TRANSLATORS src/components/Nav/NewCollective.vue:41
 #. TRANSLATORS src/components/Page/PageActionMenu.vue:131
@@ -418,17 +418,17 @@ msgstr "Новое название группы"
 #. TRANSLATORS src/components/Nav/NewCollective.vue:59
 #: /collectives/specialVueFakeDummyForL10nScript.js:134
 msgid "Select circle..."
-msgstr ""
+msgstr "Выбор окружения..."
 
 #. TRANSLATORS src/components/Nav/NewCollective.vue:63
 #: /collectives/specialVueFakeDummyForL10nScript.js:136
 msgid "Create a new collective"
-msgstr ""
+msgstr "Создать новую группу"
 
 #. TRANSLATORS src/components/Nav/NewCollective.vue:68
 #: /collectives/specialVueFakeDummyForL10nScript.js:138
 msgid "Cancel creating a new collective"
-msgstr ""
+msgstr "Отменить создание группы"
 
 #. TRANSLATORS src/components/Navigation.vue:11
 #: /collectives/specialVueFakeDummyForL10nScript.js:140
@@ -456,12 +456,12 @@ msgstr "Редактирование"
 #. TRANSLATORS src/components/Page/PageActionMenu.vue:7
 #: /collectives/specialVueFakeDummyForL10nScript.js:146
 msgid "Show in Files"
-msgstr ""
+msgstr "Перейти к расположению"
 
 #. TRANSLATORS src/components/Page/PageActionMenu.vue:126
 #: /collectives/specialVueFakeDummyForL10nScript.js:148
 msgid "Edit template for subpages"
-msgstr ""
+msgstr "Редактирование шаблона для разделов"
 
 #. TRANSLATORS src/components/Page/PageActionMenu.vue:127
 #: /collectives/specialVueFakeDummyForL10nScript.js:150
