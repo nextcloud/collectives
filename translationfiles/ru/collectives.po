@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-10-25 18:01+0200\n"
 "PO-Revision-Date: 2022-12-12 16:17+0000\n"
-"Last-Translator: vfeshenko <vad_fesh@mail.ru>\n"
+"Last-Translator: Andrey Rozentals <rozenandrey@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/ru/>\n"
 "Language: ru\n"
@@ -202,19 +202,19 @@ msgstr "Не удалось отозвать общий доступ групп�
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:3
 #: /collectives/specialVueFakeDummyForL10nScript.js:42
 msgid "Collective settings"
-msgstr ""
+msgstr "Настройки группы"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:5
 #: /collectives/specialVueFakeDummyForL10nScript.js:44
 msgid "Name and emoji"
-msgstr ""
+msgstr "Название и эмодзи"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:9
 #. TRANSLATORS src/components/Nav/NewCollective.vue:40
 #: /collectives/specialVueFakeDummyForL10nScript.js:46
 #: /collectives/specialVueFakeDummyForL10nScript.js:128
 msgid "Select emoji for collective"
-msgstr ""
+msgstr "Выбор эмодзи для группы"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:30
 #: /collectives/specialVueFakeDummyForL10nScript.js:48
@@ -276,14 +276,14 @@ msgstr "Открыть окружение в Контактах"
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:110
 #: /collectives/specialVueFakeDummyForL10nScript.js:76
 msgid "Danger zone"
-msgstr ""
+msgstr "Опасная зона"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:112
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:113
 #: /collectives/specialVueFakeDummyForL10nScript.js:78
 #: /collectives/specialVueFakeDummyForL10nScript.js:80
 msgid "Delete collective"
-msgstr ""
+msgstr "Удалить группу"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:184
 #: /collectives/specialVueFakeDummyForL10nScript.js:82
@@ -302,7 +302,7 @@ msgstr "Менять название разрешено только владе
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:218
 #: /collectives/specialVueFakeDummyForL10nScript.js:88
 msgid "Editing permissions updated"
-msgstr ""
+msgstr "Обновлены права на редактирование"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:230
 #: /collectives/specialVueFakeDummyForL10nScript.js:90
@@ -312,7 +312,7 @@ msgstr "Обновлены права на предоставление обще
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:262
 #: /collectives/specialVueFakeDummyForL10nScript.js:92
 msgid "Emoji updated"
-msgstr ""
+msgstr "Эмодзи обновлены"
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:2
 #: /collectives/specialVueFakeDummyForL10nScript.js:94
@@ -322,17 +322,17 @@ msgstr "Настройки групп"
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:4
 #: /collectives/specialVueFakeDummyForL10nScript.js:96
 msgid "Collectives Folder"
-msgstr ""
+msgstr "Групповые папки"
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:41
 #: /collectives/specialVueFakeDummyForL10nScript.js:98
 msgid "Create a collective first"
-msgstr ""
+msgstr "Сначала создайте группу"
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:52
 #: /collectives/specialVueFakeDummyForL10nScript.js:100
 msgid "Select location for collectives"
-msgstr ""
+msgstr "Выберите место для группы"
 
 #. TRANSLATORS src/components/Nav/CollectivesGlobalSettings.vue:66
 #: /collectives/specialVueFakeDummyForL10nScript.js:102
@@ -342,7 +342,7 @@ msgstr "Выбран неверный путь. Поддерживаются т�
 #. TRANSLATORS src/components/Nav/CollectivesTrash.vue:11
 #: /collectives/specialVueFakeDummyForL10nScript.js:104
 msgid "Deleted collectives"
-msgstr ""
+msgstr "Удаленные группы"
 
 #. TRANSLATORS src/components/Nav/CollectivesTrash.vue:33
 #. TRANSLATORS src/components/Page/Version.vue:15
@@ -374,7 +374,7 @@ msgstr "Отмена"
 #. TRANSLATORS src/components/Nav/CollectivesTrash.vue:60
 #: /collectives/specialVueFakeDummyForL10nScript.js:116
 msgid "Only collective"
-msgstr ""
+msgstr "Только группа"
 
 #. TRANSLATORS src/components/Nav/CollectivesTrash.vue:65
 #: /collectives/specialVueFakeDummyForL10nScript.js:118
@@ -385,7 +385,7 @@ msgstr "Группа и окружение"
 #. TRANSLATORS src/components/Nav/CollectivesTrash.vue:70
 #: /collectives/specialVueFakeDummyForL10nScript.js:120
 msgid "Only circle owners can delete a circle"
-msgstr ""
+msgstr "Удалить круг могут только владельцы круга"
 
 #. TRANSLATORS src/components/Nav/NewCollective.vue:24
 #. TRANSLATORS src/views/Home.vue:9
