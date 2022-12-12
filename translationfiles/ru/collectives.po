@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-10-25 18:01+0200\n"
-"PO-Revision-Date: 2022-12-12 16:18+0000\n"
+"PO-Revision-Date: 2022-12-12 16:19+0000\n"
 "Last-Translator: vfeshenko <vad_fesh@mail.ru>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/ru/>\n"
@@ -466,12 +466,12 @@ msgstr "Редактирование шаблона для разделов"
 #. TRANSLATORS src/components/Page/PageActionMenu.vue:127
 #: /collectives/specialVueFakeDummyForL10nScript.js:150
 msgid "Add template for subpages"
-msgstr "Добавить шаблон для подстраниц"
+msgstr "Добавить шаблон для разделов"
 
 #. TRANSLATORS src/components/Page/PageActionMenu.vue:136
 #: /collectives/specialVueFakeDummyForL10nScript.js:154
 msgid "Cannot delete page with subpages"
-msgstr ""
+msgstr "Не удается удалить страницу вместе с разделами"
 
 #. TRANSLATORS src/components/Page/PageActionMenu.vue:138
 #: /collectives/specialVueFakeDummyForL10nScript.js:156
