@@ -726,7 +726,7 @@ msgstr "Не удалось изменить расположение стран
 
 #: /collectives/templates/error.php:4
 msgid "Error: Missing apps"
-msgstr "Ошибка: Отсутствующие приложения"
+msgstr "Ошибка: Отсутствуют приложения"
 
 #: /collectives/templates/error.php:9
 msgid "The following dependency apps are missing: "
