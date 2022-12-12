@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-10-25 18:01+0200\n"
-"PO-Revision-Date: 2022-12-12 16:19+0000\n"
+"PO-Revision-Date: 2022-12-12 16:22+0000\n"
 "Last-Translator: Andrey Rozentals <rozenandrey@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/ru/>\n"
@@ -496,7 +496,7 @@ msgstr "Не удалось найти страницу."
 #. TRANSLATORS src/components/Page/PageNotFound.vue:13
 #: /collectives/specialVueFakeDummyForL10nScript.js:164
 msgid "Select a page from the list or create a new one."
-msgstr ""
+msgstr "Выберите страницу из списка или создайте новую."
 
 #. TRANSLATORS src/components/Page/Version.vue:8
 #: /collectives/specialVueFakeDummyForL10nScript.js:166
@@ -517,14 +517,14 @@ msgstr ""
 #. TRANSLATORS src/components/Page.vue:15
 #: /collectives/specialVueFakeDummyForL10nScript.js:176
 msgid "Select emoji for page"
-msgstr ""
+msgstr "Выберите эмодзи для страницы"
 
 #. TRANSLATORS src/components/Page.vue:46
 #. TRANSLATORS src/components/PageList/Item.vue:203
 #: /collectives/specialVueFakeDummyForL10nScript.js:180
 #: /collectives/specialVueFakeDummyForL10nScript.js:194
 msgid "Template"
-msgstr ""
+msgstr "Шаблон"
 
 #. TRANSLATORS src/components/Page.vue:52
 #: /collectives/specialVueFakeDummyForL10nScript.js:182
@@ -544,7 +544,7 @@ msgstr ""
 #. TRANSLATORS src/components/Page.vue:430
 #: /collectives/specialVueFakeDummyForL10nScript.js:190
 msgid "Could not rename the page"
-msgstr ""
+msgstr "Не удалось переименовать страницу"
 
 #. TRANSLATORS src/components/PageList/Item.vue:34
 #: /collectives/specialVueFakeDummyForL10nScript.js:192
@@ -585,7 +585,7 @@ msgstr ""
 #. TRANSLATORS src/components/PageList.vue:53
 #: /collectives/specialVueFakeDummyForL10nScript.js:210
 msgid "Sort by title"
-msgstr ""
+msgstr "По названию"
 
 #. TRANSLATORS src/components/PageList.vue:82
 #: /collectives/specialVueFakeDummyForL10nScript.js:212
@@ -604,16 +604,16 @@ msgstr ""
 #. TRANSLATORS src/components/PageList.vue:184
 #: /collectives/specialVueFakeDummyForL10nScript.js:216
 msgid "Hide templates"
-msgstr ""
+msgstr "Скрыть шаблоны"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:216
 msgid "Show templates"
-msgstr ""
+msgstr "Показать шаблоны"
 
 #. TRANSLATORS src/components/PageList.vue:227
 #: /collectives/specialVueFakeDummyForL10nScript.js:218
 msgid "Could not save page order for collective"
-msgstr ""
+msgstr "Не удалось сохранить порядок страниц для группы"
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabBacklinks.vue:38
 #: /collectives/specialVueFakeDummyForL10nScript.js:220
