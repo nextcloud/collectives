@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-10-25 18:01+0200\n"
-"PO-Revision-Date: 2022-12-12 16:22+0000\n"
-"Last-Translator: vfeshenko <vad_fesh@mail.ru>\n"
+"PO-Revision-Date: 2022-12-12 16:24+0000\n"
+"Last-Translator: Andrey Rozentals <rozenandrey@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/ru/>\n"
 "Language: ru\n"
@@ -638,17 +638,17 @@ msgstr "Текущая версия"
 #. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:57
 #: /collectives/specialVueFakeDummyForL10nScript.js:228
 msgid "No other versions available"
-msgstr ""
+msgstr "Других доступных версий нет"
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:58
 #: /collectives/specialVueFakeDummyForL10nScript.js:230
 msgid "After editing you can find old versions of the page here."
-msgstr ""
+msgstr "После редактирования вы можете найти старые версии страницы здесь."
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:166
 #: /collectives/specialVueFakeDummyForL10nScript.js:232
 msgid "Could not get page versions"
-msgstr ""
+msgstr "Не удалось получить версии страниц"
 
 #. TRANSLATORS src/components/PageSidebar/SidebarTabVersions.vue:137
 #: /collectives/specialVueFakeDummyForL10nScript.js:234
@@ -662,7 +662,7 @@ msgstr[2] "%n байт"
 #. TRANSLATORS src/components/PageSidebar.vue:7
 #: /collectives/specialVueFakeDummyForL10nScript.js:236
 msgid "Backlinks"
-msgstr ""
+msgstr "Обратные ссылки"
 
 #. TRANSLATORS src/components/PageSidebar.vue:12
 #: /collectives/specialVueFakeDummyForL10nScript.js:238
@@ -672,12 +672,12 @@ msgstr ""
 #. TRANSLATORS src/components/PageSidebar.vue:19
 #: /collectives/specialVueFakeDummyForL10nScript.js:240
 msgid "Versions"
-msgstr ""
+msgstr "Версии"
 
 #. TRANSLATORS src/components/PageSidebar.vue:24
 #: /collectives/specialVueFakeDummyForL10nScript.js:242
 msgid "Old versions of this page"
-msgstr ""
+msgstr "Старые версии этой страницы"
 
 #. TRANSLATORS src/views/Home.vue:4
 #: /collectives/specialVueFakeDummyForL10nScript.js:246
@@ -686,16 +686,16 @@ msgstr ""
 
 #: /collectives/src/mixins/CopyToClipboardMixin.js:24
 msgid "Link copied to the clipboard."
-msgstr ""
+msgstr "Ссылка скопирована в буфер обмена."
 
 #: /collectives/src/mixins/CopyToClipboardMixin.js:29
 msgid "Could not copy link to the clipboard:"
-msgstr ""
+msgstr "Не удалось скопировать ссылку в буфер обмена:"
 
 #: /collectives/src/mixins/pageMixin.js:76
 #: /collectives/src/mixins/pageMixin.js:100
 msgid "Could not create the page"
-msgstr ""
+msgstr "Не удалось создать страницу"
 
 #: /collectives/src/mixins/pageMixin.js:87
 msgid "New Page"
@@ -703,7 +703,7 @@ msgstr "Новая страница"
 
 #: /collectives/src/mixins/pageMixin.js:119
 msgid "Could not save emoji for page"
-msgstr ""
+msgstr "Не удалось сохранить эмодзи для страницы"
 
 #: /collectives/src/mixins/pageMixin.js:142
 msgid "Could not move page"
@@ -725,7 +725,7 @@ msgstr ""
 
 #: /collectives/templates/error.php:4
 msgid "Error: Missing apps"
-msgstr ""
+msgstr "Ошибка: Отсутствующие приложения"
 
 #: /collectives/templates/error.php:9
 msgid "The following dependency apps are missing: "
