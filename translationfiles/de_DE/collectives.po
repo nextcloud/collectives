@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-10-25 18:01+0200\n"
-"PO-Revision-Date: 2022-09-16 07:17+0000\n"
+"PO-Revision-Date: 2022-12-01 15:49+0000\n"
 "Last-Translator: Joachim Sokolowski <weblate@of99.de>\n"
 "Language-Team: German (formal) <https://hosted.weblate.org/projects/"
 "collectives/collectives-app/de@formal/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1-dev\n"
+"X-Generator: Weblate 4.15-dev\n"
 
 #. TRANSLATORS src/components/Page.vue:181
 #. TRANSLATORS src/views/Home.vue:3
@@ -124,7 +124,7 @@ msgstr ""
 #: /collectives/specialVueFakeDummyForL10nScript.js:2
 #: /collectives/specialVueFakeDummyForL10nScript.js:86
 msgid "The contacts app is required to manage members"
-msgstr "Die Kontakte App ist erforderlich um Mitglieder zu verwalten"
+msgstr "Die Kontakte-App ist erforderlich um Mitglieder zu verwalten"
 
 #. TRANSLATORS src/components/CollectiveNotFound.vue:3
 #: /collectives/specialVueFakeDummyForL10nScript.js:4
@@ -243,7 +243,7 @@ msgstr "Wählen Sie ein Emoji für das Kollektiv"
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:30
 #: /collectives/specialVueFakeDummyForL10nScript.js:48
 msgid "Save new collective name"
-msgstr "Neuen Kollektv-Namen speichern"
+msgstr "Neuen Kollektiv-Namen speichern"
 
 #. TRANSLATORS src/components/Nav/CollectiveSettings.vue:38
 #: /collectives/specialVueFakeDummyForL10nScript.js:50

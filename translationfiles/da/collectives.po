@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Nextcloud 3.14159\n"
 "Report-Msgid-Bugs-To: translations\\@example.com\n"
 "POT-Creation-Date: 2022-10-25 18:01+0200\n"
-"PO-Revision-Date: 2022-09-13 08:22+0000\n"
+"PO-Revision-Date: 2022-11-02 07:37+0000\n"
 "Last-Translator: Jens Peter Nielsen <mail@jp-nielsen.dk>\n"
 "Language-Team: Danish <https://hosted.weblate.org/projects/collectives/"
 "collectives-app/da/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1-dev\n"
+"X-Generator: Weblate 4.14.2-dev\n"
 
 #. TRANSLATORS src/components/Page.vue:181
 #. TRANSLATORS src/views/Home.vue:3
@@ -466,7 +466,7 @@ msgstr "Færdig"
 
 #: /collectives/specialVueFakeDummyForL10nScript.js:144
 msgid "Edit"
-msgstr "Redigere"
+msgstr "Rediger"
 
 #. TRANSLATORS src/components/Page/PageActionMenu.vue:7
 #: /collectives/specialVueFakeDummyForL10nScript.js:146
