@@ -50,8 +50,9 @@ class UserFolderHelper {
 	 * @throws NotPermittedException
 	 */
 	public function getUserFolderSetting($userId): string {
+		$defaultUserFolder = $this->config->getAppValue('collectives', 'default_user_folder', '');
 		// Get collectives user folder from settings and default to translated 'Collectives'
-		$userCollectivesPath = $this->config->getUserValue($userId, 'collectives', 'user_folder', '');
+		$userCollectivesPath = $this->config->getUserValue($userId, 'collectives', 'user_folder', $defaultUserFolder);
 		if ($userCollectivesPath === '') {
 			$user = $this->userManager->get($userId);
 
