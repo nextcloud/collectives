@@ -98,7 +98,7 @@ test: test-php test-js
 test-php: test-php-unit test-php-integration
 
 test-php-unit:
-	$(CURDIR)/vendor/bin/phpunit --configuration phpunit.xml
+	$(CURDIR)/vendor/bin/phpunit --configuration tests/phpunit.xml
 
 test-php-integration:
 	$(CURDIR)/vendor/bin/behat --config=tests/Integration/config/behat.yml
@@ -151,7 +151,6 @@ build: node-modules build-js-production composer-install-no-dev
 		--exclude="node_modules" \
 		--exclude="package-lock.json" \
 		--exclude="package.json" \
-		--exclude="phpunit.xml" \
 		--exclude="psalm.xml" \
 		--exclude="/src" \
 		--exclude="tests" \
