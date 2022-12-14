@@ -48,7 +48,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-::v-deep .app-navigation-entry-icon {
+:deep(.app-navigation-entry-icon) {
 	font-size: 20px;
 }
 </style>

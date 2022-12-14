@@ -120,7 +120,7 @@ export default {
 	position: relative;
 }
 
-::v-deep #read-only-editor div.ProseMirror {
+:deep(#read-only-editor div.ProseMirror) {
 	margin-top: revert;
 }
 </style>

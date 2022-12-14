@@ -187,7 +187,7 @@ export default {
 
 <style lang="scss" scoped>
 // drag element in sortable.js lists
-::v-deep .sortable-ghost {
+:deep(.sortable-ghost) {
 	opacity: 0.7;
 	border-radius: var(--border-radius-large);
 	background-color: var(--color-background-hover);
