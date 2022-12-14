@@ -1,6 +1,7 @@
 {
-  "baseUrl": "https://localhost:8081/index.php/",
+  "baseUrl": "http://localhost:8081/index.php/",
   "viewportWidth": 1280,
   "viewportHeight": 720,
-  "experimentalSessionAndOrigin": true
+  "experimentalSessionAndOrigin": true,
+  "projectId": "b6myzg"
 }
