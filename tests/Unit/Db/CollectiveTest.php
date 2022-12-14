@@ -3,11 +3,6 @@
 namespace Unit\Db;
 
 use OCA\Collectives\Db\Collective;
-use OCA\Collectives\Db\CollectiveUserSettings;
-use OCA\Collectives\Db\CollectiveUserSettingsMapper;
-use OCP\DB\QueryBuilder\IExpressionBuilder;
-use OCP\DB\QueryBuilder\IQueryBuilder;
-use OCP\IDBConnection;
 use PHPUnit\Framework\TestCase;
 
 class CollectiveTest extends TestCase {

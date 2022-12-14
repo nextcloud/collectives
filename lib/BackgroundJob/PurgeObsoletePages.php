@@ -6,7 +6,6 @@ use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\IJob;
 use OCP\BackgroundJob\TimedJob;
 use OCA\Collectives\Db\PageGarbageCollector;
-use function method_exists;
 
 class PurgeObsoletePages extends TimedJob {
 	private PageGarbageCollector $garbageCollector;
