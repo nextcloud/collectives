@@ -21,5 +21,5 @@ Naciśnij przycisk ołówka, aby rozpocząć! ↗️
 * Wiele osób może jednocześnie edytować tę samą stronę.
 * Połącz strony lokalne, zaznaczając tekst i wybierając „link do pliku”. Przeciągnij i upuść z listy stron do edytora również działa.
 * Dodaj szablony dla przyszłych podstron („Pokaż szablony” -> „Dodaj szablon dla podstron”)
-* Dowiedz się więcej o tej aplikacji w [dokumentacji] (https://collectivecloud.gitlab.io/collectives/).
+* Dowiedz się więcej o tej aplikacji w [dokumentacji] (https://nextcloud.github.io/collectives/).
 * W razie pytań poproś [społeczność](https://help.nextcloud.com/c/apps/collectives/174) o pomoc.

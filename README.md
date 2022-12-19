@@ -25,7 +25,7 @@ For full-text search to work the sqlite and pdo PHP extensions must be installed
 
 ## Documentation and help
 
-Take a look at our [online documentation](https://collectivecloud.gitlab.io/collectives/).
+Take a look at our [online documentation](https://nextcloud.github.io/collectives/).
 
 Also, don't hesitate to ask [the community](https://help.nextcloud.com/c/apps/collectives/174)
 for help in case of questions.

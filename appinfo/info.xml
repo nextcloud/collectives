@@ -30,9 +30,9 @@ In your Nextcloud instance, simply navigate to **»Apps«**, find the
 		<filesystem/>
 	</types>
 	<documentation>
-		<user>https://collectivecloud.gitlab.io/collectives/usage/</user>
-		<admin>https://collectivecloud.gitlab.io/collectives/administration/</admin>
-		<developer>https://collectivecloud.gitlab.io/collectives/development/</developer>
+		<user>https://nextcloud.github.io/collectives/usage/</user>
+		<admin>https://nextcloud.github.io/collectives/administration/</admin>
+		<developer>https://nextcloud.github.io/collectives/development/</developer>
 	</documentation>
 	<category>organization</category>
 	<category>social</category>
