@@ -1,70 +1,70 @@
 Feature: collective
 
   Scenario: Create a collective and add members
-    When user "jane" creates collective "mycollective"
-    And user "alice" joins circle "mycollective" with owner "jane"
-    Then user "jane" sees collective "mycollective"
-    And user "alice" sees collective "mycollective"
-    And user "jane" sees pagePath "Readme.md" in "mycollective"
-    And user "alice" sees pagePath "Readme.md" in "mycollective"
-    And user "john" doesn't see collective "mycollective"
+    When user "jane" creates collective "BehatCollective"
+    And user "alice" joins circle "BehatCollective" with owner "jane"
+    Then user "jane" sees collective "BehatCollective"
+    And user "alice" sees collective "BehatCollective"
+    And user "jane" sees pagePath "Readme.md" in "BehatCollective"
+    And user "alice" sees pagePath "Readme.md" in "BehatCollective"
+    And user "john" doesn't see collective "BehatCollective"
 
   Scenario: User with quota 0B sees collective
     When user "bob" has quota '0 B'
-    And user "bob" joins circle "mycollective" with owner "jane"
-    Then user "bob" sees pagePath "Readme.md" in "mycollective"
-    And user "bob" leaves circle "mycollective" with owner "jane"
+    And user "bob" joins circle "BehatCollective" with owner "jane"
+    Then user "bob" sees pagePath "Readme.md" in "BehatCollective"
+    And user "bob" leaves circle "BehatCollective" with owner "jane"
     And user "bob" has quota "default"
 
   Scenario: Edit page mode as admin and fail to edit page mode as member
-    Then user "jane" sets pageMode for collective "mycollective" to "edit"
-    And user "alice" fails to set pageMode for collective "mycollective" to "edit"
+    Then user "jane" sets pageMode for collective "BehatCollective" to "edit"
+    And user "alice" fails to set pageMode for collective "BehatCollective" to "edit"
 
   Scenario: Fail to trash a collective as simple member
-    And user "alice" fails to trash collective "mycollective"
+    And user "alice" fails to trash collective "BehatCollective"
 
   Scenario: Fail to trash a foreign collective
-    And user "john" fails to trash foreign collective "mycollective" with member "jane"
+    And user "john" fails to trash foreign collective "BehatCollective" with member "jane"
 
   Scenario: Trash an owned collective
-    When user "jane" trashes collective "mycollective"
-    Then user "jane" sees collective "mycollective" in trash
-    And user "jane" fails to create collective "mycollective"
-    And user "alice" doesn't see collective "mycollective" in trash
+    When user "jane" trashes collective "BehatCollective"
+    Then user "jane" sees collective "BehatCollective" in trash
+    And user "jane" fails to create collective "BehatCollective"
+    And user "alice" doesn't see collective "BehatCollective" in trash
 
   Scenario: Restore an owned collective
-    When user "jane" restores collective "mycollective"
-    Then user "jane" sees collective "mycollective"
-    And user "alice" sees collective "mycollective"
+    When user "jane" restores collective "BehatCollective"
+    Then user "jane" sees collective "BehatCollective"
+    And user "alice" sees collective "BehatCollective"
 
   Scenario: Trash an owned collective
-    When user "jane" trashes collective "mycollective"
+    When user "jane" trashes collective "BehatCollective"
 
   Scenario: Fail to delete a collective+circle as admin
-    When user "bob" joins circle "mycollective" with owner "jane" with level "Admin"
-    Then user "bob" fails to delete selfadmin collective+circle "mycollective"
+    When user "bob" joins circle "BehatCollective" with owner "jane" with level "Admin"
+    Then user "bob" fails to delete selfadmin collective+circle "BehatCollective"
 
   Scenario: Fail to delete a collective as simple member
-    And user "alice" fails to delete collective "mycollective" with admin "jane"
-    And user "alice" fails to delete collective+circle "mycollective" with admin "jane"
+    And user "alice" fails to delete collective "BehatCollective" with admin "jane"
+    And user "alice" fails to delete collective+circle "BehatCollective" with admin "jane"
 
   Scenario: Fail to delete a foreign collective
-    And user "john" fails to delete collective "mycollective" with admin "jane"
-    And user "john" fails to delete collective+circle "mycollective" with admin "jane"
+    And user "john" fails to delete collective "BehatCollective" with admin "jane"
+    And user "john" fails to delete collective+circle "BehatCollective" with admin "jane"
 
   Scenario: Delete an owned collective+circle with deleteTimestamp
-    When user "jane" deletes collective+circle "mycollective"
-    Then user "jane" doesn't see collective "mycollective"
-    And user "alice" doesn't see collective "mycollective"
+    When user "jane" deletes collective+circle "BehatCollective"
+    Then user "jane" doesn't see collective "BehatCollective"
+    And user "alice" doesn't see collective "BehatCollective"
 
   Scenario: Recreate a collective based on a leftover circle
-    When user "jane" creates collective "Phoenix"
-    And user "alice" joins circle "Phoenix" with owner "jane"
-    And user "jane" trashes collective "Phoenix"
-    And user "jane" deletes collective "Phoenix"
-    And user "jane" is member of circle "Phoenix"
-    And user "jane" creates collective "Phoenix"
-    Then user "jane" sees collective "Phoenix"
-    And user "alice" sees collective "Phoenix"
-    And user "jane" trashes collective "Phoenix"
-    And user "jane" deletes collective+circle "Phoenix"
+    When user "jane" creates collective "BehatPhoenixCollective"
+    And user "alice" joins circle "BehatPhoenixCollective" with owner "jane"
+    And user "jane" trashes collective "BehatPhoenixCollective"
+    And user "jane" deletes collective "BehatPhoenixCollective"
+    And user "jane" is member of circle "BehatPhoenixCollective"
+    And user "jane" creates collective "BehatPhoenixCollective"
+    Then user "jane" sees collective "BehatPhoenixCollective"
+    And user "alice" sees collective "BehatPhoenixCollective"
+    And user "jane" trashes collective "BehatPhoenixCollective"
+    And user "jane" deletes collective+circle "BehatPhoenixCollective"
