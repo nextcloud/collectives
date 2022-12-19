@@ -17,11 +17,11 @@ defaultContentLanguageInSubdir = false
 enableMissingTranslationPlaceholders = false
 
 [Author]
-  name = "CollectiveCloud Team"
-  gitlab = "collectivecloud"
+  name = "Nextcloud Collectives Team"
+  github = "nextcloud"
 
 [params]
-editURL = "https://gitlab.com/collectivecloud/collectives/edit/main/-/docs/"
+editURL = "https://github.com/nextcloud/collectives/tree/main/docs"
 showVisitedLinks = false # default is false
 themeStyle = "flex" # "original" or "flex" # default "flex"
 themeVariant = "gray" # choose theme variant "green", "gold" , "gray", "blue" (default)
@@ -38,9 +38,9 @@ home = [ "HTML", "RSS", "JSON"]
 
 [[menu.shortcuts]]
 pre = "<h3>More</h3>"
-name = "<i class='fa fa-gitlab'></i> Gitlab"
-identifier = "gitlab"
-url = "https://gitlab.com/collectivecloud/collectives/"
+name = "<i class='fa fa-github'></i> Github"
+identifier = "github"
+url = "https://github.com/nextcloud/collectives/"
 weight = 10
 
 [[menu.shortcuts]]
