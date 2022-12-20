@@ -175,8 +175,6 @@ describe('Page', function() {
 	describe('Editing a page', function() {
 		it('Supports page content editing and switching to read mode', function() {
 			cy.visit('/apps/collectives/Our%20Garden/Day%201')
-			cy.getReadOnlyEditor()
-				.should('not.be.visible')
 
 			cy.log('Inserting an image')
 			cy.intercept({ method: 'POST', url: '**/text/attachment/upload*' }).as('attachmentUpload')
