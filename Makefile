@@ -43,13 +43,6 @@ ifeq (, $(wildcard $(BUILD_TOOLS_DIR)/composer.phar))
 	cd $(BUILD_TOOLS_DIR) && curl -sS https://getcomposer.org/installer | php
 endif
 
-translationtool:
-ifeq (, $(wildcard $(BUILD_TOOLS_DIR)/translationtool.phar))
-	mkdir -p $(BUILD_TOOLS_DIR)
-	curl https://github.com/nextcloud/docker-ci/raw/master/translations/translationtool/translationtool.phar \
-		--silent --location --output $(BUILD_TOOLS_DIR)/translationtool.phar
-endif
-
 $(BUILD_TOOLS_DIR)/info.xsd:
 	mkdir -p $(BUILD_TOOLS_DIR)
 	curl https://apps.nextcloud.com/schema/apps/info.xsd \
@@ -113,18 +106,6 @@ test-js-cypress-watch:
 	cd cypress && ./runLocal.sh open
 
 # Development
-
-# Build and update translation template from source code
-po: translationtool clean
-	php $(BUILD_TOOLS_DIR)/translationtool.phar create-pot-files
-	sed -i 's/^#: .*\/collectives/#: \/collectives/' $(CURDIR)/translationfiles/templates/collectives.pot
-	for pofile in $(CURDIR)/translationfiles/*/collectives.po; do \
-		msgmerge --backup=none --no-fuzzy-matching --update "$$pofile" translationfiles/templates/collectives.pot; \
-	done
-
-# Update l10n files from translation templates
-l10n: po
-	php $(BUILD_TOOLS_DIR)/translationtool.phar convert-po-files
 
 # Update psalm baseline
 php-psalm-baseline:
@@ -230,20 +211,4 @@ endif
 	curl -s -X DELETE $(NEXTCLOUD_API_URL)/releases/$(RELEASE_NAME) \
 		-u 'collectivecloud:$(NEXTCLOUD_PASSWORD)'
 
-update-l10n:
-ifeq (, $(shell which python-gitlab))
-	  $(error python-gitlab not installed)
-endif
-	echo 'Updating l10n files.'
-	git checkout -b update/l10n
-	make l10n
-	git add l10n
-	git commit -m "Update language files" l10n translationfiles
-	git push --set-upstream origin update/l10n
-	$(eval GITLAB_IID:=$(shell python-gitlab project-merge-request create --project-id $(GITLAB_PROJECT_ID) --source-branch update/l10n --target-branch main --title 'Update language files' | cut -d ' ' -f2))
-	sleep 5
-	python-gitlab project-merge-request merge --project-id $(GITLAB_PROJECT_ID) --iid $(GITLAB_IID) --should-remove-source-branch true --merge-when-pipeline-succeeds true
-	git checkout main
-	git branch -D update/l10n
-
-.PHONY: all setup-dev composer translationtool node-modules composer-install clean distclean lint lint-js lint-appinfo build build-js-dev build-js-production test test-php test-php-unit test-php-integration test-js test-js-cypress test-js-cypress-watch po l10n php-psalm-baseline text-app-includes build release delete-release delete-release-from-gitlab delete-release-from-appstore update-l10n
+.PHONY: all setup-dev composer node-modules composer-install clean distclean lint lint-js lint-appinfo build build-js-dev build-js-production test test-php test-php-unit test-php-integration test-js test-js-cypress test-js-cypress-watch po php-psalm-baseline text-app-includes build release delete-release delete-release-from-gitlab delete-release-from-appstore
