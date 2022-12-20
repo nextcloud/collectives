@@ -1,9 +1,9 @@
 OC.L10N.register(
     "collectives",
     {
-    "Collectives" : "Kollektiv",
-    "Collectives - Page content" : "Kollektiv - sidoinnehåll",
-    "Collectives - Pages" : "Kollektiv - Sidor",
-    "in Collective {collective}" : "i kollektiv {kollektiv}"
+    "Cannot copy" : "Kan inte kopieria",
+    "Members" : "Medlemmar",
+    "Sort by title" : "Sortera efter titel",
+    "Current version" : "Aktuell version"
 },
-"nplurals=2; plural=n != 1;");
+"nplurals=2; plural=(n != 1);");
