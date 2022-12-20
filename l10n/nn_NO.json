@@ -1,0 +1,14 @@
+{ "translations": {
+    "Share link" : "Del lenkje",
+    "Unshare" : "Fjern deling",
+    "Settings" : "Innstillingar",
+    "Edit" : "Rediger",
+    "Restore" : "Gjenopprett",
+    "Delete permanently" : "Slett for godt",
+    "Cancel" : "Avbryt",
+    "Done" : "Ferdig",
+    "Title" : "Tittel",
+    "No other versions available" : "Ingen andre utgåver tilgjengeleg",
+    "Versions" : "Utgåver"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}

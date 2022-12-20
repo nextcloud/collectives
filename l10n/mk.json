@@ -1,0 +1,24 @@
+{ "translations": {
+    "You are not allowed to share %s" : "Не сте овластени да ја споделите %s",
+    "Share link" : "Сподели линк",
+    "Unshare" : "Отстрани споделување",
+    "Settings" : "Параметри",
+    "Copied" : "Копирано",
+    "Cannot copy" : "Не може да се копира",
+    "Copy share link" : "Копирај линк за споделување",
+    "View" : "Погледни",
+    "Edit" : "Уреди",
+    "Members" : "Членови",
+    "Danger zone" : "Опасна зона",
+    "Add emoji" : "Додади емотикон",
+    "Restore" : "Врати",
+    "Delete permanently" : "Избриши",
+    "Cancel" : "Откажи",
+    "Done" : "Готово",
+    "Show in Files" : "Прикажи во датотеките",
+    "Title" : "Наслов",
+    "Current version" : "Моментална верзија",
+    "No other versions available" : "Не постојат други верзии",
+    "Versions" : "Верзии"
+},"pluralForm" :"nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;"
+}

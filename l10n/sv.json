@@ -1,7 +1,30 @@
 { "translations": {
+    "Collectives" : "Kollektiv",
+    "Collectives - Page content" : "Kollektiv - sidoinnehåll",
+    "Collectives - Pages" : "Kollektiv - Sidor",
+    "in Collective {collective}" : "i kollektiv {kollektiv}",
+    "You are not allowed to share %s" : "Du har inte rätt att dela %s",
+    "Share link" : "Delningslänk",
+    "Unshare" : "Sluta dela",
+    "Settings" : "Inställningar",
+    "Copied" : "Kopierad",
     "Cannot copy" : "Kan inte kopieria",
+    "Copy share link" : "Kopiera delningslänk",
+    "Permissions" : "Behörigheter",
+    "View" : "Visa",
+    "Edit" : "Ändra",
     "Members" : "Medlemmar",
+    "Restore" : "Återställ",
+    "Delete permanently" : "Ta bort permanent",
+    "Cancel" : "Avbryt",
+    "Done" : "Klar",
+    "Show in Files" : "Visa i Filer",
+    "Hide outline" : "Göm översikt",
+    "Show outline" : "Visa översikt",
+    "Title" : "Titel",
     "Sort by title" : "Sortera efter titel",
-    "Current version" : "Aktuell version"
+    "Current version" : "Aktuell version",
+    "No other versions available" : "Inga andra versioner tillgängliga",
+    "Versions" : "Versioner"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

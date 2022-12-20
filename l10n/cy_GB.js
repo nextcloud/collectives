@@ -1,0 +1,15 @@
+OC.L10N.register(
+    "collectives",
+    {
+    "Share link" : "Rhannu dolen",
+    "Unshare" : "Dad-rannu",
+    "Settings" : "Gosodiadau",
+    "Copied" : "Copïwyd",
+    "Edit" : "Golygu",
+    "Restore" : "Adfer",
+    "Delete permanently" : "Dileu'n barhaol",
+    "Cancel" : "Diddymu",
+    "Done" : "Done",
+    "Title" : "Teitl"
+},
+"nplurals=4; plural=(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != 11) ? 2 : 3;");

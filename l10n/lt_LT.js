@@ -1,8 +1,28 @@
 OC.L10N.register(
     "collectives",
     {
+    "You are not allowed to share %s" : "Jums neleidžiama bendrinti %s",
+    "Share link" : "Bendrinimo nuoroda",
+    "Unshare" : "Nustoti bendrinti",
+    "Settings" : "Nustatymai",
+    "Copied" : "Nukopijuota",
     "Cannot copy" : "Nepavyksta nukopijuoti",
+    "Copy share link" : "Kopijuoti bendrinimo nuorodą",
+    "Permissions" : "Leidimai",
+    "View" : "Rodyti",
+    "Edit" : "Taisyti",
     "Members" : "Nariai",
-    "Current version" : "Dabartinė versija"
+    "Danger zone" : "Pavojinga zona",
+    "Add emoji" : "Pridėti šypsenėlę",
+    "Restore" : "Atkurti",
+    "Delete permanently" : "Ištrinti negrįžtamai",
+    "Cancel" : "Atsisakyti",
+    "Done" : "Atlikta",
+    "Show in Files" : "Rodyti failuose",
+    "Template" : "Šablonas",
+    "Title" : "Pavadinimas",
+    "Current version" : "Dabartinė versija",
+    "No other versions available" : "Nėra kitų prieinamų versijų",
+    "Versions" : "Versijos"
 },
 "nplurals=4; plural=(n % 10 == 1 && (n % 100 > 19 || n % 100 < 11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? 1 : n % 1 != 0 ? 2: 3);");

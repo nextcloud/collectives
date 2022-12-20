@@ -1,0 +1,28 @@
+{ "translations": {
+    "You are not allowed to share %s" : "You are not allowed to share %s",
+    "Share link" : "Share link",
+    "Unshare" : "Unshare",
+    "Settings" : "Settings",
+    "Copied" : "Copied",
+    "Cannot copy" : "Cannot copy",
+    "Copy share link" : "Copy share link",
+    "Permissions" : "Permissions",
+    "View" : "View",
+    "Edit" : "Edit",
+    "Members" : "Members",
+    "Danger zone" : "Danger zone",
+    "Add emoji" : "Add emoji",
+    "Restore" : "Restore",
+    "Delete permanently" : "Delete permanently",
+    "Cancel" : "Cancel",
+    "Done" : "Done",
+    "Show in Files" : "Show in Files",
+    "Hide outline" : "Hide outline",
+    "Show outline" : "Show outline",
+    "Template" : "Template",
+    "Title" : "Title",
+    "Sort by title" : "Sort by title",
+    "No other versions available" : "No other versions available",
+    "Versions" : "Versions"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}

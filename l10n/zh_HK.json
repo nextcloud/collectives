@@ -1,9 +1,29 @@
 { "translations": {
+    "You are not allowed to share %s" : "你無權分享 %s",
+    "Share link" : "分享連結",
+    "Unshare" : "取消共享",
+    "Settings" : "設定",
+    "Copied" : "已複製",
     "Cannot copy" : "無法複製",
+    "Copy share link" : "複製分享連結",
+    "Permissions" : "權限",
+    "View" : "檢視",
+    "Edit" : "編輯",
     "Members" : "成員",
+    "Danger zone" : "危險地帶",
+    "Add emoji" : "添加 emoji",
+    "Restore" : "復原",
+    "Delete permanently" : "永久刪除",
+    "Cancel" : "取消",
     "Done" : "完成",
+    "Show in Files" : "顯示在檔案中",
+    "Hide outline" : "隱藏大綱",
     "Show outline" : "顯示大綱",
+    "Template" : "模板",
+    "Title" : "標題",
     "Sort by title" : "按標題排序",
-    "Current version" : "目前版本"
+    "Current version" : "目前版本",
+    "No other versions available" : "沒有其他版本了",
+    "Versions" : "版本"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

@@ -1,7 +1,28 @@
 OC.L10N.register(
     "collectives",
     {
+    "You are not allowed to share %s" : "Oikeutesi eivät riitä kohteen %s jakamiseen.",
+    "Share link" : "Jaa linkki",
+    "Unshare" : "Poista jako",
+    "Settings" : "Asetukset",
+    "Copied" : "Kopioitu",
     "Cannot copy" : "Ei voida kopioida",
-    "Members" : "Jäsenet"
+    "Copy share link" : "Kopioi jakolinkki",
+    "Permissions" : "Oikeudet",
+    "View" : "Näytä",
+    "Edit" : "Muokkaa",
+    "Members" : "Jäsenet",
+    "Danger zone" : "Vaaravyöhyke",
+    "Add emoji" : "Lisää emoji",
+    "Restore" : "Palauta",
+    "Delete permanently" : "Poista pysyvästi",
+    "Cancel" : "Peruuta",
+    "Done" : "Valmis",
+    "Template" : "Malli",
+    "Title" : "Nimeke",
+    "Sort by title" : "Lajittele nimen mukaan",
+    "Current version" : "Nykyinen versio",
+    "No other versions available" : "Ei muita versioita saatavilla",
+    "Versions" : "Versiot"
 },
 "nplurals=2; plural=(n != 1);");
