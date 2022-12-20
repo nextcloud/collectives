@@ -98,7 +98,7 @@ class PageService {
 		try {
 			$folder = $this->userFolderHelper->get($userId)->get($collectiveName);
 		} catch (FilesNotFoundException $e) {
-			// Workaround https://gitlab.com/collectivecloud/collectives/-/issues/332
+			// Workaround issue #332
 			\OC_Util::setupFS($userId);
 			$folder = $this->userFolderHelper->get($userId)->get($collectiveName);
 		}

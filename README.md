@@ -12,7 +12,7 @@ organize together. Come and gather in collectives to build shared knowledge.
   for page formatting.
 * 🔎 Full-text search with automatic indexing to find content straight away.
 
-![Screenshot of Nextcloud Collectives Version 0.2.1](https://gitlab.com/collectivecloud/collectives/-/raw/main/docs/static/images/screenshot.png)
+![Screenshot of Nextcloud Collectives Version 0.2.1](https://raw.githubusercontent.com/nextcloud/collectives/main/docs/static/images/screenshot.png)
 
 ## Installation
 
@@ -48,5 +48,3 @@ AGPL v3 or later. See [COPYING](COPYING) for the full licence text.
 
 The app logo and page icons were designed and contributed by Jörg Schmidt
 from Institut für Gebrauchsgrafik <info@institut.gebrauchsgrafik.org>.
-
-We also use [Material Icons](https://fonts.google.com/icons?selected=Material) such as [Access Time](https://fonts.google.com/icons?selected=Material%20Icons%3Aaccess_time) and [Sort by Alpha](https://fonts.google.com/icons?selected=Material%20Icons%3Asort_by_alpha).

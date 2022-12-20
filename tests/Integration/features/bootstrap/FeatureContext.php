@@ -608,17 +608,17 @@ class FeatureContext implements Context {
 		]);
 
 		$this->sendOcsRequest('POST', '/apps/circles/circles/' . $circleId . '/members', $data);
-		$this->assertStatusCode(200);
+		$this->assertStatusCode([200, 400]);
 
 		if ($level) {
-			$jsonBody = $this->getJson();
-			$memberId = $jsonBody['ocs']['data']['id'];
+			$memberId = $this->circleMemberByUser($circleId, $user);
+			Assert::assertNotNull($memberId);
 			$data = new TableNode([
 				['level', $level],
 			]);
 
 			$this->sendOcsRequest('PUT', '/apps/circles/circles/' . $circleId . '/members/' . $memberId . '/level', $data);
-			$this->assertStatusCode(200);
+			$this->assertStatusCode([200, 400]);
 		}
 	}
 
@@ -968,6 +968,27 @@ class FeatureContext implements Context {
 	 * @return string|null
 	 * @throws GuzzleException
 	 */
+	private function circleMemberByUser(string $circleId, string $user): ?string {
+		$this->sendOcsRequest('GET', '/apps/circles/circles/' . $circleId . '/members');
+		if (200 !== $this->response->getStatusCode()) {
+			throw new RuntimeException('Unable to get list of members for circle ' . $circleId);
+		}
+		$jsonBody = $this->getJson();
+		foreach ($jsonBody['ocs']['data'] as $member) {
+			if ($user === $member['userId']) {
+				return $member['id'];
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * @param string $circleId
+	 * @param string $userId
+	 *
+	 * @return string|null
+	 * @throws GuzzleException
+	 */
 	private function circleMemberIdByName(string $circleId, string $userId): ?string {
 		$this->sendOcsRequest('GET', '/apps/circles/circles/' . $circleId . '/members');
 		if (200 !== $this->response->getStatusCode()) {
@@ -1243,11 +1264,17 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @param int      $statusCode
+	 * @param mixed    $statusCode
 	 * @param string   $message
 	 */
-	private function assertStatusCode(int $statusCode, string $message = ''): void {
-		Assert::assertEquals($statusCode, $this->response->getStatusCode(), $message);
+	private function assertStatusCode($statusCode, string $message = ''): void {
+		if (is_int($statusCode)) {
+			$message = $message ?: 'Status code ' . $this->response->getStatusCode() . ' is not expected ' . $statusCode . '.';
+			Assert::assertEquals($statusCode, $this->response->getStatusCode(), $message);
+		} elseif (is_array($statusCode)) {
+			$message = $message ?: 'Status code ' . $this->response->getStatusCode() . ' is neither of ' . implode(', ', $statusCode) . '.';
+			Assert::assertContains($this->response->getStatusCode(), $statusCode, $message);
+		}
 	}
 
 	/**

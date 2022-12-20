@@ -1,0 +1,122 @@
+name: app upgrade
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/**'
+      - 'appinfo/**'
+      - 'lib/**'
+      - 'templates/**'
+      - 'tests/**'
+      - 'vendor/**'
+      - 'vendor-bin/**'
+      - '.php-cs-fixer.dist.php'
+      - 'composer.json'
+      - 'composer.lock'
+
+  push:
+    branches:
+      - main
+      - master
+      - stable*
+
+permissions:
+  contents: read
+
+concurrency:
+  group: app-upgrade-mysql-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  app-upgrade-mysql:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-versions: ['8.0']
+        server-versions: ['master']
+
+    services:
+      mysql:
+        image: mariadb:10.5
+        ports:
+          - 4444:3306/tcp
+        env:
+          MYSQL_ROOT_PASSWORD: rootpassword
+        options: --health-cmd="mysqladmin ping" --health-interval 5s --health-timeout 2s --health-retries 5
+
+    steps:
+      - name: Set app env
+        run: |
+          # Split and keep last
+          echo "APP_NAME=${GITHUB_REPOSITORY##*/}" >> $GITHUB_ENV
+
+      - name: Enable ONLY_FULL_GROUP_BY MySQL option
+        run: |
+          echo "SET GLOBAL sql_mode=(SELECT CONCAT(@@sql_mode,',ONLY_FULL_GROUP_BY'));" | mysql -h 127.0.0.1 -P 4444 -u root -prootpassword
+          echo "SELECT @@sql_mode;" | mysql -h 127.0.0.1 -P 4444 -u root -prootpassword
+
+      - name: Checkout server
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+          repository: nextcloud/server
+          ref: ${{ matrix.server-versions }}
+
+      - name: Checkout circles app
+        uses: actions/checkout@v3
+        with:
+          repository: nextcloud/circles
+          path: apps/circles
+          ref: ${{ matrix.server-versions }}
+
+      - name: Set up php ${{ matrix.php-versions }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: mbstring, iconv, fileinfo, intl, mysql, pdo_mysql
+          coverage: none
+
+      - name: Set up Nextcloud, enable collectives from app store and remove collectives
+        env:
+          DB_PORT: 4444
+        run: |
+          mkdir data
+          ./occ maintenance:install --verbose --database=mysql --database-name=nextcloud --database-host=127.0.0.1 --database-port=$DB_PORT --database-user=root --database-pass=rootpassword --admin-user admin --admin-pass password
+          ./occ app:enable --force circles
+          ./occ app:enable --force ${{ env.APP_NAME }}
+          for user in alice bob jane john; do \
+          OC_PASS="$user" ./occ user:add --password-from-env "$user"; \
+          done
+          ./occ collectives:create --owner alice NewCollective
+          ./occ collectives:create --owner bob AnotherNewCollective
+          rm -r apps/collectives
+
+      - name: Checkout app
+        uses: actions/checkout@v3
+        with:
+          path: apps/${{ env.APP_NAME }}
+
+      - name: Install composer dependencies
+        working-directory: apps/${{ env.APP_NAME }}
+        run: composer i --no-dev
+
+      - name: Upgrade Nextcloud and see whether the app still works
+        run: |
+          ./occ upgrade
+          ./occ app:list
+          ./occ collectives:create --owner alice YetAnotherNewCollective
+
+  summary:
+    permissions:
+      contents: none
+    runs-on: ubuntu-latest
+    needs: app-upgrade-mysql
+
+    if: always()
+
+    name: app-upgrade-mysql-summary
+
+    steps:
+      - name: Summary status
+        run: if ${{ needs.app-upgrade-mysql.result != 'success' }}; then exit 1; fi

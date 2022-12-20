@@ -169,7 +169,7 @@ export default {
 			padding-right: 14px;
 			line-height: 44px;
 
-			::v-deep .button-vue__wrapper {
+			:deep(.button-vue__wrapper) {
 				width: 100%;
 				justify-content: start;
 			}
@@ -219,7 +219,7 @@ export default {
 	}
 }
 
-::v-deep .modal-wrapper--small {
+:deep(.modal-wrapper--small) {
 	.modal-container {
 		width: 600px;
 	}

@@ -476,7 +476,7 @@ export default {
 	background-color: var(--color-main-background);
 }
 
-::v-deep [data-text-el='editor-container'] div.editor {
+:deep([data-text-el='editor-container'] div.editor) {
 	/* Adjust to page titlebar height */
 	div.text-menubar {
 		margin: auto;

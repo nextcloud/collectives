@@ -36,11 +36,11 @@ In your Nextcloud instance, simply navigate to **»Apps«**, find the
 	</documentation>
 	<category>organization</category>
 	<category>social</category>
-	<website>https://gitlab.com/collectivecloud/collectives</website>
-	<bugs>https://gitlab.com/collectivecloud/collectives/issues</bugs>
-	<repository type="git">https://gitlab.com/collectivecloud/collectives.git</repository>
-	<screenshot small-thumbnail="https://collectivecloud.gitlab.io/collectives/images/screenshot-small.png">
-		https://collectivecloud.gitlab.io/collectives/images/screenshot.png
+	<website>https://github.com/nextcloud/collectives</website>
+	<bugs>https://github.com/nextcloud/collectives/issues</bugs>
+	<repository type="git">https://github.com/nextcloud/collectives.git</repository>
+	<screenshot small-thumbnail="https://raw.githubusercontent.com/nextcloud/collectives/main/docs/static/images/screenshot-small.png">
+		https://raw.githubusercontent.com/nextcloud/collectives/main/docs/static/images/screenshot.png
 	</screenshot>
 	<dependencies>
 		<nextcloud min-version="25" max-version="25" />

@@ -8,7 +8,6 @@ use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\IJob;
 use OCP\BackgroundJob\TimedJob;
 use OCA\Collectives\Versions\CollectiveVersionsExpireManager;
-use function method_exists;
 
 class ExpirePageVersions extends TimedJob {
 	private CollectiveVersionsExpireManager $expireManager;

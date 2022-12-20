@@ -175,8 +175,6 @@ describe('Page', function() {
 	describe('Editing a page', function() {
 		it('Supports page content editing and switching to read mode', function() {
 			cy.visit('/apps/collectives/Our%20Garden/Day%201')
-			cy.getReadOnlyEditor()
-				.should('not.be.visible')
 
 			cy.log('Inserting an image')
 			cy.intercept({ method: 'POST', url: '**/text/attachment/upload*' }).as('attachmentUpload')
@@ -200,9 +198,11 @@ describe('Page', function() {
 				.contains('admin')
 				.click()
 
-			cy.log('Changing to read mode')
-			cy.get('button.titleform-button')
-				.click()
+			// Wait 1 second to prevent race condition when switching mode
+			cy.wait(1000) // eslint-disable-line cypress/no-unnecessary-waiting
+
+			// Switch back to view mode
+			cy.switchPageMode(0)
 
 			cy.getEditor()
 				.should('not.be.visible')
