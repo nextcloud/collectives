@@ -21,5 +21,5 @@ Tryk på blyantknappen for at komme i gang! ↗️
 * Flere personer kan redigere den samme side samtidigt.
 * Link lokale sider ved at vælge tekst og vælge "link fil". Træk og slip fra sideliste til editoren virker også.
 * Tilføj skabeloner til fremtidige undersider ("Vis skabeloner" -> "Tilføj skabelon til undersider")
-* Få mere at vide om denne app i [documentation](https://collectivecloud.gitlab.io/collectives/).
+* Få mere at vide om denne app i [documentation](https://nextcloud.github.io/collectives/).
 * Spørg [fællesskabet](https://help.nextcloud.com/c/apps/collectives/174) om hjælp i tilfælde af spørgsmål.
