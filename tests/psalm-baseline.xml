@@ -1,35 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.x-dev@">
-  <file src="lib/AppInfo/Application.php">
-    <MissingDependency occurrences="1">
-      <code>CircleDestroyedEvent</code>
-    </MissingDependency>
-  </file>
-  <file src="lib/Command/CreateCollective.php">
-    <UndefinedMethod occurrences="1">
-      <code>write</code>
-    </UndefinedMethod>
-  </file>
-  <file src="lib/Command/ExpirePageVersions.php">
-    <UndefinedMethod occurrences="1">
-      <code>write</code>
-    </UndefinedMethod>
-  </file>
-  <file src="lib/Command/PurgeObsoletePages.php">
-    <UndefinedMethod occurrences="1">
-      <code>write</code>
-    </UndefinedMethod>
-  </file>
+<files psalm-version="dev-master@">
   <file src="lib/Fs/UserFolderHelper.php">
     <UndefinedClass occurrences="2">
       <code>$e</code>
       <code>NoUserException</code>
     </UndefinedClass>
-  </file>
-  <file src="lib/Listeners/CircleDestroyedListener.php">
-    <MissingDependency occurrences="1">
-      <code>CircleDestroyedEvent</code>
-    </MissingDependency>
   </file>
   <file src="lib/Mount/CollectiveFolderManager.php">
     <InvalidArgument occurrences="1">

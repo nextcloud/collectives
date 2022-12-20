@@ -69,7 +69,7 @@ class ExpireManager {
 
 		foreach ($versions as $version) {
 			$newInterval = true;
-			while ($newInterval) {
+			while ($newInterval && $interval <= 5) {
 				if ($nextInterval === -1 || $prevTimestamp > $nextInterval) {
 					if ($version->getTimestamp() > $nextVersion) {
 						// distance between two versions is too small, mark to delete

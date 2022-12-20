@@ -20,6 +20,7 @@ use OCP\IDBConnection;
  * @method Collective delete(Entity $collective)
  * @method Collective findEntity(IQueryBuilder $query)
  * @method Collective update(Entity $collective)
+ * @template-extends QBMapper<Collective>
  */
 class CollectiveMapper extends QBMapper {
 	private CircleHelper $circleHelper;

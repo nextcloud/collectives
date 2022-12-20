@@ -629,9 +629,13 @@ namespace OCA\Circles\Model\Probes {
 }
 
 namespace OCA\Circles\Events {
-	use OCA\Circles\Events\CircleResultGenericEvent;
+	use OCP\EventDispatcher\Event;
 	use OCA\Circles\Model\Federated\FederatedEvent;
-	class CircleDestroyedEvent extends CircleResultGenericEvent {
+	use OCA\Circles\Model\Circle;
+	abstract class CircleResultGenericEvent extends Event {
+		public function getCircle(): Circle;
+	}
+	abstract class CircleDestroyedEvent extends CircleResultGenericEvent {
 		public function __construct(FederatedEvent $federatedEvent, array $results) {}
 	}
 }
