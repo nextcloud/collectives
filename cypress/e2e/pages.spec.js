@@ -198,9 +198,11 @@ describe('Page', function() {
 				.contains('admin')
 				.click()
 
-			cy.log('Changing to read mode')
-			cy.get('button.titleform-button')
-				.click()
+			// Wait 1 second to prevent race condition when switching mode
+			cy.wait(1000) // eslint-disable-line cypress/no-unnecessary-waiting
+
+			// Switch back to view mode
+			cy.switchPageMode(0)
 
 			cy.getEditor()
 				.should('not.be.visible')
