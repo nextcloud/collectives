@@ -1,0 +1,27 @@
+OC.L10N.register(
+    "collectives",
+    {
+    "You are not allowed to share %s" : "أنت غير مسموح لك أن تشارك %s",
+    "Share link" : "مشاركة الرابط",
+    "Unshare" : "إلغاء المشاركة",
+    "Settings" : "الإعدادات",
+    "Copied" : "نُسخت ",
+    "Cannot copy" : "لا يمكن النسخ",
+    "Copy share link" : "انسخ رابط المشاركة",
+    "Permissions" : "التصريحات",
+    "View" : "عرض",
+    "Edit" : "تعديل",
+    "Members" : "الاعضاء",
+    "Danger zone" : "منطقة خطر",
+    "Add emoji" : "اضافة رمز تعبيري",
+    "Restore" : "استعادة ",
+    "Delete permanently" : "حذف بشكل دائم",
+    "Cancel" : "إلغاء",
+    "Done" : "أُنجز",
+    "Show in Files" : "عرض في الملفات ",
+    "Title" : "العنوان",
+    "Current version" : "الإصدار الحالي",
+    "No other versions available" : "لا تتوفر هناك نُسخ أخرى",
+    "Versions" : "الإصدارات"
+},
+"nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;");

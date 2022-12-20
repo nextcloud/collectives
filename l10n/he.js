@@ -1,0 +1,26 @@
+OC.L10N.register(
+    "collectives",
+    {
+    "You are not allowed to share %s" : "אינך רשאי/ת לשתף %s",
+    "Share link" : "קישור שיתוף",
+    "Unshare" : "ביטול שיתוף",
+    "Settings" : "הגדרות",
+    "Copied" : "הועתק",
+    "Copy share link" : "העתקת קישור השיתוף",
+    "Permissions" : "הרשאות",
+    "View" : "צפייה",
+    "Edit" : "עריכה",
+    "Members" : "חברים",
+    "Add emoji" : "הוספת אמוג׳י",
+    "Restore" : "שחזור",
+    "Delete permanently" : "מחיקה לצמיתות",
+    "Cancel" : "ביטול",
+    "Done" : "הסתיים",
+    "Show in Files" : "הצגה בקבצים",
+    "Template" : "תבנית",
+    "Title" : "תפקיד",
+    "Current version" : "גרסה נוכחית",
+    "No other versions available" : "אין גרסאות אחרות זמינות",
+    "Versions" : "גרסאות"
+},
+"nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;");

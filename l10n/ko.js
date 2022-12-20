@@ -1,0 +1,25 @@
+OC.L10N.register(
+    "collectives",
+    {
+    "You are not allowed to share %s" : "%s을(를) 공유할 수 있는 권한이 없습니다",
+    "Share link" : "링크 공유",
+    "Unshare" : "공유 해제",
+    "Settings" : "설정",
+    "Copied" : "복사됨",
+    "Cannot copy" : "복사할 수 없음",
+    "Permissions" : "권한",
+    "View" : "보기",
+    "Edit" : "편집",
+    "Members" : "구성원",
+    "Danger zone" : "위험 지역",
+    "Add emoji" : "이모티콘 추가",
+    "Restore" : "복원",
+    "Delete permanently" : "영구히 삭제",
+    "Cancel" : "취소",
+    "Done" : "완료",
+    "Template" : "템플릿",
+    "Title" : "제목",
+    "No other versions available" : "다른 버전을 사용할 수 없음",
+    "Versions" : "버전"
+},
+"nplurals=1; plural=0;");

@@ -1,6 +1,20 @@
 { "translations": {
+    "Share link" : "Chia sẻ liên kết",
+    "Unshare" : "Bỏ chia sẻ",
+    "Settings" : "Cài đặt",
+    "Copied" : "Đã sao chép",
+    "View" : "Xem",
+    "Edit" : "Chỉnh sửa",
     "Members" : "Thành viên",
+    "Danger zone" : "Khu vực nguy hiểm",
+    "Add emoji" : "Thêm biểu tượng cảm xúc",
+    "Restore" : "Khôi phục",
+    "Delete permanently" : "Xoá vĩnh viễn",
+    "Cancel" : "Hủy",
     "Done" : "Hoàn thành",
-    "Current version" : "Phiên bản hiện tại"
+    "Title" : "Tiêu đề",
+    "Current version" : "Phiên bản hiện tại",
+    "No other versions available" : "Không có các phiên bản khác có sẵn",
+    "Versions" : "Phiên bản"
 },"pluralForm" :"nplurals=1; plural=0;"
 }
