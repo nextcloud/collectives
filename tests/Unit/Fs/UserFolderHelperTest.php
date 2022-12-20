@@ -61,11 +61,7 @@ class UserFolderHelperTest extends TestCase {
 		$userManager->method('get')
 			->willReturn($user);
 
-		$this->config = $this->getMockBuilder(IConfig::class)
-			->disableOriginalConstructor()
-			->getMock();
-		$this->config->method('getUserValue')
-			->willReturn('');
+		$this->config = $this->createMock(IConfig::class);
 
 		$this->l10n = $this->getMockBuilder(IL10N::class)
 			->disableOriginalConstructor()
@@ -80,6 +76,12 @@ class UserFolderHelperTest extends TestCase {
 	}
 
 	public function testGetUserFolderSetting(): void {
+		$this->config->method('getAppValue')
+			->with('collectives', 'default_user_folder', '')
+			->willReturn('');
+		$this->config->method('getUserValue')
+			->willReturn('');
+
 		$this->l10n->method('t')
 			->willReturn('Collectif');
 		self::assertEquals('/Collectif', $this->helper->getUserFolderSetting('jane'));
@@ -90,7 +92,22 @@ class UserFolderHelperTest extends TestCase {
 		$this->helper->getUserFolderSetting('jane');
 	}
 
+	public function testGetUserFolderSettingDefaultToAppSetting(): void {
+		$this->config->method('getAppValue')
+			->with('collectives', 'default_user_folder', '')
+			->willReturn('/custom_folder');
+		$this->config->method('getUserValue')
+			->willReturn('/custom_folder');
+		self::assertEquals('/custom_folder', $this->helper->getUserFolderSetting('jane'));
+	}
+
 	public function testGetFolderExists(): void {
+		$this->config->method('getAppValue')
+			->with('collectives', 'default_user_folder', '')
+			->willReturn('');
+		$this->config->method('getUserValue')
+			->willReturn('');
+
 		$this->userFolder->method('get')
 			->willReturn($this->collectivesUserFolder);
 
@@ -98,6 +115,12 @@ class UserFolderHelperTest extends TestCase {
 	}
 
 	public function testGetFileExists(): void {
+		$this->config->method('getAppValue')
+			->with('collectives', 'default_user_folder', '')
+			->willReturn('');
+		$this->config->method('getUserValue')
+			->willReturn('');
+
 		$file = $this->getMockBuilder(File::class)
 			->disableOriginalConstructor()
 			->getMock();
@@ -109,6 +132,12 @@ class UserFolderHelperTest extends TestCase {
 	}
 
 	public function testGetFolderNotExists(): void {
+		$this->config->method('getAppValue')
+			->with('collectives', 'default_user_folder', '')
+			->willReturn('');
+		$this->config->method('getUserValue')
+			->willReturn('');
+
 		$this->userFolder->method('get')
 			->willThrowException(new NotFoundException);
 
