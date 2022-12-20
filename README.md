@@ -36,7 +36,7 @@ Documentation for developers can be found at [DEVELOPING.md](DEVELOPING.md).
 
 ## Translations
 
-Project translations are [managed on Weblate](https://hosted.weblate.org/engage/collectives/).
+Project translations are [managed on Transifex](https://www.transifex.com/nextcloud/nextcloud/collectives/).
 
 ## Maintainers
 
