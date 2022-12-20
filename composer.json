@@ -21,7 +21,7 @@
         "nextcloud/coding-standard": "^1.0.0",
         "nextcloud/ocp": "^24.0",
         "phpunit/phpunit": "^9.5",
-        "psalm/phar": "^4.15"
+        "psalm/phar": "^5.4"
     },
     "scripts": {
       "lint": "find . -name \\*.php -not -path './vendor/*' -exec php -l \"{}\" \\;",
