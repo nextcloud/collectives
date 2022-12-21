@@ -26,6 +26,7 @@ OC.L10N.register(
     "Sort by title" : "Ordenatu izenburuaren arabera",
     "Current version" : "Uneko bertsioa",
     "No other versions available" : "Ez dago bertsio gehiago eskuragarri",
+    "_%n byte_::_%n bytes_" : ["Byte %n","%n byte"],
     "Versions" : "Bertsioak"
 },
 "nplurals=2; plural=(n != 1);");
