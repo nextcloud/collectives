@@ -54,6 +54,8 @@ describe('Collective', function() {
 			cy.get(`${fileListSelector} a`).contains('Preexisting Collective').click()
 			cy.get(`${controlsSelector} .breadcrumb`).should('contain', 'Preexisting Collective')
 			cy.get(fileListSelector).should('contain', 'Readme.md')
+			cy.get('.filelist-collectives-wrapper')
+				.should('contain', 'The content of this folder is best viewed in the Collectives app.')
 		})
 	})
 
