@@ -284,16 +284,23 @@ describe('Page', function() {
 		})
 	})
 
-	describe('Using the search providers', function() {
+	describe('Using the search providers to search for a page', function() {
 		it('Search for page and page content', function() {
 			cy.get('.unified-search a').click()
 			cy.get('.unified-search__form input')
-				.type('Day 2')
-			cy.get('.unified-search__results-collectives-pages').should('contain', 'Day 2')
-			/*
-			 * Removed because the pages do not get indexed during the tests, so the check fails:
-			cy.get('.unified-search__results-collectives-page-content').should('contain', 'with Day 2 in')
-			 */
+				.type('Day')
+			cy.get('.unified-search__results-collectives-pages')
+				.should('contain', 'Day 1')
+		})
+	})
+
+	describe('Using the search providers to search page content', function() {
+		it('Search for page and page content', function() {
+			cy.get('.unified-search a').click()
+			cy.get('.unified-search__form input')
+				.type('share your thoughts')
+			cy.get('.unified-search__results-collectives-page-content')
+				.should('contain', 'your thoughts that really matter. Whether it')
 		})
 	})
 
