@@ -11,10 +11,7 @@ use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
 /**
- * @method Entity insert(Entity $settings)
- * @method Entity update(Entity $settings)
- * @method CollectiveUserSettings delete(Entity $settings)
- * @method CollectiveUserSettings findEntity(IQueryBuilder $query)
+ * @template-extends QBMapper<CollectiveUserSettings>
  */
 class CollectiveUserSettingsMapper extends QBMapper {
 	/**
@@ -34,7 +31,7 @@ class CollectiveUserSettingsMapper extends QBMapper {
 	 *
 	 * @param Entity $entity
 	 *
-	 * @return Entity
+	 * @return CollectiveUserSettings
 	 * @throws Exception
 	 */
 	public function insertOrUpdate(Entity $entity): Entity {

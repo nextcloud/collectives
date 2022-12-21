@@ -14,6 +14,7 @@ use OCP\IDBConnection;
  * @method CollectiveShare insert(Entity $share)
  * @method CollectiveShare delete(Entity $share)
  * @method CollectiveShare findEntity(IQueryBuilder $query)
+ * @template-extends QBMapper<CollectiveShare>
  */
 class CollectiveShareMapper extends QBMapper {
 	/**

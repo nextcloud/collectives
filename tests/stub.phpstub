@@ -115,6 +115,7 @@ namespace Symfony\Component\Console\Output {
     class OutputInterface {
         public const VERBOSITY_VERBOSE = 1;
         public function writeln(string $text, int $flat = 0) {}
+        public function write($messages, $newline = false, $options = 0) {}
     }
 }
 
@@ -629,9 +630,13 @@ namespace OCA\Circles\Model\Probes {
 }
 
 namespace OCA\Circles\Events {
-	use OCA\Circles\Events\CircleResultGenericEvent;
+	use OCP\EventDispatcher\Event;
 	use OCA\Circles\Model\Federated\FederatedEvent;
-	class CircleDestroyedEvent extends CircleResultGenericEvent {
+	use OCA\Circles\Model\Circle;
+	abstract class CircleResultGenericEvent extends Event {
+		public function getCircle(): Circle;
+	}
+	abstract class CircleDestroyedEvent extends CircleResultGenericEvent {
 		public function __construct(FederatedEvent $federatedEvent, array $results) {}
 	}
 }

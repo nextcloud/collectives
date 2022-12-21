@@ -10,6 +10,7 @@ use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
 use OCP\Share\Events\ShareDeletedEvent;
 
+/** @template-implements IEventListener<Event|ShareDeletedEvent> */
 class ShareDeletedListener implements IEventListener {
 	private CollectiveShareMapper $shareMapper;
 

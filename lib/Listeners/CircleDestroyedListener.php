@@ -16,6 +16,7 @@ use OCP\EventDispatcher\IEventListener;
 use OCP\Files\InvalidPathException;
 use OCP\Files\NotFoundException as FilesNotFoundException;
 
+/** @template-implements IEventListener<Event|CircleDestroyedEvent> */
 class CircleDestroyedListener implements IEventListener {
 	private CollectiveMapper $collectiveMapper;
 	private CollectiveFolderManager $collectiveFolderManager;

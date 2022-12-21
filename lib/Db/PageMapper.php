@@ -14,6 +14,7 @@ use OCP\IDBConnection;
  * @method Page update(Entity $page)
  * @method Page delete(Entity $page)
  * @method Page findEntity(IQueryBuilder $query)
+ * @template-extends QBMapper<Page>
  */
 class PageMapper extends QBMapper {
 	/**
