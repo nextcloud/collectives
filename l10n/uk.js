@@ -1,0 +1,26 @@
+OC.L10N.register(
+    "collectives",
+    {
+    "You are not allowed to share %s" : "Вам заборонено поширювати %s",
+    "Share link" : "Поділитися посиланням",
+    "Unshare" : "Закрити доступ",
+    "Settings" : "Налаштування",
+    "Copied" : "Скопійовано",
+    "Cannot copy" : "Не вдалося скопіювати",
+    "Copy share link" : "Копіювати посилання спільного доступу",
+    "Permissions" : "Дозволи ",
+    "View" : "Перегляд",
+    "Edit" : "Редагувати",
+    "Members" : "Учасники",
+    "Restore" : "Відновити",
+    "Delete permanently" : "Вилучити безповоротно",
+    "Cancel" : "Скасувати",
+    "Done" : "Готово",
+    "Hide outline" : "Сховати контур",
+    "Show outline" : "Показати контур",
+    "Title" : "Назва",
+    "Current version" : "Поточна версія",
+    "No other versions available" : "Інші версії недоступні",
+    "Versions" : "Версії"
+},
+"nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);");

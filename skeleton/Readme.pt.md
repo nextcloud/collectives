@@ -21,5 +21,5 @@ Clique no botão do lápis para começar! ↗️
 * Várias pessoas podem editar a mesma página simultaneamente.
 * Crie links com páginas locais selecionando um texto e clicando em "vincular arquivo". Arrastar da lista de páginas e soltar aqui dentro do editor também funciona.
 * Adicione modelos para futuras subpáginas ("Exibir modelos" -> "Adicionar modelo para subpáginas")
-* Saiba mais sobre este aplicativo na [documentação](https://collectivecloud.gitlab.io/collectives/).
+* Saiba mais sobre este aplicativo na [documentação](https://nextcloud.github.io/collectives/).
 * Pergunte para a [comunidade](https://help.nextcloud.com/c/apps/collectives/174) e obtenha ajuda em caso de dúvidas.

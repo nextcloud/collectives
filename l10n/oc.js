@@ -1,0 +1,20 @@
+OC.L10N.register(
+    "collectives",
+    {
+    "Share link" : "Partejar lo ligam",
+    "Unshare" : "Partejar pas mai",
+    "Settings" : "Paramètres",
+    "View" : "Veire",
+    "Edit" : "Modificar",
+    "Members" : "Membres",
+    "Danger zone" : "Zòna perilhosa",
+    "Add emoji" : "Apondre emoji",
+    "Restore" : "Restaurar",
+    "Delete permanently" : "Suprimir definitivament",
+    "Cancel" : "Anullar",
+    "Done" : "Done",
+    "Title" : "Títol",
+    "No other versions available" : "Cap d’autra version pas disponibla",
+    "Versions" : "Versions"
+},
+"nplurals=2; plural=(n > 1);");

@@ -1,0 +1,15 @@
+{ "translations": {
+    "Share link" : "Deel skakel",
+    "Unshare" : "Ontdeel",
+    "Settings" : "Instellings",
+    "Copied" : "Gekopieer",
+    "View" : "Bekyk",
+    "Edit" : "Wysig",
+    "Restore" : "Herstel",
+    "Delete permanently" : "Skrap permanent",
+    "Cancel" : "Kanselleer",
+    "Done" : "Gereed",
+    "Title" : "Titel",
+    "Versions" : "Weergawes"
+},"pluralForm" :"nplurals=2; plural=(n != 1);"
+}

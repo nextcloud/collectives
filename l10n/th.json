@@ -1,0 +1,16 @@
+{ "translations": {
+    "You are not allowed to share %s" : "คุณยังไม่ได้รับอนุญาตให้แชร์ %s",
+    "Share link" : "แชร์ลิงก์",
+    "Unshare" : "ยกเลิกการแชร์",
+    "Settings" : "การตั้งค่า",
+    "View" : "มุมมอง",
+    "Edit" : "แก้ไข",
+    "Restore" : "คืนค่า",
+    "Delete permanently" : "ลบแบบถาวร",
+    "Cancel" : "ยกเลิก",
+    "Done" : "เสร็จสิ้น",
+    "Title" : "ชื่อเรื่อง",
+    "No other versions available" : "ไม่มีรุ่นอื่น ๆ",
+    "Versions" : "รุ่น"
+},"pluralForm" :"nplurals=1; plural=0;"
+}
