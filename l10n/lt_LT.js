@@ -4,6 +4,7 @@ OC.L10N.register(
     "You are not allowed to share %s" : "Jums neleidžiama bendrinti %s",
     "Share link" : "Bendrinimo nuoroda",
     "Unshare" : "Nustoti bendrinti",
+    "Export or print" : "Eksportuoti ar spausdinti",
     "Settings" : "Nustatymai",
     "Copied" : "Nukopijuota",
     "Cannot copy" : "Nepavyksta nukopijuoti",
