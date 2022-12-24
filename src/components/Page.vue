@@ -279,6 +279,12 @@ export default {
 		document.title = this.documentTitle
 		this.initTitleEntry()
 		this.getPageContent()
+		setInterval(() => {
+			if (this.sessionContent() && this.pageContent !== this.sessionContent()) {
+				this.pageContent = this.sessionContent()
+			}
+			//
+		}, 2000)
 	},
 
 	methods: {
@@ -295,6 +301,11 @@ export default {
 			dispatchGetPages: GET_PAGES,
 			dispatchGetVersions: GET_VERSIONS,
 		}),
+
+		// this is a method so it does not get cached
+		sessionContent() {
+			return this.syncService()?._getContent()
+		},
 
 		// this is a method so it does not get cached
 		syncService() {
@@ -349,7 +360,7 @@ export default {
 		readyEditor() {
 			// Set pageContent if it's been empty before
 			if (!this.pageContent) {
-				this.pageContent = this.syncService()._getContent()
+				this.pageContent = this.sessionContent()
 			}
 			this.readMode = false
 			if (this.loading('newPage')) {
@@ -393,7 +404,7 @@ export default {
 
 			this.scrollTop = document.getElementById('editor')?.scrollTop || 0
 
-			const pageContent = this.syncService()._getContent()
+			const pageContent = this.sessionContent()
 			const changed = this.pageContent !== pageContent
 
 			// if there is still no page content we remind the user
