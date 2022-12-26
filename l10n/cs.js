@@ -62,7 +62,7 @@ OC.L10N.register(
     "Default page mode updated" : "Výchozí režim stránky zaktualizován",
     "Could not update default page mode" : "Nepodařilo se zaktualizovat výchozí režim stránky",
     "Emoji updated" : "Emotikona zaktualizována",
-    "Could not update emoji for the collective" : "Emotikonu pro kolektiv se nepodařilo zaktulizovat",
+    "Could not update emoji for the collective" : "Emotikonu pro kolektiv se nepodařilo zaktualizovat",
     "Could not rename the collective" : "Kolektiv se nepodařilo přejmenovat",
     "Collectives settings" : "Nastavení pro kolektiv",
     "Collectives Folder" : "Složka pro Kolektivy",
