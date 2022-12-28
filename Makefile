@@ -116,6 +116,10 @@ build-js-production:
 
 # Build a release package
 build: node-modules build-js-production composer-install-no-dev
+	@if [ -n "$$(git status --porcelain)" ]; then \
+		echo "Git repo not clean!"; \
+		exit 1; \
+	fi
 	mkdir -p $(RELEASE_DIR)
 	rsync -a --delete --delete-excluded \
 		--exclude=".[a-z]*" \
