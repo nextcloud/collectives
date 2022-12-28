@@ -9,19 +9,11 @@ NPM?=npm
 
 # Release variables
 VERSION_CHANGELOG:=$(shell sed -ne 's/^\#\#\s\([0-9\.]\+-*\w*\)\s-\s.*$$/\1/p' CHANGELOG.md | head -n1 )
-GITLAB_GROUP:=collectivecloud
-GITLAB_PROJECT:=collectives
-GITLAB_PROJECT_ID:=17827012
-GITLAB_URL:=https://gitlab.com
-GITLAB_API_URL:=$(GITLAB_URL)/api/v4/projects/$(GITLAB_PROJECT_ID)
 
 # Upgrade: once we have git >= 2.22 everywhere we can use the more
 # readable GIT_BRANCH:=$(shell git branch --show-current)
 GIT_BRANCH:=$(shell git rev-parse --abbrev-ref HEAD)
 GIT_REMOTE:=$(shell git config --get "branch.${GIT_BRANCH}.remote")
-
-# So far just for removing releases again
-NEXTCLOUD_API_URL:=https://apps.nextcloud.com/api/v1/apps/collectives
 
 # Internal variables
 APP_NAME:=$(notdir $(CURDIR))
@@ -30,6 +22,11 @@ BUILD_DIR:=$(CURDIR)/build
 BUILD_TOOLS_DIR:=$(BUILD_DIR)/tools
 RELEASE_DIR:=$(BUILD_DIR)/release
 CERT_DIR:=$(HOME)/.nextcloud/certificates
+
+# So far just for removing releases again
+NEXTCLOUD_API_URL:=https://apps.nextcloud.com/api/v1/apps/collectives
+
+GITHUB_PROJECT_URL:=https://github.com/nextcloud/$(APP_NAME)
 
 # Meta targets
 all: setup-dev lint build test
@@ -79,12 +76,6 @@ lint-appinfo: $(BUILD_TOOLS_DIR)/info.xsd
 	xmllint appinfo/info.xml --noout \
 		--schema $(BUILD_TOOLS_DIR)/info.xsd
 
-build-js-dev:
-	$(NPM) run dev
-
-build-js-production:
-	$(NPM) run build
-
 # Testing
 test: test-php test-js
 
@@ -115,6 +106,14 @@ php-psalm-baseline:
 text-app-includes:
 	for n in `cat .files_from_text`; do cp ../../apps/text/$$n $$n ; done
 
+
+# Build
+build-js-dev:
+	$(NPM) run dev
+
+build-js-production:
+	$(NPM) run build
+
 # Build a release package
 build: node-modules build-js-production composer-install-no-dev
 	mkdir -p $(RELEASE_DIR)
@@ -122,18 +121,20 @@ build: node-modules build-js-production composer-install-no-dev
 		--exclude=".[a-z]*" \
 		--exclude="Makefile" \
 		--exclude="Dockerfile" \
+		--exclude="TODO*" \
 		--exclude="babel.config.js" \
 		--exclude="build" \
 		--exclude="composer.*" \
 		--exclude="cypress" \
-		--exclude="cypress.json" \
+		--exclude="cypress.config.js" \
 		--exclude="docs" \
 		--exclude="jest.config.json" \
 		--exclude="node_modules" \
 		--exclude="package-lock.json" \
 		--exclude="package.json" \
 		--exclude="psalm.xml" \
-		--exclude="/src" \
+		--exclude="src" \
+		--exclude="stylelint.config.js" \
 		--exclude="tests" \
 		--exclude="webpack.*" \
 	$(PROJECT_DIR) $(RELEASE_DIR)/
@@ -157,9 +158,6 @@ release-checks:
 ifneq ($(VERSION),$(VERSION_CHANGELOG))
 	$(error Version missmatch between `appinfo/info.xml`: $(VERSION) and `CHANGELOG.md`: $(VERSION_CHANGELOG))
 endif
-ifndef GITLAB_API_TOKEN
-	$(error Missing $$GITLAB_API_TOKEN)
-endif
 	@if git tag | grep -qFx $(GIT_TAG); then \
 		echo "Git tag already exists!"; \
 		echo "Delete it with 'git tag -d $(GIT_TAG)'"; \
@@ -173,32 +171,22 @@ endif
 
 # Prepare the release package for the app store
 release: release-checks lint-appinfo build
-	# Upload the release tarball
-	$(eval UPLOAD_PATH:=$(shell curl -s -X POST -H "PRIVATE-TOKEN: $(GITLAB_API_TOKEN)" \
-			--form "file=@build/release/collectives-$(VERSION).tar.gz" $(GITLAB_API_URL)/uploads | jq -r '.full_path'))
-
 	# Git tag and push
 	git tag $(GIT_TAG) -m "Version $(VERSION)" && git push $(GIT_REMOTE) $(GIT_TAG)
 
-	# Publish the release on Gitlab
-	curl -s -X POST -H "PRIVATE-TOKEN: $(GITLAB_API_TOKEN)" \
-		-H "Content-Type: application/json" \
-		--data "{ \"tag_name\": \"$(GIT_TAG)\", \"assets\": {\"links\": [ {\"name\": \"App Store Package\", \"url\": \"$(GITLAB_URL)$(UPLOAD_PATH)\", \"link_type\": \"package\"} ] } }" "$(GITLAB_API_URL)/releases" | jq .
+	# Publish the release on Github
+	gh release create $(GIT_TAG) ./build/release/$(APP_NAME)-$(VERSION).tar.gz
 
-	@echo "URL to release tarball (for app store): $(GITLAB_URL)$(UPLOAD_PATH)"
+	@echo "URL to release tarball (for app store): $(GITHUB_PROJECT_URL)/releases/download/$(GIT_TAG)/$(APP-NAME)-$(VERSION).tar.gz"
 
-delete-release: delete-release-from-gitlab delete-release-from-appstore
+delete-release: delete-release-from-github delete-release-from-appstore
 
-delete-release-from-gitlab:
+delete-release-from-github:
 ifndef RELEASE_NAME
 	  $(error Please specify the release to remove with $$RELEASE_NAME)
 endif
-ifndef GITLAB_API_TOKEN
-	  $(error Missing $$GITLAB_API_TOKEN)
-endif
-	echo 'Removing release from gitlab.'
-	curl -s -X DELETE -H "PRIVATE-TOKEN: $(GITLAB_API_TOKEN)" \
-		$(GITLAB_API_URL)/releases/v$(RELEASE_NAME)
+	echo 'Removing release from Github.'
+	gh release delete $(RELEASE_NAME) --cleanup-tag --yes
 
 delete-release-from-appstore:
 ifndef RELEASE_NAME
@@ -211,4 +199,4 @@ endif
 	curl -s -X DELETE $(NEXTCLOUD_API_URL)/releases/$(RELEASE_NAME) \
 		-u 'collectivecloud:$(NEXTCLOUD_PASSWORD)'
 
-.PHONY: all setup-dev composer node-modules composer-install clean distclean lint lint-js lint-appinfo build build-js-dev build-js-production test test-php test-php-unit test-php-integration test-js test-js-cypress test-js-cypress-watch po php-psalm-baseline text-app-includes build release delete-release delete-release-from-gitlab delete-release-from-appstore
+.PHONY: all setup-dev composer node-modules composer-install composer-install-no-dev clean distclean lint lint-js lint-appinfo build build-js-dev build-js-production test test-php test-php-unit test-php-integration test-js test-js-cypress test-js-cypress-watch po php-psalm-baseline text-app-includes release delete-release delete-release-from-github delete-release-from-appstore
