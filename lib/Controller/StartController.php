@@ -2,6 +2,7 @@
 
 namespace OCA\Collectives\Controller;
 
+use OCA\Collectives\Events\CollectivesLoadAdditionalScriptsEvent;
 use OCA\Viewer\Event\LoadViewer;
 use OCP\App\IAppManager;
 use OCP\AppFramework\Controller;
@@ -41,7 +42,8 @@ class StartController extends Controller {
 		if ($appsMissing = $this->checkDependencies()) {
 			return new TemplateResponse('collectives', 'error', ['appsMissing' => $appsMissing]);  // templates/error.php
 		}
-		$this->eventDispatcher->dispatch(LoadViewer::class, new LoadViewer());
+		$this->eventDispatcher->dispatchTyped(new LoadViewer());
+		$this->eventDispatcher->dispatchTyped(new CollectivesLoadAdditionalScriptsEvent());
 		return new TemplateResponse('collectives', 'main', [ // templates/main.php
 			'id-app-content' => '#app-content-vue',
 			'id-app-navigation' => '#app-navigation-vue',
