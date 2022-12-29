@@ -1,15 +1,9 @@
 import Vue from 'vue'
 import FileListInfo from '../views/FileListInfo.vue'
-import axios from '@nextcloud/axios'
-import { generateOcsUrl } from '@nextcloud/router'
+import { loadState } from '@nextcloud/initial-state'
 
 const FilesCollectivesPlugin = {
 	el: null,
-
-	async getCollectivesFolder() {
-		const response = await axios.get(generateOcsUrl('apps/collectives/api/v1.0/settings/user/user_folder'))
-		return response.data.ocs.data
-	},
 
 	attach(fileList) {
 		if (fileList.id !== 'files' && fileList.id !== 'files.public') {
@@ -27,8 +21,8 @@ const FilesCollectivesPlugin = {
 		})
 	},
 
-	async render(fileList) {
-		const collectivesFolder = await this.getCollectivesFolder()
+	render(fileList) {
+		const collectivesFolder = loadState('collectives', 'user_folder', null)
 		const View = Vue.extend(FileListInfo)
 		Vue.prototype.t = window.t
 		Vue.prototype.n = window.n
