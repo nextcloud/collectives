@@ -40,7 +40,7 @@ You also need nvm v16.16.0 to compile the JavaScript.
 After installing Text and Circles:
 
 1. Clone Collectives into the apps folder of your Nextcloud: 
-   `git clone https://github.com/nextcloud/circles`
+   `git clone https://github.com/nextcloud/collectives`
 3. In the folder of the app, run the command `make` to install dependencies and build the Javascript.
 4. Enable the app through the app management of your Nextcloud
 5. 🎉 Partytime! Help fix some issues and review pull requests 👍
