@@ -10,6 +10,14 @@
 		</NcActionButton>
 		<CollectiveActions v-if="inPageList && isLandingPage"
 			:collective="currentCollective" />
+		<NcActionButton v-if="collectiveExtraAction"
+			:close-after-click="true"
+			@click="collectiveExtraAction.click()">
+			{{ collectiveExtraAction.title }}
+			<template #icon>
+				<OpenInNewIcon :size="16" />
+			</template>
+		</NcActionButton>
 		<NcActionButton v-if="!inPageList"
 			:close-after-click="true"
 			@click.native="toggle('outline')">
@@ -69,6 +77,7 @@ import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 import DeleteOffIcon from 'vue-material-design-icons/DeleteOff.vue'
 import EmoticonOutlineIcon from 'vue-material-design-icons/EmoticonOutline.vue'
 import FormatListBulletedIcon from 'vue-material-design-icons/FormatListBulleted.vue'
+import OpenInNewIcon from 'vue-material-design-icons/OpenInNew.vue'
 import PagesTemplateIcon from '../Icon/PagesTemplateIcon.vue'
 import PageActionLastUser from './PageActionLastUser.vue'
 import pageMixin from '../../mixins/pageMixin.js'
@@ -88,6 +97,7 @@ export default {
 		FormatListBulletedIcon,
 		PagesTemplateIcon,
 		PageActionLastUser,
+		OpenInNewIcon,
 	},
 
 	mixins: [
@@ -142,6 +152,7 @@ export default {
 		...mapGetters([
 			'currentCollective',
 			'loading',
+			'pagesTreeWalk',
 			'showing',
 			'showTemplates',
 			'visibleSubpages',
@@ -181,6 +192,23 @@ export default {
 
 		hasSubpages() {
 			return !!this.visibleSubpages(this.pageId).length || !!this.hasTemplate
+		},
+
+		/**
+		 * Other apps can register an extra collective action via
+		 * OCA.Collectives.CollectiveExtraAction
+		 */
+		collectiveExtraAction() {
+			const collectiveExtraAction = this.OCA.Collectives?.CollectiveExtraAction
+			if (!collectiveExtraAction) {
+				return null
+			}
+
+			const pageIds = this.pagesTreeWalk().map(p => p.id)
+			return {
+				title: collectiveExtraAction.title ?? t('collectives', 'Extra action'),
+				click: () => collectiveExtraAction.click(pageIds) ?? function() {},
+			}
 		},
 	},
 

@@ -41,14 +41,6 @@
 			{{ t('collectives', 'Unshare') }}
 		</NcActionButton>
 		<NcActionSeparator v-if="collectiveCanShare(collective) && !isPublic" />
-		<NcActionButton v-if="collectiveExtraAction"
-			:close-after-click="true"
-			@click="collectiveExtraAction.click()">
-			{{ collectiveExtraAction.title }}
-			<template #icon>
-				<OpenInNewIcon :size="16" />
-			</template>
-		</NcActionButton>
 		<NcActionLink :close-after-click="true"
 			:href="printLink"
 			target="_blank">
@@ -73,7 +65,6 @@ import { generateUrl } from '@nextcloud/router'
 import ContentPasteIcon from 'vue-material-design-icons/ContentPaste.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 import DownloadIcon from 'vue-material-design-icons/Download.vue'
-import OpenInNewIcon from 'vue-material-design-icons/OpenInNew.vue'
 import { SHARE_COLLECTIVE, UPDATE_SHARE_COLLECTIVE, UNSHARE_COLLECTIVE } from '../../store/actions.js'
 import displayError from '../../util/displayError.js'
 import CopyToClipboardMixin from '../../mixins/CopyToClipboardMixin.js'
@@ -92,7 +83,6 @@ export default {
 		ContentPasteIcon,
 		CheckIcon,
 		DownloadIcon,
-		OpenInNewIcon,
 	},
 
 	mixins: [
@@ -121,7 +111,6 @@ export default {
 			'isCollectiveAdmin',
 			'isPublic',
 			'loading',
-			'pagesTreeWalk',
 		]),
 
 		isContactsInstalled() {
@@ -161,23 +150,6 @@ export default {
 			return this.isPublic
 				? generateUrl(`/apps/collectives/p/${this.shareTokenParam}/print/${this.collective.name}`)
 				: generateUrl(`/apps/collectives/_/print/${this.collective.name}`)
-		},
-
-		/**
-		 * Other apps can register an extra collective action via
-		 * OCA.Collectives.CollectiveExtraAction
-		 */
-		collectiveExtraAction() {
-			const collectiveExtraAction = this.OCA.Collectives?.CollectiveExtraAction
-			if (!collectiveExtraAction) {
-				return null
-			}
-
-			const pageIds = this.pagesTreeWalk().map(p => p.id)
-			return {
-				title: collectiveExtraAction.title ?? t('collectives', 'Extra action'),
-				click: () => collectiveExtraAction.click(pageIds) ?? function() {},
-			}
 		},
 	},
 
