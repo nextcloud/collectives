@@ -4,6 +4,7 @@ OC.L10N.register(
     "You are not allowed to share %s" : "%s ögesini paylaşma izniniz yok",
     "Share link" : "Bağlantıyı paylaş",
     "Unshare" : "Paylaşımdan kaldır",
+    "Export or print" : "Dışa aktar ya da yazdır",
     "Settings" : "Ayarlar",
     "Copied" : "Kopyalandı",
     "Cannot copy" : "Kopyalanamadı",
