@@ -36,7 +36,7 @@ Documentation for developers can be found at [DEVELOPING.md](DEVELOPING.md).
 
 ## Development setup
 This app requires [Text](https://github.com/nextcloud/text) and [Circles](https://github.com/nextcloud/circles).
-You also need nvm v16.16.0 to compile the JavaScript. 
+You also need node v16 to compile the JavaScript. 
 After installing Text and Circles:
 
 1. Clone Collectives into the apps folder of your Nextcloud: 
