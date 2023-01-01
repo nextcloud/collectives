@@ -1,70 +1,83 @@
 <template>
-	<NcActions :force-menu="true" @click.native.stop>
-		<NcActionButton v-if="!inPageList && !showing('sidebar') && isMobile"
-			icon="icon-menu-sidebar"
-			:aria-label="t('collectives', 'Open page sidebar')"
-			aria-controls="app-sidebar-vue"
-			:close-after-click="true"
-			@click="toggle('sidebar')">
-			{{ t('collectives', 'Open page sidebar') }}
-		</NcActionButton>
-		<CollectiveActions v-if="inPageList && isLandingPage"
-			:collective="currentCollective" />
-		<NcActionButton v-if="collectiveExtraAction"
-			:close-after-click="true"
-			@click="collectiveExtraAction.click()">
-			{{ collectiveExtraAction.title }}
-			<template #icon>
-				<OpenInNewIcon :size="16" />
-			</template>
-		</NcActionButton>
-		<NcActionButton v-if="!inPageList"
-			:close-after-click="true"
-			@click.native="toggle('outline')">
-			<template #icon>
-				<FormatListBulletedIcon :size="20" />
-			</template>
-			{{ toggleOutlineString }}
-		</NcActionButton>
-		<NcActionLink v-if="showFilesLink"
-			:href="filesUrl"
-			icon="icon-files-dark"
-			:close-after-click="true">
-			{{ t('collectives', 'Show in Files') }}
-		</NcActionLink>
-		<NcActionButton v-if="!isTemplate && !isLandingPage"
-			:close-after-click="true"
-			@click.native="show('details')"
-			@click="gotoPageEmojiPicker">
-			<template #icon>
-				<EmoticonOutlineIcon :size="20" />
-			</template>
-			{{ setEmojiString }}
-		</NcActionButton>
-		<NcActionButton v-if="!isTemplate"
-			:close-after-click="true"
-			class="action-button-template"
-			@click.native="show('details')"
-			@click="editTemplate(pageId)">
-			<template #icon>
-				<PagesTemplateIcon :size="14" />
-			</template>
-			{{ editTemplateString }}
-		</NcActionButton>
-		<NcActionButton v-if="!isLandingPage"
-			:close-after-click="true"
-			:disabled="hasSubpages"
-			@click.native="show('details')"
-			@click="deletePage(parentId, pageId)">
-			<template #icon>
-				<DeleteOffIcon v-if="hasSubpages" :size="20" />
-				<DeleteIcon v-else :size="20" />
-			</template>
-			{{ deletePageString }}
-		</NcActionButton>
-		<NcActionSeparator v-if="lastUserId && lastUserDisplayName" />
-		<PageActionLastUser :last-user-id="lastUserId" :last-user-display-name="lastUserDisplayName" :timestamp="timestamp" />
-	</NcActions>
+	<div>
+		<NcActions :force-menu="true" @click.native.stop>
+			<NcActionButton v-if="!inPageList && !showing('sidebar') && isMobile"
+				icon="icon-menu-sidebar"
+				:aria-label="t('collectives', 'Open page sidebar')"
+				aria-controls="app-sidebar-vue"
+				:close-after-click="true"
+				@click="toggle('sidebar')">
+				{{ t('collectives', 'Open page sidebar') }}
+			</NcActionButton>
+			<CollectiveActions v-if="inPageList && isLandingPage"
+				:collective="currentCollective" />
+			<NcActionButton v-if="collectiveExtraAction"
+				:close-after-click="true"
+				@click="collectiveExtraAction.click()">
+				{{ collectiveExtraAction.title }}
+				<template #icon>
+					<OpenInNewIcon :size="16" />
+				</template>
+			</NcActionButton>
+			<NcActionButton v-if="!inPageList"
+				:close-after-click="true"
+				@click.native="toggle('outline')">
+				<template #icon>
+					<FormatListBulletedIcon :size="20" />
+				</template>
+				{{ toggleOutlineString }}
+			</NcActionButton>
+			<NcActionLink v-if="showFilesLink"
+				:href="filesUrl"
+				icon="icon-files-dark"
+				:close-after-click="true">
+				{{ t('collectives', 'Show in Files') }}
+			</NcActionLink>
+			<NcActionButton v-if="!isTemplate && !isLandingPage"
+				:close-after-click="true"
+				@click.native="show('details')"
+				@click="gotoPageEmojiPicker">
+				<template #icon>
+					<EmoticonOutlineIcon :size="20" />
+				</template>
+				{{ setEmojiString }}
+			</NcActionButton>
+			<NcActionButton v-if="!isTemplate"
+				:close-after-click="true"
+				class="action-button-template"
+				@click.native="show('details')"
+				@click="editTemplate(pageId)">
+				<template #icon>
+					<PagesTemplateIcon :size="14" />
+				</template>
+				{{ editTemplateString }}
+			</NcActionButton>
+			<NcActionButton v-if="!isLandingPage"
+				:close-after-click="true"
+				@click="onOpenMoveModal">
+				<template #icon>
+					<OpenInNewIcon :size="20" />
+				</template>
+				{{ t('collectives', 'Move page') }}
+			</NcActionButton>
+			<NcActionButton v-if="!isLandingPage"
+				:close-after-click="true"
+				:disabled="hasSubpages"
+				@click="deletePage(parentId, pageId)">
+				<template #icon>
+					<DeleteOffIcon v-if="hasSubpages" :size="20" />
+					<DeleteIcon v-else :size="20" />
+				</template>
+				{{ deletePageString }}
+			</NcActionButton>
+			<NcActionSeparator v-if="lastUserId && lastUserDisplayName" />
+			<PageActionLastUser :last-user-id="lastUserId" :last-user-display-name="lastUserDisplayName" :timestamp="timestamp" />
+		</NcActions>
+		<MoveModal v-if="showMoveModal"
+			:page-id="pageId"
+			:parent-id="parentId"
+			@close="onCloseMoveModal" />
+	</div>
 </template>
 
 <script>
@@ -78,6 +91,7 @@ import DeleteOffIcon from 'vue-material-design-icons/DeleteOff.vue'
 import EmoticonOutlineIcon from 'vue-material-design-icons/EmoticonOutline.vue'
 import FormatListBulletedIcon from 'vue-material-design-icons/FormatListBulleted.vue'
 import OpenInNewIcon from 'vue-material-design-icons/OpenInNew.vue'
+import MoveModal from './MoveModal.vue'
 import PagesTemplateIcon from '../Icon/PagesTemplateIcon.vue'
 import PageActionLastUser from './PageActionLastUser.vue'
 import pageMixin from '../../mixins/pageMixin.js'
@@ -87,6 +101,7 @@ export default {
 
 	components: {
 		CollectiveActions,
+		MoveModal,
 		NcActions,
 		NcActionButton,
 		NcActionLink,
@@ -146,6 +161,12 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+	},
+
+	data() {
+		return {
+			showMoveModal: false,
+		}
 	},
 
 	computed: {
@@ -222,6 +243,14 @@ export default {
 			this.$nextTick(() => {
 				this.show('pageEmojiPicker')
 			})
+		},
+
+		onOpenMoveModal() {
+			this.showMoveModal = true
+		},
+
+		onCloseMoveModal() {
+			this.showMoveModal = false
 		},
 	},
 }

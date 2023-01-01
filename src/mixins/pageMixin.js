@@ -129,8 +129,8 @@ export default {
 		 * @param {number} newIndex New index for pageId
 		 */
 		async movePage(oldParentId, newParentId, pageId, newIndex) {
-			// Add page to subpageOrder of old parent first to ensure correct sorting
-			// Don't await response in order to prevent jumping around
+			// Add page to subpageOrder of new parent first to ensure correct sorting
+			// Don't await response to prevent jumping around
 			this.subpageOrderAdd(newParentId, pageId, newIndex)
 
 			// Move subpage to new parent
