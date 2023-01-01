@@ -91,7 +91,7 @@ describe('Page', function() {
 		})
 	})
 
-	describe('set page emoji', function() {
+	describe('Set page emoji', function() {
 		it('Allows setting a page emoji from title bar', function() {
 			cy.visit('/apps/collectives/Our%20Garden/Day%201')
 			cy.get('#titleform .page-title-icon')
@@ -121,7 +121,40 @@ describe('Page', function() {
 		})
 	})
 
-	describe('with special chars', function() {
+	describe('Move a page using the modal', function() {
+		it('Moves page to a subpage', function() {
+			cy.seedPage('Move me', '', 'Readme.md')
+			cy.seedPage('Target', '', 'Readme.md')
+			cy.seedPage('Target Subpage', '', 'Target.md')
+			cy.visit('/apps/collectives/Our%20Garden')
+			cy.contains('.app-content-list-item', 'Move me')
+				.find('.action-item__menutoggle')
+				.click({ force: true })
+			cy.get('button.action-button')
+				.contains('Move page')
+				.click()
+			cy.get('.picker-page-list li')
+				.contains('Target')
+				.click()
+			cy.get('.picker-move-buttons button .arrow-down-icon')
+				.click()
+			cy.get('.picker-buttons button')
+				.contains('Move page here')
+				.click()
+
+			cy.visit('/apps/collectives/Our%20Garden/Target')
+			cy.contains('.page-list-drag-item', 'Target')
+				.get('.page-list-indent .app-content-list-item')
+				.first()
+				.contains('Target Subpage')
+			cy.contains('.page-list-drag-item', 'Target')
+				.get('.page-list-indent .app-content-list-item')
+				.last()
+				.contains('Move me')
+		})
+	})
+
+	describe('With special chars', function() {
 		it('loads well', function() {
 			cy.contains('.app-content-list-item a', '#% special chars').click()
 			cy.get('.app-content-list-item').should('contain', '#% special chars')
