@@ -133,6 +133,12 @@ export default {
 	mounted() {
 		this.selectedPageId = this.parentId
 		this.updateSubpages()
+
+		window.addEventListener('keydown', this.handleKeyDown, true)
+	},
+
+	beforeDestroy() {
+		window.removeEventListener('keydown', this.handleKeyDown, true)
 	},
 
 	methods: {
@@ -199,6 +205,17 @@ export default {
 
 		onSelect() {
 			this.$emit('select', { parentId: this.selectedPageId, newIndex: this.subpages.findIndex(p => p.id === this.pageId) })
+		},
+
+		handleKeyDown(event) {
+			if (event.key === 'ArrowDown') {
+				event.preventDefault()
+				this.onClickDown()
+			}
+			if (event.key === 'ArrowUp') {
+				event.preventDefault()
+				this.onClickUp()
+			}
 		},
 	},
 }
