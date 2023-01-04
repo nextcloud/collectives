@@ -2,19 +2,32 @@
 	<NcModal @close="onClose">
 		<div class="modal-content">
 			<h2 class="oc-dialog-title">
-				{{ t('collectives', 'Choose target') }}
+				{{ t('collectives', 'Move page') }}
 			</h2>
 			<span class="crumbs">
-				<a @click="onClickHome">
-					<HomeIcon :size="20" />
-				</a>
-				<a v-for="page in pageCrumbs"
+				<div class="crumbs-home">
+					<NcButton type="tertiary"
+						:aria-label="t('collectives', 'Breadcrumb for Home')"
+						:disabled="pageCrumbs.length === 0"
+						class="crumb-button"
+						@click="onClickHome">
+						<template #icon>
+							<HomeIcon :size="20" />
+						</template>
+					</NcButton>
+				</div>
+				<div v-for="(page, index) in pageCrumbs"
 					:key="page.id"
-					class="level"
-					@click="onClickPage(page)">
+					:aria-label="t('collectives', 'Breadcrumb for {page}', { page: page.title })"
+					class="crumbs-level">
 					<ChevronRightIcon :size="20" />
-					{{ page.title }}
-				</a>
+					<NcButton type="tertiary"
+						:disabled="(index + 1) === pageCrumbs.length"
+						class="crumb-button"
+						@click="onClickPage(page)">
+						{{ page.title }}
+					</NcButton>
+				</div>
 			</span>
 			<div class="picker-page-list">
 				<ul v-if="subpages.length > 0">
@@ -22,12 +35,16 @@
 						:id="`picker-page-${page.id}`"
 						:key="page.id">
 						<a :class="{'self': page.id === pageId}"
+							:href="page.id === pageId ? false : '#'"
 							class="picker-page-item"
 							@click="onClickPage(page)">
 							<div v-if="page.emoji" class="picker-page-icon">
 								{{ page.emoji }}
 							</div>
-							<PageIcon v-else class="picker-page-icon" :size="20" />
+							<PageIcon v-else
+								class="picker-page-icon"
+								:size="20"
+								fill-color="var(--color-background-darker)" />
 							<div class="picker-page-title">
 								{{ page.title }}
 							</div>
@@ -239,31 +256,42 @@ export default {
 }
 
 .crumbs {
+	color: var(--color-text-maxcontrast);
 	display: inline-flex;
 	padding-right: 0;
-	flex-wrap: wrap;
 
-	a {
+	div {
 		display: flex;
-		align-items: center;
-		opacity: 0.7;
 		text-overflow: ellipsis;
 		white-space: nowrap;
 		overflow: hidden;
 		flex: 0 0 auto;
-		min-width: 0;
 		max-width: 200px;
+
+		.crumb-button {
+			color: var(--color-text-maxcontrast);
+		}
 
 		&:hover {
 			opacity: 1;
 		}
 
-		.level {
+		&.crumbs-home {
+			flex-shrink: 0;
+		}
+
+		&.crumbs-level {
 			display: inline-flex;
 			min-width: 0;
-			flex: 0 0 auto;
-			order: 1;
-			padding-right: 7px;
+			flex-shrink: 1;
+		}
+
+		&:last-child {
+			flex-shrink: 0;
+
+			.crumb-button {
+				color: var(--color-main-text);
+			}
 		}
 	}
 }
@@ -304,8 +332,7 @@ export default {
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		width: 20px;
-		margin-right: 6px;
+		width: 44px;
 	}
 
 	.picker-page-title {
