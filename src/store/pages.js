@@ -177,6 +177,19 @@ export default {
 			return pages
 		},
 
+		pageParents: (state, getters) => (pageId) => {
+			const pages = []
+			while (pageId !== getters.collectivePage.id) {
+				const page = state.pages.find(p => (p.id === pageId))
+				if (!page) {
+					break
+				}
+				pages.unshift(page)
+				pageId = page.parentId
+			}
+			return pages
+		},
+
 		visibleSubpages: (state, getters) => (parentId) => {
 			return getters.sortedSubpages(parentId)
 		},

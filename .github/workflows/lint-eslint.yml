@@ -8,15 +8,15 @@ name: Lint
 on:
   pull_request:
     paths:
-      - '.github/workflows/**'
-      - 'src/**'
-      - 'appinfo/info.xml'
-      - 'package.json'
-      - 'package-lock.json'
-      - 'tsconfig.json'
-      - '**.js'
-      - '**.ts'
-      - '**.vue'
+      #- '.github/workflows/**'
+      #- 'src/**'
+      #- 'appinfo/info.xml'
+      #- 'package.json'
+      #- 'package-lock.json'
+      #- 'tsconfig.json'
+      #- '**.js'
+      #- '**.ts'
+      #- '**.vue'
 
 permissions:
   contents: read
