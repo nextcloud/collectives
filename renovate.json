@@ -1,0 +1,43 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base"
+  ],
+  "timezone": "Europe/Berlin",
+  "schedule": [
+    "before 5am every weekday",
+    "every weekend"
+  ],
+  "reviewers": ["team:office"],
+  "labels": ["dependencies"],
+  "rangeStrategy": "bump",
+  "rebaseWhen": "conflicted",
+  "ignoreUnstable": false,
+  "baseBranches": [
+    "main"
+  ],
+  "enabledManagers": [
+    "npm"
+  ],
+  "ignoreDeps": [
+    "node",
+    "npm"
+  ],
+  "packageRules": [
+    {
+      "groupName": "cypress",
+      "matchPackageNames": [
+        "cypress",
+        "@nextcloud/cypress"
+      ]
+    },
+    {
+      "matchPackageNames": ["vue"],
+      "allowedVersions": "<3"
+    },
+    {
+      "matchPackageNames": ["vuex"],
+      "allowedVersions": "<4"
+    }
+  ]
+}
