@@ -292,7 +292,7 @@ class PageService {
 					$this->revertSubFolders($node);
 				} elseif ($node instanceof File) {
 					// Move index page without subpages into the parent folder (if's not the landing page)
-					if (self::isIndexPage($node) && !self::isLandingPage($node) && !$this->pageHasOtherContent($node)) {
+					if (self::isIndexPage($node) && !self::isLandingPage($node) && !$this->indexPageHasOtherContent($node)) {
 						$filename = NodeHelper::generateFilename($folder, $folder->getName(), PageInfo::SUFFIX);
 						$node->move($folder->getParent()->getPath() . '/' . $filename . PageInfo::SUFFIX);
 						$folder->delete();
@@ -363,16 +363,17 @@ class PageService {
 	 *
 	 * @return bool
 	 */
-	public function pageHasOtherContent(File $file): bool {
+	public function indexPageHasOtherContent(File $file): bool {
 		try {
 			foreach ($file->getParent()->getDirectoryListing() as $node) {
-				if ($node instanceof File &&
-					self::isPage($node) &&
-					!self::isIndexPage($node)) {
+				// True if page and not index page
+				if ($node instanceof File
+					&& !self::isIndexPage($node)
+					&& self::isPage($node)) {
 					return true;
 				}
-				// Ignore the page file itself and corresponding attachments folder
-				if ($node->getName() !== PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX
+				// True if not index page or corresponding attachments folder
+				if (!($node instanceof File && self::isIndexPage($node))
 					&& $node->getName() !== '.attachments.' . $file->getId()) {
 					return true;
 				}
@@ -794,7 +795,7 @@ class PageService {
 		try {
 			if (self::isIndexPage($file)) {
 				// Don't delete if still page has subpages
-				if ($this->pageHasOtherContent($file)) {
+				if ($this->indexPageHasOtherContent($file)) {
 					throw new NotPermittedException('Failed to delete page ' . $id . ' with subpages');
 				}
 
