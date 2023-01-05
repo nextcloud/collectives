@@ -11,6 +11,7 @@ use OCA\Collectives\Model\PageInfo;
 use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\InvalidPathException;
+use OCP\Files\Node;
 use OCP\Files\NotPermittedException as FilesNotPermittedException;
 use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\IConfig;
@@ -136,23 +137,26 @@ class PageService {
 
 	/**
 	 * @param File $file
+	 * @param Node|null $parent
 	 *
 	 * @return int
 	 * @throws NotFoundException
 	 */
-	public function getParentPageId(File $file): int {
+	private function getParentPageId(File $file, ?Node $parent = null): int {
 		try {
 			if (self::isLandingPage($file)) {
 				// Return `0` for landing page
 				return 0;
 			}
 
+			$parent = $parent ?? $file->getParent();
+
 			if (self::isIndexPage($file)) {
 				// Go down two levels if index page but not landing page
-				return $this->getIndexPageFile($file->getParent()->getParent())->getId();
+				return $this->getIndexPageFile($parent->getParent())->getId();
 			}
 
-			return $this->getIndexPageFile($file->getParent())->getId();
+			return $this->getIndexPageFile($parent)->getId();
 		} catch (InvalidPathException | FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
@@ -160,11 +164,11 @@ class PageService {
 
 	/**
 	 * @param File $file
-	 *
+	 * @param Node|null $parent
 	 * @return PageInfo
 	 * @throws NotFoundException
 	 */
-	private function getPageByFile(File $file): PageInfo {
+	private function getPageByFile(File $file, ?Node $parent = null): PageInfo {
 		$pageInfo = new PageInfo();
 		try {
 			$page = $this->pageMapper->findByFileId($file->getId());
@@ -176,7 +180,7 @@ class PageService {
 		$subpageOrder = ($page !== null) ? $page->getSubpageOrder() : null;
 		try {
 			$pageInfo->fromFile($file,
-				$this->getParentPageId($file),
+				$this->getParentPageId($file, $parent),
 				$lastUserId,
 				$lastUserId ? $this->userManager->get($lastUserId)->getDisplayName() : null,
 				$emoji,
@@ -439,7 +443,7 @@ class PageService {
 	public function recurseFolder(Folder $folder, string $userId): array {
 		// Find index page or create it if we have subpages, but it doesn't exist
 		try {
-			$indexPage = $this->getPageByFile($this->getIndexPageFile($folder));
+			$indexPage = $this->getPageByFile($this->getIndexPageFile($folder), $folder);
 		} catch (NotFoundException $e) {
 			if (!self::folderHasSubPages($folder)) {
 				return [];
@@ -451,7 +455,7 @@ class PageService {
 		// Add subpages and recurse over subfolders
 		foreach ($folder->getDirectoryListing() as $node) {
 			if ($node instanceof File && self::isPage($node) && !self::isIndexPage($node)) {
-				$pageInfos[] = $this->getPageByFile($node);
+				$pageInfos[] = $this->getPageByFile($node, $folder);
 			} elseif ($node instanceof Folder) {
 				array_push($pageInfos, ...$this->recurseFolder($node, $userId));
 			}
