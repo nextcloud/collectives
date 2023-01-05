@@ -28,7 +28,7 @@
     "@nextcloud/notify_push": "^1.1.3",
     "@nextcloud/paths": "^2.1.0",
     "@nextcloud/router": "^2.0.1",
-    "@nextcloud/text": "^26.0.0-alpha.5",
+    "@nextcloud/text": "^26.0.0-alpha.6",
     "@nextcloud/vue": "^7.3.0",
     "debounce": "^1.2.1",
     "escape-html": "^1.0.3",
