@@ -36,7 +36,7 @@ Documentation for developers can be found at [DEVELOPING.md](DEVELOPING.md).
 
 ## Translations
 
-Project translations are [managed on Transifex](https://www.transifex.com/nextcloud/nextcloud/collectives/).
+Collectives translations are managed as part of the [Nextcloud project on Transifex](https://www.transifex.com/nextcloud/nextcloud/).
 
 ## Maintainers
 
