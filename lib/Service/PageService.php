@@ -371,7 +371,9 @@ class PageService {
 					!self::isIndexPage($node)) {
 					return true;
 				}
-				if ($node->getName() !== PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX) {
+				// Ignore the page file itself and corresponding attachments folder
+				if ($node->getName() !== PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX
+					&& $node->getName() !== '.attachments.' . $file->getId()) {
 					return true;
 				}
 			}
@@ -582,8 +584,8 @@ class PageService {
 
 	/**
 	 * @param Folder $collectiveFolder
-	 * @param int    $ancestorId
-	 * @param int    $descendantId
+	 * @param int    $pageId
+	 * @param int    $targetId
 	 *
 	 * @return bool
 	 * @throws NotFoundException

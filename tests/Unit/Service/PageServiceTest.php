@@ -158,7 +158,11 @@ class PageServiceTest extends TestCase {
 		$childFile3->method('getName')
 			->willReturn('File3.txt');
 
-		$children = [$childFile1, $childFile2, $childFile3];
+		$attachmentFolder = $this->createMock(Folder::class);
+		$attachmentFolder->method('getName')
+			->willReturn('.attachments.123');
+
+		$children = [$childFile1, $childFile2, $childFile3, $attachmentFolder];
 		$parentFolder = $this->getMockBuilder(Folder::class)
 			->disableOriginalConstructor()
 			->getMock();
@@ -168,11 +172,14 @@ class PageServiceTest extends TestCase {
 			->getMock();
 		$file->method('getParent')
 			->willReturn($parentFolder);
+		$file->method('getId')
+			->willReturn('123');
 
 		// Test `pageHasOtherContent()` with page in children
 		$parentFolder->method('getDirectoryListing')
 			->willReturnOnConsecutiveCalls(
 				$children,
+				[$attachmentFolder],
 				[],
 				$children,
 				[$childFile1],
@@ -181,6 +188,8 @@ class PageServiceTest extends TestCase {
 				$children
 			);
 		self::assertTrue($this->service->pageHasOtherContent($file));
+		// Test `pageHasOtherContent()` only with attachment folder
+		self::assertFalse($this->service->pageHasOtherContent($file));
 		// Test `pageHasOtherContent()` without any children
 		self::assertFalse($this->service->pageHasOtherContent($file));
 
