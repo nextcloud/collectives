@@ -22,7 +22,7 @@ In your Nextcloud instance, simply navigate to **»Apps«**, find the
 **»Circles«** and **»Collectives«** apps and enable them.
 
 	]]></description>
-	<version>2.1.1</version>
+	<version>2.2.0</version>
 	<licence>agpl</licence>
 	<author>CollectiveCloud Team</author>
 	<namespace>Collectives</namespace>
