@@ -1,5 +1,36 @@
 # Changelog
 
+## 2.2.0 - 2023.01.05
+
+### ✨New
+* 🎯 Add modal to move pages without drag&drop. (#462)
+* 🚚 Allow to toggle outline view in view mode. (#410)
+* ℹ️ In Files app, show a infobox linking to Collectives app. (#138)
+* 🤸 Add API to register extra collective action.
+* 💱 Migrated project from Gitlab to Github.
+
+### 🐛Fixes
+* 🔗 Fix Heading anchor links in view mode. (#395)
+* 🖱️ Fix scrolling to image in view mode. (#392)
+* 📂 Allow to configure default app folder location.
+* 🚀 Performance improvements when building page list.
+* 🧹 Ignore attachments folder when deleting/renaming a page. (#468)
+
+### 🌎Translations
+* 💱 Switch from Weblate to Transifex for translations.
+* 🗣️ Danish translation updated thanks to Jens Peter Nielsen.
+* 🗣️ Korean translation added thanks to SeungJu Lee.
+* 🗣️ Slovenian translation updated thanks to Matej U.
+* 🗣️ German translations updated thanks to Joachim Sokolowski.
+* 🗣️ Dutch translation updated thanks to Jeroen Bos.
+* 🗣️ Russian translation updated thanks to Andrey Rozentals.
+* 🗣️ Lots of translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* 🔌 Update NPM dependencies.
+* 🔌 Update PHP composer dependencies.
+
+
 ## 2.1.1 - 2022.11.29
 
 ### 🐛Fixes
