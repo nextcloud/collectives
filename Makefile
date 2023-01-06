@@ -179,9 +179,9 @@ release: release-checks lint-appinfo build
 	git tag $(GIT_TAG) -m "Version $(VERSION)" && git push $(GIT_REMOTE) $(GIT_TAG)
 
 	# Publish the release on Github
-	gh release create $(GIT_TAG) ./build/release/$(APP_NAME)-$(VERSION).tar.gz
+	gh release create --title "$(GIT_TAG)" $(GIT_TAG) ./build/release/$(APP_NAME)-$(VERSION).tar.gz
 
-	@echo "URL to release tarball (for app store): $(GITHUB_PROJECT_URL)/releases/download/$(GIT_TAG)/$(APP-NAME)-$(VERSION).tar.gz"
+	@echo "URL to release tarball (for app store): $(GITHUB_PROJECT_URL)/releases/download/$(GIT_TAG)/$(APP_NAME)-$(VERSION).tar.gz"
 
 delete-release: delete-release-from-github delete-release-from-appstore
 
