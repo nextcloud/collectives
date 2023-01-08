@@ -122,25 +122,27 @@ build: node-modules build-js-production composer-install-no-dev
 	fi
 	mkdir -p $(RELEASE_DIR)
 	rsync -a --delete --delete-excluded \
-		--exclude=".[a-z]*" \
-		--exclude="Makefile" \
-		--exclude="Dockerfile" \
-		--exclude="TODO*" \
-		--exclude="babel.config.js" \
-		--exclude="build" \
-		--exclude="composer.*" \
-		--exclude="cypress" \
-		--exclude="cypress.config.js" \
-		--exclude="docs" \
-		--exclude="jest.config.json" \
-		--exclude="node_modules" \
-		--exclude="package-lock.json" \
-		--exclude="package.json" \
-		--exclude="psalm.xml" \
-		--exclude="src" \
-		--exclude="stylelint.config.js" \
-		--exclude="tests" \
-		--exclude="webpack.*" \
+		--exclude="$(APP_NAME)/.[a-z]*" \
+		--exclude="$(APP_NAME)/Makefile" \
+		--exclude="$(APP_NAME)/Dockerfile" \
+		--exclude="$(APP_NAME)/TODO*" \
+		--exclude="$(APP_NAME)/babel.config.js" \
+		--exclude="$(APP_NAME)/build" \
+		--exclude="$(APP_NAME)/composer.*" \
+		--exclude="$(APP_NAME)/cypress" \
+		--exclude="$(APP_NAME)/cypress.config.js" \
+		--exclude="$(APP_NAME)/docs" \
+		--exclude="$(APP_NAME)/jest.config.json" \
+		--exclude="$(APP_NAME)/jsconfig.json" \
+		--exclude="$(APP_NAME)/node_modules" \
+		--exclude="$(APP_NAME)/package-lock.json" \
+		--exclude="$(APP_NAME)/package.json" \
+		--exclude="$(APP_NAME)/psalm.xml" \
+		--exclude="$(APP_NAME)/renovate.json" \
+		--exclude="$(APP_NAME)/src" \
+		--exclude="$(APP_NAME)/stylelint.config.js" \
+		--exclude="$(APP_NAME)/tests" \
+		--exclude="$(APP_NAME)/webpack.*" \
 	$(PROJECT_DIR) $(RELEASE_DIR)/
 	@if [ -f $(CERT_DIR)/$(APP_NAME).key ]; then \
 		echo "Signing code…"; \

@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.2.1 - 2023.01.08
+
+### 🐛Fixes
+* 🔎 Copy tntsearch library into release tarball. (#492)
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+
 ## 2.2.0 - 2023.01.05
 
 ### ✨New
