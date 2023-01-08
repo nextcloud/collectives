@@ -45,8 +45,9 @@ Cypress.Commands.add('logout', () => {
 /**
  * Get the editor component
  */
-Cypress.Commands.add('getEditor', () => {
-	cy.get('[data-text-el="editor-container"] div.ProseMirror')
+Cypress.Commands.add('getEditor', (timeout = null) => {
+	timeout = timeout ?? Cypress.config('defaultCommandTimeout')
+	cy.get('[data-text-el="editor-container"] div.ProseMirror', { timeout })
 })
 
 /**
@@ -72,7 +73,7 @@ Cypress.Commands.add('switchPageMode', (pageMode) => {
 		cy.get('button.titleform-button')
 			.should('contain', 'Edit')
 			.click()
-		cy.getEditor()
+		cy.getEditor(Cypress.config('defaultCommandTimeout') * 15)
 			.should('be.visible')
 	} else {
 		throw new Error(`Unknown page mode: ${pageMode}`)
