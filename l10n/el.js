@@ -19,6 +19,8 @@ OC.L10N.register(
     "Cancel" : "Ακύρωση",
     "Done" : "Ολοκληρώθηκε",
     "Show in Files" : "Εμφάνιση σε Αρχεία",
+    "Move page" : "Μετακίνηση σελίδας",
+    "Move page here" : "Μετακίνηση σελίδας εδώ",
     "Template" : "Πρότυπο",
     "Title" : "Τίτλος",
     "Sort by title" : "Ταξινόμηση κατά τίτλο",
