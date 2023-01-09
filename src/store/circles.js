@@ -1,11 +1,12 @@
 import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
-import { GET_CIRCLES, RENAME_CIRCLE, GET_PAGES } from './actions.js'
+import { GET_CIRCLES, RENAME_CIRCLE, LEAVE_CIRCLE, GET_PAGES } from './actions.js'
 import {
 	SET_CIRCLES,
 	UPDATE_CIRCLE,
 	DELETE_CIRCLE_FOR,
 	PATCH_COLLECTIVE_WITH_CIRCLE,
+	REMOVE_COLLECTIVE,
 } from './mutations.js'
 
 export default {
@@ -82,6 +83,19 @@ export default {
 				await dispatch(GET_PAGES)
 			}
 			commit(PATCH_COLLECTIVE_WITH_CIRCLE, response.data.ocs.data)
+		},
+
+		/**
+		 * Leave a circle with given collective
+		 *
+		 * @param {object} store the vuex store
+		 * @param {Function} store.commit commit changes
+		 * @param {object} collective the collective with id and circleId
+		 */
+		async [LEAVE_CIRCLE]({ commit }, collective) {
+			await axios.put(generateOcsUrl(`apps/circles/circles/${collective.circleId}/leave`))
+			commit(DELETE_CIRCLE_FOR, collective)
+			commit(REMOVE_COLLECTIVE, collective)
 		},
 	},
 }

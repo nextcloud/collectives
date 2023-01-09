@@ -33,6 +33,7 @@ describe('Collective', function() {
 		cy.deleteCollective('History Club')
 		cy.deleteCollective(specialCollective)
 		cy.deleteAndSeedCollective('Preexisting Collective')
+		cy.seedCircleMember('Preexisting Collective', 'jane')
 		cy.seedCircle('Preexisting Circle')
 		cy.seedCircle('History Club', { visible: true, open: true })
 		cy.login('jane')
@@ -141,6 +142,51 @@ describe('Collective', function() {
 				.should('have.attr', 'aria-label')
 				.and('contain', 'Add a page')
 			cy.deleteCollective(randomName)
+		})
+	})
+
+	describe('in non-admin collective', function() {
+		it.only('can leave collective and undo', function() {
+			cy.login('jane')
+			cy.visit('/apps/collectives')
+
+			// Leave collective
+			cy.get('.collectives_list_item')
+				.contains('li', 'Preexisting Collective')
+				.find('.action-item__menutoggle')
+				.click({ force: true })
+			cy.get('button.action-button')
+				.contains('Leave collective')
+				.click()
+			cy.get('.app-navigation-entry')
+				.contains('Preexisting Collective')
+				.should('not.be.visible')
+
+			// Undo leave collective
+			cy.get('.toast-undo')
+				.should('contain', 'Left collective Preexisting Collective')
+			cy.get('.toast-undo button')
+				.should('contain', 'Undo')
+				.click()
+
+			cy.get('.app-navigation-entry')
+				.contains('Preexisting Collective')
+				.should('be.visible')
+
+			// Leave collective and wait for 10 seconds
+			cy.get('.collectives_list_item')
+				.contains('li', 'Preexisting Collective')
+				.find('.action-item__menutoggle')
+				.click({ force: true })
+			cy.get('button.action-button')
+				.contains('Leave collective')
+				.click()
+			cy.get('.app-navigation-entry')
+				.contains('Preexisting Collective')
+				.should('not.be.visible')
+			cy.wait(10010) // eslint-disable-line cypress/no-unnecessary-waiting
+			cy.get('.app-navigation-entry')
+				.should('not.contain', 'Preexisting Collective')
 		})
 	})
 

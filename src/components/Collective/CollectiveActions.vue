@@ -55,34 +55,52 @@
 			@click="openCollectiveSettings()">
 			{{ t('collectives', 'Settings') }}
 		</NcActionButton>
+		<NcActionButton v-if="!isCollectiveAdmin(collective)"
+			:close-after-click="true"
+			@click="leaveCollectiveWithUndo(collective)">
+			{{ t('collectives', 'Leave collective') }}
+			<template #icon>
+				<LogoutIcon :size="16" />
+			</template>
+		</NcActionButton>
 	</div>
 </template>
 
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { NcActionButton, NcActionCheckbox, NcActionLink, NcActionSeparator, NcLoadingIcon } from '@nextcloud/vue'
+import { showError, showUndo } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
 import ContentPasteIcon from 'vue-material-design-icons/ContentPaste.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
+import CirclesIcon from '../Icon/CirclesIcon.vue'
 import DownloadIcon from 'vue-material-design-icons/Download.vue'
-import { SHARE_COLLECTIVE, UPDATE_SHARE_COLLECTIVE, UNSHARE_COLLECTIVE } from '../../store/actions.js'
+import LogoutIcon from 'vue-material-design-icons/Logout.vue'
+import {
+	LEAVE_CIRCLE,
+	MARK_COLLECTIVE_DELETED,
+	SHARE_COLLECTIVE,
+	UNMARK_COLLECTIVE_DELETED,
+	UPDATE_SHARE_COLLECTIVE,
+	UNSHARE_COLLECTIVE,
+} from '../../store/actions.js'
 import displayError from '../../util/displayError.js'
 import CopyToClipboardMixin from '../../mixins/CopyToClipboardMixin.js'
-import CirclesIcon from '../Icon/CirclesIcon.vue'
 
 export default {
 	name: 'CollectiveActions',
 
 	components: {
+		CirclesIcon,
+		ContentPasteIcon,
+		CheckIcon,
+		LogoutIcon,
+		DownloadIcon,
 		NcActionButton,
 		NcActionCheckbox,
 		NcActionLink,
 		NcActionSeparator,
 		NcLoadingIcon,
-		CirclesIcon,
-		ContentPasteIcon,
-		CheckIcon,
-		DownloadIcon,
 	},
 
 	mixins: [
@@ -98,6 +116,7 @@ export default {
 
 	data() {
 		return {
+			leaveTimeout: null,
 			shareEditable: this.collective.shareEditable,
 		}
 	},
@@ -159,16 +178,19 @@ export default {
 				const collective = { ...this.collective }
 				collective.shareEditable = val
 				return this.dispatchUpdateShareCollective(collective)
-					.catch(displayError(t('collectives', 'Could not change the collective share editing permissions')))
+					.catch(displayError('Could not change the collective share editing permissions'))
 			}
 		},
 	},
 
 	methods: {
 		...mapActions({
+			dispatchLeaveCircle: LEAVE_CIRCLE,
 			dispatchShareCollective: SHARE_COLLECTIVE,
 			dispatchUnshareCollective: UNSHARE_COLLECTIVE,
 			dispatchUpdateShareCollective: UPDATE_SHARE_COLLECTIVE,
+			dispatchMarkCollectiveDeleted: MARK_COLLECTIVE_DELETED,
+			dispatchUnmarkCollectiveDeleted: UNMARK_COLLECTIVE_DELETED,
 		}),
 
 		...mapMutations([
@@ -177,13 +199,13 @@ export default {
 
 		share(collective) {
 			return this.dispatchShareCollective(collective)
-				.catch(displayError(t('collectives', 'Could not share the collective')))
+				.catch(displayError('Could not share the collective'))
 		},
 
 		unshare(collective) {
 			this.shareEditable = undefined
 			return this.dispatchUnshareCollective(collective)
-				.catch(displayError(t('collectives', 'Could not unshare the collective')))
+				.catch(displayError('Could not unshare the collective'))
 		},
 
 		copyShare(collective) {
@@ -192,6 +214,26 @@ export default {
 
 		openCollectiveSettings() {
 			this.setSettingsCollectiveId(this.collective.id)
+		},
+
+		leaveCollectiveWithUndo(collective) {
+			showUndo(
+				t('collectives', 'Left collective {name}', { name: collective.name }),
+				() => {
+					clearTimeout(this.leaveTimeout)
+					this.leaveTimeout = null
+					this.dispatchUnmarkCollectiveDeleted(collective)
+				}
+			)
+
+			this.dispatchMarkCollectiveDeleted(collective)
+
+			this.leaveTimeout = setTimeout(() => {
+				this.dispatchLeaveCircle(collective).catch(() => {
+					showError(t('collectives', 'Could not leave the collective'))
+					this.dispatchUnmarkCollectiveDeleted(collective)
+				})
+			}, 10000)
 		},
 	},
 }

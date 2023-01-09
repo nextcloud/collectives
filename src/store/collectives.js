@@ -14,6 +14,7 @@ import {
 	RESTORE_COLLECTIVE_FROM_TRASH,
 	DELETE_COLLECTIVE_FROM_TRASH,
 	DELETE_CIRCLE_FOR,
+	REMOVE_COLLECTIVE,
 } from './mutations.js'
 
 import {
@@ -31,6 +32,8 @@ import {
 	UPDATE_COLLECTIVE_SHARE_PERMISSIONS,
 	UPDATE_COLLECTIVE_PAGE_MODE,
 	SET_COLLECTIVE_USER_SETTING_PAGE_ORDER,
+	MARK_COLLECTIVE_DELETED,
+	UNMARK_COLLECTIVE_DELETED,
 	GET_COLLECTIVES_FOLDER,
 } from './actions.js'
 
@@ -187,6 +190,10 @@ export default {
 
 		[DELETE_COLLECTIVE_FROM_TRASH](state, collective) {
 			state.trashCollectives.splice(state.trashCollectives.findIndex(c => c.id === collective.id), 1)
+		},
+
+		[REMOVE_COLLECTIVE](state, collective) {
+			state.collectives.splice(state.collectives.findIndex(c => c.id === collective.id), 1)
 		},
 
 		setSettingsCollectiveId(state, id) {
@@ -416,6 +423,16 @@ export default {
 				{ pageOrder }
 			)
 			commit(PATCH_COLLECTIVE_WITH_PROPERTY, { id, property: 'userPageOrder', value: pageOrder })
+		},
+
+		[MARK_COLLECTIVE_DELETED]({ commit }, collective) {
+			collective.deleted = true
+			commit(ADD_OR_UPDATE_COLLECTIVE, collective)
+		},
+
+		[UNMARK_COLLECTIVE_DELETED]({ commit }, collective) {
+			delete collective.deleted
+			commit(ADD_OR_UPDATE_COLLECTIVE, collective)
 		},
 	},
 
