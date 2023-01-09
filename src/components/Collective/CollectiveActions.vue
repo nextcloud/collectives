@@ -60,7 +60,7 @@
 			@click="leaveCollectiveWithUndo(collective)">
 			{{ t('collectives', 'Leave collective') }}
 			<template #icon>
-				<DeleteIcon :size="16" />
+				<LogoutIcon :size="16" />
 			</template>
 		</NcActionButton>
 	</div>
@@ -75,7 +75,7 @@ import ContentPasteIcon from 'vue-material-design-icons/ContentPaste.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 import CirclesIcon from '../Icon/CirclesIcon.vue'
 import DownloadIcon from 'vue-material-design-icons/Download.vue'
-import DeleteIcon from 'vue-material-design-icons/Delete.vue'
+import LogoutIcon from 'vue-material-design-icons/Logout.vue'
 import {
 	LEAVE_CIRCLE,
 	MARK_COLLECTIVE_DELETED,
@@ -94,7 +94,7 @@ export default {
 		CirclesIcon,
 		ContentPasteIcon,
 		CheckIcon,
-		DeleteIcon,
+		LogoutIcon,
 		DownloadIcon,
 		NcActionButton,
 		NcActionCheckbox,
