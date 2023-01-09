@@ -57,7 +57,7 @@
 		</NcActionButton>
 		<NcActionButton v-if="!isCollectiveAdmin(collective)"
 			:close-after-click="true"
-			@click="leaveCollective(collective)">
+			@click="leaveCollectiveWithUndo(collective)">
 			{{ t('collectives', 'Leave collective') }}
 			<template #icon>
 				<DeleteIcon :size="16" />
@@ -69,14 +69,21 @@
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { NcActionButton, NcActionCheckbox, NcActionLink, NcActionSeparator, NcLoadingIcon } from '@nextcloud/vue'
-import { showError, showSuccess } from '@nextcloud/dialogs'
+import { showError, showUndo } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
 import ContentPasteIcon from 'vue-material-design-icons/ContentPaste.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 import CirclesIcon from '../Icon/CirclesIcon.vue'
 import DownloadIcon from 'vue-material-design-icons/Download.vue'
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
-import { LEAVE_CIRCLE, SHARE_COLLECTIVE, UPDATE_SHARE_COLLECTIVE, UNSHARE_COLLECTIVE } from '../../store/actions.js'
+import {
+	LEAVE_CIRCLE,
+	MARK_COLLECTIVE_DELETED,
+	SHARE_COLLECTIVE,
+	UNMARK_COLLECTIVE_DELETED,
+	UPDATE_SHARE_COLLECTIVE,
+	UNSHARE_COLLECTIVE,
+} from '../../store/actions.js'
 import displayError from '../../util/displayError.js'
 import CopyToClipboardMixin from '../../mixins/CopyToClipboardMixin.js'
 
@@ -109,6 +116,7 @@ export default {
 
 	data() {
 		return {
+			leaveTimeout: null,
 			shareEditable: this.collective.shareEditable,
 		}
 	},
@@ -181,6 +189,8 @@ export default {
 			dispatchShareCollective: SHARE_COLLECTIVE,
 			dispatchUnshareCollective: UNSHARE_COLLECTIVE,
 			dispatchUpdateShareCollective: UPDATE_SHARE_COLLECTIVE,
+			dispatchMarkCollectiveDeleted: MARK_COLLECTIVE_DELETED,
+			dispatchUnmarkCollectiveDeleted: UNMARK_COLLECTIVE_DELETED,
 		}),
 
 		...mapMutations([
@@ -206,12 +216,24 @@ export default {
 			this.setSettingsCollectiveId(this.collective.id)
 		},
 
-		leaveCollective(collective) {
-			this.dispatchLeaveCircle(collective).then(() => {
-				showSuccess(t('collectives', 'Left collective {name}', { name: collective.name }))
-			}).catch(() => {
-				showError(t('collectives', 'Could not leave the collective'))
-			})
+		leaveCollectiveWithUndo(collective) {
+			showUndo(
+				t('collectives', 'Left collective {name}', { name: collective.name }),
+				() => {
+					clearTimeout(this.leaveTimeout)
+					this.leaveTimeout = null
+					this.dispatchUnmarkCollectiveDeleted(collective)
+				}
+			)
+
+			this.dispatchMarkCollectiveDeleted(collective)
+
+			this.leaveTimeout = setTimeout(() => {
+				this.dispatchLeaveCircle(collective).catch(() => {
+					showError(t('collectives', 'Could not leave the collective'))
+					this.dispatchUnmarkCollectiveDeleted(collective)
+				})
+			}, 10000)
 		},
 	},
 }

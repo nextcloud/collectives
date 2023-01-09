@@ -32,6 +32,8 @@ import {
 	UPDATE_COLLECTIVE_SHARE_PERMISSIONS,
 	UPDATE_COLLECTIVE_PAGE_MODE,
 	SET_COLLECTIVE_USER_SETTING_PAGE_ORDER,
+	MARK_COLLECTIVE_DELETED,
+	UNMARK_COLLECTIVE_DELETED,
 	GET_COLLECTIVES_FOLDER,
 } from './actions.js'
 
@@ -421,6 +423,16 @@ export default {
 				{ pageOrder }
 			)
 			commit(PATCH_COLLECTIVE_WITH_PROPERTY, { id, property: 'userPageOrder', value: pageOrder })
+		},
+
+		[MARK_COLLECTIVE_DELETED]({ commit }, collective) {
+			collective.deleted = true
+			commit(ADD_OR_UPDATE_COLLECTIVE, collective)
+		},
+
+		[UNMARK_COLLECTIVE_DELETED]({ commit }, collective) {
+			delete collective.deleted
+			commit(ADD_OR_UPDATE_COLLECTIVE, collective)
 		},
 	},
 

@@ -10,6 +10,7 @@
 		<template #list>
 			<NcAppNavigationCaption :title="t('collectives', 'Select a collective')" />
 			<CollectiveListItem v-for="collective in collectives"
+				v-show="!collective.deleted"
 				:key="collective.id"
 				:collective="collective" />
 			<NewCollective v-if="!isPublic" />
