@@ -14,6 +14,7 @@ import {
 	RESTORE_COLLECTIVE_FROM_TRASH,
 	DELETE_COLLECTIVE_FROM_TRASH,
 	DELETE_CIRCLE_FOR,
+	REMOVE_COLLECTIVE,
 } from './mutations.js'
 
 import {
@@ -187,6 +188,10 @@ export default {
 
 		[DELETE_COLLECTIVE_FROM_TRASH](state, collective) {
 			state.trashCollectives.splice(state.trashCollectives.findIndex(c => c.id === collective.id), 1)
+		},
+
+		[REMOVE_COLLECTIVE](state, collective) {
+			state.collectives.splice(state.collectives.findIndex(c => c.id === collective.id), 1)
 		},
 
 		setSettingsCollectiveId(state, id) {
