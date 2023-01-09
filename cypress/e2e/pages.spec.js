@@ -296,13 +296,13 @@ describe('Page', function() {
 			cy.log('Show outline in view mode')
 			cy.contains('button', 'Show outline')
 				.click()
-			cy.get('.editor--toc .editor--toc__item')
+			cy.get('#text-container .editor--toc .editor--toc__item')
 				.should('contain', 'Second-Level Heading')
 
 			// Switch to edit mode
 			cy.switchPageMode(1)
 
-			cy.get('.editor--toc .editor--toc__item')
+			cy.get('.text-editor .editor--toc .editor--toc__item')
 				.should('contain', 'Second-Level Heading')
 
 			cy.log('Close outline in edit mode')
