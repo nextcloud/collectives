@@ -355,6 +355,7 @@ export default {
 			}
 			this.dispatchTrashCollective(this.collective)
 				.catch(displayError('Could not move the collective to trash'))
+				.finally(this.setSettingsCollectiveId(null))
 		},
 	},
 }
