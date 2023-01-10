@@ -61,7 +61,7 @@ export default {
 	methods: {
 		newCollective() {
 			emit('toggle-navigation', { open: true })
-			emit('start-new-collective')
+			emit('open-new-collective-modal')
 			this.buttonType = 'secondary'
 		},
 	},
