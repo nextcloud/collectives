@@ -1,17 +1,8 @@
 <template>
-	<NcEmptyContent>
-		{{ t('collectives', 'Collective not found:') }}
-		{{ collectiveParam }}
+	<NcEmptyContent :title="t('collectives', 'Collective not found: {collective}', { collective: collectiveParam })"
+		:description="t('collectives', 'You\'re not part of a collective with that name.')">
 		<template #icon>
 			<CollectivesIcon />
-		</template>
-		<template #desc>
-			<div>
-				{{ t('collectives', 'You\'re not part of a collective with that name.') }}
-			</div>
-			<div>
-				{{ t('collectives', 'Select a collective or create a new one on the left.') }}
-			</div>
 		</template>
 	</NcEmptyContent>
 </template>
