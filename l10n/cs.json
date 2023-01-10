@@ -21,12 +21,7 @@
     "Copied" : "Zkopírováno",
     "Cannot copy" : "Nedaří se zkopírovat",
     "Copy share link" : "Zkopírovat odkaz na sdílení",
-    "Could not change the collective share editing permissions" : "Nedaří se změnit oprávnění k úpravám sdílení kolektivu",
-    "Could not share the collective" : "Kolektiv se nedaří nasdílet",
-    "Could not unshare the collective" : "Sdílení kolektivu se nedaří zrušit",
-    "Collective not found:" : "Kolektiv nenalezen:",
     "You're not part of a collective with that name." : "Nejste součástí kolektivu s takovým názvem.",
-    "Select a collective or create a new one on the left." : "Vyberte kolektiv nebo (vlevo) vytvořte nový.",
     "Preparing collective for exporting or printing" : "Kolektiv je připravován pro export či tisk",
     "Loading pages:" : "Načítání stránek:",
     "Loading images:" : "Načítání obrázků:",
@@ -146,6 +141,11 @@
     "Could not delete the page" : "Stránku se nepodařilo smazat",
     "Error: Missing apps" : "Chyba: chybějící aplikace",
     "The following dependency apps are missing: " : "Chybí následující aplikace, které tato potřebuje pro své fungování: ",
-    "Please ask the administrator to enable these apps." : "Požádejte správce vámi využívané instance aby tyto aplikace zapnul."
+    "Please ask the administrator to enable these apps." : "Požádejte správce vámi využívané instance aby tyto aplikace zapnul.",
+    "Could not change the collective share editing permissions" : "Nedaří se změnit oprávnění k úpravám sdílení kolektivu",
+    "Could not share the collective" : "Kolektiv se nedaří nasdílet",
+    "Could not unshare the collective" : "Sdílení kolektivu se nedaří zrušit",
+    "Collective not found:" : "Kolektiv nenalezen:",
+    "Select a collective or create a new one on the left." : "Vyberte kolektiv nebo (vlevo) vytvořte nový."
 },"pluralForm" :"nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;"
 }

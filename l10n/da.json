@@ -21,12 +21,7 @@
     "Copied" : "Kopieret",
     "Cannot copy" : "Kan ikke kopiere",
     "Copy share link" : "Kopiér delelink",
-    "Could not change the collective share editing permissions" : "Kunne ikke ændre redigeringstilladelser",
-    "Could not share the collective" : "Kunne ikke dele kollektivet",
-    "Could not unshare the collective" : "Kunne ikke ophæve deling af kollektivet",
-    "Collective not found:" : "Kollektiv ikke fundet:",
     "You're not part of a collective with that name." : "Du er ikke en del af et kollektiv med det navn.",
-    "Select a collective or create a new one on the left." : "Vælg et kollektiv eller opret et nyt.",
     "Preparing collective for exporting or printing" : "Klargøring af kollektiv til eksport eller print",
     "Loading pages:" : "Indlæser sider:",
     "Loading images:" : "Indlæser billeder:",
@@ -143,6 +138,11 @@
     "Could not delete the page" : "Siden kunne ikke slettes",
     "Error: Missing apps" : "Fejl: Manglende apps",
     "The following dependency apps are missing: " : "Følgende afhængighedsapps mangler: ",
-    "Please ask the administrator to enable these apps." : "Bed administratoren om at aktivere disse apps."
+    "Please ask the administrator to enable these apps." : "Bed administratoren om at aktivere disse apps.",
+    "Could not change the collective share editing permissions" : "Kunne ikke ændre redigeringstilladelser",
+    "Could not share the collective" : "Kunne ikke dele kollektivet",
+    "Could not unshare the collective" : "Kunne ikke ophæve deling af kollektivet",
+    "Collective not found:" : "Kollektiv ikke fundet:",
+    "Select a collective or create a new one on the left." : "Vælg et kollektiv eller opret et nyt."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

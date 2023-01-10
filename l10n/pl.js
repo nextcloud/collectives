@@ -21,13 +21,8 @@ OC.L10N.register(
     "Settings" : "Ustawienia",
     "Copied" : "Skopiowane",
     "Cannot copy" : "Nie można skopiować",
-    "Copy share link" : "Skopiuj udostępniany link",
-    "Could not change the collective share editing permissions" : "Nie można zmienić uprawnień edycji udostępnionego kolektywu",
-    "Could not share the collective" : "Nie można udostępnić tego kolektywu",
-    "Could not unshare the collective" : "Nie można zatrzymać udostępniania tego kolektywu",
-    "Collective not found:" : "Nie znaleziono kolektywu:",
+    "Copy share link" : "Skopiuj link udostępniania",
     "You're not part of a collective with that name." : "Nie jesteś częścią kolektywu o tej nazwie.",
-    "Select a collective or create a new one on the left." : "Wybierz kolektyw lub utwórz nowy z lewej.",
     "Preparing collective for exporting or printing" : "Przygotowanie kolektywu do eksportu lub druku",
     "Loading pages:" : "Ładowanie stron:",
     "Loading images:" : "Ładowanie obrazów:",
@@ -134,6 +129,11 @@ OC.L10N.register(
     "Could not delete the page" : "Nie można usunąć tej strony",
     "Error: Missing apps" : "Błąd: Brakująca aplikacja",
     "The following dependency apps are missing: " : "Brakująca zależna aplikacja: ",
-    "Please ask the administrator to enable these apps." : "Proszę poproś administratora o włączenie tych aplikacji."
+    "Please ask the administrator to enable these apps." : "Proszę poproś administratora o włączenie tych aplikacji.",
+    "Could not change the collective share editing permissions" : "Nie można zmienić uprawnień edycji udostępnionego kolektywu",
+    "Could not share the collective" : "Nie można udostępnić tego kolektywu",
+    "Could not unshare the collective" : "Nie można zatrzymać udostępniania tego kolektywu",
+    "Collective not found:" : "Nie znaleziono kolektywu:",
+    "Select a collective or create a new one on the left." : "Wybierz kolektyw lub utwórz nowy z lewej."
 },
 "nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);");

@@ -23,12 +23,7 @@ OC.L10N.register(
     "Copied" : "Kopyalandı",
     "Cannot copy" : "Kopyalanamadı",
     "Copy share link" : "Paylaşım bağlantısını kopyala",
-    "Could not change the collective share editing permissions" : "Topluluk paylaşımı düzenleme izinleri değiştirilemedi",
-    "Could not share the collective" : "Topluluk değiştirilemedi",
-    "Could not unshare the collective" : "Topluluk paylaşımı kaldırılamadı",
-    "Collective not found:" : "Topluluk bulunamadı:",
     "You're not part of a collective with that name." : "Bu adı taşıyan bir topluluğun üyesi değilsiniz.",
-    "Select a collective or create a new one on the left." : "Sol taraftan bir topluluk seçin ya da yeni bir topluluk ekleyin.",
     "Preparing collective for exporting or printing" : "Topluluk dışa aktarma ya da yazdırma için hazırlanıyor",
     "Loading pages:" : "Sayfalar yükleniyor:",
     "Loading images:" : "Görseller yükleniyor:",
@@ -152,6 +147,11 @@ OC.L10N.register(
     "Could not delete the page" : "Sayfa silinemedi",
     "Error: Missing apps" : "Hata: Uygulamalar eksik",
     "The following dependency apps are missing: " : "Gerekli şu uygulamalar eksik:",
-    "Please ask the administrator to enable these apps." : "Lütfen bu uygulamaları etkinleştirmesi için BT yöneticinizle görüşün."
+    "Please ask the administrator to enable these apps." : "Lütfen bu uygulamaları etkinleştirmesi için BT yöneticinizle görüşün.",
+    "Could not change the collective share editing permissions" : "Topluluk paylaşımı düzenleme izinleri değiştirilemedi",
+    "Could not share the collective" : "Topluluk değiştirilemedi",
+    "Could not unshare the collective" : "Topluluk paylaşımı kaldırılamadı",
+    "Collective not found:" : "Topluluk bulunamadı:",
+    "Select a collective or create a new one on the left." : "Sol taraftan bir topluluk seçin ya da yeni bir topluluk ekleyin."
 },
 "nplurals=2; plural=(n > 1);");

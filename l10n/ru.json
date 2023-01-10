@@ -19,12 +19,7 @@
     "Copied" : "Скопированный",
     "Cannot copy" : "Невозможно скопировать",
     "Copy share link" : "Скопировать ссылку общего доступа",
-    "Could not change the collective share editing permissions" : "Не удалось изменить разрешения на редактирование общего ресурса",
-    "Could not share the collective" : "Невозможно поделиться группой",
-    "Could not unshare the collective" : "Не удалось отозвать общий доступ группы",
-    "Collective not found:" : "Группа не найдена:",
     "You're not part of a collective with that name." : "Вы не являетесь частью группы с таким названием.",
-    "Select a collective or create a new one on the left." : "Выберите группу или создайте новую слева.",
     "Preparing collective for exporting or printing" : "Подготовка материалов для печати",
     "Loading pages:" : "Загрузка страниц:",
     "Loading images:" : "Загрузка изображений:",
@@ -129,6 +124,11 @@
     "Could not delete the page" : "Не удалось удалить страницу",
     "Error: Missing apps" : "Ошибка: Отсутствуют приложения",
     "The following dependency apps are missing: " : "Отсутствуют следующие приложения-зависимости: ",
-    "Please ask the administrator to enable these apps." : "Пожалуйста, попросите администратора включить эти приложения."
+    "Please ask the administrator to enable these apps." : "Пожалуйста, попросите администратора включить эти приложения.",
+    "Could not change the collective share editing permissions" : "Не удалось изменить разрешения на редактирование общего ресурса",
+    "Could not share the collective" : "Невозможно поделиться группой",
+    "Could not unshare the collective" : "Не удалось отозвать общий доступ группы",
+    "Collective not found:" : "Группа не найдена:",
+    "Select a collective or create a new one on the left." : "Выберите группу или создайте новую слева."
 },"pluralForm" :"nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);"
 }

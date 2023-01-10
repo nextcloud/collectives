@@ -21,12 +21,7 @@
     "Copied" : "Kopiatuta",
     "Cannot copy" : "Ezin da kopiatu",
     "Copy share link" : "Kopiatu partekatze-esteka",
-    "Could not change the collective share editing permissions" : "Ezin izan dira aldatu partekatze kolektiboak editatzeko baimenak",
-    "Could not share the collective" : "Ezin izan da kolektiboa partekatu",
-    "Could not unshare the collective" : "Ezin izan da kolektiboaren partekatzea kendu",
-    "Collective not found:" : "Ez da aurkitu kolektiboa:",
     "You're not part of a collective with that name." : "Ez zara izen hori duen kolektibo baten parte.",
-    "Select a collective or create a new one on the left." : "Hautatu kolektibo bat edo sortu berri bat ezkerrean.",
     "Preparing collective for exporting or printing" : "Kolektiboa prestatzen esportatzeko edo inprimatzeko ",
     "Loading pages:" : "Orriak kargatzen:",
     "Loading images:" : "Irudiak kargatzen:",
@@ -61,6 +56,11 @@
     "Current version" : "Uneko bertsioa",
     "No other versions available" : "Ez dago bertsio gehiago eskuragarri",
     "_%n byte_::_%n bytes_" : ["Byte %n","%n byte"],
-    "Versions" : "Bertsioak"
+    "Versions" : "Bertsioak",
+    "Could not change the collective share editing permissions" : "Ezin izan dira aldatu partekatze kolektiboak editatzeko baimenak",
+    "Could not share the collective" : "Ezin izan da kolektiboa partekatu",
+    "Could not unshare the collective" : "Ezin izan da kolektiboaren partekatzea kendu",
+    "Collective not found:" : "Ez da aurkitu kolektiboa:",
+    "Select a collective or create a new one on the left." : "Hautatu kolektibo bat edo sortu berri bat ezkerrean."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
