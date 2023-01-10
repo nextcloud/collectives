@@ -229,8 +229,13 @@ export default {
 			this.dispatchMarkCollectiveDeleted(collective)
 
 			this.leaveTimeout = setTimeout(() => {
-				this.dispatchLeaveCircle(collective).catch(() => {
-					showError(t('collectives', 'Could not leave the collective'))
+				this.dispatchLeaveCircle(collective).catch((e) => {
+					console.error('Failed to leave collective', e)
+					let errorMessage = ''
+					if (e.response?.data?.ocs?.meta?.message) {
+						errorMessage = e.response.data.ocs.meta.message
+					}
+					showError(t('collectives', 'Could not leave the collective. {errorMessage}', { errorMessage }))
 					this.dispatchUnmarkCollectiveDeleted(collective)
 				})
 			}, 10000)
