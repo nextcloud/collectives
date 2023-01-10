@@ -8,6 +8,7 @@ The following tools are required for app development:
 * g++: to compile some NodeJS dependencies
 * gettext: to generate pot/translation files
 * rsync and openssl: for generating release tarballs
+* php `dom` and `sqlite` extension
 * composer for installing php dependencies
 * nextcloud server: for running php tests
 * circles app: for passing some php tests that depend on it.
