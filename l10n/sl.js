@@ -23,12 +23,7 @@ OC.L10N.register(
     "Copied" : "Kopirano",
     "Cannot copy" : "Kopiranje ni mogoče",
     "Copy share link" : "Kopiraj povezavo souporabe",
-    "Could not change the collective share editing permissions" : "Ni mogoče spremeniti dovoljen souporabe zbirke",
-    "Could not share the collective" : "Ni mogoče omogočiti souporabe zbirke",
-    "Could not unshare the collective" : "Ni mogoče preklicati souporabe zbirke",
-    "Collective not found:" : "Zbirke ni mogoče najti:",
     "You're not part of a collective with that name." : "Niste član zbirke s tem imenom.",
-    "Select a collective or create a new one on the left." : "Izberite zbirko, ali pa ustvarite novo v meniju na levi.",
     "Preparing collective for exporting or printing" : "Pripravljanje zbirke za izvoz oziroma tiskanje",
     "Loading pages:" : "Nalaganje strani:",
     "Loading images:" : "Nalaganje slik:",
@@ -145,6 +140,11 @@ OC.L10N.register(
     "Could not delete the page" : "Strani ni mogoče izbrisati",
     "Error: Missing apps" : "Napaka: manjkajo programi",
     "The following dependency apps are missing: " : "Manjkajo navedeni odvisni programi: ",
-    "Please ask the administrator to enable these apps." : "Programe lahko omogoči le skrbnik sistema."
+    "Please ask the administrator to enable these apps." : "Programe lahko omogoči le skrbnik sistema.",
+    "Could not change the collective share editing permissions" : "Ni mogoče spremeniti dovoljen souporabe zbirke",
+    "Could not share the collective" : "Ni mogoče omogočiti souporabe zbirke",
+    "Could not unshare the collective" : "Ni mogoče preklicati souporabe zbirke",
+    "Collective not found:" : "Zbirke ni mogoče najti:",
+    "Select a collective or create a new one on the left." : "Izberite zbirko, ali pa ustvarite novo v meniju na levi."
 },
 "nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);");

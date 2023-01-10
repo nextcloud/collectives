@@ -23,12 +23,7 @@ OC.L10N.register(
     "Copied" : "Copié",
     "Cannot copy" : "Impossible d'effectuer la copie",
     "Copy share link" : "Copier le lien de partage",
-    "Could not change the collective share editing permissions" : "Impossible de modifier les droits d'édition du partage collectif",
-    "Could not share the collective" : "Impossible de partager le collectif",
-    "Could not unshare the collective" : "Impossible de cesser le partage du collectif",
-    "Collective not found:" : "Collectif introuvable :",
     "You're not part of a collective with that name." : "Vous ne faites pas partie d'un collectif portant ce nom.",
-    "Select a collective or create a new one on the left." : "Sélectionnez un collectif ou créez en un nouveau sur la gauche.",
     "Preparing collective for exporting or printing" : "Préparation du collectif pour l'export ou l'impression",
     "Loading pages:" : "Chargement des pages :",
     "Loading images:" : "Chargement des images :",
@@ -148,6 +143,11 @@ OC.L10N.register(
     "Could not delete the page" : "Impossible de supprimer la page",
     "Error: Missing apps" : "Erreur : Applications manquantes",
     "The following dependency apps are missing: " : "Les dépendances d'application suivantes sont manquantes : ",
-    "Please ask the administrator to enable these apps." : "Veuillez demander à l'administrateur d'activer ces applications."
+    "Please ask the administrator to enable these apps." : "Veuillez demander à l'administrateur d'activer ces applications.",
+    "Could not change the collective share editing permissions" : "Impossible de modifier les droits d'édition du partage collectif",
+    "Could not share the collective" : "Impossible de partager le collectif",
+    "Could not unshare the collective" : "Impossible de cesser le partage du collectif",
+    "Collective not found:" : "Collectif introuvable :",
+    "Select a collective or create a new one on the left." : "Sélectionnez un collectif ou créez en un nouveau sur la gauche."
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

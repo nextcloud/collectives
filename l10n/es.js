@@ -23,12 +23,7 @@ OC.L10N.register(
     "Copied" : "Copiado",
     "Cannot copy" : "No se puede copiar",
     "Copy share link" : "Copiar enlace de recurso compartido",
-    "Could not change the collective share editing permissions" : "No fue posible cambiar los permisos de edición para el recurso compartido del cuaderno",
-    "Could not share the collective" : "No fue posible compartir el cuaderno colectivo",
-    "Could not unshare the collective" : "No fue posible dejar de compartir el cuaderno colectivo",
-    "Collective not found:" : "Cuaderno colectivo no encontrado:",
     "You're not part of a collective with that name." : "No tienes acceso a un cuaderno colectivo con ese nombre.",
-    "Select a collective or create a new one on the left." : "Selecciona un cuaderno colectivo o crea uno nuevo en el panel de la izquierda.",
     "Preparing collective for exporting or printing" : "Preparando el cuaderno colectivo para exportación o impresión",
     "Loading pages:" : "Cargando páginas:",
     "Loading images:" : "Cargando imágenes:",
@@ -152,6 +147,11 @@ OC.L10N.register(
     "Could not delete the page" : "No se pudo eliminar la página",
     "Error: Missing apps" : "Error: aplicaciones faltantes",
     "The following dependency apps are missing: " : "Las siguientes aplicaciones son necesarias y no se encuentran: ",
-    "Please ask the administrator to enable these apps." : "Pida a la administrador que habilite estas aplicaciones."
+    "Please ask the administrator to enable these apps." : "Pida a la administrador que habilite estas aplicaciones.",
+    "Could not change the collective share editing permissions" : "No fue posible cambiar los permisos de edición para el recurso compartido del cuaderno",
+    "Could not share the collective" : "No fue posible compartir el cuaderno colectivo",
+    "Could not unshare the collective" : "No fue posible dejar de compartir el cuaderno colectivo",
+    "Collective not found:" : "Cuaderno colectivo no encontrado:",
+    "Select a collective or create a new one on the left." : "Selecciona un cuaderno colectivo o crea uno nuevo en el panel de la izquierda."
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

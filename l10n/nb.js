@@ -13,7 +13,6 @@ OC.L10N.register(
     "Copied" : "Kopiert",
     "Cannot copy" : "Kan ikke kopiere",
     "You're not part of a collective with that name." : "Du er ikke med i noe kollektiv med dette navnet.",
-    "Select a collective or create a new one on the left." : "Velg et kollektiv, eller opprett ett til venstre.",
     "Last edited by {user}" : "Sist endret av {user}",
     "Permissions" : "Rettigheter",
     "View" : "Vis",
@@ -58,6 +57,7 @@ OC.L10N.register(
     "Could not delete the page" : "Kunne ikke slette siden",
     "Error: Missing apps" : "Feil: Manglende programmer",
     "The following dependency apps are missing: " : "Følgende avhengigheter mangler: ",
-    "Please ask the administrator to enable these apps." : "Spør en administrator om å skru på disse programmene."
+    "Please ask the administrator to enable these apps." : "Spør en administrator om å skru på disse programmene.",
+    "Select a collective or create a new one on the left." : "Velg et kollektiv, eller opprett ett til venstre."
 },
 "nplurals=2; plural=(n != 1);");

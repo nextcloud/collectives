@@ -15,7 +15,6 @@ OC.L10N.register(
     "Copied" : "コピー",
     "Cannot copy" : "コピーできません",
     "Copy share link" : "共有リンクのコピー",
-    "Collective not found:" : "コレクティブが見つかりません:",
     "Last edited by {user}" : "最終編集者 {user}",
     "Permissions" : "アクセス権限",
     "View" : "表示",
@@ -85,6 +84,7 @@ OC.L10N.register(
     "Could not delete the page" : "ページを削除できません",
     "Error: Missing apps" : "エラー: アプリが見つかりません",
     "The following dependency apps are missing: " : "次の依存アプリが見つかりません: ",
-    "Please ask the administrator to enable these apps." : "これらのアプリを有効にするために管理者に問い合わせてください。"
+    "Please ask the administrator to enable these apps." : "これらのアプリを有効にするために管理者に問い合わせてください。",
+    "Collective not found:" : "コレクティブが見つかりません:"
 },
 "nplurals=1; plural=0;");

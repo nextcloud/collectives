@@ -21,12 +21,7 @@
     "Copied" : "已複製",
     "Cannot copy" : "無法複製",
     "Copy share link" : "複製分享連結",
-    "Could not change the collective share editing permissions" : "無法更改知識庫分享編輯權限",
-    "Could not share the collective" : "無法分享知識庫",
-    "Could not unshare the collective" : "無法撤回知識庫分享",
-    "Collective not found:" : "未找到知識庫：",
     "You're not part of a collective with that name." : "您不是具有該名稱的知識庫的成員。",
-    "Select a collective or create a new one on the left." : "在左側選擇一個知識庫或創建一個新知識庫。",
     "Preparing collective for exporting or printing" : "準備知識庫導出或打印",
     "Loading pages:" : "正在加載頁面：",
     "Loading images:" : "正在加載圖像：",
@@ -150,6 +145,11 @@
     "Could not delete the page" : "無法刪除頁面",
     "Error: Missing apps" : "錯誤：缺少應用程式",
     "The following dependency apps are missing: " : "缺少以下依賴應用程式：",
-    "Please ask the administrator to enable these apps." : "請要求管理員啟用這些應用程式。"
+    "Please ask the administrator to enable these apps." : "請要求管理員啟用這些應用程式。",
+    "Could not change the collective share editing permissions" : "無法更改知識庫分享編輯權限",
+    "Could not share the collective" : "無法分享知識庫",
+    "Could not unshare the collective" : "無法撤回知識庫分享",
+    "Collective not found:" : "未找到知識庫：",
+    "Select a collective or create a new one on the left." : "在左側選擇一個知識庫或創建一個新知識庫。"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

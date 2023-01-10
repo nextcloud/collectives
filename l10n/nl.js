@@ -23,12 +23,7 @@ OC.L10N.register(
     "Copied" : "Gekopieerd",
     "Cannot copy" : "Kan niet kopiëren",
     "Copy share link" : "Kopieer de deellink",
-    "Could not change the collective share editing permissions" : "Kan de rechten voor het delen van het collectief niet wijzigen",
-    "Could not share the collective" : "Kan het collectief niet delen",
-    "Could not unshare the collective" : "Kan het delen van het collectief niet ongedaan maken",
-    "Collective not found:" : "Collectief niet gevonden:",
     "You're not part of a collective with that name." : "Je maakt geen deel uit van een collectief met die naam.",
-    "Select a collective or create a new one on the left." : "Selecteer een collectief of maak in het linkermenu een nieuwe aan.",
     "Preparing collective for exporting or printing" : "Collectief voorbereiden voor exporteren of printen",
     "Loading pages:" : "Pagina's laden:",
     "Loading images:" : "Afbeeldingen laden:",
@@ -152,6 +147,11 @@ OC.L10N.register(
     "Could not delete the page" : "Kan de pagina niet verwijderen",
     "Error: Missing apps" : "Fout: ontbrekende apps",
     "The following dependency apps are missing: " : "De volgende apps ontbreken: ",
-    "Please ask the administrator to enable these apps." : "Vraag de beheerder om deze apps in te schakelen."
+    "Please ask the administrator to enable these apps." : "Vraag de beheerder om deze apps in te schakelen.",
+    "Could not change the collective share editing permissions" : "Kan de rechten voor het delen van het collectief niet wijzigen",
+    "Could not share the collective" : "Kan het collectief niet delen",
+    "Could not unshare the collective" : "Kan het delen van het collectief niet ongedaan maken",
+    "Collective not found:" : "Collectief niet gevonden:",
+    "Select a collective or create a new one on the left." : "Selecteer een collectief of maak in het linkermenu een nieuwe aan."
 },
 "nplurals=2; plural=(n != 1);");

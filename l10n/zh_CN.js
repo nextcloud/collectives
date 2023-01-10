@@ -20,11 +20,7 @@ OC.L10N.register(
     "Copied" : "已复制",
     "Cannot copy" : "无法复制",
     "Copy share link" : "复制共享链接",
-    "Could not share the collective" : "无法共享该知识库",
-    "Could not unshare the collective" : "无法取消共享该知识库",
-    "Collective not found:" : "未找到知识库：",
     "You're not part of a collective with that name." : "你不在该知识库中。",
-    "Select a collective or create a new one on the left." : "选择一个知识库或在左侧创建一个新知识库。",
     "Preparing collective for exporting or printing" : "准备导出或打印的collective",
     "Last edited by {user}" : "最后被 {user} 编辑",
     "Collective settings" : "知识库设置",
@@ -106,6 +102,10 @@ OC.L10N.register(
     "Could not delete the page" : "无法删除该页面",
     "Error: Missing apps" : "错误：缺少应用",
     "The following dependency apps are missing: " : "缺少以下依赖项应用： ",
-    "Please ask the administrator to enable these apps." : "请让管理员启用这些应用。"
+    "Please ask the administrator to enable these apps." : "请让管理员启用这些应用。",
+    "Could not share the collective" : "无法共享该知识库",
+    "Could not unshare the collective" : "无法取消共享该知识库",
+    "Collective not found:" : "未找到知识库：",
+    "Select a collective or create a new one on the left." : "选择一个知识库或在左侧创建一个新知识库。"
 },
 "nplurals=1; plural=0;");

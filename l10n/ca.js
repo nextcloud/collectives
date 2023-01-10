@@ -15,9 +15,7 @@ OC.L10N.register(
     "Copied" : "Copiat",
     "Cannot copy" : "No s'ha pogut copiar",
     "Copy share link" : "Copia l'enllaç per compartir",
-    "Collective not found:" : "Col·lectiu no trobat:",
     "You're not part of a collective with that name." : "No ets part d'un col·lectiu amb aquest nom.",
-    "Select a collective or create a new one on the left." : "Selecciona un col·lectiu o crea un de nou a l'esquerra.",
     "Last edited by {user}" : "Darrera edició per {user}",
     "Permissions" : "Permisos",
     "View" : "Visualitza",
@@ -82,6 +80,8 @@ OC.L10N.register(
     "Could not delete the page" : "No s'ha pogut esborrar la pàgina",
     "Error: Missing apps" : "Error: Apps faltants.",
     "The following dependency apps are missing: " : "Falten les aplicacions amb dependència següents: ",
-    "Please ask the administrator to enable these apps." : "Si us plau pregunti a l'administrador/a per activar aquestes apps."
+    "Please ask the administrator to enable these apps." : "Si us plau pregunti a l'administrador/a per activar aquestes apps.",
+    "Collective not found:" : "Col·lectiu no trobat:",
+    "Select a collective or create a new one on the left." : "Selecciona un col·lectiu o crea un de nou a l'esquerra."
 },
 "nplurals=2; plural=(n != 1);");

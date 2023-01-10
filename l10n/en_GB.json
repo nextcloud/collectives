@@ -21,12 +21,7 @@
     "Copied" : "Copied",
     "Cannot copy" : "Cannot copy",
     "Copy share link" : "Copy share link",
-    "Could not change the collective share editing permissions" : "Could not change the collective share editing permissions",
-    "Could not share the collective" : "Could not share the collective",
-    "Could not unshare the collective" : "Could not unshare the collective",
-    "Collective not found:" : "Collective not found:",
     "You're not part of a collective with that name." : "You're not part of a collective with that name.",
-    "Select a collective or create a new one on the left." : "Select a collective or create a new one on the left.",
     "Preparing collective for exporting or printing" : "Preparing collective for exporting or printing",
     "Loading pages:" : "Loading pages:",
     "Loading images:" : "Loading images:",
@@ -150,6 +145,11 @@
     "Could not delete the page" : "Could not delete the page",
     "Error: Missing apps" : "Error: Missing apps",
     "The following dependency apps are missing: " : "The following dependency apps are missing: ",
-    "Please ask the administrator to enable these apps." : "Please ask the administrator to enable these apps."
+    "Please ask the administrator to enable these apps." : "Please ask the administrator to enable these apps.",
+    "Could not change the collective share editing permissions" : "Could not change the collective share editing permissions",
+    "Could not share the collective" : "Could not share the collective",
+    "Could not unshare the collective" : "Could not unshare the collective",
+    "Collective not found:" : "Collective not found:",
+    "Select a collective or create a new one on the left." : "Select a collective or create a new one on the left."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

@@ -21,12 +21,7 @@
     "Copied" : "Копирано",
     "Cannot copy" : "Не може да се копира",
     "Copy share link" : "Копиране на връзка за споделяне",
-    "Could not change the collective share editing permissions" : "Неуспешна промяна на права за редактиране на колективния дял ",
-    "Could not share the collective" : "Не можа да се сподели колективът",
-    "Could not unshare the collective" : "Не можа да се отмени споделянето на колектива",
-    "Collective not found:" : "Колективът не е намерен:",
     "You're not part of a collective with that name." : "Вие не сте част от колектив с това име.",
-    "Select a collective or create a new one on the left." : "Избор на колектив или създаване на нов вляво.",
     "Preparing collective for exporting or printing" : "Подготовка на колектив за експортиране или отпечатване",
     "Loading pages:" : "Зареждане на страници:",
     "Loading images:" : "Зареждане на изображения:",
@@ -150,6 +145,11 @@
     "Could not delete the page" : "Неуспешно изтриване на страницата",
     "Error: Missing apps" : "Грешка: Липсват приложения",
     "The following dependency apps are missing: " : "Липсват следните зависими приложения: ",
-    "Please ask the administrator to enable these apps." : "Моля, помолете администратора да активира тези приложения."
+    "Please ask the administrator to enable these apps." : "Моля, помолете администратора да активира тези приложения.",
+    "Could not change the collective share editing permissions" : "Неуспешна промяна на права за редактиране на колективния дял ",
+    "Could not share the collective" : "Не можа да се сподели колективът",
+    "Could not unshare the collective" : "Не можа да се отмени споделянето на колектива",
+    "Collective not found:" : "Колективът не е намерен:",
+    "Select a collective or create a new one on the left." : "Избор на колектив или създаване на нов вляво."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

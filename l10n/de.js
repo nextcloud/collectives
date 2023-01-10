@@ -23,12 +23,7 @@ OC.L10N.register(
     "Copied" : "Kopiert",
     "Cannot copy" : "Kopieren nicht möglich",
     "Copy share link" : "Freigabe-Link kopieren",
-    "Could not change the collective share editing permissions" : "Die Editier-Rechte für die Freigabe des Kollektivs konnten nicht verändert werden",
-    "Could not share the collective" : "Kollektiv konnte nicht geteilt werden",
-    "Could not unshare the collective" : "Freigabe des Kollektivs konnte nicht aufgehoben werden",
-    "Collective not found:" : "Kollektiv nicht gefunden:",
     "You're not part of a collective with that name." : "Du bist nicht Teil eines Kollektives mit diesem Namen.",
-    "Select a collective or create a new one on the left." : "Wähle ein Kollektiv aus oder lege links ein Neues an.",
     "Preparing collective for exporting or printing" : "Kollektiv wird zum Exportieren oder Drucken vorbereitet",
     "Loading pages:" : "Lade Seiten:",
     "Loading images:" : "Lade Bilder:",
@@ -144,6 +139,11 @@ OC.L10N.register(
     "Could not delete the page" : "Seite konnte nicht entfernt werden",
     "Error: Missing apps" : "Fehler: Apps fehlen",
     "The following dependency apps are missing: " : "Die folgenden erforderlichen Apps fehlen: ",
-    "Please ask the administrator to enable these apps." : "Bitte die Admins, diese Apps zu aktivieren."
+    "Please ask the administrator to enable these apps." : "Bitte die Admins, diese Apps zu aktivieren.",
+    "Could not change the collective share editing permissions" : "Die Editier-Rechte für die Freigabe des Kollektivs konnten nicht verändert werden",
+    "Could not share the collective" : "Kollektiv konnte nicht geteilt werden",
+    "Could not unshare the collective" : "Freigabe des Kollektivs konnte nicht aufgehoben werden",
+    "Collective not found:" : "Kollektiv nicht gefunden:",
+    "Select a collective or create a new one on the left." : "Wähle ein Kollektiv aus oder lege links ein Neues an."
 },
 "nplurals=2; plural=(n != 1);");
