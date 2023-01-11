@@ -302,6 +302,9 @@ describe('Page', function() {
 			// Switch to edit mode
 			cy.switchPageMode(1)
 
+			// Wait one second and see whether it fixes the flaky test
+			cy.wait(1000) // eslint-disable-line cypress/no-unnecessary-waiting
+
 			cy.get('.text-editor .editor--toc .editor--toc__item')
 				.should('contain', 'Second-Level Heading')
 
