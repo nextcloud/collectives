@@ -25,6 +25,7 @@ OC.L10N.register(
     "Cannot copy" : "Não foi possível copiar",
     "Copy share link" : "Copiar link de compartilhamento",
     "Left collective {name}" : "Deixou o coletivo {name}",
+    "Could not leave the collective. {errorMessage}" : "Não poderia deixar o coletivo. {errorMessage}",
     "Collective not found: {collective}" : "Coletivo não encontrado: {coletivo}",
     "You're not part of a collective with that name." : "Você não faz parte de um coletivo com este nome.",
     "Preparing collective for exporting or printing" : "Preparando coletivo para exportação ou impressão",
