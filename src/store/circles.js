@@ -1,6 +1,6 @@
 import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
-import { GET_CIRCLES, RENAME_CIRCLE, LEAVE_CIRCLE, GET_PAGES } from './actions.js'
+import { GET_CIRCLES, RENAME_CIRCLE, ADD_MEMBERS_TO_CIRCLE, LEAVE_CIRCLE, GET_PAGES } from './actions.js'
 import {
 	SET_CIRCLES,
 	UPDATE_CIRCLE,
@@ -83,6 +83,15 @@ export default {
 				await dispatch(GET_PAGES)
 			}
 			commit(PATCH_COLLECTIVE_WITH_CIRCLE, response.data.ocs.data)
+		},
+
+		async [ADD_MEMBERS_TO_CIRCLE](_, { collective, members }) {
+			const response = await axios.post(
+				generateOcsUrl('apps/circles/circles/' + collective.circleId + '/members/multi'),
+				{ members }
+			)
+			console.debug('Added members to circle', collective.circleId, response.data.ocs.data)
+			return response.data.ocs.data
 		},
 
 		/**

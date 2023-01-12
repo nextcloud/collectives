@@ -14,12 +14,12 @@
 				:key="collective.id"
 				:collective="collective" />
 			<NcButton v-if="!isPublic"
-				:aria-label="t('collectives', 'Create new collective')"
+				:aria-label="t('collectives', 'Create a new collective')"
 				@click="onOpenNewCollectiveModal">
 				<template #icon>
 					<PlusIcon />
 				</template>
-				{{ t('collectives', 'Create new collective') }}
+				{{ t('collectives', 'New collective') }}
 			</NcButton>
 		</template>
 		<template #footer>
