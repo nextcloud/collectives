@@ -25,6 +25,7 @@ OC.L10N.register(
     "Cannot copy" : "無法複製",
     "Copy share link" : "複製分享連結",
     "Left collective {name}" : "已離開知識庫 {name}",
+    "Could not leave the collective. {errorMessage}" : "無法離開知識庫：{errorMessage}",
     "Collective not found: {collective}" : "未找到知識庫：{collective}",
     "You're not part of a collective with that name." : "您不是具有該名稱的知識庫的成員。",
     "Preparing collective for exporting or printing" : "準備知識庫導出或打印",
