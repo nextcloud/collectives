@@ -29,7 +29,7 @@
     "@nextcloud/paths": "^2.1.0",
     "@nextcloud/router": "^2.0.1",
     "@nextcloud/text": "^26.0.0-alpha.6",
-    "@nextcloud/vue": "^7.3.0",
+    "@nextcloud/vue": "^7.4.0",
     "debounce": "^1.2.1",
     "escape-html": "^1.0.3",
     "sortablejs": "^1.15.0",
