@@ -7,9 +7,15 @@
 			mobile: isMobile,
 			toplevel: level === 0,
 			highlight: isHighlighted,
+			'dragged-over-target': isDraggedOverTarget,
+			'highlight-target': isHighlightedTarget,
 		}"
 		draggable
-		@dragstart="setDragData">
+		@dragstart="onDragstart"
+		@dragend="onDragend"
+		@dragover="onDragover"
+		@dragleave="onDragleave"
+		@drop="onDrop">
 		<div class="app-content-list-item-icon"
 			:tabindex="isCollapsible ? '0' : null"
 			@keypress.enter="toggleCollapsedOrRoute()"
@@ -162,17 +168,23 @@ export default {
 	data() {
 		return {
 			pageTitleIsTruncated: false,
+			isHighlightedTarget: false,
 		}
 	},
 
 	computed: {
 		...mapState({
 			highlightPageId: (state) => state.pages.highlightPageId,
+			isDragoverTargetPage: (state) => state.pages.isDragoverTargetPage,
+			draggedPageId: (state) => state.pages.draggedPageId,
 		}),
 
 		...mapGetters([
 			'currentPage',
 			'collapsed',
+			'disableDragndropSortOrMove',
+			'pageParent',
+			'pageParents',
 		]),
 
 		isActive() {
@@ -217,6 +229,32 @@ export default {
 		isHighlighted() {
 			return this.highlightPageId === this.pageId
 		},
+
+		isDragged() {
+			return this.draggedPageId === this.pageId
+		},
+
+		isDraggedOverTarget() {
+			return this.isDragged && this.isDragoverTargetPage
+		},
+
+		isPotentialDropTarget() {
+			// IMPORTANT: needs to be synchronized with custom drag/drop events in Item.vue
+			return !this.disableDragndropSortOrMove
+				// Ignore if self is the dragged element
+				&& !this.isDragged
+				// Ignore if in filtered view
+				&& !this.filteredView
+				// Ingore if self is direct parent of dragged element
+				&& this.pageParent(this.pageId) !== this.draggedPageId
+				// Ignore if dragged element is a parent of self
+				&& !this.pageParents(this.pageId).includes(this.draggedPageId)
+		},
+
+		isDropTarget() {
+			return this.isPotentialDropTarget
+				&& this.isDragoverTargetPage
+		},
 	},
 
 	mounted() {
@@ -232,9 +270,14 @@ export default {
 		...mapMutations([
 			'expand',
 			'toggleCollapsed',
+			'setDragoverTargetPage',
+			'setDraggedPageId',
 		]),
 
-		setDragData(ev) {
+		onDragstart(ev) {
+			this.setDraggedPageId(this.pageId)
+
+			// Set drag data
 			const path = generateUrl(`/apps/collectives${this.to}`)
 			const href = new URL(path, window.location).href
 			const html = `<a href=${href}>${this.title}</a>`
@@ -242,6 +285,10 @@ export default {
 			ev.dataTransfer.setData('text/plain', href)
 			ev.dataTransfer.setData('text/uri-list', href)
 			ev.dataTransfer.setData('text/html', html)
+		},
+
+		onDragend(ev) {
+			this.setDraggedPageId(null)
 		},
 
 		toggleCollapsedOrRoute(ev) {
@@ -254,6 +301,29 @@ export default {
 				}
 			}
 		},
+
+		onDragover(ev) {
+			// if (!this.isDragged && (!this.hasVisibleSubpages || this.collapsed(this.pageId))) {
+			if (this.isPotentialDropTarget) {
+				this.isHighlightedTarget = true
+				this.setDragoverTargetPage(true)
+			}
+		},
+
+		onDragleave(ev) {
+			this.isHighlightedTarget = false
+			this.setDragoverTargetPage(false)
+		},
+
+		onDrop(ev) {
+			// if (!this.isDragged && (!this.hasVisibleSubpages || this.collapsed(this.pageId))) {
+			if (this.isDropTarget) {
+				console.debug(`move ${this.draggedPageId} to ${this.pageId}`)
+				this.movePage(this.pageParent(this.draggedPageId), this.pageId, this.draggedPageId, 0)
+			}
+			this.isHighlightedTarget = false
+			this.setDragoverTargetPage(false)
+		},
 	},
 }
 
@@ -261,8 +331,10 @@ export default {
 
 <style lang="scss" scoped>
 .app-content-list-item {
-	height: unset;
-	border-bottom: 4px solid var(--color-main-background);
+	box-sizing: border-box;
+	height: 44px;
+	// border-bottom: 4px solid var(--color-main-background);
+	margin-bottom: 4px;
 
 	padding-left: 0;
 	border-radius: var(--border-radius-large);
@@ -285,6 +357,16 @@ export default {
 		span.item-icon-badge {
 			background-color: var(--color-background-hover);
 		}
+	}
+
+	&.highlight-target {
+		// background-color: var(--color-primary-light);
+		border: 1px solid var(--color-border-maxcontrast);
+	}
+
+	&.dragged-over-target {
+		// Make cloned drag element less visible if dragged over a target page
+		opacity: .3;
 	}
 
 	&.active, &.toplevel, &.mobile, &:hover, &:focus, &:active {

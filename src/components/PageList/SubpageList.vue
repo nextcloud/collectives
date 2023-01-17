@@ -24,7 +24,7 @@
 				:level="level+1"
 				:filter-string="filterString"
 				:is-template="true" />
-			<Draggable v-if="subpagesView"
+			<Draggable v-if="subpagesView.length > 0"
 				:list="subpagesView"
 				:parent-id="page.id"
 				:disable-sorting="disableSorting"

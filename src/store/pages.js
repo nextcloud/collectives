@@ -38,6 +38,8 @@ export default {
 		showTemplates: false,
 		backlinks: [],
 		highlightPageId: null,
+		isDragoverTargetPage: false,
+		draggedPageId: null,
 	},
 
 	getters: {
@@ -177,6 +179,10 @@ export default {
 			return pages
 		},
 
+		pageParent: (state) => (pageId) => {
+			return state.pages.find(p => (p.id === pageId)).parentId
+		},
+
 		pageParents: (state, getters) => (pageId) => {
 			const pages = []
 			while (pageId !== getters.collectivePage.id) {
@@ -204,6 +210,14 @@ export default {
 
 		sortBy(state, getters) {
 			return state.sortBy ? state.sortBy : getters.sortByDefault
+		},
+
+		disableDragndropSortOrMove(state, getters) {
+			// Disable if a page list is loading (e.g. when page move is pending)
+			return getters.loading('pagelist')
+				// For now also disable in alternative page order view
+				// TODO: Smoothen UX if allowed to move but not to sort with alternative page orders
+				|| (getters.sortBy !== 'byOrder')
 		},
 
 		newPagePath(state, getters) {
@@ -310,6 +324,14 @@ export default {
 
 		setHighlightPageId(state, pageId) {
 			state.highlightPageId = pageId
+		},
+
+		setDragoverTargetPage(state, bool) {
+			state.isDragoverTargetPage = bool
+		},
+
+		setDraggedPageId(state, pageId) {
+			state.draggedPageId = pageId
 		},
 	},
 
@@ -440,6 +462,7 @@ export default {
 				commit(UPDATE_PAGE, response.data.data)
 			} catch (e) {
 				commit(UPDATE_PAGE, pageClone)
+				commit('done', 'pagelist')
 				throw e
 			}
 

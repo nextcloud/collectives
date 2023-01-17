@@ -78,6 +78,8 @@ export default {
 	computed: {
 		...mapGetters([
 			'collapsed',
+			'disableDragndropSortOrMove',
+			'loading',
 			'sortBy',
 			'visibleSubpages',
 		]),
@@ -88,12 +90,12 @@ export default {
 		},
 
 		disabled() {
-			// Disable sortable during move/sort operation or if disabled by parent component (e.g. in filtered view)
-			// return this.sortableActive || this.disableSorting
-
-			// Also disable with alternative page orders for now.
-			// TODO: Smoothen UX if allowed to move but not to sort with alternative page orders
-			return this.sortableActive || this.disableSorting || (this.sortBy !== 'byOrder')
+			// IMPORTANT: needs to be synchronized with custom drag/drop events in Item.vue
+			return this.disableDragndropSortOrMove
+				// Disable during Sortable move/sort operation
+				|| this.sortableActive
+				// Disable if disabled by parent component (e.g. in filtered view)
+				|| this.disableSorting
 		},
 
 		revertOnSpill() {

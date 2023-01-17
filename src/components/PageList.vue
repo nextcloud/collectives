@@ -1,5 +1,5 @@
 <template>
-	<NcAppContentList :class="{loading: loading('collective')}"
+	<NcAppContentList :class="{loading: loading('collective') || loading('pagelist')}"
 		:show-details="showing('details')">
 		<div class="page-list-headerbar">
 			<NcTextField name="pageFilter"
