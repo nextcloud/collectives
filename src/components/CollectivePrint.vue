@@ -70,6 +70,7 @@ export default {
 
 	computed: {
 		...mapGetters([
+			'currentCollective',
 			'pagesTreeWalk',
 			'shareTokenParam',
 		]),
@@ -86,6 +87,16 @@ export default {
 			return this.loadingTotal
 				? this.loadingCount / this.loadingTotal * 100
 				: 0
+		},
+
+		documentTitle() {
+			const parts = [
+				this.currentCollective.name,
+				t('collectives', 'Collectives'),
+				'Nextcloud',
+			]
+
+			return parts.join(' - ')
 		},
 	},
 
@@ -162,6 +173,8 @@ export default {
 			this.$nextTick(() => {
 				// Scroll back to the beginning of the document
 				document.getElementById('content-vue').scrollIntoView()
+				document.title = this.documentTitle
+
 				window.print()
 			})
 		},
