@@ -245,8 +245,6 @@ export default {
 				&& !this.isDragged
 				// Ignore if in filtered view
 				&& !this.filteredView
-				// Ingore if self is direct parent of dragged element
-				&& this.pageParent(this.pageId) !== this.draggedPageId
 				// Ignore if dragged element is a parent of self
 				&& !this.pageParents(this.pageId).includes(this.draggedPageId)
 		},
@@ -275,6 +273,8 @@ export default {
 		]),
 
 		onDragstart(ev) {
+			// Reset isDragoverTargetPage as it might be true after onDrop
+			this.setDragoverTargetPage(false)
 			this.setDraggedPageId(this.pageId)
 
 			// Set drag data
@@ -303,7 +303,6 @@ export default {
 		},
 
 		onDragover(ev) {
-			// if (!this.isDragged && (!this.hasVisibleSubpages || this.collapsed(this.pageId))) {
 			if (this.isPotentialDropTarget) {
 				this.isHighlightedTarget = true
 				this.setDragoverTargetPage(true)
@@ -316,13 +315,13 @@ export default {
 		},
 
 		onDrop(ev) {
-			// if (!this.isDragged && (!this.hasVisibleSubpages || this.collapsed(this.pageId))) {
-			if (this.isDropTarget) {
-				console.debug(`move ${this.draggedPageId} to ${this.pageId}`)
+			if (this.isDropTarget
+				// Ingore if self is direct parent of dragged element
+				&& this.pageParent(this.draggedPageId) !== this.pageId) {
 				this.movePage(this.pageParent(this.draggedPageId), this.pageId, this.draggedPageId, 0)
 			}
 			this.isHighlightedTarget = false
-			this.setDragoverTargetPage(false)
+			this.setDraggedPageId(null)
 		},
 	},
 }

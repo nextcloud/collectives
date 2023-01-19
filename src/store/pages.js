@@ -462,15 +462,15 @@ export default {
 				commit(UPDATE_PAGE, response.data.data)
 			} catch (e) {
 				commit(UPDATE_PAGE, pageClone)
-				commit('done', 'pagelist')
 				throw e
+			} finally {
+				commit('done', 'pagelist')
 			}
 
 			// Reload the page list if moved page had subpages (to get their updated paths)
 			if (getters.visibleSubpages(pageId).length > 0) {
 				await dispatch(GET_PAGES, false)
 			}
-			commit('done', 'pagelist')
 		},
 
 		/**
@@ -522,7 +522,6 @@ export default {
 				)
 				commit(UPDATE_PAGE, response.data.data)
 			} catch (e) {
-
 				commit(UPDATE_PAGE, pageClone)
 				throw e
 			}

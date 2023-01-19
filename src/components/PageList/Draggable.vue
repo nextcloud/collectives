@@ -35,7 +35,7 @@
 <script>
 import draggable from 'vuedraggable'
 import pageMixin from '../../mixins/pageMixin.js'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapMutations, mapState } from 'vuex'
 
 export default {
 	name: 'Draggable',
@@ -75,6 +75,10 @@ export default {
 	},
 
 	computed: {
+		...mapState({
+			isDragoverTargetPage: (state) => state.pages.isDragoverTargetPage,
+		}),
+
 		...mapGetters([
 			'collapsed',
 			'disableDragndropSortOrMove',
@@ -121,6 +125,7 @@ export default {
 			dataTransfer.setData('pageId', dragEl.firstChild.dataset.pageId)
 		},
 
+		// Dragged element changes position
 		onChange(ev) {
 			// Highlight direct parent page when moving between subpages
 			this.setHighlightPageId(null)
@@ -129,6 +134,7 @@ export default {
 			}
 		},
 
+		// Dragged element is moved inside list or between lists
 		onMove(ev, origEv) {
 			this.dragoverPageId = ev.related.dataset.pageId || ev.related.dataset.parentId
 
@@ -141,7 +147,13 @@ export default {
 			}
 		},
 
+		// Dragged element changes position inside a list
 		onUpdate(ev) {
+			// Don't interfere with our custom drag'n'drop implementation from Item.vue
+			if (this.isDragoverTargetPage) {
+				return false
+			}
+
 			// Sorting in one list
 			this.sortableActive = true
 			const pageId = Number(ev.originalEvent.dataTransfer.getData('pageId'))
@@ -150,7 +162,13 @@ export default {
 			this.sortableActive = false
 		},
 
+		// Dragged element is added to another list
 		onAdd(ev) {
+			// Don't interfere with our custom drag'n'drop implementation from Item.vue
+			if (this.isDragoverTargetPage) {
+				return false
+			}
+
 			// Moving from one list to another
 			this.sortableActive = true
 			const pageId = Number(ev.originalEvent.dataTransfer.getData('pageId'))
@@ -166,6 +184,7 @@ export default {
 			this.sortableActive = false
 		},
 
+		// Element stops being dragged
 		onEnd(ev) {
 			this.setHighlightPageId(null)
 		},
