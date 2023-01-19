@@ -36,7 +36,6 @@
 import draggable from 'vuedraggable'
 import pageMixin from '../../mixins/pageMixin.js'
 import { mapGetters, mapMutations } from 'vuex'
-import debounce from 'debounce'
 
 export default {
 	name: 'Draggable',
@@ -105,12 +104,6 @@ export default {
 		},
 	},
 
-	watch: {
-		'dragoverPageId'(val, oldval) {
-			this.onDragoverPage(val, oldval)
-		},
-	},
-
 	methods: {
 		...mapMutations([
 			'setHighlightPageId',
@@ -176,13 +169,6 @@ export default {
 		onEnd(ev) {
 			this.setHighlightPageId(null)
 		},
-
-		onDragoverPage: debounce(function(val, oldval) {
-			if (val) {
-				// Disable automatic expansion of subpages on hover for now. There's still too many UX glitches.
-				// this.expand(val)
-			}
-		}, 1500),
 	},
 }
 </script>
