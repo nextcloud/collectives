@@ -131,14 +131,7 @@ export default {
 		},
 
 		focusEditor() {
-			// `$editor` in Nexcloud 24+, `editor` beforehands
-			if (this.wrapper()?.$editor) {
-				this.wrapper()?.$editor.commands.focus()
-			} else if (this.wrapper()?.tiptap) {
-				this.wrapper()?.tiptap.focus()
-			} else {
-				this.$el.querySelector('.ProseMirror')?.focus()
-			}
+			this.wrapper()?.$editor?.commands?.focus?.()
 		},
 
 		/**
@@ -150,19 +143,18 @@ export default {
 				this.pageContent = this.syncService()._getContent() || ''
 			}
 			this.readMode = false
+
+			// Don't steal the focus from title if a new page
 			if (this.loading('newPage')) {
-				// Don't steal the focus from title if a new page
 				this.done('newPage')
 				return
 			}
+
 			if (this.editMode) {
 				if (this.doc()) {
 					this.previousSaveTimestamp = this.doc().lastSavedVersionTime
 				}
-				// Don't steal focus from title when creating a new page
-				if (!this.loading('newPage')) {
-					this.$nextTick(this.focusEditor())
-				}
+				this.$nextTick(this.focusEditor())
 			}
 			this.$emit('ready')
 		},
@@ -173,7 +165,10 @@ export default {
 				this.previousSaveTimestamp = this.doc().lastSavedVersionTime
 			}
 			this.$nextTick(() => {
-				if (this.scrollTop === 0) {
+				// Focus would scroll back to the top
+				if (this.scrollTop === 0
+					// Don't steal the focus from title if a new page
+					&& !this.loading('newPage')) {
 					this.focusEditor()
 				}
 				document.getElementById('editor')?.scrollTo(0, this.scrollTop)
