@@ -10,7 +10,7 @@
 			<template #icon>
 				<NcLoadingIcon v-if="loading"
 					:size="20" />
-				<CheckIcon v-else-if="editModeAndReady" :size="20" />
+				<CheckIcon v-else-if="editMode" :size="20" />
 				<PencilIcon v-else :size="20" />
 			</template>
 			{{ title }}
@@ -24,7 +24,7 @@
 			<template #icon>
 				<NcLoadingIcon v-if="loading"
 					:size="20" />
-				<CheckIcon v-else-if="editModeAndReady" :size="20" />
+				<CheckIcon v-else-if="editMode" :size="20" />
 				<PencilIcon v-else :size="20" />
 			</template>
 		</NcButton>
@@ -47,7 +47,7 @@ export default {
 	},
 
 	props: {
-		editModeAndReady: {
+		editMode: {
 			type: Boolean,
 			required: true,
 		},
@@ -63,10 +63,10 @@ export default {
 
 	computed: {
 		description() {
-			return this.editModeAndReady ? t('collectives', 'Stop editing') : t('collectives', 'Start editing')
+			return this.editMode ? t('collectives', 'Stop editing') : t('collectives', 'Start editing')
 		},
 		title() {
-			return this.editModeAndReady ? t('collectives', 'Done') : t('collectives', 'Edit')
+			return this.editMode ? t('collectives', 'Done') : t('collectives', 'Edit')
 		},
 	},
 }
