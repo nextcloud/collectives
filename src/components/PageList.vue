@@ -54,29 +54,28 @@
 				</NcActionButton>
 			</NcActions>
 		</div>
-		<div class="page-list">
-			<Draggable v-if="subpages && collectivePage"
+		<div v-if="currentCollective && collectivePage" class="page-list">
+			<Item key="Readme"
+				:to="currentCollectivePath"
+				:page-id="collectivePage.id"
+				:parent-id="0"
+				:title="currentCollective.name"
+				:timestamp="collectivePage.timestamp"
+				:last-user-id="collectivePage.lastUserId"
+				:last-user-display-name="collectivePage.lastUserDisplayName"
+				:emoji="currentCollective.emoji"
+				:level="0"
+				:can-edit="currentCollectiveCanEdit"
+				:is-landing-page="true"
+				:has-template="hasTemplate"
+				:filtered-view="false"
+				class="page-list-landing-page"
+				@click.native="show('details')" />
+			<Draggable v-if="subpages"
 				:list="subpages"
 				:parent-id="collectivePage.id"
 				:disable-sorting="disableSorting">
 				<template #header>
-					<Item v-if="currentCollective"
-						key="Readme"
-						:to="currentCollectivePath"
-						:page-id="collectivePage.id"
-						:parent-id="0"
-						:title="currentCollective.name"
-						:timestamp="collectivePage.timestamp"
-						:last-user-id="collectivePage.lastUserId"
-						:last-user-display-name="collectivePage.lastUserDisplayName"
-						:emoji="currentCollective.emoji"
-						:level="0"
-						:can-edit="currentCollectiveCanEdit"
-						:is-landing-page="true"
-						:has-template="hasTemplate"
-						:filtered-view="false"
-						class="page-list-landing-page page-list-nodrag-item"
-						@click.native="show('details')" />
 					<div v-if="!sortedBy('byOrder')" class="sort-order-container">
 						<span class="sort-order-chip">
 							{{ sortedBy('byTitle') ? t('collectives', 'Sorted by title') : t('collectives', 'Sorted by recently changed') }}
