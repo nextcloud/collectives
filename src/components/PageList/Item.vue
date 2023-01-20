@@ -13,7 +13,7 @@
 		draggable
 		@dragstart="onDragstart"
 		@dragend="onDragend"
-		@dragover="onDragover"
+		@dragover.prevent="onDragover"
 		@dragleave="onDragleave"
 		@drop="onDrop">
 		<div class="app-content-list-item-icon"
@@ -180,8 +180,8 @@ export default {
 		}),
 
 		...mapGetters([
-			'currentPage',
 			'collapsed',
+			'currentPage',
 			'disableDragndropSortOrMove',
 			'pageParent',
 			'pageParents',
@@ -241,6 +241,8 @@ export default {
 		isPotentialDropTarget() {
 			// IMPORTANT: needs to be synchronized with custom drag/drop events in Item.vue
 			return !this.disableDragndropSortOrMove
+				// Ignore if draggedPageId is unset
+				&& this.draggedPageId
 				// Ignore if self is the dragged element
 				&& !this.isDragged
 				// Ignore if in filtered view
@@ -272,10 +274,26 @@ export default {
 			'setDraggedPageId',
 		]),
 
+		toggleCollapsedOrRoute(ev) {
+			if (this.isCollapsible) {
+				event.stopPropagation()
+				this.toggleCollapsed(this.pageId)
+			} else {
+				if (this.currentPage.id !== this.pageId) {
+					this.$router.push(this.to)
+				}
+			}
+		},
+
 		onDragstart(ev) {
 			// Reset isDragoverTargetPage as it might be true after onDrop
 			this.setDragoverTargetPage(false)
-			this.setDraggedPageId(this.pageId)
+
+			// Set as dragged page if not landingpage (allows to move the page)
+			if (!this.isLandingPage) {
+				this.setDraggedPageId(this.pageId)
+			} else {
+			}
 
 			// Set drag data
 			const path = generateUrl(`/apps/collectives${this.to}`)
@@ -288,18 +306,9 @@ export default {
 		},
 
 		onDragend(ev) {
+			this.isHighlightedTarget = false
+			this.setDragoverTargetPage(false)
 			this.setDraggedPageId(null)
-		},
-
-		toggleCollapsedOrRoute(ev) {
-			if (this.isCollapsible) {
-				event.stopPropagation()
-				this.toggleCollapsed(this.pageId)
-			} else {
-				if (this.currentPage.id !== this.pageId) {
-					this.$router.push(this.to)
-				}
-			}
 		},
 
 		onDragover(ev) {
