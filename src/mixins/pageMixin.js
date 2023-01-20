@@ -15,7 +15,7 @@ export default {
 	computed: {
 		...mapState({
 			pages: (state) => state.pages.pages,
-			newPageId: (state) => state.pages.newPage.id,
+			newPageId: (state) => state.pages.newPage?.id,
 		}),
 
 		...mapGetters([
