@@ -248,7 +248,6 @@ export default {
 		 * @param {number} newIndex New index for pageId
 		 */
 		async subpageOrderUpdate(parentId, pageId, newIndex) {
-			console.debug('subpageOrderUpdate', {parentId, pageId, newIndex})
 			const parentPage = this.pages.find(p => (p.id === parentId))
 			const subpageOrder = this.sortedSubpages(parentId)
 				.map(p => p.id)

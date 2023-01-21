@@ -292,7 +292,6 @@ export default {
 			// Set as dragged page if not landingpage (allows to move the page)
 			if (!this.isLandingPage) {
 				this.setDraggedPageId(this.pageId)
-			} else {
 			}
 
 			// Set drag data
