@@ -269,9 +269,9 @@ export default {
 	methods: {
 		...mapMutations([
 			'expand',
-			'toggleCollapsed',
 			'setDragoverTargetPage',
 			'setDraggedPageId',
+			'toggleCollapsed',
 		]),
 
 		toggleCollapsedOrRoute(ev) {

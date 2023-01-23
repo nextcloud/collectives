@@ -71,7 +71,7 @@
 				:filtered-view="false"
 				class="page-list-landing-page"
 				@click.native="show('details')" />
-			<Draggable v-if="subpages"
+			<Draggable v-if="subpages || keptSortable(currentPage.id)"
 				:list="subpages"
 				:parent-id="collectivePage.id"
 				:disable-sorting="disableSorting">
@@ -159,6 +159,7 @@ export default {
 			'currentCollectivePath',
 			'currentPage',
 			'isPublic',
+			'keptSortable',
 			'loading',
 			'visibleSubpages',
 			'sortBy',

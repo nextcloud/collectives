@@ -11,6 +11,8 @@ import {
 	UPDATE_PAGE,
 	DELETE_PAGE_BY_ID,
 	SET_BACKLINKS,
+	KEEP_SORTABLE,
+	CLEAR_SORTABLE,
 } from './mutations.js'
 
 import {
@@ -269,6 +271,10 @@ export default {
 		showTemplates(state) {
 			return state.showTemplates
 		},
+
+		keptSortable(state) {
+			return (pageId) => state.pages.find(p => p.id === pageId)?.keepSortable
+		},
 	},
 
 	mutations: {
@@ -295,6 +301,14 @@ export default {
 
 		[SET_BACKLINKS](state, { pages }) {
 			state.backlinks = pages
+		},
+
+		[KEEP_SORTABLE](state, pageId) {
+			state.pages.find(p => p.id === pageId).keepSortable = true
+		},
+
+		[CLEAR_SORTABLE](state, pageId) {
+			delete state.pages.find(p => p.id === pageId).keepSortable
 		},
 
 		// using camel case name so this works nicely with mapMutations
@@ -452,6 +466,10 @@ export default {
 			// Save a clone of the page to restore in case of errors
 			const pageClone = { ...page }
 
+			// Keep subpage list of old parent page in DOM to prevent a race condition with sortableJS
+			const oldParentId = page.parentId
+			commit(KEEP_SORTABLE, oldParentId)
+
 			// Update page in store first to avoid page order jumping around
 			page.parentId = newParentId
 			commit(UPDATE_PAGE, page)
@@ -464,6 +482,7 @@ export default {
 				commit(UPDATE_PAGE, pageClone)
 				throw e
 			} finally {
+				commit(CLEAR_SORTABLE, oldParentId)
 				commit('done', 'pagelist')
 			}
 
