@@ -286,9 +286,6 @@ export default {
 		},
 
 		onDragstart(ev) {
-			// Reset isDragoverTargetPage as it might be true after onDrop
-			this.setDragoverTargetPage(false)
-
 			// Set as dragged page if not landingpage (allows to move the page)
 			if (!this.isLandingPage) {
 				this.setDraggedPageId(this.pageId)
@@ -329,6 +326,7 @@ export default {
 				this.movePage(this.pageParent(this.draggedPageId), this.pageId, this.draggedPageId, 0)
 			}
 			this.isHighlightedTarget = false
+			this.setDragoverTargetPage(false)
 			this.setDraggedPageId(null)
 		},
 	},

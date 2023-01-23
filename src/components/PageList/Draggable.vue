@@ -147,11 +147,6 @@ export default {
 
 		// Dragged element changes position inside a list
 		onUpdate(ev) {
-			// Don't interfere with our custom drag'n'drop implementation from Item.vue
-			if (this.isDragoverTargetPage) {
-				return false
-			}
-
 			// Sorting in one list
 			this.sortableActive = true
 			const pageId = Number(ev.originalEvent.dataTransfer.getData('pageId'))
@@ -162,11 +157,6 @@ export default {
 
 		// Dragged element is added to another list
 		onAdd(ev) {
-			// Don't interfere with our custom drag'n'drop implementation from Item.vue
-			if (this.isDragoverTargetPage) {
-				return false
-			}
-
 			// Moving from one list to another
 			this.sortableActive = true
 			const pageId = Number(ev.originalEvent.dataTransfer.getData('pageId'))
