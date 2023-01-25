@@ -267,7 +267,8 @@ export default {
 		},
 
 		initEditMode() {
-			this.editMode = !!this.currentCollective.pageMode
+			// Open in edit mode when pageMode is set, for template pages and for new pages
+			this.editMode = !!this.currentCollective.pageMode || this.isTemplatePage || !!this.loading('newPage')
 		},
 
 		startEdit() {

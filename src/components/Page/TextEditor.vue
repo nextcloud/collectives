@@ -209,7 +209,6 @@ export default {
 		async getPageContent() {
 			this.pageContent = await this.fetchPageContent(this.currentPageDavUrl)
 			if (!this.pageContent) {
-				console.debug('emit start-edit in TextEditor.vue')
 				this.$emit('start-edit')
 			}
 		},
