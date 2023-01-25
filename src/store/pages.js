@@ -316,6 +316,12 @@ export default {
 			state.pages = []
 		},
 
+		updateSubpageOrder(state, { parentId, subpageOrder }) {
+			if (state.pages.find(p => p.id === parentId)) {
+				state.pages.find(p => p.id === parentId).subpageOrder = subpageOrder
+			}
+		},
+
 		setPageOrder(state, order) {
 			state.sortBy = order
 		},
@@ -525,6 +531,7 @@ export default {
 		 * @param {Array} page.subpageOrder subpage order for the page
 		 */
 		async [SET_PAGE_SUBPAGE_ORDER]({ commit, getters, state }, { parentId, pageId, subpageOrder }) {
+			commit('load', 'pagelist')
 			const page = { ...state.pages.find(p => p.id === pageId) }
 
 			// Save a clone of the page to restore in case of errors
@@ -543,6 +550,8 @@ export default {
 			} catch (e) {
 				commit(UPDATE_PAGE, pageClone)
 				throw e
+			} finally {
+				commit('done', 'pagelist')
 			}
 		},
 

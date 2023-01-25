@@ -20,6 +20,7 @@ export default {
 
 		...mapGetters([
 			'currentCollective',
+			'currentFileIdPage',
 			'currentPage',
 			'newPagePath',
 			'pagePath',
@@ -34,6 +35,7 @@ export default {
 			'done',
 			'expand',
 			'load',
+			'updateSubpageOrder',
 		]),
 
 		...mapActions({
@@ -129,6 +131,8 @@ export default {
 		 * @param {number} newIndex New index for pageId
 		 */
 		async movePage(oldParentId, newParentId, pageId, newIndex) {
+			const currentPageId = this.currentPage?.id
+
 			// Add page to subpageOrder of new parent first to ensure correct sorting
 			// Don't await response to prevent jumping around
 			this.subpageOrderAdd(newParentId, pageId, newIndex)
@@ -145,8 +149,13 @@ export default {
 				this.done('page')
 			}
 
+			// Redirect to new page path if currentPage got moved
+			if (currentPageId === pageId) {
+				this.$router.replace(this.pagePath(this.currentFileIdPage))
+			}
+
 			// Remove page from subpageOrder of old parent last (ensures correct sorting in case of errors)
-			await this.subpageOrderDelete(oldParentId, pageId)
+			this.subpageOrderDelete(oldParentId, pageId)
 
 			showSuccess(t('collectives', `Page ${this.pageTitle(pageId)} moved to ${this.pageTitle(newParentId)}`))
 		},
@@ -175,32 +184,20 @@ export default {
 			}
 
 			// Delete pageId from parent page subpageOrder
-			await this.subpageOrderDelete(parentId, pageId)
+			this.subpageOrderDelete(parentId, pageId)
 
 			showSuccess(t('collectives', 'Page deleted'))
 		},
 
 		/**
-		 * Delete pageId from subpageOrder of parent page
+		 * Delete pageId from subpageOrder of parent page (only in frontend store)
 		 *
 		 * @param {number} parentId ID of the parent page
 		 * @param {number} pageId ID of the page to remove
 		 */
-		async subpageOrderDelete(parentId, pageId) {
+		subpageOrderDelete(parentId, pageId) {
 			const parentPage = this.pages.find(p => (p.id === parentId))
-			const subpageOrder = parentPage.subpageOrder
-				.filter(id => (id !== pageId))
-
-			try {
-				await this.dispatchSetPageSubpageOrder({
-					parentId: parentPage.parentId,
-					pageId: parentId,
-					subpageOrder,
-				})
-			} catch (e) {
-				showError(t('collectives', 'Could not change page order'))
-				throw e
-			}
+			this.updateSubpageOrder({ parentId, subpageOrder: parentPage.subpageOrder.filter(id => (id !== pageId)) })
 		},
 
 		/**

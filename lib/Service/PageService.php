@@ -688,6 +688,7 @@ class PageService {
 		$this->verifyEditPermissions($collectiveId, $userId);
 		$collectiveFolder = $this->getCollectiveFolder($collectiveId, $userId);
 		$file = $this->nodeHelper->getFileById($collectiveFolder, $id);
+		$oldParentId = $this->getParentPageId($file);
 		if ($this->renamePage($collectiveFolder, $parentId, $file, $title)) {
 			// Refresh the file after it has been renamed
 			$file = $this->nodeHelper->getFileById($collectiveFolder, $id);
@@ -698,6 +699,8 @@ class PageService {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
 
+		// Delete pageId from subpage order of old parent page
+		$this->removeFromSubpageOrder($collectiveId, $oldParentId, $id, $userId);
 		$this->revertSubFolders($collectiveFolder);
 		return $this->getPageByFile($file);
 	}
@@ -777,6 +780,28 @@ class PageService {
 
 	/**
 	 * @param int    $collectiveId
+	 * @param int    $pageId
+	 * @param int    $removeId
+	 * @param string $userId
+	 *
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function removeFromSubpageOrder(int $collectiveId, int $pageId, int $removeId, string $userId): void {
+		$this->verifyEditPermissions($collectiveId, $userId);
+		$collectiveFolder = $this->getCollectiveFolder($collectiveId, $userId);
+		$file = $this->nodeHelper->getFileById($collectiveFolder, $pageId);
+		$pageInfo = $this->getPageByFile($file);
+
+		$newSubpageOrder = SubpageOrderService::remove($pageInfo->getSubpageOrder(), $removeId);
+
+		$pageInfo->setSubpageOrder($newSubpageOrder);
+		$this->updatePage($pageInfo->getId(), $userId, null, $newSubpageOrder);
+	}
+
+	/**
+	 * @param int    $collectiveId
 	 * @param int    $parentId
 	 * @param int    $id
 	 * @param string $userId
@@ -811,6 +836,7 @@ class PageService {
 			throw new NotPermittedException($e->getMessage(), 0, $e);
 		}
 		$this->pageMapper->deleteByFileId($pageInfo->getId());
+		$this->removeFromSubpageOrder($collectiveId, $parentId, $id, $userId);
 
 		$this->revertSubFolders($folder);
 		return $pageInfo;
