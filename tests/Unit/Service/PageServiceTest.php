@@ -446,7 +446,7 @@ class PageServiceTest extends TestCase {
 
 		$this->expectException(NotPermittedException::class);
 		$this->expectExceptionMessage('Not allowed to rename landing page');
-		$this->service->rename($this->collectiveId, 1, 2, 'New title', $this->userId);
+		$this->service->rename($this->collectiveId, 1, 2, 'New title', 0, $this->userId);
 	}
 
 	public function testRenamePageToItselfFails(): void {
@@ -477,6 +477,6 @@ class PageServiceTest extends TestCase {
 
 		$this->expectException(NotPermittedException::class);
 		$this->expectExceptionMessage('Not allowed to move a page to itself');
-		$this->service->rename($this->collectiveId, 1, 1, 'New title', $this->userId);
+		$this->service->rename($this->collectiveId, 1, 1, 'New title', 0, $this->userId);
 	}
 }

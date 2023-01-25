@@ -464,8 +464,9 @@ export default {
 		 * @param {object} page the page
 		 * @param {number} page.newParentId ID of the new parent page
 		 * @param {number} page.pageId ID of the page
+		 * @param {number} page.index index for subpageOrder of parent page
 		 */
-		async [MOVE_PAGE]({ commit, getters, state, dispatch }, { newParentId, pageId }) {
+		async [MOVE_PAGE]({ commit, getters, state, dispatch }, { newParentId, pageId, index }) {
 			commit('load', 'pagelist')
 			const page = { ...state.pages.find(p => p.id === pageId) }
 
@@ -482,7 +483,7 @@ export default {
 
 			const url = getters.pageUrl(newParentId, pageId)
 			try {
-				const response = await axios.put(url)
+				const response = await axios.put(url, { index })
 				commit(UPDATE_PAGE, response.data.data)
 			} catch (e) {
 				commit(UPDATE_PAGE, pageClone)

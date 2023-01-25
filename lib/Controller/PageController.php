@@ -115,13 +115,14 @@ class PageController extends Controller {
 	 * @param int         $parentId
 	 * @param int         $id
 	 * @param string|null $title
+	 * @param int|null    $index
 	 *
 	 * @return DataResponse
 	 */
-	public function rename(int $collectiveId, int $parentId, int $id, ?string $title = null): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $id, $title): array {
+	public function rename(int $collectiveId, int $parentId, int $id, ?string $title = null, ?int $index = 0): DataResponse {
+		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $id, $title, $index): array {
 			$userId = $this->getUserId();
-			$pageInfo = $this->service->rename($collectiveId, $parentId, $id, $title, $userId);
+			$pageInfo = $this->service->rename($collectiveId, $parentId, $id, $title, $index, $userId);
 			return [
 				"data" => $pageInfo
 			];
