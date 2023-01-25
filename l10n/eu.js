@@ -20,6 +20,7 @@ OC.L10N.register(
     "Unshare" : "Ez partekatu",
     "Export or print" : "Esportatu edo inprimatu",
     "Settings" : "Ezarpenak",
+    "Leave collective" : "Utzi kolektiboa",
     "Copied" : "Kopiatuta",
     "Cannot copy" : "Ezin da kopiatu",
     "Copy share link" : "Kopiatu partekatze-esteka",
