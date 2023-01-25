@@ -33,7 +33,7 @@
 					</NcButton>
 				</NcEmojiPicker>
 			</div>
-			<form @submit.prevent="startEdit()">
+			<form @submit.prevent="focusEditor()">
 				<input v-if="landingPage"
 					ref="landingPageTitle"
 					v-tooltip="titleIfTruncated(currentCollective.name)"
@@ -60,7 +60,7 @@
 					@blur="renamePage()">
 			</form>
 			<EditButton v-if="currentCollectiveCanEdit"
-				:edit-mode-and-ready="editMode && !waitForEditor"
+				:edit-mode="editMode"
 				:loading="titleFormButtonIsLoading"
 				:mobile="isMobile"
 				class="edit-button"
@@ -82,20 +82,11 @@
 					@click="toggle('sidebar')" />
 			</NcActions>
 		</h1>
-		<div v-show="showRichText"
-			id="text-container"
-			:key="'text-' + currentPage.id"
-			:aria-label="t('collectives', 'Page content')">
-			<RichText :key="`show-${currentPage.id}`"
-				:as-placeholder="waitForEditor"
-				:current-page="currentPage"
-				:page-content="pageContent" />
-		</div>
-		<Editor v-if="currentCollectiveCanEdit"
-			v-show="showEditor"
-			:key="`edit-${currentPage.id}`"
-			ref="editor"
-			@ready="readyEditor" />
+		<TextEditor :key="`text-editor-${currentPage.id}`"
+			ref="texteditor"
+			:edit-mode="editMode"
+			@ready="readyEditor"
+			@start-edit="startEdit" />
 	</div>
 </template>
 
@@ -106,55 +97,41 @@ import NcEmojiPicker from '@nextcloud/vue/dist/Components/NcEmojiPicker.js'
 import CollectivesIcon from './Icon/CollectivesIcon.vue'
 import EmoticonOutlineIcon from 'vue-material-design-icons/EmoticonOutline.vue'
 import EditButton from './Page/EditButton.vue'
-import Editor from './Page/Editor.vue'
-import RichText from './Page/RichText.vue'
 import PageActionMenu from './Page/PageActionMenu.vue'
 import PageTemplateIcon from './Icon/PageTemplateIcon.vue'
-import { showError } from '@nextcloud/dialogs'
+import TextEditor from './Page/TextEditor.vue'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
-import {
-	RENAME_PAGE,
-	TOUCH_PAGE,
-	GET_PAGES,
-	GET_VERSIONS,
-} from '../store/actions.js'
 import pageMixin from '../mixins/pageMixin.js'
-import pageContentMixin from '../mixins/pageContentMixin.js'
-
-const EditState = { Unset: 0, Edit: 1, Read: 2 }
+import { showError } from '@nextcloud/dialogs'
+import { RENAME_PAGE } from '../store/actions.js'
 
 export default {
 	name: 'Page',
 
 	components: {
+		CollectivesIcon,
+		EditButton,
+		EmoticonOutlineIcon,
 		NcActionButton,
 		NcActions,
 		NcButton,
 		NcEmojiPicker,
-		CollectivesIcon,
-		EditButton,
-		Editor,
-		EmoticonOutlineIcon,
 		NcLoadingIcon,
 		PageActionMenu,
 		PageTemplateIcon,
-		RichText,
+		TextEditor,
 	},
 
 	mixins: [
 		isMobile,
 		pageMixin,
-		pageContentMixin,
 	],
 
 	data() {
 		return {
-			previousSaveTimestamp: null,
-			readMode: true,
+			editMode: false,
+			isEditorReady: false,
 			newTitle: '',
-			editToggle: EditState.Unset,
-			scrollTop: 0,
-			pageContent: '',
 			titleIsTruncated: false,
 		}
 	},
@@ -162,10 +139,8 @@ export default {
 	computed: {
 		...mapGetters([
 			'currentPage',
-			'currentPageDavUrl',
 			'currentCollective',
 			'currentCollectiveCanEdit',
-			'hasVersionsLoaded',
 			'indexPage',
 			'isPublic',
 			'isTemplatePage',
@@ -195,31 +170,6 @@ export default {
 			return parts.join(' - ')
 		},
 
-		showRichText() {
-			return this.readOnly
-		},
-
-		showEditor() {
-			return !this.readOnly
-		},
-
-		waitForEditor() {
-			return this.readMode && this.editMode
-		},
-
-		readOnly() {
-			return !this.currentCollectiveCanEdit || this.readMode || !this.editMode
-		},
-
-		editMode: {
-			get() {
-				return this.editToggle === EditState.Edit
-			},
-			set(val) {
-				this.editToggle = val ? EditState.Edit : EditState.Read
-			},
-		},
-
 		titleIfTruncated() {
 			return (title) => this.titleIsTruncated ? title : null
 		},
@@ -229,7 +179,7 @@ export default {
 		},
 
 		titleFormButtonIsLoading() {
-			return this.loading('pageUpdate') || this.waitForEditor
+			return this.loading('pageUpdate') || (this.editMode && !this.isEditorReady)
 		},
 
 		showingPageEmojiPicker() {
@@ -242,22 +192,10 @@ export default {
 	},
 
 	watch: {
-		'currentPage.id'() {
-			this.hide('outline')
-			this.editToggle = EditState.Unset
-			this.pageContent = ''
-			this.getPageContent()
-			this.scrollTop = 0
-			this.initTitleEntry()
-		},
-		'currentPage.timestamp'() {
-			if (this.currentPage.timestamp > this.previousSaveTimestamp) {
-				this.getPageContent()
-			}
-		},
 		'documentTitle'() {
 			document.title = this.documentTitle
 		},
+
 		'newTitle'() {
 			this.$nextTick(() => {
 				if (this.$refs.title) {
@@ -268,17 +206,23 @@ export default {
 				}
 			})
 		},
+
 		'showingPageEmojiPicker'(val) {
 			if (val === true) {
 				this.openPageEmojiPicker()
 			}
 		},
+
+		'currentPage.id'() {
+			this.initEditMode()
+			this.initTitleEntry()
+		},
 	},
 
 	mounted() {
 		document.title = this.documentTitle
+		this.initEditMode()
 		this.initTitleEntry()
-		this.getPageContent()
 	},
 
 	methods: {
@@ -291,35 +235,12 @@ export default {
 
 		...mapActions({
 			dispatchRenamePage: RENAME_PAGE,
-			dispatchTouchPage: TOUCH_PAGE,
-			dispatchGetPages: GET_PAGES,
-			dispatchGetVersions: GET_VERSIONS,
 		}),
-
-		// this is a method so it does not get cached
-		syncService() {
-			// `$syncService` in Nexcloud 24+, `syncService` beforehands
-			return this.wrapper()?.$syncService ?? this.wrapper()?.syncService
-		},
-
-		// this is a method so it does not get cached
-		doc() {
-			return this.wrapper()?.$data.document
-		},
-
-		// this is a method so it does not get cached
-		wrapper() {
-			return this.$refs.editor?.$children[0].$children[0]
-		},
 
 		initTitleEntry() {
 			if (this.loading('newPage')) {
 				this.newTitle = ''
-				// Older versions of text do not pass on the autofocus prop.
-				// Only focus the title if the editor won't steal the focus.
-				if (!this.wrapper().autofocus) {
-					this.$nextTick(this.focusTitle)
-				}
+				this.$nextTick(this.focusTitle)
 				return
 			} else if (this.loading('newTemplate')) {
 				this.$nextTick(this.focusEditor)
@@ -333,92 +254,33 @@ export default {
 		},
 
 		focusEditor() {
-			// `$editor` in Nexcloud 24+, `editor` beforehands
-			if (this.wrapper()?.$editor) {
-				this.wrapper()?.$editor.commands.focus()
-			} else if (this.wrapper()?.tiptap) {
-				this.wrapper()?.tiptap.focus()
-			} else {
-				this.$el.querySelector('.ProseMirror')?.focus()
-			}
+			this.$refs.texteditor.focusEditor()
 		},
 
-		/**
-		 * Set readMode to false
-		 */
-		readyEditor() {
-			// Set pageContent if it's been empty before
-			if (!this.pageContent) {
-				this.pageContent = this.syncService()._getContent()
-			}
-			this.readMode = false
-			if (this.loading('newPage')) {
-				// Don't steal the focus from title if a new page
-				this.done('newPage')
-				return
-			}
-			if (this.editMode) {
-				if (this.doc()) {
-					this.previousSaveTimestamp = this.doc().lastSavedVersionTime
-				}
-				this.$nextTick(this.focusEditor())
-			}
+		async setPageEmoji(emoji) {
+			await this.setEmoji(this.currentPage.parentId, this.currentPage.id, emoji)
 		},
 
-		/**
-		 * Show editor if edit state isn't set already
-		 */
-		initEdit() {
-			if (this.editToggle === EditState.Unset) {
-				this.startEdit()
-			}
+		openPageEmojiPicker() {
+			this.$refs['page-emoji-picker'].open = true
+			this.hide('pageEmojiPicker')
+		},
+
+		initEditMode() {
+			// Open in edit mode when pageMode is set, for template pages and for new pages
+			this.editMode = !!this.currentCollective.pageMode || this.isTemplatePage || !!this.loading('newPage')
 		},
 
 		startEdit() {
-			this.scrollTop = document.getElementById('text')?.scrollTop || 0
-			if (this.doc()) {
-				this.previousSaveTimestamp = this.doc().lastSavedVersionTime
-			}
 			this.editMode = true
-			this.$nextTick(() => {
-				if (this.scrollTop === 0) {
-					this.focusEditor()
-				}
-				document.getElementById('editor')?.scrollTo(0, this.scrollTop)
-			})
 		},
 
-		async stopEdit() {
-			this.renamePage()
-
-			this.scrollTop = document.getElementById('editor')?.scrollTop || 0
-
-			const pageContent = this.syncService()._getContent()
-			const changed = this.pageContent !== pageContent
-
-			// if there is still no page content we remind the user
-			if (!pageContent) {
-				this.focusEditor()
-				return
-			}
-
-			if (changed) {
-				this.dispatchTouchPage()
-				if (!this.isPublic && this.hasVersionsLoaded) {
-					this.dispatchGetVersions(this.currentPage.id)
-				}
-
-				// Save pending changes in editor
-				// TODO: detect missing connection and display warning
-				this.syncService().save()
-
-				this.pageContent = pageContent
-			}
+		stopEdit() {
 			this.editMode = false
+		},
 
-			this.$nextTick(() => {
-				document.getElementById('text')?.scrollTo(0, this.scrollTop)
-			})
+		readyEditor() {
+			this.isEditorReady = true
 		},
 
 		/**
@@ -438,22 +300,6 @@ export default {
 				showError(t('collectives', 'Could not rename the page'))
 			}
 		},
-
-		async getPageContent() {
-			this.pageContent = await this.fetchPageContent(this.currentPageDavUrl)
-			if (!this.pageContent || this.currentCollective.pageMode === 1) {
-				this.initEdit()
-			}
-		},
-
-		async setPageEmoji(emoji) {
-			await this.setEmoji(this.currentPage.parentId, this.currentPage.id, emoji)
-		},
-
-		openPageEmojiPicker() {
-			this.$refs['page-emoji-picker'].open = true
-			this.hide('pageEmojiPicker')
-		},
 	},
 }
 </script>
@@ -464,23 +310,6 @@ export default {
 
 	form {
 		flex: auto;
-	}
-}
-
-#text-container {
-	display: block;
-	width: 100%;
-	max-width: 100%;
-	left: 0;
-	margin: 0 auto;
-	background-color: var(--color-main-background);
-}
-
-:deep([data-text-el='editor-container'] div.editor) {
-	/* Adjust to page titlebar height */
-	div.text-menubar {
-		margin: auto;
-		top: 59px;
 	}
 }
 </style>

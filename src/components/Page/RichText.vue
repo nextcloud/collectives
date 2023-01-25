@@ -58,12 +58,6 @@ export default {
 	},
 
 	props: {
-		// RichText is rendered as a placeholder
-		// with the spinning wheel where the toolbar would be.
-		asPlaceholder: {
-			type: Boolean,
-			default: false,
-		},
 		currentPage: {
 			type: Object,
 			required: true,
