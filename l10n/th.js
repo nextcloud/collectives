@@ -1,9 +1,9 @@
 OC.L10N.register(
     "collectives",
     {
-    "You are not allowed to share %s" : "คุณยังไม่ได้รับอนุญาตให้แชร์ %s",
+    "You are not allowed to share %s" : "คุณไม่ได้รับอนุญาตให้แชร์ %s",
     "Share link" : "แชร์ลิงก์",
-    "Unshare" : "ยกเลิกการแชร์",
+    "Unshare" : "เลิกแชร์",
     "Settings" : "การตั้งค่า",
     "View" : "มุมมอง",
     "Edit" : "แก้ไข",
@@ -12,7 +12,7 @@ OC.L10N.register(
     "Cancel" : "ยกเลิก",
     "Done" : "เสร็จสิ้น",
     "Title" : "ชื่อเรื่อง",
-    "No other versions available" : "ไม่มีรุ่นอื่น ๆ",
+    "No other versions available" : "ไม่มีรุ่นอื่นที่ใช้งานได้",
     "Versions" : "รุ่น"
 },
 "nplurals=1; plural=0;");
