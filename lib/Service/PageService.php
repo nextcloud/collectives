@@ -8,6 +8,7 @@ use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Model\CollectiveInfo;
 use OCA\Collectives\Model\PageInfo;
+use OCA\NotifyPush\Queue\IQueue;
 use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\InvalidPathException;
@@ -17,6 +18,7 @@ use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\IConfig;
 use OCP\IUserManager;
 use OCP\Lock\LockedException;
+use Psr\Container\ContainerInterface;
 
 class PageService {
 	private const DEFAULT_PAGE_TITLE = 'New Page';
@@ -27,6 +29,8 @@ class PageService {
 	private UserFolderHelper $userFolderHelper;
 	private IUserManager $userManager;
 	private IConfig $config;
+	private ContainerInterface $container;
+	private ?IQueue $pushQueue = null;
 	private ?CollectiveInfo $collectiveInfo = null;
 
 	/**
@@ -36,19 +40,25 @@ class PageService {
 	 * @param UserFolderHelper      $userFolderHelper
 	 * @param IUserManager          $userManager
 	 * @param IConfig               $config
+	 * @param ContainerInterface    $container
 	 */
 	public function __construct(PageMapper $pageMapper,
 								NodeHelper $nodeHelper,
 								CollectiveServiceBase $collectiveService,
 								UserFolderHelper $userFolderHelper,
 								IUserManager $userManager,
-								IConfig  $config) {
+								IConfig  $config,
+								ContainerInterface $container) {
 		$this->pageMapper = $pageMapper;
 		$this->nodeHelper = $nodeHelper;
 		$this->collectiveService = $collectiveService;
 		$this->userFolderHelper = $userFolderHelper;
 		$this->userManager = $userManager;
 		$this->config = $config;
+		try {
+			$this->pushQueue = $container->get(IQueue::class);
+		} catch (\Exception $e) {
+		}
 	}
 
 
@@ -193,6 +203,20 @@ class PageService {
 	}
 
 	/**
+	 * @param string $userId
+	 */
+	private function notifyPush(string $userId): void {
+		if (!$this->pushQueue) {
+			return;
+		}
+
+		$this->pushQueue->push('notify_custom', [
+			'user' => $userId,
+			'message' => 'collectives_pagelist',
+		]);
+	}
+
+	/**
 	 * @param int         $fileId
 	 * @param string      $userId
 	 * @param string|null $emoji
@@ -209,6 +233,7 @@ class PageService {
 			$page->setSubpageOrder($subpageOrder);
 		}
 		$this->pageMapper->updateOrInsert($page);
+		$this->notifyPush($userId);
 	}
 
 	/**

@@ -81,7 +81,7 @@ export default {
 
 	mounted() {
 		this.initCollective()
-		const hasPush = listen('notify_file', this.getPagesBackground.bind(this))
+		const hasPush = listen('collectives_pagelist', this.getPagesBackground.bind(this))
 		if (hasPush) {
 			console.debug('Has notify_push enabled, slowing polling to 15 minutes')
 			this.pollIntervalBase = 15 * 60 * 1000
