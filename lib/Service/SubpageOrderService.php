@@ -4,12 +4,16 @@ namespace OCA\Collectives\Service;
 
 class SubpageOrderService {
 	/**
-	 * @param string $subpageOrder
+	 * @param string|null $subpageOrder
 	 *
 	 * @return array
 	 * @throws NotPermittedException
 	 */
-	private static function toArray(string $subpageOrder): array {
+	private static function toArray(?string $subpageOrder): array {
+		if ($subpageOrder === null) {
+			return [];
+		}
+
 		try {
 			$subpageOrderArray = json_decode($subpageOrder, true, 512, JSON_THROW_ON_ERROR);
 		} catch (\JsonException $e) {
@@ -55,20 +59,19 @@ class SubpageOrderService {
 	}
 
 	/**
-	 * @param string $subpageOrder
-	 * @param int    $pageId
-	 * @param int    $index
+	 * @param string|null $subpageOrder
+	 * @param int         $pageId
+	 * @param int         $index
 	 *
 	 * @return string
 	 * @throws NotPermittedException
 	 */
-	public static function add(string $subpageOrder, int $pageId, int $index = 0): string {
+	public static function add(?string $subpageOrder, int $pageId, int $index = 0): string {
 		$subpageOrderArray = self::toArray($subpageOrder);
 
 		if ($key = array_search($pageId, $subpageOrderArray, true)) {
 			// pageId already in array, remove first
 			unset($subpageOrderArray[$key]);
-			return $subpageOrder;
 		}
 
 		array_splice($subpageOrderArray, $index, 0, $pageId);
@@ -77,19 +80,18 @@ class SubpageOrderService {
 	}
 
 	/**
-	 * @param string $subpageOrder
-	 * @param int    $pageId
+	 * @param string|null $subpageOrder
+	 * @param int         $pageId
 	 *
 	 * @return string
 	 * @throws NotPermittedException
 	 */
-	public static function remove(string $subpageOrder, int $pageId): string {
+	public static function remove(?string $subpageOrder, int $pageId): string {
 		$subpageOrderArray = self::toArray($subpageOrder);
 
-		if (false === $key = array_search($pageId, $subpageOrderArray, true)) {
-			return $subpageOrder;
+		if (false !== $key = array_search($pageId, $subpageOrderArray, true)) {
+			unset($subpageOrderArray[$key]);
 		}
-		unset($subpageOrderArray[$key]);
 
 		return self::fromArray($subpageOrderArray);
 	}
