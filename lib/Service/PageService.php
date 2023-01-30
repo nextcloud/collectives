@@ -735,30 +735,6 @@ class PageService {
 	}
 
 	/**
-	 * @param string|null $subpageOrder
-	 *
-	 * @return void
-	 * @throws NotPermittedException
-	 */
-	public function verifySubpageOrder(?string $subpageOrder): void {
-		if ($subpageOrder) {
-			try {
-				$subpageOrderDecoded = json_decode($subpageOrder, true, 512, JSON_THROW_ON_ERROR);
-				if (!is_array($subpageOrderDecoded)) {
-					throw new NotPermittedException();
-				}
-				foreach ($subpageOrderDecoded as $pageId) {
-					if (!is_int($pageId)) {
-						throw new NotPermittedException();
-					}
-				}
-			} catch (\JsonException | NotPermittedException $e) {
-				throw new NotPermittedException('Invalid format of subpage order');
-			}
-		}
-	}
-
-	/**
 	 * @param int         $collectiveId
 	 * @param int         $parentId
 	 * @param int         $id
@@ -776,7 +752,7 @@ class PageService {
 		$file = $this->nodeHelper->getFileById($folder, $id);
 		$pageInfo = $this->getPageByFile($file);
 
-		$this->verifySubpageOrder($subpageOrder);
+		SubpageOrderService::verify($subpageOrder);
 
 		$pageInfo->setSubpageOrder($subpageOrder);
 		$this->updatePage($pageInfo->getId(), $userId, null, $subpageOrder);
