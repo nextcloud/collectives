@@ -11,6 +11,8 @@ import {
 	UPDATE_PAGE,
 	DELETE_PAGE_BY_ID,
 	SET_BACKLINKS,
+	KEEP_SORTABLE,
+	CLEAR_SORTABLE,
 } from './mutations.js'
 
 import {
@@ -38,6 +40,8 @@ export default {
 		showTemplates: false,
 		backlinks: [],
 		highlightPageId: null,
+		isDragoverTargetPage: false,
+		draggedPageId: null,
 	},
 
 	getters: {
@@ -177,6 +181,10 @@ export default {
 			return pages
 		},
 
+		pageParent: (state) => (pageId) => {
+			return state.pages.find(p => (p.id === pageId)).parentId
+		},
+
 		pageParents: (state, getters) => (pageId) => {
 			const pages = []
 			while (pageId !== getters.collectivePage.id) {
@@ -204,6 +212,14 @@ export default {
 
 		sortBy(state, getters) {
 			return state.sortBy ? state.sortBy : getters.sortByDefault
+		},
+
+		disableDragndropSortOrMove(state, getters) {
+			// Disable if a page list is loading (e.g. when page move is pending)
+			return getters.loading('pagelist')
+				// For now also disable in alternative page order view
+				// TODO: Smoothen UX if allowed to move but not to sort with alternative page orders
+				|| (getters.sortBy !== 'byOrder')
 		},
 
 		newPagePath(state, getters) {
@@ -255,6 +271,10 @@ export default {
 		showTemplates(state) {
 			return state.showTemplates
 		},
+
+		keptSortable(state) {
+			return (pageId) => state.pages.find(p => p.id === pageId)?.keepSortable
+		},
 	},
 
 	mutations: {
@@ -283,9 +303,23 @@ export default {
 			state.backlinks = pages
 		},
 
+		[KEEP_SORTABLE](state, pageId) {
+			state.pages.find(p => p.id === pageId).keepSortable = true
+		},
+
+		[CLEAR_SORTABLE](state, pageId) {
+			delete state.pages.find(p => p.id === pageId).keepSortable
+		},
+
 		// using camel case name so this works nicely with mapMutations
 		unsetPages(state) {
 			state.pages = []
+		},
+
+		updateSubpageOrder(state, { parentId, subpageOrder }) {
+			if (state.pages.find(p => p.id === parentId)) {
+				state.pages.find(p => p.id === parentId).subpageOrder = subpageOrder
+			}
 		},
 
 		setPageOrder(state, order) {
@@ -310,6 +344,14 @@ export default {
 
 		setHighlightPageId(state, pageId) {
 			state.highlightPageId = pageId
+		},
+
+		setDragoverTargetPage(state, bool) {
+			state.isDragoverTargetPage = bool
+		},
+
+		setDraggedPageId(state, pageId) {
+			state.draggedPageId = pageId
 		},
 	},
 
@@ -422,13 +464,18 @@ export default {
 		 * @param {object} page the page
 		 * @param {number} page.newParentId ID of the new parent page
 		 * @param {number} page.pageId ID of the page
+		 * @param {number} page.index index for subpageOrder of parent page
 		 */
-		async [MOVE_PAGE]({ commit, getters, state, dispatch }, { newParentId, pageId }) {
+		async [MOVE_PAGE]({ commit, getters, state, dispatch }, { newParentId, pageId, index }) {
 			commit('load', 'pagelist')
 			const page = { ...state.pages.find(p => p.id === pageId) }
 
 			// Save a clone of the page to restore in case of errors
 			const pageClone = { ...page }
+
+			// Keep subpage list of old parent page in DOM to prevent a race condition with sortableJS
+			const oldParentId = page.parentId
+			commit(KEEP_SORTABLE, oldParentId)
 
 			// Update page in store first to avoid page order jumping around
 			page.parentId = newParentId
@@ -436,18 +483,20 @@ export default {
 
 			const url = getters.pageUrl(newParentId, pageId)
 			try {
-				const response = await axios.put(url)
+				const response = await axios.put(url, { index })
 				commit(UPDATE_PAGE, response.data.data)
 			} catch (e) {
 				commit(UPDATE_PAGE, pageClone)
 				throw e
+			} finally {
+				commit(CLEAR_SORTABLE, oldParentId)
+				commit('done', 'pagelist')
 			}
 
 			// Reload the page list if moved page had subpages (to get their updated paths)
 			if (getters.visibleSubpages(pageId).length > 0) {
 				await dispatch(GET_PAGES, false)
 			}
-			commit('done', 'pagelist')
 		},
 
 		/**
@@ -483,6 +532,7 @@ export default {
 		 * @param {Array} page.subpageOrder subpage order for the page
 		 */
 		async [SET_PAGE_SUBPAGE_ORDER]({ commit, getters, state }, { parentId, pageId, subpageOrder }) {
+			commit('load', 'pagelist')
 			const page = { ...state.pages.find(p => p.id === pageId) }
 
 			// Save a clone of the page to restore in case of errors
@@ -499,9 +549,10 @@ export default {
 				)
 				commit(UPDATE_PAGE, response.data.data)
 			} catch (e) {
-
 				commit(UPDATE_PAGE, pageClone)
 				throw e
+			} finally {
+				commit('done', 'pagelist')
 			}
 		},
 

@@ -24,7 +24,7 @@
 				:level="level+1"
 				:filter-string="filterString"
 				:is-template="true" />
-			<Draggable v-if="subpagesView"
+			<Draggable v-if="subpagesView.length > 0 || keptSortable(page.id)"
 				:list="subpagesView"
 				:parent-id="page.id"
 				:disable-sorting="disableSorting"
@@ -80,6 +80,7 @@ export default {
 			'pageParam',
 			'pagePath',
 			'currentPageIds',
+			'keptSortable',
 			'templatePage',
 			'visibleSubpages',
 			'collapsed',

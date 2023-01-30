@@ -9,7 +9,6 @@
 		:sort="allowSorting"
 		:revert-on-spill="revertOnSpill"
 		class="page-list-dragarea"
-		:remove-clone-on-hide="false"
 		:fallback-tolerance="5"
 		:animation="200"
 		:delay="500"
@@ -17,7 +16,6 @@
 		:touch-start-threshold="3"
 		:invert-swap="true"
 		:swap-threshold="0.65"
-		:fallback-on-body="true"
 		:empty-insert-threshold="4"
 		direction="vertical"
 		:set-data="setData"
@@ -35,8 +33,7 @@
 <script>
 import draggable from 'vuedraggable'
 import pageMixin from '../../mixins/pageMixin.js'
-import { mapGetters, mapMutations } from 'vuex'
-import debounce from 'debounce'
+import { mapGetters, mapMutations, mapState } from 'vuex'
 
 export default {
 	name: 'Draggable',
@@ -76,8 +73,14 @@ export default {
 	},
 
 	computed: {
+		...mapState({
+			isDragoverTargetPage: (state) => state.pages.isDragoverTargetPage,
+		}),
+
 		...mapGetters([
 			'collapsed',
+			'disableDragndropSortOrMove',
+			'loading',
 			'sortBy',
 			'visibleSubpages',
 		]),
@@ -88,24 +91,18 @@ export default {
 		},
 
 		disabled() {
-			// Disable sortable during move/sort operation or if disabled by parent component (e.g. in filtered view)
-			// return this.sortableActive || this.disableSorting
-
-			// Also disable with alternative page orders for now.
-			// TODO: Smoothen UX if allowed to move but not to sort with alternative page orders
-			return this.sortableActive || this.disableSorting || (this.sortBy !== 'byOrder')
+			// IMPORTANT: needs to be synchronized with custom drag/drop events in Item.vue
+			return this.disableDragndropSortOrMove
+				// Disable during Sortable move/sort operation
+				|| this.sortableActive
+				// Disable if disabled by parent component (e.g. in filtered view)
+				|| this.disableSorting
 		},
 
 		revertOnSpill() {
 			// TODO: revertOnSpill on nested sublists is broken with `sort: false`
 			//       see https://github.com/SortableJS/Sortable/issues/2177
 			return this.allowSorting
-		},
-	},
-
-	watch: {
-		'dragoverPageId'(val, oldval) {
-			this.onDragoverPage(val, oldval)
 		},
 	},
 
@@ -126,6 +123,7 @@ export default {
 			dataTransfer.setData('pageId', dragEl.firstChild.dataset.pageId)
 		},
 
+		// Dragged element changes position
 		onChange(ev) {
 			// Highlight direct parent page when moving between subpages
 			this.setHighlightPageId(null)
@@ -134,6 +132,7 @@ export default {
 			}
 		},
 
+		// Dragged element is moved inside list or between lists
 		onMove(ev, origEv) {
 			this.dragoverPageId = ev.related.dataset.pageId || ev.related.dataset.parentId
 
@@ -146,6 +145,7 @@ export default {
 			}
 		},
 
+		// Dragged element changes position inside a list
 		onUpdate(ev) {
 			// Sorting in one list
 			this.sortableActive = true
@@ -155,6 +155,7 @@ export default {
 			this.sortableActive = false
 		},
 
+		// Dragged element is added to another list
 		onAdd(ev) {
 			// Moving from one list to another
 			this.sortableActive = true
@@ -171,16 +172,10 @@ export default {
 			this.sortableActive = false
 		},
 
+		// Element stops being dragged
 		onEnd(ev) {
 			this.setHighlightPageId(null)
 		},
-
-		onDragoverPage: debounce(function(val, oldval) {
-			if (val) {
-				// Disable automatic expansion of subpages on hover for now. There's still too many UX glitches.
-				// this.expand(val)
-			}
-		}, 1500),
 	},
 }
 </script>

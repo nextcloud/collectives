@@ -446,7 +446,7 @@ class PageServiceTest extends TestCase {
 
 		$this->expectException(NotPermittedException::class);
 		$this->expectExceptionMessage('Not allowed to rename landing page');
-		$this->service->rename($this->collectiveId, 1, 2, 'New title', $this->userId);
+		$this->service->rename($this->collectiveId, 1, 2, 'New title', 0, $this->userId);
 	}
 
 	public function testRenamePageToItselfFails(): void {
@@ -460,46 +460,23 @@ class PageServiceTest extends TestCase {
 			->getMock();
 		$file->method('getId')
 			->willReturn(1);
+		$parentFolder = $this->getMockBuilder(Folder::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$parentFolderIndexFile = $this->getMockBuilder(File::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$parentFolderIndexFile->method('getId')
+			->willReturn(2);
+		$parentFolder->method('get')
+			->willReturn($parentFolderIndexFile);
+		$file->method('getParent')
+			->willReturn($parentFolder);
 		$this->nodeHelper->method('getFileById')
 			->willReturn($file);
 
 		$this->expectException(NotPermittedException::class);
 		$this->expectExceptionMessage('Not allowed to move a page to itself');
-		$this->service->rename($this->collectiveId, 1, 1, 'New title', $this->userId);
-	}
-
-	public function testVerifySubpageOrder() {
-		// valid
-		$this->service->verifySubpageOrder(null);
-		$this->service->verifySubpageOrder('[]');
-		$this->service->verifySubpageOrder('[1]');
-		$this->service->verifySubpageOrder('[1, 2]');
-		$this->service->verifySubpageOrder('[1,2,9999]');
-
-		$this->expectException(NotPermittedException::class);
-		$this->expectExceptionMessage('Invalid format of subpage order');
-
-		$this->service->verifySubpageOrder(1);
-	}
-
-	public function testVerifySubpageOrderInvalid() {
-		$this->expectException(NotPermittedException::class);
-		$this->expectExceptionMessage('Invalid format of subpage order');
-
-		$this->service->verifySubpageOrder('string');
-	}
-
-	public function testVerifySubpageOrderInvalid2() {
-		$this->expectException(NotPermittedException::class);
-		$this->expectExceptionMessage('Invalid format of subpage order');
-
-		$this->service->verifySubpageOrder('[string]');
-	}
-
-	public function testVerifySubpageOrderInvalid3() {
-		$this->expectException(NotPermittedException::class);
-		$this->expectExceptionMessage('Invalid format of subpage order');
-
-		$this->service->verifySubpageOrder('{a: b}');
+		$this->service->rename($this->collectiveId, 1, 1, 'New title', 0, $this->userId);
 	}
 }

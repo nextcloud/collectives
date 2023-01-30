@@ -558,7 +558,9 @@ class PageService {
 		$safeTitle = $this->nodeHelper->sanitiseFilename($title, self::DEFAULT_PAGE_TITLE);
 		$filename = NodeHelper::generateFilename($folder, $safeTitle, PageInfo::SUFFIX);
 
-		return $this->newPage($folder, $filename, $userId);
+		$pageInfo = $this->newPage($folder, $filename, $userId);
+		$this->addToSubpageOrder($collectiveId, $parentId, $pageInfo->getId(), 0, $userId);
+		return $pageInfo;
 	}
 
 	/**
@@ -676,6 +678,7 @@ class PageService {
 	 * @param int         $parentId
 	 * @param int         $id
 	 * @param string|null $title
+	 * @param int         $index
 	 * @param string      $userId
 	 *
 	 * @return PageInfo
@@ -684,10 +687,11 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function rename(int $collectiveId, int $parentId, int $id, ?string $title, string $userId): PageInfo {
+	public function rename(int $collectiveId, int $parentId, int $id, ?string $title, int $index, string $userId): PageInfo {
 		$this->verifyEditPermissions($collectiveId, $userId);
 		$collectiveFolder = $this->getCollectiveFolder($collectiveId, $userId);
 		$file = $this->nodeHelper->getFileById($collectiveFolder, $id);
+		$oldParentId = $this->getParentPageId($file);
 		if ($this->renamePage($collectiveFolder, $parentId, $file, $title)) {
 			// Refresh the file after it has been renamed
 			$file = $this->nodeHelper->getFileById($collectiveFolder, $id);
@@ -697,6 +701,10 @@ class PageService {
 		} catch (InvalidPathException | FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
+
+		// Delete pageId from subpage order of old parent page
+		$this->removeFromSubpageOrder($collectiveId, $oldParentId, $id, $userId);
+		$this->addToSubpageOrder($collectiveId, $parentId, $id, $index, $userId);
 
 		$this->revertSubFolders($collectiveFolder);
 		return $this->getPageByFile($file);
@@ -777,6 +785,49 @@ class PageService {
 
 	/**
 	 * @param int    $collectiveId
+	 * @param int    $pageId
+	 * @param int    $addId
+	 * @param int    $index
+	 * @param string $userId
+	 *
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	private function addToSubpageOrder(int $collectiveId, int $pageId, int $addId, int $index, string $userId): void {
+		$collectiveFolder = $this->getCollectiveFolder($collectiveId, $userId);
+		$file = $this->nodeHelper->getFileById($collectiveFolder, $pageId);
+		$pageInfo = $this->getPageByFile($file);
+
+		$newSubpageOrder = SubpageOrderService::add($pageInfo->getSubpageOrder(), $addId, $index);
+
+		$pageInfo->setSubpageOrder($newSubpageOrder);
+		$this->updatePage($pageInfo->getId(), $userId, null, $newSubpageOrder);
+	}
+
+	/**
+	 * @param int    $collectiveId
+	 * @param int    $pageId
+	 * @param int    $removeId
+	 * @param string $userId
+	 *
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	private function removeFromSubpageOrder(int $collectiveId, int $pageId, int $removeId, string $userId): void {
+		$collectiveFolder = $this->getCollectiveFolder($collectiveId, $userId);
+		$file = $this->nodeHelper->getFileById($collectiveFolder, $pageId);
+		$pageInfo = $this->getPageByFile($file);
+
+		$newSubpageOrder = SubpageOrderService::remove($pageInfo->getSubpageOrder(), $removeId);
+
+		$pageInfo->setSubpageOrder($newSubpageOrder);
+		$this->updatePage($pageInfo->getId(), $userId, null, $newSubpageOrder);
+	}
+
+	/**
+	 * @param int    $collectiveId
 	 * @param int    $parentId
 	 * @param int    $id
 	 * @param string $userId
@@ -811,6 +862,7 @@ class PageService {
 			throw new NotPermittedException($e->getMessage(), 0, $e);
 		}
 		$this->pageMapper->deleteByFileId($pageInfo->getId());
+		$this->removeFromSubpageOrder($collectiveId, $parentId, $id, $userId);
 
 		$this->revertSubFolders($folder);
 		return $pageInfo;

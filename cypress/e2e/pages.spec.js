@@ -58,7 +58,7 @@ describe('Page', function() {
 			cy.get('.app-content-list-item').eq(1)
 				.should('contain', '#% special chars')
 			cy.get('.app-content-list-item').last()
-				.should('contain', 'Page Title')
+				.should('contain', 'Day 1')
 		})
 		it('can sort pages by title/timestamp and sort order is persistent', function() {
 			// Select sorting by title
@@ -87,7 +87,7 @@ describe('Page', function() {
 			cy.get('.app-content-list-item').eq(1)
 				.should('contain', '#% special chars')
 			cy.get('.app-content-list-item').last()
-				.should('contain', 'Page Title')
+				.should('contain', 'Day 1')
 		})
 	})
 
