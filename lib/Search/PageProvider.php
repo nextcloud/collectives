@@ -2,6 +2,9 @@
 
 namespace OCA\Collectives\Search;
 
+use OCA\Collectives\AppInfo\Application;
+use OCA\Collectives\Model\CollectiveInfo;
+use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Service\CollectiveHelper;
 use OCA\Collectives\Service\MissingDependencyException;
 use OCA\Collectives\Service\NotFoundException;
@@ -93,11 +96,13 @@ class PageProvider implements IProvider {
 			$pageInfos = $this->pageService->findByString($collective->getId(), $query->getTerm(), $user->getUID());
 			foreach ($pageInfos as $pageInfo) {
 				$pageSearchResults[] = new SearchResultEntry(
-					'',
-					$pageInfo->getTitle(),
-					str_replace('{collective}', $collective->getName(), $this->l10n->t('in Collective {collective}')),
+					$this->urlGenerator->getAbsoluteURL(
+						$this->urlGenerator->imagePath(Application::APP_NAME, 'page.svg')
+					),
+					$this->getPageTitle($pageInfo),
+					$this->l10n->t('in Collective %1$s', [$this->getCollectiveName($collective)]),
 					implode('/', array_filter([
-						$this->urlGenerator->linkToRoute('collectives.start.index'),
+						$this->urlGenerator->linkToRouteAbsolute('collectives.start.index'),
 						$this->pageService->getPageLink($collective->getName(), $pageInfo)
 					])),
 					'icon-collectives-page'
@@ -109,5 +114,29 @@ class PageProvider implements IProvider {
 			$this->getName(),
 			$pageSearchResults
 		);
+	}
+
+	/**
+	 * @param PageInfo $pageInfo
+	 * @return string
+	 */
+	private function getPageTitle(PageInfo $pageInfo): string {
+		$emoji = $pageInfo->getEmoji();
+		if ($emoji) {
+			return $emoji . ' ' . $pageInfo->getTitle();
+		}
+		return $pageInfo->getTitle();
+	}
+
+	/**
+	 * @param CollectiveInfo $collectiveInfo
+	 * @return string
+	 */
+	private function getCollectiveName(CollectiveInfo $collectiveInfo): string {
+		$emoji = $collectiveInfo->getEmoji();
+		if ($emoji) {
+			return $emoji . ' ' . $collectiveInfo->getName();
+		}
+		return $collectiveInfo->getTitle();
 	}
 }
