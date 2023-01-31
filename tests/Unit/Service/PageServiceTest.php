@@ -308,8 +308,8 @@ class PageServiceTest extends TestCase {
 				$filesNotJustMd,
 			);
 
-		self::assertEquals($pageInfos, $this->service->recurseFolder($folder, $this->userId));
-		self::assertEquals($pageInfos, $this->service->recurseFolder($folder, $this->userId));
+		self::assertEquals($pageInfos, $this->service->recurseFolder($this->collectiveId, $folder, $this->userId));
+		self::assertEquals($pageInfos, $this->service->recurseFolder($this->collectiveId, $folder, $this->userId));
 	}
 
 	public function testGetPageLink(): void {

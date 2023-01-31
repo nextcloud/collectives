@@ -203,26 +203,28 @@ class PageService {
 	}
 
 	/**
+	 * @param int    $collectiveId
 	 * @param string $userId
 	 */
-	private function notifyPush(string $userId): void {
+	private function notifyPush(int $collectiveId, string $userId): void {
 		if (!$this->pushQueue) {
 			return;
 		}
 
 		$this->pushQueue->push('notify_custom', [
 			'user' => $userId,
-			'message' => 'collectives_pagelist',
+			'message' => 'collectives_' . $collectiveId . '_pagelist',
 		]);
 	}
 
 	/**
+	 * @param int         $collectiveId
 	 * @param int         $fileId
 	 * @param string      $userId
 	 * @param string|null $emoji
 	 * @param string|null $subpageOrder
 	 */
-	private function updatePage(int $fileId, string $userId, ?string $emoji = null, ?string $subpageOrder = null): void {
+	private function updatePage(int $collectiveId, int $fileId, string $userId, ?string $emoji = null, ?string $subpageOrder = null): void {
 		$page = new Page();
 		$page->setFileId($fileId);
 		$page->setLastUserId($userId);
@@ -233,10 +235,11 @@ class PageService {
 			$page->setSubpageOrder($subpageOrder);
 		}
 		$this->pageMapper->updateOrInsert($page);
-		$this->notifyPush($userId);
+		$this->notifyPush($collectiveId, $userId);
 	}
 
 	/**
+	 * @param int    $collectiveId
 	 * @param Folder $folder
 	 * @param string $filename
 	 * @param string $userId
@@ -245,7 +248,7 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	private function newPage(Folder $folder, string $filename, string $userId): PageInfo {
+	private function newPage(int $collectiveId, Folder $folder, string $filename, string $userId): PageInfo {
 		$hasTemplate = self::folderHasSubPage($folder, PageInfo::TEMPLATE_PAGE_TITLE);
 		try {
 			if ($hasTemplate === 1) {
@@ -274,7 +277,7 @@ class PageService {
 				$this->getParentPageId($newFile),
 				$userId,
 				$userId ? $this->userManager->get($userId)->getDisplayName() : null);
-			$this->updatePage($newFile->getId(), $userId);
+			$this->updatePage($collectiveId, $newFile->getId(), $userId);
 		} catch (FilesNotFoundException | InvalidPathException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
@@ -460,6 +463,7 @@ class PageService {
 	}
 
 	/**
+	 * @param int    $collectiveId
 	 * @param Folder $folder
 	 * @param string $userId
 	 *
@@ -468,7 +472,7 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function recurseFolder(Folder $folder, string $userId): array {
+	public function recurseFolder(int $collectiveId, Folder $folder, string $userId): array {
 		// Find index page or create it if we have subpages, but it doesn't exist
 		try {
 			$indexPage = $this->getPageByFile($this->getIndexPageFile($folder), $folder);
@@ -476,7 +480,7 @@ class PageService {
 			if (!self::folderHasSubPages($folder)) {
 				return [];
 			}
-			$indexPage = $this->newPage($folder, PageInfo::INDEX_PAGE_TITLE, $userId);
+			$indexPage = $this->newPage($collectiveId, $folder, PageInfo::INDEX_PAGE_TITLE, $userId);
 		}
 		$pageInfos = [$indexPage];
 
@@ -485,7 +489,7 @@ class PageService {
 			if ($node instanceof File && self::isPage($node) && !self::isIndexPage($node)) {
 				$pageInfos[] = $this->getPageByFile($node, $folder);
 			} elseif ($node instanceof Folder) {
-				array_push($pageInfos, ...$this->recurseFolder($node, $userId));
+				array_push($pageInfos, ...$this->recurseFolder($collectiveId, $node, $userId));
 			}
 		}
 
@@ -504,7 +508,7 @@ class PageService {
 	public function findAll(int $collectiveId, string $userId): array {
 		$folder = $this->getCollectiveFolder($collectiveId, $userId);
 		try {
-			return $this->recurseFolder($folder, $userId);
+			return $this->recurseFolder($collectiveId, $folder, $userId);
 		} catch (NotPermittedException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
@@ -583,7 +587,7 @@ class PageService {
 		$safeTitle = $this->nodeHelper->sanitiseFilename($title, self::DEFAULT_PAGE_TITLE);
 		$filename = NodeHelper::generateFilename($folder, $safeTitle, PageInfo::SUFFIX);
 
-		$pageInfo = $this->newPage($folder, $filename, $userId);
+		$pageInfo = $this->newPage($collectiveId, $folder, $filename, $userId);
 		$this->addToSubpageOrder($collectiveId, $parentId, $pageInfo->getId(), 0, $userId);
 		return $pageInfo;
 	}
@@ -606,7 +610,7 @@ class PageService {
 		$pageInfo = $this->getPageByFile($file);
 		$pageInfo->setLastUserId($userId);
 		$pageInfo->setLastUserDisplayName($userId ? $this->userManager->get($userId)->getDisplayName() : null);
-		$this->updatePage($pageInfo->getId(), $userId);
+		$this->updatePage($collectiveId, $pageInfo->getId(), $userId);
 		return $pageInfo;
 	}
 
@@ -722,7 +726,7 @@ class PageService {
 			$file = $this->nodeHelper->getFileById($collectiveFolder, $id);
 		}
 		try {
-			$this->updatePage($file->getId(), $userId);
+			$this->updatePage($collectiveId, $file->getId(), $userId);
 		} catch (InvalidPathException | FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
@@ -755,7 +759,7 @@ class PageService {
 		$pageInfo->setLastUserId($userId);
 		$pageInfo->setLastUserDisplayName($userId ? $this->userManager->get($userId)->getDisplayName() : null);
 		$pageInfo->setEmoji($emoji);
-		$this->updatePage($pageInfo->getId(), $userId, $emoji);
+		$this->updatePage($collectiveId, $pageInfo->getId(), $userId, $emoji);
 		return $pageInfo;
 	}
 
@@ -780,7 +784,7 @@ class PageService {
 		SubpageOrderService::verify($subpageOrder);
 
 		$pageInfo->setSubpageOrder($subpageOrder);
-		$this->updatePage($pageInfo->getId(), $userId, null, $subpageOrder);
+		$this->updatePage($collectiveId, $pageInfo->getId(), $userId, null, $subpageOrder);
 		return $pageInfo;
 	}
 
@@ -803,7 +807,7 @@ class PageService {
 		$newSubpageOrder = SubpageOrderService::add($pageInfo->getSubpageOrder(), $addId, $index);
 
 		$pageInfo->setSubpageOrder($newSubpageOrder);
-		$this->updatePage($pageInfo->getId(), $userId, null, $newSubpageOrder);
+		$this->updatePage($collectiveId, $pageInfo->getId(), $userId, null, $newSubpageOrder);
 	}
 
 	/**
@@ -824,7 +828,7 @@ class PageService {
 		$newSubpageOrder = SubpageOrderService::remove($pageInfo->getSubpageOrder(), $removeId);
 
 		$pageInfo->setSubpageOrder($newSubpageOrder);
-		$this->updatePage($pageInfo->getId(), $userId, null, $newSubpageOrder);
+		$this->updatePage($collectiveId, $pageInfo->getId(), $userId, null, $newSubpageOrder);
 	}
 
 	/**
