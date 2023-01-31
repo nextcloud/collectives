@@ -19,6 +19,7 @@ use OCA\Collectives\Service\PageService;
 use OCP\IConfig;
 use OCP\IUserManager;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
 
 class PageServiceTest extends TestCase {
 	private PageMapper $pageMapper;
@@ -68,7 +69,11 @@ class PageServiceTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
-		$this->service = new PageService($this->pageMapper, $this->nodeHelper, $this->collectiveService, $userFolderHelper, $userManager, $this->config);
+		$container = $this->getMockBuilder(ContainerInterface::class)
+			->disableOriginalConstructor()
+			->getMock();
+
+		$this->service = new PageService($this->pageMapper, $this->nodeHelper, $this->collectiveService, $userFolderHelper, $userManager, $this->config, $container);
 	}
 
 	public function testGetFolder(): void {
@@ -303,8 +308,8 @@ class PageServiceTest extends TestCase {
 				$filesNotJustMd,
 			);
 
-		self::assertEquals($pageInfos, $this->service->recurseFolder($folder, $this->userId));
-		self::assertEquals($pageInfos, $this->service->recurseFolder($folder, $this->userId));
+		self::assertEquals($pageInfos, $this->service->recurseFolder($this->collectiveId, $folder, $this->userId));
+		self::assertEquals($pageInfos, $this->service->recurseFolder($this->collectiveId, $folder, $this->userId));
 	}
 
 	public function testGetPageLink(): void {

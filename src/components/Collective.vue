@@ -43,6 +43,7 @@ export default {
 			pollIntervalCurrent: 60 * 1000, // milliseconds
 			/** @type {null|number} */
 			intervalId: null,
+			listenPush: null,
 		}
 	},
 
@@ -68,6 +69,7 @@ export default {
 			this.load('collective')
 			this.unsetPages()
 			this.initCollective()
+			this.initListenPush()
 		},
 		'currentPage.id'() {
 			this.$store.commit(SELECT_VERSION, null)
@@ -81,11 +83,7 @@ export default {
 
 	mounted() {
 		this.initCollective()
-		const hasPush = listen('notify_file', this.getPagesBackground.bind(this))
-		if (hasPush) {
-			console.debug('Has notify_push enabled, slowing polling to 15 minutes')
-			this.pollIntervalBase = 15 * 60 * 1000
-		}
+		this.initListenPush()
 		this._setPollingInterval(this.pollIntervalBase)
 		subscribe('networkOffline', this.handleNetworkOffline)
 		subscribe('networkOnline', this.handleNetworkOnline)
@@ -108,6 +106,14 @@ export default {
 			this.getPages()
 			this.closeNav()
 			this.show('details')
+		},
+
+		initListenPush() {
+			this.listenPush = listen(`collectives_${this.currentCollective.id}_pagelist`, this.getPagesBackground.bind(this))
+			if (this.listenPush) {
+				console.debug('Has notify_push enabled, listening to pagelist updates and slowing polling to 15 minutes')
+				this.pollIntervalBase = 15 * 60 * 1000
+			}
 		},
 
 		handleNetworkOffline() {

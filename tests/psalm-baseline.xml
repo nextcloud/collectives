@@ -36,7 +36,10 @@
     </UndefinedClass>
   </file>
   <file src="lib/Service/PageService.php">
-    <UndefinedClass occurrences="1">
+    <UndefinedClass occurrences="4">
+      <code>$this-&gt;pushQueue</code>
+      <code>?IQueue</code>
+      <code>IQueue</code>
       <code>\OC_Util</code>
     </UndefinedClass>
   </file>
