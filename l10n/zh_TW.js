@@ -8,6 +8,7 @@ OC.L10N.register(
     "Copied" : "已複製",
     "Cannot copy" : "無法複製",
     "Copy share link" : "複製分享連結",
+    "Permissions" : "權限",
     "View" : "檢視",
     "Edit" : "編輯",
     "Members" : "成員",
