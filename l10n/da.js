@@ -139,7 +139,7 @@ OC.L10N.register(
     "Pages that link to this one" : "Sider, der linker til denne",
     "Versions" : "Versioner",
     "Old versions of this page" : "Gamle versioner af denne side",
-    "The content of this folder is best viewed in the Collectives app." : "Indholdet af denne mappe ses bedst i Kollektiv-appen.",
+    "The content of this folder is best viewed in the Collectives app." : "Indholdet af denne mappe vises bedst i Kollektiv-appen.",
     "Open in Collectives" : "Åben i Kollektiver",
     "Come, organize and build shared knowledge!" : "Kom, organiser og opbyg fælles viden!",
     "Link copied to the clipboard." : "Linket er kopieret til udklipsholderen.",
