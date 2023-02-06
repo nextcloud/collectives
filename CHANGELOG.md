@@ -1,5 +1,34 @@
 # Changelog
 
+## 2.3.0 - 2023.02.21
+
+### ✨New
+* 🍾 Support Nextcloud version 26.
+* 🔗 Collective pages link picker. (Thanks Julien Veyssier, #509)
+* 🌟 New dialog with member picker for creating a collective. (#464)
+* 🚪 Add option to leave a collective for non-admins. (#465)
+
+### 🐛Fixes
+* 🖱️ Improve page drag and drop experience. (#423)
+* 💄 Fix title and description of collective not found page.
+* ⚙️ Make sure the collective settings modal is closed after deleting.
+* 💄 Add collective name in browser title in print view. (Thanks @snehar97, #474)
+* 🚀 Improve imports in filelist info box, shrinking the JS file from 4MB to 100KB.
+* ⚙️ Improve settings icon in dark mode. (#546)
+* 📝 Don't focus editor when switching to edit mode.
+* 📘 Don't load emoji picker if collective is readonly.
+* 🖱️ Disable drag'n'drop sorting/moving pages in readonly mode.
+* 🔨 Show page actions menu in readonly mode.
+* 🆕 Fixed broken layout of create collective form. (Thanks Ferdinand Thiessen, #548)
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* 🔌 Update NPM dependencies.
+* 🔌 Update PHP composer dependencies.
+
+
 ## 2.2.1 - 2023.01.08
 
 ### 🐛Fixes
