@@ -7,7 +7,8 @@ use OC\Collaboration\Reference\LinkReferenceProvider;
 use OCA\Collectives\Model\CollectiveInfo;
 use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\PageService;
-use OCP\Collaboration\Reference\IReferenceProvider;
+use OCP\Collaboration\Reference\ADiscoverableReferenceProvider;
+use OCP\Collaboration\Reference\ISearchableReferenceProvider;
 use OCP\Collaboration\Reference\Reference;
 use OC\Collaboration\Reference\ReferenceManager;
 use OCA\Collectives\AppInfo\Application;
@@ -18,7 +19,7 @@ use OCP\IL10N;
 
 use OCP\IURLGenerator;
 
-class PageReferenceProvider implements IReferenceProvider {
+class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider implements ISearchableReferenceProvider {
 	private const RICH_OBJECT_TYPE = Application::APP_NAME . '_page';
 
 	private ?string $userId;
@@ -46,6 +47,43 @@ class PageReferenceProvider implements IReferenceProvider {
 		$this->pageService = $pageService;
 		$this->collectiveService = $collectiveService;
 		$this->dateTimeFormatter = $dateTimeFormatter;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getId(): string {
+		return Application::APP_NAME . '-ref-pages';
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getTitle(): string {
+		return $this->l10n->t('Collective pages');
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getOrder(): int {
+		return 10;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getIconUrl(): string {
+		return $this->urlGenerator->getAbsoluteURL(
+			$this->urlGenerator->imagePath(Application::APP_NAME, 'collectives-dark.svg')
+		);
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getSupportedSearchProviderIds(): array {
+		return ['collectives-pages'];
 	}
 
 	/**
