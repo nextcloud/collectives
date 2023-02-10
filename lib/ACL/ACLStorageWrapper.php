@@ -25,7 +25,7 @@ abstract class ACLStorageWrapper extends Wrapper {
 	 *
 	 * @return bool
 	 */
-	private function checkPermissions(int $permissions): bool {
+	protected function checkPermissions(int $permissions): bool {
 		// if there is no read permissions, then deny everything
 		if ($this->inShare) {
 			// Check if owner of the share is actually allowed to share
