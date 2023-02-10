@@ -227,7 +227,7 @@ describe('Page', function() {
 			cy.getEditor()
 				.should('be.visible')
 				.type('@admi')
-			cy.get('.tippy-content > .items')
+			cy.get('.tippy-content')
 				.contains('admin')
 				.click()
 
