@@ -6,6 +6,8 @@ namespace Unit\ACL;
 
 use OC\Files\Storage\Temporary;
 use OCA\Collectives\ACL\ACLStorageWrapper;
+use OCA\Collectives\ACL\ACLStorageWrapper25;
+use OCA\Collectives\ACL\ACLStorageWrapper26;
 use OCP\Constants;
 use OCP\Files\Storage\IStorage;
 use OCP\IDBConnection;
@@ -27,7 +29,7 @@ class ACLStorageWrapperTest extends TestCase {
 	public function testNoReadImpliesNothing(): void {
 		$this->source->mkdir('foo');
 
-		$storage = new ACLStorageWrapper([
+		$storage = $this->createStorage([
 			'storage' => $this->source,
 			'permissions' => Constants::PERMISSION_ALL - Constants::PERMISSION_READ,
 			'in_share' => false,
@@ -42,7 +44,7 @@ class ACLStorageWrapperTest extends TestCase {
 	public function testInShareWithoutSharingPermissions(): void {
 		$this->source->mkdir('foo');
 
-		$storage = new ACLStorageWrapper([
+		$storage = $this->createStorage([
 			'storage' => $this->source,
 			'permissions' => Constants::PERMISSION_ALL - Constants::PERMISSION_SHARE,
 			'in_share' => true,
@@ -56,7 +58,7 @@ class ACLStorageWrapperTest extends TestCase {
 		$this->source->mkdir('foo');
 		$this->source->touch('file1');
 
-		$storage = new ACLStorageWrapper([
+		$storage = $this->createStorage([
 			'storage' => $this->source,
 			'permissions' => Constants::PERMISSION_READ,
 			'in_share' => false,
@@ -65,12 +67,22 @@ class ACLStorageWrapperTest extends TestCase {
 		$this->assertFalse($storage->rename('file1', 'foo/file1'));
 
 
-		$storage = new ACLStorageWrapper([
+		$storage = $this->createStorage([
 			'storage' => $this->source,
 			'permissions' => Constants::PERMISSION_ALL,
 			'in_share' => false,
 		]);
 
 		$this->assertTrue($storage->rename('file1', 'foo/file1'));
+	}
+
+	private function createStorage($options): ACLStorageWrapper {
+		[$major, $minor, $micro] = \OCP\Util::getVersion();
+		if ($major >= 26) {
+			/** @psalm-suppress UndefinedClass */
+			return new ACLStorageWrapper26($options);
+		} else {
+			return new ACLStorageWrapper25($options);
+		}
 	}
 }
