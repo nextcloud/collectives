@@ -42,6 +42,11 @@ export default {
 
 <style>
 @media print {
+	/* Shrink to body to prevent empty pages */
+	body {
+		height: fit-content;
+	}
+
 	#content-vue {
 		position: static;
 		overflow: visible;
