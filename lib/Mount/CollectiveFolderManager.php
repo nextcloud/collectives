@@ -5,7 +5,8 @@ namespace OCA\Collectives\Mount;
 use OC\Files\Node\LazyFolder;
 use OC\Files\Storage\Wrapper\Jail;
 use OC\Files\Storage\Wrapper\PermissionsMask;
-use OCA\Collectives\ACL\ACLStorageWrapper;
+use OCA\Collectives\ACL\ACLStorageWrapper26;
+use OCA\Collectives\ACL\ACLStorageWrapper25;
 use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
@@ -140,11 +141,21 @@ class CollectiveFolderManager {
 		// apply acl before jail
 		if ($user) {
 			$inShare = $this->getCurrentUID() === null || $this->getCurrentUID() !== $user->getUID();
-			$storage = new ACLStorageWrapper([
-				'storage' => $storage,
-				'permissions' => $permissions,
-				'in_share' => $inShare
-			]);
+			[$major, $minor, $micro] = \OCP\Util::getVersion();
+			if ($major >= 26) {
+				/** @psalm-suppress UndefinedClass */
+				$storage = new ACLStorageWrapper26([
+					'storage' => $storage,
+					'permissions' => $permissions,
+					'in_share' => $inShare
+				]);
+			} else {
+				$storage = new ACLStorageWrapper25([
+					'storage' => $storage,
+					'permissions' => $permissions,
+					'in_share' => $inShare
+				]);
+			}
 			$cacheEntry['permissions'] &= $permissions;
 		}
 

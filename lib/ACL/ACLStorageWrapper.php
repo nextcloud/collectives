@@ -10,7 +10,7 @@ use OC\Files\Cache\Wrapper\CacheWrapper;
 use OC\Files\Storage\Wrapper\Wrapper;
 use OCP\Constants;
 
-class ACLStorageWrapper extends Wrapper {
+abstract class ACLStorageWrapper extends Wrapper {
 	private int $permissions;
 	private bool $inShare;
 
@@ -175,13 +175,6 @@ class ACLStorageWrapper extends Wrapper {
 			return false;
 		}
 		return parent::filetype($path);
-	}
-
-	public function filesize($path): false|int|float {
-		if (!$this->checkPermissions(Constants::PERMISSION_READ)) {
-			return false;
-		}
-		return parent::filesize($path);
 	}
 
 	public function file_exists($path): bool {

@@ -13,6 +13,7 @@
     <projectFiles>
         <directory name="lib" />
         <ignoreFiles>
+            <file name="lib/ACL/ACLStorageWrapper26.php" />
             <directory name="vendor" />
         </ignoreFiles>
     </projectFiles>
