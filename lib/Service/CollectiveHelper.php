@@ -47,14 +47,15 @@ class CollectiveHelper {
 		$collectives = $this->collectiveMapper->findByCircleIds($cids);
 		foreach ($collectives as $c) {
 			$cid = $c->getCircleId();
-			$level = $getLevel ? $this->circleHelper->getLevel($cid, $userId): 0;
+			$circle = $circles[$cid];
+			$level = $getLevel ? $circle->getInitiator()->getLevel(): 0;
 			$userPageOrder = null;
 			if ($getUserSettings) {
 				// TODO: merge queries for collective and user settings into one?
 				$userPageOrder = $this->collectiveUserSettingsMapper->getPageOrder($c->getId(), $userId) ?? Collective::defaultPageOrder;
 			}
 			$collectiveInfos[] = new CollectiveInfo($c,
-				$circles[$cid]->getSanitizedName(),
+				$circle->getSanitizedName(),
 				$level,
 				null,
 				false,
