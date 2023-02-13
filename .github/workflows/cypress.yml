@@ -161,7 +161,7 @@ jobs:
         run: php -S 0.0.0.0:8081 &
 
       - name: Run Cypress
-        uses: cypress-io/github-action@v4
+        uses: cypress-io/github-action@v5
         with:
           record: true
           parallel: true
