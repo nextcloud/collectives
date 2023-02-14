@@ -23,6 +23,7 @@
 						:error="nameIsInvalid"
 						:show-trailing-button="name !== ''"
 						:label="t('collectives', 'Name of the collective')"
+						@keypress.enter.prevent="advanceToMembers"
 						@trailing-button-click="clearName" />
 					<NcSelect v-else
 						ref="circleSelector"
@@ -70,7 +71,7 @@
 					<NcButton type="primary"
 						:disabled="!newCollectiveName || nameIsInvalid"
 						class="modal-buttons-right"
-						@click="state = 1">
+						@click="advanceToMembers">
 						{{ t('collectives', 'Select members') }}
 					</NcButton>
 				</div>
@@ -207,6 +208,12 @@ export default {
 
 		clearName() {
 			this.name = ''
+		},
+
+		advanceToMembers() {
+			if (this.newCollectiveName && !this.nameIsInvalid) {
+				this.state = 1
+			}
 		},
 
 		async getCircles() {
