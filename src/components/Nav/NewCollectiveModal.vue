@@ -29,6 +29,7 @@
 						ref="circleSelector"
 						v-model="circle"
 						class="circle-selector"
+						:append-to-body="false"
 						:options="circles"
 						:placeholder="t('collectives', 'Select a circle...')" />
 					<NcButton v-if="anyCircle && !pickCircle"
@@ -72,7 +73,7 @@
 						:disabled="!newCollectiveName || nameIsInvalid"
 						class="modal-buttons-right"
 						@click="advanceToMembers">
-						{{ t('collectives', 'Select members') }}
+						{{ t('collectives', 'Add people') }}
 					</NcButton>
 				</div>
 			</div>
@@ -313,6 +314,7 @@ export default {
 	align-items: center;
 
 	.button-emoji {
+		width: 44px;
 		font-size: 20px;
 	}
 

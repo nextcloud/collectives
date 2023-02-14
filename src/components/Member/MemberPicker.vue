@@ -11,64 +11,62 @@
 			<MagnifyIcon :size="16" />
 		</NcTextField>
 
+		<!-- Selected members -->
+		<transition-group v-if="hasSelectedMembers"
+			name="zoom"
+			tag="div"
+			class="selected-members">
+			<NcUserBubble v-for="member in selectionSet"
+				:key="member.key || `member-${member.type}-${member.id}`"
+				:margin="0"
+				:size="22"
+				:display-name="member.label"
+				class="selected-member-bubble">
+				<template #title>
+					<a href="#"
+						:title="t('collectives', 'Remove {type} {name}', { type: member.type, name: member.label })"
+						class="selected-member-bubble-delete"
+						@click="deleteMember(member)">
+						<CloseIcon :size="16" />
+					</a>
+				</template>
+			</NcUserBubble>
+		</transition-group>
+
+		<!-- No search yet -->
+		<NcEmptyContent v-if="!searchQuery"
+			:title="t('collectives', 'Search for members to add')"
+			class="empty-content">
+			<template #icon>
+				<MagnifyIcon :size="20" />
+			</template>
+		</NcEmptyContent>
+
 		<!-- Loading -->
-		<NcEmptyContent v-if="membersLoading" :title="t('collectives', 'Loading …')">
+		<NcEmptyContent v-else-if="membersLoading" :title="t('collectives', 'Loading …')">
 			<template #icon>
 				<NcLoadingIcon :size="20" />
 			</template>
 		</NcEmptyContent>
 
-		<template v-else>
-			<!-- Selected members -->
-			<transition-group v-if="hasSelectedMembers"
-				name="zoom"
-				tag="div"
-				class="selected-members">
-				<NcUserBubble v-for="member in selectionSet"
-					:key="member.key || `member-${member.type}-${member.id}`"
-					:margin="0"
-					:size="22"
-					:display-name="member.label"
-					class="selected-member-bubble">
-					<template #title>
-						<a href="#"
-							:title="t('collectives', 'Remove {type} {name}', { type: member.type, name: member.label })"
-							class="selected-member-bubble-delete"
-							@click="deleteMember(member)">
-							<CloseIcon :size="16" />
-						</a>
-					</template>
-				</NcUserBubble>
-			</transition-group>
+		<!-- Searched and picked members -->
+		<div v-else-if="availableEntities.length > 0"
+			class="search-results">
+			<MemberSearchResult v-for="entity in availableEntities"
+				:key="entity.id"
+				:entity="entity"
+				:is-selected="entity.id in selectionSet"
+				@click="onClickMember" />
+		</div>
 
-			<!-- No search yet -->
-			<NcEmptyContent v-if="!searchQuery"
-				:title="t('collectives', 'Search for members to add')"
-				class="empty-content">
-				<template #icon>
-					<MagnifyIcon :size="20" />
-				</template>
-			</NcEmptyContent>
-
-			<!-- Searched and picked members -->
-			<div v-else-if="availableEntities.length > 0"
-				class="search-results">
-				<MemberSearchResult v-for="entity in availableEntities"
-					:key="entity.id"
-					:entity="entity"
-					:is-selected="entity.id in selectionSet"
-					@click="onClickMember" />
-			</div>
-
-			<!-- No results -->
-			<NcEmptyContent v-else
-				:title="t('collectives', 'No results')"
-				class="empty-content">
-				<template #icon>
-					<MagnifyIcon :size="20" />
-				</template>
-			</NcEmptyContent>
-		</template>
+		<!-- No results -->
+		<NcEmptyContent v-else
+			:title="t('collectives', 'No results')"
+			class="empty-content">
+			<template #icon>
+				<MagnifyIcon :size="20" />
+			</template>
+		</NcEmptyContent>
 	</div>
 </template>
 
@@ -177,7 +175,7 @@ export default {
 				console.error(e)
 				showError(t('collectives', 'An error occured while performing the search'))
 				this.membersLoading = false
-				return []
+				return
 			}
 
 			const data = response.data.ocs.data
@@ -260,6 +258,7 @@ export default {
 		},
 
 		onSearch: debounce(function() {
+			this.searchResults = []
 			this.fetchSearchResults()
 		}, 250),
 	},
@@ -282,6 +281,7 @@ export default {
 	flex: 1 0 auto;
 	flex-wrap: wrap;
 	justify-content: flex-start;
+	min-height: 33px;
 	// Half a line height to know there is more lines
 	max-height: 6.5em;
 	padding: 4px 0;

@@ -64,11 +64,18 @@ export default {
 	}
 
 	&-bubble {
-		display: flex;
+		// Overwrite .user-bubble__wrapper styling from NcUserBubble
+		display: flex !important;
 		margin-bottom: 4px;
 
 		:deep(.user-bubble__content) {
+			background-color: var(--color-main-background);
 			align-items: center;
+			width: 100%;
+		}
+
+		:deep(.user-bubble__title) {
+			width: calc(100% - 80px);
 		}
 
 		&-checkmark {
@@ -77,6 +84,7 @@ export default {
 			opacity: 0;
 		}
 
+		// Show checkmark on selected
 		&-selected .member-picker-bubble-checkmark {
 			opacity: 1;
 		}
@@ -88,8 +96,6 @@ export default {
 				background-color: var(--color-primary-light);
 			}
 		}
-
-		// Show checkmark on selected
 	}
 }
 </style>
