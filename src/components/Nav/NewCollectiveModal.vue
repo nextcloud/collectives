@@ -297,7 +297,7 @@ export default {
 	width: 100%;
 	height: 100%;
 	padding: 16px;
-	padding-bottom: 0;
+	padding-bottom: 18px;
 }
 
 .modal-collective-wrapper {
@@ -336,7 +336,9 @@ export default {
 }
 
 .modal-collective-members {
-	height: 100%;
+	// Full height minus search field and buttons
+	// Required for sticky search field and buttons
+	height: calc(100% - 30px - 76px);
 }
 
 .modal-buttons {
@@ -347,7 +349,6 @@ export default {
 	width: 100%;
 	background-color: var(--color-main-background);
 	box-shadow: 0 -10px 5px var(--color-main-background);
-	padding: 16px 0;
 	// Sticky to the bottom
 	position: sticky;
 	bottom: 0;
