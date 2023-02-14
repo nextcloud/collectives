@@ -47,12 +47,21 @@
 						</template>
 					</NcButton>
 				</div>
-				<div v-if="nameError" class="modal-collective-name-error">
-					<AlertCircleOutlineIcon :size="16" />
-					<label for="collective-name" class="modal-collective-name-error-label">
-						{{ nameError }}
-					</label>
+				<div class="modal-collective-name-error-placeholder">
+					<div v-if="nameError" class="modal-collective-name-error">
+						<AlertCircleOutlineIcon :size="16" />
+						<label for="collective-name" class="modal-collective-name-error-label">
+							{{ nameError }}
+						</label>
+					</div>
 				</div>
+
+				<NcEmptyContent :title="t('collectives', 'Enter the new collective name or pick a circle')"
+					class="empty-content">
+					<template #icon>
+						<CollectivesIcon :size="20" />
+					</template>
+				</NcEmptyContent>
 
 				<div class="modal-buttons">
 					<NcButton @click="onClose">
@@ -97,10 +106,11 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { ADD_MEMBERS_TO_CIRCLE, GET_CIRCLES, NEW_COLLECTIVE } from '../../store/actions.js'
 import displayError from '../../util/displayError.js'
-import { NcButton, NcEmojiPicker, NcModal, NcSelect, NcTextField } from '@nextcloud/vue'
+import { NcButton, NcEmojiPicker, NcEmptyContent, NcModal, NcSelect, NcTextField } from '@nextcloud/vue'
 import AlertCircleOutlineIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
-import CloseIcon from 'vue-material-design-icons/Close.vue'
 import CirclesIcon from '../Icon/CirclesIcon.vue'
+import CloseIcon from 'vue-material-design-icons/Close.vue'
+import CollectivesIcon from '../Icon/CollectivesIcon.vue'
 import MemberPicker from '../Member/MemberPicker.vue'
 import { showError } from '@nextcloud/dialogs'
 
@@ -109,11 +119,13 @@ export default {
 
 	components: {
 		AlertCircleOutlineIcon,
-		CloseIcon,
 		CirclesIcon,
+		CloseIcon,
+		CollectivesIcon,
 		MemberPicker,
 		NcButton,
 		NcEmojiPicker,
+		NcEmptyContent,
 		NcModal,
 		NcSelect,
 		NcTextField,
@@ -300,6 +312,10 @@ export default {
 	.circle-selector {
 		width: 100%;
 	}
+}
+
+.modal-collective-name-error-placeholder {
+	min-height: 24px;
 }
 
 .modal-collective-name-error {
