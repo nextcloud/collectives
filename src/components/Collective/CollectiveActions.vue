@@ -50,9 +50,11 @@
 			</template>
 		</NcActionLink>
 		<NcActionButton v-if="isCollectiveAdmin(collective)"
-			icon="icon-settings"
 			:close-after-click="true"
 			@click="openCollectiveSettings()">
+			<template #icon>
+				<CogIcon :size="16" />
+			</template>
 			{{ t('collectives', 'Settings') }}
 		</NcActionButton>
 		<NcActionButton v-if="!isCollectiveAdmin(collective)"
@@ -71,9 +73,10 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { NcActionButton, NcActionCheckbox, NcActionLink, NcActionSeparator, NcLoadingIcon } from '@nextcloud/vue'
 import { showError, showUndo } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
-import ContentPasteIcon from 'vue-material-design-icons/ContentPaste.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 import CirclesIcon from '../Icon/CirclesIcon.vue'
+import CogIcon from 'vue-material-design-icons/Cog.vue'
+import ContentPasteIcon from 'vue-material-design-icons/ContentPaste.vue'
 import DownloadIcon from 'vue-material-design-icons/Download.vue'
 import LogoutIcon from 'vue-material-design-icons/Logout.vue'
 import {
@@ -92,10 +95,11 @@ export default {
 
 	components: {
 		CirclesIcon,
-		ContentPasteIcon,
 		CheckIcon,
-		LogoutIcon,
+		CogIcon,
+		ContentPasteIcon,
 		DownloadIcon,
+		LogoutIcon,
 		NcActionButton,
 		NcActionCheckbox,
 		NcActionLink,
