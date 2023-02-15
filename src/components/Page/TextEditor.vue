@@ -165,12 +165,6 @@ export default {
 				this.previousSaveTimestamp = this.doc().lastSavedVersionTime
 			}
 			this.$nextTick(() => {
-				// Focus would scroll back to the top
-				if (this.scrollTop === 0
-					// Don't steal the focus from title if a new page
-					&& !this.loading('newPage')) {
-					this.focusEditor()
-				}
 				document.getElementById('editor')?.scrollTo(0, this.scrollTop)
 			})
 		},
