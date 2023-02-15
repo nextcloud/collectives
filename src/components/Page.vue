@@ -1,6 +1,7 @@
 <template>
 	<div>
 		<h1 id="titleform" class="page-title">
+			<!-- Page emoji or icon -->
 			<div class="page-title-icon"
 				:class="{ 'mobile': isMobile }">
 				<!-- Landing page: collective emoji or CollectivesIcon -->
@@ -47,6 +48,8 @@
 						fill-color="var(--color-text-maxcontrast)" />
 				</template>
 			</div>
+
+			<!-- Page title -->
 			<form @submit.prevent="focusEditor()">
 				<input v-if="landingPage"
 					ref="landingPageTitle"
@@ -73,14 +76,17 @@
 					:disabled="!currentCollectiveCanEdit"
 					@blur="renamePage()">
 			</form>
+
+			<!-- Edit button if editable -->
 			<EditButton v-if="currentCollectiveCanEdit"
 				:edit-mode="editMode"
 				:loading="titleFormButtonIsLoading"
 				:mobile="isMobile"
 				class="edit-button"
 				@click="editMode ? stopEdit() : startEdit()" />
-			<PageActionMenu v-if="currentCollectiveCanEdit"
-				:show-files-link="!isPublic"
+
+			<!-- Actions menu -->
+			<PageActionMenu :show-files-link="!isPublic"
 				:page-id="currentPage.id"
 				:parent-id="currentPage.parentId"
 				:timestamp="currentPage.timestamp"
@@ -88,6 +94,8 @@
 				:last-user-display-name="currentPage.lastUserDisplayName"
 				:is-landing-page="landingPage"
 				:is-template="isTemplatePage" />
+
+			<!-- Sidebar toggle -->
 			<NcActions v-if="!showing('sidebar') && !isMobile">
 				<NcActionButton icon="icon-menu-sidebar"
 					:aria-label="t('collectives', 'Open page sidebar')"

@@ -33,7 +33,7 @@
 				:close-after-click="true">
 				{{ t('collectives', 'Show in Files') }}
 			</NcActionLink>
-			<NcActionButton v-if="!isTemplate && !isLandingPage"
+			<NcActionButton v-if="currentCollectiveCanEdit && !isTemplate && !isLandingPage"
 				:close-after-click="true"
 				@click.native="show('details')"
 				@click="gotoPageEmojiPicker">
@@ -42,7 +42,7 @@
 				</template>
 				{{ setEmojiString }}
 			</NcActionButton>
-			<NcActionButton v-if="!isTemplate"
+			<NcActionButton v-if="currentCollectiveCanEdit && !isTemplate"
 				:close-after-click="true"
 				class="action-button-template"
 				@click.native="show('details')"
@@ -52,7 +52,7 @@
 				</template>
 				{{ editTemplateString }}
 			</NcActionButton>
-			<NcActionButton v-if="!isLandingPage"
+			<NcActionButton v-if="currentCollectiveCanEdit && !isLandingPage"
 				:close-after-click="true"
 				@click="onOpenMoveModal">
 				<template #icon>
@@ -60,7 +60,7 @@
 				</template>
 				{{ t('collectives', 'Move page') }}
 			</NcActionButton>
-			<NcActionButton v-if="!isLandingPage"
+			<NcActionButton v-if="currentCollectiveCanEdit && !isLandingPage"
 				:close-after-click="true"
 				:disabled="hasSubpages"
 				@click="deletePage(parentId, pageId)">
@@ -172,6 +172,7 @@ export default {
 	computed: {
 		...mapGetters([
 			'currentCollective',
+			'currentCollectiveCanEdit',
 			'loading',
 			'pagesTreeWalk',
 			'showing',
