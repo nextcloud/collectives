@@ -38,7 +38,7 @@ export default {
 	background-color: var(--color-main-background-translucent);
 	backdrop-filter: var(--background-blur);
 	height: 44px;
-	padding: 12px 8px 4px 14px;
+	padding: 3px 8px 3px 14px;
 	display: flex;
 	max-width: 670px;
 	margin: auto;
