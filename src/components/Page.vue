@@ -3,12 +3,15 @@
 		<h1 id="titleform" class="page-title">
 			<div class="page-title-icon"
 				:class="{ 'mobile': isMobile }">
+				<!-- Landing page: collective emoji or CollectivesIcon -->
 				<div v-if="landingPage && currentCollective.emoji">
 					{{ currentCollective.emoji }}
 				</div>
 				<CollectivesIcon v-else-if="landingPage" :size="pageTitleIconSize" fill-color="var(--color-text-maxcontrast)" />
 				<PageTemplateIcon v-else-if="isTemplatePage" :size="pageTitleIconSize" fill-color="var(--color-text-maxcontrast)" />
-				<NcEmojiPicker v-else
+
+				<!-- Emoji picker if editable -->
+				<NcEmojiPicker v-else-if="currentCollectiveCanEdit"
 					ref="page-emoji-picker"
 					:show-preview="true"
 					@select="setPageEmoji">
@@ -32,6 +35,17 @@
 						</template>
 					</NcButton>
 				</NcEmojiPicker>
+
+				<!-- Page emoji or PageIcon if not editable -->
+				<template v-else>
+					<div v-if="currentPage.emoji">
+						{{ currentPage.emoji }}
+					</div>
+					<EmoticonOutlineIcon v-else
+						class="emoji-picker-emoticon"
+						:size="pageTitleIconSize"
+						fill-color="var(--color-text-maxcontrast)" />
+				</template>
 			</div>
 			<form @submit.prevent="focusEditor()">
 				<input v-if="landingPage"
