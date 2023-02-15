@@ -228,11 +228,16 @@ export default {
 	background-color: var(--color-main-background);
 }
 
-:deep([data-text-el='editor-container'] div.editor) {
-	/* Adjust to page titlebar height */
-	div.text-menubar {
-		margin: auto;
-		top: 59px;
+:deep([data-text-el='editor-container']) {
+	/* Remove scrolling mechanism from editor-container, required for menubar stickyness */
+	overflow: visible;
+
+	div.editor {
+		/* Adjust to page titlebar height */
+		div.text-menubar {
+			margin: auto;
+			top: 59px;
+		}
 	}
 }
 </style>
