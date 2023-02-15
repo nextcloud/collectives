@@ -137,8 +137,9 @@ Cypress.Commands.add('seedCollective', (name) => {
  */
 Cypress.Commands.add('createCollective', (name) => {
 	cy.log(`Creating collective ${name}`)
-	cy.get('a [title="Create new collective"]').click()
-	cy.get('.collective-create input[type="text"]').type(`${name}{enter}`)
+	cy.get('a [title="New collective"]').click()
+	cy.get('.collective-name input[type="text"]').type(`${name}{enter}`)
+	cy.get('button').contains('Create').click()
 })
 
 /**

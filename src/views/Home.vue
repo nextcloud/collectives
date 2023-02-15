@@ -7,7 +7,7 @@
 			</template>
 			<template #action>
 				<NcButton :aria-label="t('collectives', 'Create new collective')" :type="buttonType" @click="newCollective">
-					{{ t('collectives', 'Create new collective') }}
+					{{ t('collectives', 'New collective') }}
 				</NcButton>
 			</template>
 		</NcEmptyContent>
