@@ -32,9 +32,10 @@ describe('Read-only collective', function() {
 	})
 
 	describe('in read-only collective', function() {
-		before(function() {
+		beforeEach(function() {
 			cy.login('bob', { route: '/apps/collectives/PermissionCollective/SecondPage' })
 		})
+
 		it('not able to edit collective', function() {
 			cy.get('#titleform input').should('have.attr', 'disabled')
 			cy.get('button.titleform-button').should('not.exist')
@@ -43,6 +44,13 @@ describe('Read-only collective', function() {
 				.should('not.exist')
 			cy.getEditor()
 				.should('not.exist')
+		})
+
+		it('actions menu with outline toggle is there', function() {
+			cy.get('#titleform button.action-item__menutoggle')
+				.click()
+			cy.get('button.action-button')
+				.contains('Show outline')
 		})
 	})
 })
