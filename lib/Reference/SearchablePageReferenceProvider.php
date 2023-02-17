@@ -3,8 +3,8 @@
 namespace OCA\Collectives\Reference;
 
 use DateTime;
+use Exception;
 use OC\Collaboration\Reference\LinkReferenceProvider;
-use OCA\Collectives\Model\CollectiveInfo;
 use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\PageService;
 use OCP\Collaboration\Reference\ADiscoverableReferenceProvider;
@@ -13,11 +13,11 @@ use OCP\Collaboration\Reference\Reference;
 use OC\Collaboration\Reference\ReferenceManager;
 use OCA\Collectives\AppInfo\Application;
 use OCP\Collaboration\Reference\IReference;
-use OCP\Files\File;
 use OCP\IDateTimeFormatter;
 use OCP\IL10N;
 
 use OCP\IURLGenerator;
+use Throwable;
 
 class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider implements ISearchableReferenceProvider {
 	private const RICH_OBJECT_TYPE = Application::APP_NAME . '_page';
@@ -110,58 +110,53 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 	 */
 	public function resolveReference(string $referenceText): ?IReference {
 		if ($this->matchReference($referenceText)) {
-			$pageInfo = $this->getPagePathFromDirectLink($referenceText);
-			if ($pageInfo !== null) {
-				// TODO should it work if the fileId GET param is not there?
-				if (isset($pageInfo['fileId'])) {
-					$pageFileId = $pageInfo['fileId'];
-					$collectiveName = $pageInfo['collectiveName'];
-					$collectives = $this->collectiveService->getCollectives($this->userId);
-					$collectives = array_filter($collectives, static function (CollectiveInfo $c) use ($collectiveName) {
-						return $c->getName() === $collectiveName;
-					});
-					if (!empty($collectives)) {
-						$collective = end($collectives);
-						$pageInfo['collective'] = $collective;
-						$collectiveFolder = $this->pageService->getCollectiveFolder($collective->getId(), $this->userId);
-						$pageFile = $collectiveFolder->getById($pageFileId);
-						if (!empty($pageFile) && isset($pageFile[0]) && $pageFile[0] instanceof File) {
-							$pageFile = $pageFile[0];
-							$pageInfo['page'] = $this->pageService->findByFile($collective->getId(), $pageFile, $this->userId);
-
-							$reference = new Reference($referenceText);
-
-							$reference->setTitle($pageInfo['page']->getEmoji() . ' ' . $pageInfo['page']->getTitle());
-
-							$description = $this->l10n->t('In collective %1$s %2$s', [$collective->getEmoji(), $collective->getName()])
-								. ' - ' . $pageInfo['page']->getFilePath();
-							$reference->setDescription($description);
-							$pageInfo['description'] = $description;
-
-							$date = new DateTime();
-							$date->setTimestamp($pageInfo['page']->getTimestamp());
-							$formattedRelativeDate = $this->dateTimeFormatter->formatTimeSpan($date);
-							$pageInfo['lastEdited'] = $this->l10n->t('Last edition %1$s', [$formattedRelativeDate]);
-
-							$imageUrl = $this->urlGenerator->getAbsoluteURL(
-								$this->urlGenerator->imagePath(Application::APP_NAME, 'page.svg')
-							);
-							$reference->setImageUrl($imageUrl);
-
-							$pageInfo['link'] = $referenceText;
-							$reference->setUrl($referenceText);
-
-							$reference->setRichObject(
-								self::RICH_OBJECT_TYPE,
-								$pageInfo,
-							);
-							return $reference;
-						}
-					}
-				}
+			$pageReferenceInfo = $this->getPagePathFromDirectLink($referenceText);
+			// TODO should it work if the fileId GET param is not there?
+			if (!$pageReferenceInfo || !isset($pageReferenceInfo['fileId'])) {
+				// fallback to opengraph if it matches but somehow we can't resolve
+				return $this->linkReferenceProvider->resolveReference($referenceText);
 			}
-			// fallback to opengraph if it matches but somehow we can't resolve
-			return $this->linkReferenceProvider->resolveReference($referenceText);
+
+			$pageFileId = $pageReferenceInfo['fileId'];
+			$collectiveName = $pageReferenceInfo['collectiveName'];
+			try {
+				$collective = $this->collectiveService->findCollectiveByName($this->userId, $collectiveName);
+				$page = $this->pageService->findByFileId($collective->getId(), $pageFileId, $this->userId);
+			} catch (Exception | Throwable $e) {
+				// fallback to opengraph if it matches but somehow we can't resolve
+				return $this->linkReferenceProvider->resolveReference($referenceText);
+			}
+			$pageReferenceInfo['collective'] = $collective;
+			$pageReferenceInfo['page'] = $page;
+
+			$reference = new Reference($referenceText);
+			$pageEmoji = $page->getEmoji();
+			$refTitle = $pageEmoji ? $pageEmoji . ' ' . $page->getTitle() : $page->getTitle();
+			$reference->setTitle($refTitle);
+
+			$description = $this->l10n->t('In collective %1$s', [$this->collectiveService->getCollectiveNameWithEmoji($collective)])
+				. ' - ' . $page->getFilePath();
+			$reference->setDescription($description);
+			$pageReferenceInfo['description'] = $description;
+
+			$date = new DateTime();
+			$date->setTimestamp($page->getTimestamp());
+			$formattedRelativeDate = $this->dateTimeFormatter->formatTimeSpan($date);
+			$pageReferenceInfo['lastEdited'] = $this->l10n->t('Last edition %1$s', [$formattedRelativeDate]);
+
+			$imageUrl = $this->urlGenerator->getAbsoluteURL(
+				$this->urlGenerator->imagePath(Application::APP_NAME, 'page.svg')
+			);
+			$reference->setImageUrl($imageUrl);
+
+			$pageReferenceInfo['link'] = $referenceText;
+			$reference->setUrl($referenceText);
+
+			$reference->setRichObject(
+				self::RICH_OBJECT_TYPE,
+				$pageReferenceInfo,
+			);
+			return $reference;
 		}
 
 		return null;

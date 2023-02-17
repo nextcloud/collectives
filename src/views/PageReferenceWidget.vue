@@ -26,7 +26,7 @@
 				class="page-emoji">
 				{{ emoji }}
 			</span>
-			<CollectivesIcon v-else
+			<PageIcon v-else
 				:size="50" />
 		</div>
 		<div class="collective-page--info">
@@ -50,14 +50,14 @@
 </template>
 
 <script>
-import CollectivesIcon from '../components/Icon/CollectivesIcon.vue'
+import PageIcon from '../components/Icon/PageIcon.vue'
 import NcUserBubble from '@nextcloud/vue/dist/Components/NcUserBubble.js'
 
 export default {
 	name: 'PageReferenceWidget',
 
 	components: {
-		CollectivesIcon,
+		PageIcon,
 		NcUserBubble,
 	},
 
@@ -78,7 +78,7 @@ export default {
 
 	computed: {
 		emoji() {
-			return this.richObject.page.emoji ?? this.richObject.collective.emoji ?? null
+			return this.richObject.page.emoji
 		},
 	},
 }

@@ -3,6 +3,7 @@
 namespace OCA\Collectives\Search;
 
 use OCA\Collectives\Service\CollectiveHelper;
+use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\MissingDependencyException;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
@@ -20,6 +21,7 @@ class CollectiveProvider implements IProvider {
 	private IURLGenerator $urlGenerator;
 	private CollectiveHelper $collectiveHelper;
 	private IAppManager $appManager;
+	private CollectiveService $collectiveService;
 
 	/**
 	 * CollectiveProvider constructor.
@@ -32,11 +34,13 @@ class CollectiveProvider implements IProvider {
 	public function __construct(IL10N $l10n,
 								IURLGenerator $urlGenerator,
 								CollectiveHelper $collectiveHelper,
+								CollectiveService $collectiveService,
 								IAppManager $appManager) {
 		$this->l10n = $l10n;
 		$this->urlGenerator = $urlGenerator;
 		$this->collectiveHelper = $collectiveHelper;
 		$this->appManager = $appManager;
+		$this->collectiveService = $collectiveService;
 	}
 
 	/**
@@ -90,7 +94,7 @@ class CollectiveProvider implements IProvider {
 			}
 			$collectiveSearchResults[] = new SearchResultEntry(
 				'',
-				$collective->getName(),
+				$this->collectiveService->getCollectiveNameWithEmoji($collective),
 				'',
 				$this->urlGenerator->linkToRoute('collectives.start.index') . '/' . rawurlencode($collective->getName()),
 				'icon-collectives'
