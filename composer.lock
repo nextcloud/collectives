@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "teamtnt/tntsearch",
-            "version": "v3.0.0",
+            "version": "v3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/teamtnt/tntsearch.git",
-                "reference": "645f20cadf499d7a51db9f99df173afefecc8080"
+                "reference": "161d3368ac38c042b42f4002eda3b4698ccd3ca6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/teamtnt/tntsearch/zipball/645f20cadf499d7a51db9f99df173afefecc8080",
-                "reference": "645f20cadf499d7a51db9f99df173afefecc8080",
+                "url": "https://api.github.com/repos/teamtnt/tntsearch/zipball/161d3368ac38c042b42f4002eda3b4698ccd3ca6",
+                "reference": "161d3368ac38c042b42f4002eda3b4698ccd3ca6",
                 "shasum": ""
             },
             "require": {
@@ -66,7 +66,7 @@
             ],
             "support": {
                 "issues": "https://github.com/teamtnt/tntsearch/issues",
-                "source": "https://github.com/teamtnt/tntsearch/tree/v3.0.0"
+                "source": "https://github.com/teamtnt/tntsearch/tree/v3.1.0"
             },
             "funding": [
                 {
@@ -82,7 +82,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2022-08-02T14:00:54+00:00"
+            "time": "2023-02-16T07:12:52+00:00"
         }
     ],
     "packages-dev": [
