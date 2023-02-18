@@ -60,7 +60,7 @@
     "eslint-plugin-cypress": "^2.12.1",
     "eslint-webpack-plugin": "^4.0.0",
     "jest": "^29.4.3",
-    "stylelint-webpack-plugin": "^4.0.0"
+    "stylelint-webpack-plugin": "^4.1.0"
   },
   "overrides": {
     "sortablejs": "$sortablejs"
