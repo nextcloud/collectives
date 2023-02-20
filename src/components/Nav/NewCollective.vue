@@ -33,51 +33,65 @@
 			</NcActionButton>
 		</template>
 	</NcAppNavigationItem>
-	<div v-else class="collective-create">
-		<form v-show="editing" @submit.prevent.stop="createCollective">
-			<NcEmojiPicker :show-preview="true" @select="addEmoji">
-				<NcButton type="tertiary"
-					:aria-label="t('collectives', 'Select emoji for collective')"
-					:title="t('collectives', 'Select emoji')"
-					class="button-emoji"
-					@click.prevent>
-					{{ emoji }}
-				</NcButton>
-			</NcEmojiPicker>
+	<form v-else
+		v-show="editing"
+		class="collective-create"
+		@submit.prevent.stop="createCollective">
+		<NcEmojiPicker :show-preview="true" @select="addEmoji">
+			<NcButton type="tertiary"
+				:aria-label="t('collectives', 'Select emoji for collective')"
+				:title="t('collectives', 'Select emoji')"
+				class="button-emoji"
+				@click.prevent>
+				{{ emoji }}
+			</NcButton>
+		</NcEmojiPicker>
 
-			<input v-if="!pickCircle"
-				ref="nameField"
-				v-model="text"
-				:placeholder="t('collectives', 'New collective name')"
-				type="text"
-				required>
-			<NcMultiselect v-else
-				ref="circleSelector"
+		<NcTextField v-if="!pickCircle"
+			ref="nameField"
+			:value.sync="text"
+			:error="text === ''"
+			:label="t('collectives', 'New collective name')"
+			:show-trailing-button="!!text"
+			required
+			trailing-button-icon="arrowRight"
+			:trailing-button-label="t('collectives', 'Create new collective')"
+			@trailing-button-click="createCollective" />
+
+		<div v-else class="circle-selector--container">
+			<NcSelect ref="circleSelector"
 				v-model="circle"
+				:loading="loading"
 				:options="circles"
+				:searchable="!circle"
 				open-direction="below"
-				:placeholder="t('collectives', 'Select circle...')"
+				:placeholder="t('collectives', 'Select circle …')"
 				required />
-			<input type="submit"
-				value=""
+			<NcButton :disabled="loading || !circle"
 				:aria-label="t('collectives', 'Create a new collective')"
-				class="icon-confirm"
-				:class="{ 'icon-loading-small': loading }">
-			<NcActions>
-				<NcActionButton icon="icon-close"
-					:aria-label="t('collectives', 'Cancel creating a new collective')"
-					@click.stop.prevent="cancelEdit" />
-			</NcActions>
-		</form>
-	</div>
+				type="tertiary-no-background"
+				@click="createCollective">
+				<template #icon>
+					<ArrowRightIcon :size="20" />
+				</template>
+			</NcButton>
+		</div>
+
+		<NcActions>
+			<NcActionButton icon="icon-close"
+				:aria-label="t('collectives', 'Cancel creating a new collective')"
+				@click.stop.prevent="cancelEdit" />
+		</NcActions>
+	</form>
 </template>
 
 <script>
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { NcActionButton, NcActions, NcAppNavigationItem, NcButton, NcMultiselect } from '@nextcloud/vue'
+import { NcActionButton, NcActions, NcAppNavigationItem, NcButton, NcSelect, NcTextField } from '@nextcloud/vue'
 import NcEmojiPicker from '@nextcloud/vue/dist/Components/NcEmojiPicker.js'
 import { mapActions, mapGetters } from 'vuex'
 import CirclesIcon from '../Icon/CirclesIcon.vue'
+import ArrowRightIcon from 'vue-material-design-icons/ArrowRight.vue'
 import { GET_CIRCLES, NEW_COLLECTIVE } from '../../store/actions.js'
 import displayError from '../../util/displayError.js'
 
@@ -86,13 +100,15 @@ const randomColor = () => '#' + ((1 << 24) * Math.random() | 0).toString(16)
 export default {
 	name: 'NewCollective',
 	components: {
+		ArrowRightIcon,
+		CirclesIcon,
 		NcAppNavigationItem,
 		NcActionButton,
 		NcActions,
 		NcButton,
-		CirclesIcon,
 		NcEmojiPicker,
-		NcMultiselect,
+		NcSelect,
+		NcTextField,
 	},
 	directives: {},
 	data() {
@@ -155,7 +171,7 @@ export default {
 			this.editing = true
 			this.emoji = this.randomCollectiveEmoji()
 			this.$nextTick(() => {
-				this.$refs.nameField.focus()
+				this.$refs.nameField.$el.focus()
 			})
 		},
 
@@ -174,6 +190,8 @@ export default {
 		 * @param {Event} e - trigger event
 		 */
 		createCollective(e) {
+			if (!this.name) return
+
 			const updateCollective = () => {
 				this.clear()
 				if (this.$store.getters.collectiveChanged) {
@@ -207,22 +225,25 @@ export default {
 
 <style lang="scss" scoped>
 .collective-create {
-	form {
+	display: flex;
+	align-items: center;
+
+	.circle-selector--container {
 		display: flex;
+		align-items: center;
+		flex-grow: 1;
+		min-width: 0;
 
-		input[type='text'] {
+		.v-select.select {
+			min-width: 100%;
 			flex-grow: 1;
 		}
-
-		input[type='submit'] {
-			border-radius: var(--border-radius-large) !important;
-			border-width: 2px;
-			margin-right: 0;
+		:deep(.vs__actions) {
+			margin-right: 32px;
 		}
-
-		.multiselect {
-			min-width: unset;
-			flex-grow: 1;
+		.button-vue {
+			position: relative;
+			left: -44px;
 		}
 	}
 }
