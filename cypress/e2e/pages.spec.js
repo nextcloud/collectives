@@ -251,6 +251,34 @@ describe('Page', function() {
 		})
 	})
 
+	// Reference picker autocompletion is only available on Nextcloud 26+
+	if (Cypress.env('ncVersion') !== 'stable25') {
+		describe('Using the reference picker', function() {
+			it('Supports selecting a page from a collective', function() {
+				cy.visit('/apps/collectives/Our%20Garden/Page%20Title')
+
+				cy.getEditor()
+					.should('be.visible')
+					.type('/Coll')
+				cy.get('.tippy-content .link-picker__item')
+					.contains('Collective pages')
+					.click()
+				cy.get('.reference-picker input[type="text"]')
+					.type('Day 2')
+				cy.get('.search-result')
+					.contains('Day 2')
+					.click()
+
+				/*
+				 * Disable for now - in CI Nextcloud is on http (no TLS) and link previews don't get rendered
+				cy.getEditor()
+					.get('.widgets--list .collective-page--info .line')
+					.should('contain', 'Day 2')
+				 */
+			})
+		})
+	}
+
 	describe('Using the page list filter', function() {
 		it('Shows only landing page and (sub)pages matching the filter string', function() {
 			cy.get('input[name="pageFilter"]')
