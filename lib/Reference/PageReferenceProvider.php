@@ -138,8 +138,8 @@ class PageReferenceProvider implements IReferenceProvider {
 		}
 		if ($matches && count($matches) > 2) {
 			$pagePath = [
-				'collectiveName' => $matches[1],
-				'pagePath' => $matches[2],
+				'collectiveName' => urldecode($matches[1]),
+				'pagePath' => urldecode($matches[2]),
 			];
 			preg_match('/\?fileId=(\d+)$/i', $url, $matches);
 			if ($matches && count($matches) > 1) {
