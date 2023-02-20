@@ -555,7 +555,7 @@ class PageService {
 			$pageFile = $pageFile[0];
 			return $this->findByFile($collectiveId, $pageFile, $userId);
 		}
-		throw new NotFoundException('Error getting page by file ID ' . $fileId . ' in collective ' . $collectiveId);
+		throw new NotFoundException('Failed to get page by file ID ' . $fileId . ' in collective ' . $collectiveId);
 	}
 
 	/**
