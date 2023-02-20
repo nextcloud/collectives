@@ -7,9 +7,7 @@
 				<template #icon>
 					<DeleteIcon class="collectives-trash-button__icon" :size="20" />
 				</template>
-				<span class="collectives-trash-button__label">
-					{{ t('collectives', 'Deleted collectives') }}
-				</span>
+				{{ t('collectives', 'Deleted collectives') }}
 			</NcButton>
 		</div>
 		<transition name="slide-up">
@@ -146,10 +144,12 @@ export default {
 <style lang="scss" scoped>
 #collectives-trash {
 	margin-top: auto;
+	padding: 3px;
 
 	&__header {
 		box-sizing: border-box;
-		padding: calc(var(--default-grid-baseline, 4px) * 2);
+		margin: 0 3px 3px 3px;
+		padding-top: calc(var(--default-grid-baseline, 4px) * 2);
 
 		.collectives-trash-button {
 			display: flex;
@@ -184,14 +184,12 @@ export default {
 				height: 44px;
 				min-width: 44px;
 			}
-			&__label {
+
+			:deep(.button-vue__text) {
 				overflow: hidden;
-				max-width: 100%;
 				white-space: nowrap;
 				text-overflow: ellipsis;
-				text-align: left;
 				font-weight: normal;
-				font-size: 100%;
 			}
 		}
 	}
