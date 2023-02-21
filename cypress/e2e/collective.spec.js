@@ -64,9 +64,7 @@ describe('Collective', function() {
 		it('Reports existing circle', function() {
 			cy.login('bob')
 			cy.createCollective('Foreign Circle')
-			cy.get('main .empty-content').should('contain', 'build shared knowledge')
-			cy.get('.toast-warning').should('contain', 'Could not create the collective')
-			cy.get('.toast-warning').should('contain', 'A circle with that name exists')
+			cy.get('.modal-collective-name-error').should('contain', 'A collective with this name already exists')
 		})
 		it('Reports existing collective', function() {
 			cy.login('bob')
@@ -78,10 +76,13 @@ describe('Collective', function() {
 		it('creates collectives by picking circle',
 			function() {
 				cy.login('bob')
-				cy.get('button.action-item span.circles-icon').click({ force: true })
-				cy.get('.multiselect__option').should('not.contain', 'Foreign')
-				cy.get('.multiselect__option [title*=History]').click()
-				cy.get('input.icon-confirm').click()
+				cy.get('button').contains('New collective').click()
+				cy.get('button span.circles-icon').click()
+				// cy.get('.circle-selector ul').should('not.contain', 'Foreign')
+				cy.get('.circle-selector li [title*=History]').click()
+				cy.get('button').contains('Add people').click()
+				cy.get('button').contains('Create').click()
+
 				cy.get('#titleform input').invoke('val').should('contain', 'History Club')
 				cy.get('.toast-info').should('contain',
 					'Created collective "History Club" for existing circle.'
@@ -129,7 +130,7 @@ describe('Collective', function() {
 		const randomName = 'Created just now ' + Math.random().toString(36).substr(2, 4)
 		it('has all the ui elements', function() {
 			cy.login('bob')
-			cy.createCollective(randomName)
+			cy.createCollective(randomName, ['jane', 'john'])
 			cy.log('Check name in the disabled titleform')
 			cy.get('#titleform input').invoke('val').should('contain', randomName)
 			cy.get('#titleform input').should('have.attr', 'disabled')
@@ -146,7 +147,7 @@ describe('Collective', function() {
 	})
 
 	describe('in non-admin collective', function() {
-		it.only('can leave collective and undo', function() {
+		it('can leave collective and undo', function() {
 			cy.login('jane')
 			cy.visit('/apps/collectives')
 
