@@ -81,7 +81,6 @@ OC.L10N.register(
     "Create collective for existing circle" : "Créer un collectif pour un cercle existant",
     "Select emoji" : "Sélectionner un émoji",
     "New collective name" : "Nom du nouveau collectif",
-    "Select circle..." : "Sélectionner un cercle…",
     "Create a new collective" : "Créer un nouveau collectif",
     "Cancel creating a new collective" : "Annuler la création d'un nouveau collectif",
     "Select a collective" : "Sélectionner un collectif",
@@ -156,6 +155,7 @@ OC.L10N.register(
     "Could not share the collective" : "Impossible de partager le collectif",
     "Could not unshare the collective" : "Impossible de cesser le partage du collectif",
     "Collective not found:" : "Collectif introuvable :",
-    "Select a collective or create a new one on the left." : "Sélectionnez un collectif ou créez en un nouveau sur la gauche."
+    "Select a collective or create a new one on the left." : "Sélectionnez un collectif ou créez en un nouveau sur la gauche.",
+    "Select circle..." : "Sélectionner un cercle…"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

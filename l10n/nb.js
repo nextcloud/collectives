@@ -30,7 +30,6 @@ OC.L10N.register(
     "Create new collective" : "Opprett nytt kollektiv",
     "Create collective for existing circle" : "Opprett kollektiv for eksisterende sirkel",
     "New collective name" : "Nytt navn på kollektiv",
-    "Select circle..." : "Velg sirkel …",
     "Select a collective" : "Velg et kollektiv",
     "Done" : "Ferdig",
     "Show in Files" : "Vis i Filer",
@@ -58,6 +57,7 @@ OC.L10N.register(
     "Error: Missing apps" : "Feil: Manglende programmer",
     "The following dependency apps are missing: " : "Følgende avhengigheter mangler: ",
     "Please ask the administrator to enable these apps." : "Spør en administrator om å skru på disse programmene.",
-    "Select a collective or create a new one on the left." : "Velg et kollektiv, eller opprett ett til venstre."
+    "Select a collective or create a new one on the left." : "Velg et kollektiv, eller opprett ett til venstre.",
+    "Select circle..." : "Velg sirkel …"
 },
 "nplurals=2; plural=(n != 1);");

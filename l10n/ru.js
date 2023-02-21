@@ -67,7 +67,6 @@ OC.L10N.register(
     "Create collective for existing circle" : "Создать группу для существующего окружения",
     "Select emoji" : "Выберите эмодзи",
     "New collective name" : "Новое название группы",
-    "Select circle..." : "Выбор окружения...",
     "Create a new collective" : "Создать новую группу",
     "Cancel creating a new collective" : "Отменить создание группы",
     "Select a collective" : "Выберите группу",
@@ -131,6 +130,7 @@ OC.L10N.register(
     "Could not share the collective" : "Невозможно поделиться группой",
     "Could not unshare the collective" : "Не удалось отозвать общий доступ группы",
     "Collective not found:" : "Группа не найдена:",
-    "Select a collective or create a new one on the left." : "Выберите группу или создайте новую слева."
+    "Select a collective or create a new one on the left." : "Выберите группу или создайте новую слева.",
+    "Select circle..." : "Выбор окружения..."
 },
 "nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);");

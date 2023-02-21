@@ -79,7 +79,6 @@
     "Create collective for existing circle" : "為現有社交圈子創建知識庫",
     "Select emoji" : "選擇表情符號",
     "New collective name" : "新知識庫名稱",
-    "Select circle..." : "選擇社交圈子...",
     "Create a new collective" : "創建新知識庫",
     "Cancel creating a new collective" : "取消創建新知識庫",
     "Select a collective" : "選擇知識庫",
@@ -154,6 +153,7 @@
     "Could not share the collective" : "無法分享知識庫",
     "Could not unshare the collective" : "無法撤回知識庫分享",
     "Collective not found:" : "未找到知識庫：",
-    "Select a collective or create a new one on the left." : "在左側選擇一個知識庫或創建一個新知識庫。"
+    "Select a collective or create a new one on the left." : "在左側選擇一個知識庫或創建一個新知識庫。",
+    "Select circle..." : "選擇社交圈子..."
 },"pluralForm" :"nplurals=1; plural=0;"
 }

@@ -79,7 +79,6 @@
     "Create collective for existing circle" : "Var olan çevre için topluluk ekle",
     "Select emoji" : "Emoji seçin",
     "New collective name" : "Yeni topluluğun adı",
-    "Select circle..." : "Çevre seçin...",
     "Create a new collective" : "Yeni bir topluluk ekle",
     "Cancel creating a new collective" : "Yeni bir topluluk eklemekten vazgeç",
     "Select a collective" : "Bir topluluk seçin",
@@ -154,6 +153,7 @@
     "Could not share the collective" : "Topluluk değiştirilemedi",
     "Could not unshare the collective" : "Topluluk paylaşımı kaldırılamadı",
     "Collective not found:" : "Topluluk bulunamadı:",
-    "Select a collective or create a new one on the left." : "Sol taraftan bir topluluk seçin ya da yeni bir topluluk ekleyin."
+    "Select a collective or create a new one on the left." : "Sol taraftan bir topluluk seçin ya da yeni bir topluluk ekleyin.",
+    "Select circle..." : "Çevre seçin..."
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }

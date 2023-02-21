@@ -81,7 +81,6 @@ OC.L10N.register(
     "Create collective for existing circle" : "Vytvořit kolektiv pro existující okruh",
     "Select emoji" : "Vyberte emotikonu",
     "New collective name" : "Název pro nový kolektiv",
-    "Select circle..." : "Vybrat okruh…",
     "Create a new collective" : "Vytvořit nový kolektiv",
     "Cancel creating a new collective" : "Zrušit vytváření nového kolektivu",
     "Select a collective" : "Vybrat kolektiv",
@@ -156,6 +155,7 @@ OC.L10N.register(
     "Could not share the collective" : "Kolektiv se nedaří nasdílet",
     "Could not unshare the collective" : "Sdílení kolektivu se nedaří zrušit",
     "Collective not found:" : "Kolektiv nenalezen:",
-    "Select a collective or create a new one on the left." : "Vyberte kolektiv nebo (vlevo) vytvořte nový."
+    "Select a collective or create a new one on the left." : "Vyberte kolektiv nebo (vlevo) vytvořte nový.",
+    "Select circle..." : "Vybrat okruh…"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;");

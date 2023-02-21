@@ -81,7 +81,6 @@ OC.L10N.register(
     "Create collective for existing circle" : "Създаване на колектив за съществуващ кръг",
     "Select emoji" : "Избор на емотикони",
     "New collective name" : "Име на нов колектив",
-    "Select circle..." : "Избор на кръг ...",
     "Create a new collective" : "Създаване на новия колектив",
     "Cancel creating a new collective" : "Отказ от създаване на новия колектив",
     "Select a collective" : "Избор на колектив",
@@ -156,6 +155,7 @@ OC.L10N.register(
     "Could not share the collective" : "Не можа да се сподели колективът",
     "Could not unshare the collective" : "Не можа да се отмени споделянето на колектива",
     "Collective not found:" : "Колективът не е намерен:",
-    "Select a collective or create a new one on the left." : "Избор на колектив или създаване на нов вляво."
+    "Select a collective or create a new one on the left." : "Избор на колектив или създаване на нов вляво.",
+    "Select circle..." : "Избор на кръг ..."
 },
 "nplurals=2; plural=(n != 1);");

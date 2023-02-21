@@ -81,7 +81,6 @@ OC.L10N.register(
     "Create collective for existing circle" : "Crear cuaderno colectivo para círculo existente",
     "Select emoji" : "Seleccione el emoji",
     "New collective name" : "Nombre del cuaderno colectivo nuevo",
-    "Select circle..." : "Seleccionar círculo...",
     "Create a new collective" : "Crear un cuaderno colectivo nuevo",
     "Cancel creating a new collective" : "Cancelar la creación del cuaderno colectivo nuevo",
     "Select a collective" : "Seleccionar cuaderno colectivo",
@@ -156,6 +155,7 @@ OC.L10N.register(
     "Could not share the collective" : "No fue posible compartir el cuaderno colectivo",
     "Could not unshare the collective" : "No fue posible dejar de compartir el cuaderno colectivo",
     "Collective not found:" : "Cuaderno colectivo no encontrado:",
-    "Select a collective or create a new one on the left." : "Selecciona un cuaderno colectivo o crea uno nuevo en el panel de la izquierda."
+    "Select a collective or create a new one on the left." : "Selecciona un cuaderno colectivo o crea uno nuevo en el panel de la izquierda.",
+    "Select circle..." : "Seleccionar círculo..."
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

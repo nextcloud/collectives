@@ -35,7 +35,6 @@ OC.L10N.register(
     "Create new collective" : "Crear nou Col·lectiu",
     "Create collective for existing circle" : "Crear un Col·lectiu per al cercle existent",
     "New collective name" : "Nom del nou Col·lectiu",
-    "Select circle..." : "Seleccionar cercle...",
     "Select a collective" : "Seleccionar un col·lectiu",
     "Stop editing" : "Aturar l'edició",
     "Start editing" : "Començar a editar.",
@@ -82,6 +81,7 @@ OC.L10N.register(
     "The following dependency apps are missing: " : "Falten les aplicacions amb dependència següents: ",
     "Please ask the administrator to enable these apps." : "Si us plau pregunti a l'administrador/a per activar aquestes apps.",
     "Collective not found:" : "Col·lectiu no trobat:",
-    "Select a collective or create a new one on the left." : "Selecciona un col·lectiu o crea un de nou a l'esquerra."
+    "Select a collective or create a new one on the left." : "Selecciona un col·lectiu o crea un de nou a l'esquerra.",
+    "Select circle..." : "Seleccionar cercle..."
 },
 "nplurals=2; plural=(n != 1);");
