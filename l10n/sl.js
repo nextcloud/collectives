@@ -80,7 +80,6 @@ OC.L10N.register(
     "Create collective for existing circle" : "Ustvari zbirko za obstoječ krog",
     "Select emoji" : "Izbor izrazne ikone",
     "New collective name" : "Ime nove zbirke",
-    "Select circle..." : "Izbor kroga ...",
     "Create a new collective" : "Ustvari novo zbirko",
     "Cancel creating a new collective" : "Prekliči ustvarjanje nove zbirke",
     "Select a collective" : "Izbor zbirke",
@@ -152,6 +151,7 @@ OC.L10N.register(
     "Could not share the collective" : "Ni mogoče omogočiti souporabe zbirke",
     "Could not unshare the collective" : "Ni mogoče preklicati souporabe zbirke",
     "Collective not found:" : "Zbirke ni mogoče najti:",
-    "Select a collective or create a new one on the left." : "Izberite zbirko, ali pa ustvarite novo v meniju na levi."
+    "Select a collective or create a new one on the left." : "Izberite zbirko, ali pa ustvarite novo v meniju na levi.",
+    "Select circle..." : "Izbor kroga ..."
 },
 "nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);");

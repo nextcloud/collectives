@@ -58,7 +58,6 @@ OC.L10N.register(
     "Create new collective" : "创建新知识库",
     "Create collective for existing circle" : "为已有圈子创建知识库",
     "New collective name" : "新知识库名称",
-    "Select circle..." : "选择圈子...",
     "Select a collective" : "选择知识库",
     "Stop editing" : "停止编辑",
     "Start editing" : "开始编辑",
@@ -106,6 +105,7 @@ OC.L10N.register(
     "Could not share the collective" : "无法共享该知识库",
     "Could not unshare the collective" : "无法取消共享该知识库",
     "Collective not found:" : "未找到知识库：",
-    "Select a collective or create a new one on the left." : "选择一个知识库或在左侧创建一个新知识库。"
+    "Select a collective or create a new one on the left." : "选择一个知识库或在左侧创建一个新知识库。",
+    "Select circle..." : "选择圈子..."
 },
 "nplurals=1; plural=0;");

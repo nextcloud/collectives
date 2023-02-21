@@ -46,7 +46,6 @@ OC.L10N.register(
     "Create new collective" : "新しいコレクティブの作成",
     "Create collective for existing circle" : "既存のサークルにコレクティブを作成",
     "New collective name" : "新規コレクティブの名称",
-    "Select circle..." : "サークルを選択...",
     "Select a collective" : "コレクティブを選択",
     "Stop editing" : "編集終了",
     "Start editing" : "編集開始",
@@ -92,6 +91,7 @@ OC.L10N.register(
     "Error: Missing apps" : "エラー: アプリが見つかりません",
     "The following dependency apps are missing: " : "次の依存アプリが見つかりません: ",
     "Please ask the administrator to enable these apps." : "これらのアプリを有効にするために管理者に問い合わせてください。",
-    "Collective not found:" : "コレクティブが見つかりません:"
+    "Collective not found:" : "コレクティブが見つかりません:",
+    "Select circle..." : "サークルを選択..."
 },
 "nplurals=1; plural=0;");

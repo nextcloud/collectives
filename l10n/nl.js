@@ -77,7 +77,6 @@ OC.L10N.register(
     "Create collective for existing circle" : "Collectief maken voor bestaande cirkel",
     "Select emoji" : "Selecteer emoji",
     "New collective name" : "Nieuwe naam collectief",
-    "Select circle..." : "Selecteer cirkel...",
     "Create a new collective" : "Een nieuw collectief maken",
     "Cancel creating a new collective" : "Aanmaken van een nieuw collectief annuleren",
     "Select a collective" : "Selecteer een collectief",
@@ -152,6 +151,7 @@ OC.L10N.register(
     "Could not share the collective" : "Kan het collectief niet delen",
     "Could not unshare the collective" : "Kan het delen van het collectief niet ongedaan maken",
     "Collective not found:" : "Collectief niet gevonden:",
-    "Select a collective or create a new one on the left." : "Selecteer een collectief of maak in het linkermenu een nieuwe aan."
+    "Select a collective or create a new one on the left." : "Selecteer een collectief of maak in het linkermenu een nieuwe aan.",
+    "Select circle..." : "Selecteer cirkel..."
 },
 "nplurals=2; plural=(n != 1);");

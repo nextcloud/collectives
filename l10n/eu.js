@@ -60,7 +60,6 @@ OC.L10N.register(
     "Create new collective" : "Sortu kolektibo berria",
     "Select emoji" : "Hautatu emojia",
     "New collective name" : "Kolektibo izen berria",
-    "Select circle..." : "Hautatu zirkulua...",
     "Create a new collective" : "Sortu kolektibo berria",
     "Cancel creating a new collective" : "Utzi kolektibo berria sortzeari",
     "Select a collective" : "Hautatu kolektibo bat",
@@ -104,6 +103,7 @@ OC.L10N.register(
     "Could not share the collective" : "Ezin izan da kolektiboa partekatu",
     "Could not unshare the collective" : "Ezin izan da kolektiboaren partekatzea kendu",
     "Collective not found:" : "Ez da aurkitu kolektiboa:",
-    "Select a collective or create a new one on the left." : "Hautatu kolektibo bat edo sortu berri bat ezkerrean."
+    "Select a collective or create a new one on the left." : "Hautatu kolektibo bat edo sortu berri bat ezkerrean.",
+    "Select circle..." : "Hautatu zirkulua..."
 },
 "nplurals=2; plural=(n != 1);");

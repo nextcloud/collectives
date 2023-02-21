@@ -15,7 +15,6 @@ OC.L10N.register(
     "Restore" : "மீட்டெடு",
     "Delete permanently" : "நிரந்தரமாக நீக்கவும்",
     "Cancel" : "ரத்து செய்",
-    "Select circle..." : "வட்டத்தைத் தேர்ந்தெடுக்கவும்...",
     "Stop editing" : "திருத்துவதை நிறுத்து",
     "Done" : "Done",
     "Show in Files" : "கோப்புகளில் காட்டவும்",
@@ -34,6 +33,7 @@ OC.L10N.register(
     "Come, organize and build shared knowledge!" : "வாருங்கள், ஒழுங்கமைத்து பகிர்ந்த அறிவை உருவாக்குங்கள்!",
     "Could not create the page" : "பக்கத்தை உருவாக்க முடியவில்லை",
     "New Page" : "புதிய பக்கம்",
-    "Could not delete the page" : "பக்கத்தை நீக்க முடியவில்லை"
+    "Could not delete the page" : "பக்கத்தை நீக்க முடியவில்லை",
+    "Select circle..." : "வட்டத்தைத் தேர்ந்தெடுக்கவும்..."
 },
 "nplurals=2; plural=(n != 1);");
