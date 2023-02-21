@@ -215,8 +215,10 @@ export default {
 		},
 
 		disableDragndropSortOrMove(state, getters) {
-			// Disable if a page list is loading (e.g. when page move is pending)
-			return getters.loading('pagelist')
+			// Disable for readonly collective
+			return !getters.currentCollectiveCanEdit
+				// Disable if a page list is loading (e.g. when page move is pending)
+				|| getters.loading('pagelist')
 				// For now also disable in alternative page order view
 				// TODO: Smoothen UX if allowed to move but not to sort with alternative page orders
 				|| (getters.sortBy !== 'byOrder')

@@ -24,7 +24,7 @@ RELEASE_DIR:=$(BUILD_DIR)/release
 CERT_DIR:=$(HOME)/.nextcloud/certificates
 
 # So far just for removing releases again
-NEXTCLOUD_API_URL:=https://apps.nextcloud.com/api/v1/apps/collectives
+NEXTCLOUD_APPSTORE_API_URL:=https://apps.nextcloud.com/api/v1/apps
 
 GITHUB_PROJECT_URL:=https://github.com/nextcloud/$(APP_NAME)
 
@@ -58,7 +58,7 @@ composer-install-no-dev: composer
 # Clean build artifacts
 clean:
 	rm -rf js/*
-	rm -rf $(RELEASE_DIR)/collectives
+	rm -rf $(RELEASE_DIR)/$(APP_NAME)
 
 # Also remove build tools and dependencies
 distclean: clean
@@ -158,7 +158,7 @@ build: node-modules build-js-production composer-install-no-dev
 		openssl dgst -sha512 -sign $(CERT_DIR)/$(APP_NAME).key \
 			$(RELEASE_DIR)/$(APP_NAME)-$(VERSION).tar.gz | openssl base64; \
 	fi
-	rm -rf $(RELEASE_DIR)/collectives
+	rm -rf $(RELEASE_DIR)/$(APP_NAME)
 
 release-checks:
 ifneq ($(VERSION),$(VERSION_CHANGELOG))
@@ -175,8 +175,10 @@ endif
 		exit 1; \
 	fi
 
-# Prepare the release package for the app store
-release: release-checks lint-appinfo build
+release: release-github release-appstore
+
+# Publish the release on Github
+release-github: release-checks lint-appinfo build
 	# Git tag and push
 	git tag $(GIT_TAG) -m "Version $(VERSION)" && git push $(GIT_REMOTE) $(GIT_TAG)
 
@@ -185,6 +187,20 @@ release: release-checks lint-appinfo build
 
 	@echo "URL to release tarball (for app store): $(GITHUB_PROJECT_URL)/releases/download/$(GIT_TAG)/$(APP_NAME)-$(VERSION).tar.gz"
 
+# Publish the release on appstore
+release-appstore:
+ifndef NEXTCLOUD_PASSWORD
+	  $(error Missing $$NEXTCLOUD_PASSWORD)
+endif
+	@if [ -f $(CERT_DIR)/$(APP_NAME).key ]; then \
+		echo 'Publishing $(APP_NAME)-$(VERSION) to the app store'; \
+		curl -s -X POST $(NEXTCLOUD_APPSTORE_API_URL)/releases \
+			-H 'Content-Type: application/json' \
+			-d '{"download":"$(GITHUB_PROJECT_URL)/releases/download/$(GIT_TAG)/$(APP_NAME)-$(VERSION).tar.gz", "signature":"$(shell openssl dgst -sha512 -sign $(CERT_DIR)/$(APP_NAME).key \
+					$(RELEASE_DIR)/$(APP_NAME)-$(VERSION).tar.gz | openssl base64)"}' \
+			-u 'collectivecloud:$(NEXTCLOUD_PASSWORD)'; \
+	fi
+
 delete-release: delete-release-from-github delete-release-from-appstore
 
 delete-release-from-github:
@@ -192,7 +208,7 @@ ifndef RELEASE_NAME
 	  $(error Please specify the release to remove with $$RELEASE_NAME)
 endif
 	echo 'Removing release from Github.'
-	gh release delete $(RELEASE_NAME) --cleanup-tag --yes
+	gh release delete 'v$(RELEASE_NAME)' --cleanup-tag --yes
 
 delete-release-from-appstore:
 ifndef RELEASE_NAME
@@ -202,7 +218,7 @@ ifndef NEXTCLOUD_PASSWORD
 	  $(error Missing $$NEXTCLOUD_PASSWORD)
 endif
 	echo 'Removing release from nextcloud app store.'
-	curl -s -X DELETE $(NEXTCLOUD_API_URL)/releases/$(RELEASE_NAME) \
+	curl -s -X DELETE $(NEXTCLOUD_APPSTORE_API_URL)/collectives/releases/$(RELEASE_NAME) \
 		-u 'collectivecloud:$(NEXTCLOUD_PASSWORD)'
 
-.PHONY: all setup-dev composer node-modules composer-install composer-install-no-dev clean distclean lint lint-js lint-appinfo build build-js-dev build-js-production test test-php test-php-unit test-php-integration test-js test-js-cypress test-js-cypress-watch po php-psalm-baseline text-app-includes release delete-release delete-release-from-github delete-release-from-appstore
+.PHONY: all setup-dev composer node-modules composer-install composer-install-no-dev clean distclean lint lint-js lint-appinfo build build-js-dev build-js-production test test-php test-php-unit test-php-integration test-js test-js-cypress test-js-cypress-watch po php-psalm-baseline text-app-includes release release-github release-appstore delete-release delete-release-from-github delete-release-from-appstore
