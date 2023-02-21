@@ -24,7 +24,7 @@
 				class="selected-member-bubble">
 				<template #title>
 					<a href="#"
-						:title="t('collectives', 'Remove {type} {name}', { type: member.type, name: member.label })"
+						:title="t('collectives', 'Remove {name}', { name: member.label })"
 						class="selected-member-bubble-delete"
 						@click="deleteMember(member)">
 						<CloseIcon :size="16" />
@@ -178,49 +178,26 @@ export default {
 				return
 			}
 
-			const data = response.data.ocs.data
-			const exact = response.data.ocs.data.exact
-			data.exact = [] // removing exact from general results
+			const { exact, ...data } = response.data.ocs.data
 
 			// flatten array of arrays
 			const rawExactSuggestions = Object.values(exact).reduce((arr, elem) => arr.concat(elem), [])
 			const rawSuggestions = Object.values(data).reduce((arr, elem) => arr.concat(elem), [])
 
 			// remove invalid data and format to user-select layout
-			const exactSuggestions = rawExactSuggestions
-				.filter(result => typeof result === 'object')
-				.map(share => this.formatResults(share))
-				// sort by type so we can get user&groups first...
-				.sort((a, b) => a.shareType - b.shareType)
-			const suggestions = rawSuggestions
-				.filter(result => typeof result === 'object')
-				.map(share => this.formatResults(share))
-				// sort by type so we can get user&groups first...
-				.sort((a, b) => a.shareType - b.shareType)
-
+			const exactSuggestions = this.filterAndSortResults(rawExactSuggestions)
+			const suggestions = this.filterAndSortResults(rawSuggestions)
 			const allSuggestions = exactSuggestions.concat(suggestions)
 
-			// Count occurances of display names in order to provide a distinguishable description if needed
-			const nameCounts = allSuggestions.reduce((nameCounts, result) => {
-				if (!result.displayName) {
-					return nameCounts
-				}
-				if (!nameCounts[result.displayName]) {
-					nameCounts[result.displayName] = 0
-				}
-				nameCounts[result.displayName]++
-				return nameCounts
-			}, {})
+			this.searchResults = allSuggestions
+		},
 
-			const finalResults = allSuggestions.map(item => {
-				// Make sure that items with duplicate displayName get the shareWith applied as a description
-				if (nameCounts[item.displayName] > 1 && !item.desc) {
-					return { ...item, desc: item.shareWithDisplayNameUnique }
-				}
-				return item
-			})
-
-			this.searchResults = finalResults
+		filterAndSortResults(results) {
+			return results
+				.filter(result => typeof result === 'object')
+				.map(share => this.formatResults(share))
+				// sort by type so we can get user&groups first...
+				.sort((a, b) => a.shareType - b.shareType)
 		},
 
 		formatResults(result) {
