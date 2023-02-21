@@ -7,7 +7,7 @@
 			</template>
 			<template #action>
 				<NcButton :aria-label="t('collectives', 'Create new collective')" :type="buttonType" @click="newCollective">
-					{{ t('collectives', 'Create new collective') }}
+					{{ t('collectives', 'New collective') }}
 				</NcButton>
 			</template>
 		</NcEmptyContent>
@@ -61,7 +61,7 @@ export default {
 	methods: {
 		newCollective() {
 			emit('toggle-navigation', { open: true })
-			emit('start-new-collective')
+			emit('open-new-collective-modal')
 			this.buttonType = 'secondary'
 		},
 	},

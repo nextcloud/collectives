@@ -135,10 +135,18 @@ Cypress.Commands.add('seedCollective', (name) => {
 /**
  * Create a collective via UI
  */
-Cypress.Commands.add('createCollective', (name) => {
+Cypress.Commands.add('createCollective', (name, members = []) => {
 	cy.log(`Creating collective ${name}`)
-	cy.get('a [title="Create new collective"]').click()
-	cy.get('.collective-create input[type="text"]').type(`${name}{enter}`)
+	cy.get('button').contains('New collective').click()
+	cy.get('.collective-name input[type="text"]').type(`${name}{enter}`)
+	if (members.length > 0) {
+		for (const member of members) {
+			cy.get('.member-picker input[type="text"]').clear().type(`${member}`)
+			cy.get('.search-results .user-bubble__content').contains(member).click()
+			cy.get('.selected-members .user-bubble__content').should('contain', member)
+		}
+	}
+	cy.get('button').contains('Create').click()
 })
 
 /**

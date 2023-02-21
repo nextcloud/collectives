@@ -13,7 +13,14 @@
 				v-show="!collective.deleted"
 				:key="collective.id"
 				:collective="collective" />
-			<NewCollective v-if="!isPublic" />
+			<NcButton v-if="!isPublic"
+				:aria-label="t('collectives', 'Create a new collective')"
+				@click="onOpenNewCollectiveModal">
+				<template #icon>
+					<PlusIcon />
+				</template>
+				{{ t('collectives', 'New collective') }}
+			</NcButton>
 		</template>
 		<template #footer>
 			<CollectivesTrash v-if="displayTrash"
@@ -21,17 +28,20 @@
 				@delete-collective="deleteCollective" />
 			<CollectivesGlobalSettings v-if="!isPublic" />
 		</template>
+		<NewCollectiveModal v-if="showNewCollectiveModal" @close="onCloseNewCollectiveModal" />
 	</NcAppNavigation>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { RESTORE_COLLECTIVE, DELETE_COLLECTIVE } from '../store/actions.js'
-import { NcAppNavigation, NcAppNavigationCaption, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
-import NewCollective from './Nav/NewCollective.vue'
+import { NcAppNavigation, NcAppNavigationCaption, NcButton, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
+import NewCollectiveModal from './Nav/NewCollectiveModal.vue'
 import CollectiveListItem from './Nav/CollectiveListItem.vue'
 import CollectivesGlobalSettings from './Nav/CollectivesGlobalSettings.vue'
 import CollectivesTrash from './Nav/CollectivesTrash.vue'
+import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import displayError from '../util/displayError.js'
 
 export default {
@@ -40,12 +50,20 @@ export default {
 	components: {
 		NcAppNavigation,
 		NcAppNavigationCaption,
-		NewCollective,
+		NcButton,
+		NewCollectiveModal,
 		CollectiveListItem,
 		CollectivesGlobalSettings,
 		CollectivesTrash,
 		NcEmptyContent,
 		NcLoadingIcon,
+		PlusIcon,
+	},
+
+	data() {
+		return {
+			showNewCollectiveModal: false,
+		}
 	},
 
 	computed: {
@@ -62,6 +80,14 @@ export default {
 				&& !this.loading('collectives')
 				&& !this.loading('collectiveTrash')
 		},
+	},
+
+	mounted() {
+		subscribe('open-new-collective-modal', this.onOpenNewCollectiveModal)
+	},
+
+	unmounted() {
+		unsubscribe('open-new-collective-modal', this.onOpenNewCollectiveModal)
 	},
 
 	methods: {
@@ -91,6 +117,14 @@ export default {
 		deleteCollective(collective, circle) {
 			return this.dispatchDeleteCollective({ ...collective, circle })
 				.catch(displayError('Could not delete collective from trash'))
+		},
+
+		onOpenNewCollectiveModal() {
+			this.showNewCollectiveModal = true
+		},
+
+		onCloseNewCollectiveModal() {
+			this.showNewCollectiveModal = false
 		},
 	},
 }
