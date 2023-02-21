@@ -8,11 +8,14 @@ use Closure;
 use OCA\Circles\Events\CircleDestroyedEvent;
 use OCA\Collectives\CacheListener;
 use OCA\Collectives\Fs\UserFolderHelper;
+use OCA\Collectives\Listeners\CollectivesReferenceListener;
 use OCA\Collectives\Listeners\CircleDestroyedListener;
 use OCA\Collectives\Listeners\BeforeTemplateRenderedListener;
 use OCA\Collectives\Listeners\ShareDeletedListener;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Mount\MountProvider;
+use OCA\Collectives\Reference\PageReferenceProvider;
+use OCA\Collectives\Reference\SearchablePageReferenceProvider;
 use OCA\Collectives\Search\CollectiveProvider;
 use OCA\Collectives\Search\PageProvider;
 use OCA\Collectives\Search\PageContentProvider;
@@ -25,8 +28,10 @@ use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\Http\Events\BeforeTemplateRenderedEvent;
 use OCP\AppFramework\Utility\ITimeFactory;
+use OCP\Collaboration\Reference\RenderReferenceEvent;
 use OCP\Files\Config\IMountProviderCollection;
 use OCP\Files\IMimeTypeLoader;
+use OCP\IConfig;
 use OCP\Share\Events\ShareDeletedEvent;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
@@ -46,6 +51,7 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(BeforeTemplateRenderedEvent::class, BeforeTemplateRenderedListener::class);
 		$context->registerEventListener(CircleDestroyedEvent::class, CircleDestroyedListener::class);
 		$context->registerEventListener(ShareDeletedEvent::class, ShareDeletedListener::class);
+		$context->registerEventListener(RenderReferenceEvent::class, CollectivesReferenceListener::class);
 
 		$context->registerService(MountProvider::class, function (ContainerInterface $c) {
 			return new MountProvider(
@@ -72,6 +78,15 @@ class Application extends App implements IBootstrap {
 		$context->registerSearchProvider(CollectiveProvider::class);
 		$context->registerSearchProvider(PageProvider::class);
 		$context->registerSearchProvider(PageContentProvider::class);
+
+		$container = $this->getContainer();
+		/** @var IConfig $config */
+		$config = $container->get(IConfig::class);
+		if (version_compare($config->getSystemValueString('version', '0.0.0'), '26.0.0', '<')) {
+			$context->registerReferenceProvider(PageReferenceProvider::class);
+		} else {
+			$context->registerReferenceProvider(SearchablePageReferenceProvider::class);
+		}
 
 		$cacheListener = $this->getContainer()->get(CacheListener::class);
 		$cacheListener->listen();

@@ -1,42 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="dev-master@">
+<files psalm-version="5.6.0@e784128902dfe01d489c4123d69918a9f3c1eac5">
+  <file src="lib/AppInfo/Application.php">
+    <MissingDependency>
+      <code>PageReferenceProvider</code>
+      <code>SearchablePageReferenceProvider</code>
+    </MissingDependency>
+    <UndefinedClass>
+      <code>RenderReferenceEvent</code>
+    </UndefinedClass>
+    <UndefinedInterfaceMethod>
+      <code>registerReferenceProvider</code>
+      <code>registerReferenceProvider</code>
+    </UndefinedInterfaceMethod>
+  </file>
   <file src="lib/Fs/UserFolderHelper.php">
-    <UndefinedClass occurrences="2">
+    <UndefinedClass>
       <code>$e</code>
       <code>NoUserException</code>
     </UndefinedClass>
   </file>
+  <file src="lib/Listeners/CollectivesReferenceListener.php">
+    <MissingTemplateParam>
+      <code>IEventListener</code>
+    </MissingTemplateParam>
+    <UndefinedClass>
+      <code>RenderReferenceEvent</code>
+    </UndefinedClass>
+  </file>
   <file src="lib/Mount/CollectiveFolderManager.php">
-    <InvalidArgument occurrences="1">
+    <InvalidArgument>
       <code>$maskedStorage</code>
     </InvalidArgument>
-    <UndefinedClass occurrences="1">
+    <UndefinedClass>
       <code>LazyFolder</code>
     </UndefinedClass>
   </file>
   <file src="lib/Mount/CollectiveStorage.php">
-    <MoreSpecificImplementedParamType occurrences="1">
+    <MoreSpecificImplementedParamType>
       <code>$storage</code>
     </MoreSpecificImplementedParamType>
   </file>
   <file src="lib/Mount/NoExcludePropagatorStorageWrapper.php">
-    <ConstructorSignatureMismatch occurrences="1">
+    <ConstructorSignatureMismatch>
       <code>NoExcludePropagatorStorageWrapper</code>
     </ConstructorSignatureMismatch>
   </file>
+  <file src="lib/Reference/PageReferenceProvider.php">
+    <UndefinedClass>
+      <code>IReferenceProvider</code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Reference/SearchablePageReferenceProvider.php">
+    <UndefinedClass>
+      <code>ADiscoverableReferenceProvider</code>
+      <code>ISearchableReferenceProvider</code>
+    </UndefinedClass>
+  </file>
   <file src="lib/Service/CircleHelper.php">
-    <UndefinedClass occurrences="2">
+    <UndefinedClass>
       <code>$e</code>
       <code>\ArtificialOwl\MySmallPhpTools\Exceptions\InvalidItemException</code>
     </UndefinedClass>
   </file>
   <file src="lib/Service/CollectiveService.php">
-    <UndefinedClass occurrences="1">
+    <UndefinedClass>
       <code>File</code>
     </UndefinedClass>
   </file>
   <file src="lib/Service/PageService.php">
-    <UndefinedClass occurrences="4">
+    <UndefinedClass>
       <code>$this-&gt;pushQueue</code>
       <code>?IQueue</code>
       <code>IQueue</code>
@@ -44,7 +76,7 @@
     </UndefinedClass>
   </file>
   <file src="lib/Versions/VersionsBackend.php">
-    <UndefinedInterfaceMethod occurrences="1">
+    <UndefinedInterfaceMethod>
       <code>getDirectoryListing</code>
     </UndefinedInterfaceMethod>
   </file>

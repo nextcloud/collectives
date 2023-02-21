@@ -2,7 +2,10 @@
 
 namespace OCA\Collectives\Search;
 
+use OCA\Collectives\AppInfo\Application;
+use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Service\CollectiveHelper;
+use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\MissingDependencyException;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
@@ -22,6 +25,7 @@ class PageProvider implements IProvider {
 	private CollectiveHelper $collectiveHelper;
 	private PageService $pageService;
 	private IAppManager $appManager;
+	private CollectiveService $collectiveService;
 
 	/**
 	 * CollectiveProvider constructor.
@@ -35,6 +39,7 @@ class PageProvider implements IProvider {
 	public function __construct(IL10N $l10n,
 								IURLGenerator $urlGenerator,
 								CollectiveHelper $collectiveHelper,
+								CollectiveService $collectiveService,
 								PageService $pageService,
 								IAppManager $appManager) {
 		$this->l10n = $l10n;
@@ -42,6 +47,7 @@ class PageProvider implements IProvider {
 		$this->collectiveHelper = $collectiveHelper;
 		$this->pageService = $pageService;
 		$this->appManager = $appManager;
+		$this->collectiveService = $collectiveService;
 	}
 
 	/**
@@ -93,11 +99,13 @@ class PageProvider implements IProvider {
 			$pageInfos = $this->pageService->findByString($collective->getId(), $query->getTerm(), $user->getUID());
 			foreach ($pageInfos as $pageInfo) {
 				$pageSearchResults[] = new SearchResultEntry(
-					'',
-					$pageInfo->getTitle(),
-					str_replace('{collective}', $collective->getName(), $this->l10n->t('in Collective {collective}')),
+					$this->urlGenerator->getAbsoluteURL(
+						$this->urlGenerator->imagePath(Application::APP_NAME, 'page.svg')
+					),
+					$this->getPageTitle($pageInfo),
+					$this->l10n->t('In collective %1$s', [$this->collectiveService->getCollectiveNameWithEmoji($collective)]),
 					implode('/', array_filter([
-						$this->urlGenerator->linkToRoute('collectives.start.index'),
+						$this->urlGenerator->linkToRouteAbsolute('collectives.start.index'),
 						$this->pageService->getPageLink($collective->getName(), $pageInfo)
 					])),
 					'icon-collectives-page'
@@ -109,5 +117,16 @@ class PageProvider implements IProvider {
 			$this->getName(),
 			$pageSearchResults
 		);
+	}
+
+	/**
+	 * @param PageInfo $pageInfo
+	 * @return string
+	 */
+	private function getPageTitle(PageInfo $pageInfo): string {
+		$emoji = $pageInfo->getEmoji();
+		return $emoji
+			? $emoji . ' ' . $pageInfo->getTitle()
+			: $pageInfo->getTitle();
 	}
 }

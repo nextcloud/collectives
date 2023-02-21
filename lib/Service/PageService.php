@@ -538,6 +538,27 @@ class PageService {
 	}
 
 	/**
+	 * @param int $collectiveId
+	 * @param int $fileId
+	 * @param string $userId
+	 * @return PageInfo
+	 * @throws FilesNotFoundException
+	 * @throws InvalidPathException
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function findByFileId(int $collectiveId, int $fileId, string $userId): PageInfo {
+		$collectiveFolder = $this->getCollectiveFolder($collectiveId, $userId);
+		$pageFile = $collectiveFolder->getById($fileId);
+		if (!empty($pageFile) && isset($pageFile[0]) && $pageFile[0] instanceof File) {
+			$pageFile = $pageFile[0];
+			return $this->findByFile($collectiveId, $pageFile, $userId);
+		}
+		throw new NotFoundException('Failed to get page by file ID ' . $fileId . ' in collective ' . $collectiveId);
+	}
+
+	/**
 	 * @param int    $collectiveId
 	 * @param int    $parentId
 	 * @param int    $id

@@ -1,14 +1,18 @@
 version: '3'
 
 services:
-  nextcloud-cypress:
-    image: registry.gitlab.com/collectivecloud/docker-builds:php8.1-ncmaster
-    entrypoint:
-      - /usr/local/bin/run.sh
+  nextcloud_cypress:
+    build:
+      context: .
+      network: host
     restart: always
     ports:
       - 8081:80
     environment:
-      APP_SOURCE:
+      - CYPRESS_baseUrl
+      - APP_SOURCE
     volumes:
-      - ${APP_SOURCE}:/var/www/html/apps/collectives
+      - type: bind
+        read_only: true
+        source: ${APP_SOURCE}
+        target: /var/www/html/custom_apps/collectives

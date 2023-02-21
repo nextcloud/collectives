@@ -123,6 +123,36 @@ class CollectiveService extends CollectiveServiceBase {
 	}
 
 	/**
+	 * @param string $userId
+	 * @param string $name
+	 * @return CollectiveInfo
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function findCollectiveByName(string $userId, string $name): CollectiveInfo {
+		$collectives = $this->getCollectives($userId);
+		$collectives = array_filter($collectives, static function (CollectiveInfo $c) use ($name) {
+			return $c->getName() === $name;
+		});
+		if (empty($collectives)) {
+			throw new NotFoundException('Unable to find a collective from its name');
+		}
+		return end($collectives);
+	}
+
+	/**
+	 * @param CollectiveInfo $collectiveInfo
+	 * @return string
+	 */
+	public function getCollectiveNameWithEmoji(CollectiveInfo $collectiveInfo): string {
+		$emoji = $collectiveInfo->getEmoji();
+		return $emoji
+			? $emoji . ' ' . $collectiveInfo->getName()
+			: $collectiveInfo->getName();
+	}
+
+	/**
 	 * @param string      $userId
 	 * @param string      $userLang
 	 * @param string      $safeName

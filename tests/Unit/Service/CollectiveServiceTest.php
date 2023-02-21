@@ -10,12 +10,14 @@ use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Db\CollectiveUserSettingsMapper;
 use OCA\Collectives\Db\PageMapper;
+use OCA\Collectives\Model\CollectiveInfo;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Service\CircleExistsException;
 use OCA\Collectives\Service\CircleHelper;
 use OCA\Collectives\Service\CollectiveHelper;
 use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\CollectiveShareService;
+use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\UnprocessableEntityException;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IL10N;
@@ -24,6 +26,7 @@ use PHPUnit\Framework\TestCase;
 class CollectiveServiceTest extends TestCase {
 	private string $userId = 'jane';
 	private CollectiveMapper $collectiveMapper;
+	private CollectiveHelper $collectiveHelper;
 	private CircleHelper $circleHelper;
 	private IL10N $l10n;
 	private CollectiveService $service;
@@ -33,7 +36,7 @@ class CollectiveServiceTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
-		$collectiveHelper = $this->getMockBuilder(CollectiveHelper::class)
+		$this->collectiveHelper = $this->getMockBuilder(CollectiveHelper::class)
 			->disableOriginalConstructor()
 			->getMock();
 
@@ -78,7 +81,7 @@ class CollectiveServiceTest extends TestCase {
 
 		$this->service = new CollectiveService(
 			$this->collectiveMapper,
-			$collectiveHelper,
+			$this->collectiveHelper,
 			$collectiveFolderManager,
 			$this->circleHelper,
 			$shareService,
@@ -87,6 +90,31 @@ class CollectiveServiceTest extends TestCase {
 			$this->l10n,
 			$eventDispatcher
 		);
+	}
+
+	public function testFindCollectiveByName(): void {
+		$collective1 = new Collective();
+		$collective2 = new Collective();
+		$collectiveInfo1 = new CollectiveInfo($collective1, 'collective1');
+		$collectiveInfo2 = new CollectiveInfo($collective2, 'collective2');
+		$this->collectiveHelper->method('getCollectivesForUser')
+			->willReturn([$collectiveInfo1, $collectiveInfo2]);
+
+		$this->assertEquals($collectiveInfo1, $this->service->findCollectiveByName($this->userId, 'collective1'));
+
+		$this->expectException(NotFoundException::class);
+		$this->service->findCollectiveByName($this->userId, 'collective3');
+	}
+
+	public function testGetCollectiveNameWithEmoji(): void {
+		$name = 'collective';
+		$emoji = '⭐';
+		$collective = new Collective();
+		$collectiveInfo = new CollectiveInfo($collective, $name);
+		$this->assertEquals($name, $this->service->getCollectiveNameWithEmoji($collectiveInfo));
+
+		$collectiveInfo->setEmoji($emoji);
+		$this->assertEquals($emoji . ' ' . $name, $this->service->getCollectiveNameWithEmoji($collectiveInfo));
 	}
 
 	public function testCreateWithEmptyName(): void {
