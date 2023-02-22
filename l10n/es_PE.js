@@ -11,6 +11,7 @@ OC.L10N.register(
     "Restore" : "Restaurar",
     "Delete permanently" : "Borrar permanentemente",
     "Cancel" : "Cancelar",
+    "Back" : "Atrás",
     "Done" : "Terminado",
     "Title" : "Título",
     "Versions" : "Versiones"

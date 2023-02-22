@@ -5,6 +5,7 @@ OC.L10N.register(
     "Unshare" : "Dad-rannu",
     "Settings" : "Gosodiadau",
     "Copied" : "Copïwyd",
+    "Loading …" : "Yn llwytho …",
     "Edit" : "Golygu",
     "Restore" : "Adfer",
     "Delete permanently" : "Dileu'n barhaol",

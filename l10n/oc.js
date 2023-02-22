@@ -4,6 +4,8 @@ OC.L10N.register(
     "Share link" : "Partejar lo ligam",
     "Unshare" : "Partejar pas mai",
     "Settings" : "Paramètres",
+    "Loading …" : "Cargament…",
+    "No results" : "Cap de resultat",
     "View" : "Veire",
     "Edit" : "Modificar",
     "Members" : "Membres",
@@ -12,9 +14,13 @@ OC.L10N.register(
     "Restore" : "Restaurar",
     "Delete permanently" : "Suprimir definitivament",
     "Cancel" : "Anullar",
+    "Back" : "Retorn",
+    "Create" : "Crear",
     "Done" : "Done",
     "Title" : "Títol",
     "No other versions available" : "Cap d’autra version pas disponibla",
-    "Versions" : "Versions"
+    "Versions" : "Versions",
+    "Users" : "Utilizaires",
+    "Groups" : "Gropes"
 },
 "nplurals=2; plural=(n > 1);");

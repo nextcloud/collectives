@@ -6,6 +6,9 @@
     "Copied" : "Копирано",
     "Cannot copy" : "Не може да се копира",
     "Copy share link" : "Копирај линк за споделување",
+    "Loading …" : "Се вчитува…",
+    "No results" : "Нема резултати",
+    "Add {type}" : "Додади {type}",
     "View" : "Погледни",
     "Edit" : "Уреди",
     "Members" : "Членови",
@@ -14,11 +17,15 @@
     "Restore" : "Врати",
     "Delete permanently" : "Избриши",
     "Cancel" : "Откажи",
+    "Back" : "Назад",
+    "Create" : "Креирај",
     "Done" : "Готово",
     "Show in Files" : "Прикажи во датотеките",
     "Title" : "Наслов",
     "Current version" : "Моментална верзија",
     "No other versions available" : "Не постојат други верзии",
-    "Versions" : "Верзии"
+    "Versions" : "Верзии",
+    "Groups" : "Групи",
+    "Email addresses" : "Е-пошта адреси"
 },"pluralForm" :"nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;"
 }

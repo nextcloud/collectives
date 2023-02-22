@@ -6,9 +6,13 @@ OC.L10N.register(
     "Edit" : "Sunting",
     "Restore" : "Pulihkan",
     "Cancel" : "Batal",
+    "Back" : "Kembali",
+    "Create" : "Buat",
     "Done" : "Done",
     "Title" : "Judul",
     "No other versions available" : "Tiada lagi versi lain",
-    "Versions" : "Versi"
+    "Versions" : "Versi",
+    "Users" : "Pengguna",
+    "Groups" : "Kumpulan"
 },
 "nplurals=1; plural=0;");

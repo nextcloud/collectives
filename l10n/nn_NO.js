@@ -8,9 +8,13 @@ OC.L10N.register(
     "Restore" : "Gjenopprett",
     "Delete permanently" : "Slett for godt",
     "Cancel" : "Avbryt",
+    "Back" : "Tilbake",
+    "Create" : "Lag",
     "Done" : "Ferdig",
     "Title" : "Tittel",
     "No other versions available" : "Ingen andre utgåver tilgjengeleg",
-    "Versions" : "Utgåver"
+    "Versions" : "Utgåver",
+    "Users" : "Brukarare",
+    "Groups" : "Grupper"
 },
 "nplurals=2; plural=(n != 1);");

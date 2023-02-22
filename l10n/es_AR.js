@@ -8,6 +8,8 @@ OC.L10N.register(
     "Copied" : "Copiado",
     "Cannot copy" : "No se pudo copiar",
     "Copy share link" : "Copiar el enlace compartido",
+    "Loading …" : "Cargando …",
+    "Add {type}" : "Añadir {type}",
     "Permissions" : "Permisos",
     "View" : "Ver",
     "Edit" : "Editar",

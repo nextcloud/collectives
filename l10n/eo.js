@@ -6,6 +6,7 @@ OC.L10N.register(
     "Unshare" : "Malkunhavigi",
     "Settings" : "Agordoj",
     "Copied" : "Kopiita",
+    "Loading …" : "Ŝargas …",
     "View" : "Vidi",
     "Edit" : "Modifi",
     "Members" : "Membroj",

@@ -5,8 +5,11 @@
     "Edit" : "تەھرىر",
     "Delete permanently" : "مەڭگۈلۈك ئۆچۈر",
     "Cancel" : "ۋاز كەچ",
+    "Create" : "قۇر",
     "Done" : "Done",
     "Title" : "ماۋزۇ",
-    "Versions" : "نەشرى"
+    "Versions" : "نەشرى",
+    "Users" : "ئىشلەتكۈچىلەر",
+    "Groups" : "گۇرۇپپا"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

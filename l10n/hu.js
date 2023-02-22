@@ -8,6 +8,9 @@ OC.L10N.register(
     "Copied" : "Másolva",
     "Cannot copy" : "Nem lehet másolni",
     "Copy share link" : "Megosztási hivatkozás másolása",
+    "Loading …" : "Betöltés…",
+    "No results" : "Nincs találat",
+    "Add {type}" : "{type} hozzáadása",
     "Permissions" : "Jogosultságok",
     "View" : "Megtekintés",
     "Edit" : "Szerkesztés",
@@ -17,6 +20,7 @@ OC.L10N.register(
     "Restore" : "Helyreállítás",
     "Delete permanently" : "Végleges törlés",
     "Cancel" : "Mégse",
+    "Back" : "Vissza",
     "Done" : "Kész",
     "Show in Files" : "Megjelenítés a Fájlokban",
     "Hide outline" : "Vázlat elrejtése",
@@ -26,6 +30,8 @@ OC.L10N.register(
     "Sort by title" : "Rendezés cím szerint",
     "Current version" : "Jelenlegi verzió",
     "No other versions available" : "Nincs másik elérhető verzió",
-    "Versions" : "Verziók"
+    "Versions" : "Verziók",
+    "Groups" : "Csoportok",
+    "Email addresses" : "E-mail-címek"
 },
 "nplurals=2; plural=(n != 1);");

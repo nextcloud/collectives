@@ -7,9 +7,11 @@ OC.L10N.register(
     "Edit" : "ಸಂಪಾದಿಸು",
     "Restore" : "ಮರುಸ್ಥಾಪಿಸು",
     "Cancel" : "﻿ರದ್ದು",
+    "Create" : "ಸೃಷ್ಟಿಸಿ",
     "Done" : "Done",
     "Title" : "ಶೀರ್ಷಿಕೆ",
     "No other versions available" : "ಇನ್ನಿತರೆ ಯಾವುದೇ ಆವೃತ್ತಿಗಳು ಲಭ್ಯವಿಲ್ಲ",
-    "Versions" : "ಆವೃತ್ತಿಗಳು"
+    "Versions" : "ಆವೃತ್ತಿಗಳು",
+    "Groups" : "﻿ಗುಂಪುಗಳು"
 },
 "nplurals=2; plural=(n > 1);");

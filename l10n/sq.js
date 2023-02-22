@@ -6,6 +6,7 @@ OC.L10N.register(
     "Unshare" : "Hiqe ndarjen",
     "Settings" : "Rregullimet",
     "Copied" : "Kopjuar",
+    "No results" : "Asnjë rezultat",
     "Permissions" : "Lejet",
     "View" : "Shiko",
     "Edit" : "Përpuno",
@@ -13,9 +14,14 @@ OC.L10N.register(
     "Restore" : "Rikthe",
     "Delete permanently" : "Fshije përgjithmonë",
     "Cancel" : "Anullo",
+    "Back" : "Prapa",
+    "Create" : "Krijo",
     "Done" : "U krye",
     "Title" : "Titulli",
     "No other versions available" : "Nuk ka versione të tjera të gatshme",
-    "Versions" : "Versione"
+    "Versions" : "Versione",
+    "Users" : "Përdoruesit",
+    "Groups" : "Grupet",
+    "Circles" : "Rrethet"
 },
 "nplurals=2; plural=(n != 1);");

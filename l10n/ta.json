@@ -1,6 +1,5 @@
 { "translations": {
     "Collectives" : "தொகுப்புகள்",
-    "in Collective {collective}" : "தொகுப்பில் {தொகுப்பு}",
     "Created collective \"%s\" for existing circle." : "ஏற்கனவே உள்ள வட்டத்திற்காக \"%s\" தொகுப்பு உருவாக்கப்பட்டது.",
     "Manage members" : "உறுப்பினர்களை நிர்வகிக்கவும்",
     "Share link" : "இணைப்பைப் பகிரவும்",
@@ -13,6 +12,8 @@
     "Restore" : "மீட்டெடு",
     "Delete permanently" : "நிரந்தரமாக நீக்கவும்",
     "Cancel" : "ரத்து செய்",
+    "Back" : "பின்னுக்கு",
+    "Create" : "உருவாக்குக",
     "Stop editing" : "திருத்துவதை நிறுத்து",
     "Done" : "Done",
     "Show in Files" : "கோப்புகளில் காட்டவும்",
@@ -29,9 +30,12 @@
     "Versions" : "பதிப்புகள்",
     "Old versions of this page" : "இந்தப் பக்கத்தின் பழைய பதிப்புகள்",
     "Come, organize and build shared knowledge!" : "வாருங்கள், ஒழுங்கமைத்து பகிர்ந்த அறிவை உருவாக்குங்கள்!",
+    "Users" : "பயனாளர்",
+    "Groups" : "குழுக்கள்",
     "Could not create the page" : "பக்கத்தை உருவாக்க முடியவில்லை",
     "New Page" : "புதிய பக்கம்",
     "Could not delete the page" : "பக்கத்தை நீக்க முடியவில்லை",
+    "in Collective {collective}" : "தொகுப்பில் {தொகுப்பு}",
     "Select circle..." : "வட்டத்தைத் தேர்ந்தெடுக்கவும்..."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

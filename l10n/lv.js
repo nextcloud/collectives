@@ -6,6 +6,7 @@ OC.L10N.register(
     "Unshare" : "Pārtraukt koplietošanu",
     "Settings" : "Iestatījumi",
     "Copied" : "Nokopēts",
+    "No results" : "Nav rezultātu",
     "Permissions" : "Atļaujas",
     "View" : "Skats",
     "Edit" : "Rediģēt",
@@ -13,9 +14,12 @@ OC.L10N.register(
     "Restore" : "Atjaunot",
     "Delete permanently" : "Dzēst pavisam",
     "Cancel" : "Atcelt",
+    "Back" : "Atpakaļ",
+    "Create" : "Izveidot",
     "Done" : "Pabeigts",
     "Title" : "Amats",
     "No other versions available" : "Citas versijas nav pieejamas",
-    "Versions" : "Versijas"
+    "Versions" : "Versijas",
+    "Groups" : "Grupas"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");

@@ -7,6 +7,9 @@ OC.L10N.register(
     "Settings" : "הגדרות",
     "Copied" : "הועתק",
     "Copy share link" : "העתקת קישור השיתוף",
+    "Loading …" : "בטעינה…",
+    "No results" : "אין תוצאות",
+    "Add {type}" : "הוסף {type}",
     "Permissions" : "הרשאות",
     "View" : "צפייה",
     "Edit" : "עריכה",
@@ -15,12 +18,14 @@ OC.L10N.register(
     "Restore" : "שחזור",
     "Delete permanently" : "מחיקה לצמיתות",
     "Cancel" : "ביטול",
+    "Back" : "חזרה",
     "Done" : "הסתיים",
     "Show in Files" : "הצגה בקבצים",
     "Template" : "תבנית",
     "Title" : "תפקיד",
     "Current version" : "גרסה נוכחית",
     "No other versions available" : "אין גרסאות אחרות זמינות",
-    "Versions" : "גרסאות"
+    "Versions" : "גרסאות",
+    "Groups" : "קבוצות"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;");

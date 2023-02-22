@@ -5,14 +5,17 @@ OC.L10N.register(
     "Share link" : "ბმულის გაზიარება",
     "Unshare" : "გაზიარების შეწყვეტა",
     "Settings" : "პარამეტრები",
+    "No results" : "შედეგები არაა",
     "Permissions" : "უფლებები",
     "Edit" : "შეცვლა",
     "Members" : "წევრები",
     "Restore" : "აღდგენა",
     "Delete permanently" : "სამუდამოდ წაშლა",
     "Cancel" : "უარყოფა",
+    "Back" : "უკან",
     "Done" : "დასრულებულია",
     "Title" : "სათაური",
-    "Versions" : "ვერსიები"
+    "Versions" : "ვერსიები",
+    "Groups" : "ჯგუფები"
 },
 "nplurals=2; plural=(n!=1);");

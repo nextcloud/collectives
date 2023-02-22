@@ -5,6 +5,9 @@ OC.L10N.register(
     "Unshare" : "Bỏ chia sẻ",
     "Settings" : "Cài đặt",
     "Copied" : "Đã sao chép",
+    "Loading …" : "Đang tải …",
+    "No results" : "Không có kết quả",
+    "Add {type}" : "Thêm {type}",
     "View" : "Xem",
     "Edit" : "Chỉnh sửa",
     "Members" : "Thành viên",
@@ -13,10 +16,15 @@ OC.L10N.register(
     "Restore" : "Khôi phục",
     "Delete permanently" : "Xoá vĩnh viễn",
     "Cancel" : "Hủy",
+    "Back" : "Quay lại",
+    "Create" : "‎Tạo‎",
     "Done" : "Hoàn thành",
     "Title" : "Tiêu đề",
     "Current version" : "Phiên bản hiện tại",
     "No other versions available" : "Không có các phiên bản khác có sẵn",
-    "Versions" : "Phiên bản"
+    "Versions" : "Phiên bản",
+    "Users" : "Người dùng",
+    "Groups" : "Nhóm",
+    "Circles" : "Vòng kết nối"
 },
 "nplurals=1; plural=0;");

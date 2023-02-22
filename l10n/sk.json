@@ -6,6 +6,9 @@
     "Copied" : "Skopírované",
     "Cannot copy" : "Nemôže kopírovať",
     "Copy share link" : "Kopírovať odkaz na zdieľanie",
+    "Loading …" : "Načítavam …",
+    "No results" : "Žiadne výsledky",
+    "Add {type}" : "Pridať {type}",
     "Permissions" : "Oprávnenia",
     "View" : "Zobrazenie",
     "Edit" : "Upraviť",
@@ -15,6 +18,8 @@
     "Restore" : "Obnoviť",
     "Delete permanently" : "Zmazať  natrvalo",
     "Cancel" : "Zrušiť",
+    "Back" : "Späť",
+    "Create" : "Vytvoriť",
     "Done" : "Hotové",
     "Show in Files" : "Zobraziť v Súboroch",
     "Hide outline" : "Skryť prehľad",
@@ -24,6 +29,9 @@
     "Sort by title" : "Zoradiť podľa nadpisu",
     "Current version" : "Aktuálna verzia",
     "No other versions available" : "Žiadne ďalšie verzie nie sú dostupné",
-    "Versions" : "Verzie"
+    "Versions" : "Verzie",
+    "Users" : "Užívatelia",
+    "Groups" : "Skupiny",
+    "Circles" : "Kruhy"
 },"pluralForm" :"nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);"
 }
