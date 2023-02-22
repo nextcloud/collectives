@@ -8,6 +8,7 @@ OC.L10N.register(
     "Restore" : "بحال",
     "Cancel" : "منسوخ کریں",
     "Done" : "Done",
-    "Title" : "عنوان"
+    "Title" : "عنوان",
+    "Users" : "صارفین"
 },
 "nplurals=2; plural=(n != 1);");

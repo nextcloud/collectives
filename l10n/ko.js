@@ -8,6 +8,9 @@ OC.L10N.register(
     "Copied" : "복사됨",
     "Cannot copy" : "복사할 수 없음",
     "Copy share link" : "공유 링크 복사",
+    "Loading …" : "불러오는 중 …",
+    "No results" : "결과 없음",
+    "Add {type}" : "{type} 추가",
     "Permissions" : "권한",
     "View" : "보기",
     "Edit" : "편집",
@@ -17,10 +20,13 @@ OC.L10N.register(
     "Restore" : "복원",
     "Delete permanently" : "영구히 삭제",
     "Cancel" : "취소",
+    "Back" : "뒤로",
+    "Create" : "생성",
     "Done" : "완료",
     "Template" : "템플릿",
     "Title" : "제목",
     "No other versions available" : "다른 버전을 사용할 수 없음",
-    "Versions" : "버전"
+    "Versions" : "버전",
+    "Groups" : "그룹"
 },
 "nplurals=1; plural=0;");

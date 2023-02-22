@@ -8,6 +8,9 @@ OC.L10N.register(
     "Copied" : "Kopioitu",
     "Cannot copy" : "Ei voida kopioida",
     "Copy share link" : "Kopioi jakolinkki",
+    "Loading …" : "Ladataan…",
+    "No results" : "Ei tuloksia",
+    "Add {type}" : "Lisää {type}",
     "Permissions" : "Oikeudet",
     "View" : "Näytä",
     "Edit" : "Muokkaa",
@@ -17,12 +20,14 @@ OC.L10N.register(
     "Restore" : "Palauta",
     "Delete permanently" : "Poista pysyvästi",
     "Cancel" : "Peruuta",
+    "Back" : "Takaisin",
     "Done" : "Valmis",
     "Template" : "Malli",
     "Title" : "Nimeke",
     "Sort by title" : "Lajittele nimen mukaan",
     "Current version" : "Nykyinen versio",
     "No other versions available" : "Ei muita versioita saatavilla",
-    "Versions" : "Versiot"
+    "Versions" : "Versiot",
+    "Groups" : "Ryhmät"
 },
 "nplurals=2; plural=(n != 1);");

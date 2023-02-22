@@ -7,8 +7,11 @@ OC.L10N.register(
     "Edit" : "تەھرىر",
     "Delete permanently" : "مەڭگۈلۈك ئۆچۈر",
     "Cancel" : "ۋاز كەچ",
+    "Create" : "قۇر",
     "Done" : "Done",
     "Title" : "ماۋزۇ",
-    "Versions" : "نەشرى"
+    "Versions" : "نەشرى",
+    "Users" : "ئىشلەتكۈچىلەر",
+    "Groups" : "گۇرۇپپا"
 },
 "nplurals=2; plural=(n != 1);");

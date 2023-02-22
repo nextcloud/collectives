@@ -6,14 +6,17 @@ OC.L10N.register(
     "Unshare" : "Batalkan berbagi",
     "Settings" : "Setelan",
     "Copied" : "Tersalin",
+    "No results" : "Tidak ada hasil",
     "Edit" : "Sunting",
     "Members" : "Anggota",
     "Restore" : "Pulihkan",
     "Delete permanently" : "Hapus secara permanen",
     "Cancel" : "Membatalkan",
+    "Back" : "Kembali",
     "Done" : "Selesai",
     "Title" : "Judul",
     "No other versions available" : "Tidak ada versi lain yang tersedia",
-    "Versions" : "Versi"
+    "Versions" : "Versi",
+    "Groups" : "Grup"
 },
 "nplurals=1; plural=0;");

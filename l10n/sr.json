@@ -5,6 +5,9 @@
     "Settings" : "Поставке",
     "Copied" : "Копирано",
     "Copy share link" : "Копирај везу дељења",
+    "Loading …" : "Учитавање…",
+    "No results" : "Нема резултата",
+    "Add {type}" : "Додај {type}",
     "Permissions" : "Дозволе",
     "View" : "Погледај",
     "Edit" : "Измени",
@@ -12,10 +15,15 @@
     "Restore" : "Врати",
     "Delete permanently" : "Обриши заувек",
     "Cancel" : "Откажи",
+    "Back" : "Назад",
+    "Create" : "Направи",
     "Done" : "Готово",
     "Title" : "Звање",
     "Current version" : "Тренутна верзија",
     "No other versions available" : "Нема доступних других верзија",
-    "Versions" : "Верзије"
+    "Versions" : "Верзије",
+    "Users" : "Корисници",
+    "Groups" : "Групе",
+    "Circles" : "Кругови"
 },"pluralForm" :"nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
 }

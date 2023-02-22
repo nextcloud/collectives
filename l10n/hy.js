@@ -11,6 +11,7 @@ OC.L10N.register(
     "Done" : "Done",
     "Title" : "Վերնագիր",
     "No other versions available" : "Այլ տարբերակներ չկան",
-    "Versions" : "Տարբերակներ"
+    "Versions" : "Տարբերակներ",
+    "Groups" : "Խմբեր"
 },
 "nplurals=2; plural=(n != 1);");

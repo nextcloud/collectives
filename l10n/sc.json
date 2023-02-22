@@ -5,6 +5,9 @@
     "Settings" : "Impostatziones",
     "Copied" : "Copiadu",
     "Cannot copy" : "Non faghet a copiare",
+    "Loading …" : "Carrigamentu …",
+    "No results" : "Perunu resurtadu",
+    "Add {type}" : "Agiunghe {type}",
     "Permissions" : "Permissos",
     "View" : "Visualiza",
     "Edit" : "Modìfica",
@@ -14,6 +17,8 @@
     "Restore" : "Riprìstina",
     "Delete permanently" : "Cantzella in manera definitiva",
     "Cancel" : "Annulla",
+    "Back" : "In segus",
+    "Create" : "Crea",
     "Done" : "Fatu",
     "Show in Files" : "Mustra in Archìvios",
     "Template" : "Modellu",
@@ -21,6 +26,9 @@
     "Sort by title" : "Assenta segundu tìtulu",
     "Current version" : "Versione atuale",
     "No other versions available" : "Peruna àtera versione disponìbile",
-    "Versions" : "Versiones"
+    "Versions" : "Versiones",
+    "Users" : "Utentes",
+    "Groups" : "Grupos",
+    "Circles" : "Giros"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

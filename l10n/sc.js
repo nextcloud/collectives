@@ -7,6 +7,9 @@ OC.L10N.register(
     "Settings" : "Impostatziones",
     "Copied" : "Copiadu",
     "Cannot copy" : "Non faghet a copiare",
+    "Loading …" : "Carrigamentu …",
+    "No results" : "Perunu resurtadu",
+    "Add {type}" : "Agiunghe {type}",
     "Permissions" : "Permissos",
     "View" : "Visualiza",
     "Edit" : "Modìfica",
@@ -16,6 +19,8 @@ OC.L10N.register(
     "Restore" : "Riprìstina",
     "Delete permanently" : "Cantzella in manera definitiva",
     "Cancel" : "Annulla",
+    "Back" : "In segus",
+    "Create" : "Crea",
     "Done" : "Fatu",
     "Show in Files" : "Mustra in Archìvios",
     "Template" : "Modellu",
@@ -23,6 +28,9 @@ OC.L10N.register(
     "Sort by title" : "Assenta segundu tìtulu",
     "Current version" : "Versione atuale",
     "No other versions available" : "Peruna àtera versione disponìbile",
-    "Versions" : "Versiones"
+    "Versions" : "Versiones",
+    "Users" : "Utentes",
+    "Groups" : "Grupos",
+    "Circles" : "Giros"
 },
 "nplurals=2; plural=(n != 1);");

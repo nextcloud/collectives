@@ -5,6 +5,7 @@ OC.L10N.register(
     "Share link" : "Compartir liga",
     "Unshare" : "Dejar de compartir",
     "Settings" : "Configuraciones ",
+    "Loading …" : "Cargando …",
     "Permissions" : "Permisos",
     "Edit" : "Editar",
     "Members" : "Miembros",

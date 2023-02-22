@@ -8,6 +8,9 @@ OC.L10N.register(
     "Copied" : "已複製",
     "Cannot copy" : "無法複製",
     "Copy share link" : "複製分享連結",
+    "Loading …" : "正在載入……",
+    "No results" : "無結果",
+    "Add {type}" : "新增 {type}",
     "Permissions" : "權限",
     "View" : "檢視",
     "Edit" : "編輯",
@@ -17,6 +20,8 @@ OC.L10N.register(
     "Restore" : "還原",
     "Delete permanently" : "永久刪除",
     "Cancel" : "取消",
+    "Back" : "返回",
+    "Create" : "建立",
     "Done" : "完成",
     "Show in Files" : "在「檔案」中顯示",
     "Hide outline" : "隱藏大綱",
@@ -25,6 +30,10 @@ OC.L10N.register(
     "Sort by title" : "按標題排序",
     "Current version" : "目前版本",
     "No other versions available" : "沒有其他版本了",
-    "Versions" : "版本"
+    "Versions" : "版本",
+    "Users" : "使用者",
+    "Groups" : "群組",
+    "Email addresses" : "電子郵件地址",
+    "Circles" : "圈子"
 },
 "nplurals=1; plural=0;");
