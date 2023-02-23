@@ -11,9 +11,12 @@
     "Delete permanently" : "სამუდამოდ წაშლა",
     "Cancel" : "უარყოფა",
     "Back" : "უკან",
+    "Create" : "შექმნა",
     "Done" : "დასრულებულია",
     "Title" : "სათაური",
     "Versions" : "ვერსიები",
-    "Groups" : "ჯგუფები"
+    "Users" : "მომხმარებლები",
+    "Groups" : "ჯგუფები",
+    "Circles" : "წრეები"
 },"pluralForm" :"nplurals=2; plural=(n!=1);"
 }

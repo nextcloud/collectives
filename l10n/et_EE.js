@@ -11,9 +11,12 @@ OC.L10N.register(
     "Delete permanently" : "Kustuta jäädavalt",
     "Cancel" : "Loobu",
     "Back" : "Tagasi",
+    "Create" : "Loo",
     "Done" : "Valmis",
     "Title" : "Pealkiri",
     "No other versions available" : "Muid versioone pole saadaval",
-    "Versions" : "Versioonid"
+    "Versions" : "Versioonid",
+    "Users" : "Kasutajad",
+    "Groups" : "Grupid"
 },
 "nplurals=2; plural=(n != 1);");
