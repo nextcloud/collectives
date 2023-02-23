@@ -21,6 +21,7 @@ OC.L10N.register(
     "Delete permanently" : "Trajno izbrišite",
     "Cancel" : "Odustani",
     "Back" : "Natrag",
+    "Create" : "Stvori",
     "Done" : "Gotovo",
     "Show in Files" : "Prikaži u datotekama",
     "Template" : "Predložak",
@@ -29,6 +30,8 @@ OC.L10N.register(
     "Current version" : "Trenutna verzija",
     "No other versions available" : "Nema drugih inačica",
     "Versions" : "Inačice",
-    "Groups" : "Grupe"
+    "Users" : "Korisnici",
+    "Groups" : "Grupe",
+    "Circles" : "Krugovi"
 },
 "nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;");

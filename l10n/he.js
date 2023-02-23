@@ -19,6 +19,7 @@ OC.L10N.register(
     "Delete permanently" : "מחיקה לצמיתות",
     "Cancel" : "ביטול",
     "Back" : "חזרה",
+    "Create" : "יצירה",
     "Done" : "הסתיים",
     "Show in Files" : "הצגה בקבצים",
     "Template" : "תבנית",
@@ -26,6 +27,8 @@ OC.L10N.register(
     "Current version" : "גרסה נוכחית",
     "No other versions available" : "אין גרסאות אחרות זמינות",
     "Versions" : "גרסאות",
-    "Groups" : "קבוצות"
+    "Users" : "משתמשים",
+    "Groups" : "קבוצות",
+    "Circles" : "מעגלים"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;");

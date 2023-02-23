@@ -21,6 +21,7 @@ OC.L10N.register(
     "Delete permanently" : "Végleges törlés",
     "Cancel" : "Mégse",
     "Back" : "Vissza",
+    "Create" : "Létrehozás",
     "Done" : "Kész",
     "Show in Files" : "Megjelenítés a Fájlokban",
     "Hide outline" : "Vázlat elrejtése",
@@ -31,7 +32,9 @@ OC.L10N.register(
     "Current version" : "Jelenlegi verzió",
     "No other versions available" : "Nincs másik elérhető verzió",
     "Versions" : "Verziók",
+    "Users" : "Felhasználók",
     "Groups" : "Csoportok",
-    "Email addresses" : "E-mail-címek"
+    "Email addresses" : "E-mail-címek",
+    "Circles" : "Körök"
 },
 "nplurals=2; plural=(n != 1);");

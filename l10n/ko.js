@@ -27,6 +27,8 @@ OC.L10N.register(
     "Title" : "제목",
     "No other versions available" : "다른 버전을 사용할 수 없음",
     "Versions" : "버전",
-    "Groups" : "그룹"
+    "Users" : "사용자",
+    "Groups" : "그룹",
+    "Circles" : "서클"
 },
 "nplurals=1; plural=0;");

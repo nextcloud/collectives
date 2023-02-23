@@ -9,9 +9,12 @@ OC.L10N.register(
     "Restore" : "Geri qaytar",
     "Delete permanently" : "Həmişəlik sil",
     "Cancel" : "Dayandır",
+    "Create" : "Yarat",
     "Done" : "Done",
     "Title" : "Başlıq",
     "No other versions available" : "Başqa versiyalar mövcud deyil",
-    "Versions" : "Versiyaları"
+    "Versions" : "Versiyaları",
+    "Users" : "İstifadəçilər",
+    "Groups" : "Qruplar"
 },
 "nplurals=2; plural=(n != 1);");

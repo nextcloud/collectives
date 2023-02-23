@@ -17,12 +17,15 @@ OC.L10N.register(
     "Delete permanently" : "Eyða varanlega",
     "Cancel" : "Hætta við",
     "Back" : "Til baka",
+    "Create" : "Búa til",
     "Done" : "Lokið",
     "Template" : "Sniðmát",
     "Title" : "Titill",
     "Current version" : "Fyrirliggjandi útgáfa",
     "No other versions available" : "Engar aðrar útgáfur í boði",
     "Versions" : "Útgáfur",
-    "Groups" : "Hópar"
+    "Users" : "Notendur",
+    "Groups" : "Hópar",
+    "Circles" : "Hringir"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

@@ -5,15 +5,22 @@ OC.L10N.register(
     "Share link" : "Share link",
     "Unshare" : "Dexar de compartir",
     "Settings" : "Settings",
+    "Loading …" : "Cargando...",
+    "No results" : "Ensin resultaos",
     "Permissions" : "Permisos",
     "Edit" : "Editar",
     "Members" : "Miembros",
     "Restore" : "Respaldar",
     "Delete permanently" : "Desaniciar dafechu",
     "Cancel" : "Encaboxar",
+    "Back" : "Atrás",
+    "Create" : "Crear",
     "Done" : "Fecho",
     "Title" : "Títulu",
     "No other versions available" : "Nun hai otres versiones disponibles",
-    "Versions" : "Versiones"
+    "Versions" : "Versiones",
+    "Users" : "Usuarios",
+    "Groups" : "Grupos",
+    "Circles" : "Círculos"
 },
 "nplurals=2; plural=(n != 1);");

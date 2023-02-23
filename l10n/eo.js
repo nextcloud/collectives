@@ -7,16 +7,22 @@ OC.L10N.register(
     "Settings" : "Agordoj",
     "Copied" : "Kopiita",
     "Loading …" : "Ŝargas …",
+    "No results" : "Neniu rezulto",
     "View" : "Vidi",
     "Edit" : "Modifi",
     "Members" : "Membroj",
     "Restore" : "Restaŭri",
     "Delete permanently" : "Forigi por ĉiam",
     "Cancel" : "Nuligi",
+    "Back" : "Antaŭen",
+    "Create" : "Krei",
     "Done" : "Farita",
     "Title" : "Titolo",
     "Current version" : "Nuna versio",
     "No other versions available" : "Neniu alia versio disponeblas",
-    "Versions" : "Versioj"
+    "Versions" : "Versioj",
+    "Users" : "Uzantoj",
+    "Groups" : "Grupoj",
+    "Circles" : "Rondoj"
 },
 "nplurals=2; plural=(n != 1);");

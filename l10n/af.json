@@ -3,13 +3,18 @@
     "Unshare" : "Ontdeel",
     "Settings" : "Instellings",
     "Copied" : "Gekopieer",
+    "Loading …" : "Laai …",
     "View" : "Bekyk",
     "Edit" : "Wysig",
     "Restore" : "Herstel",
     "Delete permanently" : "Skrap permanent",
     "Cancel" : "Kanselleer",
+    "Back" : "Terug",
+    "Create" : "Skep",
     "Done" : "Gereed",
     "Title" : "Titel",
-    "Versions" : "Weergawes"
+    "Versions" : "Weergawes",
+    "Users" : "Gebruikers",
+    "Groups" : "Groepe"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

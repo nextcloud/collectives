@@ -13,9 +13,12 @@ OC.L10N.register(
     "Delete permanently" : "სამუდამოდ წაშლა",
     "Cancel" : "უარყოფა",
     "Back" : "უკან",
+    "Create" : "შექმნა",
     "Done" : "დასრულებულია",
     "Title" : "სათაური",
     "Versions" : "ვერსიები",
-    "Groups" : "ჯგუფები"
+    "Users" : "მომხმარებლები",
+    "Groups" : "ჯგუფები",
+    "Circles" : "წრეები"
 },
 "nplurals=2; plural=(n!=1);");

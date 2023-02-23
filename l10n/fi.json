@@ -18,7 +18,9 @@
     "Restore" : "Palauta",
     "Delete permanently" : "Poista pysyvästi",
     "Cancel" : "Peruuta",
+    "Select emoji" : "Valitse emoji",
     "Back" : "Takaisin",
+    "Create" : "Luo",
     "Done" : "Valmis",
     "Template" : "Malli",
     "Title" : "Nimeke",
@@ -26,6 +28,9 @@
     "Current version" : "Nykyinen versio",
     "No other versions available" : "Ei muita versioita saatavilla",
     "Versions" : "Versiot",
-    "Groups" : "Ryhmät"
+    "Users" : "Käyttäjät",
+    "Groups" : "Ryhmät",
+    "Email addresses" : "Sähköpostiosoitteet",
+    "Circles" : "Piirit"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

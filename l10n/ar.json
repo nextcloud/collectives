@@ -6,6 +6,8 @@
     "Copied" : "نُسخت ",
     "Cannot copy" : "لا يمكن النسخ",
     "Copy share link" : "انسخ رابط المشاركة",
+    "Loading …" : "جاري التحميل …",
+    "No results" : "لا يوجد أي نتيجة",
     "Permissions" : "التصريحات",
     "View" : "عرض",
     "Edit" : "تعديل",
@@ -15,11 +17,16 @@
     "Restore" : "استعادة ",
     "Delete permanently" : "حذف بشكل دائم",
     "Cancel" : "إلغاء",
+    "Back" : "العودة",
+    "Create" : "إنشاء",
     "Done" : "أُنجز",
     "Show in Files" : "عرض في الملفات ",
     "Title" : "العنوان",
     "Current version" : "الإصدار الحالي",
     "No other versions available" : "لا تتوفر هناك نُسخ أخرى",
-    "Versions" : "الإصدارات"
+    "Versions" : "الإصدارات",
+    "Users" : "المستخدمين:",
+    "Groups" : "المجموعات",
+    "Circles" : "جماعة"
 },"pluralForm" :"nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;"
 }

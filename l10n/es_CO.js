@@ -5,6 +5,7 @@ OC.L10N.register(
     "Share link" : "Compartir enlace",
     "Unshare" : "Dejar de compartir",
     "Settings" : "Configuraciones ",
+    "No results" : "No hay resultados",
     "Permissions" : "Permisos",
     "Edit" : "Editar",
     "Members" : "Miembros",
@@ -12,8 +13,12 @@ OC.L10N.register(
     "Delete permanently" : "Borrar permanentemente",
     "Cancel" : "Cancelar",
     "Back" : "Atrás",
+    "Create" : "Crear",
     "Done" : "Terminado",
     "Title" : "Título",
-    "Versions" : "Versiones"
+    "Versions" : "Versiones",
+    "Users" : "Usuarios",
+    "Groups" : "Grupos",
+    "Circles" : "Círculos"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

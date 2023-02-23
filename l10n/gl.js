@@ -21,6 +21,7 @@ OC.L10N.register(
     "Delete permanently" : "Eliminar de xeito permanente",
     "Cancel" : "Cancelar",
     "Back" : "Atrás",
+    "Create" : "Crear",
     "Done" : "Feito",
     "Show in Files" : "Amosar en Ficheiros",
     "Template" : "Modelo",
@@ -28,6 +29,8 @@ OC.L10N.register(
     "Current version" : "Versión actual",
     "No other versions available" : "Non hai outras versións dispoñíbeis",
     "Versions" : "Versións",
-    "Groups" : "Grupos"
+    "Users" : "Usuarios",
+    "Groups" : "Grupos",
+    "Circles" : "Círculos"
 },
 "nplurals=2; plural=(n != 1);");

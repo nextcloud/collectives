@@ -15,11 +15,15 @@ OC.L10N.register(
     "Delete permanently" : "حذف قطعی",
     "Cancel" : "لغو",
     "Back" : "بازگشت",
+    "Create" : "ایجاد",
     "Done" : "انجام شد",
     "Show in Files" : "نمایش در فایل‌ها",
     "Title" : "عنوان",
     "Current version" : "نسخه فعلی",
     "No other versions available" : "نسخه ی دیگری در دسترس نیست",
-    "Versions" : "نسخه ها"
+    "Versions" : "نسخه ها",
+    "Users" : "کاربران",
+    "Groups" : "گروه ها",
+    "Circles" : "حلقه ها"
 },
 "nplurals=2; plural=(n > 1);");

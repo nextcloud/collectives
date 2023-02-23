@@ -20,7 +20,9 @@ OC.L10N.register(
     "Restore" : "Palauta",
     "Delete permanently" : "Poista pysyvästi",
     "Cancel" : "Peruuta",
+    "Select emoji" : "Valitse emoji",
     "Back" : "Takaisin",
+    "Create" : "Luo",
     "Done" : "Valmis",
     "Template" : "Malli",
     "Title" : "Nimeke",
@@ -28,6 +30,9 @@ OC.L10N.register(
     "Current version" : "Nykyinen versio",
     "No other versions available" : "Ei muita versioita saatavilla",
     "Versions" : "Versiot",
-    "Groups" : "Ryhmät"
+    "Users" : "Käyttäjät",
+    "Groups" : "Ryhmät",
+    "Email addresses" : "Sähköpostiosoitteet",
+    "Circles" : "Piirit"
 },
 "nplurals=2; plural=(n != 1);");
