@@ -173,7 +173,7 @@ export default {
 				this.membersLoading = false
 			} catch (e) {
 				console.error(e)
-				showError(t('collectives', 'An error occured while performing the search'))
+				showError(t('collectives', 'An error occurred while performing the search'))
 				this.membersLoading = false
 				return
 			}
