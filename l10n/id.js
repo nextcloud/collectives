@@ -13,10 +13,12 @@ OC.L10N.register(
     "Delete permanently" : "Hapus secara permanen",
     "Cancel" : "Membatalkan",
     "Back" : "Kembali",
+    "Create" : "Buat",
     "Done" : "Selesai",
     "Title" : "Judul",
     "No other versions available" : "Tidak ada versi lain yang tersedia",
     "Versions" : "Versi",
+    "Users" : "Pengguna",
     "Groups" : "Grup"
 },
 "nplurals=1; plural=0;");

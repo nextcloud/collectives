@@ -14,6 +14,7 @@ OC.L10N.register(
     "Title" : "Titel",
     "No other versions available" : "Keng aner Versiounen disponibel",
     "Versions" : "Versiounen",
+    "Users" : "Benotzer",
     "Groups" : "Gruppen"
 },
 "nplurals=2; plural=(n != 1);");

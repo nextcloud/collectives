@@ -39,7 +39,7 @@ OC.L10N.register(
     "Search for members to add" : "Vyhledat členy, které přidat",
     "Loading …" : "Načítání…",
     "No results" : "Žádné výsledky",
-    "An error occured while performing the search" : "Došlo k chybě při provádění hledání",
+    "An error occurred while performing the search" : "Došlo k chybě při provádění hledání",
     "Add {type}" : "Přidat {type}",
     "Collective settings" : "Nastavení pro kolektiv",
     "Name and emoji" : "Název a emotikona",

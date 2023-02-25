@@ -20,6 +20,7 @@ OC.L10N.register(
     "Title" : "Amats",
     "No other versions available" : "Citas versijas nav pieejamas",
     "Versions" : "Versijas",
+    "Users" : "Lietotāji",
     "Groups" : "Grupas"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");

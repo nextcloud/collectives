@@ -32,6 +32,7 @@ OC.L10N.register(
     "Last edited by {user}" : "Zadnje urejanje: {user}",
     "Loading …" : "Poteka nalaganje …",
     "No results" : "Ni zadetkov",
+    "An error occurred while performing the search" : "Me iskanjem je prišlo do napake",
     "Add {type}" : "Dodaj {type}",
     "Collective settings" : "Nastavitve Zbirke",
     "Name and emoji" : "Ime in izrazne ikone",

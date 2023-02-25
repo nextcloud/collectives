@@ -15,6 +15,7 @@ OC.L10N.register(
     "No other versions available" : "Ingen andre utgåver tilgjengeleg",
     "Versions" : "Utgåver",
     "Users" : "Brukarare",
-    "Groups" : "Grupper"
+    "Groups" : "Grupper",
+    "Circles" : "Sirklar"
 },
 "nplurals=2; plural=(n != 1);");

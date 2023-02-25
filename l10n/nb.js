@@ -55,6 +55,7 @@ OC.L10N.register(
     "Users" : "Brukere",
     "Groups" : "Grupper",
     "Email addresses" : "E-postadresser",
+    "Circles" : "Sirkler",
     "Could not create the page" : "Kunne ikke opprette siden",
     "New Page" : "Ny side",
     "Could not delete the page" : "Kunne ikke slette siden",

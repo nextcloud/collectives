@@ -19,6 +19,7 @@ OC.L10N.register(
     "Title" : "Цол/Албан тушаал",
     "Versions" : "Хувилбарууд",
     "Users" : "хэрэглэгч",
-    "Groups" : "бүлэгүүд"
+    "Groups" : "бүлэгүүд",
+    "Circles" : "Тойрог"
 },
 "nplurals=2; plural=(n != 1);");

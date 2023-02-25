@@ -13,6 +13,7 @@ OC.L10N.register(
     "Copy share link" : "Kopiera delningslänk",
     "Loading …" : "Läser in …",
     "No results" : "Inga resultat",
+    "An error occurred while performing the search" : "Ett fel uppstod när sökningen utfördes",
     "Add {type}" : "Lägg till {type}",
     "Permissions" : "Behörigheter",
     "View" : "Visa",

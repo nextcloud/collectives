@@ -30,6 +30,7 @@ OC.L10N.register(
     "Last edited by {user}" : "Azkenekoz {user}k editatu du",
     "Loading …" : "Kargatzen …",
     "No results" : "Emaitzarik ez",
+    "An error occurred while performing the search" : "Errore bat gertatu da bilaketa egitean",
     "Add {type}" : "Gehitu {type}",
     "Collective settings" : "Kolektiboaren ezarpenak",
     "Name and emoji" : "Izena eta emojia",

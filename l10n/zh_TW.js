@@ -10,6 +10,7 @@ OC.L10N.register(
     "Copy share link" : "複製分享連結",
     "Loading …" : "正在載入……",
     "No results" : "無結果",
+    "An error occurred while performing the search" : "搜尋時發生了錯誤",
     "Add {type}" : "新增 {type}",
     "Permissions" : "權限",
     "View" : "檢視",

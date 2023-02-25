@@ -8,6 +8,7 @@ OC.L10N.register(
     "Restore" : "Վերականգնել",
     "Delete permanently" : "Ջնջել ընդմիշտ",
     "Cancel" : "ընդհատել",
+    "Create" : "Ստեղծել",
     "Done" : "Done",
     "Title" : "Վերնագիր",
     "No other versions available" : "Այլ տարբերակներ չկան",

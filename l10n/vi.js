@@ -7,6 +7,7 @@ OC.L10N.register(
     "Copied" : "Đã sao chép",
     "Loading …" : "Đang tải …",
     "No results" : "Không có kết quả",
+    "An error occurred while performing the search" : "Đã xảy ra lỗi khi thực hiện tìm kiếm",
     "Add {type}" : "Thêm {type}",
     "View" : "Xem",
     "Edit" : "Chỉnh sửa",

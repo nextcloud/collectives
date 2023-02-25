@@ -6,6 +6,7 @@ OC.L10N.register(
     "Settings" : "Paramètres",
     "Loading …" : "Cargament…",
     "No results" : "Cap de resultat",
+    "An error occurred while performing the search" : "Una error s'es producha en realizant la recèrca",
     "View" : "Veire",
     "Edit" : "Modificar",
     "Members" : "Membres",
@@ -21,6 +22,7 @@ OC.L10N.register(
     "No other versions available" : "Cap d’autra version pas disponibla",
     "Versions" : "Versions",
     "Users" : "Utilizaires",
-    "Groups" : "Gropes"
+    "Groups" : "Gropes",
+    "Circles" : "Cercles"
 },
 "nplurals=2; plural=(n > 1);");

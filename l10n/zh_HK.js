@@ -39,7 +39,7 @@ OC.L10N.register(
     "Search for members to add" : "搜索要添加的成員",
     "Loading …" : "加載中 …",
     "No results" : "沒有結果",
-    "An error occured while performing the search" : "搜尋時發生了錯誤",
+    "An error occurred while performing the search" : "搜尋時發生了錯誤",
     "Add {type}" : "新增 {type}",
     "Collective settings" : "知識庫設定",
     "Name and emoji" : "姓名及表情符號",

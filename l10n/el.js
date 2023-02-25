@@ -10,6 +10,7 @@ OC.L10N.register(
     "Copy share link" : "Αντιγραφή συνδέσμου κοινής χρήσης",
     "Loading …" : "Φόρτωση …",
     "No results" : "Κανένα αποτέλεσμα",
+    "An error occurred while performing the search" : "Παρουσιάστηκε σφάλμα κατά την αναζήτηση",
     "Add {type}" : "Προσθήκη {type}",
     "Permissions" : "Δικαιώματα",
     "View" : "Προβολή",

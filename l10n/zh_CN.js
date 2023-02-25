@@ -24,6 +24,7 @@ OC.L10N.register(
     "Last edited by {user}" : "最后被 {user} 编辑",
     "Loading …" : "正在加载 …",
     "No results" : "无结果",
+    "An error occurred while performing the search" : "执行搜索时出错",
     "Add {type}" : "添加  {type}",
     "Collective settings" : "知识库设置",
     "Permissions" : "权限",

@@ -10,6 +10,7 @@ OC.L10N.register(
     "Copy share link" : "공유 링크 복사",
     "Loading …" : "불러오는 중 …",
     "No results" : "결과 없음",
+    "An error occurred while performing the search" : "검색을 수행하는 동안 오류가 발생했습니다.",
     "Add {type}" : "{type} 추가",
     "Permissions" : "권한",
     "View" : "보기",

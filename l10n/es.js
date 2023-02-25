@@ -39,7 +39,7 @@ OC.L10N.register(
     "Search for members to add" : "Buscar miembros para añadir",
     "Loading …" : "Cargando …",
     "No results" : "Sin resultados",
-    "An error occured while performing the search" : "Ocurrió un error mientras se realizaba la búsqueda",
+    "An error occurred while performing the search" : "Ha ocurrido un error mientras se realizaba la búsqueda",
     "Add {type}" : "Añadir {type}",
     "Collective settings" : "Configuraciones del cuaderno colectivo",
     "Name and emoji" : "Nombre y emoji",

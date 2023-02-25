@@ -31,6 +31,7 @@
     "Last edited by {user}" : "Son düzenleyen: {user}",
     "Loading …" : "Yükleniyor…",
     "No results" : "Herhangi bir sonuç bulunamadı",
+    "An error occurred while performing the search" : "Arama sırasında bir sorun çıktı",
     "Add {type}" : "{type} ekle",
     "Collective settings" : "Topluluk ayarları",
     "Name and emoji" : "Ad ve emoji",

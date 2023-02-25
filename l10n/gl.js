@@ -10,6 +10,7 @@ OC.L10N.register(
     "Copy share link" : "Copiar a ligazón compartida",
     "Loading …" : "Cargando…",
     "No results" : "Sen resultados",
+    "An error occurred while performing the search" : "Produciuse un erro ao realizar a busca",
     "Add {type}" : "Engadir {type}",
     "Permissions" : "Permisos",
     "View" : "Ver",
