@@ -18,6 +18,7 @@ OC.L10N.register(
     "Last edited by {user}" : "Darrera edició per {user}",
     "Loading …" : "Carregant …",
     "No results" : "Sense resultats",
+    "An error occurred while performing the search" : "S'ha produït un error en realitzar la cerca",
     "Add {type}" : "Afegeix {type}",
     "Permissions" : "Permisos",
     "View" : "Visualitza",

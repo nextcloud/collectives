@@ -10,6 +10,7 @@ OC.L10N.register(
     "Copy share link" : "Megosztási hivatkozás másolása",
     "Loading …" : "Betöltés…",
     "No results" : "Nincs találat",
+    "An error occurred while performing the search" : "Hiba történt a keresés végrehajtásakor",
     "Add {type}" : "{type} hozzáadása",
     "Permissions" : "Jogosultságok",
     "View" : "Megtekintés",

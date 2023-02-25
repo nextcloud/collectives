@@ -25,6 +25,7 @@ OC.L10N.register(
     "Last edited by {user}" : "最終編集者 {user}",
     "Loading …" : "読み込み中…",
     "No results" : "該当なし",
+    "An error occurred while performing the search" : "検索中にエラーが発生しました",
     "Add {type}" : "{type}を追加",
     "Permissions" : "アクセス権限",
     "View" : "表示",

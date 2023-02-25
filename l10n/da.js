@@ -33,6 +33,7 @@ OC.L10N.register(
     "Last edited by {user}" : "Sidst redigeret af {user}",
     "Loading …" : "Loading …",
     "No results" : "Ingen resultater",
+    "An error occurred while performing the search" : "Der opstod en fejl under søgningen",
     "Add {type}" : "Tilføj {type}",
     "Collective settings" : "Indstillinger",
     "Name and emoji" : "Navn og emoji",

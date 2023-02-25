@@ -10,6 +10,7 @@ OC.L10N.register(
     "Copy share link" : "Kopírovať odkaz na zdieľanie",
     "Loading …" : "Načítavam …",
     "No results" : "Žiadne výsledky",
+    "An error occurred while performing the search" : "Pri vyhľadávaní sa vyskytla chyba",
     "Add {type}" : "Pridať {type}",
     "Permissions" : "Oprávnenia",
     "View" : "Zobrazenie",

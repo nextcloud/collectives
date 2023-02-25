@@ -33,6 +33,7 @@ OC.L10N.register(
     "Last edited by {user}" : "Editador pela última vez por {user}",
     "Loading …" : "Carregando …",
     "No results" : "Sem resultados",
+    "An error occurred while performing the search" : "Erro ao pesquisar",
     "Add {type}" : "Adicionar {type}",
     "Collective settings" : "Configurações do coletivo",
     "Name and emoji" : "Nome e emoji",

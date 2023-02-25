@@ -9,10 +9,12 @@ OC.L10N.register(
     "Delete permanently" : "លុប​ជា​អចិន្ត្រៃយ៍",
     "Cancel" : "បោះបង់",
     "Back" : "ត្រឡប់ក្រោយ",
+    "Create" : "បង្កើត",
     "Done" : "Done",
     "Title" : "ចំណងជើង",
     "No other versions available" : "មិន​មាន​កំណែ​ផ្សេង​ទៀត​ទេ",
     "Versions" : "កំណែ",
+    "Users" : "អ្នកប្រើ",
     "Groups" : "ក្រុ"
 },
 "nplurals=1; plural=0;");

@@ -11,6 +11,7 @@ OC.L10N.register(
     "Copy share link" : "Kopijuoti bendrinimo nuorodą",
     "Loading …" : "Įkeliama…",
     "No results" : "Rezultatų nėra",
+    "An error occurred while performing the search" : "Atliekant paiešką, įvyko klaida",
     "Add {type}" : "Pridėti {type}",
     "Permissions" : "Leidimai",
     "View" : "Rodyti",

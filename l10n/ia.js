@@ -11,10 +11,12 @@ OC.L10N.register(
     "Delete permanently" : "Deler permanentemente",
     "Cancel" : "Cancellar",
     "Back" : "Retro",
+    "Create" : "Crear",
     "Done" : "Preste",
     "Title" : "Titulo",
     "No other versions available" : "Nulle altere versiones disponibile",
     "Versions" : "Versiones",
+    "Users" : "Usatores",
     "Groups" : "Gruppos"
 },
 "nplurals=2; plural=(n != 1);");

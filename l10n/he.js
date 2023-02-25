@@ -9,6 +9,7 @@ OC.L10N.register(
     "Copy share link" : "העתקת קישור השיתוף",
     "Loading …" : "בטעינה…",
     "No results" : "אין תוצאות",
+    "An error occurred while performing the search" : "אירעה שגיאה בעת ביצוע החיפוש",
     "Add {type}" : "הוסף {type}",
     "Permissions" : "הרשאות",
     "View" : "צפייה",

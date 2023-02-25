@@ -6,6 +6,7 @@ OC.L10N.register(
     "Settings" : "Arventennoù",
     "Loading …" : "O Kargañ ...",
     "No results" : "Disoc'h ebet",
+    "An error occurred while performing the search" : "Ur fazi a zo bet en ur ober an enklask",
     "View" : "Gwell",
     "Edit" : "Cheñch",
     "Add emoji" : "Ouzhpennañ un emoji",

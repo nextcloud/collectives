@@ -33,6 +33,7 @@ OC.L10N.register(
     "Last edited by {user}" : "Ultima modifica dall'utente {user}",
     "Loading …" : "Caricamento …",
     "No results" : "Nessun risultato",
+    "An error occurred while performing the search" : "Si è verificato un errore durante l'esecuzione della ricerca",
     "Add {type}" : "Aggiungi {type}",
     "Collective settings" : "Impostazioni del collettivo",
     "Name and emoji" : "Nome ed emoji",

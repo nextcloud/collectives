@@ -12,6 +12,7 @@ OC.L10N.register(
     "Title" : "ಶೀರ್ಷಿಕೆ",
     "No other versions available" : "ಇನ್ನಿತರೆ ಯಾವುದೇ ಆವೃತ್ತಿಗಳು ಲಭ್ಯವಿಲ್ಲ",
     "Versions" : "ಆವೃತ್ತಿಗಳು",
+    "Users" : "﻿ಬಳಕೆದಾರರು",
     "Groups" : "﻿ಗುಂಪುಗಳು"
 },
 "nplurals=2; plural=(n > 1);");

@@ -9,6 +9,7 @@ OC.L10N.register(
     "Copy share link" : "Копирај везу дељења",
     "Loading …" : "Учитавање…",
     "No results" : "Нема резултата",
+    "An error occurred while performing the search" : "Грешка приликом претраге",
     "Add {type}" : "Додај {type}",
     "Permissions" : "Дозволе",
     "View" : "Погледај",

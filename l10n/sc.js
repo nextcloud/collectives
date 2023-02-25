@@ -9,6 +9,7 @@ OC.L10N.register(
     "Cannot copy" : "Non faghet a copiare",
     "Loading …" : "Carrigamentu …",
     "No results" : "Perunu resurtadu",
+    "An error occurred while performing the search" : "B'at àpidu un'errore in sa chirca",
     "Add {type}" : "Agiunghe {type}",
     "Permissions" : "Permissos",
     "View" : "Visualiza",

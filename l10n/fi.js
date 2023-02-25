@@ -10,6 +10,7 @@ OC.L10N.register(
     "Copy share link" : "Kopioi jakolinkki",
     "Loading …" : "Ladataan…",
     "No results" : "Ei tuloksia",
+    "An error occurred while performing the search" : "Hakua suorittaessa tapahtui virhe",
     "Add {type}" : "Lisää {type}",
     "Permissions" : "Oikeudet",
     "View" : "Näytä",

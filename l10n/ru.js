@@ -27,6 +27,7 @@ OC.L10N.register(
     "Last edited by {user}" : "Последний раз редактировалось {user}",
     "Loading …" : "Загрузка…",
     "No results" : "Нет результатов",
+    "An error occurred while performing the search" : "Не удалось выполнить поиск",
     "Add {type}" : "Добавить {type}",
     "Collective settings" : "Настройки группы",
     "Name and emoji" : "Название и эмодзи",

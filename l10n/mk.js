@@ -10,6 +10,7 @@ OC.L10N.register(
     "Copy share link" : "Копирај линк за споделување",
     "Loading …" : "Се вчитува…",
     "No results" : "Нема резултати",
+    "An error occurred while performing the search" : "Настана грешка при обидот за пребарување",
     "Add {type}" : "Додади {type}",
     "View" : "Погледни",
     "Edit" : "Уреди",
@@ -27,7 +28,9 @@ OC.L10N.register(
     "Current version" : "Моментална верзија",
     "No other versions available" : "Не постојат други верзии",
     "Versions" : "Верзии",
+    "Users" : "Корисници",
     "Groups" : "Групи",
-    "Email addresses" : "Е-пошта адреси"
+    "Email addresses" : "Е-пошта адреси",
+    "Circles" : "Кругови"
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");
