@@ -24,6 +24,7 @@ OC.L10N.register(
     "Title" : "Звање",
     "Current version" : "Тренутна верзија",
     "No other versions available" : "Нема доступних других верзија",
+    "_%n byte_::_%n bytes_" : ["%n бајт","%n бајта","%n бајтова"],
     "Versions" : "Верзије",
     "Users" : "Корисници",
     "Groups" : "Групе",
