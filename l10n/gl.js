@@ -29,6 +29,7 @@ OC.L10N.register(
     "Title" : "Título",
     "Current version" : "Versión actual",
     "No other versions available" : "Non hai outras versións dispoñíbeis",
+    "_%n byte_::_%n bytes_" : ["%n  byte","%n bytes"],
     "Versions" : "Versións",
     "Users" : "Usuarios",
     "Groups" : "Grupos",
