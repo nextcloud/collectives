@@ -30,7 +30,7 @@
     "@nextcloud/paths": "^2.1.0",
     "@nextcloud/router": "^2.0.1",
     "@nextcloud/text": "^26.0.0-alpha.7",
-    "@nextcloud/vue": "^7.7.1",
+    "@nextcloud/vue": "^7.8.0",
     "@nextcloud/vue-richtext": "^2.1.0-beta.5",
     "debounce": "^1.2.1",
     "escape-html": "^1.0.3",
