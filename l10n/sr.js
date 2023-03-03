@@ -21,6 +21,8 @@ OC.L10N.register(
     "Back" : "Назад",
     "Create" : "Направи",
     "Done" : "Готово",
+    "Hide outline" : "Сакриј контуру",
+    "Show outline" : "Прикажи контуру",
     "Title" : "Звање",
     "Current version" : "Тренутна верзија",
     "No other versions available" : "Нема доступних других верзија",
