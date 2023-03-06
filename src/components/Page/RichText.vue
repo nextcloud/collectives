@@ -173,7 +173,12 @@ export default {
 
 		handleRelativeFileLink({ href }) {
 			if (!href.match(/^[a-zA-Z]*:/)) {
-				const encodedRelPath = href.match(/^([^?]*)\?fileId=(\d+)/)[1]
+				const fileIdMatches = href.match(/^([^?]*)\?fileId=(\d+)/)
+				if (!fileIdMatches || fileIdMatches.length < 2) {
+					// href search params don't contain a fileId
+					return false
+				}
+				const encodedRelPath = fileIdMatches[1]
 				const relPath = decodeURI(encodedRelPath)
 				const path = resolvePath(`/${this.currentPageFilePath}`, relPath)
 				this.OCA.Viewer.open({ path })
