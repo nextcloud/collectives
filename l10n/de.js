@@ -97,7 +97,7 @@ OC.L10N.register(
     "Back" : "Zurück",
     "Create" : "Erstellen",
     "Name too short, requires at least three characters" : "Name zu kurz, mindestens drei Zeichen erforderlich",
-    "A collective with this name already exists" : "Ein Kollektiv mit diesem Namen existiert bereits",
+    "A collective with this name already exists" : "Ein Kollektiv mit diesem Namen existiert bereits.",
     "Could not add members to the collective" : "Konnte keine Mitglieder zu diesem Kollektiv hinzufügen",
     "Select a collective" : "Wähle ein Kollektiv aus",
     "Create a new collective" : "Neues Kollektiv erstellen",
