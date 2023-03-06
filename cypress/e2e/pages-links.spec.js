@@ -60,7 +60,8 @@ describe('Page', function() {
 
 ## Links supposed to open in new window
 
-* Link to another app in Nextcloud: [Contacts](${Cypress.env('baseUrl')}/index.php/apps/contacts)
+* Absolute link to another app in Nextcloud: [Contacts absolute](${Cypress.env('baseUrl')}/index.php/apps/contacts)
+* Relative link to another app in Nextcloud: [Contacts relative](/index.php/apps/contacts)
 * Link to external page: [example.org](http://example.org/)
 			`)
 		})
@@ -101,11 +102,14 @@ describe('Page', function() {
 	}
 
 	// Expected to open in same tab
-	const testLinkToSameTab = function(href, { edit = false, isPublic = false, absolute = false } = {}) {
-		if (!absolute) {
+	const testLinkToSameTab = function(href, { edit = false, isPublic = false, keepRelative = false } = {}) {
+		if (keepRelative) {
+			clickLink(href, edit)
 			href = `${Cypress.env('baseUrl')}${href}`
+		} else {
+			href = `${Cypress.env('baseUrl')}${href}`
+			clickLink(href, edit)
 		}
-		clickLink(href, edit)
 
 		const url = new URL(href)
 		const encodedCollectiveName = encodeURIComponent('Link Testing')
@@ -121,15 +125,17 @@ describe('Page', function() {
 	}
 
 	// Expected to open in new tab
-	const testLinkToNewTab = function(href, { edit = false, isPublic = false, absolute = false } = {}) {
-		if (!absolute) {
-			href = `${Cypress.env('baseUrl')}${href}`
-		}
+	const testLinkToNewTab = function(href, { edit = false, isPublic = false, keepRelative = false, isAbsolute = false } = {}) {
 		let openStub = null
 		cy.window().then(win => {
 			openStub = cy.stub(win, 'open').as('open')
 		})
-		clickLink(href, edit)
+		if (keepRelative || isAbsolute) {
+			clickLink(href, edit)
+		} else {
+			href = `${Cypress.env('baseUrl')}${href}`
+			clickLink(href, edit)
+		}
 		cy.get('@open')
 			.should('be.calledWith', href)
 			.then(() => {
@@ -167,15 +173,21 @@ describe('Page', function() {
 			testLinkToSameTab(href)
 			testLinkToNewTab(href, { edit: true })
 		})
-		it('Opens link to another Nextcloud app in new tab', function() {
+		it('Opens absolute link to another Nextcloud app in new tab', function() {
 			const href = '/index.php/apps/contacts'
 			testLinkToNewTab(href)
 			testLinkToNewTab(href, { edit: true })
 		})
+		it('Opens relative link to another Nextcloud app in new tab', function() {
+			const href = '/index.php/apps/contacts'
+			testLinkToNewTab(href, { keepRelative: true })
+			// In edit mode, URL gets opened as absolute.
+			// testLinkToNewTab(href, { edit: true, keepRelative: true })
+		})
 		it('Opens link to external page in new tab', function() {
 			const href = 'http://example.org/'
-			testLinkToNewTab(href, { absolute: true })
-			testLinkToNewTab(href, { edit: true, absolute: true })
+			testLinkToNewTab(href, { isAbsolute: true })
+			testLinkToNewTab(href, { edit: true, isAbsolute: true })
 		})
 	})
 
@@ -232,8 +244,8 @@ describe('Page', function() {
 			cy.logout()
 			cy.visit(`${shareUrl}/Link Source`)
 			const href = 'http://example.org/'
-			testLinkToNewTab(href, { isPublic: true, absolute: true })
-			testLinkToNewTab(href, { edit: true, isPublic: true, absolute: true })
+			testLinkToNewTab(href, { isPublic: true, isAbsolute: true })
+			testLinkToNewTab(href, { edit: true, isPublic: true, isAbsolute: true })
 		})
 	})
 })
