@@ -1,17 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.6.0@e784128902dfe01d489c4123d69918a9f3c1eac5">
+<files psalm-version="5.7.6@ae4ec68e00e4880e3f00b1edd2da891236d749ab">
   <file src="lib/AppInfo/Application.php">
     <MissingDependency>
-      <code>PageReferenceProvider</code>
       <code>SearchablePageReferenceProvider</code>
     </MissingDependency>
-    <UndefinedClass>
-      <code>RenderReferenceEvent</code>
-    </UndefinedClass>
-    <UndefinedInterfaceMethod>
-      <code>registerReferenceProvider</code>
-      <code>registerReferenceProvider</code>
-    </UndefinedInterfaceMethod>
   </file>
   <file src="lib/Fs/UserFolderHelper.php">
     <UndefinedClass>
@@ -23,9 +15,6 @@
     <MissingTemplateParam>
       <code>IEventListener</code>
     </MissingTemplateParam>
-    <UndefinedClass>
-      <code>RenderReferenceEvent</code>
-    </UndefinedClass>
   </file>
   <file src="lib/Mount/CollectiveFolderManager.php">
     <InvalidArgument>
@@ -47,7 +36,13 @@
   </file>
   <file src="lib/Reference/PageReferenceProvider.php">
     <UndefinedClass>
-      <code>IReferenceProvider</code>
+      <code><![CDATA[$this->linkReferenceProvider]]></code>
+      <code><![CDATA[$this->linkReferenceProvider]]></code>
+      <code><![CDATA[$this->referenceManager]]></code>
+      <code>LinkReferenceProvider</code>
+      <code>LinkReferenceProvider</code>
+      <code>ReferenceManager</code>
+      <code>ReferenceManager</code>
     </UndefinedClass>
   </file>
   <file src="lib/Reference/SearchablePageReferenceProvider.php">
@@ -69,7 +64,7 @@
   </file>
   <file src="lib/Service/PageService.php">
     <UndefinedClass>
-      <code>$this-&gt;pushQueue</code>
+      <code><![CDATA[$this->pushQueue]]></code>
       <code>?IQueue</code>
       <code>IQueue</code>
       <code>\OC_Util</code>
