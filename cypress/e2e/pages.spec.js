@@ -269,12 +269,9 @@ describe('Page', function() {
 					.contains('Day 2')
 					.click()
 
-				/*
-				 * Disable for now - in CI Nextcloud is on http (no TLS) and link previews don't get rendered
 				cy.getEditor()
 					.get('.widgets--list .collective-page--info .line')
 					.should('contain', 'Day 2')
-				 */
 			})
 		})
 	}
