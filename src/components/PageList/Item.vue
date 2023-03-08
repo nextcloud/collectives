@@ -29,6 +29,9 @@
 						{{ emoji }}
 					</div>
 				</template>
+				<template v-else-if="isLandingPage">
+					<CollectivesIcon :size="22" fill-color="var(--color-main-text)" />
+				</template>
 				<template v-else>
 					<PageIcon :size="22" fill-color="var(--color-background-darker)" />
 				</template>
@@ -79,6 +82,7 @@
 import { generateUrl } from '@nextcloud/router'
 import { mapGetters, mapMutations, mapState } from 'vuex'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
+import CollectivesIcon from '../Icon/CollectivesIcon.vue'
 import { NcActionButton, NcActions } from '@nextcloud/vue'
 import MenuRightIcon from 'vue-material-design-icons/MenuRight.vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
@@ -92,6 +96,7 @@ export default {
 	name: 'Item',
 
 	components: {
+		CollectivesIcon,
 		NcActionButton,
 		NcActions,
 		MenuRightIcon,
