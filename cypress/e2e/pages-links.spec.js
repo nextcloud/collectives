@@ -26,11 +26,16 @@
 
 let imageId
 let textId
-const sourceUrl = '/index.php/apps/collectives/Link%20Testing/Link%20Source'
+let targetPageId
+const sourceUrl = new URL(`${Cypress.env('baseUrl')}/index.php/apps/collectives/Link%20Testing/Link%20Source`)
 
 describe('Page', function() {
 	before(function() {
 		cy.login('bob', { route: '/apps/collectives' })
+		cy.deleteAndSeedCollective('Another Collective')
+		cy.seedPage('First Page', '', 'Readme.md').then((id) => {
+			targetPageId = id
+		})
 		cy.deleteAndSeedCollective('Link Testing')
 		cy.seedPage('Link Target', '', 'Readme.md')
 		cy.seedPageContent('Link%20Testing/Link%20Target.md', 'Some content')
@@ -51,15 +56,13 @@ describe('Page', function() {
 ## Links supposed to open in same window
 
 * Link to page in this collective: [Link Target](${Cypress.env('baseUrl')}/index.php/apps/collectives/Link%20Testing/Link%20Target)
-* Link to page in other collective: [Another Collective/First Page](${Cypress.env('baseUrl')}/index.php/apps/collectives/Another%20Collective/First%20Page)
+* Link to page in other collective: [Another Collective/First Page](${Cypress.env('baseUrl')}/index.php/apps/collectives/Another%20Collective/First%20Page?fileId=${targetPageId})
 
 ## Links supposed to open in new window
 
 * Link to another app in Nextcloud: [Contacts](${Cypress.env('baseUrl')}/index.php/apps/contacts)
 * Link to external page: [example.org](http://example.org/)
 			`)
-			cy.deleteAndSeedCollective('Another Collective')
-			cy.seedPage('First Page', '', 'Readme.md')
 		})
 	})
 
@@ -72,8 +75,7 @@ describe('Page', function() {
 	const clickLink = function(href, edit) {
 		if (edit) {
 			// Change to edit mode
-			cy.get('button.titleform-button').contains('Edit')
-				.click()
+			cy.switchPageMode(1)
 			cy.getEditor()
 				.find(`a[href="${href}"]`)
 				.click()
@@ -87,7 +89,10 @@ describe('Page', function() {
 	// Expected to open file in viewer and stay on same page
 	const testLinkToViewer = function(href, { fileName, viewerFileElement, edit = false }) {
 		clickLink(href, edit)
-		cy.location('pathname').should('match', new RegExp(`^${sourceUrl}`))
+		cy.location().should((loc) => {
+			expect(loc.pathname).to.eq(sourceUrl.pathname)
+			expect(loc.search).to.eq(sourceUrl.search)
+		})
 		cy.get('.modal-title').should('contain', fileName)
 		cy.get(`.viewer__content > ${viewerFileElement}.viewer__file`).should('exist')
 
@@ -96,14 +101,22 @@ describe('Page', function() {
 	}
 
 	// Expected to open in same tab
-	const testLinkToSameTab = function(href, { edit = false, isPublic = false } = {}) {
-		clickLink(`${Cypress.env('baseUrl')}${href}`, edit)
-		if (!isPublic) {
-			cy.location('pathname').should('match', new RegExp(`^${href}`))
-		} else {
-			const encodedCollectiveName = encodeURIComponent('Link Testing')
-			cy.location('pathname').should('match', new RegExp(`^${href.replace(`/${encodedCollectiveName}`, `/p/\\w+/${encodedCollectiveName}`)}`))
+	const testLinkToSameTab = function(href, { edit = false, isPublic = false, absolute = false } = {}) {
+		if (!absolute) {
+			href = `${Cypress.env('baseUrl')}${href}`
 		}
+		clickLink(href, edit)
+
+		const url = new URL(href)
+		const encodedCollectiveName = encodeURIComponent('Link Testing')
+		const pathname = isPublic
+			? url.pathname.replace(`/${encodedCollectiveName}`, `/p/\\w+/${encodedCollectiveName}`)
+			: url.pathname
+		cy.location().should((loc) => {
+			expect(loc.pathname).to.match(new RegExp(`^${pathname}$`))
+			expect(loc.search).to.eq(url.search)
+		})
+
 		cy.go('back')
 	}
 
@@ -123,12 +136,14 @@ describe('Page', function() {
 				openStub.restore()
 			})
 
-		if (!isPublic) {
-			cy.location('pathname').should('match', new RegExp(`^${sourceUrl}`))
-		} else {
-			const encodedCollectiveName = encodeURIComponent('Link Testing')
-			cy.location('pathname').should('match', new RegExp(`^${sourceUrl.replace(`/${encodedCollectiveName}`, `/p/\\w+/${encodedCollectiveName}`)}`))
-		}
+		const encodedCollectiveName = encodeURIComponent('Link Testing')
+		const pathname = isPublic
+			? sourceUrl.pathname.replace(`/${encodedCollectiveName}`, `/p/\\w+/${encodedCollectiveName}`)
+			: sourceUrl.pathname
+		cy.location().should((loc) => {
+			expect(loc.pathname).to.match(new RegExp(`^${pathname}$`))
+			expect(loc.search).to.eq(sourceUrl.search)
+		})
 	}
 
 	describe('Link handling internal', function() {
@@ -148,7 +163,7 @@ describe('Page', function() {
 			testLinkToNewTab(href, { edit: true })
 		})
 		it('Opens link to page in other collective in same/new tab depending on view/edit mode', function() {
-			const href = '/index.php/apps/collectives/Another%20Collective/First%20Page'
+			const href = `/index.php/apps/collectives/Another%20Collective/First%20Page?fileId=${targetPageId}`
 			testLinkToSameTab(href)
 			testLinkToNewTab(href, { edit: true })
 		})
