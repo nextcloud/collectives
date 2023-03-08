@@ -175,7 +175,7 @@ describe('Page', function() {
 				.should('not.have.attr', 'disabled')
 			cy.get('#titleform input.title')
 				.type('{selectAll}New page from Template{enter}')
-			cy.getEditor()
+			cy.getEditor(Cypress.config('defaultCommandTimeout') * 2)
 				.should('be.visible')
 				.contains('This is going to be our template.')
 			cy.get('.app-content-list-item').eq(1)
