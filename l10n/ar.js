@@ -10,6 +10,7 @@ OC.L10N.register(
     "Copy share link" : "انسخ رابط المشاركة",
     "Loading …" : "جاري التحميل …",
     "No results" : "لا يوجد أي نتيجة",
+    "An error occurred while performing the search" : "حدث خطأ اثناء البحث",
     "Permissions" : "التصريحات",
     "View" : "عرض",
     "Edit" : "تعديل",

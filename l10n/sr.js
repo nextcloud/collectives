@@ -6,6 +6,7 @@ OC.L10N.register(
     "Unshare" : "Укини дељење",
     "Settings" : "Поставке",
     "Copied" : "Копирано",
+    "Cannot copy" : "Не може да се копира",
     "Copy share link" : "Копирај везу дељења",
     "Loading …" : "Учитавање…",
     "No results" : "Нема резултата",
