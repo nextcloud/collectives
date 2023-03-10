@@ -25,6 +25,8 @@ OC.L10N.register(
     "Create" : "Crear",
     "Done" : "Feito",
     "Show in Files" : "Amosar en Ficheiros",
+    "Hide outline" : "Ocultar contorno",
+    "Show outline" : "Mostrar contorno",
     "Template" : "Modelo",
     "Title" : "Título",
     "Current version" : "Versión actual",
