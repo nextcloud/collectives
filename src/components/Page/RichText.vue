@@ -130,41 +130,54 @@ export default {
 				|| window.open(attrs.href, '_blank')
 		},
 
+		// E.g. `https://cloud.example.org/apps/collectives/mycollective/...` or `/apps/collectives/mycollective/...`
 		handleCollectiveLink({ href }) {
+			// Add origin for local links and resolve relative paths
+			const full = new URL(href, window.location)
+			href = full.href
+
 			const baseUrl = new URL(generateUrl('/apps/collectives'), window.location)
-			if (href.startsWith(baseUrl.href)) {
-				let collectiveUrl = href.replace(baseUrl.href, '')
-				const publicUrlPrefix = `/p/${this.currentCollective.shareToken}`
-
-				if (this.isPublic
-					&& (collectiveUrl === `/${encodeURIComponent(this.collectiveParam)}`
-					|| collectiveUrl.startsWith(`/${encodeURIComponent(this.collectiveParam)}/`))) {
-					// In public share, rewrite link to own collective to a public link
-					collectiveUrl = `${publicUrlPrefix}${collectiveUrl}`
-				} else if (!this.isPublic && collectiveUrl.startsWith(publicUrlPrefix)) {
-					// When internal, rewrite link to public share of own collective to internal
-					collectiveUrl = collectiveUrl.replace(publicUrlPrefix, '')
-				}
-
-				this.$router.push(collectiveUrl)
-				return true
+			if (!href.startsWith(baseUrl.href)) {
+				// Ignore everything except links to local collectives app
+				return false
 			}
+
+			let collectivePath = href.replace(baseUrl.href, '')
+			const publicPrefix = `/p/${this.currentCollective.shareToken}`
+
+			if (this.isPublic
+				&& (collectivePath === `/${encodeURIComponent(this.collectiveParam)}`
+					|| collectivePath.startsWith(`/${encodeURIComponent(this.collectiveParam)}/`))) {
+				// In public share, rewrite private link to own collective to a public share
+				collectivePath = `${publicPrefix}${collectivePath}`
+			} else if (!this.isPublic && collectivePath.startsWith(publicPrefix)) {
+				// When internal, rewrite link to public share of own collective to private
+				collectivePath = collectivePath.replace(publicPrefix, '')
+			}
+
+			this.$router.push(collectivePath)
+			return true
 		},
 
+		// E.g. `../SomeOtherPage.md?fileId=123` or `../SomeOtherPage.md`
 		handleRelativeMarkdownLink({ href }) {
 			const full = new URL(href, window.location)
-			if (full.origin === window.location.origin
-				&& href.includes('.md?fileId=')) {
-				const pageParamOmitsReadme = this.currentPage.fileName === 'Readme.md'
-					&& this.pageParam !== 'Readme.md'
-				const prefix = pageParamOmitsReadme
-					? (this.pageParam || this.collectiveParam) + '/'
-					: ''
-				this.$router.push(prefix + href.replace('.md?', '?'))
-				return true
+			const pageParamOmitsReadme = this.currentPage.fileName === 'Readme.md'
+				&& this.pageParam !== 'Readme.md'
+			const prefix = pageParamOmitsReadme
+				? (this.pageParam || this.collectiveParam) + '/'
+				: ''
+
+			if (full.origin === window.location.origin) {
+				if (href.includes('.md?fileId=')) {
+					// With `fileId` parameter
+					this.$router.push(prefix + href.replace('.md?', '?'))
+					return true
+				}
 			}
 		},
 
+		// E.g. `https://cloud.example.org/
 		handleSameOriginLink({ href }) {
 			if (href.match('/^' + window.location.origin + '/')) {
 				window.open(href)
