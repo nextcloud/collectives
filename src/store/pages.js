@@ -10,6 +10,7 @@ import {
 	ADD_PAGE,
 	UPDATE_PAGE,
 	DELETE_PAGE_BY_ID,
+	SET_ATTACHMENTS,
 	SET_BACKLINKS,
 	KEEP_SORTABLE,
 	CLEAR_SORTABLE,
@@ -26,6 +27,7 @@ import {
 	SET_PAGE_EMOJI,
 	SET_PAGE_SUBPAGE_ORDER,
 	DELETE_PAGE,
+	GET_ATTACHMENTS,
 	GET_BACKLINKS,
 } from './actions.js'
 
@@ -38,6 +40,7 @@ export default {
 		sortBy: undefined,
 		collapsed: {},
 		showTemplates: false,
+		attachments: [],
 		backlinks: [],
 		highlightPageId: null,
 		isDragoverTargetPage: false,
@@ -254,6 +257,10 @@ export default {
 			return `${getters.pageUrl(getters.currentPage.parentId, getters.currentPage.id)}/touch`
 		},
 
+		attachmentsUrl(_state, getters) {
+			return (parentId, pageId) => `${getters.pageUrl(parentId, pageId)}/attachments`
+		},
+
 		backlinksUrl(_state, getters) {
 			return (parentId, pageId) => `${getters.pageUrl(parentId, pageId)}/backlinks`
 		},
@@ -299,6 +306,10 @@ export default {
 
 		[DELETE_PAGE_BY_ID](state, id) {
 			state.pages.splice(state.pages.findIndex(p => p.id === id), 1)
+		},
+
+		[SET_ATTACHMENTS](state, { attachments }) {
+			state.attachments = attachments
 		},
 
 		[SET_BACKLINKS](state, { pages }) {
@@ -574,6 +585,21 @@ export default {
 			await axios.delete(getters.pageUrl(parentId, pageId))
 			commit(DELETE_PAGE_BY_ID, pageId)
 			commit('done', 'page')
+		},
+
+		/**
+		 * Get list of attachments for a page
+		 *
+		 * @param {object} store the vuex store
+		 * @param {Function} store.commit commit changes
+		 * @param {object} store.getters getters of the store
+		 * @param {object} page Page to get attachments for
+		 */
+		async [GET_ATTACHMENTS]({ commit, getters }, page) {
+			commit('load', 'attachments')
+			const response = await axios.get(getters.attachmentsUrl(page.parentId, page.id))
+			commit(SET_ATTACHMENTS, { attachments: response.data.data })
+			commit('done', 'attachments')
 		},
 
 		/**

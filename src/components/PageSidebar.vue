@@ -2,8 +2,19 @@
 	<NcAppSidebar ref="sidebar"
 		:title="title"
 		@close="close">
-		<NcAppSidebarTab id="backlinks"
+		<NcAppSidebarTab id="attachments"
 			:order="0"
+			:name="t('collectives', 'Attachments')">
+			<template #icon>
+				<PaperclipIcon :size="16" />
+			</template>
+			<div class="app-sidebar-tab-desc">
+				{{ t('collectives', 'Attachments in this page') }}
+			</div>
+			<SidebarTabAttachments v-if="showing('sidebar')" :page="page" />
+		</NcAppSidebarTab>
+		<NcAppSidebarTab id="backlinks"
+			:order="1"
 			:name="t('collectives', 'Backlinks')">
 			<template #icon>
 				<ArrowBottomLeftIcon :size="16" />
@@ -15,7 +26,7 @@
 		</NcAppSidebarTab>
 		<NcAppSidebarTab v-if="!isPublic && currentCollectiveCanEdit"
 			id="versions"
-			:order="1"
+			:order="2"
 			:name="t('collectives', 'Versions')">
 			<template #icon>
 				<RestoreIcon :size="16" />
@@ -36,7 +47,9 @@ import { mapGetters, mapMutations } from 'vuex'
 import { NcAppSidebar, NcAppSidebarTab } from '@nextcloud/vue'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
 import ArrowBottomLeftIcon from 'vue-material-design-icons/ArrowBottomLeft.vue'
+import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue'
 import { SELECT_VERSION } from '../store/mutations.js'
+import SidebarTabAttachments from './PageSidebar/SidebarTabAttachments.vue'
 import SidebarTabBacklinks from './PageSidebar/SidebarTabBacklinks.vue'
 import SidebarTabVersions from './PageSidebar/SidebarTabVersions.vue'
 
@@ -48,6 +61,8 @@ export default {
 		NcAppSidebarTab,
 		RestoreIcon,
 		ArrowBottomLeftIcon,
+		PaperclipIcon,
+		SidebarTabAttachments,
 		SidebarTabBacklinks,
 		SidebarTabVersions,
 	},
