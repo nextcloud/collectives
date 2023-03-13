@@ -124,7 +124,6 @@ export default {
 
 		followLink(_event, attrs) {
 			return this.handleCollectiveLink(attrs)
-				|| this.handleRelativeMarkdownLink(attrs)
 				|| this.handleSameOriginLink(attrs)
 				|| this.handleRelativeFileLink(attrs)
 				|| window.open(attrs.href, '_blank')
@@ -142,6 +141,18 @@ export default {
 				return false
 			}
 
+			// Try to resolve relative links to markdown files
+			if (href.includes('.md?fileId=')) {
+				// With `fileId` parameter
+				href = href.replace('.md?', '?')
+			} else if (href.endsWith('.md')) {
+				// Without `fileId` parameter
+				href = href.slice(0, -'.md'.length)
+				if (href.endsWith('/Readme')) {
+					href = href.slice(0, -'/Readme'.length)
+				}
+			}
+
 			let collectivePath = href.replace(baseUrl.href, '')
 			const publicPrefix = `/p/${this.currentCollective.shareToken}`
 
@@ -157,24 +168,6 @@ export default {
 
 			this.$router.push(collectivePath)
 			return true
-		},
-
-		// E.g. `../SomeOtherPage.md?fileId=123` or `../SomeOtherPage.md`
-		handleRelativeMarkdownLink({ href }) {
-			const full = new URL(href, window.location)
-			const pageParamOmitsReadme = this.currentPage.fileName === 'Readme.md'
-				&& this.pageParam !== 'Readme.md'
-			const prefix = pageParamOmitsReadme
-				? (this.pageParam || this.collectiveParam) + '/'
-				: ''
-
-			if (full.origin === window.location.origin) {
-				if (href.includes('.md?fileId=')) {
-					// With `fileId` parameter
-					this.$router.push(prefix + href.replace('.md?', '?'))
-					return true
-				}
-			}
 		},
 
 		// E.g. `https://cloud.example.org/

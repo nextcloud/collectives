@@ -61,6 +61,7 @@ describe('Page', function() {
 * Absolute path to page in this collective:  [Link Target](/index.php/apps/collectives/Link%20Testing/Link%20Target)
 * Relative path to page in this collective with fileId:  [Link Target](./Link%20Target?fileId=${linkTargetPageId})
 * Relative path to page in this collective without fileId:  [Link Target](./Link%20Target)
+* Relative path to markdown file in this collective:  [Link Target](./Link%20Target.md)
 
 * URL to page in other collective with fileId: [Another Collective/First Page](${baseUrl}/index.php/apps/collectives/Another%20Collective/First%20Page?fileId=${anotherCollectiveFirstPageId})
 * Absolute path to page in other collective without fileId: [Another Collective/First Page](/index.php/apps/collectives/Another%20Collective/First%20Page)
@@ -111,7 +112,7 @@ describe('Page', function() {
 	}
 
 	// Expected to open in same tab
-	const testLinkToSameTab = function(href, { edit = false, isPublic = false } = {}) {
+	const testLinkToSameTab = function(href, { edit = false, isPublic = false, expectedPathname = null } = {}) {
 		clickLink(href, edit)
 
 		cy.url().then((newBaseUrl) => {
@@ -121,7 +122,7 @@ describe('Page', function() {
 				? url.pathname.replace(`/${encodedCollectiveName}`, `/p/\\w+/${encodedCollectiveName}`)
 				: url.pathname
 			cy.location().should((loc) => {
-				expect(loc.pathname).to.match(new RegExp(`^${pathname}$`))
+				expect(loc.pathname).to.match(new RegExp(`^${expectedPathname || pathname}$`))
 				expect(loc.search).to.eq(url.search)
 			})
 		})
@@ -199,6 +200,13 @@ describe('Page', function() {
 			const href = './Link%20Target'
 			testLinkToSameTab(href)
 			testLinkToNewTab(href, { edit: true })
+		})
+		it('Opens link with relative path to markdown file in this collective without fileId in same/new tab depending on view/edit mode', function() {
+			// TODO: We want '.md' to be stripped when opening the link
+			const href = './Link%20Target.md'
+			testLinkToSameTab(href, { expectedPathname: '/index.php/apps/collectives/Link%20Testing/Link%20Target' })
+			// Special handling of links to markdown files is only in Collectives link handler
+			// testLinkToNewTab(href, { edit: true, expectedPathname: '/index.php/apps/collectives/Link%20Testing/Link%20Target' })
 		})
 
 		it('Opens link with URL to page in other collective with fileId in same/new tab depending on view/edit mode', function() {
