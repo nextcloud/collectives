@@ -239,6 +239,27 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @Then user :user sees attachment :name with mimetype :mimetype for :page in :collective
+	 *
+	 * @param string $user
+	 * @param string $name
+	 * @param string $mimetype
+	 * @param string $page
+	 * @param string $collective
+	 *
+	 * @return void
+	 */
+	public function userSeesAttachments(string $user, string $name, string $mimetype, string $page, string $collective): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$pageId = $this->pageIdByName($collectiveId, $page);
+		$parentId = $this->getParentId($collectiveId, 'Readme.md');
+		$this->sendRequest('GET', '/apps/collectives/_api/' . $collectiveId . '/_pages/parent/' . $parentId . '/page/' . $pageId . '/attachments');
+		$this->assertStatusCode(200);
+		$this->assertAttachment($name, $mimetype);
+	}
+
+	/**
 	 * @Then user :user last edited page :page in :collective
 	 *
 	 * @param string $user
@@ -892,6 +913,28 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @Then anonymous sees attachment :name with mimetype :mimetype for :page in public collective :collective with owner :owner
+	 *
+	 * @param string $name
+	 * @param string $mimetype
+	 * @param string $page
+	 * @param string $collective
+	 * @param string $owner
+	 *
+	 * @return void
+	 */
+	public function anonymousSeesAttachments(string $name, string $mimetype, string $page, string $collective, string $owner): void {
+		$this->setCurrentUser($owner);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$token = $this->getCollectiveShareToken($collectiveId);
+		$pageId = $this->pageIdByName($collectiveId, $page);
+		$parentId = $this->getParentId($collectiveId, 'Readme.md');
+		$this->sendRequest('GET', '/apps/collectives/_api/p/' . $token . '/_pages/parent/' . $parentId . '/page/' . $pageId . '/attachments');
+		$this->assertStatusCode(200);
+		$this->assertAttachment($name, $mimetype);
+	}
+
+	/**
 	 * @When user :user has webdav access to :collective with permissions :permissions
 	 *
 	 * @param string $collective
@@ -928,6 +971,35 @@ class FeatureContext implements Context {
 		$folderPermissions = preg_replace('/.*<oc:permissions>(.*)<\/oc:permissions>.*/sm', '\1', $this->response->getBody()->getContents());
 
 		Assert::assertEquals($permissions, $folderPermissions);
+	}
+
+	/**
+	 * @When user :user uploads attachment :fileName to :page in :collective
+	 *
+	 * @param string $user
+	 * @param string $fileName
+	 * @param string $page
+	 * @param string $collective
+	 *
+	 * @throws GuzzleException
+	 */
+	public function uploadsAttachment(string $user, string $fileName, string $page, string $collective): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$pageId = $this->pageIdByName($collectiveId, $page);
+		$userCollectivesPath = 'Collectives';
+
+		// Dirty hack to not break it on local dev setup
+		$lang = $this->getUserLanguage($user);
+		if ($lang === 'de') {
+			$userCollectivesPath = 'Kollektive';
+		}
+
+		$attachmentsPath = '/dav/files/' . $user . '/' . $userCollectivesPath . '/' . urlencode($collective) . '/' . '.attachments.' . $pageId;
+
+		$this->sendRemoteRequest('MKCOL', $attachmentsPath);
+		$body = fopen('tests/Integration/features/fixtures/' . $fileName, 'rb');
+		$this->sendRemoteRequest('PUT', $attachmentsPath . '/' . $fileName, $body);
 	}
 
 	/**
@@ -1068,19 +1140,19 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @param string      $verb
-	 * @param string      $url
-	 * @param string|null $body
-	 * @param array       $headers
-	 * @param bool|null   $auth
+	 * @param string               $verb
+	 * @param string               $url
+	 * @param string|resource|null $body
+	 * @param array                $headers
+	 * @param bool|null            $auth
 	 *
 	 * @throws GuzzleException
 	 */
 	private function sendRemoteRequest(string $verb,
-								 string $url,
-								 ?string $body = null,
-								 array $headers = [],
-								 ?bool $auth = true): void {
+									   string $url,
+									   $body = null,
+									   array $headers = [],
+									   ?bool $auth = true): void {
 		$fullUrl = $this->remoteUrl . $url;
 		$this->sendRequestBase($verb, $fullUrl, $body, $headers, $auth);
 	}
@@ -1388,5 +1460,26 @@ class FeatureContext implements Context {
 			}
 		}
 		Assert::assertContains($title, $pageTitles);
+	}
+
+	/**
+	 * @param string $name
+	 * @param string $mimetype
+	 */
+	private function assertAttachment(string $name, string $mimetype): void {
+		$jsonBody = $this->getJson();
+		$attachment = [
+			'name' => $name,
+			'mimetype' => $mimetype,
+		];
+
+		$pageAttachments = array_map(function ($attachment) {
+			return [
+				'name' => $attachment['name'],
+				'mimetype' => $attachment['mimetype'],
+			];
+		}, $jsonBody['data']);
+
+		Assert::assertContains($attachment, $pageAttachments);
 	}
 }
