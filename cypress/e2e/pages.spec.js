@@ -249,6 +249,11 @@ describe('Page', function() {
 				.find('.mention')
 				.should('contain', 'admin')
 		})
+		it('Lists attachments for the page', function() {
+			cy.visit('/apps/collectives/Our%20Garden/Day%201')
+			cy.get('button.action-item .icon-menu-sidebar').click()
+			cy.get('.app-sidebar-tabs__content').should('contain', 'test.png')
+		})
 	})
 
 	// Reference picker autocompletion is only available on Nextcloud 26+
@@ -369,6 +374,7 @@ describe('Page', function() {
 		it('Lists backlinks for a page', function() {
 			cy.visit('/apps/collectives/Our%20Garden/Day%201')
 			cy.get('button.action-item .icon-menu-sidebar').click()
+			cy.get('a#backlinks').click()
 			cy.get('.app-sidebar-tabs__content').should('contain', 'Day 2')
 		})
 	})
