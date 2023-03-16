@@ -7,6 +7,7 @@ OC.L10N.register(
     "Settings" : "Setelan",
     "Copied" : "Tersalin",
     "No results" : "Tidak ada hasil",
+    "View" : "Tampilan",
     "Edit" : "Sunting",
     "Members" : "Anggota",
     "Restore" : "Pulihkan",

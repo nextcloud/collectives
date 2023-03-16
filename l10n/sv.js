@@ -4,7 +4,7 @@ OC.L10N.register(
     "Collectives" : "Kollektiv",
     "Collectives - Page content" : "Kollektiv - sidoinnehåll",
     "Collectives - Pages" : "Kollektiv - Sidor",
-    "You are not allowed to share %s" : "Du har inte rätt att dela %s",
+    "You are not allowed to share %s" : "Du tillåẗs inte att dela %s",
     "Share link" : "Delningslänk",
     "Unshare" : "Sluta dela",
     "Settings" : "Inställningar",
