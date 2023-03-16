@@ -35,9 +35,18 @@
 					</a>
 				</div>
 				<NcActions :force-menu="true">
-					<NcActionLink icon="icon-folder"
-						:href="filesUrl(attachment.id)"
+					<NcActionButton :close-after-click="true"
+						@click="scrollTo(attachment)">
+						<template #icon>
+							<EyeIcon />
+						</template>
+						{{ t('collectives', 'View in document') }}
+					</NcActionButton>
+					<NcActionLink :href="filesUrl(attachment.id)"
 						:close-after-click="true">
+						<template #icon>
+							<FolderIcon />
+						</template>
 						{{ t('collectives', 'Show in Files') }}
 					</NcActionLink>
 				</NcActions>
@@ -56,7 +65,7 @@
 		<div class="attachments-infobox">
 			<InformationIcon />
 			<div class="content">
-				{{ t('collectives', 'Add media to the document using drag & drop or via "Insert attachment"') }}
+				{{ t('collectives', 'Add attachments to the document using drag & drop or via "Insert attachment"') }}
 			</div>
 		</div>
 	</div>
@@ -67,9 +76,11 @@ import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { GET_ATTACHMENTS } from '../../store/actions.js'
 import { listen } from '@nextcloud/notify_push'
 import { formatFileSize } from '@nextcloud/files'
-import { NcActions, NcActionLink, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcActionLink, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagon.vue'
+import EyeIcon from 'vue-material-design-icons/Eye.vue'
+import FolderIcon from 'vue-material-design-icons/Folder.vue'
 import InformationIcon from 'vue-material-design-icons/Information.vue'
 import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue'
 import { generateUrl } from '@nextcloud/router'
@@ -79,8 +90,11 @@ export default {
 
 	components: {
 		AlertOctagonIcon,
+		EyeIcon,
+		FolderIcon,
 		InformationIcon,
 		NcActions,
+		NcActionButton,
 		NcActionLink,
 		NcEmptyContent,
 		NcLoadingIcon,
@@ -187,6 +201,25 @@ export default {
 			}
 
 			window.location = this.filesUrl(attachment.id)
+		},
+
+		activeTextElement() {
+			// TODO: Move page mode handling into vuex store
+			const readerElement = document.getElementById('read-only-editor')
+			if (readerElement?.offsetParent) {
+				return readerElement
+			}
+
+			return document.getElementById('editor-container')
+		},
+
+		scrollTo(attachment) {
+			// Encode name the same way as Text does at `insertAttachment` in MediaHandler.vue
+			const name = encodeURIComponent(attachment.name).replace(/[!'()*]/g, (c) => {
+				return '%' + c.charCodeAt(0).toString(16).toUpperCase()
+			})
+			const candidates = [...this.activeTextElement().querySelectorAll('[data-component="image-view"]')]
+			candidates.find(el => el.dataset.src.endsWith(name))?.scrollIntoView({ block: 'center' })
 		},
 	},
 }
