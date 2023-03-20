@@ -79,11 +79,8 @@
 
 			<!-- Edit button if editable -->
 			<EditButton v-if="currentCollectiveCanEdit"
-				:edit-mode="editMode"
-				:loading="titleFormButtonIsLoading"
 				:mobile="isMobile"
-				class="edit-button"
-				@click="editMode ? stopEdit() : startEdit()" />
+				class="edit-button" />
 
 			<!-- Actions menu -->
 			<PageActionMenu :show-files-link="!isPublic"
@@ -105,10 +102,7 @@
 			</NcActions>
 		</h1>
 		<TextEditor :key="`text-editor-${currentPage.id}`"
-			ref="texteditor"
-			:edit-mode="editMode"
-			@ready="readyEditor"
-			@start-edit="startEdit" />
+			ref="texteditor" />
 	</div>
 </template>
 
@@ -151,8 +145,6 @@ export default {
 
 	data() {
 		return {
-			editMode: false,
-			isEditorReady: false,
 			newTitle: '',
 			titleIsTruncated: false,
 		}
@@ -200,10 +192,6 @@ export default {
 			return this.loading(`pageEmoji-${this.currentPage.id}`)
 		},
 
-		titleFormButtonIsLoading() {
-			return this.loading('pageUpdate') || (this.editMode && !this.isEditorReady)
-		},
-
 		showingPageEmojiPicker() {
 			return this.showing('pageEmojiPicker')
 		},
@@ -236,14 +224,12 @@ export default {
 		},
 
 		'currentPage.id'() {
-			this.initEditMode()
 			this.initTitleEntry()
 		},
 	},
 
 	mounted() {
 		document.title = this.documentTitle
-		this.initEditMode()
 		this.initTitleEntry()
 	},
 
@@ -286,23 +272,6 @@ export default {
 		openPageEmojiPicker() {
 			this.$refs['page-emoji-picker'].open = true
 			this.hide('pageEmojiPicker')
-		},
-
-		initEditMode() {
-			// Open in edit mode when pageMode is set, for template pages and for new pages
-			this.editMode = !!this.currentCollective.pageMode || this.isTemplatePage || !!this.loading('newPage')
-		},
-
-		startEdit() {
-			this.editMode = true
-		},
-
-		stopEdit() {
-			this.editMode = false
-		},
-
-		readyEditor() {
-			this.isEditorReady = true
 		},
 
 		/**

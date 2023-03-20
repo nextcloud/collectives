@@ -39,19 +39,13 @@ export default {
 		pageContentMixin,
 	],
 
-	props: {
-		editMode: {
-			type: Boolean,
-			required: true,
-		},
-	},
-
 	data() {
 		return {
 			pageContent: '',
 			previousSaveTimestamp: null,
 			readMode: true,
 			scrollTop: 0,
+			textEditWatcher: null,
 		}
 	},
 
@@ -62,6 +56,8 @@ export default {
 			'currentPage',
 			'currentPageDavUrl',
 			'hasVersionsLoaded',
+			'isTemplatePage',
+			'isTextEdit',
 			'isPublic',
 			'loading',
 		]),
@@ -75,37 +71,54 @@ export default {
 		},
 
 		waitForEditor() {
-			return this.readMode && this.editMode
+			return this.readMode && this.isTextEdit
 		},
 
 		readOnly() {
-			return !this.currentCollectiveCanEdit || this.readMode || !this.editMode
+			return !this.currentCollectiveCanEdit || this.readMode | !this.isTextEdit
 		},
 	},
 
 	watch: {
-		'editMode'(val) {
-			if (val === true) {
-				this.startEdit()
-			} else {
-				this.stopEdit()
-			}
-		},
-
 		'currentPage.timestamp'() {
 			if (this.currentPage.timestamp > this.previousSaveTimestamp) {
+				this.previousSaveTimestamp = this.currentPage.timestamp
 				this.getPageContent()
 			}
 		},
 	},
 
+	beforeMount() {
+		// Change back to default view mode
+		this.setTextView()
+
+		this.load('editor')
+		this.load('pageContent')
+	},
+
 	mounted() {
+		this.initEditMode()
 		this.getPageContent()
+
+		this.textEditWatcher = this.$watch('isTextEdit', (val) => {
+			if (val === true) {
+				this.startEdit()
+			} else {
+				this.stopEdit()
+			}
+		})
+	},
+
+	beforeDestroy() {
+		this.textEditWatcher()
 	},
 
 	methods: {
 		...mapMutations([
+			'load',
 			'done',
+			'setTextEdit',
+			'setTextView',
 		]),
 
 		...mapActions({
@@ -138,6 +151,8 @@ export default {
 		 * Set readMode to false
 		 */
 		readyEditor() {
+			this.done('editor')
+
 			// Set pageContent if it's been empty before
 			if (!this.pageContent) {
 				this.pageContent = this.syncService()._getContent() || ''
@@ -150,13 +165,19 @@ export default {
 				return
 			}
 
-			if (this.editMode) {
+			if (this.isTextEdit) {
 				if (this.doc()) {
 					this.previousSaveTimestamp = this.doc().lastSavedVersionTime
 				}
 				this.$nextTick(this.focusEditor())
 			}
-			this.$emit('ready')
+		},
+
+		initEditMode() {
+			// Open in edit mode when pageMode is set, for template pages and for new pages
+			if (!!this.currentCollective.pageMode || this.isTemplatePage || this.loading('newPage')) {
+				this.setTextEdit()
+			}
 		},
 
 		startEdit() {
@@ -169,16 +190,18 @@ export default {
 			})
 		},
 
-		async stopEdit() {
+		stopEdit() {
 			this.scrollTop = document.getElementById('editor')?.scrollTop || 0
 
 			const pageContent = this.syncService()._getContent() || ''
 			const changed = this.pageContent !== pageContent
 
 			// switch back to edit if there's no content
-			if (!pageContent) {
-				this.$emit('start-edit')
-				this.focusEditor()
+			if (!pageContent.trim()) {
+				this.setTextEdit()
+				this.$nextTick(() => {
+					this.focusEditor()
+				})
 				return
 			}
 
@@ -203,10 +226,10 @@ export default {
 		async getPageContent() {
 			this.pageContent = await this.fetchPageContent(this.currentPageDavUrl)
 			if (!this.pageContent) {
-				this.$emit('start-edit')
+				this.setTextEdit()
 			}
+			this.done('pageContent')
 		},
-
 	},
 }
 </script>

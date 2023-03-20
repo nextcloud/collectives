@@ -6,7 +6,12 @@
 			:value="shareTokenParam">
 		<div id="text" class="editor">
 			<PageInfoBar :current-page="currentPage" />
-			<RichTextReader v-if="!loading"
+			<NcEmptyContent v-if="loading('pageContent')">
+				<template #icon>
+					<NcLoadingIcon />
+				</template>
+			</NcEmptyContent>
+			<RichTextReader v-else
 				:content="pageContent"
 				@click-link="followLink" />
 		</div>
@@ -18,6 +23,7 @@ import { mapGetters, mapMutations } from 'vuex'
 import { RichTextReader, AttachmentResolver, ATTACHMENT_RESOLVER, OUTLINE_STATE, OUTLINE_ACTIONS } from '@nextcloud/text'
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl } from '@nextcloud/router'
+import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 import PageInfoBar from './PageInfoBar.vue'
 
 const resolvePath = function(from, rel) {
@@ -43,6 +49,8 @@ export default {
 	name: 'RichText',
 
 	components: {
+		NcEmptyContent,
+		NcLoadingIcon,
 		PageInfoBar,
 		RichTextReader,
 	},
@@ -70,7 +78,6 @@ export default {
 
 	data() {
 		return {
-			loading: true,
 			outline: {
 				visible: false,
 				enable: false,
@@ -85,6 +92,7 @@ export default {
 			'currentPageDirectory',
 			'currentPageFilePath',
 			'isPublic',
+			'loading',
 			'pageParam',
 			'showing',
 			'shareTokenParam',
@@ -108,13 +116,6 @@ export default {
 		'showOutline'() {
 			this.outline.visible = this.showing('outline')
 		},
-	},
-
-	mounted() {
-		this.$nextTick(() => {
-			this.loading = false
-			this.$emit('ready')
-		})
 	},
 
 	methods: {
