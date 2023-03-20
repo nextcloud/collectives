@@ -34,6 +34,7 @@ class AttachmentService {
 				'mimetype' => $file->getMimeType(),
 				'timestamp' => $file->getMTime(),
 				'path' => substr($file->getPath(), strlen('/' . $userId . '/files')),
+				'internalPath' => $file->getInternalPath(),
 				'hasPreview' => $this->preview->isAvailable($file),
 			];
 		} catch (FilesNotFoundException | InvalidPathException $e) {

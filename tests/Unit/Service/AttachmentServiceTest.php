@@ -42,7 +42,9 @@ class AttachmentServiceTest extends TestCase {
 		$attachmentFile->method('getId')
 			->willReturn(2);
 		$attachmentFile->method('getPath')
-			->willReturn('/' . $this->userId . '/files/path/to/' . $this->attachmentFolderName . '/attachmentFile1');
+			->willReturn('/' . $this->userId . '/files/Collectives/x/path/to/' . $this->attachmentFolderName . '/attachmentFile1');
+		$attachmentFile->method('getInternalPath')
+			->willReturn('/path/to/' . $this->attachmentFolderName . '/attachmentFile1');
 		$attachmentFolder->method('getDirectoryListing')
 			->willReturn([$attachmentFile]);
 		$parentFolder->method('get')
@@ -65,7 +67,8 @@ class AttachmentServiceTest extends TestCase {
 			'filesize' => null,
 			'mimetype' => null,
 			'timestamp' => null,
-			'path' => '/path/to/' . $this->attachmentFolderName . '/attachmentFile1',
+			'path' => '/Collectives/x/path/to/' . $this->attachmentFolderName . '/attachmentFile1',
+			'internalPath' => '/path/to/' . $this->attachmentFolderName . '/attachmentFile1',
 			'hasPreview' => null,
 		];
 

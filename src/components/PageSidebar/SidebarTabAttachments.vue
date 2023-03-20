@@ -42,6 +42,14 @@
 						</template>
 						{{ t('collectives', 'View in document') }}
 					</NcActionButton>
+					<NcActionLink :href="davUrl(attachment)"
+						:download="attachment.name"
+						:close-after-click="true">
+						<template #icon>
+							<DownloadIcon />
+						</template>
+						{{ t('collectives', 'Download') }}
+					</NcActionLink>
 					<NcActionLink :href="filesUrl(attachment.id)"
 						:close-after-click="true">
 						<template #icon>
@@ -62,7 +70,7 @@
 			</template>
 		</NcEmptyContent>
 
-		<div class="attachments-infobox" v-show="isTextEdit">
+		<div v-show="isTextEdit" class="attachments-infobox">
 			<InformationIcon />
 			<div class="content">
 				{{ t('collectives', 'Add attachments using drag and drop or via "Insert attachment" in the formatting bar') }}
@@ -76,20 +84,23 @@ import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { GET_ATTACHMENTS } from '../../store/actions.js'
 import { listen } from '@nextcloud/notify_push'
 import { formatFileSize } from '@nextcloud/files'
+import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
+import { getCurrentUser } from '@nextcloud/auth'
 import { NcActions, NcActionButton, NcActionLink, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagon.vue'
+import DownloadIcon from 'vue-material-design-icons/Download.vue'
 import EyeIcon from 'vue-material-design-icons/Eye.vue'
 import FolderIcon from 'vue-material-design-icons/Folder.vue'
 import InformationIcon from 'vue-material-design-icons/Information.vue'
 import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue'
-import { generateUrl } from '@nextcloud/router'
 
 export default {
 	name: 'SidebarTabAttachments',
 
 	components: {
 		AlertOctagonIcon,
+		DownloadIcon,
 		EyeIcon,
 		FolderIcon,
 		InformationIcon,
@@ -119,6 +130,7 @@ export default {
 			attachments: (state) => state.pages.attachments,
 		}),
 		...mapGetters([
+			'currentPage',
 			'isTextEdit',
 			'loading',
 			'pagePath',
@@ -134,8 +146,19 @@ export default {
 			return (timestamp) => moment.unix(timestamp).fromNow()
 		},
 
+		// Encode name the same way as Text does at `insertAttachment` in MediaHandler.vue
+		fileNameUriComponent() {
+			return (fileName) => encodeURIComponent(fileName).replace(/[!'()*]/g, (c) => {
+				return '%' + c.charCodeAt(0).toString(16).toUpperCase()
+			})
+		},
+
 		filesUrl() {
 			return (fileId) => generateUrl(`/f/${fileId}`)
+		},
+
+		davUrl() {
+			return (attachment) => generateRemoteUrl(`dav/files/${getCurrentUser().uid}/${this.currentPage.collectivePath}/${encodeURI(attachment.internalPath)}`)
 		},
 
 		formattedFileSize() {
@@ -220,12 +243,8 @@ export default {
 		},
 
 		scrollTo(attachment) {
-			// Encode name the same way as Text does at `insertAttachment` in MediaHandler.vue
-			const name = encodeURIComponent(attachment.name).replace(/[!'()*]/g, (c) => {
-				return '%' + c.charCodeAt(0).toString(16).toUpperCase()
-			})
 			const candidates = [...this.getActiveTextElement().querySelectorAll('[data-component="image-view"]')]
-			candidates.find(el => el.dataset.src.endsWith(name))?.scrollIntoView({ block: 'center' })
+			candidates.find(el => el.dataset.src.endsWith(this.fileNameUriComponent(attachment.name)))?.scrollIntoView({ block: 'center' })
 		},
 	},
 }
