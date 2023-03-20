@@ -62,10 +62,10 @@
 			</template>
 		</NcEmptyContent>
 
-		<div class="attachments-infobox">
+		<div class="attachments-infobox" v-show="isTextEdit">
 			<InformationIcon />
 			<div class="content">
-				{{ t('collectives', 'Add attachments to the document using drag & drop or via "Insert attachment"') }}
+				{{ t('collectives', 'Add attachments using drag and drop or via "Insert attachment" in the formatting bar') }}
 			</div>
 		</div>
 	</div>
@@ -119,6 +119,7 @@ export default {
 			attachments: (state) => state.pages.attachments,
 		}),
 		...mapGetters([
+			'isTextEdit',
 			'loading',
 			'pagePath',
 			'pagePathTitle',
@@ -204,7 +205,6 @@ export default {
 		},
 
 		activeTextElement() {
-			// TODO: Move page mode handling into vuex store
 			const readerElement = document.getElementById('read-only-editor')
 			if (readerElement?.offsetParent) {
 				return readerElement
@@ -213,12 +213,18 @@ export default {
 			return document.getElementById('editor-container')
 		},
 
+		getActiveTextElement() {
+			return this.isTextEdit
+				? document.getElementById('editor-container')
+				: document.getElementById('read-only-editor')
+		},
+
 		scrollTo(attachment) {
 			// Encode name the same way as Text does at `insertAttachment` in MediaHandler.vue
 			const name = encodeURIComponent(attachment.name).replace(/[!'()*]/g, (c) => {
 				return '%' + c.charCodeAt(0).toString(16).toUpperCase()
 			})
-			const candidates = [...this.activeTextElement().querySelectorAll('[data-component="image-view"]')]
+			const candidates = [...this.getActiveTextElement().querySelectorAll('[data-component="image-view"]')]
 			candidates.find(el => el.dataset.src.endsWith(name))?.scrollIntoView({ block: 'center' })
 		},
 	},
