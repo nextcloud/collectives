@@ -5,35 +5,26 @@
 		<NcAppSidebarTab id="attachments"
 			:order="0"
 			:name="t('collectives', 'Attachments')">
-			<template #icon>
-				<PaperclipIcon :size="16" />
+			<template slot="icon">
+				<PaperclipIcon :size="20" />
 			</template>
-			<div class="app-sidebar-tab-desc">
-				{{ t('collectives', 'Attachments in this page') }}
-			</div>
 			<SidebarTabAttachments v-if="showing('sidebar')" :page="page" />
 		</NcAppSidebarTab>
 		<NcAppSidebarTab id="backlinks"
 			:order="1"
 			:name="t('collectives', 'Backlinks')">
-			<template #icon>
-				<ArrowBottomLeftIcon :size="16" />
+			<template slot="icon">
+				<ArrowBottomLeftIcon :size="20" />
 			</template>
-			<div class="app-sidebar-tab-desc">
-				{{ t('collectives', 'Pages that link to this one') }}
-			</div>
 			<SidebarTabBacklinks v-if="showing('sidebar')" :page="page" />
 		</NcAppSidebarTab>
 		<NcAppSidebarTab v-if="!isPublic && currentCollectiveCanEdit"
 			id="versions"
 			:order="2"
 			:name="t('collectives', 'Versions')">
-			<template #icon>
-				<RestoreIcon :size="16" />
+			<template slot="icon">
+				<RestoreIcon :size="20" />
 			</template>
-			<div class="app-sidebar-tab-desc">
-				{{ t('collectives', 'Old versions of this page') }}
-			</div>
 			<SidebarTabVersions v-if="showing('sidebar')"
 				:page-id="page.id"
 				:page-timestamp="page.timestamp"
