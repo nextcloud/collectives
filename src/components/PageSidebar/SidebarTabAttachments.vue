@@ -244,7 +244,16 @@ export default {
 
 		scrollTo(attachment) {
 			const candidates = [...this.getActiveTextElement().querySelectorAll('[data-component="image-view"]')]
-			candidates.find(el => el.dataset.src.endsWith(this.fileNameUriComponent(attachment.name)))?.scrollIntoView({ block: 'center' })
+			const element = candidates.find(el => el.dataset.src.endsWith(this.fileNameUriComponent(attachment.name)))
+			if (element) {
+				// Scroll into view
+				element.scrollIntoView({ block: 'center' })
+				// Highlight
+				element.children[0].classList.add('highlight-animation')
+				const t = setTimeout(() => {
+					element.children[0].classList.remove('highlight-animation')
+				}, 5000)
+			}
 		},
 	},
 }
@@ -331,5 +340,18 @@ li.attachment {
 		margin-left: 1em;
 		margin-bottom: 0;
 	}
+}
+</style>
+
+<style>
+.highlight-animation {
+	animation: highlight-animation 5s 1;
+	border-radius: 8px;
+}
+
+@keyframes highlight-animation {
+	0% { background-color: var(--color-background-hover); }
+	50% { background-color: var(--color-background-hover); }
+	100% { background-color: rgba(var(--color-background-hover), 0); }
 }
 </style>
