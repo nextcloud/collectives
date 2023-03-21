@@ -20,11 +20,14 @@
 				:key="attachment.id"
 				class="attachment">
 				<a class="fileicon"
-					:href="filesUrl(attachment.id)"
+					:href="davUrl(attachment)"
+					:download="attachment.name"
 					:style="mimetypeForAttachment(attachment)"
-					@click.prevent="showViewer(attachment)" />
+					@click="clickAttachment(attachment, $event)" />
 				<div class="details">
-					<a :href="filesUrl(attachment.id)" @click.prevent="showViewer(attachment)">
+					<a :href="davUrl(attachment)"
+						:download="attachment.name"
+						@click="clickAttachment(attachment, $event)">
 						<div class="filename">
 							<span class="basename">{{ attachment.name }}</span>
 						</div>
@@ -218,13 +221,13 @@ export default {
 			}
 		},
 
-		showViewer(attachment) {
+		clickAttachment(attachment, ev) {
+			// Show in viewer if the mimetype is supported
 			if (window.OCA.Viewer.availableHandlers.map(handler => handler.mimes).flat().includes(attachment.mimetype)) {
+				ev.preventDefault()
 				window.OCA.Viewer.open({ path: attachment.path })
 				return
 			}
-
-			window.location = this.filesUrl(attachment.id)
 		},
 
 		activeTextElement() {
