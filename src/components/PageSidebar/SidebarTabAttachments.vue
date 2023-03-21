@@ -16,28 +16,29 @@
 
 		<!-- backlinks list -->
 		<ul v-else-if="!loading('attachments') && attachments.length" class="attachment-list">
-			<li v-for="attachment in sortedAttachments"
+			<NcListItem v-for="attachment in sortedAttachments"
 				:key="attachment.id"
-				class="attachment">
-				<a class="fileicon"
-					:href="davUrl(attachment)"
-					:download="attachment.name"
-					:style="mimetypeForAttachment(attachment)"
-					@click="clickAttachment(attachment, $event)" />
-				<div class="details">
-					<a :href="davUrl(attachment)"
-						:download="attachment.name"
-						@click="clickAttachment(attachment, $event)">
-						<div class="filename">
-							<span class="basename">{{ attachment.name }}</span>
-						</div>
-						<div>
-							<span class="filesize">{{ formattedFileSize(attachment.filesize) }}</span>
-							<span class="filedate">{{ relativeDate(attachment.timestamp) }}</span>
-						</div>
-					</a>
-				</div>
-				<NcActions :force-menu="true">
+				:title="attachment.name"
+				:href="davUrl(attachment)"
+				:force-display-actions="true"
+				class="attachment"
+				@click="clickAttachment(attachment, $event)">
+				<template #icon>
+					<img lazy="true"
+						:src="previewUrl(attachment)"
+						alt=""
+						height="256"
+						width="256"
+						class="attachment__image">
+				</template>
+				<template #subtitle>
+					<div class="attachment__info">
+						<span class="attachment__info_size">{{ formattedFileSize(attachment.filesize) }}</span>
+						<span class="attachment__info_size">·</span>
+						<span :title="formattedDate(attachment.timestamp)">{{ relativeDate(attachment.timestamp) }}</span>
+					</div>
+				</template>
+				<template #actions>
 					<NcActionButton :close-after-click="true"
 						@click="scrollTo(attachment)">
 						<template #icon>
@@ -60,8 +61,8 @@
 						</template>
 						{{ t('collectives', 'Show in Files') }}
 					</NcActionLink>
-				</NcActions>
-			</li>
+				</template>
+			</NcListItem>
 		</ul>
 
 		<!-- no attachments found -->
@@ -89,7 +90,7 @@ import { listen } from '@nextcloud/notify_push'
 import { formatFileSize } from '@nextcloud/files'
 import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
-import { NcActions, NcActionButton, NcActionLink, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
+import { NcActionButton, NcActionLink, NcEmptyContent, NcListItem, NcLoadingIcon } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagon.vue'
 import DownloadIcon from 'vue-material-design-icons/Download.vue'
@@ -107,11 +108,11 @@ export default {
 		EyeIcon,
 		FolderIcon,
 		InformationIcon,
-		NcActions,
 		NcActionButton,
 		NcActionLink,
 		NcEmptyContent,
 		NcLoadingIcon,
+		NcListItem,
 		PaperclipIcon,
 	},
 
@@ -145,6 +146,14 @@ export default {
 			return [...this.attachments].sort((a, b) => a.timestamp < b.timestamp)
 		},
 
+		formattedFileSize() {
+			return (fileSize) => formatFileSize(fileSize)
+		},
+
+		formattedDate() {
+			return (timestamp) => moment.unix(timestamp).format('LLL')
+		},
+
 		relativeDate() {
 			return (timestamp) => moment.unix(timestamp).fromNow()
 		},
@@ -164,21 +173,11 @@ export default {
 			return (attachment) => generateRemoteUrl(`dav/files/${getCurrentUser().uid}/${this.currentPage.collectivePath}/${encodeURI(attachment.internalPath)}`)
 		},
 
-		formattedFileSize() {
-			return (fileSize) => formatFileSize(fileSize)
-		},
-
-		mimetypeForAttachment() {
+		previewUrl() {
 			return (attachment) => {
-				if (!attachment) {
-					return {}
-				}
-				const url = attachment.hasPreview
+				return attachment.hasPreview
 					? this.attachmentPreview(attachment)
 					: OC.MimeType.getIconUrl(attachment.mimetype ?? 'undefined')
-				return {
-					'background-image': `url("${url}")`,
-				}
 			}
 		},
 
@@ -226,7 +225,6 @@ export default {
 			if (window.OCA.Viewer.availableHandlers.map(handler => handler.mimes).flat().includes(attachment.mimetype)) {
 				ev.preventDefault()
 				window.OCA.Viewer.open({ path: attachment.path })
-				return
 			}
 		},
 
@@ -253,7 +251,7 @@ export default {
 				element.scrollIntoView({ block: 'center' })
 				// Highlight
 				element.children[0].classList.add('highlight-animation')
-				const t = setTimeout(() => {
+				setTimeout(() => {
 					element.children[0].classList.remove('highlight-animation')
 				}, 5000)
 			}
@@ -267,58 +265,30 @@ export default {
 	height: calc(100% - 24px);
 }
 
-li.attachment {
+.attachment {
 	display: flex;
-	padding: 3px;
-	min-height: 44px;
+	flex-direction: row;
 
-	&:hover, &:focus, &:active {
-		background-color: var(--color-background-hover);
+	:deep(.line-one__title) {
+		font-weight: normal;
 	}
 
-	.fileicon {
-		display: inline-block;
-		min-width: 32px;
-		width: 32px;
-		height: 32px;
-		background-size: contain;
-	}
-
-	.details {
-		flex-grow: 1;
-		flex-shrink: 1;
-		min-width: 0;
-		flex-basis: 50%;
-		line-height: 110%;
-		padding: 2px;
-	}
-
-	.filename {
+	&__info {
 		display: flex;
-		.basename {
-			white-space: nowrap;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			padding-bottom: 2px;
-		}
-		.extension {
-			opacity: 0.7;
+		flex-direction: row;
+		align-items: center;
+		gap: 0.5rem;
+
+		&__size {
+			color: var(--color-text-lighter);
 		}
 	}
 
-	.attachment--info,
-	.filesize, .filedate {
-		font-size: 90%;
-		color: var(--color-text-maxcontrast);
-	}
-
-	.app-popover-menu-utils {
-		position: relative;
-		right: -10px;
-		button {
-			height: 32px;
-			width: 42px;
-		}
+	&__image {
+		width: 3rem;
+		height: 3rem;
+		border: 1px solid var(--color-border);
+		border-radius: var(--border-radius-large);
 	}
 }
 
