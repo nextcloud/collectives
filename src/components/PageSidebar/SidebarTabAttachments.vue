@@ -212,11 +212,12 @@ export default {
 		 */
 		async getAttachments() {
 			try {
-				this.done('attachments')
-				this.dispatchGetAttachments(this.page)
+				await this.dispatchGetAttachments(this.page)
 			} catch (e) {
 				this.error = t('collectives', 'Could not get attachments')
 				console.error('Failed to get page attachments', e)
+			} finally {
+				this.done('attachments')
 			}
 		},
 

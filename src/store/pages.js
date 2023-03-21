@@ -596,10 +596,8 @@ export default {
 		 * @param {object} page Page to get attachments for
 		 */
 		async [GET_ATTACHMENTS]({ commit, getters }, page) {
-			commit('load', 'attachments')
 			const response = await axios.get(getters.attachmentsUrl(page.parentId, page.id))
 			commit(SET_ATTACHMENTS, { attachments: response.data.data })
-			commit('done', 'attachments')
 		},
 
 		/**
