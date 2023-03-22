@@ -11,6 +11,8 @@ import {
 	UPDATE_PAGE,
 	DELETE_PAGE_BY_ID,
 	SET_ATTACHMENTS,
+	SET_ATTACHMENT_DELETED,
+	SET_ATTACHMENT_UNDELETED,
 	SET_BACKLINKS,
 	KEEP_SORTABLE,
 	CLEAR_SORTABLE,
@@ -41,6 +43,7 @@ export default {
 		collapsed: {},
 		showTemplates: false,
 		attachments: [],
+		deletedAttachments: [],
 		backlinks: [],
 		highlightPageId: null,
 		isDragoverTargetPage: false,
@@ -310,6 +313,27 @@ export default {
 
 		[SET_ATTACHMENTS](state, { attachments }) {
 			state.attachments = attachments
+				// Disregard deletedAttachments when updating attachments
+				.filter(a => !state.deletedAttachments.map(a => a.name).includes(a.name))
+			state.deletedAttachments = state.deletedAttachments
+				// Only keep deletedAttachments that still exist
+				.filter(a => attachments.map(a => a.name).includes(a.name))
+		},
+
+		[SET_ATTACHMENT_DELETED](state, name) {
+			const index = state.attachments.findIndex(a => a.name === name)
+			if (index !== -1) {
+				const [attachment] = state.attachments.splice(index, 1)
+				state.deletedAttachments.push(attachment)
+			}
+		},
+
+		[SET_ATTACHMENT_UNDELETED](state, name) {
+			const index = state.deletedAttachments.findIndex(a => a.name === name)
+			if (index !== -1) {
+				const [attachment] = state.deletedAttachments.splice(index, 1)
+				state.attachments.push(attachment)
+			}
 		},
 
 		[SET_BACKLINKS](state, { pages }) {
@@ -327,6 +351,11 @@ export default {
 		// using camel case name so this works nicely with mapMutations
 		unsetPages(state) {
 			state.pages = []
+		},
+
+		unsetAttachments(state) {
+			state.attachments = []
+			state.deletedAttachments = []
 		},
 
 		updateSubpageOrder(state, { parentId, subpageOrder }) {

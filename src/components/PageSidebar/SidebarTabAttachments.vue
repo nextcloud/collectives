@@ -14,56 +14,113 @@
 			</template>
 		</NcEmptyContent>
 
-		<!-- backlinks list -->
-		<ul v-else-if="!loading('attachments') && attachments.length" class="attachment-list">
-			<NcListItem v-for="attachment in sortedAttachments"
-				:key="attachment.id"
-				:title="attachment.name"
-				:href="davUrl(attachment)"
-				:force-display-actions="true"
-				class="attachment"
-				@click="clickAttachment(attachment, $event)">
-				<template #icon>
-					<img lazy="true"
-						:src="previewUrl(attachment)"
-						alt=""
-						height="256"
-						width="256"
-						class="attachment__image">
-				</template>
-				<template #subtitle>
-					<div class="attachment__info">
-						<span class="attachment__info_size">{{ formattedFileSize(attachment.filesize) }}</span>
-						<span class="attachment__info_size">·</span>
-						<span :title="formattedDate(attachment.timestamp)">{{ relativeDate(attachment.timestamp) }}</span>
-					</div>
-				</template>
-				<template #actions>
-					<NcActionButton :close-after-click="true"
-						@click="scrollTo(attachment)">
-						<template #icon>
-							<EyeIcon />
-						</template>
-						{{ t('collectives', 'View in document') }}
-					</NcActionButton>
-					<NcActionLink :href="davUrl(attachment)"
-						:download="attachment.name"
-						:close-after-click="true">
-						<template #icon>
-							<DownloadIcon />
-						</template>
-						{{ t('collectives', 'Download') }}
-					</NcActionLink>
-					<NcActionLink :href="filesUrl(attachment.id)"
-						:close-after-click="true">
-						<template #icon>
-							<FolderIcon />
-						</template>
-						{{ t('collectives', 'Show in Files') }}
-					</NcActionLink>
-				</template>
-			</NcListItem>
-		</ul>
+		<div v-else-if="!loading('attachments') && (attachments.length || deletedAttachments.length)">
+			<!-- attachments list -->
+			<ul v-show="sortedAttachments.length" class="attachment-list">
+				<NcListItem v-for="attachment in sortedAttachments"
+					:key="attachment.id"
+					:title="attachment.name"
+					:href="davUrl(attachment)"
+					:force-display-actions="true"
+					class="attachment"
+					@click="clickAttachment(attachment, $event)">
+					<template #icon>
+						<img lazy="true"
+							:src="previewUrl(attachment)"
+							alt=""
+							height="256"
+							width="256"
+							class="attachment__image">
+					</template>
+					<template #subtitle>
+						<div class="attachment__info">
+							<span class="attachment__info_size">{{ formattedFileSize(attachment.filesize) }}</span>
+							<span class="attachment__info_size">·</span>
+							<span :title="formattedDate(attachment.timestamp)">{{ relativeDate(attachment.timestamp) }}</span>
+						</div>
+					</template>
+					<template #actions>
+						<NcActionButton :close-after-click="true"
+							@click="scrollTo(attachment)">
+							<template #icon>
+								<EyeIcon />
+							</template>
+							{{ t('collectives', 'View in document') }}
+						</NcActionButton>
+						<NcActionLink :href="davUrl(attachment)"
+							:download="attachment.name"
+							:close-after-click="true">
+							<template #icon>
+								<DownloadIcon />
+							</template>
+							{{ t('collectives', 'Download') }}
+						</NcActionLink>
+						<NcActionLink :href="filesUrl(attachment.id)"
+							:close-after-click="true">
+							<template #icon>
+								<FolderIcon />
+							</template>
+							{{ t('collectives', 'Show in Files') }}
+						</NcActionLink>
+					</template>
+				</NcListItem>
+			</ul>
+
+			<!-- deleted attachments list -->
+			<ul v-show="isTextEdit && deletedAttachments.length" class="attachment-list-deleted">
+				<div class="attachment-list-subheading">
+					{{ t('collectives', 'Recently deleted') }}
+				</div>
+
+				<NcListItem v-for="attachment in deletedAttachments"
+					:key="attachment.id"
+					:title="attachment.name"
+					:href="davUrl(attachment)"
+					:force-display-actions="true"
+					class="attachment"
+					@click="clickAttachment(attachment, $event)">
+					<template #icon>
+						<img lazy="true"
+							:src="previewUrl(attachment)"
+							alt=""
+							height="256"
+							width="256"
+							class="attachment__image">
+					</template>
+					<template #subtitle>
+						<div class="attachment__info">
+							<span class="attachment__info_size">{{ formattedFileSize(attachment.filesize) }}</span>
+							<span class="attachment__info_size">·</span>
+							<span :title="formattedDate(attachment.timestamp)">{{ relativeDate(attachment.timestamp) }}</span>
+						</div>
+					</template>
+					<template #actions>
+						<NcActionButton :close-after-click="true"
+							@click="restore(attachment)">
+							<template #icon>
+								<RestoreIcon />
+							</template>
+							{{ t('collectives', 'Restore') }}
+						</NcActionButton>
+						<NcActionLink :href="davUrl(attachment)"
+							:download="attachment.name"
+							:close-after-click="true">
+							<template #icon>
+								<DownloadIcon />
+							</template>
+							{{ t('collectives', 'Download') }}
+						</NcActionLink>
+						<NcActionLink :href="filesUrl(attachment.id)"
+							:close-after-click="true">
+							<template #icon>
+								<FolderIcon />
+							</template>
+							{{ t('collectives', 'Show in Files') }}
+						</NcActionLink>
+					</template>
+				</NcListItem>
+			</ul>
+		</div>
 
 		<!-- no attachments found -->
 		<NcEmptyContent v-else
@@ -86,8 +143,10 @@
 <script>
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { GET_ATTACHMENTS } from '../../store/actions.js'
+import { SET_ATTACHMENT_DELETED, SET_ATTACHMENT_UNDELETED } from '../../store/mutations.js'
 import { listen } from '@nextcloud/notify_push'
 import { formatFileSize } from '@nextcloud/files'
+import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
 import { NcActionButton, NcActionLink, NcEmptyContent, NcListItem, NcLoadingIcon } from '@nextcloud/vue'
@@ -98,6 +157,7 @@ import EyeIcon from 'vue-material-design-icons/Eye.vue'
 import FolderIcon from 'vue-material-design-icons/Folder.vue'
 import InformationIcon from 'vue-material-design-icons/Information.vue'
 import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue'
+import RestoreIcon from 'vue-material-design-icons/Restore.vue'
 
 export default {
 	name: 'SidebarTabAttachments',
@@ -114,6 +174,7 @@ export default {
 		NcLoadingIcon,
 		NcListItem,
 		PaperclipIcon,
+		RestoreIcon,
 	},
 
 	props: {
@@ -132,6 +193,7 @@ export default {
 	computed: {
 		...mapState({
 			attachments: (state) => state.pages.attachments,
+			deletedAttachments: (state) => state.pages.deletedAttachments,
 		}),
 		...mapGetters([
 			'currentPage',
@@ -197,11 +259,25 @@ export default {
 	mounted() {
 		this.load('attachments')
 		this.getAttachments()
+		// Reload attachment list on event from Text
+		subscribe('collectives:text-image-node:add', this.getAttachments)
+		// Move attachment to recently deleted on event from Text
+		subscribe('collectives:text-image-node:delete', this.onDeleteImageNode)
+		// Reload attachment list on filesystem changes
 		listen('notify_file', this.getAttachments.bind(this))
+	},
+
+	beforeDestroy() {
+		unsubscribe('collectives:text-image-node:add', this.getAttachments)
+		unsubscribe('collectives:text-image-node:delete', this.onDeleteImageNode)
 	},
 
 	methods: {
 		...mapMutations(['done', 'load', 'unsetAttachments']),
+		...mapMutations({
+			setAttachmentDeleted: SET_ATTACHMENT_DELETED,
+			setAttachmentUndeleted: SET_ATTACHMENT_UNDELETED,
+		}),
 
 		...mapActions({
 			dispatchGetAttachments: GET_ATTACHMENTS,
@@ -256,6 +332,22 @@ export default {
 					element.children[0].classList.remove('highlight-animation')
 				}, 5000)
 			}
+		},
+
+		restore(attachment) {
+			emit('collectives:attachment:restore', this.fileNameUriComponent(attachment.name))
+			this.scrollTo(attachment)
+			this.setAttachmentUndeleted(attachment.name)
+		},
+
+		onDeleteImageNode(imageUrl) {
+			const url = new URL(imageUrl, window.location)
+			const imageFileName = url.searchParams.get('imageFileName') || url.searchParams.get('mediaFileName')
+			if (!url.pathname.includes('/apps/text/') || !imageFileName) {
+				// Ignore image nodes that don't point to direct Text attachments
+				return
+			}
+			this.setAttachmentDeleted(imageFileName)
 		},
 	},
 }
@@ -314,6 +406,11 @@ export default {
 		margin-left: 1em;
 		margin-bottom: 0;
 	}
+}
+
+.attachment-list-subheading {
+	padding: 0.3rem 8px;
+	font-weight: bold;
 }
 </style>
 

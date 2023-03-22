@@ -12,11 +12,14 @@
 		mime="text/markdown"
 		class="file-view active"
 		@ready="ready"
-		@outline-toggled="toggleOutlineFromText" />
+		@outline-toggled="toggleOutlineFromText"
+		@add-image-node="onAddImageNode"
+		@delete-image-node="onDeleteImageNode" />
 </template>
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
+import { emit } from '@nextcloud/event-bus'
 
 export default {
 	name: 'Editor',
@@ -62,6 +65,14 @@ export default {
 			} else if (visible === false) {
 				this.hide('outline')
 			}
+		},
+
+		onAddImageNode(imageUrl) {
+			emit('collectives:text-image-node:add')
+		},
+
+		onDeleteImageNode(imageUrl) {
+			emit('collectives:text-image-node:delete', imageUrl)
 		},
 	},
 }

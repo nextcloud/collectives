@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import Editor from './Editor.vue'
 import RichText from './RichText.vue'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
@@ -107,9 +108,11 @@ export default {
 				this.stopEdit()
 			}
 		})
+		subscribe('collectives:attachment:restore', this.addImage)
 	},
 
 	beforeDestroy() {
+		unsubscribe('collectives:attachment:restore', this.addImage)
 		this.textEditWatcher()
 	},
 
@@ -144,7 +147,18 @@ export default {
 		},
 
 		focusEditor() {
-			this.wrapper()?.$editor?.commands?.focus?.()
+			this.wrapper()?.$editor?.commands.focus?.()
+		},
+
+		addImage(name) {
+			// inspired by the fixedEncodeURIComponent function suggested in
+			// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent
+			const src = '.attachments.' + this.currentPage.id + '/' + name
+			// simply get rid of brackets to make sure link text is valid
+			// as it does not need to be unique and matching the real file name
+			const alt = name.replaceAll(/[[\]]/g, '')
+
+			this.wrapper()?.$editor?.commands.setImage({ src, alt })
 		},
 
 		/**

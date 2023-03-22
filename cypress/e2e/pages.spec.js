@@ -249,10 +249,35 @@ describe('Page', function() {
 				.find('.mention')
 				.should('contain', 'admin')
 		})
-		it('Lists attachments for the page', function() {
+		it('Lists attachments for the page and allows restore', function() {
 			cy.visit('/apps/collectives/Our%20Garden/Day%201')
+
+			// Switch to edit mode
+			cy.switchPageMode(1)
+
+			// Open attachment list
 			cy.get('button.action-item .icon-menu-sidebar').click()
 			cy.get('.app-sidebar-tabs__content').should('contain', 'test.png')
+
+			// Delete image
+			cy.getEditor()
+				.find('figure[data-component="image-view"] .image__view')
+				.trigger('mouseover')
+				.get('.image__caption__delete')
+				.click()
+			cy.getEditor()
+				.find('figure[data-component="image-view"] .image__view')
+				.should('not.exist')
+
+			// Restore image
+			cy.get('.attachment-list-deleted >>>>>>> button.action-item__menutoggle')
+				.click()
+			cy.get('button')
+				.contains('Restore')
+				.click()
+			cy.getEditor()
+				.find('figure[data-component="image-view"] .image__view')
+				.should('be.visible')
 		})
 	})
 
