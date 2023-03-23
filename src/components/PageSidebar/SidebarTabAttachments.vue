@@ -55,7 +55,8 @@
 							</template>
 							{{ t('collectives', 'Download') }}
 						</NcActionLink>
-						<NcActionLink :href="filesUrl(attachment.id)"
+						<NcActionLink v-if="!isPublic"
+							:href="filesUrl(attachment.id)"
 							:close-after-click="true">
 							<template #icon>
 								<FolderIcon />
@@ -197,10 +198,12 @@ export default {
 		}),
 		...mapGetters([
 			'currentPage',
+			'isPublic',
 			'isTextEdit',
 			'loading',
 			'pagePath',
 			'pagePathTitle',
+			'shareTokenParam',
 		]),
 
 		// Sort attachments chronologically, most recent first
@@ -231,12 +234,26 @@ export default {
 			return (fileId) => generateUrl(`/f/${fileId}`)
 		},
 
+		pathSplit() {
+			return (filepath) => {
+				const lastSlashIndex = filepath.lastIndexOf('/')
+				const path = filepath.substring(0, lastSlashIndex)
+				const filename = filepath.substring(lastSlashIndex + 1)
+				return [path, filename]
+			}
+		},
+
 		davUrl() {
-			return (attachment) => generateRemoteUrl(`dav/files/${getCurrentUser().uid}/${this.currentPage.collectivePath}/${encodeURI(attachment.internalPath)}`)
+			return function(attachment) {
+				const [path, filename] = this.pathSplit(attachment.internalPath)
+				return this.isPublic
+					? generateUrl(`s/${this.shareTokenParam}/download?path=/${path}&files=${filename}`)
+					: generateRemoteUrl(`dav/files/${getCurrentUser()?.uid}/${this.currentPage.collectivePath}/${encodeURI(attachment.internalPath)}`)
+			}
 		},
 
 		previewUrl() {
-			return (attachment) => {
+			return function(attachment) {
 				return attachment.hasPreview
 					? this.attachmentPreview(attachment)
 					: OC.MimeType.getIconUrl(attachment.mimetype ?? 'undefined')
@@ -244,7 +261,12 @@ export default {
 		},
 
 		attachmentPreview() {
-			return (attachment) => (attachment.id ? generateUrl(`/core/preview?fileId=${attachment.id}&x=64&y=64&a=true`) : null)
+			return function(attachment) {
+				const searchParams = '&x=64&y=64&a=true'
+				return this.isPublic
+					? generateUrl(`/apps/files_sharing/publicpreview/${this.shareTokenParam}?fileId=${attachment.id}&file=${encodeURI(attachment.internalPath)}${searchParams}`)
+					: generateUrl(`/core/preview?fileId=${attachment.id}${searchParams}`)
+			}
 		},
 	},
 
@@ -299,7 +321,7 @@ export default {
 
 		clickAttachment(attachment, ev) {
 			// Show in viewer if the mimetype is supported
-			if (window.OCA.Viewer.availableHandlers.map(handler => handler.mimes).flat().includes(attachment.mimetype)) {
+			if (!this.isPublic && window.OCA.Viewer.availableHandlers.map(handler => handler.mimes).flat().includes(attachment.mimetype)) {
 				ev.preventDefault()
 				window.OCA.Viewer.open({ path: attachment.path })
 			}
