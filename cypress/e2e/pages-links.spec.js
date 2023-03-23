@@ -187,7 +187,10 @@ describe('Page', function() {
 		it('Opens link with absolute path to page in this collective in same/new tab depending on view/edit mode', function() {
 			const href = '/index.php/apps/collectives/Link%20Testing/Link%20Target'
 			testLinkToSameTab(href)
-			testLinkToNewTab(href, { edit: true })
+			// Broken in Text on Nextcloud 25
+			if (Cypress.env('ncVersion') !== 'stable25') {
+				testLinkToNewTab(href, { edit: true })
+			}
 		})
 		/* Link without origin and containing `fileId` param gets rewritten by editor rendering, so unable to test for now
 		it('Opens link with relative path to page in this collective with fileId in same/new tab depending on view/edit mode', function() {
@@ -199,7 +202,10 @@ describe('Page', function() {
 		it('Opens link with relative path to page in this collective without fileId in same/new tab depending on view/edit mode', function() {
 			const href = './Link%20Target'
 			testLinkToSameTab(href)
-			testLinkToNewTab(href, { edit: true })
+			// Broken in Text on Nextcloud 25
+			if (Cypress.env('ncVersion') !== 'stable25') {
+				testLinkToNewTab(href, { edit: true })
+			}
 		})
 		it('Opens link with relative path to markdown file in this collective without fileId in same/new tab depending on view/edit mode', function() {
 			// TODO: We want '.md' to be stripped when opening the link
@@ -217,7 +223,10 @@ describe('Page', function() {
 		it('Opens link with absolute path to page in other collective without fileId in same/new tab depending on view/edit mode', function() {
 			const href = '/index.php/apps/collectives/Another%20Collective/First%20Page'
 			testLinkToSameTab(href)
-			testLinkToNewTab(href, { edit: true })
+			// Broken in Text on Nextcloud 25
+			if (Cypress.env('ncVersion') !== 'stable25') {
+				testLinkToNewTab(href, { edit: true })
+			}
 		})
 	})
 
@@ -230,7 +239,10 @@ describe('Page', function() {
 		it('Opens link with absolute path to another Nextcloud app in new tab', function() {
 			const href = '/index.php/apps/contacts'
 			testLinkToNewTab(href)
-			testLinkToNewTab(href, { edit: true })
+			// Broken in Text on Nextcloud 25
+			if (Cypress.env('ncVersion') !== 'stable25') {
+				testLinkToNewTab(href, { edit: true })
+			}
 		})
 	})
 
@@ -293,7 +305,10 @@ describe('Page', function() {
 			cy.logout()
 			cy.visit(`${shareUrl}/Link Source`)
 			const href = '/index.php/apps/collectives/Link%20Testing/Link%20Target'
-			testLinkToSameTab(href, { isPublic: true })
+			// Broken in Text on Nextcloud 25
+			if (Cypress.env('ncVersion') !== 'stable25') {
+				testLinkToSameTab(href, { isPublic: true })
+			}
 			testLinkToNewTab(href, { edit: true, isPublic: true })
 		})
 		it('Public share: opens link to external website in new tab', function() {
