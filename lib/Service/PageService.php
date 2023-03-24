@@ -126,6 +126,21 @@ class PageService {
 	 * @param int    $fileId
 	 * @param string $userId
 	 *
+	 * @return File
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function getPageFile(int $collectiveId, int $fileId, string $userId): File {
+		$collectiveFolder = $this->getCollectiveFolder($collectiveId, $userId);
+		return $this->nodeHelper->getFileById($collectiveFolder, $fileId);
+	}
+
+	/**
+	 * @param int    $collectiveId
+	 * @param int    $fileId
+	 * @param string $userId
+	 *
 	 * @return Folder
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException

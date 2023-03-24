@@ -37,7 +37,7 @@ class NodeHelper {
 		$file = $folder->getById($id);
 
 		if (count($file) <= 0 || !($file[0] instanceof File)) {
-			throw new NotFoundException('Page not found: ' . $id);
+			throw new NotFoundException('File not found: ' . $id);
 		}
 		return $file[0];
 	}

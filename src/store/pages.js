@@ -10,6 +10,9 @@ import {
 	ADD_PAGE,
 	UPDATE_PAGE,
 	DELETE_PAGE_BY_ID,
+	SET_ATTACHMENTS,
+	SET_ATTACHMENT_DELETED,
+	SET_ATTACHMENT_UNDELETED,
 	SET_BACKLINKS,
 	KEEP_SORTABLE,
 	CLEAR_SORTABLE,
@@ -26,6 +29,7 @@ import {
 	SET_PAGE_EMOJI,
 	SET_PAGE_SUBPAGE_ORDER,
 	DELETE_PAGE,
+	GET_ATTACHMENTS,
 	GET_BACKLINKS,
 } from './actions.js'
 
@@ -38,6 +42,8 @@ export default {
 		sortBy: undefined,
 		collapsed: {},
 		showTemplates: false,
+		attachments: [],
+		deletedAttachments: [],
 		backlinks: [],
 		highlightPageId: null,
 		isDragoverTargetPage: false,
@@ -254,6 +260,10 @@ export default {
 			return `${getters.pageUrl(getters.currentPage.parentId, getters.currentPage.id)}/touch`
 		},
 
+		attachmentsUrl(_state, getters) {
+			return (parentId, pageId) => `${getters.pageUrl(parentId, pageId)}/attachments`
+		},
+
 		backlinksUrl(_state, getters) {
 			return (parentId, pageId) => `${getters.pageUrl(parentId, pageId)}/backlinks`
 		},
@@ -301,6 +311,31 @@ export default {
 			state.pages.splice(state.pages.findIndex(p => p.id === id), 1)
 		},
 
+		[SET_ATTACHMENTS](state, { attachments }) {
+			state.attachments = attachments
+				// Disregard deletedAttachments when updating attachments
+				.filter(a => !state.deletedAttachments.map(a => a.name).includes(a.name))
+			state.deletedAttachments = state.deletedAttachments
+				// Only keep deletedAttachments that still exist
+				.filter(a => attachments.map(a => a.name).includes(a.name))
+		},
+
+		[SET_ATTACHMENT_DELETED](state, name) {
+			const index = state.attachments.findIndex(a => a.name === name)
+			if (index !== -1) {
+				const [attachment] = state.attachments.splice(index, 1)
+				state.deletedAttachments.push(attachment)
+			}
+		},
+
+		[SET_ATTACHMENT_UNDELETED](state, name) {
+			const index = state.deletedAttachments.findIndex(a => a.name === name)
+			if (index !== -1) {
+				const [attachment] = state.deletedAttachments.splice(index, 1)
+				state.attachments.push(attachment)
+			}
+		},
+
 		[SET_BACKLINKS](state, { pages }) {
 			state.backlinks = pages
 		},
@@ -316,6 +351,11 @@ export default {
 		// using camel case name so this works nicely with mapMutations
 		unsetPages(state) {
 			state.pages = []
+		},
+
+		unsetAttachments(state) {
+			state.attachments = []
+			state.deletedAttachments = []
 		},
 
 		updateSubpageOrder(state, { parentId, subpageOrder }) {
@@ -574,6 +614,19 @@ export default {
 			await axios.delete(getters.pageUrl(parentId, pageId))
 			commit(DELETE_PAGE_BY_ID, pageId)
 			commit('done', 'page')
+		},
+
+		/**
+		 * Get list of attachments for a page
+		 *
+		 * @param {object} store the vuex store
+		 * @param {Function} store.commit commit changes
+		 * @param {object} store.getters getters of the store
+		 * @param {object} page Page to get attachments for
+		 */
+		async [GET_ATTACHMENTS]({ commit, getters }, page) {
+			const response = await axios.get(getters.attachmentsUrl(page.parentId, page.id))
+			commit(SET_ATTACHMENTS, { attachments: response.data.data })
 		},
 
 		/**

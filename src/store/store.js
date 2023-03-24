@@ -6,6 +6,7 @@ import collectives from './collectives.js'
 import pages from './pages.js'
 import settings from './settings.js'
 import versions from './versions.js'
+import { pageModes } from '../constants.js'
 
 Vue.use(Vuex)
 
@@ -20,6 +21,7 @@ export default new Store({
 	},
 
 	state: {
+		textMode: pageModes.MODE_VIEW,
 		messages: {},
 		showing: {},
 		loading: {},
@@ -48,6 +50,9 @@ export default new Store({
 
 		isPublic: (_state, get) =>
 			!!get.shareTokenParam,
+
+		isTextEdit: (state) => state.textMode === pageModes.MODE_EDIT,
+		isTextView: (state) => state.textMode === pageModes.MODE_VIEW,
 	},
 
 	mutations: {
@@ -60,9 +65,8 @@ export default new Store({
 		hide: (state, aspect) => set(state.showing, aspect, false),
 		toggle: (state, aspect) =>
 			set(state.showing, aspect, !state.showing[aspect]),
-		setPrintView: (state) => {
-			state.printView = true
-		},
-
+		setPrintView: (state) => { state.printView = true },
+		setTextEdit: (state) => { state.textMode = pageModes.MODE_EDIT },
+		setTextView: (state) => { state.textMode = pageModes.MODE_VIEW },
 	},
 })

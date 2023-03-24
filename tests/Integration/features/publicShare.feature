@@ -7,6 +7,10 @@ Feature: publicShare
     Then anonymous sees public collective "BehatPublicCollective" with owner "jane"
     And anonymous sees pagePath "Readme.md" in public collective "BehatPublicCollective" with owner "jane"
 
+  Scenario: Upload and list attachment for page
+    When user "jane" uploads attachment "test.png" to "firstpage" in "BehatPublicCollective"
+    Then anonymous sees attachment "test.png" with mimetype "image/png" for "firstpage" in public collective "BehatPublicCollective" with owner "jane"
+
   Scenario: Fail to create a second public share
     Then user "jane" fails to create public share for "BehatPublicCollective"
 

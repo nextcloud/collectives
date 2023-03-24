@@ -58,6 +58,8 @@ return [
 			'verb' => 'DELETE', 'requirements' => ['collectiveId' => '\d+', 'parentId' => '\d+', 'id' => '\d+']],
 		['name' => 'page#getBacklinks', 'url' => '/_api/{collectiveId}/_pages/parent/{parentId}/page/{id}/backlinks',
 			'verb' => 'GET', 'requirements' => ['collectiveId' => '\d+', 'parentId' => '\d+', 'id' => '\d+']],
+		['name' => 'page#getAttachments', 'url' => '/_api/{collectiveId}/_pages/parent/{parentId}/page/{id}/attachments',
+			'verb' => 'GET', 'requirements' => ['collectiveId' => '\d+', 'parentId' => '\d+', 'id' => '\d+']],
 
 		// public collectives API
 		['name' => 'publicCollective#get', 'url' => '/_api/p/{token}', 'verb' => 'GET'],
@@ -78,6 +80,8 @@ return [
 			'verb' => 'PUT', 'requirements' => ['parentId' => '\d+', 'id' => '\d+']],
 		['name' => 'publicPage#delete', 'url' => '/_api/p/{token}/_pages/parent/{parentId}/page/{id}',
 			'verb' => 'DELETE', 'requirements' => ['parentId' => '\d+', 'id' => '\d+']],
+		['name' => 'publicPage#getAttachments', 'url' => '/_api/p/{token}/_pages/parent/{parentId}/page/{id}/attachments',
+			'verb' => 'GET', 'requirements' => ['parentId' => '\d+', 'id' => '\d+']],
 		['name' => 'publicPage#getBacklinks', 'url' => '/_api/p/{token}/_pages/parent/{parentId}/page/{id}/backlinks',
 			'verb' => 'GET', 'requirements' => ['parentId' => '\d+', 'id' => '\d+']],
 

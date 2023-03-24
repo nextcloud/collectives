@@ -2,6 +2,7 @@
 
 namespace OCA\Collectives\Controller;
 
+use OCA\Collectives\Service\AttachmentService;
 use OCA\Collectives\Service\PageService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
@@ -11,18 +12,21 @@ use Psr\Log\LoggerInterface;
 
 class PageController extends Controller {
 	private PageService $service;
+	private AttachmentService $attachmentService;
 	private IUserSession $userSession;
 	private LoggerInterface $logger;
 
 	use ErrorHelper;
 
-	public function __construct(string                $appName,
-								IRequest              $request,
-								PageService           $service,
-								IUserSession          $userSession,
-								LoggerInterface       $logger) {
+	public function __construct(string            $appName,
+								IRequest          $request,
+								PageService       $service,
+								AttachmentService $attachmentService,
+								IUserSession      $userSession,
+								LoggerInterface   $logger) {
 		parent::__construct($appName, $request);
 		$this->service = $service;
+		$this->attachmentService = $attachmentService;
 		$this->userSession = $userSession;
 		$this->logger = $logger;
 	}
@@ -184,6 +188,25 @@ class PageController extends Controller {
 			$pageInfo = $this->service->delete($collectiveId, $parentId, $id, $userId);
 			return [
 				"data" => $pageInfo
+			];
+		}, $this->logger);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 *
+	 * @param int $collectiveId
+	 * @param int $parentId
+	 * @param int $id
+	 *
+	 * @return DataResponse
+	 */
+	public function getAttachments(int $collectiveId, int $parentId, int $id): DataResponse {
+		return $this->handleErrorResponse(function () use ($collectiveId, $id): array {
+			$userId = $this->getUserId();
+			$attachments = $this->attachmentService->getAttachments($collectiveId, $id, $userId);
+			return [
+				"data" => $attachments
 			];
 		}, $this->logger);
 	}

@@ -2,27 +2,29 @@
 	<NcAppSidebar ref="sidebar"
 		:title="title"
 		@close="close">
-		<NcAppSidebarTab id="backlinks"
+		<NcAppSidebarTab id="attachments"
 			:order="0"
-			:name="t('collectives', 'Backlinks')">
-			<template #icon>
-				<ArrowBottomLeftIcon :size="16" />
+			:name="t('collectives', 'Attachments')">
+			<template slot="icon">
+				<PaperclipIcon :size="20" />
 			</template>
-			<div class="app-sidebar-tab-desc">
-				{{ t('collectives', 'Pages that link to this one') }}
-			</div>
+			<SidebarTabAttachments v-if="showing('sidebar')" :page="page" />
+		</NcAppSidebarTab>
+		<NcAppSidebarTab id="backlinks"
+			:order="1"
+			:name="t('collectives', 'Backlinks')">
+			<template slot="icon">
+				<ArrowBottomLeftIcon :size="20" />
+			</template>
 			<SidebarTabBacklinks v-if="showing('sidebar')" :page="page" />
 		</NcAppSidebarTab>
 		<NcAppSidebarTab v-if="!isPublic && currentCollectiveCanEdit"
 			id="versions"
-			:order="1"
+			:order="2"
 			:name="t('collectives', 'Versions')">
-			<template #icon>
-				<RestoreIcon :size="16" />
+			<template slot="icon">
+				<RestoreIcon :size="20" />
 			</template>
-			<div class="app-sidebar-tab-desc">
-				{{ t('collectives', 'Old versions of this page') }}
-			</div>
 			<SidebarTabVersions v-if="showing('sidebar')"
 				:page-id="page.id"
 				:page-timestamp="page.timestamp"
@@ -36,7 +38,9 @@ import { mapGetters, mapMutations } from 'vuex'
 import { NcAppSidebar, NcAppSidebarTab } from '@nextcloud/vue'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
 import ArrowBottomLeftIcon from 'vue-material-design-icons/ArrowBottomLeft.vue'
+import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue'
 import { SELECT_VERSION } from '../store/mutations.js'
+import SidebarTabAttachments from './PageSidebar/SidebarTabAttachments.vue'
 import SidebarTabBacklinks from './PageSidebar/SidebarTabBacklinks.vue'
 import SidebarTabVersions from './PageSidebar/SidebarTabVersions.vue'
 
@@ -48,6 +52,8 @@ export default {
 		NcAppSidebarTab,
 		RestoreIcon,
 		ArrowBottomLeftIcon,
+		PaperclipIcon,
+		SidebarTabAttachments,
 		SidebarTabBacklinks,
 		SidebarTabVersions,
 	},

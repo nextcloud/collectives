@@ -76,6 +76,16 @@ class PageServiceTest extends TestCase {
 		$this->service = new PageService($this->pageMapper, $this->nodeHelper, $this->collectiveService, $userFolderHelper, $userManager, $this->config, $container);
 	}
 
+	public function testGetPageFile(): void {
+		$file = $this->getMockBuilder(File::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$this->nodeHelper->method('getFileById')
+			->willReturn($file);
+
+		self::assertEquals($file, $this->service->getPageFile($this->collectiveId, 1, $this->userId));
+	}
+
 	public function testGetFolder(): void {
 		$folder = $this->getMockBuilder(Folder::class)
 			->disableOriginalConstructor()

@@ -4,6 +4,7 @@ namespace OCA\Collectives\Controller;
 
 use OCA\Collectives\Db\CollectiveShareMapper;
 use OCA\Collectives\Model\CollectiveShareInfo;
+use OCA\Collectives\Service\AttachmentService;
 use OCA\Collectives\Service\CollectiveShareService;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
@@ -20,22 +21,25 @@ class PublicPageController extends PublicShareController {
 	private CollectiveShareMapper $collectiveShareMapper;
 	private CollectiveShareService $collectiveShareService;
 	private PageService $service;
+	private AttachmentService $attachmentService;
 	private LoggerInterface $logger;
 	private ?CollectiveShareInfo $share = null;
 
 	use ErrorHelper;
 
-	public function __construct(string                $appName,
-								IRequest              $request,
-								CollectiveShareMapper $collectiveShareMapper,
+	public function __construct(string                 $appName,
+								IRequest               $request,
+								CollectiveShareMapper  $collectiveShareMapper,
 								CollectiveShareService $collectiveShareService,
-								PageService $service,
-								ISession $session,
-								LoggerInterface $logger) {
+								PageService            $service,
+								AttachmentService      $attachmentService,
+								ISession               $session,
+								LoggerInterface        $logger) {
 		parent::__construct($appName, $request, $session);
 		$this->collectiveShareMapper = $collectiveShareMapper;
 		$this->collectiveShareService = $collectiveShareService;
 		$this->service = $service;
+		$this->attachmentService = $attachmentService;
 		$this->logger = $logger;
 	}
 
@@ -274,6 +278,25 @@ class PublicPageController extends PublicShareController {
 			$pageInfo->setShareToken($this->getToken());
 			return [
 				"data" => $pageInfo
+			];
+		}, $this->logger);
+	}
+
+	/**
+	 * @PublicPage
+	 *
+	 * @param int $parentId
+	 * @param int $id
+	 *
+	 * @return DataResponse
+	 */
+	public function getAttachments(int $parentId, int $id): DataResponse {
+		return $this->handleErrorResponse(function () use ($id): array {
+			$owner = $this->getShare()->getOwner();
+			$collectiveId = $this->getShare()->getCollectiveId();
+			$attachments = $this->attachmentService->getAttachments($collectiveId, $id, $owner);
+			return [
+				"data" => $attachments
 			];
 		}, $this->logger);
 	}

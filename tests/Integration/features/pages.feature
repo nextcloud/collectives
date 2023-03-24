@@ -6,6 +6,10 @@ Feature: pages
     And user "jane" creates page "secondpage" with parentPath "Readme.md" in "BehatPagesCollective"
     Then user "jane" sees pagePath "firstpage.md" in "BehatPagesCollective"
 
+  Scenario: Upload and list attachment for page
+    When user "jane" uploads attachment "test.png" to "firstpage" in "BehatPagesCollective"
+    Then user "jane" sees attachment "test.png" with mimetype "image/png" for "firstpage" in "BehatPagesCollective"
+
   Scenario: Share collective (with pages) and create subpage
     When user "alice" joins circle "BehatPagesCollective" with owner "jane"
     And user "alice" creates page "subpage" with parentPath "firstpage.md" in "BehatPagesCollective"
