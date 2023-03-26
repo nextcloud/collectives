@@ -261,23 +261,25 @@ describe('Page', function() {
 
 			// Delete image
 			cy.getEditor()
-				.find('figure[data-component="image-view"] .image__view')
+				.find('[data-component="image-view"] .image__view')
 				.trigger('mouseover')
 				.get('.image__caption__delete')
 				.click()
 			cy.getEditor()
-				.find('figure[data-component="image-view"] .image__view')
+				.find('[data-component="image-view"] .image__view')
 				.should('not.exist')
 
 			// Restore image
-			cy.get('.attachment-list-deleted >>>>>>> button.action-item__menutoggle')
-				.click()
-			cy.get('button')
-				.contains('Restore')
-				.click()
-			cy.getEditor()
-				.find('figure[data-component="image-view"] .image__view')
-				.should('be.visible')
+			if (Cypress.env('ncVersion') !== 'stable25') {
+				cy.get('.attachment-list-deleted >>>>>>> button.action-item__menutoggle')
+					.click()
+				cy.get('button')
+					.contains('Restore')
+					.click()
+				cy.getEditor()
+					.find('[data-component="image-view"] .image__view')
+					.should('be.visible')
+			}
 		})
 	})
 
