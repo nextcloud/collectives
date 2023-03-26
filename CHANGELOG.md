@@ -1,5 +1,23 @@
 # Changelog
 
+## 2.4.0 - 2023.03.24
+
+### ✨New
+* Page attachments list in the sidebar. (#135, #322)
+
+### 🐛Fixes
+* Many improvements to link handling in view mode. (#385)
+* Displaying non-image attachments in view mode. (#396)
+* Use Collectives icon for landing page of collectives without emoji.
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* 🔌 Update NPM dependencies.
+* 🔌 Update PHP composer dependencies.
+
+
 ## 2.3.0 - 2023.02.21
 
 ### ✨New
