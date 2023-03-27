@@ -4,9 +4,10 @@ namespace OCA\Collectives\Mount;
 
 use OC\Files\Mount\MountPoint;
 use OC\Files\Storage\Storage;
+use OCP\Files\Mount\ISystemMountPoint;
 use OCP\Files\Storage\IStorageFactory;
 
-class CollectiveMountPoint extends MountPoint {
+class CollectiveMountPoint extends MountPoint implements ISystemMountPoint {
 	private ?int $folderId;
 	private CollectiveFolderManager $collectiveFolderManager;
 
@@ -42,26 +43,6 @@ class CollectiveMountPoint extends MountPoint {
 	 */
 	public function getMountType(): string {
 		return 'collective';
-	}
-
-	/**
-	 * @param string $name
-	 * @param mixed  $default
-	 *
-	 * @return mixed
-	 */
-	public function getOption($name, $default) {
-		$options = $this->getOptions();
-		return $options[$name] ?? $default;
-	}
-
-	/**
-	 * @return array
-	 */
-	public function getOptions(): array {
-		$options = parent::getOptions();
-		$options['encrypt'] = false;
-		return $options;
 	}
 
 	/**
