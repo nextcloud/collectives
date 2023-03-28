@@ -141,6 +141,7 @@
     "Hide templates" : "Hide templates",
     "Show templates" : "Show templates",
     "Could not save page order for collective" : "Could not save page order for collective",
+    "Download" : "Download",
     "No backlinks available" : "No backlinks available",
     "If other pages link to this one, they will be listed here." : "If other pages link to this one, they will be listed here.",
     "Could not get page backlinks" : "Could not get page backlinks",
@@ -149,10 +150,9 @@
     "After editing you can find old versions of the page here." : "After editing you can find old versions of the page here.",
     "Could not get page versions" : "Could not get page versions",
     "_%n byte_::_%n bytes_" : ["%n byte","%n bytes"],
+    "Attachments" : "Attachments",
     "Backlinks" : "Backlinks",
-    "Pages that link to this one" : "Pages that link to this one",
     "Versions" : "Versions",
-    "Old versions of this page" : "Old versions of this page",
     "The content of this folder is best viewed in the Collectives app." : "The content of this folder is best viewed in the Collectives app.",
     "Open in Collectives" : "Open in Collectives",
     "Come, organize and build shared knowledge!" : "Come organise and build shared knowledge!",
@@ -180,6 +180,8 @@
     "Create collective for existing circle" : "Create collective for existing circle",
     "New collective name" : "New collective name",
     "Select circle..." : "Select circle...",
-    "Cancel creating a new collective" : "Cancel creating a new collective"
+    "Cancel creating a new collective" : "Cancel creating a new collective",
+    "Pages that link to this one" : "Pages that link to this one",
+    "Old versions of this page" : "Old versions of this page"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

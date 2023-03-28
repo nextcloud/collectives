@@ -152,9 +152,7 @@ OC.L10N.register(
     "Could not get page versions" : "Не можаха да се получат версии на страницата",
     "_%n byte_::_%n bytes_" : ["%n  байта","%n байта"],
     "Backlinks" : "Обратни връзки",
-    "Pages that link to this one" : "Страници, които имат връзка с тази страница",
     "Versions" : "Версии",
-    "Old versions of this page" : "Стари версии на тази страница",
     "The content of this folder is best viewed in the Collectives app." : "Съдържанието на тази папка се визуализира най-добре в приложението Колективи /Collectives/.",
     "Open in Collectives" : "Отваряне в Колективи",
     "Come, organize and build shared knowledge!" : "Елате, организирайте се и изградете споделено знание!",
@@ -182,6 +180,8 @@ OC.L10N.register(
     "Create collective for existing circle" : "Създаване на колектив за съществуващ кръг",
     "New collective name" : "Име на нов колектив",
     "Select circle..." : "Избор на кръг ...",
-    "Cancel creating a new collective" : "Отказ от създаване на новия колектив"
+    "Cancel creating a new collective" : "Отказ от създаване на новия колектив",
+    "Pages that link to this one" : "Страници, които имат връзка с тази страница",
+    "Old versions of this page" : "Стари версии на тази страница"
 },
 "nplurals=2; plural=(n != 1);");

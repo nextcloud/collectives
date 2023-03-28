@@ -11,6 +11,7 @@ OC.L10N.register(
     "Create" : "Ստեղծել",
     "Done" : "Done",
     "Title" : "Վերնագիր",
+    "Download" : "Ներբեռնել",
     "No other versions available" : "Այլ տարբերակներ չկան",
     "Versions" : "Տարբերակներ",
     "Groups" : "Խմբեր"

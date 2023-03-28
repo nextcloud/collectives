@@ -141,6 +141,7 @@
     "Hide templates" : "Kalıpları gizle",
     "Show templates" : "Kalıpları görüntüle",
     "Could not save page order for collective" : "Topluluğun sayfa sıralaması kaydedilemedi",
+    "Download" : "İndir",
     "No backlinks available" : "Kullanılabilecek bir dönüş bağlantısı yok",
     "If other pages link to this one, they will be listed here." : "Varsa, bu sayfa ile bağlantılı sayfalar burada görüntülenir.",
     "Could not get page backlinks" : "Sayfa dönüş bağlantıları alınamadı",
@@ -149,10 +150,9 @@
     "After editing you can find old versions of the page here." : "Düzenlendikten sonra sayfanın önceki sürümlerini burada görebilirsiniz.",
     "Could not get page versions" : "Sayfa sürümleri alınamadı",
     "_%n byte_::_%n bytes_" : ["%n bayt","%n bayt"],
+    "Attachments" : "Ek dosyalar",
     "Backlinks" : "Dönüş bağlantıları",
-    "Pages that link to this one" : "Bu sayfa ile bağlantılı sayfalar",
     "Versions" : "Sürümler",
-    "Old versions of this page" : "Bu sayfanın eski sürümleri",
     "The content of this folder is best viewed in the Collectives app." : "Bu klasörün içeriğini en iyi şekilde görüntülemek için Topluluk uygulamasını kullanın.",
     "Open in Collectives" : "Topluluk uygulaması ile aç",
     "Come, organize and build shared knowledge!" : "Bir araya gelin, bilgilerinizi paylaşın!",
@@ -180,6 +180,8 @@
     "Create collective for existing circle" : "Var olan çevre için topluluk ekle",
     "New collective name" : "Yeni topluluğun adı",
     "Select circle..." : "Çevre seçin...",
-    "Cancel creating a new collective" : "Yeni bir topluluk eklemekten vazgeç"
+    "Cancel creating a new collective" : "Yeni bir topluluk eklemekten vazgeç",
+    "Pages that link to this one" : "Bu sayfa ile bağlantılı sayfalar",
+    "Old versions of this page" : "Bu sayfanın eski sürümleri"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }

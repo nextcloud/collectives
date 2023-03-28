@@ -149,10 +149,9 @@
     "After editing you can find old versions of the page here." : "Efter redigering kan du finde gamle versioner af siden her.",
     "Could not get page versions" : "Kunne ikke hente sideversioner",
     "_%n byte_::_%n bytes_" : ["%n byte","%n bytes"],
+    "Attachments" : "Vedhæftede filer",
     "Backlinks" : "Backlinks",
-    "Pages that link to this one" : "Sider, der linker til denne",
     "Versions" : "Versioner",
-    "Old versions of this page" : "Gamle versioner af denne side",
     "The content of this folder is best viewed in the Collectives app." : "Indholdet af denne mappe vises bedst i Kollektiv-appen.",
     "Open in Collectives" : "Åben i Kollektiver",
     "Come, organize and build shared knowledge!" : "Kom, organiser og opbyg fælles viden!",
@@ -180,6 +179,8 @@
     "Create collective for existing circle" : "Opret kollektiv for eksisterende cirkel",
     "New collective name" : "Nyt Kollektiv navn",
     "Select circle..." : "Vælg cirkel...",
-    "Cancel creating a new collective" : "Annuller oprettelse af et nyt kollektiv"
+    "Cancel creating a new collective" : "Annuller oprettelse af et nyt kollektiv",
+    "Pages that link to this one" : "Sider, der linker til denne",
+    "Old versions of this page" : "Gamle versioner af denne side"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

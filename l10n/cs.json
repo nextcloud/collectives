@@ -149,10 +149,9 @@
     "After editing you can find old versions of the page here." : "Po upravení naleznete starší verze stránky zde.",
     "Could not get page versions" : "Nedaří se načíst verze stránky",
     "_%n byte_::_%n bytes_" : ["%n bajt","%n bajty","%n bajtů","%n bajty"],
+    "Attachments" : "Přílohy",
     "Backlinks" : "Zpětné odkazy",
-    "Pages that link to this one" : "Stránky, které odkazují na tuto",
     "Versions" : "Verze",
-    "Old versions of this page" : "Staré verze této stránky",
     "The content of this folder is best viewed in the Collectives app." : "Obsah této složky nejlépe zobrazíte v aplikaci Kolektivy.",
     "Open in Collectives" : "Otevřít v Kolektivech",
     "Come, organize and build shared knowledge!" : "Organizujte se a vytvářejte sdílené znalosti!",
@@ -180,6 +179,8 @@
     "Create collective for existing circle" : "Vytvořit kolektiv pro existující okruh",
     "New collective name" : "Název pro nový kolektiv",
     "Select circle..." : "Vybrat okruh…",
-    "Cancel creating a new collective" : "Zrušit vytváření nového kolektivu"
+    "Cancel creating a new collective" : "Zrušit vytváření nového kolektivu",
+    "Pages that link to this one" : "Stránky, které odkazují na tuto",
+    "Old versions of this page" : "Staré verze této stránky"
 },"pluralForm" :"nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;"
 }

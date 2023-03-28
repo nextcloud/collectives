@@ -143,6 +143,7 @@ OC.L10N.register(
     "Hide templates" : "Ocultar plantillas",
     "Show templates" : "Mostrar plantillas",
     "Could not save page order for collective" : "No fue posible guardar el ordenamiento de páginas para el cuaderno colectivo",
+    "Download" : "Descargar",
     "No backlinks available" : "No hay enlaces entrantes",
     "If other pages link to this one, they will be listed here." : "Si otras páginas enlazan a esta, aparecerán en esta lista.",
     "Could not get page backlinks" : "No se encontraron enlaces entrantes",
@@ -151,10 +152,9 @@ OC.L10N.register(
     "After editing you can find old versions of the page here." : "Después de editar, es posible encontrar aquí versiones anteriores de la página.",
     "Could not get page versions" : "No se encontraron versiones de página",
     "_%n byte_::_%n bytes_" : ["%n byte","%n bytes","%n bytes"],
+    "Attachments" : "Adjuntos",
     "Backlinks" : "Enlaces entrantes",
-    "Pages that link to this one" : "Páginas que enlazan a esta página",
     "Versions" : "Versiones",
-    "Old versions of this page" : "Versiones anteriores de esta página",
     "The content of this folder is best viewed in the Collectives app." : "El contenido de esta carpeta se ve mejor en la app de Cuadernos colectivos.",
     "Open in Collectives" : "Abrir en Cuadernos colectivos",
     "Come, organize and build shared knowledge!" : "Aquí organizamos y construimos conocimiento juntos.",
@@ -182,6 +182,8 @@ OC.L10N.register(
     "Create collective for existing circle" : "Crear cuaderno colectivo para círculo existente",
     "New collective name" : "Nombre del cuaderno colectivo nuevo",
     "Select circle..." : "Seleccionar círculo...",
-    "Cancel creating a new collective" : "Cancelar la creación del cuaderno colectivo nuevo"
+    "Cancel creating a new collective" : "Cancelar la creación del cuaderno colectivo nuevo",
+    "Pages that link to this one" : "Páginas que enlazan a esta página",
+    "Old versions of this page" : "Versiones anteriores de esta página"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

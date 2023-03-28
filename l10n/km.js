@@ -12,6 +12,7 @@ OC.L10N.register(
     "Create" : "បង្កើត",
     "Done" : "Done",
     "Title" : "ចំណងជើង",
+    "Download" : "ទាញយក",
     "No other versions available" : "មិន​មាន​កំណែ​ផ្សេង​ទៀត​ទេ",
     "Versions" : "កំណែ",
     "Users" : "អ្នកប្រើ",

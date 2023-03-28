@@ -14,6 +14,7 @@ OC.L10N.register(
     "Create" : "Loo",
     "Done" : "Valmis",
     "Title" : "Pealkiri",
+    "Download" : "Lae alla",
     "No other versions available" : "Muid versioone pole saadaval",
     "Versions" : "Versioonid",
     "Users" : "Kasutajad",

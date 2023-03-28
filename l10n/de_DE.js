@@ -151,10 +151,9 @@ OC.L10N.register(
     "After editing you can find old versions of the page here." : "Nach dem Bearbeiten werden alte Versionen hier angezeigt.",
     "Could not get page versions" : "Konnte Versionen der Seite nicht laden",
     "_%n byte_::_%n bytes_" : ["%n Byte","%n Bytes"],
+    "Attachments" : "Anhänge",
     "Backlinks" : "Rückverweise",
-    "Pages that link to this one" : "Seiten, die auf diese Seite verweisen",
     "Versions" : "Historie",
-    "Old versions of this page" : "Frühere Versionen dieser Seite",
     "The content of this folder is best viewed in the Collectives app." : "Der Inhalt dieses Ordners wird am Besten in der Collectives-App (Kollektive-App) angezeigt.",
     "Open in Collectives" : "In Collectives (Kollektive) öffnen",
     "Come, organize and build shared knowledge!" : "Kommen Sie vorbei, organisieren Sie sich und teilen Sie Ihr Wissen!",
@@ -182,6 +181,8 @@ OC.L10N.register(
     "Create collective for existing circle" : "Kollektiv für einen bestehenden Kreis anlegen",
     "New collective name" : "Name des neuen Kollektivs",
     "Select circle..." : "Wähle Kreis...",
-    "Cancel creating a new collective" : "Erstellung eines neuen Kollektivs abbrechen"
+    "Cancel creating a new collective" : "Erstellung eines neuen Kollektivs abbrechen",
+    "Pages that link to this one" : "Seiten, die auf diese Seite verweisen",
+    "Old versions of this page" : "Frühere Versionen dieser Seite"
 },
 "nplurals=2; plural=(n != 1);");

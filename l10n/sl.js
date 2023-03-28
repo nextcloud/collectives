@@ -124,6 +124,7 @@ OC.L10N.register(
     "Hide templates" : "Skrij predloge",
     "Show templates" : "Pokaži predloge",
     "Could not save page order for collective" : "Ni mogoče shraniti razvrstitve strani za to zbirko",
+    "Download" : "Prejmi",
     "No backlinks available" : "Ni povratnih povezav",
     "If other pages link to this one, they will be listed here." : "Če se na to stran povezujejo druge strani, bodo izpisane na tem mestu.",
     "Could not get page backlinks" : "Ni mogoče pridobiti povratnih povezav strani",
@@ -132,10 +133,9 @@ OC.L10N.register(
     "After editing you can find old versions of the page here." : "Po urejanju so starejše kopije strani zbrane na tem mestu.",
     "Could not get page versions" : "Ni mogoče pridobiti različic strani",
     "_%n byte_::_%n bytes_" : ["%n bajt","%n bajta","%n bajti","%n bajtov"],
+    "Attachments" : "Priloge",
     "Backlinks" : "Povratne povezave",
-    "Pages that link to this one" : "Strani, ki se povezujejo na to stran",
     "Versions" : "Različice",
-    "Old versions of this page" : "Stare različice te strani",
     "Open in Collectives" : "Odpri v Zbirki",
     "Come, organize and build shared knowledge!" : "No, začnite izgrajevati skupno vsebino!",
     "Create new collective" : "Ustvari novo zbirko",
@@ -162,6 +162,8 @@ OC.L10N.register(
     "Create collective for existing circle" : "Ustvari zbirko za obstoječ krog",
     "New collective name" : "Ime nove zbirke",
     "Select circle..." : "Izbor kroga ...",
-    "Cancel creating a new collective" : "Prekliči ustvarjanje nove zbirke"
+    "Cancel creating a new collective" : "Prekliči ustvarjanje nove zbirke",
+    "Pages that link to this one" : "Strani, ki se povezujejo na to stran",
+    "Old versions of this page" : "Stare različice te strani"
 },
 "nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);");

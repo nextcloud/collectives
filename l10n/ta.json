@@ -23,12 +23,11 @@
     "Restore this version" : "இந்தப் பதிப்பை மீட்டெடுக்கவும்",
     "Title" : "தலைப்பு",
     "Add a page" : "ஒரு பக்கத்தைச் சேர்க்கவும்",
+    "Download" : "பதிவிறக்குக",
     "Current version" : "தற்போதைய பதிப்பு",
     "No other versions available" : "வேறு பதிப்புகள் இல்லை",
     "Could not get page versions" : "பக்க பதிப்புகளைப் பெற முடியவில்லை",
-    "Pages that link to this one" : "இதை  இணைக்கும் பக்கங்கள்",
     "Versions" : "பதிப்புகள்",
-    "Old versions of this page" : "இந்தப் பக்கத்தின் பழைய பதிப்புகள்",
     "Come, organize and build shared knowledge!" : "வாருங்கள், ஒழுங்கமைத்து பகிர்ந்த அறிவை உருவாக்குங்கள்!",
     "Users" : "பயனாளர்",
     "Groups" : "குழுக்கள்",
@@ -36,6 +35,8 @@
     "New Page" : "புதிய பக்கம்",
     "Could not delete the page" : "பக்கத்தை நீக்க முடியவில்லை",
     "in Collective {collective}" : "தொகுப்பில் {தொகுப்பு}",
-    "Select circle..." : "வட்டத்தைத் தேர்ந்தெடுக்கவும்..."
+    "Select circle..." : "வட்டத்தைத் தேர்ந்தெடுக்கவும்...",
+    "Pages that link to this one" : "இதை  இணைக்கும் பக்கங்கள்",
+    "Old versions of this page" : "இந்தப் பக்கத்தின் பழைய பதிப்புகள்"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

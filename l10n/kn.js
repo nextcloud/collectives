@@ -10,6 +10,7 @@ OC.L10N.register(
     "Create" : "ಸೃಷ್ಟಿಸಿ",
     "Done" : "Done",
     "Title" : "ಶೀರ್ಷಿಕೆ",
+    "Download" : "ಪ್ರತಿಯನ್ನು ಸ್ಥಳೀಯವಾಗಿ ಉಳಿಸಿಕೊಳ್ಳಿ",
     "No other versions available" : "ಇನ್ನಿತರೆ ಯಾವುದೇ ಆವೃತ್ತಿಗಳು ಲಭ್ಯವಿಲ್ಲ",
     "Versions" : "ಆವೃತ್ತಿಗಳು",
     "Users" : "﻿ಬಳಕೆದಾರರು",

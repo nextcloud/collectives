@@ -10,6 +10,7 @@ OC.L10N.register(
     "Create" : "Buat",
     "Done" : "Done",
     "Title" : "Judul",
+    "Download" : "Muat turun",
     "No other versions available" : "Tiada lagi versi lain",
     "Versions" : "Versi",
     "Users" : "Pengguna",

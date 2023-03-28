@@ -107,6 +107,7 @@ OC.L10N.register(
     "Hide templates" : "Скрыть шаблоны",
     "Show templates" : "Показать шаблоны",
     "Could not save page order for collective" : "Не удалось сохранить расположение страниц в группе",
+    "Download" : "Скачать",
     "No backlinks available" : "Обратных ссылок не обнаружено",
     "If other pages link to this one, they will be listed here." : "Если другие страницы ссылаются на эту страницу, они будут показаны здесь.",
     "Could not get page backlinks" : "Не удалось получить обратные ссылки страницы",
@@ -115,10 +116,9 @@ OC.L10N.register(
     "After editing you can find old versions of the page here." : "После редактирования вы можете найти старые версии страницы здесь.",
     "Could not get page versions" : "Не удалось получить версии страниц",
     "_%n byte_::_%n bytes_" : ["%n байт","%n байта","%n байт","%n байта"],
+    "Attachments" : "Вложения",
     "Backlinks" : "Обратные ссылки",
-    "Pages that link to this one" : "Страницы, которые ссылаются на текущий объект",
     "Versions" : "Версии",
-    "Old versions of this page" : "Старые версии этой страницы",
     "Come, organize and build shared knowledge!" : "Присоединяйтесь, создавайте и наполняйте общую базу знаний!",
     "Create new collective" : "Создать группу",
     "Users" : "Пользователи",
@@ -143,6 +143,8 @@ OC.L10N.register(
     "Create collective for existing circle" : "Создать группу для существующего окружения",
     "New collective name" : "Новое название группы",
     "Select circle..." : "Выбор окружения...",
-    "Cancel creating a new collective" : "Отменить создание группы"
+    "Cancel creating a new collective" : "Отменить создание группы",
+    "Pages that link to this one" : "Страницы, которые ссылаются на текущий объект",
+    "Old versions of this page" : "Старые версии этой страницы"
 },
 "nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);");
