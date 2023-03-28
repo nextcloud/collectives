@@ -82,6 +82,7 @@
     "Sort by title" : "标题",
     "Hide templates" : "隐藏模板",
     "Show templates" : "显示模板",
+    "Download" : "下载",
     "No backlinks available" : "没有可用的反向链接",
     "If other pages link to this one, they will be listed here." : "如果其他页面链接到此页面，则它们将在此处列出。",
     "Could not get page backlinks" : "无法获取页面反向链接",
@@ -89,10 +90,9 @@
     "No other versions available" : "没有其他可用版本",
     "After editing you can find old versions of the page here." : "编辑后，您可以在此处找到页面的旧版本。",
     "Could not get page versions" : "无法获取页面版本",
+    "Attachments" : "附件",
     "Backlinks" : "反向链接",
-    "Pages that link to this one" : "链接到此页面的页面",
     "Versions" : "版本",
-    "Old versions of this page" : "此页面的旧版本",
     "Come, organize and build shared knowledge!" : "来吧，组织和建立共享的知识库！",
     "Create new collective" : "创建新知识库",
     "Users" : "用户",
@@ -113,6 +113,8 @@
     "Select a collective or create a new one on the left." : "选择一个知识库或在左侧创建一个新知识库。",
     "Create collective for existing circle" : "为已有圈子创建知识库",
     "New collective name" : "新知识库名称",
-    "Select circle..." : "选择圈子..."
+    "Select circle..." : "选择圈子...",
+    "Pages that link to this one" : "链接到此页面的页面",
+    "Old versions of this page" : "此页面的旧版本"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

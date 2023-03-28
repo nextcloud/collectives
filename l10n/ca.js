@@ -71,10 +71,9 @@ OC.L10N.register(
     "After editing you can find old versions of the page here." : "Després d'editar-lo, podeu trobar versions antigues de la pàgina aquí.",
     "Could not get page versions" : "No s'han pogut obtenir les versions de la pàgina",
     "_%n byte_::_%n bytes_" : ["%n byte","%n bytes"],
+    "Attachments" : "Adjunts",
     "Backlinks" : "Enllaços",
-    "Pages that link to this one" : "Pàgines que enllacen cap aquesta",
     "Versions" : "Versions",
-    "Old versions of this page" : "Versió antiga d'aquesta pàgina",
     "Come, organize and build shared knowledge!" : "Vine, organitza i crea coneixement compartit!",
     "Create new collective" : "Crear nou Col·lectiu",
     "Users" : "Usuaris",
@@ -92,6 +91,8 @@ OC.L10N.register(
     "Select a collective or create a new one on the left." : "Selecciona un col·lectiu o crea un de nou a l'esquerra.",
     "Create collective for existing circle" : "Crear un Col·lectiu per al cercle existent",
     "New collective name" : "Nom del nou Col·lectiu",
-    "Select circle..." : "Seleccionar cercle..."
+    "Select circle..." : "Seleccionar cercle...",
+    "Pages that link to this one" : "Pàgines que enllacen cap aquesta",
+    "Old versions of this page" : "Versió antiga d'aquesta pàgina"
 },
 "nplurals=2; plural=(n != 1);");

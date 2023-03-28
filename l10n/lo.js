@@ -12,6 +12,7 @@ OC.L10N.register(
     "Back" : "ຫຼັງ",
     "Create" : "ສ້າງ",
     "Done" : "ສໍາເລັດ",
+    "Download" : "ດາວໂຫລດ",
     "Users" : "ຜູ້ໃຊ້"
 },
 "nplurals=1; plural=0;");

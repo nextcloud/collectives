@@ -143,6 +143,7 @@ OC.L10N.register(
     "Hide templates" : "Сакриј шаблоне",
     "Show templates" : "Прикажи шаблоне",
     "Could not save page order for collective" : "Редослед страница за колектив није могао да се промени",
+    "Download" : "Преузми",
     "No backlinks available" : "Нема доступних повратних линкова",
     "If other pages link to this one, they will be listed here." : "Ако друге странице имају везу на ову, оне ће се навести овде.",
     "Could not get page backlinks" : "Није успело добављање повратних линкова странице",
@@ -151,10 +152,9 @@ OC.L10N.register(
     "After editing you can find old versions of the page here." : "Након уређивања, овде можете да пронађете старе верзије странице.",
     "Could not get page versions" : "Верзије странице нису могле да се добаве",
     "_%n byte_::_%n bytes_" : ["%n бајт","%n бајта","%n бајтова"],
+    "Attachments" : "Прилози",
     "Backlinks" : "Повратни линкови",
-    "Pages that link to this one" : "Странице које имају линк на ову",
     "Versions" : "Верзије",
-    "Old versions of this page" : "Старе верзије ове странице",
     "The content of this folder is best viewed in the Collectives app." : "Садржај овог фолдера изгледа најбоље када се прегледа из апликације Колективи.",
     "Open in Collectives" : "Отвори у Колективима",
     "Come, organize and build shared knowledge!" : "Дођите, организујте и изградите заједничко знаљње!",
@@ -182,6 +182,8 @@ OC.L10N.register(
     "Create collective for existing circle" : "Креирај колектив за подтојећи круг",
     "New collective name" : "Нови назив колектива",
     "Select circle..." : "Изаберите круг...",
-    "Cancel creating a new collective" : "Откажи креирање новог колектива"
+    "Cancel creating a new collective" : "Откажи креирање новог колектива",
+    "Pages that link to this one" : "Странице које имају линк на ову",
+    "Old versions of this page" : "Старе верзије ове странице"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);");

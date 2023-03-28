@@ -125,6 +125,7 @@
     "Hide templates" : "Nascondi i modelli",
     "Show templates" : "Mostra i modelli",
     "Could not save page order for collective" : "Impossibile salvare l'ordinamento delle pagine per il collettivo",
+    "Download" : "Scarica",
     "No backlinks available" : "Non sono disponibili link entranti",
     "If other pages link to this one, they will be listed here." : "Se altre pagine hanno link verso questa pagina, verranno elencate qui.",
     "Could not get page backlinks" : "Non è stato possibile ottenere i backlink della pagina",
@@ -133,10 +134,9 @@
     "After editing you can find old versions of the page here." : "Dopo le modifiche puoi trovare le versioni precedenti della pagina qui.",
     "Could not get page versions" : "Non è stato possibile ottenere le versioni della pagina",
     "_%n byte_::_%n bytes_" : ["%n byte","%nbytes","%n bytes"],
+    "Attachments" : "Allegati",
     "Backlinks" : "Link entranti",
-    "Pages that link to this one" : "Pagine che hanno link verso questa",
     "Versions" : "Versioni",
-    "Old versions of this page" : "Vecchie versioni di questa pagina",
     "The content of this folder is best viewed in the Collectives app." : "Il contenuto di questa cartella è meglio visualizzato nell'app Collettivi",
     "Open in Collectives" : "Apri in Collettivi",
     "Come, organize and build shared knowledge!" : "Entra, organizza e costruisci la conoscenza condivisa!",
@@ -164,6 +164,8 @@
     "Create collective for existing circle" : "Crea un collettivo per una cerchia esistente",
     "New collective name" : "Nome del nuovo collettivo",
     "Select circle..." : "Seleziona cerchia...",
-    "Cancel creating a new collective" : "Annulla la creazione di un nuovo collettivo"
+    "Cancel creating a new collective" : "Annulla la creazione di un nuovo collettivo",
+    "Pages that link to this one" : "Pagine che hanno link verso questa",
+    "Old versions of this page" : "Vecchie versioni di questa pagina"
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

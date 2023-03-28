@@ -12,6 +12,7 @@ OC.L10N.register(
     "Create" : "Erstellen",
     "Done" : "Done",
     "Title" : "Titel",
+    "Download" : "Eroflueden",
     "No other versions available" : "Keng aner Versiounen disponibel",
     "Versions" : "Versiounen",
     "Users" : "Benotzer",

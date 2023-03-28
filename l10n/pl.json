@@ -141,6 +141,7 @@
     "Hide templates" : "Ukryj szablony",
     "Show templates" : "Pokaż szablony",
     "Could not save page order for collective" : "Nie można zachować kolejność stron dla kolektywu",
+    "Download" : "Pobierz",
     "No backlinks available" : "Brak dostępnych linków wstecznych",
     "If other pages link to this one, they will be listed here." : "Jeśli inne strony prowadzą do tej strony, zostaną tutaj wymienione.",
     "Could not get page backlinks" : "Nie udało się uzyskać linków zwrotnych do strony",
@@ -149,10 +150,9 @@
     "After editing you can find old versions of the page here." : "Po edycji możesz znaleźć stare wersje strony tutaj.",
     "Could not get page versions" : "Nie udało się pobrać wersji strony",
     "_%n byte_::_%n bytes_" : ["%n bajt","%n bajty","%n bajtów","%n bajtów"],
+    "Attachments" : "Załączniki",
     "Backlinks" : "Linki wsteczne",
-    "Pages that link to this one" : "Strony które kierują tutaj",
     "Versions" : "Wersje",
-    "Old versions of this page" : "Stara wersja tej strony",
     "The content of this folder is best viewed in the Collectives app." : "Zawartość tego katalogu najlepiej wyświetlać w aplikacji Kolektywy.",
     "Open in Collectives" : "Otwórz w Kolektywach",
     "Come, organize and build shared knowledge!" : "Przyjdź, uporządkuj i buduj wspólną wiedzę!",
@@ -180,6 +180,8 @@
     "Create collective for existing circle" : "Utwórz kolektyw dla istniejącego kręgu",
     "New collective name" : "Nowa nazwa kolektywu",
     "Select circle..." : "Wybierz krąg...",
-    "Cancel creating a new collective" : "Anuluj tworzenie nowego kolektywu"
+    "Cancel creating a new collective" : "Anuluj tworzenie nowego kolektywu",
+    "Pages that link to this one" : "Strony które kierują tutaj",
+    "Old versions of this page" : "Stara wersja tej strony"
 },"pluralForm" :"nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);"
 }

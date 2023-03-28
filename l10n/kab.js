@@ -10,6 +10,8 @@ OC.L10N.register(
     "Create" : "Snulfu-d",
     "Done" : "Immed",
     "Title" : "Azwel",
+    "Download" : "Sider",
+    "Attachments" : "Ticeqqufin",
     "Users" : "Iseqdacen",
     "Groups" : "Igrawen"
 },

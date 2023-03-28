@@ -143,6 +143,7 @@ OC.L10N.register(
     "Hide templates" : "Sjablonen verbergen",
     "Show templates" : "Sjablonen weergeven",
     "Could not save page order for collective" : "Kan paginavolgorde voor collectief niet opslaan",
+    "Download" : "Download",
     "No backlinks available" : "Geen backlinks beschikbaar",
     "If other pages link to this one, they will be listed here." : "Als andere pagina's naar deze linken, worden ze hier vermeld.",
     "Could not get page backlinks" : "Kan geen pagina-backlinks krijgen",
@@ -151,10 +152,9 @@ OC.L10N.register(
     "After editing you can find old versions of the page here." : "Na bewerking kun je hier oude versies van de pagina vinden.",
     "Could not get page versions" : "Kan geen paginaversies ophalen",
     "_%n byte_::_%n bytes_" : ["%n byte","%n bytes"],
+    "Attachments" : "Bijlagen",
     "Backlinks" : "Backlinks",
-    "Pages that link to this one" : "Pagina's die naar deze linken",
     "Versions" : "Versies",
-    "Old versions of this page" : "Oude versies van deze pagina",
     "The content of this folder is best viewed in the Collectives app." : "De inhoud van deze map kun je het beste bekijken in de Collectives app.",
     "Open in Collectives" : "Open in Collectives",
     "Come, organize and build shared knowledge!" : "Kom, organiseer en bouw gedeelde kennis op!",
@@ -182,6 +182,8 @@ OC.L10N.register(
     "Create collective for existing circle" : "Collectief maken voor bestaande cirkel",
     "New collective name" : "Nieuwe naam collectief",
     "Select circle..." : "Selecteer cirkel...",
-    "Cancel creating a new collective" : "Aanmaken van een nieuw collectief annuleren"
+    "Cancel creating a new collective" : "Aanmaken van een nieuw collectief annuleren",
+    "Pages that link to this one" : "Pagina's die naar deze linken",
+    "Old versions of this page" : "Oude versies van deze pagina"
 },
 "nplurals=2; plural=(n != 1);");

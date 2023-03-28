@@ -141,6 +141,7 @@
     "Hide templates" : "隱藏模板",
     "Show templates" : "顯示模板",
     "Could not save page order for collective" : "無法保存知識庫的頁面順序",
+    "Download" : "下載",
     "No backlinks available" : "沒有可用的反向連結",
     "If other pages link to this one, they will be listed here." : "連結到此頁面的頁面將在此處列出。",
     "Could not get page backlinks" : "無法獲取頁面反向連結",
@@ -149,10 +150,9 @@
     "After editing you can find old versions of the page here." : "編輯後，您可以在此處找到該頁面的舊版本。",
     "Could not get page versions" : "無法獲取頁面版本",
     "_%n byte_::_%n bytes_" : ["%n 位元組"],
+    "Attachments" : "附件",
     "Backlinks" : "反向連結",
-    "Pages that link to this one" : "連結到此頁面的頁面",
     "Versions" : "版本",
-    "Old versions of this page" : "此頁面的舊版本",
     "The content of this folder is best viewed in the Collectives app." : "此資料夾的內容在知識庫應用程式中查看最好。",
     "Open in Collectives" : "在知識庫中開啟",
     "Come, organize and build shared knowledge!" : "快來組織和建立共享知識吧！",
@@ -180,6 +180,8 @@
     "Create collective for existing circle" : "為現有社交圈子創建知識庫",
     "New collective name" : "新知識庫名稱",
     "Select circle..." : "選擇社交圈子...",
-    "Cancel creating a new collective" : "取消創建新知識庫"
+    "Cancel creating a new collective" : "取消創建新知識庫",
+    "Pages that link to this one" : "連結到此頁面的頁面",
+    "Old versions of this page" : "此頁面的舊版本"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

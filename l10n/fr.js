@@ -143,6 +143,7 @@ OC.L10N.register(
     "Hide templates" : "Masquer les modèles",
     "Show templates" : "Afficher les modèles",
     "Could not save page order for collective" : "Impossible de sauvegarder l'ordre des pages pour ce collectif",
+    "Download" : "Télécharger",
     "No backlinks available" : "Aucun lien de retour disponible",
     "If other pages link to this one, they will be listed here." : "Si d'autres pages font référence à celle-ci, elles seront listées ici.",
     "Could not get page backlinks" : "Impossible de récupérer les liens de retour de la page",
@@ -151,10 +152,9 @@ OC.L10N.register(
     "After editing you can find old versions of the page here." : "Après l'avoir modifiée, vous trouverez les anciennes versions de cette page ici.",
     "Could not get page versions" : "Impossible de récupérer les versions de la page",
     "_%n byte_::_%n bytes_" : ["%n octet","%n octets","%n octets"],
+    "Attachments" : "Pièces jointes",
     "Backlinks" : "Liens de retour",
-    "Pages that link to this one" : "Pages qui font référence à celle-ci",
     "Versions" : "Versions",
-    "Old versions of this page" : "Anciennes versions de cette page",
     "The content of this folder is best viewed in the Collectives app." : "L'application Collectives offre une meilleure vue du contenu de ce dossier",
     "Open in Collectives" : "Ouvrir dans Collectives",
     "Come, organize and build shared knowledge!" : "Venez, organisez et développez des connaissances partagées !",
@@ -182,6 +182,8 @@ OC.L10N.register(
     "Create collective for existing circle" : "Créer un collectif pour un cercle existant",
     "New collective name" : "Nom du nouveau collectif",
     "Select circle..." : "Sélectionner un cercle…",
-    "Cancel creating a new collective" : "Annuler la création d'un nouveau collectif"
+    "Cancel creating a new collective" : "Annuler la création d'un nouveau collectif",
+    "Pages that link to this one" : "Pages qui font référence à celle-ci",
+    "Old versions of this page" : "Anciennes versions de cette page"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
