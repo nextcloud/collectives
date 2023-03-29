@@ -12,6 +12,7 @@ OC.L10N.register(
     "Create" : "Yarat",
     "Done" : "Done",
     "Title" : "Başlıq",
+    "Download" : "Yüklə",
     "No other versions available" : "Başqa versiyalar mövcud deyil",
     "Versions" : "Versiyaları",
     "Users" : "İstifadəçilər",
