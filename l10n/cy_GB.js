@@ -15,6 +15,7 @@ OC.L10N.register(
     "Create" : "Creu",
     "Done" : "Done",
     "Title" : "Teitl",
+    "Download" : "Llwytho i lawr",
     "Users" : "Defnyddwyr",
     "Groups" : "Grwpiau"
 },
