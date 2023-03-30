@@ -12,6 +12,7 @@ OC.L10N.register(
     "Create" : "তৈরী কর",
     "Done" : "Done",
     "Title" : "শিরোনাম",
+    "Download" : "ডাউনলোড",
     "No other versions available" : "আর কোন সংষ্করণ প্রাপ্তব্য নয়",
     "Versions" : "সংষ্করন",
     "Users" : "ব্যবহারকারী",

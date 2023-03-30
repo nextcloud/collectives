@@ -63,6 +63,7 @@ OC.L10N.register(
     "Sort by title" : "Ordenar per títol",
     "Hide templates" : "Amagar plantilles",
     "Show templates" : "Mostrar plantilles",
+    "Download" : "Baixada",
     "No backlinks available" : "No hi ha enllaços d'entrada disponibles",
     "If other pages link to this one, they will be listed here." : "Si hi ha altres pàgines que enllacen amb aquesta, es mostraran aquí.",
     "Could not get page backlinks" : "No s'han pogut obtenir enllaços d'entrada de pàgina",

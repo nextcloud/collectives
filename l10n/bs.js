@@ -11,6 +11,7 @@ OC.L10N.register(
     "Create" : "Ustvari",
     "Done" : "Done",
     "Title" : "Naslov",
+    "Download" : "Preuzmi",
     "No other versions available" : "Druge verzije su nedostupne",
     "Versions" : "Verzije",
     "Users" : "Korisnici",
