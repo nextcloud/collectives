@@ -24,6 +24,7 @@ OC.L10N.register(
     "Title" : "Títol",
     "Download" : "Telecargar",
     "No other versions available" : "Cap d’autra version pas disponibla",
+    "_%n byte_::_%n bytes_" : ["%n octet","%n octets"],
     "Versions" : "Versions",
     "Users" : "Utilizaires",
     "Groups" : "Gropes",
