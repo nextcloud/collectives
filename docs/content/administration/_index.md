@@ -21,6 +21,15 @@ The **Collectives** app can be installed from the [Nextcloud App Store](https://
 In your Nextcloud instance, simply navigate to **»Apps«**, find the
 **»Collectives«** app and enable it.
 
+## Collectives and server-side encryption
+
+With server-side encryption enabled, the files in a Collective will be stored
+encrypted on the filesystem as well.
+
+Please note that index files for the full-text search will not be encrypted
+though. Also, please read the [Nextcloud server documentation about
+limitations](https://docs.nextcloud.com/server/latest/admin_manual/configuration_files/encryption_configuration.html#files-not-encrypted) carefully.
+
 ## Collectives and guest users
 
 In order to allow guest users (as provided by the [guests](https://github.com/nextcloud/guests/)
