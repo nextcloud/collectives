@@ -638,10 +638,8 @@ export default {
 		 * @param {object} page Page to get backlinks for
 		 */
 		async [GET_BACKLINKS]({ commit, getters }, page) {
-			commit('load', 'backlinks')
 			const response = await axios.get(getters.backlinksUrl(page.parentId, page.id))
 			commit(SET_BACKLINKS, { pages: response.data.data })
-			commit('done', 'backlinks')
 		},
 	},
 }
