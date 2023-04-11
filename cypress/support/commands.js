@@ -141,7 +141,8 @@ Cypress.Commands.add('createCollective', (name, members = []) => {
 	cy.get('.collective-name input[type="text"]').type(`${name}{enter}`)
 	if (members.length > 0) {
 		for (const member of members) {
-			cy.get('.member-picker input[type="text"]').clear().type(`${member}`)
+			cy.get('.member-picker input[type="text"]').clear()
+			cy.get('.member-picker input[type="text"]').type(`${member}`)
 			cy.get('.search-results .user-bubble__content').contains(member).click()
 			cy.get('.selected-members .user-bubble__content').should('contain', member)
 		}

@@ -92,11 +92,10 @@ describe('Collective Share', function() {
 				.click({ force: true })
 			cy.intercept('PUT', '**/_api/*/share/*').as('updateShare')
 			cy.get('input#shareEditable')
-				.check({ force: true }).then(() => {
-					cy.get('input#shareEditable')
-						.should('be.checked')
-				})
+				.check({ force: true })
 			cy.wait('@updateShare')
+			cy.get('input#shareEditable')
+				.should('be.checked')
 		})
 		it('Allows opening and editing a shared (editable) collective', function() {
 			cy.logout()

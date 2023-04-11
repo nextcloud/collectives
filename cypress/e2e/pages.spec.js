@@ -219,7 +219,6 @@ describe('Page', function() {
 			cy.getEditor()
 				.should('be.visible')
 				.type('## Heading{enter}')
-				.focus()
 
 			cy.log('Inserting a user mention')
 			// Wait 1 second to prevent race condition with previous insertion
@@ -263,6 +262,7 @@ describe('Page', function() {
 			cy.getEditor()
 				.find('[data-component="image-view"] .image__view')
 				.trigger('mouseover')
+			cy.getEditor()
 				.get('.image__caption__delete')
 				.click()
 			cy.getEditor()
