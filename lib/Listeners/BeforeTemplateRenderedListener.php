@@ -5,28 +5,34 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Listeners;
 
+use OCA\Collectives\Fs\UserFolderHelper;
+use OCA\Collectives\Service\NotPermittedException;
 use OCP\AppFramework\Http\Events\BeforeTemplateRenderedEvent;
 use OCP\AppFramework\Services\IInitialState;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
-use OCP\IConfig;
 use OCP\IUserSession;
 use OCP\Util;
 
 /** @template-implements IEventListener<Event|BeforeTemplateRenderedEvent> */
 class BeforeTemplateRenderedListener implements IEventListener {
 	private IUserSession $userSession;
-	private IConfig $config;
+	private UserFolderHelper $userFolderHelper;
 	private IInitialState $initialState;
 
 	public function __construct(IUserSession $userSession,
-								IConfig $config,
+								UserFolderHelper $userFolderHelper,
 								IInitialState $initialState) {
 		$this->userSession = $userSession;
-		$this->config = $config;
+		$this->userFolderHelper = $userFolderHelper;
 		$this->initialState = $initialState;
 	}
 
+	/**
+	 * @param Event $event
+	 *
+	 * @throws NotPermittedException
+	 */
 	public function handle(Event $event): void {
 		if (!($event instanceof BeforeTemplateRenderedEvent)) {
 			return;
@@ -40,7 +46,7 @@ class BeforeTemplateRenderedListener implements IEventListener {
 			$userId = $this->userSession->getUser()
 				? $this->userSession->getUser()->getUID()
 				: null;
-			$userFolder = $this->config->getUserValue($userId, 'collectives', 'user_folder', '');
+			$userFolder = $this->userFolderHelper->getUserFolderSetting($userId);
 		}
 
 		Util::addScript('collectives', 'collectives-files');
