@@ -10,10 +10,13 @@
 		<NcActionSeparator v-if="showManageMembers" />
 		<NcActionButton v-if="collectiveCanShare(collective)"
 			v-show="!isShared"
-			:icon="shareIcon"
 			:close-after-click="false"
 			@click="share(collective)">
 			{{ t('collectives', 'Share link') }}
+			<template #icon>
+				<NcLoadingIcon v-if="loading('share')" :size="16" />
+				<LinkVariantIcon v-else :size="16" />
+			</template>
 		</NcActionButton>
 		<NcActionButton v-if="!isPublic"
 			v-show="isShared"
@@ -35,9 +38,12 @@
 		</NcActionCheckbox>
 		<NcActionButton v-if="!isPublic"
 			v-show="isShared"
-			:icon="unshareIcon"
 			:close-after-click="false"
 			@click="unshare(collective)">
+			<template #icon>
+				<NcLoadingIcon v-if="loading('unshare')" :size="16" />
+				<LinkVariantIcon v-else :size="16" />
+			</template>
 			{{ t('collectives', 'Unshare') }}
 		</NcActionButton>
 		<NcActionSeparator v-if="collectiveCanShare(collective) && !isPublic" />
@@ -78,6 +84,7 @@ import CirclesIcon from '../Icon/CirclesIcon.vue'
 import CogIcon from 'vue-material-design-icons/Cog.vue'
 import ContentPasteIcon from 'vue-material-design-icons/ContentPaste.vue'
 import DownloadIcon from 'vue-material-design-icons/Download.vue'
+import LinkVariantIcon from 'vue-material-design-icons/LinkVariant.vue'
 import LogoutIcon from 'vue-material-design-icons/Logout.vue'
 import {
 	LEAVE_CIRCLE,
@@ -99,6 +106,7 @@ export default {
 		CogIcon,
 		ContentPasteIcon,
 		DownloadIcon,
+		LinkVariantIcon,
 		LogoutIcon,
 		NcActionButton,
 		NcActionCheckbox,
@@ -152,10 +160,6 @@ export default {
 			return !!this.collective.shareToken
 		},
 
-		shareIcon() {
-			return this.loading('share') ? 'icon-loading-small' : 'icon-public'
-		},
-
 		copyButtonText() {
 			if (this.copied) {
 				return this.copySuccess
@@ -163,10 +167,6 @@ export default {
 					: t('collectives', 'Cannot copy')
 			}
 			return t('collectives', 'Copy share link')
-		},
-
-		unshareIcon() {
-			return this.loading('unshare') ? 'icon-loading-small' : 'icon-public'
 		},
 
 		printLink() {
