@@ -790,3 +790,7 @@ namespace OCA\Files_Versions {
         public function isExpired($timestamp, $quotaExceeded = false) {}
     }
 }
+
+namespace OCP\Files\Mount {
+	interface ISystemMountPoint {}
+}
