@@ -30,7 +30,7 @@
 					:close-after-click="true"
 					@click="sortPagesAndScroll('byOrder')">
 					<template #icon>
-						<SortAscendingIcon :size="16" />
+						<SortAscendingIcon :size="20" />
 					</template>
 					{{ t('collectives', 'Sort by custom order') }}
 				</NcActionButton>
@@ -39,7 +39,7 @@
 					:close-after-click="true"
 					@click="sortPagesAndScroll('byTimestamp')">
 					<template #icon>
-						<SortClockAscendingOutlineIcon :size="16" />
+						<SortClockAscendingOutlineIcon :size="20" />
 					</template>
 					{{ t('collectives', 'Sort recently changed first') }}
 				</NcActionButton>
@@ -48,7 +48,7 @@
 					:close-after-click="true"
 					@click="sortPagesAndScroll('byTitle')">
 					<template #icon>
-						<SortAlphabeticalAscendingIcon :size="16" />
+						<SortAlphabeticalAscendingIcon :size="20" />
 					</template>
 					{{ t('collectives', 'Sort by title') }}
 				</NcActionButton>

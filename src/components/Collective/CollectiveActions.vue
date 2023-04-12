@@ -3,26 +3,29 @@
 		<NcActionLink v-if="showManageMembers"
 			:href="circleLink">
 			<template #icon>
-				<CirclesIcon :size="16" />
+				<CirclesIcon :size="20" />
 			</template>
 			{{ t('collectives', 'Manage members') }}
 		</NcActionLink>
 		<NcActionSeparator v-if="showManageMembers" />
 		<NcActionButton v-if="collectiveCanShare(collective)"
 			v-show="!isShared"
-			:icon="shareIcon"
 			:close-after-click="false"
 			@click="share(collective)">
 			{{ t('collectives', 'Share link') }}
+			<template #icon>
+				<NcLoadingIcon v-if="loading('share')" :size="20" />
+				<LinkVariantIcon v-else :size="20" />
+			</template>
 		</NcActionButton>
 		<NcActionButton v-if="!isPublic"
 			v-show="isShared"
 			:close-after-click="false"
 			@click.stop.prevent="copyShare(collective)">
 			<template #icon>
-				<CheckIcon v-if="copySuccess" :size="16" />
-				<NcLoadingIcon v-else-if="copyLoading" :size="16" />
-				<ContentPasteIcon v-else :size="16" />
+				<CheckIcon v-if="copySuccess" :size="20" />
+				<NcLoadingIcon v-else-if="copyLoading" :size="20" />
+				<ContentPasteIcon v-else :size="20" />
 			</template>
 			{{ copyButtonText }}
 		</NcActionButton>
@@ -35,9 +38,12 @@
 		</NcActionCheckbox>
 		<NcActionButton v-if="!isPublic"
 			v-show="isShared"
-			:icon="unshareIcon"
 			:close-after-click="false"
 			@click="unshare(collective)">
+			<template #icon>
+				<NcLoadingIcon v-if="loading('unshare')" :size="20" />
+				<LinkVariantIcon v-else :size="20" />
+			</template>
 			{{ t('collectives', 'Unshare') }}
 		</NcActionButton>
 		<NcActionSeparator v-if="collectiveCanShare(collective) && !isPublic" />
@@ -46,14 +52,14 @@
 			target="_blank">
 			{{ t('collectives', 'Export or print') }}
 			<template #icon>
-				<DownloadIcon :size="16" />
+				<DownloadIcon :size="20" />
 			</template>
 		</NcActionLink>
 		<NcActionButton v-if="isCollectiveAdmin(collective)"
 			:close-after-click="true"
 			@click="openCollectiveSettings()">
 			<template #icon>
-				<CogIcon :size="16" />
+				<CogIcon :size="20" />
 			</template>
 			{{ t('collectives', 'Settings') }}
 		</NcActionButton>
@@ -62,7 +68,7 @@
 			@click="leaveCollectiveWithUndo(collective)">
 			{{ t('collectives', 'Leave collective') }}
 			<template #icon>
-				<LogoutIcon :size="16" />
+				<LogoutIcon :size="20" />
 			</template>
 		</NcActionButton>
 	</div>
@@ -78,6 +84,7 @@ import CirclesIcon from '../Icon/CirclesIcon.vue'
 import CogIcon from 'vue-material-design-icons/Cog.vue'
 import ContentPasteIcon from 'vue-material-design-icons/ContentPaste.vue'
 import DownloadIcon from 'vue-material-design-icons/Download.vue'
+import LinkVariantIcon from 'vue-material-design-icons/LinkVariant.vue'
 import LogoutIcon from 'vue-material-design-icons/Logout.vue'
 import {
 	LEAVE_CIRCLE,
@@ -99,6 +106,7 @@ export default {
 		CogIcon,
 		ContentPasteIcon,
 		DownloadIcon,
+		LinkVariantIcon,
 		LogoutIcon,
 		NcActionButton,
 		NcActionCheckbox,
@@ -152,10 +160,6 @@ export default {
 			return !!this.collective.shareToken
 		},
 
-		shareIcon() {
-			return this.loading('share') ? 'icon-loading-small' : 'icon-public'
-		},
-
 		copyButtonText() {
 			if (this.copied) {
 				return this.copySuccess
@@ -163,10 +167,6 @@ export default {
 					: t('collectives', 'Cannot copy')
 			}
 			return t('collectives', 'Copy share link')
-		},
-
-		unshareIcon() {
-			return this.loading('unshare') ? 'icon-loading-small' : 'icon-public'
 		},
 
 		printLink() {

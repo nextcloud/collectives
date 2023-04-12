@@ -1,5 +1,5 @@
 <template>
-	<NcAppContentList>
+	<div class="backlinks-container">
 		<!-- loading -->
 		<NcEmptyContent v-if="loading('backlinks')">
 			<template #icon>
@@ -15,23 +15,29 @@
 		</NcEmptyContent>
 
 		<!-- backlinks list -->
-		<template v-else-if="!loading('backlinks') && backlinks.length">
-			<router-link v-for="backlinkPage in backlinks"
-				:key="backlinkPage.id"
-				:to="pagePath(backlinkPage)">
-				<div class="app-content-list-item">
-					<div class="app-content-list-item-icon">
-						<PageIcon :size="26" fill-color="var(--color-main-background)" />
-					</div>
-					<div class="app-content-list-item-line-one">
-						{{ pagePathTitle(backlinkPage) }}
-					</div>
-					<div class="app-content-list-item-line-two">
+		<div v-else-if="!loading('backlinks') && backlinks.length">
+			<ul class="backlink-list">
+				<NcListItem v-for="backlinkPage in backlinks"
+					:key="backlinkPage.id"
+					:title="pagePathTitle(backlinkPage)"
+					:to="pagePath(backlinkPage)"
+					class="backlink">
+					<template #icon>
+						<div v-if="backlinkPage.emoji"
+							class="item-icon item-icon__emoji">
+							{{ backlinkPage.emoji }}
+						</div>
+						<PageIcon v-else
+							:size="26"
+							fill-color="var(--color-main-background)"
+							class="item-icon item-icon__page" />
+					</template>
+					<template #subtitle>
 						{{ lastUpdate(page) }}
-					</div>
-				</div>
-			</router-link>
-		</template>
+					</template>
+				</NcListItem>
+			</ul>
+		</div>
 
 		<!-- no backlinks found -->
 		<NcEmptyContent v-else
@@ -41,12 +47,12 @@
 				<ArrowBottomLeftIcon />
 			</template>
 		</NcEmptyContent>
-	</NcAppContentList>
+	</div>
 </template>
 
 <script>
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
-import { NcAppContentList, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
+import { NcEmptyContent, NcListItem, NcLoadingIcon } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagon.vue'
 import ArrowBottomLeftIcon from 'vue-material-design-icons/ArrowBottomLeft.vue'
@@ -58,8 +64,8 @@ export default {
 
 	components: {
 		AlertOctagonIcon,
-		NcAppContentList,
 		NcEmptyContent,
+		NcListItem,
 		NcLoadingIcon,
 		ArrowBottomLeftIcon,
 		PageIcon,
@@ -102,11 +108,12 @@ export default {
 	},
 
 	mounted() {
+		this.load('backlinks')
 		this.getBacklinks()
 	},
 
 	methods: {
-		...mapMutations(['load', 'unsetBacklinks']),
+		...mapMutations(['done', 'load', 'unsetBacklinks']),
 
 		...mapActions({
 			dispatchGetBacklinks: GET_BACKLINKS,
@@ -117,10 +124,12 @@ export default {
 		 */
 		async getBacklinks() {
 			try {
-				this.dispatchGetBacklinks(this.page)
+				await this.dispatchGetBacklinks(this.page)
 			} catch (e) {
 				this.error = t('collectives', 'Could not get page backlinks')
 				console.error('Failed to get page backlinks', e)
+			} finally {
+				this.done('backlinks')
 			}
 		},
 	},
@@ -128,43 +137,29 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.app-content-list {
-	max-width: none;
-	border-right: none;
-}
-
-.app-content-list-item {
-	border-bottom: 1px solid rgba(100, 100, 100, 0.1);
-}
-
-.app-content-list-item .app-content-list-item-icon {
+.backlink {
 	display: flex;
-	line-height: 40px;
-	width: 26px;
-	height: 34px;
-	left: 12px;
-	font-size: 24px;
-	background-color: var(--color-background-darker);
-	border-radius: 4px;
-}
+	flex-direction: row;
 
-.app-content-list .app-content-list-item .app-content-list-item-line-one {
-	font-size: 120%;
+	:deep(.line-one__title) {
+		font-weight: normal;
+	}
 
-	overflow: hidden;
-	text-overflow: ellipsis;
+	.item-icon {
+		height: 34px;
+		border-radius: var(--border-radius);
 
-	// Crop the string at the beginning, not end
-	// TODO: Untested with RTL script
-	text-align: left;
-	direction: rtl;
-}
+		&__emoji {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 26px;
+			font-size: 1.3em;
+		}
 
-.app-content-list .app-content-list-item .app-content-list-item-line-two {
-	opacity: .5;
-}
-
-.app-content-list-item:hover {
-	background-color: var(--color-background-hover);
+		&__page {
+			background-color: var(--color-background-darker);
+		}
+	}
 }
 </style>

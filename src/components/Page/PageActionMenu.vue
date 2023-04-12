@@ -16,7 +16,7 @@
 				@click="collectiveExtraAction.click()">
 				{{ collectiveExtraAction.title }}
 				<template #icon>
-					<OpenInNewIcon :size="16" />
+					<OpenInNewIcon :size="20" />
 				</template>
 			</NcActionButton>
 			<NcActionButton v-if="!inPageList"
@@ -48,7 +48,7 @@
 				@click.native="show('details')"
 				@click="editTemplate(pageId)">
 				<template #icon>
-					<PagesTemplateIcon :size="14" />
+					<PagesTemplateIcon :size="18" />
 				</template>
 				{{ editTemplateString }}
 			</NcActionButton>

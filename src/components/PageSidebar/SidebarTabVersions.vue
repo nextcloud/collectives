@@ -1,5 +1,5 @@
 <template>
-	<NcAppContentList>
+	<div class="versions-container">
 		<!-- loading -->
 		<NcEmptyContent v-if="loading('versions')">
 			<template #icon>
@@ -15,42 +15,45 @@
 		</NcEmptyContent>
 
 		<!-- versions list -->
-		<template v-else-if="!loading('versions') && versions.length">
-			<a @click="clickPreviewVersion(null)">
-				<div class="app-content-list-item"
-					:class="{active: !version}">
-					<div class="app-content-list-item-icon item-icon-page">
-						<PageIcon :size="26" fill-color="var(--color-main-background)" />
-					</div>
-					<div class="app-content-list-item-line-one" :title="pageFormattedTimestamp">
-						{{ t('collectives', 'Current version') }}
-					</div>
-					<div class="app-content-list-item-line-two" :title="pageAltSize">
-						{{ pageHumanReadableSize }}
-					</div>
-				</div>
-			</a>
-			<a v-for="v in versions"
-				:key="v.downloadUrl"
-				@click="clickPreviewVersion(v)">
-				<div class="app-content-list-item"
-					:class="{active: (version && v.timestamp === version.timestamp)}">
-					<div v-if="loading(`version-${pageId}-${v.timestamp}`)"
-						class="app-content-list-item-icon item-icon-loading">
-						<NcLoadingIcon :size="26" fill-color="var(--color-main-background)" />
-					</div>
-					<div v-else class="app-content-list-item-icon item-icon-page">
-						<PageIcon :size="26" fill-color="var(--color-main-background)" />
-					</div>
-					<div class="app-content-list-item-line-one live-relative-timestamp" :data-timestamp="v.millisecondsTimestamp" :title="v.formattedTimestamp">
-						{{ v.relativeTimestamp }}
-					</div>
-					<div class="app-content-list-item-line-two" :title="v.altSize">
-						{{ v.humanReadableSize }}
-					</div>
-				</div>
-			</a>
-		</template>
+		<div v-else-if="!loading('versions') && versions.length">
+			<ul class="version-list">
+				<span :title="pageFormattedTimestamp">
+					<NcListItem :title="t('collectives', 'Current version')"
+						class="version"
+						@click="clickPreviewVersion(null)">
+						<template #icon>
+							<PageIcon :size="26"
+								fill-color="var(--color-main-background)"
+								class="item-icon item-icon__page" />
+						</template>
+						<template #subtitle>
+							{{ pageHumanReadableSize }}
+						</template>
+					</NcListItem>
+				</span>
+				<span v-for="v in versions"
+					:key="v.downloadUrl"
+					:title="v.formattedTimestamp">
+					<NcListItem :title="v.relativeTimestamp"
+						class="version"
+						@click="clickPreviewVersion(v)">
+						<template #icon>
+							<NcLoadingIcon v-if="loading(`version-${pageId}-${v.timestamp}`)"
+								:size="26"
+								fill-color="var(--color-main-background)"
+								class="item-icon item-icon__loading" />
+							<PageIcon v-else
+								:size="26"
+								fill-color="var(--color-main-background)"
+								class="item-icon item-icon__page" />
+						</template>
+						<template #subtitle>
+							{{ v.humanReadableSize }}
+						</template>
+					</NcListItem>
+				</span>
+			</ul>
+		</div>
 
 		<!-- no versions found -->
 		<NcEmptyContent v-else
@@ -60,13 +63,13 @@
 				<RestoreIcon />
 			</template>
 		</NcEmptyContent>
-	</NcAppContentList>
+	</div>
 </template>
 
 <script>
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { formatFileSize } from '@nextcloud/files'
-import { NcAppContentList, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
+import { NcEmptyContent, NcListItem, NcLoadingIcon } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagon.vue'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
@@ -79,8 +82,8 @@ export default {
 
 	components: {
 		AlertOctagonIcon,
-		NcAppContentList,
 		NcEmptyContent,
+		NcListItem,
 		NcLoadingIcon,
 		PageIcon,
 		RestoreIcon,
@@ -129,22 +132,17 @@ export default {
 		pageHumanReadableSize() {
 			return formatFileSize(this.pageSize)
 		},
-
-		/**
-		 * @return {string}
-		 */
-		pageAltSize() {
-			return n('files', '%n byte', '%n bytes', this.pageSize)
-		},
 	},
 
 	watch: {
 		'pageId'() {
+			this.load('versions')
 			this.getPageVersions()
 		},
 	},
 
 	beforeMount() {
+		this.load('versions')
 		this.getPageVersions()
 	},
 
@@ -159,14 +157,14 @@ export default {
 		 * Get versions of a page
 		 */
 		async getPageVersions() {
-			this.load('versions')
 			try {
-				this.dispatchGetVersions(this.pageId)
+				await this.dispatchGetVersions(this.pageId)
 			} catch (e) {
 				this.error = t('collectives', 'Could not get page versions')
 				console.error('Failed to get page versions', e)
+			} finally {
+				this.done('versions')
 			}
-			this.done('versions')
 		},
 
 		/**
@@ -182,46 +180,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// Copied from apps/files_versions/src/css/versions.css
-.app-content-list {
-	max-width: none;
-	border-right: none;
-}
+.version {
+	display: flex;
+	flex-direction: row;
 
-.app-content-list-item {
-	border-bottom: 1px solid rgba(100, 100, 100, 0.1);
-}
+	:deep(.line-one__title) {
+		font-weight: normal;
+	}
 
-.app-content-list-item .app-content-list-item-icon {
-	line-height: 40px;
-	width: 26px;
-	left: 12px;
-
-	&.item-icon-page {
-		display: flex;
+	.item-icon {
 		height: 34px;
-		background-color: var(--color-background-darker);
-		border-radius: 4px;
+		border-radius: var(--border-radius);
+
+		&__page {
+			background-color: var(--color-background-darker);
+		}
 	}
-
-	&.item-icon-loading {
-		padding-top: 6px;
-	}
-}
-
-.app-content-list .app-content-list-item .app-content-list-item-line-one {
-	font-size: 120%;
-}
-
-.app-content-list .app-content-list-item .app-content-list-item-line-two {
-	opacity: .5;
-}
-
-.app-content-list-item:hover {
-	background-color: var(--color-background-hover);
-}
-
-.app-content-list-item .active {
-	background-color: var(--color-background-dark);
 }
 </style>

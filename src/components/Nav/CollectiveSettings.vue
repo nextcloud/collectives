@@ -8,7 +8,7 @@
 					<NcButton type="tertiary"
 						:aria-label="t('collectives', 'Select emoji for collective')"
 						:title="emojiTitle"
-						:class="{'loading': loading('updateCollectiveEmoji')}"
+						:class="{'loading': loading('updateCollectiveEmoji') || loading('renameCollective')}"
 						class="button-emoji"
 						@click.prevent>
 						{{ collective.emoji }}
@@ -17,21 +17,25 @@
 						</template>
 					</NcButton>
 				</NcEmojiPicker>
-				<form @submit.prevent.stop="renameCollective()">
-					<input ref="nameField"
-						v-model="newCollectiveName"
-						v-tooltip="renameDisabledTooltip"
-						type="text"
-						:disabled="!isCollectiveOwner(collective)"
-						required>
-					<input v-tooltip="renameDisabledTooltip"
-						type="submit"
-						value=""
-						:aria-label="t('collectives', 'Save new collective name')"
-						class="icon-confirm"
-						:class="{ 'icon-loading-small': loading('renameCollective') }"
-						:disabled="!isCollectiveOwner(collective)">
-				</form>
+				<NcTextField ref="collectiveName"
+					:value.sync="newCollectiveName"
+					:disabled="!isCollectiveOwner(collective)"
+					:label="getRenameLabel"
+					:error="isNameTooShort"
+					:show-trailing-button="!isNameTooShort"
+					trailing-button-icon="arrowRight"
+					class="collective-name-input"
+					@blur="renameCollective()"
+					@keypress.enter.prevent="renameCollective()"
+					@trailing-button-click="renameCollective()" />
+			</div>
+			<div class="collective-name-error-placeholder">
+				<div v-if="getNameError" class="collective-name-error">
+					<AlertCircleOutlineIcon :size="16" />
+					<label for="collective-name" class="modal-collective-name-error-label">
+						{{ getNameError }}
+					</label>
+				</div>
 			</div>
 		</NcAppSettingsSection>
 
@@ -144,7 +148,8 @@
 import { memberLevels, pageModes } from '../../constants.js'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { showError, showSuccess } from '@nextcloud/dialogs'
-import { NcAppSettingsDialog, NcAppSettingsSection, NcButton, NcCheckboxRadioSwitch } from '@nextcloud/vue'
+import { NcAppSettingsDialog, NcAppSettingsSection, NcButton, NcCheckboxRadioSwitch, NcTextField } from '@nextcloud/vue'
+import AlertCircleOutlineIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
 import NcEmojiPicker from '@nextcloud/vue/dist/Components/NcEmojiPicker.js'
 import EmoticonOutline from 'vue-material-design-icons/EmoticonOutline.vue'
 import { generateUrl } from '@nextcloud/router'
@@ -162,11 +167,13 @@ export default {
 	name: 'CollectiveSettings',
 
 	components: {
+		AlertCircleOutlineIcon,
 		NcAppSettingsDialog,
 		NcAppSettingsSection,
 		NcButton,
 		NcCheckboxRadioSwitch,
 		NcEmojiPicker,
+		NcTextField,
 		EmoticonOutline,
 	},
 
@@ -206,9 +213,10 @@ export default {
 			return this.collective.emoji ? t('collectives', 'Change emoji') : t('collectives', 'Add emoji')
 		},
 
-		renameDisabledTooltip() {
-			return !this.isCollectiveOwner(this.collective)
-				&& t('collectives', 'Renaming is limited to owners of the circle')
+		getRenameLabel() {
+			return this.isCollectiveOwner(this.collective)
+				? t('collectives', 'Name of the collective')
+				: t('collectives', 'Renaming is limited to owners of the circle')
 		},
 
 		membersDisabledTooltip() {
@@ -218,6 +226,17 @@ export default {
 
 		isContactsInstalled() {
 			return 'contacts' in this.OC.appswebroots
+		},
+
+		isNameTooShort() {
+			return !!this.newCollectiveName && this.newCollectiveName.length < 3
+		},
+
+		getNameError() {
+			if (this.isNameTooShort) {
+				return t('collectives', 'Name too short, requires at least three characters')
+			}
+			return null
 		},
 	},
 
@@ -308,7 +327,7 @@ export default {
 		 */
 		async renameCollective() {
 			// Ignore rename to same name
-			if (this.newCollectiveName === this.collective.name) {
+			if (this.isNameTooShort || this.newCollectiveName === this.collective.name) {
 				return
 			}
 
@@ -369,13 +388,23 @@ export default {
 .collective-name {
 	display: flex;
 
-	form {
-		display: flex;
-		flex-grow: 1;
+	.collective-name-input {
+		display: grid;
+		align-items: center;
+	}
+}
 
-		input[type='text'] {
-			flex-grow: 1;
-		}
+.collective-name-error-placeholder {
+	min-height: 24px;
+}
+
+.collective-name-error {
+	display: flex;
+	// Emoji button + input field padding
+	padding-left: calc(57px + 12px);
+
+	&-label {
+		padding-left: 4px;
 	}
 }
 
