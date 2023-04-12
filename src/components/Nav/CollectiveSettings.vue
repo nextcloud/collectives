@@ -20,9 +20,9 @@
 				<NcTextField ref="collectiveName"
 					:value.sync="newCollectiveName"
 					:disabled="!isCollectiveOwner(collective)"
-					:label="renameLabel"
-					:error="nameIsTooShort"
-					:show-trailing-button="!nameIsTooShort"
+					:label="getRenameLabel"
+					:error="isNameTooShort"
+					:show-trailing-button="!isNameTooShort"
 					trailing-button-icon="arrowRight"
 					class="collective-name-input"
 					@blur="renameCollective()"
@@ -30,10 +30,10 @@
 					@trailing-button-click="renameCollective()" />
 			</div>
 			<div class="collective-name-error-placeholder">
-				<div v-if="nameError" class="collective-name-error">
+				<div v-if="getNameError" class="collective-name-error">
 					<AlertCircleOutlineIcon :size="16" />
 					<label for="collective-name" class="modal-collective-name-error-label">
-						{{ nameError }}
+						{{ getNameError }}
 					</label>
 				</div>
 			</div>
@@ -213,7 +213,7 @@ export default {
 			return this.collective.emoji ? t('collectives', 'Change emoji') : t('collectives', 'Add emoji')
 		},
 
-		renameLabel() {
+		getRenameLabel() {
 			return this.isCollectiveOwner(this.collective)
 				? t('collectives', 'Name of the collective')
 				: t('collectives', 'Renaming is limited to owners of the circle')
@@ -228,12 +228,12 @@ export default {
 			return 'contacts' in this.OC.appswebroots
 		},
 
-		nameIsTooShort() {
+		isNameTooShort() {
 			return !!this.newCollectiveName && this.newCollectiveName.length < 3
 		},
 
-		nameError() {
-			if (this.nameIsTooShort) {
+		getNameError() {
+			if (this.isNameTooShort) {
 				return t('collectives', 'Name too short, requires at least three characters')
 			}
 			return null
@@ -327,7 +327,7 @@ export default {
 		 */
 		async renameCollective() {
 			// Ignore rename to same name
-			if (this.nameIsTooShort || this.newCollectiveName === this.collective.name) {
+			if (this.isNameTooShort || this.newCollectiveName === this.collective.name) {
 				return
 			}
 
