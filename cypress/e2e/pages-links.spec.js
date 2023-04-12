@@ -307,8 +307,8 @@ describe('Page', function() {
 			// Broken in Text on Nextcloud 25
 			if (Cypress.env('ncVersion') !== 'stable25') {
 				testLinkToSameTab(href, { isPublic: true })
+				testLinkToNewTab(href, { edit: true, isPublic: true })
 			}
-			testLinkToNewTab(href, { edit: true, isPublic: true })
 		})
 		it('Public share: opens link to external website in new tab', function() {
 			cy.logout()
