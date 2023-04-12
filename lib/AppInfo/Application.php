@@ -7,6 +7,7 @@ namespace OCA\Collectives\AppInfo;
 use Closure;
 use OCA\Circles\Events\CircleDestroyedEvent;
 use OCA\Collectives\CacheListener;
+use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Listeners\BeforeTemplateRenderedListener;
 use OCA\Collectives\Listeners\CircleDestroyedListener;
@@ -20,7 +21,10 @@ use OCA\Collectives\Search\CollectiveProvider;
 use OCA\Collectives\Search\PageContentProvider;
 use OCA\Collectives\Search\PageProvider;
 use OCA\Collectives\Service\CollectiveHelper;
+use OCA\Collectives\Trash\PageTrashBackend;
+use OCA\Collectives\Trash\PageTrashManager;
 use OCA\Collectives\Versions\VersionsBackend;
+use OCA\Files_Versions\Versions\IVersionBackend;
 use OCP\App\IAppManager;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
@@ -62,6 +66,21 @@ class Application extends App implements IBootstrap {
 				$c->get(LoggerInterface::class),
 				$c->get(UserFolderHelper::class)
 			);
+		});
+
+		$context->registerService(PageTrashBackend::class, function (ContainerInterface $c) {
+			$trashBackend = new PageTrashBackend(
+				$c->get(CollectiveFolderManager::class),
+				$c->get(PageTrashManager::class),
+				$c->get(MountProvider::class),
+				$c->get(CollectiveMapper::class),
+				$c->get(LoggerInterface::class)
+			);
+			$hasVersionApp = interface_exists(IVersionBackend::class);
+			if ($hasVersionApp) {
+				$trashBackend->setVersionsBackend($c->get(VersionsBackend::class));
+			}
+			return $trashBackend;
 		});
 
 		$context->registerService(VersionsBackend::class, function (ContainerInterface $c) {
