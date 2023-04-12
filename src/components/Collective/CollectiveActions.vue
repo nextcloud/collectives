@@ -3,7 +3,7 @@
 		<NcActionLink v-if="showManageMembers"
 			:href="circleLink">
 			<template #icon>
-				<CirclesIcon :size="16" />
+				<CirclesIcon :size="20" />
 			</template>
 			{{ t('collectives', 'Manage members') }}
 		</NcActionLink>
@@ -14,8 +14,8 @@
 			@click="share(collective)">
 			{{ t('collectives', 'Share link') }}
 			<template #icon>
-				<NcLoadingIcon v-if="loading('share')" :size="16" />
-				<LinkVariantIcon v-else :size="16" />
+				<NcLoadingIcon v-if="loading('share')" :size="20" />
+				<LinkVariantIcon v-else :size="20" />
 			</template>
 		</NcActionButton>
 		<NcActionButton v-if="!isPublic"
@@ -23,9 +23,9 @@
 			:close-after-click="false"
 			@click.stop.prevent="copyShare(collective)">
 			<template #icon>
-				<CheckIcon v-if="copySuccess" :size="16" />
-				<NcLoadingIcon v-else-if="copyLoading" :size="16" />
-				<ContentPasteIcon v-else :size="16" />
+				<CheckIcon v-if="copySuccess" :size="20" />
+				<NcLoadingIcon v-else-if="copyLoading" :size="20" />
+				<ContentPasteIcon v-else :size="20" />
 			</template>
 			{{ copyButtonText }}
 		</NcActionButton>
@@ -41,8 +41,8 @@
 			:close-after-click="false"
 			@click="unshare(collective)">
 			<template #icon>
-				<NcLoadingIcon v-if="loading('unshare')" :size="16" />
-				<LinkVariantIcon v-else :size="16" />
+				<NcLoadingIcon v-if="loading('unshare')" :size="20" />
+				<LinkVariantIcon v-else :size="20" />
 			</template>
 			{{ t('collectives', 'Unshare') }}
 		</NcActionButton>
@@ -52,14 +52,14 @@
 			target="_blank">
 			{{ t('collectives', 'Export or print') }}
 			<template #icon>
-				<DownloadIcon :size="16" />
+				<DownloadIcon :size="20" />
 			</template>
 		</NcActionLink>
 		<NcActionButton v-if="isCollectiveAdmin(collective)"
 			:close-after-click="true"
 			@click="openCollectiveSettings()">
 			<template #icon>
-				<CogIcon :size="16" />
+				<CogIcon :size="20" />
 			</template>
 			{{ t('collectives', 'Settings') }}
 		</NcActionButton>
@@ -68,7 +68,7 @@
 			@click="leaveCollectiveWithUndo(collective)">
 			{{ t('collectives', 'Leave collective') }}
 			<template #icon>
-				<LogoutIcon :size="16" />
+				<LogoutIcon :size="20" />
 			</template>
 		</NcActionButton>
 	</div>
