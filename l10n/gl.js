@@ -32,11 +32,11 @@ OC.L10N.register(
     "Download" : "Descargar",
     "Current version" : "Versión actual",
     "No other versions available" : "Non hai outras versións dispoñíbeis",
-    "_%n byte_::_%n bytes_" : ["%n  byte","%n bytes"],
     "Attachments" : "Anexos",
     "Versions" : "Versións",
     "Users" : "Usuarios",
     "Groups" : "Grupos",
-    "Circles" : "Círculos"
+    "Circles" : "Círculos",
+    "_%n byte_::_%n bytes_" : ["%n  byte","%n bytes"]
 },
 "nplurals=2; plural=(n != 1);");
