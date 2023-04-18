@@ -24,6 +24,7 @@ OC.L10N.register(
     "Restore" : "Återställ",
     "Delete permanently" : "Ta bort permanent",
     "Cancel" : "Avbryt",
+    "Select emoji" : "Välj emoji",
     "Back" : "Tillbaka",
     "Create" : "Skapa",
     "Done" : "Klar",
