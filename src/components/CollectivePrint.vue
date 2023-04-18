@@ -23,7 +23,7 @@
 				</ul>
 			</template>
 		</NcEmptyContent>
-		<div v-for="page in pagesTreeWalk()" v-show="!loading" :key="page.id">
+		<div v-for="page in pages" v-show="!loading" :key="page.id">
 			<PagePrint :page="page"
 				@loading="waitingFor.push(page.id)"
 				@ready="ready(page.id)" />
@@ -71,6 +71,7 @@ export default {
 	computed: {
 		...mapGetters([
 			'currentCollective',
+			'currentPage',
 			'pagesTreeWalk',
 			'shareTokenParam',
 		]),
@@ -98,6 +99,14 @@ export default {
 
 			return parts.join(' - ')
 		},
+
+		/**
+		 * List of all pages, empty if pages not loaded
+		 */
+		pages() {
+			if (!this.currentPage) return []
+			return this.pagesTreeWalk(this.currentPage.parentId)
+		},
 	},
 
 	mounted() {
@@ -110,12 +119,12 @@ export default {
 		}),
 
 		/**
-		 * Get list of all pages
+		 * Fetch list of all pages
 		 */
 		async getPages() {
 			await this.dispatchGetPages()
 				.catch(displayError('Could not fetch pages'))
-			this.loadPages.total = this.pagesTreeWalk().length
+			this.loadPages.total = this.pagesTreeWalk(this.currentPage.parentId).length
 		},
 
 		ready(pageId) {

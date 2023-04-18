@@ -50,7 +50,7 @@
 		<NcActionSeparator v-if="collectiveCanShare(collective) && !isPublic" />
 		<NcActionLink :close-after-click="true"
 			:href="printLink"
-			target="_blank">
+			target="ncCollectivesPrint">
 			{{ t('collectives', 'Export or print') }}
 			<template #icon>
 				<DownloadIcon :size="20" />
@@ -142,6 +142,7 @@ export default {
 			'isCollectiveAdmin',
 			'isPublic',
 			'loading',
+			'printLink',
 		]),
 
 		circleLink() {
@@ -165,6 +166,10 @@ export default {
 			return this.isPublic
 				? generateUrl(`/apps/collectives/p/${this.shareTokenParam}/print/${this.collective.name}`)
 				: generateUrl(`/apps/collectives/_/print/${this.collective.name}`)
+		},
+
+		unshareIcon() {
+			return this.loading('unshare') ? 'icon-loading-small' : 'icon-public'
 		},
 	},
 

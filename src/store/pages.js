@@ -171,6 +171,14 @@ export default {
 			return state.pages.find(p => (p.parentId === parentId && p.title === TEMPLATE_PAGE))
 		},
 
+		pagePrintLink: (state, get) => (page) => {
+			const path = [page.collectivePath.split('/').at(-1), page.filePath.split('/'), page.fileName]
+			if (path.at(-1) === 'Readme.md') path.splice(-1, 1)
+			if (get.isPublic) path.splice(2, 0, 'print')
+			else path.splice(0, 0, '_', 'print')
+			return generateUrl(`/apps/collectives/${path.join('/')}`)
+		},
+
 		currentFileIdPage(state, _getters, rootState) {
 			const fileId = Number(rootState.route.query.fileId)
 			return state.pages.find(p => (p.id === fileId))

@@ -3,7 +3,7 @@
 		<h1 v-if="page.parentId === 0" id="page-title-collective" class="page-title page-title-collective">
 			{{ currentCollectiveTitle }}
 		</h1>
-		<h1 v-else class="page-title page-title-subpage">
+		<h1 v-else class="page-title" :class="{'page-title-subpage': currentPage.id !== page.id}">
 			{{ pageTitleString }}
 		</h1>
 		<RichTextReader v-if="pageContent"
@@ -53,6 +53,7 @@ export default {
 	computed: {
 		...mapGetters([
 			'currentCollectiveTitle',
+			'currentPage',
 			'pageDavUrl',
 			'pageDirectory',
 			'isPublic',

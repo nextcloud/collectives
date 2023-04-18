@@ -47,6 +47,15 @@ export default {
 		height: fit-content;
 	}
 
+	html, body {
+		background: var(--color-main-background, white)!important;
+	}
+
+	/* hide toast notifications for printing */
+	.toastify.dialogs {
+		display: none;
+	}
+
 	#content-vue {
 		position: static;
 		overflow: visible;

@@ -68,6 +68,14 @@
 				</template>
 				{{ deletePageString }}
 			</NcActionButton>
+			<NcActionLink :close-after-click="true"
+				:href="printLink"
+				target="ncCollectivesPrint">
+				{{ t('collectives', 'Export or print') }}
+				<template #icon>
+					<DownloadIcon :size="20" />
+				</template>
+			</NcActionLink>
 			<NcActionSeparator v-if="lastUserId && lastUserDisplayName" />
 			<PageActionLastUser :last-user-id="lastUserId" :last-user-display-name="lastUserDisplayName" :timestamp="timestamp" />
 		</NcActions>
@@ -85,6 +93,7 @@ import { NcActions, NcActionButton, NcActionLink, NcActionSeparator } from '@nex
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import CollectiveActions from '../Collective/CollectiveActions.vue'
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
+import DownloadIcon from 'vue-material-design-icons/Download.vue'
 import EmoticonOutlineIcon from 'vue-material-design-icons/EmoticonOutline.vue'
 import FormatListBulletedIcon from 'vue-material-design-icons/FormatListBulleted.vue'
 import OpenInNewIcon from 'vue-material-design-icons/OpenInNew.vue'
@@ -104,6 +113,7 @@ export default {
 		NcActionLink,
 		NcActionSeparator,
 		DeleteIcon,
+		DownloadIcon,
 		EmoticonOutlineIcon,
 		FormatListBulletedIcon,
 		PagesTemplateIcon,
@@ -172,10 +182,16 @@ export default {
 			'hasSubpages',
 			'loading',
 			'pagesTreeWalk',
+			'pageById',
+			'pagePrintLink',
 			'showing',
 			'showTemplates',
 			'visibleSubpages',
 		]),
+
+		printLink() {
+			return this.pagePrintLink(this.pageById(this.pageId))
+		},
 
 		toggleOutlineString() {
 			return this.showing('outline')

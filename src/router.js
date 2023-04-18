@@ -37,11 +37,13 @@ const routes = [
 		path: '/_/print/:collective',
 		component: CollectivePrintView,
 		props: (route) => route.params,
+		children: [{ path: ':page*' }],
 	},
 	{
 		path: '/p/:token/print/:collective',
 		component: CollectivePrintView,
 		props: (route) => route.params,
+		children: [{ path: ':page*' }],
 	},
 	{
 		path: '/p/:token/:collective',
