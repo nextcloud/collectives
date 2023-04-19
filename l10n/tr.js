@@ -36,7 +36,7 @@ OC.L10N.register(
     "Last edited by {user}" : "Son düzenleyen: {user}",
     "Search users, groups, circles…" : "Kullanıcı, grup ve çevre arama…",
     "Remove {name}" : "{name} sil",
-    "Search for members to add" : "Eklenecek üyeleri arayın",
+    "Search for members to add" : "Eklenecek üyeleri ara",
     "Loading …" : "Yükleniyor…",
     "No results" : "Herhangi bir sonuç bulunamadı",
     "An error occurred while performing the search" : "Arama sırasında bir sorun çıktı",
