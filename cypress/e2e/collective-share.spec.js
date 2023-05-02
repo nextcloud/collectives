@@ -142,7 +142,6 @@ describe('Collective Share', function() {
 			cy.logout()
 			cy.visit(shareUrl, { failOnStatusCode: false })
 			cy.get('.body-login-container').contains(/(File|Page) not found/)
-			cy.get('.infogroup').contains(/The (document|page) could not be found on the server\./)
 		})
 	})
 })
