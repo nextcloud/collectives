@@ -24,11 +24,11 @@ class PublicCollectiveController extends PublicShareController {
 	use ErrorHelper;
 
 	public function __construct(string $AppName,
-								IRequest $request,
-								CollectiveShareMapper $collectiveShareMapper,
-								CollectiveService $service,
-								ISession $session,
-								LoggerInterface $logger) {
+		IRequest $request,
+		CollectiveShareMapper $collectiveShareMapper,
+		CollectiveService $service,
+		ISession $session,
+		LoggerInterface $logger) {
 		parent::__construct($AppName, $request, $session);
 		$this->collectiveShareMapper = $collectiveShareMapper;
 		$this->service = $service;

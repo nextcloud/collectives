@@ -17,10 +17,10 @@ class TrashController extends Controller {
 	use ErrorHelper;
 
 	public function __construct(string $AppName,
-								IRequest $request,
-								CollectiveService $service,
-								IUserSession $userSession,
-								LoggerInterface $logger) {
+		IRequest $request,
+		CollectiveService $service,
+		IUserSession $userSession,
+		LoggerInterface $logger) {
 		parent::__construct($AppName, $request);
 		$this->service = $service;
 		$this->userSession = $userSession;

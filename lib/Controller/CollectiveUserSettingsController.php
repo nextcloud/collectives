@@ -19,10 +19,10 @@ class CollectiveUserSettingsController extends Controller {
 	use ErrorHelper;
 
 	public function __construct(string $AppName,
-								IRequest $request,
-								CollectiveUserSettingsService $service,
-								IUserSession $userSession,
-								LoggerInterface $logger) {
+		IRequest $request,
+		CollectiveUserSettingsService $service,
+		IUserSession $userSession,
+		LoggerInterface $logger) {
 		parent::__construct($AppName, $request);
 		$this->service = $service;
 		$this->userSession = $userSession;

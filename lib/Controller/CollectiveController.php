@@ -27,13 +27,13 @@ class CollectiveController extends Controller {
 	use ErrorHelper;
 
 	public function __construct(string $AppName,
-								IRequest $request,
-								CollectiveService $service,
-								IUserSession $userSession,
-								IFactory $l10nFactory,
-								LoggerInterface $logger,
-								NodeHelper $nodeHelper,
-								CollectiveShareService $shareService) {
+		IRequest $request,
+		CollectiveService $service,
+		IUserSession $userSession,
+		IFactory $l10nFactory,
+		LoggerInterface $logger,
+		NodeHelper $nodeHelper,
+		CollectiveShareService $shareService) {
 		parent::__construct($AppName, $request);
 		$this->service = $service;
 		$this->userSession = $userSession;

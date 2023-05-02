@@ -29,9 +29,9 @@ class CollectiveShareService {
 	private IL10N $l10n;
 
 	public function __construct(IShareManager $shareManager,
-								UserFolderHelper $userFolderHelper,
-								CollectiveShareMapper $collectiveShareMapper,
-								IL10N $l10n) {
+		UserFolderHelper $userFolderHelper,
+		CollectiveShareMapper $collectiveShareMapper,
+		IL10N $l10n) {
 		$this->shareManager = $shareManager;
 		$this->userFolderHelper = $userFolderHelper;
 		$this->collectiveShareMapper = $collectiveShareMapper;

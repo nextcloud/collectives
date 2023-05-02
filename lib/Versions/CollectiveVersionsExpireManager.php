@@ -43,12 +43,12 @@ class CollectiveVersionsExpireManager extends BasicEmitter {
 	 * @param EventDispatcherInterface $dispatcher
 	 */
 	public function __construct(ContainerInterface $appContainer,
-								CollectiveFolderManager $folderManager,
-								ExpireManager $expireManager,
-								IDBConnection $connection,
-								CollectiveMapper $collectiveMapper,
-								ITimeFactory $timeFactory,
-								EventDispatcherInterface $dispatcher) {
+		CollectiveFolderManager $folderManager,
+		ExpireManager $expireManager,
+		IDBConnection $connection,
+		CollectiveMapper $collectiveMapper,
+		ITimeFactory $timeFactory,
+		EventDispatcherInterface $dispatcher) {
 		$this->folderManager = $folderManager;
 		$this->expireManager = $expireManager;
 		$this->connection = $connection;

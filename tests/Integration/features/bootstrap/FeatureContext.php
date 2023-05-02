@@ -1131,10 +1131,10 @@ class FeatureContext implements Context {
 	 * @throws GuzzleException
 	 */
 	private function sendRequest(string $verb,
-								 string $url,
-								 ?TableNode $body = null,
-								 array $headers = [],
-								 ?bool $auth = true): void {
+		string $url,
+		?TableNode $body = null,
+		array $headers = [],
+		?bool $auth = true): void {
 		$fullUrl = $this->baseUrl . $url;
 		$this->sendRequestBase($verb, $fullUrl, $body, $headers, $auth);
 	}
@@ -1149,10 +1149,10 @@ class FeatureContext implements Context {
 	 * @throws GuzzleException
 	 */
 	private function sendRemoteRequest(string $verb,
-									   string $url,
-									   $body = null,
-									   array $headers = [],
-									   ?bool $auth = true): void {
+		string $url,
+		$body = null,
+		array $headers = [],
+		?bool $auth = true): void {
 		$fullUrl = $this->remoteUrl . $url;
 		$this->sendRequestBase($verb, $fullUrl, $body, $headers, $auth);
 	}
@@ -1167,10 +1167,10 @@ class FeatureContext implements Context {
 	 * @throws GuzzleException
 	 */
 	private function sendOcsRequest(string $verb,
-									 string $url,
-									 ?TableNode $body = null,
-									 array $headers = [],
-									 ?bool $auth = true): void {
+		string $url,
+		?TableNode $body = null,
+		array $headers = [],
+		?bool $auth = true): void {
 		$fullUrl = $this->ocsUrl . $url;
 
 		// Add Xdebug trigger variable as GET parameter
@@ -1193,10 +1193,10 @@ class FeatureContext implements Context {
 	 * @throws GuzzleException
 	 */
 	private function sendRequestBase(string $verb,
-								 string $url,
-								 $body = null,
-								 array $headers = [],
-								 ?bool $auth = true): void {
+		string $url,
+		$body = null,
+		array $headers = [],
+		?bool $auth = true): void {
 		$client = new Client($this->clientOptions);
 
 		if (true === $auth && !isset($this->cookieJars[$this->currentUser])) {

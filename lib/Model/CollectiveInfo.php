@@ -26,11 +26,11 @@ class CollectiveInfo extends Collective {
 	protected ?int $userPageOrder;
 
 	public function __construct(Collective $collective,
-								string $name,
-								int $level = Member::LEVEL_MEMBER,
-								string $shareToken = null,
-								bool $shareEditable = false,
-								?int $userPageOrder = Collective::defaultPageOrder) {
+		string $name,
+		int $level = Member::LEVEL_MEMBER,
+		string $shareToken = null,
+		bool $shareEditable = false,
+		?int $userPageOrder = Collective::defaultPageOrder) {
 		$this->id = $collective->getId();
 		$this->circleUniqueId = $collective->getCircleId();
 		$this->emoji = $collective->getEmoji();

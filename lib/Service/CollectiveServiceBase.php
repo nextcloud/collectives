@@ -11,7 +11,7 @@ class CollectiveServiceBase {
 	protected CircleHelper $circleHelper;
 
 	public function __construct(CollectiveMapper $collectiveMapper,
-								CircleHelper $circleHelper) {
+		CircleHelper $circleHelper) {
 		$this->collectiveMapper = $collectiveMapper;
 		$this->circleHelper = $circleHelper;
 	}

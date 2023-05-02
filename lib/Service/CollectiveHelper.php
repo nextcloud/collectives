@@ -20,8 +20,8 @@ class CollectiveHelper {
 	 * @param CircleHelper                 $circleHelper
 	 */
 	public function __construct(CollectiveMapper $collectiveMapper,
-								CollectiveUserSettingsMapper $collectiveUserSettingsMapper,
-								CircleHelper $circleHelper) {
+		CollectiveUserSettingsMapper $collectiveUserSettingsMapper,
+		CircleHelper $circleHelper) {
 		$this->collectiveMapper = $collectiveMapper;
 		$this->collectiveUserSettingsMapper = $collectiveUserSettingsMapper;
 		$this->circleHelper = $circleHelper;

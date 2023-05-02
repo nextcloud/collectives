@@ -19,11 +19,11 @@ class PageController extends Controller {
 	use ErrorHelper;
 
 	public function __construct(string            $appName,
-								IRequest          $request,
-								PageService       $service,
-								AttachmentService $attachmentService,
-								IUserSession      $userSession,
-								LoggerInterface   $logger) {
+		IRequest          $request,
+		PageService       $service,
+		AttachmentService $attachmentService,
+		IUserSession      $userSession,
+		LoggerInterface   $logger) {
 		parent::__construct($appName, $request);
 		$this->service = $service;
 		$this->attachmentService = $attachmentService;

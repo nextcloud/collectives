@@ -8,14 +8,12 @@ use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Search\FileSearch\ClauseTokenizer;
 use OCA\Collectives\Search\FileSearch\FileSearcher;
 use OCA\Collectives\Search\FileSearch\FileSearchException;
-use OCA\Collectives\Service\SearchService;
-use OCP\Files\File;
-use OCP\Files\NotFoundException;
-use Psr\Log\LoggerInterface;
-use TeamTNT\TNTSearch\Support\Highlighter;
 use OCA\Collectives\Service\CollectiveHelper;
 use OCA\Collectives\Service\PageService;
+use OCA\Collectives\Service\SearchService;
 use OCP\App\IAppManager;
+use OCP\Files\File;
+use OCP\Files\NotFoundException;
 use OCP\IL10N;
 use OCP\IURLGenerator;
 use OCP\IUser;
@@ -23,6 +21,8 @@ use OCP\Search\IProvider;
 use OCP\Search\ISearchQuery;
 use OCP\Search\SearchResult;
 use OCP\Search\SearchResultEntry;
+use Psr\Log\LoggerInterface;
+use TeamTNT\TNTSearch\Support\Highlighter;
 
 class PageContentProvider implements IProvider {
 	private IL10N $l10n;
@@ -43,12 +43,12 @@ class PageContentProvider implements IProvider {
 	 * @param IAppManager      $appManager
 	 */
 	public function __construct(IL10N $l10n,
-								IURLGenerator $urlGenerator,
-								CollectiveHelper $collectiveHelper,
-								PageService $pageService,
-								SearchService $indexedSearchService,
-								LoggerInterface $logger,
-								IAppManager $appManager) {
+		IURLGenerator $urlGenerator,
+		CollectiveHelper $collectiveHelper,
+		PageService $pageService,
+		SearchService $indexedSearchService,
+		LoggerInterface $logger,
+		IAppManager $appManager) {
 		$this->l10n = $l10n;
 		$this->urlGenerator = $urlGenerator;
 		$this->collectiveHelper = $collectiveHelper;

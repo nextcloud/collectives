@@ -33,8 +33,8 @@ class VersionsBackend implements IVersionBackend {
 	 * @param LoggerInterface         $logger
 	 */
 	public function __construct(CollectiveFolderManager $collectiveFolderManager,
-								ITimeFactory $timeFactory,
-								LoggerInterface $logger) {
+		ITimeFactory $timeFactory,
+		LoggerInterface $logger) {
 		$this->collectiveFolderManager = $collectiveFolderManager;
 		$this->timeFactory = $timeFactory;
 		$this->logger = $logger;

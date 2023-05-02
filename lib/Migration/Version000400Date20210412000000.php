@@ -6,8 +6,8 @@ namespace OCA\Collectives\Migration;
 
 use Closure;
 use OCP\DB\ISchemaWrapper;
-use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
+use OCP\Migration\SimpleMigrationStep;
 
 class Version000400Date20210412000000 extends SimpleMigrationStep {
 	/**

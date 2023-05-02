@@ -5,13 +5,13 @@ namespace OCA\Collectives\Reference;
 use DateTime;
 use Exception;
 use OC\Collaboration\Reference\LinkReferenceProvider;
-use OCA\Collectives\Service\CollectiveService;
-use OCA\Collectives\Service\PageService;
-use OCP\Collaboration\Reference\IReferenceProvider;
-use OCP\Collaboration\Reference\Reference;
 use OC\Collaboration\Reference\ReferenceManager;
 use OCA\Collectives\AppInfo\Application;
+use OCA\Collectives\Service\CollectiveService;
+use OCA\Collectives\Service\PageService;
 use OCP\Collaboration\Reference\IReference;
+use OCP\Collaboration\Reference\IReferenceProvider;
+use OCP\Collaboration\Reference\Reference;
 use OCP\IDateTimeFormatter;
 use OCP\IL10N;
 
@@ -31,13 +31,13 @@ class PageReferenceProvider implements IReferenceProvider {
 	private IDateTimeFormatter $dateTimeFormatter;
 
 	public function __construct(CollectiveService $collectiveService,
-								PageService $pageService,
-								IL10N $l10n,
-								IURLGenerator $urlGenerator,
-								IDateTimeFormatter $dateTimeFormatter,
-								ReferenceManager $referenceManager,
-								LinkReferenceProvider $linkReferenceProvider,
-								?string $userId) {
+		PageService $pageService,
+		IL10N $l10n,
+		IURLGenerator $urlGenerator,
+		IDateTimeFormatter $dateTimeFormatter,
+		ReferenceManager $referenceManager,
+		LinkReferenceProvider $linkReferenceProvider,
+		?string $userId) {
 		$this->userId = $userId;
 		$this->referenceManager = $referenceManager;
 		$this->l10n = $l10n;

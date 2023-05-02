@@ -4,7 +4,6 @@
 namespace OCA\Collectives\Service;
 
 use OCA\Circles\CirclesManager;
-use OCA\Circles\Model\Probes\CircleProbe;
 use OCA\Circles\Exceptions\CircleNotFoundException;
 use OCA\Circles\Exceptions\FederatedItemException;
 use OCA\Circles\Exceptions\FederatedUserException;
@@ -16,6 +15,7 @@ use OCA\Circles\Exceptions\SingleCircleNotFoundException;
 use OCA\Circles\Model\Circle;
 use OCA\Circles\Model\FederatedUser;
 use OCA\Circles\Model\Member;
+use OCA\Circles\Model\Probes\CircleProbe;
 use OCP\AppFramework\QueryException;
 use OCP\AutoloadNotAllowedException;
 use Psr\Container\ContainerInterface;

@@ -166,9 +166,9 @@ class CollectiveService extends CollectiveServiceBase {
 	 * @throws UnprocessableEntityException
 	 */
 	public function createCollective(string $userId,
-									 string $userLang,
-									 string $safeName,
-									 string $emoji = null): array {
+		string $userLang,
+		string $safeName,
+		string $emoji = null): array {
 		if (empty($safeName)) {
 			throw new UnprocessableEntityException('Empty collective name is not allowed');
 		}
@@ -250,8 +250,8 @@ class CollectiveService extends CollectiveServiceBase {
 	 * @throws NotPermittedException
 	 */
 	public function updateCollective(int $id,
-									 string $userId,
-									 string $emoji = null): CollectiveInfo {
+		string $userId,
+		string $emoji = null): CollectiveInfo {
 		$collectiveInfo = $this->getCollectiveInfo($id, $userId);
 
 		if (!$this->circleHelper->isAdmin($collectiveInfo->getCircleId(), $userId)) {
@@ -280,9 +280,9 @@ class CollectiveService extends CollectiveServiceBase {
 	 * @throws NotPermittedException
 	 */
 	public function setPermissionLevel(int $id,
-									  string $userId,
-									  int $permissionLevel,
-									  int $permission): CollectiveInfo {
+		string $userId,
+		int $permissionLevel,
+		int $permission): CollectiveInfo {
 		$collectiveInfo = $this->getCollectiveInfo($id, $userId);
 
 		if (!$this->circleHelper->isAdmin($collectiveInfo->getCircleId(), $userId)) {
@@ -308,8 +308,8 @@ class CollectiveService extends CollectiveServiceBase {
 	 * @throws NotPermittedException
 	 */
 	public function setPageMode(int $id,
-								string $userId,
-								int $mode): CollectiveInfo {
+		string $userId,
+		int $mode): CollectiveInfo {
 		$collectiveInfo = $this->getCollectiveInfo($id, $userId);
 
 		if (!$this->circleHelper->isAdmin($collectiveInfo->getCircleId(), $userId)) {

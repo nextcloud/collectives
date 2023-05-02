@@ -13,7 +13,7 @@ class AttachmentService {
 	private IPreview $preview;
 
 	public function __construct(PageService $pageService,
-								IPreview $preview) {
+		IPreview $preview) {
 		$this->pageService = $pageService;
 		$this->preview = $preview;
 	}

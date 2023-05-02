@@ -28,16 +28,16 @@ class CollectiveVersion extends Version {
 	 * @param int             $folderId
 	 */
 	public function __construct(int $timestamp,
-								int $revisionId,
-								string $name,
-								int $size,
-								string $mimetype,
-								string $path,
-								FileInfo $sourceFileInfo,
-								IVersionBackend $backend,
-								IUser $user,
-								File $versionFile,
-								int $folderId) {
+		int $revisionId,
+		string $name,
+		int $size,
+		string $mimetype,
+		string $path,
+		FileInfo $sourceFileInfo,
+		IVersionBackend $backend,
+		IUser $user,
+		File $versionFile,
+		int $folderId) {
 		parent::__construct($timestamp, $revisionId, $name, $size, $mimetype, $path, $sourceFileInfo, $backend, $user);
 		$this->versionFile = $versionFile;
 		$this->folderId = $folderId;
