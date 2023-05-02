@@ -207,7 +207,7 @@ class PageService {
 			$pageInfo->fromFile($file,
 				$this->getParentPageId($file, $parent),
 				$lastUserId,
-				$lastUserId ? $this->userManager->get($lastUserId)->getDisplayName() : null,
+				$lastUserId ? $this->userManager->getDisplayName($lastUserId) : null,
 				$emoji,
 				$subpageOrder);
 		} catch (FilesNotFoundException | InvalidPathException $e) {
@@ -291,7 +291,7 @@ class PageService {
 			$pageInfo->fromFile($newFile,
 				$this->getParentPageId($newFile),
 				$userId,
-				$userId ? $this->userManager->get($userId)->getDisplayName() : null);
+				$this->userManager->getDisplayName($userId));
 			$this->updatePage($collectiveId, $newFile->getId(), $userId);
 		} catch (FilesNotFoundException | InvalidPathException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
@@ -645,7 +645,7 @@ class PageService {
 		$file = $this->nodeHelper->getFileById($folder, $id);
 		$pageInfo = $this->getPageByFile($file);
 		$pageInfo->setLastUserId($userId);
-		$pageInfo->setLastUserDisplayName($userId ? $this->userManager->get($userId)->getDisplayName() : null);
+		$pageInfo->setLastUserDisplayName($this->userManager->getDisplayName($userId));
 		$this->updatePage($collectiveId, $pageInfo->getId(), $userId);
 		return $pageInfo;
 	}
@@ -793,7 +793,7 @@ class PageService {
 		$file = $this->nodeHelper->getFileById($folder, $id);
 		$pageInfo = $this->getPageByFile($file);
 		$pageInfo->setLastUserId($userId);
-		$pageInfo->setLastUserDisplayName($userId ? $this->userManager->get($userId)->getDisplayName() : null);
+		$pageInfo->setLastUserDisplayName($this->userManager->getDisplayName($userId));
 		$pageInfo->setEmoji($emoji);
 		$this->updatePage($collectiveId, $pageInfo->getId(), $userId, $emoji);
 		return $pageInfo;
