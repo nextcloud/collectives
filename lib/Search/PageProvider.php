@@ -37,11 +37,11 @@ class PageProvider implements IProvider {
 	 * @param IAppManager      $appManager
 	 */
 	public function __construct(IL10N $l10n,
-								IURLGenerator $urlGenerator,
-								CollectiveHelper $collectiveHelper,
-								CollectiveService $collectiveService,
-								PageService $pageService,
-								IAppManager $appManager) {
+		IURLGenerator $urlGenerator,
+		CollectiveHelper $collectiveHelper,
+		CollectiveService $collectiveService,
+		PageService $pageService,
+		IAppManager $appManager) {
 		$this->l10n = $l10n;
 		$this->urlGenerator = $urlGenerator;
 		$this->collectiveHelper = $collectiveHelper;

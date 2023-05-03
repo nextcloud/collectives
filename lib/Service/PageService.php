@@ -13,8 +13,8 @@ use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\InvalidPathException;
 use OCP\Files\Node;
-use OCP\Files\NotPermittedException as FilesNotPermittedException;
 use OCP\Files\NotFoundException as FilesNotFoundException;
+use OCP\Files\NotPermittedException as FilesNotPermittedException;
 use OCP\IConfig;
 use OCP\IUserManager;
 use OCP\Lock\LockedException;
@@ -43,12 +43,12 @@ class PageService {
 	 * @param ContainerInterface    $container
 	 */
 	public function __construct(PageMapper $pageMapper,
-								NodeHelper $nodeHelper,
-								CollectiveServiceBase $collectiveService,
-								UserFolderHelper $userFolderHelper,
-								IUserManager $userManager,
-								IConfig  $config,
-								ContainerInterface $container) {
+		NodeHelper $nodeHelper,
+		CollectiveServiceBase $collectiveService,
+		UserFolderHelper $userFolderHelper,
+		IUserManager $userManager,
+		IConfig  $config,
+		ContainerInterface $container) {
 		$this->pageMapper = $pageMapper;
 		$this->nodeHelper = $nodeHelper;
 		$this->collectiveService = $collectiveService;

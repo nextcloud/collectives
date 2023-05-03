@@ -26,13 +26,13 @@ class CollectiveMountPoint extends MountPoint implements ISystemMountPoint {
 	 * @throws \Exception
 	 */
 	public function __construct(?int $folderId,
-								CollectiveFolderManager $collectiveFolderManager,
-								Storage $storage,
-								string $mountPoint,
-								array $arguments = null,
-								IStorageFactory $loader = null,
-								array $mountOptions = null,
-								int $mountId = null) {
+		CollectiveFolderManager $collectiveFolderManager,
+		Storage $storage,
+		string $mountPoint,
+		array $arguments = null,
+		IStorageFactory $loader = null,
+		array $mountOptions = null,
+		int $mountId = null) {
 		$this->folderId = $folderId;
 		$this->collectiveFolderManager = $collectiveFolderManager;
 		parent::__construct($storage, $mountPoint, $arguments, $loader, $mountOptions, $mountId, MountProvider::class);

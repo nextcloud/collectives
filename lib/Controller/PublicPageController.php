@@ -28,13 +28,13 @@ class PublicPageController extends PublicShareController {
 	use ErrorHelper;
 
 	public function __construct(string                 $appName,
-								IRequest               $request,
-								CollectiveShareMapper  $collectiveShareMapper,
-								CollectiveShareService $collectiveShareService,
-								PageService            $service,
-								AttachmentService      $attachmentService,
-								ISession               $session,
-								LoggerInterface        $logger) {
+		IRequest               $request,
+		CollectiveShareMapper  $collectiveShareMapper,
+		CollectiveShareService $collectiveShareService,
+		PageService            $service,
+		AttachmentService      $attachmentService,
+		ISession               $session,
+		LoggerInterface        $logger) {
 		parent::__construct($appName, $request, $session);
 		$this->collectiveShareMapper = $collectiveShareMapper;
 		$this->collectiveShareService = $collectiveShareService;

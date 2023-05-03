@@ -27,10 +27,10 @@ class IndexCollectives extends TimedJob {
 	 * @param SearchService $searchService
 	 */
 	public function __construct(ITimeFactory $time,
-								CollectiveMapper $collectiveMapper,
-								CollectiveFolderManager $collectiveFolderManager,
-								LoggerInterface $logger,
-								SearchService $searchService) {
+		CollectiveMapper $collectiveMapper,
+		CollectiveFolderManager $collectiveFolderManager,
+		LoggerInterface $logger,
+		SearchService $searchService) {
 		parent::__construct($time);
 		$this->collectiveMapper = $collectiveMapper;
 		$this->collectiveFolderManager = $collectiveFolderManager;

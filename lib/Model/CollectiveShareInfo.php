@@ -12,7 +12,7 @@ class CollectiveShareInfo extends CollectiveShare {
 	protected bool $editable;
 
 	public function __construct(CollectiveShare $collectiveShare,
-								bool $editable = false) {
+		bool $editable = false) {
 		$this->id = $collectiveShare->getId();
 		$this->collectiveId = $collectiveShare->getCollectiveId();
 		$this->token = $collectiveShare->getToken();

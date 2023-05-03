@@ -8,8 +8,8 @@ use Closure;
 use Doctrine\DBAL\Types\Types;
 use OCA\Collectives\Db\Collective;
 use OCP\DB\ISchemaWrapper;
-use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
+use OCP\Migration\SimpleMigrationStep;
 
 class Version000003Date20200720000000 extends SimpleMigrationStep {
 	/**

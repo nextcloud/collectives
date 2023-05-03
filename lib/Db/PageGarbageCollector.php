@@ -15,7 +15,7 @@ class PageGarbageCollector {
 	 * @param CollectiveFolderManager $folderManager
 	 */
 	public function __construct(PageMapper $pageMapper,
-								CollectiveFolderManager $folderManager) {
+		CollectiveFolderManager $folderManager) {
 		$this->pageMapper = $pageMapper;
 		$this->folderManager = $folderManager;
 	}

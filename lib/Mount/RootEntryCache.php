@@ -18,7 +18,7 @@ class RootEntryCache extends CacheWrapper {
 	 * @param ICacheEntry|null $rootEntry
 	 */
 	public function __construct(ICache $cache,
-								ICacheEntry $rootEntry = null) {
+		ICacheEntry $rootEntry = null) {
 		parent::__construct($cache);
 		$this->rootEntry = $rootEntry;
 	}

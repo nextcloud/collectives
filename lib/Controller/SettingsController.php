@@ -20,10 +20,10 @@ class SettingsController extends OCSController {
 	use ErrorHelper;
 
 	public function __construct(string $appName,
-								IRequest $request,
-								IConfig $config,
-								LoggerInterface $logger,
-								string $userId) {
+		IRequest $request,
+		IConfig $config,
+		LoggerInterface $logger,
+		string $userId) {
 		parent::__construct($appName, $request);
 		$this->config = $config;
 		$this->logger = $logger;

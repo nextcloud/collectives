@@ -23,10 +23,10 @@ class CreateCollective extends Base {
 	private IFactory $l10nFactory;
 
 	public function __construct(CollectiveService $collectiveService,
-								NodeHelper $nodeHelper,
-								IUserManager $userManager,
-								IUserSession $userSession,
-								IFactory $l10nFactory) {
+		NodeHelper $nodeHelper,
+		IUserManager $userManager,
+		IUserSession $userSession,
+		IFactory $l10nFactory) {
 		parent::__construct();
 		$this->collectiveService = $collectiveService;
 		$this->nodeHelper = $nodeHelper;

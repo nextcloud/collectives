@@ -4,16 +4,16 @@ namespace OCA\Collectives\BackgroundJob;
 
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
+use OCA\Collectives\Versions\CollectiveVersionsExpireManager;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\IJob;
 use OCP\BackgroundJob\TimedJob;
-use OCA\Collectives\Versions\CollectiveVersionsExpireManager;
 
 class ExpirePageVersions extends TimedJob {
 	private CollectiveVersionsExpireManager $expireManager;
 
 	public function __construct(ITimeFactory $time,
-								CollectiveVersionsExpireManager $expireManager) {
+		CollectiveVersionsExpireManager $expireManager) {
 		parent::__construct($time);
 
 		// Run once per hour

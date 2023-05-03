@@ -7,8 +7,8 @@ namespace OCA\Collectives\Migration;
 use Closure;
 use Doctrine\DBAL\Types\Types;
 use OCP\DB\ISchemaWrapper;
-use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
+use OCP\Migration\SimpleMigrationStep;
 
 class Version002000Date20220210000000 extends SimpleMigrationStep {
 	// private const defaultPageOrder = 1;

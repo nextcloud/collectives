@@ -8,8 +8,8 @@ use Closure;
 use Doctrine\DBAL\Types\Types;
 use OCP\Constants;
 use OCP\DB\ISchemaWrapper;
-use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
+use OCP\Migration\SimpleMigrationStep;
 
 class Version002000Date20220103000000 extends SimpleMigrationStep {
 	/** @var int */

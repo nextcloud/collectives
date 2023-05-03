@@ -14,7 +14,7 @@ class CollectiveUserSettingsService {
 	private CollectiveMapper $collectiveMapper;
 
 	public function __construct(CollectiveUserSettingsMapper $collectiveUserSettingsMapper,
-								CollectiveMapper $collectiveMapper) {
+		CollectiveMapper $collectiveMapper) {
 		$this->collectiveUserSettingsMapper = $collectiveUserSettingsMapper;
 		$this->collectiveMapper = $collectiveMapper;
 	}

@@ -19,11 +19,11 @@ class PublicStartController extends PublicShareController {
 	private IEventDispatcher $eventDispatcher;
 
 	public function __construct(string $AppName,
-								IRequest $request,
-								ISession $session,
-								CollectiveShareMapper $collectiveShareMapper,
-								IAppManager $appManager,
-								IEventDispatcher $eventDispatcher
+		IRequest $request,
+		ISession $session,
+		CollectiveShareMapper $collectiveShareMapper,
+		IAppManager $appManager,
+		IEventDispatcher $eventDispatcher
 	) {
 		parent::__construct($AppName, $request, $session);
 		$this->collectiveShareMapper = $collectiveShareMapper;

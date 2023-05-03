@@ -12,8 +12,8 @@ use OCP\Files\IRootFolder;
 use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\Files\NotPermittedException as FilesNotPermittedException;
 use OCP\IConfig;
-use OCP\L10N\IFactory;
 use OCP\IUserManager;
+use OCP\L10N\IFactory;
 use OCP\Lock\LockedException;
 use OCP\PreConditionNotMetException;
 

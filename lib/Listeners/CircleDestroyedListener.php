@@ -22,7 +22,7 @@ class CircleDestroyedListener implements IEventListener {
 	private CollectiveFolderManager $collectiveFolderManager;
 
 	public function __construct(CollectiveMapper $collectiveMapper,
-								CollectiveFolderManager $collectiveFolderManager) {
+		CollectiveFolderManager $collectiveFolderManager) {
 		$this->collectiveMapper = $collectiveMapper;
 		$this->collectiveFolderManager = $collectiveFolderManager;
 	}

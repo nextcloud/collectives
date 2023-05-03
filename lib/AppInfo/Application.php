@@ -8,17 +8,17 @@ use Closure;
 use OCA\Circles\Events\CircleDestroyedEvent;
 use OCA\Collectives\CacheListener;
 use OCA\Collectives\Fs\UserFolderHelper;
-use OCA\Collectives\Listeners\CollectivesReferenceListener;
-use OCA\Collectives\Listeners\CircleDestroyedListener;
 use OCA\Collectives\Listeners\BeforeTemplateRenderedListener;
+use OCA\Collectives\Listeners\CircleDestroyedListener;
+use OCA\Collectives\Listeners\CollectivesReferenceListener;
 use OCA\Collectives\Listeners\ShareDeletedListener;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Mount\MountProvider;
 use OCA\Collectives\Reference\PageReferenceProvider;
 use OCA\Collectives\Reference\SearchablePageReferenceProvider;
 use OCA\Collectives\Search\CollectiveProvider;
-use OCA\Collectives\Search\PageProvider;
 use OCA\Collectives\Search\PageContentProvider;
+use OCA\Collectives\Search\PageProvider;
 use OCA\Collectives\Service\CollectiveHelper;
 use OCA\Collectives\Versions\VersionsBackend;
 use OCP\App\IAppManager;
@@ -97,7 +97,7 @@ class Application extends App implements IBootstrap {
 	}
 
 	private function registerMountProvider(IMountProviderCollection $collection,
-										   MountProvider $provider): void {
+		MountProvider $provider): void {
 		$collection->registerProvider($provider);
 	}
 }

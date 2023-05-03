@@ -5,12 +5,12 @@ namespace OCA\Collectives\Mount;
 use OC\Files\Node\LazyFolder;
 use OC\Files\Storage\Wrapper\Jail;
 use OC\Files\Storage\Wrapper\PermissionsMask;
-use OCA\Collectives\ACL\ACLStorageWrapper26;
 use OCA\Collectives\ACL\ACLStorageWrapper25;
+use OCA\Collectives\ACL\ACLStorageWrapper26;
 use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\Folder;
-use OCP\Files\IRootFolder;
 use OCP\Files\InvalidPathException;
+use OCP\Files\IRootFolder;
 use OCP\Files\Mount\IMountPoint;
 use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
@@ -120,11 +120,11 @@ class CollectiveFolderManager {
 	 * @throws NotFoundException
 	 */
 	public function getMount(int $id,
-							 string $mountPoint,
-							 int $permissions,
-							 ?ICacheEntry $cacheEntry = null,
-							 IStorageFactory $loader = null,
-							 IUser $user = null): ?IMountPoint {
+		string $mountPoint,
+		int $permissions,
+		?ICacheEntry $cacheEntry = null,
+		IStorageFactory $loader = null,
+		IUser $user = null): ?IMountPoint {
 		if (!$cacheEntry) {
 			try {
 				$folder = $this->getOrCreateFolder($id);

@@ -15,9 +15,9 @@ class StartController extends Controller {
 	private IEventDispatcher $eventDispatcher;
 
 	public function __construct(string $AppName,
-								IRequest $request,
-								IAppManager $appManager,
-								IEventDispatcher $eventDispatcher
+		IRequest $request,
+		IAppManager $appManager,
+		IEventDispatcher $eventDispatcher
 	) {
 		parent::__construct($AppName, $request);
 		$this->appManager = $appManager;

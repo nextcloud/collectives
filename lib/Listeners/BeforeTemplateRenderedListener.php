@@ -21,8 +21,8 @@ class BeforeTemplateRenderedListener implements IEventListener {
 	private IInitialState $initialState;
 
 	public function __construct(IUserSession $userSession,
-								UserFolderHelper $userFolderHelper,
-								IInitialState $initialState) {
+		UserFolderHelper $userFolderHelper,
+		IInitialState $initialState) {
 		$this->userSession = $userSession;
 		$this->userFolderHelper = $userFolderHelper;
 		$this->initialState = $initialState;
