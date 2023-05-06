@@ -17,6 +17,7 @@ OC.L10N.register(
     "View" : "Перегляд",
     "Edit" : "Редагувати",
     "Members" : "Учасники",
+    "Danger zone" : "Небезпечна зона",
     "Change emoji" : "Змінити емоційку",
     "Add emoji" : "Додати емоційку",
     "Emoji updated" : "Емоційку оновлено",
