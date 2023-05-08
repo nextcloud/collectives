@@ -51,6 +51,12 @@ export default {
 	},
 
 	getters: {
+		pageById(state) {
+			return (pageId) => {
+				return state.pages.find(p => p.id === pageId)
+			}
+		},
+
 		pagePath: (_state, getters) => (page) => {
 			const collective = getters.currentCollective.name
 			const { filePath, fileName, title, id } = page

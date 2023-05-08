@@ -93,6 +93,7 @@ export default {
 			'currentPageFilePath',
 			'isPublic',
 			'loading',
+			'pageById',
 			'pageParam',
 			'showing',
 			'shareTokenParam',
@@ -154,16 +155,29 @@ export default {
 				}
 			}
 
+			// Special treatment for links to current collective
 			let collectivePath = href.replace(baseUrl.href, '')
-			const publicPrefix = `/p/${this.currentCollective.shareToken}`
+			const collectiveParam = encodeURIComponent(this.collectiveParam)
+			const publicPrefix = `/p/${this.currentCollective.shareToken}/`
 
-			if (this.isPublic
-				&& (collectivePath === `/${encodeURIComponent(this.collectiveParam)}`
-					|| collectivePath.startsWith(`/${encodeURIComponent(this.collectiveParam)}/`))) {
+			if (collectivePath === `/${collectiveParam}` || collectivePath.startsWith(`/${collectiveParam}/`)) {
+				// If link contains a fileId, handle only existing pages
+				// Required to not break relative links to attachments in the Collectives folder
+				if (collectivePath.includes('?fileId=')) {
+					const fileId = parseInt(collectivePath.match(/^[^?]*\?fileId=(\d+)/)[1])
+					if (!this.pageById(fileId)) {
+						return false
+					}
+				}
+
 				// In public share, rewrite private link to own collective to a public share
-				collectivePath = `${publicPrefix}${collectivePath}`
-			} else if (!this.isPublic && collectivePath.startsWith(publicPrefix)) {
-				// When internal, rewrite link to public share of own collective to private
+				if (this.isPublic) {
+					collectivePath = `${publicPrefix}${collectivePath}`
+				}
+			}
+
+			// When not in public share, rewrite link to public share of own collective to internal
+			if (!this.isPublic && collectivePath.startsWith(publicPrefix)) {
 				collectivePath = collectivePath.replace(publicPrefix, '')
 			}
 
@@ -173,7 +187,7 @@ export default {
 
 		// E.g. `https://cloud.example.org/
 		handleSameOriginLink({ href }) {
-			if (href.match('/^' + window.location.origin + '/')) {
+			if (href.match(new RegExp('^' + window.location.origin + '/'))) {
 				window.open(href)
 			}
 		},
