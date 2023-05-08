@@ -93,6 +93,7 @@ export default {
 			'currentPageFilePath',
 			'isPublic',
 			'loading',
+			'pageById',
 			'pageParam',
 			'showing',
 			'shareTokenParam',
@@ -157,6 +158,16 @@ export default {
 			let collectivePath = href.replace(baseUrl.href, '')
 			const publicPrefix = `/p/${this.currentCollective.shareToken}`
 
+			// If link contains a fileId, handle only existing pages
+			// Required to not break relative links to attachments in the Collectives folder
+			if (collectivePath.includes('?fileId=')) {
+				const fileId = parseInt(collectivePath.match(/^[^?]*\?fileId=(\d+)/)[1])
+				if (!this.pageById(fileId)) {
+					return false
+				}
+			}
+
+			// Public share related link rewrites
 			if (this.isPublic
 				&& (collectivePath === `/${encodeURIComponent(this.collectiveParam)}`
 					|| collectivePath.startsWith(`/${encodeURIComponent(this.collectiveParam)}/`))) {
