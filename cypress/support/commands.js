@@ -230,7 +230,7 @@ Cypress.Commands.add('seedPage', (name, parentFilePath, parentFileName) => {
 /**
  * Upload a file
  */
-Cypress.Commands.add('uploadFile', (path, mimeType) => {
+Cypress.Commands.add('uploadFile', (path, mimeType, remotePath = '') => {
 	// Get fixture
 	return cy.fixture(path, 'base64').then(file => {
 		// convert the base64 string to a blob
@@ -240,13 +240,13 @@ Cypress.Commands.add('uploadFile', (path, mimeType) => {
 			return cy.window()
 				.its('app')
 				.then(async app => {
-					const response = await axios.put(`${Cypress.env('baseUrl')}/remote.php/webdav/${path}`, file, {
+					const response = await axios.put(`${Cypress.env('baseUrl')}/remote.php/webdav/${remotePath}${path}`, file, {
 						headers: {
 							requesttoken: app.OC.requestToken,
 							'Content-Type': mimeType,
 						},
 					})
-					cy.log(`Uploaded file to ${path}`)
+					cy.log(`Uploaded file to ${remotePath}${path}`)
 					const ocFileId = response.headers['oc-fileid']
 					const fileId = parseInt(ocFileId.substring(0, ocFileId.indexOf('oc')))
 					return fileId
