@@ -81,7 +81,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 import { NcButton, NcLoadingIcon, NcModal } from '@nextcloud/vue'
 import ArrowDownIcon from 'vue-material-design-icons/ArrowDown.vue'
 import ArrowUpIcon from 'vue-material-design-icons/ArrowUp.vue'
@@ -128,13 +128,10 @@ export default {
 	computed: {
 		...mapGetters([
 			'collectivePage',
+			'pageById',
 			'pageParents',
 			'visibleSubpages',
 		]),
-
-		...mapState({
-			pages: (state) => state.pages.pages,
-		}),
 
 		pageCrumbs() {
 			return this.pageParents(this.selectedPageId)
@@ -164,7 +161,7 @@ export default {
 
 			// Add current page to top of subpages if not part of it yet
 			if (!this.subpages.find(p => (p.id === this.pageId))) {
-				this.subpages.unshift(this.pages.find(p => (p.id === this.pageId)))
+				this.subpages.unshift(this.pageById(this.pageId))
 			}
 
 			// Scroll current page into view (important when listing parent page)
