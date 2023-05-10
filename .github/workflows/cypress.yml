@@ -44,7 +44,7 @@ jobs:
       fail-fast: false
       matrix:
         node-version: [16]
-        containers: [1, 2, 3, 4]
+        #containers: [1, 2, 3, 4]
         php-versions: ['8.0']
         databases: ['sqlite']
         server-versions: ['stable25', 'master']
@@ -164,17 +164,17 @@ jobs:
         uses: cypress-io/github-action@v5
         with:
           browser: chrome
-          record: true
-          parallel: true
+          #record: true
+          #parallel: true
           wait-on: '${{ env.CYPRESS_baseUrl }}'
           working-directory: apps/${{ env.APP_NAME }}
           config: video=false,defaultCommandTimeout=20000
-          tag: ${{ github.event_name }}
+          #tag: ${{ github.event_name }}
         env:
           # https://github.com/cypress-io/github-action/issues/124
           COMMIT_INFO_MESSAGE: ${{ github.event.pull_request.title }}
           COMMIT_INFO_SHA:  ${{ github.event.pull_request.head.sha }}
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          #CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           CYPRESS_ncVersion: ${{ matrix.server-versions }}
 
       - name: Upload test failure screenshots
