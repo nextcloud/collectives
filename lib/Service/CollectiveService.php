@@ -183,6 +183,7 @@ class CollectiveService extends CollectiveServiceBase {
 				// We don't have admin access to the circle
 				throw $e;
 			}
+			$this->circleHelper->flagCircleAsAppManaged($circle->getSingleId());
 			$message = $this->l10n->t(
 				'Created collective "%s" for existing circle.',
 				[$safeName]
@@ -366,6 +367,8 @@ class CollectiveService extends CollectiveServiceBase {
 
 		if ($deleteCircle) {
 			$this->circleHelper->destroyCircle($collectiveInfo->getCircleId(), $userId);
+		} else {
+			$this->circleHelper->unflagCircleAsAppManaged($collectiveInfo->getCircleId());
 		}
 
 		// Delete collective folder and its contents

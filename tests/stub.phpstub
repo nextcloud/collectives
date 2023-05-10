@@ -656,6 +656,11 @@ namespace OCA\Circles\Exceptions {
 	class SingleCircleNotFoundException extends FederatedItemServerException {}
 }
 
+namespace OCA\Circles\Tools\Exceptions {
+	use Exception;
+	class InvalidItemException extends Exception {}
+}
+
 namespace OCA\Circles {
     use OCA\Circles\Model\Circle;
     use OCA\Circles\Model\FederatedUser;
@@ -665,6 +670,7 @@ namespace OCA\Circles {
         public function startSession(?FederatedUser $federatedUser = null): void {}
         public function getCircles(?CircleProbe $probe = null): array {}
         public function getCircle(string $singleId, ?CircleProbe $probe = null): Circle {}
+        public function flagAsAppManaged(string $circleId, bool $enabled = true): void {}
         public function getFederatedUser(string $federatedId, int $type = Member::TYPE_SINGLE): FederatedUser {}
         public function stopSession(): void {}
 		public function createCircle(string $name, ?FederatedUser $owner = null, bool $personal = false, bool $local = false): Circle {}
