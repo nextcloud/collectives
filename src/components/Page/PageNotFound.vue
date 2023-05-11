@@ -1,17 +1,8 @@
 <template>
-	<NcEmptyContent>
-		{{ t('collectives', 'Page not found:') }}
-		{{ pageParam }}
+	<NcEmptyContent :title="t('collectives', 'Page not found: {page}', { page: pageParam })"
+		:description="t('collectives', 'Select a page from the list or create a new one.')">
 		<template #icon>
 			<PageIcon />
-		</template>
-		<template #desc>
-			<div>
-				{{ t('collectives', 'Could not find the Page.') }}
-			</div>
-			<div>
-				{{ t('collectives', 'Select a page from the list or create a new one.') }}
-			</div>
 		</template>
 	</NcEmptyContent>
 </template>
