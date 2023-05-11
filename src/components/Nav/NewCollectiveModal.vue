@@ -314,6 +314,7 @@ export default {
 	align-items: center;
 
 	.button-emoji {
+		padding: 0;
 		width: 44px;
 		font-size: 20px;
 	}
