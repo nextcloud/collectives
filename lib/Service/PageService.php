@@ -566,7 +566,7 @@ class PageService {
 	public function findByFileId(int $collectiveId, int $fileId, string $userId): PageInfo {
 		$collectiveFolder = $this->getCollectiveFolder($collectiveId, $userId);
 		$pageFile = $collectiveFolder->getById($fileId);
-		if (!empty($pageFile) && isset($pageFile[0]) && $pageFile[0] instanceof File) {
+		if (isset($pageFile[0]) && $pageFile[0] instanceof File) {
 			$pageFile = $pageFile[0];
 			return $this->findByFile($collectiveId, $pageFile, $userId);
 		}
@@ -942,7 +942,7 @@ class PageService {
 
 		$protocol = 'https?:\/\/';
 		$trustedDomainConfig = (array)$this->config->getSystemValue('trusted_domains', []);
-		$trustedDomains = !empty($trustedDomainConfig) ? '(' . implode('|', $trustedDomainConfig) . ')' : 'localhost';
+		$trustedDomains = $trustedDomainConfig !== [] ? '(' . implode('|', $trustedDomainConfig) . ')' : 'localhost';
 
 		$basePath = str_replace('/', '/+', str_replace('/', '/+', preg_quote(trim(\OC::$WEBROOT, '/'), '/'))) . '(\/+index\.php)?';
 

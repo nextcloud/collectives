@@ -135,7 +135,7 @@ class CollectiveService extends CollectiveServiceBase {
 		$collectives = array_filter($collectives, static function (CollectiveInfo $c) use ($name) {
 			return $c->getName() === $name;
 		});
-		if (empty($collectives)) {
+		if ($collectives === []) {
 			throw new NotFoundException('Unable to find a collective from its name');
 		}
 		return end($collectives);
@@ -169,7 +169,7 @@ class CollectiveService extends CollectiveServiceBase {
 		string $userLang,
 		string $safeName,
 		string $emoji = null): array {
-		if (empty($safeName)) {
+		if ($safeName === '') {
 			throw new UnprocessableEntityException('Empty collective name is not allowed');
 		}
 
