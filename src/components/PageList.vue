@@ -274,7 +274,7 @@ export default {
 }
 
 li.toggle-button.selected {
-	background-color: var(--color-primary-light);
+	background-color: var(--color-primary-element-light);
 }
 
 .page-list {
@@ -306,7 +306,7 @@ li.toggle-button.selected {
 		height: 24px;
 		padding: 7px;
 		margin-left: 33px; // 40px - 7px
-		background-color: var(--color-primary-light);
+		background-color: var(--color-primary-element-light);
 		border-radius: var(--border-radius-pill);
 
 		overflow: hidden;

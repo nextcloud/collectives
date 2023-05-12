@@ -354,10 +354,10 @@ export default {
 	}
 
 	&.active {
-		background-color: var(--color-primary-light);
+		background-color: var(--color-primary-element-light);
 
 		span.item-icon-badge {
-			background-color: var(--color-primary-light);
+			background-color: var(--color-primary-element-light);
 		}
 	}
 
@@ -370,7 +370,7 @@ export default {
 	}
 
 	&.highlight-target {
-		// background-color: var(--color-primary-light);
+		// background-color: var(--color-primary-element-light);
 		border: 1px solid var(--color-border-maxcontrast);
 	}
 
