@@ -68,7 +68,7 @@ class MountProvider implements IMountProvider {
 		}
 
 		// Stop here if no collectives were found
-		if (empty($collectiveInfos)) {
+		if ($collectiveInfos === []) {
 			return $folders;
 		}
 

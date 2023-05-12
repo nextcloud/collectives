@@ -27,7 +27,7 @@ class PageGarbageCollector {
 		$purgeCount = 0;
 		$rootFolder = $this->folderManager->getRootFolder();
 		foreach ($this->pageMapper->getAll() as $page) {
-			if (empty($rootFolder->getById($page->getFileId()))) {
+			if ($rootFolder->getById($page->getFileId()) === []) {
 				$purgeCount++;
 				$this->pageMapper->delete($page);
 			}

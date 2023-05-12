@@ -103,7 +103,7 @@ class NodeHelper {
 		// remove leading+trailing spaces and dots to prevent hidden files
 		$name = trim($name, ' .');
 
-		if (empty($name)) {
+		if ($name === '') {
 			$name = $this->l10n->t($default);
 		}
 
