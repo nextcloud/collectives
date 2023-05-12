@@ -1,5 +1,28 @@
 # Changelog
 
+## 2.5.0 - 2023.05.12
+
+### ✨New
+* 🔒 Support server side encryption. (#285)
+* 🛡️ Flag circles for collectives as managed by app. (#314, 613)
+* ✨ Add support for Nextcloud 27.
+
+### 🐛Fixes
+* 🔗 Fix relative links to non-markdown files in current collective. (#638, #642)
+* 🐛 Fix error when creating first Collective. (#587)
+* ♻️ Reset outline showing state when switching pages. (#619)
+* 💄 Update sidebar components to current design. (#608)
+* 🐛 Avoid call on null bug in PageService.
+* 💄 Show title and description on "page not found" page.
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 2.4.0 - 2023.03.24
 
 ### ✨New
