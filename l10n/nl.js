@@ -114,8 +114,6 @@ OC.L10N.register(
     "Delete template" : "Sjabloon verwijderen",
     "Delete page" : "Pagina verwijderen",
     "Extra action" : "Extra actie",
-    "Page not found:" : "Pagina niet gevonden:",
-    "Could not find the Page." : "Kan de pagina niet vinden.",
     "Select a page from the list or create a new one." : "Selecteer een pagina uit de lijst of maak een nieuwe aan.",
     "Breadcrumb for Home" : "Navigatie naar Home",
     "Breadcrumb for {page}" : "Navigatie naar {page}",
@@ -189,6 +187,8 @@ OC.L10N.register(
     "New collective name" : "Nieuwe naam collectief",
     "Select circle..." : "Selecteer cirkel...",
     "Cancel creating a new collective" : "Aanmaken van een nieuw collectief annuleren",
+    "Page not found:" : "Pagina niet gevonden:",
+    "Could not find the Page." : "Kan de pagina niet vinden.",
     "Pages that link to this one" : "Pagina's die naar deze linken",
     "Old versions of this page" : "Oude versies van deze pagina"
 },

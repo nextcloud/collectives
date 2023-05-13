@@ -114,8 +114,6 @@ OC.L10N.register(
     "Delete template" : "刪除模板",
     "Delete page" : "刪除頁面",
     "Extra action" : "額外操作",
-    "Page not found:" : "找不到頁面︰",
-    "Could not find the Page." : "找不到頁面。",
     "Select a page from the list or create a new one." : "從清單中選擇一個頁面或創建一個新頁面。",
     "Breadcrumb for Home" : "主頁的麵包屑式導航",
     "Breadcrumb for {page}" : "{page} 頁的麵包屑式導航",
@@ -189,6 +187,8 @@ OC.L10N.register(
     "New collective name" : "新知識庫名稱",
     "Select circle..." : "選擇社交圈子...",
     "Cancel creating a new collective" : "取消創建新知識庫",
+    "Page not found:" : "找不到頁面︰",
+    "Could not find the Page." : "找不到頁面。",
     "Pages that link to this one" : "連結到此頁面的頁面",
     "Old versions of this page" : "此頁面的舊版本"
 },

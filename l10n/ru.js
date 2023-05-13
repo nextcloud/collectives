@@ -81,8 +81,6 @@ OC.L10N.register(
     "Cannot delete page with subpages" : "Не удается удалить страницу вместе с разделами",
     "Delete template" : "Удалить шаблон",
     "Delete page" : "Удалить страницу",
-    "Page not found:" : "Страница не найдена:",
-    "Could not find the Page." : "Не удалось найти страницу.",
     "Select a page from the list or create a new one." : "Выберите страницу из списка или создайте новую.",
     "Page content" : "Содержимое страницы",
     "Restore this version" : "Восстановить эту версию",
@@ -144,6 +142,8 @@ OC.L10N.register(
     "New collective name" : "Новое название группы",
     "Select circle..." : "Выбор окружения...",
     "Cancel creating a new collective" : "Отменить создание группы",
+    "Page not found:" : "Страница не найдена:",
+    "Could not find the Page." : "Не удалось найти страницу.",
     "Pages that link to this one" : "Страницы, которые ссылаются на текущий объект",
     "Old versions of this page" : "Старые версии этой страницы"
 },

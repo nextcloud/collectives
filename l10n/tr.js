@@ -114,8 +114,6 @@ OC.L10N.register(
     "Delete template" : "Kalıbı sil",
     "Delete page" : "Sayfayı sil",
     "Extra action" : "Ek işlem",
-    "Page not found:" : "Sayfa bulunamadı:",
-    "Could not find the Page." : "Sayfa bulunamadı.",
     "Select a page from the list or create a new one." : "Listeden bir sayfa seçin ya da yeni bir sayfa ekleyin.",
     "Breadcrumb for Home" : "Giriş sayfası yolu",
     "Breadcrumb for {page}" : "{page} sayfası yolu",
@@ -189,6 +187,8 @@ OC.L10N.register(
     "New collective name" : "Yeni topluluğun adı",
     "Select circle..." : "Çevre seçin...",
     "Cancel creating a new collective" : "Yeni bir topluluk eklemekten vazgeç",
+    "Page not found:" : "Sayfa bulunamadı:",
+    "Could not find the Page." : "Sayfa bulunamadı.",
     "Pages that link to this one" : "Bu sayfa ile bağlantılı sayfalar",
     "Old versions of this page" : "Bu sayfanın eski sürümleri"
 },

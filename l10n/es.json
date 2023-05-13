@@ -112,8 +112,6 @@
     "Delete template" : "Eliminar plantilla",
     "Delete page" : "Eliminar página",
     "Extra action" : "Acción adicional",
-    "Page not found:" : "No se encontró la página:",
-    "Could not find the Page." : "No fue posible encontrar la página.",
     "Select a page from the list or create a new one." : "Seleccionar una página de la lista o cree una nueva.",
     "Breadcrumb for Home" : "Ruta de navegación para Home",
     "Breadcrumb for {page}" : "Ruta de navegación para {página}",
@@ -187,6 +185,8 @@
     "New collective name" : "Nombre del cuaderno colectivo nuevo",
     "Select circle..." : "Seleccionar círculo...",
     "Cancel creating a new collective" : "Cancelar la creación del cuaderno colectivo nuevo",
+    "Page not found:" : "No se encontró la página:",
+    "Could not find the Page." : "No fue posible encontrar la página.",
     "Pages that link to this one" : "Páginas que enlazan a esta página",
     "Old versions of this page" : "Versiones anteriores de esta página"
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"

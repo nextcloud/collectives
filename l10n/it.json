@@ -96,8 +96,6 @@
     "Delete template" : "Elimina modello",
     "Delete page" : "Elimina la pagina",
     "Extra action" : "Azione aggiuntiva",
-    "Page not found:" : "Pagina non trovata:",
-    "Could not find the Page." : "Non è stato possibile trovare la pagina.",
     "Select a page from the list or create a new one." : "Seleziona una pagina dalla lista o creane una di nuova.",
     "Breadcrumb for Home" : "Percorso per la Home",
     "Breadcrumb for {page}" : "Percorso per {page}",
@@ -165,6 +163,8 @@
     "New collective name" : "Nome del nuovo collettivo",
     "Select circle..." : "Seleziona cerchia...",
     "Cancel creating a new collective" : "Annulla la creazione di un nuovo collettivo",
+    "Page not found:" : "Pagina non trovata:",
+    "Could not find the Page." : "Non è stato possibile trovare la pagina.",
     "Pages that link to this one" : "Pagine che hanno link verso questa",
     "Old versions of this page" : "Vecchie versioni di questa pagina"
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"

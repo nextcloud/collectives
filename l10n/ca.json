@@ -47,8 +47,6 @@
     "Edit template for subpages" : "Edita la plantilla per subpàgines",
     "Add template for subpages" : "Afegeix una plantilla per subpàgines",
     "Delete page" : "Esborrar pàgina",
-    "Page not found:" : "Pàgina no trobada:",
-    "Could not find the Page." : "No s'ha pogut trobar la Pàgina.",
     "Select a page from the list or create a new one." : "Selecciona una pàgina de la llista o crea una de nova.",
     "Restore this version" : "Restaurar aquesta versió.",
     "Reverted {page} to revision {timestamp}." : "Retornar {page} a la revisió {timestamp}.",
@@ -93,6 +91,8 @@
     "Create collective for existing circle" : "Crear un Col·lectiu per al cercle existent",
     "New collective name" : "Nom del nou Col·lectiu",
     "Select circle..." : "Seleccionar cercle...",
+    "Page not found:" : "Pàgina no trobada:",
+    "Could not find the Page." : "No s'ha pogut trobar la Pàgina.",
     "Pages that link to this one" : "Pàgines que enllacen cap aquesta",
     "Old versions of this page" : "Versió antiga d'aquesta pàgina"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

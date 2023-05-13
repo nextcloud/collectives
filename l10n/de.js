@@ -114,8 +114,6 @@ OC.L10N.register(
     "Delete template" : "Vorlage löschen",
     "Delete page" : "Seite entfernen",
     "Extra action" : "Zusätzliche Aktion",
-    "Page not found:" : "Seite nicht gefunden:",
-    "Could not find the Page." : "Seite nicht gefunden.",
     "Select a page from the list or create a new one." : "Wähle eine Seite aus der Liste oder lege eine neue an.",
     "Breadcrumb for Home" : "Brotkrümel für Startseite",
     "Breadcrumb for {page}" : "Brotkrümel für {page}",
@@ -189,6 +187,8 @@ OC.L10N.register(
     "New collective name" : "Name des neuen Kollektivs",
     "Select circle..." : "Wähle Kreis …",
     "Cancel creating a new collective" : "Die Erstellung eines neuen Kollektivs abbrechen",
+    "Page not found:" : "Seite nicht gefunden:",
+    "Could not find the Page." : "Seite nicht gefunden.",
     "Pages that link to this one" : "Seiten, die auf diese Seite verweisen",
     "Old versions of this page" : "Frühere Versionen dieser Seite"
 },
