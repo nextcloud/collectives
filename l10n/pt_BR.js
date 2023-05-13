@@ -114,8 +114,6 @@ OC.L10N.register(
     "Delete template" : "Excluir modelo",
     "Delete page" : "Remover página",
     "Extra action" : "Ação extra",
-    "Page not found:" : "Página não encontrada:",
-    "Could not find the Page." : "Não foi possível encontrar a página.",
     "Select a page from the list or create a new one." : "Selecione uma página da lista ou crie uma nova.",
     "Breadcrumb for Home" : "Breadcrumb para casa",
     "Breadcrumb for {page}" : "Breadcrumb para {page}",
@@ -189,6 +187,8 @@ OC.L10N.register(
     "New collective name" : "Nome para o novo coletivo",
     "Select circle..." : "Selecionar círculo...",
     "Cancel creating a new collective" : "Cancelar a criação de um novo coletivo",
+    "Page not found:" : "Página não encontrada:",
+    "Could not find the Page." : "Não foi possível encontrar a página.",
     "Pages that link to this one" : "Páginas que fazem referência a essa",
     "Old versions of this page" : "Versões antigas desta página"
 },

@@ -114,8 +114,6 @@ OC.L10N.register(
     "Delete template" : "Smazat šablonu",
     "Delete page" : "Smazat stránku",
     "Extra action" : "Další akce",
-    "Page not found:" : "Stránka nenalezena:",
-    "Could not find the Page." : "Stránku se nedaří nalézt.",
     "Select a page from the list or create a new one." : "Vyberte stránku ze seznamu nebo vytvořte novou.",
     "Breadcrumb for Home" : "Drobečková navigace pro domovskou",
     "Breadcrumb for {page}" : "Drobečková navigace pro {page}",
@@ -189,6 +187,8 @@ OC.L10N.register(
     "New collective name" : "Název pro nový kolektiv",
     "Select circle..." : "Vybrat okruh…",
     "Cancel creating a new collective" : "Zrušit vytváření nového kolektivu",
+    "Page not found:" : "Stránka nenalezena:",
+    "Could not find the Page." : "Stránku se nedaří nalézt.",
     "Pages that link to this one" : "Stránky, které odkazují na tuto",
     "Old versions of this page" : "Staré verze této stránky"
 },

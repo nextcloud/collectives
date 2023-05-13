@@ -114,8 +114,6 @@ OC.L10N.register(
     "Delete template" : "Изтриване на шаблон",
     "Delete page" : "Изтриване на страница",
     "Extra action" : "Допълнително действие",
-    "Page not found:" : "Страницата не е намерена:",
-    "Could not find the Page." : "Страницата не е намерена.",
     "Select a page from the list or create a new one." : "Избор на страница от списъка или създаване на нова страница.",
     "Breadcrumb for Home" : "Breadcrumb /навигационен път/ за начална страница",
     "Breadcrumb for {page}" : "Breadcrumb /навигационен път/ за {page}",
@@ -189,6 +187,8 @@ OC.L10N.register(
     "New collective name" : "Име на нов колектив",
     "Select circle..." : "Избор на кръг ...",
     "Cancel creating a new collective" : "Отказ от създаване на новия колектив",
+    "Page not found:" : "Страницата не е намерена:",
+    "Could not find the Page." : "Страницата не е намерена.",
     "Pages that link to this one" : "Страници, които имат връзка с тази страница",
     "Old versions of this page" : "Стари версии на тази страница"
 },

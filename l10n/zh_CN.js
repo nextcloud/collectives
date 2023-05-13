@@ -68,8 +68,6 @@ OC.L10N.register(
     "Edit template for subpages" : "为子页面编辑模板",
     "Add template for subpages" : "为子页面添加模板",
     "Delete page" : "删除页面",
-    "Page not found:" : "未找到页面：",
-    "Could not find the Page." : "无法找到页面。",
     "Select a page from the list or create a new one." : "从列表中选择一个页面或创建一个新页面。",
     "Restore this version" : "还原此版本",
     "Reverted {page} to revision {timestamp}." : "将页面 {page} 还原为版本 {timestamp}。",
@@ -116,6 +114,8 @@ OC.L10N.register(
     "Create collective for existing circle" : "为已有圈子创建知识库",
     "New collective name" : "新知识库名称",
     "Select circle..." : "选择圈子...",
+    "Page not found:" : "未找到页面：",
+    "Could not find the Page." : "无法找到页面。",
     "Pages that link to this one" : "链接到此页面的页面",
     "Old versions of this page" : "此页面的旧版本"
 },

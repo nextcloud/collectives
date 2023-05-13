@@ -111,8 +111,6 @@ OC.L10N.register(
     "Cannot delete page with subpages" : "Kan inte ta bort sida med undersidor",
     "Delete template" : "Ta bort mall",
     "Delete page" : "Ta bort sida",
-    "Page not found:" : "Sidan hittas inte:",
-    "Could not find the Page." : "Kunde inte hitta sidan.",
     "Select a page from the list or create a new one." : "Välj en sida från listan eller skapa en ny.",
     "Breadcrumb for Home" : "Brödsmula för Hem",
     "Breadcrumb for {page}" : "Brödsmula för {page}",
@@ -186,6 +184,8 @@ OC.L10N.register(
     "New collective name" : "Nytt namn för collective",
     "Select circle..." : "Välj cirkel...",
     "Cancel creating a new collective" : "Avbryt skapande av nytt collective",
+    "Page not found:" : "Sidan hittas inte:",
+    "Could not find the Page." : "Kunde inte hitta sidan.",
     "Pages that link to this one" : "Sidor som länkar till denna",
     "Old versions of this page" : "Gamla versioner av denna sida"
 },

@@ -79,8 +79,6 @@
     "Cannot delete page with subpages" : "Не удается удалить страницу вместе с разделами",
     "Delete template" : "Удалить шаблон",
     "Delete page" : "Удалить страницу",
-    "Page not found:" : "Страница не найдена:",
-    "Could not find the Page." : "Не удалось найти страницу.",
     "Select a page from the list or create a new one." : "Выберите страницу из списка или создайте новую.",
     "Page content" : "Содержимое страницы",
     "Restore this version" : "Восстановить эту версию",
@@ -142,6 +140,8 @@
     "New collective name" : "Новое название группы",
     "Select circle..." : "Выбор окружения...",
     "Cancel creating a new collective" : "Отменить создание группы",
+    "Page not found:" : "Страница не найдена:",
+    "Could not find the Page." : "Не удалось найти страницу.",
     "Pages that link to this one" : "Страницы, которые ссылаются на текущий объект",
     "Old versions of this page" : "Старые версии этой страницы"
 },"pluralForm" :"nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);"

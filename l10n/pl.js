@@ -114,8 +114,6 @@ OC.L10N.register(
     "Delete template" : "Usuń szablon",
     "Delete page" : "Usuń stronę",
     "Extra action" : "Dodatkowe akcje",
-    "Page not found:" : "Nie znaleziono strony:",
-    "Could not find the Page." : "Nie można znaleźć strony.",
     "Select a page from the list or create a new one." : "Zaznacz stronę z listy lub stwórz nową.",
     "Breadcrumb for Home" : "Okruszki chleba dla Strony głównej",
     "Breadcrumb for {page}" : "Okruszki chleba dla {page}",
@@ -189,6 +187,8 @@ OC.L10N.register(
     "New collective name" : "Nowa nazwa kolektywu",
     "Select circle..." : "Wybierz krąg...",
     "Cancel creating a new collective" : "Anuluj tworzenie nowego kolektywu",
+    "Page not found:" : "Nie znaleziono strony:",
+    "Could not find the Page." : "Nie można znaleźć strony.",
     "Pages that link to this one" : "Strony które kierują tutaj",
     "Old versions of this page" : "Stara wersja tej strony"
 },

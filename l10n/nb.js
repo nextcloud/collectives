@@ -34,7 +34,6 @@ OC.L10N.register(
     "Done" : "Ferdig",
     "Show in Files" : "Vis i Filer",
     "Delete page" : "Slett side",
-    "Page not found:" : "Fant ikke siden:",
     "Restore this version" : "Gjenopprett denne versjonen",
     "Reverted {page} to revision {timestamp}." : "Gjenoppretet {page} til versjon {timestamp}.",
     "Failed to revert {page} to revision {timestamp}." : "Klarte ikke å tilbakestille {page} til versjon {timestamp}.",
@@ -68,6 +67,7 @@ OC.L10N.register(
     "Select a collective or create a new one on the left." : "Velg et kollektiv, eller opprett ett til venstre.",
     "Create collective for existing circle" : "Opprett kollektiv for eksisterende sirkel",
     "New collective name" : "Nytt navn på kollektiv",
-    "Select circle..." : "Velg sirkel …"
+    "Select circle..." : "Velg sirkel …",
+    "Page not found:" : "Fant ikke siden:"
 },
 "nplurals=2; plural=(n != 1);");

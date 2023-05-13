@@ -97,8 +97,6 @@ OC.L10N.register(
     "Delete template" : "Izbriši predlogo",
     "Delete page" : "Izbriši stran",
     "Extra action" : "Dodatno dejanje",
-    "Page not found:" : "Strani ni mogoče najti:",
-    "Could not find the Page." : "Strani ni mogoče najti.",
     "Select a page from the list or create a new one." : "Izberite stran na seznamu, ali pa ustvarite novo.",
     "Move page here" : "Premakni stran na to mesto",
     "Page content" : "Vsebina strani",
@@ -163,6 +161,8 @@ OC.L10N.register(
     "New collective name" : "Ime nove zbirke",
     "Select circle..." : "Izbor kroga ...",
     "Cancel creating a new collective" : "Prekliči ustvarjanje nove zbirke",
+    "Page not found:" : "Strani ni mogoče najti:",
+    "Could not find the Page." : "Strani ni mogoče najti.",
     "Pages that link to this one" : "Strani, ki se povezujejo na to stran",
     "Old versions of this page" : "Stare različice te strani"
 },

@@ -20,8 +20,6 @@ OC.L10N.register(
     "Done" : "Done",
     "Show in Files" : "கோப்புகளில் காட்டவும்",
     "Delete page" : "பக்கத்தை நீக்கு",
-    "Page not found:" : "பக்கம் கிடைக்கவில்லை:",
-    "Could not find the Page." : "பக்கத்தைக் கண்டுபிடிக்க முடியவில்லை.",
     "Restore this version" : "இந்தப் பதிப்பை மீட்டெடுக்கவும்",
     "Title" : "தலைப்பு",
     "Add a page" : "ஒரு பக்கத்தைச் சேர்க்கவும்",
@@ -38,6 +36,8 @@ OC.L10N.register(
     "Could not delete the page" : "பக்கத்தை நீக்க முடியவில்லை",
     "in Collective {collective}" : "தொகுப்பில் {தொகுப்பு}",
     "Select circle..." : "வட்டத்தைத் தேர்ந்தெடுக்கவும்...",
+    "Page not found:" : "பக்கம் கிடைக்கவில்லை:",
+    "Could not find the Page." : "பக்கத்தைக் கண்டுபிடிக்க முடியவில்லை.",
     "Pages that link to this one" : "இதை  இணைக்கும் பக்கங்கள்",
     "Old versions of this page" : "இந்தப் பக்கத்தின் பழைய பதிப்புகள்"
 },

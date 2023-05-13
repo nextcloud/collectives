@@ -114,8 +114,6 @@ OC.L10N.register(
     "Delete template" : "Slet skabelon",
     "Delete page" : "Slet side",
     "Extra action" : "Ekstra handling",
-    "Page not found:" : "Siden blev ikke fundet:",
-    "Could not find the Page." : "Kunne ikke finde siden.",
     "Select a page from the list or create a new one." : "Vælg en side fra listen, eller opret en ny.",
     "Breadcrumb for Home" : "Breadcrumb for Hjem",
     "Breadcrumb for {page}" : "Breadcrumb for {page}",
@@ -189,6 +187,8 @@ OC.L10N.register(
     "New collective name" : "Nyt Kollektiv navn",
     "Select circle..." : "Vælg cirkel...",
     "Cancel creating a new collective" : "Annuller oprettelse af et nyt kollektiv",
+    "Page not found:" : "Siden blev ikke fundet:",
+    "Could not find the Page." : "Kunne ikke finde siden.",
     "Pages that link to this one" : "Sider, der linker til denne",
     "Old versions of this page" : "Gamle versioner af denne side"
 },

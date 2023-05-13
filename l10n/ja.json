@@ -55,8 +55,6 @@
     "Edit template for subpages" : "サブページのテンプレートを編集",
     "Add template for subpages" : "サブページのテンプレートを追加",
     "Delete page" : "ページの削除",
-    "Page not found:" : "ページが見つかりません:",
-    "Could not find the Page." : "ページが見つかりません。",
     "Select a page from the list or create a new one." : "リストか新規に作成してページを選択してください。",
     "Restore this version" : "このバージョンを戻す",
     "Reverted {page} to revision {timestamp}." : "{page} をリビジョン{timestamp}に戻します。",
@@ -100,6 +98,8 @@
     "Create collective for existing circle" : "既存のサークルにコレクティブを作成",
     "New collective name" : "新規コレクティブの名称",
     "Select circle..." : "サークルを選択...",
+    "Page not found:" : "ページが見つかりません:",
+    "Could not find the Page." : "ページが見つかりません。",
     "Pages that link to this one" : "ここにリンクされているページ",
     "Old versions of this page" : "このページの古いバージョン"
 },"pluralForm" :"nplurals=1; plural=0;"

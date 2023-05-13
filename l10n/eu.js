@@ -114,8 +114,6 @@ OC.L10N.register(
     "Delete template" : "Ezabatu txantiloia",
     "Delete page" : "Ezabatu orria",
     "Extra action" : "Ekintza gehigarria",
-    "Page not found:" : "Ez da orria aurkitu:",
-    "Could not find the Page." : "Ezin izan da orria aurkitu.",
     "Select a page from the list or create a new one." : "Hautatu orri bat zerrendatik edo sortu berri bat.",
     "Breadcrumb for Home" : "Hasieraren nabigazio-haria ",
     "Breadcrumb for {page}" : " {page}-ren nabigazio-haria ",
@@ -189,6 +187,8 @@ OC.L10N.register(
     "New collective name" : "Kolektibo izen berria",
     "Select circle..." : "Hautatu zirkulua...",
     "Cancel creating a new collective" : "Utzi kolektibo berria sortzeari",
+    "Page not found:" : "Ez da orria aurkitu:",
+    "Could not find the Page." : "Ezin izan da orria aurkitu.",
     "Pages that link to this one" : "Horrekin lotura duten orriak",
     "Old versions of this page" : "Orri horren bertsio zaharrak"
 },

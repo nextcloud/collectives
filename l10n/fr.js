@@ -114,8 +114,6 @@ OC.L10N.register(
     "Delete template" : "Supprimer le modèle",
     "Delete page" : "Supprimer la page",
     "Extra action" : "Action supplémentaire",
-    "Page not found:" : "Page introuvable :",
-    "Could not find the Page." : "Impossible de trouver la page.",
     "Select a page from the list or create a new one." : "Sélectionnez une page de la liste ou créez-en une nouvelle.",
     "Breadcrumb for Home" : "Fil d'Ariane pour l'Accueil",
     "Breadcrumb for {page}" : "Fil d'Ariane pour {page}",
@@ -189,6 +187,8 @@ OC.L10N.register(
     "New collective name" : "Nom du nouveau collectif",
     "Select circle..." : "Sélectionner un cercle…",
     "Cancel creating a new collective" : "Annuler la création d'un nouveau collectif",
+    "Page not found:" : "Page introuvable :",
+    "Could not find the Page." : "Impossible de trouver la page.",
     "Pages that link to this one" : "Pages qui font référence à celle-ci",
     "Old versions of this page" : "Anciennes versions de cette page"
 },
