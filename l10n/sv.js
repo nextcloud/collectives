@@ -111,6 +111,7 @@ OC.L10N.register(
     "Cannot delete page with subpages" : "Kan inte ta bort sida med undersidor",
     "Delete template" : "Ta bort mall",
     "Delete page" : "Ta bort sida",
+    "Page not found: {page}" : "Sidan hittades inte: {page}",
     "Select a page from the list or create a new one." : "Välj en sida från listan eller skapa en ny.",
     "Breadcrumb for Home" : "Brödsmula för Hem",
     "Breadcrumb for {page}" : "Brödsmula för {page}",

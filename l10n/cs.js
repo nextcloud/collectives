@@ -114,6 +114,7 @@ OC.L10N.register(
     "Delete template" : "Smazat šablonu",
     "Delete page" : "Smazat stránku",
     "Extra action" : "Další akce",
+    "Page not found: {page}" : "Stránka nenalezena: {page}",
     "Select a page from the list or create a new one." : "Vyberte stránku ze seznamu nebo vytvořte novou.",
     "Breadcrumb for Home" : "Drobečková navigace pro domovskou",
     "Breadcrumb for {page}" : "Drobečková navigace pro {page}",
