@@ -93,7 +93,7 @@ export default {
 		&-selected, &:hover, &:focus {
 			:deep(.user-bubble__content) {
 				// better visual with light default tint
-				background-color: var(--color-primary-light);
+				background-color: var(--color-primary-element-light);
 			}
 		}
 	}

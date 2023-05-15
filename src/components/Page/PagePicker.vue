@@ -313,7 +313,7 @@ export default {
 
 		// Element of the page that is to be moved
 		&.self {
-			background-color: var(--color-primary-light);
+			background-color: var(--color-primary-element-light);
 		}
 	}
 
