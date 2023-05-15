@@ -133,8 +133,17 @@ export default {
 
 		// E.g. `https://cloud.example.org/apps/collectives/mycollective/...` or `/apps/collectives/mycollective/...`
 		handleCollectiveLink({ href }) {
+			const collectiveParam = encodeURIComponent(this.collectiveParam)
+
+			// If we're on landing page, append `/` to location to make `URL()` append relative paths correctly
+			let windowLocation = window.location.toString()
+			if (windowLocation.endsWith(`/collectives/${collectiveParam}`)
+				|| windowLocation.match(new RegExp(`/collectives/p/[^/]+/${collectiveParam}$`))) {
+				windowLocation = `${location}/`
+			}
+
 			// Add origin for local links and resolve relative paths
-			const full = new URL(href, window.location)
+			const full = new URL(href, windowLocation)
 			href = full.href
 
 			const baseUrl = new URL(generateUrl('/apps/collectives'), window.location)
@@ -157,7 +166,6 @@ export default {
 
 			// Special treatment for links to current collective
 			let collectivePath = href.replace(baseUrl.href, '')
-			const collectiveParam = encodeURIComponent(this.collectiveParam)
 			const publicPrefix = `/p/${this.currentCollective.shareToken}/`
 
 			if (collectivePath === `/${collectiveParam}` || collectivePath.startsWith(`/${collectiveParam}/`)) {
