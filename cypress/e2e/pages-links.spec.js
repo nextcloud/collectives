@@ -64,6 +64,7 @@ describe('Page Link Handling', function() {
 * URL to page in this collective: [Link Target](${baseUrl}/index.php/apps/collectives/Link%20Testing/Link%20Target)
 * Absolute path to page in this collective:  [Link Target](/index.php/apps/collectives/Link%20Testing/Link%20Target)
 * Relative path to page in this collective with fileId:  [Link Target](./Link%20Target?fileId=${linkTargetPageId})
+* Relative path to page in this collective with fileId and outdated path:  [Link Target](./Link%20Target%20Outdated?fileId=${linkTargetPageId})
 * Relative path to page in this collective without fileId:  [Link Target](./Link%20Target)
 * Relative path to markdown file in this collective:  [Link Target](./Link%20Target.md)
 
@@ -116,7 +117,7 @@ describe('Page Link Handling', function() {
 	}
 
 	// Expected to open in same tab
-	const testLinkToSameTab = function(href, { edit = false, isPublic = false, expectedPathname = null } = {}) {
+	const testLinkToSameTab = function(href, { edit = false, isPublic = false, expectedPathname = null, expectedSearch = null } = {}) {
 		clickLink(href, edit)
 
 		cy.url().then((newBaseUrl) => {
@@ -127,7 +128,7 @@ describe('Page Link Handling', function() {
 				: url.pathname
 			cy.location().should((loc) => {
 				expect(loc.pathname).to.match(new RegExp(`^${expectedPathname || pathname}$`))
-				expect(loc.search).to.eq(url.search)
+				expect(loc.search).to.eq(expectedSearch || url.search)
 			})
 		})
 
@@ -202,13 +203,26 @@ describe('Page Link Handling', function() {
 				testLinkToNewTab(href, { edit: true })
 			}
 		})
-		/* Link without origin and containing `fileId` param gets rewritten by editor rendering, so unable to test for now
 		it('Opens link with relative path to page in this collective with fileId in same/new tab depending on view/edit mode', function() {
-			const href = './Link%20Target?fileId=${linkTargetPageId}'
-			testLinkToSameTab(href)
-			testLinkToNewTab(href, { edit: true })
+			// Link without origin and containing `fileId` param gets rewritten by editor rendering
+			// const href = `./Link%20Target?fileId=${linkTargetPageId}`
+			const href = `/index.php/apps/files/?dir=/&openfile=${linkTargetPageId}#relPath=./Link%20Target`
+			testLinkToSameTab(href, {
+				expectedPathname: '/index.php/apps/collectives/Link%20Testing/Link%20Target',
+				expectedSearch: `?fileId=${linkTargetPageId}`,
+			})
+			// testLinkToNewTab(href, { edit: true })
 		})
-		 */
+		it('Opens link with relative path to page in this collective with fileId and outdated path in same/new tab depending on view/edit mode', function() {
+			// Link without origin and containing `fileId` param gets rewritten by editor rendering
+			// const href = `./Link%20Target%20Outdated?fileId=${linkTargetPageId}`
+			const href = `/index.php/apps/files/?dir=/&openfile=${linkTargetPageId}#relPath=./Link%20Target%20Outdated`
+			testLinkToSameTab(href, {
+				expectedPathname: '/index.php/apps/collectives/Link%20Testing/Link%20Target',
+				expectedSearch: `?fileId=${linkTargetPageId}`,
+			})
+			// testLinkToNewTab(href, { edit: true })
+		})
 		it('Opens link with relative path to page in this collective without fileId in same/new tab depending on view/edit mode', function() {
 			const href = './Link%20Target'
 			testLinkToSameTab(href)
