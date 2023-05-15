@@ -52,6 +52,12 @@ describe('Page Link Handling', function() {
 				pdfId = id
 			})
 		}).then(() => {
+			cy.seedPageContent('Link%20Testing/Readme.md', `
+
+## Links supposed to open in same window
+
+* Relative path to page in this collective with fileId:  [Link Target](./Link%20Target?fileId=${linkTargetPageId})
+			`)
 			cy.seedPageContent('Link%20Testing/Link%20Source.md', `
 ## Links supposed to open in viewer
 
@@ -251,6 +257,17 @@ describe('Page Link Handling', function() {
 			if (Cypress.env('ncVersion') !== 'stable25') {
 				testLinkToNewTab(href, { edit: true })
 			}
+		})
+		it('Opens link with relative path from landing page to page in this collective with fileId in same/new tab depending on view/edit mode', function() {
+			cy.visit('/apps/collectives/Link%20Testing')
+			// Link without origin and containing `fileId` param gets rewritten by editor rendering
+			// const href = `./Link%20Target?fileId=${linkTargetPageId}`
+			const href = `/index.php/apps/files/?dir=/&openfile=${linkTargetPageId}#relPath=./Link%20Target`
+			testLinkToSameTab(href, {
+				expectedPathname: '/index.php/apps/collectives/Link%20Testing/Link%20Target',
+				expectedSearch: `?fileId=${linkTargetPageId}`,
+			})
+			// testLinkToNewTab(href, { edit: true })
 		})
 	})
 
