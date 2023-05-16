@@ -136,10 +136,10 @@ export default {
 			const collectiveParam = encodeURIComponent(this.collectiveParam)
 
 			// If we're on landing page, append `/` to location to make `URL()` append relative paths correctly
-			let windowLocation = window.location.toString()
+			let windowLocation = window.location.origin + window.location.pathname
 			if (windowLocation.endsWith(`/collectives/${collectiveParam}`)
 				|| windowLocation.match(new RegExp(`/collectives/p/[^/]+/${collectiveParam}$`))) {
-				windowLocation = `${location}/`
+				windowLocation = `${windowLocation}/`
 			}
 
 			// Add origin for local links and resolve relative paths
