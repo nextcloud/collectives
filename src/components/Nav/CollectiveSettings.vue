@@ -57,7 +57,7 @@
 					:loading="loading('updateCollectiveEditPermissions_' + String(memberLevels.LEVEL_MODERATOR))"
 					name="edit_moderators"
 					type="radio">
-					{{ t('collectives', 'Admins and moderaters') }}
+					{{ t('collectives', 'Admins and moderators') }}
 				</NcCheckboxRadioSwitch>
 				<NcCheckboxRadioSwitch :checked.sync="editPermissions"
 					:value="String(memberLevels.LEVEL_MEMBER)"
@@ -85,7 +85,7 @@
 					:loading="loading('updateCollectiveSharePermissions_' + String(memberLevels.LEVEL_MODERATOR))"
 					name="share_moderators"
 					type="radio">
-					{{ t('collectives', 'Admins and moderaters') }}
+					{{ t('collectives', 'Admins and moderators') }}
 				</NcCheckboxRadioSwitch>
 				<NcCheckboxRadioSwitch :checked.sync="sharePermissions"
 					:value="String(memberLevels.LEVEL_MEMBER)"
