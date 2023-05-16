@@ -7,6 +7,7 @@ OC.L10N.register(
     "An error occurred while performing the search" : "Prodúxose un error mentanto se facía la busca",
     "Permissions" : "Permisos",
     "Members" : "Miembros",
+    "Download" : "Baxar",
     "Versions" : "Versiones",
     "Groups" : "Grupos",
     "Circles" : "Círculos",
