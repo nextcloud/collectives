@@ -114,6 +114,7 @@ OC.L10N.register(
     "Delete template" : "Обриши шаблон",
     "Delete page" : "Обриши страницу",
     "Extra action" : "Додатна акција",
+    "Page not found: {page}" : "Страница није пронађена: {page}",
     "Select a page from the list or create a new one." : "Изаберите страницу из листе или креирајте нову.",
     "Breadcrumb for Home" : "Мрвице за Почетну",
     "Breadcrumb for {page}" : "Мрвице за {page}",

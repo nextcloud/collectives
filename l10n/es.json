@@ -112,6 +112,7 @@
     "Delete template" : "Eliminar plantilla",
     "Delete page" : "Eliminar página",
     "Extra action" : "Acción adicional",
+    "Page not found: {page}" : "Página no encontrada: {page}",
     "Select a page from the list or create a new one." : "Seleccionar una página de la lista o cree una nueva.",
     "Breadcrumb for Home" : "Ruta de navegación para Home",
     "Breadcrumb for {page}" : "Ruta de navegación para {página}",
