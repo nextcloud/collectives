@@ -5,6 +5,7 @@ namespace OCA\Collectives\Trash;
 use OC\Files\Storage\Wrapper\Jail;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Db\PageMapper;
+use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Mount\CollectiveStorage;
 use OCA\Collectives\Mount\MountProvider;
@@ -196,6 +197,7 @@ class PageTrashBackend implements ITrashBackend {
 		}
 
 		$this->pageMapper->deleteByFileId($item->getId());
+		NodeHelper::revertSubFolders($node->getParent());
 	}
 
 	/**

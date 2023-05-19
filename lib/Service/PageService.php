@@ -180,14 +180,14 @@ class PageService {
 	 */
 	private function getParentPageId(File $file, ?Node $parent = null): int {
 		try {
-			if (self::isLandingPage($file)) {
+			if (NodeHelper::isLandingPage($file)) {
 				// Return `0` for landing page
 				return 0;
 			}
 
 			$parent = $parent ?? $file->getParent();
 
-			if (self::isIndexPage($file)) {
+			if (NodeHelper::isIndexPage($file)) {
 				// Go down two levels if index page but not landing page
 				return $this->getIndexPageFile($parent->getParent())->getId();
 			}
@@ -276,7 +276,7 @@ class PageService {
 	 * @throws NotPermittedException
 	 */
 	private function newPage(int $collectiveId, Folder $folder, string $filename, string $userId): PageInfo {
-		$hasTemplate = self::folderHasSubPage($folder, PageInfo::TEMPLATE_PAGE_TITLE);
+		$hasTemplate = NodeHelper::folderHasSubPage($folder, PageInfo::TEMPLATE_PAGE_TITLE);
 		try {
 			if ($hasTemplate === 1) {
 				$template = $folder->get(PageInfo::TEMPLATE_PAGE_TITLE . PageInfo::SUFFIX);
@@ -320,7 +320,7 @@ class PageService {
 	 */
 	public function initSubFolder(File $file): Folder {
 		$folder = $file->getParent();
-		if (self::isIndexPage($file)) {
+		if (NodeHelper::isIndexPage($file)) {
 			return $folder;
 		}
 
@@ -332,65 +332,6 @@ class PageService {
 			throw new NotPermittedException($e->getMessage(), 0, $e);
 		}
 		return $subFolder;
-	}
-
-	/**
-	 * @param Folder $folder
-	 *
-	 * @throws NotFoundException
-	 * @throws NotPermittedException
-	 */
-	private function revertSubFolders(Folder $folder): void {
-		try {
-			foreach ($folder->getDirectoryListing() as $node) {
-				if ($node instanceof Folder) {
-					$this->revertSubFolders($node);
-				} elseif ($node instanceof File) {
-					// Move index page without subpages into the parent folder (if's not the landing page)
-					if (self::isIndexPage($node) && !self::isLandingPage($node) && !$this->indexPageHasOtherContent($node)) {
-						$filename = NodeHelper::generateFilename($folder, $folder->getName(), PageInfo::SUFFIX);
-						$node->move($folder->getParent()->getPath() . '/' . $filename . PageInfo::SUFFIX);
-						$folder->delete();
-						break;
-					}
-				}
-			}
-		} catch (FilesNotFoundException | InvalidPathException $e) {
-			throw new NotFoundException($e->getMessage(), 0, $e);
-		} catch (FilesNotPermittedException | LockedException $e) {
-			throw new NotPermittedException($e->getMessage(), 0, $e);
-		}
-	}
-
-	/**
-	 * @param File $file
-	 *
-	 * @return bool
-	 */
-	public static function isPage(File $file): bool {
-		$name = $file->getName();
-		$length = strlen(PageInfo::SUFFIX);
-		return (substr($name, -$length) === PageInfo::SUFFIX);
-	}
-
-	/**
-	 * @param File $file
-	 *
-	 * @return bool
-	 */
-	public static function isLandingPage(File $file): bool {
-		$internalPath = $file->getInternalPath();
-		return ($internalPath === PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX);
-	}
-
-	/**
-	 * @param File $file
-	 *
-	 * @return bool
-	 */
-	public static function isIndexPage(File $file): bool {
-		$name = $file->getName();
-		return ($name === PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX);
 	}
 
 	/**
@@ -414,82 +355,6 @@ class PageService {
 	}
 
 	/**
-	 * @param File $file
-	 *
-	 * @return bool
-	 */
-	public function indexPageHasOtherContent(File $file): bool {
-		try {
-			foreach ($file->getParent()->getDirectoryListing() as $node) {
-				// True if page and not index page
-				if ($node instanceof File
-					&& !self::isIndexPage($node)
-					&& self::isPage($node)) {
-					return true;
-				}
-				// True if not index page or corresponding attachments folder
-				if (!($node instanceof File && self::isIndexPage($node))
-					&& $node->getName() !== '.attachments.' . $file->getId()) {
-					return true;
-				}
-			}
-		} catch (FilesNotFoundException $e) {
-		}
-
-		return false;
-	}
-
-	/**
-	 * @param Folder $folder
-	 *
-	 * @return bool
-	 */
-	public static function folderHasSubPages(Folder $folder): bool {
-		try {
-			foreach ($folder->getDirectoryListing() as $node) {
-				if ($node instanceof File &&
-					self::isPage($node) &&
-					!self::isIndexPage($node)) {
-					return true;
-				}
-
-				if ($node instanceof Folder) {
-					return self::folderHasSubPages($node);
-				}
-			}
-		} catch (FilesNotFoundException $e) {
-		}
-
-		return false;
-	}
-
-	/**
-	 * @param Folder $folder
-	 * @param string $title
-	 *
-	 * @return int
-	 */
-	public static function folderHasSubPage(Folder $folder, string $title): int {
-		try {
-			foreach ($folder->getDirectoryListing() as $node) {
-				if ($node instanceof File &&
-					strcmp($node->getName(), $title . PageInfo::SUFFIX) === 0) {
-					return 1;
-				}
-
-				if ($node instanceof Folder &&
-					strcmp($node->getName(), $title) === 0 &&
-					$node->nodeExists(PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX)) {
-					return 2;
-				}
-			}
-		} catch (FilesNotFoundException $e) {
-		}
-
-		return 0;
-	}
-
-	/**
 	 * @param int    $collectiveId
 	 * @param Folder $folder
 	 * @param string $userId
@@ -504,7 +369,7 @@ class PageService {
 		try {
 			$indexPage = $this->getPageByFile($this->getIndexPageFile($folder), $folder);
 		} catch (NotFoundException $e) {
-			if (!self::folderHasSubPages($folder)) {
+			if (!NodeHelper::folderHasSubPages($folder)) {
 				return [];
 			}
 			$indexPage = $this->newPage($collectiveId, $folder, PageInfo::INDEX_PAGE_TITLE, $userId);
@@ -513,7 +378,7 @@ class PageService {
 
 		// Add subpages and recurse over subfolders
 		foreach ($folder->getDirectoryListing() as $node) {
-			if ($node instanceof File && self::isPage($node) && !self::isIndexPage($node)) {
+			if ($node instanceof File && NodeHelper::isPage($node) && !NodeHelper::isIndexPage($node)) {
 				$pageInfos[] = $this->getPageByFile($node, $folder);
 			} elseif ($node instanceof Folder) {
 				array_push($pageInfos, ...$this->recurseFolder($collectiveId, $node, $userId));
@@ -707,7 +572,7 @@ class PageService {
 	 */
 	private function isAncestorOf(Folder $collectiveFolder, int $pageId, int $targetId): bool {
 		$targetFile = $this->nodeHelper->getFileById($collectiveFolder, $targetId);
-		if (self::isLandingPage($targetFile)) {
+		if (NodeHelper::isLandingPage($targetFile)) {
 			return false;
 		}
 
@@ -731,7 +596,7 @@ class PageService {
 	 */
 	private function renamePage(Folder $collectiveFolder, int $parentId, File $file, ?string $title): bool {
 		// Do not allow to move the landing page
-		if (self::isLandingPage($file)) {
+		if (NodeHelper::isLandingPage($file)) {
 			throw new NotPermittedException('Not allowed to rename landing page');
 		}
 
@@ -758,8 +623,8 @@ class PageService {
 		}
 
 		// If processing an index page, then rename the parent folder, otherwise the file itself
-		$node = self::isIndexPage($file) ? $file->getParent() : $file;
-		$suffix = self::isIndexPage($file) ? '' : PageInfo::SUFFIX;
+		$node = NodeHelper::isIndexPage($file) ? $file->getParent() : $file;
+		$suffix = NodeHelper::isIndexPage($file) ? '' : PageInfo::SUFFIX;
 		if ($title) {
 			$safeTitle = $this->nodeHelper->sanitiseFilename($title, self::DEFAULT_PAGE_TITLE);
 			$newSafeName = $safeTitle . $suffix;
@@ -818,7 +683,7 @@ class PageService {
 		$this->removeFromSubpageOrder($collectiveId, $oldParentId, $id, $userId);
 		$this->addToSubpageOrder($collectiveId, $parentId, $id, $index, $userId);
 
-		$this->revertSubFolders($collectiveFolder);
+		NodeHelper::revertSubFolders($collectiveFolder);
 		return $this->getPageByFile($file);
 	}
 
@@ -932,9 +797,9 @@ class PageService {
 		$pageInfo = $this->getPageByFile($file);
 
 		try {
-			if (self::isIndexPage($file)) {
+			if (NodeHelper::isIndexPage($file)) {
 				// Don't delete if still page has subpages
-				if ($this->indexPageHasOtherContent($file)) {
+				if (NodeHelper::indexPageHasOtherContent($file)) {
 					throw new NotPermittedException('Failed to delete page ' . $id . ' with subpages');
 				}
 
@@ -955,7 +820,7 @@ class PageService {
 			// Delete directly if trash is not available
 			$this->pageMapper->deleteByFileId($id);
 			$this->removeFromSubpageOrder($collectiveId, $parentId, $id, $userId);
-			$this->revertSubFolders($folder);
+			NodeHelper::revertSubFolders($folder);
 			// TODO: check
 			return $pageInfo;
 		}
