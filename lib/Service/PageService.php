@@ -2,6 +2,7 @@
 
 namespace OCA\Collectives\Service;
 
+use OC\App\AppManager;
 use OCA\Collectives\Db\Page;
 use OCA\Collectives\Db\PageMapper;
 use OCA\Collectives\Fs\NodeHelper;
@@ -29,11 +30,12 @@ class PageService {
 	private UserFolderHelper $userFolderHelper;
 	private IUserManager $userManager;
 	private IConfig $config;
-	private ContainerInterface $container;
 	private ?IQueue $pushQueue = null;
 	private ?CollectiveInfo $collectiveInfo = null;
+	private bool $trashEnabled;
 
 	/**
+	 * @param AppManager            $appManager
 	 * @param PageMapper            $pageMapper
 	 * @param NodeHelper            $nodeHelper
 	 * @param CollectiveServiceBase $collectiveService
@@ -42,7 +44,8 @@ class PageService {
 	 * @param IConfig               $config
 	 * @param ContainerInterface    $container
 	 */
-	public function __construct(PageMapper $pageMapper,
+	public function __construct(AppManager $appManager,
+		PageMapper $pageMapper,
 		NodeHelper $nodeHelper,
 		CollectiveServiceBase $collectiveService,
 		UserFolderHelper $userFolderHelper,
@@ -55,6 +58,7 @@ class PageService {
 		$this->userFolderHelper = $userFolderHelper;
 		$this->userManager = $userManager;
 		$this->config = $config;
+		$this->trashEnabled = $appManager->isEnabledForUser('files_trashbin');
 		try {
 			$this->pushQueue = $container->get(IQueue::class);
 		} catch (\Exception $e) {
@@ -188,8 +192,10 @@ class PageService {
 	}
 
 	/**
-	 * @param File $file
+	 * @param File      $file
 	 * @param Node|null $parent
+	 * @param bool      $includeTrash
+	 *
 	 * @return PageInfo
 	 * @throws NotFoundException
 	 */
@@ -878,7 +884,7 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function delete(int $collectiveId, int $parentId, int $id, string $userId): PageInfo {
+	public function trash(int $collectiveId, int $parentId, int $id, string $userId): PageInfo {
 		$this->verifyEditPermissions($collectiveId, $userId);
 		$folder = $this->getFolder($collectiveId, $parentId, $userId);
 		$file = $this->nodeHelper->getFileById($folder, $id);
@@ -902,13 +908,24 @@ class PageService {
 		} catch (FilesNotPermittedException $e) {
 			throw new NotPermittedException($e->getMessage(), 0, $e);
 		}
-		$this->pageMapper->deleteByFileId($pageInfo->getId());
-		$this->removeFromSubpageOrder($collectiveId, $parentId, $id, $userId);
 
-		$this->revertSubFolders($folder);
+		// Delete directly if trash is not available
+		if (!$this->trashEnabled) {
+			$this->pageMapper->deleteByFileId($id);
+			$this->removeFromSubpageOrder($collectiveId, $parentId, $id, $userId);
+			$this->revertSubFolders($folder);
+		}
+
+		$this->notifyPush($collectiveId, $userId);
+
+		$trashedPage = $this->pageMapper->findByFileId($id, true);
+		if (!$trashedPage) {
+			throw new NotFoundException('Failed to find trashed page in page trash: ' . $id);
+		}
+
+		$pageInfo->setTrashTimestamp($trashedPage->getTrashTimestamp());
 		return $pageInfo;
 	}
-
 
 	/**
 	 * @param string   $collectiveName

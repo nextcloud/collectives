@@ -8,6 +8,7 @@ use Closure;
 use OCA\Circles\Events\CircleDestroyedEvent;
 use OCA\Collectives\CacheListener;
 use OCA\Collectives\Db\CollectiveMapper;
+use OCA\Collectives\Db\PageMapper;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Listeners\BeforeTemplateRenderedListener;
 use OCA\Collectives\Listeners\CircleDestroyedListener;
@@ -74,6 +75,7 @@ class Application extends App implements IBootstrap {
 				$c->get(PageTrashManager::class),
 				$c->get(MountProvider::class),
 				$c->get(CollectiveMapper::class),
+				$c->get(PageMapper::class),
 				$c->get(LoggerInterface::class)
 			);
 			$hasVersionApp = interface_exists(IVersionBackend::class);

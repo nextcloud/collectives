@@ -267,12 +267,12 @@ class PublicPageController extends PublicShareController {
 	 *
 	 * @return DataResponse
 	 */
-	public function delete(int $parentId, int $id): DataResponse {
+	public function trash(int $parentId, int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($parentId, $id): array {
 			$this->checkEditPermissions();
 			$owner = $this->getShare()->getOwner();
 			$collectiveId = $this->getShare()->getCollectiveId();
-			$pageInfo = $this->service->delete($collectiveId, $parentId, $id, $owner);
+			$pageInfo = $this->service->trash($collectiveId, $parentId, $id, $owner);
 			// Shares don't have a collective path
 			$pageInfo->setCollectivePath('');
 			$pageInfo->setShareToken($this->getToken());

@@ -182,10 +182,10 @@ class PageController extends Controller {
 	 *
 	 * @return DataResponse
 	 */
-	public function delete(int $collectiveId, int $parentId, int $id): DataResponse {
+	public function trash(int $collectiveId, int $parentId, int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $id): array {
 			$userId = $this->getUserId();
-			$pageInfo = $this->service->delete($collectiveId, $parentId, $id, $userId);
+			$pageInfo = $this->service->trash($collectiveId, $parentId, $id, $userId);
 			return [
 				"data" => $pageInfo
 			];

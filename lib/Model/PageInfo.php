@@ -19,6 +19,8 @@ use OCP\Files\NotFoundException;
  * @method string getTitle()
  * @method void setSubpageOrder(string $value)
  * @method string getSubpageOrder()
+ * @method int|null getTrashTimestamp()
+ * @method void setTrashTimestamp(?int $trashTimestamp)
  * @method void setTitle(string $value)
  * @method int getTimestamp()
  * @method void setTimestamp(int $value)
@@ -44,6 +46,7 @@ class PageInfo extends Entity implements JsonSerializable {
 	protected ?string $lastUserDisplayName = null;
 	protected ?string $emoji = null;
 	protected ?string $subpageOrder = null;
+	protected ?int $trashTimestamp = null;
 	protected ?string $title = null;
 	protected ?int $timestamp = null;
 	protected ?int $size = null;
@@ -63,6 +66,7 @@ class PageInfo extends Entity implements JsonSerializable {
 			'lastUserDisplayName' => $this->lastUserDisplayName,
 			'emoji' => $this->emoji,
 			'subpageOrder' => json_decode($this->subpageOrder ?? '[]', true, 512, JSON_THROW_ON_ERROR),
+			'trashTimestamp' => $this->trashTimestamp,
 			'title' => $this->title,
 			'timestamp' => $this->timestamp,
 			'size' => $this->size,

@@ -38,6 +38,9 @@ class Version000200Date20200822000000 extends SimpleMigrationStep {
 				'notnull' => false,
 				'length' => 8,
 			]);
+			$table->addColumn('trash_timestamp', Types::INTEGER, [
+				'notnull' => false,
+			]);
 
 			$table->setPrimaryKey(['id']);
 			$table->addUniqueIndex(['file_id'], 'collectives_pages_file_index');

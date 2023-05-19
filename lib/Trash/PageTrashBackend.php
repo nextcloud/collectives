@@ -4,6 +4,7 @@ namespace OCA\Collectives\Trash;
 
 use OC\Files\Storage\Wrapper\Jail;
 use OCA\Collectives\Db\CollectiveMapper;
+use OCA\Collectives\Db\PageMapper;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Mount\CollectiveStorage;
 use OCA\Collectives\Mount\MountProvider;
@@ -26,6 +27,7 @@ class PageTrashBackend implements ITrashBackend {
 	private PageTrashManager $trashManager;
 	private MountProvider $mountProvider;
 	private CollectiveMapper $collectiveMapper;
+	private PageMapper $pageMapper;
 	private LoggerInterface $logger;
 	private ?VersionsBackend $versionsBackend = null;
 
@@ -33,11 +35,13 @@ class PageTrashBackend implements ITrashBackend {
 								PageTrashManager        $trashManager,
 								MountProvider           $mountProvider,
 								CollectiveMapper        $collectiveMapper,
+								PageMapper              $pageMapper,
 								LoggerInterface         $logger) {
 		$this->collectiveFolderManager = $collectiveFolderManager;
 		$this->trashManager = $trashManager;
 		$this->mountProvider = $mountProvider;
 		$this->collectiveMapper = $collectiveMapper;
+		$this->pageMapper = $pageMapper;
 		$this->logger = $logger;
 	}
 
@@ -161,6 +165,8 @@ class PageTrashBackend implements ITrashBackend {
 		$targetFolder->getStorage()->moveFromStorage($trashStorage, $node->getInternalPath(), $targetLocation);
 		$targetFolder->getStorage()->getUpdater()->renameFromStorage($trashStorage, $node->getInternalPath(), $targetLocation);
 		$this->trashManager->removeItem((int)$collectiveId, $item->getName(), $item->getDeletedTime());
+
+		$this->pageMapper->restoreByFileId($item->getId());
 	}
 
 	/**
@@ -188,6 +194,8 @@ class PageTrashBackend implements ITrashBackend {
 		if ($item->isRootItem()) {
 			$this->trashManager->removeItem((int)$collectiveId, $item->getName(), $item->getDeletedTime());
 		}
+
+		$this->pageMapper->deleteByFileId($item->getId());
 	}
 
 	/**
@@ -217,6 +225,9 @@ class PageTrashBackend implements ITrashBackend {
 			} else {
 				throw new \Exception('Failed to move collective item to trash');
 			}
+
+			$this->pageMapper->trashByFileId($fileEntry->getId());
+
 			return true;
 		}
 		return false;

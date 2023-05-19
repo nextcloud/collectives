@@ -47,9 +47,10 @@ class PageMapper extends QBMapper {
 	 *
 	 * @return Page|null
 	 */
-	public function deleteByFileId(int $fileId): ?Page {
+	public function trashByFileId(int $fileId): ?Page {
 		if (null !== $page = $this->findByFileId($fileId)) {
-			return $this->delete($page);
+			$page->setTrashTimestamp(time());
+			return $this->update($page);
 		}
 		return null;
 	}
@@ -59,13 +60,44 @@ class PageMapper extends QBMapper {
 	 *
 	 * @return Page|null
 	 */
-	public function findByFileId(int $fileId): ?Page {
+	public function restoreByFileId(int $fileId): ?Page {
+		if (null !== $page = $this->findByFileId($fileId, true)) {
+			$page->setTrashTimestamp(null);
+			return $this->update($page);
+		}
+		return null;
+	}
+
+	/**
+	 * @param int $fileId
+	 *
+	 * @return Page|null
+	 */
+	public function deleteByFileId(int $fileId): ?Page {
+		if (null !== $page = $this->findByFileId($fileId, true)) {
+			return $this->delete($page);
+		}
+		return null;
+	}
+
+	/**
+	 * @param int  $fileId
+	 * @param bool $trashed
+	 *
+	 * @return Page|null
+	 */
+	public function findByFileId(int $fileId, bool $trashed = false): ?Page {
 		$qb = $this->db->getQueryBuilder();
+		$where = $qb->expr()->andX();
+		$where->add($qb->expr()->eq('file_id', $qb->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)));
+		if ($trashed) {
+			$where->add($qb->expr()->isNotNull('trash_timestamp'));
+		} else {
+			$where->add($qb->expr()->isNull('trash_timestamp'));
+		}
 		$qb->select('*')
 			->from($this->tableName)
-			->where(
-				$qb->expr()->eq('file_id', $qb->createNamedParameter($fileId, IQueryBuilder::PARAM_INT))
-			);
+			->where($where);
 		try {
 			return $this->findEntity($qb);
 		} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
