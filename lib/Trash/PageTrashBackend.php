@@ -353,7 +353,7 @@ class PageTrashBackend implements ITrashBackend {
 				$name = $pathParts['filename'];
 				$key = $collectiveId . '/' . $name . '/' . $timestamp;
 				$originalLocation = isset($indexedRows[$key]) ? $indexedRows[$key]['original_location'] : '';
-				// TODO: Check permissions!!!
+
 				$info = $item->getFileInfo();
 				$info['name'] = $name;
 				$items[] = new CollectivePageTrashItem(
@@ -370,12 +370,6 @@ class PageTrashBackend implements ITrashBackend {
 		return $items;
 	}
 
-	/**
-	 * @param IUser $user
-	 * @param int   $fileId
-	 *
-	 * @return Node|null
-	 */
 	public function getTrashNodeById(IUser $user, int $fileId): ?Node {
 		try {
 			/** @var Folder $trashFolder */
@@ -392,11 +386,66 @@ class PageTrashBackend implements ITrashBackend {
 			if ($this->userHasAccessToFolder($user, (int)$collectiveId)) {
 				return $trashFolder->get($relativePath);
 			}
-
-			return null;
 		} catch (NotFoundException $e) {
-			return null;
 		}
+
+		return null;
+	}
+
+	/**
+	 * @param IUser $user
+	 * @param int   $fileId
+	 *
+	 * @return ITrashItem|null
+	 */
+	public function getTrashItemByCollectiveAndId(IUser $user, int $collectiveId, int $fileId): ?ITrashItem {
+		try {
+			if (!$this->userHasAccessToFolder($user, (int)$collectiveId)) {
+				return null;
+			}
+
+			// Build the TrashItem object
+			$trashFolder = $this->getTrashFolder($collectiveId);
+			$trashNode = $this->getTrashNodeById($user, $fileId);
+			$trashItem = $this->trashManager->getTrashItemByFileId($fileId);
+			if ($trashItem && $trashNode) {
+				$pathParts = pathinfo($trashNode->getName());
+				$name = $pathParts['filename'];
+
+				$info = $trashNode->getFileInfo();
+				$info['name'] = $name;
+				return new CollectivePageTrashItem(
+					$this,
+					$trashItem['original_location'],
+					$trashItem['deleted_time'],
+					'/' . $collectiveId . '/' . $trashNode->getName(),
+					$info,
+					$user,
+					$trashFolder->getMountPoint()->getMountPoint(),
+				);
+			}
+		} catch (NotFoundException $e) {
+		}
+
+		return null;
+	}
+
+	/**
+	 * @param IUser $user
+	 * @param int   $collectiveId
+	 *
+	 * @return Node[]
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function listTrashForCollective(IUser $user, int $collectiveId): array {
+		$trashFolder = $this->getTrashFolder($collectiveId);
+
+		if (!$this->userHasAccessToFolder($user, $collectiveId)) {
+			return [];
+		}
+
+		return $trashFolder->getDirectoryListing();
 	}
 
 	/**

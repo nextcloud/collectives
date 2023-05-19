@@ -9,6 +9,7 @@ use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Model\CollectiveInfo;
 use OCA\Collectives\Model\PageInfo;
+use OCA\Collectives\Trash\PageTrashBackend;
 use OCA\NotifyPush\Queue\IQueue;
 use OCP\Files\File;
 use OCP\Files\Folder;
@@ -24,6 +25,7 @@ use Psr\Container\ContainerInterface;
 class PageService {
 	private const DEFAULT_PAGE_TITLE = 'New Page';
 
+	private AppManager $appManager;
 	private PageMapper $pageMapper;
 	private NodeHelper $nodeHelper;
 	private CollectiveServiceBase $collectiveService;
@@ -32,7 +34,7 @@ class PageService {
 	private IConfig $config;
 	private ?IQueue $pushQueue = null;
 	private ?CollectiveInfo $collectiveInfo = null;
-	private bool $trashEnabled;
+	private ?PageTrashBackend $trashBackend = null;
 
 	/**
 	 * @param AppManager            $appManager
@@ -52,19 +54,24 @@ class PageService {
 		IUserManager $userManager,
 		IConfig  $config,
 		ContainerInterface $container) {
+		$this->appManager = $appManager;
 		$this->pageMapper = $pageMapper;
 		$this->nodeHelper = $nodeHelper;
 		$this->collectiveService = $collectiveService;
 		$this->userFolderHelper = $userFolderHelper;
 		$this->userManager = $userManager;
 		$this->config = $config;
-		$this->trashEnabled = $appManager->isEnabledForUser('files_trashbin');
 		try {
 			$this->pushQueue = $container->get(IQueue::class);
 		} catch (\Exception $e) {
 		}
 	}
 
+	private function initTrashBackend(): void {
+		if ($this->appManager->isEnabledForUser('files_trashbin')) {
+			$this->trashBackend = \OC::$server->get(PageTrashBackend::class);
+		}
+	}
 
 	/**
 	 * @param int    $collectiveId
@@ -194,7 +201,6 @@ class PageService {
 	/**
 	 * @param File      $file
 	 * @param Node|null $parent
-	 * @param bool      $includeTrash
 	 *
 	 * @return PageInfo
 	 * @throws NotFoundException
@@ -533,6 +539,41 @@ class PageService {
 		} catch (NotPermittedException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
+	}
+
+	/**
+	 * @param int    $collectiveId
+	 * @param string $userId
+	 *
+	 * @return PageInfo[]
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function findAllTrash(int $collectiveId, string $userId): array {
+		$this->initTrashBackend();
+		if (!$this->trashBackend) {
+			throw new NotPermittedException('Failed to list page trash. Trash is disabled.');
+		}
+
+		$trashNodes = $this->trashBackend->listTrashForCollective($this->userManager->get($userId), $collectiveId);
+		$trashPageInfos = [];
+		foreach ($trashNodes as $node) {
+			$pathParts = pathinfo($node->getName());
+			$name = $pathParts['filename'];
+			$trashedPage = $this->pageMapper->findByFileId($node->getId(), true);
+			$trashPageInfos[] = [
+				'id' => $node->getId(),
+				'lastUserId' => $trashedPage ? $trashedPage->getLastUserId() : null,
+				'emoji' => $trashedPage ? $trashedPage->getEmoji() : null,
+				'trashTimestamp' => $trashedPage ? $trashedPage->getTrashTimestamp() : null,
+				'title' => ($node instanceof Folder)
+					? $name
+					: basename($name, PageInfo::SUFFIX),
+			];
+		}
+
+		return $trashPageInfos;
 	}
 
 	/**
@@ -909,11 +950,14 @@ class PageService {
 			throw new NotPermittedException($e->getMessage(), 0, $e);
 		}
 
-		// Delete directly if trash is not available
-		if (!$this->trashEnabled) {
+		$this->initTrashBackend();
+		if (!$this->trashBackend) {
+			// Delete directly if trash is not available
 			$this->pageMapper->deleteByFileId($id);
 			$this->removeFromSubpageOrder($collectiveId, $parentId, $id, $userId);
 			$this->revertSubFolders($folder);
+			// TODO: check
+			return $pageInfo;
 		}
 
 		$this->notifyPush($collectiveId, $userId);
@@ -925,6 +969,68 @@ class PageService {
 
 		$pageInfo->setTrashTimestamp($trashedPage->getTrashTimestamp());
 		return $pageInfo;
+	}
+
+	/**
+	 * @param int    $collectiveId
+	 * @param int    $id
+	 * @param string $userId
+	 *
+	 * @return PageInfo
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function restore(int $collectiveId, int $id, string $userId): PageInfo {
+		$this->verifyEditPermissions($collectiveId, $userId);
+
+		$this->initTrashBackend();
+		if (!$this->trashBackend) {
+			throw new NotPermittedException('Failed to restore page. Trash is disabled.');
+		}
+
+		if (null === $trashItem = $this->trashBackend->getTrashItemByCollectiveAndId($this->userManager->get($userId), $collectiveId, $id)) {
+			throw new NotFoundException('Failed to restore page ' . $id . '. Not found in trash.');
+		}
+
+		try {
+			$this->trashBackend->restoreItem($trashItem);
+		} catch (FilesNotFoundException|FilesNotPermittedException|InvalidPathException $e) {
+			throw new NotFoundException('Failed to restore page ' . $id . ':' . $e->getMessage(), 0, $e);
+		}
+
+		$this->notifyPush($collectiveId, $userId);
+		return $this->findByFileId($collectiveId, $id, $userId);
+	}
+
+	/**
+	 * @param int    $collectiveId
+	 * @param int    $id
+	 * @param string $userId
+	 *
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function delete(int $collectiveId, int $id, string $userId): void {
+		$this->verifyEditPermissions($collectiveId, $userId);
+
+		$this->initTrashBackend();
+		if (!$this->trashBackend) {
+			throw new NotPermittedException('Failed to delete page. Trash is disabled.');
+		}
+
+		if (null === $trashItem = $this->trashBackend->getTrashItemByCollectiveAndId($this->userManager->get($userId), $collectiveId, $id)) {
+			throw new NotFoundException('Failed to delete page ' . $id . '. Not found in trash.');
+		}
+
+		try {
+			$this->trashBackend->removeItem($trashItem);
+		} catch (FilesNotFoundException|FilesNotPermittedException $e) {
+			throw new NotFoundException('Failed to delete page from trash ' . $id . ':' . $e->getMessage());
+		}
+
+		$this->notifyPush($collectiveId, $userId);
 	}
 
 	/**

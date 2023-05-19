@@ -2,6 +2,7 @@
 
 namespace Unit\Service;
 
+use OC\App\AppManager;
 use OC\Files\Mount\MountPoint;
 use OC\Files\Node\File;
 use OC\Files\Node\Folder;
@@ -32,6 +33,10 @@ class PageServiceTest extends TestCase {
 	private int $collectiveId = 1;
 
 	protected function setUp(): void {
+		$appManager = $this->getMockBuilder(AppManager::class)
+			->disableOriginalConstructor()
+			->getMock();
+
 		$this->pageMapper = $this->getMockBuilder(PageMapper::class)
 			->disableOriginalConstructor()
 			->getMock();
@@ -73,7 +78,14 @@ class PageServiceTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
-		$this->service = new PageService($this->pageMapper, $this->nodeHelper, $this->collectiveService, $userFolderHelper, $userManager, $this->config, $container);
+		$this->service = new PageService(
+			$appManager,
+			$this->pageMapper,
+			$this->nodeHelper,
+			$this->collectiveService,
+			$userFolderHelper,
+			$userManager,
+			$this->config, $container);
 	}
 
 	public function testGetPageFile(): void {
