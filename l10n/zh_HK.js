@@ -114,6 +114,7 @@ OC.L10N.register(
     "Delete template" : "刪除模板",
     "Delete page" : "刪除頁面",
     "Extra action" : "額外操作",
+    "Page not found: {page}" : "找不到頁面︰{page}",
     "Select a page from the list or create a new one." : "從清單中選擇一個頁面或創建一個新頁面。",
     "Breadcrumb for Home" : "主頁的麵包屑式導航",
     "Breadcrumb for {page}" : "{page} 頁的麵包屑式導航",

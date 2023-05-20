@@ -114,6 +114,7 @@ OC.L10N.register(
     "Delete template" : "Delete template",
     "Delete page" : "Delete page",
     "Extra action" : "Extra action",
+    "Page not found: {page}" : "Page not found: {page}",
     "Select a page from the list or create a new one." : "Select a page from the list or create a new one.",
     "Breadcrumb for Home" : "Breadcrumb for Home",
     "Breadcrumb for {page}" : "Breadcrumb for {page}",
