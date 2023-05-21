@@ -69,7 +69,7 @@
     "Select a page from the list or create a new one." : "从列表中选择一个页面或创建一个新页面。",
     "Restore this version" : "还原此版本",
     "Reverted {page} to revision {timestamp}." : "将页面 {page} 还原为版本 {timestamp}。",
-    "Failed to revert {page} to revision {timestamp}." : "还原页面 {page} 还原到版本 {timestamp} 失败。",
+    "Failed to revert {page} to revision {timestamp}." : "还原页面{page}还原到版本{timestamp}失败。",
     "Template" : "模板",
     "Title" : "标题",
     "Could not rename the page" : "无法重命名页面",
