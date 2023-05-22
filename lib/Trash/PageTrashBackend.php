@@ -471,12 +471,30 @@ class PageTrashBackend implements ITrashBackend {
 	}
 
 	/**
+	 * @param int $collectiveId
+	 *
+	 * @return void
+	 * @throws InvalidPathException
+	 * @throws NotPermittedException
+	 */
+	public function deleteTrashFolder(int $collectiveId): void {
+		$trashRoot = $this->getTrashRoot();
+		try {
+			$trashFolder = $trashRoot->get((string)$collectiveId);
+			$this->cleanTrashFolder($collectiveId);
+			$trashFolder->delete();
+		} catch (NotFoundException $e) {
+			// Folder doesn't exist
+		}
+	}
+
+	/**
 	 * @param Expiration $expiration
 	 *
 	 * @return int
+	 * @throws InvalidPathException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
-	 * @throws InvalidPathException
 	 */
 	public function expire(Expiration $expiration): int {
 		$count = 0;

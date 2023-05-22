@@ -243,6 +243,22 @@ class VersionsBackend implements IVersionBackend {
 	/**
 	 * @param int $folderId
 	 *
+	 * @return void
+	 * @throws InvalidPathException
+	 * @throws NotPermittedException
+	 */
+	public function deleteVersionsFolder(int $folderId): void {
+		try {
+			$versionsFolder = $this->getAppFolder()->get('versions/' . $folderId);
+			$versionsFolder->delete();
+		} catch (NotFoundException $e) {
+			// Folder doesn't exist
+		}
+	}
+
+	/**
+	 * @param int $folderId
+	 *
 	 * @return Folder
 	 * @throws NotFoundException
 	 * @throws NotPermittedException

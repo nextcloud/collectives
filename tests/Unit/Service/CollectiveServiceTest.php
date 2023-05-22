@@ -2,6 +2,7 @@
 
 namespace Unit\Service;
 
+use OC\App\AppManager;
 use OC\Files\Node\File;
 use OC\Files\Node\Folder;
 use OCA\Circles\Model\Circle;
@@ -32,6 +33,10 @@ class CollectiveServiceTest extends TestCase {
 	private CollectiveService $service;
 
 	protected function setUp(): void {
+		$appManager = $this->getMockBuilder(AppManager::class)
+			->disableOriginalConstructor()
+			->getMock();
+
 		$this->collectiveMapper = $this->getMockBuilder(CollectiveMapper::class)
 			->disableOriginalConstructor()
 			->getMock();
@@ -80,6 +85,7 @@ class CollectiveServiceTest extends TestCase {
 			->getMock();
 
 		$this->service = new CollectiveService(
+			$appManager,
 			$this->collectiveMapper,
 			$this->collectiveHelper,
 			$collectiveFolderManager,
