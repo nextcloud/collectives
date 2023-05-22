@@ -196,6 +196,9 @@ class PageTrashBackend implements ITrashBackend {
 			$this->trashManager->removeItem((int)$collectiveId, $item->getName(), $item->getDeletedTime());
 		}
 
+		if (!is_null($this->versionsBackend)) {
+			$this->versionsBackend->deleteAllVersionsForFile($collectiveId, $item->getId());
+		}
 		$this->pageMapper->deleteByFileId($item->getId());
 		NodeHelper::revertSubFolders($node->getParent());
 	}

@@ -380,6 +380,7 @@ class CollectiveService extends CollectiveServiceBase {
 		} finally {
 			$this->shareService->deleteShareByCollectiveId($collectiveInfo->getId());
 			$this->collectiveUserSettingsMapper->deleteByCollectiveId($collectiveInfo->getId());
+			// $this->pageTrashBackend->
 		}
 
 		return new CollectiveInfo($this->collectiveMapper->delete($collectiveInfo),
