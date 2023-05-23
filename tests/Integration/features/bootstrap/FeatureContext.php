@@ -185,19 +185,25 @@ class FeatureContext implements Context {
 
 	/**
 	 * @Then user :user sees pagePath :pagePath in :collective
+	 * @Then user :user :fails to see pagePath :pagePath in :collective
 	 *
-	 * @param string $user
-	 * @param string $pagePath
-	 * @param string $collective
+	 * @param string      $user
+	 * @param string      $pagePath
+	 * @param string      $collective
+	 * @param string|null $fail
 	 *
 	 * @throws GuzzleException
 	 */
-	public function userSeesPagePath(string $user, string $pagePath, string $collective): void {
+	public function userSeesPagePath(string $user, string $pagePath, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$this->sendRequest('GET', '/apps/collectives/_api/' . $collectiveId . '/_pages');
 		$this->assertStatusCode(200);
-		$this->assertPageByPath($pagePath);
+		if ($fail === 'fails') {
+			$this->assertPageByPath($pagePath, true);
+		} else {
+			$this->assertPageByPath($pagePath);
+		}
 	}
 
 	/**
@@ -756,8 +762,7 @@ class FeatureContext implements Context {
 
 		if ($status === 'enabled') {
 			$this->sendRequest('POST', '/settings/apps/enable', null, $jsonData);
-
-		} elseif ($status === 'disabled')  {
+		} elseif ($status === 'disabled') {
 			$this->sendRequest('POST', '/settings/apps/disable', null, $jsonData);
 		} else {
 			throw new RuntimeException('Unknown app status: ' . $status);
@@ -1012,6 +1017,20 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @param string $user
+	 *
+	 * @return string
+	 */
+	private function getUserCollectivesPath(string $user): string {
+		// Dirty hack to not break it on local dev setup
+		$lang = $this->getUserLanguage($user);
+		if ($lang === 'de') {
+			return 'Kollektive';
+		}
+
+		return 'Collectives';
+	}
+	/**
 	 * @When user :user has webdav access to :collective with permissions :permissions
 	 *
 	 * @param string $collective
@@ -1033,21 +1052,74 @@ class FeatureContext implements Context {
 		$xProp->appendChild($dom->createElement('oc:permissions'));
 		$dom->appendChild($xPropfind)->appendChild($xProp);
 		$body = $dom->saveXML();
-		$userCollectivesPath = 'Collectives';
+		$userCollectivesPath = $this->getUserCollectivesPath($user);
 
-		// Dirty hack to not break it on local dev setup
-		$lang = $this->getUserLanguage($user);
-		if ($lang === 'de') {
-			$userCollectivesPath = 'Kollektive';
-		}
-
-		$this->sendRemoteRequest('PROPFIND', '/dav/files/' . $user . '/' . $userCollectivesPath . '/' . urlencode($collective) . '/', $body, $headers);
+		$this->sendRemoteRequest('PROPFIND', '/dav/files/' . $user . '/' . $userCollectivesPath . '/' . urlencode($collective) . '/', $body, null, $headers);
 		$this->assertStatusCode(207);
 
 		// simplexml_load_string() would be better than preg_replace
 		$folderPermissions = preg_replace('/.*<oc:permissions>(.*)<\/oc:permissions>.*/sm', '\1', $this->response->getBody()->getContents());
 
 		Assert::assertEquals($permissions, $folderPermissions);
+	}
+
+	/**
+	 * @param string $user
+	 *
+	 * @return array
+	 * @throws GuzzleException
+	 */
+	private function listWebdavTrash(string $user): array {
+		$this->setCurrentUser($user);
+		$headers = [
+			'Content-Type' => 'Content-Type: text/xml; charset="utf-8"',
+			'Depth' => 1,
+		];
+		$dom = new \DOMDocument('1.0', 'UTF-8');
+		$xPropfind = $dom->createElementNS('DAV:', 'D:propfind');
+		$xProp = $dom->createElement('D:prop');
+		$xProp->setAttribute('xmlns:nc', 'http://nextcloud.org/ns');
+		$xProp->appendChild($dom->createElement('nc:trashbin-title'));
+		$dom->appendChild($xPropfind)->appendChild($xProp);
+		$body = $dom->saveXML();
+
+		$this->sendRemoteRequest('PROPFIND', '/dav/trashbin/' . $user . '/trash/', $body, null, $headers);
+		$this->assertStatusCode(207);
+
+		$xml = simplexml_load_string($this->response->getBody()->getContents());
+		$entries = [];
+		$count = 0;
+		foreach ($xml->xpath('//d:href') as $xmlItem) {
+			$href = (string)$xmlItem;
+			$trashbinTitle = (string)$xmlItem->xpath('//nc:trashbin-title')[$count];
+			$entries[] = [
+				'href' => $href, 'trashbinTitle' => $trashbinTitle
+			];
+			$count++;
+		}
+
+		return $entries;
+	}
+
+	/**
+	 * @param string $collective
+	 * @param string $filePath
+	 * @param string $user
+	 *
+	 * @return string|null
+	 * @throws GuzzleException
+	 */
+	private function inWebdavTrash(string $collective, string $filePath, string $user): ?string {
+		$webdavTrashEntries = $this->listWebdavTrash($user);
+		$userCollectivesPath = $this->getUserCollectivesPath($user);
+
+		foreach ($webdavTrashEntries as $entry) {
+			if ($entry['trashbinTitle'] === $userCollectivesPath . '/' . urlencode($collective) . '/' . $filePath) {
+				return $entry['href'];
+			}
+		}
+
+		return null;
 	}
 
 	/**
@@ -1064,19 +1136,97 @@ class FeatureContext implements Context {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$pageId = $this->pageIdByName($collectiveId, $page);
-		$userCollectivesPath = 'Collectives';
-
-		// Dirty hack to not break it on local dev setup
-		$lang = $this->getUserLanguage($user);
-		if ($lang === 'de') {
-			$userCollectivesPath = 'Kollektive';
-		}
+		$userCollectivesPath = $this->getUserCollectivesPath($user);
 
 		$attachmentsPath = '/dav/files/' . $user . '/' . $userCollectivesPath . '/' . urlencode($collective) . '/' . '.attachments.' . $pageId;
 
 		$this->sendRemoteRequest('MKCOL', $attachmentsPath);
 		$body = fopen('tests/Integration/features/fixtures/' . $fileName, 'rb');
 		$this->sendRemoteRequest('PUT', $attachmentsPath . '/' . $fileName, $body);
+	}
+
+	/**
+	 * @When user :user trashes page :page via webdav in :collective
+	 * @When user :user :fails to trash page :page via webdav in :collective
+	 *
+	 * @param string      $user
+	 * @param string      $page
+	 * @param string      $collective
+	 * @param string|null $fail
+	 *
+	 * @throws GuzzleException
+	 */
+	public function webdavTrashFile(string $user, string $page, string $collective, ?string $fail = null): void {
+		$this->setCurrentUser($user);
+		$userCollectivesPath = $this->getUserCollectivesPath($user);
+
+		$filePath = '/dav/files/' . $user . '/' . $userCollectivesPath . '/' . urlencode($collective) . '/' . urlencode($page) . '.md';
+
+		$this->sendRemoteRequest('DELETE', $filePath);
+		if ("fails" === $fail) {
+			$this->assertStatusCode(403);
+		} else {
+			$this->assertStatusCode(204);
+		}
+	}
+
+	/**
+	 * @When user :user restores page :page from trash via webdav in :collective
+	 * @When user :user :fails to restore page :page from trash via webdav in :collective
+	 *
+	 * @param string      $user
+	 * @param string      $page
+	 * @param string      $collective
+	 * @param string|null $fail
+	 *
+	 * @throws GuzzleException
+	 */
+	public function webdavRestoreFile(string $user, string $page, string $collective, ?string $fail = null): void {
+		$this->setCurrentUser($user);
+
+		$href = $this->inWebdavTrash($collective, urlencode($page) . '.md', $user);
+		if ("fails" === $fail) {
+			Assert::assertNull($href, 'Page found in trash even though not expected: ' . $page);
+			return;
+		}
+		Assert::assertNotNull($href, 'Page not found in trash: ' . $page);
+
+		$hrefSplit = explode('/', $href);
+		$trashFilename = end($hrefSplit);
+		$filePath = '/dav/trashbin/' . $user . '/trash/' . $trashFilename;
+
+		$headers = ['destination' => $this->remoteUrl . '/dav/trashbin/' . $user . '/restore/' . $trashFilename];
+		$this->sendRemoteRequest('MOVE', $filePath, null, null, $headers);
+		$this->assertStatusCode(201);
+	}
+
+	/**
+	 * @When user :user deletes page :page from trash via webdav in :collective
+	 * @When user :user :fails to delete page :page from trash via webdav in :collective
+	 *
+	 * @param string      $user
+	 * @param string      $page
+	 * @param string      $collective
+	 * @param string|null $fail
+	 *
+	 * @throws GuzzleException
+	 */
+	public function webdavDeleteFile(string $user, string $page, string $collective, ?string $fail = null): void {
+		$this->setCurrentUser($user);
+
+		$href = $this->inWebdavTrash($collective, urlencode($page) . '.md', $user);
+		if ("fails" === $fail) {
+			Assert::assertNull($href, 'Page found in trash even though not expected: ' . $page);
+			return;
+		}
+		Assert::assertNotNull($href, 'Page not found in trash: ' . $page);
+
+		$hrefSplit = explode('/', $href);
+		$trashFilename = end($hrefSplit);
+		$filePath = '/dav/trashbin/' . $user . '/trash/' . $trashFilename;
+
+		$this->sendRemoteRequest('DELETE', $filePath);
+		$this->assertStatusCode(204);
 	}
 
 	/**
@@ -1339,8 +1489,8 @@ class FeatureContext implements Context {
 		// clear the cached json response
 		$this->json = null;
 		try {
-			if ($verb === 'PROPFIND') {
-				$this->response = $client->request('PROPFIND', $url, $options);
+			if ($verb === 'PROPFIND' || $verb === 'MOVE') {
+				$this->response = $client->request($verb, $url, $options);
 			} else {
 				$this->response = $client->{$verb}($url, $options);
 			}
