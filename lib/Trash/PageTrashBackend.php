@@ -167,6 +167,17 @@ class PageTrashBackend implements ITrashBackend {
 		$targetFolder->getStorage()->getUpdater()->renameFromStorage($trashStorage, $node->getInternalPath(), $targetLocation);
 		$this->trashManager->removeItem((int)$collectiveId, $item->getName(), $item->getDeletedTime());
 
+		// Restore attachments folder if it exists
+		$trashFolder = $this->getTrashFolder($collectiveId);
+		try {
+			$attachmentsNode = $trashFolder->get('.attachments.' . $item->getId());
+			if (null !== $attachmentsItem = $this->getTrashItemByCollectiveAndId($user, $collectiveId, $attachmentsNode->getId())) {
+				$this->restoreItem($attachmentsItem);
+			}
+		} catch (NotFoundException $e) {
+		}
+
+
 		$this->pageMapper->restoreByFileId($item->getId());
 	}
 
