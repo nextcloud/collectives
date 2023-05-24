@@ -214,10 +214,11 @@ Cypress.Commands.add('seedPage', (name, parentFilePath, parentFileName) => {
 		.its('app')
 		.then(async app => {
 			await app.$store.dispatch(GET_PAGES)
-			const parentId = app.$store.state.pages.pages.find(function(p) {
+			const parentPage = app.$store.state.pages.pages.find(function(p) {
 				return p.filePath === parentFilePath
 					&& p.fileName === parentFileName
-			}).id
+			})
+			const parentId = parentPage.id
 			await app.$store.dispatch(NEW_PAGE, { title: name, pagePath: name, parentId })
 			// Return pageId of created page
 			return app.$store.state.pages.pages.find(function(p) {

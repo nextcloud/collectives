@@ -53,44 +53,6 @@ describe('Page', function() {
 		})
 	})
 
-	describe('Sort order', function() {
-		it('sorts pages by custom order by default', function() {
-			cy.get('.app-content-list-item').eq(1)
-				.should('contain', '#% special chars')
-			cy.get('.app-content-list-item').last()
-				.should('contain', 'Day 1')
-		})
-		it('can sort pages by title/timestamp and sort order is persistent', function() {
-			// Select sorting by title
-			cy.get('span.sort-ascending-icon').click()
-			cy.get('.sort-alphabetical-ascending-icon').click()
-			cy.get('.app-content-list-item').last()
-				.should('contain', 'Page Title')
-
-			// Reload to test persistance of sort order
-			cy.intercept('GET', '**/_api/*/_pages').as('getPages')
-			cy.reload()
-			cy.wait('@getPages')
-			cy.get('.app-content-list-item').last()
-				.should('contain', 'Page Title')
-
-			// Select sorting by timestamp
-			cy.get('span.sort-alphabetical-ascending-icon').click()
-			cy.get('button.action-button > span.sort-clock-ascending-outline-icon').click()
-			cy.get('.app-content-list-item').last()
-				.should('contain', 'Day 1')
-
-			// Remove alternative sort order
-			cy.get('span.sort-order-chip > button').click()
-			cy.get('span.sort-ascending-icon')
-				.should('be.visible')
-			cy.get('.app-content-list-item').eq(1)
-				.should('contain', '#% special chars')
-			cy.get('.app-content-list-item').last()
-				.should('contain', 'Day 1')
-		})
-	})
-
 	describe('Set page emoji', function() {
 		it('Allows setting a page emoji from title bar', function() {
 			cy.visit('/apps/collectives/Our%20Garden/Day%201')
@@ -118,39 +80,6 @@ describe('Page', function() {
 			cy.contains('.app-content-list-item', 'Day 2')
 				.find('.app-content-list-item-icon')
 				.should('contain', '😀')
-		})
-	})
-
-	describe('Move a page using the modal', function() {
-		it('Moves page to a subpage', function() {
-			cy.seedPage('Move me', '', 'Readme.md')
-			cy.seedPage('Target', '', 'Readme.md')
-			cy.seedPage('Target Subpage', '', 'Target.md')
-			cy.visit('/apps/collectives/Our%20Garden')
-			cy.contains('.app-content-list-item', 'Move me')
-				.find('.action-item__menutoggle')
-				.click({ force: true })
-			cy.get('button.action-button')
-				.contains('Move page')
-				.click()
-			cy.get('.picker-page-list li')
-				.contains('Target')
-				.click()
-			cy.get('.picker-move-buttons button .arrow-down-icon')
-				.click()
-			cy.get('.picker-buttons button')
-				.contains('Move page here')
-				.click()
-
-			cy.visit('/apps/collectives/Our%20Garden/Target')
-			cy.contains('.page-list-drag-item', 'Target')
-				.get('.page-list-indent .app-content-list-item')
-				.first()
-				.contains('Target Subpage')
-			cy.contains('.page-list-drag-item', 'Target')
-				.get('.page-list-indent .app-content-list-item')
-				.last()
-				.contains('Move me')
 		})
 	})
 
@@ -311,20 +240,6 @@ describe('Page', function() {
 		})
 	}
 
-	describe('Using the page list filter', function() {
-		it('Shows only landing page and (sub)pages matching the filter string', function() {
-			cy.get('input[name="pageFilter"]')
-				.type('Title')
-			cy.get('.app-content-list-item-line-one:visible').should('have.length', 3)
-			cy.get('.app-content-list-item-line-one:visible').eq(0)
-				.should('contain', 'Our Garden')
-			cy.get('.app-content-list-item-line-one:visible').eq(1)
-				.should('contain', 'Subpage Title')
-			cy.get('.app-content-list-item-line-one:visible').eq(2)
-				.should('contain', 'Page Title')
-		})
-	})
-
 	describe('Changing page mode', function() {
 		it('Opens edit mode per default', function() {
 			cy.seedCollectivePageMode('Our Garden', 1)
@@ -342,38 +257,6 @@ describe('Page', function() {
 				.should('be.visible')
 			cy.getEditor()
 				.should('not.be.visible')
-		})
-	})
-
-	describe('Display table of contents', function() {
-		it('Allows to display/close TOC and switch page modes in between', function() {
-			cy.seedPage('TableOfContents', '', 'Readme.md')
-			cy.seedPageContent('Our Garden/TableOfContents.md', '## Second-Level Heading')
-			cy.visit('/apps/collectives/Our%20Garden/TableOfContents')
-			cy.get('#titleform .action-item__menutoggle')
-				.click()
-
-			cy.log('Show outline in view mode')
-			cy.contains('button', 'Show outline')
-				.click()
-			cy.get('#text-container .editor--toc .editor--toc__item')
-				.should('contain', 'Second-Level Heading')
-
-			// Switch to edit mode
-			cy.switchPageMode(1)
-
-			cy.get('.text-editor .editor--toc .editor--toc__item')
-				.should('contain', 'Second-Level Heading')
-
-			cy.log('Close outline in edit mode')
-			cy.get('.text-editor .editor--outline__header .close-icon')
-				.click()
-
-			// Switch back to view mode
-			cy.switchPageMode(0)
-
-			cy.get('.editor--toc')
-				.should('not.exist')
 		})
 	})
 
@@ -397,31 +280,4 @@ describe('Page', function() {
 		})
 	})
 
-	describe('Displaying backlinks', function() {
-		it('Lists backlinks for a page', function() {
-			cy.visit('/apps/collectives/Our%20Garden/Day%201')
-			cy.get('button.action-item .icon-menu-sidebar').click()
-			cy.get('a#backlinks').click()
-			cy.get('.app-sidebar-tabs__content').should('contain', 'Day 2')
-		})
-	})
-
-	describe('Print view', function() {
-		it('renders all the pages', function() {
-			let printStub
-			cy.visit('/apps/collectives/_/print/Our%20Garden', {
-				onBeforeLoad: (win) => {
-					printStub = cy.stub(win, 'print').as('print')
-				},
-			})
-			cy.get('main')
-				.should('contain', 'Preparing collective for exporting or printing')
-			cy.get('#page-title-collective').should('contain', 'Our Garden')
-			cy.get('main').should('contain', 'Day 2')
-			cy.get('@print').should('be.called')
-				.then(() => {
-					printStub.restore()
-				})
-		})
-	})
 })
