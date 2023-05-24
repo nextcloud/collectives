@@ -166,19 +166,12 @@ class PageTrashBackend implements ITrashBackend {
 		$targetFolder->getStorage()->moveFromStorage($trashStorage, $node->getInternalPath(), $targetLocation);
 		$targetFolder->getStorage()->getUpdater()->renameFromStorage($trashStorage, $node->getInternalPath(), $targetLocation);
 		$this->trashManager->removeItem((int)$collectiveId, $item->getName(), $item->getDeletedTime());
-
-		// Restore attachments folder if it exists
-		$trashFolder = $this->getTrashFolder($collectiveId);
-		try {
-			$attachmentsNode = $trashFolder->get('.attachments.' . $item->getId());
-			if (null !== $attachmentsItem = $this->getTrashItemByCollectiveAndId($user, $collectiveId, $attachmentsNode->getId())) {
-				$this->restoreItem($attachmentsItem);
-			}
-		} catch (NotFoundException $e) {
-		}
-
-
 		$this->pageMapper->restoreByFileId($item->getId());
+
+		// Also restore attachments folder if it exists
+		if (null !== $attachmentsFolderItem = $this->findAttachmentFolderItem($user, $collectiveId, $item)) {
+			$this->restoreItem($attachmentsFolderItem);
+		}
 	}
 
 	/**
@@ -223,6 +216,11 @@ class PageTrashBackend implements ITrashBackend {
 		}
 		$this->pageMapper->deleteByFileId($item->getId());
 
+		// Also remove attachments folder if it exists
+		if (null !== $attachmentsFolderItem = $this->findAttachmentFolderItem($user, $collectiveId, $item)) {
+			$this->removeItem($attachmentsFolderItem);
+		}
+
 		// Try to revert subfolders of target folder parent
 		if ($targetFolder) {
 			try {
@@ -230,6 +228,39 @@ class PageTrashBackend implements ITrashBackend {
 			} catch (\OCA\Collectives\Service\NotFoundException | \OCA\Collectives\Service\NotPermittedException $e) {
 			}
 		}
+	}
+
+	/**
+	 * @param IUser      $user
+	 * @param int        $collectiveId
+	 * @param ITrashItem $item
+	 *
+	 * @return ITrashItem|null
+	 * @throws NotPermittedException
+	 */
+	private function findAttachmentFolderItem(IUser $user, int $collectiveId, ITrashItem $item): ?ITrashItem {
+		$attachmentsPrefix = ".attachments.";
+		if (strpos($item->getName(), $attachmentsPrefix) === 0) {
+			// Passed item is already an attachment folder
+			return null;
+		}
+
+		$trashFolder = $this->getTrashFolder($collectiveId);
+		$deletedTime = $item->getDeletedTime();
+		// Search for attachments folder with deleted time up to two seconds after item deleted time
+		for ($t = $deletedTime; $t < $deletedTime + 2; $t++) {
+			try {
+				$name = $attachmentsPrefix . $item->getId() . '.d' . $t;
+				$attachmentsNode = $trashFolder->get($name);
+				if (null !== $attachmentsItem = $this->getTrashItemByCollectiveAndId($user, $collectiveId, $attachmentsNode->getId())) {
+					return $attachmentsItem;
+				}
+				break;
+			} catch (NotFoundException | InvalidPathException $e) {
+			}
+		}
+
+		return null;
 	}
 
 	/**
