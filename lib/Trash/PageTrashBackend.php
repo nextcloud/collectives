@@ -186,6 +186,18 @@ class PageTrashBackend implements ITrashBackend {
 		if ($node === null) {
 			throw new NotFoundException();
 		}
+
+		// Get original parent folder of item to revert subfolders further down
+		$targetFolder = $this->collectiveFolderManager->getFolder((int)$collectiveId);
+		$targetFolderPath = substr($item->getOriginalLocation(), 0, -strlen($item->getName()));
+		if ($targetFolderPath) {
+			try {
+				$targetFolder = $targetFolder->get($targetFolderPath);
+			} catch (NotFoundException $e) {
+				$targetFolder = null;
+			}
+		}
+
 		if ($node->getStorage()->unlink($node->getInternalPath()) === false) {
 			throw new \Exception('Failed to remove item from trashbin');
 		}
@@ -200,7 +212,14 @@ class PageTrashBackend implements ITrashBackend {
 			$this->versionsBackend->deleteAllVersionsForFile($collectiveId, $item->getId());
 		}
 		$this->pageMapper->deleteByFileId($item->getId());
-		NodeHelper::revertSubFolders($node->getParent());
+
+		// Try to revert subfolders of target folder parent
+		if ($targetFolder) {
+			try {
+				NodeHelper::revertSubFolders($targetFolder->getParent());
+			} catch (\OCA\Collectives\Service\NotFoundException | \OCA\Collectives\Service\NotPermittedException $e) {
+			}
+		}
 	}
 
 	/**
