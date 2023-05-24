@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Command;
 
-use OC\App\AppManager;
 use OC\Core\Command\Base;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Service\MissingDependencyException;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
 use OCA\Collectives\Trash\PageTrashBackend;
+use OCP\App\IAppManager;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -22,7 +22,7 @@ class PageTrashCleanup extends Base {
 	private CollectiveMapper $collectiveMapper;
 
 	public function __construct(
-		AppManager $appManager,
+		IAppManager $appManager,
 		CollectiveMapper $collectiveMapper
 	) {
 		parent::__construct();

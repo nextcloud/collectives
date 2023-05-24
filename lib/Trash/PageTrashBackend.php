@@ -13,6 +13,7 @@ use OCA\Collectives\Versions\VersionsBackend;
 use OCA\Files_Trashbin\Expiration;
 use OCA\Files_Trashbin\Trash\ITrashBackend;
 use OCA\Files_Trashbin\Trash\ITrashItem;
+use OCA\Files_Trashbin\Trash\TrashItem;
 use OCP\Constants;
 use OCP\Files\Folder;
 use OCP\Files\InvalidPathException;
@@ -67,7 +68,7 @@ class PageTrashBackend implements ITrashBackend {
 	/**
 	 * @param IUser $user
 	 *
-	 * @return array|ITrashItem[]
+	 * @return array|CollectivePageTrashItem[]
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
@@ -79,7 +80,7 @@ class PageTrashBackend implements ITrashBackend {
 	/**
 	 * @param ITrashItem $trashItem
 	 *
-	 * @return array|ITrashItem[]
+	 * @return array|TrashItem[]
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
@@ -231,14 +232,14 @@ class PageTrashBackend implements ITrashBackend {
 	}
 
 	/**
-	 * @param IUser      $user
-	 * @param int        $collectiveId
-	 * @param ITrashItem $item
+	 * @param IUser                   $user
+	 * @param int                     $collectiveId
+	 * @param CollectivePageTrashItem $item
 	 *
-	 * @return ITrashItem|null
+	 * @return TrashItem|null
 	 * @throws NotPermittedException
 	 */
-	private function findAttachmentFolderItem(IUser $user, int $collectiveId, ITrashItem $item): ?ITrashItem {
+	private function findAttachmentFolderItem(IUser $user, int $collectiveId, CollectivePageTrashItem $item): ?TrashItem {
 		$attachmentsPrefix = ".attachments.";
 		if (strpos($item->getName(), $attachmentsPrefix) === 0) {
 			// Passed item is already an attachment folder
@@ -336,12 +337,12 @@ class PageTrashBackend implements ITrashBackend {
 
 	/**
 	 * @param IUser      $user
-	 * @param ITrashItem $trashItem
+	 * @param TrashItem  $trashItem
 	 *
 	 * @return Node|null
 	 * @throws NotPermittedException
 	 */
-	private function getNodeForTrashItem(IUser $user, ITrashItem $trashItem): ?Node {
+	private function getNodeForTrashItem(IUser $user, TrashItem $trashItem): ?Node {
 		[, $collectiveId, $path] = explode('/', $trashItem->getTrashPath(), 3);
 		if (!$this->userHasAccessToFolder($user, (int)$collectiveId)) {
 			throw new NotPermittedException('No permission to trash for collective');
@@ -384,7 +385,7 @@ class PageTrashBackend implements ITrashBackend {
 	 */
 	private function getTrashFolder(int $collectiveId): Folder {
 		try {
-			$folder = $this->getTrashRoot()->get($collectiveId);
+			$folder = $this->getTrashRoot()->get((string)$collectiveId);
 			if (!$folder instanceof Folder) {
 				throw new NotPermittedException('Trash root is not a folder');
 			}
@@ -429,7 +430,7 @@ class PageTrashBackend implements ITrashBackend {
 				$key = $collectiveId . '/' . $name . '/' . $timestamp;
 				$originalLocation = isset($indexedRows[$key]) ? $indexedRows[$key]['original_location'] : '';
 
-				if (null !== $info = $item->getFileInfo()) {
+				if (method_exists($item, 'getFileInfo') && null !== $info = $item->getFileInfo()) {
 					$info['name'] = $name;
 					$items[] = new CollectivePageTrashItem(
 						$this,
@@ -473,10 +474,10 @@ class PageTrashBackend implements ITrashBackend {
 	 * @param int   $collectiveId
 	 * @param int   $fileId
 	 *
-	 * @return ITrashItem|null
+	 * @return TrashItem|null
 	 * @throws NotPermittedException
 	 */
-	public function getTrashItemByCollectiveAndId(IUser $user, int $collectiveId, int $fileId): ?ITrashItem {
+	public function getTrashItemByCollectiveAndId(IUser $user, int $collectiveId, int $fileId): ?TrashItem {
 		try {
 			if (!$this->userHasAccessToFolder($user, (int)$collectiveId)) {
 				return null;
@@ -486,7 +487,7 @@ class PageTrashBackend implements ITrashBackend {
 			$trashFolder = $this->getTrashFolder($collectiveId);
 			$trashNode = $this->getTrashNodeById($user, $fileId);
 			$trashItem = $this->trashManager->getTrashItemByFileId($fileId);
-			if ($trashItem && $trashNode) {
+			if ($trashItem && $trashNode && method_exists($trashNode, 'getFileInfo')) {
 				$pathParts = pathinfo($trashNode->getName());
 				$name = $pathParts['filename'];
 

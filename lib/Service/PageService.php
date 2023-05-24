@@ -2,7 +2,6 @@
 
 namespace OCA\Collectives\Service;
 
-use OC\App\AppManager;
 use OCA\Collectives\Db\Page;
 use OCA\Collectives\Db\PageMapper;
 use OCA\Collectives\Fs\NodeHelper;
@@ -11,6 +10,7 @@ use OCA\Collectives\Model\CollectiveInfo;
 use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Trash\PageTrashBackend;
 use OCA\NotifyPush\Queue\IQueue;
+use OCP\App\IAppManager;
 use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\InvalidPathException;
@@ -25,7 +25,7 @@ use Psr\Container\ContainerInterface;
 class PageService {
 	private const DEFAULT_PAGE_TITLE = 'New Page';
 
-	private AppManager $appManager;
+	private IAppManager $appManager;
 	private PageMapper $pageMapper;
 	private NodeHelper $nodeHelper;
 	private CollectiveServiceBase $collectiveService;
@@ -37,7 +37,7 @@ class PageService {
 	private ?PageTrashBackend $trashBackend = null;
 
 	/**
-	 * @param AppManager            $appManager
+	 * @param IAppManager           $appManager
 	 * @param PageMapper            $pageMapper
 	 * @param NodeHelper            $nodeHelper
 	 * @param CollectiveServiceBase $collectiveService
@@ -46,7 +46,7 @@ class PageService {
 	 * @param IConfig               $config
 	 * @param ContainerInterface    $container
 	 */
-	public function __construct(AppManager $appManager,
+	public function __construct(IAppManager $appManager,
 		PageMapper $pageMapper,
 		NodeHelper $nodeHelper,
 		CollectiveServiceBase $collectiveService,
@@ -410,7 +410,7 @@ class PageService {
 	 * @param int    $collectiveId
 	 * @param string $userId
 	 *
-	 * @return PageInfo[]
+	 * @return array[]
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException

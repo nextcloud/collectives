@@ -2,7 +2,6 @@
 
 namespace OCA\Collectives\Service;
 
-use OC\App\AppManager;
 use OC\Files\Node\File;
 use OCA\Circles\Model\Member;
 use OCA\Collectives\Db\Collective;
@@ -15,6 +14,7 @@ use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Trash\PageTrashBackend;
 use OCA\Collectives\Versions\VersionsBackend;
+use OCP\App\IAppManager;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\Events\InvalidateMountCacheEvent;
 use OCP\Files\InvalidPathException;
@@ -23,7 +23,7 @@ use OCP\Files\NotPermittedException as FilesNotPermittedException;
 use OCP\IL10N;
 
 class CollectiveService extends CollectiveServiceBase {
-	private AppManager $appManager;
+	private IAppManager $appManager;
 	private CollectiveHelper $collectiveHelper;
 	private CollectiveFolderManager $collectiveFolderManager;
 	private CollectiveShareService $shareService;
@@ -35,7 +35,7 @@ class CollectiveService extends CollectiveServiceBase {
 	private ?VersionsBackend $pageVersionsBackend = null;
 
 	/**
-	 * @param AppManager                   $appManager
+	 * @param IAppManager                  $appManager
 	 * @param CollectiveMapper             $collectiveMapper
 	 * @param CollectiveHelper             $collectiveHelper
 	 * @param CollectiveFolderManager      $collectiveFolderManager
@@ -47,7 +47,7 @@ class CollectiveService extends CollectiveServiceBase {
 	 * @param IEventDispatcher             $eventDispatcher
 	 */
 	public function __construct(
-		AppManager $appManager,
+		IAppManager $appManager,
 		CollectiveMapper $collectiveMapper,
 		CollectiveHelper $collectiveHelper,
 		CollectiveFolderManager $collectiveFolderManager,

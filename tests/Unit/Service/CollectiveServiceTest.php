@@ -2,7 +2,6 @@
 
 namespace Unit\Service;
 
-use OC\App\AppManager;
 use OC\Files\Node\File;
 use OC\Files\Node\Folder;
 use OCA\Circles\Model\Circle;
@@ -20,6 +19,7 @@ use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\CollectiveShareService;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\UnprocessableEntityException;
+use OCP\App\IAppManager;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IL10N;
 use PHPUnit\Framework\TestCase;
@@ -33,7 +33,7 @@ class CollectiveServiceTest extends TestCase {
 	private CollectiveService $service;
 
 	protected function setUp(): void {
-		$appManager = $this->getMockBuilder(AppManager::class)
+		$appManager = $this->getMockBuilder(IAppManager::class)
 			->disableOriginalConstructor()
 			->getMock();
 
