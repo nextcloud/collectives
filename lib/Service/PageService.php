@@ -416,6 +416,9 @@ class PageService {
 	 * @throws NotPermittedException
 	 */
 	public function findAllTrash(int $collectiveId, string $userId): array {
+		// Get collective info to verify that user has access to it
+		$this->getCollectiveInfo($collectiveId, $userId);
+
 		$this->initTrashBackend();
 		if (!$this->trashBackend) {
 			throw new NotPermittedException('Failed to list page trash. Trash is disabled.');

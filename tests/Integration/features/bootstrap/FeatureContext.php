@@ -828,6 +828,23 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @When user :user unsets editing permissions for collective :collective
+	 *
+	 * @param string $user
+	 * @param string $collective
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userUnsetsPublicShareEditPermissions(string $user, string $collective): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$token = $this->getCollectiveShareToken($collectiveId);
+		$formData = new TableNode([['editable', false]]);
+		$this->sendRequest('PUT', '/apps/collectives/_api/' . $collectiveId . '/share/' . $token, $formData);
+		$this->assertStatusCode(200);
+	}
+
+	/**
 	 * @When user :user stores token for public share :collective
 	 *
 	 * @param string $user
@@ -968,8 +985,8 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When anonymous deletes page :page with parentPath :parentPath in public collective :collective with owner :owner
-	 * @When anonymous :fails to delete page :page with parentPath :parentPath in public collective :collective with owner :owner
+	 * @When anonymous trashes page :page with parentPath :parentPath in public collective :collective with owner :owner
+	 * @When anonymous :fails to trash page :page with parentPath :parentPath in public collective :collective with owner :owner
 	 *
 	 * @param string      $page
 	 * @param string      $collective
@@ -979,7 +996,7 @@ class FeatureContext implements Context {
 	 *
 	 * @throws GuzzleException
 	 */
-	public function anonymousDeletesPublicCollectivePage(string $page, string $collective, string $parentPath, string $owner, ?string $fail = null): void {
+	public function anonymousTrashesPublicCollectivePage(string $page, string $collective, string $parentPath, string $owner, ?string $fail = null): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$token = $this->getCollectiveShareToken($collectiveId);
@@ -990,6 +1007,58 @@ class FeatureContext implements Context {
 		if ("fails" === $fail) {
 			$this->assertStatusCode(403);
 		} else {
+			$this->assertStatusCode(200);
+		}
+	}
+
+	/**
+	 * @When anonymous restores page :page from trash in public collective :collective with owner :owner
+	 * @When anonymous :fails to restore page :page from trash in public collective :collective with owner :owner
+	 *
+	 * @param string      $page
+	 * @param string      $collective
+	 * @param string      $owner
+	 * @param string|null $fail
+	 *
+	 * @throws GuzzleException
+	 */
+	public function anonymousRestoresPublicCollectivePage(string $page, string $collective, string $owner, ?string $fail = null): void {
+		$this->setCurrentUser($owner);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$token = $this->getCollectiveShareToken($collectiveId);
+
+		if ("fails" === $fail) {
+			$this->sendRequest('PATCH', '/apps/collectives/_api/p/' . $token . '/_pages/trash/1', null, null, [], false);
+			$this->assertStatusCode(403);
+		} else {
+			$pageId = $this->trashedPageIdByName($collectiveId, $page, $token);
+			$this->sendRequest('PATCH', '/apps/collectives/_api/p/' . $token . '/_pages/trash/' . $pageId, null, null, [], false);
+			$this->assertStatusCode(200);
+		}
+	}
+
+	/**
+	 * @When anonymous deletes page :page from trash in public collective :collective with owner :owner
+	 * @When anonymous :fails to delete page :page from trash in public collective :collective with owner :owner
+	 *
+	 * @param string      $page
+	 * @param string      $collective
+	 * @param string      $owner
+	 * @param string|null $fail
+	 *
+	 * @throws GuzzleException
+	 */
+	public function anonymousDeletesPublicCollectivePage(string $page, string $collective, string $owner, ?string $fail = null): void {
+		$this->setCurrentUser($owner);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$token = $this->getCollectiveShareToken($collectiveId);
+
+		if ("fails" === $fail) {
+			$this->sendRequest('DELETE', '/apps/collectives/_api/p/' . $token . '/_pages/trash/1', null, null, [], false);
+			$this->assertStatusCode(403);
+		} else {
+			$pageId = $this->trashedPageIdByName($collectiveId, $page, $token);
+			$this->sendRequest('DELETE', '/apps/collectives/_api/p/' . $token . '/_pages/trash/' . $pageId, null, null, [], false);
 			$this->assertStatusCode(200);
 		}
 	}
@@ -1349,14 +1418,19 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @param int    $collectiveId
-	 * @param string $name
+	 * @param int         $collectiveId
+	 * @param string      $name
+	 * @param string|null $token
 	 *
 	 * @return int|null
 	 * @throws GuzzleException
 	 */
-	private function trashedPageIdByName(int $collectiveId, string $name): ?int {
-		$this->sendRequest('GET', '/apps/collectives/_api/' . $collectiveId . '/_pages/trash');
+	private function trashedPageIdByName(int $collectiveId, string $name, ?string $token = null): ?int {
+		if ($token) {
+			$this->sendRequest('GET', '/apps/collectives/_api/p/' . $token . '/_pages/trash', null, null, [], false);
+		} else {
+			$this->sendRequest('GET', '/apps/collectives/_api/' . $collectiveId . '/_pages/trash');
+		}
 		if (200 !== $this->response->getStatusCode()) {
 			throw new RuntimeException('Unable to get list of trashed pages for collective ' . $collectiveId);
 		}
