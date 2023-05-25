@@ -22,6 +22,7 @@
 import { registerWidget } from '@nextcloud/vue/dist/Components/NcRichText.js'
 import Vue from 'vue'
 import PageReferenceWidget from './views/PageReferenceWidget.vue'
+import './shared-init.js'
 
 Vue.prototype.t = t
 Vue.prototype.n = n

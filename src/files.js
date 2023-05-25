@@ -1,8 +1,6 @@
 import { generateUrl, imagePath } from '@nextcloud/router'
 import { FilesCollectivesPlugin } from './helpers/files.js'
-
-__webpack_nonce__ = btoa(OC.requestToken) // eslint-disable-line
-__webpack_public_path__ = OC.linkTo('collectives', 'js/') // eslint-disable-line
+import './shared-init.js'
 
 window.addEventListener('DOMContentLoaded', () => {
 	if (OCA.Theming) {
