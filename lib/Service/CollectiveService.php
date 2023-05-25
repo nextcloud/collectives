@@ -398,22 +398,24 @@ class CollectiveService extends CollectiveServiceBase {
 			$collectiveFolder->delete();
 		} catch (InvalidPathException | FilesNotFoundException | FilesNotPermittedException $e) {
 			throw new NotFoundException('Failed to delete collective folder', 0, $e);
-		}
+		} finally {
+			// Delete leftovers in any case (also if collective folder is already gone)
 
-		// Delete shares and user settings
-		$this->shareService->deleteShareByCollectiveId($collectiveInfo->getId());
-		$this->collectiveUserSettingsMapper->deleteByCollectiveId($collectiveInfo->getId());
+			// Delete shares and user settings
+			$this->shareService->deleteShareByCollectiveId($collectiveInfo->getId());
+			$this->collectiveUserSettingsMapper->deleteByCollectiveId($collectiveInfo->getId());
 
-		// Delete page trash for the collective
-		$this->initPageTrashBackend();
-		if ($this->pageTrashBackend) {
-			$this->pageTrashBackend->deleteTrashFolder($collectiveInfo->getId());
-		}
+			// Delete page trash for the collective
+			$this->initPageTrashBackend();
+			if ($this->pageTrashBackend) {
+				$this->pageTrashBackend->deleteTrashFolder($collectiveInfo->getId());
+			}
 
-		// Delete page versions for the collective
-		$this->initPageVersionsBackend();
-		if ($this->pageVersionsBackend) {
-			$this->pageVersionsBackend->deleteVersionsFolder($collectiveInfo->getId());
+			// Delete page versions for the collective
+			$this->initPageVersionsBackend();
+			if ($this->pageVersionsBackend) {
+				$this->pageVersionsBackend->deleteVersionsFolder($collectiveInfo->getId());
+			}
 		}
 
 		return new CollectiveInfo($this->collectiveMapper->delete($collectiveInfo),
