@@ -830,7 +830,7 @@ class PageService {
 
 		$trashedPage = $this->pageMapper->findByFileId($id, true);
 		if (!$trashedPage) {
-			throw new NotFoundException('Failed to find trashed page in page trash: ' . $id);
+			throw new NotFoundException('Failed to find trashed page in page trash database: ' . $id);
 		}
 
 		$pageInfo->setTrashTimestamp($trashedPage->getTrashTimestamp());
