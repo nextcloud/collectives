@@ -16,12 +16,16 @@
 					<NcAppNavigationItem v-for="collective in trashCollectives"
 						:key="collective.circleId"
 						:title="collective.name"
+						:force-menu="true"
+						:force-display-actions="isMobile"
 						class="collectives_trash_list_item">
-						<template v-if="collective.emoji" #icon>
-							{{ collective.emoji }}
-						</template>
-						<template v-else #icon>
-							<CollectivesIcon :size="20" />
+						<template #icon>
+							<template v-if="collective.emoji">
+								{{ collective.emoji }}
+							</template>
+							<template v-else>
+								<CollectivesIcon :size="20" />
+							</template>
 						</template>
 						<template #actions>
 							<NcActionButton :close-after-click="true" @click="restoreCollective(collective)">
@@ -77,6 +81,7 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 import { NcActionButton, NcAppNavigationItem, NcButton, NcModal } from '@nextcloud/vue'
+import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import CollectivesIcon from '../Icon/CollectivesIcon.vue'
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
@@ -84,9 +89,11 @@ import { directive as ClickOutside } from 'v-click-outside'
 
 export default {
 	name: 'CollectivesTrash',
+
 	directives: {
 		ClickOutside,
 	},
+
 	components: {
 		NcActionButton,
 		NcAppNavigationItem,
@@ -96,6 +103,11 @@ export default {
 		NcModal,
 		RestoreIcon,
 	},
+
+	mixins: [
+		isMobile,
+	],
+
 	data() {
 		return {
 			open: false,
@@ -106,6 +118,7 @@ export default {
 			},
 		}
 	},
+
 	computed: {
 		...mapState({
 			trashCollectives: (state) => state.collectives.trashCollectives,
