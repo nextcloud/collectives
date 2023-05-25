@@ -824,11 +824,9 @@ class PageService {
 			$this->pageMapper->deleteByFileId($id);
 			$this->removeFromSubpageOrder($collectiveId, $parentId, $id, $userId);
 			NodeHelper::revertSubFolders($folder);
-			// TODO: check
+			$this->notifyPush($collectiveId, $userId);
 			return $pageInfo;
 		}
-
-		$this->notifyPush($collectiveId, $userId);
 
 		$trashedPage = $this->pageMapper->findByFileId($id, true);
 		if (!$trashedPage) {
@@ -836,6 +834,7 @@ class PageService {
 		}
 
 		$pageInfo->setTrashTimestamp($trashedPage->getTrashTimestamp());
+		$this->notifyPush($collectiveId, $userId);
 		return $pageInfo;
 	}
 
