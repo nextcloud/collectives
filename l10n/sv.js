@@ -45,6 +45,7 @@ OC.L10N.register(
     "Permissions" : "Behörigheter",
     "Allow editing for" : "Tillåt redigering för",
     "Admins only" : "Endast administratörer",
+    "Admins and moderators" : "Administratörer och moderatorer",
     "All members" : "Alla medlemmar",
     "Allow sharing for" : "Tillåt delning för",
     "Page settings" : "Sidinställningar",

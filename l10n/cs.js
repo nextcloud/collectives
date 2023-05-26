@@ -47,6 +47,7 @@ OC.L10N.register(
     "Permissions" : "Oprávnění",
     "Allow editing for" : "Povolit úpravy pro",
     "Admins only" : "Pouze správci",
+    "Admins and moderators" : "Správci a moderátoři",
     "All members" : "Všichni členové",
     "Allow sharing for" : "Umožnit sdílení pro",
     "Page settings" : "Nastavení stránky",

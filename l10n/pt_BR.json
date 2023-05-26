@@ -111,6 +111,7 @@
     "Delete template" : "Excluir modelo",
     "Delete page" : "Remover página",
     "Extra action" : "Ação extra",
+    "Page not found: {page}" : "Página não encontrada: {page}",
     "Select a page from the list or create a new one." : "Selecione uma página da lista ou crie uma nova.",
     "Breadcrumb for Home" : "Breadcrumb para casa",
     "Breadcrumb for {page}" : "Breadcrumb para {page}",
