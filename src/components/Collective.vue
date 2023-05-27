@@ -16,7 +16,7 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { listen } from '@nextcloud/notify_push'
 import { NcAppContentDetails, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
-import { GET_PAGES } from '../store/actions.js'
+import { GET_PAGES, GET_TRASH_PAGES } from '../store/actions.js'
 import { SELECT_VERSION } from '../store/mutations.js'
 import displayError from '../util/displayError.js'
 import Page from './Page.vue'
@@ -100,6 +100,7 @@ export default {
 
 		...mapActions({
 			dispatchGetPages: GET_PAGES,
+			dispatchGetTrashPages: GET_TRASH_PAGES,
 		}),
 
 		initCollective() {
@@ -173,6 +174,8 @@ export default {
 		async getPages() {
 			await this.dispatchGetPages()
 				.catch(displayError('Could not fetch pages'))
+			await this.dispatchGetTrashPages()
+				.catch(displayError('Could not fetch page trash'))
 		},
 
 		/**
@@ -181,6 +184,8 @@ export default {
 		async getPagesBackground() {
 			await this.dispatchGetPages(false)
 				.catch(displayError('Could not fetch pages'))
+			await this.dispatchGetTrashPages()
+				.catch(displayError('Could not fetch page trash'))
 		},
 
 		closeNav() {

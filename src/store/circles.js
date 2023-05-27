@@ -1,6 +1,6 @@
 import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
-import { GET_CIRCLES, RENAME_CIRCLE, ADD_MEMBERS_TO_CIRCLE, LEAVE_CIRCLE, GET_PAGES } from './actions.js'
+import { GET_CIRCLES, RENAME_CIRCLE, ADD_MEMBERS_TO_CIRCLE, LEAVE_CIRCLE, GET_PAGES, GET_TRASH_PAGES } from './actions.js'
 import {
 	SET_CIRCLES,
 	UPDATE_CIRCLE,
@@ -81,6 +81,7 @@ export default {
 			if (collective.id === getters.currentCollective?.id) {
 				// Update page list, properties like `collectivePath` might have changed
 				await dispatch(GET_PAGES)
+				await dispatch(GET_TRASH_PAGES)
 			}
 			commit(PATCH_COLLECTIVE_WITH_CIRCLE, response.data.ocs.data)
 		},
