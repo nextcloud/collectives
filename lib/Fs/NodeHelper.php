@@ -148,14 +148,22 @@ class NodeHelper {
 	}
 
 	/**
+	 * @param string $name
+	 *
+	 * @return bool
+	 */
+	public static function isPageFilename(string $name): bool {
+		$length = strlen(PageInfo::SUFFIX);
+		return (substr($name, -$length) === PageInfo::SUFFIX);
+	}
+
+	/**
 	 * @param File $file
 	 *
 	 * @return bool
 	 */
 	public static function isPage(File $file): bool {
-		$name = $file->getName();
-		$length = strlen(PageInfo::SUFFIX);
-		return (substr($name, -$length) === PageInfo::SUFFIX);
+		return self::isPageFilename($file->getName());
 	}
 
 	/**

@@ -116,6 +116,13 @@ class NodeHelperTest extends TestCase {
 		self::assertEquals($output, NodeHelper::generateFilename($folder, $input));
 	}
 
+	public function testIsPageFilename(): void {
+		self::assertTrue(NodeHelper::isPageFilename('page.md'));
+		self::assertTrue(NodeHelper::isPageFilename('image.gz.md'));
+		self::assertFalse(NodeHelper::isPageFilename('folder'));
+		self::assertFalse(NodeHelper::isPageFilename('image.gz'));
+	}
+
 	public function testIsPage(): void {
 		$file = $this->getMockBuilder(File::class)
 			->disableOriginalConstructor()

@@ -206,22 +206,56 @@ class PageService {
 	 * @throws NotFoundException
 	 */
 	private function getPageByFile(File $file, ?Node $parent = null): PageInfo {
+		$trashPageInfo = new PageInfo();
+		try {
+			$trashPage = $this->pageMapper->findByFileId($file->getId());
+		} catch (InvalidPathException | FilesNotFoundException $e) {
+			throw new NotFoundException($e->getMessage(), 0, $e);
+		}
+		$lastUserId = ($trashPage !== null) ? $trashPage->getLastUserId() : null;
+		$emoji = ($trashPage !== null) ? $trashPage->getEmoji() : null;
+		$subpageOrder = ($trashPage !== null) ? $trashPage->getSubpageOrder() : null;
+		try {
+			$trashPageInfo->fromFile($file,
+				$this->getParentPageId($file, $parent),
+				$lastUserId,
+				$lastUserId ? $this->userManager->getDisplayName($lastUserId) : null,
+				$emoji,
+				$subpageOrder);
+		} catch (FilesNotFoundException | InvalidPathException $e) {
+			throw new NotFoundException($e->getMessage(), 0, $e);
+		}
+
+		return $trashPageInfo;
+	}
+
+	/**
+	 * @param File $file
+	 *
+	 * @return PageInfo
+	 * @throws NotFoundException
+	 */
+	private function getTrashPageByFile(File $file, string $filename, string $timestamp): PageInfo {
 		$pageInfo = new PageInfo();
 		try {
-			$page = $this->pageMapper->findByFileId($file->getId());
+			$page = $this->pageMapper->findByFileId($file->getId(), true);
 		} catch (InvalidPathException | FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
 		$lastUserId = ($page !== null) ? $page->getLastUserId() : null;
 		$emoji = ($page !== null) ? $page->getEmoji() : null;
 		$subpageOrder = ($page !== null) ? $page->getSubpageOrder() : null;
+		$trashTimestamp = ($page !== null) ? $page->getTrashTimestamp(): (int)$timestamp;
 		try {
 			$pageInfo->fromFile($file,
-				$this->getParentPageId($file, $parent),
+				0,
 				$lastUserId,
 				$lastUserId ? $this->userManager->getDisplayName($lastUserId) : null,
 				$emoji,
 				$subpageOrder);
+			$pageInfo->setTrashTimestamp($trashTimestamp);
+			$pageInfo->setFilePath('');
+			$pageInfo->setTitle(basename($filename, PageInfo::SUFFIX));
 		} catch (FilesNotFoundException | InvalidPathException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
@@ -410,7 +444,7 @@ class PageService {
 	 * @param int    $collectiveId
 	 * @param string $userId
 	 *
-	 * @return array[]
+	 * @return PageInfo[]
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
@@ -427,18 +461,23 @@ class PageService {
 		$trashNodes = $this->trashBackend->listTrashForCollective($this->userManager->get($userId), $collectiveId);
 		$trashPageInfos = [];
 		foreach ($trashNodes as $node) {
-			$pathParts = pathinfo($node->getName());
-			$name = $pathParts['filename'];
-			$trashedPage = $this->pageMapper->findByFileId($node->getId(), true);
-			$trashPageInfos[] = [
-				'id' => $node->getId(),
-				'lastUserId' => $trashedPage ? $trashedPage->getLastUserId() : null,
-				'emoji' => $trashedPage ? $trashedPage->getEmoji() : null,
-				'trashTimestamp' => $trashedPage ? $trashedPage->getTrashTimestamp() : null,
-				'title' => ($node instanceof Folder)
-					? $name
-					: basename($name, PageInfo::SUFFIX),
-			];
+			if ($node instanceof Folder) {
+				try {
+					$node = $node->get(PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX);
+				} catch (FilesNotFoundException $e) {
+					// Ignore folders without index page
+					continue;
+				}
+			}
+			$pathParts = pathInfo($node->getName());
+			$filename = $pathParts['filename'];
+			$timestamp = ltrim($pathParts['extension'], 'd');
+			if (!($node instanceof File) || !(NodeHelper::isPageFilename($filename))) {
+				// Ignore everything except page files
+				continue;
+			}
+
+			$trashPageInfos[] = $this->getTrashPageByFile($node, $filename, $timestamp);
 		}
 
 		return $trashPageInfos;

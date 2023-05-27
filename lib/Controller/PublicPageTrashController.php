@@ -103,6 +103,11 @@ class PublicPageTrashController extends PublicShareController {
 			$owner = $this->getShare()->getOwner();
 			$collectiveId = $this->getShare()->getCollectiveId();
 			$pageInfos = $this->service->findAllTrash($collectiveId, $owner);
+			foreach ($pageInfos as $pageInfo) {
+				// Shares don't have a collective path
+				$pageInfo->setCollectivePath('');
+				$pageInfo->setShareToken($this->getToken());
+			}
 			return [
 				"data" => $pageInfos
 			];
@@ -122,6 +127,9 @@ class PublicPageTrashController extends PublicShareController {
 			$owner = $this->getShare()->getOwner();
 			$collectiveId = $this->getShare()->getCollectiveId();
 			$pageInfo = $this->service->restore($collectiveId, $id, $owner);
+			// Shares don't have a collective path
+			$pageInfo->setCollectivePath('');
+			$pageInfo->setShareToken($this->getToken());
 			return [
 				"data" => $pageInfo
 			];
