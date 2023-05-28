@@ -47,6 +47,7 @@ OC.L10N.register(
     "Permissions" : "İzinler",
     "Allow editing for" : "Şunlar düzenleyebilsin",
     "Admins only" : "Yalnızca yöneticiler",
+    "Admins and moderators" : "Yöneticiler ve sorumlular",
     "All members" : "Tüm üyeler",
     "Allow sharing for" : "Şunlar paylaşabilsin",
     "Page settings" : "Sayfa ayarları",
