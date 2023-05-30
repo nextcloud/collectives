@@ -450,8 +450,7 @@ class PageService {
 	 * @throws NotPermittedException
 	 */
 	public function findAllTrash(int $collectiveId, string $userId): array {
-		// Get collective info to verify that user has access to it
-		$this->getCollectiveInfo($collectiveId, $userId);
+		$this->verifyEditPermissions($collectiveId, $userId);
 
 		$this->initTrashBackend();
 		if (!$this->trashBackend) {
@@ -461,6 +460,10 @@ class PageService {
 		$trashNodes = $this->trashBackend->listTrashForCollective($this->userManager->get($userId), $collectiveId);
 		$trashPageInfos = [];
 		foreach ($trashNodes as $node) {
+			$pathParts = pathInfo($node->getName());
+			$filename = $pathParts['filename'];
+			$timestamp = ltrim($pathParts['extension'], 'd');
+
 			if ($node instanceof Folder) {
 				try {
 					$node = $node->get(PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX);
@@ -469,11 +472,9 @@ class PageService {
 					continue;
 				}
 			}
-			$pathParts = pathInfo($node->getName());
-			$filename = $pathParts['filename'];
-			$timestamp = ltrim($pathParts['extension'], 'd');
-			if (!($node instanceof File) || !(NodeHelper::isPageFilename($filename))) {
-				// Ignore everything except page files
+
+			// Ignore everything except files
+			if (!($node instanceof File)) {
 				continue;
 			}
 

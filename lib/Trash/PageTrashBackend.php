@@ -6,6 +6,7 @@ use OC\Files\Storage\Wrapper\Jail;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Db\PageMapper;
 use OCA\Collectives\Fs\NodeHelper;
+use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Mount\CollectiveStorage;
 use OCA\Collectives\Mount\MountProvider;
@@ -15,6 +16,7 @@ use OCA\Files_Trashbin\Trash\ITrashBackend;
 use OCA\Files_Trashbin\Trash\ITrashItem;
 use OCA\Files_Trashbin\Trash\TrashItem;
 use OCP\Constants;
+use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\InvalidPathException;
 use OCP\Files\Node;
@@ -163,11 +165,26 @@ class PageTrashBackend implements ITrashBackend {
 			} while ($targetFolder->nodeExists($originalLocation));
 		}
 
+		// Get pageId for restoring page in collective page database
+		$restorePageId = null;
+		if ($node instanceof Folder) {
+			// Try to use index page if folder is deleted
+			if (null !== $indexNode = $node->get(PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX)) {
+				$restorePageId = $indexNode->getId();
+			}
+		} else {
+			$restorePageId = $node->getId();
+		}
+
 		$targetLocation = $targetFolder->getInternalPath() . '/' . $originalLocation;
 		$targetFolder->getStorage()->moveFromStorage($trashStorage, $node->getInternalPath(), $targetLocation);
 		$targetFolder->getStorage()->getUpdater()->renameFromStorage($trashStorage, $node->getInternalPath(), $targetLocation);
 		$this->trashManager->removeItem((int)$collectiveId, $item->getName(), $item->getDeletedTime());
-		$this->pageMapper->restoreByFileId($item->getId());
+
+		// Restore page in collective page database
+		if ($restorePageId) {
+			$this->pageMapper->restoreByFileId($restorePageId);
+		}
 
 		// Also restore attachments folder if it exists
 		if (null !== $attachmentsFolderItem = $this->findAttachmentFolderItem($user, $collectiveId, $item)) {
@@ -203,6 +220,17 @@ class PageTrashBackend implements ITrashBackend {
 			}
 		}
 
+		// Get pageId for deleting page from collective page database
+		$deletePageId = null;
+		if ($node instanceof Folder) {
+			// Try to use index page if folder is deleted
+			if (null !== $indexNode = $node->get(PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX)) {
+				$deletePageId = $indexNode->getId();
+			}
+		} else {
+			$deletePageId = $node->getId();
+		}
+
 		if ($node->getStorage()->unlink($node->getInternalPath()) === false) {
 			throw new \Exception('Failed to remove item from trashbin');
 		}
@@ -215,7 +243,11 @@ class PageTrashBackend implements ITrashBackend {
 		if (!is_null($this->versionsBackend)) {
 			$this->versionsBackend->deleteAllVersionsForFile($collectiveId, $item->getId());
 		}
-		$this->pageMapper->deleteByFileId($item->getId());
+
+		// Delete page from collective page database
+		if ($deletePageId) {
+			$this->pageMapper->deleteByFileId($deletePageId);
+		}
 
 		// Also remove attachments folder if it exists
 		if (null !== $attachmentsFolderItem = $this->findAttachmentFolderItem($user, $collectiveId, $item)) {
@@ -283,6 +315,18 @@ class PageTrashBackend implements ITrashBackend {
 			$trashName = $name . '.d' . $time;
 			[$unJailedStorage, $unJailedInternalPath] = $this->unwrapJails($storage, $internalPath);
 			$targetInternalPath = $trashFolder->getInternalPath() . '/' . $trashName;
+
+			// Get pageId for trashing page in collectives page database
+			$trashPageId = null;
+			if ($fileEntry->getMimeType() === 'httpd/unix-directory') {
+				// Try to use index page if folder is deleted
+				if ($indexPageEntry = $storage->getCache()->get(rtrim($internalPath, '/') . '/' . PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX)) {
+					$trashPageId = $indexPageEntry->getId();
+				}
+			} else {
+				$trashPageId = $fileEntry->getId();
+			}
+
 			if ($trashStorage->moveFromStorage($unJailedStorage, $unJailedInternalPath, $targetInternalPath)) {
 				$this->trashManager->addTrashItem($collectiveId, $name, $time, $internalPath, $fileEntry->getId());
 				if ($trashStorage->getCache()->getId($targetInternalPath) !== $fileEntry->getId()) {
@@ -292,7 +336,10 @@ class PageTrashBackend implements ITrashBackend {
 				throw new \Exception('Failed to move collective item to trash');
 			}
 
-			$this->pageMapper->trashByFileId($fileEntry->getId());
+			// Trash page in collectives page database
+			if ($trashPageId) {
+				$this->pageMapper->trashByFileId($trashPageId);
+			}
 
 			return true;
 		}
@@ -479,15 +526,19 @@ class PageTrashBackend implements ITrashBackend {
 	 */
 	public function getTrashItemByCollectiveAndId(IUser $user, int $collectiveId, int $fileId): ?TrashItem {
 		try {
-			if (!$this->userHasAccessToFolder($user, (int)$collectiveId)) {
+			if (!$this->userHasAccessToFolder($user, $collectiveId)) {
 				return null;
 			}
 
 			// Build the TrashItem object
 			$trashFolder = $this->getTrashFolder($collectiveId);
 			$trashNode = $this->getTrashNodeById($user, $fileId);
-			$trashItem = $this->trashManager->getTrashItemByFileId($fileId);
-			if ($trashItem && $trashNode && method_exists($trashNode, 'getFileInfo')) {
+			// Get parent folder for index pages
+			if ($trashNode instanceof File && NodeHelper::isIndexPage($trashNode)) {
+				$trashNode = $trashNode->getParent();
+			}
+			$trashItem = $this->trashManager->getTrashItemByFileId($trashNode->getId());
+			if ($trashItem && method_exists($trashNode, 'getFileInfo')) {
 				$pathParts = pathinfo($trashNode->getName());
 				$name = $pathParts['filename'];
 
