@@ -46,10 +46,6 @@ Feature: pages
     And user "jane" sets subpageOrder for page "firstpage" to "[1,2]" with parentPath "Readme.md" in "BehatPagesCollective"
     And user "jane" fails to set subpageOrder for page "firstpage" to "[invalid]" with parentPath "Readme.md" in "BehatPagesCollective"
 
-  Scenario: Fail to trash a page with subpages
-    When user "jane" fails to trash page "firstpage" with parentPath "Readme.md" in "BehatPagesCollective"
-    Then user "jane" sees pagePath "firstpage/Readme.md" in "BehatPagesCollective"
-
   Scenario: Rename parent page
     When user "jane" renames page "firstpage" to "parentpage" with parentPath "Readme.md" in "BehatPagesCollective"
     Then user "jane" sees pagePath "parentpage/Readme.md" in "BehatPagesCollective"
@@ -77,6 +73,11 @@ Feature: pages
   Scenario: Restore subpage
     When user "jane" restores page "subpage" from trash in "BehatPagesCollective"
     Then user "jane" sees pagePath "parentpage/subpage.md" in "BehatPagesCollective"
+
+  Scenario: Trash and restore a page with subpages
+    When user "jane" trashes page "parentpage" with parentPath "Readme.md" in "BehatPagesCollective"
+    And user "jane" doesn't see pagePath "parentpage/Readme.md" in "BehatPagesCollective"
+    Then user "jane" restores page "parentpage" from trash in "BehatPagesCollective"
 
   Scenario: Trash and delete all subpages reverts subfolders
     When user "jane" trashes page "subpage" with parentPath "parentpage/Readme.md" in "BehatPagesCollective"
