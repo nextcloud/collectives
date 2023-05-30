@@ -28,6 +28,7 @@
       "cs:check": "php-cs-fixer fix --dry-run --diff",
       "cs:fix": "php-cs-fixer fix",
       "psalm": "psalm.phar",
-      "psalm:update-baseline": "psalm.phar --threads=1 --update-baseline --set-baseline=tests/psalm-baseline.xml"
+      "psalm:update-baseline": "psalm.phar --threads=1 --update-baseline --set-baseline=tests/psalm-baseline.xml",
+      "test:unit": "phpunit -c tests/phpunit.xml"
     }
 }
