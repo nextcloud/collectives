@@ -1,70 +1,87 @@
 <template>
-	<div id="page-trash"
-		v-click-outside="clickOutsideConfig">
-		<div id="page-trash__header">
-			<NcButton ref="page-trash-button"
-				type="tertiary"
-				class="page-trash-button"
-				@click="toggleTrash">
-				<template #icon>
-					<DeleteIcon class="page-trash-button__icon" :size="20" />
+	<div class="page-trash">
+		<NcButton ref="page-trash-button"
+			type="tertiary"
+			class="page-trash-button"
+			@click="toggleTrash">
+			<template #icon>
+				<DeleteIcon class="page-trash-button__icon" :size="20" />
+			</template>
+			{{ t('collectives', 'Deleted pages') }}
+		</NcButton>
+		<NcModal v-if="showModal" size="large" @close="closeTrash">
+			<div class="modal__content">
+				<h2>{{ t('collectives', 'Deleted pages') }}</h2>
+				<NcEmptyContent v-if="!trashPages.length"
+					class="modal__content_empty"
+					:description="t('collectives', 'No deleted pages.')">
+					<template #icon>
+						<DeleteIcon :size="20" />
+					</template>
+				</NcEmptyContent>
+				<template v-else>
+					<table>
+						<tr>
+							<th class="header-title">
+								{{ t('collectives', 'Title') }}
+							</th>
+							<th />
+							<th v-if="!isMobile" class="header-timestamp">
+								{{ t('collectives', 'Deleted') }}
+							</th>
+						</tr>
+						<tr v-for="trashPage in trashPages" :key="trashPage.id">
+							<td class="item">
+								<div class="item-icon">
+									<PageTemplateIcon v-if="isTemplate(trashPage)" :size="22" fill-color="var(--color-background-darker)" />
+									<div v-else-if="trashPage.emoji">
+										{{ trashPage.emoji }}
+									</div>
+									<PageIcon v-else :size="22" fill-color="var(--color-background-darker)" />
+								</div>
+								<div class="item-title">
+									{{ trashPage.title }}
+								</div>
+							</td>
+							<td class="actions">
+								<NcActions>
+									<NcActionButton :close-after-click="true" @click="restorePage(trashPage)">
+										<template #icon>
+											<RestoreIcon :size="20" />
+										</template>
+										{{ t('collectives', 'Restore') }}
+									</NcActionButton>
+									<NcActionButton :close-after-click="true" @click="deletePage(trashPage)">
+										<template #icon>
+											<DeleteIcon :size="20" />
+										</template>
+										{{ t('collectives', 'Delete permanently') }}
+									</NcActionButton>
+								</NcActions>
+							</td>
+							<td v-if="!isMobile" class="timestamp">
+								<span :title="titleDate(trashPage.trashTimestamp)">
+									{{ formattedDate(trashPage.trashTimestamp) }}
+								</span>
+							</td>
+						</tr>
+					</table>
 				</template>
-				{{ t('collectives', 'Deleted pages') }}
-			</NcButton>
-		</div>
-		<transition name="slide-up">
-			<div v-show="open" id="page-trash__content">
-				<div v-for="trashPage in trashPages"
-					:key="`page-trash-${trashPage.id}`"
-					class="app-content-list-item"
-					:class="{ mobile: isMobile }">
-					<div class="app-content-list-item-icon">
-						<PageTemplateIcon v-if="isTemplate(trashPage)" :size="22" fill-color="var(--color-background-darker)" />
-						<div v-else-if="trashPage.emoji" class="item-icon-emoji">
-							{{ trashPage.emoji }}
-						</div>
-						<PageIcon v-else :size="22" fill-color="var(--color-background-darker)" />
-					</div>
-					<a class="app-content-list-item-link">
-						<div :ref="`page-title-${trashPage.id}`"
-							v-tooltip="pageTitleIfTruncated(trashPage)"
-							class="app-content-list-item-line-one"
-							:class="{ 'template': isTemplate(trashPage) }">
-							{{ pageTitleString(trashPage) }}
-						</div>
-					</a>
-					<div class="page-list-item-actions">
-						<NcActions>
-							<NcActionButton :close-after-click="true" @click="restorePage(trashPage)">
-								<template #icon>
-									<RestoreIcon :size="20" />
-								</template>
-								{{ t('collectives', 'Restore') }}
-							</NcActionButton>
-							<NcActionButton :close-after-click="true" @click="deletePage(trashPage)">
-								<template #icon>
-									<DeleteIcon :size="20" />
-								</template>
-								{{ t('collectives', 'Delete permanently') }}
-							</NcActionButton>
-						</NcActions>
-					</div>
-				</div>
 			</div>
-		</transition>
+		</NcModal>
 	</div>
 </template>
 
 <script>
-import { NcActions, NcActionButton, NcButton } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcButton, NcEmptyContent, NcModal } from '@nextcloud/vue'
+import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { showSuccess } from '@nextcloud/dialogs'
-import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
+import moment from '@nextcloud/moment'
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
 import PageIcon from '../Icon/PageIcon.vue'
 import PageTemplateIcon from '../Icon/PageTemplateIcon.vue'
-import { directive as ClickOutside } from 'v-click-outside'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { EXPAND_PARENTS, RESTORE_PAGE, DELETE_PAGE } from '../../store/actions.js'
 import { scrollToPage } from '../../util/scrollToElement.js'
@@ -72,14 +89,12 @@ import { scrollToPage } from '../../util/scrollToElement.js'
 export default {
 	name: 'PageTrash',
 
-	directives: {
-		ClickOutside,
-	},
-
 	components: {
 		NcActions,
 		NcActionButton,
 		NcButton,
+		NcEmptyContent,
+		NcModal,
 		DeleteIcon,
 		RestoreIcon,
 		PageIcon,
@@ -92,10 +107,7 @@ export default {
 
 	data() {
 		return {
-			open: false,
-			clickOutsideConfig: {
-				handler: this.closeTrash,
-			},
+			showModal: false,
 		}
 	},
 
@@ -110,23 +122,15 @@ export default {
 			}
 		},
 
-		pageTitleIsTruncated() {
-			return (trashPage) => {
-				return false
-				// TODO: ref not working
-				// return this.$refs[`page-title-${trashPage.id}`].scrollWidth > this.$refs[`page-title-${trashPage.id}`].clientWidth
+		titleDate() {
+			return (timestamp) => {
+				return moment.unix(timestamp).format('LLL')
 			}
 		},
 
-		pageTitleIfTruncated() {
-			return (trashPage) => {
-				return this.pageTitleIsTruncated(trashPage) ? this.pageTitleString : null
-			}
-		},
-
-		pageTitleString() {
-			return (trashPage) => {
-				return this.isTemplate(trashPage) ? t('collectives', 'Template') : trashPage.title
+		formattedDate() {
+			return (timestamp) => {
+				return moment.unix(timestamp).fromNow()
 			}
 		},
 	},
@@ -151,11 +155,11 @@ export default {
 		}),
 
 		toggleTrash() {
-			this.open = !this.open
+			this.showModal = !this.showModal
 		},
 
 		closeTrash() {
-			this.open = false
+			this.showModal = false
 		},
 
 		restorePage(trashPage) {
@@ -171,12 +175,10 @@ export default {
 						}, 5000)
 					})
 				})
-			this.closeTrash()
 		},
 
 		deletePage(trashPage) {
 			this.dispatchDeletePage({ pageId: trashPage.id })
-			this.closeTrash()
 			showSuccess(t('collectives', 'Page deleted'))
 		},
 
@@ -191,144 +193,93 @@ export default {
 </script>
 
 <style scoped lang="scss">
-#page-trash {
+.page-trash {
 	width: 100%;
 	position: sticky;
 	bottom: 0;
+	margin-top: auto;
 	background-color: var(--color-main-background);
-	padding-top: 20px;
-	padding-bottom: 10px;
+	padding: 20px 4px 12px 4px;
 
-	&__header {
-		box-sizing: border-box;
-		margin: 0 3px 3px 3px;
-		padding-top: calc(var(--default-grid-baseline, 4px) * 2);
+	.page-trash-button {
+		width: calc(100% - 3px);
+		padding: 0;
 
-		.page-trash-button {
-			display: flex;
-			flex: 1 1 0;
-			height: 44px;
-			width: 100%;
-			padding: 0;
-			margin: 0;
-			// background-color: var(--color-main-background);
-			box-shadow: none;
-			border: 0;
-			border-radius: var(--border-radius-pill);
-			color: var(--color-main-text);
-			padding-right: 14px;
-			line-height: 44px;
-
-			&.highlight-animation {
-				animation: highlight-animation 5s 1;
-			}
-
-			:deep(.button-vue__wrapper) {
-				width: 100%;
-				justify-content: start;
-			}
-
-			&:hover,
-			&:focus {
-				background-color: var(--color-background-hover);
-			}
-
-			&__icon {
-				width: 44px;
-				height: 44px;
-				min-width: 44px;
-			}
-
-			:deep(.button-vue__text) {
-				overflow: hidden;
-				white-space: nowrap;
-				text-overflow: ellipsis;
-				font-weight: normal;
-			}
-		}
-	}
-
-	&__content {
-		display: block;
-		padding: 10px 4px;
-		/* Restrict height of trash and make scrollable */
-		max-height: 300px;
-		overflow-y: auto;
-		box-sizing: border-box;
-	}
-
-	.slide-up-leave-active,
-	.slide-up-enter-active {
-		transition-duration: var(--animation-slow);
-		transition-property: max-height, padding;
-		overflow-y: hidden !important;
-	}
-
-	.slide-up-enter,
-	.slide-up-leave-to {
-		max-height: 0 !important;
-		padding: 0 4px !important;
-	}
-
-	.app-content-list-item {
-		box-sizing: border-box;
-		height: 44px;
-		// border-bottom: 4px solid var(--color-main-background);
-		margin-bottom: 4px;
-
-		padding-left: 0;
-		border-radius: var(--border-radius-large);
-		cursor: default;
-
-		&:hover, &:focus, &:active {
-			background-color: var(--color-background-hover);
+		&.highlight-animation {
+			animation: highlight-animation 5s 1;
 		}
 
-		&.mobile, &:hover, &:focus, &:active {
-			// Shorter width to prevent collision with actions
-			.app-content-list-item-link {
-				width: calc(100% - 24px);
-			}
-
-			.page-list-item-actions {
-				visibility: visible;
-			}
+		:deep(.button-vue__wrapper) {
+			justify-content: start;
 		}
 
-		.app-content-list-item-icon {
+		:deep(.button-vue__icon) {
+			margin-left: -2px;
+		}
+
+		:deep(.button-vue__text) {
+			margin-left: -2px;
+			font-weight: normal;
+		}
+	}
+}
+
+.modal__content {
+	margin: 2vw;
+
+	&__empty {
+		margin-top: 25px !important;
+	}
+}
+
+table {
+	width: 100%;
+}
+
+tr {
+	display: flex;
+	border-bottom: 1px solid var(--color-border);
+}
+
+th, td {
+	display: flex;
+	height: 55px;
+	align-items: center;
+	margin: 0 14px;
+}
+
+th {
+	color: var(--color-text-maxcontrast);
+	font-weight: bold;
+
+	&.header-title {
+		padding-left: 44px;
+		flex: 1 1 auto;
+	}
+
+	&.header-timestamp {
+		width: 110px;
+	}
+}
+
+td {
+	&.item {
+		flex: 1 1 auto;
+
+		.item-icon {
 			display: flex;
 			justify-content: center;
-			align-items: center;
-			// Emojis are too big with default 1.5em
-			font-size: 1.3em;
-			cursor: default;
-
-			.item-icon-emoji {
-				&.landing-page {
-					margin: -3px 0;
-				}
-			}
+			width: 44px;
 		}
 
-		.app-content-list-item-line-one {
-			padding-left: 40px;
-			cursor: default;
+		.item-title {
+			white-space: normal;
 		}
 
-		.app-content-list-item-link {
-			width: 100%;
-			overflow: hidden;
-			text-overflow: ellipsis;
-		}
 	}
 
-	.page-list-item-actions {
-		visibility: hidden;
-		display: flex;
-		position: absolute;
-		top: 0;
-		right: 0;
-		margin: 0;
+	&.timestamp {
+		width: 110px;
 	}
 }
 

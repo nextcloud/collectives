@@ -341,7 +341,7 @@ export default {
 		[MOVE_PAGE_INTO_TRASH](state, page) {
 			const trashPage = { ...page }
 			state.pages.splice(state.pages.findIndex(p => p.id === page.id), 1)
-			trashPage.trashTimestamp = Date.now()
+			trashPage.trashTimestamp = Date.now() / 1000
 			state.trashPages.unshift(trashPage)
 		},
 

@@ -168,17 +168,15 @@ describe('Page list', function() {
 				.should('not.contain', 'Day 1')
 
 			// Restore page
-			cy.get('#page-trash')
+			cy.get('.page-trash')
 				.click()
-			cy.contains('#page-trash__content .app-content-list-item', 'Day 1')
+			cy.contains('table tr', 'Day 1')
 				.find('.action-item__menutoggle')
 				.click({ force: true })
 			cy.get('button.action-button')
 				.contains('Restore')
 				.click()
-			cy.get('#page-trash')
-				.click()
-			cy.get('#page-trash__content .app-content-list-item')
+			cy.get('table tr')
 				.should('not.exist')
 
 			cy.visit('/apps/collectives/Our%20Garden/Day%201')
