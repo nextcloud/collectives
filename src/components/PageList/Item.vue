@@ -9,6 +9,7 @@
 			highlight: isHighlighted,
 			'dragged-over-target': isDraggedOverTarget,
 			'highlight-target': isHighlightedTarget,
+			'highlight-animation': isHighlightAnimation,
 		}"
 		draggable
 		@dragstart="onDragstart"
@@ -180,6 +181,7 @@ export default {
 	computed: {
 		...mapState({
 			highlightPageId: (state) => state.pages.highlightPageId,
+			highlightAnimationPageId: (state) => state.pages.highlightAnimationPageId,
 			isDragoverTargetPage: (state) => state.pages.isDragoverTargetPage,
 			draggedPageId: (state) => state.pages.draggedPageId,
 		}),
@@ -259,6 +261,10 @@ export default {
 		isDropTarget() {
 			return this.isPotentialDropTarget
 				&& this.isDragoverTargetPage
+		},
+
+		isHighlightAnimation() {
+			return this.highlightAnimationPageId === this.pageId
 		},
 	},
 
@@ -369,6 +375,14 @@ export default {
 		}
 	}
 
+	&.highlight-animation {
+		animation: highlight-animation 5s 1;
+
+		span.item-icon-badge {
+			animation: highlight-animation 5s 1;
+		}
+	}
+
 	&.highlight-target {
 		// background-color: var(--color-primary-element-light);
 		border: 1px solid var(--color-border-maxcontrast);
@@ -448,5 +462,11 @@ export default {
 	top: 0;
 	right: 0;
 	margin: 0;
+}
+
+@keyframes highlight-animation {
+	0% { background-color: var(--color-background-hover); }
+	50% { background-color: var(--color-background-hover); }
+	100% { background-color: rgba(var(--color-background-hover), 0); }
 }
 </style>

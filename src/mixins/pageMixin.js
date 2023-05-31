@@ -1,5 +1,6 @@
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { showError, showSuccess } from '@nextcloud/dialogs'
+import { emit } from '@nextcloud/event-bus'
 import {
 	TRASH_PAGE,
 	GET_PAGES,
@@ -182,7 +183,7 @@ export default {
 				this.$router.push(`/${encodeURIComponent(this.currentCollective.name)}`)
 			}
 
-			showSuccess(t('collectives', 'Page deleted'))
+			emit('collectives:page-list:page-trashed')
 		},
 
 		/**

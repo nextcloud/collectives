@@ -22,6 +22,7 @@ import {
 } from './mutations.js'
 
 import {
+	EXPAND_PARENTS,
 	GET_PAGES,
 	GET_TRASH_PAGES,
 	GET_PAGE,
@@ -53,6 +54,7 @@ export default {
 		deletedAttachments: [],
 		backlinks: [],
 		highlightPageId: null,
+		highlightAnimationPageId: null,
 		isDragoverTargetPage: false,
 		draggedPageId: null,
 	},
@@ -431,6 +433,10 @@ export default {
 			state.highlightPageId = pageId
 		},
 
+		setHighlightAnimationPageId(state, pageId) {
+			state.highlightAnimationPageId = pageId
+		},
+
 		setDragoverTargetPage(state, bool) {
 			state.isDragoverTargetPage = bool
 		},
@@ -441,6 +447,21 @@ export default {
 	},
 
 	actions: {
+		/**
+		 * Expand all parents of a page
+		 * Needs to be an action to have access to the getter `pageParents`
+		 *
+		 * @param {object} store the vuex store
+		 * @param {Function} store.commit commit changes
+		 * @param {object} store.getters getters of the store
+		 * @param {number} pageId Page ID
+		 */
+		[EXPAND_PARENTS]({ commit, getters }, pageId) {
+			for (const page of getters.pageParents(pageId)) {
+				commit('expand', page.id)
+			}
+		},
+
 		/**
 		 * Get list of all pages
 		 *

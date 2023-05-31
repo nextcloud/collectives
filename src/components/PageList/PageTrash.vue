@@ -2,7 +2,10 @@
 	<div id="page-trash"
 		v-click-outside="clickOutsideConfig">
 		<div id="page-trash__header">
-			<NcButton type="tertiary" class="page-trash-button" @click="toggleTrash">
+			<NcButton ref="page-trash-button"
+				type="tertiary"
+				class="page-trash-button"
+				@click="toggleTrash">
 				<template #icon>
 					<DeleteIcon class="page-trash-button__icon" :size="20" />
 				</template>
@@ -54,14 +57,17 @@
 
 <script>
 import { NcActions, NcActionButton, NcButton } from '@nextcloud/vue'
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { showSuccess } from '@nextcloud/dialogs'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
 import PageIcon from '../Icon/PageIcon.vue'
 import PageTemplateIcon from '../Icon/PageTemplateIcon.vue'
 import { directive as ClickOutside } from 'v-click-outside'
-import { mapActions, mapGetters } from 'vuex'
-import { RESTORE_PAGE, DELETE_PAGE } from '../../store/actions.js'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { EXPAND_PARENTS, RESTORE_PAGE, DELETE_PAGE } from '../../store/actions.js'
+import { scrollToPage } from '../../util/scrollToElement.js'
 
 export default {
 	name: 'PageTrash',
@@ -125,8 +131,21 @@ export default {
 		},
 	},
 
+	mounted() {
+		subscribe('collectives:page-list:page-trashed', this.onPageTrashed)
+	},
+
+	unmounted() {
+		unsubscribe('collectives:page-list:page-trashed', this.onPageTrashed)
+	},
+
 	methods: {
+		...mapMutations([
+			'setHighlightAnimationPageId',
+		]),
+
 		...mapActions({
+			dispatchExpandParents: EXPAND_PARENTS,
 			dispatchRestorePage: RESTORE_PAGE,
 			dispatchDeletePage: DELETE_PAGE,
 		}),
@@ -141,12 +160,31 @@ export default {
 
 		restorePage(trashPage) {
 			this.dispatchRestorePage({ pageId: trashPage.id })
+				.then(() => {
+					// Expand, scroll into view and highlight restored page
+					this.$nextTick(() => {
+						this.dispatchExpandParents(trashPage.id)
+						scrollToPage(trashPage.id)
+						this.setHighlightAnimationPageId(trashPage.id)
+						setTimeout(() => {
+							this.setHighlightAnimationPageId(null)
+						}, 5000)
+					})
+				})
 			this.closeTrash()
 		},
 
 		deletePage(trashPage) {
 			this.dispatchDeletePage({ pageId: trashPage.id })
 			this.closeTrash()
+			showSuccess(t('collectives', 'Page deleted'))
+		},
+
+		onPageTrashed() {
+			this.$refs['page-trash-button'].$el.classList.add('highlight-animation')
+			setTimeout(() => {
+				this.$refs['page-trash-button'].$el.classList.remove('highlight-animation')
+			}, 5000)
 		},
 	},
 }
@@ -155,9 +193,11 @@ export default {
 <style scoped lang="scss">
 #page-trash {
 	width: 100%;
-	position: absolute;
+	position: sticky;
 	bottom: 0;
-	// margin-top: auto;
+	background-color: var(--color-main-background);
+	padding-top: 20px;
+	padding-bottom: 10px;
 
 	&__header {
 		box-sizing: border-box;
@@ -178,6 +218,10 @@ export default {
 			color: var(--color-main-text);
 			padding-right: 14px;
 			line-height: 44px;
+
+			&.highlight-animation {
+				animation: highlight-animation 5s 1;
+			}
 
 			:deep(.button-vue__wrapper) {
 				width: 100%;
@@ -286,5 +330,11 @@ export default {
 		right: 0;
 		margin: 0;
 	}
+}
+
+@keyframes highlight-animation {
+	0% { background-color: var(--color-background-hover); }
+	50% { background-color: var(--color-background-hover); }
+	100% { background-color: rgba(var(--color-background-hover), 0); }
 }
 </style>
