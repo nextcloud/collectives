@@ -47,6 +47,7 @@ OC.L10N.register(
     "Permissions" : "Дозволе",
     "Allow editing for" : "Дозволи да уређују",
     "Admins only" : "Само админи",
+    "Admins and moderators" : "Админи и модератори",
     "All members" : "Сви чланови",
     "Allow sharing for" : "Омогући дељење за",
     "Page settings" : "Подешавања странице",
