@@ -182,9 +182,6 @@ export default {
 				this.$router.push(`/${encodeURIComponent(this.currentCollective.name)}`)
 			}
 
-			// Delete pageId from parent page subpageOrder
-			this.subpageOrderDelete(parentId, pageId)
-
 			showSuccess(t('collectives', 'Page deleted'))
 		},
 
