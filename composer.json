@@ -19,7 +19,7 @@
         "behat/behat": "^3.8",
         "guzzlehttp/guzzle": "^7.2",
         "nextcloud/coding-standard": "^1.0.0",
-        "nextcloud/ocp": "^25.0",
+        "nextcloud/ocp": "dev-stable25",
         "phpunit/phpunit": "^9.5",
         "psalm/phar": "^5.4"
     },
