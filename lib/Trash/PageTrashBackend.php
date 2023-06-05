@@ -283,7 +283,7 @@ class PageTrashBackend implements ITrashBackend {
 		// Search for attachments folder with deleted time up to two seconds after item deleted time
 		for ($t = $deletedTime; $t < $deletedTime + 2; $t++) {
 			try {
-				$name = $attachmentsPrefix . $item->getId() . '.d' . $t;
+				$name = self::getTrashFilename($attachmentsPrefix . $item->getId(), $t);
 				$attachmentsNode = $trashFolder->get($name);
 				if (null !== $attachmentsItem = $this->getTrashItemByCollectiveAndId($user, $collectiveId, $attachmentsNode->getId())) {
 					return $attachmentsItem;
@@ -312,7 +312,7 @@ class PageTrashBackend implements ITrashBackend {
 			$trashFolder = $this->getTrashFolder($collectiveId);
 			$trashStorage = $trashFolder->getStorage();
 			$time = time();
-			$trashName = $name . '.d' . $time;
+			$trashName = self::getTrashFilename($name, $time);
 			[$unJailedStorage, $unJailedInternalPath] = $this->unwrapJails($storage, $internalPath);
 			$targetInternalPath = $trashFolder->getInternalPath() . '/' . $trashName;
 
@@ -632,7 +632,7 @@ class PageTrashBackend implements ITrashBackend {
 			$trashFolder = $this->getTrashFolder($collectiveId);
 			$nodes = []; // cache
 			foreach ($trashItems as $collectiveTrashItem) {
-				$nodeName = $collectiveTrashItem['name'] . '.d' . $collectiveTrashItem['deleted_time'];
+				$nodeName = self::getTrashFilename($collectiveTrashItem['name'], $collectiveTrashItem['deleted_time']);
 				try {
 					$nodes[$nodeName] = $trashFolder->get($nodeName);
 				} catch (NotFoundException $e) {
@@ -642,7 +642,7 @@ class PageTrashBackend implements ITrashBackend {
 			}
 			foreach ($trashItems as $collectiveTrashItem) {
 				if ($expiration->isExpired($collectiveTrashItem['deleted_item'])) {
-					$nodeName = $collectiveTrashItem['name'] . '.d' . $collectiveTrashItem['deleted_time'];
+					$nodeName = self::getTrashFilename($collectiveTrashItem['name'], $collectiveTrashItem['deleted_time']);
 					if (!isset($nodes[$nodeName])) {
 						continue;
 					}
@@ -690,5 +690,29 @@ class PageTrashBackend implements ITrashBackend {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Copied from OCA\Files_Trashbin\Trashbin::getTrashFilename
+	 *
+	 * @param string $filename
+	 * @param int    $timestamp
+	 *
+	 * @return string
+	 */
+	private static function getTrashFilename(string $filename, int $timestamp): string {
+		$trashFilename = $filename . '.d' . $timestamp;
+		$length = strlen($trashFilename);
+		// oc_filecache `name` column has a limit of 250 chars
+		$maxLength = 250;
+		if ($length > $maxLength) {
+			$trashFilename = substr_replace(
+				$trashFilename,
+				'',
+				$maxLength / 2,
+				$length - $maxLength
+			);
+		}
+		return $trashFilename;
 	}
 }
