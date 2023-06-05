@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OCA\Collectives\Service;
 
 use OC\Files\Node\File;
@@ -287,7 +289,7 @@ class CollectiveService extends CollectiveServiceBase {
 		return new CollectiveInfo($this->collectiveMapper->update($collectiveInfo),
 			$collectiveInfo->getName(),
 			$collectiveInfo->getLevel(),
-			$collectiveInfo->getUserPageOrder());
+			(string)$collectiveInfo->getUserPageOrder());
 	}
 
 	/**
@@ -316,7 +318,7 @@ class CollectiveService extends CollectiveServiceBase {
 		return new CollectiveInfo($this->collectiveMapper->update($collectiveInfo),
 			$collectiveInfo->getName(),
 			$collectiveInfo->getLevel(),
-			$collectiveInfo->getUserPageOrder());
+			(string)$collectiveInfo->getUserPageOrder());
 	}
 
 	/**
@@ -343,7 +345,7 @@ class CollectiveService extends CollectiveServiceBase {
 		return new CollectiveInfo($this->collectiveMapper->update($collectiveInfo),
 			$collectiveInfo->getName(),
 			$collectiveInfo->getLevel(),
-			$collectiveInfo->getUserPageOrder());
+			(string)$collectiveInfo->getUserPageOrder());
 	}
 
 	/**
@@ -370,7 +372,7 @@ class CollectiveService extends CollectiveServiceBase {
 		return new CollectiveInfo($this->collectiveMapper->trash($collectiveInfo),
 			$collectiveInfo->getName(),
 			$collectiveInfo->getLevel(),
-			$collectiveInfo->getUserPageOrder());
+			(string)$collectiveInfo->getUserPageOrder());
 	}
 
 	/**
@@ -421,7 +423,7 @@ class CollectiveService extends CollectiveServiceBase {
 		return new CollectiveInfo($this->collectiveMapper->delete($collectiveInfo),
 			$collectiveInfo->getName(),
 			$collectiveInfo->getLevel(),
-			$collectiveInfo->getUserPageOrder());
+			(string)$collectiveInfo->getUserPageOrder());
 	}
 
 	/**
@@ -444,6 +446,6 @@ class CollectiveService extends CollectiveServiceBase {
 		return new CollectiveInfo($this->collectiveMapper->restore($collectiveInfo),
 			$collectiveInfo->getName(),
 			$collectiveInfo->getLevel(),
-			$collectiveInfo->getUserPageOrder());
+			(string)$collectiveInfo->getUserPageOrder());
 	}
 }

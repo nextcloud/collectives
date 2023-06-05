@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OCA\Collectives\Service;
 
 class SubpageOrderService {
@@ -74,7 +76,7 @@ class SubpageOrderService {
 			unset($subpageOrderArray[$key]);
 		}
 
-		array_splice($subpageOrderArray, $index, 0, $pageId);
+		array_splice($subpageOrderArray, $index, 0, [$pageId]);
 
 		return self::fromArray($subpageOrderArray);
 	}

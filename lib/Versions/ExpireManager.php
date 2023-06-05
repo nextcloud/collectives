@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OCA\Collectives\Versions;
 
 use OCA\Collectives\Service\MissingDependencyException;
