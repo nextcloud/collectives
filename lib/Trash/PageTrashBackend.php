@@ -37,11 +37,11 @@ class PageTrashBackend implements ITrashBackend {
 	private ?VersionsBackend $versionsBackend = null;
 
 	public function __construct(CollectiveFolderManager $collectiveFolderManager,
-								PageTrashManager        $trashManager,
-								MountProvider           $mountProvider,
-								CollectiveMapper        $collectiveMapper,
-								PageMapper              $pageMapper,
-								LoggerInterface         $logger) {
+		PageTrashManager        $trashManager,
+		MountProvider           $mountProvider,
+		CollectiveMapper        $collectiveMapper,
+		PageMapper              $pageMapper,
+		LoggerInterface         $logger) {
 		$this->collectiveFolderManager = $collectiveFolderManager;
 		$this->trashManager = $trashManager;
 		$this->mountProvider = $mountProvider;
