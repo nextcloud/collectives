@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OCA\Collectives\Search\FileSearch;
 
 use TeamTNT\TNTSearch\Support\ProductTokenizer;

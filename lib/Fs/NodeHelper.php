@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OCA\Collectives\Fs;
 
 use OCA\Collectives\Model\PageInfo;
