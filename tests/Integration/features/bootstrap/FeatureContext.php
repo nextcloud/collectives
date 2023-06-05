@@ -185,19 +185,25 @@ class FeatureContext implements Context {
 
 	/**
 	 * @Then user :user sees pagePath :pagePath in :collective
+	 * @Then user :user :fails to see pagePath :pagePath in :collective
 	 *
-	 * @param string $user
-	 * @param string $pagePath
-	 * @param string $collective
+	 * @param string      $user
+	 * @param string      $pagePath
+	 * @param string      $collective
+	 * @param string|null $fail
 	 *
 	 * @throws GuzzleException
 	 */
-	public function userSeesPagePath(string $user, string $pagePath, string $collective): void {
+	public function userSeesPagePath(string $user, string $pagePath, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$this->sendRequest('GET', '/apps/collectives/_api/' . $collectiveId . '/_pages');
 		$this->assertStatusCode(200);
-		$this->assertPageByPath($pagePath);
+		if ($fail === 'fails') {
+			$this->assertPageByPath($pagePath, true);
+		} else {
+			$this->assertPageByPath($pagePath);
+		}
 	}
 
 	/**
@@ -430,8 +436,8 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user deletes page :page with parentPath :parentPath in :collective
-	 * @When user :user :fails to delete page :page with parentPath :parentPath in :collective
+	 * @When user :user trashes page :page with parentPath :parentPath in :collective
+	 * @When user :user :fails to trash page :page with parentPath :parentPath in :collective
 	 *
 	 * @param string      $user
 	 * @param string      $page
@@ -441,7 +447,7 @@ class FeatureContext implements Context {
 	 *
 	 * @throws GuzzleException
 	 */
-	public function userDeletesPage(string $user, string $page, string $collective, string $parentPath, ?string $fail = null): void {
+	public function userTrashesPage(string $user, string $page, string $collective, string $parentPath, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$pageId = $this->pageIdByName($collectiveId, $page);
@@ -450,6 +456,54 @@ class FeatureContext implements Context {
 		if ("fails" === $fail) {
 			$this->assertStatusCode(403);
 		} else {
+			$this->assertStatusCode(200);
+		}
+	}
+
+	/**
+	 * @When user :user restores page :page from trash in :collective
+	 * @When user :user :fails to restore page :page from trash in :collective
+	 *
+	 * @param string      $user
+	 * @param string      $page
+	 * @param string      $collective
+	 * @param string|null $fail
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userRestoresPage(string $user, string $page, string $collective, ?string $fail = null): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		if ("fails" === $fail) {
+			$this->sendRequest('PATCH', '/apps/collectives/_api/' . $collectiveId . '/_pages/trash/' . 1);
+			$this->assertStatusCode(403);
+		} else {
+			$pageId = $this->trashedPageIdByName($collectiveId, $page);
+			$this->sendRequest('PATCH', '/apps/collectives/_api/' . $collectiveId . '/_pages/trash/' . $pageId);
+			$this->assertStatusCode(200);
+		}
+	}
+
+	/**
+	 * @When user :user deletes page :page from trash in :collective
+	 * @When user :user :fails to delete page :page from trash in :collective
+	 *
+	 * @param string      $user
+	 * @param string      $page
+	 * @param string      $collective
+	 * @param string|null $fail
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userDeletesPage(string $user, string $page, string $collective, ?string $fail = null): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		if ("fails" === $fail) {
+			$this->sendRequest('DELETE', '/apps/collectives/_api/' . $collectiveId . '/_pages/trash/' . 1);
+			$this->assertStatusCode(403);
+		} else {
+			$pageId = $this->trashedPageIdByName($collectiveId, $page);
+			$this->sendRequest('DELETE', '/apps/collectives/_api/' . $collectiveId . '/_pages/trash/' . $pageId);
 			$this->assertStatusCode(200);
 		}
 	}
@@ -694,6 +748,28 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @When app :appId is :status
+	 *
+	 * @param string $appId
+	 * @param string $status
+	 *
+	 * @throws GuzzleException
+	 */
+	public function toggleApp(string $appId, string $status): void {
+		$this->setCurrentUser('admin');
+
+		$jsonData = ['appIds' => [$appId]];
+
+		if ($status === 'enabled') {
+			$this->sendRequest('POST', '/settings/apps/enable', null, $jsonData);
+		} elseif ($status === 'disabled') {
+			$this->sendRequest('POST', '/settings/apps/disable', null, $jsonData);
+		} else {
+			throw new RuntimeException('Unknown app status: ' . $status);
+		}
+	}
+
+	/**
 	 * @When user :user has quota :quota
 	 *
 	 * @param string $user
@@ -752,6 +828,23 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @When user :user unsets editing permissions for collective :collective
+	 *
+	 * @param string $user
+	 * @param string $collective
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userUnsetsPublicShareEditPermissions(string $user, string $collective): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$token = $this->getCollectiveShareToken($collectiveId);
+		$formData = new TableNode([['editable', false]]);
+		$this->sendRequest('PUT', '/apps/collectives/_api/' . $collectiveId . '/share/' . $token, $formData);
+		$this->assertStatusCode(200);
+	}
+
+	/**
 	 * @When user :user stores token for public share :collective
 	 *
 	 * @param string $user
@@ -796,7 +889,7 @@ class FeatureContext implements Context {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$token = $this->getCollectiveShareToken($collectiveId);
-		$this->sendRequest('GET', '/apps/collectives/_api/p/' . $token, null, [], false);
+		$this->sendRequest('GET', '/apps/collectives/_api/p/' . $token, null, null, [], false);
 		$this->assertStatusCode(200);
 		$this->assertCollectiveByName($collective);
 		$this->assertCollectiveLevel($collective, 1);
@@ -812,7 +905,7 @@ class FeatureContext implements Context {
 	public function anonymousFailsToSeePublicCollective(string $collective): void {
 		Assert::assertArrayHasKey('shareToken', $this->store);
 		Assert::assertNotEmpty($this->store['shareToken']);
-		$this->sendRequest('GET', '/apps/collectives/_api/p/' . $this->store['shareToken'], null, [], false);
+		$this->sendRequest('GET', '/apps/collectives/_api/p/' . $this->store['shareToken'], null, null, [], false);
 		$this->assertStatusCode(404);
 	}
 
@@ -829,7 +922,7 @@ class FeatureContext implements Context {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$token = $this->getCollectiveShareToken($collectiveId);
-		$this->sendRequest('GET', '/apps/collectives/_api/p/' . $token . '/_pages', null, [], false);
+		$this->sendRequest('GET', '/apps/collectives/_api/p/' . $token . '/_pages', null, null, [], false);
 		$this->assertStatusCode(200);
 		$this->assertPageByPath($path);
 	}
@@ -853,7 +946,7 @@ class FeatureContext implements Context {
 		$parentId = $this->getParentId($collectiveId, $parentPath);
 
 		$formData = new TableNode([['title', $page], ['parentId', $parentId]]);
-		$this->sendRequest('POST', '/apps/collectives/_api/p/' . $token . '/_pages/parent/' . $parentId, $formData, [], false);
+		$this->sendRequest('POST', '/apps/collectives/_api/p/' . $token . '/_pages/parent/' . $parentId, $formData, null, [], false);
 		if ("fails" === $fail) {
 			$this->assertStatusCode(403);
 		} else {
@@ -892,8 +985,8 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When anonymous deletes page :page with parentPath :parentPath in public collective :collective with owner :owner
-	 * @When anonymous :fails to delete page :page with parentPath :parentPath in public collective :collective with owner :owner
+	 * @When anonymous trashes page :page with parentPath :parentPath in public collective :collective with owner :owner
+	 * @When anonymous :fails to trash page :page with parentPath :parentPath in public collective :collective with owner :owner
 	 *
 	 * @param string      $page
 	 * @param string      $collective
@@ -903,17 +996,69 @@ class FeatureContext implements Context {
 	 *
 	 * @throws GuzzleException
 	 */
-	public function anonymousDeletesPublicCollectivePage(string $page, string $collective, string $parentPath, string $owner, ?string $fail = null): void {
+	public function anonymousTrashesPublicCollectivePage(string $page, string $collective, string $parentPath, string $owner, ?string $fail = null): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$token = $this->getCollectiveShareToken($collectiveId);
 		$pageId = $this->pageIdByName($collectiveId, $page);
 		$parentId = $this->getParentId($collectiveId, $parentPath);
 
-		$this->sendRequest('DELETE', '/apps/collectives/_api/p/' . $token . '/_pages/parent/' . $parentId . '/page/' . $pageId, null, [], false);
+		$this->sendRequest('DELETE', '/apps/collectives/_api/p/' . $token . '/_pages/parent/' . $parentId . '/page/' . $pageId, null, null, [], false);
 		if ("fails" === $fail) {
 			$this->assertStatusCode(403);
 		} else {
+			$this->assertStatusCode(200);
+		}
+	}
+
+	/**
+	 * @When anonymous restores page :page from trash in public collective :collective with owner :owner
+	 * @When anonymous :fails to restore page :page from trash in public collective :collective with owner :owner
+	 *
+	 * @param string      $page
+	 * @param string      $collective
+	 * @param string      $owner
+	 * @param string|null $fail
+	 *
+	 * @throws GuzzleException
+	 */
+	public function anonymousRestoresPublicCollectivePage(string $page, string $collective, string $owner, ?string $fail = null): void {
+		$this->setCurrentUser($owner);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$token = $this->getCollectiveShareToken($collectiveId);
+
+		if ("fails" === $fail) {
+			$this->sendRequest('PATCH', '/apps/collectives/_api/p/' . $token . '/_pages/trash/1', null, null, [], false);
+			$this->assertStatusCode(403);
+		} else {
+			$pageId = $this->trashedPageIdByName($collectiveId, $page, $token);
+			$this->sendRequest('PATCH', '/apps/collectives/_api/p/' . $token . '/_pages/trash/' . $pageId, null, null, [], false);
+			$this->assertStatusCode(200);
+		}
+	}
+
+	/**
+	 * @When anonymous deletes page :page from trash in public collective :collective with owner :owner
+	 * @When anonymous :fails to delete page :page from trash in public collective :collective with owner :owner
+	 *
+	 * @param string      $page
+	 * @param string      $collective
+	 * @param string      $owner
+	 * @param string|null $fail
+	 *
+	 * @throws GuzzleException
+	 */
+	public function anonymousDeletesPublicCollectivePage(string $page, string $collective, string $owner, ?string $fail = null): void {
+		$this->setCurrentUser($owner);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$token = $this->getCollectiveShareToken($collectiveId);
+
+		if ("fails" === $fail) {
+			$this->sendRequest('DELETE', '/apps/collectives/_api/p/' . $token . '/_pages/trash/1', null, null, [], false);
+			$this->assertStatusCode(403);
+		} else {
+			$pageId = $this->trashedPageIdByName($collectiveId, $page, $token);
+			$this->sendRequest('DELETE', '/apps/collectives/_api/p/' . $token . '/_pages/trash/' . $pageId, null, null, [], false);
 			$this->assertStatusCode(200);
 		}
 	}
@@ -941,6 +1086,20 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @param string $user
+	 *
+	 * @return string
+	 */
+	private function getUserCollectivesPath(string $user): string {
+		// Dirty hack to not break it on local dev setup
+		$lang = $this->getUserLanguage($user);
+		if ($lang === 'de') {
+			return 'Kollektive';
+		}
+
+		return 'Collectives';
+	}
+	/**
 	 * @When user :user has webdav access to :collective with permissions :permissions
 	 *
 	 * @param string $collective
@@ -962,21 +1121,74 @@ class FeatureContext implements Context {
 		$xProp->appendChild($dom->createElement('oc:permissions'));
 		$dom->appendChild($xPropfind)->appendChild($xProp);
 		$body = $dom->saveXML();
-		$userCollectivesPath = 'Collectives';
+		$userCollectivesPath = $this->getUserCollectivesPath($user);
 
-		// Dirty hack to not break it on local dev setup
-		$lang = $this->getUserLanguage($user);
-		if ($lang === 'de') {
-			$userCollectivesPath = 'Kollektive';
-		}
-
-		$this->sendRemoteRequest('PROPFIND', '/dav/files/' . $user . '/' . $userCollectivesPath . '/' . urlencode($collective) . '/', $body, $headers);
+		$this->sendRemoteRequest('PROPFIND', '/dav/files/' . $user . '/' . $userCollectivesPath . '/' . urlencode($collective) . '/', $body, null, $headers);
 		$this->assertStatusCode(207);
 
 		// simplexml_load_string() would be better than preg_replace
 		$folderPermissions = preg_replace('/.*<oc:permissions>(.*)<\/oc:permissions>.*/sm', '\1', $this->response->getBody()->getContents());
 
 		Assert::assertEquals($permissions, $folderPermissions);
+	}
+
+	/**
+	 * @param string $user
+	 *
+	 * @return array
+	 * @throws GuzzleException
+	 */
+	private function listWebdavTrash(string $user): array {
+		$this->setCurrentUser($user);
+		$headers = [
+			'Content-Type' => 'Content-Type: text/xml; charset="utf-8"',
+			'Depth' => 1,
+		];
+		$dom = new \DOMDocument('1.0', 'UTF-8');
+		$xPropfind = $dom->createElementNS('DAV:', 'D:propfind');
+		$xProp = $dom->createElement('D:prop');
+		$xProp->setAttribute('xmlns:nc', 'http://nextcloud.org/ns');
+		$xProp->appendChild($dom->createElement('nc:trashbin-title'));
+		$dom->appendChild($xPropfind)->appendChild($xProp);
+		$body = $dom->saveXML();
+
+		$this->sendRemoteRequest('PROPFIND', '/dav/trashbin/' . $user . '/trash/', $body, null, $headers);
+		$this->assertStatusCode(207);
+
+		$xml = simplexml_load_string($this->response->getBody()->getContents());
+		$entries = [];
+		$count = 0;
+		foreach ($xml->xpath('//d:href') as $xmlItem) {
+			$href = (string)$xmlItem;
+			$trashbinTitle = (string)$xmlItem->xpath('//nc:trashbin-title')[$count];
+			$entries[] = [
+				'href' => $href, 'trashbinTitle' => $trashbinTitle
+			];
+			$count++;
+		}
+
+		return $entries;
+	}
+
+	/**
+	 * @param string $collective
+	 * @param string $filePath
+	 * @param string $user
+	 *
+	 * @return string|null
+	 * @throws GuzzleException
+	 */
+	private function inWebdavTrash(string $collective, string $filePath, string $user): ?string {
+		$webdavTrashEntries = $this->listWebdavTrash($user);
+		$userCollectivesPath = $this->getUserCollectivesPath($user);
+
+		foreach ($webdavTrashEntries as $entry) {
+			if ($entry['trashbinTitle'] === $userCollectivesPath . '/' . urlencode($collective) . '/' . $filePath) {
+				return $entry['href'];
+			}
+		}
+
+		return null;
 	}
 
 	/**
@@ -993,19 +1205,97 @@ class FeatureContext implements Context {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$pageId = $this->pageIdByName($collectiveId, $page);
-		$userCollectivesPath = 'Collectives';
-
-		// Dirty hack to not break it on local dev setup
-		$lang = $this->getUserLanguage($user);
-		if ($lang === 'de') {
-			$userCollectivesPath = 'Kollektive';
-		}
+		$userCollectivesPath = $this->getUserCollectivesPath($user);
 
 		$attachmentsPath = '/dav/files/' . $user . '/' . $userCollectivesPath . '/' . urlencode($collective) . '/' . '.attachments.' . $pageId;
 
 		$this->sendRemoteRequest('MKCOL', $attachmentsPath);
 		$body = fopen('tests/Integration/features/fixtures/' . $fileName, 'rb');
 		$this->sendRemoteRequest('PUT', $attachmentsPath . '/' . $fileName, $body);
+	}
+
+	/**
+	 * @When user :user trashes page :page via webdav in :collective
+	 * @When user :user :fails to trash page :page via webdav in :collective
+	 *
+	 * @param string      $user
+	 * @param string      $page
+	 * @param string      $collective
+	 * @param string|null $fail
+	 *
+	 * @throws GuzzleException
+	 */
+	public function webdavTrashFile(string $user, string $page, string $collective, ?string $fail = null): void {
+		$this->setCurrentUser($user);
+		$userCollectivesPath = $this->getUserCollectivesPath($user);
+
+		$filePath = '/dav/files/' . $user . '/' . $userCollectivesPath . '/' . urlencode($collective) . '/' . urlencode($page) . '.md';
+
+		$this->sendRemoteRequest('DELETE', $filePath);
+		if ("fails" === $fail) {
+			$this->assertStatusCode(403);
+		} else {
+			$this->assertStatusCode(204);
+		}
+	}
+
+	/**
+	 * @When user :user restores page :page from trash via webdav in :collective
+	 * @When user :user :fails to restore page :page from trash via webdav in :collective
+	 *
+	 * @param string      $user
+	 * @param string      $page
+	 * @param string      $collective
+	 * @param string|null $fail
+	 *
+	 * @throws GuzzleException
+	 */
+	public function webdavRestoreFile(string $user, string $page, string $collective, ?string $fail = null): void {
+		$this->setCurrentUser($user);
+
+		$href = $this->inWebdavTrash($collective, urlencode($page) . '.md', $user);
+		if ("fails" === $fail) {
+			Assert::assertNull($href, 'Page found in trash even though not expected: ' . $page);
+			return;
+		}
+		Assert::assertNotNull($href, 'Page not found in trash: ' . $page);
+
+		$hrefSplit = explode('/', $href);
+		$trashFilename = end($hrefSplit);
+		$filePath = '/dav/trashbin/' . $user . '/trash/' . $trashFilename;
+
+		$headers = ['destination' => $this->remoteUrl . '/dav/trashbin/' . $user . '/restore/' . $trashFilename];
+		$this->sendRemoteRequest('MOVE', $filePath, null, null, $headers);
+		$this->assertStatusCode(201);
+	}
+
+	/**
+	 * @When user :user deletes page :page from trash via webdav in :collective
+	 * @When user :user :fails to delete page :page from trash via webdav in :collective
+	 *
+	 * @param string      $user
+	 * @param string      $page
+	 * @param string      $collective
+	 * @param string|null $fail
+	 *
+	 * @throws GuzzleException
+	 */
+	public function webdavDeleteFile(string $user, string $page, string $collective, ?string $fail = null): void {
+		$this->setCurrentUser($user);
+
+		$href = $this->inWebdavTrash($collective, urlencode($page) . '.md', $user);
+		if ("fails" === $fail) {
+			Assert::assertNull($href, 'Page found in trash even though not expected: ' . $page);
+			return;
+		}
+		Assert::assertNotNull($href, 'Page not found in trash: ' . $page);
+
+		$hrefSplit = explode('/', $href);
+		$trashFilename = end($hrefSplit);
+		$filePath = '/dav/trashbin/' . $user . '/trash/' . $trashFilename;
+
+		$this->sendRemoteRequest('DELETE', $filePath);
+		$this->assertStatusCode(204);
 	}
 
 	/**
@@ -1128,6 +1418,32 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @param int         $collectiveId
+	 * @param string      $name
+	 * @param string|null $token
+	 *
+	 * @return int|null
+	 * @throws GuzzleException
+	 */
+	private function trashedPageIdByName(int $collectiveId, string $name, ?string $token = null): ?int {
+		if ($token) {
+			$this->sendRequest('GET', '/apps/collectives/_api/p/' . $token . '/_pages/trash', null, null, [], false);
+		} else {
+			$this->sendRequest('GET', '/apps/collectives/_api/' . $collectiveId . '/_pages/trash');
+		}
+		if (200 !== $this->response->getStatusCode()) {
+			throw new RuntimeException('Unable to get list of trashed pages for collective ' . $collectiveId);
+		}
+		$jsonBody = $this->getJson();
+		foreach ($jsonBody['data'] as $page) {
+			if ($name === $page['title']) {
+				return $page['id'];
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * @param string         $verb
 	 * @param string         $url
 	 * @param TableNode|null $body
@@ -1139,10 +1455,11 @@ class FeatureContext implements Context {
 	private function sendRequest(string $verb,
 		string $url,
 		?TableNode $body = null,
+		?array $jsonBody = null,
 		array $headers = [],
 		?bool $auth = true): void {
 		$fullUrl = $this->baseUrl . $url;
-		$this->sendRequestBase($verb, $fullUrl, $body, $headers, $auth);
+		$this->sendRequestBase($verb, $fullUrl, $body, $jsonBody, $headers, $auth);
 	}
 
 	/**
@@ -1157,10 +1474,11 @@ class FeatureContext implements Context {
 	private function sendRemoteRequest(string $verb,
 		string $url,
 		$body = null,
+		?array $jsonBody = null,
 		array $headers = [],
 		?bool $auth = true): void {
 		$fullUrl = $this->remoteUrl . $url;
-		$this->sendRequestBase($verb, $fullUrl, $body, $headers, $auth);
+		$this->sendRequestBase($verb, $fullUrl, $body, $jsonBody, $headers, $auth);
 	}
 
 	/**
@@ -1175,6 +1493,7 @@ class FeatureContext implements Context {
 	private function sendOcsRequest(string $verb,
 		string $url,
 		?TableNode $body = null,
+		?array $jsonBody = null,
 		array $headers = [],
 		?bool $auth = true): void {
 		$fullUrl = $this->ocsUrl . $url;
@@ -1186,13 +1505,14 @@ class FeatureContext implements Context {
 		} else {
 			$fullUrl .= '?' . $ocsJsonFormat;
 		}
-		$this->sendRequestBase($verb, $fullUrl, $body, $headers, $auth);
+		$this->sendRequestBase($verb, $fullUrl, $body, $jsonBody, $headers, $auth);
 	}
 
 	/**
 	 * @param string                $verb
 	 * @param string                $url
 	 * @param TableNode|string|null $body
+	 * @param array|null            $jsonBody
 	 * @param array                 $headers
 	 * @param bool|null             $auth
 	 *
@@ -1201,6 +1521,7 @@ class FeatureContext implements Context {
 	private function sendRequestBase(string $verb,
 		string $url,
 		$body = null,
+		?array $jsonBody = null,
 		array $headers = [],
 		?bool $auth = true): void {
 		$client = new Client($this->clientOptions);
@@ -1227,6 +1548,10 @@ class FeatureContext implements Context {
 			$options['body'] = $body;
 		}
 
+		if ($jsonBody) {
+			$options['json'] = $jsonBody;
+		}
+
 		// Add Xdebug trigger variable as GET parameter
 		$xdebugSession = 'XDEBUG_SESSION=PHPSTORM';
 		if (false !== strpos($url, '?')) {
@@ -1238,8 +1563,8 @@ class FeatureContext implements Context {
 		// clear the cached json response
 		$this->json = null;
 		try {
-			if ($verb === 'PROPFIND') {
-				$this->response = $client->request('PROPFIND', $url, $options);
+			if ($verb === 'PROPFIND' || $verb === 'MOVE') {
+				$this->response = $client->request($verb, $url, $options);
 			} else {
 				$this->response = $client->{$verb}($url, $options);
 			}

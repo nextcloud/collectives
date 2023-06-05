@@ -115,4 +115,117 @@ class NodeHelperTest extends TestCase {
 
 		self::assertEquals($output, NodeHelper::generateFilename($folder, $input));
 	}
+
+	public function testIsPageFilename(): void {
+		self::assertTrue(NodeHelper::isPageFilename('page.md'));
+		self::assertTrue(NodeHelper::isPageFilename('image.gz.md'));
+		self::assertFalse(NodeHelper::isPageFilename('folder'));
+		self::assertFalse(NodeHelper::isPageFilename('image.gz'));
+	}
+
+	public function testIsPage(): void {
+		$file = $this->getMockBuilder(File::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$file->method('getName')
+			->willReturnOnConsecutiveCalls(
+				'page.md', 'image.gz'
+			);
+
+		self::assertTrue(NodeHelper::isPage($file));
+		self::assertFalse(NodeHelper::isPage($file));
+	}
+
+	public function testIsIndexPage(): void {
+		$file = $this->getMockBuilder(File::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$file->method('getName')
+			->willReturnOnConsecutiveCalls(
+				'Readme.md', 'page.md'
+			);
+		self::assertTrue(NodeHelper::isIndexPage($file));
+		self::assertFalse(NodeHelper::isIndexPage($file));
+	}
+
+	public function testHasSubPages(): void {
+		$childFile1 = $this->getMockBuilder(File::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$childFile1->method('getName')
+			->willReturn('Readme.md');
+
+		$childFile2 = $this->getMockBuilder(File::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$childFile2->method('getName')
+			->willReturn('File2.md');
+
+		$childFile3 = $this->getMockBuilder(File::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$childFile3->method('getName')
+			->willReturn('File3.txt');
+
+		$attachmentFolder = $this->createMock(Folder::class);
+		$attachmentFolder->method('getName')
+			->willReturn('.attachments.123');
+
+		$children = [$childFile1, $childFile2, $childFile3, $attachmentFolder];
+		$parentFolder = $this->getMockBuilder(Folder::class)
+			->disableOriginalConstructor()
+			->getMock();
+
+		$file = $this->getMockBuilder(File::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$file->method('getParent')
+			->willReturn($parentFolder);
+		$file->method('getId')
+			->willReturn('123');
+
+		// Test `indexPageHasOtherContent()` with page in children
+		$parentFolder->method('getDirectoryListing')
+			->willReturnOnConsecutiveCalls(
+				$children,
+				[$attachmentFolder],
+				[],
+				$children,
+				[$childFile1],
+				$children,
+				$children,
+				$children
+			);
+		self::assertTrue(NodeHelper::indexPageHasOtherContent($file));
+		// Test `indexPageHasOtherContent()` only with attachment folder
+		self::assertFalse(NodeHelper::indexPageHasOtherContent($file));
+		// Test `indexPageHasOtherContent()` without any children
+		self::assertFalse(NodeHelper::indexPageHasOtherContent($file));
+
+		$subfolder = $this->getMockBuilder(Folder::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$subfolder->method('getDirectoryListing')
+			->willReturn([$parentFolder]);
+		$subfolder->method('getName')
+			->willReturn('subfolder');
+		$subfolder->method('nodeExists')
+			->with('Readme.md')
+			->willReturn(true);
+		$folder = $this->getMockBuilder(Folder::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$folder->method('getDirectoryListing')
+			->willReturn([$subfolder]);
+
+		// Test `folderHasSubPages()` with page in grandchildren
+		self::assertTrue(NodeHelper::folderHasSubPages($folder));
+		// Test `folderHasSubPages()` without page in grandchildren
+		self::assertFalse(NodeHelper::folderHasSubPages($folder));
+
+		// Test `folderHasSubPage()`
+		self::assertEquals(0, NodeHelper::folderHasSubPage($parentFolder, 'File3'));
+		self::assertEquals(1, NodeHelper::folderHasSubPage($parentFolder, 'File2'));
+		self::assertEquals(2, NodeHelper::folderHasSubPage($folder, 'subfolder'));
+	}
 }

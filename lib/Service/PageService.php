@@ -8,7 +8,9 @@ use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Model\CollectiveInfo;
 use OCA\Collectives\Model\PageInfo;
+use OCA\Collectives\Trash\PageTrashBackend;
 use OCA\NotifyPush\Queue\IQueue;
+use OCP\App\IAppManager;
 use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\InvalidPathException;
@@ -23,17 +25,19 @@ use Psr\Container\ContainerInterface;
 class PageService {
 	private const DEFAULT_PAGE_TITLE = 'New Page';
 
+	private IAppManager $appManager;
 	private PageMapper $pageMapper;
 	private NodeHelper $nodeHelper;
 	private CollectiveServiceBase $collectiveService;
 	private UserFolderHelper $userFolderHelper;
 	private IUserManager $userManager;
 	private IConfig $config;
-	private ContainerInterface $container;
 	private ?IQueue $pushQueue = null;
 	private ?CollectiveInfo $collectiveInfo = null;
+	private ?PageTrashBackend $trashBackend = null;
 
 	/**
+	 * @param IAppManager           $appManager
 	 * @param PageMapper            $pageMapper
 	 * @param NodeHelper            $nodeHelper
 	 * @param CollectiveServiceBase $collectiveService
@@ -42,13 +46,15 @@ class PageService {
 	 * @param IConfig               $config
 	 * @param ContainerInterface    $container
 	 */
-	public function __construct(PageMapper $pageMapper,
+	public function __construct(IAppManager $appManager,
+		PageMapper $pageMapper,
 		NodeHelper $nodeHelper,
 		CollectiveServiceBase $collectiveService,
 		UserFolderHelper $userFolderHelper,
 		IUserManager $userManager,
 		IConfig  $config,
 		ContainerInterface $container) {
+		$this->appManager = $appManager;
 		$this->pageMapper = $pageMapper;
 		$this->nodeHelper = $nodeHelper;
 		$this->collectiveService = $collectiveService;
@@ -61,6 +67,11 @@ class PageService {
 		}
 	}
 
+	private function initTrashBackend(): void {
+		if ($this->appManager->isEnabledForUser('files_trashbin')) {
+			$this->trashBackend = \OC::$server->get(PageTrashBackend::class);
+		}
+	}
 
 	/**
 	 * @param int    $collectiveId
@@ -169,14 +180,14 @@ class PageService {
 	 */
 	private function getParentPageId(File $file, ?Node $parent = null): int {
 		try {
-			if (self::isLandingPage($file)) {
+			if (NodeHelper::isLandingPage($file)) {
 				// Return `0` for landing page
 				return 0;
 			}
 
 			$parent = $parent ?? $file->getParent();
 
-			if (self::isIndexPage($file)) {
+			if (NodeHelper::isIndexPage($file)) {
 				// Go down two levels if index page but not landing page
 				return $this->getIndexPageFile($parent->getParent())->getId();
 			}
@@ -188,28 +199,63 @@ class PageService {
 	}
 
 	/**
-	 * @param File $file
+	 * @param File      $file
 	 * @param Node|null $parent
+	 *
 	 * @return PageInfo
 	 * @throws NotFoundException
 	 */
 	private function getPageByFile(File $file, ?Node $parent = null): PageInfo {
+		$trashPageInfo = new PageInfo();
+		try {
+			$trashPage = $this->pageMapper->findByFileId($file->getId());
+		} catch (InvalidPathException | FilesNotFoundException $e) {
+			throw new NotFoundException($e->getMessage(), 0, $e);
+		}
+		$lastUserId = ($trashPage !== null) ? $trashPage->getLastUserId() : null;
+		$emoji = ($trashPage !== null) ? $trashPage->getEmoji() : null;
+		$subpageOrder = ($trashPage !== null) ? $trashPage->getSubpageOrder() : null;
+		try {
+			$trashPageInfo->fromFile($file,
+				$this->getParentPageId($file, $parent),
+				$lastUserId,
+				$lastUserId ? $this->userManager->getDisplayName($lastUserId) : null,
+				$emoji,
+				$subpageOrder);
+		} catch (FilesNotFoundException | InvalidPathException $e) {
+			throw new NotFoundException($e->getMessage(), 0, $e);
+		}
+
+		return $trashPageInfo;
+	}
+
+	/**
+	 * @param File $file
+	 *
+	 * @return PageInfo
+	 * @throws NotFoundException
+	 */
+	private function getTrashPageByFile(File $file, string $filename, string $timestamp): PageInfo {
 		$pageInfo = new PageInfo();
 		try {
-			$page = $this->pageMapper->findByFileId($file->getId());
+			$page = $this->pageMapper->findByFileId($file->getId(), true);
 		} catch (InvalidPathException | FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
 		$lastUserId = ($page !== null) ? $page->getLastUserId() : null;
 		$emoji = ($page !== null) ? $page->getEmoji() : null;
 		$subpageOrder = ($page !== null) ? $page->getSubpageOrder() : null;
+		$trashTimestamp = ($page !== null) ? $page->getTrashTimestamp(): (int)$timestamp;
 		try {
 			$pageInfo->fromFile($file,
-				$this->getParentPageId($file, $parent),
+				0,
 				$lastUserId,
 				$lastUserId ? $this->userManager->getDisplayName($lastUserId) : null,
 				$emoji,
 				$subpageOrder);
+			$pageInfo->setTrashTimestamp($trashTimestamp);
+			$pageInfo->setFilePath('');
+			$pageInfo->setTitle(basename($filename, PageInfo::SUFFIX));
 		} catch (FilesNotFoundException | InvalidPathException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
@@ -264,7 +310,7 @@ class PageService {
 	 * @throws NotPermittedException
 	 */
 	private function newPage(int $collectiveId, Folder $folder, string $filename, string $userId): PageInfo {
-		$hasTemplate = self::folderHasSubPage($folder, PageInfo::TEMPLATE_PAGE_TITLE);
+		$hasTemplate = NodeHelper::folderHasSubPage($folder, PageInfo::TEMPLATE_PAGE_TITLE);
 		try {
 			if ($hasTemplate === 1) {
 				$template = $folder->get(PageInfo::TEMPLATE_PAGE_TITLE . PageInfo::SUFFIX);
@@ -308,7 +354,7 @@ class PageService {
 	 */
 	public function initSubFolder(File $file): Folder {
 		$folder = $file->getParent();
-		if (self::isIndexPage($file)) {
+		if (NodeHelper::isIndexPage($file)) {
 			return $folder;
 		}
 
@@ -320,65 +366,6 @@ class PageService {
 			throw new NotPermittedException($e->getMessage(), 0, $e);
 		}
 		return $subFolder;
-	}
-
-	/**
-	 * @param Folder $folder
-	 *
-	 * @throws NotFoundException
-	 * @throws NotPermittedException
-	 */
-	private function revertSubFolders(Folder $folder): void {
-		try {
-			foreach ($folder->getDirectoryListing() as $node) {
-				if ($node instanceof Folder) {
-					$this->revertSubFolders($node);
-				} elseif ($node instanceof File) {
-					// Move index page without subpages into the parent folder (if's not the landing page)
-					if (self::isIndexPage($node) && !self::isLandingPage($node) && !$this->indexPageHasOtherContent($node)) {
-						$filename = NodeHelper::generateFilename($folder, $folder->getName(), PageInfo::SUFFIX);
-						$node->move($folder->getParent()->getPath() . '/' . $filename . PageInfo::SUFFIX);
-						$folder->delete();
-						break;
-					}
-				}
-			}
-		} catch (FilesNotFoundException | InvalidPathException $e) {
-			throw new NotFoundException($e->getMessage(), 0, $e);
-		} catch (FilesNotPermittedException | LockedException $e) {
-			throw new NotPermittedException($e->getMessage(), 0, $e);
-		}
-	}
-
-	/**
-	 * @param File $file
-	 *
-	 * @return bool
-	 */
-	public static function isPage(File $file): bool {
-		$name = $file->getName();
-		$length = strlen(PageInfo::SUFFIX);
-		return (substr($name, -$length) === PageInfo::SUFFIX);
-	}
-
-	/**
-	 * @param File $file
-	 *
-	 * @return bool
-	 */
-	public static function isLandingPage(File $file): bool {
-		$internalPath = $file->getInternalPath();
-		return ($internalPath === PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX);
-	}
-
-	/**
-	 * @param File $file
-	 *
-	 * @return bool
-	 */
-	public static function isIndexPage(File $file): bool {
-		$name = $file->getName();
-		return ($name === PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX);
 	}
 
 	/**
@@ -402,82 +389,6 @@ class PageService {
 	}
 
 	/**
-	 * @param File $file
-	 *
-	 * @return bool
-	 */
-	public function indexPageHasOtherContent(File $file): bool {
-		try {
-			foreach ($file->getParent()->getDirectoryListing() as $node) {
-				// True if page and not index page
-				if ($node instanceof File
-					&& !self::isIndexPage($node)
-					&& self::isPage($node)) {
-					return true;
-				}
-				// True if not index page or corresponding attachments folder
-				if (!($node instanceof File && self::isIndexPage($node))
-					&& $node->getName() !== '.attachments.' . $file->getId()) {
-					return true;
-				}
-			}
-		} catch (FilesNotFoundException $e) {
-		}
-
-		return false;
-	}
-
-	/**
-	 * @param Folder $folder
-	 *
-	 * @return bool
-	 */
-	public static function folderHasSubPages(Folder $folder): bool {
-		try {
-			foreach ($folder->getDirectoryListing() as $node) {
-				if ($node instanceof File &&
-					self::isPage($node) &&
-					!self::isIndexPage($node)) {
-					return true;
-				}
-
-				if ($node instanceof Folder) {
-					return self::folderHasSubPages($node);
-				}
-			}
-		} catch (FilesNotFoundException $e) {
-		}
-
-		return false;
-	}
-
-	/**
-	 * @param Folder $folder
-	 * @param string $title
-	 *
-	 * @return int
-	 */
-	public static function folderHasSubPage(Folder $folder, string $title): int {
-		try {
-			foreach ($folder->getDirectoryListing() as $node) {
-				if ($node instanceof File &&
-					strcmp($node->getName(), $title . PageInfo::SUFFIX) === 0) {
-					return 1;
-				}
-
-				if ($node instanceof Folder &&
-					strcmp($node->getName(), $title) === 0 &&
-					$node->nodeExists(PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX)) {
-					return 2;
-				}
-			}
-		} catch (FilesNotFoundException $e) {
-		}
-
-		return 0;
-	}
-
-	/**
 	 * @param int    $collectiveId
 	 * @param Folder $folder
 	 * @param string $userId
@@ -492,7 +403,7 @@ class PageService {
 		try {
 			$indexPage = $this->getPageByFile($this->getIndexPageFile($folder), $folder);
 		} catch (NotFoundException $e) {
-			if (!self::folderHasSubPages($folder)) {
+			if (!NodeHelper::folderHasSubPages($folder)) {
 				return [];
 			}
 			$indexPage = $this->newPage($collectiveId, $folder, PageInfo::INDEX_PAGE_TITLE, $userId);
@@ -501,7 +412,7 @@ class PageService {
 
 		// Add subpages and recurse over subfolders
 		foreach ($folder->getDirectoryListing() as $node) {
-			if ($node instanceof File && self::isPage($node) && !self::isIndexPage($node)) {
+			if ($node instanceof File && NodeHelper::isPage($node) && !NodeHelper::isIndexPage($node)) {
 				$pageInfos[] = $this->getPageByFile($node, $folder);
 			} elseif ($node instanceof Folder) {
 				array_push($pageInfos, ...$this->recurseFolder($collectiveId, $node, $userId));
@@ -527,6 +438,50 @@ class PageService {
 		} catch (NotPermittedException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
+	}
+
+	/**
+	 * @param int    $collectiveId
+	 * @param string $userId
+	 *
+	 * @return PageInfo[]
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function findAllTrash(int $collectiveId, string $userId): array {
+		$this->verifyEditPermissions($collectiveId, $userId);
+
+		$this->initTrashBackend();
+		if (!$this->trashBackend) {
+			throw new NotPermittedException('Failed to list page trash. Trash is disabled.');
+		}
+
+		$trashNodes = $this->trashBackend->listTrashForCollective($this->userManager->get($userId), $collectiveId);
+		$trashPageInfos = [];
+		foreach ($trashNodes as $node) {
+			$pathParts = pathInfo($node->getName());
+			$filename = $pathParts['filename'];
+			$timestamp = ltrim($pathParts['extension'], 'd');
+
+			if ($node instanceof Folder) {
+				try {
+					$node = $node->get(PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX);
+				} catch (FilesNotFoundException $e) {
+					// Ignore folders without index page
+					continue;
+				}
+			}
+
+			// Ignore everything except files
+			if (!($node instanceof File)) {
+				continue;
+			}
+
+			$trashPageInfos[] = $this->getTrashPageByFile($node, $filename, $timestamp);
+		}
+
+		return $trashPageInfos;
 	}
 
 	/**
@@ -660,7 +615,7 @@ class PageService {
 	 */
 	private function isAncestorOf(Folder $collectiveFolder, int $pageId, int $targetId): bool {
 		$targetFile = $this->nodeHelper->getFileById($collectiveFolder, $targetId);
-		if (self::isLandingPage($targetFile)) {
+		if (NodeHelper::isLandingPage($targetFile)) {
 			return false;
 		}
 
@@ -684,7 +639,7 @@ class PageService {
 	 */
 	private function renamePage(Folder $collectiveFolder, int $parentId, File $file, ?string $title): bool {
 		// Do not allow to move the landing page
-		if (self::isLandingPage($file)) {
+		if (NodeHelper::isLandingPage($file)) {
 			throw new NotPermittedException('Not allowed to rename landing page');
 		}
 
@@ -711,8 +666,8 @@ class PageService {
 		}
 
 		// If processing an index page, then rename the parent folder, otherwise the file itself
-		$node = self::isIndexPage($file) ? $file->getParent() : $file;
-		$suffix = self::isIndexPage($file) ? '' : PageInfo::SUFFIX;
+		$node = NodeHelper::isIndexPage($file) ? $file->getParent() : $file;
+		$suffix = NodeHelper::isIndexPage($file) ? '' : PageInfo::SUFFIX;
 		if ($title) {
 			$safeTitle = $this->nodeHelper->sanitiseFilename($title, self::DEFAULT_PAGE_TITLE);
 			$newSafeName = $safeTitle . $suffix;
@@ -771,7 +726,7 @@ class PageService {
 		$this->removeFromSubpageOrder($collectiveId, $oldParentId, $id, $userId);
 		$this->addToSubpageOrder($collectiveId, $parentId, $id, $index, $userId);
 
-		$this->revertSubFolders($collectiveFolder);
+		NodeHelper::revertSubFolders($collectiveFolder);
 		return $this->getPageByFile($file);
 	}
 
@@ -878,16 +833,16 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function delete(int $collectiveId, int $parentId, int $id, string $userId): PageInfo {
+	public function trash(int $collectiveId, int $parentId, int $id, string $userId): PageInfo {
 		$this->verifyEditPermissions($collectiveId, $userId);
 		$folder = $this->getFolder($collectiveId, $parentId, $userId);
 		$file = $this->nodeHelper->getFileById($folder, $id);
 		$pageInfo = $this->getPageByFile($file);
 
 		try {
-			if (self::isIndexPage($file)) {
+			if (NodeHelper::isIndexPage($file)) {
 				// Don't delete if still page has subpages
-				if ($this->indexPageHasOtherContent($file)) {
+				if (NodeHelper::indexPageHasOtherContent($file)) {
 					throw new NotPermittedException('Failed to delete page ' . $id . ' with subpages');
 				}
 
@@ -902,13 +857,88 @@ class PageService {
 		} catch (FilesNotPermittedException $e) {
 			throw new NotPermittedException($e->getMessage(), 0, $e);
 		}
-		$this->pageMapper->deleteByFileId($pageInfo->getId());
-		$this->removeFromSubpageOrder($collectiveId, $parentId, $id, $userId);
 
-		$this->revertSubFolders($folder);
+		$this->initTrashBackend();
+		if (!$this->trashBackend) {
+			// Delete directly if trash is not available
+			$this->pageMapper->deleteByFileId($id);
+			$this->removeFromSubpageOrder($collectiveId, $parentId, $id, $userId);
+			NodeHelper::revertSubFolders($folder);
+			$this->notifyPush($collectiveId, $userId);
+			return $pageInfo;
+		}
+
+		$trashedPage = $this->pageMapper->findByFileId($id, true);
+		if (!$trashedPage) {
+			throw new NotFoundException('Failed to find trashed page in page trash database: ' . $id);
+		}
+
+		$pageInfo->setTrashTimestamp($trashedPage->getTrashTimestamp());
+		$this->notifyPush($collectiveId, $userId);
 		return $pageInfo;
 	}
 
+	/**
+	 * @param int    $collectiveId
+	 * @param int    $id
+	 * @param string $userId
+	 *
+	 * @return PageInfo
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function restore(int $collectiveId, int $id, string $userId): PageInfo {
+		$this->verifyEditPermissions($collectiveId, $userId);
+
+		$this->initTrashBackend();
+		if (!$this->trashBackend) {
+			throw new NotPermittedException('Failed to restore page. Trash is disabled.');
+		}
+
+		if (null === $trashItem = $this->trashBackend->getTrashItemByCollectiveAndId($this->userManager->get($userId), $collectiveId, $id)) {
+			throw new NotFoundException('Failed to restore page ' . $id . '. Not found in trash.');
+		}
+
+		try {
+			$this->trashBackend->restoreItem($trashItem);
+		} catch (FilesNotFoundException|FilesNotPermittedException|InvalidPathException $e) {
+			throw new NotFoundException('Failed to restore page ' . $id . ':' . $e->getMessage(), 0, $e);
+		}
+
+		$this->notifyPush($collectiveId, $userId);
+		return $this->findByFileId($collectiveId, $id, $userId);
+	}
+
+	/**
+	 * @param int    $collectiveId
+	 * @param int    $id
+	 * @param string $userId
+	 *
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function delete(int $collectiveId, int $id, string $userId): void {
+		$this->verifyEditPermissions($collectiveId, $userId);
+
+		$this->initTrashBackend();
+		if (!$this->trashBackend) {
+			throw new NotPermittedException('Failed to delete page. Trash is disabled.');
+		}
+
+		if (null === $trashItem = $this->trashBackend->getTrashItemByCollectiveAndId($this->userManager->get($userId), $collectiveId, $id)) {
+			throw new NotFoundException('Failed to delete page ' . $id . '. Not found in trash.');
+		}
+
+		try {
+			$this->trashBackend->removeItem($trashItem);
+		} catch (FilesNotFoundException|FilesNotPermittedException $e) {
+			throw new NotFoundException('Failed to delete page from trash ' . $id . ':' . $e->getMessage());
+		}
+
+		$this->notifyPush($collectiveId, $userId);
+	}
 
 	/**
 	 * @param string   $collectiveName

@@ -797,6 +797,61 @@ namespace OCA\Files_Versions {
     }
 }
 
+namespace OCA\Files_Trashbin {
+    class Expiration {
+        /**
+         * @param int $timestamp
+         * @param bool $quotaExceeded
+         * @return bool
+         */
+        public function isExpired($timestamp, $quotaExceeded = false) {}
+    }
+}
+
+namespace OCA\Files_Trashbin\Trash {
+	interface ITrashBackend {}
+
+	use OCP\Files\FileInfo;
+	interface ITrashItem extends FileInfo {
+	}
+
+	use OCP\IUser;
+	class TrashItem implements ITrashItem {
+		public function getOriginalLocation(): string {}
+		public function getDeletedTime(): int {}
+		public function getTrashPath(): string {}
+		public function getTrashPath(): string {}
+		public function getUser(): IUser {}
+		public function getEtag() {}
+		public function getSize($includeMounts = true) {}
+		public function getMtime() {}
+		public function getName() {}
+		public function getInternalPath() {}
+		public function getPath() {}
+		public function getMimetype() {}
+		public function getMimePart() {}
+		public function getStorage() {}
+		public function getId() {}
+		public function isEncrypted() {}
+		public function getPermissions() {}
+		public function getType() {}
+		public function isReadable() {}
+		public function isUpdateable() {}
+		public function isCreatable() {}
+		public function isDeletable() {}
+		public function isShareable() {}
+		public function isShared() {}
+		public function isMounted() {}
+		public function getMountPoint() {}
+		public function getOwner() {}
+		public function getChecksum() {}
+		public function getExtension(): string {}
+		public function getTitle(): string {}
+		public function getCreationTime(): int {}
+		public function getUploadTime(): int {}
+	}
+}
+
 namespace OCP\Files\Mount {
 	interface ISystemMountPoint {}
 }

@@ -46,8 +46,8 @@ Feature: pages
     And user "jane" sets subpageOrder for page "firstpage" to "[1,2]" with parentPath "Readme.md" in "BehatPagesCollective"
     And user "jane" fails to set subpageOrder for page "firstpage" to "[invalid]" with parentPath "Readme.md" in "BehatPagesCollective"
 
-  Scenario: Fail to delete a page with subpages
-    When user "jane" fails to delete page "firstpage" with parentPath "Readme.md" in "BehatPagesCollective"
+  Scenario: Fail to trash a page with subpages
+    When user "jane" fails to trash page "firstpage" with parentPath "Readme.md" in "BehatPagesCollective"
     Then user "jane" sees pagePath "firstpage/Readme.md" in "BehatPagesCollective"
 
   Scenario: Rename parent page
@@ -63,9 +63,26 @@ Feature: pages
     And user "jane" creates page "anotherpage" with parentPath "Readme.md" in "BehatPagesCollective"
     Then user "jane" sees pagePath "anotherpage/Subtemplate.md" in "BehatPagesCollective"
 
-  Scenario: Delete all subpages
-    When user "jane" deletes page "subpage" with parentPath "parentpage/Readme.md" in "BehatPagesCollective"
-    And user "jane" deletes page "subpage2" with parentPath "parentpage/Readme.md" in "BehatPagesCollective"
+  Scenario: Trash subpage
+    When user "jane" trashes page "subpage" with parentPath "parentpage/Readme.md" in "BehatPagesCollective"
+    Then user "jane" doesn't see pagePath "parentpage/subpage.md" in "BehatPagesCollective"
+    And user "jane" sees pagePath "parentpage/Readme.md" in "BehatPagesCollective"
+
+  Scenario: Fail to restore+delete pages in read-only collective
+    When user "alice" joins circle "BehatPagesCollective" with owner "jane"
+    And user "jane" sets "edit" level in collective "BehatPagesCollective" to "Admin"
+    Then user "alice" fails to restore page "subpage" from trash in "BehatPagesCollective"
+    When user "alice" fails to delete page "subpage" from trash in "BehatPagesCollective"
+
+  Scenario: Restore subpage
+    When user "jane" restores page "subpage" from trash in "BehatPagesCollective"
+    Then user "jane" sees pagePath "parentpage/subpage.md" in "BehatPagesCollective"
+
+  Scenario: Trash and delete all subpages reverts subfolders
+    When user "jane" trashes page "subpage" with parentPath "parentpage/Readme.md" in "BehatPagesCollective"
+    And user "jane" trashes page "subpage2" with parentPath "parentpage/Readme.md" in "BehatPagesCollective"
+    When user "jane" deletes page "subpage" from trash in "BehatPagesCollective"
+    When user "jane" deletes page "subpage2" from trash in "BehatPagesCollective"
     Then user "jane" doesn't see pagePath "parentpage/Readme.md" in "BehatPagesCollective"
     And user "jane" sees pagePath "parentpage.md" in "BehatPagesCollective"
 
@@ -77,7 +94,7 @@ Feature: pages
     And user "john" fails to rename page "secondpage" to "newnamepage" with parentPath "Readme.md" in "BehatPagesCollective"
     And user "john" fails to set emoji for page "secondpage" to "🍏" with parentPath "Readme.md" in "BehatPagesCollective"
     And user "john" fails to set subpageOrder for page "secondpage" to "[]" with parentPath "Readme.md" in "BehatPagesCollective"
-    And user "john" fails to delete page "secondpage" with parentPath "Readme.md" in "BehatPagesCollective"
+    And user "john" fails to trash page "secondpage" with parentPath "Readme.md" in "BehatPagesCollective"
 
   Scenario: Trash and delete collective and circle with all remaining pages
     Then user "jane" trashes collective "BehatPagesCollective"

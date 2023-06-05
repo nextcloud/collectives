@@ -12,6 +12,9 @@ use OCA\Collectives\Db\PageMapper;
 use OCA\Collectives\Model\CollectiveInfo;
 use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Mount\CollectiveFolderManager;
+use OCA\Collectives\Trash\PageTrashBackend;
+use OCA\Collectives\Versions\VersionsBackend;
+use OCP\App\IAppManager;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\Events\InvalidateMountCacheEvent;
 use OCP\Files\InvalidPathException;
@@ -20,6 +23,7 @@ use OCP\Files\NotPermittedException as FilesNotPermittedException;
 use OCP\IL10N;
 
 class CollectiveService extends CollectiveServiceBase {
+	private IAppManager $appManager;
 	private CollectiveHelper $collectiveHelper;
 	private CollectiveFolderManager $collectiveFolderManager;
 	private CollectiveShareService $shareService;
@@ -27,8 +31,11 @@ class CollectiveService extends CollectiveServiceBase {
 	private PageMapper $pageMapper;
 	private IL10N $l10n;
 	private IEventDispatcher $eventDispatcher;
+	private ?PageTrashBackend $pageTrashBackend = null;
+	private ?VersionsBackend $pageVersionsBackend = null;
 
 	/**
+	 * @param IAppManager                  $appManager
 	 * @param CollectiveMapper             $collectiveMapper
 	 * @param CollectiveHelper             $collectiveHelper
 	 * @param CollectiveFolderManager      $collectiveFolderManager
@@ -40,6 +47,7 @@ class CollectiveService extends CollectiveServiceBase {
 	 * @param IEventDispatcher             $eventDispatcher
 	 */
 	public function __construct(
+		IAppManager $appManager,
 		CollectiveMapper $collectiveMapper,
 		CollectiveHelper $collectiveHelper,
 		CollectiveFolderManager $collectiveFolderManager,
@@ -50,6 +58,7 @@ class CollectiveService extends CollectiveServiceBase {
 		IL10N $l10n,
 		IEventDispatcher $eventDispatcher) {
 		parent::__construct($collectiveMapper, $circleHelper);
+		$this->appManager = $appManager;
 		$this->collectiveHelper = $collectiveHelper;
 		$this->collectiveFolderManager = $collectiveFolderManager;
 		$this->shareService = $shareService;
@@ -57,6 +66,18 @@ class CollectiveService extends CollectiveServiceBase {
 		$this->pageMapper = $pageMapper;
 		$this->l10n = $l10n;
 		$this->eventDispatcher = $eventDispatcher;
+	}
+
+	private function initPageTrashBackend(): void {
+		if ($this->appManager->isEnabledForUser('files_trashbin')) {
+			$this->pageTrashBackend = \OC::$server->get(PageTrashBackend::class);
+		}
+	}
+
+	private function initPageVersionsBackend(): void {
+		if ($this->appManager->isEnabledForUser('files_versions')) {
+			$this->pageVersionsBackend = \OC::$server->get(VersionsBackend::class);
+		}
 	}
 
 	/**
@@ -378,8 +399,23 @@ class CollectiveService extends CollectiveServiceBase {
 		} catch (InvalidPathException | FilesNotFoundException | FilesNotPermittedException $e) {
 			throw new NotFoundException('Failed to delete collective folder', 0, $e);
 		} finally {
+			// Delete leftovers in any case (also if collective folder is already gone)
+
+			// Delete shares and user settings
 			$this->shareService->deleteShareByCollectiveId($collectiveInfo->getId());
 			$this->collectiveUserSettingsMapper->deleteByCollectiveId($collectiveInfo->getId());
+
+			// Delete page trash for the collective
+			$this->initPageTrashBackend();
+			if ($this->pageTrashBackend) {
+				$this->pageTrashBackend->deleteTrashFolder($collectiveInfo->getId());
+			}
+
+			// Delete page versions for the collective
+			$this->initPageVersionsBackend();
+			if ($this->pageVersionsBackend) {
+				$this->pageVersionsBackend->deleteVersionsFolder($collectiveInfo->getId());
+			}
 		}
 
 		return new CollectiveInfo($this->collectiveMapper->delete($collectiveInfo),

@@ -114,8 +114,10 @@ jobs:
         run: |
           ./occ app:list
           ./occ collectives:create --owner alice NewCollective
-          ./occ collectives:pages:purge-obsolete
+          ./occ collectives:index
           ./occ collectives:pages:expire
+          ./occ collectives:pages:trashbin:cleanup -f
+          ./occ collectives:pages:purge-obsolete
 
       - name: Disable circles and run occ command
         run: |

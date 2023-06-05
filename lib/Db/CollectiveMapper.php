@@ -190,6 +190,19 @@ class CollectiveMapper extends QBMapper {
 	}
 
 	/**
+	 * @throws MissingDependencyException
+	 * @throws NotPermittedException
+	 * @throws NotFoundException
+	 */
+	public function idToName(int $id, string $userId = null, bool $super = false): string {
+		$collective = $this->findByIdAndUser($id, $userId);
+		if ($collective === null) {
+			throw new NotFoundException('Collective not found: ' . $id);
+		}
+		return $this->circleHelper->getCircle($collective->getCircleId(), $userId, $super)->getSanitizedName();
+	}
+
+	/**
 	 * @param string      $circleId
 	 * @param string|null $userId
 	 * @param bool        $super

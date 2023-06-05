@@ -19,6 +19,7 @@ use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\CollectiveShareService;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\UnprocessableEntityException;
+use OCP\App\IAppManager;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IL10N;
 use PHPUnit\Framework\TestCase;
@@ -32,6 +33,10 @@ class CollectiveServiceTest extends TestCase {
 	private CollectiveService $service;
 
 	protected function setUp(): void {
+		$appManager = $this->getMockBuilder(IAppManager::class)
+			->disableOriginalConstructor()
+			->getMock();
+
 		$this->collectiveMapper = $this->getMockBuilder(CollectiveMapper::class)
 			->disableOriginalConstructor()
 			->getMock();
@@ -80,6 +85,7 @@ class CollectiveServiceTest extends TestCase {
 			->getMock();
 
 		$this->service = new CollectiveService(
+			$appManager,
 			$this->collectiveMapper,
 			$this->collectiveHelper,
 			$collectiveFolderManager,

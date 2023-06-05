@@ -54,12 +54,19 @@ return [
 			'verb' => 'PUT', 'requirements' => ['collectiveId' => '\d+', 'parentId' => '\d+', 'id' => '\d+']],
 		['name' => 'page#setSubpageOrder', 'url' => '/_api/{collectiveId}/_pages/parent/{parentId}/page/{id}/subpageOrder',
 			'verb' => 'PUT', 'requirements' => ['collectiveId' => '\d+', 'parentId' => '\d+', 'id' => '\d+']],
-		['name' => 'page#delete', 'url' => '/_api/{collectiveId}/_pages/parent/{parentId}/page/{id}',
+		['name' => 'page#trash', 'url' => '/_api/{collectiveId}/_pages/parent/{parentId}/page/{id}',
 			'verb' => 'DELETE', 'requirements' => ['collectiveId' => '\d+', 'parentId' => '\d+', 'id' => '\d+']],
 		['name' => 'page#getBacklinks', 'url' => '/_api/{collectiveId}/_pages/parent/{parentId}/page/{id}/backlinks',
 			'verb' => 'GET', 'requirements' => ['collectiveId' => '\d+', 'parentId' => '\d+', 'id' => '\d+']],
 		['name' => 'page#getAttachments', 'url' => '/_api/{collectiveId}/_pages/parent/{parentId}/page/{id}/attachments',
 			'verb' => 'GET', 'requirements' => ['collectiveId' => '\d+', 'parentId' => '\d+', 'id' => '\d+']],
+
+		// pages trash API
+		['name' => 'pageTrash#index', 'url' => '/_api/{collectiveId}/_pages/trash', 'verb' => 'GET'],
+		['name' => 'pageTrash#delete', 'url' => '/_api/{collectiveId}/_pages/trash/{id}', 'verb' => 'DELETE',
+			'requirements' => ['id' => '\d+']],
+		['name' => 'pageTrash#restore', 'url' => '/_api/{collectiveId}/_pages/trash/{id}', 'verb' => 'PATCH',
+			'requirements' => ['id' => '\d+']],
 
 		// public collectives API
 		['name' => 'publicCollective#get', 'url' => '/_api/p/{token}', 'verb' => 'GET'],
@@ -78,12 +85,19 @@ return [
 			'verb' => 'PUT', 'requirements' => ['parentId' => '\d+', 'id' => '\d+']],
 		['name' => 'publicPage#setSubpageOrder', 'url' => '/_api/p/{token}/_pages/parent/{parentId}/page/{id}/subpageOrder',
 			'verb' => 'PUT', 'requirements' => ['parentId' => '\d+', 'id' => '\d+']],
-		['name' => 'publicPage#delete', 'url' => '/_api/p/{token}/_pages/parent/{parentId}/page/{id}',
+		['name' => 'publicPage#trash', 'url' => '/_api/p/{token}/_pages/parent/{parentId}/page/{id}',
 			'verb' => 'DELETE', 'requirements' => ['parentId' => '\d+', 'id' => '\d+']],
 		['name' => 'publicPage#getAttachments', 'url' => '/_api/p/{token}/_pages/parent/{parentId}/page/{id}/attachments',
 			'verb' => 'GET', 'requirements' => ['parentId' => '\d+', 'id' => '\d+']],
 		['name' => 'publicPage#getBacklinks', 'url' => '/_api/p/{token}/_pages/parent/{parentId}/page/{id}/backlinks',
 			'verb' => 'GET', 'requirements' => ['parentId' => '\d+', 'id' => '\d+']],
+
+		// public pages trash API
+		['name' => 'publicPageTrash#index', 'url' => '/_api/p/{token}/_pages/trash', 'verb' => 'GET'],
+		['name' => 'publicPageTrash#delete', 'url' => '/_api/p/{token}/_pages/trash/{id}', 'verb' => 'DELETE',
+			'requirements' => ['id' => '\d+']],
+		['name' => 'publicPageTrash#restore', 'url' => '/_api/p/{token}/_pages/trash/{id}', 'verb' => 'PATCH',
+			'requirements' => ['id' => '\d+']],
 
 		// default public route (Vue.js frontend)
 		['name' => 'publicStart#publicIndex', 'url' => '/p/{token}/{path}', 'verb' => 'GET',
