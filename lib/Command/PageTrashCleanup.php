@@ -68,7 +68,7 @@ class PageTrashCleanup extends Base {
 				if ($foundCollectiveName === $collectiveName) {
 					$question = new ConfirmationQuestion('Are you sure you want to empty the page trashbin of collective ' . $collectiveName . '? This can not be undone. (y/N) ', false);
 					if (!$input->getOption('force') && !$helper->ask($input, $output, $question)) {
-						return -1;
+						return -2;
 					}
 
 					$this->trashBackend->cleanTrashFolder($collective->getId());
@@ -82,7 +82,7 @@ class PageTrashCleanup extends Base {
 
 		$question = new ConfirmationQuestion('Are you sure you want to empty the page trashbin of all collectives? This can not be undone (y/N).', false);
 		if (!$input->getOption('force') && !$helper->ask($input, $output, $question)) {
-			return -1;
+			return -2;
 		}
 
 		foreach ($collectives as $collective) {
