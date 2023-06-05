@@ -129,6 +129,11 @@ jobs:
         working-directory: apps/${{ env.APP_NAME }}
         run: composer run test:integration
 
+      - name: Print logs
+        if: always()
+        run: |
+          cat data/nextcloud.log
+
       - name: Skipped
         # Fail the action when neither unit nor integration tests ran
         if: steps.check_phpunit.outcome == 'failure' && steps.check_integration.outcome == 'failure'
