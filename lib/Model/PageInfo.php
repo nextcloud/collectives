@@ -104,7 +104,10 @@ class PageInfo extends Entity implements JsonSerializable {
 		$this->setTimestamp($file->getMTime());
 		$this->setSize($file->getSize());
 		$this->setFileName($file->getName());
-		$this->setCollectivePath(rtrim(explode('/', $file->getMountPoint()->getMountPoint(), 4)[3], '/'));
+		$mountPoint = explode('/', $file->getMountPoint()->getMountPoint(), 4);
+		if (count($mountPoint) >= 4) {
+			$this->setCollectivePath(rtrim($mountPoint[3], '/'));
+		}
 		if (null !== $lastUserId) {
 			$this->setLastUserId($lastUserId);
 		}

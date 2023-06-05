@@ -163,7 +163,7 @@ class PageServiceTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 		$indexFile->method('getId')
-			->willReturn('101');
+			->willReturn(101);
 		$indexFile->method('getName')
 			->willReturn('Readme.md');
 		$folder->method('get')

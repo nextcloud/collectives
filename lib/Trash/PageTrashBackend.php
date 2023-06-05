@@ -125,13 +125,14 @@ class PageTrashBackend implements ITrashBackend {
 		}
 		$user = $item->getUser();
 		[, $collectiveId] = explode('/', $item->getTrashPath());
+		$collectiveId = (int)$collectiveId;
 		$node = $this->getNodeForTrashItem($user, $item);
 		if ($node === null) {
 			throw new NotFoundException();
 		}
 
 		$trashStorage = $node->getStorage();
-		$targetFolder = $this->collectiveFolderManager->getFolder((int)$collectiveId);
+		$targetFolder = $this->collectiveFolderManager->getFolder($collectiveId);
 		$originalLocation = $item->getOriginalLocation();
 		$parent = dirname($originalLocation);
 		if ($parent === '.') {
@@ -181,7 +182,7 @@ class PageTrashBackend implements ITrashBackend {
 		$targetLocation = $targetFolder->getInternalPath() . '/' . $originalLocation;
 		$targetFolder->getStorage()->moveFromStorage($trashStorage, $node->getInternalPath(), $targetLocation);
 		$targetFolder->getStorage()->getUpdater()->renameFromStorage($trashStorage, $node->getInternalPath(), $targetLocation);
-		$this->trashManager->removeItem((int)$collectiveId, $item->getName(), $item->getDeletedTime());
+		$this->trashManager->removeItem($collectiveId, $item->getName(), $item->getDeletedTime());
 
 		// Restore page in collective page database
 		if ($restorePageId) {
@@ -206,13 +207,14 @@ class PageTrashBackend implements ITrashBackend {
 		}
 		$user = $item->getUser();
 		[, $collectiveId] = explode('/', $item->getTrashPath());
+		$collectiveId = (int)$collectiveId;
 		$node = $this->getNodeForTrashItem($user, $item);
 		if ($node === null) {
 			throw new NotFoundException();
 		}
 
 		// Get original parent folder of item to revert subfolders further down
-		$targetFolder = $this->collectiveFolderManager->getFolder((int)$collectiveId);
+		$targetFolder = $this->collectiveFolderManager->getFolder($collectiveId);
 		$targetFolderPath = substr($item->getOriginalLocation(), 0, -strlen($item->getName()));
 		if ($targetFolderPath) {
 			try {
@@ -239,7 +241,7 @@ class PageTrashBackend implements ITrashBackend {
 
 		$node->getStorage()->getCache()->remove($node->getInternalPath());
 		if ($item->isRootItem()) {
-			$this->trashManager->removeItem((int)$collectiveId, $item->getName(), $item->getDeletedTime());
+			$this->trashManager->removeItem($collectiveId, $item->getName(), $item->getDeletedTime());
 		}
 
 		if (!is_null($this->versionsBackend)) {
@@ -551,7 +553,7 @@ class PageTrashBackend implements ITrashBackend {
 				return new CollectivePageTrashItem(
 					$this,
 					$trashItem['original_location'],
-					$trashItem['deleted_time'],
+					(int)$trashItem['deleted_time'],
 					'/' . $collectiveId . '/' . $trashNode->getName(),
 					$info,
 					$user,
@@ -634,17 +636,17 @@ class PageTrashBackend implements ITrashBackend {
 			$trashFolder = $this->getTrashFolder($collectiveId);
 			$nodes = []; // cache
 			foreach ($trashItems as $collectiveTrashItem) {
-				$nodeName = self::getTrashFilename($collectiveTrashItem['name'], $collectiveTrashItem['deleted_time']);
+				$nodeName = self::getTrashFilename($collectiveTrashItem['name'], (int)$collectiveTrashItem['deleted_time']);
 				try {
 					$nodes[$nodeName] = $trashFolder->get($nodeName);
 				} catch (NotFoundException $e) {
-					$this->trashManager->removeItem($collectiveId, $collectiveTrashItem['name'], $collectiveTrashItem['deleted_time']);
+					$this->trashManager->removeItem($collectiveId, $collectiveTrashItem['name'], (int)$collectiveTrashItem['deleted_time']);
 					continue;
 				}
 			}
 			foreach ($trashItems as $collectiveTrashItem) {
 				if ($expiration->isExpired($collectiveTrashItem['deleted_item'])) {
-					$nodeName = self::getTrashFilename($collectiveTrashItem['name'], $collectiveTrashItem['deleted_time']);
+					$nodeName = self::getTrashFilename($collectiveTrashItem['name'], (int)$collectiveTrashItem['deleted_time']);
 					if (!isset($nodes[$nodeName])) {
 						continue;
 					}
@@ -657,7 +659,7 @@ class PageTrashBackend implements ITrashBackend {
 					// only count up after checking if removal is possible
 					$count++;
 					$node->getStorage()->getCache()->remove($node->getInternalPath());
-					$this->trashManager->removeItem($collectiveId, $collectiveTrashItem['name'], $collectiveTrashItem['deleted_time']);
+					$this->trashManager->removeItem($collectiveId, $collectiveTrashItem['name'], (int)$collectiveTrashItem['deleted_time']);
 					if (!is_null($collectiveTrashItem['file_id']) && !is_null($this->versionsBackend)) {
 						$this->versionsBackend->deleteAllVersionsForFile($collectiveId, $collectiveTrashItem['file_id']);
 					}

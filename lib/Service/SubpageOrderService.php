@@ -76,7 +76,7 @@ class SubpageOrderService {
 			unset($subpageOrderArray[$key]);
 		}
 
-		array_splice($subpageOrderArray, $index, 0, $pageId);
+		array_splice($subpageOrderArray, $index, 0, [$pageId]);
 
 		return self::fromArray($subpageOrderArray);
 	}
