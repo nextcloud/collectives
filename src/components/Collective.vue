@@ -50,6 +50,7 @@ export default {
 	computed: {
 		...mapGetters([
 			'currentCollective',
+			'currentCollectiveCanEdit',
 			'currentFileIdPage',
 			'currentPage',
 			'collectivePage',
@@ -174,8 +175,10 @@ export default {
 		async getPages() {
 			await this.dispatchGetPages()
 				.catch(displayError('Could not fetch pages'))
-			await this.dispatchGetTrashPages()
-				.catch(displayError('Could not fetch page trash'))
+			if (this.currentCollectiveCanEdit) {
+				await this.dispatchGetTrashPages()
+					.catch(displayError('Could not fetch page trash'))
+			}
 		},
 
 		/**
@@ -184,8 +187,10 @@ export default {
 		async getPagesBackground() {
 			await this.dispatchGetPages(false)
 				.catch(displayError('Could not fetch pages'))
-			await this.dispatchGetTrashPages()
-				.catch(displayError('Could not fetch page trash'))
+			if (this.currentCollectiveCanEdit) {
+				await this.dispatchGetTrashPages()
+					.catch(displayError('Could not fetch page trash'))
+			}
 		},
 
 		closeNav() {
