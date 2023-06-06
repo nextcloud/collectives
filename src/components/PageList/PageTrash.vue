@@ -21,50 +21,54 @@
 				</NcEmptyContent>
 				<template v-else>
 					<table>
-						<tr>
-							<th class="header-title">
-								{{ t('collectives', 'Title') }}
-							</th>
-							<th />
-							<th v-if="!isMobile" class="header-timestamp">
-								{{ t('collectives', 'Deleted') }}
-							</th>
-						</tr>
-						<tr v-for="trashPage in trashPages" :key="trashPage.id">
-							<td class="item">
-								<div class="item-icon">
-									<PageTemplateIcon v-if="isTemplate(trashPage)" :size="22" fill-color="var(--color-background-darker)" />
-									<div v-else-if="trashPage.emoji">
-										{{ trashPage.emoji }}
+						<thead>
+							<tr>
+								<th class="header-title">
+									{{ t('collectives', 'Title') }}
+								</th>
+								<th />
+								<th v-if="!isMobile" class="header-timestamp">
+									{{ t('collectives', 'Deleted') }}
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr v-for="trashPage in trashPages" :key="trashPage.id">
+								<td class="item">
+									<div class="item-icon">
+										<PageTemplateIcon v-if="isTemplate(trashPage)" :size="22" fill-color="var(--color-background-darker)" />
+										<div v-else-if="trashPage.emoji">
+											{{ trashPage.emoji }}
+										</div>
+										<PageIcon v-else :size="22" fill-color="var(--color-background-darker)" />
 									</div>
-									<PageIcon v-else :size="22" fill-color="var(--color-background-darker)" />
-								</div>
-								<div class="item-title">
-									{{ trashPage.title }}
-								</div>
-							</td>
-							<td class="actions">
-								<NcActions>
-									<NcActionButton :close-after-click="true" @click="restorePage(trashPage)">
+									<div class="item-title">
+										{{ trashPage.title }}
+									</div>
+								</td>
+								<td class="actions">
+									<NcButton @click="restorePage(trashPage)">
 										<template #icon>
 											<RestoreIcon :size="20" />
 										</template>
 										{{ t('collectives', 'Restore') }}
-									</NcActionButton>
-									<NcActionButton :close-after-click="true" @click="deletePage(trashPage)">
-										<template #icon>
-											<DeleteIcon :size="20" />
-										</template>
-										{{ t('collectives', 'Delete permanently') }}
-									</NcActionButton>
-								</NcActions>
-							</td>
-							<td v-if="!isMobile" class="timestamp">
-								<span :title="titleDate(trashPage.trashTimestamp)">
-									{{ formattedDate(trashPage.trashTimestamp) }}
-								</span>
-							</td>
-						</tr>
+									</NcButton>
+									<NcActions :force-menu="true">
+										<NcActionButton :close-after-click="true" @click="deletePage(trashPage)">
+											<template #icon>
+												<DeleteIcon :size="20" />
+											</template>
+											{{ t('collectives', 'Delete permanently') }}
+										</NcActionButton>
+									</NcActions>
+								</td>
+								<td v-if="!isMobile" class="timestamp">
+									<span :title="titleDate(trashPage.trashTimestamp)">
+										{{ formattedDate(trashPage.trashTimestamp) }}
+									</span>
+								</td>
+							</tr>
+						</tbody>
 					</table>
 				</template>
 			</div>
