@@ -179,7 +179,7 @@ export default {
 
 		deletePage(trashPage) {
 			this.dispatchDeletePage({ pageId: trashPage.id })
-			showSuccess(t('collectives', 'Page deleted'))
+			showSuccess(t('collectives', 'Page permanently deleted'))
 		},
 
 		onPageTrashed() {
@@ -238,7 +238,10 @@ table {
 
 tr {
 	display: flex;
-	border-bottom: 1px solid var(--color-border);
+
+	&:not(:last-child) {
+		border-bottom: 1px solid var(--color-border);
+	}
 }
 
 th, td {
@@ -250,7 +253,6 @@ th, td {
 
 th {
 	color: var(--color-text-maxcontrast);
-	font-weight: bold;
 
 	&.header-title {
 		padding-left: 44px;

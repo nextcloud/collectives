@@ -184,6 +184,7 @@ export default {
 			}
 
 			emit('collectives:page-list:page-trashed')
+			showSuccess(t('collectives', 'Page deleted'))
 		},
 
 		/**

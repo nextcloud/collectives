@@ -176,6 +176,12 @@ export default {
 			return state.pages.find(p => (p.id === fileId))
 		},
 
+		hasSubpages(state, _getters) {
+			return (pageId) => {
+				return state.pages.filter(p => p.parentId === pageId).length > 0
+			}
+		},
+
 		sortedSubpages(state, getters) {
 			return (parentId, sortOrder) => {
 				const parentPage = state.pages.find(p => p.id === parentId)

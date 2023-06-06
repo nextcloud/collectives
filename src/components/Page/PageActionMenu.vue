@@ -169,6 +169,7 @@ export default {
 		...mapGetters([
 			'currentCollective',
 			'currentCollectiveCanEdit',
+			'hasSubpages',
 			'loading',
 			'pagesTreeWalk',
 			'showing',
@@ -197,9 +198,11 @@ export default {
 		},
 
 		deletePageString() {
-			return this.isTemplate
-				? t('collectives', 'Delete template')
-				: t('collectives', 'Delete page')
+			return this.hasSubpages(this.pageId)
+				? t('collectives', 'Delete page and subpages')
+				: this.isTemplate
+					? t('collectives', 'Delete template')
+					: t('collectives', 'Delete page')
 		},
 
 		hasTemplate() {
