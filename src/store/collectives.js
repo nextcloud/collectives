@@ -53,12 +53,18 @@ export default {
 			)
 		},
 
-		currentCollectivePath(state, getters) {
-			if (getters.isPublic) {
-				return `/p/${getters.shareTokenParam}/${encodeURIComponent(getters.currentCollective.name)}`
-			} else {
-				return `/${encodeURIComponent(getters.currentCollective.name)}`
+		collectivePath(state, getters) {
+			return (collective) => {
+				if (getters.isPublic && collective.shareToken) {
+					return `/p/${collective.shareToken}/${encodeURIComponent(collective.name)}`
+				} else {
+					return `/${encodeURIComponent(collective.name)}`
+				}
 			}
+		},
+
+		currentCollectivePath(state, getters) {
+			return getters.collectivePath(getters.currentCollective)
 		},
 
 		currentCollectiveTitle(_state, getters) {

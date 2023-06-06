@@ -1,7 +1,7 @@
 <template>
 	<NcAppNavigationItem :key="collective.circleId"
 		:title="collective.name"
-		:to="`/${encodeURIComponent(collective.name)}`"
+		:to="collectivePath(collective)"
 		:force-menu="true"
 		:force-display-actions="isMobile"
 		class="collectives_list_item">
@@ -20,6 +20,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { NcAppNavigationItem } from '@nextcloud/vue'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import CollectiveActions from '../Collective/CollectiveActions.vue'
@@ -43,6 +44,12 @@ export default {
 			type: Object,
 			required: true,
 		},
+	},
+
+	computed: {
+		...mapGetters([
+			'collectivePath',
+		]),
 	},
 }
 </script>
