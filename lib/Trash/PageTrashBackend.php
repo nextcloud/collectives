@@ -169,14 +169,14 @@ class PageTrashBackend implements ITrashBackend {
 		}
 
 		// Get pageId for restoring page in collective page database
-		$restorePageId = null;
+		$restorePageId = $node->getId();
 		if ($node instanceof Folder) {
 			// Try to use index page if folder is deleted
-			if (null !== $indexNode = $node->get(PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX)) {
+			try {
+				$indexNode = $node->get(PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX);
 				$restorePageId = $indexNode->getId();
+			} catch (NotFoundException $e) {
 			}
-		} else {
-			$restorePageId = $node->getId();
 		}
 
 		$targetLocation = $targetFolder->getInternalPath() . '/' . $originalLocation;
@@ -225,14 +225,14 @@ class PageTrashBackend implements ITrashBackend {
 		}
 
 		// Get pageId for deleting page from collective page database
-		$deletePageId = null;
+		$deletePageId = $node->getId();
 		if ($node instanceof Folder) {
 			// Try to use index page if folder is deleted
-			if (null !== $indexNode = $node->get(PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX)) {
+			try {
+				$indexNode = $node->get(PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX);
 				$deletePageId = $indexNode->getId();
+			} catch (NotFoundException $e) {
 			}
-		} else {
-			$deletePageId = $node->getId();
 		}
 
 		if ($node->getStorage()->unlink($node->getInternalPath()) === false) {
