@@ -47,6 +47,7 @@ OC.L10N.register(
     "Permissions" : "Jogosultságok",
     "Allow editing for" : "Szerkesztés engedélyezése a következőknek:",
     "Admins only" : "Csak rendszergazdák",
+    "Admins and moderators" : "Rendszergazdák és moderátorok",
     "All members" : "Összes tag",
     "Allow sharing for" : "Megosztás engedélyezése a következőknek:",
     "Page settings" : "Oldalbeállítások",
