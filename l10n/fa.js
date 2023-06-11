@@ -9,6 +9,7 @@ OC.L10N.register(
     "Loading …" : "بارگذاری …",
     "No results" : "بدون نتیجه",
     "Permissions" : "مجوزها",
+    "View" : "نمایش",
     "Edit" : "ویرایش",
     "Members" : "اعضا",
     "Restore" : "بازیابی",
