@@ -26,7 +26,7 @@ OC.L10N.register(
     "Done" : "Feito",
     "Show in Files" : "Amosar en Ficheiros",
     "Hide outline" : "Ocultar contorno",
-    "Show outline" : "Mostrar contorno",
+    "Show outline" : "Amosar o esquema",
     "Template" : "Modelo",
     "Title" : "Título",
     "Download" : "Descargar",
