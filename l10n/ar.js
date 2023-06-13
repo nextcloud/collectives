@@ -22,7 +22,7 @@ OC.L10N.register(
     "Cancel" : "إلغاء",
     "Back" : "العودة",
     "Create" : "إنشاء",
-    "Done" : "أُنجز",
+    "Done" : "تم",
     "Show in Files" : "عرض في الملفات ",
     "Title" : "العنوان",
     "Download" : "تنزيل",
