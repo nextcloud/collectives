@@ -49,7 +49,7 @@ OC.L10N.register(
     "Emoji updated" : "Емодзі оновлено",
     "Could not update emoji for the collective" : "Неможливо оновити емодзі для колективу",
     "Could not rename the collective" : "Не вдалося перейменувати колектив",
-    "Collectives settings" : "Загальні",
+    "Collectives settings" : "Налаштування",
     "Collectives Folder" : "Тека для колективів",
     "Invalid path selected. Only folders on first level are supported." : "Вибрано некоректний шлях. Підтримуються лише теки першого рівня.",
     "Deleted collectives" : "Видалені колективи",
