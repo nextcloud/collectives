@@ -197,7 +197,7 @@ export default {
 		},
 
 		setEmojiString() {
-			return t('collective', 'Select emoji')
+			return t('collectives', 'Select emoji')
 		},
 
 		deletePageString() {
