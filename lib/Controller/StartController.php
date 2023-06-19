@@ -27,20 +27,12 @@ class StartController extends Controller {
 	}
 
 	/**
-	 * CAUTION: the @Stuff turns off security checks; for this page no admin is
-	 *          required and no CSRF check. If you don't know what CSRF is, read
-	 *          it up in the docs or you might create a security hole. This is
-	 *          basically the only required method to add this exemption, don't
-	 *          add it to any other method if you don't exactly know what it does
-	 *
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 *
-	 * @param string $path
-	 *
 	 * @return TemplateResponse
 	 */
-	public function index(string $path): TemplateResponse {
+	public function index(): TemplateResponse {
 		if ($appsMissing = $this->checkDependencies()) {
 			return new TemplateResponse('collectives', 'error', ['appsMissing' => $appsMissing]);  // templates/error.php
 		}
@@ -50,6 +42,18 @@ class StartController extends Controller {
 			'id-app-content' => '#app-content-vue',
 			'id-app-navigation' => '#app-navigation-vue',
 		]);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 *
+	 * @param string $path
+	 *
+	 * @return TemplateResponse
+	 */
+	public function indexPath(string $path): TemplateResponse {
+		return $this->index();
 	}
 
 	/**

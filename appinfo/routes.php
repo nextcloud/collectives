@@ -99,14 +99,17 @@ return [
 		['name' => 'publicPageTrash#restore', 'url' => '/_api/p/{token}/_pages/trash/{id}', 'verb' => 'PATCH',
 			'requirements' => ['id' => '\d+']],
 
-		// default public route (Vue.js frontend)
+		// default Vue.js router route (Vue.js frontend)
+		['name' => 'start#index', 'url' => '/', 'verb' => 'GET'],
+
+		// Vue.js router public route (Vue.js frontend)
 		['name' => 'publicStart#publicIndex', 'url' => '/p/{token}/{path}', 'verb' => 'GET',
 			'requirements' => ['path' => '.*'],	'defaults' => ['path' => '']],
 
-		// default route (Vue.js frontend)
-		['name' => 'start#index', 'url' => '/{path}', 'verb' => 'GET',
+		// Vue.js router route (Vue.js frontend)
+		['name' => 'start#indexPath', 'url' => '/{path}', 'verb' => 'GET',
 			'requirements' => ['path' => '.*'],
-			'defaults' => ['path' => '']],
+			'defaults' => ['path' => '/']],
 	],
 	'ocs' => [
 		['name' => 'settings#getUserSetting', 'url' => '/api/v{apiVersion}/settings/user/{key}', 'verb' => 'GET',
