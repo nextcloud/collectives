@@ -47,8 +47,8 @@
     "extends @nextcloud/browserslist-config"
   ],
   "engines": {
-    "node": ">=16.0.0",
-    "npm": ">=8.0.0"
+    "node": "^20.0.0",
+    "npm": "^9.0.0"
   },
   "devDependencies": {
     "@cypress/browserify-preprocessor": "^3.0.2",
