@@ -5,6 +5,7 @@ OC.L10N.register(
     "Share link" : "Linki yayımla",
     "Unshare" : "Paylaşımı durdur",
     "Settings" : "Quraşdırmalar",
+    "No results" : "Nəticə yoxdur",
     "Edit" : "Dəyişiklik et",
     "Restore" : "Geri qaytar",
     "Delete permanently" : "Həmişəlik sil",
