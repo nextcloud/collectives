@@ -13,6 +13,7 @@ OC.L10N.register(
     "An error occurred while performing the search" : "검색을 수행하는 동안 오류가 발생했습니다.",
     "Add {type}" : "{type} 추가",
     "Permissions" : "권한",
+    "Admins and moderators" : "관리자와 중재자",
     "View" : "보기",
     "Edit" : "편집",
     "Members" : "구성원",
