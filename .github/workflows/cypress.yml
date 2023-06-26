@@ -38,12 +38,12 @@ env:
 
 jobs:
   cypress:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     strategy:
       fail-fast: false
       matrix:
-        node-version: [16]
+        node-version: [20]
         containers: [1, 2, 3, 4]
         php-versions: ['8.0']
         databases: ['sqlite']
@@ -56,21 +56,21 @@ jobs:
           echo "APP_NAME=${GITHUB_REPOSITORY##*/}" >> $GITHUB_ENV
 
       - name: Checkout server
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
         with:
           submodules: true
           repository: nextcloud/server
           ref: ${{ matrix.server-versions }}
 
       - name: Checkout circles app
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
         with:
           repository: nextcloud/circles
           path: apps/circles
           ref: ${{ matrix.server-versions }}
 
       - name: Checkout files_pdfviewer app
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
         with:
           repository: nextcloud/files_pdfviewer
           path: apps/files_pdfviewer
@@ -82,21 +82,21 @@ jobs:
           echo "text_app_ref=$text_app_ref" >> $GITHUB_ENV
 
       - name: Checkout text app
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
         with:
           repository: nextcloud/text
           path: apps/text
           ref: ${{ env.text_app_ref }}
 
       - name: Checkout viewer app
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
         with:
           repository: nextcloud/viewer
           path: apps/viewer
           ref: ${{ matrix.server-versions }}
 
       - name: Checkout app
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
         with:
           path: apps/${{ env.APP_NAME }}
 
@@ -119,8 +119,8 @@ jobs:
         uses: skjnldsv/read-package-engines-version-actions@8205673bab74a63eb9b8093402fd9e0e018663a1 # v2.2
         id: versions
         with:
-          fallbackNode: '^16'
-          fallbackNpm: '^8'
+          fallbackNode: '^20'
+          fallbackNpm: '^9'
 
       - name: Set up node ${{ steps.versions.outputs.nodeVersion }}
         uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c # v3

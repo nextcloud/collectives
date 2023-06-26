@@ -51,20 +51,15 @@ jobs:
           # Split and keep last
           echo "APP_NAME=${GITHUB_REPOSITORY##*/}" >> $GITHUB_ENV
 
-      - name: Enable ONLY_FULL_GROUP_BY MySQL option
-        run: |
-          echo "SET GLOBAL sql_mode=(SELECT CONCAT(@@sql_mode,',ONLY_FULL_GROUP_BY'));" | mysql -h 127.0.0.1 -P 4444 -u root -prootpassword
-          echo "SELECT @@sql_mode;" | mysql -h 127.0.0.1 -P 4444 -u root -prootpassword
-
       - name: Checkout server
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
         with:
           submodules: true
           repository: nextcloud/server
           ref: ${{ matrix.server-versions }}
 
       - name: Checkout circles app
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
         with:
           repository: nextcloud/circles
           path: apps/circles
@@ -76,14 +71,14 @@ jobs:
           echo "text_app_ref=$text_app_ref" >> $GITHUB_ENV
 
       - name: Checkout text app
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
         with:
           repository: nextcloud/text
           path: apps/text
           ref: ${{ env.text_app_ref }}
 
       - name: Checkout viewer app
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
         with:
           repository: nextcloud/viewer
           path: apps/viewer
@@ -100,13 +95,17 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Enable ONLY_FULL_GROUP_BY MySQL option
+        run: |
+          echo "SET GLOBAL sql_mode=(SELECT CONCAT(@@sql_mode,',ONLY_FULL_GROUP_BY'));" | mysql -h 127.0.0.1 -P 4444 -u root -prootpassword
+          echo "SELECT @@sql_mode;" | mysql -h 127.0.0.1 -P 4444 -u root -prootpassword
+
       - name: Set up Nextcloud, enable collectives from app store and remove collectives
         env:
           DB_PORT: 4444
         run: |
           mkdir data
           ./occ maintenance:install --verbose --database=mysql --database-name=nextcloud --database-host=127.0.0.1 --database-port=$DB_PORT --database-user=root --database-pass=rootpassword --admin-user admin --admin-pass admin
-          ./occ app:enable --force circles
           ./occ app:enable --force ${{ env.APP_NAME }}
           for user in alice bob jane john; do \
           OC_PASS="$user" ./occ user:add --password-from-env "$user"; \
