@@ -174,8 +174,9 @@ class NodeHelper {
 	 * @return bool
 	 */
 	public static function isLandingPage(File $file): bool {
-		$internalPath = $file->getInternalPath();
-		return ($internalPath === PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX);
+		$internalPath = $file->getInternalPath() ?: '';
+		return ($internalPath === PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX)
+			|| preg_match('/^appdata_\w+\/collectives\/\d+\/' . PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX . '$/', $internalPath);
 	}
 
 	/**
