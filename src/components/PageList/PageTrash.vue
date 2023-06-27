@@ -1,6 +1,6 @@
 <template>
 	<div class="page-trash">
-		<NcButton ref="page-trash-button"
+		<NcButton ref="pagetrashbutton"
 			type="tertiary"
 			class="page-trash-button"
 			@click="toggleTrash">
@@ -141,10 +141,12 @@ export default {
 
 	mounted() {
 		subscribe('collectives:page-list:page-trashed', this.onPageTrashed)
+		this.$highlightTimeoutId = null
 	},
 
 	unmounted() {
 		unsubscribe('collectives:page-list:page-trashed', this.onPageTrashed)
+		clearTimeout(this.$highlightTimeoutId)
 	},
 
 	methods: {
@@ -187,10 +189,18 @@ export default {
 		},
 
 		onPageTrashed() {
-			this.$refs['page-trash-button'].$el.classList.add('highlight-animation')
-			setTimeout(() => {
-				this.$refs['page-trash-button'].$el.classList.remove('highlight-animation')
-			}, 5000)
+			if (this.$highlightTimeoutId) {
+				// clear former timeout and remove class to allow re-highlighting the button
+				clearTimeout(this.$highlightTimeoutId)
+				this.$refs.pagetrashbutton.$el.classList.remove('highlight-animation')
+			}
+			this.$nextTick(() => {
+				this.$refs.pagetrashbutton.$el.classList.add('highlight-animation')
+				this.$highlightTimeoutId = setTimeout(() => {
+					this.$refs.pagetrashbutton.$el.classList.remove('highlight-animation')
+					this.$highlightTimeoutId = null
+				}, 5000)
+			})
 		},
 	},
 }
