@@ -1,7 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
-    "You are not allowed to share %s" : "%s을(를) 공유할 수 있는 권한이 없습니다",
+    "You are not allowed to share %s" : "%s을(를) 공유할 수 있는 권한이 없습니다.",
     "Share link" : "링크 공유",
     "Unshare" : "공유 해제",
     "Settings" : "설정",
@@ -18,7 +18,7 @@ OC.L10N.register(
     "Edit" : "편집",
     "Members" : "구성원",
     "Danger zone" : "위험 지역",
-    "Add emoji" : "이모티콘 추가",
+    "Add emoji" : "이모지 추가",
     "Restore" : "복원",
     "Delete permanently" : "영구히 삭제",
     "Cancel" : "취소",
@@ -35,6 +35,7 @@ OC.L10N.register(
     "Versions" : "버전",
     "Users" : "사용자",
     "Groups" : "그룹",
-    "Circles" : "서클"
+    "Circles" : "서클",
+    "Admins and moderaters" : "관리자와 중재자"
 },
 "nplurals=1; plural=0;");
