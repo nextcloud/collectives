@@ -197,6 +197,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import '../../css/animation.scss';
+
 .page-trash {
 	width: 100%;
 	position: sticky;
@@ -287,11 +289,5 @@ td {
 	&.timestamp {
 		width: 110px;
 	}
-}
-
-@keyframes highlight-animation {
-	0% { background-color: var(--color-background-hover); }
-	50% { background-color: var(--color-background-hover); }
-	100% { background-color: rgba(var(--color-background-hover), 0); }
 }
 </style>

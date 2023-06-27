@@ -436,15 +436,11 @@ export default {
 }
 </style>
 
-<style>
+<style lang="scss">
+@import '../../css/animation.scss';
+
 .highlight-animation {
 	animation: highlight-animation 5s 1;
 	border-radius: 8px;
-}
-
-@keyframes highlight-animation {
-	0% { background-color: var(--color-background-hover); }
-	50% { background-color: var(--color-background-hover); }
-	100% { background-color: rgba(var(--color-background-hover), 0); }
 }
 </style>

@@ -346,6 +346,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../../css/animation.scss';
+
 .app-content-list-item {
 	box-sizing: border-box;
 	height: 44px;
@@ -462,11 +464,5 @@ export default {
 	top: 0;
 	right: 0;
 	margin: 0;
-}
-
-@keyframes highlight-animation {
-	0% { background-color: var(--color-background-hover); }
-	50% { background-color: var(--color-background-hover); }
-	100% { background-color: rgba(var(--color-background-hover), 0); }
 }
 </style>
