@@ -62,11 +62,9 @@
 			</NcActionButton>
 			<NcActionButton v-if="currentCollectiveCanEdit && !isLandingPage"
 				:close-after-click="true"
-				:disabled="hasSubpages"
 				@click="deletePage(parentId, pageId)">
 				<template #icon>
-					<DeleteOffIcon v-if="hasSubpages" :size="20" />
-					<DeleteIcon v-else :size="20" />
+					<DeleteIcon :size="20" />
 				</template>
 				{{ deletePageString }}
 			</NcActionButton>
@@ -87,7 +85,6 @@ import { NcActions, NcActionButton, NcActionLink, NcActionSeparator } from '@nex
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import CollectiveActions from '../Collective/CollectiveActions.vue'
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
-import DeleteOffIcon from 'vue-material-design-icons/DeleteOff.vue'
 import EmoticonOutlineIcon from 'vue-material-design-icons/EmoticonOutline.vue'
 import FormatListBulletedIcon from 'vue-material-design-icons/FormatListBulleted.vue'
 import OpenInNewIcon from 'vue-material-design-icons/OpenInNew.vue'
@@ -107,7 +104,6 @@ export default {
 		NcActionLink,
 		NcActionSeparator,
 		DeleteIcon,
-		DeleteOffIcon,
 		EmoticonOutlineIcon,
 		FormatListBulletedIcon,
 		PagesTemplateIcon,
@@ -173,6 +169,7 @@ export default {
 		...mapGetters([
 			'currentCollective',
 			'currentCollectiveCanEdit',
+			'hasSubpages',
 			'loading',
 			'pagesTreeWalk',
 			'showing',
@@ -201,8 +198,8 @@ export default {
 		},
 
 		deletePageString() {
-			return this.hasSubpages
-				? t('collectives', 'Cannot delete page with subpages')
+			return this.hasSubpages(this.pageId)
+				? t('collectives', 'Delete page and subpages')
 				: this.isTemplate
 					? t('collectives', 'Delete template')
 					: t('collectives', 'Delete page')
@@ -210,10 +207,6 @@ export default {
 
 		hasTemplate() {
 			return !!this.templatePage(this.pageId)
-		},
-
-		hasSubpages() {
-			return !!this.visibleSubpages(this.pageId).length || !!this.hasTemplate
 		},
 
 		/**

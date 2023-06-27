@@ -9,6 +9,7 @@
 			highlight: isHighlighted,
 			'dragged-over-target': isDraggedOverTarget,
 			'highlight-target': isHighlightedTarget,
+			'highlight-animation': isHighlightAnimation,
 		}"
 		draggable
 		@dragstart="onDragstart"
@@ -180,6 +181,7 @@ export default {
 	computed: {
 		...mapState({
 			highlightPageId: (state) => state.pages.highlightPageId,
+			highlightAnimationPageId: (state) => state.pages.highlightAnimationPageId,
 			isDragoverTargetPage: (state) => state.pages.isDragoverTargetPage,
 			draggedPageId: (state) => state.pages.draggedPageId,
 		}),
@@ -259,6 +261,10 @@ export default {
 		isDropTarget() {
 			return this.isPotentialDropTarget
 				&& this.isDragoverTargetPage
+		},
+
+		isHighlightAnimation() {
+			return this.highlightAnimationPageId === this.pageId
 		},
 	},
 
@@ -340,6 +346,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../../css/animation.scss';
+
 .app-content-list-item {
 	box-sizing: border-box;
 	height: 44px;
@@ -366,6 +374,14 @@ export default {
 
 		span.item-icon-badge {
 			background-color: var(--color-background-hover);
+		}
+	}
+
+	&.highlight-animation {
+		animation: highlight-animation 5s 1;
+
+		span.item-icon-badge {
+			animation: highlight-animation 5s 1;
 		}
 	}
 

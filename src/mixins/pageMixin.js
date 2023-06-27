@@ -1,7 +1,8 @@
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { showError, showSuccess } from '@nextcloud/dialogs'
+import { emit } from '@nextcloud/event-bus'
 import {
-	DELETE_PAGE,
+	TRASH_PAGE,
 	GET_PAGES,
 	MOVE_PAGE,
 	NEW_PAGE,
@@ -45,7 +46,7 @@ export default {
 			dispatchSetPageEmoji: SET_PAGE_EMOJI,
 			dispatchSetPageSubpageOrder: SET_PAGE_SUBPAGE_ORDER,
 			dispatchMovePage: MOVE_PAGE,
-			dispatchDeletePage: DELETE_PAGE,
+			dispatchTrashPage: TRASH_PAGE,
 		}),
 
 		/**
@@ -170,7 +171,7 @@ export default {
 			const currentPageId = this.currentPage?.id
 
 			try {
-				await this.dispatchDeletePage({ parentId, pageId })
+				await this.dispatchTrashPage({ parentId, pageId })
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not delete the page'))
@@ -182,9 +183,7 @@ export default {
 				this.$router.push(`/${encodeURIComponent(this.currentCollective.name)}`)
 			}
 
-			// Delete pageId from parent page subpageOrder
-			this.subpageOrderDelete(parentId, pageId)
-
+			emit('collectives:page-list:page-trashed')
 			showSuccess(t('collectives', 'Page deleted'))
 		},
 

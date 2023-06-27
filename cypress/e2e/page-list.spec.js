@@ -146,4 +146,48 @@ describe('Page list', function() {
 				})
 		})
 	})
+
+	describe('Page trash', function() {
+		it('allows to trash and restore page with subpage and attachment', function() {
+			cy.visit('/apps/collectives/Our%20Garden/Day%201')
+
+			// Insert attachment
+			cy.intercept({ method: 'POST', url: '**/text/attachment/upload*' }).as('attachmentUpload')
+			cy.get('input[data-text-el="attachment-file-input"]')
+				.selectFile('cypress/fixtures/test.png', { force: true })
+			cy.wait('@attachmentUpload')
+			cy.switchPageMode(0)
+
+			// Trash page
+			cy.contains('.page-list .app-content-list-item', 'Day 1')
+				.find('.action-item__menutoggle')
+				.click({ force: true })
+			cy.get('button.action-button')
+				.contains('Delete page and subpages')
+				.click()
+			cy.get('.page-list .app-content-list-item')
+				.should('not.contain', 'Day 1')
+
+			// Restore page
+			cy.get('.page-trash')
+				.click()
+			cy.contains('table tr', 'Day 1')
+				.find('button')
+				.contains('Restore')
+				.click()
+			cy.get('table tr')
+				.should('not.exist')
+
+			cy.visit('/apps/collectives/Our%20Garden/Day%201')
+			if (Cypress.env('ncVersion') === 'stable25') {
+				cy.getEditor()
+					.find('img.image__main')
+					.should('be.visible')
+			} else {
+				cy.getReadOnlyEditor()
+					.find('img.image__main')
+					.should('be.visible')
+			}
+		})
+	})
 })

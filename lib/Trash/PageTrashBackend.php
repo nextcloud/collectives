@@ -169,14 +169,14 @@ class PageTrashBackend implements ITrashBackend {
 		}
 
 		// Get pageId for restoring page in collective page database
-		$restorePageId = null;
+		$restorePageId = $node->getId();
 		if ($node instanceof Folder) {
 			// Try to use index page if folder is deleted
-			if (null !== $indexNode = $node->get(PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX)) {
+			try {
+				$indexNode = $node->get(PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX);
 				$restorePageId = $indexNode->getId();
+			} catch (NotFoundException $e) {
 			}
-		} else {
-			$restorePageId = $node->getId();
 		}
 
 		$targetLocation = $targetFolder->getInternalPath() . '/' . $originalLocation;
@@ -214,25 +214,25 @@ class PageTrashBackend implements ITrashBackend {
 		}
 
 		// Get original parent folder of item to revert subfolders further down
-		$targetFolder = $this->collectiveFolderManager->getFolder($collectiveId);
+		$collectiveFolder = $this->collectiveFolderManager->getFolder($collectiveId);
 		$targetFolderPath = substr($item->getOriginalLocation(), 0, -strlen($item->getName()));
 		if ($targetFolderPath) {
 			try {
-				$targetFolder = $targetFolder->get($targetFolderPath);
+				$targetFolder = $collectiveFolder->get($targetFolderPath);
 			} catch (NotFoundException $e) {
 				$targetFolder = null;
 			}
 		}
 
 		// Get pageId for deleting page from collective page database
-		$deletePageId = null;
+		$deletePageId = $node->getId();
 		if ($node instanceof Folder) {
 			// Try to use index page if folder is deleted
-			if (null !== $indexNode = $node->get(PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX)) {
+			try {
+				$indexNode = $node->get(PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX);
 				$deletePageId = $indexNode->getId();
+			} catch (NotFoundException $e) {
 			}
-		} else {
-			$deletePageId = $node->getId();
 		}
 
 		if ($node->getStorage()->unlink($node->getInternalPath()) === false) {
@@ -259,7 +259,7 @@ class PageTrashBackend implements ITrashBackend {
 		}
 
 		// Try to revert subfolders of target folder parent
-		if ($targetFolder) {
+		if ($targetFolder && $targetFolder->getId() !== $collectiveFolder->getId()) {
 			try {
 				NodeHelper::revertSubFolders($targetFolder->getParent());
 			} catch (\OCA\Collectives\Service\NotFoundException | \OCA\Collectives\Service\NotPermittedException $e) {

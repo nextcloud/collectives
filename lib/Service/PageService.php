@@ -843,11 +843,6 @@ class PageService {
 
 		try {
 			if (NodeHelper::isIndexPage($file)) {
-				// Don't delete if still page has subpages
-				if (NodeHelper::indexPageHasOtherContent($file)) {
-					throw new NotPermittedException('Failed to delete page ' . $id . ' with subpages');
-				}
-
 				// Delete folder if it's an index page without subpages
 				$file->getParent()->delete();
 			} else {

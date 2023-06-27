@@ -105,6 +105,7 @@
 					class="page-list-drag-item" />
 			</Draggable>
 		</div>
+		<PageTrash v-if="displayTrash" />
 	</NcAppContentList>
 </template>
 
@@ -117,6 +118,7 @@ import CloseIcon from 'vue-material-design-icons/Close.vue'
 import Draggable from './PageList/Draggable.vue'
 import SubpageList from './PageList/SubpageList.vue'
 import Item from './PageList/Item.vue'
+import PageTrash from './PageList/PageTrash.vue'
 import SortAlphabeticalAscendingIcon from 'vue-material-design-icons/SortAlphabeticalAscending.vue'
 import SortAscendingIcon from 'vue-material-design-icons/SortAscending.vue'
 import SortClockAscendingOutlineIcon from 'vue-material-design-icons/SortClockAscendingOutline.vue'
@@ -138,6 +140,7 @@ export default {
 		Draggable,
 		Item,
 		PagesTemplateIcon,
+		PageTrash,
 		SubpageList,
 		SortAlphabeticalAscendingIcon,
 		SortAscendingIcon,
@@ -199,6 +202,12 @@ export default {
 
 		disableSorting() {
 			return this.filterString !== ''
+		},
+
+		displayTrash() {
+			return this.currentCollectiveCanEdit
+				&& ('files_trashbin' in this.OC.appswebroots)
+				&& !this.loading('collectives')
 		},
 	},
 

@@ -7,9 +7,12 @@ import * as sortOrders from '../util/sortOrders.js'
 
 import {
 	SET_PAGES,
+	SET_TRASH_PAGES,
 	ADD_PAGE,
 	UPDATE_PAGE,
-	DELETE_PAGE_BY_ID,
+	MOVE_PAGE_INTO_TRASH,
+	RESTORE_PAGE_FROM_TRASH,
+	DELETE_PAGE_FROM_TRASH_BY_ID,
 	SET_ATTACHMENTS,
 	SET_ATTACHMENT_DELETED,
 	SET_ATTACHMENT_UNDELETED,
@@ -19,7 +22,9 @@ import {
 } from './mutations.js'
 
 import {
+	EXPAND_PARENTS,
 	GET_PAGES,
+	GET_TRASH_PAGES,
 	GET_PAGE,
 	NEW_PAGE,
 	NEW_TEMPLATE,
@@ -28,6 +33,8 @@ import {
 	MOVE_PAGE,
 	SET_PAGE_EMOJI,
 	SET_PAGE_SUBPAGE_ORDER,
+	TRASH_PAGE,
+	RESTORE_PAGE,
 	DELETE_PAGE,
 	GET_ATTACHMENTS,
 	GET_BACKLINKS,
@@ -38,6 +45,7 @@ export const TEMPLATE_PAGE = 'Template'
 export default {
 	state: {
 		pages: [],
+		trashPages: [],
 		newPage: undefined,
 		sortBy: undefined,
 		collapsed: {},
@@ -46,6 +54,7 @@ export default {
 		deletedAttachments: [],
 		backlinks: [],
 		highlightPageId: null,
+		highlightAnimationPageId: null,
 		isDragoverTargetPage: false,
 		draggedPageId: null,
 	},
@@ -167,6 +176,12 @@ export default {
 			return state.pages.find(p => (p.id === fileId))
 		},
 
+		hasSubpages(state, _getters) {
+			return (pageId) => {
+				return state.pages.filter(p => p.parentId === pageId).length > 0
+			}
+		},
+
 		sortedSubpages(state, getters) {
 			return (parentId, sortOrder) => {
 				const parentPage = state.pages.find(p => p.id === parentId)
@@ -274,6 +289,14 @@ export default {
 			return (parentId, pageId) => `${getters.pageUrl(parentId, pageId)}/backlinks`
 		},
 
+		trashIndexUrl(_state, getters) {
+			return `${getters.pagesUrl}/trash`
+		},
+
+		trashActionUrl(_state, getters) {
+			return (pageId) => `${getters.pagesUrl}/trash/${pageId}`
+		},
+
 		pageTitle(state, getters) {
 			return pageId => {
 				const page = state.pages.find(p => p.id === pageId)
@@ -293,11 +316,19 @@ export default {
 		keptSortable(state) {
 			return (pageId) => state.pages.find(p => p.id === pageId)?.keepSortable
 		},
+
+		trashPages(state) {
+			return state.trashPages.sort((a, b) => b.trashTimestamp - a.trashTimestamp)
+		},
 	},
 
 	mutations: {
 		[SET_PAGES](state, { pages }) {
 			state.pages = pages
+		},
+
+		[SET_TRASH_PAGES](state, trashPages) {
+			state.trashPages = trashPages
 		},
 
 		[UPDATE_PAGE](state, page) {
@@ -313,8 +344,22 @@ export default {
 			state.newPage = page
 		},
 
-		[DELETE_PAGE_BY_ID](state, id) {
-			state.pages.splice(state.pages.findIndex(p => p.id === id), 1)
+		[MOVE_PAGE_INTO_TRASH](state, page) {
+			const trashPage = { ...page }
+			state.pages.splice(state.pages.findIndex(p => p.id === page.id), 1)
+			trashPage.trashTimestamp = Date.now() / 1000
+			state.trashPages.unshift(trashPage)
+		},
+
+		[RESTORE_PAGE_FROM_TRASH](state, trashPage) {
+			const page = { ...trashPage }
+			page.trashTimestamp = null
+			state.pages.unshift(page)
+			state.trashPages.splice(state.trashPages.findIndex(p => p.id === trashPage.id), 1)
+		},
+
+		[DELETE_PAGE_FROM_TRASH_BY_ID](state, id) {
+			state.trashPages.splice(state.trashPages.findIndex(p => p.id === id), 1)
 		},
 
 		[SET_ATTACHMENTS](state, { attachments }) {
@@ -394,6 +439,10 @@ export default {
 			state.highlightPageId = pageId
 		},
 
+		setHighlightAnimationPageId(state, pageId) {
+			state.highlightAnimationPageId = pageId
+		},
+
 		setDragoverTargetPage(state, bool) {
 			state.isDragoverTargetPage = bool
 		},
@@ -404,6 +453,21 @@ export default {
 	},
 
 	actions: {
+		/**
+		 * Expand all parents of a page
+		 * Needs to be an action to have access to the getter `pageParents`
+		 *
+		 * @param {object} store the vuex store
+		 * @param {Function} store.commit commit changes
+		 * @param {object} store.getters getters of the store
+		 * @param {number} pageId Page ID
+		 */
+		[EXPAND_PARENTS]({ commit, getters }, pageId) {
+			for (const page of getters.pageParents(pageId)) {
+				commit('expand', page.id)
+			}
+		},
+
 		/**
 		 * Get list of all pages
 		 *
@@ -419,6 +483,20 @@ export default {
 				current: getters.currentPage,
 			})
 			commit('done', 'collective')
+		},
+
+		/**
+		 * Get list of all pages in trash
+		 *
+		 * @param {object} store the vuex store
+		 * @param {Function} store.commit commit changes
+		 * @param {object} store.getters getters of the store
+		 */
+		async [GET_TRASH_PAGES]({ commit, getters }) {
+			commit('load', 'pageTrash')
+			const response = await axios.get(getters.trashIndexUrl)
+			commit(SET_TRASH_PAGES, response.data.data)
+			commit('done', 'pageTrash')
 		},
 
 		/**
@@ -605,8 +683,7 @@ export default {
 		},
 
 		/**
-		 *
-		 * Delete the current page
+		 * Trash the page with the given id
 		 *
 		 * @param {object} store the vuex store
 		 * @param {Function} store.commit commit changes
@@ -615,11 +692,39 @@ export default {
 		 * @param {number} page.parentId ID of the parent page
 		 * @param {number} page.pageId ID of the page
 		 */
-		async [DELETE_PAGE]({ commit, getters }, { parentId, pageId }) {
+		async [TRASH_PAGE]({ commit, getters }, { parentId, pageId }) {
 			commit('load', 'page')
-			await axios.delete(getters.pageUrl(parentId, pageId))
-			commit(DELETE_PAGE_BY_ID, pageId)
+			const response = await axios.delete(getters.pageUrl(parentId, pageId))
+			commit(MOVE_PAGE_INTO_TRASH, response.data.data)
 			commit('done', 'page')
+		},
+
+		/**
+		 * Restore the page with the given id from trash
+		 *
+		 * @param {object} store the vuex store
+		 * @param {Function} store.commit commit changes
+		 * @param {object} store.getters getters of the store
+		 * @param {object} page the page
+		 * @param {number} page.pageId ID of the page to restore
+		 */
+		async [RESTORE_PAGE]({ commit, getters }, { pageId }) {
+			const response = await axios.patch(getters.trashActionUrl(pageId))
+			commit(RESTORE_PAGE_FROM_TRASH, response.data.data)
+		},
+
+		/**
+		 * Delete the page with the given id from trash
+		 *
+		 * @param {object} store the vuex store
+		 * @param {Function} store.commit commit changes
+		 * @param {object} store.getters getters of the store
+		 * @param {object} page the page
+		 * @param {number} page.pageId ID of the page to delete
+		 */
+		async [DELETE_PAGE]({ commit, getters }, { pageId }) {
+			axios.delete(getters.trashActionUrl(pageId))
+			commit(DELETE_PAGE_FROM_TRASH_BY_ID, pageId)
 		},
 
 		/**
