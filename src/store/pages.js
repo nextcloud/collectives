@@ -335,7 +335,7 @@ export default {
 			state.pages.splice(
 				state.pages.findIndex(p => p.id === page.id),
 				1,
-				page
+				page,
 			)
 		},
 
@@ -671,7 +671,7 @@ export default {
 			try {
 				const response = await axios.put(
 					getters.subpageOrderUrl(parentId, pageId),
-					{ subpageOrder: JSON.stringify(subpageOrder) }
+					{ subpageOrder: JSON.stringify(subpageOrder) },
 				)
 				commit(UPDATE_PAGE, response.data.data)
 			} catch (e) {

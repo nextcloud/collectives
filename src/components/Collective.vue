@@ -154,7 +154,7 @@ export default {
 				console.debug('Started background fetcher as session_keepalive is enabled')
 				this.intervalId = window.setInterval(
 					this.getPagesBackground.bind(this),
-					this.pollIntervalCurrent
+					this.pollIntervalCurrent,
 				)
 			} else {
 				console.debug('Did not start background fetcher as session_keepalive is off')

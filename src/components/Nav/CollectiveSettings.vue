@@ -354,7 +354,7 @@ export default {
 			if (redirect) {
 				this.$router.push(
 					'/' + encodeURIComponent(this.newCollectiveName)
-					+ (this.pageParam ? '/' + this.pageParam : '')
+					+ (this.pageParam ? '/' + this.pageParam : ''),
 				)
 			}
 

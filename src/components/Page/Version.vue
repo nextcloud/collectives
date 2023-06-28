@@ -73,7 +73,7 @@ export default {
 
 		restoreFolderUrl() {
 			return generateRemoteUrl(
-				`dav/versions/${this.getUser}/restore/${this.currentPage.id}`
+				`dav/versions/${this.getUser}/restore/${this.currentPage.id}`,
 			)
 		},
 

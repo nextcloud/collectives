@@ -227,7 +227,7 @@ export default {
 					clearTimeout(this.leaveTimeout)
 					this.leaveTimeout = null
 					this.dispatchUnmarkCollectiveDeleted(collective)
-				}
+				},
 			)
 
 			this.dispatchMarkCollectiveDeleted(collective)

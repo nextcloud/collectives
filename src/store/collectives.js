@@ -49,7 +49,7 @@ export default {
 	getters: {
 		currentCollective(state, getters) {
 			return state.collectives.find(
-				(collective) => collective.name === getters.collectiveParam
+				(collective) => collective.name === getters.collectiveParam,
 			)
 		},
 
@@ -103,7 +103,7 @@ export default {
 
 		collectiveShare: (state) => ({ id }) => {
 			return state.collectiveShares.find(
-				(collectiveShare) => collectiveShare.collectiveId === id
+				(collectiveShare) => collectiveShare.collectiveId === id,
 			)
 		},
 
@@ -354,7 +354,7 @@ export default {
 			commit('load', 'shareEditable')
 			const response = await axios.put(
 				generateUrl('/apps/collectives/_api/' + id + '/share/' + shareToken),
-				{ editable: shareEditable }
+				{ editable: shareEditable },
 
 			)
 			commit(ADD_OR_UPDATE_COLLECTIVE, response.data.data)
@@ -372,7 +372,7 @@ export default {
 		async [UNSHARE_COLLECTIVE]({ commit, getters }, collective) {
 			commit('load', 'unshare')
 			const response = await axios.delete(
-				generateUrl('/apps/collectives/_api/' + collective.id + '/share/' + collective.shareToken)
+				generateUrl('/apps/collectives/_api/' + collective.id + '/share/' + collective.shareToken),
 			)
 			commit(ADD_OR_UPDATE_COLLECTIVE, response.data.data)
 			commit('done', 'unshare')
@@ -388,7 +388,7 @@ export default {
 		async [UPDATE_COLLECTIVE_EDIT_PERMISSIONS]({ commit }, { id, level }) {
 			const response = await axios.put(
 				generateUrl('/apps/collectives/_api/' + id + '/editLevel'),
-				{ level }
+				{ level },
 			)
 			commit(ADD_OR_UPDATE_COLLECTIVE, response.data.data)
 		},
@@ -403,7 +403,7 @@ export default {
 		async [UPDATE_COLLECTIVE_SHARE_PERMISSIONS]({ commit }, { id, level }) {
 			const response = await axios.put(
 				generateUrl('/apps/collectives/_api/' + id + '/shareLevel'),
-				{ level }
+				{ level },
 			)
 			commit(ADD_OR_UPDATE_COLLECTIVE, response.data.data)
 		},
@@ -418,7 +418,7 @@ export default {
 		async [UPDATE_COLLECTIVE_PAGE_MODE]({ commit }, { id, mode }) {
 			const response = await axios.put(
 				generateUrl('/apps/collectives/_api/' + id + '/pageMode'),
-				{ mode }
+				{ mode },
 			)
 			commit(ADD_OR_UPDATE_COLLECTIVE, response.data.data)
 		},
@@ -426,7 +426,7 @@ export default {
 		async [SET_COLLECTIVE_USER_SETTING_PAGE_ORDER]({ commit }, { id, pageOrder }) {
 			await axios.put(
 				generateUrl('/apps/collectives/_api/' + id + '/_userSettings/pageOrder'),
-				{ pageOrder }
+				{ pageOrder },
 			)
 			commit(PATCH_COLLECTIVE_WITH_PROPERTY, { id, property: 'userPageOrder', value: pageOrder })
 		},
