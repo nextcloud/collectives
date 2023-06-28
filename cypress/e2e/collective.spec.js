@@ -85,7 +85,7 @@ describe('Collective', function() {
 
 				cy.get('#titleform input').invoke('val').should('contain', 'History Club')
 				cy.get('.toast-info').should('contain',
-					'Created collective "History Club" for existing circle.'
+					'Created collective "History Club" for existing circle.',
 				)
 			})
 		it('collectives of visible circles only show for members',
@@ -99,7 +99,7 @@ describe('Collective', function() {
 				cy.createCollective('Preexisting Circle')
 				cy.get('#titleform input').invoke('val').should('contain', 'Preexisting Circle')
 				cy.get('.toast-info').should('contain',
-					'Created collective "Preexisting Circle" for existing circle.'
+					'Created collective "Preexisting Circle" for existing circle.',
 				)
 			})
 		after(function() {

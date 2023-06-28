@@ -42,7 +42,7 @@ export default {
 			state.circles.splice(
 				state.circles.findIndex(c => c.id === circle.id),
 				1,
-				circle
+				circle,
 			)
 		},
 	},
@@ -89,7 +89,7 @@ export default {
 		async [ADD_MEMBERS_TO_CIRCLE](_, { collective, members }) {
 			const response = await axios.post(
 				generateOcsUrl('apps/circles/circles/' + collective.circleId + '/members/multi'),
-				{ members }
+				{ members },
 			)
 			console.debug('Added members to circle', collective.circleId, response.data.ocs.data)
 			return response.data.ocs.data
