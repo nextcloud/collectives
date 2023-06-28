@@ -36,17 +36,17 @@ export default new Store({
 		pageParam: (state) => state.route.params.page,
 		shareTokenParam: (state) => state.route.params.token,
 
-		indexPage: (_state, get) =>
+		isIndexPage: (_state, get) =>
 			get.currentPage.fileName === 'Readme.md',
 
-		landingPage: (_state, get) =>
+		isLandingPage: (_state, get) =>
 			!get.pageParam || get.pageParam === 'Readme',
 
 		isTemplatePage: (_state, get) =>
 			get.currentPage.title === 'Template',
 
 		title: (_state, get) =>
-			get.landingPage ? get.currentCollective.name : get.currentPage.title,
+			get.isLandingPage ? get.currentCollective.name : get.currentPage.title,
 
 		isPublic: (_state, get) =>
 			!!get.shareTokenParam,

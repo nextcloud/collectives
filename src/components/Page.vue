@@ -5,10 +5,10 @@
 			<div class="page-title-icon"
 				:class="{ 'mobile': isMobile }">
 				<!-- Landing page: collective emoji or CollectivesIcon -->
-				<div v-if="landingPage && currentCollective.emoji">
+				<div v-if="isLandingPage && currentCollective.emoji">
 					{{ currentCollective.emoji }}
 				</div>
-				<CollectivesIcon v-else-if="landingPage" :size="pageTitleIconSize" fill-color="var(--color-text-maxcontrast)" />
+				<CollectivesIcon v-else-if="isLandingPage" :size="pageTitleIconSize" fill-color="var(--color-text-maxcontrast)" />
 				<PageTemplateIcon v-else-if="isTemplatePage" :size="pageTitleIconSize" fill-color="var(--color-text-maxcontrast)" />
 
 				<!-- Emoji picker if editable -->
@@ -51,7 +51,7 @@
 
 			<!-- Page title -->
 			<form @submit.prevent="focusEditor()">
-				<input v-if="landingPage"
+				<input v-if="isLandingPage"
 					ref="landingPageTitle"
 					v-tooltip="titleIfTruncated(currentCollective.name)"
 					class="title"
@@ -89,7 +89,7 @@
 				:timestamp="currentPage.timestamp"
 				:last-user-id="currentPage.lastUserId"
 				:last-user-display-name="currentPage.lastUserDisplayName"
-				:is-landing-page="landingPage"
+				:is-landing-page="isLandingPage"
 				:is-template="isTemplatePage" />
 
 			<!-- Sidebar toggle -->
@@ -155,10 +155,10 @@ export default {
 			'currentPage',
 			'currentCollective',
 			'currentCollectiveCanEdit',
-			'indexPage',
+			'isIndexPage',
 			'isPublic',
 			'isTemplatePage',
-			'landingPage',
+			'isLandingPage',
 			'loading',
 			'showing',
 		]),
@@ -174,10 +174,10 @@ export default {
 				t('collectives', 'Collectives'),
 				'Nextcloud',
 			]
-			if (!this.landingPage) {
+			if (!this.isLandingPage) {
 				// Add parent page names in reverse order
 				filePath.split('/').forEach(part => part && parts.unshift(part))
-				if (!this.indexPage) {
+				if (!this.isIndexPage) {
 					parts.unshift(title)
 				}
 			}
