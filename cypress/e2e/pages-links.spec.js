@@ -37,6 +37,8 @@ describe('Page Link Handling', function() {
 			anotherCollectiveFirstPageId = id
 		})
 		cy.deleteAndSeedCollective('Link Testing')
+		cy.seedPage('Parent', '', 'Readme.md')
+		cy.seedPage('Child', '', 'Parent.md')
 		cy.seedPage('Link Target', '', 'Readme.md').then((id) => {
 			linkTargetPageId = id
 		})
@@ -53,10 +55,14 @@ describe('Page Link Handling', function() {
 			})
 		}).then(() => {
 			cy.seedPageContent('Link%20Testing/Readme.md', `
-
 ## Links supposed to open in same window
 
 * Relative path to page in this collective with fileId:  [Link Target](./Link%20Target?fileId=${linkTargetPageId})
+			`)
+			cy.seedPageContent('Link%20Testing/Parent/Readme.md', `
+## Links supposed to open in same window
+
+* Relative path to page in this collective with fileId:  [../Link Target.md](../Link%20Target.md?fileId=${linkTargetPageId})
 			`)
 			cy.seedPageContent('Link%20Testing/Link%20Source.md', `
 ## Links supposed to open in viewer
@@ -257,6 +263,17 @@ describe('Page Link Handling', function() {
 			if (Cypress.env('ncVersion') !== 'stable25') {
 				testLinkToNewTab(href, { edit: true })
 			}
+		})
+		it('Opens link with relative path from index page to page in this collective with fileId in same/new tab depending on view/edit mode', function() {
+			cy.visit('/apps/collectives/Link%20Testing/Parent')
+			// Link without origin and containing `fileId` param gets rewritten by editor rendering
+			// const href = `../Link%20Target.md?fileId=${linkTargetPageId}`
+			const href = `/index.php/apps/files/?dir=&openfile=${linkTargetPageId}#relPath=../Link%20Target.md`
+			testLinkToSameTab(href, {
+				expectedPathname: '/index.php/apps/collectives/Link%20Testing/Link%20Target',
+				expectedSearch: `?fileId=${linkTargetPageId}`,
+			})
+			// testLinkToNewTab(href, { edit: true })
 		})
 		it('Opens link with relative path from landing page to page in this collective with fileId in same/new tab depending on view/edit mode', function() {
 			cy.visit('/apps/collectives/Link%20Testing')
