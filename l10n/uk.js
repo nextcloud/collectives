@@ -77,7 +77,6 @@ OC.L10N.register(
     "Show outline" : "Показати зміст",
     "Edit template for subpages" : "Редагувати шаблон для підсторінок",
     "Add template for subpages" : "Додати шаблон для підсторінок",
-    "Cannot delete page with subpages" : "Не можна видалити сторінку з підсторінками",
     "Delete template" : "Видалити шаблон",
     "Delete page" : "Видалити сторінку",
     "Page not found: {page}" : "Сторінку не знайдено: {page}",
@@ -127,6 +126,7 @@ OC.L10N.register(
     "New collective name" : "Назва нового колективу",
     "Select circle..." : "Вибрати коло...",
     "Cancel creating a new collective" : "Скасувати створення нового колективу",
+    "Cannot delete page with subpages" : "Не можна видалити сторінку з підсторінками",
     "Page not found:" : "Сторінка не знайдена:"
 },
 "nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);");
