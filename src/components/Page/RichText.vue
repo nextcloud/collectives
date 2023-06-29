@@ -91,6 +91,7 @@ export default {
 			'currentCollective',
 			'currentPageDirectory',
 			'currentPageFilePath',
+			'isIndexPage',
 			'isPublic',
 			'loading',
 			'pageById',
@@ -135,10 +136,9 @@ export default {
 		handleCollectiveLink({ href }) {
 			const collectiveParam = encodeURIComponent(this.collectiveParam)
 
-			// If we're on landing page, append `/` to location to make `URL()` append relative paths correctly
+			// If we're on index page, append `/` to location to make `URL()` append relative paths correctly
 			let windowLocation = window.location.origin + window.location.pathname
-			if (windowLocation.endsWith(`/collectives/${collectiveParam}`)
-				|| windowLocation.match(new RegExp(`/collectives/p/[^/]+/${collectiveParam}$`))) {
+			if (this.isIndexPage) {
 				windowLocation = `${windowLocation}/`
 			}
 
