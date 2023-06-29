@@ -127,6 +127,7 @@ OC.L10N.register(
     "Expand subpage list" : "Rozwiń listę podstron",
     "Add a page" : "Dodaj stronę",
     "Add a subpage" : "Dodaj podstronę",
+    "Deleted" : "Usunięto",
     "Search pages ..." : "Szukaj stron ...",
     "Sort order" : "Kolejność sortowania",
     "Sort by custom order" : "Sortuj według własne porządku",

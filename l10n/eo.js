@@ -18,6 +18,7 @@ OC.L10N.register(
     "Create" : "Krei",
     "Done" : "Farita",
     "Title" : "Titolo",
+    "Deleted" : "Forigita",
     "Download" : "Elŝuti",
     "Current version" : "Nuna versio",
     "No other versions available" : "Neniu alia versio disponeblas",

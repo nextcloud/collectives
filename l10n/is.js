@@ -21,6 +21,7 @@ OC.L10N.register(
     "Done" : "Lokið",
     "Template" : "Sniðmát",
     "Title" : "Titill",
+    "Deleted" : "Eytt",
     "Download" : "Sækja",
     "Current version" : "Fyrirliggjandi útgáfa",
     "No other versions available" : "Engar aðrar útgáfur í boði",

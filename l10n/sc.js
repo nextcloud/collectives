@@ -26,6 +26,7 @@ OC.L10N.register(
     "Show in Files" : "Mustra in Archìvios",
     "Template" : "Modellu",
     "Title" : "Tìtulu",
+    "Deleted" : "Cantzelladu",
     "Sort by title" : "Assenta segundu tìtulu",
     "Download" : "Iscàrriga",
     "Current version" : "Versione atuale",

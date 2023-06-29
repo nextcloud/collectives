@@ -27,6 +27,7 @@ OC.L10N.register(
     "Done" : "Valmis",
     "Template" : "Malli",
     "Title" : "Nimeke",
+    "Deleted" : "Poistettu",
     "Sort by title" : "Lajittele nimen mukaan",
     "Download" : "Lataa",
     "Current version" : "Nykyinen versio",

@@ -12,6 +12,7 @@ OC.L10N.register(
     "Create" : "Lag",
     "Done" : "Ferdig",
     "Title" : "Tittel",
+    "Deleted" : "Sletta",
     "Download" : "Last ned",
     "No other versions available" : "Ingen andre utgåver tilgjengeleg",
     "Versions" : "Utgåver",

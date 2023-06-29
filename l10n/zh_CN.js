@@ -128,6 +128,7 @@ OC.L10N.register(
     "Expand subpage list" : "展开子页面列表",
     "Add a page" : "添加页面",
     "Add a subpage" : "添加一个子页面",
+    "Deleted" : "已删除",
     "Search pages ..." : "搜索页面 ...",
     "Sort order" : "排序",
     "Sort by custom order" : "手动排序",

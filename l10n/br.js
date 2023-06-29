@@ -17,6 +17,7 @@ OC.L10N.register(
     "Create" : "Krouiñ",
     "Done" : "Graet",
     "Title" : "Titl",
+    "Deleted" : "Lamet",
     "Download" : "Pellgargañ",
     "No other versions available" : "Stumm all ebet kavet",
     "Versions" : "Stumm",

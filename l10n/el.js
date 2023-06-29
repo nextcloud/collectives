@@ -29,6 +29,7 @@ OC.L10N.register(
     "Move page here" : "Μετακίνηση σελίδας εδώ",
     "Template" : "Πρότυπο",
     "Title" : "Τίτλος",
+    "Deleted" : "Διαγραμμένα",
     "Sort by title" : "Ταξινόμηση κατά τίτλο",
     "Download" : "Λήψη",
     "Current version" : "Τρέχουσα έκδοση",

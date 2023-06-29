@@ -21,6 +21,7 @@ OC.L10N.register(
     "Create" : "‎Tạo‎",
     "Done" : "Hoàn thành",
     "Title" : "Tiêu đề",
+    "Deleted" : "Đã xoá",
     "Download" : "Tải xuống",
     "Current version" : "Phiên bản hiện tại",
     "No other versions available" : "Không có các phiên bản khác có sẵn",

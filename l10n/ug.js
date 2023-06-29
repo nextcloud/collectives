@@ -10,6 +10,7 @@ OC.L10N.register(
     "Create" : "قۇر",
     "Done" : "Done",
     "Title" : "ماۋزۇ",
+    "Deleted" : "ئۆچۈرۈلدى",
     "Download" : "چۈشۈر",
     "Versions" : "نەشرى",
     "Users" : "ئىشلەتكۈچىلەر",

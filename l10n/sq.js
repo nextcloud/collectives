@@ -18,6 +18,7 @@ OC.L10N.register(
     "Create" : "Krijo",
     "Done" : "U krye",
     "Title" : "Titulli",
+    "Deleted" : "E fshirë",
     "Download" : "Shkarko",
     "No other versions available" : "Nuk ka versione të tjera të gatshme",
     "Attachments" : "Bashkangjitjet",

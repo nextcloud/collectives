@@ -17,6 +17,7 @@ OC.L10N.register(
     "Create" : "Crear",
     "Done" : "Terminado",
     "Title" : "Título",
+    "Deleted" : "Eliminado",
     "Download" : "Descargar",
     "Current version" : "Versión actual",
     "No other versions available" : "No hay otras versiones disponibles",

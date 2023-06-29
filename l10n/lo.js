@@ -12,6 +12,7 @@ OC.L10N.register(
     "Back" : "ຫຼັງ",
     "Create" : "ສ້າງ",
     "Done" : "ສໍາເລັດ",
+    "Deleted" : "ລືບ",
     "Download" : "ດາວໂຫລດ",
     "Users" : "ຜູ້ໃຊ້"
 },

@@ -11,6 +11,7 @@ OC.L10N.register(
     "Create" : "Ստեղծել",
     "Done" : "Done",
     "Title" : "Վերնագիր",
+    "Deleted" : "Ջնջված",
     "Download" : "Ներբեռնել",
     "No other versions available" : "Այլ տարբերակներ չկան",
     "Versions" : "Տարբերակներ",

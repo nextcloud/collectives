@@ -22,6 +22,7 @@ OC.L10N.register(
     "Create" : "Crear",
     "Done" : "Done",
     "Title" : "Títol",
+    "Deleted" : "Suprimit",
     "Download" : "Telecargar",
     "No other versions available" : "Cap d’autra version pas disponibla",
     "Versions" : "Versions",

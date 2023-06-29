@@ -129,6 +129,7 @@ OC.L10N.register(
     "Expand subpage list" : "Aloldallista kibontása",
     "Add a page" : "Oldal hozzáadása",
     "Add a subpage" : "Aloldal hozzáadása",
+    "Deleted" : "Törölve",
     "Search pages ..." : "Oldalak keresése…",
     "Sort order" : "Rendezési sorrend",
     "Sort by custom order" : "Egyéni sorrendezés",

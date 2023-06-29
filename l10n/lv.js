@@ -18,6 +18,7 @@ OC.L10N.register(
     "Create" : "Izveidot",
     "Done" : "Pabeigts",
     "Title" : "Amats",
+    "Deleted" : "Dzēstie",
     "Download" : "Lejupielādēt",
     "No other versions available" : "Citas versijas nav pieejamas",
     "Attachments" : "Pielikumi",

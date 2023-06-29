@@ -129,6 +129,7 @@ OC.L10N.register(
     "Expand subpage list" : "Subpaginalijst uitvouwen",
     "Add a page" : "Een pagina toevoegen",
     "Add a subpage" : "Een subpagina toevoegen",
+    "Deleted" : "Verwijderd",
     "Search pages ..." : "Zoek pagina's...",
     "Sort order" : "Sorteervolgorde",
     "Sort by custom order" : "Sorteren op aangepaste volgorde",

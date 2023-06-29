@@ -16,6 +16,7 @@ OC.L10N.register(
     "Create" : "Crear",
     "Done" : "Terminado",
     "Title" : "Título",
+    "Deleted" : "Borrado",
     "Download" : "Descargar",
     "Versions" : "Versiones",
     "Users" : "Ususarios",

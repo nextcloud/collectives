@@ -15,6 +15,7 @@ OC.L10N.register(
     "Create" : "Skep",
     "Done" : "Gereed",
     "Title" : "Titel",
+    "Deleted" : "Geskrap",
     "Download" : "Laai af",
     "Versions" : "Weergawes",
     "Users" : "Gebruikers",

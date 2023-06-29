@@ -59,6 +59,7 @@ OC.L10N.register(
     "Expand subpage list" : "Amplieu la llista de subpàgines",
     "Add a page" : "Afegir una Pàgina",
     "Add a subpage" : "Afegir subpàgina",
+    "Deleted" : "Suprimit",
     "Sort order" : "Ordenar per:",
     "Sort by title" : "Ordenar per títol",
     "Hide templates" : "Amagar plantilles",

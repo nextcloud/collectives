@@ -91,6 +91,7 @@ OC.L10N.register(
     "Expand subpage list" : "Развернуть список разделов",
     "Add a page" : "Добавить страницу",
     "Add a subpage" : "Добавить раздел",
+    "Deleted" : "Удалено",
     "Search pages ..." : "Поиск страниц ...",
     "Sort order" : "Сортировка",
     "Sort by custom order" : "Сортировка в случайном порядке",

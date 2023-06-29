@@ -17,6 +17,7 @@ OC.L10N.register(
     "Create" : "Crează",
     "Done" : "Realizat",
     "Title" : "Titlu",
+    "Deleted" : "Șters",
     "Download" : "Descărcare",
     "No other versions available" : "Nu există alte versiuni disponibile",
     "Attachments" : "Atașamente ",
