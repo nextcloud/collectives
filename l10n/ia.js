@@ -14,6 +14,7 @@ OC.L10N.register(
     "Create" : "Crear",
     "Done" : "Preste",
     "Title" : "Titulo",
+    "Deleted" : "Delite",
     "Download" : "Discargar",
     "No other versions available" : "Nulle altere versiones disponibile",
     "Attachments" : "Attachamentos",

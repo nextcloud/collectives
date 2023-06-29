@@ -16,6 +16,7 @@ OC.L10N.register(
     "Create" : "შექმნა",
     "Done" : "დასრულებულია",
     "Title" : "სათაური",
+    "Deleted" : "გაუქმდა",
     "Download" : "ჩამოტვირთვა",
     "Versions" : "ვერსიები",
     "Users" : "მომხმარებლები",

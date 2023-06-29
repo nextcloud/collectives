@@ -17,6 +17,7 @@ OC.L10N.register(
     "Create" : "Buat",
     "Done" : "Selesai",
     "Title" : "Judul",
+    "Deleted" : "Dihapus",
     "Download" : "Unduh",
     "No other versions available" : "Tidak ada versi lain yang tersedia",
     "Attachments" : "Lampiran",

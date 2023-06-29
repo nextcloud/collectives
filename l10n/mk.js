@@ -25,6 +25,7 @@ OC.L10N.register(
     "Done" : "Готово",
     "Show in Files" : "Прикажи во датотеките",
     "Title" : "Наслов",
+    "Deleted" : "Избришани",
     "Download" : "Преземи",
     "Current version" : "Моментална верзија",
     "No other versions available" : "Не постојат други верзии",

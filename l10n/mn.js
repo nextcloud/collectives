@@ -17,6 +17,7 @@ OC.L10N.register(
     "Create" : "Үүсгэх",
     "Done" : "Хийсэн",
     "Title" : "Цол/Албан тушаал",
+    "Deleted" : "Устгагдсан",
     "Download" : "Татах",
     "Attachments" : "Хавсралт",
     "Versions" : "Хувилбарууд",

@@ -16,6 +16,7 @@ OC.L10N.register(
     "Create" : "สร้าง",
     "Done" : "เสร็จสิ้น",
     "Title" : "ชื่อเรื่อง",
+    "Deleted" : "ลบแล้ว",
     "Download" : "ดาวน์โหลด",
     "No other versions available" : "ไม่มีรุ่นอื่นที่ใช้งานได้",
     "Attachments" : "ไฟล์แนบ",

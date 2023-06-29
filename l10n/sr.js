@@ -129,6 +129,7 @@ OC.L10N.register(
     "Expand subpage list" : "Прошири листу подстраница",
     "Add a page" : "Додај страницу",
     "Add a subpage" : "Додај подстраницу",
+    "Deleted" : "Обрисано",
     "Search pages ..." : "Претражи странице ...",
     "Sort order" : "Редослед сортирања",
     "Sort by custom order" : "Поређај по ручно дефинисаном редоследу",

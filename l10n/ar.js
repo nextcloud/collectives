@@ -25,6 +25,7 @@ OC.L10N.register(
     "Done" : "تم",
     "Show in Files" : "عرض في الملفات ",
     "Title" : "العنوان",
+    "Deleted" : "تمّ حذفه",
     "Download" : "تنزيل",
     "Current version" : "الإصدار الحالي",
     "No other versions available" : "لا تتوفر هناك نُسخ أخرى",

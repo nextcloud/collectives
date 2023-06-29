@@ -129,6 +129,7 @@ OC.L10N.register(
     "Expand subpage list" : "Expandir lista de subpáginas",
     "Add a page" : "Adicionar página",
     "Add a subpage" : "Adicionar subpágina",
+    "Deleted" : "Excluído",
     "Search pages ..." : "Buscar páginas…",
     "Sort order" : "Ordem",
     "Sort by custom order" : "Classificar por ordem personalizada",

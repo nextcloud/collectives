@@ -88,6 +88,7 @@ OC.L10N.register(
     "Could not rename the page" : "Не вдалося перейменувати сторінку",
     "Add a page" : "Додати сторінку",
     "Add a subpage" : "Додати підсторінку",
+    "Deleted" : "Вилучено",
     "Search pages ..." : "Шукати сторінки...",
     "Sort order" : "Порядок сортування",
     "Sort by custom order" : "За користувацьким порядком",

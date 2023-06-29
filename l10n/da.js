@@ -129,6 +129,7 @@ OC.L10N.register(
     "Expand subpage list" : "Udvid undersideliste",
     "Add a page" : "Tilføj en side",
     "Add a subpage" : "Tilføj en underside",
+    "Deleted" : "Slettet",
     "Search pages ..." : "Søg på sider...",
     "Sort order" : "Sorteringsrækkefølge",
     "Sort by custom order" : "Sorter efter tilpasset rækkefølge",

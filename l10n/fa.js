@@ -20,6 +20,7 @@ OC.L10N.register(
     "Done" : "انجام شد",
     "Show in Files" : "نمایش در فایل‌ها",
     "Title" : "عنوان",
+    "Deleted" : "حذف شده",
     "Download" : "بارگیری",
     "Current version" : "نسخه فعلی",
     "No other versions available" : "نسخه ی دیگری در دسترس نیست",

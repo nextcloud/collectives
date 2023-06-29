@@ -67,6 +67,7 @@ OC.L10N.register(
     "Expand subpage list" : "サブページリストを開く",
     "Add a page" : "ページの追加",
     "Add a subpage" : "サブページの追加",
+    "Deleted" : "削除済み",
     "Sort order" : "ソート順",
     "Sort by title" : "タイトルでソート",
     "Hide templates" : "テンプレートを隠す",

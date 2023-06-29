@@ -126,6 +126,7 @@ OC.L10N.register(
     "Expand subpage list" : "Utöka undersidans lista",
     "Add a page" : "Lägg till en sida",
     "Add a subpage" : "Lägg till en undersida",
+    "Deleted" : "Borttagen",
     "Search pages ..." : "Sök sidor ...",
     "Sort order" : "Sorteringsordning",
     "Sort by custom order" : "Sortera efter anpassad ordning",

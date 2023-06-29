@@ -41,6 +41,7 @@ OC.L10N.register(
     "Hide outline" : "隱藏大綱",
     "Show outline" : "顯示大綱",
     "Title" : "標題",
+    "Deleted" : "已刪除",
     "Sort by title" : "按標題排序",
     "Download" : "下載",
     "Current version" : "目前版本",

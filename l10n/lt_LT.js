@@ -31,6 +31,7 @@ OC.L10N.register(
     "Template" : "Šablonas",
     "Title" : "Pavadinimas",
     "Could not rename the page" : "Nepavyko pervadinti puslapio",
+    "Deleted" : "Ištrinta",
     "Hide templates" : "Slėpti šablonus",
     "Show templates" : "Rodyti šablonus",
     "Download" : "Atsisiųsti",

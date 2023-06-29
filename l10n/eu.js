@@ -127,6 +127,7 @@ OC.L10N.register(
     "Expand subpage list" : "Zabaldu azpiorrien zerrenda",
     "Add a page" : "Gehitu orri bat",
     "Add a subpage" : "Gehitu azpi-orri bat",
+    "Deleted" : "Ezabatuta",
     "Search pages ..." : "Bilatu orriak ...",
     "Sort order" : "Ordenatzeko irizpidea",
     "Sort by custom order" : "Ordenatu hurrenkera pertsonalizatuan",

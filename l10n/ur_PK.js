@@ -9,6 +9,7 @@ OC.L10N.register(
     "Cancel" : "منسوخ کریں",
     "Done" : "Done",
     "Title" : "عنوان",
+    "Deleted" : "حذف شدہ ",
     "Download" : "ڈاؤن لوڈ",
     "Users" : "صارفین"
 },

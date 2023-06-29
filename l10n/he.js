@@ -25,6 +25,7 @@ OC.L10N.register(
     "Show in Files" : "הצגה בקבצים",
     "Template" : "תבנית",
     "Title" : "תפקיד",
+    "Deleted" : "נמחק",
     "Download" : "הורדה",
     "Current version" : "גרסה נוכחית",
     "No other versions available" : "אין גרסאות אחרות זמינות",

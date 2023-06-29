@@ -22,6 +22,7 @@ OC.L10N.register(
     "Create" : "Crear",
     "Done" : "Hecho",
     "Title" : "Título",
+    "Deleted" : "Eliminado",
     "Download" : "Descargar",
     "No other versions available" : "No hay más versiones disponibles",
     "Attachments" : "Adjuntos",

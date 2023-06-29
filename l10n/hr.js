@@ -27,6 +27,7 @@ OC.L10N.register(
     "Show in Files" : "Prikaži u datotekama",
     "Template" : "Predložak",
     "Title" : "Naslov",
+    "Deleted" : "Izbrisano",
     "Sort by title" : "Razvrstaj prema naslovu",
     "Download" : "Preuzmi",
     "Current version" : "Trenutna verzija",

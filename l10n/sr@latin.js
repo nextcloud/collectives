@@ -12,6 +12,7 @@ OC.L10N.register(
     "Create" : "Napravi",
     "Done" : "Gotovo",
     "Title" : "Naslov",
+    "Deleted" : "Obrisano",
     "Attachments" : "Prilozi",
     "Groups" : "Grupe"
 },

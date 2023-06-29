@@ -29,6 +29,7 @@ OC.L10N.register(
     "Show outline" : "Zobraziť prehľad",
     "Template" : "Šablóny",
     "Title" : "Názov",
+    "Deleted" : "Zmazané",
     "Sort by title" : "Zoradiť podľa nadpisu",
     "Download" : "Sťahovanie",
     "Current version" : "Aktuálna verzia",
