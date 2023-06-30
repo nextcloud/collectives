@@ -127,7 +127,7 @@ OC.L10N.register(
     "Expand subpage list" : "Klappe Unterseiten-Liste auf",
     "Add a page" : "Seite hinzufügen",
     "Add a subpage" : "Unterseite hinzufügen",
-    "Deleted" : "Benötigt keine Übersetzung. Hier wird nur die formelle Übersetzung verwendet (de_DE).",
+    "Deleted" : "Gelöscht",
     "Search pages ..." : "Suche Seiten …",
     "Sort order" : "Sortierung",
     "Sort by custom order" : "Benutzerdefinierte Sortierung",
