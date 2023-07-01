@@ -1,12 +1,8 @@
 <template>
 	<NcAppContentDetails>
 		<Version v-if="currentPage && version" />
-		<Page v-else-if="currentPage" />
-		<NcEmptyContent v-else-if="loading('collective') || loading('page')">
-			<template #icon>
-				<NcLoadingIcon />
-			</template>
-		</NcEmptyContent>
+		<Page v-else-if="currentPage && !loading('collective')" />
+		<SkeletonLoading v-else-if="loading('collective') || loading('page')" :count="1" type="page-heading" />
 		<PageNotFound v-else />
 	</NcAppContentDetails>
 </template>
@@ -15,21 +11,21 @@
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { listen } from '@nextcloud/notify_push'
-import { NcAppContentDetails, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
+import { NcAppContentDetails } from '@nextcloud/vue'
 import { GET_PAGES, GET_TRASH_PAGES } from '../store/actions.js'
 import { SELECT_VERSION } from '../store/mutations.js'
 import displayError from '../util/displayError.js'
 import Page from './Page.vue'
 import Version from './Page/Version.vue'
 import PageNotFound from './Page/PageNotFound.vue'
+import SkeletonLoading from './SkeletonLoading.vue'
 
 export default {
 	name: 'Collective',
 
 	components: {
+		SkeletonLoading,
 		NcAppContentDetails,
-		NcEmptyContent,
-		NcLoadingIcon,
 		Page,
 		PageNotFound,
 		Version,

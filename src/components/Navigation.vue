@@ -1,13 +1,10 @@
 <template>
 	<NcAppNavigation>
-		<template v-if="loading('collectives')" #default>
-			<NcEmptyContent>
-				<template #icon>
-					<NcLoadingIcon />
-				</template>
-			</NcEmptyContent>
+		<template v-if="loading('collectives')" #list>
+			<NcAppNavigationCaption :title="t('collectives', 'Select a collective')" />
+			<SkeletonLoading type="items" :count="3" />
 		</template>
-		<template #list>
+		<template v-else #list>
 			<NcAppNavigationCaption :title="t('collectives', 'Select a collective')" />
 			<CollectiveListItem v-for="collective in collectives"
 				v-show="!collective.deleted"
@@ -36,13 +33,14 @@
 import { mapActions, mapGetters } from 'vuex'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { RESTORE_COLLECTIVE, DELETE_COLLECTIVE } from '../store/actions.js'
-import { NcAppNavigation, NcAppNavigationCaption, NcButton, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
+import { NcAppNavigation, NcAppNavigationCaption, NcButton } from '@nextcloud/vue'
 import NewCollectiveModal from './Nav/NewCollectiveModal.vue'
 import CollectiveListItem from './Nav/CollectiveListItem.vue'
 import CollectivesGlobalSettings from './Nav/CollectivesGlobalSettings.vue'
 import CollectivesTrash from './Nav/CollectivesTrash.vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import displayError from '../util/displayError.js'
+import SkeletonLoading from './SkeletonLoading.vue'
 
 export default {
 	name: 'Navigation',
@@ -55,8 +53,7 @@ export default {
 		CollectiveListItem,
 		CollectivesGlobalSettings,
 		CollectivesTrash,
-		NcEmptyContent,
-		NcLoadingIcon,
+		SkeletonLoading,
 		PlusIcon,
 	},
 
