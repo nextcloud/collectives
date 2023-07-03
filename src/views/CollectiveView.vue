@@ -1,6 +1,7 @@
 <template>
 	<NcAppContent :show-details="showing('details')"
-		:list-min-width="20"
+		:list-size="20"
+		:list-min-width="15"
 		@update:showDetails="hide('details')">
 		<template #list>
 			<PageList v-if="currentCollective" />
