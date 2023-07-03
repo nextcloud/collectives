@@ -645,7 +645,7 @@ class PageTrashBackend implements ITrashBackend {
 				}
 			}
 			foreach ($trashItems as $collectiveTrashItem) {
-				if ($expiration->isExpired($collectiveTrashItem['deleted_item'])) {
+				if ($expiration->isExpired($collectiveTrashItem['deleted_time'])) {
 					$nodeName = self::getTrashFilename($collectiveTrashItem['name'], (int)$collectiveTrashItem['deleted_time']);
 					if (!isset($nodes[$nodeName])) {
 						continue;
