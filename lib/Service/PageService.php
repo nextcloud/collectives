@@ -724,11 +724,14 @@ class PageService {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
 
-		// Delete pageId from subpage order of old parent page
-		$this->removeFromSubpageOrder($collectiveId, $oldParentId, $id, $userId);
-		$this->addToSubpageOrder($collectiveId, $parentId, $id, $index, $userId);
+		if ($oldParentId !== $parentId) {
+			// Page got moved: remove from subpage order of old parent page, add to new
+			$this->removeFromSubpageOrder($collectiveId, $oldParentId, $id, $userId);
+			$this->addToSubpageOrder($collectiveId, $parentId, $id, $index, $userId);
 
-		NodeHelper::revertSubFolders($collectiveFolder);
+			NodeHelper::revertSubFolders($collectiveFolder);
+		}
+
 		return $this->getPageByFile($file);
 	}
 
