@@ -1,5 +1,32 @@
 # Changelog
 
+## 2.6.0 - 2023.07.03
+
+### ✨New
+* 🗑️ Add pages trash to files backend and frontend. (#47)
+
+### 🐛Fixes
+* 🛰️ Make sure the default app route has a trailing slash. (#411, 727)
+* 🔗 Fix relative paths to pages from index or landing pages. (#642, #684, #726)
+* 🔗 Fix path to collective in navigation of public shares. (#697)
+* 🗣️ Fix localization section for 'Select emoji'. Thanks to AIlkiv.
+* 🎯 Always display action buttons in collectives trash on mobile.
+* 📜 Remove old versions along with pages. (#136)
+* 📜 Delete old versions when deleting a collective.
+* 🗑️ Allow to trash pages with subpages.
+* 🏛️ Switch to ObjectStoreScanner on object storage. (#744)
+* 📋 Lower minimum page list width to 15%.
+* 🔃 Don't change subpage order if a page gets renamed.
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* 📋 Minor updates to development documentation.
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 2.5.0 - 2023.05.12
 
 ### ✨New
