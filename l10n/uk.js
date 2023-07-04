@@ -24,6 +24,7 @@ OC.L10N.register(
     "Search for members to add" : "Пошук учасників, щоб додати",
     "Loading …" : "Завантаження …",
     "No results" : "Немає результатів",
+    "An error occurred while performing the search" : "Помилка під час пошуку",
     "Add {type}" : "Додати {type}",
     "Collective settings" : "Налаштування колективу",
     "Name and emoji" : "Назва та емодзі",
