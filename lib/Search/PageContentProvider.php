@@ -81,7 +81,7 @@ class PageContentProvider implements IProvider {
 	 * @return int
 	 */
 	public function getOrder(string $route, array $routeParameters): int {
-		if ($route === 'collectives.Start.index') {
+		if ($route === 'collectives.start.index') {
 			return -1;
 		}
 		return 4;
@@ -139,10 +139,7 @@ class PageContentProvider implements IProvider {
 				'',
 				$highlighter->extractRelevant($query->getTerm(), $page->getContent(), $highlightLength, 5, ''),
 				$collective->getName() . ' / ' . $pageInfo->getTitle(),
-				implode('/', array_filter([
-					$this->urlGenerator->linkToRoute('collectives.start.index'),
-					$this->pageService->getPageLink($collective->getName(), $pageInfo)
-				])),
+				$this->urlGenerator->linkToRoute('collectives.start.index') . $this->pageService->getPageLink($collective->getName(), $pageInfo),
 				'icon-collectives-page'
 			);
 		}
