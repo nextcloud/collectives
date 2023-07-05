@@ -66,7 +66,7 @@ class CollectiveProvider implements IProvider {
 	 * @return int
 	 */
 	public function getOrder(string $route, array $routeParameters): int {
-		if ($route === 'collectives.Start.index') {
+		if ($route === 'collectives.start.index') {
 			// Collectives first when the app is active
 			return -3;
 		}
@@ -98,7 +98,7 @@ class CollectiveProvider implements IProvider {
 				'',
 				$this->collectiveService->getCollectiveNameWithEmoji($collective),
 				'',
-				$this->urlGenerator->linkToRoute('collectives.start.index') . '/' . rawurlencode($collective->getName()),
+				$this->urlGenerator->linkToRoute('collectives.start.index') . rawurlencode($collective->getName()),
 				'icon-collectives'
 			);
 		}
