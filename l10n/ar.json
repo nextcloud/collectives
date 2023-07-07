@@ -175,6 +175,7 @@
     "Could not save emoji for page" : "تعذّر حفظ الصورة التعبيرية emoji للصفحة",
     "Could not move page" : "تعذّر نقل الصفحة",
     "Could not delete the page" : "تعذّر حذف الصفحة",
+    "_%n byte_::_%n bytes_" : ["بايت","بايت","بايت","بايت","بايت","%n بايت"],
     "Error: Missing apps" : "خطأ: تطبيقات ناقصة",
     "The following dependency apps are missing: " : "تطبيقات التبعيّة dependency التالية ناقصة:",
     "Please ask the administrator to enable these apps." : "رجاءً، أُطلُب من المُشرف تمكين هذه التطبيقات",
