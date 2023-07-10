@@ -1,5 +1,18 @@
 # Changelog
 
+## 2.6.1 - 2023.07.10
+
+### 🐛Fixes
+* 🔗 Remove duplicate slash from links to app in search providers. (#762)
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 2.6.0 - 2023.07.03
 
 ### ✨New
