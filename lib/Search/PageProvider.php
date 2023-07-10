@@ -106,7 +106,7 @@ class PageProvider implements IProvider {
 					),
 					$this->getPageTitle($pageInfo),
 					$this->l10n->t('In collective %1$s', [$this->collectiveService->getCollectiveNameWithEmoji($collective)]),
-					$this->urlGenerator->linkToRoute('collectives.start.index') . $this->pageService->getPageLink($collective->getName(), $pageInfo),
+					$this->urlGenerator->linkToRouteAbsolute('collectives.start.index') . $this->pageService->getPageLink($collective->getName(), $pageInfo),
 					'icon-collectives-page'
 				);
 			}
