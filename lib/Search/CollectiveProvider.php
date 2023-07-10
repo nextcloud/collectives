@@ -98,7 +98,7 @@ class CollectiveProvider implements IProvider {
 				'',
 				$this->collectiveService->getCollectiveNameWithEmoji($collective),
 				'',
-				$this->urlGenerator->linkToRoute('collectives.start.index') . rawurlencode($collective->getName()),
+				$this->urlGenerator->linkToRouteAbsolute('collectives.start.index') . rawurlencode($collective->getName()),
 				'icon-collectives'
 			);
 		}
