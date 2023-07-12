@@ -4,7 +4,7 @@
 		<NcTextField ref="memberSearch"
 			:value.sync="searchQuery"
 			type="text"
-			:show-trailing-button="searchQuery !== ''"
+			:show-trailing-button="isSearching"
 			:label="t('collectives', 'Search users, groups, circles…')"
 			@trailing-button-click="clearSearch"
 			@input="onSearch">
@@ -112,6 +112,10 @@ export default {
 	},
 
 	computed: {
+		isSearching() {
+			return this.searchQuery !== ''
+		},
+
 		hasSelectedMembers() {
 			return Object.keys(this.selectionSet).length !== 0
 		},
@@ -152,6 +156,12 @@ export default {
 			this.searchQuery = ''
 		},
 
+		debounceFetchSearchResults: debounce(function() {
+			if (this.isSearching) {
+				this.fetchSearchResults()
+			}
+		}, 250),
+
 		async fetchSearchResults() {
 			// Search for users, groups and circles
 			const shareType = [shareTypes.TYPE_USER, shareTypes.TYPE_GROUP, shareTypes.TYPE_CIRCLE]
@@ -159,7 +169,6 @@ export default {
 
 			let response = null
 			try {
-				this.membersLoading = true
 				response = await axios.get(generateOcsUrl('apps/files_sharing/api/v1/sharees'), {
 					params: {
 						format: 'json',
@@ -234,10 +243,11 @@ export default {
 			this.addMember(member)
 		},
 
-		onSearch: debounce(function() {
+		onSearch() {
 			this.searchResults = []
-			this.fetchSearchResults()
-		}, 250),
+			this.membersLoading = true
+			this.debounceFetchSearchResults()
+		},
 	},
 }
 </script>
