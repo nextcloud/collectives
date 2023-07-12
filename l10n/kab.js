@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Share link" : "Fren aseɣwen",
     "Settings" : "Iɣewwaṛen",
+    "Loading …" : "Asali ...",
     "No results" : "Ulac igmad",
     "Edit" : "Ẓreg",
     "Cancel" : "Sefsex",
