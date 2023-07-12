@@ -35,7 +35,7 @@
 
 		<!-- No search yet -->
 		<NcEmptyContent v-if="!searchQuery"
-			:title="t('collectives', 'Search for members to add')"
+			:title="t('collectives', 'Search for people to add')"
 			class="empty-content">
 			<template #icon>
 				<MagnifyIcon :size="20" />
@@ -113,7 +113,7 @@ export default {
 
 	computed: {
 		hasSelectedMembers() {
-			return this.selectionSet.length !== 0
+			return Object.keys(this.selectionSet).length !== 0
 		},
 
 		/**
@@ -247,23 +247,20 @@ export default {
 	position: relative;
 	display: flex;
 	flex-direction: column;
+	gap: 0.5rem;
 	// TODO: Fix cropped bottom
 	height: 100%;
 }
 
 .selected-members {
 	display: flex;
-	overflow-y: auto;
-	align-content: flex-start;
-	flex: 1 0 auto;
 	flex-wrap: wrap;
-	justify-content: flex-start;
-	min-height: 33px;
-	// Half a line height to know there is more lines
-	max-height: 6.5em;
-	padding: 4px 0;
 	border-bottom: 1px solid var(--color-background-darker);
-	background: var(--color-main-background);
+	padding: 4px 0;
+	max-height: 97px;
+	overflow-y: auto;
+	flex: 1 0 auto;
+	align-content: flex-start;
 
 	.selected-member-bubble {
 		max-width: calc(50% - 4px);

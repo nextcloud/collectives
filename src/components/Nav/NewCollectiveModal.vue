@@ -80,7 +80,7 @@
 
 			<div v-else-if="state === 1" class="modal-collective-wrapper">
 				<h2 class="modal-collective-title">
-					{{ t('collectives', 'Members') }}
+					{{ t('collectives', 'Add people') }}
 				</h2>
 
 				<div class="modal-collective-members">
