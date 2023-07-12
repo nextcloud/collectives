@@ -86,12 +86,20 @@ export default {
 			commit(PATCH_COLLECTIVE_WITH_CIRCLE, response.data.ocs.data)
 		},
 
-		async [ADD_MEMBERS_TO_CIRCLE](_, { collective, members }) {
+		/**
+		 * Add members to a circle
+		 *
+		 * @param {object} _ the vuex store
+		 * @param {object} params the params object
+		 * @param {number} params.circleId ID of the circle
+		 * @param {object} params.members Object with members to be added
+		 */
+		async [ADD_MEMBERS_TO_CIRCLE](_, { circleId, members }) {
 			const response = await axios.post(
-				generateOcsUrl('apps/circles/circles/' + collective.circleId + '/members/multi'),
+				generateOcsUrl('apps/circles/circles/' + circleId + '/members/multi'),
 				{ members },
 			)
-			console.debug('Added members to circle', collective.circleId, response.data.ocs.data)
+			console.debug('Added members to circle', circleId, response.data.ocs.data)
 			return response.data.ocs.data
 		},
 

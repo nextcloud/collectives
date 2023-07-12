@@ -108,6 +108,7 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { ADD_MEMBERS_TO_CIRCLE, GET_CIRCLES, NEW_COLLECTIVE } from '../../store/actions.js'
 import displayError from '../../util/displayError.js'
+import { autocompleteSourcesToCircleMemberTypes, circlesMemberTypes } from '../../constants.js'
 import { NcButton, NcEmojiPicker, NcEmptyContent, NcModal, NcSelect, NcTextField } from '@nextcloud/vue'
 import AlertCircleOutlineIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
 import CirclesIcon from '../Icon/CirclesIcon.vue'
@@ -231,11 +232,11 @@ export default {
 			const updateCollective = () => {
 				if (this.updatedCollective && this.selectedMembers) {
 					const selectedMembers = Object.values(this.selectedMembers).map(entry => ({
-						id: entry.shareWith,
-						type: entry.type,
+						id: entry.id,
+						type: circlesMemberTypes[autocompleteSourcesToCircleMemberTypes[entry.source]],
 					}))
 					try {
-						this.dispatchAddMembersToCircle({ collective: this.updatedCollective, members: selectedMembers })
+						this.dispatchAddMembersToCircle({ circleId: this.updatedCollective.circleId, members: selectedMembers })
 					} catch (e) {
 						showError(t('collectives', 'Could not add members to the collective'))
 					}
