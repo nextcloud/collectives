@@ -21,6 +21,7 @@ OC.L10N.register(
     "Restore" : "Επαναφορά",
     "Delete permanently" : "Διαγραφή οριστικά",
     "Cancel" : "Ακύρωση",
+    "Select emoji" : "Επιλογή emoji",
     "Back" : "Πίσω",
     "Create" : "Δημιουργία",
     "Done" : "Ολοκληρώθηκε",
