@@ -23,7 +23,7 @@
     "Leave collective" : "Abandonar o colectivo",
     "Copied" : "Copiada",
     "Cannot copy" : "Non se pode copiar",
-    "Copy share link" : "Copiar a ligazón compartida",
+    "Copy share link" : "Copiar a ligazón para compartir",
     "Left collective {name}" : "Abandonou o colectivo {name}",
     "Could not leave the collective. {errorMessage}" : "Non foi posíbel abandonar o colectivo. {errorMessage}",
     "Collective not found: {collective}" : "Non se atopou o colectivo: {collective}",
