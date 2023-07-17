@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5622b2bfe0a3c8285fa4ddc51837f4c4",
+    "content-hash": "dbccebfa1b0ca40690abc19960cc56ce",
     "packages": [
         {
             "name": "teamtnt/tntsearch",
-            "version": "v3.2.0",
+            "version": "v4.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/teamtnt/tntsearch.git",
-                "reference": "177c4252b1539458c295fc67b32f7e2be3a1c1b1"
+                "reference": "a3d4375900a2fd3b6217c8d8609d06db9172c85f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/teamtnt/tntsearch/zipball/177c4252b1539458c295fc67b32f7e2be3a1c1b1",
-                "reference": "177c4252b1539458c295fc67b32f7e2be3a1c1b1",
+                "url": "https://api.github.com/repos/teamtnt/tntsearch/zipball/a3d4375900a2fd3b6217c8d8609d06db9172c85f",
+                "reference": "a3d4375900a2fd3b6217c8d8609d06db9172c85f",
                 "shasum": ""
             },
             "require": {
@@ -66,7 +66,7 @@
             ],
             "support": {
                 "issues": "https://github.com/teamtnt/tntsearch/issues",
-                "source": "https://github.com/teamtnt/tntsearch/tree/v3.2.0"
+                "source": "https://github.com/teamtnt/tntsearch/tree/v4.1.0"
             },
             "funding": [
                 {
@@ -82,7 +82,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2023-05-04T09:38:01+00:00"
+            "time": "2023-07-17T10:34:14+00:00"
         }
     ],
     "packages-dev": [
