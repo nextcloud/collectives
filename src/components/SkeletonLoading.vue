@@ -90,7 +90,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$clickable-area: 44px;
+$clickable-area: 40px;
 $margin: 8px;
 $messages-list-max-width: 670px;
 
@@ -145,7 +145,7 @@ $messages-list-max-width: 670px;
 .items-placeholder {
 	width: calc(100% - 2 * #{$margin});
 	height: $clickable-area;
-	margin: 0 0 -3px 0;
+	margin: 2px 0 -1px 0;
 
 	&-line-one {
 		width: calc(100% - #{$margin + $clickable-area});
@@ -166,8 +166,8 @@ $messages-list-max-width: 670px;
 		width: min($messages-list-max-width, 100vw);
 		position: relative;
 		height: 2em;
-		x: $margin + $clickable-area;
-		y: 8px;
+		x: $margin + 4 + $clickable-area;
+		y: 6px;
 	}
 
 	&-line-two {
