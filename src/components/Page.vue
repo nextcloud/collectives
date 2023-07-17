@@ -119,7 +119,7 @@ import TextEditor from './Page/TextEditor.vue'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import pageMixin from '../mixins/pageMixin.js'
 import { showError } from '@nextcloud/dialogs'
-import { RENAME_PAGE } from '../store/actions.js'
+import { GET_PAGES, RENAME_PAGE } from '../store/actions.js'
 
 export default {
 	name: 'Page',
@@ -243,6 +243,7 @@ export default {
 		]),
 
 		...mapActions({
+			dispatchGetPages: GET_PAGES,
 			dispatchRenamePage: RENAME_PAGE,
 		}),
 
@@ -286,7 +287,7 @@ export default {
 				await this.dispatchRenamePage(this.newTitle)
 				// The resulting title may be different due to sanitizing
 				this.newTitle = this.currentPage.title
-				this.dispatchGetPages()
+				this.dispatchGetPages(false)
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not rename the page'))

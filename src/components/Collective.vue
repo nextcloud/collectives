@@ -1,8 +1,8 @@
 <template>
 	<NcAppContentDetails>
-		<Version v-if="currentPage && version" />
-		<Page v-else-if="currentPage && !loading('collective')" />
-		<SkeletonLoading v-else-if="loading('collective') || loading('page')" :count="1" type="page-heading" />
+		<SkeletonLoading v-if="loading('collective') || loading('currentPage')" :count="1" type="page-heading" />
+		<Version v-else-if="currentPage && version" />
+		<Page v-else-if="currentPage" />
 		<PageNotFound v-else />
 	</NcAppContentDetails>
 </template>
@@ -57,7 +57,7 @@ export default {
 		]),
 
 		notFound() {
-			return !this.loading('collective') && !this.loading('pagelist') && !this.currentPage
+			return !this.loading('collective') && !this.loading('currentPage') && !this.currentPage
 		},
 	},
 
@@ -125,7 +125,7 @@ export default {
 		},
 
 		handleNetworkOnline() {
-			this.getPages()
+			this.getPagesBackground()
 			console.debug('Network is online.')
 			this._setPollingInterval(this.pollIntervalBase)
 		},

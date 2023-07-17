@@ -80,7 +80,7 @@ export default {
 
 			if (collective.id === getters.currentCollective?.id) {
 				// Update page list, properties like `collectivePath` might have changed
-				await dispatch(GET_PAGES)
+				await dispatch(GET_PAGES, false)
 				await dispatch(GET_TRASH_PAGES)
 			}
 			commit(PATCH_COLLECTIVE_WITH_CIRCLE, response.data.ocs.data)

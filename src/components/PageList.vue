@@ -54,10 +54,10 @@
 				</NcActionButton>
 			</NcActions>
 		</div>
-		<div v-if="loading('collective') || loading('pagelist')" class="page-list">
+		<div v-if="!currentCollective || !collectivePage || loading('collective')" class="page-list">
 			<SkeletonLoading type="items" :count="3" />
 		</div>
-		<div v-if="!loading('collective') && currentCollective && collectivePage" class="page-list">
+		<div v-else class="page-list">
 			<Item key="Readme"
 				:to="currentCollectivePath"
 				:page-id="collectivePage.id"
