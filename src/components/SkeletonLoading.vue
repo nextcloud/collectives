@@ -32,10 +32,10 @@
 						class="text-placeholder"
 						xmlns="http://www.w3.org/2000/svg"
 						:fill="'url(#placeholder-gradient' + suffix + ')'">
-						<rect class="text-placeholder-line-one" :style="textLinesWidth[0]" />
-						<rect class="text-placeholder-line-two" :style="textLinesWidth[1]" />
-						<rect class="text-placeholder-line-three" :style="textLinesWidth[2]" />
-						<rect class="text-placeholder-line-four" :style="width" />
+						<rect class="text-placeholder-line-one" :style="textPlaceholderData[0]" />
+						<rect class="text-placeholder-line-two" :style="textPlaceholderData[1]" />
+						<rect class="text-placeholder-line-three" :style="textPlaceholderData[2]" />
+						<rect class="text-placeholder-line-four" :style="textPlaceholderData[3]" />
 					</svg>
 				</li>
 			</ul>
@@ -78,12 +78,13 @@ export default {
 			}
 			return data
 		},
-		textLinesWidth() {
-			return [
-				'width: ' + (Math.floor(Math.random() * 50) + 60) + '%',
-				'width: ' + (Math.floor(Math.random() * 50) + 60) + '%',
-				'width: ' + (Math.floor(Math.random() * 50) + 60) + '%',
-			]
+		textPlaceholderData() {
+			const data = []
+			for (let i = 0; i < 4; i++) {
+				// generate random widths
+				data.push('width: ' + (Math.floor(Math.random() * 50) + 60) + '%')
+			}
+			return data
 		},
 	},
 }
@@ -181,7 +182,7 @@ $messages-list-max-width: 670px;
 
 .text-placeholder {
 	width: min($messages-list-max-width, 100vw);
-	height: calc(#{$clickable-area} * 2);
+	height: 6em;
 	margin: $margin auto;
 	padding: 4px 8px 0 14px;
 	display: block;
@@ -196,19 +197,23 @@ $messages-list-max-width: 670px;
 
 	&-line-one {
 		y: 5px;
+		y: 0.33em;
 		width: 175px;
 	}
 
 	&-line-two {
 		y: 25px;
+		y: 1.66em;
 	}
 
 	&-line-three {
 		y: 45px;
+		y: 3em;
 	}
 
 	&-line-four {
 		y: 65px;
+		y: 4.33em;
 	}
 }
 
