@@ -3,6 +3,7 @@
 		:show-details="showing('details')">
 		<div class="page-list-headerbar">
 			<NcTextField name="pageFilter"
+				:label="t('collectives', 'Search pages')"
 				:value.sync="filterString"
 				class="page-filter"
 				:placeholder="t('collectives', 'Search pages ...')" />
