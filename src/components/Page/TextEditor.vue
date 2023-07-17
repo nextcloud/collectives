@@ -145,7 +145,11 @@ export default {
 		},
 
 		focusEditor() {
-			this.wrapper()?.$editor?.commands.focus?.()
+			if (this.wrapper()?.$editor?.commands.autofocus) {
+				this.wrapper().$editor.commands.autofocus()
+			} else {
+				this.wrapper()?.$editor?.commands.focus?.()
+			}
 		},
 
 		addImage(name) {
