@@ -1,12 +1,8 @@
 <template>
 	<NcAppContentDetails>
-		<Version v-if="currentPage && version" />
+		<SkeletonLoading v-if="loading('collective') || loading('currentPage')" :count="1" type="page-heading" />
+		<Version v-else-if="currentPage && version" />
 		<Page v-else-if="currentPage" />
-		<NcEmptyContent v-else-if="loading('collective') || loading('page')">
-			<template #icon>
-				<NcLoadingIcon />
-			</template>
-		</NcEmptyContent>
 		<PageNotFound v-else />
 	</NcAppContentDetails>
 </template>
@@ -15,21 +11,21 @@
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { listen } from '@nextcloud/notify_push'
-import { NcAppContentDetails, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
+import { NcAppContentDetails } from '@nextcloud/vue'
 import { GET_PAGES, GET_TRASH_PAGES } from '../store/actions.js'
 import { SELECT_VERSION } from '../store/mutations.js'
 import displayError from '../util/displayError.js'
 import Page from './Page.vue'
 import Version from './Page/Version.vue'
 import PageNotFound from './Page/PageNotFound.vue'
+import SkeletonLoading from './SkeletonLoading.vue'
 
 export default {
 	name: 'Collective',
 
 	components: {
+		SkeletonLoading,
 		NcAppContentDetails,
-		NcEmptyContent,
-		NcLoadingIcon,
 		Page,
 		PageNotFound,
 		Version,
@@ -61,7 +57,7 @@ export default {
 		]),
 
 		notFound() {
-			return !this.loading('collective') && !this.loading('pagelist') && !this.currentPage
+			return !this.loading('collective') && !this.loading('currentPage') && !this.currentPage
 		},
 	},
 
@@ -129,7 +125,7 @@ export default {
 		},
 
 		handleNetworkOnline() {
-			this.getPages()
+			this.getPagesBackground()
 			console.debug('Network is online.')
 			this._setPollingInterval(this.pollIntervalBase)
 		},

@@ -1,6 +1,5 @@
 <template>
-	<NcAppContentList :class="{loading: loading('collective') || loading('pagelist')}"
-		:show-details="showing('details')">
+	<NcAppContentList :show-details="showing('details')">
 		<div class="page-list-headerbar">
 			<NcTextField name="pageFilter"
 				:label="t('collectives', 'Search pages')"
@@ -55,7 +54,10 @@
 				</NcActionButton>
 			</NcActions>
 		</div>
-		<div v-if="currentCollective && collectivePage" class="page-list">
+		<div v-if="!currentCollective || !collectivePage || loading('collective')" class="page-list">
+			<SkeletonLoading type="items" :count="3" />
+		</div>
+		<div v-else class="page-list">
 			<Item key="Readme"
 				:to="currentCollectivePath"
 				:page-id="collectivePage.id"
@@ -127,11 +129,13 @@ import PagesTemplateIcon from './Icon/PagesTemplateIcon.vue'
 import { SET_COLLECTIVE_USER_SETTING_PAGE_ORDER } from '../store/actions.js'
 import { scrollToPage } from '../util/scrollToElement.js'
 import { pageOrders } from '../util/sortOrders.js'
+import SkeletonLoading from './SkeletonLoading.vue'
 
 export default {
 	name: 'PageList',
 
 	components: {
+		SkeletonLoading,
 		NcActions,
 		NcActionButton,
 		NcAppContentList,

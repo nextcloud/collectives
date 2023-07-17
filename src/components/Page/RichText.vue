@@ -6,11 +6,7 @@
 			:value="shareTokenParam">
 		<div id="text" class="editor">
 			<PageInfoBar :current-page="currentPage" />
-			<NcEmptyContent v-if="loading('pageContent')">
-				<template #icon>
-					<NcLoadingIcon />
-				</template>
-			</NcEmptyContent>
+			<SkeletonLoading v-if="loading('pageContent')" type="text" />
 			<RichTextReader v-else
 				:content="pageContent"
 				@click-link="followLink" />
@@ -23,8 +19,8 @@ import { mapGetters, mapMutations } from 'vuex'
 import { RichTextReader, AttachmentResolver, ATTACHMENT_RESOLVER, OUTLINE_STATE, OUTLINE_ACTIONS } from '@nextcloud/text'
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl } from '@nextcloud/router'
-import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 import PageInfoBar from './PageInfoBar.vue'
+import SkeletonLoading from '../SkeletonLoading.vue'
 
 const resolvePath = function(from, rel) {
 	if (!rel) {
@@ -49,8 +45,7 @@ export default {
 	name: 'RichText',
 
 	components: {
-		NcEmptyContent,
-		NcLoadingIcon,
+		SkeletonLoading,
 		PageInfoBar,
 		RichTextReader,
 	},

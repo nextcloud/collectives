@@ -506,10 +506,8 @@ export default {
 		 * @param {number} pageId Page ID
 		 */
 		async [GET_PAGE]({ commit, getters, state }, { parentId, pageId }) {
-			commit('load', 'page')
 			const response = await axios.get(getters.pageUrl(parentId, pageId))
 			commit(UPDATE_PAGE, response.data.data)
-			commit('done', 'page')
 		},
 
 		/**
@@ -572,12 +570,10 @@ export default {
 		 * @param {string} newTitle new title for the page
 		 */
 		async [RENAME_PAGE]({ commit, getters }, newTitle) {
-			commit('load', 'page')
 			const page = getters.currentPage
 			const url = getters.pageUrl(page.parentId, page.id)
 			const response = await axios.put(url, { title: newTitle })
 			await commit(UPDATE_PAGE, response.data.data)
-			commit('done', 'page')
 		},
 
 		/**
@@ -693,10 +689,8 @@ export default {
 		 * @param {number} page.pageId ID of the page
 		 */
 		async [TRASH_PAGE]({ commit, getters }, { parentId, pageId }) {
-			commit('load', 'page')
 			const response = await axios.delete(getters.pageUrl(parentId, pageId))
 			commit(MOVE_PAGE_INTO_TRASH, response.data.data)
-			commit('done', 'page')
 		},
 
 		/**

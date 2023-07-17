@@ -73,7 +73,7 @@ export default {
 				}
 
 				// Parents location changes when the first subpage is created.
-				this.dispatchGetPages()
+				this.dispatchGetPages(false)
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not create the page'))
@@ -97,7 +97,7 @@ export default {
 				this.$nextTick(() => scrollToPage(this.newPageId))
 
 				// Parents location changes when the first subpage is created.
-				this.dispatchGetPages()
+				this.dispatchGetPages(false)
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not create the page'))
@@ -139,14 +139,14 @@ export default {
 
 			// Move subpage to new parent
 			try {
-				this.load('page')
+				this.load('currentPage')
 				await this.dispatchMovePage({ newParentId, pageId, index: newIndex })
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not move page'))
 				return
 			} finally {
-				this.done('page')
+				this.done('currentPage')
 			}
 
 			// Redirect to new page path if currentPage got moved

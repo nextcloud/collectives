@@ -22,7 +22,6 @@ import Editor from './Editor.vue'
 import RichText from './RichText.vue'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import {
-	GET_PAGES,
 	GET_VERSIONS,
 	TOUCH_PAGE,
 } from '../../store/actions.js'
@@ -126,7 +125,6 @@ export default {
 
 		...mapActions({
 			dispatchTouchPage: TOUCH_PAGE,
-			dispatchGetPages: GET_PAGES,
 			dispatchGetVersions: GET_VERSIONS,
 		}),
 
