@@ -2,7 +2,7 @@
 	<NcContent app-name="collectives">
 		<Navigation v-if="!printView" />
 		<router-view />
-		<PageSidebar v-if="currentPage" v-show="showing('sidebar')" />
+		<PageSidebar v-if="currentCollective && currentPage" v-show="showing('sidebar')" />
 		<CollectiveSettings v-if="showCollectiveSettings"
 			:collective="settingsCollective" />
 	</NcContent>
@@ -35,6 +35,7 @@ export default {
 		]),
 
 		...mapGetters([
+			'currentCollective',
 			'currentPage',
 			'isPublic',
 			'showing',
