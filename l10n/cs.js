@@ -134,6 +134,7 @@ OC.L10N.register(
     "No deleted pages." : "Žádné smazané stránky.",
     "Deleted" : "Smazáno",
     "Page permanently deleted" : "Stránka trvale smazána.",
+    "Search pages" : "Hledat stránky",
     "Search pages ..." : "Hledat stránky…",
     "Sort order" : "Pořadí řazení",
     "Sort by custom order" : "Uživatelsky určené pořadí",

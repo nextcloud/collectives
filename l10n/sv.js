@@ -131,6 +131,7 @@ OC.L10N.register(
     "No deleted pages." : "Inga borttagna sidor.",
     "Deleted" : "Borttagen",
     "Page permanently deleted" : "Sidan permanent borttagen",
+    "Search pages" : "Sök sidor",
     "Search pages ..." : "Sök sidor ...",
     "Sort order" : "Sorteringsordning",
     "Sort by custom order" : "Sortera efter anpassad ordning",

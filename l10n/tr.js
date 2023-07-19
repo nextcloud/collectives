@@ -134,6 +134,7 @@ OC.L10N.register(
     "No deleted pages." : "Silinmiş bir sayfa yok.",
     "Deleted" : "Silinmiş",
     "Page permanently deleted" : "Sayfa kalıcı olarak silindi",
+    "Search pages" : "Sayfa arama",
     "Search pages ..." : "Sayfa arama...",
     "Sort order" : "Sıralama",
     "Sort by custom order" : "Özel sıralama kullanılsın",

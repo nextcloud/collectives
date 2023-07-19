@@ -134,6 +134,7 @@ OC.L10N.register(
     "No deleted pages." : "لا توجد صفحات محذوفة",
     "Deleted" : "تمّ حذفه",
     "Page permanently deleted" : "تم حذف الصفحة نهائيًا",
+    "Search pages" : "البحث في الصفحات",
     "Search pages ..." : "إبحث في الصفحات ...",
     "Sort order" : "ترتيب الفرز",
     "Sort by custom order" : "ترتيب مُخصّص",
