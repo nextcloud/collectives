@@ -12,6 +12,7 @@ OC.L10N.register(
     "No results" : "Нема резултати",
     "An error occurred while performing the search" : "Настана грешка при обидот за пребарување",
     "Add {type}" : "Додади {type}",
+    "Permissions" : "Дозволи",
     "View" : "Погледни",
     "Edit" : "Уреди",
     "Members" : "Членови",

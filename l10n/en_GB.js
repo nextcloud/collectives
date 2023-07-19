@@ -134,6 +134,7 @@ OC.L10N.register(
     "No deleted pages." : "No deleted pages.",
     "Deleted" : "Deleted",
     "Page permanently deleted" : "Page permanently deleted",
+    "Search pages" : "Search pages",
     "Search pages ..." : "Search pages ...",
     "Sort order" : "Sort order",
     "Sort by custom order" : "Sort by custom order",

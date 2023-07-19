@@ -134,6 +134,7 @@ OC.L10N.register(
     "No deleted pages." : "沒有已刪除的頁面。",
     "Deleted" : "已刪除",
     "Page permanently deleted" : "頁面已被永久刪除",
+    "Search pages" : "搜尋頁面",
     "Search pages ..." : "搜尋頁面 ...",
     "Sort order" : "排序依據",
     "Sort by custom order" : "手動排序",
