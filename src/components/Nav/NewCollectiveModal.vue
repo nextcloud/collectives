@@ -84,8 +84,10 @@
 				</h2>
 
 				<div class="modal-collective-members">
-					<MemberPicker :selection-set="selectedMembers"
-						@updateSelection="updateSelectedMembers" />
+					<MemberPicker :show-selection="true"
+						:selected-members="selectedMembers"
+						@click-member="onClickMember"
+						@delete-from-selection="deleteMember" />
 				</div>
 
 				<div class="modal-buttons">
@@ -284,8 +286,20 @@ export default {
 			this.emoji = emoji
 		},
 
-		updateSelectedMembers(selectedMembers) {
-			this.selectedMembers = selectedMembers
+		addMember(member) {
+			this.$set(this.selectedMembers, `${member.source}-${member.id}`, member)
+		},
+
+		deleteMember(member) {
+			this.$delete(this.selectedMembers, `${member.source}-${member.id}`, member)
+		},
+
+		onClickMember(member) {
+			if (`${member.source}-${member.id}` in this.selectedMembers) {
+				this.deleteMember(member)
+				return
+			}
+			this.addMember(member)
 		},
 	},
 }

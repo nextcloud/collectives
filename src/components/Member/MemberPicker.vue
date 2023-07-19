@@ -12,27 +12,9 @@
 		</NcTextField>
 
 		<!-- Selected members -->
-		<transition-group v-if="hasSelectedMembers"
-			name="zoom"
-			tag="div"
-			class="selected-members">
-			<NcUserBubble v-for="member in selectionSet"
-				:key="`member-${member.source}-${member.id}`"
-				:margin="0"
-				:size="22"
-				:display-name="member.label"
-				:avatar-image="selectedMemberAvatarImage(member)"
-				class="selected-member-bubble">
-				<template #title>
-					<a href="#"
-						:title="t('collectives', 'Remove {name}', { name: member.label })"
-						class="selected-member-bubble-delete"
-						@click="deleteMember(member)">
-						<CloseIcon :size="16" />
-					</a>
-				</template>
-			</NcUserBubble>
-		</transition-group>
+		<SelectedMembers v-if="showSelection"
+			:selected-members="selectedMembers"
+			@delete-from-selection="deleteFromSelection" />
 
 		<!-- No search yet -->
 		<NcEmptyContent v-if="!isSearching && !hasSearchResults"
@@ -53,7 +35,7 @@
 		<!-- Searched and picked members -->
 		<MemberSearchResults v-else-if="hasSearchResults"
 			:search-results="searchResults"
-			:selection-set="selectionSet"
+			:selection-set="selectedMembers"
 			@click="onClickMember" />
 
 		<!-- No results -->
@@ -73,26 +55,29 @@ import debounce from 'debounce'
 import { shareTypes } from '../../constants.js'
 import { generateOcsUrl } from '@nextcloud/router'
 import { showError } from '@nextcloud/dialogs'
-import { NcEmptyContent, NcLoadingIcon, NcTextField, NcUserBubble } from '@nextcloud/vue'
-import CloseIcon from 'vue-material-design-icons/Close.vue'
+import { NcEmptyContent, NcLoadingIcon, NcTextField } from '@nextcloud/vue'
 import MagnifyIcon from 'vue-material-design-icons/Magnify.vue'
-import MemberSearchResults from '../Member/MemberSearchResults.vue'
+import MemberSearchResults from './MemberSearchResults.vue'
+import SelectedMembers from './SelectedMembers.vue'
 
 export default {
 	name: 'MemberPicker',
 
 	components: {
-		CloseIcon,
 		MagnifyIcon,
 		MemberSearchResults,
 		NcEmptyContent,
 		NcLoadingIcon,
 		NcTextField,
-		NcUserBubble,
+		SelectedMembers,
 	},
 
 	props: {
-		selectionSet: {
+		showSelection: {
+			type: Boolean,
+			default: false,
+		},
+		selectedMembers: {
 			type: Object,
 			default() {
 				return {}
@@ -115,16 +100,6 @@ export default {
 
 		hasSearchResults() {
 			return this.searchResults.length !== 0
-		},
-
-		hasSelectedMembers() {
-			return Object.keys(this.selectionSet).length !== 0
-		},
-
-		selectedMemberAvatarImage() {
-			return function(member) {
-				return member.source === 'users' ? null : 'icon-group-white'
-			}
 		},
 	},
 
@@ -171,22 +146,12 @@ export default {
 			}
 		},
 
-		addMember(member) {
-			this.$set(this.selectionSet, `${member.source}-${member.id}`, member)
-			this.$emit('update-selection', this.selectionSet)
-		},
-
-		deleteMember(member) {
-			this.$delete(this.selectionSet, `${member.source}-${member.id}`, member)
-			this.$emit('update-selection', this.selectionSet)
+		deleteFromSelection(member) {
+			this.$emit('delete-from-selection', member)
 		},
 
 		onClickMember(member) {
-			if (`${member.source}-${member.id}` in this.selectionSet) {
-				this.deleteMember(member)
-				return
-			}
-			this.addMember(member)
+			this.$emit('click-member', member)
 		},
 
 		onSearch() {
@@ -206,54 +171,5 @@ export default {
 	gap: 0.5rem;
 	// TODO: Fix cropped bottom
 	height: 100%;
-}
-
-.selected-members {
-	display: flex;
-	flex-wrap: wrap;
-	border-bottom: 1px solid var(--color-background-darker);
-	padding: 4px 0;
-	max-height: 97px;
-	overflow-y: auto;
-	flex: 1 0 auto;
-	align-content: flex-start;
-
-	.selected-member-bubble {
-		max-width: calc(50% - 4px);
-		margin-right: 4px;
-		margin-bottom: 4px;
-
-		:deep(.user-bubble__content) {
-			align-items: center;
-		}
-
-		&-delete {
-			display: block;
-			margin-right: -4px;
-			opacity: .7;
-
-			&:hover, &active, &focus {
-				opacity: 1;
-			}
-		}
-	}
-}
-
-.zoom-enter-active {
-	animation: zoom-in var(--animation-quick);
-}
-
-.zoom-leave-active {
-	animation: zoom-in var(--animation-quick) reverse;
-	will-change: transform;
-}
-
-@keyframes zoom-in {
-	0% {
-		transform: scale(0);
-	}
-	100% {
-		transform: scale(1);
-	}
 }
 </style>
