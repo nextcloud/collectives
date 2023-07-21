@@ -5,7 +5,10 @@ import {
 	GET_CIRCLES,
 	RENAME_CIRCLE,
 	GET_CIRCLE_MEMBERS,
+	ADD_MEMBER_TO_CIRCLE,
 	ADD_MEMBERS_TO_CIRCLE,
+	CHANGE_CIRCLE_MEMBER_LEVEL,
+	REMOVE_MEMBER_FROM_CIRCLE,
 	LEAVE_CIRCLE,
 	GET_PAGES,
 	GET_TRASH_PAGES,
@@ -117,7 +120,25 @@ export default {
 		},
 
 		/**
-		 * Add members to a circle
+		 * Add a single member to a circle
+		 *
+		 * @param {object} _ the vuex store
+		 * @param {object} params the params object
+		 * @param {string} params.circleId ID of the circle
+		 * @param {string} params.userId User ID of the member to be added
+		 * @param {number} params.type Type of the member to be added
+		 */
+		async [ADD_MEMBER_TO_CIRCLE](_, { circleId, userId, type }) {
+			const response = await axios.post(
+				generateOcsUrl('apps/circles/circles/' + circleId + '/members'),
+				{ userId, type },
+			)
+			console.debug('Added member to circle', circleId, response.data.ocs.data)
+			return response.data.ocs.data
+		},
+
+		/**
+		 * Add multiple members to a circle
 		 *
 		 * @param {object} _ the vuex store
 		 * @param {object} params the params object
@@ -130,6 +151,40 @@ export default {
 				{ members },
 			)
 			console.debug('Added members to circle', circleId, response.data.ocs.data)
+			return response.data.ocs.data
+		},
+
+		/**
+		 * Remove a single member to a circle
+		 *
+		 * @param {object} _ the vuex store
+		 * @param {object} params the params object
+		 * @param {string} params.circleId ID of the circle
+		 * @param {string} params.memberId Circle member ID of the member to be removed
+		 */
+		async [REMOVE_MEMBER_FROM_CIRCLE](_, { circleId, memberId }) {
+			const response = await axios.delete(
+				generateOcsUrl('apps/circles/circles/' + circleId + '/members/' + memberId),
+			)
+			console.debug('Removed member from circle', circleId, response.data.ocs.data)
+			return response.data.ocs.data
+		},
+
+		/**
+		 * Change a member level in a circle
+		 *
+		 * @param {object} _ the vuex store
+		 * @param {object} params the params object
+		 * @param {string} params.circleId ID of the circle
+		 * @param {string} params.memberId Circle member ID of the member to be changed
+		 * @param {number} params.level Level of the member to be changed
+		 */
+		async [CHANGE_CIRCLE_MEMBER_LEVEL](_, { circleId, memberId, level }) {
+			const response = await axios.put(
+				generateOcsUrl('apps/circles/circles/' + circleId + '/members/' + memberId + '/level'),
+				{ level },
+			)
+			console.debug('Changed level of member from circle', circleId, response.data.ocs.data)
 			return response.data.ocs.data
 		},
 

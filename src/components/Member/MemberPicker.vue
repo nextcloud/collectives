@@ -15,6 +15,7 @@
 			<!-- Current members (optional) -->
 			<SkeletonLoading v-if="showCurrentSkeleton" type="members-list" :count="3" />
 			<CurrentMembers v-else-if="showCurrent"
+				:circle-id="circleId"
 				:current-members="currentMembers"
 				:search-query="searchQuery" />
 
@@ -25,9 +26,9 @@
 
 			<!-- Searched and picked members -->
 			<MemberSearchResults v-if="!showCurrentSkeleton && hasSearchResults"
-				:search-results="searchResults"
+				:search-results="filteredSearchResults"
 				:selection-set="selectedMembers"
-				@click="onClickMember" />
+				@click="onClickSearched" />
 
 			<!-- No search results -->
 			<template v-else-if="!showCurrentSkeleton">
@@ -44,7 +45,6 @@
 import axios from '@nextcloud/axios'
 import debounce from 'debounce'
 import { autocompleteSourcesToCircleMemberTypes, circlesMemberTypes, shareTypes } from '../../constants.js'
-import { getCurrentUser } from '@nextcloud/auth'
 import { generateOcsUrl } from '@nextcloud/router'
 import { showError } from '@nextcloud/dialogs'
 import { NcAppNavigationCaption, NcTextField } from '@nextcloud/vue'
@@ -70,6 +70,10 @@ export default {
 	},
 
 	props: {
+		circleId: {
+			type: String,
+			required: true,
+		},
 		showCurrent: {
 			type: Boolean,
 			default: false,
@@ -106,7 +110,11 @@ export default {
 		},
 
 		hasSearchResults() {
-			return this.searchResults.length !== 0
+			return this.filteredSearchResults.length !== 0
+		},
+
+		filteredSearchResults() {
+			return this.searchResults.filter(this.filterCurrentMembers)
 		},
 
 		showCurrentSkeleton() {
@@ -146,7 +154,7 @@ export default {
 				})
 				this.isSearchLoading = false
 
-				this.searchResults = response.data.ocs.data.filter(this.filterCurrentMembers)
+				this.searchResults = response.data.ocs.data
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'An error occurred while performing the search'))
@@ -166,8 +174,9 @@ export default {
 			this.$emit('delete-from-selection', member)
 		},
 
-		onClickMember(member) {
+		onClickSearched(member) {
 			this.$emit('click-member', member)
+			this.$emit('click-searched', member)
 		},
 
 		onSearch() {

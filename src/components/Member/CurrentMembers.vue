@@ -4,8 +4,10 @@
 			:title="t('collectives', 'Members')" />
 		<Member v-for="item in searchedMembers"
 			:key="item.singleId"
-			:display-name="item.displayName"
+			:circle-id="circleId"
+			:member-id="item.id"
 			:user-id="item.userId"
+			:display-name="item.displayName"
 			:user-type="item.userType"
 			:level="item.level"
 			:is-current-user="item.userId === currentUser"
@@ -31,6 +33,10 @@ export default {
 	},
 
 	props: {
+		circleId: {
+			type: String,
+			required: true,
+		},
 		currentMembers: {
 			type: Array,
 			required: true,

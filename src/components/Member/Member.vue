@@ -22,7 +22,7 @@
 				class="member-row__actions">
 				<NcActionButton v-if="!isAdmin"
 					:close-after-click="true"
-					@click="setLevelAdmin">
+					@click="setMemberLevel(memberLevels.LEVEL_ADMIN)">
 					<template #icon>
 						<AccountCogIcon :size="20" />
 					</template>
@@ -30,7 +30,7 @@
 				</NcActionButton>
 				<NcActionButton v-if="!isModerator"
 					:close-after-click="true"
-					@click="setLevelModerator">
+					@click="setMemberLevel(memberLevels.LEVEL_MODERATOR)">
 					<template #icon>
 						<CrownIcon :size="20" />
 					</template>
@@ -38,7 +38,7 @@
 				</NcActionButton>
 				<NcActionButton v-if="!isMember"
 					:close-after-click="true"
-					@click="setLevelMember">
+					@click="setMemberLevel(memberLevels.LEVEL_MEMBER)">
 					<template #icon>
 						<AccountIcon :size="20" />
 					</template>
@@ -50,7 +50,6 @@
 					<template #icon>
 						<DeleteIcon :size="20" />
 					</template>
-					{{ }}
 					{{ t('collectives', 'Remove') }}
 				</NcActionButton>
 			</NcActions>
@@ -59,7 +58,13 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import { circlesMemberTypes, memberLevels } from '../../constants.js'
+import {
+	GET_CIRCLE_MEMBERS,
+	CHANGE_CIRCLE_MEMBER_LEVEL,
+	REMOVE_MEMBER_FROM_CIRCLE,
+} from '../../store/actions.js'
 import { NcActions, NcActionButton, NcActionSeparator, NcAvatar } from '@nextcloud/vue'
 import AccountCogIcon from 'vue-material-design-icons/AccountCog.vue'
 import AccountIcon from 'vue-material-design-icons/Account.vue'
@@ -81,6 +86,14 @@ export default {
 	},
 
 	props: {
+		circleId: {
+			type: String,
+			required: true,
+		},
+		memberId: {
+			type: String,
+			required: true,
+		},
 		userId: {
 			type: String,
 			required: true,
@@ -105,6 +118,12 @@ export default {
 			type: Boolean,
 			default: true,
 		},
+	},
+
+	data() {
+		return {
+			memberLevels,
+		}
 	},
 
 	computed: {
@@ -141,21 +160,19 @@ export default {
 	},
 
 	methods: {
-		setLevelAdmin() {
-			// TODO: implement
-			console.debug('make admin')
+		...mapActions({
+			dispatchGetCircleMembers: GET_CIRCLE_MEMBERS,
+			dispatchChangeCircleMemberLevel: CHANGE_CIRCLE_MEMBER_LEVEL,
+			dispatchRemoveMemberFromCircle: REMOVE_MEMBER_FROM_CIRCLE,
+		}),
+
+		async setMemberLevel(level) {
+			await this.dispatchChangeCircleMemberLevel({ circleId: this.circleId, memberId: this.memberId, level })
+			await this.dispatchGetCircleMembers(this.circleId)
 		},
-		setLevelModerator() {
-			// TODO: implement
-			console.debug('make moderator')
-		},
-		setLevelMember() {
-			// TODO: implement
-			console.debug('make member')
-		},
-		removeMember() {
-			// TODO: implement
-			console.debug('remove member')
+		async removeMember() {
+			await this.dispatchRemoveMemberFromCircle({ circleId: this.circleId, memberId: this.memberId })
+			await this.dispatchGetCircleMembers(this.circleId)
 		},
 	},
 }
@@ -190,6 +207,10 @@ export default {
 		color: var(--color-text-maxcontrast);
 		font-weight: 300;
 		padding-left: 5px;
+	}
+
+	&:hover, &:focus {
+		background-color: var(--color-background-hover);
 	}
 
 	.is-searched {

@@ -8,8 +8,9 @@
 
 				<div class="modal-collective-members">
 					<MemberPicker :show-current="true"
+						:circle-id="collective.circleId"
 						:current-members="circleMembers(collective.circleId)"
-						@click-member="onClickMember" />
+						@click-searched="onClickSearched" />
 				</div>
 			</div>
 		</div>
@@ -18,7 +19,8 @@
 
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
-import { GET_CIRCLE_MEMBERS, ADD_MEMBERS_TO_CIRCLE } from '../../store/actions.js'
+import { autocompleteSourcesToCircleMemberTypes, circlesMemberTypes } from '../../constants.js'
+import { GET_CIRCLE_MEMBERS, ADD_MEMBER_TO_CIRCLE } from '../../store/actions.js'
 import { NcModal } from '@nextcloud/vue'
 import MemberPicker from '../Member/MemberPicker.vue'
 
@@ -60,15 +62,20 @@ export default {
 
 		...mapActions({
 			dispatchGetCircleMembers: GET_CIRCLE_MEMBERS,
-			dispatchAddMembersToCircle: ADD_MEMBERS_TO_CIRCLE,
+			dispatchAddMemberToCircle: ADD_MEMBER_TO_CIRCLE,
 		}),
 
 		onClose() {
 			this.$emit('close')
 		},
 
-		onClickMember(member) {
-			console.debug('CollectiveMembersModal onClickMember', member)
+		async onClickSearched(member) {
+			await this.dispatchAddMemberToCircle({
+				circleId: this.collective.circleId,
+				userId: member.id,
+				type: circlesMemberTypes[autocompleteSourcesToCircleMemberTypes[member.source]],
+			})
+			await this.dispatchGetCircleMembers(this.collective.circleId)
 		},
 	},
 }
