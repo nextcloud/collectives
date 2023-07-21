@@ -1,10 +1,20 @@
+import { set } from 'vue'
 import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
-import { GET_CIRCLES, RENAME_CIRCLE, ADD_MEMBERS_TO_CIRCLE, LEAVE_CIRCLE, GET_PAGES, GET_TRASH_PAGES } from './actions.js'
+import {
+	GET_CIRCLES,
+	RENAME_CIRCLE,
+	GET_CIRCLE_MEMBERS,
+	ADD_MEMBERS_TO_CIRCLE,
+	LEAVE_CIRCLE,
+	GET_PAGES,
+	GET_TRASH_PAGES,
+} from './actions.js'
 import {
 	SET_CIRCLES,
 	UPDATE_CIRCLE,
 	DELETE_CIRCLE_FOR,
+	SET_CIRCLE_MEMBERS,
 	PATCH_COLLECTIVE_WITH_CIRCLE,
 	REMOVE_COLLECTIVE,
 } from './mutations.js'
@@ -12,6 +22,7 @@ import {
 export default {
 	state: {
 		circles: [],
+		circleMembers: {},
 	},
 
 	getters: {
@@ -27,6 +38,8 @@ export default {
 					return !alive && !trashed
 				})
 		},
+
+		circleMembers: (state) => (circleId) => state.circleMembers[circleId] || [],
 	},
 
 	mutations: {
@@ -44,6 +57,10 @@ export default {
 				1,
 				circle,
 			)
+		},
+
+		[SET_CIRCLE_MEMBERS](state, { circleId, members }) {
+			set(state.circleMembers, circleId, members)
 		},
 	},
 
@@ -64,6 +81,7 @@ export default {
 		},
 
 		/**
+		 * Rename a circle
 		 *
 		 * @param {object} store the vuex store
 		 * @param {Function} store.commit commit changes
@@ -87,11 +105,23 @@ export default {
 		},
 
 		/**
+		 * Get members of a circle
+		 *
+		 * @param {object} store the vuex store
+		 * @param {Function} store.commit commit changes
+		 * @param {string} circleId ID of the circle
+		 */
+		async [GET_CIRCLE_MEMBERS]({ commit }, circleId) {
+			const response = await axios.get(generateOcsUrl(`apps/circles/circles/${circleId}/members`))
+			commit(SET_CIRCLE_MEMBERS, { circleId, members: response.data.ocs.data })
+		},
+
+		/**
 		 * Add members to a circle
 		 *
 		 * @param {object} _ the vuex store
 		 * @param {object} params the params object
-		 * @param {number} params.circleId ID of the circle
+		 * @param {string} params.circleId ID of the circle
 		 * @param {object} params.members Object with members to be added
 		 */
 		async [ADD_MEMBERS_TO_CIRCLE](_, { circleId, members }) {

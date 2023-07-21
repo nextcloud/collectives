@@ -11,71 +11,78 @@
 			<MagnifyIcon :size="16" />
 		</NcTextField>
 
-		<!-- Selected members -->
-		<SelectedMembers v-if="showSelection"
-			:selected-members="selectedMembers"
-			@delete-from-selection="deleteFromSelection" />
+		<div class="member-picker-list">
+			<!-- Current members (optional) -->
+			<SkeletonLoading v-if="showCurrentSkeleton" type="members-list" :count="3" />
+			<CurrentMembers v-else-if="showCurrent"
+				:current-members="currentMembers"
+				:search-query="searchQuery" />
 
-		<!-- No search yet -->
-		<NcEmptyContent v-if="!isSearching && !hasSearchResults"
-			:title="t('collectives', 'Search for people to add')"
-			class="empty-content">
-			<template #icon>
-				<MagnifyIcon :size="20" />
+			<!-- Selected members (optional) -->
+			<SelectedMembers v-if="!showCurrentSkeleton && showSelection"
+				:selected-members="selectedMembers"
+				@delete-from-selection="deleteFromSelection" />
+
+			<!-- Searched and picked members -->
+			<MemberSearchResults v-if="!showCurrentSkeleton && hasSearchResults"
+				:search-results="searchResults"
+				:selection-set="selectedMembers"
+				@click="onClickMember" />
+
+			<!-- No search results -->
+			<template v-else-if="!showCurrentSkeleton">
+				<NcAppNavigationCaption class="member-picker-caption" :title="t('collectives', 'Add users, groups or circles…')" />
+				<Hint v-if="!isSearching" :hint="t('collectives', 'Search for members to add')" />
+				<Hint v-else-if="isSearchLoading" :hint="t('collectives', 'Loading…')" />
+				<Hint v-else :hint="t('collectives', 'No search results')" />
 			</template>
-		</NcEmptyContent>
-
-		<!-- Loading -->
-		<NcEmptyContent v-else-if="membersLoading" :title="t('collectives', 'Loading …')">
-			<template #icon>
-				<NcLoadingIcon :size="20" />
-			</template>
-		</NcEmptyContent>
-
-		<!-- Searched and picked members -->
-		<MemberSearchResults v-else-if="hasSearchResults"
-			:search-results="searchResults"
-			:selection-set="selectedMembers"
-			@click="onClickMember" />
-
-		<!-- No results -->
-		<NcEmptyContent v-else
-			:title="t('collectives', 'No search results')"
-			class="empty-content">
-			<template #icon>
-				<MagnifyIcon :size="20" />
-			</template>
-		</NcEmptyContent>
+		</div>
 	</div>
 </template>
 
 <script>
 import axios from '@nextcloud/axios'
 import debounce from 'debounce'
-import { shareTypes } from '../../constants.js'
+import { autocompleteSourcesToCircleMemberTypes, circlesMemberTypes, shareTypes } from '../../constants.js'
+import { getCurrentUser } from '@nextcloud/auth'
 import { generateOcsUrl } from '@nextcloud/router'
 import { showError } from '@nextcloud/dialogs'
-import { NcEmptyContent, NcLoadingIcon, NcTextField } from '@nextcloud/vue'
+import { NcAppNavigationCaption, NcTextField } from '@nextcloud/vue'
+import CurrentMembers from './CurrentMembers.vue'
 import MagnifyIcon from 'vue-material-design-icons/Magnify.vue'
+import Hint from './Hint.vue'
 import MemberSearchResults from './MemberSearchResults.vue'
 import SelectedMembers from './SelectedMembers.vue'
+import SkeletonLoading from '../SkeletonLoading.vue'
 
 export default {
 	name: 'MemberPicker',
 
 	components: {
+		NcAppNavigationCaption,
+		CurrentMembers,
+		Hint,
 		MagnifyIcon,
 		MemberSearchResults,
-		NcEmptyContent,
-		NcLoadingIcon,
 		NcTextField,
 		SelectedMembers,
+		SkeletonLoading,
 	},
 
 	props: {
+		showCurrent: {
+			type: Boolean,
+			default: false,
+		},
 		showSelection: {
 			type: Boolean,
 			default: false,
+		},
+		currentMembers: {
+			type: Array,
+			default() {
+				return []
+			},
 		},
 		selectedMembers: {
 			type: Object,
@@ -89,7 +96,7 @@ export default {
 		return {
 			searchQuery: '',
 			searchResults: [],
-			membersLoading: false,
+			isSearchLoading: false,
 		}
 	},
 
@@ -101,10 +108,10 @@ export default {
 		hasSearchResults() {
 			return this.searchResults.length !== 0
 		},
-	},
 
-	beforeMount() {
-		this.fetchSearchResults()
+		showCurrentSkeleton() {
+			return this.showCurrent && this.currentMembers.length === 0
+		},
 	},
 
 	mounted() {
@@ -137,13 +144,22 @@ export default {
 						shareTypes: searchShareTypes,
 					},
 				})
-				this.membersLoading = false
-				this.searchResults = response.data.ocs.data
+				this.isSearchLoading = false
+
+				this.searchResults = response.data.ocs.data.filter(this.filterCurrentMembers)
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'An error occurred while performing the search'))
-				this.membersLoading = false
+				this.isSearchLoading = false
 			}
+		},
+
+		// Filter out current members
+		filterCurrentMembers(item) {
+			return !this.currentMembers.find(m => {
+				return m.userType === circlesMemberTypes[autocompleteSourcesToCircleMemberTypes[item.source]]
+					&& m.displayName === item.label
+			})
 		},
 
 		deleteFromSelection(member) {
@@ -156,7 +172,7 @@ export default {
 
 		onSearch() {
 			this.searchResults = []
-			this.membersLoading = true
+			this.isSearchLoading = true
 			this.debounceFetchSearchResults()
 		},
 	},
@@ -169,7 +185,15 @@ export default {
 	display: flex;
 	flex-direction: column;
 	gap: 0.5rem;
-	// TODO: Fix cropped bottom
 	height: 100%;
+
+	&-caption:not(:first-child) {
+		margin-top: 0;
+	}
+
+	&-list {
+		height: 100%;
+		overflow-y: auto;
+	}
 }
 </style>

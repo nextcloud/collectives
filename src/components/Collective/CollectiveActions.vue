@@ -1,5 +1,13 @@
 <template>
 	<div>
+		<NcActionButton v-if="isCollectiveAdmin(collective)"
+			:close-after-click="true"
+			@click="openCollectiveMembers()">
+			<template #icon>
+				<AccountMultipleIcon :size="20" />
+			</template>
+			{{ t('collectives', 'Manage members') }}
+		</NcActionButton>
 		<NcActionLink v-if="showManageMembers"
 			:href="circleLink">
 			<template #icon>
@@ -79,6 +87,7 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { NcActionButton, NcActionCheckbox, NcActionLink, NcActionSeparator, NcLoadingIcon } from '@nextcloud/vue'
 import { showError, showUndo } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
+import AccountMultipleIcon from 'vue-material-design-icons/AccountMultiple.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 import CirclesIcon from '../Icon/CirclesIcon.vue'
 import CogIcon from 'vue-material-design-icons/Cog.vue'
@@ -101,6 +110,7 @@ export default {
 	name: 'CollectiveActions',
 
 	components: {
+		AccountMultipleIcon,
 		CirclesIcon,
 		CheckIcon,
 		CogIcon,
@@ -198,6 +208,7 @@ export default {
 		}),
 
 		...mapMutations([
+			'setMembersCollectiveId',
 			'setSettingsCollectiveId',
 		]),
 
@@ -214,6 +225,10 @@ export default {
 
 		copyShare(collective) {
 			this.copyToClipboard(window.location.origin + this.collectiveShareUrl(collective))
+		},
+
+		openCollectiveMembers() {
+			this.setMembersCollectiveId(this.collective.id)
 		},
 
 		openCollectiveSettings() {

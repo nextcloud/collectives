@@ -65,7 +65,6 @@
 </template>
 
 <script>
-import { getCurrentUser } from '@nextcloud/auth'
 import { NcAppNavigationCaption, NcUserBubble } from '@nextcloud/vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 
@@ -95,13 +94,7 @@ export default {
 				return []
 			}
 
-			const searchResultUsers = this.searchResults.filter(item => item.source === 'users')
-			return searchResultUsers.filter(user => {
-				if (user.id === getCurrentUser().uid) {
-					return false
-				}
-				return true
-			})
+			return this.searchResults.filter(item => item.source === 'users')
 		},
 
 		addableGroups() {
@@ -128,8 +121,8 @@ export default {
 	},
 
 	methods: {
-		onClick(entity) {
-			this.$emit('click', entity)
+		onClick(item) {
+			this.$emit('click', item)
 		},
 
 		generateKey(item) {
@@ -147,11 +140,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.member-search-results {
-	height: 100%;
-	overflow-y: auto;
-}
-
 .member-picker {
 	&-caption:not(:first-child) {
 		margin-top: 0;
