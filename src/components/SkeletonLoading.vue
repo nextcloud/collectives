@@ -196,23 +196,19 @@ $messages-list-max-width: 670px;
 	}
 
 	&-line-one {
-		y: 5px;
 		y: 0.33em;
 		width: 175px;
 	}
 
 	&-line-two {
-		y: 25px;
 		y: 1.66em;
 	}
 
 	&-line-three {
-		y: 45px;
 		y: 3em;
 	}
 
 	&-line-four {
-		y: 65px;
 		y: 4.33em;
 	}
 }
