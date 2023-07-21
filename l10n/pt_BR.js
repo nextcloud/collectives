@@ -134,6 +134,7 @@ OC.L10N.register(
     "No deleted pages." : "Nenhuma página excluída.",
     "Deleted" : "Excluído",
     "Page permanently deleted" : "Página excluída permanentemente",
+    "Search pages" : "Pesquisar páginas",
     "Search pages ..." : "Buscar páginas…",
     "Sort order" : "Ordem",
     "Sort by custom order" : "Classificar por ordem personalizada",
