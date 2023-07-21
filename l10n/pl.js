@@ -56,7 +56,7 @@ OC.L10N.register(
     "Members" : "Członkowie",
     "Members can be managed via the connected circle in the Contacts app." : "Członkowie mogą być zarządzani przez powiązane kręgi w aplikacji Kontakty.",
     "Open circle in Contacts" : "Otwórz kręgi w Kontaktach",
-    "Danger zone" : "Strefa niebezpieczna",
+    "Danger zone" : "Strefa niebezpieczeństwa",
     "Delete collective" : "Usuń kolektyw",
     "Change emoji" : "Zmień emotikon",
     "Add emoji" : "Dodaj emotikon",
