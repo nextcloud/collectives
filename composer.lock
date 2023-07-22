@@ -7,24 +7,86 @@
     "content-hash": "062b5fd41692985b320dc1e865edc1ee",
     "packages": [
         {
-            "name": "teamtnt/tntsearch",
-            "version": "v3.2.0",
+            "name": "predis/predis",
+            "version": "v2.2.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/teamtnt/tntsearch.git",
-                "reference": "177c4252b1539458c295fc67b32f7e2be3a1c1b1"
+                "url": "https://github.com/predis/predis.git",
+                "reference": "33b70b971a32b0d28b4f748b0547593dce316e0d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/teamtnt/tntsearch/zipball/177c4252b1539458c295fc67b32f7e2be3a1c1b1",
-                "reference": "177c4252b1539458c295fc67b32f7e2be3a1c1b1",
+                "url": "https://api.github.com/repos/predis/predis/zipball/33b70b971a32b0d28b4f748b0547593dce316e0d",
+                "reference": "33b70b971a32b0d28b4f748b0547593dce316e0d",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2 || ^8.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.3",
+                "phpstan/phpstan": "^1.9",
+                "phpunit/phpunit": "^8.0 || ~9.4.4"
+            },
+            "suggest": {
+                "ext-relay": "Faster connection with in-memory caching (>=0.6.2)"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Predis\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Till Krüss",
+                    "homepage": "https://till.im",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "A flexible and feature-complete Redis client for PHP.",
+            "homepage": "http://github.com/predis/predis",
+            "keywords": [
+                "nosql",
+                "predis",
+                "redis"
+            ],
+            "support": {
+                "issues": "https://github.com/predis/predis/issues",
+                "source": "https://github.com/predis/predis/tree/v2.2.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/sponsors/tillkruss",
+                    "type": "github"
+                }
+            ],
+            "time": "2023-06-14T10:37:31+00:00"
+        },
+        {
+            "name": "teamtnt/tntsearch",
+            "version": "v4.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/teamtnt/tntsearch.git",
+                "reference": "d3fc3e7ccc1760dc4b8604807be01140fa7f69c5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/teamtnt/tntsearch/zipball/d3fc3e7ccc1760dc4b8604807be01140fa7f69c5",
+                "reference": "d3fc3e7ccc1760dc4b8604807be01140fa7f69c5",
                 "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",
                 "ext-pdo_sqlite": "*",
                 "ext-sqlite3": "*",
-                "php": "~7.1|^8"
+                "php": "~7.1|^8",
+                "predis/predis": "^2.2"
             },
             "require-dev": {
                 "phpunit/phpunit": "7.*|8.*|9.*",
@@ -66,7 +128,7 @@
             ],
             "support": {
                 "issues": "https://github.com/teamtnt/tntsearch/issues",
-                "source": "https://github.com/teamtnt/tntsearch/tree/v3.2.0"
+                "source": "https://github.com/teamtnt/tntsearch/tree/v4.2.1"
             },
             "funding": [
                 {
@@ -82,7 +144,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2023-05-04T09:38:01+00:00"
+            "time": "2023-07-19T10:35:23+00:00"
         }
     ],
     "packages-dev": [
