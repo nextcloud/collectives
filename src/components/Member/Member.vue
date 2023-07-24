@@ -39,7 +39,7 @@
 					:close-after-click="true"
 					@click="setMemberLevel(memberLevels.LEVEL_ADMIN)">
 					<template #icon>
-						<AccountCogIcon :size="20" />
+						<CrownIcon :size="20" />
 					</template>
 					{{ t('collectives', 'Promote to admin') }}
 				</NcActionButton>
@@ -47,7 +47,7 @@
 					:close-after-click="true"
 					@click="setMemberLevel(memberLevels.LEVEL_MODERATOR)">
 					<template #icon>
-						<CrownIcon :size="20" />
+						<AccountCogIcon :size="20" />
 					</template>
 					{{ setLevelModeratorString }}
 				</NcActionButton>
