@@ -10,7 +10,7 @@
 					<MemberPicker :show-current="true"
 						:circle-id="collective.circleId"
 						:current-members="circleMembers(collective.circleId)"
-						@click-searched="onClickSearched" />
+						:on-click-searched="onClickSearched" />
 				</div>
 			</div>
 		</div>

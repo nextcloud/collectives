@@ -29,7 +29,7 @@
 				:circle-id="circleId"
 				:search-results="filteredSearchResults"
 				:selection-set="selectedMembers"
-				@click="onClickSearched" />
+				:on-click-searched="onClickSearched" />
 
 			<!-- No search results -->
 			<template v-else-if="!showCurrentSkeleton">
@@ -95,6 +95,12 @@ export default {
 				return {}
 			},
 		},
+		onClickSearched: {
+			type: Function,
+			default() {
+				return () => {}
+			},
+		},
 	},
 
 	data() {
@@ -132,6 +138,7 @@ export default {
 	methods: {
 		clearSearch() {
 			this.searchQuery = ''
+			this.searchResults = []
 		},
 
 		debounceFetchSearchResults: debounce(function() {
@@ -173,11 +180,6 @@ export default {
 
 		deleteFromSelection(member) {
 			this.$emit('delete-from-selection', member)
-		},
-
-		onClickSearched(member) {
-			this.$emit('click-member', member)
-			this.$emit('click-searched', member)
 		},
 
 		onSearch() {

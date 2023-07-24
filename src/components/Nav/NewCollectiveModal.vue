@@ -86,7 +86,7 @@
 				<div class="modal-collective-members">
 					<MemberPicker :show-selection="true"
 						:selected-members="selectedMembers"
-						@click-member="onClickMember"
+						:on-click-searched="onClickSearched"
 						@delete-from-selection="deleteMember" />
 				</div>
 
@@ -294,7 +294,7 @@ export default {
 			this.$delete(this.selectedMembers, `${member.source}-${member.id}`, member)
 		},
 
-		onClickMember(member) {
+		onClickSearched(member) {
 			if (`${member.source}-${member.id}` in this.selectedMembers) {
 				this.deleteMember(member)
 				return

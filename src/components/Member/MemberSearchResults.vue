@@ -11,6 +11,7 @@
 				:user-type="circleUserType(item.source)"
 				:is-searched="true"
 				:is-selected="isSelected(item)"
+				:is-loading="isLoading(item)"
 				@click="onClick(item)" />
 		</template>
 
@@ -25,6 +26,7 @@
 				:user-type="circleUserType(item.source)"
 				:is-searched="true"
 				:is-selected="isSelected(item)"
+				:is-loading="isLoading(item)"
 				@click="onClick(item)" />
 		</template>
 
@@ -39,6 +41,7 @@
 				:user-type="circleUserType(item.source)"
 				:is-searched="true"
 				:is-selected="isSelected(item)"
+				:is-loading="isLoading(item)"
 				@click="onClick(item)" />
 		</template>
 	</div>
@@ -70,6 +73,18 @@ export default {
 			type: Object,
 			required: true,
 		},
+		onClickSearched: {
+			type: Function,
+			default() {
+				return () => {}
+			},
+		},
+	},
+
+	data() {
+		return {
+			loadingItems: {},
+		}
 	},
 
 	computed: {
@@ -108,11 +123,19 @@ export default {
 				return `${item.source}-${item.id}` in this.selectionSet
 			}
 		},
+
+		isLoading() {
+			return function(item) {
+				return `${item.source}-${item.id}` in this.loadingItems
+			}
+		},
 	},
 
 	methods: {
-		onClick(item) {
-			this.$emit('click', item)
+		async onClick(item) {
+			this.$set(this.loadingItems, `${item.source}-${item.id}`, true)
+			await this.onClickSearched(item)
+			this.$delete(this.loadingItems, `${item.source}-${item.id}`)
 		},
 
 		generateKey(item) {

@@ -21,6 +21,11 @@
 				<span v-if="showLevelLabel" class="member-row__level-indicator">({{ levelLabel }})</span>
 			</div>
 
+			<!-- Loading icon -->
+			<div v-if="isLoading || isLoadingLevel" class="member-row__loading">
+				<NcLoadingIcon :size="20" />
+			</div>
+
 			<!-- Checkmark icon for selected -->
 			<div v-if="isSearched && isSelected" class="member-row__checkmark">
 				<CheckIcon :size="20" />
@@ -75,7 +80,7 @@ import {
 	CHANGE_CIRCLE_MEMBER_LEVEL,
 	REMOVE_MEMBER_FROM_CIRCLE,
 } from '../../store/actions.js'
-import { NcActions, NcActionButton, NcActionSeparator, NcAvatar } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcActionSeparator, NcAvatar, NcLoadingIcon } from '@nextcloud/vue'
 import AccountCogIcon from 'vue-material-design-icons/AccountCog.vue'
 import AccountIcon from 'vue-material-design-icons/Account.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
@@ -95,6 +100,7 @@ export default {
 		NcActionButton,
 		NcActionSeparator,
 		NcAvatar,
+		NcLoadingIcon,
 	},
 
 	props: {
@@ -134,10 +140,15 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		isLoading: {
+			type: Boolean,
+			default: false,
+		},
 	},
 
 	data() {
 		return {
+			isLoadingLevel: false,
 			memberLevels,
 		}
 	},
@@ -187,15 +198,19 @@ export default {
 
 		async setMemberLevel(level) {
 			if (this.circleId) {
+				this.isLoadingLevel = true
 				await this.dispatchChangeCircleMemberLevel({ circleId: this.circleId, memberId: this.memberId, level })
 				await this.dispatchGetCircleMembers(this.circleId)
+				this.isLoadingLevel = false
 			}
 		},
 
 		async removeMember() {
 			if (this.circleId) {
+				this.isLoadingLevel = true
 				await this.dispatchRemoveMemberFromCircle({ circleId: this.circleId, memberId: this.memberId })
 				await this.dispatchGetCircleMembers(this.circleId)
+				this.isLoadingLevel = false
 			}
 		},
 
@@ -237,6 +252,10 @@ export default {
 		color: var(--color-text-maxcontrast);
 		font-weight: 300;
 		padding-left: 5px;
+	}
+
+	&__loading {
+		margin-right: 8px;
 	}
 
 	&:hover, &:focus {
