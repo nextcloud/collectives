@@ -1,5 +1,5 @@
 <template>
-	<NcModal :title="t('collectives', 'Members of collective {name}', { name: collective.name })" @close="onClose">
+	<NcModal @close="onClose">
 		<div class="modal-content">
 			<div class="modal-collective-wrapper">
 				<h2 class="modal-collective-title">

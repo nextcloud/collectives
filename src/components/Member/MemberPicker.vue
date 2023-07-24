@@ -26,6 +26,7 @@
 
 			<!-- Searched and picked members -->
 			<MemberSearchResults v-if="!showCurrentSkeleton && hasSearchResults"
+				:circle-id="circleId"
 				:search-results="filteredSearchResults"
 				:selection-set="selectedMembers"
 				@click="onClickSearched" />
@@ -72,7 +73,7 @@ export default {
 	props: {
 		circleId: {
 			type: String,
-			required: true,
+			default: null,
 		},
 		showCurrent: {
 			type: Boolean,

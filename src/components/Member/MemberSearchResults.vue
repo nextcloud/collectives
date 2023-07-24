@@ -3,81 +3,65 @@
 		<template v-if="addableUsers.length !== 0">
 			<NcAppNavigationCaption :title="t('collectives', 'Add users')"
 				class="member-picker-caption" />
-			<NcUserBubble v-for="item in addableUsers"
+			<Member v-for="item in addableUsers"
 				:key="generateKey(item)"
-				class="member-picker-bubble"
-				:class="{'member-picker-bubble-selected': isSelected(item)}"
+				:circle-id="circleId"
+				:user-id="item.id"
 				:display-name="item.label"
-				:user="item.user"
-				:margin="6"
-				:size="44"
-				@click.stop.prevent="onClick(item)">
-				<template #title>
-					<div class="member-picker-bubble-checkmark">
-						<CheckIcon :size="16" />
-					</div>
-				</template>
-			</NcUserBubble>
+				:user-type="circleUserType(item.source)"
+				:is-searched="true"
+				:is-selected="isSelected(item)"
+				@click="onClick(item)" />
 		</template>
 
 		<template v-if="addableGroups.length !== 0">
 			<NcAppNavigationCaption :title="t('collectives', 'Add groups')"
 				class="member-picker-caption" />
-			<NcUserBubble v-for="item in addableGroups"
+			<Member v-for="item in addableGroups"
 				:key="generateKey(item)"
-				class="member-picker-bubble"
-				:class="{'member-picker-bubble-selected': isSelected(item)}"
+				:circle-id="circleId"
+				:user-id="item.id"
 				:display-name="item.label"
-				:user="item.user"
-				avatar-image="icon-group-white"
-				:margin="6"
-				:size="44"
-				@click.stop.prevent="onClick(item)">
-				<template #title>
-					<div class="member-picker-bubble-checkmark">
-						<CheckIcon :size="16" />
-					</div>
-				</template>
-			</NcUserBubble>
+				:user-type="circleUserType(item.source)"
+				:is-searched="true"
+				:is-selected="isSelected(item)"
+				@click="onClick(item)" />
 		</template>
 
 		<template v-if="addableCircles.length !== 0">
 			<NcAppNavigationCaption :title="t('collectives', 'Add circles')"
 				class="member-picker-caption" />
-			<NcUserBubble v-for="item in addableCircles"
+			<Member v-for="item in addableCircles"
 				:key="generateKey(item)"
-				class="member-picker-bubble"
-				:class="{'member-picker-bubble-selected': isSelected(item)}"
+				:circle-id="circleId"
+				:user-id="item.id"
 				:display-name="item.label"
-				:user="item.user"
-				avatar-image="icon-group-white"
-				:margin="6"
-				:size="44"
-				@click.stop.prevent="onClick(item)">
-				<template #title>
-					<div class="member-picker-bubble-checkmark">
-						<CheckIcon :size="16" />
-					</div>
-				</template>
-			</NcUserBubble>
+				:user-type="circleUserType(item.source)"
+				:is-searched="true"
+				:is-selected="isSelected(item)"
+				@click="onClick(item)" />
 		</template>
 	</div>
 </template>
 
 <script>
-import { NcAppNavigationCaption, NcUserBubble } from '@nextcloud/vue'
-import CheckIcon from 'vue-material-design-icons/Check.vue'
+import { NcAppNavigationCaption } from '@nextcloud/vue'
+import { autocompleteSourcesToCircleMemberTypes, circlesMemberTypes } from '../../constants.js'
+import Member from './Member.vue'
 
 export default {
 	name: 'MemberSearchResults',
 
 	components: {
-		CheckIcon,
+		Member,
 		NcAppNavigationCaption,
-		NcUserBubble,
 	},
 
 	props: {
+		circleId: {
+			type: String,
+			default: null,
+		},
 		searchResults: {
 			type: Array,
 			required: true,
@@ -113,6 +97,12 @@ export default {
 			return this.searchResults.filter(item => item.source === 'circles')
 		},
 
+		circleUserType() {
+			return function(source) {
+				return circlesMemberTypes[autocompleteSourcesToCircleMemberTypes[source]]
+			}
+		},
+
 		isSelected() {
 			return function(item) {
 				return `${item.source}-${item.id}` in this.selectionSet
@@ -143,41 +133,6 @@ export default {
 .member-picker {
 	&-caption:not(:first-child) {
 		margin-top: 0;
-	}
-
-	&-bubble {
-		// Overwrite .user-bubble__wrapper styling from NcUserBubble
-		display: flex !important;
-		margin-bottom: 4px;
-
-		:deep(.user-bubble__content) {
-			background-color: var(--color-main-background);
-			align-items: center;
-			width: 100%;
-		}
-
-		:deep(.user-bubble__title) {
-			width: calc(100% - 80px);
-		}
-
-		&-checkmark {
-			display: block;
-			margin-right: -4px;
-			opacity: 0;
-		}
-
-		// Show checkmark on selected
-		&-selected .member-picker-bubble-checkmark {
-			opacity: 1;
-		}
-
-		// Show primary bg on hovering entities
-		&-selected, &:hover, &:focus {
-			:deep(.user-bubble__content) {
-				// better visual with light default tint
-				background-color: var(--color-primary-element-light);
-			}
-		}
 	}
 }
 </style>

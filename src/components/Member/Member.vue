@@ -1,6 +1,11 @@
 <template>
 	<div>
-		<div class="member-row" :class="{'is-searched': isSearched}">
+		<div class="member-row"
+			:class="{
+				'clickable': isClickable,
+				'selected': isSelected,
+			}"
+			@click="onClick">
 			<!-- Avatar -->
 			<NcAvatar :user="userId"
 				:is-no-user="isNoUser"
@@ -16,8 +21,13 @@
 				<span v-if="showLevelLabel" class="member-row__level-indicator">({{ levelLabel }})</span>
 			</div>
 
+			<!-- Checkmark icon for selected -->
+			<div v-if="isSearched && isSelected" class="member-row__checkmark">
+				<CheckIcon :size="20" />
+			</div>
+
 			<!-- Action menu -->
-			<NcActions v-if="!isCurrentUser && !isSearched"
+			<NcActions v-else-if="!isSearched && !isCurrentUser"
 				:force-menu="true"
 				class="member-row__actions">
 				<NcActionButton v-if="!isAdmin"
@@ -68,6 +78,7 @@ import {
 import { NcActions, NcActionButton, NcActionSeparator, NcAvatar } from '@nextcloud/vue'
 import AccountCogIcon from 'vue-material-design-icons/AccountCog.vue'
 import AccountIcon from 'vue-material-design-icons/Account.vue'
+import CheckIcon from 'vue-material-design-icons/Check.vue'
 import CrownIcon from 'vue-material-design-icons/Crown.vue'
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 
@@ -77,6 +88,7 @@ export default {
 	components: {
 		AccountCogIcon,
 		AccountIcon,
+		CheckIcon,
 		CrownIcon,
 		DeleteIcon,
 		NcActions,
@@ -88,11 +100,11 @@ export default {
 	props: {
 		circleId: {
 			type: String,
-			required: true,
+			default: null,
 		},
 		memberId: {
 			type: String,
-			required: true,
+			default: null,
 		},
 		userId: {
 			type: String,
@@ -118,6 +130,10 @@ export default {
 			type: Boolean,
 			default: true,
 		},
+		isSelected: {
+			type: Boolean,
+			default: false,
+		},
 	},
 
 	data() {
@@ -127,6 +143,9 @@ export default {
 	},
 
 	computed: {
+		isClickable() {
+			return this.isSearched
+		},
 		isNoUser() {
 			return this.userType !== circlesMemberTypes.TYPE_USER
 		},
@@ -167,12 +186,23 @@ export default {
 		}),
 
 		async setMemberLevel(level) {
-			await this.dispatchChangeCircleMemberLevel({ circleId: this.circleId, memberId: this.memberId, level })
-			await this.dispatchGetCircleMembers(this.circleId)
+			if (this.circleId) {
+				await this.dispatchChangeCircleMemberLevel({ circleId: this.circleId, memberId: this.memberId, level })
+				await this.dispatchGetCircleMembers(this.circleId)
+			}
 		},
+
 		async removeMember() {
-			await this.dispatchRemoveMemberFromCircle({ circleId: this.circleId, memberId: this.memberId })
-			await this.dispatchGetCircleMembers(this.circleId)
+			if (this.circleId) {
+				await this.dispatchRemoveMemberFromCircle({ circleId: this.circleId, memberId: this.memberId })
+				await this.dispatchGetCircleMembers(this.circleId)
+			}
+		},
+
+		onClick(event) {
+			if (this.isClickable) {
+				this.$emit('click')
+			}
 		},
 	},
 }
@@ -213,40 +243,19 @@ export default {
 		background-color: var(--color-background-hover);
 	}
 
-	.is-searched {
-		// Show primary bg on hovering entities
-		&:hover, &:focus {
+	&.clickable {
+		cursor: pointer;
+
+		.avatar-class-icon,
+		.member-row__user-descriptor,
+		.member-row__user-name,
+		.member-row__level-indicator {
+			cursor: pointer;
+		}
+
+		// If clickable, show primary bg when selected and on hovering
+		&:hover, &:focus, &.selected {
 			background-color: var(--color-primary-element-light);
-		}
-	}
-}
-
-.member-picker {
-	&-caption:not(:first-child) {
-		margin-top: 0;
-	}
-
-	&-bubble {
-		// Overwrite .user-bubble__wrapper styling from NcUserBubble
-		display: flex !important;
-		margin-bottom: 4px;
-
-		:deep(.user-bubble__content) {
-			background-color: var(--color-main-background);
-			align-items: center;
-			width: 100%;
-		}
-
-		:deep(.user-bubble__title) {
-			width: calc(100% - 80px);
-		}
-
-		// Show primary bg on hovering entities
-		&:hover, &:focus {
-			:deep(.user-bubble__content) {
-				// better visual with light default tint
-				background-color: var(--color-primary-element-light);
-			}
 		}
 	}
 }
