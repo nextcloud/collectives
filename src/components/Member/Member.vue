@@ -1,75 +1,76 @@
 <template>
-	<div>
-		<div class="member-row"
-			:class="{
-				'clickable': isClickable,
-				'selected': isSelected,
-			}"
-			@click="onClick">
-			<!-- Avatar -->
-			<NcAvatar :user="userId"
-				:is-no-user="isNoUser"
-				:icon-class="iconClass"
-				:disable-menu="true"
-				:disable-tooltip="true"
-				:show-user-status="false"
-				:size="44" />
+	<li class="member-row"
+		:tabindex="tabindex"
+		:role="ariaRole"
+		:class="{
+			'clickable': isClickable,
+			'selected': isSelected,
+		}"
+		@click="onClick"
+		@keyup.enter="onClick">
+		<!-- Avatar -->
+		<NcAvatar :user="userId"
+			:is-no-user="isNoUser"
+			:icon-class="iconClass"
+			:disable-menu="true"
+			:disable-tooltip="true"
+			:show-user-status="false"
+			:size="44" />
 
-			<!-- Data -->
-			<div class="member-row__user-descriptor">
-				<span class="member-row__user-name">{{ displayName }}</span>
-				<span v-if="showLevelLabel" class="member-row__level-indicator">({{ levelLabel }})</span>
-			</div>
-
-			<!-- Loading icon -->
-			<div v-if="isLoading || isLoadingLevel" class="member-row__loading">
-				<NcLoadingIcon :size="20" />
-			</div>
-
-			<!-- Checkmark icon for selected -->
-			<div v-if="isSearched && isSelected" class="member-row__checkmark">
-				<CheckIcon :size="20" />
-			</div>
-
-			<!-- Action menu -->
-			<NcActions v-else-if="!isSearched && !isCurrentUser"
-				:force-menu="true"
-				class="member-row__actions">
-				<NcActionButton v-if="!isAdmin"
-					:close-after-click="true"
-					@click="setMemberLevel(memberLevels.LEVEL_ADMIN)">
-					<template #icon>
-						<CrownIcon :size="20" />
-					</template>
-					{{ t('collectives', 'Promote to admin') }}
-				</NcActionButton>
-				<NcActionButton v-if="!isModerator"
-					:close-after-click="true"
-					@click="setMemberLevel(memberLevels.LEVEL_MODERATOR)">
-					<template #icon>
-						<AccountCogIcon :size="20" />
-					</template>
-					{{ setLevelModeratorString }}
-				</NcActionButton>
-				<NcActionButton v-if="!isMember"
-					:close-after-click="true"
-					@click="setMemberLevel(memberLevels.LEVEL_MEMBER)">
-					<template #icon>
-						<AccountIcon :size="20" />
-					</template>
-					{{ t('collectives', 'Demote to member') }}
-				</NcActionButton>
-				<NcActionSeparator />
-				<NcActionButton :close-after-click="true"
-					@click="removeMember">
-					<template #icon>
-						<DeleteIcon :size="20" />
-					</template>
-					{{ t('collectives', 'Remove') }}
-				</NcActionButton>
-			</NcActions>
+		<!-- Data -->
+		<div class="member-row__user-descriptor">
+			<span class="member-row__user-name">{{ displayName }}</span>
+			<span v-if="showLevelLabel" class="member-row__level-indicator">({{ levelLabel }})</span>
 		</div>
-	</div>
+
+		<!-- Loading icon -->
+		<div v-if="isLoading || isLoadingLevel" class="member-row__loading">
+			<NcLoadingIcon :size="20" />
+		</div>
+
+		<!-- Checkmark icon for selected -->
+		<div v-if="isSearched && isSelected" class="member-row__checkmark">
+			<CheckIcon :size="20" />
+		</div>
+
+		<!-- Action menu -->
+		<NcActions v-else-if="!isSearched && !isCurrentUser"
+			:force-menu="true"
+			class="member-row__actions">
+			<NcActionButton v-if="!isAdmin"
+				:close-after-click="true"
+				@click="setMemberLevel(memberLevels.LEVEL_ADMIN)">
+				<template #icon>
+					<CrownIcon :size="20" />
+				</template>
+				{{ t('collectives', 'Promote to admin') }}
+			</NcActionButton>
+			<NcActionButton v-if="!isModerator"
+				:close-after-click="true"
+				@click="setMemberLevel(memberLevels.LEVEL_MODERATOR)">
+				<template #icon>
+					<AccountCogIcon :size="20" />
+				</template>
+				{{ setLevelModeratorString }}
+			</NcActionButton>
+			<NcActionButton v-if="!isMember"
+				:close-after-click="true"
+				@click="setMemberLevel(memberLevels.LEVEL_MEMBER)">
+				<template #icon>
+					<AccountIcon :size="20" />
+				</template>
+				{{ t('collectives', 'Demote to member') }}
+			</NcActionButton>
+			<NcActionSeparator />
+			<NcActionButton :close-after-click="true"
+				@click="removeMember">
+				<template #icon>
+					<DeleteIcon :size="20" />
+				</template>
+				{{ t('collectives', 'Remove') }}
+			</NcActionButton>
+		</NcActions>
+	</li>
 </template>
 
 <script>
@@ -156,6 +157,12 @@ export default {
 	computed: {
 		isClickable() {
 			return this.isSearched
+		},
+		tabindex() {
+			return this.isClickable ? 0 : undefined
+		},
+		ariaRole() {
+			return this.isClickable ? 'button' : undefined
 		},
 		isNoUser() {
 			return this.userType !== circlesMemberTypes.TYPE_USER
