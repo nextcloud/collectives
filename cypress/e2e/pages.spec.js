@@ -103,7 +103,13 @@ describe('Page', function() {
 			cy.get('#titleform input.title')
 				.should('not.have.attr', 'disabled')
 			cy.get('#titleform input.title')
-				.type('{selectAll}New page from Template{enter}')
+				.clear()
+			cy.intercept('PUT', '**/_api/*/_pages/parent/*/page/*').as('renamePage')
+			cy.get('#titleform input.title')
+				.type('New page from Template')
+			cy.get('#titleform input.title')
+				.blur()
+			cy.wait('@renamePage')
 			// Flaky on stable25
 			if (Cypress.env('ncVersion') !== 'stable25') {
 				cy.getEditor(Cypress.config('defaultCommandTimeout') * 2)
@@ -227,7 +233,7 @@ describe('Page', function() {
 				cy.get('.tippy-content .link-picker__item')
 					.contains('Collective pages')
 					.click()
-				cy.get('.reference-picker input[type="text"]')
+				cy.get('.reference-picker input[type="search"]')
 					.type('Day 2')
 				cy.get('.search-result')
 					.contains('Day 2')

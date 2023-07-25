@@ -194,7 +194,6 @@ jobs:
       - name: Run Cypress
         uses: cypress-io/github-action@v5
         with:
-          browser: chrome
           record: true
           parallel: true
           wait-on: '${{ env.CYPRESS_baseUrl }}'
