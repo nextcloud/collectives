@@ -97,6 +97,7 @@ export default {
 	flex-direction: column;
 	width: 100%;
 	height: 550px;
+	max-height: 80vh;
 }
 
 .modal-collective-members {
