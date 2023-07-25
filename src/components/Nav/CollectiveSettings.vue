@@ -120,20 +120,6 @@
 			</div>
 		</NcAppSettingsSection>
 
-		<NcAppSettingsSection id="members" :title="t('collectives', 'Members')">
-			<div class="section-description">
-				{{ t('collectives', 'Members can be managed via the connected circle in the Contacts app.') }}
-			</div>
-			<div>
-				<NcButton v-tooltip="membersDisabledTooltip"
-					:aria-label="t('collectives', 'Open circle in Contacts')"
-					:disabled="!isContactsInstalled"
-					@click="openCircleLink">
-					{{ t('collectives', 'Open circle in Contacts') }}
-				</NcButton>
-			</div>
-		</NcAppSettingsSection>
-
 		<NcAppSettingsSection id="danger-zone" :title="t('collectives', 'Danger zone')">
 			<div>
 				<NcButton type="error" :aria-label="t('collectives', 'Delete collective')" @click="trashCollective()">
@@ -152,7 +138,6 @@ import { NcAppSettingsDialog, NcAppSettingsSection, NcButton, NcCheckboxRadioSwi
 import AlertCircleOutlineIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
 import NcEmojiPicker from '@nextcloud/vue/dist/Components/NcEmojiPicker.js'
 import EmoticonOutline from 'vue-material-design-icons/EmoticonOutline.vue'
-import { generateUrl } from '@nextcloud/router'
 import {
 	RENAME_CIRCLE,
 	UPDATE_COLLECTIVE,
@@ -198,7 +183,6 @@ export default {
 
 	computed: {
 		...mapState({
-			circles: (state) => state.circles.circles,
 			pages: (state) => state.pages.pages,
 		}),
 
@@ -217,15 +201,6 @@ export default {
 			return this.isCollectiveOwner(this.collective)
 				? t('collectives', 'Name of the collective')
 				: t('collectives', 'Renaming is limited to owners of the circle')
-		},
-
-		membersDisabledTooltip() {
-			return !this.isContactsInstalled
-				&& t('collectives', 'The contacts app is required to manage members')
-		},
-
-		isContactsInstalled() {
-			return 'contacts' in this.OC.appswebroots
 		},
 
 		isNameTooShort() {
@@ -359,10 +334,6 @@ export default {
 			}
 
 			this.done('renameCollective')
-		},
-
-		openCircleLink() {
-			window.open(generateUrl('/apps/contacts/direct/circle/' + this.collective.circleId), '_blank')
 		},
 
 		/**

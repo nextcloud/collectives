@@ -8,14 +8,7 @@
 			</template>
 			{{ t('collectives', 'Manage members') }}
 		</NcActionButton>
-		<NcActionLink v-if="showManageMembers"
-			:href="circleLink">
-			<template #icon>
-				<CirclesIcon :size="20" />
-			</template>
-			{{ t('collectives', 'Manage members') }}
-		</NcActionLink>
-		<NcActionSeparator v-if="showManageMembers" />
+		<NcActionSeparator v-if="isCollectiveAdmin(collective)" />
 		<NcActionButton v-if="collectiveCanShare(collective)"
 			v-show="!isShared"
 			:close-after-click="false"
@@ -71,8 +64,7 @@
 			</template>
 			{{ t('collectives', 'Settings') }}
 		</NcActionButton>
-		<NcActionButton v-if="!isCollectiveAdmin(collective)"
-			:close-after-click="true"
+		<NcActionButton :close-after-click="true"
 			@click="leaveCollectiveWithUndo(collective)">
 			{{ t('collectives', 'Leave collective') }}
 			<template #icon>
@@ -89,7 +81,6 @@ import { showError, showUndo } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
 import AccountMultipleIcon from 'vue-material-design-icons/AccountMultiple.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
-import CirclesIcon from '../Icon/CirclesIcon.vue'
 import CogIcon from 'vue-material-design-icons/Cog.vue'
 import ContentPasteIcon from 'vue-material-design-icons/ContentPaste.vue'
 import DownloadIcon from 'vue-material-design-icons/Download.vue'
@@ -111,7 +102,6 @@ export default {
 
 	components: {
 		AccountMultipleIcon,
-		CirclesIcon,
 		CheckIcon,
 		CogIcon,
 		ContentPasteIcon,
@@ -153,14 +143,6 @@ export default {
 			'isPublic',
 			'loading',
 		]),
-
-		isContactsInstalled() {
-			return 'contacts' in this.OC.appswebroots
-		},
-
-		showManageMembers() {
-			return this.isCollectiveAdmin(this.collective) && this.isContactsInstalled
-		},
 
 		circleLink() {
 			return generateUrl('/apps/contacts/direct/circle/' + this.collective.circleId)

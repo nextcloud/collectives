@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { showInfo, showError } from '@nextcloud/dialogs'
+import { showInfo } from '@nextcloud/dialogs'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { GET_COLLECTIVES_FOLDER, GET_COLLECTIVES, GET_TRASH_COLLECTIVES } from './store/actions.js'
 import displayError from './util/displayError.js'
@@ -65,11 +65,6 @@ export default {
 		if (!this.isPublic) {
 			this.getCollectivesFolder()
 			this.getTrashCollectives()
-		}
-
-		if (!this.isPublic && !('contacts' in this.OC.appswebroots)) {
-			console.error('The contacts app is required to manage members')
-			showError(t('collectives', 'The contacts app is required to manage members'))
 		}
 	},
 
