@@ -75,6 +75,7 @@
 
 <script>
 import { mapActions } from 'vuex'
+import { showError, showSuccess } from '@nextcloud/dialogs'
 import { circlesMemberTypes, memberLevels } from '../../constants.js'
 import {
 	GET_CIRCLE_MEMBERS,
@@ -207,8 +208,15 @@ export default {
 			if (this.circleId) {
 				this.isLoadingLevel = true
 				await this.dispatchChangeCircleMemberLevel({ circleId: this.circleId, memberId: this.memberId, level })
-				await this.dispatchGetCircleMembers(this.circleId)
-				this.isLoadingLevel = false
+					.then(async () => {
+						showSuccess(t('collectives', 'Member level changed'))
+						await this.dispatchGetCircleMembers(this.circleId)
+					}).catch((error) => {
+						showError(t('collectives', 'Could not change member level'))
+						throw error
+					}).finally(() => {
+						this.isLoadingLevel = false
+					})
 			}
 		},
 
@@ -216,7 +224,15 @@ export default {
 			if (this.circleId) {
 				this.isLoadingLevel = true
 				await this.dispatchRemoveMemberFromCircle({ circleId: this.circleId, memberId: this.memberId })
-				await this.dispatchGetCircleMembers(this.circleId)
+					.then(async () => {
+						showSuccess(t('collectives', 'Member removed'))
+						await this.dispatchGetCircleMembers(this.circleId)
+					}).catch((error) => {
+						showError(t('collectives', 'Could not remove member'))
+						throw error
+					}).finally(() => {
+						this.isLoadingLevel = false
+					})
 				this.isLoadingLevel = false
 			}
 		},
