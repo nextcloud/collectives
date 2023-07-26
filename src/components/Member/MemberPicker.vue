@@ -175,11 +175,12 @@ export default {
 			}
 		},
 
-		// Filter out current members
+		// Filter out circle itself and current members
 		filterSearchResults(item) {
 			return !this.currentMembers.find(m => {
-				return this.circleMemberType(m) === circlesMemberTypes[autocompleteSourcesToCircleMemberTypes[item.source]]
-					&& m.displayName === item.label
+				return (item.source === 'circlesx' && item.id === this.circleId)
+					|| (this.circleMemberType(m) === circlesMemberTypes[autocompleteSourcesToCircleMemberTypes[item.source]]
+						&& m.displayName === item.label)
 			})
 		},
 
