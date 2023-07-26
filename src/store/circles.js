@@ -21,6 +21,7 @@ import {
 	PATCH_COLLECTIVE_WITH_CIRCLE,
 	REMOVE_COLLECTIVE,
 } from './mutations.js'
+import { circlesMemberTypes } from '../constants.js'
 
 export default {
 	state: {
@@ -43,6 +44,14 @@ export default {
 		},
 
 		circleMembers: (state) => (circleId) => state.circleMembers[circleId] || [],
+
+		circleMemberType: () => (member) => {
+			// If the user type is a circle, this could originate from multiple sources
+			// Copied from Contacts app src/models/member.ts get userType()
+			return member.userType !== circlesMemberTypes.TYPE_CIRCLE
+				? member.userType
+				: member.basedOn.source
+		},
 	},
 
 	mutations: {

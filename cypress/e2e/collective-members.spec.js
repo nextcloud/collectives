@@ -45,8 +45,7 @@ describe('Collective members', function() {
 
 	describe('Manage members', function() {
 		it('Allows to add members', function() {
-			// const addMembers = ['alice', 'Bobs Group']
-			const addMembers = ['alice']
+			const addMembers = ['alice', 'Bobs Group']
 			for (const member of addMembers) {
 				cy.get('.member-picker input[type="text"]').clear()
 				cy.get('.member-picker input[type="text"]').type(member)
@@ -57,8 +56,7 @@ describe('Collective members', function() {
 		})
 
 		it('Allows to change membership management', function() {
-			// const member = 'Bobs Group'
-			const member = 'alice'
+			const member = 'Bobs Group'
 
 			// Promote to admin
 			cy.get('.current-members').contains('.member-row', member)
@@ -90,7 +88,6 @@ describe('Collective members', function() {
 		})
 
 		it('Allows to remove member', function() {
-			// const member = 'Bobs Group'
 			const member = 'alice'
 
 			cy.get('.current-members').contains('.member-row', member)

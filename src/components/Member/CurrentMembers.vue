@@ -8,7 +8,7 @@
 			:member-id="item.id"
 			:user-id="item.userId"
 			:display-name="item.displayName"
-			:user-type="item.userType"
+			:user-type="circleMemberType(item)"
 			:level="item.level"
 			:is-current-user="item.userId === currentUser"
 			:is-searched="false" />
@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { getCurrentUser } from '@nextcloud/auth'
 import { NcAppNavigationCaption } from '@nextcloud/vue'
 import Hint from './Hint.vue'
@@ -48,6 +49,10 @@ export default {
 	},
 
 	computed: {
+		...mapGetters([
+			'circleMemberType',
+		]),
+
 		isSearching() {
 			return this.searchQuery !== ''
 		},
@@ -99,8 +104,8 @@ export default {
 			}
 
 			// Sort by user type (user > group > circle)
-			if (m1.userType !== m2.userType) {
-				return m1.userType > m2.userType
+			if (this.circleMemberType(m1) !== this.circleMemberType(m2)) {
+				return this.circleMemberType(m1) > this.circleMemberType(m2)
 			}
 
 			// Sort by display name

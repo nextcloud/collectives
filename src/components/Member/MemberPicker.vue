@@ -43,6 +43,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import axios from '@nextcloud/axios'
 import debounce from 'debounce'
 import { autocompleteSourcesToCircleMemberTypes, circlesMemberTypes, shareTypes } from '../../constants.js'
@@ -112,6 +113,10 @@ export default {
 	},
 
 	computed: {
+		...mapGetters([
+			'circleMemberType',
+		]),
+
 		isSearching() {
 			return this.searchQuery !== ''
 		},
@@ -121,7 +126,7 @@ export default {
 		},
 
 		filteredSearchResults() {
-			return this.searchResults.filter(this.filterCurrentMembers)
+			return this.searchResults.filter(this.filterSearchResults)
 		},
 
 		showCurrentSkeleton() {
@@ -171,9 +176,9 @@ export default {
 		},
 
 		// Filter out current members
-		filterCurrentMembers(item) {
+		filterSearchResults(item) {
 			return !this.currentMembers.find(m => {
-				return m.userType === circlesMemberTypes[autocompleteSourcesToCircleMemberTypes[item.source]]
+				return this.circleMemberType(m) === circlesMemberTypes[autocompleteSourcesToCircleMemberTypes[item.source]]
 					&& m.displayName === item.label
 			})
 		},
