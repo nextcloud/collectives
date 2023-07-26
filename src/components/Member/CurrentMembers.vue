@@ -10,7 +10,7 @@
 			:display-name="item.displayName"
 			:user-type="circleMemberType(item)"
 			:level="item.level"
-			:is-current-user="item.userId === currentUser"
+			:is-current-user="isCurrentUser(item)"
 			:is-searched="false" />
 		<Hint v-if="isSearching && searchedMembers.length === 0"
 			:hint="t('collectives', 'No search results')" />
@@ -74,6 +74,13 @@ export default {
 
 		currentUser() {
 			return getCurrentUser().uid
+		},
+
+		isCurrentUser() {
+			return function(item) {
+				return item.userId === this.currentUser
+					|| item.singleId === item.circle.initiator.singleId
+			}
 		},
 	},
 
