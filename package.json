@@ -52,11 +52,12 @@
   },
   "devDependencies": {
     "@cypress/browserify-preprocessor": "^3.0.2",
+    "@cypress/webpack-preprocessor": "^5.17.1",
     "@nextcloud/babel-config": "^1.0.0",
     "@nextcloud/browserslist-config": "^2.3.0",
     "@nextcloud/eslint-config": "^8.3.0-beta.2",
     "@nextcloud/eslint-plugin": "^2.0.0",
-    "@nextcloud/stylelint-config": "^2.3.0",
+    "@nextcloud/stylelint-config": "^2.3.1",
     "@nextcloud/webpack-vue-config": "^5.5.1",
     "cypress": "^12.17.2",
     "eslint-plugin-cypress": "^2.13.3",
