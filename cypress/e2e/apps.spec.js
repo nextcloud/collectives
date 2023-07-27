@@ -21,16 +21,6 @@
  */
 
 describe('The apps', function() {
-	describe('Circles', function() {
-
-		it('shows circles in the contacts app', function() {
-			cy.login('jane', { route: '/apps/contacts' })
-			cy.get('.app-navigation')
-				.should('contain', 'Circles')
-		})
-
-	})
-
 	describe('Collectives', function() {
 
 		it('allows creating a new collective', function() {
@@ -65,5 +55,4 @@ describe('The apps', function() {
 		})
 
 	})
-
 })

@@ -13,12 +13,12 @@
 
 			<ul :key="'list' + suffix" :class="'placeholder-list placeholder-list' + suffix">
 				<li v-for="(width, index) in placeholderData" :key="'placeholder' + suffix + index">
-					<svg v-if="type === 'items'"
-						class="items-placeholder"
+					<svg v-if="type === 'items' || type === 'members-list'"
+						:class="`${type}-placeholder`"
 						xmlns="http://www.w3.org/2000/svg"
 						:fill="'url(#placeholder-gradient' + suffix + ')'">
-						<circle class="items-placeholder-icon" />
-						<rect class="items-placeholder-line-one" :style="width" />
+						<circle :class="`${type}-placeholder-icon`" />
+						<rect :class="`${type}-placeholder-line-one`" :style="width" />
 					</svg>
 					<svg v-if="type === 'page-heading'"
 						class="page-heading-placeholder"
@@ -131,6 +131,7 @@ $messages-list-max-width: 670px;
 }
 
 .items-placeholder,
+.members-list-placeholder,
 .text-placeholder,
 .page-heading-placeholder {
 
@@ -143,7 +144,8 @@ $messages-list-max-width: 670px;
 	}
 }
 
-.items-placeholder {
+.items-placeholder,
+.members-list-placeholder {
 	width: calc(100% - 2 * #{$margin});
 	height: $clickable-area;
 	margin: 2px 0 -1px 0;
@@ -154,6 +156,25 @@ $messages-list-max-width: 670px;
 		height: 1.5em;
 		x: $margin + $clickable-area;
 		y: 10px;
+	}
+}
+
+.members-list-placeholder {
+	$icon-size: 44px;
+	height: $icon-size + 8;
+
+	&-icon {
+		width: $icon-size;
+		height: $icon-size;
+		cx: calc(#{$icon-size + 8} / 2);
+		cy: calc(#{$icon-size + 8} / 2);
+		r: calc(#{$icon-size} / 2);
+
+	}
+
+	&-line-one {
+		x: 60px;
+		y: 16px;
 	}
 }
 

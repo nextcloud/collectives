@@ -26,18 +26,22 @@
 			<CollectivesGlobalSettings v-if="!isPublic" />
 		</template>
 		<NewCollectiveModal v-if="showNewCollectiveModal" @close="onCloseNewCollectiveModal" />
+		<CollectiveMembersModal v-if="showCollectiveMembersModal"
+			:collective="membersCollective"
+			@close="onCloseCollectiveMembersModal" />
 	</NcAppNavigation>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { RESTORE_COLLECTIVE, DELETE_COLLECTIVE } from '../store/actions.js'
 import { NcAppNavigation, NcAppNavigationCaption, NcButton } from '@nextcloud/vue'
-import NewCollectiveModal from './Nav/NewCollectiveModal.vue'
+import CollectiveMembersModal from './Nav/CollectiveMembersModal.vue'
 import CollectiveListItem from './Nav/CollectiveListItem.vue'
 import CollectivesGlobalSettings from './Nav/CollectivesGlobalSettings.vue'
 import CollectivesTrash from './Nav/CollectivesTrash.vue'
+import NewCollectiveModal from './Nav/NewCollectiveModal.vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import displayError from '../util/displayError.js'
 import SkeletonLoading from './SkeletonLoading.vue'
@@ -49,10 +53,11 @@ export default {
 		NcAppNavigation,
 		NcAppNavigationCaption,
 		NcButton,
-		NewCollectiveModal,
 		CollectiveListItem,
+		CollectiveMembersModal,
 		CollectivesGlobalSettings,
 		CollectivesTrash,
+		NewCollectiveModal,
 		SkeletonLoading,
 		PlusIcon,
 	},
@@ -68,6 +73,7 @@ export default {
 			'isPublic',
 			'loading',
 			'collectives',
+			'membersCollective',
 			'trashCollectives',
 		]),
 
@@ -76,6 +82,10 @@ export default {
 				&& this.trashCollectives.length
 				&& !this.loading('collectives')
 				&& !this.loading('collectiveTrash')
+		},
+
+		showCollectiveMembersModal() {
+			return !!this.membersCollective
 		},
 	},
 
@@ -88,6 +98,10 @@ export default {
 	},
 
 	methods: {
+		...mapMutations([
+			'setMembersCollectiveId',
+		]),
+
 		...mapActions({
 			dispatchRestoreCollective: RESTORE_COLLECTIVE,
 			dispatchDeleteCollective: DELETE_COLLECTIVE,
@@ -122,6 +136,10 @@ export default {
 
 		onCloseNewCollectiveModal() {
 			this.showNewCollectiveModal = false
+		},
+
+		onCloseCollectiveMembersModal() {
+			this.setMembersCollectiveId(null)
 		},
 	},
 }

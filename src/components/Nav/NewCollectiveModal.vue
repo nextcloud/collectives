@@ -80,12 +80,14 @@
 
 			<div v-else-if="state === 1" class="modal-collective-wrapper">
 				<h2 class="modal-collective-title">
-					{{ t('collectives', 'Members') }}
+					{{ t('collectives', 'Add people') }}
 				</h2>
 
 				<div class="modal-collective-members">
-					<MemberPicker :selection-set="selectedMembers"
-						@updateSelection="updateSelectedMembers" />
+					<MemberPicker :show-selection="true"
+						:selected-members="selectedMembers"
+						:on-click-searched="onClickSearched"
+						@delete-from-selection="deleteMember" />
 				</div>
 
 				<div class="modal-buttons">
@@ -108,6 +110,7 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { ADD_MEMBERS_TO_CIRCLE, GET_CIRCLES, NEW_COLLECTIVE } from '../../store/actions.js'
 import displayError from '../../util/displayError.js'
+import { autocompleteSourcesToCircleMemberTypes, circlesMemberTypes } from '../../constants.js'
 import { NcButton, NcEmojiPicker, NcEmptyContent, NcModal, NcSelect, NcTextField } from '@nextcloud/vue'
 import AlertCircleOutlineIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
 import CirclesIcon from '../Icon/CirclesIcon.vue'
@@ -231,11 +234,11 @@ export default {
 			const updateCollective = () => {
 				if (this.updatedCollective && this.selectedMembers) {
 					const selectedMembers = Object.values(this.selectedMembers).map(entry => ({
-						id: entry.shareWith,
-						type: entry.type,
+						id: entry.id,
+						type: circlesMemberTypes[autocompleteSourcesToCircleMemberTypes[entry.source]],
 					}))
 					try {
-						this.dispatchAddMembersToCircle({ collective: this.updatedCollective, members: selectedMembers })
+						this.dispatchAddMembersToCircle({ circleId: this.updatedCollective.circleId, members: selectedMembers })
 					} catch (e) {
 						showError(t('collectives', 'Could not add members to the collective'))
 					}
@@ -283,8 +286,20 @@ export default {
 			this.emoji = emoji
 		},
 
-		updateSelectedMembers(selectedMembers) {
-			this.selectedMembers = selectedMembers
+		addMember(member) {
+			this.$set(this.selectedMembers, `${member.source}-${member.id}`, member)
+		},
+
+		deleteMember(member) {
+			this.$delete(this.selectedMembers, `${member.source}-${member.id}`, member)
+		},
+
+		onClickSearched(member) {
+			if (`${member.source}-${member.id}` in this.selectedMembers) {
+				this.deleteMember(member)
+				return
+			}
+			this.addMember(member)
 		},
 	},
 }
