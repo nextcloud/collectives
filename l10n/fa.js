@@ -6,6 +6,7 @@ OC.L10N.register(
     "Unshare" : "لغو اشتراک‌گذاری",
     "Settings" : "تنظیمات",
     "Copied" : "کپی شد",
+    "Cannot copy" : "امکان کپی نیست",
     "Loading …" : "بارگذاری …",
     "No results" : "بدون نتیجه",
     "Permissions" : "مجوزها",
