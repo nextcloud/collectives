@@ -14,13 +14,13 @@ use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
 use OCP\AppFramework\QueryException;
 use OCP\AppFramework\Utility\ITimeFactory;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\FileInfo;
 use OCP\Files\InvalidPathException;
 use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\Files\NotPermittedException as FilesNotPermittedException;
 use OCP\IDBConnection;
 use Psr\Container\ContainerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class CollectiveVersionsExpireManager extends BasicEmitter {
 	private CollectiveFolderManager $folderManager;
@@ -28,20 +28,18 @@ class CollectiveVersionsExpireManager extends BasicEmitter {
 	private IDBConnection $connection;
 	private CollectiveMapper $collectiveMapper;
 	private ITimeFactory $timeFactory;
-	private EventDispatcherInterface $dispatcher;
+	private $dispatcher;
 	private ?VersionsBackend $versionsBackend = null;
 	private string $dependencyInjectionError = '';
 
 	/**
-	 * CollectiveVersionsExpireManager constructor.
-	 *
-	 * @param ContainerInterface       $appContainer
-	 * @param CollectiveFolderManager  $folderManager
-	 * @param ExpireManager            $expireManager
-	 * @param IDBConnection            $connection
-	 * @param CollectiveMapper         $collectiveMapper
-	 * @param ITimeFactory             $timeFactory
-	 * @param EventDispatcherInterface $dispatcher
+	 * @param ContainerInterface      $appContainer
+	 * @param CollectiveFolderManager $folderManager
+	 * @param ExpireManager           $expireManager
+	 * @param IDBConnection           $connection
+	 * @param CollectiveMapper        $collectiveMapper
+	 * @param ITimeFactory            $timeFactory
+	 * @param IEventDispatcher        $dispatcher
 	 */
 	public function __construct(ContainerInterface $appContainer,
 		CollectiveFolderManager $folderManager,
@@ -49,7 +47,7 @@ class CollectiveVersionsExpireManager extends BasicEmitter {
 		IDBConnection $connection,
 		CollectiveMapper $collectiveMapper,
 		ITimeFactory $timeFactory,
-		EventDispatcherInterface $dispatcher) {
+		IEventDispatcher $dispatcher) {
 		$this->folderManager = $folderManager;
 		$this->expireManager = $expireManager;
 		$this->connection = $connection;
