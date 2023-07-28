@@ -15,8 +15,6 @@ OC.L10N.register(
     "Deleted" : "মুছে ফেলা",
     "Download" : "ডাউনলোড",
     "No other versions available" : "আর কোন সংষ্করণ প্রাপ্তব্য নয়",
-    "Versions" : "সংষ্করন",
-    "Users" : "ব্যবহারকারী",
-    "Groups" : "গোষ্ঠীসমূহ"
+    "Versions" : "সংষ্করন"
 },
 "nplurals=2; plural=(n != 1);");

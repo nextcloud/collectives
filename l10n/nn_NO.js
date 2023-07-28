@@ -4,6 +4,8 @@ OC.L10N.register(
     "Share link" : "Del lenkje",
     "Unshare" : "Fjern deling",
     "Settings" : "Innstillingar",
+    "Promote to moderator" : "Fremje til moderator",
+    "Loading…" : "Lastar...",
     "Edit" : "Rediger",
     "Restore" : "Gjenopprett",
     "Delete permanently" : "Slett for godt",
@@ -15,9 +17,6 @@ OC.L10N.register(
     "Deleted" : "Sletta",
     "Download" : "Last ned",
     "No other versions available" : "Ingen andre utgåver tilgjengeleg",
-    "Versions" : "Utgåver",
-    "Users" : "Brukarare",
-    "Groups" : "Grupper",
-    "Circles" : "Sirklar"
+    "Versions" : "Utgåver"
 },
 "nplurals=2; plural=(n != 1);");

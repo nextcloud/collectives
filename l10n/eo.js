@@ -6,11 +6,9 @@ OC.L10N.register(
     "Unshare" : "Malkunhavigi",
     "Settings" : "Agordoj",
     "Copied" : "Kopiita",
-    "Loading …" : "Ŝargas …",
-    "No results" : "Neniu rezulto",
+    "Members" : "Membroj",
     "View" : "Vidi",
     "Edit" : "Modifi",
-    "Members" : "Membroj",
     "Restore" : "Restaŭri",
     "Delete permanently" : "Forigi por ĉiam",
     "Cancel" : "Nuligi",
@@ -23,9 +21,6 @@ OC.L10N.register(
     "Current version" : "Nuna versio",
     "No other versions available" : "Neniu alia versio disponeblas",
     "Attachments" : "Dosieraj aldonaĵoj",
-    "Versions" : "Versioj",
-    "Users" : "Uzantoj",
-    "Groups" : "Grupoj",
-    "Circles" : "Rondoj"
+    "Versions" : "Versioj"
 },
 "nplurals=2; plural=(n != 1);");

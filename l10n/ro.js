@@ -6,8 +6,9 @@ OC.L10N.register(
     "Unshare" : "Oprește partajarea",
     "Settings" : "Setări",
     "Copied" : "Copiat",
-    "Loading …" : "Se încarcă…",
-    "No results" : "Niciun rezultat",
+    "No search results" : "Căutarea nu are rezultate",
+    "Remove" : "Elimină",
+    "Loading…" : "Se încarcă...",
     "View" : "Vizualizare",
     "Edit" : "Editează",
     "Restore" : "Restaurare",
@@ -21,9 +22,6 @@ OC.L10N.register(
     "Download" : "Descărcare",
     "No other versions available" : "Nu există alte versiuni disponibile",
     "Attachments" : "Atașamente ",
-    "Versions" : "Versiuni",
-    "Users" : "Utilizatori",
-    "Groups" : "Grupuri",
-    "Circles" : "Cercuri"
+    "Versions" : "Versiuni"
 },
 "nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));");

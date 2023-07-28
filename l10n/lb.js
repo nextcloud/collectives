@@ -4,6 +4,7 @@ OC.L10N.register(
     "Share link" : "Link deelen",
     "Unshare" : "Net méi deelen",
     "Settings" : "Astellungen",
+    "Loading…" : "Et gëtt gelueden",
     "Edit" : "Änneren",
     "Restore" : "Zrécksetzen",
     "Delete permanently" : "Permanent läschen",
@@ -15,8 +16,6 @@ OC.L10N.register(
     "Deleted" : "Geläscht",
     "Download" : "Eroflueden",
     "No other versions available" : "Keng aner Versiounen disponibel",
-    "Versions" : "Versiounen",
-    "Users" : "Benotzer",
-    "Groups" : "Gruppen"
+    "Versions" : "Versiounen"
 },
 "nplurals=2; plural=(n != 1);");

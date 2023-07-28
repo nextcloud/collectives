@@ -4,9 +4,10 @@ OC.L10N.register(
     "Share link" : "Compartir ligamine",
     "Unshare" : "Cessa de compartir",
     "Settings" : "Configurationes",
+    "Members" : "Membros",
+    "Loading…" : "Cargante...",
     "View" : "Vider",
     "Edit" : "Modificar",
-    "Members" : "Membros",
     "Restore" : "Restaurar",
     "Delete permanently" : "Deler permanentemente",
     "Cancel" : "Cancellar",
@@ -18,8 +19,6 @@ OC.L10N.register(
     "Download" : "Discargar",
     "No other versions available" : "Nulle altere versiones disponibile",
     "Attachments" : "Attachamentos",
-    "Versions" : "Versiones",
-    "Users" : "Usatores",
-    "Groups" : "Gruppos"
+    "Versions" : "Versiones"
 },
 "nplurals=2; plural=(n != 1);");

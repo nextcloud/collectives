@@ -5,7 +5,6 @@ OC.L10N.register(
     "Share link" : "Linki yayımla",
     "Unshare" : "Paylaşımı durdur",
     "Settings" : "Quraşdırmalar",
-    "No results" : "Nəticə yoxdur",
     "Edit" : "Dəyişiklik et",
     "Restore" : "Geri qaytar",
     "Delete permanently" : "Həmişəlik sil",
@@ -16,8 +15,6 @@ OC.L10N.register(
     "Deleted" : "Silinib",
     "Download" : "Yüklə",
     "No other versions available" : "Başqa versiyalar mövcud deyil",
-    "Versions" : "Versiyaları",
-    "Users" : "İstifadəçilər",
-    "Groups" : "Qruplar"
+    "Versions" : "Versiyaları"
 },
 "nplurals=2; plural=(n != 1);");

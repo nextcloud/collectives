@@ -6,11 +6,12 @@ OC.L10N.register(
     "Unshare" : "Pārtraukt koplietošanu",
     "Settings" : "Iestatījumi",
     "Copied" : "Nokopēts",
-    "No results" : "Nav rezultātu",
+    "Members" : "Biedri",
+    "Remove" : "Izņemt",
+    "Loading…" : "Ielādē …",
     "Permissions" : "Atļaujas",
     "View" : "Skats",
     "Edit" : "Rediģēt",
-    "Members" : "Biedri",
     "Restore" : "Atjaunot",
     "Delete permanently" : "Dzēst pavisam",
     "Cancel" : "Atcelt",
@@ -22,8 +23,6 @@ OC.L10N.register(
     "Download" : "Lejupielādēt",
     "No other versions available" : "Citas versijas nav pieejamas",
     "Attachments" : "Pielikumi",
-    "Versions" : "Versijas",
-    "Users" : "Lietotāji",
-    "Groups" : "Grupas"
+    "Versions" : "Versijas"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");

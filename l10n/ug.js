@@ -12,8 +12,6 @@ OC.L10N.register(
     "Title" : "ماۋزۇ",
     "Deleted" : "ئۆچۈرۈلدى",
     "Download" : "چۈشۈر",
-    "Versions" : "نەشرى",
-    "Users" : "ئىشلەتكۈچىلەر",
-    "Groups" : "گۇرۇپپا"
+    "Versions" : "نەشرى"
 },
 "nplurals=2; plural=(n != 1);");

@@ -6,14 +6,15 @@
     "Copied" : "Αντιγράφτηκε",
     "Cannot copy" : "Δεν είναι δυνατή η αντιγραφή",
     "Copy share link" : "Αντιγραφή συνδέσμου κοινής χρήσης",
-    "Loading …" : "Φόρτωση …",
-    "No results" : "Κανένα αποτέλεσμα",
+    "Members" : "Μέλη",
+    "Remove" : "Αφαίρεση",
     "An error occurred while performing the search" : "Παρουσιάστηκε σφάλμα κατά την αναζήτηση",
-    "Add {type}" : "Προσθήκη {type}",
+    "Add users" : "Προσθήκη χρηστών",
+    "Add groups" : "Προσθήκη ομάδων",
+    "Add circles" : "Προσθήκη κύκλων",
     "Permissions" : "Δικαιώματα",
     "View" : "Προβολή",
     "Edit" : "Επεξεργασία",
-    "Members" : "Μέλη",
     "Danger zone" : "Επικίνδυνη ζώνη",
     "Add emoji" : "Προσθήκη emoji",
     "Restore" : "Επαναφορά",
@@ -34,9 +35,6 @@
     "Current version" : "Τρέχουσα έκδοση",
     "No other versions available" : "Δεν υπάρχουν άλλες εκδόσεις διαθέσιμες",
     "Attachments" : "Συνημμένα",
-    "Versions" : "Εκδόσεις",
-    "Users" : "Χρήστες",
-    "Groups" : "Ομάδες",
-    "Circles" : "Κύκλοι"
+    "Versions" : "Εκδόσεις"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

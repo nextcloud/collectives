@@ -3,8 +3,9 @@ OC.L10N.register(
     {
     "Share link" : "Fren aseɣwen",
     "Settings" : "Iɣewwaṛen",
-    "Loading …" : "Asali ...",
-    "No results" : "Ulac igmad",
+    "No search results" : "Ulac igmaḍ n unadi",
+    "Remove" : "Kkes",
+    "Loading…" : "Asali...",
     "Edit" : "Ẓreg",
     "Cancel" : "Sefsex",
     "Back" : "Retour",
@@ -13,8 +14,6 @@ OC.L10N.register(
     "Title" : "Azwel",
     "Deleted" : "Yettwakkes",
     "Download" : "Sider",
-    "Attachments" : "Ticeqqufin",
-    "Users" : "Iseqdacen",
-    "Groups" : "Igrawen"
+    "Attachments" : "Ticeqqufin"
 },
 "nplurals=2; plural=(n != 1);");

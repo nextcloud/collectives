@@ -6,10 +6,9 @@ OC.L10N.register(
     "Settings" : "Тохиргоо",
     "Copied" : "Хуулагдсан",
     "Cannot copy" : "Хуулагдаагүй",
-    "Loading …" : "Уншиж байна...",
-    "No results" : "Үр дүн байхгүй",
-    "Edit" : "засварлах",
     "Members" : "Гишүүд",
+    "Loading…" : "уншиж байна",
+    "Edit" : "засварлах",
     "Restore" : "Сэргээх",
     "Delete permanently" : "бүр мөсөн устгах",
     "Cancel" : "болиулах",
@@ -20,9 +19,6 @@ OC.L10N.register(
     "Deleted" : "Устгагдсан",
     "Download" : "Татах",
     "Attachments" : "Хавсралт",
-    "Versions" : "Хувилбарууд",
-    "Users" : "хэрэглэгч",
-    "Groups" : "бүлэгүүд",
-    "Circles" : "Тойрог"
+    "Versions" : "Хувилбарууд"
 },
 "nplurals=2; plural=(n != 1);");

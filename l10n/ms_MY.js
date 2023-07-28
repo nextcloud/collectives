@@ -13,8 +13,6 @@ OC.L10N.register(
     "Deleted" : "Dipadam",
     "Download" : "Muat turun",
     "No other versions available" : "Tiada lagi versi lain",
-    "Versions" : "Versi",
-    "Users" : "Pengguna",
-    "Groups" : "Kumpulan"
+    "Versions" : "Versi"
 },
 "nplurals=1; plural=0;");

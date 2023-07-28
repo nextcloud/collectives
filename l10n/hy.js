@@ -14,7 +14,6 @@ OC.L10N.register(
     "Deleted" : "Ջնջված",
     "Download" : "Ներբեռնել",
     "No other versions available" : "Այլ տարբերակներ չկան",
-    "Versions" : "Տարբերակներ",
-    "Groups" : "Խմբեր"
+    "Versions" : "Տարբերակներ"
 },
 "nplurals=2; plural=(n != 1);");

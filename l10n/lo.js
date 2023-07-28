@@ -4,8 +4,8 @@ OC.L10N.register(
     "Share link" : "ແບ່ງປັນລິງ",
     "Unshare" : "ຍົກເລີກການແບ່ງປັນ",
     "Settings" : "ການຕັ້ງຄ່າ",
-    "Loading …" : "ກຳລັງໂຫຼດ",
-    "No results" : "ບໍ່ມີຜົນ",
+    "Remove" : "ຍ້າຍອອກ",
+    "Loading…" : "ກຳລັງໂຫຼດ",
     "Edit" : "ແກ້ໄຂ",
     "Restore" : "ການກຸ້ຄຶນ",
     "Cancel" : "ຍົກເລີກ",
@@ -13,7 +13,6 @@ OC.L10N.register(
     "Create" : "ສ້າງ",
     "Done" : "ສໍາເລັດ",
     "Deleted" : "ລືບ",
-    "Download" : "ດາວໂຫລດ",
-    "Users" : "ຜູ້ໃຊ້"
+    "Download" : "ດາວໂຫລດ"
 },
 "nplurals=1; plural=0;");

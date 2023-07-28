@@ -5,7 +5,6 @@ OC.L10N.register(
     "Unshare" : "Ontdeel",
     "Settings" : "Instellings",
     "Copied" : "Gekopieer",
-    "Loading …" : "Laai …",
     "View" : "Bekyk",
     "Edit" : "Wysig",
     "Restore" : "Herstel",
@@ -17,8 +16,6 @@ OC.L10N.register(
     "Title" : "Titel",
     "Deleted" : "Geskrap",
     "Download" : "Laai af",
-    "Versions" : "Weergawes",
-    "Users" : "Gebruikers",
-    "Groups" : "Groepe"
+    "Versions" : "Weergawes"
 },
 "nplurals=2; plural=(n != 1);");

@@ -7,12 +7,13 @@ OC.L10N.register(
     "Settings" : "تنظیمات",
     "Copied" : "کپی شد",
     "Cannot copy" : "امکان کپی نیست",
-    "Loading …" : "بارگذاری …",
-    "No results" : "بدون نتیجه",
+    "Members" : "اعضا",
+    "No search results" : "جستجو نتیجه‌ای نداشت",
+    "Remove" : "حذف",
+    "Loading…" : "درحال بارگیری…",
     "Permissions" : "مجوزها",
     "View" : "نمایش",
     "Edit" : "ویرایش",
-    "Members" : "اعضا",
     "Restore" : "بازیابی",
     "Delete permanently" : "حذف قطعی",
     "Cancel" : "لغو",
@@ -26,9 +27,6 @@ OC.L10N.register(
     "Current version" : "نسخه فعلی",
     "No other versions available" : "نسخه ی دیگری در دسترس نیست",
     "Attachments" : "پیوست ها",
-    "Versions" : "نسخه ها",
-    "Users" : "کاربران",
-    "Groups" : "گروه ها",
-    "Circles" : "حلقه ها"
+    "Versions" : "نسخه ها"
 },
 "nplurals=2; plural=(n > 1);");

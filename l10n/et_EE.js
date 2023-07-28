@@ -5,7 +5,7 @@ OC.L10N.register(
     "Share link" : "Jaga link",
     "Unshare" : "Lõpeta jagamine",
     "Settings" : "Seaded",
-    "No results" : "Vasteid ei leitud",
+    "Loading…" : "Laadimine…",
     "Edit" : "Redigeeri",
     "Restore" : "Taasta",
     "Delete permanently" : "Kustuta jäädavalt",
@@ -17,8 +17,6 @@ OC.L10N.register(
     "Deleted" : "Kustutatud",
     "Download" : "Lae alla",
     "No other versions available" : "Muid versioone pole saadaval",
-    "Versions" : "Versioonid",
-    "Users" : "Kasutajad",
-    "Groups" : "Grupid"
+    "Versions" : "Versioonid"
 },
 "nplurals=2; plural=(n != 1);");
