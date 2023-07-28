@@ -6,10 +6,11 @@ OC.L10N.register(
     "Unshare" : "Batalkan berbagi",
     "Settings" : "Setelan",
     "Copied" : "Tersalin",
-    "No results" : "Tidak ada hasil",
+    "Members" : "Anggota",
+    "Remove" : "Hapus",
+    "Loading…" : "Memuat…",
     "View" : "Tampilan",
     "Edit" : "Sunting",
-    "Members" : "Anggota",
     "Restore" : "Pulihkan",
     "Delete permanently" : "Hapus secara permanen",
     "Cancel" : "Membatalkan",
@@ -21,8 +22,6 @@ OC.L10N.register(
     "Download" : "Unduh",
     "No other versions available" : "Tidak ada versi lain yang tersedia",
     "Attachments" : "Lampiran",
-    "Versions" : "Versi",
-    "Users" : "Pengguna",
-    "Groups" : "Grup"
+    "Versions" : "Versi"
 },
 "nplurals=1; plural=0;");

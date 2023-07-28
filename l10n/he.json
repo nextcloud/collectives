@@ -5,14 +5,15 @@
     "Settings" : "הגדרות",
     "Copied" : "הועתק",
     "Copy share link" : "העתקת קישור השיתוף",
-    "Loading …" : "בטעינה…",
-    "No results" : "אין תוצאות",
+    "Members" : "חברים",
+    "Remove" : "הסרה",
+    "Loading…" : "בטעינה…",
     "An error occurred while performing the search" : "אירעה שגיאה בעת ביצוע החיפוש",
-    "Add {type}" : "הוסף {type}",
+    "Add groups" : "הוספת קבוצות",
+    "Add circles" : "הוספת מעגלים",
     "Permissions" : "הרשאות",
     "View" : "צפייה",
     "Edit" : "עריכה",
-    "Members" : "חברים",
     "Add emoji" : "הוספת אמוג׳י",
     "Restore" : "שחזור",
     "Delete permanently" : "מחיקה לצמיתות",
@@ -28,9 +29,6 @@
     "Current version" : "גרסה נוכחית",
     "No other versions available" : "אין גרסאות אחרות זמינות",
     "Attachments" : "קבצים מצורפים",
-    "Versions" : "גרסאות",
-    "Users" : "משתמשים",
-    "Groups" : "קבוצות",
-    "Circles" : "מעגלים"
+    "Versions" : "גרסאות"
 },"pluralForm" :"nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;"
 }

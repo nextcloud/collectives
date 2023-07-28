@@ -3,7 +3,7 @@
     "Share link" : "Jaga link",
     "Unshare" : "Lõpeta jagamine",
     "Settings" : "Seaded",
-    "No results" : "Vasteid ei leitud",
+    "Loading…" : "Laadimine…",
     "Edit" : "Redigeeri",
     "Restore" : "Taasta",
     "Delete permanently" : "Kustuta jäädavalt",
@@ -15,8 +15,6 @@
     "Deleted" : "Kustutatud",
     "Download" : "Lae alla",
     "No other versions available" : "Muid versioone pole saadaval",
-    "Versions" : "Versioonid",
-    "Users" : "Kasutajad",
-    "Groups" : "Grupid"
+    "Versions" : "Versioonid"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

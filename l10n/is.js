@@ -7,12 +7,11 @@ OC.L10N.register(
     "Settings" : "Stillingar",
     "Copied" : "Afritað",
     "Copy share link" : "Afrita deilitengil",
-    "Loading …" : "Hleð inn …",
-    "No results" : "Engar niðurstöður",
+    "Members" : "Meðlimir",
+    "Loading…" : "Hleð inn…",
     "Permissions" : "Heimildir",
     "View" : "Skoða",
     "Edit" : "Breyta",
-    "Members" : "Meðlimir",
     "Restore" : "Endurheimta",
     "Delete permanently" : "Eyða varanlega",
     "Cancel" : "Hætta við",
@@ -26,9 +25,6 @@ OC.L10N.register(
     "Current version" : "Fyrirliggjandi útgáfa",
     "No other versions available" : "Engar aðrar útgáfur í boði",
     "Attachments" : "Viðhengi",
-    "Versions" : "Útgáfur",
-    "Users" : "Notendur",
-    "Groups" : "Hópar",
-    "Circles" : "Hringir"
+    "Versions" : "Útgáfur"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

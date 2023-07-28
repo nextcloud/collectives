@@ -8,12 +8,11 @@ OC.L10N.register(
     "Copied" : "Copiado",
     "Cannot copy" : "Não é possível copiar",
     "Copy share link" : "Copie partilhe ligação",
-    "Loading …" : "A carregar...",
-    "No results" : "Sem resultados",
-    "Add {type}" : "Adicionar (tipo)",
+    "Members" : "Membros",
+    "Remove" : "Remover",
+    "Loading…" : "A carregar…",
     "View" : "Ver",
     "Edit" : "Editar",
-    "Members" : "Membros",
     "Restore" : "Restaurar",
     "Delete permanently" : "Eliminar permanentemente",
     "Cancel" : "Cancelar",
@@ -25,9 +24,6 @@ OC.L10N.register(
     "Download" : "Transferir",
     "No other versions available" : "Nenhuma outra versão disponível",
     "Attachments" : "Anexos",
-    "Versions" : "Versões",
-    "Users" : "Utilizadores",
-    "Groups" : "Grupos",
-    "Circles" : "Círculos"
+    "Versions" : "Versões"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

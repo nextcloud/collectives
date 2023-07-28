@@ -5,11 +5,12 @@ OC.L10N.register(
     "Share link" : "Compartir liga",
     "Unshare" : "Dejar de compartir",
     "Settings" : "Ajustes",
-    "No results" : "Sin resultados",
+    "Members" : "Miembros",
+    "Remove" : "Borrar",
+    "Loading…" : "Cargando...",
     "Permissions" : "Permisos",
     "View" : "Ver",
     "Edit" : "Editar",
-    "Members" : "Miembros",
     "Restore" : "Restaurar",
     "Delete permanently" : "Borrar permanentemente",
     "Cancel" : "Cancelar",
@@ -22,9 +23,6 @@ OC.L10N.register(
     "Current version" : "Versión actual",
     "No other versions available" : "No hay otras versiones disponibles",
     "Attachments" : "Adjuntos",
-    "Versions" : "Versiones",
-    "Users" : " Usuarios",
-    "Groups" : "Grupos",
-    "Circles" : "Círculos"
+    "Versions" : "Versiones"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

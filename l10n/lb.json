@@ -2,6 +2,7 @@
     "Share link" : "Link deelen",
     "Unshare" : "Net méi deelen",
     "Settings" : "Astellungen",
+    "Loading…" : "Et gëtt gelueden",
     "Edit" : "Änneren",
     "Restore" : "Zrécksetzen",
     "Delete permanently" : "Permanent läschen",
@@ -13,8 +14,6 @@
     "Deleted" : "Geläscht",
     "Download" : "Eroflueden",
     "No other versions available" : "Keng aner Versiounen disponibel",
-    "Versions" : "Versiounen",
-    "Users" : "Benotzer",
-    "Groups" : "Gruppen"
+    "Versions" : "Versiounen"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

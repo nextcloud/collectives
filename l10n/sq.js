@@ -6,11 +6,12 @@ OC.L10N.register(
     "Unshare" : "Hiqe ndarjen",
     "Settings" : "Rregullimet",
     "Copied" : "Kopjuar",
-    "No results" : "Asnjë rezultat",
+    "Members" : "Anëtar",
+    "Remove" : "Hiqe",
+    "Loading…" : "Duke u ngarkuar…",
     "Permissions" : "Lejet",
     "View" : "Shiko",
     "Edit" : "Përpuno",
-    "Members" : "Anëtar",
     "Restore" : "Rikthe",
     "Delete permanently" : "Fshije përgjithmonë",
     "Cancel" : "Anullo",
@@ -22,9 +23,6 @@ OC.L10N.register(
     "Download" : "Shkarko",
     "No other versions available" : "Nuk ka versione të tjera të gatshme",
     "Attachments" : "Bashkangjitjet",
-    "Versions" : "Versione",
-    "Users" : "Përdoruesit",
-    "Groups" : "Grupet",
-    "Circles" : "Rrethet"
+    "Versions" : "Versione"
 },
 "nplurals=2; plural=(n != 1);");

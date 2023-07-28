@@ -5,10 +5,10 @@ OC.L10N.register(
     "Share link" : "ბმულის გაზიარება",
     "Unshare" : "გაზიარების შეწყვეტა",
     "Settings" : "პარამეტრები",
-    "No results" : "შედეგები არაა",
+    "Members" : "წევრები",
+    "Promote to moderator" : "დაწინაურება მოდერატორზე",
     "Permissions" : "უფლებები",
     "Edit" : "შეცვლა",
-    "Members" : "წევრები",
     "Restore" : "აღდგენა",
     "Delete permanently" : "სამუდამოდ წაშლა",
     "Cancel" : "უარყოფა",
@@ -18,9 +18,6 @@ OC.L10N.register(
     "Title" : "სათაური",
     "Deleted" : "გაუქმდა",
     "Download" : "ჩამოტვირთვა",
-    "Versions" : "ვერსიები",
-    "Users" : "მომხმარებლები",
-    "Groups" : "ჯგუფები",
-    "Circles" : "წრეები"
+    "Versions" : "ვერსიები"
 },
 "nplurals=2; plural=(n!=1);");

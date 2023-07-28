@@ -1,7 +1,7 @@
 { "translations": {
     "Settings" : "සැකසුම්",
-    "Loading …" : "පූරණය වෙමින් …",
-    "No results" : "ප්‍රතිථල නැත",
+    "Remove" : "ඉවත් කරන්න",
+    "Loading…" : "පූරණය වෙමින්…",
     "Edit" : "සංස්කරණය",
     "Restore" : "ප්‍රතිෂ්ථාපනය",
     "Cancel" : "අවලංගු",
@@ -14,8 +14,6 @@
     "No other versions available" : "වෙනත් අනුවාද නැත",
     "Attachments" : "ඇමිණුම්",
     "Versions" : "අනුවාද",
-    "Users" : "පරිශීලකයින්",
-    "Groups" : "සමූහ",
     "New Page" : "නව පිටුව"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

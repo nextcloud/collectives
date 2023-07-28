@@ -10,7 +10,6 @@ OC.L10N.register(
     "Done" : "Done",
     "Title" : "عنوان",
     "Deleted" : "حذف شدہ ",
-    "Download" : "ڈاؤن لوڈ",
-    "Users" : "صارفین"
+    "Download" : "ڈاؤن لوڈ"
 },
 "nplurals=2; plural=(n != 1);");

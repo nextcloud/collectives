@@ -15,7 +15,6 @@ OC.L10N.register(
     "Share not found for user" : "لم يمُكن العثور على مُشاركة للمستخدِم",
     "A place for activist and community projects to build shared knowledge" : "مكان للنشطاء والمشاريع المجتمعية لبناء المعرفة المشتركة",
     "Collectives is a Nextcloud App for activist and community projects to organize together.\nCome and gather in collectives to build shared knowledge.\n\n* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n  tied to a [Nextcloud Circle](https://github.com/nextcloud/circles) and\n  owned by the collective.\n* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**\n  for page formatting.\n\n## Installation\n\nIn your Nextcloud instance, simply navigate to **»Apps«**, find the\n**»Circles«** and **»Collectives«** apps and enable them." : "\"التجميعات\" Collectives هي تطبيق من نكست كلاود للنشطاء والمشاريع المجتمعية للتنظيم معًا. \nتعالوا واجتمعوا في مجموعات لبناء المعرفة المشتركة. \n* 👥 ** سير عمل جماعي وغير هرمي \n**: التجميعات مرتبطة بتطبيق نكست كلاود للدوائر Circles ـ [Circles](https://github.com/nextcloud/circles)  \n\n* 📝 **تحرير جماعي للتجميعة** كما في التطبيق الشهير إيثرباد EtherpadK. و هذا صار ممكنا بفضل تطبيق Text من نكست كلاود [Text app] (https://github.com/nextcloud/text).\n* 🔤 ** استخدام ماركدوان في تكوين الصفحات  [Markdown] (https://en.wikipedia.org/wiki/Markdown) على خادومك الخاص. \n\n## التنصيب\n\nما عليك سوى الانتقال إلى ** »التطبيقات« **، و ابحث عن ** »الدوائر Circles« ** و ** »التجميعات Collectives« ** و قم بتمكينها.",
-    "The contacts app is required to manage members" : "تطبيق جهات الاتصال مطلوب لإدارة الأعضاء",
     "Manage members" : "إدارة الإعضاء",
     "Share link" : "مشاركة الرابط",
     "Allow editing in share" : "السماح بالتحرير في المشاركة",
@@ -34,13 +33,11 @@ OC.L10N.register(
     "Loading pages:" : "تحميل الصفحات:",
     "Loading images:" : "تحميل الصور:",
     "Last edited by {user}" : "آخر تعديلٍ كان من قِبٍَل {user}",
+    "Members" : "الاعضاء",
     "Search users, groups, circles…" : "البحث عن مستخدمين، أو مجموعات، أو دوائر ...",
-    "Remove {name}" : "إزالة {name}",
     "Search for members to add" : "البحث عن أعضاء للإضافة",
-    "Loading …" : "جاري التحميل …",
-    "No results" : "لا يوجد أي نتيجة",
     "An error occurred while performing the search" : "حدث خطأ اثناء البحث",
-    "Add {type}" : "إضافة {type}",
+    "Remove {name}" : "إزالة {name}",
     "Collective settings" : "إعدادات التجميعات collective",
     "Name and emoji" : "الاسم و الرمز التعبيري emoji",
     "Select emoji for collective" : "إختر رمزاً تعبيرياً emoji للتجميعة collective",
@@ -54,9 +51,6 @@ OC.L10N.register(
     "Default page mode" : "الوضع التلقائي للصفحة",
     "View" : "عرض",
     "Edit" : "تعديل",
-    "Members" : "الاعضاء",
-    "Members can be managed via the connected circle in the Contacts app." : "يمكن إدارة الأعضاء عبر الدائرة المتصلة connected circle في تطبيق جهات الاتصال.",
-    "Open circle in Contacts" : "فتح الدائرة في جهات الاتصال",
     "Danger zone" : "منطقة خطر",
     "Delete collective" : "حذف التجميعة",
     "Change emoji" : "تغيير الرمز التعبيري",
@@ -167,10 +161,6 @@ OC.L10N.register(
     "Open in Collectives" : "إفتح في تطبيق التجميعات Collectives",
     "Come, organize and build shared knowledge!" : "تعالَ، و نظّمْ، و ابنِ معرفةً مشتركةً!",
     "Create new collective" : "أنشيء تجميعةً collective جديدةً",
-    "Users" : "المستخدمين:",
-    "Groups" : "المجموعات",
-    "Email addresses" : "عنوان البريد الالكتروني",
-    "Circles" : "جماعة",
     "Link copied to the clipboard." : "تمّ نسخ الرابط إلى الحافظة",
     "Could not copy link to the clipboard:" : "تعذّر نسخ الرابط إلى الحافظة",
     "Could not create the page" : "تعذّر إنشاء الصفحة",
@@ -183,6 +173,7 @@ OC.L10N.register(
     "The following dependency apps are missing: " : "تطبيقات التبعيّة dependency التالية ناقصة:",
     "Please ask the administrator to enable these apps." : "رجاءً، أُطلُب من المُشرف تمكين هذه التطبيقات",
     "in Collective {collective}" : "في  التجميعة {collective}",
+    "The contacts app is required to manage members" : "تطبيق جهات الاتصال مطلوب لإدارة الأعضاء",
     "Could not change the collective share editing permissions" : "تعذّر تغيير أذونات تعديل مُشاركة التجميعة",
     "Could not share the collective" : "تعذّرت مشاركة التجميعة",
     "Could not unshare the collective" : "تعذّر إلغاء مُشاركة التجميعة",
@@ -190,6 +181,8 @@ OC.L10N.register(
     "Select a collective or create a new one on the left." : "إختر تجميعةً أو أنشيء واحدةً جديدةً على الجانب.",
     "Save new collective name" : "حفظ اسم التجميعة الجديدة",
     "Admins and moderaters" : "المشرفون و المنسّقون",
+    "Members can be managed via the connected circle in the Contacts app." : "يمكن إدارة الأعضاء عبر الدائرة المتصلة connected circle في تطبيق جهات الاتصال.",
+    "Open circle in Contacts" : "فتح الدائرة في جهات الاتصال",
     "Create collective for existing circle" : "أنشيء تجميعة Collective لدائرة الاتصال Circle القائمة",
     "New collective name" : "اسم تجميعة جديدة",
     "Select circle..." : "إختر دائرة اتصال Circle ...",

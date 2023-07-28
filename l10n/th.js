@@ -5,8 +5,8 @@ OC.L10N.register(
     "Share link" : "แชร์ลิงก์",
     "Unshare" : "เลิกแชร์",
     "Settings" : "การตั้งค่า",
-    "Loading …" : "กำลังโหลด …",
-    "No results" : "ไม่มีผลลัพธ์",
+    "Remove" : "ลบออก",
+    "Loading…" : "กำลังโหลด…",
     "View" : "มุมมอง",
     "Edit" : "แก้ไข",
     "Restore" : "คืนค่า",
@@ -20,8 +20,6 @@ OC.L10N.register(
     "Download" : "ดาวน์โหลด",
     "No other versions available" : "ไม่มีรุ่นอื่นที่ใช้งานได้",
     "Attachments" : "ไฟล์แนบ",
-    "Versions" : "รุ่น",
-    "Users" : "ผู้ใช้",
-    "Groups" : "กลุ่ม"
+    "Versions" : "รุ่น"
 },
 "nplurals=1; plural=0;");

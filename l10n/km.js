@@ -15,8 +15,6 @@ OC.L10N.register(
     "Deleted" : "បាន​លុប",
     "Download" : "ទាញយក",
     "No other versions available" : "មិន​មាន​កំណែ​ផ្សេង​ទៀត​ទេ",
-    "Versions" : "កំណែ",
-    "Users" : "អ្នកប្រើ",
-    "Groups" : "ក្រុ"
+    "Versions" : "កំណែ"
 },
 "nplurals=1; plural=0;");
