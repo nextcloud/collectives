@@ -354,7 +354,7 @@ export default {
 	// border-bottom: 4px solid var(--color-main-background);
 	margin-bottom: 4px;
 
-	padding-left: 0;
+	padding: 0;
 	border-radius: var(--border-radius-large);
 
 	&.toplevel {
@@ -451,6 +451,9 @@ export default {
 	}
 
 	.app-content-list-item-link {
+		display: flex;
+		align-items: center;
+		height: 100%;
 		width: 100%;
 		overflow: hidden;
 		text-overflow: ellipsis;
