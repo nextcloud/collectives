@@ -192,6 +192,8 @@ jobs:
 
       - name: Run Nextcloud
         run: php -S 0.0.0.0:8081 &
+        env:
+          PHP_CLI_SERVER_WORKERS: 3
 
       - name: Cypress run
         uses: cypress-io/github-action@v6
