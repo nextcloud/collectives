@@ -10,6 +10,7 @@ OC.L10N.register(
     "Copy share link" : "Copiar el enlace compartido",
     "Members" : "Miembros",
     "Remove" : "Eliminar",
+    "Loading…" : "Cargando…",
     "Permissions" : "Permisos",
     "View" : "Ver",
     "Edit" : "Editar",

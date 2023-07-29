@@ -5,6 +5,7 @@ OC.L10N.register(
     "Unshare" : "Ontdeel",
     "Settings" : "Instellings",
     "Copied" : "Gekopieer",
+    "Loading…" : "Laai…",
     "View" : "Bekyk",
     "Edit" : "Wysig",
     "Restore" : "Herstel",

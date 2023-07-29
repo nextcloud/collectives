@@ -7,6 +7,7 @@ OC.L10N.register(
     "Settings" : "Agordoj",
     "Copied" : "Kopiita",
     "Members" : "Membroj",
+    "Loading…" : "Ŝargado...",
     "View" : "Vidi",
     "Edit" : "Modifi",
     "Restore" : "Restaŭri",
