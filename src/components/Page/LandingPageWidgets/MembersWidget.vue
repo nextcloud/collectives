@@ -122,5 +122,6 @@ export default {
 	display: flex;
 	flex-direction: row;
 	gap: 12px;
+	margin-top: 12px;
 }
 </style>
