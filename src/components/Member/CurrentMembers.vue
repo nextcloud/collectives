@@ -5,6 +5,7 @@
 		<Member v-for="item in searchedMembers"
 			:key="item.singleId"
 			:circle-id="circleId"
+			:current-user-is-admin="currentUserIsAdmin"
 			:member-id="item.id"
 			:user-id="item.userId"
 			:display-name="item.displayName"
@@ -45,6 +46,10 @@ export default {
 		searchQuery: {
 			type: String,
 			default: '',
+		},
+		currentUserIsAdmin: {
+			type: Boolean,
+			default: true,
 		},
 	},
 

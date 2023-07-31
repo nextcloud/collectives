@@ -29,12 +29,12 @@
 		</div>
 
 		<!-- Checkmark icon for selected -->
-		<div v-if="isSearched && isSelected" class="member-row__checkmark">
+		<div v-if="currentUserIsAdmin && isSearched && isSelected" class="member-row__checkmark">
 			<CheckIcon :size="20" />
 		</div>
 
 		<!-- Action menu -->
-		<NcActions v-else-if="!isSearched && !isCurrentUser"
+		<NcActions v-else-if="currentUserIsAdmin && !isSearched && !isCurrentUser"
 			:force-menu="true"
 			class="member-row__actions">
 			<NcActionButton v-if="!isAdmin"
@@ -109,6 +109,10 @@ export default {
 		circleId: {
 			type: String,
 			default: null,
+		},
+		currentUserIsAdmin: {
+			type: Boolean,
+			default: true,
 		},
 		memberId: {
 			type: String,

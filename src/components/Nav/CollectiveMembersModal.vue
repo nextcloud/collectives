@@ -9,6 +9,7 @@
 				<div class="modal-collective-members">
 					<MemberPicker :show-current="true"
 						:circle-id="collective.circleId"
+						:current-user-is-admin="currentUserIsAdmin"
 						:current-members="circleMembersSorted(collective.circleId)"
 						:on-click-searched="onClickSearched" />
 				</div>
@@ -48,7 +49,12 @@ export default {
 	computed: {
 		...mapGetters([
 			'circleMembersSorted',
+			'isCollectiveAdmin',
 		]),
+
+		currentUserIsAdmin() {
+			return this.isCollectiveAdmin(this.collective)
+		},
 	},
 
 	beforeMount() {
@@ -70,6 +76,10 @@ export default {
 		},
 
 		async onClickSearched(member) {
+			if (!this.currentUserIsAdmin) {
+				return
+			}
+
 			await this.dispatchAddMemberToCircle({
 				circleId: this.collective.circleId,
 				userId: member.id,
