@@ -37,6 +37,7 @@ OC.L10N.register(
     "No search results" : "Ez dago bilaketaren emaitzarik",
     "Remove" : "Kendu",
     "admin" : "admin",
+    "moderator" : "moderatzailea",
     "Promote to moderator" : "Moderatzaile bihurtu zara",
     "Search users, groups, circles…" : "Bilatu erabiltzaileak, taldeak, zirkuluak...",
     "Search for members to add" : "Bilatu gehitzeko kideak",
