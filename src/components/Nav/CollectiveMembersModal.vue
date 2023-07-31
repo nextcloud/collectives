@@ -9,7 +9,7 @@
 				<div class="modal-collective-members">
 					<MemberPicker :show-current="true"
 						:circle-id="collective.circleId"
-						:current-members="circleMembers(collective.circleId)"
+						:current-members="circleMembersSorted(collective.circleId)"
 						:on-click-searched="onClickSearched" />
 				</div>
 			</div>
@@ -47,7 +47,7 @@ export default {
 
 	computed: {
 		...mapGetters([
-			'circleMembers',
+			'circleMembersSorted',
 		]),
 	},
 
