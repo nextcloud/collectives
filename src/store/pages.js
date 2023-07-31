@@ -320,6 +320,22 @@ export default {
 		trashPages(state) {
 			return state.trashPages.sort((a, b) => b.trashTimestamp - a.trashTimestamp)
 		},
+
+		recentPages(state) {
+			return state.pages
+				.slice()
+				.sort(sortOrders.byTimestamp)
+		},
+
+		recentPagesUserIds(_state, getters) {
+			return getters.recentPages
+				// take only userIds
+				.map(p => p.lastUserId)
+				// filter out duplicates
+				.filter((value, index, array) => {
+					return array.indexOf(value) === index
+				})
+		},
 	},
 
 	mutations: {
