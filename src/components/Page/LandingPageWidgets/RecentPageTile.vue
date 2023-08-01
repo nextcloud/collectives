@@ -61,6 +61,7 @@ export default {
 	box-sizing: content-box;
 	padding: 12px;
 
+	scroll-snap-align: start;
 	border-radius: var(--border-radius-rounded);
 
 	&:hover {
