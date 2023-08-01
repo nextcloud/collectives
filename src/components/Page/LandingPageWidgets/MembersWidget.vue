@@ -1,7 +1,7 @@
 <template>
 	<div class="members-widget">
 		<WidgetHeading :title="t('collectives', 'Collective members')" />
-		<div class="members-widget-members">
+		<div ref="members" class="members-widget-members">
 			<NcAvatar v-for="member in trimmedMembers"
 				:key="member.singleId"
 				:user="member.userId"
@@ -11,8 +11,8 @@
 				:disable-menu="true"
 				:tooltip-message="member.displayName"
 				:size="44" />
-			<NcButton v-if="showMoreButton"
-				type="secondary"
+			<NcButton type="secondary"
+				:title="t('collectives', 'Show members')"
 				:aria-label="t('collectives', 'Show all members of the collective')"
 				@click="openCollectiveMembers()">
 				<template #icon>
@@ -24,14 +24,13 @@
 </template>
 
 <script>
+import debounce from 'debounce'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { NcAvatar, NcButton } from '@nextcloud/vue'
 import DotsHorizontalIcon from 'vue-material-design-icons/DotsHorizontal.vue'
 import { GET_CIRCLE_MEMBERS } from '../../../store/actions.js'
 import { circlesMemberTypes } from '../../../constants.js'
 import WidgetHeading from './WidgetHeading.vue'
-
-const SHOW_MEMBERS_COUNT = 3
 
 export default {
 	name: 'MembersWidget',
@@ -43,12 +42,17 @@ export default {
 		WidgetHeading,
 	},
 
+	data() {
+		return {
+			showMembersCount: 3,
+		}
+	},
+
 	computed: {
 		...mapGetters([
 			'circleMembersSorted',
 			'circleMemberType',
 			'currentCollective',
-			'isCollectiveAdmin',
 			'recentPagesUserIds',
 		]),
 
@@ -60,7 +64,7 @@ export default {
 
 		trimmedMembers() {
 			return this.sortedMembers
-				.slice(0, SHOW_MEMBERS_COUNT)
+				.slice(0, this.showMembersCount)
 		},
 
 		isNoUser() {
@@ -74,15 +78,26 @@ export default {
 				return this.isNoUser(member) ? 'icon-group-white' : null
 			}
 		},
+	},
 
-		showMoreButton() {
-			return this.isCollectiveAdmin(this.currentCollective)
-				|| this.sortedMembers.length > SHOW_MEMBERS_COUNT
+	watch: {
+		'sortedMembers.length'() {
+			this.$nextTick(() => {
+				this.updateShowMembersCount()
+			})
 		},
 	},
 
 	beforeMount() {
 		this.dispatchGetCircleMembers(this.currentCollective.circleId)
+	},
+
+	mounted() {
+		window.addEventListener('resize', this.updateShowMembersCount)
+	},
+
+	unmounted() {
+		window.removeEventListener('resize', this.updateShowMembersCount)
 	},
 
 	methods: {
@@ -93,6 +108,15 @@ export default {
 		...mapMutations([
 			'setMembersCollectiveId',
 		]),
+
+		updateShowMembersCount: debounce(function() {
+			// How many avatars (44px width + 12px gap) fit? Substract one for the more button.
+			const membersWidth = this.$refs.members?.clientWidth
+			if (membersWidth) {
+				const maxMembers = Math.floor(membersWidth / 56) - 1
+				this.showMembersCount = Math.min(this.sortedMembers.length, maxMembers)
+			}
+		}, 50),
 
 		openCollectiveMembers() {
 			this.setMembersCollectiveId(this.currentCollective.id)
