@@ -34,7 +34,7 @@ OC.L10N.register(
     "Loading images:" : "Lade Bilder:",
     "Last edited by {user}" : "Zuletzt bearbeitet von {user}",
     "Members" : "Mitglieder",
-    "No search results" : "Benötigt keine Übersetzung. Hier wird nur die formelle Übersetzung verwendet (de_DE).",
+    "No search results" : "Keine Suchergebnisse",
     "Remove" : "Entfernen",
     "admin" : "Administrator",
     "Promote to moderator" : "Zum Moderator ernennen",
