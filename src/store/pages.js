@@ -324,6 +324,7 @@ export default {
 		recentPages(state) {
 			return state.pages
 				.slice()
+				.filter(p => p.title !== 'Template')
 				.sort(sortOrders.byTimestamp)
 		},
 

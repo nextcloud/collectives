@@ -1,10 +1,7 @@
 <template>
 	<router-link :to="pagePath(page)" class="recent-page-tile">
 		<div class="recent-page-tile__rectangle">
-			<template v-if="isTemplate">
-				<PageTemplateIcon :size="36" fill-color="var(--color-text-maxcontrast)" />
-			</template>
-			<template v-else-if="page.emoji">
+			<template v-if="page.emoji">
 				{{ page.emoji }}
 			</template>
 			<template v-else>
@@ -24,7 +21,6 @@
 <script>
 import { mapGetters } from 'vuex'
 import LastUserBubble from '../../LastUserBubble.vue'
-import PageTemplateIcon from '../../Icon/PageTemplateIcon.vue'
 import PageIcon from '../../Icon/PageIcon.vue'
 
 export default {
@@ -32,7 +28,6 @@ export default {
 	components: {
 		LastUserBubble,
 		PageIcon,
-		PageTemplateIcon,
 	},
 
 	props: {
@@ -46,10 +41,6 @@ export default {
 		...mapGetters([
 			'pagePath',
 		]),
-
-		isTemplate() {
-			return this.page.title === 'Template'
-		},
 	},
 }
 </script>
