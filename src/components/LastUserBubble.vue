@@ -8,7 +8,9 @@
 			:show-user-status="false">
 			{{ lastEditedUserMessage }}
 		</NcUserBubble>
-		{{ lastUpdate }}
+		<span class="timestamp">
+			{{ lastUpdate }}
+		</span>
 	</div>
 </template>
 

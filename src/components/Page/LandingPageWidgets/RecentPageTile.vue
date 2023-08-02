@@ -94,6 +94,12 @@ export default {
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
+		display: flex;
+		flex-direction: column;
+
+		:deep(.timestamp) {
+			color: var(--color-text-maxcontrast);
+		}
 	}
 }
 </style>
