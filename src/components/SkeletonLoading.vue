@@ -11,7 +11,7 @@
 				</defs>
 			</svg>
 
-			<ul :key="'list' + suffix" :class="'placeholder-list placeholder-list' + suffix">
+			<ul :key="'list' + suffix" :class="'placeholder-list placeholder-list' + suffix + ' placeholder-list-' + type">
 				<li v-for="(width, index) in placeholderData" :key="'placeholder' + suffix + index">
 					<svg v-if="type === 'items' || type === 'members-list'"
 						:class="`${type}-placeholder`"
@@ -36,6 +36,12 @@
 						<rect class="text-placeholder-line-two" :style="textPlaceholderData[1]" />
 						<rect class="text-placeholder-line-three" :style="textPlaceholderData[2]" />
 						<rect class="text-placeholder-line-four" :style="textPlaceholderData[3]" />
+					</svg>
+					<svg v-if="type === 'avatar'"
+						class="avatar-placeholder"
+						xmlns="http://www.w3.org/2000/svg"
+						:fill="'url(#placeholder-gradient' + suffix + ')'">
+						<circle class="avatar-placeholder-icon" />
 					</svg>
 				</li>
 			</ul>
@@ -123,6 +129,11 @@ $messages-list-max-width: 670px;
 	animation-timing-function: linear;
 }
 
+.placeholder-list-avatar {
+	display: flex;
+	gap: 12px;
+}
+
 .placeholder-gradient {
 	position: fixed;
 	height: 0;
@@ -175,6 +186,20 @@ $messages-list-max-width: 670px;
 	&-line-one {
 		x: 60px;
 		y: 16px;
+	}
+}
+
+.avatar-placeholder {
+	$icon-size: 44px;
+	height: $icon-size;
+	width: $icon-size;
+
+	&-icon {
+		width: $icon-size;
+		height: $icon-size;
+		cx: calc(#{$icon-size} / 2);
+		cy: calc(#{$icon-size} / 2);
+		r: calc(#{$icon-size} / 2);
 	}
 }
 

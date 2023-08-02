@@ -1,7 +1,11 @@
 <template>
 	<div class="members-widget">
 		<WidgetHeading :title="t('collectives', 'Collective members')" />
-		<div ref="members" class="members-widget-members">
+		<SkeletonLoading v-if="loading"
+			type="avatar"
+			:count="3"
+			class="members-widget-skeleton" />
+		<div v-else ref="members" class="members-widget-members">
 			<NcAvatar v-for="member in trimmedMembers"
 				:key="member.singleId"
 				:user="member.userId"
@@ -28,6 +32,7 @@ import debounce from 'debounce'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { NcAvatar, NcButton } from '@nextcloud/vue'
 import DotsHorizontalIcon from 'vue-material-design-icons/DotsHorizontal.vue'
+import SkeletonLoading from '../../SkeletonLoading.vue'
 import { GET_CIRCLE_MEMBERS } from '../../../store/actions.js'
 import { circlesMemberTypes } from '../../../constants.js'
 import WidgetHeading from './WidgetHeading.vue'
@@ -39,6 +44,7 @@ export default {
 		DotsHorizontalIcon,
 		NcAvatar,
 		NcButton,
+		SkeletonLoading,
 		WidgetHeading,
 	},
 
@@ -65,6 +71,10 @@ export default {
 		trimmedMembers() {
 			return this.sortedMembers
 				.slice(0, this.showMembersCount)
+		},
+
+		loading() {
+			return this.trimmedMembers.length === 0
 		},
 
 		isNoUser() {
@@ -142,6 +152,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.members-widget-skeleton {
+	height: 44px;
+	margin-top: 12px;
+}
+
 .members-widget-members {
 	display: flex;
 	flex-direction: row;
