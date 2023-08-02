@@ -72,6 +72,9 @@ export default {
 	methods: {
 		updateButtons: debounce(function() {
 			const pagesliderEl = this.$refs.pageslider
+			if (!pagesliderEl) {
+				return
+			}
 			if (pagesliderEl.scrollLeft <= 0) {
 				this.$refs.buttonslideleft.classList.add('hidden')
 			} else {
@@ -98,7 +101,8 @@ export default {
 
 		slideRight() {
 			const pagesliderEl = this.$refs.pageslider
-			const newScrollLeft = Math.min(pagesliderEl.scrollLeftMax, pagesliderEl.scrollLeft += SLIDE_OFFSET)
+			const scrollLeftMax = pagesliderEl.scrollWidth - pagesliderEl.clientWidth
+			const newScrollLeft = Math.min(scrollLeftMax, pagesliderEl.scrollLeft += SLIDE_OFFSET)
 			pagesliderEl.scrollTo({
 				top: pagesliderEl.scrollTop,
 				left: pagesliderEl.scrollLeft = newScrollLeft,
@@ -123,7 +127,12 @@ export default {
 		max-width: 670px;
 		overflow-x: auto;
 		scroll-snap-type: x mandatory;
+		// Hide scrollbar
 		scrollbar-width: none;
+		-ms-overflow-style: none;
+		&::-webkit-scrollbar {
+			display: none;
+		}
 	}
 }
 
