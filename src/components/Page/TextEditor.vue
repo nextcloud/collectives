@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<WidgetHeading v-if="isLandingPage"
-			:title="t('collectives', 'Description')"
+			:title="t('collectives', 'Landing page')"
 			class="text-container-heading" />
 		<div v-show="showRichText"
 			id="text-container"

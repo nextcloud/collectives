@@ -9,7 +9,7 @@
 			</template>
 		</div>
 		<div class="recent-page-tile__title">
-			{{ page.title }}
+			{{ title }}
 		</div>
 		<LastUserBubble :last-user-id="page.lastUserId"
 			:last-user-display-name="page.lastUserDisplayName"
@@ -41,6 +41,12 @@ export default {
 		...mapGetters([
 			'pagePath',
 		]),
+
+		title() {
+			return this.page.title === 'Readme'
+				? t('collectives', 'Landing page')
+				: this.page.title
+		},
 	},
 }
 </script>
