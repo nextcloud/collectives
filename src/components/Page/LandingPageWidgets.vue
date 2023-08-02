@@ -26,7 +26,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .landing-page-widgets {
 	margin: auto;
 	padding-left: 12px;

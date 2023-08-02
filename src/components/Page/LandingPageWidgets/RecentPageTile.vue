@@ -2,13 +2,13 @@
 	<router-link :to="pagePath(page)" class="recent-page-tile">
 		<div class="recent-page-tile__rectangle">
 			<template v-if="isTemplate">
-				<PageTemplateIcon :size="36" fill-color="var(--color-background-darker)" />
+				<PageTemplateIcon :size="36" fill-color="var(--color-text-maxcontrast)" />
 			</template>
 			<template v-else-if="page.emoji">
 				{{ page.emoji }}
 			</template>
 			<template v-else>
-				<PageIcon :size="36" fill-color="var(--color-background-darker)" />
+				<PageIcon :size="36" fill-color="var(--color-text-maxcontrast)" />
 			</template>
 		</div>
 		<div class="recent-page-tile__title">

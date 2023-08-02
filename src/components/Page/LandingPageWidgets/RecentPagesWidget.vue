@@ -1,6 +1,6 @@
 <template>
 	<div class="recent-pages-widget">
-		<WidgetHeading :title="t('collectives', 'Recent pages')" />
+		<WidgetHeading :title="t('collectives', 'Recent pages')" :first="true" />
 		<div class="recent-pages-widget-container">
 			<div ref="pageslider" class="recent-pages-widget-pages">
 				<RecentPageTile v-for="page in trimmedRecentPages"
