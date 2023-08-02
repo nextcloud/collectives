@@ -101,6 +101,7 @@
 					@click="toggle('sidebar')" />
 			</NcActions>
 		</h1>
+		<LandingPageWidgets v-if="isLandingPage" />
 		<TextEditor :key="`text-editor-${currentPage.id}`"
 			ref="texteditor" />
 	</div>
@@ -113,6 +114,7 @@ import NcEmojiPicker from '@nextcloud/vue/dist/Components/NcEmojiPicker.js'
 import CollectivesIcon from './Icon/CollectivesIcon.vue'
 import EmoticonOutlineIcon from 'vue-material-design-icons/EmoticonOutline.vue'
 import EditButton from './Page/EditButton.vue'
+import LandingPageWidgets from './Page/LandingPageWidgets.vue'
 import PageActionMenu from './Page/PageActionMenu.vue'
 import PageTemplateIcon from './Icon/PageTemplateIcon.vue'
 import TextEditor from './Page/TextEditor.vue'
@@ -128,6 +130,7 @@ export default {
 		CollectivesIcon,
 		EditButton,
 		EmoticonOutlineIcon,
+		LandingPageWidgets,
 		NcActionButton,
 		NcActions,
 		NcButton,

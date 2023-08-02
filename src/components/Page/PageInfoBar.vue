@@ -4,7 +4,8 @@
 			<div class="item-text">
 				<LastUserBubble :last-user-id="currentPage.lastUserId"
 					:last-user-display-name="currentPage.lastUserDisplayName"
-					:timestamp="currentPage.timestamp" />
+					:timestamp="currentPage.timestamp"
+					:show-prefix-string="true" />
 			</div>
 		</div>
 	</div>

@@ -17,22 +17,23 @@
 			<CurrentMembers v-else-if="showCurrent"
 				:circle-id="circleId"
 				:current-members="currentMembers"
-				:search-query="searchQuery" />
+				:search-query="searchQuery"
+				:current-user-is-admin="currentUserIsAdmin" />
 
 			<!-- Selected members (optional) -->
-			<SelectedMembers v-if="!showCurrentSkeleton && showSelection"
+			<SelectedMembers v-if="currentUserIsAdmin && !showCurrentSkeleton && showSelection"
 				:selected-members="selectedMembers"
 				@delete-from-selection="deleteFromSelection" />
 
 			<!-- Searched and picked members -->
-			<MemberSearchResults v-if="!showCurrentSkeleton && hasSearchResults"
+			<MemberSearchResults v-if="currentUserIsAdmin && !showCurrentSkeleton && hasSearchResults"
 				:circle-id="circleId"
 				:search-results="filteredSearchResults"
 				:selection-set="selectedMembers"
 				:on-click-searched="onClickSearched" />
 
 			<!-- No search results -->
-			<template v-else-if="!showCurrentSkeleton">
+			<template v-else-if="currentUserIsAdmin && !showCurrentSkeleton">
 				<NcAppNavigationCaption class="member-picker-caption" :title="t('collectives', 'Add users, groups or circles…')" />
 				<Hint v-if="!isSearching" :hint="t('collectives', 'Search for members to add')" />
 				<Hint v-else-if="isSearchLoading" :hint="t('collectives', 'Loading…')" />
@@ -75,6 +76,10 @@ export default {
 		circleId: {
 			type: String,
 			default: null,
+		},
+		currentUserIsAdmin: {
+			type: Boolean,
+			default: true,
 		},
 		showCurrent: {
 			type: Boolean,
@@ -189,6 +194,11 @@ export default {
 		},
 
 		onSearch() {
+			// Don't search for new members if not admin
+			if (!this.currentUserIsAdmin) {
+				return
+			}
+
 			this.searchResults = []
 			this.isSearchLoading = true
 			this.debounceFetchSearchResults()

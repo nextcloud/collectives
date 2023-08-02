@@ -1,5 +1,8 @@
 <template>
 	<div>
+		<WidgetHeading v-if="isLandingPage"
+			:title="t('collectives', 'Landing page')"
+			class="text-container-heading" />
 		<div v-show="showRichText"
 			id="text-container"
 			:key="'text-' + currentPage.id"
@@ -20,6 +23,7 @@
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import Editor from './Editor.vue'
 import RichText from './RichText.vue'
+import WidgetHeading from './LandingPageWidgets/WidgetHeading.vue'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import {
 	GET_VERSIONS,
@@ -33,6 +37,7 @@ export default {
 	components: {
 		Editor,
 		RichText,
+		WidgetHeading,
 	},
 
 	mixins: [
@@ -56,6 +61,7 @@ export default {
 			'currentPage',
 			'currentPageDavUrl',
 			'hasVersionsLoaded',
+			'isLandingPage',
 			'isTemplatePage',
 			'isTextEdit',
 			'isPublic',
@@ -251,6 +257,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.text-container-heading {
+	max-width: 670px;
+	margin: auto;
+	padding-left: 14px;
+}
 
 #text-container {
 	display: block;

@@ -52,6 +52,39 @@ export default {
 				? member.userType
 				: member.basedOn.source
 		},
+
+		circleMembersSorted: (state, getters) => (circleId) => {
+			/**
+			 * @param {object} m1 First member
+			 * @param {string} m1.userId First member user ID
+			 * @param {string} m1.displayName First member display name
+			 * @param {number} m1.level First member level
+			 * @param {number} m1.userType First member user type
+			 * @param {object} m2 Second member
+			 * @param {string} m2.userId Second member user ID
+			 * @param {string} m2.displayName Second member display name
+			 * @param {number} m2.level Second member level
+			 * @param {number} m2.userType Second member user type
+			 */
+			function sortMembersByLevelAndType(m1, m2) {
+				// Sort by level (admin > moderator > member)
+				if (m1.level !== m2.level) {
+					return m1.level < m2.level
+				}
+
+				// Sort by user type (user > group > circle)
+				if (getters.circleMemberType(m1) !== getters.circleMemberType(m2)) {
+					return getters.circleMemberType(m1) > getters.circleMemberType(m2)
+				}
+
+				// Sort by display name
+				return m1.displayName.localeCompare(m2.displayName)
+			}
+
+			return getters.circleMembers(circleId)
+				.slice()
+				.sort(sortMembersByLevelAndType)
+		},
 	},
 
 	mutations: {

@@ -1,11 +1,16 @@
 <template>
 	<div>
+		<template v-if="showPrefixString">
+			{{ t('collectives', 'Last changed by') }}
+		</template>
 		<NcUserBubble :display-name="lastUserDisplayName"
 			:user="lastUserId"
 			:show-user-status="false">
 			{{ lastEditedUserMessage }}
 		</NcUserBubble>
-		{{ lastUpdate }}
+		<span class="timestamp">
+			{{ lastUpdate }}
+		</span>
 	</div>
 </template>
 
@@ -32,6 +37,10 @@ export default {
 		timestamp: {
 			type: Number,
 			required: true,
+		},
+		showPrefixString: {
+			type: Boolean,
+			default: false,
 		},
 	},
 
