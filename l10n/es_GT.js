@@ -6,6 +6,7 @@ OC.L10N.register(
     "Unshare" : "Dejar de compartir",
     "Settings" : "Configuraciones ",
     "Members" : "Miembros",
+    "Loading…" : "Cargando",
     "Permissions" : "Permisos",
     "Edit" : "Editar",
     "Restore" : "Restaurar",
