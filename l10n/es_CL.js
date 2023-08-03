@@ -7,6 +7,7 @@ OC.L10N.register(
     "Settings" : "Configuraciones ",
     "Members" : "Miembros",
     "Remove" : "Remover",
+    "Loading…" : "Cargando...",
     "Permissions" : "Permisos",
     "Edit" : "Editar",
     "Restore" : "Restaurar",

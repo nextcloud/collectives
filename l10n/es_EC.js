@@ -38,6 +38,7 @@ OC.L10N.register(
     "admin" : "admin",
     "Search users, groups, circles…" : "Buscar usuarios, grupos, círculos...",
     "Search for members to add" : "Buscar miembros para añadir",
+    "Loading…" : "Cargando",
     "An error occurred while performing the search" : "Se produjo un error al realizar la búsqueda",
     "Add users" : "Agregar usuarios",
     "Add groups" : "Agregar grupos",
