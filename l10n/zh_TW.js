@@ -45,6 +45,7 @@ OC.L10N.register(
     "Show in Files" : "在「檔案」中顯示",
     "Hide outline" : "隱藏大綱",
     "Show outline" : "顯示大綱",
+    "Template" : "範本",
     "Title" : "標題",
     "Deleted" : "已刪除",
     "Sort by title" : "按標題排序",
