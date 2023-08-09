@@ -17,6 +17,18 @@ const url = Cypress.config('baseUrl').replace(/\/index.php\/?$/g, '')
 Cypress.env('baseUrl', url)
 
 /**
+ * Ignore ResizeObserver loop limit exceeded' exceptions from browser
+ * See https://stackoverflow.com/q/49384120 for details
+ */
+const resizeObserverLoopErrRe = /^[^(ResizeObserver loop limit exceeded)]/
+Cypress.on('uncaught:exception', (err) => {
+	/* returning false here prevents Cypress from failing the test */
+	if (resizeObserverLoopErrRe.test(err.message)) {
+		return false
+	}
+})
+
+/**
  * Login a user to Nextcloud and visit a given route
  */
 Cypress.Commands.add('login', (user, { password, route, onBeforeLoad } = {}) => {
