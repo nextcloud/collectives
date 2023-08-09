@@ -302,8 +302,6 @@ export default {
 
 <style lang="scss" scoped>
 #titleform {
-	z-index: 10022;
-
 	form {
 		flex: auto;
 	}
