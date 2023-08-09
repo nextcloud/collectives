@@ -80,6 +80,10 @@ export default {
 </script>
 
 <style lang="scss">
+[data-text-el='editor-container'] {
+	overflow: initial !important;
+}
+
 [data-text-el='editor-container'] .document-status {
 	max-width: 670px;
 	padding: 0 2px;
