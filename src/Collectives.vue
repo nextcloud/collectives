@@ -131,6 +131,10 @@ export default {
 	padding-bottom: 200px;
 }
 
+#titleform {
+	z-index: 10022;
+}
+
 #version-title, #titleform input[type='text'] {
 	font-size: 35px;
 	border: none;
