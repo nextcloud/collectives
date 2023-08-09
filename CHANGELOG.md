@@ -1,5 +1,29 @@
 # Changelog
 
+## 2.7.0 - 2023.08.08
+
+### ✨New
+* 👥 Allow to manage members inside the app. (#308, #244)
+* 🛬 List recent pages and members on landing page. (#311)
+* ⌛ Placeholder skeleton instead of loading spinner while loading.
+* 📊 With Nextcloud 27.1, add support for mermaid diagrams. (#284)
+* 👩‍💻With recent Text versions, add syntax highlighting to code blocks.
+
+### 🐛Fixes
+* 🔗 Grow link area in page list to full item height. (#808)
+* ⌨️  Use `autofocus` command from Text. With recent Text versions, cursor position
+  will be restored when opening a page.
+* 👩‍💻Use `OCP\IDispatcher` to fix issues with Nextcloud 27.1. (#710)
+* 💄 Fix stickyness of titlebar when viewing old versions of a page.
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️  Update NPM dependencies.
+* ⬆️  Update PHP composer dependencies.
+
+
 ## 2.6.1 - 2023.07.10
 
 ### 🐛Fixes
