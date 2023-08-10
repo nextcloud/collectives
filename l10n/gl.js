@@ -147,7 +147,7 @@ OC.L10N.register(
     "Template" : "Modelo",
     "Title" : "Título",
     "Could not rename the page" : "Non foi posíbel cambiar o nome da páxina",
-    "Expand subpage list" : "Expandir a lista de subpáxinas",
+    "Expand subpage list" : "Estender a lista de subpáxinas",
     "Add a page" : "Engadir unha páxina",
     "Add a subpage" : "Engadir unha subpáxina",
     "Deleted pages" : "Páxinas eliminadas",
