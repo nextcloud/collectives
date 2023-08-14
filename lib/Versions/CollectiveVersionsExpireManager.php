@@ -21,6 +21,7 @@ use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\Files\NotPermittedException as FilesNotPermittedException;
 use OCP\IDBConnection;
 use Psr\Container\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class CollectiveVersionsExpireManager extends BasicEmitter {
 	private CollectiveFolderManager $folderManager;
@@ -54,6 +55,13 @@ class CollectiveVersionsExpireManager extends BasicEmitter {
 		$this->collectiveMapper = $collectiveMapper;
 		$this->timeFactory = $timeFactory;
 		$this->dispatcher = $dispatcher;
+
+		[$major] = \OCP\Util::getVersion();
+		if ($major < 28) {
+			// Use Symfony event dispatcher on older Nextcloud releases
+			$this->dispatcher = \OCP\Server::get(EventDispatcherInterface::class);
+		}
+
 		try {
 			$this->versionsBackend = $appContainer->get(VersionsBackend::class);
 		} catch (QueryException $e) {
