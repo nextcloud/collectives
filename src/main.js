@@ -25,12 +25,11 @@ import Collectives from './Collectives.vue'
 import router from './router.js'
 import store from './store/store.js'
 import { sync } from 'vuex-router-sync'
-import { generateFilePath } from '@nextcloud/router'
 
 /** Global directives */
 import VTooltip from '@nextcloud/vue/dist/Directives/Tooltip.js'
 
-__webpack_public_path__ = generateFilePath('collectives', '', 'js/') // eslint-disable-line
+import './shared-init.js'
 
 // Register global directives
 Vue.directive('Tooltip', VTooltip)
