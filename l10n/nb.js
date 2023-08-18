@@ -15,6 +15,7 @@ OC.L10N.register(
     "Last edited by {user}" : "Sist endret av {user}",
     "Members" : "Medlemmer",
     "No search results" : "Ingen søkeresultater",
+    "admin" : "admin",
     "Permissions" : "Rettigheter",
     "View" : "Vis",
     "Edit" : "Rediger",
