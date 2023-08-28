@@ -51,7 +51,7 @@ describe('The apps', function() {
 
 		it('Renders the default files list', function() {
 			cy.login('jane', { route: 'apps/files' })
-			cy.get('.files-fileList tr').should('contain', 'welcome.txt')
+			cy.get('.files-fileList tr, .files-list__tbody tr').should('contain', 'welcome.txt')
 		})
 
 	})

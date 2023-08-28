@@ -65,7 +65,7 @@ describe('Settings', function() {
 				.click()
 			cy.get('input[name="userFolder"]')
 				.click()
-			cy.get('[data-dir=""] > a')
+			cy.get('[data-dir=""] > a, a[title="Home"]')
 				.click()
 			cy.get('tr[data-entryname="Collectives"]')
 				.click()
