@@ -45,7 +45,7 @@ jobs:
 
     strategy:
       matrix:
-        server-versions: ['stable25', 'master']
+        server-versions: ['stable25', 'stable27', 'master']
 
     steps:
       - name: Checkout server
@@ -133,7 +133,7 @@ jobs:
         containers: [1, 2, 3, 4]
         php-versions: ['8.0']
         databases: ['sqlite']
-        server-versions: ['stable25', 'master']
+        server-versions: ['stable25', 'stable27', 'master']
 
     steps:
       - name: Restore context
