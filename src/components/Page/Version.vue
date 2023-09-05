@@ -21,7 +21,7 @@
 		</h1>
 		<div id="text-container"
 			:class="[isFullWidthView ? 'full-width-view' : 'sheet-view']">
-			<RichText :key="`show-${currentPage.id}-${version.timestamp}`"
+			<Reader :key="`show-${currentPage.id}-${version.timestamp}`"
 				:current-page="currentPage"
 				:page-content="pageVersionContent" />
 		</div>
@@ -31,7 +31,7 @@
 <script>
 import { NcActionButton, NcActions, NcButton } from '@nextcloud/vue'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
-import RichText from './RichText.vue'
+import Reader from './Reader.vue'
 
 import { getCurrentUser } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
@@ -51,7 +51,7 @@ export default {
 		NcActions,
 		NcButton,
 		RestoreIcon,
-		RichText,
+		Reader,
 	},
 
 	mixins: [

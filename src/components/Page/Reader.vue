@@ -42,7 +42,7 @@ const resolvePath = function(from, rel) {
 }
 
 export default {
-	name: 'RichText',
+	name: 'Reader',
 
 	components: {
 		SkeletonLoading,

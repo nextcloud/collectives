@@ -4,27 +4,27 @@
 			:title="t('collectives', 'Landing page')"
 			class="text-container-heading"
 			:class="[isFullWidthView ? 'full-width-view' : 'sheet-view']" />
-		<div v-show="showRichText"
+		<div v-show="showReader"
 			id="text-container"
 			:key="'text-' + currentPage.id"
 			:class="[isFullWidthView ? 'full-width-view' : 'sheet-view']"
 			:aria-label="t('collectives', 'Page content')">
-			<RichText :key="`reader-${currentPage.id}`"
+			<Reader :key="`reader-${currentPage.id}`"
 				:current-page="currentPage"
 				:page-content="pageContent" />
 		</div>
-		<Editor v-if="currentCollectiveCanEdit"
+		<LegacyEditor v-if="currentCollectiveCanEdit"
 			v-show="showEditor"
 			:key="`editor-${currentPage.id}`"
-			ref="editor"
+			ref="legacyEditor"
 			@ready="readyEditor" />
 	</div>
 </template>
 
 <script>
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import Editor from './Editor.vue'
-import RichText from './RichText.vue'
+import LegacyEditor from './LegacyEditor.vue'
+import Reader from './Reader.vue'
 import WidgetHeading from './LandingPageWidgets/WidgetHeading.vue'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import {
@@ -34,11 +34,11 @@ import {
 import pageContentMixin from '../../mixins/pageContentMixin.js'
 
 export default {
-	name: 'TextEditor',
+	name: 'LegacyTextEditor',
 
 	components: {
-		Editor,
-		RichText,
+		LegacyEditor,
+		Reader,
 		WidgetHeading,
 	},
 
@@ -71,7 +71,7 @@ export default {
 			'loading',
 		]),
 
-		showRichText() {
+		showReader() {
 			return this.readOnly
 		},
 
@@ -138,26 +138,26 @@ export default {
 		}),
 
 		// this is a method so it does not get cached
-		wrapper() {
-			return this.$refs.editor?.$children[0].$children[0]
+		legacyWrapper() {
+			return this.$refs.legacyEditor?.$children[0].$children[0]
 		},
 
 		// this is a method so it does not get cached
-		syncService() {
+		legacySyncService() {
 			// `$syncService` in Nexcloud 24+, `syncService` beforehands
-			return this.wrapper()?.$syncService ?? this.wrapper()?.syncService
+			return this.legacyWrapper()?.$syncService ?? this.legacyWrapper()?.syncService
 		},
 
 		// this is a method so it does not get cached
-		doc() {
-			return this.wrapper()?.$data.document
+		legacyDoc() {
+			return this.legacyWrapper()?.$data.document
 		},
 
 		focusEditor() {
-			if (this.wrapper()?.$editor?.commands.autofocus) {
-				this.wrapper().$editor.commands.autofocus()
+			if (this.legacyWrapper()?.$editor?.commands.autofocus) {
+				this.legacyWrapper().$editor.commands.autofocus()
 			} else {
-				this.wrapper()?.$editor?.commands.focus?.()
+				this.legacyWrapper()?.$editor?.commands.focus?.()
 			}
 		},
 
@@ -169,7 +169,7 @@ export default {
 			// as it does not need to be unique and matching the real file name
 			const alt = name.replaceAll(/[[\]]/g, '')
 
-			this.wrapper()?.$editor?.commands.setImage({ src, alt })
+			this.legacyWrapper()?.$editor?.commands.setImage({ src, alt })
 		},
 
 		/**
@@ -180,13 +180,13 @@ export default {
 
 			// Set pageContent if it's been empty before
 			if (!this.pageContent) {
-				this.pageContent = this.syncService()._getContent() || ''
+				this.pageContent = this.legacySyncService()._getContent() || ''
 			}
 			this.readMode = false
 
 			if (this.isTextEdit) {
-				if (this.doc()) {
-					this.previousSaveTimestamp = this.doc().lastSavedVersionTime
+				if (this.legacyDoc()) {
+					this.previousSaveTimestamp = this.legacyDoc().lastSavedVersionTime
 				}
 			}
 		},
@@ -201,8 +201,8 @@ export default {
 
 		startEdit() {
 			this.scrollTop = document.getElementById('text')?.scrollTop || 0
-			if (this.doc()) {
-				this.previousSaveTimestamp = this.doc().lastSavedVersionTime
+			if (this.legacyDoc()) {
+				this.previousSaveTimestamp = this.legacyDoc().lastSavedVersionTime
 			}
 			this.$nextTick(() => {
 				document.getElementById('editor')?.scrollTo(0, this.scrollTop)
@@ -212,7 +212,7 @@ export default {
 		stopEdit() {
 			this.scrollTop = document.getElementById('editor')?.scrollTop || 0
 
-			const pageContent = this.syncService()._getContent() || ''
+			const pageContent = this.legacySyncService()._getContent() || ''
 			const changed = this.pageContent !== pageContent
 
 			// switch back to edit if there's no content
@@ -232,7 +232,7 @@ export default {
 
 				// Save pending changes in editor
 				// TODO: detect missing connection and display warning
-				this.syncService().save()
+				this.legacySyncService().save()
 
 				this.pageContent = pageContent
 			}

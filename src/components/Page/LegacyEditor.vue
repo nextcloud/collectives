@@ -23,7 +23,7 @@ import { mapGetters, mapMutations } from 'vuex'
 import { emit } from '@nextcloud/event-bus'
 
 export default {
-	name: 'Editor',
+	name: 'LegacyEditor',
 
 	computed: {
 		...mapGetters([
