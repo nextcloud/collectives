@@ -107,7 +107,11 @@
 			</div>
 		</h1>
 		<LandingPageWidgets v-if="isLandingPage" />
-		<LegacyTextEditor :key="`text-editor-${currentPage.id}`"
+		<TextEditor v-if="textApiAvailable"
+			:key="`text-editor-${currentPage.id}`"
+			ref="texteditor" />
+		<LegacyTextEditor v-else
+			:key="`text-editor-${currentPage.id}`"
 			ref="texteditor" />
 	</div>
 </template>
@@ -123,6 +127,7 @@ import LandingPageWidgets from './Page/LandingPageWidgets.vue'
 import PageActionMenu from './Page/PageActionMenu.vue'
 import PageTemplateIcon from './Icon/PageTemplateIcon.vue'
 import LegacyTextEditor from './Page/LegacyTextEditor.vue'
+import TextEditor from './Page/TextEditor.vue'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import pageMixin from '../mixins/pageMixin.js'
 import { showError } from '@nextcloud/dialogs'
@@ -144,6 +149,7 @@ export default {
 		PageActionMenu,
 		PageTemplateIcon,
 		LegacyTextEditor,
+		TextEditor,
 	},
 
 	mixins: [
@@ -155,6 +161,7 @@ export default {
 		return {
 			newTitle: '',
 			titleIsTruncated: false,
+			textApiAvailable: !!window.OCA?.Text?.createEditor,
 		}
 	},
 

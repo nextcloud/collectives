@@ -7,9 +7,11 @@ namespace OCA\Collectives\Listeners;
 
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Service\NotPermittedException;
+use OCA\Text\Event\LoadEditor;
 use OCP\AppFramework\Http\Events\BeforeTemplateRenderedEvent;
 use OCP\AppFramework\Services\IInitialState;
 use OCP\EventDispatcher\Event;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\EventDispatcher\IEventListener;
 use OCP\IUserSession;
 use OCP\Util;
@@ -18,13 +20,16 @@ use OCP\Util;
 class BeforeTemplateRenderedListener implements IEventListener {
 	private IUserSession $userSession;
 	private UserFolderHelper $userFolderHelper;
+	private IEventDispatcher $eventDispatcher;
 	private IInitialState $initialState;
 
 	public function __construct(IUserSession $userSession,
 		UserFolderHelper $userFolderHelper,
+		IEventDispatcher $eventDispatcher,
 		IInitialState $initialState) {
 		$this->userSession = $userSession;
 		$this->userFolderHelper = $userFolderHelper;
+		$this->eventDispatcher = $eventDispatcher;
 		$this->initialState = $initialState;
 	}
 
@@ -55,6 +60,11 @@ class BeforeTemplateRenderedListener implements IEventListener {
 		}
 
 		Util::addScript('collectives', 'collectives-files');
+
+		if (class_exists(LoadEditor::class)) {
+			$this->eventDispatcher->dispatchTyped(new LoadEditor());
+		}
+
 		// Provide Collectives user folder as initial state
 		$this->initialState->provideInitialState('user_folder', $userFolder);
 	}
