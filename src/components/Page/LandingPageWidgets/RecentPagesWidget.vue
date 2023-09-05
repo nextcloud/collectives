@@ -145,7 +145,7 @@ export default {
 	top: 0;
 	bottom: 0;
 	padding: 0;
-	margin: 0;
+	margin: 0 !important;
 	border: 0;
 	border-radius: 0;
 	z-index: 2;
