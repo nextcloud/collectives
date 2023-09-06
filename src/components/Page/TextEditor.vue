@@ -63,6 +63,7 @@ export default {
 			'isTextEdit',
 			'isPublic',
 			'loading',
+			'showing',
 		]),
 
 		pageContent() {
@@ -84,11 +85,19 @@ export default {
 		readOnly() {
 			return !this.currentCollectiveCanEdit || this.readMode | !this.isTextEdit
 		},
+
+		showOutline() {
+			return this.showing('outline')
+		},
 	},
 
 	watch: {
 		'currentPage.timestamp'() {
 			this.getPageContent()
+		},
+		'showOutline'(value) {
+			console.debug('watch showOutline in TextEditor.vue', value)
+			this.editor?.setShowOutline(value)
 		},
 	},
 
