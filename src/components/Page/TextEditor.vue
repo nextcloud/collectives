@@ -148,6 +148,7 @@ export default {
 				el: this.$refs.editor,
 				fileId: this.currentPage.id,
 				readOnly: false,
+				autofocus: false,
 				onUpdate: ({ markdown }) => {
 					this.editorContent = markdown
 				},
