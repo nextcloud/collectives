@@ -96,7 +96,6 @@ export default {
 			this.getPageContent()
 		},
 		'showOutline'(value) {
-			console.debug('watch showOutline in TextEditor.vue', value)
 			this.editor?.setShowOutline(value)
 		},
 	},
@@ -110,9 +109,10 @@ export default {
 	},
 
 	mounted() {
-		this.initEditMode()
-		this.getPageContent()
 		this.setupEditor()
+		this.getPageContent().then(() => {
+			this.initEditMode()
+		})
 
 		this.textEditWatcher = this.$watch('isTextEdit', (val) => {
 			if (val === true) {
@@ -149,11 +149,13 @@ export default {
 				fileId: this.currentPage.id,
 				readOnly: false,
 				autofocus: false,
+				onLoaded: () => {
+					this.readyEditor()
+				},
 				onUpdate: ({ markdown }) => {
 					this.editorContent = markdown
 				},
 			})
-			this.readyEditor()
 		},
 
 		focusEditor() {
@@ -194,8 +196,14 @@ export default {
 		},
 
 		initEditMode() {
-			// Open in edit mode when pageMode is set, for template pages and for new pages
-			if (!!this.currentCollective.pageMode || this.isTemplatePage || this.loading('newPage')) {
+			// Open in edit mode when pageMode is set
+			if (!!this.currentCollective.pageMode
+				// for template pages
+				|| this.isTemplatePage
+				// for new pages
+				|| this.loading('newPage')
+				// or when page is empty
+				|| !this.pageContent) {
 				this.setTextEdit()
 			}
 		},
