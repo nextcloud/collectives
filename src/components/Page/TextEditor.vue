@@ -57,12 +57,14 @@ export default {
 			'currentCollectiveCanEdit',
 			'currentPage',
 			'currentPageDavUrl',
+			'currentPageFilePath',
 			'hasVersionsLoaded',
 			'isLandingPage',
 			'isTemplatePage',
 			'isTextEdit',
 			'isPublic',
 			'loading',
+			'shareTokenParam',
 			'showing',
 		]),
 
@@ -147,7 +149,9 @@ export default {
 			this.editor = await window.OCA.Text.createEditor({
 				el: this.$refs.editor,
 				fileId: this.currentPage.id,
+				filePath: `/${this.currentPageFilePath}`,
 				readOnly: false,
+				shareToken: this.shareTokenParam || null,
 				autofocus: false,
 				onLoaded: () => {
 					this.readyEditor()
