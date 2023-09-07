@@ -19,6 +19,7 @@
 
 <script>
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { showError } from '@nextcloud/dialogs'
 import Reader from './Reader.vue'
 import WidgetHeading from './LandingPageWidgets/WidgetHeading.vue'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
@@ -239,7 +240,11 @@ export default {
 
 				// Save pending changes in editor
 				// TODO: detect missing connection and display warning
-				//this.legacySyncService()?.save()
+				this.editor.save()
+					.catch(() => {
+						showError(t('collectives', 'Error saving the document. Please try again.'))
+						this.setTextEdit()
+					})
 			}
 
 			this.$nextTick(() => {
