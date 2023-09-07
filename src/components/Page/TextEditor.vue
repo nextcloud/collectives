@@ -137,8 +137,10 @@ export default {
 		...mapMutations([
 			'load',
 			'done',
+			'hide',
 			'setTextEdit',
 			'setTextView',
+			'show',
 		]),
 
 		...mapActions({
@@ -159,6 +161,9 @@ export default {
 				},
 				onUpdate: ({ markdown }) => {
 					this.editorContent = markdown
+				},
+				onOutlineToggle: (visible) => {
+					this.toggleOutlineFromEditor(visible)
 				},
 			})
 		},
@@ -250,6 +255,14 @@ export default {
 			this.$nextTick(() => {
 				document.getElementById('text')?.scrollTo(0, this.scrollTop)
 			})
+		},
+
+		toggleOutlineFromEditor(visible) {
+			if (visible === true) {
+				this.show('outline')
+			} else if (visible === false) {
+				this.hide('outline')
+			}
 		},
 
 		async getPageContent() {
