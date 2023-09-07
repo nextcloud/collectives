@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Mount;
 
-use OC\Files\Node\LazyFolder;
 use OC\Files\Storage\Wrapper\Jail;
 use OC\Files\Storage\Wrapper\PermissionsMask;
 use OCA\Collectives\ACL\ACLStorageWrapper25;
@@ -35,8 +34,7 @@ class CollectiveFolderManager {
 	private IRequest $request;
 	private ?string $rootPath = null;
 
-	/** @var int|null */
-	private $rootFolderStorageId = null;
+	private ?int $rootFolderStorageId = null;
 
 	/**
 	 * CollectiveFolderManager constructor.
@@ -78,14 +76,7 @@ class CollectiveFolderManager {
 	 * @return Folder
 	 */
 	public function getRootFolder(): Folder {
-		$rootFolder = $this->rootFolder;
-		return (new LazyFolder(function () use ($rootFolder) {
-			try {
-				return $rootFolder->get($this->getRootPath());
-			} catch (NotFoundException $e) {
-				return $rootFolder->newFolder($this->getRootPath());
-			}
-		}));
+		return new LazyFolder($this->rootFolder, $this->getRootPath());
 	}
 
 	/**
@@ -120,6 +111,8 @@ class CollectiveFolderManager {
 	 * @return IMountPoint|null
 	 * @throws InvalidPathException
 	 * @throws NotFoundException
+	 *
+	 *
 	 */
 	public function getMount(int $id,
 		string $mountPoint,

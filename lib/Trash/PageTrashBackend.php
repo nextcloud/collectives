@@ -539,7 +539,8 @@ class PageTrashBackend implements ITrashBackend {
 			$trashNode = $this->getTrashNodeById($user, $fileId);
 			// Get parent folder for index pages
 			if ($trashNode instanceof File && NodeHelper::isIndexPage($trashNode)) {
-				$trashNode = $trashNode->getParent();
+				// The extra `get()` is required to resolve the lazy folder from getParent()
+				$trashNode = $trashNode->getParent()->get('');
 			}
 			$trashItem = $this->trashManager->getTrashItemByFileId($trashNode->getId());
 			if ($trashItem && method_exists($trashNode, 'getFileInfo')) {

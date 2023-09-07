@@ -1,4 +1,4 @@
-Feature: pages
+Feature: pagesDisabledTrashbin
 
   Scenario: Disable trashbin and versions apps
     When app "files_trashbin" is "disabled"
