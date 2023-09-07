@@ -121,11 +121,11 @@ export default {
 				this.stopEdit()
 			}
 		})
-		subscribe('collectives:attachment:restore', this.addImage)
+		subscribe('collectives:attachment:restore', this.restoreAttachment)
 	},
 
 	beforeDestroy() {
-		unsubscribe('collectives:attachment:restore', this.addImage)
+		unsubscribe('collectives:attachment:restore', this.restoreAttachment)
 		this.textEditWatcher()
 		this.editor?.destroy()
 	},
@@ -162,7 +162,7 @@ export default {
 			this.editor?.focus()
 		},
 
-		addImage(name) {
+		restoreAttachment(name) {
 			// inspired by the fixedEncodeURIComponent function suggested in
 			// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent
 			const src = '.attachments.' + this.currentPage.id + '/' + name
@@ -170,8 +170,7 @@ export default {
 			// as it does not need to be unique and matching the real file name
 			const alt = name.replaceAll(/[[\]]/g, '')
 
-			// TODO: insert image
-			//this.legacyWrapper()?.$editor?.commands.setImage({ src, alt })
+			this.editor.insertAtCursor(`<img src="${src}" alt="${alt}" />`)
 		},
 
 		/**
