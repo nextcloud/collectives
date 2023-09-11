@@ -1,5 +1,20 @@
 # Changelog
 
+## 2.7.1 - 2023.09.11
+
+### 🐛Fixes
+* 🧹 Fallback to old EventDispatcher on older releases, fixing background job. (#828)
+* 📊 Fix async component loading, fixing mermaid support in view mode. (#866)
+* ⚡️ Fix LazyFolder implementation with Nextcloud 28.
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️  Update NPM dependencies.
+* ⬆️  Update PHP composer dependencies.
+
+
 ## 2.7.0 - 2023.08.08
 
 ### ✨New
