@@ -198,6 +198,7 @@ jobs:
         with:
           record: true
           parallel: true
+          group: 'Nextcloud ${{ matrix.server-versions }}'
           wait-on: '${{ env.CYPRESS_baseUrl }}'
           working-directory: apps/${{ env.APP_NAME }}
           config: video=false,defaultCommandTimeout=20000
