@@ -130,7 +130,7 @@ jobs:
       fail-fast: false
       matrix:
         node-version: [20]
-        containers: [1, 2, 3, 4]
+        #containers: [1, 2, 3, 4]
         php-versions: ['8.0']
         databases: ['sqlite']
         server-versions: ['stable25', 'stable27', 'master']
@@ -197,7 +197,7 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           record: true
-          parallel: true
+          #parallel: true
           group: 'Nextcloud ${{ matrix.server-versions }}'
           wait-on: '${{ env.CYPRESS_baseUrl }}'
           working-directory: apps/${{ env.APP_NAME }}
