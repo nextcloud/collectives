@@ -72,7 +72,9 @@ describe('Page details', function() {
 
 	describe('Displaying backlinks', function() {
 		it('Lists backlinks for a page', function() {
+			cy.intercept('PUT', '**/apps/text/session/create').as('textCreateSession')
 			cy.visit('/apps/collectives/Our%20Garden/Day%201')
+			cy.wait('@textCreateSession')
 			cy.get('button.action-item .icon-menu-sidebar').click()
 			cy.get('a#backlinks').click()
 			cy.get('.app-sidebar-tabs__content').should('contain', 'Day 2')
