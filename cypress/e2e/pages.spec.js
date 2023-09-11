@@ -233,7 +233,7 @@ describe('Page', function() {
 				cy.get('.tippy-content .link-picker__item')
 					.contains('Collective pages')
 					.click()
-				cy.get('.reference-picker input[type="search"]')
+				cy.get('.reference-picker input[type="text"], .reference-picker input[type="search"]')
 					.type('Day 2')
 				cy.get('.search-result')
 					.contains('Day 2')
