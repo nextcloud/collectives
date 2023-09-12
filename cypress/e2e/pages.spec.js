@@ -269,6 +269,38 @@ describe('Page', function() {
 		})
 	})
 
+	describe.only('Full width view', function() {
+		it('Allows to toggle persistent full-width view', function() {
+			cy.visit('/apps/collectives/Our%20Garden/Day%202')
+			cy.get('#titleform').should('have.css', 'max-width', '670px')
+			cy.get('#titleform').invoke('outerWidth').should('eq', 670)
+			cy.get('#read-only-editor').invoke('outerWidth').should('eq', 670)
+
+			// Set full width mode
+			cy.get('#titleform .action-item__menutoggle')
+				.click()
+			cy.contains('li.action', 'Full width')
+				.click()
+			cy.get('#titleform').should('have.css', 'max-width', 'none')
+			cy.get('#titleform').invoke('outerWidth').should('be.greaterThan', 700)
+			cy.get('#read-only-editor').invoke('outerWidth').should('be.greaterThan', 700)
+
+			// Reload to check persistence with browser storage
+			cy.reload()
+			cy.get('#titleform').invoke('outerWidth').should('be.greaterThan', 700)
+			cy.get('#read-only-editor').invoke('outerWidth').should('be.greaterThan', 700)
+
+			// Unset full width mode
+			cy.get('#titleform .action-item__menutoggle')
+				.click()
+			cy.contains('li.action', 'Full width')
+				.click()
+			cy.get('#titleform').should('have.css', 'max-width', '670px')
+			cy.get('#titleform').invoke('outerWidth').should('eq', 670)
+			cy.get('#read-only-editor').invoke('outerWidth').should('eq', 670)
+		})
+	})
+
 	describe('Using the search providers to search for a page', function() {
 		it('Search for page title', function() {
 			cy.get('.unified-search a').click()
