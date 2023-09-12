@@ -1,0 +1,16 @@
+:root {
+	--text-editor-max-width: false !important;
+}
+
+.sheet-view {
+	--text-editor-max-width: 670px !important;
+	max-width: var(--text-editor-max-width);
+	margin: auto;
+
+	// Editor document status bar
+	.document-status {
+		max-width: var(--text-editor-max-width);
+		padding: 0 2px;
+		margin: auto;
+	}
+}

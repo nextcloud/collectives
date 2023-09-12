@@ -1,5 +1,6 @@
 <template>
-	<div class="landing-page-widgets">
+	<div class="landing-page-widgets"
+		:class="{'sheet-view': !isFullWidthView}">
 		<RecentPagesWidget />
 		<MembersWidget v-if="!isPublic" />
 	</div>
@@ -21,6 +22,7 @@ export default {
 	computed: {
 		...mapGetters([
 			'isPublic',
+			'isFullWidthView',
 		]),
 	},
 }
@@ -28,8 +30,6 @@ export default {
 
 <style scoped>
 .landing-page-widgets {
-	margin: auto;
 	padding-left: 12px;
-	max-width: 670px;
 }
 </style>

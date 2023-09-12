@@ -2,10 +2,12 @@
 	<div>
 		<WidgetHeading v-if="isLandingPage"
 			:title="t('collectives', 'Landing page')"
-			class="text-container-heading" />
+			class="text-container-heading"
+			:class="{'sheet-view': !isFullWidthView}" />
 		<div v-show="showRichText"
 			id="text-container"
 			:key="'text-' + currentPage.id"
+			:class="{'sheet-view': !isFullWidthView}"
 			:aria-label="t('collectives', 'Page content')">
 			<RichText :key="`reader-${currentPage.id}`"
 				:current-page="currentPage"
@@ -65,6 +67,7 @@ export default {
 			'isTemplatePage',
 			'isTextEdit',
 			'isPublic',
+			'isFullWidthView',
 			'loading',
 		]),
 
@@ -258,8 +261,6 @@ export default {
 
 <style lang="scss" scoped>
 .text-container-heading {
-	max-width: 670px;
-	margin: auto;
 	padding-left: 14px;
 }
 

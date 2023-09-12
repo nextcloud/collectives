@@ -124,7 +124,6 @@ export default {
 		flex-direction: row;
 		gap: 12px;
 
-		max-width: 670px;
 		overflow-x: auto;
 		scroll-snap-type: x mandatory;
 		// Hide scrollbar

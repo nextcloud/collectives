@@ -19,6 +19,15 @@
 					<OpenInNewIcon :size="20" />
 				</template>
 			</NcActionButton>
+			<NcActionCheckbox v-if="!inPageList && !isMobile"
+				:checked="isFullWidthView"
+				@check="onCheckFullWidthView"
+				@uncheck="onUncheckFullWidthView">
+				<template #icon>
+					<DeleteIcon :size="20" />
+				</template>
+				{{ t('collectives', 'Full width') }}
+			</NcActionCheckbox>
 			<NcActionButton v-if="!inPageList"
 				:close-after-click="true"
 				@click.native="toggle('outline')">
@@ -33,7 +42,7 @@
 				:close-after-click="true">
 				{{ t('collectives', 'Show in Files') }}
 			</NcActionLink>
-			<NcActionButton v-if="currentCollectiveCanEdit && !isTemplate && !isLandingPage"
+			<NcActionButton v-if="inPageList && currentCollectiveCanEdit && !isTemplate && !isLandingPage"
 				:close-after-click="true"
 				@click.native="show('details')"
 				@click="gotoPageEmojiPicker">
@@ -52,7 +61,7 @@
 				</template>
 				{{ editTemplateString }}
 			</NcActionButton>
-			<NcActionButton v-if="currentCollectiveCanEdit && !isLandingPage"
+			<NcActionButton v-if="inPageList && currentCollectiveCanEdit && !isLandingPage"
 				:close-after-click="true"
 				@click="onOpenMoveModal">
 				<template #icon>
@@ -79,9 +88,10 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { generateUrl } from '@nextcloud/router'
-import { NcActions, NcActionButton, NcActionLink, NcActionSeparator } from '@nextcloud/vue'
+import { SET_FULL_WIDTH_VIEW } from '../../store/actions.js'
+import { NcActions, NcActionButton, NcActionCheckbox, NcActionLink, NcActionSeparator } from '@nextcloud/vue'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import CollectiveActions from '../Collective/CollectiveActions.vue'
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
@@ -101,6 +111,7 @@ export default {
 		MoveModal,
 		NcActions,
 		NcActionButton,
+		NcActionCheckbox,
 		NcActionLink,
 		NcActionSeparator,
 		DeleteIcon,
@@ -170,6 +181,7 @@ export default {
 			'currentCollective',
 			'currentCollectiveCanEdit',
 			'hasSubpages',
+			'isFullWidthView',
 			'loading',
 			'pagesTreeWalk',
 			'showing',
@@ -229,6 +241,18 @@ export default {
 
 	methods: {
 		...mapMutations(['show', 'toggle']),
+
+		...mapActions({
+			dispatchSetFullWidthView: SET_FULL_WIDTH_VIEW,
+		}),
+
+		onCheckFullWidthView() {
+			this.dispatchSetFullWidthView(true)
+		},
+
+		onUncheckFullWidthView() {
+			this.dispatchSetFullWidthView(false)
+		},
 
 		gotoPageEmojiPicker() {
 			if (this.pageUrl && (this.currentPage.id !== this.pageId)) {

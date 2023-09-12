@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<h1 id="titleform" class="page-title">
+		<h1 id="titleform" class="page-title" :class="{'sheet-view': !isFullWidthView}">
 			<!-- Page emoji or icon -->
 			<div class="page-title-icon"
 				:class="{ 'mobile': isMobile }">
@@ -121,7 +121,7 @@ import TextEditor from './Page/TextEditor.vue'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import pageMixin from '../mixins/pageMixin.js'
 import { showError } from '@nextcloud/dialogs'
-import { GET_PAGES, RENAME_PAGE } from '../store/actions.js'
+import { GET_PAGES, INIT_FULL_WIDTH_PAGEIDS, RENAME_PAGE } from '../store/actions.js'
 
 export default {
 	name: 'Page',
@@ -160,6 +160,7 @@ export default {
 			'currentCollectiveCanEdit',
 			'isIndexPage',
 			'isPublic',
+			'isFullWidthView',
 			'isTemplatePage',
 			'isLandingPage',
 			'loading',
@@ -233,6 +234,7 @@ export default {
 	},
 
 	mounted() {
+		this.dispatchInitFullWidthPageids()
 		document.title = this.documentTitle
 		this.initTitleEntry()
 	},
@@ -248,6 +250,7 @@ export default {
 		...mapActions({
 			dispatchGetPages: GET_PAGES,
 			dispatchRenamePage: RENAME_PAGE,
+			dispatchInitFullWidthPageids: INIT_FULL_WIDTH_PAGEIDS,
 		}),
 
 		initTitleEntry() {
@@ -309,6 +312,8 @@ export default {
 </style>
 
 <style lang="scss">
+@import '../css/editor';
+
 @media print {
 	/* Don't print emoticon button (if page doesn't have an emoji set) */
 	.edit-button, .action-item, .emoji-picker-emoticon {

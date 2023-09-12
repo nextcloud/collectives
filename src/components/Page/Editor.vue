@@ -11,6 +11,7 @@
 		:show-outline-outside="showOutline"
 		mime="text/markdown"
 		class="file-view active"
+		:class="{'sheet-view': !isFullWidthView}"
 		@ready="ready"
 		@outline-toggled="toggleOutlineFromText"
 		@add-image-node="onAddImageNode"
@@ -28,6 +29,7 @@ export default {
 		...mapGetters([
 			'currentPage',
 			'currentPageFilePath',
+			'isFullWidthView',
 			'shareTokenParam',
 			'showing',
 		]),
@@ -82,12 +84,6 @@ export default {
 <style lang="scss">
 [data-text-el='editor-container'] {
 	overflow: initial !important;
-}
-
-[data-text-el='editor-container'] .document-status {
-	max-width: 670px;
-	padding: 0 2px;
-	margin: auto;
 }
 
 [data-text-el='editor-container'] .editor--outline {
