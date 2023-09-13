@@ -109,17 +109,19 @@ class PageContentProvider implements IProvider {
 			try {
 				$collectiveRoot = $this->pageService->getCollectiveFolder($collective->getId(), $user->getUID());
 				$results = $this->indexedSearchService->searchCollective($collective, $query->getTerm());
-				foreach ($results as $fileId => $fileData) {
-					$file = $collectiveRoot->getById($fileId);
-					$pages[$fileId] = reset($file);
-					$collectiveMap[$fileId] = $collective;
-				}
 			} catch (FileSearchException|NotFoundException $e) {
 				$this->logger->warning('Collectives file content search failed.', [
 					'error' => $e->getMessage(),
 					'trace' => $e->getTraceAsString()
 				]);
 				continue;
+			}
+			foreach ($results as $fileId => $fileData) {
+				$fileEntries = $collectiveRoot->getById($fileId);
+				if (!empty($fileEntries)) {
+					$pages[$fileId] = $fileEntries[0];
+					$collectiveMap[$fileId] = $collective;
+				}
 			}
 		}
 
