@@ -1,7 +1,16 @@
 <template>
 	<div class="recent-pages-widget">
-		<WidgetHeading :title="t('collectives', 'Recent pages')" :first="true" />
-		<div class="recent-pages-widget-container">
+		<a class="recent-pages-title"
+			@keydown.enter="toggleWidget"
+			@click="toggleWidget">
+			<WidgetHeading :title="t('collectives', 'Recent pages')" />
+			<div class="toggle-icon">
+				<ChevronDownButton :size="24"
+					:title="t('collectives', 'Expand recent pages')"
+					:class="{ 'collapsed': !showWidget }" />
+			</div>
+		</a>
+		<div v-if="showWidget" class="recent-pages-widget-container">
 			<div ref="pageslider" class="recent-pages-widget-pages">
 				<RecentPageTile v-for="page in trimmedRecentPages"
 					:key="page.id"
@@ -30,6 +39,7 @@
 <script>
 import debounce from 'debounce'
 import { mapGetters } from 'vuex'
+import ChevronDownButton from 'vue-material-design-icons/ChevronDown.vue'
 import ChevronLeftButton from 'vue-material-design-icons/ChevronLeft.vue'
 import ChevronRightButton from 'vue-material-design-icons/ChevronRight.vue'
 import RecentPageTile from './RecentPageTile.vue'
@@ -41,10 +51,17 @@ export default {
 	name: 'RecentPagesWidget',
 
 	components: {
+		ChevronDownButton,
 		ChevronLeftButton,
 		ChevronRightButton,
 		RecentPageTile,
 		WidgetHeading,
+	},
+
+	data() {
+		return {
+			showWidget: true,
+		}
 	},
 
 	computed: {
@@ -70,6 +87,13 @@ export default {
 	},
 
 	methods: {
+		toggleWidget() {
+			this.showWidget = !this.showWidget
+			if (this.showWidget) {
+				this.updateButtons()
+			}
+		},
+
 		updateButtons: debounce(function() {
 			const pagesliderEl = this.$refs.pageslider
 			if (!pagesliderEl) {
@@ -115,6 +139,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.recent-pages-title {
+	display: flex;
+
+	.toggle-icon {
+		padding-top: 25px;
+		padding-left: 8px;
+
+		.collapsed {
+			transition: transform var(--animation-slow);
+			transform: rotate(-90deg);
+		}
+	}
+}
+
 .recent-pages-widget-container {
 	position: relative;
 	padding-top: 12px;

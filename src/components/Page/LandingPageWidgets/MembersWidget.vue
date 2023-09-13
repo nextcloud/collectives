@@ -1,6 +1,5 @@
 <template>
 	<div class="members-widget">
-		<WidgetHeading :title="t('collectives', 'Collective members')" />
 		<SkeletonLoading v-if="loading"
 			type="avatar"
 			:count="3"
@@ -35,7 +34,6 @@ import DotsHorizontalIcon from 'vue-material-design-icons/DotsHorizontal.vue'
 import SkeletonLoading from '../../SkeletonLoading.vue'
 import { GET_CIRCLE_MEMBERS } from '../../../store/actions.js'
 import { circlesMemberTypes } from '../../../constants.js'
-import WidgetHeading from './WidgetHeading.vue'
 
 export default {
 	name: 'MembersWidget',
@@ -45,7 +43,6 @@ export default {
 		NcAvatar,
 		NcButton,
 		SkeletonLoading,
-		WidgetHeading,
 	},
 
 	data() {
