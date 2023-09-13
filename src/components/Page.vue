@@ -77,29 +77,31 @@
 					@blur="renamePage()">
 			</form>
 
-			<!-- Edit button if editable -->
-			<EditButton v-if="currentCollectiveCanEdit"
-				:mobile="isMobile"
-				class="edit-button" />
+			<div class="titlebar-buttons">
+				<!-- Edit button if editable -->
+				<EditButton v-if="currentCollectiveCanEdit"
+					:mobile="isMobile"
+					class="edit-button" />
 
-			<!-- Actions menu -->
-			<PageActionMenu :show-files-link="!isPublic"
-				:page-id="currentPage.id"
-				:parent-id="currentPage.parentId"
-				:timestamp="currentPage.timestamp"
-				:last-user-id="currentPage.lastUserId"
-				:last-user-display-name="currentPage.lastUserDisplayName"
-				:is-landing-page="isLandingPage"
-				:is-template="isTemplatePage" />
+				<!-- Actions menu -->
+				<PageActionMenu :show-files-link="!isPublic"
+					:page-id="currentPage.id"
+					:parent-id="currentPage.parentId"
+					:timestamp="currentPage.timestamp"
+					:last-user-id="currentPage.lastUserId"
+					:last-user-display-name="currentPage.lastUserDisplayName"
+					:is-landing-page="isLandingPage"
+					:is-template="isTemplatePage" />
 
-			<!-- Sidebar toggle -->
-			<NcActions v-if="!showing('sidebar') && !isMobile">
-				<NcActionButton icon="icon-menu-sidebar"
-					:aria-label="t('collectives', 'Open page sidebar')"
-					aria-controls="app-sidebar-vue"
-					:close-after-click="true"
-					@click="toggle('sidebar')" />
-			</NcActions>
+				<!-- Sidebar toggle -->
+				<NcActions v-if="!showing('sidebar') && !isMobile">
+					<NcActionButton icon="icon-menu-sidebar"
+						:aria-label="t('collectives', 'Open page sidebar')"
+						aria-controls="app-sidebar-vue"
+						:close-after-click="true"
+						@click="toggle('sidebar')" />
+				</NcActions>
+			</div>
 		</h1>
 		<LandingPageWidgets v-if="isLandingPage" />
 		<TextEditor :key="`text-editor-${currentPage.id}`"
@@ -307,6 +309,10 @@ export default {
 #titleform {
 	form {
 		flex: auto;
+	}
+
+	.titlebar-buttons {
+		display: flex;
 	}
 }
 </style>

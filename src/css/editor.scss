@@ -7,6 +7,11 @@
 	max-width: var(--text-editor-max-width);
 	margin: auto;
 
+	&.page-title {
+		max-width: 100%;
+		margin: 0 0 0 max(0px, calc(50% - (var(--text-editor-max-width) / 2)));
+	}
+
 	// Editor document status bar
 	.document-status {
 		max-width: var(--text-editor-max-width);
