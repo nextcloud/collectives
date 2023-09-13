@@ -1,17 +1,10 @@
 <template>
 	<div>
 		<NcActions :force-menu="true" @click.native.stop>
-			<NcActionButton v-if="!inPageList && !showing('sidebar') && isMobile"
-				icon="icon-menu-sidebar"
-				:aria-label="t('collectives', 'Open page sidebar')"
-				aria-controls="app-sidebar-vue"
-				:close-after-click="true"
-				@click="toggle('sidebar')">
-				{{ t('collectives', 'Open page sidebar') }}
-			</NcActionButton>
-			<CollectiveActions v-if="inPageList && isLandingPage"
+			<!-- Collective actions: only displayed for landing page in page list -->
+			<CollectiveActions v-if="displayCollectiveActions"
 				:collective="currentCollective" />
-			<NcActionButton v-if="collectiveExtraAction"
+			<NcActionButton v-if="displayCollectiveActions && collectiveExtraAction"
 				:close-after-click="true"
 				@click="collectiveExtraAction.click()">
 				{{ collectiveExtraAction.title }}
@@ -19,6 +12,27 @@
 					<OpenInNewIcon :size="20" />
 				</template>
 			</NcActionButton>
+			<NcActionSeparator v-if="displayCollectiveActions" />
+
+			<!-- Last edited info -->
+			<PageActionLastUser v-if="displayLastEditedInfo"
+				:last-user-id="lastUserId"
+				:last-user-display-name="lastUserDisplayName"
+				:timestamp="timestamp" />
+			<NcActionSeparator v-if="displayLastEditedInfo" />
+
+			<!-- Sidebar toggle: only displayed on mobile and in page title menu -->
+			<NcActionButton v-if="displaySidebarAction"
+				icon="icon-menu-sidebar"
+				:aria-label="t('collectives', 'Open page sidebar')"
+				aria-controls="app-sidebar-vue"
+				:close-after-click="true"
+				@click="toggle('sidebar')">
+				{{ t('collectives', 'Open page sidebar') }}
+			</NcActionButton>
+			<NcActionSeparator v-if="displaySidebarAction" />
+
+			<!-- Page view options: only displaybed in page title menu -->
 			<NcActionCheckbox v-if="!inPageList && !isMobile"
 				:checked="isFullWidthView"
 				@check="onCheckFullWidthView"
@@ -36,12 +50,17 @@
 				</template>
 				{{ toggleOutlineString }}
 			</NcActionButton>
-			<NcActionLink v-if="showFilesLink"
+			<NcActionSeparator v-if="!inPageList" />
+
+			<!-- Open in files app action: only displayed in page title menu -->
+			<NcActionLink v-if="!inPageList && showFilesLink"
 				:href="filesUrl"
 				icon="icon-files-dark"
 				:close-after-click="true">
 				{{ t('collectives', 'Show in Files') }}
 			</NcActionLink>
+
+			<!-- Edit page emoji: only displaybed in page list -->
 			<NcActionButton v-if="inPageList && currentCollectiveCanEdit && !isTemplate && !isLandingPage"
 				:close-after-click="true"
 				@click.native="show('details')"
@@ -51,6 +70,8 @@
 				</template>
 				{{ setEmojiString }}
 			</NcActionButton>
+
+			<!-- Edit template for subpages -->
 			<NcActionButton v-if="currentCollectiveCanEdit && !isTemplate"
 				:close-after-click="true"
 				class="action-button-template"
@@ -61,6 +82,8 @@
 				</template>
 				{{ editTemplateString }}
 			</NcActionButton>
+
+			<!-- Move page via modal: only displayed in page list -->
 			<NcActionButton v-if="inPageList && currentCollectiveCanEdit && !isLandingPage"
 				:close-after-click="true"
 				@click="onOpenMoveModal">
@@ -69,6 +92,8 @@
 				</template>
 				{{ t('collectives', 'Move page') }}
 			</NcActionButton>
+
+			<!-- Delete page -->
 			<NcActionButton v-if="currentCollectiveCanEdit && !isLandingPage"
 				:close-after-click="true"
 				@click="deletePage(parentId, pageId)">
@@ -77,8 +102,6 @@
 				</template>
 				{{ deletePageString }}
 			</NcActionButton>
-			<NcActionSeparator v-if="lastUserId && lastUserDisplayName" />
-			<PageActionLastUser :last-user-id="lastUserId" :last-user-display-name="lastUserDisplayName" :timestamp="timestamp" />
 		</NcActions>
 		<MoveModal v-if="showMoveModal"
 			:page-id="pageId"
@@ -188,6 +211,18 @@ export default {
 			'showTemplates',
 			'visibleSubpages',
 		]),
+
+		displaySidebarAction() {
+			return !this.inPageList && this.showing('sidebar') && isMobile
+		},
+
+		displayCollectiveActions() {
+			return this.inPageList && this.isLandingPage
+		},
+
+		displayLastEditedInfo() {
+			return this.lastUserId && this.lastUserDisplayName
+		},
 
 		toggleOutlineString() {
 			return this.showing('outline')
