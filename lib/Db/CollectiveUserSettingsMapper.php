@@ -76,23 +76,11 @@ class CollectiveUserSettingsMapper extends QBMapper {
 			->from($this->tableName)
 			->where($where);
 		try {
+			/** @var CollectiveUserSettings $this->findEntity($qb) */
 			return $this->findEntity($qb);
 		} catch (DoesNotExistException $e) {
 			return null;
 		}
-	}
-
-	/**
-	 * @param int    $collectiveId
-	 * @param string $userId
-	 *
-	 * @return int|null
-	 * @throws Exception
-	 * @throws MultipleObjectsReturnedException
-	 */
-	public function getPageOrder(int $collectiveId, string $userId): ?int {
-		$settings = $this->findByCollectiveAndUser($collectiveId, $userId);
-		return $settings ? $settings->getPageOrder() : null;
 	}
 
 	public function deleteByCollectiveId(int $collectiveId): void {

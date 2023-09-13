@@ -54,7 +54,8 @@ class CollectiveHelper {
 			$userPageOrder = null;
 			if ($getUserSettings) {
 				// TODO: merge queries for collective and user settings into one?
-				$userPageOrder = $this->collectiveUserSettingsMapper->getPageOrder($c->getId(), $userId) ?? Collective::defaultPageOrder;
+				$settings = $this->collectiveUserSettingsMapper->findByCollectiveAndUser($c->getId(), $userId);
+				$userPageOrder = ($settings ? $settings->getSetting('page_order') : null) ?? Collective::defaultPageOrder;
 			}
 			$collectiveInfos[] = new CollectiveInfo($c,
 				$circle->getSanitizedName(),
