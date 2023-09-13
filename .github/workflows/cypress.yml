@@ -214,7 +214,7 @@ jobs:
         uses: actions/upload-artifact@v3
         if: failure()
         with:
-          name: Upload screenshots
+          name: Screenshots.${{ matrix.server-versions }}
           path: apps/${{ env.APP_NAME }}/cypress/screenshots/
           retention-days: 5
 
@@ -222,7 +222,7 @@ jobs:
         uses: actions/upload-artifact@v3
         if: failure()
         with:
-          name: Upload nextcloud log
+          name: ${{ matrix.server-versions }}.log
           path: data/nextcloud.log
           retention-days: 5
 
