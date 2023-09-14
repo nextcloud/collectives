@@ -786,7 +786,7 @@ export default {
 		 * @param {Function} store.commit commit changes
 		 */
 		[INIT_FULL_WIDTH_PAGEIDS]({ commit }) {
-			commit(SET_FULL_WIDTH_PAGEIDS, JSON.parse(persistentStorage.getItem('fullWidthPageIds') ?? '[]'))
+			commit(SET_FULL_WIDTH_PAGEIDS, JSON.parse(persistentStorage.getItem('text-fullWidthPageIds') ?? '[]'))
 		},
 
 		/**
@@ -799,15 +799,15 @@ export default {
 		 */
 		[SET_FULL_WIDTH_VIEW]({ commit, getters }, fullWidthView) {
 			const pageId = getters.currentPage.id
-			const fullWidthPageIds = JSON.parse(persistentStorage.getItem('fullWidthPageIds') ?? '[]')
+			const fullWidthPageIds = JSON.parse(persistentStorage.getItem('text-fullWidthPageIds') ?? '[]')
 			if (fullWidthView && !fullWidthPageIds.includes(pageId)) {
 				fullWidthPageIds.push(pageId)
 				commit(SET_FULL_WIDTH_PAGEIDS, fullWidthPageIds)
-				persistentStorage.setItem('fullWidthPageIds', JSON.stringify(fullWidthPageIds))
+				persistentStorage.setItem('text-fullWidthPageIds', JSON.stringify(fullWidthPageIds))
 			} else if (!fullWidthView && fullWidthPageIds.includes(pageId)) {
 				fullWidthPageIds.splice(fullWidthPageIds.indexOf(pageId), 1)
 				commit(SET_FULL_WIDTH_PAGEIDS, fullWidthPageIds)
-				persistentStorage.setItem('fullWidthPageIds', JSON.stringify(fullWidthPageIds))
+				persistentStorage.setItem('text-fullWidthPageIds', JSON.stringify(fullWidthPageIds))
 			}
 		},
 	},
