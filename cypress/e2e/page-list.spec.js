@@ -148,15 +148,18 @@ describe('Page list', function() {
 	})
 
 	describe('Page trash', function() {
-		it('allows to trash and restore page with subpage and attachment', function() {
-			cy.visit('/apps/collectives/Our%20Garden/Day%201')
 
-			// Insert attachment
+		// Insert attachment once
+		before(function() {
+			cy.visit('/apps/collectives/Our%20Garden/Day%201')
 			cy.intercept({ method: 'POST', url: '**/text/attachment/upload*' }).as('attachmentUpload')
 			cy.get('input[data-text-el="attachment-file-input"]')
 				.selectFile('cypress/fixtures/test.png', { force: true })
 			cy.wait('@attachmentUpload')
 			cy.switchPageMode(0)
+		})
+
+		it('allows to trash and restore page with subpage and attachment', function() {
 
 			// Trash page
 			cy.contains('.page-list .app-content-list-item', 'Day 1')
