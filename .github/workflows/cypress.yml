@@ -196,7 +196,7 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
-          record: true
+          #record: true
           #parallel: true
           group: 'Nextcloud ${{ matrix.server-versions }}'
           wait-on: '${{ env.CYPRESS_baseUrl }}'
@@ -207,7 +207,7 @@ jobs:
           # https://github.com/cypress-io/github-action/issues/124
           COMMIT_INFO_MESSAGE: ${{ github.event.pull_request.title }}
           COMMIT_INFO_SHA:  ${{ github.event.pull_request.head.sha }}
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          #CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           CYPRESS_ncVersion: ${{ matrix.server-versions }}
 
       - name: Upload test failure screenshots
