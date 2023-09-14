@@ -198,11 +198,11 @@ jobs:
         with:
           #record: true
           #parallel: true
-          group: 'Nextcloud ${{ matrix.server-versions }}'
+          #group: 'Nextcloud ${{ matrix.server-versions }}'
           wait-on: '${{ env.CYPRESS_baseUrl }}'
           working-directory: apps/${{ env.APP_NAME }}
           config: video=false,defaultCommandTimeout=20000
-          tag: ${{ github.event_name }}
+          #tag: ${{ github.event_name }}
         env:
           # https://github.com/cypress-io/github-action/issues/124
           COMMIT_INFO_MESSAGE: ${{ github.event.pull_request.title }}
