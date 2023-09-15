@@ -1,5 +1,6 @@
 import { set } from 'vue'
 import { getCurrentUser } from '@nextcloud/auth'
+import { getBuilder } from '@nextcloud/browser-storage'
 import axios from '@nextcloud/axios'
 import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
 /* eslint import/namespace: ['error', { allowComputed: true }] */
@@ -19,6 +20,7 @@ import {
 	SET_BACKLINKS,
 	KEEP_SORTABLE,
 	CLEAR_SORTABLE,
+	SET_FULL_WIDTH_PAGEIDS,
 } from './mutations.js'
 
 import {
@@ -38,7 +40,11 @@ import {
 	DELETE_PAGE,
 	GET_ATTACHMENTS,
 	GET_BACKLINKS,
+	INIT_FULL_WIDTH_PAGEIDS,
+	SET_FULL_WIDTH_VIEW,
 } from './actions.js'
+
+const persistentStorage = getBuilder('collectives').persist().build()
 
 export const TEMPLATE_PAGE = 'Template'
 
@@ -57,6 +63,7 @@ export default {
 		highlightAnimationPageId: null,
 		isDragoverTargetPage: false,
 		draggedPageId: null,
+		fullWidthPageIds: [],
 	},
 
 	getters: {
@@ -337,6 +344,10 @@ export default {
 					return array.indexOf(value) === index
 				})
 		},
+
+		isFullWidthView(state, getters) {
+			return state.fullWidthPageIds.includes(getters.currentPage?.id)
+		},
 	},
 
 	mutations: {
@@ -414,6 +425,10 @@ export default {
 
 		[CLEAR_SORTABLE](state, pageId) {
 			delete state.pages.find(p => p.id === pageId).keepSortable
+		},
+
+		[SET_FULL_WIDTH_PAGEIDS](state, fullWidthPageIds) {
+			state.fullWidthPageIds = fullWidthPageIds
 		},
 
 		// using camel case name so this works nicely with mapMutations
@@ -762,6 +777,38 @@ export default {
 		async [GET_BACKLINKS]({ commit, getters }, page) {
 			const response = await axios.get(getters.backlinksUrl(page.parentId, page.id))
 			commit(SET_BACKLINKS, { pages: response.data.data })
+		},
+
+		/**
+		 * Init full width store from browser storage
+		 *
+		 * @param {object} store the vuex store
+		 * @param {Function} store.commit commit changes
+		 */
+		[INIT_FULL_WIDTH_PAGEIDS]({ commit }) {
+			commit(SET_FULL_WIDTH_PAGEIDS, JSON.parse(persistentStorage.getItem('text-fullWidthPageIds') ?? '[]'))
+		},
+
+		/**
+		 * Set full width for a page
+		 *
+		 * @param {object} store the vuex store
+		 * @param {Function} store.commit commit changes
+		 * @param {object} store.getters getters of the store
+		 * @param {boolean} fullWidthView Whether full width view is enabled or not
+		 */
+		[SET_FULL_WIDTH_VIEW]({ commit, getters }, fullWidthView) {
+			const pageId = getters.currentPage.id
+			const fullWidthPageIds = JSON.parse(persistentStorage.getItem('text-fullWidthPageIds') ?? '[]')
+			if (fullWidthView && !fullWidthPageIds.includes(pageId)) {
+				fullWidthPageIds.push(pageId)
+				commit(SET_FULL_WIDTH_PAGEIDS, fullWidthPageIds)
+				persistentStorage.setItem('text-fullWidthPageIds', JSON.stringify(fullWidthPageIds))
+			} else if (!fullWidthView && fullWidthPageIds.includes(pageId)) {
+				fullWidthPageIds.splice(fullWidthPageIds.indexOf(pageId), 1)
+				commit(SET_FULL_WIDTH_PAGEIDS, fullWidthPageIds)
+				persistentStorage.setItem('text-fullWidthPageIds', JSON.stringify(fullWidthPageIds))
+			}
 		},
 	},
 }

@@ -1,5 +1,6 @@
 <template>
-	<div class="text-menubar">
+	<div class="text-menubar"
+		:class="{'sheet-view': !isFullWidthView}">
 		<div v-if="currentPage.lastUserId" class="infobar-item infobar-lastupdate">
 			<div class="item-text">
 				<LastUserBubble :last-user-id="currentPage.lastUserId"
@@ -12,6 +13,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import LastUserBubble from '../LastUserBubble.vue'
 
 export default {
@@ -27,6 +29,12 @@ export default {
 			required: true,
 		},
 	},
+
+	computed: {
+		...mapGetters([
+			'isFullWidthView',
+		]),
+	},
 }
 </script>
 
@@ -41,8 +49,6 @@ export default {
 	height: 44px;
 	padding: 3px 8px 3px 14px;
 	display: flex;
-	max-width: 670px;
-	margin: auto;
 	flex-wrap: nowrap;
 	align-items: center;
 	overflow: hidden;

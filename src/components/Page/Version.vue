@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<h1 id="titleform" class="page-title">
+		<h1 id="titleform" class="page-title" :class="{'sheet-view': !isFullWidthView}">
 			<input class="title"
 				:class="{ 'mobile': isMobile }"
 				type="text"
@@ -67,6 +67,7 @@ export default {
 	computed: {
 		...mapGetters([
 			'currentPage',
+			'isFullWidthView',
 			'version',
 			'title',
 		]),

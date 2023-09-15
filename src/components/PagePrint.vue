@@ -1,13 +1,13 @@
 <template>
 	<div id="text-container" :key="'text-' + page.id" class="page">
-		<h1 v-if="page.parentId === 0" id="page-title-collective" class="page-title page-title-collective">
+		<h1 v-if="page.parentId === 0" id="page-title-collective" class="page-title sheet-view page-title-collective">
 			{{ currentCollectiveTitle }}
 		</h1>
-		<h1 v-else class="page-title page-title-subpage">
+		<h1 v-else class="page-title sheet-view page-title-subpage">
 			{{ pageTitleString }}
 		</h1>
 		<RichTextReader v-if="pageContent"
-			class="editor__content"
+			class="editor__content sheet-view"
 			:content="pageContent" />
 	</div>
 </template>
@@ -89,14 +89,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../css/editor';
 @import '~@nextcloud/text/dist/style.css';
 
 .page-title {
 	font-size: 30px;
 	line-height: 45px;
 	padding: 8px 2px 2px 8px;
-	margin: auto;
-	max-width: 670px;
 
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -115,8 +114,6 @@ export default {
 }
 
 .editor__content {
-	max-width: 670px;
-	margin: auto;
 	position: relative;
 }
 

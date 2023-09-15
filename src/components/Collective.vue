@@ -202,9 +202,7 @@ export default {
 .page-title {
 	position: sticky;
 	top: 0;
-	padding: 8px 0px 2px 8px;
-	margin: auto;
-	max-width: 670px;
+	padding: 8px 8px 2px 8px;
 	display: flex;
 	align-items: center;
 	background-color: var(--color-main-background);

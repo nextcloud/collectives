@@ -251,11 +251,6 @@ export default {
 </style>
 
 <style lang="scss">
-:root {
-	// Required for read-only view where only RichTextReader and no Editor gets loaded
-	--text-editor-max-width: 670px;
-}
-
 @media print {
 
 	h1, h2, h3 {

@@ -1,5 +1,6 @@
 <template>
-	<div class="placeholder-main" :class="'placeholder-main-' + type">
+	<div class="placeholder-main"
+		:class="placeholderClasses">
 		<!-- Placeholder animation -->
 		<template v-for="(suffix, gradientIndex) in ['-regular', '-reverse']">
 			<svg :key="'gradient' + suffix" :class="'placeholder-gradient placeholder-gradient' + suffix">
@@ -50,6 +51,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 const bodyStyles = window.getComputedStyle(document.body)
 const colorPlaceholderDark = bodyStyles.getPropertyValue('--color-placeholder-dark')
 const colorPlaceholderLight = bodyStyles.getPropertyValue('--color-placeholder-light')
@@ -76,6 +79,18 @@ export default {
 	},
 
 	computed: {
+		...mapGetters([
+			'isFullWidthView',
+		]),
+
+		placeholderClasses() {
+			const classes = [`placeholder-main-${this.type}`]
+			if (!this.isFullWidthView) {
+				classes.push('sheet-view')
+			}
+			return classes
+		},
+
 		placeholderData() {
 			const data = []
 			for (let i = 0; i < this.count; i++) {
@@ -108,7 +123,9 @@ $messages-list-max-width: 670px;
 
 	&-text,
 	&-page-heading {
-		margin: auto;
+		&.sheet-view {
+			margin: auto;
+		}
 	}
 }
 

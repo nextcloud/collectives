@@ -1,17 +1,10 @@
 <template>
 	<div>
 		<NcActions :force-menu="true" @click.native.stop>
-			<NcActionButton v-if="!inPageList && !showing('sidebar') && isMobile"
-				icon="icon-menu-sidebar"
-				:aria-label="t('collectives', 'Open page sidebar')"
-				aria-controls="app-sidebar-vue"
-				:close-after-click="true"
-				@click="toggle('sidebar')">
-				{{ t('collectives', 'Open page sidebar') }}
-			</NcActionButton>
-			<CollectiveActions v-if="inPageList && isLandingPage"
+			<!-- Collective actions: only displayed for landing page in page list -->
+			<CollectiveActions v-if="displayCollectiveActions"
 				:collective="currentCollective" />
-			<NcActionButton v-if="collectiveExtraAction"
+			<NcActionButton v-if="displayCollectiveActions && collectiveExtraAction"
 				:close-after-click="true"
 				@click="collectiveExtraAction.click()">
 				{{ collectiveExtraAction.title }}
@@ -19,6 +12,36 @@
 					<OpenInNewIcon :size="20" />
 				</template>
 			</NcActionButton>
+			<NcActionSeparator v-if="displayCollectiveActions" />
+
+			<!-- Last edited info -->
+			<PageActionLastUser v-if="displayLastEditedInfo"
+				:last-user-id="lastUserId"
+				:last-user-display-name="lastUserDisplayName"
+				:timestamp="timestamp" />
+			<NcActionSeparator v-if="displayLastEditedInfo" />
+
+			<!-- Sidebar toggle: only displayed on mobile and in page title menu -->
+			<NcActionButton v-if="displaySidebarAction"
+				icon="icon-menu-sidebar"
+				:aria-label="t('collectives', 'Open page sidebar')"
+				aria-controls="app-sidebar-vue"
+				:close-after-click="true"
+				@click="toggle('sidebar')">
+				{{ t('collectives', 'Open page sidebar') }}
+			</NcActionButton>
+			<NcActionSeparator v-if="displaySidebarAction" />
+
+			<!-- Page view options: only displaybed in page title menu -->
+			<NcActionCheckbox v-if="!inPageList && !isMobile"
+				:checked="isFullWidthView"
+				@check="onCheckFullWidthView"
+				@uncheck="onUncheckFullWidthView">
+				<template #icon>
+					<DeleteIcon :size="20" />
+				</template>
+				{{ t('collectives', 'Full width') }}
+			</NcActionCheckbox>
 			<NcActionButton v-if="!inPageList"
 				:close-after-click="true"
 				@click.native="toggle('outline')">
@@ -27,13 +50,18 @@
 				</template>
 				{{ toggleOutlineString }}
 			</NcActionButton>
-			<NcActionLink v-if="showFilesLink"
+			<NcActionSeparator v-if="!inPageList" />
+
+			<!-- Open in files app action: only displayed in page title menu -->
+			<NcActionLink v-if="!inPageList && showFilesLink"
 				:href="filesUrl"
 				icon="icon-files-dark"
 				:close-after-click="true">
 				{{ t('collectives', 'Show in Files') }}
 			</NcActionLink>
-			<NcActionButton v-if="currentCollectiveCanEdit && !isTemplate && !isLandingPage"
+
+			<!-- Edit page emoji: only displaybed in page list -->
+			<NcActionButton v-if="inPageList && currentCollectiveCanEdit && !isTemplate && !isLandingPage"
 				:close-after-click="true"
 				@click.native="show('details')"
 				@click="gotoPageEmojiPicker">
@@ -42,6 +70,8 @@
 				</template>
 				{{ setEmojiString }}
 			</NcActionButton>
+
+			<!-- Edit template for subpages -->
 			<NcActionButton v-if="currentCollectiveCanEdit && !isTemplate"
 				:close-after-click="true"
 				class="action-button-template"
@@ -52,7 +82,9 @@
 				</template>
 				{{ editTemplateString }}
 			</NcActionButton>
-			<NcActionButton v-if="currentCollectiveCanEdit && !isLandingPage"
+
+			<!-- Move page via modal: only displayed in page list -->
+			<NcActionButton v-if="inPageList && currentCollectiveCanEdit && !isLandingPage"
 				:close-after-click="true"
 				@click="onOpenMoveModal">
 				<template #icon>
@@ -60,6 +92,8 @@
 				</template>
 				{{ t('collectives', 'Move page') }}
 			</NcActionButton>
+
+			<!-- Delete page -->
 			<NcActionButton v-if="currentCollectiveCanEdit && !isLandingPage"
 				:close-after-click="true"
 				@click="deletePage(parentId, pageId)">
@@ -68,8 +102,6 @@
 				</template>
 				{{ deletePageString }}
 			</NcActionButton>
-			<NcActionSeparator v-if="lastUserId && lastUserDisplayName" />
-			<PageActionLastUser :last-user-id="lastUserId" :last-user-display-name="lastUserDisplayName" :timestamp="timestamp" />
 		</NcActions>
 		<MoveModal v-if="showMoveModal"
 			:page-id="pageId"
@@ -79,9 +111,10 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { generateUrl } from '@nextcloud/router'
-import { NcActions, NcActionButton, NcActionLink, NcActionSeparator } from '@nextcloud/vue'
+import { SET_FULL_WIDTH_VIEW } from '../../store/actions.js'
+import { NcActions, NcActionButton, NcActionCheckbox, NcActionLink, NcActionSeparator } from '@nextcloud/vue'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import CollectiveActions from '../Collective/CollectiveActions.vue'
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
@@ -101,6 +134,7 @@ export default {
 		MoveModal,
 		NcActions,
 		NcActionButton,
+		NcActionCheckbox,
 		NcActionLink,
 		NcActionSeparator,
 		DeleteIcon,
@@ -170,12 +204,25 @@ export default {
 			'currentCollective',
 			'currentCollectiveCanEdit',
 			'hasSubpages',
+			'isFullWidthView',
 			'loading',
 			'pagesTreeWalk',
 			'showing',
 			'showTemplates',
 			'visibleSubpages',
 		]),
+
+		displaySidebarAction() {
+			return !this.inPageList && this.showing('sidebar') && isMobile
+		},
+
+		displayCollectiveActions() {
+			return this.inPageList && this.isLandingPage
+		},
+
+		displayLastEditedInfo() {
+			return this.lastUserId && this.lastUserDisplayName
+		},
 
 		toggleOutlineString() {
 			return this.showing('outline')
@@ -229,6 +276,18 @@ export default {
 
 	methods: {
 		...mapMutations(['show', 'toggle']),
+
+		...mapActions({
+			dispatchSetFullWidthView: SET_FULL_WIDTH_VIEW,
+		}),
+
+		onCheckFullWidthView() {
+			this.dispatchSetFullWidthView(true)
+		},
+
+		onUncheckFullWidthView() {
+			this.dispatchSetFullWidthView(false)
+		},
 
 		gotoPageEmojiPicker() {
 			if (this.pageUrl && (this.currentPage.id !== this.pageId)) {
