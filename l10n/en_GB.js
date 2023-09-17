@@ -124,6 +124,7 @@ OC.L10N.register(
     "Recent pages" : "Recent pages",
     "Scroll recent pages to the left" : "Scroll recent pages to the left",
     "Open page sidebar" : "Open page sidebar",
+    "Full width" : "Full width",
     "Show in Files" : "Show in Files",
     "Move page" : "Move page",
     "Hide outline" : "Hide outline",

@@ -124,6 +124,7 @@ OC.L10N.register(
     "Recent pages" : "最近的頁面",
     "Scroll recent pages to the left" : "向左滾動最近的頁面",
     "Open page sidebar" : "開啟頁面側邊攔",
+    "Full width" : "全寬度",
     "Show in Files" : "顯示在檔案中",
     "Move page" : "移動頁面",
     "Hide outline" : "隱藏大綱",
