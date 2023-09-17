@@ -122,6 +122,7 @@ OC.L10N.register(
     "Recent pages" : "Senaste sidorna",
     "Scroll recent pages to the left" : "Bläddra de senaste sidorna åt vänster",
     "Open page sidebar" : "Öppna sidofältet",
+    "Full width" : "Full bredd",
     "Show in Files" : "Visa i Filer",
     "Move page" : "Flytta sidan",
     "Hide outline" : "Göm översikt",

@@ -124,6 +124,7 @@ OC.L10N.register(
     "Recent pages" : "الصفحات الحالية",
     "Scroll recent pages to the left" : "مرِّر الصفحات الحالية جانبيّاً",
     "Open page sidebar" : "إفتح الشريط الجانبي للصفحة",
+    "Full width" : "العرض الكامل",
     "Show in Files" : "عرض في الملفات ",
     "Move page" : "أنقل الصفحة",
     "Hide outline" : "إخفِ قائمة محتويات الصفحة outlines",
