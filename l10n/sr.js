@@ -124,6 +124,7 @@ OC.L10N.register(
     "Recent pages" : "Скорашње странице",
     "Scroll recent pages to the left" : "Скролуј улево скорашње странице",
     "Open page sidebar" : "Отвори бочну траку са страницом",
+    "Full width" : "Пуна ширина",
     "Show in Files" : "Прикажи у Фајловима",
     "Move page" : "Премести страницу",
     "Hide outline" : "Сакриј контуру",
