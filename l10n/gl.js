@@ -124,6 +124,7 @@ OC.L10N.register(
     "Recent pages" : "Páxinas recentes",
     "Scroll recent pages to the left" : "Desprazar as páxinas recentes cara á esquerda",
     "Open page sidebar" : "Abrir a barra lateral da páxina",
+    "Full width" : "Largo total",
     "Show in Files" : "Amosar en Ficheiros",
     "Move page" : "Mover a páxina",
     "Hide outline" : "Agochar o esquema",
