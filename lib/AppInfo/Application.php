@@ -7,6 +7,7 @@ namespace OCA\Collectives\AppInfo;
 use Closure;
 use OCA\Circles\Events\CircleDestroyedEvent;
 use OCA\Collectives\CacheListener;
+use OCA\Collectives\Dashboard\RecentPagesWidget;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Db\PageMapper;
 use OCA\Collectives\Fs\UserFolderHelper;
@@ -34,6 +35,7 @@ use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\Http\Events\BeforeTemplateRenderedEvent;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Collaboration\Reference\RenderReferenceEvent;
+use OCP\Dashboard\IAPIWidgetV2;
 use OCP\Files\Config\IMountProviderCollection;
 use OCP\Files\IMimeTypeLoader;
 use OCP\IConfig;
@@ -111,6 +113,10 @@ class Application extends App implements IBootstrap {
 
 		$cacheListener = $this->getContainer()->get(CacheListener::class);
 		$cacheListener->listen();
+
+		if (\interface_exists(IAPIWidgetV2::class)) {
+			$context->registerDashboardWidget(RecentPagesWidget::class);
+		}
 	}
 
 	public function boot(IBootcontext $context): void {
