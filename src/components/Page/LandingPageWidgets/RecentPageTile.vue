@@ -55,7 +55,7 @@ export default {
 .recent-page-tile {
 	margin-right: 12px;
 	max-width: 150px;
-	box-sizing: content-box;
+	box-sizing: content-box !important;
 	padding: 12px;
 
 	scroll-snap-align: start;
