@@ -7,10 +7,10 @@
 			<div class="toggle-icon">
 				<ChevronDownButton :size="24"
 					:title="t('collectives', 'Expand recent pages')"
-					:class="{ 'collapsed': !showWidget }" />
+					:class="{ 'collapsed': !showRecentPages }" />
 			</div>
 		</a>
-		<div v-if="showWidget" class="recent-pages-widget-container">
+		<div v-if="showRecentPages" class="recent-pages-widget-container">
 			<div ref="pageslider" class="recent-pages-widget-pages">
 				<RecentPageTile v-for="page in trimmedRecentPages"
 					:key="page.id"
@@ -38,12 +38,14 @@
 
 <script>
 import debounce from 'debounce'
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
+import { showError } from '@nextcloud/dialogs'
 import ChevronDownButton from 'vue-material-design-icons/ChevronDown.vue'
 import ChevronLeftButton from 'vue-material-design-icons/ChevronLeft.vue'
 import ChevronRightButton from 'vue-material-design-icons/ChevronRight.vue'
 import RecentPageTile from './RecentPageTile.vue'
 import WidgetHeading from './WidgetHeading.vue'
+import { SET_COLLECTIVE_USER_SETTING_SHOW_RECENT_PAGES } from '../../../store/actions.js'
 
 const SLIDE_OFFSET = 198
 
@@ -58,16 +60,16 @@ export default {
 		WidgetHeading,
 	},
 
-	data() {
-		return {
-			showWidget: true,
-		}
-	},
-
 	computed: {
 		...mapGetters([
+			'currentCollective',
+			'isPublic',
 			'recentPages',
 		]),
+
+		showRecentPages() {
+			return this.currentCollective.userShowRecentPages ?? true
+		},
 
 		trimmedRecentPages() {
 			return this.recentPages
@@ -87,9 +89,20 @@ export default {
 	},
 
 	methods: {
+		...mapActions({
+			dispatchSetUserShowRecentPages: SET_COLLECTIVE_USER_SETTING_SHOW_RECENT_PAGES,
+		}),
+
 		toggleWidget() {
-			this.showWidget = !this.showWidget
-			if (this.showWidget) {
+			if (!this.isPublic) {
+				this.dispatchSetUserShowRecentPages({ id: this.currentCollective.id, showRecentPages: !this.showRecentPages })
+					.catch((error) => {
+						console.error(error)
+						showError(t('collectives', 'Could not save recent pages setting for collective'))
+					})
+			}
+
+			if (this.showRecentPages) {
 				this.updateButtons()
 			}
 		},

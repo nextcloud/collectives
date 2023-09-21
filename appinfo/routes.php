@@ -38,6 +38,8 @@ return [
 		// collectives userSettings API
 		['name' => 'collectiveUserSettings#pageOrder', 'url' => '/_api/{id}/_userSettings/pageOrder', 'verb' => 'PUT',
 			'requirements' => ['id' => '\d+']],
+		['name' => 'collectiveUserSettings#showRecentPages', 'url' => '/_api/{id}/_userSettings/showRecentPages', 'verb' => 'PUT',
+			'requirements' => ['id' => '\d+']],
 
 		// pages API
 		['name' => 'page#index', 'url' => '/_api/{collectiveId}/_pages',

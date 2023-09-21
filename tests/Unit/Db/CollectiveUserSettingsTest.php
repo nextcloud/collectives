@@ -58,4 +58,11 @@ class CollectiveUserSettingsTest extends TestCase {
 		$this->expectException(NotPermittedException::class);
 		$settings->setPageOrder(max($pageOrders) + 1);
 	}
+
+	public function testSetShowRecentPages(): void {
+		$settings = new CollectiveUserSettings();
+		self::assertEquals(null, $settings->getSetting('show_recent_pages'));
+		$settings->setShowRecentPages(true);
+		self::assertEquals(true, $settings->getSetting('show_recent_pages'));
+	}
 }

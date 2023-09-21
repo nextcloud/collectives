@@ -65,4 +65,23 @@ class CollectiveUserSettingsController extends Controller {
 			return [];
 		});
 	}
+
+	/**
+	 * @NoAdminRequired
+	 *
+	 * @param int  $id
+	 * @param bool $showRecentPages
+	 *
+	 * @return DataResponse
+	 */
+	public function showRecentPages(int $id, bool $showRecentPages): DataResponse {
+		return $this->prepareResponse(function () use ($id, $showRecentPages): array {
+			$this->service->setShowRecentPages(
+				$id,
+				$this->getUserId(),
+				$showRecentPages
+			);
+			return [];
+		});
+	}
 }

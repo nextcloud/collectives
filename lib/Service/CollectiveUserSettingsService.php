@@ -27,7 +27,7 @@ class CollectiveUserSettingsService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	private function prepareSettings(int $collectiveId, string $userId): CollectiveUserSettings {
+	private function initSettings(int $collectiveId, string $userId): CollectiveUserSettings {
 		if (null === $this->collectiveMapper->findByIdAndUser($collectiveId, $userId)) {
 			throw new NotFoundException('Collective not found: ' . $collectiveId);
 		}
@@ -50,10 +50,29 @@ class CollectiveUserSettingsService {
 	 * @throws NotPermittedException
 	 */
 	public function setPageOrder(int $collectiveId, string $userId, int $pageOrder): void {
-		$settings = $this->prepareSettings($collectiveId, $userId);
+		$settings = $this->initSettings($collectiveId, $userId);
+		$settings->setPageOrder($pageOrder);
 
 		try {
-			$settings->setPageOrder($pageOrder);
+			$this->collectiveUserSettingsMapper->insertOrUpdate($settings);
+		} catch (Exception $e) {
+			throw new NotPermittedException($e->getMessage(), 0, $e);
+		}
+	}
+
+	/**
+	 * @param int    $collectiveId
+	 * @param string $userId
+	 * @param bool   $showRecentPages
+	 *
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function setShowRecentPages(int $collectiveId, string $userId, bool $showRecentPages): void {
+		$settings = $this->initSettings($collectiveId, $userId);
+		$settings->setShowRecentPages($showRecentPages);
+
+		try {
 			$this->collectiveUserSettingsMapper->insertOrUpdate($settings);
 		} catch (Exception $e) {
 			throw new NotPermittedException($e->getMessage(), 0, $e);

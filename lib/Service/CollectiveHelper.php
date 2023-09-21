@@ -52,17 +52,20 @@ class CollectiveHelper {
 			$circle = $circles[$cid];
 			$level = $getLevel ? $circle->getInitiator()->getLevel(): 0;
 			$userPageOrder = null;
+			$userShowRecentPages = null;
 			if ($getUserSettings) {
 				// TODO: merge queries for collective and user settings into one?
 				$settings = $this->collectiveUserSettingsMapper->findByCollectiveAndUser($c->getId(), $userId);
 				$userPageOrder = ($settings ? $settings->getSetting('page_order') : null) ?? Collective::defaultPageOrder;
+				$userShowRecentPages = ($settings ? $settings->getSetting('show_recent_pages') : null) ?? Collective::defaultShowRecentPages;
 			}
 			$collectiveInfos[] = new CollectiveInfo($c,
 				$circle->getSanitizedName(),
 				$level,
 				null,
 				false,
-				$userPageOrder);
+				$userPageOrder,
+				$userShowRecentPages);
 		}
 		return $collectiveInfos;
 	}

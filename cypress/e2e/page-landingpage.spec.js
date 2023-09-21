@@ -45,11 +45,30 @@ describe('Page landing page', function() {
 	})
 
 	describe('Displays recent pages', function() {
-		it('Allows to display/close TOC and switch page modes in between', function() {
+		it('Allows to toggle recent pages widget', function() {
+			cy.get('.recent-pages-widget .recent-page-tile')
+				.contains('Page 2')
+
+			cy.get('.recent-pages-widget .recent-pages-title')
+				.click()
+			cy.get('.recent-pages-widget .recent-page-tile')
+				.should('not.exist')
+
+			cy.reload()
+
+			cy.get('.recent-pages-widget .recent-page-tile')
+				.should('not.exist')
+			cy.get('.recent-pages-widget .recent-pages-title')
+				.click()
 			cy.get('.recent-pages-widget .recent-page-tile')
 				.contains('Page 2')
 				.click()
+		})
 
+		it('Allows to open page from recent pages widget', function() {
+			cy.get('.recent-pages-widget .recent-page-tile')
+				.contains('Page 2')
+				.click()
 			cy.url().should('include', `/apps/collectives/${encodeURIComponent(collective)}/${encodeURIComponent('Page 2')}`)
 		})
 	})

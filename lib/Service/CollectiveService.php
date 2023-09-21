@@ -291,7 +291,8 @@ class CollectiveService extends CollectiveServiceBase {
 			$collectiveInfo->getLevel(),
 			$collectiveInfo->getShareToken(),
 			$collectiveInfo->getShareEditable(),
-			$collectiveInfo->getUserPageOrder());
+			$collectiveInfo->getUserPageOrder(),
+			$collectiveInfo->getUserShowRecentPages());
 	}
 
 	/**
@@ -322,7 +323,8 @@ class CollectiveService extends CollectiveServiceBase {
 			$collectiveInfo->getLevel(),
 			$collectiveInfo->getShareToken(),
 			$collectiveInfo->getShareEditable(),
-			$collectiveInfo->getUserPageOrder());
+			$collectiveInfo->getUserPageOrder(),
+			$collectiveInfo->getUserShowRecentPages());
 	}
 
 	/**
@@ -351,7 +353,8 @@ class CollectiveService extends CollectiveServiceBase {
 			$collectiveInfo->getLevel(),
 			$collectiveInfo->getShareToken(),
 			$collectiveInfo->getShareEditable(),
-			$collectiveInfo->getUserPageOrder());
+			$collectiveInfo->getUserPageOrder(),
+			$collectiveInfo->getUserShowRecentPages());
 	}
 
 	/**
@@ -380,7 +383,8 @@ class CollectiveService extends CollectiveServiceBase {
 			$collectiveInfo->getLevel(),
 			$collectiveInfo->getShareToken(),
 			$collectiveInfo->getShareEditable(),
-			$collectiveInfo->getUserPageOrder());
+			$collectiveInfo->getUserPageOrder(),
+			$collectiveInfo->getUserShowRecentPages());
 	}
 
 	/**
@@ -433,7 +437,8 @@ class CollectiveService extends CollectiveServiceBase {
 			$collectiveInfo->getLevel(),
 			$collectiveInfo->getShareToken(),
 			$collectiveInfo->getShareEditable(),
-			$collectiveInfo->getUserPageOrder());
+			$collectiveInfo->getUserPageOrder(),
+			$collectiveInfo->getUserShowRecentPages());
 	}
 
 	/**
@@ -458,6 +463,7 @@ class CollectiveService extends CollectiveServiceBase {
 			$collectiveInfo->getLevel(),
 			$collectiveInfo->getShareToken(),
 			$collectiveInfo->getShareEditable(),
-			$collectiveInfo->getUserPageOrder());
+			$collectiveInfo->getUserPageOrder(),
+			$collectiveInfo->getUserShowRecentPages());
 	}
 }
