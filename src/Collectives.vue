@@ -136,7 +136,7 @@ export default {
 }
 
 #version-title, #titleform input[type='text'] {
-	font-size: 35px;
+	font-size: 30px;
 	border: none;
 	color: var(--color-main-text);
 	width: 100%;
