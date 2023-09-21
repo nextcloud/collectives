@@ -49,6 +49,11 @@ class BeforeTemplateRenderedListener implements IEventListener {
 			$userFolder = $this->userFolderHelper->getUserFolderSetting($userId);
 		}
 
+		// only available since Nextcloud 28
+		if (method_exists(Util::class, 'addInitScript')) {
+			Util::addInitScript('collectives', 'collectives-init');
+		}
+
 		Util::addScript('collectives', 'collectives-files');
 		// Provide Collectives user folder as initial state
 		$this->initialState->provideInitialState('user_folder', $userFolder);
