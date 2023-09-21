@@ -289,7 +289,9 @@ class CollectiveService extends CollectiveServiceBase {
 		return new CollectiveInfo($this->collectiveMapper->update($collectiveInfo),
 			$collectiveInfo->getName(),
 			$collectiveInfo->getLevel(),
-			(string)$collectiveInfo->getUserPageOrder());
+			$collectiveInfo->getShareToken(),
+			$collectiveInfo->getShareEditable(),
+			$collectiveInfo->getUserPageOrder());
 	}
 
 	/**
@@ -318,7 +320,9 @@ class CollectiveService extends CollectiveServiceBase {
 		return new CollectiveInfo($this->collectiveMapper->update($collectiveInfo),
 			$collectiveInfo->getName(),
 			$collectiveInfo->getLevel(),
-			(string)$collectiveInfo->getUserPageOrder());
+			$collectiveInfo->getShareToken(),
+			$collectiveInfo->getShareEditable(),
+			$collectiveInfo->getUserPageOrder());
 	}
 
 	/**
@@ -345,7 +349,9 @@ class CollectiveService extends CollectiveServiceBase {
 		return new CollectiveInfo($this->collectiveMapper->update($collectiveInfo),
 			$collectiveInfo->getName(),
 			$collectiveInfo->getLevel(),
-			(string)$collectiveInfo->getUserPageOrder());
+			$collectiveInfo->getShareToken(),
+			$collectiveInfo->getShareEditable(),
+			$collectiveInfo->getUserPageOrder());
 	}
 
 	/**
@@ -372,7 +378,9 @@ class CollectiveService extends CollectiveServiceBase {
 		return new CollectiveInfo($this->collectiveMapper->trash($collectiveInfo),
 			$collectiveInfo->getName(),
 			$collectiveInfo->getLevel(),
-			(string)$collectiveInfo->getUserPageOrder());
+			$collectiveInfo->getShareToken(),
+			$collectiveInfo->getShareEditable(),
+			$collectiveInfo->getUserPageOrder());
 	}
 
 	/**
@@ -423,7 +431,9 @@ class CollectiveService extends CollectiveServiceBase {
 		return new CollectiveInfo($this->collectiveMapper->delete($collectiveInfo),
 			$collectiveInfo->getName(),
 			$collectiveInfo->getLevel(),
-			(string)$collectiveInfo->getUserPageOrder());
+			$collectiveInfo->getShareToken(),
+			$collectiveInfo->getShareEditable(),
+			$collectiveInfo->getUserPageOrder());
 	}
 
 	/**
@@ -446,6 +456,8 @@ class CollectiveService extends CollectiveServiceBase {
 		return new CollectiveInfo($this->collectiveMapper->restore($collectiveInfo),
 			$collectiveInfo->getName(),
 			$collectiveInfo->getLevel(),
-			(string)$collectiveInfo->getUserPageOrder());
+			$collectiveInfo->getShareToken(),
+			$collectiveInfo->getShareEditable(),
+			$collectiveInfo->getUserPageOrder());
 	}
 }

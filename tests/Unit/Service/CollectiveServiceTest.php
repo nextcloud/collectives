@@ -211,7 +211,7 @@ class CollectiveServiceTest extends TestCase {
 			'canShare' => true,
 			'shareToken' => null,
 			'shareEditable' => false,
-			'userPageOrder' => 0,
+			'userPageOrder' => null,
 		], $collective->jsonSerialize());
 	}
 }

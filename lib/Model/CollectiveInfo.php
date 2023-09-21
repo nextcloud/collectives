@@ -14,11 +14,11 @@ use OCP\Constants;
  * @method void setName(string $name)
  * @method int getLevel()
  * @method void setLevel(int $level)
- * @method int getShareToken()
+ * @method string getShareToken()
  * @method void setShareToken(string $shareToken)
  * @method bool getShareEditable()
  * @method void setShareEditable(bool $shareEditable)
- * @method bool getUserPageOrder()
+ * @method int getUserPageOrder()
  */
 class CollectiveInfo extends Collective {
 	protected string $name;
@@ -30,9 +30,9 @@ class CollectiveInfo extends Collective {
 	public function __construct(Collective $collective,
 		string $name,
 		int $level = Member::LEVEL_MEMBER,
-		string $shareToken = null,
+		?string $shareToken = null,
 		bool $shareEditable = false,
-		?int $userPageOrder = Collective::defaultPageOrder) {
+		?int $userPageOrder = null) {
 		$this->id = $collective->getId();
 		$this->circleUniqueId = $collective->getCircleId();
 		$this->emoji = $collective->getEmoji();
