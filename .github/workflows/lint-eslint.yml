@@ -56,6 +56,8 @@ jobs:
         run: npm i -g npm@"${{ steps.versions.outputs.npmVersion }}"
 
       - name: Install dependencies
+        env:
+          CYPRESS_INSTALL_BINARY: 0
         run: npm ci
 
       - name: Lint

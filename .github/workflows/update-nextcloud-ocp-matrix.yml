@@ -38,11 +38,26 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Read codeowners
+        id: codeowners
+        run: |
+          grep '/appinfo/info.xml' .github/CODEOWNERS | cut -f 2- -d ' ' | xargs | awk '{ print "codeowners="$0 }' >> $GITHUB_OUTPUT
+        continue-on-error: true
+
       - name: Composer install
         run: composer install
 
       - name: Composer update nextcloud/ocp
+        id: update_branch
         run: composer require --dev nextcloud/ocp:dev-${{ matrix.target }}
+
+      - name: Raise on issue on failure
+        uses: dacbd/create-issue-action@ba4d1c45cccf9c483f2720cefb40e437f0ee6f7d # v1.2.1
+        if: ${{ failure() && steps.update_branch.conclusion == 'failure' }}
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: Failed to update nextcloud/ocp package}
+          body: Please check the output of the GitHub action and manually resolve the issues<br>${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}<br>${{ steps.codeowners.outputs.codeowners }}
 
       - name: Reset checkout 3rdparty
         run: |
