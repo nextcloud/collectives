@@ -117,6 +117,7 @@ OC.L10N.register(
     "Start editing" : "Démarrer l'édition",
     "Done" : "Terminé",
     "Open page sidebar" : "Ouvrir la barre latérale de la page",
+    "Full width" : "Pleine largueur",
     "Show in Files" : "Afficher dans Fichiers",
     "Move page" : "Déplacer la page",
     "Hide outline" : "Masquer le plan du document",
