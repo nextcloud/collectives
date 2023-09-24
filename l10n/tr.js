@@ -124,6 +124,7 @@ OC.L10N.register(
     "Recent pages" : "Son sayfalar",
     "Scroll recent pages to the left" : "Son sayfaları sola kaydır",
     "Open page sidebar" : "Sayfa yan çubuğunu aç",
+    "Full width" : "Tam genişlik",
     "Show in Files" : "Dosyalarda görüntüle",
     "Move page" : "Sayfayı taşı",
     "Hide outline" : "Özeti gizle",
