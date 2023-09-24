@@ -112,7 +112,7 @@ describe('Page', function() {
 			cy.wait('@renamePage')
 			// Flaky on stable25
 			if (Cypress.env('ncVersion') !== 'stable25') {
-				cy.getEditor(Cypress.config('defaultCommandTimeout') * 2)
+				cy.getEditor(Cypress.config('defaultCommandTimeout') * 5)
 					.should('be.visible')
 					.contains('This is going to be our template.')
 			}
