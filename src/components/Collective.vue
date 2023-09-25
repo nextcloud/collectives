@@ -211,7 +211,7 @@ export default {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		font-size: 30px;
+		font-size: 24px;
 		min-width: 44px;
 		height: 43px;
 		opacity: 0.8;
@@ -219,7 +219,7 @@ export default {
 		.button-emoji-page {
 			width: 44px;
 			padding: 0px 4px;
-			font-size: 30px;
+			font-size: 24px;
 
 			&.mobile {
 				font-size: 25px;
