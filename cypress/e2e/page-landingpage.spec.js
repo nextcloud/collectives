@@ -52,12 +52,12 @@ describe('Page landing page', function() {
 			cy.get('.recent-pages-widget .recent-pages-title')
 				.click()
 			cy.get('.recent-pages-widget .recent-page-tile')
-				.should('not.exist')
+				.should('not.be.visible')
 
 			cy.reload()
 
 			cy.get('.recent-pages-widget .recent-page-tile')
-				.should('not.exist')
+				.should('not.be.visible')
 			cy.get('.recent-pages-widget .recent-pages-title')
 				.click()
 			cy.get('.recent-pages-widget .recent-page-tile')

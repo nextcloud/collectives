@@ -6,7 +6,7 @@
 			@click="toggleWidget">
 			<WidgetHeading :title="t('collectives', 'Recent pages')" />
 			<div class="toggle-icon">
-				<ChevronDownButton :size="24"
+				<ChevronDownIcon :size="24"
 					:class="{ 'collapsed': !showRecentPages }" />
 			</div>
 		</a>
@@ -22,14 +22,14 @@
 					:aria-label="t('collectives', 'Scroll recent pages to the left')"
 					@click="slideLeft"
 					@keypress.enter.prevent="slideLeft">
-					<ChevronLeftButton :size="44" />
+					<ChevronLeftIcon :size="44" />
 				</button>
 				<button ref="buttonslideright"
 					class="button-slide button-slide__right hidden"
 					:aria-label="t('collectives', 'Scroll recent pages to the left')"
 					@click="slideRight"
 					@keypress.enter.prevent="slideRight">
-					<ChevronRightButton :size="44" />
+					<ChevronRightIcon :size="44" />
 				</button>
 			</div>
 		</div>
@@ -40,9 +40,9 @@
 import debounce from 'debounce'
 import { mapActions, mapGetters } from 'vuex'
 import { showError } from '@nextcloud/dialogs'
-import ChevronDownButton from 'vue-material-design-icons/ChevronDown.vue'
-import ChevronLeftButton from 'vue-material-design-icons/ChevronLeft.vue'
-import ChevronRightButton from 'vue-material-design-icons/ChevronRight.vue'
+import ChevronDownIcon from 'vue-material-design-icons/ChevronDown.vue'
+import ChevronLeftIcon from 'vue-material-design-icons/ChevronLeft.vue'
+import ChevronRightIcon from 'vue-material-design-icons/ChevronRight.vue'
 import RecentPageTile from './RecentPageTile.vue'
 import WidgetHeading from './WidgetHeading.vue'
 import { SET_COLLECTIVE_USER_SETTING_SHOW_RECENT_PAGES } from '../../../store/actions.js'
@@ -53,9 +53,9 @@ export default {
 	name: 'RecentPagesWidget',
 
 	components: {
-		ChevronDownButton,
-		ChevronLeftButton,
-		ChevronRightButton,
+		ChevronDownIcon,
+		ChevronLeftIcon,
+		ChevronRightIcon,
 		RecentPageTile,
 		WidgetHeading,
 	},
