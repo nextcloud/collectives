@@ -173,7 +173,7 @@ jobs:
         run: |
           mkdir data
           ./occ maintenance:install --verbose --database=sqlite --database-name=nextcloud --database-host=127.0.0.1 --database-port=$DB_PORT --database-user=root --database-pass=rootpassword --admin-user admin --admin-pass admin
-          ./occ config:system:set --value="http://localhost:8080" -- overwrite.cli.url
+          ./occ config:system:set --value="http://localhost:8081" -- overwrite.cli.url
           ./occ app:enable --force contacts
           ./occ app:enable --force files_pdfviewer
           ./occ app:enable --force ${{ env.APP_NAME }}
@@ -220,7 +220,7 @@ jobs:
 
       - name: Upload nextcloud logs
         uses: actions/upload-artifact@v3
-        if: failure()
+        if: always()
         with:
           name: ${{ matrix.server-versions }}.log
           path: data/nextcloud.log
