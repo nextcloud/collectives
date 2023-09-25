@@ -101,7 +101,7 @@ OC.L10N.register(
     "Switch back to default sort order" : "Повернутися до типового впорядкування",
     "Hide templates" : "Сховати шаблони",
     "Show templates" : "Показати шаблони",
-    "Download" : "Звантажити",
+    "Download" : "Завантажити",
     "Current version" : "Поточна версія",
     "No other versions available" : "Інші версії недоступні",
     "Attachments" : "Вкладення",
