@@ -2,6 +2,7 @@ import Vue from 'vue'
 import FileListInfo from '../views/FileListInfo.vue'
 import { loadState } from '@nextcloud/initial-state'
 
+// For Nextcloud <= 27
 const FilesCollectivesPlugin = {
 	el: null,
 

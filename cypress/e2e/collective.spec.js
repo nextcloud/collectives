@@ -56,11 +56,8 @@ describe('Collective', function() {
 			cy.get(breadcrumbsSelector).should('contain', 'Preexisting Collective')
 			cy.get(fileListSelector).should('contain', 'Readme')
 			cy.get(fileListSelector).should('contain', '.md')
-			// TODO: Fix FileListInfo for Nextcloud 28+ (Github issue #860)
-			if (['stable25', 'stable26', 'stable27'].includes(Cypress.env('ncVersion'))) {
-				cy.get('.filelist-collectives-wrapper')
-					.should('contain', 'The content of this folder is best viewed in the Collectives app.')
-			}
+			cy.get('.filelist-collectives-wrapper')
+				.should('contain', 'The content of this folder is best viewed in the Collectives app.')
 		})
 	})
 
