@@ -509,6 +509,9 @@ class PageTrashBackend implements ITrashBackend {
 			}
 			$absolutePath = $this->getAppFolder()->getMountPoint()->getMountPoint() . $path;
 			$relativePath = $trashFolder->getRelativePath($absolutePath);
+			if (!$relativePath) {
+				return null;
+			}
 			[, $collectiveId, $nameAndTime] = explode('/', $relativePath);
 
 			if ($this->userHasAccessToFolder($user, (int)$collectiveId)) {
