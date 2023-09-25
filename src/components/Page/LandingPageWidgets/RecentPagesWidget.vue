@@ -1,16 +1,16 @@
 <template>
 	<div class="recent-pages-widget">
 		<a class="recent-pages-title"
+			:aria-label="expandLabel"
 			@keydown.enter="toggleWidget"
 			@click="toggleWidget">
 			<WidgetHeading :title="t('collectives', 'Recent pages')" />
 			<div class="toggle-icon">
 				<ChevronDownButton :size="24"
-					:title="t('collectives', 'Expand recent pages')"
 					:class="{ 'collapsed': !showRecentPages }" />
 			</div>
 		</a>
-		<div v-if="showRecentPages" class="recent-pages-widget-container">
+		<div v-show="showRecentPages" class="recent-pages-widget-container">
 			<div ref="pageslider" class="recent-pages-widget-pages">
 				<RecentPageTile v-for="page in trimmedRecentPages"
 					:key="page.id"
@@ -66,6 +66,12 @@ export default {
 			'isPublic',
 			'recentPages',
 		]),
+
+		expandLabel() {
+			return this.showRecentPages
+				? t('collectives', 'Collapse recent pages')
+				: t('collectives', 'Expand recent pages')
+		},
 
 		showRecentPages() {
 			return this.currentCollective.userShowRecentPages ?? true
