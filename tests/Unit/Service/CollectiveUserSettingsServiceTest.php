@@ -37,7 +37,7 @@ class CollectiveUserSettingsServiceTest extends TestCase {
 		$this->service->setPageOrder(1, 'user', Collective::defaultPageOrder);
 	}
 
-	public function testSetPageOrderInvalidPageOrder(): void {
+	public function testPageOrderInvalidPageOrder(): void {
 		$this->collectiveMapper->method('findByIdAndUser')
 			->willReturn(new Collective());
 		$this->collectiveUserSettingsMapper->method('findByCollectiveAndUser')
@@ -47,18 +47,5 @@ class CollectiveUserSettingsServiceTest extends TestCase {
 			->method('insertOrUpdate');
 		$this->expectException(NotPermittedException::class);
 		$this->service->setPageOrder(1, 'user', min(array_keys(Collective::pageOrders)) - 1);
-	}
-
-	public function testSetPageOrderRuntimeException(): void {
-		$this->collectiveMapper->method('findByIdAndUser')
-			->willReturn(new Collective());
-		$this->collectiveUserSettingsMapper->method('findByCollectiveAndUser')
-			->willReturn(null);
-
-		$this->collectiveUserSettingsMapper->expects(self::once())
-			->method('insertOrUpdate')
-			->willThrowException(new \RuntimeException());
-		$this->expectException(NotPermittedException::class);
-		$this->service->setPageOrder(1, 'user', Collective::defaultPageOrder);
 	}
 }

@@ -1,8 +1,8 @@
 <template>
 	<div class="landing-page-widgets"
 		:class="{'sheet-view': !isFullWidthView}">
-		<RecentPagesWidget />
 		<MembersWidget v-if="!isPublic" />
+		<RecentPagesWidget />
 	</div>
 </template>
 

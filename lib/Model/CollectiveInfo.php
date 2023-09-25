@@ -14,11 +14,12 @@ use OCP\Constants;
  * @method void setName(string $name)
  * @method int getLevel()
  * @method void setLevel(int $level)
- * @method int getShareToken()
+ * @method string getShareToken()
  * @method void setShareToken(string $shareToken)
  * @method bool getShareEditable()
  * @method void setShareEditable(bool $shareEditable)
- * @method bool getUserPageOrder()
+ * @method int getUserPageOrder()
+ * @method bool getUserShowRecentPages()
  */
 class CollectiveInfo extends Collective {
 	protected string $name;
@@ -26,13 +27,15 @@ class CollectiveInfo extends Collective {
 	protected ?string $shareToken;
 	protected bool $shareEditable;
 	protected ?int $userPageOrder;
+	protected ?bool $userShowRecentPages;
 
 	public function __construct(Collective $collective,
 		string $name,
 		int $level = Member::LEVEL_MEMBER,
-		string $shareToken = null,
+		?string $shareToken = null,
 		bool $shareEditable = false,
-		?int $userPageOrder = Collective::defaultPageOrder) {
+		?int $userPageOrder = Collective::defaultPageOrder,
+		?bool $userShowRecentPages = Collective::defaultShowRecentPages) {
 		$this->id = $collective->getId();
 		$this->circleUniqueId = $collective->getCircleId();
 		$this->emoji = $collective->getEmoji();
@@ -44,6 +47,7 @@ class CollectiveInfo extends Collective {
 		$this->shareToken = $shareToken;
 		$this->shareEditable = $shareEditable;
 		$this->userPageOrder = $userPageOrder;
+		$this->userShowRecentPages = $userShowRecentPages;
 	}
 
 	/**
@@ -117,6 +121,13 @@ class CollectiveInfo extends Collective {
 	}
 
 	/**
+	 * @param bool $userShowRecentPages
+	 */
+	public function setUserShowRecentPages(bool $userShowRecentPages): void {
+		$this->userShowRecentPages = $userShowRecentPages;
+	}
+
+	/**
 	 * @return array
 	 */
 	public function jsonSerialize(): array {
@@ -135,6 +146,7 @@ class CollectiveInfo extends Collective {
 			'shareToken' => $this->shareToken,
 			'shareEditable' => $this->canEdit() && $this->shareEditable,
 			'userPageOrder' => $this->userPageOrder,
+			'userShowRecentPages' => $this->userShowRecentPages,
 		];
 	}
 }

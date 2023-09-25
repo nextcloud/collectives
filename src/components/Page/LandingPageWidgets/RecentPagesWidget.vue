@@ -1,7 +1,16 @@
 <template>
 	<div class="recent-pages-widget">
-		<WidgetHeading :title="t('collectives', 'Recent pages')" :first="true" />
-		<div class="recent-pages-widget-container">
+		<a class="recent-pages-title"
+			:aria-label="expandLabel"
+			@keydown.enter="toggleWidget"
+			@click="toggleWidget">
+			<WidgetHeading :title="t('collectives', 'Recent pages')" />
+			<div class="toggle-icon">
+				<ChevronDownIcon :size="24"
+					:class="{ 'collapsed': !showRecentPages }" />
+			</div>
+		</a>
+		<div v-show="showRecentPages" class="recent-pages-widget-container">
 			<div ref="pageslider" class="recent-pages-widget-pages">
 				<RecentPageTile v-for="page in trimmedRecentPages"
 					:key="page.id"
@@ -13,14 +22,14 @@
 					:aria-label="t('collectives', 'Scroll recent pages to the left')"
 					@click="slideLeft"
 					@keypress.enter.prevent="slideLeft">
-					<ChevronLeftButton :size="44" />
+					<ChevronLeftIcon :size="44" />
 				</button>
 				<button ref="buttonslideright"
 					class="button-slide button-slide__right hidden"
 					:aria-label="t('collectives', 'Scroll recent pages to the left')"
 					@click="slideRight"
 					@keypress.enter.prevent="slideRight">
-					<ChevronRightButton :size="44" />
+					<ChevronRightIcon :size="44" />
 				</button>
 			</div>
 		</div>
@@ -29,11 +38,14 @@
 
 <script>
 import debounce from 'debounce'
-import { mapGetters } from 'vuex'
-import ChevronLeftButton from 'vue-material-design-icons/ChevronLeft.vue'
-import ChevronRightButton from 'vue-material-design-icons/ChevronRight.vue'
+import { mapActions, mapGetters } from 'vuex'
+import { showError } from '@nextcloud/dialogs'
+import ChevronDownIcon from 'vue-material-design-icons/ChevronDown.vue'
+import ChevronLeftIcon from 'vue-material-design-icons/ChevronLeft.vue'
+import ChevronRightIcon from 'vue-material-design-icons/ChevronRight.vue'
 import RecentPageTile from './RecentPageTile.vue'
 import WidgetHeading from './WidgetHeading.vue'
+import { SET_COLLECTIVE_USER_SETTING_SHOW_RECENT_PAGES } from '../../../store/actions.js'
 
 const SLIDE_OFFSET = 198
 
@@ -41,16 +53,29 @@ export default {
 	name: 'RecentPagesWidget',
 
 	components: {
-		ChevronLeftButton,
-		ChevronRightButton,
+		ChevronDownIcon,
+		ChevronLeftIcon,
+		ChevronRightIcon,
 		RecentPageTile,
 		WidgetHeading,
 	},
 
 	computed: {
 		...mapGetters([
+			'currentCollective',
+			'isPublic',
 			'recentPages',
 		]),
+
+		expandLabel() {
+			return this.showRecentPages
+				? t('collectives', 'Collapse recent pages')
+				: t('collectives', 'Expand recent pages')
+		},
+
+		showRecentPages() {
+			return this.currentCollective.userShowRecentPages ?? true
+		},
 
 		trimmedRecentPages() {
 			return this.recentPages
@@ -70,6 +95,24 @@ export default {
 	},
 
 	methods: {
+		...mapActions({
+			dispatchSetUserShowRecentPages: SET_COLLECTIVE_USER_SETTING_SHOW_RECENT_PAGES,
+		}),
+
+		toggleWidget() {
+			if (!this.isPublic) {
+				this.dispatchSetUserShowRecentPages({ id: this.currentCollective.id, showRecentPages: !this.showRecentPages })
+					.catch((error) => {
+						console.error(error)
+						showError(t('collectives', 'Could not save recent pages setting for collective'))
+					})
+			}
+
+			if (this.showRecentPages) {
+				this.updateButtons()
+			}
+		},
+
 		updateButtons: debounce(function() {
 			const pagesliderEl = this.$refs.pageslider
 			if (!pagesliderEl) {
@@ -115,6 +158,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.recent-pages-title {
+	display: flex;
+
+	.toggle-icon {
+		padding-top: 25px;
+		padding-left: 8px;
+
+		.collapsed {
+			transition: transform var(--animation-slow);
+			transform: rotate(-90deg);
+		}
+	}
+}
+
 .recent-pages-widget-container {
 	position: relative;
 	padding-top: 12px;

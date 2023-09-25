@@ -48,6 +48,8 @@ class Collective extends Entity implements JsonSerializable {
 	];
 	/** @var int */
 	public const defaultPageMode = 0;
+	/** @var bool */
+	public const defaultShowRecentPages = true;
 
 	protected ?string $circleUniqueId = null;
 	protected int $permissions = self::defaultPermissions;

@@ -32,6 +32,7 @@ import {
 	UPDATE_COLLECTIVE_SHARE_PERMISSIONS,
 	UPDATE_COLLECTIVE_PAGE_MODE,
 	SET_COLLECTIVE_USER_SETTING_PAGE_ORDER,
+	SET_COLLECTIVE_USER_SETTING_SHOW_RECENT_PAGES,
 	MARK_COLLECTIVE_DELETED,
 	UNMARK_COLLECTIVE_DELETED,
 	GET_COLLECTIVES_FOLDER,
@@ -440,6 +441,14 @@ export default {
 				{ pageOrder },
 			)
 			commit(PATCH_COLLECTIVE_WITH_PROPERTY, { id, property: 'userPageOrder', value: pageOrder })
+		},
+
+		async [SET_COLLECTIVE_USER_SETTING_SHOW_RECENT_PAGES]({ commit, getters }, { id, showRecentPages }) {
+			commit(PATCH_COLLECTIVE_WITH_PROPERTY, { id, property: 'userShowRecentPages', value: showRecentPages })
+			await axios.put(
+				generateUrl('/apps/collectives/_api/' + id + '/_userSettings/showRecentPages'),
+				{ showRecentPages },
+			)
 		},
 
 		[MARK_COLLECTIVE_DELETED]({ commit }, collective) {
