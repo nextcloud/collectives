@@ -178,6 +178,11 @@ jobs:
           ./occ app:enable --force files_pdfviewer
           ./occ app:enable --force ${{ env.APP_NAME }}
 
+      - name: Run Nextcloud
+        run: php -S 0.0.0.0:8081 &
+        env:
+          PHP_CLI_SERVER_WORKERS: 3
+
       - name: Add Nextcloud users and a collective for full-text search
         run: |
           for user in alice bob jane john; do \
@@ -189,11 +194,6 @@ jobs:
           done
           ./occ collectives:create SearchTest --owner=bob
           ./occ collectives:index
-
-      - name: Run Nextcloud
-        run: php -S 0.0.0.0:8081 &
-        env:
-          PHP_CLI_SERVER_WORKERS: 3
 
       - name: Cypress run
         uses: cypress-io/github-action@v6
