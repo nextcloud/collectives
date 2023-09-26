@@ -117,7 +117,6 @@ OC.L10N.register(
     "Stop editing" : "Stop met bewerken",
     "Start editing" : "Begin met bewerken",
     "Done" : "Klaar",
-    "Collective members" : "Collectief leden",
     "Show members" : "Toon leden",
     "Show all members of the collective" : "Toon alle leden van het collectief",
     "Landing page" : "Landingspagina",

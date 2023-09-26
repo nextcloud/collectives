@@ -117,7 +117,6 @@ OC.L10N.register(
     "Stop editing" : "توقف عن التحرير",
     "Start editing" : "إبدإ التحرير",
     "Done" : "تم",
-    "Collective members" : "أعضاء التجميعة",
     "Show members" : "إعرِض الأعضاء",
     "Show all members of the collective" : "إعرِض كل أعضاء التجميعة",
     "Landing page" : "الصفحة المقصودة",

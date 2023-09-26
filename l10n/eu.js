@@ -117,7 +117,6 @@ OC.L10N.register(
     "Stop editing" : "Utzi edizioa",
     "Start editing" : "Hasi editatzen",
     "Done" : "Egina",
-    "Collective members" : "Kolektiboko kideak",
     "Show members" : "Erakutsi kideak",
     "Show all members of the collective" : "Erakutsi kolektiboko kide guztiak",
     "Landing page" : "Helmugako orria",

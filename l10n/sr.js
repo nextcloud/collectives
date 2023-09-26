@@ -117,7 +117,6 @@ OC.L10N.register(
     "Stop editing" : "Прекини уређивање",
     "Start editing" : "Почни уређивање",
     "Done" : "Готово",
-    "Collective members" : "Чланови колектива",
     "Show members" : "Прикажи чланове",
     "Show all members of the collective" : "Приказује све чланове колектива",
     "Landing page" : "Почетна страница",
