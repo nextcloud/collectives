@@ -48,9 +48,28 @@ describe('Collective settings', function() {
 			cy.get('button.button-emoji')
 				.click()
 			cy.contains('.emoji-mart-scroll .emoji-mart-emoji', '🥰').click()
+
+			// Test persistence of changed emoji
 			cy.reload()
 			cy.contains('.app-navigation-entry', 'Change me')
 				.find('.app-navigation-entry-icon').should('contain', '🥰')
+
+			// Unset emoji
+			cy.get('.collectives_list_item')
+				.contains('li', 'Change me')
+				.find('.action-item__menutoggle')
+				.click({ force: true })
+			cy.get('button.action-button')
+				.contains('Settings')
+				.click()
+			cy.get('button.button-emoji')
+				.click()
+			cy.contains('.emoji-mart-emoji.emoji-selected', '🥰').click()
+
+			// Test persistence of unset emoji
+			cy.reload()
+			cy.contains('.app-navigation-entry', 'Change me')
+				.find('.app-navigation-entry-icon .collectives-icon')
 		})
 	})
 
