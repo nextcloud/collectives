@@ -117,7 +117,6 @@ OC.L10N.register(
     "Stop editing" : "Stop editing",
     "Start editing" : "Start editing",
     "Done" : "Done",
-    "Collective members" : "Collective members",
     "Show members" : "Show members",
     "Show all members of the collective" : "Show all members of the collective",
     "Landing page" : "Landing page",

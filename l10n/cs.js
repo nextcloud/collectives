@@ -117,7 +117,6 @@ OC.L10N.register(
     "Stop editing" : "Ukončit upravování",
     "Start editing" : "Zahájit upravování",
     "Done" : "Hotovo",
-    "Collective members" : "Členové kolektivu",
     "Show members" : "Zobrazit členy",
     "Show all members of the collective" : "Zobrazit všechny členy kolektivu",
     "Landing page" : "Úvodní stránka",

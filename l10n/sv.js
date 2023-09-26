@@ -115,7 +115,6 @@ OC.L10N.register(
     "Stop editing" : "Sluta redigera",
     "Start editing" : "Börja redigera",
     "Done" : "Klar",
-    "Collective members" : "Collective-medlemmar",
     "Show members" : "Visa medlemmar",
     "Show all members of the collective" : "Visa alla medlemmar i collective",
     "Landing page" : "Landningssida",

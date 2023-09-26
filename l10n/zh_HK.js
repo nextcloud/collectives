@@ -117,7 +117,6 @@ OC.L10N.register(
     "Stop editing" : "停止編輯",
     "Start editing" : "開始編輯",
     "Done" : "完成",
-    "Collective members" : "知識庫成員",
     "Show members" : "顯示成員",
     "Show all members of the collective" : "顯示知識庫的所有成員",
     "Landing page" : "登陸頁面",
