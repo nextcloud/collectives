@@ -19,7 +19,7 @@ use OCP\Constants;
  * @method int getPermissions()
  * @method void setPermissions(int $permissions)
  * @method string getEmoji()
- * @method void setEmoji(string $emoji)
+ * @method void setEmoji(?string $emoji)
  * @method int|null getTrashTimestamp()
  * @method void setTrashTimestamp(?int $trashTimestamp)
  * @method int getPageMode()

@@ -17,7 +17,7 @@ use OCP\AppFramework\Db\Entity;
  * @method string getLastUserId()
  * @method void setLastUserId(string $value)
  * @method string getEmoji()
- * @method void setEmoji(string $value)
+ * @method void setEmoji(?string $value)
  * @method string getSubpageOrder()
  * @method void setSubpageOrder(string $value)
  * @method int|null getTrashTimestamp()

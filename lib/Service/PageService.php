@@ -291,7 +291,7 @@ class PageService {
 		$page = new Page();
 		$page->setFileId($fileId);
 		$page->setLastUserId($userId);
-		if ($emoji) {
+		if ($emoji !== null) {
 			$page->setEmoji($emoji);
 		}
 		if ($subpageOrder) {

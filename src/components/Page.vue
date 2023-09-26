@@ -15,7 +15,10 @@
 				<NcEmojiPicker v-else-if="currentCollectiveCanEdit"
 					ref="page-emoji-picker"
 					:show-preview="true"
-					@select="setPageEmoji">
+					:allow-unselect="true"
+					:selected-emoji="currentPage.emoji"
+					@select="setPageEmoji"
+					@unselect="unselectPageEmoji">
 					<NcButton type="tertiary"
 						:aria-label="t('collectives', 'Select emoji for page')"
 						:title="t('collectives', 'Select emoji')"
@@ -277,6 +280,10 @@ export default {
 
 		async setPageEmoji(emoji) {
 			await this.setEmoji(this.currentPage.parentId, this.currentPage.id, emoji)
+		},
+
+		unselectPageEmoji() {
+			return this.setPageEmoji('')
 		},
 
 		openPageEmojiPicker() {

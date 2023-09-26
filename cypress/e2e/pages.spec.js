@@ -59,12 +59,25 @@ describe('Page', function() {
 			cy.get('#titleform .page-title-icon')
 				.click()
 			cy.contains('.emoji-mart-scroll .emoji-mart-emoji', '🥰').click()
+
+			// Test persistence of changed emmoji
 			cy.reload()
 			cy.get('#titleform .page-title-icon')
 				.should('contain', '🥰')
 			cy.contains('.app-content-list-item', 'Day 1')
 				.find('.app-content-list-item-icon')
 				.should('contain', '🥰')
+
+			// Unset emoji
+			cy.get('#titleform .page-title-icon')
+				.click()
+			cy.contains('.emoji-mart-emoji.emoji-selected', '🥰').click()
+
+			// Test persistence of unset emoji
+			cy.reload()
+			cy.get('#titleform .page-title-icon .emoticon-outline-icon')
+			cy.contains('.app-content-list-item', 'Day 1')
+				.find('.app-content-list-item-icon .collectives-page-icon')
 		})
 		it('Allows setting a page emoji from page list', function() {
 			cy.contains('.app-content-list-item', 'Day 2')

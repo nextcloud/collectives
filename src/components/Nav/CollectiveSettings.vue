@@ -4,7 +4,11 @@
 		:show-navigation="true">
 		<NcAppSettingsSection id="name-and-emoji" :title="t('collectives', 'Name and emoji')">
 			<div class="collective-name">
-				<NcEmojiPicker :show-preview="true" @select="updateEmoji">
+				<NcEmojiPicker :show-preview="true"
+					:allow-unselect="true"
+					:selected-emoji="collective.emoji"
+					@select="updateEmoji"
+					@unselect="unselectEmoji">
 					<NcButton type="tertiary"
 						:aria-label="t('collectives', 'Select emoji for collective')"
 						:title="emojiTitle"
@@ -178,6 +182,7 @@ export default {
 			editPermissions: String(this.collective.editPermissionLevel),
 			sharePermissions: String(this.collective.sharePermissionLevel),
 			pageMode: String(this.collective.pageMode),
+			emoji: null,
 		}
 	},
 
@@ -284,6 +289,7 @@ export default {
 		 * @param {string} emoji Emoji
 		 */
 		updateEmoji(emoji) {
+			console.debug('updateEmoji', emoji)
 			this.load('updateCollectiveEmoji')
 			const collective = { id: this.collective.id }
 			collective.emoji = emoji
@@ -295,6 +301,10 @@ export default {
 				this.done('updateCollectiveEmoji')
 				throw error
 			})
+		},
+
+		unselectEmoji() {
+			return this.updateEmoji('')
 		},
 
 		/**

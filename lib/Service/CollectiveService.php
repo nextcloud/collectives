@@ -282,7 +282,9 @@ class CollectiveService extends CollectiveServiceBase {
 			throw new NotPermittedException('Member ' . $userId . ' not allowed to update collective: ' . $id);
 		}
 
-		if ($emoji) {
+		if ($emoji === '') {
+			$collectiveInfo->setEmoji(null);
+		} elseif ($emoji) {
 			$collectiveInfo->setEmoji($emoji);
 		}
 
