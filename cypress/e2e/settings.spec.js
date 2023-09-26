@@ -37,14 +37,20 @@ describe('Settings', function() {
 			const fileListSelector = '.files-fileList a, [data-cy-files-list-row] a'
 			const breadcrumbsSelector = '.files-controls .breadcrumb, [data-cy-files-content-breadcrumbs] a'
 			cy.login('bob')
+
 			cy.get('#app-settings')
 				.click()
 			cy.intercept('PROPFIND', '**/remote.php/dav/files/**').as('propfindFolder')
 			cy.get('input[name="userFolder"]')
 				.click()
 			cy.wait('@propfindFolder')
+
+			// Open home folder
 			cy.get('[data-dir=""] > a, a[title="Home"]')
 				.click()
+			cy.wait('@propfindFolder')
+
+			// Create new folder
 			cy.get('#oc-dialog-filepicker-content > span > span > a.button-add, .breadcrumb__actions button')
 				.click()
 			cy.intercept('MKCOL', `**/remote.php/dav/files/**/${randomFolder}`).as('createFolder')
@@ -54,27 +60,40 @@ describe('Settings', function() {
 			if (!['stable25', 'stable26'].includes(Cypress.env('ncVersion'))) {
 				cy.get(filePickerListSelector).contains(randomFolder).click()
 			}
+
+			// Select new created folder
 			cy.intercept('POST', '**/collectives/api/v1.0/settings/user').as('setCollectivesFolder')
 			cy.get('button').contains('Choose')
 				.click()
 			cy.wait('@setCollectivesFolder')
+
+			// Check if collectives are found in new folder in Files app
 			cy.log('Check if collectives are in configured user folder')
 			cy.visit('/apps/files')
 			cy.get(fileListSelector).contains(randomFolder).click()
 			cy.get(breadcrumbsSelector).should('contain', randomFolder)
 			cy.get(fileListSelector).should('contain', 'A Collective')
+
+			// Change user folder back to default
 			cy.log('Change user folder back to default')
 			cy.visit('/apps/collectives')
 			cy.get('#app-settings')
 				.click()
 			cy.get('input[name="userFolder"]')
 				.click()
+			cy.wait('@propfindFolder')
+
+			// Open home folder
 			cy.get('[data-dir=""] > a, a[title="Home"]')
 				.click()
+			cy.wait('@propfindFolder')
+
+			// Open and select default folder
 			cy.get(filePickerListSelector).contains('Collec')
 				.click()
 			cy.get('button').contains('Choose')
 				.click()
+			cy.wait('@setCollectivesFolder')
 		})
 	})
 })
