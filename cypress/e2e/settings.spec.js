@@ -57,9 +57,7 @@ describe('Settings', function() {
 			cy.get('nav.newFolderMenu > ul > li > form > input[type="text"], input[placeholder="New folder name"], input[placeholder="New folder"]')
 				.type(`${randomFolder}{enter}`)
 			cy.wait('@createFolder')
-			if (!['stable25', 'stable26'].includes(Cypress.env('ncVersion'))) {
-				cy.get(filePickerListSelector).contains(randomFolder).click()
-			}
+			cy.get(filePickerListSelector).contains(randomFolder).click()
 
 			// Select new created folder
 			cy.intercept('POST', '**/collectives/api/v1.0/settings/user').as('setCollectivesFolder')
