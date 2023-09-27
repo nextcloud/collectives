@@ -120,6 +120,7 @@ OC.L10N.register(
     "Landing page" : "Landningssida",
     "Recent pages" : "Senaste sidorna",
     "Scroll recent pages to the left" : "Bläddra de senaste sidorna åt vänster",
+    "Could not save recent pages setting for collective" : "Kunde inte spara inställningen senaste sidor för collective",
     "Open page sidebar" : "Öppna sidofältet",
     "Full width" : "Full bredd",
     "Show in Files" : "Visa i Filer",
