@@ -40,8 +40,8 @@ Please note that this enables guest users to create new collectives.
 
 ## Public shares
 
-WebDAV access to public shares must not be forbidden for publically shared
-collectives to work. Please make sure that you didn't disable the admin option
+WebDAV access to public shares must be **enabled** for publically shared
+collectives to work. Please make sure that you enabled the admin option:
 "Allow users on this server to send shares to other servers (This option also
 enables WebDAV access to public shares)" under "Sharing -> Federated Cloud
 Sharing".
