@@ -124,7 +124,7 @@ OC.L10N.register(
     "Scroll recent pages to the left" : "Durch die letzten Seiten nach links scrollen",
     "Collapse recent pages" : "Aktuelle Seiten zusammenklappen",
     "Expand recent pages" : "Aktuelle Seiten aufklappen",
-    "Could not save recent pages setting for collective" : "Die aktuellen Seiteneinstellungen für Kollektive konnten nicht gespeichert werden",
+    "Could not save recent pages setting for collective" : "Die Einstellungen für aktuellen Seiten für Kollektive konnten nicht gespeichert werden",
     "Open page sidebar" : "Seitenleiste für diese Seite öffnen",
     "Full width" : "Volle Breite",
     "Show in Files" : "Zeige in Dateien",
