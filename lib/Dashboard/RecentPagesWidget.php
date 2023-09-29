@@ -2,10 +2,9 @@
 
 namespace OCA\Collectives\Dashboard;
 
-use OCA\Collectives\Model\CollectiveInfo;
-use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\PageService;
+use OCA\Collectives\Service\RecentPagesService;
 use OCP\Dashboard\IReloadableWidget;
 use OCP\Dashboard\Model\WidgetItem;
 use OCP\Dashboard\Model\WidgetItems;
@@ -23,6 +22,7 @@ class RecentPagesWidget implements IReloadableWidget {
 		protected IUserSession $userSession,
 		protected PageService $pageService,
 		protected CollectiveService $collectiveService,
+		protected RecentPagesService $recentPagesService,
 	) {}
 
 	public function getItemsV2(string $userId, ?string $since = null, int $limit = 7): WidgetItems {
@@ -30,58 +30,16 @@ class RecentPagesWidget implements IReloadableWidget {
 			return new WidgetItems();
 		}
 
-		$collectives = $this->collectiveService->getCollectives($user->getUID());
-		$results  = [];
-		foreach ($collectives as $collective) {
-			// fetch pages from the current collective
-			$id = $collective->getId();
-			$pages = $this->pageService->findAll($id, $user->getUID());
-
-			// sort pages and slice to the maximal necessary amount
-			usort($pages, function (PageInfo $a, PageInfo $b): int {
-				return $b->getTimestamp() - $a->getTimestamp();
-			});
-			$pages = array_slice($pages, 0, self::MAX_ITEMS);
-
-			// prepare result entries
-			foreach ($pages as $page) {
-				$results[] = [
-					'timestamp' => $page->getTimestamp(),
-					'page' => $page,
-					'collective' => $collective
-				];
-			}
-
-			// again sort result and slice to the max amount
-			usort($results, function (array $a, array $b): int {
-				return $b['timestamp'] - $a['timestamp'];
-			});
-			$results = array_slice($results, 0, self::MAX_ITEMS);
-		}
+		$recentPages = $this->recentPagesService->forUser($user, self::MAX_ITEMS);
 
 		$items = [];
-		foreach ($results as $result) {
-			/* @var array{timestamp: int, page: PageInfo, collective: CollectiveInfo} $result */
-
-			$pathParts = [$result['collective']->getName()];
-			if ($result['page']->getFilePath() !== '') {
-				$pathParts = array_merge($pathParts, explode('/', $result['page']->getFilePath()));
-			}
-			if ($result['page']->getFileName() !== 'Readme.md') {
-				$pathParts[] = $result['page']->getTitle();
-			}
-
-			$iconData = $result['page']->getEmoji()
-				? $this->getEmojiAvatar($result['page']->getEmoji())
-				: $this->getEmojiAvatar('🗒');
-				//: $this->getFallbackDataIcon();
-
+		foreach ($recentPages as $recentPage) {
 			$items[] = new WidgetItem(
-				$result['page']->getTitle(),
-				$result['collective']->getName(),
-				$this->urlGenerator->linkToRoute('collectives.start.indexPath', ['path' => implode('/', $pathParts)]),
-				'data:image/svg+xml;base64,' . base64_encode($iconData),
-				(string)$result['timestamp']
+				$recentPage->getTitle(),
+				$recentPage->getCollectiveName(),
+				$recentPage->getPageUrl(),
+				'data:image/svg+xml;base64,' . base64_encode($this->getEmojiAvatar($recentPage->getEmoji())),
+				(string)$recentPage->getTimestamp()
 			);
 		}
 
