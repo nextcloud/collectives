@@ -25,6 +25,7 @@ OC.L10N.register(
     "Restore" : "Obnoviť",
     "Delete permanently" : "Zmazať  natrvalo",
     "Cancel" : "Zrušiť",
+    "Select emoji" : "Vybrať emotikon",
     "Back" : "Späť",
     "Create" : "Vytvoriť",
     "Done" : "Hotové",
