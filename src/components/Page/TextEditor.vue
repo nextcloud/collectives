@@ -2,7 +2,8 @@
 	<div>
 		<WidgetHeading v-if="isLandingPage"
 			:title="t('collectives', 'Landing page')"
-			class="text-container-heading" />
+			class="text-container-heading"
+			:class="[isFullWidthView ? 'full-width-view' : 'sheet-view']" />
 		<div v-show="showReader"
 			id="text-container"
 			:key="'text-' + currentPage.id"
@@ -13,6 +14,7 @@
 		</div>
 		<div v-if="currentCollectiveCanEdit"
 			v-show="showEditor"
+			:class="{'sheet-view': !isFullWidthView}"
 			ref="editor" />
 	</div>
 </template>
@@ -60,10 +62,11 @@ export default {
 			'currentPageDavUrl',
 			'currentPageFilePath',
 			'hasVersionsLoaded',
+			'isFullWidthView',
 			'isLandingPage',
+			'isPublic',
 			'isTemplatePage',
 			'isTextEdit',
-			'isPublic',
 			'loading',
 			'shareTokenParam',
 			'showing',
@@ -212,7 +215,7 @@ export default {
 				// for new pages
 				|| this.loading('newPage')
 				// or when page is empty
-				|| !this.pageContent) {
+				|| !this.pageContent.trim()) {
 				this.setTextEdit()
 			}
 		},
@@ -275,8 +278,6 @@ export default {
 
 <style lang="scss" scoped>
 .text-container-heading {
-	max-width: 670px;
-	margin: auto;
 	padding-left: 14px;
 }
 
