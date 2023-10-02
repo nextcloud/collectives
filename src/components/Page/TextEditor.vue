@@ -5,13 +5,8 @@
 			class="text-container-heading"
 			:class="[isFullWidthView ? 'full-width-view' : 'sheet-view']" />
 		<div v-show="showReader"
-			id="text-container"
-			:key="'text-' + currentPage.id"
-			:aria-label="t('collectives', 'Page content')">
-			<Reader :key="`reader-${currentPage.id}`"
-				:current-page="currentPage"
-				:page-content="pageContent" />
-		</div>
+			:class="{'sheet-view': !isFullWidthView}"
+			ref="reader" />
 		<div v-if="currentCollectiveCanEdit"
 			v-show="showEditor"
 			:class="{'sheet-view': !isFullWidthView}"
@@ -22,7 +17,6 @@
 <script>
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { showError } from '@nextcloud/dialogs'
-import Reader from './Reader.vue'
 import WidgetHeading from './LandingPageWidgets/WidgetHeading.vue'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import {
@@ -35,7 +29,6 @@ export default {
 	name: 'TextEditor',
 
 	components: {
-		Reader,
 		WidgetHeading,
 	},
 
@@ -48,6 +41,7 @@ export default {
 			editor: null,
 			davContent: '',
 			editorContent: null,
+			reader: null,
 			readMode: true,
 			scrollTop: 0,
 			textEditWatcher: null,
@@ -103,6 +97,7 @@ export default {
 		},
 		'showOutline'(value) {
 			this.editor?.setShowOutline(value)
+			this.reader?.setShowOutline(value)
 		},
 	},
 
@@ -115,6 +110,7 @@ export default {
 	},
 
 	mounted() {
+		this.setupReader()
 		this.setupEditor()
 		this.getPageContent().then(() => {
 			this.initEditMode()
@@ -134,6 +130,7 @@ export default {
 		unsubscribe('collectives:attachment:restore', this.restoreAttachment)
 		this.textEditWatcher()
 		this.editor?.destroy()
+		this.reader?.destroy()
 	},
 
 	methods: {
@@ -151,6 +148,17 @@ export default {
 			dispatchGetVersions: GET_VERSIONS,
 		}),
 
+		async setupReader() {
+			this.reader = await window.OCA.Text.createEditor({
+				el: this.$refs.reader,
+				content: this.pageContent,
+				readOnly: true,
+				onOutlineToggle: (visible) => {
+					this.toggleOutlineFromEditor(visible)
+				},
+			})
+		},
+
 		async setupEditor() {
 			this.editor = await window.OCA.Text.createEditor({
 				el: this.$refs.editor,
@@ -164,6 +172,7 @@ export default {
 				},
 				onUpdate: ({ markdown }) => {
 					this.editorContent = markdown
+					this.reader?.setContent(this.pageContent)
 				},
 				onOutlineToggle: (visible) => {
 					this.toggleOutlineFromEditor(visible)
@@ -270,6 +279,7 @@ export default {
 
 		async getPageContent() {
 			this.davContent = await this.fetchPageContent(this.currentPageDavUrl)
+			this.reader?.setContent(this.pageContent)
 			this.done('pageContent')
 		},
 	},
@@ -279,15 +289,6 @@ export default {
 <style lang="scss" scoped>
 .text-container-heading {
 	padding-left: 14px;
-}
-
-#text-container {
-	display: block;
-	width: 100%;
-	max-width: 100%;
-	left: 0;
-	margin: 0 auto;
-	background-color: var(--color-main-background);
 }
 
 :deep([data-text-el='editor-container']) {
