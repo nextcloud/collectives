@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.8.1 - 2023.10.02
+
+### 🐛Fixes
+* 🐛 Fixes not null violation for new not null column. Thanks @tcitworld.
+
+
 ## 2.8.0 - 2023.10.02
 
 ### ✨New
