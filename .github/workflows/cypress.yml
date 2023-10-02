@@ -131,9 +131,15 @@ jobs:
       matrix:
         node-version: [20]
         #containers: [1, 2, 3, 4]
-        php-versions: ['8.0']
+        php-versions: ['8.2']
         databases: ['sqlite']
         server-versions: ['stable25', 'stable27', 'master']
+        include:
+          - php-versions: '8.0'
+            server-versions: 'stable25'
+        exclude:
+          - php-versions: '8.2'
+            server-versions: 'stable25'
 
     steps:
       - name: Restore context
