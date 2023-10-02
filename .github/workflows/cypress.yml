@@ -130,16 +130,25 @@ jobs:
       fail-fast: false
       matrix:
         node-version: [20]
-        #containers: [1, 2, 3, 4]
-        php-versions: ['8.2']
+        containers: [1, 2, 3]
+        php-versions: ['8.0', '8.2']
         databases: ['sqlite']
         server-versions: ['stable25', 'stable27', 'master']
-        include:
-          - php-versions: '8.0'
-            server-versions: 'stable25'
+        # Only use cypress cloud for PRs
+        use-cypress-cloud:
+          - ${{ !!github.head_ref }}
         exclude:
+          - php-versions: '8.0'
+            server-versions: 'stable27'
+          - php-versions: '8.0'
+            server-versions: 'master'
           - php-versions: '8.2'
             server-versions: 'stable25'
+        # Only use one container if we are not using the cypress cloud.
+          - use-cypress-cloud: false
+            containers: 2
+          - use-cypress-cloud: false
+            containers: 3
 
     steps:
       - name: Restore context
@@ -204,18 +213,18 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
-          #record: true
-          #parallel: true
-          #group: 'Nextcloud ${{ matrix.server-versions }}'
+          record: '${{ !!matrix.use-cypress-cloud }}'
+          parallel: '${{ !!matrix.use-cypress-cloud }}'
+          group: ${{ matrix.use-cypress-cloud && format('Nextcloud {0}',  matrix.server-versions) }}
           wait-on: '${{ env.CYPRESS_baseUrl }}'
           working-directory: apps/${{ env.APP_NAME }}
           config: video=false,defaultCommandTimeout=20000
-          #tag: ${{ github.event_name }}
+          tag: ${{ matrix.use-cypress-cloud && github.event_name }}
         env:
           # https://github.com/cypress-io/github-action/issues/124
           COMMIT_INFO_MESSAGE: ${{ github.event.pull_request.title }}
           COMMIT_INFO_SHA:  ${{ github.event.pull_request.head.sha }}
-          #CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           CYPRESS_ncVersion: ${{ matrix.server-versions }}
 
       - name: Upload test failure screenshots
