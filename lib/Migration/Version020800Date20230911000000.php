@@ -35,6 +35,7 @@ class Version020800Date20230911000000 extends SimpleMigrationStep {
 		if (!$table->hasColumn('settings')) {
 			$table->addColumn('settings', Types::JSON, [
 				'notnull' => true,
+				'default' => '[]'
 			]);
 			$this->runPageModeMigration = true;
 
