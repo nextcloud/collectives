@@ -1,5 +1,28 @@
 # Changelog
 
+## 2.8.0 - 2023.10.02
+
+### ✨New
+* 📝 Add toggle for full width page view. (#242)
+* 👁️ Allow to collapse recent pages widget on landing page. (#835)
+* 😀 Allow to unselect collective and page emojis. (#422)
+
+### 🐛Fixes
+* 🔎 Handle removed files gracefully when searching for page content. (#873)
+* 💄 Fix several visual glitches in user interface. (#831)
+* 📋 Improve documentation wording around public shares. Thanks @pjrobertson.
+* ℹ️ Show collectives info box in Files app on Nextcloud 28. (#860)
+* 🔨 Reorder page actions menu.
+* 🐛 Fix spurious backend error log in page trash.
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 2.7.1 - 2023.09.11
 
 ### 🐛Fixes
