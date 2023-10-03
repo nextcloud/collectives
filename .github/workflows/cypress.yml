@@ -215,11 +215,11 @@ jobs:
         with:
           record: '${{ !!matrix.use-cypress-cloud }}'
           parallel: '${{ !!matrix.use-cypress-cloud }}'
-          group: ${{ matrix.use-cypress-cloud && format('Nextcloud {0}',  matrix.server-versions) }}
+          group: "${{ !!matrix.use-cypress-cloud && format('Nextcloud {0}',  matrix.server-versions) || '' }}"
           wait-on: '${{ env.CYPRESS_baseUrl }}'
           working-directory: apps/${{ env.APP_NAME }}
           config: video=false,defaultCommandTimeout=20000
-          tag: ${{ matrix.use-cypress-cloud && github.event_name }}
+          tag: "${{ !!matrix.use-cypress-cloud && github.event_name || '' }}"
         env:
           # https://github.com/cypress-io/github-action/issues/124
           COMMIT_INFO_MESSAGE: ${{ github.event.pull_request.title }}
