@@ -38,7 +38,7 @@ jobs:
 
     services:
       mysql:
-        image: ghcr.io/nextcloud/continuous-integration-mariadb-10.6:latest
+        image: ghcr.io/nextcloud/continuous-integration-mysql-8.0:latest
         ports:
           - 4444:3306/tcp
         env:
@@ -128,6 +128,15 @@ jobs:
           ./occ upgrade
           ./occ app:list
           ./occ collectives:create --owner alice YetAnotherNewCollective
+
+      - name: Upload nextcloud logs
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: nextcloud.log
+          path: data/nextcloud.log
+          retention-days: 5
+
 
   summary:
     permissions:
