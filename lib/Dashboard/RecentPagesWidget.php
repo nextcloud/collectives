@@ -2,8 +2,6 @@
 
 namespace OCA\Collectives\Dashboard;
 
-use OCA\Collectives\Service\CollectiveService;
-use OCA\Collectives\Service\PageService;
 use OCA\Collectives\Service\RecentPagesService;
 use OCP\Dashboard\IReloadableWidget;
 use OCP\Dashboard\Model\WidgetItem;
@@ -19,21 +17,15 @@ class RecentPagesWidget implements IReloadableWidget {
 	protected IL10N $l10n;
 	protected IURLGenerator $urlGenerator;
 	protected IUserSession $userSession;
-	protected PageService $pageService;
-	protected CollectiveService $collectiveService;
 	protected RecentPagesService $recentPagesService;
 
 	public function __construct(
 		IL10N $l10n,
 		IURLGenerator $urlGenerator,
 		IUserSession $userSession,
-		PageService $pageService,
-		CollectiveService $collectiveService,
 		RecentPagesService $recentPagesService
 	) {
 		$this->recentPagesService = $recentPagesService;
-		$this->collectiveService = $collectiveService;
-		$this->pageService = $pageService;
 		$this->userSession = $userSession;
 		$this->urlGenerator = $urlGenerator;
 		$this->l10n = $l10n;
