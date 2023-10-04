@@ -16,13 +16,25 @@ use OCP\IUser;
 
 class RecentPagesService {
 
+	protected CollectiveService $collectiveService;
+	protected IURLGenerator $urlGenerator;
+	protected IDBConnection $dbc;
+	protected IConfig $config;
+	protected IMimeTypeLoader $mimeTypeLoader;
+
 	public function __construct(
-		protected CollectiveService $collectiveService,
-		protected IDBConnection $dbc,
-		protected IConfig $config,
-		protected IMimeTypeLoader $mimeTypeLoader,
-		protected IURLGenerator $urlGenerator,
-	) {	}
+		CollectiveService $collectiveService,
+		IDBConnection $dbc,
+		IConfig $config,
+		IMimeTypeLoader $mimeTypeLoader,
+		IURLGenerator $urlGenerator
+	) {
+		$this->mimeTypeLoader = $mimeTypeLoader;
+		$this->config = $config;
+		$this->dbc = $dbc;
+		$this->urlGenerator = $urlGenerator;
+		$this->collectiveService = $collectiveService;
+	}
 
 	/**
 	 * @return RecentPage[]
@@ -32,7 +44,7 @@ class RecentPagesService {
 	public function forUser(IUser $user, int $limit = 10): array {
 		try {
 			$collectives = $this->collectiveService->getCollectives($user->getUID());
-		} catch (NotFoundException|NotPermittedException) {
+		} catch (NotFoundException|NotPermittedException $e) {
 			return [];
 		}
 

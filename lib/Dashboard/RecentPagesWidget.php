@@ -16,14 +16,28 @@ class RecentPagesWidget implements IReloadableWidget {
 	public const REFRESH_INTERVAL_IN_SECS = 33;
 	public const MAX_ITEMS = 10;
 
+	protected IL10N $l10n;
+	protected IURLGenerator $urlGenerator;
+	protected IUserSession $userSession;
+	protected PageService $pageService;
+	protected CollectiveService $collectiveService;
+	protected RecentPagesService $recentPagesService;
+
 	public function __construct(
-		protected IL10N $l10n,
-		protected IURLGenerator $urlGenerator,
-		protected IUserSession $userSession,
-		protected PageService $pageService,
-		protected CollectiveService $collectiveService,
-		protected RecentPagesService $recentPagesService,
-	) {}
+		IL10N $l10n,
+		IURLGenerator $urlGenerator,
+		IUserSession $userSession,
+		PageService $pageService,
+		CollectiveService $collectiveService,
+		RecentPagesService $recentPagesService
+	) {
+		$this->recentPagesService = $recentPagesService;
+		$this->collectiveService = $collectiveService;
+		$this->pageService = $pageService;
+		$this->userSession = $userSession;
+		$this->urlGenerator = $urlGenerator;
+		$this->l10n = $l10n;
+	}
 
 	public function getItemsV2(string $userId, ?string $since = null, int $limit = 7): WidgetItems {
 		if (!($user = $this->userSession->getUser())) {
