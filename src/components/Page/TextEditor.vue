@@ -6,12 +6,14 @@
 			:class="[isFullWidthView ? 'full-width-view' : 'sheet-view']" />
 		<SkeletonLoading v-show="!contentLoaded" class="page-content-skeleton" type="text" />
 		<div v-show="contentLoaded && showReader"
-			:class="{'sheet-view': !isFullWidthView}"
-			ref="reader" />
+			ref="reader"
+			data-collectives-el="reader"
+			:class="{'sheet-view': !isFullWidthView}" />
 		<div v-if="currentCollectiveCanEdit"
 			v-show="showEditor"
-			:class="{'sheet-view': !isFullWidthView}"
-			ref="editor" />
+			ref="editor"
+			data-collectives-el="editor"
+			:class="{'sheet-view': !isFullWidthView}" />
 	</div>
 </template>
 

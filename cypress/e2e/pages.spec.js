@@ -285,7 +285,7 @@ describe('Page', function() {
 		it('Allows to toggle persistent full-width view', function() {
 			cy.openPage('Day 2')
 			cy.get('#titleform').should('have.css', 'max-width', '100%')
-			cy.get('#read-only-editor').invoke('outerWidth').should('eq', 670)
+			cy.get('[data-collectives-el="reader"], #read-only-editor').invoke('outerWidth').should('eq', 670)
 
 			// Set full width mode
 			cy.get('#titleform .action-item__menutoggle')
@@ -293,12 +293,12 @@ describe('Page', function() {
 			cy.contains('li.action', 'Full width')
 				.click()
 			cy.get('#titleform').should('have.css', 'max-width', 'none')
-			cy.get('#read-only-editor').invoke('outerWidth').should('be.greaterThan', 700)
+			cy.get('[data-collectives-el="reader"], #read-only-editor').invoke('outerWidth').should('be.greaterThan', 700)
 
 			// Reload to check persistence with browser storage
 			cy.reload()
 			cy.get('#titleform').should('have.css', 'max-width', 'none')
-			cy.get('#read-only-editor').invoke('outerWidth').should('be.greaterThan', 700)
+			cy.get('[data-collectives-el="reader"], #read-only-editor').invoke('outerWidth').should('be.greaterThan', 700)
 
 			// Unset full width mode
 			cy.get('#titleform .action-item__menutoggle')
@@ -306,7 +306,7 @@ describe('Page', function() {
 			cy.contains('li.action', 'Full width')
 				.click()
 			cy.get('#titleform').should('have.css', 'max-width', '100%')
-			cy.get('#read-only-editor').invoke('outerWidth').should('eq', 670)
+			cy.get('[data-collectives-el="reader"], #read-only-editor').invoke('outerWidth').should('eq', 670)
 		})
 	})
 
