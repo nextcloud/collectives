@@ -52,7 +52,7 @@ class RecentPagesWidget implements IReloadableWidget {
 				$recentPage->getTitle(),
 				$recentPage->getCollectiveName(),
 				$recentPage->getPageUrl(),
-				'data:image/svg+xml;base64,' . base64_encode($this->getEmojiAvatar($recentPage->getEmoji())),
+				'data:image/svg+xml;base64,' . base64_encode($this->getEmojiAvatar($recentPage->getEmoji() ?: '🗒')),
 				(string)$recentPage->getTimestamp()
 			);
 		}

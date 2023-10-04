@@ -6,7 +6,7 @@ class RecentPage {
 	protected string $collectiveName = '';
 	protected string $pageUrl = '';
 	protected string $title = '';
-	protected string $emoji = '🗒';
+	protected string $emoji = '';
 	protected int $timestamp = 0;
 
 	public function getCollectiveName(): string {
