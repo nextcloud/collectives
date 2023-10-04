@@ -1,4 +1,4 @@
-name: app upgrade mysql
+name: app upgrade pgsql
 
 on:
   pull_request:
@@ -24,11 +24,11 @@ permissions:
   contents: read
 
 concurrency:
-  group: app-upgrade-mysql-${{ github.head_ref || github.run_id }}
+  group: app-upgrade-pgsql-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 
 jobs:
-  app-upgrade-mysql:
+  app-upgrade-pgsql:
     runs-on: ubuntu-latest
 
     strategy:
@@ -37,13 +37,15 @@ jobs:
         server-versions: ['master']
 
     services:
-      mysql:
-        image: ghcr.io/nextcloud/continuous-integration-mysql-8.0:latest
+      postgres:
+        image: ghcr.io/nextcloud/continuous-integration-postgres-14:latest
         ports:
-          - 4444:3306/tcp
+          - 4444:5432/tcp
         env:
-          MYSQL_ROOT_PASSWORD: rootpassword
-        options: --health-cmd="mysqladmin ping" --health-interval 5s --health-timeout 2s --health-retries 5
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: rootpassword
+          POSTGRES_DB: nextcloud
+        options: --health-cmd pg_isready --health-interval 5s --health-timeout 2s --health-retries 5
 
     steps:
       - name: Set app env
@@ -89,23 +91,18 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
           # https://docs.nextcloud.com/server/stable/admin_manual/installation/source_installation.html#prerequisites-for-manual-installation
-          extensions: bz2, ctype, curl, dom, fileinfo, gd, iconv, intl, json, libxml, mbstring, openssl, pcntl, posix, session, simplexml, xmlreader, xmlwriter, zip, zlib, mysql, pdo_mysql, sqlite, pdo_sqlite
+          extensions: bz2, ctype, curl, dom, fileinfo, gd, iconv, intl, json, libxml, mbstring, openssl, pcntl, posix, session, simplexml, xmlreader, xmlwriter, zip, zlib, pgsql, pdo_pgsql, sqlite, pdo_sqlite
           coverage: none
           ini-file: development
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Enable ONLY_FULL_GROUP_BY MySQL option
-        run: |
-          echo "SET GLOBAL sql_mode=(SELECT CONCAT(@@sql_mode,',ONLY_FULL_GROUP_BY'));" | mysql -h 127.0.0.1 -P 4444 -u root -prootpassword
-          echo "SELECT @@sql_mode;" | mysql -h 127.0.0.1 -P 4444 -u root -prootpassword
 
       - name: Set up Nextcloud, enable collectives from app store and remove collectives
         env:
           DB_PORT: 4444
         run: |
           mkdir data
-          ./occ maintenance:install --verbose --database=mysql --database-name=nextcloud --database-host=127.0.0.1 --database-port=$DB_PORT --database-user=root --database-pass=rootpassword --admin-user admin --admin-pass admin
+          ./occ maintenance:install --verbose --database=pgsql --database-name=nextcloud --database-host=127.0.0.1 --database-port=$DB_PORT --database-user=root --database-pass=rootpassword --admin-user admin --admin-pass admin
           ./occ app:enable --force ${{ env.APP_NAME }}
           for user in alice bob jane john; do \
           OC_PASS="$user" ./occ user:add --password-from-env "$user"; \
@@ -137,17 +134,16 @@ jobs:
           path: data/nextcloud.log
           retention-days: 5
 
-
   summary:
     permissions:
       contents: none
     runs-on: ubuntu-latest
-    needs: app-upgrade-mysql
+    needs: app-upgrade-pgsql
 
     if: always()
 
-    name: app-upgrade-mysql-summary
+    name: app-upgrade-pgsql-summary
 
     steps:
       - name: Summary status
-        run: if ${{ needs.app-upgrade-mysql.result != 'success' }}; then exit 1; fi
+        run: if ${{ needs.app-upgrade-pgsql.result != 'success' }}; then exit 1; fi
