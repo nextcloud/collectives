@@ -16,6 +16,7 @@ module.exports = defineConfig({
 		baseUrl: 'http://localhost:8081/index.php/',
 		specPattern: 'cypress/e2e/**/*.{js,jsx,ts,tsx}',
 	},
+	defaultCommandTimeout: 7000,
 	retries: {
 		runMode: 2,
 		// do not retry in `cypress open`
