@@ -4,7 +4,8 @@
 			:title="t('collectives', 'Landing page')"
 			class="text-container-heading"
 			:class="[isFullWidthView ? 'full-width-view' : 'sheet-view']" />
-		<div v-show="showReader"
+		<SkeletonLoading v-show="!contentLoaded" class="page-content-skeleton" type="text" />
+		<div v-show="contentLoaded && showReader"
 			:class="{'sheet-view': !isFullWidthView}"
 			ref="reader" />
 		<div v-if="currentCollectiveCanEdit"
@@ -24,11 +25,13 @@ import {
 	TOUCH_PAGE,
 } from '../../store/actions.js'
 import pageContentMixin from '../../mixins/pageContentMixin.js'
+import SkeletonLoading from '../SkeletonLoading.vue'
 
 export default {
 	name: 'TextEditor',
 
 	components: {
+		SkeletonLoading,
 		WidgetHeading,
 	},
 
@@ -88,6 +91,11 @@ export default {
 
 		showOutline() {
 			return this.showing('outline')
+		},
+
+		contentLoaded() {
+			// Either `pageContent` is filled from editor or we finished fetching it from DAV
+			return this.pageContent || !this.loading('pageContent')
 		},
 	},
 
@@ -289,6 +297,10 @@ export default {
 <style lang="scss" scoped>
 .text-container-heading {
 	padding-left: 14px;
+}
+
+.page-content-skeleton {
+	padding-top: 44px;
 }
 
 :deep([data-text-el='editor-container']) {
