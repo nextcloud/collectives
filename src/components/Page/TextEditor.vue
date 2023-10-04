@@ -24,6 +24,7 @@ import {
 	GET_VERSIONS,
 	TOUCH_PAGE,
 } from '../../store/actions.js'
+import linkHandlerMixin from '../../mixins/linkHandlerMixin.js'
 import pageContentMixin from '../../mixins/pageContentMixin.js'
 import SkeletonLoading from '../SkeletonLoading.vue'
 
@@ -36,6 +37,7 @@ export default {
 	},
 
 	mixins: [
+		linkHandlerMixin,
 		pageContentMixin,
 	],
 
@@ -161,6 +163,9 @@ export default {
 				el: this.$refs.reader,
 				content: this.pageContent,
 				readOnly: true,
+				onLinkClick: (_event, attrs) => {
+					this.followLink(_event, attrs)
+				},
 				onOutlineToggle: (visible) => {
 					this.toggleOutlineFromEditor(visible)
 				},
