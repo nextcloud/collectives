@@ -37,6 +37,11 @@ class Version010200Date20220616000000 extends SimpleMigrationStep {
 			]);
 			$table->addColumn('page_order', Types::INTEGER, [
 				'notnull' => true,
+				'default' => 0,
+			]);
+			$table->addColumn('settings', Types::STRING, [
+				'notnull' => true,
+				'default' => '{}',
 			]);
 
 			$table->setPrimaryKey(['id']);
