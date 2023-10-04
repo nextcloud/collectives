@@ -8,17 +8,15 @@ use JsonSerializable;
 
 use OCA\Collectives\Service\NotPermittedException;
 use OCP\AppFramework\Db\Entity;
-use OCP\DB\Types;
 
 /**
- * Class CollectiveShare
  * @method int getId()
  * @method void setId(int $value)
  * @method int getCollectiveId()
  * @method void setCollectiveId(int $value)
  * @method string getUserId()
  * @method void setUserId(string $value)
- * @method array getSettings()
+ * @method string getSettings()
  */
 class CollectiveUserSettings extends Entity implements JsonSerializable {
 	/** @var array */
@@ -30,11 +28,7 @@ class CollectiveUserSettings extends Entity implements JsonSerializable {
 	protected ?int $collectiveId = null;
 	protected ?string $userId = null;
 	protected int $pageOrder = Collective::defaultPageOrder;
-	protected ?array $settings = null;
-
-	public function __construct() {
-		$this->addType('settings', Types::JSON);
-	}
+	protected ?string $settings = '{}';
 
 	/**
 	 * @param string $setting
@@ -52,10 +46,11 @@ class CollectiveUserSettings extends Entity implements JsonSerializable {
 	 *
 	 * @return mixed|null
 	 * @throws NotPermittedException
+	 * @throws \JsonException
 	 */
 	public function getSetting(string $setting) {
 		self::checkSetting($setting);
-		return $this->settings[$setting] ?? null;
+		return json_decode($this->settings, true, 512, JSON_THROW_ON_ERROR)[$setting] ?? null;
 	}
 
 	/**
@@ -63,10 +58,13 @@ class CollectiveUserSettings extends Entity implements JsonSerializable {
 	 * @param mixed  $value
 	 *
 	 * @throws NotPermittedException
+	 * @throws \JsonException
 	 */
 	private function setSetting(string $setting, $value): void {
 		self::checkSetting($setting);
-		$this->settings[$setting] = $value;
+		$settings = json_decode($this->settings, true, 512, JSON_THROW_ON_ERROR) ?? [];
+		$settings[$setting] = $value;
+		$this->settings = json_encode($settings, JSON_THROW_ON_ERROR);
 		$this->markFieldUpdated('settings');
 	}
 
@@ -74,6 +72,7 @@ class CollectiveUserSettings extends Entity implements JsonSerializable {
 	 * @param int $pageOrder
 	 *
 	 * @throws NotPermittedException
+	 * @throws \JsonException
 	 */
 	public function setPageOrder(int $pageOrder): void {
 		if (!array_key_exists($pageOrder, Collective::pageOrders)) {
@@ -86,6 +85,7 @@ class CollectiveUserSettings extends Entity implements JsonSerializable {
 	 * @param bool $showRecentPages
 	 *
 	 * @throws NotPermittedException
+	 * @throws \JsonException
 	 */
 	public function setShowRecentPages(bool $showRecentPages): void {
 		$this->setSetting('show_recent_pages', $showRecentPages);

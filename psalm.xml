@@ -28,7 +28,8 @@
     <issueHandlers>
         <UndefinedClass>
             <errorLevel type="suppress">
-                <referencedClass name="Doctrine\DBAL\Types\Types"/>
+                <referencedClass name="Doctrine\DBAL\Types\Type" />
+                <referencedClass name="Doctrine\DBAL\Types\Types" />
             </errorLevel>
         </UndefinedClass>
         <UndefinedDocblockClass>
