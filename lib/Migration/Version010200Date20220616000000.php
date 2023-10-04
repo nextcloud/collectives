@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace OCA\Collectives\Migration;
 
 use Closure;
-use Doctrine\DBAL\Types\Types;
 use OCP\DB\ISchemaWrapper;
+use OCP\DB\Types;
 use OCP\Migration\IOutput;
 use OCP\Migration\SimpleMigrationStep;
 
@@ -37,6 +37,11 @@ class Version010200Date20220616000000 extends SimpleMigrationStep {
 			]);
 			$table->addColumn('page_order', Types::INTEGER, [
 				'notnull' => true,
+				'default' => 0,
+			]);
+			$table->addColumn('settings', Types::STRING, [
+				'notnull' => true,
+				'default' => '{}',
 			]);
 
 			$table->setPrimaryKey(['id']);

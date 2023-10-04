@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace OCA\Collectives\Migration;
 
 use Closure;
-use Doctrine\DBAL\Types\Types;
 use OCP\Constants;
 use OCP\DB\ISchemaWrapper;
+use OCP\DB\Types;
 use OCP\Migration\IOutput;
 use OCP\Migration\SimpleMigrationStep;
 
