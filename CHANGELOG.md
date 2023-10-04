@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.8.2 - 2023.10.04
+
+### 🐛Fixes
+* 🐛 Migrate settings field in collectives_u_settings DB table to string type. (#917)
+
+
 ## 2.8.1 - 2023.10.02
 
 ### 🐛Fixes
