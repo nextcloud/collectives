@@ -57,17 +57,10 @@ class RecentPagesService {
 		$r = $qb->executeQuery();
 
 		$pages = [];
-		$collectives = [];
 		while ($row = $r->fetch()) {
 			$collectiveId = (int)explode('/', $row['path'], 4)[2];
 			if (!isset($collectives[$collectiveId])) {
-				try {
-					// collectives are not cached, but always read from DB, so keep them
-					$collectives[$collectiveId] = $this->collectiveService->getCollectiveInfo($collectiveId, $user->getUID());
-				} catch (MissingDependencyException|NotFoundException|NotPermittedException) {
-					// just skip
-					continue;
-				}
+				continue;
 			}
 
 			// cut out $appDataDir/collectives/%d/ prefix from front, and filename at the rear
@@ -91,10 +84,11 @@ class RecentPagesService {
 			// build result model
 			// not returning a PageInfo instance because it would be either incomplete or too expensive to build completely
 			$recentPage = new RecentPage();
-			$recentPage->setCollectiveName($this->collectiveService->getCollectiveNameWithEmoji($collectives[$collectiveId]));
-			$recentPage->setTitle($title);
-			$recentPage->setPageUrl($url);
-			$recentPage->setTimestamp($row['timestamp']);
+			$recentPage
+				->setCollectiveName($this->collectiveService->getCollectiveNameWithEmoji($collectives[$collectiveId]))
+				->setTitle($title)
+				->setPageUrl($url)
+				->setTimestamp($row['timestamp']);
 			if ($row['emoji']) {
 				$recentPage->setEmoji($row['emoji']);
 			}
