@@ -971,8 +971,10 @@ class PageService {
 		$suffix = '\)/';
 
 		$protocol = 'https?:\/\/';
-		$trustedDomainConfig = (array)$this->config->getSystemValue('trusted_domains', []);
-		$trustedDomains = $trustedDomainConfig !== [] ? '(' . implode('|', $trustedDomainConfig) . ')' : 'localhost';
+		$trustedDomainArray = array_map(static function (string $domain) {
+			return preg_quote($domain, '/');
+		}, (array)$this->config->getSystemValue('trusted_domains', []));
+		$trustedDomains = $trustedDomainArray !== [] ? '(' . implode('|', $trustedDomainArray) . ')' : 'localhost';
 
 		$basePath = str_replace('/', '/+', str_replace('/', '/+', preg_quote(trim(\OC::$WEBROOT, '/'), '/'))) . '(\/+index\.php)?';
 
