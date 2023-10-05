@@ -259,13 +259,11 @@ export default {
 		}),
 
 		initTitleEntry() {
-			if (this.loading('newPage')) {
+			if (this.loading('newPageTitle')) {
 				this.newTitle = ''
 				this.$nextTick(this.focusTitle)
-				this.done('newPage')
+				this.done('newPageTitle')
 				return
-			} else if (this.loading('newTemplate')) {
-				this.done('newTemplate')
 			}
 			this.newTitle = this.currentPage.title
 		},
