@@ -990,10 +990,10 @@ class PageService {
 		$relativePathPattern = $prefix . $relativeUrl . $basePath . $appPath . $pagePath . $suffix;
 		$absolutePathPattern = $prefix . $absoluteUrl . $basePath . $appPath . $pagePath . $suffix;
 
-		return preg_match($relativeFileIdPattern, $content, $linkMatches) ||
-			preg_match($relativePathPattern, $content, $linkMatches) ||
-			preg_match($absoluteFileIdPattern, $content, $linkMatches) ||
-			preg_match($absolutePathPattern, $content, $linkMatches);
+		return preg_match($relativeFileIdPattern, $content) ||
+			preg_match($relativePathPattern, $content) ||
+			preg_match($absoluteFileIdPattern, $content) ||
+			preg_match($absolutePathPattern, $content);
 	}
 
 	/**
