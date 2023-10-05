@@ -184,23 +184,16 @@ export default {
 			}
 			this.readMode = false
 
-			// Don't steal the focus from title if a new page
-			if (this.loading('newPage')) {
-				this.done('newPage')
-				return
-			}
-
 			if (this.isTextEdit) {
 				if (this.doc()) {
 					this.previousSaveTimestamp = this.doc().lastSavedVersionTime
 				}
-				this.$nextTick(this.focusEditor())
 			}
 		},
 
 		initEditMode() {
 			// Open in edit mode when pageMode is set, for template pages and for new pages
-			if (!!this.currentCollective.pageMode || this.isTemplatePage || this.loading('newPage')) {
+			if (!!this.currentCollective.pageMode || this.isTemplatePage || this.loading('newPage') || this.loading('newTemplate')) {
 				this.setTextEdit()
 			}
 		},

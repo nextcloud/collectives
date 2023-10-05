@@ -573,7 +573,7 @@ export default {
 				parentId,
 			}
 
-			// We'll be done when the editor has focus.
+			// We'll be done when the editor is loaded.
 			commit('load', 'newTemplate')
 
 			const response = await axios.post(getters.pageCreateUrl(page.parentId), page)

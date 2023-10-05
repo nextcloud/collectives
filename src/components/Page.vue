@@ -262,9 +262,9 @@ export default {
 			if (this.loading('newPage')) {
 				this.newTitle = ''
 				this.$nextTick(this.focusTitle)
+				this.done('newPage')
 				return
 			} else if (this.loading('newTemplate')) {
-				this.$nextTick(this.focusEditor)
 				this.done('newTemplate')
 			}
 			this.newTitle = this.currentPage.title
