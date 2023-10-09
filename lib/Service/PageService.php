@@ -972,7 +972,7 @@ class PageService {
 
 		$protocol = 'https?:\/\/';
 		$trustedDomainArray = array_map(static function (string $domain) {
-			return preg_quote($domain, '/');
+			return str_replace('\*', '\w*', preg_quote($domain, '/'));
 		}, (array)$this->config->getSystemValue('trusted_domains', []));
 		$trustedDomains = $trustedDomainArray !== [] ? '(' . implode('|', $trustedDomainArray) . ')' : 'localhost';
 
