@@ -551,8 +551,10 @@ export default {
 		 * @param {object} page Properties for the new page (title for now)
 		 */
 		async [NEW_PAGE]({ commit, getters }, page) {
-			// We'll be done when the title form has focus.
-			commit('load', 'newPage')
+			// Will be done when the title form has focus.
+			commit('load', 'newPageTitle')
+			// We'll be done when the editor is loaded.
+			commit('load', 'newPageContent')
 
 			const response = await axios.post(getters.pageCreateUrl(page.parentId), page)
 			// Add new page to the beginning of pages array
@@ -573,8 +575,8 @@ export default {
 				parentId,
 			}
 
-			// We'll be done when the editor has focus.
-			commit('load', 'newTemplate')
+			// We'll be done when the editor is loaded.
+			commit('load', 'newPageContent')
 
 			const response = await axios.post(getters.pageCreateUrl(page.parentId), page)
 			// Add new page to the beginning of pages array
