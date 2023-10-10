@@ -225,20 +225,7 @@ export default {
 		 */
 		readyEditor() {
 			this.done('editor')
-
 			this.readMode = false
-
-			// Don't steal the focus from title if a new page
-			if (this.loading('newPage')) {
-				this.done('newPage')
-				return
-			}
-
-			if (this.isTextEdit) {
-				this.$nextTick(() => {
-					this.focusEditor()
-				})
-			}
 		},
 
 		initEditMode() {
@@ -247,10 +234,11 @@ export default {
 				// for template pages
 				|| this.isTemplatePage
 				// for new pages
-				|| this.loading('newPage')
+				|| this.loading('newPageContent')
 				// or when page is empty
 				|| !this.pageContent?.trim()) {
 				this.setTextEdit()
+				this.done('newPageContent')
 			}
 		},
 
