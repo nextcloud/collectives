@@ -28,6 +28,7 @@ import {
 } from '../../store/actions.js'
 import linkHandlerMixin from '../../mixins/linkHandlerMixin.js'
 import pageContentMixin from '../../mixins/pageContentMixin.js'
+import PageInfoBar from '../Page/PageInfoBar.vue'
 import SkeletonLoading from '../SkeletonLoading.vue'
 
 export default {
@@ -74,7 +75,7 @@ export default {
 		]),
 
 		pageContent() {
-			return this.editorContent || this.davContent
+			return this.editorContent?.trim() || this.davContent
 		},
 
 		showReader() {
@@ -165,6 +166,13 @@ export default {
 				el: this.$refs.reader,
 				content: this.pageContent,
 				readOnly: true,
+				readonlyBar: {
+					component: PageInfoBar,
+					props: {
+						currentPage: this.currentPage,
+						isFullWidthView: this.isFullWidthView,
+					},
+				},
 				onLinkClick: (_event, attrs) => {
 					this.followLink(_event, attrs)
 				},
@@ -175,24 +183,26 @@ export default {
 		},
 
 		async setupEditor() {
-			this.editor = await window.OCA.Text.createEditor({
-				el: this.$refs.editor,
-				fileId: this.currentPage.id,
-				filePath: `/${this.currentPageFilePath}`,
-				readOnly: false,
-				shareToken: this.shareTokenParam || null,
-				autofocus: false,
-				onLoaded: () => {
-					this.readyEditor()
-				},
-				onUpdate: ({ markdown }) => {
-					this.editorContent = markdown
-					this.reader?.setContent(this.pageContent)
-				},
-				onOutlineToggle: (visible) => {
-					this.toggleOutlineFromEditor(visible)
-				},
-			})
+			this.editor = this.currentCollectiveCanEdit
+				? await window.OCA.Text.createEditor({
+					el: this.$refs.editor,
+					fileId: this.currentPage.id,
+					filePath: `/${this.currentPageFilePath}`,
+					readOnly: false,
+					shareToken: this.shareTokenParam || null,
+					autofocus: false,
+					onLoaded: () => {
+						this.readyEditor()
+					},
+					onUpdate: ({ markdown }) => {
+						this.editorContent = markdown
+						this.reader?.setContent(this.pageContent)
+					},
+					onOutlineToggle: (visible) => {
+						this.toggleOutlineFromEditor(visible)
+					},
+				})
+				: null
 		},
 
 		focusEditor() {
@@ -239,7 +249,7 @@ export default {
 				// for new pages
 				|| this.loading('newPage')
 				// or when page is empty
-				|| !this.pageContent.trim()) {
+				|| !this.pageContent?.trim()) {
 				this.setTextEdit()
 			}
 		},
@@ -255,7 +265,7 @@ export default {
 			this.scrollTop = document.getElementById('editor')?.scrollTop || 0
 
 			// switch back to edit if there's no content
-			if (!this.pageContent.trim()) {
+			if (!this.pageContent?.trim()) {
 				this.setTextEdit()
 				this.$nextTick(() => {
 					this.focusEditor()
