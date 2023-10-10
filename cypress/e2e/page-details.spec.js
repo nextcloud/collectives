@@ -30,6 +30,8 @@ describe('Page details', function() {
 		cy.deleteAndSeedCollective('Our Garden')
 		cy.seedPage('Day 1', '', 'Readme.md')
 		cy.seedPageContent('Our Garden/Day 2.md', 'A test string with Day 2 in the middle and a [link to Day 1](/index.php/apps/collectives/Our%20Garden/Day%201).')
+		cy.seedPage('TableOfContents', '', 'Readme.md')
+		cy.seedPageContent('Our Garden/TableOfContents.md', '## Second-Level Heading')
 	})
 
 	beforeEach(function() {
@@ -40,8 +42,6 @@ describe('Page details', function() {
 
 	describe('Display table of contents', function() {
 		it('Allows to display/close TOC and switch page modes in between', function() {
-			cy.seedPage('TableOfContents', '', 'Readme.md')
-			cy.seedPageContent('Our Garden/TableOfContents.md', '## Second-Level Heading')
 			cy.visit('/apps/collectives/Our%20Garden/TableOfContents')
 			cy.get('#titleform .action-item__menutoggle')
 				.click()
