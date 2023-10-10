@@ -310,7 +310,7 @@ describe('Page', function() {
 
 	describe('Using the search providers to search for a page', function() {
 		it('Search for page title', function() {
-			cy.get('.unified-search a').click()
+			cy.get('.unified-search a, .unified-search button').click()
 			cy.get('.unified-search__form input')
 				.type('Day')
 			cy.get('.unified-search__results-collectives-pages')
@@ -318,7 +318,7 @@ describe('Page', function() {
 		})
 
 		it('Search for page content', function() {
-			cy.get('.unified-search a').click()
+			cy.get('.unified-search a, .unified-search button').click()
 			cy.get('.unified-search__form input')
 				.type('share your thoughts')
 			cy.get('.unified-search__results-collectives-page-content')
