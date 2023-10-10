@@ -123,12 +123,9 @@ describe('Page', function() {
 			cy.get('#titleform input.title')
 				.blur()
 			cy.wait('@renamePage')
-			// Flaky on stable25
-			if (Cypress.env('ncVersion') !== 'stable25') {
-				cy.getEditor(Cypress.config('defaultCommandTimeout') * 2)
-					.should('be.visible')
-					.contains('This is going to be our template.')
-			}
+			cy.getEditor(Cypress.config('defaultCommandTimeout') * 2)
+				.should('be.visible')
+				.contains('This is going to be our template.')
 			cy.get('.app-content-list-item').eq(1)
 				.should('contain', 'New page from Template')
 		})

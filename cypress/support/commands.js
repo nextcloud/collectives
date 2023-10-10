@@ -360,3 +360,11 @@ Cypress.Commands.add('seedCircleMember', (name, userId, type = 1, level) => {
 			}
 		})
 })
+
+/**
+ * Fail the test on the initial run to check if retries work
+ */
+Cypress.Commands.add('testRetry', () => {
+	cy.wrap(cy.state('test').currentRetry())
+		.should('be.equal', 2)
+})
