@@ -19,6 +19,8 @@ on:
       - 'package.json'
       - 'package-lock.json'
 
+  merge_group:
+
   push:
     branches:
       - main
