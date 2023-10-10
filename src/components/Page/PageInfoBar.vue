@@ -13,7 +13,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import LastUserBubble from '../LastUserBubble.vue'
 
 export default {
@@ -28,12 +27,10 @@ export default {
 			type: Object,
 			required: true,
 		},
-	},
-
-	computed: {
-		...mapGetters([
-			'isFullWidthView',
-		]),
+		isFullWidthView: {
+			type: Boolean,
+			required: true,
+		},
 	},
 }
 </script>
