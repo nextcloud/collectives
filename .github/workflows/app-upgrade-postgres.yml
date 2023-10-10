@@ -14,6 +14,8 @@ on:
       #- 'composer.json'
       #- 'composer.lock'
 
+  merge_group:
+
   push:
     branches:
       - main

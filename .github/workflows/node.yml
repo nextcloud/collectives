@@ -17,6 +17,7 @@ on:
       - '**.js'
       - '**.ts'
       - '**.vue'
+  merge_group:
   push:
     branches:
       - main
