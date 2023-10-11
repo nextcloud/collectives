@@ -49,14 +49,14 @@ Cypress.Commands.add('loginAs', (user, password = null) => {
  */
 Cypress.Commands.add('getEditor', (timeout = null) => {
 	timeout = timeout ?? Cypress.config('defaultCommandTimeout')
-	cy.get('[data-collectives-el="editor"] div.ProseMirror, [data-text-el="editor-container"] div.ProseMirror', { timeout })
+	cy.get('[data-collectives-el="editor"]', { timeout })
 })
 
 /**
  * Get the ReadOnlyEditor/RichTextReader component
  */
 Cypress.Commands.add('getReadOnlyEditor', () => {
-	cy.get('[data-collectives-el="reader"] div.ProseMirror, #read-only-editor div.ProseMirror')
+	cy.get('[data-collectives-el="reader"]')
 })
 
 /**

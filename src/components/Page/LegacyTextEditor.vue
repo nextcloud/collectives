@@ -8,7 +8,8 @@
 			id="text-container"
 			:key="'text-' + currentPage.id"
 			:class="[isFullWidthView ? 'full-width-view' : 'sheet-view']"
-			:aria-label="t('collectives', 'Page content')">
+			:aria-label="t('collectives', 'Page content')"
+			data-collectives-el="reader">
 			<Reader :key="`reader-${currentPage.id}`"
 				:current-page="currentPage"
 				:page-content="pageContent" />
@@ -17,6 +18,7 @@
 			v-show="showEditor"
 			:key="`editor-${currentPage.id}`"
 			ref="legacyEditor"
+			data-collectives-el="editor"
 			@ready="readyEditor" />
 	</div>
 </template>

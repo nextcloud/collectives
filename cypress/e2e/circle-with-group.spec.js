@@ -41,6 +41,7 @@ describe('Pages are accessible via group membership to circle', function() {
 		cy.loginAs('bob')
 		cy.visit('apps/collectives')
 		cy.get('.app-navigation').contains('Group Collective').click()
-		cy.get('#text h1').should('contain', 'Welcome to your new collective')
+		cy.getReadOnlyEditor()
+			.find('h1').should('contain', 'Welcome to your new collective')
 	})
 })
