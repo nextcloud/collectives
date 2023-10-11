@@ -162,7 +162,9 @@ export default {
 			this.reader = await window.OCA.Text.createEditor({
 				el: this.$refs.reader,
 				content: this.pageContent,
+				filePath: `/${this.currentPageFilePath}`,
 				readOnly: true,
+				shareToken: this.shareTokenParam || null,
 				readonlyBar: {
 					component: PageInfoBar,
 					props: {
