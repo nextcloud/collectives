@@ -6,6 +6,7 @@ OC.L10N.register(
     "Settings" : "Gosodiadau",
     "Copied" : "Copïwyd",
     "Loading…" : "Yn llwytho…",
+    "View" : "Golwg",
     "Edit" : "Golygu",
     "Restore" : "Adfer",
     "Delete permanently" : "Dileu'n barhaol",
