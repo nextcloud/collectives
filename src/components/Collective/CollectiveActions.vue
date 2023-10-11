@@ -64,7 +64,8 @@
 			</template>
 			{{ t('collectives', 'Settings') }}
 		</NcActionButton>
-		<NcActionButton :close-after-click="true"
+		<NcActionButton v-if="!isPublic"
+			:close-after-click="true"
 			@click="leaveCollectiveWithUndo(collective)">
 			{{ t('collectives', 'Leave collective') }}
 			<template #icon>
