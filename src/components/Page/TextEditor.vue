@@ -51,7 +51,6 @@ export default {
 			editorContent: null,
 			reader: null,
 			readMode: true,
-			scrollTop: 0,
 			textEditWatcher: null,
 		}
 	},
@@ -130,9 +129,7 @@ export default {
 		})
 
 		this.textEditWatcher = this.$watch('isTextEdit', (val) => {
-			if (val === true) {
-				this.startEdit()
-			} else {
+			if (val === false) {
 				this.stopEdit()
 			}
 		})
@@ -242,16 +239,7 @@ export default {
 			}
 		},
 
-		startEdit() {
-			this.scrollTop = document.getElementById('text')?.scrollTop || 0
-			this.$nextTick(() => {
-				document.getElementById('editor')?.scrollTo(0, this.scrollTop)
-			})
-		},
-
 		stopEdit() {
-			this.scrollTop = document.getElementById('editor')?.scrollTop || 0
-
 			// switch back to edit if there's no content
 			if (!this.pageContent?.trim()) {
 				this.setTextEdit()
@@ -276,10 +264,6 @@ export default {
 						this.setTextEdit()
 					})
 			}
-
-			this.$nextTick(() => {
-				document.getElementById('text')?.scrollTo(0, this.scrollTop)
-			})
 		},
 
 		toggleOutlineFromEditor(visible) {
