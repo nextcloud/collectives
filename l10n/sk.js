@@ -42,6 +42,7 @@ OC.L10N.register(
     "Current version" : "Aktuálna verzia",
     "No other versions available" : "Žiadne ďalšie verzie nie sú dostupné",
     "Attachments" : "Prílohy",
-    "Versions" : "Verzie"
+    "Versions" : "Verzie",
+    "New Page" : "Nová stránka"
 },
 "nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);");
