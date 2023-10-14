@@ -138,7 +138,7 @@ jobs:
         server-versions: ['stable25', 'stable27', 'master']
         # Only use cypress cloud for PRs
         use-cypress-cloud:
-          - ${{ !!github.head_ref }}
+          - ${{ vars.USE_CYPRESS_CLOUD && !!github.head_ref }}
         exclude:
           - php-versions: '8.0'
             server-versions: 'stable27'
