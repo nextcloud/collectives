@@ -80,10 +80,12 @@ class PublicStartController extends PublicShareController {
 			return new PublicTemplateResponse('collectives', 'error', ['appsMissing' => $appsMissing]);  // templates/error.php
 		}
 		$this->eventDispatcher->dispatch(LoadViewer::class, new LoadViewer());
-		return new PublicTemplateResponse('collectives', 'main', [ // templates/main.php
+		$response = new PublicTemplateResponse('collectives', 'main', [ // templates/main.php
 			'id-app-content' => '#app-content-vue',
 			'id-app-navigation' => '#app-navigation-vue',
 		]);
+		$response->setFooterVisible(false);
+		return $response;
 	}
 
 	/**
