@@ -123,10 +123,10 @@ class PageController extends Controller {
 	 *
 	 * @return DataResponse
 	 */
-	public function rename(int $collectiveId, int $id, ?int $parentId = null, ?string $title = null, ?int $index = 0): DataResponse {
+	public function move(int $collectiveId, int $id, ?int $parentId = null, ?string $title = null, ?int $index = 0): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $id, $parentId, $title, $index): array {
 			$userId = $this->getUserId();
-			$pageInfo = $this->service->rename($collectiveId, $id, $parentId, $title, $index, $userId);
+			$pageInfo = $this->service->move($collectiveId, $id, $parentId, $title, $index, $userId);
 			return [
 				"data" => $pageInfo
 			];

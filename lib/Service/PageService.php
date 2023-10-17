@@ -637,10 +637,10 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	private function renamePage(Folder $collectiveFolder, int $parentId, File $file, ?string $title): bool {
+	private function movePage(Folder $collectiveFolder, int $parentId, File $file, ?string $title): bool {
 		// Do not allow to move the landing page
 		if (NodeHelper::isLandingPage($file)) {
-			throw new NotPermittedException('Not allowed to rename landing page');
+			throw new NotPermittedException('Not allowed to move landing page');
 		}
 
 		// Do not allow to move a page to itself
@@ -665,7 +665,7 @@ class PageService {
 			$newFolder = $this->nodeHelper->getFileById($collectiveFolder, $parentId)->getParent();
 		}
 
-		// If processing an index page, then rename the parent folder, otherwise the file itself
+		// If processing an index page, then move the parent folder, otherwise the file itself
 		$node = NodeHelper::isIndexPage($file) ? $file->getParent() : $file;
 		$suffix = NodeHelper::isIndexPage($file) ? '' : PageInfo::SUFFIX;
 		if ($title) {
@@ -707,14 +707,14 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function rename(int $collectiveId, int $id, ?int $parentId, ?string $title, int $index, string $userId): PageInfo {
+	public function move(int $collectiveId, int $id, ?int $parentId, ?string $title, int $index, string $userId): PageInfo {
 		$this->verifyEditPermissions($collectiveId, $userId);
 		$collectiveFolder = $this->getCollectiveFolder($collectiveId, $userId);
 		$file = $this->nodeHelper->getFileById($collectiveFolder, $id);
 		$oldParentId = $this->getParentPageId($file);
 		$parentId = $parentId ?: $oldParentId;
-		if ($this->renamePage($collectiveFolder, $parentId, $file, $title)) {
-			// Refresh the file after it has been renamed
+		if ($this->movePage($collectiveFolder, $parentId, $file, $title)) {
+			// Refresh the file after it has been moved
 			$file = $this->nodeHelper->getFileById($collectiveFolder, $id);
 		}
 		try {
