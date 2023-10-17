@@ -277,7 +277,7 @@ export default {
 		},
 
 		async setPageEmoji(emoji) {
-			await this.setEmoji(this.currentPage.parentId, this.currentPage.id, emoji)
+			await this.setEmoji(this.currentPage.id, emoji)
 		},
 
 		unselectPageEmoji() {

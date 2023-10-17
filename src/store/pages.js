@@ -269,31 +269,31 @@ export default {
 		},
 
 		pageCreateUrl(_state, getters) {
-			return parentId => `${getters.pagesUrl}/parent/${parentId}`
+			return parentId => `${getters.pagesUrl}/${parentId}`
 		},
 
 		pageUrl(_state, getters) {
-			return (parentId, pageId) => `${getters.pagesUrl}/parent/${parentId}/page/${pageId}`
+			return (pageId) => `${getters.pagesUrl}/${pageId}`
 		},
 
 		emojiUrl(_state, getters) {
-			return (parentId, pageId) => `${getters.pageUrl(parentId, pageId)}/emoji`
+			return (pageId) => `${getters.pageUrl(pageId)}/emoji`
 		},
 
 		subpageOrderUrl(_state, getters) {
-			return (parentId, pageId) => `${getters.pageUrl(parentId, pageId)}/subpageOrder`
+			return (pageId) => `${getters.pageUrl(pageId)}/subpageOrder`
 		},
 
 		touchUrl(_state, getters) {
-			return `${getters.pageUrl(getters.currentPage.parentId, getters.currentPage.id)}/touch`
+			return `${getters.pageUrl(getters.currentPage.id)}/touch`
 		},
 
 		attachmentsUrl(_state, getters) {
-			return (parentId, pageId) => `${getters.pageUrl(parentId, pageId)}/attachments`
+			return (pageId) => `${getters.pageUrl(pageId)}/attachments`
 		},
 
 		backlinksUrl(_state, getters) {
-			return (parentId, pageId) => `${getters.pageUrl(parentId, pageId)}/backlinks`
+			return (pageId) => `${getters.pageUrl(pageId)}/backlinks`
 		},
 
 		trashIndexUrl(_state, getters) {
@@ -534,11 +534,14 @@ export default {
 		/**
 		 * Get a single page and update it in the store
 		 *
-		 * @param {number} parentId Parent ID
+		 * @param {object} store the vuex store
+		 * @param {Function} store.commit commit changes
+		 * @param {object} store.getters getters of the store
+		 * @param {object} store.state state of the store
 		 * @param {number} pageId Page ID
 		 */
-		async [GET_PAGE]({ commit, getters, state }, { parentId, pageId }) {
-			const response = await axios.get(getters.pageUrl(parentId, pageId))
+		async [GET_PAGE]({ commit, getters, state }, pageId) {
+			const response = await axios.get(getters.pageUrl(pageId))
 			commit(UPDATE_PAGE, response.data.data)
 		},
 
@@ -604,8 +607,7 @@ export default {
 		 * @param {string} newTitle new title for the page
 		 */
 		async [RENAME_PAGE]({ commit, getters }, newTitle) {
-			const page = getters.currentPage
-			const url = getters.pageUrl(page.parentId, page.id)
+			const url = getters.pageUrl(getters.currentPage.id)
 			const response = await axios.put(url, { title: newTitle })
 			await commit(UPDATE_PAGE, response.data.data)
 		},
@@ -637,9 +639,9 @@ export default {
 			page.parentId = newParentId
 			commit(UPDATE_PAGE, page)
 
-			const url = getters.pageUrl(newParentId, pageId)
+			const url = getters.pageUrl(pageId)
 			try {
-				const response = await axios.put(url, { index })
+				const response = await axios.put(url, { index, parentId: newParentId })
 				commit(UPDATE_PAGE, response.data.data)
 			} catch (e) {
 				commit(UPDATE_PAGE, pageClone)
@@ -663,13 +665,12 @@ export default {
 		 * @param {Function} store.commit commit changes
 		 * @param {object} store.getters getters of the store
 		 * @param {object} page the page
-		 * @param {number} page.parentId ID of the parent page
 		 * @param {number} page.pageId ID of the page
 		 * @param {string} page.emoji emoji for the page
 		 */
-		async [SET_PAGE_EMOJI]({ commit, getters }, { parentId, pageId, emoji }) {
+		async [SET_PAGE_EMOJI]({ commit, getters }, { pageId, emoji }) {
 			commit('load', `pageEmoji-${pageId}`)
-			const response = await axios.put(getters.emojiUrl(parentId, pageId), { emoji })
+			const response = await axios.put(getters.emojiUrl(pageId), { emoji })
 			commit(UPDATE_PAGE, response.data.data)
 			commit('done', `pageEmoji-${pageId}`)
 		},
@@ -683,11 +684,10 @@ export default {
 		 * @param {object} store.getters getters of the store
 		 * @param {object} store.state state of the store
 		 * @param {object} page the page
-		 * @param {number} page.parentId ID of the parent page
 		 * @param {number} page.pageId ID of the page
 		 * @param {Array} page.subpageOrder subpage order for the page
 		 */
-		async [SET_PAGE_SUBPAGE_ORDER]({ commit, getters, state }, { parentId, pageId, subpageOrder }) {
+		async [SET_PAGE_SUBPAGE_ORDER]({ commit, getters, state }, { pageId, subpageOrder }) {
 			commit('load', 'pagelist')
 			const page = { ...state.pages.find(p => p.id === pageId) }
 
@@ -700,7 +700,7 @@ export default {
 
 			try {
 				const response = await axios.put(
-					getters.subpageOrderUrl(parentId, pageId),
+					getters.subpageOrderUrl(pageId),
 					{ subpageOrder: JSON.stringify(subpageOrder) },
 				)
 				commit(UPDATE_PAGE, response.data.data)
@@ -719,11 +719,10 @@ export default {
 		 * @param {Function} store.commit commit changes
 		 * @param {object} store.getters getters of the store
 		 * @param {object} page the page
-		 * @param {number} page.parentId ID of the parent page
 		 * @param {number} page.pageId ID of the page
 		 */
-		async [TRASH_PAGE]({ commit, getters }, { parentId, pageId }) {
-			const response = await axios.delete(getters.pageUrl(parentId, pageId))
+		async [TRASH_PAGE]({ commit, getters }, { pageId }) {
+			const response = await axios.delete(getters.pageUrl(pageId))
 			commit(MOVE_PAGE_INTO_TRASH, response.data.data)
 		},
 
@@ -764,7 +763,7 @@ export default {
 		 * @param {object} page Page to get attachments for
 		 */
 		async [GET_ATTACHMENTS]({ commit, getters }, page) {
-			const response = await axios.get(getters.attachmentsUrl(page.parentId, page.id))
+			const response = await axios.get(getters.attachmentsUrl(page.id))
 			commit(SET_ATTACHMENTS, { attachments: response.data.data })
 		},
 
@@ -777,7 +776,7 @@ export default {
 		 * @param {object} page Page to get backlinks for
 		 */
 		async [GET_BACKLINKS]({ commit, getters }, page) {
-			const response = await axios.get(getters.backlinksUrl(page.parentId, page.id))
+			const response = await axios.get(getters.backlinksUrl(page.id))
 			commit(SET_BACKLINKS, { pages: response.data.data })
 		},
 

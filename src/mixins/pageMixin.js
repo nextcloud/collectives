@@ -110,13 +110,12 @@ export default {
 		/**
 		 * Set emoji for a page
 		 *
-		 * @param {number} parentId ID of the parent page
 		 * @param {number} pageId ID of the page
 		 * @param {string} emoji Emoji for the page
 		 */
-		async setEmoji(parentId, pageId, emoji) {
+		async setEmoji(pageId, emoji) {
 			try {
-				await this.dispatchSetPageEmoji({ parentId, pageId, emoji })
+				await this.dispatchSetPageEmoji({ pageId, emoji })
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not save emoji for page'))
@@ -164,14 +163,13 @@ export default {
 		 * Delete the current page,
 		 * remove it from the frontend and show a hint
 		 *
-		 * @param {number} parentId ID of the parent page
 		 * @param {number} pageId ID of the page
 		 */
-		async deletePage(parentId, pageId) {
+		async deletePage(pageId) {
 			const currentPageId = this.currentPage?.id
 
 			try {
-				await this.dispatchTrashPage({ parentId, pageId })
+				await this.dispatchTrashPage({ pageId })
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not delete the page'))
@@ -232,7 +230,6 @@ export default {
 		 * @param {number} newIndex New index for pageId
 		 */
 		async subpageOrderUpdate(parentId, pageId, newIndex) {
-			const parentPage = this.pages.find(p => (p.id === parentId))
 			const subpageOrder = this.sortedSubpages(parentId)
 				.map(p => p.id)
 			subpageOrder.splice(subpageOrder.findIndex(id => id === pageId), 1)
@@ -240,7 +237,6 @@ export default {
 
 			try {
 				await this.dispatchSetPageSubpageOrder({
-					parentId: parentPage.parentId,
 					pageId: parentId,
 					subpageOrder,
 				})

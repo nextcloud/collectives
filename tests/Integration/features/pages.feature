@@ -18,7 +18,7 @@ Feature: pages
     And user "jane" sees pagePath "firstpage/Readme.md" in "BehatPagesCollective"
 
   Scenario: Touch page
-    When user "alice" touches page "firstpage" with parentPath "Readme.md" in "BehatPagesCollective"
+    When user "alice" touches page "firstpage" in "BehatPagesCollective"
     Then user "alice" last edited page "firstpage" in "BehatPagesCollective"
 
   Scenario: Create page with namespace conflict
@@ -38,13 +38,13 @@ Feature: pages
     When user "jane" fails to rename page "Readme" to "newnamepage" with parentPath "Readme.md" in "BehatPagesCollective"
 
   Scenario: Change page emoji
-    When user "jane" sets emoji for page "firstpage" to "🍏" with parentPath "Readme.md" in "BehatPagesCollective"
-    And user "jane" sets emoji for page "firstpage" to "" with parentPath "Readme.md" in "BehatPagesCollective"
+    When user "jane" sets emoji for page "firstpage" to "🍏" in "BehatPagesCollective"
+    And user "jane" sets emoji for page "firstpage" to "" in "BehatPagesCollective"
 
   Scenario: Change page subpageOrder
-    When user "jane" sets subpageOrder for page "firstpage" to "[]" with parentPath "Readme.md" in "BehatPagesCollective"
-    And user "jane" sets subpageOrder for page "firstpage" to "[1,2]" with parentPath "Readme.md" in "BehatPagesCollective"
-    And user "jane" fails to set subpageOrder for page "firstpage" to "[invalid]" with parentPath "Readme.md" in "BehatPagesCollective"
+    When user "jane" sets subpageOrder for page "firstpage" to "[]" in "BehatPagesCollective"
+    And user "jane" sets subpageOrder for page "firstpage" to "[1,2]" in "BehatPagesCollective"
+    And user "jane" fails to set subpageOrder for page "firstpage" to "[invalid]" in "BehatPagesCollective"
 
   Scenario: Rename parent page
     When user "jane" renames page "firstpage" to "parentpage" with parentPath "Readme.md" in "BehatPagesCollective"
@@ -60,7 +60,7 @@ Feature: pages
     Then user "jane" sees pagePath "anotherpage/Subtemplate.md" in "BehatPagesCollective"
 
   Scenario: Trash subpage
-    When user "jane" trashes page "subpage" with parentPath "parentpage/Readme.md" in "BehatPagesCollective"
+    When user "jane" trashes page "subpage" in "BehatPagesCollective"
     Then user "jane" doesn't see pagePath "parentpage/subpage.md" in "BehatPagesCollective"
     And user "jane" sees pagePath "parentpage/Readme.md" in "BehatPagesCollective"
 
@@ -75,13 +75,13 @@ Feature: pages
     Then user "jane" sees pagePath "parentpage/subpage.md" in "BehatPagesCollective"
 
   Scenario: Trash and restore a page with subpages
-    When user "jane" trashes page "parentpage" with parentPath "Readme.md" in "BehatPagesCollective"
+    When user "jane" trashes page "parentpage" in "BehatPagesCollective"
     And user "jane" doesn't see pagePath "parentpage/Readme.md" in "BehatPagesCollective"
     Then user "jane" restores page "parentpage" from trash in "BehatPagesCollective"
 
   Scenario: Trash and delete all subpages reverts subfolders
-    When user "jane" trashes page "subpage" with parentPath "parentpage/Readme.md" in "BehatPagesCollective"
-    And user "jane" trashes page "subpage2" with parentPath "parentpage/Readme.md" in "BehatPagesCollective"
+    When user "jane" trashes page "subpage" in "BehatPagesCollective"
+    And user "jane" trashes page "subpage2" in "BehatPagesCollective"
     When user "jane" deletes page "subpage" from trash in "BehatPagesCollective"
     When user "jane" deletes page "subpage2" from trash in "BehatPagesCollective"
     Then user "jane" doesn't see pagePath "parentpage/Readme.md" in "BehatPagesCollective"
@@ -91,11 +91,11 @@ Feature: pages
     When user "john" joins circle "BehatPagesCollective" with owner "jane"
     And user "jane" sets "edit" level in collective "BehatPagesCollective" to "Admin"
     Then user "john" fails to create page "johnspage" with parentPath "Readme.md" in "BehatPagesCollective"
-    And user "john" fails to touch page "secondpage" with parentPath "Readme.md" in "BehatPagesCollective"
+    And user "john" fails to touch page "secondpage" in "BehatPagesCollective"
     And user "john" fails to rename page "secondpage" to "newnamepage" with parentPath "Readme.md" in "BehatPagesCollective"
-    And user "john" fails to set emoji for page "secondpage" to "🍏" with parentPath "Readme.md" in "BehatPagesCollective"
-    And user "john" fails to set subpageOrder for page "secondpage" to "[]" with parentPath "Readme.md" in "BehatPagesCollective"
-    And user "john" fails to trash page "secondpage" with parentPath "Readme.md" in "BehatPagesCollective"
+    And user "john" fails to set emoji for page "secondpage" to "🍏" in "BehatPagesCollective"
+    And user "john" fails to set subpageOrder for page "secondpage" to "[]" in "BehatPagesCollective"
+    And user "john" fails to trash page "secondpage" in "BehatPagesCollective"
 
   Scenario: Trash and delete collective and circle with all remaining pages
     Then user "jane" trashes collective "BehatPagesCollective"

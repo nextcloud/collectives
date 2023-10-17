@@ -107,7 +107,7 @@ describe('Page', function() {
 	describe('Creating a page from template', function() {
 		it('New page has template content', function() {
 			// Do some handstands to ensure that new page with editor is loaded before we edit the title
-			cy.intercept('POST', '**/_api/*/_pages/parent/*').as('createPage')
+			cy.intercept('POST', '**/_api/*/_pages/*').as('createPage')
 			cy.intercept('PUT', '**/apps/text/session/create').as('textCreateSession')
 			cy.contains('.app-content-list-item', 'Our Garden')
 				.find('button.action-button-add')
@@ -117,7 +117,7 @@ describe('Page', function() {
 				.should('not.have.attr', 'disabled')
 			cy.get('#titleform input.title')
 				.clear()
-			cy.intercept('PUT', '**/_api/*/_pages/parent/*/page/*').as('renamePage')
+			cy.intercept('PUT', '**/_api/*/_pages/*').as('renamePage')
 			cy.get('#titleform input.title')
 				.type('New page from Template')
 			cy.get('#titleform input.title')
@@ -134,7 +134,7 @@ describe('Page', function() {
 	describe('Creating a new subpage', function() {
 		it('Shows the title in the enabled titleform and full path in browser title', function() {
 			// Do some handstands to ensure that new page with editor is loaded before we edit the title
-			cy.intercept('POST', '**/_api/*/_pages/parent/*').as('createPage')
+			cy.intercept('POST', '**/_api/*/_pages/*').as('createPage')
 			cy.intercept('PUT', '**/apps/text/session/create').as('textCreateSession')
 			cy.contains('.app-content-list-item', '#% special chars')
 				.find('button.action-button-add')

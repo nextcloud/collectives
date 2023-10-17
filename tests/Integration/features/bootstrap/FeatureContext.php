@@ -152,8 +152,8 @@ class FeatureContext implements Context {
 		$collectiveId = $this->collectiveIdByName($collective);
 		$parentId = $this->getParentId($collectiveId, $parentPath);
 
-		$formData = new TableNode([['title', $page], ['parentId', $parentId]]);
-		$this->sendRequest('POST', '/apps/collectives/_api/' . $collectiveId . '/_pages/parent/' . $parentId, $formData);
+		$formData = new TableNode([['title', $page]]);
+		$this->sendRequest('POST', '/apps/collectives/_api/' . $collectiveId . '/_pages/' . $parentId, $formData);
 
 		if ("fails" === $fail) {
 			$this->assertStatusCode(403);
@@ -259,8 +259,7 @@ class FeatureContext implements Context {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$pageId = $this->pageIdByName($collectiveId, $page);
-		$parentId = $this->getParentId($collectiveId, 'Readme.md');
-		$this->sendRequest('GET', '/apps/collectives/_api/' . $collectiveId . '/_pages/parent/' . $parentId . '/page/' . $pageId . '/attachments');
+		$this->sendRequest('GET', '/apps/collectives/_api/' . $collectiveId . '/_pages/' . $pageId . '/attachments');
 		$this->assertStatusCode(200);
 		$this->assertAttachment($name, $mimetype);
 	}
@@ -436,23 +435,21 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user trashes page :page with parentPath :parentPath in :collective
-	 * @When user :user :fails to trash page :page with parentPath :parentPath in :collective
+	 * @When user :user trashes page :page in :collective
+	 * @When user :user :fails to trash page :page in :collective
 	 *
 	 * @param string      $user
 	 * @param string      $page
 	 * @param string      $collective
-	 * @param string      $parentPath
 	 * @param string|null $fail
 	 *
 	 * @throws GuzzleException
 	 */
-	public function userTrashesPage(string $user, string $page, string $collective, string $parentPath, ?string $fail = null): void {
+	public function userTrashesPage(string $user, string $page, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$pageId = $this->pageIdByName($collectiveId, $page);
-		$parentId = $this->getParentId($collectiveId, $parentPath);
-		$this->sendRequest('DELETE', '/apps/collectives/_api/' . $collectiveId . '/_pages/parent/' . $parentId . '/page/' . $pageId);
+		$this->sendRequest('DELETE', '/apps/collectives/_api/' . $collectiveId . '/_pages/' . $pageId);
 		if ("fails" === $fail) {
 			$this->assertStatusCode(403);
 		} else {
@@ -509,23 +506,21 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user touches page :page with parentPath :parentPath in :collective
-	 * @When user :user :fails to touch page :page with parentPath :parentPath in :collective
+	 * @When user :user touches page :page in :collective
+	 * @When user :user :fails to touch page :page in :collective
 	 *
 	 * @param string      $user
 	 * @param string      $page
-	 * @param string      $parentPath
 	 * @param string      $collective
 	 * @param string|null $fail
 	 *
 	 * @throws GuzzleException
 	 */
-	public function userTouchesPage(string $user, string $page, string $parentPath, string $collective, ?string $fail = null): void {
+	public function userTouchesPage(string $user, string $page, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$pageId = $this->pageIdByName($collectiveId, $page);
-		$parentId = $this->getParentId($collectiveId, $parentPath);
-		$this->sendRequest('GET', '/apps/collectives/_api/' . $collectiveId . '/_pages/parent/' . $parentId . '/page/' . $pageId . '/touch');
+		$this->sendRequest('GET', '/apps/collectives/_api/' . $collectiveId . '/_pages/' . $pageId . '/touch');
 		if ("fails" === $fail) {
 			$this->assertStatusCode(403);
 		} else {
@@ -551,8 +546,8 @@ class FeatureContext implements Context {
 		$collectiveId = $this->collectiveIdByName($collective);
 		$pageId = $this->pageIdByName($collectiveId, $page);
 		$parentId = $this->getParentId($collectiveId, $parentPath);
-		$formData = new TableNode([['title', $newtitle]]);
-		$this->sendRequest('PUT', '/apps/collectives/_api/' . $collectiveId . '/_pages/parent/' . $parentId . '/page/' . $pageId, $formData);
+		$formData = new TableNode([['parentId', $parentId], ['title', $newtitle]]);
+		$this->sendRequest('PUT', '/apps/collectives/_api/' . $collectiveId . '/_pages/' . $pageId, $formData);
 		if ("fails" === $fail) {
 			$this->assertStatusCode(403);
 		} else {
@@ -561,25 +556,23 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user sets emoji for page :page to :emoji with parentPath :parentPath in :collective
-	 * @When user :user :fails to set emoji for page :page to :emoji with parentPath :parentPath in :collective
+	 * @When user :user sets emoji for page :page to :emoji in :collective
+	 * @When user :user :fails to set emoji for page :page to :emoji in :collective
 	 *
 	 * @param string      $user
 	 * @param string      $page
 	 * @param string      $emoji
-	 * @param string      $parentPath
 	 * @param string      $collective
 	 * @param string|null $fail
 	 *
 	 * @throws GuzzleException
 	 */
-	public function userSetsPageEmoji(string $user, string $page, string $emoji, string $parentPath, string $collective, ?string $fail = null): void {
+	public function userSetsPageEmoji(string $user, string $page, string $emoji, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$pageId = $this->pageIdByName($collectiveId, $page);
-		$parentId = $this->getParentId($collectiveId, $parentPath);
 		$formData = new TableNode([['emoji', $emoji]]);
-		$this->sendRequest('PUT', '/apps/collectives/_api/' . $collectiveId . '/_pages/parent/' . $parentId . '/page/' . $pageId . '/emoji', $formData);
+		$this->sendRequest('PUT', '/apps/collectives/_api/' . $collectiveId . '/_pages/' . $pageId . '/emoji', $formData);
 		if ("fails" === $fail) {
 			$this->assertStatusCode(403);
 		} else {
@@ -589,25 +582,23 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user sets subpageOrder for page :page to :subpageOrder with parentPath :parentPath in :collective
-	 * @When user :user :fails to set subpageOrder for page :page to :subpageOrder with parentPath :parentPath in :collective
+	 * @When user :user sets subpageOrder for page :page to :subpageOrder in :collective
+	 * @When user :user :fails to set subpageOrder for page :page to :subpageOrder in :collective
 	 *
 	 * @param string      $user
 	 * @param string      $page
 	 * @param string      $subpageOrder
-	 * @param string      $parentPath
 	 * @param string      $collective
 	 * @param string|null $fail
 	 *
 	 * @throws GuzzleException
 	 */
-	public function userSetsPageSubpageOrder(string $user, string $page, string $subpageOrder, string $parentPath, string $collective, ?string $fail = null): void {
+	public function userSetsPageSubpageOrder(string $user, string $page, string $subpageOrder, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$pageId = $this->pageIdByName($collectiveId, $page);
-		$parentId = $this->getParentId($collectiveId, $parentPath);
 		$formData = new TableNode([['subpageOrder', $subpageOrder]]);
-		$this->sendRequest('PUT', '/apps/collectives/_api/' . $collectiveId . '/_pages/parent/' . $parentId . '/page/' . $pageId . '/subpageOrder', $formData);
+		$this->sendRequest('PUT', '/apps/collectives/_api/' . $collectiveId . '/_pages/' . $pageId . '/subpageOrder', $formData);
 		if ("fails" === $fail) {
 			$this->assertStatusCode(403);
 		} else {
@@ -945,8 +936,8 @@ class FeatureContext implements Context {
 		$token = $this->getCollectiveShareToken($collectiveId);
 		$parentId = $this->getParentId($collectiveId, $parentPath);
 
-		$formData = new TableNode([['title', $page], ['parentId', $parentId]]);
-		$this->sendRequest('POST', '/apps/collectives/_api/p/' . $token . '/_pages/parent/' . $parentId, $formData, null, [], false);
+		$formData = new TableNode([['title', $page]]);
+		$this->sendRequest('POST', '/apps/collectives/_api/p/' . $token . '/_pages/' . $parentId, $formData, null, [], false);
 		if ("fails" === $fail) {
 			$this->assertStatusCode(403);
 		} else {
@@ -955,27 +946,25 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When anonymous sets emoji for page :page to :emoji with parentPath :parentPath in public collective :collective with owner :owner
-	 * @When anonymous :fails to set emoji for page :page to :emoji with parentPath :parentPath in public collective :collective with owner :owner
+	 * @When anonymous sets emoji for page :page to :emoji in public collective :collective with owner :owner
+	 * @When anonymous :fails to set emoji for page :page to :emoji in public collective :collective with owner :owner
 	 *
 	 * @param string      $page
 	 * @param string      $emoji
-	 * @param string      $parentPath
 	 * @param string      $collective
 	 * @param string      $owner
 	 * @param string|null $fail
 	 *
 	 * @throws GuzzleException
 	 */
-	public function anonymousSetsPublicCollectivePageEmoji(string $page, string $emoji, string $parentPath, string $collective, $owner, ?string $fail = null): void {
+	public function anonymousSetsPublicCollectivePageEmoji(string $page, string $emoji, string $collective, $owner, ?string $fail = null): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$token = $this->getCollectiveShareToken($collectiveId);
 		$pageId = $this->pageIdByName($collectiveId, $page);
-		$parentId = $this->getParentId($collectiveId, $parentPath);
 
 		$formData = new TableNode([['emoji', $emoji]]);
-		$this->sendRequest('PUT', '/apps/collectives/_api/p/' . $token . '/_pages/parent/' . $parentId . '/page/' . $pageId . '/emoji', $formData);
+		$this->sendRequest('PUT', '/apps/collectives/_api/p/' . $token . '/_pages/' . $pageId . '/emoji', $formData);
 		if ("fails" === $fail) {
 			$this->assertStatusCode(403);
 		} else {
@@ -985,25 +974,23 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When anonymous trashes page :page with parentPath :parentPath in public collective :collective with owner :owner
-	 * @When anonymous :fails to trash page :page with parentPath :parentPath in public collective :collective with owner :owner
+	 * @When anonymous trashes page :page in public collective :collective with owner :owner
+	 * @When anonymous :fails to trash page :page in public collective :collective with owner :owner
 	 *
 	 * @param string      $page
 	 * @param string      $collective
-	 * @param string      $parentPath
 	 * @param string      $owner
 	 * @param string|null $fail
 	 *
 	 * @throws GuzzleException
 	 */
-	public function anonymousTrashesPublicCollectivePage(string $page, string $collective, string $parentPath, string $owner, ?string $fail = null): void {
+	public function anonymousTrashesPublicCollectivePage(string $page, string $collective, string $owner, ?string $fail = null): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$token = $this->getCollectiveShareToken($collectiveId);
 		$pageId = $this->pageIdByName($collectiveId, $page);
-		$parentId = $this->getParentId($collectiveId, $parentPath);
 
-		$this->sendRequest('DELETE', '/apps/collectives/_api/p/' . $token . '/_pages/parent/' . $parentId . '/page/' . $pageId, null, null, [], false);
+		$this->sendRequest('DELETE', '/apps/collectives/_api/p/' . $token . '/_pages/' . $pageId, null, null, [], false);
 		if ("fails" === $fail) {
 			$this->assertStatusCode(403);
 		} else {
@@ -1079,8 +1066,7 @@ class FeatureContext implements Context {
 		$collectiveId = $this->collectiveIdByName($collective);
 		$token = $this->getCollectiveShareToken($collectiveId);
 		$pageId = $this->pageIdByName($collectiveId, $page);
-		$parentId = $this->getParentId($collectiveId, 'Readme.md');
-		$this->sendRequest('GET', '/apps/collectives/_api/p/' . $token . '/_pages/parent/' . $parentId . '/page/' . $pageId . '/attachments');
+		$this->sendRequest('GET', '/apps/collectives/_api/p/' . $token . '/_pages/' . $pageId . '/attachments');
 		$this->assertStatusCode(200);
 		$this->assertAttachment($name, $mimetype);
 	}
