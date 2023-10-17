@@ -136,6 +136,25 @@ class PageController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 *
+	 * @param int      $collectiveId
+	 * @param int      $id
+	 * @param int      $newCollectiveId
+	 * @param int|null $parentId
+	 * @param int|null $index
+	 *
+	 * @return DataResponse
+	 */
+	public function moveToCollective(int $collectiveId, int $id, int $newCollectiveId, ?int $parentId = null, ?int $index = 0): DataResponse {
+		return $this->handleErrorResponse(function () use ($collectiveId, $id, $newCollectiveId, $parentId, $index): array {
+			$userId = $this->getUserId();
+			$this->service->moveToCollective($collectiveId, $id, $newCollectiveId, $parentId, $index, $userId);
+			return [];
+		}, $this->logger);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 *
 	 * @param int         $collectiveId
 	 * @param int         $id
 	 * @param string|null $emoji

@@ -53,6 +53,15 @@ Feature: pages
     And user "jane" doesn't see pagePath "firstpage/subpage.md" in "BehatPagesCollective"
     And user "jane" doesn't see pagePath "firstpage/parentpage.md" in "BehatPagesCollective"
 
+  Scenario: Move page to another collective
+    When user "jane" creates collective "BehatPagesCollective2"
+    And user "jane" creates page "movethatpage1" with parentPath "Readme.md" in "BehatPagesCollective"
+    And user "jane" creates page "movethatpage2" with parentPath "Readme.md" in "BehatPagesCollective"
+    Then user "jane" moves page "movethatpage1" from collective "BehatPagesCollective" to collective "BehatPagesCollective2"
+    And user "jane" sees pagePath "movethatpage1.md" in "BehatPagesCollective2"
+    And user "jane" moves page "movethatpage2" from collective "BehatPagesCollective" to collective "BehatPagesCollective2" with parentPath "movethatpage1.md"
+    And user "jane" sees pagePath "movethatpage1/movethatpage2.md" in "BehatPagesCollective2"
+
   Scenario: Create and use template page
     When user "jane" creates page "Template" with parentPath "Readme.md" in "BehatPagesCollective"
     And user "jane" creates page "Subtemplate" with parentPath "Template.md" in "BehatPagesCollective"

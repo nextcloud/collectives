@@ -556,6 +556,33 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @When user :user moves page :page from collective :oldCollectiveId to collective :newCollectiveId
+	 * @When user :user moves page :page from collective :oldCollectiveId to collective :newCollectiveId with parentPath :parentPath
+	 *
+	 * @param string      $user
+	 * @param string      $page
+	 * @param string      $oldCollective
+	 * @param string      $newCollective
+	 * @param string|null $parentPath
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userMovesPageToCollective(string $user, string $page, string $oldCollective, string $newCollective, ?string $parentPath = null): void {
+		$this->setCurrentUser($user);
+		$oldCollectiveId = $this->collectiveIdByName($oldCollective);
+		$newCollectiveId = $this->collectiveIdByName($newCollective);
+		$pageId = $this->pageIdByName($oldCollectiveId, $page);
+		if ($parentPath) {
+			$newParentId = $this->getParentId($newCollectiveId, $parentPath);
+			$formData = new TableNode([['parentId', $newParentId]]);
+		} else {
+			$formData = null;
+		}
+		$this->sendRequest('PUT', '/apps/collectives/_api/' . $oldCollectiveId . '/_pages/' . $pageId . '/to/' . $newCollectiveId, $formData);
+		$this->assertStatusCode(200);
+	}
+
+	/**
 	 * @When user :user sets emoji for page :page to :emoji in :collective
 	 * @When user :user :fails to set emoji for page :page to :emoji in :collective
 	 *
