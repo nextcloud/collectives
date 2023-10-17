@@ -87,12 +87,8 @@ describe('Page list', function() {
 			cy.seedPage('Target', '', 'Readme.md')
 			cy.seedPage('Target Subpage', '', 'Target.md')
 			cy.visit('/apps/collectives/Our%20Garden')
-			cy.contains('.app-content-list-item', 'Move me')
-				.find('.action-item__menutoggle')
-				.click({ force: true })
-			cy.get('button.action-button')
-				.contains('Move page')
-				.click()
+			cy.openPageMenu('Move me')
+			cy.clickMenuButton('Move page')
 			cy.get('.picker-page-list li')
 				.contains('Target')
 				.click()
@@ -102,7 +98,7 @@ describe('Page list', function() {
 				.contains('Move page here')
 				.click()
 
-			cy.visit('/apps/collectives/Our%20Garden/Target')
+			cy.openPage('Target')
 			cy.contains('.page-list-drag-item', 'Target')
 				.get('.page-list-indent .app-content-list-item')
 				.first()
@@ -149,7 +145,7 @@ describe('Page list', function() {
 
 	describe('Page trash', function() {
 		it('allows to trash and restore page with subpage and attachment', function() {
-			cy.visit('/apps/collectives/Our%20Garden/Day%201')
+			cy.openPage('Day 1')
 
 			// Insert attachment
 			cy.intercept({ method: 'POST', url: '**/text/attachment/upload*' }).as('attachmentUpload')
@@ -159,12 +155,8 @@ describe('Page list', function() {
 			cy.switchPageMode(0)
 
 			// Trash page
-			cy.contains('.page-list .app-content-list-item', 'Day 1')
-				.find('.action-item__menutoggle')
-				.click({ force: true })
-			cy.get('button.action-button')
-				.contains('Delete page and subpages')
-				.click()
+			cy.openPageMenu('Day 1')
+			cy.clickMenuButton('Delete page and subpages')
 			cy.get('.page-list .app-content-list-item')
 				.should('not.contain', 'Day 1')
 
@@ -177,8 +169,9 @@ describe('Page list', function() {
 				.click()
 			cy.get('table tr')
 				.should('not.exist')
+			cy.get('button.modal-container__close').click()
 
-			cy.visit('/apps/collectives/Our%20Garden/Day%201')
+			cy.openPage('Day 1')
 			if (Cypress.env('ncVersion') === 'stable25') {
 				cy.getEditor()
 					.find('img.image__main')

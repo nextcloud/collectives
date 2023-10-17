@@ -33,14 +33,8 @@ describe('Collective members', function() {
 
 	beforeEach(function() {
 		cy.login('bob')
-
-		cy.get('.collectives_list_item')
-			.contains('li', 'Members Collective')
-			.find('.action-item__menutoggle')
-			.click({ force: true })
-		cy.get('button.action-button')
-			.contains('Manage members')
-			.click()
+		cy.openCollectiveMenu('Members Collective')
+		cy.clickMenuButton('Manage members')
 	})
 
 	describe('Manage members', function() {

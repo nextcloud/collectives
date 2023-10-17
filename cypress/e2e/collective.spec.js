@@ -153,13 +153,8 @@ describe('Collective', function() {
 			cy.visit('/apps/collectives')
 
 			// Leave collective
-			cy.get('.collectives_list_item')
-				.contains('li', 'Preexisting Collective')
-				.find('.action-item__menutoggle')
-				.click({ force: true })
-			cy.get('button.action-button')
-				.contains('Leave collective')
-				.click()
+			cy.openCollectiveMenu('Preexisting Collective')
+			cy.clickMenuButton('Leave collective')
 			cy.get('.app-navigation-entry')
 				.contains('Preexisting Collective')
 				.should('not.be.visible')
@@ -176,14 +171,9 @@ describe('Collective', function() {
 				.should('be.visible')
 
 			// Leave collective and wait for 10 seconds
-			cy.get('.collectives_list_item')
-				.contains('li', 'Preexisting Collective')
-				.find('.action-item__menutoggle')
-				.click({ force: true })
+			cy.openCollectiveMenu('Preexisting Collective')
 			cy.intercept('PUT', '**/apps/circles/circles/**/leave').as('leaveCircle')
-			cy.get('button.action-button')
-				.contains('Leave collective')
-				.click()
+			cy.clickMenuButton('Leave collective')
 			cy.get('.app-navigation-entry')
 				.contains('Preexisting Collective')
 				.should('not.be.visible')
