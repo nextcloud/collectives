@@ -127,7 +127,7 @@ export default {
 
 	computed: {
 		...mapGetters([
-			'collectivePage',
+			'landingPage',
 			'pageById',
 			'pageParents',
 			'visibleSubpages',
@@ -188,7 +188,7 @@ export default {
 		},
 
 		onClickHome() {
-			this.selectedPageId = this.collectivePage.id
+			this.selectedPageId = this.landingPage.id
 		},
 
 		/**

@@ -98,13 +98,13 @@ export default {
 			// Return landing page
 			if (!getters.pageParam
 				|| getters.pageParam === 'Readme') {
-				return [getters.collectivePage.id]
+				return [getters.landingPage.id]
 			}
 
 			// Iterate through all path levels to find the correct page
 			const pageIds = []
 			const parts = getters.pageParam.split('/').filter(Boolean)
-			let page = getters.collectivePage
+			let page = getters.landingPage
 			for (const i in parts) {
 				page = state.pages.find(p => (p.parentId === page.id && p.title === parts[i]))
 				if (page) {
@@ -170,7 +170,7 @@ export default {
 			return [collectivePath, filePath].filter(Boolean).join('/')
 		},
 
-		collectivePage(state) {
+		landingPage(state) {
 			return state.pages.find(p => (p.parentId === 0))
 		},
 
@@ -221,7 +221,7 @@ export default {
 
 		pageParents: (state, getters) => (pageId) => {
 			const pages = []
-			while (pageId !== getters.collectivePage.id) {
+			while (pageId !== getters.landingPage.id) {
 				const page = state.pages.find(p => (p.id === pageId))
 				if (!page) {
 					break

@@ -54,18 +54,18 @@
 				</NcActionButton>
 			</NcActions>
 		</div>
-		<div v-if="!currentCollective || !collectivePage || loading('collective')" class="page-list">
+		<div v-if="!currentCollective || !landingPage || loading('collective')" class="page-list">
 			<SkeletonLoading type="items" :count="3" />
 		</div>
 		<div v-else class="page-list">
 			<Item key="Readme"
 				:to="currentCollectivePath"
-				:page-id="collectivePage.id"
+				:page-id="landingPage.id"
 				:parent-id="0"
 				:title="currentCollective.name"
-				:timestamp="collectivePage.timestamp"
-				:last-user-id="collectivePage.lastUserId"
-				:last-user-display-name="collectivePage.lastUserDisplayName"
+				:timestamp="landingPage.timestamp"
+				:last-user-id="landingPage.lastUserId"
+				:last-user-display-name="landingPage.lastUserDisplayName"
 				:emoji="currentCollective.emoji"
 				:level="0"
 				:can-edit="currentCollectiveCanEdit"
@@ -76,7 +76,7 @@
 				@click.native="show('details')" />
 			<Draggable v-if="subpages || keptSortable(currentPage.id)"
 				:list="subpages"
-				:parent-id="collectivePage.id"
+				:parent-id="landingPage.id"
 				:disable-sorting="disableSorting">
 				<template #header>
 					<div v-if="!sortedBy('byOrder')" class="sort-order-container">
@@ -161,7 +161,7 @@ export default {
 	computed: {
 		...mapGetters([
 			'currentCollectiveCanEdit',
-			'collectivePage',
+			'landingPage',
 			'templatePage',
 			'currentCollective',
 			'currentCollectivePath',
@@ -176,15 +176,15 @@ export default {
 		]),
 
 		subpages() {
-			if (this.collectivePage) {
-				return this.visibleSubpages(this.collectivePage.id)
+			if (this.landingPage) {
+				return this.visibleSubpages(this.landingPage.id)
 			} else {
 				return []
 			}
 		},
 
 		hasTemplate() {
-			return !!this.templatePage(this.collectivePage ? this.collectivePage.id : 0)
+			return !!this.templatePage(this.landingPage ? this.landingPage.id : 0)
 		},
 
 		labels() {
@@ -194,8 +194,8 @@ export default {
 		},
 
 		templateView() {
-			if (this.showTemplates && this.collectivePage) {
-				return this.templatePage(this.collectivePage.id)
+			if (this.showTemplates && this.landingPage) {
+				return this.templatePage(this.landingPage.id)
 			} else {
 				return null
 			}
