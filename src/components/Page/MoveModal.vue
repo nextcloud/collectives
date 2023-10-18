@@ -1,7 +1,7 @@
 <template>
 	<PagePicker :page-id="pageId"
 		:parent-id="parentId"
-		:loading="moving"
+		:is-moving="moving"
 		@select="onMove"
 		@close="onClose" />
 </template>
@@ -44,15 +44,18 @@ export default {
 		},
 
 		/**
-		 *
 		 * @param {object} object Parameter object
+		 * @param {number} object.collectiveId collective ID
 		 * @param {number} object.parentId new parent page for page
 		 * @param {number} object.newIndex new order index of page
 		 */
-		async onMove({ parentId, newIndex }) {
+		async onMove({ collectiveId, parentId, newIndex }) {
 			this.moving = true
 
-			if (parentId !== this.parentId) {
+			if (collectiveId !== this.currentCollective.id) {
+				// Move page to new collective
+				this.movePageToCollective(collectiveId, this.parentId, parentId, this.pageId, newIndex)
+			} else if (parentId !== this.parentId) {
 				// Move page to new parent
 				this.movePage(this.parentId, parentId, this.pageId, newIndex)
 			} else {

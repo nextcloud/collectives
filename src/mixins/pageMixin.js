@@ -5,6 +5,7 @@ import {
 	TRASH_PAGE,
 	GET_PAGES,
 	MOVE_PAGE,
+	MOVE_PAGE_TO_COLLECTIVE,
 	NEW_PAGE,
 	NEW_TEMPLATE,
 	SET_PAGE_EMOJI,
@@ -20,9 +21,11 @@ export default {
 		}),
 
 		...mapGetters([
+			'collectiveTitle',
 			'currentCollective',
 			'currentFileIdPage',
 			'currentPage',
+			'landingPage',
 			'newPagePath',
 			'pagePath',
 			'pageTitle',
@@ -46,6 +49,7 @@ export default {
 			dispatchSetPageEmoji: SET_PAGE_EMOJI,
 			dispatchSetPageSubpageOrder: SET_PAGE_SUBPAGE_ORDER,
 			dispatchMovePage: MOVE_PAGE,
+			dispatchMovePageToCollective: MOVE_PAGE_TO_COLLECTIVE,
 			dispatchTrashPage: TRASH_PAGE,
 		}),
 
@@ -157,6 +161,39 @@ export default {
 			this.subpageOrderDelete(oldParentId, pageId)
 
 			showSuccess(t('collectives', `Page ${this.pageTitle(pageId)} moved to ${this.pageTitle(newParentId)}`))
+		},
+
+		/**
+		 * Move a page to another collective
+		 *
+		 * @param {number} collectiveId ID of the new collective
+		 * @param {number} oldParentId ID of the old parent page
+		 * @param {number} newParentId ID of the new parent page
+		 * @param {number} pageId ID of the page
+		 * @param {number} newIndex New index for pageId
+		 */
+		async movePageToCollective(collectiveId, oldParentId, newParentId, pageId, newIndex) {
+			const currentPageId = this.currentPage?.id
+			const pageTitle = this.pageTitle(pageId)
+
+			// Move subpage to new collective
+			try {
+				await this.dispatchMovePageToCollective({ collectiveId, newParentId, pageId, index: newIndex })
+			} catch (e) {
+				console.error(e)
+				showError(t('collectives', 'Could not move page to another collective'))
+				return
+			}
+
+			// Redirect to landing page if currentPage got moved
+			if (currentPageId === pageId) {
+				this.$router.replace(this.pagePath(this.landingPage.id))
+			}
+
+			// Remove page from subpageOrder of old parent last
+			this.subpageOrderDelete(oldParentId, pageId)
+
+			showSuccess(t('collectives', `Page ${pageTitle} moved to collective ${this.collectiveTitle(collectiveId)}`))
 		},
 
 		/**
