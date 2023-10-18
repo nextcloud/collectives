@@ -37,11 +37,13 @@ OC.L10N.register(
     "Template" : "Šablóny",
     "Title" : "Názov",
     "Deleted" : "Zmazané",
+    "Search pages" : "Hľadať stránky",
     "Sort by title" : "Zoradiť podľa nadpisu",
     "Download" : "Sťahovanie",
     "Current version" : "Aktuálna verzia",
     "No other versions available" : "Žiadne ďalšie verzie nie sú dostupné",
     "Attachments" : "Prílohy",
+    "Backlinks" : "Spätné odkazy",
     "Versions" : "Verzie",
     "New Page" : "Nová stránka"
 },
