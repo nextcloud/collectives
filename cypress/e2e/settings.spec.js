@@ -87,7 +87,7 @@ describe('Settings', function() {
 			cy.wait('@propfindFolder')
 
 			// Open and select default folder
-			cy.get(filePickerListSelector).contains('Collec')
+			cy.get(filePickerListSelector).contains('Collectives')
 				.click()
 			cy.get('button').contains('Choose')
 				.click()
