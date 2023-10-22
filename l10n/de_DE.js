@@ -42,7 +42,7 @@ OC.L10N.register(
     "admin" : "Administration",
     "moderator" : "Moderation",
     "member" : "Mitglied",
-    "Demote to moderator" : "Zur Moderation heraufstufen",
+    "Demote to moderator" : "Herabstufen auf Moderation",
     "Promote to moderator" : "Zur Moderation heraufstufen",
     "Member level changed" : "Mitgliedsebene geändert",
     "Could not change member level" : "Mitgliedsebene konnte nicht geändert werden",
