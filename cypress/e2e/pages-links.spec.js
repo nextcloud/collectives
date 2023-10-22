@@ -31,7 +31,8 @@ let anotherCollectiveFirstPageId, linkTargetPageId
 
 describe('Page Link Handling', function() {
 	before(function() {
-		cy.login('bob', { route: '/apps/collectives' })
+		cy.loginAs('bob')
+		cy.visit('/apps/collectives')
 		cy.deleteAndSeedCollective('Another Collective')
 		cy.seedPage('First Page', '', 'Readme.md').then((id) => {
 			anotherCollectiveFirstPageId = id
@@ -94,7 +95,8 @@ describe('Page Link Handling', function() {
 	})
 
 	beforeEach(function() {
-		cy.login('bob', { route: '/apps/collectives/Link Testing/Link Source' })
+		cy.loginAs('bob')
+		cy.visit('/apps/collectives/Link Testing/Link Source')
 		// make sure the page list loaded properly
 		cy.contains('.app-content-list-item a', 'Link Target')
 	})

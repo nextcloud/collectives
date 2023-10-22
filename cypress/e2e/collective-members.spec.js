@@ -26,13 +26,15 @@
 
 describe('Collective members', function() {
 	before(function() {
-		cy.login('bob')
+		cy.loginAs('bob')
+		cy.visit('apps/collectives')
 		cy.deleteCollective('Members Collective')
 		cy.deleteAndSeedCollective('Members Collective')
 	})
 
 	beforeEach(function() {
-		cy.login('bob')
+		cy.loginAs('bob')
+		cy.visit('apps/collectives')
 		cy.openCollectiveMenu('Members Collective')
 		cy.clickMenuButton('Manage members')
 	})

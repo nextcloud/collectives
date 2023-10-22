@@ -31,18 +31,16 @@
  */
 describe('Pages are accessible via group membership to circle', function() {
 	before(function() {
-		cy.login('jane')
+		cy.loginAs('jane')
+		cy.visit('apps/collectives')
 		cy.deleteAndSeedCollective('Group Collective')
 		cy.seedCircleMember('Group Collective', 'Bobs Group', 2, 8)
-		cy.logout()
-		cy.clearCookies()
-		cy.getCookies().should('be.empty')
 	})
 
 	it('Lists the collective', function() {
-		cy.login('bob')
+		cy.loginAs('bob')
+		cy.visit('apps/collectives')
 		cy.get('.app-navigation').contains('Group Collective').click()
 		cy.get('#text h1').should('contain', 'Welcome to your new collective')
-		cy.logout()
 	})
 })

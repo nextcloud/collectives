@@ -27,7 +27,8 @@
 describe('Collective', function() {
 	describe('move collective to trash and restore', function() {
 		before(function() {
-			cy.login('bob')
+			cy.loginAs('bob')
+			cy.visit('apps/collectives')
 			cy.deleteAndSeedCollective('Delete me')
 		})
 		it('Allows moving the collective to trash', function() {
@@ -43,7 +44,8 @@ describe('Collective', function() {
 				.should('contain', 'Delete me')
 		})
 		it('Allows restoring the collective from trash', function() {
-			cy.login('bob')
+			cy.loginAs('bob')
+			cy.visit('apps/collectives')
 			cy.get('#collectives-trash')
 				.click()
 			cy.openTrashedCollectiveMenu('Delete me')
@@ -55,7 +57,8 @@ describe('Collective', function() {
 
 	describe('move collective to trash and delete permanently', function() {
 		it('Allows moving the collective to trash', function() {
-			cy.login('bob')
+			cy.loginAs('bob')
+			cy.visit('apps/collectives')
 			cy.openCollectiveMenu('Delete me')
 			cy.clickMenuButton('Settings')
 			cy.get('button')
@@ -67,7 +70,8 @@ describe('Collective', function() {
 				.should('contain', 'Delete me')
 		})
 		it('Allows deleting the collective and circle from trash', function() {
-			cy.login('bob')
+			cy.loginAs('bob')
+			cy.visit('apps/collectives')
 			cy.get('#collectives-trash')
 				.click()
 			cy.openTrashedCollectiveMenu('Delete me')

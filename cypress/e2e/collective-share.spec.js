@@ -28,13 +28,14 @@ describe('Collective Share', function() {
 	let shareUrl
 
 	before(function() {
-		cy.login('bob')
+		cy.loginAs('bob')
+		cy.visit('/apps/collectives')
 		cy.deleteAndSeedCollective('Share me')
 	})
 
 	describe('collective share', function() {
 		it('Allows sharing a collective', function() {
-			cy.login('bob')
+			cy.loginAs('bob')
 			cy.visit('/apps/collectives', {
 				onBeforeLoad(win) {
 					// navigator.clipboard doesn't exist on HTTP requests (in CI), so let's create it
@@ -80,7 +81,8 @@ describe('Collective Share', function() {
 			cy.getEditor().should('not.exist')
 		})
 		it('Allows toggling the editable flag for a collective share', function() {
-			cy.login('bob')
+			cy.loginAs('bob')
+			cy.visit('apps/collectives')
 			cy.openCollectiveMenu('Share me')
 			cy.intercept('PUT', '**/_api/*/share/*').as('updateShare')
 			cy.get('input#shareEditable')
@@ -113,7 +115,8 @@ describe('Collective Share', function() {
 				.click()
 		})
 		it('Allows unsharing a collective', function() {
-			cy.login('bob')
+			cy.loginAs('bob')
+			cy.visit('apps/collectives')
 			cy.openCollectiveMenu('Share me')
 			cy.intercept('DELETE', '**/_api/*/share/*').as('deleteShare')
 			cy.clickMenuButton('Unshare')

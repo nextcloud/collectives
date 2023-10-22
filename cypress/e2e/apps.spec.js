@@ -24,7 +24,8 @@ describe('The apps', function() {
 	describe('Collectives', function() {
 
 		it('allows creating a new collective', function() {
-			cy.login('jane')
+			cy.loginAs('jane')
+			cy.visit('apps/collectives')
 			cy.get('#app-navigation-vue')
 				.should('contain', 'New collective')
 		})
@@ -40,17 +41,18 @@ describe('The apps', function() {
 	describe('Disabled circles app does not break files view', function() {
 
 		before(function() {
-			cy.login('admin', { route: '/' })
+			cy.loginAs('admin')
 			cy.disableApp('circles')
 		})
 
 		after(function() {
-			cy.login('admin', { route: '/' })
+			cy.loginAs('admin')
 			cy.enableApp('circles')
 		})
 
 		it('Renders the default files list', function() {
-			cy.login('jane', { route: 'apps/files' })
+			cy.loginAs('jane')
+			cy.visit('apps/files')
 			cy.fileList().should('contain', 'welcome')
 		})
 

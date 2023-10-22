@@ -28,7 +28,8 @@ describe('Collective', function() {
 	const specialCollective = 'stupid !@#$%^&()_ special chars'
 
 	before(function() {
-		cy.login('bob')
+		cy.loginAs('bob')
+		cy.visit('apps/collectives')
 		cy.deleteCollective('Preexisting Circle')
 		cy.deleteCollective('History Club')
 		cy.deleteCollective(specialCollective)
@@ -36,14 +37,16 @@ describe('Collective', function() {
 		cy.seedCircleMember('Preexisting Collective', 'jane')
 		cy.seedCircle('Preexisting Circle')
 		cy.seedCircle('History Club', { visible: true, open: true })
-		cy.login('jane')
+		cy.loginAs('jane')
+		cy.visit('apps/collectives')
 		cy.deleteCollective('Foreign Circle')
 		cy.seedCircle('Foreign Circle', { visible: true, open: true })
 	})
 
 	describe('in the files app', function() {
 		before(function() {
-			cy.login('bob', { route: '/apps/files' })
+			cy.loginAs('bob')
+			cy.visit('/apps/files')
 		})
 		it('has a matching folder', function() {
 			const breadcrumbsSelector = '.files-controls .breadcrumb, [data-cy-files-content-breadcrumbs] a'
@@ -60,12 +63,14 @@ describe('Collective', function() {
 
 	describe('name conflicts', function() {
 		it('Reports existing circle', function() {
-			cy.login('bob')
+			cy.loginAs('bob')
+			cy.visit('apps/collectives')
 			cy.createCollective('Foreign Circle')
 			cy.get('.modal-collective-name-error').should('contain', 'A collective with this name already exists')
 		})
 		it('Reports existing collective', function() {
-			cy.login('bob')
+			cy.loginAs('bob')
+			cy.visit('apps/collectives')
 			cy.createCollective('Preexisting Collective')
 			cy.get('main .empty-content').should('contain', 'build shared knowledge')
 			cy.get('.toast-warning').should('contain', 'Could not create the collective')
@@ -73,7 +78,8 @@ describe('Collective', function() {
 		})
 		it('creates collectives by picking circle',
 			function() {
-				cy.login('bob')
+				cy.loginAs('bob')
+				cy.visit('apps/collectives')
 				cy.get('button').contains('New collective').click()
 				cy.get('button span.circles-icon').click()
 				// cy.get('.circle-selector ul').should('not.contain', 'Foreign')
@@ -88,12 +94,14 @@ describe('Collective', function() {
 			})
 		it('collectives of visible circles only show for members',
 			function() {
-				cy.login('jane')
+				cy.loginAs('jane')
+				cy.visit('apps/collectives')
 				cy.get('.app-navigation-entry').should('not.contain', 'History Club')
 			})
 		it('creates collectives for admins of corresponding circle',
 			function() {
-				cy.login('bob')
+				cy.loginAs('bob')
+				cy.visit('apps/collectives')
 				cy.createCollective('Preexisting Circle')
 				cy.get('#titleform input').invoke('val').should('contain', 'Preexisting Circle')
 				cy.get('.toast-info').should('contain',
@@ -109,7 +117,8 @@ describe('Collective', function() {
 	describe('non ascii characters', function() {
 		it('can handle special chars in collective name',
 			function() {
-				cy.login('bob')
+				cy.loginAs('bob')
+				cy.visit('apps/collectives')
 				cy.createCollective(specialCollective)
 				cy.get('#titleform input').invoke('val').should('contain', specialCollective)
 			})
@@ -127,7 +136,8 @@ describe('Collective', function() {
 	describe('after creation', function() {
 		const randomName = 'Created just now ' + Math.random().toString(36).substr(2, 4)
 		it('has all the ui elements', function() {
-			cy.login('bob')
+			cy.loginAs('bob')
+			cy.visit('apps/collectives')
 			cy.createCollective(randomName, ['jane', 'john'])
 			cy.log('Check name in the disabled titleform')
 			cy.get('#titleform input').invoke('val').should('contain', randomName)
@@ -146,7 +156,7 @@ describe('Collective', function() {
 
 	describe('in non-admin collective', function() {
 		it('can leave collective and undo', function() {
-			cy.login('jane')
+			cy.loginAs('jane')
 			cy.visit('/apps/collectives')
 
 			// Leave collective
@@ -184,7 +194,8 @@ describe('Collective', function() {
 
 	describe('reloading works', function() {
 		before(function() {
-			cy.login('bob', { route: '/apps/collectives/Preexisting%20Collective' })
+			cy.loginAs('bob')
+			cy.visit('/apps/collectives/Preexisting%20Collective')
 			cy.get('#titleform input').should('have.value', 'Preexisting Collective')
 		})
 		it('Shows the name in the disabled titleform', function() {

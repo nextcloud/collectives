@@ -26,7 +26,8 @@
 
 describe('Page list', function() {
 	before(function() {
-		cy.login('bob', { route: '/apps/collectives' })
+		cy.loginAs('bob')
+		cy.visit('apps/collectives')
 		cy.deleteAndSeedCollective('Our Garden')
 		cy.seedPage('Target', '', 'Readme.md')
 		cy.seedPage('Target Subpage', '', 'Target.md')
@@ -47,7 +48,8 @@ describe('Page list', function() {
 	})
 
 	beforeEach(function() {
-		cy.login('bob', { route: '/apps/collectives/Our Garden' })
+		cy.loginAs('bob')
+		cy.visit('apps/collectives/Our Garden')
 		// make sure the page list loaded properly
 		cy.contains('.app-content-list-item a', 'Day 1')
 	})
@@ -92,7 +94,7 @@ describe('Page list', function() {
 
 	describe('Move and copy a page using the modal', function() {
 		it('Moves page to a subpage', function() {
-			cy.visit('/apps/collectives/Our%20Garden')
+			cy.visit('apps/collectives/Our%20Garden')
 			cy.openPageMenu('Move me internal')
 			cy.clickMenuButton('Move or copy')
 			cy.get('.picker-list li')
@@ -225,7 +227,7 @@ describe('Page list', function() {
 	describe('Print view', function() {
 		it('renders all the pages', function() {
 			let printStub
-			cy.visit('/apps/collectives/_/print/Our%20Garden', {
+			cy.visit('apps/collectives/_/print/Our%20Garden', {
 				onBeforeLoad: (win) => {
 					printStub = cy.stub(win, 'print').as('print')
 				},
