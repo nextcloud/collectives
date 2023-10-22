@@ -529,8 +529,8 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user renames page :page to :newtitle with parentPath :parentPath in :collective
-	 * @When user :user :fails to rename page :page to :newtitle with parentPath :parentPath in :collective
+	 * @When user :user moves page :page to :newtitle with parentPath :parentPath in :collective
+	 * @When user :user :fails to move page :page to :newtitle with parentPath :parentPath in :collective
 	 *
 	 * @param string      $user
 	 * @param string      $page
@@ -541,12 +541,43 @@ class FeatureContext implements Context {
 	 *
 	 * @throws GuzzleException
 	 */
-	public function userRenamesPage(string $user, string $page, string $newtitle, string $parentPath, string $collective, ?string $fail = null): void {
+	public function userMovesPage(string $user, string $page, string $newtitle, string $parentPath, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$pageId = $this->pageIdByName($collectiveId, $page);
 		$parentId = $this->getParentId($collectiveId, $parentPath);
 		$formData = new TableNode([['parentId', $parentId], ['title', $newtitle]]);
+		$this->sendRequest('PUT', '/apps/collectives/_api/' . $collectiveId . '/_pages/' . $pageId, $formData);
+		if ("fails" === $fail) {
+			$this->assertStatusCode(403);
+		} else {
+			$this->assertStatusCode(200);
+		}
+	}
+
+	/**
+	 * @When user :user copies page :page to :newtitle with parentPath :parentPath in :collective
+	 * @When user :user :fails to copy page :page to :newtitle with parentPath :parentPath in :collective
+	 *
+	 * @param string      $user
+	 * @param string      $page
+	 * @param string      $newtitle
+	 * @param string      $parentPath
+	 * @param string      $collective
+	 * @param string|null $fail
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userCopiesPage(string $user, string $page, string $newtitle, string $parentPath, string $collective, ?string $fail = null): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$pageId = $this->pageIdByName($collectiveId, $page);
+		$parentId = $this->getParentId($collectiveId, $parentPath);
+		$formData = new TableNode([
+			['parentId', $parentId],
+			['title', $newtitle],
+			['copy', true],
+		]);
 		$this->sendRequest('PUT', '/apps/collectives/_api/' . $collectiveId . '/_pages/' . $pageId, $formData);
 		if ("fails" === $fail) {
 			$this->assertStatusCode(403);
@@ -577,6 +608,33 @@ class FeatureContext implements Context {
 			$formData = new TableNode([['parentId', $newParentId]]);
 		} else {
 			$formData = null;
+		}
+		$this->sendRequest('PUT', '/apps/collectives/_api/' . $oldCollectiveId . '/_pages/' . $pageId . '/to/' . $newCollectiveId, $formData);
+		$this->assertStatusCode(200);
+	}
+
+	/**
+	 * @When user :user copies page :page from collective :oldCollectiveId to collective :newCollectiveId
+	 * @When user :user copies page :page from collective :oldCollectiveId to collective :newCollectiveId with parentPath :parentPath
+	 *
+	 * @param string      $user
+	 * @param string      $page
+	 * @param string      $oldCollective
+	 * @param string      $newCollective
+	 * @param string|null $parentPath
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userCopiesPageToCollective(string $user, string $page, string $oldCollective, string $newCollective, ?string $parentPath = null): void {
+		$this->setCurrentUser($user);
+		$oldCollectiveId = $this->collectiveIdByName($oldCollective);
+		$newCollectiveId = $this->collectiveIdByName($newCollective);
+		$pageId = $this->pageIdByName($oldCollectiveId, $page);
+		if ($parentPath) {
+			$newParentId = $this->getParentId($newCollectiveId, $parentPath);
+			$formData = new TableNode([['parentId', $newParentId], ['copy', true]]);
+		} else {
+			$formData = new TableNode([['copy', true]]);
 		}
 		$this->sendRequest('PUT', '/apps/collectives/_api/' . $oldCollectiveId . '/_pages/' . $pageId . '/to/' . $newCollectiveId, $formData);
 		$this->assertStatusCode(200);
@@ -946,6 +1004,24 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @When anonymous doesn't see pagePath :path in public collective :collective with owner :owner
+	 *
+	 * @param string $path
+	 * @param string $collective
+	 * @param string $owner
+	 *
+	 * @throws GuzzleException
+	 */
+	public function anonymousDoesntSeePublicCollectivePages(string $path, string $collective, string $owner): void {
+		$this->setCurrentUser($owner);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$token = $this->getCollectiveShareToken($collectiveId);
+		$this->sendRequest('GET', '/apps/collectives/_api/p/' . $token . '/_pages', null, null, [], false);
+		$this->assertStatusCode(200);
+		$this->assertPageByPath($path, true);
+	}
+
+	/**
 	 * @When anonymous creates page :page with parentPath :parentPath in public collective :collective with owner :owner
 	 * @When anonymous :fails to create page :page with parentPath :parentPath in public collective :collective with owner :owner
 	 *
@@ -965,6 +1041,66 @@ class FeatureContext implements Context {
 
 		$formData = new TableNode([['title', $page]]);
 		$this->sendRequest('POST', '/apps/collectives/_api/p/' . $token . '/_pages/' . $parentId, $formData, null, [], false);
+		if ("fails" === $fail) {
+			$this->assertStatusCode(403);
+		} else {
+			$this->assertStatusCode(200);
+		}
+	}
+
+	/**
+	 * @When anonymous moves page :page to :newtitle with parentPath :parentPath in public collective :collective with owner :owner
+	 * @When anonymous :fails to move page :page to :newtitle with parentPath :parentPath in public collective :collective with owner :owner
+	 *
+	 * @param string      $page
+	 * @param string      $newtitle
+	 * @param string      $parentPath
+	 * @param string      $collective
+	 * @param string      $owner
+	 * @param string|null $fail
+	 *
+	 * @throws GuzzleException
+	 */
+	public function anonymousMovesPage(string $page, string $newtitle, string $parentPath, string $collective, string $owner, ?string $fail = null): void {
+		$this->setCurrentUser($owner);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$token = $this->getCollectiveShareToken($collectiveId);
+		$pageId = $this->pageIdByName($collectiveId, $page);
+		$parentId = $this->getParentId($collectiveId, $parentPath);
+		$formData = new TableNode([['parentId', $parentId], ['title', $newtitle]]);
+		$this->sendRequest('PUT', '/apps/collectives/_api/p/' . $token . '/_pages/' . $pageId, $formData, null, [], false);
+		if ("fails" === $fail) {
+			$this->assertStatusCode(403);
+		} else {
+			$this->assertStatusCode(200);
+		}
+	}
+
+	/**
+	 * @When anonymous copies page :page to :newtitle with parentPath :parentPath in public collective :collective with owner :owner
+	 * @When anonymous :fails to copy page :page to :newtitle with parentPath :parentPath in public collective :collective with owner :owner
+	 *
+	 * @param string      $page
+	 * @param string      $newtitle
+	 * @param string      $parentPath
+	 * @param string      $collective
+	 * @param string      $owner
+	 * @param string|null $fail
+	 *
+	 * @throws GuzzleException
+	 */
+	public function anonymousCopiesPage(string $page, string $newtitle, string $parentPath, string $collective, string $owner, ?string $fail = null): void {
+		$this->setCurrentUser($owner);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$token = $this->getCollectiveShareToken($collectiveId);
+		$pageId = $this->pageIdByName($collectiveId, $page);
+		$parentId = $this->getParentId($collectiveId, $parentPath);
+		$formData = new TableNode([
+			['parentId', $parentId],
+			['title', $newtitle],
+			['copy', true],
+		]);
+		$this->sendRequest('PUT', '/apps/collectives/_api/p/' . $token . '/_pages/' . $pageId, $formData, null, [], false);
 		if ("fails" === $fail) {
 			$this->assertStatusCode(403);
 		} else {

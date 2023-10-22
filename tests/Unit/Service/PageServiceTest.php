@@ -366,7 +366,7 @@ class PageServiceTest extends TestCase {
 			->willReturn($file);
 
 		$this->expectException(NotPermittedException::class);
-		$this->expectExceptionMessage('Not allowed to move landing page');
+		$this->expectExceptionMessage('Not allowed to move or copy landing page');
 		$this->service->move($this->collectiveId, 2, 1, 'New title', 0, $this->userId);
 	}
 
@@ -397,7 +397,7 @@ class PageServiceTest extends TestCase {
 			->willReturn($file);
 
 		$this->expectException(NotPermittedException::class);
-		$this->expectExceptionMessage('Not allowed to move a page to itself');
+		$this->expectExceptionMessage('Not allowed to move or copy a page to itself');
 		$this->service->move($this->collectiveId, 1, 1, 'New title', 0, $this->userId);
 	}
 }

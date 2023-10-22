@@ -120,13 +120,16 @@ class PageController extends Controller {
 	 * @param int|null    $parentId
 	 * @param string|null $title
 	 * @param int|null    $index
+	 * @param bool        $copy
 	 *
 	 * @return DataResponse
 	 */
-	public function move(int $collectiveId, int $id, ?int $parentId = null, ?string $title = null, ?int $index = 0): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId, $id, $parentId, $title, $index): array {
+	public function moveOrCopy(int $collectiveId, int $id, ?int $parentId = null, ?string $title = null, ?int $index = 0, bool $copy = false): DataResponse {
+		return $this->handleErrorResponse(function () use ($collectiveId, $id, $parentId, $title, $index, $copy): array {
 			$userId = $this->getUserId();
-			$pageInfo = $this->service->move($collectiveId, $id, $parentId, $title, $index, $userId);
+			$pageInfo = $copy
+				? $this->service->copy($collectiveId, $id, $parentId, $title, $index, $userId)
+				: $this->service->move($collectiveId, $id, $parentId, $title, $index, $userId);
 			return [
 				"data" => $pageInfo
 			];
@@ -141,13 +144,19 @@ class PageController extends Controller {
 	 * @param int      $newCollectiveId
 	 * @param int|null $parentId
 	 * @param int|null $index
+	 * @param bool     $copy
 	 *
 	 * @return DataResponse
 	 */
-	public function moveToCollective(int $collectiveId, int $id, int $newCollectiveId, ?int $parentId = null, ?int $index = 0): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId, $id, $newCollectiveId, $parentId, $index): array {
+	public function moveOrCopyToCollective(int $collectiveId, int $id, int $newCollectiveId, ?int $parentId = null, ?int $index = 0, bool $copy = false): DataResponse {
+		return $this->handleErrorResponse(function () use ($collectiveId, $id, $newCollectiveId, $parentId, $index, $copy): array {
 			$userId = $this->getUserId();
-			$this->service->moveToCollective($collectiveId, $id, $newCollectiveId, $parentId, $index, $userId);
+			if ($copy) {
+				$this->service->copyToCollective($collectiveId, $id, $newCollectiveId, $parentId, $index, $userId);
+			} else {
+				$this->service->moveToCollective($collectiveId, $id, $newCollectiveId, $parentId, $index, $userId);
+
+			}
 			return [];
 		}, $this->logger);
 	}

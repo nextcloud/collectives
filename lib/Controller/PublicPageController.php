@@ -193,15 +193,18 @@ class PublicPageController extends PublicShareController {
 	 * @param int|null    $parentId
 	 * @param string|null $title
 	 * @param int|null    $index
+	 * @param bool        $copy
 	 *
 	 * @return DataResponse
 	 */
-	public function rename(int $id, ?int $parentId, ?string $title = null, ?int $index = 0): DataResponse {
-		return $this->handleErrorResponse(function () use ($id, $parentId, $title, $index): array {
+	public function moveOrCopy(int $id, ?int $parentId, ?string $title = null, ?int $index = 0, bool $copy = false): DataResponse {
+		return $this->handleErrorResponse(function () use ($id, $parentId, $title, $index, $copy): array {
 			$this->checkEditPermissions();
 			$owner = $this->getShare()->getOwner();
 			$collectiveId = $this->getShare()->getCollectiveId();
-			$pageInfo = $this->service->rename($collectiveId, $id, $parentId, $title, $index, $owner);
+			$pageInfo = $copy
+				? $this->service->copy($collectiveId, $id, $parentId, $title, $index, $owner)
+				: $this->service->move($collectiveId, $id, $parentId, $title, $index, $owner);
 			// Shares don't have a collective path
 			$pageInfo->setCollectivePath('');
 			$pageInfo->setShareToken($this->getToken());
