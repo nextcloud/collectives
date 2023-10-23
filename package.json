@@ -37,7 +37,7 @@
     "escape-html": "^1.0.3",
     "sortablejs": "^1.15.0",
     "v-click-outside": "^3.2.0",
-    "vue": "^2.7.14",
+    "vue": "^2.7.15",
     "vue-material-design-icons": "^5.2.0",
     "vue-router": "^3.6.5",
     "vuedraggable": "^2.24.3",
