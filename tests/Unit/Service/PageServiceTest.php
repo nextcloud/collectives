@@ -141,7 +141,7 @@ class PageServiceTest extends TestCase {
 		self::assertEquals($subFolder, $this->service->initSubFolder($otherFile));
 	}
 
-	public function testRecurseFolder(): void {
+	public function testGetPagesFromFolder(): void {
 		$filesNotJustMd = [];
 		$filesJustMd = [];
 		$pageInfos = [];
@@ -224,8 +224,8 @@ class PageServiceTest extends TestCase {
 				$filesNotJustMd,
 			);
 
-		self::assertEquals($pageInfos, $this->service->recurseFolder($this->collectiveId, $folder, $this->userId));
-		self::assertEquals($pageInfos, $this->service->recurseFolder($this->collectiveId, $folder, $this->userId));
+		self::assertEquals($pageInfos, $this->service->getPagesFromFolder($this->collectiveId, $folder, $this->userId, true));
+		self::assertEquals($pageInfos, $this->service->getPagesFromFolder($this->collectiveId, $folder, $this->userId, true));
 	}
 
 	public function testGetPageLink(): void {

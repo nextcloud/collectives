@@ -394,13 +394,14 @@ class PageService {
 	 * @param int    $collectiveId
 	 * @param Folder $folder
 	 * @param string $userId
+	 * @param bool   $recurse
 	 *
 	 * @return array
 	 * @throws FilesNotFoundException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function recurseFolder(int $collectiveId, Folder $folder, string $userId): array {
+	public function getPagesFromFolder(int $collectiveId, Folder $folder, string $userId, bool $recurse = false): array {
 		// Find index page or create it if we have subpages, but it doesn't exist
 		try {
 			$indexPage = $this->getPageByFile($this->getIndexPageFile($folder), $folder);
@@ -416,8 +417,8 @@ class PageService {
 		foreach ($folder->getDirectoryListing() as $node) {
 			if ($node instanceof File && NodeHelper::isPage($node) && !NodeHelper::isIndexPage($node)) {
 				$pageInfos[] = $this->getPageByFile($node, $folder);
-			} elseif ($node instanceof Folder) {
-				array_push($pageInfos, ...$this->recurseFolder($collectiveId, $node, $userId));
+			} elseif ($recurse && $node instanceof Folder) {
+				array_push($pageInfos, ...$this->getPagesFromFolder($collectiveId, $node, $userId, true));
 			}
 		}
 
@@ -436,7 +437,7 @@ class PageService {
 	public function findAll(int $collectiveId, string $userId): array {
 		$folder = $this->getCollectiveFolder($collectiveId, $userId);
 		try {
-			return $this->recurseFolder($collectiveId, $folder, $userId);
+			return $this->getPagesFromFolder($collectiveId, $folder, $userId, true);
 		} catch (NotPermittedException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
