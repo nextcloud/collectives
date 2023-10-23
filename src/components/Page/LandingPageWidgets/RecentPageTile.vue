@@ -11,8 +11,8 @@
 		<div class="recent-page-tile__title">
 			{{ title }}
 		</div>
-		<LastUserBubble :last-user-id="page.lastUserId"
-			:last-user-display-name="page.lastUserDisplayName"
+		<LastUserBubble :last-user-id="page.lastUserId || ''"
+			:last-user-display-name="page.lastUserDisplayName || ''"
 			:timestamp="page.timestamp"
 			class="recent-page-tile__last-user-bubble" />
 	</router-link>
