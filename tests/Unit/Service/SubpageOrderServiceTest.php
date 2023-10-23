@@ -42,6 +42,12 @@ class SubpageOrderServiceTest extends TestCase {
 		SubpageOrderService::verify('{a: b}');
 	}
 
+	public function testClean(): void {
+		$subpageOrder = '[1,2,3,5]';
+		self::assertEquals('[1,3,5]', SubpageOrderService::clean($subpageOrder, [1,3,4,5]));
+		self::assertEquals('[1,3]', SubpageOrderService::clean($subpageOrder, [1,3]));
+	}
+
 	public function testAdd(): void {
 		$subpageOrder = '[1,2,3]';
 		self::assertEquals('[0,1,2,3]', SubpageOrderService::add($subpageOrder, 0));

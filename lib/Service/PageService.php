@@ -174,6 +174,28 @@ class PageService {
 	}
 
 	/**
+	 * @param int    $collectiveId
+	 * @param File   $file
+	 * @param string $userId
+	 *
+	 * @return array
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	private function getSubpagesFromFile(int $collectiveId, File $file, string $userId): array {
+		if (!NodeHelper::isIndexPage($file)) {
+			return [];
+		}
+
+		$parentId = $file->getId();
+		$folder = $this->getFolder($collectiveId, $parentId, $userId);
+		return array_filter($this->getPagesFromFolder($collectiveId, $folder, $userId), static function (PageInfo $pageInfo) use ($parentId) {
+			return $pageInfo->getParentId() === $parentId;
+		});
+	}
+
+	/**
 	 * @param File $file
 	 * @param Node|null $parent
 	 *
@@ -903,6 +925,24 @@ class PageService {
 	}
 
 	/**
+	 * @param int      $collectiveId
+	 * @param PageInfo $pageInfo
+	 * @param string   $userId
+	 *
+	 * @return string
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	private function cleanSubpageOrder(int $collectiveId, PageInfo $pageInfo, string $userId): string {
+		$pageFile = $this->getPageFile($collectiveId, $pageInfo->getId(), $userId);
+		$childIds = array_map(static function (PageInfo $pageInfo) {
+			return $pageInfo->getId();
+		}, $this->getSubpagesFromFile($collectiveId, $pageFile, $userId));
+		return SubpageOrderService::clean($pageInfo->getSubpageOrder(), $childIds);
+	}
+
+	/**
 	 * @param int    $collectiveId
 	 * @param int    $pageId
 	 * @param int    $addId
@@ -918,7 +958,9 @@ class PageService {
 		$file = $this->nodeHelper->getFileById($collectiveFolder, $pageId);
 		$pageInfo = $this->getPageByFile($file);
 
-		$newSubpageOrder = SubpageOrderService::add($pageInfo->getSubpageOrder(), $addId, $index);
+		$subpageOrder = $pageInfo->getSubpageOrder();
+		$cleanedSubpageOrder = $this->cleanSubpageOrder($collectiveId, $pageInfo, $userId);
+		$newSubpageOrder = SubpageOrderService::add($cleanedSubpageOrder, $addId, $index);
 
 		$pageInfo->setSubpageOrder($newSubpageOrder);
 		$this->updatePage($collectiveId, $pageInfo->getId(), $userId, null, $newSubpageOrder);
