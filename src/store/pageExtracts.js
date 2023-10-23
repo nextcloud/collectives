@@ -4,6 +4,10 @@
 import * as sortOrders from '../util/sortOrders.js'
 import { TEMPLATE_PAGE } from './pages.js'
 
+/**
+ * @param {object} state state of the vuex store
+ * @param {object} getters getters of the vuex store
+ */
 export function sortedSubpages(state, getters) {
 	return (parentId, sortOrder) => {
 		const parentPage = state.pages.find(p => p.id === parentId)
@@ -19,6 +23,10 @@ export function sortedSubpages(state, getters) {
 	}
 }
 
+/**
+ * @param {object} state state of the vuex store
+ * @param {object} getters getters of the vuex store
+ */
 export function pageParents(state, getters) {
 	return (pageId) => {
 		const pages = []

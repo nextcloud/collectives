@@ -2,18 +2,19 @@
 	<NcModal @close="onClose">
 		<div class="modal-content">
 			<h2 class="oc-dialog-title">
-				{{ t('collectives', 'Move page') }}
+				{{ t('collectives', 'Copy or move page') }}
 			</h2>
 			<span class="crumbs">
 				<div class="crumbs-home">
 					<NcButton type="tertiary"
 						:aria-label="t('collectives', 'Breadcrumb for list of collectives')"
 						:disabled="!selectedCollective"
-						class="crumb-button"
+						class="crumb-button home"
 						@click="onClickCollectivesList">
 						<template #icon>
-							<HomeIcon :size="20" />
+							<CollectivesIcon :size="20" />
 						</template>
+						{{ collectivesCrumbString }}
 					</NcButton>
 				</div>
 				<template v-if="selectedCollective">
@@ -102,11 +103,21 @@
 				</ul>
 			</div>
 			<div class="picker-buttons">
-				<NcButton type="primary" :disabled="isMoving || !selectedCollective" @click="onSelect">
+				<NcButton type="secondary"
+					:disabled="isActionButtonsDisabled"
+					@click="onMoveOrCopy(true)">
+					<template #icon>
+						<NcLoadingIcon v-if="isCopying" :size="20" />
+					</template>
+					{{ copyPageString }}
+				</NcButton>
+				<NcButton type="primary"
+					:disabled="isActionButtonsDisabled"
+					@click="onMoveOrCopy(false)">
 					<template #icon>
 						<NcLoadingIcon v-if="isMoving" :size="20" />
 					</template>
-					{{ t('collectives', 'Move page here') }}
+					{{ movePageString }}
 				</NcButton>
 			</div>
 		</div>
@@ -121,7 +132,6 @@ import { NcButton, NcLoadingIcon, NcModal } from '@nextcloud/vue'
 import ArrowDownIcon from 'vue-material-design-icons/ArrowDown.vue'
 import ArrowUpIcon from 'vue-material-design-icons/ArrowUp.vue'
 import ChevronRightIcon from 'vue-material-design-icons/ChevronRight.vue'
-import HomeIcon from 'vue-material-design-icons/Home.vue'
 import CollectivesIcon from '../Icon/CollectivesIcon.vue'
 import PageIcon from '../Icon/PageIcon.vue'
 import SkeletonLoading from '../SkeletonLoading.vue'
@@ -135,7 +145,6 @@ export default {
 		ArrowUpIcon,
 		ChevronRightIcon,
 		CollectivesIcon,
-		HomeIcon,
 		NcButton,
 		NcLoadingIcon,
 		NcModal,
@@ -144,6 +153,10 @@ export default {
 	},
 
 	props: {
+		isCopying: {
+			type: Boolean,
+			default: false,
+		},
 		isMoving: {
 			type: Boolean,
 			default: false,
@@ -183,6 +196,10 @@ export default {
 			'visibleSubpages',
 		]),
 
+		isActionButtonsDisabled() {
+			return !this.selectedCollective || this.isCopying || this.isMoving
+		},
+
 		isCurrentCollective() {
 			return this.selectedCollective?.id === this.currentCollective.id
 		},
@@ -195,6 +212,24 @@ export default {
 			return this.isCurrentCollective
 				? this.landingPage
 				: this.collectivesPages[this.selectedCollective.id]?.find(p => (p.parentId === 0))
+		},
+
+		collectivesCrumbString() {
+			return this.selectedCollective
+				? ''
+				: t('collectives', 'All collectives')
+		},
+
+		movePageString() {
+			return !this.selectedCollective || this.isCurrentCollective
+				? t('collectives', 'Move page here')
+				: t('collectives', 'Move page to {collective}', { collective: this.selectedCollective.name })
+		},
+
+		copyPageString() {
+			return !this.selectedCollective || this.isCurrentCollective
+				? t('collectives', 'Copy page here')
+				: t('collectives', 'Copy page to {collective}', { collective: this.selectedCollective.name })
 		},
 	},
 
@@ -327,12 +362,18 @@ export default {
 			this.$emit('close')
 		},
 
-		onSelect() {
-			this.$emit('select', {
+		onMoveOrCopy(copy) {
+			const args = {
 				collectiveId: this.selectedCollective.id,
 				parentId: this.selectedPageId,
-				newIndex: this.subpages.findIndex(p => p.id === this.pageId)
-			})
+				newIndex: this.subpages.findIndex(p => p.id === this.pageId),
+			}
+
+			if (copy) {
+				this.$emit('copy', args)
+			} else {
+				this.$emit('move', args)
+			}
 		},
 
 		handleKeyDown(event) {
@@ -381,6 +422,11 @@ export default {
 
 		.crumb-button {
 			color: var(--color-text-maxcontrast);
+
+			&.home {
+				padding-left: 0;
+				font-weight: bold;
+			}
 		}
 
 		&:hover {
@@ -425,7 +471,7 @@ export default {
 			background-color: var(--color-background-hover);
 		}
 
-		// Element of the page that is to be moved
+		// Element of the page that is to be copied/moved
 		&.self {
 			background-color: var(--color-primary-element-light);
 		}
@@ -465,5 +511,6 @@ export default {
 	display: flex;
 	justify-content: flex-end;
 	padding-top: 10px;
+	gap: 12px;
 }
 </style>
