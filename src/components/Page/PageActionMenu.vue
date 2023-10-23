@@ -96,7 +96,7 @@
 			<!-- Delete page -->
 			<NcActionButton v-if="currentCollectiveCanEdit && !isLandingPage"
 				:close-after-click="true"
-				@click="deletePage(parentId, pageId)">
+				@click="deletePage(pageId)">
 				<template #icon>
 					<DeleteIcon :size="20" />
 				</template>

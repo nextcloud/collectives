@@ -532,7 +532,6 @@ class PageService {
 
 	/**
 	 * @param int    $collectiveId
-	 * @param int    $parentId
 	 * @param int    $id
 	 * @param string $userId
 	 *
@@ -541,8 +540,8 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function find(int $collectiveId, int $parentId, int $id, string $userId): PageInfo {
-		$folder = $this->getFolder($collectiveId, $parentId, $userId);
+	public function find(int $collectiveId, int $id, string $userId): PageInfo {
+		$folder = $this->getCollectiveFolder($collectiveId, $userId);
 		return $this->getPageByFile($this->nodeHelper->getFileById($folder, $id));
 	}
 
@@ -558,7 +557,7 @@ class PageService {
 	 * @throws NotPermittedException
 	 */
 	public function findByFile(int $collectiveId, File $file, string $userId): PageInfo {
-		return $this->find($collectiveId, $this->getParentPageId($file), $file->getId(), $userId);
+		return $this->find($collectiveId, $file->getId(), $userId);
 	}
 
 	/**
@@ -587,7 +586,6 @@ class PageService {
 
 	/**
 	 * @param int    $collectiveId
-	 * @param int    $parentId
 	 * @param int    $id
 	 * @param string $userId
 	 *
@@ -596,9 +594,9 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function touch(int $collectiveId, int $parentId, int $id, string $userId): PageInfo {
+	public function touch(int $collectiveId, int $id, string $userId): PageInfo {
 		$this->verifyEditPermissions($collectiveId, $userId);
-		$folder = $this->getFolder($collectiveId, $parentId, $userId);
+		$folder = $this->getCollectiveFolder($collectiveId, $userId);
 		$file = $this->nodeHelper->getFileById($folder, $id);
 		$pageInfo = $this->getPageByFile($file);
 		$pageInfo->setLastUserId($userId);
@@ -697,8 +695,8 @@ class PageService {
 
 	/**
 	 * @param int         $collectiveId
-	 * @param int         $parentId
 	 * @param int         $id
+	 * @param int|null    $parentId
 	 * @param string|null $title
 	 * @param int         $index
 	 * @param string      $userId
@@ -709,11 +707,12 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function rename(int $collectiveId, int $parentId, int $id, ?string $title, int $index, string $userId): PageInfo {
+	public function rename(int $collectiveId, int $id, ?int $parentId, ?string $title, int $index, string $userId): PageInfo {
 		$this->verifyEditPermissions($collectiveId, $userId);
 		$collectiveFolder = $this->getCollectiveFolder($collectiveId, $userId);
 		$file = $this->nodeHelper->getFileById($collectiveFolder, $id);
 		$oldParentId = $this->getParentPageId($file);
+		$parentId = $parentId ?: $oldParentId;
 		if ($this->renamePage($collectiveFolder, $parentId, $file, $title)) {
 			// Refresh the file after it has been renamed
 			$file = $this->nodeHelper->getFileById($collectiveFolder, $id);
@@ -737,7 +736,6 @@ class PageService {
 
 	/**
 	 * @param int         $collectiveId
-	 * @param int         $parentId
 	 * @param int         $id
 	 * @param string|null $emoji
 	 * @param string      $userId
@@ -747,9 +745,9 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function setEmoji(int $collectiveId, int $parentId, int $id, ?string $emoji, string $userId): PageInfo {
+	public function setEmoji(int $collectiveId, int $id, ?string $emoji, string $userId): PageInfo {
 		$this->verifyEditPermissions($collectiveId, $userId);
-		$folder = $this->getFolder($collectiveId, $parentId, $userId);
+		$folder = $this->getCollectiveFolder($collectiveId, $userId);
 		$file = $this->nodeHelper->getFileById($folder, $id);
 		$pageInfo = $this->getPageByFile($file);
 		$pageInfo->setLastUserId($userId);
@@ -761,7 +759,6 @@ class PageService {
 
 	/**
 	 * @param int         $collectiveId
-	 * @param int         $parentId
 	 * @param int         $id
 	 * @param string|null $subpageOrder
 	 * @param string      $userId
@@ -771,9 +768,9 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function setSubpageOrder(int $collectiveId, int $parentId, int $id, ?string $subpageOrder, string $userId): PageInfo {
+	public function setSubpageOrder(int $collectiveId, int $id, ?string $subpageOrder, string $userId): PageInfo {
 		$this->verifyEditPermissions($collectiveId, $userId);
-		$folder = $this->getFolder($collectiveId, $parentId, $userId);
+		$folder = $this->getCollectiveFolder($collectiveId, $userId);
 		$file = $this->nodeHelper->getFileById($folder, $id);
 		$pageInfo = $this->getPageByFile($file);
 
@@ -829,7 +826,6 @@ class PageService {
 
 	/**
 	 * @param int    $collectiveId
-	 * @param int    $parentId
 	 * @param int    $id
 	 * @param string $userId
 	 *
@@ -838,11 +834,12 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function trash(int $collectiveId, int $parentId, int $id, string $userId): PageInfo {
+	public function trash(int $collectiveId, int $id, string $userId): PageInfo {
 		$this->verifyEditPermissions($collectiveId, $userId);
-		$folder = $this->getFolder($collectiveId, $parentId, $userId);
+		$folder = $this->getCollectiveFolder($collectiveId, $userId);
 		$file = $this->nodeHelper->getFileById($folder, $id);
 		$pageInfo = $this->getPageByFile($file);
+		$parentId = $this->getParentPageId($file);
 
 		try {
 			if (NodeHelper::isIndexPage($file)) {
@@ -1000,7 +997,6 @@ class PageService {
 
 	/**
 	 * @param int    $collectiveId
-	 * @param int    $parentId
 	 * @param int    $id
 	 * @param string $userId
 	 *
@@ -1009,8 +1005,8 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function getBacklinks(int $collectiveId, int $parentId, int $id, string $userId): array {
-		$page = $this->find($collectiveId, $parentId, $id, $userId);
+	public function getBacklinks(int $collectiveId, int $id, string $userId): array {
+		$page = $this->find($collectiveId, $id, $userId);
 		$allPages = $this->findAll($collectiveId, $userId);
 
 		$backlinks = [];

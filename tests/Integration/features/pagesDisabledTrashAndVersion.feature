@@ -11,7 +11,7 @@ Feature: pagesDisabledTrashbin
     Then user "jane" sees pagePath "firstpage.md" in "BehatPagesDisabledTrashAndVersionsCollective"
 
   Scenario: Trash page, fail to restore+delete pages with disabled trashbin
-    When user "jane" trashes page "firstpage" with parentPath "Readme.md" in "BehatPagesDisabledTrashAndVersionsCollective"
+    When user "jane" trashes page "firstpage" in "BehatPagesDisabledTrashAndVersionsCollective"
     And user "jane" doesn't see pagePath "firstpage.md" in "BehatPagesDisabledTrashAndVersionsCollective"
     Then user "jane" fails to restore page "firstpage" from trash in "BehatPagesDisabledTrashAndVersionsCollective"
     When user "jane" fails to delete page "firstpage" from trash in "BehatPagesDisabledTrashAndVersionsCollective"

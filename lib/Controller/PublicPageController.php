@@ -123,16 +123,15 @@ class PublicPageController extends PublicShareController {
 	/**
 	 * @PublicPage
 	 *
-	 * @param int    $parentId
 	 * @param int    $id
 	 *
 	 * @return DataResponse
 	 */
-	public function get(int $parentId, int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($parentId, $id): array {
+	public function get(int $id): DataResponse {
+		return $this->handleErrorResponse(function () use ($id): array {
 			$owner = $this->getShare()->getOwner();
 			$collectiveId = $this->getShare()->getCollectiveId();
-			$pageInfo = $this->service->find($collectiveId, $parentId, $id, $owner);
+			$pageInfo = $this->service->find($collectiveId, $id, $owner);
 			// Shares don't have a collective path
 			$pageInfo->setCollectivePath('');
 			$pageInfo->setShareToken($this->getToken());
@@ -168,17 +167,16 @@ class PublicPageController extends PublicShareController {
 	/**
 	 * @PublicPage
 	 *
-	 * @param int $parentId
 	 * @param int $id
 	 *
 	 * @return DataResponse
 	 */
-	public function touch(int $parentId, int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($parentId, $id): array {
+	public function touch(int $id): DataResponse {
+		return $this->handleErrorResponse(function () use ($id): array {
 			$this->checkEditPermissions();
 			$owner = $this->getShare()->getOwner();
 			$collectiveId = $this->getShare()->getCollectiveId();
-			$pageInfo = $this->service->touch($collectiveId, $parentId, $id, $owner);
+			$pageInfo = $this->service->touch($collectiveId, $id, $owner);
 			// Shares don't have a collective path
 			$pageInfo->setCollectivePath('');
 			$pageInfo->setShareToken($this->getToken());
@@ -191,19 +189,19 @@ class PublicPageController extends PublicShareController {
 	/**
 	 * @PublicPage
 	 *
-	 * @param int         $parentId
 	 * @param int         $id
+	 * @param int|null    $parentId
 	 * @param string|null $title
 	 * @param int|null    $index
 	 *
 	 * @return DataResponse
 	 */
-	public function rename(int $parentId, int $id, ?string $title = null, ?int $index = 0): DataResponse {
-		return $this->handleErrorResponse(function () use ($parentId, $id, $title, $index): array {
+	public function rename(int $id, ?int $parentId, ?string $title = null, ?int $index = 0): DataResponse {
+		return $this->handleErrorResponse(function () use ($id, $parentId, $title, $index): array {
 			$this->checkEditPermissions();
 			$owner = $this->getShare()->getOwner();
 			$collectiveId = $this->getShare()->getCollectiveId();
-			$pageInfo = $this->service->rename($collectiveId, $parentId, $id, $title, $index, $owner);
+			$pageInfo = $this->service->rename($collectiveId, $id, $parentId, $title, $index, $owner);
 			// Shares don't have a collective path
 			$pageInfo->setCollectivePath('');
 			$pageInfo->setShareToken($this->getToken());
@@ -216,18 +214,17 @@ class PublicPageController extends PublicShareController {
 	/**
 	 * @PublicPage
 	 *
-	 * @param int         $parentId
 	 * @param int         $id
 	 * @param string|null $emoji
 	 *
 	 * @return DataResponse
 	 */
-	public function setEmoji(int $parentId, int $id, ?string $emoji = null): DataResponse {
-		return $this->handleErrorResponse(function () use ($parentId, $id, $emoji): array {
+	public function setEmoji(int $id, ?string $emoji = null): DataResponse {
+		return $this->handleErrorResponse(function () use ($id, $emoji): array {
 			$this->checkEditPermissions();
 			$owner = $this->getShare()->getOwner();
 			$collectiveId = $this->getShare()->getCollectiveId();
-			$pageInfo = $this->service->setEmoji($collectiveId, $parentId, $id, $emoji, $owner);
+			$pageInfo = $this->service->setEmoji($collectiveId, $id, $emoji, $owner);
 			// Shares don't have a collective path
 			$pageInfo->setCollectivePath('');
 			$pageInfo->setShareToken($this->getToken());
@@ -240,18 +237,17 @@ class PublicPageController extends PublicShareController {
 	/**
 	 * @PublicPage
 	 *
-	 * @param int         $parentId
 	 * @param int         $id
 	 * @param string|null $subpageOrder
 	 *
 	 * @return DataResponse
 	 */
-	public function setSubpageOrder(int $parentId, int $id, ?string $subpageOrder = null): DataResponse {
-		return $this->handleErrorResponse(function () use ($parentId, $id, $subpageOrder): array {
+	public function setSubpageOrder(int $id, ?string $subpageOrder = null): DataResponse {
+		return $this->handleErrorResponse(function () use ($id, $subpageOrder): array {
 			$this->checkEditPermissions();
 			$owner = $this->getShare()->getOwner();
 			$collectiveId = $this->getShare()->getCollectiveId();
-			$pageInfo = $this->service->setSubpageOrder($collectiveId, $parentId, $id, $subpageOrder, $owner);
+			$pageInfo = $this->service->setSubpageOrder($collectiveId, $id, $subpageOrder, $owner);
 			// Shares don't have a collective path
 			$pageInfo->setCollectivePath('');
 			$pageInfo->setShareToken($this->getToken());
@@ -264,17 +260,16 @@ class PublicPageController extends PublicShareController {
 	/**
 	 * @PublicPage
 	 *
-	 * @param int $parentId
 	 * @param int $id
 	 *
 	 * @return DataResponse
 	 */
-	public function trash(int $parentId, int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($parentId, $id): array {
+	public function trash(int $id): DataResponse {
+		return $this->handleErrorResponse(function () use ($id): array {
 			$this->checkEditPermissions();
 			$owner = $this->getShare()->getOwner();
 			$collectiveId = $this->getShare()->getCollectiveId();
-			$pageInfo = $this->service->trash($collectiveId, $parentId, $id, $owner);
+			$pageInfo = $this->service->trash($collectiveId, $id, $owner);
 			// Shares don't have a collective path
 			$pageInfo->setCollectivePath('');
 			$pageInfo->setShareToken($this->getToken());
@@ -287,12 +282,11 @@ class PublicPageController extends PublicShareController {
 	/**
 	 * @PublicPage
 	 *
-	 * @param int $parentId
 	 * @param int $id
 	 *
 	 * @return DataResponse
 	 */
-	public function getAttachments(int $parentId, int $id): DataResponse {
+	public function getAttachments(int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($id): array {
 			$owner = $this->getShare()->getOwner();
 			$collectiveId = $this->getShare()->getCollectiveId();
@@ -306,16 +300,15 @@ class PublicPageController extends PublicShareController {
 	/**
 	 * @PublicPage
 	 *
-	 * @param int    $parentId
 	 * @param int    $id
 	 *
 	 * @return DataResponse
 	 */
-	public function getBacklinks(int $parentId, int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($parentId, $id): array {
+	public function getBacklinks(int $id): DataResponse {
+		return $this->handleErrorResponse(function () use ($id): array {
 			$owner = $this->getShare()->getOwner();
 			$collectiveId = $this->getShare()->getCollectiveId();
-			$backlinks = $this->service->getBacklinks($collectiveId, $parentId, $id, $owner);
+			$backlinks = $this->service->getBacklinks($collectiveId, $id, $owner);
 			return [
 				"data" => $backlinks
 			];

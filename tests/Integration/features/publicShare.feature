@@ -21,16 +21,16 @@ Feature: publicShare
 
   Scenario: Fail to create and trash page in read-only shared collective
     Then anonymous fails to create page "secondpage" with parentPath "Readme.md" in public collective "BehatPublicCollective" with owner "jane"
-    Then anonymous fails to set emoji for page "firstpage" to "🍏" with parentPath "Readme.md" in public collective "BehatPublicCollective" with owner "jane"
-    And anonymous fails to trash page "firstpage" with parentPath "Readme.md" in public collective "BehatPublicCollective" with owner "jane"
+    Then anonymous fails to set emoji for page "firstpage" to "🍏" in public collective "BehatPublicCollective" with owner "jane"
+    And anonymous fails to trash page "firstpage" in public collective "BehatPublicCollective" with owner "jane"
 
   Scenario: Create page and edit emoji editable shared collective
     When user "jane" sets editing permissions for collective "BehatPublicCollective"
     Then anonymous creates page "secondpage" with parentPath "Readme.md" in public collective "BehatPublicCollective" with owner "jane"
-    Then anonymous sets emoji for page "secondpage" to "🍏" with parentPath "Readme.md" in public collective "BehatPublicCollective" with owner "jane"
+    Then anonymous sets emoji for page "secondpage" to "🍏" in public collective "BehatPublicCollective" with owner "jane"
 
   Scenario: Trash page
-    When anonymous trashes page "secondpage" with parentPath "Readme.md" in public collective "BehatPublicCollective" with owner "jane"
+    When anonymous trashes page "secondpage" in public collective "BehatPublicCollective" with owner "jane"
     Then user "jane" doesn't see pagePath "secondpage.md" in "BehatPublicCollective"
 
   Scenario: Fail to restore+delete pages in read-only collective
@@ -42,7 +42,7 @@ Feature: publicShare
     When user "jane" sets editing permissions for collective "BehatPublicCollective"
     And anonymous restores page "secondpage" from trash in public collective "BehatPublicCollective" with owner "jane"
     And user "jane" sees pagePath "secondpage.md" in "BehatPublicCollective"
-    And anonymous trashes page "secondpage" with parentPath "Readme.md" in public collective "BehatPublicCollective" with owner "jane"
+    And anonymous trashes page "secondpage" in public collective "BehatPublicCollective" with owner "jane"
     And anonymous deletes page "secondpage" from trash in public collective "BehatPublicCollective" with owner "jane"
     Then user "jane" doesn't see pagePath "secondpage.md" in "BehatPublicCollective"
 
@@ -53,7 +53,7 @@ Feature: publicShare
     And anonymous creates page "secondpage" with parentPath "Readme.md" in public collective "BehatPublicCollective" with owner "john"
     And user "jane" sets "edit" level in collective "BehatPublicCollective" to "Admin"
     Then anonymous fails to create page "thirdpage" with parentPath "Readme.md" in public collective "BehatPublicCollective" with owner "john"
-    And anonymous fails to trash page "secondpage" with parentPath "Readme.md" in public collective "BehatPublicCollective" with owner "john"
+    And anonymous fails to trash page "secondpage" in public collective "BehatPublicCollective" with owner "john"
 
   Scenario: Delete a public share
     When user "jane" stores token for public share "BehatPublicCollective"

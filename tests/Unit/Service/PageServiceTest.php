@@ -367,7 +367,7 @@ class PageServiceTest extends TestCase {
 
 		$this->expectException(NotPermittedException::class);
 		$this->expectExceptionMessage('Not allowed to rename landing page');
-		$this->service->rename($this->collectiveId, 1, 2, 'New title', 0, $this->userId);
+		$this->service->rename($this->collectiveId, 2, 1, 'New title', 0, $this->userId);
 	}
 
 	public function testRenamePageToItselfFails(): void {
