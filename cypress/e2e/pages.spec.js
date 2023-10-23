@@ -55,7 +55,7 @@ describe('Page', function() {
 
 	describe('Set page emoji', function() {
 		it('Allows setting a page emoji from title bar', function() {
-			cy.visit('/apps/collectives/Our%20Garden/Day%201')
+			cy.openPage('Day 1')
 			cy.get('#titleform .page-title-icon')
 				.click()
 			cy.contains('.emoji-mart-scroll .emoji-mart-emoji', '🥰').click()
@@ -155,7 +155,7 @@ describe('Page', function() {
 
 	describe('Editing a page', function() {
 		it('Supports page content editing and switching to read mode', function() {
-			cy.visit('/apps/collectives/Our%20Garden/Day%201')
+			cy.openPage('Day 1')
 
 			cy.log('Inserting an image')
 			cy.intercept({ method: 'POST', url: '**/text/attachment/upload*' }).as('attachmentUpload')
@@ -197,7 +197,7 @@ describe('Page', function() {
 				.should('contain', 'admin')
 		})
 		it('Lists attachments for the page and allows restore', function() {
-			cy.visit('/apps/collectives/Our%20Garden/Day%201')
+			cy.openPage('Day 1')
 
 			// Switch to edit mode
 			cy.switchPageMode(1)
@@ -235,7 +235,7 @@ describe('Page', function() {
 	if (Cypress.env('ncVersion') !== 'stable25') {
 		describe('Using the reference picker', function() {
 			it('Supports selecting a page from a collective', function() {
-				cy.visit('/apps/collectives/Our%20Garden/Page%20Title')
+				cy.openPage('Page Title')
 
 				cy.getEditor()
 					.should('be.visible')
@@ -262,7 +262,7 @@ describe('Page', function() {
 	describe('Changing page mode', function() {
 		it('Opens edit mode per default', function() {
 			cy.seedCollectivePageMode('Our Garden', 1)
-			cy.visit('/apps/collectives/Our%20Garden/Day%202')
+			cy.openPage('Day 2')
 			cy.getEditor()
 				.should('be.visible')
 			cy.getReadOnlyEditor()
@@ -271,7 +271,7 @@ describe('Page', function() {
 
 		it('Opens view mode per default', function() {
 			cy.seedCollectivePageMode('Our Garden', 0)
-			cy.visit('/apps/collectives/Our%20Garden/Day%202')
+			cy.openPage('Day 2')
 			cy.getReadOnlyEditor()
 				.should('be.visible')
 			cy.getEditor()
@@ -281,7 +281,7 @@ describe('Page', function() {
 
 	describe('Full width view', function() {
 		it('Allows to toggle persistent full-width view', function() {
-			cy.visit('/apps/collectives/Our%20Garden/Day%202')
+			cy.openPage('Day 2')
 			cy.get('#titleform').should('have.css', 'max-width', '100%')
 			cy.get('#read-only-editor').invoke('outerWidth').should('eq', 670)
 

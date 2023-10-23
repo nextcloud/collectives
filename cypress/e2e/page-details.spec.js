@@ -42,7 +42,7 @@ describe('Page details', function() {
 
 	describe('Display table of contents', function() {
 		it('Allows to display/close TOC and switch page modes in between', function() {
-			cy.visit('/apps/collectives/Our%20Garden/TableOfContents')
+			cy.openPage('TableOfContents')
 			cy.get('#titleform .action-item__menutoggle')
 				.click()
 
@@ -73,7 +73,7 @@ describe('Page details', function() {
 	describe('Displaying backlinks', function() {
 		it('Lists backlinks for a page', function() {
 			cy.intercept('PUT', '**/apps/text/session/create').as('textCreateSession')
-			cy.visit('/apps/collectives/Our%20Garden/Day%201')
+			cy.openPage('Day 1')
 			cy.wait('@textCreateSession')
 			cy.get('button.action-item .icon-menu-sidebar').click()
 			cy.get('a#backlinks').click()

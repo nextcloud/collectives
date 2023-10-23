@@ -50,9 +50,8 @@ describe('The apps', function() {
 		})
 
 		it('Renders the default files list', function() {
-			const fileListSelector = '.files-fileList a, [data-cy-files-list-row] a'
 			cy.login('jane', { route: 'apps/files' })
-			cy.get(fileListSelector).should('contain', 'welcome')
+			cy.fileList().should('contain', 'welcome')
 		})
 
 	})

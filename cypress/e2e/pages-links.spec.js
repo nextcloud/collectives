@@ -265,7 +265,7 @@ describe('Page Link Handling', function() {
 			}
 		})
 		it('Opens link with relative path from index page to page in this collective with fileId in same/new tab depending on view/edit mode', function() {
-			cy.visit('/apps/collectives/Link%20Testing/Parent')
+			cy.openPage('Parent')
 			// Link without origin and containing `fileId` param gets rewritten by editor rendering
 			// const href = `../Link%20Target.md?fileId=${linkTargetPageId}`
 			const href = `/index.php/apps/files/?dir=&openfile=${linkTargetPageId}#relPath=../Link%20Target.md`
@@ -276,7 +276,7 @@ describe('Page Link Handling', function() {
 			// testLinkToNewTab(href, { edit: true })
 		})
 		it('Opens link with relative path from landing page to page in this collective with fileId in same/new tab depending on view/edit mode', function() {
-			cy.visit('/apps/collectives/Link%20Testing')
+			cy.openPage('Link Testing')
 			// Link without origin and containing `fileId` param gets rewritten by editor rendering
 			// const href = `./Link%20Target?fileId=${linkTargetPageId}`
 			const href = `/index.php/apps/files/?dir=/&openfile=${linkTargetPageId}#relPath=./Link%20Target`
@@ -338,14 +338,9 @@ describe('Page Link Handling', function() {
 						.as('clipBoardWriteText')
 				},
 			})
-			cy.get('.collectives_list_item')
-				.contains('li', 'Link Testing')
-				.find('.action-item__menutoggle')
-				.click({ force: true })
+			cy.openCollectiveMenu('Link Testing')
 			cy.intercept('POST', '**/_api/*/share').as('createShare')
-			cy.get('button')
-				.contains('Share link')
-				.click()
+			cy.clickMenuButton('Share link')
 			cy.wait('@createShare')
 			cy.intercept('PUT', '**/_api/*/share/*').as('updateShare')
 			cy.get('input#shareEditable')

@@ -46,16 +46,13 @@ describe('Collective', function() {
 			cy.login('bob', { route: '/apps/files' })
 		})
 		it('has a matching folder', function() {
-			const fileListSelector = '.files-fileList a, [data-cy-files-list-row] a'
 			const breadcrumbsSelector = '.files-controls .breadcrumb, [data-cy-files-content-breadcrumbs] a'
-			cy.get(fileListSelector).should('contain', 'Collectives')
-			cy.get(fileListSelector).contains('Collectives').click()
+			cy.openFile('Collectives')
 			cy.get(breadcrumbsSelector).should('contain', 'Collectives')
-			cy.get(fileListSelector).should('contain', 'Preexisting Collective')
-			cy.get(fileListSelector).contains('Preexisting Collective').click()
+			cy.openFile('Preexisting Collective')
 			cy.get(breadcrumbsSelector).should('contain', 'Preexisting Collective')
-			cy.get(fileListSelector).should('contain', 'Readme')
-			cy.get(fileListSelector).should('contain', '.md')
+			cy.fileList().should('contain', 'Readme')
+			cy.fileList().should('contain', '.md')
 			cy.get('.filelist-collectives-wrapper')
 				.should('contain', 'The content of this folder is best viewed in the Collectives app.')
 		})
@@ -153,13 +150,8 @@ describe('Collective', function() {
 			cy.visit('/apps/collectives')
 
 			// Leave collective
-			cy.get('.collectives_list_item')
-				.contains('li', 'Preexisting Collective')
-				.find('.action-item__menutoggle')
-				.click({ force: true })
-			cy.get('button.action-button')
-				.contains('Leave collective')
-				.click()
+			cy.openCollectiveMenu('Preexisting Collective')
+			cy.clickMenuButton('Leave collective')
 			cy.get('.app-navigation-entry')
 				.contains('Preexisting Collective')
 				.should('not.be.visible')
@@ -176,14 +168,9 @@ describe('Collective', function() {
 				.should('be.visible')
 
 			// Leave collective and wait for 10 seconds
-			cy.get('.collectives_list_item')
-				.contains('li', 'Preexisting Collective')
-				.find('.action-item__menutoggle')
-				.click({ force: true })
+			cy.openCollectiveMenu('Preexisting Collective')
 			cy.intercept('PUT', '**/apps/circles/circles/**/leave').as('leaveCircle')
-			cy.get('button.action-button')
-				.contains('Leave collective')
-				.click()
+			cy.clickMenuButton('Leave collective')
 			cy.get('.app-navigation-entry')
 				.contains('Preexisting Collective')
 				.should('not.be.visible')

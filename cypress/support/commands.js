@@ -293,7 +293,6 @@ Cypress.Commands.add('seedPageContent', (pagePath, content) => {
  */
 Cypress.Commands.add('seedCircle', (name, config = null) => {
 	cy.log(`Seeding circle ${name}`)
-	cy.visit('/apps/collectives')
 	cy.window()
 		.its('app')
 		.then(async app => {

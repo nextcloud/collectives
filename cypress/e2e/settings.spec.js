@@ -34,7 +34,6 @@ describe('Settings', function() {
 		it('Allows changing the collective user folder', function() {
 			const randomFolder = Math.random().toString(36).replace(/[^a-z]+/g, '').slice(0, 10)
 			const filePickerListSelector = '#picker-filestable tr, .file-picker__row'
-			const fileListSelector = '.files-fileList a, [data-cy-files-list-row] a'
 			const breadcrumbsSelector = '.files-controls .breadcrumb, [data-cy-files-content-breadcrumbs] a'
 			cy.login('bob')
 
@@ -68,9 +67,9 @@ describe('Settings', function() {
 			// Check if collectives are found in new folder in Files app
 			cy.log('Check if collectives are in configured user folder')
 			cy.visit('/apps/files')
-			cy.get(fileListSelector).contains(randomFolder).click()
+			cy.openFile(randomFolder)
 			cy.get(breadcrumbsSelector).should('contain', randomFolder)
-			cy.get(fileListSelector).should('contain', 'A Collective')
+			cy.fileList().should('contain', 'A Collective')
 
 			// Change user folder back to default
 			cy.log('Change user folder back to default')
@@ -87,7 +86,7 @@ describe('Settings', function() {
 			cy.wait('@propfindFolder')
 
 			// Open and select default folder
-			cy.get(filePickerListSelector).contains('Collec')
+			cy.get(filePickerListSelector).contains('Collectives')
 				.click()
 			cy.get('button').contains('Choose')
 				.click()
