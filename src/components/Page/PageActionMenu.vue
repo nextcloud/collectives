@@ -231,7 +231,7 @@ export default {
 		},
 
 		filesUrl() {
-			return generateUrl(`/apps/files/?fileid=${this.currentPage.id}`)
+			return generateUrl(`/f/${this.currentPage.id}`)
 		},
 
 		editTemplateString() {
