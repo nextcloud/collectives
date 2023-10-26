@@ -18,7 +18,7 @@
 					</NcButton>
 				</div>
 				<template v-if="selectedCollective">
-					<div class="crumbs-collective">
+					<div class="crumbs-level">
 						<ChevronRightIcon :size="20" />
 						<NcButton type="tertiary"
 							:aria-label="t('collectives', 'Breadcrumb for collective {name}', { name: selectedCollective.name })"
@@ -417,8 +417,7 @@ export default {
 		text-overflow: ellipsis;
 		white-space: nowrap;
 		overflow: hidden;
-		flex: 0 0 auto;
-		max-width: 200px;
+		max-width: 300px;
 
 		.crumb-button {
 			color: var(--color-text-maxcontrast);
@@ -429,23 +428,20 @@ export default {
 			}
 		}
 
-		&:hover {
-			opacity: 1;
-		}
-
 		&.crumbs-home {
 			flex-shrink: 0;
 		}
 
 		&.crumbs-level {
 			display: inline-flex;
-			min-width: 0;
-			flex-shrink: 1;
+			min-width: 65px;
+
+			&:last-child {
+				flex-shrink: 0;
+			}
 		}
 
 		&:last-child {
-			flex-shrink: 0;
-
 			.crumb-button {
 				color: var(--color-main-text);
 			}
