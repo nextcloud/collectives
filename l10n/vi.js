@@ -32,6 +32,7 @@ OC.L10N.register(
     "Current version" : "Phiên bản hiện tại",
     "No other versions available" : "Không có các phiên bản khác có sẵn",
     "Attachments" : "Đính kèm",
-    "Versions" : "Phiên bản"
+    "Versions" : "Phiên bản",
+    "_%n byte_::_%n bytes_" : ["%n byte"]
 },
 "nplurals=1; plural=0;");
