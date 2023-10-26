@@ -1,6 +1,6 @@
 <template>
 	<div class="text-menubar"
-		:class="{'sheet-view': !isFullWidthView}">
+		:class="[isFullWidthView ? 'full-width-view' : 'sheet-view']">
 		<div v-if="currentPage.lastUserId" class="infobar-item infobar-lastupdate">
 			<div class="item-text">
 				<LastUserBubble :last-user-id="currentPage.lastUserId"

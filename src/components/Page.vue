@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<h1 id="titleform" class="page-title" :class="{'sheet-view': !isFullWidthView}">
+		<h1 id="titleform" class="page-title" :class="[isFullWidthView ? 'full-width-view' : 'sheet-view']">
 			<!-- Page emoji or icon -->
 			<div class="page-title-icon"
 				:class="{ 'mobile': isMobile }">

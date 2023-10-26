@@ -1,6 +1,6 @@
 <template>
 	<div class="landing-page-widgets"
-		:class="{'sheet-view': !isFullWidthView}">
+		:class="[isFullWidthView ? 'full-width-view' : 'sheet-view']">
 		<MembersWidget v-if="!isPublic" />
 		<RecentPagesWidget />
 	</div>
