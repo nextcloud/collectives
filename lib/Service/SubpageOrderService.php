@@ -62,6 +62,25 @@ class SubpageOrderService {
 
 	/**
 	 * @param string|null $subpageOrder
+	 * @param array       $childIds
+	 *
+	 * @return string
+	 * @throws NotPermittedException
+	 */
+	public static function clean(?string $subpageOrder, array $childIds): string {
+		$subpageOrderArray = self::toArray($subpageOrder);
+		$cleanedSubpageOrderArray = [];
+		foreach ($subpageOrderArray as $pageId) {
+			if (in_array($pageId, $childIds, true)) {
+				$cleanedSubpageOrderArray[] = $pageId;
+			}
+		}
+
+		return self::fromArray($cleanedSubpageOrderArray);
+	}
+
+	/**
+	 * @param string|null $subpageOrder
 	 * @param int         $pageId
 	 * @param int         $index
 	 *

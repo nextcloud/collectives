@@ -174,6 +174,28 @@ class PageService {
 	}
 
 	/**
+	 * @param int    $collectiveId
+	 * @param File   $file
+	 * @param string $userId
+	 *
+	 * @return array
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	private function getSubpagesFromFile(int $collectiveId, File $file, string $userId): array {
+		if (!NodeHelper::isIndexPage($file)) {
+			return [];
+		}
+
+		$parentId = $file->getId();
+		$folder = $this->getFolder($collectiveId, $parentId, $userId);
+		return array_filter($this->getPagesFromFolder($collectiveId, $folder, $userId), static function (PageInfo $pageInfo) use ($parentId) {
+			return $pageInfo->getParentId() === $parentId;
+		});
+	}
+
+	/**
 	 * @param File $file
 	 * @param Node|null $parent
 	 *
@@ -394,13 +416,14 @@ class PageService {
 	 * @param int    $collectiveId
 	 * @param Folder $folder
 	 * @param string $userId
+	 * @param bool   $recurse
 	 *
 	 * @return array
 	 * @throws FilesNotFoundException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function recurseFolder(int $collectiveId, Folder $folder, string $userId): array {
+	public function getPagesFromFolder(int $collectiveId, Folder $folder, string $userId, bool $recurse = false): array {
 		// Find index page or create it if we have subpages, but it doesn't exist
 		try {
 			$indexPage = $this->getPageByFile($this->getIndexPageFile($folder), $folder);
@@ -416,8 +439,8 @@ class PageService {
 		foreach ($folder->getDirectoryListing() as $node) {
 			if ($node instanceof File && NodeHelper::isPage($node) && !NodeHelper::isIndexPage($node)) {
 				$pageInfos[] = $this->getPageByFile($node, $folder);
-			} elseif ($node instanceof Folder) {
-				array_push($pageInfos, ...$this->recurseFolder($collectiveId, $node, $userId));
+			} elseif ($recurse && $node instanceof Folder) {
+				array_push($pageInfos, ...$this->getPagesFromFolder($collectiveId, $node, $userId, true));
 			}
 		}
 
@@ -436,7 +459,7 @@ class PageService {
 	public function findAll(int $collectiveId, string $userId): array {
 		$folder = $this->getCollectiveFolder($collectiveId, $userId);
 		try {
-			return $this->recurseFolder($collectiveId, $folder, $userId);
+			return $this->getPagesFromFolder($collectiveId, $folder, $userId, true);
 		} catch (NotPermittedException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
@@ -629,68 +652,80 @@ class PageService {
 
 	/**
 	 * @param Folder      $collectiveFolder
-	 * @param int         $parentId
 	 * @param File        $file
+	 * @param int         $parentId
 	 * @param string|null $title
+	 * @param bool        $copy
+	 * @param Folder|null $newCollectiveFolder
 	 *
-	 * @return bool
+	 * @return File|null
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	private function renamePage(Folder $collectiveFolder, int $parentId, File $file, ?string $title): bool {
-		// Do not allow to move the landing page
+	private function moveOrCopyPage(Folder $collectiveFolder, File $file, int $parentId, ?string $title, bool $copy, ?Folder $newCollectiveFolder = null): ?File {
+		$targetFolder = $newCollectiveFolder ?: $collectiveFolder;
+
+		// Do not allow to move/copy the landing page
 		if (NodeHelper::isLandingPage($file)) {
-			throw new NotPermittedException('Not allowed to rename landing page');
+			throw new NotPermittedException('Not allowed to move or copy landing page');
 		}
 
-		// Do not allow to move a page to itself
+		// Do not allow to move/copy a page to itself
 		try {
 			if ($parentId === $file->getId()) {
-				throw new NotPermittedException('Not allowed to move a page to itself');
+				throw new NotPermittedException('Not allowed to move or copy a page to itself');
 			}
 		} catch (InvalidPathException | FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
 
-		// Do not allow to move a page to a subpage of itself
-		if ($this->isAncestorOf($collectiveFolder, $file->getId(), $parentId)) {
-			throw new NotPermittedException('Not allowed to move a page to a subpage of itself');
+		// Do not allow to move or copy a page to a subpage of itself
+		if ($this->isAncestorOf($targetFolder, $file->getId(), $parentId)) {
+			throw new NotPermittedException('Not allowed to move or copy a page to a subpage of itself');
 		}
 
-		$moveFolder = false;
+		$toNewFolder = false;
 		if ($parentId !== $this->getParentPageId($file)) {
-			$newFolder = $this->initSubFolder($this->nodeHelper->getFileById($collectiveFolder, $parentId));
-			$moveFolder = true;
+			$newFolder = $this->initSubFolder($this->nodeHelper->getFileById($targetFolder, $parentId));
+			$toNewFolder = true;
 		} else {
-			$newFolder = $this->nodeHelper->getFileById($collectiveFolder, $parentId)->getParent();
+			$newFolder = $this->nodeHelper->getFileById($targetFolder, $parentId)->getParent();
 		}
 
-		// If processing an index page, then rename the parent folder, otherwise the file itself
+		// If processing an index page, then move/copy the parent folder, otherwise the file itself
 		$node = NodeHelper::isIndexPage($file) ? $file->getParent() : $file;
 		$suffix = NodeHelper::isIndexPage($file) ? '' : PageInfo::SUFFIX;
-		if ($title) {
-			$safeTitle = $this->nodeHelper->sanitiseFilename($title, self::DEFAULT_PAGE_TITLE);
-			$newSafeName = $safeTitle . $suffix;
-			$newFileName = NodeHelper::generateFilename($newFolder, $safeTitle, PageInfo::SUFFIX);
-		} else {
-			$newSafeName = $node->getName();
-			$newFileName = basename($node->getName(), $suffix);
+		if (!$title) {
+			$title = basename($node->getName(), $suffix);
 		}
+		$safeTitle = $this->nodeHelper->sanitiseFilename($title, self::DEFAULT_PAGE_TITLE);
+		$newSafeName = $safeTitle . $suffix;
+		$newFileName = NodeHelper::generateFilename($newFolder, $safeTitle, PageInfo::SUFFIX);
 
-		// Neither path nor title changed, nothing to do
-		if (!$moveFolder && $newSafeName === $node->getName()) {
-			return false;
+		// Not copying and neither path nor title changed, nothing to do
+		if (!$copy && !$toNewFolder && $newSafeName === $node->getName()) {
+			return null;
 		}
 
 		try {
-			$node->move($newFolder->getPath() . '/' . $newFileName . $suffix);
+			if ($copy) {
+				$newNode = $node->copy($newFolder->getPath() . '/' . $newFileName . $suffix);
+			} else {
+				$newNode = $node->move($newFolder->getPath() . '/' . $newFileName . $suffix);
+			}
 		} catch (InvalidPathException | FilesNotFoundException | LockedException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		} catch (FilesNotPermittedException $e) {
 			throw new NotPermittedException($e->getMessage(), 0, $e);
 		}
 
-		return true;
+		if ($newNode instanceof Folder) {
+			// Return index page if node is a folder
+			$newNode = $this->getIndexPageFile($newNode);
+		} elseif (!($newNode instanceof File)) {
+			throw new NotFoundException('Node not a file: ' . $node->getId());
+		}
+		return $newNode;
 	}
 
 	/**
@@ -707,16 +742,53 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function rename(int $collectiveId, int $id, ?int $parentId, ?string $title, int $index, string $userId): PageInfo {
+	public function copy(int $collectiveId, int $id, ?int $parentId, ?string $title, int $index, string $userId): PageInfo {
+		$this->verifyEditPermissions($collectiveId, $userId);
+		$collectiveFolder = $this->getCollectiveFolder($collectiveId, $userId);
+		$file = $this->nodeHelper->getFileById($collectiveFolder, $id);
+		$page = $this->getPageByFile($file);
+		$oldParentId = $this->getParentPageId($file);
+		$parentId = $parentId ?: $oldParentId;
+
+		if (null !== $newFile = $this->moveOrCopyPage($collectiveFolder, $file, $parentId, $title, true)) {
+			$file = $newFile;
+		}
+		try {
+			$this->updatePage($collectiveId, $file->getId(), $userId, $page->getEmoji());
+		} catch (InvalidPathException | FilesNotFoundException $e) {
+			throw new NotFoundException($e->getMessage(), 0, $e);
+		}
+
+		$this->addToSubpageOrder($collectiveId, $parentId, $file->getId(), $index, $userId);
+
+		return $this->getPageByFile($file);
+	}
+
+	/**
+	 * @param int         $collectiveId
+	 * @param int         $id
+	 * @param int|null    $parentId
+	 * @param string|null $title
+	 * @param int         $index
+	 * @param string      $userId
+	 *
+	 * @return PageInfo
+	 * @throws FilesNotFoundException
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function move(int $collectiveId, int $id, ?int $parentId, ?string $title, int $index, string $userId): PageInfo {
 		$this->verifyEditPermissions($collectiveId, $userId);
 		$collectiveFolder = $this->getCollectiveFolder($collectiveId, $userId);
 		$file = $this->nodeHelper->getFileById($collectiveFolder, $id);
 		$oldParentId = $this->getParentPageId($file);
 		$parentId = $parentId ?: $oldParentId;
-		if ($this->renamePage($collectiveFolder, $parentId, $file, $title)) {
-			// Refresh the file after it has been renamed
-			$file = $this->nodeHelper->getFileById($collectiveFolder, $id);
+
+		if (null !== $newFile = $this->moveOrCopyPage($collectiveFolder, $file, $parentId, $title, false)) {
+			$file = $newFile;
 		}
+
 		try {
 			$this->updatePage($collectiveId, $file->getId(), $userId);
 		} catch (InvalidPathException | FilesNotFoundException $e) {
@@ -726,12 +798,83 @@ class PageService {
 		if ($oldParentId !== $parentId) {
 			// Page got moved: remove from subpage order of old parent page, add to new
 			$this->removeFromSubpageOrder($collectiveId, $oldParentId, $id, $userId);
-			$this->addToSubpageOrder($collectiveId, $parentId, $id, $index, $userId);
+			$this->addToSubpageOrder($collectiveId, $parentId, $file->getId(), $index, $userId);
 
 			NodeHelper::revertSubFolders($collectiveFolder);
 		}
 
 		return $this->getPageByFile($file);
+	}
+
+	/**
+	 * @param int      $collectiveId
+	 * @param int      $id
+	 * @param int      $newCollectiveId
+	 * @param int|null $parentId
+	 * @param int      $index
+	 * @param string   $userId
+	 *
+	 * @throws FilesNotFoundException
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function copyToCollective(int $collectiveId, int $id, int $newCollectiveId, ?int $parentId, int $index, string $userId): void {
+		$this->verifyEditPermissions($collectiveId, $userId);
+		$this->verifyEditPermissions($newCollectiveId, $userId);
+		$collectiveFolder = $this->getCollectiveFolder($collectiveId, $userId);
+		$newCollectiveFolder = $this->getCollectiveFolder($newCollectiveId, $userId);
+		$file = $this->nodeHelper->getFileById($collectiveFolder, $id);
+		$page = $this->getPageByFile($file);
+		$parentId = $parentId ?: $this->getIndexPageFile($newCollectiveFolder)->getId();
+
+		if (null !== $newFile = $this->moveOrCopyPage($collectiveFolder, $file, $parentId, null, true, $newCollectiveFolder)) {
+			$file = $newFile;
+		}
+		try {
+			$this->updatePage($newCollectiveId, $file->getId(), $userId, $page->getEmoji());
+		} catch (InvalidPathException | FilesNotFoundException $e) {
+			throw new NotFoundException($e->getMessage(), 0, $e);
+		}
+
+		$this->addToSubpageOrder($newCollectiveId, $parentId, $file->getId(), $index, $userId);
+	}
+
+	/**
+	 * @param int      $collectiveId
+	 * @param int      $id
+	 * @param int      $newCollectiveId
+	 * @param int|null $parentId
+	 * @param int      $index
+	 * @param string   $userId
+	 *
+	 * @throws FilesNotFoundException
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function moveToCollective(int $collectiveId, int $id, int $newCollectiveId, ?int $parentId, int $index, string $userId): void {
+		$this->verifyEditPermissions($collectiveId, $userId);
+		$this->verifyEditPermissions($newCollectiveId, $userId);
+		$collectiveFolder = $this->getCollectiveFolder($collectiveId, $userId);
+		$newCollectiveFolder = $this->getCollectiveFolder($newCollectiveId, $userId);
+		$file = $this->nodeHelper->getFileById($collectiveFolder, $id);
+		$oldParentId = $this->getParentPageId($file);
+		$parentId = $parentId ?: $this->getIndexPageFile($newCollectiveFolder)->getId();
+
+		if (null !== $newFile = $this->moveOrCopyPage($collectiveFolder, $file, $parentId, null, false, $newCollectiveFolder)) {
+			$file = $newFile;
+		}
+		try {
+			$this->updatePage($newCollectiveId, $file->getId(), $userId);
+		} catch (InvalidPathException | FilesNotFoundException $e) {
+			throw new NotFoundException($e->getMessage(), 0, $e);
+		}
+
+		$this->removeFromSubpageOrder($collectiveId, $oldParentId, $id, $userId);
+		$this->addToSubpageOrder($newCollectiveId, $parentId, $file->getId(), $index, $userId);
+
+		NodeHelper::revertSubFolders($collectiveFolder);
 	}
 
 	/**
@@ -782,6 +925,24 @@ class PageService {
 	}
 
 	/**
+	 * @param int      $collectiveId
+	 * @param PageInfo $pageInfo
+	 * @param string   $userId
+	 *
+	 * @return string
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	private function cleanSubpageOrder(int $collectiveId, PageInfo $pageInfo, string $userId): string {
+		$pageFile = $this->getPageFile($collectiveId, $pageInfo->getId(), $userId);
+		$childIds = array_map(static function (PageInfo $pageInfo) {
+			return $pageInfo->getId();
+		}, $this->getSubpagesFromFile($collectiveId, $pageFile, $userId));
+		return SubpageOrderService::clean($pageInfo->getSubpageOrder(), $childIds);
+	}
+
+	/**
 	 * @param int    $collectiveId
 	 * @param int    $pageId
 	 * @param int    $addId
@@ -797,7 +958,9 @@ class PageService {
 		$file = $this->nodeHelper->getFileById($collectiveFolder, $pageId);
 		$pageInfo = $this->getPageByFile($file);
 
-		$newSubpageOrder = SubpageOrderService::add($pageInfo->getSubpageOrder(), $addId, $index);
+		$subpageOrder = $pageInfo->getSubpageOrder();
+		$cleanedSubpageOrder = $this->cleanSubpageOrder($collectiveId, $pageInfo, $userId);
+		$newSubpageOrder = SubpageOrderService::add($cleanedSubpageOrder, $addId, $index);
 
 		$pageInfo->setSubpageOrder($newSubpageOrder);
 		$this->updatePage($collectiveId, $pageInfo->getId(), $userId, null, $newSubpageOrder);

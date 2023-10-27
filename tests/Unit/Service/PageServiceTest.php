@@ -141,7 +141,7 @@ class PageServiceTest extends TestCase {
 		self::assertEquals($subFolder, $this->service->initSubFolder($otherFile));
 	}
 
-	public function testRecurseFolder(): void {
+	public function testGetPagesFromFolder(): void {
 		$filesNotJustMd = [];
 		$filesJustMd = [];
 		$pageInfos = [];
@@ -224,8 +224,8 @@ class PageServiceTest extends TestCase {
 				$filesNotJustMd,
 			);
 
-		self::assertEquals($pageInfos, $this->service->recurseFolder($this->collectiveId, $folder, $this->userId));
-		self::assertEquals($pageInfos, $this->service->recurseFolder($this->collectiveId, $folder, $this->userId));
+		self::assertEquals($pageInfos, $this->service->getPagesFromFolder($this->collectiveId, $folder, $this->userId, true));
+		self::assertEquals($pageInfos, $this->service->getPagesFromFolder($this->collectiveId, $folder, $this->userId, true));
 	}
 
 	public function testGetPageLink(): void {
@@ -351,7 +351,7 @@ class PageServiceTest extends TestCase {
 		self::assertFalse($method->invokeArgs($this->service, [$this->collectiveFolder, $pageId, $targetId]));
 	}
 
-	public function testRenameLandingPageFails(): void {
+	public function testMoveLandingPageFails(): void {
 		$collective = new Collective();
 		$collectiveInfo = new CollectiveInfo($collective, 'Collective', Member::LEVEL_ADMIN);
 		$this->collectiveService->method('getCollectiveInfo')
@@ -366,11 +366,11 @@ class PageServiceTest extends TestCase {
 			->willReturn($file);
 
 		$this->expectException(NotPermittedException::class);
-		$this->expectExceptionMessage('Not allowed to rename landing page');
-		$this->service->rename($this->collectiveId, 2, 1, 'New title', 0, $this->userId);
+		$this->expectExceptionMessage('Not allowed to move or copy landing page');
+		$this->service->move($this->collectiveId, 2, 1, 'New title', 0, $this->userId);
 	}
 
-	public function testRenamePageToItselfFails(): void {
+	public function testMovePageToItselfFails(): void {
 		$collective = new Collective();
 		$collectiveInfo = new CollectiveInfo($collective, 'Collective', Member::LEVEL_ADMIN);
 		$this->collectiveService->method('getCollectiveInfo')
@@ -397,7 +397,7 @@ class PageServiceTest extends TestCase {
 			->willReturn($file);
 
 		$this->expectException(NotPermittedException::class);
-		$this->expectExceptionMessage('Not allowed to move a page to itself');
-		$this->service->rename($this->collectiveId, 1, 1, 'New title', 0, $this->userId);
+		$this->expectExceptionMessage('Not allowed to move or copy a page to itself');
+		$this->service->move($this->collectiveId, 1, 1, 'New title', 0, $this->userId);
 	}
 }

@@ -5,6 +5,7 @@ import axios from '@nextcloud/axios'
 import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
 /* eslint import/namespace: ['error', { allowComputed: true }] */
 import * as sortOrders from '../util/sortOrders.js'
+import { sortedSubpages, pageParents } from './pageExtracts.js'
 
 import {
 	SET_PAGES,
@@ -12,6 +13,7 @@ import {
 	ADD_PAGE,
 	UPDATE_PAGE,
 	MOVE_PAGE_INTO_TRASH,
+	REMOVE_PAGE,
 	RESTORE_PAGE_FROM_TRASH,
 	DELETE_PAGE_FROM_TRASH_BY_ID,
 	SET_ATTACHMENTS,
@@ -32,7 +34,10 @@ import {
 	NEW_TEMPLATE,
 	TOUCH_PAGE,
 	RENAME_PAGE,
+	COPY_PAGE,
 	MOVE_PAGE,
+	COPY_PAGE_TO_COLLECTIVE,
+	MOVE_PAGE_TO_COLLECTIVE,
 	SET_PAGE_EMOJI,
 	SET_PAGE_SUBPAGE_ORDER,
 	TRASH_PAGE,
@@ -98,13 +103,13 @@ export default {
 			// Return landing page
 			if (!getters.pageParam
 				|| getters.pageParam === 'Readme') {
-				return [getters.collectivePage.id]
+				return [getters.landingPage.id]
 			}
 
 			// Iterate through all path levels to find the correct page
 			const pageIds = []
 			const parts = getters.pageParam.split('/').filter(Boolean)
-			let page = getters.collectivePage
+			let page = getters.landingPage
 			for (const i in parts) {
 				page = state.pages.find(p => (p.parentId === page.id && p.title === parts[i]))
 				if (page) {
@@ -138,7 +143,6 @@ export default {
 
 		pageDavPath: (_state, getters) => (page) => {
 			const parts = getters.pageFilePath(page).split('/')
-			// For public collectives, the dav path doesn't contain a username
 			if (!getters.isPublic) {
 				parts.unshift(getCurrentUser().uid)
 			}
@@ -170,7 +174,7 @@ export default {
 			return [collectivePath, filePath].filter(Boolean).join('/')
 		},
 
-		collectivePage(state) {
+		landingPage(state) {
 			return state.pages.find(p => (p.parentId === 0))
 		},
 
@@ -189,20 +193,7 @@ export default {
 			}
 		},
 
-		sortedSubpages(state, getters) {
-			return (parentId, sortOrder) => {
-				const parentPage = state.pages.find(p => p.id === parentId)
-				const customOrder = parentPage?.subpageOrder || []
-				return state.pages
-					.filter(p => p.parentId === parentId)
-					// disregard template pages, they're listed first manually
-					.filter(p => p.title !== TEMPLATE_PAGE)
-					// add the index from customOrder
-					.map(p => ({ ...p, index: customOrder.indexOf(p.id) }))
-					// sort by given order, fall back to user setting
-					.sort(sortOrders[sortOrder] || getters.sortOrder)
-			}
-		},
+		sortedSubpages,
 
 		pagesTreeWalk: (_state, getters) => (parentId = 0) => {
 			const pages = []
@@ -219,18 +210,7 @@ export default {
 			return state.pages.find(p => (p.id === pageId)).parentId
 		},
 
-		pageParents: (state, getters) => (pageId) => {
-			const pages = []
-			while (pageId !== getters.collectivePage.id) {
-				const page = state.pages.find(p => (p.id === pageId))
-				if (!page) {
-					break
-				}
-				pages.unshift(page)
-				pageId = page.parentId
-			}
-			return pages
-		},
+		pageParents,
 
 		visibleSubpages: (state, getters) => (parentId) => {
 			return getters.sortedSubpages(parentId)
@@ -324,6 +304,17 @@ export default {
 			return (pageId) => state.pages.find(p => p.id === pageId)?.keepSortable
 		},
 
+		subpageOrder(state) {
+			return (pageId) => state.pages.find(p => p.id === pageId).subpageOrder
+		},
+
+		subpageOrderIndex(state, getters) {
+			return (parentId, pageId) => {
+				const parentSubpageOrder = getters.subpageOrder(parentId)
+				return parentSubpageOrder.indexOf(pageId)
+			}
+		},
+
 		trashPages(state) {
 			return state.trashPages.sort((a, b) => b.trashTimestamp - a.trashTimestamp)
 		},
@@ -377,6 +368,10 @@ export default {
 			state.pages.splice(state.pages.findIndex(p => p.id === page.id), 1)
 			trashPage.trashTimestamp = Date.now() / 1000
 			state.trashPages.unshift(trashPage)
+		},
+
+		[REMOVE_PAGE](state, page) {
+			state.pages.splice(state.pages.findIndex(p => p.id === page.id), 1)
 		},
 
 		[RESTORE_PAGE_FROM_TRASH](state, trashPage) {
@@ -501,8 +496,11 @@ export default {
 		},
 
 		/**
-		 * Get list of all pages
+		 * Get list of all pages for current collective
 		 *
+		 * @param {object} store the vuex store
+		 * @param {Function} store.commit commit changes
+		 * @param {object} store.getters getters of the store
 		 * @param {boolean} setLoading Whether to set loading('collective')
 		 */
 		async [GET_PAGES]({ commit, getters }, setLoading = true) {
@@ -613,6 +611,42 @@ export default {
 		},
 
 		/**
+		 * Copy page to another parent
+		 *
+		 * @param {object} store the vuex store
+		 * @param {Function} store.commit commit changes
+		 * @param {object} store.getters getters of the store
+		 * @param {object} store.state state of the store
+		 * @param {Function} store.dispatch dispatch actions
+		 * @param {object} page the page
+		 * @param {number} page.newParentId ID of the new parent page
+		 * @param {number} page.pageId ID of the page
+		 * @param {number} page.index index for subpageOrder of parent page
+		 */
+		async [COPY_PAGE]({ commit, getters, state, dispatch }, { newParentId, pageId, index }) {
+			commit('load', 'pagelist')
+			const page = { ...state.pages.find(p => p.id === pageId) }
+
+			// Keep subpage list of old parent page in DOM to prevent a race condition with sortableJS
+			const oldParentId = page.parentId
+
+			// Increment index by one if copying to same folder with an index after the original
+			if (oldParentId === newParentId && index >= getters.subpageOrderIndex(newParentId, pageId)) {
+				index += 1
+			}
+
+			const url = getters.pageUrl(pageId)
+			try {
+				await axios.put(url, { index, parentId: newParentId, copy: true })
+				// Reload the page list to make new page appear
+				await dispatch(GET_PAGES, false)
+			} finally {
+				commit('done', 'pagelist')
+			}
+		},
+
+		/**
+		 * Move page to another parent
 		 *
 		 * @param {object} store the vuex store
 		 * @param {Function} store.commit commit changes
@@ -627,6 +661,7 @@ export default {
 		async [MOVE_PAGE]({ commit, getters, state, dispatch }, { newParentId, pageId, index }) {
 			commit('load', 'pagelist')
 			const page = { ...state.pages.find(p => p.id === pageId) }
+			const hasSubpages = getters.visibleSubpages(pageId).length > 0
 
 			// Save a clone of the page to restore in case of errors
 			const pageClone = { ...page }
@@ -652,7 +687,59 @@ export default {
 			}
 
 			// Reload the page list if moved page had subpages (to get their updated paths)
-			if (getters.visibleSubpages(pageId).length > 0) {
+			if (hasSubpages) {
+				await dispatch(GET_PAGES, false)
+			}
+		},
+
+		/**
+		 * Copy page to another collective
+		 *
+		 * @param {object} store the vuex store
+		 * @param {Function} store.commit commit changes
+		 * @param {object} store.getters getters of the store
+		 * @param {object} store.state state of the store
+		 * @param {Function} store.dispatch dispatch actions
+		 * @param {object} page the page
+		 * @param {number} page.collectiveId ID of the new collective
+		 * @param {number} page.newParentId ID of the new parent page
+		 * @param {number} page.pageId ID of the page
+		 * @param {number} page.index index for subpageOrder of parent page
+		 */
+		async [COPY_PAGE_TO_COLLECTIVE]({ commit, getters, state, dispatch }, { collectiveId, newParentId, pageId, index }) {
+			commit('load', 'pagelist')
+
+			const url = `${getters.pageUrl(pageId)}/to/${collectiveId}`
+			await axios.put(url, { index, parentId: newParentId, copy: true })
+			commit('done', 'pagelist')
+		},
+
+		/**
+		 * Move page to another collective
+		 *
+		 * @param {object} store the vuex store
+		 * @param {Function} store.commit commit changes
+		 * @param {object} store.getters getters of the store
+		 * @param {object} store.state state of the store
+		 * @param {Function} store.dispatch dispatch actions
+		 * @param {object} page the page
+		 * @param {number} page.collectiveId ID of the new collective
+		 * @param {number} page.newParentId ID of the new parent page
+		 * @param {number} page.pageId ID of the page
+		 * @param {number} page.index index for subpageOrder of parent page
+		 */
+		async [MOVE_PAGE_TO_COLLECTIVE]({ commit, getters, state, dispatch }, { collectiveId, newParentId, pageId, index }) {
+			commit('load', 'pagelist')
+			const page = { ...state.pages.find(p => p.id === pageId) }
+			const hasSubpages = getters.visibleSubpages(pageId).length > 0
+
+			const url = `${getters.pageUrl(pageId)}/to/${collectiveId}`
+			await axios.put(url, { index, parentId: newParentId })
+			commit(REMOVE_PAGE, page)
+			commit('done', 'pagelist')
+
+			// Reload the page list if moved page had subpages (to remove subpages as well)
+			if (hasSubpages) {
 				await dispatch(GET_PAGES, false)
 			}
 		},

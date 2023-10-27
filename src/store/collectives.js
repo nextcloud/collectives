@@ -74,6 +74,10 @@ export default {
 			return emoji ? `${emoji} ${name}` : name
 		},
 
+		collectiveTitle(state, getters) {
+			return (collectiveId) => state.collectives.find(c => c.id === collectiveId).name
+		},
+
 		currentCollectiveCanEdit(state, getters) {
 			return getters.collectiveCanEdit(getters.currentCollective)
 		},

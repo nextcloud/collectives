@@ -29,14 +29,24 @@ Feature: publicShare
     Then anonymous creates page "secondpage" with parentPath "Readme.md" in public collective "BehatPublicCollective" with owner "jane"
     Then anonymous sets emoji for page "secondpage" to "🍏" in public collective "BehatPublicCollective" with owner "jane"
 
+  Scenario: Move page
+    When anonymous moves page "firstpage" to "movedpage" with parentPath "Readme.md" in public collective "BehatPublicCollective" with owner "jane"
+    Then anonymous sees pagePath "movedpage.md" in public collective "BehatPublicCollective" with owner "jane"
+    And anonymous doesn't see pagePath "firstpage.md" in public collective "BehatPublicCollective" with owner "jane"
+
+  Scenario: Copy page
+    When anonymous copies page "movedpage" to "copiedpage" with parentPath "Readme.md" in public collective "BehatPublicCollective" with owner "jane"
+    Then anonymous sees pagePath "copiedpage.md" in public collective "BehatPublicCollective" with owner "jane"
+    And anonymous sees pagePath "movedpage.md" in public collective "BehatPublicCollective" with owner "jane"
+
   Scenario: Trash page
     When anonymous trashes page "secondpage" in public collective "BehatPublicCollective" with owner "jane"
     Then user "jane" doesn't see pagePath "secondpage.md" in "BehatPublicCollective"
 
   Scenario: Fail to restore+delete pages in read-only collective
     When user "jane" unsets editing permissions for collective "BehatPublicCollective"
-    Then anonymous fails to restore page "firstpage" from trash in public collective "BehatPublicCollective" with owner "jane"
-    And anonymous fails to delete page "firstpage" from trash in public collective "BehatPublicCollective" with owner "jane"
+    Then anonymous fails to restore page "secondpage" from trash in public collective "BehatPublicCollective" with owner "jane"
+    And anonymous fails to delete page "secondpage" from trash in public collective "BehatPublicCollective" with owner "jane"
 
   Scenario: Restore, trash and delete subpage
     When user "jane" sets editing permissions for collective "BehatPublicCollective"

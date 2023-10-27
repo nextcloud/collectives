@@ -49,7 +49,6 @@ export default {
 			'currentCollectiveCanEdit',
 			'currentFileIdPage',
 			'currentPage',
-			'collectivePage',
 			'loading',
 			'pageParam',
 			'pagePath',

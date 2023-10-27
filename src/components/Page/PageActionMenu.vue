@@ -83,14 +83,14 @@
 				{{ editTemplateString }}
 			</NcActionButton>
 
-			<!-- Move page via modal: only displayed in page list -->
+			<!-- Move/copy page via modal: only displayed in page list -->
 			<NcActionButton v-if="inPageList && currentCollectiveCanEdit && !isLandingPage"
 				:close-after-click="true"
-				@click="onOpenMoveModal">
+				@click="onOpenMoveOrCopyModal">
 				<template #icon>
 					<OpenInNewIcon :size="20" />
 				</template>
-				{{ t('collectives', 'Move page') }}
+				{{ t('collectives', 'Move or copy') }}
 			</NcActionButton>
 
 			<!-- Delete page -->
@@ -103,10 +103,10 @@
 				{{ deletePageString }}
 			</NcActionButton>
 		</NcActions>
-		<MoveModal v-if="showMoveModal"
+		<MoveOrCopyModal v-if="showMoveOrCopyModal"
 			:page-id="pageId"
 			:parent-id="parentId"
-			@close="onCloseMoveModal" />
+			@close="onCloseMoveOrCopyModal" />
 	</div>
 </template>
 
@@ -121,7 +121,7 @@ import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 import EmoticonOutlineIcon from 'vue-material-design-icons/EmoticonOutline.vue'
 import FormatListBulletedIcon from 'vue-material-design-icons/FormatListBulleted.vue'
 import OpenInNewIcon from 'vue-material-design-icons/OpenInNew.vue'
-import MoveModal from './MoveModal.vue'
+import MoveOrCopyModal from './MoveOrCopyModal.vue'
 import PagesTemplateIcon from '../Icon/PagesTemplateIcon.vue'
 import PageActionLastUser from './PageActionLastUser.vue'
 import pageMixin from '../../mixins/pageMixin.js'
@@ -131,7 +131,7 @@ export default {
 
 	components: {
 		CollectiveActions,
-		MoveModal,
+		MoveOrCopyModal,
 		NcActions,
 		NcActionButton,
 		NcActionCheckbox,
@@ -195,7 +195,7 @@ export default {
 
 	data() {
 		return {
-			showMoveModal: false,
+			showMoveOrCopyModal: false,
 		}
 	},
 
@@ -298,12 +298,12 @@ export default {
 			})
 		},
 
-		onOpenMoveModal() {
-			this.showMoveModal = true
+		onOpenMoveOrCopyModal() {
+			this.showMoveOrCopyModal = true
 		},
 
-		onCloseMoveModal() {
-			this.showMoveModal = false
+		onCloseMoveOrCopyModal() {
+			this.showMoveOrCopyModal = false
 		},
 	},
 }
