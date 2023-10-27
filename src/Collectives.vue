@@ -169,6 +169,13 @@ export default {
 	#content-vue {
 		display: block !important;
 	}
+
+	#text-wrapper #text div.ProseMirror {
+		margin-top: 0;
+		margin-bottom: 0;
+		padding-top: 0;
+		padding-bottom: 0;
+	}
 }
 
 /* Align toggle with page list header bar */
