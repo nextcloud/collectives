@@ -279,4 +279,11 @@ export default {
 		}
 	}
 }
+
+@media print {
+	/* Don't print unwanted elements */
+	.text-container-heading {
+		display: none !important;
+	}
+}
 </style>

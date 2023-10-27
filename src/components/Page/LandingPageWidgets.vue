@@ -32,4 +32,11 @@ export default {
 .landing-page-widgets {
 	padding-left: 12px;
 }
+
+@media print {
+	/* Don't print unwanted elements */
+	.landing-page-widgets {
+		display: none !important;
+	}
+}
 </style>
