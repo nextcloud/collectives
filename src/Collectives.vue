@@ -162,6 +162,15 @@ export default {
 }
 
 @media print {
+	html, body {
+		background: var(--color-main-background, white) !important;
+	}
+
+	/* hide toast notifications for printing */
+	.toastify.dialogs {
+		display: none;
+	}
+
 	#header {
 		display: none !important;
 	}
@@ -170,12 +179,17 @@ export default {
 		display: block !important;
 	}
 
-	#text-wrapper #text div.ProseMirror {
-		margin-top: 0;
-		margin-bottom: 0;
-		padding-top: 0;
-		padding-bottom: 0;
+	#text-wrapper #text .content-wrapper {
+		display: block;
+
+		div.ProseMirror {
+			margin-top: 0;
+			margin-bottom: 0;
+			padding-top: 0;
+			padding-bottom: 0;
+		}
 	}
+
 }
 
 /* Align toggle with page list header bar */

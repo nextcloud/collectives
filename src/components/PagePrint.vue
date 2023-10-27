@@ -106,6 +106,7 @@ export default {
 
 	&-subpage {
 		page-break-before: always;
+		break-before: always;
 	}
 }
 
@@ -114,6 +115,7 @@ export default {
 }
 
 .editor__content {
+	display: block;
 	position: relative;
 }
 
