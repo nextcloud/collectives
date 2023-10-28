@@ -18,6 +18,7 @@ OC.L10N.register(
     "Back" : "Til baka",
     "Create" : "Búa til",
     "Done" : "Lokið",
+    "Move or copy" : "Færa eða afrita",
     "Template" : "Sniðmát",
     "Title" : "Titill",
     "Deleted" : "Eytt",

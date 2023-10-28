@@ -16,6 +16,7 @@ OC.L10N.register(
     "Back" : "Antaŭen",
     "Create" : "Krei",
     "Done" : "Farita",
+    "Move or copy" : "Movi aŭ kopii",
     "Title" : "Titolo",
     "Deleted" : "Forigita",
     "Download" : "Elŝuti",

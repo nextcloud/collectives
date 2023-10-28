@@ -29,6 +29,7 @@ OC.L10N.register(
     "Create" : "Stvori",
     "Done" : "Gotovo",
     "Show in Files" : "Prikaži u datotekama",
+    "Move or copy" : "Premjesti ili kopiraj",
     "Template" : "Predložak",
     "Title" : "Naslov",
     "Deleted" : "Izbrisano",

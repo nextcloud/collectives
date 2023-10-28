@@ -29,6 +29,7 @@ OC.L10N.register(
     "Back" : "Takaisin",
     "Create" : "Luo",
     "Done" : "Valmis",
+    "Move or copy" : "Siirrä tai kopioi",
     "Template" : "Malli",
     "Title" : "Nimeke",
     "Deleted" : "Poistettu",

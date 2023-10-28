@@ -17,6 +17,7 @@ OC.L10N.register(
     "Back" : "Kembali",
     "Create" : "Buat",
     "Done" : "Selesai",
+    "Move or copy" : "Pindah atau salin",
     "Title" : "Judul",
     "Deleted" : "Dihapus",
     "Download" : "Unduh",

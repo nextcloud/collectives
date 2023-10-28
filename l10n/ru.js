@@ -75,6 +75,7 @@ OC.L10N.register(
     "Start editing" : "Начать редактирование",
     "Done" : "Готово",
     "Show in Files" : "Перейти к расположению",
+    "Move or copy" : "Переместить или копировать",
     "Hide outline" : "Скрыть обрамление",
     "Show outline" : "Показать обрамление",
     "Edit template for subpages" : "Редактирование шаблона для разделов",

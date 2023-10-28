@@ -74,7 +74,7 @@ OC.L10N.register(
     "Start editing" : "Почати редагування",
     "Done" : "Готово",
     "Show in Files" : "Показати в Файлах",
-    "Move page" : "Перемістити сторінку",
+    "Move or copy" : "Перемістити або копіювати",
     "Hide outline" : "Сховати зміст",
     "Show outline" : "Показати зміст",
     "Edit template for subpages" : "Редагувати шаблон для підсторінок",

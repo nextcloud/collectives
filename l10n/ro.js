@@ -17,6 +17,7 @@ OC.L10N.register(
     "Back" : "Înapoi",
     "Create" : "Crează",
     "Done" : "Realizat",
+    "Move or copy" : "Mută sau copiază",
     "Title" : "Titlu",
     "Deleted" : "Șters",
     "Download" : "Descărcare",

@@ -20,6 +20,7 @@ OC.L10N.register(
     "Back" : "Atrás",
     "Create" : "Crear",
     "Done" : "Hecho",
+    "Move or copy" : "Mover o Copiar",
     "Title" : "Título",
     "Deleted" : "Eliminado",
     "Download" : "Descargar",
