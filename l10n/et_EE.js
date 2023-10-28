@@ -13,6 +13,7 @@ OC.L10N.register(
     "Back" : "Tagasi",
     "Create" : "Loo",
     "Done" : "Valmis",
+    "Move or copy" : "Liiguta või kopeeri",
     "Title" : "Pealkiri",
     "Deleted" : "Kustutatud",
     "Download" : "Lae alla",

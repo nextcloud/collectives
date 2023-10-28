@@ -29,6 +29,7 @@ OC.L10N.register(
     "Create" : "Sukurti",
     "Done" : "Atlikta",
     "Show in Files" : "Rodyti failuose",
+    "Move or copy" : "Perkelti ar kopijuoti",
     "Page content" : "Puslapio turinys",
     "Restore this version" : "Atkurti šią versiją",
     "Template" : "Šablonas",

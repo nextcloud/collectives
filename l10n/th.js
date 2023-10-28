@@ -15,6 +15,7 @@ OC.L10N.register(
     "Back" : "ย้อนกลับ",
     "Create" : "สร้าง",
     "Done" : "เสร็จสิ้น",
+    "Move or copy" : "ย้ายหรือคัดลอก",
     "Title" : "ชื่อเรื่อง",
     "Deleted" : "ลบแล้ว",
     "Download" : "ดาวน์โหลด",

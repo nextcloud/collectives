@@ -33,6 +33,7 @@ OC.L10N.register(
     "Select a collective" : "Velg et kollektiv",
     "Done" : "Ferdig",
     "Show in Files" : "Vis i Filer",
+    "Move or copy" : "Flytt eller kopier",
     "Delete page" : "Slett side",
     "Restore this version" : "Gjenopprett denne versjonen",
     "Reverted {page} to revision {timestamp}." : "Gjenoppretet {page} til versjon {timestamp}.",

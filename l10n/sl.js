@@ -106,7 +106,7 @@ OC.L10N.register(
     "Done" : "Končano",
     "Open page sidebar" : "Odpri bočno okno",
     "Show in Files" : "Pokaži v Datotekah",
-    "Move page" : "Premakni stran",
+    "Move or copy" : "Premakni ali kopiraj",
     "Hide outline" : "Skrij obris",
     "Show outline" : "Pokaži obris",
     "Edit template for subpages" : "Uredi predlogo podstrani",

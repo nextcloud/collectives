@@ -18,6 +18,7 @@ OC.L10N.register(
     "Back" : "Atpakaļ",
     "Create" : "Izveidot",
     "Done" : "Pabeigts",
+    "Move or copy" : "Pārvietot vai kopēt",
     "Title" : "Amats",
     "Deleted" : "Dzēstie",
     "Download" : "Lejupielādēt",

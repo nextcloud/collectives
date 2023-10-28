@@ -28,6 +28,7 @@ OC.L10N.register(
     "Create" : "Креирај",
     "Done" : "Готово",
     "Show in Files" : "Прикажи во датотеките",
+    "Move or copy" : "Премести или копирај",
     "Title" : "Наслов",
     "Deleted" : "Избришани",
     "Download" : "Преземи",

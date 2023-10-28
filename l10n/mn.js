@@ -15,6 +15,7 @@ OC.L10N.register(
     "Back" : "буцах",
     "Create" : "Үүсгэх",
     "Done" : "Хийсэн",
+    "Move or copy" : "Зөөх эсвэл хуулах",
     "Title" : "Цол/Албан тушаал",
     "Deleted" : "Устгагдсан",
     "Download" : "Татах",

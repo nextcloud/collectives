@@ -43,6 +43,7 @@ OC.L10N.register(
     "Create" : "建立",
     "Done" : "完成",
     "Show in Files" : "在「檔案」中顯示",
+    "Move or copy" : "移動或複製",
     "Hide outline" : "隱藏大綱",
     "Show outline" : "顯示大綱",
     "Template" : "範本",

@@ -57,6 +57,7 @@ OC.L10N.register(
     "Start editing" : "編集開始",
     "Done" : "完了",
     "Show in Files" : "ファイルで表示",
+    "Move or copy" : "移動またはコピー",
     "Edit template for subpages" : "サブページのテンプレートを編集",
     "Add template for subpages" : "サブページのテンプレートを追加",
     "Delete page" : "ページの削除",

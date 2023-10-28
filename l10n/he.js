@@ -24,6 +24,7 @@ OC.L10N.register(
     "Create" : "יצירה",
     "Done" : "הסתיים",
     "Show in Files" : "הצגה בקבצים",
+    "Move or copy" : "העברה או העתקה",
     "Template" : "תבנית",
     "Title" : "תפקיד",
     "Deleted" : "נמחק",
