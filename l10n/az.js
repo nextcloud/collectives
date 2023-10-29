@@ -11,6 +11,7 @@ OC.L10N.register(
     "Cancel" : "Dayandır",
     "Create" : "Yarat",
     "Done" : "Done",
+    "Move or copy" : "Köçürt və ya kopyala",
     "Title" : "Başlıq",
     "Deleted" : "Silinib",
     "Download" : "Yüklə",

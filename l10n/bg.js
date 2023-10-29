@@ -107,6 +107,7 @@ OC.L10N.register(
     "Done" : "Завършено",
     "Open page sidebar" : "Отваряне на страничната лента на страницата",
     "Show in Files" : "Показване във файлове",
+    "Move or copy" : "Премести или копирай",
     "Hide outline" : "Скриване на структурата",
     "Show outline" : "Показване на структурата",
     "Edit template for subpages" : "Редактиране на шаблона за подстраници",

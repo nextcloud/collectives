@@ -8,6 +8,7 @@ OC.L10N.register(
     "Loading…" : "Cargando…",
     "An error occurred while performing the search" : "Prodúxose un error mentanto se facía la busca",
     "Permissions" : "Permisos",
+    "Move or copy" : "Mover o copiar",
     "Template" : "Plantía",
     "Download" : "Baxar",
     "Versions" : "Versiones",
