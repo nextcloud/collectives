@@ -14,6 +14,7 @@ OC.L10N.register(
     "Back" : "Terug",
     "Create" : "Skep",
     "Done" : "Gereed",
+    "Move or copy" : "Kopieer of skuif",
     "Title" : "Titel",
     "Deleted" : "Geskrap",
     "Download" : "Laai af",
