@@ -1,5 +1,10 @@
 :root {
+	--text-editor-max-width: 670px !important;
+}
+
+.full-width-view {
 	--text-editor-max-width: false !important;
+	max-width: unset;
 }
 
 .sheet-view {

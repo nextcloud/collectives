@@ -11,7 +11,7 @@
 		:show-outline-outside="showOutline"
 		mime="text/markdown"
 		class="file-view active"
-		:class="{'sheet-view': !isFullWidthView}"
+		:class="[isFullWidthView ? 'full-width-view' : 'sheet-view']"
 		@ready="ready"
 		@outline-toggled="toggleOutlineFromText"
 		@add-image-node="onAddImageNode"

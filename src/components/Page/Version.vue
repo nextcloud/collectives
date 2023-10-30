@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<h1 id="titleform" class="page-title" :class="{'sheet-view': !isFullWidthView}">
+		<h1 id="titleform" class="page-title" :class="[isFullWidthView ? 'full-width-view' : 'sheet-view']">
 			<input class="title"
 				:class="{ 'mobile': isMobile }"
 				type="text"
@@ -19,7 +19,8 @@
 				<NcActionButton icon="icon-menu-sidebar" :close-after-click="true" @click="closeVersions" />
 			</NcActions>
 		</h1>
-		<div id="text-container">
+		<div id="text-container"
+			:class="[isFullWidthView ? 'full-width-view' : 'sheet-view']">
 			<RichText :key="`show-${currentPage.id}-${version.timestamp}`"
 				:current-page="currentPage"
 				:page-content="pageVersionContent" />

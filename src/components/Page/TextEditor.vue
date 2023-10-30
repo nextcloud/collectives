@@ -3,11 +3,11 @@
 		<WidgetHeading v-if="isLandingPage"
 			:title="t('collectives', 'Landing page')"
 			class="text-container-heading"
-			:class="{'sheet-view': !isFullWidthView}" />
+			:class="[isFullWidthView ? 'full-width-view' : 'sheet-view']" />
 		<div v-show="showRichText"
 			id="text-container"
 			:key="'text-' + currentPage.id"
-			:class="{'sheet-view': !isFullWidthView}"
+			:class="[isFullWidthView ? 'full-width-view' : 'sheet-view']"
 			:aria-label="t('collectives', 'Page content')">
 			<RichText :key="`reader-${currentPage.id}`"
 				:current-page="currentPage"

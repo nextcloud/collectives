@@ -1,6 +1,6 @@
 <template>
 	<div class="placeholder-main"
-		:class="placeholderClasses">
+		:class="[`placeholder-main-${type}`, isFullWidthView ? 'full-width-view' : 'sheet-view']">
 		<!-- Placeholder animation -->
 		<template v-for="(suffix, gradientIndex) in ['-regular', '-reverse']">
 			<svg :key="'gradient' + suffix" :class="'placeholder-gradient placeholder-gradient' + suffix">
@@ -82,14 +82,6 @@ export default {
 		...mapGetters([
 			'isFullWidthView',
 		]),
-
-		placeholderClasses() {
-			const classes = [`placeholder-main-${this.type}`]
-			if (!this.isFullWidthView) {
-				classes.push('sheet-view')
-			}
-			return classes
-		},
 
 		placeholderData() {
 			const data = []
