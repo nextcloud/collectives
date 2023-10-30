@@ -106,6 +106,7 @@ export default {
 
 	&-subpage {
 		page-break-before: always;
+		break-before: always;
 	}
 }
 
@@ -114,10 +115,14 @@ export default {
 }
 
 .editor__content {
+	display: block;
 	position: relative;
 }
 
 :deep(#read-only-editor div.ProseMirror) {
-	margin-top: revert;
+	margin-top: 0;
+	margin-bottom: 0;
+	padding-top: 0;
+	padding-bottom: 0;
 }
 </style>

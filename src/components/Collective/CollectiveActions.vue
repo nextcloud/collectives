@@ -143,6 +143,7 @@ export default {
 			'isCollectiveAdmin',
 			'isPublic',
 			'loading',
+			'shareTokenParam',
 		]),
 
 		circleLink() {

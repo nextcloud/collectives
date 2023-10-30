@@ -252,9 +252,9 @@ export default {
 
 <style lang="scss">
 @media print {
-
 	h1, h2, h3 {
 		page-break-after: avoid;
+		break-after: avoid;
 	}
 }
 </style>

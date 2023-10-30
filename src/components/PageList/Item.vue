@@ -57,8 +57,9 @@
 				{{ pageTitleString }}
 			</div>
 		</router-link>
-		<div v-if="canEdit" class="page-list-item-actions">
-			<PageActionMenu :page-id="pageId"
+		<div class="page-list-item-actions">
+			<PageActionMenu v-if="canEdit || isLandingPage"
+				:page-id="pageId"
 				:page-url="to"
 				:parent-id="parentId"
 				:timestamp="timestamp"
@@ -67,7 +68,7 @@
 				:is-landing-page="isLandingPage"
 				:is-template="isTemplate"
 				:in-page-list="true" />
-			<NcActions>
+			<NcActions v-if="canEdit">
 				<NcActionButton class="action-button-add" @click="newPage(pageId)">
 					<template #icon>
 						<PlusIcon :size="20" fill-color="var(--color-main-text)" />
