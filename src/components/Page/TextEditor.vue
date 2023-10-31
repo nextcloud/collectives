@@ -26,9 +26,8 @@ import {
 	GET_VERSIONS,
 	TOUCH_PAGE,
 } from '../../store/actions.js'
-import linkHandlerMixin from '../../mixins/linkHandlerMixin.js'
 import pageContentMixin from '../../mixins/pageContentMixin.js'
-import PageInfoBar from '../Page/PageInfoBar.vue'
+import editorMixin from '../../mixins/editorMixin.js'
 import SkeletonLoading from '../SkeletonLoading.vue'
 
 export default {
@@ -40,17 +39,12 @@ export default {
 	},
 
 	mixins: [
-		linkHandlerMixin,
 		pageContentMixin,
+		editorMixin,
 	],
 
 	data() {
 		return {
-			editor: null,
-			davContent: '',
-			editorContent: null,
-			reader: null,
-			readMode: true,
 			textEditWatcher: null,
 		}
 	},
@@ -61,7 +55,6 @@ export default {
 			'currentCollectiveCanEdit',
 			'currentPage',
 			'currentPageDavUrl',
-			'currentPageFilePath',
 			'hasVersionsLoaded',
 			'isFullWidthView',
 			'isLandingPage',
@@ -69,13 +62,7 @@ export default {
 			'isTemplatePage',
 			'isTextEdit',
 			'loading',
-			'shareTokenParam',
-			'showing',
 		]),
-
-		pageContent() {
-			return this.editorContent?.trim() || this.davContent
-		},
 
 		showReader() {
 			return this.readOnly
@@ -85,16 +72,8 @@ export default {
 			return !this.readOnly
 		},
 
-		waitForEditor() {
-			return this.readMode && this.isTextEdit
-		},
-
 		readOnly() {
-			return !this.currentCollectiveCanEdit || this.readMode | !this.isTextEdit
-		},
-
-		showOutline() {
-			return this.showing('outline')
+			return !this.currentCollectiveCanEdit || this.readMode || !this.isTextEdit
 		},
 
 		contentLoaded() {
@@ -106,10 +85,6 @@ export default {
 	watch: {
 		'currentPage.timestamp'() {
 			this.getPageContent()
-		},
-		'showOutline'(value) {
-			this.editor?.setShowOutline(value)
-			this.reader?.setShowOutline(value)
 		},
 	},
 
@@ -139,74 +114,20 @@ export default {
 	beforeDestroy() {
 		unsubscribe('collectives:attachment:restore', this.restoreAttachment)
 		this.textEditWatcher()
-		this.editor?.destroy()
-		this.reader?.destroy()
 	},
 
 	methods: {
 		...mapMutations([
 			'load',
 			'done',
-			'hide',
 			'setTextEdit',
 			'setTextView',
-			'show',
 		]),
 
 		...mapActions({
 			dispatchTouchPage: TOUCH_PAGE,
 			dispatchGetVersions: GET_VERSIONS,
 		}),
-
-		async setupReader() {
-			this.reader = await window.OCA.Text.createEditor({
-				el: this.$refs.reader,
-				content: this.pageContent,
-				filePath: `/${this.currentPageFilePath}`,
-				readOnly: true,
-				shareToken: this.shareTokenParam || null,
-				readonlyBar: {
-					component: PageInfoBar,
-					props: {
-						currentPage: this.currentPage,
-						isFullWidthView: this.isFullWidthView,
-					},
-				},
-				onLinkClick: (_event, attrs) => {
-					this.followLink(_event, attrs)
-				},
-				onOutlineToggle: (visible) => {
-					this.toggleOutlineFromEditor(visible)
-				},
-			})
-		},
-
-		async setupEditor() {
-			this.editor = this.currentCollectiveCanEdit
-				? await window.OCA.Text.createEditor({
-					el: this.$refs.editor,
-					fileId: this.currentPage.id,
-					filePath: `/${this.currentPageFilePath}`,
-					readOnly: false,
-					shareToken: this.shareTokenParam || null,
-					autofocus: false,
-					onLoaded: () => {
-						this.readyEditor()
-					},
-					onUpdate: ({ markdown }) => {
-						this.editorContent = markdown
-						this.reader?.setContent(this.pageContent)
-					},
-					onOutlineToggle: (visible) => {
-						this.toggleOutlineFromEditor(visible)
-					},
-				})
-				: null
-		},
-
-		focusEditor() {
-			this.editor?.focus()
-		},
 
 		restoreAttachment(name) {
 			// inspired by the fixedEncodeURIComponent function suggested in
@@ -217,14 +138,6 @@ export default {
 			const alt = name.replaceAll(/[[\]]/g, '')
 
 			this.editor.insertAtCursor(`<img src="${src}" alt="${alt}" />`)
-		},
-
-		/**
-		 * Set readMode to false
-		 */
-		readyEditor() {
-			this.done('editor')
-			this.readMode = false
 		},
 
 		initEditMode() {
@@ -265,14 +178,6 @@ export default {
 						showError(t('collectives', 'Error saving the document. Please try again.'))
 						this.setTextEdit()
 					})
-			}
-		},
-
-		toggleOutlineFromEditor(visible) {
-			if (visible === true) {
-				this.show('outline')
-			} else if (visible === false) {
-				this.hide('outline')
 			}
 		},
 
