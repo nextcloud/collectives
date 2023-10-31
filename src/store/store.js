@@ -53,6 +53,16 @@ export default new Store({
 
 		isTextEdit: (state) => state.textMode === pageModes.MODE_EDIT,
 		isTextView: (state) => state.textMode === pageModes.MODE_VIEW,
+
+		editorApiVersionCheck() {
+			const requiredVersion = '1.0'
+			const apiVersion = window.OCA?.Text?.apiVersion || '0'
+			return apiVersion.localeCompare(requiredVersion, undefined, { numeric: true, sensitivity: 'base' }) >= 0
+		},
+
+		useEditorApi(_, get) {
+			return !!window.OCA?.Text?.createEditor && get.editorApiVersionCheck
+		},
 	},
 
 	mutations: {

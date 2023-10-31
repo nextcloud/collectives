@@ -175,18 +175,9 @@ export default {
 			'isTemplatePage',
 			'isLandingPage',
 			'loading',
+			'useEditorApi',
 			'showing',
 		]),
-
-		editorApiVersionCheck() {
-			const requiredVersion = '1.0'
-			const apiVersion = window.OCA?.Text?.apiVersion || '0'
-			return apiVersion.localeCompare(requiredVersion, undefined, { numeric: true, sensitivity: 'base' }) >= 0
-		},
-
-		useEditorApi() {
-			return !!window.OCA?.Text?.createEditor && this.editorApiVersionCheck
-		},
 
 		titleChanged() {
 			return this.newTitle && this.newTitle !== this.currentPage.title
