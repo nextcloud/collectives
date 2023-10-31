@@ -48,6 +48,7 @@ OC.L10N.register(
     "Start editing" : "Començar a editar.",
     "Done" : "Fet",
     "Show in Files" : "Mostrar a Fitxers",
+    "Move or copy" : "Mou o copia",
     "Hide outline" : "Amaga l'esquema",
     "Show outline" : "Mostra l'esquema",
     "Edit template for subpages" : "Edita la plantilla per subpàgines",

@@ -20,6 +20,7 @@ OC.L10N.register(
     "Back" : "Distro",
     "Create" : "Krouiñ",
     "Done" : "Graet",
+    "Move or copy" : "Dilec'hiañ pe eilañ",
     "Title" : "Titl",
     "Deleted" : "Lamet",
     "Download" : "Pellgargañ",
