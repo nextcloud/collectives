@@ -78,7 +78,7 @@ export default {
 
 		contentLoaded() {
 			// Either `pageContent` is filled from editor or we finished fetching it from DAV
-			return this.pageContent || !this.loading('pageContent')
+			return !!this.pageContent || !this.loading('pageContent')
 		},
 	},
 

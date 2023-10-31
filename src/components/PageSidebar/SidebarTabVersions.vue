@@ -20,6 +20,8 @@
 				<span :title="pageFormattedTimestamp">
 					<NcListItem :title="t('collectives', 'Current version')"
 						class="version"
+						:class="{'active': !version}"
+						:active="!version"
 						@click="clickPreviewVersion(null)">
 						<template #icon>
 							<PageIcon :size="26"
@@ -36,6 +38,8 @@
 					:title="v.formattedTimestamp">
 					<NcListItem :title="v.relativeTimestamp"
 						class="version"
+						:class="{'active': selected(v)}"
+						:active="selected(v)"
 						@click="clickPreviewVersion(v)">
 						<template #icon>
 							<NcLoadingIcon v-if="loading(`version-${pageId}-${v.timestamp}`)"
@@ -131,6 +135,12 @@ export default {
 		 */
 		pageHumanReadableSize() {
 			return formatFileSize(this.pageSize)
+		},
+
+		selected() {
+			return (v) => {
+				return v.timestamp === this.version?.timestamp
+			}
 		},
 	},
 
