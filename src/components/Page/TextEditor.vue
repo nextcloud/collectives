@@ -8,12 +8,12 @@
 		<div v-show="contentLoaded && showReader"
 			ref="reader"
 			data-collectives-el="reader"
-			:class="{'sheet-view': !isFullWidthView}" />
+			:class="[isFullWidthView ? 'full-width-view' : 'sheet-view']" />
 		<div v-if="currentCollectiveCanEdit"
 			v-show="showEditor"
 			ref="editor"
 			data-collectives-el="editor"
-			:class="{'sheet-view': !isFullWidthView}" />
+			:class="[isFullWidthView ? 'full-width-view' : 'sheet-view']" />
 	</div>
 </template>
 
