@@ -26,8 +26,8 @@ import {
 	GET_VERSIONS,
 	TOUCH_PAGE,
 } from '../../store/actions.js'
-import pageContentMixin from '../../mixins/pageContentMixin.js'
 import editorMixin from '../../mixins/editorMixin.js'
+import pageContentMixin from '../../mixins/pageContentMixin.js'
 import SkeletonLoading from '../SkeletonLoading.vue'
 
 export default {
@@ -39,8 +39,8 @@ export default {
 	},
 
 	mixins: [
-		pageContentMixin,
 		editorMixin,
+		pageContentMixin,
 	],
 
 	data() {

@@ -129,8 +129,8 @@ export default {
 		},
 
 		waitForImages() {
-			const images = document.querySelectorAll('#text-container figure.image')
-			const loading = document.querySelectorAll('#text-container figure.image.icon-loading')
+			const images = document.querySelectorAll('div.ProseMirror figure.image')
+			const loading = document.querySelectorAll('div.ProseMirror figure.image.icon-loading')
 			this.loadImages.total = images.length
 			this.loadImages.count = images.length - loading.length
 

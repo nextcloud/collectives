@@ -6,9 +6,12 @@
 		<h1 v-else class="page-title sheet-view page-title-subpage">
 			{{ pageTitleString }}
 		</h1>
-		<RichTextReader v-if="pageContent"
+		<div v-if="useEditorApi"
+			ref="reader"
+			data-collectives-el="reader" />
+		<RichTextReader v-else
 			class="editor__content sheet-view"
-			:content="pageContent" />
+			:content="davContent" />
 	</div>
 </template>
 
@@ -16,6 +19,7 @@
 import { mapGetters } from 'vuex'
 import { RichTextReader, AttachmentResolver, ATTACHMENT_RESOLVER } from '@nextcloud/text'
 import { getCurrentUser } from '@nextcloud/auth'
+import editorMixin from '../mixins/editorMixin.js'
 import pageContentMixin from '../mixins/pageContentMixin.js'
 
 export default {
@@ -26,6 +30,7 @@ export default {
 	},
 
 	mixins: [
+		editorMixin,
 		pageContentMixin,
 	],
 
@@ -46,7 +51,7 @@ export default {
 
 	data() {
 		return {
-			pageContent: null,
+			davContent: '',
 		}
 	},
 
@@ -57,6 +62,7 @@ export default {
 			'pageDirectory',
 			'isPublic',
 			'shareTokenParam',
+			'useEditorApi',
 		]),
 
 		attachmentResolver() {
@@ -75,14 +81,27 @@ export default {
 
 	mounted() {
 		this.$emit('loading')
-		this.getPageContent().then(() => {
-			this.$emit('ready')
+
+		let readerPromise
+		if (this.useEditorApi) {
+			readerPromise = this.setupReader()
+		} else {
+			readerPromise = new Promise((resolve) => {
+				resolve()
+			})
+		}
+
+		readerPromise.then(() => {
+			this.getPageContent().then(() => {
+				this.$emit('ready')
+			})
 		})
 	},
 
 	methods: {
 		async getPageContent() {
-			this.pageContent = await this.fetchPageContent(this.pageDavUrl(this.page))
+			this.davContent = await this.fetchPageContent(this.pageDavUrl(this.page))
+			this.reader?.setContent(this.davContent)
 		},
 	},
 }
@@ -110,19 +129,36 @@ export default {
 	}
 }
 
+:deep(.text-menubar) {
+	display: none;
+}
+
+/* TODO: remove once removing LegacyEditor.vue+Reader.vue */
 #read-only-editor {
 	overflow-x: hidden;
 }
 
-.editor__content {
-	display: block;
-	position: relative;
+/* TODO: remove once removing LegacyEditor.vue+Reader.vue */
+:deep(.content-wrapper) {
+	display: block !important;
 }
 
-:deep(#read-only-editor div.ProseMirror) {
+/* TODO: remove once removing LegacyEditor.vue+Reader.vue */
+:deep(.editor__content div.ProseMirror) {
 	margin-top: 0;
 	margin-bottom: 0;
 	padding-top: 0;
 	padding-bottom: 0;
+}
+
+:deep([data-collectives-el='reader'] .content-wrapper) {
+	display: block !important;
+
+	div.ProseMirror {
+		margin-top: 0;
+		margin-bottom: 0;
+		padding-top: 0;
+		padding-bottom: 0;
+	}
 }
 </style>
