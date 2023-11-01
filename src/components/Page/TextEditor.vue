@@ -97,7 +97,11 @@ export default {
 	},
 
 	mounted() {
-		this.setupReader()
+		this.setupReader().then(() => {
+			if (!this.loading('pageContent')) {
+				this.reader?.setContent(this.pageContent)
+			}
+		})
 		this.setupEditor()
 		this.getPageContent().then(() => {
 			this.initEditMode()
