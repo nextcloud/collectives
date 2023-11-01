@@ -115,17 +115,20 @@ export default {
 	overflow-y: auto;
 }
 
+/* TODO: remove once removing LegacyEditor.vue+Reader.vue */
 [data-text-el='editor-container'] .text-editor__wrapper {
 	/* Required to allow scrolling long content in text editor */
 	position: static !important;
 	overflow: visible !important;
 }
 
+/* TODO: remove once removing LegacyEditor.vue+Reader.vue */
 [data-text-el='editor-container'] .editor {
 	/* Overflow is required for sticky menubar */
 	overflow: visible !important;
 }
 
+/* TODO: remove first selector once removing LegacyEditor.vue+Reader.vue */
 #text-wrapper #text div.ProseMirror {
 	/* Align read view bottom padding with editor */
 	padding-bottom: 200px;
@@ -179,7 +182,10 @@ export default {
 		display: block !important;
 	}
 
-	#text-wrapper #text .content-wrapper {
+	/* TODO: remove first selector once removing LegacyEditor.vue+Reader.vue */
+	#text-wrapper #text .content-wrapper,
+	[data-collectives-el='editor'] .content-wrapper,
+	[data-collectives-el='reader'] .content-wrapper {
 		display: block;
 
 		div.ProseMirror {
