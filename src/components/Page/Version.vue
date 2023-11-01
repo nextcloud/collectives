@@ -123,6 +123,7 @@ export default {
 
 	mounted() {
 		if (this.useEditorApi) {
+			this.pageInfoBarPage = {}
 			this.setupReader()
 		}
 		this.getPageContent()

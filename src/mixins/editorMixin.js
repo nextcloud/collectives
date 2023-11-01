@@ -13,6 +13,7 @@ export default {
 			editor: null,
 			davContent: '',
 			editorContent: null,
+			pageInfoBarPage: null,
 			readMode: true,
 		}
 	},
@@ -64,7 +65,7 @@ export default {
 				readonlyBar: {
 					component: PageInfoBar,
 					props: {
-						currentPage: this.currentPage,
+						currentPage: this.pageInfoBarPage || this.currentPage,
 						isFullWidthView: this.isFullWidthView,
 					},
 				},
