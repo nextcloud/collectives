@@ -143,8 +143,8 @@ export default {
 				el.addEventListener('load', this.imageLoaded, { capture: true })
 			}
 
-			// Wait 1 sec for each image but max. 15 sec, timeout afterwards
-			const timeout = Math.min(loading.length * 1000, 15000)
+			// Wait 1 sec for each image (min 3 sec, max. 15 sec), timeout afterwards
+			const timeout = Math.min(Math.max(loading.length * 1000, 3000), 15000)
 			this.$imageTimeout = debounce(() => {
 				if (this.loadImages.count < this.loadImages.total) {
 					console.error(`Failed to load ${this.loadImages.total - this.loadImages.count} images`)
@@ -159,7 +159,7 @@ export default {
 				return
 			}
 			this.loadImages.count += 1
-			if (this.loadImages.count >= this.loadImages.total) {
+			if (this.loadImages.count >= this.loadImages.total && this.loading) {
 				this.$imageTimeout?.clear()
 				// Finish loading the image
 				this.$nextTick(() => {
