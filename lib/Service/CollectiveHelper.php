@@ -34,12 +34,10 @@ class CollectiveHelper {
 	 * @param bool   $getLevel
 	 * @param bool   $getUserSettings
 	 *
-	 * @return array<int, CollectiveInfo>
+	 * @return CollectiveInfo[]
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 * @throws MissingDependencyException
-	 *
-	 * The array key of the returned result is the collective id.
 	 */
 	public function getCollectivesForUser(string $userId, bool $getLevel = true, bool $getUserSettings = true): array {
 		$collectiveInfos = [];
@@ -62,7 +60,7 @@ class CollectiveHelper {
 				$userPageOrder = ($settings ? $settings->getSetting('page_order') : null) ?? Collective::defaultPageOrder;
 				$userShowRecentPages = ($settings ? $settings->getSetting('show_recent_pages') : null) ?? Collective::defaultShowRecentPages;
 			}
-			$collectiveInfos[$c->getId()] = new CollectiveInfo(
+			$collectiveInfos[] = new CollectiveInfo(
 				$c,
 				$circle->getSanitizedName(),
 				$level,
@@ -77,12 +75,10 @@ class CollectiveHelper {
 	/**
 	 * @param string $userId
 	 *
-	 * @return array<int, CollectiveInfo>
+	 * @return CollectiveInfo[]
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 * @throws MissingDependencyException
-	 *
-	 * The array key of the returned result is the collective id.
 	 */
 	public function getCollectivesTrashForUser(string $userId): array {
 		$collectiveInfos = [];
@@ -91,11 +87,10 @@ class CollectiveHelper {
 			return $circle->getSingleId();
 		}, $circles);
 		$circles = array_combine($cids, $circles);
-		/** @var Collective[] $collectives */
 		$collectives = $this->collectiveMapper->findTrashByCircleIdsAndUser($cids, $userId);
 		foreach ($collectives as $c) {
 			$cid = $c->getCircleId();
-			$collectiveInfos[$c->getId()] = new CollectiveInfo(
+			$collectiveInfos[] = new CollectiveInfo(
 				$c,
 				$circles[$cid]->getSanitizedName(),
 				$this->circleHelper->getLevel($cid, $userId)

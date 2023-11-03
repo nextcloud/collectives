@@ -104,7 +104,7 @@ class CollectiveService extends CollectiveServiceBase {
 	/**
 	 * @param string $userId
 	 *
-	 * @return array<int, CollectiveInfo>
+	 * @return CollectiveInfo[]
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 * @throws MissingDependencyException

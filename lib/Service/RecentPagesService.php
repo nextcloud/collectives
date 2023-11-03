@@ -53,10 +53,13 @@ class RecentPagesService {
 		$mimeTypeMd = $this->mimeTypeLoader->getId('text/markdown');
 
 		$expressions = [];
+		$collectivesMap = [];
 		foreach ($collectives as $collective) {
 			$value = sprintf($appData . '/collectives/%d/%%', $collective->getId());
 			$expressions[] = $qb->expr()->like('f.path', $qb->createNamedParameter($value, IQueryBuilder::PARAM_STR));
+			$collectivesMap[$collective->getId()] = $collective;
 		}
+		unset($collectives);
 
 		$qb->select('p.*', 'f.mtime as timestamp', 'f.name as filename', 'f.path as path')
 			->from('filecache', 'f')
@@ -71,7 +74,7 @@ class RecentPagesService {
 		$pages = [];
 		while ($row = $r->fetch()) {
 			$collectiveId = (int)explode('/', $row['path'], 4)[2];
-			if (!isset($collectives[$collectiveId])) {
+			if (!isset($collectivesMap[$collectiveId])) {
 				continue;
 			}
 
@@ -81,7 +84,7 @@ class RecentPagesService {
 			unset($splitPath);
 
 			// prepare link and title
-			$pathParts = [$collectives[$collectiveId]->getName()];
+			$pathParts = [$collectivesMap[$collectiveId]->getName()];
 			if ($internalPath !== '' && $internalPath !== '.') {
 				$pathParts = array_merge($pathParts, explode('/', $internalPath));
 			}
@@ -97,7 +100,7 @@ class RecentPagesService {
 			// not returning a PageInfo instance because it would be either incomplete or too expensive to build completely
 			$recentPage = new RecentPage();
 			$recentPage
-				->setCollectiveName($this->collectiveService->getCollectiveNameWithEmoji($collectives[$collectiveId]))
+				->setCollectiveName($this->collectiveService->getCollectiveNameWithEmoji($collectivesMap[$collectiveId]))
 				->setTitle($title)
 				->setPageUrl($url)
 				->setTimestamp($row['timestamp']);
