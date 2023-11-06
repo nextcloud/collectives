@@ -12,6 +12,7 @@
         "php": ">=7.4",
         "ext-json": "*",
         "ext-pdo": "*",
+        "ext-pdo_sqlite": "*",
         "teamtnt/tntsearch": "^3.0"
     },
     "require-dev": {
