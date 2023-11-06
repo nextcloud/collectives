@@ -27,7 +27,6 @@
 describe('Settings', function() {
 	before(function() {
 		cy.loginAs('bob')
-		cy.visit('apps/collectives')
 		cy.deleteAndSeedCollective('A Collective')
 	})
 

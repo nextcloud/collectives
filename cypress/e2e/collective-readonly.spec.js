@@ -24,12 +24,11 @@ describe('Read-only collective', function() {
 
 	before(function() {
 		cy.loginAs('alice')
-		cy.visit('apps/collectives')
 		cy.deleteAndSeedCollective('PermissionCollective')
-		cy.seedPage('SecondPage', '', 'Readme.md')
-		cy.seedCollectivePermissions('PermissionCollective', 'edit', 4)
+			.seedPage('SecondPage')
 		cy.circleFind('PermissionCollective')
 			.circleAddMember('bob')
+		cy.seedCollectivePermissions('PermissionCollective', 'edit', 4)
 	})
 
 	describe('in read-only collective', function() {

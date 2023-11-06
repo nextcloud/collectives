@@ -27,11 +27,10 @@
 describe('Page details', function() {
 	before(function() {
 		cy.loginAs('bob')
-		cy.visit('/apps/collectives')
 		cy.deleteAndSeedCollective('Our Garden')
-		cy.seedPage('Day 1', '', 'Readme.md')
+			.seedPage('Day 1', '', 'Readme.md')
+			.seedPage('TableOfContents', '', 'Readme.md')
 		cy.seedPageContent('Our Garden/Day 2.md', 'A test string with Day 2 in the middle and a [link to Day 1](/index.php/apps/collectives/Our%20Garden/Day%201).')
-		cy.seedPage('TableOfContents', '', 'Readme.md')
 		cy.seedPageContent('Our Garden/TableOfContents.md', '## Second-Level Heading')
 	})
 

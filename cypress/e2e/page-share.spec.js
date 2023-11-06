@@ -29,10 +29,9 @@ describe('Collective Share', function() {
 
 	before(function() {
 		cy.loginAs('bob')
-		cy.visit('/apps/collectives')
 		cy.deleteAndSeedCollective('Share me')
-		cy.seedPage('Sharepage', '', 'Readme.md')
-		cy.seedPage('Sharesubpage', '', 'Sharepage.md')
+			.seedPage('Sharepage', '', 'Readme.md')
+			.seedPage('Sharesubpage', '', 'Sharepage.md')
 		cy.seedPageContent('Share%20me/Sharepage/Readme.md', '## Shared page')
 	})
 

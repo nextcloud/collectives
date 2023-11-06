@@ -29,16 +29,18 @@ const collective = 'Landingpage Collective'
 describe('Page landing page', function() {
 	before(function() {
 		cy.loginAs('bob')
-		cy.visit('/apps/collectives')
 		cy.deleteAndSeedCollective(collective)
+			.seedPage('Page 1', '', 'Readme.md')
+			.seedPage('Page 2', '', 'Readme.md')
+			.then(collective => {
+				// Wait 1 to make sure that page order by time is right
+				cy.wait(1000) // eslint-disable-line cypress/no-unnecessary-waiting
+				cy.wrap(collective)
+					.seedPage('Page 3', '', 'Readme.md')
+			})
 		cy.circleFind(collective).circleAddMember('alice')
 		cy.circleFind(collective).circleAddMember('jane')
 		cy.circleFind(collective).circleAddMember('john')
-		cy.seedPage('Page 1', '', 'Readme.md')
-		cy.seedPage('Page 2', '', 'Readme.md')
-		// Wait 1 second to make sure that page order by time is right
-		cy.wait(1000) // eslint-disable-line cypress/no-unnecessary-waiting
-		cy.seedPage('Page 3', '', 'Readme.md')
 	})
 
 	beforeEach(function() {

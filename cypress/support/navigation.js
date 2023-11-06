@@ -17,8 +17,7 @@ Cypress.Commands.add('openPageMenu', (pageName) => {
 
 Cypress.Commands.add('openCollective', (collectiveName) => {
 	Cypress.log()
-	cy.get(`.collectives_list_item a[title="${collectiveName}"]`)
-		.click()
+	cy.routeTo(collectiveName)
 })
 
 Cypress.Commands.add('openCollectiveMenu', (collectiveName) => {

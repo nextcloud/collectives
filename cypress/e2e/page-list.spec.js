@@ -27,24 +27,25 @@
 describe('Page list', function() {
 	before(function() {
 		cy.loginAs('bob')
-		cy.visit('apps/collectives')
 		cy.deleteAndSeedCollective('Our Garden')
-		cy.seedPage('Target', '', 'Readme.md')
-		cy.seedPage('Target Subpage', '', 'Target.md')
+			.as('garden')
+			.seedPage('Target', '', 'Readme.md')
+			.seedPage('Target Subpage', '', 'Target.md')
 		// Wait 1 second to make sure that page order by time is right
 		cy.wait(1000) // eslint-disable-line cypress/no-unnecessary-waiting
-		cy.seedPage('Day 1', '', 'Readme.md')
-		cy.seedPage('Subpage Title', '', 'Day 1.md')
-		cy.seedPage('Day 2', '', 'Readme.md')
-		cy.seedPage('Page Title', '', 'Readme.md')
-		cy.seedPage('Move me internal', '', 'Readme.md')
-		cy.seedPage('Copy me internal', '', 'Readme.md')
-		cy.seedPage('Move me external', '', 'Readme.md')
-		cy.seedPage('Copy me external', '', 'Readme.md')
-		cy.seedPage('#% special chars', '', 'Readme.md')
+		cy.then(() => this.garden)
+			.seedPage('Day 1', '', 'Readme.md')
+			.seedPage('Subpage Title', '', 'Day 1.md')
+			.seedPage('Day 2', '', 'Readme.md')
+			.seedPage('Page Title', '', 'Readme.md')
+			.seedPage('Move me internal', '', 'Readme.md')
+			.seedPage('Copy me internal', '', 'Readme.md')
+			.seedPage('Move me external', '', 'Readme.md')
+			.seedPage('Copy me external', '', 'Readme.md')
+			.seedPage('#% special chars', '', 'Readme.md')
 		cy.deleteAndSeedCollective('MoveCopyTargetCollective')
-		cy.seedPage('Target external', '', 'Readme.md')
-		cy.seedPage('Target Subpage external', '', 'Target external.md')
+			.seedPage('Target external', '', 'Readme.md')
+			.seedPage('Target Subpage external', '', 'Target external.md')
 	})
 
 	beforeEach(function() {
@@ -94,7 +95,6 @@ describe('Page list', function() {
 
 	describe('Move and copy a page using the modal', function() {
 		it('Moves page to a subpage', function() {
-			cy.visit('apps/collectives/Our%20Garden')
 			cy.openPageMenu('Move me internal')
 			cy.clickMenuButton('Move or copy')
 			cy.get('.picker-list li')
@@ -118,7 +118,6 @@ describe('Page list', function() {
 		})
 
 		it('Copies page to a subpage', function() {
-			cy.visit('/apps/collectives/Our%20Garden')
 			cy.openPageMenu('Copy me internal')
 			cy.clickMenuButton('Move or copy')
 			cy.get('.picker-list li')
@@ -146,7 +145,6 @@ describe('Page list', function() {
 		})
 
 		it('Moves page to a subpage in another collective', function() {
-			cy.visit('/apps/collectives/Our%20Garden')
 			cy.openPageMenu('Move me external')
 			cy.clickMenuButton('Move or copy')
 			cy.get('.crumbs-home')
@@ -176,7 +174,6 @@ describe('Page list', function() {
 		})
 
 		it('Copies page to a subpage in another collective', function() {
-			cy.visit('/apps/collectives/Our%20Garden')
 			cy.openPageMenu('Copy me external')
 			cy.clickMenuButton('Move or copy')
 			cy.get('.crumbs-home')

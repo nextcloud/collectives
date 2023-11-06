@@ -32,7 +32,6 @@
 describe('Pages are accessible via group membership to circle', function() {
 	before(function() {
 		cy.loginAs('jane')
-		cy.visit('apps/collectives')
 		cy.deleteAndSeedCollective('Group Collective')
 		cy.circleFind('Group Collective')
 			.circleAddMember('Bobs Group', 2)
