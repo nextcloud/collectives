@@ -1,3 +1,6 @@
+import { login, logout } from '@nextcloud/cypress/commands'
+import { User } from '@nextcloud/cypress'
+
 import {
 	GET_COLLECTIVES,
 	GET_TRASH_COLLECTIVES,
@@ -28,30 +31,17 @@ Cypress.on('uncaught:exception', (err) => {
 	}
 })
 
-/**
- * Login a user to Nextcloud and visit a given route
- */
-Cypress.Commands.add('login', (user, { password, route, onBeforeLoad } = {}) => {
-	route = route || '/apps/collectives'
-	password = password || user
-	cy.session(user, function() {
-		cy.visit(route)
-		cy.get('input[name=user]').type(user)
-		cy.get('input[name=password]').type(password)
-		cy.get('form[name=login] [type=submit]').click()
-		cy.url().should('not.include', 'index.php/login?redirect_url')
-		cy.url().should('include', route.replaceAll(' ', '%20'))
-	})
-	// in case the session already existed but we are on a different route...
-	cy.visit(route, { onBeforeLoad })
-})
+// Authentication commands from @nextcloud/cypress
+Cypress.Commands.add('login', login)
+Cypress.Commands.add('logout', logout)
 
 /**
- * Logout a user from Nextcloud
+ * Login with the given username to Nextcloud
  */
-Cypress.Commands.add('logout', () => {
-	cy.session('_guest', function() {
-	})
+Cypress.Commands.add('loginAs', (user, password = null) => {
+	password ||= user
+	const u = new User(user, password)
+	cy.login(u)
 })
 
 /**
@@ -98,12 +88,13 @@ Cypress.Commands.add('switchPageMode', (pageMode) => {
 Cypress.Commands.add('enableApp', appName => cy.setAppEnabled(appName))
 Cypress.Commands.add('disableApp', appName => cy.setAppEnabled(appName, false))
 Cypress.Commands.add('setAppEnabled', (appName, value = true) => {
-	cy.window().then(async win => {
+	cy.request('/csrftoken').then(({ body }) => {
+		const requesttoken = body.token
 		const verb = value ? 'enable' : 'disable'
 		const api = `${Cypress.env('baseUrl')}/index.php/settings/apps/${verb}`
 		return axios.post(api,
 			{ appIds: [appName] },
-			{ headers: { requesttoken: win.OC.requestToken } },
+			{ headers: { requesttoken } },
 		)
 	})
 })

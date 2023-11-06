@@ -28,7 +28,8 @@ const collective = 'Landingpage Collective'
 
 describe('Page landing page', function() {
 	before(function() {
-		cy.login('bob', { route: '/apps/collectives' })
+		cy.loginAs('bob')
+		cy.visit('/apps/collectives')
 		cy.deleteAndSeedCollective(collective)
 		cy.seedCircleMember(collective, 'alice')
 		cy.seedCircleMember(collective, 'jane')
@@ -39,7 +40,8 @@ describe('Page landing page', function() {
 	})
 
 	beforeEach(function() {
-		cy.login('bob', { route: `/apps/collectives/${collective}` })
+		cy.loginAs('bob')
+		cy.visit(`/apps/collectives/${collective}`)
 		// make sure the page list loaded properly
 		cy.contains('.app-content-list-item a', 'Page 1')
 	})
@@ -85,7 +87,8 @@ describe('Page landing page', function() {
 		})
 
 		it('Allows to open members modal as member', function() {
-			cy.login('alice', { route: `/apps/collectives/${collective}` })
+			cy.loginAs('alice')
+			cy.visit(`/apps/collectives/${collective}`)
 			cy.get('.members-widget .avatardiv[title="bob"]')
 			cy.get('.members-widget .button-vue[title="Show members"]')
 				.click()

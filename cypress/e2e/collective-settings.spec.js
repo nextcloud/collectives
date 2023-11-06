@@ -26,13 +26,15 @@
 
 describe('Collective settings', function() {
 	before(function() {
-		cy.login('bob')
+		cy.loginAs('bob')
+		cy.visit('apps/collectives')
 		cy.deleteCollective('Change me now')
 		cy.deleteAndSeedCollective('Change me')
 	})
 
 	beforeEach(function() {
-		cy.login('bob')
+		cy.loginAs('bob')
+		cy.visit('apps/collectives')
 	})
 
 	describe('set emoji', function() {

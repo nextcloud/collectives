@@ -26,7 +26,8 @@
 
 describe('Settings', function() {
 	before(function() {
-		cy.login('bob')
+		cy.loginAs('bob')
+		cy.visit('apps/collectives')
 		cy.deleteAndSeedCollective('A Collective')
 	})
 
@@ -35,7 +36,8 @@ describe('Settings', function() {
 			const randomFolder = Math.random().toString(36).replace(/[^a-z]+/g, '').slice(0, 10)
 			const filePickerListSelector = '#picker-filestable tr, .file-picker__row'
 			const breadcrumbsSelector = '.files-controls .breadcrumb, [data-cy-files-content-breadcrumbs] a'
-			cy.login('bob')
+			cy.loginAs('bob')
+			cy.visit('apps/collectives')
 
 			cy.get('#app-settings')
 				.click()

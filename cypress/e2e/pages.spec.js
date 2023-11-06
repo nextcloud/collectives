@@ -26,7 +26,8 @@
 
 describe('Page', function() {
 	before(function() {
-		cy.login('bob', { route: '/apps/collectives' })
+		cy.loginAs('bob')
+		cy.visit('/apps/collectives')
 		cy.deleteAndSeedCollective('Our Garden')
 		cy.seedPage('Day 1', '', 'Readme.md')
 		// Wait 1 second to make sure that page order by time is right
@@ -40,7 +41,8 @@ describe('Page', function() {
 	})
 
 	beforeEach(function() {
-		cy.login('bob', { route: '/apps/collectives/Our Garden' })
+		cy.loginAs('bob')
+		cy.visit('/apps/collectives/Our Garden')
 		// make sure the page list loaded properly
 		cy.contains('.app-content-list-item a', 'Day 1')
 	})

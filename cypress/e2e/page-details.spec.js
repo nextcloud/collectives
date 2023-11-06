@@ -26,7 +26,8 @@
 
 describe('Page details', function() {
 	before(function() {
-		cy.login('bob', { route: '/apps/collectives' })
+		cy.loginAs('bob')
+		cy.visit('/apps/collectives')
 		cy.deleteAndSeedCollective('Our Garden')
 		cy.seedPage('Day 1', '', 'Readme.md')
 		cy.seedPageContent('Our Garden/Day 2.md', 'A test string with Day 2 in the middle and a [link to Day 1](/index.php/apps/collectives/Our%20Garden/Day%201).')
@@ -35,7 +36,8 @@ describe('Page details', function() {
 	})
 
 	beforeEach(function() {
-		cy.login('bob', { route: '/apps/collectives/Our Garden' })
+		cy.loginAs('bob')
+		cy.visit('/apps/collectives/Our Garden')
 		// make sure the page list loaded properly
 		cy.contains('.app-content-list-item a', 'Day 1')
 	})
