@@ -161,11 +161,15 @@ describe('Page', function() {
 
 			cy.log('Inserting an image')
 			cy.intercept({ method: 'POST', url: '**/text/attachment/upload*' }).as('attachmentUpload')
-			cy.get('input[data-text-el="attachment-file-input"]')
+			cy.getEditor()
+				.should('be.visible')
+				.find('input[data-text-el="attachment-file-input"]')
 				.selectFile('cypress/fixtures/test.png', { force: true })
 			cy.wait('@attachmentUpload')
 
 			cy.log('Inserting a heading')
+			// Wait 1 second to prevent race condition with previous insertion
+			cy.wait(1000) // eslint-disable-line cypress/no-unnecessary-waiting
 			cy.getEditor()
 				.should('be.visible')
 				.type('## Heading{enter}')
