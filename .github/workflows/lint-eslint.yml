@@ -8,22 +8,7 @@
 
 name: Lint eslint
 
-on:
-  pull_request:
-    paths:
-      - '.github/workflows/**'
-      - 'src/**'
-      - 'appinfo/info.xml'
-      - 'package.json'
-      - 'package-lock.json'
-      - 'tsconfig.json'
-      - '.eslintrc.*'
-      - '.eslintignore'
-      - '**.js'
-      - '**.ts'
-      - '**.vue'
-
-  merge_group:
+on: pull_request
 
 permissions:
   contents: read
@@ -33,10 +18,38 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+
+    outputs:
+      src: ${{ steps.changes.outputs.src}}
+
+    steps:
+      - uses: dorny/paths-filter@4512585405083f25c027a35db413c2b3b9006d50 # v2.11.1
+        id: changes
+        continue-on-error: true
+        with:
+          filters: |
+            src:
+              - '.github/workflows/**'
+              - 'src/**'
+              - 'appinfo/info.xml'
+              - 'package.json'
+              - 'package-lock.json'
+              - 'tsconfig.json'
+              - '.eslintrc.*'
+              - '.eslintignore'
+              - '**.js'
+              - '**.ts'
+              - '**.vue'
+
   lint:
     runs-on: ubuntu-latest
 
-    name: eslint
+    needs: changes
+    if: needs.changes.outputs.src != 'false'
+
+    name: NPM lint
 
     steps:
       - name: Checkout
@@ -60,7 +73,23 @@ jobs:
       - name: Install dependencies
         env:
           CYPRESS_INSTALL_BINARY: 0
+          PUPPETEER_SKIP_DOWNLOAD: true
         run: npm ci
 
       - name: Lint
         run: npm run lint
+
+  summary:
+    permissions:
+      contents: none
+    runs-on: ubuntu-latest
+    needs: [changes, lint]
+
+    if: always()
+
+    # This is the summary, we just avoid to rename it so that branch protection rules still match
+    name: eslint
+
+    steps:
+      - name: Summary status
+        run: if ${{ needs.changes.outputs.src != 'false' && needs.lint.result != 'success' }}; then exit 1; fi

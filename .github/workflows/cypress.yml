@@ -1,37 +1,12 @@
 name: Cypress
 
-on:
-  pull_request:
-    paths:
-      - '.github/workflows/**'
-      - 'appinfo/**'
-      - 'cypress/**'
-      - 'l10n/**'
-      - 'lib/**'
-      - 'src/**'
-      - 'skeleton/**'
-      - 'templates/**'
-      - '.php-cs-fixer.dist.php'
-      - 'babel.config.js'
-      - 'composer.json'
-      - 'composer.lock'
-      - 'cypress.json'
-      - 'package.json'
-      - 'package-lock.json'
-
-  merge_group:
-
-  push:
-    branches:
-      - main
-      - master
-      - stable*
+on: pull_request
 
 permissions:
   contents: read
 
 concurrency:
-  group: ${{ github.head_ref || github.run_id }}
+  group: cypress-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 
 env:
@@ -39,8 +14,43 @@ env:
   CYPRESS_baseUrl: http://localhost:8081/index.php
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+
+    outputs:
+      src: ${{ steps.changes.outputs.src}}
+
+    steps:
+      - uses: dorny/paths-filter@4512585405083f25c027a35db413c2b3b9006d50 # v2.11.1
+        id: changes
+        continue-on-error: true
+        with:
+          filters: |
+            src:
+              - '.github/workflows/**'
+              - 'appinfo/**'
+              - 'css/**'
+              - 'lib/**'
+              - 'skeleton/**'
+              - 'src/**'
+              - 'templates/**'
+              - 'babel.config.js'
+              - 'composer.json'
+              - 'composer.lock'
+              - 'cypress.config.js'
+              - 'package.json'
+              - 'package-lock.json'
+              - 'tsconfig.json'
+              - '**.js'
+              - '**.ts'
+              - '**.vue'
+
   init:
     runs-on: ubuntu-22.04
+
+    needs: changes
+    if: needs.changes.outputs.src != 'false'
+
     outputs:
       nodeVersion: ${{ steps.versions.outputs.nodeVersion }}
       npmVersion: ${{ steps.versions.outputs.npmVersion }}
@@ -126,7 +136,9 @@ jobs:
 
   cypress:
     runs-on: ubuntu-22.04
-    needs: init
+
+    needs: [changes, init]
+    if: needs.changes.outputs.src != 'false'
 
     strategy:
       fail-fast: false
@@ -257,4 +269,4 @@ jobs:
 
     steps:
       - name: Summary status
-        run: if ${{ needs.init.result != 'success' || ( needs.cypress.result != 'success' && needs.cypress.result != 'skipped' ) }}; then exit 1; fi
+        run: if ${{ needs.changes.outputs.src != 'false' && (needs.init.result != 'success' || ( needs.cypress.result != 'success' && needs.cypress.result != 'skipped' )) }}; then exit 1; fi
