@@ -75,7 +75,7 @@ Cypress.Commands.add('switchPageMode', (pageMode) => {
 		cy.get('button.titleform-button')
 			.should('contain', 'Edit')
 			.click()
-		cy.getEditor(Cypress.config('defaultCommandTimeout') * 15)
+		cy.getEditor()
 			.should('be.visible')
 	} else {
 		throw new Error(`Unknown page mode: ${pageMode}`)
