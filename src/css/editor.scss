@@ -9,15 +9,15 @@
 
 .sheet-view {
 	--text-editor-max-width: 670px !important;
-	max-width: var(--text-editor-max-width);
-	margin: auto;
 
-	&[data-collectives-el='editor'],
-	&[data-collectives-el='reader'] {
-		max-width: unset;
+	.landing-page-widgets,
+	.text-container-heading,
+	.page-content-skeleton {
+		max-width: var(--text-editor-max-width);
+		margin: auto;
 	}
 
-	&.page-title {
+	.page-title {
 		max-width: 100%;
 		margin: 0 0 0 max(0px, calc(50% - (var(--text-editor-max-width) / 2)));
 	}
@@ -27,6 +27,17 @@
 		max-width: var(--text-editor-max-width);
 		padding: 0 2px;
 		margin: auto;
+	}
+
+	[data-collectives-el='editor'],
+	[data-collectives-el='reader'] {
+		max-width: unset;
+		margin: auto;
+
+		.text-menubar {
+			max-width: var(--text-editor-max-width);
+			margin: auto;
+		}
 	}
 }
 

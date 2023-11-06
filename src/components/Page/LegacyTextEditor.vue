@@ -2,12 +2,10 @@
 	<div>
 		<WidgetHeading v-if="isLandingPage"
 			:title="t('collectives', 'Landing page')"
-			class="text-container-heading"
-			:class="[isFullWidthView ? 'full-width-view' : 'sheet-view']" />
+			class="text-container-heading" />
 		<div v-show="showReader"
 			id="text-container"
 			:key="'text-' + currentPage.id"
-			:class="[isFullWidthView ? 'full-width-view' : 'sheet-view']"
 			:aria-label="t('collectives', 'Page content')"
 			data-collectives-el="reader">
 			<Reader :key="`reader-${currentPage.id}`"
@@ -69,7 +67,6 @@ export default {
 			'isTemplatePage',
 			'isTextEdit',
 			'isPublic',
-			'isFullWidthView',
 			'loading',
 		]),
 

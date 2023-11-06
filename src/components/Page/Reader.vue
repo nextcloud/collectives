@@ -5,7 +5,7 @@
 			name="sharingToken"
 			:value="shareTokenParam">
 		<div id="text" class="editor">
-			<PageInfoBar :current-page="currentPage" :is-full-width-view="isFullWidthView" />
+			<PageInfoBar :current-page="currentPage" />
 			<SkeletonLoading v-if="loading('pageContent')" type="text" />
 			<RichTextReader v-else
 				:content="pageContent"
@@ -68,7 +68,6 @@ export default {
 	computed: {
 		...mapGetters([
 			'currentPageDirectory',
-			'isFullWidthView',
 			'loading',
 			'showing',
 			'shareTokenParam',

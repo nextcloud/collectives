@@ -1,6 +1,6 @@
 <template>
-	<div>
-		<h1 id="titleform" class="page-title" :class="[isFullWidthView ? 'full-width-view' : 'sheet-view']">
+	<div :class="[isFullWidthView ? 'full-width-view' : 'sheet-view']">
+		<h1 id="titleform" class="page-title">
 			<div class="page-title-icon">
 				<div v-if="currentPage.emoji">
 					{{ currentPage.emoji }}
@@ -31,15 +31,15 @@
 		</h1>
 		<SkeletonLoading v-show="!contentLoaded" class="page-content-skeleton" type="text" />
 		<div v-show="contentLoaded"
-			id="text-container"
-			:class="[isFullWidthView ? 'full-width-view' : 'sheet-view']">
+			id="text-container">
 			<div v-if="useEditorApi"
 				ref="reader"
 				data-collectives-el="reader" />
 			<Reader v-else
 				:key="`show-${currentPage.id}-${version.timestamp}`"
 				:current-page="currentPage"
-				:page-content="davContent" />
+				:page-content="davContent"
+				data-collectives-el="reader" />
 		</div>
 	</div>
 </template>

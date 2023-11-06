@@ -2,18 +2,17 @@
 	<div>
 		<WidgetHeading v-if="isLandingPage"
 			:title="t('collectives', 'Landing page')"
-			class="text-container-heading"
-			:class="[isFullWidthView ? 'full-width-view' : 'sheet-view']" />
-		<SkeletonLoading v-show="!contentLoaded" class="page-content-skeleton" type="text" />
+			class="text-container-heading" />
+		<SkeletonLoading v-show="!contentLoaded"
+			type="text"
+			class="page-content-skeleton" />
 		<div v-show="contentLoaded && showReader"
 			ref="reader"
-			data-collectives-el="reader"
-			:class="[isFullWidthView ? 'full-width-view' : 'sheet-view']" />
+			data-collectives-el="reader" />
 		<div v-if="currentCollectiveCanEdit"
 			v-show="showEditor"
 			ref="editor"
-			data-collectives-el="editor"
-			:class="[isFullWidthView ? 'full-width-view' : 'sheet-view']" />
+			data-collectives-el="editor" />
 	</div>
 </template>
 
@@ -56,7 +55,6 @@ export default {
 			'currentPage',
 			'currentPageDavUrl',
 			'hasVersionsLoaded',
-			'isFullWidthView',
 			'isLandingPage',
 			'isPublic',
 			'isTemplatePage',

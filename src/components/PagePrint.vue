@@ -1,16 +1,17 @@
 <template>
-	<div id="text-container" :key="'text-' + page.id" class="page">
-		<h1 v-if="page.parentId === 0" id="page-title-collective" class="page-title sheet-view page-title-collective">
+	<div id="text-container" :key="'text-' + page.id" class="page sheet-view">
+		<h1 v-if="page.parentId === 0" id="page-title-collective" class="page-title page-title-collective">
 			{{ currentCollectiveTitle }}
 		</h1>
-		<h1 v-else class="page-title sheet-view page-title-subpage">
+		<h1 v-else class="page-title page-title-subpage">
 			{{ pageTitleString }}
 		</h1>
 		<div v-if="useEditorApi"
 			ref="reader"
+			class="sheet-view"
 			data-collectives-el="reader" />
 		<RichTextReader v-else
-			class="editor__content sheet-view"
+			class="editor__content"
 			:content="davContent" />
 	</div>
 </template>

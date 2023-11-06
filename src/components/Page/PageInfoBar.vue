@@ -1,6 +1,5 @@
 <template>
-	<div class="text-menubar"
-		:class="[isFullWidthView ? 'full-width-view' : 'sheet-view']">
+	<div class="text-menubar">
 		<div v-if="currentPage.lastUserId" class="infobar-item infobar-lastupdate">
 			<div class="item-text">
 				<LastUserBubble :last-user-id="currentPage.lastUserId"
@@ -25,10 +24,6 @@ export default {
 	props: {
 		currentPage: {
 			type: Object,
-			required: true,
-		},
-		isFullWidthView: {
-			type: Boolean,
 			required: true,
 		},
 	},

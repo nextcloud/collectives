@@ -11,7 +11,6 @@
 		:show-outline-outside="showOutline"
 		mime="text/markdown"
 		class="file-view active"
-		:class="[isFullWidthView ? 'full-width-view' : 'sheet-view']"
 		@ready="ready"
 		@outline-toggled="toggleOutlineFromText"
 		@add-image-node="onAddImageNode"
@@ -29,7 +28,6 @@ export default {
 		...mapGetters([
 			'currentPage',
 			'currentPageFilePath',
-			'isFullWidthView',
 			'shareTokenParam',
 			'showing',
 		]),

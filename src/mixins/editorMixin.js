@@ -23,7 +23,6 @@ export default {
 			'currentCollectiveCanEdit',
 			'currentPage',
 			'currentPageFilePath',
-			'isFullWidthView',
 			'shareTokenParam',
 			'showing',
 		]),
@@ -66,7 +65,6 @@ export default {
 					component: PageInfoBar,
 					props: {
 						currentPage: this.pageInfoBarPage || this.currentPage,
-						isFullWidthView: this.isFullWidthView,
 					},
 				},
 				onLinkClick: (_event, attrs) => {
