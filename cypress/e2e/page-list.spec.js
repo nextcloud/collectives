@@ -252,6 +252,11 @@ describe('Page list', function() {
 			cy.get('input[data-text-el="attachment-file-input"]')
 				.selectFile('cypress/fixtures/test.png', { force: true })
 			cy.wait('@attachmentUpload')
+
+			cy.wait(1000) // eslint-disable-line cypress/no-unnecessary-waiting
+			cy.getEditor()
+				.should('be.visible')
+				.type('text')
 			cy.switchPageMode(0)
 
 			// Trash page
@@ -272,15 +277,9 @@ describe('Page list', function() {
 			cy.get('button.modal-container__close').click()
 
 			cy.openPage('Day 1')
-			if (Cypress.env('ncVersion') === 'stable25') {
-				cy.getEditor()
-					.find('img.image__main')
-					.should('be.visible')
-			} else {
-				cy.getReadOnlyEditor()
-					.find('img.image__main')
-					.should('be.visible')
-			}
+			cy.getReadOnlyEditor()
+				.find('img.image__main')
+				.should('be.visible')
 		})
 	})
 })
