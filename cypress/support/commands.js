@@ -100,6 +100,20 @@ Cypress.Commands.add('setAppEnabled', (appName, value = true) => {
 })
 
 /**
+ * Enable dashboard widget
+ */
+Cypress.Commands.add('enableDashboardWidget', (widgetName) => {
+	cy.request('/csrftoken').then(({ body }) => {
+		const requesttoken = body.token
+		const api = `${Cypress.env('baseUrl')}/index.php/apps/dashboard/layout`
+		return axios.post(api,
+			{ layout: widgetName },
+			{ headers: { requesttoken } },
+		)
+	})
+})
+
+/**
  * First delete, then seed a collective (to start fresh)
  */
 Cypress.Commands.add('deleteAndSeedCollective', (name) => {
