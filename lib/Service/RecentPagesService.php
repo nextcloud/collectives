@@ -11,6 +11,7 @@ use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\IMimeTypeLoader;
 use OCP\IConfig;
 use OCP\IDBConnection;
+use OCP\IL10N;
 use OCP\IURLGenerator;
 use OCP\IUser;
 
@@ -21,19 +22,22 @@ class RecentPagesService {
 	protected IDBConnection $dbc;
 	protected IConfig $config;
 	protected IMimeTypeLoader $mimeTypeLoader;
+	protected IL10N $l10n;
 
 	public function __construct(
 		CollectiveService $collectiveService,
 		IDBConnection $dbc,
 		IConfig $config,
 		IMimeTypeLoader $mimeTypeLoader,
-		IURLGenerator $urlGenerator
+		IURLGenerator $urlGenerator,
+		IL10N $l10n
 	) {
 		$this->mimeTypeLoader = $mimeTypeLoader;
 		$this->config = $config;
 		$this->dbc = $dbc;
 		$this->urlGenerator = $urlGenerator;
 		$this->collectiveService = $collectiveService;
+		$this->l10n = $l10n;
 	}
 
 	/**
@@ -91,10 +95,14 @@ class RecentPagesService {
 			if ($row['filename'] !== 'Readme.md') {
 				$pathParts[] = basename($row['filename'], PageInfo::SUFFIX);
 				$title = basename($row['filename'], PageInfo::SUFFIX);
+			} elseif ($internalPath === '' || $internalPath === '.') {
+				$title = $this->l10n->t('Landing page');
 			} else {
 				$title = basename($internalPath);
 			}
-			$url = $this->urlGenerator->linkToRoute('collectives.start.indexPath', ['path' => implode('/', $pathParts)]);
+
+			$fileIdSuffix = '?fileId=' . $row['file_id'];
+			$url = $this->urlGenerator->linkToRoute('collectives.start.indexPath', ['path' => implode('/', $pathParts)]) . $fileIdSuffix;
 
 			// build result model
 			// not returning a PageInfo instance because it would be either incomplete or too expensive to build completely
