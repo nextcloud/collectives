@@ -46,6 +46,7 @@ class CollectiveHelper {
 			return $circle->getSingleId();
 		}, $circles);
 		$circles = array_combine($cids, $circles);
+		/** @var Collective[] $collectives */
 		$collectives = $this->collectiveMapper->findByCircleIds($cids);
 		foreach ($collectives as $c) {
 			$cid = $c->getCircleId();
@@ -59,7 +60,8 @@ class CollectiveHelper {
 				$userPageOrder = ($settings ? $settings->getSetting('page_order') : null) ?? Collective::defaultPageOrder;
 				$userShowRecentPages = ($settings ? $settings->getSetting('show_recent_pages') : null) ?? Collective::defaultShowRecentPages;
 			}
-			$collectiveInfos[] = new CollectiveInfo($c,
+			$collectiveInfos[] = new CollectiveInfo(
+				$c,
 				$circle->getSanitizedName(),
 				$level,
 				null,
@@ -88,7 +90,8 @@ class CollectiveHelper {
 		$collectives = $this->collectiveMapper->findTrashByCircleIdsAndUser($cids, $userId);
 		foreach ($collectives as $c) {
 			$cid = $c->getCircleId();
-			$collectiveInfos[] = new CollectiveInfo($c,
+			$collectiveInfos[] = new CollectiveInfo(
+				$c,
 				$circles[$cid]->getSanitizedName(),
 				$this->circleHelper->getLevel($cid, $userId)
 			);
