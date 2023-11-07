@@ -1,3 +1,4 @@
+import debounce from 'debounce'
 import { mapGetters, mapMutations } from 'vuex'
 import linkHandlerMixin from '../mixins/linkHandlerMixin.js'
 import PageInfoBar from '../components/Page/PageInfoBar.vue'
@@ -97,8 +98,7 @@ export default {
 						this.done('editor')
 					},
 					onUpdate: ({ markdown }) => {
-						this.editorContent = markdown
-						this.reader?.setContent(this.editorContent)
+						this.updateEditorContent(markdown)
 					},
 					onOutlineToggle: (visible) => {
 						this.toggleOutlineFromEditor(visible)
@@ -106,6 +106,11 @@ export default {
 				})
 				: null
 		},
+
+		updateEditorContent: debounce(function(markdown) {
+			this.editorContent = markdown
+			this.reader?.setContent(this.editorContent)
+		}, 200),
 
 		focusEditor() {
 			this.editor?.focus()
