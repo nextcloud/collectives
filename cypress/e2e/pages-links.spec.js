@@ -106,10 +106,12 @@ describe('Page Link Handling', function() {
 			// Change to edit mode
 			cy.switchPageMode(1)
 			cy.getEditor()
+				.should('be.visible')
 				.find(`a[href="${href}"]`)
 				.click()
 		} else {
 			cy.getReadOnlyEditor()
+				.should('be.visible')
 				.find(`a[href="${href}"]`)
 				.click()
 		}
