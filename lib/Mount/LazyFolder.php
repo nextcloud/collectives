@@ -109,6 +109,10 @@ class LazyFolder implements Folder {
 		return $this->__call(__FUNCTION__, func_get_args());
 	}
 
+	public function getMetadata(): array {
+		return $this->__call(__FUNCTION__, func_get_args());
+	}
+
 	public function getFullPath($path) {
 		return $this->__call(__FUNCTION__, func_get_args());
 	}
