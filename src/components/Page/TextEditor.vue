@@ -6,11 +6,11 @@
 		<SkeletonLoading v-show="!contentLoaded"
 			type="text"
 			class="page-content-skeleton" />
-		<div v-show="contentLoaded && showReader"
+		<div v-show="contentLoaded && !showEditor"
 			ref="reader"
 			data-collectives-el="reader" />
 		<div v-if="currentCollectiveCanEdit"
-			v-show="showEditor"
+			v-show="contentLoaded && showEditor"
 			ref="editor"
 			data-collectives-el="editor" />
 	</div>
@@ -62,21 +62,8 @@ export default {
 			'loading',
 		]),
 
-		showReader() {
-			return this.readOnly
-		},
-
 		showEditor() {
-			return !this.readOnly
-		},
-
-		readOnly() {
-			return !this.currentCollectiveCanEdit || this.readMode || !this.isTextEdit
-		},
-
-		contentLoaded() {
-			// Either `pageContent` is filled from editor or we finished fetching it from DAV
-			return !!this.pageContent || !this.loading('pageContent')
+			return this.currentCollectiveCanEdit && !this.loading('editor') && this.isTextEdit
 		},
 	},
 
@@ -94,14 +81,11 @@ export default {
 		this.load('pageContent')
 	},
 
-	mounted() {
-		this.setupReader().then(() => {
-			if (!this.loading('pageContent')) {
-				this.reader?.setContent(this.pageContent)
-			}
-		})
-		this.setupEditor()
-		this.getPageContent().then(() => {
+	async mounted() {
+		const readerPromise = this.setupReader()
+		const editorPromise = this.setupEditor()
+		const pageContentPromise = this.getPageContent()
+		Promise.all([readerPromise, editorPromise, pageContentPromise]).then(() => {
 			this.initEditMode()
 		})
 
@@ -150,7 +134,7 @@ export default {
 				// for new pages
 				|| this.loading('newPageContent')
 				// or when page is empty
-				|| !this.pageContent?.trim()) {
+				|| !this.davContent.trim()) {
 				this.setTextEdit()
 				this.done('newPageContent')
 			}

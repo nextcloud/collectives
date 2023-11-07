@@ -14,7 +14,6 @@ export default {
 			davContent: '',
 			editorContent: null,
 			pageInfoBarPage: null,
-			readMode: true,
 		}
 	},
 
@@ -23,6 +22,7 @@ export default {
 			'currentCollectiveCanEdit',
 			'currentPage',
 			'currentPageFilePath',
+			'loading',
 			'shareTokenParam',
 			'showing',
 		]),
@@ -33,6 +33,11 @@ export default {
 
 		showOutline() {
 			return this.showing('outline')
+		},
+
+		contentLoaded() {
+			// Either `pageContent` is filled from editor or we finished fetching it from DAV
+			return !!this.pageContent || !this.loading('pageContent')
 		},
 	},
 
@@ -74,6 +79,9 @@ export default {
 					this.toggleOutlineFromEditor(visible)
 				},
 			})
+			if (!this.loading('pageContent')) {
+				this.reader.setContent(this.pageContent)
+			}
 		},
 
 		async setupEditor() {
@@ -86,11 +94,11 @@ export default {
 					shareToken: this.shareTokenParam || null,
 					autofocus: false,
 					onLoaded: () => {
-						this.readyEditor()
+						this.done('editor')
 					},
 					onUpdate: ({ markdown }) => {
 						this.editorContent = markdown
-						this.reader?.setContent(this.pageContent)
+						this.reader?.setContent(this.editorContent)
 					},
 					onOutlineToggle: (visible) => {
 						this.toggleOutlineFromEditor(visible)
@@ -101,14 +109,6 @@ export default {
 
 		focusEditor() {
 			this.editor?.focus()
-		},
-
-		/**
-		 * Set readMode to false
-		 */
-		readyEditor() {
-			this.done('editor')
-			this.readMode = false
 		},
 
 		toggleOutlineFromEditor(visible) {
