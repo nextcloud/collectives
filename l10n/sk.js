@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Recent pages" : "Nedávne stránky",
     "Collectives" : "Kolektívy",
     "In collective %1$s" : "V kolektíve 1%1$s",
     "Last edition %1$s" : "Posledná úprava %1$s",
@@ -13,6 +14,7 @@ OC.L10N.register(
     "A share for collective %s exists already" : "Zdieľanie kolektívu %s už existuje",
     "You are not allowed to edit %s" : "Nemáte povolenie upravovať %s",
     "Share not found for user" : "Zdieľanie pre používateľa nebolo nájdené",
+    "Landing page" : "Úvodná stránka",
     "A place for activist and community projects to build shared knowledge" : "Miesto pre aktivistické a komunitné projekty na budovanie a vytváranie zdieľaných vedomostí",
     "Manage members" : "Správa členov",
     "Share link" : "Zdieľať odkaz",
@@ -118,8 +120,6 @@ OC.L10N.register(
     "Done" : "Hotovo",
     "Show members" : "Ukázať členov",
     "Show all members of the collective" : "Zobraziť všetkých členov kolektívu",
-    "Landing page" : "Úvodná stránka",
-    "Recent pages" : "Nedávne stránky",
     "Collapse recent pages" : "Zbaliť posledné stránky",
     "Expand recent pages" : "Rozbaliť posledné stránky",
     "Open page sidebar" : "Otvoriť bočný panel stránky",

@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Recent pages" : "Páginas recientes",
     "Collectives" : "Cuadernos",
     "In collective %1$s" : "En cuaderno colectivo %1$s",
     "Last edition %1$s" : "Última edición %1$s",
@@ -13,6 +14,7 @@ OC.L10N.register(
     "A share for collective %s exists already" : "Un recurso compartido para el cuaderno colectivo %s ya existe",
     "You are not allowed to edit %s" : "Usted no está autorizado para editar %s",
     "Share not found for user" : "Recurso compartido no encontrado para el usuario",
+    "Landing page" : "Página de inicio",
     "A place for activist and community projects to build shared knowledge" : "Un lugar para proyectos activistas y comunitarios para gestionar conocimiento compartido",
     "Collectives is a Nextcloud App for activist and community projects to organize together.\nCome and gather in collectives to build shared knowledge.\n\n* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n  tied to a [Nextcloud Circle](https://github.com/nextcloud/circles) and\n  owned by the collective.\n* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**\n  for page formatting.\n\n## Installation\n\nIn your Nextcloud instance, simply navigate to **»Apps«**, find the\n**»Circles«** and **»Collectives«** apps and enable them." : "Cuadernos colectivos es una aplicación de Nextcloud App para gestionar proyectos activistas y comunitarios de manera colaborativa.\nAquí organizamos y construimos conocimiento juntos.\n\n* 👥 **Flujo de trabajo colaborativo y sin jerarquías**: los Cuadernos colectivos están vinculados a un\n  [Nextcloud Circle](https://github.com/nextcloud/circles) y son propiedad del grupo.\n \n* 📝 **Edición simultánea de páginas** a la manera de los blocs de notas de Etherpad\n gracias a la aplicación [Text app](https://github.com/nextcloud/text).\n* 🔤 **Basado en el conocido formato de archivos [Markdown](https://es.wikipedia.org/wiki/Markdown)**\n  para la edición de formato.\n\n## Instalación\n\nEn su instancia de Nextcloud, simplemente navegue a **»Apps«**, busque las aplicaciones\n**»Circles«** y **»Collectives«**y habilítelas.",
     "Manage members" : "Gestionar colaboradores",
@@ -119,8 +121,6 @@ OC.L10N.register(
     "Done" : "Hecho",
     "Show members" : "Mostrar miembros",
     "Show all members of the collective" : "Mostrar a todos los miembros del colectivo",
-    "Landing page" : "Página de inicio",
-    "Recent pages" : "Páginas recientes",
     "Scroll recent pages to the left" : "Desplazar páginas recientes a la izquierda",
     "Collapse recent pages" : "Colapsar páginas recientes",
     "Expand recent pages" : "Expandir páginas recientes",

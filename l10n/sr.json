@@ -1,4 +1,5 @@
 { "translations": {
+    "Recent pages" : "Скорашње странице",
     "Collectives" : "Колективи",
     "In collective %1$s" : "У колективу %1$s",
     "Last edition %1$s" : "Последње издање %1$s",
@@ -11,6 +12,7 @@
     "A share for collective %s exists already" : "Дељење за колектив %s већ постоји",
     "You are not allowed to edit %s" : "Није вам дозвољено да уређујете %s",
     "Share not found for user" : "Дељење кориснику није пронађено",
+    "Landing page" : "Почетна страница",
     "A place for activist and community projects to build shared knowledge" : "Место на којем пројекти активиста и заједнице изграђују заједничко знање",
     "Collectives is a Nextcloud App for activist and community projects to organize together.\nCome and gather in collectives to build shared knowledge.\n\n* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n  tied to a [Nextcloud Circle](https://github.com/nextcloud/circles) and\n  owned by the collective.\n* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**\n  for page formatting.\n\n## Installation\n\nIn your Nextcloud instance, simply navigate to **»Apps«**, find the\n**»Circles«** and **»Collectives«** apps and enable them." : "Колективи је Nextcloud апликација служи за организацију пројеката активиста и заједнице.\nДођите, окупимо се у колективима да изградимо заједничко знање.\n\n* 👥 **Колектив и нехијрархијски процес рада у сржи**: Колективи су \n  везани за [Nextcloud Кругове](https://github.com/nextcloud/circles) и \n  власништво су колектива.\n* 📝 **Заједничко уређивање странице** као што је познато из Etherpad захваљујући\n  [Текст апликацији](https://github.com/nextcloud/text).\n* 🔤 **Добро позната [Markdown](https://en.wikipedia.org/wiki/Markdown) синтакса**\n  за форматирање странице.\n\n## Инсталација\n\nУ вашој Nextcloud инстанци, просто идите на **»Апликације«**, пронађите\nапликације **»Кругови«** и **»Колективи«** и укључите их.",
     "Manage members" : "Управљај члановима",
@@ -117,8 +119,6 @@
     "Done" : "Готово",
     "Show members" : "Прикажи чланове",
     "Show all members of the collective" : "Приказује све чланове колектива",
-    "Landing page" : "Почетна страница",
-    "Recent pages" : "Скорашње странице",
     "Scroll recent pages to the left" : "Скролуј улево скорашње странице",
     "Collapse recent pages" : "Сажми скорашње странице",
     "Expand recent pages" : "Развиј скорашње странице",

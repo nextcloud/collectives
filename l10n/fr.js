@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Recent pages" : "Pages récentes",
     "Collectives" : "Collectifs",
     "In collective %1$s" : "Dans le collectif %1$s",
     "Last edition %1$s" : "Dernière édition le %1$s",
@@ -13,6 +14,7 @@ OC.L10N.register(
     "A share for collective %s exists already" : "Il existe déjà partage pour le collectif %s",
     "You are not allowed to edit %s" : "Vous n'avez pas l'autorisation de modifier %s",
     "Share not found for user" : "Partage non trouvé pour l'utilisateur",
+    "Landing page" : "Page d'atterrissage",
     "A place for activist and community projects to build shared knowledge" : "Un lieu où les projets des activistes et des communautés peuvent développer des connaissances communes",
     "Collectives is a Nextcloud App for activist and community projects to organize together.\nCome and gather in collectives to build shared knowledge.\n\n* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n  tied to a [Nextcloud Circle](https://github.com/nextcloud/circles) and\n  owned by the collective.\n* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**\n  for page formatting.\n\n## Installation\n\nIn your Nextcloud instance, simply navigate to **»Apps«**, find the\n**»Circles«** and **»Collectives«** apps and enable them." : "Collectifs est une application Nextcloud qui permet aux activistes et aux projets communautaires de s'organiser ensemble.\nVenez et rassemblez-vous en collectifs pour développer des connaissances partagées.\n\n* 👥 **Fonctionnement collectif et non hiérarchique** : Les collectifs sont\n  liés à un [Cercle Nextcloud] (https://github.com/nextcloud/circles) qui\n  appartient au collectif.\n* 📝 **Édition collaborative de pages** comme on le connaît sur Etherpad grâce à\n  l'[application Texte] (https://github.com/nextcloud/text).\n* 🔤 **Syntaxe bien connue de [Markdown](https://en.wikipedia.org/wiki/Markdown)**\n  pour le formatage des pages.\n\n## Installation\n\nDans votre instance Nextcloud, rendez-vous simplement dans **« Applications »**, trouvez les\napplications **« Cercles »** et **« Collectifs »** et activez-les.",
     "Manage members" : "Gérer les membres",
@@ -119,8 +121,6 @@ OC.L10N.register(
     "Done" : "Terminé",
     "Show members" : "Montrer les membres",
     "Show all members of the collective" : "Montrer tous les membres du collectif",
-    "Landing page" : "Page d'atterrissage",
-    "Recent pages" : "Pages récentes",
     "Scroll recent pages to the left" : "Défiler les pages récentes sur la gauche",
     "Collapse recent pages" : "Replier les pages récentes",
     "Expand recent pages" : "Déplier les pages récentes",

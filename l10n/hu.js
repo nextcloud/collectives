@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Recent pages" : "Legutóbbi oldalak",
     "Collectives" : "Kollektívák",
     "In collective %1$s" : "A(z) %1$s kollektívában",
     "Last edition %1$s" : "Utolsó kiadás: %1$s",
@@ -13,6 +14,7 @@ OC.L10N.register(
     "A share for collective %s exists already" : "Már létezik megosztás a(z) %s kollektívához",
     "You are not allowed to edit %s" : "Nincs jogosultsága a(z) %s szerkesztéséhez",
     "Share not found for user" : "Nem található megosztás a felhasználóhoz",
+    "Landing page" : "Érkező oldal",
     "A place for activist and community projects to build shared knowledge" : "Egy hely az aktivisták és a közösségi projektek számára, hogy közös tudásbázist építsenek",
     "Collectives is a Nextcloud App for activist and community projects to organize together.\nCome and gather in collectives to build shared knowledge.\n\n* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n  tied to a [Nextcloud Circle](https://github.com/nextcloud/circles) and\n  owned by the collective.\n* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**\n  for page formatting.\n\n## Installation\n\nIn your Nextcloud instance, simply navigate to **»Apps«**, find the\n**»Circles«** and **»Collectives«** apps and enable them." : "A Kollektívák egy nextcloudos alkalmazás aktivisták és közösségi projektek számára, hogy\nközösen szerveződjenek. Csatlakozzon és szervezzen kollektívákat, hogy közös tudásbázist\népítsenek.\n\n* 👥 **Közös és hierarchiamentes munkafolyamatok**: A kollektívák a\n  [Nextcloud Körökhöz](https://github.com/nextcloud/circles) kapcsolódnak, és\n  a kollektívák birtokolják őket.\n* 📝 **Közös oldalszerkesztés** az Etherpadhoz ismerthez hasonlóan a\n  [Szöveg alkalmazásnak](https://github.com/nextcloud/text) köszönhetően.\n* 🔤 **Jól ismert [Markdown](https://en.wikipedia.org/wiki/Markdown) szintaxis**\n  az oldalak formázásához.\n\n## Telepítés\n\nEgyszerűen navigáljon a Nextcloud-példányán az **„Alkalmazásokhoz”, keresse meg\na **„Körök”** és a **„Kollektívák”** alkalmazásokat, és engedélyezze azokat.",
     "Manage members" : "Tagok kezelése",
@@ -119,8 +121,6 @@ OC.L10N.register(
     "Done" : "Kész",
     "Show members" : "Tagok mutatása",
     "Show all members of the collective" : "A kollektíva összes tagjának mutatása",
-    "Landing page" : "Érkező oldal",
-    "Recent pages" : "Legutóbbi oldalak",
     "Scroll recent pages to the left" : "Legutóbbi oldalak balra görgetése",
     "Collapse recent pages" : "Legfrisebb oldalak összecsukása",
     "Expand recent pages" : "Legfrisebb oldalak kinyitása",

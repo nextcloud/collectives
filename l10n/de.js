@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Recent pages" : "Aktuelle Seiten",
     "Collectives" : "Kollektive",
     "In collective %1$s" : "In Kollektiv %1$s",
     "Last edition %1$s" : "Letzte Version %1$s",
@@ -13,6 +14,7 @@ OC.L10N.register(
     "A share for collective %s exists already" : "Eine Freigabe für Kollektiv %s existiert bereits",
     "You are not allowed to edit %s" : "Du darfst %s nicht editieren",
     "Share not found for user" : "Freigabe für Benutzer nicht gefunden",
+    "Landing page" : "Startseite",
     "A place for activist and community projects to build shared knowledge" : "Ein Ort für Aktivst:innen und Community-Projekte um gemeinsames Wissen aufzubauen",
     "Collectives is a Nextcloud App for activist and community projects to organize together.\nCome and gather in collectives to build shared knowledge.\n\n* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n  tied to a [Nextcloud Circle](https://github.com/nextcloud/circles) and\n  owned by the collective.\n* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**\n  for page formatting.\n\n## Installation\n\nIn your Nextcloud instance, simply navigate to **»Apps«**, find the\n**»Circles«** and **»Collectives«** apps and enable them." : "Kollektive ist eine Nextcloud-Anwendung für Aktivist:innen und Gemeinschaftsprojekte, um sich gemeinsam zu organisieren.\nKomm vorbei und verbünde dich in Kollektiven um gemeinsames Wissen aufzubauen.\n\n* 👥 **Kollektive und hierarchie-arme Arbeitsweise**: Kollektive sind\n  mit einem [Nextcloud Kreis](https://github.com/nextcloud/circles) verknüpft\n  und unter Kontrolle des Kollektivs.\n* 📝 **Kollaboratives Bearbeiten von Seiten** (wie etwa von Etherpad bekannt)\n  dank der [Text app](https://github.com/nextcloud/text).\n* 🔤 **Wohlbekannte [Markdown](https://en.wikipedia.org/wiki/Markdown) Syntax**\n  zum Formatieren von Seiten.\n\n## Installation\n\nGehe in deiner Nextcloud-Instanz zu **»Apps«**, suche die Anwendungen\n**»Circles«** und **»Collectives«** und aktiviere sie.",
     "Manage members" : "Mitglieder verwalten",
@@ -119,8 +121,6 @@ OC.L10N.register(
     "Done" : "Fertig",
     "Show members" : "Mitglieder anzeigen",
     "Show all members of the collective" : "Alle Mitglieder des Kollektivs anzeigen",
-    "Landing page" : "Startseite",
-    "Recent pages" : "Aktuelle Seiten",
     "Scroll recent pages to the left" : "Durch die letzten Seiten nach links scrollen",
     "Collapse recent pages" : "Aktuelle Seiten zusammenklappen",
     "Expand recent pages" : "Aktuelle Seiten aufklappen",
