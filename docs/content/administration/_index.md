@@ -38,6 +38,13 @@ of enabled apps for guest users in admin settings.
 
 Please note that this enables guest users to create new collectives.
 
+## Searching Collectives
+
+To enable searching of collectives from the unified Nextcloud search, make sure the `ext-pdo` and `ext-pdo_sqlite` PHP extensions are installed and the Nextcloud cronjob is running. The index of collectives page contents should update with every cronjob run.
+
+Tip: On Ubuntu 22.04, the relevant package to install is `phpXX-sqlite3` - with the XX being replaced with your PHP version. E.g. ` php8.1-sqlite3` for PHP 8.1.
+
+
 ## Public shares
 
 WebDAV access to public shares must not be disabled (i.e it must be enabled)
