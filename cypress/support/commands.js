@@ -222,22 +222,15 @@ Cypress.Commands.add('seedPage', (name, parentFilePath, parentFileName) => {
  * Upload a file
  */
 Cypress.Commands.add('uploadFile', (path, mimeType, remotePath = '') => {
+	Cypress.log()
 	// Get fixture
 	return cy.fixture(path, 'base64').then(file => {
 		// convert the base64 string to a blob
 		const blob = Cypress.Blob.base64StringToBlob(file, mimeType)
 		try {
 			const file = new File([blob], path, { type: mimeType })
-			return cy.window()
-				.its('app')
-				.then(async app => {
-					const response = await axios.put(`${Cypress.env('baseUrl')}/remote.php/webdav/${remotePath}${path}`, file, {
-						headers: {
-							requesttoken: app.OC.requestToken,
-							'Content-Type': mimeType,
-						},
-					})
-					cy.log(`Uploaded file to ${remotePath}${path}`)
+			return cy.uploadContent(remotePath + path, file, mimeType)
+				.then(response => {
 					const ocFileId = response.headers['oc-fileid']
 					const fileId = parseInt(ocFileId.substring(0, ocFileId.indexOf('oc')))
 					return fileId
@@ -254,13 +247,22 @@ Cypress.Commands.add('uploadFile', (path, mimeType, remotePath = '') => {
  */
 Cypress.Commands.add('seedPageContent', (pagePath, content) => {
 	cy.log(`Seeding collective page content for ${pagePath}`)
+	cy.uploadContent(`Collectives/${pagePath}`, content)
+})
+
+/**
+ * Generic upload of content - used by seedPageContent and uploadPage
+ */
+Cypress.Commands.add('uploadContent', (path, content, mimetype = 'text/markdown') => {
+	// @nextcloud/axios automatic handling for request tokens does not work for webdav
 	cy.window()
-		.its('app')
-		.then(async app => {
-			await axios.put(`${Cypress.env('baseUrl')}/remote.php/webdav/Collectives/${pagePath}`, content, {
+		.its('app.OC.requestToken')
+		.then(requesttoken => {
+			const url = `${Cypress.env('baseUrl')}/remote.php/webdav/${path}`
+			return axios.put(url, content, {
 				headers: {
-					requesttoken: app.OC.requestToken,
-					'Content-Type': 'text/markdown',
+					requesttoken,
+					'Content-Type': mimetype,
 				},
 			})
 		})
@@ -281,7 +283,6 @@ Cypress.Commands.add('seedCircle', (name, config = null) => {
 			if (!circle) {
 				const response = await axios.post(api,
 					{ name, personal: false, local: true },
-					{ headers: { requesttoken: app.OC.requestToken } },
 				)
 				circleId = response.data.ocs.data.id
 			} else {
@@ -298,7 +299,6 @@ Cypress.Commands.add('seedCircle', (name, config = null) => {
 					.reduce((sum, [k, v]) => sum + v, 0)
 				await axios.put(`${api}/${circleId}/config`,
 					{ value },
-					{ headers: { requesttoken: app.OC.requestToken } },
 				)
 			}
 		})
@@ -318,7 +318,6 @@ Cypress.Commands.add('seedCircleMember', (name, userId, type = 1, level) => {
 			const api = `${Cypress.env('baseUrl')}/ocs/v2.php/apps/circles/circles/${circleId}/members`
 			const response = await axios.post(api,
 				{ userId, type },
-				{ headers: { requesttoken: app.OC.requestToken } },
 			).catch(e => {
 				if (e.request && e.request.status === 400) {
 					// The member already got added... carry on.
@@ -332,7 +331,6 @@ Cypress.Commands.add('seedCircleMember', (name, userId, type = 1, level) => {
 				cy.log(`Setting circle ${name} member ${userId} level to ${level}`)
 				await axios.put(`${api}/${memberId}/level`,
 					{ level },
-					{ headers: { requesttoken: app.OC.requestToken } },
 				)
 			}
 		})
