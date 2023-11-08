@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Recent pages" : "Nedávné stránky",
     "Collectives" : "Kolektivy",
     "In collective %1$s" : "V kolektivu %1$s",
     "Last edition %1$s" : "Poslední úprava %1$s",
@@ -13,6 +14,7 @@ OC.L10N.register(
     "A share for collective %s exists already" : "Sdílení pro kolektiv %s už existuje",
     "You are not allowed to edit %s" : "Nejste oprávněni upravovat %s",
     "Share not found for user" : "Sdílení nenalezeno pro uživatele",
+    "Landing page" : "Úvodní stránka",
     "A place for activist and community projects to build shared knowledge" : "Místo pro aktivistické a komunitní projekty, pro vytváření sdílených znalostí",
     "Collectives is a Nextcloud App for activist and community projects to organize together.\nCome and gather in collectives to build shared knowledge.\n\n* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n  tied to a [Nextcloud Circle](https://github.com/nextcloud/circles) and\n  owned by the collective.\n* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**\n  for page formatting.\n\n## Installation\n\nIn your Nextcloud instance, simply navigate to **»Apps«**, find the\n**»Circles«** and **»Collectives«** apps and enable them." : "Kolektivy je Nextcloud aplikace pro společné organizování aktivistických a komunitních projektů.\nSdružujte se do kolektivů a vytvářejte společné znalosti.\n\n* 👥 **Kolektivy a přirozeně nehierarchické pracovní postupy**: Kolektivy jsou\n  navázané na [Nextcloud okruhy](https://github.com/nextcloud/circles)\n  a vlastněné kolektivem.\n* 📝 **Upravování stránek ve spolupráci vícero lidí naráz** (podobně jako v aplikaci Etherpad)\n  díky [aplikaci Text](https://github.com/nextcloud/text).\n* 🔤 **Dobře známá forma zápisu [Markdown](https://en.wikipedia.org/wiki/Markdown)**\n  pro formátování stránky.\n\n## Instalace\n\nVe vaší instanci Nextcloud stačí přejít do **»Aplikace«**, najít aplikace\n**»Okruhy«** a **»Kolektivy«** a aktivovat je.",
     "Manage members" : "Spravovat členy",
@@ -119,8 +121,6 @@ OC.L10N.register(
     "Done" : "Hotovo",
     "Show members" : "Zobrazit členy",
     "Show all members of the collective" : "Zobrazit všechny členy kolektivu",
-    "Landing page" : "Úvodní stránka",
-    "Recent pages" : "Nedávné stránky",
     "Scroll recent pages to the left" : "Posunout nedávné stránky vlevo",
     "Collapse recent pages" : "Sbalit nedávné stránky",
     "Expand recent pages" : "Rozbalit nedávné stránky",

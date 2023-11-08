@@ -1,4 +1,5 @@
 { "translations": {
+    "Recent pages" : "最近的頁面",
     "Collectives" : "知識庫",
     "In collective %1$s" : "在知識庫 %1$s 中",
     "Last edition %1$s" : "上一版 %1$s",
@@ -11,6 +12,7 @@
     "A share for collective %s exists already" : "知識庫 %s的分享已經存在",
     "You are not allowed to edit %s" : "你無權編輯 %s",
     "Share not found for user" : "找不到以下用戶的分享",
+    "Landing page" : "登陸頁面",
     "A place for activist and community projects to build shared knowledge" : "活動家和社區項目建立共享知識的地方",
     "Collectives is a Nextcloud App for activist and community projects to organize together.\nCome and gather in collectives to build shared knowledge.\n\n* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n  tied to a [Nextcloud Circle](https://github.com/nextcloud/circles) and\n  owned by the collective.\n* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**\n  for page formatting.\n\n## Installation\n\nIn your Nextcloud instance, simply navigate to **»Apps«**, find the\n**»Circles«** and **»Collectives«** apps and enable them." : "Collectives is a Nextcloud App for activist and community projects to organize together.\nCome and gather in collectives to build shared knowledge.\n\n* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n  tied to a [Nextcloud Circle](https://github.com/nextcloud/circles) and\n  owned by the collective.\n* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**\n  for page formatting.\n\n## Installation\n\nIn your Nextcloud instance, simply navigate to **»Apps«**, find the\n**»Circles«** and **»Collectives«** apps and enable them.",
     "Manage members" : "管理成員",
@@ -117,8 +119,6 @@
     "Done" : "完成",
     "Show members" : "顯示成員",
     "Show all members of the collective" : "顯示知識庫的所有成員",
-    "Landing page" : "登陸頁面",
-    "Recent pages" : "最近的頁面",
     "Scroll recent pages to the left" : "向左滾動最近的頁面",
     "Collapse recent pages" : "折疊最近的頁面",
     "Expand recent pages" : "展開最近的頁面",

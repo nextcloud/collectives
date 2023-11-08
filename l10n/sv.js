@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Recent pages" : "Senaste sidorna",
     "Collectives" : "Collectives",
     "In collective %1$s" : "I collective %1$s",
     "Last edition %1$s" : "Sista versionen %1$s",
@@ -13,6 +14,7 @@ OC.L10N.register(
     "A share for collective %s exists already" : "En delning för collective %s finns redan",
     "You are not allowed to edit %s" : "Du får inte redigera %s",
     "Share not found for user" : "Delningen hittades inte för användaren",
+    "Landing page" : "Landningssida",
     "Manage members" : "Hantera medlemmar",
     "Share link" : "Delningslänk",
     "Allow editing in share" : "Tillåt redigering i delning",
@@ -117,8 +119,6 @@ OC.L10N.register(
     "Done" : "Klar",
     "Show members" : "Visa medlemmar",
     "Show all members of the collective" : "Visa alla medlemmar i collective",
-    "Landing page" : "Landningssida",
-    "Recent pages" : "Senaste sidorna",
     "Scroll recent pages to the left" : "Bläddra de senaste sidorna åt vänster",
     "Collapse recent pages" : "Fäll ihop senaste sidorna",
     "Expand recent pages" : "Fäll ut senaste sidorna",

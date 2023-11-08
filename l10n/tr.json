@@ -1,4 +1,5 @@
 { "translations": {
+    "Recent pages" : "Son sayfalar",
     "Collectives" : "Topluluklar",
     "In collective %1$s" : "%1$s topluluğunda",
     "Last edition %1$s" : "Son düzenleme %1$s",
@@ -11,6 +12,7 @@
     "A share for collective %s exists already" : "%s topluluğu için bir paylaşım zaten var",
     "You are not allowed to edit %s" : "%s ögesini düzenleme izniniz yok",
     "Share not found for user" : "Kullanıcı için paylaşım bulunamadı",
+    "Landing page" : "Giriş sayfası",
     "A place for activist and community projects to build shared knowledge" : "Aktivist ve toplulukların bilgi paylaşabileceği bir yer",
     "Collectives is a Nextcloud App for activist and community projects to organize together.\nCome and gather in collectives to build shared knowledge.\n\n* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n  tied to a [Nextcloud Circle](https://github.com/nextcloud/circles) and\n  owned by the collective.\n* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**\n  for page formatting.\n\n## Installation\n\nIn your Nextcloud instance, simply navigate to **»Apps«**, find the\n**»Circles«** and **»Collectives«** apps and enable them." : "Topluluklar, aktivist ve topluluk projelerinin iş birliği ile düzenlenmesini sağlayan bir Nextcloud uygulamasıdır.\nBilgi paylaşımı için bir araya gelerek topluluklar oluşturun.\n\n* 👥 **Temelden katılımcı ve hiyerarşik olmayan iş akışı**: Topluluklar\nbir [Nextcloud çevresine](https://github.com/nextcloud/circles) bağlıdır\nve topluluğa aittir.\n* 📝 **İş birlikli sayfa düzenleme**, Etherpad tarafından sağlanan\n[Metin uygulaması](https://github.com/nextcloud/text) gibi.\n* 🔤 **İyi bilinen [Markdown](https://en.wikipedia.org/wiki/Markdown) sözdizimi**\nile sayfa biçimlendirmesi.\n\n## Kurulum\n\nNextcloud lkopyanızda **»Uygulamalar«** bölümüne giderek **»Çevreler«** \nve **»Topluluklar«** uygulamalarını etkinleştirin.",
     "Manage members" : "Üye yönetimi",
@@ -117,8 +119,6 @@
     "Done" : "Tamam",
     "Show members" : "Üyeleri görüntüle",
     "Show all members of the collective" : "Topluluğun tüm üyelerini görüntüle",
-    "Landing page" : "Giriş sayfası",
-    "Recent pages" : "Son sayfalar",
     "Scroll recent pages to the left" : "Son sayfaları sola kaydır",
     "Collapse recent pages" : "Son sayfaları daralt",
     "Expand recent pages" : "Son sayfaları genişlet",

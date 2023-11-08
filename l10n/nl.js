@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Recent pages" : "Recente pagina's",
     "Collectives" : "Collectieven",
     "In collective %1$s" : "In collectief 1%1$s",
     "Last edition %1$s" : "Laatste versie 1%1$s",
@@ -13,6 +14,7 @@ OC.L10N.register(
     "A share for collective %s exists already" : "Gedeeld collectief %s bestaat al",
     "You are not allowed to edit %s" : "Je hebt geen toestemming om %s te bewerken",
     "Share not found for user" : "Share niet gevonden voor gebruiker",
+    "Landing page" : "Landingspagina",
     "A place for activist and community projects to build shared knowledge" : "Een plek voor communities om gezamenlijk kennis te delen",
     "Collectives is a Nextcloud App for activist and community projects to organize together.\nCome and gather in collectives to build shared knowledge.\n\n* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n  tied to a [Nextcloud Circle](https://github.com/nextcloud/circles) and\n  owned by the collective.\n* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**\n  for page formatting.\n\n## Installation\n\nIn your Nextcloud instance, simply navigate to **»Apps«**, find the\n**»Circles«** and **»Collectives«** apps and enable them." : "Collectives is een Nextcloud-app om communityprojecten gezamenlijk te organiseren.\nStart samen collectieven om kennis te verzamelen en te delen.\n\n* 👥 **Standaard collectieve en niet-hiërarchische workflow**: Collectieven zijn\n   gekoppeld aan een [Nextcloud Circle](https://github.com/nextcloud/circles) en\n   eigendom van het collectief.\n* 📝 **Gezamenlijke paginabewerking** zoals bekend van Etherpad dankzij de\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Het bekende [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**\n voor de pagina-opmaak.\n\n## Installatie\n\nNavigeer in de Nextcloud-installatie naar **»Apps«**, zoek de\n**»Circles«** en **»Collectives«** apps en schakel ze in.",
     "Manage members" : "Leden beheren",
@@ -119,8 +121,6 @@ OC.L10N.register(
     "Done" : "Klaar",
     "Show members" : "Toon leden",
     "Show all members of the collective" : "Toon alle leden van het collectief",
-    "Landing page" : "Landingspagina",
-    "Recent pages" : "Recente pagina's",
     "Scroll recent pages to the left" : "Scroll recente pagina's naar links",
     "Collapse recent pages" : "Recente pagina's samenvouwen",
     "Expand recent pages" : "Recente pagina's uitvouwen",

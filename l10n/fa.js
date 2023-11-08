@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Recent pages" : "Recent pages",
     "Collectives" : "Collectives",
     "In collective %1$s" : "In collective %1$s",
     "Last edition %1$s" : "Last edition %1$s",
@@ -13,6 +14,7 @@ OC.L10N.register(
     "A share for collective %s exists already" : "A share for collective %s exists already",
     "You are not allowed to edit %s" : "You are not allowed to edit %s",
     "Share not found for user" : "Share not found for user",
+    "Landing page" : "Landing page",
     "A place for activist and community projects to build shared knowledge" : "A place for activist and community projects to build shared knowledge",
     "Collectives is a Nextcloud App for activist and community projects to organize together.\nCome and gather in collectives to build shared knowledge.\n\n* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n  tied to a [Nextcloud Circle](https://github.com/nextcloud/circles) and\n  owned by the collective.\n* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**\n  for page formatting.\n\n## Installation\n\nIn your Nextcloud instance, simply navigate to **»Apps«**, find the\n**»Circles«** and **»Collectives«** apps and enable them." : "Collectives is a Nextcloud App for activist and community projects to organize together.\nCome and gather in collectives to build shared knowledge.\n\n* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n  tied to a [Nextcloud Circle](https://github.com/nextcloud/circles) and\n  owned by the collective.\n* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**\n  for page formatting.\n\n## Installation\n\nIn your Nextcloud instance, simply navigate to **»Apps«**, find the\n**»Circles«** and **»Collectives«** apps and enable them.",
     "Manage members" : "Manage members",
@@ -119,8 +121,6 @@ OC.L10N.register(
     "Done" : "انجام شد",
     "Show members" : "Show members",
     "Show all members of the collective" : "Show all members of the collective",
-    "Landing page" : "Landing page",
-    "Recent pages" : "Recent pages",
     "Scroll recent pages to the left" : "Scroll recent pages to the left",
     "Open page sidebar" : "Open page sidebar",
     "Show in Files" : "نمایش در فایل‌ها",

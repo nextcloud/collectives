@@ -1,4 +1,5 @@
 { "translations": {
+    "Recent pages" : "الصفحات الحالية",
     "Collectives" : "تجميعات Collectives",
     "In collective %1$s" : "في تجميعة %1$s",
     "Last edition %1$s" : "آخر نسخة %1$s",
@@ -11,6 +12,7 @@
     "A share for collective %s exists already" : "مشاركة التجميعة %s موجودة مسبقاً",
     "You are not allowed to edit %s" : "غير مسموح لك بتعديل %s",
     "Share not found for user" : "لم يمُكن العثور على مُشاركة للمستخدِم",
+    "Landing page" : "الصفحة المقصودة",
     "A place for activist and community projects to build shared knowledge" : "مكان للنشطاء والمشاريع المجتمعية لبناء المعرفة المشتركة",
     "Collectives is a Nextcloud App for activist and community projects to organize together.\nCome and gather in collectives to build shared knowledge.\n\n* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n  tied to a [Nextcloud Circle](https://github.com/nextcloud/circles) and\n  owned by the collective.\n* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**\n  for page formatting.\n\n## Installation\n\nIn your Nextcloud instance, simply navigate to **»Apps«**, find the\n**»Circles«** and **»Collectives«** apps and enable them." : "\"التجميعات\" Collectives هي تطبيق من نكست كلاود للنشطاء والمشاريع المجتمعية للتنظيم معًا. \nتعالوا واجتمعوا في مجموعات لبناء المعرفة المشتركة. \n* 👥 ** سير عمل جماعي وغير هرمي \n**: التجميعات مرتبطة بتطبيق نكست كلاود للدوائر Circles ـ [Circles](https://github.com/nextcloud/circles)  \n\n* 📝 **تحرير جماعي للتجميعة** كما في التطبيق الشهير إيثرباد EtherpadK. و هذا صار ممكنا بفضل تطبيق Text من نكست كلاود [Text app] (https://github.com/nextcloud/text).\n* 🔤 ** استخدام ماركدوان في تكوين الصفحات  [Markdown] (https://en.wikipedia.org/wiki/Markdown) على خادومك الخاص. \n\n## التنصيب\n\nما عليك سوى الانتقال إلى ** »التطبيقات« **، و ابحث عن ** »الدوائر Circles« ** و ** »التجميعات Collectives« ** و قم بتمكينها.",
     "Manage members" : "إدارة الإعضاء",
@@ -117,8 +119,6 @@
     "Done" : "تم",
     "Show members" : "إعرِض الأعضاء",
     "Show all members of the collective" : "إعرِض كل أعضاء التجميعة",
-    "Landing page" : "الصفحة المقصودة",
-    "Recent pages" : "الصفحات الحالية",
     "Scroll recent pages to the left" : "مرِّر الصفحات الحالية جانبيّاً",
     "Collapse recent pages" : "طَي collapse الصفحات المفتوحة مؤخراً",
     "Expand recent pages" : "فرد expand الصفحات المفتوحة مؤخراً",

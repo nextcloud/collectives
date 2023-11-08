@@ -1,4 +1,5 @@
 { "translations": {
+    "Recent pages" : "Páginas recentes",
     "Collectives" : "Coletivos",
     "In collective %1$s" : "In collective %1$s",
     "Last edition %1$s" : "Last edition %1$s",
@@ -11,6 +12,7 @@
     "A share for collective %s exists already" : "Um compartilhamento para o Coletivo %s já existe",
     "You are not allowed to edit %s" : "Você não tem autorização para modificar %s",
     "Share not found for user" : "Compartilhamento não localizado para o usuário",
+    "Landing page" : "Página de destino",
     "A place for activist and community projects to build shared knowledge" : "Um local para ativistas e projetos comunitários construírem uma base de conhecimentos",
     "Collectives is a Nextcloud App for activist and community projects to organize together.\nCome and gather in collectives to build shared knowledge.\n\n* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n  tied to a [Nextcloud Circle](https://github.com/nextcloud/circles) and\n  owned by the collective.\n* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**\n  for page formatting.\n\n## Installation\n\nIn your Nextcloud instance, simply navigate to **»Apps«**, find the\n**»Circles«** and **»Collectives«** apps and enable them." : "Coletivos é um aplicativo do Nextcloud para ativistas e projetos da comunidade para facilitar a organização.\nVenha e se una a coletivos para criar conhecimento compartilhado\n\n* 👥 **Coletivo com fluxos não-hierarquicos**: Coletivos estão sempre\nligados a um [Círculo Nextcloud](https://github.com/nextcloud/circles) e\nsão de propriedade do mesmo.\n* 📝 **Edição de página colaborativa** semelhante ao Etherpad graças\nao [Aplicativo de Texto](https://github.com/nextcloud/text)\n* 🔤 **Sintaxe bem conhecida [Markdown](https://en.wikipedia.org/wiki/Markdown)**\npara formatação das páginas.\n\n## Instalação\n\nNo seu Nextcloud, navege para **Aplicativos**, encontre\nos apps **Círculos** e **Coletivos** e habilite-os.",
     "Manage members" : "Gerenciar membros",
@@ -117,8 +119,6 @@
     "Done" : "Concluído",
     "Show members" : "Mostrar membros",
     "Show all members of the collective" : "Mostrar todos os membros do coletivo",
-    "Landing page" : "Página de destino",
-    "Recent pages" : "Páginas recentes",
     "Scroll recent pages to the left" : "Role as páginas recentes para a esquerda",
     "Collapse recent pages" : "Recolher páginas recentes",
     "Expand recent pages" : "Expandir páginas recentes",
