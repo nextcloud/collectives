@@ -103,6 +103,23 @@ Cypress.Commands.add('enableDashboardWidget', (widgetName) => {
 	)
 })
 
+Cypress.Commands.add('store', (selector) => {
+	if (selector) {
+		cy.window().its(`app.$store.${selector}`)
+	} else {
+		cy.window().its('app.$store')
+	}
+})
+
+Cypress.Commands.add('routeTo', (path) => {
+	cy.window().its('app.$router').invoke('push', path)
+})
+
+Cypress.Commands.add('dispatch', (...args) => {
+	cy.store()
+		.invoke(...['dispatch', ...args])
+})
+
 /**
  * Create a fresh collective for use in the test
  *
@@ -111,13 +128,9 @@ Cypress.Commands.add('enableDashboardWidget', (widgetName) => {
 Cypress.Commands.add('deleteAndSeedCollective', (name) => {
 	cy.deleteCollective(name)
 	cy.log(`Seeding collective ${name}`)
-	cy.window()
-		.its('app')
-		.then(async app => {
-			await app.$store.dispatch(NEW_COLLECTIVE, { name })
-			const updatedCollectivePath = app.$store.getters.updatedCollectivePath
-			app.$router.push(updatedCollectivePath)
-		})
+	cy.dispatch(NEW_COLLECTIVE, { name })
+	cy.store('getters.updatedCollectivePath')
+		.then(path => cy.routeTo(path))
 	// Make sure new collective is loaded
 	cy.get('#titleform input').should('have.value', name)
 })
@@ -144,23 +157,27 @@ Cypress.Commands.add('createCollective', (name, members = []) => {
  * Delete a collective if it exists
  */
 Cypress.Commands.add('deleteCollective', (name) => {
-	cy.window()
-		.its('app')
-		.then(async app => {
-			await app.$store.dispatch(GET_COLLECTIVES)
-			const id = app.$store.state.collectives.collectives.find(c => c.name === name)?.id
+	cy.dispatch(GET_COLLECTIVES)
+	cy.store('state.collectives.collectives')
+		.invoke('find', c => c.name === name)
+		.then(collective => collective?.id)
+		.then(id => {
 			if (id) {
 				cy.log(`Deleting collective ${name} (id ${id})`)
-				await app.$store.dispatch(TRASH_COLLECTIVE, { id })
-				return await app.$store.dispatch(DELETE_COLLECTIVE, { id, circle: true })
-			}
-
-			// Try to find and delete collective from trash
-			await app.$store.dispatch(GET_TRASH_COLLECTIVES)
-			const trashId = app.$store.state.collectives.trashCollectives.find(c => c.name === name)?.id
-			if (trashId) {
-				cy.log(`Deleting trashed collective ${name} (id ${trashId})`)
-				return await app.$store.dispatch(DELETE_COLLECTIVE, { id: trashId, circle: true })
+				cy.dispatch(TRASH_COLLECTIVE, { id })
+				cy.dispatch(DELETE_COLLECTIVE, { id, circle: true })
+			} else {
+				// Try to find and delete collective from trash
+				cy.dispatch(GET_TRASH_COLLECTIVES)
+				cy.store('state.collectives.collectives')
+					.invoke('find', c => c.name === name)
+					.then(collective => collective?.id)
+					.then(trashId => {
+						if (trashId) {
+							cy.log(`Deleting trashed collective ${name} (id ${trashId})`)
+							cy.dispatch(DELETE_COLLECTIVE, { id: trashId, circle: true })
+						}
+					})
 			}
 		})
 })
@@ -169,17 +186,13 @@ Cypress.Commands.add('deleteCollective', (name) => {
  * Change permission settings for a collective
  */
 Cypress.Commands.add('seedCollectivePermissions', (name, type, level) => {
+	const action = (type === 'edit')
+		? UPDATE_COLLECTIVE_EDIT_PERMISSIONS
+		: UPDATE_COLLECTIVE_SHARE_PERMISSIONS
 	cy.log(`Seeding collective permissions for ${name}`)
-	cy.window()
-		.its('app')
-		.then(async app => {
-			const id = app.$store.state.collectives.collectives.find(c => c.name === name).id
-			if (type === 'edit') {
-				await app.$store.dispatch(UPDATE_COLLECTIVE_EDIT_PERMISSIONS, { id, level })
-			} else if (type === 'share') {
-				await app.$store.dispatch(UPDATE_COLLECTIVE_SHARE_PERMISSIONS, { id, level })
-			}
-		})
+	cy.store('state.collectives.collectives')
+		.invoke('find', c => c.name === name)
+		.then(({ id }) => cy.dispatch(action, { id, level }))
 })
 
 /**
@@ -187,12 +200,9 @@ Cypress.Commands.add('seedCollectivePermissions', (name, type, level) => {
  */
 Cypress.Commands.add('seedCollectivePageMode', (name, mode) => {
 	cy.log(`Seeding collective page mode for ${name}`)
-	cy.window()
-		.its('app')
-		.then(async app => {
-			const id = app.$store.state.collectives.collectives.find(c => c.name === name).id
-			await app.$store.dispatch(UPDATE_COLLECTIVE_PAGE_MODE, { id, mode })
-		})
+	cy.store('state.collectives.collectives')
+		.invoke('find', c => c.name === name)
+		.then(({ id }) => cy.dispatch(UPDATE_COLLECTIVE_PAGE_MODE, { id, mode }))
 })
 
 /**
@@ -200,21 +210,19 @@ Cypress.Commands.add('seedCollectivePageMode', (name, mode) => {
  */
 Cypress.Commands.add('seedPage', (name, parentFilePath, parentFileName) => {
 	cy.log(`Seeding collective page ${name}`)
-	cy.window()
-		.its('app')
-		.then(async app => {
-			await app.$store.dispatch(GET_PAGES)
-			const parentPage = app.$store.state.pages.pages.find(function(p) {
-				return p.filePath === parentFilePath
-					&& p.fileName === parentFileName
-			})
-			const parentId = parentPage.id
-			await app.$store.dispatch(NEW_PAGE, { title: name, pagePath: name, parentId })
+	cy.dispatch(GET_PAGES)
+	cy.store('state.pages.pages')
+		.invoke('find', function(p) {
+			return p.filePath === parentFilePath
+				&& p.fileName === parentFileName
+		})
+		.its('id')
+		.then(parentId => {
+			cy.dispatch(NEW_PAGE, { title: name, pagePath: name, parentId })
 			// Return pageId of created page
-			return app.$store.state.pages.pages.find(function(p) {
-				return p.parentId === parentId
-					&& p.title === name
-			}).id
+			return cy.store('state.pages.pages')
+				.invoke('find', p => p.parentId === parentId && p.title === name)
+				.its('id')
 		})
 })
 
@@ -273,11 +281,10 @@ Cypress.Commands.add('uploadContent', (path, content, mimetype = 'text/markdown'
  */
 Cypress.Commands.add('seedCircle', (name, config = null) => {
 	cy.log(`Seeding circle ${name}`)
-	cy.window()
-		.its('app')
-		.then(async app => {
-			await app.$store.dispatch(GET_CIRCLES)
-			const circle = app.$store.state.circles.circles.find(c => c.sanitizedName === name)
+	cy.dispatch(GET_CIRCLES)
+	cy.store('state.circles.circles')
+		.invoke('find', c => c.sanitizedName === name)
+		.then(async circle => {
 			const api = `${Cypress.env('baseUrl')}/ocs/v2.php/apps/circles/circles`
 			let circleId
 			if (!circle) {
@@ -309,11 +316,11 @@ Cypress.Commands.add('seedCircle', (name, config = null) => {
  */
 Cypress.Commands.add('seedCircleMember', (name, userId, type = 1, level) => {
 	cy.log(`Seeding circle member ${name} of type ${type}`)
-	cy.window()
-		.its('app')
-		.then(async app => {
-			await app.$store.dispatch(GET_CIRCLES)
-			const circleId = app.$store.state.circles.circles.find(c => c.sanitizedName === name).id
+	cy.dispatch(GET_CIRCLES)
+	cy.store('state.circles.circles')
+		.invoke('find', c => c.sanitizedName === name)
+		.its('id')
+		.then(async circleId => {
 			cy.log(`circleId: ${circleId}`)
 			const api = `${Cypress.env('baseUrl')}/ocs/v2.php/apps/circles/circles/${circleId}/members`
 			const response = await axios.post(api,
