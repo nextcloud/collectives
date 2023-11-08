@@ -57,3 +57,7 @@ you can even add entire groups to your collectives.
   Drag & drop from page list into the editor also works.
 * Add templates for future subpages ("Show templates" -> "Add template for subpages")
 * Ask [the community](https://help.nextcloud.com/c/apps/collectives/174) for help in case of questions.
+
+## Searching Collectives
+
+Use the search input on top of the page list (top left) to filter your collecives by page titles. Use the Nextcloud unified search (top right) to search within the contents of Collectives.
