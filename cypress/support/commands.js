@@ -124,11 +124,28 @@ Cypress.Commands.add('routeTo', (path) => {
 		.invoke(silent, 'push', path)
 })
 
-Cypress.Commands.add('dispatch', (...args) => {
-	Cypress.log()
-	cy.store()
-		.invoke(silent, ...['dispatch', ...args])
-})
+/*
+ * Dispatch action
+ *
+ * When used as a child command expects an object to be yielded
+ * and merges it into the payload:
+ * `cy.wrap({ id: 123 }).dispatch(SOME_ACTION, { value: 'Hello' })`
+ * will dispatch `SOME_ACTION` with a payload of `{ id: 123, value: 'Hello'}`.
+ *
+ * If null is yielded the action won't be dispatched.
+ * This is useful for cleanup commands like `deleteCollective`.
+ */
+Cypress.Commands.add('dispatch',
+	{ prevSubject: 'optional' },
+	(subject, action, payload) => {
+		// used as a child command but null was yielded
+		if (subject === null) {
+			return
+		}
+		Cypress.log()
+		cy.store()
+			.invoke(silent, 'dispatch', action, { ...payload, ...subject })
+	})
 
 Cypress.Commands.add('findBy',
 	{ prevSubject: true },
@@ -141,7 +158,7 @@ Cypress.Commands.add('findBy',
 				}
 			}
 			return true
-		})
+		}) || null
 	})
 
 /**
@@ -178,32 +195,18 @@ Cypress.Commands.add('createCollective', (name, members = []) => {
 })
 
 /**
- * Delete a collective if it exists
+ * Delete a collective if exists and clean it from the trash.
  */
 Cypress.Commands.add('deleteCollective', (name) => {
 	cy.dispatch(GET_COLLECTIVES)
 	cy.store('state.collectives.collectives')
 		.findBy({ name })
-		.then(collective => collective?.id)
-		.then(id => {
-			if (id) {
-				cy.log(`Deleting collective ${name} (id ${id})`)
-				cy.dispatch(TRASH_COLLECTIVE, { id })
-				cy.dispatch(DELETE_COLLECTIVE, { id, circle: true })
-			} else {
-				// Try to find and delete collective from trash
-				cy.dispatch(GET_TRASH_COLLECTIVES)
-				cy.store('state.collectives.trashCollectives')
-					.findBy({ name })
-					.then(collective => collective?.id)
-					.then(trashId => {
-						if (trashId) {
-							cy.log(`Deleting trashed collective ${name} (id ${trashId})`)
-							cy.dispatch(DELETE_COLLECTIVE, { id: trashId, circle: true })
-						}
-					})
-			}
-		})
+		.dispatch(TRASH_COLLECTIVE)
+	// Try to find and delete collective from trash
+	cy.dispatch(GET_TRASH_COLLECTIVES)
+	cy.store('state.collectives.trashCollectives')
+		.findBy({ name })
+		.dispatch(DELETE_COLLECTIVE, { circle: true })
 })
 
 /**
@@ -216,7 +219,7 @@ Cypress.Commands.add('seedCollectivePermissions', (name, type, level) => {
 	cy.log(`Seeding collective permissions for ${name}`)
 	cy.store('state.collectives.collectives')
 		.findBy({ name })
-		.then(({ id }) => cy.dispatch(action, { id, level }))
+		.dispatch(action, { level })
 })
 
 /**
@@ -226,7 +229,7 @@ Cypress.Commands.add('seedCollectivePageMode', (name, mode) => {
 	cy.log(`Seeding collective page mode for ${name}`)
 	cy.store('state.collectives.collectives')
 		.findBy({ name })
-		.then(({ id }) => cy.dispatch(UPDATE_COLLECTIVE_PAGE_MODE, { id, mode }))
+		.dispatch(UPDATE_COLLECTIVE_PAGE_MODE, { mode })
 })
 
 /**
@@ -238,13 +241,15 @@ Cypress.Commands.add('seedPage', (name, parentFilePath, parentFileName) => {
 	cy.store('state.pages.pages')
 		.findBy({ filePath: parentFilePath, fileName: parentFileName })
 		.its('id')
-		.then(parentId => {
-			cy.dispatch(NEW_PAGE, { title: name, pagePath: name, parentId })
-			// Return pageId of created page
-			return cy.store('state.pages.pages')
-				.findBy({ parentId, title: name })
-				.its('id')
-		})
+		.as('parentId')
+		.then(id => ({ parentId: id }))
+		.dispatch(NEW_PAGE, { title: name, pagePath: name })
+	// Return pageId of created page
+	cy.get('@parentId').then(parentId => {
+		return cy.store('state.pages.pages')
+			.findBy({ parentId, title: name })
+			.its('id')
+	})
 })
 
 /**
