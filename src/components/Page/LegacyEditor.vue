@@ -11,7 +11,6 @@
 		:show-outline-outside="showOutline"
 		mime="text/markdown"
 		class="file-view active"
-		:class="[isFullWidthView ? 'full-width-view' : 'sheet-view']"
 		@ready="ready"
 		@outline-toggled="toggleOutlineFromText"
 		@add-image-node="onAddImageNode"
@@ -23,13 +22,12 @@ import { mapGetters, mapMutations } from 'vuex'
 import { emit } from '@nextcloud/event-bus'
 
 export default {
-	name: 'Editor',
+	name: 'LegacyEditor',
 
 	computed: {
 		...mapGetters([
 			'currentPage',
 			'currentPageFilePath',
-			'isFullWidthView',
 			'shareTokenParam',
 			'showing',
 		]),

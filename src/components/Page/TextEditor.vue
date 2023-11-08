@@ -2,56 +2,48 @@
 	<div>
 		<WidgetHeading v-if="isLandingPage"
 			:title="t('collectives', 'Landing page')"
-			class="text-container-heading"
-			:class="[isFullWidthView ? 'full-width-view' : 'sheet-view']" />
-		<div v-show="showRichText"
-			id="text-container"
-			:key="'text-' + currentPage.id"
-			:class="[isFullWidthView ? 'full-width-view' : 'sheet-view']"
-			:aria-label="t('collectives', 'Page content')">
-			<RichText :key="`reader-${currentPage.id}`"
-				:current-page="currentPage"
-				:page-content="pageContent" />
-		</div>
-		<Editor v-if="currentCollectiveCanEdit"
-			v-show="showEditor"
-			:key="`editor-${currentPage.id}`"
+			class="text-container-heading" />
+		<SkeletonLoading v-show="!contentLoaded"
+			type="text"
+			class="page-content-skeleton" />
+		<div v-show="contentLoaded && !showEditor"
+			ref="reader"
+			data-collectives-el="reader" />
+		<div v-if="currentCollectiveCanEdit"
+			v-show="contentLoaded && showEditor"
 			ref="editor"
-			@ready="readyEditor" />
+			data-collectives-el="editor" />
 	</div>
 </template>
 
 <script>
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import Editor from './Editor.vue'
-import RichText from './RichText.vue'
+import { showError } from '@nextcloud/dialogs'
 import WidgetHeading from './LandingPageWidgets/WidgetHeading.vue'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import {
 	GET_VERSIONS,
 	TOUCH_PAGE,
 } from '../../store/actions.js'
+import editorMixin from '../../mixins/editorMixin.js'
 import pageContentMixin from '../../mixins/pageContentMixin.js'
+import SkeletonLoading from '../SkeletonLoading.vue'
 
 export default {
 	name: 'TextEditor',
 
 	components: {
-		Editor,
-		RichText,
+		SkeletonLoading,
 		WidgetHeading,
 	},
 
 	mixins: [
+		editorMixin,
 		pageContentMixin,
 	],
 
 	data() {
 		return {
-			pageContent: '',
-			previousSaveTimestamp: null,
-			readMode: true,
-			scrollTop: 0,
 			textEditWatcher: null,
 		}
 	},
@@ -64,36 +56,20 @@ export default {
 			'currentPageDavUrl',
 			'hasVersionsLoaded',
 			'isLandingPage',
+			'isPublic',
 			'isTemplatePage',
 			'isTextEdit',
-			'isPublic',
-			'isFullWidthView',
 			'loading',
 		]),
 
-		showRichText() {
-			return this.readOnly
-		},
-
 		showEditor() {
-			return !this.readOnly
-		},
-
-		waitForEditor() {
-			return this.readMode && this.isTextEdit
-		},
-
-		readOnly() {
-			return !this.currentCollectiveCanEdit || this.readMode | !this.isTextEdit
+			return this.currentCollectiveCanEdit && !this.loading('editor') && this.isTextEdit
 		},
 	},
 
 	watch: {
 		'currentPage.timestamp'() {
-			if (this.currentPage.timestamp > this.previousSaveTimestamp) {
-				this.previousSaveTimestamp = this.currentPage.timestamp
-				this.getPageContent()
-			}
+			this.getPageContent()
 		},
 	},
 
@@ -105,22 +81,24 @@ export default {
 		this.load('pageContent')
 	},
 
-	mounted() {
-		this.initEditMode()
-		this.getPageContent()
+	async mounted() {
+		const readerPromise = this.setupReader()
+		const editorPromise = this.setupEditor()
+		const pageContentPromise = this.getPageContent()
+		Promise.all([readerPromise, editorPromise, pageContentPromise]).then(() => {
+			this.initEditMode()
+		})
 
 		this.textEditWatcher = this.$watch('isTextEdit', (val) => {
-			if (val === true) {
-				this.startEdit()
-			} else {
+			if (val === false) {
 				this.stopEdit()
 			}
 		})
-		subscribe('collectives:attachment:restore', this.addImage)
+		subscribe('collectives:attachment:restore', this.restoreAttachment)
 	},
 
 	beforeDestroy() {
-		unsubscribe('collectives:attachment:restore', this.addImage)
+		unsubscribe('collectives:attachment:restore', this.restoreAttachment)
 		this.textEditWatcher()
 	},
 
@@ -137,31 +115,7 @@ export default {
 			dispatchGetVersions: GET_VERSIONS,
 		}),
 
-		// this is a method so it does not get cached
-		wrapper() {
-			return this.$refs.editor?.$children[0].$children[0]
-		},
-
-		// this is a method so it does not get cached
-		syncService() {
-			// `$syncService` in Nexcloud 24+, `syncService` beforehands
-			return this.wrapper()?.$syncService ?? this.wrapper()?.syncService
-		},
-
-		// this is a method so it does not get cached
-		doc() {
-			return this.wrapper()?.$data.document
-		},
-
-		focusEditor() {
-			if (this.wrapper()?.$editor?.commands.autofocus) {
-				this.wrapper().$editor.commands.autofocus()
-			} else {
-				this.wrapper()?.$editor?.commands.focus?.()
-			}
-		},
-
-		addImage(name) {
+		restoreAttachment(name) {
 			// inspired by the fixedEncodeURIComponent function suggested in
 			// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent
 			const src = '.attachments.' + this.currentPage.id + '/' + name
@@ -169,54 +123,26 @@ export default {
 			// as it does not need to be unique and matching the real file name
 			const alt = name.replaceAll(/[[\]]/g, '')
 
-			this.wrapper()?.$editor?.commands.setImage({ src, alt })
-		},
-
-		/**
-		 * Set readMode to false
-		 */
-		readyEditor() {
-			this.done('editor')
-
-			// Set pageContent if it's been empty before
-			if (!this.pageContent) {
-				this.pageContent = this.syncService()._getContent() || ''
-			}
-			this.readMode = false
-
-			if (this.isTextEdit) {
-				if (this.doc()) {
-					this.previousSaveTimestamp = this.doc().lastSavedVersionTime
-				}
-			}
+			this.editor.insertAtCursor(`<img src="${src}" alt="${alt}" />`)
 		},
 
 		initEditMode() {
-			// Open in edit mode when pageMode is set, for template pages and for new pages
-			if (!!this.currentCollective.pageMode || this.isTemplatePage || this.loading('newPageContent')) {
+			// Open in edit mode when pageMode is set
+			if (!!this.currentCollective.pageMode
+				// for template pages
+				|| this.isTemplatePage
+				// for new pages
+				|| this.loading('newPageContent')
+				// or when page is empty
+				|| !this.davContent.trim()) {
 				this.setTextEdit()
 				this.done('newPageContent')
 			}
 		},
 
-		startEdit() {
-			this.scrollTop = document.getElementById('text')?.scrollTop || 0
-			if (this.doc()) {
-				this.previousSaveTimestamp = this.doc().lastSavedVersionTime
-			}
-			this.$nextTick(() => {
-				document.getElementById('editor')?.scrollTo(0, this.scrollTop)
-			})
-		},
-
 		stopEdit() {
-			this.scrollTop = document.getElementById('editor')?.scrollTop || 0
-
-			const pageContent = this.syncService()._getContent() || ''
-			const changed = this.pageContent !== pageContent
-
 			// switch back to edit if there's no content
-			if (!pageContent.trim()) {
+			if (!this.pageContent?.trim()) {
 				this.setTextEdit()
 				this.$nextTick(() => {
 					this.focusEditor()
@@ -224,6 +150,7 @@ export default {
 				return
 			}
 
+			const changed = this.editorContent && (this.editorContent !== this.davContent)
 			if (changed) {
 				this.dispatchTouchPage()
 				if (!this.isPublic && this.hasVersionsLoaded) {
@@ -232,21 +159,17 @@ export default {
 
 				// Save pending changes in editor
 				// TODO: detect missing connection and display warning
-				this.syncService().save()
-
-				this.pageContent = pageContent
+				this.editor.save()
+					.catch(() => {
+						showError(t('collectives', 'Error saving the document. Please try again.'))
+						this.setTextEdit()
+					})
 			}
-
-			this.$nextTick(() => {
-				document.getElementById('text')?.scrollTo(0, this.scrollTop)
-			})
 		},
 
 		async getPageContent() {
-			this.pageContent = await this.fetchPageContent(this.currentPageDavUrl)
-			if (!this.pageContent) {
-				this.setTextEdit()
-			}
+			this.davContent = await this.fetchPageContent(this.currentPageDavUrl)
+			this.reader?.setContent(this.pageContent)
 			this.done('pageContent')
 		},
 	},
@@ -258,13 +181,8 @@ export default {
 	padding-left: 14px;
 }
 
-#text-container {
-	display: block;
-	width: 100%;
-	max-width: 100%;
-	left: 0;
-	margin: 0 auto;
-	background-color: var(--color-main-background);
+.page-content-skeleton {
+	padding-top: 44px;
 }
 
 :deep([data-text-el='editor-container']) {
@@ -284,6 +202,15 @@ export default {
 	/* Don't print unwanted elements */
 	.text-container-heading {
 		display: none !important;
+	}
+}
+</style>
+
+<style lang="scss">
+@media print {
+	h1, h2, h3 {
+		page-break-after: avoid;
+		break-after: avoid;
 	}
 }
 </style>

@@ -15,7 +15,7 @@ if ! npm exec wait-on >/dev/null; then
 fi
 
 # start server if it's not running yet
-if npm exec wait-on -- -i 500 -t 1000 "$CYPRESS_baseUrl" 2>/dev/null; then
+if npm exec wait-on -- -i 500 -t 2000 "$CYPRESS_baseUrl" 2>/dev/null; then
 	echo Server is up at "$CYPRESS_baseUrl"
 else
 	echo No server reached at "$CYPRESS_baseUrl" - starting containers.

@@ -283,15 +283,19 @@ export default {
 		this.getAttachments()
 		// Reload attachment list on event from Text
 		subscribe('collectives:text-image-node:add', this.getAttachments)
+		subscribe('text:image-node:add', this.getAttachments)
 		// Move attachment to recently deleted on event from Text
 		subscribe('collectives:text-image-node:delete', this.onDeleteImageNode)
+		subscribe('text:image-node:delete', this.onDeleteImageNode)
 		// Reload attachment list on filesystem changes
 		listen('notify_file', this.getAttachments.bind(this))
 	},
 
 	beforeDestroy() {
 		unsubscribe('collectives:text-image-node:add', this.getAttachments)
+		unsubscribe('text:image-node:add', this.getAttachments)
 		unsubscribe('collectives:text-image-node:delete', this.onDeleteImageNode)
+		unsubscribe('text:image-node:delete', this.onDeleteImageNode)
 	},
 
 	methods: {

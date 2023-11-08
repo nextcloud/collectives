@@ -9,10 +9,15 @@
 
 .sheet-view {
 	--text-editor-max-width: 670px !important;
-	max-width: var(--text-editor-max-width);
-	margin: auto;
 
-	&.page-title {
+	.landing-page-widgets,
+	.text-container-heading,
+	.page-content-skeleton {
+		max-width: var(--text-editor-max-width);
+		margin: auto;
+	}
+
+	.page-title {
 		max-width: 100%;
 		margin: 0 0 0 max(0px, calc(50% - (var(--text-editor-max-width) / 2)));
 	}
@@ -23,4 +28,23 @@
 		padding: 0 2px;
 		margin: auto;
 	}
+
+	[data-collectives-el='editor'],
+	[data-collectives-el='reader'] {
+		max-width: unset;
+		margin: auto;
+
+		.text-menubar {
+			max-width: var(--text-editor-max-width);
+			margin: auto;
+		}
+	}
+}
+
+/* TODO: remove once https://github.com/nextcloud/text/pull/4945 got released */
+.editor--outline {
+	border-radius: var(--border-radius-large);
+	box-shadow: 0 1px 10px var(--color-box-shadow);
+	background-color: var(--color-main-background);
+	z-index: 10021;
 }

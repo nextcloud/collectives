@@ -161,11 +161,15 @@ describe('Page', function() {
 
 			cy.log('Inserting an image')
 			cy.intercept({ method: 'POST', url: '**/text/attachment/upload*' }).as('attachmentUpload')
-			cy.get('input[data-text-el="attachment-file-input"]')
+			cy.getEditor()
+				.should('be.visible')
+				.find('input[data-text-el="attachment-file-input"]')
 				.selectFile('cypress/fixtures/test.png', { force: true })
 			cy.wait('@attachmentUpload')
 
 			cy.log('Inserting a heading')
+			// Wait 1 second to prevent race condition with previous insertion
+			cy.wait(1000) // eslint-disable-line cypress/no-unnecessary-waiting
 			cy.getEditor()
 				.should('be.visible')
 				.type('## Heading{enter}')
@@ -285,7 +289,10 @@ describe('Page', function() {
 		it('Allows to toggle persistent full-width view', function() {
 			cy.openPage('Day 2')
 			cy.get('#titleform').should('have.css', 'max-width', '100%')
-			cy.get('#read-only-editor').invoke('outerWidth').should('eq', 670)
+			cy.getReadOnlyEditor()
+				.find('.editor__content')
+				.invoke('outerWidth')
+				.should('eq', 670)
 
 			// Set full width mode
 			cy.get('#titleform .action-item__menutoggle')
@@ -293,12 +300,18 @@ describe('Page', function() {
 			cy.contains('li.action', 'Full width')
 				.click()
 			cy.get('#titleform').should('have.css', 'max-width', 'none')
-			cy.get('#read-only-editor').invoke('outerWidth').should('be.greaterThan', 700)
+			cy.getReadOnlyEditor()
+				.find('.editor__content')
+				.invoke('outerWidth')
+				.should('be.greaterThan', 700)
 
 			// Reload to check persistence with browser storage
 			cy.reload()
 			cy.get('#titleform').should('have.css', 'max-width', 'none')
-			cy.get('#read-only-editor').invoke('outerWidth').should('be.greaterThan', 700)
+			cy.getReadOnlyEditor()
+				.find('.editor__content')
+				.invoke('outerWidth')
+				.should('be.greaterThan', 700)
 
 			// Unset full width mode
 			cy.get('#titleform .action-item__menutoggle')
@@ -306,7 +319,10 @@ describe('Page', function() {
 			cy.contains('li.action', 'Full width')
 				.click()
 			cy.get('#titleform').should('have.css', 'max-width', '100%')
-			cy.get('#read-only-editor').invoke('outerWidth').should('eq', 670)
+			cy.getReadOnlyEditor()
+				.find('.editor__content')
+				.invoke('outerWidth')
+				.should('eq', 670)
 		})
 	})
 

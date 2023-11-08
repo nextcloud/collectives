@@ -49,14 +49,14 @@ Cypress.Commands.add('loginAs', (user, password = null) => {
  */
 Cypress.Commands.add('getEditor', (timeout = null) => {
 	timeout = timeout ?? Cypress.config('defaultCommandTimeout')
-	cy.get('[data-text-el="editor-container"] div.ProseMirror', { timeout })
+	cy.get('[data-collectives-el="editor"]', { timeout })
 })
 
 /**
  * Get the ReadOnlyEditor/RichTextReader component
  */
 Cypress.Commands.add('getReadOnlyEditor', () => {
-	cy.get('#read-only-editor div.ProseMirror')
+	cy.get('[data-collectives-el="reader"]')
 })
 
 /**
@@ -75,7 +75,7 @@ Cypress.Commands.add('switchPageMode', (pageMode) => {
 		cy.get('button.titleform-button')
 			.should('contain', 'Edit')
 			.click()
-		cy.getEditor(Cypress.config('defaultCommandTimeout') * 15)
+		cy.getEditor()
 			.should('be.visible')
 	} else {
 		throw new Error(`Unknown page mode: ${pageMode}`)
