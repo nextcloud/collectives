@@ -40,15 +40,9 @@ Please note that this enables guest users to create new collectives.
 
 ## Searching Collectives
 
-To enable searching of collectives from the unified Nextcloud search, make sure the `ext-pdo` and `ext-pdo_sqlite` PHP extensions are installed and the Nextcloud cronjob is running. The index of collectives page contents should update with every cronjob run. The following commands can be used to install the PHP extensions on Ubuntu:
+To enable searching of collectives from the unified Nextcloud search, make sure the `ext-pdo` and `ext-pdo_sqlite` PHP extensions are installed and the Nextcloud cronjob is running. The index of collectives page contents should update with every cronjob run.
 
-```
-apt-get install phpXX-mysql # for Nextcloud instances that use MySQL
-apt-get install phpXX-pgsql # for Nextcloud instances that use Postgres
-apt-get install phpXX-sqlite3 # required for all instances
-```
-
-Note: the XX above should be replaced with your PHP version. E.g. ` php8.1-sqlite3` for PHP 8.1
+Tip: On Ubuntu 22.04, the relevant package to install is `phpXX-sqlite3` - with the XX being replaced with your PHP version. E.g. ` php8.1-sqlite3` for PHP 8.1.
 
 
 ## Public shares
