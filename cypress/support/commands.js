@@ -18,6 +18,7 @@ import axios from '@nextcloud/axios'
 
 const url = Cypress.config('baseUrl').replace(/\/index.php\/?$/g, '')
 Cypress.env('baseUrl', url)
+const silent = { log: false }
 
 /**
  * Ignore ResizeObserver loop limit exceeded' exceptions from browser
@@ -103,21 +104,30 @@ Cypress.Commands.add('enableDashboardWidget', (widgetName) => {
 	)
 })
 
-Cypress.Commands.add('store', (selector) => {
+Cypress.Commands.add('store', (selector, options = {}) => {
 	if (selector) {
-		cy.window().its(`app.$store.${selector}`)
+		Cypress.log()
+	}
+	if (selector) {
+		cy.window(silent)
+			.its(`app.$store.${selector}`, silent)
 	} else {
-		cy.window().its('app.$store')
+		cy.window(silent)
+			.its('app.$store', silent)
 	}
 })
 
 Cypress.Commands.add('routeTo', (path) => {
-	cy.window().its('app.$router').invoke('push', path)
+	Cypress.log()
+	cy.window(silent)
+		.its('app.$router', silent)
+		.invoke(silent, 'push', path)
 })
 
 Cypress.Commands.add('dispatch', (...args) => {
+	Cypress.log()
 	cy.store()
-		.invoke(...['dispatch', ...args])
+		.invoke(silent, ...['dispatch', ...args])
 })
 
 /**
