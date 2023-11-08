@@ -55,8 +55,7 @@ describe('Page details', function() {
 				.find('.editor--toc .editor--toc__item')
 				.should('contain', 'Second-Level Heading')
 
-			// Switch to edit mode
-			cy.switchPageMode(1)
+			cy.switchToEditMode()
 
 			cy.getEditor()
 				.find('.editor--toc .editor--toc__item')
@@ -68,7 +67,7 @@ describe('Page details', function() {
 				.click()
 
 			// Switch back to view mode
-			cy.switchPageMode(0)
+			cy.switchToViewMode()
 
 			cy.get('.editor--toc')
 				.should('not.exist')
