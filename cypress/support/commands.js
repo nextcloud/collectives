@@ -130,6 +130,20 @@ Cypress.Commands.add('dispatch', (...args) => {
 		.invoke(silent, ...['dispatch', ...args])
 })
 
+Cypress.Commands.add('findBy',
+	{ prevSubject: true },
+	(subject, properties) => {
+		Cypress.log()
+		return subject.find(item => {
+			for (const key in properties) {
+				if (item[key] !== properties[key]) {
+					return false
+				}
+			}
+			return true
+		})
+	})
+
 /**
  * Create a fresh collective for use in the test
  *
@@ -169,7 +183,7 @@ Cypress.Commands.add('createCollective', (name, members = []) => {
 Cypress.Commands.add('deleteCollective', (name) => {
 	cy.dispatch(GET_COLLECTIVES)
 	cy.store('state.collectives.collectives')
-		.invoke('find', c => c.name === name)
+		.findBy({ name })
 		.then(collective => collective?.id)
 		.then(id => {
 			if (id) {
@@ -179,8 +193,8 @@ Cypress.Commands.add('deleteCollective', (name) => {
 			} else {
 				// Try to find and delete collective from trash
 				cy.dispatch(GET_TRASH_COLLECTIVES)
-				cy.store('state.collectives.collectives')
-					.invoke('find', c => c.name === name)
+				cy.store('state.collectives.trashCollectives')
+					.findBy({ name })
 					.then(collective => collective?.id)
 					.then(trashId => {
 						if (trashId) {
@@ -201,7 +215,7 @@ Cypress.Commands.add('seedCollectivePermissions', (name, type, level) => {
 		: UPDATE_COLLECTIVE_SHARE_PERMISSIONS
 	cy.log(`Seeding collective permissions for ${name}`)
 	cy.store('state.collectives.collectives')
-		.invoke('find', c => c.name === name)
+		.findBy({ name })
 		.then(({ id }) => cy.dispatch(action, { id, level }))
 })
 
@@ -211,7 +225,7 @@ Cypress.Commands.add('seedCollectivePermissions', (name, type, level) => {
 Cypress.Commands.add('seedCollectivePageMode', (name, mode) => {
 	cy.log(`Seeding collective page mode for ${name}`)
 	cy.store('state.collectives.collectives')
-		.invoke('find', c => c.name === name)
+		.findBy({ name })
 		.then(({ id }) => cy.dispatch(UPDATE_COLLECTIVE_PAGE_MODE, { id, mode }))
 })
 
@@ -222,16 +236,13 @@ Cypress.Commands.add('seedPage', (name, parentFilePath, parentFileName) => {
 	cy.log(`Seeding collective page ${name}`)
 	cy.dispatch(GET_PAGES)
 	cy.store('state.pages.pages')
-		.invoke('find', function(p) {
-			return p.filePath === parentFilePath
-				&& p.fileName === parentFileName
-		})
+		.findBy({ filePath: parentFilePath, fileName: parentFileName })
 		.its('id')
 		.then(parentId => {
 			cy.dispatch(NEW_PAGE, { title: name, pagePath: name, parentId })
 			// Return pageId of created page
 			return cy.store('state.pages.pages')
-				.invoke('find', p => p.parentId === parentId && p.title === name)
+				.findBy({ parentId, title: name })
 				.its('id')
 		})
 })
@@ -293,7 +304,7 @@ Cypress.Commands.add('seedCircle', (name, config = null) => {
 	cy.log(`Seeding circle ${name}`)
 	cy.dispatch(GET_CIRCLES)
 	cy.store('state.circles.circles')
-		.invoke('find', c => c.sanitizedName === name)
+		.findBy({ sanitizedName: name })
 		.then(async circle => {
 			const api = `${Cypress.env('baseUrl')}/ocs/v2.php/apps/circles/circles`
 			let circleId
@@ -328,7 +339,7 @@ Cypress.Commands.add('seedCircleMember', (name, userId, type = 1, level) => {
 	cy.log(`Seeding circle member ${name} of type ${type}`)
 	cy.dispatch(GET_CIRCLES)
 	cy.store('state.circles.circles')
-		.invoke('find', c => c.sanitizedName === name)
+		.findBy({ sanitizedName: name })
 		.its('id')
 		.then(async circleId => {
 			cy.log(`circleId: ${circleId}`)
