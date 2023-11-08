@@ -112,36 +112,19 @@ Cypress.Commands.add('enableDashboardWidget', (widgetName) => {
 })
 
 /**
- * First delete, then seed a collective (to start fresh)
+ * Create a fresh collective for use in the test
+ *
+ * If the collective already existed it will be deleted first.
  */
 Cypress.Commands.add('deleteAndSeedCollective', (name) => {
 	cy.deleteCollective(name)
-	cy.seedCollective(name)
-})
-
-/**
- * Create a collective if it doesn't exist
- */
-Cypress.Commands.add('seedCollective', (name) => {
 	cy.log(`Seeding collective ${name}`)
 	cy.window()
 		.its('app')
 		.then(async app => {
 			await app.$store.dispatch(NEW_COLLECTIVE, { name })
-				.catch(e => {
-					if (e.request && e.request.status === 422) {
-						// The collective already existed... carry on.
-					} else {
-						throw e
-					}
-				})
 			const updatedCollectivePath = app.$store.getters.updatedCollectivePath
-			if (updatedCollectivePath) {
-				app.$router.push(updatedCollectivePath)
-			} else {
-				// Fallback - if collective exists, updatedCollectivePath is undefined
-				app.$router.push(`/${name}`)
-			}
+			app.$router.push(updatedCollectivePath)
 		})
 	// Make sure new collective is loaded
 	cy.get('#titleform input').should('have.value', name)
