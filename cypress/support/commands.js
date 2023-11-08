@@ -86,29 +86,21 @@ Cypress.Commands.add('switchToEditMode', () => {
 Cypress.Commands.add('enableApp', appName => cy.setAppEnabled(appName))
 Cypress.Commands.add('disableApp', appName => cy.setAppEnabled(appName, false))
 Cypress.Commands.add('setAppEnabled', (appName, value = true) => {
-	cy.request('/csrftoken').then(({ body }) => {
-		const requesttoken = body.token
-		const verb = value ? 'enable' : 'disable'
-		const api = `${Cypress.env('baseUrl')}/index.php/settings/apps/${verb}`
-		return axios.post(api,
-			{ appIds: [appName] },
-			{ headers: { requesttoken } },
-		)
-	})
+	const verb = value ? 'enable' : 'disable'
+	const api = `${Cypress.env('baseUrl')}/index.php/settings/apps/${verb}`
+	return axios.post(api,
+		{ appIds: [appName] },
+	)
 })
 
 /**
  * Enable dashboard widget
  */
 Cypress.Commands.add('enableDashboardWidget', (widgetName) => {
-	cy.request('/csrftoken').then(({ body }) => {
-		const requesttoken = body.token
-		const api = `${Cypress.env('baseUrl')}/index.php/apps/dashboard/layout`
-		return axios.post(api,
-			{ layout: widgetName },
-			{ headers: { requesttoken } },
-		)
-	})
+	const api = `${Cypress.env('baseUrl')}/index.php/apps/dashboard/layout`
+	return axios.post(api,
+		{ layout: widgetName },
+	)
 })
 
 /**
