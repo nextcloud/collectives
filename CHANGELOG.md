@@ -1,5 +1,30 @@
 # Changelog
 
+## 2.9.0 - 2023.11.08
+
+### ✨New
+* 🛺 Allow to copy/move pages in and between collectives. (#488)
+* 📌 Add recent pages dashboard widget. (#113)
+* 👽 Use Text editor via API on Nextcloud 26 and newer. (#18, #932, #969)
+* ✨ Add Nextcloud 28 support.
+
+### 🐛Fixes
+* 📝 Don't autofocus editor when opening page in edit mode. (#596)
+* 🔗 Fix backlink detection with special chars in trusted_domains config. (#330)
+* 🧹 Don't show 'Leave collective' action in public shares.
+* 🧹 Don't show Nextcloud footer in public shares. (#848, #944)
+* 💄 Fix layout of text editor when opened in viewer.
+* 🖨️ Several print layout fixes and improvements. (#542, #543)
+* 📋 Added documentation on searching. Thanks @pjrobertson.
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 2.8.2 - 2023.10.04
 
 ### 🐛Fixes
