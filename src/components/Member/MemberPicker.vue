@@ -23,6 +23,7 @@
 			<!-- Selected members (optional) -->
 			<SelectedMembers v-if="currentUserIsAdmin && !showCurrentSkeleton && showSelection"
 				:selected-members="selectedMembers"
+				:no-delete-members="noDeleteMembers"
 				@delete-from-selection="deleteFromSelection" />
 
 			<!-- Searched and picked members -->
@@ -35,7 +36,7 @@
 			<!-- No search results -->
 			<template v-else-if="currentUserIsAdmin && !showCurrentSkeleton">
 				<NcAppNavigationCaption class="member-picker-caption" :title="t('collectives', 'Add users, groups or circles…')" />
-				<Hint v-if="!isSearching" :hint="t('collectives', 'Search for members to add')" />
+				<Hint v-if="!isSearching" :hint="t('collectives', 'Search for members to add.')" />
 				<Hint v-else-if="isSearchLoading" :hint="t('collectives', 'Loading…')" />
 				<Hint v-else :hint="t('collectives', 'No search results')" />
 			</template>
@@ -99,6 +100,12 @@ export default {
 			type: Object,
 			default() {
 				return {}
+			},
+		},
+		noDeleteMembers: {
+			type: Array,
+			default() {
+				return []
 			},
 		},
 		onClickSearched: {
