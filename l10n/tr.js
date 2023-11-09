@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Add a collective" : "Bir topluluk ekle",
     "Recent pages" : "Son sayfalar",
     "Collectives" : "Topluluklar",
     "In collective %1$s" : "%1$s topluluğunda",
@@ -125,6 +126,7 @@ OC.L10N.register(
     "Collapse recent pages" : "Son sayfaları daralt",
     "Expand recent pages" : "Son sayfaları genişlet",
     "Could not save recent pages setting for collective" : "Topluluğun son sayfalar ayarı kaydedilemedi",
+    "Page content" : "Sayfa içeriği",
     "Open page sidebar" : "Sayfa yan çubuğunu aç",
     "Full width" : "Tam genişlik",
     "Show in Files" : "Dosyalarda görüntüle",
@@ -148,7 +150,6 @@ OC.L10N.register(
     "Move page to {collective}" : "Sayfayı {collective} topluluğuna taşı",
     "Copy page here" : "Sayfayı buraya kopyala",
     "Copy page to {collective}" : "Sayfayı {collective} topluluğuna kopyala",
-    "Page content" : "Sayfa içeriği",
     "Restore this version" : "Bu sürümü geri yükle",
     "Reverted {page} to revision {timestamp}." : "{page} sayfası {timestamp} sürümüne geri alındı.",
     "Failed to revert {page} to revision {timestamp}." : "{page} sayfası {timestamp} sürümüne geri alınamadı.",

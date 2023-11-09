@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Add a collective" : "Ajouter un collectif",
     "Recent pages" : "Pages récentes",
     "Collectives" : "Collectifs",
     "In collective %1$s" : "Dans le collectif %1$s",
@@ -125,6 +126,7 @@ OC.L10N.register(
     "Collapse recent pages" : "Replier les pages récentes",
     "Expand recent pages" : "Déplier les pages récentes",
     "Could not save recent pages setting for collective" : "Impossible de sauvegarder les pages récentes pour ce collectif",
+    "Page content" : "Contenu de la page",
     "Open page sidebar" : "Ouvrir la barre latérale de la page",
     "Full width" : "Pleine largueur",
     "Show in Files" : "Afficher dans Fichiers",
@@ -148,7 +150,6 @@ OC.L10N.register(
     "Move page to {collective}" : "Déplacer la page vers {collective}",
     "Copy page here" : "Copier la page ici",
     "Copy page to {collective}" : "Copier la page vers {collective}",
-    "Page content" : "Contenu de la page",
     "Restore this version" : "Restaurer cette version",
     "Reverted {page} to revision {timestamp}." : "{page} restaurée à la révision {timestamp}.",
     "Failed to revert {page} to revision {timestamp}." : "Échec de la restauration de {page} à la révision {timestamp}.",

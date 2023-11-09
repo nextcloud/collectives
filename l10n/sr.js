@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Add a collective" : "Додаје колектив",
     "Recent pages" : "Скорашње странице",
     "Collectives" : "Колективи",
     "In collective %1$s" : "У колективу %1$s",
@@ -125,6 +126,7 @@ OC.L10N.register(
     "Collapse recent pages" : "Сажми скорашње странице",
     "Expand recent pages" : "Развиј скорашње странице",
     "Could not save recent pages setting for collective" : "Није успело чување подешавања за скорашње странице колектива",
+    "Page content" : "Садржај странице",
     "Open page sidebar" : "Отвори бочну траку са страницом",
     "Full width" : "Пуна ширина",
     "Show in Files" : "Прикажи у Фајловима",
@@ -148,7 +150,6 @@ OC.L10N.register(
     "Move page to {collective}" : "Премести страницу у {collective}",
     "Copy page here" : "Копирај страницу овде",
     "Copy page to {collective}" : "Копирај страницу у {collective}",
-    "Page content" : "Садржај странице",
     "Restore this version" : "Обнови ову верзију",
     "Reverted {page} to revision {timestamp}." : "Страница {page} је обновљена на ревизију {timestamp}.",
     "Failed to revert {page} to revision {timestamp}." : "Није успело враћање {page} на ревизију {timestamp}.",
