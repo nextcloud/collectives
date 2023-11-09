@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Add a collective" : "إضافة تجميعة",
     "Recent pages" : "الصفحات الحالية",
     "Collectives" : "تجميعات Collectives",
     "In collective %1$s" : "في تجميعة %1$s",
@@ -125,6 +126,7 @@ OC.L10N.register(
     "Collapse recent pages" : "طَي collapse الصفحات المفتوحة مؤخراً",
     "Expand recent pages" : "فرد expand الصفحات المفتوحة مؤخراً",
     "Could not save recent pages setting for collective" : "تعذّر حفظ إعدادات الصفحات المفتوحة مؤخراً من التجميعة collective",
+    "Page content" : "محتوى الصفحة",
     "Open page sidebar" : "إفتح الشريط الجانبي للصفحة",
     "Full width" : "العرض الكامل",
     "Show in Files" : "عرض في الملفات ",
@@ -148,7 +150,6 @@ OC.L10N.register(
     "Move page to {collective}" : "أنقُل الصفحة إلى {collective}",
     "Copy page here" : "إنسَخ الصفحة هنا",
     "Copy page to {collective}" : "إنسَخ الصفحة إلى {collective}",
-    "Page content" : "محتوى الصفحة",
     "Restore this version" : "إستعادة الصفحة",
     "Reverted {page} to revision {timestamp}." : "صفحة معادة {page} إلى النسخة {timestamp}.",
     "Failed to revert {page} to revision {timestamp}." : "تعذّرت إعادة الصفحة {page} إلى النسخة {timestamp}.",
