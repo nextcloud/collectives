@@ -290,7 +290,7 @@ Cypress.Commands.add('seedPageContent', (pagePath, content) => {
 	const contentForLog = content.length > 200
 		? content.substring(0, 200) + '...'
 		: content
-	Cypress.log({ message: `${pagePath}, ${contentForLog}`})
+	Cypress.log({ message: `${pagePath}, ${contentForLog}` })
 	cy.uploadContent(`Collectives/${pagePath}`, content)
 })
 
@@ -350,39 +350,36 @@ Cypress.Commands.add('seedCircle', (name, config = null) => {
 /**
  * Add someone to a circle
  */
-Cypress.Commands.add('seedCircleMember', (name, userId, type = 1, level) => {
+Cypress.Commands.add('circleFind', (name) => {
 	Cypress.log()
 	cy.dispatch(GET_CIRCLES)
-	cy.store('state.circles.circles')
+	return cy.store('state.circles.circles')
 		.findBy({ sanitizedName: name })
-		.its('id')
-		.then(circleId => {
-			cy.circleAddMember(circleId, { userId, type })
-		})
-		.then(({ circleId, memberId }) => {
-			if (level) {
-				cy.circleSetMemberLevel(circleId, memberId, level)
-			}
-		})
 })
 
-Cypress.Commands.add('circleSetMemberLevel', (circleId, memberId, level) => {
-	Cypress.log()
-	const url = `${Cypress.env('baseUrl')}/ocs/v2.php/apps/circles/circles/${circleId}/members`
-	return axios.put(`${url}/${memberId}/level`,
-		{ level },
-	)
-})
+Cypress.Commands.add('circleAddMember',
+	{ prevSubject: true },
+	async ({ id }, userId, type = 1) => {
+		Cypress.log()
+		const url = `${Cypress.env('baseUrl')}/ocs/v2.php/apps/circles/circles/${id}/members`
+		const response = await axios.post(url,
+			{ userId, type },
+		)
+		const memberId = response.data.ocs.data.id
+		return { circleId: id, userId, memberId }
+	},
+)
 
-Cypress.Commands.add('circleAddMember', async (circleId, { userId, type }) => {
-	Cypress.log()
-	const url = `${Cypress.env('baseUrl')}/ocs/v2.php/apps/circles/circles/${circleId}/members`
-	const response = await axios.post(url,
-		{ userId, type },
-	)
-	const memberId = response.data.ocs.data.id
-	return { circleId, userId, memberId }
-})
+Cypress.Commands.add('circleSetMemberLevel',
+	{ prevSubject: true },
+	({ circleId, memberId }, level) => {
+		Cypress.log()
+		const url = `${Cypress.env('baseUrl')}/ocs/v2.php/apps/circles/circles/${circleId}/members`
+		return axios.put(`${url}/${memberId}/level`,
+			{ level },
+		)
+	},
+)
 
 /**
  * Fail the test on the initial run to check if retries work
