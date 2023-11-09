@@ -86,6 +86,7 @@
 				<div class="modal-collective-members">
 					<MemberPicker :show-selection="true"
 						:selected-members="selectedMembers"
+						:no-delete-members="noDeleteMembers"
 						:on-click-searched="onClickSearched"
 						@delete-from-selection="deleteMember" />
 				</div>
@@ -108,16 +109,17 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
+import { getCurrentUser } from '@nextcloud/auth'
+import { showError } from '@nextcloud/dialogs'
+import { NcButton, NcEmojiPicker, NcEmptyContent, NcModal, NcSelect, NcTextField } from '@nextcloud/vue'
 import { ADD_MEMBERS_TO_CIRCLE, GET_CIRCLES, NEW_COLLECTIVE } from '../../store/actions.js'
 import displayError from '../../util/displayError.js'
 import { autocompleteSourcesToCircleMemberTypes, circlesMemberTypes } from '../../constants.js'
-import { NcButton, NcEmojiPicker, NcEmptyContent, NcModal, NcSelect, NcTextField } from '@nextcloud/vue'
 import AlertCircleOutlineIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
 import CirclesIcon from '../Icon/CirclesIcon.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 import CollectivesIcon from '../Icon/CollectivesIcon.vue'
 import MemberPicker from '../Member/MemberPicker.vue'
-import { showError } from '@nextcloud/dialogs'
 
 export default {
 	name: 'NewCollectiveModal',
@@ -144,7 +146,9 @@ export default {
 			name: '',
 			nameExists: '',
 			pickCircle: false,
+			currentUserId: getCurrentUser().uid,
 			selectedMembers: {},
+			noDeleteMembers: [],
 			state: 0,
 		}
 	},
@@ -193,9 +197,26 @@ export default {
 			}
 			return null
 		},
+
+		selectedMembersWithoutSelf() {
+			return Object.keys(this.selectedMembers)
+				.filter(key => key !== `users-${this.currentUserId}`)
+				.reduce((cur, key) => { return Object.assign(cur, { [key]: this.selectedMembers[key] }) }, {})
+		},
+
+		hasSelectedMembersWithoutSelf() {
+			return Object.keys(this.selectedMembersWithoutSelf).length !== 0
+		},
 	},
 
 	mounted() {
+		this.selectedMembers[`users-${this.currentUserId}`] = {
+			icon: 'icon-user',
+			id: this.currentUserId,
+			label: this.currentUserId,
+			source: 'users',
+		}
+		this.noDeleteMembers = [`users-${this.currentUserId}`]
 		this.emoji = this.randomCollectiveEmoji()
 		this.getCircles()
 		this.$nextTick(() => {
@@ -232,13 +253,13 @@ export default {
 		// Create a new collective and navigate to it
 		onCreate() {
 			const updateCollective = () => {
-				if (this.updatedCollective && this.selectedMembers) {
-					const selectedMembers = Object.values(this.selectedMembers).map(entry => ({
+				if (this.updatedCollective && this.hasSelectedMembersWithoutSelf) {
+					const members = Object.values(this.selectedMembersWithoutSelf).map(entry => ({
 						id: entry.id,
 						type: circlesMemberTypes[autocompleteSourcesToCircleMemberTypes[entry.source]],
 					}))
 					try {
-						this.dispatchAddMembersToCircle({ circleId: this.updatedCollective.circleId, members: selectedMembers })
+						this.dispatchAddMembersToCircle({ circleId: this.updatedCollective.circleId, members })
 					} catch (e) {
 						showError(t('collectives', 'Could not add members to the collective'))
 					}
@@ -291,6 +312,9 @@ export default {
 		},
 
 		deleteMember(member) {
+			if (member.source === 'users' && member.id === this.currentUserId) {
+				return
+			}
 			this.$delete(this.selectedMembers, `${member.source}-${member.id}`, member)
 		},
 

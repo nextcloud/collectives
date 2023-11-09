@@ -10,7 +10,7 @@
 			:display-name="member.label"
 			:avatar-image="selectedMemberAvatarImage(member)"
 			class="selected-member-bubble">
-			<template #title>
+			<template v-if="selectedMemberDeletable(member)" #title>
 				<a href="#"
 					:title="t('collectives', 'Remove {name}', { name: member.label })"
 					class="selected-member-bubble-delete"
@@ -39,6 +39,12 @@ export default {
 			type: Object,
 			required: true,
 		},
+		noDeleteMembers: {
+			type: Array,
+			default() {
+				return []
+			},
+		},
 	},
 
 	computed: {
@@ -47,9 +53,11 @@ export default {
 		},
 
 		selectedMemberAvatarImage() {
-			return function(member) {
-				return member.source === 'users' ? null : 'icon-group-white'
-			}
+			return (member) => member.source === 'users' ? null : 'icon-group-white'
+		},
+
+		selectedMemberDeletable() {
+			return (member) => !this.noDeleteMembers.includes(`${member.source}-${member.id}`)
 		},
 	},
 
