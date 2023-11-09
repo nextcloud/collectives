@@ -15,7 +15,7 @@
 				<ul class="app-navigation__list">
 					<NcAppNavigationItem v-for="collective in trashCollectives"
 						:key="collective.circleId"
-						:title="collective.name"
+						:name="collective.name"
 						:force-menu="true"
 						:force-display-actions="isMobile"
 						class="collectives_trash_list_item">

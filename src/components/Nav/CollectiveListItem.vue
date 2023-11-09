@@ -1,6 +1,6 @@
 <template>
 	<NcAppNavigationItem :key="collective.circleId"
-		:title="collective.name"
+		:name="collective.name"
 		:to="collectivePath(collective)"
 		:force-menu="true"
 		:force-display-actions="isMobile"
