@@ -85,7 +85,7 @@ describe('Collective', function() {
 				cy.get('button span.circles-icon').click()
 				// cy.get('.circle-selector ul').should('not.contain', 'Foreign')
 				cy.get('.circle-selector li [title*=History]').click()
-				cy.get('button').contains('Add people').click()
+				cy.get('button').contains('Add members').click()
 				cy.get('button').contains('Create').click()
 
 				cy.get('#titleform input').invoke('val').should('contain', 'History Club')

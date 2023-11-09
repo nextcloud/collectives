@@ -73,14 +73,14 @@
 						:disabled="!newCollectiveName || nameIsInvalid"
 						class="modal-buttons-right"
 						@click="advanceToMembers">
-						{{ t('collectives', 'Add people') }}
+						{{ t('collectives', 'Add members') }}
 					</NcButton>
 				</div>
 			</div>
 
 			<div v-else-if="state === 1" class="modal-collective-wrapper">
 				<h2 class="modal-collective-title">
-					{{ t('collectives', 'Add people') }}
+					{{ t('collectives', 'Add members to {name}', { name: newCollectiveName }) }}
 				</h2>
 
 				<div class="modal-collective-members">
@@ -99,7 +99,7 @@
 						:disabled="loading"
 						class="modal-buttons-right"
 						@click="onCreate">
-						{{ t('collectives', 'Create') }}
+						{{ createButtonString }}
 					</NcButton>
 				</div>
 			</div>
@@ -206,6 +206,12 @@ export default {
 
 		hasSelectedMembersWithoutSelf() {
 			return Object.keys(this.selectedMembersWithoutSelf).length !== 0
+		},
+
+		createButtonString() {
+			return this.hasSelectedMembersWithoutSelf
+				? t('collectives', 'Create')
+				: t('collectives', 'Create without members')
 		},
 	},
 
