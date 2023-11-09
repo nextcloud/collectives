@@ -1,6 +1,8 @@
 <template>
 	<NcAppContentDetails>
-		<SkeletonLoading v-if="loading('collective') || loading('currentPage')" :count="1" type="page-heading" />
+		<div v-if="loading('collective') || loading('currentPage')" class="sheet-view">
+			<SkeletonLoading :count="1" class="page-heading-skeleton" type="page-heading" />
+		</div>
 		<Version v-else-if="currentPage && version" />
 		<Page v-else-if="currentPage" />
 		<PageNotFound v-else />
