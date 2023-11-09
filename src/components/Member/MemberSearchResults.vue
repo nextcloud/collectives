@@ -1,7 +1,7 @@
 <template>
 	<div class="member-search-results">
 		<template v-if="addableUsers.length !== 0">
-			<NcAppNavigationCaption :title="t('collectives', 'Add users')"
+			<NcAppNavigationCaption :title="t('collectives', 'Add accounts')"
 				class="member-picker-caption" />
 			<Member v-for="item in addableUsers"
 				:key="generateKey(item)"
