@@ -64,7 +64,7 @@ Cypress.Commands.add('getReadOnlyEditor', () => {
  * Switch page mode to view or edit
  */
 Cypress.Commands.add('switchToViewMode', () => {
-	cy.log('Switch to view mode')
+	Cypress.log()
 	cy.get('button.titleform-button')
 		.should('contain', 'Done')
 		.click()
@@ -73,7 +73,7 @@ Cypress.Commands.add('switchToViewMode', () => {
 })
 
 Cypress.Commands.add('switchToEditMode', () => {
-	cy.log('Switch to edit mode')
+	Cypress.log()
 	cy.get('button.titleform-button')
 		.should('contain', 'Edit')
 		.click()
@@ -84,8 +84,16 @@ Cypress.Commands.add('switchToEditMode', () => {
 /**
  * Enable/disable a Nextcloud app
  */
-Cypress.Commands.add('enableApp', appName => cy.setAppEnabled(appName))
-Cypress.Commands.add('disableApp', appName => cy.setAppEnabled(appName, false))
+Cypress.Commands.add('enableApp', appName => {
+	Cypress.log()
+	cy.setAppEnabled(appName)
+})
+
+Cypress.Commands.add('disableApp', appName => {
+	Cypress.log()
+	cy.setAppEnabled(appName, false)
+})
+
 Cypress.Commands.add('setAppEnabled', (appName, value = true) => {
 	const verb = value ? 'enable' : 'disable'
 	const api = `${Cypress.env('baseUrl')}/index.php/settings/apps/${verb}`
@@ -98,6 +106,7 @@ Cypress.Commands.add('setAppEnabled', (appName, value = true) => {
  * Enable dashboard widget
  */
 Cypress.Commands.add('enableDashboardWidget', (widgetName) => {
+	Cypress.log()
 	const api = `${Cypress.env('baseUrl')}/index.php/apps/dashboard/layout`
 	return axios.post(api,
 		{ layout: widgetName },
@@ -105,9 +114,7 @@ Cypress.Commands.add('enableDashboardWidget', (widgetName) => {
 })
 
 Cypress.Commands.add('store', (selector, options = {}) => {
-	if (selector) {
-		Cypress.log()
-	}
+	Cypress.log()
 	if (selector) {
 		cy.window(silent)
 			.its(`app.$store.${selector}`, silent)
@@ -167,8 +174,8 @@ Cypress.Commands.add('findBy',
  * If the collective already existed it will be deleted first.
  */
 Cypress.Commands.add('deleteAndSeedCollective', (name) => {
+	Cypress.log()
 	cy.deleteCollective(name)
-	cy.log(`Seeding collective ${name}`)
 	cy.dispatch(NEW_COLLECTIVE, { name })
 	cy.store('getters.updatedCollectivePath')
 		.then(path => cy.routeTo(path))
@@ -180,7 +187,7 @@ Cypress.Commands.add('deleteAndSeedCollective', (name) => {
  * Create a collective via UI
  */
 Cypress.Commands.add('createCollective', (name, members = []) => {
-	cy.log(`Creating collective ${name}`)
+	Cypress.log()
 	cy.get('button').contains('New collective').click()
 	cy.get('.collective-name input[type="text"]').type(`${name}{enter}`)
 	if (members.length > 0) {
@@ -213,10 +220,10 @@ Cypress.Commands.add('deleteCollective', (name) => {
  * Change permission settings for a collective
  */
 Cypress.Commands.add('seedCollectivePermissions', (name, type, level) => {
+	Cypress.log()
 	const action = (type === 'edit')
 		? UPDATE_COLLECTIVE_EDIT_PERMISSIONS
 		: UPDATE_COLLECTIVE_SHARE_PERMISSIONS
-	cy.log(`Seeding collective permissions for ${name}`)
 	cy.store('state.collectives.collectives')
 		.findBy({ name })
 		.dispatch(action, { level })
@@ -226,7 +233,7 @@ Cypress.Commands.add('seedCollectivePermissions', (name, type, level) => {
  * Change default page mode for a collective
  */
 Cypress.Commands.add('seedCollectivePageMode', (name, mode) => {
-	cy.log(`Seeding collective page mode for ${name}`)
+	Cypress.log()
 	cy.store('state.collectives.collectives')
 		.findBy({ name })
 		.dispatch(UPDATE_COLLECTIVE_PAGE_MODE, { mode })
@@ -236,7 +243,7 @@ Cypress.Commands.add('seedCollectivePageMode', (name, mode) => {
  * Add a page to a collective
  */
 Cypress.Commands.add('seedPage', (name, parentFilePath, parentFileName) => {
-	cy.log(`Seeding collective page ${name}`)
+	Cypress.log()
 	cy.dispatch(GET_PAGES)
 	cy.store('state.pages.pages')
 		.findBy({ filePath: parentFilePath, fileName: parentFileName })
@@ -280,7 +287,10 @@ Cypress.Commands.add('uploadFile', (path, mimeType, remotePath = '') => {
  * Upload content of a page
  */
 Cypress.Commands.add('seedPageContent', (pagePath, content) => {
-	cy.log(`Seeding collective page content for ${pagePath}`)
+	const contentForLog = content.length > 200
+		? content.substring(0, 200) + '...'
+		: content
+	Cypress.log({ message: `${pagePath}, ${contentForLog}`})
 	cy.uploadContent(`Collectives/${pagePath}`, content)
 })
 
@@ -306,7 +316,7 @@ Cypress.Commands.add('uploadContent', (path, content, mimetype = 'text/markdown'
  * Create a circle (optionally with given config)
  */
 Cypress.Commands.add('seedCircle', (name, config = null) => {
-	cy.log(`Seeding circle ${name}`)
+	Cypress.log()
 	cy.dispatch(GET_CIRCLES)
 	cy.store('state.circles.circles')
 		.findBy({ sanitizedName: name })
@@ -341,32 +351,37 @@ Cypress.Commands.add('seedCircle', (name, config = null) => {
  * Add someone to a circle
  */
 Cypress.Commands.add('seedCircleMember', (name, userId, type = 1, level) => {
-	cy.log(`Seeding circle member ${name} of type ${type}`)
+	Cypress.log()
 	cy.dispatch(GET_CIRCLES)
 	cy.store('state.circles.circles')
 		.findBy({ sanitizedName: name })
 		.its('id')
-		.then(async circleId => {
-			cy.log(`circleId: ${circleId}`)
-			const api = `${Cypress.env('baseUrl')}/ocs/v2.php/apps/circles/circles/${circleId}/members`
-			const response = await axios.post(api,
-				{ userId, type },
-			).catch(e => {
-				if (e.request && e.request.status === 400) {
-					// The member already got added... carry on.
-				} else {
-					throw e
-				}
-			})
+		.then(circleId => {
+			cy.circleAddMember(circleId, { userId, type })
+		})
+		.then(({ circleId, memberId }) => {
 			if (level) {
-				const memberId = response.data.ocs.data.id
-				cy.log(memberId)
-				cy.log(`Setting circle ${name} member ${userId} level to ${level}`)
-				await axios.put(`${api}/${memberId}/level`,
-					{ level },
-				)
+				cy.circleSetMemberLevel(circleId, memberId, level)
 			}
 		})
+})
+
+Cypress.Commands.add('circleSetMemberLevel', (circleId, memberId, level) => {
+	Cypress.log()
+	const url = `${Cypress.env('baseUrl')}/ocs/v2.php/apps/circles/circles/${circleId}/members`
+	return axios.put(`${url}/${memberId}/level`,
+		{ level },
+	)
+})
+
+Cypress.Commands.add('circleAddMember', async (circleId, { userId, type }) => {
+	Cypress.log()
+	const url = `${Cypress.env('baseUrl')}/ocs/v2.php/apps/circles/circles/${circleId}/members`
+	const response = await axios.post(url,
+		{ userId, type },
+	)
+	const memberId = response.data.ocs.data.id
+	return { circleId, userId, memberId }
 })
 
 /**
