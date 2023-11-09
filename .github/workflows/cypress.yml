@@ -261,7 +261,7 @@ jobs:
     permissions:
       contents: none
     runs-on: ubuntu-latest
-    needs: [init, cypress]
+    needs: [changes, init, cypress]
 
     if: always()
 
