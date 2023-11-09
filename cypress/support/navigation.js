@@ -1,23 +1,28 @@
 Cypress.Commands.add('openApp', (appName) => {
+	Cypress.log()
 	cy.get(`nav.app-menu li[data-app-id="${appName}"] a`).click()
 })
 
 Cypress.Commands.add('openPage', (pageName) => {
+	Cypress.log()
 	cy.contains('.app-content-list-item a', pageName).click()
 })
 
 Cypress.Commands.add('openPageMenu', (pageName) => {
+	Cypress.log()
 	cy.contains('.app-content-list-item', pageName)
 		.find('.action-item__menutoggle')
 		.click({ force: true })
 })
 
 Cypress.Commands.add('openCollective', (collectiveName) => {
+	Cypress.log()
 	cy.get(`.collectives_list_item a[title="${collectiveName}"]`)
 		.click()
 })
 
 Cypress.Commands.add('openCollectiveMenu', (collectiveName) => {
+	Cypress.log()
 	cy.get('.collectives_list_item')
 		.contains('li', collectiveName)
 		.find('.action-item__menutoggle')
@@ -25,6 +30,7 @@ Cypress.Commands.add('openCollectiveMenu', (collectiveName) => {
 })
 
 Cypress.Commands.add('openTrashedCollectiveMenu', (collectiveName) => {
+	Cypress.log()
 	cy.get('.collectives_trash_list_item')
 		.contains('li', collectiveName)
 		.find('.action-item__menutoggle')
@@ -32,6 +38,7 @@ Cypress.Commands.add('openTrashedCollectiveMenu', (collectiveName) => {
 })
 
 Cypress.Commands.add('clickMenuButton', (title) => {
+	Cypress.log()
 	cy.get('button.action-button')
 		.contains(title)
 		.click()

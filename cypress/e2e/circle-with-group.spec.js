@@ -34,7 +34,9 @@ describe('Pages are accessible via group membership to circle', function() {
 		cy.loginAs('jane')
 		cy.visit('apps/collectives')
 		cy.deleteAndSeedCollective('Group Collective')
-		cy.seedCircleMember('Group Collective', 'Bobs Group', 2, 8)
+		cy.circleFind('Group Collective')
+			.circleAddMember('Bobs Group', 2)
+			.circleSetMemberLevel(8)
 	})
 
 	it('Lists the collective', function() {

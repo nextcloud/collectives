@@ -257,7 +257,7 @@ describe('Page list', function() {
 			cy.getEditor()
 				.should('be.visible')
 				.type('text')
-			cy.switchPageMode(0)
+			cy.switchToViewMode()
 
 			// Trash page
 			cy.openPageMenu('Day 1')

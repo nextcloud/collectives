@@ -103,8 +103,7 @@ describe('Page Link Handling', function() {
 
 	const clickLink = function(href, edit) {
 		if (edit) {
-			// Change to edit mode
-			cy.switchPageMode(1)
+			cy.switchToEditMode()
 			cy.getEditor()
 				.should('be.visible')
 				.find(`a[href="${href}"]`)

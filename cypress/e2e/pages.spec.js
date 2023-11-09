@@ -188,7 +188,7 @@ describe('Page', function() {
 			cy.wait(1000) // eslint-disable-line cypress/no-unnecessary-waiting
 
 			// Switch back to view mode
-			cy.switchPageMode(0)
+			cy.switchToViewMode()
 
 			cy.getEditor()
 				.should('not.be.visible')
@@ -205,8 +205,7 @@ describe('Page', function() {
 		it('Lists attachments for the page and allows restore', function() {
 			cy.openPage('Day 1')
 
-			// Switch to edit mode
-			cy.switchPageMode(1)
+			cy.switchToEditMode()
 
 			// Open attachment list
 			cy.get('button.action-item .icon-menu-sidebar').click()

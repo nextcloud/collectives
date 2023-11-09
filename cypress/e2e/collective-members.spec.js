@@ -28,7 +28,6 @@ describe('Collective members', function() {
 	before(function() {
 		cy.loginAs('bob')
 		cy.visit('apps/collectives')
-		cy.deleteCollective('Members Collective')
 		cy.deleteAndSeedCollective('Members Collective')
 	})
 
