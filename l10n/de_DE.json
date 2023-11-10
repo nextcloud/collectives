@@ -148,6 +148,7 @@
     "Move page to {collective}" : "Seite nach {collective} verschieben",
     "Copy page here" : "Seite hierhin kopieren",
     "Copy page to {collective}" : "Seite nach {collective} kopieren",
+    "Error saving the document. Please try again." : "Fehler beim Speichern des Dokumentes. Bitte noch einmal versuchen.",
     "Restore this version" : "Diese Version wiederherstellen",
     "Reverted {page} to revision {timestamp}." : "Seite {page} auf Version {timestamp} zurücksetzen.",
     "Failed to revert {page} to revision {timestamp}." : "Das Zurücksetzen der Seite {page} auf die Version {timestamp} ist fehlgeschlagen.",

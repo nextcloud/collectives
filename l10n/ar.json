@@ -148,6 +148,7 @@
     "Move page to {collective}" : "أنقُل الصفحة إلى {collective}",
     "Copy page here" : "إنسَخ الصفحة هنا",
     "Copy page to {collective}" : "إنسَخ الصفحة إلى {collective}",
+    "Error saving the document. Please try again." : "حدث خطأ أثناء حفظ المستند. يُرجى المحاولة مرة أخرى.",
     "Restore this version" : "إستعادة الصفحة",
     "Reverted {page} to revision {timestamp}." : "صفحة معادة {page} إلى النسخة {timestamp}.",
     "Failed to revert {page} to revision {timestamp}." : "تعذّرت إعادة الصفحة {page} إلى النسخة {timestamp}.",
