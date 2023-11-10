@@ -150,6 +150,7 @@ OC.L10N.register(
     "Move page to {collective}" : "Премести страницу у {collective}",
     "Copy page here" : "Копирај страницу овде",
     "Copy page to {collective}" : "Копирај страницу у {collective}",
+    "Error saving the document. Please try again." : "Грешка приликом чувања документа. Молимо вас покушајте поново.",
     "Restore this version" : "Обнови ову верзију",
     "Reverted {page} to revision {timestamp}." : "Страница {page} је обновљена на ревизију {timestamp}.",
     "Failed to revert {page} to revision {timestamp}." : "Није успело враћање {page} на ревизију {timestamp}.",
