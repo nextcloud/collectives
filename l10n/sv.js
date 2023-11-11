@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Add a collective" : "Lägg till ett collective",
     "Recent pages" : "Senaste sidorna",
     "Collectives" : "Collectives",
     "In collective %1$s" : "I collective %1$s",
@@ -147,6 +148,7 @@ OC.L10N.register(
     "Move page to {collective}" : "Flytta sida till {collective}",
     "Copy page here" : "Kopiera sidan hit",
     "Copy page to {collective}" : "Kopiera sida till {collective}",
+    "Error saving the document. Please try again." : "Kunde inte spara dokumentet. Var god försök igen.",
     "Restore this version" : "Återställ denna version",
     "Reverted {page} to revision {timestamp}." : "Återställd {page} till version {timestamp}.",
     "Failed to revert {page} to revision {timestamp}." : "Kunde inte återställa {page} till version {timestamp}.",
