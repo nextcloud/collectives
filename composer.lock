@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5622b2bfe0a3c8285fa4ddc51837f4c4",
+    "content-hash": "062b5fd41692985b320dc1e865edc1ee",
     "packages": [
         {
             "name": "teamtnt/tntsearch",
@@ -4428,7 +4428,8 @@
     "platform": {
         "php": ">=7.4",
         "ext-json": "*",
-        "ext-pdo": "*"
+        "ext-pdo": "*",
+        "ext-pdo_sqlite": "*"
     },
     "platform-dev": {
         "ext-dom": "*"
