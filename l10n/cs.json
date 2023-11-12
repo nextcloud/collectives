@@ -1,4 +1,5 @@
 { "translations": {
+    "Add a collective" : "Přidat kolektiv",
     "Recent pages" : "Nedávné stránky",
     "Collectives" : "Kolektivy",
     "In collective %1$s" : "V kolektivu %1$s",
@@ -147,6 +148,7 @@
     "Move page to {collective}" : "Přesunout stránku do {collective}",
     "Copy page here" : "Zkopírovat stránku sem",
     "Copy page to {collective}" : "Zkopírovat stránku do {collective}",
+    "Error saving the document. Please try again." : "Chyba při ukládání dokumentu. Zkuste to znovu.",
     "Restore this version" : "Obnovit do podoby v této verzi",
     "Reverted {page} to revision {timestamp}." : "Stránka {page} obnovena do podoby k revizi {timestamp}.",
     "Failed to revert {page} to revision {timestamp}." : "Stránku {page} se nepodařilo vrátit do podoby k revizi {timestamp}.",

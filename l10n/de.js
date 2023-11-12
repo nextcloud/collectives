@@ -51,7 +51,7 @@ OC.L10N.register(
     "Member removed" : "Mitglied entfernt",
     "Could not remove member" : "Mitglied konnte nicht entfernt werden.",
     "Search users, groups, circles…" : "Suche Benutzer, Gruppen und Kreise …",
-    "Add users, groups or circles…" : "Benutzer, Gruppen oder Kreise hinzufügen…",
+    "Add users, groups or circles…" : "Benutzer, Gruppen oder Kreise hinzufügen …",
     "Search for members to add" : "Nach Mitgliedern zum Hinzufügen suchen",
     "Loading…" : "Lade …",
     "An error occurred while performing the search" : "Es ist ein Fehler beim Suchen aufgetreten",
