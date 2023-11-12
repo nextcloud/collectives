@@ -148,6 +148,7 @@
     "Move page to {collective}" : "Sayfayı {collective} topluluğuna taşı",
     "Copy page here" : "Sayfayı buraya kopyala",
     "Copy page to {collective}" : "Sayfayı {collective} topluluğuna kopyala",
+    "Error saving the document. Please try again." : "Belge kaydedilirken sorun çıktı. Lütfen yeniden deneyin.",
     "Restore this version" : "Bu sürümü geri yükle",
     "Reverted {page} to revision {timestamp}." : "{page} sayfası {timestamp} sürümüne geri alındı.",
     "Failed to revert {page} to revision {timestamp}." : "{page} sayfası {timestamp} sürümüne geri alınamadı.",
