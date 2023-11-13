@@ -263,7 +263,7 @@ class PageServiceTest extends TestCase {
 		$urlPathBase = '/apps/collectives/mycollective';
 		$urlPath = $urlPathBase . '/page1/pageX/subpage2';
 
-		// Relative link with fileId
+		// Relative link with fileId in [text](link) syntax
 		self::assertTrue($this->service->matchBacklinks($pageInfo, 'content with [a link](' . $urlPath . '?fileId=123).'));
 		self::assertTrue($this->service->matchBacklinks($pageInfo, 'content with [a link](/index.php' . $urlPath . '?fileId=123).'));
 		self::assertTrue($this->service->matchBacklinks($pageInfo, 'content with [a link to wrong path but correct fileId](' . $urlPathBase . '/subpage2?fileId=123).'));
@@ -272,18 +272,34 @@ class PageServiceTest extends TestCase {
 		self::assertFalse($this->service->matchBacklinks($pageInfo, 'content with [a broken link(' . $urlPath . '?fileId=123).'));
 		self::assertFalse($this->service->matchBacklinks($pageInfo, 'content with [a broken link] (' . $urlPath . '?fileId=123).'));
 
-		// Relative link without fileId
+		// Relative link with fileId in <link> syntax
+		self::assertTrue($this->service->matchBacklinks($pageInfo, 'content with a link: <' . $urlPath . '?fileId=123>'));
+		self::assertTrue($this->service->matchBacklinks($pageInfo, 'content with a link: </index.php' . $urlPath . '?fileId=123>'));
+		self::assertTrue($this->service->matchBacklinks($pageInfo, 'content with a link to wrong path but correct fileId: <' . $urlPathBase . '/subpage2?fileId=123>'));
+		self::assertTrue($this->service->matchBacklinks($pageInfo, 'content with a relative link: <pageX/subpage2?fileId=123>.'));
+		self::assertFalse($this->service->matchBacklinks($pageInfo, 'content with a link to wrong fileId <' . $urlPath . '?fileId=345>.'));
+		self::assertFalse($this->service->matchBacklinks($pageInfo, 'content with a broken link: <' . $urlPath . '?fileId=123'));
+		self::assertFalse($this->service->matchBacklinks($pageInfo, 'content with a broken link: <' . $urlPath . '?fileId=123]>'));
+		self::assertFalse($this->service->matchBacklinks($pageInfo, 'content with a broken link: ' . $urlPath . '?fileId=123>'));
+
+		// Relative link without fileId in [text](link) syntax
 		self::assertTrue($this->service->matchBacklinks($pageInfo, 'content with [a link](' . $urlPath . ') in it.'));
 		self::assertFalse($this->service->matchBacklinks($pageInfo, 'content with [a link to wrong path](' . $urlPathBase . '/page1/subpage2) in it.'));
 		self::assertFalse($this->service->matchBacklinks($pageInfo, 'content with [a link to wrong webroot](/index.php/instance2' . $urlPath . ') in it.'));
 
-		// Absolute link with fileId
+		// Relative link without fileId in <link> syntax
+		self::assertTrue($this->service->matchBacklinks($pageInfo, 'content with a link: <' . $urlPath . '> in it.'));
+		self::assertFalse($this->service->matchBacklinks($pageInfo, 'content with a broken link: <[' . $urlPath . '> in it.'));
+		self::assertFalse($this->service->matchBacklinks($pageInfo, 'content with a link to wrong path: <' . $urlPathBase . '/page1/subpage2> in it.'));
+		self::assertFalse($this->service->matchBacklinks($pageInfo, 'content with a link to wrong webroot: </index.php/instance2' . $urlPath . '> in it.'));
+
+		// Absolute link with fileId in [text](link) syntax
 		self::assertTrue($this->service->matchBacklinks($pageInfo, 'content with [a link](http://nextcloud.local' . $urlPath . '?fileId=123) in it.'));
 		self::assertTrue($this->service->matchBacklinks($pageInfo, 'content with [a link](https://nextcloud.local' . $urlPath . '?fileId=123) in it.'));
 		self::assertTrue($this->service->matchBacklinks($pageInfo, 'content with [a link](https://nextcloud.local/index.php' . $urlPath . '?fileId=123) in it.'));
 		self::assertFalse($this->service->matchBacklinks($pageInfo, 'content with [a link to wrong host (with fileId)](https://example.org/' . $urlPath . 'fileId=123) in it.'));
 
-		// Absolute link without fileId
+		// Absolute link without fileId in [text](link) syntax
 		self::assertTrue($this->service->matchBacklinks($pageInfo, 'content with [a link](http://nextcloud.local' . $urlPath . ') in it.'));
 		self::assertTrue($this->service->matchBacklinks($pageInfo, 'content with [a link](https://nextcloud.local' . $urlPath . ') in it.'));
 		self::assertTrue($this->service->matchBacklinks($pageInfo, 'content with [a link with many slashes](https://nextcloud.local/////' . str_replace('/', '//', $urlPath) . ') in it.'));
@@ -294,15 +310,15 @@ class PageServiceTest extends TestCase {
 
 		\OC::$WEBROOT = 'mycloud';
 
-		// Relative link with fileId with webroot
+		// Relative link with fileId with webroot in [text](link) syntax
 		self::assertTrue($this->service->matchBacklinks($pageInfo, 'content with [a link with webroot](' . \OC::$WEBROOT . $urlPath . '?fileId=123).'));
-		// Relative link without fileId with webroot
+		// Relative link without fileId with webroot in [text](link) syntax
 		self::assertTrue($this->service->matchBacklinks($pageInfo, 'content with [a link with webroot](' . \OC::$WEBROOT . $urlPath . ') in it.'));
 		self::assertFalse($this->service->matchBacklinks($pageInfo, 'content with [a link with missing webroot](' . $urlPath . ') in it.'));
-		// Absolute link with fileId with webroot
+		// Absolute link with fileId with webroot in [text](link) syntax
 		self::assertTrue($this->service->matchBacklinks($pageInfo, 'content with [a link with webroot](http://nextcloud.local' . \OC::$WEBROOT . $urlPath . '?fileId=123) in it.'));
 		self::assertFalse($this->service->matchBacklinks($pageInfo, 'content with [a link with missing webroot](http://nextcloud.local' . $urlPath . '?fileId=123) in it.'));
-		// Absolute link without fileId with webroot
+		// Absolute link without fileId with webroot in [text](link) syntax
 		self::assertTrue($this->service->matchBacklinks($pageInfo, 'content with [a link with webroot](http://nextcloud.local' . \OC::$WEBROOT . $urlPath . ') in it.'));
 		self::assertFalse($this->service->matchBacklinks($pageInfo, 'content with [a link with missing webroot](http://nextcloud.local' . $urlPath . ') in it.'));
 	}

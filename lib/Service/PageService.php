@@ -1127,8 +1127,8 @@ class PageService {
 	 * @return bool
 	 */
 	public function matchBacklinks(PageInfo $pageInfo, string $content): bool {
-		$prefix = '/\[[^\]]+\]\(';
-		$suffix = '\)/';
+		$prefix = '/(\[[^\]]+\]\(|\<)';
+		$suffix = '[\)\>]/';
 
 		$protocol = 'https?:\/\/';
 		$trustedDomainArray = array_map(static function (string $domain) {
