@@ -25,10 +25,9 @@ class FileSearcher extends TNTSearch {
 
 	public function __construct() {
 		parent::__construct();
-		$this->indexer = new FileIndexer();
-		$this->fuzziness = true;
-		$this->asYouType = true;
 		$this->loadConfig();
+		$this->asYouType(true);
+		$this->fuzziness(true);
 	}
 
 	/**
@@ -36,8 +35,9 @@ class FileSearcher extends TNTSearch {
 	 * @return void
 	 */
 	public function loadConfig(array $config = self::DEFAULT_CONFIG): void {
+		parent::loadConfig($config);
+		$this->indexer = new FileIndexer($this->engine);
 		$this->indexer->loadConfig($config);
-		$this->config = $this->indexer->config;
 	}
 
 	/**

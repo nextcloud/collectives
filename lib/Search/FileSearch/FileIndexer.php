@@ -11,6 +11,7 @@ use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
 use OCP\Lock\LockedException;
 use PDO;
+use TeamTNT\TNTSearch\Contracts\EngineContract;
 use TeamTNT\TNTSearch\Indexer\TNTIndexer;
 use TeamTNT\TNTSearch\Support\Collection;
 
@@ -18,9 +19,9 @@ use TeamTNT\TNTSearch\Support\Collection;
  * @property PDO|null $index
  */
 class FileIndexer extends TNTIndexer {
-	public function __construct() {
-		parent::__construct();
-		$this->disableOutput = true;
+	public function __construct(EngineContract $engine) {
+		parent::__construct($engine);
+		$this->disableOutput(true);
 	}
 
 	/**
@@ -30,7 +31,7 @@ class FileIndexer extends TNTIndexer {
 	 */
 	public function loadConfig(array $config): void {
 		parent::loadConfig($config);
-		$this->config['storage'] = '';
+		$this->engine->config['storage'] = '';
 	}
 
 	/**
@@ -80,14 +81,14 @@ class FileIndexer extends TNTIndexer {
 	 * @throws FileSearchException
 	 */
 	public function run(array $pages = []): void {
-		if (!$this->index) {
+		if (!$this->getIndex()) {
 			throw new FileSearchException('Indexing could not be performed because index is not selected.');
 		}
 
-		$this->index->exec("CREATE TABLE IF NOT EXISTS filemap (
+		$this->getIndex()->exec("CREATE TABLE IF NOT EXISTS filemap (
                     id INTEGER PRIMARY KEY,
                     path TEXT)");
-		$this->index->beginTransaction();
+		$this->getIndex()->beginTransaction();
 
 		$processedPages = 0;
 		foreach ($pages as $page) {
@@ -101,7 +102,7 @@ class FileIndexer extends TNTIndexer {
 				]);
 				$this->processDocument($fileCollection);
 
-				$statement = $this->index->prepare("INSERT INTO filemap ( 'id', 'path') values ( :id, :path)");
+				$statement = $this->getIndex()->prepare("INSERT INTO filemap ( 'id', 'path') values ( :id, :path)");
 				$statement->bindParam(':id', $id);
 				$statement->bindParam(':path', $internalPath);
 				$statement->execute();
@@ -111,16 +112,16 @@ class FileIndexer extends TNTIndexer {
 				throw new FileSearchException('File indexer failed to open and/or read file', 0, $e);
 			}
 		}
-		$this->index->exec("UPDATE info SET `value`=$processedPages WHERE `key`='total_documents'");
-		$this->index->exec("INSERT INTO info ( 'key', 'value') values ( 'driver', 'filesystem')");
+		$this->getIndex()->exec("UPDATE info SET `value`=$processedPages WHERE `key`='total_documents'");
+		$this->getIndex()->exec("INSERT INTO info ( 'key', 'value') values ( 'driver', 'filesystem')");
 
-		$this->index->commit();
+		$this->getIndex()->commit();
 	}
 
 	/**
 	 * @return PDO|null
 	 */
 	public function getIndex(): ?PDO {
-		return $this->index;
+		return $this->engine->index;
 	}
 }
