@@ -52,6 +52,10 @@ class RecentPagesService {
 			return [];
 		}
 
+		if (!$collectives) {
+			return [];
+		}
+
 		$qb = $this->dbc->getQueryBuilder();
 		$appData = $this->getAppDataFolderName();
 		$mimeTypeMd = $this->mimeTypeLoader->getId('text/markdown');
