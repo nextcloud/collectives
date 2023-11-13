@@ -13,6 +13,7 @@ use OCP\App\IAppManager;
 use OCP\IL10N;
 use OCP\IURLGenerator;
 use OCP\IUser;
+use OCP\Search\IFilterCollection;
 use OCP\Search\ISearchQuery;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -72,13 +73,27 @@ class PageContentProviderTest extends TestCase {
 		$user = $this->createMock(IUser::class);
 		$user->method('getUID')
 			->willReturn('jane');
-		$query = new SearchQuery(
-			'Search me!',
-			ISearchQuery::SORT_DATE_DESC,
-			SearchQuery::LIMIT_DEFAULT,
-			null,
-			'collectives.'
-		);
+		try {
+			// Nextcloud << 28
+			$query = new SearchQuery(
+				'Search me!',
+				ISearchQuery::SORT_DATE_DESC,
+				SearchQuery::LIMIT_DEFAULT,
+				null,
+				'collectives.'
+			);
+		} catch (\TypeError $e) {
+			// Nextcloud >= 28
+			$filters = $this->createMock(IFilterCollection::class);
+			$query = new SearchQuery(
+				$filters,
+				ISearchQuery::SORT_DATE_DESC,
+				SearchQuery::LIMIT_DEFAULT,
+				null,
+				'collectives.'
+
+			);
+		}
 		$response = json_encode($this->provider->search($user, $query));
 		$result = json_decode($response, true);
 
