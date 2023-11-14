@@ -159,7 +159,7 @@ export default {
 
 				// Save pending changes in editor
 				// TODO: detect missing connection and display warning
-				this.editor.save()
+				this.save()
 					.catch(() => {
 						showError(t('collectives', 'Error saving the document. Please try again.'))
 						this.setTextEdit()
