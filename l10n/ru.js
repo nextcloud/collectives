@@ -31,7 +31,6 @@ OC.L10N.register(
     "Promote to moderator" : "Сделать модератором",
     "Loading…" : "Загрузка…",
     "An error occurred while performing the search" : "Не удалось выполнить поиск",
-    "Add users" : "Добавить пользователей",
     "Add groups" : "Добавить группы",
     "Add circles" : "Добавить круги",
     "Collective settings" : "Настройки группы",

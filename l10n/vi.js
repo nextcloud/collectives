@@ -13,7 +13,6 @@ OC.L10N.register(
     "Promote to moderator" : "Quảng bá cho người kiểm duyệt",
     "Loading…" : "Đang tải…",
     "An error occurred while performing the search" : "Đã xảy ra lỗi khi thực hiện tìm kiếm",
-    "Add users" : "Thêm người dùng",
     "Add groups" : "Thêm nhóm",
     "Add circles" : "Thêm vòng kết nối",
     "View" : "Xem",

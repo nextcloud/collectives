@@ -8,7 +8,6 @@ OC.L10N.register(
     "admin" : "merour",
     "Loading…" : "O Kargañ...",
     "An error occurred while performing the search" : "Ur fazi a zo bet en ur ober an enklask",
-    "Add users" : "Ouzhpennañ implijer ",
     "Add groups" : "Ouzhoennañ strolladoù",
     "Add circles" : "Ouzhpennañ kelc'hioù",
     "View" : "Gwell",

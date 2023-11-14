@@ -14,7 +14,6 @@ OC.L10N.register(
     "admin" : "admin",
     "Loading…" : "Učitavanje…",
     "An error occurred while performing the search" : "Došlo je do pogreške pri pretraživanju",
-    "Add users" : "Dodaj korisnike",
     "Add groups" : "Dodaj grupe",
     "Add circles" : "Dodaj krugove",
     "Permissions" : "Dopuštenja",

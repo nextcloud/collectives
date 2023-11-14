@@ -14,7 +14,6 @@ OC.L10N.register(
     "Remove" : "Šalinti",
     "Loading…" : "Įkeliama…",
     "An error occurred while performing the search" : "Atliekant paiešką, įvyko klaida",
-    "Add users" : "Pridėti naudotojus",
     "Add groups" : "Pridėti grupes",
     "Add circles" : "Pridėti ratus",
     "Permissions" : "Leidimai",

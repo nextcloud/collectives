@@ -27,7 +27,6 @@ OC.L10N.register(
     "Promote to moderator" : "授予主持人資格",
     "Loading…" : "正在載入……",
     "An error occurred while performing the search" : "搜尋時發生了錯誤",
-    "Add users" : "新增使用者",
     "Add groups" : "新增群組",
     "Add circles" : "新增小圈圈",
     "Permissions" : "權限",

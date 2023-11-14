@@ -36,7 +36,6 @@ OC.L10N.register(
     "admin" : "amministratore",
     "Loading…" : "Caricamento…",
     "An error occurred while performing the search" : "Si è verificato un errore durante l'esecuzione della ricerca",
-    "Add users" : "Aggiungi utenti",
     "Add groups" : "Aggiungi gruppi",
     "Add circles" : "Aggiungi cerchie",
     "Collective settings" : "Impostazioni del collettivo",
