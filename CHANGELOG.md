@@ -1,5 +1,25 @@
 # Changelog
 
+## 2.9.1 - 2023.11.14
+
+### 🐛Fixes
+* 🆕 Improve UX when creating a new collective without members.
+* 📌 Dashboard: Display parent page path in recent pages widget. (#1010)
+* 🔗 Accept `<link>` syntax in parsed markdown when searching for backlinks. (#1007)
+* 🐛 Fix dashboard issue for users without a collective.
+* 💄 Fix alignment of page heading loading skeleton.
+* 📋 Improve wording around user entities: members can be accounts, circles or groups.
+* ⌨️ Save document on <Ctrl>-<S> when page title is focussed. (#989)
+* ℹ️ Don't always show file app info header for guest users. (#893)
+* 🧹 Fix `ExpireTrashPages` background job if no trash backend available. (#968)
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 2.9.0 - 2023.11.08
 
 ### ✨New
