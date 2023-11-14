@@ -99,10 +99,17 @@ class RecentPagesService {
 			if ($row['filename'] !== 'Readme.md') {
 				$pathParts[] = basename($row['filename'], PageInfo::SUFFIX);
 				$title = basename($row['filename'], PageInfo::SUFFIX);
+				$pagePath = $internalPath;
 			} elseif ($internalPath === '' || $internalPath === '.') {
 				$title = $this->l10n->t('Landing page');
+				$pagePath = '';
 			} else {
 				$title = basename($internalPath);
+				$pagePath = dirname($internalPath);
+			}
+
+			if ($pagePath === '.') {
+				$pagePath = '';
 			}
 
 			$fileIdSuffix = '?fileId=' . $row['file_id'];
@@ -114,6 +121,7 @@ class RecentPagesService {
 			$recentPage
 				->setCollectiveName($this->collectiveService->getCollectiveNameWithEmoji($collectivesMap[$collectiveId]))
 				->setTitle($title)
+				->setPagePath($pagePath)
 				->setPageUrl($url)
 				->setTimestamp($row['timestamp']);
 			if ($row['emoji']) {

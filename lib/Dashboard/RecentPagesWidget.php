@@ -40,9 +40,12 @@ class RecentPagesWidget implements IReloadableWidget {
 
 		$items = [];
 		foreach ($recentPages as $recentPage) {
+			$subtitle = $recentPage->getPagePath()
+				? $recentPage->getCollectiveName() . ': ' . $recentPage->getPagePath()
+				: $recentPage->getCollectiveName();
 			$items[] = new WidgetItem(
 				$recentPage->getTitle(),
-				$recentPage->getCollectiveName(),
+				$subtitle,
 				$recentPage->getPageUrl(),
 				'data:image/svg+xml;base64,' . base64_encode($this->getEmojiAvatar($recentPage->getEmoji() ?: '🗒')),
 				(string)$recentPage->getTimestamp()
