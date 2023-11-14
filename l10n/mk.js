@@ -13,7 +13,6 @@ OC.L10N.register(
     "Remove" : "Отстрани ",
     "Loading…" : "Се вчитува…",
     "An error occurred while performing the search" : "Настана грешка при обидот за пребарување",
-    "Add users" : "Додади корисници",
     "Add groups" : "Додади групи",
     "Add circles" : "Додади кругови",
     "Permissions" : "Дозволи",

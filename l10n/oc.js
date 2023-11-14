@@ -11,7 +11,6 @@ OC.L10N.register(
     "Remove" : "Suprimir",
     "Loading…" : "Cargament...",
     "An error occurred while performing the search" : "Una error s'es producha en realizant la recèrca",
-    "Add users" : "Apondre utilizaires",
     "Add groups" : "Apondre grops",
     "Add circles" : "Apondre cercles",
     "Allow editing for" : "Permetre la modificacion per",

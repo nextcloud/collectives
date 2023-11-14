@@ -28,7 +28,6 @@ OC.L10N.register(
     "admin" : "管理者",
     "Loading…" : "読み込み中…",
     "An error occurred while performing the search" : "検索中にエラーが発生しました",
-    "Add users" : "ユーザーを追加",
     "Add groups" : "グループを追加",
     "Add circles" : "サークルを追加",
     "Permissions" : "アクセス権限",

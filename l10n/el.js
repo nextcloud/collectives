@@ -14,7 +14,6 @@ OC.L10N.register(
     "admin" : "διαχειριστής",
     "Loading…" : "Γίνεται φόρτωση…",
     "An error occurred while performing the search" : "Παρουσιάστηκε σφάλμα κατά την αναζήτηση",
-    "Add users" : "Προσθήκη χρηστών",
     "Add groups" : "Προσθήκη ομάδων",
     "Add circles" : "Προσθήκη κύκλων",
     "Permissions" : "Δικαιώματα",

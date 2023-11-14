@@ -14,7 +14,6 @@ OC.L10N.register(
     "Promote to moderator" : "Korota moderaattoriksi",
     "Loading…" : "Ladataan…",
     "An error occurred while performing the search" : "Hakua suorittaessa tapahtui virhe",
-    "Add users" : "Lisää käyttäjiä",
     "Add groups" : "Lisää ryhmiä",
     "Add circles" : "Lisää piirejä",
     "Permissions" : "Oikeudet",

@@ -15,7 +15,6 @@ OC.L10N.register(
     "Promote to moderator" : "Approva a moderadore",
     "Loading…" : "Carrighende…",
     "An error occurred while performing the search" : "B'at àpidu un'errore in sa chirca",
-    "Add users" : "Agiunghe utentes",
     "Add groups" : "Agiunghe grupos",
     "Add circles" : "Agiunghe giros",
     "Permissions" : "Permissos",
