@@ -116,6 +116,10 @@ export default {
 			this.editor?.focus()
 		},
 
+		save() {
+			return this.editor.save()
+		},
+
 		toggleOutlineFromEditor(visible) {
 			if (visible === true) {
 				this.show('outline')

@@ -77,7 +77,8 @@
 					:placeholder="t('collectives', 'Title')"
 					type="text"
 					:disabled="!currentCollectiveCanEdit"
-					@blur="renamePage()">
+					@blur="renamePage()"
+					@keydown.stop="onTitleKeyDown">
 			</form>
 
 			<div class="titlebar-buttons">
@@ -173,6 +174,7 @@ export default {
 			'isPublic',
 			'isFullWidthView',
 			'isTemplatePage',
+			'isTextEdit',
 			'isLandingPage',
 			'loading',
 			'useEditorApi',
@@ -283,6 +285,10 @@ export default {
 			this.$refs.texteditor.focusEditor()
 		},
 
+		saveEditor() {
+			this.$refs.texteditor.save()
+		},
+
 		async setPageEmoji(emoji) {
 			await this.setEmoji(this.currentPage.id, emoji)
 		},
@@ -311,6 +317,13 @@ export default {
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not rename the page'))
+			}
+		},
+
+		onTitleKeyDown(event) {
+			if (this.isTextEdit && (event.ctrlKey || event.metaKey) && event.key === 's') {
+				this.saveEditor()
+				event.preventDefault()
 			}
 		},
 	},
