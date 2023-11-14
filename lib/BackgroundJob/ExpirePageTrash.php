@@ -14,18 +14,20 @@ use OCP\BackgroundJob\TimedJob;
 class ExpirePageTrash extends TimedJob {
 	private Expiration $expiration;
 	private PageTrashBackend $trashBackend;
+	private bool $hasTrashBackend = false;
 
 	public function __construct(
-		ITimeFactory $time,
-		Expiration $expiration,
-		PageTrashBackend $trashBackend) {
+		ITimeFactory $time) {
 		parent::__construct($time);
 
 		// Run once per hour
 		$this->setInterval(60 * 60);
 
-		$this->expiration = $expiration;
-		$this->trashBackend = $trashBackend;
+		if (class_exists(Expiration::class)) {
+			$this->hasTrashBackend = true;
+			$this->expiration = \OC::$server->get(Expiration::class);
+			$this->trashBackend = \OC::$server->get(PageTrashBackend::class);
+		}
 	}
 
 	/**
@@ -35,6 +37,8 @@ class ExpirePageTrash extends TimedJob {
 	 * @throws NotPermittedException
 	 */
 	protected function run($argument): void {
-		$this->trashBackend->expire($this->expiration);
+		if ($this->hasTrashBackend) {
+			$this->trashBackend->expire($this->expiration);
+		}
 	}
 }
