@@ -4,6 +4,7 @@ namespace OCA\Collectives\Model;
 
 class RecentPage {
 	protected string $collectiveName = '';
+	protected string $pagePath = '';
 	protected string $pageUrl = '';
 	protected string $title = '';
 	protected string $emoji = '';
@@ -15,6 +16,15 @@ class RecentPage {
 
 	public function setCollectiveName(string $collectiveName): self {
 		$this->collectiveName = $collectiveName;
+		return $this;
+	}
+
+	public function getPagePath(): string {
+		return $this->pagePath;
+	}
+
+	public function setPagePath(string $pagePath): self {
+		$this->pagePath = $pagePath;
 		return $this;
 	}
 
