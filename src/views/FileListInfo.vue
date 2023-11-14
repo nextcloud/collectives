@@ -70,7 +70,7 @@ export default {
 
 	methods: {
 		setActive() {
-			this.active = this.collectivesFolder && this.path.startsWith(this.collectivesFolder)
+			this.active = this.collectivesFolder && this.collectivesFolder !== '/' && this.path.startsWith(this.collectivesFolder)
 		},
 	},
 }
