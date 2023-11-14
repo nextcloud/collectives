@@ -88,8 +88,7 @@ class Application extends App implements IBootstrap {
 		});
 
 		$context->registerService(VersionsBackend::class, function (ContainerInterface $c) {
-			$appManager = $c->get(IAppManager::class);
-			if ($appManager->isEnabledForUser('files_versions')) {
+			if (interface_exists(IVersionBackend::class)) {
 				return new VersionsBackend(
 					$c->get(CollectiveFolderManager::class),
 					$c->get(ITimeFactory::class),

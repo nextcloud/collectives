@@ -25,8 +25,8 @@ class ExpirePageTrash extends TimedJob {
 
 		if (class_exists(Expiration::class)) {
 			$this->hasTrashBackend = true;
-			$this->expiration = \OC::$server->get(Expiration::class);
-			$this->trashBackend = \OC::$server->get(PageTrashBackend::class);
+			$this->expiration = \OCP\Server::get(Expiration::class);
+			$this->trashBackend = \OCP\Server::get(PageTrashBackend::class);
 		}
 	}
 
