@@ -148,6 +148,7 @@ OC.L10N.register(
     "Please ask the administrator to enable these apps." : "Будь ласка, попросіть адміністратора ввімкнути ці додатки.",
     "in Collective {collective}" : "В колективі {collective}",
     "The contacts app is required to manage members" : "Для керування учасниками необхідний додаток Контакти ",
+    "Could not share the collective" : "Не вдалося поділитися колективом",
     "Collective not found:" : "Колектив не знайдено:",
     "Save new collective name" : "Зберегти назву нового колективу",
     "Admins and moderaters" : "Адміни й модератори",
