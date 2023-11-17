@@ -12,7 +12,6 @@ use OCP\IUserSession;
 
 class RecentPagesWidget implements IReloadableWidget {
 	public const REFRESH_INTERVAL_IN_SECS = 33;
-	public const MAX_ITEMS = 10;
 
 	protected IL10N $l10n;
 	protected IURLGenerator $urlGenerator;
@@ -36,7 +35,7 @@ class RecentPagesWidget implements IReloadableWidget {
 			return new WidgetItems();
 		}
 
-		$recentPages = $this->recentPagesService->forUser($user, self::MAX_ITEMS);
+		$recentPages = $this->recentPagesService->forUser($user, $limit);
 
 		$items = [];
 		foreach ($recentPages as $recentPage) {
