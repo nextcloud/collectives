@@ -9,7 +9,7 @@
 * 🐛 Fix dashboard issue for users without a collective.
 * 💄 Fix alignment of page heading loading skeleton.
 * 📋 Improve wording around user entities: members can be accounts, circles or groups.
-* ⌨️ Save document on <Ctrl>-<S> when page title is focussed. (#989)
+* ⌨️ Save document on `<Ctrl>-<S>` when page title is focussed. (#989)
 * ℹ️ Don't always show file app info header for guest users. (#893)
 * 🧹 Fix `ExpireTrashPages` background job if no trash backend available. (#968)
 
