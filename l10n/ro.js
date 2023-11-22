@@ -9,6 +9,7 @@ OC.L10N.register(
     "No search results" : "Căutarea nu are rezultate",
     "Remove" : "Elimină",
     "Loading…" : "Se încarcă...",
+    "Permissions" : "Permisiuni",
     "View" : "Vizualizare",
     "Edit" : "Editează",
     "Restore" : "Restaurare",
