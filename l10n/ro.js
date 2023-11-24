@@ -6,6 +6,7 @@ OC.L10N.register(
     "Unshare" : "Oprește partajarea",
     "Settings" : "Setări",
     "Copied" : "Copiat",
+    "Cannot copy" : "Nu s-a putut copia",
     "Members" : "Membri",
     "No search results" : "Căutarea nu are rezultate",
     "Remove" : "Elimină",
