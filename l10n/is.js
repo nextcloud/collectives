@@ -19,6 +19,8 @@ OC.L10N.register(
     "Create" : "Búa til",
     "Done" : "Lokið",
     "Move or copy" : "Færa eða afrita",
+    "Hide outline" : "Fela útlínu",
+    "Show outline" : "Birta útlínu",
     "Template" : "Sniðmát",
     "Title" : "Titill",
     "Deleted" : "Eytt",
