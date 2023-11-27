@@ -2,6 +2,7 @@ import debounce from 'debounce'
 import { mapGetters, mapMutations } from 'vuex'
 import linkHandlerMixin from '../mixins/linkHandlerMixin.js'
 import PageInfoBar from '../components/Page/PageInfoBar.vue'
+import { editorApiReaderFileId } from '../constants.js'
 
 export default {
 	mixins: [
@@ -23,6 +24,7 @@ export default {
 			'currentCollectiveCanEdit',
 			'currentPage',
 			'currentPageFilePath',
+			'editorApiFlags',
 			'loading',
 			'shareTokenParam',
 			'showing',
@@ -61,8 +63,13 @@ export default {
 		]),
 
 		async setupReader() {
+			const fileId = this.editorApiFlags.includes(editorApiReaderFileId)
+				? this.currentPage.id
+				: null
 			this.reader = await window.OCA.Text.createEditor({
 				el: this.$refs.reader,
+				fileId,
+				useSession: false,
 				content: this.pageContent,
 				filePath: `/${this.currentPageFilePath}`,
 				readOnly: true,

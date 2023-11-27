@@ -6,7 +6,7 @@ import collectives from './collectives.js'
 import pages from './pages.js'
 import settings from './settings.js'
 import versions from './versions.js'
-import { pageModes } from '../constants.js'
+import { editorApiReaderFileId, pageModes } from '../constants.js'
 
 Vue.use(Vuex)
 
@@ -54,14 +54,21 @@ export default new Store({
 		isTextEdit: (state) => state.textMode === pageModes.MODE_EDIT,
 		isTextView: (state) => state.textMode === pageModes.MODE_VIEW,
 
-		editorApiVersionCheck() {
-			const requiredVersion = '1.0'
+		editorApiVersionCheck: () => (requiredVersion) => {
 			const apiVersion = window.OCA?.Text?.apiVersion || '0'
 			return apiVersion.localeCompare(requiredVersion, undefined, { numeric: true, sensitivity: 'base' }) >= 0
 		},
 
 		useEditorApi(_, get) {
-			return !!window.OCA?.Text?.createEditor && get.editorApiVersionCheck
+			return !!window.OCA?.Text?.createEditor && get.editorApiVersionCheck('1.0')
+		},
+
+		editorApiFlags(_, get) {
+			const flags = []
+			if (get.editorApiVersionCheck('1.1')) {
+				flags.push(editorApiReaderFileId)
+			}
+			return flags
 		},
 	},
 

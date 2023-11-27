@@ -34,3 +34,5 @@ export const pageModes = {
 	MODE_VIEW: 0,
 	MODE_EDIT: 1,
 }
+
+export const editorApiReaderFileId = 'READER_FILE_ID'
