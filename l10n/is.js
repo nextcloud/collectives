@@ -28,6 +28,7 @@ OC.L10N.register(
     "Current version" : "Fyrirliggjandi útgáfa",
     "No other versions available" : "Engar aðrar útgáfur í boði",
     "Attachments" : "Viðhengi",
-    "Versions" : "Útgáfur"
+    "Versions" : "Útgáfur",
+    "_%n byte_::_%n bytes_" : ["%n bæti","%n bæti"]
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");
