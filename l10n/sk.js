@@ -110,6 +110,7 @@ OC.L10N.register(
     "Back" : "Späť",
     "A collective with this name already exists" : "Kolektív s týmto názvom už existuje",
     "Create" : "Vytvoriť",
+    "Create without members" : "Vytvoriť bez členov",
     "Could not add members to the collective" : "Do kolektívu sa nepodarilo pridať členov",
     "Select a collective" : "Vyberte kolektív",
     "Create a new collective" : "Vytvoriť nový kolektív",
