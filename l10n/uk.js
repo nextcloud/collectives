@@ -56,6 +56,8 @@ OC.L10N.register(
     "Change emoji" : "Змінити емодзі",
     "Add emoji" : "Додати емодзі",
     "Name of the collective" : "Назва колективу",
+    "Editing permissions updated" : "Дозволи на редагування оновлено",
+    "Sharing permissions updated" : "Дозволи на поширення оновлено",
     "Emoji updated" : "Емодзі оновлено",
     "Could not update emoji for the collective" : "Неможливо оновити емодзі для колективу",
     "Could not rename the collective" : "Не вдалося перейменувати колектив",
