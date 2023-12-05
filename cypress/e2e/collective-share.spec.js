@@ -97,7 +97,11 @@ describe('Collective Share', function() {
 			cy.visit(shareUrl)
 			// Do some handstands to ensure that new page with editor is loaded before we edit the title
 			cy.intercept('POST', '**/_api/p/*/_pages/*').as('createPage')
-			cy.intercept('PUT', '**/apps/text/public/session/create').as('textCreateSession')
+			if (['stable25', 'stable26', 'stable27'].includes(Cypress.env('ncVersion'))) {
+				cy.intercept('PUT', '**/apps/text/public/session/create').as('textCreateSession')
+			} else {
+				cy.intercept('PUT', '**/apps/text/public/session/*/create').as('textCreateSession')
+			}
 			cy.contains('.app-content-list-item', 'Share me')
 				.find('button.action-button-add')
 				.click()
