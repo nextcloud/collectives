@@ -274,7 +274,7 @@ describe('Page list', function() {
 				.click()
 			cy.get('table tr')
 				.should('not.exist')
-			cy.get('button.modal-container__close').click()
+			cy.get('.modal__page-trash button.modal-container__close').click()
 
 			cy.openPage('Day 1')
 			cy.getReadOnlyEditor()
