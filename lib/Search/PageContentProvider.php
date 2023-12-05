@@ -95,9 +95,7 @@ class PageContentProvider implements IProvider {
 	 * @throws FileSearchException
 	 */
 	public function search(IUser $user, ISearchQuery $query): SearchResult {
-		// Only search for page content if the app is active
-		if ($this->appManager->isEnabledForUser('circles', $user) &&
-			strpos($query->getRoute(), 'collectives.') === 0) {
+		if ($this->appManager->isEnabledForUser('circles', $user)) {
 			$collectiveInfos = $this->collectiveHelper->getCollectivesForUser($user->getUID(), false, false);
 		} else {
 			$collectiveInfos = [];
