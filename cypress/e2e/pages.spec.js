@@ -110,7 +110,11 @@ describe('Page', function() {
 		it('New page has template content', function() {
 			// Do some handstands to ensure that new page with editor is loaded before we edit the title
 			cy.intercept('POST', '**/_api/*/_pages/*').as('createPage')
-			cy.intercept('PUT', '**/apps/text/session/create').as('textCreateSession')
+			if (['stable25', 'stable26', 'stable27'].includes(Cypress.env('ncVersion'))) {
+				cy.intercept('PUT', '**/apps/text/session/create').as('textCreateSession')
+			} else {
+				cy.intercept('PUT', '**/apps/text/session/*/create').as('textCreateSession')
+			}
 			cy.contains('.app-content-list-item', 'Our Garden')
 				.find('button.action-button-add')
 				.click()
@@ -137,7 +141,11 @@ describe('Page', function() {
 		it('Shows the title in the enabled titleform and full path in browser title', function() {
 			// Do some handstands to ensure that new page with editor is loaded before we edit the title
 			cy.intercept('POST', '**/_api/*/_pages/*').as('createPage')
-			cy.intercept('PUT', '**/apps/text/session/create').as('textCreateSession')
+			if (['stable25', 'stable26', 'stable27'].includes(Cypress.env('ncVersion'))) {
+				cy.intercept('PUT', '**/apps/text/session/create').as('textCreateSession')
+			} else {
+				cy.intercept('PUT', '**/apps/text/session/*/create').as('textCreateSession')
+			}
 			cy.contains('.app-content-list-item', '#% special chars')
 				.find('button.action-button-add')
 				.click({ force: true })
