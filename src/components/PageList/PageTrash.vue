@@ -9,7 +9,10 @@
 			</template>
 			{{ t('collectives', 'Deleted pages') }}
 		</NcButton>
-		<NcModal v-if="showModal" size="large" @close="closeTrash">
+		<NcModal v-if="showModal"
+			size="large"
+			class="modal__page-trash"
+			@close="closeTrash">
 			<div class="modal__content">
 				<h2>{{ t('collectives', 'Deleted pages') }}</h2>
 				<NcEmptyContent v-if="!trashPages.length"
