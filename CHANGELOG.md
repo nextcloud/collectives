@@ -1,5 +1,21 @@
 # Changelog
 
+## 2.9.2 - 2023.12.06
+
+### 🐛Fixes
+* 📎 Fix several issues with displaying attachments. (#620, #964)
+* 🔎 Always search for page content, not only in app realm.
+* 📌 Dashboard: respect passed in item limit. Thanks @jld3103.
+* 📋 Changelog: Correct styling. Thanks @SimJoSt.
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 2.9.1 - 2023.11.14
 
 ### 🐛Fixes
