@@ -36,6 +36,8 @@ describe('Page landing page', function() {
 		cy.circleFind(collective).circleAddMember('john')
 		cy.seedPage('Page 1', '', 'Readme.md')
 		cy.seedPage('Page 2', '', 'Readme.md')
+		// Wait 1 second to make sure that page order by time is right
+		cy.wait(1000) // eslint-disable-line cypress/no-unnecessary-waiting
 		cy.seedPage('Page 3', '', 'Readme.md')
 	})
 
@@ -49,7 +51,7 @@ describe('Page landing page', function() {
 	describe('Displays recent pages', function() {
 		it('Allows to toggle recent pages widget', function() {
 			cy.get('.recent-pages-widget .recent-page-tile')
-				.contains('Page 2')
+				.contains('Page 3')
 
 			cy.get('.recent-pages-widget .recent-pages-title')
 				.click()
@@ -63,15 +65,14 @@ describe('Page landing page', function() {
 			cy.get('.recent-pages-widget .recent-pages-title')
 				.click()
 			cy.get('.recent-pages-widget .recent-page-tile')
-				.contains('Page 2')
-				.click()
+				.contains('Page 3')
 		})
 
 		it('Allows to open page from recent pages widget', function() {
 			cy.get('.recent-pages-widget .recent-page-tile')
-				.contains('Page 2')
+				.contains('Page 3')
 				.click()
-			cy.url().should('include', `/apps/collectives/${encodeURIComponent(collective)}/${encodeURIComponent('Page 2')}`)
+			cy.url().should('include', `/apps/collectives/${encodeURIComponent(collective)}/${encodeURIComponent('Page 3')}`)
 		})
 	})
 
