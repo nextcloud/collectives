@@ -9,7 +9,6 @@ use Closure;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Service\CollectiveService;
-use OCA\Collectives\Service\CollectiveShareService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\Constants;
@@ -24,7 +23,6 @@ class CollectiveController extends Controller {
 	private IFactory $l10nFactory;
 	private LoggerInterface $logger;
 	private NodeHelper $nodeHelper;
-	private CollectiveShareService $shareService;
 
 	use ErrorHelper;
 
@@ -34,15 +32,13 @@ class CollectiveController extends Controller {
 		IUserSession $userSession,
 		IFactory $l10nFactory,
 		LoggerInterface $logger,
-		NodeHelper $nodeHelper,
-		CollectiveShareService $shareService) {
+		NodeHelper $nodeHelper) {
 		parent::__construct($AppName, $request);
 		$this->service = $service;
 		$this->userSession = $userSession;
 		$this->l10nFactory = $l10nFactory;
 		$this->logger = $logger;
 		$this->nodeHelper = $nodeHelper;
-		$this->shareService = $shareService;
 	}
 
 	/**
@@ -201,65 +197,6 @@ class CollectiveController extends Controller {
 	public function trash(int $id): DataResponse {
 		return $this->prepareResponse(function () use ($id): array {
 			$collectiveInfo = $this->service->trashCollective($id, $this->getUserId());
-			return [
-				"data" => $collectiveInfo
-			];
-		});
-	}
-
-	/**
-	 * @NoAdminRequired
-	 *
-	 * @param int $id
-	 *
-	 * @return DataResponse
-	 */
-	public function createShare(int $id): DataResponse {
-		return $this->prepareResponse(function () use ($id): array {
-			$userId = $this->getUserId();
-			$collectiveInfo = $this->service->getCollectiveInfo($id, $userId);
-			$share = $this->shareService->createShare($userId, $collectiveInfo);
-			$collectiveInfo->setShareToken($share->getToken());
-			return [
-				"data" => $collectiveInfo
-			];
-		});
-	}
-
-	/**
-	 * @NoAdminRequired
-	 *
-	 * @param int    $id
-	 * @param string $token
-	 * @param bool   $editable
-	 *
-	 * @return DataResponse
-	 */
-	public function updateShare(int $id, string $token, bool $editable = false): DataResponse {
-		return $this->prepareResponse(function () use ($id, $token, $editable): array {
-			$userId = $this->getUserId();
-			$collectiveInfo = $this->service->getCollectiveInfo($id, $userId);
-			$this->shareService->updateShare($userId, $collectiveInfo, $token, $editable);
-			$collectiveInfo = $this->service->getCollectiveWithShare($id, $userId);
-			return [
-				"data" => $collectiveInfo
-			];
-		});
-	}
-
-	/**
-	 * @NoAdminRequired
-	 *
-	 * @param int    $id
-	 * @param string $token
-	 *
-	 * @return DataResponse
-	 */
-	public function deleteShare(int $id, string $token): DataResponse {
-		return $this->prepareResponse(function () use ($id, $token): array {
-			$userId = $this->getUserId();
-			$collectiveInfo = $this->service->getCollectiveInfo($id, $userId);
-			$this->shareService->deleteShare($userId, $id, $token);
 			return [
 				"data" => $collectiveInfo
 			];

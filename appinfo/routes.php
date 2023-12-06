@@ -21,12 +21,6 @@ return [
 			'requirements' => ['id' => '\d+']],
 		['name' => 'collective#trash', 'url' => '/_api/{id}', 'verb' => 'DELETE',
 			'requirements' => ['id' => '\d+']],
-		['name' => 'collective#createShare', 'url' => '/_api/{id}/share', 'verb' => 'POST',
-			'requirements' => ['id' => '\d+']],
-		['name' => 'collective#updateShare', 'url' => '/_api/{id}/share/{token}', 'verb' => 'PUT',
-			'requirements' => ['id' => '\d+']],
-		['name' => 'collective#deleteShare', 'url' => '/_api/{id}/share/{token}', 'verb' => 'DELETE',
-			'requirements' => ['id' => '\d+']],
 
 		// collectives trash API
 		['name' => 'trash#index', 'url' => '/_api/trash', 'verb' => 'GET'],
@@ -40,6 +34,22 @@ return [
 			'requirements' => ['id' => '\d+']],
 		['name' => 'collectiveUserSettings#showRecentPages', 'url' => '/_api/{id}/_userSettings/showRecentPages', 'verb' => 'PUT',
 			'requirements' => ['id' => '\d+']],
+
+		// share API
+		['name' => 'share#getCollectiveShares', 'url' => '/_api/{collectiveId}/shares', 'verb' => 'GET',
+			'requirements' => ['collectiveId' => '\d+']],
+		['name' => 'share#createCollectiveShare', 'url' => '/_api/{collectiveId}/share', 'verb' => 'POST',
+			'requirements' => ['collectiveId' => '\d+']],
+		['name' => 'share#updateCollectiveShare', 'url' => '/_api/{collectiveId}/share/{token}', 'verb' => 'PUT',
+			'requirements' => ['collectiveId' => '\d+']],
+		['name' => 'share#deleteCollectiveShare', 'url' => '/_api/{collectiveId}/share/{token}', 'verb' => 'DELETE',
+			'requirements' => ['collectiveId' => '\d+']],
+		['name' => 'share#createPageShare', 'url' => '/_api/{collectiveId}/_pages/{pageId}/share', 'verb' => 'POST',
+			'requirements' => ['collectiveId' => '\d+', 'pageId' => '\d+']],
+		['name' => 'share#updatePageShare', 'url' => '/_api/{collectiveId}/_pages/{pageId}/share/{token}', 'verb' => 'PUT',
+			'requirements' => ['collectiveId' => '\d+', 'pageId' => '\d+']],
+		['name' => 'share#deletePageShare', 'url' => '/_api/{collectiveId}/_pages/{pageId}/share/{token}', 'verb' => 'DELETE',
+			'requirements' => ['collectiveId' => '\d+', 'pageId' => '\d+']],
 
 		// pages API
 		['name' => 'page#index', 'url' => '/_api/{collectiveId}/_pages',

@@ -175,6 +175,24 @@ class PageService {
 
 	/**
 	 * @param int    $collectiveId
+	 * @param int    $parentId
+	 * @param int    $pageId
+	 * @param string $userId
+	 *
+	 * @return void
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function isPageInPageFolder(int $collectiveId, int $parentId, int $pageId, string $userId): void {
+		$folder = $this->getFolder($collectiveId, $parentId, $userId);
+		if (!isset($folder->getById($pageId)[0])) {
+			throw new NotFoundException('Page ' . $pageId . ' is not a child of ' . $parentId);
+		}
+	}
+
+	/**
+	 * @param int    $collectiveId
 	 * @param File   $file
 	 * @param string $userId
 	 *
@@ -449,6 +467,31 @@ class PageService {
 
 	/**
 	 * @param int    $collectiveId
+	 * @param int    $parentId
+	 * @param string $userId
+	 *
+	 * @return array|PageInfo[]
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function findChildren(int $collectiveId, int $parentId, string $userId): array {
+		$collectiveFolder = $this->getCollectiveFolder($collectiveId, $userId);
+		$parentFile = $this->nodeHelper->getFileById($collectiveFolder, $parentId);
+		if (!NodeHelper::isIndexPage($parentFile)) {
+			throw new NotFoundException('Not an index page: ' . $parentId);
+		}
+
+		$folder = $this->getFolder($collectiveId, $parentId, $userId);
+		try {
+			return $this->getPagesFromFolder($collectiveId, $folder, $userId, true);
+		} catch (FilesNotFoundException $e) {
+			throw new NotFoundException($e->getMessage(), 0, $e);
+		}
+	}
+
+	/**
+	 * @param int    $collectiveId
 	 * @param string $userId
 	 *
 	 * @return PageInfo[]
@@ -460,7 +503,7 @@ class PageService {
 		$folder = $this->getCollectiveFolder($collectiveId, $userId);
 		try {
 			return $this->getPagesFromFolder($collectiveId, $folder, $userId, true);
-		} catch (NotPermittedException $e) {
+		} catch (FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
 	}

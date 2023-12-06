@@ -76,16 +76,19 @@ class PublicCollectiveController extends PublicShareController {
 	/**
 	 * @PublicPage
 	 *
+	 * @param int $pageId
+	 *
 	 * @return DataResponse
 	 */
-	public function get(): DataResponse {
-		return $this->prepareResponse(function (): array {
+	public function get(int $pageId = 0): DataResponse {
+		return $this->prepareResponse(function () use ($pageId): array {
 			try {
 				$share = $this->collectiveShareMapper->findOneByToken($this->getToken());
 			} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
 				throw new NotFoundException('Failed to get shared collective', 0, $e);
 			}
 			$collective = $this->service->getCollectiveWithShare($share->getCollectiveId(),
+				$share->getPageId(),
 				$share->getOwner());
 			// Explicitly set member level
 			$collective->setLevel(Member::LEVEL_MEMBER);

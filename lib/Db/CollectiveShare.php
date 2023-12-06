@@ -14,6 +14,8 @@ use OCP\AppFramework\Db\Entity;
  * @method void setId(int $value)
  * @method int getCollectiveId()
  * @method void setCollectiveId(int $value)
+ * @method int getPageId()
+ * @method void setPageId(int $value)
  * @method string getToken()
  * @method void setToken(string $value)
  * @method string getOwner()
@@ -21,6 +23,7 @@ use OCP\AppFramework\Db\Entity;
  */
 class CollectiveShare extends Entity implements JsonSerializable {
 	protected ?int $collectiveId = null;
+	protected int $pageId = 0;
 	protected ?string $token = null;
 	protected ?string $owner = null;
 
@@ -28,6 +31,7 @@ class CollectiveShare extends Entity implements JsonSerializable {
 		return [
 			'id' => $this->id,
 			'collectiveId' => (int)$this->collectiveId,
+			'pageId' => $this->pageId,
 			'token' => $this->token,
 			'owner' => $this->owner,
 		];
