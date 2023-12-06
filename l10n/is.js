@@ -6,6 +6,7 @@ OC.L10N.register(
     "Unshare" : "Hætta deilingu",
     "Settings" : "Stillingar",
     "Copied" : "Afritað",
+    "Cannot copy" : "Get ekki afritað",
     "Copy share link" : "Afrita deilitengil",
     "Members" : "Meðlimir",
     "Loading…" : "Hleð inn…",
