@@ -30,6 +30,10 @@ class Version001600Date20211025000000 extends SimpleMigrationStep {
 			$table->addColumn('collective_id', Types::BIGINT, [
 				'notnull' => true,
 			]);
+			$table->addColumn('page_id', Types::BIGINT, [
+				'notnull' => true,
+				'default' => 0,
+			]);
 			$table->addColumn('token', Types::STRING, [
 				'notnull' => true,
 				'length' => 64,

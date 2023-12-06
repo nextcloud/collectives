@@ -47,15 +47,35 @@ class CollectiveShareMapper extends QBMapper {
 	 * @param int    $collectiveId
 	 * @param string $userId
 	 *
+	 * @return CollectiveShare[]
+	 * @throws Exception
+	 */
+	public function findByCollectiveIdAndUser(int $collectiveId, string $userId): array {
+		$qb = $this->db->getQueryBuilder();
+		$where = $qb->expr()->andX();
+		$where->add($qb->expr()->eq('collective_id', $qb->createNamedParameter($collectiveId, IQueryBuilder::PARAM_INT)));
+		$where->add($qb->expr()->eq('owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
+		$qb->select('*')
+			->from($this->tableName)
+			->where($where);
+		return $this->findEntities($qb);
+	}
+
+	/**
+	 * @param int    $collectiveId
+	 * @param int    $pageId
+	 * @param string $userId
+	 *
 	 * @return CollectiveShare
 	 * @throws DoesNotExistException
 	 * @throws MultipleObjectsReturnedException
 	 * @throws Exception
 	 */
-	public function findOneByCollectiveIdAndUser(int $collectiveId, string $userId): CollectiveShare {
+	public function findOneByCollectiveIdAndUser(int $collectiveId, int $pageId, string $userId): CollectiveShare {
 		$qb = $this->db->getQueryBuilder();
 		$where = $qb->expr()->andX();
 		$where->add($qb->expr()->eq('collective_id', $qb->createNamedParameter($collectiveId, IQueryBuilder::PARAM_INT)));
+		$where->add($qb->expr()->eq('page_id', $qb->createNamedParameter($pageId, IQueryBuilder::PARAM_INT)));
 		$where->add($qb->expr()->eq('owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
 		$qb->select('*')
 			->from($this->tableName)
@@ -83,6 +103,7 @@ class CollectiveShareMapper extends QBMapper {
 
 	/**
 	 * @param int    $collectiveId
+	 * @param int    $pageId
 	 * @param string $token
 	 * @param string $userId
 	 *
@@ -91,10 +112,11 @@ class CollectiveShareMapper extends QBMapper {
 	 * @throws Exception
 	 * @throws MultipleObjectsReturnedException
 	 */
-	public function findOneByCollectiveIdAndTokenAndUser(int $collectiveId, string $token, string $userId): CollectiveShare {
+	public function findOneByCollectiveIdAndTokenAndUser(int $collectiveId, int $pageId, string $token, string $userId): CollectiveShare {
 		$qb = $this->db->getQueryBuilder();
 		$where = $qb->expr()->andX();
 		$where->add($qb->expr()->eq('collective_id', $qb->createNamedParameter($collectiveId, IQueryBuilder::PARAM_INT)));
+		$where->add($qb->expr()->eq('page_id', $qb->createNamedParameter($pageId, IQueryBuilder::PARAM_INT)));
 		$where->add($qb->expr()->eq('token', $qb->createNamedParameter($token, IQueryBuilder::PARAM_STR)));
 		$where->add($qb->expr()->eq('owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
 		$qb->select('*')
@@ -105,15 +127,17 @@ class CollectiveShareMapper extends QBMapper {
 
 	/**
 	 * @param int    $collectiveId
+	 * @param int    $pageId
 	 * @param string $token
 	 * @param string $owner
 	 *
 	 * @return CollectiveShare
 	 * @throws Exception
 	 */
-	public function create(int $collectiveId, string $token, string $owner): CollectiveShare {
+	public function create(int $collectiveId, int $pageId, string $token, string $owner): CollectiveShare {
 		$share = new CollectiveShare();
 		$share->setCollectiveId($collectiveId);
+		$share->setPageId($pageId);
 		$share->setToken($token);
 		$share->setOwner($owner);
 

@@ -84,6 +84,7 @@ class CollectiveService extends CollectiveServiceBase {
 
 	/**
 	 * @param int    $id
+	 * @param int    $pageId
 	 * @param string $userId
 	 *
 	 * @return CollectiveInfo
@@ -91,9 +92,9 @@ class CollectiveService extends CollectiveServiceBase {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function getCollectiveWithShare(int $id, string $userId): CollectiveInfo {
+	public function getCollectiveWithShare(int $id, int $pageId, string $userId): CollectiveInfo {
 		$collectiveInfo = $this->getCollectiveInfo($id, $userId);
-		if (null !== $share = $this->shareService->findShare($userId, $id)) {
+		if (null !== $share = $this->shareService->findShare($userId, $id, $pageId)) {
 			$collectiveInfo->setShareToken($share->getToken());
 			$collectiveInfo->setShareEditable($share->getEditable());
 		}
@@ -124,7 +125,7 @@ class CollectiveService extends CollectiveServiceBase {
 	public function getCollectivesWithShares(string $userId): array {
 		$collectiveInfos = $this->collectiveHelper->getCollectivesForUser($userId);
 		foreach ($collectiveInfos as $c) {
-			if (null !== $share = $this->shareService->findShare($userId, $c->getId())) {
+			if (null !== $share = $this->shareService->findShare($userId, $c->getId(), 0)) {
 				$c->setShareToken($share->getToken());
 				$c->setShareEditable($share->getEditable());
 			}

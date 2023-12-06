@@ -3,7 +3,6 @@
 namespace Unit\Service;
 
 use OC\Files\Node\Folder;
-use OC\Files\Node\Node;
 use OC\Share20\Share;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveShare;
@@ -14,6 +13,7 @@ use OCA\Collectives\Model\CollectiveShareInfo;
 use OCA\Collectives\Service\CollectiveShareService;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
+use OCA\Collectives\Service\PageService;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\IL10N;
@@ -33,7 +33,7 @@ class CollectiveShareServiceTest extends TestCase {
 	private string $userId = 'jane';
 	private string $collectiveId = '123';
 	private string $collectiveName = 'Test Collective';
-	private Node $collectiveNode;
+	private Folder $collectiveFolder;
 
 	protected function setUp(): void {
 		$this->shareManager = $this->getMockBuilder(IShareManager::class)
@@ -53,10 +53,13 @@ class CollectiveShareServiceTest extends TestCase {
 			->getMock();
 		$l10n->method('t')->willReturnArgument(0);
 
+		$pageService = $this->createMock(PageService::class);
+
 		$this->service = new CollectiveShareService(
 			$this->shareManager,
 			$this->userFolderHelper,
 			$this->collectiveShareMapper,
+			$pageService,
 			$l10n
 		);
 
@@ -78,12 +81,12 @@ class CollectiveShareServiceTest extends TestCase {
 		$userFolder = $this->getMockBuilder(Folder::class)
 			->disableOriginalConstructor()
 			->getMock();
-		$this->collectiveNode = $this->getMockBuilder(Node::class)
+		$this->collectiveFolder = $this->getMockBuilder(Folder::class)
 			->disableOriginalConstructor()
 			->getMock();
 		$userFolder->method('get')
 			->willReturnMap([
-				[$this->collectiveName, $this->collectiveNode]
+				[$this->collectiveName, $this->collectiveFolder]
 			]);
 		$this->userFolderHelper->method('get')
 			->willReturnMap([
@@ -91,22 +94,22 @@ class CollectiveShareServiceTest extends TestCase {
 			]);
 
 		$share->method('getNode')
-			->willReturn($this->collectiveNode);
+			->willReturn($this->collectiveFolder);
 	}
 
 	public function testCreateFolderShareLockedException(): void {
 		$this->prepareFolderShare();
-		$this->collectiveNode->method('lock')
+		$this->collectiveFolder->method('lock')
 			->willThrowException(new LockedException(''));
 
 		$this->expectException(NotFoundException::class);
 		$this->expectExceptionMessage('Could not create share');
-		$this->service->createFolderShare($this->userId, $this->collectiveName);
+		$this->service->createFolderShare($this->userId, $this->collectiveName, 0);
 	}
 
 	public function testCreateFolderShareGenericShareException(): void {
 		$this->prepareFolderShare();
-		$this->collectiveNode
+		$this->collectiveFolder
 			->expects(self::once())
 			->method('unlock');
 
@@ -114,12 +117,12 @@ class CollectiveShareServiceTest extends TestCase {
 			->willThrowException(new GenericShareException(''));
 
 		$this->expectException(NotFoundException::class);
-		$this->service->createFolderShare($this->userId, $this->collectiveName);
+		$this->service->createFolderShare($this->userId, $this->collectiveName, 0);
 	}
 
 	public function testCreateFolderShare(): void {
 		$this->prepareFolderShare();
-		$this->collectiveNode
+		$this->collectiveFolder
 			->expects(self::once())
 			->method('unlock');
 
@@ -127,11 +130,11 @@ class CollectiveShareServiceTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 		$share->method('getNode')
-			->willReturn($this->collectiveNode);
+			->willReturn($this->collectiveFolder);
 		$this->shareManager->method('createShare')
 			->willReturn($share);
 
-		self::assertEquals($share, $this->service->createFolderShare($this->userId, $this->collectiveName));
+		self::assertEquals($share, $this->service->createFolderShare($this->userId, $this->collectiveName, 0));
 	}
 
 	public function testFindShareDoesNotExistException(): void {
@@ -139,7 +142,7 @@ class CollectiveShareServiceTest extends TestCase {
 		$this->collectiveShareMapper->method('findOneByCollectiveIdAndUser')
 			->willThrowException(new DoesNotExistException(''));
 
-		self::assertNull($this->service->findShare($this->userId, $this->collectiveId));
+		self::assertNull($this->service->findShare($this->userId, $this->collectiveId, 0));
 	}
 
 	public function testFindShareMultipleObjectsReturnedException(): void {
@@ -147,7 +150,7 @@ class CollectiveShareServiceTest extends TestCase {
 		$this->collectiveShareMapper->method('findOneByCollectiveIdAndUser')
 			->willThrowException(new MultipleObjectsReturnedException(''));
 
-		self::assertNull($this->service->findShare($this->userId, $this->collectiveId));
+		self::assertNull($this->service->findShare($this->userId, $this->collectiveId, 0));
 	}
 
 	public function testFindShareShareNotFoundException(): void {
@@ -161,13 +164,11 @@ class CollectiveShareServiceTest extends TestCase {
 		$this->shareManager->method('getShareByToken')
 			->willThrowException(new ShareNotFound(''));
 
-		self::assertNull($this->service->findShare($this->userId, $this->collectiveId));
+		self::assertNull($this->service->findShare($this->userId, $this->collectiveId, 0));
 	}
 
 	public function testFindShare(): void {
-		$collectiveShare = $this->getMockBuilder(CollectiveShare::class)
-			->disableOriginalConstructor()
-			->getMock();
+		$collectiveShare = new CollectiveShare();
 		$this->collectiveShareMapper->method('findOneByCollectiveIdAndUser')
 			->willReturn($collectiveShare);
 		$folderShare = $this->getMockBuilder(Share::class)
@@ -176,19 +177,17 @@ class CollectiveShareServiceTest extends TestCase {
 		$this->shareManager->method('getShareByToken')
 			->willReturn($folderShare);
 
-		self::assertEquals(new CollectiveShareInfo($collectiveShare), $this->service->findShare($this->userId, $this->collectiveId));
+		self::assertEquals(new CollectiveShareInfo($collectiveShare), $this->service->findShare($this->userId, $this->collectiveId, 0));
 
 		// Test with share write permissions
 		$folderShare->method('getPermissions')
 			->willReturn(15);
 
-		self::assertEquals(new CollectiveShareInfo($collectiveShare, true), $this->service->findShare($this->userId, $this->collectiveId));
+		self::assertEquals(new CollectiveShareInfo($collectiveShare, true), $this->service->findShare($this->userId, $this->collectiveId, 0));
 	}
 
 	public function testCreateShareExistsAlready(): void {
-		$collectiveShare = $this->getMockBuilder(CollectiveShare::class)
-			->disableOriginalConstructor()
-			->getMock();
+		$collectiveShare = new CollectiveShare();
 		$this->collectiveShareMapper->method('findOneByCollectiveIdAndUser')
 			->willReturn($collectiveShare);
 
@@ -200,13 +199,11 @@ class CollectiveShareServiceTest extends TestCase {
 
 		$this->expectException(NotPermittedException::class);
 		$this->expectExceptionMessage('A share for collective %s exists already');
-		$this->service->createShare($this->userId, $this->collectiveInfo);
+		$this->service->createShare($this->userId, $this->collectiveInfo, null);
 	}
 
 	public function testUpdateShare(): void {
-		$collectiveShare = $this->getMockBuilder(CollectiveShare::class)
-			->disableOriginalConstructor()
-			->getMock();
+		$collectiveShare = new CollectiveShare();
 		$this->collectiveShareMapper->method('findOneByCollectiveIdAndTokenAndUser')
 			->willReturn($collectiveShare);
 
@@ -217,12 +214,12 @@ class CollectiveShareServiceTest extends TestCase {
 			->willReturn($folderShare);
 
 		// Without share write permissions
-		self::assertEquals(new CollectiveShareInfo($collectiveShare, false), $this->service->updateShare($this->userId, $this->collectiveInfo, 'token', false));
+		self::assertEquals(new CollectiveShareInfo($collectiveShare, false), $this->service->updateShare($this->userId, $this->collectiveInfo, null, 'token', false));
 
 		// With share write permissions
 		$permissions = 15;
 		$folderShare->method('getPermissions')
 			->willReturn($permissions);
-		self::assertEquals(new CollectiveShareInfo($collectiveShare, true), $this->service->updateShare($this->userId, $this->collectiveInfo, 'token', true));
+		self::assertEquals(new CollectiveShareInfo($collectiveShare, true), $this->service->updateShare($this->userId, $this->collectiveInfo, null, 'token', true));
 	}
 }

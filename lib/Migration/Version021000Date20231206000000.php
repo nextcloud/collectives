@@ -1,0 +1,37 @@
+<?php
+
+declare(strict_types=1);
+
+namespace OCA\Collectives\Migration;
+
+use Closure;
+use OCP\DB\ISchemaWrapper;
+use OCP\DB\Types;
+use OCP\Migration\IOutput;
+use OCP\Migration\SimpleMigrationStep;
+
+class Version021000Date20231206000000 extends SimpleMigrationStep {
+	/**
+	 * @param IOutput $output
+	 * @param Closure $schemaClosure The `\Closure` returns a `ISchemaWrapper`
+	 * @param array   $options
+	 *
+	 * @return null|ISchemaWrapper
+	 */
+	public function changeSchema(IOutput $output, Closure $schemaClosure, array $options): ?ISchemaWrapper {
+		/** @var ISchemaWrapper $schema */
+		$schema = $schemaClosure();
+
+		$table = $schema->getTable('collectives_shares');
+		if (!$table->hasColumn('page_id')) {
+			$table->addColumn('page_id', Types::BIGINT, [
+				'notnull' => true,
+				'default' => 0,
+			]);
+
+			return $schema;
+		}
+
+		return null;
+	}
+}

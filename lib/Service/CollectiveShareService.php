@@ -6,13 +6,16 @@ namespace OCA\Collectives\Service;
 
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveShareMapper;
+use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Model\CollectiveInfo;
 use OCA\Collectives\Model\CollectiveShareInfo;
+use OCA\Collectives\Model\PageInfo;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\Constants;
 use OCP\DB\Exception;
+use OCP\Files\Folder;
 use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\IL10N;
 use OCP\Lock\ILockingProvider;
@@ -26,15 +29,18 @@ class CollectiveShareService {
 	private IShareManager $shareManager;
 	private UserFolderHelper $userFolderHelper;
 	private CollectiveShareMapper $collectiveShareMapper;
+	private PageService $pageService;
 	private IL10N $l10n;
 
 	public function __construct(IShareManager $shareManager,
 		UserFolderHelper $userFolderHelper,
 		CollectiveShareMapper $collectiveShareMapper,
+		PageService $pageService,
 		IL10N $l10n) {
 		$this->shareManager = $shareManager;
 		$this->userFolderHelper = $userFolderHelper;
 		$this->collectiveShareMapper = $collectiveShareMapper;
+		$this->pageService = $pageService;
 		$this->l10n = $l10n;
 	}
 
@@ -43,12 +49,13 @@ class CollectiveShareService {
 	 *
 	 * @param string $userId
 	 * @param string $collectiveName
+	 * @param int    $nodeId
 	 *
 	 * @return IShare
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function createFolderShare(string $userId, string $collectiveName): IShare {
+	public function createFolderShare(string $userId, string $collectiveName, int $nodeId): IShare {
 		$share = $this->shareManager->newShare();
 
 		$permissions = Constants::PERMISSION_READ;
@@ -62,6 +69,16 @@ class CollectiveShareService {
 		$userFolder = $this->userFolderHelper->get($userId);
 		try {
 			$path = $userFolder->get($collectiveName);
+			if (!($path instanceof Folder)) {
+				throw new FilesNotFoundException();
+			}
+			if ($nodeId !== 0) {
+				$nodes = $path->getById($nodeId);
+				if (count($nodes) <= 0) {
+					throw new FilesNotFoundException();
+				}
+				$path = $nodes[0];
+			}
 		} catch (FilesNotFoundException $e) {
 			throw new NotFoundException('Wrong path, collective folder doesn\'t exist', 0, $e);
 		}
@@ -99,12 +116,13 @@ class CollectiveShareService {
 	/**
 	 * @param string $userId
 	 * @param int    $collectiveId
+	 * @param int    $pageId
 	 *
 	 * @return CollectiveShareInfo|null
 	 */
-	public function findShare(string $userId, int $collectiveId): ?CollectiveShareInfo {
+	public function findShare(string $userId, int $collectiveId, int $pageId): ?CollectiveShareInfo {
 		try {
-			$collectiveShare = $this->collectiveShareMapper->findOneByCollectiveIdAndUser($collectiveId, $userId);
+			$collectiveShare = $this->collectiveShareMapper->findOneByCollectiveIdAndUser($collectiveId, $pageId, $userId);
 		} catch (DoesNotExistException | MultipleObjectsReturnedException | Exception $e) {
 			return null;
 		}
@@ -144,6 +162,29 @@ class CollectiveShareService {
 	}
 
 	/**
+	 * @param string $userId
+	 * @param int    $collectiveId
+	 *
+	 * @return array
+	 */
+	public function getSharesByCollectiveAndUser(string $userId, int $collectiveId): array {
+		$collectiveShares = $this->collectiveShareMapper->findByCollectiveIdAndUser($collectiveId, $userId);
+
+		$shares = [];
+		foreach ($collectiveShares as $share) {
+			try {
+				$folderShare = $this->shareManager->getShareByToken($share->getToken());
+			} catch (ShareNotFound $e) {
+				// Corresponding folder share not found, delete the collective share as well.
+				$this->collectiveShareMapper->delete($share);
+			}
+			$shares[] = new CollectiveShareInfo($share, $this->isShareEditable($folderShare));
+		}
+
+		return $shares;
+	}
+
+	/**
 	 * @param IShare $folderShare
 	 *
 	 * @return bool
@@ -156,32 +197,46 @@ class CollectiveShareService {
 	/**
 	 * @param string         $userId
 	 * @param CollectiveInfo $collective
+	 * @param PageInfo|null  $pageInfo
 	 *
 	 * @return CollectiveShareInfo
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function createShare(string $userId, CollectiveInfo $collective): CollectiveShareInfo {
+	public function createShare(string $userId, CollectiveInfo $collective, ?PageInfo $pageInfo): CollectiveShareInfo {
 		if (!$collective->canShare()) {
 			throw new NotPermittedException($this->l10n->t('You are not allowed to share %s', $collective->getName()));
 		}
 
-		if (null !== $this->findShare($userId, $collective->getId())) {
+		$pageId = 0;
+		$nodeId = 0;
+		if ($pageInfo) {
+			$pageId = $pageInfo->getId();
+			$file = $this->pageService->getPageFile($collective->getId(), $pageId, $userId);
+			if (NodeHelper::isIndexPage($file)) {
+				$nodeId = $file->getParent()->getId();
+			} else {
+				$nodeId = $pageInfo->getId();
+			}
+		}
+
+		if (null !== $this->findShare($userId, $collective->getId(), $nodeId)) {
 			throw new NotPermittedException($this->l10n->t('A share for collective %s exists already', $collective->getName()));
 		}
 
-		$folderShare = $this->createFolderShare($userId, $collective->getName());
+		$folderShare = $this->createFolderShare($userId, $collective->getName(), $nodeId);
 
 		try {
-			return new CollectiveShareInfo($this->collectiveShareMapper->create($collective->getId(), $folderShare->getToken(), $userId));
+			return new CollectiveShareInfo($this->collectiveShareMapper->create($collective->getId(), $pageId, $folderShare->getToken(), $userId));
 		} catch (Exception $e) {
-			throw new NotPermittedException('Failed to create collective share for ' . $collective->getName(), 0, $e);
+			throw new NotPermittedException('Failed to create collective/page share for ' . $collective->getName(), 0, $e);
 		}
 	}
 
 	/**
 	 * @param string         $userId
 	 * @param CollectiveInfo $collective
+	 * @param PageInfo|null  $pageInfo
 	 * @param string         $token
 	 * @param bool           $editable
 	 *
@@ -192,7 +247,7 @@ class CollectiveShareService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function updateShare(string $userId, CollectiveInfo $collective, string $token, bool $editable = false): CollectiveShareInfo {
+	public function updateShare(string $userId, CollectiveInfo $collective, ?PageInfo $pageInfo, string $token, bool $editable = false): CollectiveShareInfo {
 		if (!$collective->canShare()) {
 			throw new NotPermittedException($this->l10n->t('You are not allowed to share %s', $collective->getName()));
 		}
@@ -201,7 +256,12 @@ class CollectiveShareService {
 			throw new NotPermittedException($this->l10n->t('You are not allowed to edit %s', $collective->getName()));
 		}
 
-		if (null === $share = $this->collectiveShareMapper->findOneByCollectiveIdAndTokenAndUser($collective->getId(), $token, $userId)) {
+		$pageId = 0;
+		if ($pageInfo) {
+			$pageId = $pageInfo->getId();
+		}
+
+		if (null === $share = $this->collectiveShareMapper->findOneByCollectiveIdAndTokenAndUser($collective->getId(), $pageId, $token, $userId)) {
 			throw new NotFoundException($this->l10n->t('Share not found for user'));
 		}
 
@@ -237,15 +297,16 @@ class CollectiveShareService {
 	/**
 	 * @param string $userId
 	 * @param int    $collectiveId
+	 * @param int    $pageId
 	 * @param string $token
 	 *
 	 * @return CollectiveShareInfo
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function deleteShare(string $userId, int $collectiveId, string $token): CollectiveShareInfo {
+	public function deleteShare(string $userId, int $collectiveId, int $pageId, string $token): CollectiveShareInfo {
 		try {
-			$collectiveShare = $this->collectiveShareMapper->findOneByCollectiveIdAndTokenAndUser($collectiveId, $token, $userId);
+			$collectiveShare = $this->collectiveShareMapper->findOneByCollectiveIdAndTokenAndUser($collectiveId, $pageId, $token, $userId);
 			$this->collectiveShareMapper->delete($collectiveShare);
 		} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
 			throw new NotFoundException('Failed to find collective share ' . $token, 0, $e);
