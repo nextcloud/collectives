@@ -54,29 +54,30 @@
 				</NcActionButton>
 			</NcActions>
 		</div>
-		<div v-if="!currentCollective || !landingPage || loading('collective')" class="page-list">
+		<div v-if="!currentCollective || !rootPage || loading('collective')" class="page-list">
 			<SkeletonLoading type="items" :count="3" />
 		</div>
 		<div v-else class="page-list">
 			<Item key="Readme"
 				:to="currentCollectivePath"
-				:page-id="landingPage.id"
+				:page-id="rootPage.id"
 				:parent-id="0"
-				:title="currentCollective.name"
-				:timestamp="landingPage.timestamp"
-				:last-user-id="landingPage.lastUserId"
-				:last-user-display-name="landingPage.lastUserDisplayName"
-				:emoji="currentCollective.emoji"
+				:title="currentCollectiveIsPageShare ? rootPage.title : currentCollective.name"
+				:timestamp="rootPage.timestamp"
+				:last-user-id="rootPage.lastUserId"
+				:last-user-display-name="rootPage.lastUserDisplayName"
+				:emoji="currentCollectiveIsPageShare ? rootPage.emoji : currentCollective.emoji"
 				:level="0"
 				:can-edit="currentCollectiveCanEdit"
-				:is-landing-page="true"
+				:is-root-page="true"
+				:is-landing-page="!currentCollectiveIsPageShare"
 				:has-template="hasTemplate"
 				:filtered-view="false"
-				class="page-list-landing-page"
+				class="page-list-root-page"
 				@click.native="show('details')" />
 			<Draggable v-if="subpages || keptSortable(currentPage.id)"
 				:list="subpages"
-				:parent-id="landingPage.id"
+				:parent-id="rootPage.id"
 				:disable-sorting="disableSorting">
 				<template #header>
 					<div v-if="!sortedBy('byOrder')" class="sort-order-container">
@@ -161,9 +162,10 @@ export default {
 	computed: {
 		...mapGetters([
 			'currentCollectiveCanEdit',
-			'landingPage',
+			'rootPage',
 			'templatePage',
 			'currentCollective',
+			'currentCollectiveIsPageShare',
 			'currentCollectivePath',
 			'currentPage',
 			'isPublic',
@@ -176,15 +178,15 @@ export default {
 		]),
 
 		subpages() {
-			if (this.landingPage) {
-				return this.visibleSubpages(this.landingPage.id)
+			if (this.rootPage) {
+				return this.visibleSubpages(this.rootPage.id)
 			} else {
 				return []
 			}
 		},
 
 		hasTemplate() {
-			return !!this.templatePage(this.landingPage ? this.landingPage.id : 0)
+			return !!this.templatePage(this.rootPage ? this.rootPage.id : 0)
 		},
 
 		labels() {
@@ -194,8 +196,8 @@ export default {
 		},
 
 		templateView() {
-			if (this.showTemplates && this.landingPage) {
-				return this.templatePage(this.landingPage.id)
+			if (this.showTemplates && this.rootPage) {
+				return this.templatePage(this.rootPage.id)
 			} else {
 				return null
 			}
@@ -253,7 +255,7 @@ export default {
 <style lang="scss" scoped>
 .app-content-list {
 	// nextcloud-vue component sets `max-height: unset` on mobile.
-	// Overwrite this to fix stickyness of header and landingpage.
+	// Overwrite this to fix stickyness of header and rootpage.
 	max-height: calc(100vh - 50px);
 }
 
@@ -295,7 +297,7 @@ li.toggle-button.selected {
 	padding: 0 4px;
 }
 
-.page-list-landing-page {
+.page-list-root-page {
 	position: sticky;
 	top: 44px;
 	z-index: 1;

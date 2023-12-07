@@ -188,7 +188,7 @@ export default {
 
 		...mapGetters([
 			'currentCollective',
-			'landingPage',
+			'rootPage',
 			'loading',
 			'pageById',
 			'pageParents',
@@ -204,13 +204,13 @@ export default {
 			return this.selectedCollective?.id === this.currentCollective.id
 		},
 
-		selectedLandingPage() {
+		selectedRootPage() {
 			if (!this.selectedCollective) {
 				return null
 			}
 
 			return this.isCurrentCollective
-				? this.landingPage
+				? this.rootPage
 				: this.collectivesPages[this.selectedCollective.id]?.find(p => (p.parentId === 0))
 		},
 
@@ -291,7 +291,7 @@ export default {
 				this.pageCrumbs = this.pageParents(this.selectedPageId)
 			} else {
 				const state = { pages: this.collectivesPages[this.selectedCollective.id] }
-				const getters = { landingPage: this.selectedLandingPage }
+				const getters = { rootPage: this.selectedRootPage }
 				this.pageCrumbs = pageParents(state, getters)(this.selectedPageId)
 			}
 		},
@@ -333,7 +333,7 @@ export default {
 			if (!this.isCurrentCollective && !this.collectivesPages[this.selectedCollective.id]) {
 				await this.fetchCollectivePages()
 			}
-			this.selectedPageId = this.selectedLandingPage.id
+			this.selectedPageId = this.selectedRootPage.id
 		},
 
 		/**

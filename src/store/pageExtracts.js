@@ -30,7 +30,7 @@ export function sortedSubpages(state, getters) {
 export function pageParents(state, getters) {
 	return (pageId) => {
 		const pages = []
-		while (pageId !== getters.landingPage.id) {
+		while (pageId !== getters.rootPage.id) {
 			const page = state.pages.find(p => (p.id === pageId))
 			if (!page) {
 				break
