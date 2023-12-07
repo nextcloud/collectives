@@ -96,6 +96,7 @@ class CollectiveService extends CollectiveServiceBase {
 		$collectiveInfo = $this->getCollectiveInfo($id, $userId);
 		if (null !== $share = $this->shareService->findShare($userId, $id, $pageId)) {
 			$collectiveInfo->setShareToken($share->getToken());
+			$collectiveInfo->setIsPageShare($share->getPageId() !== 0);
 			$collectiveInfo->setShareEditable($share->getEditable());
 		}
 
@@ -293,6 +294,7 @@ class CollectiveService extends CollectiveServiceBase {
 			$collectiveInfo->getName(),
 			$collectiveInfo->getLevel(),
 			$collectiveInfo->getShareToken(),
+			$collectiveInfo->getIsPageShare(),
 			$collectiveInfo->getShareEditable(),
 			$collectiveInfo->getUserPageOrder(),
 			$collectiveInfo->getUserShowRecentPages());
@@ -325,6 +327,7 @@ class CollectiveService extends CollectiveServiceBase {
 			$collectiveInfo->getName(),
 			$collectiveInfo->getLevel(),
 			$collectiveInfo->getShareToken(),
+			$collectiveInfo->getIsPageShare(),
 			$collectiveInfo->getShareEditable(),
 			$collectiveInfo->getUserPageOrder(),
 			$collectiveInfo->getUserShowRecentPages());
@@ -355,6 +358,7 @@ class CollectiveService extends CollectiveServiceBase {
 			$collectiveInfo->getName(),
 			$collectiveInfo->getLevel(),
 			$collectiveInfo->getShareToken(),
+			$collectiveInfo->getIsPageShare(),
 			$collectiveInfo->getShareEditable(),
 			$collectiveInfo->getUserPageOrder(),
 			$collectiveInfo->getUserShowRecentPages());
@@ -385,6 +389,7 @@ class CollectiveService extends CollectiveServiceBase {
 			$collectiveInfo->getName(),
 			$collectiveInfo->getLevel(),
 			$collectiveInfo->getShareToken(),
+			$collectiveInfo->getIsPageShare(),
 			$collectiveInfo->getShareEditable(),
 			$collectiveInfo->getUserPageOrder(),
 			$collectiveInfo->getUserShowRecentPages());
@@ -439,6 +444,7 @@ class CollectiveService extends CollectiveServiceBase {
 			$collectiveInfo->getName(),
 			$collectiveInfo->getLevel(),
 			$collectiveInfo->getShareToken(),
+			$collectiveInfo->getIsPageShare(),
 			$collectiveInfo->getShareEditable(),
 			$collectiveInfo->getUserPageOrder(),
 			$collectiveInfo->getUserShowRecentPages());
@@ -465,6 +471,7 @@ class CollectiveService extends CollectiveServiceBase {
 			$collectiveInfo->getName(),
 			$collectiveInfo->getLevel(),
 			$collectiveInfo->getShareToken(),
+			$collectiveInfo->getIsPageShare(),
 			$collectiveInfo->getShareEditable(),
 			$collectiveInfo->getUserPageOrder(),
 			$collectiveInfo->getUserShowRecentPages());
