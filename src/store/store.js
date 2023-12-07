@@ -40,7 +40,9 @@ export default new Store({
 			get.currentPage.fileName === 'Readme.md',
 
 		isLandingPage: (_state, get) =>
-			!get.pageParam || get.pageParam === 'Readme',
+			get.currentCollectiveIsPageShare
+				? false
+				: !get.pageParam || get.pageParam === 'Readme',
 
 		isTemplatePage: (_state, get) =>
 			get.currentPage.title === 'Template',

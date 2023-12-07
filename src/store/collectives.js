@@ -78,6 +78,10 @@ export default {
 			return (collectiveId) => state.collectives.find(c => c.id === collectiveId).name
 		},
 
+		currentCollectiveIsPageShare(_state, getters) {
+			return getters.currentCollective.isPageShare
+		},
+
 		currentCollectiveCanEdit(state, getters) {
 			return getters.collectiveCanEdit(getters.currentCollective)
 		},
@@ -86,11 +90,11 @@ export default {
 			return getters.collectiveCanShare(getters.currentCollective)
 		},
 
-		collectives(state, getters) {
+		collectives(state) {
 			return state.collectives.sort(byName)
 		},
 
-		trashCollectives(state, getters) {
+		trashCollectives(state) {
 			return state.trashCollectives.sort(byName)
 		},
 

@@ -100,16 +100,16 @@ export default {
 		},
 
 		currentPageIds(state, getters) {
-			// Return landing page
+			// Return root page
 			if (!getters.pageParam
 				|| getters.pageParam === 'Readme') {
-				return [getters.landingPage.id]
+				return [getters.rootPage.id]
 			}
 
 			// Iterate through all path levels to find the correct page
 			const pageIds = []
 			const parts = getters.pageParam.split('/').filter(Boolean)
-			let page = getters.landingPage
+			let page = getters.rootPage
 			for (const i in parts) {
 				page = state.pages.find(p => (p.parentId === page.id && p.title === parts[i]))
 				if (page) {
@@ -129,7 +129,7 @@ export default {
 			return getters.pageFilePath(getters.currentPage)
 		},
 
-		pageFilePath: (state) => (page) => {
+		pageFilePath: () => (page) => {
 			return [
 				page.collectivePath,
 				page.filePath,
@@ -174,8 +174,10 @@ export default {
 			return [collectivePath, filePath].filter(Boolean).join('/')
 		},
 
-		landingPage(state) {
-			return state.pages.find(p => (p.parentId === 0))
+		rootPage(state, getters) {
+			return getters.currentCollectiveIsPageShare
+				? state.pages[0]
+				: state.pages.find(p => (p.parentId === 0))
 		},
 
 		templatePage: (state) => (parentId) => {
@@ -187,7 +189,7 @@ export default {
 			return state.pages.find(p => (p.id === fileId))
 		},
 
-		hasSubpages(state, _getters) {
+		hasSubpages(state) {
 			return (pageId) => {
 				return state.pages.filter(p => p.parentId === pageId).length > 0
 			}

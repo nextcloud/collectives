@@ -236,7 +236,7 @@ export default {
 				return
 			}
 
-			// Redirect to landing page if currentPage got moved
+			// Redirect to root page if currentPage got moved
 			if (currentPageId === pageId) {
 				this.$router.replace(this.currentCollectivePath)
 			}
@@ -264,7 +264,7 @@ export default {
 				return
 			}
 
-			// Redirect to landing page if currentPage got deleted
+			// Redirect to root page if currentPage got deleted
 			if (currentPageId === pageId) {
 				this.$router.push(`/${encodeURIComponent(this.currentCollective.name)}`)
 			}

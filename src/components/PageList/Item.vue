@@ -26,7 +26,7 @@
 					<PageTemplateIcon :size="22" fill-color="var(--color-background-darker)" />
 				</template>
 				<template v-else-if="emoji">
-					<div class="item-icon-emoji" :class="{'landing-page': isLandingPage}">
+					<div class="item-icon-emoji" :class="{'root-page': isRootPage}">
 						{{ emoji }}
 					</div>
 				</template>
@@ -162,6 +162,10 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		isRootPage: {
+			type: Boolean,
+			default: false,
+		},
 		isLandingPage: {
 			type: Boolean,
 			default: false,
@@ -216,7 +220,7 @@ export default {
 		},
 
 		isCollapsible() {
-			// Collective landing page is not collapsible
+			// root page is not collapsible
 			return (this.level > 0 && this.hasVisibleSubpages)
 		},
 
@@ -298,8 +302,8 @@ export default {
 		},
 
 		onDragstart(ev) {
-			// Set as dragged page if not landingpage (allows to move the page)
-			if (!this.isLandingPage) {
+			// Set as dragged page if not root page (allows to move the page)
+			if (!this.isRootPage) {
 				this.setDraggedPageId(this.pageId)
 			}
 
@@ -421,7 +425,7 @@ export default {
 		.item-icon-emoji {
 			cursor: pointer;
 
-			&.landing-page {
+			&.root-page {
 				margin: -3px 0;
 			}
 		}
