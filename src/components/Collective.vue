@@ -49,6 +49,7 @@ export default {
 		...mapGetters([
 			'currentCollective',
 			'currentCollectiveCanEdit',
+			'currentCollectiveIsPageShare',
 			'currentFileIdPage',
 			'currentPage',
 			'loading',
@@ -172,7 +173,7 @@ export default {
 		async getPages() {
 			await this.dispatchGetPages()
 				.catch(displayError('Could not fetch pages'))
-			if (this.currentCollectiveCanEdit) {
+			if (this.currentCollectiveCanEdit && !this.currentCollectiveIsPageShare) {
 				await this.dispatchGetTrashPages()
 					.catch(displayError('Could not fetch page trash'))
 			}
@@ -184,7 +185,7 @@ export default {
 		async getPagesBackground() {
 			await this.dispatchGetPages(false)
 				.catch(displayError('Could not fetch pages'))
-			if (this.currentCollectiveCanEdit) {
+			if (this.currentCollectiveCanEdit && !this.currentCollectiveIsPageShare) {
 				await this.dispatchGetTrashPages()
 					.catch(displayError('Could not fetch page trash'))
 			}
