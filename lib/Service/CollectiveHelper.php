@@ -66,6 +66,7 @@ class CollectiveHelper {
 				$level,
 				null,
 				false,
+				false,
 				$userPageOrder,
 				$userShowRecentPages);
 		}

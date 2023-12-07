@@ -16,6 +16,8 @@ use OCP\Constants;
  * @method void setLevel(int $level)
  * @method string getShareToken()
  * @method void setShareToken(string $shareToken)
+ * @method bool getIsPageShare()
+ * @method void setIsPageShare(bool $isPageShare)
  * @method bool getShareEditable()
  * @method void setShareEditable(bool $shareEditable)
  * @method int getUserPageOrder()
@@ -25,6 +27,7 @@ class CollectiveInfo extends Collective {
 	protected string $name;
 	protected int $level;
 	protected ?string $shareToken;
+	protected bool $isPageShare;
 	protected bool $shareEditable;
 	protected ?int $userPageOrder;
 	protected ?bool $userShowRecentPages;
@@ -33,6 +36,7 @@ class CollectiveInfo extends Collective {
 		string $name,
 		int $level = Member::LEVEL_MEMBER,
 		?string $shareToken = null,
+		bool $isPageShare = false,
 		bool $shareEditable = false,
 		?int $userPageOrder = Collective::defaultPageOrder,
 		?bool $userShowRecentPages = Collective::defaultShowRecentPages) {
@@ -45,6 +49,7 @@ class CollectiveInfo extends Collective {
 		$this->name = $name;
 		$this->level = $level;
 		$this->shareToken = $shareToken;
+		$this->isPageShare = $isPageShare;
 		$this->shareEditable = $shareEditable;
 		$this->userPageOrder = $userPageOrder;
 		$this->userShowRecentPages = $userShowRecentPages;
@@ -144,6 +149,7 @@ class CollectiveInfo extends Collective {
 			'canEdit' => $this->canEdit(),
 			'canShare' => $this->canShare(),
 			'shareToken' => $this->shareToken,
+			'isPageShare' => $this->isPageShare,
 			'shareEditable' => $this->canEdit() && $this->shareEditable,
 			'userPageOrder' => $this->userPageOrder,
 			'userShowRecentPages' => $this->userShowRecentPages,
