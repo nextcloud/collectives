@@ -19,6 +19,7 @@ OC.L10N.register(
     "Back" : "Til baka",
     "Create" : "Búa til",
     "Done" : "Lokið",
+    "Show in Files" : "Sýna í skrám",
     "Move or copy" : "Færa eða afrita",
     "Hide outline" : "Fela útlínu",
     "Show outline" : "Birta útlínu",
