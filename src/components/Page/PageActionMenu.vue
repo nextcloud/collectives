@@ -94,7 +94,7 @@
 			</NcActionButton>
 
 			<!-- Delete page -->
-			<NcActionButton v-if="currentCollectiveCanEdit && !isLandingPage"
+			<NcActionButton v-if="displayDeleteAction"
 				:close-after-click="true"
 				@click="deletePage(pageId)">
 				<template #icon>
@@ -203,6 +203,7 @@ export default {
 		...mapGetters([
 			'currentCollective',
 			'currentCollectiveCanEdit',
+			'currentCollectiveIsPageShare',
 			'hasSubpages',
 			'isFullWidthView',
 			'loading',
@@ -222,6 +223,12 @@ export default {
 
 		displayLastEditedInfo() {
 			return this.lastUserId && this.lastUserDisplayName
+		},
+
+		displayDeleteAction() {
+			return this.currentCollectiveCanEdit
+				&& !this.currentCollectiveIsPageShare
+				&& !this.isLandingPage
 		},
 
 		toggleOutlineString() {

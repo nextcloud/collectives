@@ -79,6 +79,10 @@ class PublicPageTrashController extends PublicShareController {
 			if ($this->share === null) {
 				throw new NotFoundException('Failed to get shared collective');
 			}
+
+			if ($this->share->getPageId() !== 0) {
+				throw new NotFoundException('Shared page does not support page trash');
+			}
 		}
 
 		return $this->share;
