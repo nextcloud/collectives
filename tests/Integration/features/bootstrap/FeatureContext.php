@@ -887,7 +887,32 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user sets editing permissions for collective :collective
+	 * @When user :user creates public page share for page :page in :collective
+	 * @When user :user :fails to create public page share for page :page in :collective
+	 *
+	 * @param string $user
+	 * @param string $page
+	 * @param string $collective
+	 * @param string|null $fail
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userCreatesPublicPageShare(string $user, string $collective, string $page, ?string $fail = null): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$pageId = $this->pageIdByName($collectiveId, $page);
+		$this->sendRequest('POST', '/apps/collectives/_api/' . $collectiveId . '/_pages/' . $pageId . '/share');
+		if ("fails" === $fail) {
+			$this->assertStatusCode(403);
+		} else {
+			$this->assertStatusCode(200);
+			$jsonBody = $this->getJson();
+			Assert::assertNotEmpty($jsonBody['data']['shareToken']);
+		}
+	}
+
+	/**
+	 * @When user :user sets editing permissions for collective share :collective
 	 *
 	 * @param string $user
 	 * @param string $collective
@@ -897,9 +922,28 @@ class FeatureContext implements Context {
 	public function userSetsPublicShareEditPermissions(string $user, string $collective): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
-		$token = $this->getCollectiveShareToken($collectiveId);
+		$token = $this->getShareToken($collectiveId);
 		$formData = new TableNode([['editable', true]]);
 		$this->sendRequest('PUT', '/apps/collectives/_api/' . $collectiveId . '/share/' . $token, $formData);
+		$this->assertStatusCode(200);
+	}
+
+	/**
+	 * @When user :user sets editing permissions for page share :page in collective :collective
+	 *
+	 * @param string $user
+	 * @param string $page
+	 * @param string $collective
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userSetsPublicFileShareEditPermissions(string $user, string $page, string $collective): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$pageId = $this->pageIdByName($collectiveId, $page);
+		$token = $this->getShareToken($collectiveId, $pageId);
+		$formData = new TableNode([['editable', true]]);
+		$this->sendRequest('PUT', '/apps/collectives/_api/' . $collectiveId . '/_pages/' . $pageId . '/share/' . $token, $formData);
 		$this->assertStatusCode(200);
 	}
 
@@ -914,7 +958,26 @@ class FeatureContext implements Context {
 	public function userUnsetsPublicShareEditPermissions(string $user, string $collective): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
-		$token = $this->getCollectiveShareToken($collectiveId);
+		$token = $this->getShareToken($collectiveId);
+		$formData = new TableNode([['editable', false]]);
+		$this->sendRequest('PUT', '/apps/collectives/_api/' . $collectiveId . '/share/' . $token, $formData);
+		$this->assertStatusCode(200);
+	}
+
+	/**
+	 * @When user :user unsets editing permissions for page share :page in collective :collective
+	 *
+	 * @param string $user
+	 * @param string $page
+	 * @param string $collective
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userUnsetsPublicFileShareEditPermissions(string $user, string $page, string $collective): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$pageId = $this->pageIdByName($collectiveId, $page);
+		$token = $this->getShareToken($collectiveId, $pageId);
 		$formData = new TableNode([['editable', false]]);
 		$this->sendRequest('PUT', '/apps/collectives/_api/' . $collectiveId . '/share/' . $token, $formData);
 		$this->assertStatusCode(200);
@@ -922,31 +985,47 @@ class FeatureContext implements Context {
 
 	/**
 	 * @When user :user stores token for public share :collective
+	 * @When user :user stores token for public page share :pageShare in collective :collective
 	 *
-	 * @param string $user
-	 * @param string $collective
+	 * @param string  $user
+	 * @param string  $collective
+	 * @param ?string $page
 	 *
 	 * @throws GuzzleException
 	 */
-	public function userStoresPublicShareToken(string $user, string $collective): void {
+	public function userStoresPublicShareToken(string $user, string $collective, ?string $pageShare = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
-		$this->store['shareToken'] = $this->getCollectiveShareToken($collectiveId);
+		$pageShareId = 0;
+		if ($pageShare) {
+			$pageShareId = $this->pageIdByName($collectiveId, $pageShare);
+		}
+		$this->store['shareToken'] = $this->getShareToken($collectiveId, $pageShareId);
 	}
 
 	/**
 	 * @When user :user deletes public share for :collective
+	 * @When user :user deletes public page share :pageShare in collective :collective
 	 *
-	 * @param string $user
-	 * @param string $collective
+	 * @param string  $user
+	 * @param string  $collective
+	 * @param ?string $pageShare
 	 *
 	 * @throws GuzzleException
 	 */
-	public function userDeletesPublicShare(string $user, string $collective): void {
+	public function userDeletesPublicShare(string $user, string $collective, ?string $pageShare = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
-		$token = $this->getCollectiveShareToken($collectiveId);
-		$this->sendRequest('DELETE', '/apps/collectives/_api/' . $collectiveId . '/share/' . $token);
+		$pageShareId = 0;
+		if ($pageShare) {
+			$pageShareId = $this->pageIdByName($collectiveId, $pageShare);
+		}
+		$token = $this->getShareToken($collectiveId, $pageShareId);
+		if ($pageShare) {
+			$this->sendRequest('DELETE', '/apps/collectives/_api/' . $collectiveId . '/_pages/' . $pageShareId . '/share/' . $token);
+		} else {
+			$this->sendRequest('DELETE', '/apps/collectives/_api/' . $collectiveId . '/share/' . $token);
+		}
 		$this->assertStatusCode(200);
 		$this->assertCollectiveLevel($collective, 9);
 		$jsonBody = $this->getJson();
@@ -964,7 +1043,7 @@ class FeatureContext implements Context {
 	public function anonymousSeesPublicCollective(string $collective, string $owner): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
-		$token = $this->getCollectiveShareToken($collectiveId);
+		$token = $this->getShareToken($collectiveId);
 		$this->sendRequest('GET', '/apps/collectives/_api/p/' . $token, null, null, [], false);
 		$this->assertStatusCode(200);
 		$this->assertCollectiveByName($collective);
@@ -972,13 +1051,31 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When anonymous fails to see public collective :collective with stored token
+	 * @When anonymous sees public page share :page in collective :collective with owner :owner
 	 *
+	 * @param string $page
 	 * @param string $collective
+	 * @param string $owner
 	 *
 	 * @throws GuzzleException
 	 */
-	public function anonymousFailsToSeePublicCollective(string $collective): void {
+	public function anonymousSeesPublicPageShare(string $page, string $collective, string $owner): void {
+		$this->setCurrentUser($owner);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$pageId = $this->pageIdByName($collectiveId, $page);
+		$token = $this->getShareToken($collectiveId, $pageId);
+		$this->sendRequest('GET', '/apps/collectives/_api/p/' . $token, null, null, [], false);
+		$this->assertStatusCode(200);
+		$this->assertCollectiveByName($collective);
+		$this->assertCollectiveLevel($collective, 1);
+	}
+
+	/**
+	 * @When anonymous fails to see public share with stored token
+	 *
+	 * @throws GuzzleException
+	 */
+	public function anonymousFailsToSeePublicCollective(): void {
 		Assert::assertArrayHasKey('shareToken', $this->store);
 		Assert::assertNotEmpty($this->store['shareToken']);
 		$this->sendRequest('GET', '/apps/collectives/_api/p/' . $this->store['shareToken'], null, null, [], false);
@@ -997,7 +1094,27 @@ class FeatureContext implements Context {
 	public function anonymousSeesPublicCollectivePages(string $path, string $collective, string $owner): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
-		$token = $this->getCollectiveShareToken($collectiveId);
+		$token = $this->getShareToken($collectiveId);
+		$this->sendRequest('GET', '/apps/collectives/_api/p/' . $token . '/_pages', null, null, [], false);
+		$this->assertStatusCode(200);
+		$this->assertPageByPath($path);
+	}
+
+	/**
+	 * @When anonymous sees pagePath :path in public page share :pageShare in collective :collective with owner :owner
+	 *
+	 * @param string $path
+	 * @param string $pageShare
+	 * @param string $collective
+	 * @param string $owner
+	 *
+	 * @throws GuzzleException
+	 */
+	public function anonymousSeesPublicPagePages(string $path, string $pageShare, string $collective, string $owner): void {
+		$this->setCurrentUser($owner);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$pageShareId = $this->pageIdByName($collectiveId, $pageShare);
+		$token = $this->getShareToken($collectiveId, $pageShareId);
 		$this->sendRequest('GET', '/apps/collectives/_api/p/' . $token . '/_pages', null, null, [], false);
 		$this->assertStatusCode(200);
 		$this->assertPageByPath($path);
@@ -1015,7 +1132,27 @@ class FeatureContext implements Context {
 	public function anonymousDoesntSeePublicCollectivePages(string $path, string $collective, string $owner): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
-		$token = $this->getCollectiveShareToken($collectiveId);
+		$token = $this->getShareToken($collectiveId);
+		$this->sendRequest('GET', '/apps/collectives/_api/p/' . $token . '/_pages', null, null, [], false);
+		$this->assertStatusCode(200);
+		$this->assertPageByPath($path, true);
+	}
+
+	/**
+	 * @When anonymous doesn't see pagePath :path in public page share :pageShare in collective :collective with owner :owner
+	 *
+	 * @param string $path
+	 * @param string $pageShare
+	 * @param string $collective
+	 * @param string $owner
+	 *
+	 * @throws GuzzleException
+	 */
+	public function anonymousDoesntSeePublicPageSharePages(string $path, string $pageShare, string $collective, string $owner): void {
+		$this->setCurrentUser($owner);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$pageShareId = $this->pageIdByName($collectiveId, $pageShare);
+		$token = $this->getShareToken($collectiveId, $pageShareId);
 		$this->sendRequest('GET', '/apps/collectives/_api/p/' . $token . '/_pages', null, null, [], false);
 		$this->assertStatusCode(200);
 		$this->assertPageByPath($path, true);
@@ -1036,7 +1173,36 @@ class FeatureContext implements Context {
 	public function anonymousCreatesPublicCollectivePage(string $page, string $parentPath, string $collective, string $owner, ?string $fail = null): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
-		$token = $this->getCollectiveShareToken($collectiveId);
+		$token = $this->getShareToken($collectiveId);
+		$parentId = $this->getParentId($collectiveId, $parentPath);
+
+		$formData = new TableNode([['title', $page]]);
+		$this->sendRequest('POST', '/apps/collectives/_api/p/' . $token . '/_pages/' . $parentId, $formData, null, [], false);
+		if ("fails" === $fail) {
+			$this->assertStatusCode(403);
+		} else {
+			$this->assertStatusCode(200);
+		}
+	}
+
+	/**
+	 * @When anonymous creates page :page with parentPath :parentPath in public page share :pageShare in collective :collective with owner :owner
+	 * @When anonymous :fails to create page :page with parentPath :parentPath in public page share :pageShare in collective :collective with owner :owner
+	 *
+	 * @param string $page
+	 * @param string $parentPath
+	 * @param string $pageShare
+	 * @param string $collective
+	 * @param string $owner
+	 * @param string|null $fail
+	 *
+	 * @throws GuzzleException
+	 */
+	public function anonymousCreatesPublicPagePage(string $page, string $parentPath, string $pageShare, string $collective, string $owner, ?string $fail = null): void {
+		$this->setCurrentUser($owner);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$pageShareId = $this->pageIdByName($collectiveId, $pageShare);
+		$token = $this->getShareToken($collectiveId, $pageShareId);
 		$parentId = $this->getParentId($collectiveId, $parentPath);
 
 		$formData = new TableNode([['title', $page]]);
@@ -1064,7 +1230,37 @@ class FeatureContext implements Context {
 	public function anonymousMovesPage(string $page, string $newtitle, string $parentPath, string $collective, string $owner, ?string $fail = null): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
-		$token = $this->getCollectiveShareToken($collectiveId);
+		$token = $this->getShareToken($collectiveId);
+		$pageId = $this->pageIdByName($collectiveId, $page);
+		$parentId = $this->getParentId($collectiveId, $parentPath);
+		$formData = new TableNode([['parentId', $parentId], ['title', $newtitle]]);
+		$this->sendRequest('PUT', '/apps/collectives/_api/p/' . $token . '/_pages/' . $pageId, $formData, null, [], false);
+		if ("fails" === $fail) {
+			$this->assertStatusCode(403);
+		} else {
+			$this->assertStatusCode(200);
+		}
+	}
+
+	/**
+	 * @When anonymous moves page :page to :newtitle with parentPath :parentPath in public page share :pageShare in collective :collective with owner :owner
+	 * @When anonymous :fails to move page :page to :newtitle with parentPath :parentPath in public page share :pageShare in collective :collective with owner :owner
+	 *
+	 * @param string      $page
+	 * @param string      $newtitle
+	 * @param string      $parentPath
+	 * @param string      $pageShare
+	 * @param string      $collective
+	 * @param string      $owner
+	 * @param string|null $fail
+	 *
+	 * @throws GuzzleException
+	 */
+	public function anonymousMovesPageInPageShare(string $page, string $newtitle, string $parentPath, string $pageShare, string $collective, string $owner, ?string $fail = null): void {
+		$this->setCurrentUser($owner);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$pageShareId = $this->pageIdByName($collectiveId, $pageShare);
+		$token = $this->getShareToken($collectiveId, $pageShareId);
 		$pageId = $this->pageIdByName($collectiveId, $page);
 		$parentId = $this->getParentId($collectiveId, $parentPath);
 		$formData = new TableNode([['parentId', $parentId], ['title', $newtitle]]);
@@ -1092,7 +1288,7 @@ class FeatureContext implements Context {
 	public function anonymousCopiesPage(string $page, string $newtitle, string $parentPath, string $collective, string $owner, ?string $fail = null): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
-		$token = $this->getCollectiveShareToken($collectiveId);
+		$token = $this->getShareToken($collectiveId);
 		$pageId = $this->pageIdByName($collectiveId, $page);
 		$parentId = $this->getParentId($collectiveId, $parentPath);
 		$formData = new TableNode([
@@ -1123,7 +1319,37 @@ class FeatureContext implements Context {
 	public function anonymousSetsPublicCollectivePageEmoji(string $page, string $emoji, string $collective, $owner, ?string $fail = null): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
-		$token = $this->getCollectiveShareToken($collectiveId);
+		$token = $this->getShareToken($collectiveId);
+		$pageId = $this->pageIdByName($collectiveId, $page);
+
+		$formData = new TableNode([['emoji', $emoji]]);
+		$this->sendRequest('PUT', '/apps/collectives/_api/p/' . $token . '/_pages/' . $pageId . '/emoji', $formData);
+		if ("fails" === $fail) {
+			$this->assertStatusCode(403);
+		} else {
+			$this->assertStatusCode(200);
+			$this->assertPageKeyValue($pageId, 'emoji', $emoji);
+		}
+	}
+
+	/**
+	 * @When anonymous sets emoji for page :page to :emoji in public page share :pageShare in collective :collective with owner :owner
+	 * @When anonymous :fails to set emoji for page :page to :emoji in public page share :pageShare in collective :collective with owner :owner
+	 *
+	 * @param string      $page
+	 * @param string      $emoji
+	 * @param string      $pageShare
+	 * @param string      $collective
+	 * @param string      $owner
+	 * @param string|null $fail
+	 *
+	 * @throws GuzzleException
+	 */
+	public function anonymousSetsPublicPageSharePageEmoji(string $page, string $emoji, string $pageShare, string $collective, $owner, ?string $fail = null): void {
+		$this->setCurrentUser($owner);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$pageShareId = $this->pageIdByName($collectiveId, $pageShare);
+		$token = $this->getShareToken($collectiveId, $pageShareId);
 		$pageId = $this->pageIdByName($collectiveId, $page);
 
 		$formData = new TableNode([['emoji', $emoji]]);
@@ -1150,7 +1376,7 @@ class FeatureContext implements Context {
 	public function anonymousTrashesPublicCollectivePage(string $page, string $collective, string $owner, ?string $fail = null): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
-		$token = $this->getCollectiveShareToken($collectiveId);
+		$token = $this->getShareToken($collectiveId);
 		$pageId = $this->pageIdByName($collectiveId, $page);
 
 		$this->sendRequest('DELETE', '/apps/collectives/_api/p/' . $token . '/_pages/' . $pageId, null, null, [], false);
@@ -1159,6 +1385,27 @@ class FeatureContext implements Context {
 		} else {
 			$this->assertStatusCode(200);
 		}
+	}
+
+	/**
+	 * @When anonymous fails to trash page :page in public page share :pageShare in collective :collective with owner :owner
+	 *
+	 * @param string $page
+	 * @param string $pageShare
+	 * @param string $collective
+	 * @param string $owner
+	 *
+	 * @throws GuzzleException
+	 */
+	public function anonymousTrashesPublicPageSharePage(string $page, string $pageShare, string $collective, string $owner): void {
+		$this->setCurrentUser($owner);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$pageShareId = $this->pageIdByName($collectiveId, $pageShare);
+		$token = $this->getShareToken($collectiveId, $pageShareId);
+		$pageId = $this->pageIdByName($collectiveId, $page);
+
+		$this->sendRequest('DELETE', '/apps/collectives/_api/p/' . $token . '/_pages/' . $pageId, null, null, [], false);
+		$this->assertStatusCode(403);
 	}
 
 	/**
@@ -1175,7 +1422,7 @@ class FeatureContext implements Context {
 	public function anonymousRestoresPublicCollectivePage(string $page, string $collective, string $owner, ?string $fail = null): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
-		$token = $this->getCollectiveShareToken($collectiveId);
+		$token = $this->getShareToken($collectiveId);
 
 		if ("fails" === $fail) {
 			$this->sendRequest('PATCH', '/apps/collectives/_api/p/' . $token . '/_pages/trash/1', null, null, [], false);
@@ -1201,7 +1448,7 @@ class FeatureContext implements Context {
 	public function anonymousDeletesPublicCollectivePage(string $page, string $collective, string $owner, ?string $fail = null): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
-		$token = $this->getCollectiveShareToken($collectiveId);
+		$token = $this->getShareToken($collectiveId);
 
 		if ("fails" === $fail) {
 			$this->sendRequest('DELETE', '/apps/collectives/_api/p/' . $token . '/_pages/trash/1', null, null, [], false);
@@ -1223,11 +1470,36 @@ class FeatureContext implements Context {
 	 * @param string $owner
 	 *
 	 * @return void
+	 * @throws GuzzleException
 	 */
 	public function anonymousSeesAttachments(string $name, string $mimetype, string $page, string $collective, string $owner): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
-		$token = $this->getCollectiveShareToken($collectiveId);
+		$token = $this->getShareToken($collectiveId);
+		$pageId = $this->pageIdByName($collectiveId, $page);
+		$this->sendRequest('GET', '/apps/collectives/_api/p/' . $token . '/_pages/' . $pageId . '/attachments');
+		$this->assertStatusCode(200);
+		$this->assertAttachment($name, $mimetype);
+	}
+
+	/**
+	 * @Then anonymous sees attachment :name with mimetype :mimetype for :page in public page share :pageShare in collective :collective with owner :owner
+	 *
+	 * @param string $name
+	 * @param string $mimetype
+	 * @param string $page
+	 * @param string $pageShare
+	 * @param string $collective
+	 * @param string $owner
+	 *
+	 * @return void
+	 * @throws GuzzleException
+	 */
+	public function anonymousSeesPageShareAttachments(string $name, string $mimetype, string $page, string $pageShare, string $collective, string $owner): void {
+		$this->setCurrentUser($owner);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$pageShareId = $this->pageIdByName($collectiveId, $pageShare);
+		$token = $this->getShareToken($collectiveId, $pageShareId);
 		$pageId = $this->pageIdByName($collectiveId, $page);
 		$this->sendRequest('GET', '/apps/collectives/_api/p/' . $token . '/_pages/' . $pageId . '/attachments');
 		$this->assertStatusCode(200);
@@ -1797,19 +2069,20 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @param int    $collectiveId
+	 * @param int $collectiveId
+	 * @param int $pageId
 	 *
 	 * @return string|null
 	 */
-	private function getCollectiveShareToken(int $collectiveId): ?string {
-		$this->sendRequest('GET', '/apps/collectives/_api');
+	private function getShareToken(int $collectiveId, int $pageId = 0): ?string {
+		$this->sendRequest('GET', '/apps/collectives/_api/' . $collectiveId . '/shares');
 		if (200 !== $this->response->getStatusCode()) {
 			throw new RuntimeException('Unable to get list of collectives');
 		}
 		$jsonBody = $this->getJson();
-		foreach ($jsonBody['data'] as $collective) {
-			if ($collectiveId === $collective['id']) {
-				return $collective['shareToken'];
+		foreach ($jsonBody['data'] as $share) {
+			if ($collectiveId === $share['collectiveId'] && $pageId === $share['pageId']) {
+				return $share['token'];
 			}
 		}
 		return null;
