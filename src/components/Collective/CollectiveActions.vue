@@ -90,10 +90,10 @@ import LogoutIcon from 'vue-material-design-icons/Logout.vue'
 import {
 	LEAVE_CIRCLE,
 	MARK_COLLECTIVE_DELETED,
-	SHARE_COLLECTIVE,
 	UNMARK_COLLECTIVE_DELETED,
-	UPDATE_SHARE_COLLECTIVE,
-	UNSHARE_COLLECTIVE,
+	CREATE_SHARE,
+	UPDATE_SHARE,
+	DELETE_SHARE,
 } from '../../store/actions.js'
 import displayError from '../../util/displayError.js'
 import CopyToClipboardMixin from '../../mixins/CopyToClipboardMixin.js'
@@ -175,7 +175,7 @@ export default {
 			if (val !== undefined) {
 				const collective = { ...this.collective }
 				collective.shareEditable = val
-				return this.dispatchUpdateShareCollective(collective)
+				return this.dispatchUpdateShare(collective)
 					.catch(displayError('Could not change the collective share editing permissions'))
 			}
 		},
@@ -184,9 +184,9 @@ export default {
 	methods: {
 		...mapActions({
 			dispatchLeaveCircle: LEAVE_CIRCLE,
-			dispatchShareCollective: SHARE_COLLECTIVE,
-			dispatchUnshareCollective: UNSHARE_COLLECTIVE,
-			dispatchUpdateShareCollective: UPDATE_SHARE_COLLECTIVE,
+			dispatchCreateShare: CREATE_SHARE,
+			dispatchDeleteShare: DELETE_SHARE,
+			dispatchUpdateShare: UPDATE_SHARE,
 			dispatchMarkCollectiveDeleted: MARK_COLLECTIVE_DELETED,
 			dispatchUnmarkCollectiveDeleted: UNMARK_COLLECTIVE_DELETED,
 		}),
@@ -197,13 +197,13 @@ export default {
 		]),
 
 		share(collective) {
-			return this.dispatchShareCollective(collective)
+			return this.dispatchCreateShare(collective)
 				.catch(displayError('Could not share the collective'))
 		},
 
 		unshare(collective) {
 			this.shareEditable = undefined
-			return this.dispatchUnshareCollective(collective)
+			return this.dispatchDeleteShare(collective)
 				.catch(displayError('Could not unshare the collective'))
 		},
 

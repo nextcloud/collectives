@@ -15,6 +15,9 @@ import {
 	DELETE_COLLECTIVE_FROM_TRASH,
 	DELETE_CIRCLE_FOR,
 	REMOVE_COLLECTIVE,
+	SET_SHARES,
+	ADD_OR_UPDATE_SHARE,
+	REMOVE_SHARE,
 } from './mutations.js'
 
 import {
@@ -25,9 +28,10 @@ import {
 	TRASH_COLLECTIVE,
 	DELETE_COLLECTIVE,
 	RESTORE_COLLECTIVE,
-	SHARE_COLLECTIVE,
-	UPDATE_SHARE_COLLECTIVE,
-	UNSHARE_COLLECTIVE,
+	GET_SHARES,
+	CREATE_SHARE,
+	UPDATE_SHARE,
+	DELETE_SHARE,
 	UPDATE_COLLECTIVE_EDIT_PERMISSIONS,
 	UPDATE_COLLECTIVE_SHARE_PERMISSIONS,
 	UPDATE_COLLECTIVE_PAGE_MODE,
@@ -42,7 +46,7 @@ export default {
 	state: {
 		collectives: [],
 		trashCollectives: [],
-		collectiveShares: [],
+		shares: [],
 		updatedCollective: undefined,
 		membersCollectiveId: undefined,
 		settingsCollectiveId: undefined,
@@ -111,10 +115,8 @@ export default {
 			return updated && (updated !== current)
 		},
 
-		collectiveShare: (state) => ({ id }) => {
-			return state.collectiveShares.find(
-				(collectiveShare) => collectiveShare.collectiveId === id,
-			)
+		sharesByPageId: (state) => (pageId) => {
+			return state.shares.filter(s => s.pageId === pageId)
 		},
 
 		collectiveShareUrl: (state, getters) => (collective) => {
@@ -218,12 +220,33 @@ export default {
 			state.collectives.splice(state.collectives.findIndex(c => c.id === collective.id), 1)
 		},
 
+		[SET_SHARES](state, shares) {
+			state.shares = shares
+		},
+
+		[ADD_OR_UPDATE_SHARE](state, share) {
+			const cur = state.shares.findIndex(s => s.id === share.id)
+			if (cur === -1) {
+				state.shares.unshift(share)
+			} else {
+				state.shares.splice(cur, 1, share)
+			}
+		},
+
+		[REMOVE_SHARE](state, share) {
+			state.shares.splice(state.shares.findIndex(s => s.id === share.id), 1)
+		},
+
 		setMembersCollectiveId(state, id) {
 			state.membersCollectiveId = id
 		},
 
 		setSettingsCollectiveId(state, id) {
 			state.settingsCollectiveId = id
+		},
+
+		unsetShares(state) {
+			state.shares = []
 		},
 	},
 
@@ -252,9 +275,8 @@ export default {
 		 *
 		 * @param {object} store the vuex store
 		 * @param {Function} store.commit commit changes
-		 * @param {object} store.getters getters of the store
 		 */
-		async [GET_TRASH_COLLECTIVES]({ commit, getters }) {
+		async [GET_TRASH_COLLECTIVES]({ commit }) {
 			commit('load', 'collectiveTrash')
 			const response = await axios.get(generateUrl('/apps/collectives/_api/trash'))
 			commit(SET_TRASH_COLLECTIVES, response.data.data)
@@ -304,7 +326,7 @@ export default {
 		 * @param {object} store the vuex store
 		 * @param {Function} store.commit commit changes
 		 * @param {object} collective identifying object for the collective
-		 * @param {number} collective.id ID of the colletive to be trashed
+		 * @param {number} collective.id ID of the collective to be trashed
 		 */
 		async [TRASH_COLLECTIVE]({ commit }, { id }) {
 			const response = await axios.delete(generateUrl('/apps/collectives/_api/' + id))
@@ -317,7 +339,7 @@ export default {
 		 * @param {object} store the vuex store
 		 * @param {Function} store.commit commit changes
 		 * @param {object} collective identifying object for the collective
-		 * @param {number} collective.id ID of the colletive to be restored
+		 * @param {number} collective.id ID of the collective to be restored
 		 */
 		async [RESTORE_COLLECTIVE]({ commit }, { id }) {
 			const response = await axios.patch(generateUrl('/apps/collectives/_api/trash/' + id))
@@ -330,7 +352,7 @@ export default {
 		 * @param {object} store the vuex store
 		 * @param {Function} store.commit commit changes
 		 * @param {object} collective the collective with id and circle
-		 * @param {number} collective.id ID of the colletive to be trashed
+		 * @param {number} collective.id ID of the collective to be trashed
 		 * @param {boolean} collective.circle Whether to delete the circle as well
 		 */
 		async [DELETE_COLLECTIVE]({ commit }, { id, circle }) {
@@ -346,55 +368,73 @@ export default {
 		},
 
 		/**
-		 * Create a public collective share
-		 *
-		 * @param {object} store the vuex store
-		 * @param {Function} store.commit commit changes
-		 * @param {object} collective the collective with id
-		 * @param {number} collective.id ID of the colletive to be shared
-		 */
-		async [SHARE_COLLECTIVE]({ commit }, { id }) {
-			commit('load', 'share')
-			const response = await axios.post(generateUrl('/apps/collectives/_api/' + id + '/share'))
-			commit(ADD_OR_UPDATE_COLLECTIVE, response.data.data)
-			commit('done', 'share')
-		},
-
-		/**
-		 * Create a public collective share
-		 *
-		 * @param {object} store the vuex store
-		 * @param {Function} store.commit commit changes
-		 * @param {object} collective the collective with id
-		 * @param {number} collective.id ID of the colletive
-		 * @param {string} collective.shareToken Token of the share to be updated
-		 * @param {boolean} collective.shareEditable Is collective share editable
-		 */
-		async [UPDATE_SHARE_COLLECTIVE]({ commit }, { id, shareToken, shareEditable }) {
-			commit('load', 'shareEditable')
-			const response = await axios.put(
-				generateUrl('/apps/collectives/_api/' + id + '/share/' + shareToken),
-				{ editable: shareEditable },
-
-			)
-			commit(ADD_OR_UPDATE_COLLECTIVE, response.data.data)
-			commit('done', 'shareEditable')
-		},
-
-		/**
-		 * Delete a public collective share
+		 * Get shares of a collective and its pages
 		 *
 		 * @param {object} store the vuex store
 		 * @param {Function} store.commit commit changes
 		 * @param {object} store.getters getters of the store
-		 * @param {object} collective the collective with id
 		 */
-		async [UNSHARE_COLLECTIVE]({ commit, getters }, collective) {
-			commit('load', 'unshare')
-			const response = await axios.delete(
-				generateUrl('/apps/collectives/_api/' + collective.id + '/share/' + collective.shareToken),
+		async [GET_SHARES]({ commit, getters }) {
+			commit('load', 'shares')
+			const response = await axios.get(generateUrl('/apps/collectives/_api/' + getters.currentCollective.id + '/shares'))
+			commit(SET_SHARES, response.data.data)
+			commit('done', 'shares')
+		},
+
+		/**
+		 * Create a public collective/page share
+		 *
+		 * @param {object} store the vuex store
+		 * @param {Function} store.commit commit changes
+		 * @param {object} object the property object
+		 * @param {number} object.collectiveId ID of the collective to be shared
+		 * @param {number} object.pageId ID of the page to be shared
+		 */
+		async [CREATE_SHARE]({ commit }, { collectiveId, pageId = 0 }) {
+			commit('load', 'share')
+			const url = pageId
+				? '/apps/collectives/_api/' + collectiveId + '/_pages/' + pageId + '/share'
+				: '/apps/collectives/_api/' + collectiveId + '/share'
+			const response = await axios.post(generateUrl(url))
+			commit(ADD_OR_UPDATE_SHARE, response.data.data)
+			commit('done', 'share')
+		},
+
+		/**
+		 * Create a public collective/page share
+		 *
+		 * @param {object} store the vuex store
+		 * @param {Function} store.commit commit changes
+		 * @param {object} share the share to be deleted
+		 */
+		async [UPDATE_SHARE]({ commit }, share) {
+			commit('load', 'share')
+			const url = share.pageId
+				? '/apps/collectives/_api/' + share.collectiveId + '/_pages/' + share.pageId + '/share/' + share.token
+				: '/apps/collectives/_api/' + share.collectiveId + '/share/' + share.token
+			const response = await axios.put(
+				generateUrl(url),
+				{ editable: share.editable },
+
 			)
-			commit(ADD_OR_UPDATE_COLLECTIVE, response.data.data)
+			commit(ADD_OR_UPDATE_SHARE, response.data.data)
+			commit('done', 'share')
+		},
+
+		/**
+		 * Delete a public collective/page share
+		 *
+		 * @param {object} store the vuex store
+		 * @param {Function} store.commit commit changes
+		 * @param {object} share the share to be deleted
+		 */
+		async [DELETE_SHARE]({ commit }, share) {
+			commit('load', 'unshare')
+			const url = share.pageId
+				? '/apps/collectives/_api/' + share.collectiveId + '/_pages/' + share.pageId + '/share/' + share.token
+				: '/apps/collectives/_api/' + share.collectiveId + '/share/' + share.token
+			await axios.delete(generateUrl(url))
+			commit(REMOVE_SHARE, share)
 			commit('done', 'unshare')
 		},
 
@@ -402,7 +442,7 @@ export default {
 		 * @param {object} store the vuex store
 		 * @param {Function} store.commit commit changes
 		 * @param {object} data the data object
-		 * @param {number} data.id ID of the colletive to be updated
+		 * @param {number} data.id ID of the collective to be updated
 		 * @param {number} data.level new minimum level for sharing
 		 */
 		async [UPDATE_COLLECTIVE_EDIT_PERMISSIONS]({ commit }, { id, level }) {
@@ -417,7 +457,7 @@ export default {
 		 * @param {object} store the vuex store
 		 * @param {Function} store.commit commit changes
 		 * @param {object} data the data object
-		 * @param {number} data.id ID of the colletive to be updated
+		 * @param {number} data.id ID of the collective to be updated
 		 * @param {number} data.level new minimum level for sharing
 		 */
 		async [UPDATE_COLLECTIVE_SHARE_PERMISSIONS]({ commit }, { id, level }) {
@@ -432,7 +472,7 @@ export default {
 		 * @param {object} store the vuex store
 		 * @param {Function} store.commit commit changes
 		 * @param {object} data the data object
-		 * @param {number} data.id ID of the colletive to be updated
+		 * @param {number} data.id ID of the collective to be updated
 		 * @param {number} data.mode page mode
 		 */
 		async [UPDATE_COLLECTIVE_PAGE_MODE]({ commit }, { id, mode }) {
@@ -451,7 +491,7 @@ export default {
 			commit(PATCH_COLLECTIVE_WITH_PROPERTY, { id, property: 'userPageOrder', value: pageOrder })
 		},
 
-		async [SET_COLLECTIVE_USER_SETTING_SHOW_RECENT_PAGES]({ commit, getters }, { id, showRecentPages }) {
+		async [SET_COLLECTIVE_USER_SETTING_SHOW_RECENT_PAGES]({ commit }, { id, showRecentPages }) {
 			commit(PATCH_COLLECTIVE_WITH_PROPERTY, { id, property: 'userShowRecentPages', value: showRecentPages })
 			await axios.put(
 				generateUrl('/apps/collectives/_api/' + id + '/_userSettings/showRecentPages'),

@@ -14,7 +14,7 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { listen } from '@nextcloud/notify_push'
 import { NcAppContentDetails } from '@nextcloud/vue'
-import { GET_PAGES, GET_TRASH_PAGES } from '../store/actions.js'
+import { GET_SHARES, GET_PAGES, GET_TRASH_PAGES } from '../store/actions.js'
 import { SELECT_VERSION } from '../store/mutations.js'
 import displayError from '../util/displayError.js'
 import Page from './Page.vue'
@@ -52,6 +52,7 @@ export default {
 			'currentCollectiveIsPageShare',
 			'currentFileIdPage',
 			'currentPage',
+			'isPublic',
 			'loading',
 			'pageParam',
 			'pagePath',
@@ -67,6 +68,7 @@ export default {
 		'currentCollective.id'() {
 			this.load('collective')
 			this.unsetPages()
+			this.unsetShares()
 			this.initCollective()
 			this.initListenPush()
 		},
@@ -95,17 +97,19 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['show', 'hide', 'load', 'unsetPages']),
+		...mapMutations(['show', 'hide', 'load', 'unsetShares', 'unsetPages']),
 
 		...mapActions({
 			dispatchGetPages: GET_PAGES,
 			dispatchGetTrashPages: GET_TRASH_PAGES,
+			dispatchGetShares: GET_SHARES,
 		}),
 
 		initCollective() {
 			this.getPages()
 			this.closeNav()
 			this.show('details')
+			this.getShares()
 		},
 
 		initListenPush() {
@@ -188,6 +192,13 @@ export default {
 			if (this.currentCollectiveCanEdit && !this.currentCollectiveIsPageShare) {
 				await this.dispatchGetTrashPages()
 					.catch(displayError('Could not fetch page trash'))
+			}
+		},
+
+		async getShares() {
+			if (!this.isPublic) {
+				await this.dispatchGetShares()
+					.catch(displayError('Could not fetch shares'))
 			}
 		},
 
