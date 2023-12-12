@@ -5,7 +5,7 @@
 				{{ t('collectives', 'Copy or move page') }}
 			</h2>
 			<span class="crumbs">
-				<div class="crumbs-home">
+				<div v-if="!selectedCollective || !selectedCollective.isPageShare" class="crumbs-home">
 					<NcButton type="tertiary"
 						:aria-label="t('collectives', 'Breadcrumb for list of collectives')"
 						:disabled="!selectedCollective"
@@ -16,19 +16,19 @@
 						</template>
 						{{ collectivesCrumbString }}
 					</NcButton>
+					<ChevronRightIcon :size="20" />
 				</div>
 				<template v-if="selectedCollective">
 					<div class="crumbs-level">
-						<ChevronRightIcon :size="20" />
 						<NcButton type="tertiary"
-							:aria-label="t('collectives', 'Breadcrumb for collective {name}', { name: selectedCollective.name })"
+							:aria-label="collectiveBreadcrumbAriaLabel"
 							:disabled="pageCrumbs.length === 0"
 							class="crumb-button"
 							@click="onClickCollectiveHome">
-							<template v-if="selectedCollective.emoji" #icon>
-								{{ selectedCollective.emoji }}
+							<template v-if="collectiveBreadcrumbEmoji" #icon>
+								{{ collectiveBreadcrumbEmoji }}
 							</template>
-							{{ selectedCollective.name }}
+							{{ collectiveBreadcrumbTitle }}
 						</NcButton>
 					</div>
 					<div v-for="(page, index) in pageCrumbs"
@@ -218,6 +218,24 @@ export default {
 			return this.selectedCollective
 				? ''
 				: t('collectives', 'All collectives')
+		},
+
+		collectiveBreadcrumbAriaLabel() {
+			return this.selectedCollective.isPageShare
+				? t('collectives', 'Breadcrumb for page {name}', { name: this.rootPage.title })
+				: t('collectives', 'Breadcrumb for collective {name}', { name: this.selectedCollective.name })
+		},
+
+		collectiveBreadcrumbEmoji() {
+			return this.selectedCollective.isPageShare
+				? this.rootPage.emoji
+				: this.selectedCollective.emoji
+		},
+
+		collectiveBreadcrumbTitle() {
+			return this.selectedCollective.isPageShare
+				? this.rootPage.title
+				: this.selectedCollective.name
 		},
 
 		movePageString() {
