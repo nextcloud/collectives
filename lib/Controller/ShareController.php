@@ -126,9 +126,8 @@ class ShareController extends Controller {
 				$pageInfo = $this->pageService->findByFileId($collectiveId, $pageId, $userId);
 			}
 			$share = $this->shareService->createShare($userId, $collectiveInfo, $pageInfo);
-			$collectiveInfo->setShareToken($share->getToken());
 			return [
-				"data" => $collectiveInfo
+				"data" => $share
 			];
 		});
 	}
@@ -151,10 +150,9 @@ class ShareController extends Controller {
 			if ($pageId !== 0) {
 				$pageInfo = $this->pageService->findByFileId($collectiveId, $pageId, $userId);
 			}
-			$this->shareService->updateShare($userId, $collectiveInfo, $pageInfo, $token, $editable);
-			$collectiveInfo = $this->collectiveService->getCollectiveWithShare($collectiveId, $pageId, $userId);
+			$share = $this->shareService->updateShare($userId, $collectiveInfo, $pageInfo, $token, $editable);
 			return [
-				"data" => $collectiveInfo
+				"data" => $share
 			];
 		});
 	}
@@ -171,11 +169,9 @@ class ShareController extends Controller {
 	public function deletePageShare(int $collectiveId, int $pageId, string $token): DataResponse {
 		return $this->prepareResponse(function () use ($collectiveId, $pageId, $token): array {
 			$userId = $this->getUserId();
-			$collectiveInfo = $this->collectiveService->getCollectiveInfo($collectiveId, $userId);
+			$this->collectiveService->getCollectiveInfo($collectiveId, $userId);
 			$this->shareService->deleteShare($userId, $collectiveId, $pageId, $token);
-			return [
-				"data" => $collectiveInfo
-			];
+			return [];
 		});
 	}
 }

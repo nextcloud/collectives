@@ -882,7 +882,7 @@ class FeatureContext implements Context {
 		} else {
 			$this->assertStatusCode(200);
 			$jsonBody = $this->getJson();
-			Assert::assertNotEmpty($jsonBody['data']['shareToken']);
+			Assert::assertNotEmpty($jsonBody['data']['token']);
 		}
 	}
 
@@ -907,7 +907,7 @@ class FeatureContext implements Context {
 		} else {
 			$this->assertStatusCode(200);
 			$jsonBody = $this->getJson();
-			Assert::assertNotEmpty($jsonBody['data']['shareToken']);
+			Assert::assertNotEmpty($jsonBody['data']['token']);
 		}
 	}
 
@@ -1027,9 +1027,6 @@ class FeatureContext implements Context {
 			$this->sendRequest('DELETE', '/apps/collectives/_api/' . $collectiveId . '/share/' . $token);
 		}
 		$this->assertStatusCode(200);
-		$this->assertCollectiveLevel($collective, 9);
-		$jsonBody = $this->getJson();
-		Assert::assertEmpty($jsonBody['data']['shareToken']);
 	}
 
 	/**
