@@ -32,14 +32,11 @@
 			</NcActionButton>
 			<NcActionSeparator v-if="displaySidebarAction" />
 
-			<!-- Page view options: only displaybed in page title menu -->
+			<!-- Page view options: only displayed in page title menu -->
 			<NcActionCheckbox v-if="!inPageList && !isMobile"
 				:checked="isFullWidthView"
 				@check="onCheckFullWidthView"
 				@uncheck="onUncheckFullWidthView">
-				<template #icon>
-					<DeleteIcon :size="20" />
-				</template>
 				{{ t('collectives', 'Full width') }}
 			</NcActionCheckbox>
 			<NcActionButton v-if="!inPageList"
@@ -214,7 +211,7 @@ export default {
 		]),
 
 		displaySidebarAction() {
-			return !this.inPageList && this.showing('sidebar') && isMobile
+			return isMobile && !this.inPageList && !this.showing('sidebar')
 		},
 
 		displayCollectiveActions() {
