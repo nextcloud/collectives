@@ -16,12 +16,12 @@ export default {
 
 			// copy link to clipboard
 			try {
-				navigator.clipboard.writeText(url)
+				await navigator.clipboard.writeText(url)
 				this.copySuccess = true
 				this.copied = true
 
 				// Notify success
-				showSuccess(t('collectives', 'Link copied to the clipboard.'))
+				showSuccess(t('collectives', 'Link copied'))
 			} catch (error) {
 				this.copySuccess = false
 				this.copied = true
@@ -32,9 +32,9 @@ export default {
 				this.copyLoading = false
 				setTimeout(() => {
 					// stop loading status regardless of outcome
-					this.copied = false
 					this.copySuccess = false
-				}, 2000)
+					this.copied = false
+				}, 4000)
 			}
 		},
 	},
