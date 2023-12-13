@@ -1,6 +1,7 @@
 <template>
 	<NcAppSidebar ref="sidebar"
 		:title="title"
+		:active.sync="active"
 		@close="close">
 		<NcAppSidebarTab id="attachments"
 			:order="0"
@@ -71,19 +72,34 @@ export default {
 		SidebarTabVersions,
 	},
 
+	data() {
+		return {
+		}
+	},
+
 	computed: {
 		...mapGetters([
-			'isPublic',
+			'activeSidebarTab',
 			'currentCollectiveCanEdit',
 			'currentCollectiveCanShare',
 			'currentPage',
-			'title',
+			'isPublic',
 			'showing',
+			'title',
 		]),
+
+		active: {
+			get() {
+				return this.activeSidebarTab
+			},
+			set(id) {
+				this.setActiveSidebarTab(id)
+			},
+		},
 	},
 
 	methods: {
-		...mapMutations(['hide']),
+		...mapMutations(['hide', 'setActiveSidebarTab']),
 
 		/**
 		 * Load the current version and close the sidebar

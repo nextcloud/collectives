@@ -10,44 +10,13 @@
 		</NcActionButton>
 		<NcActionSeparator v-if="isCollectiveAdmin(collective)" />
 		<NcActionButton v-if="collectiveCanShare(collective)"
-			v-show="!isShared"
-			:close-after-click="false"
-			@click="share(collective)">
-			{{ t('collectives', 'Share link') }}
+			:close-after-click="true"
+			@click="openShareTab(collective)">
+			{{ t('collectives', 'Share') }}
 			<template #icon>
-				<NcLoadingIcon v-if="loading('share')" :size="20" />
-				<LinkVariantIcon v-else :size="20" />
+				<ShareVariantIcon :size="20" />
 			</template>
 		</NcActionButton>
-		<NcActionButton v-if="!isPublic"
-			v-show="isShared"
-			:close-after-click="false"
-			@click.stop.prevent="copyShare(collective)">
-			<template #icon>
-				<CheckIcon v-if="copySuccess" :size="20" />
-				<NcLoadingIcon v-else-if="copyLoading" :size="20" />
-				<ContentPasteIcon v-else :size="20" />
-			</template>
-			{{ copyButtonText }}
-		</NcActionButton>
-		<NcActionCheckbox v-if="!isPublic"
-			v-show="isShared && collectiveCanEdit(collective)"
-			id="shareEditable"
-			:disabled="loading('shareEditable')"
-			:checked.sync="shareEditable">
-			{{ t('collectives', 'Allow editing in share') }}
-		</NcActionCheckbox>
-		<NcActionButton v-if="!isPublic"
-			v-show="isShared"
-			:close-after-click="false"
-			@click="unshare(collective)">
-			<template #icon>
-				<NcLoadingIcon v-if="loading('unshare')" :size="20" />
-				<LinkVariantIcon v-else :size="20" />
-			</template>
-			{{ t('collectives', 'Unshare') }}
-		</NcActionButton>
-		<NcActionSeparator v-if="collectiveCanShare(collective) && !isPublic" />
 		<NcActionLink :close-after-click="true"
 			:href="printLink"
 			target="_blank">
@@ -77,48 +46,33 @@
 
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
-import { NcActionButton, NcActionCheckbox, NcActionLink, NcActionSeparator, NcLoadingIcon } from '@nextcloud/vue'
+import { NcActionButton, NcActionLink, NcActionSeparator } from '@nextcloud/vue'
 import { showError, showUndo } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
 import AccountMultipleIcon from 'vue-material-design-icons/AccountMultiple.vue'
-import CheckIcon from 'vue-material-design-icons/Check.vue'
 import CogIcon from 'vue-material-design-icons/Cog.vue'
-import ContentPasteIcon from 'vue-material-design-icons/ContentPaste.vue'
 import DownloadIcon from 'vue-material-design-icons/Download.vue'
-import LinkVariantIcon from 'vue-material-design-icons/LinkVariant.vue'
 import LogoutIcon from 'vue-material-design-icons/Logout.vue'
+import ShareVariantIcon from 'vue-material-design-icons/ShareVariant.vue'
 import {
 	LEAVE_CIRCLE,
 	MARK_COLLECTIVE_DELETED,
 	UNMARK_COLLECTIVE_DELETED,
-	CREATE_SHARE,
-	UPDATE_SHARE,
-	DELETE_SHARE,
 } from '../../store/actions.js'
-import displayError from '../../util/displayError.js'
-import CopyToClipboardMixin from '../../mixins/CopyToClipboardMixin.js'
 
 export default {
 	name: 'CollectiveActions',
 
 	components: {
 		AccountMultipleIcon,
-		CheckIcon,
 		CogIcon,
-		ContentPasteIcon,
 		DownloadIcon,
-		LinkVariantIcon,
 		LogoutIcon,
 		NcActionButton,
-		NcActionCheckbox,
 		NcActionLink,
 		NcActionSeparator,
-		NcLoadingIcon,
+		ShareVariantIcon,
 	},
-
-	mixins: [
-		CopyToClipboardMixin,
-	],
 
 	props: {
 		collective: {
@@ -130,37 +84,19 @@ export default {
 	data() {
 		return {
 			leaveTimeout: null,
-			shareEditable: this.collective.shareEditable,
 		}
 	},
 
 	computed: {
 		...mapGetters([
-			'collectiveCanEdit',
 			'collectiveCanShare',
-			'collectiveParam',
-			'collectiveShareUrl',
 			'isCollectiveAdmin',
 			'isPublic',
-			'loading',
 			'shareTokenParam',
 		]),
 
 		circleLink() {
 			return generateUrl('/apps/contacts/direct/circle/' + this.collective.circleId)
-		},
-
-		isShared() {
-			return !!this.collective.shareToken
-		},
-
-		copyButtonText() {
-			if (this.copied) {
-				return this.copySuccess
-					? t('collectives', 'Copied')
-					: t('collectives', 'Cannot copy')
-			}
-			return t('collectives', 'Copy share link')
 		},
 
 		printLink() {
@@ -170,45 +106,24 @@ export default {
 		},
 	},
 
-	watch: {
-		shareEditable(val) {
-			if (val !== undefined) {
-				const collective = { ...this.collective }
-				collective.shareEditable = val
-				return this.dispatchUpdateShare(collective)
-					.catch(displayError('Could not change the collective share editing permissions'))
-			}
-		},
-	},
-
 	methods: {
 		...mapActions({
 			dispatchLeaveCircle: LEAVE_CIRCLE,
-			dispatchCreateShare: CREATE_SHARE,
-			dispatchDeleteShare: DELETE_SHARE,
-			dispatchUpdateShare: UPDATE_SHARE,
 			dispatchMarkCollectiveDeleted: MARK_COLLECTIVE_DELETED,
 			dispatchUnmarkCollectiveDeleted: UNMARK_COLLECTIVE_DELETED,
 		}),
 
 		...mapMutations([
+			'setActiveSidebarTab',
 			'setMembersCollectiveId',
 			'setSettingsCollectiveId',
+			'show',
 		]),
 
-		share(collective) {
-			return this.dispatchCreateShare(collective)
-				.catch(displayError('Could not share the collective'))
-		},
-
-		unshare(collective) {
-			this.shareEditable = undefined
-			return this.dispatchDeleteShare(collective)
-				.catch(displayError('Could not unshare the collective'))
-		},
-
-		copyShare(collective) {
-			this.copyToClipboard(window.location.origin + this.collectiveShareUrl(collective))
+		openShareTab(collective) {
+			this.$router.push(`/${encodeURIComponent(collective.name)}`)
+			this.show('sidebar')
+			this.setActiveSidebarTab('sharing')
 		},
 
 		openCollectiveMembers() {
