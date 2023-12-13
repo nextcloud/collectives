@@ -335,18 +335,18 @@ describe('Page', function() {
 
 	describe('Using the search providers to search for a page', function() {
 		it('Search for page title', function() {
-			cy.get('.unified-search a, .unified-search button, button.global-search__button').click()
-			cy.get('.unified-search__form input, .global-search-modal input')
+			cy.get('.unified-search a, .unified-search button, button.unified-search__button').click()
+			cy.get('.unified-search__form input, .unified-search-modal input')
 				.type('Day')
-			cy.get('.unified-search__results-collectives-pages, .global-search-modal__results')
+			cy.get('.unified-search__results-collectives-pages, .unified-search-modal__results')
 				.should('contain', 'Day 1')
 		})
 
 		it('Search for page content', function() {
-			cy.get('.unified-search a, .unified-search button, button.global-search__button').click()
-			cy.get('.unified-search__form input, .global-search-modal input')
+			cy.get('.unified-search a, .unified-search button, button.unified-search__button').click()
+			cy.get('.unified-search__form input, .unified-search-modal input')
 				.type('share your thoughts')
-			cy.get('.unified-search__results-collectives-page-content, .global-search-modal__results')
+			cy.get('.unified-search__results-collectives-page-content, .unified-search-modal__results')
 				.should('contain', 'your thoughts that really matter')
 		})
 	})
