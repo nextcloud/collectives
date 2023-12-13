@@ -26,6 +26,7 @@ export default new Store({
 		showing: {},
 		loading: {},
 		printView: false,
+		activeSidebarTab: 'attachments',
 	},
 
 	getters: {
@@ -72,6 +73,8 @@ export default new Store({
 			}
 			return flags
 		},
+
+		activeSidebarTab: (state) => state.activeSidebarTab,
 	},
 
 	mutations: {
@@ -87,5 +90,6 @@ export default new Store({
 		setPrintView: (state) => { state.printView = true },
 		setTextEdit: (state) => { state.textMode = pageModes.MODE_EDIT },
 		setTextView: (state) => { state.textMode = pageModes.MODE_VIEW },
+		setActiveSidebarTab: (state, id) => { state.activeSidebarTab = id },
 	},
 })

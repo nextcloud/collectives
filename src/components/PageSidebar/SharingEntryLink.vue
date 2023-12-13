@@ -8,7 +8,8 @@
 				<span class="sharing-entry__title" :title="title">
 					{{ title }}
 				</span>
-				<div ref="quickShareDropdownContainer"
+				<div v-if="share"
+					ref="quickShareDropdownContainer"
 					:class="{ 'active': showDropdown, 'share-select': true }">
 					<span :id="dropdownId"
 						class="trigger-text"
@@ -67,7 +68,7 @@
 					{{ t('collectives', 'Add another link') }}
 				</NcActionButton>
 
-				<NcActionButton @click.prevent="onDelete">
+				<NcActionButton class="unshare-button" @click.prevent="onDelete">
 					<template #icon>
 						<CloseIcon :size="20" />
 					</template>

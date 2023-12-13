@@ -61,8 +61,8 @@ export default {
 
 		collectivePath(state, getters) {
 			return (collective) => {
-				if (getters.isPublic && collective.shareToken) {
-					return `/p/${collective.shareToken}/${encodeURIComponent(collective.name)}`
+				if (getters.isPublic) {
+					return `/p/${getters.shareTokenParam}/${encodeURIComponent(collective.name)}`
 				} else {
 					return `/${encodeURIComponent(collective.name)}`
 				}
@@ -117,14 +117,6 @@ export default {
 
 		sharesByPageId: (state) => (pageId) => {
 			return state.shares.filter(s => s.pageId === pageId)
-		},
-
-		collectiveShareUrl: (state, getters) => (collective) => {
-			if (collective.shareToken) {
-				return generateUrl(`/apps/collectives/p/${collective.shareToken}/${encodeURIComponent(collective.name)}`)
-			} else {
-				return null
-			}
 		},
 
 		isCollectiveAdmin: (state, getters) => (collective) => {
