@@ -57,7 +57,18 @@
 				{{ t('collectives', 'Show in Files') }}
 			</NcActionLink>
 
-			<!-- Edit page emoji: only displaybed in page list -->
+			<!-- Share page action: only displayed in page list -->
+			<NcActionButton v-if="inPageList && currentCollectiveCanShare"
+				:close-after-click="true"
+				@click.native="show('details')"
+				@click="openShareTab">
+				<template #icon>
+					<ShareVariantIcon :size="20" />
+				</template>
+				{{ t('collectives', 'Share') }}
+			</NcActionButton>
+
+			<!-- Edit page emoji: only displayed in page list -->
 			<NcActionButton v-if="inPageList && currentCollectiveCanEdit && !isTemplate && !isLandingPage"
 				:close-after-click="true"
 				@click.native="show('details')"
@@ -121,6 +132,7 @@ import OpenInNewIcon from 'vue-material-design-icons/OpenInNew.vue'
 import MoveOrCopyModal from './MoveOrCopyModal.vue'
 import PagesTemplateIcon from '../Icon/PagesTemplateIcon.vue'
 import PageActionLastUser from './PageActionLastUser.vue'
+import ShareVariantIcon from 'vue-material-design-icons/ShareVariant.vue'
 import pageMixin from '../../mixins/pageMixin.js'
 
 export default {
@@ -137,9 +149,10 @@ export default {
 		DeleteIcon,
 		EmoticonOutlineIcon,
 		FormatListBulletedIcon,
+		OpenInNewIcon,
 		PagesTemplateIcon,
 		PageActionLastUser,
-		OpenInNewIcon,
+		ShareVariantIcon,
 	},
 
 	mixins: [
@@ -200,6 +213,7 @@ export default {
 		...mapGetters([
 			'currentCollective',
 			'currentCollectiveCanEdit',
+			'currentCollectiveCanShare',
 			'currentCollectiveIsPageShare',
 			'hasSubpages',
 			'isFullWidthView',
@@ -279,7 +293,11 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['show', 'toggle']),
+		...mapMutations([
+			'setActiveSidebarTab',
+			'show',
+			'toggle',
+		]),
 
 		...mapActions({
 			dispatchSetFullWidthView: SET_FULL_WIDTH_VIEW,
@@ -291,6 +309,16 @@ export default {
 
 		onUncheckFullWidthView() {
 			this.dispatchSetFullWidthView(false)
+		},
+
+		openShareTab() {
+			if (this.pageUrl && (this.currentPage.id !== this.pageId)) {
+				this.$router.push(this.pageUrl)
+			}
+			this.$nextTick(() => {
+				this.show('sidebar')
+				this.setActiveSidebarTab('sharing')
+			})
 		},
 
 		gotoPageEmojiPicker() {
