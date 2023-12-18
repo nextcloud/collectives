@@ -272,7 +272,9 @@ class PageService {
 	}
 
 	/**
-	 * @param File $file
+	 * @param File   $file
+	 * @param string $filename
+	 * @param string $timestamp
 	 *
 	 * @return PageInfo
 	 * @throws NotFoundException
@@ -408,6 +410,26 @@ class PageService {
 			throw new NotPermittedException($e->getMessage(), 0, $e);
 		}
 		return $subFolder;
+	}
+
+	/**
+	 * @param int    $collectiveId
+	 * @param int    $pageId
+	 * @param string $userId
+	 *
+	 * @return PageInfo
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 * @throws FilesNotFoundException
+	 */
+	public function pageToSubFolder(int $collectiveId, int $pageId, string $userId): PageInfo {
+		$file = $this->getPageFile($collectiveId, $pageId, $userId);
+		if (!NodeHelper::isIndexPage($file)) {
+			$this->initSubFolder($file);
+		}
+
+		return $this->findByFileId($collectiveId, $pageId, $userId);
 	}
 
 	/**
@@ -581,7 +603,6 @@ class PageService {
 	 * @param string $userId
 	 * @return PageInfo
 	 * @throws FilesNotFoundException
-	 * @throws InvalidPathException
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
@@ -616,14 +637,16 @@ class PageService {
 	 * @param File $file
 	 * @param string $userId
 	 * @return PageInfo
-	 * @throws FilesNotFoundException
-	 * @throws InvalidPathException
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
 	public function findByFile(int $collectiveId, File $file, string $userId): PageInfo {
-		return $this->find($collectiveId, $file->getId(), $userId);
+		try {
+			return $this->find($collectiveId, $file->getId(), $userId);
+		} catch (InvalidPathException | FilesNotFoundException $e) {
+			throw new NotFoundException($e->getMessage(), 0, $e);
+		}
 	}
 
 	/**
