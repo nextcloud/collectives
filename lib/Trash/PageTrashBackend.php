@@ -213,17 +213,6 @@ class PageTrashBackend implements ITrashBackend {
 			throw new NotFoundException();
 		}
 
-		// Get original parent folder of item to revert subfolders further down
-		$collectiveFolder = $this->collectiveFolderManager->getFolder($collectiveId);
-		$targetFolderPath = substr($item->getOriginalLocation(), 0, -strlen($item->getName()));
-		if ($targetFolderPath) {
-			try {
-				$targetFolder = $collectiveFolder->get($targetFolderPath);
-			} catch (NotFoundException $e) {
-				$targetFolder = null;
-			}
-		}
-
 		// Get pageId for deleting page from collective page database
 		$deletePageId = $node->getId();
 		if ($node instanceof Folder) {
@@ -256,14 +245,6 @@ class PageTrashBackend implements ITrashBackend {
 		// Also remove attachments folder if it exists
 		if (null !== $attachmentsFolderItem = $this->findAttachmentFolderItem($user, $collectiveId, $item)) {
 			$this->removeItem($attachmentsFolderItem);
-		}
-
-		// Try to revert subfolders of target folder parent
-		if ($targetFolder && $targetFolder->getId() !== $collectiveFolder->getId()) {
-			try {
-				NodeHelper::revertSubFolders($targetFolder->getParent());
-			} catch (\OCA\Collectives\Service\NotFoundException | \OCA\Collectives\Service\NotPermittedException $e) {
-			}
 		}
 	}
 

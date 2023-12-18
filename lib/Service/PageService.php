@@ -842,8 +842,6 @@ class PageService {
 			// Page got moved: remove from subpage order of old parent page, add to new
 			$this->removeFromSubpageOrder($collectiveId, $oldParentId, $id, $userId);
 			$this->addToSubpageOrder($collectiveId, $parentId, $file->getId(), $index, $userId);
-
-			NodeHelper::revertSubFolders($collectiveFolder);
 		}
 
 		return $this->getPageByFile($file);
@@ -916,8 +914,6 @@ class PageService {
 
 		$this->removeFromSubpageOrder($collectiveId, $oldParentId, $id, $userId);
 		$this->addToSubpageOrder($newCollectiveId, $parentId, $file->getId(), $index, $userId);
-
-		NodeHelper::revertSubFolders($collectiveFolder);
 	}
 
 	/**
@@ -1066,7 +1062,6 @@ class PageService {
 			// Delete directly if trash is not available
 			$this->pageMapper->deleteByFileId($id);
 			$this->removeFromSubpageOrder($collectiveId, $parentId, $id, $userId);
-			NodeHelper::revertSubFolders($folder);
 			$this->notifyPush($collectiveId, $userId);
 			return $pageInfo;
 		}
