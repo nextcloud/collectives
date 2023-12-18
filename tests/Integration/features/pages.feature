@@ -7,7 +7,7 @@ Feature: pages
     Then user "jane" sees pagePath "firstpage.md" in "BehatPagesCollective"
 
   Scenario: Upload and list attachment for page
-    When user "jane" uploads attachment "test.png" to "firstpage" in "BehatPagesCollective"
+    When user "jane" uploads attachment "test.png" to "firstpage" with file path "/" in "BehatPagesCollective"
     Then user "jane" sees attachment "test.png" with mimetype "image/png" for "firstpage" in "BehatPagesCollective"
 
   Scenario: Join collective (with pages) and create subpage

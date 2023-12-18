@@ -1610,26 +1610,29 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user uploads attachment :fileName to :page in :collective
+	 * @When user :user uploads attachment :fileName to :page with file path :filePath in :collective
 	 *
 	 * @param string $user
 	 * @param string $fileName
 	 * @param string $page
+	 * @param string $filePath
 	 * @param string $collective
 	 *
 	 * @throws GuzzleException
 	 */
-	public function uploadsAttachment(string $user, string $fileName, string $page, string $collective): void {
+	public function uploadsAttachment(string $user, string $fileName, string $page, string $filePath, string $collective): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$pageId = $this->pageIdByName($collectiveId, $page);
 		$userCollectivesPath = $this->getUserCollectivesPath($user);
 
-		$attachmentsPath = '/dav/files/' . $user . '/' . $userCollectivesPath . '/' . urlencode($collective) . '/' . '.attachments.' . $pageId;
+		$attachmentsPath = '/dav/files/' . $user . '/' . $userCollectivesPath . '/' . urlencode($collective) . $filePath . '.attachments.' . $pageId;
 
 		$this->sendRemoteRequest('MKCOL', $attachmentsPath);
+		$this->assertStatusCode(201);
 		$body = fopen('tests/Integration/features/fixtures/' . $fileName, 'rb');
 		$this->sendRemoteRequest('PUT', $attachmentsPath . '/' . $fileName, $body);
+		$this->assertStatusCode(201);
 	}
 
 	/**
