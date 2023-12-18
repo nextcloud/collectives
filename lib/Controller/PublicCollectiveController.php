@@ -89,7 +89,8 @@ class PublicCollectiveController extends PublicShareController {
 			}
 			$collective = $this->service->getCollectiveWithShare($share->getCollectiveId(),
 				$share->getPageId(),
-				$share->getOwner());
+				$share->getOwner(),
+				$share->getToken());
 			// Explicitly set member level
 			$collective->setLevel(Member::LEVEL_MEMBER);
 			return [
