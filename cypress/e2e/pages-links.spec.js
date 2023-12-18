@@ -342,7 +342,7 @@ describe('Page Link Handling', function() {
 				},
 			})
 			cy.openCollectiveMenu('Link Testing')
-			cy.clickMenuButton('Share')
+			cy.clickMenuButton('Share with guests')
 			cy.intercept('POST', '**/_api/*/share').as('createShare')
 			cy.get('.sharing-entry button.new-share-link')
 				.click()
