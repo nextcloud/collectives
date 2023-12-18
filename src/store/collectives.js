@@ -138,8 +138,11 @@ export default {
 			return collective.canEdit
 		},
 
-		collectiveCanShare: (state) => (collective) => {
+		collectiveCanShare: (state, getters) => (collective) => {
 			if (!collective) {
+				return false
+			}
+			if (getters.isPublic) {
 				return false
 			}
 			return collective.canShare
