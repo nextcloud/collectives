@@ -3,7 +3,7 @@ Feature: mountpoint
   Scenario: Set edit and share permissions for collective and check mountpoint permissions
     When user "jane" creates collective "BehatMountPoint"
     And user "jane" creates page "firstpage" with parentPath "Readme.md" in "BehatMountPoint"
-    And user "jane" uploads attachment "test.png" to "firstpage" in "BehatMountPoint"
+    And user "jane" uploads attachment "test.png" to "firstpage" with file path "/" in "BehatMountPoint"
     And user "jane" sets "edit" level in collective "BehatMountPoint" to "Admin"
     And user "jane" sets "share" level in collective "BehatMountPoint" to "Moderator"
     And user "john" joins circle "BehatMountPoint" with owner "jane" with level "Admin"

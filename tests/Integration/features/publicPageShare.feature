@@ -16,9 +16,8 @@ Feature: publicPageShare
     And anonymous sees pagePath "Readme.md" in public page share "sharefolderpage" in collective "BehatPublicPageCollective" with owner "jane"
 
   Scenario: Upload and list attachment for page
-    When user "jane" uploads attachment "test.png" to "subpage" in "BehatPublicPageCollective"
-    # TODO
-    #Then anonymous sees attachment "test.png" with mimetype "image/png" for "subpage" in public page share "sharefolderpage" in collective "BehatPublicPageCollective" with owner "jane"
+    When user "jane" uploads attachment "test.png" to "subpage" with file path "/sharefolderpage/" in "BehatPublicPageCollective"
+    Then anonymous sees attachment "test.png" with mimetype "image/png" for "subpage" in public page share "sharefolderpage" in collective "BehatPublicPageCollective" with owner "jane"
 
   Scenario: Fail to share a page if sharing permissions are missing
     When user "jane" sets "share" level in collective "BehatPublicPageCollective" to "Admin"
