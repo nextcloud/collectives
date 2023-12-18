@@ -37,22 +37,22 @@ export default new Store({
 		pageParam: (state) => state.route.params.page,
 		shareTokenParam: (state) => state.route.params.token,
 
-		isIndexPage: (_state, get) =>
-			get.currentPage.fileName === 'Readme.md',
+		isIndexPage: (_state, getters) =>
+			getters.currentPage.fileName === 'Readme.md',
 
-		isLandingPage: (_state, get) =>
-			get.currentCollectiveIsPageShare
+		isLandingPage: (_state, getters) =>
+			getters.currentCollectiveIsPageShare
 				? false
-				: !get.pageParam || get.pageParam === 'Readme',
+				: !getters.pageParam || getters.pageParam === 'Readme',
 
-		isTemplatePage: (_state, get) =>
-			get.currentPage.title === 'Template',
+		isTemplatePage: (_state, getters) =>
+			getters.currentPage.title === 'Template',
 
-		title: (_state, get) =>
-			get.isLandingPage ? get.currentCollective.name : get.currentPage.title,
+		title: (_state, getters) =>
+			getters.isLandingPage ? getters.currentCollective.name : getters.currentPage.title,
 
-		isPublic: (_state, get) =>
-			!!get.shareTokenParam,
+		isPublic: (_state, getters) =>
+			!!getters.shareTokenParam,
 
 		isTextEdit: (state) => state.textMode === pageModes.MODE_EDIT,
 		isTextView: (state) => state.textMode === pageModes.MODE_VIEW,
@@ -62,13 +62,13 @@ export default new Store({
 			return apiVersion.localeCompare(requiredVersion, undefined, { numeric: true, sensitivity: 'base' }) >= 0
 		},
 
-		useEditorApi(_, get) {
-			return !!window.OCA?.Text?.createEditor && get.editorApiVersionCheck('1.0')
+		useEditorApi(_state, getters) {
+			return !!window.OCA?.Text?.createEditor && getters.editorApiVersionCheck('1.0')
 		},
 
-		editorApiFlags(_, get) {
+		editorApiFlags(_state, getters) {
 			const flags = []
-			if (get.editorApiVersionCheck('1.1')) {
+			if (getters.editorApiVersionCheck('1.1')) {
 				flags.push(editorApiReaderFileId)
 			}
 			return flags

@@ -93,7 +93,7 @@ export default {
 			return `/${pagePath}?fileId=${id}`
 		},
 
-		pagePathTitle: (_state, getters) => (page) => {
+		pagePathTitle: () => (page) => {
 			const { filePath, fileName, title } = page
 			const titlePart = fileName !== 'Readme.md' && title
 			return [filePath, titlePart].filter(Boolean).join('/')
@@ -214,7 +214,7 @@ export default {
 
 		pageParents,
 
-		visibleSubpages: (state, getters) => (parentId) => {
+		visibleSubpages: (_state, getters) => (parentId) => {
 			return getters.sortedSubpages(parentId)
 		},
 
@@ -230,7 +230,7 @@ export default {
 			return state.sortBy ? state.sortBy : getters.sortByDefault
 		},
 
-		disableDragndropSortOrMove(state, getters) {
+		disableDragndropSortOrMove(_state, getters) {
 			// Disable for readonly collective
 			return !getters.currentCollectiveCanEdit
 				// Disable if a page list is loading (e.g. when page move is pending)
@@ -310,7 +310,7 @@ export default {
 			return (pageId) => state.pages.find(p => p.id === pageId).subpageOrder
 		},
 
-		subpageOrderIndex(state, getters) {
+		subpageOrderIndex(_state, getters) {
 			return (parentId, pageId) => {
 				const parentSubpageOrder = getters.subpageOrder(parentId)
 				return parentSubpageOrder.indexOf(pageId)

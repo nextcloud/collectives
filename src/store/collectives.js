@@ -59,7 +59,7 @@ export default {
 			)
 		},
 
-		collectivePath(state, getters) {
+		collectivePath(_state, getters) {
 			return (collective) => {
 				if (getters.isPublic) {
 					return `/p/${getters.shareTokenParam}/${encodeURIComponent(collective.name)}`
@@ -69,7 +69,7 @@ export default {
 			}
 		},
 
-		currentCollectivePath(state, getters) {
+		currentCollectivePath(_state, getters) {
 			return getters.collectivePath(getters.currentCollective)
 		},
 
@@ -86,11 +86,11 @@ export default {
 			return getters.currentCollective.isPageShare
 		},
 
-		currentCollectiveCanEdit(state, getters) {
+		currentCollectiveCanEdit(_state, getters) {
 			return getters.collectiveCanEdit(getters.currentCollective)
 		},
 
-		currentCollectiveCanShare(state, getters) {
+		currentCollectiveCanShare(_state, getters) {
 			return getters.collectiveCanShare(getters.currentCollective)
 		},
 
@@ -119,15 +119,15 @@ export default {
 			return state.shares.filter(s => s.pageId === pageId)
 		},
 
-		isCollectiveAdmin: (state, getters) => (collective) => {
+		isCollectiveAdmin: (state) => (collective) => {
 			return collective.level >= memberLevels.LEVEL_ADMIN
 		},
 
-		isCollectiveOwner: (state, getters) => (collective) => {
+		isCollectiveOwner: (state) => (collective) => {
 			return collective.level >= memberLevels.LEVEL_OWNER
 		},
 
-		collectiveCanEdit: (state, getters) => (collective) => {
+		collectiveCanEdit: (_state, getters) => (collective) => {
 			if (!collective) {
 				return false
 			}
@@ -138,7 +138,7 @@ export default {
 			return collective.canEdit
 		},
 
-		collectiveCanShare: (state, getters) => (collective) => {
+		collectiveCanShare: (_state, getters) => (collective) => {
 			if (!collective) {
 				return false
 			}
@@ -153,7 +153,7 @@ export default {
 		},
 
 		// Return a function (with empty arguments list) to prevent caching the result
-		randomCollectiveEmoji: (state, getters) => () => {
+		randomCollectiveEmoji: (_state, getters) => () => {
 			return randomEmoji(getters.allCollectiveEmojis)
 		},
 
