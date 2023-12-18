@@ -123,7 +123,7 @@ class ShareController extends Controller {
 			$collectiveInfo = $this->collectiveService->getCollectiveInfo($collectiveId, $userId);
 			$pageInfo = null;
 			if ($pageId !== 0) {
-				$pageInfo = $this->pageService->findByFileId($collectiveId, $pageId, $userId);
+				$pageInfo = $this->pageService->pageToSubFolder($collectiveId, $pageId, $userId);
 			}
 			$share = $this->shareService->createShare($userId, $collectiveInfo, $pageInfo);
 			return [

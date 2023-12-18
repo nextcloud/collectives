@@ -5,8 +5,8 @@ Feature: publicPageShare
     And user "jane" creates page "singlesharepage" with parentPath "Readme.md" in "BehatPublicPageCollective"
     And user "jane" creates public page share for page "singlesharepage" in "BehatPublicPageCollective"
     Then anonymous sees public page share "singlesharepage" in collective "BehatPublicPageCollective" with owner "jane"
-    # TODO
-    #And anonymous sees pagePath "Readme.md" in public page share "singlesharepage" in collective "BehatPublicPageCollective" with owner "jane"
+    And anonymous sees pagePath "Readme.md" in public page share "singlesharepage" in collective "BehatPublicPageCollective" with owner "jane"
+    And anonymous doesn't see pagePath "singlesharepage.md" in public page share "singlesharepage" in collective "BehatPublicPageCollective" with owner "jane"
 
   Scenario: Create and share a page with subpages publicly (read-only)
     And user "jane" creates page "sharefolderpage" with parentPath "Readme.md" in "BehatPublicPageCollective"
