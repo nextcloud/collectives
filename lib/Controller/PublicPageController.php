@@ -249,6 +249,9 @@ class PublicPageController extends PublicShareController {
 			$collectiveId = $this->getShare()->getCollectiveId();
 			if (0 !== $pageId = $this->getShare()->getPageId()) {
 				$this->checkPageShareAccess($collectiveId, $pageId, $id, $owner);
+				if ($parentId) {
+					$this->checkPageShareAccess($collectiveId, $pageId, $parentId, $owner);
+				}
 			}
 			$pageInfo = $copy
 				? $this->service->copy($collectiveId, $id, $parentId, $title, $index, $owner)

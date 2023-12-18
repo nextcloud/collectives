@@ -9,7 +9,7 @@ Feature: publicPageShare
     And anonymous doesn't see pagePath "singlesharepage.md" in public page share "singlesharepage" in collective "BehatPublicPageCollective" with owner "jane"
 
   Scenario: Create and share a page with subpages publicly (read-only)
-    And user "jane" creates page "sharefolderpage" with parentPath "Readme.md" in "BehatPublicPageCollective"
+    When user "jane" creates page "sharefolderpage" with parentPath "Readme.md" in "BehatPublicPageCollective"
     And user "jane" creates page "subpage" with parentPath "sharefolderpage.md" in "BehatPublicPageCollective"
     And user "jane" creates public page share for page "sharefolderpage" in "BehatPublicPageCollective"
     Then anonymous sees public page share "sharefolderpage" in collective "BehatPublicPageCollective" with owner "jane"
@@ -37,6 +37,9 @@ Feature: publicPageShare
 
   Scenario: Fail to create page outside shared page
     Then anonymous fails to create page "outsidepage" with parentPath "Readme.md" in public page share "sharefolderpage" in collective "BehatPublicPageCollective" with owner "jane"
+
+  Scenario: Fail to move page out of editable shared page
+    Then anonymous fails to move page "secondsubpage" to "movedpage" with parentPath "Readme.md" in public page share "sharefolderpage" in collective "BehatPublicPageCollective" with owner "jane"
 
   Scenario: Move page in editable shared page
     When anonymous moves page "secondsubpage" to "movedpage" with parentPath "sharefolderpage/Readme.md" in public page share "sharefolderpage" in collective "BehatPublicPageCollective" with owner "jane"
