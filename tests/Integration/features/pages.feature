@@ -100,16 +100,6 @@ Feature: pages
     And user "jane" doesn't see pagePath "parentpage/Readme.md" in "BehatPagesCollective"
     Then user "jane" restores page "parentpage" from trash in "BehatPagesCollective"
 
-  Scenario: Trash and delete all subpages reverts subfolders
-    When user "jane" trashes page "subpage" in "BehatPagesCollective"
-    And user "jane" trashes page "subpage2" in "BehatPagesCollective"
-    And user "jane" trashes page "subpage3" in "BehatPagesCollective"
-    When user "jane" deletes page "subpage" from trash in "BehatPagesCollective"
-    When user "jane" deletes page "subpage2" from trash in "BehatPagesCollective"
-    When user "jane" deletes page "subpage3" from trash in "BehatPagesCollective"
-    Then user "jane" doesn't see pagePath "parentpage/Readme.md" in "BehatPagesCollective"
-    And user "jane" sees pagePath "parentpage.md" in "BehatPagesCollective"
-
   Scenario: Fail to edit pages in read-only collective
     When user "john" joins circle "BehatPagesCollective" with owner "jane"
     And user "jane" sets "edit" level in collective "BehatPagesCollective" to "Admin"

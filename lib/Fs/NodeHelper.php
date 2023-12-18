@@ -264,32 +264,4 @@ class NodeHelper {
 
 		return 0;
 	}
-
-	/**
-	 * @param Folder $folder
-	 *
-	 * @throws NotFoundException
-	 * @throws NotPermittedException
-	 */
-	public static function revertSubFolders(Folder $folder): void {
-		try {
-			foreach ($folder->getDirectoryListing() as $node) {
-				if ($node instanceof Folder) {
-					self::revertSubFolders($node);
-				} elseif ($node instanceof File) {
-					// Move index page without subpages into the parent folder (if's not the landing page)
-					if (self::isIndexPage($node) && !self::isLandingPage($node) && !self::indexPageHasOtherContent($node)) {
-						$filename = self::generateFilename($folder, $folder->getName(), PageInfo::SUFFIX);
-						$node->move($folder->getParent()->getPath() . '/' . $filename . PageInfo::SUFFIX);
-						$folder->delete();
-						break;
-					}
-				}
-			}
-		} catch (FilesNotFoundException | InvalidPathException $e) {
-			throw new NotFoundException($e->getMessage(), 0, $e);
-		} catch (FilesNotPermittedException | LockedException $e) {
-			throw new NotPermittedException($e->getMessage(), 0, $e);
-		}
-	}
 }
