@@ -65,7 +65,7 @@
 				<template #icon>
 					<ShareVariantIcon :size="20" />
 				</template>
-				{{ t('collectives', 'Share') }}
+				{{ t('collectives', 'Share with guests') }}
 			</NcActionButton>
 
 			<!-- Edit page emoji: only displayed in page list -->
