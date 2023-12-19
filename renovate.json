@@ -8,7 +8,7 @@
     "before 5am every weekday",
     "every weekend"
   ],
-  "reviewers": ["team:office"],
+  "reviewers": ["max-nextcloud", "mejo-"],
   "labels": ["dependencies"],
   "rangeStrategy": "bump",
   "rebaseWhen": "conflicted",

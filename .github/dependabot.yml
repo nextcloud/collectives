@@ -11,6 +11,10 @@ updates:
   labels:
   - 3. to review
   - dependencies
+  reviewers:
+  - mejo-
+  - max-nextcloud
+
 - package-ecosystem: github-actions
   directory: "/"
   schedule:
@@ -21,3 +25,6 @@ updates:
   labels:
   - 3. to review
   - dependencies
+  reviewers:
+  - mejo-
+  - max-nextcloud
