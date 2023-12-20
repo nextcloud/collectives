@@ -88,7 +88,6 @@ class PublicCollectiveController extends PublicShareController {
 				throw new NotFoundException('Failed to get shared collective', 0, $e);
 			}
 			$collective = $this->service->getCollectiveWithShare($share->getCollectiveId(),
-				$share->getPageId(),
 				$share->getOwner(),
 				$share->getToken());
 			// Explicitly set member level
