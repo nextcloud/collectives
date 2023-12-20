@@ -12,7 +12,6 @@ use OCA\Collectives\Model\CollectiveInfo;
 use OCA\Collectives\Model\CollectiveShareInfo;
 use OCA\Collectives\Service\CollectiveShareService;
 use OCA\Collectives\Service\NotFoundException;
-use OCA\Collectives\Service\NotPermittedException;
 use OCA\Collectives\Service\PageService;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
@@ -184,22 +183,6 @@ class CollectiveShareServiceTest extends TestCase {
 			->willReturn(15);
 
 		self::assertEquals(new CollectiveShareInfo($collectiveShare, true), $this->service->findShare($this->userId, $this->collectiveId, 0));
-	}
-
-	public function testCreateShareExistsAlready(): void {
-		$collectiveShare = new CollectiveShare();
-		$this->collectiveShareMapper->method('findOneByCollectiveIdAndUser')
-			->willReturn($collectiveShare);
-
-		$folderShare = $this->getMockBuilder(Share::class)
-			->disableOriginalConstructor()
-			->getMock();
-		$this->shareManager->method('getShareByToken')
-			->willReturn($folderShare);
-
-		$this->expectException(NotPermittedException::class);
-		$this->expectExceptionMessage('A share for collective %s exists already');
-		$this->service->createShare($this->userId, $this->collectiveInfo, null);
 	}
 
 	public function testUpdateShare(): void {

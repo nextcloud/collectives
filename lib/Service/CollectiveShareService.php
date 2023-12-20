@@ -6,7 +6,6 @@ namespace OCA\Collectives\Service;
 
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveShareMapper;
-use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Model\CollectiveInfo;
 use OCA\Collectives\Model\CollectiveShareInfo;
@@ -214,10 +213,6 @@ class CollectiveShareService {
 			$pageId = $pageInfo->getId();
 			$file = $this->pageService->getPageFile($collective->getId(), $pageId, $userId);
 			$nodeId = $file->getParent()->getId();
-		}
-
-		if (null !== $this->findShare($userId, $collective->getId(), $nodeId)) {
-			throw new NotPermittedException($this->l10n->t('A share for collective %s exists already', $collective->getName()));
 		}
 
 		$folderShare = $this->createFolderShare($userId, $collective->getName(), $nodeId);
