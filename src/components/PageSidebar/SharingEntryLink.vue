@@ -96,7 +96,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import { generateUrl } from '@nextcloud/router'
-import { showSuccess } from '@nextcloud/dialogs'
+import { showError, showSuccess } from '@nextcloud/dialogs'
 import { createFocusTrap } from 'focus-trap'
 import { NcAvatar, NcActionButton, NcActions, NcLoadingIcon } from '@nextcloud/vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
@@ -323,6 +323,10 @@ export default {
 					: t('collectives', 'Collective "{name}" has been shared', { name: this.currentCollective.name })
 				showSuccess(message)
 			} catch (error) {
+				const message = this.isPageShare
+					? t('collectives', 'Failed to share page "{name}"', { name: this.currentPage.title })
+					: t('collectives', 'Failed to share collective "{name}"', { name: this.currentCollective.name })
+				showError(message)
 				console.error('Failed to create share', error)
 				this.open = true
 			} finally {
