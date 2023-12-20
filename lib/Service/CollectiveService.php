@@ -84,7 +84,6 @@ class CollectiveService extends CollectiveServiceBase {
 
 	/**
 	 * @param int         $id
-	 * @param int         $pageId
 	 * @param string      $userId
 	 * @param string|null $shareToken
 	 *
@@ -93,12 +92,16 @@ class CollectiveService extends CollectiveServiceBase {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function getCollectiveWithShare(int $id, int $pageId, string $userId, ?string $shareToken = null): CollectiveInfo {
+	public function getCollectiveWithShare(int $id, string $userId, ?string $shareToken = null): CollectiveInfo {
 		$collectiveInfo = $this->getCollectiveInfo($id, $userId);
 		if ($shareToken && null !== $share = $this->shareService->findShareByToken($shareToken)) {
-			$collectiveInfo->setShareToken($share->getToken());
-			$collectiveInfo->setIsPageShare($share->getPageId() !== 0);
-			$collectiveInfo->setShareEditable($share->getEditable());
+			if ($collectiveInfo->getId() === $share->getCollectiveId()) {
+				$collectiveInfo->setShareToken($share->getToken());
+				$collectiveInfo->setIsPageShare($share->getPageId() !== 0);
+				$collectiveInfo->setShareEditable($share->getEditable());
+			} else {
+				throw new NotFoundException('Share token does not match collective.');
+			}
 		}
 
 		return $collectiveInfo;
