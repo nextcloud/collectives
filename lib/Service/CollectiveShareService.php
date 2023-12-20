@@ -213,11 +213,7 @@ class CollectiveShareService {
 		if ($pageInfo) {
 			$pageId = $pageInfo->getId();
 			$file = $this->pageService->getPageFile($collective->getId(), $pageId, $userId);
-			if (NodeHelper::isIndexPage($file)) {
-				$nodeId = $file->getParent()->getId();
-			} else {
-				$nodeId = $pageInfo->getId();
-			}
+			$nodeId = $file->getParent()->getId();
 		}
 
 		if (null !== $this->findShare($userId, $collective->getId(), $nodeId)) {
