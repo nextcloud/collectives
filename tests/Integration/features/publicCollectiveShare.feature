@@ -11,8 +11,8 @@ Feature: publicCollectiveShare
     When user "jane" uploads attachment "test.png" to "firstpage" with file path "/" in "BehatPublicCollective"
     Then anonymous sees attachment "test.png" with mimetype "image/png" for "firstpage" in public collective "BehatPublicCollective" with owner "jane"
 
-  Scenario: Fail to create a second public share
-    Then user "jane" fails to create public share for "BehatPublicCollective"
+  Scenario: Create a second public share
+    Then user "jane" creates public share for "BehatPublicCollective"
 
   Scenario: Fail to share a collective if sharing permissions are missing
     When user "jane" sets "share" level in collective "BehatPublicCollective" to "Admin"
