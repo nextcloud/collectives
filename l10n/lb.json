@@ -1,6 +1,4 @@
 { "translations": {
-    "Share link" : "Link deelen",
-    "Unshare" : "Net méi deelen",
     "Settings" : "Astellungen",
     "Loading…" : "Et gëtt gelueden",
     "Edit" : "Änneren",
@@ -12,8 +10,11 @@
     "Done" : "Done",
     "Title" : "Titel",
     "Deleted" : "Geläscht",
+    "Unshare" : "Net méi deelen",
+    "Share link" : "Link deelen",
     "Download" : "Eroflueden",
     "No other versions available" : "Keng aner Versiounen disponibel",
+    "Sharing" : "Gedeelt",
     "Versions" : "Versiounen"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

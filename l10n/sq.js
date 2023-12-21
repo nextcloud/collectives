@@ -2,10 +2,7 @@ OC.L10N.register(
     "collectives",
     {
     "You are not allowed to share %s" : "Nuk ju lejohet ta ndani %s me të tjerët",
-    "Share link" : "Lidhje ndarjeje",
-    "Unshare" : "Hiqe ndarjen",
     "Settings" : "Rregullimet",
-    "Copied" : "Kopjuar",
     "Members" : "Anëtar",
     "Remove" : "Hiqe",
     "Loading…" : "Duke u ngarkuar…",
@@ -20,9 +17,15 @@ OC.L10N.register(
     "Done" : "U krye",
     "Title" : "Titulli",
     "Deleted" : "E fshirë",
+    "Unshare" : "Hiqe ndarjen",
+    "Share link" : "Lidhje ndarjeje",
+    "Can edit" : "Mund të editojë",
     "Download" : "Shkarko",
     "No other versions available" : "Nuk ka versione të tjera të gatshme",
     "Attachments" : "Bashkangjitjet",
-    "Versions" : "Versione"
+    "Sharing" : "Ndarje",
+    "Versions" : "Versione",
+    "Link copied" : "Linku u kopjua",
+    "Copied" : "Kopjuar"
 },
 "nplurals=2; plural=(n != 1);");

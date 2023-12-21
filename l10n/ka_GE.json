@@ -1,7 +1,5 @@
 { "translations": {
     "You are not allowed to share %s" : "თქვენ არ გაქვთ უფლება გააზიაროთ %s",
-    "Share link" : "ბმულის გაზიარება",
-    "Unshare" : "გაზიარების შეწყვეტა",
     "Settings" : "პარამეტრები",
     "Members" : "წევრები",
     "Promote to moderator" : "დაწინაურება მოდერატორზე",
@@ -16,7 +14,11 @@
     "Move or copy" : "გადაიტანეთ ან დააკოპირეთ",
     "Title" : "სათაური",
     "Deleted" : "გაუქმდა",
+    "Unshare" : "გაზიარების შეწყვეტა",
+    "Share link" : "ბმულის გაზიარება",
+    "Can edit" : "შეუძლია შეცვლა",
     "Download" : "ჩამოტვირთვა",
+    "Sharing" : "გაზიარება",
     "Versions" : "ვერსიები"
 },"pluralForm" :"nplurals=2; plural=(n!=1);"
 }

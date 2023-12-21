@@ -1,10 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
-    "Share link" : "Rhannu dolen",
-    "Unshare" : "Dad-rannu",
     "Settings" : "Gosodiadau",
-    "Copied" : "Copïwyd",
     "Loading…" : "Yn llwytho…",
     "View" : "Golwg",
     "Edit" : "Golygu",
@@ -16,6 +13,10 @@ OC.L10N.register(
     "Done" : "Done",
     "Title" : "Teitl",
     "Deleted" : "Wedi dileu",
-    "Download" : "Llwytho i lawr"
+    "Add another link" : "Ychwanegu dolen arall",
+    "Unshare" : "Dad-rannu",
+    "Share link" : "Rhannu dolen",
+    "Download" : "Llwytho i lawr",
+    "Copied" : "Copïwyd"
 },
 "nplurals=4; plural=(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != 11) ? 2 : 3;");

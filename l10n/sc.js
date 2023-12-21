@@ -2,11 +2,7 @@ OC.L10N.register(
     "collectives",
     {
     "You are not allowed to share %s" : "No tenes su permissu de cumpartzire %s",
-    "Share link" : "Cumpartzi ligòngiu",
-    "Unshare" : "Annulla sa cumpartzidura",
     "Settings" : "Impostatziones",
-    "Copied" : "Copiadu",
-    "Cannot copy" : "Non faghet a copiare",
     "Members" : "Membros",
     "No search results" : "Perunu resurtadu de chirca",
     "Remove" : "Boga",
@@ -33,10 +29,20 @@ OC.L10N.register(
     "Title" : "Tìtulu",
     "Deleted" : "Cantzelladu",
     "Sort by title" : "Assenta segundu tìtulu",
+    "Add another link" : "Agiunghe un'àteru ligòngiu",
+    "Unshare" : "Annulla sa cumpartzidura",
+    "Create a new share link" : "Crea unu ligòngiu de cumpartzidura nou",
+    "Share link" : "Cumpartzi ligòngiu",
+    "Can edit" : "Podet modificare",
+    "Cannot copy, please copy the link manually" : "No at fatu a copiare, copia su ligòngiu a manu",
     "Download" : "Iscàrriga",
     "Current version" : "Versione atuale",
     "No other versions available" : "Peruna àtera versione disponìbile",
     "Attachments" : "Alligongiados",
-    "Versions" : "Versiones"
+    "Sharing" : "Cumpartzende",
+    "Versions" : "Versiones",
+    "Link copied" : "Ligòngiu copiadu",
+    "Copied" : "Copiadu",
+    "Cannot copy" : "Non faghet a copiare"
 },
 "nplurals=2; plural=(n != 1);");

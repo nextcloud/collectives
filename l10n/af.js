@@ -1,10 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
-    "Share link" : "Deel skakel",
-    "Unshare" : "Ontdeel",
     "Settings" : "Instellings",
-    "Copied" : "Gekopieer",
     "Loading…" : "Laai…",
     "View" : "Bekyk",
     "Edit" : "Wysig",
@@ -17,7 +14,10 @@ OC.L10N.register(
     "Move or copy" : "Kopieer of skuif",
     "Title" : "Titel",
     "Deleted" : "Geskrap",
+    "Unshare" : "Ontdeel",
+    "Share link" : "Deel skakel",
     "Download" : "Laai af",
-    "Versions" : "Weergawes"
+    "Versions" : "Weergawes",
+    "Copied" : "Gekopieer"
 },
 "nplurals=2; plural=(n != 1);");

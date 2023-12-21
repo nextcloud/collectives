@@ -2,10 +2,7 @@ OC.L10N.register(
     "collectives",
     {
     "You are not allowed to share %s" : "Vi ne permesatas kunhavigi %s",
-    "Share link" : "Kunhavigi ligilon",
-    "Unshare" : "Malkunhavigi",
     "Settings" : "Agordoj",
-    "Copied" : "Kopiita",
     "Members" : "Membroj",
     "Loading…" : "Ŝargado...",
     "View" : "Vidi",
@@ -19,10 +16,15 @@ OC.L10N.register(
     "Move or copy" : "Movi aŭ kopii",
     "Title" : "Titolo",
     "Deleted" : "Forigita",
+    "Add another link" : "Aldoni plian ligilon",
+    "Unshare" : "Malkunhavigi",
+    "Create a new share link" : "Krei novan kunhavan ligilon",
+    "Share link" : "Kunhavigi ligilon",
     "Download" : "Elŝuti",
     "Current version" : "Nuna versio",
     "No other versions available" : "Neniu alia versio disponeblas",
     "Attachments" : "Dosieraj aldonaĵoj",
-    "Versions" : "Versioj"
+    "Versions" : "Versioj",
+    "Copied" : "Kopiita"
 },
 "nplurals=2; plural=(n != 1);");

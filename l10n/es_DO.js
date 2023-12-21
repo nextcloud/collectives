@@ -2,8 +2,6 @@ OC.L10N.register(
     "collectives",
     {
     "You are not allowed to share %s" : "No tienes permitido compartir %s",
-    "Share link" : "Compartir liga",
-    "Unshare" : "Dejar de compartir",
     "Settings" : "Configuraciones ",
     "Members" : "Miembros",
     "Loading…" : "Cargando...",
@@ -18,6 +16,9 @@ OC.L10N.register(
     "Move or copy" : "Mover o copiar",
     "Title" : "Título",
     "Deleted" : "Borrado",
+    "Add another link" : "Añadir otro enlace",
+    "Unshare" : "Dejar de compartir",
+    "Share link" : "Compartir liga",
     "Download" : "Descargar",
     "Versions" : "Versiones"
 },

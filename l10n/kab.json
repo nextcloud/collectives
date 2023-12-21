@@ -1,5 +1,4 @@
 { "translations": {
-    "Share link" : "Fren aseɣwen",
     "Settings" : "Iɣewwaṛen",
     "No search results" : "Ulac igmaḍ n unadi",
     "Remove" : "Kkes",
@@ -11,7 +10,11 @@
     "Done" : "Immed",
     "Title" : "Azwel",
     "Deleted" : "Yettwakkes",
+    "Add another link" : "Rnu aseɣwen-nniḍen",
+    "Share link" : "Fren aseɣwen",
     "Download" : "Sider",
-    "Attachments" : "Ticeqqufin"
+    "Attachments" : "Ticeqqufin",
+    "Sharing" : "Beṭṭu",
+    "Link copied" : "Aseɣwen yettwanɣel"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

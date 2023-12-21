@@ -2,10 +2,7 @@ OC.L10N.register(
     "collectives",
     {
     "You are not allowed to share %s" : "Anda tidak diizinkan untuk membagikan %s",
-    "Share link" : "Bagikan tautan",
-    "Unshare" : "Batalkan berbagi",
     "Settings" : "Setelan",
-    "Copied" : "Tersalin",
     "Members" : "Anggota",
     "Remove" : "Hapus",
     "Loading…" : "Memuat…",
@@ -20,9 +17,15 @@ OC.L10N.register(
     "Move or copy" : "Pindah atau salin",
     "Title" : "Judul",
     "Deleted" : "Dihapus",
+    "Add another link" : "Tambah tautan lain",
+    "Unshare" : "Batalkan berbagi",
+    "Share link" : "Bagikan tautan",
     "Download" : "Unduh",
     "No other versions available" : "Tidak ada versi lain yang tersedia",
     "Attachments" : "Lampiran",
-    "Versions" : "Versi"
+    "Sharing" : "Berbagi",
+    "Versions" : "Versi",
+    "Link copied" : "Link tersalin",
+    "Copied" : "Tersalin"
 },
 "nplurals=1; plural=0;");

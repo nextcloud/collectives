@@ -1,5 +1,4 @@
 { "translations": {
-    "Share link" : "Share link",
     "Settings" : "Tetapan",
     "Edit" : "Sunting",
     "Restore" : "Pulihkan",
@@ -9,6 +8,7 @@
     "Done" : "Done",
     "Title" : "Judul",
     "Deleted" : "Dipadam",
+    "Share link" : "Share link",
     "Download" : "Muat turun",
     "No other versions available" : "Tiada lagi versi lain",
     "Versions" : "Versi"

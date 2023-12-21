@@ -1,11 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
-    "Share link" : "Холбоос хуваалцах",
-    "Unshare" : "Түгээлтийг зогсоох",
     "Settings" : "Тохиргоо",
-    "Copied" : "Хуулагдсан",
-    "Cannot copy" : "Хуулагдаагүй",
     "Members" : "Гишүүд",
     "Loading…" : "уншиж байна",
     "Edit" : "засварлах",
@@ -18,8 +14,14 @@ OC.L10N.register(
     "Move or copy" : "Зөөх эсвэл хуулах",
     "Title" : "Цол/Албан тушаал",
     "Deleted" : "Устгагдсан",
+    "Unshare" : "Түгээлтийг зогсоох",
+    "Share link" : "Холбоос хуваалцах",
+    "View only" : "Зөвхөн үзэх",
     "Download" : "Татах",
     "Attachments" : "Хавсралт",
-    "Versions" : "Хувилбарууд"
+    "Sharing" : "Түгээх",
+    "Versions" : "Хувилбарууд",
+    "Copied" : "Хуулагдсан",
+    "Cannot copy" : "Хуулагдаагүй"
 },
 "nplurals=2; plural=(n != 1);");

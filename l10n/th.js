@@ -2,8 +2,6 @@ OC.L10N.register(
     "collectives",
     {
     "You are not allowed to share %s" : "คุณไม่ได้รับอนุญาตให้แชร์ %s",
-    "Share link" : "แชร์ลิงก์",
-    "Unshare" : "เลิกแชร์",
     "Settings" : "การตั้งค่า",
     "Remove" : "ลบออก",
     "Loading…" : "กำลังโหลด…",
@@ -18,9 +16,17 @@ OC.L10N.register(
     "Move or copy" : "ย้ายหรือคัดลอก",
     "Title" : "ชื่อเรื่อง",
     "Deleted" : "ลบแล้ว",
+    "Add another link" : "เพิ่มลิงก์อื่น",
+    "Unshare" : "เลิกแชร์",
+    "Share link" : "แชร์ลิงก์",
+    "View only" : "ดูเท่านั้น",
+    "Can edit" : "สามารถแก้ไข",
+    "Cannot copy, please copy the link manually" : "ไม่สามารถคัดลอก กรุณาคัดลอกลิงก์เอง",
     "Download" : "ดาวน์โหลด",
     "No other versions available" : "ไม่มีรุ่นอื่นที่ใช้งานได้",
     "Attachments" : "ไฟล์แนบ",
-    "Versions" : "รุ่น"
+    "Sharing" : "แชร์ข้อมูล",
+    "Versions" : "รุ่น",
+    "Link copied" : "คัดลอกลิงก์แล้ว"
 },
 "nplurals=1; plural=0;");
