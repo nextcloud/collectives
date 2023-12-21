@@ -1,6 +1,4 @@
 { "translations": {
-    "Share link" : "Podijelite vezu",
-    "Unshare" : "Prestani  dijeliti",
     "Settings" : "Podešavanje",
     "Members" : "Članovi",
     "Edit" : "Izmjeni",
@@ -9,6 +7,8 @@
     "Create" : "Ustvari",
     "Done" : "Done",
     "Title" : "Naslov",
+    "Unshare" : "Prestani  dijeliti",
+    "Share link" : "Podijelite vezu",
     "Download" : "Preuzmi",
     "No other versions available" : "Druge verzije su nedostupne",
     "Versions" : "Verzije"

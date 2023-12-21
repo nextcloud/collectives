@@ -2,8 +2,6 @@ OC.L10N.register(
     "collectives",
     {
     "You are not allowed to share %s" : "No tienes permitido compartir %s",
-    "Share link" : "Compartir enlace",
-    "Unshare" : "Dejar de compartir",
     "Settings" : "Configuraciones ",
     "Members" : "Miembros",
     "Loading…" : "Cargando",
@@ -18,6 +16,10 @@ OC.L10N.register(
     "Move or copy" : "Mover o copiar",
     "Title" : "Título",
     "Deleted" : "Borrado",
-    "Versions" : "Versiones"
+    "Add another link" : "Añadir otro enlace",
+    "Unshare" : "Dejar de compartir",
+    "Share link" : "Compartir enlace",
+    "Versions" : "Versiones",
+    "Link copied" : "Enlace copiado"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

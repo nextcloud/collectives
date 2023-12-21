@@ -1,11 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
-    "Share link" : "Partejar lo ligam",
-    "Allow editing in share" : "Permetre la modificacion dins lo partatge",
-    "Unshare" : "Partejar pas mai",
     "Settings" : "Paramètres",
-    "Copy share link" : "Copiar ligam de partatge",
     "Members" : "Membres",
     "No search results" : "pas cap de resultats de recèrca",
     "Remove" : "Suprimir",
@@ -27,9 +23,19 @@ OC.L10N.register(
     "Move or copy" : "Desplaçar o copiar",
     "Title" : "Títol",
     "Deleted" : "Suprimit",
+    "Add another link" : "Ajustar un autre ligam",
+    "Unshare" : "Partejar pas mai",
+    "Create a new share link" : "Crear un ligam de partatge novèl",
+    "Share link" : "Partejar lo ligam",
+    "View only" : "Veire solament",
+    "Can edit" : "Pòt modificar",
     "Download" : "Telecargar",
     "No other versions available" : "Cap d’autra version pas disponibla",
+    "Sharing" : "Partiment",
     "Versions" : "Versions",
-    "_%n byte_::_%n bytes_" : ["%n octet","%n octets"]
+    "Link copied" : "Ligam copiat",
+    "_%n byte_::_%n bytes_" : ["%n octet","%n octets"],
+    "Allow editing in share" : "Permetre la modificacion dins lo partatge",
+    "Copy share link" : "Copiar ligam de partatge"
 },
 "nplurals=2; plural=(n > 1);");

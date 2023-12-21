@@ -1,8 +1,6 @@
 OC.L10N.register(
     "collectives",
     {
-    "Share link" : "Share link",
-    "Unshare" : "លែង​ចែក​រំលែក",
     "Settings" : "ការកំណត់",
     "Edit" : "កែប្រែ",
     "Restore" : "ស្ដារ​មក​វិញ",
@@ -13,8 +11,11 @@ OC.L10N.register(
     "Done" : "Done",
     "Title" : "ចំណងជើង",
     "Deleted" : "បាន​លុប",
+    "Unshare" : "លែង​ចែក​រំលែក",
+    "Share link" : "Share link",
     "Download" : "ទាញយក",
     "No other versions available" : "មិន​មាន​កំណែ​ផ្សេង​ទៀត​ទេ",
+    "Sharing" : "ការ​ចែក​រំលែក",
     "Versions" : "កំណែ"
 },
 "nplurals=1; plural=0;");

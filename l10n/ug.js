@@ -1,8 +1,6 @@
 OC.L10N.register(
     "collectives",
     {
-    "Share link" : "Share link",
-    "Unshare" : "ھەمبەھىرلىمە",
     "Settings" : "تەڭشەكلەر",
     "Edit" : "تەھرىر",
     "Delete permanently" : "مەڭگۈلۈك ئۆچۈر",
@@ -11,7 +9,10 @@ OC.L10N.register(
     "Done" : "Done",
     "Title" : "ماۋزۇ",
     "Deleted" : "ئۆچۈرۈلدى",
+    "Unshare" : "ھەمبەھىرلىمە",
+    "Share link" : "Share link",
     "Download" : "چۈشۈر",
+    "Sharing" : "ھەمبەھىر",
     "Versions" : "نەشرى"
 },
 "nplurals=2; plural=(n != 1);");

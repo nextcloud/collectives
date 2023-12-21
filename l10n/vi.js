@@ -1,10 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
-    "Share link" : "Chia sẻ liên kết",
-    "Unshare" : "Bỏ chia sẻ",
     "Settings" : "Cài đặt",
-    "Copied" : "Đã sao chép",
     "Members" : "Thành viên",
     "No search results" : "Không có kết quả tìm kiếm",
     "Remove" : "Xoá",
@@ -28,11 +25,23 @@ OC.L10N.register(
     "Move or copy" : "Di chuyển hoặc sao chép",
     "Title" : "Tiêu đề",
     "Deleted" : "Đã xoá",
+    "Add another link" : "Thêm một liên kết khác",
+    "Unshare" : "Bỏ chia sẻ",
+    "Create a new share link" : "Tạo liên kết chia sẻ mới",
+    "Share link ({index})" : "Chia sẻ liên kết ({index})",
+    "Share link" : "Chia sẻ liên kết",
+    "View only" : "Chỉ xem",
+    "Can edit" : "Có thể chỉnh sửa",
+    "Cannot copy, please copy the link manually" : "Không thể sao chép, vui lòng sao chép liên kết bằng tay",
+    "Actions for \"{title}\"" : "Hành động cho \"{title}\"",
     "Download" : "Tải xuống",
     "Current version" : "Phiên bản hiện tại",
     "No other versions available" : "Không có các phiên bản khác có sẵn",
     "Attachments" : "Đính kèm",
+    "Sharing" : "Đang chia sẽ",
     "Versions" : "Phiên bản",
-    "_%n byte_::_%n bytes_" : ["%n byte"]
+    "Link copied" : "Đã sao chép liên kết",
+    "_%n byte_::_%n bytes_" : ["%n byte"],
+    "Copied" : "Đã sao chép"
 },
 "nplurals=1; plural=0;");

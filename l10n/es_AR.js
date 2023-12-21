@@ -2,12 +2,7 @@ OC.L10N.register(
     "collectives",
     {
     "You are not allowed to share %s" : "No tiene permitido compartir %s",
-    "Share link" : "Compartir enlace",
-    "Unshare" : "No compartir",
     "Settings" : "Ajustes",
-    "Copied" : "Copiado",
-    "Cannot copy" : "No se pudo copiar",
-    "Copy share link" : "Copiar el enlace compartido",
     "Members" : "Miembros",
     "Remove" : "Eliminar",
     "Loading…" : "Cargando…",
@@ -23,9 +18,16 @@ OC.L10N.register(
     "Move or copy" : "Mover o Copiar",
     "Title" : "Título",
     "Deleted" : "Eliminado",
+    "Add another link" : "Agregar otro enlace",
+    "Unshare" : "No compartir",
+    "Share link" : "Compartir enlace",
     "Download" : "Descargar",
     "No other versions available" : "No hay más versiones disponibles",
     "Attachments" : "Adjuntos",
-    "Versions" : "Versiones"
+    "Versions" : "Versiones",
+    "Link copied" : "Link copiado",
+    "Copied" : "Copiado",
+    "Cannot copy" : "No se pudo copiar",
+    "Copy share link" : "Copiar el enlace compartido"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

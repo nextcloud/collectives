@@ -1,8 +1,6 @@
 OC.L10N.register(
     "collectives",
     {
-    "Share link" : "Del lenkje",
-    "Unshare" : "Fjern deling",
     "Settings" : "Innstillingar",
     "Promote to moderator" : "Fremje til moderator",
     "Loading…" : "Lastar...",
@@ -15,8 +13,13 @@ OC.L10N.register(
     "Done" : "Ferdig",
     "Title" : "Tittel",
     "Deleted" : "Sletta",
+    "Add another link" : "Legg til ei anna lenkje",
+    "Unshare" : "Fjern deling",
+    "Share link" : "Del lenkje",
     "Download" : "Last ned",
     "No other versions available" : "Ingen andre utgåver tilgjengeleg",
-    "Versions" : "Utgåver"
+    "Sharing" : "Deling",
+    "Versions" : "Utgåver",
+    "Link copied" : "Lenkje kopiert"
 },
 "nplurals=2; plural=(n != 1);");

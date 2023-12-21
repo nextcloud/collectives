@@ -1,10 +1,6 @@
 { "translations": {
     "You are not allowed to share %s" : "אינך רשאי/ת לשתף %s",
-    "Share link" : "קישור שיתוף",
-    "Unshare" : "ביטול שיתוף",
     "Settings" : "הגדרות",
-    "Copied" : "הועתק",
-    "Copy share link" : "העתקת קישור השיתוף",
     "Members" : "חברים",
     "Remove" : "הסרה",
     "Loading…" : "בטעינה…",
@@ -26,10 +22,21 @@
     "Template" : "תבנית",
     "Title" : "תפקיד",
     "Deleted" : "נמחק",
+    "Add another link" : "הוספת קישור נוסף",
+    "Unshare" : "ביטול שיתוף",
+    "Create a new share link" : "יצירת קישור שיתוף חדש",
+    "Share link" : "קישור שיתוף",
+    "View only" : "לצפיה בלבד",
+    "Can edit" : "ניתן לערוך",
+    "Cannot copy, please copy the link manually" : "לא ניתן להעתיק, נא להעתיק את הקישור ידנית",
     "Download" : "הורדה",
     "Current version" : "גרסה נוכחית",
     "No other versions available" : "אין גרסאות אחרות זמינות",
     "Attachments" : "קבצים מצורפים",
-    "Versions" : "גרסאות"
+    "Sharing" : "שיתוף",
+    "Versions" : "גרסאות",
+    "Link copied" : "הקישור הועתק",
+    "Copied" : "הועתק",
+    "Copy share link" : "העתקת קישור השיתוף"
 },"pluralForm" :"nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;"
 }

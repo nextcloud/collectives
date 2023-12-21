@@ -2,12 +2,7 @@ OC.L10N.register(
     "collectives",
     {
     "You are not allowed to share %s" : "Δεν σας επιτρέπεται ο διαμοιρασμός %s",
-    "Share link" : "Διαμοιρασμός συνδέσμου",
-    "Unshare" : "Αναίρεση διαμοιρασμού",
     "Settings" : "Ρυθμίσεις",
-    "Copied" : "Αντιγράφτηκε",
-    "Cannot copy" : "Δεν είναι δυνατή η αντιγραφή",
-    "Copy share link" : "Αντιγραφή συνδέσμου κοινής χρήσης",
     "Members" : "Μέλη",
     "No search results" : "Κανένα αποτέλεσμα",
     "Remove" : "Αφαίρεση",
@@ -35,10 +30,17 @@ OC.L10N.register(
     "Title" : "Τίτλος",
     "Deleted" : "Διαγραμμένα",
     "Sort by title" : "Ταξινόμηση κατά τίτλο",
+    "Add another link" : "Προσθήκη άλλου συνδέσμου",
+    "Unshare" : "Αναίρεση διαμοιρασμού",
+    "Create a new share link" : "Δημιουργία νέου κοινόχρηστου συνδέσμου",
+    "Share link" : "Διαμοιρασμός συνδέσμου",
     "Download" : "Λήψη",
     "Current version" : "Τρέχουσα έκδοση",
     "No other versions available" : "Δεν υπάρχουν άλλες εκδόσεις διαθέσιμες",
     "Attachments" : "Συνημμένα",
-    "Versions" : "Εκδόσεις"
+    "Versions" : "Εκδόσεις",
+    "Copied" : "Αντιγράφτηκε",
+    "Cannot copy" : "Δεν είναι δυνατή η αντιγραφή",
+    "Copy share link" : "Αντιγραφή συνδέσμου κοινής χρήσης"
 },
 "nplurals=2; plural=(n != 1);");

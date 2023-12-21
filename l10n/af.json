@@ -1,8 +1,5 @@
 { "translations": {
-    "Share link" : "Deel skakel",
-    "Unshare" : "Ontdeel",
     "Settings" : "Instellings",
-    "Copied" : "Gekopieer",
     "Loading…" : "Laai…",
     "View" : "Bekyk",
     "Edit" : "Wysig",
@@ -15,7 +12,10 @@
     "Move or copy" : "Kopieer of skuif",
     "Title" : "Titel",
     "Deleted" : "Geskrap",
+    "Unshare" : "Ontdeel",
+    "Share link" : "Deel skakel",
     "Download" : "Laai af",
-    "Versions" : "Weergawes"
+    "Versions" : "Weergawes",
+    "Copied" : "Gekopieer"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

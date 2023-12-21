@@ -2,10 +2,7 @@ OC.L10N.register(
     "collectives",
     {
     "You are not allowed to share %s" : "Jums nav atļauts dalīties %s",
-    "Share link" : "Koplietot saiti",
-    "Unshare" : "Pārtraukt koplietošanu",
     "Settings" : "Iestatījumi",
-    "Copied" : "Nokopēts",
     "Members" : "Biedri",
     "Remove" : "Izņemt",
     "Loading…" : "Ielādē …",
@@ -21,9 +18,16 @@ OC.L10N.register(
     "Move or copy" : "Pārvietot vai kopēt",
     "Title" : "Amats",
     "Deleted" : "Dzēstie",
+    "Add another link" : "Pievienot citu saiti",
+    "Unshare" : "Pārtraukt koplietošanu",
+    "Create a new share link" : "Izveidojiet jaunu kopīgošanas saiti",
+    "Share link" : "Koplietot saiti",
     "Download" : "Lejupielādēt",
     "No other versions available" : "Citas versijas nav pieejamas",
     "Attachments" : "Pielikumi",
-    "Versions" : "Versijas"
+    "Sharing" : "Koplietošana",
+    "Versions" : "Versijas",
+    "Link copied" : "Saite nokopēta",
+    "Copied" : "Nokopēts"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");
