@@ -18,6 +18,7 @@ OC.L10N.register(
     "A place for activist and community projects to build shared knowledge" : "مكان للنشطاء والمشاريع المجتمعية لبناء المعرفة المشتركة",
     "Collectives is a Nextcloud App for activist and community projects to organize together.\nCome and gather in collectives to build shared knowledge.\n\n* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n  tied to a [Nextcloud Circle](https://github.com/nextcloud/circles) and\n  owned by the collective.\n* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**\n  for page formatting.\n\n## Installation\n\nIn your Nextcloud instance, simply navigate to **»Apps«**, find the\n**»Circles«** and **»Collectives«** apps and enable them." : "\"التجميعات\" Collectives هي تطبيق من نكست كلاود للنشطاء والمشاريع المجتمعية للتنظيم معًا. \nتعالوا واجتمعوا في مجموعات لبناء المعرفة المشتركة. \n* 👥 ** سير عمل جماعي وغير هرمي \n**: التجميعات مرتبطة بتطبيق نكست كلاود للدوائر Circles ـ [Circles](https://github.com/nextcloud/circles)  \n\n* 📝 **تحرير جماعي للتجميعة** كما في التطبيق الشهير إيثرباد EtherpadK. و هذا صار ممكنا بفضل تطبيق Text من نكست كلاود [Text app] (https://github.com/nextcloud/text).\n* 🔤 ** استخدام ماركدوان في تكوين الصفحات  [Markdown] (https://en.wikipedia.org/wiki/Markdown) على خادومك الخاص. \n\n## التنصيب\n\nما عليك سوى الانتقال إلى ** »التطبيقات« **، و ابحث عن ** »الدوائر Circles« ** و ** »التجميعات Collectives« ** و قم بتمكينها.",
     "Manage members" : "إدارة الإعضاء",
+    "Share with guests" : "شارِك مع الضيوف",
     "Export or print" : "صدّر أو اطبع",
     "Settings" : "الإعدادات",
     "Leave collective" : "غادر التجميعة collective",
@@ -140,6 +141,7 @@ OC.L10N.register(
     "Breadcrumb for list of collectives" : "مسار التنقُّل لقائمة التجميعات",
     "Breadcrumb for page {page}" : "مسار التنقُّل للصفحة {page}",
     "All collectives" : "كل التجميعات",
+    "Breadcrumb for page {name}" : "مسار النقلات للصفحة  {name}",
     "Breadcrumb for collective {name}" : "مسار التنقُّل للتجميعة {name}",
     "Move page here" : "أُنقُل الصفحة هنا",
     "Move page to {collective}" : "أنقُل الصفحة إلى {collective}",
@@ -172,8 +174,25 @@ OC.L10N.register(
     "Hide templates" : "إخفِ القوالب",
     "Show templates" : "أظهِر القوالب",
     "Could not save page order for collective" : "تعذّر حفظ ترتيب صفحة التجميعة",
+    "Quick share options dropdown" : "القائمة المنسدلة لخيارات المشاركة السريعة",
+    "Add another link" : "أضِف رابطاً آخر",
     "Unshare" : "إلغاء المشاركة",
+    "Create a new share link" : "أنشِيءْ رابط مشاركة جديد",
+    "Share link ({index})" : "رابط المشاركة ({index})",
     "Share link" : "مشاركة الرابط",
+    "View only" : "للعرض فقط",
+    "Can edit" : "يمكنه التعديل",
+    "Cannot copy, please copy the link manually" : "يتعذّر النسخ. يُرجى نسخ الرابط يدويًا",
+    "Copy public link of {title} to clipboard" : "إنسَخ الرابط العمومي لـ {title} إلى الحافظة",
+    "Actions for \"{title}\"" : "إجراءات لـ \"{title}\"",
+    "Page \"{name}\" has been shared" : "الصفحة  \"{name}\" تمّت مشاركتها",
+    "Collective \"{name}\" has been shared" : "التجميعة  \"{name}\" تمّت مشاركتها",
+    "Failed to share page \"{name}\"" : "تعذّرت مشاركة الصفحة  \"{name}\"",
+    "Failed to share collective \"{name}\"" : "تعذّرت مشاركة التجميعة  \"{name}\"",
+    "Share link of page \"{name}\" has been updated" : "رابط مشاركة الصفحة  \"{name}\" تمّ تحديثه",
+    "Share link of collective \"{name}\" has been updated" : "رابط مشاركة التجميعة  \"{name}\" تمّ تحديثه",
+    "Page \"{name}\" has been unshared" : "الصفحة  \"{name}\" تمّ إلغاء مشاركتها",
+    "Collective \"{name}\" has been unshared" : "التجميعة \"{name}\" تمّ إلغاء مشاركتها",
     "View in document" : "عرض في المستند",
     "Download" : "تنزيل",
     "Recently deleted" : "محذوفة مؤخّراً",
@@ -190,11 +209,13 @@ OC.L10N.register(
     "Could not get page versions" : "تعذّر الحصول على نُسَخِ الصفحة",
     "Attachments" : "المرفقات",
     "Backlinks" : "روابط خلفيّة ",
+    "Sharing" : "المشاركة",
     "Versions" : "الإصدارات",
     "The content of this folder is best viewed in the Collectives app." : "من الأفضل مُشاهدة مُحتوى هذا المُجلّد في تطبيق التجميعات Collectives app.",
     "Open in Collectives" : "إفتح في تطبيق التجميعات Collectives",
     "Come, organize and build shared knowledge!" : "تعالَ، و نظّمْ، و ابنِ معرفةً مشتركةً!",
     "Create new collective" : "أنشيء تجميعةً collective جديدةً",
+    "Link copied" : "تمّ نَسْخ الرابط",
     "Could not copy link to the clipboard:" : "تعذّر نسخ الرابط إلى الحافظة",
     "Could not create the page" : "تعذّر إنشاء الصفحة",
     "New Page" : "صفحة جديدة",

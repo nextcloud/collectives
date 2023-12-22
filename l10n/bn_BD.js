@@ -15,6 +15,7 @@ OC.L10N.register(
     "Share link" : "লিংক ভাগাভাগি করেন",
     "Download" : "ডাউনলোড",
     "No other versions available" : "আর কোন সংষ্করণ প্রাপ্তব্য নয়",
+    "Sharing" : "ভাগাভাগিরত",
     "Versions" : "সংষ্করন"
 },
 "nplurals=2; plural=(n != 1);");

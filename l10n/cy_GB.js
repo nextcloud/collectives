@@ -17,6 +17,7 @@ OC.L10N.register(
     "Unshare" : "Dad-rannu",
     "Share link" : "Rhannu dolen",
     "Download" : "Llwytho i lawr",
+    "Link copied" : "Dolen wedi'i gopïo",
     "Copied" : "Copïwyd"
 },
 "nplurals=4; plural=(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != 11) ? 2 : 3;");
