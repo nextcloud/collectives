@@ -14,7 +14,9 @@ OC.L10N.register(
     "Back" : "Atrás",
     "Move or copy" : "Mover o copiar",
     "Template" : "Plantía",
+    "Can edit" : "Pue editar",
     "Download" : "Baxar",
+    "Sharing" : "Compartición",
     "Versions" : "Versiones",
     "_%n byte_::_%n bytes_" : ["%n byte","%n bytes"]
 },

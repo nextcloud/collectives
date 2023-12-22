@@ -16,8 +16,10 @@ OC.L10N.register(
     "Deleted" : "Geskrap",
     "Unshare" : "Ontdeel",
     "Share link" : "Deel skakel",
+    "Can edit" : "Kan redigeer",
     "Download" : "Laai af",
     "Versions" : "Weergawes",
+    "Link copied" : "Skakel gekopieer",
     "Copied" : "Gekopieer"
 },
 "nplurals=2; plural=(n != 1);");

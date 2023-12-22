@@ -20,11 +20,15 @@ OC.L10N.register(
     "Unshare" : "Malkunhavigi",
     "Create a new share link" : "Krei novan kunhavan ligilon",
     "Share link" : "Kunhavigi ligilon",
+    "Can edit" : "Povas redakti",
+    "Cannot copy, please copy the link manually" : "Ne eblis kopii la ligilon; kopiu ĝin permane.",
     "Download" : "Elŝuti",
     "Current version" : "Nuna versio",
     "No other versions available" : "Neniu alia versio disponeblas",
     "Attachments" : "Dosieraj aldonaĵoj",
+    "Sharing" : "Kunhavigo",
     "Versions" : "Versioj",
+    "Link copied" : "Ligilo kopiita",
     "Copied" : "Kopiita"
 },
 "nplurals=2; plural=(n != 1);");

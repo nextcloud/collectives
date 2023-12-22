@@ -19,6 +19,8 @@ OC.L10N.register(
     "Add another link" : "Añadir otro enlace",
     "Unshare" : "Dejar de compartir",
     "Share link" : "Compartir enlace",
+    "Can edit" : "Puede editar",
+    "Sharing" : "Compartiendo",
     "Versions" : "Versiones",
     "Link copied" : "Enlace copiado"
 },

@@ -17,6 +17,8 @@
     "Add another link" : "Añadir otro enlace",
     "Unshare" : "Dejar de compartir",
     "Share link" : "Compartir enlace",
+    "Can edit" : "Puede editar",
+    "Sharing" : "Compartiendo",
     "Versions" : "Versiones",
     "Link copied" : "Enlace copiado"
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"

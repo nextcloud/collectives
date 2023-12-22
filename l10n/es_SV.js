@@ -18,6 +18,7 @@ OC.L10N.register(
     "Deleted" : "Borrado",
     "Unshare" : "Dejar de compartir",
     "Share link" : "Compartir liga",
+    "Can edit" : "Puede editar",
     "Download" : "Descargar",
     "Sharing" : "Compartiendo",
     "Versions" : "Versiones"

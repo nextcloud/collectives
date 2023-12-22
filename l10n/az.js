@@ -12,10 +12,13 @@ OC.L10N.register(
     "Move or copy" : "Köçürt və ya kopyala",
     "Title" : "Başlıq",
     "Deleted" : "Silinib",
+    "Add another link" : "Başqa link əlavə edin",
     "Unshare" : "Paylaşımı durdur",
     "Share link" : "Linki yayımla",
     "Download" : "Yüklə",
     "No other versions available" : "Başqa versiyalar mövcud deyil",
-    "Versions" : "Versiyaları"
+    "Sharing" : "Paylaşılır",
+    "Versions" : "Versiyaları",
+    "Link copied" : "Link kopyalandı"
 },
 "nplurals=2; plural=(n != 1);");
