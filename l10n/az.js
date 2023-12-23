@@ -7,6 +7,7 @@ OC.L10N.register(
     "Restore" : "Geri qaytar",
     "Delete permanently" : "Həmişəlik sil",
     "Cancel" : "Dayandır",
+    "Back" : "Geri",
     "Create" : "Yarat",
     "Done" : "Done",
     "Move or copy" : "Köçürt və ya kopyala",
