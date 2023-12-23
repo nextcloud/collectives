@@ -20,6 +20,7 @@ OC.L10N.register(
     "Add another link" : "Tambah tautan lain",
     "Unshare" : "Batalkan berbagi",
     "Share link" : "Bagikan tautan",
+    "View only" : "Hanya lihat",
     "Download" : "Unduh",
     "No other versions available" : "Tidak ada versi lain yang tersedia",
     "Attachments" : "Lampiran",
