@@ -9,6 +9,7 @@ OC.L10N.register(
     "An error occurred while performing the search" : "Una error s'es producha en realizant la recèrca",
     "Add groups" : "Apondre grops",
     "Add circles" : "Apondre cercles",
+    "Permissions" : "Autorizacions",
     "Allow editing for" : "Permetre la modificacion per",
     "View" : "Veire",
     "Edit" : "Modificar",
