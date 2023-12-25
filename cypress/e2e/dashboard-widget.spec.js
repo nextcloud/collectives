@@ -30,9 +30,8 @@ describe('Collectives dashboard widget', function() {
 			before(function() {
 				cy.loginAs('bob')
 				cy.enableDashboardWidget('collectives-recent-pages')
-				cy.visit('apps/collectives')
 				cy.deleteAndSeedCollective('Dashboard Collective1')
-				cy.seedPage('Page 1', '', 'Readme.md')
+					.seedPage('Page 1', '', 'Readme.md')
 			})
 			it('Lists pages in the dashboard widget', function() {
 				cy.visit('/apps/dashboard/')

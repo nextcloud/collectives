@@ -1,11 +1,11 @@
 import { set } from 'vue'
 import { getCurrentUser } from '@nextcloud/auth'
 import { getBuilder } from '@nextcloud/browser-storage'
-import axios from '@nextcloud/axios'
-import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
+import { generateRemoteUrl } from '@nextcloud/router'
 /* eslint import/namespace: ['error', { allowComputed: true }] */
 import * as sortOrders from '../util/sortOrders.js'
 import { sortedSubpages, pageParents } from './pageExtracts.js'
+import * as api from '../apis/collectives/index.js'
 
 import {
 	SET_PAGES,
@@ -244,46 +244,12 @@ export default {
 			return state.newPage && getters.pagePath(state.newPage)
 		},
 
-		pagesUrl(_state, getters) {
-			return getters.isPublic
-				? generateUrl(`/apps/collectives/_api/p/${getters.shareTokenParam}/_pages`)
-				: generateUrl(`/apps/collectives/_api/${getters.currentCollective.id}/_pages`)
-		},
-
-		pageCreateUrl(_state, getters) {
-			return parentId => `${getters.pagesUrl}/${parentId}`
-		},
-
-		pageUrl(_state, getters) {
-			return (pageId) => `${getters.pagesUrl}/${pageId}`
-		},
-
-		emojiUrl(_state, getters) {
-			return (pageId) => `${getters.pageUrl(pageId)}/emoji`
-		},
-
-		subpageOrderUrl(_state, getters) {
-			return (pageId) => `${getters.pageUrl(pageId)}/subpageOrder`
-		},
-
-		touchUrl(_state, getters) {
-			return `${getters.pageUrl(getters.currentPage.id)}/touch`
-		},
-
-		attachmentsUrl(_state, getters) {
-			return (pageId) => `${getters.pageUrl(pageId)}/attachments`
-		},
-
-		backlinksUrl(_state, getters) {
-			return (pageId) => `${getters.pageUrl(pageId)}/backlinks`
-		},
-
-		trashIndexUrl(_state, getters) {
-			return `${getters.pagesUrl}/trash`
-		},
-
-		trashActionUrl(_state, getters) {
-			return (pageId) => `${getters.pagesUrl}/trash/${pageId}`
+		context(_state, getters) {
+			return {
+				isPublic: getters.isPublic,
+				collectiveId: getters.currentCollective.id,
+				shareTokenParam: getters.shareTokenParam,
+			}
 		},
 
 		pageTitle(state, getters) {
@@ -509,7 +475,7 @@ export default {
 			if (setLoading) {
 				commit('load', 'collective')
 			}
-			const response = await axios.get(getters.pagesUrl)
+			const response = await api.getPages(getters.context)
 			commit(SET_PAGES, {
 				pages: response.data.data,
 				current: getters.currentPage,
@@ -526,7 +492,7 @@ export default {
 		 */
 		async [GET_TRASH_PAGES]({ commit, getters }) {
 			commit('load', 'pageTrash')
-			const response = await axios.get(getters.trashIndexUrl)
+			const response = await api.getTrashPages(getters.context)
 			commit(SET_TRASH_PAGES, response.data.data)
 			commit('done', 'pageTrash')
 		},
@@ -541,7 +507,7 @@ export default {
 		 * @param {number} pageId Page ID
 		 */
 		async [GET_PAGE]({ commit, getters, state }, pageId) {
-			const response = await axios.get(getters.pageUrl(pageId))
+			const response = await api.getPage(getters.context, pageId)
 			commit(UPDATE_PAGE, response.data.data)
 		},
 
@@ -559,13 +525,13 @@ export default {
 			// We'll be done when the editor is loaded.
 			commit('load', 'newPageContent')
 
-			const response = await axios.post(getters.pageCreateUrl(page.parentId), page)
+			const response = await api.createPage(getters.context, page)
 			// Add new page to the beginning of pages array
 			commit(ADD_PAGE, response.data.data)
 		},
 
 		/**
-		 * Create a new page
+		 * Create a new template page
 		 *
 		 * @param {object} store the vuex store
 		 * @param {Function} store.commit commit changes
@@ -581,7 +547,7 @@ export default {
 			// We'll be done when the editor is loaded.
 			commit('load', 'newPageContent')
 
-			const response = await axios.post(getters.pageCreateUrl(page.parentId), page)
+			const response = await api.createPage(getters.context, page)
 			// Add new page to the beginning of pages array
 			commit(ADD_PAGE, response.data.data)
 		},
@@ -594,7 +560,7 @@ export default {
 		 * @param {object} store.getters getters of the store
 		 */
 		async [TOUCH_PAGE]({ commit, getters }) {
-			const response = await axios.get(getters.touchUrl)
+			const response = await api.touchPage(getters.context, getters.currentPage.id)
 			commit(UPDATE_PAGE, response.data.data)
 		},
 
@@ -607,8 +573,7 @@ export default {
 		 * @param {string} newTitle new title for the page
 		 */
 		async [RENAME_PAGE]({ commit, getters }, newTitle) {
-			const url = getters.pageUrl(getters.currentPage.id)
-			const response = await axios.put(url, { title: newTitle })
+			const response = await api.renamePage(getters.context, getters.currentPage.id, newTitle)
 			await commit(UPDATE_PAGE, response.data.data)
 		},
 
@@ -637,9 +602,8 @@ export default {
 				index += 1
 			}
 
-			const url = getters.pageUrl(pageId)
 			try {
-				await axios.put(url, { index, parentId: newParentId, copy: true })
+				await api.copyPage(getters.context, pageId, newParentId, index)
 				// Reload the page list to make new page appear
 				await dispatch(GET_PAGES, false)
 			} finally {
@@ -676,9 +640,8 @@ export default {
 			page.parentId = newParentId
 			commit(UPDATE_PAGE, page)
 
-			const url = getters.pageUrl(pageId)
 			try {
-				const response = await axios.put(url, { index, parentId: newParentId })
+				const response = await api.movePage(getters.context, pageId, newParentId, index)
 				commit(UPDATE_PAGE, response.data.data)
 			} catch (e) {
 				commit(UPDATE_PAGE, pageClone)
@@ -711,8 +674,7 @@ export default {
 		async [COPY_PAGE_TO_COLLECTIVE]({ commit, getters, state, dispatch }, { collectiveId, newParentId, pageId, index }) {
 			commit('load', 'pagelist')
 
-			const url = `${getters.pageUrl(pageId)}/to/${collectiveId}`
-			await axios.put(url, { index, parentId: newParentId, copy: true })
+			await api.copyPageToCollective(getters.context, pageId, collectiveId, newParentId, index)
 			commit('done', 'pagelist')
 		},
 
@@ -735,8 +697,7 @@ export default {
 			const page = { ...state.pages.find(p => p.id === pageId) }
 			const hasSubpages = getters.visibleSubpages(pageId).length > 0
 
-			const url = `${getters.pageUrl(pageId)}/to/${collectiveId}`
-			await axios.put(url, { index, parentId: newParentId })
+			await api.movePageToCollective(getters.context, pageId, collectiveId, newParentId, index)
 			commit(REMOVE_PAGE, page)
 			commit('done', 'pagelist')
 
@@ -759,7 +720,7 @@ export default {
 		 */
 		async [SET_PAGE_EMOJI]({ commit, getters }, { pageId, emoji }) {
 			commit('load', `pageEmoji-${pageId}`)
-			const response = await axios.put(getters.emojiUrl(pageId), { emoji })
+			const response = await api.setPageEmoji(getters.context, pageId, emoji)
 			commit(UPDATE_PAGE, response.data.data)
 			commit('done', `pageEmoji-${pageId}`)
 		},
@@ -788,9 +749,10 @@ export default {
 			commit(UPDATE_PAGE, page)
 
 			try {
-				const response = await axios.put(
-					getters.subpageOrderUrl(pageId),
-					{ subpageOrder: JSON.stringify(subpageOrder) },
+				const response = await api.setPageSubpageOrder(
+					getters.context,
+					pageId,
+					JSON.stringify(subpageOrder),
 				)
 				commit(UPDATE_PAGE, response.data.data)
 			} catch (e) {
@@ -811,7 +773,7 @@ export default {
 		 * @param {number} page.pageId ID of the page
 		 */
 		async [TRASH_PAGE]({ commit, getters }, { pageId }) {
-			const response = await axios.delete(getters.pageUrl(pageId))
+			const response = await api.trashPage(getters.context, pageId)
 			commit(MOVE_PAGE_INTO_TRASH, response.data.data)
 		},
 
@@ -825,7 +787,7 @@ export default {
 		 * @param {number} page.pageId ID of the page to restore
 		 */
 		async [RESTORE_PAGE]({ commit, getters }, { pageId }) {
-			const response = await axios.patch(getters.trashActionUrl(pageId))
+			const response = await api.restorePage(getters.context, pageId)
 			commit(RESTORE_PAGE_FROM_TRASH, response.data.data)
 		},
 
@@ -839,7 +801,7 @@ export default {
 		 * @param {number} page.pageId ID of the page to delete
 		 */
 		async [DELETE_PAGE]({ commit, getters }, { pageId }) {
-			axios.delete(getters.trashActionUrl(pageId))
+			await api.deletePage(getters.context, pageId)
 			commit(DELETE_PAGE_FROM_TRASH_BY_ID, pageId)
 		},
 
@@ -852,7 +814,7 @@ export default {
 		 * @param {object} page Page to get attachments for
 		 */
 		async [GET_ATTACHMENTS]({ commit, getters }, page) {
-			const response = await axios.get(getters.attachmentsUrl(page.id))
+			const response = await api.getPageAttachments(getters.context, page.id)
 			commit(SET_ATTACHMENTS, { attachments: response.data.data })
 		},
 
@@ -865,7 +827,7 @@ export default {
 		 * @param {object} page Page to get backlinks for
 		 */
 		async [GET_BACKLINKS]({ commit, getters }, page) {
-			const response = await axios.get(getters.backlinksUrl(page.id))
+			const response = await api.getPageBacklinks(getters.context, page.id)
 			commit(SET_BACKLINKS, { pages: response.data.data })
 		},
 

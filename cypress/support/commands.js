@@ -1,20 +1,9 @@
 import { login, logout } from '@nextcloud/cypress/commands'
 import { User } from '@nextcloud/cypress'
 
-import {
-	GET_COLLECTIVES,
-	GET_TRASH_COLLECTIVES,
-	NEW_COLLECTIVE,
-	TRASH_COLLECTIVE,
-	DELETE_COLLECTIVE,
-	UPDATE_COLLECTIVE_EDIT_PERMISSIONS,
-	UPDATE_COLLECTIVE_SHARE_PERMISSIONS,
-	UPDATE_COLLECTIVE_PAGE_MODE,
-	GET_PAGES,
-	NEW_PAGE,
-	GET_CIRCLES,
-} from '../../src/store/actions.js'
+import * as api from '../../src/apis/collectives/index.js'
 import axios from '@nextcloud/axios'
+import { generateOcsUrl } from '@nextcloud/router'
 
 const url = Cypress.config('baseUrl').replace(/\/index.php\/?$/g, '')
 Cypress.env('baseUrl', url)
@@ -96,8 +85,8 @@ Cypress.Commands.add('disableApp', appName => {
 
 Cypress.Commands.add('setAppEnabled', (appName, value = true) => {
 	const verb = value ? 'enable' : 'disable'
-	const api = `${Cypress.env('baseUrl')}/index.php/settings/apps/${verb}`
-	return axios.post(api,
+	const url = `${Cypress.env('baseUrl')}/index.php/settings/apps/${verb}`
+	return axios.post(url,
 		{ appIds: [appName] },
 	)
 })
@@ -107,8 +96,8 @@ Cypress.Commands.add('setAppEnabled', (appName, value = true) => {
  */
 Cypress.Commands.add('enableDashboardWidget', (widgetName) => {
 	Cypress.log()
-	const api = `${Cypress.env('baseUrl')}/index.php/apps/dashboard/layout`
-	return axios.post(api,
+	const url = `${Cypress.env('baseUrl')}/index.php/apps/dashboard/layout`
+	return axios.post(url,
 		{ layout: widgetName },
 	)
 })
@@ -176,11 +165,20 @@ Cypress.Commands.add('findBy',
 Cypress.Commands.add('deleteAndSeedCollective', (name) => {
 	Cypress.log()
 	cy.deleteCollective(name)
-	cy.dispatch(NEW_COLLECTIVE, { name })
-	cy.store('getters.updatedCollectivePath')
-		.then(path => cy.routeTo(path))
-	// Make sure new collective is loaded
-	cy.get('#titleform input').should('have.value', name)
+	cy.seedCollective(name)
+	cy.getCollectives()
+		.findBy({ name })
+})
+
+Cypress.Commands.add('seedCollective', (name) => {
+	return api.newCollective({ name })
+		.catch(e => {
+			if (e.request && e.request.status === 422) {
+				// The collective already existed... carry on.
+			} else {
+				throw e
+			}
+		})
 })
 
 /**
@@ -202,18 +200,45 @@ Cypress.Commands.add('createCollective', (name, members = []) => {
 })
 
 /**
- * Delete a collective if exists and clean it from the trash.
+ * Delete a collective - no matter if it is in use or trashed.
+ *
+ * This command will succeed if the collective does not exist at all.
  */
 Cypress.Commands.add('deleteCollective', (name) => {
-	cy.dispatch(GET_COLLECTIVES)
-	cy.store('state.collectives.collectives')
+	cy.trashCollective(name)
+	cy.deleteCollectiveFromTrash(name)
+})
+
+Cypress.Commands.add('getCollectives', () => {
+	return api.getCollectives()
+		.then(response => response.data.data)
+})
+
+/**
+ * Move a collective into the trash if it exists.
+ *
+ * This command will succeed if the collective does not exist at all.
+ */
+Cypress.Commands.add('trashCollective', (name) => {
+	cy.getCollectives()
 		.findBy({ name })
-		.dispatch(TRASH_COLLECTIVE)
-	// Try to find and delete collective from trash
-	cy.dispatch(GET_TRASH_COLLECTIVES)
-	cy.store('state.collectives.trashCollectives')
+		.then((found) => found && api.trashCollective(found.id))
+})
+
+Cypress.Commands.add('getTrashCollectives', () => {
+	return api.getTrashCollectives()
+		.then(response => response.data.data)
+})
+
+/**
+ * Clear a collective from the trash if it is in there.
+ *
+ * This command will succeed if the collective does not exist at all.
+ */
+Cypress.Commands.add('deleteCollectiveFromTrash', (name) => {
+	cy.getTrashCollectives()
 		.findBy({ name })
-		.dispatch(DELETE_COLLECTIVE, { circle: true })
+		.then((found) => found && api.deleteCollective(found.id, true))
 })
 
 /**
@@ -222,11 +247,11 @@ Cypress.Commands.add('deleteCollective', (name) => {
 Cypress.Commands.add('seedCollectivePermissions', (name, type, level) => {
 	Cypress.log()
 	const action = (type === 'edit')
-		? UPDATE_COLLECTIVE_EDIT_PERMISSIONS
-		: UPDATE_COLLECTIVE_SHARE_PERMISSIONS
-	cy.store('state.collectives.collectives')
+		? api.updateCollectiveEditPermissions
+		: api.updateCollectiveSharePermissions
+	cy.getCollectives()
 		.findBy({ name })
-		.dispatch(action, { level })
+		.then((found) => action(found.id, level))
 })
 
 /**
@@ -234,54 +259,47 @@ Cypress.Commands.add('seedCollectivePermissions', (name, type, level) => {
  */
 Cypress.Commands.add('seedCollectivePageMode', (name, mode) => {
 	Cypress.log()
-	cy.store('state.collectives.collectives')
+	cy.getCollectives()
 		.findBy({ name })
-		.dispatch(UPDATE_COLLECTIVE_PAGE_MODE, { mode })
+		.then((found) => api.updateCollectivePageMode(found.id, mode))
+})
+
+/**
+ * Context for the given collective for a logged in user.
+ *
+ * @param {object} collective - Collective to provide the context for.
+ */
+function collectiveContext(collective) {
+	return {
+		isPublic: false,
+		collectiveId: collective.id,
+		shareTokenParam: null,
+	}
+}
+
+Cypress.Commands.add('getPages', collective => {
+	return api.getPages(collectiveContext(collective))
+		.then(response => response.data.data)
 })
 
 /**
  * Add a page to a collective
  */
-Cypress.Commands.add('seedPage', (name, parentFilePath, parentFileName) => {
-	Cypress.log()
-	cy.dispatch(GET_PAGES)
-	cy.store('state.pages.pages')
-		.findBy({ filePath: parentFilePath, fileName: parentFileName })
-		.its('id')
-		.as('parentId')
-		.then(id => ({ parentId: id }))
-		.dispatch(NEW_PAGE, { title: name, pagePath: name })
-	// Return pageId of created page
-	cy.get('@parentId').then(parentId => {
-		return cy.store('state.pages.pages')
-			.findBy({ parentId, title: name })
-			.its('id')
+Cypress.Commands.add('seedPage',
+	{ prevSubject: true },
+	(subject, name, parentFilePath = '', parentFileName = 'Readme.md') => {
+		Cypress.log()
+		cy.getPages(subject)
+			.findBy({ filePath: parentFilePath, fileName: parentFileName })
+			.then(({ id: parentId }) => {
+				return api.createPage(
+					collectiveContext(subject),
+					{ parentId, title: name, pagePath: name },
+				)
+			})
+			.its('data.data.id')
+			.then(pageId => ({ ...subject, pageId }))
 	})
-})
-
-/**
- * Upload a file
- */
-Cypress.Commands.add('uploadFile', (path, mimeType, remotePath = '') => {
-	Cypress.log()
-	// Get fixture
-	return cy.fixture(path, 'base64').then(file => {
-		// convert the base64 string to a blob
-		const blob = Cypress.Blob.base64StringToBlob(file, mimeType)
-		try {
-			const file = new File([blob], path, { type: mimeType })
-			return cy.uploadContent(remotePath + path, file, mimeType)
-				.then(response => {
-					const ocFileId = response.headers['oc-fileid']
-					const fileId = parseInt(ocFileId.substring(0, ocFileId.indexOf('oc')))
-					return fileId
-				})
-		} catch (error) {
-			cy.log(error)
-			throw new Error(`Unable to process file ${path}`)
-		}
-	})
-})
 
 /**
  * Upload content of a page
@@ -294,22 +312,37 @@ Cypress.Commands.add('seedPageContent', (pagePath, content) => {
 	cy.uploadContent(`Collectives/${pagePath}`, content)
 })
 
+Cypress.Commands.add('uploadFile', (path, mimeType, remotePath = '') => {
+	Cypress.log()
+	// Get fixture
+	return cy.fixture(path, 'base64').then(data => {
+		// convert the base64 string to a blob
+		const blob = Cypress.Blob.base64StringToBlob(data, mimeType)
+		const file = new File([blob], path, { type: mimeType })
+		return cy.uploadContent(remotePath + path, file, mimeType)
+			.then(response => {
+				const ocFileId = response.headers['oc-fileid']
+				const fileId = parseInt(ocFileId.substring(0, ocFileId.indexOf('oc')))
+				return fileId
+			})
+	})
+})
+
 /**
  * Generic upload of content - used by seedPageContent and uploadPage
  */
 Cypress.Commands.add('uploadContent', (path, content, mimetype = 'text/markdown') => {
 	// @nextcloud/axios automatic handling for request tokens does not work for webdav
-	cy.window()
-		.its('app.OC.requestToken')
-		.then(requesttoken => {
-			const url = `${Cypress.env('baseUrl')}/remote.php/webdav/${path}`
-			return axios.put(url, content, {
-				headers: {
-					requesttoken,
-					'Content-Type': mimetype,
-				},
-			})
+	cy.request('/csrftoken').then(({ body }) => {
+		const requesttoken = body.token
+		const url = `${Cypress.env('baseUrl')}/remote.php/webdav/${path}`
+		return axios.put(url, content, {
+			headers: {
+				requesttoken,
+				'Content-Type': mimetype,
+			},
 		})
+	})
 })
 
 /**
@@ -317,14 +350,12 @@ Cypress.Commands.add('uploadContent', (path, content, mimetype = 'text/markdown'
  */
 Cypress.Commands.add('seedCircle', (name, config = null) => {
 	Cypress.log()
-	cy.dispatch(GET_CIRCLES)
-	cy.store('state.circles.circles')
-		.findBy({ sanitizedName: name })
+	cy.circleFind(name)
 		.then(async circle => {
-			const api = `${Cypress.env('baseUrl')}/ocs/v2.php/apps/circles/circles`
+			const url = `${Cypress.env('baseUrl')}/ocs/v2.php/apps/circles/circles`
 			let circleId
 			if (!circle) {
-				const response = await axios.post(api,
+				const response = await axios.post(url,
 					{ name, personal: false, local: true },
 				)
 				circleId = response.data.ocs.data.id
@@ -340,23 +371,27 @@ Cypress.Commands.add('seedCircle', (name, config = null) => {
 				const value = bits
 					.filter(([k, v]) => config[k])
 					.reduce((sum, [k, v]) => sum + v, 0)
-				await axios.put(`${api}/${circleId}/config`,
+				await axios.put(`${url}/${circleId}/config`,
 					{ value },
 				)
 			}
 		})
 })
 
-/**
- * Add someone to a circle
- */
+Cypress.Commands.add('getCircles', () => {
+	return axios.get(generateOcsUrl('apps/circles/circles'))
+		.then(response => response.data.ocs.data)
+})
+
 Cypress.Commands.add('circleFind', (name) => {
 	Cypress.log()
-	cy.dispatch(GET_CIRCLES)
-	return cy.store('state.circles.circles')
+	cy.getCircles()
 		.findBy({ sanitizedName: name })
 })
 
+/**
+ * Add someone to a circle
+ */
 Cypress.Commands.add('circleAddMember',
 	{ prevSubject: true },
 	async ({ id }, userId, type = 1) => {

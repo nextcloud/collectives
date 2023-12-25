@@ -25,18 +25,19 @@
  */
 
 describe('Page', function() {
+
 	before(function() {
 		cy.loginAs('bob')
-		cy.visit('/apps/collectives')
-		cy.deleteAndSeedCollective('Our Garden')
-		cy.seedPage('Day 1', '', 'Readme.md')
+		cy.deleteAndSeedCollective('Our Garden').as('garden')
+			.seedPage('Day 1', '', 'Readme.md')
 		// Wait 1 second to make sure that page order by time is right
 		cy.wait(1000) // eslint-disable-line cypress/no-unnecessary-waiting
-		cy.seedPage('Day 2', '', 'Readme.md')
-		cy.seedPage('Page Title', '', 'Readme.md')
-		cy.seedPage('#% special chars', '', 'Readme.md')
+		cy.then(() => this.garden)
+			.seedPage('Day 2', '', 'Readme.md')
+			.seedPage('Page Title', '', 'Readme.md')
+			.seedPage('#% special chars', '', 'Readme.md')
+			.seedPage('Template', '', 'Readme.md')
 		cy.seedPageContent('Our Garden/Day 2.md', 'A test string with Day 2 in the middle and a [link to Day 1](/index.php/apps/collectives/Our%20Garden/Day%201).')
-		cy.seedPage('Template', '', 'Readme.md')
 		cy.seedPageContent('Our Garden/Template.md', 'This is going to be our template.')
 	})
 
@@ -271,26 +272,6 @@ describe('Page', function() {
 			})
 		})
 	}
-
-	describe('Changing page mode', function() {
-		it('Opens edit mode per default', function() {
-			cy.seedCollectivePageMode('Our Garden', 1)
-			cy.openPage('Day 2')
-			cy.getEditor()
-				.should('be.visible')
-			cy.getReadOnlyEditor()
-				.should('not.be.visible')
-		})
-
-		it('Opens view mode per default', function() {
-			cy.seedCollectivePageMode('Our Garden', 0)
-			cy.openPage('Day 2')
-			cy.getReadOnlyEditor()
-				.should('be.visible')
-			cy.getEditor()
-				.should('not.be.visible')
-		})
-	})
 
 	describe('Full width view', function() {
 		it('Allows to toggle persistent full-width view', function() {

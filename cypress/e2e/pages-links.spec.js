@@ -32,19 +32,18 @@ let anotherCollectiveFirstPageId, linkTargetPageId
 describe('Page Link Handling', function() {
 	before(function() {
 		cy.loginAs('bob')
-		cy.visit('/apps/collectives')
 		cy.deleteAndSeedCollective('Another Collective')
-		cy.seedPage('First Page', '', 'Readme.md').then((id) => {
-			anotherCollectiveFirstPageId = id
-		})
+			.seedPage('First Page', '', 'Readme.md').then(({ pageId }) => {
+				anotherCollectiveFirstPageId = pageId
+			})
 		cy.deleteAndSeedCollective('Link Testing')
-		cy.seedPage('Parent', '', 'Readme.md')
-		cy.seedPage('Child', '', 'Parent.md')
-		cy.seedPage('Link Target', '', 'Readme.md').then((id) => {
-			linkTargetPageId = id
-		})
+			.seedPage('Parent', '', 'Readme.md')
+			.seedPage('Child', '', 'Parent.md')
+			.seedPage('Link Target', '', 'Readme.md').then(({ pageId }) => {
+				linkTargetPageId = pageId
+			})
+			.seedPage('Link Source', '', 'Readme.md')
 		cy.seedPageContent('Link%20Testing/Link%20Target.md', 'Some content')
-		cy.seedPage('Link Source', '', 'Readme.md')
 		cy.uploadFile('test.md', 'text/markdown').then((id) => {
 			textId = id
 		}).then(() => {

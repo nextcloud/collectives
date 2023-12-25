@@ -29,7 +29,6 @@ describe('Collective', function() {
 
 	before(function() {
 		cy.loginAs('bob')
-		cy.visit('apps/collectives')
 		cy.deleteCollective('Preexisting Circle')
 		cy.deleteCollective('History Club')
 		cy.deleteCollective(specialCollective)
@@ -39,7 +38,6 @@ describe('Collective', function() {
 		cy.seedCircle('Preexisting Circle')
 		cy.seedCircle('History Club', { visible: true, open: true })
 		cy.loginAs('jane')
-		cy.visit('apps/collectives')
 		cy.deleteCollective('Foreign Circle')
 		cy.seedCircle('Foreign Circle', { visible: true, open: true })
 	})

@@ -1,8 +1,7 @@
-import axios from '@nextcloud/axios'
-import { generateUrl } from '@nextcloud/router'
 import { byName } from '../util/sortOrders.js'
 import randomEmoji from '../util/randomEmoji.js'
 import { memberLevels } from '../constants.js'
+import * as api from '../apis/collectives/index.js'
 
 import {
 	SET_COLLECTIVES,
@@ -257,8 +256,8 @@ export default {
 			commit('load', 'collectives')
 			try {
 				const response = getters.isPublic
-					? await axios.get(generateUrl(`/apps/collectives/_api/p/${getters.shareTokenParam}`))
-					: await axios.get(generateUrl('/apps/collectives/_api'))
+					? await api.getSharedCollective(getters.shareTokenParam)
+					: await api.getCollectives()
 				commit(SET_COLLECTIVES, response.data.data)
 			} finally {
 				commit('done', 'collectives')
@@ -273,7 +272,7 @@ export default {
 		 */
 		async [GET_TRASH_COLLECTIVES]({ commit }) {
 			commit('load', 'collectiveTrash')
-			const response = await axios.get(generateUrl('/apps/collectives/_api/trash'))
+			const response = await api.getTrashCollectives()
 			commit(SET_TRASH_COLLECTIVES, response.data.data)
 			commit('done', 'collectiveTrash')
 		},
@@ -288,10 +287,7 @@ export default {
 		 * @param {object} collective Properties for the new collective
 		 */
 		async [NEW_COLLECTIVE]({ commit, rootState, dispatch }, collective) {
-			const response = await axios.post(
-				generateUrl('/apps/collectives/_api'),
-				collective,
-			)
+			const response = await api.newCollective(collective)
 			commit('info', response.data.message)
 			commit(ADD_OR_UPDATE_COLLECTIVE, response.data.data)
 			// If collectives folder wasn't initialized already, now it should be there
@@ -308,10 +304,7 @@ export default {
 		 * @param {object} collective Properties for the collective
 		 */
 		async [UPDATE_COLLECTIVE]({ commit }, collective) {
-			const response = await axios.put(
-				generateUrl('/apps/collectives/_api/' + collective.id),
-				collective,
-			)
+			const response = await api.updateCollective(collective)
 			commit(ADD_OR_UPDATE_COLLECTIVE, response.data.data)
 		},
 
@@ -324,7 +317,7 @@ export default {
 		 * @param {number} collective.id ID of the collective to be trashed
 		 */
 		async [TRASH_COLLECTIVE]({ commit }, { id }) {
-			const response = await axios.delete(generateUrl('/apps/collectives/_api/' + id))
+			const response = await api.trashCollective(id)
 			commit(MOVE_COLLECTIVE_INTO_TRASH, response.data.data)
 		},
 
@@ -337,7 +330,7 @@ export default {
 		 * @param {number} collective.id ID of the collective to be restored
 		 */
 		async [RESTORE_COLLECTIVE]({ commit }, { id }) {
-			const response = await axios.patch(generateUrl('/apps/collectives/_api/trash/' + id))
+			const response = await api.restoreCollective(id)
 			commit(RESTORE_COLLECTIVE_FROM_TRASH, response.data.data)
 		},
 
@@ -351,11 +344,7 @@ export default {
 		 * @param {boolean} collective.circle Whether to delete the circle as well
 		 */
 		async [DELETE_COLLECTIVE]({ commit }, { id, circle }) {
-			let doCircle = ''
-			if (circle) {
-				doCircle = '?circle=1'
-			}
-			const response = await axios.delete(generateUrl('/apps/collectives/_api/trash/' + id + doCircle))
+			const response = await api.deleteCollective(id, circle)
 			commit(DELETE_COLLECTIVE_FROM_TRASH, response.data.data)
 			if (circle) {
 				commit(DELETE_CIRCLE_FOR, response.data.data)
@@ -371,7 +360,7 @@ export default {
 		 */
 		async [GET_SHARES]({ commit, getters }) {
 			commit('load', 'shares')
-			const response = await axios.get(generateUrl('/apps/collectives/_api/' + getters.currentCollective.id + '/shares'))
+			const response = await api.getShares(getters.currentCollective.id)
 			commit(SET_SHARES, response.data.data)
 			commit('done', 'shares')
 		},
@@ -387,31 +376,23 @@ export default {
 		 */
 		async [CREATE_SHARE]({ commit }, { collectiveId, pageId = 0 }) {
 			commit('load', 'share')
-			const url = pageId
-				? '/apps/collectives/_api/' + collectiveId + '/_pages/' + pageId + '/share'
-				: '/apps/collectives/_api/' + collectiveId + '/share'
-			const response = await axios.post(generateUrl(url))
+			const response = pageId
+				? await api.createPageShare(collectiveId, pageId)
+				: await api.createCollectiveShare(collectiveId)
 			commit(ADD_OR_UPDATE_SHARE, response.data.data)
 			commit('done', 'share')
 		},
 
 		/**
-		 * Create a public collective/page share
+		 * Update a public collective/page share
 		 *
 		 * @param {object} store the vuex store
 		 * @param {Function} store.commit commit changes
-		 * @param {object} share the share to be deleted
+		 * @param {object} share the share to be updated
 		 */
 		async [UPDATE_SHARE]({ commit }, share) {
 			commit('load', 'share')
-			const url = share.pageId
-				? '/apps/collectives/_api/' + share.collectiveId + '/_pages/' + share.pageId + '/share/' + share.token
-				: '/apps/collectives/_api/' + share.collectiveId + '/share/' + share.token
-			const response = await axios.put(
-				generateUrl(url),
-				{ editable: share.editable },
-
-			)
+			const response = await api.updateShare(share)
 			commit(ADD_OR_UPDATE_SHARE, response.data.data)
 			commit('done', 'share')
 		},
@@ -425,10 +406,7 @@ export default {
 		 */
 		async [DELETE_SHARE]({ commit }, share) {
 			commit('load', 'unshare')
-			const url = share.pageId
-				? '/apps/collectives/_api/' + share.collectiveId + '/_pages/' + share.pageId + '/share/' + share.token
-				: '/apps/collectives/_api/' + share.collectiveId + '/share/' + share.token
-			await axios.delete(generateUrl(url))
+			await api.deleteShare(share)
 			commit(REMOVE_SHARE, share)
 			commit('done', 'unshare')
 		},
@@ -441,10 +419,7 @@ export default {
 		 * @param {number} data.level new minimum level for sharing
 		 */
 		async [UPDATE_COLLECTIVE_EDIT_PERMISSIONS]({ commit }, { id, level }) {
-			const response = await axios.put(
-				generateUrl('/apps/collectives/_api/' + id + '/editLevel'),
-				{ level },
-			)
+			const response = await api.updateCollectiveEditPermissions(id, level)
 			commit(ADD_OR_UPDATE_COLLECTIVE, response.data.data)
 		},
 
@@ -456,10 +431,7 @@ export default {
 		 * @param {number} data.level new minimum level for sharing
 		 */
 		async [UPDATE_COLLECTIVE_SHARE_PERMISSIONS]({ commit }, { id, level }) {
-			const response = await axios.put(
-				generateUrl('/apps/collectives/_api/' + id + '/shareLevel'),
-				{ level },
-			)
+			const response = await api.updateCollectiveSharePermissions(id, level)
 			commit(ADD_OR_UPDATE_COLLECTIVE, response.data.data)
 		},
 
@@ -471,27 +443,27 @@ export default {
 		 * @param {number} data.mode page mode
 		 */
 		async [UPDATE_COLLECTIVE_PAGE_MODE]({ commit }, { id, mode }) {
-			const response = await axios.put(
-				generateUrl('/apps/collectives/_api/' + id + '/pageMode'),
-				{ mode },
-			)
+			const response = await api.updateCollectivePageMode(id, mode)
 			commit(ADD_OR_UPDATE_COLLECTIVE, response.data.data)
 		},
 
+		/**
+		 * Set the page order for the current user
+		 *
+		 * @param {object} store the vuex store
+		 * @param {Function} store.commit commit changes
+		 * @param {object} data the data object
+		 * @param {number} data.id ID of the colletive to be updated
+		 * @param {number} data.pageOrder the desired page order for the current user
+		 */
 		async [SET_COLLECTIVE_USER_SETTING_PAGE_ORDER]({ commit }, { id, pageOrder }) {
-			await axios.put(
-				generateUrl('/apps/collectives/_api/' + id + '/_userSettings/pageOrder'),
-				{ pageOrder },
-			)
+			await api.setCollectiveUserSettingPageOrder(id, pageOrder)
 			commit(PATCH_COLLECTIVE_WITH_PROPERTY, { id, property: 'userPageOrder', value: pageOrder })
 		},
 
 		async [SET_COLLECTIVE_USER_SETTING_SHOW_RECENT_PAGES]({ commit }, { id, showRecentPages }) {
 			commit(PATCH_COLLECTIVE_WITH_PROPERTY, { id, property: 'userShowRecentPages', value: showRecentPages })
-			await axios.put(
-				generateUrl('/apps/collectives/_api/' + id + '/_userSettings/showRecentPages'),
-				{ showRecentPages },
-			)
+			await api.setCollectiveUserSettingShowRecentPages(id, showRecentPages)
 		},
 
 		[MARK_COLLECTIVE_DELETED]({ commit }, collective) {

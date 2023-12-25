@@ -1,10 +1,9 @@
-import axios from '@nextcloud/axios'
-import { generateOcsUrl } from '@nextcloud/router'
 import {
 	GET_COLLECTIVES_FOLDER,
 	UPDATE_COLLECTIVES_FOLDER,
 } from './actions.js'
 import { SET_COLLECTIVES_FOLDER } from './mutations.js'
+import * as settings from '../apis/collectives/settings.js'
 
 export default {
 	state: {
@@ -25,7 +24,7 @@ export default {
 		 * @param {Function} store.commit commit changes
 		 */
 		async [GET_COLLECTIVES_FOLDER]({ commit }) {
-			const response = await axios.get(generateOcsUrl('apps/collectives/api/v1.0/settings/user/user_folder'))
+			const response = await settings.getCollectivesFolder()
 			commit(SET_COLLECTIVES_FOLDER, response.data.ocs.data)
 		},
 
@@ -37,10 +36,7 @@ export default {
 		 * @param {string} collectivesFolder path to collectives folder
 		 */
 		async [UPDATE_COLLECTIVES_FOLDER]({ commit }, collectivesFolder) {
-			const response = await axios.post(generateOcsUrl('apps/collectives/api/v1.0/settings/user'), {
-				key: 'user_folder',
-				value: collectivesFolder,
-			})
+			const response = await settings.setCollectivesFolder(collectivesFolder)
 			commit(SET_COLLECTIVES_FOLDER, response.data.ocs.data)
 		},
 	},
