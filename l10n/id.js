@@ -4,6 +4,7 @@ OC.L10N.register(
     "You are not allowed to share %s" : "Anda tidak diizinkan untuk membagikan %s",
     "Settings" : "Setelan",
     "Members" : "Anggota",
+    "No search results" : "Tidak ada hasil pencarian",
     "Remove" : "Hapus",
     "Loading…" : "Memuat…",
     "View" : "Tampilan",
