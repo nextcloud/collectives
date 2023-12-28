@@ -1,7 +1,7 @@
 <template>
 	<div class="current-members">
 		<NcAppNavigationCaption v-if="isSearching"
-			:title="t('collectives', 'Members')" />
+			:name="t('collectives', 'Members')" />
 		<Member v-for="item in searchedMembers"
 			:key="item.singleId"
 			:circle-id="circleId"

@@ -42,14 +42,14 @@
 
 			<!-- clipboard -->
 			<NcActions v-if="share && share.token" ref="copyButton" class="sharing-entry__copy">
-				<NcActionButton :title="copyLinkTooltip"
-					:aria-label="copyLinkTooltip"
+				<NcActionButton :aria-label="copyLinkTooltip"
 					@click.prevent="copyLink">
 					<template #icon>
 						<CheckIcon v-if="copySuccess" :size="20" />
 						<NcLoadingIcon v-else-if="copyLoading" :size="20" />
 						<ContentCopyIcon v-else :size="20" />
 					</template>
+					{{ copyLinkTooltip }}
 				</NcActionButton>
 			</NcActions>
 		</div>
@@ -79,12 +79,12 @@
 			<!-- Create new share -->
 			<NcActionButton v-else
 				class="new-share-link"
-				:title="t('collectives', 'Create a new share link')"
 				:aria-label="t('collectives', 'Create a new share link')"
 				@click.prevent.stop="onNewShare">
 				<template #icon>
 					<PlusIcon :size="20" />
 				</template>
+				{{ t('collectives', 'Create a new share link') }}
 			</NcActionButton>
 		</NcActions>
 

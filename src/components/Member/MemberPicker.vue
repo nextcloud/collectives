@@ -35,7 +35,7 @@
 
 			<!-- No search results -->
 			<template v-else-if="currentUserIsAdmin && !showCurrentSkeleton">
-				<NcAppNavigationCaption class="member-picker-caption" :title="t('collectives', 'Add accounts, groups or circles…')" />
+				<NcAppNavigationCaption class="member-picker-caption" :name="t('collectives', 'Add accounts, groups or circles…')" />
 				<Hint v-if="!isSearching" :hint="t('collectives', 'Search for members to add.')" />
 				<Hint v-else-if="isSearchLoading" :hint="t('collectives', 'Loading…')" />
 				<Hint v-else :hint="t('collectives', 'No search results')" />

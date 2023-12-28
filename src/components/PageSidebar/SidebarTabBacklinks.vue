@@ -8,7 +8,7 @@
 		</NcEmptyContent>
 
 		<!-- error message -->
-		<NcEmptyContent v-else-if="error" :title="error">
+		<NcEmptyContent v-else-if="error" :name="error">
 			<template #icon>
 				<AlertOctagonIcon />
 			</template>
@@ -19,7 +19,7 @@
 			<ul class="backlink-list">
 				<NcListItem v-for="backlinkPage in backlinks"
 					:key="backlinkPage.id"
-					:title="pagePathTitle(backlinkPage)"
+					:name="pagePathTitle(backlinkPage)"
 					:to="pagePath(backlinkPage)"
 					class="backlink">
 					<template #icon>
@@ -32,7 +32,7 @@
 							fill-color="var(--color-main-background)"
 							class="item-icon item-icon__page" />
 					</template>
-					<template #subtitle>
+					<template #subname>
 						{{ lastUpdate(page) }}
 					</template>
 				</NcListItem>
@@ -41,7 +41,7 @@
 
 		<!-- no backlinks found -->
 		<NcEmptyContent v-else
-			:title="t('collectives', 'No backlinks available')"
+			:name="t('collectives', 'No backlinks available')"
 			:description="t( 'collectives', 'If other pages link to this one, they will be listed here.')">
 			<template #icon>
 				<ArrowBottomLeftIcon />
@@ -141,7 +141,7 @@ export default {
 	display: flex;
 	flex-direction: row;
 
-	:deep(.line-one__title) {
+	:deep(.line-one__name) {
 		font-weight: normal;
 	}
 
