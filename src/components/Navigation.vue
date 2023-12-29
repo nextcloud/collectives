@@ -1,11 +1,11 @@
 <template>
 	<NcAppNavigation>
 		<template v-if="loading('collectives')" #list>
-			<NcAppNavigationCaption :title="t('collectives', 'Select a collective')" />
+			<NcAppNavigationCaption :name="t('collectives', 'Select a collective')" />
 			<SkeletonLoading type="items" :count="3" />
 		</template>
 		<template v-else #list>
-			<NcAppNavigationCaption :title="t('collectives', 'Select a collective')" />
+			<NcAppNavigationCaption :name="t('collectives', 'Select a collective')" />
 			<CollectiveListItem v-for="collective in collectives"
 				v-show="!collective.deleted"
 				:key="collective.id"

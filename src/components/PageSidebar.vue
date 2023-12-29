@@ -1,6 +1,6 @@
 <template>
 	<NcAppSidebar ref="sidebar"
-		:title="title"
+		:name="title"
 		:active.sync="active"
 		@close="close">
 		<NcAppSidebarTab id="attachments"

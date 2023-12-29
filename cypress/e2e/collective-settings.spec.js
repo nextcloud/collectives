@@ -25,14 +25,10 @@
  */
 
 describe('Collective settings', function() {
-	before(function() {
-		cy.loginAs('bob')
-		cy.deleteCollective('Change me now')
-		cy.deleteAndSeedCollective('Change me')
-	})
 
 	beforeEach(function() {
 		cy.loginAs('bob')
+		cy.deleteAndSeedCollective('Change me')
 		cy.visit('apps/collectives')
 	})
 
@@ -64,6 +60,11 @@ describe('Collective settings', function() {
 	})
 
 	describe('rename collective', function() {
+
+		beforeEach(function() {
+			cy.deleteCollective('Change me now')
+		})
+
 		it('Allows to rename the collective', function() {
 			cy.openCollectiveMenu('Change me')
 			cy.clickMenuButton('Settings')
@@ -72,13 +73,14 @@ describe('Collective settings', function() {
 			cy.get('.collectives_list_item')
 				.should('contain', 'Change me now')
 		})
+
 	})
 
 	describe('change edit permissions', function() {
 		it('Allows to change editing permissions', function() {
-			cy.openCollectiveMenu('Change me now')
+			cy.openCollectiveMenu('Change me')
 			cy.clickMenuButton('Settings')
-			cy.get('div.permissions-input-edit > :first-child > .checkbox-radio-switch__label')
+			cy.get('.permissions-input-edit').contains('Admins only')
 				.click()
 			cy.get('div.toast-success').should('contain', 'Editing permissions updated')
 		})
@@ -86,9 +88,9 @@ describe('Collective settings', function() {
 
 	describe('change share permissions', function() {
 		it('Allows to change sharing permissions', function() {
-			cy.openCollectiveMenu('Change me now')
+			cy.openCollectiveMenu('Change me')
 			cy.clickMenuButton('Settings')
-			cy.get('div.permissions-input-share > :first-child > .checkbox-radio-switch__label')
+			cy.get('.permissions-input-share').contains('Admins only')
 				.click()
 			cy.get('div.toast-success').should('contain', 'Sharing permissions updated')
 		})
@@ -96,12 +98,12 @@ describe('Collective settings', function() {
 
 	describe('change page mode', function() {
 		it('Allows to change page mode', function() {
-			cy.openCollectiveMenu('Change me now')
+			cy.openCollectiveMenu('Change me')
 			cy.clickMenuButton('Settings')
 			cy.get('a.navigation-list__link')
 				.contains('Page settings')
 				.click()
-			cy.get('div.edit-mode > :last-child > .checkbox-radio-switch__label')
+			cy.get('.edit-mode').contains('Edit')
 				.click()
 			cy.get('div.toast-success').should('contain', 'Default page mode updated')
 		})
@@ -109,8 +111,8 @@ describe('Collective settings', function() {
 
 	describe('open settings from landing page actions', function() {
 		it('Allows to open settings from landing page actions', function() {
-			cy.openCollective('Change me now')
-			cy.openPageMenu('Change me now')
+			cy.openCollective('Change me')
+			cy.openPageMenu('Change me')
 			cy.clickMenuButton('Settings')
 			cy.get('div.permissions-input-edit')
 		})

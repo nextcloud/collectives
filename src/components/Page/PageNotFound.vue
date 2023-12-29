@@ -1,5 +1,5 @@
 <template>
-	<NcEmptyContent :title="t('collectives', 'Page not found: {page}', { page: pageParam })"
+	<NcEmptyContent :name="t('collectives', 'Page not found: {page}', { page: pageParam })"
 		:description="t('collectives', 'Select a page from the list or create a new one.')">
 		<template #icon>
 			<PageIcon />

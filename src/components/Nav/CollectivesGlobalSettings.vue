@@ -1,5 +1,5 @@
 <template>
-	<NcAppNavigationSettings :title="t('collectives', 'Collectives settings')">
+	<NcAppNavigationSettings :name="t('collectives', 'Collectives settings')">
 		<NcTextField name="userFolder"
 			:label="t('collectives', 'Collectives Folder')"
 			:label-visible="true"

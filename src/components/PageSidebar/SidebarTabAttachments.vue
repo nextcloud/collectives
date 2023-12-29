@@ -8,7 +8,7 @@
 		</NcEmptyContent>
 
 		<!-- error message -->
-		<NcEmptyContent v-else-if="error" :title="error">
+		<NcEmptyContent v-else-if="error" :name="error">
 			<template #icon>
 				<AlertOctagonIcon />
 			</template>
@@ -19,7 +19,7 @@
 			<ul v-show="sortedAttachments.length" class="attachment-list">
 				<NcListItem v-for="attachment in sortedAttachments"
 					:key="attachment.id"
-					:title="attachment.name"
+					:name="attachment.name"
 					:href="davUrl(attachment)"
 					:force-display-actions="true"
 					class="attachment"
@@ -32,7 +32,7 @@
 							width="256"
 							class="attachment__image">
 					</template>
-					<template #subtitle>
+					<template #subname>
 						<div class="attachment__info">
 							<span class="attachment__info_size">{{ formattedFileSize(attachment.filesize) }}</span>
 							<span class="attachment__info_size">·</span>
@@ -75,7 +75,7 @@
 
 				<NcListItem v-for="attachment in deletedAttachments"
 					:key="attachment.id"
-					:title="attachment.name"
+					:name="attachment.name"
 					:href="davUrl(attachment)"
 					:force-display-actions="true"
 					class="attachment"
@@ -88,7 +88,7 @@
 							width="256"
 							class="attachment__image">
 					</template>
-					<template #subtitle>
+					<template #subname>
 						<div class="attachment__info">
 							<span class="attachment__info_size">{{ formattedFileSize(attachment.filesize) }}</span>
 							<span class="attachment__info_size">·</span>
@@ -125,7 +125,7 @@
 
 		<!-- no attachments found -->
 		<NcEmptyContent v-else
-			:title="t('collectives', 'No attachments available')"
+			:name="t('collectives', 'No attachments available')"
 			:description="t('collectives', 'If the page has attachments, they will be listed here.')">
 			<template #icon>
 				<PaperclipIcon />
@@ -388,7 +388,7 @@ export default {
 	display: flex;
 	flex-direction: row;
 
-	:deep(.line-one__title) {
+	:deep(.line-one__name) {
 		font-weight: normal;
 	}
 

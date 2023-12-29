@@ -1,5 +1,5 @@
 <template>
-	<NcEmptyContent :title="t('collectives', 'Collective not found: {collective}', { collective: collectiveParam })"
+	<NcEmptyContent :name="t('collectives', 'Collective not found: {collective}', { collective: collectiveParam })"
 		:description="t('collectives', 'You\'re not part of a collective with that name.')">
 		<template #icon>
 			<CollectivesIcon />

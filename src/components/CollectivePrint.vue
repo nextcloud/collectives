@@ -5,7 +5,7 @@
 			name="sharingToken"
 			:value="shareTokenParam">
 		<NcEmptyContent v-show="loading"
-			:title="t('collectives', 'Preparing collective for exporting or printing')">
+			:name="t('collectives', 'Preparing collective for exporting or printing')">
 			<template #icon>
 				<DownloadIcon />
 			</template>

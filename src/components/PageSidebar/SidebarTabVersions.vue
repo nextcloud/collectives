@@ -8,7 +8,7 @@
 		</NcEmptyContent>
 
 		<!-- error message -->
-		<NcEmptyContent v-else-if="error" :title="error">
+		<NcEmptyContent v-else-if="error" :name="error">
 			<template #icon>
 				<AlertOctagonIcon />
 			</template>
@@ -18,7 +18,7 @@
 		<div v-else-if="!loading('versions') && versions.length">
 			<ul class="version-list">
 				<span :title="pageFormattedTimestamp">
-					<NcListItem :title="t('collectives', 'Current version')"
+					<NcListItem :name="t('collectives', 'Current version')"
 						class="version"
 						:class="{'active': !version}"
 						:active="!version"
@@ -28,7 +28,7 @@
 								fill-color="var(--color-main-background)"
 								class="item-icon item-icon__page" />
 						</template>
-						<template #subtitle>
+						<template #subname>
 							{{ pageHumanReadableSize }}
 						</template>
 					</NcListItem>
@@ -36,7 +36,7 @@
 				<span v-for="v in versions"
 					:key="v.downloadUrl"
 					:title="v.formattedTimestamp">
-					<NcListItem :title="v.relativeTimestamp"
+					<NcListItem :name="v.relativeTimestamp"
 						class="version"
 						:class="{'active': selected(v)}"
 						:active="selected(v)"
@@ -51,7 +51,7 @@
 								fill-color="var(--color-main-background)"
 								class="item-icon item-icon__page" />
 						</template>
-						<template #subtitle>
+						<template #subname>
 							{{ v.humanReadableSize }}
 						</template>
 					</NcListItem>
@@ -61,7 +61,7 @@
 
 		<!-- no versions found -->
 		<NcEmptyContent v-else
-			:title="t('collectives', 'No other versions available')"
+			:name="t('collectives', 'No other versions available')"
 			:description="t( 'collectives', 'After editing you can find old versions of the page here.')">
 			<template #icon>
 				<RestoreIcon />
@@ -194,7 +194,7 @@ export default {
 	display: flex;
 	flex-direction: row;
 
-	:deep(.line-one__title) {
+	:deep(.line-one__name) {
 		font-weight: normal;
 	}
 

@@ -1,8 +1,8 @@
 <template>
 	<NcAppSettingsDialog :open.sync="showSettings"
-		:title="t('collectives', 'Collective settings')"
+		:name="t('collectives', 'Collective settings')"
 		:show-navigation="true">
-		<NcAppSettingsSection id="name-and-emoji" :title="t('collectives', 'Name and emoji')">
+		<NcAppSettingsSection id="name-and-emoji" :name="t('collectives', 'Name and emoji')">
 			<div class="collective-name">
 				<NcEmojiPicker :show-preview="true"
 					:allow-unselect="true"
@@ -11,7 +11,6 @@
 					@unselect="unselectEmoji">
 					<NcButton type="tertiary"
 						:aria-label="t('collectives', 'Select emoji for collective')"
-						:title="emojiTitle"
 						:class="{'loading': loading('updateCollectiveEmoji') || loading('renameCollective')}"
 						class="button-emoji"
 						@click.prevent>
@@ -43,7 +42,7 @@
 			</div>
 		</NcAppSettingsSection>
 
-		<NcAppSettingsSection id="permissions" :title="t('collectives', 'Permissions')">
+		<NcAppSettingsSection id="permissions" :name="t('collectives', 'Permissions')">
 			<div class="subsection-header">
 				{{ t('collectives', 'Allow editing for') }}
 			</div>
@@ -101,7 +100,7 @@
 			</div>
 		</NcAppSettingsSection>
 
-		<NcAppSettingsSection id="page-settings" :title="t('collectives', 'Page settings')">
+		<NcAppSettingsSection id="page-settings" :name="t('collectives', 'Page settings')">
 			<div class="subsection-header">
 				{{ t('collectives', 'Default page mode') }}
 			</div>
@@ -124,7 +123,7 @@
 			</div>
 		</NcAppSettingsSection>
 
-		<NcAppSettingsSection id="danger-zone" :title="t('collectives', 'Danger zone')">
+		<NcAppSettingsSection id="danger-zone" :name="t('collectives', 'Danger zone')">
 			<div>
 				<NcButton type="error" :aria-label="t('collectives', 'Delete collective')" @click="trashCollective()">
 					{{ t('collectives', 'Delete collective') }}

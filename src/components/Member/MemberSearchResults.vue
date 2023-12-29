@@ -1,7 +1,7 @@
 <template>
 	<div class="member-search-results">
 		<template v-if="addableUsers.length !== 0">
-			<NcAppNavigationCaption :title="t('collectives', 'Add accounts')"
+			<NcAppNavigationCaption :name="t('collectives', 'Add accounts')"
 				class="member-picker-caption" />
 			<Member v-for="item in addableUsers"
 				:key="generateKey(item)"
@@ -16,7 +16,7 @@
 		</template>
 
 		<template v-if="addableGroups.length !== 0">
-			<NcAppNavigationCaption :title="t('collectives', 'Add groups')"
+			<NcAppNavigationCaption :name="t('collectives', 'Add groups')"
 				class="member-picker-caption" />
 			<Member v-for="item in addableGroups"
 				:key="generateKey(item)"
@@ -31,7 +31,7 @@
 		</template>
 
 		<template v-if="addableCircles.length !== 0">
-			<NcAppNavigationCaption :title="t('collectives', 'Add circles')"
+			<NcAppNavigationCaption :name="t('collectives', 'Add circles')"
 				class="member-picker-caption" />
 			<Member v-for="item in addableCircles"
 				:key="generateKey(item)"
