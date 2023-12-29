@@ -25,14 +25,10 @@
  */
 
 describe('Collective settings', function() {
-	before(function() {
-		cy.loginAs('bob')
-		cy.deleteCollective('Change me now')
-		cy.deleteAndSeedCollective('Change me')
-	})
 
 	beforeEach(function() {
 		cy.loginAs('bob')
+		cy.deleteAndSeedCollective('Change me')
 		cy.visit('apps/collectives')
 	})
 
@@ -64,6 +60,11 @@ describe('Collective settings', function() {
 	})
 
 	describe('rename collective', function() {
+
+		beforeEach(function() {
+			cy.deleteCollective('Change me now')
+		})
+
 		it('Allows to rename the collective', function() {
 			cy.openCollectiveMenu('Change me')
 			cy.clickMenuButton('Settings')
@@ -72,11 +73,12 @@ describe('Collective settings', function() {
 			cy.get('.collectives_list_item')
 				.should('contain', 'Change me now')
 		})
+
 	})
 
 	describe('change edit permissions', function() {
 		it('Allows to change editing permissions', function() {
-			cy.openCollectiveMenu('Change me now')
+			cy.openCollectiveMenu('Change me')
 			cy.clickMenuButton('Settings')
 			cy.get('div.permissions-input-edit > :first-child > .checkbox-radio-switch__label')
 				.click()
@@ -86,7 +88,7 @@ describe('Collective settings', function() {
 
 	describe('change share permissions', function() {
 		it('Allows to change sharing permissions', function() {
-			cy.openCollectiveMenu('Change me now')
+			cy.openCollectiveMenu('Change me')
 			cy.clickMenuButton('Settings')
 			cy.get('div.permissions-input-share > :first-child > .checkbox-radio-switch__label')
 				.click()
@@ -96,7 +98,7 @@ describe('Collective settings', function() {
 
 	describe('change page mode', function() {
 		it('Allows to change page mode', function() {
-			cy.openCollectiveMenu('Change me now')
+			cy.openCollectiveMenu('Change me')
 			cy.clickMenuButton('Settings')
 			cy.get('a.navigation-list__link')
 				.contains('Page settings')
@@ -109,8 +111,8 @@ describe('Collective settings', function() {
 
 	describe('open settings from landing page actions', function() {
 		it('Allows to open settings from landing page actions', function() {
-			cy.openCollective('Change me now')
-			cy.openPageMenu('Change me now')
+			cy.openCollective('Change me')
+			cy.openPageMenu('Change me')
 			cy.clickMenuButton('Settings')
 			cy.get('div.permissions-input-edit')
 		})
