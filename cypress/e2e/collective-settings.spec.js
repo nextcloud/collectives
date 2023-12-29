@@ -80,7 +80,7 @@ describe('Collective settings', function() {
 		it('Allows to change editing permissions', function() {
 			cy.openCollectiveMenu('Change me')
 			cy.clickMenuButton('Settings')
-			cy.get('div.permissions-input-edit > :first-child > .checkbox-radio-switch__label')
+			cy.get('.permissions-input-edit').contains('Admins only')
 				.click()
 			cy.get('div.toast-success').should('contain', 'Editing permissions updated')
 		})
@@ -90,7 +90,7 @@ describe('Collective settings', function() {
 		it('Allows to change sharing permissions', function() {
 			cy.openCollectiveMenu('Change me')
 			cy.clickMenuButton('Settings')
-			cy.get('div.permissions-input-share > :first-child > .checkbox-radio-switch__label')
+			cy.get('.permissions-input-share').contains('Admins only')
 				.click()
 			cy.get('div.toast-success').should('contain', 'Sharing permissions updated')
 		})
@@ -103,7 +103,7 @@ describe('Collective settings', function() {
 			cy.get('a.navigation-list__link')
 				.contains('Page settings')
 				.click()
-			cy.get('div.edit-mode > :last-child > .checkbox-radio-switch__label')
+			cy.get('.edit-mode').contains('Edit')
 				.click()
 			cy.get('div.toast-success').should('contain', 'Default page mode updated')
 		})
