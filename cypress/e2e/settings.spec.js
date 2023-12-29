@@ -89,6 +89,8 @@ describe('Settings', function() {
 			// Open and select default folder
 			cy.get(filePickerListSelector).contains('Collectives')
 				.click()
+			cy.get(filePickerListSelector).contains('Collectives')
+				.should('not.exist')
 			cy.get('button').contains('Choose')
 				.click()
 			cy.wait('@setCollectivesFolder')
