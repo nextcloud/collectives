@@ -20,6 +20,7 @@ OC.L10N.register(
     "Unshare" : "Dejar de compartir",
     "Share link" : "Compartir liga",
     "Download" : "Descargar",
+    "Sharing" : "Compartiendo",
     "Versions" : "Versiones"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

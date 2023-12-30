@@ -26,6 +26,7 @@ OC.L10N.register(
     "Current version" : "Versión actual",
     "No other versions available" : "No hay otras versiones disponibles",
     "Attachments" : "Adjuntos",
+    "Sharing" : "Compartiendo",
     "Versions" : "Versiones",
     "Link copied" : "Enlace copiado"
 },
