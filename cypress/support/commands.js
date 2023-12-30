@@ -208,6 +208,13 @@ Cypress.Commands.add('getCollectives', () => {
 		.then(response => response.data.data)
 })
 
+Cypress.Commands.add('getCollectivesFolder', () => {
+	return api.getCollectivesFolder()
+		.then(response => response.data.ocs.data)
+})
+
+Cypress.Commands.add('setCollectivesFolder', api.setCollectivesFolder)
+
 /**
  * Move a collective into the trash if it exists.
  *
