@@ -170,16 +170,10 @@ Cypress.Commands.add('deleteAndSeedCollective', (name) => {
 		.findBy({ name })
 })
 
-Cypress.Commands.add('seedCollective', (name) => {
-	return api.newCollective({ name })
-		.catch(e => {
-			if (e.request && e.request.status === 422) {
-				// The collective already existed... carry on.
-			} else {
-				throw e
-			}
-		})
-})
+Cypress.Commands.add(
+	'seedCollective',
+	name => api.newCollective({ name }),
+)
 
 /**
  * Create a collective via UI
