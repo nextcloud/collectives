@@ -64,6 +64,8 @@ describe('Settings', function() {
 			cy.get('button').contains('Choose')
 				.click()
 			cy.wait('@setCollectivesFolder')
+			cy.getCollectivesFolder()
+				.should('be.equal', `/${randomFolder}`)
 
 			// Check if collectives are found in new folder in Files app
 			cy.log('Check if collectives are in configured user folder')
@@ -73,25 +75,7 @@ describe('Settings', function() {
 			cy.fileList().should('contain', 'A Collective')
 
 			// Change user folder back to default
-			cy.log('Change user folder back to default')
-			cy.visit('/apps/collectives')
-			cy.get('#app-settings')
-				.click()
-			cy.get('input[name="userFolder"]')
-				.click()
-			cy.wait('@propfindFolder')
-
-			// Open home folder
-			cy.get('[data-dir=""] > a, a[title="Home"]')
-				.click()
-			cy.wait('@propfindFolder')
-
-			// Open and select default folder
-			cy.get(filePickerListSelector).contains('Collectives')
-				.click()
-			cy.get('button').contains('Choose')
-				.click()
-			cy.wait('@setCollectivesFolder')
+			cy.setCollectivesFolder('/Collectives')
 		})
 	})
 })

@@ -51,7 +51,6 @@ export default {
 		selectCollectivesFolder() {
 			const picker = getFilePickerBuilder(t('collectives', 'Select location for collectives'))
 				.setMultiSelect(false)
-				.setModal(true)
 				.setType(1)
 				.addMimeTypeFilter('httpd/unix-directory')
 				.allowDirectories()
