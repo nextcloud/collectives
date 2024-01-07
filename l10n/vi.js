@@ -22,6 +22,7 @@ OC.L10N.register(
     "Back" : "Quay lại",
     "Create" : "‎Tạo‎",
     "Done" : "Hoàn thành",
+    "Show in Files" : "Hiển thị trong Files",
     "Move or copy" : "Di chuyển hoặc sao chép",
     "Title" : "Tiêu đề",
     "Deleted" : "Đã xoá",
