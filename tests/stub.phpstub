@@ -855,3 +855,7 @@ namespace OCA\Files_Trashbin\Trash {
 namespace OCP\Files\Mount {
 	interface ISystemMountPoint {}
 }
+
+namespace OCA\Text\Event {
+	class LoadEditor extends \OCP\EventDispatcher\Event {}
+}
