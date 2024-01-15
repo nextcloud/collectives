@@ -5,6 +5,7 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Listeners;
 
+use OCA\Collectives\AppInfo\Application;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Service\NotPermittedException;
 use OCA\Text\Event\LoadEditor;
@@ -61,7 +62,8 @@ class BeforeTemplateRenderedListener implements IEventListener {
 
 		Util::addScript('collectives', 'collectives-files');
 
-		if (class_exists(LoadEditor::class)) {
+		$isCollectivesResponse = $event->getResponse()->getApp() === Application::APP_NAME;
+		if ($isCollectivesResponse && class_exists(LoadEditor::class)) {
 			$this->eventDispatcher->dispatchTyped(new LoadEditor());
 		}
 
