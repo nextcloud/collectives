@@ -37,6 +37,7 @@ OC.L10N.register(
     "Link copied" : "Ligam copiat",
     "_%n byte_::_%n bytes_" : ["%n octet","%n octets"],
     "Allow editing in share" : "Permetre la modificacion dins lo partatge",
+    "Copied" : "Copiat",
     "Copy share link" : "Copiar ligam de partatge"
 },
 "nplurals=2; plural=(n > 1);");
