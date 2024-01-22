@@ -9,6 +9,9 @@ js/*
 # PHPunit cache
 .phpunit.result.cache
 
+# PHP-CS-Fixer cache
+.php-cs-fixer.cache
+
 # Cypress test artifacts
 cypress/screenshots/
 cypress/videos/
