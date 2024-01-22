@@ -3,6 +3,7 @@
 namespace OCA\Collectives\Dashboard;
 
 use OCA\Collectives\Service\RecentPagesService;
+use OCP\Dashboard\IIconWidget;
 use OCP\Dashboard\IReloadableWidget;
 use OCP\Dashboard\Model\WidgetItem;
 use OCP\Dashboard\Model\WidgetItems;
@@ -10,7 +11,7 @@ use OCP\IL10N;
 use OCP\IURLGenerator;
 use OCP\IUserSession;
 
-class RecentPagesWidget implements IReloadableWidget {
+class RecentPagesWidget implements IReloadableWidget, IIconWidget {
 	public const REFRESH_INTERVAL_IN_SECS = 33;
 
 	protected IL10N $l10n;
@@ -80,6 +81,10 @@ class RecentPagesWidget implements IReloadableWidget {
 
 	public function getIconClass(): string {
 		return 'icon-collectives';
+	}
+
+	public function getIconUrl(): string {
+		return $this->urlGenerator->imagePath('collectives', 'collectives.svg');
 	}
 
 	public function getUrl(): ?string {
