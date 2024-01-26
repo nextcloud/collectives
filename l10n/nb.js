@@ -13,6 +13,8 @@ OC.L10N.register(
     "No search results" : "Ingen søkeresultater",
     "admin" : "admin",
     "An error occurred while performing the search" : "Det oppstod en feil under utføring av søket",
+    "Add groups" : "Legg til grupper",
+    "Add circles" : "Legg til sirkler",
     "Permissions" : "Rettigheter",
     "View" : "Vis",
     "Edit" : "Rediger",
