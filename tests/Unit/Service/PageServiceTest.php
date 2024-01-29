@@ -2,6 +2,7 @@
 
 namespace Unit\Service;
 
+use OC;
 use OC\App\AppManager;
 use OC\Files\Mount\MountPoint;
 use OC\Files\Node\File;
@@ -21,6 +22,7 @@ use OCP\IConfig;
 use OCP\IUserManager;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
+use ReflectionClass;
 
 class PageServiceTest extends TestCase {
 	private PageMapper $pageMapper;
@@ -308,24 +310,24 @@ class PageServiceTest extends TestCase {
 		self::assertFalse($this->service->matchBacklinks($pageInfo, 'content with [a link to wrong host](https://anothercloud.com' . $urlPath . ') in it.'));
 		self::assertFalse($this->service->matchBacklinks($pageInfo, 'content with [a link to wrong host](anothercloud.com' . $urlPath . ') in it.'));
 
-		\OC::$WEBROOT = 'mycloud';
+		OC::$WEBROOT = 'mycloud';
 
 		// Relative link with fileId with webroot in [text](link) syntax
-		self::assertTrue($this->service->matchBacklinks($pageInfo, 'content with [a link with webroot](' . \OC::$WEBROOT . $urlPath . '?fileId=123).'));
+		self::assertTrue($this->service->matchBacklinks($pageInfo, 'content with [a link with webroot](' . OC::$WEBROOT . $urlPath . '?fileId=123).'));
 		// Relative link without fileId with webroot in [text](link) syntax
-		self::assertTrue($this->service->matchBacklinks($pageInfo, 'content with [a link with webroot](' . \OC::$WEBROOT . $urlPath . ') in it.'));
+		self::assertTrue($this->service->matchBacklinks($pageInfo, 'content with [a link with webroot](' . OC::$WEBROOT . $urlPath . ') in it.'));
 		self::assertFalse($this->service->matchBacklinks($pageInfo, 'content with [a link with missing webroot](' . $urlPath . ') in it.'));
 		// Absolute link with fileId with webroot in [text](link) syntax
-		self::assertTrue($this->service->matchBacklinks($pageInfo, 'content with [a link with webroot](http://nextcloud.local' . \OC::$WEBROOT . $urlPath . '?fileId=123) in it.'));
+		self::assertTrue($this->service->matchBacklinks($pageInfo, 'content with [a link with webroot](http://nextcloud.local' . OC::$WEBROOT . $urlPath . '?fileId=123) in it.'));
 		self::assertFalse($this->service->matchBacklinks($pageInfo, 'content with [a link with missing webroot](http://nextcloud.local' . $urlPath . '?fileId=123) in it.'));
 		// Absolute link without fileId with webroot in [text](link) syntax
-		self::assertTrue($this->service->matchBacklinks($pageInfo, 'content with [a link with webroot](http://nextcloud.local' . \OC::$WEBROOT . $urlPath . ') in it.'));
+		self::assertTrue($this->service->matchBacklinks($pageInfo, 'content with [a link with webroot](http://nextcloud.local' . OC::$WEBROOT . $urlPath . ') in it.'));
 		self::assertFalse($this->service->matchBacklinks($pageInfo, 'content with [a link with missing webroot](http://nextcloud.local' . $urlPath . ') in it.'));
 	}
 
 	public function testIsAncestorOf(): void {
 		// Allow testing the private function
-		$reflection = new \ReflectionClass($this->service);
+		$reflection = new ReflectionClass($this->service);
 		$method = $reflection->getMethod('isAncestorOf');
 		$method->setAccessible(true);
 

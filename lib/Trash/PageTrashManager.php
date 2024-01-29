@@ -8,17 +8,9 @@ use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
 class PageTrashManager {
-	private IDBConnection $connection;
-
-	public function __construct(IDBConnection $connection) {
-		$this->connection = $connection;
+	public function __construct(private IDBConnection $connection) {
 	}
 
-	/**
-	 * @param int[] $collectiveIds
-	 *
-	 * @return array
-	 */
 	public function listTrashForCollectives(array $collectiveIds): array {
 		$query = $this->connection->getQueryBuilder();
 		$query->select(['trash_id', 'name', 'deleted_time', 'original_location', 'collective_id', 'file_id'])
@@ -28,13 +20,6 @@ class PageTrashManager {
 		return $query->executeQuery()->fetchAll();
 	}
 
-	/**
-	 * @param int    $collectiveId
-	 * @param string $name
-	 * @param int    $deletedTime
-	 * @param string $originalLocation
-	 * @param int    $fileId
-	 */
 	public function addTrashItem(int $collectiveId, string $name, int $deletedTime, string $originalLocation, int $fileId): void {
 		$query = $this->connection->getQueryBuilder();
 		$query->insert('collectives_page_trash')
@@ -48,11 +33,6 @@ class PageTrashManager {
 		$query->executeStatement();
 	}
 
-	/**
-	 * @param int $fileId
-	 *
-	 * @return array|null
-	 */
 	public function getTrashItemByFileId(int $fileId): ?array {
 		$query = $this->connection->getQueryBuilder();
 		$query->select(['trash_id', 'name', 'deleted_time', 'original_location', 'collective_id'])
@@ -61,11 +41,6 @@ class PageTrashManager {
 		return $query->executeQuery()->fetch() ?: null;
 	}
 
-	/**
-	 * @param int    $collectiveId
-	 * @param string $name
-	 * @param int    $deletedTime
-	 */
 	public function removeItem(int $collectiveId, string $name, int $deletedTime): void {
 		$query = $this->connection->getQueryBuilder();
 		$query->delete('collectives_page_trash')
@@ -75,9 +50,6 @@ class PageTrashManager {
 		$query->executeStatement();
 	}
 
-	/**
-	 * @param int $collectiveId
-	 */
 	public function emptyTrash(int $collectiveId): void {
 		$query = $this->connection->getQueryBuilder();
 		$query->delete('collectives_page_trash')

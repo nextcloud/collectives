@@ -19,24 +19,13 @@ use OCP\Util;
 
 /** @template-implements IEventListener<Event|BeforeTemplateRenderedEvent> */
 class BeforeTemplateRenderedListener implements IEventListener {
-	private IUserSession $userSession;
-	private UserFolderHelper $userFolderHelper;
-	private IEventDispatcher $eventDispatcher;
-	private IInitialState $initialState;
-
-	public function __construct(IUserSession $userSession,
-		UserFolderHelper $userFolderHelper,
-		IEventDispatcher $eventDispatcher,
-		IInitialState $initialState) {
-		$this->userSession = $userSession;
-		$this->userFolderHelper = $userFolderHelper;
-		$this->eventDispatcher = $eventDispatcher;
-		$this->initialState = $initialState;
+	public function __construct(private IUserSession $userSession,
+		private UserFolderHelper $userFolderHelper,
+		private IEventDispatcher $eventDispatcher,
+		private IInitialState $initialState) {
 	}
 
 	/**
-	 * @param Event $event
-	 *
 	 * @throws NotPermittedException
 	 */
 	public function handle(Event $event): void {

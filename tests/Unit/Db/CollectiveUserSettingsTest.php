@@ -6,11 +6,13 @@ use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveUserSettings;
 use OCA\Collectives\Service\NotPermittedException;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use ReflectionMethod;
 
 class CollectiveUserSettingsTest extends TestCase {
 	// Required to test private function `CollectiveUserSettings->setSetting()`
-	protected static function getPrivateSetSettingMethod(): \ReflectionMethod {
-		$class = new \ReflectionClass(CollectiveUserSettings::class);
+	protected static function getPrivateSetSettingMethod(): ReflectionMethod {
+		$class = new ReflectionClass(CollectiveUserSettings::class);
 		$method = $class->getMethod('setSetting');
 		$method->setAccessible(true);
 		return $method;

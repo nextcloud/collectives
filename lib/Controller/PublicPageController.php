@@ -21,54 +21,35 @@ use OCP\ISession;
 use Psr\Log\LoggerInterface;
 
 class PublicPageController extends PublicShareController {
-	private CollectiveShareMapper $collectiveShareMapper;
-	private CollectiveShareService $collectiveShareService;
-	private PageService $service;
-	private AttachmentService $attachmentService;
-	private LoggerInterface $logger;
 	private ?CollectiveShareInfo $share = null;
 
 	use ErrorHelper;
 
-	public function __construct(string                 $appName,
-		IRequest               $request,
-		CollectiveShareMapper  $collectiveShareMapper,
-		CollectiveShareService $collectiveShareService,
-		PageService            $service,
-		AttachmentService      $attachmentService,
-		ISession               $session,
-		LoggerInterface        $logger) {
+	public function __construct(string $appName,
+		IRequest $request,
+		private CollectiveShareMapper $collectiveShareMapper,
+		private CollectiveShareService $collectiveShareService,
+		private PageService $service,
+		private AttachmentService $attachmentService,
+		ISession $session,
+		private LoggerInterface $logger) {
 		parent::__construct($appName, $request, $session);
-		$this->collectiveShareMapper = $collectiveShareMapper;
-		$this->collectiveShareService = $collectiveShareService;
-		$this->service = $service;
-		$this->attachmentService = $attachmentService;
-		$this->logger = $logger;
 	}
 
-	/**
-	 * @return string
-	 */
 	protected function getPasswordHash(): string {
 		return '';
 	}
 
-	/**
-	 * @return bool
-	 */
 	public function isValidToken(): bool {
 		try {
 			$this->collectiveShareMapper->findOneByToken($this->getToken());
-		} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
+		} catch (DoesNotExistException | MultipleObjectsReturnedException) {
 			return false;
 		}
 
 		return true;
 	}
 
-	/**
-	 * @return bool
-	 */
 	protected function isPasswordProtected(): bool {
 		return false;
 	}
@@ -90,7 +71,6 @@ class PublicPageController extends PublicShareController {
 	}
 
 	/**
-	 * @return void
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
@@ -101,12 +81,6 @@ class PublicPageController extends PublicShareController {
 	}
 
 	/**
-	 * @param int    $collectiveId
-	 * @param int    $sharePageId
-	 * @param int    $id
-	 * @param string $owner
-	 *
-	 * @return void
 	 * @throws NotPermittedException
 	 */
 	private function checkPageShareAccess(int $collectiveId, int $sharePageId, int $id, string $owner): void {
@@ -118,12 +92,6 @@ class PublicPageController extends PublicShareController {
 	}
 
 	/**
-	 * @param int      $collectiveId
-	 * @param int      $sharePageId
-	 * @param string   $owner
-	 * @param PageInfo $pageInfo
-	 *
-	 * @return void
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
@@ -140,8 +108,6 @@ class PublicPageController extends PublicShareController {
 
 	/**
 	 * @PublicPage
-	 *
-	 * @return DataResponse
 	 */
 	public function index(): DataResponse {
 		return $this->handleErrorResponse(function (): array {
@@ -164,10 +130,6 @@ class PublicPageController extends PublicShareController {
 
 	/**
 	 * @PublicPage
-	 *
-	 * @param int    $id
-	 *
-	 * @return DataResponse
 	 */
 	public function get(int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($id): array {
@@ -186,11 +148,6 @@ class PublicPageController extends PublicShareController {
 
 	/**
 	 * @PublicPage
-	 *
-	 * @param int    $parentId
-	 * @param string $title
-	 *
-	 * @return DataResponse
 	 */
 	public function create(int $parentId, string $title): DataResponse {
 		return $this->handleErrorResponse(function () use ($parentId, $title): array {
@@ -210,10 +167,6 @@ class PublicPageController extends PublicShareController {
 
 	/**
 	 * @PublicPage
-	 *
-	 * @param int $id
-	 *
-	 * @return DataResponse
 	 */
 	public function touch(int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($id): array {
@@ -233,14 +186,6 @@ class PublicPageController extends PublicShareController {
 
 	/**
 	 * @PublicPage
-	 *
-	 * @param int         $id
-	 * @param int|null    $parentId
-	 * @param string|null $title
-	 * @param int|null    $index
-	 * @param bool        $copy
-	 *
-	 * @return DataResponse
 	 */
 	public function moveOrCopy(int $id, ?int $parentId, ?string $title = null, ?int $index = 0, bool $copy = false): DataResponse {
 		return $this->handleErrorResponse(function () use ($id, $parentId, $title, $index, $copy): array {
@@ -265,11 +210,6 @@ class PublicPageController extends PublicShareController {
 
 	/**
 	 * @PublicPage
-	 *
-	 * @param int         $id
-	 * @param string|null $emoji
-	 *
-	 * @return DataResponse
 	 */
 	public function setEmoji(int $id, ?string $emoji = null): DataResponse {
 		return $this->handleErrorResponse(function () use ($id, $emoji): array {
@@ -289,11 +229,6 @@ class PublicPageController extends PublicShareController {
 
 	/**
 	 * @PublicPage
-	 *
-	 * @param int         $id
-	 * @param string|null $subpageOrder
-	 *
-	 * @return DataResponse
 	 */
 	public function setSubpageOrder(int $id, ?string $subpageOrder = null): DataResponse {
 		return $this->handleErrorResponse(function () use ($id, $subpageOrder): array {
@@ -313,10 +248,6 @@ class PublicPageController extends PublicShareController {
 
 	/**
 	 * @PublicPage
-	 *
-	 * @param int $id
-	 *
-	 * @return DataResponse
 	 */
 	public function trash(int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($id): array {
@@ -336,10 +267,6 @@ class PublicPageController extends PublicShareController {
 
 	/**
 	 * @PublicPage
-	 *
-	 * @param int $id
-	 *
-	 * @return DataResponse
 	 */
 	public function getAttachments(int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($id): array {
@@ -357,10 +284,6 @@ class PublicPageController extends PublicShareController {
 
 	/**
 	 * @PublicPage
-	 *
-	 * @param int    $id
-	 *
-	 * @return DataResponse
 	 */
 	public function getBacklinks(int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($id): array {

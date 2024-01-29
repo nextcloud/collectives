@@ -12,17 +12,13 @@ use OCP\BackgroundJob\IJob;
 use OCP\BackgroundJob\TimedJob;
 
 class ExpirePageVersions extends TimedJob {
-	private CollectiveVersionsExpireManager $expireManager;
-
 	public function __construct(ITimeFactory $time,
-		CollectiveVersionsExpireManager $expireManager) {
+		private CollectiveVersionsExpireManager $expireManager) {
 		parent::__construct($time);
 
 		// Run once per hour
 		$this->setInterval(60 * 60);
 		$this->setTimeSensitivity(IJob::TIME_INSENSITIVE);
-
-		$this->expireManager = $expireManager;
 	}
 
 	/**

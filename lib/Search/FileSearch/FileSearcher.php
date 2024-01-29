@@ -30,10 +30,6 @@ class FileSearcher extends TNTSearch {
 		$this->fuzziness(true);
 	}
 
-	/**
-	 * @param array $config
-	 * @return void
-	 */
 	public function loadConfig(array $config = self::DEFAULT_CONFIG): void {
 		parent::loadConfig($config);
 		$this->indexer = new FileIndexer($this->engine);
@@ -41,9 +37,8 @@ class FileSearcher extends TNTSearch {
 	}
 
 	/**
-	 * @param $phrase
-	 * @param int $numOfResults
-	 * @return array
+	 * @param string $phrase
+	 * @param int    $numOfResults
 	 */
 	public function search($phrase, $numOfResults = 1000): array {
 		$this->setStemmer();
@@ -52,14 +47,12 @@ class FileSearcher extends TNTSearch {
 	}
 
 	/**
-	 * @param File $indexFile
-	 * @return FileIndexer
 	 * @throws FileSearchException
 	 */
 	public function selectIndexFile(File $indexFile): FileIndexer {
 		try {
 			$path = $indexFile->getStorage()->getLocalFile($indexFile->getInternalPath());
-		} catch (NotFoundException $e) {
+		} catch (NotFoundException) {
 			throw new FileSearchException('File searcher could not find storage for index file.');
 		}
 
@@ -72,7 +65,6 @@ class FileSearcher extends TNTSearch {
 
 	/**
 	 * @param string $indexName
-	 * @return FileIndexer
 	 * @throws FileSearchException
 	 */
 	public function selectIndex($indexName): FileIndexer {
@@ -89,7 +81,6 @@ class FileSearcher extends TNTSearch {
 	/**
 	 * @param string $indexName
 	 * @param bool $disableOutput
-	 * @return FileIndexer
 	 */
 	public function createIndex($indexName = '', $disableOutput = false): FileIndexer {
 		$this->indexer->createIndex($indexName);
@@ -97,16 +88,10 @@ class FileSearcher extends TNTSearch {
 		return $this->indexer;
 	}
 
-	/**
-	 * @return FileIndexer
-	 */
 	public function createInMemoryIndex(): FileIndexer {
 		return $this->createIndex(':memory:');
 	}
 
-	/**
-	 * @return TokenizerInterface|null
-	 */
 	public function getTokenizer(): ?TokenizerInterface {
 		$this->index && $this->setTokenizer();
 		$configTokenizer = $this->config['tokenizer'];

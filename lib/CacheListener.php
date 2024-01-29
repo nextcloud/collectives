@@ -11,15 +11,7 @@ use OCP\Files\Cache\CacheUpdateEvent;
 use OCP\Files\Cache\ICacheEvent;
 
 class CacheListener {
-	private IEventDispatcher $eventDispatcher;
-
-	/**
-	 * CacheListener constructor.
-	 *
-	 * @param IEventDispatcher $eventDispatcher
-	 */
-	public function __construct(IEventDispatcher $eventDispatcher) {
-		$this->eventDispatcher = $eventDispatcher;
+	public function __construct(private IEventDispatcher $eventDispatcher) {
 	}
 
 	public function listen(): void {
@@ -27,9 +19,6 @@ class CacheListener {
 		$this->eventDispatcher->addListener(CacheUpdateEvent::class, [$this, 'onCacheEvent'], 99999);
 	}
 
-	/**
-	 * @param ICacheEvent $event
-	 */
 	public function onCacheEvent(ICacheEvent $event): void {
 		if (!$event->getStorage()->instanceOfStorage(CollectiveStorage::class)) {
 			return;

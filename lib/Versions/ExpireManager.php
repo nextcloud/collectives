@@ -12,17 +12,17 @@ use Psr\Container\ContainerInterface;
 
 class ExpireManager {
 	public const MAX_VERSIONS_PER_INTERVAL = [
-		//first 10sec, one version every 2sec
+		// first 10sec, one version every 2sec
 		1 => ['intervalEndsAfter' => 10, 'step' => 2],
-		//next minute, one version every 10sec
+		// next minute, one version every 10sec
 		2 => ['intervalEndsAfter' => 60, 'step' => 10],
-		//next hour, one version every minute
+		// next hour, one version every minute
 		3 => ['intervalEndsAfter' => 3600, 'step' => 60],
-		//next 24h, one version every hour
+		// next 24h, one version every hour
 		4 => ['intervalEndsAfter' => 86400, 'step' => 3600],
-		//next 30days, one version per day
+		// next 30days, one version per day
 		5 => ['intervalEndsAfter' => 2592000, 'step' => 86400],
-		//until the end one version per week
+		// until the end one version per week
 		6 => ['intervalEndsAfter' => -1, 'step' => 604800],
 	];
 
@@ -40,11 +40,6 @@ class ExpireManager {
 
 	/**
 	 * get list of files we want to archive
-	 *
-	 * @param int        $time
-	 * @param IVersion[] $versions
-	 *
-	 * @return IVersion[]
 	 */
 	protected function getAutoExpireList(int $time, array $versions): array {
 		if (!$versions) {
@@ -53,9 +48,7 @@ class ExpireManager {
 		$toDelete = []; // versions we want to delete
 
 		// ensure the versions are sorted by newest first
-		usort($versions, static function (IVersion $a, IVersion $b) {
-			return $b->getTimestamp() <=> $a->getTimestamp();
-		});
+		usort($versions, static fn (IVersion $a, IVersion $b) => $b->getTimestamp() <=> $a->getTimestamp());
 
 		$interval = 1;
 		$step = self::MAX_VERSIONS_PER_INTERVAL[$interval]['step'];
@@ -99,11 +92,6 @@ class ExpireManager {
 	}
 
 	/**
-	 * @param IVersion[] $versions
-	 * @param int        $time
-	 * @param bool       $quotaExceeded
-	 *
-	 * @return IVersion[]
 	 * @throws MissingDependencyException
 	 */
 	public function getExpiredVersion(array $versions, int $time, bool $quotaExceeded): array {
@@ -117,14 +105,10 @@ class ExpireManager {
 			$autoExpire = [];
 		}
 
-		$versionsLeft = array_udiff($versions, $autoExpire, static function (IVersion $a, IVersion $b) {
-			return ($a->getRevisionId() <=> $b->getRevisionId()) *
-				($a->getSourceFile()->getId() <=> $b->getSourceFile()->getId());
-		});
+		$versionsLeft = array_udiff($versions, $autoExpire, static fn (IVersion $a, IVersion $b) => ($a->getRevisionId() <=> $b->getRevisionId()) *
+			($a->getSourceFile()->getId() <=> $b->getSourceFile()->getId()));
 
-		$expired = array_filter($versionsLeft, function (IVersion $version) use ($quotaExceeded) {
-			return $this->expiration->isExpired($version->getTimestamp(), $quotaExceeded);
-		});
+		$expired = array_filter($versionsLeft, fn (IVersion $version) => $this->expiration->isExpired($version->getTimestamp(), $quotaExceeded));
 
 		return array_merge($autoExpire, $expired);
 	}

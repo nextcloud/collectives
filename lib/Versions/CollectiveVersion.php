@@ -11,24 +11,6 @@ use OCP\Files\FileInfo;
 use OCP\IUser;
 
 class CollectiveVersion extends Version {
-	private File $versionFile;
-	private int $folderId;
-
-	/**
-	 * CollectiveVersion constructor.
-	 *
-	 * @param int             $timestamp
-	 * @param int             $revisionId
-	 * @param string          $name
-	 * @param int             $size
-	 * @param string          $mimetype
-	 * @param string          $path
-	 * @param FileInfo        $sourceFileInfo
-	 * @param IVersionBackend $backend
-	 * @param IUser           $user
-	 * @param File            $versionFile
-	 * @param int             $folderId
-	 */
 	public function __construct(int $timestamp,
 		int $revisionId,
 		string $name,
@@ -38,23 +20,15 @@ class CollectiveVersion extends Version {
 		FileInfo $sourceFileInfo,
 		IVersionBackend $backend,
 		IUser $user,
-		File $versionFile,
-		int $folderId) {
+		private File $versionFile,
+		private int $folderId) {
 		parent::__construct($timestamp, $revisionId, $name, $size, $mimetype, $path, $sourceFileInfo, $backend, $user);
-		$this->versionFile = $versionFile;
-		$this->folderId = $folderId;
 	}
 
-	/**
-	 * @return File
-	 */
 	public function getVersionFile(): File {
 		return $this->versionFile;
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getFolderId(): int {
 		return $this->folderId;
 	}

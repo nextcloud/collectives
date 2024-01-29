@@ -10,8 +10,6 @@ use OCP\Files\FileInfo;
 use OCP\IUser;
 
 class CollectivePageTrashItem extends TrashItem {
-	private string $mountPoint;
-
 	public function __construct(
 		ITrashBackend $backend,
 		string $originalLocation,
@@ -19,10 +17,9 @@ class CollectivePageTrashItem extends TrashItem {
 		string $trashPath,
 		FileInfo $fileInfo,
 		IUser $user,
-		string $mountPoint
+		private string $mountPoint
 	) {
 		parent::__construct($backend, $originalLocation, $deletedTime, $trashPath, $fileInfo, $user);
-		$this->mountPoint = $mountPoint;
 	}
 
 	public function isRootItem(): bool {

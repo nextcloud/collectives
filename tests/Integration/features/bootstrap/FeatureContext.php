@@ -13,9 +13,6 @@ use Psr\Http\Message\ResponseInterface;
  * Defines application features from the specific context.
  */
 class FeatureContext implements Context {
-	private string $baseUrl;
-	private string $remoteUrl;
-	private string $ocsUrl;
 	private array $clientOptions;
 	private ?ResponseInterface $response = null;
 	private ?array $json = null;
@@ -41,25 +38,14 @@ class FeatureContext implements Context {
 	 * Every scenario gets its own context instance.
 	 * You can also pass arbitrary arguments to the
 	 * context constructor through behat.yml.
-	 *
-	 * @param string $baseUrl
-	 * @param string $remoteUrl
-	 * @param string $ocsUrl
 	 */
-	public function __construct(string $baseUrl, string $remoteUrl, string $ocsUrl) {
-		$this->baseUrl = $baseUrl;
-		$this->remoteUrl = $remoteUrl;
-		$this->ocsUrl = $ocsUrl;
+	public function __construct(private string $baseUrl, private string $remoteUrl, private string $ocsUrl) {
 		$this->clientOptions = ['verify' => false];
 	}
 
 	/**
 	 * @When user :user creates collective :collective
 	 * @When user :user :fails to create collective :collective
-	 *
-	 * @param string      $user
-	 * @param string      $collective
-	 * @param string|null $fail
 	 *
 	 * @throws GuzzleException
 	 */
@@ -78,11 +64,6 @@ class FeatureContext implements Context {
 	/**
 	 * @When user :user sets :type level in collective :collective to :level
 	 *
-	 * @param string $user
-	 * @param string $type
-	 * @param string $collective
-	 * @param string $level
-	 *
 	 * @throws GuzzleException
 	 */
 	public function userUpdatesCollectivePermissionLevel(string $user, string $type, string $collective, string $level): void {
@@ -91,7 +72,7 @@ class FeatureContext implements Context {
 
 		$intLevel = array_search($level, self::CIRCLE_MEMBER_LEVEL, true);
 		if (!$intLevel) {
-			throw new \RuntimeException('Could not verify circle member level ' . $level);
+			throw new RuntimeException('Could not verify circle member level ' . $level);
 		}
 
 		$formData = new TableNode([['level', $intLevel]]);
@@ -106,11 +87,6 @@ class FeatureContext implements Context {
 	 * @When user :user sets pageMode for collective :collective to :mode
 	 * @When user :user :fails to set pageMode for collective :collective to :mode
 	 *
-	 * @param string      $user
-	 * @param string      $collective
-	 * @param string      $mode
-	 * @param string|null $fail
-	 *
 	 * @throws GuzzleException
 	 */
 	public function userUpdatesCollectivePageMode(string $user, string $collective, string $mode, ?string $fail = null): void {
@@ -119,7 +95,7 @@ class FeatureContext implements Context {
 
 		$intMode = array_search($mode, self::PAGE_MODE, true);
 		if (!$intMode) {
-			throw new \RuntimeException('Could not verify page mode ' . $mode);
+			throw new RuntimeException('Could not verify page mode ' . $mode);
 		}
 
 		$formData = new TableNode([['mode', $intMode]]);
@@ -138,12 +114,6 @@ class FeatureContext implements Context {
 	/**
 	 * @When user :user creates page :page with parentPath :parentPath in :collective
 	 * @When user :user :fails to create page :page with parentPath :parentPath in :collective
-	 *
-	 * @param string      $user
-	 * @param string      $page
-	 * @param string      $parentPath
-	 * @param string      $collective
-	 * @param string|null $fail
 	 *
 	 * @throws GuzzleException
 	 */
@@ -166,10 +136,6 @@ class FeatureContext implements Context {
 	 * @Then user :user sees collective :collective
 	 * @Then user :user sees collective :collective in :trash
 	 *
-	 * @param string      $user
-	 * @param string      $collective
-	 * @param string|null $trash
-	 *
 	 * @throws GuzzleException
 	 */
 	public function userSeesCollective(string $user, string $collective, ?string $trash = null): void {
@@ -186,11 +152,6 @@ class FeatureContext implements Context {
 	/**
 	 * @Then user :user sees pagePath :pagePath in :collective
 	 * @Then user :user :fails to see pagePath :pagePath in :collective
-	 *
-	 * @param string      $user
-	 * @param string      $pagePath
-	 * @param string      $collective
-	 * @param string|null $fail
 	 *
 	 * @throws GuzzleException
 	 */
@@ -210,10 +171,6 @@ class FeatureContext implements Context {
 	 * @Then user :user doesn't see collective :collective
 	 * @Then user :user doesn't see collective :collective in :trash
 	 *
-	 * @param string      $user
-	 * @param string      $collective
-	 * @param string|null $trash
-	 *
 	 * @throws GuzzleException
 	 */
 	public function userDoesntSeeCollective(string $user, string $collective, ?string $trash = null): void {
@@ -230,10 +187,6 @@ class FeatureContext implements Context {
 	/**
 	 * @Then user :user doesn't see pagePath :pagePath in :collective
 	 *
-	 * @param string $user
-	 * @param string $pagePath
-	 * @param string $collective
-	 *
 	 * @throws GuzzleException
 	 */
 	public function userDoesntSeePagePath(string $user, string $pagePath, string $collective): void {
@@ -247,13 +200,7 @@ class FeatureContext implements Context {
 	/**
 	 * @Then user :user sees attachment :name with mimetype :mimetype for :page in :collective
 	 *
-	 * @param string $user
-	 * @param string $name
-	 * @param string $mimetype
-	 * @param string $page
-	 * @param string $collective
-	 *
-	 * @return void
+	 * @throws GuzzleException
 	 */
 	public function userSeesAttachments(string $user, string $name, string $mimetype, string $page, string $collective): void {
 		$this->setCurrentUser($user);
@@ -266,10 +213,6 @@ class FeatureContext implements Context {
 
 	/**
 	 * @Then user :user last edited page :page in :collective
-	 *
-	 * @param string $user
-	 * @param string $page
-	 * @param string $collective
 	 *
 	 * @throws GuzzleException
 	 */
@@ -285,11 +228,6 @@ class FeatureContext implements Context {
 	 * @When user :user trashes collective :collective
 	 * @When user :user :fails to trash collective :collective
 	 * @When user :user :fails to trash foreign collective :collective with member :member
-	 *
-	 * @param string      $user
-	 * @param string      $collective
-	 * @param string|null $fail
-	 * @param string|null $member
 	 *
 	 * @throws GuzzleException
 	 */
@@ -313,11 +251,6 @@ class FeatureContext implements Context {
 	 * @When user :user deletes collective :collective
 	 * @When user :user :fails to delete collective :collective
 	 * @When user :user :fails to delete collective :collective with admin :admin
-	 *
-	 * @param string      $user
-	 * @param string      $collective
-	 * @param string|null $fail
-	 * @param string|null $admin
 	 *
 	 * @throws GuzzleException
 	 */
@@ -344,12 +277,6 @@ class FeatureContext implements Context {
 	 * @When user :user :fails to delete collective+circle :collective with admin :admin
 	 * @When user :user :fails to delete :selfadmin collective+circle :collective
 	 *
-	 * @param string      $user
-	 * @param string      $collective
-	 * @param string|null $fail
-	 * @param string|null $admin
-	 * @param string|null $selfadmin
-	 *
 	 * @throws GuzzleException
 	 */
 	public function userDeletesCollectiveAndCircle(string $user, string $collective, ?string $fail = null, ?string $admin = null, ?string $selfadmin = null): void {
@@ -372,10 +299,6 @@ class FeatureContext implements Context {
 	 * @When user :user restores collective :collective
 	 * @When user :user :fails to restore collective :collective
 	 *
-	 * @param string      $user
-	 * @param string      $collective
-	 * @param string|null $fail
-	 *
 	 * @throws GuzzleException
 	 */
 	public function userRestoresCollective(string $user, string $collective, ?string $fail = null): void {
@@ -396,11 +319,6 @@ class FeatureContext implements Context {
 	/**
 	 * @When user :user collective :collective property :property is :value
 	 *
-	 * @param string $user
-	 * @param string $collective
-	 * @param string $property
-	 * @param string $value
-	 *
 	 * @throws GuzzleException
 	 */
 	public function userCollectiveProperty(string $user, string $collective, string $property, string $value): void {
@@ -414,11 +332,6 @@ class FeatureContext implements Context {
 
 	/**
 	 * @When user :user sets userSetting :userSetting for collective :collective to :value
-	 *
-	 * @param string $user
-	 * @param string $userSetting
-	 * @param string $collective
-	 * @param string $value
 	 *
 	 * @throws GuzzleException
 	 */
@@ -438,11 +351,6 @@ class FeatureContext implements Context {
 	 * @When user :user trashes page :page in :collective
 	 * @When user :user :fails to trash page :page in :collective
 	 *
-	 * @param string      $user
-	 * @param string      $page
-	 * @param string      $collective
-	 * @param string|null $fail
-	 *
 	 * @throws GuzzleException
 	 */
 	public function userTrashesPage(string $user, string $page, string $collective, ?string $fail = null): void {
@@ -460,11 +368,6 @@ class FeatureContext implements Context {
 	/**
 	 * @When user :user restores page :page from trash in :collective
 	 * @When user :user :fails to restore page :page from trash in :collective
-	 *
-	 * @param string      $user
-	 * @param string      $page
-	 * @param string      $collective
-	 * @param string|null $fail
 	 *
 	 * @throws GuzzleException
 	 */
@@ -485,11 +388,6 @@ class FeatureContext implements Context {
 	 * @When user :user deletes page :page from trash in :collective
 	 * @When user :user :fails to delete page :page from trash in :collective
 	 *
-	 * @param string      $user
-	 * @param string      $page
-	 * @param string      $collective
-	 * @param string|null $fail
-	 *
 	 * @throws GuzzleException
 	 */
 	public function userDeletesPage(string $user, string $page, string $collective, ?string $fail = null): void {
@@ -509,11 +407,6 @@ class FeatureContext implements Context {
 	 * @When user :user touches page :page in :collective
 	 * @When user :user :fails to touch page :page in :collective
 	 *
-	 * @param string      $user
-	 * @param string      $page
-	 * @param string      $collective
-	 * @param string|null $fail
-	 *
 	 * @throws GuzzleException
 	 */
 	public function userTouchesPage(string $user, string $page, string $collective, ?string $fail = null): void {
@@ -531,13 +424,6 @@ class FeatureContext implements Context {
 	/**
 	 * @When user :user moves page :page to :newtitle with parentPath :parentPath in :collective
 	 * @When user :user :fails to move page :page to :newtitle with parentPath :parentPath in :collective
-	 *
-	 * @param string      $user
-	 * @param string      $page
-	 * @param string      $newtitle
-	 * @param string      $parentPath
-	 * @param string      $collective
-	 * @param string|null $fail
 	 *
 	 * @throws GuzzleException
 	 */
@@ -558,13 +444,6 @@ class FeatureContext implements Context {
 	/**
 	 * @When user :user copies page :page to :newtitle with parentPath :parentPath in :collective
 	 * @When user :user :fails to copy page :page to :newtitle with parentPath :parentPath in :collective
-	 *
-	 * @param string      $user
-	 * @param string      $page
-	 * @param string      $newtitle
-	 * @param string      $parentPath
-	 * @param string      $collective
-	 * @param string|null $fail
 	 *
 	 * @throws GuzzleException
 	 */
@@ -590,12 +469,6 @@ class FeatureContext implements Context {
 	 * @When user :user moves page :page from collective :oldCollectiveId to collective :newCollectiveId
 	 * @When user :user moves page :page from collective :oldCollectiveId to collective :newCollectiveId with parentPath :parentPath
 	 *
-	 * @param string      $user
-	 * @param string      $page
-	 * @param string      $oldCollective
-	 * @param string      $newCollective
-	 * @param string|null $parentPath
-	 *
 	 * @throws GuzzleException
 	 */
 	public function userMovesPageToCollective(string $user, string $page, string $oldCollective, string $newCollective, ?string $parentPath = null): void {
@@ -616,12 +489,6 @@ class FeatureContext implements Context {
 	/**
 	 * @When user :user copies page :page from collective :oldCollectiveId to collective :newCollectiveId
 	 * @When user :user copies page :page from collective :oldCollectiveId to collective :newCollectiveId with parentPath :parentPath
-	 *
-	 * @param string      $user
-	 * @param string      $page
-	 * @param string      $oldCollective
-	 * @param string      $newCollective
-	 * @param string|null $parentPath
 	 *
 	 * @throws GuzzleException
 	 */
@@ -644,12 +511,6 @@ class FeatureContext implements Context {
 	 * @When user :user sets emoji for page :page to :emoji in :collective
 	 * @When user :user :fails to set emoji for page :page to :emoji in :collective
 	 *
-	 * @param string      $user
-	 * @param string      $page
-	 * @param string      $emoji
-	 * @param string      $collective
-	 * @param string|null $fail
-	 *
 	 * @throws GuzzleException
 	 */
 	public function userSetsPageEmoji(string $user, string $page, string $emoji, string $collective, ?string $fail = null): void {
@@ -670,12 +531,6 @@ class FeatureContext implements Context {
 	 * @When user :user sets subpageOrder for page :page to :subpageOrder in :collective
 	 * @When user :user :fails to set subpageOrder for page :page to :subpageOrder in :collective
 	 *
-	 * @param string      $user
-	 * @param string      $page
-	 * @param string      $subpageOrder
-	 * @param string      $collective
-	 * @param string|null $fail
-	 *
 	 * @throws GuzzleException
 	 */
 	public function userSetsPageSubpageOrder(string $user, string $page, string $subpageOrder, string $collective, ?string $fail = null): void {
@@ -695,10 +550,6 @@ class FeatureContext implements Context {
 	/**
 	 * @When user :user gets setting :key with value :value
 	 *
-	 * @param string $user
-	 * @param string $key
-	 * @param string $value
-	 *
 	 * @throws GuzzleException
 	 */
 	public function userGetsSetting(string $user, string $key, string $value): void {
@@ -714,11 +565,6 @@ class FeatureContext implements Context {
 	/**
 	 * @When user :user sets setting :key to value :value
 	 * @When user :user :fails to set setting :key to value :value
-	 *
-	 * @param string      $user
-	 * @param string      $key
-	 * @param string      $value
-	 * @param string|null $fails
 	 *
 	 * @throws GuzzleException
 	 */
@@ -740,11 +586,6 @@ class FeatureContext implements Context {
 	/**
 	 * @When user :user joins circle :name with owner :owner
 	 * @When user :user joins circle :name with owner :owner with level :level
-	 *
-	 * @param string      $user
-	 * @param string      $name
-	 * @param string      $owner
-	 * @param string|null $level
 	 *
 	 * @throws GuzzleException
 	 */
@@ -790,9 +631,6 @@ class FeatureContext implements Context {
 	/**
 	 * @When user :user is member of circle :name
 	 *
-	 * @param string $user
-	 * @param string $name
-	 *
 	 * @throws GuzzleException
 	 */
 	public function userIsMemberOfCircle(string $user, string $name): void {
@@ -804,10 +642,6 @@ class FeatureContext implements Context {
 	/**
 	 * @When user :user deletes circle :name
 	 * @When user :user :fails to delete circle :name
-	 *
-	 * @param string      $user
-	 * @param string      $name
-	 * @param string|null $fails
 	 *
 	 * @throws GuzzleException
 	 */
@@ -825,9 +659,6 @@ class FeatureContext implements Context {
 
 	/**
 	 * @When app :appId is :status
-	 *
-	 * @param string $appId
-	 * @param string $status
 	 *
 	 * @throws GuzzleException
 	 */
@@ -848,9 +679,6 @@ class FeatureContext implements Context {
 	/**
 	 * @When user :user has quota :quota
 	 *
-	 * @param string $user
-	 * @param string $quota
-	 *
 	 * @throws GuzzleException
 	 */
 	public function setUserQuota(string $user, string $quota): void {
@@ -866,10 +694,6 @@ class FeatureContext implements Context {
 	/**
 	 * @When user :user creates public share for :collective
 	 * @When user :user :fails to create public share for :collective
-	 *
-	 * @param string $user
-	 * @param string $collective
-	 * @param string|null $fail
 	 *
 	 * @throws GuzzleException
 	 */
@@ -890,11 +714,6 @@ class FeatureContext implements Context {
 	 * @When user :user creates public page share for page :page in :collective
 	 * @When user :user :fails to create public page share for page :page in :collective
 	 *
-	 * @param string $user
-	 * @param string $page
-	 * @param string $collective
-	 * @param string|null $fail
-	 *
 	 * @throws GuzzleException
 	 */
 	public function userCreatesPublicPageShare(string $user, string $collective, string $page, ?string $fail = null): void {
@@ -914,9 +733,6 @@ class FeatureContext implements Context {
 	/**
 	 * @When user :user sets editing permissions for collective share :collective
 	 *
-	 * @param string $user
-	 * @param string $collective
-	 *
 	 * @throws GuzzleException
 	 */
 	public function userSetsPublicShareEditPermissions(string $user, string $collective): void {
@@ -930,10 +746,6 @@ class FeatureContext implements Context {
 
 	/**
 	 * @When user :user sets editing permissions for page share :page in collective :collective
-	 *
-	 * @param string $user
-	 * @param string $page
-	 * @param string $collective
 	 *
 	 * @throws GuzzleException
 	 */
@@ -950,9 +762,6 @@ class FeatureContext implements Context {
 	/**
 	 * @When user :user unsets editing permissions for collective :collective
 	 *
-	 * @param string $user
-	 * @param string $collective
-	 *
 	 * @throws GuzzleException
 	 */
 	public function userUnsetsPublicShareEditPermissions(string $user, string $collective): void {
@@ -966,10 +775,6 @@ class FeatureContext implements Context {
 
 	/**
 	 * @When user :user unsets editing permissions for page share :page in collective :collective
-	 *
-	 * @param string $user
-	 * @param string $page
-	 * @param string $collective
 	 *
 	 * @throws GuzzleException
 	 */
@@ -987,10 +792,6 @@ class FeatureContext implements Context {
 	 * @When user :user stores token for public share :collective
 	 * @When user :user stores token for public page share :pageShare in collective :collective
 	 *
-	 * @param string  $user
-	 * @param string  $collective
-	 * @param ?string $page
-	 *
 	 * @throws GuzzleException
 	 */
 	public function userStoresPublicShareToken(string $user, string $collective, ?string $pageShare = null): void {
@@ -1006,10 +807,6 @@ class FeatureContext implements Context {
 	/**
 	 * @When user :user deletes public share for :collective
 	 * @When user :user deletes public page share :pageShare in collective :collective
-	 *
-	 * @param string  $user
-	 * @param string  $collective
-	 * @param ?string $pageShare
 	 *
 	 * @throws GuzzleException
 	 */
@@ -1032,9 +829,6 @@ class FeatureContext implements Context {
 	/**
 	 * @When anonymous sees public collective :collective with owner :owner
 	 *
-	 * @param string      $collective
-	 * @param string      $owner
-	 *
 	 * @throws GuzzleException
 	 */
 	public function anonymousSeesPublicCollective(string $collective, string $owner): void {
@@ -1049,10 +843,6 @@ class FeatureContext implements Context {
 
 	/**
 	 * @When anonymous sees public page share :page in collective :collective with owner :owner
-	 *
-	 * @param string $page
-	 * @param string $collective
-	 * @param string $owner
 	 *
 	 * @throws GuzzleException
 	 */
@@ -1082,10 +872,6 @@ class FeatureContext implements Context {
 	/**
 	 * @When anonymous sees pagePath :path in public collective :collective with owner :owner
 	 *
-	 * @param string $path
-	 * @param string $collective
-	 * @param string $owner
-	 *
 	 * @throws GuzzleException
 	 */
 	public function anonymousSeesPublicCollectivePages(string $path, string $collective, string $owner): void {
@@ -1099,11 +885,6 @@ class FeatureContext implements Context {
 
 	/**
 	 * @When anonymous sees pagePath :path in public page share :pageShare in collective :collective with owner :owner
-	 *
-	 * @param string $path
-	 * @param string $pageShare
-	 * @param string $collective
-	 * @param string $owner
 	 *
 	 * @throws GuzzleException
 	 */
@@ -1120,10 +901,6 @@ class FeatureContext implements Context {
 	/**
 	 * @When anonymous doesn't see pagePath :path in public collective :collective with owner :owner
 	 *
-	 * @param string $path
-	 * @param string $collective
-	 * @param string $owner
-	 *
 	 * @throws GuzzleException
 	 */
 	public function anonymousDoesntSeePublicCollectivePages(string $path, string $collective, string $owner): void {
@@ -1137,11 +914,6 @@ class FeatureContext implements Context {
 
 	/**
 	 * @When anonymous doesn't see pagePath :path in public page share :pageShare in collective :collective with owner :owner
-	 *
-	 * @param string $path
-	 * @param string $pageShare
-	 * @param string $collective
-	 * @param string $owner
 	 *
 	 * @throws GuzzleException
 	 */
@@ -1158,12 +930,6 @@ class FeatureContext implements Context {
 	/**
 	 * @When anonymous creates page :page with parentPath :parentPath in public collective :collective with owner :owner
 	 * @When anonymous :fails to create page :page with parentPath :parentPath in public collective :collective with owner :owner
-	 *
-	 * @param string $page
-	 * @param string $parentPath
-	 * @param string $collective
-	 * @param string $owner
-	 * @param string|null $fail
 	 *
 	 * @throws GuzzleException
 	 */
@@ -1185,13 +951,6 @@ class FeatureContext implements Context {
 	/**
 	 * @When anonymous creates page :page with parentPath :parentPath in public page share :pageShare in collective :collective with owner :owner
 	 * @When anonymous :fails to create page :page with parentPath :parentPath in public page share :pageShare in collective :collective with owner :owner
-	 *
-	 * @param string $page
-	 * @param string $parentPath
-	 * @param string $pageShare
-	 * @param string $collective
-	 * @param string $owner
-	 * @param string|null $fail
 	 *
 	 * @throws GuzzleException
 	 */
@@ -1215,13 +974,6 @@ class FeatureContext implements Context {
 	 * @When anonymous moves page :page to :newtitle with parentPath :parentPath in public collective :collective with owner :owner
 	 * @When anonymous :fails to move page :page to :newtitle with parentPath :parentPath in public collective :collective with owner :owner
 	 *
-	 * @param string      $page
-	 * @param string      $newtitle
-	 * @param string      $parentPath
-	 * @param string      $collective
-	 * @param string      $owner
-	 * @param string|null $fail
-	 *
 	 * @throws GuzzleException
 	 */
 	public function anonymousMovesPage(string $page, string $newtitle, string $parentPath, string $collective, string $owner, ?string $fail = null): void {
@@ -1242,14 +994,6 @@ class FeatureContext implements Context {
 	/**
 	 * @When anonymous moves page :page to :newtitle with parentPath :parentPath in public page share :pageShare in collective :collective with owner :owner
 	 * @When anonymous :fails to move page :page to :newtitle with parentPath :parentPath in public page share :pageShare in collective :collective with owner :owner
-	 *
-	 * @param string      $page
-	 * @param string      $newtitle
-	 * @param string      $parentPath
-	 * @param string      $pageShare
-	 * @param string      $collective
-	 * @param string      $owner
-	 * @param string|null $fail
 	 *
 	 * @throws GuzzleException
 	 */
@@ -1272,13 +1016,6 @@ class FeatureContext implements Context {
 	/**
 	 * @When anonymous copies page :page to :newtitle with parentPath :parentPath in public collective :collective with owner :owner
 	 * @When anonymous :fails to copy page :page to :newtitle with parentPath :parentPath in public collective :collective with owner :owner
-	 *
-	 * @param string      $page
-	 * @param string      $newtitle
-	 * @param string      $parentPath
-	 * @param string      $collective
-	 * @param string      $owner
-	 * @param string|null $fail
 	 *
 	 * @throws GuzzleException
 	 */
@@ -1305,15 +1042,9 @@ class FeatureContext implements Context {
 	 * @When anonymous sets emoji for page :page to :emoji in public collective :collective with owner :owner
 	 * @When anonymous :fails to set emoji for page :page to :emoji in public collective :collective with owner :owner
 	 *
-	 * @param string      $page
-	 * @param string      $emoji
-	 * @param string      $collective
-	 * @param string      $owner
-	 * @param string|null $fail
-	 *
 	 * @throws GuzzleException
 	 */
-	public function anonymousSetsPublicCollectivePageEmoji(string $page, string $emoji, string $collective, $owner, ?string $fail = null): void {
+	public function anonymousSetsPublicCollectivePageEmoji(string $page, string $emoji, string $collective, string $owner, ?string $fail = null): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$token = $this->getShareToken($collectiveId);
@@ -1333,16 +1064,9 @@ class FeatureContext implements Context {
 	 * @When anonymous sets emoji for page :page to :emoji in public page share :pageShare in collective :collective with owner :owner
 	 * @When anonymous :fails to set emoji for page :page to :emoji in public page share :pageShare in collective :collective with owner :owner
 	 *
-	 * @param string      $page
-	 * @param string      $emoji
-	 * @param string      $pageShare
-	 * @param string      $collective
-	 * @param string      $owner
-	 * @param string|null $fail
-	 *
 	 * @throws GuzzleException
 	 */
-	public function anonymousSetsPublicPageSharePageEmoji(string $page, string $emoji, string $pageShare, string $collective, $owner, ?string $fail = null): void {
+	public function anonymousSetsPublicPageSharePageEmoji(string $page, string $emoji, string $pageShare, string $collective, string $owner, ?string $fail = null): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$pageShareId = $this->pageIdByName($collectiveId, $pageShare);
@@ -1363,11 +1087,6 @@ class FeatureContext implements Context {
 	 * @When anonymous trashes page :page in public collective :collective with owner :owner
 	 * @When anonymous :fails to trash page :page in public collective :collective with owner :owner
 	 *
-	 * @param string      $page
-	 * @param string      $collective
-	 * @param string      $owner
-	 * @param string|null $fail
-	 *
 	 * @throws GuzzleException
 	 */
 	public function anonymousTrashesPublicCollectivePage(string $page, string $collective, string $owner, ?string $fail = null): void {
@@ -1387,11 +1106,6 @@ class FeatureContext implements Context {
 	/**
 	 * @When anonymous fails to trash page :page in public page share :pageShare in collective :collective with owner :owner
 	 *
-	 * @param string $page
-	 * @param string $pageShare
-	 * @param string $collective
-	 * @param string $owner
-	 *
 	 * @throws GuzzleException
 	 */
 	public function anonymousTrashesPublicPageSharePage(string $page, string $pageShare, string $collective, string $owner): void {
@@ -1408,11 +1122,6 @@ class FeatureContext implements Context {
 	/**
 	 * @When anonymous restores page :page from trash in public collective :collective with owner :owner
 	 * @When anonymous :fails to restore page :page from trash in public collective :collective with owner :owner
-	 *
-	 * @param string      $page
-	 * @param string      $collective
-	 * @param string      $owner
-	 * @param string|null $fail
 	 *
 	 * @throws GuzzleException
 	 */
@@ -1435,11 +1144,6 @@ class FeatureContext implements Context {
 	 * @When anonymous deletes page :page from trash in public collective :collective with owner :owner
 	 * @When anonymous :fails to delete page :page from trash in public collective :collective with owner :owner
 	 *
-	 * @param string      $page
-	 * @param string      $collective
-	 * @param string      $owner
-	 * @param string|null $fail
-	 *
 	 * @throws GuzzleException
 	 */
 	public function anonymousDeletesPublicCollectivePage(string $page, string $collective, string $owner, ?string $fail = null): void {
@@ -1460,13 +1164,6 @@ class FeatureContext implements Context {
 	/**
 	 * @Then anonymous sees attachment :name with mimetype :mimetype for :page in public collective :collective with owner :owner
 	 *
-	 * @param string $name
-	 * @param string $mimetype
-	 * @param string $page
-	 * @param string $collective
-	 * @param string $owner
-	 *
-	 * @return void
 	 * @throws GuzzleException
 	 */
 	public function anonymousSeesAttachments(string $name, string $mimetype, string $page, string $collective, string $owner): void {
@@ -1482,14 +1179,6 @@ class FeatureContext implements Context {
 	/**
 	 * @Then anonymous sees attachment :name with mimetype :mimetype for :page in public page share :pageShare in collective :collective with owner :owner
 	 *
-	 * @param string $name
-	 * @param string $mimetype
-	 * @param string $page
-	 * @param string $pageShare
-	 * @param string $collective
-	 * @param string $owner
-	 *
-	 * @return void
 	 * @throws GuzzleException
 	 */
 	public function anonymousSeesPageShareAttachments(string $name, string $mimetype, string $page, string $pageShare, string $collective, string $owner): void {
@@ -1503,11 +1192,6 @@ class FeatureContext implements Context {
 		$this->assertAttachment($name, $mimetype);
 	}
 
-	/**
-	 * @param string $user
-	 *
-	 * @return string
-	 */
 	private function getUserCollectivesPath(string $user): string {
 		// Dirty hack to not break it on local dev setup
 		$lang = $this->getUserLanguage($user);
@@ -1520,10 +1204,6 @@ class FeatureContext implements Context {
 	/**
 	 * @When user :user has webdav access to :collective with permissions :permissions
 	 *
-	 * @param string $collective
-	 * @param string $user
-	 * @param string $permissions
-	 *
 	 * @throws GuzzleException
 	 */
 	public function hasWebdavAccess(string $collective, string $user, string $permissions): void {
@@ -1532,7 +1212,7 @@ class FeatureContext implements Context {
 			'Content-Type' => 'Content-Type: text/xml; charset="utf-8"',
 			'Depth' => 0,
 		];
-		$dom = new \DOMDocument('1.0', 'UTF-8');
+		$dom = new DOMDocument('1.0', 'UTF-8');
 		$xPropfind = $dom->createElementNS('DAV:', 'D:propfind');
 		$xProp = $dom->createElement('D:prop');
 		$xProp->setAttribute('xmlns:oc', 'http://owncloud.org/ns');
@@ -1551,9 +1231,6 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @param string $user
-	 *
-	 * @return array
 	 * @throws GuzzleException
 	 */
 	private function listWebdavTrash(string $user): array {
@@ -1562,7 +1239,7 @@ class FeatureContext implements Context {
 			'Content-Type' => 'Content-Type: text/xml; charset="utf-8"',
 			'Depth' => 1,
 		];
-		$dom = new \DOMDocument('1.0', 'UTF-8');
+		$dom = new DOMDocument('1.0', 'UTF-8');
 		$xPropfind = $dom->createElementNS('DAV:', 'D:propfind');
 		$xProp = $dom->createElement('D:prop');
 		$xProp->setAttribute('xmlns:nc', 'http://nextcloud.org/ns');
@@ -1589,11 +1266,6 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @param string $collective
-	 * @param string $filePath
-	 * @param string $user
-	 *
-	 * @return string|null
 	 * @throws GuzzleException
 	 */
 	private function inWebdavTrash(string $collective, string $filePath, string $user): ?string {
@@ -1611,12 +1283,6 @@ class FeatureContext implements Context {
 
 	/**
 	 * @When user :user uploads attachment :fileName to :page with file path :filePath in :collective
-	 *
-	 * @param string $user
-	 * @param string $fileName
-	 * @param string $page
-	 * @param string $filePath
-	 * @param string $collective
 	 *
 	 * @throws GuzzleException
 	 */
@@ -1639,11 +1305,6 @@ class FeatureContext implements Context {
 	 * @When user :user trashes page :page via webdav in :collective
 	 * @When user :user :fails to trash page :page via webdav in :collective
 	 *
-	 * @param string      $user
-	 * @param string      $page
-	 * @param string      $collective
-	 * @param string|null $fail
-	 *
 	 * @throws GuzzleException
 	 */
 	public function webdavTrashFile(string $user, string $page, string $collective, ?string $fail = null): void {
@@ -1663,11 +1324,6 @@ class FeatureContext implements Context {
 	/**
 	 * @When user :user restores page :page from trash via webdav in :collective
 	 * @When user :user :fails to restore page :page from trash via webdav in :collective
-	 *
-	 * @param string      $user
-	 * @param string      $page
-	 * @param string      $collective
-	 * @param string|null $fail
 	 *
 	 * @throws GuzzleException
 	 */
@@ -1694,11 +1350,6 @@ class FeatureContext implements Context {
 	 * @When user :user deletes page :page from trash via webdav in :collective
 	 * @When user :user :fails to delete page :page from trash via webdav in :collective
 	 *
-	 * @param string      $user
-	 * @param string      $page
-	 * @param string      $collective
-	 * @param string|null $fail
-	 *
 	 * @throws GuzzleException
 	 */
 	public function webdavDeleteFile(string $user, string $page, string $collective, ?string $fail = null): void {
@@ -1720,7 +1371,6 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @return array
 	 * @throws JsonException
 	 */
 	private function getJson(): array {
@@ -1731,9 +1381,6 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @param string $name
-	 *
-	 * @return string|null
 	 * @throws GuzzleException
 	 */
 	private function circleIdByName(string $name): ?string {
@@ -1751,10 +1398,6 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @param string $circleId
-	 * @param string $userId
-	 *
-	 * @return string|null
 	 * @throws GuzzleException
 	 */
 	private function circleMemberByUser(string $circleId, string $user): ?string {
@@ -1772,10 +1415,6 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @param string $circleId
-	 * @param string $userId
-	 *
-	 * @return string|null
 	 * @throws GuzzleException
 	 */
 	private function circleMemberIdByName(string $circleId, string $userId): ?string {
@@ -1793,10 +1432,6 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @param string $name
-	 * @param bool   $trash
-	 *
-	 * @return int|null
 	 * @throws GuzzleException
 	 */
 	private function collectiveIdByName(string $name, bool $trash = false): ?int {
@@ -1818,10 +1453,6 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @param int    $collectiveId
-	 * @param string $name
-	 *
-	 * @return int|null
 	 * @throws GuzzleException
 	 */
 	private function pageIdByName(int $collectiveId, string $name): ?int {
@@ -1839,11 +1470,6 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @param int         $collectiveId
-	 * @param string      $name
-	 * @param string|null $token
-	 *
-	 * @return int|null
 	 * @throws GuzzleException
 	 */
 	private function trashedPageIdByName(int $collectiveId, string $name, ?string $token = null): ?int {
@@ -1865,12 +1491,6 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @param string         $verb
-	 * @param string         $url
-	 * @param TableNode|null $body
-	 * @param array          $headers
-	 * @param bool|null      $auth
-	 *
 	 * @throws GuzzleException
 	 */
 	private function sendRequest(string $verb,
@@ -1884,11 +1504,7 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @param string               $verb
-	 * @param string               $url
 	 * @param string|resource|null $body
-	 * @param array                $headers
-	 * @param bool|null            $auth
 	 *
 	 * @throws GuzzleException
 	 */
@@ -1903,12 +1519,6 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @param string         $verb
-	 * @param string         $url
-	 * @param TableNode|null $body
-	 * @param array          $headers
-	 * @param bool|null      $auth
-	 *
 	 * @throws GuzzleException
 	 */
 	private function sendOcsRequest(string $verb,
@@ -1921,7 +1531,7 @@ class FeatureContext implements Context {
 
 		// Add Xdebug trigger variable as GET parameter
 		$ocsJsonFormat = 'format=json';
-		if (false !== strpos($fullUrl, '?')) {
+		if (str_contains($fullUrl, '?')) {
 			$fullUrl .= '&' . $ocsJsonFormat;
 		} else {
 			$fullUrl .= '?' . $ocsJsonFormat;
@@ -1930,12 +1540,7 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @param string                $verb
-	 * @param string                $url
 	 * @param TableNode|string|null $body
-	 * @param array|null            $jsonBody
-	 * @param array                 $headers
-	 * @param bool|null             $auth
 	 *
 	 * @throws GuzzleException
 	 */
@@ -1975,7 +1580,7 @@ class FeatureContext implements Context {
 
 		// Add Xdebug trigger variable as GET parameter
 		$xdebugSession = 'XDEBUG_SESSION=PHPSTORM';
-		if (false !== strpos($url, '?')) {
+		if (str_contains($url, '?')) {
 			$url .= '&' . $xdebugSession;
 		} else {
 			$url .= '?' . $xdebugSession;
@@ -1995,8 +1600,6 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @param string $user
-	 *
 	 * @throws GuzzleException
 	 */
 	private function getUserRequestToken(string $user): void {
@@ -2030,11 +1633,6 @@ class FeatureContext implements Context {
 		}
 	}
 
-	/**
-	 * @param string $user
-	 *
-	 * @return string
-	 */
 	private function getUserLanguage(string $user): string {
 		$this->sendOcsRequest('GET', '/cloud/users/' . $user);
 		$this->assertStatusCode(200);
@@ -2043,19 +1641,10 @@ class FeatureContext implements Context {
 		return $jsonBody['ocs']['data']['language'];
 	}
 
-	/**
-	 * @param string $user
-	 */
 	private function setCurrentUser(string $user): void {
 		$this->currentUser = $user;
 	}
 
-	/**
-	 * @param int    $collectiveId
-	 * @param string $parentPath
-	 *
-	 * @return int
-	 */
 	private function getParentId(int $collectiveId, string $parentPath): int {
 		$this->sendRequest('GET', '/apps/collectives/_api/' . $collectiveId . '/_pages');
 		$jsonBody = $this->getJson();
@@ -2068,12 +1657,6 @@ class FeatureContext implements Context {
 		throw new RuntimeException('Could not get parent page id for ' . $parentPath);
 	}
 
-	/**
-	 * @param int $collectiveId
-	 * @param int $pageId
-	 *
-	 * @return string|null
-	 */
 	private function getShareToken(int $collectiveId, int $pageId = 0): ?string {
 		$this->sendRequest('GET', '/apps/collectives/_api/' . $collectiveId . '/shares');
 		if (200 !== $this->response->getStatusCode()) {
@@ -2088,11 +1671,7 @@ class FeatureContext implements Context {
 		return null;
 	}
 
-	/**
-	 * @param mixed    $statusCode
-	 * @param string   $message
-	 */
-	private function assertStatusCode($statusCode, string $message = ''): void {
+	private function assertStatusCode(mixed $statusCode, string $message = ''): void {
 		if (is_int($statusCode)) {
 			$message = $message ?: 'Status code ' . $this->response->getStatusCode() . ' is not expected ' . $statusCode . '.';
 			Assert::assertEquals($statusCode, $this->response->getStatusCode(), $message);
@@ -2102,10 +1681,6 @@ class FeatureContext implements Context {
 		}
 	}
 
-	/**
-	 * @param string    $name
-	 * @param bool|null $revert
-	 */
 	private function assertCollectiveByName(string $name, ?bool $revert = false): void {
 		$jsonBody = $this->getJson();
 		$collectiveNames = [];
@@ -2120,12 +1695,6 @@ class FeatureContext implements Context {
 	}
 
 
-	/**
-	 * @param string    $name
-	 * @param string    $key
-	 * @param string    $value
-	 * @param bool|null $revert
-	 */
 	private function assertCollectiveKeyValue(string $name, string $key, string $value, ?bool $revert = false): void {
 		$jsonBody = $this->getJson();
 		foreach ($jsonBody['data'] as $c) {
@@ -2145,10 +1714,6 @@ class FeatureContext implements Context {
 		}
 	}
 
-	/**
-	 * @param string $name
-	 * @param int    $level
-	 */
 	private function assertCollectiveLevel(string $name, int $level): void {
 		$data = $this->getJson()['data'];
 		// Dirty hack. We don't know whether $data contains the collective (e.g. after collective#create)
@@ -2162,10 +1727,6 @@ class FeatureContext implements Context {
 		Assert::assertEquals($level, $collective['level']);
 	}
 
-	/**
-	 * @param string    $path
-	 * @param bool|null $revert
-	 */
 	private function assertPageByPath(string $path, ?bool $revert = false): void {
 		$jsonBody = $this->getJson();
 		$pagePaths = [];
@@ -2179,13 +1740,7 @@ class FeatureContext implements Context {
 		}
 	}
 
-	/**
-	 * @param int       $id
-	 * @param string    $key
-	 * @param mixed     $value
-	 * @param bool|null $revert
-	 */
-	private function assertPageKeyValue(int $id, string $key, $value, ?bool $revert = false): void {
+	private function assertPageKeyValue(int $id, string $key, mixed $value, ?bool $revert = false): void {
 		$jsonBody = $this->getJson();
 		$page = $jsonBody['data'];
 
@@ -2200,10 +1755,6 @@ class FeatureContext implements Context {
 		}
 	}
 
-	/**
-	 * @param string    $title
-	 * @param string    $user
-	 */
 	private function assertPageLastEditedByUser(string $title, string $user): void {
 		$jsonBody = $this->getJson();
 		$pageTitles = [];
@@ -2215,10 +1766,6 @@ class FeatureContext implements Context {
 		Assert::assertContains($title, $pageTitles);
 	}
 
-	/**
-	 * @param string $name
-	 * @param string $mimetype
-	 */
 	private function assertAttachment(string $name, string $mimetype): void {
 		$jsonBody = $this->getJson();
 		$attachment = [
@@ -2226,12 +1773,10 @@ class FeatureContext implements Context {
 			'mimetype' => $mimetype,
 		];
 
-		$pageAttachments = array_map(function ($attachment) {
-			return [
-				'name' => $attachment['name'],
-				'mimetype' => $attachment['mimetype'],
-			];
-		}, $jsonBody['data']);
+		$pageAttachments = array_map(static fn ($attachment) => [
+			'name' => $attachment['name'],
+			'mimetype' => $attachment['mimetype'],
+		], $jsonBody['data']);
 
 		Assert::assertContains($attachment, $pageAttachments);
 	}

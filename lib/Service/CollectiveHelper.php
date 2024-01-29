@@ -10,31 +10,10 @@ use OCA\Collectives\Db\CollectiveUserSettingsMapper;
 use OCA\Collectives\Model\CollectiveInfo;
 
 class CollectiveHelper {
-	private CollectiveMapper $collectiveMapper;
-	private CollectiveUserSettingsMapper $collectiveUserSettingsMapper;
-	private CircleHelper $circleHelper;
-
-	/**
-	 * CollectiveHelper constructor.
-	 *
-	 * @param CollectiveMapper             $collectiveMapper
-	 * @param CollectiveUserSettingsMapper $collectiveUserSettingsMapper
-	 * @param CircleHelper                 $circleHelper
-	 */
-	public function __construct(CollectiveMapper $collectiveMapper,
-		CollectiveUserSettingsMapper $collectiveUserSettingsMapper,
-		CircleHelper $circleHelper) {
-		$this->collectiveMapper = $collectiveMapper;
-		$this->collectiveUserSettingsMapper = $collectiveUserSettingsMapper;
-		$this->circleHelper = $circleHelper;
+	public function __construct(private CollectiveMapper $collectiveMapper, private CollectiveUserSettingsMapper $collectiveUserSettingsMapper, private CircleHelper $circleHelper) {
 	}
 
 	/**
-	 * @param string $userId
-	 * @param bool   $getLevel
-	 * @param bool   $getUserSettings
-	 *
-	 * @return CollectiveInfo[]
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 * @throws MissingDependencyException
@@ -42,9 +21,7 @@ class CollectiveHelper {
 	public function getCollectivesForUser(string $userId, bool $getLevel = true, bool $getUserSettings = true): array {
 		$collectiveInfos = [];
 		$circles = $this->circleHelper->getCircles($userId);
-		$cids = array_map(function ($circle) {
-			return $circle->getSingleId();
-		}, $circles);
+		$cids = array_map(fn ($circle) => $circle->getSingleId(), $circles);
 		$circles = array_combine($cids, $circles);
 		/** @var Collective[] $collectives */
 		$collectives = $this->collectiveMapper->findByCircleIds($cids);
@@ -74,9 +51,6 @@ class CollectiveHelper {
 	}
 
 	/**
-	 * @param string $userId
-	 *
-	 * @return CollectiveInfo[]
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 * @throws MissingDependencyException
@@ -84,9 +58,7 @@ class CollectiveHelper {
 	public function getCollectivesTrashForUser(string $userId): array {
 		$collectiveInfos = [];
 		$circles = $this->circleHelper->getCircles($userId);
-		$cids = array_map(function ($circle) {
-			return $circle->getSingleId();
-		}, $circles);
+		$cids = array_map(fn ($circle) => $circle->getSingleId(), $circles);
 		$circles = array_combine($cids, $circles);
 		$collectives = $this->collectiveMapper->findTrashByCircleIdsAndUser($cids, $userId);
 		foreach ($collectives as $c) {

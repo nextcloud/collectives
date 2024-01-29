@@ -9,6 +9,7 @@ use OC\Files\Cache\Scanner;
 use OC\Files\Cache\Wrapper\CacheWrapper;
 use OC\Files\Storage\Wrapper\Wrapper;
 use OCP\Constants;
+use Traversable;
 
 class ACLStorageWrapper extends Wrapper {
 	private int $permissions;
@@ -20,11 +21,6 @@ class ACLStorageWrapper extends Wrapper {
 		$this->inShare = $arguments['in_share'];
 	}
 
-	/**
-	 * @param int $permissions
-	 *
-	 * @return bool
-	 */
 	protected function checkPermissions(int $permissions): bool {
 		// if there is no read permissions, then deny everything
 		if ($this->inShare) {
@@ -64,10 +60,10 @@ class ACLStorageWrapper extends Wrapper {
 	}
 
 	public function rename($path1, $path2): bool {
-		if (strpos($path1, $path2) === 0) {
+		if (str_starts_with($path1, $path2)) {
 			$part = substr($path1, strlen($path2));
 			// This is a renaming of the transfer file to the original file
-			if (strpos($part, '.ocTransferId') === 0) {
+			if (str_starts_with($part, '.ocTransferId')) {
 				return $this->checkPermissions(Constants::PERMISSION_CREATE) && parent::rename($path1, $path2);
 			}
 		}
@@ -123,7 +119,7 @@ class ACLStorageWrapper extends Wrapper {
 		return $this->checkPermissions($permissions) ? parent::fopen($path, $mode) : false;
 	}
 
-	public function writeStream(string $path, $stream, int $size = null): int {
+	public function writeStream(string $path, $stream, ?int $size = null): int {
 		$permissions = $this->file_exists($path) ? Constants::PERMISSION_UPDATE : Constants::PERMISSION_CREATE;
 		return $this->checkPermissions($permissions) ? parent::writeStream($path, $stream, $size) : 0;
 	}
@@ -223,7 +219,7 @@ class ACLStorageWrapper extends Wrapper {
 		return parent::getDirectDownload($path);
 	}
 
-	public function getDirectoryContent($directory): \Traversable {
+	public function getDirectoryContent($directory): Traversable {
 		foreach ($this->getWrapperStorage()->getDirectoryContent($directory) as $data) {
 			$data['scan_permissions'] ??= $data['permissions'];
 			$data['permissions'] &= $this->permissions;

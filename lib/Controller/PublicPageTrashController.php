@@ -19,57 +19,39 @@ use OCP\ISession;
 use Psr\Log\LoggerInterface;
 
 class PublicPageTrashController extends PublicShareController {
-	private CollectiveShareMapper $collectiveShareMapper;
-	private CollectiveShareService $collectiveShareService;
-	private PageService $service;
-	private LoggerInterface $logger;
 	private ?CollectiveShareInfo $share = null;
 
 	use ErrorHelper;
 
-	public function __construct(string                 $appName,
-		IRequest               $request,
-		CollectiveShareMapper  $collectiveShareMapper,
-		CollectiveShareService $collectiveShareService,
-		PageService            $service,
-		ISession               $session,
-		LoggerInterface        $logger) {
+	public function __construct(string $appName,
+		IRequest $request,
+		private CollectiveShareMapper $collectiveShareMapper,
+		private CollectiveShareService $collectiveShareService,
+		private PageService $service,
+		ISession $session,
+		private LoggerInterface $logger) {
 		parent::__construct($appName, $request, $session);
-		$this->collectiveShareMapper = $collectiveShareMapper;
-		$this->collectiveShareService = $collectiveShareService;
-		$this->service = $service;
-		$this->logger = $logger;
 	}
 
-	/**
-	 * @return string
-	 */
 	protected function getPasswordHash(): string {
 		return '';
 	}
 
-	/**
-	 * @return bool
-	 */
 	public function isValidToken(): bool {
 		try {
 			$this->collectiveShareMapper->findOneByToken($this->getToken());
-		} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
+		} catch (DoesNotExistException | MultipleObjectsReturnedException) {
 			return false;
 		}
 
 		return true;
 	}
 
-	/**
-	 * @return bool
-	 */
 	protected function isPasswordProtected(): bool {
 		return false;
 	}
 
 	/**
-	 * @return CollectiveShareInfo
 	 * @throws NotFoundException
 	 */
 	private function getShare(): CollectiveShareInfo {
@@ -89,7 +71,6 @@ class PublicPageTrashController extends PublicShareController {
 	}
 
 	/**
-	 * @return void
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
@@ -101,8 +82,6 @@ class PublicPageTrashController extends PublicShareController {
 
 	/**
 	 * @PublicPage
-	 *
-	 * @return DataResponse
 	 */
 	public function index(): DataResponse {
 		return $this->handleErrorResponse(function (): array {
@@ -122,10 +101,6 @@ class PublicPageTrashController extends PublicShareController {
 
 	/**
 	 * @PublicPage
-	 *
-	 * @param int $id
-	 *
-	 * @return DataResponse
 	 */
 	public function restore(int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($id): array {
@@ -144,10 +119,6 @@ class PublicPageTrashController extends PublicShareController {
 
 	/**
 	 * @PublicPage
-	 *
-	 * @param int $id
-	 *
-	 * @return DataResponse
 	 */
 	public function delete(int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($id): array {

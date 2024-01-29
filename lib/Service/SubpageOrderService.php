@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Service;
 
+use JsonException;
+
 class SubpageOrderService {
 	/**
-	 * @param string|null $subpageOrder
-	 *
-	 * @return array
 	 * @throws NotPermittedException
 	 */
 	private static function toArray(?string $subpageOrder): array {
@@ -18,7 +17,7 @@ class SubpageOrderService {
 
 		try {
 			$subpageOrderArray = json_decode($subpageOrder, true, 512, JSON_THROW_ON_ERROR);
-		} catch (\JsonException $e) {
+		} catch (JsonException) {
 			throw new NotPermittedException('Invalid format of subpage order');
 		}
 		if (!is_array($subpageOrderArray)) {
@@ -29,23 +28,17 @@ class SubpageOrderService {
 	}
 
 	/**
-	 * @param array $subpageOrderArray
-	 *
-	 * @return string
 	 * @throws NotPermittedException
 	 */
 	private static function fromArray(array $subpageOrderArray): string {
 		try {
 			return json_encode(array_values($subpageOrderArray), JSON_THROW_ON_ERROR);
-		} catch (\JsonException $e) {
+		} catch (JsonException) {
 			throw new NotPermittedException('Invalid format of subpage order');
 		}
 	}
 
 	/**
-	 * @param string|null $subpageOrder
-	 *
-	 * @return void
 	 * @throws NotPermittedException
 	 */
 	public static function verify(?string $subpageOrder): void {
@@ -61,10 +54,6 @@ class SubpageOrderService {
 	}
 
 	/**
-	 * @param string|null $subpageOrder
-	 * @param array       $childIds
-	 *
-	 * @return string
 	 * @throws NotPermittedException
 	 */
 	public static function clean(?string $subpageOrder, array $childIds): string {
@@ -80,11 +69,6 @@ class SubpageOrderService {
 	}
 
 	/**
-	 * @param string|null $subpageOrder
-	 * @param int         $pageId
-	 * @param int         $index
-	 *
-	 * @return string
 	 * @throws NotPermittedException
 	 */
 	public static function add(?string $subpageOrder, int $pageId, int $index = 0): string {
@@ -101,10 +85,6 @@ class SubpageOrderService {
 	}
 
 	/**
-	 * @param string|null $subpageOrder
-	 * @param int         $pageId
-	 *
-	 * @return string
 	 * @throws NotPermittedException
 	 */
 	public static function remove(?string $subpageOrder, int $pageId): string {

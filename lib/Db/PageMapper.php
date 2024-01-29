@@ -19,21 +19,10 @@ use OCP\IDBConnection;
  * @template-extends QBMapper<Page>
  */
 class PageMapper extends QBMapper {
-	/**
-	 * PageMapper constructor.
-	 *
-	 * @param IDBConnection $db
-	 * @param string|null   $entityClass
-	 */
-	public function __construct(IDBConnection $db, string $entityClass = null) {
+	public function __construct(IDBConnection $db, ?string $entityClass = null) {
 		parent::__construct($db, 'collectives_pages', $entityClass);
 	}
 
-	/**
-	 * @param Page $page
-	 *
-	 * @return Page
-	 */
 	public function updateOrInsert(Page $page): Page {
 		if (null === $page->getId() &&
 			null !== $oldPage = $this->findByFileId($page->getFileId())) {
@@ -44,11 +33,6 @@ class PageMapper extends QBMapper {
 		return $this->insert($page);
 	}
 
-	/**
-	 * @param int $fileId
-	 *
-	 * @return Page|null
-	 */
 	public function trashByFileId(int $fileId): ?Page {
 		if (null !== $page = $this->findByFileId($fileId)) {
 			$page->setTrashTimestamp(time());
@@ -57,11 +41,6 @@ class PageMapper extends QBMapper {
 		return null;
 	}
 
-	/**
-	 * @param int $fileId
-	 *
-	 * @return Page|null
-	 */
 	public function restoreByFileId(int $fileId): ?Page {
 		if (null !== $page = $this->findByFileId($fileId, true)) {
 			$page->setTrashTimestamp(null);
@@ -70,11 +49,6 @@ class PageMapper extends QBMapper {
 		return null;
 	}
 
-	/**
-	 * @param int $fileId
-	 *
-	 * @return Page|null
-	 */
 	public function deleteByFileId(int $fileId): ?Page {
 		if (null !== $page = $this->findByFileId($fileId, true)) {
 			return $this->delete($page);
@@ -82,12 +56,6 @@ class PageMapper extends QBMapper {
 		return null;
 	}
 
-	/**
-	 * @param int  $fileId
-	 * @param bool $trashed
-	 *
-	 * @return Page|null
-	 */
 	public function findByFileId(int $fileId, bool $trashed = false): ?Page {
 		$qb = $this->db->getQueryBuilder();
 		$where = $qb->expr()->andX();
@@ -102,7 +70,7 @@ class PageMapper extends QBMapper {
 			->where($where);
 		try {
 			return $this->findEntity($qb);
-		} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
+		} catch (DoesNotExistException | MultipleObjectsReturnedException) {
 			return null;
 		}
 	}

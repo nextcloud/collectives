@@ -16,16 +16,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class IndexCollectives extends Base {
-	private SearchService $searchService;
-	private CollectiveMapper $collectiveMapper;
-
-	public function __construct(
-		SearchService    $searchService,
-		CollectiveMapper $collectiveMapper
-	) {
+	public function __construct(private SearchService $searchService,
+		private CollectiveMapper $collectiveMapper) {
 		parent::__construct();
-		$this->searchService = $searchService;
-		$this->collectiveMapper = $collectiveMapper;
 	}
 
 	protected function configure(): void {
@@ -36,12 +29,6 @@ class IndexCollectives extends Base {
 		parent::configure();
 	}
 
-	/**
-	 * @param InputInterface  $input
-	 * @param OutputInterface $output
-	 *
-	 * @return int
-	 */
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		if (!$this->searchService->areDependenciesMet()) {
 			$output->writeln('<error>Could not index the collectives: PDO or SQLite extension not installed.</error>');
@@ -60,10 +47,10 @@ class IndexCollectives extends Base {
 				}
 				$output->writeln('<info>Creating index for ' . $circleName . ' ... </info>');
 				$this->searchService->indexCollective($collective);
-			} catch (MissingDependencyException|NotFoundException|NotPermittedException $e) {
+			} catch (MissingDependencyException|NotFoundException|NotPermittedException) {
 				$output->writeln("<error>Failed to find circle associated with collective with ID={$collective->getId()}</error>");
 				return 1;
-			} catch (FileSearchException $e) {
+			} catch (FileSearchException) {
 				$output->writeln('<error>Failed to save the indices to the collectives folder.</error>');
 				return 1;
 			}

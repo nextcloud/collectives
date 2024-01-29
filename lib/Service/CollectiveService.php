@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Service;
 
+use OC;
 use OC\Files\Node\File;
 use OCA\Circles\Model\Member;
 use OCA\Collectives\Db\Collective;
@@ -25,69 +26,36 @@ use OCP\Files\NotPermittedException as FilesNotPermittedException;
 use OCP\IL10N;
 
 class CollectiveService extends CollectiveServiceBase {
-	private IAppManager $appManager;
-	private CollectiveHelper $collectiveHelper;
-	private CollectiveFolderManager $collectiveFolderManager;
-	private CollectiveShareService $shareService;
-	private CollectiveUserSettingsMapper $collectiveUserSettingsMapper;
-	private PageMapper $pageMapper;
-	private IL10N $l10n;
-	private IEventDispatcher $eventDispatcher;
 	private ?PageTrashBackend $pageTrashBackend = null;
 	private ?VersionsBackend $pageVersionsBackend = null;
 
-	/**
-	 * @param IAppManager                  $appManager
-	 * @param CollectiveMapper             $collectiveMapper
-	 * @param CollectiveHelper             $collectiveHelper
-	 * @param CollectiveFolderManager      $collectiveFolderManager
-	 * @param CircleHelper                 $circleHelper
-	 * @param CollectiveShareService       $shareService
-	 * @param CollectiveUserSettingsMapper $collectiveUserSettingsMapper
-	 * @param PageMapper                   $pageMapper
-	 * @param IL10N                        $l10n
-	 * @param IEventDispatcher             $eventDispatcher
-	 */
 	public function __construct(
-		IAppManager $appManager,
+		private IAppManager $appManager,
 		CollectiveMapper $collectiveMapper,
-		CollectiveHelper $collectiveHelper,
-		CollectiveFolderManager $collectiveFolderManager,
+		private CollectiveHelper $collectiveHelper,
+		private CollectiveFolderManager $collectiveFolderManager,
 		CircleHelper $circleHelper,
-		CollectiveShareService $shareService,
-		CollectiveUserSettingsMapper $collectiveUserSettingsMapper,
-		PageMapper $pageMapper,
-		IL10N $l10n,
-		IEventDispatcher $eventDispatcher) {
+		private CollectiveShareService $shareService,
+		private CollectiveUserSettingsMapper $collectiveUserSettingsMapper,
+		private PageMapper $pageMapper,
+		private IL10N $l10n,
+		private IEventDispatcher $eventDispatcher) {
 		parent::__construct($collectiveMapper, $circleHelper);
-		$this->appManager = $appManager;
-		$this->collectiveHelper = $collectiveHelper;
-		$this->collectiveFolderManager = $collectiveFolderManager;
-		$this->shareService = $shareService;
-		$this->collectiveUserSettingsMapper = $collectiveUserSettingsMapper;
-		$this->pageMapper = $pageMapper;
-		$this->l10n = $l10n;
-		$this->eventDispatcher = $eventDispatcher;
 	}
 
 	private function initPageTrashBackend(): void {
 		if ($this->appManager->isEnabledForUser('files_trashbin')) {
-			$this->pageTrashBackend = \OC::$server->get(PageTrashBackend::class);
+			$this->pageTrashBackend = OC::$server->get(PageTrashBackend::class);
 		}
 	}
 
 	private function initPageVersionsBackend(): void {
 		if ($this->appManager->isEnabledForUser('files_versions')) {
-			$this->pageVersionsBackend = \OC::$server->get(VersionsBackend::class);
+			$this->pageVersionsBackend = OC::$server->get(VersionsBackend::class);
 		}
 	}
 
 	/**
-	 * @param int         $id
-	 * @param string      $userId
-	 * @param string|null $shareToken
-	 *
-	 * @return CollectiveInfo
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
@@ -108,9 +76,6 @@ class CollectiveService extends CollectiveServiceBase {
 	}
 
 	/**
-	 * @param string $userId
-	 *
-	 * @return CollectiveInfo[]
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 * @throws MissingDependencyException
@@ -120,9 +85,6 @@ class CollectiveService extends CollectiveServiceBase {
 	}
 
 	/**
-	 * @param string $userId
-	 *
-	 * @return CollectiveInfo[]
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 * @throws MissingDependencyException
@@ -140,9 +102,6 @@ class CollectiveService extends CollectiveServiceBase {
 	}
 
 	/**
-	 * @param string $userId
-	 *
-	 * @return CollectiveInfo[]
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 * @throws MissingDependencyException
@@ -152,28 +111,19 @@ class CollectiveService extends CollectiveServiceBase {
 	}
 
 	/**
-	 * @param string $userId
-	 * @param string $name
-	 * @return CollectiveInfo
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
 	public function findCollectiveByName(string $userId, string $name): CollectiveInfo {
 		$collectives = $this->getCollectives($userId);
-		$collectives = array_filter($collectives, static function (CollectiveInfo $c) use ($name) {
-			return $c->getName() === $name;
-		});
+		$collectives = array_filter($collectives, static fn (CollectiveInfo $c) => $c->getName() === $name);
 		if ($collectives === []) {
 			throw new NotFoundException('Unable to find a collective from its name');
 		}
 		return end($collectives);
 	}
 
-	/**
-	 * @param CollectiveInfo $collectiveInfo
-	 * @return string
-	 */
 	public function getCollectiveNameWithEmoji(CollectiveInfo $collectiveInfo): string {
 		$emoji = $collectiveInfo->getEmoji();
 		return $emoji
@@ -182,12 +132,6 @@ class CollectiveService extends CollectiveServiceBase {
 	}
 
 	/**
-	 * @param string      $userId
-	 * @param string      $userLang
-	 * @param string      $safeName
-	 * @param string|null $emoji
-	 *
-	 * @return array [CollectiveInfo, string]
 	 * @throws CircleExistsException
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
@@ -197,7 +141,7 @@ class CollectiveService extends CollectiveServiceBase {
 	public function createCollective(string $userId,
 		string $userLang,
 		string $safeName,
-		string $emoji = null): array {
+		?string $emoji = null): array {
 		if ($safeName === '') {
 			throw new UnprocessableEntityException('Empty collective name is not allowed');
 		}
@@ -270,18 +214,13 @@ class CollectiveService extends CollectiveServiceBase {
 	}
 
 	/**
-	 * @param int         $id
-	 * @param string      $userId
-	 * @param string|null $emoji
-	 *
-	 * @return CollectiveInfo
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
 	public function updateCollective(int $id,
 		string $userId,
-		string $emoji = null): CollectiveInfo {
+		?string $emoji = null): CollectiveInfo {
 		$collectiveInfo = $this->getCollectiveInfo($id, $userId);
 
 		if (!$this->circleHelper->isAdmin($collectiveInfo->getCircleId(), $userId)) {
@@ -305,12 +244,6 @@ class CollectiveService extends CollectiveServiceBase {
 	}
 
 	/**
-	 * @param int    $id
-	 * @param string $userId
-	 * @param int    $permissionLevel
-	 * @param int    $permission
-	 *
-	 * @return CollectiveInfo
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
@@ -338,11 +271,6 @@ class CollectiveService extends CollectiveServiceBase {
 	}
 
 	/**
-	 * @param int    $id
-	 * @param string $userId
-	 * @param int    $mode
-	 *
-	 * @return CollectiveInfo
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
@@ -369,10 +297,6 @@ class CollectiveService extends CollectiveServiceBase {
 	}
 
 	/**
-	 * @param int    $id
-	 * @param string $userId
-	 *
-	 * @return CollectiveInfo
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 * @throws MissingDependencyException
@@ -400,11 +324,6 @@ class CollectiveService extends CollectiveServiceBase {
 	}
 
 	/**
-	 * @param int    $id
-	 * @param string $userId
-	 * @param bool   $deleteCircle
-	 *
-	 * @return CollectiveInfo
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 * @throws MissingDependencyException
@@ -455,10 +374,6 @@ class CollectiveService extends CollectiveServiceBase {
 	}
 
 	/**
-	 * @param int    $id
-	 * @param string $userId
-	 *
-	 * @return CollectiveInfo
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 * @throws MissingDependencyException

@@ -11,21 +11,15 @@ use OCA\Collectives\Db\CollectiveShare;
  * @method void setEditable(bool $editable)
  */
 class CollectiveShareInfo extends CollectiveShare {
-	protected bool $editable;
-
 	public function __construct(CollectiveShare $collectiveShare,
-		bool $editable = false) {
+		protected bool $editable = false) {
 		$this->id = $collectiveShare->getId();
 		$this->collectiveId = $collectiveShare->getCollectiveId();
 		$this->pageId = $collectiveShare->getPageId();
 		$this->token = $collectiveShare->getToken();
 		$this->owner = $collectiveShare->getOwner();
-		$this->editable = $editable;
 	}
 
-	/**
-	 * @return array
-	 */
 	public function jsonSerialize(): array {
 		return [
 			'id' => $this->id,

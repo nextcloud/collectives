@@ -12,21 +12,17 @@ use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
 
 class PageTrashController extends Controller {
-	private PageService $service;
 	private IUserSession $userSession;
-	private LoggerInterface $logger;
 
 	use ErrorHelper;
 
 	public function __construct(string            $appName,
 		IRequest          $request,
-		PageService       $service,
+		private PageService       $service,
 		IUserSession      $userSession,
-		LoggerInterface   $logger) {
+		private LoggerInterface   $logger) {
 		parent::__construct($appName, $request);
-		$this->service = $service;
 		$this->userSession = $userSession;
-		$this->logger = $logger;
 	}
 
 	/**
@@ -39,7 +35,6 @@ class PageTrashController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 *
-	 * @param int $collectiveId
 	 *
 	 * @return DataResponse
 	 */
@@ -56,8 +51,6 @@ class PageTrashController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 *
-	 * @param int $collectiveId
-	 * @param int $id
 	 *
 	 * @return DataResponse
 	 */
@@ -74,8 +67,6 @@ class PageTrashController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 *
-	 * @param int $collectiveId
-	 * @param int $id
 	 *
 	 * @return DataResponse
 	 */

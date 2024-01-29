@@ -10,14 +10,14 @@ use OCA\Collectives\Trash\PageTrashBackend;
 use OCA\Files_Trashbin\Expiration;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\TimedJob;
+use OCP\Server;
 
 class ExpirePageTrash extends TimedJob {
 	private Expiration $expiration;
 	private PageTrashBackend $trashBackend;
 	private bool $hasTrashBackend = false;
 
-	public function __construct(
-		ITimeFactory $time) {
+	public function __construct(ITimeFactory $time) {
 		parent::__construct($time);
 
 		// Run once per hour
@@ -25,8 +25,8 @@ class ExpirePageTrash extends TimedJob {
 
 		if (class_exists(Expiration::class)) {
 			$this->hasTrashBackend = true;
-			$this->expiration = \OCP\Server::get(Expiration::class);
-			$this->trashBackend = \OCP\Server::get(PageTrashBackend::class);
+			$this->expiration = Server::get(Expiration::class);
+			$this->trashBackend = Server::get(PageTrashBackend::class);
 		}
 	}
 

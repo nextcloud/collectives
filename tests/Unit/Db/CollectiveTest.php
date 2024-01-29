@@ -4,6 +4,7 @@ namespace Unit\Db;
 
 use OCA\Collectives\Db\Collective;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 class CollectiveTest extends TestCase {
 	public function testsetPageMode(): void {
@@ -26,11 +27,9 @@ class CollectiveTest extends TestCase {
 
 	/**
 	 * @dataProvider invalidPageModeProvider
-	 *
-	 * @param int $mode
 	 */
 	public function testSetPageModeException(int $mode): void {
-		$this->expectException(\RuntimeException::class);
+		$this->expectException(RuntimeException::class);
 		$collective = new Collective();
 		$collective->setPageMode($mode);
 	}

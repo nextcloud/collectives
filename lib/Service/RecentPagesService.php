@@ -14,41 +14,26 @@ use OCP\IDBConnection;
 use OCP\IL10N;
 use OCP\IURLGenerator;
 use OCP\IUser;
+use RuntimeException;
 
 class RecentPagesService {
 
-	protected CollectiveService $collectiveService;
-	protected IURLGenerator $urlGenerator;
-	protected IDBConnection $dbc;
-	protected IConfig $config;
-	protected IMimeTypeLoader $mimeTypeLoader;
-	protected IL10N $l10n;
-
-	public function __construct(
-		CollectiveService $collectiveService,
-		IDBConnection $dbc,
-		IConfig $config,
-		IMimeTypeLoader $mimeTypeLoader,
-		IURLGenerator $urlGenerator,
-		IL10N $l10n
-	) {
-		$this->mimeTypeLoader = $mimeTypeLoader;
-		$this->config = $config;
-		$this->dbc = $dbc;
-		$this->urlGenerator = $urlGenerator;
-		$this->collectiveService = $collectiveService;
-		$this->l10n = $l10n;
+	public function __construct(protected CollectiveService $collectiveService,
+		protected IDBConnection $dbc,
+		protected IConfig $config,
+		protected IMimeTypeLoader $mimeTypeLoader,
+		protected IURLGenerator $urlGenerator,
+		protected IL10N $l10n) {
 	}
 
 	/**
-	 * @return RecentPage[]
 	 * @throws MissingDependencyException
 	 * @throws Exception
 	 */
 	public function forUser(IUser $user, int $limit = 10): array {
 		try {
 			$collectives = $this->collectiveService->getCollectives($user->getUID());
-		} catch (NotFoundException|NotPermittedException $e) {
+		} catch (NotFoundException|NotPermittedException) {
 			return [];
 		}
 
@@ -138,7 +123,7 @@ class RecentPagesService {
 	private function getAppDataFolderName(): string {
 		$instanceId = $this->config->getSystemValueString('instanceid', '');
 		if ($instanceId === '') {
-			throw new \RuntimeException('no instance id!');
+			throw new RuntimeException('no instance id!');
 		}
 
 		return 'appdata_' . $instanceId;

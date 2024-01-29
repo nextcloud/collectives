@@ -16,9 +16,6 @@ use OCP\IDBConnection;
  * @template-extends QBMapper<CollectiveUserSettings>
  */
 class CollectiveUserSettingsMapper extends QBMapper {
-	/**
-	 * @param IDBConnection $db
-	 */
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, 'collectives_u_settings', CollectiveUserSettings::class);
 	}
@@ -31,8 +28,6 @@ class CollectiveUserSettingsMapper extends QBMapper {
 	 *
 	 * TODO: Migrate to using `CollectiveUserSettings` in type hints once we drop PHP7.3.
 	 *
-	 * @param Entity $entity
-	 *
 	 * @return CollectiveUserSettings
 	 * @throws Exception
 	 */
@@ -44,8 +39,6 @@ class CollectiveUserSettingsMapper extends QBMapper {
 	}
 
 	/**
-	 * @param int $collectiveId
-	 *
 	 * @return CollectiveUserSettings[]
 	 * @throws Exception
 	 */
@@ -60,10 +53,6 @@ class CollectiveUserSettingsMapper extends QBMapper {
 	}
 
 	/**
-	 * @param int    $collectiveId
-	 * @param string $userId
-	 *
-	 * @return CollectiveUserSettings|null
 	 * @throws Exception
 	 * @throws MultipleObjectsReturnedException
 	 */
@@ -78,7 +67,7 @@ class CollectiveUserSettingsMapper extends QBMapper {
 		try {
 			/** @var CollectiveUserSettings $this->findEntity($qb) */
 			return $this->findEntity($qb);
-		} catch (DoesNotExistException $e) {
+		} catch (DoesNotExistException) {
 			return null;
 		}
 	}

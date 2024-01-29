@@ -24,73 +24,38 @@ use Throwable;
 class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider implements ISearchableReferenceProvider {
 	private const RICH_OBJECT_TYPE = Application::APP_NAME . '_page';
 
-	private ?string $userId;
-	private ReferenceManager $referenceManager;
-	private IL10N $l10n;
-	private IURLGenerator $urlGenerator;
-	private LinkReferenceProvider $linkReferenceProvider;
-	private PageService $pageService;
-	private CollectiveService $collectiveService;
-	private IDateTimeFormatter $dateTimeFormatter;
-
-	public function __construct(CollectiveService $collectiveService,
-		PageService $pageService,
-		IL10N $l10n,
-		IURLGenerator $urlGenerator,
-		IDateTimeFormatter $dateTimeFormatter,
-		ReferenceManager $referenceManager,
-		LinkReferenceProvider $linkReferenceProvider,
-		?string $userId) {
-		$this->userId = $userId;
-		$this->referenceManager = $referenceManager;
-		$this->l10n = $l10n;
-		$this->urlGenerator = $urlGenerator;
-		$this->linkReferenceProvider = $linkReferenceProvider;
-		$this->pageService = $pageService;
-		$this->collectiveService = $collectiveService;
-		$this->dateTimeFormatter = $dateTimeFormatter;
+	public function __construct(private CollectiveService $collectiveService,
+		private PageService $pageService,
+		private IL10N $l10n,
+		private IURLGenerator $urlGenerator,
+		private IDateTimeFormatter $dateTimeFormatter,
+		private ReferenceManager $referenceManager,
+		private LinkReferenceProvider $linkReferenceProvider,
+		private ?string $userId) {
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public function getId(): string {
 		return Application::APP_NAME . '-ref-pages';
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public function getTitle(): string {
 		return $this->l10n->t('Collective pages');
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public function getOrder(): int {
 		return 10;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public function getIconUrl(): string {
 		return $this->urlGenerator->getAbsoluteURL(
 			$this->urlGenerator->imagePath(Application::APP_NAME, 'collectives-dark.svg')
 		);
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public function getSupportedSearchProviderIds(): array {
 		return ['collectives-pages'];
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public function matchReference(string $referenceText): bool {
 		if ($this->userId === null) {
 			return false;
@@ -107,15 +72,12 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 		return $noIndexMatch || $indexMatch;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public function resolveReference(string $referenceText): ?IReference {
 		if ($this->matchReference($referenceText)) {
 			$pageReferenceInfo = $this->getPagePathFromDirectLink($referenceText);
 			// TODO should it work if the fileId GET param is not there?
 			if (!$pageReferenceInfo || !isset($pageReferenceInfo['fileId'])) {
-				// fallback to opengraph if it matches but somehow we can't resolve
+				// fallback to opengraph if it matches, but somehow we can't resolve
 				return $this->linkReferenceProvider->resolveReference($referenceText);
 			}
 
@@ -124,8 +86,8 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 			try {
 				$collective = $this->collectiveService->findCollectiveByName($this->userId, $collectiveName);
 				$page = $this->pageService->findByFileId($collective->getId(), $pageFileId, $this->userId);
-			} catch (Exception | Throwable $e) {
-				// fallback to opengraph if it matches but somehow we can't resolve
+			} catch (Exception | Throwable) {
+				// fallback to opengraph if it matches, but somehow we can't resolve
 				return $this->linkReferenceProvider->resolveReference($referenceText);
 			}
 			$pageReferenceInfo['collective'] = $collective;
@@ -164,10 +126,6 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 		return null;
 	}
 
-	/**
-	 * @param string $url
-	 * @return array|null
-	 */
 	public function getPagePathFromDirectLink(string $url): ?array {
 		$start = $this->urlGenerator->getAbsoluteURL('/apps/' . Application::APP_NAME);
 		$startIndex = $this->urlGenerator->getAbsoluteURL('/index.php/apps/' . Application::APP_NAME);
@@ -191,24 +149,14 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 		return null;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public function getCachePrefix(string $referenceId): string {
 		return $this->userId ?? '';
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	public function getCacheKey(string $referenceId): ?string {
 		return $referenceId;
 	}
 
-	/**
-	 * @param string $userId
-	 * @return void
-	 */
 	public function invalidateUserCache(string $userId): void {
 		$this->referenceManager->invalidateCache($userId);
 	}

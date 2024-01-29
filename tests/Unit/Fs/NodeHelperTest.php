@@ -46,9 +46,6 @@ class NodeHelperTest extends TestCase {
 
 	/**
 	 * @dataProvider nameProvider
-	 *
-	 * @param string $input
-	 * @param string $output
 	 */
 	public function testSanitiseFilename(string $input, string $output): void {
 		$this->l10n->method('t')
@@ -91,9 +88,6 @@ class NodeHelperTest extends TestCase {
 
 	/**
 	 * @dataProvider filenameProvider
-	 *
-	 * @param string $input
-	 * @param string $output
 	 */
 	public function testGenerateFilename(string $input, string $output): void {
 		$folder = $this->getMockBuilder(Folder::class)

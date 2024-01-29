@@ -32,9 +32,6 @@ class CircleHelper {
 	}
 
 	/**
-	 * @param string|null $userId
-	 *
-	 * @return FederatedUser|null
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
@@ -54,8 +51,6 @@ class CircleHelper {
 	}
 
 	/**
-	 * @param string|null $userId
-	 *
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
@@ -81,9 +76,6 @@ class CircleHelper {
 	}
 
 	/**
-	 * @param string|null $userId
-	 *
-	 * @return Circle[]
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 * @throws MissingDependencyException
@@ -104,11 +96,6 @@ class CircleHelper {
 	}
 
 	/**
-	 * @param string      $circleId
-	 * @param string|null $userId
-	 * @param bool        $super
-	 *
-	 * @return Circle
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 * @throws MissingDependencyException
@@ -133,11 +120,6 @@ class CircleHelper {
 	}
 
 	/**
-	 * @param string $name
-	 * @param int    $level
-	 * @param string $userId
-	 *
-	 * @return Circle|null
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 * @throws MissingDependencyException
@@ -157,9 +139,6 @@ class CircleHelper {
 	}
 
 	/**
-	 * @param string $name
-	 *
-	 * @return bool
 	 * @throws NotPermittedException
 	 */
 	private function existsCircle(string $name): bool {
@@ -182,10 +161,6 @@ class CircleHelper {
 	}
 
 	/**
-	 * @param string $name
-	 * @param string $userId
-	 *
-	 * @return Circle
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 * @throws CircleExistsException
@@ -212,9 +187,6 @@ class CircleHelper {
 	}
 
 	/**
-	 * @param string $circleId
-	 *
-	 * @return void
 	 * @throws NotPermittedException
 	 */
 	public function flagCircleAsAppManaged(string $circleId): void {
@@ -229,9 +201,6 @@ class CircleHelper {
 	}
 
 	/**
-	 * @param string $circleId
-	 *
-	 * @return void
 	 * @throws NotPermittedException
 	 */
 	public function unflagCircleAsAppManaged(string $circleId): void {
@@ -246,9 +215,6 @@ class CircleHelper {
 	}
 
 	/**
-	 * @param string $circleId
-	 * @param string $userId
-	 *
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 * @throws MissingDependencyException
@@ -271,10 +237,6 @@ class CircleHelper {
 	}
 
 	/**
-	 * @param string $circleId
-	 * @param string $userId
-	 *
-	 * @return int
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 * @throws MissingDependencyException
@@ -299,11 +261,6 @@ class CircleHelper {
 	}
 
 	/**
-	 * @param string $circleId
-	 * @param int    $level
-	 * @param string $userId
-	 *
-	 * @return bool
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 * @throws MissingDependencyException
@@ -313,10 +270,6 @@ class CircleHelper {
 	}
 
 	/**
-	 * @param string $circleId
-	 * @param string $userId
-	 *
-	 * @return bool
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 * @throws MissingDependencyException
@@ -326,10 +279,6 @@ class CircleHelper {
 	}
 
 	/**
-	 * @param string $circleId
-	 * @param string $userId
-	 *
-	 * @return bool
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 * @throws MissingDependencyException

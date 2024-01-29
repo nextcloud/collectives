@@ -17,23 +17,15 @@ use OCP\IL10N;
 use OCP\Lock\LockedException;
 
 class NodeHelper {
-	private IDBConnection $db;
-	private IL10N $l10n;
 	private bool $db4ByteSupport;
 
 	public function __construct(
 		IDBConnection $db,
-		IL10N $l10n) {
-		$this->db = $db;
-		$this->l10n = $l10n;
-		$this->db4ByteSupport = $this->db->supports4ByteText();
+		private IL10N $l10n) {
+		$this->db4ByteSupport = $db->supports4ByteText();
 	}
 
 	/**
-	 * @param Folder $folder
-	 * @param int    $id
-	 *
-	 * @return File
 	 * @throws NotFoundException
 	 */
 	public function getFileById(Folder $folder, int $id): File {
@@ -45,13 +37,6 @@ class NodeHelper {
 		return $file[0];
 	}
 
-	/**
-	 * @param Folder $folder
-	 * @param string $filename
-	 * @param string $suffix
-	 *
-	 * @return string
-	 */
 	public static function generateFilename(Folder $folder, string $filename, string $suffix = ''): string {
 		$path = $filename . $suffix;
 		if (!$folder->nodeExists($filename) && !$folder->nodeExists($path)) {
@@ -77,11 +62,6 @@ class NodeHelper {
 	/**
 	 * Removes or replaces characters that are illegal in a file or folder name on some operating systems.
 	 * Most code copied from `Service::NoteUtil::sanitisePath()` from Notes App.
-	 *
-	 * @param string $name
-	 * @param string $default
-	 *
-	 * @return string
 	 */
 	public function sanitiseFilename(string $name, string $default = 'New File'): string {
 		// replace '/' with '-' to prevent directory traversal
@@ -116,9 +96,6 @@ class NodeHelper {
 	/**
 	 * Most of the logic copied from `lib/Service/Note.php` from the Notes app
 	 *
-	 * @param File $file
-	 *
-	 * @return string
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
@@ -149,51 +126,26 @@ class NodeHelper {
 		return $content;
 	}
 
-	/**
-	 * @param string $name
-	 *
-	 * @return bool
-	 */
 	public static function isPageFilename(string $name): bool {
 		$length = strlen(PageInfo::SUFFIX);
 		return (substr($name, -$length) === PageInfo::SUFFIX);
 	}
 
-	/**
-	 * @param File $file
-	 *
-	 * @return bool
-	 */
 	public static function isPage(File $file): bool {
 		return self::isPageFilename($file->getName());
 	}
 
-	/**
-	 * @param File $file
-	 *
-	 * @return bool
-	 */
 	public static function isLandingPage(File $file): bool {
 		$internalPath = $file->getInternalPath() ?: '';
 		return ($internalPath === PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX)
 			|| preg_match('/^appdata_\w+\/collectives\/\d+\/' . PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX . '$/', $internalPath);
 	}
 
-	/**
-	 * @param File $file
-	 *
-	 * @return bool
-	 */
 	public static function isIndexPage(File $file): bool {
 		$name = $file->getName();
 		return ($name === PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX);
 	}
 
-	/**
-	 * @param File $file
-	 *
-	 * @return bool
-	 */
 	public static function indexPageHasOtherContent(File $file): bool {
 		try {
 			foreach ($file->getParent()->getDirectoryListing() as $node) {
@@ -209,17 +161,12 @@ class NodeHelper {
 					return true;
 				}
 			}
-		} catch (FilesNotFoundException $e) {
+		} catch (FilesNotFoundException) {
 		}
 
 		return false;
 	}
 
-	/**
-	 * @param Folder $folder
-	 *
-	 * @return bool
-	 */
 	public static function folderHasSubPages(Folder $folder): bool {
 		try {
 			foreach ($folder->getDirectoryListing() as $node) {
@@ -233,18 +180,12 @@ class NodeHelper {
 					return self::folderHasSubPages($node);
 				}
 			}
-		} catch (FilesNotFoundException $e) {
+		} catch (FilesNotFoundException) {
 		}
 
 		return false;
 	}
 
-	/**
-	 * @param Folder $folder
-	 * @param string $title
-	 *
-	 * @return int
-	 */
 	public static function folderHasSubPage(Folder $folder, string $title): int {
 		try {
 			foreach ($folder->getDirectoryListing() as $node) {
@@ -259,7 +200,7 @@ class NodeHelper {
 					return 2;
 				}
 			}
-		} catch (FilesNotFoundException $e) {
+		} catch (FilesNotFoundException) {
 		}
 
 		return 0;

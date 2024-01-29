@@ -18,6 +18,7 @@ use OCP\Search\ISearchQuery;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use TypeError;
 
 class PageContentProviderTest extends TestCase {
 	private PageContentProvider $provider;
@@ -82,7 +83,7 @@ class PageContentProviderTest extends TestCase {
 				null,
 				'collectives.'
 			);
-		} catch (\TypeError $e) {
+		} catch (TypeError) {
 			// Nextcloud >= 28
 			$filters = $this->createMock(IFilterCollection::class);
 			$query = new SearchQuery(

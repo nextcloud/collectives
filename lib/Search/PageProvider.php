@@ -22,56 +22,22 @@ use OCP\Search\SearchResult;
 use OCP\Search\SearchResultEntry;
 
 class PageProvider implements IProvider {
-	private IL10N $l10n;
-	private IURLGenerator $urlGenerator;
-	private CollectiveHelper $collectiveHelper;
-	private PageService $pageService;
-	private IAppManager $appManager;
-	private CollectiveService $collectiveService;
-
-	/**
-	 * CollectiveProvider constructor.
-	 *
-	 * @param IL10N            $l10n
-	 * @param IURLGenerator    $urlGenerator
-	 * @param CollectiveHelper $collectiveHelper
-	 * @param PageService      $pageService
-	 * @param IAppManager      $appManager
-	 */
-	public function __construct(IL10N $l10n,
-		IURLGenerator $urlGenerator,
-		CollectiveHelper $collectiveHelper,
-		CollectiveService $collectiveService,
-		PageService $pageService,
-		IAppManager $appManager) {
-		$this->l10n = $l10n;
-		$this->urlGenerator = $urlGenerator;
-		$this->collectiveHelper = $collectiveHelper;
-		$this->pageService = $pageService;
-		$this->appManager = $appManager;
-		$this->collectiveService = $collectiveService;
+	public function __construct(private IL10N $l10n,
+		private IURLGenerator $urlGenerator,
+		private CollectiveHelper $collectiveHelper,
+		private CollectiveService $collectiveService,
+		private PageService $pageService,
+		private IAppManager $appManager) {
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getId(): string {
 		return 'collectives-pages';
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getName(): string {
 		return $this->l10n->t('Collectives - Pages');
 	}
 
-	/**
-	 * @param string $route
-	 * @param array  $routeParameters
-	 *
-	 * @return int
-	 */
 	public function getOrder(string $route, array $routeParameters): int {
 		if ($route === 'collectives.start.index') {
 			// Collective pages second when the app is active
@@ -81,10 +47,6 @@ class PageProvider implements IProvider {
 	}
 
 	/**
-	 * @param IUser        $user
-	 * @param ISearchQuery $query
-	 *
-	 * @return SearchResult
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
@@ -118,10 +80,6 @@ class PageProvider implements IProvider {
 		);
 	}
 
-	/**
-	 * @param PageInfo $pageInfo
-	 * @return string
-	 */
 	private function getPageTitle(PageInfo $pageInfo): string {
 		$emoji = $pageInfo->getEmoji();
 		return $emoji

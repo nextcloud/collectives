@@ -22,43 +22,15 @@ use OCP\IUser;
 use Psr\Log\LoggerInterface;
 
 class MountProvider implements IMountProvider {
-	private CollectiveHelper $collectiveHelper;
-	private CollectiveFolderManager $collectiveFolderManager;
-	private LoggerInterface $logger;
-	private IMimeTypeLoader $mimeTypeLoader;
-	private IAppManager $appManager;
-	private UserFolderHelper $userFolderHelper;
-
-	/**
-	 * MountProvider constructor.
-	 *
-	 * @param CollectiveHelper        $collectiveHelper
-	 * @param CollectiveFolderManager $collectiveFolderManager
-	 * @param IMimeTypeLoader         $mimeTypeLoader
-	 * @param IAppManager             $appManager
-	 * @param LoggerInterface         $logger
-	 * @param UserFolderHelper        $userFolderHelper
-	 */
 	public function __construct(
-		CollectiveHelper $collectiveHelper,
-		CollectiveFolderManager $collectiveFolderManager,
-		IMimeTypeLoader $mimeTypeLoader,
-		IAppManager $appManager,
-		LoggerInterface $logger,
-		UserFolderHelper $userFolderHelper) {
-		$this->collectiveHelper = $collectiveHelper;
-		$this->collectiveFolderManager = $collectiveFolderManager;
-		$this->mimeTypeLoader = $mimeTypeLoader;
-		$this->appManager = $appManager;
-		$this->logger = $logger;
-		$this->userFolderHelper = $userFolderHelper;
+		private CollectiveHelper $collectiveHelper,
+		private CollectiveFolderManager $collectiveFolderManager,
+		private IMimeTypeLoader $mimeTypeLoader,
+		private IAppManager $appManager,
+		private LoggerInterface $logger,
+		private UserFolderHelper $userFolderHelper) {
 	}
 
-	/**
-	 * @param IUser $user
-	 *
-	 * @return array
-	 */
 	public function getFoldersForUser(IUser $user): array {
 		$folders = [];
 
@@ -104,9 +76,6 @@ class MountProvider implements IMountProvider {
 	}
 
 	/**
-	 * @param IUser           $user
-	 * @param IStorageFactory $loader
-	 *
 	 * @return IMountPoint[]|null[]
 	 */
 	public function getMountsForUser(IUser $user, IStorageFactory $loader): array {
@@ -116,35 +85,25 @@ class MountProvider implements IMountProvider {
 
 		$folders = $this->getFoldersForUser($user);
 		try {
-			return array_map(function ($folder) use ($user, $loader) {
-				return $this->collectiveFolderManager->getMount(
-					$folder['folder_id'],
-					'/' . $user->getUID() . '/files/' . $folder['mount_point'],
-					$folder['permissions'],
-					$folder['rootCacheEntry'],
-					$loader,
-					$user
-				);
-			}, $folders);
+			return array_map(fn ($folder) => $this->collectiveFolderManager->getMount(
+				$folder['folder_id'],
+				'/' . $user->getUID() . '/files/' . $folder['mount_point'],
+				$folder['permissions'],
+				$folder['rootCacheEntry'],
+				$loader,
+				$user
+			), $folders);
 		} catch (FilesNotFoundException | \Exception $e) {
 			$this->log($e);
 			return [];
 		}
 	}
 
-	/**
-	 * @param IUser $user
-	 *
-	 * @return bool
-	 */
 	protected function isEnabledForUser(IUser $user): bool {
 		return $this->appManager->isEnabledForUser('circles', $user)
 			&& $this->appManager->isEnabledForUser('collectives', $user);
 	}
 
-	/**
-	 * @param \Exception $e
-	 */
 	protected function log(\Exception $e): void {
 		$this->logger->error('Collectives App Error: ' . $e->getMessage(),
 			['exception' => $e]

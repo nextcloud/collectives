@@ -10,11 +10,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class PurgeObsoletePages extends Base {
-	private PageGarbageCollector $garbageCollector;
-
-	public function __construct(PageGarbageCollector $garbageCollector) {
+	public function __construct(private PageGarbageCollector $garbageCollector) {
 		parent::__construct();
-		$this->garbageCollector = $garbageCollector;
 	}
 
 	protected function configure(): void {
@@ -24,12 +21,6 @@ class PurgeObsoletePages extends Base {
 		parent::configure();
 	}
 
-	/**
-	 * @param InputInterface  $input
-	 * @param OutputInterface $output
-	 *
-	 * @return int
-	 */
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$output->write('Start to purge cruft pages from database ...');
 		$count = $this->garbageCollector->purgeObsoletePages();
