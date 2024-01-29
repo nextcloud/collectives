@@ -111,7 +111,7 @@ describe('Page', function() {
 		it('New page has template content', function() {
 			// Do some handstands to ensure that new page with editor is loaded before we edit the title
 			cy.intercept('POST', '**/_api/*/_pages/*').as('createPage')
-			if (['stable25', 'stable26', 'stable27'].includes(Cypress.env('ncVersion'))) {
+			if (['stable26', 'stable27'].includes(Cypress.env('ncVersion'))) {
 				cy.intercept('PUT', '**/apps/text/session/create').as('textCreateSession')
 			} else {
 				cy.intercept('PUT', '**/apps/text/session/*/create').as('textCreateSession')
@@ -142,7 +142,7 @@ describe('Page', function() {
 		it('Shows the title in the enabled titleform and full path in browser title', function() {
 			// Do some handstands to ensure that new page with editor is loaded before we edit the title
 			cy.intercept('POST', '**/_api/*/_pages/*').as('createPage')
-			if (['stable25', 'stable26', 'stable27'].includes(Cypress.env('ncVersion'))) {
+			if (['stable26', 'stable27'].includes(Cypress.env('ncVersion'))) {
 				cy.intercept('PUT', '**/apps/text/session/create').as('textCreateSession')
 			} else {
 				cy.intercept('PUT', '**/apps/text/session/*/create').as('textCreateSession')
@@ -232,46 +232,41 @@ describe('Page', function() {
 				.should('not.exist')
 
 			// Restore image
-			if (Cypress.env('ncVersion') !== 'stable25') {
-				cy.get('.attachment-list-deleted >>>>>>> button.action-item__menutoggle')
-					.click()
-				cy.get('button')
-					.contains('Restore')
-					.click()
-				cy.getEditor()
-					.find('[data-component="image-view"] .image__view')
-					.should('be.visible')
-			}
+			cy.get('.attachment-list-deleted >>>>>>> button.action-item__menutoggle')
+				.click()
+			cy.get('button')
+				.contains('Restore')
+				.click()
+			cy.getEditor()
+				.find('[data-component="image-view"] .image__view')
+				.should('be.visible')
 		})
 	})
 
-	// Reference picker autocompletion is only available on Nextcloud 26+
-	if (Cypress.env('ncVersion') !== 'stable25') {
-		describe('Using the reference picker', function() {
-			it('Supports selecting a page from a collective', function() {
-				cy.openPage('Page Title')
+	describe('Using the reference picker', function() {
+		it('Supports selecting a page from a collective', function() {
+			cy.openPage('Page Title')
 
-				cy.getEditor()
-					.should('be.visible')
-					.type('/Coll')
-				cy.get('.tippy-content .link-picker__item')
-					.contains('Collective pages')
-					.click()
-				cy.get('.reference-picker input[type="text"], .reference-picker input[type="search"]')
-					.type('Day 2')
-				cy.get('.search-result')
-					.contains('Day 2')
-					.click()
+			cy.getEditor()
+				.should('be.visible')
+				.type('/Coll')
+			cy.get('.tippy-content .link-picker__item')
+				.contains('Collective pages')
+				.click()
+			cy.get('.reference-picker input[type="text"], .reference-picker input[type="search"]')
+				.type('Day 2')
+			cy.get('.search-result')
+				.contains('Day 2')
+				.click()
 
-				/*
-				 * Disable for now - in CI Nextcloud is on http (no TLS) and link previews don't get rendered
-				cy.getEditor()
-					.get('.widgets--list .collective-page--info .line')
-					.should('contain', 'Day 2')
-				 */
-			})
+			/*
+			 * Disable for now - in CI Nextcloud is on http (no TLS) and link previews don't get rendered
+			cy.getEditor()
+				.get('.widgets--list .collective-page--info .line')
+				.should('contain', 'Day 2')
+			 */
 		})
-	}
+	})
 
 	describe('Full width view', function() {
 		it('Allows to toggle persistent full-width view', function() {

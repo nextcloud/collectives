@@ -57,7 +57,7 @@ jobs:
 
     strategy:
       matrix:
-        server-versions: ['stable25', 'stable27', 'master']
+        server-versions: ['stable27', 'master']
 
     steps:
       - name: Checkout server
@@ -147,7 +147,7 @@ jobs:
         containers: [1, 2, 3]
         php-versions: ['8.0', '8.2']
         databases: ['sqlite']
-        server-versions: ['stable25', 'stable27', 'master']
+        server-versions: ['stable27', 'master']
         # Only use cypress cloud for PRs
         use-cypress-cloud:
           - ${{ vars.USE_CYPRESS_CLOUD && !!github.head_ref }}
@@ -156,8 +156,6 @@ jobs:
             server-versions: 'stable27'
           - php-versions: '8.0'
             server-versions: 'master'
-          - php-versions: '8.2'
-            server-versions: 'stable25'
         # Only use one container if we are not using the cypress cloud.
           - use-cypress-cloud: false
             containers: 2

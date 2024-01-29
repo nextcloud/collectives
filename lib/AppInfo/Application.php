@@ -17,7 +17,6 @@ use OCA\Collectives\Listeners\CollectivesReferenceListener;
 use OCA\Collectives\Listeners\ShareDeletedListener;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Mount\MountProvider;
-use OCA\Collectives\Reference\PageReferenceProvider;
 use OCA\Collectives\Reference\SearchablePageReferenceProvider;
 use OCA\Collectives\Search\CollectiveProvider;
 use OCA\Collectives\Search\PageContentProvider;
@@ -38,7 +37,6 @@ use OCP\Collaboration\Reference\RenderReferenceEvent;
 use OCP\Dashboard\IAPIWidgetV2;
 use OCP\Files\Config\IMountProviderCollection;
 use OCP\Files\IMimeTypeLoader;
-use OCP\IConfig;
 use OCP\Share\Events\ShareDeletedEvent;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
@@ -102,13 +100,7 @@ class Application extends App implements IBootstrap {
 		$context->registerSearchProvider(PageContentProvider::class);
 
 		$container = $this->getContainer();
-		/** @var IConfig $config */
-		$config = $container->get(IConfig::class);
-		if (version_compare($config->getSystemValueString('version', '0.0.0'), '26.0.0', '<')) {
-			$context->registerReferenceProvider(PageReferenceProvider::class);
-		} else {
-			$context->registerReferenceProvider(SearchablePageReferenceProvider::class);
-		}
+		$context->registerReferenceProvider(SearchablePageReferenceProvider::class);
 
 		$cacheListener = $this->getContainer()->get(CacheListener::class);
 		$cacheListener->listen();
