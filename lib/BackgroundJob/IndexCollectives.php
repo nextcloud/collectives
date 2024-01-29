@@ -16,28 +16,12 @@ use OCP\Files\NotFoundException;
 use Psr\Log\LoggerInterface;
 
 class IndexCollectives extends TimedJob {
-	private CollectiveMapper $collectiveMapper;
-	private CollectiveFolderManager $collectiveFolderManager;
-	private SearchService $searchService;
-	private LoggerInterface $logger;
-
-	/**
-	 * @param ITimeFactory $time
-	 * @param CollectiveMapper $collectiveMapper
-	 * @param CollectiveFolderManager $collectiveFolderManager
-	 * @param LoggerInterface $logger
-	 * @param SearchService $searchService
-	 */
 	public function __construct(ITimeFactory $time,
-		CollectiveMapper $collectiveMapper,
-		CollectiveFolderManager $collectiveFolderManager,
-		LoggerInterface $logger,
-		SearchService $searchService) {
+		private CollectiveMapper $collectiveMapper,
+		private CollectiveFolderManager $collectiveFolderManager,
+		private LoggerInterface $logger,
+		private SearchService $searchService) {
 		parent::__construct($time);
-		$this->collectiveMapper = $collectiveMapper;
-		$this->collectiveFolderManager = $collectiveFolderManager;
-		$this->searchService = $searchService;
-		$this->logger = $logger;
 
 		$this->setInterval(60 * 5);
 	}
@@ -65,10 +49,6 @@ class IndexCollectives extends TimedJob {
 		}
 	}
 
-	/**
-	 * @param Collective $collective
-	 * @return bool
-	 */
 	private function isOutdatedIndex(Collective $collective): bool {
 		$index = $this->searchService->getIndexForCollective($collective);
 		if (!$index) {
@@ -78,7 +58,7 @@ class IndexCollectives extends TimedJob {
 		try {
 			$folder = $this->collectiveFolderManager->getRootFolder()->get((string) $collective->getId());
 			return $folder->getMTime() > $index->getMTime();
-		} catch (NotFoundException|InvalidPathException $e) {
+		} catch (NotFoundException|InvalidPathException) {
 			return false;
 		}
 	}

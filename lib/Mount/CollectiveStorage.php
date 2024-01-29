@@ -19,11 +19,6 @@ class CollectiveStorage extends Wrapper {
 	/** @var RootEntryCache */
 	public $cache;
 
-	/**
-	 * CollectiveStorage constructor.
-	 *
-	 * @param $parameters
-	 */
 	public function __construct($parameters) {
 		parent::__construct($parameters);
 		$this->folderId = $parameters['folder_id'];
@@ -31,9 +26,6 @@ class CollectiveStorage extends Wrapper {
 		$this->mountOwner = $parameters['mountOwner'];
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getFolderId(): int {
 		return $this->folderId;
 	}
@@ -50,8 +42,6 @@ class CollectiveStorage extends Wrapper {
 	/**
 	 * @param string $path
 	 * @param null   $storage
-	 *
-	 * @return RootEntryCache
 	 */
 	public function getCache($path = '', $storage = null): RootEntryCache {
 		if ($this->cache) {
@@ -68,8 +58,6 @@ class CollectiveStorage extends Wrapper {
 	/**
 	 * @param string $path
 	 * @param null   $storage
-	 *
-	 * @return Scanner
 	 */
 	public function getScanner($path = '', $storage = null): Scanner {
 		if (!$storage) {

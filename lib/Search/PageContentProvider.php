@@ -27,59 +27,23 @@ use Psr\Log\LoggerInterface;
 use TeamTNT\TNTSearch\Support\Highlighter;
 
 class PageContentProvider implements IProvider {
-	private IL10N $l10n;
-	private IURLGenerator $urlGenerator;
-	private CollectiveHelper $collectiveHelper;
-	private PageService $pageService;
-	private SearchService $indexedSearchService;
-	private LoggerInterface $logger;
-	private IAppManager $appManager;
-
-	/**
-	 * @param IL10N            $l10n
-	 * @param IURLGenerator    $urlGenerator
-	 * @param CollectiveHelper $collectiveHelper
-	 * @param PageService      $pageService
-	 * @param SearchService    $indexedSearchService
-	 * @param LoggerInterface  $logger
-	 * @param IAppManager      $appManager
-	 */
-	public function __construct(IL10N $l10n,
-		IURLGenerator $urlGenerator,
-		CollectiveHelper $collectiveHelper,
-		PageService $pageService,
-		SearchService $indexedSearchService,
-		LoggerInterface $logger,
-		IAppManager $appManager) {
-		$this->l10n = $l10n;
-		$this->urlGenerator = $urlGenerator;
-		$this->collectiveHelper = $collectiveHelper;
-		$this->pageService = $pageService;
-		$this->indexedSearchService = $indexedSearchService;
-		$this->logger = $logger;
-		$this->appManager = $appManager;
+	public function __construct(private IL10N $l10n,
+		private IURLGenerator $urlGenerator,
+		private CollectiveHelper $collectiveHelper,
+		private PageService $pageService,
+		private SearchService $indexedSearchService,
+		private LoggerInterface $logger,
+		private IAppManager $appManager) {
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getId(): string {
 		return 'collectives-page-content';
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getName(): string {
 		return $this->l10n->t('Collectives - Page content');
 	}
 
-	/**
-	 * @param string $route
-	 * @param array  $routeParameters
-	 *
-	 * @return int
-	 */
 	public function getOrder(string $route, array $routeParameters): int {
 		if ($route === 'collectives.start.index') {
 			return -1;
@@ -88,10 +52,6 @@ class PageContentProvider implements IProvider {
 	}
 
 	/**
-	 * @param IUser        $user
-	 * @param ISearchQuery $query
-	 *
-	 * @return SearchResult
 	 * @throws FileSearchException
 	 */
 	public function search(IUser $user, ISearchQuery $query): SearchResult {
@@ -151,7 +111,6 @@ class PageContentProvider implements IProvider {
 	}
 
 	/**
-	 * @param string $term
 	 * @param File[] $pages
 	 * @return File[]
 	 * @throws FileSearchException
@@ -190,16 +149,10 @@ class PageContentProvider implements IProvider {
 		return $ranked;
 	}
 
-	/**
-	 * @param Collective $collective
-	 * @param File $file
-	 * @param string $userId
-	 * @return PageInfo|null
-	 */
 	private function getPageInfo(Collective $collective, File $file, string $userId): ?PageInfo {
 		try {
 			return $this->pageService->findByFile($collective->getId(), $file, $userId);
-		} catch (Exception $e) {
+		} catch (Exception) {
 			return null;
 		}
 	}

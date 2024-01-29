@@ -20,46 +20,29 @@ use OCP\Files\InvalidPathException;
 use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\Files\NotPermittedException as FilesNotPermittedException;
 use OCP\IDBConnection;
+use OCP\Server;
+use OCP\Util;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class CollectiveVersionsExpireManager extends BasicEmitter {
-	private CollectiveFolderManager $folderManager;
-	private ExpireManager $expireManager;
-	private IDBConnection $connection;
-	private CollectiveMapper $collectiveMapper;
-	private ITimeFactory $timeFactory;
 	private $dispatcher;
 	private ?VersionsBackend $versionsBackend = null;
 	private string $dependencyInjectionError = '';
 
-	/**
-	 * @param ContainerInterface      $appContainer
-	 * @param CollectiveFolderManager $folderManager
-	 * @param ExpireManager           $expireManager
-	 * @param IDBConnection           $connection
-	 * @param CollectiveMapper        $collectiveMapper
-	 * @param ITimeFactory            $timeFactory
-	 * @param IEventDispatcher        $dispatcher
-	 */
 	public function __construct(ContainerInterface $appContainer,
-		CollectiveFolderManager $folderManager,
-		ExpireManager $expireManager,
-		IDBConnection $connection,
-		CollectiveMapper $collectiveMapper,
-		ITimeFactory $timeFactory,
+		private CollectiveFolderManager $folderManager,
+		private ExpireManager $expireManager,
+		private IDBConnection $connection,
+		private CollectiveMapper $collectiveMapper,
+		private ITimeFactory $timeFactory,
 		IEventDispatcher $dispatcher) {
-		$this->folderManager = $folderManager;
-		$this->expireManager = $expireManager;
-		$this->connection = $connection;
-		$this->collectiveMapper = $collectiveMapper;
-		$this->timeFactory = $timeFactory;
 		$this->dispatcher = $dispatcher;
 
-		[$major] = \OCP\Util::getVersion();
+		[$major] = Util::getVersion();
 		if ($major < 28) {
 			// Use Symfony event dispatcher on older Nextcloud releases
-			$this->dispatcher = \OCP\Server::get(EventDispatcherInterface::class);
+			$this->dispatcher = Server::get(EventDispatcherInterface::class);
 		}
 
 		try {
@@ -69,9 +52,6 @@ class CollectiveVersionsExpireManager extends BasicEmitter {
 		}
 	}
 
-	/**
-	 * @return array
-	 */
 	public function getAllFolders(): array {
 		$qb = $this->connection->getQueryBuilder();
 		$qb->select('co.id AS id', 'circle_unique_id')
@@ -87,7 +67,7 @@ class CollectiveVersionsExpireManager extends BasicEmitter {
 					'mount_point' => $this->collectiveMapper->circleIdToName($row['circle_unique_id'], null, true),
 				];
 			}
-		} catch (NotFoundException $e) {
+		} catch (NotFoundException) {
 		}
 
 		return $folderMap;
@@ -106,8 +86,6 @@ class CollectiveVersionsExpireManager extends BasicEmitter {
 	}
 
 	/**
-	 * @param array $folder
-	 *
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 * @throws MissingDependencyException

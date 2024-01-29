@@ -59,7 +59,7 @@
       <code><![CDATA[$this->pushQueue]]></code>
       <code>?IQueue</code>
       <code>IQueue</code>
-      <code>\OC_Util</code>
+      <code>OC_Util</code>
     </UndefinedClass>
   </file>
   <file src="lib/Versions/VersionsBackend.php">

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Unit\ACL;
 
+use OC;
 use OC\Files\Storage\Temporary;
 use OCA\Collectives\ACL\ACLStorageWrapper;
 use OCP\Constants;
@@ -17,9 +18,7 @@ class ACLStorageWrapperTest extends TestCase {
 	protected function setUp(): void {
 		parent::setUp();
 
-		\OC::$server->registerService(IDBConnection::class, function () {
-			return $this->createMock(IDBConnection::class);
-		});
+		OC::$server->registerService(IDBConnection::class, fn () => $this->createMock(IDBConnection::class));
 
 		$this->source = new Temporary([]);
 	}

@@ -12,6 +12,8 @@ use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\GenericFileException;
 use OCP\Files\InvalidPathException;
+use OCP\Files\NotFoundException;
+use OCP\Files\NotPermittedException;
 use OCP\ITempManager;
 use OCP\Lock\LockedException;
 use PDO;
@@ -20,23 +22,12 @@ use Psr\Log\LoggerInterface;
 class SearchService {
 	private const INDICES_DIR_NAME = 'indices';
 
-	private CollectiveFolderManager $collectiveFolderManager;
-	private ITempManager $tempManager;
-	private LoggerInterface $logger;
-
-	public function __construct(
-		CollectiveFolderManager $collectiveFolderManager,
-		ITempManager $tempManager,
-		LoggerInterface $logger
-	) {
-		$this->collectiveFolderManager = $collectiveFolderManager;
-		$this->tempManager = $tempManager;
-		$this->logger = $logger;
+	public function __construct(private CollectiveFolderManager $collectiveFolderManager,
+		private ITempManager $tempManager,
+		private LoggerInterface $logger) {
 	}
 
 	/**
-	 * @param Collective $collective
-	 * @return void
 	 * @throws FileSearchException
 	 */
 	public function indexCollective(Collective $collective): void {
@@ -44,7 +35,7 @@ class SearchService {
 
 		try {
 			$collectiveFolder = $this->collectiveFolderManager->getFolder($collective->getId());
-		} catch (InvalidPathException|\OCP\Files\NotFoundException $e) {
+		} catch (InvalidPathException|NotFoundException $e) {
 			throw new FileSearchException('Collectives search service could not find folder for collective.', 0, $e);
 		}
 
@@ -57,10 +48,6 @@ class SearchService {
 	}
 
 	/**
-	 * @param Collective $collective
-	 * @param string $term
-	 * @param int $maxResults
-	 * @return array
 	 * @throws FileSearchException
 	 */
 	public function searchCollective(Collective $collective, string $term, int $maxResults = 15): array {
@@ -81,32 +68,23 @@ class SearchService {
 	}
 
 	/**
-	 * @param Collective $collective
-	 * @return File|null
 	 * @throws FileSearchException
 	 */
 	public function getIndexForCollective(Collective $collective): ?File {
 		try {
 			$file = $this->getIndicesFolder()->get($this->getIndexName($collective));
-		} catch (\OCP\Files\NotFoundException $e) {
+		} catch (NotFoundException) {
 			return null;
 		}
 
 		return $file instanceof File ? $file : null;
 	}
 
-	/**
-	 * @param Collective $collective
-	 * @return string
-	 */
 	public function getIndexName(Collective $collective): string {
 		return 'index_' . $collective->getCircleId() . '.db';
 	}
 
 	/**
-	 * @param Collective $collective
-	 * @param string $path
-	 * @return void
 	 * @throws FileSearchException
 	 */
 	private function saveIndex(Collective $collective, string $path): void {
@@ -117,14 +95,12 @@ class SearchService {
 
 		try {
 			$file->putContent(file_get_contents($path));
-		} catch (\OCP\Files\NotPermittedException|GenericFileException|LockedException $e) {
+		} catch (NotPermittedException|GenericFileException|LockedException $e) {
 			throw new FileSearchException('Could not write to index file for collective.', 0, $e);
 		}
 	}
 
 	/**
-	 * @param Collective $collective
-	 * @return File|null
 	 * @throws FileSearchException
 	 */
 	private function getOrCreateIndexForCollective(Collective $collective): ?File {
@@ -132,14 +108,13 @@ class SearchService {
 
 		try {
 			$file = $this->getIndicesFolder()->newFile($this->getIndexName($collective));
-		} catch (\OCP\Files\NotPermittedException $e) {
+		} catch (NotPermittedException) {
 		}
 
 		return $file instanceof File ? $file : null;
 	}
 
 	/**
-	 * @return Folder
 	 * @throws FileSearchException
 	 */
 	private function getIndicesFolder(): Folder {
@@ -149,19 +124,16 @@ class SearchService {
 			if ($folder instanceof Folder) {
 				return $folder;
 			}
-		} catch (\OCP\Files\NotFoundException $e) {
+		} catch (NotFoundException) {
 		}
 
 		try {
 			return $rootFolder->newFolder(self::INDICES_DIR_NAME);
-		} catch (\OCP\Files\NotPermittedException $e) {
+		} catch (NotPermittedException) {
 			throw new FileSearchException('Could not find or create the indices directory.');
 		}
 	}
 
-	/**
-	 * @return bool
-	 */
 	public function areDependenciesMet(): bool {
 		return in_array('sqlite', PDO::getAvailableDrivers(), true);
 	}

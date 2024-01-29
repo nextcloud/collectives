@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace OCA\Collectives\Db;
 
 use JsonSerializable;
-
 use OCA\Circles\Model\Member;
+
 use OCP\AppFramework\Db\Entity;
 use OCP\Constants;
+use RuntimeException;
 
 /**
  * Class Collective
@@ -64,9 +65,6 @@ class Collective extends Entity implements JsonSerializable {
 		return $this->getCircleUniqueId();
 	}
 
-	/**
-	 * @param string $circleId
-	 */
 	public function setCircleId(string $circleId): void {
 		$this->setCircleUniqueId($circleId);
 	}
@@ -79,9 +77,6 @@ class Collective extends Entity implements JsonSerializable {
 		return intdiv($this->permissions, 100) % 100;
 	}
 
-	/**
-	 * @param int $permissions
-	 */
 	public function setModeratorPermissions(int $permissions): void {
 		// moderator permissions are stored in thousands and hundreds
 		$this->setPermissions(
@@ -98,9 +93,6 @@ class Collective extends Entity implements JsonSerializable {
 		return $this->permissions % 100;
 	}
 
-	/**
-	 * @param int $permissions
-	 */
 	public function setMemberPermissions(int $permissions): void {
 		// member permissions are stored in tens and ones
 		$this->setPermissions(
@@ -109,10 +101,6 @@ class Collective extends Entity implements JsonSerializable {
 		);
 	}
 
-	/**
-	 * @param int        $level
-	 * @param int        $permission
-	 */
 	public function updatePermissionLevel(int $level, int $permission): void {
 		if ($level >= Member::LEVEL_ADMIN) {
 			$this->setModeratorPermissions($this->getModeratorPermissions() & ~$permission);
@@ -126,12 +114,9 @@ class Collective extends Entity implements JsonSerializable {
 		}
 	}
 
-	/**
-	 * @param int $mode
-	 */
 	public function setPageMode(int $mode): void {
 		if (!array_key_exists($mode, Collective::pageModes)) {
-			throw new \RuntimeException('Invalid pageMode value: ' . $mode);
+			throw new RuntimeException('Invalid pageMode value: ' . $mode);
 		}
 		$this->pageMode = $mode;
 		$this->markFieldUpdated('pageMode');

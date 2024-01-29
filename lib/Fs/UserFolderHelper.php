@@ -17,40 +17,22 @@ use OCP\IUserManager;
 use OCP\L10N\IFactory;
 use OCP\Lock\LockedException;
 use OCP\PreConditionNotMetException;
+use UnexpectedValueException;
 
 class UserFolderHelper {
-	private IRootFolder $rootFolder;
-	private IUserManager $userManager;
-	private IConfig $config;
-	private IFactory $l10nFactory;
 	private ?Folder $userCollectivesFolder = null;
 
-	/**
-	 * UserFolderHelper constructor.
-	 *
-	 * @param IRootFolder  $rootFolder
-	 * @param IUserManager $userManager
-	 * @param IConfig      $config
-	 * @param IFactory     $l10nFactory
-	 */
 	public function __construct(
-		IRootFolder $rootFolder,
-		IUserManager $userManager,
-		IConfig $config,
-		IFactory $l10nFactory) {
-		$this->rootFolder = $rootFolder;
-		$this->userManager = $userManager;
-		$this->config = $config;
-		$this->l10nFactory = $l10nFactory;
+		private IRootFolder $rootFolder,
+		private IUserManager $userManager,
+		private IConfig $config,
+		private IFactory $l10nFactory) {
 	}
 
 	/**
-	 * @param $userId
-	 *
-	 * @return string
 	 * @throws NotPermittedException
 	 */
-	public function getUserFolderSetting($userId): string {
+	public function getUserFolderSetting(string $userId): string {
 		$defaultUserFolder = $this->config->getAppValue('collectives', 'default_user_folder', '');
 		// Get collectives user folder from settings and default to translated 'Collectives'
 		$userCollectivesPath = $this->config->getUserValue($userId, 'collectives', 'user_folder', $defaultUserFolder);
@@ -58,7 +40,7 @@ class UserFolderHelper {
 			$user = $this->userManager->get($userId);
 
 			// Guest users and others with null quota are not allowed to create a subdirectory
-			if ($user->getQuota() === '0 B') {
+			if ($user?->getQuota() === '0 B') {
 				return '/';
 			}
 
@@ -67,7 +49,7 @@ class UserFolderHelper {
 			$userCollectivesPath = '/' . $l10n->t('Collectives');
 			try {
 				$this->config->setUserValue($userId, 'collectives', 'user_folder', $userCollectivesPath);
-			} catch (PreConditionNotMetException | \UnexpectedValueException $e) {
+			} catch (PreConditionNotMetException | UnexpectedValueException $e) {
 				throw new NotPermittedException($e->getMessage(), 0, $e);
 			}
 		}
@@ -76,9 +58,6 @@ class UserFolderHelper {
 	}
 
 	/**
-	 * @param string $userId
-	 *
-	 * @return Folder
 	 * @throws NotPermittedException
 	 * @throws NotFoundException
 	 */
@@ -119,9 +98,6 @@ class UserFolderHelper {
 	}
 
 	/**
-	 * @param string $userId
-	 *
-	 * @return Folder
 	 * @throws NotPermittedException
 	 * @throws NotFoundException
 	 */

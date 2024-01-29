@@ -10,20 +10,10 @@ use OCA\Collectives\Db\CollectiveUserSettingsMapper;
 use OCP\DB\Exception;
 
 class CollectiveUserSettingsService {
-	private CollectiveUserSettingsMapper $collectiveUserSettingsMapper;
-	private CollectiveMapper $collectiveMapper;
-
-	public function __construct(CollectiveUserSettingsMapper $collectiveUserSettingsMapper,
-		CollectiveMapper $collectiveMapper) {
-		$this->collectiveUserSettingsMapper = $collectiveUserSettingsMapper;
-		$this->collectiveMapper = $collectiveMapper;
+	public function __construct(private CollectiveUserSettingsMapper $collectiveUserSettingsMapper, private CollectiveMapper $collectiveMapper) {
 	}
 
 	/**
-	 * @param int    $collectiveId
-	 * @param string $userId
-	 *
-	 * @return CollectiveUserSettings
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
@@ -42,10 +32,6 @@ class CollectiveUserSettingsService {
 	}
 
 	/**
-	 * @param int    $collectiveId
-	 * @param string $userId
-	 * @param int    $pageOrder
-	 *
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
@@ -61,10 +47,6 @@ class CollectiveUserSettingsService {
 	}
 
 	/**
-	 * @param int    $collectiveId
-	 * @param string $userId
-	 * @param bool   $showRecentPages
-	 *
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */

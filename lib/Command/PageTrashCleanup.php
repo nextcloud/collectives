@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Command;
 
+use OC;
 use OC\Core\Command\Base;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Service\MissingDependencyException;
@@ -19,17 +20,13 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class PageTrashCleanup extends Base {
 	private ?PageTrashBackend $trashBackend = null;
-	private CollectiveMapper $collectiveMapper;
 
-	public function __construct(
-		IAppManager $appManager,
-		CollectiveMapper $collectiveMapper
-	) {
+	public function __construct(IAppManager $appManager,
+		private CollectiveMapper $collectiveMapper) {
 		parent::__construct();
 		if ($appManager->isEnabledForUser('files_trashbin')) {
-			$this->trashBackend = \OC::$server->get(PageTrashBackend::class);
+			$this->trashBackend = OC::$server->get(PageTrashBackend::class);
 		}
-		$this->collectiveMapper = $collectiveMapper;
 	}
 
 	protected function configure(): void {
@@ -41,12 +38,6 @@ class PageTrashCleanup extends Base {
 		parent::configure();
 	}
 
-	/**
-	 * @param InputInterface  $input
-	 * @param OutputInterface $output
-	 *
-	 * @return int
-	 */
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		if (!$this->trashBackend) {
 			$output->writeln('<error>files_trashbin is disabled: collectives page trashbin is not available</error>');
@@ -62,7 +53,7 @@ class PageTrashCleanup extends Base {
 				$foundCollectiveName = null;
 				try {
 					$foundCollectiveName = $this->collectiveMapper->idToName($collective->getId(), null, true);
-				} catch (MissingDependencyException | NotFoundException | NotPermittedException $e) {
+				} catch (MissingDependencyException | NotFoundException | NotPermittedException) {
 				}
 
 				if ($foundCollectiveName === $collectiveName) {

@@ -17,13 +17,6 @@ class Version002000Date20220103000000 extends SimpleMigrationStep {
 		Constants::PERMISSION_ALL * 100 + // Moderator
 		Constants::PERMISSION_ALL;        // Member
 
-	/**
-	 * @param IOutput $output
-	 * @param Closure $schemaClosure The `\Closure` returns a `ISchemaWrapper`
-	 * @param array   $options
-	 *
-	 * @return null|ISchemaWrapper
-	 */
 	public function changeSchema(IOutput $output, Closure $schemaClosure, array $options): ?ISchemaWrapper {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();

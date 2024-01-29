@@ -11,20 +11,10 @@ use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\IPreview;
 
 class AttachmentService {
-	private PageService $pageService;
-	private IPreview $preview;
-
-	public function __construct(PageService $pageService,
-		IPreview $preview) {
-		$this->pageService = $pageService;
-		$this->preview = $preview;
+	public function __construct(private PageService $pageService, private IPreview $preview) {
 	}
 
 	/**
-	 * @param File   $file
-	 * @param string $userId
-	 *
-	 * @return array
 	 * @throws NotFoundException
 	 */
 	private function fileToInfo(File $file, string $userId): array {
@@ -45,9 +35,6 @@ class AttachmentService {
 	}
 
 	/**
-	 * @param File $pageFile
-	 *
-	 * @return Folder
 	 * @throws NotFoundException
 	 */
 	private function getAttachmentDirectory(File $pageFile): Folder {
@@ -60,18 +47,13 @@ class AttachmentService {
 					return $attachmentFolder;
 				}
 			}
-		} catch (FilesNotFoundException | InvalidPathException $e) {
+		} catch (FilesNotFoundException | InvalidPathException) {
 			throw new NotFoundException('Failed to get attachment directory for page ' . $pageFile->getId() . '.');
 		}
 		throw new NotFoundException('Failed to get attachment directory for page ' . $pageFile->getId() . '.');
 	}
 
 	/**
-	 * @param int    $collectiveId
-	 * @param int    $pageId
-	 * @param string $userId
-	 *
-	 * @return array
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
@@ -80,16 +62,12 @@ class AttachmentService {
 		$pageFile = $this->pageService->getPageFile($collectiveId, $pageId, $userId);
 		try {
 			$attachmentDir = $this->getAttachmentDirectory($pageFile);
-		} catch (NotFoundException $e) {
+		} catch (NotFoundException) {
 			// No attachment folder -> empty list
 			return [];
 		}
 
 		// Only return files, ignore folders
-		return array_map(function ($file) use ($userId) {
-			return $this->fileToInfo($file, $userId);
-		}, array_filter($attachmentDir->getDirectoryListing(), static function ($node) {
-			return $node instanceof File;
-		}));
+		return array_map(fn ($file) => $this->fileToInfo($file, $userId), array_filter($attachmentDir->getDirectoryListing(), static fn ($node) => $node instanceof File));
 	}
 }

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Service;
 
+use Exception;
+use OC;
+use OC_Util;
 use OCA\Collectives\Db\Page;
 use OCA\Collectives\Db\PageMapper;
 use OCA\Collectives\Fs\NodeHelper;
@@ -27,59 +30,31 @@ use Psr\Container\ContainerInterface;
 class PageService {
 	private const DEFAULT_PAGE_TITLE = 'New Page';
 
-	private IAppManager $appManager;
-	private PageMapper $pageMapper;
-	private NodeHelper $nodeHelper;
-	private CollectiveServiceBase $collectiveService;
-	private UserFolderHelper $userFolderHelper;
-	private IUserManager $userManager;
-	private IConfig $config;
 	private ?IQueue $pushQueue = null;
 	private ?CollectiveInfo $collectiveInfo = null;
 	private ?PageTrashBackend $trashBackend = null;
 
-	/**
-	 * @param IAppManager           $appManager
-	 * @param PageMapper            $pageMapper
-	 * @param NodeHelper            $nodeHelper
-	 * @param CollectiveServiceBase $collectiveService
-	 * @param UserFolderHelper      $userFolderHelper
-	 * @param IUserManager          $userManager
-	 * @param IConfig               $config
-	 * @param ContainerInterface    $container
-	 */
-	public function __construct(IAppManager $appManager,
-		PageMapper $pageMapper,
-		NodeHelper $nodeHelper,
-		CollectiveServiceBase $collectiveService,
-		UserFolderHelper $userFolderHelper,
-		IUserManager $userManager,
-		IConfig  $config,
+	public function __construct(private IAppManager $appManager,
+		private PageMapper $pageMapper,
+		private NodeHelper $nodeHelper,
+		private CollectiveServiceBase $collectiveService,
+		private UserFolderHelper $userFolderHelper,
+		private IUserManager $userManager,
+		private IConfig $config,
 		ContainerInterface $container) {
-		$this->appManager = $appManager;
-		$this->pageMapper = $pageMapper;
-		$this->nodeHelper = $nodeHelper;
-		$this->collectiveService = $collectiveService;
-		$this->userFolderHelper = $userFolderHelper;
-		$this->userManager = $userManager;
-		$this->config = $config;
 		try {
 			$this->pushQueue = $container->get(IQueue::class);
-		} catch (\Exception $e) {
+		} catch (Exception) {
 		}
 	}
 
 	private function initTrashBackend(): void {
 		if ($this->appManager->isEnabledForUser('files_trashbin')) {
-			$this->trashBackend = \OC::$server->get(PageTrashBackend::class);
+			$this->trashBackend = OC::$server->get(PageTrashBackend::class);
 		}
 	}
 
 	/**
-	 * @param int    $collectiveId
-	 * @param string $userId
-	 *
-	 * @return CollectiveInfo
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
@@ -93,10 +68,6 @@ class PageService {
 	}
 
 	/**
-	 * @param int    $collectiveId
-	 * @param string $userId
-	 *
-	 * @return void
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
@@ -108,10 +79,6 @@ class PageService {
 	}
 
 	/**
-	 * @param int    $collectiveId
-	 * @param string $userId
-	 *
-	 * @return Folder
 	 * @throws FilesNotFoundException
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
@@ -121,9 +88,9 @@ class PageService {
 		$collectiveName = $this->getCollectiveInfo($collectiveId, $userId)->getName();
 		try {
 			$folder = $this->userFolderHelper->get($userId)->get($collectiveName);
-		} catch (FilesNotFoundException $e) {
+		} catch (FilesNotFoundException) {
 			// Workaround issue #332
-			\OC_Util::setupFS($userId);
+			OC_Util::setupFS($userId);
 			$folder = $this->userFolderHelper->get($userId)->get($collectiveName);
 		}
 
@@ -135,11 +102,6 @@ class PageService {
 	}
 
 	/**
-	 * @param int    $collectiveId
-	 * @param int    $fileId
-	 * @param string $userId
-	 *
-	 * @return File
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
@@ -150,11 +112,6 @@ class PageService {
 	}
 
 	/**
-	 * @param int    $collectiveId
-	 * @param int    $fileId
-	 * @param string $userId
-	 *
-	 * @return Folder
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
@@ -174,12 +131,6 @@ class PageService {
 	}
 
 	/**
-	 * @param int    $collectiveId
-	 * @param int    $parentId
-	 * @param int    $pageId
-	 * @param string $userId
-	 *
-	 * @return void
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
@@ -192,11 +143,6 @@ class PageService {
 	}
 
 	/**
-	 * @param int    $collectiveId
-	 * @param File   $file
-	 * @param string $userId
-	 *
-	 * @return array
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
@@ -208,16 +154,10 @@ class PageService {
 
 		$parentId = $file->getId();
 		$folder = $this->getFolder($collectiveId, $parentId, $userId);
-		return array_filter($this->getPagesFromFolder($collectiveId, $folder, $userId), static function (PageInfo $pageInfo) use ($parentId) {
-			return $pageInfo->getParentId() === $parentId;
-		});
+		return array_filter($this->getPagesFromFolder($collectiveId, $folder, $userId), static fn (PageInfo $pageInfo) => $pageInfo->getParentId() === $parentId);
 	}
 
 	/**
-	 * @param File $file
-	 * @param Node|null $parent
-	 *
-	 * @return int
 	 * @throws NotFoundException
 	 */
 	private function getParentPageId(File $file, ?Node $parent = null): int {
@@ -227,7 +167,7 @@ class PageService {
 				return 0;
 			}
 
-			$parent = $parent ?? $file->getParent();
+			$parent ??= $file->getParent();
 
 			if (NodeHelper::isIndexPage($file)) {
 				// Go down two levels if index page but not landing page
@@ -241,10 +181,6 @@ class PageService {
 	}
 
 	/**
-	 * @param File      $file
-	 * @param Node|null $parent
-	 *
-	 * @return PageInfo
 	 * @throws NotFoundException
 	 */
 	private function getPageByFile(File $file, ?Node $parent = null): PageInfo {
@@ -272,11 +208,6 @@ class PageService {
 	}
 
 	/**
-	 * @param File   $file
-	 * @param string $filename
-	 * @param string $timestamp
-	 *
-	 * @return PageInfo
 	 * @throws NotFoundException
 	 */
 	private function getTrashPageByFile(File $file, string $filename, string $timestamp): PageInfo {
@@ -307,10 +238,6 @@ class PageService {
 		return $pageInfo;
 	}
 
-	/**
-	 * @param int    $collectiveId
-	 * @param string $userId
-	 */
 	private function notifyPush(int $collectiveId, string $userId): void {
 		if (!$this->pushQueue) {
 			return;
@@ -322,13 +249,6 @@ class PageService {
 		]);
 	}
 
-	/**
-	 * @param int         $collectiveId
-	 * @param int         $fileId
-	 * @param string      $userId
-	 * @param string|null $emoji
-	 * @param string|null $subpageOrder
-	 */
 	private function updatePage(int $collectiveId, int $fileId, string $userId, ?string $emoji = null, ?string $subpageOrder = null): void {
 		$page = new Page();
 		$page->setFileId($fileId);
@@ -344,12 +264,6 @@ class PageService {
 	}
 
 	/**
-	 * @param int    $collectiveId
-	 * @param Folder $folder
-	 * @param string $filename
-	 * @param string $userId
-	 *
-	 * @return PageInfo
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
@@ -391,9 +305,6 @@ class PageService {
 	}
 
 	/**
-	 * @param File $file
-	 *
-	 * @return Folder
 	 * @throws NotPermittedException
 	 */
 	public function initSubFolder(File $file): Folder {
@@ -413,11 +324,6 @@ class PageService {
 	}
 
 	/**
-	 * @param int    $collectiveId
-	 * @param int    $pageId
-	 * @param string $userId
-	 *
-	 * @return PageInfo
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
@@ -433,9 +339,6 @@ class PageService {
 	}
 
 	/**
-	 * @param Folder $folder
-	 *
-	 * @return File
 	 * @throws NotFoundException
 	 */
 	private function getIndexPageFile(Folder $folder): File {
@@ -453,12 +356,6 @@ class PageService {
 	}
 
 	/**
-	 * @param int    $collectiveId
-	 * @param Folder $folder
-	 * @param string $userId
-	 * @param bool   $recurse
-	 *
-	 * @return array
 	 * @throws FilesNotFoundException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
@@ -467,7 +364,7 @@ class PageService {
 		// Find index page or create it if we have subpages, but it doesn't exist
 		try {
 			$indexPage = $this->getPageByFile($this->getIndexPageFile($folder), $folder);
-		} catch (NotFoundException $e) {
+		} catch (NotFoundException) {
 			if (!NodeHelper::folderHasSubPages($folder)) {
 				return [];
 			}
@@ -488,11 +385,6 @@ class PageService {
 	}
 
 	/**
-	 * @param int    $collectiveId
-	 * @param int    $parentId
-	 * @param string $userId
-	 *
-	 * @return array|PageInfo[]
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
@@ -513,10 +405,6 @@ class PageService {
 	}
 
 	/**
-	 * @param int    $collectiveId
-	 * @param string $userId
-	 *
-	 * @return PageInfo[]
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
@@ -531,10 +419,6 @@ class PageService {
 	}
 
 	/**
-	 * @param int    $collectiveId
-	 * @param string $userId
-	 *
-	 * @return PageInfo[]
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
@@ -557,7 +441,7 @@ class PageService {
 			if ($node instanceof Folder) {
 				try {
 					$node = $node->get(PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX);
-				} catch (FilesNotFoundException $e) {
+				} catch (FilesNotFoundException) {
 					// Ignore folders without index page
 					continue;
 				}
@@ -575,11 +459,6 @@ class PageService {
 	}
 
 	/**
-	 * @param int    $collectiveId
-	 * @param string $search
-	 * @param string $userId
-	 *
-	 * @return PageInfo[]
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
@@ -598,10 +477,6 @@ class PageService {
 	}
 
 	/**
-	 * @param int $collectiveId
-	 * @param int $fileId
-	 * @param string $userId
-	 * @return PageInfo
 	 * @throws FilesNotFoundException
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
@@ -618,11 +493,6 @@ class PageService {
 	}
 
 	/**
-	 * @param int    $collectiveId
-	 * @param int    $id
-	 * @param string $userId
-	 *
-	 * @return PageInfo
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
@@ -633,10 +503,6 @@ class PageService {
 	}
 
 	/**
-	 * @param int $collectiveId
-	 * @param File $file
-	 * @param string $userId
-	 * @return PageInfo
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
@@ -650,12 +516,6 @@ class PageService {
 	}
 
 	/**
-	 * @param int    $collectiveId
-	 * @param int    $parentId
-	 * @param string $title
-	 * @param string $userId
-	 *
-	 * @return PageInfo
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
@@ -674,11 +534,6 @@ class PageService {
 	}
 
 	/**
-	 * @param int    $collectiveId
-	 * @param int    $id
-	 * @param string $userId
-	 *
-	 * @return PageInfo
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
@@ -695,11 +550,6 @@ class PageService {
 	}
 
 	/**
-	 * @param Folder $collectiveFolder
-	 * @param int    $pageId
-	 * @param int    $targetId
-	 *
-	 * @return bool
 	 * @throws NotFoundException
 	 */
 	private function isAncestorOf(Folder $collectiveFolder, int $pageId, int $targetId): bool {
@@ -717,14 +567,6 @@ class PageService {
 	}
 
 	/**
-	 * @param Folder      $collectiveFolder
-	 * @param File        $file
-	 * @param int         $parentId
-	 * @param string|null $title
-	 * @param bool        $copy
-	 * @param Folder|null $newCollectiveFolder
-	 *
-	 * @return File|null
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
@@ -795,14 +637,6 @@ class PageService {
 	}
 
 	/**
-	 * @param int         $collectiveId
-	 * @param int         $id
-	 * @param int|null    $parentId
-	 * @param string|null $title
-	 * @param int         $index
-	 * @param string      $userId
-	 *
-	 * @return PageInfo
 	 * @throws FilesNotFoundException
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
@@ -831,14 +665,6 @@ class PageService {
 	}
 
 	/**
-	 * @param int         $collectiveId
-	 * @param int         $id
-	 * @param int|null    $parentId
-	 * @param string|null $title
-	 * @param int         $index
-	 * @param string      $userId
-	 *
-	 * @return PageInfo
 	 * @throws FilesNotFoundException
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
@@ -871,13 +697,6 @@ class PageService {
 	}
 
 	/**
-	 * @param int      $collectiveId
-	 * @param int      $id
-	 * @param int      $newCollectiveId
-	 * @param int|null $parentId
-	 * @param int      $index
-	 * @param string   $userId
-	 *
 	 * @throws FilesNotFoundException
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
@@ -905,13 +724,6 @@ class PageService {
 	}
 
 	/**
-	 * @param int      $collectiveId
-	 * @param int      $id
-	 * @param int      $newCollectiveId
-	 * @param int|null $parentId
-	 * @param int      $index
-	 * @param string   $userId
-	 *
 	 * @throws FilesNotFoundException
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
@@ -940,12 +752,6 @@ class PageService {
 	}
 
 	/**
-	 * @param int         $collectiveId
-	 * @param int         $id
-	 * @param string|null $emoji
-	 * @param string      $userId
-	 *
-	 * @return PageInfo
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
@@ -963,12 +769,6 @@ class PageService {
 	}
 
 	/**
-	 * @param int         $collectiveId
-	 * @param int         $id
-	 * @param string|null $subpageOrder
-	 * @param string      $userId
-	 *
-	 * @return PageInfo
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
@@ -987,30 +787,17 @@ class PageService {
 	}
 
 	/**
-	 * @param int      $collectiveId
-	 * @param PageInfo $pageInfo
-	 * @param string   $userId
-	 *
-	 * @return string
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
 	private function cleanSubpageOrder(int $collectiveId, PageInfo $pageInfo, string $userId): string {
 		$pageFile = $this->getPageFile($collectiveId, $pageInfo->getId(), $userId);
-		$childIds = array_map(static function (PageInfo $pageInfo) {
-			return $pageInfo->getId();
-		}, $this->getSubpagesFromFile($collectiveId, $pageFile, $userId));
+		$childIds = array_map(static fn (PageInfo $pageInfo) => $pageInfo->getId(), $this->getSubpagesFromFile($collectiveId, $pageFile, $userId));
 		return SubpageOrderService::clean($pageInfo->getSubpageOrder(), $childIds);
 	}
 
 	/**
-	 * @param int    $collectiveId
-	 * @param int    $pageId
-	 * @param int    $addId
-	 * @param int    $index
-	 * @param string $userId
-	 *
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
@@ -1029,11 +816,6 @@ class PageService {
 	}
 
 	/**
-	 * @param int    $collectiveId
-	 * @param int    $pageId
-	 * @param int    $removeId
-	 * @param string $userId
-	 *
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
@@ -1050,11 +832,6 @@ class PageService {
 	}
 
 	/**
-	 * @param int    $collectiveId
-	 * @param int    $id
-	 * @param string $userId
-	 *
-	 * @return PageInfo
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
@@ -1100,11 +877,6 @@ class PageService {
 	}
 
 	/**
-	 * @param int    $collectiveId
-	 * @param int    $id
-	 * @param string $userId
-	 *
-	 * @return PageInfo
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
@@ -1132,10 +904,6 @@ class PageService {
 	}
 
 	/**
-	 * @param int    $collectiveId
-	 * @param int    $id
-	 * @param string $userId
-	 *
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
@@ -1161,13 +929,6 @@ class PageService {
 		$this->notifyPush($collectiveId, $userId);
 	}
 
-	/**
-	 * @param string   $collectiveName
-	 * @param PageInfo $pageInfo
-	 * @param bool     $withFileId
-	 *
-	 * @return string
-	 */
 	public function getPageLink(string $collectiveName, PageInfo $pageInfo, bool $withFileId = true): string {
 		$collectiveRoute = rawurlencode($collectiveName);
 		$pagePathRoute = implode('/', array_map('rawurlencode', explode('/', $pageInfo->getFilePath())));
@@ -1181,23 +942,15 @@ class PageService {
 		return $withFileId ? $fullRoute . '?fileId=' . $pageInfo->getId() : $fullRoute;
 	}
 
-	/**
-	 * @param PageInfo $pageInfo
-	 * @param string   $content
-	 *
-	 * @return bool
-	 */
 	public function matchBacklinks(PageInfo $pageInfo, string $content): bool {
 		$prefix = '/(\[[^\]]+\]\(|\<)';
 		$suffix = '[\)\>]/';
 
 		$protocol = 'https?:\/\/';
-		$trustedDomainArray = array_map(static function (string $domain) {
-			return str_replace('\*', '\w*', preg_quote($domain, '/'));
-		}, (array)$this->config->getSystemValue('trusted_domains', []));
+		$trustedDomainArray = array_map(static fn (string $domain) => str_replace('\*', '\w*', preg_quote($domain, '/')), (array)$this->config->getSystemValue('trusted_domains', []));
 		$trustedDomains = $trustedDomainArray !== [] ? '(' . implode('|', $trustedDomainArray) . ')' : 'localhost';
 
-		$basePath = str_replace('/', '/+', str_replace('/', '/+', preg_quote(trim(\OC::$WEBROOT, '/'), '/'))) . '(\/+index\.php)?';
+		$basePath = str_replace('/', '/+', str_replace('/', '/+', preg_quote(trim(OC::$WEBROOT, '/'), '/'))) . '(\/+index\.php)?';
 
 		$relativeUrl = '(?!' . $protocol . '[^\/]+)';
 		$absoluteUrl = $protocol . $trustedDomains . '(:[0-9]+)?';
@@ -1220,11 +973,6 @@ class PageService {
 	}
 
 	/**
-	 * @param int    $collectiveId
-	 * @param int    $id
-	 * @param string $userId
-	 *
-	 * @return PageInfo[]
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException

@@ -9,20 +9,10 @@ use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Model\CollectiveInfo;
 
 class CollectiveServiceBase {
-	protected CollectiveMapper $collectiveMapper;
-	protected CircleHelper $circleHelper;
-
-	public function __construct(CollectiveMapper $collectiveMapper,
-		CircleHelper $circleHelper) {
-		$this->collectiveMapper = $collectiveMapper;
-		$this->circleHelper = $circleHelper;
+	public function __construct(protected CollectiveMapper $collectiveMapper, protected CircleHelper $circleHelper) {
 	}
 
 	/**
-	 * @param int    $collectiveId
-	 * @param string $userId
-	 *
-	 * @return Collective
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
@@ -35,10 +25,6 @@ class CollectiveServiceBase {
 	}
 
 	/**
-	 * @param int    $id
-	 * @param string $userId
-	 *
-	 * @return CollectiveInfo
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
@@ -52,10 +38,6 @@ class CollectiveServiceBase {
 	}
 
 	/**
-	 * @param int    $collectiveId
-	 * @param string $userId
-	 *
-	 * @return Collective
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
@@ -68,10 +50,6 @@ class CollectiveServiceBase {
 	}
 
 	/**
-	 * @param int    $id
-	 * @param string $userId
-	 *
-	 * @return CollectiveInfo
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException

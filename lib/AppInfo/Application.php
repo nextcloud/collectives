@@ -48,9 +48,6 @@ class Application extends App implements IBootstrap {
 		parent::__construct(self::APP_NAME, $urlParams);
 	}
 
-	/**
-	 * @param IRegistrationContext $context
-	 */
 	public function register(IRegistrationContext $context): void {
 		require_once(__DIR__  . '/../../vendor/autoload.php');
 		$context->registerEventListener(BeforeTemplateRenderedEvent::class, BeforeTemplateRenderedListener::class);
@@ -58,16 +55,14 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(ShareDeletedEvent::class, ShareDeletedListener::class);
 		$context->registerEventListener(RenderReferenceEvent::class, CollectivesReferenceListener::class);
 
-		$context->registerService(MountProvider::class, function (ContainerInterface $c) {
-			return new MountProvider(
-				$c->get(CollectiveHelper::class),
-				$c->get(CollectiveFolderManager::class),
-				$c->get(IMimeTypeLoader::class),
-				$c->get(IAppManager::class),
-				$c->get(LoggerInterface::class),
-				$c->get(UserFolderHelper::class)
-			);
-		});
+		$context->registerService(MountProvider::class, fn (ContainerInterface $c) => new MountProvider(
+			$c->get(CollectiveHelper::class),
+			$c->get(CollectiveFolderManager::class),
+			$c->get(IMimeTypeLoader::class),
+			$c->get(IAppManager::class),
+			$c->get(LoggerInterface::class),
+			$c->get(UserFolderHelper::class)
+		));
 
 		$context->registerService(PageTrashBackend::class, function (ContainerInterface $c) {
 			$trashBackend = new PageTrashBackend(
@@ -99,7 +94,6 @@ class Application extends App implements IBootstrap {
 		$context->registerSearchProvider(PageProvider::class);
 		$context->registerSearchProvider(PageContentProvider::class);
 
-		$container = $this->getContainer();
 		$context->registerReferenceProvider(SearchablePageReferenceProvider::class);
 
 		$cacheListener = $this->getContainer()->get(CacheListener::class);

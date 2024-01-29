@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Versions;
 
+use LogicException;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Mount\CollectiveMountPoint;
 use OCA\Files_Versions\Versions\IVersion;
@@ -23,46 +24,20 @@ use OCP\Lock\LockedException;
 use Psr\Log\LoggerInterface;
 
 class VersionsBackend implements IVersionBackend {
-	private CollectiveFolderManager $collectiveFolderManager;
-	private ITimeFactory $timeFactory;
-	private LoggerInterface $logger;
-
-	/**
-	 * VersionsBackend constructor.
-	 *
-	 * @param CollectiveFolderManager $collectiveFolderManager
-	 * @param ITimeFactory            $timeFactory
-	 * @param LoggerInterface         $logger
-	 */
-	public function __construct(CollectiveFolderManager $collectiveFolderManager,
-		ITimeFactory $timeFactory,
-		LoggerInterface $logger) {
-		$this->collectiveFolderManager = $collectiveFolderManager;
-		$this->timeFactory = $timeFactory;
-		$this->logger = $logger;
+	public function __construct(private CollectiveFolderManager $collectiveFolderManager,
+		private ITimeFactory $timeFactory,
+		private LoggerInterface $logger) {
 	}
 
-	/**
-	 * @return Folder
-	 */
 	private function getAppFolder(): Folder {
 		return $this->collectiveFolderManager->getRootFolder();
 	}
 
-	/**
-	 * @param IStorage $storage
-	 *
-	 * @return bool
-	 */
 	public function useBackendForStorage(IStorage $storage): bool {
 		return true;
 	}
 
 	/**
-	 * @param IUser    $user
-	 * @param FileInfo $file
-	 *
-	 * @return CollectiveVersion[]
 	 * @throws InvalidPathException
 	 */
 	public function getVersionsForFile(IUser $user, FileInfo $file): array {
@@ -90,7 +65,7 @@ class VersionsBackend implements IVersionBackend {
 						$folderId
 					);
 				}, $versionsFolder->getDirectoryListing());
-			} catch (NotFoundException $e) {
+			} catch (NotFoundException) {
 				return [];
 			}
 		} else {
@@ -99,9 +74,6 @@ class VersionsBackend implements IVersionBackend {
 	}
 
 	/**
-	 * @param IUser    $user
-	 * @param FileInfo $file
-	 *
 	 * @throws NotPermittedException
 	 */
 	public function createVersion(IUser $user, FileInfo $file): void {
@@ -113,7 +85,7 @@ class VersionsBackend implements IVersionBackend {
 			try {
 				/** @var Folder $versionFolder */
 				$versionFolder = $versionsFolder->get((string)$file->getId());
-			} catch (NotFoundException $e) {
+			} catch (NotFoundException) {
 				$versionFolder = $versionsFolder->newFolder((string)$file->getId());
 			}
 
@@ -131,8 +103,6 @@ class VersionsBackend implements IVersionBackend {
 	}
 
 	/**
-	 * @param IVersion $version
-	 *
 	 * @throws NotPermittedException
 	 */
 	public function rollback(IVersion $version): void {
@@ -154,8 +124,6 @@ class VersionsBackend implements IVersionBackend {
 	}
 
 	/**
-	 * @param IVersion $version
-	 *
 	 * @return false|resource
 	 * @throws LockedException
 	 * @throws NotPermittedException
@@ -168,31 +136,21 @@ class VersionsBackend implements IVersionBackend {
 		return false;
 	}
 
-	/**
-	 * @param IUser      $user
-	 * @param FileInfo   $sourceFile
-	 * @param int|string $revision
-	 *
-	 * @return File
-	 */
 	public function getVersionFile(IUser $user, FileInfo $sourceFile, $revision): File {
 		$mount = $sourceFile->getMountPoint();
 		if (!($mount instanceof CollectiveMountPoint)) {
-			throw new \LogicException('Trying to getVersionFile from a file not in a mounted collective folder');
+			throw new LogicException('Trying to getVersionFile from a file not in a mounted collective folder');
 		}
 		try {
 			/** @var Folder $versionsFolder */
 			$versionsFolder = $this->getVersionsFolder($mount->getFolderId())->get((string)$sourceFile->getId());
 			return $versionsFolder->get((string)$revision);
-		} catch (NotFoundException $e) {
-			throw new \LogicException('Trying to getVersionFile from a file that doesn\'t exist');
+		} catch (NotFoundException) {
+			throw new LogicException('Trying to getVersionFile from a file that doesn\'t exist');
 		}
 	}
 
 	/**
-	 * @param array $folder
-	 *
-	 * @return (FileInfo|null)[] [$fileId => FileInfo|null]
 	 * @throws NotFoundException
 	 * @throws InvalidPathException
 	 */
@@ -209,14 +167,12 @@ class VersionsBackend implements IVersionBackend {
 		}
 		try {
 			$contents = $versionsFolder->getDirectoryListing();
-		} catch (NotFoundException $e) {
+		} catch (NotFoundException) {
 			return [];
 		}
 
-		$fileIds = array_map(static function (Node $node) {
-			return (int)$node->getName();
-		}, $contents);
-		$files = array_map(static function (int $fileId) use ($mount) {
+		$fileIds = array_map(static fn (Node $node) => (int)$node->getName(), $contents);
+		$files = array_map(static function (int $fileId) use ($mount): ?\OC\Files\FileInfo {
 			$cacheEntry = $mount->getStorage()->getCache()->get($fileId);
 			if ($cacheEntry) {
 				return new \OC\Files\FileInfo($mount->getMountPoint() . '/' . $cacheEntry->getPath(), $mount->getStorage(), $cacheEntry->getPath(), $cacheEntry, $mount);
@@ -228,9 +184,6 @@ class VersionsBackend implements IVersionBackend {
 	}
 
 	/**
-	 * @param int $folderId
-	 * @param int $fileId
-	 *
 	 * @throws InvalidPathException
 	 * @throws NotPermittedException
 	 */
@@ -238,14 +191,11 @@ class VersionsBackend implements IVersionBackend {
 		$versionsFolder = $this->getVersionsFolder($folderId);
 		try {
 			$versionsFolder->get((string)$fileId)->delete();
-		} catch (NotFoundException $e) {
+		} catch (NotFoundException) {
 		}
 	}
 
 	/**
-	 * @param int $folderId
-	 *
-	 * @return void
 	 * @throws InvalidPathException
 	 * @throws NotPermittedException
 	 */
@@ -253,22 +203,19 @@ class VersionsBackend implements IVersionBackend {
 		try {
 			$versionsFolder = $this->getAppFolder()->get('versions/' . $folderId);
 			$versionsFolder->delete();
-		} catch (NotFoundException $e) {
+		} catch (NotFoundException) {
 			// Folder doesn't exist
 		}
 	}
 
 	/**
-	 * @param int $folderId
-	 *
-	 * @return Folder
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
 	private function getVersionsFolder(int $folderId): Folder {
 		try {
 			return $this->getAppFolder()->get('versions/' . $folderId);
-		} catch (NotFoundException $e) {
+		} catch (NotFoundException) {
 			/** @var Folder $versionsFolder */
 			$versionsFolder = $this->getAppFolder()->nodeExists('versions') ? $this->getAppFolder()->get('versions') : $this->getAppFolder()->newFolder('versions');
 			return $versionsFolder->newFolder((string)$folderId);

@@ -14,46 +14,26 @@ use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
 
 class CollectiveUserSettingsController extends Controller {
-	private CollectiveUserSettingsService $service;
-	private IUserSession $userSession;
-	private LoggerInterface $logger;
-
 	use ErrorHelper;
 
 	public function __construct(string $AppName,
 		IRequest $request,
-		CollectiveUserSettingsService $service,
-		IUserSession $userSession,
-		LoggerInterface $logger) {
+		private CollectiveUserSettingsService $service,
+		private IUserSession $userSession,
+		private LoggerInterface $logger) {
 		parent::__construct($AppName, $request);
-		$this->service = $service;
-		$this->userSession = $userSession;
-		$this->logger = $logger;
 	}
 
-	/**
-	 * @return string
-	 */
 	private function getUserId(): string {
 		return $this->userSession->getUser()->getUID();
 	}
 
-	/**
-	 * @param Closure $callback
-	 *
-	 * @return DataResponse
-	 */
 	private function prepareResponse(Closure $callback) : DataResponse {
 		return $this->handleErrorResponse($callback, $this->logger);
 	}
 
 	/**
 	 * @NoAdminRequired
-	 *
-	 * @param int $id
-	 * @param int $level
-	 *
-	 * @return DataResponse
 	 */
 	public function pageOrder(int $id, int $pageOrder): DataResponse {
 		return $this->prepareResponse(function () use ($id, $pageOrder): array {
@@ -68,11 +48,6 @@ class CollectiveUserSettingsController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 *
-	 * @param int  $id
-	 * @param bool $showRecentPages
-	 *
-	 * @return DataResponse
 	 */
 	public function showRecentPages(int $id, bool $showRecentPages): DataResponse {
 		return $this->prepareResponse(function () use ($id, $showRecentPages): array {

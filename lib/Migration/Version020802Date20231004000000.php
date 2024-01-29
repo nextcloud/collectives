@@ -21,13 +21,6 @@ class Version020802Date20231004000000 extends SimpleMigrationStep {
 		$this->connection = $connection;
 	}
 
-	/**
-	 * @param IOutput $output
-	 * @param Closure $schemaClosure The `\Closure` returns a `ISchemaWrapper`
-	 * @param array   $options
-	 *
-	 * @return null|ISchemaWrapper
-	 */
 	public function changeSchema(IOutput $output, Closure $schemaClosure, array $options): ?ISchemaWrapper {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
@@ -62,11 +55,6 @@ class Version020802Date20231004000000 extends SimpleMigrationStep {
 		return null;
 	}
 
-	/**
-	 * @param IOutput $output
-	 * @param Closure $schemaClosure
-	 * @param array   $options
-	 */
 	public function postSchemaChange(IOutput $output, Closure $schemaClosure, array $options): void {
 		if ($this->runPageModeMigration) {
 			$query = $this->connection->getQueryBuilder();

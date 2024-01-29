@@ -16,23 +16,12 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class CreateCollective extends Base {
-	private CollectiveService $collectiveService;
-	private NodeHelper $nodeHelper;
-	private IUserManager $userManager;
-	private IUserSession $userSession;
-	private IFactory $l10nFactory;
-
-	public function __construct(CollectiveService $collectiveService,
-		NodeHelper $nodeHelper,
-		IUserManager $userManager,
-		IUserSession $userSession,
-		IFactory $l10nFactory) {
+	public function __construct(private CollectiveService $collectiveService,
+		private NodeHelper $nodeHelper,
+		private IUserManager $userManager,
+		private IUserSession $userSession,
+		private IFactory $l10nFactory) {
 		parent::__construct();
-		$this->collectiveService = $collectiveService;
-		$this->nodeHelper = $nodeHelper;
-		$this->userManager = $userManager;
-		$this->userSession = $userSession;
-		$this->l10nFactory = $l10nFactory;
 	}
 
 	protected function configure(): void {
@@ -44,12 +33,6 @@ class CreateCollective extends Base {
 		parent::configure();
 	}
 
-	/**
-	 * @param InputInterface  $input
-	 * @param OutputInterface $output
-	 *
-	 * @return int
-	 */
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$name = $input->getArgument('name');
 		$userId = $input->getOption('owner');

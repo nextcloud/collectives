@@ -10,17 +10,12 @@ use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
 
 class LazyFolder implements Folder {
-	private IRootFolder $rootFolder;
-	private string $rootPath;
 	private ?Folder $folder = null;
 
-	public function __construct(IRootFolder $rootFolder, string $rootPath) {
-		$this->rootFolder = $rootFolder;
-		$this->rootPath = $rootPath;
+	public function __construct(private IRootFolder $rootFolder, private string $rootPath) {
 	}
 
 	/**
-	 * @return Folder
 	 * @throws NotPermittedException
 	 */
 	private function getFolder(): Folder {
@@ -31,7 +26,7 @@ class LazyFolder implements Folder {
 					throw new NotFoundException('Not a folder: ' . $folder->getPath());
 				}
 				$this->folder = $folder;
-			} catch (NotFoundException $e) {
+			} catch (NotFoundException) {
 				$this->folder = $this->rootFolder->newFolder($this->rootPath);
 			}
 		}

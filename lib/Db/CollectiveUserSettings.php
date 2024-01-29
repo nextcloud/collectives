@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Db;
 
+use JsonException;
 use JsonSerializable;
 
 use OCA\Collectives\Service\NotPermittedException;
@@ -31,8 +32,6 @@ class CollectiveUserSettings extends Entity implements JsonSerializable {
 	protected ?string $settings = '{}';
 
 	/**
-	 * @param string $setting
-	 *
 	 * @throws NotPermittedException
 	 */
 	private static function checkSetting(string $setting): void {
@@ -42,11 +41,9 @@ class CollectiveUserSettings extends Entity implements JsonSerializable {
 	}
 
 	/**
-	 * @param string $setting
-	 *
 	 * @return mixed|null
 	 * @throws NotPermittedException
-	 * @throws \JsonException
+	 * @throws JsonException
 	 */
 	public function getSetting(string $setting) {
 		self::checkSetting($setting);
@@ -54,13 +51,10 @@ class CollectiveUserSettings extends Entity implements JsonSerializable {
 	}
 
 	/**
-	 * @param string $setting
-	 * @param mixed  $value
-	 *
 	 * @throws NotPermittedException
-	 * @throws \JsonException
+	 * @throws JsonException
 	 */
-	private function setSetting(string $setting, $value): void {
+	private function setSetting(string $setting, mixed $value): void {
 		self::checkSetting($setting);
 		$settings = json_decode($this->settings, true, 512, JSON_THROW_ON_ERROR) ?? [];
 		$settings[$setting] = $value;
@@ -69,10 +63,8 @@ class CollectiveUserSettings extends Entity implements JsonSerializable {
 	}
 
 	/**
-	 * @param int $pageOrder
-	 *
 	 * @throws NotPermittedException
-	 * @throws \JsonException
+	 * @throws JsonException
 	 */
 	public function setPageOrder(int $pageOrder): void {
 		if (!array_key_exists($pageOrder, Collective::pageOrders)) {
@@ -82,10 +74,8 @@ class CollectiveUserSettings extends Entity implements JsonSerializable {
 	}
 
 	/**
-	 * @param bool $showRecentPages
-	 *
 	 * @throws NotPermittedException
-	 * @throws \JsonException
+	 * @throws JsonException
 	 */
 	public function setShowRecentPages(bool $showRecentPages): void {
 		$this->setSetting('show_recent_pages', $showRecentPages);

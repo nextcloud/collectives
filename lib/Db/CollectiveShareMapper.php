@@ -19,20 +19,10 @@ use OCP\IDBConnection;
  * @template-extends QBMapper<CollectiveShare>
  */
 class CollectiveShareMapper extends QBMapper {
-	/**
-	 * CollectiveMapper constructor.
-	 *
-	 * @param IDBConnection $db
-	 */
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, 'collectives_shares', CollectiveShare::class);
 	}
 
-	/**
-	 * @param int $collectiveId
-	 *
-	 * @return CollectiveShare[]
-	 */
 	public function findByCollectiveId(int $collectiveId): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
@@ -44,10 +34,6 @@ class CollectiveShareMapper extends QBMapper {
 	}
 
 	/**
-	 * @param int    $collectiveId
-	 * @param string $userId
-	 *
-	 * @return CollectiveShare[]
 	 * @throws Exception
 	 */
 	public function findByCollectiveIdAndUser(int $collectiveId, string $userId): array {
@@ -62,11 +48,6 @@ class CollectiveShareMapper extends QBMapper {
 	}
 
 	/**
-	 * @param int    $collectiveId
-	 * @param int    $pageId
-	 * @param string $userId
-	 *
-	 * @return CollectiveShare
 	 * @throws DoesNotExistException
 	 * @throws MultipleObjectsReturnedException
 	 * @throws Exception
@@ -84,9 +65,6 @@ class CollectiveShareMapper extends QBMapper {
 	}
 
 	/**
-	 * @param string $token
-	 *
-	 * @return CollectiveShare
 	 * @throws DoesNotExistException
 	 * @throws MultipleObjectsReturnedException
 	 * @throws Exception
@@ -102,12 +80,6 @@ class CollectiveShareMapper extends QBMapper {
 	}
 
 	/**
-	 * @param int    $collectiveId
-	 * @param int    $pageId
-	 * @param string $token
-	 * @param string $userId
-	 *
-	 * @return CollectiveShare
 	 * @throws DoesNotExistException
 	 * @throws Exception
 	 * @throws MultipleObjectsReturnedException
@@ -126,12 +98,6 @@ class CollectiveShareMapper extends QBMapper {
 	}
 
 	/**
-	 * @param int    $collectiveId
-	 * @param int    $pageId
-	 * @param string $token
-	 * @param string $owner
-	 *
-	 * @return CollectiveShare
 	 * @throws Exception
 	 */
 	public function create(int $collectiveId, int $pageId, string $token, string $owner): CollectiveShare {
@@ -145,16 +111,13 @@ class CollectiveShareMapper extends QBMapper {
 	}
 
 	/**
-	 * @param string $token
-	 *
-	 * @return CollectiveShare
 	 * @throws Exception
 	 */
 	public function deleteByToken(string $token): ?CollectiveShare {
 		try {
 			$share = $this->findOneByToken($token);
 			return $this->delete($share);
-		} catch (MultipleObjectsReturnedException | DoesNotExistException $e) {
+		} catch (MultipleObjectsReturnedException | DoesNotExistException) {
 		}
 
 		return null;

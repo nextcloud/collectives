@@ -19,66 +19,41 @@ use OCP\ISession;
 use Psr\Log\LoggerInterface;
 
 class PublicCollectiveController extends PublicShareController {
-	private CollectiveShareMapper $collectiveShareMapper;
-	private CollectiveService $service;
-	private LoggerInterface $logger;
-
 	use ErrorHelper;
 
 	public function __construct(string $AppName,
 		IRequest $request,
-		CollectiveShareMapper $collectiveShareMapper,
-		CollectiveService $service,
+		private CollectiveShareMapper $collectiveShareMapper,
+		private CollectiveService $service,
 		ISession $session,
-		LoggerInterface $logger) {
+		private LoggerInterface $logger) {
 		parent::__construct($AppName, $request, $session);
-		$this->collectiveShareMapper = $collectiveShareMapper;
-		$this->service = $service;
-		$this->logger = $logger;
 	}
 
-	/**
-	 * @return string
-	 */
 	protected function getPasswordHash(): string {
 		return '';
 	}
 
-	/**
-	 * @return bool
-	 */
 	public function isValidToken(): bool {
 		try {
 			$this->collectiveShareMapper->findOneByToken($this->getToken());
-		} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
+		} catch (DoesNotExistException | MultipleObjectsReturnedException) {
 			return false;
 		}
 
 		return true;
 	}
 
-	/**
-	 * @return bool
-	 */
 	protected function isPasswordProtected(): bool {
 		return false;
 	}
 
-	/**
-	 * @param Closure $callback
-	 *
-	 * @return DataResponse
-	 */
 	private function prepareResponse(Closure $callback) : DataResponse {
 		return $this->handleErrorResponse($callback, $this->logger);
 	}
 
 	/**
 	 * @PublicPage
-	 *
-	 * @param int $pageId
-	 *
-	 * @return DataResponse
 	 */
 	public function get(int $pageId = 0): DataResponse {
 		return $this->prepareResponse(function () use ($pageId): array {

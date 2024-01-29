@@ -13,24 +13,16 @@ use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IRequest;
 
 class StartController extends Controller {
-	private IAppManager $appManager;
-	private IEventDispatcher $eventDispatcher;
-
 	public function __construct(string $AppName,
 		IRequest $request,
-		IAppManager $appManager,
-		IEventDispatcher $eventDispatcher
-	) {
+		private IAppManager $appManager,
+		private IEventDispatcher $eventDispatcher) {
 		parent::__construct($AppName, $request);
-		$this->appManager = $appManager;
-		$this->eventDispatcher = $eventDispatcher;
 	}
 
 	/**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 *
-	 * @return TemplateResponse
 	 */
 	public function index(): TemplateResponse {
 		if ($appsMissing = $this->checkDependencies()) {
@@ -47,18 +39,11 @@ class StartController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
-	 *
-	 * @param string $path
-	 *
-	 * @return TemplateResponse
 	 */
 	public function indexPath(string $path): TemplateResponse {
 		return $this->index();
 	}
 
-	/**
-	 * @return array
-	 */
 	private function checkDependencies(): array {
 		$apps = ['circles', 'files_versions', 'text', 'viewer'];
 		$appsMissing = [];

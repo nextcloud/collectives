@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Mount;
 
+use Exception;
+use OC;
 use OC\Files\Storage\Wrapper\Jail;
 use OC\Files\Storage\Wrapper\PermissionsMask;
 use OCA\Collectives\ACL\ACLStorageWrapper;
@@ -20,41 +22,22 @@ use OCP\IDBConnection;
 use OCP\IRequest;
 use OCP\IUser;
 use OCP\IUserSession;
+use OCP\Util;
+use RuntimeException;
 
 class CollectiveFolderManager {
 	private const SKELETON_DIR = 'skeleton';
 	private const LANDING_PAGE_TITLE = 'Readme';
 	private const SUFFIX = '.md';
 
-	private IRootFolder $rootFolder;
-	private IDBConnection $connection;
-	private IConfig $config;
-	private IUserSession $userSession;
-	private IRequest $request;
 	private ?string $rootPath = null;
-
 	private ?int $rootFolderStorageId = null;
 
-	/**
-	 * CollectiveFolderManager constructor.
-	 *
-	 * @param IRootFolder   $rootFolder
-	 * @param IDBConnection $connection
-	 * @param IConfig       $config
-	 * @param IUserSession  $userSession
-	 * @param IRequest      $request
-	 */
-	public function __construct(
-		IRootFolder $rootFolder,
-		IDBConnection $connection,
-		IConfig $config,
-		IUserSession $userSession,
-		IRequest $request) {
-		$this->rootFolder = $rootFolder;
-		$this->connection = $connection;
-		$this->config = $config;
-		$this->userSession = $userSession;
-		$this->request = $request;
+	public function __construct(private IRootFolder $rootFolder,
+		private IDBConnection $connection,
+		private IConfig $config,
+		private IUserSession $userSession,
+		private IRequest $request) {
 	}
 
 	public function getRootPath(): string {
@@ -64,54 +47,36 @@ class CollectiveFolderManager {
 
 		$instanceId = $this->config->getSystemValue('instanceid', null);
 		if (null === $instanceId) {
-			throw new \RuntimeException('no instance id!');
+			throw new RuntimeException('no instance id!');
 		}
 
 		$this->rootPath = 'appdata_' . $instanceId . '/collectives';
 		return $this->rootPath;
 	}
 
-	/**
-	 * @return Folder
-	 */
 	public function getRootFolder(): Folder {
 		return new LazyFolder($this->rootFolder, $this->getRootPath());
 	}
 
-	/**
-	 * @return string|null
-	 */
 	private function getCurrentUID(): ?string {
 		try {
 			// wopi requests are not logged in, instead we need to get the editor user from the access token
 			if (strpos($this->request->getRawPathInfo(), 'apps/richdocuments/wopi') && class_exists('OCA\Richdocuments\Db\WopiMapper')) {
-				$wopiMapper = \OC::$server->query('OCA\Richdocuments\Db\WopiMapper');
+				$wopiMapper = OC::$server->query('OCA\Richdocuments\Db\WopiMapper');
 				$token = $this->request->getParam('access_token');
 				if ($token) {
-					$wopi = $wopiMapper->getPathForToken($token);
-					return $wopi->getEditorUid();
+					return $wopiMapper->getPathForToken($token)->getEditorUid();
 				}
 			}
-		} catch (\Exception $e) {
+		} catch (Exception) {
 		}
 
-		$user = $this->userSession->getUser();
-		return $user ? $user->getUID() : null;
+		return $this->userSession->getUser()?->getUID();
 	}
 
 	/**
-	 * @param int                  $id
-	 * @param string               $mountPoint
-	 * @param int                  $permissions
-	 * @param ICacheEntry|null     $cacheEntry
-	 * @param IStorageFactory|null $loader
-	 * @param IUser|null           $user
-	 *
-	 * @return IMountPoint|null
 	 * @throws InvalidPathException
 	 * @throws NotFoundException
-	 *
-	 *
 	 */
 	public function getMount(int $id,
 		string $mountPoint,
@@ -122,7 +87,7 @@ class CollectiveFolderManager {
 		if (!$cacheEntry) {
 			try {
 				$folder = $this->getOrCreateFolder($id);
-			} catch (InvalidPathException | NotPermittedException $e) {
+			} catch (InvalidPathException | NotPermittedException) {
 				return null;
 			}
 			$cacheEntry = $this->getRootFolder()->getStorage()->getCache()->get($folder->getId());
@@ -135,7 +100,7 @@ class CollectiveFolderManager {
 		// apply acl before jail
 		if ($user) {
 			$inShare = $this->getCurrentUID() === null || $this->getCurrentUID() !== $user->getUID();
-			[$major, $minor, $micro] = \OCP\Util::getVersion();
+			[$major, $minor, $micro] = Util::getVersion();
 			$storage = new ACLStorageWrapper([
 				'storage' => $storage,
 				'permissions' => $permissions,
@@ -170,17 +135,11 @@ class CollectiveFolderManager {
 	}
 
 
-	/**
-	 * @param int $folderId
-	 *
-	 * @return string
-	 */
 	private function getJailPath(int $folderId): string {
 		return $this->getRootFolder()->getInternalPath() . '/' . $folderId;
 	}
 
 	/**
-	 * @return int
 	 * @throws NotFoundException
 	 */
 	private function getRootFolderStorageId(): int {
@@ -199,9 +158,6 @@ class CollectiveFolderManager {
 	}
 
 	/**
-	 * @param Folder $folder
-	 *
-	 * @return Folder
 	 * @throws NotPermittedException
 	 */
 	private function getSkeletonFolder(Folder $folder): Folder {
@@ -210,19 +166,13 @@ class CollectiveFolderManager {
 			if (!$skeletonFolder instanceof Folder) {
 				throw new NotFoundException('Not a folder: ' . $skeletonFolder->getPath());
 			}
-		} catch (NotFoundException $e) {
+		} catch (NotFoundException) {
 			$skeletonFolder = $folder->newFolder(self::SKELETON_DIR);
 		}
 
 		return $skeletonFolder;
 	}
 
-	/**
-	 * @param string $path
-	 * @param string $lang
-	 *
-	 * @return string
-	 */
 	public function getLandingPagePath(string $path, string $lang): string {
 		$landingPagePathEnglish = $path . '/' . self::LANDING_PAGE_TITLE . '.en' . self::SUFFIX;
 		$landingPagePathLocalized = $path . '/' . self::LANDING_PAGE_TITLE . '.' . $lang . self::SUFFIX;
@@ -231,10 +181,6 @@ class CollectiveFolderManager {
 	}
 
 	/**
-	 * @param int    $id
-	 * @param string $name
-	 *
-	 * @return array
 	 * @throws NotFoundException
 	 * @throws \OCP\DB\Exception
 	 */
@@ -255,9 +201,6 @@ class CollectiveFolderManager {
 	}
 
 	/**
-	 * @param int $id
-	 *
-	 * @return Folder
 	 * @throws InvalidPathException
 	 * @throws NotFoundException
 	 */
@@ -270,16 +213,13 @@ class CollectiveFolderManager {
 	}
 
 	/**
-	 * @param int $id
-	 *
-	 * @return Folder
 	 * @throws InvalidPathException
 	 * @throws NotPermittedException
 	 */
 	public function getOrCreateFolder(int $id): Folder {
 		try {
 			$folder = $this->getFolder($id);
-		} catch (NotFoundException $e) {
+		} catch (NotFoundException) {
 			$folder = $this->getSkeletonFolder($this->getRootFolder())
 				->copy($this->getRootFolder()->getPath() . '/' . $id);
 		}
@@ -288,10 +228,6 @@ class CollectiveFolderManager {
 	}
 
 	/**
-	 * @param int    $id
-	 * @param string $lang
-	 *
-	 * @return Folder
 	 * @throws InvalidPathException
 	 * @throws NotPermittedException
 	 */

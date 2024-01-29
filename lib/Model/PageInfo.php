@@ -58,9 +58,6 @@ class PageInfo extends Entity implements JsonSerializable {
 	protected ?int $parentId = null;
 	protected ?string $shareToken = null;
 
-	/**
-	 * @return array
-	 */
 	public function jsonSerialize(): array {
 		return [
 			'id' => $this->id,
@@ -81,12 +78,6 @@ class PageInfo extends Entity implements JsonSerializable {
 	}
 
 	/**
-	 * @param File        $file
-	 * @param int         $parentId
-	 * @param string|null $lastUserId
-	 * @param string|null $emoji
-	 * @param string|null  $subpageOrder
-	 *
 	 * @throws InvalidPathException
 	 * @throws NotFoundException
 	 */

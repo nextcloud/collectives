@@ -13,39 +13,23 @@ use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
 
 class PageController extends Controller {
-	private PageService $service;
-	private AttachmentService $attachmentService;
-	private IUserSession $userSession;
-	private LoggerInterface $logger;
-
 	use ErrorHelper;
 
-	public function __construct(string            $appName,
-		IRequest          $request,
-		PageService       $service,
-		AttachmentService $attachmentService,
-		IUserSession      $userSession,
-		LoggerInterface   $logger) {
+	public function __construct(string $appName,
+		IRequest $request,
+		private PageService $service,
+		private AttachmentService $attachmentService,
+		private IUserSession $userSession,
+		private LoggerInterface $logger) {
 		parent::__construct($appName, $request);
-		$this->service = $service;
-		$this->attachmentService = $attachmentService;
-		$this->userSession = $userSession;
-		$this->logger = $logger;
 	}
 
-	/**
-	 * @return string
-	 */
 	private function getUserId(): string {
 		return $this->userSession->getUser()->getUID();
 	}
 
 	/**
 	 * @NoAdminRequired
-	 *
-	 * @param int $collectiveId
-	 *
-	 * @return DataResponse
 	 */
 	public function index(int $collectiveId): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId): array {
@@ -59,11 +43,6 @@ class PageController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 *
-	 * @param int $collectiveId
-	 * @param int $id
-	 *
-	 * @return DataResponse
 	 */
 	public function get(int $collectiveId, int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $id): array {
@@ -77,12 +56,6 @@ class PageController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 *
-	 * @param int    $collectiveId
-	 * @param int    $parentId
-	 * @param string $title
-	 *
-	 * @return DataResponse
 	 */
 	public function create(int $collectiveId, int $parentId, string $title): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $title): array {
@@ -96,11 +69,6 @@ class PageController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 *
-	 * @param int $collectiveId
-	 * @param int $id
-	 *
-	 * @return DataResponse
 	 */
 	public function touch(int $collectiveId, int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $id): array {
@@ -114,15 +82,6 @@ class PageController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 *
-	 * @param int         $collectiveId
-	 * @param int         $id
-	 * @param int|null    $parentId
-	 * @param string|null $title
-	 * @param int|null    $index
-	 * @param bool        $copy
-	 *
-	 * @return DataResponse
 	 */
 	public function moveOrCopy(int $collectiveId, int $id, ?int $parentId = null, ?string $title = null, ?int $index = 0, bool $copy = false): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $id, $parentId, $title, $index, $copy): array {
@@ -138,15 +97,6 @@ class PageController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 *
-	 * @param int      $collectiveId
-	 * @param int      $id
-	 * @param int      $newCollectiveId
-	 * @param int|null $parentId
-	 * @param int|null $index
-	 * @param bool     $copy
-	 *
-	 * @return DataResponse
 	 */
 	public function moveOrCopyToCollective(int $collectiveId, int $id, int $newCollectiveId, ?int $parentId = null, ?int $index = 0, bool $copy = false): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $id, $newCollectiveId, $parentId, $index, $copy): array {
@@ -163,12 +113,6 @@ class PageController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 *
-	 * @param int         $collectiveId
-	 * @param int         $id
-	 * @param string|null $emoji
-	 *
-	 * @return DataResponse
 	 */
 	public function setEmoji(int $collectiveId, int $id, ?string $emoji = null): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $id, $emoji): array {
@@ -182,12 +126,6 @@ class PageController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 *
-	 * @param int         $collectiveId
-	 * @param int         $id
-	 * @param string|null $subpageOrder
-	 *
-	 * @return DataResponse
 	 */
 	public function setSubpageOrder(int $collectiveId, int $id, ?string $subpageOrder = null): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $id, $subpageOrder): array {
@@ -201,11 +139,6 @@ class PageController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 *
-	 * @param int $collectiveId
-	 * @param int $id
-	 *
-	 * @return DataResponse
 	 */
 	public function trash(int $collectiveId, int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $id): array {
@@ -219,11 +152,6 @@ class PageController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 *
-	 * @param int $collectiveId
-	 * @param int $id
-	 *
-	 * @return DataResponse
 	 */
 	public function getAttachments(int $collectiveId, int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $id): array {
@@ -237,11 +165,6 @@ class PageController extends Controller {
 
 	/**
 	 * @NoAdminRequired
-	 *
-	 * @param int $collectiveId
-	 * @param int $id
-	 *
-	 * @return DataResponse
 	 */
 	public function getBacklinks(int $collectiveId, int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $id): array {
