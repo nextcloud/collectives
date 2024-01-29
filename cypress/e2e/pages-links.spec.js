@@ -212,10 +212,7 @@ describe('Page Link Handling', function() {
 		it('Opens link with absolute path to page in this collective in same/new tab depending on view/edit mode', function() {
 			const href = '/index.php/apps/collectives/Link%20Testing/Link%20Target'
 			testLinkToSameTab(href)
-			// Broken in Text on Nextcloud 25
-			if (Cypress.env('ncVersion') !== 'stable25') {
-				testLinkToNewTab(href, { edit: true })
-			}
+			testLinkToNewTab(href, { edit: true })
 		})
 		it('Opens link with relative path to page in this collective with fileId in same/new tab depending on view/edit mode', function() {
 			// Link without origin and containing `fileId` param gets rewritten by editor rendering
@@ -240,10 +237,7 @@ describe('Page Link Handling', function() {
 		it('Opens link with relative path to page in this collective without fileId in same/new tab depending on view/edit mode', function() {
 			const href = './Link%20Target'
 			testLinkToSameTab(href)
-			// Broken in Text on Nextcloud 25
-			if (Cypress.env('ncVersion') !== 'stable25') {
-				testLinkToNewTab(href, { edit: true })
-			}
+			testLinkToNewTab(href, { edit: true })
 		})
 		it('Opens link with relative path to markdown file in this collective without fileId in same/new tab depending on view/edit mode', function() {
 			// TODO: We want '.md' to be stripped when opening the link
@@ -261,10 +255,7 @@ describe('Page Link Handling', function() {
 		it('Opens link with absolute path to page in other collective without fileId in same/new tab depending on view/edit mode', function() {
 			const href = '/index.php/apps/collectives/Another%20Collective/First%20Page'
 			testLinkToSameTab(href)
-			// Broken in Text on Nextcloud 25
-			if (Cypress.env('ncVersion') !== 'stable25') {
-				testLinkToNewTab(href, { edit: true })
-			}
+			testLinkToNewTab(href, { edit: true })
 		})
 		it('Opens link with relative path from index page to page in this collective with fileId in same/new tab depending on view/edit mode', function() {
 			cy.openPage('Parent')
@@ -299,10 +290,7 @@ describe('Page Link Handling', function() {
 		it('Opens link with absolute path to another Nextcloud app in new tab', function() {
 			const href = '/index.php/apps/contacts'
 			testLinkToNewTab(href)
-			// Broken in Text on Nextcloud 25
-			if (Cypress.env('ncVersion') !== 'stable25') {
-				testLinkToNewTab(href, { edit: true })
-			}
+			testLinkToNewTab(href, { edit: true })
 		})
 	})
 
@@ -361,11 +349,8 @@ describe('Page Link Handling', function() {
 			cy.logout()
 			cy.visit(`${shareUrl}/Link Source`)
 			const href = '/index.php/apps/collectives/Link%20Testing/Link%20Target'
-			// Broken in Text on Nextcloud 25
-			if (Cypress.env('ncVersion') !== 'stable25') {
-				testLinkToSameTab(href, { isPublic: true })
-				testLinkToNewTab(href, { edit: true, isPublic: true })
-			}
+			testLinkToSameTab(href, { isPublic: true })
+			testLinkToNewTab(href, { edit: true, isPublic: true })
 		})
 		it('Public share: opens link to external website in new tab', function() {
 			cy.logout()

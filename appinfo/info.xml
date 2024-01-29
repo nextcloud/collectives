@@ -43,7 +43,7 @@ In your Nextcloud instance, simply navigate to **»Apps«**, find the
 		https://raw.githubusercontent.com/nextcloud/collectives/main/docs/static/images/screenshot.png
 	</screenshot>
 	<dependencies>
-		<nextcloud min-version="25" max-version="28" />
+		<nextcloud min-version="26" max-version="28" />
 	</dependencies>
 	<background-jobs>
 		<job>OCA\Collectives\BackgroundJob\ExpirePageTrash</job>

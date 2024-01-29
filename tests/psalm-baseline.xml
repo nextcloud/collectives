@@ -43,17 +43,6 @@
       <code>NoExcludePropagatorStorageWrapper</code>
     </ConstructorSignatureMismatch>
   </file>
-  <file src="lib/Reference/PageReferenceProvider.php">
-    <UndefinedClass>
-      <code><![CDATA[$this->linkReferenceProvider]]></code>
-      <code><![CDATA[$this->linkReferenceProvider]]></code>
-      <code><![CDATA[$this->referenceManager]]></code>
-      <code>LinkReferenceProvider</code>
-      <code>LinkReferenceProvider</code>
-      <code>ReferenceManager</code>
-      <code>ReferenceManager</code>
-    </UndefinedClass>
-  </file>
   <file src="lib/Reference/SearchablePageReferenceProvider.php">
     <UndefinedClass>
       <code>ADiscoverableReferenceProvider</code>
