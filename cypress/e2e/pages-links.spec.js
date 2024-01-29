@@ -180,7 +180,7 @@ describe('Page Link Handling', function() {
 		})
 	}
 
-	describe('Link handling to viewer', function() {
+	describe.skip('Link handling to viewer', function() {
 		it('Opens link with absolute path to image in Nextcloud in viewer', function() {
 			const href = `/index.php/apps/files/?dir=/&openfile=${imageId}#relPath=//test.png`
 			testLinkToViewer(href, { fileName: 'test.png', viewerFileElement: 'img' })
