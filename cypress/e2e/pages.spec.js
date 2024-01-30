@@ -232,7 +232,7 @@ describe('Page', function() {
 				.should('not.exist')
 
 			// Restore image
-			cy.get('.attachment-list-deleted >>>>>>> button.action-item__menutoggle')
+			cy.get('.attachment-list-deleted button.action-item__menutoggle')
 				.click()
 			cy.get('button')
 				.contains('Restore')
@@ -311,7 +311,7 @@ describe('Page', function() {
 
 	describe('Using the search providers to search for a page', function() {
 		it('Search for page title', function() {
-			cy.get('.unified-search a, .unified-search button, button.unified-search__button').click()
+			cy.get('.unified-search a, button.unified-search__button, .unified-search-menu button').click()
 			cy.get('.unified-search__form input, .unified-search-modal input')
 				.type('Day')
 			cy.get('.unified-search__results-collectives-pages, .unified-search-modal__results')
@@ -319,7 +319,7 @@ describe('Page', function() {
 		})
 
 		it('Search for page content', function() {
-			cy.get('.unified-search a, .unified-search button, button.unified-search__button').click()
+			cy.get('.unified-search a, button.unified-search__button, .unified-search-menu button').click()
 			cy.get('.unified-search__form input, .unified-search-modal input')
 				.type('share your thoughts')
 			cy.get('.unified-search__results-collectives-page-content, .unified-search-modal__results')
