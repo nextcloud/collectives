@@ -2,9 +2,9 @@ OC.L10N.register(
     "collectives",
     {
     "Collectives" : "知識庫",
+    "Collective pages" : "知識庫頁面",
     "In collective %1$s" : "在知識庫 %1$s 中",
     "Last edition %1$s" : "上一版 %1$s",
-    "Collective pages" : "知識庫頁面",
     "Collectives - Page content" : "知識庫 - 頁面內容",
     "Collectives - Pages" : "知識庫 - 頁面",
     "Created collective \"%s\" for existing circle." : "為既有的小圈圈建立知識庫「%s」",

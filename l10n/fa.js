@@ -3,9 +3,9 @@ OC.L10N.register(
     {
     "Recent pages" : "Recent pages",
     "Collectives" : "Collectives",
+    "Collective pages" : "Collective pages",
     "In collective %1$s" : "In collective %1$s",
     "Last edition %1$s" : "Last edition %1$s",
-    "Collective pages" : "Collective pages",
     "Collectives - Page content" : "Collectives - Page content",
     "Collectives - Pages" : "Collectives - Pages",
     "Created collective \"%s\" for existing circle." : "Created collective \"%s\" for existing circle.",

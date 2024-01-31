@@ -1,8 +1,8 @@
 { "translations": {
     "Collectives" : "Colectivos",
+    "Collective pages" : "Páginas del colectivo",
     "In collective %1$s" : "En el colectivo %1$s",
     "Last edition %1$s" : "Última edición %1$s",
-    "Collective pages" : "Páginas del colectivo",
     "Collectives - Page content" : "Colectivos - Contenido de la página",
     "Collectives - Pages" : "Colectivos - Páginas",
     "Created collective \"%s\" for existing circle." : "Se creó el colectivo \"%s\" para el círculo existente.",

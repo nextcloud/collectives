@@ -3,9 +3,9 @@ OC.L10N.register(
     {
     "Recent pages" : "Legutóbbi oldalak",
     "Collectives" : "Kollektívák",
+    "Collective pages" : "Kollektíva oldalai",
     "In collective %1$s" : "A(z) %1$s kollektívában",
     "Last edition %1$s" : "Utolsó kiadás: %1$s",
-    "Collective pages" : "Kollektíva oldalai",
     "Collectives - Page content" : "Kollektívák – Oldaltartalom",
     "Collectives - Pages" : "Kollektívák – Oldalak",
     "Created collective \"%s\" for existing circle." : "A(z) „%s” kollektíva létrehozva a meglévő körhöz.",
