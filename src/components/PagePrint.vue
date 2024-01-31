@@ -6,42 +6,22 @@
 		<h1 v-else class="page-title page-title-subpage">
 			{{ pageTitleString }}
 		</h1>
-		<div v-if="useEditorApi"
-			ref="reader"
-			class="sheet-view"
-			data-collectives-el="reader" />
-		<RichTextReader v-else
-			class="editor__content"
-			:content="davContent" />
+		<div ref="reader" class="sheet-view" data-collectives-el="reader" />
 	</div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import { RichTextReader, AttachmentResolver, ATTACHMENT_RESOLVER } from '@nextcloud/text'
-import { getCurrentUser } from '@nextcloud/auth'
 import editorMixin from '../mixins/editorMixin.js'
 import pageContentMixin from '../mixins/pageContentMixin.js'
 
 export default {
 	name: 'PagePrint',
 
-	components: {
-		RichTextReader,
-	},
-
 	mixins: [
 		editorMixin,
 		pageContentMixin,
 	],
-
-	provide() {
-		const val = {}
-		Object.defineProperties(val, {
-			[ATTACHMENT_RESOLVER]: { get: () => this.attachmentResolver },
-		})
-		return val
-	},
 
 	props: {
 		page: {
@@ -60,20 +40,9 @@ export default {
 		...mapGetters([
 			'currentCollectiveTitle',
 			'pageDavUrl',
-			'pageDirectory',
 			'isPublic',
 			'shareTokenParam',
-			'useEditorApi',
 		]),
-
-		attachmentResolver() {
-			return new AttachmentResolver({
-				fileId: this.page.id,
-				currentDirectory: '/' + this.pageDirectory(this.page),
-				user: getCurrentUser(),
-				shareToken: this.shareTokenParam,
-			})
-		},
 
 		pageTitleString() {
 			return this.page.emoji ? `${this.page.emoji} ${this.page.title}` : this.page.title
@@ -83,16 +52,7 @@ export default {
 	mounted() {
 		this.$emit('loading')
 
-		let readerPromise
-		if (this.useEditorApi) {
-			readerPromise = this.setupReader()
-		} else {
-			readerPromise = new Promise((resolve) => {
-				resolve()
-			})
-		}
-
-		readerPromise.then(() => {
+		this.setupReader().then(() => {
 			this.getPageContent().then(() => {
 				this.$emit('ready')
 			})
@@ -110,7 +70,6 @@ export default {
 
 <style lang="scss" scoped>
 @import '../css/editor';
-@import '~@nextcloud/text/dist/style.css';
 
 .page-title {
 	font-size: 30px;
@@ -132,24 +91,6 @@ export default {
 
 :deep(.text-menubar) {
 	display: none;
-}
-
-/* TODO: remove once removing LegacyEditor.vue+Reader.vue */
-#read-only-editor {
-	overflow-x: hidden;
-}
-
-/* TODO: remove once removing LegacyEditor.vue+Reader.vue */
-:deep(.content-wrapper) {
-	display: block !important;
-}
-
-/* TODO: remove once removing LegacyEditor.vue+Reader.vue */
-:deep(.editor__content div.ProseMirror) {
-	margin-top: 0;
-	margin-bottom: 0;
-	padding-top: 0;
-	padding-bottom: 0;
 }
 
 :deep([data-collectives-el='reader'] .content-wrapper) {

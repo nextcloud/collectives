@@ -331,15 +331,6 @@ export default {
 			}
 		},
 
-		activeTextElement() {
-			const readerElement = document.getElementById('read-only-editor')
-			if (readerElement?.offsetParent) {
-				return readerElement
-			}
-
-			return document.getElementById('editor-container')
-		},
-
 		getActiveTextElement() {
 			return this.isTextEdit
 				? document.getElementById('editor-container')

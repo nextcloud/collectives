@@ -165,15 +165,6 @@ export default {
 				: generateRemoteUrl(`dav/files/${getters.pageDavPath(page)}`)
 		},
 
-		currentPageDirectory(_state, getters) {
-			return getters.pageDirectory(getters.currentPage)
-		},
-
-		pageDirectory: () => (page) => {
-			const { collectivePath, filePath } = page
-			return [collectivePath, filePath].filter(Boolean).join('/')
-		},
-
 		rootPage(state, getters) {
 			return getters.currentCollectiveIsPageShare
 				? state.pages[0]

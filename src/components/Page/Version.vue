@@ -32,14 +32,7 @@
 		<SkeletonLoading v-show="!contentLoaded" class="page-content-skeleton" type="text" />
 		<div v-show="contentLoaded"
 			id="text-container">
-			<div v-if="useEditorApi"
-				ref="reader"
-				data-collectives-el="reader" />
-			<Reader v-else
-				:key="`show-${currentPage.id}-${version.timestamp}`"
-				:current-page="currentPage"
-				:page-content="davContent"
-				data-collectives-el="reader" />
+			<div ref="reader" data-collectives-el="reader" />
 		</div>
 	</div>
 </template>
@@ -47,7 +40,6 @@
 <script>
 import { NcActionButton, NcActions, NcButton } from '@nextcloud/vue'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
-import Reader from './Reader.vue'
 
 import { getCurrentUser } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
@@ -71,7 +63,6 @@ export default {
 		NcActions,
 		NcButton,
 		RestoreIcon,
-		Reader,
 		SkeletonLoading,
 	},
 
@@ -86,7 +77,6 @@ export default {
 			'currentPage',
 			'isFullWidthView',
 			'loading',
-			'useEditorApi',
 			'title',
 			'version',
 		]),
@@ -122,10 +112,8 @@ export default {
 	},
 
 	mounted() {
-		if (this.useEditorApi) {
-			this.pageInfoBarPage = {}
-			this.setupReader()
-		}
+		this.pageInfoBarPage = {}
+		this.setupReader()
 		this.getPageContent()
 	},
 
