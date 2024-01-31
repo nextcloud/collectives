@@ -333,8 +333,8 @@ export default {
 
 		getActiveTextElement() {
 			return this.isTextEdit
-				? document.getElementById('editor-container')
-				: document.getElementById('read-only-editor')
+				? document.querySelector('[data-collectives-el="editor"]')
+				: document.querySelector('[data-collectives-el="reader"]')
 		},
 
 		scrollTo(attachment) {
