@@ -2,9 +2,9 @@ OC.L10N.register(
     "collectives",
     {
     "Collectives" : "Kolektywy",
+    "Collective pages" : "Strony kolektywu",
     "In collective %1$s" : "W kolektywie %1$s",
     "Last edition %1$s" : "Ostatnia edycja %1$s",
-    "Collective pages" : "Strony kolektywu",
     "Collectives - Page content" : "Kolektywy - Zawartość strony",
     "Collectives - Pages" : "Kolektywy - Strony",
     "Created collective \"%s\" for existing circle." : "Utworzono kolektyw \"%s\" dla istniejącego kręgu.",

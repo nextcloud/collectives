@@ -2,9 +2,9 @@ OC.L10N.register(
     "collectives",
     {
     "Collectives" : "Колективи",
+    "Collective pages" : "Колективни страници",
     "In collective %1$s" : "В колектив %1$s",
     "Last edition %1$s" : "Последно издание %1$s",
-    "Collective pages" : "Колективни страници",
     "Collectives - Page content" : "Колективи - Съдържание на страницата",
     "Collectives - Pages" : "Колективи - Страници",
     "Created collective \"%s\" for existing circle." : "Създаден е колектив \"%s\" за съществуващ кръг.",

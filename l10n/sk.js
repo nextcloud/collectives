@@ -3,9 +3,9 @@ OC.L10N.register(
     {
     "Recent pages" : "Nedávne stránky",
     "Collectives" : "Kolektívy",
+    "Collective pages" : "Kolektívy - stránky",
     "In collective %1$s" : "V kolektíve 1%1$s",
     "Last edition %1$s" : "Posledná úprava %1$s",
-    "Collective pages" : "Kolektívy - stránky",
     "Collectives - Page content" : "Kolektívy - obsah stránky",
     "Collectives - Pages" : "Kolektívy - stránky",
     "Created collective \"%s\" for existing circle." : "Vytvorený kolektív „%s“ pre existujúci kruh.",
