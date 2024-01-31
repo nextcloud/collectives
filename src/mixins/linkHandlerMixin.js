@@ -122,9 +122,5 @@ export default {
 				return true
 			}
 		},
-
-		toggleOutlineFromTextComponent() {
-			this.toggle('outline')
-		},
 	},
 }

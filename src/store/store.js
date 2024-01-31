@@ -62,10 +62,6 @@ export default new Store({
 			return apiVersion.localeCompare(requiredVersion, undefined, { numeric: true, sensitivity: 'base' }) >= 0
 		},
 
-		useEditorApi(_state, getters) {
-			return !!window.OCA?.Text?.createEditor && getters.editorApiVersionCheck('1.0')
-		},
-
 		editorApiFlags(_state, getters) {
 			const flags = []
 			if (getters.editorApiVersionCheck('1.1')) {
