@@ -59,6 +59,7 @@ OC.L10N.register(
     "Sharing" : "分享",
     "Versions" : "版本",
     "Link copied" : "已複製連結",
+    "Could not copy link to the clipboard:" : "無法複製連結至剪貼簿：",
     "A share for collective %s exists already" : "知識庫 %s 的分享已存在",
     "Copied" : "已複製",
     "Cannot copy" : "無法複製",
