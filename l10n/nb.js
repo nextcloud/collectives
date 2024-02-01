@@ -28,6 +28,7 @@ OC.L10N.register(
     "Cancel" : "Avbryt",
     "Only collective" : "Kun kollektivet",
     "Collective and circle" : "Kollektivet og sirkelen",
+    "Select emoji" : "Velg emoji",
     "Back" : "Tilbake",
     "Create" : "Opprett",
     "Select a collective" : "Velg et kollektiv",
