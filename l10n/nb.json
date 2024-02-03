@@ -37,6 +37,7 @@
     "Restore this version" : "Gjenopprett denne versjonen",
     "Reverted {page} to revision {timestamp}." : "Gjenoppretet {page} til versjon {timestamp}.",
     "Failed to revert {page} to revision {timestamp}." : "Klarte ikke å tilbakestille {page} til versjon {timestamp}.",
+    "Template" : "Mal",
     "Title" : "Navn",
     "Could not rename the page" : "Kunne ikke gi siden nytt navn",
     "Expand subpage list" : "Utvid undersideliste",
