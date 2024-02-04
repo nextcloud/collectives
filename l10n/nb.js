@@ -77,6 +77,7 @@ OC.L10N.register(
     "in Collective {collective}" : "i kollektivet {collective}",
     "Copied" : "Kopiert",
     "Cannot copy" : "Kan ikke kopiere",
+    "Copy share link" : "Kopier delingslenke",
     "Select a collective or create a new one on the left." : "Velg et kollektiv, eller opprett ett til venstre.",
     "Create collective for existing circle" : "Opprett kollektiv for eksisterende sirkel",
     "New collective name" : "Nytt navn på kollektiv",
