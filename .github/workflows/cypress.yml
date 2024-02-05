@@ -2,15 +2,13 @@ name: Cypress
 
 on: pull_request
 
-permissions:
-  contents: read
-
 concurrency:
   group: cypress-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 
 env:
-  APP_NAME: collectives
+  # Adjust APP_NAME if your repository name is different
+  APP_NAME: ${{ github.event.repository.name }}
   CYPRESS_baseUrl: http://localhost:8081/index.php
 
 jobs:
@@ -46,8 +44,7 @@ jobs:
               - '**.vue'
 
   init:
-    runs-on: ubuntu-22.04
-
+    runs-on: ubuntu-latest
     needs: changes
     if: needs.changes.outputs.src != 'false'
 
@@ -58,6 +55,9 @@ jobs:
     strategy:
       matrix:
         server-versions: ['stable27', 'master']
+
+    env:
+      PUPPETEER_SKIP_DOWNLOAD: true
 
     steps:
       - name: Checkout server
@@ -109,8 +109,8 @@ jobs:
         uses: skjnldsv/read-package-engines-version-actions@8205673bab74a63eb9b8093402fd9e0e018663a1 # v2.2
         id: versions
         with:
-          fallbackNode: '^20'
-          fallbackNpm: '^9'
+          fallbackNode: "^20"
+          fallbackNpm: "^9"
           path: apps/${{ env.APP_NAME }}
 
       - name: Set up node ${{ steps.versions.outputs.nodeVersion }}
@@ -129,14 +129,13 @@ jobs:
           npm run build --if-present
 
       - name: Save context
-        uses: actions/cache@ab5e6d0c87105b4c9c2047343972218f562e4319 # v4.0.1
+        uses: buildjet/cache/save@e376f15c6ec6dc595375c78633174c7e5f92dc0e # v3
         with:
           key: cypress-context-${{ matrix.server-versions }}-${{ github.run_id }}
           path: ./
 
   cypress:
-    runs-on: ubuntu-22.04
-
+    runs-on: ubuntu-latest
     needs: [changes, init]
     if: needs.changes.outputs.src != 'false'
 
@@ -162,18 +161,19 @@ jobs:
           - use-cypress-cloud: false
             containers: 3
 
+    name: runner ${{ matrix.containers }} (${{ matrix.server-versions }})
+
     steps:
       - name: Restore context
-        uses: actions/cache@ab5e6d0c87105b4c9c2047343972218f562e4319 # v4.0.1
+        uses: buildjet/cache/restore@e376f15c6ec6dc595375c78633174c7e5f92dc0e # v3
         with:
           fail-on-cache-miss: true
           key: cypress-context-${{ matrix.server-versions }}-${{ github.run_id }}
           path: ./
 
       - name: Set up node ${{ steps.versions.outputs.nodeVersion }}
-        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v3
+        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
         with:
-          cache: 'npm'
           node-version: ${{ steps.versions.outputs.nodeVersion }}
 
       - name: Set up npm ${{ steps.versions.outputs.npmVersion }}
@@ -222,8 +222,8 @@ jobs:
           ./occ collectives:create SearchTest --owner=bob
           ./occ collectives:index
 
-      - name: Cypress run
-        uses: cypress-io/github-action@v6
+      - name: Run E2E cypress tests
+        uses: cypress-io/github-action@1b70233146622b69e789ccdd4f9452adc638d25a # v6.6.1
         with:
           record: '${{ !!matrix.use-cypress-cloud }}'
           parallel: '${{ !!matrix.use-cypress-cloud }}'
@@ -236,19 +236,20 @@ jobs:
           # https://github.com/cypress-io/github-action/issues/124
           COMMIT_INFO_MESSAGE: ${{ github.event.pull_request.title }}
           COMMIT_INFO_SHA:  ${{ github.event.pull_request.head.sha }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           CYPRESS_ncVersion: ${{ matrix.server-versions }}
 
-      - name: Upload test failure screenshots
-        uses: actions/upload-artifact@v4
+      - name: Upload snapshots
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         if: failure()
         with:
           name: Screenshots.${{ matrix.server-versions }}-${{ matrix.containers }}
           path: apps/${{ env.APP_NAME }}/cypress/screenshots/
           retention-days: 5
 
-      - name: Upload nextcloud logs
-        uses: actions/upload-artifact@v4
+      - name: Upload NC logs
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         if: always()
         with:
           name: ${{ matrix.server-versions }}-${{ matrix.containers }}.log
@@ -256,8 +257,6 @@ jobs:
           retention-days: 5
 
   summary:
-    permissions:
-      contents: none
     runs-on: ubuntu-latest
     needs: [changes, init, cypress]
 
