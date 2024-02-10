@@ -23,7 +23,7 @@
         "nextcloud/ocp": "dev-stable25",
         "phpunit/phpunit": "^9.5",
         "psalm/phar": "^5.4",
-        "rector/rector": "^0.19.2"
+        "rector/rector": "^1.0.0"
     },
     "scripts": {
       "lint": "find . -name \\*.php -not -path './vendor/*' -exec php -l \"{}\" \\;",
