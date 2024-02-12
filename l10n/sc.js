@@ -33,6 +33,7 @@ OC.L10N.register(
     "Unshare" : "Annulla sa cumpartzidura",
     "Create a new share link" : "Crea unu ligòngiu de cumpartzidura nou",
     "Share link" : "Cumpartzi ligòngiu",
+    "View only" : "Isceti in visualizatzione",
     "Can edit" : "Podet modificare",
     "Cannot copy, please copy the link manually" : "No at fatu a copiare, copia su ligòngiu a manu",
     "Download" : "Iscàrriga",
