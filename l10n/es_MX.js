@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "You are not allowed to share %s" : "No tienes permitido compartir %s",
     "Settings" : "Ajustes",
+    "Preparing collective for exporting or printing" : "Preparando colección para exportación o impresión",
     "Members" : "Miembros",
     "Remove" : "Borrar",
     "Loading…" : "Cargando...",
