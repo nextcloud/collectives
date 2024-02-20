@@ -17,7 +17,6 @@ use OCP\Collaboration\Reference\ISearchableReferenceProvider;
 use OCP\Collaboration\Reference\Reference;
 use OCP\IDateTimeFormatter;
 use OCP\IL10N;
-
 use OCP\IURLGenerator;
 use Throwable;
 
@@ -75,21 +74,28 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 	public function resolveReference(string $referenceText): ?IReference {
 		if ($this->matchReference($referenceText)) {
 			$pageReferenceInfo = $this->getPagePathFromDirectLink($referenceText);
-			// TODO should it work if the fileId GET param is not there?
-			if (!$pageReferenceInfo || !isset($pageReferenceInfo['fileId'])) {
+			if (!$pageReferenceInfo) {
 				// fallback to opengraph if it matches, but somehow we can't resolve
 				return $this->linkReferenceProvider->resolveReference($referenceText);
 			}
 
-			$pageFileId = $pageReferenceInfo['fileId'];
 			$collectiveName = $pageReferenceInfo['collectiveName'];
 			try {
 				$collective = $this->collectiveService->findCollectiveByName($this->userId, $collectiveName);
-				$page = $this->pageService->findByFileId($collective->getId(), $pageFileId, $this->userId);
+				if ($pageReferenceInfo['fileId']) {
+					$page = $this->pageService->findByFileId($collective->getId(), $pageReferenceInfo['fileId'], $this->userId);
+				} else {
+					$page = $this->pageService->findByPath($collective->getId(), $pageReferenceInfo['pagePath'], $this->userId);
+				}
 			} catch (Exception | Throwable) {
 				// fallback to opengraph if it matches, but somehow we can't resolve
 				return $this->linkReferenceProvider->resolveReference($referenceText);
 			}
+			if (!$page) {
+				// fallback to opengraph if it matches, but somehow we can't resolve
+				return $this->linkReferenceProvider->resolveReference($referenceText);
+			}
+
 			$pageReferenceInfo['collective'] = $collective;
 			$pageReferenceInfo['page'] = $page;
 
