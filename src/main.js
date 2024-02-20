@@ -31,6 +31,11 @@ import VTooltip from '@nextcloud/vue/dist/Directives/Tooltip.js'
 
 import './shared-init.js'
 
+window.OCA.Collectives = {
+	...window.OCA.Collectives,
+	vueRouter: router,
+}
+
 // Register global directives
 Vue.directive('Tooltip', VTooltip)
 

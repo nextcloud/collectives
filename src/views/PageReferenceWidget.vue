@@ -20,7 +20,11 @@
   -->
 
 <template>
-	<div v-if="richObject" class="collective-page">
+	<a v-if="richObject"
+		:href="richObject.link"
+		target="_blank"
+		class="collective-page"
+		@click="clickLink">
 		<div class="collective-page--image">
 			<span v-if="emoji"
 				class="page-emoji">
@@ -32,9 +36,7 @@
 		<div class="collective-page--info">
 			<div class="line">
 				<strong>
-					<a :href="richObject.link" target="_blank">
-						{{ richObject.page.title }}
-					</a>
+					{{ richObject.page.title }}
 				</strong>
 			</div>
 			<div class="description">
@@ -46,12 +48,13 @@
 					:display-name="richObject.page.lastUserDisplayName" />
 			</div>
 		</div>
-	</div>
+	</a>
 </template>
 
 <script>
 import PageIcon from '../components/Icon/PageIcon.vue'
 import NcUserBubble from '@nextcloud/vue/dist/Components/NcUserBubble.js'
+import { generateUrl } from '@nextcloud/router'
 
 export default {
 	name: 'PageReferenceWidget',
@@ -81,6 +84,20 @@ export default {
 			return this.richObject.page.emoji
 		},
 	},
+
+	methods: {
+		clickLink(event) {
+			const appUrl = '/apps/collectives'
+			const linkUrl = new URL(this.richObject.link, window.location)
+			// Only consider rerouting if we're inside the collectives app and for links to collectives app
+			if (OCA.Collectives?.vueRouter
+				&& linkUrl.pathname.toString().startsWith(generateUrl(appUrl))) {
+				event.preventDefault()
+				const collectivesUrl = linkUrl.href.substring(linkUrl.href.indexOf(appUrl) + appUrl.length)
+				OCA.Collectives.vueRouter.push(collectivesUrl)
+			}
+		},
+	},
 }
 </script>
 
@@ -88,15 +105,10 @@ export default {
 .collective-page {
 	width: 100%;
 	white-space: normal;
-	padding: 12px;
+	padding: 12px !important;
 	display: flex;
-
-	a {
-		padding: 0 !important;
-		&:not(:hover) {
-			text-decoration: unset !important;
-		}
-	}
+	text-decoration: unset !important;
+	color: var(--color-main-text) !important;
 
 	&--image {
 		margin-right: 12px;
