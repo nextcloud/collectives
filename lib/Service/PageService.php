@@ -477,6 +477,39 @@ class PageService {
 	}
 
 	/**
+	 * @throws NotFoundException
+	 */
+	public function findByPath(int $collectiveId, string $path, string $userId): PageInfo {
+		$collectiveFolder = $this->getCollectiveFolder($collectiveId, $userId);
+		$pages = $this->getPagesFromFolder($collectiveId, $collectiveFolder, $userId);
+		foreach ($pages as $pageInfo) {
+			if ($pageInfo->getFileName() === 'Readme.md') {
+				$parentPage = $pageInfo;
+				break;
+			}
+		}
+
+		if (!$parentPage) {
+			throw new NotFoundException('Failed to get landing page of collective ' . $collectiveId);
+		}
+
+		foreach (explode('/', $path) as $title) {
+			foreach ($pages as $pageInfo) {
+				if ($pageInfo->getTitle() === $title && $parentPage->getId() === $pageInfo->getParentId()) {
+					$matchingPage = $pageInfo;
+					break;
+				}
+			}
+			if (!$matchingPage) {
+				throw new NotFoundException('Failed to get page by path ' . $path . ' in collective ' . $collectiveId);
+			}
+			$parentPage = $matchingPage;
+		}
+
+		return $parentPage;
+	}
+
+	/**
 	 * @throws FilesNotFoundException
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
