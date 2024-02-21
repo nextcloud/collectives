@@ -31,7 +31,7 @@
 		</template>
 
 		<template v-if="addableCircles.length !== 0">
-			<NcAppNavigationCaption :name="t('collectives', 'Add circles')"
+			<NcAppNavigationCaption :name="t('collectives', 'Add teams')"
 				class="member-picker-caption" />
 			<Member v-for="item in addableCircles"
 				:key="generateKey(item)"

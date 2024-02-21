@@ -204,7 +204,7 @@ export default {
 		getRenameLabel() {
 			return this.isCollectiveOwner(this.collective)
 				? t('collectives', 'Name of the collective')
-				: t('collectives', 'Renaming is limited to owners of the circle')
+				: t('collectives', 'Renaming is limited to owners of the team')
 		},
 
 		isNameTooShort() {

@@ -31,9 +31,9 @@
 						class="circle-selector"
 						:append-to-body="false"
 						:options="circles"
-						:placeholder="t('collectives', 'Select a circle...')" />
+						:placeholder="t('collectives', 'Select a team...')" />
 					<NcButton v-if="anyCircle && !pickCircle"
-						:title="t('collectives', 'Select an existing circle')"
+						:title="t('collectives', 'Select an existing team')"
 						type="tertiary"
 						@click.stop.prevent="startSelectCircle">
 						<template #icon>
@@ -41,7 +41,7 @@
 						</template>
 					</NcButton>
 					<NcButton v-if="anyCircle && pickCircle"
-						:title="t('collectives', 'Cancel selecting a circle')"
+						:title="t('collectives', 'Cancel selecting a team')"
 						type="tertiary"
 						@click.stop.prevent="stopSelectCircle">
 						<template #icon>
@@ -58,7 +58,7 @@
 					</div>
 				</div>
 
-				<NcEmptyContent :title="t('collectives', 'Enter the new collective name or pick a circle')"
+				<NcEmptyContent :title="t('collectives', 'Enter the new collective name or pick an existing team')"
 					class="empty-content">
 					<template #icon>
 						<CollectivesIcon :size="20" />

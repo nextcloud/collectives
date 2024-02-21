@@ -72,7 +72,7 @@ describe('Collectives trash', function() {
 			cy.openTrashedCollectiveMenu('Delete me')
 			cy.clickMenuButton('Delete permanently')
 			cy.get('button')
-				.contains('Collective and circle')
+				.contains('Collective and team')
 				.click()
 			cy.get('#app-navigation-vue #collectives-trash').should('not.exist')
 		})
