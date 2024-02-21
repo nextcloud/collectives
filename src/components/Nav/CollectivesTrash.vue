@@ -52,7 +52,7 @@
 					{{ t('collectives', 'Permanently delete collective »{collective}«', { collective: modalCollective.name }) }}
 				</h2>
 				<div>
-					{{ t('collectives', 'Delete corresponding circle along with the collective?') }}
+					{{ t('collectives', 'Delete corresponding team along with the collective?') }}
 				</div>
 				<div class="three_buttons">
 					<NcButton @click="closeDeleteModal">
@@ -64,13 +64,13 @@
 					<NcButton v-if="isCollectiveOwner(modalCollective)"
 						type="error"
 						@click="deleteCollective(modalCollective, true)">
-						{{ t('collectives', 'Collective and circle') }}
+						{{ t('collectives', 'Collective and team') }}
 					</NcButton>
 					<NcButton v-else
 						type="primary"
 						disabled
-						:title="t('collectives', 'Only circle owners can delete a circle')">
-						{{ t('collectives', 'Collective and circle') }}
+						:title="t('collectives', 'Only team owners can delete a team')">
+						{{ t('collectives', 'Collective and team') }}
 					</NcButton>
 				</div>
 			</div>
