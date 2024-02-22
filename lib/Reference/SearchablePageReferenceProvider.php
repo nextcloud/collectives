@@ -9,7 +9,9 @@ use Exception;
 use OC\Collaboration\Reference\LinkReferenceProvider;
 use OC\Collaboration\Reference\ReferenceManager;
 use OCA\Collectives\AppInfo\Application;
+use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Service\CollectiveService;
+use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\PageService;
 use OCP\Collaboration\Reference\ADiscoverableReferenceProvider;
 use OCP\Collaboration\Reference\IReference;
@@ -85,7 +87,20 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 				if ($pageReferenceInfo['fileId']) {
 					$page = $this->pageService->findByFileId($collective->getId(), $pageReferenceInfo['fileId'], $this->userId);
 				} else {
-					$page = $this->pageService->findByPath($collective->getId(), $pageReferenceInfo['pagePath'], $this->userId);
+					try {
+						$page = $this->pageService->findByPath($collective->getId(), $pageReferenceInfo['pagePath'], $this->userId);
+					} catch (NotFoundException) {
+						$pathInfo = pathinfo($pageReferenceInfo['pagePath']);
+						if ('.' . $pathInfo['extension'] === PageInfo::SUFFIX) {
+							if ($pathInfo['filename'] === PageInfo::INDEX_PAGE_TITLE) {
+								// try to find page by stripping `/Readme.md`
+								$page = $this->pageService->findByPath($collective->getId(), $pathInfo['dirname'], $this->userId);
+							} else {
+								// try to find page by stripping `.md`
+								$page = $this->pageService->findByPath($collective->getId(), $pathInfo['filename'], $this->userId);
+							}
+						}
+					}
 				}
 			} catch (Exception | Throwable) {
 				// fallback to opengraph if it matches, but somehow we can't resolve
@@ -99,7 +114,8 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 			$pageReferenceInfo['collective'] = $collective;
 			$pageReferenceInfo['page'] = $page;
 
-			$reference = new Reference($referenceText);
+			$link = $this->urlGenerator->linkToRouteAbsolute('collectives.start.index') . $this->pageService->getPageLink($collective->getName(), $page);
+			$reference = new Reference($link);
 			$pageEmoji = $page->getEmoji();
 			$refTitle = $pageEmoji ? $pageEmoji . ' ' . $page->getTitle() : $page->getTitle();
 			$reference->setTitle($refTitle);
@@ -119,8 +135,8 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 			);
 			$reference->setImageUrl($imageUrl);
 
-			$pageReferenceInfo['link'] = $referenceText;
-			$reference->setUrl($referenceText);
+			$pageReferenceInfo['link'] = $link;
+			$reference->setUrl($link);
 
 			$reference->setRichObject(
 				self::RICH_OBJECT_TYPE,
