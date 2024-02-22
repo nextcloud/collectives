@@ -477,25 +477,25 @@ class PageService {
 	}
 
 	/**
+	 * @throws MissingDependencyException
 	 * @throws NotFoundException
+	 * @throws NotPermittedException
 	 */
 	public function findByPath(int $collectiveId, string $path, string $userId): PageInfo {
 		$collectiveFolder = $this->getCollectiveFolder($collectiveId, $userId);
-		$pages = $this->getPagesFromFolder($collectiveId, $collectiveFolder, $userId);
-		foreach ($pages as $pageInfo) {
-			if ($pageInfo->getFileName() === 'Readme.md') {
-				$parentPage = $pageInfo;
-				break;
-			}
+		$landingPageId = $this->getIndexPageFile($collectiveFolder)->getId();
+
+		if ($path === '' || $path === '/') {
+			// Return landing page
+			return $this->findByFileId($collectiveId, $landingPageId, $userId);
 		}
 
-		if (!$parentPage) {
-			throw new NotFoundException('Failed to get landing page of collective ' . $collectiveId);
-		}
-
+		$parentPageId = $landingPageId;
+		$allPages = $this->findAll($collectiveId, $userId);
 		foreach (explode('/', $path) as $title) {
-			foreach ($pages as $pageInfo) {
-				if ($pageInfo->getTitle() === $title && $parentPage->getId() === $pageInfo->getParentId()) {
+			$matchingPage = null;
+			foreach ($allPages as $pageInfo) {
+				if ($pageInfo->getTitle() === $title && $pageInfo->getParentId() === $parentPageId) {
 					$matchingPage = $pageInfo;
 					break;
 				}
@@ -503,10 +503,10 @@ class PageService {
 			if (!$matchingPage) {
 				throw new NotFoundException('Failed to get page by path ' . $path . ' in collective ' . $collectiveId);
 			}
-			$parentPage = $matchingPage;
+			$parentPageId = $matchingPage->getId();
 		}
 
-		return $parentPage;
+		return $matchingPage;
 	}
 
 	/**
