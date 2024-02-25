@@ -2,7 +2,7 @@ OC.L10N.register(
     "collectives",
     {
     "You are not allowed to share %s" : "No tenes su permissu de cumpartzire %s",
-    "Settings" : "Impostatziones",
+    "Settings" : "Cunfiguratzione",
     "Members" : "Membros",
     "No search results" : "Perunu resurtadu de chirca",
     "Remove" : "Boga",
