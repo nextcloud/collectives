@@ -22,6 +22,7 @@ use OCA\Collectives\Search\CollectiveProvider;
 use OCA\Collectives\Search\PageContentProvider;
 use OCA\Collectives\Search\PageProvider;
 use OCA\Collectives\Service\CollectiveHelper;
+use OCA\Collectives\Team\CollectiveTeamResourceProvider;
 use OCA\Collectives\Trash\PageTrashBackend;
 use OCA\Collectives\Trash\PageTrashManager;
 use OCA\Collectives\Versions\VersionsBackend;
@@ -101,6 +102,10 @@ class Application extends App implements IBootstrap {
 
 		if (\interface_exists(IAPIWidgetV2::class)) {
 			$context->registerDashboardWidget(RecentPagesWidget::class);
+		}
+
+		if (method_exists($context, 'registerTeamResourceProvider')) {
+			$context->registerTeamResourceProvider(CollectiveTeamResourceProvider::class);
 		}
 	}
 
