@@ -171,13 +171,13 @@ describe('Page Link Handling', function() {
 			const calledUrl = edit
 				? url.href
 				: href
-			/*
-			cy.get('@open')
-				.should('be.calledWith', calledUrl)
-				.then(() => {
-					openStub.restore()
-				})
-			 */
+			if (['stable26', 'stable27', 'stable28'].includes(Cypress.env('ncVersion'))) {
+				cy.get('@open')
+					.should('be.calledWith', calledUrl)
+					.then(() => {
+						openStub.restore()
+					})
+			}
 
 			const encodedCollectiveName = encodeURIComponent('Link Testing')
 			const pathname = isPublic
