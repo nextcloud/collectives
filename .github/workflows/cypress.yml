@@ -129,7 +129,7 @@ jobs:
           npm run build --if-present
 
       - name: Save context
-        uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # v4.0.0
+        uses: actions/cache@ab5e6d0c87105b4c9c2047343972218f562e4319 # v4.0.1
         with:
           key: cypress-context-${{ matrix.server-versions }}-${{ github.run_id }}
           path: ./
@@ -164,7 +164,7 @@ jobs:
 
     steps:
       - name: Restore context
-        uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # v4.0.0
+        uses: actions/cache@ab5e6d0c87105b4c9c2047343972218f562e4319 # v4.0.1
         with:
           fail-on-cache-miss: true
           key: cypress-context-${{ matrix.server-versions }}-${{ github.run_id }}
