@@ -531,72 +531,74 @@ describe('Page Link Handling', function() {
 	})
 
 	describe('Link handling public share', function() {
-		let shareUrl
+		if (['stable26', 'stable27', 'stable28'].includes(Cypress.env('ncVersion'))) {
+			let shareUrl
 
-		it('Share the collective', function() {
-			cy.visit('/apps/collectives', {
-				onBeforeLoad(win) {
-					// navigator.clipboard doesn't exist on HTTP requests (in CI), so let's create it
-					if (!win.navigator.clipboard) {
-						win.navigator.clipboard = {
-							__proto__: {
-								writeText: () => {},
-							},
+			it('Share the collective', function() {
+				cy.visit('/apps/collectives', {
+					onBeforeLoad(win) {
+						// navigator.clipboard doesn't exist on HTTP requests (in CI), so let's create it
+						if (!win.navigator.clipboard) {
+							win.navigator.clipboard = {
+								__proto__: {
+									writeText: () => {},
+								},
+							}
 						}
-					}
-					// overwrite navigator.clipboard.writeText with cypress stub
-					cy.stub(win.navigator.clipboard, 'writeText', (text) => {
-						shareUrl = text
-					})
-						.as('clipBoardWriteText')
-				},
+						// overwrite navigator.clipboard.writeText with cypress stub
+						cy.stub(win.navigator.clipboard, 'writeText', (text) => {
+							shareUrl = text
+						})
+							.as('clipBoardWriteText')
+					},
+				})
+				cy.openCollectiveMenu('Link Testing')
+				cy.clickMenuButton('Share with guests')
+				cy.intercept('POST', '**/_api/*/share').as('createShare')
+				cy.get('.sharing-entry button.new-share-link')
+					.click()
+				cy.wait('@createShare')
+				cy.get('.sharing-entry .share-select')
+					.click()
+				cy.intercept('PUT', '**/_api/*/share/*').as('updateShare')
+				cy.get('.sharing-entry .share-select .dropdown-item')
+					.contains('Can edit')
+					.click()
+				cy.wait('@updateShare')
+				cy.get('button.sharing-entry__copy')
+					.click()
+				cy.get('@clipBoardWriteText').should('have.been.calledOnce')
 			})
-			cy.openCollectiveMenu('Link Testing')
-			cy.clickMenuButton('Share with guests')
-			cy.intercept('POST', '**/_api/*/share').as('createShare')
-			cy.get('.sharing-entry button.new-share-link')
-				.click()
-			cy.wait('@createShare')
-			cy.get('.sharing-entry .share-select')
-				.click()
-			cy.intercept('PUT', '**/_api/*/share/*').as('updateShare')
-			cy.get('.sharing-entry .share-select .dropdown-item')
-				.contains('Can edit')
-				.click()
-			cy.wait('@updateShare')
-			cy.get('button.sharing-entry__copy')
-				.click()
-			cy.get('@clipBoardWriteText').should('have.been.calledOnce')
-		})
-		it('Public share in view mode: opens link with absolute path to page in this collective in same tab', function() {
-			cy.logout()
-			cy.visit(`${shareUrl}/Link Source`)
-			const href = '/index.php/apps/collectives/Link%20Testing/Link%20Target'
-			testLinkToSameTab(href, { isPublic: true })
-		})
-		it('Public share in edit mode: opens link with absolute path to page in this collective in same tab', function() {
-			cy.logout()
-			cy.visit(`${shareUrl}/Link Source`)
-			const href = '/index.php/apps/collectives/Link%20Testing/Link%20Target'
-			cy.switchToEditMode()
-			if (!['stable26', 'stable27', 'stable28'].includes(Cypress.env('ncVersion'))) {
-				testLinkToSameTab(href, { edit: true, isPublic: true })
-			} else {
+			it('Public share in view mode: opens link with absolute path to page in this collective in same tab', function() {
+				cy.logout()
+				cy.visit(`${shareUrl}/Link Source`)
+				const href = '/index.php/apps/collectives/Link%20Testing/Link%20Target'
+				testLinkToSameTab(href, { isPublic: true })
+			})
+			it('Public share in edit mode: opens link with absolute path to page in this collective in same tab', function() {
+				cy.logout()
+				cy.visit(`${shareUrl}/Link Source`)
+				const href = '/index.php/apps/collectives/Link%20Testing/Link%20Target'
+				cy.switchToEditMode()
+				if (!['stable26', 'stable27', 'stable28'].includes(Cypress.env('ncVersion'))) {
+					testLinkToSameTab(href, { edit: true, isPublic: true })
+				} else {
+					testLinkToNewTab(href, { edit: true, isPublic: true })
+				}
+			})
+			it('Public share in view mode: opens link to external website in new tab', function() {
+				cy.logout()
+				cy.visit(`${shareUrl}/Link Source`)
+				const href = 'http://example.org/'
+				testLinkToNewTab(href, { isPublic: true })
+			})
+			it('Public share in edit mode: opens link to external website in new tab', function() {
+				cy.logout()
+				cy.visit(`${shareUrl}/Link Source`)
+				const href = 'http://example.org/'
+				cy.switchToEditMode()
 				testLinkToNewTab(href, { edit: true, isPublic: true })
-			}
-		})
-		it('Public share in view mode: opens link to external website in new tab', function() {
-			cy.logout()
-			cy.visit(`${shareUrl}/Link Source`)
-			const href = 'http://example.org/'
-			testLinkToNewTab(href, { isPublic: true })
-		})
-		it('Public share in edit mode: opens link to external website in new tab', function() {
-			cy.logout()
-			cy.visit(`${shareUrl}/Link Source`)
-			const href = 'http://example.org/'
-			cy.switchToEditMode()
-			testLinkToNewTab(href, { edit: true, isPublic: true })
-		})
+			})
+		}
 	})
 })
