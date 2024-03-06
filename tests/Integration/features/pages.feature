@@ -11,7 +11,7 @@ Feature: pages
     Then user "jane" sees attachment "test.png" with mimetype "image/png" for "firstpage" in "BehatPagesCollective"
 
   Scenario: Join collective (with pages) and create subpage
-    When user "alice" joins circle "BehatPagesCollective" with owner "jane"
+    When user "alice" joins team "BehatPagesCollective" with owner "jane"
     And user "alice" creates page "subpage" with parentPath "firstpage.md" in "BehatPagesCollective"
     Then user "jane" sees pagePath "firstpage/subpage.md" in "BehatPagesCollective"
     And user "jane" doesn't see pagePath "firstpage.md" in "BehatPagesCollective"
@@ -86,7 +86,7 @@ Feature: pages
     And user "jane" sees pagePath "parentpage/Readme.md" in "BehatPagesCollective"
 
   Scenario: Fail to restore+delete pages in read-only collective
-    When user "alice" joins circle "BehatPagesCollective" with owner "jane"
+    When user "alice" joins team "BehatPagesCollective" with owner "jane"
     And user "jane" sets "edit" level in collective "BehatPagesCollective" to "Admin"
     Then user "alice" fails to restore page "subpage" from trash in "BehatPagesCollective"
     When user "alice" fails to delete page "subpage" from trash in "BehatPagesCollective"
@@ -101,7 +101,7 @@ Feature: pages
     Then user "jane" restores page "parentpage" from trash in "BehatPagesCollective"
 
   Scenario: Fail to edit pages in read-only collective
-    When user "john" joins circle "BehatPagesCollective" with owner "jane"
+    When user "john" joins team "BehatPagesCollective" with owner "jane"
     And user "jane" sets "edit" level in collective "BehatPagesCollective" to "Admin"
     Then user "john" fails to create page "johnspage" with parentPath "Readme.md" in "BehatPagesCollective"
     And user "john" fails to touch page "secondpage" in "BehatPagesCollective"
@@ -110,8 +110,8 @@ Feature: pages
     And user "john" fails to set subpageOrder for page "secondpage" to "[]" in "BehatPagesCollective"
     And user "john" fails to trash page "secondpage" in "BehatPagesCollective"
 
-  Scenario: Trash and delete collective and circle with all remaining pages
+  Scenario: Trash and delete collective and team with all remaining pages
     Then user "jane" trashes collective "BehatPagesCollective"
     Then user "jane" trashes collective "BehatPagesCollective2"
-    And user "jane" deletes collective+circle "BehatPagesCollective"
-    And user "jane" deletes collective+circle "BehatPagesCollective2"
+    And user "jane" deletes collective+team "BehatPagesCollective"
+    And user "jane" deletes collective+team "BehatPagesCollective2"

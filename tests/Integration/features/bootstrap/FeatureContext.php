@@ -72,7 +72,7 @@ class FeatureContext implements Context {
 
 		$intLevel = array_search($level, self::CIRCLE_MEMBER_LEVEL, true);
 		if (!$intLevel) {
-			throw new RuntimeException('Could not verify circle member level ' . $level);
+			throw new RuntimeException('Could not verify team member level ' . $level);
 		}
 
 		$formData = new TableNode([['level', $intLevel]]);
@@ -272,14 +272,14 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user deletes collective+circle :collective
-	 * @When user :user :fails to delete collective+circle :collective
-	 * @When user :user :fails to delete collective+circle :collective with admin :admin
-	 * @When user :user :fails to delete :selfadmin collective+circle :collective
+	 * @When user :user deletes collective+team :collective
+	 * @When user :user :fails to delete collective+team :collective
+	 * @When user :user :fails to delete collective+team :collective with admin :admin
+	 * @When user :user :fails to delete :selfadmin collective+team :collective
 	 *
 	 * @throws GuzzleException
 	 */
-	public function userDeletesCollectiveAndCircle(string $user, string $collective, ?string $fail = null, ?string $admin = null, ?string $selfadmin = null): void {
+	public function userDeletesCollectiveAndTeam(string $user, string $collective, ?string $fail = null, ?string $admin = null, ?string $selfadmin = null): void {
 		$this->setCurrentUser($admin ?: $user);
 		$collectiveId = $this->collectiveIdByName($collective, true);
 		if ($collectiveId === null) {
@@ -584,12 +584,12 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user joins circle :name with owner :owner
-	 * @When user :user joins circle :name with owner :owner with level :level
+	 * @When user :user joins team :name with owner :owner
+	 * @When user :user joins team :name with owner :owner with level :level
 	 *
 	 * @throws GuzzleException
 	 */
-	public function userJoinsCircle(string $user, string $name, string $owner, ?string $level = null): void {
+	public function userJoinsTeam(string $user, string $name, string $owner, ?string $level = null): void {
 		$this->setCurrentUser($owner);
 		$circleId = $this->circleIdByName($name);
 		Assert::assertNotNull($circleId);
@@ -615,9 +615,9 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user leaves circle :name with owner :owner
+	 * @When user :user leaves team :name with owner :owner
 	 */
-	public function userLeavesCircle(string $user, string $name, string $owner): void {
+	public function userLeavesTeam(string $user, string $name, string $owner): void {
 		$this->setCurrentUser($owner);
 		$circleId = $this->circleIdByName($name);
 		Assert::assertNotNull($circleId);
@@ -629,23 +629,23 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user is member of circle :name
+	 * @When user :user is member of team :name
 	 *
 	 * @throws GuzzleException
 	 */
-	public function userIsMemberOfCircle(string $user, string $name): void {
+	public function userIsMemberOfTeam(string $user, string $name): void {
 		$this->setCurrentUser($user);
 		$circleId = $this->circleIdByName($name);
 		Assert::assertNotNull($circleId);
 	}
 
 	/**
-	 * @When user :user deletes circle :name
-	 * @When user :user :fails to delete circle :name
+	 * @When user :user deletes team :name
+	 * @When user :user :fails to delete team :name
 	 *
 	 * @throws GuzzleException
 	 */
-	public function userDeletesCircle(string $user, string $name, ?string $fails = null): void {
+	public function userDeletesTeam(string $user, string $name, ?string $fails = null): void {
 		$this->setCurrentUser($user);
 		$circleId = $this->circleIdByName($name);
 		Assert::assertNotNull($circleId);
@@ -1386,7 +1386,7 @@ class FeatureContext implements Context {
 	private function circleIdByName(string $name): ?string {
 		$this->sendOcsRequest('GET', '/apps/circles/circles');
 		if ($this->response->getStatusCode() !== 200) {
-			throw new RuntimeException('Unable to get list of circles');
+			throw new RuntimeException('Unable to get list of teams');
 		}
 		$jsonBody = $this->getJson();
 		foreach ($jsonBody['ocs']['data'] as $circle) {
@@ -1403,7 +1403,7 @@ class FeatureContext implements Context {
 	private function circleMemberByUser(string $circleId, string $user): ?string {
 		$this->sendOcsRequest('GET', '/apps/circles/circles/' . $circleId . '/members');
 		if ($this->response->getStatusCode() !== 200) {
-			throw new RuntimeException('Unable to get list of members for circle ' . $circleId);
+			throw new RuntimeException('Unable to get list of members for team ' . $circleId);
 		}
 		$jsonBody = $this->getJson();
 		foreach ($jsonBody['ocs']['data'] as $member) {
@@ -1420,7 +1420,7 @@ class FeatureContext implements Context {
 	private function circleMemberIdByName(string $circleId, string $userId): ?string {
 		$this->sendOcsRequest('GET', '/apps/circles/circles/' . $circleId . '/members');
 		if ($this->response->getStatusCode() !== 200) {
-			throw new RuntimeException('Unable to get list of circle members');
+			throw new RuntimeException('Unable to get list of team members');
 		}
 		$jsonBody = $this->getJson();
 		foreach ($jsonBody['ocs']['data'] as $member) {
