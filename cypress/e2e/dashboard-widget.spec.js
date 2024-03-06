@@ -20,10 +20,6 @@
  *
  */
 
-/**
- *  Tests for Collectives dashboard widget.
- */
-
 describe('Collectives dashboard widget', function() {
 	describe('Open dashboard widget', function() {
 		before(function() {

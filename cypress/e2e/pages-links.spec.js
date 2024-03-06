@@ -20,16 +20,12 @@
  *
  */
 
-/**
- *  Tests for basic Page functionality.
- */
-
 const baseUrl = Cypress.env('baseUrl')
 const sourceUrl = new URL(`${baseUrl}/index.php/apps/collectives/Link%20Testing/Link%20Source`)
 let imageId, pdfId, textId
 let anotherCollectiveFirstPageId, linkTargetPageId
 
-describe('Page Link Handling', function() {
+describe('Page link handling', function() {
 	before(function() {
 		cy.loginAs('bob')
 		cy.deleteAndSeedCollective('Another Collective')

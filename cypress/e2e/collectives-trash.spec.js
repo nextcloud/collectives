@@ -20,11 +20,7 @@
  *
  */
 
-/**
- *  Tests for Collectives trash functionality.
- */
-
-describe('Collective', function() {
+describe('Collectives trash', function() {
 	describe('move collective to trash and restore', function() {
 		before(function() {
 			cy.loginAs('bob')

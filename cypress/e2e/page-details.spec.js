@@ -20,10 +20,6 @@
  *
  */
 
-/**
- *  Tests for page details.
- */
-
 describe('Page details', function() {
 	before(function() {
 		cy.loginAs('bob')

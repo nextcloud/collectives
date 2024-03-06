@@ -20,10 +20,6 @@
  *
  */
 
-/**
- *  Tests for basic Collectives functionality.
- */
-
 describe('Collective Share', function() {
 	let shareUrl
 

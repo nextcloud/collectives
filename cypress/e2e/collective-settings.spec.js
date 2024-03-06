@@ -20,12 +20,7 @@
  *
  */
 
-/**
- *  Tests for Collectives settings.
- */
-
 describe('Collective settings', function() {
-
 	beforeEach(function() {
 		cy.loginAs('bob')
 		cy.deleteAndSeedCollective('Change me')

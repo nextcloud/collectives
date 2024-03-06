@@ -20,11 +20,7 @@
  *
  */
 
-/**
- *  Tests for basic Collectives functionality.
- */
-
-describe('Collective Share', function() {
+describe('Page share', function() {
 	let shareUrl
 
 	before(function() {
