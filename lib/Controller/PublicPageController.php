@@ -59,7 +59,7 @@ class PublicPageController extends PublicShareController {
 	 * @throws NotFoundException
 	 */
 	private function getShare(): CollectiveShareInfo {
-		if (null === $this->share) {
+		if ($this->share === null) {
 			$this->share = $this->collectiveShareService->findShareByToken($this->getToken());
 
 			if ($this->share === null) {

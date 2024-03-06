@@ -41,12 +41,12 @@ class CollectiveFolderManager {
 	}
 
 	public function getRootPath(): string {
-		if (null !== $this->rootPath) {
+		if ($this->rootPath !== null) {
 			return $this->rootPath;
 		}
 
 		$instanceId = $this->config->getSystemValue('instanceid', null);
-		if (null === $instanceId) {
+		if ($instanceId === null) {
 			throw new RuntimeException('no instance id!');
 		}
 
@@ -82,8 +82,8 @@ class CollectiveFolderManager {
 		string $mountPoint,
 		int $permissions,
 		?ICacheEntry $cacheEntry = null,
-		IStorageFactory $loader = null,
-		IUser $user = null): ?IMountPoint {
+		?IStorageFactory $loader = null,
+		?IUser $user = null): ?IMountPoint {
 		if (!$cacheEntry) {
 			try {
 				$folder = $this->getOrCreateFolder($id);

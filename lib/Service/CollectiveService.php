@@ -152,7 +152,7 @@ class CollectiveService extends CollectiveServiceBase {
 			$circle = $this->circleHelper->createCircle($safeName, $userId);
 		} catch (CircleExistsException $e) {
 			$circle = $this->circleHelper->findCircle($safeName, $userId, Member::LEVEL_ADMIN);
-			if (null === $circle) {
+			if ($circle === null) {
 				// We don't have admin access to the circle
 				throw $e;
 			}
@@ -163,7 +163,7 @@ class CollectiveService extends CollectiveServiceBase {
 			);
 		}
 
-		if (null !== $this->collectiveMapper->findByCircleId($circle->getSingleId(), true)) {
+		if ($this->collectiveMapper->findByCircleId($circle->getSingleId(), true) !== null) {
 			// There's already a collective with that name.
 			throw new UnprocessableEntityException('Collective already exists.');
 		}

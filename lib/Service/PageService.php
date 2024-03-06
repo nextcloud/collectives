@@ -60,7 +60,7 @@ class PageService {
 	 * @throws NotPermittedException
 	 */
 	private function getCollectiveInfo(int $collectiveId, string $userId): CollectiveInfo {
-		if (null === $this->collectiveInfo || $this->collectiveInfo->getId() !== $collectiveId) {
+		if ($this->collectiveInfo === null || $this->collectiveInfo->getId() !== $collectiveId) {
 			$this->collectiveInfo = $this->collectiveService->getCollectiveInfo($collectiveId, $userId);
 		}
 

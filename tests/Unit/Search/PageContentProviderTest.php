@@ -46,7 +46,7 @@ class PageContentProviderTest extends TestCase {
 		/** @var SearchService&MockObject $indexedSearchService */
 		$indexedSearchService = $this->createMock(SearchService::class);
 		$indexedSearchService->method('searchCollective')
-			->willReturn(array(404 => 'fileData'));
+			->willReturn([404 => 'fileData']);
 		/** @var LoggerInterface&MockObject $logger  */
 		$logger = $this->createMock(LoggerInterface::class);
 		/** @var IAppManager&MockObject $appManager */

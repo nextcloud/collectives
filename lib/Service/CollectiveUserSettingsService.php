@@ -18,7 +18,7 @@ class CollectiveUserSettingsService {
 	 * @throws NotPermittedException
 	 */
 	private function initSettings(int $collectiveId, string $userId): CollectiveUserSettings {
-		if (null === $this->collectiveMapper->findByIdAndUser($collectiveId, $userId)) {
+		if ($this->collectiveMapper->findByIdAndUser($collectiveId, $userId) === null) {
 			throw new NotFoundException('Collective not found: ' . $collectiveId);
 		}
 
