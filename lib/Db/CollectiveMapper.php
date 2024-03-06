@@ -38,7 +38,7 @@ class CollectiveMapper extends QBMapper {
 		try {
 			$collective = $this->findEntity($qb);
 			// Return any found collective if $userId is null
-			if (null === $userId) {
+			if ($userId === null) {
 				return $collective;
 			}
 			// Return member collectives with at least level `level`

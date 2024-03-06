@@ -14,10 +14,10 @@ class CollectiveMountPoint extends MountPoint implements ISystemMountPoint {
 		private CollectiveFolderManager $collectiveFolderManager,
 		Storage $storage,
 		string $mountPoint,
-		array $arguments = null,
-		IStorageFactory $loader = null,
-		array $mountOptions = null,
-		int $mountId = null) {
+		?array $arguments = null,
+		?IStorageFactory $loader = null,
+		?array $mountOptions = null,
+		?int $mountId = null) {
 		parent::__construct($storage, $mountPoint, $arguments, $loader, $mountOptions, $mountId, MountProvider::class);
 	}
 

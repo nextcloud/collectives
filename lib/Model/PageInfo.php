@@ -86,7 +86,7 @@ class PageInfo extends Entity implements JsonSerializable {
 		// Set folder name as title for all index pages except the collective landing page
 		$dirName = dirname($file->getInternalPath());
 		$dirName = $dirName === '.' ? '' : $dirName;
-		if ($parentId !== 0 && 0 === strcmp($file->getName(), self::INDEX_PAGE_TITLE . self::SUFFIX)) {
+		if ($parentId !== 0 && strcmp($file->getName(), self::INDEX_PAGE_TITLE . self::SUFFIX) === 0) {
 			$this->setTitle(basename($dirName));
 		} else {
 			$this->setTitle(basename($file->getName(), self::SUFFIX));
@@ -99,16 +99,16 @@ class PageInfo extends Entity implements JsonSerializable {
 		if (count($mountPoint) >= 4) {
 			$this->setCollectivePath(rtrim($mountPoint[3], '/'));
 		}
-		if (null !== $lastUserId) {
+		if ($lastUserId !== null) {
 			$this->setLastUserId($lastUserId);
 		}
-		if (null !== $lastUserDisplayName) {
+		if ($lastUserDisplayName !== null) {
 			$this->setLastUserDisplayName($lastUserDisplayName);
 		}
-		if (null !== $emoji) {
+		if ($emoji !== null) {
 			$this->setEmoji($emoji);
 		}
-		if (null !== $subpageOrder) {
+		if ($subpageOrder !== null) {
 			$this->setSubpageOrder($subpageOrder);
 		}
 		$this->setParentId($parentId);

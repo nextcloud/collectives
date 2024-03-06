@@ -36,7 +36,7 @@ class CircleHelper {
 	 * @throws NotPermittedException
 	 */
 	private function getFederatedUser(?string $userId = null): ?FederatedUser {
-		if (null === $userId) {
+		if ($userId === null) {
 			return null;
 		}
 
