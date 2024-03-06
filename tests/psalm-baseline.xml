@@ -1,70 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.15.0@5c774aca4746caf3d239d9c8cadb9f882ca29352">
+<files psalm-version="5.22.2@d768d914152dbbf3486c36398802f74e80cfde48">
   <file src="lib/AppInfo/Application.php">
     <MissingDependency>
-      <code>RecentPagesWidget</code>
-      <code>SearchablePageReferenceProvider</code>
+      <code><![CDATA[CollectiveTeamResourceProvider]]></code>
+      <code><![CDATA[RecentPagesWidget]]></code>
+      <code><![CDATA[SearchablePageReferenceProvider]]></code>
     </MissingDependency>
-    <UndefinedClass>
-      <code>IAPIWidgetV2</code>
-    </UndefinedClass>
   </file>
   <file src="lib/Dashboard/RecentPagesWidget.php">
     <UndefinedClass>
-      <code>IReloadableWidget</code>
+      <code><![CDATA[IReloadableWidget]]></code>
     </UndefinedClass>
   </file>
   <file src="lib/Fs/UserFolderHelper.php">
     <UndefinedClass>
-      <code>$e</code>
-      <code>NoUserException</code>
+      <code><![CDATA[$e]]></code>
+      <code><![CDATA[NoUserException]]></code>
     </UndefinedClass>
   </file>
   <file src="lib/Listeners/CollectivesReferenceListener.php">
     <MissingTemplateParam>
-      <code>IEventListener</code>
+      <code><![CDATA[IEventListener]]></code>
     </MissingTemplateParam>
   </file>
   <file src="lib/Mount/CollectiveFolderManager.php">
     <InvalidArgument>
-      <code>$maskedStorage</code>
+      <code><![CDATA[$maskedStorage]]></code>
     </InvalidArgument>
-    <UndefinedClass>
-      <code>LazyFolder</code>
-    </UndefinedClass>
   </file>
   <file src="lib/Mount/CollectiveStorage.php">
     <MoreSpecificImplementedParamType>
-      <code>$storage</code>
+      <code><![CDATA[$storage]]></code>
     </MoreSpecificImplementedParamType>
-  </file>
-  <file src="lib/Mount/NoExcludePropagatorStorageWrapper.php">
-    <ConstructorSignatureMismatch>
-      <code>NoExcludePropagatorStorageWrapper</code>
-    </ConstructorSignatureMismatch>
   </file>
   <file src="lib/Reference/SearchablePageReferenceProvider.php">
     <UndefinedClass>
-      <code>ADiscoverableReferenceProvider</code>
-      <code>ISearchableReferenceProvider</code>
+      <code><![CDATA[ADiscoverableReferenceProvider]]></code>
+      <code><![CDATA[ISearchableReferenceProvider]]></code>
     </UndefinedClass>
   </file>
   <file src="lib/Service/CollectiveService.php">
     <UndefinedClass>
-      <code>File</code>
+      <code><![CDATA[File]]></code>
     </UndefinedClass>
   </file>
   <file src="lib/Service/PageService.php">
     <UndefinedClass>
       <code><![CDATA[$this->pushQueue]]></code>
-      <code>?IQueue</code>
-      <code>IQueue</code>
-      <code>OC_Util</code>
+      <code><![CDATA[?IQueue]]></code>
+      <code><![CDATA[IQueue]]></code>
+      <code><![CDATA[OC_Util]]></code>
+    </UndefinedClass>
+  </file>
+  <file src="lib/Team/CollectiveTeamResourceProvider.php">
+    <UndefinedClass>
+      <code><![CDATA[ITeamResourceProvider]]></code>
     </UndefinedClass>
   </file>
   <file src="lib/Versions/VersionsBackend.php">
     <UndefinedInterfaceMethod>
-      <code>getDirectoryListing</code>
+      <code><![CDATA[getDirectoryListing]]></code>
     </UndefinedInterfaceMethod>
   </file>
 </files>
