@@ -26,7 +26,7 @@ class CircleHelper {
 		try {
 			$this->circlesManager = $appContainer->get(CirclesManager::class);
 		} catch (QueryException|AutoloadNotAllowedException $e) {
-			// Could not instantiate - probably circles app is disabled
+			// Could not instantiate - probably teams app is disabled
 			$this->dependencyInjectionError = $e->getMessage();
 		}
 	}
@@ -169,7 +169,7 @@ class CircleHelper {
 	public function createCircle(string $name, string $userId): Circle {
 		try {
 			if ($this->existsCircle($name)) {
-				throw new CircleExistsException('A circle with that name exists');
+				throw new CircleExistsException('A team with that name exists');
 			}
 			$this->startSession($userId);
 			$circle = $this->circlesManager->createCircle($name, null, false, false);
@@ -221,7 +221,7 @@ class CircleHelper {
 	 */
 	public function destroyCircle(string $circleId, string $userId): void {
 		if (!$this->isOwner($circleId, $userId)) {
-			throw new NotPermittedException('Not allowed to destroy circle ' . $circleId);
+			throw new NotPermittedException('Not allowed to destroy team ' . $circleId);
 		}
 		try {
 			$this->unflagCircleAsAppManaged($circleId);

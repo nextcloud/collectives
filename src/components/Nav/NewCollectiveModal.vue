@@ -37,7 +37,7 @@
 						type="tertiary"
 						@click.stop.prevent="startSelectCircle">
 						<template #icon>
-							<CirclesIcon :size="16" />
+							<TeamsIcon :size="16" />
 						</template>
 					</NcButton>
 					<NcButton v-if="anyCircle && pickCircle"
@@ -116,7 +116,7 @@ import { ADD_MEMBERS_TO_CIRCLE, GET_CIRCLES, NEW_COLLECTIVE } from '../../store/
 import displayError from '../../util/displayError.js'
 import { autocompleteSourcesToCircleMemberTypes, circlesMemberTypes } from '../../constants.js'
 import AlertCircleOutlineIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
-import CirclesIcon from '../Icon/CirclesIcon.vue'
+import TeamsIcon from '../Icon/TeamsIcon.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 import CollectivesIcon from '../Icon/CollectivesIcon.vue'
 import MemberPicker from '../Member/MemberPicker.vue'
@@ -126,7 +126,7 @@ export default {
 
 	components: {
 		AlertCircleOutlineIcon,
-		CirclesIcon,
+		TeamsIcon,
 		CloseIcon,
 		CollectivesIcon,
 		MemberPicker,
@@ -249,7 +249,7 @@ export default {
 
 		async getCircles() {
 			return await this.dispatchGetCircles()
-				.catch(displayError('Could not fetch circles'))
+				.catch(displayError('Could not get list of teams'))
 		},
 
 		onClose() {
@@ -282,7 +282,7 @@ export default {
 			this.dispatchNewCollective({ name: this.newCollectiveName, emoji: this.emoji })
 				.then(updateCollective)
 				.catch((e) => {
-					if (e.response?.data === 'A circle with that name exists') {
+					if (e.response?.data === 'A team with that name exists') {
 						this.nameExists = this.newCollectiveName
 						this.state = 0
 					} else {

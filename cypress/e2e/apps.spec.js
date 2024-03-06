@@ -33,12 +33,12 @@ describe('The apps', function() {
 
 	/**
 	 * Regression test for #110 and #117.
-	 * Without the circles app the whole server became unresponsive.
+	 * Without the teams app the whole server became unresponsive.
 	 * If we have this regression this test will not only fail
 	 * it will also break all following tests.
 	 *
 	 */
-	describe('Disabled circles app does not break files view', function() {
+	describe('Disabled teams app does not break files view', function() {
 
 		before(function() {
 			cy.loginAs('admin')

@@ -10,7 +10,7 @@ The following tools are required for app development:
 * php `dom` and `sqlite` extension
 * composer for installing php dependencies
 * nextcloud server for running php tests
-* circles app for passing some php tests that depend on it
+* teams app for passing some php tests that depend on it
 * gh, the Github console command, for releasing to Github
 
 ## Developer installation
@@ -18,7 +18,7 @@ The following tools are required for app development:
 To install the app manually:
 
 0. Install a [development setup](https://docs.nextcloud.com/server/latest/developer_manual/app_development/tutorial.html#setup) of nextcloud.
-1. Install the circles, text and viewer apps by cloning them to the `apps` folder
+1. Install the teams, text and viewer apps by cloning them to the `apps` folder
 2. Clone this repository into the `apps` folder of your Nextcloud
 3. Install build tools and dependencies by running `make setup-dev`
 4. Compile NodeJS assets by running `make build`
@@ -50,7 +50,7 @@ available in the `nextcloud-docker-dev` repo.
 ### Development environment
 
 Development environments often do not use proper hostnames and are not
-using ssl. In order to make the circles API work in such environments,
+using ssl. In order to make the teams API work in such environments,
 a few configuration settings need to be adjusted.
 
 You can do so by running the following commands on the nextcloud server:
@@ -84,10 +84,10 @@ we want the collective pages to be owned and maintained by the collective.
 That's why the Collectives app implements an own storage and uses mountpoints
 to mount the collective folders to members home directories.
 
-## Development Background: Circles integration
+## Development Background: Teams integration
 
-Every collective is bound to a circle. Currently, the app automatically creates
-a new secret circle with every new collective.
+Every collective is bound to a team. Currently, the app automatically creates
+a new secret team with every new collective.
 
 ## Prepare a release
 

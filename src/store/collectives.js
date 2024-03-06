@@ -339,9 +339,9 @@ export default {
 		 *
 		 * @param {object} store the vuex store
 		 * @param {Function} store.commit commit changes
-		 * @param {object} collective the collective with id and circle
+		 * @param {object} collective the collective with id and team
 		 * @param {number} collective.id ID of the collective to be trashed
-		 * @param {boolean} collective.circle Whether to delete the circle as well
+		 * @param {boolean} collective.circle Whether to delete the team as well
 		 */
 		async [DELETE_COLLECTIVE]({ commit }, { id, circle }) {
 			const response = await api.deleteCollective(id, circle)

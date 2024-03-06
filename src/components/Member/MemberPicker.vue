@@ -165,7 +165,7 @@ export default {
 		}, 250),
 
 		async fetchSearchResults() {
-			// Search for users, groups and circles
+			// Search for users, groups and teams
 			const searchShareTypes = [shareTypes.TYPE_USER, shareTypes.TYPE_GROUP, shareTypes.TYPE_CIRCLE]
 
 			try {
@@ -187,7 +187,7 @@ export default {
 			}
 		},
 
-		// Filter out circle itself and current members
+		// Filter out team itself and current members
 		filterSearchResults(item) {
 			return !this.currentMembers.find(m => {
 				return (item.source === 'circlesx' && item.id === this.circleId)

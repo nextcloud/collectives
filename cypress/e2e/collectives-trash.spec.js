@@ -68,7 +68,7 @@ describe('Collective', function() {
 			cy.get('.collectives_trash_list_item')
 				.should('contain', 'Delete me')
 		})
-		it('Allows deleting the collective and circle from trash', function() {
+		it('Allows deleting the collective and team from trash', function() {
 			cy.loginAs('bob')
 			cy.visit('apps/collectives')
 			cy.get('#collectives-trash')

@@ -122,7 +122,7 @@ export default {
 		 * Delete a collective with the given name from trash
 		 *
 		 * @param {object} collective Properties of the collective
-		 * @param {boolean} circle Whether to delete the circle as well
+		 * @param {boolean} circle Whether to delete the team as well
 		 * @return {Promise}
 		 */
 		deleteCollective(collective, circle) {

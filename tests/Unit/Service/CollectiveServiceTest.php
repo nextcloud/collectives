@@ -131,11 +131,11 @@ class CollectiveServiceTest extends TestCase {
 
 	public function testCreateWithExistingCircle(): void {
 		$this->circleHelper->method('createCircle')
-			->willThrowException(new CircleExistsException('A circle with that name exists'));
+			->willThrowException(new CircleExistsException('A team with that name exists'));
 		$this->circleHelper->method('findCircle')
 			->willReturn(null);
 		$this->expectException(CircleExistsException::class);
-		$this->expectExceptionMessage('A circle with that name exists');
+		$this->expectExceptionMessage('A team with that name exists');
 		$this->service->createCollective($this->userId, 'de', 'taken');
 	}
 
@@ -150,7 +150,7 @@ class CollectiveServiceTest extends TestCase {
 		$collective = new Collective();
 		$collective->setId(123);
 		$this->circleHelper->method('createCircle')
-			->willThrowException(new CircleExistsException('A circle with that name exists'));
+			->willThrowException(new CircleExistsException('A team with that name exists'));
 		$this->circleHelper->method('findCircle')
 			->willReturn($circle);
 		$this->collectiveMapper->method('findByCircleId')
@@ -164,10 +164,10 @@ class CollectiveServiceTest extends TestCase {
 		$this->l10n
 			->expects(self::once())
 			->method('t')
-			->willReturn('Created collective "own" for existing circle.');
+			->willReturn('Created collective "own" for existing team.');
 		[$collective, $info] = $this->service->createCollective($this->userId, 'de', 'own');
 		self::assertIsCallable([$collective, 'jsonSerialize']);
-		self::assertEquals('Created collective "own" for existing circle.', $info);
+		self::assertEquals('Created collective "own" for existing team.', $info);
 	}
 
 	public function testCreate(): void {

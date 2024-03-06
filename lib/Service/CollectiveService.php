@@ -146,19 +146,19 @@ class CollectiveService extends CollectiveServiceBase {
 			throw new UnprocessableEntityException('Empty collective name is not allowed');
 		}
 
-		// Create a new circle
+		// Create a new team
 		$message = '';
 		try {
 			$circle = $this->circleHelper->createCircle($safeName, $userId);
 		} catch (CircleExistsException $e) {
 			$circle = $this->circleHelper->findCircle($safeName, $userId, Member::LEVEL_ADMIN);
 			if ($circle === null) {
-				// We don't have admin access to the circle
+				// We don't have admin access to the team
 				throw $e;
 			}
 			$this->circleHelper->flagCircleAsAppManaged($circle->getSingleId());
 			$message = $this->l10n->t(
-				'Created collective "%s" for existing circle.',
+				'Created collective "%s" for existing team.',
 				[$safeName]
 			);
 		}

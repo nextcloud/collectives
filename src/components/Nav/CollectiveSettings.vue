@@ -307,7 +307,7 @@ export default {
 		},
 
 		/**
-		 * Rename circle and reload collective
+		 * Rename team and reload collective
 		 */
 		async renameCollective() {
 			// Ignore rename to same name
@@ -320,7 +320,7 @@ export default {
 			// If currentCollective is renamed, we need to update the router path later
 			const redirect = this.collectiveParam === this.collective.name
 
-			// Wait for circle rename (also patches store with updated collective and pages)
+			// Wait for team rename (also patches store with updated collective and pages)
 			const collective = { ...this.collective }
 			collective.name = this.newCollectiveName
 			await this.dispatchRenameCircle(collective).then(() => {
@@ -331,7 +331,7 @@ export default {
 				throw error
 			})
 
-			// Name might have changed (due to circle name conflicts), update input field
+			// Name might have changed (due to team name conflicts), update input field
 			this.newCollectiveName = this.collective.name
 
 			// Push new router path if currentCollective was renamed

@@ -4,7 +4,7 @@ Collectives is a Nextcloud App for activist and community projects to
 organize together. Come and gather in collectives to build shared knowledge.
 
 * 👥 **Collective and non-hierarchical workflow by heart**: Collectives are
-  tied to a [Nextcloud Circle](https://github.com/nextcloud/circles) and
+  tied to a [Nextcloud Team](https://github.com/nextcloud/circles) and
   owned by the collective.
 * 📝 **Collaborative page editing** like known from Etherpad thanks to the
   [Text app](https://github.com/nextcloud/text).
@@ -17,7 +17,7 @@ organize together. Come and gather in collectives to build shared knowledge.
 ## Installation
 
 In your Nextcloud instance, simply navigate to **»Apps«**, find the
-**»Circles«** and **»Collectives«** apps and enable them.
+**»Teams«** and **»Collectives«** apps and enable them.
 
 ## Requirements
 
