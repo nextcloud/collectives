@@ -20,10 +20,6 @@
  *
  */
 
-/**
- *  Tests for the page list.
- */
-
 describe('Page list', function() {
 	before(function() {
 		cy.loginAs('bob')

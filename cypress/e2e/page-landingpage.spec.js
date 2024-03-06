@@ -20,10 +20,6 @@
  *
  */
 
-/**
- *  Tests for page details.
- */
-
 const collective = 'Landingpage Collective'
 
 describe('Page landing page', function() {

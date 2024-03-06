@@ -20,10 +20,6 @@
  *
  */
 
-/**
- *  Tests for Collectives settings.
- */
-
 describe('Collective members', function() {
 	before(function() {
 		cy.loginAs('bob')

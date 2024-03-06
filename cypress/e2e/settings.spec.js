@@ -20,10 +20,6 @@
  *
  */
 
-/**
- *  Tests for app-wide settings functionality.
- */
-
 describe('Settings', function() {
 	before(function() {
 		cy.loginAs('bob')

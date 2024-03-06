@@ -20,10 +20,6 @@
  *
  */
 
-/**
- *  Tests for basic Collectives functionality.
- */
-
 describe('Collective', function() {
 	const specialCollective = 'stupid !@#$%^&()_ special chars'
 

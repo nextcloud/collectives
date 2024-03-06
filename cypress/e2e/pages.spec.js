@@ -20,12 +20,7 @@
  *
  */
 
-/**
- *  Tests for basic Page functionality.
- */
-
-describe('Page', function() {
-
+describe('Pages', function() {
 	before(function() {
 		cy.loginAs('bob')
 		cy.deleteAndSeedCollective('Our Garden').as('garden')
@@ -326,5 +321,4 @@ describe('Page', function() {
 				.should('contain', 'your thoughts that really matter')
 		})
 	})
-
 })
