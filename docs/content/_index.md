@@ -13,7 +13,7 @@ organize together. Come and gather in collectives to build shared knowledge.
 ## Features
 
 * 👥 **Collective and non-hierarchical workflow by heart**: Collectives are
-  tied to a [Nextcloud Circle](https://github.com/nextcloud/circles) and
+  tied to a [Nextcloud Team](https://github.com/nextcloud/circles) and
   owned by the collective.
 * 📝 **Collaborative page editing** like known from Etherpad thanks to the
   [Text app](https://github.com/nextcloud/text).

@@ -353,7 +353,7 @@ Cypress.Commands.add('uploadContent', (path, content, mimetype = 'text/markdown'
 })
 
 /**
- * Create a circle (optionally with given config)
+ * Create a team (optionally with given config)
  */
 Cypress.Commands.add('seedCircle', (name, config = null) => {
 	Cypress.log()
@@ -397,7 +397,7 @@ Cypress.Commands.add('circleFind', (name) => {
 })
 
 /**
- * Add someone to a circle
+ * Add someone to a team
  */
 Cypress.Commands.add('circleAddMember',
 	{ prevSubject: true },

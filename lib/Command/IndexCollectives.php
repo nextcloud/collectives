@@ -48,7 +48,7 @@ class IndexCollectives extends Base {
 				$output->writeln('<info>Creating index for ' . $circleName . ' ... </info>');
 				$this->searchService->indexCollective($collective);
 			} catch (MissingDependencyException|NotFoundException|NotPermittedException) {
-				$output->writeln("<error>Failed to find circle associated with collective with ID={$collective->getId()}</error>");
+				$output->writeln("<error>Failed to find team associated with collective with ID={$collective->getId()}</error>");
 				return 1;
 			} catch (FileSearchException) {
 				$output->writeln('<error>Failed to save the indices to the collectives folder.</error>');

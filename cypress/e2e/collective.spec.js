@@ -25,17 +25,17 @@ describe('Collective', function() {
 
 	before(function() {
 		cy.loginAs('bob')
-		cy.deleteCollective('Preexisting Circle')
+		cy.deleteCollective('Preexisting Team')
 		cy.deleteCollective('History Club')
 		cy.deleteCollective(specialCollective)
 		cy.deleteAndSeedCollective('Preexisting Collective')
 		cy.circleFind('Preexisting Collective')
 			.circleAddMember('jane')
-		cy.seedCircle('Preexisting Circle')
+		cy.seedCircle('Preexisting Team')
 		cy.seedCircle('History Club', { visible: true, open: true })
 		cy.loginAs('jane')
-		cy.deleteCollective('Foreign Circle')
-		cy.seedCircle('Foreign Circle', { visible: true, open: true })
+		cy.deleteCollective('Foreign Team')
+		cy.seedCircle('Foreign Team', { visible: true, open: true })
 	})
 
 	describe('in the files app', function() {
@@ -57,10 +57,10 @@ describe('Collective', function() {
 	})
 
 	describe('name conflicts', function() {
-		it('Reports existing circle', function() {
+		it('Reports existing team', function() {
 			cy.loginAs('bob')
 			cy.visit('apps/collectives')
-			cy.createCollective('Foreign Circle')
+			cy.createCollective('Foreign Team')
 			cy.get('.modal-collective-name-error').should('contain', 'A collective with this name already exists')
 		})
 		it('Reports existing collective', function() {
@@ -71,12 +71,12 @@ describe('Collective', function() {
 			cy.get('.toast-warning').should('contain', 'Could not create the collective')
 			cy.get('.toast-warning').should('contain', 'Collective already exists')
 		})
-		it('creates collectives by picking circle',
+		it('creates collectives by picking team',
 			function() {
 				cy.loginAs('bob')
 				cy.visit('apps/collectives')
 				cy.get('button').contains('New collective').click()
-				cy.get('button span.circles-icon').click()
+				cy.get('button span.teams-icon').click()
 				// cy.get('.circle-selector ul').should('not.contain', 'Foreign')
 				cy.get('.circle-selector li [title*=History]').click()
 				cy.get('button').contains('Add members').click()
@@ -84,27 +84,27 @@ describe('Collective', function() {
 
 				cy.get('#titleform input').invoke('val').should('contain', 'History Club')
 				cy.get('.toast-info').should('contain',
-					'Created collective "History Club" for existing circle.',
+					'Created collective "History Club" for existing team.',
 				)
 			})
-		it('collectives of visible circles only show for members',
+		it('collectives of visible teams only show for members',
 			function() {
 				cy.loginAs('jane')
 				cy.visit('apps/collectives')
 				cy.get('.app-navigation-entry').should('not.contain', 'History Club')
 			})
-		it('creates collectives for admins of corresponding circle',
+		it('creates collectives for admins of corresponding team',
 			function() {
 				cy.loginAs('bob')
 				cy.visit('apps/collectives')
-				cy.createCollective('Preexisting Circle')
-				cy.get('#titleform input').invoke('val').should('contain', 'Preexisting Circle')
+				cy.createCollective('Preexisting Team')
+				cy.get('#titleform input').invoke('val').should('contain', 'Preexisting Team')
 				cy.get('.toast-info').should('contain',
-					'Created collective "Preexisting Circle" for existing circle.',
+					'Created collective "Preexisting Team" for existing team.',
 				)
 			})
 		after(function() {
-			cy.deleteCollective('Preexisting Circle')
+			cy.deleteCollective('Preexisting Team')
 			cy.deleteCollective('History Club')
 		})
 	})

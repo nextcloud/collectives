@@ -9,7 +9,7 @@ alwaysopen = false
 
 This app requires the following apps to be enabled:
 
-* [**Circles**](https://apps.nextcloud.com/apps/circles)
+* [**Teams**](https://apps.nextcloud.com/apps/circles)
 * [**Text**](https://apps.nextcloud.com/apps/text)
 * **Viewer**
 * **files_versions**
@@ -33,7 +33,7 @@ limitations](https://docs.nextcloud.com/server/latest/admin_manual/configuration
 ## Collectives and guest users
 
 In order to allow guest users (as provided by the [guests](https://github.com/nextcloud/guests/)
-app) to access collectives, add the Collectives and Circles apps to the list
+app) to access collectives, add the Collectives and Teams apps to the list
 of enabled apps for guest users in admin settings.
 
 Please note that this enables guest users to create new collectives.
@@ -70,9 +70,9 @@ collectives directory instead.
 
 ### Allow for groups in your collectives
 
-You can configure the circles app to allow adding groups to circles.
-Since the collectives app relies on the circles app for user management
+You can configure the teams app to allow adding groups to teams.
+Since the collectives app relies on the teams app for user management
 this also allows adding entire groups to collectives.
 
-Keep in mind thought that in contrast to circles
-groups can only be managed by server admins.
+Keep in mind thought that in contrast to teams, groups can only be
+managed by server admins.

@@ -36,7 +36,7 @@ class ExpirePageVersions extends Base {
 			return 0;
 		} catch (MissingDependencyException $e) {
 			$output->writeln('');
-			$output->writeln('<error>  Looks like the circles app is not active.  </error>');
+			$output->writeln('<error>  Looks like the teams app is not active.  </error>');
 			$output->writeln('<info>  Please enable it:  </info>');
 			$output->writeln('<info>      occ app:enable circles  </info>');
 			$output->writeln($e->getMessage());

@@ -111,7 +111,7 @@ export default {
 
 	actions: {
 		/**
-		 * Get list of all circles
+		 * Get list of all teams
 		 *
 		 * @param {object} store the vuex store
 		 * @param {Function} store.commit commit changes
@@ -126,7 +126,7 @@ export default {
 		},
 
 		/**
-		 * Rename a circle
+		 * Rename a team
 		 *
 		 * @param {object} store the vuex store
 		 * @param {Function} store.commit commit changes
@@ -150,11 +150,11 @@ export default {
 		},
 
 		/**
-		 * Get members of a circle
+		 * Get members of a team
 		 *
 		 * @param {object} store the vuex store
 		 * @param {Function} store.commit commit changes
-		 * @param {string} circleId ID of the circle
+		 * @param {string} circleId ID of the team
 		 */
 		async [GET_CIRCLE_MEMBERS]({ commit }, circleId) {
 			const response = await axios.get(generateOcsUrl(`apps/circles/circles/${circleId}/members`))
@@ -162,11 +162,11 @@ export default {
 		},
 
 		/**
-		 * Add a single member to a circle
+		 * Add a single member to a team
 		 *
 		 * @param {object} _ the vuex store
 		 * @param {object} params the params object
-		 * @param {string} params.circleId ID of the circle
+		 * @param {string} params.circleId ID of the team
 		 * @param {string} params.userId User ID of the member to be added
 		 * @param {number} params.type Type of the member to be added
 		 */
@@ -175,16 +175,16 @@ export default {
 				generateOcsUrl('apps/circles/circles/' + circleId + '/members'),
 				{ userId, type },
 			)
-			console.debug('Added member to circle', circleId, response.data.ocs.data)
+			console.debug('Added member to team', circleId, response.data.ocs.data)
 			return response.data.ocs.data
 		},
 
 		/**
-		 * Add multiple members to a circle
+		 * Add multiple members to a team
 		 *
 		 * @param {object} _ the vuex store
 		 * @param {object} params the params object
-		 * @param {string} params.circleId ID of the circle
+		 * @param {string} params.circleId ID of the team
 		 * @param {object} params.members Object with members to be added
 		 */
 		async [ADD_MEMBERS_TO_CIRCLE](_, { circleId, members }) {
@@ -192,33 +192,33 @@ export default {
 				generateOcsUrl('apps/circles/circles/' + circleId + '/members/multi'),
 				{ members },
 			)
-			console.debug('Added members to circle', circleId, response.data.ocs.data)
+			console.debug('Added members to team', circleId, response.data.ocs.data)
 			return response.data.ocs.data
 		},
 
 		/**
-		 * Remove a single member to a circle
+		 * Remove a single member to a team
 		 *
 		 * @param {object} _ the vuex store
 		 * @param {object} params the params object
-		 * @param {string} params.circleId ID of the circle
-		 * @param {string} params.memberId Circle member ID of the member to be removed
+		 * @param {string} params.circleId ID of the team
+		 * @param {string} params.memberId Team member ID of the member to be removed
 		 */
 		async [REMOVE_MEMBER_FROM_CIRCLE](_, { circleId, memberId }) {
 			const response = await axios.delete(
 				generateOcsUrl('apps/circles/circles/' + circleId + '/members/' + memberId),
 			)
-			console.debug('Removed member from circle', circleId, response.data.ocs.data)
+			console.debug('Removed member from team', circleId, response.data.ocs.data)
 			return response.data.ocs.data
 		},
 
 		/**
-		 * Change a member level in a circle
+		 * Change a member level in a team
 		 *
 		 * @param {object} _ the vuex store
 		 * @param {object} params the params object
-		 * @param {string} params.circleId ID of the circle
-		 * @param {string} params.memberId Circle member ID of the member to be changed
+		 * @param {string} params.circleId ID of the team
+		 * @param {string} params.memberId Team member ID of the member to be changed
 		 * @param {number} params.level Level of the member to be changed
 		 */
 		async [CHANGE_CIRCLE_MEMBER_LEVEL](_, { circleId, memberId, level }) {
@@ -226,12 +226,12 @@ export default {
 				generateOcsUrl('apps/circles/circles/' + circleId + '/members/' + memberId + '/level'),
 				{ level },
 			)
-			console.debug('Changed level of member from circle', circleId, response.data.ocs.data)
+			console.debug('Changed level of member from team', circleId, response.data.ocs.data)
 			return response.data.ocs.data
 		},
 
 		/**
-		 * Leave a circle with given collective
+		 * Leave a team with given collective
 		 *
 		 * @param {object} store the vuex store
 		 * @param {Function} store.commit commit changes

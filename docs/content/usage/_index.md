@@ -47,8 +47,8 @@ to adjust it to your collectives needs.
 Follow the "manage members" link that you find in the action menu inside
 the collectives list on the left to manage members.
 
-If your Nextcloud instance is configured to allow groups in circles
-you can even add entire groups to your collectives.
+If your Nextcloud instance is configured to allow groups in teams you
+can even add entire groups to your collectives.
 
 ## Also good to know
 
