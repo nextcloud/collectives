@@ -76,7 +76,7 @@ describe('Page landing page', function() {
 
 	describe('Displays recent members', function() {
 		it('Allows to open members modal as admin', function() {
-			cy.get('.members-widget .avatardiv[title="alice"]')
+			cy.get('.members-widget img[src*="/alice/"]')
 			cy.get('.members-widget .button-vue[title="Show members"]')
 				.click()
 
@@ -88,7 +88,7 @@ describe('Page landing page', function() {
 		it('Allows to open members modal as member', function() {
 			cy.loginAs('alice')
 			cy.visit(`/apps/collectives/${collective}`)
-			cy.get('.members-widget .avatardiv[title="bob"]')
+			cy.get('.members-widget img[src*="/bob/"]')
 			cy.get('.members-widget .button-vue[title="Show members"]')
 				.click()
 
