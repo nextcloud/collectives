@@ -6,9 +6,9 @@ Feature: mountpoint
     And user "jane" uploads attachment "test.png" to "firstpage" with file path "/" in "BehatMountPoint"
     And user "jane" sets "edit" level in collective "BehatMountPoint" to "Admin"
     And user "jane" sets "share" level in collective "BehatMountPoint" to "Moderator"
-    And user "john" joins circle "BehatMountPoint" with owner "jane" with level "Admin"
-    And user "alice" joins circle "BehatMountPoint" with owner "jane" with level "Moderator"
-    And user "bob" joins circle "BehatMountPoint" with owner "jane"
+    And user "john" joins team "BehatMountPoint" with owner "jane" with level "Admin"
+    And user "alice" joins team "BehatMountPoint" with owner "jane" with level "Moderator"
+    And user "bob" joins team "BehatMountPoint" with owner "jane"
     Then user "jane" has webdav access to "BehatMountPoint" with permissions "RMGDNVCK"
     And user "john" has webdav access to "BehatMountPoint" with permissions "RMGDNVCK"
     And user "alice" has webdav access to "BehatMountPoint" with permissions "RMG"
@@ -33,6 +33,6 @@ Feature: mountpoint
     And user "jane" deletes page "firstpage" from trash via webdav in "BehatMountPoint"
     Then user "jane" fails to see pagePath "firstpage.md" in "BehatMountPoint"
 
-  Scenario: Trash and delete collective and circle
+  Scenario: Trash and delete collective and team
     Then user "jane" trashes collective "BehatMountPoint"
-    And user "jane" deletes collective+circle "BehatMountPoint"
+    And user "jane" deletes collective+team "BehatMountPoint"

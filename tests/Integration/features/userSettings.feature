@@ -6,6 +6,6 @@ Feature: userSettings
     And user "jane" sets userSetting "pageOrder" for collective "BehatUserSettingsCollective" to "2"
     Then user "jane" collective "BehatUserSettingsCollective" property "userPageOrder" is "2"
 
-  Scenario: Trash and delete collective and circle
+  Scenario: Trash and delete collective and team
     Then user "jane" trashes collective "BehatUserSettingsCollective"
-    And user "jane" deletes collective+circle "BehatUserSettingsCollective"
+    And user "jane" deletes collective+team "BehatUserSettingsCollective"

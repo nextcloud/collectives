@@ -21,7 +21,7 @@ Feature: publicPageShare
 
   Scenario: Fail to share a page if sharing permissions are missing
     When user "jane" sets "share" level in collective "BehatPublicPageCollective" to "Admin"
-    And user "john" joins circle "BehatPublicPageCollective" with owner "jane" with level "Moderator"
+    And user "john" joins team "BehatPublicPageCollective" with owner "jane" with level "Moderator"
     Then user "john" fails to create public page share for page "singlesharepage" in "BehatPublicPageCollective"
 
   Scenario: Fail to create and trash page in read-only shared page
@@ -61,6 +61,6 @@ Feature: publicPageShare
     And user "jane" deletes public page share "sharefolderpage" in collective "BehatPublicPageCollective"
     Then anonymous fails to see public share with stored token
 
-  Scenario: Trash and delete collective and circle with all remaining pages
+  Scenario: Trash and delete collective and team with all remaining pages
     Then user "jane" trashes collective "BehatPublicPageCollective"
-    And user "jane" deletes collective+circle "BehatPublicPageCollective"
+    And user "jane" deletes collective+team "BehatPublicPageCollective"
