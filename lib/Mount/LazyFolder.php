@@ -6,6 +6,7 @@ namespace OCA\Collectives\Mount;
 
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
+use OCP\Files\Node;
 use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
 
@@ -157,6 +158,10 @@ class LazyFolder implements Folder {
 	}
 
 	public function getById($id) {
+		return $this->__call(__FUNCTION__, func_get_args());
+	}
+
+	public function getFirstNodeById(int $id): ?Node {
 		return $this->__call(__FUNCTION__, func_get_args());
 	}
 
