@@ -42,7 +42,7 @@ describe('Settings', function() {
 			cy.wait('@propfindFolder')
 
 			// Open home folder
-			cy.get('[data-dir=""] > a, a[title="Home"]')
+			cy.get('.file-picker nav [title="Home"]')
 				.click()
 			cy.wait('@propfindFolder')
 
@@ -53,6 +53,9 @@ describe('Settings', function() {
 			cy.get('nav.newFolderMenu > ul > li > form > input[type="text"], input[placeholder="New folder name"], input[placeholder="New folder"]')
 				.type(`${randomFolder}{enter}`)
 			cy.wait('@createFolder')
+			// TODO: new folder popover doesn't close automatically, so click somewhere
+			cy.get('.file-picker nav [title="Home"]')
+				.click()
 			cy.get(filePickerListSelector).contains(randomFolder).click()
 
 			// Select new created folder
