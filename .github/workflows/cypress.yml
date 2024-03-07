@@ -257,7 +257,7 @@ jobs:
           retention-days: 5
 
   summary:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest-low
     needs: [changes, init, cypress]
 
     if: always()

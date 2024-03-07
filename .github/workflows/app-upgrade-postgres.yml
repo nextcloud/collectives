@@ -146,7 +146,7 @@ jobs:
   summary:
     permissions:
       contents: none
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest-low
     needs: [changes, app-upgrade-pgsql]
 
     if: always()
