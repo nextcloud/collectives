@@ -11,7 +11,6 @@ OC.L10N.register(
     "Loading…" : "Loading…",
     "An error occurred while performing the search" : "An error occurred while performing the search",
     "Add groups" : "Add groups",
-    "Add circles" : "Add circles",
     "Permissions" : "Permissions",
     "View" : "View",
     "Edit" : "Edit",

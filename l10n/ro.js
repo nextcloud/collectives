@@ -9,7 +9,6 @@ OC.L10N.register(
     "Promote to moderator" : "Promovează la moderator",
     "Loading…" : "Se încarcă...",
     "Add groups" : "Adaugă grupuri",
-    "Add circles" : "Adaugă cercuri",
     "Permissions" : "Permisiuni",
     "View" : "Vizualizare",
     "Edit" : "Editează",

@@ -6,7 +6,6 @@
     "Loading…" : "בטעינה…",
     "An error occurred while performing the search" : "אירעה שגיאה בעת ביצוע החיפוש",
     "Add groups" : "הוספת קבוצות",
-    "Add circles" : "הוספת מעגלים",
     "Permissions" : "הרשאות",
     "View" : "צפייה",
     "Edit" : "עריכה",
@@ -39,5 +38,5 @@
     "_%n byte_::_%n bytes_" : ["%n בייט","%n בייטים","%n בייטים"],
     "Copied" : "הועתק",
     "Copy share link" : "העתקת קישור השיתוף"
-},"pluralForm" :"nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;"
+},"pluralForm" :"nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: 2;"
 }

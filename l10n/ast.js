@@ -45,7 +45,6 @@ OC.L10N.register(
     "Delete permanently" : "Desaniciar permanentemente",
     "Cancel" : "Encaboxar",
     "New collective" : "Coleicionable nuevu",
-    "Select a circle..." : "Seleicionar un círculu…",
     "Add members" : "Amestar miembros",
     "Back" : "Atrás",
     "A collective with this name already exists" : "Yá esiste un coleicionable con esti nome",
@@ -61,7 +60,6 @@ OC.L10N.register(
     "Show all members of the collective" : "Amosar tolos miembros del coleicionable",
     "Collapse recent pages" : "Contrayer les páxines de recién",
     "Expand recent pages" : "Espander les páxines de recién",
-    "Page content" : "Conteníu de la páxina",
     "Open page sidebar" : "Abrir la barra llateral de la páxina",
     "Show in Files" : "Amosar en Ficheros",
     "Move or copy" : "Mover o copiar",
@@ -126,6 +124,7 @@ OC.L10N.register(
     "Collective not found:" : "Nun s'atopó'l coleicionable:",
     "Page not found:" : "Nun s'atopó la páxina:",
     "Could not find the Page." : "Nun se pudo atopar la páxina.",
+    "Page content" : "Conteníu de la páxina",
     "Pages that link to this one" : "Páxines qu'enllacien a esta",
     "Old versions of this page" : "Versiones antigües d'esta páxina",
     "Link copied to the clipboard." : "L'enllaz copióse nel cartafueyu."

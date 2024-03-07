@@ -8,7 +8,6 @@
     "Loading…" : "Įkeliama…",
     "An error occurred while performing the search" : "Atliekant paiešką, įvyko klaida",
     "Add groups" : "Pridėti grupes",
-    "Add circles" : "Pridėti ratus",
     "Permissions" : "Leidimai",
     "View" : "Rodyti",
     "Edit" : "Taisyti",
@@ -20,7 +19,6 @@
     "Back" : "Atgal",
     "Create" : "Sukurti",
     "Done" : "Atlikta",
-    "Page content" : "Puslapio turinys",
     "Show in Files" : "Rodyti failuose",
     "Move or copy" : "Perkelti ar kopijuoti",
     "Restore this version" : "Atkurti šią versiją",
@@ -53,6 +51,7 @@
     "Cannot copy" : "Nepavyksta nukopijuoti",
     "Copy share link" : "Kopijuoti bendrinimo nuorodą",
     "Page not found:" : "Puslapis nerastas:",
+    "Page content" : "Puslapio turinys",
     "Link copied to the clipboard." : "Nuoroda nukopijuota į iškarpinę."
 },"pluralForm" :"nplurals=4; plural=(n % 10 == 1 && (n % 100 > 19 || n % 100 < 11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? 1 : n % 1 != 0 ? 2: 3);"
 }
