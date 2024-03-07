@@ -8,7 +8,6 @@ OC.L10N.register(
     "Loading…" : "בטעינה…",
     "An error occurred while performing the search" : "אירעה שגיאה בעת ביצוע החיפוש",
     "Add groups" : "הוספת קבוצות",
-    "Add circles" : "הוספת מעגלים",
     "Permissions" : "הרשאות",
     "View" : "צפייה",
     "Edit" : "עריכה",
@@ -42,4 +41,4 @@ OC.L10N.register(
     "Copied" : "הועתק",
     "Copy share link" : "העתקת קישור השיתוף"
 },
-"nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;");
+"nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: 2;");

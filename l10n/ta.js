@@ -2,7 +2,6 @@ OC.L10N.register(
     "collectives",
     {
     "Collectives" : "தொகுப்புகள்",
-    "Created collective \"%s\" for existing circle." : "ஏற்கனவே உள்ள வட்டத்திற்காக \"%s\" தொகுப்பு உருவாக்கப்பட்டது.",
     "Manage members" : "உறுப்பினர்களை நிர்வகிக்கவும்",
     "Settings" : "அமைப்புகள்",
     "Remove" : "அகற்றுக",
@@ -31,6 +30,7 @@ OC.L10N.register(
     "New Page" : "புதிய பக்கம்",
     "Could not delete the page" : "பக்கத்தை நீக்க முடியவில்லை",
     "in Collective {collective}" : "தொகுப்பில் {தொகுப்பு}",
+    "Created collective \"%s\" for existing circle." : "ஏற்கனவே உள்ள வட்டத்திற்காக \"%s\" தொகுப்பு உருவாக்கப்பட்டது.",
     "Copied" : "நகலெடுக்கப்பட்டது",
     "Cannot copy" : "நகலெடுக்க முடியாது",
     "Copy share link" : "பகிர்வு இணைப்பை நகலெடுக்கவும்",

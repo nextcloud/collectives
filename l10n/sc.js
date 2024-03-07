@@ -12,7 +12,6 @@ OC.L10N.register(
     "Loading…" : "Carrighende…",
     "An error occurred while performing the search" : "B'at àpidu un'errore in sa chirca",
     "Add groups" : "Agiunghe grupos",
-    "Add circles" : "Agiunghe giros",
     "Permissions" : "Permissos",
     "View" : "Visualiza",
     "Edit" : "Modìfica",

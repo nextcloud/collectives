@@ -9,7 +9,6 @@ OC.L10N.register(
     "Loading…" : "Се вчитува…",
     "An error occurred while performing the search" : "Настана грешка при обидот за пребарување",
     "Add groups" : "Додади групи",
-    "Add circles" : "Додади кругови",
     "Permissions" : "Дозволи",
     "View" : "Погледни",
     "Edit" : "Уреди",

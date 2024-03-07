@@ -7,7 +7,6 @@ OC.L10N.register(
     "Loading…" : "O Kargañ...",
     "An error occurred while performing the search" : "Ur fazi a zo bet en ur ober an enklask",
     "Add groups" : "Ouzhoennañ strolladoù",
-    "Add circles" : "Ouzhpennañ kelc'hioù",
     "View" : "Gwell",
     "Edit" : "Cheñch",
     "Add emoji" : "Ouzhpennañ un emoji",

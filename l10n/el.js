@@ -10,7 +10,6 @@ OC.L10N.register(
     "Loading…" : "Γίνεται φόρτωση…",
     "An error occurred while performing the search" : "Παρουσιάστηκε σφάλμα κατά την αναζήτηση",
     "Add groups" : "Προσθήκη ομάδων",
-    "Add circles" : "Προσθήκη κύκλων",
     "Permissions" : "Δικαιώματα",
     "View" : "Προβολή",
     "Edit" : "Επεξεργασία",

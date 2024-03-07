@@ -9,14 +9,12 @@ OC.L10N.register(
     "Last edition %1$s" : "آخر نسخة %1$s",
     "Collectives - Page content" : "تجميعات - محتوى الصفحة",
     "Collectives - Pages" : "تجميعات - صفحات",
-    "Created collective \"%s\" for existing circle." : "التجميعة \"%s\" أُنشئت للدائرة القائمة.",
     "Collective Share" : "مشاركة التجميعة",
     "You are not allowed to share %s" : "أنت غير مسموح لك أن تشارك %s",
     "You are not allowed to edit %s" : "غير مسموح لك بتعديل %s",
     "Share not found for user" : "لم يمُكن العثور على مُشاركة للمستخدِم",
     "Landing page" : "الصفحة المقصودة",
     "A place for activist and community projects to build shared knowledge" : "مكان للنشطاء والمشاريع المجتمعية لبناء المعرفة المشتركة",
-    "Collectives is a Nextcloud App for activist and community projects to organize together.\nCome and gather in collectives to build shared knowledge.\n\n* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n  tied to a [Nextcloud Circle](https://github.com/nextcloud/circles) and\n  owned by the collective.\n* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**\n  for page formatting.\n\n## Installation\n\nIn your Nextcloud instance, simply navigate to **»Apps«**, find the\n**»Circles«** and **»Collectives«** apps and enable them." : "\"التجميعات\" Collectives هي تطبيق من نكست كلاود للنشطاء والمشاريع المجتمعية للتنظيم معًا. \nتعالوا واجتمعوا في مجموعات لبناء المعرفة المشتركة. \n* 👥 ** سير عمل جماعي وغير هرمي \n**: التجميعات مرتبطة بتطبيق نكست كلاود للدوائر Circles ـ [Circles](https://github.com/nextcloud/circles)  \n\n* 📝 **تحرير جماعي للتجميعة** كما في التطبيق الشهير إيثرباد EtherpadK. و هذا صار ممكنا بفضل تطبيق Text من نكست كلاود [Text app] (https://github.com/nextcloud/text).\n* 🔤 ** استخدام ماركدوان في تكوين الصفحات  [Markdown] (https://en.wikipedia.org/wiki/Markdown) على خادومك الخاص. \n\n## التنصيب\n\nما عليك سوى الانتقال إلى ** »التطبيقات« **، و ابحث عن ** »الدوائر Circles« ** و ** »التجميعات Collectives« ** و قم بتمكينها.",
     "Manage members" : "إدارة الإعضاء",
     "Share with guests" : "شارِك مع الضيوف",
     "Export or print" : "صدّر أو اطبع",
@@ -45,14 +43,11 @@ OC.L10N.register(
     "Could not change member level" : "تعذّر تغيير رتبة العضو",
     "Member removed" : "تمّ حذف العضو",
     "Could not remove member" : "تعذّر حذف العضو",
-    "Search accounts, groups, circles…" : "البحث في الحسابات، و المجموعات، و الدوائر...",
-    "Add accounts, groups or circles…" : "إضافة حسابات، أو مجموعات، أو دوائر ...",
     "Search for members to add." : "البحث عن أعضاء لإضافتهم.",
     "Loading…" : "جاري التحميل…",
     "An error occurred while performing the search" : "حدث خطأ اثناء البحث",
     "Add accounts" : "إضافة حسابات",
     "Add groups" : "اضافة مجموعات",
-    "Add circles" : "اضافة جماعات",
     "Remove {name}" : "إزالة {name}",
     "Members of collective {name}" : "أعضاء التجميعة collective ـ {name} ",
     "Collective settings" : "إعدادات التجميعات collective",
@@ -73,7 +68,6 @@ OC.L10N.register(
     "Change emoji" : "تغيير الرمز التعبيري",
     "Add emoji" : "اضافة رمز تعبيري",
     "Name of the collective" : "اسم التجميعة",
-    "Renaming is limited to owners of the circle" : "إعادة التسمية تقتصر على مُلّاك الدائرة",
     "Name too short, requires at least three characters" : "الاسم قصير جدّاً. يلزم ثلاث حروف على الأقل",
     "Editing permissions updated" : "تعديلات الأذونات تمّ تحديثها",
     "Could not update editing permissions" : "تعذّر تحديث تعديلات الأذونات",
@@ -93,17 +87,10 @@ OC.L10N.register(
     "Restore" : "استعادة ",
     "Delete permanently" : "حذف بشكل دائم",
     "Permanently delete collective »{collective}«" : "إحذف التجميعة نهائيّاً »{collective}«",
-    "Delete corresponding circle along with the collective?" : "إحذف الدائرة المناظرة مع التجميعة؟",
     "Cancel" : "إلغاء",
     "Only collective" : "تجميعة فقط",
-    "Collective and circle" : "تجميعة collective و دائرة circle",
-    "Only circle owners can delete a circle" : "مُلّاك الدائرة فقط لهم صلاحية حذفها",
     "New collective" : "تجميعة collective جديدة",
     "Select emoji" : "إختر رمزاً تعبيريّاً emji",
-    "Select a circle..." : "إختر دائرةً ...",
-    "Select an existing circle" : "إختر دائرةً موجودةً",
-    "Cancel selecting a circle" : "إلغ اختيار دائرة",
-    "Enter the new collective name or pick a circle" : "أدخل اسم تجميعة جديدة أو اختر دائرة",
     "Add members" : "إضافة أعضاء",
     "Add members to {name}" : "إضافة أعضاء إلى {name}",
     "Back" : "عودة",
@@ -122,7 +109,6 @@ OC.L10N.register(
     "Collapse recent pages" : "طَي collapse الصفحات المفتوحة مؤخراً",
     "Expand recent pages" : "فرد expand الصفحات المفتوحة مؤخراً",
     "Could not save recent pages setting for collective" : "تعذّر حفظ إعدادات الصفحات المفتوحة مؤخراً من التجميعة collective",
-    "Page content" : "محتوى الصفحة",
     "Open page sidebar" : "إفتح الشريط الجانبي للصفحة",
     "Full width" : "العرض الكامل",
     "Show in Files" : "عرض في الملفات ",
@@ -230,7 +216,9 @@ OC.L10N.register(
     "The following dependency apps are missing: " : "تطبيقات التبعيّة dependency التالية ناقصة:",
     "Please ask the administrator to enable these apps." : "رجاءً، أُطلُب من المُشرف تمكين هذه التطبيقات",
     "in Collective {collective}" : "في  التجميعة {collective}",
+    "Created collective \"%s\" for existing circle." : "التجميعة \"%s\" أُنشئت للدائرة القائمة.",
     "A share for collective %s exists already" : "مشاركة التجميعة %s موجودة مسبقاً",
+    "Collectives is a Nextcloud App for activist and community projects to organize together.\nCome and gather in collectives to build shared knowledge.\n\n* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n  tied to a [Nextcloud Circle](https://github.com/nextcloud/circles) and\n  owned by the collective.\n* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**\n  for page formatting.\n\n## Installation\n\nIn your Nextcloud instance, simply navigate to **»Apps«**, find the\n**»Circles«** and **»Collectives«** apps and enable them." : "\"التجميعات\" Collectives هي تطبيق من نكست كلاود للنشطاء والمشاريع المجتمعية للتنظيم معًا. \nتعالوا واجتمعوا في مجموعات لبناء المعرفة المشتركة. \n* 👥 ** سير عمل جماعي وغير هرمي \n**: التجميعات مرتبطة بتطبيق نكست كلاود للدوائر Circles ـ [Circles](https://github.com/nextcloud/circles)  \n\n* 📝 **تحرير جماعي للتجميعة** كما في التطبيق الشهير إيثرباد EtherpadK. و هذا صار ممكنا بفضل تطبيق Text من نكست كلاود [Text app] (https://github.com/nextcloud/text).\n* 🔤 ** استخدام ماركدوان في تكوين الصفحات  [Markdown] (https://en.wikipedia.org/wiki/Markdown) على خادومك الخاص. \n\n## التنصيب\n\nما عليك سوى الانتقال إلى ** »التطبيقات« **، و ابحث عن ** »الدوائر Circles« ** و ** »التجميعات Collectives« ** و قم بتمكينها.",
     "The contacts app is required to manage members" : "تطبيق جهات الاتصال مطلوب لإدارة الأعضاء",
     "Allow editing in share" : "السماح بالتحرير في المشاركة",
     "Copied" : "نُسخت ",
@@ -245,6 +233,10 @@ OC.L10N.register(
     "Admins and moderaters" : "المشرفون و المنسّقون",
     "Members can be managed via the connected circle in the Contacts app." : "يمكن إدارة الأعضاء عبر الدائرة المتصلة connected circle في تطبيق جهات الاتصال.",
     "Open circle in Contacts" : "فتح الدائرة في جهات الاتصال",
+    "Renaming is limited to owners of the circle" : "إعادة التسمية تقتصر على مُلّاك الدائرة",
+    "Delete corresponding circle along with the collective?" : "إحذف الدائرة المناظرة مع التجميعة؟",
+    "Collective and circle" : "تجميعة collective و دائرة circle",
+    "Only circle owners can delete a circle" : "مُلّاك الدائرة فقط لهم صلاحية حذفها",
     "Create collective for existing circle" : "أنشيء تجميعة Collective لدائرة الاتصال Circle القائمة",
     "New collective name" : "اسم تجميعة جديدة",
     "Select circle..." : "إختر دائرة اتصال Circle ...",
@@ -252,6 +244,7 @@ OC.L10N.register(
     "Cannot delete page with subpages" : "لا يمكن حذف صفحة بها صفحات فرعية",
     "Page not found:" : "الصفحة غير موجودة:",
     "Could not find the Page." : "تعذّر إيجاد الصفحة.",
+    "Page content" : "محتوى الصفحة",
     "Pages that link to this one" : "الصفحات التي لها روابط link إلى هذه الصفحة",
     "Old versions of this page" : "النسخ القديمة من هذه الصفحة",
     "Link copied to the clipboard." : "تمّ نسخ الرابط إلى الحافظة"

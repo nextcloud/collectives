@@ -11,7 +11,6 @@ OC.L10N.register(
     "Loading…" : "Đang tải…",
     "An error occurred while performing the search" : "Đã xảy ra lỗi khi thực hiện tìm kiếm",
     "Add groups" : "Thêm nhóm",
-    "Add circles" : "Thêm vòng kết nối",
     "View" : "Xem",
     "Edit" : "Chỉnh sửa",
     "Danger zone" : "Khu vực nguy hiểm",
