@@ -1,5 +1,28 @@
 # Changelog
 
+## 2.10.0 - 2024.03.07
+
+### ✨New
+* 🔗 Add support public page shares. (#515)
+* 🔗 Allow to create several shares for a collective. (#633)
+* ✨ Add Nextcloud 29 support.
+* 🧹 Remove Nextcloud 25 and PHP 7.4 support.
+* 👪 Rename Circles to Teams (change from Nextcloud 29).
+* 👪 Add a team resource provider.
+
+### 🐛Fixes
+* 💄 Show 'open sidebar' when sidebar is closed.
+* 📂 Don't revert subfolders for leaf pages.
+* 🔗 Improved link handling for links to collectives pages.
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 2.9.2 - 2023.12.06
 
 ### 🐛Fixes
