@@ -7,6 +7,8 @@ namespace OCA\Collectives\Team;
 use OCA\Collectives\AppInfo\Application;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Service\CollectiveService;
+use OCA\Collectives\Service\NotFoundException;
+use OCA\Collectives\Service\NotPermittedException;
 use OCP\IURLGenerator;
 use OCP\Teams\ITeamResourceProvider;
 use OCP\Teams\TeamResource;
@@ -29,22 +31,26 @@ class CollectiveTeamResourceProvider implements ITeamResourceProvider {
 	}
 
 	public function getSharedWith(string $teamId): array {
-		$collective = $this->collectiveMapper->findByCircleId($teamId);
-		if ($collective) {
-			$collective = $this->collectiveService->getCollectiveInfo($collective->getId(), $this->userId);
-			return [
-				new TeamResource(
-					$this,
-					(string)$collective->getId(),
-					$collective->getName(),
-					$this->urlGenerator->linkToRouteAbsolute('collectives.start.index') . rawurlencode($collective->getName()),
-					'',
-					'',
-					$collective->getEmoji(),
-				)
-			];
+		try {
+			$collective = $this->collectiveMapper->findByCircleId($teamId);
+			if ($collective) {
+				$collective = $this->collectiveService->getCollectiveInfo($collective->getId(), $this->userId);
+			}
+		} catch (NotFoundException|NotPermittedException) {
+			$collective = null;
 		}
-		return [];
+
+		return $collective
+			? [new TeamResource(
+				$this,
+				(string)$collective->getId(),
+				$collective->getName(),
+				$this->urlGenerator->linkToRouteAbsolute('collectives.start.index') . rawurlencode($collective->getName()),
+				'',
+				'',
+				$collective->getEmoji(),
+			)]
+			: [];
 	}
 
 	public function isSharedWithTeam(string $teamId, string $resourceId): bool {
@@ -52,7 +58,11 @@ class CollectiveTeamResourceProvider implements ITeamResourceProvider {
 	}
 
 	public function getTeamsForResource(string $resourceId): array {
-		$collective = $this->collectiveMapper->findByIdAndUser((int)$resourceId, $this->userId);
-		return $collective->getCircleId() ? [$collective->getCircleId()] : [];
+		try {
+			$collective = $this->collectiveService->getCollective((int)$resourceId, $this->userId);
+		} catch (NotFoundException|NotPermittedException) {
+			return [];
+		}
+		return [$collective->getCircleId()];
 	}
 }
