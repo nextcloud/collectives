@@ -268,7 +268,7 @@ jobs:
         uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         if: failure()
         with:
-          name: Screenshots.${{ matrix.server-versions }}-${{ matrix.containers }}
+          name: Screenshots.nextcloud-${{ matrix.containers }}
           path: apps/${{ env.APP_NAME }}/cypress/screenshots/
           retention-days: 5
 
@@ -276,7 +276,7 @@ jobs:
         uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         if: always()
         with:
-          name: ${{ matrix.server-versions }}-${{ matrix.containers }}.log
+          name: nextcloud-${{ matrix.containers }}.log
           path: data/nextcloud.log
           retention-days: 5
 
