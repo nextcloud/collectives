@@ -54,7 +54,7 @@ jobs:
 
     strategy:
       matrix:
-        server-versions: ['stable27', 'fix/file-widget-viewer']
+        server-versions: ['fix/file-widget-viewer']
 
     env:
       PUPPETEER_SKIP_DOWNLOAD: true
@@ -172,13 +172,11 @@ jobs:
         containers: [1, 2, 3]
         php-versions: ['8.0', '8.2']
         databases: ['sqlite']
-        server-versions: ['stable27', 'fix/file-widget-viewer']
+        server-versions: ['fix/file-widget-viewer']
         # Only use cypress cloud for PRs
         use-cypress-cloud:
           - ${{ vars.USE_CYPRESS_CLOUD && !!github.head_ref }}
         exclude:
-          - php-versions: '8.0'
-            server-versions: 'stable27'
           - php-versions: '8.0'
             server-versions: 'fix/file-widget-viewer'
         # Only use one container if we are not using the cypress cloud.
