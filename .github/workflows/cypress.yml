@@ -54,12 +54,17 @@ jobs:
 
     strategy:
       matrix:
-        server-versions: ['stable27', 'master']
+        server-versions: ['stable27', 'fix/file-widget-viewer']
 
     env:
       PUPPETEER_SKIP_DOWNLOAD: true
 
     steps:
+      - name: Register text Git reference
+        run: |
+          server_app_ref="$(if [ "${{ matrix.server-versions }}" = "fix/file-widget-viewer" ]; then echo -n "master"; else echo -n "${{ matrix.server-versions }}"; fi)"
+          echo "server_app_ref=$server_app_ref" >> $GITHUB_ENV
+
       - name: Checkout server
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:
@@ -72,18 +77,18 @@ jobs:
         with:
           repository: nextcloud/circles
           path: apps/circles
-          ref: ${{ matrix.server-versions }}
+          ref: ${{ env.server_app_ref }}
 
       - name: Checkout files_pdfviewer app
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:
           repository: nextcloud/files_pdfviewer
           path: apps/files_pdfviewer
-          ref: ${{ matrix.server-versions }}
+          ref: ${{ env.server_app_ref }}
 
       - name: Register text Git reference
         run: |
-          text_app_ref="$(if [ "${{ matrix.server-versions }}" = "master" ]; then echo -n "main"; else echo -n "${{ matrix.server-versions }}"; fi)"
+          text_app_ref="$(if [ "${{ matrix.server-versions }}" = "fix/file-widget-viewer" ]; then echo -n "main"; else echo -n "${{ matrix.server-versions }}"; fi)"
           echo "text_app_ref=$text_app_ref" >> $GITHUB_ENV
 
       - name: Checkout text app
@@ -98,7 +103,7 @@ jobs:
         with:
           repository: nextcloud/viewer
           path: apps/viewer
-          ref: ${{ matrix.server-versions }}
+          ref: ${{ env.server_app_ref }}
 
       - name: Checkout app
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
@@ -146,7 +151,7 @@ jobs:
         containers: [1, 2, 3]
         php-versions: ['8.0', '8.2']
         databases: ['sqlite']
-        server-versions: ['stable27', 'master']
+        server-versions: ['stable27', 'fix/file-widget-viewer']
         # Only use cypress cloud for PRs
         use-cypress-cloud:
           - ${{ vars.USE_CYPRESS_CLOUD && !!github.head_ref }}
@@ -154,7 +159,7 @@ jobs:
           - php-versions: '8.0'
             server-versions: 'stable27'
           - php-versions: '8.0'
-            server-versions: 'master'
+            server-versions: 'fix/file-widget-viewer'
         # Only use one container if we are not using the cypress cloud.
           - use-cypress-cloud: false
             containers: 2
