@@ -79,6 +79,13 @@ jobs:
           path: apps/circles
           ref: ${{ env.server_app_ref }}
 
+      - name: Checkout vue lib
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        with:
+          repository: nextcloud-libraries/nextcloud-vue
+          path: nextcloud-vue
+          ref: fix/widget-interactive-ncrichtext
+
       - name: Checkout files_pdfviewer app
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:
@@ -126,6 +133,20 @@ jobs:
 
       - name: Set up npm ${{ steps.versions.outputs.npmVersion }}
         run: npm i -g npm@"${{ steps.versions.outputs.npmVersion }}"
+
+      - name: Install dependencies & build lib
+        working-directory: nextcloud-vue
+        run: |
+          npm ci
+          npm run build --if-present
+          npm link
+
+      - name: Install dependencies & build text
+        working-directory: apps/text
+        run: |
+          npm ci
+          npm link @nextcloud/vue
+          npm run build --if-present
 
       - name: Install dependencies & build
         working-directory: apps/${{ env.APP_NAME }}
