@@ -110,11 +110,11 @@ jobs:
         id: versions
         with:
           fallbackNode: "^20"
-          fallbackNpm: "^9"
+          fallbackNpm: "^10"
           path: apps/${{ env.APP_NAME }}
 
       - name: Set up node ${{ steps.versions.outputs.nodeVersion }}
-        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v3
+        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
         with:
           cache: 'npm'
           node-version: ${{ steps.versions.outputs.nodeVersion }}
@@ -122,11 +122,11 @@ jobs:
       - name: Set up npm ${{ steps.versions.outputs.npmVersion }}
         run: npm i -g npm@"${{ steps.versions.outputs.npmVersion }}"
 
-      - name: Install dependencies & build
+      - name: Install node dependencies & build app
         working-directory: apps/${{ env.APP_NAME }}
         run: |
           npm ci
-          npm run build --if-present
+          TESTING=true npm run build --if-present
 
       - name: Save context
         uses: buildjet/cache/save@e376f15c6ec6dc595375c78633174c7e5f92dc0e # v3
@@ -172,7 +172,7 @@ jobs:
           path: ./
 
       - name: Set up node ${{ steps.versions.outputs.nodeVersion }}
-        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v3
+        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
         with:
           node-version: ${{ steps.versions.outputs.nodeVersion }}
 
