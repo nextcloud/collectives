@@ -26,10 +26,10 @@ jobs:
 
       - name: Get php version
         id: versions
-        uses: icewind1991/nextcloud-version-matrix@7d433286e92318f51ed0537b6c77374759e12f46 # v1.3.0
+        uses: icewind1991/nextcloud-version-matrix@58becf3b4bb6dc6cef677b15e2fd8e7d48c0908f # v1.3.1
 
       - name: Set up php${{ steps.versions.outputs.php-available }}
-        uses: shivammathur/setup-php@6d7209f44a25a59e904b1ee9f3b0c33ab2cd888d # v2
+        uses: shivammathur/setup-php@a4e22b60bbb9c1021113f2860347b0759f66fe5d # v2
         with:
           php-version: ${{ steps.versions.outputs.php-available }}
           extensions: bz2, ctype, curl, dom, fileinfo, gd, iconv, intl, json, libxml, mbstring, openssl, pcntl, posix, session, simplexml, xmlreader, xmlwriter, zip, zlib, sqlite, pdo_sqlite
