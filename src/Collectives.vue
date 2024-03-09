@@ -183,4 +183,10 @@ export default {
 .app-navigation .app-navigation-toggle {
 	top: 0 !important;
 }
+
+/* Fix for anchor scroll and sticky header */
+.splitpanes__pane-details {
+	scroll-padding-top: 60px;
+	scroll-behavior: smooth;
+}
 </style>
