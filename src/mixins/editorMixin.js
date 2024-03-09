@@ -86,7 +86,15 @@ export default {
 				onOutlineToggle: (visible) => {
 					this.toggleOutlineFromEditor(visible)
 				},
+				onLoaded: () => {
+					if (document.location.hash) {
+						// scroll to the corresponding header if the page was loaded with a hash
+						const element = document.querySelector(`[href="${document.location.hash}"]`)
+						element?.click()
+					}
+				},
 			})
+
 			if (!this.loading('pageContent')) {
 				this.reader.setContent(this.pageContent)
 			}
