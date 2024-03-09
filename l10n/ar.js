@@ -9,12 +9,14 @@ OC.L10N.register(
     "Last edition %1$s" : "آخر نسخة %1$s",
     "Collectives - Page content" : "تجميعات - محتوى الصفحة",
     "Collectives - Pages" : "تجميعات - صفحات",
+    "Created collective \"%s\" for existing team." : "التجميعة \"%s\" تمّ إنشاؤها للفريق الحالي.",
     "Collective Share" : "مشاركة التجميعة",
     "You are not allowed to share %s" : "أنت غير مسموح لك أن تشارك %s",
     "You are not allowed to edit %s" : "غير مسموح لك بتعديل %s",
     "Share not found for user" : "لم يمُكن العثور على مُشاركة للمستخدِم",
     "Landing page" : "الصفحة المقصودة",
     "A place for activist and community projects to build shared knowledge" : "مكان للنشطاء والمشاريع المجتمعية لبناء المعرفة المشتركة",
+    "Collectives is a Nextcloud App for activist and community projects to organize together.\nCome and gather in collectives to build shared knowledge.\n\n* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n  tied to a [Nextcloud Team](https://github.com/nextcloud/circles) and\n  owned by the collective.\n* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**\n  for page formatting.\n\n## Installation\n\nIn your Nextcloud instance, simply navigate to **»Apps«**, find the\n**»Teams«** and **»Collectives«** apps and enable them." : "تطبيق التجميعات Collectives هو تطبيق لنكست كلاود لتنظيم عم.مل الفرق و المجموعات لبناء المعرفة المشتركة.\n\n * 👥 **سير العمل الجماعي غير الهرمي.**: كل تجميعة مرتبطة بـفريق من مستخدِمي نكست كلاود [Nextcloud Team] (https://github.com/nextcloud/circles) . \n* 📝 **تحرير الصفحة تعاونيّاً ** بالكيفية المعروفة في إيثرباد Etherpad؛ و ذلك أصبح ممكنا بفضل التطبيق [Text app] (https://github.com/nextcloud/text). \n* 🔤 **صيغة قياسية متعارف عليها لتحرير التجميعة؛ و هي صيغة ماركداون الشهيرة [Markdown] (https://en.wikipedia.org/wiki/Markdown)**. \n\n## التثبيت \nعلى خادوم نكست كلاود عندك، ما عليك سوى الانتقال إلى جزء **«التطبيقات Apps»**، ثم  البحث عن تطبيقات **«الفرق Teams»** و **«التجميعات Collectives»** و تمكينها.",
     "Manage members" : "إدارة الإعضاء",
     "Share with guests" : "شارِك مع الضيوف",
     "Export or print" : "صدّر أو اطبع",
@@ -43,6 +45,8 @@ OC.L10N.register(
     "Could not change member level" : "تعذّر تغيير رتبة العضو",
     "Member removed" : "تمّ حذف العضو",
     "Could not remove member" : "تعذّر حذف العضو",
+    "Search accounts, groups, teams" : "البحث في الحسابات، و المجموعات، و الفِرَق",
+    "Add accounts, groups or teams" : "إضافة حسابات، أو مجموعات، أو فِرَق",
     "Search for members to add." : "البحث عن أعضاء لإضافتهم.",
     "Loading…" : "جاري التحميل…",
     "An error occurred while performing the search" : "حدث خطأ اثناء البحث",
@@ -69,6 +73,7 @@ OC.L10N.register(
     "Change emoji" : "تغيير الرمز التعبيري",
     "Add emoji" : "اضافة رمز تعبيري",
     "Name of the collective" : "اسم التجميعة",
+    "Renaming is limited to owners of the team" : "تغيير التسمية يحق فقط لمالكي الفِرَق",
     "Name too short, requires at least three characters" : "الاسم قصير جدّاً. يلزم ثلاث حروف على الأقل",
     "Editing permissions updated" : "تعديلات الأذونات تمّ تحديثها",
     "Could not update editing permissions" : "تعذّر تحديث تعديلات الأذونات",
@@ -88,10 +93,17 @@ OC.L10N.register(
     "Restore" : "استعادة ",
     "Delete permanently" : "حذف بشكل دائم",
     "Permanently delete collective »{collective}«" : "إحذف التجميعة نهائيّاً »{collective}«",
+    "Delete corresponding team along with the collective?" : "هل ترغب في حذف الفريق المُناظِر مع التجميعة؟",
     "Cancel" : "إلغاء",
     "Only collective" : "تجميعة فقط",
+    "Collective and team" : "التجميعات و الفِرَق",
+    "Only team owners can delete a team" : "يمكن فقط لمالك الفريق حذفه",
     "New collective" : "تجميعة collective جديدة",
     "Select emoji" : "إختر رمزاً تعبيريّاً emji",
+    "Select a team..." : "إختَر فريقاً ...",
+    "Select an existing team" : "إختَر فريقاً موجوداً",
+    "Cancel selecting a team" : "إلغٍ عملية حذف فريق",
+    "Enter the new collective name or pick an existing team" : "أدخِل اسم التجميعة الجديدة أو اختَر واحدةً من الموجود مسبقاً",
     "Add members" : "إضافة أعضاء",
     "Add members to {name}" : "إضافة أعضاء إلى {name}",
     "Back" : "عودة",
