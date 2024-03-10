@@ -23,6 +23,7 @@ OC.L10N.register(
     "Add another link" : "Añadir otro enlace",
     "Unshare" : "Dejar de compartir",
     "Share link" : "Compartir liga",
+    "View only" : "Sólo lectura",
     "Cannot copy, please copy the link manually" : "No se ha podido copiar, por favor, copia el enlace manualmente",
     "Download" : "Descargar",
     "Current version" : "Versión actual",
