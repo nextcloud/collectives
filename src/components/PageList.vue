@@ -99,13 +99,24 @@
 					:level="1"
 					:filter-string="filterString"
 					:is-template="true" />
-				<SubpageList v-for="page in subpages"
-					:key="page.id"
-					:data-page-id="page.id"
-					:page="page"
-					:level="1"
-					:filter-string="filterString"
-					class="page-list-drag-item" />
+				<div v-if="filterString !== ''">
+					<SubpageList v-for="page in filteredPages"
+						:key="page.id"
+						:data-page-id="page.id"
+						:page="page"
+						:level="1"
+						:filtered-view="true"
+						class="page-list-drag-item" />
+				</div>
+				<div v-else>
+					<SubpageList v-for="page in subpages"
+						:key="page.id"
+						:data-page-id="page.id"
+						:page="page"
+						:level="1"
+						:filtered-view="false"
+						class="page-list-drag-item" />
+				</div>
 			</Draggable>
 		</div>
 		<PageTrash v-if="displayTrash" />
@@ -174,7 +185,18 @@ export default {
 			'sortBy',
 			'showing',
 			'showTemplates',
+			'allPages',
 		]),
+
+		allpages() {
+			return this.allPages(this.rootPage.collectivePath)
+		},
+
+		filteredPages() {
+			return this.allpages.filter(p => {
+				return p.title.toLowerCase().includes(this.filterString.toLowerCase())
+			})
+		},
 
 		subpages() {
 			if (this.rootPage) {

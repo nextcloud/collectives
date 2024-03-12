@@ -186,6 +186,23 @@ export default {
 			}
 		},
 
+		filteredPages(state) {
+			return (filterString) => {
+				return state.pages.filter(p => {
+					return p.title.toLowerCase().includes(filterString.toLowerCase())
+				})
+			}
+		},
+
+		allPages(state) {
+			return function(collectivePath) {
+				const pages = state.pages.filter(p => p.collectivePath === collectivePath).map((p) => {
+					return p
+				})
+				return pages
+			}
+		},
+
 		sortedSubpages,
 
 		pagesTreeWalk: (_state, getters) => (parentId = 0) => {
