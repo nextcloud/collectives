@@ -1,7 +1,6 @@
 <template>
 	<div>
-		<Item v-show="pageInFilterString"
-			key="page.title"
+		<Item :key="page.title"
 			:to="pagePath(page)"
 			:page-id="page.id"
 			:parent-id="page.parentId"
@@ -14,7 +13,7 @@
 			:can-edit="currentCollectiveCanEdit"
 			:is-template="isTemplate"
 			:has-visible-subpages="hasVisibleSubpages"
-			:filtered-view="filterString !== ''"
+			:filtered-view="filteredView"
 			@toggleCollapsed="toggleCollapsed(page.id)"
 			@click.native="show('details')" />
 		<div class="page-list-indent">
@@ -22,7 +21,6 @@
 				:key="templateView.id"
 				:page="templateView"
 				:level="level+1"
-				:filter-string="filterString"
 				:is-template="true" />
 			<Draggable v-if="subpagesView.length > 0 || keptSortable(page.id)"
 				:list="subpagesView"
@@ -34,7 +32,6 @@
 					:data-page-id="subpage.id"
 					:page="subpage"
 					:level="level+1"
-					:filter-string="filterString"
 					:is-template="isTemplate"
 					class="page-list-drag-item" />
 			</Draggable>
@@ -64,9 +61,9 @@ export default {
 			type: Number,
 			required: true,
 		},
-		filterString: {
-			type: String,
-			default: '',
+		filteredView: {
+			type: Boolean,
+			default: false,
 		},
 		isTemplate: {
 			type: Boolean,
@@ -87,13 +84,9 @@ export default {
 			'showTemplates',
 		]),
 
-		pageInFilterString() {
-			return this.page.title.toLowerCase().includes(this.filterString.toLowerCase())
-		},
-
 		showSubpages() {
-			// Display subpages if either in filtered view or not collapsed
-			return this.filterString !== '' || !this.collapsed(this.page.id)
+			// Display subpages only when not in filtered view and when not collapsed
+			return !this.filteredView && !this.collapsed(this.page.id)
 		},
 
 		subpagesView() {
@@ -124,7 +117,7 @@ export default {
 		},
 
 		disableSorting() {
-			return this.filterString !== ''
+			return this.filteredView
 		},
 	},
 
