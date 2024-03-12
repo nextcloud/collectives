@@ -45,6 +45,7 @@ OC.L10N.register(
     "Loading…" : "Nahrávam...",
     "An error occurred while performing the search" : "Pri vyhľadávaní sa vyskytla chyba",
     "Add groups" : "Pridať skupiny",
+    "Add teams" : "Pridať tímy",
     "Remove {name}" : "Odstrániť {name}",
     "Members of collective {name}" : "Členovia kolektívu {name}",
     "Collective settings" : "Nastavenia kolektívu",
