@@ -97,18 +97,23 @@
 					:key="templateView.id"
 					:page="templateView"
 					:level="1"
-					:filter-string="filterString"
+					:filtered-view="filterString !== ''"
 					:is-template="true" />
-				<div v-if="filterString !== ''">
-					<SubpageList v-for="page in filteredPages"
-						:key="page.id"
-						:data-page-id="page.id"
-						:page="page"
-						:level="1"
-						:filtered-view="true"
-						class="page-list-drag-item" />
+				<div v-if="filterString.length>0">
+					<RecycleScroller v-slot="{item}"
+						class="scroller"
+						:items="filteredPages"
+						:item-size="44"
+						key-field="id">
+						<SubpageList :key="item.id"
+							:data-page-id="item.id"
+							:page="item"
+							:level="1"
+							:filtered-view="true"
+							class="page-list-drag-item" />
+					</RecycleScroller>
 				</div>
-				<div v-else>
+				<div v-if="filterString.length === 0">
 					<SubpageList v-for="page in subpages"
 						:key="page.id"
 						:data-page-id="page.id"
@@ -141,6 +146,9 @@ import { SET_COLLECTIVE_USER_SETTING_PAGE_ORDER } from '../store/actions.js'
 import { scrollToPage } from '../util/scrollToElement.js'
 import { pageOrders } from '../util/sortOrders.js'
 import SkeletonLoading from './SkeletonLoading.vue'
+import { RecycleScroller } from 'vue-virtual-scroller'
+
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 
 export default {
 	name: 'PageList',
@@ -161,6 +169,7 @@ export default {
 		SortAlphabeticalAscendingIcon,
 		SortAscendingIcon,
 		SortClockAscendingOutlineIcon,
+		RecycleScroller,
 	},
 
 	data() {
@@ -275,6 +284,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.scroller{
+	height:100vh;
+}
+
 .app-content-list {
 	// nextcloud-vue component sets `max-height: unset` on mobile.
 	// Overwrite this to fix stickyness of header and rootpage.
