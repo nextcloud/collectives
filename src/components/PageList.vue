@@ -17,8 +17,7 @@
 				</NcActionButton>
 			</NcActions>
 			<NcActions class="toggle"
-				:aria-label="t('collectives', 'Sort order')"
-				:menu-name="t('collectives', 'Sort order')">
+				:aria-label="t('collectives', 'Sort order')">
 				<template #icon>
 					<SortAscendingIcon v-if="sortedBy('byOrder')" :size="16" />
 					<SortAlphabeticalAscendingIcon v-else-if="sortedBy('byTitle')" :size="16" />
