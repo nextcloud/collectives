@@ -97,9 +97,9 @@
 					:key="templateView.id"
 					:page="templateView"
 					:level="1"
-					:filtered-view="filterString !== ''"
+					:filtered-view="disableSorting"
 					:is-template="true" />
-				<div v-if="filterString.length>0">
+				<div v-if="disableSorting">
 					<RecycleScroller v-slot="{item}"
 						class="scroller"
 						:items="filteredPages"
@@ -113,7 +113,7 @@
 							class="page-list-drag-item" />
 					</RecycleScroller>
 				</div>
-				<div v-if="filterString.length === 0">
+				<div v-if="!disableSorting">
 					<SubpageList v-for="page in subpages"
 						:key="page.id"
 						:data-page-id="page.id"
