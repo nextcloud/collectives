@@ -198,7 +198,7 @@ export default {
 		]),
 
 		allpages() {
-			return this.allPages(this.rootPage.collectivePath)
+			return this.allPages(this.rootPage.id)
 		},
 
 		filteredPages() {

@@ -194,12 +194,17 @@ export default {
 			}
 		},
 
-		allPages(state) {
-			return function(collectivePath) {
-				const pages = state.pages.filter(p => p.collectivePath === collectivePath).map((p) => {
-					return p
+		allPages(state, getters) {
+			const allSubPagesSorted = (pageId) => {
+				const res = []
+				sortedSubpages(state, getters)(pageId).forEach(element => {
+					res.push(element)
+					res.push(...sortedSubpages(state, getters)(element.id))
 				})
-				return pages
+				return res
+			}
+			return function(rootPageId) {
+				return allSubPagesSorted(rootPageId)
 			}
 		},
 
