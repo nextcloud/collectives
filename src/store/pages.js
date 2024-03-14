@@ -186,15 +186,7 @@ export default {
 			}
 		},
 
-		filteredPages(state) {
-			return (filterString) => {
-				return state.pages.filter(p => {
-					return p.title.toLowerCase().includes(filterString.toLowerCase())
-				})
-			}
-		},
-
-		allPages(state, getters) {
+		allPagesSorted(state, getters) {
 			const allSubPagesSorted = (pageId) => {
 				const res = []
 				sortedSubpages(state, getters)(pageId).forEach(element => {
@@ -203,9 +195,7 @@ export default {
 				})
 				return res
 			}
-			return function(rootPageId) {
-				return allSubPagesSorted(rootPageId)
-			}
+			return allSubPagesSorted
 		},
 
 		sortedSubpages,
