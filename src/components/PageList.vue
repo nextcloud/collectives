@@ -77,7 +77,7 @@
 			<Draggable v-if="subpages || keptSortable(currentPage.id)"
 				:list="subpages"
 				:parent-id="rootPage.id"
-				:disable-sorting="disableSorting">
+				:disable-sorting="isFilteredview">
 				<template #header>
 					<div v-if="!sortedBy('byOrder')" class="sort-order-container">
 						<span class="sort-order-chip">
@@ -97,9 +97,9 @@
 					:key="templateView.id"
 					:page="templateView"
 					:level="1"
-					:filtered-view="disableSorting"
+					:filtered-view="isFilteredview"
 					:is-template="true" />
-				<div v-if="disableSorting">
+				<div v-if="isFilteredview">
 					<RecycleScroller v-slot="{item}"
 						class="scroller"
 						:items="filteredPages"
@@ -113,7 +113,7 @@
 							class="page-list-drag-item" />
 					</RecycleScroller>
 				</div>
-				<div v-if="!disableSorting">
+				<div v-if="!isFilteredview">
 					<SubpageList v-for="page in subpages"
 						:key="page.id"
 						:data-page-id="page.id"
@@ -237,7 +237,7 @@ export default {
 			return (sortOrder) => this.sortBy === sortOrder
 		},
 
-		disableSorting() {
+		isFilteredview() {
 			return this.filterString !== ''
 		},
 
