@@ -285,8 +285,9 @@ export default {
 
 <style lang="scss" scoped>
 
-.scroller{
-	height: 100vh;
+.scroller {
+	// NC header bar 50px; page list header bar 52px; landing page 48px; page trash 76px
+	height: calc(100vh - 50px - 52px - 48px - 76px);
 }
 
 .app-content-list {
@@ -307,7 +308,8 @@ export default {
 	margin-right: 4px;
 
 	.page-filter {
-		margin-left: 50px !important;
+		margin-left: 52px !important;
+		padding-bottom: 2px;
 	}
 }
 
@@ -335,7 +337,7 @@ li.toggle-button.selected {
 
 .page-list-root-page {
 	position: sticky;
-	top: 44px;
+	top: 52px;
 	z-index: 1;
 	background-color: var(--color-main-background);
 }
