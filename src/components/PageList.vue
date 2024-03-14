@@ -194,15 +194,15 @@ export default {
 			'sortBy',
 			'showing',
 			'showTemplates',
-			'allPages',
+			'allPagesSorted',
 		]),
 
-		allpages() {
-			return this.allPages(this.rootPage.id)
+		allPagesSortedCached() {
+			return this.allPagesSorted(this.rootPage.id)
 		},
 
 		filteredPages() {
-			return this.allpages.filter(p => {
+			return this.allPagesSortedCached.filter(p => {
 				return p.title.toLowerCase().includes(this.filterString.toLowerCase())
 			})
 		},
@@ -286,7 +286,7 @@ export default {
 <style lang="scss" scoped>
 
 .scroller{
-	height:100vh;
+	height: 100vh;
 }
 
 .app-content-list {
