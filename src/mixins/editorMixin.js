@@ -23,9 +23,9 @@ export default {
 		...mapGetters([
 			'currentCollectiveCanEdit',
 			'currentPage',
-			'currentPageFilePath',
 			'editorApiFlags',
 			'loading',
+			'pageFilePath',
 			'shareTokenParam',
 			'showing',
 		]),
@@ -41,6 +41,13 @@ export default {
 		contentLoaded() {
 			// Either `pageContent` is filled from editor or we finished fetching it from DAV
 			return !!this.pageContent || !this.loading('pageContent')
+		},
+
+		/**
+		 * Use `this.page` if available (e.g. in `PagePrint`) and fallback to `currentPage`
+		 */
+		pageToUse() {
+			return this.page || this.currentPage
 		},
 	},
 
@@ -64,20 +71,20 @@ export default {
 
 		async setupReader() {
 			const fileId = this.editorApiFlags.includes(editorApiReaderFileId)
-				? this.currentPage.id
+				? this.pageToUse.id
 				: null
 			this.reader = await window.OCA.Text.createEditor({
 				el: this.$refs.reader,
 				fileId,
 				useSession: false,
 				content: this.pageContent,
-				filePath: `/${this.currentPageFilePath}`,
+				filePath: `/${this.pageFilePath(this.pageToUse.id)}`,
 				readOnly: true,
 				shareToken: this.shareTokenParam || null,
 				readonlyBar: {
 					component: PageInfoBar,
 					props: {
-						currentPage: this.pageInfoBarPage || this.currentPage,
+						currentPage: this.pageInfoBarPage || this.pageToUse,
 					},
 				},
 				onLinkClick: (_event, attrs) => {
@@ -104,8 +111,8 @@ export default {
 			this.editor = this.currentCollectiveCanEdit
 				? await window.OCA.Text.createEditor({
 					el: this.$refs.editor,
-					fileId: this.currentPage.id,
-					filePath: `/${this.currentPageFilePath}`,
+					fileId: this.pageToUse.id,
+					filePath: `/${this.pageFilePath(this.pageToUse.id)}`,
 					readOnly: false,
 					shareToken: this.shareTokenParam || null,
 					autofocus: false,
