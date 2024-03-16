@@ -1,6 +1,6 @@
 <template>
 	<NcAppContent>
-		<CollectivePrint v-if="currentCollective" />
+		<CollectivePrint v-if="currentCollective && collectiveCanEdit(currentCollective)" />
 		<NcEmptyContent v-else-if="loading('collectives')" />
 		<CollectiveNotFound v-else />
 	</NcAppContent>
@@ -25,6 +25,7 @@ export default {
 
 	computed: {
 		...mapGetters([
+			'collectiveCanEdit',
 			'currentCollective',
 			'loading',
 		]),

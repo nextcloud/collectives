@@ -17,7 +17,8 @@
 				<ShareVariantIcon :size="20" />
 			</template>
 		</NcActionButton>
-		<NcActionLink :close-after-click="true"
+		<NcActionLink v-if="collectiveCanEdit(collective)"
+			:close-after-click="true"
 			:href="printLink"
 			target="_blank">
 			{{ t('collectives', 'Export or print') }}
@@ -89,6 +90,7 @@ export default {
 
 	computed: {
 		...mapGetters([
+			'collectiveCanEdit',
 			'collectiveCanShare',
 			'isCollectiveAdmin',
 			'isPublic',
