@@ -15,6 +15,7 @@ OC.L10N.register(
     "Landing page" : "Úvodná stránka",
     "A place for activist and community projects to build shared knowledge" : "Miesto pre aktivistické a komunitné projekty na budovanie a vytváranie zdieľaných vedomostí",
     "Manage members" : "Správa členov",
+    "Share with guests" : "Zdieľať s hosťami",
     "Export or print" : "Exportovať alebo tlačiť",
     "Settings" : "Nastavenia",
     "Leave collective" : "Opustiť kolektív",
