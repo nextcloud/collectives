@@ -91,7 +91,10 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 						$page = $this->pageService->findByPath($collective->getId(), $pageReferenceInfo['pagePath'], $this->userId);
 					} catch (NotFoundException) {
 						$pathInfo = pathinfo($pageReferenceInfo['pagePath']);
-						if ('.' . $pathInfo['extension'] === PageInfo::SUFFIX) {
+						if ($pathInfo || !array_key_exists('extension', $pathInfo)) {
+							throw new NotFoundException('Pathinfo for page path is incomplete');
+						}
+						if ($pathInfo && ('.' . $pathInfo['extension'] === PageInfo::SUFFIX)) {
 							if ($pathInfo['filename'] === PageInfo::INDEX_PAGE_TITLE) {
 								// try to find page by stripping `/Readme.md`
 								$page = $this->pageService->findByPath($collective->getId(), $pathInfo['dirname'], $this->userId);
@@ -103,10 +106,6 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 					}
 				}
 			} catch (Exception | Throwable) {
-				// fallback to opengraph if it matches, but somehow we can't resolve
-				return $this->linkReferenceProvider->resolveReference($referenceText);
-			}
-			if (!$page) {
 				// fallback to opengraph if it matches, but somehow we can't resolve
 				return $this->linkReferenceProvider->resolveReference($referenceText);
 			}
