@@ -44,6 +44,12 @@ export default {
 		NcButton,
 		SkeletonLoading,
 	},
+	props: {
+		currentCollective: {
+			type: Object,
+			required: true,
+		},
+	},
 
 	data() {
 		return {
@@ -55,7 +61,6 @@ export default {
 		...mapGetters([
 			'circleMembersSorted',
 			'circleMemberType',
-			'currentCollective',
 			'recentPagesUserIds',
 		]),
 
@@ -151,13 +156,11 @@ export default {
 <style lang="scss" scoped>
 .members-widget-skeleton {
 	height: 44px;
-	margin-top: 12px;
 }
 
 .members-widget-members {
 	display: flex;
 	flex-direction: row;
 	gap: 12px;
-	margin-top: 12px;
 }
 </style>
