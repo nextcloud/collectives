@@ -235,6 +235,6 @@ OC.L10N.register(
     "Page content" : "Contido da páxina",
     "Pages that link to this one" : "Páxinas que ligan con esta",
     "Old versions of this page" : "Versións antigas desta páxina",
-    "Link copied to the clipboard." : "Ligazón copiada no portapapeis."
+    "Link copied to the clipboard." : "A ligazón foi copiada no portapapeis."
 },
 "nplurals=2; plural=(n != 1);");
