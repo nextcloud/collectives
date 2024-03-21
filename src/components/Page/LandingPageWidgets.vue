@@ -7,7 +7,7 @@
 					<TeamsIcon :size="20" />
 				</template>
 				<template #default>
-					{{ t('collectives','Team') }}
+					{{ t('collectives','Team Overview') }}
 				</template>
 			</NcButton>
 		</div>
