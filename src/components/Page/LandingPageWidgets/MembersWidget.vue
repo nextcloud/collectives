@@ -44,12 +44,6 @@ export default {
 		NcButton,
 		SkeletonLoading,
 	},
-	props: {
-		currentCollective: {
-			type: Object,
-			required: true,
-		},
-	},
 
 	data() {
 		return {
@@ -61,6 +55,7 @@ export default {
 		...mapGetters([
 			'circleMembersSorted',
 			'circleMemberType',
+			'currentCollective',
 			'recentPagesUserIds',
 		]),
 

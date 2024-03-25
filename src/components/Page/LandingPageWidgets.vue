@@ -1,12 +1,12 @@
 <template>
 	<div class="landing-page-widgets">
 		<div class="first-row-widgets">
-			<MembersWidget v-if="!isPublic" :current-collective="currentCollective" />
-			<NcButton v-if="'contacts' in OC.appswebroots" :href="teamUrl">
+			<MembersWidget v-if="!isPublic" />
+			<NcButton v-if="hasContactsApp" :href="teamUrl">
 				<template #icon>
 					<TeamsIcon :size="20" />
 				</template>
-				<template #default>
+				<template v-if="!isMobile" #default>
 					{{ t('collectives','Team Overview') }}
 				</template>
 			</NcButton>
@@ -22,6 +22,7 @@ import RecentPagesWidget from './LandingPageWidgets/RecentPagesWidget.vue'
 import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
 import TeamsIcon from '../Icon/TeamsIcon.vue'
 import { generateUrl } from '@nextcloud/router'
+import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 
 export default {
 	name: 'LandingPageWidgets',
@@ -33,6 +34,10 @@ export default {
 		TeamsIcon,
 	},
 
+	mixins: [
+		isMobile,
+	],
+
 	computed: {
 		...mapGetters([
 			'isPublic',
@@ -41,13 +46,16 @@ export default {
 		teamUrl() {
 			return generateUrl('/apps/contacts/circle/{teamId}', { teamId: this.currentCollective.circleId })
 		},
+		hasContactsApp() {
+			return 'contacts' in this.OC.appswebroots
+		},
 	},
 }
 </script>
 
 <style scoped>
 .landing-page-widgets {
-	padding-left: 12px;
+	padding-inline: 12px;
 }
 .first-row-widgets{
 	display: flex;
