@@ -88,6 +88,7 @@ describe('Page link handling', function() {
 * Absolute path to another app in Nextcloud: [Contacts](/index.php/apps/contacts)
 * URL to a page in Collectives on another instance: [Foreign Page](https://example.org/apps/collectives/Foreign%20Collective/Foreign%20Page?fileId=123)
 * URL to external website: [example.org](http://example.org/)
+* Some content
 			`)
 		})
 	})
@@ -318,7 +319,7 @@ describe('Page link handling', function() {
 				testLinkToSameTab(href)
 			}
 		})
-		it('Opens link with relative path to markdown file in this collective without fileId in same tag', function() {
+		it('Opens link with relative path to markdown file in this collective without fileId in same tab', function() {
 			// TODO: We want '.md' to be stripped when opening the link
 			const href = './Link%20Target.md'
 			if (!['stable26', 'stable27', 'stable28'].includes(Cypress.env('ncVersion'))) {
@@ -437,7 +438,7 @@ describe('Page link handling', function() {
 				testLinkToNewTab(href, { edit: true })
 			}
 		})
-		it('Opens link with relative path to markdown file in this collective without fileId in same tag', function() {
+		it('Opens link with relative path to markdown file in this collective without fileId in same tab', function() {
 			// TODO: We want '.md' to be stripped when opening the link
 			const href = './Link%20Target.md'
 			cy.switchToEditMode()
