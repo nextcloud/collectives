@@ -100,8 +100,8 @@ class PublicPageController extends PublicShareController {
 		$pageInfo->setCollectivePath('');
 		// Remove root page from file path on page shares
 		if ($sharePageId !== 0) {
-			$rootPageName = $this->service->find($collectiveId, $sharePageId, $owner)->getTitle();
-			$pageInfo->setFilePath(preg_replace('/^' . $rootPageName . '\/?/', '', $pageInfo->getFilePath()));
+			$rootPagePath = $this->service->find($collectiveId, $sharePageId, $owner)->getFilePath();
+			$pageInfo->setFilePath(preg_replace('/^' . preg_quote($rootPagePath, '/') . '\/?/', '', $pageInfo->getFilePath()));
 		}
 		$pageInfo->setShareToken($this->getToken());
 	}
