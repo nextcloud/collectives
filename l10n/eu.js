@@ -48,6 +48,7 @@ OC.L10N.register(
     "An error occurred while performing the search" : "Errore bat gertatu da bilaketa egitean",
     "Add accounts" : "Gehitu kontuak",
     "Add groups" : "Gehitu taldeak",
+    "Add teams" : "Gehitu taldeak",
     "Remove {name}" : "Kendu {name}",
     "Members of collective {name}" : "{name} kolektiboko kideak",
     "Collective settings" : "Kolektiboaren ezarpenak",
