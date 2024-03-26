@@ -119,6 +119,18 @@ namespace Symfony\Component\Console\Output {
     }
 }
 
+namespace OC\Collaboration\Reference {
+    use OCP\Collaboration\Reference\IReferenceManager;
+
+    class LinkReferenceProvider {
+        public function resolveReference(string $referenceText) {}
+    }
+
+    class ReferenceManager implements IReferenceManager {
+        public function invalidateCache(string $cachePrefix, ?string $cacheKey = null): void;
+    }
+}
+
 namespace OC\Files\Cache {
     use OCP\Files\Cache\ICache;
     use OCP\Files\Cache\ICacheEntry;
