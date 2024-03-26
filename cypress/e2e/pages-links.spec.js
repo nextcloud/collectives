@@ -101,6 +101,9 @@ describe('Page link handling', function() {
 	})
 
 	const clickLink = function(href, edit) {
+		// Editor loaded will reset page content, which interferes with clicked link. So let's wait for it.
+		cy.getEditor()
+
 		cy.getEditorContent(edit)
 			.find(`a[href="${href}"]`)
 			.as('link')
@@ -110,10 +113,6 @@ describe('Page link handling', function() {
 
 		// Starting with Nextcloud 29, clicking on a link opens the link bubble
 		if (!['stable26', 'stable27', 'stable28'].includes(Cypress.env('ncVersion'))) {
-			if (!edit) {
-				cy.get('@link')
-					.click()
-			}
 			cy.get('.link-view-bubble .widgets--list')
 				.find('a.widget-file, a.collective-page, a.widget-default')
 				.click()
