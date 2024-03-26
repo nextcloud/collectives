@@ -55,15 +55,15 @@ class CollectiveProvider implements IProvider {
 		}
 
 		$collectiveSearchResults = [];
-		foreach ($collectiveInfos as $collective) {
-			if (stripos($collective->getName(), $query->getTerm()) === false) {
+		foreach ($collectiveInfos as $collectiveInfo) {
+			if (stripos($collectiveInfo->getName(), $query->getTerm()) === false) {
 				continue;
 			}
 			$collectiveSearchResults[] = new SearchResultEntry(
 				'',
-				$this->collectiveService->getCollectiveNameWithEmoji($collective),
+				$this->collectiveService->getCollectiveNameWithEmoji($collectiveInfo),
 				'',
-				$this->urlGenerator->linkToRouteAbsolute('collectives.start.index') . rawurlencode($collective->getName()),
+				$this->urlGenerator->linkToRouteAbsolute('collectives.start.index') . rawurlencode($collectiveInfo->getName()),
 				'icon-collectives'
 			);
 		}

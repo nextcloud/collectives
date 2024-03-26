@@ -59,16 +59,16 @@ class PageProvider implements IProvider {
 		}
 
 		$pageSearchResults = [];
-		foreach ($collectiveInfos as $collective) {
-			$pageInfos = $this->pageService->findByString($collective->getId(), $query->getTerm(), $user->getUID());
+		foreach ($collectiveInfos as $collectiveInfo) {
+			$pageInfos = $this->pageService->findByString($collectiveInfo->getId(), $query->getTerm(), $user->getUID());
 			foreach ($pageInfos as $pageInfo) {
 				$pageSearchResults[] = new SearchResultEntry(
 					$this->urlGenerator->getAbsoluteURL(
 						$this->urlGenerator->imagePath(Application::APP_NAME, 'page.svg')
 					),
 					$this->getPageTitle($pageInfo),
-					$this->l10n->t('In collective %1$s', [$this->collectiveService->getCollectiveNameWithEmoji($collective)]),
-					$this->urlGenerator->linkToRouteAbsolute('collectives.start.index') . $this->pageService->getPageLink($collective->getName(), $pageInfo),
+					$this->l10n->t('In collective %1$s', [$this->collectiveService->getCollectiveNameWithEmoji($collectiveInfo)]),
+					$this->urlGenerator->linkToRouteAbsolute('collectives.start.index') . $this->pageService->getPageLink($collectiveInfo->getName(), $pageInfo),
 					'icon-collectives-page'
 				);
 			}

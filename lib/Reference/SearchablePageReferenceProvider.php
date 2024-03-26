@@ -83,12 +83,12 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 
 			$collectiveName = $pageReferenceInfo['collectiveName'];
 			try {
-				$collective = $this->collectiveService->findCollectiveByName($this->userId, $collectiveName);
+				$collectiveInfo = $this->collectiveService->findCollectiveByName($this->userId, $collectiveName);
 				if ($pageReferenceInfo['fileId']) {
-					$page = $this->pageService->findByFileId($collective->getId(), $pageReferenceInfo['fileId'], $this->userId);
+					$page = $this->pageService->findByFileId($collectiveInfo->getId(), $pageReferenceInfo['fileId'], $this->userId);
 				} else {
 					try {
-						$page = $this->pageService->findByPath($collective->getId(), $pageReferenceInfo['pagePath'], $this->userId);
+						$page = $this->pageService->findByPath($collectiveInfo->getId(), $pageReferenceInfo['pagePath'], $this->userId);
 					} catch (NotFoundException) {
 						$pathInfo = pathinfo($pageReferenceInfo['pagePath']);
 						if (!$pathInfo || !array_key_exists('extension', $pathInfo)) {
@@ -97,10 +97,10 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 						if ('.' . $pathInfo['extension'] === PageInfo::SUFFIX) {
 							if ($pathInfo['filename'] === PageInfo::INDEX_PAGE_TITLE) {
 								// try to find page by stripping `/Readme.md`
-								$page = $this->pageService->findByPath($collective->getId(), $pathInfo['dirname'], $this->userId);
+								$page = $this->pageService->findByPath($collectiveInfo->getId(), $pathInfo['dirname'], $this->userId);
 							} else {
 								// try to find page by stripping `.md`
-								$page = $this->pageService->findByPath($collective->getId(), $pathInfo['filename'], $this->userId);
+								$page = $this->pageService->findByPath($collectiveInfo->getId(), $pathInfo['filename'], $this->userId);
 							}
 						}
 					}
@@ -110,16 +110,16 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 				return $this->linkReferenceProvider->resolveReference($referenceText);
 			}
 
-			$pageReferenceInfo['collective'] = $collective;
+			$pageReferenceInfo['collective'] = $collectiveInfo;
 			$pageReferenceInfo['page'] = $page;
 
-			$link = $this->urlGenerator->linkToRouteAbsolute('collectives.start.index') . $this->pageService->getPageLink($collective->getName(), $page);
+			$link = $this->urlGenerator->linkToRouteAbsolute('collectives.start.index') . $this->pageService->getPageLink($collectiveInfo->getName(), $page);
 			$reference = new Reference($link);
 			$pageEmoji = $page->getEmoji();
 			$refTitle = $pageEmoji ? $pageEmoji . ' ' . $page->getTitle() : $page->getTitle();
 			$reference->setTitle($refTitle);
 
-			$description = $this->l10n->t('In collective %1$s', [$this->collectiveService->getCollectiveNameWithEmoji($collective)])
+			$description = $this->l10n->t('In collective %1$s', [$this->collectiveService->getCollectiveNameWithEmoji($collectiveInfo)])
 				. ' - ' . $page->getFilePath();
 			$reference->setDescription($description);
 			$pageReferenceInfo['description'] = $description;
