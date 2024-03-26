@@ -59,10 +59,10 @@ class CollectiveTeamResourceProvider implements ITeamResourceProvider {
 
 	public function getTeamsForResource(string $resourceId): array {
 		try {
-			$collective = $this->collectiveService->getCollective((int)$resourceId, $this->userId);
+			$collectiveInfo = $this->collectiveService->getCollective((int)$resourceId, $this->userId);
 		} catch (NotFoundException|NotPermittedException) {
 			return [];
 		}
-		return [$collective->getCircleId()];
+		return [$collectiveInfo->getCircleId()];
 	}
 }

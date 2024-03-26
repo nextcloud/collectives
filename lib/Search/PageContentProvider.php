@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace OCA\Collectives\Search;
 
 use Exception;
-use OCA\Collectives\Db\Collective;
+use OCA\Collectives\Model\CollectiveInfo;
 use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Search\FileSearch\ClauseTokenizer;
 use OCA\Collectives\Search\FileSearch\FileSearcher;
@@ -63,10 +63,10 @@ class PageContentProvider implements IProvider {
 
 		$collectiveMap = [];
 		$pages = [];
-		foreach ($collectiveInfos as $collective) {
+		foreach ($collectiveInfos as $collectiveInfo) {
 			try {
-				$collectiveRoot = $this->pageService->getCollectiveFolder($collective->getId(), $user->getUID());
-				$results = $this->indexedSearchService->searchCollective($collective, $query->getTerm());
+				$collectiveRoot = $this->pageService->getCollectiveFolder($collectiveInfo->getId(), $user->getUID());
+				$results = $this->indexedSearchService->searchCollective($collectiveInfo, $query->getTerm());
 			} catch (FileSearchException|NotFoundException $e) {
 				$this->logger->warning('Collectives file content search failed.', [
 					'error' => $e->getMessage(),
@@ -78,7 +78,7 @@ class PageContentProvider implements IProvider {
 				$fileEntries = $collectiveRoot->getById($fileId);
 				if (!empty($fileEntries)) {
 					$pages[$fileId] = $fileEntries[0];
-					$collectiveMap[$fileId] = $collective;
+					$collectiveMap[$fileId] = $collectiveInfo;
 				}
 			}
 		}
@@ -89,8 +89,8 @@ class PageContentProvider implements IProvider {
 		$pages = $this->rankPages($query->getTerm(), $pages);
 		$pageSearchResults = [];
 		foreach ($pages as $page) {
-			$collective = $collectiveMap[$page->getId()];
-			$pageInfo = $this->getPageInfo($collective, $page, $user->getUID());
+			$collectiveInfo = $collectiveMap[$page->getId()];
+			$pageInfo = $this->getPageInfo($collectiveInfo, $page, $user->getUID());
 			if (!$pageInfo) {
 				continue;
 			}
@@ -98,8 +98,8 @@ class PageContentProvider implements IProvider {
 			$pageSearchResults[] = new SearchResultEntry(
 				'',
 				$highlighter->extractRelevant($query->getTerm(), $page->getContent(), $highlightLength, 5, ''),
-				$collective->getName() . ' / ' . $pageInfo->getTitle(),
-				$this->urlGenerator->linkToRouteAbsolute('collectives.start.index') . $this->pageService->getPageLink($collective->getName(), $pageInfo),
+				$collectiveInfo->getName() . ' / ' . $pageInfo->getTitle(),
+				$this->urlGenerator->linkToRouteAbsolute('collectives.start.index') . $this->pageService->getPageLink($collectiveInfo->getName(), $pageInfo),
 				'icon-collectives-page'
 			);
 		}
@@ -149,9 +149,9 @@ class PageContentProvider implements IProvider {
 		return $ranked;
 	}
 
-	private function getPageInfo(Collective $collective, File $file, string $userId): ?PageInfo {
+	private function getPageInfo(CollectiveInfo $collectiveInfo, File $file, string $userId): ?PageInfo {
 		try {
-			return $this->pageService->findByFile($collective->getId(), $file, $userId);
+			return $this->pageService->findByFile($collectiveInfo->getId(), $file, $userId);
 		} catch (Exception) {
 			return null;
 		}

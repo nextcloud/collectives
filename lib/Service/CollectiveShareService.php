@@ -158,25 +158,25 @@ class CollectiveShareService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function createShare(string $userId, CollectiveInfo $collective, ?PageInfo $pageInfo): CollectiveShareInfo {
-		if (!$collective->canShare()) {
-			throw new NotPermittedException($this->l10n->t('You are not allowed to share %s', $collective->getName()));
+	public function createShare(string $userId, CollectiveInfo $collectiveInfo, ?PageInfo $pageInfo): CollectiveShareInfo {
+		if (!$collectiveInfo->canShare()) {
+			throw new NotPermittedException($this->l10n->t('You are not allowed to share %s', $collectiveInfo->getName()));
 		}
 
 		$pageId = 0;
 		$nodeId = 0;
 		if ($pageInfo) {
 			$pageId = $pageInfo->getId();
-			$file = $this->pageService->getPageFile($collective->getId(), $pageId, $userId);
+			$file = $this->pageService->getPageFile($collectiveInfo->getId(), $pageId, $userId);
 			$nodeId = $file->getParent()->getId();
 		}
 
-		$folderShare = $this->createFolderShare($userId, $collective->getName(), $nodeId);
+		$folderShare = $this->createFolderShare($userId, $collectiveInfo->getName(), $nodeId);
 
 		try {
-			return new CollectiveShareInfo($this->collectiveShareMapper->create($collective->getId(), $pageId, $folderShare->getToken(), $userId));
+			return new CollectiveShareInfo($this->collectiveShareMapper->create($collectiveInfo->getId(), $pageId, $folderShare->getToken(), $userId));
 		} catch (Exception $e) {
-			throw new NotPermittedException('Failed to create collective/page share for ' . $collective->getName(), 0, $e);
+			throw new NotPermittedException('Failed to create collective/page share for ' . $collectiveInfo->getName(), 0, $e);
 		}
 	}
 
@@ -187,13 +187,13 @@ class CollectiveShareService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function updateShare(string $userId, CollectiveInfo $collective, ?PageInfo $pageInfo, string $token, bool $editable = false): CollectiveShareInfo {
-		if (!$collective->canShare()) {
-			throw new NotPermittedException($this->l10n->t('You are not allowed to share %s', $collective->getName()));
+	public function updateShare(string $userId, CollectiveInfo $collectiveInfo, ?PageInfo $pageInfo, string $token, bool $editable = false): CollectiveShareInfo {
+		if (!$collectiveInfo->canShare()) {
+			throw new NotPermittedException($this->l10n->t('You are not allowed to share %s', $collectiveInfo->getName()));
 		}
 
-		if (!$collective->canEdit()) {
-			throw new NotPermittedException($this->l10n->t('You are not allowed to edit %s', $collective->getName()));
+		if (!$collectiveInfo->canEdit()) {
+			throw new NotPermittedException($this->l10n->t('You are not allowed to edit %s', $collectiveInfo->getName()));
 		}
 
 		$pageId = 0;
@@ -201,7 +201,7 @@ class CollectiveShareService {
 			$pageId = $pageInfo->getId();
 		}
 
-		if (null === $share = $this->collectiveShareMapper->findOneByCollectiveIdAndTokenAndUser($collective->getId(), $pageId, $token, $userId)) {
+		if (null === $share = $this->collectiveShareMapper->findOneByCollectiveIdAndTokenAndUser($collectiveInfo->getId(), $pageId, $token, $userId)) {
 			throw new NotFoundException($this->l10n->t('Share not found for user'));
 		}
 
