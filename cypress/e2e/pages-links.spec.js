@@ -53,12 +53,12 @@ describe('Page link handling', function() {
 			cy.seedPageContent('Link%20Testing/Readme.md', `
 ## Links supposed to open in same window
 
-* Relative path to page in this collective with fileId:  [Link Target](./Link%20Target?fileId=${linkTargetPageId})
+* Relative path to page in this collective with fileId: [Link Target](./Link%20Target?fileId=${linkTargetPageId})
 			`)
 			cy.seedPageContent('Link%20Testing/Parent/Readme.md', `
 ## Links supposed to open in same window
 
-* Relative path to page in this collective with fileId:  [../Link Target.md](../Link%20Target.md?fileId=${linkTargetPageId})
+* Relative path to page in this collective with fileId: [../Link Target.md](../Link%20Target.md?fileId=${linkTargetPageId})
 			`)
 			cy.seedPageContent('Link%20Testing/Link%20Source.md', `
 ## Links supposed to open in viewer
@@ -73,11 +73,11 @@ describe('Page link handling', function() {
 ## Links supposed to open in same window
 
 * URL to page in this collective: [Link Target](${baseUrl}/index.php/apps/collectives/Link%20Testing/Link%20Target)
-* Absolute path to page in this collective:  [Link Target](/index.php/apps/collectives/Link%20Testing/Link%20Target)
-* Relative path to page in this collective with fileId:  [Link Target](./Link%20Target?fileId=${linkTargetPageId})
-* Relative path to page in this collective with fileId and outdated path:  [Link Target](./Link%20Target%20Outdated?fileId=${linkTargetPageId})
-* Relative path to page in this collective without fileId:  [Link Target](./Link%20Target)
-* Relative path to markdown file in this collective:  [Link Target](./Link%20Target.md)
+* Absolute path to page in this collective: [Link Target](/index.php/apps/collectives/Link%20Testing/Link%20Target)
+* Relative path to page in this collective with fileId: [Link Target](./Link%20Target?fileId=${linkTargetPageId})
+* Relative path to page in this collective with fileId and outdated path: [Link Target](./Link%20Target%20Outdated?fileId=${linkTargetPageId})
+* Relative path to page in this collective without fileId: [Link Target](./Link%20Target)
+* Relative path to markdown file in this collective: [Link Target](./Link%20Target.md)
 
 * URL to page in other collective with fileId: [Another Collective/First Page](${baseUrl}/index.php/apps/collectives/Another%20Collective/First%20Page?fileId=${anotherCollectiveFirstPageId})
 * Absolute path to page in other collective without fileId: [Another Collective/First Page](/index.php/apps/collectives/Another%20Collective/First%20Page)
