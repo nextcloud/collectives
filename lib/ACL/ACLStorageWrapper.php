@@ -59,19 +59,19 @@ class ACLStorageWrapper extends Wrapper {
 		return $this->storage->getPermissions($path) & $this->permissions;
 	}
 
-	public function rename($path1, $path2): bool {
-		if (str_starts_with($path1, $path2)) {
-			$part = substr($path1, strlen($path2));
+	public function rename($source, $target): bool {
+		if (str_starts_with($source, $target)) {
+			$part = substr($source, strlen($target));
 			// This is a renaming of the transfer file to the original file
 			if (str_starts_with($part, '.ocTransferId')) {
-				return $this->checkPermissions(Constants::PERMISSION_CREATE) && parent::rename($path1, $path2);
+				return $this->checkPermissions(Constants::PERMISSION_CREATE) && parent::rename($source, $target);
 			}
 		}
-		$targetPermissions = $this->file_exists($path2) ? Constants::PERMISSION_UPDATE : Constants::PERMISSION_CREATE;
+		$targetPermissions = $this->file_exists($target) ? Constants::PERMISSION_UPDATE : Constants::PERMISSION_CREATE;
 		return $this->checkPermissions(Constants::PERMISSION_READ) &&
 			$this->checkPermissions(Constants::PERMISSION_DELETE) &&
 			$this->checkPermissions($targetPermissions) &&
-			parent::rename($path1, $path2);
+			parent::rename($source, $target);
 	}
 
 	public function opendir($path) {
@@ -81,11 +81,11 @@ class ACLStorageWrapper extends Wrapper {
 		return parent::opendir($path);
 	}
 
-	public function copy($path1, $path2): bool {
-		$targetPermissions = $this->file_exists($path2) ? Constants::PERMISSION_UPDATE : Constants::PERMISSION_CREATE;
+	public function copy($source, $target): bool {
+		$targetPermissions = $this->file_exists($target) ? Constants::PERMISSION_UPDATE : Constants::PERMISSION_CREATE;
 		return $this->checkPermissions(Constants::PERMISSION_READ) &&
 			$this->checkPermissions($targetPermissions) &&
-			parent::copy($path1, $path2);
+			parent::copy($source, $target);
 	}
 
 	public function touch($path, $mtime = null): bool {
