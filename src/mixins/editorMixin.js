@@ -78,7 +78,7 @@ export default {
 				fileId,
 				useSession: false,
 				content: this.pageContent,
-				filePath: `/${this.pageFilePath(this.pageToUse.id)}`,
+				filePath: `/${this.pageFilePath(this.pageToUse)}`,
 				readOnly: true,
 				shareToken: this.shareTokenParam || null,
 				readonlyBar: {
@@ -112,7 +112,7 @@ export default {
 				? await window.OCA.Text.createEditor({
 					el: this.$refs.editor,
 					fileId: this.pageToUse.id,
-					filePath: `/${this.pageFilePath(this.pageToUse.id)}`,
+					filePath: `/${this.pageFilePath(this.pageToUse)}`,
 					readOnly: false,
 					shareToken: this.shareTokenParam || null,
 					autofocus: false,
