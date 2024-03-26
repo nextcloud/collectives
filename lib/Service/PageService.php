@@ -184,17 +184,17 @@ class PageService {
 	 * @throws NotFoundException
 	 */
 	private function getPageByFile(File $file, ?Node $parent = null): PageInfo {
-		$trashPageInfo = new PageInfo();
+		$pageInfo = new PageInfo();
 		try {
-			$trashPage = $this->pageMapper->findByFileId($file->getId());
+			$page = $this->pageMapper->findByFileId($file->getId());
 		} catch (InvalidPathException | FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
-		$lastUserId = ($trashPage !== null) ? $trashPage->getLastUserId() : null;
-		$emoji = ($trashPage !== null) ? $trashPage->getEmoji() : null;
-		$subpageOrder = ($trashPage !== null) ? $trashPage->getSubpageOrder() : null;
+		$lastUserId = ($page !== null) ? $page->getLastUserId() : null;
+		$emoji = ($page !== null) ? $page->getEmoji() : null;
+		$subpageOrder = ($page !== null) ? $page->getSubpageOrder() : null;
 		try {
-			$trashPageInfo->fromFile($file,
+			$pageInfo->fromFile($file,
 				$this->getParentPageId($file, $parent),
 				$lastUserId,
 				$lastUserId ? $this->userManager->getDisplayName($lastUserId) : null,
@@ -204,7 +204,7 @@ class PageService {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
 
-		return $trashPageInfo;
+		return $pageInfo;
 	}
 
 	/**
