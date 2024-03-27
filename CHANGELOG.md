@@ -1,5 +1,25 @@
 # Changelog
 
+## 2.10.1 - 2024.03.27
+
+### 🐛Fixes
+* 🔎 Improve filtering large page lists. Thanks @grnd-alt. (#1090)
+* 🔎 Set default language for TNTSearch. Thanks @Koc.
+* 💄 Fix alignments and padding of page list header items.
+* 🔗 Fix anchor link scrolling. Thanks @Koc.
+* 📎 Fix image and attachment loading in print view. (#1068)
+* 🔗 Fix bugs with page reference provider.
+* 👥 Link to teams overview from landing page. Thanks @grnd-alt. (#1168)
+* 🔗 Fix link shares of subpages. (#1147)
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 2.10.0 - 2024.03.07
 
 ### ✨New
