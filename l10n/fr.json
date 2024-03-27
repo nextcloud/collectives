@@ -180,7 +180,7 @@
     "Can edit" : "Peut modifier",
     "Cannot copy, please copy the link manually" : "Impossible de copier, merci de copier le lien manuellement",
     "Copy public link of {title} to clipboard" : "Copier le lien public de {title} dans le presse-papiers",
-    "Actions for \"{title}\"" : "Actions pour \"{title}\"",
+    "Actions for \"{title}\"" : "Actions pour « {title} »",
     "Page \"{name}\" has been shared" : "La page « {name} » a été partagée",
     "Collective \"{name}\" has been shared" : "Le collectif « {name} » a été partagé",
     "Failed to share page \"{name}\"" : "Le partage de la page « {name} » a échoué",
