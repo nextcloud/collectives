@@ -58,9 +58,6 @@ class Collective extends Entity implements JsonSerializable {
 	protected ?int $trashTimestamp = null;
 	protected int $pageMode = self::defaultPageMode;
 
-	/**
-	 * @return string|null
-	 */
 	public function getCircleId(): ?string {
 		return $this->getCircleUniqueId();
 	}
@@ -69,9 +66,6 @@ class Collective extends Entity implements JsonSerializable {
 		$this->setCircleUniqueId($circleId);
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getModeratorPermissions(): int {
 		// moderator permissions are stored in thousands and hundreds
 		return intdiv($this->permissions, 100) % 100;
@@ -85,9 +79,6 @@ class Collective extends Entity implements JsonSerializable {
 		);
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getMemberPermissions(): int {
 		// member permissions are stored in tens and ones
 		return $this->permissions % 100;
@@ -122,16 +113,10 @@ class Collective extends Entity implements JsonSerializable {
 		$this->markFieldUpdated('pageMode');
 	}
 
-	/**
-	 * @return bool
-	 */
 	public function isTrashed(): bool {
 		return (bool)$this->getTrashTimestamp();
 	}
 
-	/**
-	 * @return array
-	 */
 	public function jsonSerialize(): array {
 		return [
 			'id' => $this->id,
