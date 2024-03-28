@@ -122,6 +122,7 @@ OC.L10N.register(
     "Collapse recent pages" : "Collapse recent pages",
     "Expand recent pages" : "Expand recent pages",
     "Could not save recent pages setting for collective" : "Could not save recent pages setting for collective",
+    "Team Overview" : "Team Overview",
     "Open page sidebar" : "Open page sidebar",
     "Full width" : "Full width",
     "Show in Files" : "Show in Files",

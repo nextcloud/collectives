@@ -122,6 +122,7 @@ OC.L10N.register(
     "Collapse recent pages" : "Recolher páginas recentes",
     "Expand recent pages" : "Expandir páginas recentes",
     "Could not save recent pages setting for collective" : "Não foi possível salvar a configuração de páginas recentes para coletivo",
+    "Team Overview" : "Visão geral da equipe",
     "Open page sidebar" : "Barra lateral da página aberta",
     "Full width" : "Largura completa",
     "Show in Files" : "Mostrar em Arquivos",

@@ -122,6 +122,7 @@ OC.L10N.register(
     "Collapse recent pages" : "طَي collapse الصفحات المفتوحة مؤخراً",
     "Expand recent pages" : "فرد expand الصفحات المفتوحة مؤخراً",
     "Could not save recent pages setting for collective" : "تعذّر حفظ إعدادات الصفحات المفتوحة مؤخراً من التجميعة collective",
+    "Team Overview" : "نظرة عامة على الفريق",
     "Open page sidebar" : "إفتح الشريط الجانبي للصفحة",
     "Full width" : "العرض الكامل",
     "Show in Files" : "عرض في الملفات ",
