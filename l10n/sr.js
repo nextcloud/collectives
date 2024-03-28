@@ -122,6 +122,7 @@ OC.L10N.register(
     "Collapse recent pages" : "Сажми скорашње странице",
     "Expand recent pages" : "Развиј скорашње странице",
     "Could not save recent pages setting for collective" : "Није успело чување подешавања за скорашње странице колектива",
+    "Team Overview" : "Преглед тима",
     "Open page sidebar" : "Отвори бочну траку са страницом",
     "Full width" : "Пуна ширина",
     "Show in Files" : "Прикажи у Фајловима",

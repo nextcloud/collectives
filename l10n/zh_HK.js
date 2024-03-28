@@ -122,6 +122,7 @@ OC.L10N.register(
     "Collapse recent pages" : "折疊最近的頁面",
     "Expand recent pages" : "展開最近的頁面",
     "Could not save recent pages setting for collective" : "無法保存知識庫最近的頁面設定",
+    "Team Overview" : "團隊概覽",
     "Open page sidebar" : "開啟頁面側邊攔",
     "Full width" : "全寬度",
     "Show in Files" : "顯示在檔案中",
