@@ -122,6 +122,7 @@ OC.L10N.register(
     "Collapse recent pages" : "Skjul nylige sider",
     "Expand recent pages" : "Vis nylige sider",
     "Could not save recent pages setting for collective" : "Kunne ikke lagre innstillingen for nylige sider for kollektivet",
+    "Team Overview" : "Oversikt over lag",
     "Open page sidebar" : "Åpne sidepanelet",
     "Full width" : "Full bredde",
     "Show in Files" : "Vis i Filer",

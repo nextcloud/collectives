@@ -196,7 +196,7 @@ OC.L10N.register(
     "Please ask the administrator to enable these apps." : "Будь ласка, попросіть адміністратора ввімкнути ці додатки.",
     "in Collective {collective}" : "В колективі {collective}",
     "Created collective \"%s\" for existing circle." : "Створити колектив \"%s\" на базі наявного кола.",
-    "The contacts app is required to manage members" : "Для керування учасниками необхідний додаток Контакти ",
+    "The contacts app is required to manage members" : "Для керування учасниками необхідно встановити та увімкнути застосунок \"Контакти\" ",
     "Allow editing in share" : "Дозволити редагувати гостям",
     "Copied" : "Скопійовано",
     "Cannot copy" : "Не вдалося скопіювати",
