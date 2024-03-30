@@ -93,6 +93,7 @@ OC.L10N.register(
     "Show templates" : "Amosar les plantíes",
     "Add another link" : "Amestar otru enllaz",
     "Unshare" : "Dexar de compartir",
+    "Share link" : "Compartir l'enllaz",
     "View only" : "Ver namás",
     "Can edit" : "Pue editar",
     "Cannot copy, please copy the link manually" : "Nun se pue copiar. Copia l'enllaz manualmente",
