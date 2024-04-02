@@ -35,6 +35,7 @@ OC.L10N.register(
     "Edit" : "Editar",
     "Danger zone" : "Zona de peligru",
     "Delete collective" : "Desaniciar el coleutivu",
+    "Add emoji" : "Amestar un fustaxe",
     "Name of the collective" : "Nome del coleutivu",
     "Editing permissions updated" : "Anováronse los permisos d'edición",
     "Could not update editing permissions" : "Nun se pudieron anovar los permisos d'edición",
