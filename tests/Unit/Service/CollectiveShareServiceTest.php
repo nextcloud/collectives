@@ -9,7 +9,6 @@ use OCA\Collectives\Db\CollectiveShare;
 use OCA\Collectives\Db\CollectiveShareMapper;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Model\CollectiveInfo;
-use OCA\Collectives\Model\CollectiveShareInfo;
 use OCA\Collectives\Service\CollectiveShareService;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\PageService;
@@ -176,13 +175,14 @@ class CollectiveShareServiceTest extends TestCase {
 		$this->shareManager->method('getShareByToken')
 			->willReturn($folderShare);
 
-		self::assertEquals(new CollectiveShareInfo($collectiveShare), $this->service->findShare($this->userId, $this->collectiveId, 0));
+		self::assertEquals($collectiveShare, $this->service->findShare($this->userId, $this->collectiveId, 0));
 
 		// Test with share write permissions
 		$folderShare->method('getPermissions')
 			->willReturn(15);
 
-		self::assertEquals(new CollectiveShareInfo($collectiveShare, true), $this->service->findShare($this->userId, $this->collectiveId, 0));
+		$collectiveShare->setEditable(true);
+		self::assertEquals($collectiveShare, $this->service->findShare($this->userId, $this->collectiveId, 0));
 	}
 
 	public function testUpdateShare(): void {
@@ -197,12 +197,13 @@ class CollectiveShareServiceTest extends TestCase {
 			->willReturn($folderShare);
 
 		// Without share write permissions
-		self::assertEquals(new CollectiveShareInfo($collectiveShare, false), $this->service->updateShare($this->userId, $this->collectiveInfo, null, 'token', false));
+		self::assertEquals($collectiveShare, $this->service->updateShare($this->userId, $this->collectiveInfo, null, 'token', false));
 
 		// With share write permissions
 		$permissions = 15;
 		$folderShare->method('getPermissions')
 			->willReturn($permissions);
-		self::assertEquals(new CollectiveShareInfo($collectiveShare, true), $this->service->updateShare($this->userId, $this->collectiveInfo, null, 'token', true));
+		$collectiveShare->setEditable(true);
+		self::assertEquals($collectiveShare, $this->service->updateShare($this->userId, $this->collectiveInfo, null, 'token', true));
 	}
 }
