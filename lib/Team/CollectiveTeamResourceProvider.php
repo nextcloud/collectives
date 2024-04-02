@@ -34,7 +34,7 @@ class CollectiveTeamResourceProvider implements ITeamResourceProvider {
 		try {
 			$collective = $this->collectiveMapper->findByCircleId($teamId);
 			if ($collective) {
-				$collective = $this->collectiveService->getCollectiveInfo($collective->getId(), $this->userId);
+				$collective = $this->collectiveService->getCollective($collective->getId(), $this->userId);
 			}
 		} catch (NotFoundException|NotPermittedException) {
 			$collective = null;
@@ -59,10 +59,10 @@ class CollectiveTeamResourceProvider implements ITeamResourceProvider {
 
 	public function getTeamsForResource(string $resourceId): array {
 		try {
-			$collectiveInfo = $this->collectiveService->getCollective((int)$resourceId, $this->userId);
+			$collective = $this->collectiveService->getCollective((int)$resourceId, $this->userId);
 		} catch (NotFoundException|NotPermittedException) {
 			return [];
 		}
-		return [$collectiveInfo->getCircleId()];
+		return [$collective->getCircleId()];
 	}
 }

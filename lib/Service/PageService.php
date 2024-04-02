@@ -7,11 +7,11 @@ namespace OCA\Collectives\Service;
 use Exception;
 use OC;
 use OC_Util;
+use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\Page;
 use OCA\Collectives\Db\PageMapper;
 use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Fs\UserFolderHelper;
-use OCA\Collectives\Model\CollectiveInfo;
 use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Trash\PageTrashBackend;
 use OCA\NotifyPush\Queue\IQueue;
@@ -31,7 +31,7 @@ class PageService {
 	private const DEFAULT_PAGE_TITLE = 'New Page';
 
 	private ?IQueue $pushQueue = null;
-	private ?CollectiveInfo $collectiveInfo = null;
+	private ?Collective $collective = null;
 	private ?PageTrashBackend $trashBackend = null;
 
 	public function __construct(private IAppManager $appManager,
@@ -59,12 +59,12 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	private function getCollectiveInfo(int $collectiveId, string $userId): CollectiveInfo {
-		if ($this->collectiveInfo === null || $this->collectiveInfo->getId() !== $collectiveId) {
-			$this->collectiveInfo = $this->collectiveService->getCollectiveInfo($collectiveId, $userId);
+	private function getCollective(int $collectiveId, string $userId): Collective {
+		if ($this->collective === null || $this->collective->getId() !== $collectiveId) {
+			$this->collective = $this->collectiveService->getCollective($collectiveId, $userId);
 		}
 
-		return $this->collectiveInfo;
+		return $this->collective;
 	}
 
 	/**
@@ -73,7 +73,7 @@ class PageService {
 	 * @throws NotPermittedException
 	 */
 	private function verifyEditPermissions(int $collectiveId, string $userId): void {
-		if (!$this->getCollectiveInfo($collectiveId, $userId)->canEdit()) {
+		if (!$this->getCollective($collectiveId, $userId)->canEdit()) {
 			throw new NotPermittedException('Not allowed to edit collective');
 		}
 	}
@@ -85,7 +85,7 @@ class PageService {
 	 * @throws NotPermittedException
 	 */
 	public function getCollectiveFolder(int $collectiveId, string $userId): Folder {
-		$collectiveName = $this->getCollectiveInfo($collectiveId, $userId)->getName();
+		$collectiveName = $this->getCollective($collectiveId, $userId)->getName();
 		try {
 			$folder = $this->userFolderHelper->get($userId)->get($collectiveName);
 		} catch (FilesNotFoundException) {

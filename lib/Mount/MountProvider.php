@@ -35,14 +35,14 @@ class MountProvider implements IMountProvider {
 		$folders = [];
 
 		try {
-			$collectiveInfos = $this->collectiveHelper->getCollectivesForUser($user->getUID(), true, false);
+			$collectives = $this->collectiveHelper->getCollectivesForUser($user->getUID(), true, false);
 		} catch (QueryException | MissingDependencyException | NotFoundException | NotPermittedException $e) {
 			$this->log($e);
 			return $folders;
 		}
 
 		// Stop here if no collectives were found
-		if ($collectiveInfos === []) {
+		if ($collectives === []) {
 			return $folders;
 		}
 
@@ -53,7 +53,7 @@ class MountProvider implements IMountProvider {
 			return $folders;
 		}
 
-		foreach ($collectiveInfos as $c) {
+		foreach ($collectives as $c) {
 			$mountPointPath = ($this->userFolderHelper->getUserFolderSetting($user->getUID()) === '/')
 				? ''
 				: $userFolder->getName() . '/';

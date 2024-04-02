@@ -12,7 +12,6 @@ use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Db\CollectiveUserSettingsMapper;
 use OCA\Collectives\Db\Page;
 use OCA\Collectives\Db\PageMapper;
-use OCA\Collectives\Model\CollectiveInfo;
 use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Trash\PageTrashBackend;
@@ -60,19 +59,19 @@ class CollectiveService extends CollectiveServiceBase {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function getCollectiveWithShare(int $id, string $userId, ?string $shareToken = null): CollectiveInfo {
-		$collectiveInfo = $this->getCollectiveInfo($id, $userId);
+	public function getCollectiveWithShare(int $id, string $userId, ?string $shareToken = null): Collective {
+		$collective = $this->getCollective($id, $userId);
 		if ($shareToken && null !== $share = $this->shareService->findShareByToken($shareToken)) {
-			if ($collectiveInfo->getId() === $share->getCollectiveId()) {
-				$collectiveInfo->setShareToken($share->getToken());
-				$collectiveInfo->setIsPageShare($share->getPageId() !== 0);
-				$collectiveInfo->setShareEditable($share->getEditable());
+			if ($collective->getId() === $share->getCollectiveId()) {
+				$collective->setShareToken($share->getToken());
+				$collective->setIsPageShare($share->getPageId() !== 0);
+				$collective->setShareEditable($share->getEditable());
 			} else {
 				throw new NotFoundException('Share token does not match collective.');
 			}
 		}
 
-		return $collectiveInfo;
+		return $collective;
 	}
 
 	/**
@@ -90,15 +89,15 @@ class CollectiveService extends CollectiveServiceBase {
 	 * @throws MissingDependencyException
 	 */
 	public function getCollectivesWithShares(string $userId): array {
-		$collectiveInfos = $this->collectiveHelper->getCollectivesForUser($userId);
-		foreach ($collectiveInfos as $c) {
+		$collectives = $this->collectiveHelper->getCollectivesForUser($userId);
+		foreach ($collectives as $c) {
 			if (null !== $share = $this->shareService->findShare($userId, $c->getId(), 0)) {
 				$c->setShareToken($share->getToken());
 				$c->setShareEditable($share->getEditable());
 			}
 		}
 
-		return $collectiveInfos;
+		return $collectives;
 	}
 
 	/**
@@ -115,20 +114,20 @@ class CollectiveService extends CollectiveServiceBase {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function findCollectiveByName(string $userId, string $name): CollectiveInfo {
+	public function findCollectiveByName(string $userId, string $name): Collective {
 		$collectives = $this->getCollectives($userId);
-		$collectives = array_filter($collectives, static fn (CollectiveInfo $c) => $c->getName() === $name);
+		$collectives = array_filter($collectives, static fn (Collective $c) => $c->getName() === $name);
 		if ($collectives === []) {
 			throw new NotFoundException('Unable to find a collective from its name');
 		}
 		return end($collectives);
 	}
 
-	public function getCollectiveNameWithEmoji(CollectiveInfo $collectiveInfo): string {
-		$emoji = $collectiveInfo->getEmoji();
+	public function getCollectiveNameWithEmoji(Collective $collective): string {
+		$emoji = $collective->getEmoji();
 		return $emoji
-			? $emoji . ' ' . $collectiveInfo->getName()
-			: $collectiveInfo->getName();
+			? $emoji . ' ' . $collective->getName()
+			: $collective->getName();
 	}
 
 	/**
@@ -182,11 +181,9 @@ class CollectiveService extends CollectiveServiceBase {
 		}
 		$collective = $this->collectiveMapper->insert($collective);
 
-		// Read collectiveInfo object
-		$collectiveInfo = new CollectiveInfo(
-			$collective,
-			$circle->getSanitizedName(),
-			$this->circleHelper->getLevel($circle->getSingleId(), $userId));
+		// Decorate collective object
+		$collective->setName($circle->getSanitizedName());
+		$collective->setLevel($this->circleHelper->getLevel($circle->getSingleId(), $userId));
 
 		// Create folder for collective and optionally copy default landing page
 		try {
@@ -210,7 +207,7 @@ class CollectiveService extends CollectiveServiceBase {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
 
-		return [$collectiveInfo, $message];
+		return [$collective, $message];
 	}
 
 	/**
@@ -220,27 +217,20 @@ class CollectiveService extends CollectiveServiceBase {
 	 */
 	public function updateCollective(int $id,
 		string $userId,
-		?string $emoji = null): CollectiveInfo {
-		$collectiveInfo = $this->getCollectiveInfo($id, $userId);
+		?string $emoji = null): Collective {
+		$collective = $this->getCollective($id, $userId);
 
-		if (!$this->circleHelper->isAdmin($collectiveInfo->getCircleId(), $userId)) {
+		if (!$this->circleHelper->isAdmin($collective->getCircleId(), $userId)) {
 			throw new NotPermittedException('Member ' . $userId . ' not allowed to update collective: ' . $id);
 		}
 
 		if ($emoji === '') {
-			$collectiveInfo->setEmoji(null);
+			$collective->setEmoji(null);
 		} elseif ($emoji) {
-			$collectiveInfo->setEmoji($emoji);
+			$collective->setEmoji($emoji);
 		}
 
-		return new CollectiveInfo($this->collectiveMapper->update($collectiveInfo),
-			$collectiveInfo->getName(),
-			$collectiveInfo->getLevel(),
-			$collectiveInfo->getShareToken(),
-			$collectiveInfo->getIsPageShare(),
-			$collectiveInfo->getShareEditable(),
-			$collectiveInfo->getUserPageOrder(),
-			$collectiveInfo->getUserShowRecentPages());
+		return $this->collectiveMapper->update($collective);
 	}
 
 	/**
@@ -251,23 +241,16 @@ class CollectiveService extends CollectiveServiceBase {
 	public function setPermissionLevel(int $id,
 		string $userId,
 		int $permissionLevel,
-		int $permission): CollectiveInfo {
-		$collectiveInfo = $this->getCollectiveInfo($id, $userId);
+		int $permission): Collective {
+		$collective = $this->getCollective($id, $userId);
 
-		if (!$this->circleHelper->isAdmin($collectiveInfo->getCircleId(), $userId)) {
+		if (!$this->circleHelper->isAdmin($collective->getCircleId(), $userId)) {
 			throw new NotPermittedException('Member ' . $userId . ' not allowed to update collective: ' . $id);
 		}
 
-		$collectiveInfo->updatePermissionLevel($permissionLevel, $permission);
+		$collective->updatePermissionLevel($permissionLevel, $permission);
 
-		return new CollectiveInfo($this->collectiveMapper->update($collectiveInfo),
-			$collectiveInfo->getName(),
-			$collectiveInfo->getLevel(),
-			$collectiveInfo->getShareToken(),
-			$collectiveInfo->getIsPageShare(),
-			$collectiveInfo->getShareEditable(),
-			$collectiveInfo->getUserPageOrder(),
-			$collectiveInfo->getUserShowRecentPages());
+		return $this->collectiveMapper->update($collective);
 	}
 
 	/**
@@ -277,23 +260,16 @@ class CollectiveService extends CollectiveServiceBase {
 	 */
 	public function setPageMode(int $id,
 		string $userId,
-		int $mode): CollectiveInfo {
-		$collectiveInfo = $this->getCollectiveInfo($id, $userId);
+		int $mode): Collective {
+		$collective = $this->getCollective($id, $userId);
 
-		if (!$this->circleHelper->isAdmin($collectiveInfo->getCircleId(), $userId)) {
+		if (!$this->circleHelper->isAdmin($collective->getCircleId(), $userId)) {
 			throw new NotPermittedException('Member ' . $userId . ' not allowed to update collective: ' . $id);
 		}
 
-		$collectiveInfo->setPageMode($mode);
+		$collective->setPageMode($mode);
 
-		return new CollectiveInfo($this->collectiveMapper->update($collectiveInfo),
-			$collectiveInfo->getName(),
-			$collectiveInfo->getLevel(),
-			$collectiveInfo->getShareToken(),
-			$collectiveInfo->getIsPageShare(),
-			$collectiveInfo->getShareEditable(),
-			$collectiveInfo->getUserPageOrder(),
-			$collectiveInfo->getUserShowRecentPages());
+		return $this->collectiveMapper->update($collective);
 	}
 
 	/**
@@ -301,10 +277,10 @@ class CollectiveService extends CollectiveServiceBase {
 	 * @throws NotPermittedException
 	 * @throws MissingDependencyException
 	 */
-	public function trashCollective(int $id, string $userId): CollectiveInfo {
-		$collectiveInfo = $this->getCollectiveInfo($id, $userId);
+	public function trashCollective(int $id, string $userId): Collective {
+		$collective = $this->getCollective($id, $userId);
 
-		if (!$this->circleHelper->isAdmin($collectiveInfo->getCircleId(), $userId)) {
+		if (!$this->circleHelper->isAdmin($collective->getCircleId(), $userId)) {
 			throw new NotPermittedException('Member ' . $userId . ' not allowed to delete collective: ' . $id);
 		}
 
@@ -313,14 +289,7 @@ class CollectiveService extends CollectiveServiceBase {
 			$this->eventDispatcher->dispatchTyped(new InvalidateMountCacheEvent(null));
 		}
 
-		return new CollectiveInfo($this->collectiveMapper->trash($collectiveInfo),
-			$collectiveInfo->getName(),
-			$collectiveInfo->getLevel(),
-			$collectiveInfo->getShareToken(),
-			$collectiveInfo->getIsPageShare(),
-			$collectiveInfo->getShareEditable(),
-			$collectiveInfo->getUserPageOrder(),
-			$collectiveInfo->getUserShowRecentPages());
+		return $this->collectiveMapper->trash($collective);
 	}
 
 	/**
@@ -328,18 +297,18 @@ class CollectiveService extends CollectiveServiceBase {
 	 * @throws NotPermittedException
 	 * @throws MissingDependencyException
 	 */
-	public function deleteCollective(int $id, string $userId, bool $deleteCircle): CollectiveInfo {
-		$collectiveInfo = $this->getCollectiveInfoFromTrash($id, $userId);
+	public function deleteCollective(int $id, string $userId, bool $deleteCircle): Collective {
+		$collective = $this->getCollectiveFromTrash($id, $userId);
 
 		if ($deleteCircle) {
-			$this->circleHelper->destroyCircle($collectiveInfo->getCircleId(), $userId);
+			$this->circleHelper->destroyCircle($collective->getCircleId(), $userId);
 		} else {
-			$this->circleHelper->unflagCircleAsAppManaged($collectiveInfo->getCircleId());
+			$this->circleHelper->unflagCircleAsAppManaged($collective->getCircleId());
 		}
 
 		// Delete collective folder and its contents
 		try {
-			$collectiveFolder = $this->collectiveFolderManager->getFolder($collectiveInfo->getId());
+			$collectiveFolder = $this->collectiveFolderManager->getFolder($collective->getId());
 			$collectiveFolder->delete();
 		} catch (InvalidPathException | FilesNotFoundException | FilesNotPermittedException $e) {
 			throw new NotFoundException('Failed to delete collective folder', 0, $e);
@@ -347,30 +316,23 @@ class CollectiveService extends CollectiveServiceBase {
 			// Delete leftovers in any case (also if collective folder is already gone)
 
 			// Delete shares and user settings
-			$this->shareService->deleteShareByCollectiveId($collectiveInfo->getId());
-			$this->collectiveUserSettingsMapper->deleteByCollectiveId($collectiveInfo->getId());
+			$this->shareService->deleteShareByCollectiveId($collective->getId());
+			$this->collectiveUserSettingsMapper->deleteByCollectiveId($collective->getId());
 
 			// Delete page trash for the collective
 			$this->initPageTrashBackend();
 			if ($this->pageTrashBackend) {
-				$this->pageTrashBackend->deleteTrashFolder($collectiveInfo->getId());
+				$this->pageTrashBackend->deleteTrashFolder($collective->getId());
 			}
 
 			// Delete page versions for the collective
 			$this->initPageVersionsBackend();
 			if ($this->pageVersionsBackend) {
-				$this->pageVersionsBackend->deleteVersionsFolder($collectiveInfo->getId());
+				$this->pageVersionsBackend->deleteVersionsFolder($collective->getId());
 			}
 		}
 
-		return new CollectiveInfo($this->collectiveMapper->delete($collectiveInfo),
-			$collectiveInfo->getName(),
-			$collectiveInfo->getLevel(),
-			$collectiveInfo->getShareToken(),
-			$collectiveInfo->getIsPageShare(),
-			$collectiveInfo->getShareEditable(),
-			$collectiveInfo->getUserPageOrder(),
-			$collectiveInfo->getUserShowRecentPages());
+		return $this->collectiveMapper->delete($collective);
 	}
 
 	/**
@@ -378,21 +340,14 @@ class CollectiveService extends CollectiveServiceBase {
 	 * @throws NotPermittedException
 	 * @throws MissingDependencyException
 	 */
-	public function restoreCollective(int $id, string $userId): CollectiveInfo {
-		$collectiveInfo = $this->getCollectiveInfoFromTrash($id, $userId);
+	public function restoreCollective(int $id, string $userId): Collective {
+		$collective = $this->getCollectiveFromTrash($id, $userId);
 
 		// Invalidate mountpoint cache as we changed list of collectives
 		if (class_exists(InvalidateMountCacheEvent::class)) {
 			$this->eventDispatcher->dispatchTyped(new InvalidateMountCacheEvent(null));
 		}
 
-		return new CollectiveInfo($this->collectiveMapper->restore($collectiveInfo),
-			$collectiveInfo->getName(),
-			$collectiveInfo->getLevel(),
-			$collectiveInfo->getShareToken(),
-			$collectiveInfo->getIsPageShare(),
-			$collectiveInfo->getShareEditable(),
-			$collectiveInfo->getUserPageOrder(),
-			$collectiveInfo->getUserShowRecentPages());
+		return $this->collectiveMapper->restore($collective);
 	}
 }

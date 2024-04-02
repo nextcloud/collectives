@@ -13,7 +13,6 @@ use OCA\Collectives\Db\Page;
 use OCA\Collectives\Db\PageMapper;
 use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Fs\UserFolderHelper;
-use OCA\Collectives\Model\CollectiveInfo;
 use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Service\CollectiveServiceBase;
 use OCA\Collectives\Service\NotPermittedException;
@@ -371,9 +370,10 @@ class PageServiceTest extends TestCase {
 
 	public function testMoveLandingPageFails(): void {
 		$collective = new Collective();
-		$collectiveInfo = new CollectiveInfo($collective, 'Collective', Member::LEVEL_ADMIN);
-		$this->collectiveService->method('getCollectiveInfo')
-			->willReturn($collectiveInfo);
+		$collective->setName('Collective');
+		$collective->setLevel(Member::LEVEL_ADMIN);
+		$this->collectiveService->method('getCollective')
+			->willReturn($collective);
 
 		$file = $this->getMockBuilder(File::class)
 			->disableOriginalConstructor()
@@ -390,9 +390,10 @@ class PageServiceTest extends TestCase {
 
 	public function testMovePageToItselfFails(): void {
 		$collective = new Collective();
-		$collectiveInfo = new CollectiveInfo($collective, 'Collective', Member::LEVEL_ADMIN);
-		$this->collectiveService->method('getCollectiveInfo')
-			->willReturn($collectiveInfo);
+		$collective->setName('Collective');
+		$collective->setLevel(Member::LEVEL_ADMIN);
+		$this->collectiveService->method('getCollective')
+			->willReturn($collective);
 
 		$file = $this->getMockBuilder(File::class)
 			->disableOriginalConstructor()
