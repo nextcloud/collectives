@@ -6,57 +6,141 @@ namespace OCA\Collectives\Model;
 
 use JsonSerializable;
 
-use OCP\AppFramework\Db\Entity;
 use OCP\Files\File;
 use OCP\Files\InvalidPathException;
 use OCP\Files\NotFoundException;
 
-/**
- * @method string getLastUserId()
- * @method void setLastUserId(string $value)
- * @method string getLastUserDisplayName()
- * @method void setLastUserDisplayName(string $value)
- * @method string getEmoji()
- * @method void setEmoji(string $value)
- * @method string getTitle()
- * @method void setSubpageOrder(string $value)
- * @method string getSubpageOrder()
- * @method int|null getTrashTimestamp()
- * @method void setTrashTimestamp(?int $trashTimestamp)
- * @method void setTitle(string $value)
- * @method int getTimestamp()
- * @method void setTimestamp(int $value)
- * @method int getSize()
- * @method void setSize(int $value)
- * @method string getFileName()
- * @method void setFileName(string $value)
- * @method string getFilePath()
- * @method void setFilePath(string $value)
- * @method string getCollectivePath()
- * @method void setCollectivePath(string $value)
- * @method int getParentId()
- * @method void setParentId(int $value)
- * @method int getShareToken()
- * @method void setShareToken(string $value)
- */
-class PageInfo extends Entity implements JsonSerializable {
+class PageInfo implements JsonSerializable {
 	public const INDEX_PAGE_TITLE = 'Readme';
 	public const TEMPLATE_PAGE_TITLE = 'Template';
 	public const SUFFIX = '.md';
 
-	protected ?string $lastUserId = null;
-	protected ?string $lastUserDisplayName = null;
-	protected ?string $emoji = null;
-	protected ?string $subpageOrder = null;
-	protected ?int $trashTimestamp = null;
-	protected ?string $title = null;
-	protected ?int $timestamp = null;
-	protected ?int $size = null;
-	protected ?string $fileName = null;
-	protected ?string $filePath = null;
-	protected ?string $collectivePath = null;
-	protected ?int $parentId = null;
-	protected ?string $shareToken = null;
+	private int $id;
+	private ?string $lastUserId = null;
+	private ?string $lastUserDisplayName = null;
+	private ?string $emoji = null;
+	private ?string $subpageOrder = null;
+	private ?int $trashTimestamp = null;
+	private string $title;
+	private int $timestamp;
+	private int $size;
+	private string $fileName;
+	private string $filePath;
+	private ?string $collectivePath = null;
+	private int $parentId;
+	private ?string $shareToken = null;
+
+	public function getId(): int {
+		return $this->id;
+	}
+
+	public function setId(int $id): void {
+		$this->id = $id;
+	}
+
+	public function getLastUserId(): ?string {
+		return $this->lastUserId;
+	}
+
+	public function setLastUserId(string $lastUserId): void {
+		$this->lastUserId = $lastUserId;
+	}
+
+	public function getLastUserDisplayName(): ?string {
+		return $this->lastUserDisplayName;
+	}
+
+	public function setLastUserDisplayName(string $lastUserDisplayName): void {
+		$this->lastUserDisplayName = $lastUserDisplayName;
+	}
+
+	public function getEmoji(): ?string {
+		return $this->emoji;
+	}
+
+	public function setEmoji(?string $emoji): void {
+		$this->emoji = $emoji;
+	}
+
+	public function getSubpageOrder(): ?string {
+		return $this->subpageOrder;
+	}
+
+	public function setSubpageOrder(string $subpageOrder): void {
+		$this->subpageOrder = $subpageOrder;
+	}
+
+	public function getTrashTimestamp(): ?int {
+		return $this->trashTimestamp;
+	}
+
+	public function setTrashTimestamp(int $trashTimestamp): void {
+		$this->trashTimestamp = $trashTimestamp;
+	}
+
+	public function getTitle(): string {
+		return $this->title;
+	}
+
+	public function setTitle(string $title): void {
+		$this->title = $title;
+	}
+
+	public function getTimestamp(): int {
+		return $this->timestamp;
+	}
+
+	public function setTimestamp(int $timestamp): void {
+		$this->timestamp = $timestamp;
+	}
+
+	public function getSize(): int {
+		return $this->size;
+	}
+
+	public function setSize(int $size): void {
+		$this->size = $size;
+	}
+
+	public function getFileName(): string {
+		return $this->fileName;
+	}
+
+	public function setFileName(string $fileName): void {
+		$this->fileName = $fileName;
+	}
+
+	public function getFilePath(): string {
+		return $this->filePath;
+	}
+
+	public function setFilePath(string $filePath): void {
+		$this->filePath = $filePath;
+	}
+
+	public function getCollectivePath(): ?string {
+		return $this->collectivePath;
+	}
+
+	public function setCollectivePath(string $collectivePath): void {
+		$this->collectivePath = $collectivePath;
+	}
+
+	public function getParentId(): int {
+		return $this->parentId;
+	}
+
+	public function setParentId(int $parentId): void {
+		$this->parentId = $parentId;
+	}
+
+	public function getShareToken(): ?string {
+		return $this->shareToken;
+	}
+
+	public function setShareToken(string $shareToken): void {
+		$this->shareToken = $shareToken;
+	}
 
 	public function jsonSerialize(): array {
 		return [
