@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Controller;
 
+use OCA\Collectives\Db\CollectiveShare;
 use OCA\Collectives\Db\CollectiveShareMapper;
-use OCA\Collectives\Model\CollectiveShareInfo;
 use OCA\Collectives\Service\CollectiveShareService;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
@@ -19,7 +19,7 @@ use OCP\ISession;
 use Psr\Log\LoggerInterface;
 
 class PublicPageTrashController extends PublicShareController {
-	private ?CollectiveShareInfo $share = null;
+	private ?CollectiveShare $share = null;
 
 	use ErrorHelper;
 
@@ -54,7 +54,7 @@ class PublicPageTrashController extends PublicShareController {
 	/**
 	 * @throws NotFoundException
 	 */
-	private function getShare(): CollectiveShareInfo {
+	private function getShare(): CollectiveShare {
 		if ($this->share === null) {
 			$this->share = $this->collectiveShareService->findShareByToken($this->getToken());
 
