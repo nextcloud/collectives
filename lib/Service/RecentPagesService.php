@@ -32,12 +32,12 @@ class RecentPagesService {
 	 */
 	public function forUser(IUser $user, int $limit = 10): array {
 		try {
-			$collectiveInfos = $this->collectiveService->getCollectives($user->getUID());
+			$collectives = $this->collectiveService->getCollectives($user->getUID());
 		} catch (NotFoundException|NotPermittedException) {
 			return [];
 		}
 
-		if (!$collectiveInfos) {
+		if (!$collectives) {
 			return [];
 		}
 
@@ -47,12 +47,12 @@ class RecentPagesService {
 
 		$expressions = [];
 		$collectivesMap = [];
-		foreach ($collectiveInfos as $collectiveInfo) {
-			$value = sprintf($appData . '/collectives/%d/%%', $collectiveInfo->getId());
+		foreach ($collectives as $collective) {
+			$value = sprintf($appData . '/collectives/%d/%%', $collective->getId());
 			$expressions[] = $qb->expr()->like('f.path', $qb->createNamedParameter($value, IQueryBuilder::PARAM_STR));
-			$collectivesMap[$collectiveInfo->getId()] = $collectiveInfo;
+			$collectivesMap[$collective->getId()] = $collective;
 		}
-		unset($collectiveInfos);
+		unset($collective);
 
 		$qb->select('p.*', 'f.mtime as timestamp', 'f.name as filename', 'f.path as path')
 			->from('filecache', 'f')

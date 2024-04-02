@@ -10,7 +10,6 @@ use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Db\CollectiveUserSettingsMapper;
 use OCA\Collectives\Db\PageMapper;
-use OCA\Collectives\Model\CollectiveInfo;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Service\CircleExistsException;
 use OCA\Collectives\Service\CircleHelper;
@@ -101,12 +100,14 @@ class CollectiveServiceTest extends TestCase {
 	public function testFindCollectiveByName(): void {
 		$collective1 = new Collective();
 		$collective2 = new Collective();
-		$collectiveInfo1 = new CollectiveInfo($collective1, 'collective1');
-		$collectiveInfo2 = new CollectiveInfo($collective2, 'collective2');
+		$collective1 = new Collective($collective1);
+		$collective1->setName('collective1');
+		$collective2 = new Collective($collective2);
+		$collective2->setName('collective2');
 		$this->collectiveHelper->method('getCollectivesForUser')
-			->willReturn([$collectiveInfo1, $collectiveInfo2]);
+			->willReturn([$collective1, $collective2]);
 
-		$this->assertEquals($collectiveInfo1, $this->service->findCollectiveByName($this->userId, 'collective1'));
+		$this->assertEquals($collective1, $this->service->findCollectiveByName($this->userId, 'collective1'));
 
 		$this->expectException(NotFoundException::class);
 		$this->service->findCollectiveByName($this->userId, 'collective3');
@@ -116,11 +117,12 @@ class CollectiveServiceTest extends TestCase {
 		$name = 'collective';
 		$emoji = '⭐';
 		$collective = new Collective();
-		$collectiveInfo = new CollectiveInfo($collective, $name);
-		$this->assertEquals($name, $this->service->getCollectiveNameWithEmoji($collectiveInfo));
+		$collective = new Collective($collective);
+		$collective->setName($name);
+		$this->assertEquals($name, $this->service->getCollectiveNameWithEmoji($collective));
 
-		$collectiveInfo->setEmoji($emoji);
-		$this->assertEquals($emoji . ' ' . $name, $this->service->getCollectiveNameWithEmoji($collectiveInfo));
+		$collective->setEmoji($emoji);
+		$this->assertEquals($emoji . ' ' . $name, $this->service->getCollectiveNameWithEmoji($collective));
 	}
 
 	public function testCreateWithEmptyName(): void {

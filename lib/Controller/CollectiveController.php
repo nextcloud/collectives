@@ -57,14 +57,14 @@ class CollectiveController extends Controller {
 	public function create(string $name, ?string $emoji = null): DataResponse {
 		return $this->prepareResponse(function () use ($name, $emoji): array {
 			$safeName = $this->nodeHelper->sanitiseFilename($name);
-			[$collectiveInfo, $info] = $this->service->createCollective(
+			[$collective, $info] = $this->service->createCollective(
 				$this->getUserId(),
 				$this->getUserLang(),
 				$safeName,
-				$emoji
+				$emoji,
 			);
 			return [
-				"data" => $collectiveInfo,
+				"data" => $collective,
 				"message" => $info,
 			];
 		});
@@ -75,13 +75,13 @@ class CollectiveController extends Controller {
 	 */
 	public function update(int $id, ?string $emoji = null): DataResponse {
 		return $this->prepareResponse(function () use ($id, $emoji): array {
-			$collectiveInfo = $this->service->updateCollective(
+			$collective = $this->service->updateCollective(
 				$id,
 				$this->getUserId(),
 				$emoji
 			);
 			return [
-				"data" => $collectiveInfo,
+				"data" => $collective,
 			];
 		});
 	}
@@ -91,14 +91,14 @@ class CollectiveController extends Controller {
 	 */
 	public function editLevel(int $id, int $level): DataResponse {
 		return $this->prepareResponse(function () use ($id, $level): array {
-			$collectiveInfo = $this->service->setPermissionLevel(
+			$collective = $this->service->setPermissionLevel(
 				$id,
 				$this->getUserId(),
 				$level,
 				Collective::editPermissions
 			);
 			return [
-				"data" => $collectiveInfo,
+				"data" => $collective,
 			];
 		});
 	}
@@ -108,14 +108,14 @@ class CollectiveController extends Controller {
 	 */
 	public function shareLevel(int $id, int $level): DataResponse {
 		return $this->prepareResponse(function () use ($id, $level): array {
-			$collectiveInfo = $this->service->setPermissionLevel(
+			$collective = $this->service->setPermissionLevel(
 				$id,
 				$this->getUserId(),
 				$level,
 				Constants::PERMISSION_SHARE
 			);
 			return [
-				"data" => $collectiveInfo,
+				"data" => $collective,
 			];
 		});
 	}
@@ -125,13 +125,13 @@ class CollectiveController extends Controller {
 	 */
 	public function pageMode(int $id, int $mode): DataResponse {
 		return $this->prepareResponse(function () use ($id, $mode): array {
-			$collectiveInfo = $this->service->setPageMode(
+			$collective = $this->service->setPageMode(
 				$id,
 				$this->getUserId(),
 				$mode,
 			);
 			return [
-				"data" => $collectiveInfo,
+				"data" => $collective,
 			];
 		});
 	}
@@ -141,9 +141,9 @@ class CollectiveController extends Controller {
 	 */
 	public function trash(int $id): DataResponse {
 		return $this->prepareResponse(function () use ($id): array {
-			$collectiveInfo = $this->service->trashCollective($id, $this->getUserId());
+			$collective = $this->service->trashCollective($id, $this->getUserId());
 			return [
-				"data" => $collectiveInfo
+				"data" => $collective,
 			];
 		});
 	}

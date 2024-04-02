@@ -42,8 +42,8 @@ class ShareController extends Controller {
 	public function getCollectiveShares(int $collectiveId): DataResponse {
 		return $this->prepareResponse(function () use ($collectiveId): array {
 			$userId = $this->getUserId();
-			$collectiveInfo = $this->collectiveService->getCollectiveInfo($collectiveId, $userId);
-			$shares = $this->shareService->getSharesByCollectiveAndUser($userId, $collectiveInfo->getId());
+			$collective = $this->collectiveService->getCollective($collectiveId, $userId);
+			$shares = $this->shareService->getSharesByCollectiveAndUser($userId, $collective->getId());
 			return [
 				"data" => $shares
 			];
@@ -77,12 +77,12 @@ class ShareController extends Controller {
 	public function createPageShare(int $collectiveId, int $pageId = 0): DataResponse {
 		return $this->prepareResponse(function () use ($collectiveId, $pageId): array {
 			$userId = $this->getUserId();
-			$collectiveInfo = $this->collectiveService->getCollectiveInfo($collectiveId, $userId);
+			$collective = $this->collectiveService->getCollective($collectiveId, $userId);
 			$pageInfo = null;
 			if ($pageId !== 0) {
 				$pageInfo = $this->pageService->pageToSubFolder($collectiveId, $pageId, $userId);
 			}
-			$share = $this->shareService->createShare($userId, $collectiveInfo, $pageInfo);
+			$share = $this->shareService->createShare($userId, $collective, $pageInfo);
 			return [
 				"data" => $share
 			];
@@ -95,12 +95,12 @@ class ShareController extends Controller {
 	public function updatePageShare(int $collectiveId, int $pageId, string $token, bool $editable = false): DataResponse {
 		return $this->prepareResponse(function () use ($collectiveId, $pageId, $token, $editable): array {
 			$userId = $this->getUserId();
-			$collectiveInfo = $this->collectiveService->getCollectiveInfo($collectiveId, $userId);
+			$collective = $this->collectiveService->getCollective($collectiveId, $userId);
 			$pageInfo = null;
 			if ($pageId !== 0) {
 				$pageInfo = $this->pageService->findByFileId($collectiveId, $pageId, $userId);
 			}
-			$share = $this->shareService->updateShare($userId, $collectiveInfo, $pageInfo, $token, $editable);
+			$share = $this->shareService->updateShare($userId, $collective, $pageInfo, $token, $editable);
 			return [
 				"data" => $share
 			];
@@ -113,7 +113,7 @@ class ShareController extends Controller {
 	public function deletePageShare(int $collectiveId, int $pageId, string $token): DataResponse {
 		return $this->prepareResponse(function () use ($collectiveId, $pageId, $token): array {
 			$userId = $this->getUserId();
-			$this->collectiveService->getCollectiveInfo($collectiveId, $userId);
+			$this->collectiveService->getCollective($collectiveId, $userId);
 			$this->shareService->deleteShare($userId, $collectiveId, $pageId, $token);
 			return [];
 		});

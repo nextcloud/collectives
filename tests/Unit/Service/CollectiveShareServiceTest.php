@@ -8,7 +8,6 @@ use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveShare;
 use OCA\Collectives\Db\CollectiveShareMapper;
 use OCA\Collectives\Fs\UserFolderHelper;
-use OCA\Collectives\Model\CollectiveInfo;
 use OCA\Collectives\Service\CollectiveShareService;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\PageService;
@@ -26,7 +25,7 @@ class CollectiveShareServiceTest extends TestCase {
 	private UserFolderHelper $userFolderHelper;
 	private CollectiveShareMapper $collectiveShareMapper;
 	private CollectiveShareService $service;
-	private CollectiveInfo $collectiveInfo;
+	private Collective $collective;
 
 	private string $userId = 'jane';
 	private string $collectiveId = '123';
@@ -61,9 +60,9 @@ class CollectiveShareServiceTest extends TestCase {
 			$l10n
 		);
 
-		$collective = new Collective();
-		$collective->setId($this->collectiveId);
-		$this->collectiveInfo = new CollectiveInfo($collective, $this->collectiveName);
+		$this->collective = new Collective();
+		$this->collective->setId($this->collectiveId);
+		$this->collective->setName($this->collectiveName);
 	}
 
 	private function prepareFolderShare(): void {
@@ -197,13 +196,13 @@ class CollectiveShareServiceTest extends TestCase {
 			->willReturn($folderShare);
 
 		// Without share write permissions
-		self::assertEquals($collectiveShare, $this->service->updateShare($this->userId, $this->collectiveInfo, null, 'token', false));
+		self::assertEquals($collectiveShare, $this->service->updateShare($this->userId, $this->collective, null, 'token', false));
 
 		// With share write permissions
 		$permissions = 15;
 		$folderShare->method('getPermissions')
 			->willReturn($permissions);
 		$collectiveShare->setEditable(true);
-		self::assertEquals($collectiveShare, $this->service->updateShare($this->userId, $this->collectiveInfo, null, 'token', true));
+		self::assertEquals($collectiveShare, $this->service->updateShare($this->userId, $this->collective, null, 'token', true));
 	}
 }

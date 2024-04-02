@@ -49,21 +49,21 @@ class CollectiveProvider implements IProvider {
 	 */
 	public function search(IUser $user, ISearchQuery $query): SearchResult {
 		if ($this->appManager->isEnabledForUser('circles', $user)) {
-			$collectiveInfos = $this->collectiveHelper->getCollectivesForUser($user->getUID(), false, false);
+			$collectives = $this->collectiveHelper->getCollectivesForUser($user->getUID(), false, false);
 		} else {
-			$collectiveInfos = [];
+			$collectives = [];
 		}
 
 		$collectiveSearchResults = [];
-		foreach ($collectiveInfos as $collectiveInfo) {
-			if (stripos($collectiveInfo->getName(), $query->getTerm()) === false) {
+		foreach ($collectives as $collective) {
+			if (stripos($collective->getName(), $query->getTerm()) === false) {
 				continue;
 			}
 			$collectiveSearchResults[] = new SearchResultEntry(
 				'',
-				$this->collectiveService->getCollectiveNameWithEmoji($collectiveInfo),
+				$this->collectiveService->getCollectiveNameWithEmoji($collective),
 				'',
-				$this->urlGenerator->linkToRouteAbsolute('collectives.start.index') . rawurlencode($collectiveInfo->getName()),
+				$this->urlGenerator->linkToRouteAbsolute('collectives.start.index') . rawurlencode($collective->getName()),
 				'icon-collectives'
 			);
 		}

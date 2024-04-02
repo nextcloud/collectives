@@ -6,20 +6,22 @@ namespace OCA\Collectives\Service;
 
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
-use OCA\Collectives\Model\CollectiveInfo;
 
 class CollectiveServiceBase {
 	public function __construct(protected CollectiveMapper $collectiveMapper, protected CircleHelper $circleHelper) {
 	}
 
 	/**
+	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function getCollective(int $collectiveId, string $userId): Collective {
-		if (null === $collective = $this->collectiveMapper->findByIdAndUser($collectiveId, $userId)) {
-			throw new NotFoundException('Collective not found: '. $collectiveId);
+	public function getCollective(int $id, string $userId): Collective {
+		if (null === $collective = $this->collectiveMapper->findByIdAndUser($id, $userId)) {
+			throw new NotFoundException('Collective not found: '. $id);
 		}
+		$collective->setName($this->collectiveMapper->circleIdToName($collective->getCircleId(), $userId));
+		$collective->setLevel($this->circleHelper->getLevel($collective->getCircleId(), $userId));
 
 		return $collective;
 	}
@@ -29,36 +31,13 @@ class CollectiveServiceBase {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function getCollectiveInfo(int $id, string $userId): CollectiveInfo {
-		$collective = $this->getCollective($id, $userId);
-		$name = $this->collectiveMapper->circleIdToName($collective->getCircleId(), $userId);
-		$level = $this->circleHelper->getLevel($collective->getCircleId(), $userId);
-
-		return new CollectiveInfo($collective, $name, $level);
-	}
-
-	/**
-	 * @throws NotFoundException
-	 * @throws NotPermittedException
-	 */
-	public function getCollectiveFromTrash(int $collectiveId, string $userId): Collective {
-		if (null === $collective = $this->collectiveMapper->findTrashByIdAndUser($collectiveId, $userId)) {
-			throw new NotFoundException('Collective not found in trash: '. $collectiveId);
+	public function getCollectiveFromTrash(int $id, string $userId): Collective {
+		if (null === $collective = $this->collectiveMapper->findTrashByIdAndUser($id, $userId)) {
+			throw new NotFoundException('Collective not found in trash: '. $id);
 		}
+		$collective->setName($this->collectiveMapper->circleIdToName($collective->getCircleId(), $userId));
+		$collective->setLevel($this->circleHelper->getLevel($collective->getCircleId(), $userId));
 
 		return $collective;
-	}
-
-	/**
-	 * @throws MissingDependencyException
-	 * @throws NotFoundException
-	 * @throws NotPermittedException
-	 */
-	public function getCollectiveInfoFromTrash(int $id, string $userId): CollectiveInfo {
-		$collective = $this->getCollectiveFromTrash($id, $userId);
-		$name = $this->collectiveMapper->circleIdToName($collective->getCircleId(), $userId);
-		$level = $this->circleHelper->getLevel($collective->getCircleId(), $userId);
-
-		return new CollectiveInfo($collective, $name, $level);
 	}
 }
