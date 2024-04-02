@@ -175,6 +175,10 @@ class PageServiceTest extends TestCase {
 			->willReturn($mountPoint);
 		$indexFile->method('getInternalPath')
 			->willReturn('Collectives/testfolder/Readme.md');
+		$indexFile->method('getMTime')
+			->willReturn(0);
+		$indexFile->method('getSize')
+			->willReturn(0);
 		$indexPage = new Page();
 		$this->pageMapper->method('findByFileId')
 			->willReturn($indexPage);
@@ -203,6 +207,10 @@ class PageServiceTest extends TestCase {
 				->willReturn($mountPoint);
 			$file->method('getInternalPath')
 				->willReturn('Collectives/testfolder/Readme.md');
+			$file->method('getMTime')
+				->willReturn(0);
+			$file->method('getSize')
+				->willReturn(0);
 
 			$filesNotJustMd[] = $file;
 
