@@ -32,6 +32,7 @@ OC.L10N.register(
     "Loading…" : "Poteka nalaganje …",
     "An error occurred while performing the search" : "Me iskanjem je prišlo do napake",
     "Add groups" : "Dodaj skupine",
+    "Add teams" : "Dodaj ekipe",
     "Remove {name}" : "Odstrani {name}",
     "Collective settings" : "Nastavitve Zbirke",
     "Name and emoji" : "Ime in izrazne ikone",

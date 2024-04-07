@@ -18,6 +18,8 @@ OC.L10N.register(
     "Done" : "Terminado",
     "Show in Files" : "Mostrar en Archivos",
     "Move or copy" : "Mover o copiar",
+    "Hide outline" : "Ocultar esquema",
+    "Show outline" : "Mostrar esquema",
     "Title" : "Título",
     "Deleted" : "Eliminado",
     "Add another link" : "Añadir otro enlace",
