@@ -32,6 +32,7 @@ describe('Page list', function() {
 		cy.then(() => this.garden)
 			.seedPage('Day 1', '', 'Readme.md')
 			.seedPage('Subpage Title', '', 'Day 1.md')
+			.seedPage('DeepSubpage Title', 'Day 1', 'Subpage Title.md')
 			.seedPage('Day 2', '', 'Readme.md')
 			.seedPage('Page Title', '', 'Readme.md')
 			.seedPage('Move me internal', '', 'Readme.md')
@@ -207,7 +208,7 @@ describe('Page list', function() {
 		it('Shows only landing page and (sub)pages matching the filter string', function() {
 			cy.get('input[name="pageFilter"]')
 				.type('Title')
-			cy.get('.app-content-list-item-line-one:visible').should('have.length', 3)
+			cy.get('.app-content-list-item-line-one:visible').should('have.length', 4)
 			cy.get('.app-content-list-item-line-one:visible').eq(0)
 				.should('contain', 'Our Garden')
 			cy.get('.app-content-list-item-line-one:visible').eq(1)
