@@ -191,7 +191,7 @@ export default {
 				const res = []
 				sortedSubpages(state, getters)(pageId).forEach(element => {
 					res.push(element)
-					res.push(...sortedSubpages(state, getters)(element.id))
+					res.push(...allSubPagesSorted(element.id))
 				})
 				return res
 			}
