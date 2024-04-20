@@ -28,6 +28,7 @@ class CollectiveShare extends Entity implements JsonSerializable {
 	protected ?string $owner = null;
 	/** transient attributes, not persisted in database  */
 	protected bool $editable = false;
+	protected string $password = '';
 
 	public function getEditable(): bool {
 		return $this->editable;
@@ -35,6 +36,14 @@ class CollectiveShare extends Entity implements JsonSerializable {
 
 	public function setEditable(bool $editable): void {
 		$this->editable = $editable;
+	}
+
+	public function getPassword(): string {
+		return $this->password;
+	}
+
+	public function setPassword(string $password): void {
+		$this->password = $password;
 	}
 
 	public function jsonSerialize(): array {
@@ -45,6 +54,7 @@ class CollectiveShare extends Entity implements JsonSerializable {
 			'token' => $this->token,
 			'owner' => $this->owner,
 			'editable' => $this->editable,
+			'password' => $this->password,
 		];
 	}
 }

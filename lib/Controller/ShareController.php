@@ -60,8 +60,8 @@ class ShareController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 */
-	public function updateCollectiveShare(int $collectiveId, string $token, bool $editable): DataResponse {
-		return $this->updatePageShare($collectiveId, 0, $token, $editable);
+	public function updateCollectiveShare(int $collectiveId, string $token, bool $editable, string $password = ''): DataResponse {
+		return $this->updatePageShare($collectiveId, 0, $token, $editable, $password);
 	}
 
 	/**
@@ -92,15 +92,15 @@ class ShareController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 */
-	public function updatePageShare(int $collectiveId, int $pageId, string $token, bool $editable = false): DataResponse {
-		return $this->prepareResponse(function () use ($collectiveId, $pageId, $token, $editable): array {
+	public function updatePageShare(int $collectiveId, int $pageId, string $token, bool $editable, string $password = ''): DataResponse {
+		return $this->prepareResponse(function () use ($collectiveId, $pageId, $token, $editable, $password): array {
 			$userId = $this->getUserId();
 			$collective = $this->collectiveService->getCollective($collectiveId, $userId);
 			$pageInfo = null;
 			if ($pageId !== 0) {
 				$pageInfo = $this->pageService->findByFileId($collectiveId, $pageId, $userId);
 			}
-			$share = $this->shareService->updateShare($userId, $collective, $pageInfo, $token, $editable);
+			$share = $this->shareService->updateShare($userId, $collective, $pageInfo, $token, $editable, $password);
 			return [
 				"data" => $share
 			];

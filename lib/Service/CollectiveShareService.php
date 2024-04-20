@@ -111,6 +111,9 @@ class CollectiveShareService {
 		}
 
 		$collectiveShare->setEditable($this->isShareEditable($folderShare));
+		if ($folderShare->getPassword()) {
+			$collectiveShare->setPassword($folderShare->getPassword());
+		}
 		return $collectiveShare;
 	}
 
@@ -130,6 +133,9 @@ class CollectiveShareService {
 		}
 
 		$collectiveShare->setEditable($this->isShareEditable($folderShare));
+		if ($folderShare->getPassword()) {
+			$collectiveShare->setPassword($folderShare->getPassword());
+		}
 		return $collectiveShare;
 	}
 
@@ -145,6 +151,9 @@ class CollectiveShareService {
 				$this->collectiveShareMapper->delete($share);
 			}
 			$share->setEditable($this->isShareEditable($folderShare));
+			if ($folderShare->getPassword()) {
+				$share->setPassword($folderShare->getPassword());
+			}
 			$shares[] = $share;
 		}
 
@@ -189,7 +198,7 @@ class CollectiveShareService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function updateShare(string $userId, Collective $collective, ?PageInfo $pageInfo, string $token, bool $editable = false): CollectiveShare {
+	public function updateShare(string $userId, Collective $collective, ?PageInfo $pageInfo, string $token, bool $editable, string $password): CollectiveShare {
 		if (!$collective->canShare()) {
 			throw new NotPermittedException($this->l10n->t('You are not allowed to share %s', $collective->getName()));
 		}
@@ -219,9 +228,11 @@ class CollectiveShareService {
 		}
 
 		$folderShare->setPermissions($permissions);
+		$folderShare->setPassword($password);
 		$this->shareManager->updateShare($folderShare);
 
 		$share->setEditable($this->isShareEditable($folderShare));
+		$share->setPassword($folderShare->getPassword() ?? '');
 		return $share;
 	}
 
