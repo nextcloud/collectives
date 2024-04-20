@@ -196,13 +196,30 @@ class CollectiveShareServiceTest extends TestCase {
 			->willReturn($folderShare);
 
 		// Without share write permissions
-		self::assertEquals($collectiveShare, $this->service->updateShare($this->userId, $this->collective, null, 'token', false));
+		self::assertEquals($collectiveShare, $this->service->updateShare($this->userId, $this->collective, null, 'token', false, ''));
 
 		// With share write permissions
 		$permissions = 15;
 		$folderShare->method('getPermissions')
 			->willReturn($permissions);
 		$collectiveShare->setEditable(true);
-		self::assertEquals($collectiveShare, $this->service->updateShare($this->userId, $this->collective, null, 'token', true));
+		self::assertEquals($collectiveShare, $this->service->updateShare($this->userId, $this->collective, null, 'token', true, ''));
+	}
+
+	public function testUpdateShareWithPassword(): void {
+		$collectiveShare = new CollectiveShare();
+		$this->collectiveShareMapper->method('findOneByCollectiveIdAndTokenAndUser')
+			->willReturn($collectiveShare);
+
+		$folderShare = $this->getMockBuilder(Share::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$this->shareManager->method('getShareByToken')
+			->willReturn($folderShare);
+
+		$folderShare->method('getPassword')
+			->willReturn('passwordhash');
+		$collectiveShare = $this->service->updateShare($this->userId, $this->collective, null, 'token', false, 'password');
+		self::assertEquals('passwordhash', $collectiveShare->getPassword());
 	}
 }
