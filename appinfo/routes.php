@@ -117,7 +117,9 @@ return [
 		['name' => 'start#index', 'url' => '/', 'verb' => 'GET'],
 
 		// Vue.js router public route (Vue.js frontend)
-		['name' => 'publicStart#publicIndex', 'url' => '/p/{token}/{path}', 'verb' => 'GET',
+		['name' => 'publicStart#showAuthenticate', 'url' => '/p/{token}/authenticate/{redirect}', 'verb' => 'GET'],
+		['name' => 'publicStart#authenticate', 'url' => '/p/{token}/authenticate/{redirect}', 'verb' => 'POST'],
+		['name' => 'publicStart#showShare', 'url' => '/p/{token}/{path}', 'verb' => 'GET',
 			'requirements' => ['path' => '.*'],	'defaults' => ['path' => '']],
 
 		// Vue.js router route (Vue.js frontend)

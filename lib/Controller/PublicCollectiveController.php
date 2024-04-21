@@ -16,13 +16,19 @@ use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\PublicShareController;
 use OCP\IRequest;
 use OCP\ISession;
+use OCP\Share\Exceptions\ShareNotFound;
+use OCP\Share\IManager as ShareManager;
+use OCP\Share\IShare;
 use Psr\Log\LoggerInterface;
 
 class PublicCollectiveController extends PublicShareController {
 	use ErrorHelper;
 
+	private ?IShare $share = null;
+
 	public function __construct(string $AppName,
 		IRequest $request,
+		private ShareManager $shareManager,
 		private CollectiveShareMapper $collectiveShareMapper,
 		private CollectiveService $service,
 		ISession $session,
@@ -30,8 +36,18 @@ class PublicCollectiveController extends PublicShareController {
 		parent::__construct($AppName, $request, $session);
 	}
 
+	/**
+	 * @throws ShareNotFound
+	 */
+	protected function getShare(): IShare {
+		if ($this->share === null) {
+			$this->share = $this->shareManager->getShareByToken($this->getToken());
+		}
+		return $this->share;
+	}
+
 	protected function getPasswordHash(): string {
-		return '';
+		return $this->getShare()->getPassword();
 	}
 
 	public function isValidToken(): bool {
@@ -45,7 +61,7 @@ class PublicCollectiveController extends PublicShareController {
 	}
 
 	protected function isPasswordProtected(): bool {
-		return false;
+		return $this->getShare()->getPassword() !== null;
 	}
 
 	private function prepareResponse(Closure $callback) : DataResponse {
@@ -55,8 +71,8 @@ class PublicCollectiveController extends PublicShareController {
 	/**
 	 * @PublicPage
 	 */
-	public function get(int $pageId = 0): DataResponse {
-		return $this->prepareResponse(function () use ($pageId): array {
+	public function get(): DataResponse {
+		return $this->prepareResponse(function (): array {
 			try {
 				$share = $this->collectiveShareMapper->findOneByToken($this->getToken());
 			} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
