@@ -18,15 +18,20 @@ use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\PublicShareController;
 use OCP\IRequest;
 use OCP\ISession;
+use OCP\Share\Exceptions\ShareNotFound;
+use OCP\Share\IManager as ShareManager;
+use OCP\Share\IShare;
 use Psr\Log\LoggerInterface;
 
 class PublicPageController extends PublicShareController {
-	private ?CollectiveShare $share = null;
+	private ?IShare $share = null;
+	private ?CollectiveShare $collectiveShare = null;
 
 	use ErrorHelper;
 
 	public function __construct(string $appName,
 		IRequest $request,
+		private ShareManager $shareManager,
 		private CollectiveShareMapper $collectiveShareMapper,
 		private CollectiveShareService $collectiveShareService,
 		private PageService $service,
@@ -36,8 +41,33 @@ class PublicPageController extends PublicShareController {
 		parent::__construct($appName, $request, $session);
 	}
 
+	/**
+	 * @throws ShareNotFound
+	 */
+	protected function getShare(): IShare {
+		if ($this->share === null) {
+			$this->share = $this->shareManager->getShareByToken($this->getToken());
+		}
+		return $this->share;
+	}
+
+	/**
+	 * @throws NotFoundException
+	 */
+	private function getCollectiveShare(): CollectiveShare {
+		if ($this->collectiveShare === null) {
+			$this->collectiveShare = $this->collectiveShareService->findShareByToken($this->getToken());
+
+			if ($this->collectiveShare === null) {
+				throw new NotFoundException('Failed to get shared collective');
+			}
+		}
+
+		return $this->collectiveShare;
+	}
+
 	protected function getPasswordHash(): string {
-		return '';
+		return $this->getShare()->getPassword();
 	}
 
 	public function isValidToken(): bool {
@@ -51,22 +81,7 @@ class PublicPageController extends PublicShareController {
 	}
 
 	protected function isPasswordProtected(): bool {
-		return false;
-	}
-
-	/**
-	 * @throws NotFoundException
-	 */
-	private function getShare(): CollectiveShare {
-		if ($this->share === null) {
-			$this->share = $this->collectiveShareService->findShareByToken($this->getToken());
-
-			if ($this->share === null) {
-				throw new NotFoundException('Failed to get shared collective');
-			}
-		}
-
-		return $this->share;
+		return $this->getShare()->getPassword() !== null;
 	}
 
 	/**
@@ -74,7 +89,7 @@ class PublicPageController extends PublicShareController {
 	 * @throws NotPermittedException
 	 */
 	private function checkEditPermissions(): void {
-		if (!$this->getShare()->getEditable()) {
+		if (!$this->getCollectiveShare()->getEditable()) {
 			throw new NotPermittedException('Not permitted to edit shared collective');
 		}
 	}
@@ -110,9 +125,9 @@ class PublicPageController extends PublicShareController {
 	 */
 	public function index(): DataResponse {
 		return $this->handleErrorResponse(function (): array {
-			$owner = $this->getShare()->getOwner();
-			$collectiveId = $this->getShare()->getCollectiveId();
-			$sharePageId = $this->getShare()->getPageId();
+			$owner = $this->getCollectiveShare()->getOwner();
+			$collectiveId = $this->getCollectiveShare()->getCollectiveId();
+			$sharePageId = $this->getCollectiveShare()->getPageId();
 			if ($sharePageId === 0) {
 				$pageInfos = $this->service->findAll($collectiveId, $owner);
 			} else {
@@ -132,9 +147,9 @@ class PublicPageController extends PublicShareController {
 	 */
 	public function get(int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($id): array {
-			$owner = $this->getShare()->getOwner();
-			$collectiveId = $this->getShare()->getCollectiveId();
-			if (0 !== $sharePageId = $this->getShare()->getPageId()) {
+			$owner = $this->getCollectiveShare()->getOwner();
+			$collectiveId = $this->getCollectiveShare()->getCollectiveId();
+			if (0 !== $sharePageId = $this->getCollectiveShare()->getPageId()) {
 				$this->checkPageShareAccess($collectiveId, $sharePageId, $id, $owner);
 			}
 			$pageInfo = $this->service->find($collectiveId, $id, $owner);
@@ -151,9 +166,9 @@ class PublicPageController extends PublicShareController {
 	public function create(int $parentId, string $title): DataResponse {
 		return $this->handleErrorResponse(function () use ($parentId, $title): array {
 			$this->checkEditPermissions();
-			$owner = $this->getShare()->getOwner();
-			$collectiveId = $this->getShare()->getCollectiveId();
-			if (0 !== $sharePageId = $this->getShare()->getPageId()) {
+			$owner = $this->getCollectiveShare()->getOwner();
+			$collectiveId = $this->getCollectiveShare()->getCollectiveId();
+			if (0 !== $sharePageId = $this->getCollectiveShare()->getPageId()) {
 				$this->checkPageShareAccess($collectiveId, $sharePageId, $parentId, $owner);
 			}
 			$pageInfo = $this->service->create($collectiveId, $parentId, $title, $owner);
@@ -170,9 +185,9 @@ class PublicPageController extends PublicShareController {
 	public function touch(int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($id): array {
 			$this->checkEditPermissions();
-			$owner = $this->getShare()->getOwner();
-			$collectiveId = $this->getShare()->getCollectiveId();
-			if (0 !== $sharePageId = $this->getShare()->getPageId()) {
+			$owner = $this->getCollectiveShare()->getOwner();
+			$collectiveId = $this->getCollectiveShare()->getCollectiveId();
+			if (0 !== $sharePageId = $this->getCollectiveShare()->getPageId()) {
 				$this->checkPageShareAccess($collectiveId, $sharePageId, $id, $owner);
 			}
 			$pageInfo = $this->service->touch($collectiveId, $id, $owner);
@@ -189,9 +204,9 @@ class PublicPageController extends PublicShareController {
 	public function moveOrCopy(int $id, ?int $parentId, ?string $title = null, ?int $index = 0, bool $copy = false): DataResponse {
 		return $this->handleErrorResponse(function () use ($id, $parentId, $title, $index, $copy): array {
 			$this->checkEditPermissions();
-			$owner = $this->getShare()->getOwner();
-			$collectiveId = $this->getShare()->getCollectiveId();
-			if (0 !== $sharePageId = $this->getShare()->getPageId()) {
+			$owner = $this->getCollectiveShare()->getOwner();
+			$collectiveId = $this->getCollectiveShare()->getCollectiveId();
+			if (0 !== $sharePageId = $this->getCollectiveShare()->getPageId()) {
 				$this->checkPageShareAccess($collectiveId, $sharePageId, $id, $owner);
 				if ($parentId) {
 					$this->checkPageShareAccess($collectiveId, $sharePageId, $parentId, $owner);
@@ -213,9 +228,9 @@ class PublicPageController extends PublicShareController {
 	public function setEmoji(int $id, ?string $emoji = null): DataResponse {
 		return $this->handleErrorResponse(function () use ($id, $emoji): array {
 			$this->checkEditPermissions();
-			$owner = $this->getShare()->getOwner();
-			$collectiveId = $this->getShare()->getCollectiveId();
-			if (0 !== $sharePageId = $this->getShare()->getPageId()) {
+			$owner = $this->getCollectiveShare()->getOwner();
+			$collectiveId = $this->getCollectiveShare()->getCollectiveId();
+			if (0 !== $sharePageId = $this->getCollectiveShare()->getPageId()) {
 				$this->checkPageShareAccess($collectiveId, $sharePageId, $id, $owner);
 			}
 			$pageInfo = $this->service->setEmoji($collectiveId, $id, $emoji, $owner);
@@ -232,9 +247,9 @@ class PublicPageController extends PublicShareController {
 	public function setSubpageOrder(int $id, ?string $subpageOrder = null): DataResponse {
 		return $this->handleErrorResponse(function () use ($id, $subpageOrder): array {
 			$this->checkEditPermissions();
-			$owner = $this->getShare()->getOwner();
-			$collectiveId = $this->getShare()->getCollectiveId();
-			if (0 !== $sharePageId = $this->getShare()->getPageId()) {
+			$owner = $this->getCollectiveShare()->getOwner();
+			$collectiveId = $this->getCollectiveShare()->getCollectiveId();
+			if (0 !== $sharePageId = $this->getCollectiveShare()->getPageId()) {
 				$this->checkPageShareAccess($collectiveId, $sharePageId, $id, $owner);
 			}
 			$pageInfo = $this->service->setSubpageOrder($collectiveId, $id, $subpageOrder, $owner);
@@ -251,11 +266,11 @@ class PublicPageController extends PublicShareController {
 	public function trash(int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($id): array {
 			$this->checkEditPermissions();
-			if ($this->getShare()->getPageId()) {
+			if ($this->getCollectiveShare()->getPageId()) {
 				throw new NotPermittedException('Not permitted to trash page from page share');
 			}
-			$owner = $this->getShare()->getOwner();
-			$collectiveId = $this->getShare()->getCollectiveId();
+			$owner = $this->getCollectiveShare()->getOwner();
+			$collectiveId = $this->getCollectiveShare()->getCollectiveId();
 			$pageInfo = $this->service->trash($collectiveId, $id, $owner);
 			$this->decoratePageInfo($collectiveId, 0, $owner, $pageInfo);
 			return [
@@ -269,9 +284,9 @@ class PublicPageController extends PublicShareController {
 	 */
 	public function getAttachments(int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($id): array {
-			$owner = $this->getShare()->getOwner();
-			$collectiveId = $this->getShare()->getCollectiveId();
-			if (0 !== $sharePageId = $this->getShare()->getPageId()) {
+			$owner = $this->getCollectiveShare()->getOwner();
+			$collectiveId = $this->getCollectiveShare()->getCollectiveId();
+			if (0 !== $sharePageId = $this->getCollectiveShare()->getPageId()) {
 				$this->checkPageShareAccess($collectiveId, $sharePageId, $id, $owner);
 			}
 			$attachments = $this->attachmentService->getAttachments($collectiveId, $id, $owner);
@@ -286,9 +301,9 @@ class PublicPageController extends PublicShareController {
 	 */
 	public function getBacklinks(int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($id): array {
-			$owner = $this->getShare()->getOwner();
-			$collectiveId = $this->getShare()->getCollectiveId();
-			if (0 !== $sharePageId = $this->getShare()->getPageId()) {
+			$owner = $this->getCollectiveShare()->getOwner();
+			$collectiveId = $this->getCollectiveShare()->getCollectiveId();
+			if (0 !== $sharePageId = $this->getCollectiveShare()->getPageId()) {
 				$this->checkPageShareAccess($collectiveId, $sharePageId, $id, $owner);
 			}
 			$backlinks = $this->service->getBacklinks($collectiveId, $id, $owner);

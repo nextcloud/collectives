@@ -16,15 +16,20 @@ use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\PublicShareController;
 use OCP\IRequest;
 use OCP\ISession;
+use OCP\Share\Exceptions\ShareNotFound;
+use OCP\Share\IManager as ShareManager;
+use OCP\Share\IShare;
 use Psr\Log\LoggerInterface;
 
 class PublicPageTrashController extends PublicShareController {
-	private ?CollectiveShare $share = null;
+	private ?IShare $share = null;
+	private ?CollectiveShare $collectiveShare = null;
 
 	use ErrorHelper;
 
 	public function __construct(string $appName,
 		IRequest $request,
+		private ShareManager $shareManager,
 		private CollectiveShareMapper $collectiveShareMapper,
 		private CollectiveShareService $collectiveShareService,
 		private PageService $service,
@@ -33,8 +38,37 @@ class PublicPageTrashController extends PublicShareController {
 		parent::__construct($appName, $request, $session);
 	}
 
+	/**
+	 * @throws ShareNotFound
+	 */
+	protected function getShare(): IShare {
+		if ($this->share === null) {
+			$this->share = $this->shareManager->getShareByToken($this->getToken());
+		}
+		return $this->share;
+	}
+
+	/**
+	 * @throws NotFoundException
+	 */
+	private function getCollectiveShare(): CollectiveShare {
+		if ($this->collectiveShare === null) {
+			$this->collectiveShare = $this->collectiveShareService->findShareByToken($this->getToken());
+
+			if ($this->collectiveShare === null) {
+				throw new NotFoundException('Failed to get shared collective');
+			}
+
+			if ($this->collectiveShare->getPageId() !== 0) {
+				throw new NotFoundException('Shared page does not support page trash');
+			}
+		}
+
+		return $this->collectiveShare;
+	}
+
 	protected function getPasswordHash(): string {
-		return '';
+		return $this->getShare()->getPassword();
 	}
 
 	public function isValidToken(): bool {
@@ -48,26 +82,7 @@ class PublicPageTrashController extends PublicShareController {
 	}
 
 	protected function isPasswordProtected(): bool {
-		return false;
-	}
-
-	/**
-	 * @throws NotFoundException
-	 */
-	private function getShare(): CollectiveShare {
-		if ($this->share === null) {
-			$this->share = $this->collectiveShareService->findShareByToken($this->getToken());
-
-			if ($this->share === null) {
-				throw new NotFoundException('Failed to get shared collective');
-			}
-
-			if ($this->share->getPageId() !== 0) {
-				throw new NotFoundException('Shared page does not support page trash');
-			}
-		}
-
-		return $this->share;
+		return $this->getShare()->getPassword() !== null;
 	}
 
 	/**
@@ -75,7 +90,7 @@ class PublicPageTrashController extends PublicShareController {
 	 * @throws NotPermittedException
 	 */
 	private function checkEditPermissions(): void {
-		if (!$this->getShare()->getEditable()) {
+		if (!$this->getCollectiveShare()->getEditable()) {
 			throw new NotPermittedException('Not permitted to edit shared collective');
 		}
 	}
@@ -85,8 +100,8 @@ class PublicPageTrashController extends PublicShareController {
 	 */
 	public function index(): DataResponse {
 		return $this->handleErrorResponse(function (): array {
-			$owner = $this->getShare()->getOwner();
-			$collectiveId = $this->getShare()->getCollectiveId();
+			$owner = $this->getCollectiveShare()->getOwner();
+			$collectiveId = $this->getCollectiveShare()->getCollectiveId();
 			$pageInfos = $this->service->findAllTrash($collectiveId, $owner);
 			foreach ($pageInfos as $pageInfo) {
 				// Shares don't have a collective path
@@ -105,8 +120,8 @@ class PublicPageTrashController extends PublicShareController {
 	public function restore(int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($id): array {
 			$this->checkEditPermissions();
-			$owner = $this->getShare()->getOwner();
-			$collectiveId = $this->getShare()->getCollectiveId();
+			$owner = $this->getCollectiveShare()->getOwner();
+			$collectiveId = $this->getCollectiveShare()->getCollectiveId();
 			$pageInfo = $this->service->restore($collectiveId, $id, $owner);
 			// Shares don't have a collective path
 			$pageInfo->setCollectivePath('');
@@ -123,8 +138,8 @@ class PublicPageTrashController extends PublicShareController {
 	public function delete(int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($id): array {
 			$this->checkEditPermissions();
-			$owner = $this->getShare()->getOwner();
-			$collectiveId = $this->getShare()->getCollectiveId();
+			$owner = $this->getCollectiveShare()->getOwner();
+			$collectiveId = $this->getCollectiveShare()->getCollectiveId();
 			$this->service->delete($collectiveId, $id, $owner);
 			return [];
 		}, $this->logger);
