@@ -22,6 +22,7 @@ OC.L10N.register(
     "Show outline" : "Mostrar esquema",
     "Title" : "Título",
     "Deleted" : "Eliminado",
+    "Sort by title" : "Ordenar por título",
     "Add another link" : "Añadir otro enlace",
     "Unshare" : "Dejar de compartir",
     "Create a new share link" : "Crear un nuevo enlace compartido",
