@@ -37,7 +37,7 @@ class CollectiveShareService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function createFolderShare(string $userId, string $collectiveName, int $nodeId): IShare {
+	public function createFolderShare(string $userId, string $collectiveName, int $nodeId, string $password = ''): IShare {
 		$share = $this->shareManager->newShare();
 
 		$permissions = Constants::PERMISSION_READ;
@@ -75,6 +75,9 @@ class CollectiveShareService {
 		$share->setShareType(IShare::TYPE_LINK);
 		$share->setSharedBy($userId);
 		$share->setLabel($this->l10n->t('Collective Share'));
+		if ($password !== '') {
+			$share->setPassword($password);
+		}
 
 		try {
 			$share = $this->shareManager->createShare($share);
@@ -169,7 +172,7 @@ class CollectiveShareService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function createShare(string $userId, Collective $collective, ?PageInfo $pageInfo): CollectiveShare {
+	public function createShare(string $userId, Collective $collective, ?PageInfo $pageInfo, string $password): CollectiveShare {
 		if (!$collective->canShare()) {
 			throw new NotPermittedException($this->l10n->t('You are not allowed to share %s', $collective->getName()));
 		}
@@ -182,13 +185,18 @@ class CollectiveShareService {
 			$nodeId = $file->getParent()->getId();
 		}
 
-		$folderShare = $this->createFolderShare($userId, $collective->getName(), $nodeId);
+		$folderShare = $this->createFolderShare($userId, $collective->getName(), $nodeId, $password);
 
 		try {
-			return $this->collectiveShareMapper->create($collective->getId(), $pageId, $folderShare->getToken(), $userId);
+			$collectiveShare = $this->collectiveShareMapper->create($collective->getId(), $pageId, $folderShare->getToken(), $userId);
 		} catch (Exception $e) {
 			throw new NotPermittedException('Failed to create collective/page share for ' . $collective->getName(), 0, $e);
 		}
+
+		if ($password != '') {
+			$collectiveShare->setPassword($folderShare->getPassword());
+		}
+		return $collectiveShare;
 	}
 
 	/**
