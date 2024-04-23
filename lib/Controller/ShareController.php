@@ -53,8 +53,8 @@ class ShareController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 */
-	public function createCollectiveShare(int $collectiveId): DataResponse {
-		return $this->createPageShare($collectiveId, 0);
+	public function createCollectiveShare(int $collectiveId, string $password = ''): DataResponse {
+		return $this->createPageShare($collectiveId, 0, $password);
 	}
 
 	/**
@@ -74,15 +74,15 @@ class ShareController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 */
-	public function createPageShare(int $collectiveId, int $pageId = 0): DataResponse {
-		return $this->prepareResponse(function () use ($collectiveId, $pageId): array {
+	public function createPageShare(int $collectiveId, int $pageId = 0, string $password = ''): DataResponse {
+		return $this->prepareResponse(function () use ($collectiveId, $pageId, $password): array {
 			$userId = $this->getUserId();
 			$collective = $this->collectiveService->getCollective($collectiveId, $userId);
 			$pageInfo = null;
 			if ($pageId !== 0) {
 				$pageInfo = $this->pageService->pageToSubFolder($collectiveId, $pageId, $userId);
 			}
-			$share = $this->shareService->createShare($userId, $collective, $pageInfo);
+			$share = $this->shareService->createShare($userId, $collective, $pageInfo, $password);
 			return [
 				"data" => $share
 			];

@@ -56,8 +56,57 @@
 				</NcActions>
 			</div>
 
+			<!-- pending actions -->
+			<NcActions v-if="isPending"
+				class="sharing-entry__pending_actions"
+				:aria-label="actionsTooltip"
+				menu-align="right"
+				:open.sync="open"
+				@close="onCancelPending">
+				<NcActionText>
+					<template #icon>
+						<InformationOutlineIcon :size="20" />
+					</template>
+					{{ t('collectives', 'Please enter the following required information before creating the share') }}
+				</NcActionText>
+
+				<NcActionText v-if="isPasswordEnforced">
+					<template #icon>
+						<LockIcon :size="20" />
+					</template>
+					{{ t('collectives', 'Password protection (enforced)') }}
+				</NcActionText>
+				<NcActionCheckbox v-else-if="isPasswordDefaultEnabled"
+					:checked.sync="isPendingPasswordProtected"
+					:disabled="loading"
+					@uncheck="onPendingDisablePassword">
+					{{ t('collectives', 'Set password') }}
+				</NcActionCheckbox>
+				<NcActionInput v-if="isPendingPasswordProtected"
+					autocomplete="new-password"
+					:value.sync="pendingPassword"
+					:error="passwordError"
+					:helper-text="errorPasswordLabel"
+					:required="isPasswordEnforced"
+					:label="t('collectives', 'Password')"
+					:disabled="loading"
+					@submit="onNewShare" />
+				<NcActionButton @click.prevent.stop="onNewShare">
+					<template #icon>
+						<CheckIcon :size="20" />
+					</template>
+					{{ t('files_sharing', 'Create share') }}
+				</NcActionButton>
+				<NcActionButton @click.prevent.stop="onCancelPending">
+					<template #icon>
+						<CloseIcon :size="20" />
+					</template>
+					{{ t('collectives', 'Cancel') }}
+				</NcActionButton>
+			</NcActions>
+
 			<!-- actions -->
-			<NcActions v-if="!loading"
+			<NcActions v-else-if="!loading"
 				class="sharing-entry__actions"
 				:aria-label="actionsTooltip"
 				menu-align="right"
@@ -133,6 +182,9 @@ import { createFocusTrap } from 'focus-trap'
 import {
 	NcAvatar,
 	NcActionButton,
+	NcActionCheckbox,
+	NcActionInput,
+	NcActionText,
 	NcActions,
 	NcButton,
 	NcCheckboxRadioSwitch,
@@ -143,6 +195,8 @@ import CheckIcon from 'vue-material-design-icons/Check.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 import CogIcon from 'vue-material-design-icons/Cog.vue'
 import ContentCopyIcon from 'vue-material-design-icons/ContentCopy.vue'
+import InformationOutlineIcon from 'vue-material-design-icons/InformationOutline.vue'
+import LockIcon from 'vue-material-design-icons/Lock.vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import TriangleSmallDownIcon from 'vue-material-design-icons/TriangleSmallDown.vue'
 
@@ -161,7 +215,12 @@ export default {
 		CloseIcon,
 		CogIcon,
 		ContentCopyIcon,
+		InformationOutlineIcon,
+		LockIcon,
 		NcActionButton,
+		NcActionCheckbox,
+		NcActionInput,
+		NcActionText,
 		NcActions,
 		NcAvatar,
 		NcButton,
@@ -195,6 +254,9 @@ export default {
 			open: false,
 			focusTrap: null,
 			passwordError: false,
+			isPending: false,
+			isPendingPasswordProtected: true,
+			pendingPassword: '',
 		}
 	},
 
@@ -263,6 +325,10 @@ export default {
 
 		isPasswordEnforced() {
 			return OC.appConfig.core.enforcePasswordForPublicLink === true
+		},
+
+		isPasswordDefaultEnabled() {
+			return OC.appConfig.core.enableLinkPasswordByDefault === true
 		},
 
 		isPasswordProtected: {
@@ -392,12 +458,20 @@ export default {
 				return
 			}
 
+			if (!this.isPending && (this.isPasswordDefaultEnabled || this.isPasswordEnforced)) {
+				this.open = true
+				this.isPending = true
+				this.pendingPassword = this.generatePassword()
+				return
+			}
+
 			try {
 				this.loading = true
 				this.open = false
 				await this.dispatchCreateShare({
 					collectiveId: this.currentCollective.id,
 					pageId: this.isPageShare ? this.currentPage.id : 0,
+					password: this.pendingPassword,
 				})
 				const message = this.isPageShare
 					? t('collectives', 'Page "{name}" has been shared', { name: this.currentPage.title })
@@ -412,7 +486,18 @@ export default {
 				this.open = true
 			} finally {
 				this.loading = false
+				this.isPending = false
+				this.pendingPassword = ''
 			}
+		},
+
+		onPendingDisablePassword() {
+			this.pendingPassword = ''
+		},
+
+		onCancelPending() {
+			this.isPending = false
+			this.pendingPassword = ''
 		},
 
 		async onPasswordChange(password) {

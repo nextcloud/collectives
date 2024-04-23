@@ -373,12 +373,13 @@ export default {
 		 * @param {object} object the property object
 		 * @param {number} object.collectiveId ID of the collective to be shared
 		 * @param {number} object.pageId ID of the page to be shared
+		 * @param {string} object.password optional password for the share
 		 */
-		async [CREATE_SHARE]({ commit }, { collectiveId, pageId = 0 }) {
+		async [CREATE_SHARE]({ commit }, { collectiveId, pageId = 0, password }) {
 			commit('load', 'share')
 			const response = pageId
-				? await api.createPageShare(collectiveId, pageId)
-				: await api.createCollectiveShare(collectiveId)
+				? await api.createPageShare(collectiveId, pageId, password)
+				: await api.createCollectiveShare(collectiveId, password)
 			commit(ADD_OR_UPDATE_SHARE, response.data.data)
 			commit('done', 'share')
 		},
