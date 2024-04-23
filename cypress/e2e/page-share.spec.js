@@ -121,4 +121,87 @@ describe('Page share', function() {
 			cy.get('.body-login-container').contains(/(File|Page) not found/)
 		})
 	})
+
+	describe('page share with password protection', function() {
+		it('Allows sharing a page', function() {
+			cy.loginAs('bob')
+			cy.visit('/apps/collectives', {
+				onBeforeLoad(win) {
+					// navigator.clipboard doesn't exist on HTTP requests (in CI), so let's create it
+					if (!win.navigator.clipboard) {
+						win.navigator.clipboard = {
+							__proto__: {
+								writeText: () => {},
+							},
+						}
+					}
+					// overwrite navigator.clipboard.writeText with cypress stub
+					cy.stub(win.navigator.clipboard, 'writeText', (text) => {
+						shareUrl = text
+					})
+						.as('clipBoardWriteText')
+				},
+			})
+			cy.openCollective('Share me')
+			cy.openPage('Sharepage')
+			cy.get('button.action-item .icon-menu-sidebar').click()
+			cy.get('#tab-button-sharing').click()
+			cy.intercept('POST', '**/_api/*/_pages/*/share').as('createShare')
+			cy.get('.sharing-entry button.new-share-link')
+				.click()
+			cy.wait('@createShare')
+			cy.get('.toast-success').should('contain', 'Page "Sharepage" has been shared')
+			cy.get('.sharing-entry .share-select')
+				.should('contain', 'View only')
+			cy.get('button.sharing-entry__copy')
+				.click()
+			cy.get('.toast-success').should('contain', 'Link copied')
+			cy.get('@clipBoardWriteText').should('have.been.calledOnce')
+		})
+		it('Allows adding password protection to a page share', function() {
+			cy.loginAs('bob')
+			cy.visit('/apps/collectives')
+			cy.openCollective('Share me')
+			cy.openPage('Sharepage')
+			cy.get('button.action-item .icon-menu-sidebar').click()
+			cy.get('#tab-button-sharing').click()
+			cy.get('.sharing-entry__actions').click()
+			cy.get('button').contains('Advanced settings').click()
+			cy.get('.sharing-entry__settings').contains('Set password').click()
+			cy.get('.sharing-entry__settings input[type="password"]').type('{selectAll}password')
+
+			cy.intercept('PUT', '**/_api/*/_pages/*/share/*').as('updateShare')
+			cy.get('.sharing-entry__settings button').contains('Update share').click()
+			cy.wait('@updateShare')
+			cy.get('.toast-success').should('contain', 'Share link of page "Sharepage" has been updated')
+		})
+		it('Allows opening a password-protected shared (non-editable) page', function() {
+			cy.logout()
+			cy.visit(shareUrl)
+			cy.get('#password-input-form input[type="password"]').type('password')
+			cy.get('#password-input-form input[type="submit"]').click()
+
+			cy.get('#titleform input').should('have.value', 'Sharepage')
+			cy.getReadOnlyEditor()
+				.should('be.visible')
+				.find('h2').should('contain', 'Shared page')
+			cy.get('.app-content-list-item.toplevel')
+				.should('contain', 'Sharepage')
+		})
+		it('Allows unsharing a page', function() {
+			cy.loginAs('bob')
+			cy.visit('/apps/collectives')
+			cy.openCollective('Share me')
+			cy.openPage('Sharepage')
+			cy.get('button.action-item .icon-menu-sidebar').click()
+			cy.get('#tab-button-sharing').click()
+			cy.get('.sharing-entry__actions')
+				.click()
+			cy.intercept('DELETE', '**/_api/*/_pages/*/share/*').as('deleteShare')
+			cy.get('.unshare-button')
+				.click()
+			cy.wait('@deleteShare')
+			cy.get('.toast-success').should('contain', 'Page "Sharepage" has been unshared')
+		})
+	})
 })
