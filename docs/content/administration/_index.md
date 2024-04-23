@@ -7,10 +7,10 @@ alwaysopen = false
 
 ## Runtime Dependencies
 
-This app requires the following apps to be enabled:
+Collectives requires the following apps to be enabled, all being shipped and enabled by default with recent Nextcloud releases:
 
-* [**Teams**](https://apps.nextcloud.com/apps/circles)
-* [**Text**](https://apps.nextcloud.com/apps/text)
+* **Teams** (with Nextcloud >= 29) or **Circles** (with Nextcloud <= 28)
+* **Text**
 * **Viewer**
 * **files_versions**
 
