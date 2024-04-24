@@ -437,3 +437,13 @@ Cypress.Commands.add('testRetry', () => {
 	cy.wrap(cy.state('test').currentRetry())
 		.should('be.equal', 2)
 })
+
+Cypress.Commands.add('setAppConfig', (app, key, value) => {
+	Cypress.log()
+	const url = `${Cypress.env('baseUrl')}/ocs/v2.php/apps/provisioning_api/api/v1/config/apps/${app}/${key}`
+	return axios.post(url, { value }, {
+		headers: {
+			'OCS-APIRequest': true,
+		},
+	})
+})
