@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace OCA\Collectives\Controller;
 
 use OCA\Collectives\Db\CollectiveShareMapper;
-use OCA\DAV\Connector\Sabre\PublicAuth;
 use OCA\Viewer\Event\LoadViewer;
 use OCP\App\IAppManager;
 use OCP\AppFramework\AuthPublicShareController;
@@ -68,7 +67,8 @@ class PublicStartController extends AuthPublicShareController {
 	}
 
 	protected function authSucceeded() {
-		$this->session->set(PublicAuth::DAV_AUTHENTICATED, $this->getShare()->getId());
+		// TODO: use `OCA\DAV\Connector\Sabre\PublicAuth::DAV_AUTHENTICATED` (only in stable29+)
+		$this->session->set('public_link_authenticated', $this->getShare()->getId());
 	}
 
 	/**
