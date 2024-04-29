@@ -26,18 +26,12 @@ import router from './router.js'
 import store from './store/store.js'
 import { sync } from 'vuex-router-sync'
 
-/** Global directives */
-import VTooltip from '@nextcloud/vue/dist/Directives/Tooltip.js'
-
 import './shared-init.js'
 
 window.OCA.Collectives = {
 	...window.OCA.Collectives,
 	vueRouter: router,
 }
-
-// Register global directives
-Vue.directive('Tooltip', VTooltip)
 
 Vue.prototype.t = t
 Vue.prototype.n = n

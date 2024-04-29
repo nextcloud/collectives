@@ -56,7 +56,7 @@
 			<form @submit.prevent="focusEditor()">
 				<input v-if="isLandingPage"
 					ref="landingPageTitle"
-					v-tooltip="titleIfTruncated(currentCollective.name)"
+					:title="titleIfTruncated(currentCollective.name)"
 					class="title"
 					:class="{ 'mobile': isMobile }"
 					type="text"
@@ -71,7 +71,7 @@
 				<input v-else
 					ref="title"
 					v-model="newTitle"
-					v-tooltip="titleIfTruncated(newTitle)"
+					:title="titleIfTruncated(newTitle)"
 					class="title"
 					:class="{ 'mobile': isMobile }"
 					:placeholder="t('collectives', 'Title')"
