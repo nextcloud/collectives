@@ -1,7 +1,7 @@
 <!-- dirty hack to workaround https://github.com/nextcloud/nextcloud-vue/issues/3231 -->
 <template>
 	<div>
-		<NcButton v-tooltip="description"
+		<NcButton :title="description"
 			:aria-label="description"
 			class="titleform-button"
 			type="primary"

@@ -16,7 +16,7 @@
 				type="text"
 				disabled
 				:value="versionTitle">
-			<NcButton v-tooltip="t('collectives', 'Restore this version')"
+			<NcButton :title="t('collectives', 'Restore this version')"
 				:aria-label="t('collectives', 'Restore this version')"
 				class="titleform-button"
 				@click="revertVersion">

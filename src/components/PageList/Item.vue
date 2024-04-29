@@ -50,7 +50,7 @@
 			draggable="false"
 			class="app-content-list-item-link">
 			<div ref="page-title"
-				v-tooltip="pageTitleIfTruncated"
+				:title="pageTitleIfTruncated"
 				class="app-content-list-item-line-one"
 				:class="{ 'template': isTemplate }"
 				@click="expand(pageId)">
