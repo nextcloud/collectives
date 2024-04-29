@@ -80,6 +80,27 @@ class PageController extends Controller {
 		}, $this->logger);
 	}
 
+	public function contentFiltered(int $collectiveId, string $filterString): DataResponse {
+		return $this->handleErrorResponse(function () use ($collectiveId, $filterString): array {
+			$userId = $this->getUserId();
+			$pageInfos = $this->service->findAll($collectiveId, $userId);
+			$contentFilteredPages = [];
+			foreach ($pageInfos as &$pageInfo) {
+				$file = $this->service->getPageFile($collectiveId, $pageInfo->getId(), $userId);
+				$fileContent = $file->getContent();
+				if (str_contains(strtolower($fileContent), strtolower($filterString))) {
+					$contentFilteredPages[] = [
+						"page" => $pageInfo->jsonSerialize(),
+						"content" => $fileContent
+					];
+				}
+			}
+			return [
+				"data" => $contentFilteredPages
+			];
+		}, $this->logger);
+	}
+
 	/**
 	 * @NoAdminRequired
 	 */
