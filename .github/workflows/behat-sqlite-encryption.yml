@@ -116,6 +116,10 @@ jobs:
       - name: Behat integration
         working-directory: apps/${{ env.APP_NAME }}
         run: ./vendor/bin/behat --config=${{ env.BEHAT_CONFIG }} --profile ci
+      - name: Print Logs
+        if: always()
+        run: |
+          cat data/nextcloud.log
 
   summary:
     permissions:
