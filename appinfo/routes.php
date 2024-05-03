@@ -119,6 +119,10 @@ return [
 		// Vue.js router public route (Vue.js frontend)
 		['name' => 'publicStart#showAuthenticate', 'url' => '/p/{token}/authenticate/{redirect}', 'verb' => 'GET'],
 		['name' => 'publicStart#authenticate', 'url' => '/p/{token}/authenticate/{redirect}', 'verb' => 'POST'],
+		// TODO: Remove the two uppercase PublicStart entries once Nextcloud 28 support gets removed
+		// See
+		['name' => 'PublicStart#showAuthenticate', 'url' => '/p/{token}/authenticate/{redirect}', 'verb' => 'GET'],
+		['name' => 'PublicStart#authenticate', 'url' => '/p/{token}/authenticate/{redirect}', 'verb' => 'POST'],
 		['name' => 'publicStart#showShare', 'url' => '/p/{token}/{path}', 'verb' => 'GET',
 			'requirements' => ['path' => '.*'],	'defaults' => ['path' => '']],
 
