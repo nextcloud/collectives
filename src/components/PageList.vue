@@ -73,78 +73,69 @@
 				:filtered-view="false"
 				class="page-list-root-page"
 				@click.native="show('details')" />
-			<Draggable v-if="subpages || keptSortable(currentPage.id)"
-				:list="subpages"
-				:parent-id="rootPage.id"
-				:disable-sorting="isFilteredview">
-				<template #header>
-					<div v-if="!sortedBy('byOrder')" class="sort-order-container">
-						<span class="sort-order-chip">
-							{{ sortedBy('byTitle') ? t('collectives', 'Sorted by title') : t('collectives', 'Sorted by recently changed') }}
-							<NcButton :aria-label="t('collectives', 'Switch back to default sort order')"
-								type="tertiary"
-								class="sort-oder-chip-button"
-								@click="sortPagesAndScroll('byOrder')">
-								<template #icon>
-									<CloseIcon :size="20" />
-								</template>
-							</NcButton>
-						</span>
-					</div>
-				</template>
-				<SubpageList v-if="templateView"
-					:key="templateView.id"
-					:page="templateView"
-					:level="1"
-					:filtered-view="isFilteredview"
-					:is-template="true" />
-				<div v-if="isFilteredview">
-					<NcAppNavigationCaption v-if="filteredPages.length > 0" :name="t('Collectives','Results in title')" />
-					<RecycleScroller v-if="filteredPages.length > 0"
-						v-slot="{ item }"
-						class="scroller"
-						:class="{ fullscroller: !loadingContentFilteredPages && contentFilteredPages.length <= 0 }"
-						:items="filteredPages"
-						:item-size="44"
-						key-field="id">
-						<SubpageList :key="item.id"
-							:data-page-id="item.id"
-							:page="item"
-							:level="1"
-							:filtered-view="true"
-							class="page-list-drag-item" />
-					</RecycleScroller>
-					<NcAppNavigationCaption v-if="loadingContentFilteredPages || contentFilteredPages.length > 0" :name="t('Collectives', 'Results in content')" />
-					<RecycleScroller v-if="!loadingContentFilteredPages && contentFilteredPages.length > 0"
-						v-slot="{ item }"
-						class="scroller contentFiltered"
-						:class="{ fullscroller: filteredPages.length <= 0 }"
-						:items="contentFilteredPages"
-						:item-size="44"
-						key-field="page">
-						<div>
-							<SubpageList :key="item.page.id"
-								:data-page-id="item.page.id"
-								:page="item.page"
-								:level="1"
-								:filtered-view="true"
-								class="page-list-drag-item" />
-						</div>
-					</RecycleScroller>
-					<div v-if="loadingContentFilteredPages" class="scrollload">
-						<SkeletonLoading type="items" :count="3" />
-					</div>
-				</div>
-				<div v-else>
-					<SubpageList v-for="page in subpages"
-						:key="page.id"
-						:data-page-id="page.id"
-						:page="page"
-						:level="1"
-						:filtered-view="false"
-						class="page-list-drag-item" />
-				</Draggable>
+			<div v-if="!sortedBy('byOrder')" class="sort-order-container">
+				<span class="sort-order-chip">
+					{{ sortedBy('byTitle') ? t('collectives', 'Sorted by title') : t('collectives', 'Sorted by recently changed') }}
+					<NcButton :aria-label="t('collectives', 'Switch back to default sort order')"
+						type="tertiary"
+						class="sort-oder-chip-button"
+						@click="sortPagesAndScroll('byOrder')">
+						<template #icon>
+							<CloseIcon :size="20" />
+						</template>
+					</NcButton>
+				</span>
 			</div>
+			<SubpageList v-if="templateView"
+				:key="templateView.id"
+				:page="templateView"
+				:level="1"
+				:filtered-view="isFilteredview"
+				:is-template="true" />
+			<div v-if="isFilteredview">
+				<NcAppNavigationCaption v-if="filteredPages.length > 0" :name="t('Collectives','Results in title')" />
+				<RecycleScroller v-if="filteredPages.length > 0"
+					v-slot="{ item }"
+					class="scroller"
+					:class="{ fullscroller: !loadingContentFilteredPages && contentFilteredPages.length <= 0 }"
+					:items="filteredPages"
+					:item-size="44"
+					key-field="id">
+					<SubpageList :key="item.id"
+						:data-page-id="item.id"
+						:page="item"
+						:level="1"
+						:filtered-view="true"
+						class="page-list-drag-item" />
+				</RecycleScroller>
+				<NcAppNavigationCaption v-if="loadingContentFilteredPages || contentFilteredPages.length > 0" :name="t('Collectives', 'Results in content')" />
+				<RecycleScroller v-if="!loadingContentFilteredPages && contentFilteredPages.length > 0"
+					v-slot="{ item }"
+					class="scroller contentFiltered"
+					:class="{ fullscroller: filteredPages.length <= 0 }"
+					:items="contentFilteredPages"
+					:item-size="44"
+					key-field="id">
+					<SubpageList :key="item.id"
+						:data-page-id="item.id"
+						:page="item"
+						:level="1"
+						:filtered-view="true"
+						class="page-list-drag-item" />
+				</RecycleScroller>
+				<div v-if="loadingContentFilteredPages" class="scrollload">
+					<SkeletonLoading type="items" :count="3" />
+				</div>
+			</div>
+			<Draggable v-else>
+				<SubpageList v-for="page in subpages"
+					:key="page.id"
+					:data-page-id="page.id"
+					:page="page"
+					:level="1"
+					:filtered-view="false"
+					class="page-list-drag-item" />
+			</Draggable>
 		</div>
 		<PageTrash v-if="displayTrash" />
 	</NcAppContentList>
@@ -334,12 +325,12 @@ export default {
 
 .scroller {
 	// NC header bar 50px; page list header bar 52px; landing page 48px; page trash 76px NcAppNavigationCaption 78px divided by 2 for multiple scrollers
-	max-height: calc((100vh - 50px - 52px - 48px - 76px - 78px * 2) / 2);
+	max-height: calc((100vh - var(--header-height) - 52px - 48px - 76px - 78px * 2) / 2);
 }
 
 .fullscroller{
 	// NC header bar 50px; page list header bar 52px; landing page 48px; page trash 76px NcAppNavigationCaption 78px
-	max-height: calc(100vh - 50px - 52px - 48px - 76px - 78px);
+	max-height: calc(100vh - var(--header-height) - 52px - 48px - 76px - 78px);
 }
 
 .app-content-list {

@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace OCA\Collectives\Controller;
 
 use OCA\Collectives\Service\AttachmentService;
+use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\PageService;
+use OCA\Collectives\Service\SearchService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
@@ -20,6 +22,8 @@ class PageController extends Controller {
 		private PageService $service,
 		private AttachmentService $attachmentService,
 		private IUserSession $userSession,
+		private SearchService $indexedSearchService,
+		private CollectiveService $collectiveService,
 		private LoggerInterface $logger) {
 		parent::__construct($appName, $request);
 	}
@@ -80,23 +84,21 @@ class PageController extends Controller {
 		}, $this->logger);
 	}
 
+
+	/**
+	 * @NoAdminRequired
+	 */
 	public function contentFiltered(int $collectiveId, string $filterString): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $filterString): array {
 			$userId = $this->getUserId();
-			$pageInfos = $this->service->findAll($collectiveId, $userId);
-			$contentFilteredPages = [];
-			foreach ($pageInfos as &$pageInfo) {
-				$file = $this->service->getPageFile($collectiveId, $pageInfo->getId(), $userId);
-				$fileContent = $file->getContent();
-				if (str_contains(strtolower($fileContent), strtolower($filterString))) {
-					$contentFilteredPages[] = [
-						"page" => $pageInfo->jsonSerialize(),
-						"content" => $fileContent
-					];
-				}
+			$collective = $this->collectiveService->getCollective($collectiveId, $userId);
+			$results = $this->indexedSearchService->searchCollective($collective, $filterString, 100);
+			$pages = [];
+			foreach ($results as $value) {
+				$pages[] = $this->service->find($collectiveId, $value['id'], $userId);
 			}
 			return [
-				"data" => $contentFilteredPages
+				"data" => $pages
 			];
 		}, $this->logger);
 	}
