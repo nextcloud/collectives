@@ -8,6 +8,7 @@ use OCA\Files_Trashbin\Trash\ITrashBackend;
 use OCA\Files_Trashbin\Trash\TrashItem;
 use OCP\Files\FileInfo;
 use OCP\IUser;
+use OCP\Util;
 
 class CollectivePageTrashItem extends TrashItem {
 	public function __construct(
@@ -19,7 +20,13 @@ class CollectivePageTrashItem extends TrashItem {
 		IUser $user,
 		private string $mountPoint
 	) {
-		parent::__construct($backend, $originalLocation, $deletedTime, $trashPath, $fileInfo, $user);
+		[$major] = Util::getVersion();
+		if ($major < 30) {
+			parent::__construct($backend, $originalLocation, $deletedTime, $trashPath, $fileInfo, $user);
+		} else {
+			// *TODO* Add support for deletedby to collectives trash backend table
+			parent::__construct($backend, $originalLocation, $deletedTime, $trashPath, $fileInfo, $user, null);
+		}
 	}
 
 	public function isRootItem(): bool {
