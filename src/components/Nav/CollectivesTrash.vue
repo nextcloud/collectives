@@ -55,22 +55,28 @@
 					{{ t('collectives', 'Delete corresponding team along with the collective?') }}
 				</div>
 				<div class="three_buttons">
-					<NcButton @click="closeDeleteModal">
-						{{ t('collectives', 'Cancel') }}
-					</NcButton>
-					<NcButton type="error" @click="deleteCollective(modalCollective, false)">
+					<NcButton type="error"
+						:wide="true"
+						@click="deleteCollective(modalCollective, false)">
 						{{ t('collectives', 'Only collective') }}
 					</NcButton>
 					<NcButton v-if="isCollectiveOwner(modalCollective)"
 						type="error"
+						:wide="true"
 						@click="deleteCollective(modalCollective, true)">
 						{{ t('collectives', 'Collective and team') }}
 					</NcButton>
 					<NcButton v-else
 						type="primary"
 						disabled
-						:title="t('collectives', 'Only team owners can delete a team')">
+						:title="t('collectives', 'Only team owners can delete a team')"
+						:wide="true">
 						{{ t('collectives', 'Collective and team') }}
+					</NcButton>
+					<NcButton v-click-outside
+						:wide="true"
+						@click="closeDeleteModal">
+						{{ t('collectives', 'Cancel') }}
 					</NcButton>
 				</div>
 			</div>
@@ -242,6 +248,7 @@ export default {
 
 .three_buttons {
 	display: flex;
+	flex-flow: column nowrap;
 	justify-content: space-between;
 	padding-top: 10px;
 	gap: 10px;
