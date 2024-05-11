@@ -48,6 +48,7 @@ OC.L10N.register(
     "An error occurred while performing the search" : "Ha ocurrido un error mientras se realizaba la búsqueda",
     "Add accounts" : "Añadir cuentas",
     "Add groups" : "Añadir grupos",
+    "Add teams" : "Añadir equipos",
     "Remove {name}" : "Eliminar {nombre}",
     "Members of collective {name}" : "Miembros del colectivo {name}",
     "Collective settings" : "Configuraciones del cuaderno colectivo",
