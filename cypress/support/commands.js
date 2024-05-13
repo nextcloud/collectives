@@ -102,10 +102,17 @@ Cypress.Commands.add('setAppEnabled', (appName, value = true) => {
  */
 Cypress.Commands.add('enableDashboardWidget', (widgetName) => {
 	Cypress.log()
-	const url = `${Cypress.env('baseUrl')}/index.php/apps/dashboard/layout`
-	return axios.post(url,
-		{ layout: widgetName },
-	)
+	if (['stable26', 'stable27', 'stable28', 'stable29'].includes(Cypress.env('ncVersion'))) {
+		const url = `${Cypress.env('baseUrl')}/index.php/apps/dashboard/layout`
+		return axios.post(url,
+			{ layout: widgetName },
+		)
+	} else {
+		const url = `${Cypress.env('baseUrl')}/ocs/v2.php/apps/dashboard/api/v3/layout`
+		return axios.post(url,
+			{ layout: [widgetName] },
+		)
+	}
 })
 
 Cypress.Commands.add('store', (selector, options = {}) => {
