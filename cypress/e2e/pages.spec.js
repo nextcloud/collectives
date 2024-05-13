@@ -174,15 +174,13 @@ describe('Pages', function() {
 			cy.log('Inserting a heading')
 			// Wait 1 second to prevent race condition with previous insertion
 			cy.wait(1000) // eslint-disable-line cypress/no-unnecessary-waiting
-			cy.getEditor()
-				.should('be.visible')
+			cy.getEditorContent(true)
 				.type('## Heading{enter}')
 
 			cy.log('Inserting a user mention')
 			// Wait 1 second to prevent race condition with previous insertion
 			cy.wait(1000) // eslint-disable-line cypress/no-unnecessary-waiting
-			cy.getEditor()
-				.should('be.visible')
+			cy.getEditorContent(true)
 				.type('@admi')
 			cy.get('.tippy-content')
 				.contains('admin')
@@ -242,8 +240,7 @@ describe('Pages', function() {
 		it('Supports selecting a page from a collective', function() {
 			cy.openPage('Page Title')
 
-			cy.getEditor()
-				.should('be.visible')
+			cy.getEditorContent(true)
 				.type('/Coll')
 			cy.get('.tippy-content .link-picker__item')
 				.contains('Collective pages')

@@ -248,8 +248,7 @@ describe('Page list', function() {
 			cy.wait('@attachmentUpload')
 
 			cy.wait(1000) // eslint-disable-line cypress/no-unnecessary-waiting
-			cy.getEditor()
-				.should('be.visible')
+			cy.getEditorContent(true)
 				.type('text')
 			cy.switchToViewMode()
 

@@ -112,7 +112,7 @@ describe('Collective Share', function() {
 				.should('have.value', '')
 			cy.get('#titleform input.title')
 				.type('New page')
-			cy.getEditor()
+			cy.getEditorContent(true)
 				.type('New content')
 			cy.get('button.titleform-button')
 				.click()
