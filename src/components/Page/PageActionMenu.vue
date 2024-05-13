@@ -57,8 +57,8 @@
 				{{ t('collectives', 'Show in Files') }}
 			</NcActionLink>
 
-			<!-- Share page action: only displayed in page list -->
-			<NcActionButton v-if="inPageList && currentCollectiveCanShare"
+			<!-- Share page action: only displayed in page list and not for landing page (already in collectives actions there) -->
+			<NcActionButton v-if="inPageList && currentCollectiveCanShare && !isLandingPage"
 				:close-after-click="true"
 				@click.native="show('details')"
 				@click="openShareTab">
