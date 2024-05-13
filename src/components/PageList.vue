@@ -73,46 +73,43 @@
 				:filtered-view="false"
 				class="page-list-root-page"
 				@click.native="show('details')" />
-			<Draggable v-if="subpages || keptSortable(currentPage.id)"
-				:list="subpages"
-				:parent-id="rootPage.id"
-				:disable-sorting="isFilteredview">
-				<template #header>
-					<div v-if="!sortedBy('byOrder')" class="sort-order-container">
-						<span class="sort-order-chip">
-							{{ sortedBy('byTitle') ? t('collectives', 'Sorted by title') : t('collectives', 'Sorted by recently changed') }}
-							<NcButton :aria-label="t('collectives', 'Switch back to default sort order')"
-								type="tertiary"
-								class="sort-oder-chip-button"
-								@click="sortPagesAndScroll('byOrder')">
-								<template #icon>
-									<CloseIcon :size="20" />
-								</template>
-							</NcButton>
-						</span>
-					</div>
-				</template>
-				<SubpageList v-if="templateView"
-					:key="templateView.id"
-					:page="templateView"
-					:level="1"
-					:filtered-view="isFilteredview"
-					:is-template="true" />
-				<div v-if="isFilteredview">
-					<RecycleScroller v-slot="{item}"
-						class="scroller"
-						:items="filteredPages"
-						:item-size="44"
-						key-field="id">
-						<SubpageList :key="item.id"
-							:data-page-id="item.id"
-							:page="item"
-							:level="1"
-							:filtered-view="true"
-							class="page-list-drag-item" />
-					</RecycleScroller>
-				</div>
-				<div v-if="!isFilteredview">
+			<div v-if="!sortedBy('byOrder')" class="sort-order-container">
+				<span class="sort-order-chip">
+					{{ sortedBy('byTitle') ? t('collectives', 'Sorted by title') : t('collectives', 'Sorted by recently changed') }}
+					<NcButton :aria-label="t('collectives', 'Switch back to default sort order')"
+						type="tertiary"
+						class="sort-oder-chip-button"
+						@click="sortPagesAndScroll('byOrder')">
+						<template #icon>
+							<CloseIcon :size="20" />
+						</template>
+					</NcButton>
+				</span>
+			</div>
+			<SubpageList v-if="templateView"
+				:key="templateView.id"
+				:page="templateView"
+				:level="1"
+				:filtered-view="isFilteredview"
+				:is-template="true" />
+			<div v-if="subpages || keptSortable(currentPage.id)">
+				<RecycleScroller v-if="isFilteredview"
+					v-slot="{item}"
+					class="scroller"
+					:items="filteredPages"
+					:item-size="44"
+					key-field="id">
+					<SubpageList :key="item.id"
+						:data-page-id="item.id"
+						:page="item"
+						:level="1"
+						:filtered-view="true"
+						class="page-list-drag-item" />
+				</RecycleScroller>
+				<Draggable v-else
+					:list="subpages"
+					:parent-id="rootPage.id"
+					:disable-sorting="isFilteredview">
 					<SubpageList v-for="page in subpages"
 						:key="page.id"
 						:data-page-id="page.id"
@@ -120,8 +117,8 @@
 						:level="1"
 						:filtered-view="false"
 						class="page-list-drag-item" />
-				</div>
-			</Draggable>
+				</Draggable>
+			</div>
 		</div>
 		<PageTrash v-if="displayTrash" />
 	</NcAppContentList>
