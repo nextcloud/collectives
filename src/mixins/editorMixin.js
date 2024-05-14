@@ -132,7 +132,7 @@ export default {
 		updateEditorContent: debounce(function(markdown) {
 			this.editorContent = markdown
 			this.reader?.setContent(this.editorContent)
-		}, 200, { immediate: true }),
+		}, 200),
 
 		focusEditor() {
 			this.editor?.focus()
