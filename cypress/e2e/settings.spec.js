@@ -32,7 +32,8 @@ describe('Settings', function() {
 			const filePickerListSelector = '#picker-filestable tr, .file-picker__row'
 			const breadcrumbsSelector = '.files-controls .breadcrumb, [data-cy-files-content-breadcrumbs] a'
 			cy.loginAs('bob')
-			cy.visit('apps/collectives')
+			cy.visit('apps/collectives/A%20Collective')
+			cy.get('button.app-navigation-toggle').click()
 
 			cy.get('#app-settings')
 				.click()

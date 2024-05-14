@@ -153,7 +153,8 @@ describe('Collective', function() {
 	describe('in non-admin collective', function() {
 		it('can leave collective and undo', function() {
 			cy.loginAs('jane')
-			cy.visit('/apps/collectives')
+			cy.visit('/apps/collectives/Preexisting%20Collective')
+			cy.get('button.app-navigation-toggle').click()
 
 			// Leave collective
 			cy.openCollectiveMenu('Preexisting Collective')
