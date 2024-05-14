@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Share link" : "Rhannu dolen",
     "Settings" : "Gosodiadau",
     "Loading…" : "Yn llwytho…",
     "View" : "Golwg",
@@ -15,7 +16,6 @@ OC.L10N.register(
     "Deleted" : "Wedi dileu",
     "Add another link" : "Ychwanegu dolen arall",
     "Unshare" : "Dad-rannu",
-    "Share link" : "Rhannu dolen",
     "Download" : "Llwytho i lawr",
     "Link copied" : "Dolen wedi'i gopïo",
     "Copied" : "Copïwyd"

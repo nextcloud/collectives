@@ -2,6 +2,7 @@ OC.L10N.register(
     "collectives",
     {
     "You are not allowed to share %s" : "Sul pole lubatud %s jagada",
+    "Share link" : "Jaga link",
     "Settings" : "Seaded",
     "Loading…" : "Laadimine…",
     "Edit" : "Redigeeri",
@@ -16,7 +17,6 @@ OC.L10N.register(
     "Deleted" : "Kustutatud",
     "Add another link" : "Lisa veel üks link",
     "Unshare" : "Lõpeta jagamine",
-    "Share link" : "Jaga link",
     "Can edit" : "Võib redigeerida",
     "Cannot copy, please copy the link manually" : "Ei saa kopeerida, palun kopeeri link käsitsi",
     "Download" : "Lae alla",

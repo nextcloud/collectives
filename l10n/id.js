@@ -2,6 +2,7 @@ OC.L10N.register(
     "collectives",
     {
     "You are not allowed to share %s" : "Anda tidak diizinkan untuk membagikan %s",
+    "Share link" : "Bagikan tautan",
     "Settings" : "Setelan",
     "Members" : "Anggota",
     "No search results" : "Tidak ada hasil pencarian",
@@ -20,7 +21,6 @@ OC.L10N.register(
     "Deleted" : "Dihapus",
     "Add another link" : "Tambah tautan lain",
     "Unshare" : "Batalkan berbagi",
-    "Share link" : "Bagikan tautan",
     "View only" : "Hanya lihat",
     "Download" : "Unduh",
     "No other versions available" : "Tidak ada versi lain yang tersedia",

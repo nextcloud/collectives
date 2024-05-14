@@ -2,6 +2,7 @@ OC.L10N.register(
     "collectives",
     {
     "You are not allowed to share %s" : "Не сте овластени да ја споделите %s",
+    "Share link" : "Сподели линк",
     "Settings" : "Параметри",
     "Members" : "Членови",
     "No search results" : "Нема резултати од пребарувањето",
@@ -28,7 +29,6 @@ OC.L10N.register(
     "Unshare" : "Отстрани споделување",
     "Create a new share link" : "Креирајте нов линк за споделување",
     "Share link ({index})" : "Сподели линк ({index})",
-    "Share link" : "Сподели линк",
     "View only" : "Само за гледање",
     "Can edit" : "Може да се уредува",
     "Cannot copy, please copy the link manually" : "Неможе да се копира, копирајте го линкот рачно",

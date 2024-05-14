@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Share link" : "Link deelen",
     "Settings" : "Astellungen",
     "Loading…" : "Et gëtt gelueden",
     "Edit" : "Änneren",
@@ -14,7 +15,6 @@ OC.L10N.register(
     "Deleted" : "Geläscht",
     "Add another link" : "Füügt en anere Link",
     "Unshare" : "Net méi deelen",
-    "Share link" : "Link deelen",
     "Download" : "Eroflueden",
     "No other versions available" : "Keng aner Versiounen disponibel",
     "Sharing" : "Gedeelt",

@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Share link" : "Ceangal co-roinnidh",
     "Settings" : "Roghainnean",
     "Remove" : "Thoir air falbh",
     "Loading…" : "’Ga luchdadh…",
@@ -11,7 +12,6 @@ OC.L10N.register(
     "Deleted" : "Chaidh a sguabadh às",
     "Add another link" : "Cuir ceangal eile ris",
     "Unshare" : "Na co-roinn tuilleadh",
-    "Share link" : "Ceangal co-roinnidh",
     "Download" : "Luchdaich a-nuas",
     "Sharing" : "Co-roinneadh",
     "Link copied" : "Chaidh lethbhreac dhen cheangal a dhèanamh"

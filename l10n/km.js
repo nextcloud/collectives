@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Share link" : "Share link",
     "Settings" : "ការកំណត់",
     "Edit" : "កែប្រែ",
     "Restore" : "ស្ដារ​មក​វិញ",
@@ -12,7 +13,6 @@ OC.L10N.register(
     "Title" : "ចំណងជើង",
     "Deleted" : "បាន​លុប",
     "Unshare" : "លែង​ចែក​រំលែក",
-    "Share link" : "Share link",
     "Download" : "ទាញយក",
     "No other versions available" : "មិន​មាន​កំណែ​ផ្សេង​ទៀត​ទេ",
     "Sharing" : "ការ​ចែក​រំលែក",

@@ -2,6 +2,7 @@ OC.L10N.register(
     "collectives",
     {
     "You are not allowed to share %s" : "Vi ne permesatas kunhavigi %s",
+    "Share link" : "Kunhavigi ligilon",
     "Settings" : "Agordoj",
     "Members" : "Membroj",
     "Loading…" : "Ŝargado...",
@@ -19,7 +20,6 @@ OC.L10N.register(
     "Add another link" : "Aldoni plian ligilon",
     "Unshare" : "Malkunhavigi",
     "Create a new share link" : "Krei novan kunhavan ligilon",
-    "Share link" : "Kunhavigi ligilon",
     "Can edit" : "Povas redakti",
     "Cannot copy, please copy the link manually" : "Ne eblis kopii la ligilon; kopiu ĝin permane.",
     "Download" : "Elŝuti",

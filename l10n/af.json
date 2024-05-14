@@ -1,4 +1,5 @@
 { "translations": {
+    "Share link" : "Deel skakel",
     "Settings" : "Instellings",
     "Loading…" : "Laai…",
     "View" : "Bekyk",
@@ -13,7 +14,6 @@
     "Title" : "Titel",
     "Deleted" : "Geskrap",
     "Unshare" : "Ontdeel",
-    "Share link" : "Deel skakel",
     "Can edit" : "Kan redigeer",
     "Download" : "Laai af",
     "Versions" : "Weergawes",

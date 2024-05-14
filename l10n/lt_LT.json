@@ -1,5 +1,6 @@
 { "translations": {
     "You are not allowed to share %s" : "Jums neleidžiama bendrinti %s",
+    "Share link" : "Bendrinimo nuoroda",
     "Export or print" : "Eksportuoti ar spausdinti",
     "Settings" : "Nustatymai",
     "Members" : "Nariai",
@@ -31,7 +32,6 @@
     "Add another link" : "Pridėti kitą nuorodą",
     "Unshare" : "Nustoti bendrinti",
     "Create a new share link" : "Sukurti naują bendrinimo nuorodą",
-    "Share link" : "Bendrinimo nuoroda",
     "View only" : "Tik peržiūrėti",
     "Can edit" : "Gali taisyti",
     "Cannot copy, please copy the link manually" : "Nepavyksta nukopijuoti, nukopijuokite nuorodą rankiniu būdu",

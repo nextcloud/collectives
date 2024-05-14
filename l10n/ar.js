@@ -18,7 +18,7 @@ OC.L10N.register(
     "A place for activist and community projects to build shared knowledge" : "مكان للنشطاء والمشاريع المجتمعية لبناء المعرفة المشتركة",
     "Collectives is a Nextcloud App for activist and community projects to organize together.\nCome and gather in collectives to build shared knowledge.\n\n* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n  tied to a [Nextcloud Team](https://github.com/nextcloud/circles) and\n  owned by the collective.\n* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**\n  for page formatting.\n\n## Installation\n\nIn your Nextcloud instance, simply navigate to **»Apps«**, find the\n**»Teams«** and **»Collectives«** apps and enable them." : "تطبيق التجميعات Collectives هو تطبيق لنكست كلاود لتنظيم عم.مل الفرق و المجموعات لبناء المعرفة المشتركة.\n\n * 👥 **سير العمل الجماعي غير الهرمي.**: كل تجميعة مرتبطة بـفريق من مستخدِمي نكست كلاود [Nextcloud Team] (https://github.com/nextcloud/circles) . \n* 📝 **تحرير الصفحة تعاونيّاً ** بالكيفية المعروفة في إيثرباد Etherpad؛ و ذلك أصبح ممكنا بفضل التطبيق [Text app] (https://github.com/nextcloud/text). \n* 🔤 **صيغة قياسية متعارف عليها لتحرير التجميعة؛ و هي صيغة ماركداون الشهيرة [Markdown] (https://en.wikipedia.org/wiki/Markdown)**. \n\n## التثبيت \nعلى خادوم نكست كلاود عندك، ما عليك سوى الانتقال إلى جزء **«التطبيقات Apps»**، ثم  البحث عن تطبيقات **«الفرق Teams»** و **«التجميعات Collectives»** و تمكينها.",
     "Manage members" : "إدارة الإعضاء",
-    "Share with guests" : "شارِك مع الضيوف",
+    "Share link" : "مشاركة الرابط",
     "Export or print" : "صدّر أو اطبع",
     "Settings" : "الإعدادات",
     "Leave collective" : "غادر التجميعة collective",
@@ -94,10 +94,10 @@ OC.L10N.register(
     "Delete permanently" : "حذف بشكل دائم",
     "Permanently delete collective »{collective}«" : "إحذف التجميعة نهائيّاً »{collective}«",
     "Delete corresponding team along with the collective?" : "هل ترغب في حذف الفريق المُناظِر مع التجميعة؟",
-    "Cancel" : "إلغاء",
     "Only collective" : "تجميعة فقط",
     "Collective and team" : "التجميعات و الفِرَق",
     "Only team owners can delete a team" : "يمكن فقط لمالك الفريق حذفه",
+    "Cancel" : "إلغاء",
     "New collective" : "تجميعة collective جديدة",
     "Select emoji" : "إختر رمزاً تعبيريّاً emji",
     "Select a team..." : "إختَر فريقاً ...",
@@ -179,7 +179,6 @@ OC.L10N.register(
     "Unshare" : "إلغاء المشاركة",
     "Create a new share link" : "أنشِيءْ رابط مشاركة جديد",
     "Share link ({index})" : "رابط المشاركة ({index})",
-    "Share link" : "مشاركة الرابط",
     "View only" : "للعرض فقط",
     "Can edit" : "يمكنه التعديل",
     "Cannot copy, please copy the link manually" : "يتعذّر النسخ. يُرجى نسخ الرابط يدويًا",

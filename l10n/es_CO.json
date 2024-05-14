@@ -1,5 +1,6 @@
 { "translations": {
     "You are not allowed to share %s" : "No tienes permitido compartir %s",
+    "Share link" : "Compartir enlace",
     "Settings" : "Configuraciones ",
     "Members" : "Miembros",
     "Loading…" : "Cargando",
@@ -16,7 +17,6 @@
     "Deleted" : "Borrado",
     "Add another link" : "Añadir otro enlace",
     "Unshare" : "Dejar de compartir",
-    "Share link" : "Compartir enlace",
     "Can edit" : "Puede editar",
     "Sharing" : "Compartiendo",
     "Versions" : "Versiones",

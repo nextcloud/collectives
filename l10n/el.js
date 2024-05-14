@@ -2,6 +2,7 @@ OC.L10N.register(
     "collectives",
     {
     "You are not allowed to share %s" : "Δεν σας επιτρέπεται ο διαμοιρασμός %s",
+    "Share link" : "Διαμοιρασμός συνδέσμου",
     "Settings" : "Ρυθμίσεις",
     "Members" : "Μέλη",
     "No search results" : "Κανένα αποτέλεσμα",
@@ -32,7 +33,6 @@ OC.L10N.register(
     "Add another link" : "Προσθήκη άλλου συνδέσμου",
     "Unshare" : "Αναίρεση διαμοιρασμού",
     "Create a new share link" : "Δημιουργία νέου κοινόχρηστου συνδέσμου",
-    "Share link" : "Διαμοιρασμός συνδέσμου",
     "View only" : "Μόνο για προβολή",
     "Can edit" : "Δυνατότητα επεξεργασίας",
     "Cannot copy, please copy the link manually" : "Δεν μπορεί να αντιγραφεί, παρακαλώ αντιγράψτε χειροκίνητα",

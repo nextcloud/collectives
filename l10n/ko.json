@@ -1,5 +1,6 @@
 { "translations": {
     "You are not allowed to share %s" : "%s을(를) 공유할 수 있는 권한이 없습니다.",
+    "Share link" : "링크 공유",
     "Settings" : "설정",
     "Members" : "구성원",
     "No search results" : "검색 결과 없음",
@@ -33,7 +34,6 @@
     "Unshare" : "공유 해제",
     "Create a new share link" : "새로운 공유 링크 생성",
     "Share link ({index})" : "링크 공유 ({index})",
-    "Share link" : "링크 공유",
     "View only" : "읽기 전용",
     "Can edit" : "수정할 수 있음",
     "Cannot copy, please copy the link manually" : "복사할 수 없습니다, 링크를 수동으로 복사하세요.",

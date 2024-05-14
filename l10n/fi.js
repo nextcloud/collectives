@@ -2,6 +2,7 @@ OC.L10N.register(
     "collectives",
     {
     "You are not allowed to share %s" : "Oikeutesi eivät riitä kohteen %s jakamiseen.",
+    "Share link" : "Jaa linkki",
     "Settings" : "Asetukset",
     "Members" : "Jäsenet",
     "No search results" : "Ei hakutuloksia",
@@ -31,7 +32,6 @@ OC.L10N.register(
     "Unshare" : "Poista jako",
     "Create a new share link" : "Luo uusi jakolinkki",
     "Share link ({index})" : "Jaa linkki ({index})",
-    "Share link" : "Jaa linkki",
     "View only" : "Vain katselu",
     "Can edit" : "Voi muokata",
     "Cannot copy, please copy the link manually" : "Kopioiminen ei onnistu. Kopioi linkki manuaalisesti",

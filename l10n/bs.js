@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Share link" : "Podijelite vezu",
     "Settings" : "Podešavanje",
     "Members" : "Članovi",
     "Edit" : "Izmjeni",
@@ -10,7 +11,6 @@ OC.L10N.register(
     "Done" : "Done",
     "Title" : "Naslov",
     "Unshare" : "Prestani  dijeliti",
-    "Share link" : "Podijelite vezu",
     "Download" : "Preuzmi",
     "No other versions available" : "Druge verzije su nedostupne",
     "Sharing" : "Dijeljenje",

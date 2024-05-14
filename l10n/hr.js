@@ -2,6 +2,7 @@ OC.L10N.register(
     "collectives",
     {
     "You are not allowed to share %s" : "Nije vam dopušteno dijeliti %s",
+    "Share link" : "Dijeli poveznicu",
     "Settings" : "Postavke",
     "Members" : "Članovi",
     "No search results" : "Nema rezultata pretraživanja",
@@ -30,7 +31,6 @@ OC.L10N.register(
     "Add another link" : "Dodaj drugu poveznicu",
     "Unshare" : "Prestani dijeliti",
     "Create a new share link" : "Stvori novu poveznicu dijeljenja",
-    "Share link" : "Dijeli poveznicu",
     "View only" : "Samo za gledanje",
     "Can edit" : "Uređivanje moguće",
     "Cannot copy, please copy the link manually" : "Kopiranje nije moguće, ručno kopirajte poveznicu",

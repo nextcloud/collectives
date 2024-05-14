@@ -2,6 +2,7 @@ OC.L10N.register(
     "collectives",
     {
     "You are not allowed to share %s" : "%s-in yayimlanmasına sizə izin verilmir",
+    "Share link" : "Linki yayımla",
     "Settings" : "Quraşdırmalar",
     "Edit" : "Dəyişiklik et",
     "Restore" : "Geri qaytar",
@@ -15,7 +16,6 @@ OC.L10N.register(
     "Deleted" : "Silinib",
     "Add another link" : "Başqa link əlavə edin",
     "Unshare" : "Paylaşımı durdur",
-    "Share link" : "Linki yayımla",
     "Download" : "Yüklə",
     "No other versions available" : "Başqa versiyalar mövcud deyil",
     "Sharing" : "Paylaşılır",
