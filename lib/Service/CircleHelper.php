@@ -265,6 +265,37 @@ class CircleHelper {
 	 * @throws NotPermittedException
 	 * @throws MissingDependencyException
 	 */
+	public function canLeave(string $circleId, string $userId): bool {
+		if (is_null($this->circlesManager)) {
+			throw new MissingDependencyException($this->dependencyInjectionError);
+		}
+
+		try {
+			$this->startSession($userId);
+			$circle = $this->circlesManager->getCircle($circleId);
+			$initiator = $circle->getInitiator();
+			if ($initiator->getUserType() !== Member::TYPE_USER) {
+				return false;
+			}
+			$members = $circle->getMembers();
+		} catch (CircleNotFoundException $e) {
+			throw new NotFoundException($e->getMessage(), 0, $e);
+		}
+
+		foreach ($members as $member) {
+			if ($member->getSingleId() !== $initiator->getSingleId()) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 * @throws MissingDependencyException
+	 */
 	public function hasLevel(string $circleId, string $userId, int $level = Member::LEVEL_MEMBER): bool {
 		return $this->getLevel($circleId, $userId) >= $level;
 	}

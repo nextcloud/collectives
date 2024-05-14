@@ -625,6 +625,8 @@ namespace OCA\Circles\Model {
         public const APP_OCC = 10002;
         public const APP_DEFAULT = 11000;
 
+        public function getSingleId(): string {}
+        public function getUserType(): int {}
         public function getLevel(): int {}
     }
 
@@ -632,6 +634,7 @@ namespace OCA\Circles\Model {
         public function getName(): string {}
         public function getSingleId(): string {}
         public function getSanitizedName(): string {}
+        public function getMembers(): array {}
         public function getInitiator(): Member {}
     }
 

@@ -183,6 +183,7 @@ class CollectiveServiceTest extends TestCase {
 		$collective = new Collective();
 		$collective->setId(123);
 		$collective->setPermissions(Collective::defaultPermissions);
+		$collective->setCanLeave(true);
 		$this->circleHelper->method('createCircle')
 			->willReturn($circle);
 		$this->circleHelper->method('getLevel')
@@ -212,6 +213,7 @@ class CollectiveServiceTest extends TestCase {
 			'shareEditable' => false,
 			'userPageOrder' => 0,
 			'userShowRecentPages' => true,
+			'canLeave' => true,
 		], $collective->jsonSerialize());
 	}
 }

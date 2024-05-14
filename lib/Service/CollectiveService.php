@@ -91,6 +91,7 @@ class CollectiveService extends CollectiveServiceBase {
 	public function getCollectivesWithShares(string $userId): array {
 		$collectives = $this->collectiveHelper->getCollectivesForUser($userId);
 		foreach ($collectives as $c) {
+			$c->setCanLeave($this->circleHelper->canLeave($c->getCircleId(), $userId));
 			if (null !== $share = $this->shareService->findShare($userId, $c->getId(), 0)) {
 				$c->setShareToken($share->getToken());
 				$c->setShareEditable($share->getEditable());

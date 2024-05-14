@@ -65,6 +65,7 @@ class Collective extends Entity implements JsonSerializable {
 	protected bool $shareEditable = false;
 	protected int $userPageOrder = Collective::defaultPageOrder;
 	protected bool $userShowRecentPages = Collective::defaultShowRecentPages;
+	protected ?bool $canLeave = null;
 
 	public function getCircleId(): ?string {
 		return $this->getCircleUniqueId();
@@ -173,6 +174,14 @@ class Collective extends Entity implements JsonSerializable {
 		return $this->userShowRecentPages;
 	}
 
+	public function getCanLeave(): ?bool {
+		return $this->canLeave;
+	}
+
+	public function setCanLeave(?bool $canLeave): void {
+		$this->canLeave = $canLeave;
+	}
+
 	/**
 	 * @throws RuntimeException
 	 */
@@ -245,6 +254,7 @@ class Collective extends Entity implements JsonSerializable {
 			'shareEditable' => $this->canEdit() && $this->shareEditable,
 			'userPageOrder' => $this->userPageOrder,
 			'userShowRecentPages' => $this->userShowRecentPages,
+			'canLeave' => $this->getCanLeave(),
 		];
 	}
 }
