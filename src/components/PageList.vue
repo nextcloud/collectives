@@ -343,7 +343,7 @@ li.toggle-button.selected {
 	align-items: center;
 
 	position: sticky;
-	top: 92px; // 2x 44px + 4px border-bottom
+	top: 100px; // 52px pagelist header + 44px landing page + 4px border-bottom
 	z-index: 1;
 	background-color: var(--color-main-background);
 	border-bottom: 4px solid var(--color-main-background);
