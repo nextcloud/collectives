@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Share link" : "Partejar lo ligam",
     "Settings" : "Paramètres",
     "Members" : "Membres",
     "No search results" : "pas cap de resultats de recèrca",
@@ -26,7 +27,6 @@ OC.L10N.register(
     "Add another link" : "Ajustar un autre ligam",
     "Unshare" : "Partejar pas mai",
     "Create a new share link" : "Crear un ligam de partatge novèl",
-    "Share link" : "Partejar lo ligam",
     "View only" : "Veire solament",
     "Can edit" : "Pòt modificar",
     "Download" : "Telecargar",

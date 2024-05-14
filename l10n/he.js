@@ -2,6 +2,7 @@ OC.L10N.register(
     "collectives",
     {
     "You are not allowed to share %s" : "אינך רשאי/ת לשתף %s",
+    "Share link" : "קישור שיתוף",
     "Settings" : "הגדרות",
     "Members" : "חברים",
     "Remove" : "הסרה",
@@ -26,7 +27,6 @@ OC.L10N.register(
     "Add another link" : "הוספת קישור נוסף",
     "Unshare" : "ביטול שיתוף",
     "Create a new share link" : "יצירת קישור שיתוף חדש",
-    "Share link" : "קישור שיתוף",
     "View only" : "לצפיה בלבד",
     "Can edit" : "ניתן לערוך",
     "Cannot copy, please copy the link manually" : "לא ניתן להעתיק, נא להעתיק את הקישור ידנית",

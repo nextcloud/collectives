@@ -1,4 +1,5 @@
 { "translations": {
+    "Share link" : "Холбоос хуваалцах",
     "Settings" : "Тохиргоо",
     "Members" : "Гишүүд",
     "Loading…" : "уншиж байна",
@@ -13,7 +14,6 @@
     "Title" : "Цол/Албан тушаал",
     "Deleted" : "Устгагдсан",
     "Unshare" : "Түгээлтийг зогсоох",
-    "Share link" : "Холбоос хуваалцах",
     "View only" : "Зөвхөн үзэх",
     "Download" : "Татах",
     "Attachments" : "Хавсралт",

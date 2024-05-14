@@ -2,6 +2,7 @@ OC.L10N.register(
     "collectives",
     {
     "You are not allowed to share %s" : "Nu există permisiunea de partajare %s",
+    "Share link" : "Partajează link-ul",
     "Settings" : "Setări",
     "Members" : "Membri",
     "No search results" : "Căutarea nu are rezultate",
@@ -24,7 +25,6 @@ OC.L10N.register(
     "Deleted" : "Șters",
     "Add another link" : "Adaugă un alt link",
     "Unshare" : "Oprește partajarea",
-    "Share link" : "Partajează link-ul",
     "View only" : "Numai se vizualizează",
     "Can edit" : "Poate edita",
     "Download" : "Descărcare",

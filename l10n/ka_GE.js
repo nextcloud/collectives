@@ -2,6 +2,7 @@ OC.L10N.register(
     "collectives",
     {
     "You are not allowed to share %s" : "თქვენ არ გაქვთ უფლება გააზიაროთ %s",
+    "Share link" : "ბმულის გაზიარება",
     "Settings" : "პარამეტრები",
     "Members" : "წევრები",
     "Promote to moderator" : "დაწინაურება მოდერატორზე",
@@ -17,7 +18,6 @@ OC.L10N.register(
     "Title" : "სათაური",
     "Deleted" : "გაუქმდა",
     "Unshare" : "გაზიარების შეწყვეტა",
-    "Share link" : "ბმულის გაზიარება",
     "Can edit" : "შეუძლია შეცვლა",
     "Download" : "ჩამოტვირთვა",
     "Sharing" : "გაზიარება",

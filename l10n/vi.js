@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Share link" : "Chia sẻ liên kết",
     "Settings" : "Cài đặt",
     "Members" : "Thành viên",
     "No search results" : "Không có kết quả tìm kiếm",
@@ -29,7 +30,6 @@ OC.L10N.register(
     "Unshare" : "Bỏ chia sẻ",
     "Create a new share link" : "Tạo liên kết chia sẻ mới",
     "Share link ({index})" : "Chia sẻ liên kết ({index})",
-    "Share link" : "Chia sẻ liên kết",
     "View only" : "Chỉ xem",
     "Can edit" : "Có thể chỉnh sửa",
     "Cannot copy, please copy the link manually" : "Không thể sao chép, vui lòng sao chép liên kết bằng tay",

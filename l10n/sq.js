@@ -2,6 +2,7 @@ OC.L10N.register(
     "collectives",
     {
     "You are not allowed to share %s" : "Nuk ju lejohet ta ndani %s me të tjerët",
+    "Share link" : "Lidhje ndarjeje",
     "Settings" : "Rregullimet",
     "Members" : "Anëtar",
     "Remove" : "Hiqe",
@@ -18,7 +19,6 @@ OC.L10N.register(
     "Title" : "Titulli",
     "Deleted" : "E fshirë",
     "Unshare" : "Hiqe ndarjen",
-    "Share link" : "Lidhje ndarjeje",
     "Can edit" : "Mund të editojë",
     "Download" : "Shkarko",
     "No other versions available" : "Nuk ka versione të tjera të gatshme",

@@ -2,6 +2,7 @@ OC.L10N.register(
     "collectives",
     {
     "You are not allowed to share %s" : "No tenes su permissu de cumpartzire %s",
+    "Share link" : "Cumpartzi ligòngiu",
     "Settings" : "Cunfiguratzione",
     "Members" : "Membros",
     "No search results" : "Perunu resurtadu de chirca",
@@ -31,7 +32,6 @@ OC.L10N.register(
     "Add another link" : "Agiunghe un'àteru ligòngiu",
     "Unshare" : "Annulla sa cumpartzidura",
     "Create a new share link" : "Crea unu ligòngiu de cumpartzidura nou",
-    "Share link" : "Cumpartzi ligòngiu",
     "View only" : "Isceti in visualizatzione",
     "Can edit" : "Podet modificare",
     "Cannot copy, please copy the link manually" : "No at fatu a copiare, copia su ligòngiu a manu",

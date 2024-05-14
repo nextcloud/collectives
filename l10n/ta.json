@@ -1,6 +1,7 @@
 { "translations": {
     "Collectives" : "தொகுப்புகள்",
     "Manage members" : "உறுப்பினர்களை நிர்வகிக்கவும்",
+    "Share link" : "இணைப்பைப் பகிரவும்",
     "Settings" : "அமைப்புகள்",
     "Remove" : "அகற்றுக",
     "Edit" : "தொகுக்க",
@@ -17,7 +18,6 @@
     "Title" : "தலைப்பு",
     "Add a page" : "ஒரு பக்கத்தைச் சேர்க்கவும்",
     "Unshare" : "பகிர்வதை நீக்கு",
-    "Share link" : "இணைப்பைப் பகிரவும்",
     "Download" : "பதிவிறக்குக",
     "Current version" : "தற்போதைய பதிப்பு",
     "No other versions available" : "வேறு பதிப்புகள் இல்லை",

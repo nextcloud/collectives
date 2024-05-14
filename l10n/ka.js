@@ -2,6 +2,7 @@ OC.L10N.register(
     "collectives",
     {
     "You are not allowed to share %s" : "You are not allowed to share %s",
+    "Share link" : "Share link",
     "Settings" : "Settings",
     "Members" : "Members",
     "No search results" : "No search results",
@@ -30,7 +31,6 @@ OC.L10N.register(
     "Unshare" : "Unshare",
     "Create a new share link" : "Create a new share link",
     "Share link ({index})" : "Share link ({index})",
-    "Share link" : "Share link",
     "View only" : "View only",
     "Can edit" : "Can edit",
     "Cannot copy, please copy the link manually" : "Cannot copy, please copy the link manually",

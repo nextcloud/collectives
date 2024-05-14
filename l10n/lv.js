@@ -2,6 +2,7 @@ OC.L10N.register(
     "collectives",
     {
     "You are not allowed to share %s" : "Jums nav atļauts dalīties %s",
+    "Share link" : "Koplietot saiti",
     "Settings" : "Iestatījumi",
     "Members" : "Biedri",
     "Remove" : "Izņemt",
@@ -21,7 +22,6 @@ OC.L10N.register(
     "Add another link" : "Pievienot citu saiti",
     "Unshare" : "Pārtraukt koplietošanu",
     "Create a new share link" : "Izveidojiet jaunu kopīgošanas saiti",
-    "Share link" : "Koplietot saiti",
     "Download" : "Lejupielādēt",
     "No other versions available" : "Citas versijas nav pieejamas",
     "Attachments" : "Pielikumi",

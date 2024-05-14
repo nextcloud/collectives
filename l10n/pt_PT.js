@@ -2,6 +2,7 @@ OC.L10N.register(
     "collectives",
     {
     "You are not allowed to share %s" : "Não está autorizado a partilhar %s",
+    "Share link" : "Partilhar ligação",
     "Settings" : "Definições",
     "Members" : "Membros",
     "Remove" : "Remover",
@@ -19,7 +20,6 @@ OC.L10N.register(
     "Deleted" : "Eliminado",
     "Add another link" : "Adicionar outra hiperligação",
     "Unshare" : "Cancelar partilha",
-    "Share link" : "Partilhar ligação",
     "View only" : "Visualizar apenas",
     "Can edit" : "Pode editar",
     "Cannot copy, please copy the link manually" : "Não foi possível copiar, copie a ligação manualmente",

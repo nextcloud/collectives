@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Share link" : "Podeli vezu",
     "Settings" : "Поставке",
     "Loading…" : "Učitavam…",
     "Edit" : "Izmeni",
@@ -12,7 +13,6 @@ OC.L10N.register(
     "Title" : "Naslov",
     "Deleted" : "Obrisano",
     "Unshare" : "Ukini deljenje",
-    "Share link" : "Podeli vezu",
     "Attachments" : "Prilozi",
     "Link copied" : "Veza iskopirana"
 },

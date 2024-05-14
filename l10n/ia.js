@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Share link" : "Compartir ligamine",
     "Settings" : "Configurationes",
     "Members" : "Membros",
     "Loading…" : "Cargante...",
@@ -15,7 +16,6 @@ OC.L10N.register(
     "Title" : "Titulo",
     "Deleted" : "Delite",
     "Unshare" : "Cessa de compartir",
-    "Share link" : "Compartir ligamine",
     "Download" : "Discargar",
     "No other versions available" : "Nulle altere versiones disponibile",
     "Attachments" : "Attachamentos",

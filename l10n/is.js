@@ -2,6 +2,7 @@ OC.L10N.register(
     "collectives",
     {
     "You are not allowed to share %s" : "Þú hefur ekki heimild til að deila %s",
+    "Share link" : "Deila tengli",
     "Settings" : "Stillingar",
     "Members" : "Meðlimir",
     "No search results" : "Engar leitarniðurstöður",
@@ -26,7 +27,6 @@ OC.L10N.register(
     "Unshare" : "Hætta deilingu",
     "Create a new share link" : "Búa til nýjan tengil á sameign",
     "Share link ({index})" : "Tengill á sameign ({index})",
-    "Share link" : "Deila tengli",
     "View only" : "Einungis skoða",
     "Can edit" : "Getur breytt",
     "Cannot copy, please copy the link manually" : "Mistókst að afrita, afritaðu tengilinn handvirkt",
