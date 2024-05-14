@@ -150,7 +150,7 @@ describe('Collective', function() {
 		})
 	})
 
-	describe('in non-admin collective', function() {
+	describe('leaving a collective', function() {
 		it('can leave collective and undo', function() {
 			cy.loginAs('jane')
 			cy.visit('/apps/collectives/Preexisting%20Collective')
@@ -185,6 +185,16 @@ describe('Collective', function() {
 			cy.wait('@leaveCircle', { requestTimeout: Cypress.config('requestTimeout') + 10010 })
 			cy.get('.app-navigation__list')
 				.contains('Preexisting Collective')
+				.should('not.exist')
+		})
+		it('cannot leave collective as last member', function() {
+			cy.loginAs('bob')
+			cy.visit('/apps/collectives')
+
+			cy.openCollectiveMenu('Preexisting Collective')
+			// No leave collective option
+			cy.get('button.action-button')
+				.contains('Leave collective')
 				.should('not.exist')
 		})
 	})
