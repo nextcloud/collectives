@@ -49,7 +49,7 @@
 		<NcModal v-if="deleteModal" size="small" @close="closeDeleteModal">
 			<div class="modal__content">
 				<h2>
-					{{ t('collectives', 'Permanently delete collective »{collective}«', { collective: modalCollective.name }) }}
+					{{ t('collectives', 'Permanently delete collective "{collective}"', { collective: modalCollective.name }) }}
 				</h2>
 				<div>
 					{{ t('collectives', 'Delete corresponding team along with the collective?') }}
