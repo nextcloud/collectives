@@ -9,6 +9,9 @@ const url = Cypress.config('baseUrl').replace(/\/index.php\/?$/g, '')
 Cypress.env('baseUrl', url)
 const silent = { log: false }
 
+// Prevent @nextcloud/router from reading window.location
+window._oc_webroot = ''
+
 /**
  * Ignore ResizeObserver loop limit exceeded' exceptions from browser
  * See https://stackoverflow.com/q/49384120 for details
