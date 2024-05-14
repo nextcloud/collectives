@@ -4,7 +4,7 @@
 			{{ t('collectives', 'Last changed by') }}
 		</template>
 		<NcUserBubble :display-name="lastUserDisplayName"
-			:user="lastUserId"
+			:user="lastUserId || ' '"
 			:show-user-status="false">
 			{{ lastEditedUserMessage }}
 		</NcUserBubble>
