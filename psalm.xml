@@ -28,6 +28,7 @@
         <UndefinedClass>
             <errorLevel type="suppress">
                 <referencedClass name="Doctrine\DBAL\Types\Type" />
+				<referencedClass name="OCP\SetupCheck\ISetupCheck" />
             </errorLevel>
         </UndefinedClass>
         <UndefinedDocblockClass>

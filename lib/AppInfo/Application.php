@@ -22,6 +22,8 @@ use OCA\Collectives\Search\CollectiveProvider;
 use OCA\Collectives\Search\PageContentProvider;
 use OCA\Collectives\Search\PageProvider;
 use OCA\Collectives\Service\CollectiveHelper;
+use OCA\Collectives\SetupChecks\CirclesAppIsEnableCheck;
+use OCA\Collectives\SetupChecks\PDOSQLiteDriverIsEnableCheck;
 use OCA\Collectives\Team\CollectiveTeamResourceProvider;
 use OCA\Collectives\Trash\PageTrashBackend;
 use OCA\Collectives\Trash\PageTrashManager;
@@ -38,6 +40,7 @@ use OCP\Collaboration\Reference\RenderReferenceEvent;
 use OCP\Dashboard\IAPIWidgetV2;
 use OCP\Files\Config\IMountProviderCollection;
 use OCP\Files\IMimeTypeLoader;
+use OCP\SetupCheck\ISetupCheck;
 use OCP\Share\Events\ShareDeletedEvent;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
@@ -50,7 +53,7 @@ class Application extends App implements IBootstrap {
 	}
 
 	public function register(IRegistrationContext $context): void {
-		require_once(__DIR__  . '/../../vendor/autoload.php');
+		require_once(__DIR__ . '/../../vendor/autoload.php');
 		$context->registerEventListener(BeforeTemplateRenderedEvent::class, BeforeTemplateRenderedListener::class);
 		$context->registerEventListener(CircleDestroyedEvent::class, CircleDestroyedListener::class);
 		$context->registerEventListener(ShareDeletedEvent::class, ShareDeletedListener::class);
@@ -100,12 +103,19 @@ class Application extends App implements IBootstrap {
 		$cacheListener = $this->getContainer()->get(CacheListener::class);
 		$cacheListener->listen();
 
-		if (\interface_exists(IAPIWidgetV2::class)) {
+		if (interface_exists(IAPIWidgetV2::class)) {
 			$context->registerDashboardWidget(RecentPagesWidget::class);
 		}
 
 		if (method_exists($context, 'registerTeamResourceProvider')) {
 			$context->registerTeamResourceProvider(CollectiveTeamResourceProvider::class);
+		}
+
+		if (interface_exists(ISetupCheck::class) && method_exists($context, 'registerSetupCheck')) {
+			/** @psalm-suppress MissingDependency */
+			$context->registerSetupCheck(PDOSQLiteDriverIsEnableCheck::class);
+			/** @psalm-suppress MissingDependency */
+			$context->registerSetupCheck(CirclesAppIsEnableCheck::class);
 		}
 	}
 
@@ -114,7 +124,7 @@ class Application extends App implements IBootstrap {
 	}
 
 	private function registerMountProvider(IMountProviderCollection $collection,
-		MountProvider $provider): void {
+		MountProvider            $provider): void {
 		$collection->registerProvider($provider);
 	}
 }
