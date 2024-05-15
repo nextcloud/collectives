@@ -17,6 +17,8 @@ OC.L10N.register(
     "Move or copy" : "გადაიტანეთ ან დააკოპირეთ",
     "Title" : "სათაური",
     "Deleted" : "გაუქმდა",
+    "Password" : "პაროლ",
+    "Advanced settings" : "დამატებითი პარამეტრები",
     "Unshare" : "გაზიარების შეწყვეტა",
     "Can edit" : "შეუძლია შეცვლა",
     "Download" : "ჩამოტვირთვა",

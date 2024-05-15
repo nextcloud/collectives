@@ -18,6 +18,8 @@ OC.L10N.register(
     "Done" : "U krye",
     "Title" : "Titulli",
     "Deleted" : "E fshirë",
+    "Password" : "Fjalëkalimi",
+    "Advanced settings" : "Rregullime të mëtejshme",
     "Unshare" : "Hiqe ndarjen",
     "Can edit" : "Mund të editojë",
     "Download" : "Shkarko",

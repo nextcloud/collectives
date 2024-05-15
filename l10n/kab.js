@@ -13,6 +13,7 @@ OC.L10N.register(
     "Done" : "Immed",
     "Title" : "Azwel",
     "Deleted" : "Yettwakkes",
+    "Set password" : "Sbadu awal uffir",
     "Add another link" : "Rnu aseɣwen-nniḍen",
     "Download" : "Sider",
     "Attachments" : "Ticeqqufin",

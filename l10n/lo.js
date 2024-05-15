@@ -12,6 +12,7 @@ OC.L10N.register(
     "Create" : "ສ້າງ",
     "Done" : "ສໍາເລັດ",
     "Deleted" : "ລືບ",
+    "Set password" : "ກຳນົດລະຫັດຜ່ານ",
     "Add another link" : "ເພີ່ມລິງອຶ່ນອີ",
     "Unshare" : "ຍົກເລີກການແບ່ງປັນ",
     "Download" : "ດາວໂຫລດ",

@@ -19,6 +19,7 @@ OC.L10N.register(
     "Restore this version" : "இந்தப் பதிப்பை மீட்டெடுக்கவும்",
     "Title" : "தலைப்பு",
     "Add a page" : "ஒரு பக்கத்தைச் சேர்க்கவும்",
+    "Password" : "கடவுச்சொல்",
     "Unshare" : "பகிர்வதை நீக்கு",
     "Download" : "பதிவிறக்குக",
     "Current version" : "தற்போதைய பதிப்பு",

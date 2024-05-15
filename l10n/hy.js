@@ -11,6 +11,7 @@ OC.L10N.register(
     "Done" : "Done",
     "Title" : "Վերնագիր",
     "Deleted" : "Ջնջված",
+    "Password" : "գախտնաբառ",
     "Unshare" : "Չկիսվել",
     "Download" : "Ներբեռնել",
     "No other versions available" : "Այլ տարբերակներ չկան",

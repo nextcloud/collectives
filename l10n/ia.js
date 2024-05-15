@@ -15,6 +15,7 @@ OC.L10N.register(
     "Done" : "Preste",
     "Title" : "Titulo",
     "Deleted" : "Delite",
+    "Advanced settings" : "Configurationes avantiate",
     "Unshare" : "Cessa de compartir",
     "Download" : "Discargar",
     "No other versions available" : "Nulle altere versiones disponibile",

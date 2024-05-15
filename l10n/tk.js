@@ -10,6 +10,8 @@ OC.L10N.register(
     "Back" : "Yzyna",
     "Create" : "Dörediň",
     "Deleted" : "Öçürildi",
+    "Set password" : "Paroly düzüň",
+    "Password" : "Açarsöz",
     "Add another link" : "Başga bir baglanyşyk goşuň",
     "Unshare" : "Paýlaşma",
     "Download" : "Göçürip almak",

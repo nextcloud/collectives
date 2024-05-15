@@ -18,6 +18,8 @@ OC.L10N.register(
     "Move or copy" : "Mover o copiar",
     "Title" : "Título",
     "Deleted" : "Borrado",
+    "Password" : "Clave",
+    "Advanced settings" : "Configuraciones avanzados",
     "Unshare" : "Dejar de compartir",
     "Download" : "Descargar",
     "Sharing" : "Compartiendo",
