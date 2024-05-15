@@ -30,6 +30,16 @@ Please note that index files for the full-text search will not be encrypted
 though. Also, please read the [Nextcloud server documentation about
 limitations](https://docs.nextcloud.com/server/latest/admin_manual/configuration_files/encryption_configuration.html#files-not-encrypted) carefully.
 
+## Collectives and `group_everyone`
+
+When using the [group_everyone app](https://github.com/icewind1991/group_everyone/), existing
+users will not see collectives with the "everyone" group as member. The group members need to
+be synced once in the circles app: `occ circles:sync --groups`
+
+This only needs to be done once. New users that got created after the app was enabled will see
+the collectives straight away
+.
+
 ## Collectives and guest users
 
 In order to allow guest users (as provided by the [guests](https://github.com/nextcloud/guests/)
@@ -47,8 +57,8 @@ Tip: On Ubuntu 22.04, the relevant package to install is `phpXX-sqlite3` - with 
 
 ## Public shares
 
-WebDAV access to public shares must not be disabled (i.e it must be enabled)
-for publically shared collectives to work. Please make sure that the following
+WebDAV access to public shares must not be disabled (i.e. it must be enabled)
+for publicly shared collectives to work. Please make sure that the following
  admin option is enabled and not disabled: "Allow users on this server to send
  shares to other servers (This option also enables WebDAV access to public shares)"
  under "Sharing -> Federated Cloud Sharing".
