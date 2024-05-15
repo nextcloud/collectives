@@ -29,7 +29,6 @@ describe('Settings', function() {
 	describe('Collectives folder setting', function() {
 		it('Allows changing the collective user folder', function() {
 			const randomFolder = Math.random().toString(36).replace(/[^a-z]+/g, '').slice(0, 10)
-			const filePickerListSelector = '#picker-filestable tr, .file-picker__row'
 			const breadcrumbsSelector = '.files-controls .breadcrumb, [data-cy-files-content-breadcrumbs] a'
 			cy.loginAs('bob')
 			cy.visit('apps/collectives/A%20Collective')
@@ -54,10 +53,6 @@ describe('Settings', function() {
 			cy.get('nav.newFolderMenu > ul > li > form > input[type="text"], input[placeholder="New folder name"], input[placeholder="New folder"]')
 				.type(`${randomFolder}{enter}`)
 			cy.wait('@createFolder')
-			// TODO: new folder popover doesn't close automatically, so click somewhere
-			cy.get('.file-picker nav [title="Home"]')
-				.click()
-			cy.get(filePickerListSelector).contains(randomFolder).click()
 
 			// Select new created folder
 			cy.intercept('POST', '**/collectives/api/v1.0/settings/user').as('setCollectivesFolder')
