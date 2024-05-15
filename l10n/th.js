@@ -18,6 +18,7 @@ OC.L10N.register(
     "Title" : "ชื่อเรื่อง",
     "Deleted" : "ลบแล้ว",
     "Add another link" : "เพิ่มลิงก์อื่น",
+    "Advanced settings" : "การตั้งค่าขั้นสูง",
     "Unshare" : "เลิกแชร์",
     "View only" : "ดูเท่านั้น",
     "Can edit" : "สามารถแก้ไข",

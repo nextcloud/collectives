@@ -14,6 +14,7 @@ OC.L10N.register(
     "Title" : "Titel",
     "Deleted" : "Geläscht",
     "Add another link" : "Füügt en anere Link",
+    "Advanced settings" : "Erweidert Astellungen",
     "Unshare" : "Net méi deelen",
     "Download" : "Eroflueden",
     "No other versions available" : "Keng aner Versiounen disponibel",

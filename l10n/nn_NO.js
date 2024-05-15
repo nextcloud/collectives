@@ -15,6 +15,7 @@ OC.L10N.register(
     "Title" : "Tittel",
     "Deleted" : "Sletta",
     "Add another link" : "Legg til ei anna lenkje",
+    "Advanced settings" : "Avanserte innstillingar",
     "Unshare" : "Fjern deling",
     "Download" : "Last ned",
     "No other versions available" : "Ingen andre utgåver tilgjengeleg",

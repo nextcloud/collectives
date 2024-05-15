@@ -15,6 +15,8 @@ OC.L10N.register(
     "Move or copy" : "Зөөх эсвэл хуулах",
     "Title" : "Цол/Албан тушаал",
     "Deleted" : "Устгагдсан",
+    "Password" : "нууц үг",
+    "Advanced settings" : "Нарийвчилсан тохиргоо",
     "Unshare" : "Түгээлтийг зогсоох",
     "View only" : "Зөвхөн үзэх",
     "Download" : "Татах",

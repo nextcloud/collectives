@@ -20,6 +20,7 @@ OC.L10N.register(
     "Title" : "Título",
     "Deleted" : "Eliminado",
     "Add another link" : "Agregar otro enlace",
+    "Advanced settings" : "Configuraciones avanzadas",
     "Unshare" : "No compartir",
     "View only" : "Solo ver",
     "Can edit" : "Puede editar",

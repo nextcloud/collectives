@@ -16,6 +16,7 @@ OC.L10N.register(
     "Move or copy" : "Mover o copiar",
     "Title" : "Título",
     "Deleted" : "Borrado",
+    "Advanced settings" : "Configuraciones avanzados",
     "Unshare" : "Dejar de compartir",
     "Can edit" : "Puede editar",
     "Download" : "Descargar",

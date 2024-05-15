@@ -10,6 +10,8 @@ OC.L10N.register(
     "Back" : "Air ais",
     "Create" : "Cruthaich",
     "Deleted" : "Chaidh a sguabadh às",
+    "Set password" : "Suidhich facal-faire",
+    "Password" : "Facal-faire",
     "Add another link" : "Cuir ceangal eile ris",
     "Unshare" : "Na co-roinn tuilleadh",
     "Download" : "Luchdaich a-nuas",
