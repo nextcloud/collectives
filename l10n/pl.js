@@ -94,6 +94,7 @@ OC.L10N.register(
     "Extra action" : "Dodatkowe akcje",
     "Select a page from the list or create a new one." : "Zaznacz stronę z listy lub stwórz nową.",
     "Move page here" : "Przenieś stronę tutaj",
+    "Error saving the document. Please try again." : "Błąd podczas zapisywania dokumentu. Proszę spróbuj ponownie.",
     "Restore this version" : "Przywróć tą wersję",
     "Reverted {page} to revision {timestamp}." : "Przywrócono {page} do wersji {timestamp}.",
     "Failed to revert {page} to revision {timestamp}." : "Nie udało się przywrócić {page} do wersji {timestamp}.",

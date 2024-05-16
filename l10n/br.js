@@ -20,6 +20,7 @@ OC.L10N.register(
     "Move or copy" : "Dilec'hiañ pe eilañ",
     "Title" : "Titl",
     "Deleted" : "Lamet",
+    "Set password" : "Termeniñ ur ger-tremen",
     "Add another link" : "Implij ul liamm all",
     "Unshare" : "Na eskemm ken",
     "Can edit" : "Posuple eo embann",

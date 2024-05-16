@@ -18,6 +18,7 @@ OC.L10N.register(
     "Title" : "Titolo",
     "Deleted" : "Forigita",
     "Please enter the following required information before creating the share" : "Entajpu la jenajn neprajn informojn antaŭ ol krei la kunhavigon",
+    "Password protection (enforced)" : "Pasvorta protekto (efektiva)",
     "Add another link" : "Aldoni plian ligilon",
     "Advanced settings" : "Altanivela agordo",
     "Unshare" : "Malkunhavigi",

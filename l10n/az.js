@@ -15,6 +15,7 @@ OC.L10N.register(
     "Title" : "Başlıq",
     "Deleted" : "Silinib",
     "Add another link" : "Başqa link əlavə edin",
+    "Advanced settings" : "İrəliləmiş quraşdırmalar",
     "Unshare" : "Paylaşımı durdur",
     "Download" : "Yüklə",
     "No other versions available" : "Başqa versiyalar mövcud deyil",
