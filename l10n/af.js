@@ -15,6 +15,7 @@ OC.L10N.register(
     "Move or copy" : "Kopieer of skuif",
     "Title" : "Titel",
     "Deleted" : "Geskrap",
+    "Advanced settings" : "Gevorderde instellings",
     "Unshare" : "Ontdeel",
     "Can edit" : "Kan redigeer",
     "Download" : "Laai af",
