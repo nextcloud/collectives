@@ -1,5 +1,34 @@
 # Changelog
 
+## 2.11.0 - 2024.05.16
+
+### ✨New
+* 🔒 Allow to protect shares with a password. (#505)
+* ✅ Add setup checks for PHP SQLite dependency. Thanks @hweihwang. (#1031)
+* 💄 Automatically open collective if only one exists for user. (#1241)
+
+### 🐛Fixes
+* 🖱️ Fix sorting in page list using drag and drop. (#1246, #1257)
+* 📄 Fix outdated page content in view mode. (#1194)
+* 🔎 List subpages when filtering page list. Thanks @grnd-alt. (#1190)
+* 📝 Improve documentation about app dependencies. (#1220)
+* 🗑️ Make trash backend compatible with Nextcloud 30.
+* 🔗 Improve wording for sharing options. Thanks @Jerome-Herbinet. (#1225)
+* 💄 Fix layout of delete collective modal. Thanks @elzody. (#1189, #1250)
+* 💄 Make sort order pill in page list pixel perfect when scrolling.
+* 🐛 Fix JS console error for recent page tiles without last changed user.
+* 💄 Use standard `""` quotes in collectives trash modal. (#1190)
+* ♿ Completely migrate from v-tooltip to native browser tooltips.
+* 📝 Add documentation about using group_everyone app. (#1202)
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 2.10.1 - 2024.03.27
 
 ### 🐛Fixes
