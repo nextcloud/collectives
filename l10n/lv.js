@@ -20,6 +20,7 @@ OC.L10N.register(
     "Title" : "Amats",
     "Deleted" : "Dzēstie",
     "Set password" : "Uzstādīt paroli",
+    "Password" : "Parole",
     "Add another link" : "Pievienot citu saiti",
     "Advanced settings" : "Paplašināti iestatījumi",
     "Unshare" : "Pārtraukt koplietošanu",
