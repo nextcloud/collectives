@@ -4,10 +4,7 @@
 			{{ t('collectives', 'Last changed by') }}
 		</template>
 		<NcUserBubble :display-name="lastUserDisplayName"
-			:user="lastUserId || ' '"
-			:show-user-status="false">
-			{{ lastEditedUserMessage }}
-		</NcUserBubble>
+			:user="lastUserId" />
 		<span class="timestamp">
 			{{ lastUpdate }}
 		</span>
@@ -45,10 +42,6 @@ export default {
 	},
 
 	computed: {
-		lastEditedUserMessage() {
-			return t('collectives', 'Last edited by {user}', { user: this.lastUserDisplayName })
-		},
-
 		lastUpdate() {
 			return moment.unix(this.timestamp).fromNow()
 		},
