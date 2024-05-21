@@ -249,17 +249,29 @@ class PageService {
 		]);
 	}
 
-	private function updatePage(int $collectiveId, int $fileId, string $userId, ?string $emoji = null, ?string $subpageOrder = null): void {
+	private function updatePage(int $collectiveId, int $fileId, string $userId, ?string $emoji = null): void {
 		$page = new Page();
 		$page->setFileId($fileId);
 		$page->setLastUserId($userId);
 		if ($emoji !== null) {
 			$page->setEmoji($emoji);
 		}
-		if ($subpageOrder) {
-			$page->setSubpageOrder($subpageOrder);
-		}
 		$this->pageMapper->updateOrInsert($page);
+		$this->notifyPush($collectiveId, $userId);
+	}
+
+	/**
+	 * @throws NotFoundException
+	 */
+	private function updateSubpageOrder(int $collectiveId, int $fileId, string $userId, string $subpageOrder): void {
+		if (null === $oldPage = $this->pageMapper->findByFileId($fileId)) {
+			throw new NotFoundException('page not found');
+		}
+		$page = new Page();
+		$page->setId($oldPage->getId());
+		$page->setFileId($fileId);
+		$page->setSubpageOrder($subpageOrder);
+		$this->pageMapper->update($page);
 		$this->notifyPush($collectiveId, $userId);
 	}
 
@@ -815,7 +827,7 @@ class PageService {
 		SubpageOrderService::verify($subpageOrder);
 
 		$pageInfo->setSubpageOrder($subpageOrder);
-		$this->updatePage($collectiveId, $pageInfo->getId(), $userId, null, $subpageOrder);
+		$this->updateSubpageOrder($collectiveId, $pageInfo->getId(), $userId, $subpageOrder);
 		return $pageInfo;
 	}
 
@@ -845,7 +857,7 @@ class PageService {
 		$newSubpageOrder = SubpageOrderService::add($cleanedSubpageOrder, $addId, $index);
 
 		$pageInfo->setSubpageOrder($newSubpageOrder);
-		$this->updatePage($collectiveId, $pageInfo->getId(), $userId, null, $newSubpageOrder);
+		$this->updateSubpageOrder($collectiveId, $pageInfo->getId(), $userId, $newSubpageOrder);
 	}
 
 	/**
@@ -861,7 +873,7 @@ class PageService {
 		$newSubpageOrder = SubpageOrderService::remove($pageInfo->getSubpageOrder(), $removeId);
 
 		$pageInfo->setSubpageOrder($newSubpageOrder);
-		$this->updatePage($collectiveId, $pageInfo->getId(), $userId, null, $newSubpageOrder);
+		$this->updateSubpageOrder($collectiveId, $pageInfo->getId(), $userId, $newSubpageOrder);
 	}
 
 	/**
