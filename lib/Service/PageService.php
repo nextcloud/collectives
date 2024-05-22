@@ -41,7 +41,8 @@ class PageService {
 		private UserFolderHelper $userFolderHelper,
 		private IUserManager $userManager,
 		private IConfig $config,
-		ContainerInterface $container) {
+		ContainerInterface $container,
+		private SessionService $sessionService) {
 		try {
 			$this->pushQueue = $container->get(IQueue::class);
 		} catch (Exception) {
@@ -238,15 +239,18 @@ class PageService {
 		return $pageInfo;
 	}
 
-	private function notifyPush(int $collectiveId, string $userId): void {
+	private function notifyPush(int $collectiveId): void {
 		if (!$this->pushQueue) {
 			return;
 		}
 
-		$this->pushQueue->push('notify_custom', [
-			'user' => $userId,
-			'message' => 'collectives_' . $collectiveId . '_pagelist',
-		]);
+		$sessionUsers = $this->sessionService->getSessionUsers($collectiveId);
+		foreach ($sessionUsers as $userId) {
+			$this->pushQueue->push('notify_custom', [
+				'user' => $userId,
+				'message' => 'collectives_' . $collectiveId . '_pagelist',
+			]);
+		}
 	}
 
 	private function updatePage(int $collectiveId, int $fileId, string $userId, ?string $emoji = null): void {
@@ -257,7 +261,7 @@ class PageService {
 			$page->setEmoji($emoji);
 		}
 		$this->pageMapper->updateOrInsert($page);
-		$this->notifyPush($collectiveId, $userId);
+		$this->notifyPush($collectiveId);
 	}
 
 	/**
@@ -907,7 +911,7 @@ class PageService {
 			// Delete directly if trash is not available
 			$this->pageMapper->deleteByFileId($id);
 			$this->removeFromSubpageOrder($collectiveId, $parentId, $id, $userId);
-			$this->notifyPush($collectiveId, $userId);
+			$this->notifyPush($collectiveId);
 			return $pageInfo;
 		}
 
@@ -917,7 +921,7 @@ class PageService {
 		}
 
 		$pageInfo->setTrashTimestamp($trashedPage->getTrashTimestamp());
-		$this->notifyPush($collectiveId, $userId);
+		$this->notifyPush($collectiveId);
 		return $pageInfo;
 	}
 
@@ -944,7 +948,7 @@ class PageService {
 			throw new NotFoundException('Failed to restore page ' . $id . ':' . $e->getMessage(), 0, $e);
 		}
 
-		$this->notifyPush($collectiveId, $userId);
+		$this->notifyPush($collectiveId);
 		return $this->findByFileId($collectiveId, $id, $userId);
 	}
 
@@ -971,7 +975,7 @@ class PageService {
 			throw new NotFoundException('Failed to delete page from trash ' . $id . ':' . $e->getMessage());
 		}
 
-		$this->notifyPush($collectiveId, $userId);
+		$this->notifyPush($collectiveId);
 	}
 
 	public function getPageLink(string $collectiveName, PageInfo $pageInfo, bool $withFileId = true): string {

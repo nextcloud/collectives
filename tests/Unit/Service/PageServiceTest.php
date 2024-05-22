@@ -17,6 +17,7 @@ use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Service\CollectiveServiceBase;
 use OCA\Collectives\Service\NotPermittedException;
 use OCA\Collectives\Service\PageService;
+use OCA\Collectives\Service\SessionService;
 use OCP\IConfig;
 use OCP\IUserManager;
 use PHPUnit\Framework\TestCase;
@@ -79,6 +80,10 @@ class PageServiceTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
+		$sessionService = $this->getMockBuilder(SessionService::class)
+			->disableOriginalConstructor()
+			->getMock();
+
 		$this->service = new PageService(
 			$appManager,
 			$this->pageMapper,
@@ -86,7 +91,9 @@ class PageServiceTest extends TestCase {
 			$this->collectiveService,
 			$userFolderHelper,
 			$userManager,
-			$this->config, $container);
+			$this->config,
+			$container,
+			$sessionService);
 	}
 
 	public function testGetPageFile(): void {
