@@ -9,7 +9,6 @@ use JsonSerializable;
 use OCP\AppFramework\Db\Entity;
 
 /**
- * Class Collective
  * @method int getId()
  * @method void setId(int $value)
  * @method int getFileId()
