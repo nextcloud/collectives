@@ -132,9 +132,18 @@ return [
 			'defaults' => ['path' => '/']],
 	],
 	'ocs' => [
+		// User settings API
 		['name' => 'settings#getUserSetting', 'url' => '/api/v{apiVersion}/settings/user/{key}', 'verb' => 'GET',
 			'requirements' => ['apiVersion' => '1.0']],
 		['name' => 'settings#setUserSetting', 'url' => '/api/v{apiVersion}/settings/user', 'verb' => 'POST',
+			'requirements' => ['apiVersion' => '1.0']],
+
+		// Session API
+		['name' => 'session#create', 'url' => '/api/v{apiVersion}/session/{collectiveId}', 'verb' => 'POST',
+			'requirements' => ['apiVersion' => '1.0']],
+		['name' => 'session#sync', 'url' => '/api/v{apiVersion}/session/{collectiveId}', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '1.0']],
+		['name' => 'session#close', 'url' => '/api/v{apiVersion}/session/{collectiveId}', 'verb' => 'DELETE',
 			'requirements' => ['apiVersion' => '1.0']],
 	]
 ];
