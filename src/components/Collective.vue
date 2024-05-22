@@ -14,13 +14,14 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { listen } from '@nextcloud/notify_push'
 import { NcAppContentDetails } from '@nextcloud/vue'
-import { GET_SHARES, GET_PAGES, GET_TRASH_PAGES } from '../store/actions.js'
+import { GET_SHARES, GET_PAGES, GET_TRASH_PAGES, CREATE_SESSION, UPDATE_SESSION, CLOSE_SESSION } from '../store/actions.js'
 import { SELECT_VERSION } from '../store/mutations.js'
 import displayError from '../util/displayError.js'
 import Page from './Page.vue'
 import Version from './Page/Version.vue'
 import PageNotFound from './Page/PageNotFound.vue'
 import SkeletonLoading from './SkeletonLoading.vue'
+import { sessionUpdateInterval } from '../constants.js'
 
 export default {
 	name: 'Collective',
@@ -38,10 +39,13 @@ export default {
 			backgroundFetching: false,
 			/** @type {number} */
 			pollIntervalBase: 60 * 1000, // milliseconds
+			/** @type {number} */
 			pollIntervalCurrent: 60 * 1000, // milliseconds
 			/** @type {null|number} */
-			intervalId: null,
+			getPagesIntervalId: null,
 			listenPush: null,
+			/** @type {null|number} */
+			updateSessionIntervalId: null,
 		}
 	},
 
@@ -52,6 +56,7 @@ export default {
 			'currentCollectiveIsPageShare',
 			'currentFileIdPage',
 			'currentPage',
+			'hasSession',
 			'isPublic',
 			'loading',
 			'pageParam',
@@ -65,12 +70,15 @@ export default {
 	},
 
 	watch: {
-		'currentCollective.id'() {
+		'currentCollective.id'(val) {
 			this.load('collective')
 			this.unsetPages()
 			this.unsetShares()
-			this.initCollective()
-			this.initListenPush()
+			this.clearListenPush()
+			if (val) {
+				this.initCollective()
+				this.initListenPush()
+			}
 		},
 		'currentPage.id'() {
 			this.$store.commit(SELECT_VERSION, null)
@@ -91,6 +99,7 @@ export default {
 	},
 
 	beforeDestroy() {
+		this.closeSession()
 		this.teardownBackgroundFetcher()
 		unsubscribe('networkOffline', this.handleNetworkOffline)
 		unsubscribe('networkOnline', this.handleNetworkOnline)
@@ -103,6 +112,9 @@ export default {
 			dispatchGetPages: GET_PAGES,
 			dispatchGetTrashPages: GET_TRASH_PAGES,
 			dispatchGetShares: GET_SHARES,
+			dispatchCreateSession: CREATE_SESSION,
+			dispatchUpdateSession: UPDATE_SESSION,
+			dispatchCloseSession: CLOSE_SESSION,
 		}),
 
 		initCollective() {
@@ -114,9 +126,31 @@ export default {
 
 		initListenPush() {
 			this.listenPush = listen(`collectives_${this.currentCollective.id}_pagelist`, this.getPagesBackground.bind(this))
+
 			if (this.listenPush) {
 				console.debug('Has notify_push enabled, listening to pagelist updates and slowing polling to 15 minutes')
 				this.pollIntervalBase = 15 * 60 * 1000
+				this.createSession()
+			}
+		},
+
+		clearListenPush() {
+			this.closeSession()
+			this.listenPush = null
+			this.pollIntervalBase = 60 * 1000
+		},
+
+		async createSession() {
+			await this.dispatchCreateSession()
+			this.updateSessionIntervalId = setInterval(this.dispatchUpdateSession, sessionUpdateInterval * 1000)
+		},
+
+		async closeSession() {
+			if (this.updateSessionIntervalId) {
+				clearInterval(this.updateSessionIntervalId)
+			}
+			if (this.hasSession) {
+				await this.dispatchCloseSession()
 			}
 		},
 
@@ -154,7 +188,7 @@ export default {
 		setupBackgroundFetcher() {
 			if (OC.config.session_keepalive) {
 				console.debug('Started background fetcher as session_keepalive is enabled')
-				this.intervalId = window.setInterval(
+				this.getPagesIntervalId = window.setInterval(
 					this.getPagesBackground.bind(this),
 					this.pollIntervalCurrent,
 				)
@@ -165,9 +199,9 @@ export default {
 
 		teardownBackgroundFetcher() {
 			console.debug('Stopping background fetcher.')
-			if (this.intervalId) {
-				window.clearInterval(this.intervalId)
-				this.intervalId = null
+			if (this.getPagesIntervalId) {
+				window.clearInterval(this.getPagesIntervalId)
+				this.getPagesIntervalId = null
 			}
 		},
 

@@ -477,5 +477,4 @@ export default {
 			commit(ADD_OR_UPDATE_COLLECTIVE, collective)
 		},
 	},
-
 }

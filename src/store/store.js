@@ -4,6 +4,7 @@ import Vuex, { Store } from 'vuex'
 import circles from './circles.js'
 import collectives from './collectives.js'
 import pages from './pages.js'
+import sessions from './sessions.js'
 import settings from './settings.js'
 import versions from './versions.js'
 import { editorApiReaderFileId, pageModes } from '../constants.js'
@@ -16,6 +17,7 @@ export default new Store({
 		circles,
 		collectives,
 		pages,
+		sessions,
 		settings,
 		versions,
 	},

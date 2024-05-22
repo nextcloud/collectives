@@ -36,3 +36,5 @@ export const pageModes = {
 }
 
 export const editorApiReaderFileId = 'READER_FILE_ID'
+
+export const sessionUpdateInterval = 90 // in seconds
