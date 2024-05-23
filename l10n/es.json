@@ -29,7 +29,7 @@
     "Left collective {name}" : "Se abandonó el cuaderno colectivo {name}",
     "Could not leave the collective. {errorMessage}" : "No fue posible abandonar el cuaderno colectivo. {errorMessage}",
     "Collective not found: {collective}" : "No se encontró el cuaderno colectivo: {collective}",
-    "You're not part of a collective with that name." : "No tienes acceso a un cuaderno colectivo con ese nombre.",
+    "You're not part of a collective with that name." : "No tiene acceso a un cuaderno colectivo con ese nombre.",
     "Preparing collective for exporting or printing" : "Preparando el cuaderno colectivo para exportación o impresión",
     "Loading pages:" : "Cargando páginas:",
     "Loading images:" : "Cargando imágenes:",
