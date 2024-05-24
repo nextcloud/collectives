@@ -90,6 +90,7 @@ OC.L10N.register(
     "Cancel" : "取消",
     "New collective" : "新知识库",
     "Select emoji" : "选择表情符号",
+    "Enter the new collective name or pick an existing team" : "输入新的集体名称或选择现有团队",
     "Add members" : "添加成员",
     "Add members to {name}" : "添加成员到 {name}",
     "Back" : "返回",
