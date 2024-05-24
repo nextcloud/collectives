@@ -108,7 +108,7 @@ class CollectiveMapper extends QBMapper {
 			throw new NotFoundException('Failed to run database query', 0, $e);
 		}
 
-		return array_filter($collectives, fn (Collective $c) => $this->circleHelper->hasLevel($c->getCircleId(), $userId, Member::LEVEL_ADMIN));
+		return array_values(array_filter($collectives, fn (Collective $c) => $this->circleHelper->hasLevel($c->getCircleId(), $userId, Member::LEVEL_ADMIN)));
 	}
 
 	/**
