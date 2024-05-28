@@ -23,11 +23,13 @@
 
 			<!-- Sidebar toggle: only displayed on mobile and in page title menu -->
 			<NcActionButton v-if="displaySidebarAction"
-				icon="icon-menu-sidebar"
 				:aria-label="t('collectives', 'Open page sidebar')"
 				aria-controls="app-sidebar-vue"
 				:close-after-click="true"
 				@click="toggle('sidebar')">
+				<template #icon>
+					<DockRightIcon :size="20" />
+				</template>
 				{{ t('collectives', 'Open page sidebar') }}
 			</NcActionButton>
 			<NcActionSeparator v-if="displaySidebarAction" />
@@ -126,6 +128,7 @@ import { NcActions, NcActionButton, NcActionCheckbox, NcActionLink, NcActionSepa
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import CollectiveActions from '../Collective/CollectiveActions.vue'
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
+import DockRightIcon from 'vue-material-design-icons/DockRight.vue'
 import EmoticonOutlineIcon from 'vue-material-design-icons/EmoticonOutline.vue'
 import FormatListBulletedIcon from 'vue-material-design-icons/FormatListBulleted.vue'
 import OpenInNewIcon from 'vue-material-design-icons/OpenInNew.vue'
@@ -147,6 +150,7 @@ export default {
 		NcActionLink,
 		NcActionSeparator,
 		DeleteIcon,
+		DockRightIcon,
 		EmoticonOutlineIcon,
 		FormatListBulletedIcon,
 		OpenInNewIcon,

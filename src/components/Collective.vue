@@ -251,7 +251,7 @@ export default {
 }
 
 /* Leave space for page list toggle on small screens (editor 670px + toggle 44px) */
-@media only screen and (max-width: 670px + 44px) {
+@media only screen and (max-width: calc(670px + 44px)) {
 	.page-title {
 		padding-left: 40px;
 	}

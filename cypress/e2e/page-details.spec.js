@@ -78,7 +78,7 @@ describe('Page details', function() {
 			}
 			cy.openPage('Day 1')
 			cy.wait('@textCreateSession')
-			cy.get('button.action-item .icon-menu-sidebar').click()
+			cy.get('button.app-sidebar__toggle').click()
 			cy.get('#tab-button-backlinks').click()
 			cy.get('.app-sidebar-tabs__content').should('contain', 'Day 2')
 		})

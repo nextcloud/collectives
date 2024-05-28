@@ -2,7 +2,7 @@
 	<NcContent app-name="collectives">
 		<Navigation v-if="!printView" />
 		<router-view />
-		<PageSidebar v-if="currentCollective && currentPage" v-show="showing('sidebar')" />
+		<PageSidebar v-if="currentCollective && currentPage" />
 		<CollectiveSettings v-if="showCollectiveSettings"
 			:collective="settingsCollective" />
 	</NcContent>
@@ -188,5 +188,17 @@ export default {
 .splitpanes__pane-details {
 	scroll-padding-top: 60px;
 	scroll-behavior: smooth;
+}
+</style>
+
+<style lang="scss" scoped>
+:deep(.page-sidebar-button) {
+	// Align sidebar toggle button with page title bar
+	margin-top: 2px;
+}
+
+:deep(.page-sidebar-button_mobile) {
+	// Hide on mobile (moved to page actions instead there to save horizontal space
+	display: none;
 }
 </style>

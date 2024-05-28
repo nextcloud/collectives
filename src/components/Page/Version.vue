@@ -26,7 +26,11 @@
 				{{ t('collectives', 'Restore') }}
 			</NcButton>
 			<NcActions>
-				<NcActionButton icon="icon-menu-sidebar" :close-after-click="true" @click="closeVersions" />
+				<NcActionButton :close-after-click="true" @click="closeVersions">
+					<template #icon>
+						<DockRightIcon :size="20" />
+					</template>
+				</NcActionButton>
 			</NcActions>
 		</h1>
 		<SkeletonLoading v-show="!contentLoaded" class="page-content-skeleton" type="text" />
@@ -39,6 +43,7 @@
 
 <script>
 import { NcActionButton, NcActions, NcButton } from '@nextcloud/vue'
+import DockRightIcon from 'vue-material-design-icons/DockRight.vue'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
 
 import { getCurrentUser } from '@nextcloud/auth'
@@ -58,6 +63,7 @@ export default {
 	name: 'Version',
 
 	components: {
+		DockRightIcon,
 		EmoticonOutlineIcon,
 		NcActionButton,
 		NcActions,

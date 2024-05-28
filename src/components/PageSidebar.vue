@@ -2,6 +2,11 @@
 	<NcAppSidebar ref="sidebar"
 		:name="title"
 		:active.sync="active"
+		:open.sync="open"
+		:toggle-classes="{
+			'page-sidebar-button': true,
+			'page-sidebar-button_mobile': isMobile,
+		}"
 		@close="close">
 		<NcAppSidebarTab id="attachments"
 			:order="0"
@@ -50,6 +55,7 @@ import RestoreIcon from 'vue-material-design-icons/Restore.vue'
 import ArrowBottomLeftIcon from 'vue-material-design-icons/ArrowBottomLeft.vue'
 import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue'
 import ShareVariantIcon from 'vue-material-design-icons/ShareVariant.vue'
+import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import { SELECT_VERSION } from '../store/mutations.js'
 import SidebarTabAttachments from './PageSidebar/SidebarTabAttachments.vue'
 import SidebarTabBacklinks from './PageSidebar/SidebarTabBacklinks.vue'
@@ -72,10 +78,9 @@ export default {
 		SidebarTabVersions,
 	},
 
-	data() {
-		return {
-		}
-	},
+	mixins: [
+		isMobile,
+	],
 
 	computed: {
 		...mapGetters([
@@ -96,10 +101,23 @@ export default {
 				this.setActiveSidebarTab(id)
 			},
 		},
+
+		open: {
+			get() {
+				return this.showing('sidebar') || false
+			},
+			set(value) {
+				if (value === true) {
+					this.show('sidebar')
+				} else {
+					this.hide('sidebar')
+				}
+			},
+		},
 	},
 
 	methods: {
-		...mapMutations(['hide', 'setActiveSidebarTab']),
+		...mapMutations(['hide', 'setActiveSidebarTab', 'show']),
 
 		/**
 		 * Load the current version and close the sidebar
@@ -111,9 +129,3 @@ export default {
 	},
 }
 </script>
-
-<style>
-.app-sidebar-tab-desc {
-	font-weight: bold;
-}
-</style>
