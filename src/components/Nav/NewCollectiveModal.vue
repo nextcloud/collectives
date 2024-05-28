@@ -31,6 +31,7 @@
 						class="circle-selector"
 						:append-to-body="false"
 						:options="circles"
+						:aria-label-combobox="t('collectives', 'Select an existing team')"
 						:placeholder="t('collectives', 'Select a team...')" />
 					<NcButton v-if="anyCircle && !pickCircle"
 						:title="t('collectives', 'Select an existing team')"
