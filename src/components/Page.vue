@@ -81,7 +81,7 @@
 					@keydown.stop="onTitleKeyDown">
 			</form>
 
-			<div class="titlebar-buttons">
+			<div class="titlebar-buttons" :class="{'titlebar-buttons_sidebar-toggle': !isMobile && !showing('sidebar')}">
 				<!-- Edit button if editable -->
 				<EditButton v-if="currentCollectiveCanEdit"
 					:mobile="isMobile"
@@ -96,15 +96,6 @@
 					:last-user-display-name="currentPage.lastUserDisplayName"
 					:is-landing-page="isLandingPage"
 					:is-template="isTemplatePage" />
-
-				<!-- Sidebar toggle -->
-				<NcActions v-if="!showing('sidebar') && !isMobile">
-					<NcActionButton icon="icon-menu-sidebar"
-						:aria-label="t('collectives', 'Open page sidebar')"
-						aria-controls="app-sidebar-vue"
-						:close-after-click="true"
-						@click="toggle('sidebar')" />
-				</NcActions>
 			</div>
 		</h1>
 		<LandingPageWidgets v-if="isLandingPage" />
@@ -114,7 +105,7 @@
 
 <script>
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
-import { NcActions, NcActionButton, NcButton, NcLoadingIcon } from '@nextcloud/vue'
+import { NcButton, NcLoadingIcon } from '@nextcloud/vue'
 import NcEmojiPicker from '@nextcloud/vue/dist/Components/NcEmojiPicker.js'
 import CollectivesIcon from './Icon/CollectivesIcon.vue'
 import EmoticonOutlineIcon from 'vue-material-design-icons/EmoticonOutline.vue'
@@ -136,8 +127,6 @@ export default {
 		EditButton,
 		EmoticonOutlineIcon,
 		LandingPageWidgets,
-		NcActionButton,
-		NcActions,
 		NcButton,
 		NcEmojiPicker,
 		NcLoadingIcon,
@@ -172,6 +161,10 @@ export default {
 			'loading',
 			'showing',
 		]),
+
+		hasSidebarToggle() {
+			return !this.showing('sidebar')
+		},
 
 		titleChanged() {
 			return this.newTitle && this.newTitle !== this.currentPage.title
@@ -250,7 +243,6 @@ export default {
 			'done',
 			'hide',
 			'load',
-			'toggle',
 		]),
 
 		...mapActions({
@@ -330,6 +322,10 @@ export default {
 
 	.titlebar-buttons {
 		display: flex;
+
+		&_sidebar-toggle {
+			margin-right: 44px;
+		}
 	}
 }
 </style>

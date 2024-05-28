@@ -210,7 +210,7 @@ describe('Pages', function() {
 			cy.switchToEditMode()
 
 			// Open attachment list
-			cy.get('button.action-item .icon-menu-sidebar').click()
+			cy.get('button.app-sidebar__toggle').click()
 			cy.get('.app-sidebar-tabs__content').should('contain', 'test.png')
 
 			// Delete image
