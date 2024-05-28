@@ -5,6 +5,7 @@ OC.L10N.register(
     "Settings" : "Socruithe",
     "No search results" : "Gan torthaí cuardaigh",
     "Remove" : "Bain",
+    "Loading…" : "Á lódáil…",
     "View" : "Amharc",
     "Edit" : "Cuir in eagar",
     "Cancel" : "Cealaigh",
@@ -15,10 +16,12 @@ OC.L10N.register(
     "Show outline" : "Taispeáin imlíne",
     "Title" : "Teideal",
     "Password" : "Pasfhocal",
+    "Add another link" : "Cuir nasc eile leis",
     "View only" : "Amharc amháin",
     "Cannot copy, please copy the link manually" : "Ní féidir cóip a dhéanamh, cóipeáil an nasc de láimh",
     "Download" : "Íoslódáil",
     "Attachments" : "Ceangaltáin",
-    "Sharing" : "Roinnt"
+    "Sharing" : "Roinnt",
+    "Link copied" : "Cóipeáladh an nasc"
 },
 "nplurals=5; plural=(n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n<11 ? 3 : 4);");
