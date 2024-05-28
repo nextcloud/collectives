@@ -1,6 +1,7 @@
 <template>
 	<NcEmptyContent :name="t('collectives', 'Collective not found: {collective}', { collective: collectiveParam })"
-		:description="t('collectives', 'You\'re not part of a collective with that name.')">
+		:description="t('collectives', 'You\'re not part of a collective with that name.')"
+		class="content-not-found">
 		<template #icon>
 			<CollectivesIcon />
 		</template>
@@ -27,3 +28,10 @@ export default {
 	},
 }
 </script>
+
+<style lang="scss" scoped>
+.content-not-found {
+	height: 100%;
+	padding: calc(var(--default-grid-baseline) * 4);
+}
+</style>

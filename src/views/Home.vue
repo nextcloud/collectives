@@ -1,7 +1,8 @@
 <template>
 	<NcAppContent>
 		<NcEmptyContent :title="t('collectives', 'Collectives')"
-			:description="t('collectives', 'Come, organize and build shared knowledge!')">
+			:description="t('collectives', 'Come, organize and build shared knowledge!')"
+			class="content-home">
 			<template #icon>
 				<CollectivesIcon />
 			</template>
@@ -70,3 +71,10 @@ export default {
 
 }
 </script>
+
+<style lang="scss" scoped>
+.content-home {
+	height: 100%;
+	padding: calc(var(--default-grid-baseline) * 4);
+}
+</style>
