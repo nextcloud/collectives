@@ -584,6 +584,80 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @When we wait for :seconds seconds
+	 */
+	public function waitSeconds(int $seconds): void {
+		sleep($seconds);
+	}
+
+	/**
+	 * @When user :user creates session for :collective
+	 * @When user :user :fails to create session for :collective
+	 */
+	public function userCreatesSession(string $user, string $collective, ?string $fails = null): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$this->sendOcsRequest('POST', '/apps/collectives/api/v1.0/session/' . $collectiveId);
+		if ($fails !== "fails") {
+			$this->assertStatusCode(200);
+			$jsonBody = $this->getJson();
+			$this->store['sessionToken'] = $jsonBody['ocs']['data']['token'];
+		} else {
+			$this->assertStatusCode(404);
+		}
+	}
+
+	/**
+	 * @When user :user updates session for :collective
+	 * @When user :user updates session for :collective with token :token
+	 * @When user :user :fails to update session for :collective
+	 * @When user :user :fails to update session for :collective with token :token
+	 */
+	public function userUpdatesSession(string $user, string $collective, ?string $fails = null, ?string $token = null): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		if ($token === null) {
+			Assert::assertArrayHasKey('sessionToken', $this->store);
+			Assert::assertNotEmpty($this->store['sessionToken']);
+			$token = $this->store['sessionToken'];
+		}
+		$data = new TableNode([
+			['token', $token],
+		]);
+		$this->sendOcsRequest('PUT', '/apps/collectives/api/v1.0/session/' . $collectiveId, $data);
+		if ($fails !== "fails") {
+			$this->assertStatusCode(200);
+		} else {
+			$this->assertStatusCode(404);
+		}
+	}
+
+	/**
+	 * @When user :user closes session for :collective
+	 * @When user :user closes session for :collective with token :token
+	 * @When user :user :fails to close session for :collective
+	 * @When user :user :fails to close session for :collective with token :token
+	 */
+	public function userClosesSession(string $user, string $collective, ?string $fails = null, ?string $token = null): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		if ($token === null) {
+			Assert::assertArrayHasKey('sessionToken', $this->store);
+			Assert::assertNotEmpty($this->store['sessionToken']);
+			$token = $this->store['sessionToken'];
+		}
+		$data = new TableNode([
+			['token', $token],
+		]);
+		$this->sendOcsRequest('DELETE', '/apps/collectives/api/v1.0/session/' . $collectiveId, $data);
+		if ($fails !== "fails") {
+			$this->assertStatusCode(200);
+		} else {
+			$this->assertStatusCode(404);
+		}
+	}
+
+	/**
 	 * @When user :user joins team :name with owner :owner
 	 * @When user :user joins team :name with owner :owner with level :level
 	 *
