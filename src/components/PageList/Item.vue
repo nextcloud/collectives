@@ -11,7 +11,7 @@
 			'highlight-target': isHighlightedTarget,
 			'highlight-animation': isHighlightAnimation,
 		}"
-		draggable
+		draggable="true"
 		@dragstart="onDragstart"
 		@dragend="onDragend"
 		@dragover.prevent="onDragover"
