@@ -4,6 +4,7 @@ OC.L10N.register(
     "You are not allowed to share %s" : "Níl cead agat %s a roinnt",
     "Share link" : "Comhroinn nasc",
     "Settings" : "Socruithe",
+    "Members" : "Baill",
     "No search results" : "Gan torthaí cuardaigh",
     "Remove" : "Bain",
     "Loading…" : "Á lódáil…",
@@ -15,6 +16,7 @@ OC.L10N.register(
     "Back" : "Ar ais",
     "Create" : "Cruthaigh",
     "Done" : "Déanta",
+    "Show in Files" : "Taispeáin i gComhaid",
     "Move or copy" : "Bog nó cóipeáil",
     "Hide outline" : "Folaigh imlíne",
     "Show outline" : "Taispeáin imlíne",
@@ -42,6 +44,8 @@ OC.L10N.register(
     "Sharing" : "Roinnt",
     "Versions" : "Leaganacha",
     "Link copied" : "Cóipeáladh an nasc",
-    "_%n byte_::_%n bytes_" : ["%n beart ","%n bearta ","%n bearta","%n bearta","%n bearta"]
+    "_%n byte_::_%n bytes_" : ["%n beart ","%n bearta ","%n bearta","%n bearta","%n bearta"],
+    "Copied" : "Cóipeáladh",
+    "Cannot copy" : "Ní féidir cóip a dhéanamh"
 },
 "nplurals=5; plural=(n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n<11 ? 3 : 4);");
