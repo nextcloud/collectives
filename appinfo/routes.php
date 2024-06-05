@@ -60,7 +60,7 @@ return [
 			'verb' => 'POST', 'requirements' => ['collectiveId' => '\d+', 'parentId' => '\d+']],
 		['name' => 'page#touch', 'url' => '/_api/{collectiveId}/_pages/{id}/touch',
 			'verb' => 'GET', 'requirements' => ['collectiveId' => '\d+', 'id' => '\d+']],
-		['name' => 'page#contentFiltered', 'url' => '/_api/{collectiveId}/_pages/filter',
+		['name' => 'page#contentSearch', 'url' => '/_api/{collectiveId}/_pages/search',
 			'verb' => 'GET', 'requirements' => ['collectiveId' => '\d+', 'filterString' => '\s+']],
 		['name' => 'page#moveOrCopy', 'url' => '/_api/{collectiveId}/_pages/{id}',
 			'verb' => 'PUT', 'requirements' => ['collectiveId' => '\d+', 'id' => '\d+']],

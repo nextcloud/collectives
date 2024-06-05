@@ -88,11 +88,11 @@ class PageController extends Controller {
 	/**
 	 * @NoAdminRequired
 	 */
-	public function contentFiltered(int $collectiveId, string $filterString): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId, $filterString): array {
+	public function contentSearch(int $collectiveId, string $searchString): DataResponse {
+		return $this->handleErrorResponse(function () use ($collectiveId, $searchString): array {
 			$userId = $this->getUserId();
 			$collective = $this->collectiveService->getCollective($collectiveId, $userId);
-			$results = $this->indexedSearchService->searchCollective($collective, $filterString, 100);
+			$results = $this->indexedSearchService->searchCollective($collective, $searchString, 100);
 			$pages = [];
 			foreach ($results as $value) {
 				$pages[] = $this->service->find($collectiveId, $value['id'], $userId);
