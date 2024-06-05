@@ -34,3 +34,11 @@ export function pagesUrl(context, ...parts) {
 		? collectivesUrl('p', context.shareTokenParam, '_pages', ...parts)
 		: collectivesUrl(context.collectiveId, '_pages', ...parts)
 }
+
+/**
+ *
+ * @param {number} collectiveId collectiveId to search in
+ */
+export function contentSearchUrl(collectiveId) {
+	return collectivesUrl(collectiveId, '_pages/search')
+}

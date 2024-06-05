@@ -1,5 +1,5 @@
 import axios from '@nextcloud/axios'
-import { pagesUrl } from './urls.js'
+import { contentSearchUrl, pagesUrl } from './urls.js'
 
 /**
  * Get all pages in the given context (collective or public share)
@@ -8,6 +8,16 @@ import { pagesUrl } from './urls.js'
  */
 export function getPages(context) {
 	return axios.get(pagesUrl(context))
+}
+
+/**
+ * Perform index search on pages in given collective
+ *
+ * @param {number} collectiveId collective to search in
+ * @param {string} searchString string to search for
+ */
+export function contentSearchPages(collectiveId, searchString) {
+	return axios.get(contentSearchUrl(collectiveId), { params: { searchString } })
 }
 
 /**

@@ -127,7 +127,10 @@
 					<SkeletonLoading type="items" :count="3" />
 				</div>
 			</div>
-			<Draggable v-else>
+			<Draggable v-else
+				:list="subpages"
+				:parent-id="rootPage.id"
+				:disable-sorting="isFilteredview">
 				<SubpageList v-for="page in subpages"
 					:key="page.id"
 					:data-page-id="page.id"
@@ -162,9 +165,8 @@ import SkeletonLoading from './SkeletonLoading.vue'
 import { RecycleScroller } from 'vue-virtual-scroller'
 
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
-import { generateUrl } from '@nextcloud/router'
-import axios from '@nextcloud/axios'
 import debounce from 'debounce'
+import { contentSearchPages } from '../apis/collectives/pages.js'
 
 export default {
 	name: 'PageList',
@@ -271,8 +273,7 @@ export default {
 
 	watch: {
 		filterString() {
-			this.getContentFilteredPagesDebounced.clear()
-			this.getContentFilteredPagesDebounced.apply(this)
+			this.getContentFilteredPagesDebounced()
 		},
 	},
 
@@ -307,9 +308,8 @@ export default {
 		},
 		async getContentFilteredPages() {
 			this.loadingContentFilteredPages = true
-			const url = generateUrl(`/apps/collectives/_api/${this.currentCollective.id}/_pages/filter`)
 			const oldFilterString = this.filterString
-			this.contentFilteredPages = (await axios.get(url, { params: { filterString: this.filterString } })).data.data
+			this.contentFilteredPages = (await contentSearchPages(this.currentCollective.id, this.filterString)).data.data
 
 			// prevent showing old results
 			if (oldFilterString === this.filterString) {
@@ -324,12 +324,12 @@ export default {
 <style lang="scss" scoped>
 
 .scroller {
-	// NC header bar 50px; page list header bar 52px; landing page 48px; page trash 76px NcAppNavigationCaption 78px divided by 2 for multiple scrollers
+	// NC header bar 50px; page list header bar 52px; landing page 48px; page trash 76px; NcAppNavigationCaption 78px divided by 2 for multiple scrollers
 	max-height: calc((100vh - var(--header-height) - 52px - 48px - 76px - 78px * 2) / 2);
 }
 
 .fullscroller{
-	// NC header bar 50px; page list header bar 52px; landing page 48px; page trash 76px NcAppNavigationCaption 78px
+	// NC header bar 50px; page list header bar 52px; landing page 48px; page trash 76px; NcAppNavigationCaption 78px
 	max-height: calc(100vh - var(--header-height) - 52px - 48px - 76px - 78px);
 }
 
