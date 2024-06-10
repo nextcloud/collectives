@@ -150,6 +150,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.members-widget {
+	flex-grow: 1;
+}
+
 .members-widget-skeleton {
 	height: 44px;
 }
