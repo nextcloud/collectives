@@ -121,6 +121,7 @@ export default {
 			searchQuery: '',
 			searchResults: [],
 			isSearchLoading: false,
+			fetchSearchResultsDebounced: debounce(this.fetchSearchResults, 250),
 		}
 	},
 
@@ -157,12 +158,6 @@ export default {
 			this.searchQuery = ''
 			this.searchResults = []
 		},
-
-		debounceFetchSearchResults: debounce(function() {
-			if (this.isSearching) {
-				this.fetchSearchResults()
-			}
-		}, 250),
 
 		async fetchSearchResults() {
 			// Search for users, groups and teams
@@ -208,7 +203,9 @@ export default {
 
 			this.searchResults = []
 			this.isSearchLoading = true
-			this.debounceFetchSearchResults()
+			if (this.isSearching) {
+				this.fetchSearchResultsDebounced()
+			}
 		},
 	},
 }
