@@ -60,6 +60,12 @@ export default {
 		WidgetHeading,
 	},
 
+	data() {
+		return {
+			updateButtonsDebounced: debounce(this.updateButtons, 50),
+		}
+	},
+
 	computed: {
 		...mapGetters([
 			'currentCollective',
@@ -85,13 +91,13 @@ export default {
 
 	mounted() {
 		this.$nextTick(() => {
-			this.updateButtons()
+			this.updateButtonsDebounced()
 		})
-		this.$refs.pageslider.addEventListener('scroll', this.updateButtons)
+		this.$refs.pageslider.addEventListener('scroll', this.updateButtonsDebounced)
 	},
 
 	unmounted() {
-		this.$refs.pageslider.removeEventListener('scroll', this.updateButtons)
+		this.$refs.pageslider.removeEventListener('scroll', this.updateButtonsDebounced)
 	},
 
 	methods: {
@@ -109,11 +115,11 @@ export default {
 			}
 
 			if (this.showRecentPages) {
-				this.updateButtons()
+				this.updateButtonsDebounced()
 			}
 		},
 
-		updateButtons: debounce(function() {
+		updateButtons() {
 			const pagesliderEl = this.$refs.pageslider
 			if (!pagesliderEl) {
 				return
@@ -129,7 +135,7 @@ export default {
 			} else {
 				this.$refs.buttonslideright.classList.remove('hidden')
 			}
-		}, 50),
+		},
 
 		slideLeft() {
 			const pagesliderEl = this.$refs.pageslider
@@ -139,7 +145,7 @@ export default {
 				left: pagesliderEl.scrollLeft = newScrollLeft,
 				behavior: 'smooth',
 			})
-			this.updateButtons()
+			this.updateButtonsDebounced()
 		},
 
 		slideRight() {
@@ -151,7 +157,7 @@ export default {
 				left: pagesliderEl.scrollLeft = newScrollLeft,
 				behavior: 'smooth',
 			})
-			this.updateButtons()
+			this.updateButtonsDebounced()
 		},
 	},
 }

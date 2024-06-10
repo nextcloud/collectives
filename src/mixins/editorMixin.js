@@ -16,6 +16,7 @@ export default {
 			davContent: '',
 			editorContent: null,
 			pageInfoBarPage: null,
+			updateEditorContentDebounced: debounce(this.updateEditorContent, 200),
 		}
 	},
 
@@ -120,7 +121,7 @@ export default {
 						this.done('editor')
 					},
 					onUpdate: ({ markdown }) => {
-						this.updateEditorContent(markdown)
+						this.updateEditorContentDebounced(markdown)
 					},
 					onOutlineToggle: (visible) => {
 						this.toggleOutlineFromEditor(visible)
@@ -129,10 +130,10 @@ export default {
 				: null
 		},
 
-		updateEditorContent: debounce(function(markdown) {
+		updateEditorContent(markdown) {
 			this.editorContent = markdown
 			this.reader?.setContent(this.editorContent)
-		}, 200),
+		},
 
 		focusEditor() {
 			this.editor?.focus()

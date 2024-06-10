@@ -48,6 +48,7 @@ export default {
 	data() {
 		return {
 			showMembersCount: 3,
+			updateShowMembersCountDebounced: debounce(this.updateShowMembersCount, 50),
 		}
 	},
 
@@ -90,7 +91,7 @@ export default {
 	watch: {
 		'sortedMembers.length'() {
 			this.$nextTick(() => {
-				this.updateShowMembersCount()
+				this.updateShowMembersCountDebounced()
 			})
 		},
 	},
@@ -100,11 +101,11 @@ export default {
 	},
 
 	mounted() {
-		window.addEventListener('resize', this.updateShowMembersCount)
+		window.addEventListener('resize', this.updateShowMembersCountDebounced)
 	},
 
 	unmounted() {
-		window.removeEventListener('resize', this.updateShowMembersCount)
+		window.removeEventListener('resize', this.updateShowMembersCountDebounced)
 	},
 
 	methods: {
@@ -116,14 +117,14 @@ export default {
 			'setMembersCollectiveId',
 		]),
 
-		updateShowMembersCount: debounce(function() {
+		updateShowMembersCount() {
 			// How many avatars (44px width + 12px gap) fit? Substract one for the more button.
 			const membersWidth = this.$refs.members?.clientWidth
 			if (membersWidth) {
 				const maxMembers = Math.floor(membersWidth / 56) - 1
 				this.showMembersCount = Math.min(this.sortedMembers.length, maxMembers)
 			}
-		}, 50),
+		},
 
 		openCollectiveMembers() {
 			this.setMembersCollectiveId(this.currentCollective.id)
