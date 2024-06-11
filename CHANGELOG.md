@@ -1,5 +1,29 @@
 # Changelog
 
+## 2.12.0 - 2024.06.11
+
+### ✨New
+* 🔎 Add content search to filter in page list. (#1094)
+* 🔔 Track notify_push sessions, notify all active users. (#1118)
+
+### 🐛Fixes
+* 🗑️ Always return trashed collectives as simple list. (#1289)
+* 🔃 Don't update last edit user when changing sort order. (#1122)
+* 📱 Unbreak editing on mobile. (#1232, #1293)
+* 🚪 Show 'Leave collective' option conditionally. (Fixes: #1103, #1259)
+* 💄 Fix displaying user bubble in view mode.
+* 💄 Center empty content in home and notfound view.
+* 💄 Fix resizing members widget according to available space.
+* 🐛 Fix console errors about debounced methods in different contexts.
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 2.11.0 - 2024.05.16
 
 ### ✨New
