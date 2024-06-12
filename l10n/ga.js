@@ -7,6 +7,7 @@ OC.L10N.register(
     "Members" : "Baill",
     "No search results" : "Gan torthaí cuardaigh",
     "Remove" : "Bain",
+    "admin" : "riar",
     "moderator" : "modhnóir",
     "Promote to moderator" : "Cur chun cinn chuig modhnóir",
     "Loading…" : "Á lódáil…",
