@@ -176,6 +176,8 @@ OC.L10N.register(
     "Sorted by title" : "Поређано по наслову",
     "Sorted by recently changed" : "Поређано по времену измене",
     "Switch back to default sort order" : "Пређи на подразумевани редослед сортирања",
+    "Results in title" : "Резултати у наслову",
+    "Results in content" : "Резултати у садржају",
     "Hide templates" : "Сакриј шаблоне",
     "Show templates" : "Прикажи шаблоне",
     "Could not save page order for collective" : "Редослед страница за колектив није могао да се промени",
