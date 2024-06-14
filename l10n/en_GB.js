@@ -176,6 +176,8 @@ OC.L10N.register(
     "Sorted by title" : "Sorted by title",
     "Sorted by recently changed" : "Sorted by recently changed",
     "Switch back to default sort order" : "Switch back to default sort order",
+    "Results in title" : "Results in title",
+    "Results in content" : "Results in content",
     "Hide templates" : "Hide templates",
     "Show templates" : "Show templates",
     "Could not save page order for collective" : "Could not save page order for collective",

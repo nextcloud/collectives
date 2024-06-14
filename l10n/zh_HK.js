@@ -176,6 +176,8 @@ OC.L10N.register(
     "Sorted by title" : "按標題排序",
     "Sorted by recently changed" : "按最近更改排序",
     "Switch back to default sort order" : "切換回默認排序順序",
+    "Results in title" : "標題結果",
+    "Results in content" : "內容結果",
     "Hide templates" : "隱藏模板",
     "Show templates" : "顯示模板",
     "Could not save page order for collective" : "無法保存知識庫的頁面順序",
