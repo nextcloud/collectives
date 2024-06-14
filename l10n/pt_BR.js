@@ -176,6 +176,8 @@ OC.L10N.register(
     "Sorted by title" : "Ordenado por título",
     "Sorted by recently changed" : "Ordenado por alterado recentemente",
     "Switch back to default sort order" : "Voltar para a ordem de classificação padrão",
+    "Results in title" : "Resultados no título",
+    "Results in content" : "Resultados em conteúdo",
     "Hide templates" : "Esconder templates",
     "Show templates" : "Mostrar templates",
     "Could not save page order for collective" : "Não foi possível salvar a ordem das páginas para o coletivo",
