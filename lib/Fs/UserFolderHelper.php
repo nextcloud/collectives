@@ -21,6 +21,7 @@ use UnexpectedValueException;
 
 class UserFolderHelper {
 	private ?Folder $userCollectivesFolder = null;
+	private ?string $initializedUser = null;
 
 	public function __construct(
 		private IRootFolder $rootFolder,
@@ -102,8 +103,9 @@ class UserFolderHelper {
 	 * @throws NotFoundException
 	 */
 	public function get(string $userId): Folder {
-		if (!$this->userCollectivesFolder) {
+		if (!$this->userCollectivesFolder || $userId !== $this->initializedUser) {
 			$this->userCollectivesFolder = $this->initialize($userId);
+			$this->initializedUser = $userId;
 		}
 
 		return $this->userCollectivesFolder;
