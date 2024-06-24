@@ -84,7 +84,7 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 			$collectiveName = $pageReferenceInfo['collectiveName'];
 			try {
 				$collective = $this->collectiveService->findCollectiveByName($this->userId, $collectiveName);
-				if ($pageReferenceInfo['fileId']) {
+				if (isset($pageReferenceInfo['fileId'])) {
 					$page = $this->pageService->findByFileId($collective->getId(), $pageReferenceInfo['fileId'], $this->userId);
 				} else {
 					try {
