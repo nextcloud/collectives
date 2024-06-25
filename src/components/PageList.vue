@@ -272,6 +272,10 @@ export default {
 	},
 
 	watch: {
+		'currentCollective.id'() {
+			this.contentFilteredPages = []
+			this.getContentFilteredPagesDebounced()
+		},
 		filterString() {
 			this.getContentFilteredPagesDebounced()
 		},
@@ -307,6 +311,11 @@ export default {
 			})
 		},
 		async getContentFilteredPages() {
+			if (!this.filterString) {
+				this.contentFilteredPages = []
+				return
+			}
+
 			this.loadingContentFilteredPages = true
 			const oldFilterString = this.filterString
 			this.contentFilteredPages = (await contentSearchPages(this.currentCollective.id, this.filterString)).data.data
