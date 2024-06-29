@@ -19,6 +19,7 @@ OC.L10N.register(
     "Title" : "Título",
     "Deleted" : "Borrado",
     "Password" : "Clave",
+    "Add another link" : "Agregar otro enlace",
     "Advanced settings" : "Configuraciones avanzados",
     "Unshare" : "Dejar de compartir",
     "Download" : "Descargar",
