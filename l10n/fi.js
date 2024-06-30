@@ -11,6 +11,7 @@ OC.L10N.register(
     "Loading…" : "Ladataan…",
     "An error occurred while performing the search" : "Hakua suorittaessa tapahtui virhe",
     "Add groups" : "Lisää ryhmiä",
+    "Add teams" : "Lisää tiimejä",
     "Permissions" : "Oikeudet",
     "View" : "Näytä",
     "Edit" : "Muokkaa",
