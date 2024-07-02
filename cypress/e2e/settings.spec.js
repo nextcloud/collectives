@@ -53,6 +53,8 @@ describe('Settings', function() {
 			cy.get('nav.newFolderMenu > ul > li > form > input[type="text"], input[placeholder="New folder name"], input[placeholder="New folder"]')
 				.type(`${randomFolder}{enter}`)
 			cy.wait('@createFolder')
+			// Wait until new view of empty folder is loaded
+			cy.get('.file-picker .empty-content')
 
 			// Select new created folder
 			cy.intercept('POST', '**/collectives/api/v1.0/settings/user').as('setCollectivesFolder')
