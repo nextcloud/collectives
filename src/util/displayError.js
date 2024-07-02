@@ -7,7 +7,7 @@ import escapeHtml from 'escape-html'
  */
 function content(msg, details) {
 	return details
-		? `<div>${escapeHtml(msg)}</div><div>${escapeHtml(details)}</div>`
+		? `<div>${escapeHtml(msg)}:&nbsp;</div><div>${escapeHtml(details)}</div>`
 		: msg
 }
 
