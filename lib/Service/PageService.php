@@ -444,7 +444,7 @@ class PageService {
 
 		$this->initTrashBackend();
 		if (!$this->trashBackend) {
-			throw new NotPermittedException('Failed to list page trash. Trash is disabled.');
+			return [];
 		}
 
 		$trashNodes = $this->trashBackend->listTrashForCollective($this->userManager->get($userId), $collectiveId);
