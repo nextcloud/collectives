@@ -21,16 +21,16 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots to help explain your problem.
 
 **Server details:**
-- Collectives app version: [e.g. 2.8.2; see Nextcloud apps page]
-- Nextcloud version: [e.g. 26.0.1]
-- PHP Version: [e.g. 8.2]
+- Collectives app version: [e.g. 2.10.1; see Nextcloud apps page]
+- Nextcloud version: [e.g. 29.0.1]
+- PHP Version: [e.g. 8.3]
 - Database: [e.g. MariaDB 10.6]
 
 **Client details:**
  - OS: [e.g. Windows/macOS/Ubuntu]
  - Browser: [e.g. Firefox, Chrome]
- - Browser version: [e.g. 22]
- - Device: [e.g. iPhone6, desktop]
+ - Browser version: [e.g. 112]
+ - Device: [e.g. iPhone13, desktop]
 
 <details>
 <summary>Logs</summary>
