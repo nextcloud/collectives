@@ -106,7 +106,7 @@ describe('Pages', function() {
 		it('New page has template content', function() {
 			// Do some handstands to ensure that new page with editor is loaded before we edit the title
 			cy.intercept('POST', '**/_api/*/_pages/*').as('createPage')
-			if (['stable26', 'stable27'].includes(Cypress.env('ncVersion'))) {
+			if (['stable27'].includes(Cypress.env('ncVersion'))) {
 				cy.intercept('PUT', '**/apps/text/session/create').as('textCreateSession')
 			} else {
 				cy.intercept('PUT', '**/apps/text/session/*/create').as('textCreateSession')
@@ -133,7 +133,7 @@ describe('Pages', function() {
 		it('Shows the title in the enabled titleform and full path in browser title', function() {
 			// Do some handstands to ensure that new page with editor is loaded before we edit the title
 			cy.intercept('POST', '**/_api/*/_pages/*').as('createPage')
-			if (['stable26', 'stable27'].includes(Cypress.env('ncVersion'))) {
+			if (['stable27'].includes(Cypress.env('ncVersion'))) {
 				cy.intercept('PUT', '**/apps/text/session/create').as('textCreateSession')
 			} else {
 				cy.intercept('PUT', '**/apps/text/session/*/create').as('textCreateSession')

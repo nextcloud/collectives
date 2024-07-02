@@ -105,7 +105,7 @@ Cypress.Commands.add('setAppEnabled', (appName, value = true) => {
  */
 Cypress.Commands.add('enableDashboardWidget', (widgetName) => {
 	Cypress.log()
-	if (['stable26', 'stable27', 'stable28', 'stable29'].includes(Cypress.env('ncVersion'))) {
+	if (['stable27', 'stable28', 'stable29'].includes(Cypress.env('ncVersion'))) {
 		const url = `${Cypress.env('baseUrl')}/index.php/apps/dashboard/layout`
 		return axios.post(url,
 			{ layout: widgetName },

@@ -71,7 +71,7 @@ describe('Page details', function() {
 
 	describe('Displaying backlinks', function() {
 		it('Lists backlinks for a page', function() {
-			if (['stable26', 'stable27'].includes(Cypress.env('ncVersion'))) {
+			if (['stable27'].includes(Cypress.env('ncVersion'))) {
 				cy.intercept('PUT', '**/apps/text/session/create').as('textCreateSession')
 			} else {
 				cy.intercept('PUT', '**/apps/text/session/*/create').as('textCreateSession')
