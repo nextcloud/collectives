@@ -4,12 +4,12 @@
     "license": "AGPL-3.0-or-later",
     "config": {
         "platform": {
-            "php": "8.0"
+            "php": "8.0.2"
         },
         "sort-packages": true
     },
     "require": {
-        "php": ">=8.0",
+        "php": ">=8.0.2",
         "ext-json": "*",
         "ext-pdo": "*",
         "ext-pdo_sqlite": "*",
@@ -17,13 +17,13 @@
     },
     "require-dev": {
         "ext-dom": "*",
-        "behat/behat": "^3.8",
-        "guzzlehttp/guzzle": "^7.7",
-        "nextcloud/coding-standard": "^1.1.1",
-        "nextcloud/ocp": "dev-stable26",
-        "phpunit/phpunit": "^9.5",
-        "psalm/phar": "^5.4",
-        "rector/rector": "^1.0.1"
+        "behat/behat": "^3.14",
+        "guzzlehttp/guzzle": "^7.8",
+        "nextcloud/coding-standard": "^1.2.1",
+        "nextcloud/ocp": "dev-stable27",
+        "phpunit/phpunit": "^9.6",
+        "psalm/phar": "^5.25",
+        "rector/rector": "^1.2.0"
     },
     "scripts": {
       "lint": "find . -name \\*.php -not -path './vendor/*' -exec php -l \"{}\" \\;",
