@@ -1,4 +1,6 @@
-# Sample workflow for building and deploying a Hugo site to GitHub Pages
+# SPDX-FileCopyrightText: 2021-2024 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: MIT
+
 name: Deploy documentation to Github Pages
 
 on:

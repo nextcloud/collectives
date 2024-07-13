@@ -2,6 +2,9 @@
 #
 # https://github.com/nextcloud/.github
 # https://docs.github.com/en/actions/learn-github-actions/sharing-workflows-with-your-organization
+#
+# SPDX-FileCopyrightText: 2022-2024 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: MIT
 
 name: Update nextcloud/ocp
 
@@ -81,12 +84,12 @@ jobs:
         uses: peter-evans/create-pull-request@c5a7806660adbe173f04e3e038b0ccdcd758773c # v6.1.0
         with:
           token: ${{ secrets.COMMAND_BOT_PAT }}
-          commit-message: "chore(dev-deps): Bump nextcloud/ocp package"
+          commit-message: 'chore(dev-deps): Bump nextcloud/ocp package'
           committer: GitHub <noreply@github.com>
           author: nextcloud-command <nextcloud-command@users.noreply.github.com>
           signoff: true
-          branch: automated/noid/${{ matrix.branches }}-update-nextcloud-ocp
-          title: "[${{ matrix.branches }}] Update nextcloud/ocp dependency"
+          branch: 'automated/noid/${{ matrix.branches }}-update-nextcloud-ocp'
+          title: '[${{ matrix.branches }}] Update nextcloud/ocp dependency'
           body: |
             Auto-generated update of [nextcloud/ocp](https://github.com/nextcloud-deps/ocp/) dependency
           labels: |
