@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2023-2024 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: MIT
+
 name: Cypress
 
 on: pull_request
@@ -120,7 +123,7 @@ jobs:
           node-version: ${{ steps.versions.outputs.nodeVersion }}
 
       - name: Set up npm ${{ steps.versions.outputs.npmVersion }}
-        run: npm i -g npm@"${{ steps.versions.outputs.npmVersion }}"
+        run: npm i -g 'npm@${{ steps.versions.outputs.npmVersion }}'
 
       - name: Install node dependencies & build app
         working-directory: apps/${{ env.APP_NAME }}
@@ -177,7 +180,7 @@ jobs:
           node-version: ${{ needs.init.outputs.nodeVersion }}
 
       - name: Set up npm ${{ needs.init.outputs.npmVersion }}
-        run: npm i -g npm@"${{ needs.init.outputs.npmVersion }}"
+        run: npm i -g 'npm@${{ needs.init.outputs.npmVersion }}'
 
       - name: Set up php ${{ matrix.php-versions }}
         uses: shivammathur/setup-php@c541c155eee45413f5b09a52248675b1a2575231 # v2
