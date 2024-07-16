@@ -210,6 +210,7 @@ class CollectiveServiceTest extends TestCase {
 			'canShare' => true,
 			'shareToken' => null,
 			'isPageShare' => false,
+			'sharePageId' => 0,
 			'shareEditable' => false,
 			'userPageOrder' => 0,
 			'userShowRecentPages' => true,

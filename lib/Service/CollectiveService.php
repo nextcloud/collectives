@@ -65,6 +65,7 @@ class CollectiveService extends CollectiveServiceBase {
 			if ($collective->getId() === $share->getCollectiveId()) {
 				$collective->setShareToken($share->getToken());
 				$collective->setIsPageShare($share->getPageId() !== 0);
+				$collective->setSharePageId($share->getPageId());
 				$collective->setShareEditable($share->getEditable());
 			} else {
 				throw new NotFoundException('Share token does not match collective.');
@@ -122,6 +123,28 @@ class CollectiveService extends CollectiveServiceBase {
 			throw new NotFoundException('Unable to find a collective from its name');
 		}
 		return end($collectives);
+	}
+
+	/**
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function findCollectiveByShare(string $shareToken): Collective {
+		if (null === $share = $this->shareService->findShareByToken($shareToken, false)) {
+			throw new NotFoundException('Unable to find a collective from its share token');
+		}
+
+		if (null === $collective = $this->collectiveMapper->findByIdAndUser($share->getCollectiveId())) {
+			throw new NotFoundException('Unable to find a collective from its share token');
+		}
+
+		$circle = $this->circleHelper->getCircle($collective->getCircleId(), null, true);
+		$collective->setName($circle->getSanitizedName());
+		$collective->setShareToken($share->getToken());
+		$collective->setIsPageShare($share->getPageId() !== 0);
+		$collective->setSharePageId($share->getPageId());
+		return $collective;
 	}
 
 	public function getCollectiveNameWithEmoji(Collective $collective): string {

@@ -1,5 +1,9 @@
 <template>
 	<NcContent app-name="collectives">
+		<input v-if="isPublic"
+			id="sharingToken"
+			type="hidden"
+			:value="shareTokenParam">
 		<Navigation v-if="!printView" />
 		<router-view />
 		<PageSidebar v-if="currentCollective && currentPage" />
@@ -38,6 +42,7 @@ export default {
 			'currentCollective',
 			'currentPage',
 			'isPublic',
+			'shareTokenParam',
 			'showing',
 			'settingsCollective',
 		]),
