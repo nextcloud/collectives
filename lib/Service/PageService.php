@@ -497,8 +497,10 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function findByPath(int $collectiveId, string $path, string $userId): PageInfo {
-		$collectiveFolder = $this->getCollectiveFolder($collectiveId, $userId);
+	public function findByPath(int $collectiveId, string $path, string $userId, ?int $parentId = null): PageInfo {
+		$collectiveFolder = $parentId
+			? $this->getFolder($collectiveId, $parentId, $userId)
+			: $this->getCollectiveFolder($collectiveId, $userId);
 		$landingPageId = $this->getIndexPageFile($collectiveFolder)->getId();
 
 		if ($path === '' || $path === '/') {
@@ -531,8 +533,10 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function findByFileId(int $collectiveId, int $fileId, string $userId): PageInfo {
-		$collectiveFolder = $this->getCollectiveFolder($collectiveId, $userId);
+	public function findByFileId(int $collectiveId, int $fileId, string $userId, ?int $parentId = null): PageInfo {
+		$collectiveFolder = $parentId
+			? $this->getFolder($collectiveId, $parentId, $userId)
+			: $this->getCollectiveFolder($collectiveId, $userId);
 		$pageFile = $collectiveFolder->getById($fileId);
 		if (isset($pageFile[0]) && $pageFile[0] instanceof File) {
 			$pageFile = $pageFile[0];

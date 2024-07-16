@@ -14,9 +14,7 @@ use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\PageService;
-use OCA\Collectives\Service\SharePageService;
 use OCP\Collaboration\Reference\ADiscoverableReferenceProvider;
-use OCP\Collaboration\Reference\IPublicReferenceProvider;
 use OCP\Collaboration\Reference\IReference;
 use OCP\Collaboration\Reference\ISearchableReferenceProvider;
 use OCP\Collaboration\Reference\Reference;
@@ -25,13 +23,12 @@ use OCP\IL10N;
 use OCP\IURLGenerator;
 use Throwable;
 
-class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider implements ISearchableReferenceProvider, IPublicReferenceProvider {
+class SearchablePageReferenceProvider29 extends ADiscoverableReferenceProvider implements ISearchableReferenceProvider {
 	private const RICH_OBJECT_TYPE = Application::APP_NAME . '_page';
 
 	public function __construct(
 		private CollectiveService $collectiveService,
 		private PageService $pageService,
-		private SharePageService $sharePageService,
 		private IL10N $l10n,
 		private IURLGenerator $urlGenerator,
 		private IDateTimeFormatter $dateTimeFormatter,
@@ -118,32 +115,19 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 	/**
 	 * @throws NotFoundException
 	 */
-	private function getCollective(string $collectiveName, ?string $sharingToken): Collective {
-		if ($sharingToken) {
-			// TODO: Check if share is password protected; if yes, then check in session if authenticated
-			return $this->collectiveService->findCollectiveByShare($sharingToken);
-		}
-
+	private function getCollective(string $collectiveName): Collective {
 		return $this->collectiveService->findCollectiveByName($this->userId, $collectiveName);
 	}
 
 	/**
 	 * @throws NotFoundException
 	 */
-	private function getPage(Collective $collective, array $pageReferenceInfo, bool $public): PageInfo {
-		if ($public && !$collective->getShareToken()) {
-			throw new NotFoundException('Collective share token is missing');
-		}
-
+	private function getPage(Collective $collective, array $pageReferenceInfo): PageInfo {
 		if (isset($pageReferenceInfo['fileId'])) {
-			$page = $public
-				? $this->sharePageService->findSharePageById($collective->getShareToken(), $pageReferenceInfo['fileId'])
-				: $this->pageService->findByFileId($collective->getId(), $pageReferenceInfo['fileId'], $this->userId);
+			$page = $this->pageService->findByFileId($collective->getId(), $pageReferenceInfo['fileId'], $this->userId);
 		} else {
 			try {
-				$page = $public
-					? $this->sharePageService->findSharePageByPath($collective->getShareToken(), $pageReferenceInfo['pagePath'])
-					: $this->pageService->findByPath($collective->getId(), $pageReferenceInfo['pagePath'], $this->userId);
+				$page = $this->pageService->findByPath($collective->getId(), $pageReferenceInfo['pagePath'], $this->userId);
 			} catch (NotFoundException) {
 				$pathInfo = pathinfo($pageReferenceInfo['pagePath']);
 				if (!$pathInfo || !array_key_exists('extension', $pathInfo)) {
@@ -152,14 +136,10 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 				if ('.' . $pathInfo['extension'] === PageInfo::SUFFIX) {
 					if ($pathInfo['filename'] === PageInfo::INDEX_PAGE_TITLE) {
 						// try to find page by stripping `/Readme.md`
-						$page = $public
-							? $this->sharePageService->findSharePageByPath($collective->getShareToken(), $pathInfo['dirname'])
-							: $this->pageService->findByPath($collective->getId(), $pathInfo['dirname'], $this->userId);
+						$page = $this->pageService->findByPath($collective->getId(), $pathInfo['dirname'], $this->userId);
 					} else {
 						// try to find page by stripping `.md`
-						$page = $public
-							? $this->sharePageService->findSharePageByPath($collective->getShareToken(), $pathInfo['filename'])
-							: $this->pageService->findByPath($collective->getId(), $pathInfo['filename'], $this->userId);
+						$page = $this->pageService->findByPath($collective->getId(), $pathInfo['filename'], $this->userId);
 					}
 				} else {
 					throw new NotFoundException('Pathinfo for page path is incomplete');
@@ -170,7 +150,7 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 		return $page;
 	}
 
-	private function resolve(string $referenceText, bool $public = false, string $sharingToken = ''): ?IReference {
+	private function resolve(string $referenceText): ?IReference {
 		if (!$this->matchReference($referenceText)) {
 			return null;
 		}
@@ -183,13 +163,9 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 
 		$collectiveName = $pageReferenceInfo['collectiveName'];
 
-		if ($public && !$sharingToken) {
-			// fallback to opengraph for public lookups without share token
-			return $this->linkReferenceProvider->resolveReference($referenceText);
-		}
 		try {
-			$collective = $this->getCollective($collectiveName, $sharingToken);
-			$page = $this->getPage($collective, $pageReferenceInfo, $public);
+			$collective = $this->getCollective($collectiveName);
+			$page = $this->getPage($collective, $pageReferenceInfo);
 		} catch (Exception | Throwable) {
 			// fallback to opengraph if it matches, but somehow we can't resolve
 			return $this->linkReferenceProvider->resolveReference($referenceText);
@@ -198,7 +174,7 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 		$pageReferenceInfo['collective'] = $collective;
 		$pageReferenceInfo['page'] = $page;
 
-		$collectivesLink = $this->urlGenerator->linkToRouteAbsolute('collectives.start.index') . ($public ? 'p/' . $sharingToken . '/' : '');
+		$collectivesLink = $this->urlGenerator->linkToRouteAbsolute('collectives.start.index');
 		$link = $collectivesLink . $this->pageService->getPageLink($collective->getName(), $page);
 		$reference = new Reference($link);
 		$pageEmoji = $page->getEmoji();
@@ -237,10 +213,6 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 		return $this->resolve($referenceText);
 	}
 
-	public function resolveReferencePublic(string $referenceText, string $sharingToken): ?IReference {
-		return $this->resolve($referenceText, true, $sharingToken);
-	}
-
 	public function getPagePathFromDirectLink(string $url): ?array {
 		return $this->matchUrl($url);
 	}
@@ -251,10 +223,6 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 
 	public function getCacheKey(string $referenceId): ?string {
 		return $this->userId ?? '';
-	}
-
-	public function getCacheKeyPublic(string $referenceId, string $sharingToken): ?string {
-		return $sharingToken;
 	}
 
 	public function invalidateUserCache(string $userId): void {

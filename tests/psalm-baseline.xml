@@ -35,8 +35,7 @@
   </file>
   <file src="lib/Reference/SearchablePageReferenceProvider.php">
     <UndefinedClass>
-      <code><![CDATA[ADiscoverableReferenceProvider]]></code>
-      <code><![CDATA[ISearchableReferenceProvider]]></code>
+      <code><![CDATA[IPublicReferenceProvider]]></code>
     </UndefinedClass>
   </file>
   <file src="lib/Service/CollectiveService.php">

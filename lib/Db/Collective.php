@@ -58,10 +58,11 @@ class Collective extends Entity implements JsonSerializable {
 	protected ?int $trashTimestamp = null;
 	protected int $pageMode = self::defaultPageMode;
 	/** transient attributes, not persisted in database  */
-	protected string $name;
+	protected string $name = '';
 	protected int $level = Member::LEVEL_MEMBER;
 	protected ?string $shareToken = null;
 	protected bool $isPageShare = false;
+	protected int $sharePageId = 0;
 	protected bool $shareEditable = false;
 	protected int $userPageOrder = Collective::defaultPageOrder;
 	protected bool $userShowRecentPages = Collective::defaultShowRecentPages;
@@ -158,6 +159,14 @@ class Collective extends Entity implements JsonSerializable {
 		$this->isPageShare = $isPageShare;
 	}
 
+	public function getSharePageId(): int {
+		return $this->sharePageId;
+	}
+
+	public function setSharePageId(int $sharePageId): void {
+		$this->sharePageId = $sharePageId;
+	}
+
 	public function getShareEditable(): bool {
 		return $this->shareEditable;
 	}
@@ -251,6 +260,7 @@ class Collective extends Entity implements JsonSerializable {
 			'canShare' => $this->canShare(),
 			'shareToken' => $this->shareToken,
 			'isPageShare' => $this->isPageShare,
+			'sharePageId' => $this->sharePageId,
 			'shareEditable' => $this->canEdit() && $this->shareEditable,
 			'userPageOrder' => $this->userPageOrder,
 			'userShowRecentPages' => $this->userShowRecentPages,

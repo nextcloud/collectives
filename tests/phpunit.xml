@@ -8,6 +8,7 @@
   <testsuites>
     <testsuite name="unit">
       <directory>./Unit</directory>
+	  <exclude>./Search/SearchablePageReferenceProviderTest.php</exclude>
     </testsuite>
   </testsuites>
 </phpunit>

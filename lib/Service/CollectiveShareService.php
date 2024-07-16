@@ -120,11 +120,15 @@ class CollectiveShareService {
 		return $collectiveShare;
 	}
 
-	public function findShareByToken(string $token): ?CollectiveShare {
+	public function findShareByToken(string $token, bool $getPermissionInfo = true): ?CollectiveShare {
 		try {
 			$collectiveShare = $this->collectiveShareMapper->findOneByToken($token);
 		} catch (DoesNotExistException | MultipleObjectsReturnedException | Exception) {
 			return null;
+		}
+
+		if (!$getPermissionInfo) {
+			return $collectiveShare;
 		}
 
 		try {
