@@ -178,10 +178,4 @@ export default {
 	}
 
 }
-
-/* Fix for anchor scroll and sticky header */
-.splitpanes__pane-details {
-	scroll-padding-top: 60px;
-	scroll-behavior: smooth;
-}
 </style>

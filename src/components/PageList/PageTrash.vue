@@ -214,11 +214,9 @@ export default {
 
 .page-trash {
 	width: 100%;
-	position: sticky;
-	bottom: 0;
 	margin-top: auto;
 	background-color: var(--color-main-background);
-	padding: 20px 4px 4px 4px;
+	padding: 20px 2px 4px 4px;
 
 	.page-trash-button {
 		width: calc(100% - 3px);
