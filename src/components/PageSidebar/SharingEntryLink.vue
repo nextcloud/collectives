@@ -591,7 +591,6 @@ export default {
 		display: flex;
 		align-items: center;
 		width: 100%;
-		min-height: 44px;
 	}
 
 	&__summary {

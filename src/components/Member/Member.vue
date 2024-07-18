@@ -15,7 +15,7 @@
 			:disable-menu="true"
 			:disable-tooltip="true"
 			:show-user-status="false"
-			:size="44" />
+			:size="avatarSize" />
 
 		<!-- Data -->
 		<div class="member-row__user-descriptor">
@@ -199,6 +199,9 @@ export default {
 				? t('collectives', 'Demote to moderator')
 				: t('collectives', 'Promote to moderator')
 		},
+		avatarSize() {
+			return parseInt(window.getComputedStyle(document.body).getPropertyValue('--default-clickable-area'))
+		},
 	},
 
 	methods: {
@@ -255,8 +258,8 @@ export default {
 	display: flex;
 	align-items: center;
 	margin: 4px 0;
-	border-radius: var(--border-radius-pill);
-	height: 56px;
+	border-radius: var(--border-radius-element, var(--border-radius-large));
+	height: calc(var(--default-clickable-area) + 12px);
 	padding: 0 4px;
 
 	&__user-descriptor {

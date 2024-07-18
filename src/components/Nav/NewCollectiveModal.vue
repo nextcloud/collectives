@@ -357,12 +357,17 @@ export default {
 .modal-collective-name {
 	display: flex;
 	flex-direction: row;
+	gap: 4px;
 	align-items: center;
+	height: calc(var(--default-clickable-area) + 12px);
 
 	.button-emoji {
 		padding: 0;
-		width: 44px;
-		font-size: 20px;
+		font-size: 1.2em;
+	}
+
+	.collective-name {
+		padding-block-end: 6px;
 	}
 
 	.circle-selector {

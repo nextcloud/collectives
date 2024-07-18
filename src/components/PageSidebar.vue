@@ -3,9 +3,10 @@
 		:name="title"
 		:active.sync="active"
 		:open.sync="open"
+		:no-toggle="isMobile"
 		:toggle-classes="{
 			'page-sidebar-button': true,
-			'page-sidebar-button_mobile': isMobile,
+			'pre-nc30': isPreNc30,
 		}"
 		@close="close">
 		<NcAppSidebarTab id="attachments"
@@ -114,6 +115,11 @@ export default {
 				}
 			},
 		},
+
+		// TODO: remove when we stop supporting NC < 30
+		isPreNc30() {
+			return window.getComputedStyle(document.body).getPropertyValue('--default-clickable-area') === '44px'
+		},
 	},
 
 	methods: {
@@ -129,3 +135,9 @@ export default {
 	},
 }
 </script>
+
+<style lang="scss">
+.page-sidebar-button.pre-nc30 {
+	inset-block-start: 2px;
+}
+</style>

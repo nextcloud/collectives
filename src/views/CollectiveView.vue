@@ -54,7 +54,7 @@ export default {
 // Align details toggle button with page title bar (only relevant on mobile)
 button.app-details-toggle {
 	z-index: 10023 !important;
-	top: 61px !important;
+	top: 58px !important;
 	position: fixed !important;
 }
 </style>

@@ -68,7 +68,7 @@
 					<li v-for="(page, index) in subpages"
 						:id="`picker-page-${page.id}`"
 						:key="page.id">
-						<a :class="{'self': page.id === pageId}"
+						<a :class="{ 'self': page.id === pageId }"
 							:href="page.id === pageId ? false : '#'"
 							class="picker-item"
 							@click="onClickPage(page)">
@@ -429,6 +429,7 @@ export default {
 	color: var(--color-text-maxcontrast);
 	display: inline-flex;
 	padding-right: 0;
+	padding-bottom: 8px;
 
 	div {
 		display: flex;
@@ -442,6 +443,9 @@ export default {
 
 			&.home {
 				padding-left: 0;
+				// Remove padding, add margin to not make the button bigger
+				padding-right: 0;
+				margin-right: var(--button-padding);
 				font-weight: bold;
 			}
 		}
@@ -476,6 +480,9 @@ export default {
 
 	li a {
 		display: flex;
+		height: var(--default-clickable-area);
+		border-radius: var(--border-radius-element, var(--border-radius-large));
+		margin: 4px 0;
 
 		&:not(:last-child) {
 			border-bottom: 1px solid var(--color-border);
@@ -503,12 +510,12 @@ export default {
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		width: 44px;
+		width: var(--default-clickable-area);
 	}
 
 	.picker-title {
-		padding: 14px 14px 14px 0;
 		flex: 1;
+		align-content: center;
 		overflow: hidden;
 		white-space: nowrap;
 		text-overflow: ellipsis;

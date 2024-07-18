@@ -218,7 +218,7 @@ export default {
 	bottom: 0;
 	margin-top: auto;
 	background-color: var(--color-main-background);
-	padding: 20px 4px 12px 4px;
+	padding: 20px 4px 4px 4px;
 
 	.page-trash-button {
 		width: calc(100% - 3px);
@@ -257,6 +257,7 @@ table {
 
 tr {
 	display: flex;
+	border-radius: var(--border-radius-element, var(--border-radius-large));
 
 	&:not(:last-child) {
 		border-bottom: 1px solid var(--color-border);
@@ -265,16 +266,17 @@ tr {
 
 th, td {
 	display: flex;
-	height: 55px;
+	height: var(--default-clickable-area);
 	align-items: center;
 	margin: 0 14px;
+	padding: 2px 0;
 }
 
 th {
 	color: var(--color-text-maxcontrast);
 
 	&.header-title {
-		padding-left: 44px;
+		padding-left: var(--default-clickable-area);
 		flex: 1 1 auto;
 	}
 
@@ -290,13 +292,17 @@ td {
 		.item-icon {
 			display: flex;
 			justify-content: center;
-			width: 44px;
+			width: var(--default-clickable-area);
 		}
 
 		.item-title {
 			white-space: normal;
 		}
 
+	}
+
+	&.actions {
+		gap: 4px;
 	}
 
 	&.timestamp {

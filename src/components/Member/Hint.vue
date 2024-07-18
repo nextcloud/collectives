@@ -20,7 +20,7 @@ export default {
 <style lang="scss" scoped>
 .app-navigation-hint {
 	color: var(--color-text-maxcontrast);
-	line-height: 44px;
+	line-height: var(--default-clickable-area);
 	list-style-type:none;
 	white-space: nowrap;
 	text-overflow: ellipsis;

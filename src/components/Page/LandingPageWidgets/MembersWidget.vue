@@ -13,13 +13,13 @@
 				:icon-class="iconClass(member)"
 				:disable-menu="true"
 				:tooltip-message="member.displayName"
-				:size="44" />
+				:size="avatarSize" />
 			<NcButton type="secondary"
 				:title="t('collectives', 'Show members')"
 				:aria-label="t('collectives', 'Show all members of the collective')"
 				@click="openCollectiveMembers()">
 				<template #icon>
-					<DotsHorizontalIcon :size="20" />
+					<DotsHorizontalIcon :size="16" />
 				</template>
 			</NcButton>
 		</div>
@@ -81,6 +81,10 @@ export default {
 			}
 		},
 
+		avatarSize() {
+			return parseInt(window.getComputedStyle(document.body).getPropertyValue('--default-clickable-area'))
+		},
+
 		iconClass() {
 			return function(member) {
 				return this.isNoUser(member) ? 'icon-group-white' : null
@@ -118,10 +122,12 @@ export default {
 		]),
 
 		updateShowMembersCount() {
-			// How many avatars (44px width + 12px gap) fit? Substract one for the more button.
+			// How many avatars (default-clickable-area + 12px gap) fit? Subtract one for the more button.
 			const membersWidth = this.$refs.members?.clientWidth
+			const defaultClickableArea = parseInt(window.getComputedStyle(document.body).getPropertyValue('--default-clickable-area'))
+			const avatarHeight = defaultClickableArea + 12
 			if (membersWidth) {
-				const maxMembers = Math.floor(membersWidth / 56) - 1
+				const maxMembers = Math.floor(membersWidth / avatarHeight) - 1
 				this.showMembersCount = Math.min(this.sortedMembers.length, maxMembers)
 			}
 		},
@@ -155,7 +161,7 @@ export default {
 }
 
 .members-widget-skeleton {
-	height: 44px;
+	height: var(--default-clickable-area);
 }
 
 .members-widget-members {

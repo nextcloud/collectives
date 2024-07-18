@@ -174,6 +174,6 @@ export default {
 
 <style lang="scss" scoped>
 .page-content-skeleton {
-	padding-top: 44px;
+	padding-top: var(--default-clickable-area);
 }
 </style>

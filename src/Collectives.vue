@@ -185,15 +185,3 @@ export default {
 	scroll-behavior: smooth;
 }
 </style>
-
-<style lang="scss" scoped>
-:deep(.page-sidebar-button) {
-	// Align sidebar toggle button with page title bar
-	margin-top: 2px;
-}
-
-:deep(.page-sidebar-button_mobile) {
-	// Hide on mobile (moved to page actions instead there to save horizontal space
-	display: none;
-}
-</style>

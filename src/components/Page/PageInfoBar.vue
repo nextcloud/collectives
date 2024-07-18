@@ -38,7 +38,7 @@ export default {
 	z-index: 10021;
 	background-color: var(--color-main-background-translucent);
 	backdrop-filter: var(--background-blur);
-	height: 44px;
+	height: var(--default-clickable-area);
 	padding: 3px 8px 3px 14px;
 	display: flex;
 	flex-wrap: nowrap;
