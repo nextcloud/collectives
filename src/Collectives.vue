@@ -179,11 +179,6 @@ export default {
 
 }
 
-/* Align toggle with page list header bar */
-.app-navigation .app-navigation-toggle {
-	top: 0 !important;
-}
-
 /* Fix for anchor scroll and sticky header */
 .splitpanes__pane-details {
 	scroll-padding-top: 60px;
