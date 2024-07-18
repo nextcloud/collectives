@@ -341,34 +341,34 @@ export default {
 :root {
 	--page-list-header-height: calc(var(--default-clickable-area) + 14px);
 	--landing-page-height: calc(var(--default-clickable-area) + 8px);
-	--page-trash-height: calc(var(--default-clickable-area) + 32px);
+	--page-trash-height: calc(var(--default-clickable-area) + 24px);
+	--page-list-height: calc(100vh - var(--header-height) - var(--page-list-header-height) - var(--landing-page-height) - var(--page-trash-height));
+	--navigation-caption-height: calc(var(--default-clickable-area) + 4px + (var(--default-clickable-area) / 2));
 }
 </style>
 
 <style lang="scss" scoped>
 .scroller {
 	// NC header bar 50px; page list header bar; landing page; page trash; NcAppNavigationCaption 78px divided by 2 for multiple scrollers
-	max-height: calc((100vh - var(--header-height) - var(--page-list-header-height) - var(--landing-page-height) - var(--page-trash-height) - 78px * 2) / 2);
+	max-height: calc((var(--page-list-height) - var(--navigation-caption-height) * 2) / 2);
 }
 
 .fullscroller{
 	// NC header bar 50px; page list header bar; landing page; page trash; NcAppNavigationCaption 78px
-	max-height: calc(100vh - var(--header-height) - var(--page-list-header-height) - var(--landing-page-height) - var(--page-trash-height) - 78px);
+	max-height: calc(var(--page-list-height) - var(--navigation-caption-height));
 }
 
 .app-content-list {
 	// nextcloud-vue component sets `max-height: unset` on mobile.
 	// Overwrite this to fix stickyness of header and rootpage.
-	max-height: calc(100vh - var(--default-clickable-area) - 8px);
+	max-height: 100%;
 }
 
 .page-list-headerbar {
 	display: flex;
 	flex-direction: row;
 	gap: 2px;
-	position: sticky;
-	top: 0;
-	z-index: 2;
+	min-height: var(--page-list-header-height);
 	background-color: var(--color-main-background);
 	align-items: center;
 	justify-content: space-between;
@@ -399,12 +399,14 @@ li.toggle-button.selected {
 }
 
 .page-list {
+	flex-grow: 1;
+	overflow: scroll;
 	padding: 0 4px;
 }
 
 .page-list-root-page {
 	position: sticky;
-	top: calc(var(--default-clickable-area) + 12px);
+	top: 0;
 	z-index: 1;
 	background-color: var(--color-main-background);
 	margin-block-end: 8px;
