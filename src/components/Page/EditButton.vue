@@ -4,6 +4,7 @@
 		<NcButton :title="description"
 			:aria-label="description"
 			class="titleform-button"
+			:class="{ 'mobile': mobile }"
 			type="primary"
 			@click="handleClick()">
 			<template #icon>
@@ -79,3 +80,11 @@ export default {
 	},
 }
 </script>
+
+<style lang="scss" scoped>
+button.titleform-button {
+	&.mobile {
+		padding: 0;
+	}
+}
+</style>

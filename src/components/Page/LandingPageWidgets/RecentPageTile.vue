@@ -59,7 +59,7 @@ export default {
 	padding: 12px;
 
 	scroll-snap-align: start;
-	border-radius: var(--border-radius-rounded);
+	border-radius: var(--border-radius-large);
 
 	&:hover {
 		background-color: var(--color-background-hover);
@@ -75,7 +75,7 @@ export default {
 		align-content: center;
 		justify-content: center;
 		background-color: var(--color-primary-element-light);
-		border-radius: var(--border-radius-rounded);
+		border-radius: var(--border-radius-large);
 	}
 
 	&__title {

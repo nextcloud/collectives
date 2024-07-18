@@ -249,7 +249,7 @@ export default {
 .page-title {
 	position: sticky;
 	top: 0;
-	padding: 8px 8px 2px 8px;
+	padding: 0 8px 2px 8px;
 	display: flex;
 	align-items: center;
 	background-color: var(--color-main-background);
@@ -258,23 +258,14 @@ export default {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		font-size: 24px;
-		min-width: 44px;
+		min-width: var(--default-clickable-area);
 		height: 43px;
 		opacity: 0.8;
 
 		.button-emoji-page {
-			width: 44px;
+			width: var(--default-clickable-area);
 			padding: 0px 4px;
-			font-size: 24px;
-
-			&.mobile {
-				font-size: 25px;
-			}
-		}
-
-		&.mobile {
-			font-size: 25px;
+			font-size: 1.5em;
 		}
 	}
 
@@ -284,10 +275,10 @@ export default {
 	}
 }
 
-/* Leave space for page list toggle on small screens (editor 670px + toggle 44px) */
-@media only screen and (max-width: calc(670px + 44px)) {
+/* Leave space for page list toggle on small screens (editor 670px + toggle button) */
+@media screen and (max-width: calc(670px + 44px)) {
 	.page-title {
-		padding-left: 40px;
+		padding-left: calc(var(--default-clickable-area) + 4px);
 	}
 }
 

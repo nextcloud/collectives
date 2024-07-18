@@ -361,16 +361,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.button-emoji {
-	font-size: 20px;
+button.button-emoji {
+	padding: 0;
+	font-size: 1.2em;
 }
 
 .collective-name {
 	display: flex;
+	gap: 4px;
+	align-items: center;
+	height: calc(var(--default-clickable-area) + 12px);
 
 	.collective-name-input {
 		display: grid;
 		align-items: center;
+		padding-block-end: 6px;
 	}
 }
 

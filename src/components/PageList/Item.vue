@@ -355,7 +355,7 @@ export default {
 
 .app-content-list-item {
 	box-sizing: border-box;
-	height: 44px;
+	height: var(--default-clickable-area);
 	// border-bottom: 4px solid var(--color-main-background);
 	margin-bottom: 4px;
 
@@ -420,7 +420,7 @@ export default {
 		justify-content: center;
 		align-items: center;
 		// Emojis are too big with default 1.5em
-		font-size: 1.3em;
+		font-size: 1.2em;
 
 		.item-icon-emoji {
 			cursor: pointer;
@@ -468,6 +468,7 @@ export default {
 .page-list-item-actions {
 	visibility: hidden;
 	display: flex;
+	gap: 2px;
 	position: absolute;
 	top: 0;
 	right: 0;

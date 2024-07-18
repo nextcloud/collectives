@@ -99,7 +99,7 @@
 					class="scroller"
 					:class="{ fullscroller: !loadingContentFilteredPages && contentFilteredPages.length <= 0 }"
 					:items="filteredPages"
-					:item-size="44"
+					:item-size="itemSize"
 					key-field="id">
 					<SubpageList :key="item.id"
 						:data-page-id="item.id"
@@ -114,7 +114,7 @@
 					class="scroller contentFiltered"
 					:class="{ fullscroller: filteredPages.length <= 0 }"
 					:items="contentFilteredPages"
-					:item-size="44"
+					:item-size="itemSize"
 					key-field="id">
 					<SubpageList :key="item.id"
 						:data-page-id="item.id"
@@ -263,6 +263,13 @@ export default {
 			return this.filterString !== ''
 		},
 
+		itemSize() {
+			const defaultClickableArea = parseInt(window.getComputedStyle(document.body).getPropertyValue('--default-clickable-area'))
+			return defaultClickableArea > 40
+				? defaultClickableArea
+				: defaultClickableArea + 4
+		},
+
 		displayTrash() {
 			return this.currentCollectiveCanEdit
 				&& !this.currentCollectiveIsPageShare
@@ -330,27 +337,35 @@ export default {
 
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+:root {
+	--page-list-header-height: calc(var(--default-clickable-area) + 14px);
+	--landing-page-height: calc(var(--default-clickable-area) + 8px);
+	--page-trash-height: calc(var(--default-clickable-area) + 32px);
+}
+</style>
 
+<style lang="scss" scoped>
 .scroller {
-	// NC header bar 50px; page list header bar 52px; landing page 48px; page trash 76px; NcAppNavigationCaption 78px divided by 2 for multiple scrollers
-	max-height: calc((100vh - var(--header-height) - 52px - 48px - 76px - 78px * 2) / 2);
+	// NC header bar 50px; page list header bar; landing page; page trash; NcAppNavigationCaption 78px divided by 2 for multiple scrollers
+	max-height: calc((100vh - var(--header-height) - var(--page-list-header-height) - var(--landing-page-height) - var(--page-trash-height) - 78px * 2) / 2);
 }
 
 .fullscroller{
-	// NC header bar 50px; page list header bar 52px; landing page 48px; page trash 76px; NcAppNavigationCaption 78px
-	max-height: calc(100vh - var(--header-height) - 52px - 48px - 76px - 78px);
+	// NC header bar 50px; page list header bar; landing page; page trash; NcAppNavigationCaption 78px
+	max-height: calc(100vh - var(--header-height) - var(--page-list-header-height) - var(--landing-page-height) - var(--page-trash-height) - 78px);
 }
 
 .app-content-list {
 	// nextcloud-vue component sets `max-height: unset` on mobile.
 	// Overwrite this to fix stickyness of header and rootpage.
-	max-height: calc(100vh - 50px);
+	max-height: calc(100vh - var(--default-clickable-area) - 8px);
 }
 
 .page-list-headerbar {
 	display: flex;
 	flex-direction: row;
+	gap: 2px;
 	position: sticky;
 	top: 0;
 	z-index: 2;
@@ -360,14 +375,14 @@ export default {
 	margin-right: 4px;
 
 	.page-filter {
-		margin-left: 52px !important;
-		padding-bottom: 2px;
+		margin-left: calc(var(--default-clickable-area) + 12px) !important;
+		padding-bottom: 6px;
 	}
 }
 
 .toggle {
-	height: 44px;
-	width: 44px;
+	height: var(--default-clickable-area);
+	width: var(--default-clickable-area);
 	padding: 0;
 }
 
@@ -389,9 +404,10 @@ li.toggle-button.selected {
 
 .page-list-root-page {
 	position: sticky;
-	top: 52px;
+	top: calc(var(--default-clickable-area) + 12px);
 	z-index: 1;
 	background-color: var(--color-main-background);
+	margin-block-end: 8px;
 }
 
 .sort-order-container {
@@ -399,7 +415,8 @@ li.toggle-button.selected {
 	align-items: center;
 
 	position: sticky;
-	top: 100px; // 52px pagelist header + 44px landing page + 4px border-bottom
+	// landing page + 8px margin-bottom
+	top: calc(var(--landing-page-height));
 	z-index: 1;
 	background-color: var(--color-main-background);
 	border-bottom: 4px solid var(--color-main-background);
@@ -413,7 +430,7 @@ li.toggle-button.selected {
 		padding: 7px;
 		margin-left: 33px; // 40px - 7px
 		background-color: var(--color-primary-element-light);
-		border-radius: var(--border-radius-pill);
+		border-radius: var(--border-radius-element, var(--border-radius-large));
 
 		overflow: hidden;
 		white-space: nowrap;

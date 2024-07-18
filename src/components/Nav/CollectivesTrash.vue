@@ -173,20 +173,20 @@ export default {
 		.collectives-trash-button {
 			display: flex;
 			flex: 1 1 0;
-			height: 44px;
+			height: var(--default-clickable-area);
 			width: 100%;
 			padding: 0;
 			margin: 0;
 			background-color: var(--color-main-background);
 			box-shadow: none;
 			border: 0;
-			border-radius: var(--border-radius-pill);
+			border-radius: var(--border-radius-element, var(--border-radius-large));
 			// text-align: left;
 			// font-weight: normal;
 			// font-size: 100%;
 			color: var(--color-main-text);
 			padding-right: 14px;
-			line-height: 44px;
+			line-height: var(--default-clickable-area);
 
 			:deep(.button-vue__wrapper) {
 				width: 100%;
@@ -199,9 +199,9 @@ export default {
 			}
 
 			&__icon {
-				width: 44px;
-				height: 44px;
-				min-width: 44px;
+				width: var(--default-clickable-area);
+				height: var(--default-clickable-area);
+				min-width: var(--default-clickable-area);
 			}
 
 			:deep(.button-vue__text) {

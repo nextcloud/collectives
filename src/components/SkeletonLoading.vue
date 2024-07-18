@@ -97,7 +97,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$clickable-area: 40px;
+$clickable-area: calc(var(--default-clickable-area) - 4px);
 $margin: 8px;
 $messages-list-max-width: 670px;
 
@@ -157,16 +157,16 @@ $messages-list-max-width: 670px;
 	margin: 2px 0 -1px 0;
 
 	&-line-one {
-		width: calc(100% - #{$margin + $clickable-area});
+		width: calc(100% - #{$margin} + #{$clickable-area});
 		position: relative;
 		height: 1.5em;
-		x: $margin + $clickable-area;
-		y: 10px;
+		x: calc(#{$margin} + #{$clickable-area});
+		y: 6px;
 	}
 }
 
 .members-list-placeholder {
-	$icon-size: 44px;
+	$icon-size: var(--default-clickable-area);
 	height: $icon-size + 8;
 
 	&-icon {
@@ -185,7 +185,7 @@ $messages-list-max-width: 670px;
 }
 
 .avatar-placeholder {
-	$icon-size: 44px;
+	$icon-size: var(--default-clickable-area);
 	height: $icon-size;
 	width: $icon-size;
 
@@ -200,7 +200,6 @@ $messages-list-max-width: 670px;
 
 .page-heading-placeholder {
 	width: min($messages-list-max-width, 100vw);
-	height: calc(#{$clickable-area} * 2);
 	margin: 12px 14px;
 	display: block;
 
@@ -208,8 +207,8 @@ $messages-list-max-width: 670px;
 		width: min($messages-list-max-width, 100vw);
 		position: relative;
 		height: 2em;
-		x: $margin + 4 + $clickable-area;
-		y: 6px;
+		x: calc(#{$margin} + 4px + $clickable-area);
+		y: 2px;
 	}
 
 	&-line-two {

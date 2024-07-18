@@ -50,7 +50,7 @@ export default {
 	height: auto;
 	margin: 0;
 	padding: 0;
-	padding-right: 14px;
+	padding-right: calc((var(--default-clickable-area) - 16px) / 2);
 	box-sizing: border-box;
 	white-space: nowrap;
 	opacity: .7;
@@ -60,11 +60,11 @@ export default {
 	box-shadow: none;
 	font-weight: normal;
 	font-size: var(--default-font-size);
-	line-height: 44px;
+	line-height: var(--default-clickable-area);
 
 	.material-design-icon {
-		width: 44px;
-		height: 44px;
+		width: var(--default-clickable-area);
+		height: var(--default-clickable-area);
 	}
 }
 </style>

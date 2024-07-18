@@ -322,9 +322,10 @@ export default {
 
 	.titlebar-buttons {
 		display: flex;
+		gap: 4px;
 
 		&_sidebar-toggle {
-			margin-right: 44px;
+			margin-right: calc(var(--default-clickable-area) + 2px);
 		}
 	}
 }
