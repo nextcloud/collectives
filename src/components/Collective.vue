@@ -253,6 +253,7 @@ export default {
 	display: flex;
 	align-items: center;
 	background-color: var(--color-main-background);
+	font-size: 30px;
 
 	.page-title-icon {
 		display: flex;
@@ -265,13 +266,14 @@ export default {
 		.button-emoji-page {
 			width: var(--default-clickable-area);
 			padding: 0px 4px;
-			font-size: 1.5em;
+			font-size: 0.8em;
 		}
 	}
 
 	.title {
 		overflow: hidden;
 		text-overflow: ellipsis;
+		font-size: 30px;
 	}
 }
 

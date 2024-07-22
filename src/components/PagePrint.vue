@@ -72,7 +72,6 @@ export default {
 @import '../css/editor';
 
 .page-title {
-	font-size: 30px;
 	line-height: 45px;
 	padding: 8px 2px 2px 8px;
 

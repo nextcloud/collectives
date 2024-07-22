@@ -120,7 +120,6 @@ export default {
 }
 
 #version-title, #titleform input[type='text'] {
-	font-size: 30px;
 	border: none;
 	color: var(--color-main-text);
 	width: 100%;
@@ -129,7 +128,6 @@ export default {
 	text-overflow: unset;
 
 	&.mobile {
-		font-size: 30px;
 		// Less padding to save some extra space
 		padding: 0;
 		padding-right: 4px;
