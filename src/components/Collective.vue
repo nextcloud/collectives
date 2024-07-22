@@ -285,14 +285,18 @@ export default {
 }
 
 @media print {
-	/* Don't print page list */
-	#app-sidebar-vue {
+	/* Don't print splitpane list and splitter panes */
+	div.splitpanes__pane-list, div.splitpanes__splitter {
 		display: none !important;
 	}
 
-	/* Fix alignment of app details for print */
-	div.splitpanes__pane-list, div.splitpanes__splitter {
+	/* Don't print page list, list toggle and page sidebar toggle */
+	#app-sidebar-vue, .app-navigation, .app-sidebar__toggle {
 		display: none !important;
+	}
+
+	div.splitpanes__pane-details {
+		width: unset !important;
 	}
 }
 </style>
