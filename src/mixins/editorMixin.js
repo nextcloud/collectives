@@ -3,6 +3,7 @@ import { mapGetters, mapMutations } from 'vuex'
 import linkHandlerMixin from '../mixins/linkHandlerMixin.js'
 import PageInfoBar from '../components/Page/PageInfoBar.vue'
 import { editorApiReaderFileId } from '../constants.js'
+import { emit } from '@nextcloud/event-bus'
 
 export default {
 	mixins: [
@@ -29,6 +30,7 @@ export default {
 			'pageFilePath',
 			'shareTokenParam',
 			'showing',
+			'searchQuery',
 		]),
 
 		pageContent() {
@@ -99,6 +101,10 @@ export default {
 						// scroll to the corresponding header if the page was loaded with a hash
 						const element = document.querySelector(`[href="${document.location.hash}"]`)
 						element?.click()
+					}
+
+					if (this.searchQuery && this.searchQuery !== '') {
+						emit('text:editor:search', { query: this.searchQuery })
 					}
 				},
 			})

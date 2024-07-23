@@ -5,6 +5,12 @@ export default {
 		query: '',
 	},
 
+	getters: {
+		searchQuery(state) {
+			return state.query
+		},
+	},
+
 	mutations: {
 		setSearchQuery(state, query) {
 			state.query = query
