@@ -286,10 +286,7 @@ export default {
 		},
 		filterString() {
 			this.getContentFilteredPagesDebounced()
-
-			emit('text:editor:search', {
-				query: this.filterString,
-			})
+			this.setSearchQuery(this.filterString);
 		},
 	},
 
@@ -298,6 +295,7 @@ export default {
 			'setPageOrder',
 			'show',
 			'toggleTemplates',
+			'setSearchQuery',
 		]),
 
 		...mapActions({
