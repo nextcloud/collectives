@@ -100,6 +100,7 @@
 		</h1>
 		<LandingPageWidgets v-if="isLandingPage" />
 		<TextEditor :key="`text-editor-${currentPage.id}`" ref="texteditor" />
+		<SearchDialog />
 	</div>
 </template>
 
@@ -114,6 +115,7 @@ import LandingPageWidgets from './Page/LandingPageWidgets.vue'
 import PageActionMenu from './Page/PageActionMenu.vue'
 import PageTemplateIcon from './Icon/PageTemplateIcon.vue'
 import TextEditor from './Page/TextEditor.vue'
+import SearchDialog from './SearchDialog.vue'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import pageMixin from '../mixins/pageMixin.js'
 import { showError } from '@nextcloud/dialogs'
@@ -133,6 +135,7 @@ export default {
 		PageActionMenu,
 		PageTemplateIcon,
 		TextEditor,
+		SearchDialog,
 	},
 
 	mixins: [
