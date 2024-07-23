@@ -3,6 +3,7 @@ import { emit } from '@nextcloud/event-bus'
 export default {
 	state: {
 		query: '',
+		all: true,
 	},
 
 	getters: {
