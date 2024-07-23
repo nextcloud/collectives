@@ -1,24 +1,26 @@
 <template>
-	<div v-if="matches !== null" class="search-dialog__container">
+	<div v-if="totalMatches !== null" class="search-dialog__container">
 		<div class="search-dialog__main">
-			<NcButton :aria-label="t('collectives', 'Find previous match')"
-				@click="previousSearch">
-				<template #icon>
-					<ArrowLeft :size="20" />
-				</template>
-			</NcButton>
-
 			<div style="margin: 0 40px;">
-				Found {{ matches.length }} matches
+				Found {{ totalMatches }} matches
 			</div>
 
-			<NcButton alignment="center-reverse"
-				:aria-label="t('collectives', 'Find next match')"
-				@click="nextSearch">
-				<template #icon>
-					<ArrowRight :size="20" />
-				</template>
-			</NcButton>
+			<div class="search-dialog__buttons">
+				<NcButton :aria-label="t('collectives', 'Find previous match')"
+					@click="previousSearch">
+					<template #icon>
+						<ArrowUp :size="20" />
+					</template>
+				</NcButton>
+
+				<NcButton alignment="center-reverse"
+					:aria-label="t('collectives', 'Find next match')"
+					@click="nextSearch">
+					<template #icon>
+						<ArrowDown :size="20" />
+					</template>
+				</NcButton>
+			</div>
 		</div>
 	</div>
 </template>
@@ -28,27 +30,27 @@ import { subscribe, emit } from '@nextcloud/event-bus'
 import { NcButton } from '@nextcloud/vue'
 import { translate as t } from '@nextcloud/l10n'
 import { mapMutations } from 'vuex'
-import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
-import ArrowRight from 'vue-material-design-icons/ArrowRight.vue'
+import ArrowDown from 'vue-material-design-icons/ArrowDown.vue'
+import ArrowUp from 'vue-material-design-icons/ArrowUp.vue'
 
 export default {
 	name: 'SearchDialog',
 
 	components: {
 		NcButton,
-		ArrowLeft,
-		ArrowRight,
+		ArrowDown,
+		ArrowUp,
 	},
 
 	data() {
 		return {
-			matches: null,
+			totalMatches: null,
 		}
 	},
 
 	created() {
-		subscribe('text:editor:search-start', ({ matches }) => {
-			this.matches = matches
+		subscribe('text:editor:search-results', ({ results }) => {
+			this.totalMatches = results
 		})
 	},
 
@@ -82,5 +84,10 @@ export default {
 .search-dialog__main {
 	display: flex;
 	align-items: center;
+}
+
+.search-dialog__buttons {
+	display: flex;
+	justify-content: space-between;
 }
 </style>
