@@ -1,18 +1,41 @@
 <template>
-	<div v-if="matches !== null" id="searchDialog__container">
-		<div id="searchDialog__main">
-			<span>Found {{ matches.length }} matches</span>
+	<div v-if="matches !== null" class="search-dialog__container">
+		<div class="search-dialog__main">
+			<NcButton :aria-label="t('collectives', 'Find previous match')">
+				<template #icon>
+					<ArrowLeft :size="20" />
+				</template>
+			</NcButton>
+
+			<div style="margin: 0 40px;">
+				Found {{ matches.length }} matches
+			</div>
+
+			<NcButton alignment="center-reverse"
+				:aria-label="t('collectives', 'Find next match')">
+				<template #icon>
+					<ArrowRight :size="20" />
+				</template>
+			</NcButton>
 		</div>
 	</div>
 </template>
 
 <script>
 import { subscribe } from '@nextcloud/event-bus'
+import { NcButton } from '@nextcloud/vue'
+import { translate as t } from '@nextcloud/l10n'
+import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
+import ArrowRight from 'vue-material-design-icons/ArrowRight.vue'
 
 export default {
 	name: 'SearchDialog',
 
-	components: {},
+	components: {
+		NcButton,
+		ArrowLeft,
+		ArrowRight,
+	},
 
 	data() {
 		return {
@@ -25,16 +48,27 @@ export default {
 			this.matches = matches
 		})
 	},
+
+	methods: {
+		t,
+	},
 }
 </script>
 
 <style scoped>
-#searchDialog__container {
-	max-width: var(--text-editor-max-width);
+.search-dialog__container {
+	width: 100%;
 	height: 50px;
-	margin: auto;
 	display: flex;
-	flex-flow: row nowrap;
 	justify-content: center;
+	align-items: center;
+	position: sticky;
+	bottom: 0;
+	background-color: var(--color-main-background);
+}
+
+.search-dialog__main {
+	display: flex;
+	align-items: center;
 }
 </style>

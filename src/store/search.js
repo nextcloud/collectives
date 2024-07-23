@@ -16,5 +16,5 @@ export default {
 			state.query = query
 			emit('text:editor:search', { query })
 		},
-	}
+	},
 }
