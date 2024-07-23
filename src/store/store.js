@@ -7,6 +7,7 @@ import pages from './pages.js'
 import sessions from './sessions.js'
 import settings from './settings.js'
 import versions from './versions.js'
+import search from './search.js'
 import { editorApiReaderFileId, pageModes } from '../constants.js'
 
 Vue.use(Vuex)
@@ -20,6 +21,7 @@ export default new Store({
 		sessions,
 		settings,
 		versions,
+		search,
 	},
 
 	state: {
