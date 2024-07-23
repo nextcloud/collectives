@@ -115,6 +115,7 @@ export default {
 }
 
 .search-dialog__info {
+	margin: 0 calc(var(--default-grid-baseline) * 4);
 	font-weight: bold;
 }
 
