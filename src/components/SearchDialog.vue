@@ -1,7 +1,18 @@
 <template>
 	<div v-if="totalMatches !== null" class="search-dialog__container">
 		<div class="search-dialog__info">
-			Found {{ totalMatches }} matches
+			<span v-if="matchAll">
+				{{ t('collectives', 'Found {matches} matches', {
+					matches: totalMatches,
+				}) }}
+			</span>
+
+			<span v-else>
+				{{ t('collectives', 'Match {index} of {matches}', {
+					index: matchIndex + 1,
+					matches: totalMatches,
+				}) }}
+			</span>
 		</div>
 
 		<div class="search-dialog__buttons">
@@ -27,7 +38,7 @@
 				type="tertiary"
 				:aria-label="t('collectives', 'Find all')"
 				:pressed="matchAll"
-				@click="setMatchAll">
+				@click="toggleMatchAll">
 				<template #icon>
 					<AllInclusive :size="20" />
 				</template>
@@ -38,10 +49,10 @@
 </template>
 
 <script>
-import { subscribe, emit } from '@nextcloud/event-bus'
+import { subscribe } from '@nextcloud/event-bus'
 import { NcButton } from '@nextcloud/vue'
 import { translate as t } from '@nextcloud/l10n'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 import ArrowDown from 'vue-material-design-icons/ArrowDown.vue'
 import ArrowUp from 'vue-material-design-icons/ArrowUp.vue'
 import AllInclusive from 'vue-material-design-icons/AllInclusive.vue'
@@ -59,19 +70,21 @@ export default {
 	data() {
 		return {
 			totalMatches: null,
-			matchAll: true,
+			matchIndex: 0,
 		}
 	},
 
 	computed: {
 		...mapGetters([
 			'searchQuery',
+			'matchAll',
 		]),
 	},
 
 	created() {
-		subscribe('text:editor:search-results', ({ results }) => {
+		subscribe('text:editor:search-results', ({ results, index }) => {
 			this.totalMatches = results
+			this.matchIndex = index
 		})
 	},
 
@@ -79,23 +92,12 @@ export default {
 		t,
 		...mapMutations([
 			'setSearchQuery',
+			'nextSearch',
+			'previousSearch',
 		]),
-		nextSearch() {
-			this.matchAll = false
-			emit('text:editor:search-next', {})
-		},
-		previousSearch() {
-			this.matchAll = false
-			emit('text:editor:search-previous', {})
-		},
-		setMatchAll() {
-			this.matchAll = !this.matchAll
-
-			this.setSearchQuery({
-				query: this.searchQuery,
-				matchAll: this.matchAll,
-			})
-		},
+		...mapActions([
+			'toggleMatchAll',
+		]),
 	},
 }
 </script>
