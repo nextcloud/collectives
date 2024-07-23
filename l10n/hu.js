@@ -44,6 +44,7 @@ OC.L10N.register(
     "Loading…" : "Betöltés…",
     "An error occurred while performing the search" : "Hiba történt a keresés végrehajtásakor",
     "Add groups" : "Csoportok hozzáadása",
+    "Add teams" : "Csapatok hozzáadása",
     "Remove {name}" : "{name} eltávolítása",
     "Members of collective {name}" : "A(z) {name} kollektíva tagjai",
     "Collective settings" : "Kollektíva beállításai",
