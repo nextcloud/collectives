@@ -3,7 +3,6 @@ import { emit } from '@nextcloud/event-bus'
 export default {
 	state: {
 		query: '',
-		all: true,
 	},
 
 	getters: {
@@ -13,9 +12,9 @@ export default {
 	},
 
 	mutations: {
-		setSearchQuery(state, query) {
+		setSearchQuery(state, { query, matchAll }) {
 			state.query = query
-			emit('text:editor:search', { query })
+			emit('text:editor:search', { query, matchAll })
 		},
 	},
 }
