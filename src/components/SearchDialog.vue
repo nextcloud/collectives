@@ -1,8 +1,7 @@
 <template>
-	<div id="searchDialog__container">
+	<div v-if="matches !== null" id="searchDialog__container">
 		<div id="searchDialog__main">
-			<span v-if="matches">Found {{ matches.length }} matches</span>
-			<span v-else>No matches found</span>
+			<span>Found {{ matches.length }} matches</span>
 		</div>
 	</div>
 </template>
@@ -22,8 +21,8 @@ export default {
 	},
 
 	created() {
-		subscribe('text:editor:search-start', ({ searchResults }) => {
-			this.matches = searchResults
+		subscribe('text:editor:search-start', ({ matches }) => {
+			this.matches = matches
 		})
 	},
 }
