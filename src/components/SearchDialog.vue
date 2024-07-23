@@ -1,7 +1,8 @@
 <template>
 	<div v-if="matches !== null" class="search-dialog__container">
 		<div class="search-dialog__main">
-			<NcButton :aria-label="t('collectives', 'Find previous match')">
+			<NcButton :aria-label="t('collectives', 'Find previous match')"
+				@click="previousSearch">
 				<template #icon>
 					<ArrowLeft :size="20" />
 				</template>
@@ -12,7 +13,8 @@
 			</div>
 
 			<NcButton alignment="center-reverse"
-				:aria-label="t('collectives', 'Find next match')">
+				:aria-label="t('collectives', 'Find next match')"
+				@click="nextSearch">
 				<template #icon>
 					<ArrowRight :size="20" />
 				</template>
@@ -22,9 +24,10 @@
 </template>
 
 <script>
-import { subscribe } from '@nextcloud/event-bus'
+import { subscribe, emit } from '@nextcloud/event-bus'
 import { NcButton } from '@nextcloud/vue'
 import { translate as t } from '@nextcloud/l10n'
+import { mapMutations } from 'vuex'
 import ArrowLeft from 'vue-material-design-icons/ArrowLeft.vue'
 import ArrowRight from 'vue-material-design-icons/ArrowRight.vue'
 
@@ -50,7 +53,16 @@ export default {
 	},
 
 	methods: {
+		...mapMutations([
+			'setSearchQuery',
+		]),
 		t,
+		nextSearch() {
+			emit('text:editor:search-next', {})
+		},
+		previousSearch() {
+			emit('text:editor:search-previous', {})
+		},
 	},
 }
 </script>
