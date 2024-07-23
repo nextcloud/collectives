@@ -284,9 +284,6 @@ export default {
 			this.contentFilteredPages = []
 			this.getContentFilteredPagesDebounced()
 		},
-		'currentPage.id'() {
-			this.setSearchQuery(this.filterString)
-		},
 		filterString() {
 			this.getContentFilteredPagesDebounced()
 			this.setSearchQuery(this.filterString);
