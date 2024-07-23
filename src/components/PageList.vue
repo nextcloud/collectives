@@ -149,7 +149,6 @@
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { NcAppNavigationCaption, NcActionButton, NcActions, NcAppContentList, NcButton, NcTextField } from '@nextcloud/vue'
 import { showError } from '@nextcloud/dialogs'
-import { emit } from '@nextcloud/event-bus'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 import Draggable from './PageList/Draggable.vue'
 import SubpageList from './PageList/SubpageList.vue'
@@ -286,7 +285,7 @@ export default {
 		},
 		filterString() {
 			this.getContentFilteredPagesDebounced()
-			this.setSearchQuery(this.filterString);
+			this.setSearchQuery(this.filterString)
 		},
 	},
 
