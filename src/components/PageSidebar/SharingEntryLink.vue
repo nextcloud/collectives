@@ -88,6 +88,7 @@
 					:error="passwordError"
 					:helper-text="errorPasswordLabel"
 					:required="isPasswordEnforced"
+					:minlength="passwordPolicy.minLength ?? 0"
 					:label="t('collectives', 'Password')"
 					:disabled="loading"
 					@submit="onNewShare" />
@@ -160,6 +161,7 @@
 				:error="passwordError"
 				:helper-text="errorPasswordLabel"
 				:required="isPasswordEnforced"
+				:minlength="passwordPolicy.minLength ?? 0"
 				:label="t('collectives', 'Password')"
 				@update:value="onPasswordChange" />
 			<div class="button-group">
@@ -176,6 +178,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { createFocusTrap } from 'focus-trap'
@@ -201,6 +204,7 @@ import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import TriangleSmallDownIcon from 'vue-material-design-icons/TriangleSmallDown.vue'
 
 import CopyToClipboardMixin from '../../mixins/CopyToClipboardMixin.js'
+import serverCapabilities from '../../mixins/serverCapabilities.js'
 import {
 	CREATE_SHARE,
 	UPDATE_SHARE,
@@ -233,6 +237,7 @@ export default {
 
 	mixins: [
 		CopyToClipboardMixin,
+		serverCapabilities,
 	],
 
 	props: {
@@ -335,9 +340,9 @@ export default {
 			get() {
 				return !!this.share.password
 			},
-			set(enabled) {
+			async set(enabled) {
 				if (enabled) {
-					const password = this.generatePassword()
+					const password = await this.generatePassword()
 					this.$set(this.share, 'password', password)
 					this.$set(this.share, 'newPassword', password)
 				} else {
@@ -461,7 +466,9 @@ export default {
 			if (!this.isPending && (this.isPasswordDefaultEnabled || this.isPasswordEnforced)) {
 				this.open = true
 				this.isPending = true
-				this.pendingPassword = this.generatePassword()
+				this.loading = true
+				this.pendingPassword = await this.generatePassword()
+				this.loading = false
 				return
 			}
 
@@ -478,11 +485,18 @@ export default {
 					: t('collectives', 'Collective "{name}" has been shared', { name: this.currentCollective.name })
 				showSuccess(message)
 			} catch (error) {
+				const responseError = error.response?.data
 				const message = this.isPageShare
-					? t('collectives', 'Failed to share page "{name}"', { name: this.currentPage.title })
-					: t('collectives', 'Failed to share collective "{name}"', { name: this.currentCollective.name })
+					? t('collectives', 'Failed to share page "{name}": {responseError}', {
+						name: this.currentPage.title,
+						responseError,
+					})
+					: t('collectives', 'Failed to share collective "{name}": {responseError}', {
+						name: this.currentCollective.name,
+						responseError,
+					})
 				showError(message)
-				console.error('Failed to create share', error)
+				console.error('Failed to create share', responseError ?? error)
 				this.open = true
 			} finally {
 				this.loading = false
@@ -568,10 +582,23 @@ export default {
 			}
 		},
 
-		// Mostly copied from `apps/files_sharing/src/utils/GeneratePassword.js`
-		generatePassword() {
+		// Copied from `apps/files_sharing/src/utils/GeneratePassword.js`
+		async generatePassword() {
 			// note: some chars removed on purpose to make them human friendly when read out
 			const passwordSet = 'abcdefgijkmnopqrstwxyzABCDEFGHJKLMNPQRSTWXYZ23456789'
+
+			if (this.passwordPolicy.api?.generate) {
+				try {
+					const request = await axios.get(this.passwordPolicy.api.generate)
+					if (request.data.ocs.data.password) {
+						return request.data.ocs.data.password
+					}
+				} catch (error) {
+					console.info('Error generating password from password_policy')
+					showError(t('collectives', 'Error generating password from password policy'))
+				}
+			}
+
 			const array = new Uint8Array(10)
 			const ratio = passwordSet.length / 255
 			self.crypto.getRandomValues(array)
