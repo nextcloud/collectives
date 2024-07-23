@@ -84,6 +84,13 @@ jobs:
           path: apps/files_pdfviewer
           ref: ${{ matrix.server-versions }}
 
+      - name: Checkout password_policy app
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        with:
+          repository: nextcloud/password_policy
+          path: apps/password_policy
+          ref: ${{ matrix.server-versions }}
+
       - name: Register text Git reference
         run: |
           text_app_ref="$(if [ "${{ matrix.server-versions }}" = "master" ]; then echo -n "main"; else echo -n "${{ matrix.server-versions }}"; fi)"
@@ -206,6 +213,7 @@ jobs:
           ./occ config:system:set --value="http://localhost:8081" -- overwrite.cli.url
           ./occ app:enable --force contacts
           ./occ app:enable --force files_pdfviewer
+          ./occ app:disable password_policy
           ./occ app:enable --force ${{ env.APP_NAME }}
 
       - name: Run Nextcloud
