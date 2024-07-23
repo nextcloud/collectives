@@ -34,12 +34,15 @@ export default {
 	},
 
 	actions: {
-		async toggleMatchAll({ state, commit }) {
+		toggleMatchAll({ state, commit }) {
 			commit('toggleMatchAll')
 			commit('setSearchQuery', {
 				query: state.query,
 				matchAll: state.matchAll,
 			})
+		},
+		clearSearch({ state, commit }) {
+			commit('setSearchQuery', { query: '' })
 		},
 	},
 }
