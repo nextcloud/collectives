@@ -19,6 +19,7 @@ OC.L10N.register(
     "Move or copy" : "Mover o Copiar",
     "Title" : "Título",
     "Deleted" : "Eliminado",
+    "Password" : "Contraseña",
     "Add another link" : "Agregar otro enlace",
     "Advanced settings" : "Configuraciones avanzadas",
     "Unshare" : "No compartir",
