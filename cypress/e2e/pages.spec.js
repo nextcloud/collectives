@@ -259,7 +259,7 @@ describe('Pages', function() {
 				.invoke('outerWidth')
 				.should('be.greaterThan', 700)
 
-			// Reload to check persistence with browser storage
+			// Reload to check persistence
 			cy.reload()
 			cy.get('#titleform').should('have.css', 'max-width', 'none')
 			cy.getReadOnlyEditor()

@@ -50,6 +50,10 @@ Feature: pages
     When user "jane" sets emoji for page "firstpage" to "🍏" in "BehatPagesCollective"
     And user "jane" sets emoji for page "firstpage" to "" in "BehatPagesCollective"
 
+  Scenario: Change page full width
+    When user "jane" sets full width for page "firstpage" to "true" in "BehatPagesCollective"
+    And user "jane" sets full width for page "firstpage" to "false" in "BehatPagesCollective"
+
   Scenario: Change page subpageOrder
     When user "jane" sets subpageOrder for page "firstpage" to "[]" in "BehatPagesCollective"
     And user "jane" sets subpageOrder for page "firstpage" to "[1,2]" in "BehatPagesCollective"
@@ -110,6 +114,7 @@ Feature: pages
     And user "john" fails to touch page "secondpage" in "BehatPagesCollective"
     And user "john" fails to move page "secondpage" to "newnamepage" with parentPath "Readme.md" in "BehatPagesCollective"
     And user "john" fails to set emoji for page "secondpage" to "🍏" in "BehatPagesCollective"
+    And user "john" fails to set full width for page "secondpage" to "🍏" in "BehatPagesCollective"
     And user "john" fails to set subpageOrder for page "secondpage" to "[]" in "BehatPagesCollective"
     And user "john" fails to trash page "secondpage" in "BehatPagesCollective"
 

@@ -158,6 +158,20 @@ export function setPageEmoji(context, pageId, emoji) {
 }
 
 /**
+ * Set full width for a page
+ *
+ * @param {object} context - either the current collective or a share context
+ * @param {number} pageId - Id of the page to update
+ * @param {boolean} fullWidth - Full width for the page
+ */
+export function setFullWidth(context, pageId, fullWidth) {
+	return axios.put(
+		pagesUrl(context, pageId, 'fullWidth'),
+		{ fullWidth },
+	)
+}
+
+/**
  * Set subpageOrder for a page
  *
  * @param {object} context - either the current collective or a share context

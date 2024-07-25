@@ -535,6 +535,27 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @When user :user sets full width for page :page to :fullWidth in :collective
+	 * @When user :user :fails to set full width for page :page to :fullWidth in :collective
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userSetsFullWidth(string $user, string $page, string $fullWidth, string $collective, ?string $fail = null): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$pageId = $this->pageIdByName($collectiveId, $page);
+		$isFullWidth = $fullWidth === "true";
+		$formData = new TableNode([['fullWidth', $isFullWidth]]);
+		$this->sendRequest('PUT', '/apps/collectives/_api/' . $collectiveId . '/_pages/' . $pageId . '/fullWidth', $formData);
+		if ($fail === "fails") {
+			$this->assertStatusCode(403);
+		} else {
+			$this->assertStatusCode(200);
+			$this->assertPageKeyValue($pageId, 'isFullWidth', $isFullWidth);
+		}
+	}
+
+	/**
 	 * @When user :user sets subpageOrder for page :page to :subpageOrder in :collective
 	 * @When user :user :fails to set subpageOrder for page :page to :subpageOrder in :collective
 	 *
