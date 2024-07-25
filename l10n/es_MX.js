@@ -39,6 +39,7 @@ OC.L10N.register(
     "Can edit" : "Puede editar",
     "Cannot copy, please copy the link manually" : "No se ha podido copiar, por favor, copia el enlace manualmente",
     "Actions for \"{title}\"" : "Acciones para \"{title}\"",
+    "Error generating password from password policy" : "Error al generar la contraseña según la política de contraseñas",
     "Download" : "Descargar",
     "Current version" : "Versión actual",
     "No other versions available" : "No hay otras versiones disponibles",

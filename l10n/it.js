@@ -120,6 +120,7 @@ OC.L10N.register(
     "Can edit" : "Può modificare",
     "Cannot copy, please copy the link manually" : "Impossibile copiare, copia il collegamento manualmente",
     "Actions for \"{title}\"" : "Azioni per \"{title}\"",
+    "Error generating password from password policy" : "Errore: la password non rispetta i criteri stabiliti",
     "Download" : "Scarica",
     "No attachments available" : "Nessun allegato disponibile",
     "Could not get attachments" : "Impossibile ottenere gli allegati",

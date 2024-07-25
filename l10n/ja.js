@@ -91,6 +91,7 @@ OC.L10N.register(
     "Can edit" : "編集可能",
     "Cannot copy, please copy the link manually" : "コピーできませんでした。手動でリンクをコピーしてください。",
     "Actions for \"{title}\"" : "\"{title}\"のアクション",
+    "Error generating password from password policy" : "パスワード ポリシーからのパスワード生成エラー",
     "Download" : "ダウンロード",
     "No backlinks available" : "バックリンクはありません",
     "If other pages link to this one, they will be listed here." : "他のページからこのページへのリンクがあると、ここに表示されます。",

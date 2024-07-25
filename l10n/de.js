@@ -172,6 +172,7 @@ OC.L10N.register(
     "Can edit" : "Kann bearbeiten",
     "Cannot copy, please copy the link manually" : "Kopieren fehlgeschlagen. Bitte kopiere den Link manuell",
     "Actions for \"{title}\"" : "Aktionen für \"{title}\"",
+    "Error generating password from password policy" : "Fehler beim Erzeugen des Passworts aufgrund der Passwortrichtlinie",
     "View in document" : "In Dokument anzeigen",
     "Download" : "Herunterladen",
     "Recently deleted" : "Kürzlich gelöscht",

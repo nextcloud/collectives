@@ -50,6 +50,7 @@ OC.L10N.register(
     "Can edit" : "수정할 수 있음",
     "Cannot copy, please copy the link manually" : "복사할 수 없습니다, 링크를 수동으로 복사하세요.",
     "Actions for \"{title}\"" : "\"{title}\"에 대한 작업",
+    "Error generating password from password policy" : "암호 정책에서 암호 생성 중에 오류 발생",
     "Download" : "다운로드",
     "Current version" : "현재 버전",
     "No other versions available" : "다른 버전을 사용할 수 없음",

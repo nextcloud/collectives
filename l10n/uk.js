@@ -164,6 +164,7 @@ OC.L10N.register(
     "Actions for \"{title}\"" : "Дія для \"{title}\"",
     "Page \"{name}\" has been unshared" : "Сторінка \"{name}\" вилучена зі спільного доступу",
     "Collective \"{name}\" has been unshared" : "Колектив \"{name}\" вилучений зі спільного доступу",
+    "Error generating password from password policy" : "Помилка під час створення пароля згідно з політикою паролів",
     "View in document" : "Переглянути в документах",
     "Download" : "Звантажити",
     "Recently deleted" : "Нещодавно видалені",

@@ -107,6 +107,7 @@ OC.L10N.register(
     "Can edit" : "Разрешено редактировать",
     "Cannot copy, please copy the link manually" : "Не удалось скопировать, выполните копирование вручную",
     "Actions for \"{title}\"" : "Действия над «{title}»",
+    "Error generating password from password policy" : "Не удалось создать пароль на основе политики",
     "Download" : "Скачать",
     "No backlinks available" : "Обратных ссылок не обнаружено",
     "If other pages link to this one, they will be listed here." : "Если другие страницы ссылаются на эту страницу, они будут показаны здесь.",

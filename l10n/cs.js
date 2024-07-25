@@ -172,6 +172,7 @@ OC.L10N.register(
     "Can edit" : "Může upravovat",
     "Cannot copy, please copy the link manually" : "Nedaří se zkopírovat, zkopírujte odkaz ručně",
     "Actions for \"{title}\"" : "Akce pro „{title}“",
+    "Error generating password from password policy" : "Chyba při vytváření hesla ze zásady pro hesla",
     "View in document" : "Zobrazit v dokumentu",
     "Download" : "Stáhnout",
     "Recently deleted" : "Nedávno smazané",
