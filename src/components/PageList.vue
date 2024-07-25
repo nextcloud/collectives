@@ -285,7 +285,7 @@ export default {
 		},
 		filterString() {
 			this.getContentFilteredPagesDebounced()
-			this.setSearchQuery({ query: this.filterString })
+			this.setSearchQuery(this.filterString)
 		},
 	},
 

@@ -16,9 +16,13 @@ export default {
 	},
 
 	mutations: {
-		setSearchQuery(state, { query, matchAll }) {
+		setSearchQuery(state, query) {
 			state.query = query
-			emit('text:editor:search', { query, matchAll })
+			emit('text:editor:search', { query: state.query, matchAll: state.matchAll })
+		},
+		toggleMatchAll(state) {
+			state.matchAll = !state.matchAll
+			emit('text:editor:search', { query: state.query, matchAll: state.matchAll })
 		},
 		nextSearch(state) {
 			state.matchAll = false
@@ -27,22 +31,6 @@ export default {
 		previousSearch(state) {
 			state.matchAll = false
 			emit('text:editor:search-previous', {})
-		},
-		toggleMatchAll(state) {
-			state.matchAll = !state.matchAll
-		},
-	},
-
-	actions: {
-		toggleMatchAll({ state, commit }) {
-			commit('toggleMatchAll')
-			commit('setSearchQuery', {
-				query: state.query,
-				matchAll: state.matchAll,
-			})
-		},
-		clearSearch({ state, commit }) {
-			commit('setSearchQuery', { query: '' })
 		},
 	},
 }
