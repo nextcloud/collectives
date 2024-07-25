@@ -5,7 +5,6 @@
 
 import { defineStore } from 'pinia'
 import { set } from 'vue'
-import { getBuilder } from '@nextcloud/browser-storage'
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateRemoteUrl } from '@nextcloud/router'
 import { useRootStore } from './root.js'
@@ -15,8 +14,6 @@ import { INDEX_PAGE, TEMPLATE_PAGE } from '../constants.js'
 import * as sortOrders from '../util/sortOrders.js'
 import { pageParents, sortedSubpages } from './pageExtracts.js'
 import * as api from '../apis/collectives/index.js'
-
-const persistentStorage = getBuilder('collectives').persist().build()
 
 export const usePagesStore = defineStore('pages', {
 	state: () => ({
@@ -33,7 +30,6 @@ export const usePagesStore = defineStore('pages', {
 		highlightAnimationPageId: null,
 		isDragoverTargetPage: false,
 		draggedPageId: null,
-		fullWidthPageIds: [],
 	}),
 
 	getters: {
@@ -290,10 +286,6 @@ export const usePagesStore = defineStore('pages', {
 				.filter((value, index, array) => {
 					return array.indexOf(value) === index
 				})
-		},
-
-		isFullWidthView(state) {
-			return state.fullWidthPageIds.includes(state.currentPage?.id)
 		},
 
 		// TODO: rename
@@ -598,6 +590,19 @@ export const usePagesStore = defineStore('pages', {
 
 		/**
 		 *
+		 * Set full width for a page
+		 *
+		 * @param {object} page the page
+		 * @param {number} page.pageId ID of the page
+		 * @param {boolean} page.fullWidthView emoji for the page
+		 */
+		async setFullWidthView({ pageId, fullWidthView }) {
+			const response = await api.setFullWidth(this.context, pageId, fullWidthView)
+			this._updatePageState(response.data.data)
+		},
+
+		/**
+		 *
 		 * Set subpageOrder for a page
 		 *
 		 * @param {object} page the page
@@ -710,32 +715,5 @@ export const usePagesStore = defineStore('pages', {
 			const response = await api.getPageBacklinks(this.context, page.id)
 			this.backlinks = response.data.data
 		},
-
-		/**
-		 * Init full width store from browser storage
-		 */
-		initFullWidthPageIds() {
-			this.fullWidthPageIds = JSON.parse(persistentStorage.getItem('text-fullWidthPageIds') ?? '[]')
-		},
-
-		/**
-		 * Set full width for a page
-		 *
-		 * @param {boolean} fullWidthView Whether full width view is enabled or not
-		 */
-		setFullWidthView(fullWidthView) {
-			const pageId = this.currentPage.id
-			const fullWidthPageIds = JSON.parse(persistentStorage.getItem('text-fullWidthPageIds') ?? '[]')
-			if (fullWidthView && !fullWidthPageIds.includes(pageId)) {
-				fullWidthPageIds.push(pageId)
-				this.fullWidthPageIds = fullWidthPageIds
-				persistentStorage.setItem('text-fullWidthPageIds', JSON.stringify(fullWidthPageIds))
-			} else if (!fullWidthView && fullWidthPageIds.includes(pageId)) {
-				fullWidthPageIds.splice(fullWidthPageIds.indexOf(pageId), 1)
-				this.fullWidthPageIds = fullWidthPageIds
-				persistentStorage.setItem('text-fullWidthPageIds', JSON.stringify(fullWidthPageIds))
-			}
-		},
-
 	},
 })

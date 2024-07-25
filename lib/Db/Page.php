@@ -24,6 +24,8 @@ use OCP\AppFramework\Db\Entity;
  * @method void setEmoji(?string $value)
  * @method string getSubpageOrder()
  * @method void setSubpageOrder(string $value)
+ * @method bool getFullWidth()
+ * @method void setFullWidth(bool $value)
  * @method int|null getTrashTimestamp()
  * @method void setTrashTimestamp(?int $trashTimestamp)
  */
@@ -32,7 +34,12 @@ class Page extends Entity implements JsonSerializable {
 	protected ?string $lastUserId = null;
 	protected ?string $emoji = null;
 	protected ?string $subpageOrder = null;
+	protected ?bool $fullWidth = null;
 	protected ?int $trashTimestamp = null;
+
+	public function __construct() {
+		$this->addType('fullWidth', 'bool');
+	}
 
 	public function jsonSerialize(): array {
 		return [
@@ -41,6 +48,7 @@ class Page extends Entity implements JsonSerializable {
 			'lastUserId' => $this->lastUserId,
 			'emoji' => $this->emoji,
 			'subpageOrder' => json_decode($this->getSubpageOrder() ?? '[]', true, 512, JSON_THROW_ON_ERROR),
+			'fullWidth' => $this->fullWidth,
 			'trashTimestamp' => $this->trashTimestamp,
 		];
 	}

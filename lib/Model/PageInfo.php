@@ -24,6 +24,7 @@ class PageInfo implements JsonSerializable {
 	private ?string $lastUserId = null;
 	private ?string $lastUserDisplayName = null;
 	private ?string $emoji = null;
+	private bool $fullWidth = false;
 	private ?string $subpageOrder = null;
 	private ?int $trashTimestamp = null;
 	private string $title;
@@ -65,6 +66,14 @@ class PageInfo implements JsonSerializable {
 
 	public function setEmoji(?string $emoji): void {
 		$this->emoji = $emoji;
+	}
+
+	public function isFullWidth(): bool {
+		return $this->fullWidth;
+	}
+
+	public function setFullWidth(bool $fullWidth): void {
+		$this->fullWidth = $fullWidth;
 	}
 
 	public function getSubpageOrder(): ?string {
@@ -153,6 +162,7 @@ class PageInfo implements JsonSerializable {
 			'lastUserId' => $this->lastUserId,
 			'lastUserDisplayName' => $this->lastUserDisplayName,
 			'emoji' => $this->emoji,
+			'isFullWidth' => $this->fullWidth,
 			'subpageOrder' => json_decode($this->subpageOrder ?? '[]', true, 512, JSON_THROW_ON_ERROR),
 			'trashTimestamp' => $this->trashTimestamp,
 			'title' => $this->title,
@@ -170,7 +180,7 @@ class PageInfo implements JsonSerializable {
 	 * @throws InvalidPathException
 	 * @throws NotFoundException
 	 */
-	public function fromFile(File $file, int $parentId, ?string $lastUserId = null, ?string $lastUserDisplayName = null, ?string $emoji = null, ?string $subpageOrder = null): void {
+	public function fromFile(File $file, int $parentId, ?string $lastUserId = null, ?string $lastUserDisplayName = null, ?string $emoji = null, ?string $subpageOrder = null, bool $fullWidth = false): void {
 		$this->setId($file->getId());
 		// Set folder name as title for all index pages except the collective landing page
 		$dirName = dirname($file->getInternalPath());
@@ -196,6 +206,9 @@ class PageInfo implements JsonSerializable {
 		}
 		if ($emoji !== null) {
 			$this->setEmoji($emoji);
+		}
+		if ($fullWidth !== null) {
+			$this->setFullWidth($fullWidth);
 		}
 		if ($subpageOrder !== null) {
 			$this->setSubpageOrder($subpageOrder);
