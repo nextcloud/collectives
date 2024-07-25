@@ -1,5 +1,28 @@
 # Changelog
 
+## 2.13.0 - 2024.07.25
+
+### ✨New
+* ✨ Add Nextcloud 30 support, remove Nextcloud 26 support.
+* 🔎 Highlight search results from page list in page content. (#648)
+* 🖼️ Allow to lookup page references in public shares. (#1275)
+
+### 🐛Fixes
+* 🔒 Fix creating shares with password policy. (#1269)
+* 📌 Allow to toggle recent pages in public shares. (#1192)
+* 🧹 Reset filtered page list when switching collectives.
+* 🐛 Fix error when loading page references.
+* 💬 Separate message and details with a space in error toast messages.
+* 🐛 Don't show an error if the page trash is disabled.
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 2.12.0 - 2024.06.11
 
 ### ✨New
