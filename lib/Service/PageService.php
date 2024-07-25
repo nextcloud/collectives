@@ -205,7 +205,8 @@ class PageService {
 				$lastUserId,
 				$lastUserId ? $this->userManager->getDisplayName($lastUserId) : null,
 				$emoji,
-				$subpageOrder);
+				$subpageOrder,
+				$page->getFullWidth());
 		} catch (FilesNotFoundException | InvalidPathException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
@@ -233,7 +234,8 @@ class PageService {
 				$lastUserId,
 				$lastUserId ? $this->userManager->getDisplayName($lastUserId) : null,
 				$emoji,
-				$subpageOrder);
+				$subpageOrder,
+				$page->getFullWidth());
 			$pageInfo->setTrashTimestamp($trashTimestamp);
 			$pageInfo->setFilePath('');
 			$pageInfo->setTitle(basename($filename, PageInfo::SUFFIX));
@@ -258,12 +260,15 @@ class PageService {
 		}
 	}
 
-	private function updatePage(int $collectiveId, int $fileId, string $userId, ?string $emoji = null): void {
+	private function updatePage(int $collectiveId, int $fileId, string $userId, ?string $emoji = null, ?bool $fullWidth = null): void {
 		$page = new Page();
 		$page->setFileId($fileId);
 		$page->setLastUserId($userId);
 		if ($emoji !== null) {
 			$page->setEmoji($emoji);
+		}
+		if ($fullWidth !== null) {
+			$page->setFullWidth($fullWidth);
 		}
 		$this->pageMapper->updateOrInsert($page);
 		$this->notifyPush($collectiveId);
@@ -604,6 +609,23 @@ class PageService {
 		$pageInfo->setLastUserId($userId);
 		$pageInfo->setLastUserDisplayName($this->userManager->getDisplayName($userId));
 		$this->updatePage($collectiveId, $pageInfo->getId(), $userId);
+		return $pageInfo;
+	}
+
+	/**
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function setFullWidth(int $collectiveId, int $id, string $userId, bool $fullWidth): PageInfo {
+		$this->verifyEditPermissions($collectiveId, $userId);
+		$folder = $this->getCollectiveFolder($collectiveId, $userId);
+		$file = $this->nodeHelper->getFileById($folder, $id);
+		$pageInfo = $this->getPageByFile($file);
+		$pageInfo->setLastUserId($userId);
+		$pageInfo->setLastUserDisplayName($this->userManager->getDisplayName($userId));
+		$pageInfo->setFullWidth($fullWidth);
+		$this->updatePage($collectiveId, $pageInfo->getId(), $userId, fullWidth: $fullWidth);
 		return $pageInfo;
 	}
 

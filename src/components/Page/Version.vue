@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<div :class="[isFullWidthView ? 'full-width-view' : 'sheet-view']">
+	<div :class="[currentPage.isFullWidth ? 'full-width-view' : 'sheet-view']">
 		<h1 id="titleform" class="page-title">
 			<div class="page-title-icon">
 				<div v-if="currentPage.emoji">
@@ -89,7 +89,6 @@ export default {
 		...mapState(useVersionsStore, ['version']),
 		...mapState(usePagesStore, [
 			'currentPage',
-			'isFullWidthView',
 			'title',
 		]),
 
