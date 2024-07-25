@@ -13,7 +13,7 @@
 
 			<NcButton alignment="center-reverse"
 				:aria-label="t('collectives', 'Find previous match')"
-				@click="previousSearch">
+				@click="previous">
 				<template #icon>
 					<ArrowUp :size="20" />
 				</template>
@@ -22,7 +22,7 @@
 
 			<NcButton alignment="center-reverse"
 				:aria-label="t('collectives', 'Find next match')"
-				@click="nextSearch">
+				@click="next">
 				<template #icon>
 					<ArrowDown :size="20" />
 				</template>
@@ -48,7 +48,7 @@
 		</div>
 
 		<div class="search-dialog__highlight-all">
-			<NcCheckboxRadioSwitch :checked.sync="highlightAll">
+			<NcCheckboxRadioSwitch :checked.sync="isHighlightAllChecked">
 				{{ t('collectives', 'Highlight all matches') }}
 			</NcCheckboxRadioSwitch>
 		</div>
@@ -59,7 +59,7 @@
 import { subscribe } from '@nextcloud/event-bus'
 import { NcButton, NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import { translate as t } from '@nextcloud/l10n'
-import { mapGetters, mapMutations, mapActions } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import ArrowDown from 'vue-material-design-icons/ArrowDown.vue'
 import ArrowUp from 'vue-material-design-icons/ArrowUp.vue'
 import Close from 'vue-material-design-icons/Close.vue'
@@ -79,7 +79,6 @@ export default {
 		return {
 			totalMatches: null,
 			matchIndex: 0,
-			highlightAll: true,
 		}
 	},
 
@@ -88,18 +87,14 @@ export default {
 			'searchQuery',
 			'matchAll',
 		]),
-	},
 
-	watch: {
-		highlightAll() {
-			if (this.highlightAll !== this.matchAll) {
+		isHighlightAllChecked: {
+			get() {
+				return this.matchAll
+			},
+			set() {
 				this.toggleMatchAll()
-			}
-		},
-		matchAll(value) {
-			if (this.highlightAll !== value) {
-				this.highlightAll = value
-			}
+			},
 		},
 	},
 
@@ -114,13 +109,28 @@ export default {
 		t,
 		...mapMutations([
 			'setSearchQuery',
+			'toggleMatchAll',
 			'nextSearch',
 			'previousSearch',
 		]),
-		...mapActions([
-			'toggleMatchAll',
-			'clearSearch',
-		]),
+
+		previous() {
+			this.previousSearch()
+			this.scrollIntoView()
+		},
+
+		next() {
+			this.nextSearch()
+			this.scrollIntoView()
+		},
+
+		clearSearch() {
+			this.setSearchQuery('')
+		},
+
+		scrollIntoView() {
+			document.querySelector('[data-text-el="search-decoration"]')?.scrollIntoView({ block: 'center' })
+		},
 	},
 }
 </script>
@@ -130,7 +140,6 @@ $button-gap: calc(var(--default-grid-baseline) * 3);
 
 .search-dialog__container {
 	width: 100%;
-	height: 50px;
 	display: flex;
 	position: sticky;
 	align-items: center;
@@ -152,6 +161,8 @@ $button-gap: calc(var(--default-grid-baseline) * 3);
 .search-dialog__highlight-all {
 	margin-left: auto;
 	margin-right: $button-gap;
+	margin-top: $button-gap;
+	margin-bottom: $button-gap;
 	display: flex;
 	align-items: center;
 	column-gap: $button-gap;
