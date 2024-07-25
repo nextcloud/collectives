@@ -200,8 +200,6 @@ OC.L10N.register(
     "Actions for \"{title}\"" : "إجراءات لـ \"{title}\"",
     "Page \"{name}\" has been shared" : "الصفحة  \"{name}\" تمّت مشاركتها",
     "Collective \"{name}\" has been shared" : "التجميعة  \"{name}\" تمّت مشاركتها",
-    "Failed to share page \"{name}\"" : "تعذّرت مشاركة الصفحة  \"{name}\"",
-    "Failed to share collective \"{name}\"" : "تعذّرت مشاركة التجميعة  \"{name}\"",
     "Share link of page \"{name}\" has been updated" : "رابط مشاركة الصفحة  \"{name}\" تمّ تحديثه",
     "Share link of collective \"{name}\" has been updated" : "رابط مشاركة التجميعة  \"{name}\" تمّ تحديثه",
     "Page \"{name}\" has been unshared" : "الصفحة  \"{name}\" تمّ إلغاء مشاركتها",

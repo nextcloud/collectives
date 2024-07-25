@@ -173,6 +173,7 @@ OC.L10N.register(
     "Can edit" : "可以编辑",
     "Cannot copy, please copy the link manually" : "无法复制，请手动复制链接",
     "Actions for \"{title}\"" : "“{title}”的动作",
+    "Error generating password from password policy" : "从密码策略生成密码时出错",
     "View in document" : "在文档中查看",
     "Download" : "下载",
     "Recently deleted" : "最近删除",

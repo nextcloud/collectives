@@ -40,6 +40,7 @@ OC.L10N.register(
     "Can edit" : "Може да се уредува",
     "Cannot copy, please copy the link manually" : "Неможе да се копира, копирајте го линкот рачно",
     "Actions for \"{title}\"" : "Акции за \"{title}\"",
+    "Error generating password from password policy" : "Грешка при генерирање на лозинка од политиката на лозинки",
     "Download" : "Преземи",
     "Current version" : "Моментална верзија",
     "No other versions available" : "Не постојат други верзии",

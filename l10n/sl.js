@@ -131,6 +131,7 @@ OC.L10N.register(
     "Can edit" : "Lahko ureja",
     "Cannot copy, please copy the link manually" : "Povezave ni mogoče kopirati. Storite to ročno.",
     "Actions for \"{title}\"" : "Dejanja za »{title}«",
+    "Error generating password from password policy" : "Napaka ustvarjanja gesla po določenih varnostnih pravilih",
     "View in document" : "Poglej v dokumentu",
     "Download" : "Prejmi",
     "Recently deleted" : "Nedavno izbrisano",

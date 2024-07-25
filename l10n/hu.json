@@ -155,6 +155,7 @@
     "Can edit" : "Szerkesztheti",
     "Cannot copy, please copy the link manually" : "A másolás sikertelen, másolja kézzel a hivatkozást",
     "Actions for \"{title}\"" : "A(z) „{title}” műveletei",
+    "Error generating password from password policy" : "Hiba a jelszóházirend alapján történő jelszó-előállítás során",
     "View in document" : "Megtekintése a dokumentumban",
     "Download" : "Letöltés",
     "Recently deleted" : "Nemrég törölve",

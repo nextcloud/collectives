@@ -170,6 +170,7 @@ OC.L10N.register(
     "Can edit" : "Môže upravovať",
     "Cannot copy, please copy the link manually" : "Nedarí sa skopírovať, skopírujte prosím ručne.",
     "Actions for \"{title}\"" : "Akcie pre \"{title}\"",
+    "Error generating password from password policy" : "Chyba pri generovaní hesla podľa bezpečnostnej politiky",
     "View in document" : "Zobraziť v dokumente",
     "Download" : "Sťahovanie",
     "Recently deleted" : "Nedávno odstránené",

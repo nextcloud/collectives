@@ -131,6 +131,7 @@ OC.L10N.register(
     "Can edit" : "Może modyfikować",
     "Cannot copy, please copy the link manually" : "Nie można skopiować, spróbuj skopiować link ręcznie",
     "Actions for \"{title}\"" : "Akcje dla \"{title}\"",
+    "Error generating password from password policy" : "Błąd generowania hasła z zasad haseł",
     "View in document" : "Zobacz w dokumencie",
     "Download" : "Pobierz",
     "Recently deleted" : "Ostatnio usunięte",

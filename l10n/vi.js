@@ -41,6 +41,7 @@ OC.L10N.register(
     "Can edit" : "Có thể chỉnh sửa",
     "Cannot copy, please copy the link manually" : "Không thể sao chép, vui lòng sao chép liên kết bằng tay",
     "Actions for \"{title}\"" : "Hành động cho \"{title}\"",
+    "Error generating password from password policy" : "Lỗi tạo mật khẩu từ chính sách mật khẩu",
     "Download" : "Tải xuống",
     "Current version" : "Phiên bản hiện tại",
     "No other versions available" : "Không có các phiên bản khác có sẵn",

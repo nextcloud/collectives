@@ -130,6 +130,7 @@ OC.L10N.register(
     "View only" : "Solo vista",
     "Cannot copy, please copy the link manually" : "No se puede copiar, por favor copia el enlace manualmente",
     "Actions for \"{title}\"" : "Acciones para \"{title}\"",
+    "Error generating password from password policy" : "Error al generar la contraseña según la política de contraseñas",
     "View in document" : "Ver en documento",
     "Download" : "Descargar",
     "Recently deleted" : "Eliminadas recientemente",

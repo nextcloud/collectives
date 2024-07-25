@@ -152,6 +152,7 @@ OC.L10N.register(
     "Can edit" : "توانایی ویرایش",
     "Cannot copy, please copy the link manually" : "کپی کردن امکان پذیر نیست ، لطفا پیوند را به صورت دستی کپی کنید",
     "Actions for \"{title}\"" : "Actions for \"{title}\"",
+    "Error generating password from password policy" : "Error generating password from password policy",
     "View in document" : "View in document",
     "Download" : "بارگیری",
     "Recently deleted" : "Recently deleted",

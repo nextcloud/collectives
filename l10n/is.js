@@ -38,6 +38,7 @@ OC.L10N.register(
     "Can edit" : "Getur breytt",
     "Cannot copy, please copy the link manually" : "Mistókst að afrita, afritaðu tengilinn handvirkt",
     "Actions for \"{title}\"" : "Aðgerðir fyrir \"{title}\"",
+    "Error generating password from password policy" : "Villa við að útbúa lykilorð út frá lykilorðastefnu",
     "Download" : "Sækja",
     "Current version" : "Fyrirliggjandi útgáfa",
     "No other versions available" : "Engar aðrar útgáfur í boði",
