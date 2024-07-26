@@ -184,6 +184,7 @@ OC.L10N.register(
     "Backlinks" : "Backlinks",
     "Sharing" : "Deling",
     "Versions" : "Versioner",
+    "Clear search" : "Ryd søgning",
     "The content of this folder is best viewed in the Collectives app." : "Indholdet af denne mappe vises bedst i Kollektiv-appen.",
     "Open in Collectives" : "Åben i Kollektiver",
     "Come, organize and build shared knowledge!" : "Kom, organiser og opbyg fælles viden!",

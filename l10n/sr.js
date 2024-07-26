@@ -223,6 +223,7 @@ OC.L10N.register(
     "Backlinks" : "Повратни линкови",
     "Sharing" : "Дељење",
     "Versions" : "Верзије",
+    "Clear search" : "Обриши претрагу",
     "The content of this folder is best viewed in the Collectives app." : "Садржај овог фолдера изгледа најбоље када се прегледа из апликације Колективи.",
     "Open in Collectives" : "Отвори у Колективима",
     "Come, organize and build shared knowledge!" : "Дођите, организујте и изградите заједничко знаљње!",

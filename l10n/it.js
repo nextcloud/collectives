@@ -135,6 +135,7 @@ OC.L10N.register(
     "Backlinks" : "Link entranti",
     "Sharing" : "Condivisione",
     "Versions" : "Versioni",
+    "Clear search" : "Svuota ricerca",
     "The content of this folder is best viewed in the Collectives app." : "Il contenuto di questa cartella è meglio visualizzato nell'applicazione Collettivi",
     "Open in Collectives" : "Apri in Collettivi",
     "Come, organize and build shared knowledge!" : "Entra, organizza e costruisci la conoscenza condivisa!",

@@ -115,6 +115,7 @@ OC.L10N.register(
     "Collective \"{name}\" has been shared" : "Compartióse'l coleutivu «{name}»",
     "Page \"{name}\" has been unshared" : "Dexó de compartise la páxina «{name}»",
     "Collective \"{name}\" has been unshared" : "Dexó de compartise'l coleutivu «{name}»",
+    "Error generating password from password policy" : "Hebo un error al xenerar una contraseña a partir la política de contraseña",
     "View in document" : "Ver nel documentu",
     "Download" : "Baxar",
     "Current version" : "Versión actual",

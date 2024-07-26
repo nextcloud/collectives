@@ -212,6 +212,7 @@ OC.L10N.register(
     "Backlinks" : "Atzeko estekak",
     "Sharing" : "Partekatzea",
     "Versions" : "Bertsioak",
+    "Clear search" : "Garbitu bilaketa",
     "The content of this folder is best viewed in the Collectives app." : "Karpeta honen edukia Collectives aplikazioan ikusten da hobekien.",
     "Open in Collectives" : "Ireki Kolektiboak-en",
     "Come, organize and build shared knowledge!" : "Zatoz, antolatu eta eraiki ezagutza partekatua!",

@@ -176,6 +176,7 @@ OC.L10N.register(
     "Backlinks" : "Visszahivatkozások",
     "Sharing" : "Megosztás",
     "Versions" : "Verziók",
+    "Clear search" : "Keresés törlése",
     "The content of this folder is best viewed in the Collectives app." : "A mappa tartalmának megjelenítéséhez a Kollektívák alkalmazás a legmegfelelőbb.",
     "Open in Collectives" : "Megnyitás a Kollektívákban",
     "Come, organize and build shared knowledge!" : "Jöjjön, szervezze és építse a közös tudásbázist!",

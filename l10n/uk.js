@@ -182,6 +182,7 @@ OC.L10N.register(
     "Backlinks" : "Зворотні посилання",
     "Sharing" : "Спільний доступ",
     "Versions" : "Версії",
+    "Clear search" : "Очистити пошук",
     "The content of this folder is best viewed in the Collectives app." : "Вміст цього каталогу найкраще переглядати у застосунку \"Колективи\".",
     "Open in Collectives" : "Відкрити колективи",
     "Come, organize and build shared knowledge!" : "Запрошуємо, організовуйте та наповнюйте колективні бази знань!",

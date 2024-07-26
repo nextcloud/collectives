@@ -223,6 +223,7 @@ OC.L10N.register(
     "Backlinks" : "Tilbakekoblinger",
     "Sharing" : "Deling",
     "Versions" : "Versjoner",
+    "Clear search" : "Tøm søk",
     "The content of this folder is best viewed in the Collectives app." : "Innholdet i denne mappen vises best i Kollektiver-appen.",
     "Open in Collectives" : "Åpne i Collectives",
     "Come, organize and build shared knowledge!" : "Ta del, organiser, og bygg delt kunnskap.",

@@ -128,6 +128,7 @@ OC.L10N.register(
     "Can edit" : "Може да се редактира",
     "Cannot copy, please copy the link manually" : "Не може да се копира, моля, копирайте връзката ръчно",
     "Actions for \"{title}\"" : "Действия за „{title}“",
+    "Error generating password from password policy" : "Грешка при генериране на парола от политиката за пароли",
     "View in document" : "Преглед в документа",
     "Download" : "Изтегляне",
     "Recently deleted" : "Наскоро изтрити",
