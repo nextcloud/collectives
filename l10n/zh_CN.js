@@ -192,6 +192,7 @@ OC.L10N.register(
     "Backlinks" : "反向链接",
     "Sharing" : "共享",
     "Versions" : "版本",
+    "Clear search" : "清除搜索",
     "The content of this folder is best viewed in the Collectives app." : "此文件夹中的内容在知识库应用中查看最佳。",
     "Open in Collectives" : "在知识库中打开",
     "Come, organize and build shared knowledge!" : "来吧，组织和建立共享的知识库！",

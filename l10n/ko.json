@@ -45,7 +45,7 @@
     "Update share" : "공유 업데이트",
     "Share link ({index})" : "링크 공유 ({index})",
     "View only" : "읽기 전용",
-    "Can edit" : "수정할 수 있음",
+    "Can edit" : "편집 허용",
     "Cannot copy, please copy the link manually" : "복사할 수 없습니다, 링크를 수동으로 복사하세요.",
     "Actions for \"{title}\"" : "\"{title}\"에 대한 작업",
     "Error generating password from password policy" : "암호 정책에서 암호 생성 중에 오류 발생",

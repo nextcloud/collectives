@@ -50,6 +50,7 @@ OC.L10N.register(
     "Attachments" : "Liitteet",
     "Sharing" : "Jakaminen",
     "Versions" : "Versiot",
+    "Clear search" : "Tyhjennä haku",
     "Link copied" : "Linkki kopioitu",
     "Copied" : "Kopioitu",
     "Cannot copy" : "Ei voida kopioida",

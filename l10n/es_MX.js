@@ -46,6 +46,7 @@ OC.L10N.register(
     "Attachments" : "Adjuntos",
     "Sharing" : "Compartiendo",
     "Versions" : "Versiones",
+    "Clear search" : "Limpiar búsqueda",
     "Link copied" : "Enlace copiado",
     "_%n byte_::_%n bytes_" : ["%n byte","%n bytes","%n bytes"]
 },

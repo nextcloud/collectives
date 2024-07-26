@@ -223,6 +223,7 @@ OC.L10N.register(
     "Backlinks" : "反向連結",
     "Sharing" : "分享",
     "Versions" : "版本",
+    "Clear search" : "清除搜尋",
     "The content of this folder is best viewed in the Collectives app." : "此資料夾的內容在知識庫應用程式中檢視最佳。",
     "Open in Collectives" : "在知識庫中開啟",
     "Come, organize and build shared knowledge!" : "快來整理與建構共享知識吧！",

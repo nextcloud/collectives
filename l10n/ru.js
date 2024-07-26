@@ -120,6 +120,7 @@ OC.L10N.register(
     "Backlinks" : "Обратные ссылки",
     "Sharing" : "Параметры публикации",
     "Versions" : "Версии",
+    "Clear search" : "Очистить поиск",
     "The content of this folder is best viewed in the Collectives app." : "Содержимое этого каталога лучше всего просматривать в приложении «Группы».",
     "Open in Collectives" : "Открыть в приложении «Группы»",
     "Come, organize and build shared knowledge!" : "Присоединяйтесь, создавайте и наполняйте общую базу знаний!",
