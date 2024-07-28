@@ -191,6 +191,7 @@ OC.L10N.register(
     "Backlinks" : "Zpětné odkazy",
     "Sharing" : "Sdílení",
     "Versions" : "Verze",
+    "Clear search" : "Vyčistit hledání",
     "The content of this folder is best viewed in the Collectives app." : "Obsah této složky nejlépe zobrazíte v aplikaci Kolektivy.",
     "Open in Collectives" : "Otevřít v Kolektivech",
     "Come, organize and build shared knowledge!" : "Organizujte se a vytvářejte sdílené znalosti!",

@@ -50,6 +50,7 @@ OC.L10N.register(
     "Attachments" : "Συνημμένα",
     "Sharing" : "Διαμοιρασμός",
     "Versions" : "Εκδόσεις",
+    "Clear search" : "Εκκαθάριση αναζήτησης",
     "Link copied" : "Ο σύνδεσμος αντιγράφηκε",
     "Copied" : "Αντιγράφτηκε",
     "Cannot copy" : "Δεν είναι δυνατή η αντιγραφή",
