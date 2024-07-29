@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
 Feature: publicPageShare
 
   Scenario: Create and share a single page publicly (read-only)

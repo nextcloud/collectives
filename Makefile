@@ -1,5 +1,5 @@
-# This file is licensed under the Affero General Public License version 3 or
-# later. See the COPYING file.
+# SPDX-FileCopyrightText: 2020-2023 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
 
 # Variables that can be overridden by env variables
 VERSION?=$(shell sed -ne 's/^\s*<version>\(.*\)<\/version>/\1/p' appinfo/info.xml)

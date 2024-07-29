@@ -1,3 +1,8 @@
+<!--
+  - SPDX-FileCopyrightText: 2021 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 <template>
 	<NcAppContent :show-details="showing('details')"
 		:list-size="20"

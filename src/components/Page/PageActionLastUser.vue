@@ -1,3 +1,8 @@
+<!--
+  - SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 <template>
 	<li v-if="lastUserDisplayName" class="action action--user-bubble">
 		<button class="action-button action-button--user-bubble" type="button">

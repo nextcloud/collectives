@@ -1,5 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
+/**
+ * SPDX-FileCopyrightText: 2020 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
 use GuzzleHttp\Client;
@@ -80,7 +87,7 @@ class FeatureContext implements Context {
 		$this->assertStatusCode(200);
 
 		$this->sendRequest('GET', '/apps/collectives/_api');
-		$this->assertCollectiveKeyValue($collective, $type . 'PermissionLevel', $intLevel);
+		$this->assertCollectiveKeyValue($collective, $type . 'PermissionLevel', (string)$intLevel);
 	}
 
 	/**
@@ -107,7 +114,7 @@ class FeatureContext implements Context {
 			$this->assertStatusCode(200);
 
 			$this->sendRequest('GET', '/apps/collectives/_api');
-			$this->assertCollectiveKeyValue($collective, 'pageMode', $intMode);
+			$this->assertCollectiveKeyValue($collective, 'pageMode', (string)$intMode);
 		}
 	}
 

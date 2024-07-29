@@ -1,3 +1,8 @@
+<!--
+  - SPDX-FileCopyrightText: 2020-2024 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 ## Build-time Dependencies
 
 The following tools are required for app development:

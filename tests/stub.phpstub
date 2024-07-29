@@ -1,10 +1,11 @@
 <?php
 
 declare(strict_types=1);
-// SPDX-FileCopyrightText: 2021 Robin Appelman <robin@icewind.nl>
-// SPDX-FileCopyrightText: 2022 Carl Schwan <carl@carlschwan.eu>
-// SPDX-FileCopyrightText: 2022 Jonas <jonas@freesources.org>
-// SPDX-License-Identifier: AGPL-3.0-or-later
+
+/**
+ * SPDX-FileCopyrightText: 2021-2024 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
 
 namespace {
     use OCP\IServerContainer;

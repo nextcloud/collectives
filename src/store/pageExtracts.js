@@ -1,3 +1,8 @@
+/**
+ * SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
 // Functions extracted from vuex page store to be reused in other places
 
 /* eslint import/namespace: ['error', { allowComputed: true }] */
