@@ -15,6 +15,7 @@ use OCP\App\IAppManager;
 use OCP\AppFramework\AuthPublicShareController;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
+use OCP\AppFramework\Http\Attribute\AnonRateLimit;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\Attribute\PublicPage;
 use OCP\AppFramework\Http\Template\PublicTemplateResponse;
@@ -80,6 +81,7 @@ class PublicStartController extends AuthPublicShareController {
 
 	#[PublicPage]
 	#[NoCSRFRequired]
+	#[AnonRateLimit(limit: 10, period: 60)]
 	public function showAuthenticate(): TemplateResponse {
 		$templateParameters = ['share' => $this->getShare()];
 		return new TemplateResponse('core', 'publicshareauth', $templateParameters, 'guest');
@@ -87,6 +89,7 @@ class PublicStartController extends AuthPublicShareController {
 
 	#[PublicPage]
 	#[NoCSRFRequired]
+	#[AnonRateLimit(limit: 10, period: 60)]
 	public function showAuthFailed(): TemplateResponse {
 		$templateParameters = ['share' => $this->getShare(), 'wrongpw' => true];
 		return new TemplateResponse('core', 'publicshareauth', $templateParameters, 'guest');
@@ -94,6 +97,7 @@ class PublicStartController extends AuthPublicShareController {
 
 	#[PublicPage]
 	#[NoCSRFRequired]
+	#[AnonRateLimit(limit: 10, period: 60)]
 	public function showShare(): PublicTemplateResponse {
 		if ($appsMissing = $this->checkDependencies()) {
 			return new PublicTemplateResponse('collectives', 'error', ['appsMissing' => $appsMissing]);  // templates/error.php

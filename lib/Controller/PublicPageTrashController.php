@@ -17,6 +17,7 @@ use OCA\Collectives\Service\NotPermittedException;
 use OCA\Collectives\Service\PageService;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
+use OCP\AppFramework\Http\Attribute\AnonRateLimit;
 use OCP\AppFramework\Http\Attribute\PublicPage;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\PublicShareController;
@@ -102,6 +103,7 @@ class PublicPageTrashController extends PublicShareController {
 	}
 
 	#[PublicPage]
+	#[AnonRateLimit(limit: 10, period: 10)]
 	public function index(): DataResponse {
 		return $this->handleErrorResponse(function (): array {
 			$owner = $this->getCollectiveShare()->getOwner();
@@ -119,6 +121,7 @@ class PublicPageTrashController extends PublicShareController {
 	}
 
 	#[PublicPage]
+	#[AnonRateLimit(limit: 10, period: 10)]
 	public function restore(int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($id): array {
 			$this->checkEditPermissions();
@@ -135,6 +138,7 @@ class PublicPageTrashController extends PublicShareController {
 	}
 
 	#[PublicPage]
+	#[AnonRateLimit(limit: 10, period: 10)]
 	public function delete(int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($id): array {
 			$this->checkEditPermissions();
