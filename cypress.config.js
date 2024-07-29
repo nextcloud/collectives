@@ -4,9 +4,9 @@
  */
 
 const { defineConfig } = require('cypress')
+const cypressSplit = require('cypress-split')
 
 module.exports = defineConfig({
-	projectId: 'b6myzg',
 	viewportWidth: 1280,
 	viewportHeight: 900,
 	e2e: {
@@ -16,6 +16,10 @@ module.exports = defineConfig({
 
 			on('file:preprocessor', browserify())
 			on('file:preprocessor', webpack())
+
+			cypressSplit(on, config)
+
+			return config
 		},
 
 		baseUrl: 'http://localhost:8081/index.php/',
