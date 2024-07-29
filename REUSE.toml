@@ -1,0 +1,36 @@
+# SPDX-FileCopyrightText: 2024 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+version = 1
+SPDX-PackageName = "collectives"
+SPDX-PackageSupplier = "Nextcloud <info@nextcloud.com>"
+SPDX-PackageDownloadLocation = "https://github.com/nextcloud/text"
+
+[[annotations]]
+path = [".dockerignore", ".editorconfig", ".github/CODEOWNERS", ".github/ISSUE_TEMPLATE/**", ".github/pull_request_template.md", ".gitignore", ".gitmodules", ".l10nignore", ".npmignore", ".php-cs-fixer.dist.php", ".tx/**", "CHANGELOG.md", "composer.json", "composer.lock", "jest.config.json", "jsconfig.json", "package.json", "package-lock.json", "psalm.xml", "renovate.json"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "none"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = ["cypress/fixtures/**", "tests/phpunit.xml", "tests/psalm-baseline.xml", "tests/Integration/features/fixtures/**"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2020-2024 Nextcloud GmbH and Nextcloud contributors"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
+
+[[annotations]]
+path = ["docs/archetypes/default.md", "docs/content/**", "docs/static/images/**"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2020-2024 Nextcloud GmbH and Nextcloud contributors"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
+
+[[annotations]]
+path = ["l10n/**.js", "l10n/**.json", "skeleton/**.md"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2020-2024 Nextcloud GmbH and Nextcloud contributors"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
+
+[[annotations]]
+path = ["img/collectives-dark.svg", "img/collectives.svg", "img/folder-collective.svg", "img/page.svg"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2021 Jörg Schmidt of Institut für Gebrauchsgrafik <info@institut.gebrauchsgrafik.org>"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
