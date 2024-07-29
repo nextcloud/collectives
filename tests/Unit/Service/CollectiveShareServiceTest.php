@@ -1,5 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
+/**
+ * SPDX-FileCopyrightText: 2021 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
 namespace Unit\Service;
 
 use OC\Files\Node\Folder;
@@ -28,7 +35,7 @@ class CollectiveShareServiceTest extends TestCase {
 	private Collective $collective;
 
 	private string $userId = 'jane';
-	private string $collectiveId = '123';
+	private int $collectiveId = 123;
 	private string $collectiveName = 'Test Collective';
 	private Folder $collectiveFolder;
 

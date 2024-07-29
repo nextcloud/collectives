@@ -1,3 +1,8 @@
+<!--
+  - SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 <!-- dirty hack to workaround https://github.com/nextcloud/nextcloud-vue/issues/3231 -->
 <template>
 	<div>

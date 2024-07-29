@@ -1,3 +1,8 @@
+/**
+ * SPDX-FileCopyrightText: 2021 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
 import { generateUrl, imagePath } from '@nextcloud/router'
 import { FilesCollectivesPlugin } from './helpers/files.js'
 import './shared-init.js'

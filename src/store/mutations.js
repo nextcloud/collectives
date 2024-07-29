@@ -1,3 +1,8 @@
+/**
+ * SPDX-FileCopyrightText: 2021 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
 export const SET_CIRCLES = 'SET_CIRCLES'
 export const UPDATE_CIRCLE = 'UPDATE_CIRCLE'
 export const DELETE_CIRCLE_FOR = 'DELETE_CIRCLE_FOR'

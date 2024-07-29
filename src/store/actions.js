@@ -1,3 +1,8 @@
+/**
+ * SPDX-FileCopyrightText: 2021 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
 export const GET_CIRCLES = 'GET_CIRCLES'
 export const RENAME_CIRCLE = 'RENAME_CIRCLE'
 export const GET_CIRCLE_MEMBERS = 'GET_CIRCLE_MEMBERS'

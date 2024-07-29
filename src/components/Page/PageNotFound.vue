@@ -1,3 +1,8 @@
+<!--
+  - SPDX-FileCopyrightText: 2021 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 <template>
 	<NcEmptyContent :name="t('collectives', 'Page not found: {page}', { page: pageParam })"
 		:description="t('collectives', 'Select a page from the list or create a new one.')">

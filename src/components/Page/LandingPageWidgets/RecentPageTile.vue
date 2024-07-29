@@ -1,3 +1,8 @@
+<!--
+  - SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 <template>
 	<router-link :to="pagePath(page)" class="recent-page-tile">
 		<div class="recent-page-tile__rectangle">

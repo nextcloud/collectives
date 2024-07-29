@@ -1,3 +1,8 @@
+/**
+ * SPDX-FileCopyrightText: 2021 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
 import moment from '@nextcloud/moment'
 import { generateRemoteUrl } from '@nextcloud/router'
 import { formatFileSize } from '@nextcloud/files'

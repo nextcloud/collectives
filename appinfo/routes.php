@@ -1,9 +1,10 @@
 <?php
+
+declare(strict_types=1);
+
 /**
- * Nextcloud - Collectives
- *
- * This file is licensed under the Affero General Public License version 3 or
- * later. See the COPYING file.
+ * SPDX-FileCopyrightText: 2020 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
 return [

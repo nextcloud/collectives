@@ -1,3 +1,8 @@
+/**
+ * SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
 Cypress.Commands.add('openApp', (appName) => {
 	Cypress.log()
 	cy.get(`nav.app-menu li[data-app-id="${appName}"] a`).click()

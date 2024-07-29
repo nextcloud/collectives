@@ -1,4 +1,6 @@
 #!/bin/bash
+# SPDX-FileCopyrightText: 2021 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
 
 export CYPRESS_baseUrl="${CYPRESS_baseUrl:-http://localhost:8081/index.php}"
 export CYPRESS_ncVersion="${CYPRESS_ncVersion:-master}"

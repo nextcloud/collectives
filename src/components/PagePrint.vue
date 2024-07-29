@@ -1,3 +1,8 @@
+<!--
+  - SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 <template>
 	<div id="text-container" :key="'text-' + page.id" class="page sheet-view">
 		<h1 v-if="page.parentId === 0" id="page-title-collective" class="page-title page-title-collective">

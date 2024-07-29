@@ -1,5 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
+/**
+ * SPDX-FileCopyrightText: 2023 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
 namespace Unit\Service;
 
 use OCA\Collectives\Service\NotPermittedException;
@@ -18,7 +25,7 @@ class SubpageOrderServiceTest extends TestCase {
 		$this->expectException(NotPermittedException::class);
 		$this->expectExceptionMessage('Invalid format of subpage order');
 
-		SubpageOrderService::verify(1);
+		SubpageOrderService::verify('1');
 	}
 
 	public function testVerifyInvalid(): void {

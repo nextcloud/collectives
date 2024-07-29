@@ -1,3 +1,8 @@
+<!--
+  - SPDX-FileCopyrightText: 2020-2024 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 # Collectives
 
 Collectives is a Nextcloud App for activist and community projects to
@@ -38,13 +43,6 @@ Documentation for developers can be found at [DEVELOPING.md](DEVELOPING.md).
 
 Collectives translations are managed as part of the [Nextcloud project on Transifex](https://www.transifex.com/nextcloud/nextcloud/).
 
-## Maintainers
-
-* Azul and Jonas <collectivecloud@systemli.org>
-
 ## Licence
 
 AGPL v3 or later. See [COPYING](COPYING) for the full licence text.
-
-The app logo and page icons were designed and contributed by Jörg Schmidt
-from Institut für Gebrauchsgrafik <info@institut.gebrauchsgrafik.org>.
