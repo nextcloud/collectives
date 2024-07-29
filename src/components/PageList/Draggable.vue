@@ -38,7 +38,8 @@
 <script>
 import draggable from 'vuedraggable'
 import pageMixin from '../../mixins/pageMixin.js'
-import { mapGetters, mapMutations, mapState } from 'vuex'
+import { mapActions, mapState } from 'pinia'
+import { usePagesStore } from '../../stores/pages.js'
 
 export default {
 	name: 'Draggable',
@@ -78,21 +79,17 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			isDragoverTargetPage: (state) => state.pages.isDragoverTargetPage,
-		}),
-
-		...mapGetters([
-			'collapsed',
+		...mapState(usePagesStore, [
+			'isCollapsed',
 			'disableDragndropSortOrMove',
-			'loading',
-			'sortBy',
+			'isDragoverTargetPage',
+			'sortByOrder',
 			'visibleSubpages',
 		]),
 
 		allowSorting() {
 			// Disable sorting for templates and with alternative page orders
-			return !this.isTemplate && (this.sortBy === 'byOrder')
+			return !this.isTemplate && (this.sortByOrder === 'byOrder')
 		},
 
 		disabled() {
@@ -112,9 +109,7 @@ export default {
 	},
 
 	methods: {
-		...mapMutations([
-			'setHighlightPageId',
-		]),
+		...mapActions(usePagesStore, ['setHighlightPageId']),
 
 		getComponentData() {
 			return {

@@ -24,9 +24,10 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapState } from 'pinia'
+import { useCirclesStore } from '../../stores/circles.js'
+import { useCollectivesStore } from '../../stores/collectives.js'
 import { autocompleteSourcesToCircleMemberTypes, circlesMemberTypes } from '../../constants.js'
-import { GET_CIRCLE_MEMBERS, ADD_MEMBER_TO_CIRCLE } from '../../store/actions.js'
 import { NcModal } from '@nextcloud/vue'
 import MemberPicker from '../Member/MemberPicker.vue'
 
@@ -45,17 +46,9 @@ export default {
 		},
 	},
 
-	data() {
-		return {
-			loading: false,
-		}
-	},
-
 	computed: {
-		...mapGetters([
-			'circleMembersSorted',
-			'isCollectiveAdmin',
-		]),
+		...mapState(useCirclesStore, ['circleMembersSorted']),
+		...mapState(useCollectivesStore, ['isCollectiveAdmin']),
 
 		currentUserIsAdmin() {
 			return this.isCollectiveAdmin(this.collective)
@@ -63,18 +56,12 @@ export default {
 	},
 
 	beforeMount() {
-		this.dispatchGetCircleMembers(this.collective.circleId)
+		this.getCircleMembers(this.collective.circleId)
 	},
 
 	methods: {
-		...mapMutations([
-			'setMembersCollectiveId',
-		]),
-
-		...mapActions({
-			dispatchGetCircleMembers: GET_CIRCLE_MEMBERS,
-			dispatchAddMemberToCircle: ADD_MEMBER_TO_CIRCLE,
-		}),
+		...mapActions(useCirclesStore, ['getCircleMembers', 'addMemberToCircle']),
+		...mapActions(useCollectivesStore, ['setMembersCollectiveId']),
 
 		onClose() {
 			this.$emit('close')
@@ -85,12 +72,12 @@ export default {
 				return
 			}
 
-			await this.dispatchAddMemberToCircle({
+			await this.addMemberToCircle({
 				circleId: this.collective.circleId,
 				userId: member.id,
 				type: circlesMemberTypes[autocompleteSourcesToCircleMemberTypes[member.source]],
 			})
-			await this.dispatchGetCircleMembers(this.collective.circleId)
+			await this.getCircleMembers(this.collective.circleId)
 		},
 	},
 }

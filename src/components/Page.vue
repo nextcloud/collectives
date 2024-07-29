@@ -22,8 +22,8 @@
 					:show-preview="true"
 					:allow-unselect="true"
 					:selected-emoji="currentPage.emoji"
-					@select="setPageEmoji"
-					@unselect="unselectPageEmoji">
+					@select="onSelectEmoji"
+					@unselect="onUnselectEmoji">
 					<NcButton type="tertiary"
 						:aria-label="t('collectives', 'Select emoji for page')"
 						:title="t('collectives', 'Select emoji')"
@@ -82,7 +82,7 @@
 					:placeholder="t('collectives', 'Title')"
 					type="text"
 					:disabled="!currentCollectiveCanEdit"
-					@blur="renamePage()"
+					@blur="onTitleBlur()"
 					@keydown.stop="onTitleKeyDown">
 			</form>
 
@@ -121,10 +121,12 @@ import PageActionMenu from './Page/PageActionMenu.vue'
 import PageTemplateIcon from './Icon/PageTemplateIcon.vue'
 import TextEditor from './Page/TextEditor.vue'
 import SearchDialog from './SearchDialog.vue'
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapState } from 'pinia'
+import { useRootStore } from '../stores/root.js'
+import { useCollectivesStore } from '../stores/collectives.js'
+import { usePagesStore } from '../stores/pages.js'
 import pageMixin from '../mixins/pageMixin.js'
 import { showError } from '@nextcloud/dialogs'
-import { GET_PAGES, INIT_FULL_WIDTH_PAGEIDS, RENAME_PAGE } from '../store/actions.js'
 
 export default {
 	name: 'Page',
@@ -156,18 +158,22 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
-			'currentPage',
-			'currentCollective',
-			'currentCollectiveCanEdit',
-			'isIndexPage',
+		...mapState(useRootStore, [
 			'isPublic',
-			'isFullWidthView',
-			'isTemplatePage',
 			'isTextEdit',
-			'isLandingPage',
 			'loading',
 			'showing',
+		]),
+		...mapState(useCollectivesStore, [
+			'currentCollective',
+			'currentCollectiveCanEdit',
+		]),
+		...mapState(usePagesStore, [
+			'currentPage',
+			'isIndexPage',
+			'isFullWidthView',
+			'isTemplatePage',
+			'isLandingPage',
 		]),
 
 		hasSidebarToggle() {
@@ -241,23 +247,22 @@ export default {
 	},
 
 	mounted() {
-		this.dispatchInitFullWidthPageids()
+		this.initFullWidthPageIds()
 		document.title = this.documentTitle
 		this.initTitleEntry()
 	},
 
 	methods: {
-		...mapMutations([
+		...mapActions(useRootStore, [
 			'done',
 			'hide',
 			'load',
 		]),
-
-		...mapActions({
-			dispatchGetPages: GET_PAGES,
-			dispatchRenamePage: RENAME_PAGE,
-			dispatchInitFullWidthPageids: INIT_FULL_WIDTH_PAGEIDS,
-		}),
+		...mapActions(usePagesStore, [
+			'getPages',
+			'renamePage',
+			'initFullWidthPageIds',
+		]),
 
 		initTitleEntry() {
 			if (this.loading('newPageTitle')) {
@@ -281,12 +286,12 @@ export default {
 			this.$refs.texteditor.save()
 		},
 
-		async setPageEmoji(emoji) {
+		async onSelectEmoji(emoji) {
 			await this.setEmoji(this.currentPage.id, emoji)
 		},
 
-		unselectPageEmoji() {
-			return this.setPageEmoji('')
+		onUnselectEmoji() {
+			return this.onSelectEmoji('')
 		},
 
 		openPageEmojiPicker() {
@@ -297,15 +302,15 @@ export default {
 		/**
 		 * Rename currentPage on the server
 		 */
-		async renamePage() {
+		async onTitleBlur() {
 			if (!this.titleChanged) {
 				return
 			}
 			try {
-				await this.dispatchRenamePage(this.newTitle)
+				await this.renamePage(this.newTitle)
 				// The resulting title may be different due to sanitizing
 				this.newTitle = this.currentPage.title
-				this.dispatchGetPages(false)
+				this.getPages(false)
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not rename the page'))
@@ -331,6 +336,7 @@ export default {
 	.titlebar-buttons {
 		display: flex;
 		gap: 4px;
+		align-items: center;
 
 		&_sidebar-toggle {
 			margin-right: calc(var(--default-clickable-area) + 2px);

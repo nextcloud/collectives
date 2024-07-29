@@ -61,9 +61,9 @@ export default {
 			this.copying = true
 
 			if (collectiveId !== this.currentCollective.id) {
-				this.copyPageToCollective(collectiveId, this.parentId, parentId, this.pageId, newIndex)
+				this.copyToCollective(collectiveId, this.parentId, parentId, this.pageId, newIndex)
 			} else {
-				this.copyPage(this.parentId, parentId, this.pageId, newIndex)
+				this.copy(this.parentId, parentId, this.pageId, newIndex)
 			}
 
 			this.copying = false
@@ -80,9 +80,9 @@ export default {
 			this.moving = true
 
 			if (collectiveId !== this.currentCollective.id) {
-				this.movePageToCollective(collectiveId, this.parentId, parentId, this.pageId, newIndex)
+				this.moveToCollective(collectiveId, this.parentId, parentId, this.pageId, newIndex)
 			} else if (parentId !== this.parentId) {
-				this.movePage(this.parentId, parentId, this.pageId, newIndex)
+				this.move(this.parentId, parentId, this.pageId, newIndex)
 			} else {
 				// Change subpage order of current parent
 				this.subpageOrderUpdate(this.parentId, this.pageId, newIndex)

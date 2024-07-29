@@ -151,7 +151,11 @@
 
 <script>
 
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapState } from 'pinia'
+import { useRootStore } from '../stores/root.js'
+import { useCollectivesStore } from '../stores/collectives.js'
+import { usePagesStore } from '../stores/pages.js'
+import { useSearchStore } from '../stores/search.js'
 import { NcAppNavigationCaption, NcActionButton, NcActions, NcAppContentList, NcButton, NcTextField } from '@nextcloud/vue'
 import { showError } from '@nextcloud/dialogs'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
@@ -163,7 +167,6 @@ import SortAlphabeticalAscendingIcon from 'vue-material-design-icons/SortAlphabe
 import SortAscendingIcon from 'vue-material-design-icons/SortAscending.vue'
 import SortClockAscendingOutlineIcon from 'vue-material-design-icons/SortClockAscendingOutline.vue'
 import PagesTemplateIcon from './Icon/PagesTemplateIcon.vue'
-import { SET_COLLECTIVE_USER_SETTING_PAGE_ORDER } from '../store/actions.js'
 import { scrollToPage } from '../util/scrollToElement.js'
 import { pageOrders } from '../util/sortOrders.js'
 import SkeletonLoading from './SkeletonLoading.vue'
@@ -206,20 +209,20 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
-			'currentCollectiveCanEdit',
-			'rootPage',
-			'templatePage',
+		...mapState(useRootStore, ['isPublic', 'loading', 'showing']),
+		...mapState(useCollectivesStore, [
 			'currentCollective',
+			'currentCollectiveCanEdit',
 			'currentCollectiveIsPageShare',
 			'currentCollectivePath',
+		]),
+		...mapState(usePagesStore, [
+			'rootPage',
+			'templatePage',
 			'currentPage',
-			'isPublic',
 			'keptSortable',
-			'loading',
 			'visibleSubpages',
-			'sortBy',
-			'showing',
+			'sortByOrder',
 			'showTemplates',
 			'allPagesSorted',
 		]),
@@ -261,7 +264,7 @@ export default {
 		},
 
 		sortedBy() {
-			return (sortOrder) => this.sortBy === sortOrder
+			return (sortOrder) => this.sortByOrder === sortOrder
 		},
 
 		isFilteredview() {
@@ -295,16 +298,10 @@ export default {
 	},
 
 	methods: {
-		...mapMutations([
-			'setPageOrder',
-			'show',
-			'toggleTemplates',
-			'setSearchQuery',
-		]),
-
-		...mapActions({
-			dispatchSetUserPageOrder: SET_COLLECTIVE_USER_SETTING_PAGE_ORDER,
-		}),
+		...mapActions(useRootStore, ['show']),
+		...mapActions(useCollectivesStore, ['setCollectiveUserSettingPageOrder']),
+		...mapActions(usePagesStore, ['setPageOrder', 'toggleTemplates']),
+		...mapActions(useSearchStore, ['setSearchQuery']),
 
 		/**
 		 * Change page sort order and scroll to current page
@@ -314,7 +311,7 @@ export default {
 		sortPagesAndScroll(order) {
 			this.setPageOrder(order)
 			if (!this.isPublic) {
-				this.dispatchSetUserPageOrder({ id: this.currentCollective.id, pageOrder: pageOrders[order] })
+				this.setCollectiveUserSettingPageOrder({ id: this.currentCollective.id, pageOrder: pageOrders[order] })
 					.catch((error) => {
 						console.error(error)
 						showError(t('collectives', 'Could not save page order for collective'))

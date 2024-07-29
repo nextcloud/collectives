@@ -19,8 +19,11 @@
 
 <script>
 import { showInfo } from '@nextcloud/dialogs'
-import { mapActions, mapGetters, mapState } from 'vuex'
-import { GET_COLLECTIVES_FOLDER, GET_COLLECTIVES, GET_TRASH_COLLECTIVES } from './store/actions.js'
+import { mapActions, mapState } from 'pinia'
+import { useRootStore } from './stores/root.js'
+import { useSettingsStore } from './stores/settings.js'
+import { useCollectivesStore } from './stores/collectives.js'
+import { usePagesStore } from './stores/pages.js'
 import displayError from './util/displayError.js'
 import { NcContent } from '@nextcloud/vue'
 import CollectiveSettings from './components/Nav/CollectiveSettings.vue'
@@ -37,20 +40,24 @@ export default {
 		PageSidebar,
 	},
 
-	computed: {
-		...mapState([
-			'printView',
-			'messages',
-		]),
+	setup() {
+		const rootStore = useRootStore()
+		return { rootStore }
+	},
 
-		...mapGetters([
-			'currentCollective',
-			'currentPage',
+	computed: {
+		...mapState(useRootStore, [
 			'isPublic',
+			'messages',
+			'printView',
 			'shareTokenParam',
 			'showing',
+		]),
+		...mapState(useCollectivesStore, [
+			'currentCollective',
 			'settingsCollective',
 		]),
+		...mapState(usePagesStore, ['currentPage']),
 
 		info() {
 			return this.messages.info
@@ -65,55 +72,38 @@ export default {
 		'info'(current) {
 			if (current) {
 				showInfo(current)
-				this.$store.commit('info', null)
+				this.rootStore.info(null)
 			}
+		},
+		$route: {
+			handler(val) {
+				this.rootStore.collectiveParam = val.params.collective
+				this.rootStore.pageParam = val.params.page
+				this.rootStore.shareTokenParam = val.params.token
+				this.rootStore.fileIdQuery = val.query.fileId
+			},
+			immediate: true,
 		},
 	},
 
 	mounted() {
+		this.rootStore.load('collective')
 		this.getCollectives()
+			.catch(displayError('Could not fetch collectives'))
 		if (!this.isPublic) {
 			this.getCollectivesFolder()
+				.catch(displayError('Could not fetch collectives folder'))
 			this.getTrashCollectives()
+				.catch(displayError('Could not fetch collectives from trash'))
 		}
 	},
 
 	methods: {
-		...mapActions({
-			dispatchGetCollectives: GET_COLLECTIVES,
-			dispatchGetCollectivesFolder: GET_COLLECTIVES_FOLDER,
-			dispatchGetTrashCollectives: GET_TRASH_COLLECTIVES,
-		}),
-
-		/**
-		 * Get collective folder for user
-		 *
-		 * @return {Promise}
-		 */
-		getCollectivesFolder() {
-			return this.dispatchGetCollectivesFolder()
-				.catch(displayError('Could not fetch collectives folder'))
-		},
-
-		/**
-		 * Get list of all collectives
-		 *
-		 * @return {Promise}
-		 */
-		getCollectives() {
-			return this.dispatchGetCollectives()
-				.catch(displayError('Could not fetch collectives'))
-		},
-
-		/**
-		 * Get list of all collectives in trash
-		 *
-		 * @return {Promise}
-		 */
-		getTrashCollectives() {
-			return this.dispatchGetTrashCollectives()
-				.catch(displayError('Could not fetch collectives from trash'))
-		},
+		...mapActions(useSettingsStore, ['getCollectivesFolder']),
+		...mapActions(useCollectivesStore, [
+			'getCollectives',
+			'getTrashCollectives',
+		]),
 	},
 
 }

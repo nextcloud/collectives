@@ -11,7 +11,7 @@
 		</template>
 		<template v-else #list>
 			<NcAppNavigationCaption :name="t('collectives', 'Select a collective')" />
-			<CollectiveListItem v-for="collective in collectives"
+			<CollectiveListItem v-for="collective in sortedCollectives"
 				v-show="!collective.deleted"
 				:key="collective.id"
 				:collective="collective" />
@@ -26,8 +26,8 @@
 		</template>
 		<template #footer>
 			<CollectivesTrash v-if="displayTrash"
-				@restore-collective="restoreCollective"
-				@delete-collective="deleteCollective" />
+				@restore-collective="onRestoreCollective"
+				@delete-collective="onDeleteCollective" />
 			<CollectivesGlobalSettings v-if="!isPublic" />
 		</template>
 		<NewCollectiveModal v-if="showNewCollectiveModal" @close="onCloseNewCollectiveModal" />
@@ -38,9 +38,10 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapState } from 'pinia'
+import { useRootStore } from '../stores/root.js'
+import { useCollectivesStore } from '../stores/collectives.js'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { RESTORE_COLLECTIVE, DELETE_COLLECTIVE } from '../store/actions.js'
 import { NcAppNavigation, NcAppNavigationCaption, NcButton } from '@nextcloud/vue'
 import CollectiveMembersModal from './Nav/CollectiveMembersModal.vue'
 import CollectiveListItem from './Nav/CollectiveListItem.vue'
@@ -74,17 +75,16 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
-			'isPublic',
-			'loading',
-			'collectives',
+		...mapState(useRootStore, ['isPublic', 'loading']),
+		...mapState(useCollectivesStore, [
 			'membersCollective',
-			'trashCollectives',
+			'sortedCollectives',
+			'sortedTrashCollectives',
 		]),
 
 		displayTrash() {
 			return !this.isPublic
-				&& this.trashCollectives.length
+				&& this.sortedTrashCollectives.length
 				&& !this.loading('collectives')
 				&& !this.loading('collectiveTrash')
 		},
@@ -103,14 +103,11 @@ export default {
 	},
 
 	methods: {
-		...mapMutations([
+		...mapActions(useCollectivesStore, [
+			'deleteCollective',
+			'restoreCollective',
 			'setMembersCollectiveId',
 		]),
-
-		...mapActions({
-			dispatchRestoreCollective: RESTORE_COLLECTIVE,
-			dispatchDeleteCollective: DELETE_COLLECTIVE,
-		}),
 
 		/**
 		 * Restore a collective with the given name from trash
@@ -118,8 +115,8 @@ export default {
 		 * @param {object} collective Properties of the collective
 		 * @return {Promise}
 		 */
-		restoreCollective(collective) {
-			return this.dispatchRestoreCollective(collective)
+		onRestoreCollective(collective) {
+			return this.restoreCollective(collective)
 				.catch(displayError('Could not restore collective from trash'))
 		},
 
@@ -130,8 +127,8 @@ export default {
 		 * @param {boolean} circle Whether to delete the team as well
 		 * @return {Promise}
 		 */
-		deleteCollective(collective, circle) {
-			return this.dispatchDeleteCollective({ ...collective, circle })
+		onDeleteCollective(collective, circle) {
+			return this.deleteCollective({ ...collective, circle })
 				.catch(displayError('Could not delete collective from trash'))
 		},
 

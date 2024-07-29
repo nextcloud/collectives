@@ -14,8 +14,9 @@
 </template>
 
 <script>
+import { mapState } from 'pinia'
+import { useRootStore } from '../stores/root.js'
 import { NcEmptyContent } from '@nextcloud/vue'
-import { mapGetters } from 'vuex'
 import CollectivesIcon from './Icon/CollectivesIcon.vue'
 
 export default {
@@ -27,9 +28,7 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
-			'collectiveParam',
-		]),
+		...mapState(useRootStore, ['collectiveParam']),
 	},
 }
 </script>

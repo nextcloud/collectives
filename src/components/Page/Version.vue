@@ -55,11 +55,12 @@ import { getCurrentUser } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { generateRemoteUrl } from '@nextcloud/router'
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapState } from 'pinia'
+import { useRootStore } from '../../stores/root.js'
+import { usePagesStore } from '../../stores/pages.js'
+import { useVersionsStore } from '../../stores/versions.js'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import EmoticonOutlineIcon from 'vue-material-design-icons/EmoticonOutline.vue'
-import { SELECT_VERSION } from '../../store/mutations.js'
-import { GET_VERSIONS } from '../../store/actions.js'
 import editorMixin from '../../mixins/editorMixin.js'
 import pageContentMixin from '../../mixins/pageContentMixin.js'
 import SkeletonLoading from '../SkeletonLoading.vue'
@@ -84,12 +85,12 @@ export default {
 	],
 
 	computed: {
-		...mapGetters([
+		...mapState(useRootStore, ['loading']),
+		...mapState(useVersionsStore, ['version']),
+		...mapState(usePagesStore, [
 			'currentPage',
 			'isFullWidthView',
-			'loading',
 			'title',
-			'version',
 		]),
 
 		pageTitleIconSize() {
@@ -129,14 +130,11 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['done', 'load', 'hide']),
-
-		...mapActions({
-			dispatchGetVersions: GET_VERSIONS,
-		}),
+		...mapActions(useRootStore, ['done', 'hide', 'load']),
+		...mapActions(useVersionsStore, ['getVersions', 'selectVersion']),
 
 		closeVersions() {
-			this.$store.commit(SELECT_VERSION, null)
+			this.selectVersion(null)
 			this.hide('sidebar')
 		},
 		/**
@@ -152,8 +150,8 @@ export default {
 						Destination: this.restoreFolderUrl,
 					},
 				})
-				this.$store.commit(SELECT_VERSION, null)
-				this.dispatchGetVersions(this.currentPage.id)
+				this.selectVersion(null)
+				this.getVersions(this.currentPage.id)
 				showSuccess(t('collectives', 'Reverted {page} to revision {timestamp}.', {
 					page: this.currentPage.title,
 					timestamp: target.relativeTimestamp,

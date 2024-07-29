@@ -56,13 +56,14 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
+import { mapActions, mapState } from 'pinia'
+import { useRootStore } from '../../stores/root.js'
+import { usePagesStore } from '../../stores/pages.js'
 import { NcEmptyContent, NcListItem, NcLoadingIcon } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagon.vue'
 import ArrowBottomLeftIcon from 'vue-material-design-icons/ArrowBottomLeft.vue'
 import PageIcon from '../Icon/PageIcon.vue'
-import { GET_BACKLINKS } from '../../store/actions.js'
 
 export default {
 	name: 'SidebarTabBacklinks',
@@ -90,11 +91,11 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			backlinks: (state) => state.pages.backlinks,
-		}),
-		...mapGetters([
+		...mapState(useRootStore, [
 			'loading',
+		]),
+		...mapState(usePagesStore, [
+			'backlinks',
 			'pagePath',
 			'pagePathTitle',
 		]),
@@ -108,28 +109,25 @@ export default {
 		'page.id'() {
 			this.load('backlinks')
 			this.unsetBacklinks()
-			this.getBacklinks()
+			this.getBacklinksForPage()
 		},
 	},
 
 	mounted() {
 		this.load('backlinks')
-		this.getBacklinks()
+		this.getBacklinksForPage()
 	},
 
 	methods: {
-		...mapMutations(['done', 'load', 'unsetBacklinks']),
-
-		...mapActions({
-			dispatchGetBacklinks: GET_BACKLINKS,
-		}),
+		...mapActions(useRootStore, ['done', 'load']),
+		...mapActions(usePagesStore, ['getBacklinks', 'unsetBacklinks']),
 
 		/**
 		 * Get backlinks for a page
 		 */
-		async getBacklinks() {
+		async getBacklinksForPage() {
 			try {
-				await this.dispatchGetBacklinks(this.page)
+				await this.getBacklinks(this.page)
 			} catch (e) {
 				this.error = t('collectives', 'Could not get page backlinks')
 				console.error('Failed to get page backlinks', e)

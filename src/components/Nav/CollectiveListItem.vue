@@ -25,7 +25,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState } from 'pinia'
+import { useCollectivesStore } from '../../stores/collectives.js'
 import { NcAppNavigationItem } from '@nextcloud/vue'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import CollectiveActions from '../Collective/CollectiveActions.vue'
@@ -52,9 +53,7 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
-			'collectivePath',
-		]),
+		...mapState(useCollectivesStore, ['collectivePath']),
 	},
 }
 </script>

@@ -37,13 +37,15 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapActions, mapState } from 'pinia'
+import { useRootStore } from '../stores/root.js'
+import { useCollectivesStore } from '../stores/collectives.js'
+import { usePagesStore } from '../stores/pages.js'
 import { NcEmptyContent } from '@nextcloud/vue'
 import NcProgressBar from '@nextcloud/vue/dist/Components/NcProgressBar.js'
 import DownloadIcon from 'vue-material-design-icons/Download.vue'
 import debounce from 'debounce'
 import PagePrint from './PagePrint.vue'
-import { GET_PAGES } from '../store/actions.js'
 import displayError from '../util/displayError.js'
 
 export default {
@@ -74,11 +76,9 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
-			'currentCollective',
-			'pagesTreeWalk',
-			'shareTokenParam',
-		]),
+		...mapState(useRootStore, ['shareTokenParam']),
+		...mapState(useCollectivesStore, ['currentCollective']),
+		...mapState(usePagesStore, ['pagesTreeWalk']),
 
 		loadingCount() {
 			return this.loadPages.count + this.loadImages.count
@@ -105,23 +105,14 @@ export default {
 		},
 	},
 
-	mounted() {
-		this.getPages()
+	async mounted() {
+		await this.getPages()
+			.catch(displayError('Could not fetch pages'))
+		this.loadPages.total = this.pagesTreeWalk().length
 	},
 
 	methods: {
-		...mapActions({
-			dispatchGetPages: GET_PAGES,
-		}),
-
-		/**
-		 * Get list of all pages
-		 */
-		async getPages() {
-			await this.dispatchGetPages()
-				.catch(displayError('Could not fetch pages'))
-			this.loadPages.total = this.pagesTreeWalk().length
-		},
+		...mapActions(usePagesStore, ['getPages']),
 
 		ready(pageId) {
 			if (this.waitingFor.indexOf(pageId) >= 0) {

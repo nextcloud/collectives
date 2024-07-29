@@ -50,7 +50,10 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapState } from 'pinia'
+import { useRootStore } from '../../stores/root.js'
+import { useCollectivesStore } from '../../stores/collectives.js'
+import { useCirclesStore } from '../../stores/circles.js'
 import { NcActionButton, NcActionLink, NcActionSeparator } from '@nextcloud/vue'
 import { showError, showUndo } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
@@ -59,11 +62,6 @@ import CogIcon from 'vue-material-design-icons/Cog.vue'
 import DownloadIcon from 'vue-material-design-icons/Download.vue'
 import LogoutIcon from 'vue-material-design-icons/Logout.vue'
 import ShareVariantIcon from 'vue-material-design-icons/ShareVariant.vue'
-import {
-	LEAVE_CIRCLE,
-	MARK_COLLECTIVE_DELETED,
-	UNMARK_COLLECTIVE_DELETED,
-} from '../../store/actions.js'
 
 export default {
 	name: 'CollectiveActions',
@@ -93,11 +91,10 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
+		...mapState(useRootStore, ['isPublic', 'shareTokenparam']),
+		...mapState(useCollectivesStore, [
 			'collectiveCanShare',
 			'isCollectiveAdmin',
-			'isPublic',
-			'shareTokenParam',
 		]),
 
 		circleLink() {
@@ -112,17 +109,13 @@ export default {
 	},
 
 	methods: {
-		...mapActions({
-			dispatchLeaveCircle: LEAVE_CIRCLE,
-			dispatchMarkCollectiveDeleted: MARK_COLLECTIVE_DELETED,
-			dispatchUnmarkCollectiveDeleted: UNMARK_COLLECTIVE_DELETED,
-		}),
-
-		...mapMutations([
-			'setActiveSidebarTab',
+		...mapActions(useRootStore, ['setActiveSidebarTab', 'show']),
+		...mapActions(useCirclesStore, ['leaveCircle']),
+		...mapActions(useCollectivesStore, [
+			'markCollectiveDeleted',
 			'setMembersCollectiveId',
 			'setSettingsCollectiveId',
-			'show',
+			'unmarkCollectiveDeleted',
 		]),
 
 		openShareTab(collective) {
@@ -145,21 +138,21 @@ export default {
 				() => {
 					clearTimeout(this.leaveTimeout)
 					this.leaveTimeout = null
-					this.dispatchUnmarkCollectiveDeleted(collective)
+					this.unmarkCollectiveDeleted(collective)
 				},
 			)
 
-			this.dispatchMarkCollectiveDeleted(collective)
+			this.markCollectiveDeleted(collective)
 
 			this.leaveTimeout = setTimeout(() => {
-				this.dispatchLeaveCircle(collective).catch((e) => {
+				this.leaveCircle(collective).catch((e) => {
 					console.error('Failed to leave collective', e)
 					let errorMessage = ''
 					if (e.response?.data?.ocs?.meta?.message) {
 						errorMessage = e.response.data.ocs.meta.message
 					}
 					showError(t('collectives', 'Could not leave the collective. {errorMessage}', { errorMessage }))
-					this.dispatchUnmarkCollectiveDeleted(collective)
+					this.unmarkCollectiveDeleted(collective)
 				})
 			}, 10000)
 		},

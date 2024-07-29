@@ -13,7 +13,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState } from 'pinia'
+import { useRootStore } from '../../stores/root.js'
 import { NcEmptyContent } from '@nextcloud/vue'
 import PageIcon from '../Icon/PageIcon.vue'
 
@@ -26,9 +27,7 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
-			'pageParam',
-		]),
+		...mapState(useRootStore, ['pageParam']),
 	},
 }
 </script>

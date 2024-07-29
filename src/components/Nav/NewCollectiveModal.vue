@@ -114,11 +114,12 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from 'vuex'
+import { mapActions, mapState } from 'pinia'
+import { useCirclesStore } from '../../stores/circles.js'
+import { useCollectivesStore } from '../../stores/collectives.js'
 import { getCurrentUser } from '@nextcloud/auth'
 import { showError } from '@nextcloud/dialogs'
 import { NcButton, NcEmojiPicker, NcEmptyContent, NcModal, NcSelect, NcTextField } from '@nextcloud/vue'
-import { ADD_MEMBERS_TO_CIRCLE, GET_CIRCLES, NEW_COLLECTIVE } from '../../store/actions.js'
 import displayError from '../../util/displayError.js'
 import { autocompleteSourcesToCircleMemberTypes, circlesMemberTypes } from '../../constants.js'
 import AlertCircleOutlineIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
@@ -160,14 +161,11 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			updatedCollective: (state) => state.collectives.updatedCollective,
-		}),
-
-		...mapGetters([
-			'availableCircles',
+		...mapState(useCirclesStore, ['availableCircles']),
+		...mapState(useCollectivesStore, [
 			'collectiveChanged',
 			'randomCollectiveEmoji',
+			'updatedCollective',
 			'updatedCollectivePath',
 		]),
 
@@ -231,17 +229,18 @@ export default {
 		this.noDeleteMembers = [`users-${this.currentUserId}`]
 		this.emoji = this.randomCollectiveEmoji()
 		this.getCircles()
+			.catch(displayError('Could not get list of teams'))
 		this.$nextTick(() => {
 			this.$refs.collectiveName.$el.getElementsByTagName('input')[0]?.focus()
 		})
 	},
 
 	methods: {
-		...mapActions({
-			dispatchGetCircles: GET_CIRCLES,
-			dispatchAddMembersToCircle: ADD_MEMBERS_TO_CIRCLE,
-			dispatchNewCollective: NEW_COLLECTIVE,
-		}),
+		...mapActions(useCirclesStore, [
+			'getCircles',
+			'addMembersToCircle',
+		]),
+		...mapActions(useCollectivesStore, ['newCollective']),
 
 		clearName() {
 			this.name = ''
@@ -251,11 +250,6 @@ export default {
 			if (this.newCollectiveName && !this.nameIsInvalid) {
 				this.state = 1
 			}
-		},
-
-		async getCircles() {
-			return await this.dispatchGetCircles()
-				.catch(displayError('Could not get list of teams'))
 		},
 
 		onClose() {
@@ -271,7 +265,7 @@ export default {
 						type: circlesMemberTypes[autocompleteSourcesToCircleMemberTypes[entry.source]],
 					}))
 					try {
-						this.dispatchAddMembersToCircle({ circleId: this.updatedCollective.circleId, members })
+						this.addMembersToCircle({ circleId: this.updatedCollective.circleId, members })
 					} catch (e) {
 						showError(t('collectives', 'Could not add members to the collective'))
 					}
@@ -285,7 +279,7 @@ export default {
 			}
 
 			this.loading = true
-			this.dispatchNewCollective({ name: this.newCollectiveName, emoji: this.emoji })
+			this.newCollective({ name: this.newCollectiveName, emoji: this.emoji })
 				.then(updateCollective)
 				.catch((e) => {
 					if (e.response?.data === 'A team with that name exists') {

@@ -13,7 +13,9 @@
 
 <script>
 
-import { mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapState } from 'pinia'
+import { useRootStore } from '../stores/root.js'
+import { useCollectivesStore } from '../stores/collectives.js'
 import { NcAppContent, NcEmptyContent } from '@nextcloud/vue'
 import CollectivePrint from '../components/CollectivePrint.vue'
 import CollectiveNotFound from '../components/CollectiveNotFound.vue'
@@ -29,10 +31,8 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
-			'currentCollective',
-			'loading',
-		]),
+		...mapState(useRootStore, ['loading']),
+		...mapState(useCollectivesStore, ['currentCollective']),
 	},
 
 	mounted() {
@@ -40,7 +40,7 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['setPrintView']),
+		...mapActions(useRootStore, ['setPrintView']),
 	},
 }
 </script>

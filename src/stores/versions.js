@@ -1,37 +1,30 @@
 /**
- * SPDX-FileCopyrightText: 2021 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-FileCopyrightText: 2024 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { defineStore } from 'pinia'
 import axios from '@nextcloud/axios'
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateRemoteUrl } from '@nextcloud/router'
-import { SELECT_VERSION, SET_VERSIONS } from './mutations.js'
-import { GET_VERSIONS } from './actions.js'
 import xmlToVersionsList from '../util/xmlToVersionsList.js'
 
-export default {
-	state: {
+export const useVersionsStore = defineStore('versions', {
+	state: () => ({
 		version: null,
 		versions: [],
-	},
+	}),
 
 	getters: {
-		version: (state) => state.version,
 		hasVersionsLoaded: (state) => !!state.versions.length,
 	},
 
-	mutations: {
-		[SELECT_VERSION](state, version) {
-			state.version = version
+	actions: {
+		selectVersion(version) {
+			this.version = version
 		},
 
-		[SET_VERSIONS](state, versions) {
-			state.versions = versions
-		},
-	},
-	actions: {
-		async [GET_VERSIONS]({ commit }, pageId) {
+		async getVersions(pageId) {
 			const user = getCurrentUser().uid
 			const versionsUrl = generateRemoteUrl(`dav/versions/${user}/versions/${pageId}`)
 			const response = await axios({
@@ -46,8 +39,7 @@ export default {
  </d:prop>
 </d:propfind>`,
 			})
-			const versions = xmlToVersionsList(response.data).reverse()
-			commit(SET_VERSIONS, versions)
+			this.versions = xmlToVersionsList(response.data).reverse()
 		},
 	},
-}
+})

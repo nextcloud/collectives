@@ -130,7 +130,7 @@
 
 		<NcAppSettingsSection id="danger-zone" :name="t('collectives', 'Danger zone')">
 			<div>
-				<NcButton type="error" :aria-label="t('collectives', 'Delete collective')" @click="trashCollective()">
+				<NcButton type="error" :aria-label="t('collectives', 'Delete collective')" @click="onTrashCollective()">
 					{{ t('collectives', 'Delete collective') }}
 				</NcButton>
 			</div>
@@ -140,20 +140,17 @@
 
 <script>
 import { memberLevels, pageModes } from '../../constants.js'
-import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
+import { mapActions, mapState } from 'pinia'
+import { useRootStore } from '../../stores/root.js'
+import { useCirclesStore } from '../../stores/circles.js'
+import { useCollectivesStore } from '../../stores/collectives.js'
+import { usePagesStore } from '../../stores/pages.js'
+import { emit } from '@nextcloud/event-bus'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { NcAppSettingsDialog, NcAppSettingsSection, NcButton, NcCheckboxRadioSwitch, NcTextField } from '@nextcloud/vue'
 import AlertCircleOutlineIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
 import NcEmojiPicker from '@nextcloud/vue/dist/Components/NcEmojiPicker.js'
 import EmoticonOutline from 'vue-material-design-icons/EmoticonOutline.vue'
-import {
-	RENAME_CIRCLE,
-	UPDATE_COLLECTIVE,
-	TRASH_COLLECTIVE,
-	UPDATE_COLLECTIVE_EDIT_PERMISSIONS,
-	UPDATE_COLLECTIVE_SHARE_PERMISSIONS,
-	UPDATE_COLLECTIVE_PAGE_MODE,
-} from '../../store/actions.js'
 import displayError from '../../util/displayError.js'
 
 export default {
@@ -191,16 +188,13 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			pages: (state) => state.pages.pages,
-		}),
-
-		...mapGetters([
+		...mapState(useRootStore, [
 			'collectiveParam',
-			'pageParam',
-			'isCollectiveOwner',
 			'loading',
+			'pageParam',
 		]),
+		...mapState(useCollectivesStore, ['isCollectiveOwner']),
+		...mapState(usePagesStore, ['pages']),
 
 		emojiTitle() {
 			return this.collective.emoji ? t('collectives', 'Change emoji') : t('collectives', 'Add emoji')
@@ -233,7 +227,7 @@ export default {
 		editPermissions(val) {
 			const permission = String(val)
 			this.load('updateCollectiveEditPermissions_' + permission)
-			this.dispatchUpdateCollectiveEditPermissions({ id: this.collective.id, level: parseInt(permission) }).then(() => {
+			this.updateCollectiveEditPermissions({ id: this.collective.id, level: parseInt(permission) }).then(() => {
 				this.done('updateCollectiveEditPermissions_' + permission)
 				showSuccess(t('collectives', 'Editing permissions updated'))
 			}).catch((error) => {
@@ -246,7 +240,7 @@ export default {
 		sharePermissions(val) {
 			const permission = String(val)
 			this.load('updateCollectiveSharePermissions_' + permission)
-			this.dispatchUpdateCollectiveSharePermissions({ id: this.collective.id, level: parseInt(permission) }).then(() => {
+			this.updateCollectiveSharePermissions({ id: this.collective.id, level: parseInt(permission) }).then(() => {
 				showSuccess(t('collectives', 'Sharing permissions updated'))
 				this.done('updateCollectiveSharePermissions_' + permission)
 			}).catch((error) => {
@@ -259,7 +253,7 @@ export default {
 		pageMode(val) {
 			const pageMode = String(val)
 			this.load('updateCollectivePageMode_' + pageMode)
-			this.dispatchUpdateCollectivePageMode({ id: this.collective.id, mode: parseInt(pageMode) }).then(() => {
+			this.updateCollectivePageMode({ id: this.collective.id, mode: parseInt(pageMode) }).then(() => {
 				this.done('updateCollectivePageMode_' + pageMode)
 				showSuccess(t('collectives', 'Default page mode updated'))
 			}).catch((error) => {
@@ -272,20 +266,19 @@ export default {
 	},
 
 	methods: {
-		...mapMutations([
+		...mapActions(useRootStore, [
 			'load',
 			'done',
-			'setSettingsCollectiveId',
 		]),
-
-		...mapActions({
-			dispatchRenameCircle: RENAME_CIRCLE,
-			dispatchUpdateCollective: UPDATE_COLLECTIVE,
-			dispatchTrashCollective: TRASH_COLLECTIVE,
-			dispatchUpdateCollectiveEditPermissions: UPDATE_COLLECTIVE_EDIT_PERMISSIONS,
-			dispatchUpdateCollectiveSharePermissions: UPDATE_COLLECTIVE_SHARE_PERMISSIONS,
-			dispatchUpdateCollectivePageMode: UPDATE_COLLECTIVE_PAGE_MODE,
-		}),
+		...mapActions(useCirclesStore, ['renameCircle']),
+		...mapActions(useCollectivesStore, [
+			'setSettingsCollectiveId',
+			'trashCollective',
+			'updateCollective',
+			'updateCollectiveEditPermissions',
+			'updateCollectiveSharePermissions',
+			'updateCollectivePageMode',
+		]),
 
 		/**
 		 * Update the emoji of a collective
@@ -297,7 +290,7 @@ export default {
 			this.load('updateCollectiveEmoji')
 			const collective = { id: this.collective.id }
 			collective.emoji = emoji
-			this.dispatchUpdateCollective(collective).then(() => {
+			this.updateCollective(collective).then(() => {
 				showSuccess(t('collectives', 'Emoji updated'))
 				this.done('updateCollectiveEmoji')
 			}).catch((error) => {
@@ -328,7 +321,7 @@ export default {
 			// Wait for team rename (also patches store with updated collective and pages)
 			const collective = { ...this.collective }
 			collective.name = this.newCollectiveName
-			await this.dispatchRenameCircle(collective).then(() => {
+			await this.renameCircle(collective).then(() => {
 				showSuccess('Collective renamed')
 			}).catch((error) => {
 				showError(t('collectives', 'Could not rename the collective'))
@@ -353,13 +346,16 @@ export default {
 		/**
 		 * Trash a collective with the given name
 		 */
-		trashCollective() {
+		onTrashCollective() {
 			if (this.collectiveParam === this.collective.name) {
 				this.$router.push('/')
+				emit('toggle-navigation', { open: true })
 			}
-			this.dispatchTrashCollective(this.collective)
+			this.trashCollective(this.collective)
 				.catch(displayError('Could not move the collective to trash'))
-				.finally(this.setSettingsCollectiveId(null))
+				.finally(() => {
+					this.setSettingsCollectiveId(null)
+				})
 		},
 	},
 }

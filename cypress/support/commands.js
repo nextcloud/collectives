@@ -123,46 +123,12 @@ Cypress.Commands.add('enableDashboardWidget', (widgetName) => {
 	}
 })
 
-Cypress.Commands.add('store', (selector, options = {}) => {
-	Cypress.log()
-	if (selector) {
-		cy.window(silent)
-			.its(`app.$store.${selector}`, silent)
-	} else {
-		cy.window(silent)
-			.its('app.$store', silent)
-	}
-})
-
 Cypress.Commands.add('routeTo', (path) => {
 	Cypress.log()
 	cy.window(silent)
 		.its('app.$router', silent)
 		.invoke(silent, 'push', path)
 })
-
-/*
- * Dispatch action
- *
- * When used as a child command expects an object to be yielded
- * and merges it into the payload:
- * `cy.wrap({ id: 123 }).dispatch(SOME_ACTION, { value: 'Hello' })`
- * will dispatch `SOME_ACTION` with a payload of `{ id: 123, value: 'Hello'}`.
- *
- * If null is yielded the action won't be dispatched.
- * This is useful for cleanup commands like `deleteCollective`.
- */
-Cypress.Commands.add('dispatch',
-	{ prevSubject: 'optional' },
-	(subject, action, payload) => {
-		// used as a child command but null was yielded
-		if (subject === null) {
-			return
-		}
-		Cypress.log()
-		cy.store()
-			.invoke(silent, 'dispatch', action, { ...payload, ...subject })
-	})
 
 Cypress.Commands.add('findBy',
 	{ prevSubject: true },

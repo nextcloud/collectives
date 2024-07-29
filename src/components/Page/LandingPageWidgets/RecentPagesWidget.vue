@@ -43,15 +43,16 @@
 
 <script>
 import debounce from 'debounce'
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapState } from 'pinia'
+import { useRootStore } from '../../../stores/root.js'
+import { useCollectivesStore } from '../../../stores/collectives.js'
+import { usePagesStore } from '../../../stores/pages.js'
 import { showError } from '@nextcloud/dialogs'
 import ChevronDownIcon from 'vue-material-design-icons/ChevronDown.vue'
 import ChevronLeftIcon from 'vue-material-design-icons/ChevronLeft.vue'
 import ChevronRightIcon from 'vue-material-design-icons/ChevronRight.vue'
 import RecentPageTile from './RecentPageTile.vue'
 import WidgetHeading from './WidgetHeading.vue'
-import { PATCH_COLLECTIVE_WITH_PROPERTY } from '../../../store/mutations.js'
-import { SET_COLLECTIVE_USER_SETTING_SHOW_RECENT_PAGES } from '../../../store/actions.js'
 
 const SLIDE_OFFSET = 198
 
@@ -73,11 +74,9 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
-			'currentCollective',
-			'isPublic',
-			'recentPages',
-		]),
+		...mapState(useRootStore, ['isPublic']),
+		...mapState(useCollectivesStore, ['currentCollective']),
+		...mapState(usePagesStore, ['recentPages']),
 
 		expandLabel() {
 			return this.showRecentPages
@@ -107,19 +106,16 @@ export default {
 	},
 
 	methods: {
-		...mapMutations({
-			patchCollectiveWithProperty: PATCH_COLLECTIVE_WITH_PROPERTY,
-		}),
-
-		...mapActions({
-			dispatchSetUserShowRecentPages: SET_COLLECTIVE_USER_SETTING_SHOW_RECENT_PAGES,
-		}),
+		...mapActions(useCollectivesStore, [
+			'patchCollectiveWithProperty',
+			'setCollectiveUserSettingShowRecentPages',
+		]),
 
 		toggleWidget() {
 			if (this.isPublic) {
 				this.patchCollectiveWithProperty({ id: this.currentCollective.id, property: 'userShowRecentPages', value: !this.showRecentPages })
 			} else {
-				this.dispatchSetUserShowRecentPages({ id: this.currentCollective.id, showRecentPages: !this.showRecentPages })
+				this.setCollectiveUserSettingShowRecentPages({ id: this.currentCollective.id, showRecentPages: !this.showRecentPages })
 					.catch((error) => {
 						console.error(error)
 						showError(t('collectives', 'Could not save recent pages setting for collective'))

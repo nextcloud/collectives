@@ -25,11 +25,11 @@
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { showError } from '@nextcloud/dialogs'
 import WidgetHeading from './LandingPageWidgets/WidgetHeading.vue'
-import { mapActions, mapGetters, mapMutations } from 'vuex'
-import {
-	GET_VERSIONS,
-	TOUCH_PAGE,
-} from '../../store/actions.js'
+import { mapActions, mapState } from 'pinia'
+import { useRootStore } from '../../stores/root.js'
+import { useCollectivesStore } from '../../stores/collectives.js'
+import { usePagesStore } from '../../stores/pages.js'
+import { useVersionsStore } from '../../stores/versions.js'
 import editorMixin from '../../mixins/editorMixin.js'
 import pageContentMixin from '../../mixins/pageContentMixin.js'
 import SkeletonLoading from '../SkeletonLoading.vue'
@@ -54,17 +54,16 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
+		...mapState(useRootStore, ['isPublic', 'isTextEdit', 'loading']),
+		...mapState(useCollectivesStore, [
 			'currentCollective',
 			'currentCollectiveCanEdit',
+		]),
+		...mapState(usePagesStore, [
 			'currentPage',
 			'currentPageDavUrl',
-			'hasVersionsLoaded',
 			'isLandingPage',
-			'isPublic',
 			'isTemplatePage',
-			'isTextEdit',
-			'loading',
 		]),
 
 		showEditor() {
@@ -108,17 +107,14 @@ export default {
 	},
 
 	methods: {
-		...mapMutations([
+		...mapActions(useRootStore, [
 			'load',
 			'done',
 			'setTextEdit',
 			'setTextView',
 		]),
-
-		...mapActions({
-			dispatchTouchPage: TOUCH_PAGE,
-			dispatchGetVersions: GET_VERSIONS,
-		}),
+		...mapActions(useVersionsStore, ['getVersions']),
+		...mapActions(usePagesStore, ['touchPage']),
 
 		restoreAttachment(name) {
 			// inspired by the fixedEncodeURIComponent function suggested in
@@ -157,9 +153,9 @@ export default {
 
 			const changed = this.editorContent && (this.editorContent !== this.davContent)
 			if (changed) {
-				this.dispatchTouchPage()
+				this.touchPage()
 				if (!this.isPublic && this.hasVersionsLoaded) {
-					this.dispatchGetVersions(this.currentPage.id)
+					this.getVersions(this.currentPage.id)
 				}
 
 				// Save pending changes in editor

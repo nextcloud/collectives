@@ -15,10 +15,10 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState } from 'pinia'
+import { useSettingsStore } from '../../stores/settings.js'
 import { getFilePickerBuilder, showError } from '@nextcloud/dialogs'
 import { NcAppNavigationSettings, NcTextField } from '@nextcloud/vue'
-import { UPDATE_COLLECTIVES_FOLDER } from '../../store/actions.js'
 import displayError from '../../util/displayError.js'
 
 export default {
@@ -35,12 +35,12 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			collectivesFolder: (state) => state.settings.collectivesFolder,
-		}),
+		...mapState(useSettingsStore, ['collectivesFolder']),
+
 		disabledPicker() {
 			return this.collectivesFolderLoading || !this.collectivesFolder
 		},
+
 		userFolderValue() {
 			return this.disabledPicker
 				? t('collectives', 'Create a collective first')
@@ -49,9 +49,7 @@ export default {
 	},
 
 	methods: {
-		...mapActions({
-			dispatchUpdateCollectivesFolder: UPDATE_COLLECTIVES_FOLDER,
-		}),
+		...mapActions(useSettingsStore, ['updateCollectivesFolder']),
 
 		selectCollectivesFolder() {
 			const picker = getFilePickerBuilder(t('collectives', 'Select location for collectives'))
@@ -73,7 +71,7 @@ export default {
 					}
 
 					this.collectivesFolderLoading = true
-					this.dispatchUpdateCollectivesFolder(path)
+					this.updateCollectivesFolder(path)
 						.catch(displayError('Could not update collectives folder'))
 					this.collectivesFolderLoading = false
 				})

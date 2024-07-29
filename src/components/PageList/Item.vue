@@ -48,7 +48,7 @@
 					fill-color="var(--color-main-text)"
 					:title="t('collectives', 'Expand subpage list')"
 					class="item-icon-badge"
-					:class="collapsed(pageId) ? 'collapsed' : 'expanded'" />
+					:class="isCollapsed(pageId) ? 'collapsed' : 'expanded'" />
 			</template>
 		</div>
 		<router-link :to="to"
@@ -87,7 +87,9 @@
 
 <script>
 import { generateUrl } from '@nextcloud/router'
-import { mapGetters, mapMutations, mapState } from 'vuex'
+import { mapActions, mapState } from 'pinia'
+import { usePagesStore } from '../../stores/pages.js'
+import { TEMPLATE_PAGE } from '../../constants.js'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import CollectivesIcon from '../Icon/CollectivesIcon.vue'
 import { NcActionButton, NcActions } from '@nextcloud/vue'
@@ -189,17 +191,14 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			highlightPageId: (state) => state.pages.highlightPageId,
-			highlightAnimationPageId: (state) => state.pages.highlightAnimationPageId,
-			isDragoverTargetPage: (state) => state.pages.isDragoverTargetPage,
-			draggedPageId: (state) => state.pages.draggedPageId,
-		}),
-
-		...mapGetters([
-			'collapsed',
+		...mapState(usePagesStore, [
+			'isCollapsed',
 			'currentPage',
 			'disableDragndropSortOrMove',
+			'draggedPageId',
+			'highlightAnimationPageId',
+			'highlightPageId',
+			'isDragoverTargetPage',
 			'pageParent',
 			'pageParents',
 		]),
@@ -214,23 +213,13 @@ export default {
 			return Math.min(Math.max(0, this.level - 1), 4)
 		},
 
-		indentItem() {
-			const left = 28 * this.indent
-			return `padding-left: ${left}px`
-		},
-
-		// UTF8 friendly way of getting first 'letter'
-		firstGrapheme() {
-			return this.title[Symbol.iterator]().next().value
-		},
-
 		isCollapsible() {
 			// root page is not collapsible
 			return (this.level > 0 && this.hasVisibleSubpages)
 		},
 
 		pageTitleString() {
-			return this.title === 'Template' ? t('collectives', 'Template') : this.title
+			return this.title === TEMPLATE_PAGE ? t('collectives', 'Template') : this.title
 		},
 
 		pageTitleIfTruncated() {
@@ -288,7 +277,7 @@ export default {
 	},
 
 	methods: {
-		...mapMutations([
+		...mapActions(usePagesStore, [
 			'expand',
 			'setDragoverTargetPage',
 			'setDraggedPageId',
