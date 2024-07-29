@@ -5,6 +5,8 @@
 
 # Collectives
 
+[![REUSE status](https://api.reuse.software/badge/github.com/nextcloud/collectives)](https://api.reuse.software/info/github.com/nextcloud/collectives)
+
 Collectives is a Nextcloud App for activist and community projects to
 organize together. Come and gather in collectives to build shared knowledge.
 
