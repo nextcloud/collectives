@@ -15,6 +15,7 @@ use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\CollectiveShareService;
 use OCA\Collectives\Service\PageService;
 use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
 use OCP\IUserSession;
@@ -41,9 +42,7 @@ class ShareController extends Controller {
 		return $this->handleErrorResponse($callback, $this->logger);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
+	#[NoAdminRequired]
 	public function getCollectiveShares(int $collectiveId): DataResponse {
 		return $this->prepareResponse(function () use ($collectiveId): array {
 			$userId = $this->getUserId();
@@ -55,30 +54,22 @@ class ShareController extends Controller {
 		});
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
+	#[NoAdminRequired]
 	public function createCollectiveShare(int $collectiveId, string $password = ''): DataResponse {
 		return $this->createPageShare($collectiveId, 0, $password);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
+	#[NoAdminRequired]
 	public function updateCollectiveShare(int $collectiveId, string $token, bool $editable, string $password = ''): DataResponse {
 		return $this->updatePageShare($collectiveId, 0, $token, $editable, $password);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
+	#[NoAdminRequired]
 	public function deleteCollectiveShare(int $collectiveId, string $token): DataResponse {
 		return $this->deletePageShare($collectiveId, 0, $token);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
+	#[NoAdminRequired]
 	public function createPageShare(int $collectiveId, int $pageId = 0, string $password = ''): DataResponse {
 		return $this->prepareResponse(function () use ($collectiveId, $pageId, $password): array {
 			$userId = $this->getUserId();
@@ -94,9 +85,7 @@ class ShareController extends Controller {
 		});
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
+	#[NoAdminRequired]
 	public function updatePageShare(int $collectiveId, int $pageId, string $token, bool $editable, string $password = ''): DataResponse {
 		return $this->prepareResponse(function () use ($collectiveId, $pageId, $token, $editable, $password): array {
 			$userId = $this->getUserId();
@@ -112,9 +101,7 @@ class ShareController extends Controller {
 		});
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
+	#[NoAdminRequired]
 	public function deletePageShare(int $collectiveId, int $pageId, string $token): DataResponse {
 		return $this->prepareResponse(function () use ($collectiveId, $pageId, $token): array {
 			$userId = $this->getUserId();

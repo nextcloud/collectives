@@ -11,6 +11,7 @@ namespace OCA\Collectives\Controller;
 
 use OCA\Collectives\Service\CollectiveService;
 use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
 use OCP\IUserSession;
@@ -31,9 +32,7 @@ class TrashController extends Controller {
 		return $this->userSession->getUser()->getUID();
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
+	#[NoAdminRequired]
 	public function index(): DataResponse {
 		return $this->handleErrorResponse(function (): array {
 			$collectives = $this->service->getCollectivesTrash($this->getUserId());
@@ -43,9 +42,7 @@ class TrashController extends Controller {
 		}, $this->logger);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
+	#[NoAdminRequired]
 	public function delete(int $id, bool $circle = false): DataResponse {
 		return $this->handleErrorResponse(function () use ($circle, $id): array {
 			$collective = $this->service->deleteCollective($id, $this->getUserId(), $circle);
@@ -55,9 +52,7 @@ class TrashController extends Controller {
 		}, $this->logger);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
+	#[NoAdminRequired]
 	public function restore(int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($id): array {
 			$collective = $this->service->restoreCollective($id, $this->getUserId());

@@ -17,6 +17,7 @@ use OCA\Collectives\Service\NotPermittedException;
 use OCA\Collectives\Service\PageService;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
+use OCP\AppFramework\Http\Attribute\PublicPage;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\PublicShareController;
 use OCP\IRequest;
@@ -100,9 +101,7 @@ class PublicPageTrashController extends PublicShareController {
 		}
 	}
 
-	/**
-	 * @PublicPage
-	 */
+	#[PublicPage]
 	public function index(): DataResponse {
 		return $this->handleErrorResponse(function (): array {
 			$owner = $this->getCollectiveShare()->getOwner();
@@ -119,9 +118,7 @@ class PublicPageTrashController extends PublicShareController {
 		}, $this->logger);
 	}
 
-	/**
-	 * @PublicPage
-	 */
+	#[PublicPage]
 	public function restore(int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($id): array {
 			$this->checkEditPermissions();
@@ -137,9 +134,7 @@ class PublicPageTrashController extends PublicShareController {
 		}, $this->logger);
 	}
 
-	/**
-	 * @PublicPage
-	 */
+	#[PublicPage]
 	public function delete(int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($id): array {
 			$this->checkEditPermissions();

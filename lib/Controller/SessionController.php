@@ -11,6 +11,7 @@ namespace OCA\Collectives\Controller;
 
 use Closure;
 use OCA\Collectives\Service\SessionService;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\IRequest;
@@ -36,9 +37,7 @@ class SessionController extends OCSController {
 		return $this->handleErrorResponse($callback, $this->logger);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
+	#[NoAdminRequired]
 	public function create(int $collectiveId): DataResponse {
 		return $this->prepareResponse(function () use ($collectiveId): array {
 			$session = $this->sessionService->initSession($collectiveId, $this->getUserId());
@@ -46,9 +45,7 @@ class SessionController extends OCSController {
 		});
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
+	#[NoAdminRequired]
 	public function sync(int $collectiveId, string $token): DataResponse {
 		return $this->prepareResponse(function () use ($collectiveId, $token): array {
 			$this->sessionService->syncSession($collectiveId, $token, $this->getUserId());
@@ -56,9 +53,7 @@ class SessionController extends OCSController {
 		});
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
+	#[NoAdminRequired]
 	public function close(int $collectiveId, string $token): DataResponse {
 		return $this->prepareResponse(function () use ($collectiveId, $token): array {
 			$this->sessionService->closeSession($collectiveId, $token, $this->getUserId());

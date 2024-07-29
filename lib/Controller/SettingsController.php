@@ -12,6 +12,7 @@ namespace OCA\Collectives\Controller;
 use Closure;
 use InvalidArgumentException;
 
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCSController;
 use OCP\IConfig;
@@ -63,9 +64,7 @@ class SettingsController extends OCSController {
 		throw new InvalidArgumentException('Unsupported setting ' . $setting);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
+	#[NoAdminRequired]
 	public function getUserSetting(string $key): DataResponse {
 		return $this->prepareResponse(function () use ($key): string {
 			$this->validateGetUserSetting($key);
@@ -73,9 +72,7 @@ class SettingsController extends OCSController {
 		});
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
+	#[NoAdminRequired]
 	public function setUserSetting(string $key, ?string $value): DataResponse {
 		return $this->prepareResponse(function () use ($key, $value): ?string {
 			$this->validateSetUserSetting($key, $value);
