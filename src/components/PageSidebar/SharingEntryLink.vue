@@ -182,7 +182,10 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapState } from 'pinia'
+import { useCollectivesStore } from '../../stores/collectives.js'
+import { useSharesStore } from '../../stores/shares.js'
+import { usePagesStore } from '../../stores/pages.js'
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 import { showError, showSuccess } from '@nextcloud/dialogs'
@@ -210,11 +213,6 @@ import TriangleSmallDownIcon from 'vue-material-design-icons/TriangleSmallDown.v
 
 import CopyToClipboardMixin from '../../mixins/CopyToClipboardMixin.js'
 import serverCapabilities from '../../mixins/serverCapabilities.js'
-import {
-	CREATE_SHARE,
-	UPDATE_SHARE,
-	DELETE_SHARE,
-} from '../../store/actions.js'
 
 export default {
 	name: 'SharingEntryLink',
@@ -271,11 +269,8 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
-			'currentCollective',
-			'currentPage',
-			'isLandingPage',
-		]),
+		...mapState(useCollectivesStore, ['currentCollective']),
+		...mapState(usePagesStore, ['currentPage', 'isLandingPage']),
 
 		title() {
 			return this.index > 1
@@ -378,11 +373,11 @@ export default {
 	},
 
 	methods: {
-		...mapActions({
-			dispatchCreateShare: CREATE_SHARE,
-			dispatchDeleteShare: DELETE_SHARE,
-			dispatchUpdateShare: UPDATE_SHARE,
-		}),
+		...mapActions(useSharesStore, [
+			'createShare',
+			'deleteShare',
+			'updateShare',
+		]),
 
 		handleClickOutside(event) {
 			const dropdownContainer = this.$refs.quickShareDropdownContainer
@@ -480,7 +475,7 @@ export default {
 			try {
 				this.loading = true
 				this.open = false
-				await this.dispatchCreateShare({
+				await this.createShare({
 					collectiveId: this.currentCollective.id,
 					pageId: this.isPageShare ? this.currentPage.id : 0,
 					password: this.pendingPassword,
@@ -553,7 +548,7 @@ export default {
 			try {
 				this.loading = true
 				this.open = false
-				await this.dispatchUpdateShare(share)
+				await this.updateShare(share)
 				const message = this.isPageShare
 					? t('collectives', 'Share link of page "{name}" has been updated', { name: this.currentPage.title })
 					: t('collectives', 'Share link of collective "{name}" has been updated', { name: this.currentCollective.name })
@@ -574,7 +569,7 @@ export default {
 			try {
 				this.loading = true
 				this.open = false
-				await this.dispatchDeleteShare(this.share)
+				await this.deleteShare(this.share)
 				const message = this.isPageShare
 					? t('collectives', 'Page "{name}" has been unshared', { name: this.currentPage.title })
 					: t('collectives', 'Collective "{name}" has been unshared', { name: this.currentCollective.name })

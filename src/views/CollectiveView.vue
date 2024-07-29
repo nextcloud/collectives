@@ -23,7 +23,9 @@
 
 <script>
 
-import { mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapState } from 'pinia'
+import { useRootStore } from '../stores/root.js'
+import { useCollectivesStore } from '../stores/collectives.js'
 import { NcAppContent, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 import Collective from '../components/Collective.vue'
 import CollectiveNotFound from '../components/CollectiveNotFound.vue'
@@ -42,15 +44,12 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
-			'currentCollective',
-			'loading',
-			'showing',
-		]),
+		...mapState(useRootStore, ['loading', 'showing']),
+		...mapState(useCollectivesStore, ['currentCollective']),
 	},
 
 	methods: {
-		...mapMutations(['hide']),
+		...mapActions(useRootStore, ['hide']),
 	},
 }
 </script>

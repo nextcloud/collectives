@@ -3,6 +3,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+export const INDEX_PAGE = 'Readme'
+export const TEMPLATE_PAGE = 'Template'
+
 // Circle lember levels
 export const memberLevels = {
 	LEVEL_MEMBER: 1,

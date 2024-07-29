@@ -16,9 +16,11 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState } from 'pinia'
+import { useCollectivesStore } from '../stores/collectives.js'
 import editorMixin from '../mixins/editorMixin.js'
 import pageContentMixin from '../mixins/pageContentMixin.js'
+import { usePagesStore } from '../stores/pages.js'
 
 export default {
 	name: 'PagePrint',
@@ -42,12 +44,8 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
-			'currentCollectiveTitle',
-			'pageDavUrl',
-			'isPublic',
-			'shareTokenParam',
-		]),
+		...mapState(useCollectivesStore, ['currentCollectiveTitle']),
+		...mapState(usePagesStore, ['pageDavUrl']),
 
 		pageTitleString() {
 			return this.page.emoji ? `${this.page.emoji} ${this.page.title}` : this.page.title

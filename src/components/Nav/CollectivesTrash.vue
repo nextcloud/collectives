@@ -18,7 +18,7 @@
 		<transition name="slide-up">
 			<div v-show="open" id="collectives-trash__content">
 				<ul class="app-navigation__list">
-					<NcAppNavigationItem v-for="collective in trashCollectives"
+					<NcAppNavigationItem v-for="collective in sortedTrashCollectives"
 						:key="collective.circleId"
 						:name="collective.name"
 						:force-menu="true"
@@ -90,7 +90,8 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
+import { mapState } from 'pinia'
+import { useCollectivesStore } from '../../stores/collectives.js'
 import { NcActionButton, NcAppNavigationItem, NcButton, NcModal } from '@nextcloud/vue'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import CollectivesIcon from '../Icon/CollectivesIcon.vue'
@@ -131,11 +132,9 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			trashCollectives: (state) => state.collectives.trashCollectives,
-		}),
-		...mapGetters([
+		...mapState(useCollectivesStore, [
 			'isCollectiveOwner',
+			'sortedTrashCollectives',
 		]),
 	},
 

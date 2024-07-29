@@ -21,7 +21,9 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState } from 'pinia'
+import { useRootStore } from '../../stores/root.js'
+import { useCollectivesStore } from '../../stores/collectives.js'
 import MembersWidget from './LandingPageWidgets/MembersWidget.vue'
 import RecentPagesWidget from './LandingPageWidgets/RecentPagesWidget.vue'
 import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
@@ -44,10 +46,9 @@ export default {
 	],
 
 	computed: {
-		...mapGetters([
-			'isPublic',
-			'currentCollective',
-		]),
+		...mapState(useRootStore, ['isPublic']),
+		...mapState(useCollectivesStore, ['currentCollective']),
+
 		teamUrl() {
 			return generateUrl('/apps/contacts/circle/{teamId}', { teamId: this.currentCollective.circleId })
 		},

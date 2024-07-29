@@ -147,9 +147,9 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
-import { GET_ATTACHMENTS } from '../../store/actions.js'
-import { SET_ATTACHMENT_DELETED, SET_ATTACHMENT_UNDELETED } from '../../store/mutations.js'
+import { mapActions, mapState } from 'pinia'
+import { useRootStore } from '../../stores/root.js'
+import { usePagesStore } from '../../stores/pages.js'
 import { listen } from '@nextcloud/notify_push'
 import { formatFileSize } from '@nextcloud/files'
 import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
@@ -197,18 +197,18 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			attachments: (state) => state.pages.attachments,
-			deletedAttachments: (state) => state.pages.deletedAttachments,
-		}),
-		...mapGetters([
-			'currentPage',
+		...mapState(useRootStore, [
 			'isPublic',
 			'isTextEdit',
 			'loading',
+			'shareTokenParam',
+		]),
+		...mapState(usePagesStore, [
+			'attachments',
+			'currentPage',
+			'deletedAttachments',
 			'pagePath',
 			'pagePathTitle',
-			'shareTokenParam',
 		]),
 
 		// Sort attachments chronologically, most recent first
@@ -279,47 +279,45 @@ export default {
 		'page.id'() {
 			this.load('attachments')
 			this.unsetAttachments()
-			this.getAttachments()
+			this.getAttachmentsForPage()
 		},
 	},
 
 	mounted() {
 		this.load('attachments')
-		this.getAttachments()
+		this.getAttachmentsForPage()
 		// Reload attachment list on event from Text
-		subscribe('collectives:text-image-node:add', this.getAttachments)
-		subscribe('text:image-node:add', this.getAttachments)
+		subscribe('collectives:text-image-node:add', this.getAttachmentsForPage)
+		subscribe('text:image-node:add', this.getAttachmentsForPage)
 		// Move attachment to recently deleted on event from Text
 		subscribe('collectives:text-image-node:delete', this.onDeleteImageNode)
 		subscribe('text:image-node:delete', this.onDeleteImageNode)
 		// Reload attachment list on filesystem changes
-		listen('notify_file', this.getAttachments.bind(this))
+		listen('notify_file', this.getAttachmentsForPage.bind(this))
 	},
 
 	beforeDestroy() {
-		unsubscribe('collectives:text-image-node:add', this.getAttachments)
-		unsubscribe('text:image-node:add', this.getAttachments)
+		unsubscribe('collectives:text-image-node:add', this.getAttachmentsForPage)
+		unsubscribe('text:image-node:add', this.getAttachmentsForPage)
 		unsubscribe('collectives:text-image-node:delete', this.onDeleteImageNode)
 		unsubscribe('text:image-node:delete', this.onDeleteImageNode)
 	},
 
 	methods: {
-		...mapMutations(['done', 'load', 'unsetAttachments']),
-		...mapMutations({
-			setAttachmentDeleted: SET_ATTACHMENT_DELETED,
-			setAttachmentUndeleted: SET_ATTACHMENT_UNDELETED,
-		}),
-
-		...mapActions({
-			dispatchGetAttachments: GET_ATTACHMENTS,
-		}),
+		...mapActions(useRootStore, ['done', 'load']),
+		...mapActions(usePagesStore, [
+			'getAttachments',
+			'setAttachmentDeleted',
+			'setAttachmentUndeleted',
+			'unsetAttachments',
+		]),
 
 		/**
 		 * Get attachments for a page
 		 */
-		async getAttachments() {
+		async getAttachmentsForPage() {
 			try {
-				await this.dispatchGetAttachments(this.page)
+				await this.getAttachments(this.page)
 			} catch (e) {
 				this.error = t('collectives', 'Could not get attachments')
 				console.error('Failed to get page attachments', e)

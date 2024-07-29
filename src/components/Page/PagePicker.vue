@@ -132,7 +132,10 @@
 <script>
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
-import { mapGetters, mapMutations, mapState } from 'vuex'
+import { mapActions, mapState } from 'pinia'
+import { useRootStore } from '../../stores/root.js'
+import { useCollectivesStore } from '../../stores/collectives.js'
+import { usePagesStore } from '../../stores/pages.js'
 import { NcButton, NcLoadingIcon, NcModal } from '@nextcloud/vue'
 import ArrowDownIcon from 'vue-material-design-icons/ArrowDown.vue'
 import ArrowUpIcon from 'vue-material-design-icons/ArrowUp.vue'
@@ -140,7 +143,7 @@ import ChevronRightIcon from 'vue-material-design-icons/ChevronRight.vue'
 import CollectivesIcon from '../Icon/CollectivesIcon.vue'
 import PageIcon from '../Icon/PageIcon.vue'
 import SkeletonLoading from '../SkeletonLoading.vue'
-import { sortedSubpages, pageParents } from '../../store/pageExtracts.js'
+import { sortedSubpages, pageParents } from '../../stores/pageExtracts.js'
 
 export default {
 	name: 'PagePicker',
@@ -187,14 +190,10 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			collectives: (state) => state.collectives.collectives,
-		}),
-
-		...mapGetters([
-			'currentCollective',
+		...mapState(useRootStore, ['loading']),
+		...mapState(useCollectivesStore, ['collectives', 'currentCollective']),
+		...mapState(usePagesStore, [
 			'rootPage',
-			'loading',
 			'pageById',
 			'pageParents',
 			'sortOrder',
@@ -277,7 +276,7 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['done', 'load']),
+		...mapActions(useRootStore, ['done', 'load']),
 
 		async fetchCollectivePages() {
 			this.load('pages-foreign-collective')
@@ -291,9 +290,11 @@ export default {
 			if (this.isCurrentCollective) {
 				this.subpages = this.visibleSubpages(this.selectedPageId)
 			} else {
-				const state = { pages: this.collectivesPages[this.selectedCollective.id] }
-				const getters = { sortOrder: this.sortOrder }
-				this.subpages = sortedSubpages(state, getters)(this.selectedPageId)
+				const state = {
+					pages: this.collectivesPages[this.selectedCollective.id],
+					sortOrder: this.sortOrder,
+				}
+				this.subpages = sortedSubpages(state)(this.selectedPageId)
 			}
 
 			// Add current page to top of subpages if not part of it yet
@@ -313,9 +314,11 @@ export default {
 			if (this.isCurrentCollective) {
 				this.pageCrumbs = this.pageParents(this.selectedPageId)
 			} else {
-				const state = { pages: this.collectivesPages[this.selectedCollective.id] }
-				const getters = { rootPage: this.selectedRootPage }
-				this.pageCrumbs = pageParents(state, getters)(this.selectedPageId)
+				const state = {
+					pages: this.collectivesPages[this.selectedCollective.id],
+					rootPage: this.selectedRootPage,
+				}
+				this.pageCrumbs = pageParents(state)(this.selectedPageId)
 			}
 		},
 

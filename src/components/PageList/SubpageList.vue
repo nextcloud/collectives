@@ -45,7 +45,10 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapState } from 'pinia'
+import { useRootStore } from '../../stores/root.js'
+import { useCollectivesStore } from '../../stores/collectives.js'
+import { usePagesStore } from '../../stores/pages.js'
 import Draggable from './Draggable.vue'
 import Item from './Item.vue'
 
@@ -77,21 +80,21 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
-			'currentCollectiveCanEdit',
-			'pageParam',
+		...mapState(useRootStore, ['pageParam']),
+		...mapState(useCollectivesStore, ['currentCollectiveCanEdit']),
+		...mapState(usePagesStore, [
 			'pagePath',
 			'currentPageIds',
 			'keptSortable',
 			'templatePage',
 			'visibleSubpages',
-			'collapsed',
+			'isCollapsed',
 			'showTemplates',
 		]),
 
 		showSubpages() {
 			// Display subpages only when not in filtered view and when not collapsed
-			return !this.filteredView && !this.collapsed(this.page.id)
+			return !this.filteredView && !this.isCollapsed(this.page.id)
 		},
 
 		subpagesView() {
@@ -138,11 +141,11 @@ export default {
 	},
 
 	methods: {
-		...mapMutations([
+		...mapActions(useRootStore, ['show']),
+		...mapActions(usePagesStore, [
 			'collapse',
 			'expand',
 			'toggleCollapsed',
-			'show',
 		]),
 
 		initCollapsed() {

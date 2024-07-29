@@ -4,7 +4,11 @@
  */
 
 import debounce from 'debounce'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapState } from 'pinia'
+import { useRootStore } from '../stores/root.js'
+import { useCollectivesStore } from '../stores/collectives.js'
+import { usePagesStore } from '../stores/pages.js'
+import { useSearchStore } from '../stores/search.js'
 import linkHandlerMixin from '../mixins/linkHandlerMixin.js'
 import PageInfoBar from '../components/Page/PageInfoBar.vue'
 import { editorApiReaderFileId } from '../constants.js'
@@ -27,16 +31,15 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
-			'currentCollectiveCanEdit',
-			'currentPage',
+		...mapState(useRootStore, [
 			'editorApiFlags',
 			'loading',
-			'pageFilePath',
 			'shareTokenParam',
 			'showing',
-			'searchQuery',
 		]),
+		...mapState(useCollectivesStore, ['currentCollectiveCanEdit']),
+		...mapState(useSearchStore, ['searchQuery']),
+		...mapState(usePagesStore, ['currentPage', 'pageFilePath']),
 
 		pageContent() {
 			return this.editorContent?.trim() || this.davContent
@@ -72,10 +75,7 @@ export default {
 	},
 
 	methods: {
-		...mapMutations([
-			'hide',
-			'show',
-		]),
+		...mapActions(useRootStore, ['done', 'hide', 'show']),
 
 		async setupReader() {
 			const fileId = this.editorApiFlags.includes(editorApiReaderFileId)

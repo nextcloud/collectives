@@ -79,14 +79,10 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions } from 'pinia'
+import { useCirclesStore } from '../../stores/circles.js'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { circlesMemberTypes, memberLevels } from '../../constants.js'
-import {
-	GET_CIRCLE_MEMBERS,
-	CHANGE_CIRCLE_MEMBER_LEVEL,
-	REMOVE_MEMBER_FROM_CIRCLE,
-} from '../../store/actions.js'
 import { NcActions, NcActionButton, NcActionSeparator, NcAvatar, NcLoadingIcon } from '@nextcloud/vue'
 import AccountCogIcon from 'vue-material-design-icons/AccountCog.vue'
 import AccountIcon from 'vue-material-design-icons/Account.vue'
@@ -210,19 +206,19 @@ export default {
 	},
 
 	methods: {
-		...mapActions({
-			dispatchGetCircleMembers: GET_CIRCLE_MEMBERS,
-			dispatchChangeCircleMemberLevel: CHANGE_CIRCLE_MEMBER_LEVEL,
-			dispatchRemoveMemberFromCircle: REMOVE_MEMBER_FROM_CIRCLE,
-		}),
+		...mapActions(useCirclesStore, [
+			'getCircleMembers',
+			'changeCircleMemberLevel',
+			'removeMemberFromCircle',
+		]),
 
 		async setMemberLevel(level) {
 			if (this.circleId) {
 				this.isLoadingLevel = true
-				await this.dispatchChangeCircleMemberLevel({ circleId: this.circleId, memberId: this.memberId, level })
+				await this.changeCircleMemberLevel({ circleId: this.circleId, memberId: this.memberId, level })
 					.then(async () => {
 						showSuccess(t('collectives', 'Member level changed'))
-						await this.dispatchGetCircleMembers(this.circleId)
+						await this.getCircleMembers(this.circleId)
 					}).catch((error) => {
 						showError(t('collectives', 'Could not change member level'))
 						throw error
@@ -235,10 +231,10 @@ export default {
 		async removeMember() {
 			if (this.circleId) {
 				this.isLoadingLevel = true
-				await this.dispatchRemoveMemberFromCircle({ circleId: this.circleId, memberId: this.memberId })
+				await this.removeMemberFromCircle({ circleId: this.circleId, memberId: this.memberId })
 					.then(async () => {
 						showSuccess(t('collectives', 'Member removed'))
-						await this.dispatchGetCircleMembers(this.circleId)
+						await this.getCircleMembers(this.circleId)
 					}).catch((error) => {
 						showError(t('collectives', 'Could not remove member'))
 						throw error

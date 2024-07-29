@@ -24,7 +24,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState } from 'pinia'
+import { useCirclesStore } from '../../stores/circles.js'
 import { getCurrentUser } from '@nextcloud/auth'
 import { NcAppNavigationCaption } from '@nextcloud/vue'
 import Hint from './Hint.vue'
@@ -59,9 +60,7 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
-			'circleMemberType',
-		]),
+		...mapState(useCirclesStore, ['circleMemberType']),
 
 		isSearching() {
 			return this.searchQuery !== ''

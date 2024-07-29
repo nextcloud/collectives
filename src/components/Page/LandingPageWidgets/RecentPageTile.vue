@@ -24,9 +24,11 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState } from 'pinia'
+import { usePagesStore } from '../../../stores/pages.js'
 import LastUserBubble from '../../LastUserBubble.vue'
 import PageIcon from '../../Icon/PageIcon.vue'
+import { INDEX_PAGE } from '../../../constants.js'
 
 export default {
 	name: 'RecentPageTile',
@@ -43,12 +45,10 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
-			'pagePath',
-		]),
+		...mapState(usePagesStore, ['pagePath']),
 
 		title() {
-			return this.page.title === 'Readme'
+			return this.page.title === INDEX_PAGE
 				? t('collectives', 'Landing page')
 				: this.page.title
 		},

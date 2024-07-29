@@ -6,8 +6,7 @@
 import Vue from 'vue'
 import Collectives from './Collectives.vue'
 import router from './router.js'
-import store from './store/store.js'
-import { sync } from 'vuex-router-sync'
+import { createPinia, PiniaVuePlugin } from 'pinia'
 
 import './shared-init.js'
 
@@ -21,12 +20,13 @@ Vue.prototype.n = n
 Vue.prototype.OC = OC
 Vue.prototype.OCA = OCA
 
-sync(store, router)
+Vue.use(PiniaVuePlugin)
+const pinia = createPinia()
 
 const app = new Vue({
 	el: '#content',
 	router,
-	store,
+	pinia,
 	render: h => h(Collectives),
 })
 

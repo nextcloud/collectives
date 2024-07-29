@@ -33,11 +33,13 @@
 
 <script>
 import debounce from 'debounce'
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapState } from 'pinia'
+import { useCirclesStore } from '../../../stores/circles.js'
+import { useCollectivesStore } from '../../../stores/collectives.js'
+import { usePagesStore } from '../../../stores/pages.js'
 import { NcAvatar, NcButton } from '@nextcloud/vue'
 import DotsHorizontalIcon from 'vue-material-design-icons/DotsHorizontal.vue'
 import SkeletonLoading from '../../SkeletonLoading.vue'
-import { GET_CIRCLE_MEMBERS } from '../../../store/actions.js'
 import { circlesMemberTypes } from '../../../constants.js'
 
 export default {
@@ -58,12 +60,12 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
+		...mapState(useCirclesStore, [
 			'circleMembersSorted',
 			'circleMemberType',
-			'currentCollective',
-			'recentPagesUserIds',
 		]),
+		...mapState(useCollectivesStore, ['currentCollective']),
+		...mapState(usePagesStore, ['recentPagesUserIds']),
 
 		sortedMembers() {
 			return this.circleMembersSorted(this.currentCollective.circleId)
@@ -106,7 +108,7 @@ export default {
 	},
 
 	beforeMount() {
-		this.dispatchGetCircleMembers(this.currentCollective.circleId)
+		this.getCircleMembers(this.currentCollective.circleId)
 	},
 
 	mounted() {
@@ -118,13 +120,8 @@ export default {
 	},
 
 	methods: {
-		...mapActions({
-			dispatchGetCircleMembers: GET_CIRCLE_MEMBERS,
-		}),
-
-		...mapMutations([
-			'setMembersCollectiveId',
-		]),
+		...mapActions(useCirclesStore, ['getCircleMembers']),
+		...mapActions(useCollectivesStore, ['setMembersCollectiveId']),
 
 		updateShowMembersCount() {
 			// How many avatars (default-clickable-area + 12px gap) fit? Subtract one for the more button.

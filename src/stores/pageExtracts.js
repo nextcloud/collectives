@@ -3,17 +3,16 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-// Functions extracted from vuex page store to be reused in other places
+// Functions extracted from pinia page store to be reused in other places
 
 /* eslint import/namespace: ['error', { allowComputed: true }] */
 import * as sortOrders from '../util/sortOrders.js'
-import { TEMPLATE_PAGE } from './pages.js'
+import { TEMPLATE_PAGE } from '../constants.js'
 
 /**
- * @param {object} state state of the vuex store
- * @param {object} getters getters of the vuex store
+ * @param {object} state state of the pinia store
  */
-export function sortedSubpages(state, getters) {
+export function sortedSubpages(state) {
 	return (parentId, sortOrder) => {
 		const parentPage = state.pages.find(p => p.id === parentId)
 		const customOrder = parentPage?.subpageOrder || []
@@ -24,18 +23,17 @@ export function sortedSubpages(state, getters) {
 			// add the index from customOrder
 			.map(p => ({ ...p, index: customOrder.indexOf(p.id) }))
 			// sort by given order, fall back to user setting
-			.sort(sortOrders[sortOrder] || getters.sortOrder)
+			.sort(sortOrders[sortOrder] || state.sortOrder)
 	}
 }
 
 /**
- * @param {object} state state of the vuex store
- * @param {object} getters getters of the vuex store
+ * @param {object} state state of the pinia store
  */
-export function pageParents(state, getters) {
+export function pageParents(state) {
 	return (pageId) => {
 		const pages = []
-		while (pageId !== getters.rootPage.id) {
+		while (pageId !== state.rootPage.id) {
 			const page = state.pages.find(p => (p.id === pageId))
 			if (!page) {
 				break

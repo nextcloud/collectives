@@ -4,11 +4,12 @@
  */
 
 import axios from '@nextcloud/axios'
-import { mapGetters } from 'vuex'
+import { mapState } from 'pinia'
+import { useRootStore } from '../stores/root.js'
 
 export default {
 	computed: {
-		...mapGetters([
+		...mapState(useRootStore, [
 			'isPublic',
 			'shareTokenParam',
 		]),
@@ -33,8 +34,7 @@ export default {
 
 			try {
 				const content = await axios.get(davUrl, axiosConfig)
-				// content.data will attempt to parse as json
-				// but we want the raw text.
+				// content.data will attempt to parse as json, but we want the raw text.
 				return content.request.responseText
 			} catch (e) {
 				console.error('Failed to fetch content of page', e)

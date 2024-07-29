@@ -64,7 +64,8 @@
 import { subscribe } from '@nextcloud/event-bus'
 import { NcButton, NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import { translate as t } from '@nextcloud/l10n'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapState } from 'pinia'
+import { useSearchStore } from '../stores/search.js'
 import ArrowDown from 'vue-material-design-icons/ArrowDown.vue'
 import ArrowUp from 'vue-material-design-icons/ArrowUp.vue'
 import Close from 'vue-material-design-icons/Close.vue'
@@ -88,10 +89,7 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
-			'searchQuery',
-			'matchAll',
-		]),
+		...mapState(useSearchStore, ['searchQuery', 'matchAll']),
 
 		isHighlightAllChecked: {
 			get() {
@@ -112,7 +110,7 @@ export default {
 
 	methods: {
 		t,
-		...mapMutations([
+		...mapActions(useSearchStore, [
 			'setSearchQuery',
 			'toggleMatchAll',
 			'nextSearch',

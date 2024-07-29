@@ -55,14 +55,17 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapState } from 'pinia'
+import { useRootStore } from '../stores/root.js'
+import { useCollectivesStore } from '../stores/collectives.js'
+import { usePagesStore } from '../stores/pages.js'
+import { useVersionsStore } from '../stores/versions.js'
 import { NcAppSidebar, NcAppSidebarTab } from '@nextcloud/vue'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
 import ArrowBottomLeftIcon from 'vue-material-design-icons/ArrowBottomLeft.vue'
 import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue'
 import ShareVariantIcon from 'vue-material-design-icons/ShareVariant.vue'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
-import { SELECT_VERSION } from '../store/mutations.js'
 import SidebarTabAttachments from './PageSidebar/SidebarTabAttachments.vue'
 import SidebarTabBacklinks from './PageSidebar/SidebarTabBacklinks.vue'
 import SidebarTabSharing from './PageSidebar/SidebarTabSharing.vue'
@@ -89,15 +92,12 @@ export default {
 	],
 
 	computed: {
-		...mapGetters([
-			'activeSidebarTab',
+		...mapState(useRootStore, ['activeSidebarTab', 'isPublic', 'showing']),
+		...mapState(useCollectivesStore, [
 			'currentCollectiveCanEdit',
 			'currentCollectiveCanShare',
-			'currentPage',
-			'isPublic',
-			'showing',
-			'title',
 		]),
+		...mapState(usePagesStore, ['currentPage', 'title']),
 
 		active: {
 			get() {
@@ -128,13 +128,18 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['hide', 'setActiveSidebarTab', 'show']),
+		...mapActions(useRootStore, [
+			'hide',
+			'setActiveSidebarTab',
+			'show',
+		]),
+		...mapActions(useVersionsStore, ['selectVersion']),
 
 		/**
 		 * Load the current version and close the sidebar
 		 */
 		close() {
-			this.$store.commit(SELECT_VERSION, null)
+			this.selectVersion(null)
 			this.hide('sidebar')
 		},
 	},

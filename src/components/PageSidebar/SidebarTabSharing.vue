@@ -25,7 +25,10 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState } from 'pinia'
+import { useRootStore } from '../../stores/root.js'
+import { useSharesStore } from '../../stores/shares.js'
+import { usePagesStore } from '../../stores/pages.js'
 import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 import SharingEntryLink from './SharingEntryLink.vue'
 
@@ -46,11 +49,9 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
-			'isLandingPage',
-			'loading',
-			'sharesByPageId',
-		]),
+		...mapState(useRootStore, ['loading']),
+		...mapState(useSharesStore, ['sharesByPageId']),
+		...mapState(usePagesStore, ['isLandingPage']),
 
 		shares() {
 			return this.isLandingPage

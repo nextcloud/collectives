@@ -126,9 +126,10 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapState } from 'pinia'
+import { useRootStore } from '../../stores/root.js'
+import { useCollectivesStore } from '../../stores/collectives.js'
 import { generateUrl } from '@nextcloud/router'
-import { SET_FULL_WIDTH_VIEW } from '../../store/actions.js'
 import { NcActions, NcActionButton, NcActionCheckbox, NcActionLink, NcActionSeparator } from '@nextcloud/vue'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import CollectiveActions from '../Collective/CollectiveActions.vue'
@@ -142,6 +143,7 @@ import PagesTemplateIcon from '../Icon/PagesTemplateIcon.vue'
 import PageActionLastUser from './PageActionLastUser.vue'
 import ShareVariantIcon from 'vue-material-design-icons/ShareVariant.vue'
 import pageMixin from '../../mixins/pageMixin.js'
+import { usePagesStore } from '../../stores/pages.js'
 
 export default {
 	name: 'PageActionMenu',
@@ -219,16 +221,17 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
+		...mapState(useRootStore, ['showing']),
+		...mapState(useCollectivesStore, [
 			'currentCollective',
 			'currentCollectiveCanEdit',
 			'currentCollectiveCanShare',
 			'currentCollectiveIsPageShare',
+		]),
+		...mapState(usePagesStore, [
 			'hasSubpages',
 			'isFullWidthView',
-			'loading',
 			'pagesTreeWalk',
-			'showing',
 			'showTemplates',
 			'visibleSubpages',
 		]),
@@ -302,22 +305,19 @@ export default {
 	},
 
 	methods: {
-		...mapMutations([
+		...mapActions(useRootStore, [
 			'setActiveSidebarTab',
 			'show',
 			'toggle',
 		]),
-
-		...mapActions({
-			dispatchSetFullWidthView: SET_FULL_WIDTH_VIEW,
-		}),
+		...mapActions(usePagesStore, ['setFullWidthView']),
 
 		onCheckFullWidthView() {
-			this.dispatchSetFullWidthView(true)
+			this.setFullWidthView(true)
 		},
 
 		onUncheckFullWidthView() {
-			this.dispatchSetFullWidthView(false)
+			this.setFullWidthView(false)
 		},
 
 		openShareTab() {

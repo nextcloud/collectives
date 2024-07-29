@@ -20,7 +20,7 @@
 			@close="closeTrash">
 			<div class="modal__content">
 				<h2>{{ t('collectives', 'Deleted pages') }}</h2>
-				<NcEmptyContent v-if="!trashPages.length"
+				<NcEmptyContent v-if="!sortedTrashPages.length"
 					class="modal__content_empty"
 					:description="t('collectives', 'No deleted pages.')">
 					<template #icon>
@@ -41,7 +41,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr v-for="trashPage in trashPages" :key="trashPage.id">
+							<tr v-for="trashPage in sortedTrashPages" :key="trashPage.id">
 								<td class="item">
 									<div class="item-icon">
 										<PageTemplateIcon v-if="isTemplate(trashPage)" :size="22" fill-color="var(--color-background-darker)" />
@@ -55,14 +55,14 @@
 									</div>
 								</td>
 								<td class="actions">
-									<NcButton @click="restorePage(trashPage)">
+									<NcButton @click="onClickRestore(trashPage)">
 										<template #icon>
 											<RestoreIcon :size="20" />
 										</template>
 										{{ t('collectives', 'Restore') }}
 									</NcButton>
 									<NcActions :force-menu="true">
-										<NcActionButton :close-after-click="true" @click="deletePage(trashPage)">
+										<NcActionButton :close-after-click="true" @click="onClickDelete(trashPage)">
 											<template #icon>
 												<DeleteIcon :size="20" />
 											</template>
@@ -85,6 +85,8 @@
 </template>
 
 <script>
+import { mapActions, mapState } from 'pinia'
+import { usePagesStore } from '../../stores/pages.js'
 import { NcActions, NcActionButton, NcButton, NcEmptyContent, NcModal } from '@nextcloud/vue'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
@@ -94,9 +96,8 @@ import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
 import PageIcon from '../Icon/PageIcon.vue'
 import PageTemplateIcon from '../Icon/PageTemplateIcon.vue'
-import { mapActions, mapGetters, mapMutations } from 'vuex'
-import { EXPAND_PARENTS, RESTORE_PAGE, DELETE_PAGE } from '../../store/actions.js'
 import { scrollToPage } from '../../util/scrollToElement.js'
+import { TEMPLATE_PAGE } from '../../constants.js'
 
 export default {
 	name: 'PageTrash',
@@ -124,13 +125,11 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
-			'trashPages',
-		]),
+		...mapState(usePagesStore, ['sortedTrashPages']),
 
 		isTemplate() {
 			return (trashPage) => {
-				return trashPage.title === 'Template'
+				return trashPage.title === TEMPLATE_PAGE
 			}
 		},
 
@@ -158,15 +157,12 @@ export default {
 	},
 
 	methods: {
-		...mapMutations([
+		...mapActions(usePagesStore, [
+			'deletePage',
+			'expandParents',
+			'restorePage',
 			'setHighlightAnimationPageId',
 		]),
-
-		...mapActions({
-			dispatchExpandParents: EXPAND_PARENTS,
-			dispatchRestorePage: RESTORE_PAGE,
-			dispatchDeletePage: DELETE_PAGE,
-		}),
 
 		toggleTrash() {
 			this.showModal = !this.showModal
@@ -176,12 +172,12 @@ export default {
 			this.showModal = false
 		},
 
-		restorePage(trashPage) {
-			this.dispatchRestorePage({ pageId: trashPage.id })
+		onClickRestore(trashPage) {
+			this.restorePage({ pageId: trashPage.id })
 				.then(() => {
 					// Expand, scroll into view and highlight restored page
 					this.$nextTick(() => {
-						this.dispatchExpandParents(trashPage.id)
+						this.expandParents(trashPage.id)
 						scrollToPage(trashPage.id)
 						this.setHighlightAnimationPageId(trashPage.id)
 						setTimeout(() => {
@@ -191,8 +187,8 @@ export default {
 				})
 		},
 
-		deletePage(trashPage) {
-			this.dispatchDeletePage({ pageId: trashPage.id })
+		onClickDelete(trashPage) {
+			this.deletePage({ pageId: trashPage.id })
 			showSuccess(t('collectives', 'Page permanently deleted'))
 		},
 

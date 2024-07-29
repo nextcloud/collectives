@@ -27,7 +27,8 @@
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 import PencilIcon from 'vue-material-design-icons/Pencil.vue'
 import { NcButton, NcLoadingIcon } from '@nextcloud/vue'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapState } from 'pinia'
+import { useRootStore } from '../../stores/root.js'
 
 export default {
 	name: 'EditButton',
@@ -47,10 +48,7 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
-			'isTextEdit',
-			'loading',
-		]),
+		...mapState(useRootStore, ['isTextEdit', 'loading']),
 
 		description() {
 			return this.isTextEdit ? t('collectives', 'Stop editing') : t('collectives', 'Start editing')
@@ -70,10 +68,7 @@ export default {
 	},
 
 	methods: {
-		...mapMutations([
-			'setTextEdit',
-			'setTextView',
-		]),
+		...mapActions(useRootStore, ['setTextEdit', 'setTextView']),
 
 		handleClick() {
 			if (this.isTextEdit) {

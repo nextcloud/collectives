@@ -4,7 +4,10 @@
  */
 
 import { generateUrl } from '@nextcloud/router'
-import { mapGetters } from 'vuex'
+import { mapState } from 'pinia'
+import { useRootStore } from '../stores/root.js'
+import { useCollectivesStore } from '../stores/collectives.js'
+import { usePagesStore } from '../stores/pages.js'
 
 const resolvePath = function(from, rel) {
 	if (!rel) {
@@ -27,12 +30,11 @@ const resolvePath = function(from, rel) {
 
 export default {
 	computed: {
-		...mapGetters([
-			'collectiveParam',
-			'currentCollective',
+		...mapState(useRootStore, ['collectiveParam', 'isPublic']),
+		...mapState(useCollectivesStore, ['currentCollective']),
+		...mapState(usePagesStore, [
 			'currentPageFilePath',
 			'isIndexPage',
-			'isPublic',
 			'pageById',
 		]),
 	},

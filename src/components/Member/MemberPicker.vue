@@ -50,7 +50,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState } from 'pinia'
+import { useCirclesStore } from '../../stores/circles.js'
 import axios from '@nextcloud/axios'
 import debounce from 'debounce'
 import { autocompleteSourcesToCircleMemberTypes, circlesMemberTypes, shareTypes } from '../../constants.js'
@@ -131,9 +132,7 @@ export default {
 	},
 
 	computed: {
-		...mapGetters([
-			'circleMemberType',
-		]),
+		...mapState(useCirclesStore, ['circleMemberType']),
 
 		isSearching() {
 			return this.searchQuery !== ''

@@ -76,15 +76,15 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
+import { mapActions, mapState } from 'pinia'
+import { useRootStore } from '../../stores/root.js'
+import { useVersionsStore } from '../../stores/versions.js'
 import { formatFileSize } from '@nextcloud/files'
 import { NcEmptyContent, NcListItem, NcLoadingIcon } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagon.vue'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
 import PageIcon from '../Icon/PageIcon.vue'
-import { SELECT_VERSION } from '../../store/mutations.js'
-import { GET_VERSIONS } from '../../store/actions.js'
 
 export default {
 	name: 'SidebarTabVersions',
@@ -120,13 +120,8 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			versions: (state) => state.versions.versions,
-		}),
-		...mapGetters([
-			'loading',
-			'version',
-		]),
+		...mapState(useRootStore, ['loading']),
+		...mapState(useVersionsStore, ['version', 'versions']),
 
 		/**
 		 * @return {string}
@@ -162,18 +157,15 @@ export default {
 	},
 
 	methods: {
-		...mapMutations(['load', 'done']),
-
-		...mapActions({
-			dispatchGetVersions: GET_VERSIONS,
-		}),
+		...mapActions(useRootStore, ['load', 'done']),
+		...mapActions(useVersionsStore, ['getVersions', 'selectVersion']),
 
 		/**
 		 * Get versions of a page
 		 */
 		async getPageVersions() {
 			try {
-				await this.dispatchGetVersions(this.pageId)
+				await this.getVersions(this.pageId)
 			} catch (e) {
 				this.error = t('collectives', 'Could not get page versions')
 				console.error('Failed to get page versions', e)
@@ -188,7 +180,7 @@ export default {
 		 * @param {object} version Page version object
 		 */
 		clickPreviewVersion(version) {
-			this.$store.commit(SELECT_VERSION, version)
+			this.selectVersion(version)
 		},
 	},
 }
