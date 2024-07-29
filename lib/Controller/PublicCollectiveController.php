@@ -17,6 +17,7 @@ use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\NotFoundException;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
+use OCP\AppFramework\Http\Attribute\AnonRateLimit;
 use OCP\AppFramework\Http\Attribute\PublicPage;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\PublicShareController;
@@ -75,6 +76,7 @@ class PublicCollectiveController extends PublicShareController {
 	}
 
 	#[PublicPage]
+	#[AnonRateLimit(limit: 10, period: 60)]
 	public function get(): DataResponse {
 		return $this->prepareResponse(function (): array {
 			try {

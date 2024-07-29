@@ -19,6 +19,7 @@ use OCA\Collectives\Service\NotPermittedException;
 use OCA\Collectives\Service\PageService;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
+use OCP\AppFramework\Http\Attribute\AnonRateLimit;
 use OCP\AppFramework\Http\Attribute\PublicPage;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\PublicShareController;
@@ -127,6 +128,7 @@ class PublicPageController extends PublicShareController {
 	}
 
 	#[PublicPage]
+	#[AnonRateLimit(limit: 10, period: 10)]
 	public function index(): DataResponse {
 		return $this->handleErrorResponse(function (): array {
 			$owner = $this->getCollectiveShare()->getOwner();
@@ -147,6 +149,7 @@ class PublicPageController extends PublicShareController {
 	}
 
 	#[PublicPage]
+	#[AnonRateLimit(limit: 10, period: 10)]
 	public function get(int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($id): array {
 			$owner = $this->getCollectiveShare()->getOwner();
@@ -163,6 +166,7 @@ class PublicPageController extends PublicShareController {
 	}
 
 	#[PublicPage]
+	#[AnonRateLimit(limit: 10, period: 10)]
 	public function create(int $parentId, string $title): DataResponse {
 		return $this->handleErrorResponse(function () use ($parentId, $title): array {
 			$this->checkEditPermissions();
@@ -180,6 +184,7 @@ class PublicPageController extends PublicShareController {
 	}
 
 	#[PublicPage]
+	#[AnonRateLimit(limit: 10, period: 10)]
 	public function touch(int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($id): array {
 			$this->checkEditPermissions();
@@ -197,6 +202,7 @@ class PublicPageController extends PublicShareController {
 	}
 
 	#[PublicPage]
+	#[AnonRateLimit(limit: 10, period: 10)]
 	public function moveOrCopy(int $id, ?int $parentId, ?string $title = null, ?int $index = 0, bool $copy = false): DataResponse {
 		return $this->handleErrorResponse(function () use ($id, $parentId, $title, $index, $copy): array {
 			$this->checkEditPermissions();
@@ -219,6 +225,7 @@ class PublicPageController extends PublicShareController {
 	}
 
 	#[PublicPage]
+	#[AnonRateLimit(limit: 10, period: 10)]
 	public function setEmoji(int $id, ?string $emoji = null): DataResponse {
 		return $this->handleErrorResponse(function () use ($id, $emoji): array {
 			$this->checkEditPermissions();
@@ -236,6 +243,7 @@ class PublicPageController extends PublicShareController {
 	}
 
 	#[PublicPage]
+	#[AnonRateLimit(limit: 10, period: 10)]
 	public function setSubpageOrder(int $id, ?string $subpageOrder = null): DataResponse {
 		return $this->handleErrorResponse(function () use ($id, $subpageOrder): array {
 			$this->checkEditPermissions();
@@ -253,6 +261,7 @@ class PublicPageController extends PublicShareController {
 	}
 
 	#[PublicPage]
+	#[AnonRateLimit(limit: 10, period: 10)]
 	public function trash(int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($id): array {
 			$this->checkEditPermissions();
@@ -270,6 +279,7 @@ class PublicPageController extends PublicShareController {
 	}
 
 	#[PublicPage]
+	#[AnonRateLimit(limit: 10, period: 10)]
 	public function getAttachments(int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($id): array {
 			$owner = $this->getCollectiveShare()->getOwner();
@@ -285,6 +295,7 @@ class PublicPageController extends PublicShareController {
 	}
 
 	#[PublicPage]
+	#[AnonRateLimit(limit: 10, period: 10)]
 	public function getBacklinks(int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($id): array {
 			$owner = $this->getCollectiveShare()->getOwner();
