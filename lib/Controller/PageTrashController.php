@@ -11,6 +11,7 @@ namespace OCA\Collectives\Controller;
 
 use OCA\Collectives\Service\PageService;
 use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
 use OCP\IUserSession;
@@ -30,19 +31,11 @@ class PageTrashController extends Controller {
 		$this->userSession = $userSession;
 	}
 
-	/**
-	 * @return string
-	 */
 	private function getUserId(): string {
 		return $this->userSession->getUser()->getUID();
 	}
 
-	/**
-	 * @NoAdminRequired
-	 *
-	 *
-	 * @return DataResponse
-	 */
+	#[NoAdminRequired]
 	public function index(int $collectiveId): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId): array {
 			$userId = $this->getUserId();
@@ -53,12 +46,7 @@ class PageTrashController extends Controller {
 		}, $this->logger);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 *
-	 *
-	 * @return DataResponse
-	 */
+	#[NoAdminRequired]
 	public function restore(int $collectiveId, int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $id): array {
 			$userId = $this->getUserId();
@@ -69,12 +57,7 @@ class PageTrashController extends Controller {
 		}, $this->logger);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 *
-	 *
-	 * @return DataResponse
-	 */
+	#[NoAdminRequired]
 	public function delete(int $collectiveId, int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $id): array {
 			$userId = $this->getUserId();

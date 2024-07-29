@@ -14,6 +14,7 @@ use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\PageService;
 use OCA\Collectives\Service\SearchService;
 use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
 use OCP\IUserSession;
@@ -37,9 +38,7 @@ class PageController extends Controller {
 		return $this->userSession->getUser()->getUID();
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
+	#[NoAdminRequired]
 	public function index(int $collectiveId): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId): array {
 			$userId = $this->getUserId();
@@ -50,9 +49,7 @@ class PageController extends Controller {
 		}, $this->logger);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
+	#[NoAdminRequired]
 	public function get(int $collectiveId, int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $id): array {
 			$userId = $this->getUserId();
@@ -63,9 +60,7 @@ class PageController extends Controller {
 		}, $this->logger);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
+	#[NoAdminRequired]
 	public function create(int $collectiveId, int $parentId, string $title): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $title): array {
 			$userId = $this->getUserId();
@@ -76,9 +71,7 @@ class PageController extends Controller {
 		}, $this->logger);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
+	#[NoAdminRequired]
 	public function touch(int $collectiveId, int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $id): array {
 			$userId = $this->getUserId();
@@ -90,9 +83,7 @@ class PageController extends Controller {
 	}
 
 
-	/**
-	 * @NoAdminRequired
-	 */
+	#[NoAdminRequired]
 	public function contentSearch(int $collectiveId, string $searchString): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $searchString): array {
 			$userId = $this->getUserId();
@@ -108,9 +99,7 @@ class PageController extends Controller {
 		}, $this->logger);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
+	#[NoAdminRequired]
 	public function moveOrCopy(int $collectiveId, int $id, ?int $parentId = null, ?string $title = null, ?int $index = 0, bool $copy = false): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $id, $parentId, $title, $index, $copy): array {
 			$userId = $this->getUserId();
@@ -123,9 +112,7 @@ class PageController extends Controller {
 		}, $this->logger);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
+	#[NoAdminRequired]
 	public function moveOrCopyToCollective(int $collectiveId, int $id, int $newCollectiveId, ?int $parentId = null, ?int $index = 0, bool $copy = false): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $id, $newCollectiveId, $parentId, $index, $copy): array {
 			$userId = $this->getUserId();
@@ -139,9 +126,7 @@ class PageController extends Controller {
 		}, $this->logger);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
+	#[NoAdminRequired]
 	public function setEmoji(int $collectiveId, int $id, ?string $emoji = null): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $id, $emoji): array {
 			$userId = $this->getUserId();
@@ -152,9 +137,7 @@ class PageController extends Controller {
 		}, $this->logger);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
+	#[NoAdminRequired]
 	public function setSubpageOrder(int $collectiveId, int $id, ?string $subpageOrder = null): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $id, $subpageOrder): array {
 			$userId = $this->getUserId();
@@ -165,9 +148,7 @@ class PageController extends Controller {
 		}, $this->logger);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
+	#[NoAdminRequired]
 	public function trash(int $collectiveId, int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $id): array {
 			$userId = $this->getUserId();
@@ -178,9 +159,7 @@ class PageController extends Controller {
 		}, $this->logger);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
+	#[NoAdminRequired]
 	public function getAttachments(int $collectiveId, int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $id): array {
 			$userId = $this->getUserId();
@@ -191,9 +170,7 @@ class PageController extends Controller {
 		}, $this->logger);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
+	#[NoAdminRequired]
 	public function getBacklinks(int $collectiveId, int $id): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $id): array {
 			$userId = $this->getUserId();

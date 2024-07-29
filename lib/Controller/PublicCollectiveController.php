@@ -17,6 +17,7 @@ use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\NotFoundException;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
+use OCP\AppFramework\Http\Attribute\PublicPage;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\PublicShareController;
 use OCP\IRequest;
@@ -73,9 +74,7 @@ class PublicCollectiveController extends PublicShareController {
 		return $this->handleErrorResponse($callback, $this->logger);
 	}
 
-	/**
-	 * @PublicPage
-	 */
+	#[PublicPage]
 	public function get(): DataResponse {
 		return $this->prepareResponse(function (): array {
 			try {

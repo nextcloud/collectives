@@ -13,6 +13,7 @@ use Closure;
 
 use OCA\Collectives\Service\CollectiveUserSettingsService;
 use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
 use OCP\IUserSession;
@@ -37,9 +38,7 @@ class CollectiveUserSettingsController extends Controller {
 		return $this->handleErrorResponse($callback, $this->logger);
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
+	#[NoAdminRequired]
 	public function pageOrder(int $id, int $pageOrder): DataResponse {
 		return $this->prepareResponse(function () use ($id, $pageOrder): array {
 			$this->service->setPageOrder(
@@ -51,9 +50,7 @@ class CollectiveUserSettingsController extends Controller {
 		});
 	}
 
-	/**
-	 * @NoAdminRequired
-	 */
+	#[NoAdminRequired]
 	public function showRecentPages(int $id, bool $showRecentPages): DataResponse {
 		return $this->prepareResponse(function () use ($id, $showRecentPages): array {
 			$this->service->setShowRecentPages(
