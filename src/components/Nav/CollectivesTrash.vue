@@ -5,7 +5,7 @@
 
 <template>
 	<div id="collectives-trash"
-		v-click-outside="clickOutsideConfig"
+		v-click-outside="closeTrash"
 		:class="{ open }">
 		<div id="collectives-trash__header">
 			<NcButton type="tertiary" class="collectives-trash-button" @click="toggleTrash">
@@ -78,9 +78,7 @@
 						:wide="true">
 						{{ t('collectives', 'Collective and team') }}
 					</NcButton>
-					<NcButton v-click-outside
-						:wide="true"
-						@click="closeDeleteModal">
+					<NcButton :wide="true" @click="closeDeleteModal">
 						{{ t('collectives', 'Cancel') }}
 					</NcButton>
 				</div>
@@ -125,9 +123,6 @@ export default {
 			open: false,
 			deleteModal: false,
 			modalCollective: null,
-			clickOutsideConfig: {
-				handler: this.closeTrash,
-			},
 		}
 	},
 
