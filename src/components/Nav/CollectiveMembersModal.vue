@@ -103,8 +103,8 @@ export default {
 }
 
 .modal-collective-members {
-	// Full height minus search field
+	// Full height minus modal title
 	// Required for sticky search field
-	height: calc(100% - 30px);
+	height: calc(100% - 76px);
 }
 </style>
