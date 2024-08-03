@@ -57,6 +57,7 @@ OC.L10N.register(
     "Attachments" : "첨부파일",
     "Sharing" : "공유",
     "Versions" : "버전",
+    "Clear search" : "찾기 초기화",
     "Link copied" : "링크 복사됨",
     "Allow editing in share" : "공유에서 수정 허용",
     "Copied" : "복사됨",
