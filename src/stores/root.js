@@ -10,7 +10,6 @@ import { editorApiReaderFileId, pageModes } from '../constants.js'
 export const useRootStore = defineStore('root', {
 	state: () => ({
 		textMode: pageModes.MODE_VIEW,
-		messages: {},
 		showings: {},
 		loadings: {},
 		printView: false,
@@ -45,9 +44,6 @@ export const useRootStore = defineStore('root', {
 	},
 
 	actions: {
-		// TODO: restructure
-		info(message) { this.messages.info = message },
-
 		load(aspect) { set(this.loadings, aspect, true) },
 		done(aspect) { set(this.loadings, aspect, false) },
 

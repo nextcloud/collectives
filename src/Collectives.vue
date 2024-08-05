@@ -18,7 +18,6 @@
 </template>
 
 <script>
-import { showInfo } from '@nextcloud/dialogs'
 import { mapActions, mapState } from 'pinia'
 import { useRootStore } from './stores/root.js'
 import { useSettingsStore } from './stores/settings.js'
@@ -48,7 +47,6 @@ export default {
 	computed: {
 		...mapState(useRootStore, [
 			'isPublic',
-			'messages',
 			'printView',
 			'shareTokenParam',
 			'showing',
@@ -59,22 +57,12 @@ export default {
 		]),
 		...mapState(usePagesStore, ['currentPage']),
 
-		info() {
-			return this.messages.info
-		},
-
 		showCollectiveSettings() {
 			return !!this.settingsCollective
 		},
 	},
 
 	watch: {
-		'info'(current) {
-			if (current) {
-				showInfo(current)
-				this.rootStore.info(null)
-			}
-		},
 		$route: {
 			handler(val) {
 				this.rootStore.collectiveParam = val.params.collective
