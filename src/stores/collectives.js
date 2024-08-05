@@ -203,15 +203,14 @@ export const useCollectivesStore = defineStore('collectives', {
 		 * @param {object} collective Properties for the new collective
 		 */
 		async newCollective(collective) {
-			const rootStore = useRootStore()
 			const settingsStore = useSettingsStore()
 			const response = await api.newCollective(collective)
-			rootStore.info(response.data.message)
 			this._addOrUpdateCollectiveState(response.data.data)
 			// If collectives folder wasn't initialized already, now it should be there
 			if (!settingsStore.collectivesFolder) {
 				await settingsStore.getCollectivesFolder()
 			}
+			return response.data.message
 		},
 
 		/**

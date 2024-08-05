@@ -118,7 +118,7 @@ import { mapActions, mapState } from 'pinia'
 import { useCirclesStore } from '../../stores/circles.js'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { getCurrentUser } from '@nextcloud/auth'
-import { showError } from '@nextcloud/dialogs'
+import { showError, showInfo } from '@nextcloud/dialogs'
 import { NcButton, NcEmojiPicker, NcEmptyContent, NcModal, NcSelect, NcTextField } from '@nextcloud/vue'
 import displayError from '../../util/displayError.js'
 import { autocompleteSourcesToCircleMemberTypes, circlesMemberTypes } from '../../constants.js'
@@ -280,7 +280,12 @@ export default {
 
 			this.loading = true
 			this.newCollective({ name: this.newCollectiveName, emoji: this.emoji })
-				.then(updateCollective)
+				.then((message) => {
+					if (message) {
+						showInfo(message)
+					}
+					updateCollective()
+				})
 				.catch((e) => {
 					if (e.response?.data === 'A team with that name exists') {
 						this.nameExists = this.newCollectiveName
