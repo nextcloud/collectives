@@ -382,27 +382,31 @@ class PageService {
 	 * @throws NotPermittedException
 	 */
 	public function getPagesFromFolder(int $collectiveId, Folder $folder, string $userId, bool $recurse = false): array {
-		// Find index page or create it if we have subpages, but it doesn't exist
-		try {
-			$indexPage = $this->getPageByFile($this->getIndexPageFile($folder), $folder);
-		} catch (NotFoundException) {
-			if (!NodeHelper::folderHasSubPages($folder)) {
-				return [];
-			}
-			$indexPage = $this->newPage($collectiveId, $folder, PageInfo::INDEX_PAGE_TITLE, $userId);
-		}
-		$pageInfos = [$indexPage];
+		$pageInfos = [];
+		$indexPage = null;
 
 		// Add subpages and recurse over subfolders
 		foreach ($folder->getDirectoryListing() as $node) {
-			if ($node instanceof File && NodeHelper::isPage($node) && !NodeHelper::isIndexPage($node)) {
-				$pageInfos[] = $this->getPageByFile($node, $folder);
+			if ($node instanceof File && NodeHelper::isPage($node)) {
+				$page = $this->getPageByFile($node, $folder);
+				if (NodeHelper::isIndexPage($node)) {
+					$indexPage = $page;
+				} else {
+					$pageInfos[] = $page;
+				}
 			} elseif ($recurse && $node instanceof Folder) {
 				array_push($pageInfos, ...$this->getPagesFromFolder($collectiveId, $node, $userId, true));
 			}
 		}
 
-		return $pageInfos;
+		if (!$indexPage) {
+			if (count($pageInfos) === 0) {
+				return [];
+			}
+			$indexPage = $this->newPage($collectiveId, $folder, PageInfo::INDEX_PAGE_TITLE, $userId);
+		}
+
+		return array_merge([$indexPage], $pageInfos);
 	}
 
 	/**
