@@ -64,8 +64,7 @@
 					</div>
 				</div>
 
-				<NcEmptyContent :title="t('collectives', 'Enter the new collective name or pick an existing team')"
-					class="empty-content">
+				<NcEmptyContent class="empty-content">
 					<template #icon>
 						<CollectivesIcon :size="20" />
 					</template>
@@ -114,6 +113,7 @@
 </template>
 
 <script>
+import debounce from 'debounce'
 import { mapActions, mapState } from 'pinia'
 import { useCirclesStore } from '../../stores/circles.js'
 import { useCollectivesStore } from '../../stores/collectives.js'
@@ -156,6 +156,8 @@ export default {
 			currentUserId: getCurrentUser().uid,
 			selectedMembers: {},
 			noDeleteMembers: [],
+			nameIsTooShort: false,
+			setNameIsTooShortDebounced: debounce(this.setNameIsTooShort, 500),
 			state: 0,
 		}
 	},
@@ -179,10 +181,6 @@ export default {
 
 		newCollectiveName() {
 			return this.pickCircle ? this.circle : this.name
-		},
-
-		nameIsTooShort() {
-			return !!this.newCollectiveName && this.newCollectiveName.length < 3
 		},
 
 		nameIsTaken() {
@@ -219,6 +217,19 @@ export default {
 		},
 	},
 
+	watch: {
+		newCollectiveName(val) {
+			if (!val || this.newCollectiveName.length > 2) {
+				this.setNameIsTooShortDebounced.clear()
+				this.nameIsTooShort = false
+				return
+			}
+
+			this.setNameIsTooShortDebounced()
+		},
+
+	},
+
 	mounted() {
 		this.selectedMembers[`users-${this.currentUserId}`] = {
 			icon: 'icon-user',
@@ -241,6 +252,10 @@ export default {
 			'addMembersToCircle',
 		]),
 		...mapActions(useCollectivesStore, ['newCollective']),
+
+		setNameIsTooShort() {
+			this.nameIsTooShort = true
+		},
 
 		clearName() {
 			this.name = ''
@@ -385,8 +400,9 @@ export default {
 
 .modal-collective-name-error {
 	display: flex;
-	// Emoji button + input field padding
-	padding-left: calc(57px + 12px);
+	// Emoji button + gap + input field padding
+	padding-left: calc(var(--default-clickable-area) + 4px + 9px);
+	color: var(--color-text-maxcontrast);
 
 	&-label {
 		padding-left: 4px;
