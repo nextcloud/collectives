@@ -201,8 +201,8 @@ class PageServiceTest extends TestCase {
 		$indexPageInfo->setParentId(101);
 		$indexPageInfo->setTitle('testfolder');
 
-		$filesJustMd[] = $indexPageInfo;
-		$filesNotJustMd[] = $indexPageInfo;
+		$filesJustMd[] = $indexFile;
+		$filesNotJustMd[] = $indexFile;
 		$pageInfos[] = $indexPageInfo;
 
 		$fileNameList = [ 'page1.md', 'page2.md', 'page3.md', 'another.jpg', 'whatever.txt' ];
