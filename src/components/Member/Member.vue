@@ -264,9 +264,9 @@ export default {
 	padding: 0 4px;
 
 	&__user-descriptor {
-		// margin-top: -4px;
+		display: flex;
+		flex-grow: 1;
 		margin-left: 12px;
-		width: calc(100% - 100px);
 
 		overflow: hidden;
 		text-overflow: ellipsis;
@@ -287,6 +287,10 @@ export default {
 
 	&__loading {
 		margin-right: 8px;
+	}
+
+	&__checkmark {
+		padding-right: 8px;
 	}
 
 	&:hover, &:focus {
