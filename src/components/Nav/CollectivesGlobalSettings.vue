@@ -6,7 +6,7 @@
 <template>
 	<NcAppNavigationSettings :name="t('collectives', 'Collectives settings')">
 		<NcTextField name="userFolder"
-			:label="t('collectives', 'Collectives Folder')"
+			:label="t('collectives', 'Collectives folder')"
 			:label-visible="true"
 			:value="userFolderValue"
 			:disabled="disabledPicker"
