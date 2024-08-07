@@ -36,7 +36,7 @@
     "debounce": "^2.1.0",
     "escape-html": "^1.0.3",
     "focus-trap": "^7.5.4",
-    "pinia": "^2.2.0",
+    "pinia": "^2.2.1",
     "sortablejs": "^1.15.2",
     "v-click-outside": "^3.2.0",
     "vue": "^2.7.16",
