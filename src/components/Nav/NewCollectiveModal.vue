@@ -4,13 +4,11 @@
 -->
 
 <template>
-	<NcModal :name="t('collectives', 'New collective')" @close="onClose">
+	<NcDialog :name="dialogName"
+		size="normal"
+		@close="onClose">
 		<div class="modal-content">
 			<div v-if="state === 0" class="modal-collective-wrapper">
-				<h2 class="modal-collective-title">
-					{{ t('collectives', 'New collective') }}
-				</h2>
-
 				<div class="modal-collective-name">
 					<NcEmojiPicker :show-preview="true" @select="updateEmoji">
 						<NcButton type="tertiary"
@@ -69,25 +67,9 @@
 						<CollectivesIcon :size="20" />
 					</template>
 				</NcEmptyContent>
-
-				<div class="modal-buttons">
-					<NcButton @click="onClose">
-						{{ t('collectives', 'Cancel') }}
-					</NcButton>
-					<NcButton type="primary"
-						:disabled="!newCollectiveName || nameIsInvalid"
-						class="modal-buttons-right"
-						@click="advanceToMembers">
-						{{ t('collectives', 'Add members') }}
-					</NcButton>
-				</div>
 			</div>
 
 			<div v-else-if="state === 1" class="modal-collective-wrapper">
-				<h2 class="modal-collective-title">
-					{{ t('collectives', 'Add members to {name}', { name: newCollectiveName }) }}
-				</h2>
-
 				<div class="modal-collective-members">
 					<MemberPicker :show-selection="true"
 						:selected-members="selectedMembers"
@@ -95,21 +77,46 @@
 						:on-click-searched="onClickSearched"
 						@delete-from-selection="deleteMember" />
 				</div>
-
-				<div class="modal-buttons">
-					<NcButton @click="state = 0">
-						{{ t('collectives', 'Back') }}
-					</NcButton>
-					<NcButton type="primary"
-						:disabled="loading"
-						class="modal-buttons-right"
-						@click="onCreate">
-						{{ createButtonString }}
-					</NcButton>
-				</div>
 			</div>
 		</div>
-	</NcModal>
+
+		<template #actions>
+			<template v-if="state === 0">
+				<NcButton @click="onClose">
+					<template #icon>
+						<CancelIcon :size="20" />
+					</template>
+					{{ t('collectives', 'Cancel') }}
+				</NcButton>
+				<NcButton type="primary"
+					:disabled="!newCollectiveName || nameIsInvalid"
+					class="modal-buttons-right"
+					@click="advanceToMembers">
+					<template #icon>
+						<PlusIcon :size="20" />
+					</template>
+					{{ t('collectives', 'Add members') }}
+				</NcButton>
+			</template>
+			<template v-else-if="state === 1">
+				<NcButton @click="state = 0">
+					<template #icon>
+						<ArrowLeftIcon :size="20" />
+					</template>
+					{{ t('collectives', 'Back') }}
+				</NcButton>
+				<NcButton type="primary"
+					:disabled="loading"
+					class="modal-buttons-right"
+					@click="onCreate">
+					<template #icon>
+						<CheckIcon :size="20" />
+					</template>
+					{{ createButtonString }}
+				</NcButton>
+			</template>
+		</template>
+	</NcDialog>
 </template>
 
 <script>
@@ -119,30 +126,38 @@ import { useCirclesStore } from '../../stores/circles.js'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { getCurrentUser } from '@nextcloud/auth'
 import { showError, showInfo } from '@nextcloud/dialogs'
-import { NcButton, NcEmojiPicker, NcEmptyContent, NcModal, NcSelect, NcTextField } from '@nextcloud/vue'
+import { NcButton, NcDialog, NcEmojiPicker, NcEmptyContent, NcSelect, NcTextField } from '@nextcloud/vue'
 import displayError from '../../util/displayError.js'
 import { autocompleteSourcesToCircleMemberTypes, circlesMemberTypes } from '../../constants.js'
 import AlertCircleOutlineIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
-import TeamsIcon from '../Icon/TeamsIcon.vue'
+import ArrowLeftIcon from 'vue-material-design-icons/ArrowLeft.vue'
+import CancelIcon from 'vue-material-design-icons/Cancel.vue'
+import CheckIcon from 'vue-material-design-icons/Check.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
+import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import CollectivesIcon from '../Icon/CollectivesIcon.vue'
 import MemberPicker from '../Member/MemberPicker.vue'
+import TeamsIcon from '../Icon/TeamsIcon.vue'
 
 export default {
 	name: 'NewCollectiveModal',
 
 	components: {
 		AlertCircleOutlineIcon,
+		ArrowLeftIcon,
 		TeamsIcon,
+		CancelIcon,
+		CheckIcon,
 		CloseIcon,
 		CollectivesIcon,
 		MemberPicker,
 		NcButton,
+		NcDialog,
 		NcEmojiPicker,
 		NcEmptyContent,
-		NcModal,
 		NcSelect,
 		NcTextField,
+		PlusIcon,
 	},
 
 	data() {
@@ -177,6 +192,12 @@ export default {
 
 		anyCircle() {
 			return this.circles.length > 0
+		},
+
+		dialogName() {
+			return this.state === 0
+				? t('collectives', 'New collective')
+				: t('collectives', 'Add members to {name}', { name: this.newCollectiveName })
 		},
 
 		newCollectiveName() {
@@ -410,26 +431,7 @@ export default {
 }
 
 .modal-collective-members {
-	// Full height minus modal title and buttons
 	// Required for sticky search field and buttons
-	height: calc(100% - 76px - 40px);
-}
-
-.modal-buttons {
-	z-index: 1;
-	display: flex;
-	flex: 0 0;
-	justify-content: space-between;
-	width: 100%;
-	background-color: var(--color-main-background);
-	box-shadow: 0 -10px 5px var(--color-main-background);
-	// Sticky to the bottom
-	position: sticky;
-	bottom: 0;
-	margin-top: auto;
-
-	&-right {
-		margin-left: auto;
-	}
+	height: 100%;
 }
 </style>
