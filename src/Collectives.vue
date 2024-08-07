@@ -112,7 +112,6 @@ export default {
 	color: var(--color-main-text);
 	width: 100%;
 	height: 43px;
-	opacity: 0.8;
 	text-overflow: unset;
 
 	&.mobile {
