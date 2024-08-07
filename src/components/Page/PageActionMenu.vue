@@ -237,7 +237,7 @@ export default {
 		]),
 
 		displaySidebarAction() {
-			return isMobile && !this.inPageList && !this.showing('sidebar')
+			return this.isMobile && !this.inPageList && !this.showing('sidebar')
 		},
 
 		displayCollectiveActions() {
