@@ -12,7 +12,7 @@
 					<TeamsIcon :size="20" />
 				</template>
 				<template v-if="!isMobile" #default>
-					{{ t('collectives','Team Overview') }}
+					{{ t('collectives','Team overview') }}
 				</template>
 			</NcButton>
 		</div>
