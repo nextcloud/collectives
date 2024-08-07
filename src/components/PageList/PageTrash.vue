@@ -8,18 +8,16 @@
 		<NcButton ref="pagetrashbutton"
 			type="tertiary"
 			class="page-trash-button"
-			@click="toggleTrash">
+			@click="openTrash">
 			<template #icon>
 				<DeleteIcon class="page-trash-button__icon" :size="20" />
 			</template>
 			{{ t('collectives', 'Deleted pages') }}
 		</NcButton>
-		<NcModal v-if="showModal"
-			size="large"
-			class="modal__page-trash"
-			@close="closeTrash">
+		<NcDialog :open.sync="showModal"
+			:name="t('collectives', 'Deleted pages')"
+			size="large">
 			<div class="modal__content">
-				<h2>{{ t('collectives', 'Deleted pages') }}</h2>
 				<NcEmptyContent v-if="!sortedTrashPages.length"
 					class="modal__content_empty"
 					:description="t('collectives', 'No deleted pages.')">
@@ -80,14 +78,14 @@
 					</table>
 				</template>
 			</div>
-		</NcModal>
+		</NcDialog>
 	</div>
 </template>
 
 <script>
 import { mapActions, mapState } from 'pinia'
 import { usePagesStore } from '../../stores/pages.js'
-import { NcActions, NcActionButton, NcButton, NcEmptyContent, NcModal } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcButton, NcDialog, NcEmptyContent } from '@nextcloud/vue'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { showSuccess } from '@nextcloud/dialogs'
@@ -106,8 +104,8 @@ export default {
 		NcActions,
 		NcActionButton,
 		NcButton,
+		NcDialog,
 		NcEmptyContent,
-		NcModal,
 		DeleteIcon,
 		RestoreIcon,
 		PageIcon,
@@ -164,12 +162,8 @@ export default {
 			'setHighlightAnimationPageId',
 		]),
 
-		toggleTrash() {
-			this.showModal = !this.showModal
-		},
-
-		closeTrash() {
-			this.showModal = false
+		openTrash() {
+			this.showModal = true
 		},
 
 		onClickRestore(trashPage) {
@@ -243,11 +237,7 @@ export default {
 }
 
 .modal__content {
-	margin: 2vw;
-
-	&__empty {
-		margin-top: 25px !important;
-	}
+	margin-bottom: 12px;
 }
 
 table {
