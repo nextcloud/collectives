@@ -176,8 +176,8 @@ export default {
 	display: flex;
 
 	.toggle-icon {
-		padding-top: 25px;
-		padding-left: 8px;
+		display: flex;
+		padding: 24px 0 12px 8px;
 
 		.collapsed {
 			transition: transform var(--animation-slow);
