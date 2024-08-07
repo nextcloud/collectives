@@ -401,8 +401,4 @@ button.button-emoji {
 		margin-top: 12px;
 	}
 }
-
-.section-description {
-	margin-bottom: 12px;
-}
 </style>
