@@ -7,77 +7,75 @@
 	<NcDialog :name="dialogName"
 		size="normal"
 		@closing="onClose">
-		<div class="modal-content">
-			<div v-if="state === 0" class="modal-collective-wrapper">
-				<div class="modal-collective-name">
-					<NcEmojiPicker :show-preview="true" @select="updateEmoji">
-						<NcButton type="tertiary"
-							:aria-label="t('collectives', 'Select emoji for collective')"
-							:title="t('collectives', 'Select emoji')"
-							class="button-emoji"
-							@click.prevent>
-							{{ emoji }}
-						</NcButton>
-					</NcEmojiPicker>
-					<NcTextField v-if="!pickCircle"
-						ref="collectiveName"
-						:value.sync="name"
-						class="collective-name"
-						:error="nameIsInvalid"
-						:show-trailing-button="name !== ''"
-						:label="t('collectives', 'Name of the collective')"
-						@keypress.enter.prevent="advanceToMembers"
-						@trailing-button-click="clearName" />
-					<NcSelect v-else
-						ref="circleSelector"
-						v-model="circle"
-						class="circle-selector"
-						:append-to-body="false"
-						:options="circles"
-						:aria-label-combobox="t('collectives', 'Select an existing team')"
-						:placeholder="t('collectives', 'Select a team...')" />
-					<NcButton v-if="anyCircle && !pickCircle"
-						:title="t('collectives', 'Select an existing team')"
-						type="tertiary"
-						@click.stop.prevent="startSelectCircle">
-						<template #icon>
-							<TeamsIcon :size="16" />
-						</template>
+		<div v-if="state === 0" class="modal-collective-wrapper">
+			<div class="modal-collective-name">
+				<NcEmojiPicker :show-preview="true" @select="updateEmoji">
+					<NcButton type="tertiary"
+						:aria-label="t('collectives', 'Select emoji for collective')"
+						:title="t('collectives', 'Select emoji')"
+						class="button-emoji"
+						@click.prevent>
+						{{ emoji }}
 					</NcButton>
-					<NcButton v-if="anyCircle && pickCircle"
-						:title="t('collectives', 'Cancel selecting a team')"
-						type="tertiary"
-						@click.stop.prevent="stopSelectCircle">
-						<template #icon>
-							<CloseIcon :size="16" />
-						</template>
-					</NcButton>
-				</div>
-				<div class="modal-collective-name-error-placeholder">
-					<div v-if="nameError" class="modal-collective-name-error">
-						<AlertCircleOutlineIcon :size="16" />
-						<label for="collective-name" class="modal-collective-name-error-label">
-							{{ nameError }}
-						</label>
-					</div>
-				</div>
-
-				<NcEmptyContent class="empty-content">
+				</NcEmojiPicker>
+				<NcTextField v-if="!pickCircle"
+					ref="collectiveName"
+					:value.sync="name"
+					class="collective-name"
+					:error="nameIsInvalid"
+					:show-trailing-button="name !== ''"
+					:label="t('collectives', 'Name of the collective')"
+					@keypress.enter.prevent="advanceToMembers"
+					@trailing-button-click="clearName" />
+				<NcSelect v-else
+					ref="circleSelector"
+					v-model="circle"
+					class="circle-selector"
+					:append-to-body="false"
+					:options="circles"
+					:aria-label-combobox="t('collectives', 'Select an existing team')"
+					:placeholder="t('collectives', 'Select a team...')" />
+				<NcButton v-if="anyCircle && !pickCircle"
+					:title="t('collectives', 'Select an existing team')"
+					type="tertiary"
+					@click.stop.prevent="startSelectCircle">
 					<template #icon>
-						<CollectivesIcon :size="20" />
+						<TeamsIcon :size="16" />
 					</template>
-				</NcEmptyContent>
+				</NcButton>
+				<NcButton v-if="anyCircle && pickCircle"
+					:title="t('collectives', 'Cancel selecting a team')"
+					type="tertiary"
+					@click.stop.prevent="stopSelectCircle">
+					<template #icon>
+						<CloseIcon :size="16" />
+					</template>
+				</NcButton>
+			</div>
+			<div class="modal-collective-name-error-placeholder">
+				<div v-if="nameError" class="modal-collective-name-error">
+					<AlertCircleOutlineIcon :size="16" />
+					<label for="collective-name" class="modal-collective-name-error-label">
+						{{ nameError }}
+					</label>
+				</div>
 			</div>
 
-			<div v-else-if="state === 1" class="modal-collective-wrapper">
-				<div class="modal-collective-members">
-					<MemberPicker :show-selection="true"
-						:search-without-query="true"
-						:selected-members="selectedMembers"
-						:no-delete-members="noDeleteMembers"
-						:on-click-searched="onClickSearched"
-						@delete-from-selection="deleteMember" />
-				</div>
+			<NcEmptyContent class="empty-content">
+				<template #icon>
+					<CollectivesIcon :size="20" />
+				</template>
+			</NcEmptyContent>
+		</div>
+
+		<div v-else-if="state === 1" class="modal-collective-wrapper">
+			<div class="modal-collective-members">
+				<MemberPicker :show-selection="true"
+					:search-without-query="true"
+					:selected-members="selectedMembers"
+					:no-delete-members="noDeleteMembers"
+					:on-click-searched="onClickSearched"
+					@delete-from-selection="deleteMember" />
 			</div>
 		</div>
 
@@ -378,20 +376,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.modal-content {
-	display: flex;
-	flex-direction: column;
-	box-sizing: border-box;
-	width: 100%;
-	height: 100%;
-	padding: 16px;
-	padding-bottom: 18px;
-}
-
 .modal-collective-wrapper {
 	display: flex;
 	flex-direction: column;
-	width: 100%;
 	height: 550px;
 }
 
