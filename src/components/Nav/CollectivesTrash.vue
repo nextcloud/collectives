@@ -51,46 +51,46 @@
 			</div>
 		</transition>
 
-		<NcModal v-if="deleteModal" size="small" @close="closeDeleteModal">
+		<NcDialog v-if="deleteModal"
+			:name="t('collectives', 'Permanently delete collective {collective}', { collective: modalCollective.name })"
+			size="small"
+			@closing="closeDeleteModal">
 			<div class="modal__content">
-				<h2>
-					{{ t('collectives', 'Permanently delete collective "{collective}"', { collective: modalCollective.name }) }}
-				</h2>
 				<div>
 					{{ t('collectives', 'Delete corresponding team along with the collective?') }}
 				</div>
-				<div class="three_buttons">
-					<NcButton type="error"
-						:wide="true"
-						@click="deleteCollective(modalCollective, false)">
-						{{ t('collectives', 'Only collective') }}
-					</NcButton>
-					<NcButton v-if="isCollectiveOwner(modalCollective)"
-						type="error"
-						:wide="true"
-						@click="deleteCollective(modalCollective, true)">
-						{{ t('collectives', 'Collective and team') }}
-					</NcButton>
-					<NcButton v-else
-						type="primary"
-						disabled
-						:title="t('collectives', 'Only team owners can delete a team')"
-						:wide="true">
-						{{ t('collectives', 'Collective and team') }}
-					</NcButton>
-					<NcButton :wide="true" @click="closeDeleteModal">
-						{{ t('collectives', 'Cancel') }}
-					</NcButton>
-				</div>
 			</div>
-		</NcModal>
+			<template #actions>
+				<NcButton type="error"
+					:wide="true"
+					@click="deleteCollective(modalCollective, false)">
+					{{ t('collectives', 'Only collective') }}
+				</NcButton>
+				<NcButton v-if="isCollectiveOwner(modalCollective)"
+					type="error"
+					:wide="true"
+					@click="deleteCollective(modalCollective, true)">
+					{{ t('collectives', 'Collective and team') }}
+				</NcButton>
+				<NcButton v-else
+					type="primary"
+					disabled
+					:title="t('collectives', 'Only team owners can delete a team')"
+					:wide="true">
+					{{ t('collectives', 'Collective and team') }}
+				</NcButton>
+				<NcButton :wide="true" @click="closeDeleteModal">
+					{{ t('collectives', 'Cancel') }}
+				</NcButton>
+			</template>
+		</NcDialog>
 	</div>
 </template>
 
 <script>
 import { mapState } from 'pinia'
 import { useCollectivesStore } from '../../stores/collectives.js'
-import { NcActionButton, NcAppNavigationItem, NcButton, NcModal } from '@nextcloud/vue'
+import { NcActionButton, NcAppNavigationItem, NcButton, NcDialog } from '@nextcloud/vue'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import CollectivesIcon from '../Icon/CollectivesIcon.vue'
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
@@ -110,7 +110,7 @@ export default {
 		NcButton,
 		CollectivesIcon,
 		DeleteIcon,
-		NcModal,
+		NcDialog,
 		RestoreIcon,
 	},
 
@@ -245,11 +245,9 @@ export default {
 	margin: 15px;
 }
 
-.three_buttons {
+:deep(.dialog__actions) {
 	display: flex;
 	flex-flow: column nowrap;
-	justify-content: space-between;
-	padding-top: 10px;
 	gap: 10px;
 }
 </style>
