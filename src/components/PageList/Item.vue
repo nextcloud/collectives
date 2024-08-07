@@ -413,8 +413,7 @@ export default {
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		// Emojis are too big with default 1.5em
-		font-size: 1.2em;
+		font-size: 20px;
 
 		.item-icon-emoji {
 			cursor: pointer;
