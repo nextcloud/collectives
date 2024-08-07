@@ -4,129 +4,124 @@
 -->
 
 <template>
-	<NcModal @close="onClose">
-		<div class="modal-content">
-			<h2 class="oc-dialog-title">
-				{{ t('collectives', 'Copy or move page') }}
-			</h2>
-			<span class="crumbs">
-				<div v-if="!selectedCollective || !selectedCollective.isPageShare" class="crumbs-home">
+	<NcDialog :name="t('collectives', 'Copy or move page')" size="normal" @closing="onClose">
+		<span class="crumbs">
+			<div v-if="!selectedCollective || !selectedCollective.isPageShare" class="crumbs-home">
+				<NcButton type="tertiary"
+					:aria-label="t('collectives', 'Breadcrumb for list of collectives')"
+					:disabled="!selectedCollective"
+					class="crumb-button home"
+					@click="onClickCollectivesList">
+					<template #icon>
+						<CollectivesIcon :size="20" />
+					</template>
+					{{ collectivesCrumbString }}
+				</NcButton>
+				<ChevronRightIcon :size="20" />
+			</div>
+			<template v-if="selectedCollective">
+				<div class="crumbs-level">
 					<NcButton type="tertiary"
-						:aria-label="t('collectives', 'Breadcrumb for list of collectives')"
-						:disabled="!selectedCollective"
-						class="crumb-button home"
-						@click="onClickCollectivesList">
-						<template #icon>
-							<CollectivesIcon :size="20" />
+						:aria-label="collectiveBreadcrumbAriaLabel"
+						:disabled="pageCrumbs.length === 0"
+						class="crumb-button"
+						@click="onClickCollectiveHome">
+						<template v-if="collectiveBreadcrumbEmoji" #icon>
+							{{ collectiveBreadcrumbEmoji }}
 						</template>
-						{{ collectivesCrumbString }}
+						{{ collectiveBreadcrumbTitle }}
 					</NcButton>
-					<ChevronRightIcon :size="20" />
 				</div>
-				<template v-if="selectedCollective">
-					<div class="crumbs-level">
-						<NcButton type="tertiary"
-							:aria-label="collectiveBreadcrumbAriaLabel"
-							:disabled="pageCrumbs.length === 0"
-							class="crumb-button"
-							@click="onClickCollectiveHome">
-							<template v-if="collectiveBreadcrumbEmoji" #icon>
-								{{ collectiveBreadcrumbEmoji }}
-							</template>
-							{{ collectiveBreadcrumbTitle }}
-						</NcButton>
-					</div>
-					<div v-for="(page, index) in pageCrumbs"
-						:key="page.id"
-						:aria-label="t('collectives', 'Breadcrumb for page {page}', { page: page.title })"
-						class="crumbs-level">
-						<ChevronRightIcon :size="20" />
-						<NcButton type="tertiary"
-							:disabled="(index + 1) === pageCrumbs.length"
-							class="crumb-button"
-							@click="onClickPage(page)">
+				<div v-for="(page, index) in pageCrumbs"
+					:key="page.id"
+					:aria-label="t('collectives', 'Breadcrumb for page {page}', { page: page.title })"
+					class="crumbs-level">
+					<ChevronRightIcon :size="20" />
+					<NcButton type="tertiary"
+						:disabled="(index + 1) === pageCrumbs.length"
+						class="crumb-button"
+						@click="onClickPage(page)">
+						{{ page.title }}
+					</NcButton>
+				</div>
+			</template>
+		</span>
+		<div class="picker-list">
+			<ul v-if="!selectedCollective">
+				<li v-for="collective in collectives"
+					:id="`picker-collective-${collective.id}`"
+					:key="collective.id">
+					<a href="#" class="picker-item" @click="onClickCollective(collective)">
+						<div v-if="collective.emoji" class="picker-icon">
+							{{ collective.emoji }}
+						</div>
+						<CollectivesIcon v-else
+							class="picker-icon"
+							:size="20" />
+						<div class="picker-title">
+							{{ collective.name }}
+						</div>
+					</a>
+				</li>
+			</ul>
+			<SkeletonLoading v-else-if="loading('pages-foreign-collective')" type="items" />
+			<ul v-else-if="subpages.length > 0">
+				<li v-for="(page, index) in subpages"
+					:id="`picker-page-${page.id}`"
+					:key="page.id">
+					<a :class="{ 'self': page.id === pageId }"
+						:href="page.id === pageId ? false : '#'"
+						class="picker-item"
+						@click="onClickPage(page)">
+						<div v-if="page.emoji" class="picker-icon">
+							{{ page.emoji }}
+						</div>
+						<PageIcon v-else
+							class="picker-icon"
+							:size="20"
+							fill-color="var(--color-background-darker)" />
+						<div class="picker-title">
 							{{ page.title }}
-						</NcButton>
-					</div>
-				</template>
-			</span>
-			<div class="picker-list">
-				<ul v-if="!selectedCollective">
-					<li v-for="collective in collectives"
-						:id="`picker-collective-${collective.id}`"
-						:key="collective.id">
-						<a href="#" class="picker-item" @click="onClickCollective(collective)">
-							<div v-if="collective.emoji" class="picker-icon">
-								{{ collective.emoji }}
-							</div>
-							<CollectivesIcon v-else
-								class="picker-icon"
-								:size="20" />
-							<div class="picker-title">
-								{{ collective.name }}
-							</div>
-						</a>
-					</li>
-				</ul>
-				<SkeletonLoading v-else-if="loading('pages-foreign-collective')" type="items" />
-				<ul v-else-if="subpages.length > 0">
-					<li v-for="(page, index) in subpages"
-						:id="`picker-page-${page.id}`"
-						:key="page.id">
-						<a :class="{ 'self': page.id === pageId }"
-							:href="page.id === pageId ? false : '#'"
-							class="picker-item"
-							@click="onClickPage(page)">
-							<div v-if="page.emoji" class="picker-icon">
-								{{ page.emoji }}
-							</div>
-							<PageIcon v-else
-								class="picker-icon"
-								:size="20"
-								fill-color="var(--color-background-darker)" />
-							<div class="picker-title">
-								{{ page.title }}
-							</div>
-							<div v-if="page.id === pageId" class="picker-move-buttons">
-								<NcButton :disabled="index === 0"
-									type="tertiary"
-									@click="onClickUp">
-									<template #icon>
-										<ArrowUpIcon :size="20" />
-									</template>
-								</NcButton>
-								<NcButton :disabled="index === (subpages.length - 1)"
-									type="tertiary"
-									@click="onClickDown">
-									<template #icon>
-										<ArrowDownIcon :size="20" />
-									</template>
-								</NcButton>
-							</div>
-						</a>
-					</li>
-				</ul>
-			</div>
-			<div class="picker-buttons">
-				<NcButton type="secondary"
-					:disabled="isActionButtonsDisabled"
-					@click="onMoveOrCopy(true)">
-					<template #icon>
-						<NcLoadingIcon v-if="isCopying" :size="20" />
-					</template>
-					{{ copyPageString }}
-				</NcButton>
-				<NcButton type="primary"
-					:disabled="isActionButtonsDisabled"
-					@click="onMoveOrCopy(false)">
-					<template #icon>
-						<NcLoadingIcon v-if="isMoving" :size="20" />
-					</template>
-					{{ movePageString }}
-				</NcButton>
-			</div>
+						</div>
+						<div v-if="page.id === pageId" class="picker-move-buttons">
+							<NcButton :disabled="index === 0"
+								type="tertiary"
+								@click="onClickUp">
+								<template #icon>
+									<ArrowUpIcon :size="20" />
+								</template>
+							</NcButton>
+							<NcButton :disabled="index === (subpages.length - 1)"
+								type="tertiary"
+								@click="onClickDown">
+								<template #icon>
+									<ArrowDownIcon :size="20" />
+								</template>
+							</NcButton>
+						</div>
+					</a>
+				</li>
+			</ul>
 		</div>
-	</NcModal>
+		<template #actions>
+			<NcButton type="secondary"
+				:disabled="isActionButtonsDisabled"
+				@click="onMoveOrCopy(true)">
+				<template #icon>
+					<NcLoadingIcon v-if="isCopying" :size="20" />
+				</template>
+				{{ copyPageString }}
+			</NcButton>
+			<NcButton type="primary"
+				:disabled="isActionButtonsDisabled"
+				@click="onMoveOrCopy(false)">
+				<template #icon>
+					<NcLoadingIcon v-if="isMoving" :size="20" />
+				</template>
+				{{ movePageString }}
+			</NcButton>
+		</template>
+	</NcDialog>
 </template>
 
 <script>
@@ -136,7 +131,7 @@ import { mapActions, mapState } from 'pinia'
 import { useRootStore } from '../../stores/root.js'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { usePagesStore } from '../../stores/pages.js'
-import { NcButton, NcLoadingIcon, NcModal } from '@nextcloud/vue'
+import { NcButton, NcDialog, NcLoadingIcon } from '@nextcloud/vue'
 import ArrowDownIcon from 'vue-material-design-icons/ArrowDown.vue'
 import ArrowUpIcon from 'vue-material-design-icons/ArrowUp.vue'
 import ChevronRightIcon from 'vue-material-design-icons/ChevronRight.vue'
@@ -154,8 +149,8 @@ export default {
 		ChevronRightIcon,
 		CollectivesIcon,
 		NcButton,
+		NcDialog,
 		NcLoadingIcon,
-		NcModal,
 		PageIcon,
 		SkeletonLoading,
 	},
@@ -418,19 +413,8 @@ export default {
 
 <style lang="scss" scoped>
 :deep(.modal-container) {
-	width: calc(100vw - 120px) !important;
 	height: calc(100vw - 120px) !important;
-	max-width: 600px !important;
 	max-height: 500px !important;
-}
-
-.modal-content {
-	display: flex;
-	box-sizing: border-box;
-	width: 100%;
-	height: 100%;
-	flex-direction: column;
-	padding: 15px;
 }
 
 .crumbs {
@@ -534,12 +518,5 @@ export default {
 		align-items: center;
 		padding: 0 12px;
 	}
-}
-
-.picker-buttons {
-	display: flex;
-	justify-content: flex-end;
-	padding-top: 10px;
-	gap: 12px;
 }
 </style>
