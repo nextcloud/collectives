@@ -236,13 +236,16 @@ export default {
 	background-color: var(--color-main-background);
 	font-size: 30px;
 
+	::placeholder {
+		font-size: 30px;
+	}
+
 	.page-title-icon {
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		min-width: var(--default-clickable-area);
 		height: 43px;
-		opacity: 0.8;
 
 		.button-emoji-page {
 			width: var(--default-clickable-area);
