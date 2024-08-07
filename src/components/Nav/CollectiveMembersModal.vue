@@ -7,16 +7,12 @@
 	<NcDialog :name="t('collectives', 'Members of collective {name}', { name: collective.name })"
 		size="normal"
 		@closing="onClose">
-		<div class="modal-content">
-			<div class="modal-collective-wrapper">
-				<div class="modal-collective-members">
-					<MemberPicker :show-current="true"
-						:circle-id="collective.circleId"
-						:current-user-is-admin="currentUserIsAdmin"
-						:current-members="circleMembersSorted(collective.circleId)"
-						:on-click-searched="onClickSearched" />
-				</div>
-			</div>
+		<div class="modal-collective-members">
+			<MemberPicker :show-current="true"
+				:circle-id="collective.circleId"
+				:current-user-is-admin="currentUserIsAdmin"
+				:current-members="circleMembersSorted(collective.circleId)"
+				:on-click-searched="onClickSearched" />
 		</div>
 	</NcDialog>
 </template>
@@ -82,26 +78,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.modal-content {
-	display: flex;
-	flex-direction: column;
-	box-sizing: border-box;
-	width: 100%;
-	height: 100%;
-	padding: 16px;
-	padding-bottom: 18px;
-}
-
-.modal-collective-wrapper {
-	display: flex;
-	flex-direction: column;
-	width: 100%;
+.modal-collective-members {
 	height: 550px;
 	max-height: 80vh;
-}
-
-.modal-collective-members {
-	// Required for sticky search field
-	height: 100%;
+	padding-bottom: 12px;
 }
 </style>
