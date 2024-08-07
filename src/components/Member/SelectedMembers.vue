@@ -14,6 +14,7 @@
 			:size="22"
 			:display-name="member.label"
 			:avatar-image="selectedMemberAvatarImage(member)"
+			:primary="isCurrentUser(member)"
 			class="selected-member-bubble">
 			<template v-if="selectedMemberDeletable(member)" #title>
 				<a href="#"
@@ -28,6 +29,7 @@
 </template>
 
 <script>
+import { getCurrentUser } from '@nextcloud/auth'
 import { NcUserBubble } from '@nextcloud/vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 
@@ -53,6 +55,10 @@ export default {
 	},
 
 	computed: {
+		isCurrentUser() {
+			return (member) => member.source === 'users' && member.label === getCurrentUser().uid
+		},
+
 		hasSelectedMembers() {
 			return Object.keys(this.selectedMembers).length !== 0
 		},

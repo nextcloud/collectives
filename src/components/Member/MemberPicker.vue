@@ -9,7 +9,7 @@
 		<NcTextField ref="memberSearch"
 			:value.sync="searchQuery"
 			type="text"
-			:show-trailing-button="isSearching"
+			:show-trailing-button="hasSearchQuery"
 			:label="t('collectives', 'Search accounts, groups, teams')"
 			@trailing-button-click="clearSearch"
 			@input="onSearch">
@@ -41,7 +41,7 @@
 			<!-- No search results -->
 			<template v-else-if="currentUserIsAdmin && !showCurrentSkeleton">
 				<NcAppNavigationCaption class="member-picker-caption" :name="t('collectives', 'Add accounts, groups or teams')" />
-				<Hint v-if="!isSearching" :hint="t('collectives', 'Search for members to add.')" />
+				<Hint v-if="!searchWithoutQuery && !hasSearchQuery" :hint="t('collectives', 'Search for members to add.')" />
 				<Hint v-else-if="isSearchLoading" :hint="t('collectives', 'Loading…')" />
 				<Hint v-else :hint="t('collectives', 'No search results')" />
 			</template>
@@ -80,6 +80,10 @@ export default {
 	},
 
 	props: {
+		searchWithoutQuery: {
+			type: Boolean,
+			default: false,
+		},
 		circleId: {
 			type: String,
 			default: null,
@@ -134,7 +138,7 @@ export default {
 	computed: {
 		...mapState(useCirclesStore, ['circleMemberType']),
 
-		isSearching() {
+		hasSearchQuery() {
 			return this.searchQuery !== ''
 		},
 
@@ -155,6 +159,9 @@ export default {
 		this.$nextTick(() => {
 			this.$refs.memberSearch.$el.getElementsByTagName('input')[0]?.focus()
 		})
+		if (this.searchWithoutQuery) {
+			this.fetchSearchResultsDebounced()
+		}
 	},
 
 	methods: {
@@ -164,6 +171,7 @@ export default {
 		},
 
 		async fetchSearchResults() {
+			this.isSearchLoading = true
 			// Search for users, groups and teams
 			const searchShareTypes = [shareTypes.TYPE_USER, shareTypes.TYPE_GROUP, shareTypes.TYPE_CIRCLE]
 
@@ -176,12 +184,11 @@ export default {
 						shareTypes: searchShareTypes,
 					},
 				})
-				this.isSearchLoading = false
-
 				this.searchResults = response.data.ocs.data
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'An error occurred while performing the search'))
+			} finally {
 				this.isSearchLoading = false
 			}
 		},
@@ -206,8 +213,7 @@ export default {
 			}
 
 			this.searchResults = []
-			this.isSearchLoading = true
-			if (this.isSearching) {
+			if (this.searchWithoutQuery || this.hasSearchQuery) {
 				this.fetchSearchResultsDebounced()
 			}
 		},
