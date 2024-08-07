@@ -4,13 +4,11 @@
 -->
 
 <template>
-	<NcModal @close="onClose">
+	<NcDialog :name="t('collectives', 'Members of collective {name}', { name: collective.name })"
+		size="normal"
+		@closing="onClose">
 		<div class="modal-content">
 			<div class="modal-collective-wrapper">
-				<h2 class="modal-collective-title">
-					{{ t('collectives', 'Members of collective {name}', { name: collective.name }) }}
-				</h2>
-
 				<div class="modal-collective-members">
 					<MemberPicker :show-current="true"
 						:circle-id="collective.circleId"
@@ -20,7 +18,7 @@
 				</div>
 			</div>
 		</div>
-	</NcModal>
+	</NcDialog>
 </template>
 
 <script>
@@ -28,7 +26,7 @@ import { mapActions, mapState } from 'pinia'
 import { useCirclesStore } from '../../stores/circles.js'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { autocompleteSourcesToCircleMemberTypes, circlesMemberTypes } from '../../constants.js'
-import { NcModal } from '@nextcloud/vue'
+import { NcDialog } from '@nextcloud/vue'
 import MemberPicker from '../Member/MemberPicker.vue'
 
 export default {
@@ -36,7 +34,7 @@ export default {
 
 	components: {
 		MemberPicker,
-		NcModal,
+		NcDialog,
 	},
 
 	props: {
@@ -103,8 +101,7 @@ export default {
 }
 
 .modal-collective-members {
-	// Full height minus modal title
 	// Required for sticky search field
-	height: calc(100% - 76px);
+	height: 100%;
 }
 </style>

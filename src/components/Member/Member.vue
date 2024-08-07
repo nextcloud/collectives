@@ -68,6 +68,7 @@
 			</NcActionButton>
 			<NcActionSeparator />
 			<NcActionButton :close-after-click="true"
+				class="critical"
 				@click="removeMember">
 				<template #icon>
 					<DeleteIcon :size="20" />
@@ -281,7 +282,6 @@ export default {
 
 	&__level-indicator {
 		color: var(--color-text-maxcontrast);
-		font-weight: 300;
 		padding-left: 5px;
 	}
 
@@ -312,5 +312,9 @@ export default {
 			background-color: var(--color-primary-element-light);
 		}
 	}
+}
+
+.critical > :deep(.action-button) {
+	color: var(--color-error);
 }
 </style>
