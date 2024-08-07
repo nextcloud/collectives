@@ -6,7 +6,7 @@
 <template>
 	<NcDialog :name="dialogName"
 		size="normal"
-		@close="onClose">
+		@closing="onClose">
 		<div class="modal-content">
 			<div v-if="state === 0" class="modal-collective-wrapper">
 				<div class="modal-collective-name">
@@ -72,6 +72,7 @@
 			<div v-else-if="state === 1" class="modal-collective-wrapper">
 				<div class="modal-collective-members">
 					<MemberPicker :show-selection="true"
+						:search-without-query="true"
 						:selected-members="selectedMembers"
 						:no-delete-members="noDeleteMembers"
 						:on-click-searched="onClickSearched"
