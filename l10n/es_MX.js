@@ -6,6 +6,7 @@ OC.L10N.register(
     "Settings" : "Ajustes",
     "Preparing collective for exporting or printing" : "Preparando colección para exportación o impresión",
     "Members" : "Miembros",
+    "No search results" : "No hay resultados de búsqueda",
     "Remove" : "Borrar",
     "Loading…" : "Cargando...",
     "Permissions" : "Permisos",
