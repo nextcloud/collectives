@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<div :class="[isFullWidthView ? 'full-width-view' : 'sheet-view']">
+	<div :class="[currentPage.isFullWidth ? 'full-width-view' : 'sheet-view']">
 		<h1 id="titleform" class="page-title">
 			<!-- Page emoji or icon -->
 			<div class="page-title-icon"
@@ -171,7 +171,6 @@ export default {
 		...mapState(usePagesStore, [
 			'currentPage',
 			'isIndexPage',
-			'isFullWidthView',
 			'isTemplatePage',
 			'isLandingPage',
 		]),
@@ -247,7 +246,6 @@ export default {
 	},
 
 	mounted() {
-		this.initFullWidthPageIds()
 		document.title = this.documentTitle
 		this.initTitleEntry()
 	},
@@ -261,7 +259,6 @@ export default {
 		...mapActions(usePagesStore, [
 			'getPages',
 			'renamePage',
-			'initFullWidthPageIds',
 		]),
 
 		initTitleEntry() {

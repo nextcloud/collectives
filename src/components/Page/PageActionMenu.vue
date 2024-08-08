@@ -41,7 +41,8 @@
 
 			<!-- Page view options: only displayed in page title menu -->
 			<NcActionCheckbox v-if="!inPageList && !isMobile"
-				:checked="isFullWidthView"
+				:checked="currentPage.isFullWidth"
+				:disabled="!currentCollectiveCanEdit"
 				@check="onCheckFullWidthView"
 				@uncheck="onUncheckFullWidthView">
 				{{ t('collectives', 'Full width') }}
@@ -230,7 +231,6 @@ export default {
 		]),
 		...mapState(usePagesStore, [
 			'hasSubpages',
-			'isFullWidthView',
 			'pagesTreeWalk',
 			'showTemplates',
 			'visibleSubpages',
@@ -313,11 +313,11 @@ export default {
 		...mapActions(usePagesStore, ['setFullWidthView']),
 
 		onCheckFullWidthView() {
-			this.setFullWidthView(true)
+			this.setFullWidthView({ pageId: this.currentPage.id, fullWidthView: true })
 		},
 
 		onUncheckFullWidthView() {
-			this.setFullWidthView(false)
+			this.setFullWidthView({ pageId: this.currentPage.id, fullWidthView: false })
 		},
 
 		openShareTab() {

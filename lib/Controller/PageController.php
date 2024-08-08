@@ -138,6 +138,17 @@ class PageController extends Controller {
 	}
 
 	#[NoAdminRequired]
+	public function setFullWidth(int $collectiveId, int $id, bool $fullWidth): DataResponse {
+		return $this->handleErrorResponse(function () use ($collectiveId, $id, $fullWidth): array {
+			$userId = $this->getUserId();
+			$pageInfo = $this->service->setFullWidth($collectiveId, $id, $userId, $fullWidth);
+			return [
+				"data" => $pageInfo,
+			];
+		}, $this->logger);
+	}
+
+	#[NoAdminRequired]
 	public function setSubpageOrder(int $collectiveId, int $id, ?string $subpageOrder = null): DataResponse {
 		return $this->handleErrorResponse(function () use ($collectiveId, $id, $subpageOrder): array {
 			$userId = $this->getUserId();
