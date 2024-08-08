@@ -4,145 +4,159 @@
 -->
 
 <template>
-	<NcModal :name="t('collectives', 'New collective')" @close="onClose">
-		<div class="modal-content">
-			<div v-if="state === 0" class="modal-collective-wrapper">
-				<h2 class="modal-collective-title">
-					{{ t('collectives', 'New collective') }}
-				</h2>
-
-				<div class="modal-collective-name">
-					<NcEmojiPicker :show-preview="true" @select="updateEmoji">
-						<NcButton type="tertiary"
-							:aria-label="t('collectives', 'Select emoji for collective')"
-							:title="t('collectives', 'Select emoji')"
-							class="button-emoji"
-							@click.prevent>
-							{{ emoji }}
-						</NcButton>
-					</NcEmojiPicker>
-					<NcTextField v-if="!pickCircle"
-						ref="collectiveName"
-						:value.sync="name"
-						class="collective-name"
-						:error="nameIsInvalid"
-						:show-trailing-button="name !== ''"
-						:label="t('collectives', 'Name of the collective')"
-						@keypress.enter.prevent="advanceToMembers"
-						@trailing-button-click="clearName" />
-					<NcSelect v-else
-						ref="circleSelector"
-						v-model="circle"
-						class="circle-selector"
-						:append-to-body="false"
-						:options="circles"
-						:aria-label-combobox="t('collectives', 'Select an existing team')"
-						:placeholder="t('collectives', 'Select a team...')" />
-					<NcButton v-if="anyCircle && !pickCircle"
-						:title="t('collectives', 'Select an existing team')"
-						type="tertiary"
-						@click.stop.prevent="startSelectCircle">
-						<template #icon>
-							<TeamsIcon :size="16" />
-						</template>
+	<NcDialog :name="dialogName"
+		size="normal"
+		@closing="onClose">
+		<div v-if="state === 0" class="modal-collective-wrapper">
+			<div class="modal-collective-name">
+				<NcEmojiPicker :show-preview="true" @select="updateEmoji">
+					<NcButton type="tertiary"
+						:aria-label="t('collectives', 'Select emoji for collective')"
+						:title="t('collectives', 'Select emoji')"
+						class="button-emoji"
+						@click.prevent>
+						{{ emoji }}
 					</NcButton>
-					<NcButton v-if="anyCircle && pickCircle"
-						:title="t('collectives', 'Cancel selecting a team')"
-						type="tertiary"
-						@click.stop.prevent="stopSelectCircle">
-						<template #icon>
-							<CloseIcon :size="16" />
-						</template>
-					</NcButton>
-				</div>
-				<div class="modal-collective-name-error-placeholder">
-					<div v-if="nameError" class="modal-collective-name-error">
-						<AlertCircleOutlineIcon :size="16" />
-						<label for="collective-name" class="modal-collective-name-error-label">
-							{{ nameError }}
-						</label>
-					</div>
-				</div>
-
-				<NcEmptyContent :title="t('collectives', 'Enter the new collective name or pick an existing team')"
-					class="empty-content">
+				</NcEmojiPicker>
+				<NcTextField v-if="!pickCircle"
+					ref="collectiveName"
+					:value.sync="name"
+					class="collective-name"
+					:error="nameIsInvalid"
+					:show-trailing-button="name !== ''"
+					:label="t('collectives', 'Name of the collective')"
+					@keypress.enter.prevent="advanceToMembers"
+					@trailing-button-click="clearName" />
+				<NcSelect v-else
+					ref="circleSelector"
+					v-model="circle"
+					class="circle-selector"
+					:append-to-body="false"
+					:options="circles"
+					:aria-label-combobox="t('collectives', 'Select an existing team')"
+					:placeholder="t('collectives', 'Select a team...')" />
+				<NcButton v-if="anyCircle && !pickCircle"
+					:title="t('collectives', 'Select an existing team')"
+					type="tertiary"
+					@click.stop.prevent="startSelectCircle">
 					<template #icon>
-						<CollectivesIcon :size="20" />
+						<TeamsIcon :size="16" />
 					</template>
-				</NcEmptyContent>
-
-				<div class="modal-buttons">
-					<NcButton @click="onClose">
-						{{ t('collectives', 'Cancel') }}
-					</NcButton>
-					<NcButton type="primary"
-						:disabled="!newCollectiveName || nameIsInvalid"
-						class="modal-buttons-right"
-						@click="advanceToMembers">
-						{{ t('collectives', 'Add members') }}
-					</NcButton>
+				</NcButton>
+				<NcButton v-if="anyCircle && pickCircle"
+					:title="t('collectives', 'Cancel selecting a team')"
+					type="tertiary"
+					@click.stop.prevent="stopSelectCircle">
+					<template #icon>
+						<CloseIcon :size="16" />
+					</template>
+				</NcButton>
+			</div>
+			<div class="modal-collective-name-error-placeholder">
+				<div v-if="nameError" class="modal-collective-name-error">
+					<AlertCircleOutlineIcon :size="16" />
+					<label for="collective-name" class="modal-collective-name-error-label">
+						{{ nameError }}
+					</label>
 				</div>
 			</div>
 
-			<div v-else-if="state === 1" class="modal-collective-wrapper">
-				<h2 class="modal-collective-title">
-					{{ t('collectives', 'Add members to {name}', { name: newCollectiveName }) }}
-				</h2>
+			<NcEmptyContent class="empty-content">
+				<template #icon>
+					<CollectivesIcon :size="20" />
+				</template>
+			</NcEmptyContent>
+		</div>
 
-				<div class="modal-collective-members">
-					<MemberPicker :show-selection="true"
-						:selected-members="selectedMembers"
-						:no-delete-members="noDeleteMembers"
-						:on-click-searched="onClickSearched"
-						@delete-from-selection="deleteMember" />
-				</div>
-
-				<div class="modal-buttons">
-					<NcButton @click="state = 0">
-						{{ t('collectives', 'Back') }}
-					</NcButton>
-					<NcButton type="primary"
-						:disabled="loading"
-						class="modal-buttons-right"
-						@click="onCreate">
-						{{ createButtonString }}
-					</NcButton>
-				</div>
+		<div v-else-if="state === 1" class="modal-collective-wrapper">
+			<div class="modal-collective-members">
+				<MemberPicker :show-selection="true"
+					:search-without-query="true"
+					:selected-members="selectedMembers"
+					:no-delete-members="noDeleteMembers"
+					:on-click-searched="onClickSearched"
+					@delete-from-selection="deleteMember" />
 			</div>
 		</div>
-	</NcModal>
+
+		<template #actions>
+			<template v-if="state === 0">
+				<NcButton @click="onClose">
+					<template #icon>
+						<CancelIcon :size="20" />
+					</template>
+					{{ t('collectives', 'Cancel') }}
+				</NcButton>
+				<NcButton type="primary"
+					:disabled="!newCollectiveName || nameIsInvalid"
+					class="modal-buttons-right"
+					@click="advanceToMembers">
+					<template #icon>
+						<PlusIcon :size="20" />
+					</template>
+					{{ t('collectives', 'Add members') }}
+				</NcButton>
+			</template>
+			<template v-else-if="state === 1">
+				<NcButton @click="state = 0">
+					<template #icon>
+						<ArrowLeftIcon :size="20" />
+					</template>
+					{{ t('collectives', 'Back') }}
+				</NcButton>
+				<NcButton type="primary"
+					:disabled="loading"
+					class="modal-buttons-right"
+					@click="onCreate">
+					<template #icon>
+						<CheckIcon :size="20" />
+					</template>
+					{{ createButtonString }}
+				</NcButton>
+			</template>
+		</template>
+	</NcDialog>
 </template>
 
 <script>
+import debounce from 'debounce'
 import { mapActions, mapState } from 'pinia'
 import { useCirclesStore } from '../../stores/circles.js'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { getCurrentUser } from '@nextcloud/auth'
 import { showError, showInfo } from '@nextcloud/dialogs'
-import { NcButton, NcEmojiPicker, NcEmptyContent, NcModal, NcSelect, NcTextField } from '@nextcloud/vue'
+import { NcButton, NcDialog, NcEmojiPicker, NcEmptyContent, NcSelect, NcTextField } from '@nextcloud/vue'
 import displayError from '../../util/displayError.js'
 import { autocompleteSourcesToCircleMemberTypes, circlesMemberTypes } from '../../constants.js'
 import AlertCircleOutlineIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
-import TeamsIcon from '../Icon/TeamsIcon.vue'
+import ArrowLeftIcon from 'vue-material-design-icons/ArrowLeft.vue'
+import CancelIcon from 'vue-material-design-icons/Cancel.vue'
+import CheckIcon from 'vue-material-design-icons/Check.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
+import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import CollectivesIcon from '../Icon/CollectivesIcon.vue'
 import MemberPicker from '../Member/MemberPicker.vue'
+import TeamsIcon from '../Icon/TeamsIcon.vue'
 
 export default {
 	name: 'NewCollectiveModal',
 
 	components: {
 		AlertCircleOutlineIcon,
+		ArrowLeftIcon,
 		TeamsIcon,
+		CancelIcon,
+		CheckIcon,
 		CloseIcon,
 		CollectivesIcon,
 		MemberPicker,
 		NcButton,
+		NcDialog,
 		NcEmojiPicker,
 		NcEmptyContent,
-		NcModal,
 		NcSelect,
 		NcTextField,
+		PlusIcon,
 	},
 
 	data() {
@@ -156,6 +170,8 @@ export default {
 			currentUserId: getCurrentUser().uid,
 			selectedMembers: {},
 			noDeleteMembers: [],
+			nameIsTooShort: false,
+			setNameIsTooShortDebounced: debounce(this.setNameIsTooShort, 500),
 			state: 0,
 		}
 	},
@@ -177,12 +193,14 @@ export default {
 			return this.circles.length > 0
 		},
 
-		newCollectiveName() {
-			return this.pickCircle ? this.circle : this.name
+		dialogName() {
+			return this.state === 0
+				? t('collectives', 'New collective')
+				: t('collectives', 'Add members to {name}', { name: this.newCollectiveName })
 		},
 
-		nameIsTooShort() {
-			return !!this.newCollectiveName && this.newCollectiveName.length < 3
+		newCollectiveName() {
+			return this.pickCircle ? this.circle : this.name
 		},
 
 		nameIsTaken() {
@@ -219,6 +237,19 @@ export default {
 		},
 	},
 
+	watch: {
+		newCollectiveName(val) {
+			if (!val || this.newCollectiveName.length > 2) {
+				this.setNameIsTooShortDebounced.clear()
+				this.nameIsTooShort = false
+				return
+			}
+
+			this.setNameIsTooShortDebounced()
+		},
+
+	},
+
 	mounted() {
 		this.selectedMembers[`users-${this.currentUserId}`] = {
 			icon: 'icon-user',
@@ -241,6 +272,10 @@ export default {
 			'addMembersToCircle',
 		]),
 		...mapActions(useCollectivesStore, ['newCollective']),
+
+		setNameIsTooShort() {
+			this.nameIsTooShort = true
+		},
 
 		clearName() {
 			this.name = ''
@@ -341,20 +376,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.modal-content {
-	display: flex;
-	flex-direction: column;
-	box-sizing: border-box;
-	width: 100%;
-	height: 100%;
-	padding: 16px;
-	padding-bottom: 18px;
-}
-
 .modal-collective-wrapper {
 	display: flex;
 	flex-direction: column;
-	width: 100%;
 	height: 550px;
 }
 
@@ -385,8 +409,9 @@ export default {
 
 .modal-collective-name-error {
 	display: flex;
-	// Emoji button + input field padding
-	padding-left: calc(57px + 12px);
+	// Emoji button + gap + input field padding
+	padding-left: calc(var(--default-clickable-area) + 4px + 9px);
+	color: var(--color-text-maxcontrast);
 
 	&-label {
 		padding-left: 4px;
@@ -394,26 +419,7 @@ export default {
 }
 
 .modal-collective-members {
-	// Full height minus modal title and buttons
 	// Required for sticky search field and buttons
-	height: calc(100% - 76px - 40px);
-}
-
-.modal-buttons {
-	z-index: 1;
-	display: flex;
-	flex: 0 0;
-	justify-content: space-between;
-	width: 100%;
-	background-color: var(--color-main-background);
-	box-shadow: 0 -10px 5px var(--color-main-background);
-	// Sticky to the bottom
-	position: sticky;
-	bottom: 0;
-	margin-top: auto;
-
-	&-right {
-		margin-left: auto;
-	}
+	height: 100%;
 }
 </style>

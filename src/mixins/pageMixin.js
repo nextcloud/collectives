@@ -86,7 +86,7 @@ export default {
 		 */
 		async newPage(parentId) {
 			const page = {
-				title: t('collectives', 'New Page'),
+				title: t('collectives', 'New page'),
 				parentId,
 			}
 			try {

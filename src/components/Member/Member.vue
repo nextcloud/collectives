@@ -68,6 +68,7 @@
 			</NcActionButton>
 			<NcActionSeparator />
 			<NcActionButton :close-after-click="true"
+				class="critical"
 				@click="removeMember">
 				<template #icon>
 					<DeleteIcon :size="20" />
@@ -264,9 +265,9 @@ export default {
 	padding: 0 4px;
 
 	&__user-descriptor {
-		// margin-top: -4px;
+		display: flex;
+		flex-grow: 1;
 		margin-left: 12px;
-		width: calc(100% - 100px);
 
 		overflow: hidden;
 		text-overflow: ellipsis;
@@ -281,12 +282,15 @@ export default {
 
 	&__level-indicator {
 		color: var(--color-text-maxcontrast);
-		font-weight: 300;
 		padding-left: 5px;
 	}
 
 	&__loading {
 		margin-right: 8px;
+	}
+
+	&__checkmark {
+		padding-right: 8px;
 	}
 
 	&:hover, &:focus {
@@ -308,5 +312,9 @@ export default {
 			background-color: var(--color-primary-element-light);
 		}
 	}
+}
+
+.critical > :deep(.action-button) {
+	color: var(--color-error);
 }
 </style>
