@@ -12,7 +12,7 @@ import { useSearchStore } from '../stores/search.js'
 import linkHandlerMixin from '../mixins/linkHandlerMixin.js'
 import PageInfoBar from '../components/Page/PageInfoBar.vue'
 import { editorApiReaderFileId } from '../constants.js'
-import { emit } from '@nextcloud/event-bus'
+import { subscribe } from '@nextcloud/event-bus'
 
 export default {
 	mixins: [
@@ -37,8 +37,8 @@ export default {
 			'shareTokenParam',
 			'showing',
 		]),
+		...mapState(useSearchStore, ['searchQuery', 'matchAll']),
 		...mapState(useCollectivesStore, ['currentCollectiveCanEdit']),
-		...mapState(useSearchStore, ['searchQuery']),
 		...mapState(usePagesStore, ['currentPage', 'pageFilePath']),
 
 		pageContent() {
@@ -62,10 +62,32 @@ export default {
 		},
 	},
 
+	created() {
+		subscribe('collectives:next-search', () => {
+			this.editor?.searchNext()
+			this.reader?.searchNext()
+		})
+
+		subscribe('collectives:previous-search', () => {
+			this.editor?.searchPrevious()
+			this.reader?.searchPrevious()
+		})
+	},
+
 	watch: {
 		'showOutline'(value) {
 			this.editor?.setShowOutline(value)
 			this.reader?.setShowOutline(value)
+		},
+		'searchQuery'(value) {
+			this.editor?.setSearchQuery(value)
+			this.reader?.setSearchQuery(value)
+		},
+		'matchAll'(newValue, oldValue) {
+			if (newValue !== oldValue) {
+				this.editor?.setSearchQuery(this.searchQuery, newValue)
+				this.reader?.setSearchQuery(this.searchQuery, newValue)
+			}
 		},
 	},
 
@@ -76,6 +98,7 @@ export default {
 
 	methods: {
 		...mapActions(useRootStore, ['done', 'hide', 'show']),
+		...mapActions(useSearchStore, ['showSearchDialog', 'setSearchResults']),
 
 		async setupReader() {
 			const fileId = this.editorApiFlags.includes(editorApiReaderFileId)
@@ -107,10 +130,10 @@ export default {
 						const element = document.querySelector(`[href="${document.location.hash}"]`)
 						element?.click()
 					}
-
-					if (this.searchQuery && this.searchQuery !== '') {
-						emit('text:editor:search', { query: this.searchQuery })
-					}
+				},
+				onSearch: (results) => {
+					this.setSearchResults(results)
+					this.showSearchDialog(true)
 				},
 			})
 

@@ -10,24 +10,30 @@ export const useSearchStore = defineStore('search', {
 	state: () => ({
 		searchQuery: '',
 		matchAll: true,
+		shouldShowSearchDialog: false,
+		results: null,
 	}),
 
 	actions: {
 		setSearchQuery(query) {
 			this.searchQuery = query
-			emit('text:editor:search', { query: this.searchQuery, matchAll: this.matchAll })
+		},
+		showSearchDialog(value) {
+			this.shouldShowSearchDialog = value
 		},
 		toggleMatchAll() {
 			this.matchAll = !this.matchAll
-			emit('text:editor:search', { query: this.searchQuery, matchAll: this.matchAll })
 		},
-		nextSearch() {
-			this.matchAll = false
-			emit('text:editor:search-next', {})
+		setSearchResults(results) {
+			this.results = results
 		},
-		previousSearch() {
+		searchNext() {
+			emit('collectives:next-search')
 			this.matchAll = false
-			emit('text:editor:search-previous', {})
+		},
+		searchPrevious() {
+			emit('collectives:previous-search')
+			this.matchAll = false
 		},
 	},
 })
