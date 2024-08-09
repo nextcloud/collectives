@@ -105,7 +105,7 @@
 		</h2>
 		<LandingPageWidgets v-if="isLandingPage" />
 		<TextEditor :key="`text-editor-${currentPage.id}`" ref="texteditor" />
-		<SearchDialog />
+		<SearchDialog :show="shouldShowSearchDialog" />
 	</div>
 </template>
 
@@ -125,6 +125,7 @@ import { mapActions, mapState } from 'pinia'
 import { useRootStore } from '../stores/root.js'
 import { useCollectivesStore } from '../stores/collectives.js'
 import { usePagesStore } from '../stores/pages.js'
+import { useSearchStore } from '../stores/search.js'
 import pageMixin from '../mixins/pageMixin.js'
 import { showError } from '@nextcloud/dialogs'
 
@@ -175,6 +176,7 @@ export default {
 			'isTemplatePage',
 			'isLandingPage',
 		]),
+		...mapState(useSearchStore, ['shouldShowSearchDialog']),
 
 		hasSidebarToggle() {
 			return !this.showing('sidebar')

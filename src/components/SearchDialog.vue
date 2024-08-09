@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<div v-if="totalMatches !== null" class="search-dialog__container">
+	<div v-if="shouldShow" class="search-dialog__container">
 		<div class="search-dialog__buttons">
 			<NcButton alignment="center-reverse"
 				type="tertiary"
@@ -38,15 +38,15 @@
 		<div class="search-dialog__info">
 			<span v-if="matchAll">
 				{{ t('collectives', 'Found {matches} matches for "{query}"', {
-					matches: totalMatches,
+					matches: results.totalMatches ?? 0,
 					query: searchQuery,
 				}) }}
 			</span>
 
 			<span v-else>
 				{{ t('collectives', 'Match {index} of {matches} for "{query}"', {
-					index: matchIndex + 1,
-					matches: totalMatches,
+					index: results.matchIndex + 1,
+					matches: results.totalMatches,
 					query: searchQuery,
 				}) }}
 			</span>
@@ -61,7 +61,6 @@
 </template>
 
 <script>
-import { subscribe } from '@nextcloud/event-bus'
 import { NcButton, NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import { translate as t } from '@nextcloud/l10n'
 import { mapActions, mapState } from 'pinia'
@@ -81,16 +80,23 @@ export default {
 		Close,
 	},
 
+	props: {
+		show: {
+			type: Boolean,
+			default: false,
+		},
+	},
+
 	data() {
-		return {
-			totalMatches: null,
-			matchIndex: 0,
-		}
+		return {}
 	},
 
 	computed: {
-		...mapState(useSearchStore, ['searchQuery', 'matchAll']),
-
+		...mapState(useSearchStore, [
+		  'searchQuery',
+		  'matchAll',
+		  'results',
+		]),
 		isHighlightAllChecked: {
 			get() {
 				return this.matchAll
@@ -99,13 +105,9 @@ export default {
 				this.toggleMatchAll()
 			},
 		},
-	},
-
-	created() {
-		subscribe('text:editor:search-results', ({ results, index }) => {
-			this.totalMatches = results
-			this.matchIndex = index
-		})
+		shouldShow() {
+		  return this.show && this.results.totalMatches !== null
+		},
 	},
 
 	methods: {
@@ -113,22 +115,24 @@ export default {
 		...mapActions(useSearchStore, [
 			'setSearchQuery',
 			'toggleMatchAll',
-			'nextSearch',
-			'previousSearch',
+			'showSearchDialog',
+			'searchNext',
+			'searchPrevious',
 		]),
 
 		previous() {
-			this.previousSearch()
+			this.searchPrevious()
 			this.scrollIntoView()
 		},
 
 		next() {
-			this.nextSearch()
+			this.searchNext()
 			this.scrollIntoView()
 		},
 
 		clearSearch() {
 			this.setSearchQuery('')
+			this.showSearchDialog(false)
 		},
 
 		scrollIntoView() {
