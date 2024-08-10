@@ -120,7 +120,7 @@ OC.L10N.register(
     "Collapse recent pages" : "Replier les pages récentes",
     "Expand recent pages" : "Déplier les pages récentes",
     "Could not save recent pages setting for collective" : "Impossible de sauvegarder les pages récentes pour ce collectif",
-    "Open page sidebar" : "Ouvrir la barre latérale de la page",
+    "Open page sidebar" : "Ouvrir le panneau latéral de la page",
     "Full width" : "Pleine largueur",
     "Show in Files" : "Afficher dans Fichiers",
     "Move or copy" : "Déplacer ou copier",

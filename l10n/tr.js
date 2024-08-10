@@ -221,6 +221,7 @@ OC.L10N.register(
     "Backlinks" : "Dönüş bağlantıları",
     "Sharing" : "Paylaşım",
     "Versions" : "Sürümler",
+    "Clear search" : "Aramayı temizle",
     "The content of this folder is best viewed in the Collectives app." : "Bu klasörün içeriğini en iyi şekilde görüntülemek için Topluluk uygulamasını kullanın.",
     "Open in Collectives" : "Topluluk uygulaması ile aç",
     "Come, organize and build shared knowledge!" : "Bir araya gelin, bilgilerinizi paylaşın!",
