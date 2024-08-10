@@ -69,16 +69,16 @@
         },
         {
             "name": "teamtnt/tntsearch",
-            "version": "v4.2.1",
+            "version": "v4.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/teamtnt/tntsearch.git",
-                "reference": "d3fc3e7ccc1760dc4b8604807be01140fa7f69c5"
+                "reference": "6116502589bda297d5c01a975e6b94c374977b2b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/teamtnt/tntsearch/zipball/d3fc3e7ccc1760dc4b8604807be01140fa7f69c5",
-                "reference": "d3fc3e7ccc1760dc4b8604807be01140fa7f69c5",
+                "url": "https://api.github.com/repos/teamtnt/tntsearch/zipball/6116502589bda297d5c01a975e6b94c374977b2b",
+                "reference": "6116502589bda297d5c01a975e6b94c374977b2b",
                 "shasum": ""
             },
             "require": {
@@ -128,23 +128,15 @@
             ],
             "support": {
                 "issues": "https://github.com/teamtnt/tntsearch/issues",
-                "source": "https://github.com/teamtnt/tntsearch/tree/v4.2.1"
+                "source": "https://github.com/teamtnt/tntsearch/tree/v4.3.0"
             },
             "funding": [
                 {
-                    "url": "https://ko-fi.com/nticaric",
-                    "type": "ko_fi"
-                },
-                {
-                    "url": "https://opencollective.com/tntsearch",
-                    "type": "open_collective"
-                },
-                {
-                    "url": "https://www.patreon.com/nticaric",
-                    "type": "patreon"
+                    "url": "https://github.com/teamtnt",
+                    "type": "github"
                 }
             ],
-            "time": "2023-07-19T10:35:23+00:00"
+            "time": "2024-08-09T06:32:01+00:00"
         }
     ],
     "packages-dev": [
