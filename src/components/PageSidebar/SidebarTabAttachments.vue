@@ -131,18 +131,11 @@
 		<!-- no attachments found -->
 		<NcEmptyContent v-else
 			:name="t('collectives', 'No attachments available')"
-			:description="t('collectives', 'If the page has attachments, they will be listed here.')">
+			:description="noAttachmentsDescription">
 			<template #icon>
 				<PaperclipIcon />
 			</template>
 		</NcEmptyContent>
-
-		<div v-show="isTextEdit" class="attachments-infobox">
-			<InformationIcon />
-			<div class="content">
-				{{ t('collectives', 'Add attachments using drag and drop or via "Insert attachment" in the formatting bar') }}
-			</div>
-		</div>
 	</div>
 </template>
 
@@ -161,7 +154,6 @@ import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagon.vue'
 import DownloadIcon from 'vue-material-design-icons/Download.vue'
 import EyeIcon from 'vue-material-design-icons/Eye.vue'
 import FolderIcon from 'vue-material-design-icons/Folder.vue'
-import InformationIcon from 'vue-material-design-icons/Information.vue'
 import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
 
@@ -173,7 +165,6 @@ export default {
 		DownloadIcon,
 		EyeIcon,
 		FolderIcon,
-		InformationIcon,
 		NcActionButton,
 		NcActionLink,
 		NcEmptyContent,
@@ -210,6 +201,10 @@ export default {
 			'pagePath',
 			'pagePathTitle',
 		]),
+
+		noAttachmentsDescription() {
+			return t('collectives', 'Add attachments using drag and drop or via "Insert attachment" in the formatting menu.')
+		},
 
 		// Sort attachments chronologically, most recent first
 		sortedAttachments() {
@@ -402,29 +397,6 @@ export default {
 		height: 3rem;
 		border: 1px solid var(--color-border);
 		border-radius: var(--border-radius-large);
-	}
-}
-
-.attachments-infobox {
-	position: sticky;
-	bottom: 0;
-
-	display: flex;
-	align-items: center;
-	justify-content: flex-start;
-
-	background-color: var(--color-background-dark);
-	border-radius: var(--border-radius-large);
-	padding: 1em;
-	margin-top: 20px;
-
-	.content {
-		display: flex;
-		align-items: center;
-		justify-content: flex-start;
-
-		margin-left: 1em;
-		margin-bottom: 0;
 	}
 }
 
