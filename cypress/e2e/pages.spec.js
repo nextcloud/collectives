@@ -301,11 +301,12 @@ describe('Pages', function() {
 	describe('Search dialog', () => {
 		beforeEach(() => {
 			cy.get('input[name="pageFilter"]').type('collective')
-			cy.get('.search-dialog__container').as('searchDialog')
+			cy.get('.search-dialog__container', { timeout: 5000 })
+				.should('be.visible')
+				.as('searchDialog')
 		})
 
 		it('Shows search dialog', () => {
-			cy.get('@searchDialog').should('be.visible')
 			cy.get('.search-dialog__info')
 				.invoke('text')
 				.invoke('trim')
@@ -313,7 +314,6 @@ describe('Pages', function() {
 		})
 
 		it('Clears search', () => {
-			cy.get('@searchDialog').should('be.visible')
 			cy.get('.search-dialog__buttons')
 				.find('button[aria-label="Clear search"]')
 				.click()
@@ -321,7 +321,6 @@ describe('Pages', function() {
 		})
 
 		it('Toggles highlight all', () => {
-			cy.get('@searchDialog').should('be.visible')
 			cy.get('.search-dialog__highlight-all')
 				.find('span.checkbox-radio-switch-checkbox')
 				.click()
@@ -333,7 +332,6 @@ describe('Pages', function() {
 		})
 
 		it('Moves to next search', () => {
-			cy.get('@searchDialog').should('be.visible')
 			cy.get('.search-dialog__buttons')
 				.find('button[aria-label="Find next match"]')
 				.click()
@@ -345,7 +343,6 @@ describe('Pages', function() {
 		})
 
 		it('Moves to previous search', () => {
-			cy.get('@searchDialog').should('be.visible')
 			cy.get('.search-dialog__buttons')
 				.find('button[aria-label="Find previous match"]')
 				.click()
