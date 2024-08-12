@@ -622,6 +622,8 @@ export default {
 		display: flex;
 		align-items: center;
 		width: 100%;
+		// 36px 2-line description + 2* 8px padding
+		min-height: 52px;
 	}
 
 	&__summary {
