@@ -297,4 +297,63 @@ describe('Pages', function() {
 				.should('contain', 'your thoughts that really matter')
 		})
 	})
+
+	describe('Search dialog', () => {
+		beforeEach(() => {
+			cy.get('input[name="pageFilter"]').type('collective')
+			cy.get('.search-dialog__container').as('searchDialog')
+		})
+
+		it('Shows search dialog', () => {
+			cy.get('@searchDialog').should('be.visible')
+			cy.get('.search-dialog__info')
+				.invoke('text')
+				.invoke('trim')
+				.should('equal', 'Found 5 matches for "collective"')
+		})
+
+		it('Clears search', () => {
+			cy.get('@searchDialog').should('be.visible')
+			cy.get('.search-dialog__buttons')
+				.find('button[aria-label="Clear search"]')
+				.click()
+			cy.get('@searchDialog').should('not.exist')
+		})
+
+		it('Toggles highlight all', () => {
+			cy.get('@searchDialog').should('be.visible')
+			cy.get('.search-dialog__highlight-all')
+				.find('span.checkbox-radio-switch-checkbox')
+				.click()
+
+			cy.get('.search-dialog__info')
+				.invoke('text')
+				.invoke('trim')
+				.should('equal', 'Match 1 of 5 for "collective"')
+		})
+
+		it('Moves to next search', () => {
+			cy.get('@searchDialog').should('be.visible')
+			cy.get('.search-dialog__buttons')
+				.find('button[aria-label="Find next match"]')
+				.click()
+
+			cy.get('.search-dialog__info')
+				.invoke('text')
+				.invoke('trim')
+				.should('equal', 'Match 2 of 5 for "collective"')
+		})
+
+		it('Moves to previous search', () => {
+			cy.get('@searchDialog').should('be.visible')
+			cy.get('.search-dialog__buttons')
+				.find('button[aria-label="Find previous match"]')
+				.click()
+
+			cy.get('.search-dialog__info')
+				.invoke('text')
+				.invoke('trim')
+				.should('equal', 'Match 5 of 5 for "collective"')
+		})
+	})
 })
