@@ -5,7 +5,7 @@
 
 <template>
 	<div :class="[isFullWidthView ? 'full-width-view' : 'sheet-view']">
-		<h1 id="titleform" class="page-title">
+		<h2 id="titleform" class="page-title">
 			<!-- Page emoji or icon -->
 			<div class="page-title-icon"
 				:class="{ 'mobile': isMobile }">
@@ -102,7 +102,7 @@
 					:is-landing-page="isLandingPage"
 					:is-template="isTemplatePage" />
 			</div>
-		</h1>
+		</h2>
 		<LandingPageWidgets v-if="isLandingPage" />
 		<TextEditor :key="`text-editor-${currentPage.id}`" ref="texteditor" />
 		<SearchDialog />
@@ -328,19 +328,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#titleform {
-	form {
-		flex: auto;
-	}
+.titlebar-buttons {
+	display: flex;
+	gap: 4px;
+	align-items: center;
 
-	.titlebar-buttons {
-		display: flex;
-		gap: 4px;
-		align-items: center;
-
-		&_sidebar-toggle {
-			margin-right: calc(var(--default-clickable-area) + 2px);
-		}
+	&_sidebar-toggle {
+		margin-right: calc(var(--default-clickable-area) + 2px);
 	}
 }
 </style>

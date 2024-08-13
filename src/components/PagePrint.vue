@@ -5,12 +5,12 @@
 
 <template>
 	<div id="text-container" :key="'text-' + page.id" class="page sheet-view">
-		<h1 v-if="page.parentId === 0" id="page-title-collective" class="page-title page-title-collective">
+		<h2 v-if="page.parentId === 0" id="page-title-collective" class="page-title page-title-collective">
 			{{ currentCollectiveTitle }}
-		</h1>
-		<h1 v-else class="page-title page-title-subpage">
+		</h2>
+		<h2 v-else class="page-title page-title-subpage">
 			{{ pageTitleString }}
-		</h1>
+		</h2>
 		<div ref="reader" class="sheet-view" data-collectives-el="reader" />
 	</div>
 </template>

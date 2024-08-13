@@ -5,7 +5,7 @@
 
 <template>
 	<div :class="[isFullWidthView ? 'full-width-view' : 'sheet-view']">
-		<h1 id="titleform" class="page-title">
+		<h2 id="titleform" class="page-title">
 			<div class="page-title-icon">
 				<div v-if="currentPage.emoji">
 					{{ currentPage.emoji }}
@@ -16,7 +16,7 @@
 					fill-color="var(--color-text-maxcontrast)" />
 			</div>
 
-			<input class="title"
+			<input class="title title-version"
 				:class="{ 'mobile': isMobile }"
 				type="text"
 				disabled
@@ -37,7 +37,7 @@
 					</template>
 				</NcActionButton>
 			</NcActions>
-		</h1>
+		</h2>
 		<SkeletonLoading v-show="!contentLoaded" class="page-content-skeleton" type="text" />
 		<div v-show="contentLoaded"
 			id="text-container">
@@ -176,6 +176,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+input[type="text"].title-version {
+	color: var(--color-text-maxcontrast);
+}
+
 .page-content-skeleton {
 	padding-top: var(--default-clickable-area);
 }

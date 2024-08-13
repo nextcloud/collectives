@@ -103,28 +103,6 @@ export default {
 	overflow-y: auto;
 }
 
-#titleform {
-	z-index: 10022;
-}
-
-#version-title, #titleform input[type='text'] {
-	border: none;
-	color: var(--color-main-text);
-	width: 100%;
-	height: 43px;
-	text-overflow: unset;
-
-	&.mobile {
-		// Less padding to save some extra space
-		padding: 0;
-		padding-right: 4px;
-	}
-}
-
-#titleform input[type='text']:disabled {
-	color: var(--color-text-maxcontrast);
-}
-
 @page {
 	size: auto;
 	margin: 5mm;

@@ -39,7 +39,7 @@ export default {
 .text-menubar {
 	--background-blur: blur(10px);
 	position: sticky;
-	top: 59px;
+	top: 48px;
 	z-index: 10021;
 	background-color: var(--color-main-background-translucent);
 	backdrop-filter: var(--background-blur);

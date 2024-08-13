@@ -194,7 +194,7 @@ export default {
 		/* Adjust to page titlebar height */
 		div.text-menubar {
 			margin: auto;
-			top: 59px;
+			top: 48px;
 		}
 	}
 }
