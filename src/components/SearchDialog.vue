@@ -88,10 +88,6 @@ export default {
 		},
 	},
 
-	data() {
-		return {}
-	},
-
 	computed: {
 		...mapState(useRootStore, ['isTextEdit']),
 		...mapState(useSearchStore, [
