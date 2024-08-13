@@ -230,14 +230,42 @@ export default {
 .page-title {
 	position: sticky;
 	top: 0;
-	padding: 0 8px 2px 8px;
+	z-index: 10022;
+	padding: 0 8px;
 	display: flex;
 	align-items: center;
 	background-color: var(--color-main-background);
-	font-size: 30px;
+	height: 48px;
+	// Overwrite `h2` defaults
+	margin: 0;
 
-	::placeholder {
-		font-size: 30px;
+	form {
+		flex: auto;
+	}
+
+	input[type='text'] {
+		border: none;
+		color: var(--color-main-text);
+		width: 100%;
+		height: 43px;
+		text-overflow: unset;
+		font-size: inherit;
+		font-weight: inherit;
+
+		&.mobile {
+			// Less padding to save some extra space
+			padding: 0;
+			padding-right: 4px;
+		}
+
+		&:disabled {
+			opacity: 1;
+		}
+
+		&::placeholder {
+			font-size: inherit;
+			font-weight: inherit;
+		}
 	}
 
 	.page-title-icon {
@@ -245,7 +273,6 @@ export default {
 		align-items: center;
 		justify-content: center;
 		min-width: var(--default-clickable-area);
-		height: 43px;
 
 		.button-emoji-page {
 			width: var(--default-clickable-area);
@@ -257,8 +284,12 @@ export default {
 	.title {
 		overflow: hidden;
 		text-overflow: ellipsis;
-		font-size: 30px;
 	}
+}
+
+// Align sidebar toggle
+.app-sidebar__toggle {
+	inset-block-start: 7px !important;
 }
 
 /* Leave space for page list toggle on small screens (editor 670px + toggle button) */
