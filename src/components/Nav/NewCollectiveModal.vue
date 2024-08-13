@@ -82,35 +82,23 @@
 		<template #actions>
 			<template v-if="state === 0">
 				<NcButton @click="onClose">
-					<template #icon>
-						<CancelIcon :size="20" />
-					</template>
 					{{ t('collectives', 'Cancel') }}
 				</NcButton>
 				<NcButton type="primary"
 					:disabled="!newCollectiveName || nameIsInvalid"
 					class="modal-buttons-right"
 					@click="advanceToMembers">
-					<template #icon>
-						<PlusIcon :size="20" />
-					</template>
 					{{ t('collectives', 'Add members') }}
 				</NcButton>
 			</template>
 			<template v-else-if="state === 1">
 				<NcButton @click="state = 0">
-					<template #icon>
-						<ArrowLeftIcon :size="20" />
-					</template>
 					{{ t('collectives', 'Back') }}
 				</NcButton>
 				<NcButton type="primary"
 					:disabled="loading"
 					class="modal-buttons-right"
 					@click="onCreate">
-					<template #icon>
-						<CheckIcon :size="20" />
-					</template>
 					{{ createButtonString }}
 				</NcButton>
 			</template>
@@ -129,11 +117,7 @@ import { NcButton, NcDialog, NcEmojiPicker, NcEmptyContent, NcSelect, NcTextFiel
 import displayError from '../../util/displayError.js'
 import { autocompleteSourcesToCircleMemberTypes, circlesMemberTypes } from '../../constants.js'
 import AlertCircleOutlineIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
-import ArrowLeftIcon from 'vue-material-design-icons/ArrowLeft.vue'
-import CancelIcon from 'vue-material-design-icons/Cancel.vue'
-import CheckIcon from 'vue-material-design-icons/Check.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
-import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import CollectivesIcon from '../Icon/CollectivesIcon.vue'
 import MemberPicker from '../Member/MemberPicker.vue'
 import TeamsIcon from '../Icon/TeamsIcon.vue'
@@ -143,10 +127,7 @@ export default {
 
 	components: {
 		AlertCircleOutlineIcon,
-		ArrowLeftIcon,
 		TeamsIcon,
-		CancelIcon,
-		CheckIcon,
 		CloseIcon,
 		CollectivesIcon,
 		MemberPicker,
@@ -156,7 +137,6 @@ export default {
 		NcEmptyContent,
 		NcSelect,
 		NcTextField,
-		PlusIcon,
 	},
 
 	data() {
@@ -376,10 +356,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+:deep(div.modal-wrapper > div.modal-container) {
+	height: min(90%, 100% - 100px);
+	max-height: 650px;
+}
+
+:deep(div.dialog__actions) {
+	justify-content: space-between;
+}
+
 .modal-collective-wrapper {
 	display: flex;
 	flex-direction: column;
-	height: 550px;
+	height: 100%;
 }
 
 .modal-collective-name {
