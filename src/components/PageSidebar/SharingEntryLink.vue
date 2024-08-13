@@ -555,6 +555,8 @@ export default {
 				showSuccess(message)
 			} catch (error) {
 				console.error('Failed to update share link', error)
+				const responseError = error.response?.data
+				showError(t('collectives', 'Failed to update share link: {responseError}', { responseError }))
 				this.open = true
 			} finally {
 				this.loading = false
@@ -576,6 +578,8 @@ export default {
 				showSuccess(message)
 			} catch (error) {
 				console.error('Failed to unshare', error)
+				const responseError = error.response?.data
+				showError(t('collectives', 'Failed to unshare: {responseError}', { responseError }))
 				this.open = true
 			} finally {
 				this.loading = false

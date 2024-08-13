@@ -86,7 +86,7 @@ class ShareController extends Controller {
 	}
 
 	#[NoAdminRequired]
-	public function updatePageShare(int $collectiveId, int $pageId, string $token, bool $editable, string $password = ''): DataResponse {
+	public function updatePageShare(int $collectiveId, int $pageId, string $token, bool $editable, ?string $password = null): DataResponse {
 		return $this->prepareResponse(function () use ($collectiveId, $pageId, $token, $editable, $password): array {
 			$userId = $this->getUserId();
 			$collective = $this->collectiveService->getCollective($collectiveId, $userId);
