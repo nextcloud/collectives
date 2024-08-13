@@ -64,6 +64,7 @@
 import { NcButton, NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import { translate as t } from '@nextcloud/l10n'
 import { mapActions, mapState } from 'pinia'
+import { useRootStore } from '../stores/root.js'
 import { useSearchStore } from '../stores/search.js'
 import ArrowDown from 'vue-material-design-icons/ArrowDown.vue'
 import ArrowUp from 'vue-material-design-icons/ArrowUp.vue'
@@ -92,6 +93,7 @@ export default {
 	},
 
 	computed: {
+		...mapState(useRootStore, ['isTextEdit']),
 		...mapState(useSearchStore, [
 		  'searchQuery',
 		  'matchAll',
@@ -135,8 +137,15 @@ export default {
 			this.showSearchDialog(false)
 		},
 
+		getActiveTextElement() {
+			return this.isTextEdit
+				? document.querySelector('[data-collectives-el="editor"]')
+				: document.querySelector('[data-collectives-el="reader"]')
+		},
+
 		scrollIntoView() {
-			document.querySelector('[data-text-el="search-decoration"]')?.scrollIntoView({ block: 'center' })
+			this.getActiveTextElement()
+				.querySelector('[data-text-el="search-decoration"]')?.scrollIntoView({ block: 'center' })
 		},
 	},
 }
