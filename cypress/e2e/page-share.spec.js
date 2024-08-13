@@ -102,7 +102,7 @@ describe('Page share', function() {
 		it('Opening unshared page fails', function() {
 			cy.logout()
 			cy.visit(shareUrl, { failOnStatusCode: false })
-			cy.get('.body-login-container').contains(/(File|Page) not found/)
+			cy.get('.body-login-container').contains(/(File|Page|Share) not found/)
 		})
 	})
 
