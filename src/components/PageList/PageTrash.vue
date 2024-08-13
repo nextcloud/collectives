@@ -16,6 +16,7 @@
 		</NcButton>
 		<NcDialog :open.sync="showModal"
 			:name="t('collectives', 'Deleted pages')"
+			class="dialog__page-trash"
 			size="large">
 			<div class="modal__content">
 				<NcEmptyContent v-if="!sortedTrashPages.length"

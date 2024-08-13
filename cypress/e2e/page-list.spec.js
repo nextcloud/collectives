@@ -82,7 +82,7 @@ describe('Page list', function() {
 				.click()
 			cy.get('.picker-move-buttons button .arrow-down-icon')
 				.click()
-			cy.get('.picker-buttons button')
+			cy.get('.dialog__actions button')
 				.contains('Move page here')
 				.click()
 
@@ -105,7 +105,7 @@ describe('Page list', function() {
 				.click()
 			cy.get('.picker-move-buttons button .arrow-down-icon')
 				.click()
-			cy.get('.picker-buttons button')
+			cy.get('.dialog__actions button')
 				.contains('Copy page here')
 				.click()
 
@@ -137,7 +137,7 @@ describe('Page list', function() {
 				.click()
 			cy.get('.picker-move-buttons button .arrow-down-icon')
 				.click()
-			cy.get('.picker-buttons button')
+			cy.get('.dialog__actions button')
 				.contains('Move page to MoveCopyTargetCollective')
 				.click()
 
@@ -166,7 +166,7 @@ describe('Page list', function() {
 				.click()
 			cy.get('.picker-move-buttons button .arrow-down-icon')
 				.click()
-			cy.get('.picker-buttons button')
+			cy.get('.dialog__actions button')
 				.contains('Copy page to MoveCopyTargetCollective')
 				.click()
 
@@ -250,7 +250,7 @@ describe('Page list', function() {
 				.click()
 			cy.get('table tr')
 				.should('not.exist')
-			cy.get('.modal__page-trash button.modal-container__close').click()
+			cy.get('.dialog__page-trash button.modal-container__close').click()
 
 			cy.openPage('Day 1')
 			cy.getReadOnlyEditor()
