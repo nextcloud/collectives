@@ -5,7 +5,13 @@
 
 <template>
 	<div>
-		<input id="sharingToken"
+		<input v-if="isPublic"
+			id="isPublic"
+			type="hidden"
+			name="isPublic"
+			value="1">
+		<input v-if="isPublic"
+			id="sharingToken"
 			type="hidden"
 			name="sharingToken"
 			:value="shareTokenParam">
@@ -76,7 +82,7 @@ export default {
 	},
 
 	computed: {
-		...mapState(useRootStore, ['shareTokenParam']),
+		...mapState(useRootStore, ['isPublic', 'shareTokenParam']),
 		...mapState(useCollectivesStore, ['currentCollective']),
 		...mapState(usePagesStore, ['pagesTreeWalk']),
 
