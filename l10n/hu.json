@@ -74,7 +74,6 @@
     "Could not update emoji for the collective" : "Nem sikerült a kollektíva emodzsijának frissítése",
     "Could not rename the collective" : "Nem sikerült a kollektíva átnevezése",
     "Collectives settings" : "Kollektívák beállításai",
-    "Collectives Folder" : "Kollektívák mappája",
     "Create a collective first" : "Először hozzon létre egy kollektívát",
     "Select location for collectives" : "Válasszon egy helyet a kollektíváknak",
     "Invalid path selected. Only folders on first level are supported." : "Érvénytelen útvonal kiválasztva. Csak az első szintű mappák támogatottak.",
@@ -83,9 +82,9 @@
     "Delete permanently" : "Végleges törlés",
     "Only collective" : "Csak a kollektívát",
     "Cancel" : "Mégse",
-    "New collective" : "Új kollektíva",
     "Select emoji" : "Emodzsi kiválasztása",
     "Back" : "Vissza",
+    "New collective" : "Új kollektíva",
     "A collective with this name already exists" : "Már létezik ilyen nevű kollektíva",
     "Create" : "Létrehozás",
     "Could not add members to the collective" : "Nem sikerült a tagok hozzáadása a kollektívához",
@@ -160,8 +159,6 @@
     "Download" : "Letöltés",
     "Recently deleted" : "Nemrég törölve",
     "No attachments available" : "Nem áll rendelkezésre melléklet",
-    "If the page has attachments, they will be listed here." : "Ha az oldalnak vannak mellékletei, akkor itt jelennek meg.",
-    "Add attachments using drag and drop or via \"Insert attachment\" in the formatting bar" : "Adjon hozzá mellékleteket fogd és vidd módszerrel, vagy a „Melléklet beszúrása” gombbal a formázási sávon",
     "Could not get attachments" : "Nem sikerült lekérni a mellékleteket",
     "No backlinks available" : "Visszahivatkozások nem érhetők el",
     "If other pages link to this one, they will be listed here." : "Ha más oldalak hivatkoznak erre, akkor itt fognak megjelenni.",
@@ -182,7 +179,6 @@
     "Link copied" : "Hivatkozás másolva",
     "Could not copy link to the clipboard:" : "A hivatkozást nem sikerült a vágólapra másolni:",
     "Could not create the page" : "Az oldalt nem sikerült létrehozni",
-    "New Page" : "Új oldal",
     "Could not save emoji for page" : "Nem sikerült az oldal emodzsijának mentése",
     "Could not move page" : "Nem sikerült az oldal áthelyezése",
     "Could not delete the page" : "Nem sikerült az oldal törlése",
@@ -210,6 +206,7 @@
     "Members can be managed via the connected circle in the Contacts app." : "A tagok a kapcsolódó körön keresztül kezelhetők a Névjegyek alkalmazásban.",
     "Open circle in Contacts" : "Kör megnyitása a Névjegyekben",
     "Renaming is limited to owners of the circle" : "Az átnevezés joga a kör tulajdonosaira korlátozott",
+    "Collectives Folder" : "Kollektívák mappája",
     "Permanently delete collective »{collective}«" : "A(z) „{collective}” kollektíva végleges törlése",
     "Delete corresponding circle along with the collective?" : "Törli a kapcsolódó kört is a kollektívával együtt?",
     "Collective and circle" : "A kollektívát és a kört is",
@@ -224,6 +221,7 @@
     "Page content" : "Oldaltartalom",
     "Pages that link to this one" : "Az erre hivatkozó oldalak",
     "Old versions of this page" : "Az oldal régi verziói",
-    "Link copied to the clipboard." : "Hivatkozás a vágólapra másolva."
+    "Link copied to the clipboard." : "Hivatkozás a vágólapra másolva.",
+    "New Page" : "Új oldal"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

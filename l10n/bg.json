@@ -60,7 +60,6 @@
     "Could not update emoji for the collective" : "Не можаха да се актуализират емотикони за колектива",
     "Could not rename the collective" : "Не можа да се преименува колектива",
     "Collectives settings" : "Настройки на колективи",
-    "Collectives Folder" : "Папка с колективи",
     "Create a collective first" : "Първо, създайте колектив",
     "Select location for collectives" : "Избор на местоположение за колективи",
     "Invalid path selected. Only folders on first level are supported." : "Избран е невалиден път. Поддържат се само папки на първо ниво.",
@@ -69,9 +68,9 @@
     "Delete permanently" : "Изтрий завинаги",
     "Only collective" : "Само колектива",
     "Cancel" : "Отказ",
-    "New collective" : "Нов колектив",
     "Select emoji" : "Избор на емотикони",
     "Back" : "Назад",
+    "New collective" : "Нов колектив",
     "A collective with this name already exists" : "Колектив с това име вече съществува",
     "Create" : "Създаване",
     "Could not add members to the collective" : "Не можаха да се добавят членове към колектива",
@@ -131,8 +130,6 @@
     "Download" : "Изтегляне",
     "Recently deleted" : "Наскоро изтрити",
     "No attachments available" : "Няма налични прикачени файлове",
-    "If the page has attachments, they will be listed here." : "Ако страницата има прикачени файлове, те ще бъдат изброени тук.",
-    "Add attachments using drag and drop or via \"Insert attachment\" in the formatting bar" : "Добавяне на прикачени файлове чрез плъзгане и пускане или чрез „Вмъкване на прикачен файл“ в лентата за форматиране",
     "Could not get attachments" : "Неуспешно получаване на прикачени файлове",
     "No backlinks available" : "Няма налични обратни връзки",
     "If other pages link to this one, they will be listed here." : "Ако други страници имат връзка към тази, те ще бъдат изброени тук.",
@@ -152,7 +149,6 @@
     "Link copied" : "Връзката е копирана",
     "Could not copy link to the clipboard:" : "Неуспешно копиране на връзката в клипборда:",
     "Could not create the page" : "Неуспешно създаване на страница",
-    "New Page" : "Нова страница",
     "Could not save emoji for page" : "Неуспешно записване на емотикони за страницата",
     "Could not move page" : "Неуспешно преместване на страницата",
     "Could not delete the page" : "Неуспешно изтриване на страницата",
@@ -180,6 +176,7 @@
     "Members can be managed via the connected circle in the Contacts app." : "Членовете могат да се управляват чрез свързания кръг в приложението Контакти.",
     "Open circle in Contacts" : "Отваряне на кръг в Контакти",
     "Renaming is limited to owners of the circle" : "Преименуването е ограничено до собствениците на кръга",
+    "Collectives Folder" : "Папка с колективи",
     "Permanently delete collective »{collective}«" : "Окончателно изтриване на колектив »{collective}«",
     "Delete corresponding circle along with the collective?" : "Да се изтрие ли съответния кръг заедно с колектива?",
     "Collective and circle" : "Колектива и кръга",
@@ -194,6 +191,7 @@
     "Page content" : "Съдържание на страницата",
     "Pages that link to this one" : "Страници, които имат връзка с тази страница",
     "Old versions of this page" : "Стари версии на тази страница",
-    "Link copied to the clipboard." : "Връзката е копирана в клипборда."
+    "Link copied to the clipboard." : "Връзката е копирана в клипборда.",
+    "New Page" : "Нова страница"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

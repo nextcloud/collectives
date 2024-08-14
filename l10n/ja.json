@@ -31,7 +31,6 @@
     "Name of the collective" : "コレクティブの名前",
     "Name too short, requires at least three characters" : "名前が短すぎます。少なくとも3文字必要です。",
     "Collectives settings" : "コレクティブ全体の設定",
-    "Collectives Folder" : "コレクティブ フォルダー",
     "Create a collective first" : "まずコレクティブを作成する",
     "Select location for collectives" : "コレクティブの場所を選択",
     "Invalid path selected. Only folders on first level are supported." : "誤ったパスが選択されています。一番上の階層にあるフォルダーのみをサポートしています。",
@@ -40,10 +39,10 @@
     "Delete permanently" : "永久に削除",
     "Only collective" : "コレクティブのみ",
     "Cancel" : "キャンセル",
-    "New collective" : "新しいコレクティブ",
     "Select emoji" : "絵文字の選択",
     "Add members" : "メンバーの追加",
     "Back" : "戻る",
+    "New collective" : "新しいコレクティブ",
     "Create" : "作成",
     "Select a collective" : "コレクティブを選択",
     "Stop editing" : "編集終了",
@@ -108,7 +107,6 @@
     "Link copied" : "リンクをコピーしました",
     "Could not copy link to the clipboard:" : "クリップボードにリンクをコピーできませんでした:",
     "Could not create the page" : "ページを作成できません",
-    "New Page" : "新規ページ",
     "Could not delete the page" : "ページを削除できません",
     "_%n byte_::_%n bytes_" : ["%n バイト"],
     "Error: Missing apps" : "エラー: アプリが見つかりません",
@@ -122,6 +120,7 @@
     "Copy share link" : "共有リンクのコピー",
     "Collective not found:" : "コレクティブが見つかりません:",
     "Last edited by {user}" : "最終編集者 {user}",
+    "Collectives Folder" : "コレクティブ フォルダー",
     "Permanently delete collective »{collective}«" : "»{collective}« コレクティブを永久に削除しました",
     "Delete corresponding circle along with the collective?" : "このコレクティブに対応するサークルも削除しますか？",
     "Collective and circle" : "コレクティブとサークル",
@@ -133,6 +132,7 @@
     "Could not find the Page." : "ページが見つかりません。",
     "Pages that link to this one" : "ここにリンクされているページ",
     "Old versions of this page" : "このページの古いバージョン",
-    "Link copied to the clipboard." : "クリップボードにリンクをコピーしました。"
+    "Link copied to the clipboard." : "クリップボードにリンクをコピーしました。",
+    "New Page" : "新規ページ"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

@@ -52,7 +52,6 @@
     "Could not update emoji for the collective" : "Impossibile aggiornare l'emoji per il collettivo",
     "Could not rename the collective" : "Impossibile rinominare il collettivo",
     "Collectives settings" : "Impostazioni dei collettivi",
-    "Collectives Folder" : "Cartella dei collettivi",
     "Create a collective first" : "Crea prima un collettivo",
     "Select location for collectives" : "Seleziona la posizione per i collettivi",
     "Invalid path selected. Only folders on first level are supported." : "Percorso selezionato non valido. Sono supportate solo le cartelle di primo livello.",
@@ -141,7 +140,6 @@
     "Link copied" : "Collegamento copiato",
     "Could not copy link to the clipboard:" : "Impossibile copiare negli appunti il collegamento:",
     "Could not create the page" : "Non è stato possibile creare la pagina",
-    "New Page" : "Nuova pagina",
     "Could not save emoji for page" : "Impossibile salvare l'emoji per la pagina",
     "Could not move page" : "Impossibile spostare la pagina",
     "Could not delete the page" : "Non è stato possibile eliminare la pagina",
@@ -169,6 +167,7 @@
     "Members can be managed via the connected circle in the Contacts app." : "I membri possono essere gestiti tramite la cerchia collegata nell'applicazione Contatti.",
     "Open circle in Contacts" : "Apri la cerchia in Contatti",
     "Renaming is limited to owners of the circle" : "La rinomina è limitata ai proprietari della cerchia",
+    "Collectives Folder" : "Cartella dei collettivi",
     "Permanently delete collective »{collective}«" : "Elimina permanentemente il collettivo »{collective}«",
     "Delete corresponding circle along with the collective?" : "Eliminare la corrispondente cerchia assieme al collettivo?",
     "Collective and circle" : "Collettivo e cerchia",
@@ -183,6 +182,7 @@
     "Page content" : "Contenuto della pagina",
     "Pages that link to this one" : "Pagine che hanno link verso questa",
     "Old versions of this page" : "Vecchie versioni di questa pagina",
-    "Link copied to the clipboard." : "Collegamento copiato negli appunti."
+    "Link copied to the clipboard." : "Collegamento copiato negli appunti.",
+    "New Page" : "Nuova pagina"
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

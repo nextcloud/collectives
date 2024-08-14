@@ -73,7 +73,6 @@
     "Could not update emoji for the collective" : "Could not update emoji for the collective",
     "Could not rename the collective" : "Could not rename the collective",
     "Collectives settings" : "Collectives settings",
-    "Collectives Folder" : "Collectives Folder",
     "Create a collective first" : "Create a collective first",
     "Select location for collectives" : "Select location for collectives",
     "Invalid path selected. Only folders on first level are supported." : "Invalid path selected. Only folders on first level are supported.",
@@ -82,9 +81,9 @@
     "Delete permanently" : "حذف قطعی",
     "Only collective" : "Only collective",
     "Cancel" : "لغو",
-    "New collective" : "New collective",
     "Select emoji" : "Select emoji",
     "Back" : "بازگشت",
+    "New collective" : "New collective",
     "A collective with this name already exists" : "A collective with this name already exists",
     "Create" : "ایجاد",
     "Could not add members to the collective" : "Could not add members to the collective",
@@ -155,8 +154,6 @@
     "Download" : "بارگیری",
     "Recently deleted" : "Recently deleted",
     "No attachments available" : "No attachments available",
-    "If the page has attachments, they will be listed here." : "If the page has attachments, they will be listed here.",
-    "Add attachments using drag and drop or via \"Insert attachment\" in the formatting bar" : "Add attachments using drag and drop or via \"Insert attachment\" in the formatting bar",
     "Could not get attachments" : "Could not get attachments",
     "No backlinks available" : "No backlinks available",
     "If other pages link to this one, they will be listed here." : "If other pages link to this one, they will be listed here.",
@@ -176,7 +173,6 @@
     "Link copied" : "پیوند رونوشت شد",
     "Could not copy link to the clipboard:" : "Could not copy link to the clipboard:",
     "Could not create the page" : "Could not create the page",
-    "New Page" : "New Page",
     "Could not save emoji for page" : "Could not save emoji for page",
     "Could not move page" : "Could not move page",
     "Could not delete the page" : "Could not delete the page",
@@ -204,6 +200,7 @@
     "Members can be managed via the connected circle in the Contacts app." : "Members can be managed via the connected circle in the Contacts app.",
     "Open circle in Contacts" : "Open circle in Contacts",
     "Renaming is limited to owners of the circle" : "Renaming is limited to owners of the circle",
+    "Collectives Folder" : "Collectives Folder",
     "Permanently delete collective »{collective}«" : "Permanently delete collective »{collective}«",
     "Delete corresponding circle along with the collective?" : "Delete corresponding circle along with the collective?",
     "Collective and circle" : "Collective and circle",
@@ -218,6 +215,7 @@
     "Page content" : "Page content",
     "Pages that link to this one" : "Pages that link to this one",
     "Old versions of this page" : "Old versions of this page",
-    "Link copied to the clipboard." : "Link copied to the clipboard."
+    "Link copied to the clipboard." : "Link copied to the clipboard.",
+    "New Page" : "New Page"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }

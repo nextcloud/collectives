@@ -51,7 +51,6 @@ OC.L10N.register(
     "Link copied" : "Nuoroda nukopijuota",
     "Could not copy link to the clipboard:" : "Nepavyko nukopijuoti nuorodos į iškarpinę:",
     "Could not create the page" : "Nepavyko sukurti puslapio",
-    "New Page" : "Naujas puslapis",
     "Could not move page" : "Nepavyko perkelti puslapio",
     "Could not delete the page" : "Nepavyko ištrinti puslapio",
     "Copied" : "Nukopijuota",
@@ -59,6 +58,7 @@ OC.L10N.register(
     "Copy share link" : "Kopijuoti bendrinimo nuorodą",
     "Page not found:" : "Puslapis nerastas:",
     "Page content" : "Puslapio turinys",
-    "Link copied to the clipboard." : "Nuoroda nukopijuota į iškarpinę."
+    "Link copied to the clipboard." : "Nuoroda nukopijuota į iškarpinę.",
+    "New Page" : "Naujas puslapis"
 },
 "nplurals=4; plural=(n % 10 == 1 && (n % 100 > 19 || n % 100 < 11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? 1 : n % 1 != 0 ? 2: 3);");

@@ -58,7 +58,6 @@
     "Could not update emoji for the collective" : "No se pudo actualizar el emoji para el colectivo",
     "Could not rename the collective" : "No se pudo cambiar el nombre del colectivo",
     "Collectives settings" : "Configuración de Colectivos",
-    "Collectives Folder" : "Carpeta de Colectivos",
     "Create a collective first" : "Primero crea un colectivo",
     "Select location for collectives" : "Seleccionar ubicación para los colectivos",
     "Invalid path selected. Only folders on first level are supported." : "Se seleccionó una ruta no válida. Solo se admiten carpetas en el primer nivel.",
@@ -67,9 +66,9 @@
     "Delete permanently" : "Borrar permanentemente",
     "Only collective" : "Solo el colectivo",
     "Cancel" : "Cancelar",
-    "New collective" : "Nuevo colectivo",
     "Select emoji" : "Seleccionar emoji",
     "Back" : "Atrás",
+    "New collective" : "Nuevo colectivo",
     "A collective with this name already exists" : "Ya existe un colectivo con este nombre",
     "Create" : "Crear",
     "Could not add members to the collective" : "No se pudieron añadir los miembros al colectivo",
@@ -133,8 +132,6 @@
     "Download" : "Descargar",
     "Recently deleted" : "Eliminadas recientemente",
     "No attachments available" : "No hay archivos adjuntos disponibles",
-    "If the page has attachments, they will be listed here." : "Si la página tiene archivos adjuntos, se mostrarán aquí.",
-    "Add attachments using drag and drop or via \"Insert attachment\" in the formatting bar" : "Añadir archivos adjuntos arrastrando y soltando o mediante \"Insertar archivo adjunto\" en la barra de formato",
     "Could not get attachments" : "No se pudieron obtener los archivos adjuntos",
     "No backlinks available" : "No hay enlaces de referencia disponibles",
     "If other pages link to this one, they will be listed here." : "Si otras páginas enlazan a esta, se mostrarán aquí.",
@@ -154,7 +151,6 @@
     "Link copied" : "Enlace copiado",
     "Could not copy link to the clipboard:" : "No se pudo copiar el enlace al portapapeles:",
     "Could not create the page" : "No se pudo crear la página",
-    "New Page" : "Nueva página",
     "Could not save emoji for page" : "No se pudo guardar el emoji para la página",
     "Could not move page" : "No se pudo mover la página",
     "Could not delete the page" : "No se pudo eliminar la página",
@@ -182,6 +178,7 @@
     "Members can be managed via the connected circle in the Contacts app." : "Los miembros se pueden administrar a través del círculo conectado en la aplicación de contactos.",
     "Open circle in Contacts" : "Abrir círculo en Contactos",
     "Renaming is limited to owners of the circle" : "El cambio de nombre está limitado a los propietarios del círculo",
+    "Collectives Folder" : "Carpeta de Colectivos",
     "Permanently delete collective »{collective}«" : "Eliminar definitivamente el colectivo »{collective}«",
     "Delete corresponding circle along with the collective?" : "¿Eliminar también el círculo correspondiente junto con el colectivo?",
     "Collective and circle" : "Colectivo y círculo",
@@ -196,6 +193,7 @@
     "Page content" : "Contenido de la página",
     "Pages that link to this one" : "Páginas que enlazan a esta",
     "Old versions of this page" : "Versiones antiguas de esta página",
-    "Link copied to the clipboard." : "Enlace copiado al portapapeles."
+    "Link copied to the clipboard." : "Enlace copiado al portapapeles.",
+    "New Page" : "Nueva página"
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }
