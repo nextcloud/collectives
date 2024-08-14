@@ -6,6 +6,11 @@
 <template>
 	<NcContent app-name="collectives">
 		<input v-if="isPublic"
+			id="isPublic"
+			type="hidden"
+			name="isPublic"
+			value="1">
+		<input v-if="isPublic"
 			id="sharingToken"
 			type="hidden"
 			:value="shareTokenParam">
