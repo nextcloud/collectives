@@ -28,7 +28,6 @@ OC.L10N.register(
     "Versions" : "பதிப்புகள்",
     "Come, organize and build shared knowledge!" : "வாருங்கள், ஒழுங்கமைத்து பகிர்ந்த அறிவை உருவாக்குங்கள்!",
     "Could not create the page" : "பக்கத்தை உருவாக்க முடியவில்லை",
-    "New Page" : "புதிய பக்கம்",
     "Could not delete the page" : "பக்கத்தை நீக்க முடியவில்லை",
     "in Collective {collective}" : "தொகுப்பில் {தொகுப்பு}",
     "Created collective \"%s\" for existing circle." : "ஏற்கனவே உள்ள வட்டத்திற்காக \"%s\" தொகுப்பு உருவாக்கப்பட்டது.",
@@ -39,6 +38,7 @@ OC.L10N.register(
     "Page not found:" : "பக்கம் கிடைக்கவில்லை:",
     "Could not find the Page." : "பக்கத்தைக் கண்டுபிடிக்க முடியவில்லை.",
     "Pages that link to this one" : "இதை  இணைக்கும் பக்கங்கள்",
-    "Old versions of this page" : "இந்தப் பக்கத்தின் பழைய பதிப்புகள்"
+    "Old versions of this page" : "இந்தப் பக்கத்தின் பழைய பதிப்புகள்",
+    "New Page" : "புதிய பக்கம்"
 },
 "nplurals=2; plural=(n != 1);");
