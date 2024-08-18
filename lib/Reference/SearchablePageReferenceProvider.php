@@ -82,6 +82,7 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 
 	public function matchUrl(string $url): ?array {
 		// link examples:
+		// https://nextcloud.local/apps/collectives/supacollective-123/page-14457-spectre-slug
 		// https://nextcloud.local/apps/collectives/supacollective/p/MsdwSCmP9F6jcQX/Tutos/Hacking/Spectre?fileId=14457
 		// https://nextcloud.local/apps/collectives/supacollective/p/MsdwSCmP9F6jcQX/Tutos/Hacking/Spectre
 		// https://nextcloud.local/apps/collectives/supacollective/index.php/p/MsdwSCmP9F6jcQX/Tutos/Hacking/Spectre?fileId=14457
