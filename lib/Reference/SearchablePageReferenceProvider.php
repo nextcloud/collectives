@@ -77,6 +77,17 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 		if ($matches && count($matches) > 1) {
 			$pagePath['fileId'] = (int)$matches[1];
 		}
+
+		if (preg_match('/page-(\d+)-(.+)$/i', $pagePath['pagePath'], $matches)) {
+			$pagePath['fileId'] = (int)$matches[1];
+			$pagePath['pagePath'] = urldecode($matches[2]);
+		}
+
+		if (preg_match('/(.+?)-(\d+)$/i', $pagePath['collectiveName'], $matches)) {
+			$pagePath['collectiveName'] = $matches[1];
+			$pagePath['collectiveId'] = (int)$matches[2];
+		}
+
 		return $pagePath;
 	}
 
@@ -99,6 +110,7 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 		}
 
 		// link examples:
+		// https://nextcloud.local/apps/collectives/supacollective-123/page-14457-spectre-slug
 		// https://nextcloud.local/apps/collectives/supacollective/Tutos/Hacking/Spectre?fileId=14457
 		// https://nextcloud.local/apps/collectives/supacollective/Tutos/Hacking/Spectre
 		$startRegexes = [
@@ -123,10 +135,14 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 	/**
 	 * @throws NotFoundException
 	 */
-	private function getCollective(string $collectiveName, ?string $sharingToken): Collective {
+	private function getCollective(?int $collectiveId, string $collectiveName, ?string $sharingToken): Collective {
 		if ($sharingToken) {
 			// TODO: Check if share is password protected; if yes, then check in session if authenticated
 			return $this->collectiveService->findCollectiveByShare($sharingToken);
+		}
+
+		if ($collectiveId) {
+			return $this->collectiveService->getCollective($collectiveId, $this->userId);
 		}
 
 		return $this->collectiveService->findCollectiveByName($this->userId, $collectiveName);
@@ -186,6 +202,7 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 			return $this->linkReferenceProvider->resolveReference($referenceText);
 		}
 
+		$collectiveId = $pageReferenceInfo['collectiveId'] ?? null;
 		$collectiveName = $pageReferenceInfo['collectiveName'];
 
 		if ($public && !$sharingToken) {
@@ -193,7 +210,7 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 			return $this->linkReferenceProvider->resolveReference($referenceText);
 		}
 		try {
-			$collective = $this->getCollective($collectiveName, $sharingToken);
+			$collective = $this->getCollective($collectiveId, $collectiveName, $sharingToken);
 			$page = $this->getPage($collective, $pageReferenceInfo, $public);
 		} catch (Exception|Throwable) {
 			// fallback to opengraph if it matches, but somehow we can't resolve

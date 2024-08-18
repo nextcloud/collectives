@@ -307,7 +307,7 @@ Cypress.Commands.add('seedPage',
 				)
 			})
 			.its('data.ocs.data.page.id')
-			.then(pageId => ({ ...subject, pageId }))
+			.then(pageId => ({ ...subject, collectiveId: collectiveContext(subject).collectiveId, pageId }))
 	})
 
 /**

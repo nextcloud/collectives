@@ -17,9 +17,10 @@ use OCP\Constants;
 use RuntimeException;
 
 /**
- * Class Collective
  * @method int getId()
  * @method void setId(int $value)
+ * @method string getSlug()
+ * @method void setSlug(?string $value)
  * @method string getCircleUniqueId()
  * @method void setCircleUniqueId(string $circleUniqueId)
  * @method int getPermissions()
@@ -63,6 +64,7 @@ class Collective extends Entity implements JsonSerializable {
 
 	protected ?string $circleUniqueId = null;
 	protected int $permissions = self::defaultPermissions;
+	protected ?string $slug = null;
 	protected ?string $emoji = null;
 	protected ?int $trashTimestamp = null;
 	protected int $pageMode = self::defaultPageMode;
@@ -281,6 +283,7 @@ class Collective extends Entity implements JsonSerializable {
 	public function jsonSerialize(): array {
 		return [
 			'id' => $this->id,
+			'slug' => $this->slug,
 			'circleId' => $this->circleUniqueId,
 			'emoji' => $this->emoji,
 			'trashTimestamp' => $this->trashTimestamp,

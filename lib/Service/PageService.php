@@ -49,6 +49,7 @@ class PageService {
 		private IConfig $config,
 		ContainerInterface $container,
 		private SessionService $sessionService,
+		private SlugService $slugService,
 	) {
 		try {
 			$this->pushQueue = $container->get(IQueue::class);
@@ -201,6 +202,7 @@ class PageService {
 		$emoji = ($page !== null) ? $page->getEmoji() : null;
 		$subpageOrder = ($page !== null) ? $page->getSubpageOrder() : null;
 		$fullWidth = $page !== null && $page->getFullWidth();
+		$slug = $page !== null ? $page->getSlug() : null;
 		$pageInfo = new PageInfo();
 		try {
 			$pageInfo->fromFile($file,
@@ -209,7 +211,8 @@ class PageService {
 				$lastUserId ? $this->userManager->getDisplayName($lastUserId) : null,
 				$emoji,
 				$subpageOrder,
-				$fullWidth);
+				$fullWidth,
+				$slug);
 		} catch (FilesNotFoundException|InvalidPathException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
@@ -263,7 +266,7 @@ class PageService {
 		}
 	}
 
-	private function updatePage(int $collectiveId, int $fileId, string $userId, ?string $emoji = null, ?bool $fullWidth = null): void {
+	private function updatePage(int $collectiveId, int $fileId, string $userId, ?string $emoji = null, ?bool $fullWidth = null, ?string $slug = null): void {
 		$page = new Page();
 		$page->setFileId($fileId);
 		$page->setLastUserId($userId);
@@ -272,6 +275,9 @@ class PageService {
 		}
 		if ($fullWidth !== null) {
 			$page->setFullWidth($fullWidth);
+		}
+		if ($slug !== null) {
+			$page->setSlug($slug);
 		}
 		$this->pageMapper->updateOrInsert($page);
 		$this->notifyPush($collectiveId);
@@ -297,7 +303,7 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	private function newPage(int $collectiveId, Folder $folder, string $filename, string $userId): PageInfo {
+	private function newPage(int $collectiveId, Folder $folder, string $filename, string $userId, ?string $title): PageInfo {
 		try {
 			$newFile = $folder->newFile($filename . PageInfo::SUFFIX);
 		} catch (FilesNotPermittedException $e) {
@@ -310,7 +316,9 @@ class PageService {
 				$this->getParentPageId($newFile),
 				$userId,
 				$this->userManager->getDisplayName($userId));
-			$this->updatePage($collectiveId, $newFile->getId(), $userId);
+			$slug = $title ? $this->generateSlugForPage($title, $newFile) : null;
+			$this->updatePage($collectiveId, $newFile->getId(), $userId, null, null, $slug);
+			$pageInfo->setSlug($slug);
 		} catch (FilesNotFoundException|InvalidPathException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
@@ -420,7 +428,7 @@ class PageService {
 		if (!isset($indexPage)) {
 			if ($hasPages || $forceIndex) {
 				// Create missing index page if folder or subfolders have page files (or forceIndex)
-				$indexPage = $this->newPage($collectiveId, $folder, PageInfo::INDEX_PAGE_TITLE, $userId);
+				$indexPage = $this->newPage($collectiveId, $folder, PageInfo::INDEX_PAGE_TITLE, $userId, PageInfo::INDEX_PAGE_TITLE);
 			} else {
 				// Ignore folders without an index page
 				return [];
@@ -630,7 +638,7 @@ class PageService {
 
 		$pageInfo = $templateId
 			? $this->copy($collectiveId, $templateId, $parentId, $safeTitle, 0, $userId)
-			: $this->newPage($collectiveId, $folder, $filename, $userId);
+			: $this->newPage($collectiveId, $folder, $filename, $userId, $title);
 		$this->addToSubpageOrder($collectiveId, $parentId, $pageInfo->getId(), 0, $userId);
 		return $pageInfo;
 	}
@@ -772,8 +780,9 @@ class PageService {
 		if (null !== $newFile = $this->moveOrCopyPage($collectiveFolder, $file, $parentId, $title, true)) {
 			$file = $newFile;
 		}
+		$slug = $this->generateSlugForPage($title ?: $pageInfo->getTitle(), $file);
 		try {
-			$this->updatePage($collectiveId, $file->getId(), $userId, $pageInfo->getEmoji(), $pageInfo->isFullWidth());
+			$this->updatePage($collectiveId, $file->getId(), $userId, $pageInfo->getEmoji(), $pageInfo->isFullWidth(), $slug);
 		} catch (InvalidPathException|FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
@@ -799,9 +808,10 @@ class PageService {
 		if (null !== $newFile = $this->moveOrCopyPage($collectiveFolder, $file, $parentId, $title, false)) {
 			$file = $newFile;
 		}
+		$slug = $title ? $this->generateSlugForPage($title, $file) : null;
 
 		try {
-			$this->updatePage($collectiveId, $file->getId(), $userId);
+			$this->updatePage($collectiveId, $file->getId(), $userId, null, null, $slug);
 		} catch (InvalidPathException|FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
@@ -926,6 +936,7 @@ class PageService {
 		$file = $this->nodeHelper->getFileById($collectiveFolder, $pageId);
 		$pageInfo = $this->getPageByFile($file);
 
+		$subpageOrder = $pageInfo->getSubpageOrder();
 		$cleanedSubpageOrder = $this->cleanSubpageOrder($collectiveId, $pageInfo, $userId);
 		$newSubpageOrder = SubpageOrderService::add($cleanedSubpageOrder, $addId, $index);
 
@@ -1109,5 +1120,13 @@ class PageService {
 		}
 
 		return $backlinks;
+	}
+
+	private function generateSlugForPage(string $title, ?File $file): ?string {
+		if (!$file) {
+			return null;
+		}
+
+		return $this->slugService->generatePageSlug($title);
 	}
 }
