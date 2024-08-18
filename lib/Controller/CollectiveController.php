@@ -85,11 +85,10 @@ class CollectiveController extends OCSController {
 	public function create(string $name, ?string $emoji = null): DataResponse {
 		try {
 			[$collective, $info] = $this->handleErrorResponse(function () use ($name, $emoji): array {
-				$safeName = $this->nodeHelper->sanitiseFilename($name);
 				[$collective, $info] = $this->service->createCollective(
 					$this->userId,
 					$this->getUserLang(),
-					$safeName,
+					$name,
 					$emoji,
 				);
 				return [$collective, $info];

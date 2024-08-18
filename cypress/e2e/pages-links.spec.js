@@ -4,15 +4,15 @@
  */
 
 const baseUrl = Cypress.env('baseUrl')
-const sourceUrl = new URL(`${baseUrl}/index.php/apps/collectives/Link%20Testing/Link%20Source`)
-let imageId, pdfId, textId
-let anotherCollectiveFirstPageId, linkTargetPageId
+let imageId, pdfId, textId, sourceUrl
+let anotherCollectiveFirstPageId, anotherCollectiveId, linkTestingCollectiveId, linkTargetPageId
 
 describe('Page link handling', function() {
 	before(function() {
 		cy.loginAs('bob')
 		cy.deleteAndSeedCollective('Another Collective')
-			.seedPage('First Page', '', 'Readme.md').then(({ pageId }) => {
+			.seedPage('First Page', '', 'Readme.md').then(({ collectiveId, pageId }) => {
+				anotherCollectiveId = collectiveId
 				anotherCollectiveFirstPageId = pageId
 			})
 		cy.deleteAndSeedCollective('Link Testing')
@@ -21,7 +21,10 @@ describe('Page link handling', function() {
 			.seedPage('Link Target', '', 'Readme.md').then(({ pageId }) => {
 				linkTargetPageId = pageId
 			})
-			.seedPage('Link Source', '', 'Readme.md')
+			.seedPage('Link Source', '', 'Readme.md').then(({ collectiveId, pageId }) => {
+				linkTestingCollectiveId = collectiveId
+				sourceUrl = new URL(`${baseUrl}/index.php/apps/collectives/Link-Testing-${collectiveId}/page-${pageId}-Link-Source`)
+			})
 		cy.seedPageContent('Link%20Testing/Link%20Target.md', 'Some content')
 		cy.uploadFile('test.md', 'text/markdown').then((id) => {
 			textId = id

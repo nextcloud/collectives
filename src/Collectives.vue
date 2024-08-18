@@ -71,7 +71,9 @@ export default {
 		$route: {
 			handler(val) {
 				this.rootStore.collectiveParam = val.params.collective
+				this.rootStore.collectiveId = val.params.collectiveId ? parseInt(val.params.collectiveId) : null
 				this.rootStore.pageParam = val.params.page
+				this.rootStore.pageId = val.params.pageId ? parseInt(val.params.pageId) : null
 				this.rootStore.shareTokenParam = val.params.token
 				this.rootStore.fileIdQuery = val.query.fileId
 			},
