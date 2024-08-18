@@ -26,6 +26,7 @@ use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
 use OCA\Collectives\Service\PageService;
 use OCA\Collectives\Service\SessionService;
+use OCA\Collectives\Service\SlugService;
 use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\IConfig;
 use OCP\IUserManager;
@@ -102,7 +103,9 @@ class PageServiceTest extends TestCase {
 			$userManager,
 			$this->config,
 			$container,
-			$sessionService);
+			$sessionService,
+			$this->createMock(SlugService::class),
+		);
 	}
 
 	public function testGetPageFile(): void {

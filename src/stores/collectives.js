@@ -33,6 +33,11 @@ export const useCollectivesStore = defineStore('collectives', {
 
 		currentCollective(state) {
 			const rootStore = useRootStore()
+			if (rootStore.collectiveId) {
+				return state.collectives.find(
+					(collective) => collective.id === rootStore.collectiveId,
+				)
+			}
 			return state.collectives.find(
 				(collective) => collective.name === rootStore.collectiveParam,
 			)
@@ -41,11 +46,11 @@ export const useCollectivesStore = defineStore('collectives', {
 		collectivePath() {
 			return (collective) => {
 				const rootStore = useRootStore()
+				const slug = collective.slug ? collective.slug : encodeURIComponent(collective.name)
 				if (rootStore.isPublic) {
-					return `/p/${rootStore.shareTokenParam}/${encodeURIComponent(collective.name)}`
-				} else {
-					return `/${encodeURIComponent(collective.name)}`
+					return `/p/${rootStore.shareTokenParam}/${slug}`
 				}
+				return `/${slug}`
 			}
 		},
 
@@ -76,7 +81,11 @@ export const useCollectivesStore = defineStore('collectives', {
 
 		updatedCollectivePath(state) {
 			const collective = state.updatedCollective
-			return collective?.name && `/${encodeURIComponent(collective.name)}`
+			if (!collective) {
+				return false
+			}
+			const slug = collective.slug ? collective.slug : encodeURIComponent(collective.name)
+			return `/${slug}`
 		},
 
 		collectiveChanged(state) {
