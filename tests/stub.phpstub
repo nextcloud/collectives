@@ -653,6 +653,20 @@ namespace OCA\Circles\Model\Probes {
 	}
 }
 
+namespace OCA\Circles\Model\Federated {
+	use OCA\Circles\Tools\Model\SimpleDataStore;
+
+    class FederatedEvent {
+    	public function getParams(): SimpleDataStore {}
+    }
+}
+
+namespace OCA\Circles\Tools\Model {
+    class SimpleDataStore {
+    	public function g(string $key): string {}
+    }
+}
+
 namespace OCA\Circles\Events {
 	use OCP\EventDispatcher\Event;
 	use OCA\Circles\Model\Federated\FederatedEvent;
@@ -662,6 +676,11 @@ namespace OCA\Circles\Events {
 	}
 	abstract class CircleDestroyedEvent extends CircleResultGenericEvent {
 		public function __construct(FederatedEvent $federatedEvent, array $results) {}
+	}
+	abstract class EditingCircleEvent extends CircleResultGenericEvent {
+		public function __construct(FederatedEvent $federatedEvent, array $results) {}
+
+		public function getFederatedEvent(): FederatedEvent;
 	}
 }
 
