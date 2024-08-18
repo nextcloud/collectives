@@ -11,6 +11,7 @@ namespace OCA\Collectives\AppInfo;
 
 use Closure;
 use OCA\Circles\Events\CircleDestroyedEvent;
+use OCA\Circles\Events\EditingCircleEvent;
 use OCA\Collectives\CacheListener;
 use OCA\Collectives\Dashboard\RecentPagesWidget;
 use OCA\Collectives\Db\CollectiveMapper;
@@ -19,6 +20,7 @@ use OCA\Collectives\Db\PageMapper;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Listeners\BeforeTemplateRenderedListener;
 use OCA\Collectives\Listeners\CircleDestroyedListener;
+use OCA\Collectives\Listeners\CircleEditingEventListener;
 use OCA\Collectives\Listeners\CollectivesReferenceListener;
 use OCA\Collectives\Listeners\ShareDeletedListener;
 use OCA\Collectives\Listeners\TextMentionListener;
@@ -54,6 +56,8 @@ use OCP\SetupCheck\ISetupCheck;
 use OCP\Share\Events\ShareDeletedEvent;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\String\Slugger\AsciiSlugger;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class Application extends App implements IBootstrap {
 	public const APP_NAME = 'collectives';
@@ -66,6 +70,7 @@ class Application extends App implements IBootstrap {
 		require_once(__DIR__ . '/../../vendor/autoload.php');
 		$context->registerEventListener(BeforeTemplateRenderedEvent::class, BeforeTemplateRenderedListener::class);
 		$context->registerEventListener(CircleDestroyedEvent::class, CircleDestroyedListener::class);
+		$context->registerEventListener(EditingCircleEvent::class, CircleEditingEventListener::class);
 		$context->registerEventListener(ShareDeletedEvent::class, ShareDeletedListener::class);
 		$context->registerEventListener(RenderReferenceEvent::class, CollectivesReferenceListener::class);
 		$context->registerEventListener(MentionEvent::class, TextMentionListener::class);
@@ -136,6 +141,10 @@ class Application extends App implements IBootstrap {
 			/** @psalm-suppress MissingDependency */
 			$context->registerSetupCheck(CirclesAppIsEnableCheck::class);
 		}
+
+		$context->registerService(SluggerInterface::class, function (ContainerInterface $c) {
+			return new AsciiSlugger();
+		});
 	}
 
 	public function boot(IBootcontext $context): void {

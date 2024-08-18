@@ -60,8 +60,9 @@ export default {
 	},
 
 	computed: {
-		...mapState(useRootStore, ['isPublic', 'loading', 'pageParam']),
+		...mapState(useRootStore, ['isPublic', 'loading', 'pageParam', 'pageId']),
 		...mapState(useCollectivesStore, [
+			'collectivePath',
 			'currentCollective',
 			'currentCollectiveCanEdit',
 			'currentCollectiveIsPageShare',
@@ -70,7 +71,9 @@ export default {
 		...mapState(usePagesStore, [
 			'currentFileIdPage',
 			'currentPage',
+			'isIndexPage',
 			'pagePath',
+			'pageSlugPath',
 		]),
 		...mapState(useVersionsStore, ['selectedVersion']),
 
@@ -89,6 +92,20 @@ export default {
 		},
 		'currentPage.id'() {
 			this.selectVersion(null)
+
+			const routerParams = this.$router.currentRoute.params
+			// If the current page is not the one we are supposed to be on, redirect
+			if (this.currentPage && !this.isIndexPage) {
+				const actualUrl = `${routerParams.collectiveSlugPart}-${routerParams.collectiveId}/page-${routerParams.pageId}-${routerParams.pageSlug}`
+				const expectedUrl = this.pageSlugPath(this.currentPage)
+
+				if (actualUrl !== expectedUrl) {
+					this.$router.replace({ path: this.pagePath(this.currentPage), hash: document.location.hash })
+				}
+			} else if (this.currentCollective
+				&& `${routerParams.collectiveSlugPart}-${routerParams.collectiveId}` !== this.currentCollective.slug) {
+				this.$router.replace(this.collectivePath(this.currentCollective))
+			}
 		},
 		'notFound'(current) {
 			if (current && this.currentFileIdPage) {

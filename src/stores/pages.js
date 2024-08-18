@@ -59,7 +59,7 @@ export const usePagesStore = defineStore('pages', {
 			const collectivesStore = useCollectivesStore()
 			return collectivesStore.currentCollectiveIsPageShare
 				? false
-				: !rootStore.pageParam || rootStore.pageParam === INDEX_PAGE
+				: (!rootStore.pageId && !rootStore.pageParam) || rootStore.pageParam === INDEX_PAGE
 		},
 		isIndexPage: (state) => state.currentPage.fileName === INDEX_PAGE + '.md',
 
@@ -73,13 +73,23 @@ export const usePagesStore = defineStore('pages', {
 		currentPageIds(state) {
 			const rootStore = useRootStore()
 			// Return root page
-			if (!rootStore.pageParam
+			if ((!rootStore.pageId && !rootStore.pageParam)
 				|| rootStore.pageParam === INDEX_PAGE) {
 				return [state.rootPage.id]
 			}
 
-			// Iterate through all path levels to find the correct page
 			const pageIds = []
+			if (rootStore.pageId) {
+				let pageId = rootStore.pageId
+				do {
+					const page = state.pageById(pageId)
+					pageIds.unshift(page.id)
+					pageId = page.parentId
+				} while (pageId)
+				return pageIds
+			}
+
+			// Iterate through all path levels to find the correct page
 			const parts = rootStore.pageParam.split('/').filter(Boolean)
 			let page = state.rootPage
 			for (const i in parts) {
@@ -103,21 +113,30 @@ export const usePagesStore = defineStore('pages', {
 			}
 		},
 
-		pagePath: () => (page) => {
+		pagePath: (state) => (page) => {
 			const rootStore = useRootStore()
-			const collectivesStore = useCollectivesStore()
-			const collective = collectivesStore.currentCollective.name
-			const { filePath, fileName, title, id } = page
-			const titlePart = fileName !== INDEX_PAGE + '.md' && title
 			// For public collectives, prepend `/p/{shareToken}`
-			const pagePath = [
-				rootStore.isPublic ? 'p' : null,
-				rootStore.isPublic ? rootStore.shareTokenParam : null,
-				collective,
-				...filePath.split('/'),
-				titlePart,
-			].filter(Boolean).map(encodeURIComponent).join('/')
-			return `/${pagePath}?fileId=${id}`
+			let prefix = ''
+			if (rootStore.isPublic) {
+				prefix = `/p/${encodeURIComponent(rootStore.shareTokenParam)}`
+			}
+			return `${prefix}/${state.pageSlugPath(page)}`
+		},
+
+		pageSlugPath: (state) => (page) => {
+			const collectivesStore = useCollectivesStore()
+			const collective = collectivesStore.currentCollective.slug || collectivesStore.currentCollective.name
+			if (!page.slug) {
+				const { filePath, fileName, title, id } = page
+				const titlePart = fileName !== INDEX_PAGE + '.md' && title
+
+				const pagePath = [collective, ...filePath.split('/'), titlePart]
+					.filter(Boolean).map(encodeURIComponent).join('/')
+
+				return `${pagePath}?fileId=${id}`
+			}
+
+			return [collective, `page-${page.id}-${page.slug}`].join('/')
 		},
 
 		pagePathTitle: () => (page) => {

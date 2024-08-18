@@ -52,11 +52,10 @@ class CreateCollective extends Base {
 		$user = $this->userManager->get($userId);
 		$this->userSession->setUser($user);
 		$lang = $this->l10nFactory->getUserLanguage($this->userSession->getUser());
-		$safeName = $this->nodeHelper->sanitiseFilename($name);
 
 		$output->write('<info>Creating new collective ' . $name . ' ... </info>');
 
-		[$collective, $info] = $this->collectiveService->createCollective($userId, $lang, $safeName);
+		[, $info] = $this->collectiveService->createCollective($userId, $lang, $name);
 
 		$output->writeln('<info>' . $info ?: 'done.' . '</info>');
 		return 0;
