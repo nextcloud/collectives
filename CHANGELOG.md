@@ -1,5 +1,31 @@
 # Changelog
 
+## 2.14.0 - 2024.08.19
+
+### ✨New
+* 📝 Persist full page width setting in database. Thanks @Koc.
+* 🔒 Add rate limits to public page controller functions.
+
+### 🐛Fixes
+* 🍍 Migrate frontend vue store from vuex to pinia.
+* 💄 Several small UI fixes and improvements.
+* 🔒 Fix updating shares with empty password and password policy. (#1327)
+* ♻️ Migrate controller annotations to attributes.
+* ♻️ Migrate license/copyright headers to SPDX format.
+* 🐛 Fix error with v-click-outside in collectives trash.
+* 🔗 Fix public share detection in editor.
+* 🔎 Use proper editor API for search highlighting.
+* 🚀 Performance: only load files script for the files app.
+* 🚀 Performance: Optimize getPagesFromFolder function.
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 2.13.0 - 2024.07.25
 
 ### ✨New
