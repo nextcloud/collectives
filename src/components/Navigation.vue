@@ -15,14 +15,17 @@
 				v-show="!collective.deleted"
 				:key="collective.id"
 				:collective="collective" />
-			<NcButton v-if="!isPublic"
-				:aria-label="t('collectives', 'Create a new collective')"
-				@click="onOpenNewCollectiveModal">
-				<template #icon>
-					<PlusIcon />
-				</template>
-				{{ t('collectives', 'New collective') }}
-			</NcButton>
+			<li>
+				<NcAppNavigationNew v-if="!isPublic"
+					:text="t('collectives', 'New collective')"
+					type="secondary"
+					class="new-collective-button"
+					@click="onOpenNewCollectiveModal">
+					<template #icon>
+						<PlusIcon />
+					</template>
+				</NcAppNavigationNew>
+			</li>
 		</template>
 		<template #footer>
 			<CollectivesTrash v-if="displayTrash"
@@ -42,7 +45,7 @@ import { mapActions, mapState } from 'pinia'
 import { useRootStore } from '../stores/root.js'
 import { useCollectivesStore } from '../stores/collectives.js'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { NcAppNavigation, NcAppNavigationCaption, NcButton } from '@nextcloud/vue'
+import { NcAppNavigation, NcAppNavigationCaption, NcAppNavigationNew } from '@nextcloud/vue'
 import CollectiveMembersModal from './Nav/CollectiveMembersModal.vue'
 import CollectiveListItem from './Nav/CollectiveListItem.vue'
 import CollectivesGlobalSettings from './Nav/CollectivesGlobalSettings.vue'
@@ -58,7 +61,7 @@ export default {
 	components: {
 		NcAppNavigation,
 		NcAppNavigationCaption,
-		NcButton,
+		NcAppNavigationNew,
 		CollectiveListItem,
 		CollectiveMembersModal,
 		CollectivesGlobalSettings,
@@ -148,6 +151,10 @@ export default {
 </script>
 
 <style scoped>
+.new-collective-button {
+	width: max-content;
+}
+
 /* Don't print list of collectives */
 @media print {
 	#app-navigation-vue {
