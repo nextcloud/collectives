@@ -5,7 +5,7 @@
 
 <template>
 	<div :class="[currentPage.isFullWidth ? 'full-width-view' : 'sheet-view']">
-		<h2 id="titleform" class="page-title">
+		<h2 id="titleform" class="page-title" :class="{ 'pre-nc30': isPreNc30 }">
 			<!-- Page emoji or icon -->
 			<div class="page-title-icon"
 				:class="{ 'mobile': isMobile }">
@@ -178,6 +178,11 @@ export default {
 		]),
 		...mapState(useSearchStore, ['shouldShowSearchDialog']),
 
+		// TODO: remove when we stop supporting NC < 30
+		isPreNc30() {
+			return window.getComputedStyle(document.body).getPropertyValue('--default-clickable-area') === '44px'
+		},
+
 		hasSidebarToggle() {
 			return !this.showing('sidebar')
 		},
@@ -328,6 +333,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+// TODO: remove when we stop supporting NC < 30
+.page-title.pre-nc30 {
+	padding-top: 11px;
+}
+
 .titlebar-buttons {
 	display: flex;
 	gap: 4px;
