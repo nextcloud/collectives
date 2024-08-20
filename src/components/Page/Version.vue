@@ -5,7 +5,7 @@
 
 <template>
 	<div :class="[currentPage.isFullWidth ? 'full-width-view' : 'sheet-view']">
-		<h2 id="titleform" class="page-title">
+		<h2 id="titleform" class="page-title" :class="{ 'pre-nc30': isPreNc30 }">
 			<div class="page-title-icon">
 				<div v-if="currentPage.emoji">
 					{{ currentPage.emoji }}
@@ -93,6 +93,11 @@ export default {
 			'title',
 		]),
 
+		// TODO: remove when we stop supporting NC < 30
+		isPreNc30() {
+			return window.getComputedStyle(document.body).getPropertyValue('--default-clickable-area') === '44px'
+		},
+
 		pageTitleIconSize() {
 			return isMobile ? 25 : 30
 		},
@@ -176,6 +181,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+// TODO: remove when we stop supporting NC < 30
+.page-title.pre-nc30 {
+	padding-top: 11px;
+}
+
 input[type="text"].title-version {
 	color: var(--color-text-maxcontrast);
 }
