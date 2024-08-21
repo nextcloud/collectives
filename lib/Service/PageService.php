@@ -198,7 +198,7 @@ class PageService {
 		$lastUserId = ($page !== null) ? $page->getLastUserId() : null;
 		$emoji = ($page !== null) ? $page->getEmoji() : null;
 		$subpageOrder = ($page !== null) ? $page->getSubpageOrder() : null;
-		$fullWidth = ($page !== null) ? $page->getFullWidth() : false;
+		$fullWidth = $page !== null && $page->getFullWidth();
 		$pageInfo = new PageInfo();
 		try {
 			$pageInfo->fromFile($file,
@@ -236,7 +236,7 @@ class PageService {
 				$lastUserId ? $this->userManager->getDisplayName($lastUserId) : null,
 				$emoji,
 				$subpageOrder,
-				$page->getFullWidth());
+				$page?->getFullWidth());
 			$pageInfo->setTrashTimestamp($trashTimestamp);
 			$pageInfo->setFilePath('');
 			$pageInfo->setTitle(basename($filename, PageInfo::SUFFIX));
