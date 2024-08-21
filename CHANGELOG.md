@@ -1,5 +1,16 @@
 # Changelog
 
+## 2.14.1 - 2024.08.21
+
+### 🐛Fixes
+* 💄 Refactor "New collectives" button, make it HTML spec compatible. (#1382)
+* 💄 Bring back top padding for titlebar on Nextcloud < 30. (#1426)
+* 🐛 Fix error "Could not fetch page trash" due to call on null. (#1431)
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+
 ## 2.14.0 - 2024.08.19
 
 ### ✨New
