@@ -236,7 +236,7 @@ class PageService {
 				$lastUserId ? $this->userManager->getDisplayName($lastUserId) : null,
 				$emoji,
 				$subpageOrder,
-				$page?->getFullWidth());
+				$page && $page->getFullWidth());
 			$pageInfo->setTrashTimestamp($trashTimestamp);
 			$pageInfo->setFilePath('');
 			$pageInfo->setTitle(basename($filename, PageInfo::SUFFIX));
