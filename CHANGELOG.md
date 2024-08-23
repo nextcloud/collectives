@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.14.2 - 2024.08.23
+
+### 🐛Fixes
+* 🐛 Fix error "Could not fetch page trash" due to call on null. (#1435)
+* 🖱️ Fix moving page by drag and drop. (#1436)
+
+
 ## 2.14.1 - 2024.08.21
 
 ### 🐛Fixes
