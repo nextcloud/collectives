@@ -333,7 +333,7 @@ export default {
 			if (this.isDropTarget
 				// Ingore if self is direct parent of dragged element
 				&& this.pageParent(this.draggedPageId) !== this.pageId) {
-				this.movePage(this.pageParent(this.draggedPageId), this.pageId, this.draggedPageId, 0)
+				this.move(this.pageParent(this.draggedPageId), this.pageId, this.draggedPageId, 0)
 			}
 			this.isHighlightedTarget = false
 			this.setDragoverTargetPage(false)

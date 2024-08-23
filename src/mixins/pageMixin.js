@@ -19,10 +19,10 @@ export default {
 			'currentCollectivePath',
 		]),
 		...mapState(usePagesStore, [
-			'currentFileIdPage',
 			'currentPage',
 			'newPageId',
 			'newPagePath',
+			'pageById',
 			'pagePath',
 			'pageTitle',
 			'pages',
@@ -172,7 +172,7 @@ export default {
 
 			// Redirect to new page path if currentPage got moved
 			if (currentPageId === pageId) {
-				this.$router.replace(this.pagePath(this.currentFileIdPage))
+				this.$router.replace(this.pagePath(this.pageById(currentPageId)))
 			}
 
 			// Remove page from subpageOrder of old parent last
