@@ -58,7 +58,7 @@ class PageTrashCleanup extends Base {
 				$foundCollectiveName = null;
 				try {
 					$foundCollectiveName = $this->collectiveMapper->idToName($collective->getId(), null, true);
-				} catch (MissingDependencyException | NotFoundException | NotPermittedException) {
+				} catch (MissingDependencyException|NotFoundException|NotPermittedException) {
 				}
 
 				if ($foundCollectiveName === $collectiveName) {

@@ -72,7 +72,7 @@ class SearchablePageReferenceProvider29 extends ADiscoverableReferenceProvider i
 		];
 		preg_match('/\?fileId=(\d+)$/i', $url, $matches);
 		if ($matches && count($matches) > 1) {
-			$pagePath['fileId'] = (int) $matches[1];
+			$pagePath['fileId'] = (int)$matches[1];
 		}
 		return $pagePath;
 	}
@@ -171,7 +171,7 @@ class SearchablePageReferenceProvider29 extends ADiscoverableReferenceProvider i
 		try {
 			$collective = $this->getCollective($collectiveName);
 			$page = $this->getPage($collective, $pageReferenceInfo);
-		} catch (Exception | Throwable) {
+		} catch (Exception|Throwable) {
 			// fallback to opengraph if it matches, but somehow we can't resolve
 			return $this->linkReferenceProvider->resolveReference($referenceText);
 		}

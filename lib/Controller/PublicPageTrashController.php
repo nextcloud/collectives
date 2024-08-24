@@ -81,7 +81,7 @@ class PublicPageTrashController extends PublicShareController {
 	public function isValidToken(): bool {
 		try {
 			$this->collectiveShareMapper->findOneByToken($this->getToken());
-		} catch (DoesNotExistException | MultipleObjectsReturnedException) {
+		} catch (DoesNotExistException|MultipleObjectsReturnedException) {
 			return false;
 		}
 
@@ -115,7 +115,7 @@ class PublicPageTrashController extends PublicShareController {
 				$pageInfo->setShareToken($this->getToken());
 			}
 			return [
-				"data" => $pageInfos
+				'data' => $pageInfos
 			];
 		}, $this->logger);
 	}
@@ -132,7 +132,7 @@ class PublicPageTrashController extends PublicShareController {
 			$pageInfo->setCollectivePath('');
 			$pageInfo->setShareToken($this->getToken());
 			return [
-				"data" => $pageInfo
+				'data' => $pageInfo
 			];
 		}, $this->logger);
 	}

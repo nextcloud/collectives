@@ -80,7 +80,7 @@ class PublicPageController extends PublicShareController {
 	public function isValidToken(): bool {
 		try {
 			$this->collectiveShareMapper->findOneByToken($this->getToken());
-		} catch (DoesNotExistException | MultipleObjectsReturnedException) {
+		} catch (DoesNotExistException|MultipleObjectsReturnedException) {
 			return false;
 		}
 
@@ -143,7 +143,7 @@ class PublicPageController extends PublicShareController {
 				$this->decoratePageInfo($collectiveId, $sharePageId, $owner, $pageInfo);
 			}
 			return [
-				"data" => $pageInfos
+				'data' => $pageInfos
 			];
 		}, $this->logger);
 	}
@@ -160,7 +160,7 @@ class PublicPageController extends PublicShareController {
 			$pageInfo = $this->service->find($collectiveId, $id, $owner);
 			$this->decoratePageInfo($collectiveId, $sharePageId, $owner, $pageInfo);
 			return [
-				"data" => $pageInfo
+				'data' => $pageInfo
 			];
 		}, $this->logger);
 	}
@@ -178,7 +178,7 @@ class PublicPageController extends PublicShareController {
 			$pageInfo = $this->service->create($collectiveId, $parentId, $title, $owner);
 			$this->decoratePageInfo($collectiveId, $sharePageId, $owner, $pageInfo);
 			return [
-				"data" => $pageInfo
+				'data' => $pageInfo
 			];
 		}, $this->logger);
 	}
@@ -196,7 +196,7 @@ class PublicPageController extends PublicShareController {
 			$pageInfo = $this->service->touch($collectiveId, $id, $owner);
 			$this->decoratePageInfo($collectiveId, $sharePageId, $owner, $pageInfo);
 			return [
-				"data" => $pageInfo
+				'data' => $pageInfo
 			];
 		}, $this->logger);
 	}
@@ -219,7 +219,7 @@ class PublicPageController extends PublicShareController {
 				: $this->service->move($collectiveId, $id, $parentId, $title, $index, $owner);
 			$this->decoratePageInfo($collectiveId, $sharePageId, $owner, $pageInfo);
 			return [
-				"data" => $pageInfo
+				'data' => $pageInfo
 			];
 		}, $this->logger);
 	}
@@ -237,7 +237,7 @@ class PublicPageController extends PublicShareController {
 			$pageInfo = $this->service->setEmoji($collectiveId, $id, $emoji, $owner);
 			$this->decoratePageInfo($collectiveId, $sharePageId, $owner, $pageInfo);
 			return [
-				"data" => $pageInfo
+				'data' => $pageInfo
 			];
 		}, $this->logger);
 	}
@@ -255,7 +255,7 @@ class PublicPageController extends PublicShareController {
 			$pageInfo = $this->service->setSubpageOrder($collectiveId, $id, $subpageOrder, $owner);
 			$this->decoratePageInfo($collectiveId, $sharePageId, $owner, $pageInfo);
 			return [
-				"data" => $pageInfo
+				'data' => $pageInfo
 			];
 		}, $this->logger);
 	}
@@ -273,7 +273,7 @@ class PublicPageController extends PublicShareController {
 			$pageInfo = $this->service->trash($collectiveId, $id, $owner);
 			$this->decoratePageInfo($collectiveId, 0, $owner, $pageInfo);
 			return [
-				"data" => $pageInfo
+				'data' => $pageInfo
 			];
 		}, $this->logger);
 	}
@@ -289,7 +289,7 @@ class PublicPageController extends PublicShareController {
 			}
 			$attachments = $this->attachmentService->getAttachments($collectiveId, $id, $owner);
 			return [
-				"data" => $attachments
+				'data' => $attachments
 			];
 		}, $this->logger);
 	}
@@ -305,7 +305,7 @@ class PublicPageController extends PublicShareController {
 			}
 			$backlinks = $this->service->getBacklinks($collectiveId, $id, $owner);
 			return [
-				"data" => $backlinks
+				'data' => $backlinks
 			];
 		}, $this->logger);
 	}

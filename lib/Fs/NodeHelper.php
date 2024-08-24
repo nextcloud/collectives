@@ -51,7 +51,7 @@ class NodeHelper {
 		// Append ' (#)' if filename conflict ('#' starting at 2 and incremented if necessary)
 		$match = preg_match('/\((?P<id>\d+)\)$/u', $filename, $matches);
 		if ($match) {
-			$newId = ((int) $matches['id']) + 1;
+			$newId = ((int)$matches['id']) + 1;
 			$newFilename = preg_replace(
 				'/(.*)\s\((\d+)\)$/u',
 				'$1 (' . $newId . ')',
@@ -107,7 +107,7 @@ class NodeHelper {
 	public static function getContent(File $file): string {
 		try {
 			$content = $file->getContent();
-		} catch (FilesNotPermittedException | LockedException $e) {
+		} catch (FilesNotPermittedException|LockedException $e) {
 			throw new NotPermittedException('Failed to read file content for ' . $file->getPath(), 0, $e);
 		}
 
@@ -116,7 +116,7 @@ class NodeHelper {
 			if ($file->getSize() === 0) {
 				$content = '';
 			}
-		} catch (InvalidPathException | FilesNotFoundException $e) {
+		} catch (InvalidPathException|FilesNotFoundException $e) {
 			throw new NotFoundException('Failed to read file content for ' . $file->getPath(), 0, $e);
 		}
 

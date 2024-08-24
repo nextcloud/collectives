@@ -74,9 +74,9 @@ class FileIndexer extends TNTIndexer {
 			throw new FileSearchException('Indexing could not be performed because index is not selected.');
 		}
 
-		$this->getIndex()->exec("CREATE TABLE IF NOT EXISTS filemap (
+		$this->getIndex()->exec('CREATE TABLE IF NOT EXISTS filemap (
                     id INTEGER PRIMARY KEY,
-                    path TEXT)");
+                    path TEXT)');
 		$this->getIndex()->beginTransaction();
 
 		$processedPages = 0;

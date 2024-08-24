@@ -48,7 +48,7 @@ class CollectiveMapper extends QBMapper {
 			}
 			// Return member collectives with at least level `level`
 			return ($this->circleHelper->hasLevel($collective->getCircleId(), $userId, $level)) ? $collective : null;
-		} catch (DoesNotExistException | MultipleObjectsReturnedException) {
+		} catch (DoesNotExistException|MultipleObjectsReturnedException) {
 			return null;
 		} catch (Exception $e) {
 			throw new NotFoundException('Failed to run database query.', 0, $e);
@@ -70,7 +70,7 @@ class CollectiveMapper extends QBMapper {
 			->where($where);
 		try {
 			return $this->findEntity($qb);
-		} catch (DoesNotExistException | MultipleObjectsReturnedException) {
+		} catch (DoesNotExistException|MultipleObjectsReturnedException) {
 			return null;
 		} catch (Exception $e) {
 			throw new NotFoundException('Failed to run database query.', 0, $e);

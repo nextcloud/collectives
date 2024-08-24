@@ -49,7 +49,7 @@ class CircleHelper {
 			return $this->circlesManager->getFederatedUser($userId, Member::TYPE_USER);
 		} catch (CircleNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
-		} catch (FederatedItemException |
+		} catch (FederatedItemException|
 				 RequestBuilderException $e) {
 				 	throw new NotPermittedException($e->getMessage(), 0, $e);
 				 }
@@ -91,7 +91,7 @@ class CircleHelper {
 			$probe = new CircleProbe();
 			$probe->mustBeMember();
 			$circles = $this->circlesManager->getCircles($probe, true);
-		} catch (RequestBuilderException |
+		} catch (RequestBuilderException|
 				 FederatedItemException $e) {
 				 	throw new NotPermittedException($e->getMessage(), 0, $e);
 				 }
@@ -115,7 +115,7 @@ class CircleHelper {
 			$circle = $this->circlesManager->getCircle($circleId);
 		} catch (CircleNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
-		} catch (RequestBuilderException |
+		} catch (RequestBuilderException|
 				 FederatedItemException $e) {
 				 	throw new NotPermittedException($e->getMessage(), 0, $e);
 				 }
@@ -150,7 +150,7 @@ class CircleHelper {
 		$this->circlesManager->startSuperSession();
 		try {
 			$circles = $this->circlesManager->getCircles();
-		} catch (InitiatorNotFoundException | RequestBuilderException $e) {
+		} catch (InitiatorNotFoundException|RequestBuilderException $e) {
 			throw new NotPermittedException($e->getMessage(), 0, $e);
 		}
 		$this->circlesManager->stopSession();
@@ -180,8 +180,8 @@ class CircleHelper {
 			$circle = $this->circlesManager->createCircle($name, null, false, false);
 		} catch (CircleNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
-		} catch (RequestBuilderException |
-				 FederatedItemException |
+		} catch (RequestBuilderException|
+				 FederatedItemException|
 				 InvalidItemException $e) {
 				 	throw new NotPermittedException($e->getMessage(), 0, $e);
 				 }
@@ -198,7 +198,7 @@ class CircleHelper {
 		$this->circlesManager->startSuperSession();
 		try {
 			$this->circlesManager->flagAsAppManaged($circleId);
-		} catch (RequestBuilderException |
+		} catch (RequestBuilderException|
 		FederatedItemException $e) {
 			throw new NotPermittedException($e->getMessage(), 0, $e);
 		}
@@ -212,7 +212,7 @@ class CircleHelper {
 		$this->circlesManager->startSuperSession();
 		try {
 			$this->circlesManager->flagAsAppManaged($circleId, false);
-		} catch (RequestBuilderException |
+		} catch (RequestBuilderException|
 				 FederatedItemException $e) {
 				 	throw new NotPermittedException($e->getMessage(), 0, $e);
 				 }
@@ -234,7 +234,7 @@ class CircleHelper {
 			$this->circlesManager->destroyCircle($circleId);
 		} catch (CircleNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
-		} catch (RequestBuilderException |
+		} catch (RequestBuilderException|
 			FederatedItemException $e) {
 				throw new NotPermittedException($e->getMessage(), 0, $e);
 			}
@@ -257,7 +257,7 @@ class CircleHelper {
 			$member = $circle->getInitiator();
 		} catch (CircleNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
-		} catch (RequestBuilderException |
+		} catch (RequestBuilderException|
 			FederatedItemException $e) {
 				throw new NotPermittedException($e->getMessage(), 0, $e);
 			}

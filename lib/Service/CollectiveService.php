@@ -217,7 +217,7 @@ class CollectiveService extends CollectiveServiceBase {
 		// Create folder for collective and optionally copy default landing page
 		try {
 			$collectiveFolder = $this->collectiveFolderManager->initializeFolder($collective->getId(), $userLang);
-		} catch (InvalidPathException | FilesNotPermittedException $e) {
+		} catch (InvalidPathException|FilesNotPermittedException $e) {
 			throw new NotPermittedException($e->getMessage(), 0, $e);
 		}
 
@@ -232,7 +232,7 @@ class CollectiveService extends CollectiveServiceBase {
 			$page->setFileId($file->getId());
 			$page->setLastUserId($userId);
 			$this->pageMapper->updateOrInsert($page);
-		} catch (FilesNotFoundException | InvalidPathException $e) {
+		} catch (FilesNotFoundException|InvalidPathException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
 
@@ -339,7 +339,7 @@ class CollectiveService extends CollectiveServiceBase {
 		try {
 			$collectiveFolder = $this->collectiveFolderManager->getFolder($collective->getId());
 			$collectiveFolder->delete();
-		} catch (InvalidPathException | FilesNotFoundException | FilesNotPermittedException $e) {
+		} catch (InvalidPathException|FilesNotFoundException|FilesNotPermittedException $e) {
 			throw new NotFoundException('Failed to delete collective folder', 0, $e);
 		} finally {
 			// Delete leftovers in any case (also if collective folder is already gone)

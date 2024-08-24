@@ -51,7 +51,7 @@ class CollectiveController extends Controller {
 	#[NoAdminRequired]
 	public function index(): DataResponse {
 		return $this->prepareResponse(fn (): array => [
-			"data" => $this->service->getCollectivesWithShares($this->getUserId()),
+			'data' => $this->service->getCollectivesWithShares($this->getUserId()),
 		]);
 	}
 
@@ -66,8 +66,8 @@ class CollectiveController extends Controller {
 				$emoji,
 			);
 			return [
-				"data" => $collective,
-				"message" => $info,
+				'data' => $collective,
+				'message' => $info,
 			];
 		});
 	}
@@ -81,7 +81,7 @@ class CollectiveController extends Controller {
 				$emoji
 			);
 			return [
-				"data" => $collective,
+				'data' => $collective,
 			];
 		});
 	}
@@ -96,7 +96,7 @@ class CollectiveController extends Controller {
 				Collective::editPermissions
 			);
 			return [
-				"data" => $collective,
+				'data' => $collective,
 			];
 		});
 	}
@@ -111,7 +111,7 @@ class CollectiveController extends Controller {
 				Constants::PERMISSION_SHARE
 			);
 			return [
-				"data" => $collective,
+				'data' => $collective,
 			];
 		});
 	}
@@ -125,7 +125,7 @@ class CollectiveController extends Controller {
 				$mode,
 			);
 			return [
-				"data" => $collective,
+				'data' => $collective,
 			];
 		});
 	}
@@ -135,7 +135,7 @@ class CollectiveController extends Controller {
 		return $this->prepareResponse(function () use ($id): array {
 			$collective = $this->service->trashCollective($id, $this->getUserId());
 			return [
-				"data" => $collective,
+				'data' => $collective,
 			];
 		});
 	}

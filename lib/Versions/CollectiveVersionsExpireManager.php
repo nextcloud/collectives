@@ -114,7 +114,7 @@ class CollectiveVersionsExpireManager extends BasicEmitter {
 			if ($file instanceof FileInfo) {
 				try {
 					$versions = $this->versionsBackend->getVersionsForFile($dummyUser, $file);
-				} catch (FilesNotPermittedException | InvalidPathException $e) {
+				} catch (FilesNotPermittedException|InvalidPathException $e) {
 					throw new NotPermittedException($e->getMessage(), 0, $e);
 				}
 				$expireVersions = $this->expireManager->getExpiredVersion($versions, $this->timeFactory->getTime(), false);
@@ -128,7 +128,7 @@ class CollectiveVersionsExpireManager extends BasicEmitter {
 				$this->emit(self::class, 'deleteFile', [$fileId]);
 				try {
 					$this->versionsBackend->deleteAllVersionsForFile($folder['id'], $fileId);
-				} catch (FilesNotPermittedException | InvalidPathException $e) {
+				} catch (FilesNotPermittedException|InvalidPathException $e) {
 					throw new NotPermittedException($e->getMessage(), 0, $e);
 				} catch (FilesNotFoundException $e) {
 					throw new NotFoundException($e->getMessage(), 0, $e);

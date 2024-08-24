@@ -46,7 +46,7 @@ class CollectiveStorage extends Wrapper {
 
 	/**
 	 * @param string $path
-	 * @param null   $storage
+	 * @param null $storage
 	 */
 	public function getCache($path = '', $storage = null): RootEntryCache {
 		if ($this->cache) {
@@ -62,7 +62,7 @@ class CollectiveStorage extends Wrapper {
 
 	/**
 	 * @param string $path
-	 * @param null   $storage
+	 * @param null $storage
 	 */
 	public function getScanner($path = '', $storage = null): Scanner {
 		if (!$storage) {

@@ -34,7 +34,7 @@ class AttachmentService {
 				'internalPath' => $file->getInternalPath(),
 				'hasPreview' => $this->preview->isAvailable($file),
 			];
-		} catch (FilesNotFoundException | InvalidPathException $e) {
+		} catch (FilesNotFoundException|InvalidPathException $e) {
 			throw new NotFoundException($e->getMessage());
 		}
 	}
@@ -52,7 +52,7 @@ class AttachmentService {
 					return $attachmentFolder;
 				}
 			}
-		} catch (FilesNotFoundException | InvalidPathException) {
+		} catch (FilesNotFoundException|InvalidPathException) {
 			throw new NotFoundException('Failed to get attachment directory for page ' . $pageFile->getId() . '.');
 		}
 		throw new NotFoundException('Failed to get attachment directory for page ' . $pageFile->getId() . '.');

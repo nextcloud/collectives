@@ -41,7 +41,7 @@ class MountProvider implements IMountProvider {
 
 		try {
 			$collectives = $this->collectiveHelper->getCollectivesForUser($user->getUID(), true, false);
-		} catch (QueryException | MissingDependencyException | NotFoundException | NotPermittedException $e) {
+		} catch (QueryException|MissingDependencyException|NotFoundException|NotPermittedException $e) {
 			$this->log($e);
 			return $folders;
 		}
@@ -65,7 +65,7 @@ class MountProvider implements IMountProvider {
 			$mountPointName = $c->getName();
 			try {
 				$cacheEntry = $this->collectiveFolderManager->getFolderFileCache($c->getId(), $mountPointName);
-			} catch (FilesNotFoundException | Exception $e) {
+			} catch (FilesNotFoundException|Exception $e) {
 				$this->log($e);
 				// maybe some other caches can be found.
 				continue;
@@ -98,7 +98,7 @@ class MountProvider implements IMountProvider {
 				$loader,
 				$user
 			), $folders);
-		} catch (FilesNotFoundException | \Exception $e) {
+		} catch (FilesNotFoundException|\Exception $e) {
 			$this->log($e);
 			return [];
 		}

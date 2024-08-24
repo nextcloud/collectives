@@ -122,7 +122,7 @@ class CollectiveShareMapper extends QBMapper {
 		try {
 			$share = $this->findOneByToken($token);
 			return $this->delete($share);
-		} catch (MultipleObjectsReturnedException | DoesNotExistException) {
+		} catch (MultipleObjectsReturnedException|DoesNotExistException) {
 		}
 
 		return null;

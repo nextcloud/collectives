@@ -59,7 +59,7 @@ class PublicStartController extends AuthPublicShareController {
 	public function isValidToken(): bool {
 		try {
 			$this->collectiveShareMapper->findOneByToken($this->getToken());
-		} catch (DoesNotExistException | MultipleObjectsReturnedException) {
+		} catch (DoesNotExistException|MultipleObjectsReturnedException) {
 			return false;
 		}
 

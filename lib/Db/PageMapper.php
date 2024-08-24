@@ -75,7 +75,7 @@ class PageMapper extends QBMapper {
 			->where($where);
 		try {
 			return $this->findEntity($qb);
-		} catch (DoesNotExistException | MultipleObjectsReturnedException) {
+		} catch (DoesNotExistException|MultipleObjectsReturnedException) {
 			return null;
 		}
 	}
