@@ -61,7 +61,7 @@ class IndexCollectives extends TimedJob {
 		}
 
 		try {
-			$folder = $this->collectiveFolderManager->getRootFolder()->get((string) $collective->getId());
+			$folder = $this->collectiveFolderManager->getRootFolder()->get((string)$collective->getId());
 			return $folder->getMTime() > $index->getMTime();
 		} catch (NotFoundException|InvalidPathException) {
 			return false;

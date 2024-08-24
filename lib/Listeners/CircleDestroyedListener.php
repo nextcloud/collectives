@@ -47,7 +47,7 @@ class CircleDestroyedListener implements IEventListener {
 		try {
 			$collectiveFolder = $this->collectiveFolderManager->getFolder($collective->getId());
 			$collectiveFolder->delete();
-		} catch (InvalidPathException | FilesNotFoundException) {
+		} catch (InvalidPathException|FilesNotFoundException) {
 		}
 
 		$this->collectiveMapper->delete($collective);

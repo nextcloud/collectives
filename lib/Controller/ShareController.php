@@ -49,7 +49,7 @@ class ShareController extends Controller {
 			$collective = $this->collectiveService->getCollective($collectiveId, $userId);
 			$shares = $this->shareService->getSharesByCollectiveAndUser($userId, $collective->getId());
 			return [
-				"data" => $shares
+				'data' => $shares
 			];
 		});
 	}
@@ -80,7 +80,7 @@ class ShareController extends Controller {
 			}
 			$share = $this->shareService->createShare($userId, $collective, $pageInfo, $password);
 			return [
-				"data" => $share
+				'data' => $share
 			];
 		});
 	}
@@ -96,7 +96,7 @@ class ShareController extends Controller {
 			}
 			$share = $this->shareService->updateShare($userId, $collective, $pageInfo, $token, $editable, $password);
 			return [
-				"data" => $share
+				'data' => $share
 			];
 		});
 	}

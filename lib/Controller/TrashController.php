@@ -37,7 +37,7 @@ class TrashController extends Controller {
 		return $this->handleErrorResponse(function (): array {
 			$collectives = $this->service->getCollectivesTrash($this->getUserId());
 			return [
-				"data" => $collectives,
+				'data' => $collectives,
 			];
 		}, $this->logger);
 	}
@@ -47,7 +47,7 @@ class TrashController extends Controller {
 		return $this->handleErrorResponse(function () use ($circle, $id): array {
 			$collective = $this->service->deleteCollective($id, $this->getUserId(), $circle);
 			return [
-				"data" => $collective,
+				'data' => $collective,
 			];
 		}, $this->logger);
 	}
@@ -57,7 +57,7 @@ class TrashController extends Controller {
 		return $this->handleErrorResponse(function () use ($id): array {
 			$collective = $this->service->restoreCollective($id, $this->getUserId());
 			return [
-				"data" => $collective,
+				'data' => $collective,
 			];
 		}, $this->logger);
 	}

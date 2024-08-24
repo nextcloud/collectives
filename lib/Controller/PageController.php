@@ -44,7 +44,7 @@ class PageController extends Controller {
 			$userId = $this->getUserId();
 			$pageInfos = $this->service->findAll($collectiveId, $userId);
 			return [
-				"data" => $pageInfos
+				'data' => $pageInfos
 			];
 		}, $this->logger);
 	}
@@ -55,7 +55,7 @@ class PageController extends Controller {
 			$userId = $this->getUserId();
 			$pageInfo = $this->service->find($collectiveId, $id, $userId);
 			return [
-				"data" => $pageInfo
+				'data' => $pageInfo
 			];
 		}, $this->logger);
 	}
@@ -66,7 +66,7 @@ class PageController extends Controller {
 			$userId = $this->getUserId();
 			$pageInfo = $this->service->create($collectiveId, $parentId, $title, $userId);
 			return [
-				"data" => $pageInfo
+				'data' => $pageInfo
 			];
 		}, $this->logger);
 	}
@@ -77,7 +77,7 @@ class PageController extends Controller {
 			$userId = $this->getUserId();
 			$pageInfo = $this->service->touch($collectiveId, $id, $userId);
 			return [
-				"data" => $pageInfo
+				'data' => $pageInfo
 			];
 		}, $this->logger);
 	}
@@ -94,7 +94,7 @@ class PageController extends Controller {
 				$pages[] = $this->service->find($collectiveId, $value['id'], $userId);
 			}
 			return [
-				"data" => $pages
+				'data' => $pages
 			];
 		}, $this->logger);
 	}
@@ -107,7 +107,7 @@ class PageController extends Controller {
 				? $this->service->copy($collectiveId, $id, $parentId, $title, $index, $userId)
 				: $this->service->move($collectiveId, $id, $parentId, $title, $index, $userId);
 			return [
-				"data" => $pageInfo
+				'data' => $pageInfo
 			];
 		}, $this->logger);
 	}
@@ -132,7 +132,7 @@ class PageController extends Controller {
 			$userId = $this->getUserId();
 			$pageInfo = $this->service->setEmoji($collectiveId, $id, $emoji, $userId);
 			return [
-				"data" => $pageInfo
+				'data' => $pageInfo
 			];
 		}, $this->logger);
 	}
@@ -143,7 +143,7 @@ class PageController extends Controller {
 			$userId = $this->getUserId();
 			$pageInfo = $this->service->setFullWidth($collectiveId, $id, $userId, $fullWidth);
 			return [
-				"data" => $pageInfo,
+				'data' => $pageInfo,
 			];
 		}, $this->logger);
 	}
@@ -154,7 +154,7 @@ class PageController extends Controller {
 			$userId = $this->getUserId();
 			$pageInfo = $this->service->setSubpageOrder($collectiveId, $id, $subpageOrder, $userId);
 			return [
-				"data" => $pageInfo
+				'data' => $pageInfo
 			];
 		}, $this->logger);
 	}
@@ -165,7 +165,7 @@ class PageController extends Controller {
 			$userId = $this->getUserId();
 			$pageInfo = $this->service->trash($collectiveId, $id, $userId);
 			return [
-				"data" => $pageInfo
+				'data' => $pageInfo
 			];
 		}, $this->logger);
 	}
@@ -176,7 +176,7 @@ class PageController extends Controller {
 			$userId = $this->getUserId();
 			$attachments = $this->attachmentService->getAttachments($collectiveId, $id, $userId);
 			return [
-				"data" => $attachments
+				'data' => $attachments
 			];
 		}, $this->logger);
 	}
@@ -187,7 +187,7 @@ class PageController extends Controller {
 			$userId = $this->getUserId();
 			$backlinks = $this->service->getBacklinks($collectiveId, $id, $userId);
 			return [
-				"data" => $backlinks
+				'data' => $backlinks
 			];
 		}, $this->logger);
 	}

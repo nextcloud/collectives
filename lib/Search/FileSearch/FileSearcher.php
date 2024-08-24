@@ -61,7 +61,7 @@ class FileSearcher extends TNTSearch {
 
 	/**
 	 * @param string $phrase
-	 * @param int    $numOfResults
+	 * @param int $numOfResults
 	 */
 	public function search($phrase, $numOfResults = 1000): array {
 		$this->setStemmer();

@@ -181,7 +181,7 @@ class PageService {
 			}
 
 			return $this->getIndexPageFile($parent)->getId();
-		} catch (InvalidPathException | FilesNotFoundException $e) {
+		} catch (InvalidPathException|FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
 	}
@@ -192,7 +192,7 @@ class PageService {
 	private function getPageByFile(File $file, ?Node $parent = null): PageInfo {
 		try {
 			$page = $this->pageMapper->findByFileId($file->getId());
-		} catch (InvalidPathException | FilesNotFoundException $e) {
+		} catch (InvalidPathException|FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
 		$lastUserId = ($page !== null) ? $page->getLastUserId() : null;
@@ -208,7 +208,7 @@ class PageService {
 				$emoji,
 				$subpageOrder,
 				$fullWidth);
-		} catch (FilesNotFoundException | InvalidPathException $e) {
+		} catch (FilesNotFoundException|InvalidPathException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
 
@@ -221,7 +221,7 @@ class PageService {
 	private function getTrashPageByFile(File $file, string $filename, string $timestamp): PageInfo {
 		try {
 			$page = $this->pageMapper->findByFileId($file->getId(), true);
-		} catch (InvalidPathException | FilesNotFoundException $e) {
+		} catch (InvalidPathException|FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
 		$lastUserId = ($page !== null) ? $page->getLastUserId() : null;
@@ -240,7 +240,7 @@ class PageService {
 			$pageInfo->setTrashTimestamp($trashTimestamp);
 			$pageInfo->setFilePath('');
 			$pageInfo->setTitle(basename($filename, PageInfo::SUFFIX));
-		} catch (FilesNotFoundException | InvalidPathException $e) {
+		} catch (FilesNotFoundException|InvalidPathException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
 
@@ -324,7 +324,7 @@ class PageService {
 				$userId,
 				$this->userManager->getDisplayName($userId));
 			$this->updatePage($collectiveId, $newFile->getId(), $userId);
-		} catch (FilesNotFoundException | InvalidPathException $e) {
+		} catch (FilesNotFoundException|InvalidPathException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
 
@@ -344,7 +344,7 @@ class PageService {
 			$folderName = NodeHelper::generateFilename($folder, basename($file->getName(), PageInfo::SUFFIX));
 			$subFolder = $folder->newFolder($folderName);
 			$file->move($subFolder->getPath() . '/' . PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX);
-		} catch (InvalidPathException | FilesNotFoundException | FilesNotPermittedException | LockedException $e) {
+		} catch (InvalidPathException|FilesNotFoundException|FilesNotPermittedException|LockedException $e) {
 			throw new NotPermittedException($e->getMessage(), 0, $e);
 		}
 		return $subFolder;
@@ -578,7 +578,7 @@ class PageService {
 	public function findByFile(int $collectiveId, File $file, string $userId): PageInfo {
 		try {
 			return $this->find($collectiveId, $file->getId(), $userId);
-		} catch (InvalidPathException | FilesNotFoundException $e) {
+		} catch (InvalidPathException|FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
 	}
@@ -668,7 +668,7 @@ class PageService {
 			if ($parentId === $file->getId()) {
 				throw new NotPermittedException('Not allowed to move or copy a page to itself');
 			}
-		} catch (InvalidPathException | FilesNotFoundException $e) {
+		} catch (InvalidPathException|FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
 
@@ -706,7 +706,7 @@ class PageService {
 			} else {
 				$newNode = $node->move($newFolder->getPath() . '/' . $newFileName . $suffix);
 			}
-		} catch (InvalidPathException | FilesNotFoundException | LockedException $e) {
+		} catch (InvalidPathException|FilesNotFoundException|LockedException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		} catch (FilesNotPermittedException $e) {
 			throw new NotPermittedException($e->getMessage(), 0, $e);
@@ -740,7 +740,7 @@ class PageService {
 		}
 		try {
 			$this->updatePage($collectiveId, $file->getId(), $userId, $page->getEmoji());
-		} catch (InvalidPathException | FilesNotFoundException $e) {
+		} catch (InvalidPathException|FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
 
@@ -768,7 +768,7 @@ class PageService {
 
 		try {
 			$this->updatePage($collectiveId, $file->getId(), $userId);
-		} catch (InvalidPathException | FilesNotFoundException $e) {
+		} catch (InvalidPathException|FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
 
@@ -801,7 +801,7 @@ class PageService {
 		}
 		try {
 			$this->updatePage($newCollectiveId, $file->getId(), $userId, $page->getEmoji());
-		} catch (InvalidPathException | FilesNotFoundException $e) {
+		} catch (InvalidPathException|FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
 
@@ -828,7 +828,7 @@ class PageService {
 		}
 		try {
 			$this->updatePage($newCollectiveId, $file->getId(), $userId);
-		} catch (InvalidPathException | FilesNotFoundException $e) {
+		} catch (InvalidPathException|FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
 
@@ -936,7 +936,7 @@ class PageService {
 				// Delete file if it's not an index page
 				$file->delete();
 			}
-		} catch (InvalidPathException | FilesNotFoundException $e) {
+		} catch (InvalidPathException|FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		} catch (FilesNotPermittedException $e) {
 			throw new NotPermittedException($e->getMessage(), 0, $e);

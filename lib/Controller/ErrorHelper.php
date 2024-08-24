@@ -32,7 +32,7 @@ trait ErrorHelper {
 		} catch (NotFoundException $e) {
 			$logger?->debug('Collectives App NotFound Error: ' . $e->getMessage(), ['exception' => $e]);
 			return new DataResponse($e->getMessage(), Http::STATUS_NOT_FOUND);
-		} catch (CircleExistsException | QueryException | UnprocessableEntityException $e) {
+		} catch (CircleExistsException|QueryException|UnprocessableEntityException $e) {
 			$logger?->debug('Collectives App CircleExists Error: ' . $e->getMessage(), ['exception' => $e]);
 			return new DataResponse($e->getMessage(), Http::STATUS_UNPROCESSABLE_ENTITY);
 		} catch (InvalidArgumentException $e) {

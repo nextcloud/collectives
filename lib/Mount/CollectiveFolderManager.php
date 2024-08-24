@@ -92,7 +92,7 @@ class CollectiveFolderManager {
 		if (!$cacheEntry) {
 			try {
 				$folder = $this->getOrCreateFolder($id);
-			} catch (InvalidPathException | NotPermittedException) {
+			} catch (InvalidPathException|NotPermittedException) {
 				return null;
 			}
 			$cacheEntry = $this->getRootFolder()->getStorage()->getCache()->get($folder->getId());

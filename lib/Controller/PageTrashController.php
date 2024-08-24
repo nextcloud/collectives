@@ -41,7 +41,7 @@ class PageTrashController extends Controller {
 			$userId = $this->getUserId();
 			$pageInfos = $this->service->findAllTrash($collectiveId, $userId);
 			return [
-				"data" => $pageInfos
+				'data' => $pageInfos
 			];
 		}, $this->logger);
 	}
@@ -52,7 +52,7 @@ class PageTrashController extends Controller {
 			$userId = $this->getUserId();
 			$pageInfo = $this->service->restore($collectiveId, $id, $userId);
 			return [
-				"data" => $pageInfo
+				'data' => $pageInfo
 			];
 		}, $this->logger);
 	}

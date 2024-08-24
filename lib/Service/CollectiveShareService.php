@@ -73,7 +73,7 @@ class CollectiveShareService {
 
 		try {
 			$share->getNode()->lock(ILockingProvider::LOCK_SHARED);
-		} catch (FilesNotFoundException | LockedException $e) {
+		} catch (FilesNotFoundException|LockedException $e) {
 			throw new NotFoundException('Could not create share', 0, $e);
 		}
 
@@ -106,7 +106,7 @@ class CollectiveShareService {
 	public function findShare(string $userId, int $collectiveId, int $pageId): ?CollectiveShare {
 		try {
 			$collectiveShare = $this->collectiveShareMapper->findOneByCollectiveIdAndUser($collectiveId, $pageId, $userId);
-		} catch (DoesNotExistException | MultipleObjectsReturnedException | Exception) {
+		} catch (DoesNotExistException|MultipleObjectsReturnedException|Exception) {
 			return null;
 		}
 
@@ -128,7 +128,7 @@ class CollectiveShareService {
 	public function findShareByToken(string $token, bool $getPermissionInfo = true): ?CollectiveShare {
 		try {
 			$collectiveShare = $this->collectiveShareMapper->findOneByToken($token);
-		} catch (DoesNotExistException | MultipleObjectsReturnedException | Exception) {
+		} catch (DoesNotExistException|MultipleObjectsReturnedException|Exception) {
 			return null;
 		}
 
@@ -274,7 +274,7 @@ class CollectiveShareService {
 		try {
 			$collectiveShare = $this->collectiveShareMapper->findOneByCollectiveIdAndTokenAndUser($collectiveId, $pageId, $token, $userId);
 			$this->collectiveShareMapper->delete($collectiveShare);
-		} catch (DoesNotExistException | MultipleObjectsReturnedException $e) {
+		} catch (DoesNotExistException|MultipleObjectsReturnedException $e) {
 			throw new NotFoundException('Failed to find collective share ' . $token, 0, $e);
 		} catch (Exception $e) {
 			throw new NotPermittedException('Failed to delete collective share ' . $token, 0, $e);

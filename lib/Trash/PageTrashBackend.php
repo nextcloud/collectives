@@ -228,7 +228,7 @@ class PageTrashBackend implements ITrashBackend {
 	 * @throws NotPermittedException
 	 */
 	private function findAttachmentFolderItem(IUser $user, int $collectiveId, CollectivePageTrashItem $item): ?TrashItem {
-		$attachmentsPrefix = ".attachments.";
+		$attachmentsPrefix = '.attachments.';
 		if (str_starts_with($item->getName(), $attachmentsPrefix)) {
 			// Passed item is already an attachment folder
 			return null;
@@ -245,7 +245,7 @@ class PageTrashBackend implements ITrashBackend {
 					return $attachmentsItem;
 				}
 				break;
-			} catch (NotFoundException | InvalidPathException) {
+			} catch (NotFoundException|InvalidPathException) {
 			}
 		}
 
@@ -556,7 +556,7 @@ class PageTrashBackend implements ITrashBackend {
 
 					$node = $nodes[$nodeName];
 					if ($node->getStorage()->unlink($node->getInternalPath()) === false) {
-						$this->logger->error("Failed to remove item from trashbin: " . $node->getPath());
+						$this->logger->error('Failed to remove item from trashbin: ' . $node->getPath());
 						continue;
 					}
 					// only count up after checking if removal is possible
