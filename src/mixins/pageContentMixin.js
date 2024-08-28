@@ -22,13 +22,16 @@ export default {
 		 * @param {string} davUrl URL to fetch page via DAV
 		 */
 		async fetchPageContent(davUrl) {
+			// Add `timestamp` as cache buster param
+			const axiosConfig = {
+				params: {
+					timestamp: Math.floor(Date.now() / 1000),
+				},
+			}
 			// Authenticate via share token for public shares
-			let axiosConfig = {}
 			if (this.isPublic) {
-				axiosConfig = {
-					auth: {
-						username: this.shareTokenParam,
-					},
+				axiosConfig.auth = {
+					username: this.shareTokenParam,
 				}
 			}
 
