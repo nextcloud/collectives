@@ -11,6 +11,7 @@ namespace OCA\Collectives\Search\FileSearch;
 
 use OCP\Files\File;
 use OCP\Files\Folder;
+use OCP\Files\GenericFileException;
 use OCP\Files\InvalidPathException;
 use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
@@ -84,11 +85,16 @@ class FileIndexer extends TNTIndexer {
 			try {
 				$id = $page->getId();
 				$internalPath = $page->getInternalPath();
-				$fileCollection = new Collection([
-					'id' => $id,
-					'name' => $page->getName(),
-					'content' => $page->getContent()
-				]);
+				try {
+					$fileCollection = new Collection([
+						'id' => $id,
+						'name' => $page->getName(),
+						'content' => $page->getContent()
+					]);
+				} catch (GenericFileException) {
+					// Ignore files that went missing
+					continue;
+				}
 				$this->processDocument($fileCollection);
 
 				$statement = $this->getIndex()->prepare("INSERT INTO filemap ( 'id', 'path') values ( :id, :path)");
