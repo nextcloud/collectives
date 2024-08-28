@@ -151,6 +151,9 @@ export default {
 					readOnly: false,
 					shareToken: this.shareTokenParam || null,
 					autofocus: false,
+					onCreate: ({ markdown }) => {
+						this.updateEditorContentDebounced(markdown)
+					},
 					onLoaded: () => {
 						this.done('editor')
 					},
