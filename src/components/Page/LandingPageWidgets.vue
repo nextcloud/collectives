@@ -7,7 +7,7 @@
 	<div class="landing-page-widgets">
 		<div class="first-row-widgets">
 			<MembersWidget v-if="!isPublic" />
-			<NcButton v-if="hasContactsApp" :href="teamUrl">
+			<NcButton v-if="hasContactsApp" :href="teamUrl" target="_blank">
 				<template #icon>
 					<TeamsIcon :size="20" />
 				</template>
