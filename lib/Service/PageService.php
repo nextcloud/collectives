@@ -1028,8 +1028,8 @@ class PageService {
 	}
 
 	public function matchBacklinks(PageInfo $pageInfo, string $content): bool {
-		$prefix = '/(\[[^\]]+\]\(|\<)';
-		$suffix = '[\)\>]/';
+		$prefix = '/(\[[^]]+]\(|<)';
+		$suffix = '(( \([^)]+\))?\)|>)/';
 
 		$protocol = 'https?:\/\/';
 		$trustedDomainArray = array_map(static fn (string $domain) => str_replace('\*', '\w*', preg_quote($domain, '/')), (array)$this->config->getSystemValue('trusted_domains', []));
