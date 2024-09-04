@@ -194,7 +194,7 @@ export const useCollectivesStore = defineStore('collectives', {
 		},
 
 		patchCollectiveWithCircle(circle) {
-			this.collectives.find(c => c.id === circle.id).name = circle.sanitizedName
+			this.collectives.find(c => c.circleId === circle.id).name = circle.sanitizedName
 		},
 
 		/**
