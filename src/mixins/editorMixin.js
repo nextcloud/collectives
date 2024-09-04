@@ -80,14 +80,14 @@ export default {
 			this.reader?.setShowOutline(value)
 		},
 		'searchQuery'(value) {
-			this.editor?.setSearchQuery(value)
-			this.reader?.setSearchQuery(value)
+			// TODO: remove check once we only support Nextcloud 30+
+			this.editor?.setSearchQuery && this.editor.setSearchQuery(value)
+			this.reader?.setSearchQuery && this.reader.setSearchQuery(value)
 		},
-		'matchAll'(newValue, oldValue) {
-			if (newValue !== oldValue) {
-				this.editor?.setSearchQuery(this.searchQuery, newValue)
-				this.reader?.setSearchQuery(this.searchQuery, newValue)
-			}
+		'matchAll'(value) {
+			// TODO: remove check once we only support Nextcloud 30+
+			this.editor?.setSearchQuery && this.editor.setSearchQuery(this.searchQuery, value)
+			this.reader?.setSearchQuery && this.reader.setSearchQuery(this.searchQuery, value)
 		},
 	},
 
@@ -125,6 +125,8 @@ export default {
 					this.toggleOutlineFromEditor(visible)
 				},
 				onLoaded: () => {
+					// TODO: remove check once we only support Nextcloud 30+
+					this.reader.setSearchQuery && this.reader.setSearchQuery(this.searchQuery, this.matchAll)
 					if (document.location.hash) {
 						// scroll to the corresponding header if the page was loaded with a hash
 						const element = document.querySelector(`[href="${document.location.hash}"]`)
@@ -155,6 +157,8 @@ export default {
 						this.updateEditorContentDebounced(markdown)
 					},
 					onLoaded: () => {
+						// TODO: remove check once we only support Nextcloud 30+
+						this.editor.setSearchQuery && this.editor.setSearchQuery(this.searchQuery, this.matchAll)
 						this.done('editor')
 					},
 					onUpdate: ({ markdown }) => {
