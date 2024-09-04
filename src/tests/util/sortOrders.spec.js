@@ -3,7 +3,45 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { byOrder } from '../../util/sortOrders.js'
+import { byName, byTitle, byOrder } from '../../util/sortOrders.js'
+
+global.OC = {
+	getLanguage: () => 'en',
+}
+
+test('by name', () => {
+	const unsorted = [
+		{ name: '2' },
+		{ name: 'a' },
+		{ name: '10' },
+		{ name: '1' },
+	]
+	const sorted = [
+		{ name: '1' },
+		{ name: '2' },
+		{ name: '10' },
+		{ name: 'a' },
+	]
+	expect(unsorted.sort(byName))
+		.toStrictEqual(sorted)
+})
+
+test('by title', () => {
+	const unsorted = [
+		{ title: '2' },
+		{ title: 'a' },
+		{ title: '10' },
+		{ title: '1' },
+	]
+	const sorted = [
+		{ title: '1' },
+		{ title: '2' },
+		{ title: '10' },
+		{ title: 'a' },
+	]
+	expect(unsorted.sort(byTitle))
+		.toStrictEqual(sorted)
+})
 
 test('by indices', () => {
 	const one = { index: 0 }
