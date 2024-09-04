@@ -331,6 +331,9 @@ class PageServiceTest extends TestCase {
 		self::assertFalse($this->service->matchBacklinks($pageInfo, 'content with [a link to wrong host](https://anothercloud.com' . $urlPath . ') in it.'));
 		self::assertFalse($this->service->matchBacklinks($pageInfo, 'content with [a link to wrong host](anothercloud.com' . $urlPath . ') in it.'));
 
+		// Relative link with fileId in [text](link (preview)) syntax
+		self::assertTrue($this->service->matchBacklinks($pageInfo, 'content with [a link](https://nextcloud.local' . $urlPath . ' (preview)) in it.'));
+
 		OC::$WEBROOT = 'mycloud';
 
 		// Relative link with fileId with webroot in [text](link) syntax
