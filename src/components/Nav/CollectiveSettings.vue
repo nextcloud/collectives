@@ -313,6 +313,11 @@ export default {
 				return
 			}
 
+			// Prevent duplicate requests by different events (e.g. blur + submit)
+			if (this.loading('renameCollective')) {
+				return
+			}
+
 			this.load('renameCollective')
 
 			// If currentCollective is renamed, we need to update the router path later
