@@ -9,7 +9,8 @@
 		:to="collectivePath(collective)"
 		:force-menu="true"
 		:force-display-actions="isMobile"
-		class="collectives_list_item">
+		class="collectives_list_item"
+		@click="onClick">
 		<template #icon>
 			<template v-if="collective.emoji">
 				{{ collective.emoji }}
@@ -25,7 +26,8 @@
 </template>
 
 <script>
-import { mapState } from 'pinia'
+import { mapActions, mapState } from 'pinia'
+import { useRootStore } from '../../stores/root.js'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { NcAppNavigationItem } from '@nextcloud/vue'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
@@ -54,6 +56,17 @@ export default {
 
 	computed: {
 		...mapState(useCollectivesStore, ['collectivePath']),
+	},
+
+	methods: {
+		...mapActions(useRootStore, ['show']),
+
+		onClick() {
+			if (this.isMobile) {
+				// Go straight to landingpage on mobile. Also required to reload page list.
+				this.show('details')
+			}
+		},
 	},
 }
 </script>
