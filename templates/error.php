@@ -5,28 +5,38 @@
  */
 ?>
 
-<div class="emptycontent">
-	<h2>
-		<?php print_unescaped($l->t('Error: Missing apps')); ?>
-	</h2>
-	<h3>
+<div class="emptycontent" style="
+	min-height: 20vw;
+	width: 100%;
+	max-width: 700px;
+	margin-block: 10vh auto;
+	margin-inline: auto;
+	background-color: var(--color-main-background-blur);
+	color: var(--color-main-text);
+	padding: calc(3 * var(--default-grid-baseline));
+	border-radius: var(--border-radius-container);
+	">
+	<div>
+		<h2><?php print_unescaped($l->t('Error: Missing apps')); ?></h2>
 		<?php print_unescaped($l->t('The following dependency apps are missing: ')); ?>
-	</h3>
-	<h3>
+	</div>
+	<br />
+	<ul style="font-weight: bold;">
 		<?php
 $i = 0;
 $len = count($_['appsMissing']);
 foreach ($_['appsMissing'] as $app) {
-	print_unescaped('<a href="https://apps.nextcloud.com/apps/' . $app . '">' . $app . '</a>');
+	print_unescaped('<li><a href="https://apps.nextcloud.com/apps/' . $app . '" style="text-decoration: underline;">' . $app . '</a></li>');
 	if ($i !== $len - 1) {
 		print_unescaped(', ');
 	}
 	$i++;
 }
 ?>
-	</h3>
-	<h3>
+	</ul>
+	<br />
+	<div>
 		<?php print_unescaped($l->t('Please ask the administrator to enable these apps.')); ?>
-		</p>
+	</div>
 </div>
 
