@@ -97,12 +97,11 @@
 				:level="1"
 				:filtered-view="isFilteredview"
 				:is-template="true" />
-			<div v-if="isFilteredview">
+			<div v-if="isFilteredview" ref="pageListFiltered" class="page-list-filtered">
 				<NcAppNavigationCaption v-if="filteredPages.length > 0" :name="t('Collectives','Results in title')" />
 				<RecycleScroller v-if="filteredPages.length > 0"
 					v-slot="{ item }"
-					class="scroller"
-					:class="{ fullscroller: !loadingContentFilteredPages && contentFilteredPages.length <= 0 }"
+					ref="filteredScroller"
 					:items="filteredPages"
 					:item-size="itemSize"
 					key-field="id">
@@ -116,8 +115,7 @@
 				<NcAppNavigationCaption v-if="loadingContentFilteredPages || contentFilteredPages.length > 0" :name="t('Collectives', 'Results in content')" />
 				<RecycleScroller v-if="!loadingContentFilteredPages && contentFilteredPages.length > 0"
 					v-slot="{ item }"
-					class="scroller contentFiltered"
-					:class="{ fullscroller: filteredPages.length <= 0 }"
+					ref="contentFilteredScroller"
 					:items="contentFilteredPages"
 					:item-size="itemSize"
 					key-field="id">
@@ -152,6 +150,8 @@
 <script>
 
 import { mapActions, mapState } from 'pinia'
+import { ref } from 'vue'
+import { useElementSize } from '@vueuse/core'
 import { useRootStore } from '../stores/root.js'
 import { useCollectivesStore } from '../stores/collectives.js'
 import { usePagesStore } from '../stores/pages.js'
@@ -197,6 +197,12 @@ export default {
 		SortClockAscendingOutlineIcon,
 		RecycleScroller,
 		NcAppNavigationCaption,
+	},
+
+	setup() {
+		const pageListFiltered = ref()
+		const { height: pageListFilteredHeight } = useElementSize(pageListFiltered)
+		return { pageListFiltered, pageListFilteredHeight }
 	},
 
 	data() {
@@ -271,11 +277,47 @@ export default {
 			return this.filterString !== ''
 		},
 
+		defaultClickableArea() {
+			return parseInt(window.getComputedStyle(document.body).getPropertyValue('--default-clickable-area'))
+		},
+
+		scrollerMaxHeights() {
+			const navigationCaptionHeight = this.defaultClickableArea + 4
+			const navigationCaptionMargin = this.defaultClickableArea / 2
+			const fullScrollerHeight = Math.floor(this.pageListFilteredHeight - navigationCaptionHeight)
+			const halfScrollerHeight = Math.floor((this.pageListFilteredHeight - navigationCaptionHeight * 2) / 2) - navigationCaptionMargin
+			// Split half/half during loading
+			if (this.loadingContentFilteredPages) {
+				return [halfScrollerHeight, halfScrollerHeight]
+			}
+
+			// If only one filter has items, give all height to it
+			if (!this.filteredPages.length) {
+				return [0, fullScrollerHeight]
+			}
+
+			// If only one filter has items, give all height to it
+			if (!this.contentFilteredPages.length) {
+				return [fullScrollerHeight, 0]
+			}
+
+			const filteredPagesFullHeight = this.filteredPages.length * this.itemSize
+			const contentFilteredPagesFullHeight = this.contentFilteredPages.length * this.itemSize
+			// If both filters grow above available space, split half/half
+			if (filteredPagesFullHeight > halfScrollerHeight && contentFilteredPagesFullHeight > halfScrollerHeight) {
+				return [halfScrollerHeight, halfScrollerHeight]
+			}
+
+			// If one filter doesn't need half of the space, give the rest to the other
+			return filteredPagesFullHeight < halfScrollerHeight
+				? [filteredPagesFullHeight, halfScrollerHeight * 2 - filteredPagesFullHeight]
+				: [halfScrollerHeight * 2 - contentFilteredPagesFullHeight, contentFilteredPagesFullHeight]
+		},
+
 		itemSize() {
-			const defaultClickableArea = parseInt(window.getComputedStyle(document.body).getPropertyValue('--default-clickable-area'))
-			return defaultClickableArea > 40
-				? defaultClickableArea
-				: defaultClickableArea + 4
+			return this.defaultClickableArea > 40
+				? this.defaultClickableArea
+				: this.defaultClickableArea + 4
 		},
 
 		displayTrash() {
@@ -294,6 +336,12 @@ export default {
 		filterString() {
 			this.getContentFilteredPagesDebounced()
 			this.setSearchQuery(this.filterString)
+		},
+		contentFilteredPages() {
+			this.updateScrollerHeights()
+		},
+		pageListFilteredHeight() {
+			this.updateScrollerHeights()
 		},
 	},
 
@@ -321,6 +369,19 @@ export default {
 				scrollToPage(this.currentPage.id)
 			})
 		},
+
+		updateScrollerHeights() {
+			const [filteredPagesScrollerMaxHeight, contentFilteredPagesScrollerMaxHeight] = this.scrollerMaxHeights
+			this.$nextTick(() => {
+				if (this.$refs.filteredScroller) {
+					this.$refs.filteredScroller.$el.style.maxHeight = filteredPagesScrollerMaxHeight + 'px'
+				}
+				if (this.$refs.contentFilteredScroller) {
+					this.$refs.contentFilteredScroller.$el.style.maxHeight = contentFilteredPagesScrollerMaxHeight + 'px'
+				}
+			})
+		},
+
 		async getContentFilteredPages() {
 			if (!this.filterString) {
 				this.contentFilteredPages = []
@@ -403,8 +464,9 @@ li.toggle-button.selected {
 }
 
 .page-list {
+	display: flex;
+	flex-direction: column;
 	flex-grow: 1;
-	overflow: scroll;
 	padding: 0 4px;
 }
 
@@ -414,6 +476,12 @@ li.toggle-button.selected {
 	z-index: 1;
 	background-color: var(--color-main-background);
 	margin-block-end: 8px;
+}
+
+.page-list-filtered {
+	flex-grow: 1;
+	max-height: 100%;
+	overflow: hidden;
 }
 
 .sort-order-container {
