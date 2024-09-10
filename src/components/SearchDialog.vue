@@ -153,7 +153,7 @@ $button-gap: calc(var(--default-grid-baseline) * 3);
 .search-dialog__container {
 	width: 100%;
 	display: flex;
-	position: absolute;
+	position: sticky;
 	align-items: center;
 	bottom: 0;
 	background-color: var(--color-main-background);
