@@ -226,6 +226,11 @@ export default {
 </script>
 
 <style lang="scss">
+.app-content-details {
+	// Required for search dialog to stick to the bottom
+	height: 100%;
+}
+
 /* Format page title in Page.vue and Version.vue */
 .page-title {
 	position: sticky;

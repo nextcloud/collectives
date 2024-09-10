@@ -8,11 +8,17 @@
 }
 
 .full-width-view {
+	// Required for search dialog to stick to the bottom
+	height: 100%;
+
 	--text-editor-max-width: false !important;
 	max-width: unset;
 }
 
 .sheet-view {
+	// Required for search dialog to stick to the bottom
+	height: 100%;
+
 	--text-editor-max-width: 670px !important;
 
 	.landing-page-widgets,

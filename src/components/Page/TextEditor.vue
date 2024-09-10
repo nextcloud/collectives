@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<div>
+	<div class="collectives-text-container">
 		<WidgetHeading v-if="isLandingPage"
 			:title="t('collectives', 'Landing page')"
 			class="text-container-heading" />
@@ -178,6 +178,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.collectives-text-container {
+	// Required for search dialog to stick to the bottom
+	height: 100%;
+}
+
 .text-container-heading {
 	padding-left: 14px;
 }
