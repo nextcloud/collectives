@@ -1,5 +1,26 @@
 # Changelog
 
+## 2.14.3 - 2024.09.10
+
+### 🐛Fixes
+* 📝 Page content: ensure consistent state between view and edit mode. (#1437)
+* 🔎 Full text search index: Don't choke on missing files (#1448)
+* ♻️ Fix error on renaming a collective. (#1456)
+* 🎯 Page list: sort numbers numerically. (#1447)
+* 🎯 Page list: Calculate scroller height dynamically for filtered view. (#1339)
+* 🔗 Backlinks: detect links with title in markdown syntax. (#1451)
+* 📱 Navigation: show details when switching collective on mobile. (#1233)
+* 💄 Improve design of missing app error box. (#1330)
+* 🔎 Several fixes to search highlighting. (#1461)
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 2.14.2 - 2024.08.23
 
 ### 🐛Fixes
