@@ -131,6 +131,7 @@ OC.L10N.register(
     "Link copied" : "Ссылка скопирована",
     "Could not copy link to the clipboard:" : "Не удалось скопировать ссылку в буфер обмена:",
     "Could not create the page" : "Не удалось создать страницу",
+    "New page" : "Новая страница",
     "Could not save emoji for page" : "Не удалось сохранить эмодзи для страницы",
     "Could not move page" : "Не удалось переместить страницу",
     "Could not delete the page" : "Не удалось удалить страницу",
