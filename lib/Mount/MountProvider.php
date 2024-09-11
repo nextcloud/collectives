@@ -24,6 +24,7 @@ use OCP\Files\Mount\IMountPoint;
 use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\Files\Storage\IStorageFactory;
 use OCP\IUser;
+use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
 
 class MountProvider implements IMountProvider {
@@ -33,7 +34,8 @@ class MountProvider implements IMountProvider {
 		private IMimeTypeLoader $mimeTypeLoader,
 		private IAppManager $appManager,
 		private LoggerInterface $logger,
-		private UserFolderHelper $userFolderHelper) {
+		private UserFolderHelper $userFolderHelper,
+		private IUserSession $userSession) {
 	}
 
 	public function getFoldersForUser(IUser $user): array {
@@ -70,10 +72,11 @@ class MountProvider implements IMountProvider {
 				// maybe some other caches can be found.
 				continue;
 			}
+			$isShare = $this->userSession->getUser() === null;
 			$folders[] = [
 				'folder_id' => $c->getId(),
 				'mount_point' => $mountPointPath . $mountPointName,
-				'permissions' => $c->getUserPermissions(),
+				'permissions' => $c->getUserPermissions($isShare),
 				'rootCacheEntry' => (isset($cacheEntry['fileid'])) ? Cache::cacheEntryFromData($cacheEntry, $this->mimeTypeLoader) : null
 			];
 		}
