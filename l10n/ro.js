@@ -29,6 +29,7 @@ OC.L10N.register(
     "Unshare" : "Oprește partajarea",
     "View only" : "Numai se vizualizează",
     "Can edit" : "Poate edita",
+    "Cannot copy, please copy the link manually" : "Nu s-a putut copia, vă rugăm să copiați link-ul manual",
     "Download" : "Descărcare",
     "No other versions available" : "Nu există alte versiuni disponibile",
     "Attachments" : "Atașamente ",
