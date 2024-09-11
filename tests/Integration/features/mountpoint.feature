@@ -32,9 +32,20 @@ Feature: mountpoint
     And user "jane" sees attachment "test.png" with mimetype "image/png" for "firstpage" in "BehatMountPoint"
 
   Scenario: Trash and delete page via webdav
-    And user "jane" trashes page "firstpage" via webdav in "BehatMountPoint"
+    When user "jane" trashes page "firstpage" via webdav in "BehatMountPoint"
     And user "jane" deletes page "firstpage" from trash via webdav in "BehatMountPoint"
     Then user "jane" fails to see pagePath "firstpage.md" in "BehatMountPoint"
+
+  Scenario: Editable public share of collective permissions is read-write
+    When user "jane" sets "edit" level in collective "BehatMountPoint" to "Member"
+    And user "jane" sets "share" level in collective "BehatMountPoint" to "Member"
+    And user "jane" creates public share for "BehatMountPoint"
+    And user "jane" sets editing permissions for collective share "BehatMountPoint"
+    Then public share with owner "jane" has webdav access to "BehatMountPoint" with permissions "RMGDNVCK"
+
+  Scenario: Editable public share of collective with admin-only permissions is read-only
+    When user "jane" sets "edit" level in collective "BehatMountPoint" to "Admin"
+    Then public share with owner "jane" has webdav access to "BehatMountPoint" with permissions "RMG"
 
   Scenario: Trash and delete collective and team
     Then user "jane" trashes collective "BehatMountPoint"

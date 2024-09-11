@@ -47,6 +47,7 @@ use OCP\Collaboration\Reference\RenderReferenceEvent;
 use OCP\Dashboard\IAPIWidgetV2;
 use OCP\Files\Config\IMountProviderCollection;
 use OCP\Files\IMimeTypeLoader;
+use OCP\IUserSession;
 use OCP\SetupCheck\ISetupCheck;
 use OCP\Share\Events\ShareDeletedEvent;
 use Psr\Container\ContainerInterface;
@@ -72,7 +73,8 @@ class Application extends App implements IBootstrap {
 			$c->get(IMimeTypeLoader::class),
 			$c->get(IAppManager::class),
 			$c->get(LoggerInterface::class),
-			$c->get(UserFolderHelper::class)
+			$c->get(UserFolderHelper::class),
+			$c->get(IUserSession::class)
 		));
 
 		$context->registerService(PageTrashBackend::class, function (ContainerInterface $c) {

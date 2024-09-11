@@ -24,6 +24,7 @@ class FeatureContext implements Context {
 	private ?ResponseInterface $response = null;
 	private ?array $json = null;
 	private ?string $currentUser = null;
+	private ?string $nextcloudVersion = null;
 	private array $cookieJars = [];
 	private array $requestTokens = [];
 	private array $store = [];
@@ -46,7 +47,7 @@ class FeatureContext implements Context {
 	 * You can also pass arbitrary arguments to the
 	 * context constructor through behat.yml.
 	 */
-	public function __construct(private string $baseUrl, private string $remoteUrl, private string $ocsUrl) {
+	public function __construct(private string $baseUrl, private string $ocsUrl, public string $publicUrl, private string $remoteUrl) {
 		$this->clientOptions = ['verify' => false];
 	}
 
@@ -1303,6 +1304,7 @@ class FeatureContext implements Context {
 
 		return 'Collectives';
 	}
+
 	/**
 	 * @When user :user has webdav access to :collective with permissions :permissions
 	 *
@@ -1324,6 +1326,41 @@ class FeatureContext implements Context {
 		$userCollectivesPath = $this->getUserCollectivesPath($user);
 
 		$this->sendRemoteRequest('PROPFIND', '/dav/files/' . $user . '/' . $userCollectivesPath . '/' . urlencode($collective) . '/', $body, null, $headers);
+		$this->assertStatusCode(207);
+
+		// simplexml_load_string() would be better than preg_replace
+		$folderPermissions = preg_replace('/.*<oc:permissions>(.*)<\/oc:permissions>.*/sm', '\1', $this->response->getBody()->getContents());
+
+		Assert::assertEquals($permissions, $folderPermissions);
+	}
+
+	/**
+	 * @When public share with owner :user has webdav access to :collective with permissions :permissions
+	 *
+	 * @throws GuzzleException
+	 */
+	public function hasPublicWebdavAccess(string $collective, string $user, string $permissions): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$token = $this->getShareToken($collectiveId);
+		$headers = [
+			'Content-Type' => 'Content-Type: text/xml; charset="utf-8"',
+			'Depth' => 0,
+		];
+		$dom = new DOMDocument('1.0', 'UTF-8');
+		$xPropfind = $dom->createElementNS('DAV:', 'D:propfind');
+		$xProp = $dom->createElement('D:prop');
+		$xProp->setAttribute('xmlns:oc', 'http://owncloud.org/ns');
+		$xProp->appendChild($dom->createElement('oc:permissions'));
+		$dom->appendChild($xPropfind)->appendChild($xProp);
+		$body = $dom->saveXML();
+
+		if ($this->getNextcloudVersion(true) > 27) {
+			$this->sendPublicRequest('PROPFIND', '/dav/files/' . $token . '/', $body, null, $headers);
+		} else {
+			$headers['Authorization'] = 'Basic ' . base64_encode($token . ':');
+			$this->sendPublicRequest('PROPFIND', '/webdav/', $body, null, $headers);
+		}
 		$this->assertStatusCode(207);
 
 		// simplexml_load_string() would be better than preg_replace
@@ -1641,6 +1678,15 @@ class FeatureContext implements Context {
 		$this->sendRequestBase($verb, $fullUrl, $body, $jsonBody, $headers, $auth);
 	}
 
+	private function sendPublicRequest(string $verb,
+		string $url,
+		$body = null,
+		?array $jsonBody = null,
+		array $headers = []) {
+		$fullUrl = $this->publicUrl . $url;
+		$this->sendRequestBase($verb, $fullUrl, $body, $jsonBody, $headers, false);
+	}
+
 	/**
 	 * @param TableNode|string|null $body
 	 *
@@ -1699,6 +1745,23 @@ class FeatureContext implements Context {
 		} catch (ClientException $e) {
 			$this->response = $e->getResponse();
 		}
+	}
+
+	private function getNextcloudVersion(bool $major = false): string {
+		if ($this->nextcloudVersion === null) {
+			$headers = [
+				'Content-Type' => 'Content-Type: text/xml; charset="utf-8"',
+				'Depth' => 0,
+			];
+
+			$statusUrl = str_replace('index.php', 'status.php', $this->baseUrl);
+			$this->sendRequestBase('GET', $statusUrl, null, null, $headers, false);
+			$this->assertStatusCode(200);
+
+			$this->nextcloudVersion = $this->getJson()['versionstring'];
+		}
+
+		return $major ? explode('.', $this->nextcloudVersion)[0] : $this->nextcloudVersion;
 	}
 
 	/**

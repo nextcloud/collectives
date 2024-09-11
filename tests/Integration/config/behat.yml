@@ -11,13 +11,15 @@ default:
             contexts:
                 - FeatureContext:
                     baseUrl: 'https://nextcloud.local/index.php'
-                    remoteUrl: 'https://nextcloud.local/remote.php'
                     ocsUrl: 'https://nextcloud.local/ocs/v2.php'
+                    publicUrl: 'https://nextcloud.local/public.php'
+                    remoteUrl: 'https://nextcloud.local/remote.php'
 ci:
     suites:
         default:
             contexts:
                 - FeatureContext:
                     baseUrl: 'http://localhost:8080/index.php'
-                    remoteUrl: 'http://localhost:8080/remote.php'
                     ocsUrl: 'http://localhost:8080/ocs/v2.php'
+                    publicUrl: 'http://localhost:8080/public.php'
+                    remoteUrl: 'http://localhost:8080/remote.php'
