@@ -10,6 +10,8 @@
 .full-width-view {
 	// Required for search dialog to stick to the bottom
 	height: 100%;
+	display: flex;
+	flex-direction: column;
 
 	--text-editor-max-width: false !important;
 	max-width: unset;
@@ -18,6 +20,8 @@
 .sheet-view {
 	// Required for search dialog to stick to the bottom
 	height: 100%;
+	display: flex;
+	flex-direction: column;
 
 	--text-editor-max-width: 670px !important;
 
@@ -26,7 +30,7 @@
 	.page-heading-skeleton,
 	.page-content-skeleton {
 		max-width: var(--text-editor-max-width);
-		margin: auto;
+		margin-inline: auto;
 	}
 
 	.page-title {
