@@ -231,6 +231,10 @@ export default {
 	height: 100%;
 }
 
+.page-heading-skeleton {
+	width: 100%;
+}
+
 /* Format page title in Page.vue and Version.vue */
 .page-title {
 	position: sticky;
@@ -240,7 +244,7 @@ export default {
 	display: flex;
 	align-items: center;
 	background-color: var(--color-main-background);
-	height: 48px;
+	min-height: 48px;
 	// Overwrite `h2` defaults
 	margin: 0;
 

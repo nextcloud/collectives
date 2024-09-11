@@ -180,7 +180,8 @@ export default {
 <style lang="scss" scoped>
 .collectives-text-container {
 	// Required for search dialog to stick to the bottom
-	height: 100%;
+	flex-grow: 1;
+	overflow: scroll;
 }
 
 .text-container-heading {
@@ -189,19 +190,6 @@ export default {
 
 .page-content-skeleton {
 	padding-top: var(--default-clickable-area);
-}
-
-:deep([data-text-el='editor-container']) {
-	/* Remove scrolling mechanism from editor-container, required for menubar stickyness */
-	overflow: visible;
-
-	div.editor {
-		/* Adjust to page titlebar height */
-		div.text-menubar {
-			margin: auto;
-			top: 48px;
-		}
-	}
 }
 
 @media print {
