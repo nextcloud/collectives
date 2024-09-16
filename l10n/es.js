@@ -214,6 +214,7 @@ OC.L10N.register(
     "Backlinks" : "Enlaces entrantes",
     "Sharing" : "Compartir",
     "Versions" : "Versiones",
+    "Clear search" : "Limpiar búsqueda",
     "The content of this folder is best viewed in the Collectives app." : "El contenido de esta carpeta se ve mejor en la app de Cuadernos colectivos.",
     "Open in Collectives" : "Abrir en Cuadernos colectivos",
     "Come, organize and build shared knowledge!" : "Aquí organizamos y construimos conocimiento juntos.",
