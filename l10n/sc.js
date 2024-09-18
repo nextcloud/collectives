@@ -31,7 +31,7 @@ OC.L10N.register(
     "Sort by title" : "Assenta segundu tìtulu",
     "Please enter the following required information before creating the share" : "Inserta is informatziones rechertas in fatu in antis de creare sa cumpartzidura",
     "Password protection (enforced)" : "Bardiadura cun crae (posta)",
-    "Set password" : "Imposta sa crae",
+    "Set password" : "Cunfigura sa crae",
     "Password" : "Crae",
     "Create share" : "Crea cumpartzidura",
     "Add another link" : "Agiunghe un'àteru ligòngiu",
