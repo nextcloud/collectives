@@ -38,9 +38,9 @@ class CollectiveStorage extends Wrapper {
 	/**
 	 * @param string $path
 	 *
-	 * @return false|string
+	 * @return string|false
 	 */
-	public function getOwner($path) {
+	public function getOwner($path): string|false {
 		return $this->mountOwner !== null ? $this->mountOwner->getUID() : false;
 	}
 
