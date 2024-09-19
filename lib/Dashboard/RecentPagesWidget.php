@@ -78,7 +78,7 @@ class RecentPagesWidget implements IReloadableWidget, IIconWidget {
 	}
 
 	public function getIconUrl(): string {
-		return $this->urlGenerator->imagePath('collectives', 'collectives.svg');
+		return $this->urlGenerator->imagePath('collectives', 'collectives-dark.svg');
 	}
 
 	public function getUrl(): ?string {
