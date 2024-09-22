@@ -32,6 +32,7 @@ OC.L10N.register(
     "Attachments" : "Pielikumi",
     "Sharing" : "Koplietošana",
     "Versions" : "Versijas",
+    "Clear search" : "Notīrīt meklēšanu",
     "Link copied" : "Saite nokopēta",
     "Copied" : "Nokopēts"
 },
