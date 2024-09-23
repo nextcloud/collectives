@@ -1,0 +1,12 @@
+{
+    "config": {
+        "platform": {
+            "php": "8.0.2"
+        },
+        "sort-packages": true
+    },
+    "require-dev": {
+        "behat/behat": "^3.14",
+        "phpunit/phpunit": "^9.6"
+    }
+}
