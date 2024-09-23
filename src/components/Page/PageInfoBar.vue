@@ -37,6 +37,7 @@ export default {
 
 <style scoped lang="scss">
 .text-menubar {
+	box-sizing: content-box !important;
 	--background-blur: blur(10px);
 	position: sticky;
 	top: 0;
@@ -44,7 +45,9 @@ export default {
 	background-color: var(--color-main-background-translucent);
 	backdrop-filter: var(--background-blur);
 	height: var(--default-clickable-area);
-	padding: 3px 8px 3px 14px;
+	border-bottom: 1px solid var(--color-border);
+	padding-top: 3px;
+	padding-bottom: 3px;
 	display: flex;
 	flex-wrap: nowrap;
 	align-items: center;
@@ -59,6 +62,10 @@ export default {
 	overflow: hidden;
 	white-space: nowrap;
 	opacity: .5;
+}
+
+.infobar-lastupdate {
+	padding-inline-start: 14px;
 }
 
 .infobar-seperator {

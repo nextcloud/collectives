@@ -7,6 +7,12 @@
 	--text-editor-max-width: 670px !important;
 }
 
+// TODO: can be removed once we only support Nextcloud 30+
+.text-menubar {
+	border-bottom: 1px solid var(--color-border);
+	box-sizing: content-box !important;
+}
+
 .full-width-view {
 	// Required for search dialog to stick to the bottom
 	height: 100%;

@@ -237,8 +237,7 @@ export default {
 
 /* Format page title in Page.vue and Version.vue */
 .page-title {
-	position: sticky;
-	top: 0;
+	position: relative;
 	z-index: 10022;
 	padding: 0 8px;
 	display: flex;
