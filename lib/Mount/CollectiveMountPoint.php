@@ -15,14 +15,16 @@ use OCP\Files\Mount\ISystemMountPoint;
 use OCP\Files\Storage\IStorageFactory;
 
 class CollectiveMountPoint extends MountPoint implements ISystemMountPoint {
-	public function __construct(private ?int $folderId,
+	public function __construct(
+		private ?int $folderId,
 		private CollectiveFolderManager $collectiveFolderManager,
 		Storage $storage,
 		string $mountPoint,
 		?array $arguments = null,
 		?IStorageFactory $loader = null,
 		?array $mountOptions = null,
-		?int $mountId = null) {
+		?int $mountId = null,
+	) {
 		parent::__construct($storage, $mountPoint, $arguments, $loader, $mountOptions, $mountId, MountProvider::class);
 	}
 

@@ -31,14 +31,16 @@ use OCP\Share\IShare;
 class PublicStartController extends AuthPublicShareController {
 	protected ?IShare $share = null;
 
-	public function __construct(string $AppName,
+	public function __construct(
+		string $AppName,
 		IRequest $request,
 		ISession $session,
 		IURLGenerator $urlGenerator,
 		private ShareManager $shareManager,
 		private CollectiveShareMapper $collectiveShareMapper,
 		private IAppManager $appManager,
-		private IEventDispatcher $eventDispatcher) {
+		private IEventDispatcher $eventDispatcher,
+	) {
 		parent::__construct($AppName, $request, $session, $urlGenerator);
 	}
 

@@ -29,11 +29,13 @@ use OCP\Share\IManager as IShareManager;
 use OCP\Share\IShare;
 
 class CollectiveShareService {
-	public function __construct(private IShareManager $shareManager,
+	public function __construct(
+		private IShareManager $shareManager,
 		private UserFolderHelper $userFolderHelper,
 		private CollectiveShareMapper $collectiveShareMapper,
 		private PageService $pageService,
-		private IL10N $l10n) {
+		private IL10N $l10n,
+	) {
 	}
 
 	/**

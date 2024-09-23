@@ -18,7 +18,10 @@ use OCP\Files\NotPermittedException;
 class LazyFolder implements Folder {
 	private ?Folder $folder = null;
 
-	public function __construct(private IRootFolder $rootFolder, private string $rootPath) {
+	public function __construct(
+		private IRootFolder $rootFolder,
+		private string $rootPath,
+	) {
 	}
 
 	/**

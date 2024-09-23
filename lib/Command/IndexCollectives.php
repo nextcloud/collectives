@@ -21,8 +21,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class IndexCollectives extends Base {
-	public function __construct(private SearchService $searchService,
-		private CollectiveMapper $collectiveMapper) {
+	public function __construct(
+		private SearchService $searchService,
+		private CollectiveMapper $collectiveMapper,
+	) {
 		parent::__construct();
 	}
 

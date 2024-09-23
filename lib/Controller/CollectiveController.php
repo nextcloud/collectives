@@ -26,13 +26,15 @@ use Psr\Log\LoggerInterface;
 class CollectiveController extends Controller {
 	use ErrorHelper;
 
-	public function __construct(string $AppName,
+	public function __construct(
+		string $AppName,
 		IRequest $request,
 		private CollectiveService $service,
 		private IUserSession $userSession,
 		private IFactory $l10nFactory,
 		private LoggerInterface $logger,
-		private NodeHelper $nodeHelper) {
+		private NodeHelper $nodeHelper,
+	) {
 		parent::__construct($AppName, $request);
 	}
 

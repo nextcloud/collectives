@@ -13,7 +13,9 @@ use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
 class PageTrashManager {
-	public function __construct(private IDBConnection $connection) {
+	public function __construct(
+		private IDBConnection $connection,
+	) {
 	}
 
 	public function listTrashForCollectives(array $collectiveIds): array {

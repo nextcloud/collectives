@@ -15,8 +15,10 @@ use OCP\BackgroundJob\IJob;
 use OCP\BackgroundJob\TimedJob;
 
 class PurgeObsoletePages extends TimedJob {
-	public function __construct(ITimeFactory $time,
-		private PageGarbageCollector $garbageCollector) {
+	public function __construct(
+		ITimeFactory $time,
+		private PageGarbageCollector $garbageCollector,
+	) {
 		parent::__construct($time);
 
 		// Run once every two days

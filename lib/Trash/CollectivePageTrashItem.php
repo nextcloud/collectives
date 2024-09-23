@@ -23,7 +23,7 @@ class CollectivePageTrashItem extends TrashItem {
 		string $trashPath,
 		FileInfo $fileInfo,
 		IUser $user,
-		private string $mountPoint
+		private string $mountPoint,
 	) {
 		[$major] = Util::getVersion();
 		if ($major < 30) {

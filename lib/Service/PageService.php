@@ -39,7 +39,8 @@ class PageService {
 	private ?Collective $collective = null;
 	private ?PageTrashBackend $trashBackend = null;
 
-	public function __construct(private IAppManager $appManager,
+	public function __construct(
+		private IAppManager $appManager,
 		private PageMapper $pageMapper,
 		private NodeHelper $nodeHelper,
 		private CollectiveServiceBase $collectiveService,
@@ -47,7 +48,8 @@ class PageService {
 		private IUserManager $userManager,
 		private IConfig $config,
 		ContainerInterface $container,
-		private SessionService $sessionService) {
+		private SessionService $sessionService,
+	) {
 		try {
 			$this->pushQueue = $container->get(IQueue::class);
 		} catch (Exception) {

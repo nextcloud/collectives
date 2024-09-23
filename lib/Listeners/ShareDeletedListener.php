@@ -16,7 +16,9 @@ use OCP\Share\Events\ShareDeletedEvent;
 
 /** @template-implements IEventListener<Event|ShareDeletedEvent> */
 class ShareDeletedListener implements IEventListener {
-	public function __construct(private CollectiveShareMapper $shareMapper) {
+	public function __construct(
+		private CollectiveShareMapper $shareMapper,
+	) {
 	}
 
 	public function handle(Event $event): void {

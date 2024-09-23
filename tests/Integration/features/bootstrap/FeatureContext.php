@@ -47,7 +47,12 @@ class FeatureContext implements Context {
 	 * You can also pass arbitrary arguments to the
 	 * context constructor through behat.yml.
 	 */
-	public function __construct(private string $baseUrl, private string $ocsUrl, public string $publicUrl, private string $remoteUrl) {
+	public function __construct(
+		private string $baseUrl,
+		private string $ocsUrl,
+		public string $publicUrl,
+		private string $remoteUrl,
+	) {
 		$this->clientOptions = ['verify' => false];
 	}
 

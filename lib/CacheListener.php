@@ -16,7 +16,9 @@ use OCP\Files\Cache\CacheUpdateEvent;
 use OCP\Files\Cache\ICacheEvent;
 
 class CacheListener {
-	public function __construct(private IEventDispatcher $eventDispatcher) {
+	public function __construct(
+		private IEventDispatcher $eventDispatcher,
+	) {
 	}
 
 	public function listen(): void {

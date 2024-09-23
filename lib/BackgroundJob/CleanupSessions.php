@@ -14,8 +14,10 @@ use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\TimedJob;
 
 class CleanupSessions extends TimedJob {
-	public function __construct(ITimeFactory $time,
-		private SessionService $sessionService) {
+	public function __construct(
+		ITimeFactory $time,
+		private SessionService $sessionService,
+	) {
 		parent::__construct($time);
 
 		$this->setInterval(SessionService::SESSION_VALID_TIME);

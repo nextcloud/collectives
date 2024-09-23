@@ -38,11 +38,13 @@ class CollectiveFolderManager {
 	private ?string $rootPath = null;
 	private ?int $rootFolderStorageId = null;
 
-	public function __construct(private IRootFolder $rootFolder,
+	public function __construct(
+		private IRootFolder $rootFolder,
 		private IDBConnection $connection,
 		private IConfig $config,
 		private IUserSession $userSession,
-		private IRequest $request) {
+		private IRequest $request,
+	) {
 	}
 
 	public function getRootPath(): string {

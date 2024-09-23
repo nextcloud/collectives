@@ -21,8 +21,10 @@ use OCP\Files\NotPermittedException as FilesNotPermittedException;
 
 /** @template-implements IEventListener<Event|CircleDestroyedEvent> */
 class CircleDestroyedListener implements IEventListener {
-	public function __construct(private CollectiveMapper $collectiveMapper,
-		private CollectiveFolderManager $collectiveFolderManager) {
+	public function __construct(
+		private CollectiveMapper $collectiveMapper,
+		private CollectiveFolderManager $collectiveFolderManager,
+	) {
 	}
 
 	/**

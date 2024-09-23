@@ -33,13 +33,15 @@ class PublicCollectiveController extends PublicShareController {
 
 	private ?IShare $share = null;
 
-	public function __construct(string $AppName,
+	public function __construct(
+		string $AppName,
 		IRequest $request,
 		private ShareManager $shareManager,
 		private CollectiveShareMapper $collectiveShareMapper,
 		private CollectiveService $service,
 		ISession $session,
-		private LoggerInterface $logger) {
+		private LoggerInterface $logger,
+	) {
 		parent::__construct($AppName, $request, $session);
 	}
 

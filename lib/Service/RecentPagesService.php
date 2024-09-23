@@ -23,12 +23,14 @@ use RuntimeException;
 
 class RecentPagesService {
 
-	public function __construct(protected CollectiveService $collectiveService,
+	public function __construct(
+		protected CollectiveService $collectiveService,
 		protected IDBConnection $dbc,
 		protected IConfig $config,
 		protected IMimeTypeLoader $mimeTypeLoader,
 		protected IURLGenerator $urlGenerator,
-		protected IL10N $l10n) {
+		protected IL10N $l10n,
+	) {
 	}
 
 	/**

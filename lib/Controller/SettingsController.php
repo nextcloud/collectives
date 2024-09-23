@@ -22,11 +22,13 @@ use Psr\Log\LoggerInterface;
 class SettingsController extends OCSController {
 	use ErrorHelper;
 
-	public function __construct(string $appName,
+	public function __construct(
+		string $appName,
 		IRequest $request,
 		private IConfig $config,
 		private LoggerInterface $logger,
-		private string $userId) {
+		private string $userId,
+	) {
 		parent::__construct($appName, $request);
 	}
 

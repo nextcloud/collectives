@@ -27,12 +27,14 @@ use OCP\Search\SearchResult;
 use OCP\Search\SearchResultEntry;
 
 class PageProvider implements IProvider {
-	public function __construct(private IL10N $l10n,
+	public function __construct(
+		private IL10N $l10n,
 		private IURLGenerator $urlGenerator,
 		private CollectiveHelper $collectiveHelper,
 		private CollectiveService $collectiveService,
 		private PageService $pageService,
-		private IAppManager $appManager) {
+		private IAppManager $appManager,
+	) {
 	}
 
 	public function getId(): string {

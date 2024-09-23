@@ -39,12 +39,14 @@ class PageTrashBackend implements ITrashBackend {
 	private ?Folder $appFolder = null;
 	private ?VersionsBackend $versionsBackend = null;
 
-	public function __construct(private CollectiveFolderManager $collectiveFolderManager,
+	public function __construct(
+		private CollectiveFolderManager $collectiveFolderManager,
 		private PageTrashManager $trashManager,
 		private MountProvider $mountProvider,
 		private CollectiveMapper $collectiveMapper,
 		private PageMapper $pageMapper,
-		private LoggerInterface $logger) {
+		private LoggerInterface $logger,
+	) {
 	}
 
 	private function getAppFolder(): Folder {

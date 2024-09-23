@@ -12,7 +12,10 @@ namespace OCA\Collectives\Db;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 
 class PageGarbageCollector {
-	public function __construct(private PageMapper $pageMapper, private CollectiveFolderManager $folderManager) {
+	public function __construct(
+		private PageMapper $pageMapper,
+		private CollectiveFolderManager $folderManager,
+	) {
 	}
 
 	public function purgeObsoletePages(): int {

@@ -21,11 +21,13 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class CreateCollective extends Base {
-	public function __construct(private CollectiveService $collectiveService,
+	public function __construct(
+		private CollectiveService $collectiveService,
 		private NodeHelper $nodeHelper,
 		private IUserManager $userManager,
 		private IUserSession $userSession,
-		private IFactory $l10nFactory) {
+		private IFactory $l10nFactory,
+	) {
 		parent::__construct();
 	}
 

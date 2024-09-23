@@ -23,14 +23,16 @@ use Psr\Log\LoggerInterface;
 class PageController extends Controller {
 	use ErrorHelper;
 
-	public function __construct(string $appName,
+	public function __construct(
+		string $appName,
 		IRequest $request,
 		private PageService $service,
 		private AttachmentService $attachmentService,
 		private IUserSession $userSession,
 		private SearchService $indexedSearchService,
 		private CollectiveService $collectiveService,
-		private LoggerInterface $logger) {
+		private LoggerInterface $logger,
+	) {
 		parent::__construct($appName, $request);
 	}
 

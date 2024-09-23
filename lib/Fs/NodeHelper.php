@@ -26,7 +26,8 @@ class NodeHelper {
 
 	public function __construct(
 		IDBConnection $db,
-		private IL10N $l10n) {
+		private IL10N $l10n,
+	) {
 		$this->db4ByteSupport = $db->supports4ByteText();
 	}
 
