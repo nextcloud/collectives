@@ -178,7 +178,7 @@ endif
 release: release-github release-appstore
 
 # Publish the release on Github
-release-github: release-checks lint-appinfo build
+release-github: release-checks lint-appinfo distclean build
 	# Git tag and push
 	git tag $(GIT_TAG) -m "Version $(VERSION)" && git push $(GIT_REMOTE) $(GIT_TAG)
 
