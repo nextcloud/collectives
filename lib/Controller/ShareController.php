@@ -24,13 +24,15 @@ use Psr\Log\LoggerInterface;
 class ShareController extends Controller {
 	use ErrorHelper;
 
-	public function __construct(string $AppName,
+	public function __construct(
+		string $AppName,
 		IRequest $request,
 		private CollectiveService $collectiveService,
 		private PageService $pageService,
 		private IUserSession $userSession,
 		private LoggerInterface $logger,
-		private CollectiveShareService $shareService) {
+		private CollectiveShareService $shareService,
+	) {
 		parent::__construct($AppName, $request);
 	}
 

@@ -18,15 +18,17 @@ use OCP\Security\ISecureRandom;
 class SessionService {
 	public const SESSION_VALID_TIME = 92;
 
-	public function __construct(private CollectiveMapper $collectiveMapper,
+	public function __construct(
+		private CollectiveMapper $collectiveMapper,
 		private SessionMapper $sessionMapper,
 		private ISecureRandom $secureRandom,
-		private ITimeFactory $timeFactory) {
+		private ITimeFactory $timeFactory,
+	) {
 	}
 
 	private function checkPermissions(int $collectiveId, string $userId): void {
 		if (null === $collective = $this->collectiveMapper->findByIdAndUser($collectiveId, $userId)) {
-			throw new NotFoundException('Collective not found: '. $collectiveId);
+			throw new NotFoundException('Collective not found: ' . $collectiveId);
 		}
 	}
 

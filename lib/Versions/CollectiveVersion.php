@@ -16,7 +16,8 @@ use OCP\Files\FileInfo;
 use OCP\IUser;
 
 class CollectiveVersion extends Version {
-	public function __construct(int $timestamp,
+	public function __construct(
+		int $timestamp,
 		int $revisionId,
 		string $name,
 		int $size,
@@ -26,7 +27,8 @@ class CollectiveVersion extends Version {
 		IVersionBackend $backend,
 		IUser $user,
 		private File $versionFile,
-		private int $folderId) {
+		private int $folderId,
+	) {
 		parent::__construct($timestamp, $revisionId, $name, $size, $mimetype, $path, $sourceFileInfo, $backend, $user);
 	}
 

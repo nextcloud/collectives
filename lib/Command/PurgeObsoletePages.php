@@ -15,7 +15,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class PurgeObsoletePages extends Base {
-	public function __construct(private PageGarbageCollector $garbageCollector) {
+	public function __construct(
+		private PageGarbageCollector $garbageCollector,
+	) {
 		parent::__construct();
 	}
 

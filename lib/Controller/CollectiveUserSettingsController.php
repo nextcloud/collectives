@@ -22,11 +22,13 @@ use Psr\Log\LoggerInterface;
 class CollectiveUserSettingsController extends Controller {
 	use ErrorHelper;
 
-	public function __construct(string $AppName,
+	public function __construct(
+		string $AppName,
 		IRequest $request,
 		private CollectiveUserSettingsService $service,
 		private IUserSession $userSession,
-		private LoggerInterface $logger) {
+		private LoggerInterface $logger,
+	) {
 		parent::__construct($AppName, $request);
 	}
 

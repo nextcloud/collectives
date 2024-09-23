@@ -16,7 +16,10 @@ use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\IPreview;
 
 class AttachmentService {
-	public function __construct(private PageService $pageService, private IPreview $preview) {
+	public function __construct(
+		private PageService $pageService,
+		private IPreview $preview,
+	) {
 	}
 
 	/**

@@ -32,13 +32,15 @@ use Psr\Log\LoggerInterface;
 use TeamTNT\TNTSearch\Support\Highlighter;
 
 class PageContentProvider implements IProvider {
-	public function __construct(private IL10N $l10n,
+	public function __construct(
+		private IL10N $l10n,
 		private IURLGenerator $urlGenerator,
 		private CollectiveHelper $collectiveHelper,
 		private PageService $pageService,
 		private SearchService $indexedSearchService,
 		private LoggerInterface $logger,
-		private IAppManager $appManager) {
+		private IAppManager $appManager,
+	) {
 	}
 
 	public function getId(): string {

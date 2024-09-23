@@ -14,8 +14,10 @@ use OCP\Files\Cache\ICache;
 use OCP\Files\Cache\ICacheEntry;
 
 class RootEntryCache extends CacheWrapper {
-	public function __construct(ICache $cache,
-		private ?ICacheEntry $rootEntry) {
+	public function __construct(
+		ICache $cache,
+		private ?ICacheEntry $rootEntry,
+	) {
 		parent::__construct($cache);
 	}
 

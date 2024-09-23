@@ -19,7 +19,12 @@ use OCP\Teams\ITeamResourceProvider;
 use OCP\Teams\TeamResource;
 
 class CollectiveTeamResourceProvider implements ITeamResourceProvider {
-	public function __construct(private CollectiveMapper $collectiveMapper, private CollectiveService $collectiveService, private IURLGenerator $urlGenerator, private ?string $userId) {
+	public function __construct(
+		private CollectiveMapper $collectiveMapper,
+		private CollectiveService $collectiveService,
+		private IURLGenerator $urlGenerator,
+		private ?string $userId,
+	) {
 
 	}
 

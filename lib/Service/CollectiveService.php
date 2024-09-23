@@ -43,7 +43,8 @@ class CollectiveService extends CollectiveServiceBase {
 		private CollectiveUserSettingsMapper $collectiveUserSettingsMapper,
 		private PageMapper $pageMapper,
 		private IL10N $l10n,
-		private IEventDispatcher $eventDispatcher) {
+		private IEventDispatcher $eventDispatcher,
+	) {
 		parent::__construct($collectiveMapper, $circleHelper);
 	}
 

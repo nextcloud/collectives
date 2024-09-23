@@ -32,7 +32,8 @@ class UserFolderHelper {
 		private IRootFolder $rootFolder,
 		private IUserManager $userManager,
 		private IConfig $config,
-		private IFactory $l10nFactory) {
+		private IFactory $l10nFactory,
+	) {
 	}
 
 	/**

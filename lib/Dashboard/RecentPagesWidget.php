@@ -19,10 +19,12 @@ use OCP\IUserSession;
 class RecentPagesWidget implements IReloadableWidget, IIconWidget {
 	public const REFRESH_INTERVAL_IN_SECS = 33;
 
-	public function __construct(protected IL10N $l10n,
+	public function __construct(
+		protected IL10N $l10n,
 		protected IURLGenerator $urlGenerator,
 		protected IUserSession $userSession,
-		protected RecentPagesService $recentPagesService) {
+		protected RecentPagesService $recentPagesService,
+	) {
 	}
 
 	public function getItemsV2(string $userId, ?string $since = null, int $limit = 7): WidgetItems {

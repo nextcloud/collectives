@@ -26,8 +26,10 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 class PageTrashCleanup extends Base {
 	private ?PageTrashBackend $trashBackend = null;
 
-	public function __construct(IAppManager $appManager,
-		private CollectiveMapper $collectiveMapper) {
+	public function __construct(
+		IAppManager $appManager,
+		private CollectiveMapper $collectiveMapper,
+	) {
 		parent::__construct();
 		if ($appManager->isEnabledForUser('files_trashbin')) {
 			$this->trashBackend = OC::$server->get(PageTrashBackend::class);

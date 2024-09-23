@@ -35,13 +35,15 @@ class CollectiveVersionsExpireManager extends BasicEmitter {
 	private ?VersionsBackend $versionsBackend = null;
 	private string $dependencyInjectionError = '';
 
-	public function __construct(ContainerInterface $appContainer,
+	public function __construct(
+		ContainerInterface $appContainer,
 		private CollectiveFolderManager $folderManager,
 		private ExpireManager $expireManager,
 		private IDBConnection $connection,
 		private CollectiveMapper $collectiveMapper,
 		private ITimeFactory $timeFactory,
-		IEventDispatcher $dispatcher) {
+		IEventDispatcher $dispatcher,
+	) {
 		$this->dispatcher = $dispatcher;
 
 		[$major] = Util::getVersion();

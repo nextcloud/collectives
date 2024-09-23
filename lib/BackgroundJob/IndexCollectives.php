@@ -21,11 +21,13 @@ use OCP\Files\NotFoundException;
 use Psr\Log\LoggerInterface;
 
 class IndexCollectives extends TimedJob {
-	public function __construct(ITimeFactory $time,
+	public function __construct(
+		ITimeFactory $time,
 		private CollectiveMapper $collectiveMapper,
 		private CollectiveFolderManager $collectiveFolderManager,
 		private LoggerInterface $logger,
-		private SearchService $searchService) {
+		private SearchService $searchService,
+	) {
 		parent::__construct($time);
 
 		$this->setInterval(60 * 5);

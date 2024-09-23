@@ -21,11 +21,13 @@ use Psr\Log\LoggerInterface;
 class SessionController extends OCSController {
 	use ErrorHelper;
 
-	public function __construct(string $appName,
+	public function __construct(
+		string $appName,
 		IRequest $request,
 		private SessionService $sessionService,
 		private LoggerInterface $logger,
-		private IUserSession $userSession) {
+		private IUserSession $userSession,
+	) {
 		parent::__construct($appName, $request);
 	}
 

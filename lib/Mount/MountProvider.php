@@ -35,7 +35,8 @@ class MountProvider implements IMountProvider {
 		private IAppManager $appManager,
 		private LoggerInterface $logger,
 		private UserFolderHelper $userFolderHelper,
-		private IUserSession $userSession) {
+		private IUserSession $userSession,
+	) {
 	}
 
 	public function getFoldersForUser(IUser $user): array {

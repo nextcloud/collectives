@@ -34,14 +34,16 @@ class PublicPageTrashController extends PublicShareController {
 
 	use ErrorHelper;
 
-	public function __construct(string $appName,
+	public function __construct(
+		string $appName,
 		IRequest $request,
 		private ShareManager $shareManager,
 		private CollectiveShareMapper $collectiveShareMapper,
 		private CollectiveShareService $collectiveShareService,
 		private PageService $service,
 		ISession $session,
-		private LoggerInterface $logger) {
+		private LoggerInterface $logger,
+	) {
 		parent::__construct($appName, $request, $session);
 	}
 

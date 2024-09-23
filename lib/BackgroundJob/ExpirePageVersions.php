@@ -17,8 +17,10 @@ use OCP\BackgroundJob\IJob;
 use OCP\BackgroundJob\TimedJob;
 
 class ExpirePageVersions extends TimedJob {
-	public function __construct(ITimeFactory $time,
-		private CollectiveVersionsExpireManager $expireManager) {
+	public function __construct(
+		ITimeFactory $time,
+		private CollectiveVersionsExpireManager $expireManager,
+	) {
 		parent::__construct($time);
 
 		// Run once per hour

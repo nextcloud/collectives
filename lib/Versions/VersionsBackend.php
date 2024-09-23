@@ -29,9 +29,11 @@ use OCP\Lock\LockedException;
 use Psr\Log\LoggerInterface;
 
 class VersionsBackend implements IVersionBackend {
-	public function __construct(private CollectiveFolderManager $collectiveFolderManager,
+	public function __construct(
+		private CollectiveFolderManager $collectiveFolderManager,
 		private ITimeFactory $timeFactory,
-		private LoggerInterface $logger) {
+		private LoggerInterface $logger,
+	) {
 	}
 
 	private function getAppFolder(): Folder {

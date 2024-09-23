@@ -14,7 +14,11 @@ use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Db\CollectiveUserSettingsMapper;
 
 class CollectiveHelper {
-	public function __construct(private CollectiveMapper $collectiveMapper, private CollectiveUserSettingsMapper $collectiveUserSettingsMapper, private CircleHelper $circleHelper) {
+	public function __construct(
+		private CollectiveMapper $collectiveMapper,
+		private CollectiveUserSettingsMapper $collectiveUserSettingsMapper,
+		private CircleHelper $circleHelper,
+	) {
 	}
 
 	/**
