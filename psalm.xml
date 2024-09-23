@@ -4,7 +4,7 @@
     resolveFromConfigFile="true"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
-    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+    xsi:schemaLocation="https://getpsalm.org/schema/config vendor-bin/vimeo/psalm/config.xsd"
     errorBaseline="tests/psalm-baseline.xml"
 >
     <stubs>
@@ -14,14 +14,14 @@
         <directory name="lib" />
         <ignoreFiles>
             <directory name="vendor" />
+            <directory name="vendor-bin" />
         </ignoreFiles>
     </projectFiles>
     <extraFiles>
         <directory name="vendor" />
+        <directory name="vendor-bin/psalm/vendor" />
         <ignoreFiles>
             <directory name="vendor/bin" />
-            <directory name="vendor/phpunit" />
-            <directory name="vendor/psalm" />
         </ignoreFiles>
     </extraFiles>
     <issueHandlers>

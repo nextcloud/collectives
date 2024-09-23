@@ -64,7 +64,7 @@ clean:
 distclean: clean
 	rm -rf $(BUILD_TOOLS_DIR)
 	rm -rf node_modules
-	rm -rf vendor
+	rm -rf vendor vendor-bin/*/vendor
 
 # Lint
 lint: lint-js lint-appinfo
@@ -142,6 +142,7 @@ build: node-modules build-js-production composer-install-no-dev
 		--exclude="$(APP_NAME)/src" \
 		--exclude="$(APP_NAME)/stylelint.config.js" \
 		--exclude="$(APP_NAME)/tests" \
+		--exclude="$(APP_NAME)/vendor-bin" \
 		--exclude="$(APP_NAME)/webpack.*" \
 	$(PROJECT_DIR) $(RELEASE_DIR)/
 	@if [ -f $(CERT_DIR)/$(APP_NAME).key ]; then \

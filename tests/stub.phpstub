@@ -120,6 +120,10 @@ namespace Symfony\Component\Console\Output {
     }
 }
 
+namespace Symfony\Component\EventDispatcher {
+    class EventDispatcherInterface {}
+}
+
 namespace OC\Collaboration\Reference {
     use OCP\Collaboration\Reference\IReferenceManager;
 
