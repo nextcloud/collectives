@@ -10,7 +10,10 @@
 				:label="t('collectives', 'Search pages')"
 				:value.sync="filterString"
 				class="page-filter"
-				:placeholder="t('collectives', 'Search pages ...')" />
+				:placeholder="t('collectives', 'Search pages ...')"
+				trailing-button-icon="close"
+				:show-trailing-button="isFilteredView"
+				@trailing-button-click="clearFilterString" />
 			<NcActions class="toggle toggle-push-to-right">
 				<NcActionButton class="toggle-button"
 					:aria-label="labels.showTemplates"
@@ -95,9 +98,9 @@
 				:key="templateView.id"
 				:page="templateView"
 				:level="1"
-				:filtered-view="isFilteredview"
+				:filtered-view="isFilteredView"
 				:is-template="true" />
-			<div v-if="isFilteredview" ref="pageListFiltered" class="page-list-filtered">
+			<div v-if="isFilteredView" ref="pageListFiltered" class="page-list-filtered">
 				<NcAppNavigationCaption v-if="filteredPages.length > 0" :name="t('Collectives','Results in title')" />
 				<RecycleScroller v-if="filteredPages.length > 0"
 					v-slot="{ item }"
@@ -133,7 +136,7 @@
 			<Draggable v-else
 				:list="subpages"
 				:parent-id="rootPage.id"
-				:disable-sorting="isFilteredview">
+				:disable-sorting="isFilteredView">
 				<SubpageList v-for="page in subpages"
 					:key="page.id"
 					:data-page-id="page.id"
@@ -273,7 +276,7 @@ export default {
 			return (sortOrder) => this.sortByOrder === sortOrder
 		},
 
-		isFilteredview() {
+		isFilteredView() {
 			return this.filterString !== ''
 		},
 
@@ -350,6 +353,10 @@ export default {
 		...mapActions(useCollectivesStore, ['setCollectiveUserSettingPageOrder']),
 		...mapActions(usePagesStore, ['setPageOrder', 'toggleTemplates']),
 		...mapActions(useSearchStore, ['setSearchQuery']),
+
+		clearFilterString() {
+			this.filterString = ''
+		},
 
 		/**
 		 * Change page sort order and scroll to current page
