@@ -1,5 +1,30 @@
 # Changelog
 
+## 2.14.4 - 2024.09.24
+
+### 🐛Fixes
+* 🛡️ Give public shares always permission of a simple user.
+* 💄 Use flexbox to align editor container and search dialog.
+* 🐘 Adjust PHP CollectiveStorage class to be compatible with Nextcloud 31.
+* 💄 Use dark SVG as widget icon. Thanks @Akhil. (#1475)
+* 👷 Run distclean as dependency of release in Makefile. (#1482)
+* 💄 Add bottom border to menubar.
+* 👷 Migrate development tools to vendor-bin.
+* 🔎 Add icon to clear the filter string. (#1501)
+* 🖱️ Close actions menu when scrolling members.
+* 🐛 Ignore folders if parent folder has no index page. (#1494)
+* 🙍 Use display name of own user instead of user ID. (#1504)
+* 🐛 Create landing page if missing. (#943)
+* 📂 Allow to mount the collectives user folder into a subfolder. (#514)
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 2.14.3 - 2024.09.10
 
 ### 🐛Fixes
