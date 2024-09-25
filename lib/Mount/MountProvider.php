@@ -61,10 +61,15 @@ class MountProvider implements IMountProvider {
 			return $folders;
 		}
 
+		$userFolderSetting = $this->userFolderHelper->getUserFolderSetting($user->getUID());
+		$internalPathPrefix = 'files';
+		$userFolderPath = substr($userFolder->getInternalPath(), 0, strlen($internalPathPrefix)) == $internalPathPrefix
+			? substr($userFolder->getInternalPath(), strlen('files')) . '/'
+			: $userFolder->getName() . '/';
+		$mountPointPath = ($userFolderSetting === '/')
+			? ''
+			: $userFolderPath;
 		foreach ($collectives as $c) {
-			$mountPointPath = ($this->userFolderHelper->getUserFolderSetting($user->getUID()) === '/')
-				? ''
-				: $userFolder->getName() . '/';
 			$mountPointName = $c->getName();
 			try {
 				$cacheEntry = $this->collectiveFolderManager->getFolderFileCache($c->getId(), $mountPointName);

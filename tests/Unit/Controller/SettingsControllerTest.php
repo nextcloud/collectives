@@ -60,8 +60,8 @@ class SettingsControllerTest extends TestCase {
 	public function testSetUserSettingsNoSlashStart(): void {
 		$response = new DataResponse('Invalid collectives folder path', Http::STATUS_BAD_REQUEST);
 		self::assertEquals($response, $this->settingsController->setUserSetting('user_folder', 'test'));
-		self::assertEquals($response, $this->settingsController->setUserSetting('user_folder', '/test/'));
 		self::assertEquals($response, $this->settingsController->setUserSetting('user_folder', 'test/'));
+		self::assertEquals($response, $this->settingsController->setUserSetting('user_folder', 'test/abc'));
 	}
 
 	public function testSetUserSettingsRootFolder(): void {
@@ -69,13 +69,19 @@ class SettingsControllerTest extends TestCase {
 		self::assertEquals($response, $this->settingsController->setUserSetting('user_folder', '/'));
 	}
 
-	public function testSetUserSettingsMultipleSlashes(): void {
+	public function testSetUserSettingsSlashEnd(): void {
 		$response = new DataResponse('Invalid collectives folder path', Http::STATUS_BAD_REQUEST);
 		self::assertEquals($response, $this->settingsController->setUserSetting('user_folder', '/test/'));
+		self::assertEquals($response, $this->settingsController->setUserSetting('user_folder', '/test/abc/'));
 	}
 
 	public function testSetUserSettings(): void {
 		$response = new DataResponse('/test', Http::STATUS_OK);
 		self::assertEquals($response, $this->settingsController->setUserSetting('user_folder', '/test'));
+	}
+
+	public function testSetUserSettingsSubfolder(): void {
+		$response = new DataResponse('/test/abc', Http::STATUS_OK);
+		self::assertEquals($response, $this->settingsController->setUserSetting('user_folder', '/test/abc'));
 	}
 }

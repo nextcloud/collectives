@@ -28,6 +28,7 @@ class FeatureContext implements Context {
 	private array $cookieJars = [];
 	private array $requestTokens = [];
 	private array $store = [];
+	private bool $setXdebugSession = false;
 
 	private const CIRCLE_MEMBER_LEVEL = [
 		1 => 'Member',
@@ -586,14 +587,18 @@ class FeatureContext implements Context {
 	 *
 	 * @throws GuzzleException
 	 */
-	public function userGetsSetting(string $user, string $key, string $value): void {
+	public function userGetsSetting(string $user, string $key, ?string $value = null): string {
 		$this->setCurrentUser($user);
 
 		$this->sendOcsRequest('GET', '/apps/collectives/api/v1.0/settings/user/' . $key);
 		$this->assertStatusCode(200);
 
 		$jsonBody = $this->getJson();
-		Assert::assertEquals($value, $jsonBody['ocs']['data']);
+		if ($value) {
+			Assert::assertEquals($value, $jsonBody['ocs']['data']);
+		}
+
+		return $jsonBody['ocs']['data'];
 	}
 
 	/**
@@ -1301,13 +1306,8 @@ class FeatureContext implements Context {
 	}
 
 	private function getUserCollectivesPath(string $user): string {
-		// Dirty hack to not break it on local dev setup
-		$lang = $this->getUserLanguage($user);
-		if ($lang === 'de') {
-			return 'Kollektive';
-		}
-
-		return 'Collectives';
+		$this->setCurrentUser($user);
+		return $this->userGetsSetting($user, 'user_folder');
 	}
 
 	/**
@@ -1330,7 +1330,7 @@ class FeatureContext implements Context {
 		$body = $dom->saveXML();
 		$userCollectivesPath = $this->getUserCollectivesPath($user);
 
-		$this->sendRemoteRequest('PROPFIND', '/dav/files/' . $user . '/' . $userCollectivesPath . '/' . urlencode($collective) . '/', $body, null, $headers);
+		$this->sendRemoteRequest('PROPFIND', '/dav/files/' . $user . $userCollectivesPath . '/' . urlencode($collective) . '/', $body, null, $headers);
 		$this->assertStatusCode(207);
 
 		// simplexml_load_string() would be better than preg_replace
@@ -1732,11 +1732,13 @@ class FeatureContext implements Context {
 		}
 
 		// Add Xdebug trigger variable as GET parameter
-		$xdebugSession = 'XDEBUG_SESSION=PHPSTORM';
-		if (str_contains($url, '?')) {
-			$url .= '&' . $xdebugSession;
-		} else {
-			$url .= '?' . $xdebugSession;
+		if ($this->setXdebugSession) {
+			$xdebugSession = 'XDEBUG_SESSION=PHPSTORM';
+			if (str_contains($url, '?')) {
+				$url .= '&' . $xdebugSession;
+			} else {
+				$url .= '?' . $xdebugSession;
+			}
 		}
 
 		// clear the cached json response
