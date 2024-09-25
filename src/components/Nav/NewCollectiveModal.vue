@@ -234,7 +234,7 @@ export default {
 		this.selectedMembers[`users-${this.currentUserId}`] = {
 			icon: 'icon-user',
 			id: this.currentUserId,
-			label: this.currentUserId,
+			label: getCurrentUser().displayName,
 			source: 'users',
 		}
 		this.noDeleteMembers = [`users-${this.currentUserId}`]
