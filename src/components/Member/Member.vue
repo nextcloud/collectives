@@ -41,6 +41,7 @@
 		<!-- Action menu -->
 		<NcActions v-else-if="currentUserIsAdmin && !isSearched && !isCurrentUser"
 			:force-menu="true"
+			:open.sync="showActionMenu"
 			class="member-row__actions">
 			<NcActionButton v-if="!isAdmin"
 				:close-after-click="true"
@@ -83,6 +84,7 @@
 import { mapActions } from 'pinia'
 import { useCirclesStore } from '../../stores/circles.js'
 import { showError, showSuccess } from '@nextcloud/dialogs'
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { circlesMemberTypes, memberLevels } from '../../constants.js'
 import { NcActions, NcActionButton, NcActionSeparator, NcAvatar, NcLoadingIcon } from '@nextcloud/vue'
 import AccountCogIcon from 'vue-material-design-icons/AccountCog.vue'
@@ -156,6 +158,7 @@ export default {
 
 	data() {
 		return {
+			showActionMenu: false,
 			isLoadingLevel: false,
 			memberLevels,
 		}
@@ -206,6 +209,14 @@ export default {
 		},
 	},
 
+	mounted() {
+		subscribe('collectives:member-picker:scroll', this.closeMenu)
+	},
+
+	unmounted() {
+		unsubscribe('collectives:member-picker:scroll', this.closeMenu)
+	},
+
 	methods: {
 		...mapActions(useCirclesStore, [
 			'getCircleMembers',
@@ -250,6 +261,10 @@ export default {
 			if (this.isClickable) {
 				this.$emit('click')
 			}
+		},
+
+		closeMenu() {
+			this.showActionMenu = false
 		},
 	},
 }

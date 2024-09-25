@@ -16,7 +16,7 @@
 			<MagnifyIcon :size="16" />
 		</NcTextField>
 
-		<div class="member-picker-list">
+		<div ref="memberPickerList" class="member-picker-list">
 			<!-- Current members (optional) -->
 			<SkeletonLoading v-if="showCurrentSkeleton" type="members-list" :count="3" />
 			<CurrentMembers v-else-if="showCurrent"
@@ -54,6 +54,7 @@ import { mapState } from 'pinia'
 import { useCirclesStore } from '../../stores/circles.js'
 import axios from '@nextcloud/axios'
 import debounce from 'debounce'
+import { emit } from '@nextcloud/event-bus'
 import { autocompleteSourcesToCircleMemberTypes, circlesMemberTypes, shareTypes } from '../../constants.js'
 import { generateOcsUrl } from '@nextcloud/router'
 import { showError } from '@nextcloud/dialogs'
@@ -132,6 +133,7 @@ export default {
 			searchResults: [],
 			isSearchLoading: false,
 			fetchSearchResultsDebounced: debounce(this.fetchSearchResults, 250),
+			onScrollDebounced: debounce(this.onScroll, 1000, { immediate: true }),
 		}
 	},
 
@@ -162,6 +164,11 @@ export default {
 		if (this.searchWithoutQuery) {
 			this.fetchSearchResultsDebounced()
 		}
+		this.$refs.memberPickerList.addEventListener('scroll', this.onScrollDebounced)
+	},
+
+	unmounted() {
+		this.$refs.memberPickerList.removeEventListener('scroll', this.onScrollDebounced)
 	},
 
 	methods: {
@@ -216,6 +223,10 @@ export default {
 			if (this.searchWithoutQuery || this.hasSearchQuery) {
 				this.fetchSearchResultsDebounced()
 			}
+		},
+
+		onScroll() {
+			emit('collectives:member-picker:scroll')
 		},
 	},
 }
