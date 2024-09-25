@@ -55,4 +55,27 @@ class CollectiveUserSettingsServiceTest extends TestCase {
 		$this->expectException(NotPermittedException::class);
 		$this->service->setPageOrder(1, 'user', min(array_keys(Collective::pageOrders)) - 1);
 	}
+
+	public function testFavoritePagesInvalidFormat(): void {
+		$this->collectiveMapper->method('findByIdAndUser')
+			->willReturn(new Collective());
+		$this->collectiveUserSettingsMapper->method('findByCollectiveAndUser')
+			->willReturn(null);
+
+		$this->collectiveUserSettingsMapper->expects(self::never())
+			->method('insertOrUpdate');
+		$this->expectException(NotPermittedException::class);
+		$this->service->setFavoritePages(1, 'user', '');
+	}
+
+	public function testFavoritePages(): void {
+		$this->collectiveMapper->method('findByIdAndUser')
+			->willReturn(new Collective());
+		$this->collectiveUserSettingsMapper->method('findByCollectiveAndUser')
+			->willReturn(null);
+
+		$this->collectiveUserSettingsMapper->expects(self::once())
+			->method('insertOrUpdate');
+		$this->service->setFavoritePages(1, 'user', '[]');
+	}
 }

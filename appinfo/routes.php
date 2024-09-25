@@ -35,6 +35,8 @@ return [
 			'requirements' => ['id' => '\d+']],
 		['name' => 'collectiveUserSettings#showRecentPages', 'url' => '/_api/{id}/_userSettings/showRecentPages', 'verb' => 'PUT',
 			'requirements' => ['id' => '\d+']],
+		['name' => 'collectiveUserSettings#favoritePages', 'url' => '/_api/{id}/_userSettings/favoritePages', 'verb' => 'PUT',
+			'requirements' => ['id' => '\d+']],
 
 		// share API
 		['name' => 'share#getCollectiveShares', 'url' => '/_api/{collectiveId}/shares', 'verb' => 'GET',
