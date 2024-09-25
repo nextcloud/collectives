@@ -7,7 +7,7 @@ updates:
   directory: "/"
   schedule:
     interval: weekly
-    day: saturday
+    day: monday
     time: "03:00"
     timezone: Europe/Paris
   open-pull-requests-limit: 10
@@ -19,40 +19,13 @@ updates:
   - max-nextcloud
 
 - package-ecosystem: composer
-  directory: "/vendor-bin/cs-fixer"
+  directories:
+    - "/vendor-bin/cs-fixer"
+    - "/vendor-bin/phpunit"
+    - "/vendor-bin/psalm"
   schedule:
     interval: weekly
-    day: saturday
-    time: "03:00"
-    timezone: Europe/Paris
-  open-pull-requests-limit: 10
-  labels:
-  - 3. to review
-  - dependencies
-  reviewers:
-  - mejo-
-  - max-nextcloud
-
-- package-ecosystem: composer
-  directory: "/vendor-bin/phpunit"
-  schedule:
-    interval: weekly
-    day: saturday
-    time: "03:00"
-    timezone: Europe/Paris
-  open-pull-requests-limit: 10
-  labels:
-  - 3. to review
-  - dependencies
-  reviewers:
-  - mejo-
-  - max-nextcloud
-
-- package-ecosystem: composer
-  directory: "/vendor-bin/psalm"
-  schedule:
-    interval: weekly
-    day: saturday
+    day: monday
     time: "03:00"
     timezone: Europe/Paris
   open-pull-requests-limit: 10
@@ -67,6 +40,7 @@ updates:
   directory: "/"
   schedule:
     interval: weekly
+    day: monday
     time: "03:00"
     timezone: Europe/Paris
   open-pull-requests-limit: 10
