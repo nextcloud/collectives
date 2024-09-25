@@ -29,6 +29,7 @@ class CollectiveUserSettings extends Entity implements JsonSerializable {
 	public const supportedSettings = [
 		'page_order',
 		'show_recent_pages',
+		'favorite_pages',
 	];
 
 	protected ?int $collectiveId = null;
@@ -84,6 +85,17 @@ class CollectiveUserSettings extends Entity implements JsonSerializable {
 	 */
 	public function setShowRecentPages(bool $showRecentPages): void {
 		$this->setSetting('show_recent_pages', $showRecentPages);
+	}
+
+	/**
+	 * @throws NotPermittedException
+	 * @throws JsonException
+	 */
+	public function setFavoritePages(array $favoritePages): void {
+		if ($favoritePages !== array_filter($favoritePages, 'is_int')) {
+			throw new NotPermittedException('Invalid favorite pages value.');
+		}
+		$this->setSetting('favorite_pages', $favoritePages);
 	}
 
 	public function jsonSerialize(): array {

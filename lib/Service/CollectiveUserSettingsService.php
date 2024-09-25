@@ -68,4 +68,28 @@ class CollectiveUserSettingsService {
 			throw new NotPermittedException($e->getMessage(), 0, $e);
 		}
 	}
+
+	/**
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function setFavoritePages(int $collectiveId, string $userId, string $favoritePages): void {
+		// Expect an array of
+		try {
+			$favoritePagesArray = json_decode($favoritePages, false, 512, JSON_THROW_ON_ERROR);
+		} catch (\JsonException) {
+			throw new NotPermittedException('Unsupported favorite pages format (stringified array expected): ' . $favoritePages);
+		}
+		if (!is_array($favoritePagesArray)) {
+			throw new NotPermittedException('Unsupported favorite pages format (stringified array expected): ' . $favoritePages);
+		}
+		$settings = $this->initSettings($collectiveId, $userId);
+		$settings->setFavoritePages($favoritePagesArray);
+
+		try {
+			$this->collectiveUserSettingsMapper->insertOrUpdate($settings);
+		} catch (Exception $e) {
+			throw new NotPermittedException($e->getMessage(), 0, $e);
+		}
+	}
 }

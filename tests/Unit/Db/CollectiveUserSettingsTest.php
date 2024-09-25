@@ -74,4 +74,18 @@ class CollectiveUserSettingsTest extends TestCase {
 		$settings->setShowRecentPages(true);
 		self::assertEquals(true, $settings->getSetting('show_recent_pages'));
 	}
+
+	public function testSetFavoritePagesException(): void {
+		$settings = new CollectiveUserSettings();
+
+		// Test invalid value(only numbers allowed in array)
+		$this->expectException(NotPermittedException::class);
+		$settings->setFavoritePages([1, 'a', 3]);
+	}
+
+	public function testSetFavoritePages(): void {
+		$settings = new CollectiveUserSettings();
+		$settings->setFavoritePages([1, 2, 3]);
+		self::assertEquals([1, 2, 3], $settings->getSetting('favorite_pages'));
+	}
 }
