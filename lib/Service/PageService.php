@@ -389,7 +389,7 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function getPagesFromFolder(int $collectiveId, Folder $folder, string $userId, bool $recurse = false): array {
+	public function getPagesFromFolder(int $collectiveId, Folder $folder, string $userId, bool $recurse = false, bool $forceIndex = false): array {
 		$pageInfos = [];
 		$indexPage = null;
 
@@ -408,7 +408,7 @@ class PageService {
 		}
 
 		if (!$indexPage) {
-			if (count($pageInfos) === 0) {
+			if (!$forceIndex && count($pageInfos) === 0) {
 				return [];
 			}
 			$indexPage = $this->newPage($collectiveId, $folder, PageInfo::INDEX_PAGE_TITLE, $userId);
@@ -445,7 +445,7 @@ class PageService {
 	public function findAll(int $collectiveId, string $userId): array {
 		$folder = $this->getCollectiveFolder($collectiveId, $userId);
 		try {
-			return $this->getPagesFromFolder($collectiveId, $folder, $userId, true);
+			return $this->getPagesFromFolder($collectiveId, $folder, $userId, true, true);
 		} catch (FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
