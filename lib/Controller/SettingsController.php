@@ -53,10 +53,10 @@ class SettingsController extends OCSController {
 		}
 
 		if ($setting === 'user_folder') {
-			// No root folder, has to start with `/`, no subfolder
+			// No root folder, has to start with `/`, not allowed to end with `/`
 			if ($value === '/'
 				|| !(str_starts_with($value, '/'))
-				|| str_contains(substr($value, 1), '/')) {
+				|| str_ends_with($value, '/')) {
 				throw new InvalidArgumentException('Invalid collectives folder path');
 			}
 

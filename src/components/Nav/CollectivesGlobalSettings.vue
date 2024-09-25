@@ -61,10 +61,10 @@ export default {
 				.build()
 			picker.pick()
 				.then((path) => {
-					// No root folder, has to start with `/`, no subfolder
+					// No root folder, has to start with `/`, not allowed to end with `/`
 					if (path === '/'
 						|| !path.startsWith('/')
-						|| path.includes('/', 1)) {
+						|| path.endsWith('/')) {
 						const error = t('collectives', 'Invalid path selected. Only folders on first level are supported.')
 						showError(error)
 						throw new Error(error)

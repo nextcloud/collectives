@@ -17,6 +17,14 @@ Feature: mountpoint
     And user "alice" has webdav access to "BehatMountPoint" with permissions "RMG"
     And user "bob" has webdav access to "BehatMountPoint" with permissions "MG"
 
+  Scenario: Change collectives user folder for user
+    When user "bob" sets setting "user_folder" to value "/some/folder"
+    Then user "jane" has webdav access to "BehatMountPoint" with permissions "RMGDNVCK"
+    And user "john" has webdav access to "BehatMountPoint" with permissions "RMGDNVCK"
+    And user "alice" has webdav access to "BehatMountPoint" with permissions "RMG"
+    And user "bob" has webdav access to "BehatMountPoint" with permissions "MG"
+    Then user "bob" sets setting "user_folder" to value "/Collectives"
+
   Scenario: Trash page via webdav
     When user "bob" fails to trash page "firstpage" via webdav in "BehatMountPoint"
     And user "jane" trashes page "firstpage" via webdav in "BehatMountPoint"
