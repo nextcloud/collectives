@@ -221,6 +221,7 @@ class CollectiveServiceTest extends TestCase {
 			'shareEditable' => false,
 			'userPageOrder' => 0,
 			'userShowRecentPages' => true,
+			'userFavoritePages' => [],
 			'canLeave' => true,
 		], $collective->jsonSerialize());
 	}

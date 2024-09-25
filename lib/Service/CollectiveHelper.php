@@ -42,6 +42,7 @@ class CollectiveHelper {
 				$settings = $this->collectiveUserSettingsMapper->findByCollectiveAndUser($c->getId(), $userId);
 				$c->setUserPageOrder(($settings ? $settings->getSetting('page_order') : null) ?? Collective::defaultPageOrder);
 				$c->setUserShowRecentPages(($settings ? $settings->getSetting('show_recent_pages') : null) ?? Collective::defaultShowRecentPages);
+				$c->setUserFavoritePages(($settings ? $settings->getSetting('favorite_pages') : null) ?? []);
 			}
 		}
 		return $collectives;
