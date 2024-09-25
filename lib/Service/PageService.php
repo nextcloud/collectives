@@ -396,7 +396,12 @@ class PageService {
 		// Add subpages and recurse over subfolders
 		foreach ($folder->getDirectoryListing() as $node) {
 			if ($node instanceof File && NodeHelper::isPage($node)) {
-				$page = $this->getPageByFile($node, $folder);
+				try {
+					$page = $this->getPageByFile($node, $folder);
+				} catch (NotFoundException) {
+					// If parent folder doesn't have an index page, it throws NotFoundException. Let's ignore it.
+					continue;
+				}
 				if (NodeHelper::isIndexPage($node)) {
 					$indexPage = $page;
 				} else {
