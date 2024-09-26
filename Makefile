@@ -34,11 +34,11 @@ all: setup-dev lint build test
 setup-dev: composer-install node-modules
 
 # Install build tools
-composer:
-ifeq (, $(wildcard $(BUILD_TOOLS_DIR)/composer.phar))
+composer: $(BUILD_TOOLS_DIR)/composer.phar
+
+$(BUILD_TOOLS_DIR)/composer.phar:
 	mkdir -p $(BUILD_TOOLS_DIR)
 	cd $(BUILD_TOOLS_DIR) && curl -sS https://getcomposer.org/installer | php
-endif
 
 $(BUILD_TOOLS_DIR)/info.xsd:
 	mkdir -p $(BUILD_TOOLS_DIR)
