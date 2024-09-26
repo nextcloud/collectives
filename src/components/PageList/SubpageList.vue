@@ -17,6 +17,7 @@
 			:level="level"
 			:can-edit="currentCollectiveCanEdit"
 			:is-template="isTemplate"
+			:is-favorite="isFavorite"
 			:has-visible-subpages="hasVisibleSubpages"
 			:filtered-view="filteredView"
 			@toggleCollapsed="toggleCollapsed(page.id)"
@@ -74,6 +75,10 @@ export default {
 			default: false,
 		},
 		isTemplate: {
+			type: Boolean,
+			default: false,
+		},
+		isFavorite: {
 			type: Boolean,
 			default: false,
 		},

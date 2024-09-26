@@ -94,6 +94,14 @@
 					</NcButton>
 				</span>
 			</div>
+			<div v-if="!isFilteredView && hasFavoritePages" class="page-list-favorites">
+				<SubpageList v-for="page in favoritePages"
+					:key="page.id"
+					:data-page-id="page.id"
+					:page="page"
+					:is-favorite="true"
+					:level="1" />
+			</div>
 			<SubpageList v-if="templateView"
 				:key="templateView.id"
 				:page="templateView"
@@ -229,6 +237,8 @@ export default {
 			'rootPage',
 			'templatePage',
 			'currentPage',
+			'hasFavoritePages',
+			'favoritePages',
 			'keptSortable',
 			'visibleSubpages',
 			'sortByOrder',
@@ -483,6 +493,10 @@ li.toggle-button.selected {
 	z-index: 1;
 	background-color: var(--color-main-background);
 	margin-block-end: 8px;
+}
+
+.page-list-favorites {
+	border-bottom: 1px solid var(--color-border);
 }
 
 .page-list-filtered {

@@ -50,6 +50,13 @@
 					class="item-icon-badge"
 					:class="isCollapsed(pageId) ? 'collapsed' : 'expanded'" />
 			</template>
+			<template v-if="isFavorite">
+				<StarIcon v-show="!filteredView"
+					:size="18"
+					fill-color="#FFCC00"
+					:title="t('collectives', 'Favorite')"
+					class="item-icon-favorite" />
+			</template>
 		</div>
 		<router-link :to="to"
 			draggable="false"
@@ -99,6 +106,7 @@ import pageMixin from '../../mixins/pageMixin.js'
 import PageIcon from '../Icon/PageIcon.vue'
 import PageActionMenu from '../Page/PageActionMenu.vue'
 import PageTemplateIcon from '../Icon/PageTemplateIcon.vue'
+import StarIcon from 'vue-material-design-icons/Star.vue'
 import { scrollToPage } from '../../util/scrollToElement.js'
 
 export default {
@@ -113,6 +121,7 @@ export default {
 		PageActionMenu,
 		PageTemplateIcon,
 		PlusIcon,
+		StarIcon,
 	},
 
 	mixins: [
@@ -162,6 +171,10 @@ export default {
 			default: false,
 		},
 		isTemplate: {
+			type: Boolean,
+			default: false,
+		},
+		isFavorite: {
 			type: Boolean,
 			default: false,
 		},
@@ -441,6 +454,17 @@ export default {
 			&.expanded {
 				transform: rotate(90deg);
 			}
+		}
+
+		// Configure favorite icon
+		.item-icon-favorite {
+			position: absolute;
+			top: 0;
+			right: -1px;
+			cursor: pointer;
+			border: 0;
+			border-radius: 50%;
+			background-color: var(--color-main-background);
 		}
 	}
 
