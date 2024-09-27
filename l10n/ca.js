@@ -201,6 +201,7 @@ OC.L10N.register(
     "Backlinks" : "Enllaços",
     "Sharing" : "Ús compartit",
     "Versions" : "Versions",
+    "Clear search" : "Neteja la cerca",
     "The content of this folder is best viewed in the Collectives app." : "El contingut d'aquesta carpeta es veu millor a l'aplicació Col·lectius.",
     "Open in Collectives" : "Obert en Col·lectius",
     "Come, organize and build shared knowledge!" : "Vine, organitza i crea coneixement compartit!",
