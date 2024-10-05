@@ -120,8 +120,7 @@ export const usePagesStore = defineStore('pages', {
 		pageSlugPath: (state) => (page) => {
 			const collectivesStore = useCollectivesStore()
 			const collective = collectivesStore.currentCollective.slug || collectivesStore.currentCollective.name
-			const slugsPath = pageParents(state)(page.id).map(p => p.slug)
-			return [collective, ...slugsPath].filter(Boolean).map(encodeURIComponent).join('/')
+			return [collective, `page-${page.id}-${page.slug}`].join('/')
 		},
 
 		pagePathTitle: () => (page) => {

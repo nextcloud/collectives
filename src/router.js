@@ -41,7 +41,7 @@ const routes = [
 		component: CollectiveView,
 		props: (route) => route.params,
 		children: [
-			{ path: ':pageSlugPart+-:pageId(\\d+)' },
+			{ path: 'page-:pageId(\\d+)-:pageSlug' },
 			{ path: ':page*' },
 		],
 	},
@@ -56,7 +56,7 @@ const routes = [
 		component: CollectiveView,
 		props: (route) => route.params,
 		children: [
-			{ path: ':pageSlugPart+-:pageId(\\d+)' },
+			{ path: 'page-:pageId(\\d+)-:pageSlug' },
 			{ path: ':page*' },
 		],
 	},

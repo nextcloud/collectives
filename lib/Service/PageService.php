@@ -1102,6 +1102,6 @@ class PageService {
 			return null;
 		}
 
-		return $this->slugGeneratorService->generatePageSlug($file->getId(), $title);
+		return $this->slugGeneratorService->generatePageSlug($title);
 	}
 }

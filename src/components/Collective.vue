@@ -98,7 +98,7 @@ export default {
 			const routerParams = this.$router.currentRoute.params
 			// If the current page is not the one we are supposed to be on, redirect
 			if (this.currentPage && !this.isIndexPage) {
-				const actualUrl = `${routerParams.collectiveSlugPart}-${routerParams.collectiveId}/${routerParams.pageSlugPart}-${routerParams.pageId}`
+				const actualUrl = `${routerParams.collectiveSlugPart}-${routerParams.collectiveId}/page-${routerParams.pageId}-${routerParams.pageSlug}`
 				const expectedUrl = this.pageSlugPath(this.currentPage)
 
 				if (actualUrl !== expectedUrl) {

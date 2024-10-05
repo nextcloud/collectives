@@ -60,7 +60,6 @@ class Version021200Date20240820000001 extends SimpleMigrationStep {
 		$queryCollectives->select(['id', 'circle_unique_id'])->from('collectives');
 		$resultCollectives = $queryCollectives->executeQuery();
 
-
 		$queryPages = $this->connection->getQueryBuilder();
 		$queryPages->select(['id'])
 			->from('collectives_pages');
@@ -81,7 +80,7 @@ class Version021200Date20240820000001 extends SimpleMigrationStep {
 					continue;
 				}
 
-				$slug = $this->slugGeneratorService->generatePageSlug($pageInfo->getId(), $pageInfo->getTitle());
+				$slug = $this->slugGeneratorService->generatePageSlug($pageInfo->getTitle());
 				$update
 					->setParameter('file_id', $pageInfo->getId(), IQueryBuilder::PARAM_INT)
 					->setParameter('slug', $slug, IQueryBuilder::PARAM_STR)

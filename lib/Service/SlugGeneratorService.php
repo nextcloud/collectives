@@ -21,7 +21,7 @@ class SlugGeneratorService {
 		return $this->slugger->slug($name)->toString() . '-' . $collectiveId;
 	}
 
-	public function generatePageSlug(int $fileId, string $title): string {
-		return $this->slugger->slug($title)->toString() . '-' . $fileId;
+	public function generatePageSlug(string $title): string {
+		return $this->slugger->slug($title)->toString();
 	}
 }
