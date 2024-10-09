@@ -10,10 +10,10 @@ declare(strict_types=1);
 namespace OCA\Collectives\ACL;
 
 use OC\Files\Cache\Cache;
-use OC\Files\Cache\Scanner;
 use OC\Files\Cache\Wrapper\CacheWrapper;
 use OC\Files\Storage\Wrapper\Wrapper;
 use OCP\Constants;
+use OCP\Files\Cache\IScanner;
 use Traversable;
 
 class ACLStorageWrapper extends Wrapper {
@@ -60,7 +60,7 @@ class ACLStorageWrapper extends Wrapper {
 		return $this->checkPermissions(Constants::PERMISSION_SHARE) && parent::isSharable($path);
 	}
 
-	public function getPermissions($path) {
+	public function getPermissions($path): int {
 		return $this->storage->getPermissions($path) & $this->permissions;
 	}
 
@@ -110,7 +110,7 @@ class ACLStorageWrapper extends Wrapper {
 		return $this->checkPermissions(Constants::PERMISSION_DELETE) && parent::unlink($path);
 	}
 
-	public function file_put_contents($path, $data) {
+	public function file_put_contents($path, $data): int|float|false {
 		$permissions = $this->file_exists($path) ? Constants::PERMISSION_UPDATE : Constants::PERMISSION_CREATE;
 		return $this->checkPermissions($permissions) ? parent::file_put_contents($path, $data) : false;
 	}
@@ -147,7 +147,7 @@ class ACLStorageWrapper extends Wrapper {
 		return $data;
 	}
 
-	public function getScanner($path = '', $storage = null): Scanner {
+	public function getScanner($path = '', $storage = null): IScanner {
 		if (!$storage) {
 			$storage = $this->storage;
 		}
@@ -164,14 +164,14 @@ class ACLStorageWrapper extends Wrapper {
 			parent::is_file($path);
 	}
 
-	public function stat($path) {
+	public function stat($path): array|false {
 		if (!$this->checkPermissions(Constants::PERMISSION_READ)) {
 			return false;
 		}
 		return parent::stat($path);
 	}
 
-	public function filetype($path) {
+	public function filetype($path): string|false {
 		if (!$this->checkPermissions(Constants::PERMISSION_READ)) {
 			return false;
 		}
@@ -182,42 +182,42 @@ class ACLStorageWrapper extends Wrapper {
 		return $this->checkPermissions(Constants::PERMISSION_READ) && parent::file_exists($path);
 	}
 
-	public function filemtime($path) {
+	public function filemtime($path): int|false {
 		if (!$this->checkPermissions(Constants::PERMISSION_READ)) {
 			return false;
 		}
 		return parent::filemtime($path);
 	}
 
-	public function file_get_contents($path) {
+	public function file_get_contents($path): string|false {
 		if (!$this->checkPermissions(Constants::PERMISSION_READ)) {
 			return false;
 		}
 		return parent::file_get_contents($path);
 	}
 
-	public function getMimeType($path) {
+	public function getMimeType($path): string|false {
 		if (!$this->checkPermissions(Constants::PERMISSION_READ)) {
 			return false;
 		}
 		return parent::getMimeType($path);
 	}
 
-	public function hash($type, $path, $raw = false) {
+	public function hash($type, $path, $raw = false): string|false {
 		if (!$this->checkPermissions(Constants::PERMISSION_READ)) {
 			return false;
 		}
 		return parent::hash($type, $path, $raw);
 	}
 
-	public function getETag($path) {
+	public function getETag($path): string|false {
 		if (!$this->checkPermissions(Constants::PERMISSION_READ)) {
 			return false;
 		}
 		return parent::getETag($path);
 	}
 
-	public function getDirectDownload($path) {
+	public function getDirectDownload($path): array|false {
 		if (!$this->checkPermissions(Constants::PERMISSION_READ)) {
 			return false;
 		}
