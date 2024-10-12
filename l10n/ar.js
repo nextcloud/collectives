@@ -185,7 +185,7 @@ OC.L10N.register(
     "Set password" : "تعيين كلمة المرور",
     "Password" : "كلمة المرور",
     "Create share" : "إنشاء مشاركة",
-    "Add another link" : "أضِف رابطاً آخر",
+    "Add another link" : "إضافة رابط آخر",
     "Advanced settings" : "إعدادات متقدمة",
     "Unshare" : "إلغاء المشاركة",
     "Create a new share link" : "أنشِيءْ رابط مشاركة جديد",
