@@ -25,6 +25,7 @@ OC.L10N.register(
     "Advanced settings" : "Paplašināti iestatījumi",
     "Unshare" : "Pārtraukt koplietošanu",
     "Create a new share link" : "Izveidojiet jaunu kopīgošanas saiti",
+    "View only" : "Tikai skatīt",
     "Can edit" : "Var labot",
     "Download" : "Lejupielādēt",
     "Current version" : "Pašreizējā versija",

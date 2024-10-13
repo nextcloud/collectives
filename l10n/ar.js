@@ -188,7 +188,7 @@ OC.L10N.register(
     "Add another link" : "إضافة رابط آخر",
     "Advanced settings" : "إعدادات متقدمة",
     "Unshare" : "إلغاء المشاركة",
-    "Create a new share link" : "أنشِيءْ رابط مشاركة جديد",
+    "Create a new share link" : "إنشاء رابط مشاركة جديد",
     "Update share" : "تحديث المشاركة",
     "Share link ({index})" : "رابط المشاركة ({index})",
     "View only" : "للعرض فقط",
