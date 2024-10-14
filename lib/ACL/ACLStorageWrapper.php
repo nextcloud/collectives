@@ -164,7 +164,7 @@ class ACLStorageWrapper extends Wrapper {
 			parent::is_file($path);
 	}
 
-	public function stat($path) {
+	public function stat(string $path): array|false {
 		if (!$this->checkPermissions(Constants::PERMISSION_READ)) {
 			return false;
 		}
