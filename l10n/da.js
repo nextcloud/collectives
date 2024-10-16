@@ -157,6 +157,7 @@ OC.L10N.register(
     "Could not save page order for collective" : "Kunne ikke gemme siderækkefølge for kollektiv",
     "Set password" : "Sæt password",
     "Password" : "Password",
+    "Create share" : "Opret share",
     "Add another link" : "Tilføj et link mere",
     "Advanced settings" : "Avancerede indstillinger",
     "Unshare" : "Fjern deling",
