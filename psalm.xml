@@ -31,6 +31,11 @@
 				<referencedClass name="OCP\SetupCheck\ISetupCheck" />
             </errorLevel>
         </UndefinedClass>
+		<UndefinedMethod>
+			<errorLevel type="suppress">
+				<referencedMethod name="OCA\Circles\Model\Circle::getOwner" />
+			</errorLevel>
+		</UndefinedMethod>
         <UndefinedDocblockClass>
             <errorLevel type="suppress">
                 <referencedClass name="Doctrine\DBAL\Driver\Statement" />
