@@ -156,7 +156,7 @@ OC.L10N.register(
     "Password protection (enforced)" : "Ochrana heslom (vynúttená)",
     "Set password" : "Nastaviť heslo",
     "Password" : "Heslo",
-    "Create share" : "Vytvoriť sprístupnenie",
+    "Create share" : "Vytvoriť zdieľanie",
     "Add another link" : "Pridať ďalší odkaz",
     "Advanced settings" : "Rozšírené nastavenia",
     "Unshare" : "Zrušiť zdieľanie",
