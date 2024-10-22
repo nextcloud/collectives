@@ -432,7 +432,7 @@ export default {
 
 .app-content-list {
 	// nextcloud-vue component sets `max-height: unset` on mobile.
-	// Overwrite this to fix stickyness of header and rootpage.
+	// Overwrite this to fix stickiness of header and rootpage.
 	max-height: 100%;
 }
 
@@ -471,6 +471,7 @@ li.toggle-button.selected {
 }
 
 .page-list {
+	overflow-y: auto;
 	display: flex;
 	flex-direction: column;
 	flex-grow: 1;
@@ -497,7 +498,7 @@ li.toggle-button.selected {
 
 	position: sticky;
 	// landing page + 8px margin-bottom
-	top: calc(var(--landing-page-height));
+	top: var(--landing-page-height);
 	z-index: 1;
 	background-color: var(--color-main-background);
 	border-bottom: 4px solid var(--color-main-background);

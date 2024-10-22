@@ -209,6 +209,8 @@ export default {
 @import '../../css/animation.scss';
 
 .page-trash {
+	position: sticky;
+	bottom: 0;
 	width: 100%;
 	margin-top: auto;
 	background-color: var(--color-main-background);
