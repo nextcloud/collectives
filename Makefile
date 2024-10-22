@@ -138,6 +138,7 @@ build: node-modules build-js-production composer-install-no-dev
 		--exclude="$(APP_NAME)/package-lock.json" \
 		--exclude="$(APP_NAME)/package.json" \
 		--exclude="$(APP_NAME)/psalm.xml" \
+		--exclude="$(APP_NAME)/rector.php" \
 		--exclude="$(APP_NAME)/renovate.json" \
 		--exclude="$(APP_NAME)/src" \
 		--exclude="$(APP_NAME)/stylelint.config.js" \
