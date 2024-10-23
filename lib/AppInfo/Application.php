@@ -137,7 +137,7 @@ class Application extends App implements IBootstrap {
 	}
 
 	private function registerMountProvider(IMountProviderCollection $collection,
-		MountProvider            $provider): void {
+		MountProvider $provider): void {
 		$collection->registerProvider($provider);
 	}
 }
