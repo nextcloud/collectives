@@ -126,7 +126,7 @@ OC.L10N.register(
     "Expand recent pages" : "فرد expand الصفحات المفتوحة مؤخراً",
     "Could not save recent pages setting for collective" : "تعذّر حفظ إعدادات الصفحات المفتوحة مؤخراً من التجميعة collective",
     "Team overview" : "لمحة عن الفريق",
-    "Open page sidebar" : "إفتح الشريط الجانبي للصفحة",
+    "Open page sidebar" : "فتح الشريط الجانبي للصفحة",
     "Full width" : "العرض الكامل",
     "Show in Files" : "عرض في الملفات ",
     "Move or copy" : "أنقُل أو انسَخ",
