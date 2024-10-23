@@ -23,11 +23,11 @@ class PageTrashController extends Controller {
 	use ErrorHelper;
 
 	public function __construct(
-		string            $appName,
-		IRequest          $request,
-		private PageService       $service,
-		IUserSession      $userSession,
-		private LoggerInterface   $logger,
+		string $appName,
+		IRequest $request,
+		private PageService $service,
+		IUserSession $userSession,
+		private LoggerInterface $logger,
 	) {
 		parent::__construct($appName, $request);
 		$this->userSession = $userSession;
