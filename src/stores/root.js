@@ -5,7 +5,7 @@
 
 import { defineStore } from 'pinia'
 import { set } from 'vue'
-import { editorApiReaderFileId, pageModes } from '../constants.js'
+import { editorApiReaderFileId, editorApiUpdateReadonlyBarProps, pageModes } from '../constants.js'
 
 export const useRootStore = defineStore('root', {
 	state: () => ({
@@ -38,6 +38,9 @@ export const useRootStore = defineStore('root', {
 			const flags = []
 			if (this.editorApiVersionCheck('1.1')) {
 				flags.push(editorApiReaderFileId)
+			}
+			if (this.editorApiVersionCheck('1.2')) {
+				flags.push(editorApiUpdateReadonlyBarProps)
 			}
 			return flags
 		},

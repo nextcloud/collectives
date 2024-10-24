@@ -31,6 +31,7 @@ import { useCollectivesStore } from '../../stores/collectives.js'
 import { usePagesStore } from '../../stores/pages.js'
 import { useVersionsStore } from '../../stores/versions.js'
 import editorMixin from '../../mixins/editorMixin.js'
+import { editorApiUpdateReadonlyBarProps } from '../../constants.js'
 import pageContentMixin from '../../mixins/pageContentMixin.js'
 import SkeletonLoading from '../SkeletonLoading.vue'
 
@@ -72,8 +73,17 @@ export default {
 	},
 
 	watch: {
-		'currentPage.timestamp'() {
-			this.getPageContent()
+		'currentPage.timestamp'(value) {
+			if (value) {
+				// Update currentPage in PageInfoBar component through Text editorAPI
+				if (this.editorApiFlags.includes(editorApiUpdateReadonlyBarProps)) {
+					this.reader?.updateReadonlyBarProps({
+						currentPage: this.pageInfoBarPage || this.pageToUse,
+					})
+				}
+
+				this.getPageContent()
+			}
 		},
 	},
 
@@ -141,7 +151,7 @@ export default {
 			}
 		},
 
-		stopEdit() {
+		async stopEdit() {
 			// switch back to edit if there's no content
 			if (!this.pageContent?.trim()) {
 				this.setTextEdit()
@@ -153,18 +163,21 @@ export default {
 
 			const changed = this.editorContent && (this.editorContent !== this.davContent)
 			if (changed) {
-				this.touchPage()
-				if (!this.isPublic && this.hasVersionsLoaded) {
-					this.getVersions(this.currentPage.id)
-				}
-
 				// Save pending changes in editor
 				// TODO: detect missing connection and display warning
-				this.save()
+				await this.save()
 					.catch(() => {
 						showError(t('collectives', 'Error saving the document. Please try again.'))
 						this.setTextEdit()
 					})
+
+				// Touch page to update last changed timestamp
+				this.touchPage()
+
+				// Update loaded versions
+				if (!this.isPublic && this.hasVersionsLoaded) {
+					this.getVersions(this.currentPage.id)
+				}
 			}
 		},
 

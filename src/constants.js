@@ -44,5 +44,6 @@ export const pageModes = {
 }
 
 export const editorApiReaderFileId = 'READER_FILE_ID'
+export const editorApiUpdateReadonlyBarProps = 'UPDATE_READONLY_BAR_PROPS'
 
 export const sessionUpdateInterval = 90 // in seconds
