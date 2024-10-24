@@ -63,4 +63,16 @@ class CollectiveUserSettingsController extends Controller {
 			return [];
 		});
 	}
+
+	#[NoAdminRequired]
+	public function favoritePages(int $id, string $favoritePages): DataResponse {
+		return $this->prepareResponse(function () use ($id, $favoritePages): array {
+			$this->service->setFavoritePages(
+				$id,
+				$this->getUserId(),
+				$favoritePages
+			);
+			return [];
+		});
+	}
 }

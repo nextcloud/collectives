@@ -137,6 +137,10 @@ export const useCollectivesStore = defineStore('collectives', {
 				? state.collectives.find(c => c.id === state.settingsCollectiveId)
 				: null
 		},
+
+		isFavoritePage: (state) => (id, pageId) => {
+			return state.collectives.find(c => c.id === id).userFavoritePages.includes(pageId)
+		},
 	},
 
 	actions: {
@@ -307,6 +311,26 @@ export const useCollectivesStore = defineStore('collectives', {
 		},
 
 		/**
+		 * @param {object} data the data object
+		 * @param {number} data.id ID of the collective to be updated
+		 * @param {number} data.pageId pageId to toggle in favoritePages
+		 */
+		async toggleFavoritePage({ id, pageId }) {
+			const favoritePages = this.collectives
+				.find(c => c.id === id)
+				.userFavoritePages
+				// Only unique entries, filter out duplicates
+				.filter((value, i, a) => a.indexOf(value) === i)
+
+			if (favoritePages.indexOf(pageId) === -1) {
+				favoritePages.push(pageId)
+			} else {
+				favoritePages.splice(favoritePages.findIndex(id => id === pageId), 1)
+			}
+			await this.setCollectiveUserSettingFavoritePages({ id, favoritePages })
+		},
+
+		/**
 		 * Set the page order for the current user
 		 *
 		 * @param {object} data the data object
@@ -321,6 +345,11 @@ export const useCollectivesStore = defineStore('collectives', {
 		async setCollectiveUserSettingShowRecentPages({ id, showRecentPages }) {
 			this.patchCollectiveWithProperty({ id, property: 'userShowRecentPages', value: showRecentPages })
 			await api.setCollectiveUserSettingShowRecentPages(id, showRecentPages)
+		},
+
+		async setCollectiveUserSettingFavoritePages({ id, favoritePages }) {
+			this.patchCollectiveWithProperty({ id, property: 'userFavoritePages', value: favoritePages })
+			await api.setCollectiveUserSettingFavoritePages(id, favoritePages)
 		},
 	},
 })

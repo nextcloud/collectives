@@ -64,6 +64,7 @@
 			<SkeletonLoading type="items" :count="3" />
 		</div>
 		<div v-else class="page-list">
+			<!-- Landing page -->
 			<Item key="Readme"
 				:to="currentCollectivePath"
 				:page-id="rootPage.id"
@@ -81,6 +82,8 @@
 				:filtered-view="false"
 				class="page-list-root-page"
 				@click.native="show('details')" />
+
+			<!-- Sort order container (optional) -->
 			<div v-if="!sortedBy('byOrder')" class="sort-order-container">
 				<span class="sort-order-chip">
 					{{ sortedBy('byTitle') ? t('collectives', 'Sorted by title') : t('collectives', 'Sorted by recently changed') }}
@@ -94,12 +97,19 @@
 					</NcButton>
 				</span>
 			</div>
+
+			<!-- Favorites -->
+			<PageFavorites v-if="showFavorites" />
+
+			<!-- Templates (optional) -->
 			<SubpageList v-if="templateView"
 				:key="templateView.id"
 				:page="templateView"
 				:level="1"
 				:filtered-view="isFilteredView"
 				:is-template="true" />
+
+			<!-- Filtered view page list -->
 			<div v-if="isFilteredView" ref="pageListFiltered" class="page-list-filtered">
 				<NcAppNavigationCaption v-if="filteredPages.length > 0" :name="t('Collectives','Results in title')" />
 				<RecycleScroller v-if="filteredPages.length > 0"
@@ -133,6 +143,8 @@
 					<SkeletonLoading type="items" :count="3" />
 				</div>
 			</div>
+
+			<!-- Unfiltered view page list -->
 			<Draggable v-else
 				:list="subpages"
 				:parent-id="rootPage.id"
@@ -146,6 +158,8 @@
 					class="page-list-drag-item" />
 			</Draggable>
 		</div>
+
+		<!-- Page trash -->
 		<PageTrash v-if="displayTrash" />
 	</NcAppContentList>
 </template>
@@ -165,6 +179,7 @@ import CloseIcon from 'vue-material-design-icons/Close.vue'
 import Draggable from './PageList/Draggable.vue'
 import SubpageList from './PageList/SubpageList.vue'
 import Item from './PageList/Item.vue'
+import PageFavorites from './PageList/PageFavorites.vue'
 import PageTrash from './PageList/PageTrash.vue'
 import SortAlphabeticalAscendingIcon from 'vue-material-design-icons/SortAlphabeticalAscending.vue'
 import SortAscendingIcon from 'vue-material-design-icons/SortAscending.vue'
@@ -193,6 +208,7 @@ export default {
 		Draggable,
 		Item,
 		PagesTemplateIcon,
+		PageFavorites,
 		PageTrash,
 		SubpageList,
 		SortAlphabeticalAscendingIcon,
@@ -229,6 +245,7 @@ export default {
 			'rootPage',
 			'templatePage',
 			'currentPage',
+			'hasFavoritePages',
 			'keptSortable',
 			'visibleSubpages',
 			'sortByOrder',
@@ -274,6 +291,10 @@ export default {
 
 		sortedBy() {
 			return (sortOrder) => this.sortByOrder === sortOrder
+		},
+
+		showFavorites() {
+			return !this.isFilteredView && this.hasFavoritePages
 		},
 
 		isFilteredView() {

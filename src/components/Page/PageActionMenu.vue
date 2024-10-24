@@ -65,6 +65,17 @@
 				{{ t('collectives', 'Show in Files') }}
 			</NcActionLink>
 
+			<!-- Favor page action: only displayed in page list and not for landing page -->
+			<NcActionButton v-if="inPageList"
+				:close-after-click="true"
+				@click="toggleFavoritePage({ id: currentCollective.id, pageId })">
+				<template #icon>
+					<StarOffIcon v-if="isFavoritePage(currentCollective.id, pageId)" :size="20" />
+					<StarIcon v-else :size="20" />
+				</template>
+				{{ toggleFavoriteString }}
+			</NcActionButton>
+
 			<!-- Share page action: only displayed in page list and not for landing page (already in collectives actions there) -->
 			<NcActionButton v-if="inPageList && currentCollectiveCanShare && !isLandingPage"
 				:close-after-click="true"
@@ -143,6 +154,8 @@ import MoveOrCopyModal from './MoveOrCopyModal.vue'
 import PagesTemplateIcon from '../Icon/PagesTemplateIcon.vue'
 import PageActionLastUser from './PageActionLastUser.vue'
 import ShareVariantIcon from 'vue-material-design-icons/ShareVariant.vue'
+import StarIcon from 'vue-material-design-icons/Star.vue'
+import StarOffIcon from 'vue-material-design-icons/StarOff.vue'
 import pageMixin from '../../mixins/pageMixin.js'
 import { usePagesStore } from '../../stores/pages.js'
 
@@ -165,6 +178,8 @@ export default {
 		PagesTemplateIcon,
 		PageActionLastUser,
 		ShareVariantIcon,
+		StarIcon,
+		StarOffIcon,
 	},
 
 	mixins: [
@@ -228,6 +243,7 @@ export default {
 			'currentCollectiveCanEdit',
 			'currentCollectiveCanShare',
 			'currentCollectiveIsPageShare',
+			'isFavoritePage',
 		]),
 		...mapState(usePagesStore, [
 			'hasSubpages',
@@ -262,6 +278,12 @@ export default {
 
 		filesUrl() {
 			return generateUrl(`/f/${this.currentPage.id}`)
+		},
+
+		toggleFavoriteString() {
+			return this.isFavoritePage(this.currentCollective.id, this.pageId)
+				? t('collectives', 'Remove from favorites')
+				: t('collectives', 'Add to favorites')
 		},
 
 		editTemplateString() {
@@ -310,7 +332,12 @@ export default {
 			'show',
 			'toggle',
 		]),
-		...mapActions(usePagesStore, ['setFullWidthView']),
+		...mapActions(useCollectivesStore, [
+			'toggleFavoritePage',
+		]),
+		...mapActions(usePagesStore, [
+			'setFullWidthView',
+		]),
 
 		onCheckFullWidthView() {
 			this.setFullWidthView({ pageId: this.currentPage.id, fullWidthView: true })

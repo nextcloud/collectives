@@ -175,6 +175,16 @@ export const usePagesStore = defineStore('pages', {
 			}
 		},
 
+		favoritePages(state) {
+			const collectivesStore = useCollectivesStore()
+			const favoritePages = collectivesStore.currentCollective.userFavoritePages
+			return state.pages.filter(p => favoritePages.includes(p.id))
+		},
+
+		hasFavoritePages(state) {
+			return state.favoritePages.length > 0
+		},
+
 		sortedSubpages,
 
 		allPagesSorted(state) {

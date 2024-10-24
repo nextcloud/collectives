@@ -50,6 +50,13 @@
 					class="item-icon-badge"
 					:class="isCollapsed(pageId) ? 'collapsed' : 'expanded'" />
 			</template>
+			<template v-if="showFavoriteStar">
+				<StarIcon v-show="!filteredView"
+					:size="18"
+					fill-color="var(--color-warning)"
+					:title="t('collectives', 'Favorite')"
+					class="item-icon-favorite" />
+			</template>
 		</div>
 		<router-link :to="to"
 			draggable="false"
@@ -88,6 +95,7 @@
 <script>
 import { generateUrl } from '@nextcloud/router'
 import { mapActions, mapState } from 'pinia'
+import { useCollectivesStore } from '../../stores/collectives.js'
 import { usePagesStore } from '../../stores/pages.js'
 import { TEMPLATE_PAGE } from '../../constants.js'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
@@ -99,6 +107,7 @@ import pageMixin from '../../mixins/pageMixin.js'
 import PageIcon from '../Icon/PageIcon.vue'
 import PageActionMenu from '../Page/PageActionMenu.vue'
 import PageTemplateIcon from '../Icon/PageTemplateIcon.vue'
+import StarIcon from 'vue-material-design-icons/Star.vue'
 import { scrollToPage } from '../../util/scrollToElement.js'
 
 export default {
@@ -113,6 +122,7 @@ export default {
 		PageActionMenu,
 		PageTemplateIcon,
 		PlusIcon,
+		StarIcon,
 	},
 
 	mixins: [
@@ -165,6 +175,10 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		inFavoriteList: {
+			type: Boolean,
+			default: false,
+		},
 		hasVisibleSubpages: {
 			type: Boolean,
 			default: false,
@@ -191,6 +205,10 @@ export default {
 	},
 
 	computed: {
+		...mapState(useCollectivesStore, [
+			'currentCollective',
+			'isFavoritePage',
+		]),
 		...mapState(usePagesStore, [
 			'isCollapsed',
 			'currentPage',
@@ -208,14 +226,13 @@ export default {
 				&& this.currentPage.id === this.pageId
 		},
 
-		indent() {
-			// Start indention at level 2. And limit to 5 to prevent nasty subtrees
-			return Math.min(Math.max(0, this.level - 1), 4)
+		isCollapsible() {
+			// root page and favorites are not collapsible
+			return this.level > 0 && !this.inFavoriteList && this.hasVisibleSubpages
 		},
 
-		isCollapsible() {
-			// root page is not collapsible
-			return (this.level > 0 && this.hasVisibleSubpages)
+		showFavoriteStar() {
+			return !this.inFavoriteList && this.isFavoritePage(this.currentCollective.id, this.pageId)
 		},
 
 		pageTitleString() {
@@ -366,12 +383,20 @@ export default {
 		span.item-icon-badge {
 			background-color: var(--color-primary-element-light);
 		}
+
+		span.item-icon-favorite {
+			background-color: var(--color-primary-element-light);
+		}
 	}
 
 	&:hover, &:focus, &:active, &.highlight {
 		background-color: var(--color-background-hover);
 
 		span.item-icon-badge {
+			background-color: var(--color-background-hover);
+		}
+
+		span.item-icon-favorite {
 			background-color: var(--color-background-hover);
 		}
 	}
@@ -441,6 +466,17 @@ export default {
 			&.expanded {
 				transform: rotate(90deg);
 			}
+		}
+
+		// Configure favorite icon
+		.item-icon-favorite {
+			position: absolute;
+			top: 0;
+			right: -1px;
+			cursor: pointer;
+			border: 0;
+			border-radius: 50%;
+			background-color: var(--color-main-background);
 		}
 	}
 

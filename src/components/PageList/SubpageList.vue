@@ -19,7 +19,6 @@
 			:is-template="isTemplate"
 			:has-visible-subpages="hasVisibleSubpages"
 			:filtered-view="filteredView"
-			@toggleCollapsed="toggleCollapsed(page.id)"
 			@click.native="show('details')" />
 		<div class="page-list-indent">
 			<SubpageList v-if="templateView"
@@ -145,7 +144,6 @@ export default {
 		...mapActions(usePagesStore, [
 			'collapse',
 			'expand',
-			'toggleCollapsed',
 		]),
 
 		initCollapsed() {

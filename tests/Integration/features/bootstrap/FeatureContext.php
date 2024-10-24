@@ -1880,7 +1880,7 @@ class FeatureContext implements Context {
 		}
 
 		if ($revert === false) {
-			Assert::assertEquals($value, $collective[$key]);
+			Assert::assertEquals($value, json_encode($collective[$key]));
 		} else {
 			Assert::assertNotEquals($value, $collective[$key]);
 		}

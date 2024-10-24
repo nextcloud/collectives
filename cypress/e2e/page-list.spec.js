@@ -201,6 +201,32 @@ describe('Page list', function() {
 		})
 	})
 
+	describe('Page favorites', function() {
+		it('Allows to add and remove pages from favorites', function() {
+			cy.get('.page-list .page-list-favorites')
+				.should('not.exist')
+
+			cy.openPageMenu('Day 1')
+			cy.clickMenuButton('Add to favorites')
+			cy.get('.page-list .page-list-favorites')
+				.should('contain', 'Day 1')
+
+			cy.get('.page-list-favorites-list')
+				.should('be.visible')
+			cy.get('.page-list-favorites .toggle-favorites-button')
+				.click()
+			cy.get('.page-list-favorites-list')
+				.should('not.be.visible')
+			cy.get('.page-list-favorites .toggle-favorites-button')
+				.click()
+
+			cy.openPageMenu('Day 1')
+			cy.clickMenuButton('Remove from favorites')
+			cy.get('.page-list .page-list-favorites')
+				.should('not.exist')
+		})
+	})
+
 	describe('Print view', function() {
 		it('renders all the pages', function() {
 			let printStub
