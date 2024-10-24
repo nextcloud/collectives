@@ -1,7 +1,7 @@
 { "translations": {
     "Add a collective" : "إضافة تجميعة",
     "Recent pages" : "الصفحات الحالية",
-    "Collectives" : "تجميعات Collectives",
+    "Collectives" : "تجميعات",
     "Collective pages" : "صفحات التجميعة",
     "In collective %1$s" : "في تجميعة %1$s",
     "Last edition %1$s" : "آخر نسخة %1$s",
@@ -23,9 +23,9 @@
     "Collectives is a Nextcloud App for activist and community projects to organize together.\nCome and gather in collectives to build shared knowledge.\n\n* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n  tied to a [Nextcloud Team](https://github.com/nextcloud/circles) and\n  owned by the collective.\n* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**\n  for page formatting.\n\n## Installation\n\nIn your Nextcloud instance, simply navigate to **»Apps«**, find the\n**»Teams«** and **»Collectives«** apps and enable them." : "تطبيق التجميعات Collectives هو تطبيق لنكست كلاود لتنظيم عممل الفرق و المجموعات لبناء المعرفة المشتركة.\n\n * 👥 **أتمتة سير العمل الجماعي غير الهرمي.**: كل تجميعة مرتبطة بـفريق من مستخدِمي نكست كلاود [Nextcloud Team] (https://github.com/nextcloud/circles) . \n* 📝 **تحرير الصفحة تعاونيّاً ** بالكيفية المعروفة في إيثرباد Etherpad؛ و ذلك أصبح ممكنا بفضل التطبيق [Text app] (https://github.com/nextcloud/text). \n* 🔤 **صيغة قياسية متعارف عليها لتحرير التجميعة؛ و هي صيغة ماركداون الشهيرة [Markdown] (https://en.wikipedia.org/wiki/Markdown)**. \n\n## التثبيت \nعلى خادوم نكست كلاود عندك، ما عليك سوى الانتقال إلى جزء **«التطبيقات Apps»**، ثم  البحث عن تطبيقات **«الفرق Teams»** و **«التجميعات Collectives»** و تمكينها.",
     "Manage members" : "إدارة الإعضاء",
     "Share link" : "مشاركة الرابط",
-    "Export or print" : "صدّر أو اطبع",
+    "Export or print" : "تصدير أو طباعة",
     "Settings" : "الإعدادات",
-    "Leave collective" : "غادر التجميعة collective",
+    "Leave collective" : "غادر التجميعة",
     "Left collective {name}" : "غادرت التجميعة {name}",
     "Could not leave the collective. {errorMessage}" : "تعذّرت مغادرة التجميعة {errorMessage}",
     "Collective not found: {collective}" : "التجميعة غير موجودة: {collective}",
@@ -36,13 +36,13 @@
     "Last changed by" : "آخر تعديل قام به ",
     "Members" : "الاعضاء",
     "No search results" : "لا توجد نتائج",
-    "Promote to admin" : "رفع الرتبة إلى مشرف",
+    "Promote to admin" : "ترقية إلى مدير",
     "Demote to member" : "خفض الرتبة إلى عضو",
     "Remove" : "حذف",
-    "admin" : "مشرف",
-    "moderator" : "مُنسّق",
+    "admin" : "مدير",
+    "moderator" : "مشرف",
     "member" : "عضو",
-    "Demote to moderator" : "خفض الرتبة إلى عضو",
+    "Demote to moderator" : "خفض الرتبة إلى مشرف",
     "Promote to moderator" : "ترقية لمشرف",
     "Member level changed" : "تمّ تغيير رتبة العضو",
     "Could not change member level" : "تعذّر تغيير رتبة العضو",
@@ -63,8 +63,8 @@
     "Select emoji for collective" : "إختر رمزاً تعبيرياً emoji للتجميعة collective",
     "Permissions" : "التصريحات",
     "Allow editing for" : "السماح بالتحرير لـ",
-    "Admins only" : "المشرفين فقط",
-    "Admins and moderators" : "المشرفين و المنسقين",
+    "Admins only" : "المديرون فقط",
+    "Admins and moderators" : "المديرون والمشرفون",
     "All members" : "كل الأعضاء",
     "Allow sharing for" : "إسمح بالمشاركة لـ",
     "Page settings" : "إعدادات الصفحة",
@@ -247,7 +247,7 @@
     "_%n byte_::_%n bytes_" : ["بايت","بايت","بايت","بايت","بايت","%n بايت"],
     "Error: Missing apps" : "خطأ: تطبيقات ناقصة",
     "The following dependency apps are missing: " : "تطبيقات التبعيّة dependency التالية ناقصة:",
-    "Please ask the administrator to enable these apps." : "رجاءً، أُطلُب من المُشرف تمكين هذه التطبيقات",
+    "Please ask the administrator to enable these apps." : "رجاءً، أُطلُب من مسؤول النظام تمكين هذه التطبيقات",
     "in Collective {collective}" : "في  التجميعة {collective}",
     "Created collective \"%s\" for existing circle." : "التجميعة \"%s\" أُنشئت للدائرة القائمة.",
     "A share for collective %s exists already" : "مشاركة التجميعة %s موجودة مسبقاً",
@@ -264,7 +264,7 @@
     "Select a collective or create a new one on the left." : "إختر تجميعةً أو أنشيء واحدةً جديدةً على الجانب.",
     "Last edited by {user}" : "آخر تعديلٍ كان من قِبٍَل {user}",
     "Save new collective name" : "حفظ اسم التجميعة الجديدة",
-    "Admins and moderaters" : "المشرفون و المنسّقون",
+    "Admins and moderaters" : "المديرون والمشرفون",
     "Members can be managed via the connected circle in the Contacts app." : "يمكن إدارة الأعضاء عبر الدائرة المتصلة connected circle في تطبيق جهات الاتصال.",
     "Open circle in Contacts" : "فتح الدائرة في جهات الاتصال",
     "Renaming is limited to owners of the circle" : "إعادة التسمية تقتصر على مُلّاك الدائرة",
