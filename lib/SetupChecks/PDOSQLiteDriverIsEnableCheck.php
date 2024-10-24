@@ -16,7 +16,7 @@ use OCP\SetupCheck\SetupResult;
 
 class PDOSQLiteDriverIsEnableCheck implements ISetupCheck {
 	public function __construct(
-		private IL10N         $l10n,
+		private IL10N $l10n,
 		private SearchService $searchService,
 	) {
 	}
