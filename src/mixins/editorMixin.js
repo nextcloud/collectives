@@ -118,9 +118,6 @@ export default {
 						currentPage: this.pageInfoBarPage || this.pageToUse,
 					},
 				},
-				onLinkClick: (_event, attrs) => {
-					this.followLink(_event, attrs)
-				},
 				onOutlineToggle: (visible) => {
 					this.toggleOutlineFromEditor(visible)
 				},
@@ -180,7 +177,7 @@ export default {
 			this.editor?.focus()
 		},
 
-		save() {
+		async save() {
 			return this.editor.save()
 		},
 
