@@ -156,7 +156,7 @@ OC.L10N.register(
     "Could not unshare the collective" : "Не удалось отозвать общий доступ группы",
     "Collective not found:" : "Группа не найдена:",
     "Select a collective or create a new one on the left." : "Выберите группу или создайте новую слева.",
-    "Last edited by {user}" : "Последний раз редактировалось {user}",
+    "Last edited by {user}" : "Последний раз изменялось {user}",
     "Save new collective name" : "Сохранить новое название группы",
     "Admins and moderaters" : "Администраторам и модераторам",
     "Members can be managed via the connected circle in the Contacts app." : "Участниками можно управлять через \\\"Окружения\\\" в приложении \\\"Контакты\\\".",
