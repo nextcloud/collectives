@@ -220,9 +220,10 @@ class Collective extends Entity implements JsonSerializable {
 	}
 
 	public function getUserPermissions(bool $isShare = false): int {
-		// Public shares always get permissions of a simple member
+		// Public shares always get permissions of a simple member plus sharing permission of owner
 		if ($isShare) {
-			return $this->getMemberPermissions();
+			$sharePermissions = $this->canShare() ? Constants::PERMISSION_SHARE : 0;
+			return $this->getMemberPermissions() | $sharePermissions;
 		}
 
 		if ($this->level === Member::LEVEL_OWNER || $this->level === Member::LEVEL_ADMIN) {
