@@ -13,6 +13,7 @@ use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\RecentPagesService;
 use OCP\Files\IMimeTypeLoader;
+use OCP\Files\IRootFolder;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IL10N;
@@ -32,6 +33,7 @@ class RecentPagesServiceTest extends TestCase {
 		$mimeTypeLoader = $this->createMock(IMimeTypeLoader::class);
 		$urlGenerator = $this->createMock(IURLGenerator::class);
 		$l10n = $this->createMock(IL10N::class);
+		$rootFolder = $this->createMock(IRootFolder::class);
 
 		$this->service = new RecentPagesService(
 			$this->collectiveService,
@@ -39,7 +41,9 @@ class RecentPagesServiceTest extends TestCase {
 			$config,
 			$mimeTypeLoader,
 			$urlGenerator,
-			$l10n);
+			$l10n,
+			$rootFolder
+		);
 
 		$this->user = $this->createMock(IUser::class);
 		$this->user->method('getUID')->willReturn('user');
