@@ -69,7 +69,6 @@ export default {
 	},
 
 	computed: {
-		...mapActions(useRootStore, ['show']),
 		...mapState(useCollectivesStore, [
 			'currentCollectiveCanEdit',
 		]),
@@ -80,6 +79,8 @@ export default {
 	},
 
 	methods: {
+		...mapActions(useRootStore, ['show']),
+
 		toggleFavorites() {
 			this.showFavoritesOpen = !this.showFavoritesOpen
 		},
