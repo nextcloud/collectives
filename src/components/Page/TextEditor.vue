@@ -185,11 +185,11 @@ export default {
 }
 
 .text-container-heading {
-	padding-left: 14px;
+	padding-inline: 14px 8px;
 }
 
 .page-content-skeleton {
-	padding-top: var(--default-clickable-area);
+	padding-block-start: var(--default-clickable-area);
 }
 
 @media print {

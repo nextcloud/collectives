@@ -32,9 +32,14 @@
 	--text-editor-max-width: 670px !important;
 
 	.landing-page-widgets,
-	.text-container-heading,
 	.page-heading-skeleton,
 	.page-content-skeleton {
+		width: var(--text-editor-max-width);
+		max-width: var(--text-editor-max-width);
+		margin-inline: auto;
+	}
+
+	.text-container-heading {
 		max-width: var(--text-editor-max-width);
 		margin-inline: auto;
 	}

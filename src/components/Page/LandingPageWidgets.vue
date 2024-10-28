@@ -61,7 +61,7 @@ export default {
 
 <style scoped>
 .landing-page-widgets {
-	padding-inline: 12px;
+	padding-inline: 14px 8px;
 }
 .first-row-widgets{
 	display: flex;
