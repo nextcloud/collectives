@@ -14,6 +14,7 @@ use OCA\Collectives\Model\RecentPage;
 use OCP\DB\Exception;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\IMimeTypeLoader;
+use OCP\Files\IRootFolder;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\IL10N;
@@ -30,6 +31,7 @@ class RecentPagesService {
 		protected IMimeTypeLoader $mimeTypeLoader,
 		protected IURLGenerator $urlGenerator,
 		protected IL10N $l10n,
+		protected IRootFolder $rootFolder,
 	) {
 	}
 
@@ -50,6 +52,7 @@ class RecentPagesService {
 
 		$qb = $this->dbc->getQueryBuilder();
 		$appData = $this->getAppDataFolderName();
+		$storageId = $this->rootFolder->get($appData)->getStorage()->getCache()->getNumericStorageId();
 		$mimeTypeMd = $this->mimeTypeLoader->getId('text/markdown');
 
 		$expressions = [];
@@ -64,7 +67,8 @@ class RecentPagesService {
 		$qb->select('p.*', 'f.mtime as timestamp', 'f.name as filename', 'f.path as path')
 			->from('filecache', 'f')
 			->leftJoin('f', 'collectives_pages', 'p', $qb->expr()->eq('f.fileid', 'p.file_id'))
-			->where($qb->expr()->orX(...$expressions))
+			->where($qb->expr()->eq('f.storage', $qb->createNamedParameter($storageId, IQueryBuilder::PARAM_STR)))
+			->andWhere($qb->expr()->orX(...$expressions))
 			->andWhere($qb->expr()->eq('f.mimetype', $qb->createNamedParameter($mimeTypeMd, IQueryBuilder::PARAM_INT)))
 			->orderBy('f.mtime', 'DESC')
 			->setMaxResults($limit);
