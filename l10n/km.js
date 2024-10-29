@@ -11,6 +11,7 @@ OC.L10N.register(
     "Create" : "បង្កើត",
     "Done" : "Done",
     "Title" : "ចំណងជើង",
+    "Favorites" : "Favorites",
     "Deleted" : "បាន​លុប",
     "Unshare" : "លែង​ចែក​រំលែក",
     "Download" : "ទាញយក",

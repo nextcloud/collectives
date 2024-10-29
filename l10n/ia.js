@@ -14,6 +14,8 @@ OC.L10N.register(
     "Create" : "Crear",
     "Done" : "Preste",
     "Title" : "Titulo",
+    "Favorite" : "Favorite",
+    "Favorites" : "Favoritos",
     "Deleted" : "Delite",
     "Advanced settings" : "Configurationes avantiate",
     "Unshare" : "Cessa de compartir",

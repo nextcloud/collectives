@@ -10,6 +10,7 @@ OC.L10N.register(
     "Create" : "Ստեղծել",
     "Done" : "Done",
     "Title" : "Վերնագիր",
+    "Favorites" : "Սիրվածներ",
     "Deleted" : "Ջնջված",
     "Password" : "գախտնաբառ",
     "Unshare" : "Չկիսվել",

@@ -18,6 +18,7 @@ OC.L10N.register(
     "Create" : "Krouiñ",
     "Done" : "Graet",
     "Move or copy" : "Dilec'hiañ pe eilañ",
+    "Add to favorites" : "Ouzhpennañ d'ar penndibaboù",
     "Title" : "Titl",
     "Deleted" : "Lamet",
     "Set password" : "Termeniñ ur ger-tremen",

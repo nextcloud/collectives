@@ -116,6 +116,7 @@ OC.L10N.register(
     "Move or copy" : "Mou o copia",
     "Hide outline" : "Amaga l'esquema",
     "Show outline" : "Mostra l'esquema",
+    "Add to favorites" : "Afegeix a preferits",
     "Edit template for subpages" : "Edició de la plantilla per subpàgines",
     "Add template for subpages" : "Afegeix una plantilla per subpàgines",
     "Delete page and subpages" : "Suprimeix la pàgina i les subpàgines",

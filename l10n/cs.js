@@ -132,6 +132,7 @@ OC.L10N.register(
     "Move or copy" : "Přesunout nebo zkopírovat",
     "Hide outline" : "Skrýt ohraničení",
     "Show outline" : "Zobrazit ohraničení",
+    "Add to favorites" : "Přidat do oblíbených",
     "Edit template for subpages" : "Upravit šablonu pro podstránky",
     "Add template for subpages" : "Přidat šablonu pro podstránky",
     "Delete page and subpages" : "Smazat stránku a její podstránky",
