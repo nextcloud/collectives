@@ -14,6 +14,8 @@ OC.L10N.register(
     "Done" : "Valmis",
     "Move or copy" : "Liiguta või kopeeri",
     "Title" : "Pealkiri",
+    "Favorite" : "Lemmik",
+    "Favorites" : "Lemmikud",
     "Deleted" : "Kustutatud",
     "Password protection (enforced)" : "Paroolikaitse (jõustatud)",
     "Add another link" : "Lisa veel üks link",

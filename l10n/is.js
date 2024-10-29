@@ -22,6 +22,8 @@ OC.L10N.register(
     "Show outline" : "Birta útlínu",
     "Template" : "Sniðmát",
     "Title" : "Titill",
+    "Favorite" : "Eftirlæti",
+    "Favorites" : "Eftirlæti",
     "Deleted" : "Eytt",
     "Please enter the following required information before creating the share" : "Settu inn eftirfarandi nauðsynlegar upplýsingar áður en þú býrð til sameignina",
     "Password protection (enforced)" : "Verndun með lykilorði (nauðsynleg)",

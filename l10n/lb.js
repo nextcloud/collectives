@@ -12,6 +12,8 @@ OC.L10N.register(
     "Create" : "Erstellen",
     "Done" : "Done",
     "Title" : "Titel",
+    "Favorite" : "Favorit",
+    "Favorites" : "Favoriten",
     "Deleted" : "Geläscht",
     "Add another link" : "Füügt en anere Link",
     "Advanced settings" : "Erweidert Astellungen",

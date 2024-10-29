@@ -18,6 +18,8 @@ OC.L10N.register(
     "Done" : "Selesai",
     "Move or copy" : "Pindah atau salin",
     "Title" : "Judul",
+    "Favorite" : "Favorit",
+    "Favorites" : "Disukai",
     "Deleted" : "Dihapus",
     "Password" : "Kata sandi",
     "Add another link" : "Tambah tautan lain",

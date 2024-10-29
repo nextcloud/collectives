@@ -14,6 +14,8 @@ OC.L10N.register(
     "Done" : "Хийсэн",
     "Move or copy" : "Зөөх эсвэл хуулах",
     "Title" : "Цол/Албан тушаал",
+    "Favorite" : "Дуртай",
+    "Favorites" : "Онцолсон",
     "Deleted" : "Устгагдсан",
     "Password" : "нууц үг",
     "Advanced settings" : "Нарийвчилсан тохиргоо",

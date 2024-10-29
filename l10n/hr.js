@@ -26,6 +26,8 @@ OC.L10N.register(
     "Move or copy" : "Premjesti ili kopiraj",
     "Template" : "Predložak",
     "Title" : "Naslov",
+    "Favorite" : "Favorit",
+    "Favorites" : "Favoriti",
     "Deleted" : "Izbrisano",
     "Sort by title" : "Razvrstaj prema naslovu",
     "Please enter the following required information before creating the share" : "Unesite sljedeće informacije prije stvaranja dijeljenja",
