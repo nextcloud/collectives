@@ -1,5 +1,31 @@
 # Changelog
 
+## 2.15.0 - 2024.10.29
+
+### ✨New
+* ⭐ Add support for page favorites. (#300)
+* 🔧 Add console function to debug sync/Yjs issues.
+
+### 🐛Fixes
+* 🖨️ Several print style fixes. (#1110)
+* 💄 Make page list header, landing page and trash sticky again. (#1523)
+* ⌛ Update timestamp in page info bar when page gets saves via "Done" button. (#1371)
+* 💄 Fix alignment of landing page widgets.
+* 🐎 Use storage id for performant index usage on dashboard query.
+* 🏛️ Add return types of storage wrapper.
+* 👷 Exclude rector.php from release tarball. (#1541)
+* 🔗 Fix page link in reference widgets for index pages.
+* 🔗 Preserve anchors in links of reference widgets. Thanks @Koc.
+* 🐛 Create index page if subfolders contain pages.
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 2.14.4 - 2024.09.24
 
 ### 🐛Fixes
