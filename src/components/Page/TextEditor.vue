@@ -194,7 +194,7 @@ export default {
 .collectives-text-container {
 	// Required for search dialog to stick to the bottom
 	flex-grow: 1;
-	overflow: scroll;
+	overflow: auto;
 }
 
 .text-container-heading {
@@ -209,6 +209,10 @@ export default {
 	/* Don't print unwanted elements */
 	.text-container-heading {
 		display: none !important;
+	}
+
+	.collectives-text-container {
+		overflow: visible;
 	}
 }
 </style>
