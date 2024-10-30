@@ -14,6 +14,7 @@ OC.L10N.register(
     "Done" : "Gereed",
     "Move or copy" : "Kopieer of skuif",
     "Title" : "Titel",
+    "Favorites" : "Gunstelinge",
     "Deleted" : "Geskrap",
     "Advanced settings" : "Gevorderde instellings",
     "Unshare" : "Ontdeel",

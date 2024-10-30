@@ -13,6 +13,8 @@ OC.L10N.register(
     "Create" : "Creu",
     "Done" : "Done",
     "Title" : "Teitl",
+    "Favorite" : "Ffefryn",
+    "Favorites" : "Ffefrynnau",
     "Deleted" : "Wedi dileu",
     "Add another link" : "Ychwanegu dolen arall",
     "Unshare" : "Dad-rannu",
