@@ -94,15 +94,4 @@ export default {
 :deep(.text-menubar) {
 	display: none;
 }
-
-:deep([data-collectives-el='reader'] .content-wrapper) {
-	display: block !important;
-
-	div.ProseMirror {
-		margin-top: 0;
-		margin-bottom: 0;
-		padding-top: 0;
-		padding-bottom: 0;
-	}
-}
 </style>

@@ -157,6 +157,12 @@ $button-gap: calc(var(--default-grid-baseline) * 3);
 	background-color: var(--color-main-background);
 }
 
+@media print {
+	.search-dialog__container {
+		display: none;
+	}
+}
+
 .search-dialog__info {
 	margin: 0 calc(var(--default-grid-baseline) * 6);
 	font-weight: bold;

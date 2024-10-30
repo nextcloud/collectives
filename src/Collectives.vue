@@ -108,12 +108,11 @@ export default {
 	overflow-y: auto;
 }
 
-@page {
-	size: auto;
-	margin: 5mm;
-}
-
 @media print {
+	@page {
+		margin: 10mm !important;
+	}
+
 	html, body {
 		background: var(--color-main-background, white) !important;
 	}
@@ -128,16 +127,16 @@ export default {
 	}
 
 	#content-vue {
-		display: block !important;
+		margin: unset;
 	}
 
-	/* TODO: remove first selector once removing LegacyEditor.vue+Reader.vue */
-	#text-wrapper #text .content-wrapper,
 	[data-collectives-el='editor'] .content-wrapper,
 	[data-collectives-el='reader'] .content-wrapper {
-		display: block;
+		// Required to prevent newline between page title and content (due to `display: grid`)
+		display: block !important;
 
 		div.ProseMirror {
+			height: unset;
 			margin-top: 0;
 			margin-bottom: 0;
 			padding-top: 0;

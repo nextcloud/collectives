@@ -59,6 +59,7 @@
 	[data-collectives-el='editor'],
 	[data-collectives-el='reader'] {
 		max-width: unset;
+		min-width: var(--text-editor-max-width);
 		margin: auto;
 
 		.text-menubar {
@@ -77,8 +78,13 @@
 }
 
 @media print {
+	.sheet-view {
+		margin: unset !important;
+	}
+
 	.page-title, .document-status, .editor__content {
-		margin: 0 !important;
+		margin: unset !important;
 		max-width: unset !important;
+		min-width: var(--text-editor-max-width);
 	}
 }
