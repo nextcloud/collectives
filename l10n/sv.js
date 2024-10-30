@@ -164,6 +164,7 @@ OC.L10N.register(
     "Add a page" : "Lägg till en sida",
     "Add a subpage" : "Lägg till en undersida",
     "Favorites" : "Favoriter",
+    "Toggle favorites" : "Växla favoriter",
     "Deleted pages" : "Borttagna sidor",
     "No deleted pages." : "Inga borttagna sidor.",
     "Deleted" : "Borttagen",

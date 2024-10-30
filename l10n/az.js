@@ -13,6 +13,8 @@ OC.L10N.register(
     "Done" : "Done",
     "Move or copy" : "Köçürt və ya kopyala",
     "Title" : "Başlıq",
+    "Favorite" : "İstəkli",
+    "Favorites" : "Sevimlilər",
     "Deleted" : "Silinib",
     "Add another link" : "Başqa link əlavə edin",
     "Advanced settings" : "İrəliləmiş quraşdırmalar",

@@ -20,6 +20,8 @@ OC.L10N.register(
     "Move or copy" : "Dilec'hiañ pe eilañ",
     "Add to favorites" : "Ouzhpennañ d'ar penndibaboù",
     "Title" : "Titl",
+    "Favorite" : "Penndibab",
+    "Favorites" : "Penndibaboù",
     "Deleted" : "Lamet",
     "Set password" : "Termeniñ ur ger-tremen",
     "Add another link" : "Implij ul liamm all",

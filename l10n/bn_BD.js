@@ -11,6 +11,8 @@ OC.L10N.register(
     "Create" : "তৈরী কর",
     "Done" : "Done",
     "Title" : "শিরোনাম",
+    "Favorite" : "প্রিয়জন",
+    "Favorites" : "প্রিয়জন",
     "Deleted" : "মুছে ফেলা",
     "Unshare" : "ভাগাভাগি বাতিল ",
     "Download" : "ডাউনলোড",
