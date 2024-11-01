@@ -165,6 +165,7 @@ OC.L10N.register(
     "Add a page" : "Adicionar página",
     "Add a subpage" : "Adicionar subpágina",
     "Favorites" : "Favoritos",
+    "Toggle favorites" : "Alternar os favoritos",
     "Deleted pages" : "Páginas excluídas",
     "No deleted pages." : "Nenhuma página excluída.",
     "Deleted" : "Excluído",
