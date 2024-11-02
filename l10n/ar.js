@@ -165,6 +165,7 @@ OC.L10N.register(
     "Add a page" : "إضافة صفحة",
     "Add a subpage" : "إضِف صفحةً فرعيّةً",
     "Favorites" : "المُفضّلة",
+    "Toggle favorites" : "تبديل المفضلة",
     "Deleted pages" : "الصفحات المحذوفة",
     "No deleted pages." : "لا توجد صفحات محذوفة",
     "Deleted" : "تمّ حذفه",
