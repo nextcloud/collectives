@@ -149,6 +149,12 @@ export default {
 				this.setTextEdit()
 				this.done('newPageContent')
 			}
+
+			if (document.location.hash) {
+				// scroll to the corresponding header if the page was loaded with a hash
+				const element = document.querySelector(`[href="${document.location.hash}"]`)
+				element?.click()
+			}
 		},
 
 		async stopEdit() {

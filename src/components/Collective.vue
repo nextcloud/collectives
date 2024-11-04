@@ -94,7 +94,7 @@ export default {
 		},
 		'notFound'(current) {
 			if (current && this.currentFileIdPage) {
-				this.$router.replace(this.pagePath(this.currentFileIdPage))
+				this.$router.replace(this.pagePath(this.currentFileIdPage) + document.location.hash)
 			}
 		},
 	},

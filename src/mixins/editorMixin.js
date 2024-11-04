@@ -128,11 +128,6 @@ export default {
 				onLoaded: () => {
 					// TODO: remove check once we only support Nextcloud 30+
 					this.reader.setSearchQuery && this.reader.setSearchQuery(this.searchQuery, this.matchAll)
-					if (document.location.hash) {
-						// scroll to the corresponding header if the page was loaded with a hash
-						const element = document.querySelector(`[href="${document.location.hash}"]`)
-						element?.click()
-					}
 				},
 				onSearch: (results) => {
 					this.setSearchResults(results)
