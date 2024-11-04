@@ -205,6 +205,9 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 
 		$collectivesLink = $this->urlGenerator->linkToRouteAbsolute('collectives.start.index') . ($public ? 'p/' . $sharingToken . '/' : '');
 		$link = $collectivesLink . $this->pageService->getPageLink($collective->getName(), $page);
+		if (str_contains($referenceText, '#')) {
+			$link .= '#' . explode('#', $referenceText)[1];
+		}
 		$reference = new Reference($link);
 		$pageEmoji = $page->getEmoji();
 		$refTitle = $pageEmoji ? $pageEmoji . ' ' . $page->getTitle() : $page->getTitle();
