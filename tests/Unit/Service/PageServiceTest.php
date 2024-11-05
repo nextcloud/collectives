@@ -253,6 +253,7 @@ class PageServiceTest extends TestCase {
 
 	public function testGetPageLink(): void {
 		$collectiveName = 'My Collective';
+
 		$pageInfo1 = new PageInfo();
 		$pageInfo1->setId(123);
 		$pageInfo1->setFilePath('page one');
@@ -264,7 +265,7 @@ class PageServiceTest extends TestCase {
 
 		$pageInfo2 = new PageInfo();
 		$pageInfo2->setId(124);
-		$pageInfo2->setFilePath('page two/with another layer/and#spec!al_ch@rs?;');
+		$pageInfo2->setFilePath('page two/with another layer/and#spec!al_ch@rs?;/page');
 		$pageInfo2->setFileName('Readme.md');
 		$pageInfo2->setTitle('page');
 
