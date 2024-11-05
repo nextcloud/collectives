@@ -165,6 +165,7 @@ OC.L10N.register(
     "Add a page" : "Додај страницу",
     "Add a subpage" : "Додај подстраницу",
     "Favorites" : "Омиљене",
+    "Toggle favorites" : "Укљ./Искљ. омиљене",
     "Deleted pages" : "Обрисане странице",
     "No deleted pages." : "Нема обрисаних страница.",
     "Deleted" : "Обрисано",
