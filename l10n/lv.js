@@ -16,6 +16,7 @@ OC.L10N.register(
     "Back" : "Atpakaļ",
     "Create" : "Izveidot",
     "Done" : "Pabeigts",
+    "Team overview" : "Komandas pārskats",
     "Move or copy" : "Pārvietot vai kopēt",
     "Remove from favorites" : "Noņemt no izlases",
     "Add to favorites" : "Pievienot izlasei",
