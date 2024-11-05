@@ -1024,7 +1024,7 @@ class PageService {
 	public function getPageLink(string $collectiveName, PageInfo $pageInfo, bool $withFileId = true): string {
 		$collectiveRoute = rawurlencode($collectiveName);
 		$pagePathRoute = implode('/', array_map('rawurlencode', explode('/', $pageInfo->getFilePath())));
-		$pageTitleRoute = rawurlencode($pageInfo->getTitle());
+		$pageTitleRoute = ($pageInfo->getFileName() === PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX) ? '' : rawurlencode($pageInfo->getTitle());
 		$fullRoute = implode('/', array_filter([
 			$collectiveRoute,
 			$pagePathRoute,
