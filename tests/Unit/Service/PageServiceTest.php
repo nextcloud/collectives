@@ -220,7 +220,7 @@ class PageServiceTest extends TestCase {
 			$file->method('getMountPoint')
 				->willReturn($mountPoint);
 			$file->method('getInternalPath')
-				->willReturn('Collectives/testfolder/Readme.md');
+				->willReturn('Collectives/testfolder/' . $fileName);
 			$file->method('getMTime')
 				->willReturn(0);
 			$file->method('getSize')
@@ -248,6 +248,79 @@ class PageServiceTest extends TestCase {
 			);
 
 		self::assertEquals($pageInfos, $this->service->getPagesFromFolder($this->collectiveId, $folder, $this->userId, true));
+		self::assertEquals($pageInfos, $this->service->getPagesFromFolder($this->collectiveId, $folder, $this->userId, true));
+	}
+
+	public function testGetPagesFromFolderWithMissingIndex(): void {
+		$files = [];
+		$pageInfos = [];
+
+		$mountPoint = $this->getMockBuilder(MountPoint::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$mountPoint->method('getMountPoint')->willReturn('/files/user/Collectives/collective/');
+
+		$folder = $this->createMock(Folder::class);
+		$folder->method('getParent')
+			->willReturn($folder);
+		$folder->method('getName')
+			->willReturn('testfolder');
+
+		$file1Name = 'page1.md';
+		$file1 = $this->getMockBuilder(File::class)
+			->disableOriginalConstructor()
+			->getMock();
+		$file1->method('getId')
+			->willReturn(1);
+		$file1->method('getName')
+			->willReturn($file1Name);
+		$file1->method('getParent')
+			->willReturn($folder);
+		$file1->method('getMountPoint')
+			->willReturn($mountPoint);
+		$file1->method('getInternalPath')
+			->willReturn('Collectives/testfolder/' . $file1Name);
+		$file1->method('getMTime')
+			->willReturn(0);
+		$file1->method('getSize')
+			->willReturn(0);
+		$files[] = $file1;
+
+		$folder->method('getDirectoryListing')
+			->willReturn($files);
+
+		$pageInfo1 = new PageInfo();
+		$pageInfo1->fromFile($file1, 1);
+		$pageInfo1->setParentId(101);
+		$pageInfos[] = $pageInfo1;
+
+		$indexFile = $this->createMock(File::class);
+		$indexFile->method('getId')
+			->willReturn(101);
+		$indexFile->method('getName')
+			->willReturn('Readme.md');
+		$folder->method('get')
+			->willReturn($indexFile);
+		$indexFile->method('getParent')
+			->willReturn($folder);
+		$indexFile->method('getMountPoint')
+			->willReturn($mountPoint);
+		$indexFile->method('getInternalPath')
+			->willReturn('Collectives/testfolder/Readme.md');
+		$indexFile->method('getMTime')
+			->willReturn(0);
+		$indexFile->method('getSize')
+			->willReturn(0);
+		$folder->method('newFile')
+			->willReturn($indexFile);
+
+		$indexPageInfo = new PageInfo();
+		$indexPageInfo->fromFile($indexFile, 1);
+		$indexPageInfo->setParentId(101);
+		$indexPageInfo->setTitle('testfolder');
+		$indexPageInfo->setLastUserId('jane');
+		array_unshift($pageInfos, $indexPageInfo);
+
 		self::assertEquals($pageInfos, $this->service->getPagesFromFolder($this->collectiveId, $folder, $this->userId, true));
 	}
 

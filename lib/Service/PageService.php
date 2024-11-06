@@ -390,36 +390,62 @@ class PageService {
 	 * @throws NotPermittedException
 	 */
 	public function getPagesFromFolder(int $collectiveId, Folder $folder, string $userId, bool $recurse = false, bool $forceIndex = false): array {
-		$pageInfos = [];
-		$indexPage = null;
+		$subPageInfos = [];
+		$folderNodes = $folder->getDirectoryListing();
 
-		// Add subpages and recurse over subfolders
-		foreach ($folder->getDirectoryListing() as $node) {
-			if ($node instanceof File && NodeHelper::isPage($node)) {
+		$hasPages = false;
+		$pageFiles = [];
+		foreach ($folderNodes as $node) {
+			// Get page infos of subfolders
+			if ($recurse && $node instanceof Folder) {
 				try {
-					$page = $this->getPageByFile($node, $folder);
+					array_push($subPageInfos, ...$this->getPagesFromFolder($collectiveId, $node, $userId, true));
 				} catch (NotFoundException) {
-					// If parent folder doesn't have an index page, it throws NotFoundException. Let's ignore it.
-					continue;
+					// If parent folder doesn't have an index page, `getPagesFromFolder()` throws NotFoundException even though having subpages.
+					$hasPages = true;
 				}
-				if (NodeHelper::isIndexPage($node)) {
-					$indexPage = $page;
-				} else {
-					$pageInfos[] = $page;
+			} elseif ($node instanceof File && NodeHelper::isPage($node)) {
+				$hasPages = true;
+				$pageFiles[] = $node;
+				if (!isset($indexPage) && NodeHelper::isIndexPage($node)) {
+					$indexPage = $this->getPageByFile($node, $folder);
 				}
-			} elseif ($recurse && $node instanceof Folder) {
-				array_push($pageInfos, ...$this->getPagesFromFolder($collectiveId, $node, $userId, true));
 			}
 		}
 
-		if (!$indexPage) {
-			if (!$forceIndex && count($pageInfos) === 0) {
+		// One of the subfolders had a page
+		if (isset($subPageInfos[0])) {
+			$hasPages = true;
+		}
+
+		if (!isset($indexPage)) {
+			if ($hasPages || $forceIndex) {
+				// Create missing index page if folder or subfolders have page files (or forceIndex)
+				$indexPage = $this->newPage($collectiveId, $folder, PageInfo::INDEX_PAGE_TITLE, $userId);
+			} else {
+				// Ignore folders without an index page
 				return [];
 			}
-			$indexPage = $this->newPage($collectiveId, $folder, PageInfo::INDEX_PAGE_TITLE, $userId);
 		}
 
-		return array_merge([$indexPage], $pageInfos);
+		// Add markdown files from this folder
+		$folderPageInfos = [];
+		foreach ($pageFiles as $pageFile) {
+			if (NodeHelper::isIndexPage($pageFile)) {
+				continue;
+			}
+
+			try {
+				$page = $this->getPageByFile($pageFile, $folder);
+			} catch (NotFoundException) {
+				// If parent folder doesn't have an index page, it throws NotFoundException.
+				continue;
+			}
+
+			$folderPageInfos[] = $page;
+		}
+
+		return array_merge([$indexPage], $folderPageInfos, $subPageInfos);
 	}
 
 	/**
