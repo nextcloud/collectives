@@ -4,6 +4,7 @@
 -->
 
 <template>
+  <NcAppContentDetails class="collective-content">
 	<NcAppContentDetails>
 		<div v-if="loading('collective') || loading('currentPage')" class="sheet-view">
 			<SkeletonLoading :count="1" class="page-heading-skeleton" type="page-heading" />
@@ -12,6 +13,13 @@
 		<Page v-else-if="currentPage" />
 		<PageNotFound v-else />
 	</NcAppContentDetails>
+<style lang="scss" scoped>
+.collective-content {
+  @media (max-width: 767px) {
+    padding: 0;
+  }
+}
+</style>
 </template>
 
 <script>

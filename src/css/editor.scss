@@ -13,6 +13,11 @@
 	box-sizing: content-box !important;
 }
 
+  // Ensure content is centered on mobile
+  @media (max-width: 767px) {
+    padding: 0 16px;
+    overflow-x: hidden;
+  }
 .full-width-view {
 	// Required for search dialog to stick to the bottom
 	height: 100%;
@@ -23,6 +28,11 @@
 	max-width: unset;
 }
 
+  // Ensure content is centered on mobile
+  @media (max-width: 767px) {
+    padding: 0 16px;
+    overflow-x: hidden;
+  }
 .sheet-view {
 	// Required for search dialog to stick to the bottom
 	height: 100%;
@@ -45,6 +55,10 @@
 	}
 
 	.page-title {
+    @media (max-width: 767px) {
+      margin: 0;
+      width: 100%;
+    }
 		max-width: 100%;
 		margin: 0 0 0 max(0px, calc(50% - (var(--text-editor-max-width) / 2)));
 	}
