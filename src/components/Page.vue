@@ -4,6 +4,7 @@
 -->
 
 <template>
+  <div :class="['page-container', currentPage.isFullWidth ? 'full-width-view' : 'sheet-view']">
 	<div :class="[currentPage.isFullWidth ? 'full-width-view' : 'sheet-view']">
 		<h2 id="titleform" class="page-title" :class="{ 'pre-nc30': isPreNc30 }">
 			<!-- Page emoji or icon -->
@@ -106,6 +107,7 @@
 		<LandingPageWidgets v-if="isLandingPage" />
 		<TextEditor :key="`text-editor-${currentPage.id}`" ref="texteditor" />
 		<SearchDialog :show="shouldShowSearchDialog" />
+  </div>
 	</div>
 </template>
 
@@ -331,6 +333,12 @@ export default {
 	},
 }
 </script>
+
+.page-container {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
 
 <style lang="scss" scoped>
 // TODO: remove when we stop supporting NC < 30
