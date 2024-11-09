@@ -173,7 +173,7 @@ OC.L10N.register(
     "Search pages" : "البحث في الصفحات",
     "Search pages ..." : "إبحث في الصفحات ...",
     "Sort order" : "ترتيب الفرز",
-    "Sort by custom order" : "ترتيب مُخصّص",
+    "Sort by custom order" : "فرز من خلال ترتيب مخصص",
     "Sort recently changed first" : "ترتيب بحسب التعديلات الأخيرة",
     "Sort by title" : "ترتيب بحسب العنوان",
     "Sorted by title" : "مُرتّب بحسب العنوان",
