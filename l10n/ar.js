@@ -78,7 +78,7 @@ OC.L10N.register(
     "Change emoji" : "تغيير الرمز التعبيري",
     "Add emoji" : "اضافة رمز تعبيري",
     "Name of the collective" : "اسم التجميعة",
-    "Renaming is limited to owners of the team" : "تغيير التسمية يحق فقط لمالكي الفرق",
+    "Renaming is limited to owners of the team" : "إعادة التسمية يحق فقط لمالكي الفرق",
     "Name too short, requires at least three characters" : "الاسم قصير جدّاً. يلزم ثلاث حروف على الأقل",
     "Editing permissions updated" : "تعديلات الأذونات تمّ تحديثها",
     "Could not update editing permissions" : "تعذّر تحديث تعديلات الأذونات",
