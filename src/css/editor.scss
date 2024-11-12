@@ -34,13 +34,13 @@
 	.landing-page-widgets,
 	.page-heading-skeleton,
 	.page-content-skeleton {
-		width: var(--text-editor-max-width);
-		max-width: var(--text-editor-max-width);
+		width: min(var(--text-editor-max-width), 100%);
+		max-width: min(var(--text-editor-max-width), 100%);
 		margin-inline: auto;
 	}
 
 	.text-container-heading {
-		max-width: var(--text-editor-max-width);
+		max-width: min(var(--text-editor-max-width), 100%);
 		margin-inline: auto;
 	}
 
@@ -51,7 +51,7 @@
 
 	// Editor document status bar
 	.document-status {
-		max-width: var(--text-editor-max-width);
+		max-width: min(var(--text-editor-max-width), 100%);
 		padding: 0 2px;
 		margin: auto;
 	}
@@ -59,11 +59,11 @@
 	[data-collectives-el='editor'],
 	[data-collectives-el='reader'] {
 		max-width: unset;
-		min-width: var(--text-editor-max-width);
+		width: min(var(--text-editor-max-width), 100%);
 		margin: auto;
 
 		.text-menubar {
-			max-width: var(--text-editor-max-width);
+			max-width: min(var(--text-editor-max-width), 100%);
 			margin: auto;
 		}
 	}
@@ -85,6 +85,6 @@
 	.page-title, .document-status, .editor__content {
 		margin: unset !important;
 		max-width: unset !important;
-		min-width: var(--text-editor-max-width);
+		width: var(--text-editor-max-width);
 	}
 }
