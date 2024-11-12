@@ -170,6 +170,7 @@ $button-gap: calc(var(--default-grid-baseline) * 3);
 
 .search-dialog__buttons {
 	display: flex;
+	overflow: hidden;
 	align-items: center;
 	column-gap: $button-gap;
 }

@@ -103,8 +103,10 @@
 					:is-template="isTemplatePage" />
 			</div>
 		</h2>
-		<LandingPageWidgets v-if="isLandingPage" />
-		<TextEditor :key="`text-editor-${currentPage.id}`" ref="texteditor" />
+		<div class="page-scroll-container">
+			<LandingPageWidgets v-if="isLandingPage" />
+			<TextEditor :key="`text-editor-${currentPage.id}`" ref="texteditor" />
+		</div>
 		<SearchDialog :show="shouldShowSearchDialog" />
 	</div>
 </template>
@@ -336,6 +338,11 @@ export default {
 // TODO: remove when we stop supporting NC < 30
 .page-title.pre-nc30 {
 	padding-top: 11px;
+}
+
+.page-scroll-container {
+	overflow-y: auto;
+	flex-grow: 1;
 }
 
 .titlebar-buttons {
