@@ -194,7 +194,7 @@ OC.L10N.register(
     "Unshare" : "Opphev deling",
     "Create a new share link" : "Opprett ny delingslenke",
     "Update share" : "Oppdater delt ressurs",
-    "Share link ({index})" : "Del lenke ({indeks})",
+    "Share link ({index})" : "Del lenke ({index})",
     "View only" : "Kun se",
     "Can edit" : "Kan redigere",
     "Cannot copy, please copy the link manually" : "Kan ikke kopiere, kopier lenken manuelt",
