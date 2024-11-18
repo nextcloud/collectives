@@ -165,6 +165,7 @@ OC.L10N.register(
     "Add a page" : "Přidat stránku",
     "Add a subpage" : "Přidat podstránku",
     "Favorites" : "Oblíbené",
+    "Toggle favorites" : "Vyp/zap. zobrazování oblíbených",
     "Deleted pages" : "Smazané stránky",
     "No deleted pages." : "Žádné smazané stránky.",
     "Deleted" : "Smazáno",
