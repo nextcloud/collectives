@@ -18,9 +18,11 @@ use OCA\Circles\Model\Circle;
 use OCA\Circles\Model\FederatedUser;
 use OCA\Circles\Model\Member;
 use OCA\Circles\Model\Probes\CircleProbe;
+use OCA\Circles\Model\Probes\DataProbe;
 use OCA\Circles\Tools\Exceptions\InvalidItemException;
 use OCP\AppFramework\QueryException;
 use OCP\AutoloadNotAllowedException;
+use OCP\Util;
 use Psr\Container\ContainerInterface;
 
 class CircleHelper {
@@ -34,6 +36,22 @@ class CircleHelper {
 			// Could not instantiate - probably teams app is disabled
 			$this->dependencyInjectionError = $e->getMessage();
 		}
+	}
+
+	/**
+	 * Use `probeCircles()` on
+	 * - Nextcloud 31+
+	 * - Nextcloud 30 starting with 30.0.3
+	 * - Nextcloud 29 starting with 29.0.10
+	 * - Nextcloud 28 starting with 28.0.13
+	 */
+	private static function useProbeCircles(): bool {
+		[$major, $minor, $micro] = Util::getVersion();
+		$version = $major . '.' . $minor . '.' . $micro;
+		return $major >= 31
+			|| ($major === 30 && version_compare($version, '30.0.3', '>='))
+			|| ($major === 29 && version_compare($version, '29.0.10', '>='))
+			|| ($major === 28 && version_compare($version, '28.0.13', '>='));
 	}
 
 	/**
@@ -88,9 +106,13 @@ class CircleHelper {
 	public function getCircles(?string $userId = null): array {
 		try {
 			$this->startSession($userId);
-			$probe = new CircleProbe();
-			$probe->mustBeMember();
-			$circles = $this->circlesManager->getCircles($probe, true);
+			$circleProbe = new CircleProbe();
+			$circleProbe->mustBeMember();
+			$dataProbe = new DataProbe();
+			$dataProbe->add(DataProbe::INITIATOR);
+			$circles = self::useProbeCircles()
+				? $this->circlesManager->probeCircles($circleProbe, $dataProbe)
+				: $this->circlesManager->getCircles($circleProbe, true);
 		} catch (RequestBuilderException|
 				 FederatedItemException $e) {
 				 	throw new NotPermittedException($e->getMessage(), 0, $e);
@@ -149,7 +171,9 @@ class CircleHelper {
 	private function existsCircle(string $name): bool {
 		$this->circlesManager->startSuperSession();
 		try {
-			$circles = $this->circlesManager->getCircles();
+			$circles = self::useProbeCircles()
+				? $this->circlesManager->probeCircles()
+				: $this->circlesManager->getCircles();
 		} catch (InitiatorNotFoundException|RequestBuilderException $e) {
 			throw new NotPermittedException($e->getMessage(), 0, $e);
 		}
