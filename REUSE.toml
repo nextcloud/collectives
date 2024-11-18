@@ -6,7 +6,7 @@ SPDX-PackageSupplier = "Nextcloud <info@nextcloud.com>"
 SPDX-PackageDownloadLocation = "https://github.com/nextcloud/text"
 
 [[annotations]]
-path = [".dockerignore", ".editorconfig", ".github/CODEOWNERS", ".github/ISSUE_TEMPLATE/**", ".github/pull_request_template.md", ".gitignore", ".gitmodules", ".l10nignore", ".npmignore", ".php-cs-fixer.dist.php", ".tx/**", "CHANGELOG.md", "composer.json", "composer.lock", "jest.config.json", "jsconfig.json", "package.json", "package-lock.json", "psalm.xml", "renovate.json"]
+path = [".dockerignore", ".editorconfig", ".github/CODEOWNERS", ".github/ISSUE_TEMPLATE/**", ".github/pull_request_template.md", ".gitignore", ".gitmodules", ".l10nignore", ".npmignore", ".php-cs-fixer.dist.php", ".tx/**", "CHANGELOG.md", "composer.json", "composer.lock", "jest.config.json", "jsconfig.json", "l10n/.gitkeep", "package.json", "package-lock.json", "psalm.xml", "renovate.json"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "none"
 SPDX-License-Identifier = "CC0-1.0"
