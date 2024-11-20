@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.15.1 - 2024.11.20
+
+### 🐛Fixes
+* 💄 Landing page widgets and page content in scroll container. (#1578)
+* 📱 Fix maximum editor/page width on mobile. (#1577)
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 2.15.0 - 2024.10.29
 
 ### ✨New
