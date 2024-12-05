@@ -28,7 +28,7 @@ class CollectiveHelper {
 	 */
 	public function getCollectivesForUser(string $userId, bool $getLevel = true, bool $getUserSettings = true): array {
 		$circles = $this->circleHelper->getCircles($userId);
-		$cids = array_map(fn ($circle) => $circle->getSingleId(), $circles);
+		$cids = array_map(static fn ($circle) => $circle->getSingleId(), $circles);
 		$circles = array_combine($cids, $circles);
 		/** @var Collective[] $collectives */
 		$collectives = $this->collectiveMapper->findByCircleIds($cids);
@@ -55,13 +55,14 @@ class CollectiveHelper {
 	 */
 	public function getCollectivesTrashForUser(string $userId): array {
 		$circles = $this->circleHelper->getCircles($userId);
-		$cids = array_map(fn ($circle) => $circle->getSingleId(), $circles);
+		$cids = array_map(static fn ($circle) => $circle->getSingleId(), $circles);
 		$circles = array_combine($cids, $circles);
 		$collectives = $this->collectiveMapper->findTrashByCircleIdsAndUser($cids, $userId);
 		foreach ($collectives as $c) {
 			$cid = $c->getCircleId();
-			$c->setName($circles[$cid]->getSanitizedName());
-			$c->setLevel($this->circleHelper->getLevel($cid, $userId));
+			$circle = $circles[$cid];
+			$c->setName($circle->getSanitizedName());
+			$c->setLevel($circle->getInitiator()->getLevel());
 		}
 		return $collectives;
 	}

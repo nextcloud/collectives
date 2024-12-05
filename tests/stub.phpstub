@@ -651,6 +651,10 @@ namespace OCA\Circles\Model\Probes {
 	class CircleProbe {
 		public function mustBeMember(bool $must = true): self {}
 	}
+	class DataProbe {
+        public const INITIATOR = 'h';
+		public function add(string $key, array $path = []): self {}
+	}
 }
 
 namespace OCA\Circles\Events {
@@ -689,16 +693,18 @@ namespace OCA\Circles {
     use OCA\Circles\Model\Circle;
     use OCA\Circles\Model\FederatedUser;
     use OCA\Circles\Model\Probes\CircleProbe;
+    use OCA\Circles\Model\Probes\DataProbe;
     class CirclesManager {
-        public function startSuperSession(): void {}
-        public function startSession(?FederatedUser $federatedUser = null): void {}
-        public function getCircles(?CircleProbe $probe = null): array {}
-        public function getCircle(string $singleId, ?CircleProbe $probe = null): Circle {}
-        public function flagAsAppManaged(string $circleId, bool $enabled = true): void {}
         public function getFederatedUser(string $federatedId, int $type = Member::TYPE_SINGLE): FederatedUser {}
+        public function startSession(?FederatedUser $federatedUser = null): void {}
+        public function startSuperSession(): void {}
         public function stopSession(): void {}
 		public function createCircle(string $name, ?FederatedUser $owner = null, bool $personal = false, bool $local = false): Circle {}
         public function destroyCircle(string $singleId): void {}
+        public function getCircles(?CircleProbe $probe = null): array {}
+        public function getCircle(string $singleId, ?CircleProbe $probe = null): Circle {}
+        public function flagAsAppManaged(string $circleId, bool $enabled = true): void {}
+        public function probeCircles(?CircleProbe $circleProbe = null, ?DataProbe $dataProbe = null): array {}
     }
 }
 
