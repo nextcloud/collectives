@@ -53,6 +53,8 @@ OC.L10N.register(
     "Versions" : "Versiones",
     "Clear search" : "Limpiar búsqueda",
     "Link copied" : "Enlace copiado",
-    "_%n byte_::_%n bytes_" : ["%n byte","%n bytes","%n bytes"]
+    "_%n byte_::_%n bytes_" : ["%n byte","%n bytes","%n bytes"],
+    "Copied" : "Copiado",
+    "Cannot copy" : "No se puede copiar"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
