@@ -95,7 +95,7 @@ OC.L10N.register(
     "Select location for collectives" : "選擇知識庫的位置",
     "Invalid path selected. Only folders on first level are supported." : "選擇的路徑無效。僅支持第一級資料夾。",
     "Deleted collectives" : "已刪除知識庫",
-    "Restore" : "復原",
+    "Restore" : "還原",
     "Delete permanently" : "永久刪除",
     "Permanently delete collective {collective}" : "永久刪除知識庫 {collective}",
     "Delete corresponding team along with the collective?" : "連同知識庫一起刪除對應的團隊？",
