@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "predis/predis",
-            "version": "v2.2.2",
+            "version": "v2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/predis/predis.git",
-                "reference": "b1d3255ed9ad4d7254f9f9bba386c99f4bb983d1"
+                "reference": "bac46bfdb78cd6e9c7926c697012aae740cb9ec9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/predis/predis/zipball/b1d3255ed9ad4d7254f9f9bba386c99f4bb983d1",
-                "reference": "b1d3255ed9ad4d7254f9f9bba386c99f4bb983d1",
+                "url": "https://api.github.com/repos/predis/predis/zipball/bac46bfdb78cd6e9c7926c697012aae740cb9ec9",
+                "reference": "bac46bfdb78cd6e9c7926c697012aae740cb9ec9",
                 "shasum": ""
             },
             "require": {
@@ -26,7 +26,7 @@
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.3",
                 "phpstan/phpstan": "^1.9",
-                "phpunit/phpunit": "^8.0 || ~9.4.4"
+                "phpunit/phpunit": "^8.0 || ^9.4"
             },
             "suggest": {
                 "ext-relay": "Faster connection with in-memory caching (>=0.6.2)"
@@ -57,7 +57,7 @@
             ],
             "support": {
                 "issues": "https://github.com/predis/predis/issues",
-                "source": "https://github.com/predis/predis/tree/v2.2.2"
+                "source": "https://github.com/predis/predis/tree/v2.3.0"
             },
             "funding": [
                 {
@@ -65,26 +65,24 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-09-13T16:42:03+00:00"
+            "time": "2024-11-21T20:00:02+00:00"
         },
         {
             "name": "teamtnt/tntsearch",
-            "version": "v4.3.0",
+            "version": "v4.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/teamtnt/tntsearch.git",
-                "reference": "6116502589bda297d5c01a975e6b94c374977b2b"
+                "reference": "781e0eec1a1f56db0cdc2936849c508482b25547"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/teamtnt/tntsearch/zipball/6116502589bda297d5c01a975e6b94c374977b2b",
-                "reference": "6116502589bda297d5c01a975e6b94c374977b2b",
+                "url": "https://api.github.com/repos/teamtnt/tntsearch/zipball/781e0eec1a1f56db0cdc2936849c508482b25547",
+                "reference": "781e0eec1a1f56db0cdc2936849c508482b25547",
                 "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",
-                "ext-pdo_sqlite": "*",
-                "ext-sqlite3": "*",
                 "php": "~7.1|^8",
                 "predis/predis": "^2.2"
             },
@@ -128,7 +126,7 @@
             ],
             "support": {
                 "issues": "https://github.com/teamtnt/tntsearch/issues",
-                "source": "https://github.com/teamtnt/tntsearch/tree/v4.3.0"
+                "source": "https://github.com/teamtnt/tntsearch/tree/v4.4.0"
             },
             "funding": [
                 {
@@ -136,7 +134,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-08-09T06:32:01+00:00"
+            "time": "2024-12-13T08:58:55+00:00"
         }
     ],
     "packages-dev": [
