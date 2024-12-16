@@ -22,7 +22,7 @@
         "ext-dom": "*",
         "bamarni/composer-bin-plugin": "^1.8",
         "guzzlehttp/guzzle": "^7.8",
-        "rector/rector": "^1.2.0"
+        "rector/rector": "^2.0.3"
     },
     "scripts": {
       "lint": "find . -name \\*.php -not -path './vendor/*' -exec php -l \"{}\" \\;",
