@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.15.2 - 2024.12.18
+
+### 🐛Fixes
+* 🚀 Performance: use `probeCircles()` instead of `getCircles()`. (#498)
+* 📱 Fix positioning of outline. (#1614)
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 2.15.1 - 2024.11.20
 
 ### 🐛Fixes
