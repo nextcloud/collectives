@@ -69,12 +69,15 @@
 	}
 }
 
-/* TODO: remove once https://github.com/nextcloud/text/pull/4945 got released */
 .editor--outline {
 	border-radius: var(--border-radius-large);
 	box-shadow: 0 1px 10px var(--color-box-shadow);
 	background-color: var(--color-main-background);
 	z-index: 10021;
+	// Margin of text editor inside text container
+	--text-container-margin: calc((var(--text-container-width) - var(--text-editor-max-width)) / 2);
+	// Move outline to the margin
+	translate: clamp((300px + 4px) * -1, var(--text-container-margin) * -1, 0px);
 }
 
 @media print {

@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<div class="collectives-text-container">
+	<div ref="textContainer" class="collectives-text-container">
 		<WidgetHeading v-if="isLandingPage"
 			:title="t('collectives', 'Landing page')"
 			class="text-container-heading" />
@@ -22,6 +22,8 @@
 </template>
 
 <script>
+import { ref, watch } from 'vue'
+import { useElementSize } from '@vueuse/core'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { showError } from '@nextcloud/dialogs'
 import WidgetHeading from './LandingPageWidgets/WidgetHeading.vue'
@@ -47,6 +49,15 @@ export default {
 		editorMixin,
 		pageContentMixin,
 	],
+
+	setup() {
+		const textContainer = ref(null)
+		const { width } = useElementSize(textContainer)
+		watch(width, value => {
+			document.documentElement.style.setProperty('--text-container-width', value + 'px')
+		})
+		return { textContainer, width }
+	},
 
 	data() {
 		return {
