@@ -18,6 +18,8 @@ use OCP\AppFramework\Db\Entity;
  * @method void setId(int $value)
  * @method int getFileId()
  * @method void setFileId(int $value)
+ * @method string getSlug()
+ * @method void setSlug(?string $value)
  * @method string getLastUserId()
  * @method void setLastUserId(string $value)
  * @method string getEmoji()
@@ -31,6 +33,7 @@ use OCP\AppFramework\Db\Entity;
  */
 class Page extends Entity implements JsonSerializable {
 	protected ?int $fileId = null;
+	protected ?string $slug = null;
 	protected ?string $lastUserId = null;
 	protected ?string $emoji = null;
 	protected ?string $subpageOrder = null;
@@ -45,6 +48,7 @@ class Page extends Entity implements JsonSerializable {
 		return [
 			'id' => $this->id,
 			'fileId' => $this->fileId,
+			'slug' => $this->slug,
 			'lastUserId' => $this->lastUserId,
 			'emoji' => $this->emoji,
 			'subpageOrder' => json_decode($this->getSubpageOrder() ?? '[]', true, 512, JSON_THROW_ON_ERROR),

@@ -49,6 +49,7 @@ class PageService {
 		private IConfig $config,
 		ContainerInterface $container,
 		private SessionService $sessionService,
+		private SlugService $slugService,
 	) {
 		try {
 			$this->pushQueue = $container->get(IQueue::class);
@@ -200,7 +201,8 @@ class PageService {
 		$lastUserId = ($page !== null) ? $page->getLastUserId() : null;
 		$emoji = ($page !== null) ? $page->getEmoji() : null;
 		$subpageOrder = ($page !== null) ? $page->getSubpageOrder() : null;
-		$fullWidth = $page !== null && $page->getFullWidth();
+		$fullWidth = ($page !== null) ? $page->getFullWidth() : false;
+		$slug = ($page !== null) ? $page->getSlug() : null;
 		$pageInfo = new PageInfo();
 		try {
 			$pageInfo->fromFile($file,
@@ -209,7 +211,8 @@ class PageService {
 				$lastUserId ? $this->userManager->getDisplayName($lastUserId) : null,
 				$emoji,
 				$subpageOrder,
-				$fullWidth);
+				$fullWidth,
+				$slug);
 		} catch (FilesNotFoundException|InvalidPathException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
@@ -230,6 +233,7 @@ class PageService {
 		$emoji = ($page !== null) ? $page->getEmoji() : null;
 		$subpageOrder = ($page !== null) ? $page->getSubpageOrder() : null;
 		$trashTimestamp = ($page !== null) ? $page->getTrashTimestamp(): (int)$timestamp;
+		$slug = ($page !== null) ? $page->getSlug() : null;
 		$pageInfo = new PageInfo();
 		try {
 			$pageInfo->fromFile($file,
@@ -238,7 +242,8 @@ class PageService {
 				$lastUserId ? $this->userManager->getDisplayName($lastUserId) : null,
 				$emoji,
 				$subpageOrder,
-				$page && $page->getFullWidth());
+				$page->getFullWidth(),
+				$slug);
 			$pageInfo->setTrashTimestamp($trashTimestamp);
 			$pageInfo->setFilePath('');
 			$pageInfo->setTitle(basename($filename, PageInfo::SUFFIX));
@@ -263,7 +268,7 @@ class PageService {
 		}
 	}
 
-	private function updatePage(int $collectiveId, int $fileId, string $userId, ?string $emoji = null, ?bool $fullWidth = null): void {
+	private function updatePage(int $collectiveId, int $fileId, string $userId, ?string $emoji = null, ?bool $fullWidth = null, ?string $slug = null): void {
 		$page = new Page();
 		$page->setFileId($fileId);
 		$page->setLastUserId($userId);
@@ -272,6 +277,9 @@ class PageService {
 		}
 		if ($fullWidth !== null) {
 			$page->setFullWidth($fullWidth);
+		}
+		if ($slug !== null) {
+			$page->setSlug($slug);
 		}
 		$this->pageMapper->updateOrInsert($page);
 		$this->notifyPush($collectiveId);
@@ -296,7 +304,7 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	private function newPage(int $collectiveId, Folder $folder, string $filename, string $userId): PageInfo {
+	private function newPage(int $collectiveId, Folder $folder, string $filename, string $userId, ?string $title): PageInfo {
 		$hasTemplate = NodeHelper::folderHasSubPage($folder, PageInfo::TEMPLATE_PAGE_TITLE);
 		try {
 			if ($hasTemplate === 1) {
@@ -325,7 +333,9 @@ class PageService {
 				$this->getParentPageId($newFile),
 				$userId,
 				$this->userManager->getDisplayName($userId));
-			$this->updatePage($collectiveId, $newFile->getId(), $userId);
+			$slug = $title ? $this->generateSlugForPage($title, $newFile) : null;
+			$this->updatePage($collectiveId, $newFile->getId(), $userId, null, null, $slug);
+			$pageInfo->setSlug($slug);
 		} catch (FilesNotFoundException|InvalidPathException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
@@ -421,11 +431,12 @@ class PageService {
 		if (!isset($indexPage)) {
 			if ($hasPages || $forceIndex) {
 				// Create missing index page if folder or subfolders have page files (or forceIndex)
-				$indexPage = $this->newPage($collectiveId, $folder, PageInfo::INDEX_PAGE_TITLE, $userId);
+				$indexPage = $this->newPage($collectiveId, $folder, PageInfo::INDEX_PAGE_TITLE, $userId, null);
 			} else {
 				// Ignore folders without an index page
 				return [];
 			}
+			$indexPage = $this->newPage($collectiveId, $folder, PageInfo::INDEX_PAGE_TITLE, $userId, null);
 		}
 
 		// Add markdown files from this folder
@@ -472,6 +483,8 @@ class PageService {
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
+	 *
+	 * @return PageInfo[]
 	 */
 	public function findAll(int $collectiveId, string $userId): array {
 		$folder = $this->getCollectiveFolder($collectiveId, $userId);
@@ -629,7 +642,7 @@ class PageService {
 		$safeTitle = $this->nodeHelper->sanitiseFilename($title, self::DEFAULT_PAGE_TITLE);
 		$filename = NodeHelper::generateFilename($folder, $safeTitle, PageInfo::SUFFIX);
 
-		$pageInfo = $this->newPage($collectiveId, $folder, $filename, $userId);
+		$pageInfo = $this->newPage($collectiveId, $folder, $filename, $userId, $title);
 		$this->addToSubpageOrder($collectiveId, $parentId, $pageInfo->getId(), 0, $userId);
 		return $pageInfo;
 	}
@@ -771,8 +784,9 @@ class PageService {
 		if (null !== $newFile = $this->moveOrCopyPage($collectiveFolder, $file, $parentId, $title, true)) {
 			$file = $newFile;
 		}
+		$slug = $this->generateSlugForPage($title ?: $page->getTitle(), $file);
 		try {
-			$this->updatePage($collectiveId, $file->getId(), $userId, $page->getEmoji());
+			$this->updatePage($collectiveId, $file->getId(), $userId, $page->getEmoji(), null, $slug);
 		} catch (InvalidPathException|FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
@@ -798,9 +812,10 @@ class PageService {
 		if (null !== $newFile = $this->moveOrCopyPage($collectiveFolder, $file, $parentId, $title, false)) {
 			$file = $newFile;
 		}
+		$slug = $title ? $this->generateSlugForPage($title, $file) : null;
 
 		try {
-			$this->updatePage($collectiveId, $file->getId(), $userId);
+			$this->updatePage($collectiveId, $file->getId(), $userId, null, null, $slug);
 		} catch (InvalidPathException|FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
@@ -1109,5 +1124,13 @@ class PageService {
 		}
 
 		return $backlinks;
+	}
+
+	private function generateSlugForPage(string $title, ?File $file): ?string {
+		if (!$file) {
+			return null;
+		}
+
+		return $this->slugService->generatePageSlug($title);
 	}
 }
