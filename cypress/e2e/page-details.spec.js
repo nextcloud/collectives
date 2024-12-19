@@ -23,6 +23,9 @@ describe('Page details', function() {
 	describe('Display table of contents', function() {
 		it('Allows to display/close TOC and switch page modes in between', function() {
 			cy.openPage('TableOfContents')
+			cy.getReadOnlyEditor()
+				.contains('Second-Level Heading')
+			cy.wait(200) // eslint-disable-line cypress/no-unnecessary-waiting
 			cy.get('#titleform .action-item__menutoggle')
 				.click()
 
@@ -34,6 +37,9 @@ describe('Page details', function() {
 				.should('contain', 'Second-Level Heading')
 
 			cy.switchToEditMode()
+			cy.getEditor()
+				.contains('Second-Level Heading')
+			cy.wait(200) // eslint-disable-line cypress/no-unnecessary-waiting
 
 			cy.getEditor()
 				.find('.editor--toc .editor--toc__item')
@@ -46,6 +52,7 @@ describe('Page details', function() {
 
 			// Switch back to view mode
 			cy.switchToViewMode()
+				.contains('Second-Level Heading')
 
 			cy.get('.editor--toc')
 				.should('not.exist')

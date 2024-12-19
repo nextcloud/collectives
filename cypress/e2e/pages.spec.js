@@ -87,7 +87,7 @@ describe('Pages', function() {
 
 	describe('Creating a page from template', function() {
 		it('New page has template content', function() {
-			// Do some handstands to ensure that new page with editor is loaded before we edit the title
+			// Do some handstands to ensure that new page with editor is loaded
 			cy.intercept('POST', '**/_api/*/_pages/*').as('createPage')
 			if (['stable27'].includes(Cypress.env('ncVersion'))) {
 				cy.intercept('PUT', '**/apps/text/session/create').as('textCreateSession')
@@ -98,15 +98,17 @@ describe('Pages', function() {
 				.find('button.action-button-add')
 				.click()
 			cy.wait(['@createPage', '@textCreateSession'])
+
+			cy.getEditor()
+				.should('be.visible')
+				.contains('This is going to be our template.')
+
 			cy.intercept('PUT', '**/_api/*/_pages/*').as('renamePage')
 			cy.get('#titleform input.title')
 				.type('New page from Template')
 			cy.get('#titleform input.title')
 				.blur()
 			cy.wait('@renamePage')
-			cy.getEditor(Cypress.config('defaultCommandTimeout') * 2)
-				.should('be.visible')
-				.contains('This is going to be our template.')
 			cy.get('.app-content-list-item').eq(1)
 				.should('contain', 'New page from Template')
 		})
