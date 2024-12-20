@@ -17,6 +17,7 @@ use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Db\CollectiveUserSettingsMapper;
 use OCA\Collectives\Db\PageMapper;
+use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Service\CircleExistsException;
 use OCA\Collectives\Service\CircleHelper;
@@ -24,6 +25,7 @@ use OCA\Collectives\Service\CollectiveHelper;
 use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\CollectiveShareService;
 use OCA\Collectives\Service\NotFoundException;
+use OCA\Collectives\Service\SlugService;
 use OCA\Collectives\Service\UnprocessableEntityException;
 use OCP\App\IAppManager;
 use OCP\EventDispatcher\IEventDispatcher;
@@ -90,6 +92,15 @@ class CollectiveServiceTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
+		$nodeHelper = $this->createMock(NodeHelper::class);
+		$nodeHelper->method('sanitiseFilename')
+			->willReturnCallback(function (string $name, string $default = 'New File') {
+				return $name;
+			});
+
+		$slugService = $this->createMock(SlugService::class);
+		$slugService->method('generateCollectiveSlug')->willReturn('free-123');
+
 		$this->service = new CollectiveService(
 			$appManager,
 			$this->collectiveMapper,
@@ -100,7 +111,9 @@ class CollectiveServiceTest extends TestCase {
 			$collectiveUserSettingsMapper,
 			$pageMapper,
 			$this->l10n,
-			$eventDispatcher
+			$eventDispatcher,
+			$nodeHelper,
+			$slugService,
 		);
 	}
 
@@ -203,8 +216,9 @@ class CollectiveServiceTest extends TestCase {
 			->willReturn($collective);
 		[$collective, $info] = $this->service->createCollective($this->userId, 'de', 'free');
 		self::assertIsCallable([$collective, 'jsonSerialize']);
-		self::assertEqualsCanonicalizing([
+		self::assertEquals([
 			'id' => 123,
+			'slug' => 'free-123',
 			'circleId' => null,
 			'emoji' => null,
 			'trashTimestamp' => null,
