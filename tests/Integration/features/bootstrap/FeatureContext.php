@@ -1782,7 +1782,12 @@ class FeatureContext implements Context {
 			$client = new Client($this->clientOptions);
 			$response = $client->get(
 				$loginUrl,
-				['cookies' => $this->cookieJars[$user]]
+				[
+					'cookies' => $this->cookieJars[$user],
+					'headers' => [
+						'Origin' => $this->baseUrl,
+					],
+				],
 			);
 			$requestToken = substr(preg_replace('/(.*)data-requesttoken="(.*)">(.*)/sm', '\2', $response->getBody()->getContents()), 0, 89);
 
@@ -1797,6 +1802,9 @@ class FeatureContext implements Context {
 						'requesttoken' => $requestToken,
 					],
 					'cookies' => $this->cookieJars[$user],
+					'headers' => [
+						'Origin' => $this->baseUrl,
+					],
 				]
 			);
 			$this->assertStatusCode(200);
