@@ -100,8 +100,7 @@ describe('Pages', function() {
 			cy.wait(['@createPage', '@textCreateSession'])
 
 			cy.getEditor()
-				// TODO: Figure out why page doesn't load in edit mode in CI and enable next line
-				// .should('be.visible')
+				.should('be.visible')
 				.contains('This is going to be our template.')
 
 			cy.intercept('PUT', '**/_api/*/_pages/*').as('renamePage')
