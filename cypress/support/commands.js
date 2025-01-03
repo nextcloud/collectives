@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { login, logout } from '@nextcloud/cypress/commands'
+import { logout } from '@nextcloud/cypress/commands'
 import { User } from '@nextcloud/cypress'
 
 import * as api from '../../src/apis/collectives/index.js'
@@ -28,6 +28,34 @@ Cypress.on('uncaught:exception', (err) => {
 		return false
 	}
 })
+
+// Copy of the new login command as long as we are blocked to upgrade @nextcloud/cypress by cypress crashes
+const login = function(user) {
+	cy.session(user, function() {
+		cy.request('/csrftoken').then(({ body }) => {
+			const requestToken = body.token
+			cy.request({
+				method: 'POST',
+				url: '/login',
+				body: {
+					user: user.userId,
+					password: user.password,
+					requesttoken: requestToken,
+				},
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+					// Add the Origin header so that the request is not blocked by the browser.
+					Origin: (Cypress.config('baseUrl') ?? '').replace('index.php/', ''),
+				},
+				followRedirect: false,
+			})
+		})
+	}, {
+		validate() {
+			cy.request('/apps/files').its('status').should('eq', 200)
+		},
+	})
+}
 
 // Authentication commands from @nextcloud/cypress
 Cypress.Commands.add('login', login)
