@@ -21,6 +21,7 @@ class PageInfo implements JsonSerializable {
 	public const SUFFIX = '.md';
 
 	private int $id;
+	private ?string $slug = null;
 	private ?string $lastUserId = null;
 	private ?string $lastUserDisplayName = null;
 	private ?string $emoji = null;
@@ -42,6 +43,14 @@ class PageInfo implements JsonSerializable {
 
 	public function setId(int $id): void {
 		$this->id = $id;
+	}
+
+	public function getSlug(): ?string {
+		return $this->slug;
+	}
+
+	public function setSlug(?string $slug): void {
+		$this->slug = $slug;
 	}
 
 	public function getLastUserId(): ?string {
@@ -159,6 +168,7 @@ class PageInfo implements JsonSerializable {
 	public function jsonSerialize(): array {
 		return [
 			'id' => $this->id,
+			'slug' => $this->slug,
 			'lastUserId' => $this->lastUserId,
 			'lastUserDisplayName' => $this->lastUserDisplayName,
 			'emoji' => $this->emoji,
@@ -180,7 +190,7 @@ class PageInfo implements JsonSerializable {
 	 * @throws InvalidPathException
 	 * @throws NotFoundException
 	 */
-	public function fromFile(File $file, int $parentId, ?string $lastUserId = null, ?string $lastUserDisplayName = null, ?string $emoji = null, ?string $subpageOrder = null, bool $fullWidth = false): void {
+	public function fromFile(File $file, int $parentId, ?string $lastUserId = null, ?string $lastUserDisplayName = null, ?string $emoji = null, ?string $subpageOrder = null, bool $fullWidth = false, ?string $slug = null): void {
 		$this->setId($file->getId());
 		// Set folder name as title for all index pages except the collective landing page
 		$dirName = dirname($file->getInternalPath());
@@ -212,6 +222,9 @@ class PageInfo implements JsonSerializable {
 		}
 		if ($subpageOrder !== null) {
 			$this->setSubpageOrder($subpageOrder);
+		}
+		if ($slug !== null) {
+			$this->setSlug($slug);
 		}
 		$this->setParentId($parentId);
 	}
