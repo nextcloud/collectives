@@ -4,8 +4,7 @@
  */
 
 const baseUrl = Cypress.env('baseUrl')
-const sourceUrl = new URL(`${baseUrl}/index.php/apps/collectives/Link%20Testing/Link%20Source`)
-let imageId, pdfId, textId
+let imageId, pdfId, textId, sourceUrl
 let anotherCollectiveFirstPageId, linkTargetPageId
 
 describe('Page link handling', function() {
@@ -21,7 +20,9 @@ describe('Page link handling', function() {
 			.seedPage('Link Target', '', 'Readme.md').then(({ pageId }) => {
 				linkTargetPageId = pageId
 			})
-			.seedPage('Link Source', '', 'Readme.md')
+			.seedPage('Link Source', '', 'Readme.md').then(({ collectiveId, pageId }) => {
+				sourceUrl = new URL(`${baseUrl}/index.php/apps/collectives/Link-Testing-${collectiveId}/page-${pageId}-Link-Source`)
+			})
 		cy.seedPageContent('Link%20Testing/Link%20Target.md', 'Some content')
 		cy.uploadFile('test.md', 'text/markdown').then((id) => {
 			textId = id
