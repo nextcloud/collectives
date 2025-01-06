@@ -4,15 +4,15 @@
  */
 
 const baseUrl = Cypress.env('baseUrl')
-const sourceUrl = new URL(`${baseUrl}/index.php/apps/collectives/Link%20Testing/Link%20Source`)
-let imageId, pdfId, textId
-let anotherCollectiveFirstPageId, linkTargetPageId
+let imageId, pdfId, textId, sourceUrl
+let anotherCollectiveFirstPageId, anotherCollectiveId, linkTestingCollectiveId, linkTargetPageId
 
 describe('Page link handling', function() {
 	before(function() {
 		cy.loginAs('bob')
 		cy.deleteAndSeedCollective('Another Collective')
-			.seedPage('First Page', '', 'Readme.md').then(({ pageId }) => {
+			.seedPage('First Page', '', 'Readme.md').then(({ collectiveId, pageId }) => {
+				anotherCollectiveId = collectiveId
 				anotherCollectiveFirstPageId = pageId
 			})
 		cy.deleteAndSeedCollective('Link Testing')
@@ -21,7 +21,10 @@ describe('Page link handling', function() {
 			.seedPage('Link Target', '', 'Readme.md').then(({ pageId }) => {
 				linkTargetPageId = pageId
 			})
-			.seedPage('Link Source', '', 'Readme.md')
+			.seedPage('Link Source', '', 'Readme.md').then(({ collectiveId, pageId }) => {
+				linkTestingCollectiveId = collectiveId
+				sourceUrl = new URL(`${baseUrl}/index.php/apps/collectives/Link-Testing-${collectiveId}/page-${pageId}-Link-Source`)
+			})
 		cy.seedPageContent('Link%20Testing/Link%20Target.md', 'Some content')
 		cy.uploadFile('test.md', 'text/markdown').then((id) => {
 			textId = id
@@ -55,15 +58,15 @@ describe('Page link handling', function() {
 
 ## Links supposed to open in same window
 
-* URL to page in this collective: [Link Target](${baseUrl}/index.php/apps/collectives/Link%20Testing/Link%20Target)
-* Absolute path to page in this collective: [Link Target](/index.php/apps/collectives/Link%20Testing/Link%20Target)
+* URL to page in this collective: [Link Target](${baseUrl}/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/page-${linkTargetPageId}-Link-Target)
+* Absolute path to page in this collective: [Link Target](/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/page-${linkTargetPageId}-Link-Target)
 * Relative path to page in this collective with fileId: [Link Target](./Link%20Target?fileId=${linkTargetPageId})
 * Relative path to page in this collective with fileId and outdated path: [Link Target](./Link%20Target%20Outdated?fileId=${linkTargetPageId})
 * Relative path to page in this collective without fileId: [Link Target](./Link%20Target)
 * Relative path to markdown file in this collective: [Link Target](./Link%20Target.md)
 
-* URL to page in other collective with fileId: [Another Collective/First Page](${baseUrl}/index.php/apps/collectives/Another%20Collective/First%20Page?fileId=${anotherCollectiveFirstPageId})
-* Absolute path to page in other collective without fileId: [Another Collective/First Page](/index.php/apps/collectives/Another%20Collective/First%20Page)
+* URL to page in other collective with fileId: [Another Collective/First Page](${baseUrl}/index.php/apps/collectives/Another-Collective-${anotherCollectiveId}/First%20Page?fileId=${anotherCollectiveFirstPageId})
+* Absolute path to page in other collective without fileId: [Another Collective/First Page](/index.php/apps/collectives/Another-Collective-${anotherCollectiveId}/page-${anotherCollectiveFirstPageId}-First-Page)
 
 ## Links supposed to open in new window
 
@@ -123,9 +126,8 @@ describe('Page link handling', function() {
 
 		cy.url().then((newBaseUrl) => {
 			const url = new URL(href, newBaseUrl)
-			const encodedCollectiveName = encodeURIComponent('Link Testing')
 			const pathname = isPublic
-				? url.pathname.replace(`/${encodedCollectiveName}`, `/p/\\w+/${encodedCollectiveName}`)
+				? url.pathname.replace('/Link-Testing', '/p/\\w+/Link-Testing')
 				: url.pathname
 			cy.location().should((loc) => {
 				expect(loc.pathname).to.match(new RegExp(`^${expectedPathname || pathname}$`))
@@ -238,24 +240,12 @@ describe('Page link handling', function() {
 
 	describe('Link handling to collectives in view mode', function() {
 		it('Opens link with URL to page in this collective in same tab', function() {
-			const href = `${baseUrl}/index.php/apps/collectives/Link%20Testing/Link%20Target`
-			if (!['stable27', 'stable28'].includes(Cypress.env('ncVersion'))) {
-				testLinkToSameTab(href, {
-					expectedSearch: `?fileId=${linkTargetPageId}`,
-				})
-			} else {
-				testLinkToSameTab(href)
-			}
+			const href = `${baseUrl}/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/page-${linkTargetPageId}-Link-Target`
+			testLinkToSameTab(href)
 		})
 		it('Opens link with absolute path to page in this collective in same tab', function() {
-			const href = '/index.php/apps/collectives/Link%20Testing/Link%20Target'
-			if (!['stable27', 'stable28'].includes(Cypress.env('ncVersion'))) {
-				testLinkToSameTab(href, {
-					expectedSearch: `?fileId=${linkTargetPageId}`,
-				})
-			} else {
-				testLinkToSameTab(href)
-			}
+			const href = `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/page-${linkTargetPageId}-Link-Target`
+			testLinkToSameTab(href)
 		})
 		it('Opens link with relative path to page in this collective with fileId in same tab', function() {
 			// Starting with Nextcloud 29, internal links will always open in same tab (also in edit mode)
@@ -267,7 +257,7 @@ describe('Page link handling', function() {
 				// const href = `./Link%20Target?fileId=${linkTargetPageId}`
 				const href = `/index.php/apps/files/?dir=/&openfile=${linkTargetPageId}#relPath=./Link%20Target`
 				testLinkToSameTab(href, {
-					expectedPathname: '/index.php/apps/collectives/Link%20Testing/Link%20Target',
+					expectedPathname: `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/page-${linkTargetPageId}-Link-Target`,
 					expectedSearch: `?fileId=${linkTargetPageId}`,
 				})
 			}
@@ -277,16 +267,14 @@ describe('Page link handling', function() {
 			if (!['stable27', 'stable28'].includes(Cypress.env('ncVersion'))) {
 				const href = `./Link%20Target%20Outdated?fileId=${linkTargetPageId}`
 				testLinkToSameTab(href, {
-					expectedPathname: '/index.php/apps/collectives/Link%20Testing/Link%20Target',
-					expectedSearch: `?fileId=${linkTargetPageId}`,
+					expectedPathname: `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/page-${linkTargetPageId}-Link-Target`,
 				})
 			} else {
 				// Link without origin and containing `fileId` param gets rewritten by editor rendering
 				// const href = `./Link%20Target%20Outdated?fileId=${linkTargetPageId}`
 				const href = `/index.php/apps/files/?dir=/&openfile=${linkTargetPageId}#relPath=./Link%20Target%20Outdated`
 				testLinkToSameTab(href, {
-					expectedPathname: '/index.php/apps/collectives/Link%20Testing/Link%20Target',
-					expectedSearch: `?fileId=${linkTargetPageId}`,
+					expectedPathname: `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/page-${linkTargetPageId}-Link-Target`,
 				})
 			}
 		})
@@ -294,8 +282,7 @@ describe('Page link handling', function() {
 			const href = './Link%20Target'
 			if (!['stable27', 'stable28'].includes(Cypress.env('ncVersion'))) {
 				testLinkToSameTab(href, {
-					expectedPathname: '/index.php/apps/collectives/Link%20Testing/Link%20Target',
-					expectedSearch: `?fileId=${linkTargetPageId}`,
+					expectedPathname: `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/page-${linkTargetPageId}-Link-Target`,
 				})
 			} else {
 				testLinkToSameTab(href)
@@ -306,27 +293,21 @@ describe('Page link handling', function() {
 			const href = './Link%20Target.md'
 			if (!['stable27', 'stable28'].includes(Cypress.env('ncVersion'))) {
 				testLinkToSameTab(href, {
-					expectedPathname: '/index.php/apps/collectives/Link%20Testing/Link%20Target',
+					expectedPathname: `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/page-${linkTargetPageId}-Link-Target`,
 					expectedSearch: `?fileId=${linkTargetPageId}`,
 				})
 			} else {
-				testLinkToSameTab(href, { expectedPathname: '/index.php/apps/collectives/Link%20Testing/Link%20Target' })
+				testLinkToSameTab(href, { expectedPathname: `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/page-${linkTargetPageId}-Link-Target` })
 			}
 		})
 
 		it('Opens link with URL to page in other collective with fileId in same tab', function() {
-			const href = `${baseUrl}/index.php/apps/collectives/Another%20Collective/First%20Page?fileId=${anotherCollectiveFirstPageId}`
+			const href = `${baseUrl}/index.php/apps/collectives/Another-Collective-${anotherCollectiveId}/page-${anotherCollectiveFirstPageId}-First-Page`
 			testLinkToSameTab(href)
 		})
 		it('Opens link with absolute path to page in other collective without fileId in same tab', function() {
-			const href = '/index.php/apps/collectives/Another%20Collective/First%20Page'
-			if (!['stable27', 'stable28'].includes(Cypress.env('ncVersion'))) {
-				testLinkToSameTab(href, {
-					expectedSearch: `?fileId=${anotherCollectiveFirstPageId}`,
-				})
-			} else {
-				testLinkToSameTab(href)
-			}
+			const href = `/index.php/apps/collectives/Another-Collective-${anotherCollectiveId}/page-${anotherCollectiveFirstPageId}-First-Page`
+			testLinkToSameTab(href)
 		})
 		it('Opens link with relative path from index page to page in this collective with fileId in same tab', function() {
 			// Starting with Nextcloud 29, internal links will always open in same tab (also in edit mode)
@@ -336,7 +317,7 @@ describe('Page link handling', function() {
 				// const href = `../Link%20Target.md?fileId=${linkTargetPageId}`
 				const href = `/index.php/apps/files/?dir=&openfile=${linkTargetPageId}#relPath=../Link%20Target.md`
 				testLinkToSameTab(href, {
-					expectedPathname: '/index.php/apps/collectives/Link%20Testing/Link%20Target',
+					expectedPathname: `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/page-${linkTargetPageId}-Link-Target`,
 					expectedSearch: `?fileId=${linkTargetPageId}`,
 				})
 			}
@@ -349,7 +330,7 @@ describe('Page link handling', function() {
 				// const href = `./Link%20Target?fileId=${linkTargetPageId}`
 				const href = `/index.php/apps/files/?dir=/&openfile=${linkTargetPageId}#relPath=./Link%20Target`
 				testLinkToSameTab(href, {
-					expectedPathname: '/index.php/apps/collectives/Link%20Testing/Link%20Target',
+					expectedPathname: `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/page-${linkTargetPageId}-Link-Target`,
 					expectedSearch: `?fileId=${linkTargetPageId}`,
 				})
 			}
@@ -358,7 +339,7 @@ describe('Page link handling', function() {
 
 	describe('Link handling to collectives in edit mode', function() {
 		it('Opens link with URL to page in this collective in same tab', function() {
-			const href = `${baseUrl}/index.php/apps/collectives/Link%20Testing/Link%20Target`
+			const href = `${baseUrl}/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/page-${linkTargetPageId}-Link-Target`
 			cy.switchToEditMode()
 			// Starting with Nextcloud 29, internal links will always open in same tab (also in edit mode)
 			if (!['stable27', 'stable28'].includes(Cypress.env('ncVersion'))) {
@@ -371,17 +352,10 @@ describe('Page link handling', function() {
 			}
 		})
 		it('Opens link with absolute path to page in this collective in same tab', function() {
-			const href = '/index.php/apps/collectives/Link%20Testing/Link%20Target'
+			const href = `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/page-${linkTargetPageId}-Link-Target`
 			cy.switchToEditMode()
 			// Starting with Nextcloud 29, internal links will always open in same tab (also in edit mode)
-			if (!['stable27', 'stable28'].includes(Cypress.env('ncVersion'))) {
-				testLinkToSameTab(href, {
-					edit: true,
-					expectedSearch: `?fileId=${linkTargetPageId}`,
-				})
-			} else {
-				testLinkToNewTab(href, { edit: true })
-			}
+			testLinkToNewTab(href, { edit: true })
 		})
 		it('Opens link with relative path to page in this collective with fileId in same tab', function() {
 			const href = `./Link%20Target?fileId=${linkTargetPageId}`
@@ -400,8 +374,7 @@ describe('Page link handling', function() {
 			if (!['stable27', 'stable28'].includes(Cypress.env('ncVersion'))) {
 				testLinkToSameTab(href, {
 					edit: true,
-					expectedPathname: '/index.php/apps/collectives/Link%20Testing/Link%20Target',
-					expectedSearch: `?fileId=${linkTargetPageId}`,
+					expectedPathname: `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/page-${linkTargetPageId}-Link-Target`,
 				})
 			} else {
 				// Link without origin and containing `fileId` param gets rewritten by editor rendering
@@ -411,14 +384,7 @@ describe('Page link handling', function() {
 			const href = './Link%20Target'
 			cy.switchToEditMode()
 			// Starting with Nextcloud 29, internal links will always open in same tab (also in edit mode)
-			if (!['stable27', 'stable28'].includes(Cypress.env('ncVersion'))) {
-				testLinkToSameTab(href, {
-					edit: true,
-					expectedSearch: `?fileId=${linkTargetPageId}`,
-				})
-			} else {
-				testLinkToNewTab(href, { edit: true })
-			}
+			testLinkToNewTab(href, { edit: true })
 		})
 		it('Opens link with relative path to markdown file in this collective without fileId in same tab', function() {
 			// TODO: We want '.md' to be stripped when opening the link
@@ -428,8 +394,7 @@ describe('Page link handling', function() {
 			if (!['stable27', 'stable28'].includes(Cypress.env('ncVersion'))) {
 				testLinkToSameTab(href, {
 					edit: true,
-					expectedPathname: '/index.php/apps/collectives/Link%20Testing/Link%20Target',
-					expectedSearch: `?fileId=${linkTargetPageId}`,
+					expectedPathname: `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/page-${linkTargetPageId}-Link-Target`,
 				})
 			} else {
 				// Special handling of links to markdown files is only in Collectives link handler
@@ -437,7 +402,7 @@ describe('Page link handling', function() {
 		})
 
 		it('Opens link with URL to page in other collective with fileId in same tab', function() {
-			const href = `${baseUrl}/index.php/apps/collectives/Another%20Collective/First%20Page?fileId=${anotherCollectiveFirstPageId}`
+			const href = `${baseUrl}/index.php/apps/collectives/Another-Collective-${anotherCollectiveId}/First%20Page?fileId=${anotherCollectiveFirstPageId}`
 			cy.switchToEditMode()
 			// Starting with Nextcloud 29, internal links will always open in same tab (also in edit mode)
 			if (!['stable27', 'stable28'].includes(Cypress.env('ncVersion'))) {
@@ -447,7 +412,7 @@ describe('Page link handling', function() {
 			}
 		})
 		it('Opens link with absolute path to page in other collective without fileId in same tab', function() {
-			const href = '/index.php/apps/collectives/Another%20Collective/First%20Page'
+			const href = `/index.php/apps/collectives/Another-Collective-${anotherCollectiveId}/page-${anotherCollectiveFirstPageId}-First-Page`
 			cy.switchToEditMode()
 			// Starting with Nextcloud 29, internal links will always open in same tab (also in edit mode)
 			if (!['stable27', 'stable28'].includes(Cypress.env('ncVersion'))) {
@@ -551,13 +516,13 @@ describe('Page link handling', function() {
 			it('Public share in view mode: opens link with absolute path to page in this collective in same tab', function() {
 				cy.logout()
 				cy.visit(`${shareUrl}/Link Source`)
-				const href = '/index.php/apps/collectives/Link%20Testing/Link%20Target'
+				const href = `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/page-${linkTargetPageId}-Link-Target`
 				testLinkToSameTab(href, { isPublic: true })
 			})
 			it('Public share in edit mode: opens link with absolute path to page in this collective in same tab', function() {
 				cy.logout()
 				cy.visit(`${shareUrl}/Link Source`)
-				const href = '/index.php/apps/collectives/Link%20Testing/Link%20Target'
+				const href = `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/page-${linkTargetPageId}-Link-Target`
 				cy.switchToEditMode()
 				if (!['stable27', 'stable28'].includes(Cypress.env('ncVersion'))) {
 					testLinkToSameTab(href, { edit: true, isPublic: true })
