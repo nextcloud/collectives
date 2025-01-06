@@ -272,7 +272,7 @@
     "Open circle in Contacts" : "Öppna cirkeln i Kontakter",
     "Renaming is limited to owners of the circle" : "Byte av namn är begränsat till ägare av cirkeln",
     "Collectives Folder" : "Collectives-mapp",
-    "Permanently delete collective »{collective}«" : "Permanent radering av collective »{collective}«",
+    "Permanently delete collective »{collective}«" : "Permanent radering av collective \"{collective}\"",
     "Delete corresponding circle along with the collective?" : "Radera motsvarande cirkel tillsammans med collective?",
     "Collective and circle" : "Collective och cirkel",
     "Only circle owners can delete a circle" : "Endast cirkelägare kan ta bort en cirkel",
