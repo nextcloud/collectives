@@ -14,6 +14,7 @@ use OC;
 use OC\Files\Storage\Wrapper\Jail;
 use OC\Files\Storage\Wrapper\PermissionsMask;
 use OCA\Collectives\ACL\ACLStorageWrapper;
+use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\Folder;
 use OCP\Files\InvalidPathException;
@@ -149,12 +150,12 @@ class CollectiveFolderManager {
 	/**
 	 * @throws NotFoundException
 	 */
-	private function getRootFolderStorageId(): int {
+	private function getFolderRootId(): int {
 		if ($this->rootFolderStorageId === null) {
 			$qb = $this->connection->getQueryBuilder();
 
-			$qb->select('fileid')
-				->from('filecache')
+			$qb->select('f.fileid')
+				->from('filecache', 'f')
 				->where($qb->expr()->eq('storage', $qb->createNamedParameter($this->getRootFolder()->getStorage()->getCache()->getNumericStorageId())))
 				->andWhere($qb->expr()->eq('path_hash', $qb->createNamedParameter(md5($this->getRootPath()))));
 
@@ -194,13 +195,12 @@ class CollectiveFolderManager {
 	public function getFolderFileCache(int $id, string $name): array {
 		$qb = $this->connection->getQueryBuilder();
 		$qb->select(
-			'co.id AS folder_id', 'fileid', 'storage', 'path', 'fc.name AS name',
-			'mimetype', 'mimepart', 'size', 'mtime', 'storage_mtime', 'etag', 'encrypted', 'parent', 'fc.permissions AS permissions')
+			'co.id AS folder_id', 'fc.fileid', 'fc.storage', 'fc.path', 'fc.name AS name',
+			'fc.mimetype', 'fc.mimepart', 'fc.size', 'fc.mtime', 'fc.storage_mtime', 'fc.etag', 'fc.encrypted', 'fc.parent', 'fc.permissions AS permissions')
 			->from('collectives', 'co')
 			->leftJoin('co', 'filecache', 'fc', $qb->expr()->andX(
-				// concat with empty string to work around missing cast to string
-				$qb->expr()->eq('fc.name', $qb->func()->concat('co.id', $qb->expr()->literal(''))),
-				$qb->expr()->eq('parent', $qb->createNamedParameter($this->getRootFolderStorageId()))))
+				$qb->expr()->eq('fc.name', $qb->expr()->castColumn('co.id', IQueryBuilder::PARAM_STR)),
+				$qb->expr()->eq('fc.parent', $qb->createNamedParameter($this->getFolderRootId()))))
 			->where($qb->expr()->eq('co.id', $qb->createNamedParameter($id)));
 		$cache = $qb->execute()->fetch();
 		$cache['mount_point'] = $name;
