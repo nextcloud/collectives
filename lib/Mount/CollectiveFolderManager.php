@@ -37,7 +37,7 @@ class CollectiveFolderManager {
 	private const SUFFIX = '.md';
 
 	private ?string $rootPath = null;
-	private ?int $rootFolderStorageId = null;
+	private ?int $rootFolderId = null;
 
 	public function __construct(
 		private IRootFolder $rootFolder,
@@ -150,19 +150,23 @@ class CollectiveFolderManager {
 	/**
 	 * @throws NotFoundException
 	 */
-	private function getFolderRootId(): int {
-		if ($this->rootFolderStorageId === null) {
+	private function getRootFolderId(): int {
+		if ($this->rootFolderId === null) {
 			$qb = $this->connection->getQueryBuilder();
 
 			$qb->select('f.fileid')
 				->from('filecache', 'f')
-				->where($qb->expr()->eq('storage', $qb->createNamedParameter($this->getRootFolder()->getStorage()->getCache()->getNumericStorageId())))
+				->where($qb->expr()->eq('storage', $qb->createNamedParameter($this->getRootFolderStorageId())))
 				->andWhere($qb->expr()->eq('path_hash', $qb->createNamedParameter(md5($this->getRootPath()))));
 
-			$this->rootFolderStorageId = (int)$qb->execute()->fetchColumn();
+			$this->rootFolderId = (int)$qb->execute()->fetchColumn();
 		}
 
-		return $this->rootFolderStorageId;
+		return $this->rootFolderId;
+	}
+
+	private function getRootFolderStorageId(): int {
+		return $this->getRootFolder()->getStorage()->getCache()->getNumericStorageId();
 	}
 
 	/**
@@ -198,10 +202,10 @@ class CollectiveFolderManager {
 			'co.id AS folder_id', 'fc.fileid', 'fc.storage', 'fc.path', 'fc.name AS name',
 			'fc.mimetype', 'fc.mimepart', 'fc.size', 'fc.mtime', 'fc.storage_mtime', 'fc.etag', 'fc.encrypted', 'fc.parent', 'fc.permissions AS permissions')
 			->from('collectives', 'co')
-			->leftJoin('co', 'filecache', 'fc', $qb->expr()->andX(
-				$qb->expr()->eq('fc.name', $qb->expr()->castColumn('co.id', IQueryBuilder::PARAM_STR)),
-				$qb->expr()->eq('fc.parent', $qb->createNamedParameter($this->getFolderRootId()))))
-			->where($qb->expr()->eq('co.id', $qb->createNamedParameter($id)));
+			->leftJoin('co', 'filecache', 'fc', $qb->expr()->eq('fc.name', $qb->expr()->castColumn('co.id', IQueryBuilder::PARAM_STR)))
+			->where($qb->expr()->eq('co.id', $qb->createNamedParameter($id)))
+			->andWhere($qb->expr()->eq('fc.parent', $qb->createNamedParameter($this->getRootFolderId())))
+			->andWhere($qb->expr()->eq('fc.storage', $qb->createNamedParameter($this->getRootFolderStorageId(), IQueryBuilder::PARAM_INT)));
 		$cache = $qb->execute()->fetch();
 		$cache['mount_point'] = $name;
 		return $cache;
