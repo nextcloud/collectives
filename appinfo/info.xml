@@ -47,7 +47,7 @@ In your Nextcloud instance, simply navigate to **»Apps«**, find the
 		https://raw.githubusercontent.com/nextcloud/collectives/main/docs/static/images/screenshot.png
 	</screenshot>
 	<dependencies>
-		<nextcloud min-version="27" max-version="30" />
+		<nextcloud min-version="27" max-version="31" />
 	</dependencies>
 	<background-jobs>
 		<job>OCA\Collectives\BackgroundJob\CleanupSessions</job>
