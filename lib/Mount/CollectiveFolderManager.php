@@ -14,6 +14,7 @@ use OC;
 use OC\Files\Storage\Wrapper\Jail;
 use OC\Files\Storage\Wrapper\PermissionsMask;
 use OCA\Collectives\ACL\ACLStorageWrapper;
+use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\Folder;
 use OCP\Files\InvalidPathException;
@@ -36,7 +37,7 @@ class CollectiveFolderManager {
 	private const SUFFIX = '.md';
 
 	private ?string $rootPath = null;
-	private ?int $rootFolderStorageId = null;
+	private ?int $rootFolderId = null;
 
 	public function __construct(
 		private IRootFolder $rootFolder,
@@ -149,19 +150,23 @@ class CollectiveFolderManager {
 	/**
 	 * @throws NotFoundException
 	 */
-	private function getRootFolderStorageId(): int {
-		if ($this->rootFolderStorageId === null) {
+	private function getRootFolderId(): int {
+		if ($this->rootFolderId === null) {
 			$qb = $this->connection->getQueryBuilder();
 
-			$qb->select('fileid')
-				->from('filecache')
-				->where($qb->expr()->eq('storage', $qb->createNamedParameter($this->getRootFolder()->getStorage()->getCache()->getNumericStorageId())))
+			$qb->select('f.fileid')
+				->from('filecache', 'f')
+				->where($qb->expr()->eq('storage', $qb->createNamedParameter($this->getRootFolderStorageId())))
 				->andWhere($qb->expr()->eq('path_hash', $qb->createNamedParameter(md5($this->getRootPath()))));
 
-			$this->rootFolderStorageId = (int)$qb->execute()->fetchColumn();
+			$this->rootFolderId = (int)$qb->execute()->fetchColumn();
 		}
 
-		return $this->rootFolderStorageId;
+		return $this->rootFolderId;
+	}
+
+	private function getRootFolderStorageId(): int {
+		return $this->getRootFolder()->getStorage()->getCache()->getNumericStorageId();
 	}
 
 	/**
@@ -194,14 +199,13 @@ class CollectiveFolderManager {
 	public function getFolderFileCache(int $id, string $name): array {
 		$qb = $this->connection->getQueryBuilder();
 		$qb->select(
-			'co.id AS folder_id', 'fileid', 'storage', 'path', 'fc.name AS name',
-			'mimetype', 'mimepart', 'size', 'mtime', 'storage_mtime', 'etag', 'encrypted', 'parent', 'fc.permissions AS permissions')
+			'co.id AS folder_id', 'fc.fileid', 'fc.storage', 'fc.path', 'fc.name AS name',
+			'fc.mimetype', 'fc.mimepart', 'fc.size', 'fc.mtime', 'fc.storage_mtime', 'fc.etag', 'fc.encrypted', 'fc.parent', 'fc.permissions AS permissions')
 			->from('collectives', 'co')
-			->leftJoin('co', 'filecache', 'fc', $qb->expr()->andX(
-				// concat with empty string to work around missing cast to string
-				$qb->expr()->eq('fc.name', $qb->func()->concat('co.id', $qb->expr()->literal(''))),
-				$qb->expr()->eq('parent', $qb->createNamedParameter($this->getRootFolderStorageId()))))
-			->where($qb->expr()->eq('co.id', $qb->createNamedParameter($id)));
+			->leftJoin('co', 'filecache', 'fc', $qb->expr()->eq('fc.name', $qb->expr()->castColumn('co.id', IQueryBuilder::PARAM_STR)))
+			->where($qb->expr()->eq('co.id', $qb->createNamedParameter($id)))
+			->andWhere($qb->expr()->eq('fc.parent', $qb->createNamedParameter($this->getRootFolderId())))
+			->andWhere($qb->expr()->eq('fc.storage', $qb->createNamedParameter($this->getRootFolderStorageId(), IQueryBuilder::PARAM_INT)));
 		$cache = $qb->execute()->fetch();
 		$cache['mount_point'] = $name;
 		return $cache;
