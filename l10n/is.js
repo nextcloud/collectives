@@ -47,6 +47,7 @@ OC.L10N.register(
     "Attachments" : "Viðhengi",
     "Sharing" : "Deiling",
     "Versions" : "Útgáfur",
+    "Clear search" : "Hreinsa leit",
     "Link copied" : "Tengill afritaður",
     "_%n byte_::_%n bytes_" : ["%n bæti","%n bæti"],
     "Copied" : "Afritað",
