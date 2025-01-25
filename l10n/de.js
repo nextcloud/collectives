@@ -105,7 +105,7 @@ OC.L10N.register(
     "Cancel" : "Abbrechen",
     "Select emoji" : "Wähle emoji",
     "Select an existing team" : "Ein bestehendes Team wählen",
-    "Select a team..." : "Ein Team auswählen...",
+    "Select a team..." : "Ein Team auswählen…",
     "Cancel selecting a team" : "Auswahl eines Teams abbrechen",
     "Add members" : "Mitglieder hinzufügen",
     "Back" : "Zurück",
