@@ -1,5 +1,22 @@
 # Changelog
 
+## 2.16.0 - 2025.01.27
+
+### ✨New
+* ✨ Add Nextcloud 31 support
+
+### 🐛Fixes
+* ✅ Adjust tests to Nextcloud 31 login changes
+* 💽 Make collectives work with sharding
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 2.15.2 - 2024.12.18
 
 ### 🐛Fixes
