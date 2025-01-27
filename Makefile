@@ -122,7 +122,7 @@ build: node-modules build-js-production composer-install-no-dev
 	fi
 	mkdir -p $(RELEASE_DIR)
 	rsync -a --delete --delete-excluded \
-		--exclude="$(APP_NAME)/.[a-z]*" \
+		--exclude="$(APP_NAME)/.**" \
 		--exclude="$(APP_NAME)/Makefile" \
 		--exclude="$(APP_NAME)/Dockerfile" \
 		--exclude="$(APP_NAME)/TODO*" \
