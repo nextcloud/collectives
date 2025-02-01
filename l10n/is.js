@@ -20,6 +20,7 @@ OC.L10N.register(
     "Move or copy" : "Færa eða afrita",
     "Hide outline" : "Fela útlínu",
     "Show outline" : "Birta útlínu",
+    "Remove from favorites" : "Fjarlægja úr eftirlætum",
     "Template" : "Sniðmát",
     "Title" : "Titill",
     "Favorite" : "Eftirlæti",
