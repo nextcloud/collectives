@@ -10,6 +10,7 @@ OC.L10N.register(
     "Permissions" : "Heimildir",
     "View" : "Skoða",
     "Edit" : "Breyta",
+    "Add emoji" : "Bæta við tjáningartákni",
     "Restore" : "Endurheimta",
     "Delete permanently" : "Eyða varanlega",
     "Cancel" : "Hætta við",
