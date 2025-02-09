@@ -22,6 +22,7 @@ OC.L10N.register(
     "Hide outline" : "Fela útlínu",
     "Show outline" : "Birta útlínu",
     "Remove from favorites" : "Fjarlægja úr eftirlætum",
+    "Add to favorites" : "Bæta í eftirlæti",
     "Template" : "Sniðmát",
     "Title" : "Titill",
     "Favorite" : "Eftirlæti",
