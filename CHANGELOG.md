@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.16.1 - 2025.02.13
+
+### 🐛Fixes
+* 🚧build: exclude all hidden files and folders
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
 ## 2.16.0 - 2025.01.27
 
 ### ✨New
