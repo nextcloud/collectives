@@ -6,6 +6,7 @@ OC.L10N.register(
     "Settings" : "Stillingar",
     "Members" : "Meðlimir",
     "No search results" : "Engar leitarniðurstöður",
+    "Remove" : "Fjarlægja",
     "Loading…" : "Hleð inn…",
     "Permissions" : "Heimildir",
     "View" : "Skoða",
