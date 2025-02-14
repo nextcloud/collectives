@@ -65,8 +65,8 @@ class RecentPagesService {
 		unset($collective);
 
 		$qb->select('p.*', 'f.mtime as timestamp', 'f.name as filename', 'f.path as path')
-			->from('filecache', 'f')
-			->leftJoin('f', 'collectives_pages', 'p', $qb->expr()->eq('f.fileid', 'p.file_id'))
+			->from('collectives_pages', 'p')
+			->innerJoin('p', 'filecache', 'f', $qb->expr()->eq('f.fileid', 'p.file_id'))
 			->where($qb->expr()->eq('f.storage', $qb->createNamedParameter($storageId, IQueryBuilder::PARAM_STR)))
 			->andWhere($qb->expr()->orX(...$expressions))
 			->andWhere($qb->expr()->eq('f.mimetype', $qb->createNamedParameter($mimeTypeMd, IQueryBuilder::PARAM_INT)))
