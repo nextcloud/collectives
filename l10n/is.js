@@ -29,6 +29,7 @@ OC.L10N.register(
     "Favorite" : "Eftirlæti",
     "Favorites" : "Eftirlæti",
     "Deleted" : "Eytt",
+    "Sort by title" : "Raða eftir titli",
     "Please enter the following required information before creating the share" : "Settu inn eftirfarandi nauðsynlegar upplýsingar áður en þú býrð til sameignina",
     "Password protection (enforced)" : "Verndun með lykilorði (nauðsynleg)",
     "Set password" : "Stilltu lykilorð",
