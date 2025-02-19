@@ -184,7 +184,7 @@ OC.L10N.register(
     "Hide templates" : "Agochar os modelos",
     "Show templates" : "Amosar os modelos",
     "Could not save page order for collective" : "Non foi posíbel gardar a orde das páxinas para o colectivo",
-    "Quick share options dropdown" : "Menú despregábel de opcións de compartición rápida",
+    "Quick share options dropdown" : "Menú despregábel das opcións de compartir de xeito rápido",
     "Please enter the following required information before creating the share" : "Introduza a seguinte información necesaria antes de crear a compartición",
     "Password protection (enforced)" : "Protección con contrasinal (obrigatoria)",
     "Set password" : "Definir o contrasinal",
