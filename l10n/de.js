@@ -41,7 +41,7 @@ OC.L10N.register(
     "Promote to admin" : " Hochstufen zur Administration",
     "Demote to member" : "Herabstufen auf Mitglied",
     "Remove" : "Entfernen",
-    "admin" : "Administrator",
+    "admin" : "Administration",
     "moderator" : "Moderation",
     "member" : "Mitglied",
     "Demote to moderator" : "Herabstufen auf Moderation",
