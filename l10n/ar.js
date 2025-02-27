@@ -28,19 +28,14 @@ OC.L10N.register(
     "Export or print" : "تصدير أو طباعة",
     "Settings" : "الإعدادات",
     "Leave collective" : "غادر التجميعة",
-    "Left collective {name}" : "غادرت التجميعة {name}",
-    "Could not leave the collective. {errorMessage}" : "تعذّرت مغادرة التجميعة {errorMessage}",
     "Collective not found: {collective}" : "التجميعة غير موجودة: {collective}",
     "You're not part of a collective with that name." : "أنت لست جزءاً من تجميعة بذلك الاسم",
-    "Preparing collective for exporting or printing" : "تحضير التجميعة للتصدير أو الطباعة",
     "Loading pages:" : "تحميل الصفحات:",
     "Loading images:" : "تحميل الصور:",
+    "Preparing collective for exporting or printing" : "تحضير التجميعة للتصدير أو الطباعة",
     "Last changed by" : "آخر تعديل قام به ",
     "Members" : "الاعضاء",
     "No search results" : "لا توجد نتائج",
-    "Promote to admin" : "ترقية إلى مدير",
-    "Demote to member" : "خفض الرتبة إلى عضو",
-    "Remove" : "حذف",
     "admin" : "مدير",
     "moderator" : "مشرف",
     "member" : "عضو",
@@ -50,16 +45,33 @@ OC.L10N.register(
     "Could not change member level" : "تعذّر تغيير رتبة العضو",
     "Member removed" : "تمّ حذف العضو",
     "Could not remove member" : "تعذّر حذف العضو",
+    "Promote to admin" : "ترقية إلى مدير",
+    "Demote to member" : "خفض الرتبة إلى عضو",
+    "Remove" : "حذف",
+    "An error occurred while performing the search" : "حدث خطأ اثناء البحث",
     "Search accounts, groups, teams" : "البحث في الحسابات، و المجموعات، والفرق",
     "Add accounts, groups or teams" : "إضافة حسابات، أو مجموعات، أو فرق",
     "Search for members to add." : "البحث عن أعضاء لإضافتهم.",
     "Loading…" : "التحميل جارٍ ...",
-    "An error occurred while performing the search" : "حدث خطأ اثناء البحث",
     "Add accounts" : "إضافة حسابات",
     "Add groups" : "اضافة مجموعات",
     "Add teams" : "إضافة فرق",
     "Remove {name}" : "إزالة {name}",
     "Members of collective {name}" : "أعضاء التجميعة {name} ",
+    "Change emoji" : "تغيير الرمز التعبيري",
+    "Add emoji" : "اضافة رمز تعبيري",
+    "Name of the collective" : "اسم التجميعة",
+    "Renaming is limited to owners of the team" : "إعادة التسمية يحق فقط لمالكي الفرق",
+    "Name too short, requires at least three characters" : "الاسم قصير جدّاً. يلزم ثلاث حروف على الأقل",
+    "Editing permissions updated" : "تعديلات الأذونات تمّ تحديثها",
+    "Could not update editing permissions" : "تعذّر تحديث تعديلات الأذونات",
+    "Sharing permissions updated" : "أذونات المشاركة تمّ تحديثها",
+    "Could not update sharing permissions" : "تعذّر تحديث أذونات المشاركة",
+    "Default page mode updated" : "تمّ تحديث الوضعية التلقائية للصفحة",
+    "Could not update default page mode" : "تعذّر تحديث الوضعية التلقائية للصفحة",
+    "Emoji updated" : "الرمز التعبيري تمّ تحديثه emoji",
+    "Could not update emoji for the collective" : "تعذّر تحديث الرمز التعبيري emoji للتجميعة",
+    "Could not rename the collective" : "تعذّرت إعادة تسمية التجميعة",
     "Collective settings" : "إعدادات التجميعات",
     "Name and emoji" : "الاسم و الرمز التعبيري emoji",
     "Select emoji for collective" : "اختر رمز تعبيري للتجميعة",
@@ -75,25 +87,11 @@ OC.L10N.register(
     "Edit" : "تعديل",
     "Danger zone" : "منطقة خطر",
     "Delete collective" : "حذف التجميعة",
-    "Change emoji" : "تغيير الرمز التعبيري",
-    "Add emoji" : "اضافة رمز تعبيري",
-    "Name of the collective" : "اسم التجميعة",
-    "Renaming is limited to owners of the team" : "إعادة التسمية يحق فقط لمالكي الفرق",
-    "Name too short, requires at least three characters" : "الاسم قصير جدّاً. يلزم ثلاث حروف على الأقل",
-    "Editing permissions updated" : "تعديلات الأذونات تمّ تحديثها",
-    "Could not update editing permissions" : "تعذّر تحديث تعديلات الأذونات",
-    "Sharing permissions updated" : "أذونات المشاركة تمّ تحديثها",
-    "Could not update sharing permissions" : "تعذّر تحديث أذونات المشاركة",
-    "Default page mode updated" : "تمّ تحديث الوضعية التلقائية للصفحة",
-    "Could not update default page mode" : "تعذّر تحديث الوضعية التلقائية للصفحة",
-    "Emoji updated" : "الرمز التعبيري تمّ تحديثه emoji",
-    "Could not update emoji for the collective" : "تعذّر تحديث الرمز التعبيري emoji للتجميعة",
-    "Could not rename the collective" : "تعذّرت إعادة تسمية التجميعة",
-    "Collectives settings" : "إعدادات التجميعات",
-    "Collectives folder" : "مجلد التجميعات",
     "Create a collective first" : "إنشاء تجميعة أوّلاً",
     "Select location for collectives" : "إختر موقعاً للتجميعة",
     "Invalid path selected. Only folders on first level are supported." : "المسار المُختار غير صحيح. في المستوى الأول، مسموحٌ فقط بالمجلدات.",
+    "Collectives settings" : "إعدادات التجميعات",
+    "Collectives folder" : "مجلد التجميعات",
     "Deleted collectives" : "تجميعات محذوفة",
     "Restore" : "استعادة ",
     "Delete permanently" : "حذف بشكل دائم",
@@ -103,33 +101,29 @@ OC.L10N.register(
     "Collective and team" : "التجميعات والفرق",
     "Only team owners can delete a team" : "يمكن فقط لمالك الفريق حذفه",
     "Cancel" : "إلغاء",
-    "Select emoji" : "إختر رمزاً تعبيريّاً emji",
-    "Select an existing team" : "إختَر فريقاً موجوداً",
-    "Select a team..." : "إختَر فريقاً ...",
-    "Cancel selecting a team" : "إلغٍ عملية حذف فريق",
-    "Add members" : "إضافة أعضاء",
-    "Back" : "عودة",
     "New collective" : "تجميعة جديدة",
     "Add members to {name}" : "إضافة أعضاء إلى {name}",
     "A collective with this name already exists" : "توجد سلفاً تجميعة بهذا الاسم",
     "Create" : "إنشاء",
     "Create without members" : "إنشاء بدون أعضاء",
     "Could not add members to the collective" : "تعذّرت إضافة أعضاء إلى التجميعة",
+    "Select emoji" : "إختر رمزاً تعبيريّاً emji",
+    "Select an existing team" : "إختَر فريقاً موجوداً",
+    "Select a team..." : "إختَر فريقاً ...",
+    "Cancel selecting a team" : "إلغٍ عملية حذف فريق",
+    "Add members" : "إضافة أعضاء",
+    "Back" : "عودة",
     "Select a collective" : "إختر تجميعة",
     "Stop editing" : "توقف عن التحرير",
     "Start editing" : "إبدإ التحرير",
     "Done" : "تم",
     "Show members" : "إعرِض الأعضاء",
     "Show all members of the collective" : "إعرِض كل أعضاء التجميعة",
-    "Scroll recent pages to the left" : "مرِّر الصفحات الحالية جانبيّاً",
     "Collapse recent pages" : "طَي collapse الصفحات المفتوحة مؤخراً",
     "Expand recent pages" : "فرد expand الصفحات المفتوحة مؤخراً",
     "Could not save recent pages setting for collective" : "تعذّر حفظ إعدادات الصفحات المفتوحة مؤخراً من التجميعة",
+    "Scroll recent pages to the left" : "مرِّر الصفحات الحالية جانبيّاً",
     "Team overview" : "لمحة عن الفريق",
-    "Open page sidebar" : "فتح الشريط الجانبي للصفحة",
-    "Full width" : "العرض الكامل",
-    "Show in Files" : "عرض في الملفات ",
-    "Move or copy" : "أنقُل أو انسَخ",
     "Hide outline" : "إخفِ قائمة محتويات الصفحة outlines",
     "Show outline" : "أظهِر قائمة محتويات الصفحة outlines",
     "Remove from favorites" : "حذف من المفضلة",
@@ -140,11 +134,12 @@ OC.L10N.register(
     "Delete template" : "ِحذف القالب",
     "Delete page" : "إحذف الصفحة",
     "Extra action" : "إجراء إضافي",
+    "Open page sidebar" : "فتح الشريط الجانبي للصفحة",
+    "Full width" : "العرض الكامل",
+    "Show in Files" : "عرض في الملفات ",
+    "Move or copy" : "أنقُل أو انسَخ",
     "Page not found: {page}" : "تعذّر العثور على الصفحة: {page}",
     "Select a page from the list or create a new one." : "إختر صفحةً من القائمة أو أنشيء صفحةً جديدةً",
-    "Copy or move page" : "إنسَخ أو انقُل الصفحة",
-    "Breadcrumb for list of collectives" : "مسار التنقُّل لقائمة التجميعات",
-    "Breadcrumb for page {page}" : "مسار التنقُّل للصفحة {page}",
     "All collectives" : "كل التجميعات",
     "Breadcrumb for page {name}" : "مسار النقلات للصفحة  {name}",
     "Breadcrumb for collective {name}" : "مسار التنقُّل للتجميعة {name}",
@@ -152,24 +147,29 @@ OC.L10N.register(
     "Move page to {collective}" : "أنقُل الصفحة إلى {collective}",
     "Copy page here" : "إنسَخ الصفحة هنا",
     "Copy page to {collective}" : "إنسَخ الصفحة إلى {collective}",
-    "Error saving the document. Please try again." : "حدث خطأ أثناء حفظ المستند. يُرجى المحاولة مرة أخرى.",
-    "Restore this version" : "إستعادة الصفحة",
+    "Copy or move page" : "إنسَخ أو انقُل الصفحة",
+    "Breadcrumb for list of collectives" : "مسار التنقُّل لقائمة التجميعات",
+    "Breadcrumb for page {page}" : "مسار التنقُّل للصفحة {page}",
     "Reverted {page} to revision {timestamp}." : "صفحة معادة {page} إلى النسخة {timestamp}.",
     "Failed to revert {page} to revision {timestamp}." : "تعذّرت إعادة الصفحة {page} إلى النسخة {timestamp}.",
+    "Restore this version" : "إستعادة الصفحة",
+    "Could not rename the page" : "تعذّرت إعادة تسمية الصفحة",
     "Select emoji for page" : "إختر الرمز التعبيري emoji للصفحة",
     "Template" : "قالب",
     "Title" : "العنوان",
-    "Could not rename the page" : "تعذّرت إعادة تسمية الصفحة",
-    "Expand subpage list" : "قم بتوسيع قائمة الصفحات الفرعية",
-    "Favorite" : "المفضلة",
     "Add a page" : "إضافة صفحة",
     "Add a subpage" : "إضِف صفحةً فرعيّةً",
+    "Expand subpage list" : "قم بتوسيع قائمة الصفحات الفرعية",
+    "Favorite" : "المفضلة",
     "Favorites" : "المُفضّلة",
     "Toggle favorites" : "تبديل المفضلة",
+    "Page permanently deleted" : "تم حذف الصفحة نهائيًا",
     "Deleted pages" : "الصفحات المحذوفة",
     "No deleted pages." : "لا توجد صفحات محذوفة",
     "Deleted" : "تمّ حذفه",
-    "Page permanently deleted" : "تم حذف الصفحة نهائيًا",
+    "Hide templates" : "إخفِ القوالب",
+    "Show templates" : "أظهِر القوالب",
+    "Could not save page order for collective" : "تعذّر حفظ ترتيب صفحة التجميعة",
     "Search pages" : "البحث في الصفحات",
     "Search pages ..." : "إبحث في الصفحات ...",
     "Sort order" : "ترتيب الفرز",
@@ -181,9 +181,12 @@ OC.L10N.register(
     "Switch back to default sort order" : "عُد إلى الترتيب التلقائي",
     "Results in title" : "نتائج في العنوان",
     "Results in content" : "نتائج في المتن",
-    "Hide templates" : "إخفِ القوالب",
-    "Show templates" : "أظهِر القوالب",
-    "Could not save page order for collective" : "تعذّر حفظ ترتيب صفحة التجميعة",
+    "Share link ({index})" : "رابط المشاركة ({index})",
+    "View only" : "للعرض فقط",
+    "Can edit" : "يمكنه التعديل",
+    "Cannot copy, please copy the link manually" : "يتعذّر النسخ. يُرجى نسخ الرابط يدويًا",
+    "Copy public link of {title} to clipboard" : "إنسَخ الرابط العمومي لـ {title} إلى الحافظة",
+    "Error generating password from password policy" : "خطأ في توليد كلمة المرور بسبب مخالفة سياسة كلمات المرور",
     "Quick share options dropdown" : "القائمة المنسدلة لخيارات المشاركة السريعة",
     "Please enter the following required information before creating the share" : "الرجاء إدخال المعلومات المطلوبة التالية قبل إنشاء المشاركة",
     "Password protection (enforced)" : "الحماية بكلمة مرور (إلزامي)",
@@ -195,36 +198,19 @@ OC.L10N.register(
     "Unshare" : "إلغاء المشاركة",
     "Create a new share link" : "إنشاء رابط مشاركة جديد",
     "Update share" : "تحديث المشاركة",
-    "Share link ({index})" : "رابط المشاركة ({index})",
-    "View only" : "للعرض فقط",
-    "Can edit" : "يمكنه التعديل",
-    "Cannot copy, please copy the link manually" : "يتعذّر النسخ. يُرجى نسخ الرابط يدويًا",
-    "Copy public link of {title} to clipboard" : "إنسَخ الرابط العمومي لـ {title} إلى الحافظة",
-    "Actions for \"{title}\"" : "إجراءات لـ \"{title}\"",
-    "Page \"{name}\" has been shared" : "الصفحة  \"{name}\" تمّت مشاركتها",
-    "Collective \"{name}\" has been shared" : "التجميعة  \"{name}\" تمّت مشاركتها",
-    "Failed to share page \"{name}\": {responseError}" : "تعذّرت مشاركة الصفحة \"{name}\": {responseError}",
-    "Failed to share collective \"{name}\": {responseError}" : "تعذّرت مشاركة التجميعة \"{name}\": {responseError}",
-    "Share link of page \"{name}\" has been updated" : "رابط مشاركة الصفحة  \"{name}\" تمّ تحديثه",
-    "Share link of collective \"{name}\" has been updated" : "رابط مشاركة التجميعة  \"{name}\" تمّ تحديثه",
-    "Failed to update share link: {responseError}" : "فشل في تحديث رابط المشاركة: {responseError}",
-    "Page \"{name}\" has been unshared" : "الصفحة  \"{name}\" تمّ إلغاء مشاركتها",
-    "Collective \"{name}\" has been unshared" : "التجميعة \"{name}\" تمّ إلغاء مشاركتها",
-    "Failed to unshare: {responseError}" : "فشل في إلغاء المشاركة: {responseError}",
-    "Error generating password from password policy" : "خطأ في توليد كلمة المرور بسبب مخالفة سياسة كلمات المرور",
+    "Add attachments using drag and drop or via \"Insert attachment\" in the formatting menu." : "أضف المرفقات باستخدام السحب والإفلات أو عبر \"إدراج مُرفَق\" في قائمة التنسيق.",
+    "Could not get attachments" : "تعذّر الحصول على المُرفَقات",
     "View in document" : "عرض في المستند",
     "Download" : "تنزيل",
     "Recently deleted" : "محذوفة مؤخّراً",
     "No attachments available" : "لا توجد مُرفقات",
-    "Add attachments using drag and drop or via \"Insert attachment\" in the formatting menu." : "أضف المرفقات باستخدام السحب والإفلات أو عبر \"إدراج مُرفَق\" في قائمة التنسيق.",
-    "Could not get attachments" : "تعذّر الحصول على المُرفَقات",
+    "Could not get page backlinks" : "تعذّر الحصول على الروابط الخلفيّة backlinks للصفحة",
     "No backlinks available" : "لا توجد روابط خلفيّة backlinks مُتاحةٌ",
     "If other pages link to this one, they will be listed here." : "إذا كان هنالك صفحات أخرى مربوطة linked بهذه الصفحة، فستظهر قائمة بها هنا",
-    "Could not get page backlinks" : "تعذّر الحصول على الروابط الخلفيّة backlinks للصفحة",
+    "Could not get page versions" : "تعذّر الحصول على نُسَخِ الصفحة",
     "Current version" : "الإصدار الحالي",
     "No other versions available" : "لا تتوفر هناك نُسخ أخرى",
     "After editing you can find old versions of the page here." : "بعد التحرير، يُمكنك إيجاد النُّسخ القديمة من الصفحة هنا.",
-    "Could not get page versions" : "تعذّر الحصول على نُسَخِ الصفحة",
     "Attachments" : "المرفقات",
     "Backlinks" : "روابط خلفيّة ",
     "Sharing" : "المشاركة",
@@ -260,21 +246,21 @@ OC.L10N.register(
     "A share for collective %s exists already" : "مشاركة التجميعة %s موجودة مسبقاً",
     "Collectives is a Nextcloud App for activist and community projects to organize together.\nCome and gather in collectives to build shared knowledge.\n\n* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n  tied to a [Nextcloud Circle](https://github.com/nextcloud/circles) and\n  owned by the collective.\n* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**\n  for page formatting.\n\n## Installation\n\nIn your Nextcloud instance, simply navigate to **»Apps«**, find the\n**»Circles«** and **»Collectives«** apps and enable them." : "\"التجميعات\" Collectives هي تطبيق من نكست كلاود للنشطاء والمشاريع المجتمعية للتنظيم معًا. \nتعالوا واجتمعوا في مجموعات لبناء المعرفة المشتركة. \n* 👥 ** مسارات سير عمل جماعي غير هرمي \n**: التجميعات مرتبطة بتطبيق نكست كلاود للدوائر Circles ـ [Circles](https://github.com/nextcloud/circles)  \n\n* 📝 **تحرير جماعي للتجميعة** كما في التطبيق الشهير إيثرباد EtherpadK. و هذا صار ممكنا بفضل تطبيق Text من نكست كلاود [Text app] (https://github.com/nextcloud/text).\n* 🔤 ** استخدام ماركدوان في تكوين الصفحات  [Markdown] (https://en.wikipedia.org/wiki/Markdown) على خادومك الخاص. \n\n## التنصيب\n\nما عليك سوى الانتقال إلى ** »التطبيقات« **، و ابحث عن ** »الدوائر Circles« ** و ** »التجميعات Collectives« ** و قم بتمكينها.",
     "The contacts app is required to manage members" : "تطبيق جهات الاتصال مطلوب لإدارة الأعضاء",
-    "Allow editing in share" : "السماح بالتحرير في المشاركة",
     "Copied" : "نُسخت ",
     "Cannot copy" : "لا يمكن النسخ",
     "Copy share link" : "انسخ رابط المشاركة",
     "Could not change the collective share editing permissions" : "تعذّر تغيير أذونات تعديل مُشاركة التجميعة",
     "Could not share the collective" : "تعذّرت مشاركة التجميعة",
     "Could not unshare the collective" : "تعذّر إلغاء مُشاركة التجميعة",
+    "Allow editing in share" : "السماح بالتحرير في المشاركة",
     "Collective not found:" : "التجميعة غير موجودة:",
     "Select a collective or create a new one on the left." : "إختر تجميعةً أو أنشيء واحدةً جديدةً على الجانب.",
     "Last edited by {user}" : "آخر تعديلٍ كان من قِبٍَل {user}",
+    "Renaming is limited to owners of the circle" : "إعادة التسمية تقتصر على مُلّاك الدائرة",
     "Save new collective name" : "حفظ اسم التجميعة الجديدة",
     "Admins and moderaters" : "المديرون والمشرفون",
     "Members can be managed via the connected circle in the Contacts app." : "يمكن إدارة الأعضاء عبر الدائرة المتصلة connected circle في تطبيق جهات الاتصال.",
     "Open circle in Contacts" : "فتح الدائرة في جهات الاتصال",
-    "Renaming is limited to owners of the circle" : "إعادة التسمية تقتصر على مُلّاك الدائرة",
     "Collectives Folder" : "مُجلّد التجميعات",
     "Permanently delete collective »{collective}«" : "إحذف التجميعة نهائيّاً »{collective}«",
     "Delete corresponding circle along with the collective?" : "إحذف الدائرة المناظرة مع التجميعة؟",
