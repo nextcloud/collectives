@@ -23,7 +23,7 @@ OC.L10N.register(
     "Title" : "Amats",
     "Favorite" : "Izlasē",
     "Favorites" : "Izlases vienumi",
-    "Deleted" : "Dzēstie",
+    "Deleted" : "Izdzēsts",
     "View only" : "Tikai skatīt",
     "Can edit" : "Var labot",
     "Set password" : "Uzstādīt paroli",
