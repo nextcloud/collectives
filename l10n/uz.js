@@ -17,9 +17,11 @@ OC.L10N.register(
     "Deleted" : "O`chirilgan",
     "Can edit" : "Can edit",
     "Password" : "Password",
+    "Create share" : "Tarqatish yaratish",
     "Unshare" : "Unshare",
     "Download" : "Download",
     "Sharing" : "Ulashish",
-    "Versions" : "Versions"
+    "Versions" : "Versions",
+    "Clear search" : "Qidiruvni tozalash"
 },
 "nplurals=1; plural=0;");
