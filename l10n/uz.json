@@ -10,6 +10,8 @@
     "Cancel" : "Cancel",
     "Back" : "Orqaga",
     "Done" : "Done",
+    "Remove from favorites" : "Sevimlilardan olib tashlang",
+    "Add to favorites" : "Sevimlilarga qo'shing",
     "Favorite" : "Favorite",
     "Favorites" : "Favorites",
     "Deleted" : "O`chirilgan",
@@ -20,6 +22,7 @@
     "Download" : "Download",
     "Sharing" : "Ulashish",
     "Versions" : "Versions",
-    "Clear search" : "Qidiruvni tozalash"
+    "Clear search" : "Qidiruvni tozalash",
+    "Link copied" : "Havola nusxalandi"
 },"pluralForm" :"nplurals=1; plural=0;"
 }
