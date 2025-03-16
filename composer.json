@@ -28,7 +28,7 @@
       "lint": "find . -name \\*.php -not -path './vendor/*' -exec php -l \"{}\" \\;",
       "cs:check": "php-cs-fixer fix --dry-run --diff",
       "cs:fix": "php-cs-fixer fix",
-      "psalm": "psalm --threads=$(nproc) --no-cache",
+      "psalm": "psalm --no-cache",
       "psalm:update-baseline": "psalm --threads=$(nproc) --no-cache --update-baseline --set-baseline=tests/psalm-baseline.xml",
       "test:unit": "phpunit -c tests/phpunit.xml",
       "post-install-cmd": [
