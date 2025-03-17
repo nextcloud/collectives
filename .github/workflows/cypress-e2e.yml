@@ -13,6 +13,7 @@ env:
   # Adjust APP_NAME if your repository name is different
   APP_NAME: ${{ github.event.repository.name }}
   CYPRESS_baseUrl: http://localhost:8081/index.php
+  CYPRESS_CACHE_FOLDER: ${{ github.workspace }}/Cypress
 
 jobs:
   changes:
@@ -144,7 +145,6 @@ jobs:
           key: cypress-context-${{ matrix.server-versions }}-${{ github.run_id }}
           path: |
             ./
-            /home/runner/.cache/Cypress
 
   cypress:
     runs-on: ubuntu-latest
@@ -174,7 +174,6 @@ jobs:
           key: cypress-context-${{ matrix.server-versions }}-${{ github.run_id }}
           path: |
             ./
-            /home/runner/.cache/Cypress
 
       - name: Set up node ${{ needs.init.outputs.nodeVersion }}
         uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
