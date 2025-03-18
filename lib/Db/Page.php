@@ -12,6 +12,7 @@ namespace OCA\Collectives\Db;
 use JsonSerializable;
 
 use OCP\AppFramework\Db\Entity;
+use OCP\DB\Types;
 
 /**
  * @method int getId()
@@ -38,7 +39,7 @@ class Page extends Entity implements JsonSerializable {
 	protected ?int $trashTimestamp = null;
 
 	public function __construct() {
-		$this->addType('fullWidth', 'bool');
+		$this->addType('fullWidth', Types::BOOLEAN);
 	}
 
 	public function jsonSerialize(): array {
