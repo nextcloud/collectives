@@ -73,6 +73,7 @@ class CollectiveTeamResourceProvider implements ITeamResourceProvider {
 		} catch (NotFoundException|NotPermittedException) {
 			return [];
 		}
-		return [$collective->getCircleId()];
+		$circleId = $collective->getCircleId();
+		return $circleId === null ? [] : [$circleId];
 	}
 }
