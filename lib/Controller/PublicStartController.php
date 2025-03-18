@@ -54,7 +54,7 @@ class PublicStartController extends AuthPublicShareController {
 		return $this->share;
 	}
 
-	protected function getPasswordHash(): string {
+	protected function getPasswordHash(): ?string {
 		return $this->getShare()->getPassword();
 	}
 
