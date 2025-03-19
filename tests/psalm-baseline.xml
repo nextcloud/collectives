@@ -1,17 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.22.2@d768d914152dbbf3486c36398802f74e80cfde48">
-  <file src="lib/AppInfo/Application.php">
-    <MissingDependency>
-      <code><![CDATA[CollectiveTeamResourceProvider]]></code>
-      <code><![CDATA[RecentPagesWidget]]></code>
-      <code><![CDATA[SearchablePageReferenceProvider]]></code>
-    </MissingDependency>
-  </file>
-  <file src="lib/Dashboard/RecentPagesWidget.php">
-    <UndefinedClass>
-      <code><![CDATA[IReloadableWidget]]></code>
-    </UndefinedClass>
-  </file>
+<files psalm-version="5.26.1@d747f6500b38ac4f7dfc5edbcae6e4b637d7add0">
   <file src="lib/Fs/UserFolderHelper.php">
     <UndefinedClass>
       <code><![CDATA[$e]]></code>
@@ -28,16 +16,6 @@
       <code><![CDATA[$maskedStorage]]></code>
     </InvalidArgument>
   </file>
-  <file src="lib/Mount/CollectiveStorage.php">
-    <MoreSpecificImplementedParamType>
-      <code><![CDATA[$storage]]></code>
-    </MoreSpecificImplementedParamType>
-  </file>
-  <file src="lib/Reference/SearchablePageReferenceProvider.php">
-    <UndefinedClass>
-      <code><![CDATA[IPublicReferenceProvider]]></code>
-    </UndefinedClass>
-  </file>
   <file src="lib/Service/CollectiveService.php">
     <UndefinedClass>
       <code><![CDATA[File]]></code>
@@ -49,11 +27,6 @@
       <code><![CDATA[?IQueue]]></code>
       <code><![CDATA[IQueue]]></code>
       <code><![CDATA[OC_Util]]></code>
-    </UndefinedClass>
-  </file>
-  <file src="lib/Team/CollectiveTeamResourceProvider.php">
-    <UndefinedClass>
-      <code><![CDATA[ITeamResourceProvider]]></code>
     </UndefinedClass>
   </file>
   <file src="lib/Versions/VersionsBackend.php">
