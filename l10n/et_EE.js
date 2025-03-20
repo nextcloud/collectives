@@ -21,6 +21,7 @@ OC.L10N.register(
     "Can edit" : "Võib redigeerida",
     "Cannot copy, please copy the link manually" : "Ei saa kopeerida, palun kopeeri link käsitsi",
     "Password protection (enforced)" : "Paroolikaitse (jõustatud)",
+    "Password" : "Salasõna",
     "Add another link" : "Lisa veel üks link",
     "Advanced settings" : "Lisavalikud",
     "Unshare" : "Lõpeta jagamine",
