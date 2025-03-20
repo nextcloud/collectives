@@ -6,6 +6,9 @@
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor-bin/vimeo/psalm/config.xsd"
     errorBaseline="tests/psalm-baseline.xml"
+    findUnusedBaselineEntry="true"
+    findUnusedCode="false"
+    phpVersion="8.0"
 >
     <stubs>
         <file name="tests/stub.phpstub" preloadClasses="true"/>

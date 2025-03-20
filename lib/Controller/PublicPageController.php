@@ -75,7 +75,7 @@ class PublicPageController extends PublicShareController {
 		return $this->collectiveShare;
 	}
 
-	protected function getPasswordHash(): string {
+	protected function getPasswordHash(): ?string {
 		return $this->getShare()->getPassword();
 	}
 
