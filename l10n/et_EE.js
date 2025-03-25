@@ -30,6 +30,7 @@ OC.L10N.register(
     "No other versions available" : "Muid versioone pole saadaval",
     "Sharing" : "Jagamine",
     "Versions" : "Versioonid",
-    "Link copied" : "Link kopeeritud"
+    "Link copied" : "Link kopeeritud",
+    "Copied" : "Kopeeritud"
 },
 "nplurals=2; plural=(n != 1);");
