@@ -60,6 +60,7 @@ OC.L10N.register(
     "Hide templates" : "Slėpti šablonus",
     "Show templates" : "Rodyti šablonus",
     "Sort order" : "Rikiavimo tvarka",
+    "Sort by title" : "Rikiuoti pagal sąveiką",
     "View only" : "Tik peržiūrėti",
     "Can edit" : "Gali taisyti",
     "Cannot copy, please copy the link manually" : "Nepavyksta nukopijuoti, nukopijuokite nuorodą rankiniu būdu",
