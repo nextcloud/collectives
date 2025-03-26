@@ -76,6 +76,10 @@ class PublicPageTrashController extends PublicShareController {
 		return $this->collectiveShare;
 	}
 
+	/**
+	 * @psalm-suppress InvalidNullableReturnType
+	 * @psalm-suppress NullableReturnStatement
+	 */
 	protected function getPasswordHash(): string {
 		return $this->getShare()->getPassword();
 	}
