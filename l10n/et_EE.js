@@ -18,6 +18,7 @@ OC.L10N.register(
     "Favorite" : "Lemmik",
     "Favorites" : "Lemmikud",
     "Deleted" : "Kustutatud",
+    "View only" : "Ainult vaatamine",
     "Can edit" : "Võib redigeerida",
     "Cannot copy, please copy the link manually" : "Ei saa kopeerida, palun kopeeri link käsitsi",
     "Password protection (enforced)" : "Paroolikaitse (jõustatud)",
