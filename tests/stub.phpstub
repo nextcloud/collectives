@@ -589,6 +589,14 @@ namespace OC\Files\Storage\Wrapper{
         public function getWatcher() {
             throw new \Exception('stub');
         }
+
+		public function needsPartFile(): bool {
+            throw new \Exception('stub');
+		}
+
+		public function setOwner(?string $user): void {
+            throw new \Exception('stub');
+		}
     }
 
     class Jail extends Wrapper {
@@ -879,6 +887,9 @@ namespace OCA\Files_Trashbin\Trash {
 		public function getTitle(): string {}
 		public function getCreationTime(): int {}
 		public function getUploadTime(): int {}
+		public function getParentId(): int {}
+		public function getDeletedBy(): ?IUser {}
+		public function getMetadata(): array {}
 	}
 }
 

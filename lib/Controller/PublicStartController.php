@@ -54,6 +54,10 @@ class PublicStartController extends AuthPublicShareController {
 		return $this->share;
 	}
 
+	/**
+	 * @psalm-suppress InvalidNullableReturnType
+	 * @psalm-suppress NullableReturnStatement
+	 */
 	protected function getPasswordHash(): string {
 		return $this->getShare()->getPassword();
 	}
