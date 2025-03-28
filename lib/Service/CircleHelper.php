@@ -306,11 +306,12 @@ class CircleHelper {
 			if ($initiator->getUserType() !== Member::TYPE_USER) {
 				return false;
 			}
-			$members = $circle->getMembers();
+			$members = $circle->getMembers(2);
 		} catch (CircleNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
 
+		// if there is at least 1 more user in this circle
 		foreach ($members as $member) {
 			if ($member->getSingleId() !== $initiator->getSingleId()) {
 				return true;
