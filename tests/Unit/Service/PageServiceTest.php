@@ -25,6 +25,7 @@ use OCA\Collectives\Service\CollectiveServiceBase;
 use OCA\Collectives\Service\NotPermittedException;
 use OCA\Collectives\Service\PageService;
 use OCA\Collectives\Service\SessionService;
+use OCA\Collectives\Service\SlugService;
 use OCP\IConfig;
 use OCP\IUserManager;
 use PHPUnit\Framework\TestCase;
@@ -100,7 +101,9 @@ class PageServiceTest extends TestCase {
 			$userManager,
 			$this->config,
 			$container,
-			$sessionService);
+			$sessionService,
+			$this->createMock(SlugService::class),
+		);
 	}
 
 	public function testGetPageFile(): void {
