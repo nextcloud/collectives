@@ -26,6 +26,7 @@ OC.L10N.register(
     "Favorite" : "Lemmik",
     "Favorites" : "Lemmikud",
     "Deleted" : "Kustutatud",
+    "Sort by title" : "Järjesta pealkirja järgi",
     "View only" : "Ainult vaatamine",
     "Can edit" : "Võib redigeerida",
     "Cannot copy, please copy the link manually" : "Ei saa kopeerida, palun kopeeri link käsitsi",
@@ -48,6 +49,7 @@ OC.L10N.register(
     "Could not copy link to the clipboard:" : "Lingi kopeerimine lõikelauale ei õnnestunud:",
     "Could not create the page" : "Lehe loomine ei õnnestunud",
     "New page" : "Uus leht",
-    "Copied" : "Kopeeritud"
+    "Copied" : "Kopeeritud",
+    "Copy share link" : "Kopeeri jagamislink"
 },
 "nplurals=2; plural=(n != 1);");
