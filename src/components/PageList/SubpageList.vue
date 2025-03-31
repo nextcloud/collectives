@@ -159,6 +159,6 @@ export default {
 
 <style>
 .page-list-indent {
-	padding-left: 28px;
+	padding-left: 20px;
 }
 </style>
