@@ -245,6 +245,10 @@ export const usePagesStore = defineStore('pages', {
 				|| (state.sortByOrder !== 'byOrder')
 		},
 
+		newPageId(state) {
+			return state.newPage?.id
+		},
+
 		newPagePath(state) {
 			return state.newPage && state.pagePath(state.newPage)
 		},
