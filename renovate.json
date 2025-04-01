@@ -38,6 +38,10 @@
     {
       "matchPackageNames": ["vue-router"],
       "allowedVersions": "<4"
+    },
+    {
+      "matchPackageNames": ["vueuse"],
+      "allowedVersions": "<12"
     }
   ]
 }
