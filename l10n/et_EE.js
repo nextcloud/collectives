@@ -50,6 +50,7 @@ OC.L10N.register(
     "Could not create the page" : "Lehe loomine ei õnnestunud",
     "New page" : "Uus leht",
     "Copied" : "Kopeeritud",
+    "Cannot copy" : "Kopeerimine ebaõnnestus",
     "Copy share link" : "Kopeeri jagamislink"
 },
 "nplurals=2; plural=(n != 1);");
