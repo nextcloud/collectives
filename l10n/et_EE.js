@@ -20,6 +20,7 @@ OC.L10N.register(
     "Create" : "Loo",
     "Back" : "Tagasi",
     "Done" : "Valmis",
+    "Remove from favorites" : "Eemalda lemmikutest",
     "Show in Files" : "Näita failirakenduses",
     "Move or copy" : "Liiguta või kopeeri",
     "Title" : "Pealkiri",
