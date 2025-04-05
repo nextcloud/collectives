@@ -69,6 +69,13 @@
 	}
 }
 
+@media screen and (max-width: 669px) {
+	.sheet-view {
+		--text-editor-max-width: false !important;
+		max-width: unset;
+	}
+}
+
 .editor--outline {
 	border-radius: var(--border-radius-large);
 	box-shadow: 0 1px 10px var(--color-box-shadow);
