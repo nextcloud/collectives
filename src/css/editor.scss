@@ -39,11 +39,6 @@
 		margin-inline: auto;
 	}
 
-	.text-container-heading {
-		max-width: min(var(--text-editor-max-width), 100%);
-		margin-inline: auto;
-	}
-
 	.page-title {
 		max-width: 100%;
 		margin: 0 0 0 max(0px, calc(50% - (var(--text-editor-max-width) / 2)));
