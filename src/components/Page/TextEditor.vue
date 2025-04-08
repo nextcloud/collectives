@@ -5,9 +5,6 @@
 
 <template>
 	<div ref="textContainer" class="collectives-text-container">
-		<WidgetHeading v-if="isLandingPage"
-			:title="t('collectives', 'Landing page')"
-			class="text-container-heading" />
 		<SkeletonLoading v-show="!contentLoaded"
 			type="text"
 			class="page-content-skeleton" />
@@ -26,7 +23,6 @@ import { ref, watch } from 'vue'
 import { useElementSize } from '@vueuse/core'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { showError } from '@nextcloud/dialogs'
-import WidgetHeading from './LandingPageWidgets/WidgetHeading.vue'
 import { mapActions, mapState } from 'pinia'
 import { useRootStore } from '../../stores/root.js'
 import { useCollectivesStore } from '../../stores/collectives.js'
@@ -42,7 +38,6 @@ export default {
 
 	components: {
 		SkeletonLoading,
-		WidgetHeading,
 	},
 
 	mixins: [
@@ -74,7 +69,6 @@ export default {
 		...mapState(usePagesStore, [
 			'currentPage',
 			'currentPageDavUrl',
-			'isLandingPage',
 			'isTemplatePage',
 		]),
 
@@ -214,20 +208,12 @@ export default {
 	min-height: 50vh;
 }
 
-.text-container-heading {
-	padding-inline: 14px 8px;
-}
-
 .page-content-skeleton {
 	padding-block-start: var(--default-clickable-area);
 }
 
 @media print {
 	/* Don't print unwanted elements */
-	.text-container-heading {
-		display: none !important;
-	}
-
 	.collectives-text-container {
 		overflow: visible;
 	}
