@@ -208,25 +208,21 @@ export default {
 
 .button-slide {
 	position: absolute;
-	width: 100px;
+	width: fit-content;
 	height: 100%;
 	display: flex;
 	right: 0;
 	top: 0;
-	bottom: 0;
 	padding: 0;
 	margin: 0 !important;
-	border: 0;
-	border-radius: 0;
-	z-index: 2;
 
 	&__left {
 		left: 0;
 		justify-content: left;
 		background: linear-gradient(to left, rgba(0, 0, 0, 0), var(--color-main-background));
 
-		&:active {
-			background: linear-gradient(to left, rgba(0, 0, 0, 0), var(--color-main-background)) !important;
+		&:hover, &:focus, &:active {
+			background: var(--color-primary-element-light-hover);
 		}
 	}
 
@@ -235,8 +231,8 @@ export default {
 		justify-content: right;
 		background: linear-gradient(to right, rgba(0, 0, 0, 0), var(--color-main-background));
 
-		&:active {
-			background: linear-gradient(to right, rgba(0, 0, 0, 0), var(--color-main-background)) !important;
+		&:hover, &:focus, &:active {
+			background: var(--color-primary-element-light-hover);
 		}
 	}
 
