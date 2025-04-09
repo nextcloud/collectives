@@ -61,11 +61,12 @@
 </template>
 
 <script>
-import { NcButton, NcCheckboxRadioSwitch } from '@nextcloud/vue'
-import { translate as t } from '@nextcloud/l10n'
 import { mapActions, mapState } from 'pinia'
-import { useRootStore } from '../stores/root.js'
-import { useSearchStore } from '../stores/search.js'
+import { useRootStore } from '../../stores/root.js'
+import { useSearchStore } from '../../stores/search.js'
+import { translate as t } from '@nextcloud/l10n'
+
+import { NcButton, NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import ArrowDown from 'vue-material-design-icons/ArrowDown.vue'
 import ArrowUp from 'vue-material-design-icons/ArrowUp.vue'
 import Close from 'vue-material-design-icons/Close.vue'
