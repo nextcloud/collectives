@@ -21,7 +21,7 @@
 .sheet-view {
 	--text-editor-max-width: 670px !important;
 
-	.landing-page-widgets,
+	&.landing-page-widgets,
 	.page-heading-skeleton,
 	.page-content-skeleton {
 		width: min(var(--text-editor-max-width), 100%);
@@ -65,7 +65,7 @@
 		margin: unset !important;
 	}
 
-	.page-title-container, .document-status, .editor__content {
+	.page-title-container, .editor__content {
 		margin: unset !important;
 		max-width: unset !important;
 		width: var(--text-editor-max-width);

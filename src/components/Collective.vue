@@ -8,7 +8,7 @@
 		<div v-if="loading('collective') || loading('currentPage')" class="sheet-view">
 			<SkeletonLoading :count="1" class="page-heading-skeleton" type="page-heading" />
 		</div>
-		<Version v-else-if="currentPage && version" />
+		<PageVersion v-else-if="currentPage && version" />
 		<Page v-else-if="currentPage" />
 		<PageNotFound v-else />
 	</NcAppContentDetails>
@@ -27,7 +27,7 @@ import { listen } from '@nextcloud/notify_push'
 import { NcAppContentDetails } from '@nextcloud/vue'
 import displayError from '../util/displayError.js'
 import Page from './Page.vue'
-import Version from './Page/Version.vue'
+import PageVersion from './PageVersion.vue'
 import PageNotFound from './Page/PageNotFound.vue'
 import SkeletonLoading from './SkeletonLoading.vue'
 import { sessionUpdateInterval } from '../constants.js'
@@ -40,7 +40,7 @@ export default {
 		NcAppContentDetails,
 		Page,
 		PageNotFound,
-		Version,
+		PageVersion,
 	},
 
 	data() {
@@ -235,71 +235,16 @@ export default {
 	width: 100%;
 }
 
-/* Format page title in Page.vue and Version.vue */
+/* Format page title in Page.vue and PageVersion.vue */
 .page-title {
 	position: relative;
 	z-index: 10022;
 	padding: 0 8px;
-	display: flex;
-	align-items: center;
-	background-color: var(--color-main-background);
-	min-height: 48px;
-	// Overwrite `h2` defaults
-	margin: 0;
-
-	form {
-		flex: auto;
-	}
-
-	input[type='text'] {
-		border: none;
-		color: var(--color-main-text);
-		width: 100%;
-		height: 43px;
-		text-overflow: unset;
-		font-size: inherit;
-		font-weight: inherit;
-
-		&.mobile {
-			// Less padding to save some extra space
-			padding: 0;
-			padding-right: 4px;
-		}
-
-		&:disabled {
-			opacity: 1;
-		}
-
-		&::placeholder {
-			font-size: inherit;
-			font-weight: inherit;
-		}
-	}
-
-	.page-title-icon {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		min-width: var(--default-clickable-area);
-
-		.button-emoji-page {
-			width: var(--default-clickable-area);
-			padding: 0px 4px;
-			font-size: 0.8em;
-		}
-	}
 }
 
 // Align sidebar toggle
 .app-sidebar__toggle {
 	inset-block-start: 7px !important;
-}
-
-/* Leave space for page list toggle on small screens (editor 670px + toggle button) */
-@media screen and (max-width: calc(670px + 44px)) {
-	.page-title {
-		padding-left: calc(var(--default-clickable-area) + 4px);
-	}
 }
 
 @media print {

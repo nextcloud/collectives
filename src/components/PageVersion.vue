@@ -4,8 +4,13 @@
 -->
 
 <template>
-	<div class="page-container" :class="[currentPage.isFullWidth ? 'full-width-view' : 'sheet-view']">
-		<h2 id="titleform" class="page-title" :class="{ 'pre-nc30': isPreNc30 }">
+	<div class="page-container">
+		<div class="page-title-container"
+			:class="{
+				'full-width-view': isFullWidth,
+				'sheet-view': !isFullWidth,
+				'pre-nc30': isPreNc30,
+			}">
 			<div class="page-title-icon">
 				<div v-if="currentPage.emoji">
 					{{ currentPage.emoji }}
@@ -16,11 +21,9 @@
 					fill-color="var(--color-text-maxcontrast)" />
 			</div>
 
-			<input class="title title-version"
-				:class="{ 'mobile': isMobile }"
-				type="text"
-				disabled
-				:value="versionTitle">
+			<PageTitle class="title title-version"
+				:value="versionTitle"
+				:disabled="true" />
 			<NcButton :title="t('collectives', 'Restore this version')"
 				:aria-label="t('collectives', 'Restore this version')"
 				class="titleform-button"
@@ -37,36 +40,39 @@
 					</template>
 				</NcActionButton>
 			</NcActions>
-		</h2>
+		</div>
 		<SkeletonLoading v-show="!contentLoaded" class="page-content-skeleton" type="text" />
 		<div v-show="contentLoaded"
-			id="text-container">
+			id="text-container"
+			:class="[isFullWidth ? 'full-width-view' : 'sheet-view']">
 			<div ref="reader" data-collectives-el="reader" />
 		</div>
 	</div>
 </template>
 
 <script>
-import { NcActionButton, NcActions, NcButton } from '@nextcloud/vue'
-import DockRightIcon from 'vue-material-design-icons/DockRight.vue'
-import RestoreIcon from 'vue-material-design-icons/Restore.vue'
+import editorMixin from '../mixins/editorMixin.js'
+import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
+import pageContentMixin from '../mixins/pageContentMixin.js'
 
 import { getCurrentUser } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { generateRemoteUrl } from '@nextcloud/router'
 import { mapActions, mapState } from 'pinia'
-import { useRootStore } from '../../stores/root.js'
-import { usePagesStore } from '../../stores/pages.js'
-import { useVersionsStore } from '../../stores/versions.js'
-import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
+import { useRootStore } from '../stores/root.js'
+import { usePagesStore } from '../stores/pages.js'
+import { useVersionsStore } from '../stores/versions.js'
+
+import { NcActionButton, NcActions, NcButton } from '@nextcloud/vue'
+import DockRightIcon from 'vue-material-design-icons/DockRight.vue'
 import EmoticonOutlineIcon from 'vue-material-design-icons/EmoticonOutline.vue'
-import editorMixin from '../../mixins/editorMixin.js'
-import pageContentMixin from '../../mixins/pageContentMixin.js'
-import SkeletonLoading from '../SkeletonLoading.vue'
+import RestoreIcon from 'vue-material-design-icons/Restore.vue'
+import PageTitle from './Page/PageTitle.vue'
+import SkeletonLoading from './SkeletonLoading.vue'
 
 export default {
-	name: 'Version',
+	name: 'PageVersion',
 
 	components: {
 		DockRightIcon,
@@ -74,6 +80,7 @@ export default {
 		NcActionButton,
 		NcActions,
 		NcButton,
+		PageTitle,
 		RestoreIcon,
 		SkeletonLoading,
 	},
@@ -89,13 +96,16 @@ export default {
 		...mapState(useVersionsStore, ['version']),
 		...mapState(usePagesStore, [
 			'currentPage',
-			'isFullWidthView',
 			'title',
 		]),
 
 		// TODO: remove when we stop supporting NC < 30
 		isPreNc30() {
 			return window.getComputedStyle(document.body).getPropertyValue('--default-clickable-area') === '44px'
+		},
+
+		isFullWidth() {
+			return this.currentPage.isFullWidth
 		},
 
 		pageTitleIconSize() {
@@ -181,12 +191,33 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// TODO: remove when we stop supporting NC < 30
-.page-title.pre-nc30 {
-	padding-top: 11px;
+.page-title-container {
+	display: flex;
+	max-width: 100%;
+	min-height: 48px;
+	padding: 0 8px;
+	align-items: center;
+	background-color: var(--color-main-background);
+
+	&.sheet-view {
+		margin: 0 0 0 max(0px, calc(50% - (var(--text-editor-max-width) / 2)));
+	}
+
+	// TODO: remove when we stop supporting NC < 30
+	&.pre-nc30 {
+		padding-top: 11px;
+	}
+
+	.button-emoji-page {
+		font-size: 0.8em;
+	}
 }
 
-input[type="text"].title-version {
+.page-title-icon {
+	font-size: 1.8em;
+}
+
+.title-version :deep(input[type="text"]) {
 	color: var(--color-text-maxcontrast);
 }
 
