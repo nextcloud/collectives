@@ -14,21 +14,11 @@
 }
 
 .full-width-view {
-	// Required for search dialog to stick to the bottom
-	height: 100%;
-	display: flex;
-	flex-direction: column;
-
 	--text-editor-max-width: false !important;
 	max-width: unset;
 }
 
 .sheet-view {
-	// Required for search dialog to stick to the bottom
-	height: 100%;
-	display: flex;
-	flex-direction: column;
-
 	--text-editor-max-width: 670px !important;
 
 	.landing-page-widgets,
@@ -37,11 +27,6 @@
 		width: min(var(--text-editor-max-width), 100%);
 		max-width: min(var(--text-editor-max-width), 100%);
 		margin-inline: auto;
-	}
-
-	.page-title {
-		max-width: 100%;
-		margin: 0 0 0 max(0px, calc(50% - (var(--text-editor-max-width) / 2)));
 	}
 
 	// Editor document status bar
@@ -80,7 +65,7 @@
 		margin: unset !important;
 	}
 
-	.page-title, .document-status, .editor__content {
+	.page-title-container, .document-status, .editor__content {
 		margin: unset !important;
 		max-width: unset !important;
 		width: var(--text-editor-max-width);

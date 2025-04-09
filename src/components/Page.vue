@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<div :class="[currentPage.isFullWidth ? 'full-width-view' : 'sheet-view']">
+	<div class="page-container" :class="[currentPage.isFullWidth ? 'full-width-view' : 'sheet-view']">
 		<PageTitle @focus-editor="focusEditor" @save-editor="saveEditor" />
 		<div class="page-scroll-container">
 			<LandingPageWidgets v-if="isLandingPage" />
@@ -57,8 +57,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.page-container {
+	// Required for search dialog to stick to the bottom
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
 .page-scroll-container {
 	overflow-y: auto;
+
+	// Make search dialog stick to the bottom
 	flex-grow: 1;
 }
 </style>

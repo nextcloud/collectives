@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<div :class="[currentPage.isFullWidth ? 'full-width-view' : 'sheet-view']">
+	<div class="page-container" :class="[currentPage.isFullWidth ? 'full-width-view' : 'sheet-view']">
 		<h2 id="titleform" class="page-title" :class="{ 'pre-nc30': isPreNc30 }">
 			<div class="page-title-icon">
 				<div v-if="currentPage.emoji">
