@@ -288,11 +288,6 @@ export default {
 			font-size: 0.8em;
 		}
 	}
-
-	.title {
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
 }
 
 // Align sidebar toggle

@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<div class="title-container">
+	<div class="page-title-container" :class="[currentPage.isFullWidth ? 'full-width-view' : 'sheet-view']">
 		<h2 id="titleform" class="page-title" :class="{ 'pre-nc30': isPreNc30 }">
 			<!-- Page emoji or icon -->
 			<div class="page-title-icon"
@@ -322,8 +322,16 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.page-title-container {
+	max-width: 100%;
+
+	&.sheet-view {
+		margin: 0 0 0 max(0px, calc(50% - (var(--text-editor-max-width) / 2)));
+	}
+}
+
 // TODO: remove when we stop supporting NC < 30
-.page-title.pre-nc30 {
+h2.pre-nc30 {
 	padding-top: 11px;
 }
 
