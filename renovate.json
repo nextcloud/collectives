@@ -32,6 +32,10 @@
       ]
     },
     {
+      "matchPackageNames": ["pinia"],
+      "allowedVersions": "<3"
+    },
+    {
       "matchPackageNames": ["vue"],
       "allowedVersions": "<3"
     },
