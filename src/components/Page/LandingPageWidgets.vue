@@ -6,8 +6,8 @@
 <template>
 	<div class="landing-page-widgets"
 		:class="[isFullWidth ? 'full-width-view' : 'sheet-view']">
-		<div class="first-row-widgets">
-			<MembersWidget v-if="!isPublic" />
+		<div v-if="!isPublic" class="first-row-widgets">
+			<MembersWidget />
 			<NcButton v-if="hasContactsApp" :href="teamUrl" target="_blank">
 				<template #icon>
 					<TeamsIcon :size="20" />
