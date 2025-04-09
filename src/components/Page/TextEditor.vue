@@ -4,7 +4,9 @@
 -->
 
 <template>
-	<div ref="textContainer" class="collectives-text-container">
+	<div ref="textContainer"
+		class="collectives-text-container"
+		:class="[isFullWidth ? 'full-width-view' : 'sheet-view']">
 		<SkeletonLoading v-show="!contentLoaded"
 			type="text"
 			class="page-content-skeleton" />
@@ -44,6 +46,13 @@ export default {
 		editorMixin,
 		pageContentMixin,
 	],
+
+	props: {
+		isFullWidth: {
+			type: Boolean,
+			required: true,
+		},
+	},
 
 	setup() {
 		const textContainer = ref(null)

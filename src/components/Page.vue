@@ -4,11 +4,13 @@
 -->
 
 <template>
-	<div class="page-container" :class="[currentPage.isFullWidth ? 'full-width-view' : 'sheet-view']">
-		<PageTitle @focus-editor="focusEditor" @save-editor="saveEditor" />
+	<div class="page-container">
+		<PageTitleBar :is-full-width="isFullWidth"
+			@focus-editor="focusEditor"
+			@save-editor="saveEditor" />
 		<div class="page-scroll-container">
-			<LandingPageWidgets v-if="isLandingPage" />
-			<TextEditor :key="`text-editor-${currentPage.id}`" ref="texteditor" />
+			<LandingPageWidgets v-if="isLandingPage" :is-full-width="isFullWidth" />
+			<TextEditor :key="`text-editor-${currentPage.id}`" ref="texteditor" :is-full-width="isFullWidth" />
 		</div>
 		<SearchDialog :show="shouldShowSearchDialog" />
 	</div>
@@ -16,11 +18,12 @@
 
 <script>
 import { mapState } from 'pinia'
+import { useRootStore } from '../stores/root.js'
 import { usePagesStore } from '../stores/pages.js'
 import { useSearchStore } from '../stores/search.js'
 
 import LandingPageWidgets from './Page/LandingPageWidgets.vue'
-import PageTitle from './Page/PageTitle.vue'
+import PageTitleBar from './Page/PageTitleBar.vue'
 import SearchDialog from './Page/SearchDialog.vue'
 import TextEditor from './Page/TextEditor.vue'
 
@@ -29,12 +32,15 @@ export default {
 
 	components: {
 		LandingPageWidgets,
-		PageTitle,
+		PageTitleBar,
 		TextEditor,
 		SearchDialog,
 	},
 
 	computed: {
+		...mapState(useRootStore, [
+			'isTextEdit',
+		]),
 		...mapState(usePagesStore, [
 			'currentPage',
 			'isLandingPage',
@@ -42,6 +48,10 @@ export default {
 		...mapState(useSearchStore, [
 			'shouldShowSearchDialog',
 		]),
+
+		isFullWidth() {
+			return this.currentPage.isFullWidth
+		},
 	},
 
 	methods: {
@@ -50,7 +60,9 @@ export default {
 		},
 
 		saveEditor() {
-			this.$refs.texteditor.save()
+			if (this.isTextEdit) {
+				this.$refs.texteditor.save()
+			}
 		},
 	},
 }
