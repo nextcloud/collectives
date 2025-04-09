@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<div v-if="shouldShow" class="search-dialog__container">
+	<div v-if="shouldShow" class="search-dialog-container">
 		<div class="search-dialog__buttons">
 			<NcButton alignment="center-reverse"
 				type="tertiary"
@@ -61,11 +61,12 @@
 </template>
 
 <script>
-import { NcButton, NcCheckboxRadioSwitch } from '@nextcloud/vue'
-import { translate as t } from '@nextcloud/l10n'
 import { mapActions, mapState } from 'pinia'
-import { useRootStore } from '../stores/root.js'
-import { useSearchStore } from '../stores/search.js'
+import { useRootStore } from '../../stores/root.js'
+import { useSearchStore } from '../../stores/search.js'
+import { translate as t } from '@nextcloud/l10n'
+
+import { NcButton, NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import ArrowDown from 'vue-material-design-icons/ArrowDown.vue'
 import ArrowUp from 'vue-material-design-icons/ArrowUp.vue'
 import Close from 'vue-material-design-icons/Close.vue'
@@ -150,7 +151,7 @@ export default {
 <style lang="scss" scoped>
 $button-gap: calc(var(--default-grid-baseline) * 3);
 
-.search-dialog__container {
+.search-dialog-container {
 	width: 100%;
 	display: flex;
 	align-items: center;
@@ -158,7 +159,7 @@ $button-gap: calc(var(--default-grid-baseline) * 3);
 }
 
 @media print {
-	.search-dialog__container {
+	.search-dialog-container {
 		display: none;
 	}
 }

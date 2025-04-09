@@ -237,7 +237,7 @@ describe('Page list', function() {
 			})
 			cy.get('main')
 				.should('contain', 'Preparing collective for exporting or printing')
-			cy.get('#page-title-collective').should('contain', 'Our Garden')
+			cy.get('.page-title-collective').should('contain', 'Our Garden')
 			cy.get('main').should('contain', 'Day 2')
 			cy.get('@print').should('be.called')
 				.then(() => {

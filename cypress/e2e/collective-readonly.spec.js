@@ -21,7 +21,7 @@ describe('Read-only collective', function() {
 		})
 
 		it('not able to edit collective', function() {
-			cy.get('#titleform input').should('have.attr', 'disabled')
+			cy.get('.page-title-container input').should('have.attr', 'disabled')
 			cy.get('button.titleform-button').should('not.exist')
 			cy.get('.app-content-list-item.toplevel')
 				.find('button.icon.add')
@@ -31,7 +31,7 @@ describe('Read-only collective', function() {
 		})
 
 		it('actions menu with outline toggle is there', function() {
-			cy.get('#titleform button.action-item__menutoggle')
+			cy.get('.page-title-container button.action-item__menutoggle')
 				.click()
 			cy.get('button.action-button')
 				.contains('Show outline')

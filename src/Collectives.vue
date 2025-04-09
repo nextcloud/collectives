@@ -137,10 +137,8 @@ export default {
 
 		div.ProseMirror {
 			height: unset;
-			margin-top: 0;
-			margin-bottom: 0;
-			padding-top: 0;
-			padding-bottom: 0;
+			margin-block: 0;
+			padding-block: 0;
 		}
 	}
 
