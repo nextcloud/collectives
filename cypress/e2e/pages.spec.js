@@ -305,7 +305,7 @@ describe('Pages', function() {
 		describe('Search dialog', () => {
 			beforeEach(() => {
 				cy.get('input[name="pageFilter"]').type('collective')
-				cy.get('.search-dialog__container', { timeout: 5000 })
+				cy.get('.search-dialog-container', { timeout: 5000 })
 					.should('be.visible')
 					.as('searchDialog')
 			})

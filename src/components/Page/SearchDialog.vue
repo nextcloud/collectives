@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<div v-if="shouldShow" class="search-dialog__container">
+	<div v-if="shouldShow" class="search-dialog-container">
 		<div class="search-dialog__buttons">
 			<NcButton alignment="center-reverse"
 				type="tertiary"
@@ -151,7 +151,7 @@ export default {
 <style lang="scss" scoped>
 $button-gap: calc(var(--default-grid-baseline) * 3);
 
-.search-dialog__container {
+.search-dialog-container {
 	width: 100%;
 	display: flex;
 	align-items: center;
@@ -159,7 +159,7 @@ $button-gap: calc(var(--default-grid-baseline) * 3);
 }
 
 @media print {
-	.search-dialog__container {
+	.search-dialog-container {
 		display: none;
 	}
 }
