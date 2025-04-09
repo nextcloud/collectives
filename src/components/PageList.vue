@@ -14,7 +14,7 @@
 				trailing-button-icon="close"
 				:show-trailing-button="isFilteredView"
 				@trailing-button-click="clearFilterString" />
-			<NcActions class="toggle toggle-push-to-right">
+			<NcActions v-if="currentCollectiveCanEdit" class="toggle toggle-push-to-right">
 				<NcActionButton class="toggle-button"
 					:aria-label="labels.showTemplates"
 					@click="toggleTemplates()">
