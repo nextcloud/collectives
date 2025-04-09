@@ -26,7 +26,7 @@ describe('Page details', function() {
 			cy.getReadOnlyEditor()
 				.contains('Second-Level Heading')
 			cy.wait(200) // eslint-disable-line cypress/no-unnecessary-waiting
-			cy.get('#titleform .action-item__menutoggle')
+			cy.get('.page-title-container .action-item__menutoggle')
 				.click()
 
 			cy.log('Show outline in view mode')
