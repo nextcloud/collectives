@@ -50,6 +50,7 @@ OC.L10N.register(
     "Could not copy link to the clipboard:" : "Lingi kopeerimine lõikelauale ei õnnestunud:",
     "Could not create the page" : "Lehe loomine ei õnnestunud",
     "New page" : "Uus leht",
+    "_%n byte_::_%n bytes_" : ["%n bait","%n baiti"],
     "Copied" : "Kopeeritud",
     "Cannot copy" : "Kopeerimine ebaõnnestus",
     "Copy share link" : "Kopeeri jagamislink"
