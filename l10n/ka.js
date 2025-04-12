@@ -51,6 +51,7 @@ OC.L10N.register(
     "Attachments" : "Attachments",
     "Sharing" : "Sharing",
     "Versions" : "Versions",
+    "Clear search" : "წაშალე ძიების ისტორია",
     "Link copied" : "Link copied",
     "_%n byte_::_%n bytes_" : ["%n byte","%n bytes"],
     "Copied" : "Copied",
