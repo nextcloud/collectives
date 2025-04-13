@@ -79,7 +79,7 @@ export default {
 	},
 
 	computed: {
-		...mapState(useRootStore, ['pageParam']),
+		...mapState(useRootStore, ['pageParam', 'pageId']),
 		...mapState(useCollectivesStore, ['currentCollectiveCanEdit']),
 		...mapState(usePagesStore, [
 			'pagePath',
@@ -131,6 +131,9 @@ export default {
 	watch: {
 		// Reinitate collapsed state when route changes
 		'pageParam'() {
+			this.initCollapsed()
+		},
+		'pageId'() {
 			this.initCollapsed()
 		},
 	},
