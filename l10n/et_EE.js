@@ -28,6 +28,7 @@ OC.L10N.register(
     "Favorites" : "Lemmikud",
     "Deleted" : "Kustutatud",
     "Sort by title" : "Järjesta pealkirja järgi",
+    "Share link ({index})" : "Jagamise link ({index})",
     "View only" : "Ainult vaatamine",
     "Can edit" : "Võib redigeerida",
     "Cannot copy, please copy the link manually" : "Ei saa kopeerida, palun kopeeri link käsitsi",
