@@ -10,7 +10,8 @@
 				'full-width-view': isFullWidth,
 				'sheet-view': !isFullWidth,
 				'pre-nc30': isPreNc30,
-			}">
+			}"
+			data-cy-collective="page-title-container">
 			<div class="page-title-icon">
 				<div v-if="currentPage.emoji">
 					{{ currentPage.emoji }}
@@ -45,7 +46,7 @@
 		<div v-show="contentLoaded"
 			id="text-container"
 			:class="[isFullWidth ? 'full-width-view' : 'sheet-view']">
-			<div ref="reader" data-collectives-el="reader" />
+			<div ref="reader" data-collectives-el="reader" data-cy-collectives="reader" />
 		</div>
 	</div>
 </template>

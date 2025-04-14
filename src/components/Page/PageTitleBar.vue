@@ -9,7 +9,8 @@
 			'full-width-view': isFullWidth,
 			'sheet-view': !isFullWidth,
 			'pre-nc30': isPreNc30,
-		}">
+		}"
+		data-cy-collectives="page-title-container">
 		<!-- Page emoji or icon -->
 		<div class="page-title-icon"
 			:class="{ 'mobile': isMobile }">

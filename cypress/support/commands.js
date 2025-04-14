@@ -75,14 +75,14 @@ Cypress.Commands.add('loginAs', (user, password = null) => {
  */
 Cypress.Commands.add('getEditor', (timeout = null) => {
 	timeout = timeout ?? Cypress.config('defaultCommandTimeout')
-	return cy.get('[data-collectives-el="editor"]', { timeout })
+	return cy.get('[data-cy-collectives="editor"]', { timeout })
 })
 
 /**
  * Get the ReadOnlyEditor/RichTextReader component
  */
 Cypress.Commands.add('getReadOnlyEditor', () => {
-	return cy.get('[data-collectives-el="reader"]')
+	return cy.get('[data-cy-collectives="reader"]')
 })
 
 Cypress.Commands.add('getEditorContent', (edit = false) => {

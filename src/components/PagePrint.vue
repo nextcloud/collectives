@@ -11,7 +11,10 @@
 		<h2 v-else class="page-title page-title-subpage">
 			{{ pageTitleString }}
 		</h2>
-		<div ref="reader" class="sheet-view" data-collectives-el="reader" />
+		<div ref="reader"
+			class="sheet-view"
+			data-collectives-el="reader"
+			data-cy-collectives="reader" />
 	</div>
 </template>
 
