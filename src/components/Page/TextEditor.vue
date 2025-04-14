@@ -12,11 +12,13 @@
 			class="page-content-skeleton" />
 		<div v-show="contentLoaded && !showEditor"
 			ref="reader"
-			data-collectives-el="reader" />
+			data-collectives-el="reader"
+			data-cy-collectives="reader" />
 		<div v-if="currentCollectiveCanEdit"
 			v-show="contentLoaded && showEditor"
 			ref="editor"
-			data-collectives-el="editor" />
+			data-collectives-el="editor"
+			data-cy-collectives="editor" />
 	</div>
 </template>
 
