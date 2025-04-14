@@ -80,4 +80,37 @@ describe('Page landing page', function() {
 				.should('not.exist')
 		})
 	})
+
+	describe('Scroll container works as expected', function() {
+		const generateLongContent = function() {
+			const template = '## Paragraph #n\n\n'
+				+ 'Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.\n\n'
+			let content = ''
+			for (let i = 1; i <= 10; i++) {
+				content += template.replace('#n', i.toString())
+			}
+			return content
+		}
+
+		before(function() {
+			cy.seedPageContent('Landingpage%20Collective/Readme.md', generateLongContent())
+		})
+
+		it.only('Scrolling down', function() {
+			cy.getReadOnlyEditor()
+				.find('h2')
+				.contains('Paragraph 10')
+				.scrollIntoView()
+
+			cy.get('.landing-page-widgets')
+				.should('not.be.visible')
+			cy.getReadOnlyEditor()
+				.find('.text-menubar')
+				.should('be.visible')
+			cy.getReadOnlyEditor()
+				.find('h2')
+				.contains('Paragraph 10')
+				.should('be.visible')
+		})
+	})
 })
