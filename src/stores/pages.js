@@ -312,9 +312,12 @@ export const usePagesStore = defineStore('pages', {
 	},
 
 	actions: {
-		// using camel case name so this works nicely with mapMutations
 		unsetPages() {
 			this.pages = []
+		},
+
+		unsetTrashPages() {
+			this.trashPages = []
 		},
 
 		unsetAttachments() {
