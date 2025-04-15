@@ -82,6 +82,7 @@ export default {
 		'currentCollective.id'(val) {
 			this.load('collective')
 			this.unsetPages()
+			this.unsetTrashPages()
 			this.unsetShares()
 			this.clearListenPush()
 			if (val) {
@@ -117,8 +118,8 @@ export default {
 	methods: {
 		...mapActions(useRootStore, ['hide', 'load', 'show']),
 		...mapActions(useSharesStore, ['getShares', 'unsetShares']),
+		...mapActions(usePagesStore, ['getPages', 'getTrashPages', 'unsetPages', 'unsetTrashPages']),
 		...mapActions(useVersionsStore, ['selectVersion']),
-		...mapActions(usePagesStore, ['getPages', 'getTrashPages', 'unsetPages']),
 
 		initCollective() {
 			this.getAllPages()
