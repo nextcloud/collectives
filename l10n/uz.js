@@ -16,6 +16,7 @@ OC.L10N.register(
     "Remove from favorites" : "Sevimlilardan olib tashlang",
     "Add to favorites" : "Sevimlilarga qo'shing",
     "Title" : "Sarlavha",
+    "Clear search" : "Qidiruvni tozalash",
     "Favorite" : "Favorite",
     "Favorites" : "Favorites",
     "Deleted" : "O`chirilgan",
@@ -26,7 +27,6 @@ OC.L10N.register(
     "Download" : "Download",
     "Sharing" : "Ulashish",
     "Versions" : "Versions",
-    "Clear search" : "Qidiruvni tozalash",
     "Link copied" : "Havola nusxalandi"
 },
 "nplurals=1; plural=0;");
