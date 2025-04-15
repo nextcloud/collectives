@@ -21,6 +21,7 @@ OC.L10N.register(
     "Add to favorites" : "Pievienot izlasei",
     "Move or copy" : "Pārvietot vai kopēt",
     "Title" : "Amats",
+    "Clear search" : "Notīrīt meklēšanu",
     "Favorite" : "Izlasē",
     "Favorites" : "Izlases vienumi",
     "Deleted" : "Izdzēsts",
@@ -38,7 +39,6 @@ OC.L10N.register(
     "Attachments" : "Pielikumi",
     "Sharing" : "Koplietošana",
     "Versions" : "Versijas",
-    "Clear search" : "Notīrīt meklēšanu",
     "Link copied" : "Saite nokopēta",
     "Copied" : "Nokopēts"
 },

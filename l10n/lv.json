@@ -19,6 +19,7 @@
     "Add to favorites" : "Pievienot izlasei",
     "Move or copy" : "Pārvietot vai kopēt",
     "Title" : "Amats",
+    "Clear search" : "Notīrīt meklēšanu",
     "Favorite" : "Izlasē",
     "Favorites" : "Izlases vienumi",
     "Deleted" : "Izdzēsts",
@@ -36,7 +37,6 @@
     "Attachments" : "Pielikumi",
     "Sharing" : "Koplietošana",
     "Versions" : "Versijas",
-    "Clear search" : "Notīrīt meklēšanu",
     "Link copied" : "Saite nokopēta",
     "Copied" : "Nokopēts"
 },"pluralForm" :"nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);"

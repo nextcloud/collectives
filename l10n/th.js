@@ -18,6 +18,7 @@ OC.L10N.register(
     "Add to favorites" : "เพิ่มในรายการโปรด",
     "Move or copy" : "ย้ายหรือคัดลอก",
     "Title" : "ชื่อเรื่อง",
+    "Clear search" : "ล้างการค้นหา",
     "Favorite" : "รายการโปรด",
     "Favorites" : "รายการโปรด",
     "Deleted" : "ลบแล้ว",
@@ -32,7 +33,6 @@ OC.L10N.register(
     "Attachments" : "ไฟล์แนบ",
     "Sharing" : "แชร์ข้อมูล",
     "Versions" : "รุ่น",
-    "Clear search" : "ล้างการค้นหา",
     "Link copied" : "คัดลอกลิงก์แล้ว"
 },
 "nplurals=1; plural=0;");
