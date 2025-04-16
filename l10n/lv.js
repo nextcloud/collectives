@@ -11,7 +11,7 @@ OC.L10N.register(
     "View" : "Skats",
     "Edit" : "Labot",
     "Restore" : "Atjaunot",
-    "Delete permanently" : "Dzēst pavisam",
+    "Delete permanently" : "Neatgriezeniski izdzēst",
     "Cancel" : "Atcelt",
     "Create" : "Izveidot",
     "Back" : "Atpakaļ",

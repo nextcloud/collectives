@@ -4,6 +4,7 @@ OC.L10N.register(
     "You are not allowed to share %s" : "Sul pole lubatud %s jagada",
     "Share link" : "Jaga link",
     "Settings" : "Seaded",
+    "Members" : "Liikmed",
     "No search results" : "Otsingul pole tulemusi",
     "Promote to moderator" : "Määra moderaatoriks",
     "Remove" : "Eemalda",
