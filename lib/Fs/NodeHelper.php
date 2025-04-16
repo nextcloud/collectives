@@ -132,6 +132,22 @@ class NodeHelper {
 		return $content;
 	}
 
+	/**
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public static function putContent(File $file, string $content): void {
+		if (!mb_check_encoding($content, 'UTF-8')) {
+			$content = mb_convert_encoding($content, 'UTF-8');
+		}
+
+		try {
+			$file->putContent($content);
+		} catch (FilesNotPermittedException|LockedException $e) {
+			throw new NotPermittedException('Failed to write file content for ' . $file->getPath(), 0, $e);
+		}
+	}
+
 	public static function isPageFilename(string $name): bool {
 		$length = strlen(PageInfo::SUFFIX);
 		return (substr($name, -$length) === PageInfo::SUFFIX);
