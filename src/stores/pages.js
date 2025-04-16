@@ -600,9 +600,12 @@ export const usePagesStore = defineStore('pages', {
 		async setPageEmoji({ pageId, emoji }) {
 			const rootStore = useRootStore()
 			rootStore.load(`pageEmoji-${pageId}`)
-			const response = await api.setPageEmoji(this.context, pageId, emoji)
-			this._updatePageState(response.data.data)
-			rootStore.done(`pageEmoji-${pageId}`)
+			try {
+				const response = await api.setPageEmoji(this.context, pageId, emoji)
+				this._updatePageState(response.data.data)
+			} finally {
+				rootStore.done(`pageEmoji-${pageId}`)
+			}
 		},
 
 		/**

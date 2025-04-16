@@ -17,6 +17,7 @@ export const useCollectivesStore = defineStore('collectives', {
 		collectives: [],
 		trashCollectives: [],
 		updatedCollective: undefined,
+		templatesCollectiveId: undefined,
 		membersCollectiveId: undefined,
 		settingsCollectiveId: undefined,
 	}),
@@ -144,6 +145,10 @@ export const useCollectivesStore = defineStore('collectives', {
 	},
 
 	actions: {
+		setTemplatesCollectiveId(id) {
+			this.templatesCollectiveId = id
+		},
+
 		setMembersCollectiveId(id) {
 			this.membersCollectiveId = id
 		},

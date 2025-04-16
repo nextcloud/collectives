@@ -13,6 +13,14 @@
 			</template>
 			{{ t('collectives', 'Manage members') }}
 		</NcActionButton>
+		<NcActionButton v-if="isCollectiveAdmin(collective)"
+			:close-after-click="true"
+			@click="openTemplates()">
+			<template #icon>
+				<PageTemplateIcon :size="18" />
+			</template>
+			{{ t('collectives', 'Manage templates') }}
+		</NcActionButton>
 		<NcActionSeparator v-if="isCollectiveAdmin(collective)" />
 		<NcActionButton v-if="collectiveCanShare(collective)"
 			:close-after-click="true"
@@ -61,6 +69,7 @@ import AccountMultipleIcon from 'vue-material-design-icons/AccountMultiple.vue'
 import CogIcon from 'vue-material-design-icons/Cog.vue'
 import DownloadIcon from 'vue-material-design-icons/Download.vue'
 import LogoutIcon from 'vue-material-design-icons/Logout.vue'
+import PageTemplateIcon from '../Icon/PageTemplateIcon.vue'
 import ShareVariantIcon from 'vue-material-design-icons/ShareVariant.vue'
 
 export default {
@@ -74,6 +83,7 @@ export default {
 		NcActionButton,
 		NcActionLink,
 		NcActionSeparator,
+		PageTemplateIcon,
 		ShareVariantIcon,
 	},
 
@@ -115,8 +125,13 @@ export default {
 			'markCollectiveDeleted',
 			'setMembersCollectiveId',
 			'setSettingsCollectiveId',
+			'setTemplatesCollectiveId',
 			'unmarkCollectiveDeleted',
 		]),
+
+		openTemplates() {
+			this.setTemplatesCollectiveId(this.collective.id)
+		},
 
 		openShareTab(collective) {
 			this.$router.push(`/${encodeURIComponent(collective.name)}`)

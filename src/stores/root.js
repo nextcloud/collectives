@@ -13,6 +13,7 @@ export const useRootStore = defineStore('root', {
 		showings: {},
 		loadings: {},
 		printView: false,
+		templateView: false,
 		activeSidebarTab: 'attachments',
 		collectiveParam: '',
 		pageParam: '',
@@ -55,6 +56,7 @@ export const useRootStore = defineStore('root', {
 		toggle(aspect) { set(this.showings, aspect, !this.showings[aspect]) },
 
 		setPrintView() { this.printView = true },
+		setTemplateView(templateView) { this.templateView = !!templateView },
 		setTextEdit() { this.textMode = pageModes.MODE_EDIT },
 		setTextView() { this.textMode = pageModes.MODE_VIEW },
 		setActiveSidebarTab(id) { this.activeSidebarTab = id },
