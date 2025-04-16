@@ -81,7 +81,7 @@ describe('Page landing page', function() {
 		})
 	})
 
-	describe('Scroll container works as expected', function() {
+	describe('Scroll container works as expected (failures might stem from changes in text app!)', function() {
 		const generateLongContent = function() {
 			const template = '## Paragraph #n\n\n'
 				+ 'Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.\n\n'
@@ -93,10 +93,11 @@ describe('Page landing page', function() {
 		}
 
 		before(function() {
+			cy.loginAs('bob')
 			cy.seedPageContent('Landingpage%20Collective/Readme.md', generateLongContent())
 		})
 
-		it.only('Scrolling down', function() {
+		it('Scrolling down (failures might stem from changes in text app!)', function() {
 			cy.getReadOnlyEditor()
 				.find('h2')
 				.contains('Paragraph 10')
