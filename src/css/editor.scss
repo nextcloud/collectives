@@ -8,7 +8,7 @@
 }
 
 .text-editor__wrapper {
-	// Required for sticky menubar
+	// Required for sticky menubar. Can be removed after nextcloud/text#7130 got released.
 	overflow: unset !important;
 }
 
