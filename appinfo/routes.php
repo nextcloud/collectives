@@ -83,11 +83,24 @@ return [
 			'verb' => 'GET', 'requirements' => ['collectiveId' => '\d+', 'id' => '\d+']],
 
 		// pages trash API
-		['name' => 'pageTrash#index', 'url' => '/_api/{collectiveId}/_pages/trash', 'verb' => 'GET'],
-		['name' => 'pageTrash#delete', 'url' => '/_api/{collectiveId}/_pages/trash/{id}', 'verb' => 'DELETE',
-			'requirements' => ['id' => '\d+']],
-		['name' => 'pageTrash#restore', 'url' => '/_api/{collectiveId}/_pages/trash/{id}', 'verb' => 'PATCH',
-			'requirements' => ['id' => '\d+']],
+		['name' => 'pageTrash#index', 'url' => '/_api/{collectiveId}/_pages/trash',
+			'verb' => 'GET', 'requirements' => ['collectiveId' => '\d+']],
+		['name' => 'pageTrash#delete', 'url' => '/_api/{collectiveId}/_pages/trash/{id}',
+			'verb' => 'DELETE', 'requirements' => ['collectiveId' => '\d+', 'id' => '\d+']],
+		['name' => 'pageTrash#restore', 'url' => '/_api/{collectiveId}/_pages/trash/{id}',
+			'verb' => 'PATCH', 'requirements' => ['collectiveId' => '\d+', 'id' => '\d+']],
+
+		// template pages API
+		['name' => 'template#index', 'url' => '/_api/{collectiveId}/_templates',
+			'verb' => 'GET', 'requirements' => ['collectiveId' => '\d+']],
+		['name' => 'template#create', 'url' => '/_api/{collectiveId}/_templates/{id}',
+			'verb' => 'POST', 'requirements' => ['collectiveId' => '\d+', 'id' => '\d+']],
+		['name' => 'template#delete', 'url' => '/_api/{collectiveId}/_templates/{id}',
+			'verb' => 'DELETE', 'requirements' => ['collectiveId' => '\d+', 'id' => '\d+']],
+		['name' => 'template#rename', 'url' => '/_api/{collectiveId}/_templates/{id}',
+			'verb' => 'PUT', 'requirements' => ['collectiveId' => '\d+', 'id' => '\d+']],
+		['name' => 'template#setEmoji', 'url' => '/_api/{collectiveId}/_templates/{id}/emoji',
+			'verb' => 'PUT', 'requirements' => ['collectiveId' => '\d+', 'id' => '\d+']],
 
 		// public collectives API
 		['name' => 'publicCollective#get', 'url' => '/_api/p/{token}', 'verb' => 'GET'],

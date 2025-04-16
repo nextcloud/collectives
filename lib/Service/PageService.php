@@ -34,6 +34,7 @@ use Psr\Container\ContainerInterface;
 
 class PageService {
 	private const DEFAULT_PAGE_TITLE = 'New Page';
+	private const DEFAULT_TEMPLATE_TITLE = 'New Template';
 
 	private ?IQueue $pushQueue = null;
 	private ?Collective $collective = null;
@@ -296,7 +297,7 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	private function newPage(int $collectiveId, Folder $folder, string $filename, string $userId): PageInfo {
+	public function newPage(int $collectiveId, Folder $folder, string $filename, string $userId): PageInfo {
 		$hasTemplate = NodeHelper::folderHasSubPage($folder, PageInfo::TEMPLATE_PAGE_TITLE);
 		try {
 			if ($hasTemplate === 1) {
@@ -370,7 +371,7 @@ class PageService {
 	/**
 	 * @throws NotFoundException
 	 */
-	private function getIndexPageFile(Folder $folder): File {
+	public function getIndexPageFile(Folder $folder): File {
 		try {
 			$file = $folder->get(PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX);
 		} catch (FilesNotFoundException $e) {
@@ -396,6 +397,11 @@ class PageService {
 		$hasPages = false;
 		$pageFiles = [];
 		foreach ($folderNodes as $node) {
+			if ($node->getName() === TemplateService::TEMPLATE_FOLDER) {
+				// Ignore special template folder
+				continue;
+			}
+
 			// Get page infos of subfolders
 			if ($recurse && $node instanceof Folder) {
 				try {
@@ -621,12 +627,12 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function create(int $collectiveId, int $parentId, string $title, string $userId): PageInfo {
+	public function create(int $collectiveId, int $parentId, string $title, string $userId, bool $template = false): PageInfo {
 		$this->verifyEditPermissions($collectiveId, $userId);
 		$folder = $this->getFolder($collectiveId, $parentId, $userId);
 		$parentFile = $this->nodeHelper->getFileById($folder, $parentId);
 		$folder = $this->initSubFolder($parentFile);
-		$safeTitle = $this->nodeHelper->sanitiseFilename($title, self::DEFAULT_PAGE_TITLE);
+		$safeTitle = $this->nodeHelper->sanitiseFilename($title, $template ? self::DEFAULT_TEMPLATE_TITLE : self::DEFAULT_PAGE_TITLE);
 		$filename = NodeHelper::generateFilename($folder, $safeTitle, PageInfo::SUFFIX);
 
 		$pageInfo = $this->newPage($collectiveId, $folder, $filename, $userId);
@@ -954,9 +960,9 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function trash(int $collectiveId, int $id, string $userId): PageInfo {
+	public function trash(int $collectiveId, int $id, string $userId, bool $direct = false, ?Folder $folder = null): PageInfo {
 		$this->verifyEditPermissions($collectiveId, $userId);
-		$folder = $this->getCollectiveFolder($collectiveId, $userId);
+		$folder = $folder ?: $this->getCollectiveFolder($collectiveId, $userId);
 		$file = $this->nodeHelper->getFileById($folder, $id);
 		$pageInfo = $this->getPageByFile($file);
 		$parentId = $this->getParentPageId($file);
@@ -976,8 +982,8 @@ class PageService {
 		}
 
 		$this->initTrashBackend();
-		if (!$this->trashBackend) {
-			// Delete directly if trash is not available
+		if ($direct || !$this->trashBackend) {
+			// Delete directly if desired or trash is not available
 			$this->pageMapper->deleteByFileId($id);
 			$this->removeFromSubpageOrder($collectiveId, $parentId, $id, $userId);
 			$this->notifyPush($collectiveId);
