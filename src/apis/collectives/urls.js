@@ -32,12 +32,24 @@ export function collectivesUrl(...parts) {
  * Url for pages paths inside the given context.
  *
  * @param {object} context - either the current collective or a share context
- * @param {...any} parts - url parts to append.
+ * @param {...any} parts - url parts to append
  */
 export function pagesUrl(context, ...parts) {
 	return context.isPublic
 		? collectivesUrl('p', context.shareTokenParam, '_pages', ...parts)
 		: collectivesUrl(context.collectiveId, '_pages', ...parts)
+}
+
+/**
+ * Url for templates paths inside the given context.
+ *
+ * @param {object} context - either the current collective or a share context
+ * @param {...any} parts - url parts to append
+ */
+export function templatesUrl(context, ...parts) {
+	return context.isPublic
+		? collectivesUrl('p', context.shareTokenParam, '_templates', ...parts)
+		: collectivesUrl(context.collectiveId, '_templates', ...parts)
 }
 
 /**

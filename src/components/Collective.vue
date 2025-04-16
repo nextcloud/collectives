@@ -21,6 +21,7 @@ import { useCollectivesStore } from '../stores/collectives.js'
 import { useSharesStore } from '../stores/shares.js'
 import { useSessionsStore } from '../stores/sessions.js'
 import { usePagesStore } from '../stores/pages.js'
+import { useTemplatesStore } from '../stores/templates.js'
 import { useVersionsStore } from '../stores/versions.js'
 import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { listen } from '@nextcloud/notify_push'
@@ -84,6 +85,7 @@ export default {
 			this.unsetPages()
 			this.unsetTrashPages()
 			this.unsetShares()
+			this.unsetTemplates()
 			this.clearListenPush()
 			if (val) {
 				this.initCollective()
@@ -118,6 +120,7 @@ export default {
 	methods: {
 		...mapActions(useRootStore, ['hide', 'load', 'show']),
 		...mapActions(useSharesStore, ['getShares', 'unsetShares']),
+		...mapActions(useTemplatesStore, ['getTemplates', 'unsetTemplates']),
 		...mapActions(usePagesStore, ['getPages', 'getTrashPages', 'unsetPages', 'unsetTrashPages']),
 		...mapActions(useVersionsStore, ['selectVersion']),
 
@@ -212,9 +215,15 @@ export default {
 		async getAllPages(setLoading = true) {
 			await this.getPages(setLoading)
 				.catch(displayError('Could not fetch pages'))
-			if (this.currentCollectiveCanEdit && !this.currentCollectiveIsPageShare) {
-				await this.getTrashPages()
-					.catch(displayError('Could not fetch page trash'))
+			if (this.currentCollectiveCanEdit) {
+				if (!this.isPublic) {
+					await this.getTemplates()
+						.catch(displayError('Could not fetch templates'))
+				}
+				if (!this.currentCollectiveIsPageShare) {
+					await this.getTrashPages()
+						.catch(displayError('Could not fetch page trash'))
+				}
 			}
 		},
 
