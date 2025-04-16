@@ -46,8 +46,7 @@ export default {
 	backdrop-filter: var(--background-blur);
 	height: var(--default-clickable-area);
 	border-bottom: 1px solid var(--color-border);
-	padding-top: 3px;
-	padding-bottom: 3px;
+	padding-block: var(--default-grid-baseline);
 	display: flex;
 	flex-wrap: nowrap;
 	align-items: center;
