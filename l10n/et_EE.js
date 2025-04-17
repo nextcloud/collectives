@@ -13,6 +13,7 @@ OC.L10N.register(
     "Add groups" : "Lisa gruppe",
     "Add teams" : "Lisa tiime",
     "Remove {name}" : "Eemalda fail: „{name}“",
+    "Permissions" : "Õigused",
     "View" : "Vaata",
     "Edit" : "Redigeeri",
     "Restore" : "Taasta",
