@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Controller;
 
-use OCA\Collectives\Service\PageService;
 use OCA\Collectives\Service\TemplateService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;

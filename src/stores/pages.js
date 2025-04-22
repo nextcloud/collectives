@@ -20,6 +20,7 @@ export const usePagesStore = defineStore('pages', {
 		pages: [],
 		trashPages: [],
 		newPage: undefined,
+		newPageParentId: null,
 		sortBy: undefined,
 		collapsed: {},
 		showTemplates: false,
@@ -358,6 +359,10 @@ export const usePagesStore = defineStore('pages', {
 			}
 		},
 
+		setNewPageParentId(id) {
+			this.newPageParentId = id
+		},
+
 		setHighlightPageId(pageId) {
 			this.highlightPageId = pageId
 		},
@@ -427,7 +432,7 @@ export const usePagesStore = defineStore('pages', {
 			const rootStore = useRootStore()
 			// Will be done when the title form has focus.
 			rootStore.load('newPageTitle')
-			// We'll be done when the editor is loaded.
+			// Will be done when the editor is loaded.
 			rootStore.load('newPageContent')
 
 			const response = await api.createPage(this.context, page)

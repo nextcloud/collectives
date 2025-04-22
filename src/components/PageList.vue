@@ -162,6 +162,7 @@
 		<!-- Page trash -->
 		<PageTrash v-if="displayTrash" />
 
+		<NewPageDialog v-if="newPageParentId" />
 		<TemplatesDialog v-if="templatesCollectiveId" />
 	</NcAppContentList>
 </template>
@@ -179,6 +180,7 @@ import { NcAppNavigationCaption, NcActionButton, NcActions, NcAppContentList, Nc
 import { showError } from '@nextcloud/dialogs'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 import Draggable from './PageList/Draggable.vue'
+import NewPageDialog from './PageList/NewPageDialog.vue'
 import SubpageList from './PageList/SubpageList.vue'
 import Item from './PageList/Item.vue'
 import PageFavorites from './PageList/PageFavorites.vue'
@@ -207,6 +209,7 @@ export default {
 		NcAppContentList,
 		NcButton,
 		NcTextField,
+		NewPageDialog,
 		CloseIcon,
 		Draggable,
 		Item,
@@ -250,6 +253,7 @@ export default {
 			'rootPage',
 			'templatePage',
 			'currentPage',
+			'newPageParentId',
 			'hasFavoritePages',
 			'keptSortable',
 			'visibleSubpages',

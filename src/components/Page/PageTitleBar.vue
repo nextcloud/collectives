@@ -244,7 +244,10 @@ export default {
 			if (this.loading('newPageTitle')) {
 				this.newTitle = ''
 				this.$nextTick(() => {
-					this.$refs.pageTitle.focus()
+					// Delay focus to prevent focus being stolen via race condition
+					setTimeout(() => {
+						this.$refs.pageTitle.focus()
+					}, 50)
 				})
 				this.done('newPageTitle')
 				return

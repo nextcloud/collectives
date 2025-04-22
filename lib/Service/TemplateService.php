@@ -16,7 +16,8 @@ class TemplateService {
 
 	public function __construct(
 		private PageService $pageService,
-	) {}
+	) {
+	}
 
 	/**
 	 * @throws FilesNotFoundException
