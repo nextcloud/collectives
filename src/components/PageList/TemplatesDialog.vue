@@ -49,7 +49,8 @@
 							@keyup.esc.prevent.stop="onStopRename" />
 					</form>
 					<a v-else
-						class="template-list-item-title-text" href="#"
+						href="#"
+						class="template-list-item-title-text"
 						@click="onOpen(template)">
 						{{ template.title }}
 					</a>
@@ -72,7 +73,7 @@
 						</NcActionButton>
 					</NcActions>
 					<NcActions>
-						<NcActionButton class="action-button-add" @click="newPage(templateId)">
+						<NcActionButton class="action-button-add" @click="onCreate(templateId)">
 							<template #icon>
 								<PlusIcon :size="20" fill-color="var(--color-main-text)" />
 							</template>
@@ -234,7 +235,6 @@ export default {
 				const templateId = await this.createTemplate(parentId)
 				const newTemplate = this.templates.find((template) => template.id === templateId)
 				this.onOpen(newTemplate)
-
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not create template'))
@@ -293,4 +293,3 @@ export default {
 	padding-inline: 12px;
 }
 </style>
-flex-grow: 1;

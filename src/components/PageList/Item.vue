@@ -81,7 +81,7 @@
 				:is-template="isTemplate"
 				:in-page-list="true" />
 			<NcActions v-if="canEdit">
-				<NcActionButton class="action-button-add" @click="newPage(pageId)">
+				<NcActionButton class="action-button-add" @click="onNewPage">
 					<template #icon>
 						<PlusIcon :size="20" fill-color="var(--color-main-text)" />
 					</template>
@@ -97,6 +97,7 @@ import { generateUrl } from '@nextcloud/router'
 import { mapActions, mapState } from 'pinia'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { usePagesStore } from '../../stores/pages.js'
+import { useTemplatesStore } from '../../stores/templates.js'
 import { TEMPLATE_PAGE } from '../../constants.js'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import CollectivesIcon from '../Icon/CollectivesIcon.vue'
@@ -219,7 +220,9 @@ export default {
 			'isDragoverTargetPage',
 			'pageParent',
 			'pageParents',
+			'newPageParentId',
 		]),
+		...mapState(useTemplatesStore, ['hasTemplates']),
 
 		pageElementId() {
 			return this.inFavoriteList
@@ -302,6 +305,7 @@ export default {
 	methods: {
 		...mapActions(usePagesStore, [
 			'expand',
+			'setNewPageParentId',
 			'setDragoverTargetPage',
 			'setDraggedPageId',
 			'toggleCollapsed',
@@ -325,6 +329,12 @@ export default {
 			if (this.inFavoriteList) {
 				scrollToPage(this.pageId)
 			}
+		},
+
+		onNewPage() {
+			this.hasTemplates
+				? this.setNewPageParentId(this.pageId)
+				: this.newPage(this.pageId)
 		},
 
 		onDragstart(event) {

@@ -20,6 +20,10 @@ export const useTemplatesStore = defineStore('templates', {
 			return pagesStore.context
 		},
 
+		hasTemplates(state) {
+			return state.templates.length > 0
+		},
+
 		hasSubpages(state) {
 			return (templateId) => {
 				return state.templates.filter(p => p.parentId === templateId).length > 0

@@ -83,11 +83,13 @@ export default {
 		 * Create a new page and focus the page automatically
 		 *
 		 * @param {number} parentId ID of the parent page
+		 * @param {null|number} templateId ID of the template to use
 		 */
-		async newPage(parentId) {
+		async newPage(parentId, templateId = null) {
 			const page = {
 				title: t('collectives', 'New page'),
 				parentId,
+				templateId,
 			}
 			try {
 				await this.createPage(page)
