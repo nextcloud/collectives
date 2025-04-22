@@ -63,10 +63,10 @@ class PageController extends Controller {
 	}
 
 	#[NoAdminRequired]
-	public function create(int $collectiveId, int $parentId, string $title): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $title): array {
+	public function create(int $collectiveId, int $parentId, string $title, ?int $templateId = null): DataResponse {
+		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $title, $templateId): array {
 			$userId = $this->getUserId();
-			$pageInfo = $this->service->create($collectiveId, $parentId, $title, $userId);
+			$pageInfo = $this->service->create($collectiveId, $parentId, $title, $templateId, $userId);
 			return [
 				'data' => $pageInfo
 			];

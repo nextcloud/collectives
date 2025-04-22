@@ -173,15 +173,15 @@ class PublicPageController extends PublicShareController {
 
 	#[PublicPage]
 	#[AnonRateLimit(limit: 10, period: 10)]
-	public function create(int $parentId, string $title): DataResponse {
-		return $this->handleErrorResponse(function () use ($parentId, $title): array {
+	public function create(int $parentId, string $title, ?int $templateId = null): DataResponse {
+		return $this->handleErrorResponse(function () use ($parentId, $title, $templateId): array {
 			$this->checkEditPermissions();
 			$owner = $this->getCollectiveShare()->getOwner();
 			$collectiveId = $this->getCollectiveShare()->getCollectiveId();
 			if (0 !== $sharePageId = $this->getCollectiveShare()->getPageId()) {
 				$this->checkPageShareAccess($collectiveId, $sharePageId, $parentId, $owner);
 			}
-			$pageInfo = $this->service->create($collectiveId, $parentId, $title, $owner);
+			$pageInfo = $this->service->create($collectiveId, $parentId, $title, $templateId, $owner);
 			$this->decoratePageInfo($collectiveId, $sharePageId, $owner, $pageInfo);
 			return [
 				'data' => $pageInfo
