@@ -35,6 +35,8 @@ use Psr\Container\ContainerInterface;
 class PageService {
 	private const DEFAULT_PAGE_TITLE = 'New Page';
 	private const DEFAULT_TEMPLATE_TITLE = 'New Template';
+	public const TEMPLATE_FOLDER = '.templates';
+	private const TEMPLATE_INDEX_CONTENT = '## This folder contains template files for the collective';
 
 	private ?IQueue $pushQueue = null;
 	private ?Collective $collective = null;
@@ -108,6 +110,30 @@ class PageService {
 		}
 
 		return $folder;
+	}
+
+	/**
+	 * @throws FilesNotFoundException
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function getTemplateFolder(int $collectiveId, string $userId): Folder {
+		$collectiveFolder = $this->getCollectiveFolder($collectiveId, $userId);
+
+		try {
+			$templateFolder = $collectiveFolder->get(self::TEMPLATE_FOLDER);
+		} catch (FilesNotFoundException) {
+			$templateFolder = $collectiveFolder->newFolder(self::TEMPLATE_FOLDER);
+			$templateIndexInfo = $this->newPage($collectiveId, $templateFolder, PageInfo::INDEX_PAGE_TITLE, null, $userId);
+			$templateIndexFile = $this->getPageFile($collectiveId, $templateIndexInfo->getId(), $userId);
+			NodeHelper::putContent($templateIndexFile, self::TEMPLATE_INDEX_CONTENT);
+		}
+		if (!($templateFolder instanceof Folder)) {
+			throw new NotFoundException('Failed to get template folder');
+		}
+
+		return $templateFolder;
 	}
 
 	/**
@@ -290,27 +316,25 @@ class PageService {
 		$page->setFileId($fileId);
 		$page->setSubpageOrder($subpageOrder);
 		$this->pageMapper->update($page);
-		$this->notifyPush($collectiveId, $userId);
+		$this->notifyPush($collectiveId);
 	}
 
 	/**
+	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function newPage(int $collectiveId, Folder $folder, string $filename, string $userId): PageInfo {
-		$hasTemplate = NodeHelper::folderHasSubPage($folder, PageInfo::TEMPLATE_PAGE_TITLE);
+	public function newPage(int $collectiveId, Folder $folder, string $filename, ?int $templateId, string $userId): PageInfo {
 		try {
-			if ($hasTemplate === 1) {
-				$template = $folder->get(PageInfo::TEMPLATE_PAGE_TITLE . PageInfo::SUFFIX);
-				$newFile = $template->copy($folder->getPath() . '/' . $filename . PageInfo::SUFFIX);
-			} elseif ($hasTemplate === 2) {
-				$template = $folder->get(PageInfo::TEMPLATE_PAGE_TITLE);
-				$newFolder = $template->copy($folder->getPath() . '/' . $filename);
-				if ($newFolder instanceof Folder) {
-					$newFile = $newFolder->get(PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX);
-				} else {
-					throw new NotFoundException('Failed to get Template folder');
+			if ($templateId !== null) {
+				$templateFile = $this->getTemplateFolder($collectiveId, $userId)->getById($templateId)[0];
+				if (!($templateFile instanceof File)) {
+					throw new NotFoundException('Failed to get template file');
 				}
+				if (NodeHelper::isIndexPage($templateFile)) {
+					$templateFile = $templateFile->getParent();
+				}
+				$newFile = $templateFile->copy($folder->getPath() . '/' . $filename . PageInfo::SUFFIX);
 			} else {
 				$newFile = $folder->newFile($filename . PageInfo::SUFFIX);
 			}
@@ -397,7 +421,7 @@ class PageService {
 		$hasPages = false;
 		$pageFiles = [];
 		foreach ($folderNodes as $node) {
-			if ($node->getName() === TemplateService::TEMPLATE_FOLDER) {
+			if ($node->getName() === self::TEMPLATE_FOLDER) {
 				// Ignore special template folder
 				continue;
 			}
@@ -427,7 +451,7 @@ class PageService {
 		if (!isset($indexPage)) {
 			if ($hasPages || $forceIndex) {
 				// Create missing index page if folder or subfolders have page files (or forceIndex)
-				$indexPage = $this->newPage($collectiveId, $folder, PageInfo::INDEX_PAGE_TITLE, $userId);
+				$indexPage = $this->newPage($collectiveId, $folder, PageInfo::INDEX_PAGE_TITLE, null, $userId);
 			} else {
 				// Ignore folders without an index page
 				return [];
@@ -627,7 +651,7 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function create(int $collectiveId, int $parentId, string $title, string $userId, bool $template = false): PageInfo {
+	public function create(int $collectiveId, int $parentId, string $title, ?int $templateId, string $userId, bool $template = false): PageInfo {
 		$this->verifyEditPermissions($collectiveId, $userId);
 		$folder = $this->getFolder($collectiveId, $parentId, $userId);
 		$parentFile = $this->nodeHelper->getFileById($folder, $parentId);
@@ -635,7 +659,7 @@ class PageService {
 		$safeTitle = $this->nodeHelper->sanitiseFilename($title, $template ? self::DEFAULT_TEMPLATE_TITLE : self::DEFAULT_PAGE_TITLE);
 		$filename = NodeHelper::generateFilename($folder, $safeTitle, PageInfo::SUFFIX);
 
-		$pageInfo = $this->newPage($collectiveId, $folder, $filename, $userId);
+		$pageInfo = $this->newPage($collectiveId, $folder, $filename, $templateId, $userId);
 		$this->addToSubpageOrder($collectiveId, $parentId, $pageInfo->getId(), 0, $userId);
 		return $pageInfo;
 	}

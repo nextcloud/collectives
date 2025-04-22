@@ -17,7 +17,6 @@ use OCP\Files\NotFoundException;
 
 class PageInfo implements JsonSerializable {
 	public const INDEX_PAGE_TITLE = 'Readme';
-	public const TEMPLATE_PAGE_TITLE = 'Template';
 	public const SUFFIX = '.md';
 
 	private int $id;
