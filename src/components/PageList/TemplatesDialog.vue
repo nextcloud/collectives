@@ -114,3 +114,10 @@ export default {
 	padding-inline: 12px;
 }
 </style>
+
+<style lang="scss">
+#viewer {
+	// Make viewer modal overlay the templates dialog modal
+	z-index: 9999;
+}
+</style>
