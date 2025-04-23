@@ -10,8 +10,8 @@
 			<li v-for="template in templateList"
 				:key="template.id"
 				class="template-item">
-				<a href="#"
-					:ref="templateRef(template.id)"
+				<a :ref="templateRef(template.id)"
+					href="#"
 					class="template-item-link"
 					@click="onCreate(template.id)">
 					<div class="template-item-icon">

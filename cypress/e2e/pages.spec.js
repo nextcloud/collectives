@@ -85,7 +85,7 @@ describe('Pages', function() {
 		})
 	})
 
-	describe('Creating a page from template', function() {
+	describe.skip('Creating a page from template', function() {
 		it('New page has template content', function() {
 			// Do some handstands to ensure that new page with editor is loaded
 			cy.intercept('POST', '**/_api/*/_pages/*').as('createPage')

@@ -9,7 +9,7 @@ import { getCurrentUser } from '@nextcloud/auth'
 import { generateRemoteUrl } from '@nextcloud/router'
 import { useRootStore } from './root.js'
 import { useCollectivesStore } from './collectives.js'
-import { INDEX_PAGE, TEMPLATE_PAGE } from '../constants.js'
+import { INDEX_PAGE } from '../constants.js'
 /* eslint import/namespace: ['error', { allowComputed: true }] */
 import * as sortOrders from '../util/sortOrders.js'
 import { pageParents, sortedSubpages } from './pageExtracts.js'
@@ -23,7 +23,6 @@ export const usePagesStore = defineStore('pages', {
 		newPageParentId: null,
 		sortBy: undefined,
 		collapsed: {},
-		showTemplates: false,
 		attachments: [],
 		deletedAttachments: [],
 		backlinks: [],
@@ -52,17 +51,12 @@ export const usePagesStore = defineStore('pages', {
 				: !rootStore.pageParam || rootStore.pageParam === INDEX_PAGE
 		},
 		isIndexPage: (state) => state.currentPage.fileName === INDEX_PAGE + '.md',
-		isTemplatePage: (state) => state.currentPage.title === TEMPLATE_PAGE,
 
 		rootPage(state) {
 			const collectivesStore = useCollectivesStore()
 			return collectivesStore.currentCollectiveIsPageShare
 				? state.pages[0]
 				: state.pages.find(p => (p.parentId === 0))
-		},
-
-		templatePage: (state) => (parentId) => {
-			return state.pages.find(p => (p.parentId === parentId && p.title === TEMPLATE_PAGE))
 		},
 
 		currentPageIds(state) {
@@ -289,7 +283,6 @@ export const usePagesStore = defineStore('pages', {
 		recentPages(state) {
 			return state.pages
 				.slice()
-				.filter(p => p.title !== TEMPLATE_PAGE)
 				.sort(sortOrders.byTimestamp)
 		},
 
@@ -338,10 +331,6 @@ export const usePagesStore = defineStore('pages', {
 
 		setPageOrder(order) {
 			this.sortBy = order
-		},
-
-		toggleTemplates() {
-			this.showTemplates = !this.showTemplates
 		},
 
 		toggleCollapsed(pageId) {
@@ -433,27 +422,6 @@ export const usePagesStore = defineStore('pages', {
 			// Will be done when the title form has focus.
 			rootStore.load('newPageTitle')
 			// Will be done when the editor is loaded.
-			rootStore.load('newPageContent')
-
-			const response = await api.createPage(this.context, page)
-			// Add new page to the beginning of pages array
-			this.pages.unshift(response.data.data)
-			this.newPage = response.data.data
-		},
-
-		/**
-		 * Create a new template page
-		 *
-		 * @param {number} parentId ID of parent page for new template
-		 */
-		async createTemplate(parentId) {
-			const rootStore = useRootStore()
-			const page = {
-				title: TEMPLATE_PAGE,
-				parentId,
-			}
-
-			// We'll be done when the editor is loaded.
 			rootStore.load('newPageContent')
 
 			const response = await api.createPage(this.context, page)

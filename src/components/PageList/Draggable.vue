@@ -65,10 +65,6 @@ export default {
 			type: Boolean,
 			default: false,
 		},
-		isTemplate: {
-			type: Boolean,
-			default: false,
-		},
 	},
 
 	data() {
@@ -88,8 +84,8 @@ export default {
 		]),
 
 		allowSorting() {
-			// Disable sorting for templates and with alternative page orders
-			return !this.isTemplate && (this.sortByOrder === 'byOrder')
+			// Disable sorting with alternative page orders
+			return this.sortByOrder === 'byOrder'
 		},
 
 		disabled() {

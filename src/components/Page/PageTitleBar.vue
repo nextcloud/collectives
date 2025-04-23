@@ -19,7 +19,6 @@
 				{{ currentCollective.emoji }}
 			</div>
 			<CollectivesIcon v-else-if="isLandingPage" :size="pageTitleIconSize" fill-color="var(--color-text-maxcontrast)" />
-			<PageTemplateIcon v-else-if="isTemplatePage" :size="pageTitleIconSize" fill-color="var(--color-text-maxcontrast)" />
 
 			<!-- Emoji picker if editable -->
 			<NcEmojiPicker v-else-if="currentCollectiveCanEdit"
@@ -67,10 +66,6 @@
 			ref="pageTitle"
 			:value="currentCollective.name"
 			:disabled="true" />
-		<PageTitle v-else-if="isTemplatePage"
-			ref="pageTitle"
-			:value="t('collectives', 'Template')"
-			:disabled="true" />
 		<PageTitle v-else
 			ref="pageTitle"
 			v-model="newTitle"
@@ -93,8 +88,7 @@
 				:timestamp="currentPage.timestamp"
 				:last-user-id="currentPage.lastUserId"
 				:last-user-display-name="currentPage.lastUserDisplayName"
-				:is-landing-page="isLandingPage"
-				:is-template="isTemplatePage" />
+				:is-landing-page="isLandingPage" />
 		</div>
 	</div>
 </template>
@@ -114,7 +108,6 @@ import CollectivesIcon from '../Icon/CollectivesIcon.vue'
 import EmoticonOutlineIcon from 'vue-material-design-icons/EmoticonOutline.vue'
 import EditButton from './EditButton.vue'
 import PageActionMenu from './PageActionMenu.vue'
-import PageTemplateIcon from '../Icon/PageTemplateIcon.vue'
 import PageTitle from './PageTitle.vue'
 
 export default {
@@ -128,7 +121,6 @@ export default {
 		NcEmojiPicker,
 		NcLoadingIcon,
 		PageActionMenu,
-		PageTemplateIcon,
 		PageTitle,
 	},
 
@@ -164,7 +156,6 @@ export default {
 		...mapState(usePagesStore, [
 			'currentPage',
 			'isIndexPage',
-			'isTemplatePage',
 			'isLandingPage',
 		]),
 

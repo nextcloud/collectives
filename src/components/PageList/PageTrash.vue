@@ -43,8 +43,7 @@
 							<tr v-for="trashPage in sortedTrashPages" :key="trashPage.id">
 								<td class="item">
 									<div class="item-icon">
-										<PageTemplateIcon v-if="isTemplate(trashPage)" :size="22" fill-color="var(--color-background-darker)" />
-										<div v-else-if="trashPage.emoji">
+										<div v-if="trashPage.emoji">
 											{{ trashPage.emoji }}
 										</div>
 										<PageIcon v-else :size="22" fill-color="var(--color-background-darker)" />
@@ -94,9 +93,7 @@ import moment from '@nextcloud/moment'
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
 import PageIcon from '../Icon/PageIcon.vue'
-import PageTemplateIcon from '../Icon/PageTemplateIcon.vue'
 import { scrollToPage } from '../../util/scrollToElement.js'
-import { TEMPLATE_PAGE } from '../../constants.js'
 
 export default {
 	name: 'PageTrash',
@@ -110,7 +107,6 @@ export default {
 		DeleteIcon,
 		RestoreIcon,
 		PageIcon,
-		PageTemplateIcon,
 	},
 
 	mixins: [
@@ -125,12 +121,6 @@ export default {
 
 	computed: {
 		...mapState(usePagesStore, ['sortedTrashPages']),
-
-		isTemplate() {
-			return (trashPage) => {
-				return trashPage.title === TEMPLATE_PAGE
-			}
-		},
 
 		titleDate() {
 			return (timestamp) => {
