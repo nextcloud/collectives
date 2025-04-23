@@ -147,6 +147,49 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @When user :user creates page :page with parentPath :parentPath from template :template in :collective
+	 * @When user :user :fails to create page :page with parentPath :parentPath from template :template in :collective
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userCreatesFromTemplate(string $user, string $page, string $parentPath, string $template, string $collective, ?string $fail = null): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$parentId = $this->getParentId($collectiveId, $parentPath);
+		$templateId = $this->templateIdByName($collectiveId, $template);
+
+		$formData = new TableNode([['title', $page], ['templateId', $templateId]]);
+		$this->sendRequest('POST', '/apps/collectives/_api/' . $collectiveId . '/_pages/' . $parentId, $formData);
+
+		if ($fail === 'fails') {
+			$this->assertStatusCode(403);
+		} else {
+			$this->assertStatusCode(200);
+		}
+	}
+
+	/**
+	 * @When user :user creates template :template in :collective
+	 * @When user :user :fails to create template :template in :collective
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userCreatesTemplate(string $user, string $page, string $collective, ?string $fail = null): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+
+		$formData = new TableNode([['title', $page], ['parentId', 0]]);
+		$this->sendRequest('POST', '/apps/collectives/_api/' . $collectiveId . '/_templates/0', $formData);
+
+		if ($fail === 'fails') {
+			$this->assertStatusCode(403);
+		} else {
+			$this->assertStatusCode(200);
+		}
+	}
+
+
+	/**
 	 * @Then user :user sees collective :collective
 	 * @Then user :user sees collective :collective in :trash
 	 *
@@ -178,6 +221,23 @@ class FeatureContext implements Context {
 			$this->assertPageByPath($pagePath, true);
 		} else {
 			$this->assertPageByPath($pagePath);
+		}
+	}
+
+	/**
+	 * @Then user :user sees templateName :templateName in :collective
+	 * @Then user :user :fails to see templateName :templateName in :collective
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userSeesTemplatePath(string $user, string $templateName, string $collective, ?string $fail = null): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$hasTemplateId = $this->expectTemplateId($collectiveId, $templateName);
+		if ($fail === 'fails') {
+			Assert::assertFalse($hasTemplateId);
+		} else {
+			Assert::assertTrue($hasTemplateId);
 		}
 	}
 
@@ -418,6 +478,19 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @When user :user deletes template :template from :collective
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userDeletesTemplate(string $user, string $template, string $collective): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$templateId = $this->templateIdByName($collectiveId, $template);
+		$this->sendRequest('DELETE', '/apps/collectives/_api/' . $collectiveId . '/_templates/' . $templateId);
+		$this->assertStatusCode(200);
+	}
+
+	/**
 	 * @When user :user touches page :page in :collective
 	 * @When user :user :fails to touch page :page in :collective
 	 *
@@ -480,6 +553,22 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @When user :user renames template :template to :newtitle in :collective
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userRenamesTemplate(string $user, string $template, string $newtitle, string $collective): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$templateId = $this->templateIdByName($collectiveId, $template);
+		$formData = new TableNode([
+			['title', $newtitle],
+		]);
+		$this->sendRequest('PUT', '/apps/collectives/_api/' . $collectiveId . '/_templates/' . $templateId, $formData);
+		$this->assertStatusCode(200);
+	}
+
+	/**
 	 * @When user :user moves page :page from collective :oldCollectiveId to collective :newCollectiveId
 	 * @When user :user moves page :page from collective :oldCollectiveId to collective :newCollectiveId with parentPath :parentPath
 	 *
@@ -538,6 +627,26 @@ class FeatureContext implements Context {
 		} else {
 			$this->assertStatusCode(200);
 			$this->assertPageKeyValue($pageId, 'emoji', $emoji);
+		}
+	}
+
+	/**
+	 * @When user :user sets emoji for template :template to :emoji in :collective
+	 * @When user :user :fails to set emoji for template :template to :emoji in :collective
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userSetsTemplateEmoji(string $user, string $template, string $emoji, string $collective, ?string $fail = null): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$templateId = $this->templateIdByName($collectiveId, $template);
+		$formData = new TableNode([['emoji', $emoji]]);
+		$this->sendRequest('PUT', '/apps/collectives/_api/' . $collectiveId . '/_pages/' . $templateId . '/emoji', $formData);
+		if ($fail === 'fails') {
+			$this->assertStatusCode(403);
+		} else {
+			$this->assertStatusCode(200);
+			$this->assertPageKeyValue($templateId, 'emoji', $emoji);
 		}
 	}
 
@@ -1606,6 +1715,24 @@ class FeatureContext implements Context {
 			}
 		}
 		return null;
+	}
+
+	private function templateIdByName(int $collectiveId, string $name): ?int {
+		$this->sendRequest('GET', '/apps/collectives/_api/' . $collectiveId . '/_templates');
+		if ($this->response->getStatusCode() !== 200) {
+			throw new RuntimeException('Unable to get list of templates for collective ' . $collectiveId);
+		}
+		$jsonBody = $this->getJson();
+		foreach ($jsonBody['data'] as $page) {
+			if ($name === $page['title']) {
+				return $page['id'];
+			}
+		}
+		return null;
+	}
+
+	private function expectTemplateId(int $collectiveId, string $templateName): bool {
+		return (bool)$this->templateIdByName($collectiveId, $templateName);
 	}
 
 	/**
