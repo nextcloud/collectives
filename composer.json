@@ -28,8 +28,8 @@
       "lint": "find . -name \\*.php -not -path './vendor/*' -exec php -l \"{}\" \\;",
       "cs:check": "php-cs-fixer fix --dry-run --diff",
       "cs:fix": "php-cs-fixer fix",
-      "psalm": "psalm --no-cache",
-      "psalm:update-baseline": "psalm --threads=$(nproc) --no-cache --update-baseline --set-baseline=tests/psalm-baseline.xml",
+      "psalm": "psalm --no-cache --threads=$(nproc)",
+      "psalm:update-baseline": "psalm --threads=1 --update-baseline --set-baseline=tests/psalm-baseline.xml",
       "test:unit": "phpunit -c tests/phpunit.xml",
       "post-install-cmd": [
         "[ $COMPOSER_DEV_MODE -eq 0 ] || composer bin all install --ansi"
