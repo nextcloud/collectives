@@ -27,7 +27,6 @@ export default {
 			'pageTitle',
 			'pages',
 			'sortedSubpages',
-			'templatePage',
 		]),
 	},
 
@@ -38,7 +37,6 @@ export default {
 			'updateSubpageOrder',
 			'getPages',
 			'createPage',
-			'createTemplate',
 			'setPageEmoji',
 			'setPageSubpageOrder',
 			'copyPage',
@@ -47,37 +45,6 @@ export default {
 			'movePageToCollective',
 			'trashPage',
 		]),
-
-		/**
-		 * Open existing or create new template page
-		 *
-		 * @param {number} parentId ID of the parent page
-		 */
-		async editTemplate(parentId) {
-			const templatePage = this.templatePage(parentId)
-			if (templatePage) {
-				this.$router.push(this.pagePath(templatePage))
-				if (this.showTemplates) {
-					this.$nextTick(() => scrollToPage(templatePage.id))
-				}
-				return
-			}
-
-			try {
-				await this.createTemplate(parentId)
-				this.$router.push(this.newPagePath)
-				this.expand(parentId)
-				if (this.showTemplates) {
-					this.$nextTick(() => scrollToPage(this.newPageId))
-				}
-
-				// Parents location changes when the first subpage is created.
-				this.getPages(false)
-			} catch (e) {
-				console.error(e)
-				showError(t('collectives', 'Could not create the page'))
-			}
-		},
 
 		/**
 		 * Create a new page and focus the page automatically

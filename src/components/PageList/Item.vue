@@ -27,10 +27,7 @@
 			@keyup.enter="toggleCollapsedOrRoute"
 			@click="toggleCollapsedOrRoute">
 			<slot name="icon">
-				<template v-if="isTemplate">
-					<PageTemplateIcon :size="22" fill-color="var(--color-background-darker)" />
-				</template>
-				<template v-else-if="emoji">
+				<template v-if="emoji">
 					<div class="item-icon-emoji" :class="{'root-page': isRootPage}">
 						{{ emoji }}
 					</div>
@@ -64,7 +61,6 @@
 			<div ref="page-title"
 				:title="pageTitleIfTruncated"
 				class="app-content-list-item-line-one"
-				:class="{ 'template': isTemplate }"
 				@click="expandAndScroll">
 				{{ pageTitleString }}
 			</div>
@@ -78,7 +74,6 @@
 				:last-user-id="lastUserId"
 				:last-user-display-name="lastUserDisplayName"
 				:is-landing-page="isLandingPage"
-				:is-template="isTemplate"
 				:in-page-list="true" />
 			<NcActions v-if="canEdit">
 				<NcActionButton class="action-button-add" @click="onNewPage">
@@ -98,7 +93,6 @@ import { mapActions, mapState } from 'pinia'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { usePagesStore } from '../../stores/pages.js'
 import { useTemplatesStore } from '../../stores/templates.js'
-import { TEMPLATE_PAGE } from '../../constants.js'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import CollectivesIcon from '../Icon/CollectivesIcon.vue'
 import { NcActionButton, NcActions } from '@nextcloud/vue'
@@ -107,7 +101,6 @@ import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import pageMixin from '../../mixins/pageMixin.js'
 import PageIcon from '../Icon/PageIcon.vue'
 import PageActionMenu from '../Page/PageActionMenu.vue'
-import PageTemplateIcon from '../Icon/PageTemplateIcon.vue'
 import StarIcon from 'vue-material-design-icons/Star.vue'
 import { scrollToPage } from '../../util/scrollToElement.js'
 
@@ -121,7 +114,6 @@ export default {
 		MenuRightIcon,
 		PageIcon,
 		PageActionMenu,
-		PageTemplateIcon,
 		PlusIcon,
 		StarIcon,
 	},
@@ -169,10 +161,6 @@ export default {
 			required: true,
 		},
 		canEdit: {
-			type: Boolean,
-			default: false,
-		},
-		isTemplate: {
 			type: Boolean,
 			default: false,
 		},
@@ -245,7 +233,7 @@ export default {
 		},
 
 		pageTitleString() {
-			return this.title === TEMPLATE_PAGE ? t('collectives', 'Template') : this.title
+			return this.title
 		},
 
 		pageTitleIfTruncated() {
@@ -453,10 +441,6 @@ export default {
 		.page-list-item-actions {
 			visibility: visible;
 		}
-	}
-
-	.template {
-		color: var(--color-text-maxcontrast);
 	}
 
 	.app-content-list-item-icon {

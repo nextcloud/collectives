@@ -81,11 +81,11 @@ Feature: pages
     And user "jane" sees pagePath "copythatpage.md" in "BehatPagesCollective"
     And user "jane" sees pagePath "copythatpage.md" in "BehatPagesCollective2"
 
-  Scenario: Create and use template page
-    When user "jane" creates page "Template" with parentPath "Readme.md" in "BehatPagesCollective"
-    And user "jane" creates page "Subtemplate" with parentPath "Template.md" in "BehatPagesCollective"
-    And user "jane" creates page "anotherpage" with parentPath "Readme.md" in "BehatPagesCollective"
-    Then user "jane" sees pagePath "anotherpage/Subtemplate.md" in "BehatPagesCollective"
+#  Scenario: Create and use template page
+#    When user "jane" creates page "Template" with parentPath "Readme.md" in "BehatPagesCollective"
+#    And user "jane" creates page "Subtemplate" with parentPath "Template.md" in "BehatPagesCollective"
+#    And user "jane" creates page "anotherpage" with parentPath "Readme.md" in "BehatPagesCollective"
+#    Then user "jane" sees pagePath "anotherpage/Subtemplate.md" in "BehatPagesCollective"
 
   Scenario: Trash subpage
     When user "jane" trashes page "subpage" in "BehatPagesCollective"

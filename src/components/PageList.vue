@@ -14,16 +14,6 @@
 				trailing-button-icon="close"
 				:show-trailing-button="isFilteredView"
 				@trailing-button-click="clearFilterString" />
-			<NcActions v-if="currentCollectiveCanEdit" class="toggle toggle-push-to-right">
-				<NcActionButton class="toggle-button"
-					:aria-label="labels.showTemplates"
-					@click="toggleTemplates()">
-					<template #icon>
-						<PagesTemplateIcon :size="12" :fill-color="showTemplates ? 'currentColor' : 'var(--color-text-maxcontrast)'" />
-					</template>
-					{{ labels.showTemplates }}
-				</NcActionButton>
-			</NcActions>
 			<NcActions class="toggle"
 				:aria-label="t('collectives', 'Sort order')">
 				<template #icon>
@@ -78,7 +68,6 @@
 				:can-edit="currentCollectiveCanEdit"
 				:is-root-page="true"
 				:is-landing-page="!currentCollectiveIsPageShare"
-				:has-template="hasTemplate"
 				:filtered-view="false"
 				class="page-list-root-page"
 				@click.native="show('details')" />
@@ -100,14 +89,6 @@
 
 			<!-- Favorites -->
 			<PageFavorites v-if="showFavorites" />
-
-			<!-- Templates (optional) -->
-			<SubpageList v-if="templateView"
-				:key="templateView.id"
-				:page="templateView"
-				:level="1"
-				:filtered-view="isFilteredView"
-				:is-template="true" />
 
 			<!-- Filtered view page list -->
 			<div v-if="isFilteredView" ref="pageListFiltered" class="page-list-filtered">
@@ -188,7 +169,6 @@ import PageTrash from './PageList/PageTrash.vue'
 import SortAlphabeticalAscendingIcon from 'vue-material-design-icons/SortAlphabeticalAscending.vue'
 import SortAscendingIcon from 'vue-material-design-icons/SortAscending.vue'
 import SortClockAscendingOutlineIcon from 'vue-material-design-icons/SortClockAscendingOutline.vue'
-import PagesTemplateIcon from './Icon/PagesTemplateIcon.vue'
 import { scrollToPage } from '../util/scrollToElement.js'
 import { pageOrders } from '../util/sortOrders.js'
 import SkeletonLoading from './SkeletonLoading.vue'
@@ -213,7 +193,6 @@ export default {
 		CloseIcon,
 		Draggable,
 		Item,
-		PagesTemplateIcon,
 		PageFavorites,
 		PageTrash,
 		SubpageList,
@@ -251,14 +230,12 @@ export default {
 		]),
 		...mapState(usePagesStore, [
 			'rootPage',
-			'templatePage',
 			'currentPage',
 			'newPageParentId',
 			'hasFavoritePages',
 			'keptSortable',
 			'visibleSubpages',
 			'sortByOrder',
-			'showTemplates',
 			'allPagesSorted',
 		]),
 
@@ -277,24 +254,6 @@ export default {
 				return this.visibleSubpages(this.rootPage.id)
 			} else {
 				return []
-			}
-		},
-
-		hasTemplate() {
-			return !!this.templatePage(this.rootPage ? this.rootPage.id : 0)
-		},
-
-		labels() {
-			return {
-				showTemplates: this.showTemplates ? t('collectives', 'Hide templates') : t('collectives', 'Show templates'),
-			}
-		},
-
-		templateView() {
-			if (this.showTemplates && this.rootPage) {
-				return this.templatePage(this.rootPage.id)
-			} else {
-				return null
 			}
 		},
 
@@ -381,7 +340,7 @@ export default {
 	methods: {
 		...mapActions(useRootStore, ['show']),
 		...mapActions(useCollectivesStore, ['setCollectiveUserSettingPageOrder']),
-		...mapActions(usePagesStore, ['setPageOrder', 'toggleTemplates']),
+		...mapActions(usePagesStore, ['setPageOrder']),
 		...mapActions(useSearchStore, ['setSearchQuery']),
 
 		clearFilterString() {
@@ -490,10 +449,6 @@ export default {
 
 .toggle:hover {
 	opacity: 1;
-}
-
-.action-item--single.toggle-push-to-right {
-	margin-left: auto;
 }
 
 li.toggle-button.selected {

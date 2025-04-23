@@ -88,7 +88,7 @@
 			</NcActionButton>
 
 			<!-- Edit page emoji: only displayed in page list -->
-			<NcActionButton v-if="inPageList && currentCollectiveCanEdit && !isTemplate && !isLandingPage"
+			<NcActionButton v-if="inPageList && currentCollectiveCanEdit && !isLandingPage"
 				:close-after-click="true"
 				@click.native="show('details')"
 				@click="gotoPageEmojiPicker">
@@ -96,18 +96,6 @@
 					<EmoticonOutlineIcon :size="20" />
 				</template>
 				{{ setEmojiString }}
-			</NcActionButton>
-
-			<!-- Edit template for subpages -->
-			<NcActionButton v-if="currentCollectiveCanEdit && !isTemplate"
-				:close-after-click="true"
-				class="action-button-template"
-				@click.native="show('details')"
-				@click="editTemplate(pageId)">
-				<template #icon>
-					<PagesTemplateIcon :size="18" />
-				</template>
-				{{ editTemplateString }}
 			</NcActionButton>
 
 			<!-- Move/copy page via modal: only displayed in page list -->
@@ -151,7 +139,6 @@ import EmoticonOutlineIcon from 'vue-material-design-icons/EmoticonOutline.vue'
 import FormatListBulletedIcon from 'vue-material-design-icons/FormatListBulleted.vue'
 import OpenInNewIcon from 'vue-material-design-icons/OpenInNew.vue'
 import MoveOrCopyModal from './MoveOrCopyModal.vue'
-import PagesTemplateIcon from '../Icon/PagesTemplateIcon.vue'
 import PageActionLastUser from './PageActionLastUser.vue'
 import ShareVariantIcon from 'vue-material-design-icons/ShareVariant.vue'
 import StarIcon from 'vue-material-design-icons/Star.vue'
@@ -175,7 +162,6 @@ export default {
 		EmoticonOutlineIcon,
 		FormatListBulletedIcon,
 		OpenInNewIcon,
-		PagesTemplateIcon,
 		PageActionLastUser,
 		ShareVariantIcon,
 		StarIcon,
@@ -216,10 +202,6 @@ export default {
 			type: Boolean,
 			default: false,
 		},
-		isTemplate: {
-			type: Boolean,
-			default: false,
-		},
 		showFilesLink: {
 			type: Boolean,
 			default: false,
@@ -248,7 +230,6 @@ export default {
 		...mapState(usePagesStore, [
 			'hasSubpages',
 			'pagesTreeWalk',
-			'showTemplates',
 			'visibleSubpages',
 		]),
 
@@ -286,12 +267,6 @@ export default {
 				: t('collectives', 'Add to favorites')
 		},
 
-		editTemplateString() {
-			return this.hasTemplate
-				? t('collectives', 'Edit template for subpages')
-				: t('collectives', 'Add template for subpages')
-		},
-
 		setEmojiString() {
 			return t('collectives', 'Select emoji')
 		},
@@ -299,13 +274,7 @@ export default {
 		deletePageString() {
 			return this.hasSubpages(this.pageId)
 				? t('collectives', 'Delete page and subpages')
-				: this.isTemplate
-					? t('collectives', 'Delete template')
-					: t('collectives', 'Delete page')
-		},
-
-		hasTemplate() {
-			return !!this.templatePage(this.pageId)
+				: t('collectives', 'Delete page')
 		},
 
 		/**

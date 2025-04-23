@@ -80,7 +80,6 @@ export default {
 		...mapState(usePagesStore, [
 			'currentPage',
 			'currentPageDavUrl',
-			'isTemplatePage',
 		]),
 
 		showEditor() {
@@ -156,8 +155,6 @@ export default {
 		initEditMode() {
 			// Open in edit mode when pageMode is set
 			if (!!this.currentCollective.pageMode
-				// for template pages
-				|| this.isTemplatePage
 				// for new pages
 				|| this.loading('newPageContent')
 				// or when page is empty

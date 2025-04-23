@@ -16,27 +16,19 @@
 			:emoji="page.emoji"
 			:level="level"
 			:can-edit="currentCollectiveCanEdit"
-			:is-template="isTemplate"
 			:has-visible-subpages="hasVisibleSubpages"
 			:filtered-view="filteredView"
 			@click.native="show('details')" />
 		<div class="page-list-indent">
-			<SubpageList v-if="templateView"
-				:key="templateView.id"
-				:page="templateView"
-				:level="level+1"
-				:is-template="true" />
 			<Draggable v-if="subpagesView.length > 0 || keptSortable(page.id)"
 				:list="subpagesView"
 				:parent-id="page.id"
-				:disable-sorting="disableSorting"
-				:is-template="isTemplate">
+				:disable-sorting="disableSorting">
 				<SubpageList v-for="subpage in subpagesView"
 					:key="subpage.id"
 					:data-page-id="subpage.id"
 					:page="subpage"
 					:level="level+1"
-					:is-template="isTemplate"
 					class="page-list-drag-item" />
 			</Draggable>
 		</div>
@@ -72,10 +64,6 @@ export default {
 			type: Boolean,
 			default: false,
 		},
-		isTemplate: {
-			type: Boolean,
-			default: false,
-		},
 	},
 
 	computed: {
@@ -85,10 +73,8 @@ export default {
 			'pagePath',
 			'currentPageIds',
 			'keptSortable',
-			'templatePage',
 			'visibleSubpages',
 			'isCollapsed',
-			'showTemplates',
 		]),
 
 		showSubpages() {
@@ -103,24 +89,8 @@ export default {
 			return []
 		},
 
-		hasTemplate() {
-			return !!this.templatePage(this.page.id)
-		},
-
-		considerTemplate() {
-			// Consider template in view if we show templates and we have one
-			return this.showTemplates && this.hasTemplate
-		},
-
-		templateView() {
-			if (this.considerTemplate && this.showSubpages) {
-				return this.templatePage(this.page.id)
-			}
-			return null
-		},
-
 		hasVisibleSubpages() {
-			return !!this.visibleSubpages(this.page.id).length || this.considerTemplate
+			return !!this.visibleSubpages(this.page.id).length
 		},
 
 		disableSorting() {
