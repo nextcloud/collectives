@@ -1,5 +1,26 @@
 # Changelog
 
+## 2.16.2 - 2025.04.23
+
+### 🐛Fixes
+* 💄 Fix indention in page list.
+* 💄 Fix jumping page order when adding a new page.
+* 💄 Replace editor heading in landingpage with a thin line.
+* 💄 Fix sliding button style in recent pages widget.
+* 💄 Don't show team overview button in public shares. Thanks @tintou.
+* 🚀 Improve performance in collectives list request.
+* 🚀 Improve performance of dashboard request. Thanks @Koc.
+* 🖱️ Scroll favored page in page list into viewport (#1673)
+* 🖱️ Fix scroll container for page content. (#1740)
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 2.16.1 - 2025.02.13
 
 ### 🐛Fixes
