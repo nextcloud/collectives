@@ -206,10 +206,10 @@ class PageService {
 
 			if (NodeHelper::isIndexPage($file)) {
 				// Go down two levels if index page but not landing page
-				return $this->getIndexPageFile($parent->getParent())->getId();
+				return self::getIndexPageFile($parent->getParent())->getId();
 			}
 
-			return $this->getIndexPageFile($parent)->getId();
+			return self::getIndexPageFile($parent)->getId();
 		} catch (InvalidPathException|FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
@@ -395,7 +395,7 @@ class PageService {
 	/**
 	 * @throws NotFoundException
 	 */
-	public function getIndexPageFile(Folder $folder): File {
+	public static function getIndexPageFile(Folder $folder): File {
 		try {
 			$file = $folder->get(PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX);
 		} catch (FilesNotFoundException $e) {
@@ -579,7 +579,7 @@ class PageService {
 		$collectiveFolder = $parentId
 			? $this->getFolder($collectiveId, $parentId, $userId)
 			: $this->getCollectiveFolder($collectiveId, $userId);
-		$landingPageId = $this->getIndexPageFile($collectiveFolder)->getId();
+		$landingPageId = self::getIndexPageFile($collectiveFolder)->getId();
 
 		if ($path === '' || $path === '/') {
 			// Return landing page
@@ -777,7 +777,7 @@ class PageService {
 
 		if ($newNode instanceof Folder) {
 			// Return index page if node is a folder
-			$newNode = $this->getIndexPageFile($newNode);
+			$newNode = self::getIndexPageFile($newNode);
 		} elseif (!($newNode instanceof File)) {
 			throw new NotFoundException('Node not a file: ' . $node->getId());
 		}
@@ -857,7 +857,7 @@ class PageService {
 		$newCollectiveFolder = $this->getCollectiveFolder($newCollectiveId, $userId);
 		$file = $this->nodeHelper->getFileById($collectiveFolder, $id);
 		$page = $this->getPageByFile($file);
-		$parentId = $parentId ?: $this->getIndexPageFile($newCollectiveFolder)->getId();
+		$parentId = $parentId ?: self::getIndexPageFile($newCollectiveFolder)->getId();
 
 		if (null !== $newFile = $this->moveOrCopyPage($collectiveFolder, $file, $parentId, null, true, $newCollectiveFolder)) {
 			$file = $newFile;
@@ -884,7 +884,7 @@ class PageService {
 		$newCollectiveFolder = $this->getCollectiveFolder($newCollectiveId, $userId);
 		$file = $this->nodeHelper->getFileById($collectiveFolder, $id);
 		$oldParentId = $this->getParentPageId($file);
-		$parentId = $parentId ?: $this->getIndexPageFile($newCollectiveFolder)->getId();
+		$parentId = $parentId ?: self::getIndexPageFile($newCollectiveFolder)->getId();
 
 		if (null !== $newFile = $this->moveOrCopyPage($collectiveFolder, $file, $parentId, null, false, $newCollectiveFolder)) {
 			$file = $newFile;

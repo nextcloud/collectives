@@ -22,9 +22,11 @@ use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Service\CollectiveServiceBase;
+use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
 use OCA\Collectives\Service\PageService;
 use OCA\Collectives\Service\SessionService;
+use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\IConfig;
 use OCP\IUserManager;
 use PHPUnit\Framework\TestCase;
@@ -154,6 +156,31 @@ class PageServiceTest extends TestCase {
 
 		self::assertEquals($folder, $this->service->initSubFolder($indexFile));
 		self::assertEquals($subFolder, $this->service->initSubFolder($otherFile));
+	}
+
+	public function testGetIndexPageFile(): void {
+		$indexFile = $this->createMock(File::class);
+
+		$folder = $this->createMock(Folder::class);
+		$folder->method('get')->willReturn($indexFile);
+
+		self::assertEquals($indexFile, PageService::getIndexPageFile($folder));
+	}
+
+	public function testGetIndexPageFileNoIndex(): void {
+		$folder = $this->createMock(Folder::class);
+		$folder->method('get')->willThrowException(new FilesNotFoundException());
+
+		$this->expectException(NotFoundException::class);
+		PageService::getIndexPageFile($folder);
+	}
+
+	public function testGetIndexPageFileBrokenIndex(): void {
+		$folder = $this->createMock(Folder::class);
+		$folder->method('get')->willReturn($folder);
+
+		$this->expectException(NotFoundException::class);
+		PageService::getIndexPageFile($folder);
 	}
 
 	public function testGetPagesFromFolder(): void {

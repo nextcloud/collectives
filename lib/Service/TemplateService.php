@@ -44,7 +44,7 @@ class TemplateService {
 	public function create(int $collectiveId, ?int $parentId, string $title, string $userId): PageInfo {
 		$parentId = $parentId !== 0
 			? $parentId
-			: $this->pageService->getIndexPageFile($this->pageService->getTemplateFolder($collectiveId, $userId))->getId();
+			: PageService::getIndexPageFile($this->pageService->getTemplateFolder($collectiveId, $userId))->getId();
 		return $this->pageService->create($collectiveId, $parentId, $title, null, $userId, true);
 	}
 
@@ -55,7 +55,7 @@ class TemplateService {
 	 * @throws NotPermittedException
 	 */
 	public function rename(int $collectiveId, int $id, string $title, string $userId): PageInfo {
-		$parentId = $this->pageService->getIndexPageFile($this->pageService->getTemplateFolder($collectiveId, $userId))->getId();
+		$parentId = PageService::getIndexPageFile($this->pageService->getTemplateFolder($collectiveId, $userId))->getId();
 		return $this->pageService->move($collectiveId, $id, $parentId, $title, 0, $userId);
 	}
 
