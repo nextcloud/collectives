@@ -13,7 +13,7 @@ OC.L10N.register(
     "Edit" : "Cheñch",
     "Restore" : "Adkrouiñ",
     "Delete permanently" : "Lamet da viken",
-    "Cancel" : "Arrest",
+    "Cancel" : "Nullañ",
     "Create" : "Krouiñ",
     "Back" : "Distro",
     "Done" : "Graet",
@@ -22,7 +22,7 @@ OC.L10N.register(
     "Title" : "Titl",
     "Favorite" : "Penndibab",
     "Favorites" : "Penndibaboù",
-    "Deleted" : "Lamet",
+    "Deleted" : "Dilamet",
     "Can edit" : "Posuple eo embann",
     "Set password" : "Termeniñ ur ger-tremen",
     "Add another link" : "Implij ul liamm all",
@@ -31,6 +31,7 @@ OC.L10N.register(
     "No other versions available" : "Stumm all ebet kavet",
     "Sharing" : "Rannan",
     "Versions" : "Stumm",
-    "Link copied" : "Liamm eilet"
+    "Link copied" : "Liamm eilet",
+    "_%n byte_::_%n bytes_" : ["okted","okted","okted","okted","%neizhbit"]
 },
 "nplurals=5; plural=((n%10 == 1) && (n%100 != 11) && (n%100 !=71) && (n%100 !=91) ? 0 :(n%10 == 2) && (n%100 != 12) && (n%100 !=72) && (n%100 !=92) ? 1 :(n%10 ==3 || n%10==4 || n%10==9) && (n%100 < 10 || n% 100 > 19) && (n%100 < 70 || n%100 > 79) && (n%100 < 90 || n%100 > 99) ? 2 :(n != 0 && n % 1000000 == 0) ? 3 : 4);");

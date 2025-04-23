@@ -4,7 +4,8 @@
 -->
 
 <template>
-	<div class="landing-page-widgets">
+	<div class="landing-page-widgets"
+		:class="[isFullWidth ? 'full-width-view' : 'sheet-view']">
 		<div v-if="!isPublic" class="first-row-widgets">
 			<MembersWidget />
 			<NcButton v-if="hasContactsApp" :href="teamUrl" target="_blank">
@@ -45,6 +46,13 @@ export default {
 		isMobile,
 	],
 
+	props: {
+		isFullWidth: {
+			type: Boolean,
+			required: true,
+		},
+	},
+
 	computed: {
 		...mapState(useRootStore, ['isPublic']),
 		...mapState(useCollectivesStore, ['currentCollective']),
@@ -52,6 +60,7 @@ export default {
 		teamUrl() {
 			return generateUrl('/apps/contacts/circle/{teamId}', { teamId: this.currentCollective.circleId })
 		},
+
 		hasContactsApp() {
 			return 'contacts' in this.OC.appswebroots
 		},
@@ -64,6 +73,7 @@ export default {
 	padding-inline: 14px 8px;
 	border-bottom: 1px solid var(--color-border);
 }
+
 .first-row-widgets{
 	display: flex;
 	justify-content: space-between;

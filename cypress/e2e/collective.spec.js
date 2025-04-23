@@ -65,7 +65,7 @@ describe('Collective', function() {
 				cy.get('button').contains('Add members').click()
 				cy.get('button').contains('Create').click()
 
-				cy.get('#titleform input').invoke('val').should('contain', 'History Club')
+				cy.get('[data-cy-collectives="page-title-container"] input').invoke('val').should('contain', 'History Club')
 				cy.get('.toast-info').should('contain',
 					'Created collective "History Club" for existing team.',
 				)
@@ -81,7 +81,7 @@ describe('Collective', function() {
 				cy.loginAs('bob')
 				cy.visit('apps/collectives')
 				cy.createCollective('Preexisting Team')
-				cy.get('#titleform input').invoke('val').should('contain', 'Preexisting Team')
+				cy.get('[data-cy-collectives="page-title-container"] input').invoke('val').should('contain', 'Preexisting Team')
 				cy.get('.toast-info').should('contain',
 					'Created collective "Preexisting Team" for existing team.',
 				)
@@ -98,7 +98,7 @@ describe('Collective', function() {
 				cy.loginAs('bob')
 				cy.visit('apps/collectives')
 				cy.createCollective(specialCollective)
-				cy.get('#titleform input').invoke('val').should('contain', specialCollective)
+				cy.get('[data-cy-collectives="page-title-container"] input').invoke('val').should('contain', specialCollective)
 			})
 
 		after(function() {
@@ -118,8 +118,8 @@ describe('Collective', function() {
 			cy.visit('apps/collectives')
 			cy.createCollective(randomName, ['jane', 'john'])
 			cy.log('Check name in the disabled titleform')
-			cy.get('#titleform input').invoke('val').should('contain', randomName)
-			cy.get('#titleform input').should('have.attr', 'disabled')
+			cy.get('[data-cy-collectives="page-title-container"] input').invoke('val').should('contain', randomName)
+			cy.get('[data-cy-collectives="page-title-container"] input').should('have.attr', 'disabled')
 			cy.log('Check initial Readme.md')
 			cy.getReadOnlyEditor()
 				.find('h1').should('contain', 'Welcome to your new collective')
@@ -186,11 +186,11 @@ describe('Collective', function() {
 		before(function() {
 			cy.loginAs('bob')
 			cy.visit('/apps/collectives/Preexisting%20Collective')
-			cy.get('#titleform input').should('have.value', 'Preexisting Collective')
+			cy.get('[data-cy-collectives="page-title-container"] input').should('have.value', 'Preexisting Collective')
 		})
 		it('Shows the name in the disabled titleform', function() {
 			cy.reload()
-			cy.get('#titleform input').should('have.value', 'Preexisting Collective')
+			cy.get('[data-cy-collectives="page-title-container"] input').should('have.value', 'Preexisting Collective')
 		})
 	})
 })

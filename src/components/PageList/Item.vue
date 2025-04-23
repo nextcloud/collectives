@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<div :id="`page-${pageId}`"
+	<div :id="pageElementId"
 		:data-page-id="pageId"
 		class="app-content-list-item"
 		:class="{
@@ -65,7 +65,7 @@
 				:title="pageTitleIfTruncated"
 				class="app-content-list-item-line-one"
 				:class="{ 'template': isTemplate }"
-				@click="expand(pageId)">
+				@click="expandAndScroll">
 				{{ pageTitleString }}
 			</div>
 		</router-link>
@@ -221,6 +221,12 @@ export default {
 			'pageParents',
 		]),
 
+		pageElementId() {
+			return this.inFavoriteList
+				? `page-favorite-${this.pageId}`
+				: `page-${this.pageId}`
+		},
+
 		isActive() {
 			return this.currentPage
 				&& this.currentPage.id === this.pageId
@@ -286,7 +292,7 @@ export default {
 
 	mounted() {
 		// Scroll to item at initial mount if it's currentPage
-		if (this.isActive) {
+		if (this.isActive && !this.inFavoriteList) {
 			scrollToPage(this.pageId)
 		}
 
@@ -303,12 +309,21 @@ export default {
 
 		toggleCollapsedOrRoute(ev) {
 			if (this.isCollapsible) {
-				event.stopPropagation()
+				ev.stopPropagation()
 				this.toggleCollapsed(this.pageId)
 			} else {
+				this.expandAndScroll()
 				if (this.currentPage.id !== this.pageId) {
 					this.$router.push(this.to)
 				}
+			}
+		},
+
+		expandAndScroll() {
+			this.expand(this.pageId)
+			// Scroll favored page in page list into viewport
+			if (this.inFavoriteList) {
+				scrollToPage(this.pageId)
 			}
 		},
 
@@ -328,25 +343,25 @@ export default {
 			ev.dataTransfer.setData('text/html', html)
 		},
 
-		onDragend(ev) {
+		onDragend() {
 			this.isHighlightedTarget = false
 			this.setDragoverTargetPage(false)
 			this.setDraggedPageId(null)
 		},
 
-		onDragover(ev) {
+		onDragover() {
 			if (this.isPotentialDropTarget) {
 				this.isHighlightedTarget = true
 				this.setDragoverTargetPage(true)
 			}
 		},
 
-		onDragleave(ev) {
+		onDragleave() {
 			this.isHighlightedTarget = false
 			this.setDragoverTargetPage(false)
 		},
 
-		onDrop(ev) {
+		onDrop() {
 			if (this.isDropTarget
 				// Ingore if self is direct parent of dragged element
 				&& this.pageParent(this.draggedPageId) !== this.pageId) {

@@ -28,6 +28,7 @@ OC.L10N.register(
     "Show in Files" : "Show in Files",
     "Move or copy" : "Move or copy",
     "Template" : "Template",
+    "Clear search" : "წაშალე ძიების ისტორია",
     "Favorite" : "Favorite",
     "Favorites" : "Favorites",
     "Deleted" : "Deleted",

@@ -54,7 +54,7 @@ describe('Page share', function() {
 		it('Allows opening a shared (non-editable) page', function() {
 			cy.logout()
 			cy.visit(shareUrl)
-			cy.get('#titleform input').should('have.value', 'Sharepage')
+			cy.get('[data-cy-collectives="page-title-container"] input').should('have.value', 'Sharepage')
 			cy.get('button.titleform-button').should('not.exist')
 			cy.getReadOnlyEditor()
 				.should('be.visible')
@@ -165,7 +165,7 @@ describe('Page share', function() {
 			cy.get('#password-input-form input[type="password"]').type('password')
 			cy.get('#password-input-form input[type="submit"]').click()
 
-			cy.get('#titleform input').should('have.value', 'Sharepage')
+			cy.get('[data-cy-collectives="page-title-container"] input').should('have.value', 'Sharepage')
 			cy.getReadOnlyEditor()
 				.should('be.visible')
 				.find('h2').should('contain', 'Shared page')

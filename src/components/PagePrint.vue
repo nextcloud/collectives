@@ -4,14 +4,17 @@
 -->
 
 <template>
-	<div id="text-container" :key="'text-' + page.id" class="page sheet-view">
-		<h2 v-if="page.parentId === 0" id="page-title-collective" class="page-title page-title-collective">
+	<div class="page-container sheet-view">
+		<h2 v-if="page.parentId === 0" class="page-title page-title-collective">
 			{{ currentCollectiveTitle }}
 		</h2>
 		<h2 v-else class="page-title page-title-subpage">
 			{{ pageTitleString }}
 		</h2>
-		<div ref="reader" class="sheet-view" data-collectives-el="reader" />
+		<div ref="reader"
+			class="sheet-view"
+			data-collectives-el="reader"
+			data-cy-collectives="reader" />
 	</div>
 </template>
 
@@ -75,11 +78,10 @@ export default {
 @import '../css/editor';
 
 .page-title {
-	line-height: 45px;
-	padding: 8px 2px 2px 8px;
+	max-width: unset;
+	margin: unset;
 
-	overflow: hidden;
-	text-overflow: ellipsis;
+	padding-block: 8px 2px;
 
 	&-collective {
 		font-size: 35px;
@@ -89,6 +91,11 @@ export default {
 		page-break-before: always;
 		break-before: always;
 	}
+}
+
+[data-collectives-el="reader"] {
+	max-width: unset !important;
+	margin: unset !important;
 }
 
 :deep(.text-menubar) {

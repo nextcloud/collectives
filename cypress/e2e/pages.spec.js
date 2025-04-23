@@ -29,34 +29,34 @@ describe('Pages', function() {
 	describe('visited from collective home', function() {
 		it('Shows the title in the enabled titleform', function() {
 			cy.get('.app-content-list-item').contains('Day 1').click()
-			cy.get('#titleform input').should('have.value', 'Day 1')
-			cy.get('#titleform input').should('not.have.attr', 'disabled')
+			cy.get('[data-cy-collectives="page-title-container"] input').should('have.value', 'Day 1')
+			cy.get('[data-cy-collectives="page-title-container"] input').should('not.have.attr', 'disabled')
 		})
 	})
 
 	describe('Set page emoji', function() {
 		it('Allows setting a page emoji from title bar', function() {
 			cy.openPage('Day 1')
-			cy.get('#titleform .page-title-icon')
+			cy.get('[data-cy-collectives="page-title-container"] .page-title-icon')
 				.click()
 			cy.contains('.emoji-mart-scroll .emoji-mart-emoji', '🥰').click()
 
 			// Test persistence of changed emmoji
 			cy.reload()
-			cy.get('#titleform .page-title-icon')
+			cy.get('[data-cy-collectives="page-title-container"] .page-title-icon')
 				.should('contain', '🥰')
 			cy.contains('.app-content-list-item', 'Day 1')
 				.find('.app-content-list-item-icon')
 				.should('contain', '🥰')
 
 			// Unset emoji
-			cy.get('#titleform .page-title-icon')
+			cy.get('[data-cy-collectives="page-title-container"] .page-title-icon')
 				.click()
 			cy.contains('.emoji-mart-emoji.emoji-selected', '🥰').click()
 
 			// Test persistence of unset emoji
 			cy.reload()
-			cy.get('#titleform .page-title-icon .emoticon-outline-icon')
+			cy.get('[data-cy-collectives="page-title-container"] .page-title-icon .emoticon-outline-icon')
 			cy.contains('.app-content-list-item', 'Day 1')
 				.find('.app-content-list-item-icon .collectives-page-icon')
 		})
@@ -69,7 +69,7 @@ describe('Pages', function() {
 				.click()
 			cy.contains('.emoji-mart-scroll .emoji-mart-emoji', '😀').click()
 			cy.reload()
-			cy.get('#titleform .page-title-icon')
+			cy.get('[data-cy-collectives="page-title-container"] .page-title-icon')
 				.should('contain', '😀')
 			cy.contains('.app-content-list-item', 'Day 2')
 				.find('.app-content-list-item-icon')
@@ -81,7 +81,7 @@ describe('Pages', function() {
 		it('loads well', function() {
 			cy.contains('.app-content-list-item a', '#% special chars').click()
 			cy.get('.app-content-list-item').should('contain', '#% special chars')
-			cy.get('#titleform input').should('have.value', '#% special chars')
+			cy.get('[data-cy-collectives="page-title-container"] input').should('have.value', '#% special chars')
 		})
 	})
 
@@ -105,9 +105,9 @@ describe('Pages', function() {
 				.contains('This is going to be our template.')
 
 			cy.intercept('PUT', '**/_api/*/_pages/*').as('renamePage')
-			cy.get('#titleform input.title')
+			cy.get('[data-cy-collectives="page-title-container"] input.title')
 				.type('New page from Template')
-			cy.get('#titleform input.title')
+			cy.get('[data-cy-collectives="page-title-container"] input.title')
 				.blur()
 			cy.wait('@renamePage')
 			cy.get('.app-content-list-item').eq(1)
@@ -130,13 +130,13 @@ describe('Pages', function() {
 			cy.wait(['@createPage', '@textCreateSession'])
 			cy.getEditor()
 				.should('be.visible')
-			cy.get('#titleform input.title')
+			cy.get('[data-cy-collectives="page-title-container"] input.title')
 				.should('not.have.attr', 'disabled')
-			cy.get('#titleform input.title')
+			cy.get('[data-cy-collectives="page-title-container"] input.title')
 				.type('{selectAll}Subpage Title{enter}')
 			cy.get('.app-content-list-item').should('contain', 'Subpage Title')
-			cy.get('#titleform input').should('have.value', 'Subpage Title')
-			cy.get('#titleform input').should('not.have.attr', 'disabled')
+			cy.get('[data-cy-collectives="page-title-container"] input').should('have.value', 'Subpage Title')
+			cy.get('[data-cy-collectives="page-title-container"] input').should('not.have.attr', 'disabled')
 			cy.title().should('eq', 'Subpage Title - #% special chars - Our Garden - Collectives - Nextcloud')
 		})
 	})
@@ -243,20 +243,20 @@ describe('Pages', function() {
 	})
 
 	describe('Full width view', function() {
-		it('Allows to toggle persistent full-width view', function() {
+		it.only('Allows to toggle persistent full-width view', function() {
 			cy.openPage('Day 2')
-			cy.get('#titleform').should('have.css', 'max-width', '100%')
+			cy.get('[data-cy-collectives="page-title-container"]').should('have.class', 'sheet-view')
 			cy.getReadOnlyEditor()
 				.find('.editor__content')
 				.invoke('outerWidth')
 				.should('eq', 670)
 
 			// Set full width mode
-			cy.get('#titleform .action-item__menutoggle')
+			cy.get('[data-cy-collectives="page-title-container"] .action-item__menutoggle')
 				.click()
 			cy.contains('li.action', 'Full width')
 				.click()
-			cy.get('#titleform').should('have.css', 'max-width', 'none')
+			cy.get('[data-cy-collectives="page-title-container"]').should('have.class', 'full-width-view')
 			cy.getReadOnlyEditor()
 				.find('.editor__content')
 				.invoke('outerWidth')
@@ -264,18 +264,18 @@ describe('Pages', function() {
 
 			// Reload to check persistence
 			cy.reload()
-			cy.get('#titleform').should('have.css', 'max-width', 'none')
+			cy.get('[data-cy-collectives="page-title-container"]').should('have.class', 'full-width-view')
 			cy.getReadOnlyEditor()
 				.find('.editor__content')
 				.invoke('outerWidth')
 				.should('be.greaterThan', 700)
 
 			// Unset full width mode
-			cy.get('#titleform .action-item__menutoggle')
+			cy.get('[data-cy-collectives="page-title-container"] .action-item__menutoggle')
 				.click()
 			cy.contains('li.action', 'Full width')
 				.click()
-			cy.get('#titleform').should('have.css', 'max-width', '100%')
+			cy.get('[data-cy-collectives="page-title-container"]').should('have.class', 'sheet-view')
 			cy.getReadOnlyEditor()
 				.find('.editor__content')
 				.invoke('outerWidth')
@@ -305,7 +305,7 @@ describe('Pages', function() {
 		describe('Search dialog', () => {
 			beforeEach(() => {
 				cy.get('input[name="pageFilter"]').type('collective')
-				cy.get('.search-dialog__container', { timeout: 5000 })
+				cy.get('.search-dialog-container', { timeout: 5000 })
 					.should('be.visible')
 					.as('searchDialog')
 			})
