@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Share link" : "Share link",
     "Settings" : "Sozlamalar",
+    "No search results" : "Qidiruv natijalari yo‘q",
     "Remove" : "Remove",
     "Loading…" : "Loading…",
     "Add emoji" : "Emoji qo'shing",
@@ -25,6 +26,7 @@ OC.L10N.register(
     "Create share" : "Tarqatish yaratish",
     "Unshare" : "Unshare",
     "Download" : "Download",
+    "Attachments" : "Qo'shimchalar",
     "Sharing" : "Ulashish",
     "Versions" : "Versions",
     "Link copied" : "Havola nusxalandi"

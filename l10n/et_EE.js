@@ -16,6 +16,7 @@ OC.L10N.register(
     "Permissions" : "Õigused",
     "View" : "Vaata",
     "Edit" : "Redigeeri",
+    "Danger zone" : "Ohtlik - siin ole ettevaatlik",
     "Restore" : "Taasta",
     "Delete permanently" : "Kustuta jäädavalt",
     "Cancel" : "Loobu",
