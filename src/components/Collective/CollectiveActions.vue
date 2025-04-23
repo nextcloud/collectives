@@ -13,7 +13,7 @@
 			</template>
 			{{ t('collectives', 'Manage members') }}
 		</NcActionButton>
-		<NcActionButton v-if="isCollectiveAdmin(collective)"
+		<NcActionButton v-if="!isPublic && collective.canEdit"
 			:close-after-click="true"
 			@click="openTemplates()">
 			<template #icon>
