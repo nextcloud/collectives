@@ -286,7 +286,6 @@ export default {
 		 * @param {string} emoji Emoji
 		 */
 		updateEmoji(emoji) {
-			console.debug('updateEmoji', emoji)
 			this.load('updateCollectiveEmoji')
 			const collective = { id: this.collective.id }
 			collective.emoji = emoji
