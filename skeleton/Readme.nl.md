@@ -20,6 +20,6 @@ Klik op het potlood om te beginnen! ️
 
 * Meerdere mensen kunnen tegelijkertijd dezelfde pagina bewerken.
 * Link lokale pagina's door tekst te selecteren en "link bestand" te kiezen. Een drag & drop vanaf de paginalijst naar de editor werkt ook.
-* Sjablonen voor toekomstige subpagina's toevoegen ("Sjablonen weergeven" -> "Sjabloon voor subpagina's toevoegen")
+* Add templates for future subpages via "Manage templates" in the landing page three-dot-menu.
 * Lees meer over deze app in de [documentatie](https://nextcloud.github.io/collectives/).
 * Vraag [de community](https://help.nextcloud.com/c/apps/collectives/174) om hulp bij vragen.

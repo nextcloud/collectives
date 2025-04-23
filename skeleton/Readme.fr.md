@@ -20,6 +20,6 @@ Appuyez sur le bouton avec un crayon pour commencer ! ↗
 
 * Plusieurs personnes peuvent modifier la même page simultanément.
 * Liez des pages en sélectionnant du texte puis en cliquant sur « lier le fichier ». Le glisser-déposer de la liste des pages vers l'éditeur fonctionne également.
-* Ajoutez des modèles pour de futures sous-pages (« Afficher les modèles » -> « Ajouter un modèle de sous-page »).
+* Ajoutez des modèles pour de futures sous-pages via « Manage templates » in the landing page three-dot-menu.
 * Pour en savoir plus sur cette application, consultez la [documentation](https://nextcloud.github.io/collectives/).
 * Demandez de l'aide à [la communauté](https://help.nextcloud.com/c/apps/collectives/174) en cas de questions.

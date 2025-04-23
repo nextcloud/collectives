@@ -20,6 +20,6 @@ Pritisnite gumb s svinčnikom in začnite! ↗️
 
 * Stran lahko hkrati ureja več oseb.
 * Krajevne strani je mogoče povezati tudi kot »povezave na datoteke«. Podprta je tudi možnost povleci in spusti s seznama strani v urejevalnik.
-* Pripraviti je dobro predloge za podstrani (»Prikaži predloge« > »Dodaj predlogo za podstrani«).
+* Add templates for future subpages via "Manage templates" in the landing page three-dot-menu.
 * Več o programu je zapisanega v [dokumentaciji] (https://nextcloud.github.io/collectives/).
 * Na vprašanja hitro odgovarja tudi [skupnost](https://help.nextcloud.com/c/apps/collectives/174).

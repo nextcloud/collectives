@@ -20,6 +20,6 @@ Haz clic en el botón Editar con el ícono del lápiz para empezar a editar. ↗
 
 * Las páginas pueden ser editadas simultáneamente por varias personas.
 *Para enlazar a páginas locales seleccionar el texto y escoger "enlazar archivo". También funciona arrastrar de la lista de páginas y soltar en el editor.
-* Se pueden agregar plantillas para subpáginas en "Ver plantillas -> "Agregar plantilla para subpáginas".
+* Add templates for future subpages via "Manage templates" in the landing page three-dot-menu.
 * Aprende más sobre esta aplicación en la [documentación](https://nextcloud.github.io/collectives/).
 * Pregunta a la [comunidad de usuarios](https://help.nextcloud.com/c/apps/collectives/174) si necesitas ayuda.
