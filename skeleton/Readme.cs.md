@@ -20,6 +20,6 @@ Klikněte na tlačítko tužky a začněte! ↗️
 
 * Stránky je možné upravovat ve vícero lidech naráz.
 * Na místní stránky je možné se odkazovat označením textu a zvolením „odkázat na soubor“. Funguje i přetažení ze seznamu stránek do editoru.
-* Je možné přidávat šablony pro budoucí podstránky („Zobrazit šablony“ -> „Přidat šablonu pro podstránky“)
+* Add templates for future subpages via "Manage templates" in the landing page three-dot-menu.
 * Více k aplikaci naleznete v [dokumentaci](https://nextcloud.github.io/collectives/).
 * Pokud máte dotazy, obraťte se o pomoc na [komunitu](https://help.nextcloud.com/c/apps/collectives/174).

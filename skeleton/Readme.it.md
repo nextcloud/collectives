@@ -20,6 +20,6 @@ Premi il pulsante matita per iniziare! ↗️
 
 * Più persone possono modificare la stessa pagina contemporaneamente.
 * Crea link verso pagine locali selezionando del testo e scegliendo "collega file". Oppure, puoi anche trascinare dalla lista delle pagine direttamente nell'editor.
-* Aggiungi modelli per future sottopagine ("Visualizza i modelli " -> "Aggiungi modello per le sottopagine")
+* Add templates for future subpages via "Manage templates" in the landing page three-dot-menu.
 * Scopri di più su questa App nella [documentazione](https://nextcloud.github.io/collectives/).
 * Chiedi alla [community](https://help.nextcloud.com/c/apps/collectives/174) per ricevere aiuto o risposte ad altre domande.

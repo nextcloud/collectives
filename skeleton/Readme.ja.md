@@ -20,6 +20,6 @@
 
 * 複数人で同時に同じページを編集できます。
 * ローカルページのリンクには、テキストを選択した状態で「ファイルのリンク」をクリックします。ページリストからエディターにドラッグ＆ドロップするのも同様に機能します。
-* サブページにテンプレートを追加できます（"テンプレートの表示"→"サブページにテンプレートを追加"）
+* Add templates for future subpages via "Manage templates" in the landing page three-dot-menu.
 * [ドキュメント](https://nextcloud.github.io/collectives/)（英語）にこのアプリに関する詳細な情報があります。
 * 質問がある場合は[コミュニティ](https://help.nextcloud.com/c/apps/collectives/174)（英語）で尋ねましょう。
