@@ -30,6 +30,16 @@ export const useTemplatesStore = defineStore('templates', {
 			}
 		},
 
+		rootTemplateId(state) {
+			return state.hasTemplates
+				? state.templates[0].parentId
+				: 0
+		},
+
+		rootTemplates(state) {
+			return state.templates.filter(template => template.parentId === state.rootTemplateId)
+		},
+
 		currentPageFilePath(state) {
 			return state.pageFilePath(state.currentPage)
 		},
