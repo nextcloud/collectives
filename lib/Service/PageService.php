@@ -125,7 +125,7 @@ class PageService {
 			$templateFolder = $collectiveFolder->get(self::TEMPLATE_FOLDER);
 		} catch (FilesNotFoundException) {
 			$templateFolder = $collectiveFolder->newFolder(self::TEMPLATE_FOLDER);
-			$templateIndexInfo = $this->newPage($collectiveId, $templateFolder, PageInfo::INDEX_PAGE_TITLE, null, $userId);
+			$templateIndexInfo = $this->newPage($collectiveId, $templateFolder, PageInfo::INDEX_PAGE_TITLE, $userId);
 			$templateIndexFile = $this->getPageFile($collectiveId, $templateIndexInfo->getId(), $userId);
 			NodeHelper::putContent($templateIndexFile, self::TEMPLATE_INDEX_CONTENT);
 		}
@@ -324,22 +324,9 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function newPage(int $collectiveId, Folder $folder, string $filename, ?int $templateId, string $userId): PageInfo {
+	private function newPage(int $collectiveId, Folder $folder, string $filename, string $userId): PageInfo {
 		try {
-			if ($templateId !== null) {
-				$templateFile = $this->getTemplateFolder($collectiveId, $userId)->getById($templateId)[0];
-				if (!($templateFile instanceof File)) {
-					throw new NotFoundException('Failed to get template file');
-				}
-				if (NodeHelper::isIndexPage($templateFile)) {
-					$templateFile = $templateFile->getParent();
-				}
-				$newFile = $templateFile->copy($folder->getPath() . '/' . $filename . PageInfo::SUFFIX);
-			} else {
-				$newFile = $folder->newFile($filename . PageInfo::SUFFIX);
-			}
-		} catch (FilesNotFoundException $e) {
-			throw new NotFoundException($e->getMessage(), 0, $e);
+			$newFile = $folder->newFile($filename . PageInfo::SUFFIX);
 		} catch (FilesNotPermittedException $e) {
 			throw new NotPermittedException($e->getMessage(), 0, $e);
 		}
@@ -451,7 +438,7 @@ class PageService {
 		if (!isset($indexPage)) {
 			if ($hasPages || $forceIndex) {
 				// Create missing index page if folder or subfolders have page files (or forceIndex)
-				$indexPage = $this->newPage($collectiveId, $folder, PageInfo::INDEX_PAGE_TITLE, null, $userId);
+				$indexPage = $this->newPage($collectiveId, $folder, PageInfo::INDEX_PAGE_TITLE, $userId);
 			} else {
 				// Ignore folders without an index page
 				return [];
@@ -659,7 +646,9 @@ class PageService {
 		$safeTitle = $this->nodeHelper->sanitiseFilename($title, $template ? self::DEFAULT_TEMPLATE_TITLE : self::DEFAULT_PAGE_TITLE);
 		$filename = NodeHelper::generateFilename($folder, $safeTitle, PageInfo::SUFFIX);
 
-		$pageInfo = $this->newPage($collectiveId, $folder, $filename, $templateId, $userId);
+		$pageInfo = $templateId
+			? $this->copy($collectiveId, $templateId, $parentId, $safeTitle, 0, $userId)
+			: $this->newPage($collectiveId, $folder, $filename, $userId);
 		$this->addToSubpageOrder($collectiveId, $parentId, $pageInfo->getId(), 0, $userId);
 		return $pageInfo;
 	}
@@ -802,7 +791,7 @@ class PageService {
 			$file = $newFile;
 		}
 		try {
-			$this->updatePage($collectiveId, $file->getId(), $userId, $page->getEmoji());
+			$this->updatePage($collectiveId, $file->getId(), $userId, $page->getEmoji(), $page->isFullWidth());
 		} catch (InvalidPathException|FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
@@ -863,7 +852,7 @@ class PageService {
 			$file = $newFile;
 		}
 		try {
-			$this->updatePage($newCollectiveId, $file->getId(), $userId, $page->getEmoji());
+			$this->updatePage($newCollectiveId, $file->getId(), $userId, $page->getEmoji(), $page->isFullWidth());
 		} catch (InvalidPathException|FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
@@ -955,7 +944,6 @@ class PageService {
 		$file = $this->nodeHelper->getFileById($collectiveFolder, $pageId);
 		$pageInfo = $this->getPageByFile($file);
 
-		$subpageOrder = $pageInfo->getSubpageOrder();
 		$cleanedSubpageOrder = $this->cleanSubpageOrder($collectiveId, $pageInfo, $userId);
 		$newSubpageOrder = SubpageOrderService::add($cleanedSubpageOrder, $addId, $index);
 
