@@ -118,10 +118,6 @@ export default {
 						currentPage: this.pageInfoBarPage || this.pageToUse,
 					},
 				},
-				// Required for link handling on Nextcloud 27+28
-				onLinkClick: (_event, attrs) => {
-					this.followLink(_event, attrs)
-				},
 				onOutlineToggle: (visible) => {
 					this.toggleOutlineFromEditor(visible)
 				},

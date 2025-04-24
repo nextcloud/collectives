@@ -43,15 +43,13 @@ class CircleHelper {
 	 * - Nextcloud 31+
 	 * - Nextcloud 30 starting with 30.0.3
 	 * - Nextcloud 29 starting with 29.0.10
-	 * - Nextcloud 28 starting with 28.0.13
 	 */
 	private static function useProbeCircles(): bool {
 		[$major, $minor, $micro] = Util::getVersion();
 		$version = $major . '.' . $minor . '.' . $micro;
 		return $major >= 31
 			|| ($major === 30 && version_compare($version, '30.0.3', '>='))
-			|| ($major === 29 && version_compare($version, '29.0.10', '>='))
-			|| ($major === 28 && version_compare($version, '28.0.13', '>='));
+			|| ($major === 29 && version_compare($version, '29.0.10', '>='));
 	}
 
 	/**

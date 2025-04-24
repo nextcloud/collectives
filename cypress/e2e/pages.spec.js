@@ -293,7 +293,7 @@ describe('Pages', function() {
 		})
 	})
 
-	if (!['stable28', 'stable29'].includes(Cypress.env('ncVersion'))) {
+	if (!['stable29'].includes(Cypress.env('ncVersion'))) {
 		describe('Search dialog', () => {
 			beforeEach(() => {
 				cy.get('input[name="pageFilter"]').type('collective')

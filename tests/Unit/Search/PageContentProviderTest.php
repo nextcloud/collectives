@@ -25,7 +25,6 @@ use OCP\Search\ISearchQuery;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use TypeError;
 
 class PageContentProviderTest extends TestCase {
 	private PageContentProvider $provider;
@@ -81,27 +80,15 @@ class PageContentProviderTest extends TestCase {
 		$user = $this->createMock(IUser::class);
 		$user->method('getUID')
 			->willReturn('jane');
-		try {
-			// Nextcloud << 28
-			$query = new SearchQuery(
-				'Search me!',
-				ISearchQuery::SORT_DATE_DESC,
-				SearchQuery::LIMIT_DEFAULT,
-				null,
-				'collectives.'
-			);
-		} catch (TypeError) {
-			// Nextcloud >= 28
-			$filters = $this->createMock(IFilterCollection::class);
-			$query = new SearchQuery(
-				$filters,
-				ISearchQuery::SORT_DATE_DESC,
-				SearchQuery::LIMIT_DEFAULT,
-				null,
-				'collectives.'
+		$filters = $this->createMock(IFilterCollection::class);
+		$query = new SearchQuery(
+			$filters,
+			ISearchQuery::SORT_DATE_DESC,
+			SearchQuery::LIMIT_DEFAULT,
+			null,
+			'collectives.'
 
-			);
-		}
+		);
 		$response = json_encode($this->provider->search($user, $query));
 		$result = json_decode($response, true);
 
