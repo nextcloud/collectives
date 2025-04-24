@@ -1360,12 +1360,7 @@ class FeatureContext implements Context {
 		$dom->appendChild($xPropfind)->appendChild($xProp);
 		$body = $dom->saveXML();
 
-		if ($this->getNextcloudVersion(true) > 27) {
-			$this->sendPublicRequest('PROPFIND', '/dav/files/' . $token . '/', $body, null, $headers);
-		} else {
-			$headers['Authorization'] = 'Basic ' . base64_encode($token . ':');
-			$this->sendPublicRequest('PROPFIND', '/webdav/', $body, null, $headers);
-		}
+		$this->sendPublicRequest('PROPFIND', '/dav/files/' . $token . '/', $body, null, $headers);
 		$this->assertStatusCode(207);
 
 		// simplexml_load_string() would be better than preg_replace

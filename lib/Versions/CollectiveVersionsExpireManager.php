@@ -25,13 +25,9 @@ use OCP\Files\InvalidPathException;
 use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\Files\NotPermittedException as FilesNotPermittedException;
 use OCP\IDBConnection;
-use OCP\Server;
-use OCP\Util;
 use Psr\Container\ContainerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class CollectiveVersionsExpireManager extends BasicEmitter {
-	private $dispatcher;
 	private ?VersionsBackend $versionsBackend = null;
 	private string $dependencyInjectionError = '';
 
@@ -42,16 +38,8 @@ class CollectiveVersionsExpireManager extends BasicEmitter {
 		private IDBConnection $connection,
 		private CollectiveMapper $collectiveMapper,
 		private ITimeFactory $timeFactory,
-		IEventDispatcher $dispatcher,
+		private IEventDispatcher $dispatcher,
 	) {
-		$this->dispatcher = $dispatcher;
-
-		[$major] = Util::getVersion();
-		if ($major < 28) {
-			// Use Symfony event dispatcher on older Nextcloud releases
-			$this->dispatcher = Server::get(EventDispatcherInterface::class);
-		}
-
 		try {
 			$this->versionsBackend = $appContainer->get(VersionsBackend::class);
 		} catch (QueryException $e) {

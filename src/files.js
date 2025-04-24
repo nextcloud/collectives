@@ -4,7 +4,6 @@
  */
 
 import { generateUrl, imagePath } from '@nextcloud/router'
-import { FilesCollectivesPlugin } from './helpers/files.js'
 import './shared-init.js'
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -14,5 +13,3 @@ window.addEventListener('DOMContentLoaded', () => {
 		OC.MimeType._mimeTypeIcons['dir-collective'] = imagePath('collectives', 'folder-collective')
 	}
 })
-
-OC.Plugins.register('OCA.Files.FileList', FilesCollectivesPlugin)
