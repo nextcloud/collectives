@@ -24,8 +24,8 @@
 		@drop="onDrop">
 		<div class="app-content-list-item-icon"
 			:tabindex="isCollapsible ? '0' : null"
-			@keypress.enter="toggleCollapsedOrRoute()"
-			@click="toggleCollapsedOrRoute()">
+			@keyup.enter="toggleCollapsedOrRoute"
+			@click="toggleCollapsedOrRoute">
 			<slot name="icon">
 				<template v-if="isTemplate">
 					<PageTemplateIcon :size="22" fill-color="var(--color-background-darker)" />
@@ -307,9 +307,9 @@ export default {
 			'toggleCollapsed',
 		]),
 
-		toggleCollapsedOrRoute(ev) {
+		toggleCollapsedOrRoute(event) {
 			if (this.isCollapsible) {
-				ev.stopPropagation()
+				event.stopPropagation()
 				this.toggleCollapsed(this.pageId)
 			} else {
 				this.expandAndScroll()
@@ -327,7 +327,7 @@ export default {
 			}
 		},
 
-		onDragstart(ev) {
+		onDragstart(event) {
 			// Set as dragged page if not root page (allows to move the page)
 			if (!this.isRootPage) {
 				this.setDraggedPageId(this.pageId)
@@ -337,10 +337,10 @@ export default {
 			const path = generateUrl(`/apps/collectives${this.to}`)
 			const href = new URL(path, window.location).href
 			const html = `<a href=${href}>${this.title}</a>`
-			ev.dataTransfer.effectAllowed = 'copyMove'
-			ev.dataTransfer.setData('text/plain', href)
-			ev.dataTransfer.setData('text/uri-list', href)
-			ev.dataTransfer.setData('text/html', html)
+			event.dataTransfer.effectAllowed = 'copyMove'
+			event.dataTransfer.setData('text/plain', href)
+			event.dataTransfer.setData('text/uri-list', href)
+			event.dataTransfer.setData('text/html', html)
 		},
 
 		onDragend() {
