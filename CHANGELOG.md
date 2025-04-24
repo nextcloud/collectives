@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.16.3 - 2025.04.24
+* 🖱️ Fix expanding/collapsing pages with subpages in the page list.
+
 ## 2.16.2 - 2025.04.23
 
 ### 🐛Fixes
