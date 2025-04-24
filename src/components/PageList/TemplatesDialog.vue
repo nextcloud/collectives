@@ -4,7 +4,10 @@
 -->
 
 <template>
-	<NcDialog :name="t('collectives', 'Templates')" size="normal" @closing="onClose">
+	<NcDialog :name="t('collectives', 'Templates')"
+		data-cy-collectives="templates-dialog"
+		size="normal"
+		@closing="onClose">
 		<!-- Template list -->
 		<ul>
 			<TemplateListItem v-for="(template, index) in rootTemplates"

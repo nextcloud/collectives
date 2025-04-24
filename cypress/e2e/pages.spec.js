@@ -85,32 +85,6 @@ describe('Pages', function() {
 		})
 	})
 
-	describe.skip('Creating a page from template', function() {
-		it('New page has template content', function() {
-			// Do some handstands to ensure that new page with editor is loaded
-			cy.intercept('POST', '**/_api/*/_pages/*').as('createPage')
-			cy.intercept('PUT', '**/apps/text/session/*/create').as('textCreateSession')
-			cy.contains('.app-content-list-item', 'Our Garden')
-				.find('button.action-button-add')
-				.click()
-			cy.wait(['@createPage', '@textCreateSession'])
-
-			cy.getEditor()
-				// TODO: Figure out why page doesn't load in edit mode in CI and enable next line
-				// .should('be.visible')
-				.contains('This is going to be our template.')
-
-			cy.intercept('PUT', '**/_api/*/_pages/*').as('renamePage')
-			cy.get('[data-cy-collectives="page-title-container"] input.title')
-				.type('New page from Template')
-			cy.get('[data-cy-collectives="page-title-container"] input.title')
-				.blur()
-			cy.wait('@renamePage')
-			cy.get('.app-content-list-item').eq(1)
-				.should('contain', 'New page from Template')
-		})
-	})
-
 	describe('Creating a new subpage', function() {
 		it('Shows the title in the enabled titleform and full path in browser title', function() {
 			// Do some handstands to ensure that new page with editor is loaded before we edit the title
