@@ -61,7 +61,7 @@ export default {
 				{
 					emoji: null,
 					id: null,
-					title: t('collectives', 'Blank'),
+					title: t('collectives', 'Blank page'),
 				},
 				...this.templates,
 			]
