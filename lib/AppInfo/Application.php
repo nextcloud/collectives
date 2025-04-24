@@ -108,6 +108,7 @@ class Application extends App implements IBootstrap {
 		$context->registerSearchProvider(PageContentProvider::class);
 
 		if (interface_exists(IPublicReferenceProvider::class)) {
+			// Nextcloud 30+
 			$context->registerReferenceProvider(SearchablePageReferenceProvider::class);
 		} else {
 			$context->registerReferenceProvider(SearchablePageReferenceProvider29::class);

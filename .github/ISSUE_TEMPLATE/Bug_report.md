@@ -21,8 +21,8 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots to help explain your problem.
 
 **Server details:**
-- Collectives app version: [e.g. 2.10.1; see Nextcloud apps page]
-- Nextcloud version: [e.g. 29.0.1]
+- Collectives app version: [e.g. 2.16.1; see Nextcloud apps page]
+- Nextcloud version: [e.g. 31.0.1]
 - PHP Version: [e.g. 8.3]
 - Database: [e.g. MariaDB 10.6]
 
