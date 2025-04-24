@@ -31,7 +31,7 @@
 			</NcEmojiPicker>
 		</div>
 		<div class="template-list-item-title">
-			<form v-if="renameName !== ''"
+			<form v-if="renameName !== null"
 				class="template-list-item-title-text"
 				@submit.prevent.stop="onRename"
 				@click.prevent.stop>
@@ -108,7 +108,7 @@ export default {
 
 	data() {
 		return {
-			renameName: '',
+			renameName: null,
 		}
 	},
 
@@ -166,7 +166,7 @@ export default {
 		},
 
 		onStopRename() {
-			this.renameName = ''
+			this.renameName = null
 		},
 	},
 }
