@@ -61,11 +61,7 @@ describe('Page details', function() {
 
 	describe('Displaying backlinks', function() {
 		it('Lists backlinks for a page', function() {
-			if (['stable27'].includes(Cypress.env('ncVersion'))) {
-				cy.intercept('PUT', '**/apps/text/session/create').as('textCreateSession')
-			} else {
-				cy.intercept('PUT', '**/apps/text/session/*/create').as('textCreateSession')
-			}
+			cy.intercept('PUT', '**/apps/text/session/*/create').as('textCreateSession')
 			cy.openPage('Day 1')
 			cy.wait('@textCreateSession')
 			cy.get('button.app-sidebar__toggle').click()
