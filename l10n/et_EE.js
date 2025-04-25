@@ -43,6 +43,7 @@ OC.L10N.register(
     "Add another link" : "Lisa veel üks link",
     "Advanced settings" : "Lisavalikud",
     "Unshare" : "Lõpeta jagamine",
+    "Create a new share link" : "Loo uus jagamislink",
     "Update share" : "Uuenda jaosmeediat",
     "Download" : "Laadi alla",
     "Recently deleted" : "Hiljuti kustutatud",
