@@ -18,6 +18,7 @@ use OCP\Files\NotPermittedException as FilesNotPermittedException;
 class TemplateService {
 	private const TEMPLATE_FOLDER = '.templates';
 	private const TEMPLATE_INDEX_CONTENT = '## This folder contains template files for the collective';
+	private const DEFAULT_TEMPLATE_TITLE = 'New Template';
 
 	public function __construct(
 		private PageService $pageService,
@@ -81,7 +82,7 @@ class TemplateService {
 		$parentId = $parentId !== 0
 			? $parentId
 			: PageService::getIndexPageFile($this->getTemplateFolder($collectiveId, $userId))->getId();
-		return $this->pageService->create($collectiveId, $parentId, $title, null, $userId, true);
+		return $this->pageService->create($collectiveId, $parentId, $title, null, $userId, self::DEFAULT_TEMPLATE_TITLE);
 	}
 
 	/**
