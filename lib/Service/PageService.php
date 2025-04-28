@@ -408,8 +408,8 @@ class PageService {
 		$hasPages = false;
 		$pageFiles = [];
 		foreach ($folderNodes as $node) {
-			if ($node->getName() === self::TEMPLATE_FOLDER) {
-				// Ignore special template folder
+			if (str_starts_with($node->getName(), '.')) {
+				// Ignore hidden folders
 				continue;
 			}
 
