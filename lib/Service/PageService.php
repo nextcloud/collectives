@@ -35,8 +35,6 @@ use Psr\Container\ContainerInterface;
 class PageService {
 	private const DEFAULT_PAGE_TITLE = 'New Page';
 	private const DEFAULT_TEMPLATE_TITLE = 'New Template';
-	public const TEMPLATE_FOLDER = '.templates';
-	private const TEMPLATE_INDEX_CONTENT = '## This folder contains template files for the collective';
 
 	private ?IQueue $pushQueue = null;
 	private ?Collective $collective = null;
@@ -110,30 +108,6 @@ class PageService {
 		}
 
 		return $folder;
-	}
-
-	/**
-	 * @throws FilesNotFoundException
-	 * @throws MissingDependencyException
-	 * @throws NotFoundException
-	 * @throws NotPermittedException
-	 */
-	public function getTemplateFolder(int $collectiveId, string $userId): Folder {
-		$collectiveFolder = $this->getCollectiveFolder($collectiveId, $userId);
-
-		try {
-			$templateFolder = $collectiveFolder->get(self::TEMPLATE_FOLDER);
-		} catch (FilesNotFoundException) {
-			$templateFolder = $collectiveFolder->newFolder(self::TEMPLATE_FOLDER);
-			$templateIndexInfo = $this->newPage($collectiveId, $templateFolder, PageInfo::INDEX_PAGE_TITLE, $userId);
-			$templateIndexFile = $this->getPageFile($collectiveId, $templateIndexInfo->getId(), $userId);
-			NodeHelper::putContent($templateIndexFile, self::TEMPLATE_INDEX_CONTENT);
-		}
-		if (!($templateFolder instanceof Folder)) {
-			throw new NotFoundException('Failed to get template folder');
-		}
-
-		return $templateFolder;
 	}
 
 	/**
