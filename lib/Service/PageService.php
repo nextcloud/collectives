@@ -34,7 +34,6 @@ use Psr\Container\ContainerInterface;
 
 class PageService {
 	private const DEFAULT_PAGE_TITLE = 'New Page';
-	private const DEFAULT_TEMPLATE_TITLE = 'New Template';
 
 	private ?IQueue $pushQueue = null;
 	private ?Collective $collective = null;
@@ -612,12 +611,12 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function create(int $collectiveId, int $parentId, string $title, ?int $templateId, string $userId, bool $template = false): PageInfo {
+	public function create(int $collectiveId, int $parentId, string $title, ?int $templateId, string $userId, ?string $defaultTitle = null): PageInfo {
 		$this->verifyEditPermissions($collectiveId, $userId);
 		$folder = $this->getFolder($collectiveId, $parentId, $userId);
 		$parentFile = $this->nodeHelper->getFileById($folder, $parentId);
 		$folder = $this->initSubFolder($parentFile);
-		$safeTitle = $this->nodeHelper->sanitiseFilename($title, $template ? self::DEFAULT_TEMPLATE_TITLE : self::DEFAULT_PAGE_TITLE);
+		$safeTitle = $this->nodeHelper->sanitiseFilename($title, $defaultTitle ?: self::DEFAULT_PAGE_TITLE);
 		$filename = NodeHelper::generateFilename($folder, $safeTitle, PageInfo::SUFFIX);
 
 		$pageInfo = $templateId
