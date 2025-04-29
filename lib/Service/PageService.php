@@ -426,13 +426,13 @@ class PageService {
 			}
 
 			try {
-				$page = $this->getPageByFile($pageFile, $folder);
+				$pageInfo = $this->getPageByFile($pageFile, $folder);
 			} catch (NotFoundException) {
 				// If parent folder doesn't have an index page, it throws NotFoundException.
 				continue;
 			}
 
-			$folderPageInfos[] = $page;
+			$folderPageInfos[] = $pageInfo;
 		}
 
 		return array_merge([$indexPage], $folderPageInfos, $subPageInfos);
@@ -756,7 +756,7 @@ class PageService {
 		$this->verifyEditPermissions($collectiveId, $userId);
 		$collectiveFolder = $this->getCollectiveFolder($collectiveId, $userId);
 		$file = $this->nodeHelper->getFileById($collectiveFolder, $id);
-		$page = $this->getPageByFile($file);
+		$pageInfo = $this->getPageByFile($file);
 		$oldParentId = $this->getParentPageId($file);
 		$parentId = $parentId ?: $oldParentId;
 
@@ -764,7 +764,7 @@ class PageService {
 			$file = $newFile;
 		}
 		try {
-			$this->updatePage($collectiveId, $file->getId(), $userId, $page->getEmoji(), $page->isFullWidth());
+			$this->updatePage($collectiveId, $file->getId(), $userId, $pageInfo->getEmoji(), $pageInfo->isFullWidth());
 		} catch (InvalidPathException|FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
@@ -818,14 +818,14 @@ class PageService {
 		$collectiveFolder = $this->getCollectiveFolder($collectiveId, $userId);
 		$newCollectiveFolder = $this->getCollectiveFolder($newCollectiveId, $userId);
 		$file = $this->nodeHelper->getFileById($collectiveFolder, $id);
-		$page = $this->getPageByFile($file);
+		$pageInfo = $this->getPageByFile($file);
 		$parentId = $parentId ?: self::getIndexPageFile($newCollectiveFolder)->getId();
 
 		if (null !== $newFile = $this->moveOrCopyPage($collectiveFolder, $file, $parentId, null, true, $newCollectiveFolder)) {
 			$file = $newFile;
 		}
 		try {
-			$this->updatePage($newCollectiveId, $file->getId(), $userId, $page->getEmoji(), $page->isFullWidth());
+			$this->updatePage($newCollectiveId, $file->getId(), $userId, $pageInfo->getEmoji(), $pageInfo->isFullWidth());
 		} catch (InvalidPathException|FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
