@@ -214,6 +214,9 @@ export default {
 
 <style lang="scss" scoped>
 .collectives-text-container {
+	display: flex;
+	flex-direction: column;
+
 	// Give editor some minimum scroll height on empty/short content
 	// Important on landing page when landing page widgets cover full height
 	min-height: 50vh;
