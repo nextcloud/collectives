@@ -6,6 +6,7 @@ OC.L10N.register(
     "No search results" : "Qidiruv natijalari yo‘q",
     "Remove" : "Remove",
     "Loading…" : "Loading…",
+    "Remove {name}" : " {name} ni o'chirish",
     "Add emoji" : "Emoji qo'shing",
     "Edit" : "Tahrirlash",
     "Restore" : "Qayta tiklangan",
