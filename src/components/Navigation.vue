@@ -37,6 +37,7 @@
 		<CollectiveMembersModal v-if="showCollectiveMembersModal"
 			:collective="membersCollective"
 			@close="onCloseCollectiveMembersModal" />
+		<TemplatesDialog v-if="templatesCollectiveId" />
 	</NcAppNavigation>
 </template>
 
@@ -54,6 +55,7 @@ import NewCollectiveModal from './Nav/NewCollectiveModal.vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import displayError from '../util/displayError.js'
 import SkeletonLoading from './SkeletonLoading.vue'
+import TemplatesDialog from './Nav/TemplatesDialog.vue'
 
 export default {
 	name: 'Navigation',
@@ -69,6 +71,7 @@ export default {
 		NewCollectiveModal,
 		SkeletonLoading,
 		PlusIcon,
+		TemplatesDialog,
 	},
 
 	data() {
@@ -83,6 +86,7 @@ export default {
 			'membersCollective',
 			'sortedCollectives',
 			'sortedTrashCollectives',
+			'templatesCollectiveId',
 		]),
 
 		displayTrash() {

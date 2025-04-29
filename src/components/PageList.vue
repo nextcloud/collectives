@@ -144,7 +144,6 @@
 		<PageTrash v-if="displayTrash" />
 
 		<NewPageDialog v-if="newPageParentId" />
-		<TemplatesDialog v-if="templatesCollectiveId" />
 	</NcAppContentList>
 </template>
 
@@ -172,7 +171,6 @@ import SortClockAscendingOutlineIcon from 'vue-material-design-icons/SortClockAs
 import { scrollToPage } from '../util/scrollToElement.js'
 import { pageOrders } from '../util/sortOrders.js'
 import SkeletonLoading from './SkeletonLoading.vue'
-import TemplatesDialog from './PageList/TemplatesDialog.vue'
 import { RecycleScroller } from 'vue-virtual-scroller'
 
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
@@ -201,7 +199,6 @@ export default {
 		SortClockAscendingOutlineIcon,
 		RecycleScroller,
 		NcAppNavigationCaption,
-		TemplatesDialog,
 	},
 
 	setup() {
@@ -226,7 +223,6 @@ export default {
 			'currentCollectiveCanEdit',
 			'currentCollectiveIsPageShare',
 			'currentCollectivePath',
-			'templatesCollectiveId',
 		]),
 		...mapState(usePagesStore, [
 			'rootPage',
