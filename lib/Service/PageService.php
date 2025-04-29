@@ -281,14 +281,14 @@ class PageService {
 	 * @throws NotFoundException
 	 */
 	private function updateSubpageOrder(int $collectiveId, int $fileId, string $userId, string $subpageOrder): void {
-		if (null === $oldPage = $this->pageMapper->findByFileId($fileId)) {
-			throw new NotFoundException('page not found');
-		}
 		$page = new Page();
-		$page->setId($oldPage->getId());
 		$page->setFileId($fileId);
 		$page->setSubpageOrder($subpageOrder);
-		$this->pageMapper->update($page);
+		if ($this->pageMapper->findByFileId($fileId) === null) {
+			// Required if page metadata in DB not present yet
+			$page->setLastUserId($userId);
+		}
+		$this->pageMapper->updateOrInsert($page);
 		$this->notifyPush($collectiveId);
 	}
 
