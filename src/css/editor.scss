@@ -44,7 +44,8 @@
 	[data-collectives-el='reader'] {
 		max-width: unset;
 		width: min(var(--text-editor-max-width), 100%);
-		margin: auto;
+		margin-inline: auto;
+		flex-grow: 1;
 
 		.text-menubar {
 			max-width: min(var(--text-editor-max-width), 100%);

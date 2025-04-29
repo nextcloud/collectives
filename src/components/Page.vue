@@ -77,6 +77,8 @@ export default {
 }
 
 .page-scroll-container {
+	display: flex;
+	flex-direction: column;
 	overflow-y: auto;
 
 	// Make search dialog stick to the bottom
