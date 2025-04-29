@@ -8,8 +8,9 @@
 		data-cy-collectives="templates-dialog"
 		size="normal"
 		@closing="onClose">
+		<SkeletonLoading v-if="loading('template-list')" type="items" />
 		<!-- Template list -->
-		<ul>
+		<ul v-else>
 			<TemplateListItem v-for="(template, index) in rootTemplates"
 				:key="`template-page-${index}`"
 				:template="template"
@@ -35,9 +36,11 @@ import { mapActions, mapState } from 'pinia'
 import { useRootStore } from '../../stores/root.js'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { useTemplatesStore } from '../../stores/templates.js'
+import displayError from '../../util/displayError.js'
 import { showError } from '@nextcloud/dialogs'
 
 import { NcButton, NcDialog, NcLoadingIcon } from '@nextcloud/vue'
+import SkeletonLoading from '../SkeletonLoading.vue'
 import TemplateListItem from './TemplateListItem.vue'
 
 export default {
@@ -47,19 +50,37 @@ export default {
 		NcButton,
 		NcDialog,
 		NcLoadingIcon,
+		SkeletonLoading,
 		TemplateListItem,
 	},
 
 	computed: {
 		...mapState(useRootStore, ['loading']),
+		...mapState(useCollectivesStore, [
+			'currentCollective',
+		]),
 		...mapState(useTemplatesStore, [
 			'rootTemplates',
+			'templatesLoaded',
 			'templateFilePath',
 		]),
 
 		isCreating() {
 			return this.loading('newTemplate')
 		},
+	},
+
+	async mounted() {
+		if (!this.templatesLoaded && !this.loading('template-list')) {
+			await this.getTemplates()
+				.catch(displayError('Could not fetch templates'))
+		}
+	},
+
+	beforeDestroy() {
+		if (!this.currentCollective?.id) {
+			this.unsetTemplates()
+		}
 	},
 
 	methods: {
@@ -69,6 +90,8 @@ export default {
 		...mapActions(useTemplatesStore, [
 			'createTemplate',
 			'deleteTemplate',
+			'getTemplates',
+			'unsetTemplates',
 		]),
 
 		onClose() {

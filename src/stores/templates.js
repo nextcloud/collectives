@@ -5,6 +5,7 @@
 
 import { defineStore } from 'pinia'
 import { useRootStore } from './root.js'
+import { useCollectivesStore } from './collectives.js'
 import { usePagesStore } from './pages.js'
 import * as api from '../apis/collectives/index.js'
 import { TEMPLATE_PAGE } from '../constants.js'
@@ -12,12 +13,18 @@ import { TEMPLATE_PAGE } from '../constants.js'
 export const useTemplatesStore = defineStore('templates', {
 	state: () => ({
 		templates: [],
+		templatesLoaded: false,
 	}),
 
 	getters: {
 		context() {
-			const pagesStore = usePagesStore()
-			return pagesStore.context
+			const rootStore = useRootStore()
+			const collectivesStore = useCollectivesStore()
+			return {
+				isPublic: rootStore.isPublic,
+				collectiveId: collectivesStore.currentCollective?.id || collectivesStore.templatesCollectiveId,
+				shareTokenParam: rootStore.shareTokenParam,
+			}
 		},
 
 		hasTemplates(state) {
@@ -53,6 +60,7 @@ export const useTemplatesStore = defineStore('templates', {
 	actions: {
 		unsetTemplates() {
 			this.templates = []
+			this.templatesLoaded = false
 		},
 
 		_updateTemplatePage(template) {
@@ -65,11 +73,21 @@ export const useTemplatesStore = defineStore('templates', {
 
 		/**
 		 * Get list of all templates for current collective
+		 *
+		 * @param {boolean} setLoading Whether to set loading('template-list')
 		 */
-		async getTemplates() {
-			const pagesStore = usePagesStore()
-			const response = await api.getTemplates(pagesStore.context)
-			this.templates = response.data.data
+		async getTemplates(setLoading = true) {
+			const rootStore = useRootStore()
+			if (setLoading) {
+				rootStore.load('template-list')
+			}
+			try {
+				const response = await api.getTemplates(this.context)
+				this.templates = response.data.data
+				this.templatesLoaded = true
+			} finally {
+				rootStore.done('template-list')
+			}
 		},
 
 		/**

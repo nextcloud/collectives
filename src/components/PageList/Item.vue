@@ -76,7 +76,9 @@
 				:is-landing-page="isLandingPage"
 				:in-page-list="true" />
 			<NcActions v-if="canEdit">
-				<NcActionButton class="action-button-add" @click="onNewPage">
+				<NcActionButton class="action-button-add"
+					:disabled="loading('template-list')"
+					@click="onNewPage">
 					<template #icon>
 						<PlusIcon :size="20" fill-color="var(--color-main-text)" />
 					</template>
@@ -88,30 +90,32 @@
 </template>
 
 <script>
-import { generateUrl } from '@nextcloud/router'
 import { mapActions, mapState } from 'pinia'
+import { useRootStore } from '../../stores/root.js'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { usePagesStore } from '../../stores/pages.js'
 import { useTemplatesStore } from '../../stores/templates.js'
+import { generateUrl } from '@nextcloud/router'
+import { scrollToPage } from '../../util/scrollToElement.js'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
+import pageMixin from '../../mixins/pageMixin.js'
+
 import CollectivesIcon from '../Icon/CollectivesIcon.vue'
 import { NcActionButton, NcActions } from '@nextcloud/vue'
 import MenuRightIcon from 'vue-material-design-icons/MenuRight.vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
-import pageMixin from '../../mixins/pageMixin.js'
 import PageIcon from '../Icon/PageIcon.vue'
 import PageActionMenu from '../Page/PageActionMenu.vue'
 import StarIcon from 'vue-material-design-icons/Star.vue'
-import { scrollToPage } from '../../util/scrollToElement.js'
 
 export default {
 	name: 'Item',
 
 	components: {
 		CollectivesIcon,
+		MenuRightIcon,
 		NcActionButton,
 		NcActions,
-		MenuRightIcon,
 		PageIcon,
 		PageActionMenu,
 		PlusIcon,
@@ -194,6 +198,7 @@ export default {
 	},
 
 	computed: {
+		...mapState(useRootStore, ['loading']),
 		...mapState(useCollectivesStore, [
 			'currentCollective',
 			'isFavoritePage',
