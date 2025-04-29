@@ -56,6 +56,11 @@ In your Nextcloud instance, simply navigate to **»Apps«**, find the
 		<job>OCA\Collectives\BackgroundJob\IndexCollectives</job>
 		<job>OCA\Collectives\BackgroundJob\PurgeObsoletePages</job>
 	</background-jobs>
+	<repair-steps>
+		<post-migration>
+			<step>OCA\Collectives\Migration\MigrateTemplates</step>
+		</post-migration>
+	</repair-steps>
 	<commands>
 		<command>OCA\Collectives\Command\CreateCollective</command>
 		<command>OCA\Collectives\Command\ExpirePageVersions</command>
