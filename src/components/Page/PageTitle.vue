@@ -94,7 +94,7 @@ h2 {
 input[type='text'] {
 	border: none;
 	color: var(--color-main-text);
-	width: 100%;
+	width: calc(100% - 2px);
 	height: 43px;
 	text-overflow: unset;
 	font-size: inherit;

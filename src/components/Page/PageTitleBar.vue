@@ -78,7 +78,7 @@
 			:disabled="!currentCollectiveCanEdit"
 			@blur="onTitleBlur()"
 			@save="$emit('save-editor')"
-			@submit="$emit('focus-editor')" />
+			@submit="onSubmit()" />
 
 		<div class="titlebar-buttons" :class="{'titlebar-buttons_sidebar-toggle': !isMobile && !showing('sidebar')}">
 			<!-- Edit button if editable -->
@@ -153,6 +153,7 @@ export default {
 	computed: {
 		...mapState(useRootStore, [
 			'isPublic',
+			'isTextEdit',
 			'loading',
 			'showing',
 		]),
@@ -281,6 +282,14 @@ export default {
 				showError(t('collectives', 'Could not rename the page'))
 			}
 		},
+
+		async onSubmit() {
+			if (this.isTextEdit) {
+				this.$emit('focus-editor')
+			} else {
+				await this.onTitleBlur()
+			}
+		}
 	},
 }
 </script>
