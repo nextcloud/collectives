@@ -289,7 +289,7 @@ export default {
 			} else {
 				await this.onTitleBlur()
 			}
-		}
+		},
 	},
 }
 </script>
