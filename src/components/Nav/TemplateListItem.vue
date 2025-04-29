@@ -31,15 +31,18 @@
 			</NcEmojiPicker>
 		</div>
 		<div class="template-list-item-title">
-			<form v-if="renameName !== null"
+			<form v-if="renameTitle !== null"
 				class="template-list-item-title-text"
 				@submit.prevent.stop="onRename"
 				@click.prevent.stop>
 				<NcTextField ref="renameField"
+					v-click-outside="onRename"
+					:placeholder="t('collectives', 'Template title')"
+					:label-outside="true"
 					:autofocus="true"
 					:minlength="1"
 					:required="true"
-					:value.sync="renameName"
+					:value.sync="renameTitle"
 					@keyup.enter.prevent.stop
 					@keyup.esc.prevent.stop="onStopRename" />
 			</form>
@@ -76,6 +79,7 @@ import { mapActions, mapState } from 'pinia'
 import { useRootStore } from '../../stores/root.js'
 import { useTemplatesStore } from '../../stores/templates.js'
 import { showError } from '@nextcloud/dialogs'
+import { directive as ClickOutside } from 'v-click-outside'
 
 import { NcActionButton, NcActions, NcButton, NcLoadingIcon, NcTextField } from '@nextcloud/vue'
 import NcEmojiPicker from '@nextcloud/vue/dist/Components/NcEmojiPicker.js'
@@ -86,6 +90,10 @@ import PencilIcon from 'vue-material-design-icons/Pencil.vue'
 
 export default {
 	name: 'TemplateListItem',
+
+	directives: {
+		ClickOutside,
+	},
 
 	components: {
 		DeleteIcon,
@@ -108,7 +116,7 @@ export default {
 
 	data() {
 		return {
-			renameName: null,
+			renameTitle: null,
 		}
 	},
 
@@ -149,7 +157,7 @@ export default {
 		},
 
 		onInitRename(template) {
-			this.renameName = template.title
+			this.renameTitle = template.title
 			this.$nextTick(() => {
 				this.$refs.renameField.focus()
 			})
@@ -157,7 +165,7 @@ export default {
 
 		async onRename() {
 			try {
-				await this.renameTemplate(this.template.id, this.renameName)
+				await this.renameTemplate(this.template.id, this.renameTitle)
 				this.onStopRename()
 			} catch (e) {
 				console.error(e)
@@ -166,7 +174,7 @@ export default {
 		},
 
 		onStopRename() {
-			this.renameName = null
+			this.renameTitle = null
 		},
 	},
 }
