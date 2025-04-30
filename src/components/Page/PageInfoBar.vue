@@ -37,10 +37,12 @@ export default {
 
 <style scoped lang="scss">
 .text-menubar {
-	box-sizing: content-box !important;
+	// Copied from `.text-menubar` in text app
 	--background-blur: blur(10px);
 	position: sticky;
 	top: 0;
+	bottom: var(--default-grid-baseline);
+	width: 100%;
 	z-index: 10021;
 	background-color: var(--color-main-background-translucent);
 	backdrop-filter: var(--background-blur);
@@ -48,8 +50,8 @@ export default {
 	border-bottom: 1px solid var(--color-border);
 	padding-block: var(--default-grid-baseline);
 	display: flex;
-	flex-wrap: nowrap;
 	align-items: center;
+
 	overflow: hidden;
 }
 
