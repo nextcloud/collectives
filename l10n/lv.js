@@ -7,6 +7,7 @@ OC.L10N.register(
     "Members" : "Biedri",
     "Remove" : "Izņemt",
     "Loading…" : "Ielādē …",
+    "Add accounts" : "Pievienot kontus",
     "Permissions" : "Atļaujas",
     "View" : "Skats",
     "Edit" : "Labot",
