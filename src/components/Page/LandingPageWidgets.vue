@@ -8,7 +8,7 @@
 		:class="[isFullWidth ? 'full-width-view' : 'sheet-view']">
 		<div v-if="!isPublic" class="first-row-widgets">
 			<MembersWidget />
-			<NcButton v-if="hasContactsApp" :href="teamUrl" target="_blank">
+			<NcButton v-if="showTeamOverviewButton" :href="teamUrl" target="_blank">
 				<template #icon>
 					<TeamsIcon :size="20" />
 				</template>
@@ -24,6 +24,7 @@
 <script>
 import { mapState } from 'pinia'
 import { useRootStore } from '../../stores/root.js'
+import { useCirclesStore } from '../../stores/circles.js'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { usePagesStore } from '../../stores/pages.js'
 
@@ -58,6 +59,7 @@ export default {
 
 	computed: {
 		...mapState(useRootStore, ['isPublic']),
+		...mapState(useCirclesStore, ['circleMembers']),
 		...mapState(useCollectivesStore, ['currentCollective']),
 		...mapState(usePagesStore, ['pages']),
 
@@ -67,6 +69,10 @@ export default {
 
 		hasContactsApp() {
 			return 'contacts' in this.OC.appswebroots
+		},
+
+		showTeamOverviewButton() {
+			return this.hasContactsApp && this.circleMembers(this.currentCollective.circleId).length > 1
 		},
 
 		showRecentPages() {
