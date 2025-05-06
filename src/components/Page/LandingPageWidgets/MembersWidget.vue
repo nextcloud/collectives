@@ -20,11 +20,12 @@
 				:tooltip-message="member.displayName"
 				:size="avatarSize" />
 			<NcButton type="secondary"
-				:title="t('collectives', 'Show members')"
-				:aria-label="t('collectives', 'Show all members of the collective')"
+				:title="showMembersTitle"
+				:aria-label="showMembersAriaLabel"
 				@click="openCollectiveMembers()">
 				<template #icon>
-					<DotsHorizontalIcon :size="16" />
+					<AccountMultiplePlusIcon v-if="isAdmin" :size="16" />
+					<AccountMultipleIcon v-else :size="16" />
 				</template>
 			</NcButton>
 		</div>
@@ -38,7 +39,8 @@ import { useCirclesStore } from '../../../stores/circles.js'
 import { useCollectivesStore } from '../../../stores/collectives.js'
 import { usePagesStore } from '../../../stores/pages.js'
 import { NcAvatar, NcButton } from '@nextcloud/vue'
-import DotsHorizontalIcon from 'vue-material-design-icons/DotsHorizontal.vue'
+import AccountMultipleIcon from 'vue-material-design-icons/AccountMultiple.vue'
+import AccountMultiplePlusIcon from 'vue-material-design-icons/AccountMultiplePlus.vue'
 import SkeletonLoading from '../../SkeletonLoading.vue'
 import { circlesMemberTypes } from '../../../constants.js'
 
@@ -46,7 +48,8 @@ export default {
 	name: 'MembersWidget',
 
 	components: {
-		DotsHorizontalIcon,
+		AccountMultipleIcon,
+		AccountMultiplePlusIcon,
 		NcAvatar,
 		NcButton,
 		SkeletonLoading,
@@ -64,7 +67,10 @@ export default {
 			'circleMembersSorted',
 			'circleMemberType',
 		]),
-		...mapState(useCollectivesStore, ['currentCollective']),
+		...mapState(useCollectivesStore, [
+			'currentCollective',
+			'isCollectiveAdmin',
+		]),
 		...mapState(usePagesStore, ['recentPagesUserIds']),
 
 		sortedMembers() {
@@ -96,6 +102,22 @@ export default {
 			return function(member) {
 				return this.isNoUser(member) ? 'icon-group-white' : null
 			}
+		},
+
+		isAdmin() {
+			return this.isCollectiveAdmin(this.currentCollective)
+		},
+
+		showMembersTitle() {
+			return this.isAdmin
+				? t('collectives', 'Manage members')
+				: t('collectives', 'Show members')
+		},
+
+		showMembersAriaLabel() {
+			return this.isAdmin
+				? t('collectives', 'Manage members of the collective')
+				: t('collectives', 'Show all members of the collective')
 		},
 	},
 
