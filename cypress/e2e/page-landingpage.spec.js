@@ -60,7 +60,7 @@ describe('Page landing page', function() {
 	describe('Displays recent members', function() {
 		it('Allows to open members modal as admin', function() {
 			cy.get('.members-widget img[src*="/alice/"]')
-			cy.get('.members-widget .button-vue[title="Show members"]')
+			cy.get('.members-widget .button-vue[title="Manage members"]')
 				.click()
 
 			cy.get('.current-members').contains('.member-row', 'alice')

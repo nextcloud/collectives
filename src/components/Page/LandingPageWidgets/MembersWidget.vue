@@ -5,30 +5,40 @@
 
 <template>
 	<div class="members-widget">
-		<SkeletonLoading v-if="loading"
-			type="avatar"
-			:count="3"
-			class="members-widget-skeleton" />
-		<div v-else ref="members" class="members-widget-members">
-			<NcAvatar v-for="member in trimmedMembers"
-				:key="member.singleId"
-				:user="member.userId"
-				:display-name="member.displayName"
-				:is-no-user="isNoUser(member)"
-				:icon-class="iconClass(member)"
-				:disable-menu="true"
-				:tooltip-message="member.displayName"
-				:size="avatarSize" />
-			<NcButton type="secondary"
-				:title="showMembersTitle"
-				:aria-label="showMembersAriaLabel"
-				@click="openCollectiveMembers()">
-				<template #icon>
-					<AccountMultiplePlusIcon v-if="isAdmin" :size="16" />
-					<AccountMultipleIcon v-else :size="16" />
-				</template>
-			</NcButton>
+		<div class="members-widget-container">
+			<SkeletonLoading v-if="loading"
+				type="avatar"
+				:count="3"
+				class="members-widget-skeleton" />
+			<div v-else ref="members" class="members-widget-members">
+				<NcAvatar v-for="member in trimmedMembers"
+					:key="member.singleId"
+					:user="member.userId"
+					:display-name="member.displayName"
+					:is-no-user="isNoUser(member)"
+					:icon-class="iconClass(member)"
+					:disable-menu="true"
+					:tooltip-message="member.displayName"
+					:size="avatarSize" />
+				<NcButton type="secondary"
+					:title="showMembersTitle"
+					:aria-label="showMembersAriaLabel"
+					@click="openCollectiveMembers()">
+					<template #icon>
+						<AccountMultiplePlusIcon v-if="isAdmin" :size="16" />
+						<AccountMultipleIcon v-else :size="16" />
+					</template>
+				</NcButton>
+			</div>
 		</div>
+		<NcButton v-if="showTeamOverviewButton" :href="teamUrl" target="_blank">
+			<template #icon>
+				<TeamsIcon :size="20" />
+			</template>
+			<template v-if="!isMobile" #default>
+				{{ t('collectives','Team overview') }}
+			</template>
+		</NcButton>
 	</div>
 </template>
 
@@ -38,11 +48,16 @@ import { mapActions, mapState } from 'pinia'
 import { useCirclesStore } from '../../../stores/circles.js'
 import { useCollectivesStore } from '../../../stores/collectives.js'
 import { usePagesStore } from '../../../stores/pages.js'
+import { generateUrl } from '@nextcloud/router'
+import { circlesMemberTypes } from '../../../constants.js'
+
+import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
+
 import { NcAvatar, NcButton } from '@nextcloud/vue'
 import AccountMultipleIcon from 'vue-material-design-icons/AccountMultiple.vue'
 import AccountMultiplePlusIcon from 'vue-material-design-icons/AccountMultiplePlus.vue'
 import SkeletonLoading from '../../SkeletonLoading.vue'
-import { circlesMemberTypes } from '../../../constants.js'
+import TeamsIcon from '../../Icon/TeamsIcon.vue'
 
 export default {
 	name: 'MembersWidget',
@@ -53,7 +68,12 @@ export default {
 		NcAvatar,
 		NcButton,
 		SkeletonLoading,
+		TeamsIcon,
 	},
+
+	mixins: [
+		isMobile,
+	],
 
 	data() {
 		return {
@@ -64,6 +84,7 @@ export default {
 
 	computed: {
 		...mapState(useCirclesStore, [
+			'circleMembers',
 			'circleMembersSorted',
 			'circleMemberType',
 		]),
@@ -118,6 +139,18 @@ export default {
 			return this.isAdmin
 				? t('collectives', 'Manage members of the collective')
 				: t('collectives', 'Show all members of the collective')
+		},
+
+		teamUrl() {
+			return generateUrl('/apps/contacts/circle/{teamId}', { teamId: this.currentCollective.circleId })
+		},
+
+		hasContactsApp() {
+			return 'contacts' in this.OC.appswebroots
+		},
+
+		showTeamOverviewButton() {
+			return this.hasContactsApp && this.circleMembers(this.currentCollective.circleId).length > 1
 		},
 	},
 
@@ -181,6 +214,13 @@ export default {
 
 <style lang="scss" scoped>
 .members-widget {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 12px;
+}
+
+.members-widget-container {
 	flex-grow: 1;
 }
 
