@@ -60,7 +60,8 @@ export default {
 				.startAt(this.collectivesFolder)
 				.build()
 			picker.pick()
-				.then((path) => {
+				.then((paths) => {
+					const path = paths[0]
 					// No root folder, has to start with `/`, not allowed to end with `/`
 					if (path === '/'
 						|| !path.startsWith('/')
