@@ -17,7 +17,7 @@
 				</template>
 			</NcButton>
 		</div>
-		<RecentPagesWidget />
+		<RecentPagesWidget v-if="showRecentPages" />
 	</div>
 </template>
 
@@ -25,12 +25,15 @@
 import { mapState } from 'pinia'
 import { useRootStore } from '../../stores/root.js'
 import { useCollectivesStore } from '../../stores/collectives.js'
+import { usePagesStore } from '../../stores/pages.js'
+
+import { generateUrl } from '@nextcloud/router'
+import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
+
 import MembersWidget from './LandingPageWidgets/MembersWidget.vue'
 import RecentPagesWidget from './LandingPageWidgets/RecentPagesWidget.vue'
 import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
 import TeamsIcon from '../Icon/TeamsIcon.vue'
-import { generateUrl } from '@nextcloud/router'
-import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 
 export default {
 	name: 'LandingPageWidgets',
@@ -56,6 +59,7 @@ export default {
 	computed: {
 		...mapState(useRootStore, ['isPublic']),
 		...mapState(useCollectivesStore, ['currentCollective']),
+		...mapState(usePagesStore, ['pages']),
 
 		teamUrl() {
 			return generateUrl('/apps/contacts/circle/{teamId}', { teamId: this.currentCollective.circleId })
@@ -64,6 +68,10 @@ export default {
 		hasContactsApp() {
 			return 'contacts' in this.OC.appswebroots
 		},
+
+		showRecentPages() {
+			return this.pages.length > 3
+		},
 	},
 }
 </script>
@@ -71,6 +79,7 @@ export default {
 <style scoped>
 .landing-page-widgets {
 	padding-inline: 14px 8px;
+	padding-bottom: 4px;
 	border-bottom: 1px solid var(--color-border);
 }
 
