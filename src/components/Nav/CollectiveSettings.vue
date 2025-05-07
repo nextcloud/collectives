@@ -21,7 +21,7 @@
 						@click.prevent>
 						{{ collective.emoji }}
 						<template v-if="!collective.emoji" #icon>
-							<EmoticonOutline :size="20" />
+							<Emoticon :size="20" />
 						</template>
 					</NcButton>
 				</NcEmojiPicker>
@@ -150,7 +150,7 @@ import { showError, showSuccess } from '@nextcloud/dialogs'
 import { NcAppSettingsDialog, NcAppSettingsSection, NcButton, NcCheckboxRadioSwitch, NcTextField } from '@nextcloud/vue'
 import AlertCircleOutlineIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
 import NcEmojiPicker from '@nextcloud/vue/dist/Components/NcEmojiPicker.js'
-import EmoticonOutline from 'vue-material-design-icons/EmoticonOutline.vue'
+import Emoticon from 'vue-material-design-icons/Emoticon.vue'
 import displayError from '../../util/displayError.js'
 
 export default {
@@ -164,7 +164,7 @@ export default {
 		NcCheckboxRadioSwitch,
 		NcEmojiPicker,
 		NcTextField,
-		EmoticonOutline,
+		Emoticon,
 	},
 
 	props: {
