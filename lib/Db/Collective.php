@@ -55,6 +55,8 @@ class Collective extends Entity implements JsonSerializable {
 	/** @var int */
 	public const defaultPageMode = 0;
 	/** @var bool */
+	public const defaultShowMembers = true;
+	/** @var bool */
 	public const defaultShowRecentPages = true;
 
 	protected ?string $circleUniqueId = null;
@@ -70,6 +72,7 @@ class Collective extends Entity implements JsonSerializable {
 	protected int $sharePageId = 0;
 	protected bool $shareEditable = false;
 	protected int $userPageOrder = Collective::defaultPageOrder;
+	protected bool $userShowMembers = Collective::defaultShowMembers;
 	protected bool $userShowRecentPages = Collective::defaultShowRecentPages;
 	protected array $userFavoritePages = [];
 	protected ?bool $canLeave = null;
@@ -185,6 +188,10 @@ class Collective extends Entity implements JsonSerializable {
 		return $this->userPageOrder;
 	}
 
+	public function getUserShowMembers(): bool {
+		return $this->userShowMembers;
+	}
+
 	public function getUserShowRecentPages(): bool {
 		return $this->userShowRecentPages;
 	}
@@ -209,6 +216,10 @@ class Collective extends Entity implements JsonSerializable {
 			throw new RuntimeException('Invalid userPageOrder value: ' . $userPageOrder);
 		}
 		$this->userPageOrder = $userPageOrder;
+	}
+
+	public function setUserShowMembers(bool $userShowMembers): void {
+		$this->userShowMembers = $userShowMembers;
 	}
 
 	public function setUserShowRecentPages(bool $userShowRecentPages): void {
@@ -283,6 +294,7 @@ class Collective extends Entity implements JsonSerializable {
 			'sharePageId' => $this->sharePageId,
 			'shareEditable' => $this->canEdit() && $this->shareEditable,
 			'userPageOrder' => $this->userPageOrder,
+			'userShowMembers' => $this->userShowMembers,
 			'userShowRecentPages' => $this->userShowRecentPages,
 			'userFavoritePages' => $this->userFavoritePages,
 			'canLeave' => $this->getCanLeave(),

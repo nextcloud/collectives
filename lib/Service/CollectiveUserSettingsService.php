@@ -58,6 +58,21 @@ class CollectiveUserSettingsService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
+	public function setShowMembers(int $collectiveId, string $userId, bool $showMembers): void {
+		$settings = $this->initSettings($collectiveId, $userId);
+		$settings->setShowMembers($showMembers);
+
+		try {
+			$this->collectiveUserSettingsMapper->insertOrUpdate($settings);
+		} catch (Exception $e) {
+			throw new NotPermittedException($e->getMessage(), 0, $e);
+		}
+	}
+
+	/**
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
 	public function setShowRecentPages(int $collectiveId, string $userId, bool $showRecentPages): void {
 		$settings = $this->initSettings($collectiveId, $userId);
 		$settings->setShowRecentPages($showRecentPages);

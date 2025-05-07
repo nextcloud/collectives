@@ -57,7 +57,24 @@ describe('Page landing page', function() {
 		})
 	})
 
-	describe('Displays recent members', function() {
+	describe.only('Displays recent members', function() {
+		it('Allows to toggle members widget', function() {
+			cy.get('.members-widget img[src*="/alice/"]')
+
+			cy.get('.members-widget .members-title')
+				.click()
+			cy.get('.members-widget img[src*="/alice/"]')
+				.should('not.be.visible')
+
+			cy.reload()
+
+			cy.get('.members-widget img[src*="/alice/"]')
+				.should('not.be.visible')
+			cy.get('.members-widget .members-title')
+				.click()
+			cy.get('.members-widget img[src*="/alice/"]')
+		})
+
 		it('Allows to open members modal as admin', function() {
 			cy.get('.members-widget img[src*="/alice/"]')
 			cy.get('.members-widget .button-vue[title="Manage members"]')
