@@ -239,7 +239,6 @@ table {
 
 tr {
 	display: flex;
-	border-radius: var(--border-radius-element, var(--border-radius-large));
 
 	&:not(:last-child) {
 		border-bottom: 1px solid var(--color-border);
