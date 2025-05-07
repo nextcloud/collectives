@@ -5,43 +5,17 @@
 
 <template>
 	<div class="members-widget">
-		<a class="members-title"
-			:aria-label="expandLabel"
-			@keydown.enter="toggleWidget"
-			@click="toggleWidget">
-			<WidgetHeading :title="t('collectives', 'Members')" />
-			<div class="toggle-icon">
-				<ChevronDownIcon :size="24"
-					:class="{ 'collapsed': !showMembers }" />
-			</div>
-		</a>
-		<div v-show="showMembers" class="members-container">
-			<div class="members-avatars">
-				<SkeletonLoading v-if="loading"
-					type="avatar"
-					:count="3"
-					class="members-skeleton" />
-				<div v-else ref="members" class="members-members">
-					<NcAvatar v-for="member in trimmedMembers"
-						:key="member.singleId"
-						:user="member.userId"
-						:display-name="member.displayName"
-						:is-no-user="isNoUser(member)"
-						:icon-class="iconClass(member)"
-						:disable-menu="true"
-						:tooltip-message="member.displayName"
-						:size="avatarSize" />
-					<NcButton type="secondary"
-						:title="showMembersTitle"
-						:aria-label="showMembersAriaLabel"
-						@click="openCollectiveMembers()">
-						<template #icon>
-							<AccountMultiplePlusIcon v-if="isAdmin" :size="16" />
-							<AccountMultipleIcon v-else :size="16" />
-						</template>
-					</NcButton>
+		<div class="members-title-container">
+			<a class="members-title"
+				:aria-label="expandLabel"
+				@keydown.enter="toggleWidget"
+				@click="toggleWidget">
+				<WidgetHeading :title="t('collectives', 'Members')" />
+				<div class="toggle-icon">
+					<ChevronDownIcon :size="24"
+						:class="{ 'collapsed': !showMembers }" />
 				</div>
-			</div>
+			</a>
 			<NcButton v-if="showTeamOverviewButton" :href="teamUrl" target="_blank">
 				<template #icon>
 					<TeamsIcon :size="20" />
@@ -50,6 +24,32 @@
 					{{ t('collectives','Team overview') }}
 				</template>
 			</NcButton>
+		</div>
+		<div v-show="showMembers" class="members-container">
+			<SkeletonLoading v-if="loading"
+				type="avatar"
+				:count="3"
+				class="members-skeleton" />
+			<div v-else ref="members" class="members-members">
+				<NcAvatar v-for="member in trimmedMembers"
+					:key="member.singleId"
+					:user="member.userId"
+					:display-name="member.displayName"
+					:is-no-user="isNoUser(member)"
+					:icon-class="iconClass(member)"
+					:disable-menu="true"
+					:tooltip-message="member.displayName"
+					:size="avatarSize" />
+				<NcButton type="secondary"
+					:title="showMembersTitle"
+					:aria-label="showMembersAriaLabel"
+					@click="openCollectiveMembers()">
+					<template #icon>
+						<AccountMultiplePlusIcon v-if="isAdmin" :size="16" />
+						<AccountMultipleIcon v-else :size="16" />
+					</template>
+				</NcButton>
+			</div>
 		</div>
 	</div>
 </template>
@@ -265,13 +265,14 @@ export default {
 	}
 }
 
-.members-container {
+.members-title-container {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 }
 
-.members-avatars {
+.members-container {
+	display: flex;
 	flex-grow: 1;
 }
 
@@ -283,5 +284,6 @@ export default {
 	display: flex;
 	flex-direction: row;
 	gap: 12px;
+	flex-grow: 1;
 }
 </style>
