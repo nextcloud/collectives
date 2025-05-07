@@ -20,6 +20,19 @@ export function setCollectiveUserSettingPageOrder(collectiveId, pageOrder) {
 }
 
 /**
+ * Set the `show members` toggle for the current user
+ *
+ * @param {number} collectiveId ID of the collective to be updated
+ * @param {boolean} showMembers the desired value
+ */
+export function setCollectiveUserSettingShowMembers(collectiveId, showMembers) {
+	return axios.put(
+		collectivesUrl(collectiveId, '_userSettings', 'showMembers'),
+		{ showMembers },
+	)
+}
+
+/**
  * Set the `show recent pages` toggle for the current user
  *
  * @param {number} collectiveId ID of the collective to be updated

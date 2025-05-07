@@ -53,6 +53,18 @@ class CollectiveUserSettingsController extends Controller {
 	}
 
 	#[NoAdminRequired]
+	public function showMembers(int $id, bool $showMembers): DataResponse {
+		return $this->prepareResponse(function () use ($id, $showMembers): array {
+			$this->service->setShowMembers(
+				$id,
+				$this->getUserId(),
+				$showMembers
+			);
+			return [];
+		});
+	}
+
+	#[NoAdminRequired]
 	public function showRecentPages(int $id, bool $showRecentPages): DataResponse {
 		return $this->prepareResponse(function () use ($id, $showRecentPages): array {
 			$this->service->setShowRecentPages(

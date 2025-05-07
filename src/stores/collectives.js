@@ -347,6 +347,11 @@ export const useCollectivesStore = defineStore('collectives', {
 			this.patchCollectiveWithProperty({ id, property: 'userPageOrder', value: pageOrder })
 		},
 
+		async setCollectiveUserSettingShowMembers({ id, showMembers }) {
+			this.patchCollectiveWithProperty({ id, property: 'userShowMembers', value: showMembers })
+			await api.setCollectiveUserSettingShowMembers(id, showMembers)
+		},
+
 		async setCollectiveUserSettingShowRecentPages({ id, showRecentPages }) {
 			this.patchCollectiveWithProperty({ id, property: 'userShowRecentPages', value: showRecentPages })
 			await api.setCollectiveUserSettingShowRecentPages(id, showRecentPages)

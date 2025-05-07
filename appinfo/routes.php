@@ -33,6 +33,8 @@ return [
 		// collectives userSettings API
 		['name' => 'collectiveUserSettings#pageOrder', 'url' => '/_api/{id}/_userSettings/pageOrder', 'verb' => 'PUT',
 			'requirements' => ['id' => '\d+']],
+		['name' => 'collectiveUserSettings#showMembers', 'url' => '/_api/{id}/_userSettings/showMembers', 'verb' => 'PUT',
+			'requirements' => ['id' => '\d+']],
 		['name' => 'collectiveUserSettings#showRecentPages', 'url' => '/_api/{id}/_userSettings/showRecentPages', 'verb' => 'PUT',
 			'requirements' => ['id' => '\d+']],
 		['name' => 'collectiveUserSettings#favoritePages', 'url' => '/_api/{id}/_userSettings/favoritePages', 'verb' => 'PUT',
