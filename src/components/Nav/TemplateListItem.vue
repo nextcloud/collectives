@@ -6,12 +6,13 @@
 <template>
 	<li class="template-list-item">
 		<div class="template-list-item-icon" @click.prevent.stop>
-			<NcEmojiPicker :show-preview="true"
+			<NcEmojiPicker :ref="`templateEmojiPicker-${template.id}`"
+				:show-preview="true"
 				:allow-unselect="true"
 				:selected-emoji="template.emoji"
 				@select="onSelectEmoji($event, template.id)"
 				@unselect="onUnselectEmoji(template.id)">
-				<NcButton type="secondary"
+				<NcButton type="tertiary"
 					:aria-label="t('collectives', 'Select emoji for template')"
 					:title="t('collectives', 'Select emoji')"
 					class="button-template-emoji"
@@ -63,6 +64,13 @@
 					{{ t('collectives', 'Rename') }}
 				</NcActionButton>
 				<NcActionButton :close-after-click="true"
+					@click="onInitSelectEmoji(template.id)">
+					<template #icon>
+						<EmoticonIcon :size="20" />
+					</template>
+					{{ t('collectives', 'Select emoji') }}
+				</NcActionButton>
+				<NcActionButton :close-after-click="true"
 					@click="$emit('delete', template)">
 					<template #icon>
 						<DeleteIcon :size="20" />
@@ -85,6 +93,7 @@ import { NcActionButton, NcActions, NcButton, NcLoadingIcon, NcTextField } from 
 import NcEmojiPicker from '@nextcloud/vue/dist/Components/NcEmojiPicker.js'
 
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
+import EmoticonIcon from 'vue-material-design-icons/Emoticon.vue'
 import PageTemplateIcon from '../Icon/PageTemplateIcon.vue'
 import PencilIcon from 'vue-material-design-icons/Pencil.vue'
 
@@ -97,6 +106,7 @@ export default {
 
 	components: {
 		DeleteIcon,
+		EmoticonIcon,
 		NcActionButton,
 		NcActions,
 		NcButton,
@@ -143,6 +153,10 @@ export default {
 			'setTemplateEmoji',
 		]),
 
+		async onInitSelectEmoji(templateId) {
+			this.$refs[`templateEmojiPicker-${templateId}`].open = true
+		},
+
 		async onSelectEmoji(emoji, templateId) {
 			try {
 				await this.setTemplateEmoji({ templateId, emoji })
@@ -186,8 +200,6 @@ export default {
 	gap: calc(2 * var(--default-grid-baseline));
 
 	height: var(--default-clickable-area);
-	border-radius: var(--border-radius-element, var(--border-radius-large));
-	margin: var(--default-grid-baseline) 0;
 
 	&:not(:last-child) {
 		border-bottom: 1px solid var(--color-border);
