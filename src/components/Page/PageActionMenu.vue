@@ -93,7 +93,7 @@
 				@click.native="show('details')"
 				@click="gotoPageEmojiPicker">
 				<template #icon>
-					<EmoticonOutlineIcon :size="20" />
+					<EmoticonIcon :size="20" />
 				</template>
 				{{ setEmojiString }}
 			</NcActionButton>
@@ -135,7 +135,7 @@ import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import CollectiveActions from '../Collective/CollectiveActions.vue'
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 import DockRightIcon from 'vue-material-design-icons/DockRight.vue'
-import EmoticonOutlineIcon from 'vue-material-design-icons/EmoticonOutline.vue'
+import EmoticonIcon from 'vue-material-design-icons/Emoticon.vue'
 import FormatListBulletedIcon from 'vue-material-design-icons/FormatListBulleted.vue'
 import OpenInNewIcon from 'vue-material-design-icons/OpenInNew.vue'
 import MoveOrCopyModal from './MoveOrCopyModal.vue'
@@ -159,7 +159,7 @@ export default {
 		NcActionSeparator,
 		DeleteIcon,
 		DockRightIcon,
-		EmoticonOutlineIcon,
+		EmoticonIcon,
 		FormatListBulletedIcon,
 		OpenInNewIcon,
 		PageActionLastUser,

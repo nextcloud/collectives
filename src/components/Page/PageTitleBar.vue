@@ -41,7 +41,7 @@
 						<div v-else-if="currentPage.emoji">
 							{{ currentPage.emoji }}
 						</div>
-						<EmoticonOutlineIcon v-else
+						<EmoticonIcon v-else
 							class="emoji-picker-emoticon"
 							:size="pageTitleIconSize"
 							fill-color="var(--color-text-maxcontrast)" />
@@ -54,7 +54,7 @@
 				<div v-if="currentPage.emoji">
 					{{ currentPage.emoji }}
 				</div>
-				<EmoticonOutlineIcon v-else
+				<EmoticonIcon v-else
 					class="emoji-picker-emoticon"
 					:size="pageTitleIconSize"
 					fill-color="var(--color-text-maxcontrast)" />
@@ -105,7 +105,7 @@ import { showError } from '@nextcloud/dialogs'
 import { NcButton, NcLoadingIcon } from '@nextcloud/vue'
 import NcEmojiPicker from '@nextcloud/vue/dist/Components/NcEmojiPicker.js'
 import CollectivesIcon from '../Icon/CollectivesIcon.vue'
-import EmoticonOutlineIcon from 'vue-material-design-icons/EmoticonOutline.vue'
+import EmoticonIcon from 'vue-material-design-icons/Emoticon.vue'
 import EditButton from './EditButton.vue'
 import PageActionMenu from './PageActionMenu.vue'
 import PageTitle from './PageTitle.vue'
@@ -116,7 +116,7 @@ export default {
 	components: {
 		CollectivesIcon,
 		EditButton,
-		EmoticonOutlineIcon,
+		EmoticonIcon,
 		NcButton,
 		NcEmojiPicker,
 		NcLoadingIcon,
