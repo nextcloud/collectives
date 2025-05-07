@@ -5,35 +5,41 @@
 
 <template>
 	<router-link :to="pagePath(page)" class="recent-page-tile">
-		<div class="recent-page-tile__rectangle">
-			<template v-if="page.emoji">
+		<div class="recent-page-tile__icon">
+			<div v-if="page.emoji" class="recent-page-tile__emoji">
 				{{ page.emoji }}
-			</template>
-			<template v-else>
-				<PageIcon :size="36" fill-color="var(--color-text-maxcontrast)" />
-			</template>
+			</div>
+			<PageIcon v-else :size="36" fill-color="var(--color-text-maxcontrast)" />
 		</div>
-		<div class="recent-page-tile__title">
-			{{ title }}
+		<div class="recent-page-tile__text">
+			<div class="recent-page-tile__title">
+				{{ title }}
+			</div>
+			<div class="recent-page-tile__subtitle">
+				<NcAvatar :user="page.lastUserId || ''"
+					:display-name="page.lastUserDisplayName || ''"
+					:size="20" />
+				<span class="timestamp">
+					{{ lastUpdate }}
+				</span>
+			</div>
 		</div>
-		<LastUserBubble :last-user-id="page.lastUserId || ''"
-			:last-user-display-name="page.lastUserDisplayName || ''"
-			:timestamp="page.timestamp"
-			class="recent-page-tile__last-user-bubble" />
 	</router-link>
 </template>
 
 <script>
 import { mapState } from 'pinia'
 import { usePagesStore } from '../../../stores/pages.js'
-import LastUserBubble from '../../LastUserBubble.vue'
-import PageIcon from '../../Icon/PageIcon.vue'
 import { INDEX_PAGE } from '../../../constants.js'
+import moment from '@nextcloud/moment'
+
+import PageIcon from '../../Icon/PageIcon.vue'
+import { NcAvatar } from '@nextcloud/vue'
 
 export default {
 	name: 'RecentPageTile',
 	components: {
-		LastUserBubble,
+		NcAvatar,
 		PageIcon,
 	},
 
@@ -52,54 +58,64 @@ export default {
 				? t('collectives', 'Landing page')
 				: this.page.title
 		},
+
+		lastUpdate() {
+			return moment.unix(this.page.timestamp).fromNow()
+		},
 	},
 }
 </script>
 
 <style lang="scss" scoped>
 .recent-page-tile {
+	display: flex;
+	flex-direction: column;
+	height: 144px;
+	width: 144px;
 	margin-right: 12px;
-	max-width: 150px;
-	box-sizing: content-box !important;
-	padding: 12px;
 
 	scroll-snap-align: start;
+	background-color: var(--color-primary-element-light);
 	border-radius: var(--border-radius-large);
 
 	&:hover {
 		background-color: var(--color-background-hover);
 	}
 
-	&__rectangle {
+	&__icon {
 		display: flex;
-		height: 150px;
-		width: 150px;
-
-		font-size: 36px;
+		height: 72px;
+		width: 144px;
 		align-items: center;
-		align-content: center;
 		justify-content: center;
-		background-color: var(--color-primary-element-light);
-		border-radius: var(--border-radius-large);
+	}
+
+	&__emoji {
+		font-size: 32px;
+	}
+
+	&__text {
+		padding: 12px;
 	}
 
 	&__title {
 		margin-top: 12px;
-		font-size: 20px;
+		font-weight: bold;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
 	}
 
-	&__last-user-bubble {
+	&__subtitle {
+		display: flex;
+		gap: 4px;
 		margin-top: 8px;
+		align-items: center;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
-		display: flex;
-		flex-direction: column;
 
-		:deep(.timestamp) {
+		.timestamp {
 			color: var(--color-text-maxcontrast);
 		}
 	}
