@@ -100,8 +100,7 @@ export default {
 	}
 
 	&__emoji {
-		font-size: 32px;
-		margin-top: -8px;
+		font-size: 29px;
 	}
 
 	&__title {
