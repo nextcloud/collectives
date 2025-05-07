@@ -19,7 +19,7 @@
 				<template #icon>
 					<SortAscendingIcon v-if="sortedBy('byOrder')" :size="16" />
 					<SortAlphabeticalAscendingIcon v-else-if="sortedBy('byTitle')" :size="16" />
-					<SortClockAscendingOutlineIcon v-else :size="16" />
+					<SortClockAscendingIcon v-else :size="16" />
 				</template>
 				<NcActionButton class="toggle-button"
 					:class="{selected: sortedBy('byOrder')}"
@@ -35,7 +35,7 @@
 					:close-after-click="true"
 					@click="sortPagesAndScroll('byTimestamp')">
 					<template #icon>
-						<SortClockAscendingOutlineIcon :size="20" />
+						<SortClockAscendingIcon :size="20" />
 					</template>
 					{{ t('collectives', 'Sort recently changed first') }}
 				</NcActionButton>
@@ -167,7 +167,7 @@ import PageFavorites from './PageList/PageFavorites.vue'
 import PageTrash from './PageList/PageTrash.vue'
 import SortAlphabeticalAscendingIcon from 'vue-material-design-icons/SortAlphabeticalAscending.vue'
 import SortAscendingIcon from 'vue-material-design-icons/SortAscending.vue'
-import SortClockAscendingOutlineIcon from 'vue-material-design-icons/SortClockAscendingOutline.vue'
+import SortClockAscendingIcon from 'vue-material-design-icons/SortClockAscending.vue'
 import { scrollToPage } from '../util/scrollToElement.js'
 import { pageOrders } from '../util/sortOrders.js'
 import SkeletonLoading from './SkeletonLoading.vue'
@@ -196,7 +196,7 @@ export default {
 		SubpageList,
 		SortAlphabeticalAscendingIcon,
 		SortAscendingIcon,
-		SortClockAscendingOutlineIcon,
+		SortClockAscendingIcon,
 		RecycleScroller,
 		NcAppNavigationCaption,
 	},

@@ -70,7 +70,7 @@
 				@close="onCancelPending">
 				<NcActionText>
 					<template #icon>
-						<InformationOutlineIcon :size="20" />
+						<InformationIcon :size="20" />
 					</template>
 					{{ t('collectives', 'Please enter the following required information before creating the share') }}
 				</NcActionText>
@@ -206,7 +206,7 @@ import CheckIcon from 'vue-material-design-icons/Check.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 import CogIcon from 'vue-material-design-icons/Cog.vue'
 import ContentCopyIcon from 'vue-material-design-icons/ContentCopy.vue'
-import InformationOutlineIcon from 'vue-material-design-icons/InformationOutline.vue'
+import InformationIcon from 'vue-material-design-icons/Information.vue'
 import LockIcon from 'vue-material-design-icons/Lock.vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import TriangleSmallDownIcon from 'vue-material-design-icons/TriangleSmallDown.vue'
@@ -222,7 +222,7 @@ export default {
 		CloseIcon,
 		CogIcon,
 		ContentCopyIcon,
-		InformationOutlineIcon,
+		InformationIcon,
 		LockIcon,
 		NcActionButton,
 		NcActionCheckbox,

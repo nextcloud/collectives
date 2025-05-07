@@ -39,7 +39,7 @@
 			</div>
 			<div class="collective-name-error-placeholder">
 				<div v-if="getNameError" class="collective-name-error">
-					<AlertCircleOutlineIcon :size="16" />
+					<AlertCircleIcon :size="16" />
 					<label for="collective-name" class="modal-collective-name-error-label">
 						{{ getNameError }}
 					</label>
@@ -148,7 +148,7 @@ import { usePagesStore } from '../../stores/pages.js'
 import { emit } from '@nextcloud/event-bus'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { NcAppSettingsDialog, NcAppSettingsSection, NcButton, NcCheckboxRadioSwitch, NcTextField } from '@nextcloud/vue'
-import AlertCircleOutlineIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
+import AlertCircleIcon from 'vue-material-design-icons/AlertCircle.vue'
 import NcEmojiPicker from '@nextcloud/vue/dist/Components/NcEmojiPicker.js'
 import Emoticon from 'vue-material-design-icons/Emoticon.vue'
 import displayError from '../../util/displayError.js'
@@ -157,7 +157,7 @@ export default {
 	name: 'CollectiveSettings',
 
 	components: {
-		AlertCircleOutlineIcon,
+		AlertCircleIcon,
 		NcAppSettingsDialog,
 		NcAppSettingsSection,
 		NcButton,

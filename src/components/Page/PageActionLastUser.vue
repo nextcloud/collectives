@@ -6,7 +6,7 @@
 <template>
 	<li v-if="lastUserDisplayName" class="action action--user-bubble">
 		<button class="action-button action-button--user-bubble" type="button">
-			<ClockOutlineIcon :size="20" />
+			<ClockIcon :size="20" />
 			<LastUserBubble :last-user-id="lastUserId"
 				:last-user-display-name="lastUserDisplayName"
 				:timestamp="timestamp" />
@@ -15,14 +15,14 @@
 </template>
 
 <script>
-import ClockOutlineIcon from 'vue-material-design-icons/ClockOutline.vue'
+import ClockIcon from 'vue-material-design-icons/Clock.vue'
 import LastUserBubble from '../LastUserBubble.vue'
 
 export default {
 	name: 'PageActionLastUser',
 
 	components: {
-		ClockOutlineIcon,
+		ClockIcon,
 		LastUserBubble,
 	},
 
