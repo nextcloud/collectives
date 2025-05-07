@@ -25,8 +25,7 @@ export default {
 <style lang="scss" scoped>
 .widget-heading {
 	padding: 24px 0 12px 0;
-	font-size: 20px;
 	font-weight: bold;
-	color: var(--color-text-maxcontrast);
+	color: var(--color-main-text);
 }
 </style>
