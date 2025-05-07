@@ -9,7 +9,7 @@
 			<div v-if="page.emoji" class="recent-page-tile__emoji">
 				{{ page.emoji }}
 			</div>
-			<PageIcon v-else :size="36" fill-color="var(--color-text-maxcontrast)" />
+			<PageIcon v-else :size="36" fill-color="var(--color-background-darker)" />
 		</div>
 		<div class="recent-page-tile__text">
 			<div class="recent-page-tile__title">
@@ -18,7 +18,7 @@
 			<div class="recent-page-tile__subtitle">
 				<NcAvatar :user="page.lastUserId || ''"
 					:display-name="page.lastUserDisplayName || ''"
-					:size="20" />
+					:size="24" />
 				<span class="timestamp">
 					{{ lastUpdate }}
 				</span>
@@ -70,53 +70,60 @@ export default {
 .recent-page-tile {
 	display: flex;
 	flex-direction: column;
+	justify-content: center;
+	align-items: space-between;
 	height: 144px;
 	width: 144px;
-	margin-right: 12px;
 
 	scroll-snap-align: start;
-	background-color: var(--color-primary-element-light);
 	border-radius: var(--border-radius-large);
+	box-shadow: 0 0 4px 0 var(--color-box-shadow);
+
+	padding: 8px;
 
 	&:hover {
-		background-color: var(--color-background-hover);
+		box-shadow: 0 0 8px 0 var(--color-box-shadow);
 	}
 
 	&__icon {
 		display: flex;
 		height: 72px;
-		width: 144px;
 		align-items: center;
-		justify-content: center;
+		justify-content: flex-start;
+	}
+
+	&__text {
+		height: 100%;
+		display: flex;
+		margin-top: 8px;
+		flex-direction: column;
 	}
 
 	&__emoji {
 		font-size: 32px;
-	}
-
-	&__text {
-		padding: 12px;
+		margin-top: -8px;
 	}
 
 	&__title {
-		margin-top: 12px;
 		font-weight: bold;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		line-clamp: 2;
+		-webkit-box-orient: vertical;
 		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
 	}
 
 	&__subtitle {
 		display: flex;
 		gap: 4px;
-		margin-top: 8px;
+		margin-top: auto;
 		align-items: center;
-		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
 
 		.timestamp {
 			color: var(--color-text-maxcontrast);
+			margin-left: 2px;
 		}
 	}
 }
