@@ -188,7 +188,6 @@ export default {
 
 .recent-pages-widget-container {
 	position: relative;
-	padding-top: 12px;
 
 	.recent-pages-widget-pages {
 		display: flex;
