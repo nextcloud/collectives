@@ -27,6 +27,7 @@ export default {
 			editorContent: null,
 			pageInfoBarPage: null,
 			updateEditorContentDebounced: debounce(this.updateEditorContent, 200),
+			updateCounter: 0,
 		}
 	},
 
@@ -133,6 +134,9 @@ export default {
 
 			if (!this.loading('pageContent')) {
 				this.reader.setContent(this.pageContent)
+				this.$nextTick(() => {
+					this.scrollToLocationHash()
+				})
 			}
 		},
 
@@ -162,11 +166,22 @@ export default {
 				})
 				: null
 			this.setupEditorDebug()
+
 		},
 
 		updateEditorContent(markdown) {
 			this.editorContent = markdown
 			this.reader?.setContent(this.editorContent)
+
+			if (this.updateCounter === 1) {
+				// Scroll to location hash after first setContent (triggered by initial content)
+				this.$nextTick(() => {
+					setTimeout(() => {
+						this.scrollToLocationHash()
+					}, 50)
+				})
+			}
+			this.updateCounter++
 		},
 
 		focusEditor() {
@@ -182,6 +197,18 @@ export default {
 				this.show('outline')
 			} else if (visible === false) {
 				this.hide('outline')
+			}
+		},
+
+		scrollToLocationHash() {
+			if (document.location.hash) {
+				// scroll to the corresponding header if the page was loaded with a hash both in reader and viewer
+				const readerEl = document.querySelector('[data-collectives-el="reader"]')
+				const editorEl = document.querySelector('[data-collectives-el="editor"]')
+
+				for (const el of [readerEl, editorEl]) {
+					el?.querySelector(document.location.hash)?.scrollIntoView({ behavior: 'instant' })
+				}
 			}
 		},
 

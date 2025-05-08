@@ -83,6 +83,9 @@ export default {
 
 	// Make search dialog stick to the bottom
 	flex-grow: 1;
+
+	// Menubar overlays headings when scrolling to them otherwise
+	scroll-padding-top: calc(var(--default-clickable-area) + 8px + 1px);
 }
 </style>
 
