@@ -37,6 +37,7 @@ OC.L10N.register(
     "View only" : "Ainult vaatamine",
     "Can edit" : "Võib redigeerida",
     "Cannot copy, please copy the link manually" : "Ei saa kopeerida, palun kopeeri link käsitsi",
+    "Please enter the following required information before creating the share" : "Enne jaosmeedia loomist palun sisesta järgmine vajalik teave",
     "Password protection (enforced)" : "Paroolikaitse (jõustatud)",
     "Set password" : "Määra salasõna",
     "Password" : "Salasõna",
