@@ -25,6 +25,7 @@ OC.L10N.register(
     "Back" : "Tagasi",
     "Done" : "Valmis",
     "Remove from favorites" : "Eemalda lemmikutest",
+    "Add to favorites" : "Lisa lemmikuks",
     "Show in Files" : "Näita failirakenduses",
     "Move or copy" : "Liiguta või kopeeri",
     "Title" : "Pealkiri",
