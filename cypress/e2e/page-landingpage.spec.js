@@ -53,7 +53,7 @@ describe('Page landing page', function() {
 			cy.get('.recent-pages-widget .recent-page-tile')
 				.contains('Page 3')
 				.click()
-			cy.url().should('include', `/apps/collectives/${encodeURIComponent(collective)}/${encodeURIComponent('Page 3')}`)
+			cy.url().should('match', /\/apps\/collectives\/Landingpage-Collective-\d+\/page-\d+-Page-3/)
 		})
 	})
 

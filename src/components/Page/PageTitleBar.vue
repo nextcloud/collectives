@@ -155,6 +155,7 @@ export default {
 			'isPublic',
 			'isTextEdit',
 			'loading',
+			'pagePath',
 			'showing',
 		]),
 		...mapState(useCollectivesStore, [
@@ -277,6 +278,7 @@ export default {
 				// The resulting title may be different due to sanitizing
 				this.newTitle = this.currentPage.title
 				this.getPages(false)
+				this.$router.replace(this.pagePath(this.currentPage))
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not rename the page'))
