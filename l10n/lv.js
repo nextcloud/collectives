@@ -16,6 +16,8 @@ OC.L10N.register(
     "Cancel" : "Atcelt",
     "Create" : "Izveidot",
     "Back" : "Atpakaļ",
+    "Delete" : "Izdzēst",
+    "Rename" : "Pārdēvēt",
     "Done" : "Pabeigts",
     "Team overview" : "Komandas pārskats",
     "Remove from favorites" : "Noņemt no izlases",

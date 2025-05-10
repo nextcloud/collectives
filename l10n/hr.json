@@ -19,10 +19,12 @@
     "Cancel" : "Odustani",
     "Create" : "Stvori",
     "Back" : "Natrag",
+    "Delete" : "Izbriši",
+    "Rename" : "Preimenuj",
+    "Templates" : "Predlošci",
     "Done" : "Gotovo",
     "Show in Files" : "Prikaži u datotekama",
     "Move or copy" : "Premjesti ili kopiraj",
-    "Template" : "Predložak",
     "Title" : "Naslov",
     "Favorite" : "Favorit",
     "Favorites" : "Favoriti",
@@ -48,6 +50,7 @@
     "Link copied" : "Poveznica je kopirana",
     "Copied" : "Kopirano",
     "Cannot copy" : "Nije moguće kopirati",
-    "Copy share link" : "Kopiraj poveznicu dijeljenja"
+    "Copy share link" : "Kopiraj poveznicu dijeljenja",
+    "Template" : "Predložak"
 },"pluralForm" :"nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;"
 }

@@ -8,6 +8,8 @@ OC.L10N.register(
     "Delete permanently" : "Ջնջել ընդմիշտ",
     "Cancel" : "ընդհատել",
     "Create" : "Ստեղծել",
+    "Delete" : "հեռացնել",
+    "Rename" : "Վերանվանել",
     "Done" : "Done",
     "Title" : "Վերնագիր",
     "Favorites" : "Սիրվածներ",

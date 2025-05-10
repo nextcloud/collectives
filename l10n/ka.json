@@ -20,12 +20,14 @@
     "Cancel" : "Cancel",
     "Create" : "Create",
     "Back" : "Back",
+    "Delete" : "წაშლა",
+    "Rename" : "Rename",
+    "Templates" : "Templates",
     "Done" : "Done",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Show in Files" : "Show in Files",
     "Move or copy" : "Move or copy",
-    "Template" : "Template",
     "Clear search" : "წაშალე ძიების ისტორია",
     "Favorite" : "Favorite",
     "Favorites" : "Favorites",
@@ -54,6 +56,7 @@
     "_%n byte_::_%n bytes_" : ["%n byte","%n bytes"],
     "Copied" : "Copied",
     "Cannot copy" : "Cannot copy",
-    "Copy share link" : "Copy share link"
+    "Copy share link" : "Copy share link",
+    "Template" : "Template"
 },"pluralForm" :"nplurals=2; plural=(n!=1);"
 }

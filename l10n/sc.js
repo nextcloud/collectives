@@ -23,13 +23,14 @@ OC.L10N.register(
     "Cancel" : "Annulla",
     "Create" : "Crea",
     "Back" : "In segus",
+    "Delete" : "Cantzella",
+    "Templates" : "Modellos",
     "Done" : "Fatu",
     "Remove from favorites" : "Boga·nche dae preferidos",
     "Add to favorites" : "Agiunghe a preferidos",
     "Show in Files" : "Mustra in Archìvios",
     "Move or copy" : "Tràmuda o còpia",
     "Copy or move page" : "Tràmuda o còpia sa pàgina",
-    "Template" : "Modellu",
     "Title" : "Tìtulu",
     "Favorite" : "Preferidu",
     "Favorites" : "Preferidos",
@@ -57,6 +58,7 @@ OC.L10N.register(
     "Versions" : "Versiones",
     "Link copied" : "Ligòngiu copiadu",
     "Copied" : "Copiadu",
-    "Cannot copy" : "Non faghet a copiare"
+    "Cannot copy" : "Non faghet a copiare",
+    "Template" : "Modellu"
 },
 "nplurals=2; plural=(n != 1);");

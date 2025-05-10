@@ -9,6 +9,8 @@ OC.L10N.register(
     "Cancel" : "Otkaži",
     "Create" : "Napravi",
     "Back" : "Nazad",
+    "Delete" : "Obriši",
+    "Rename" : "Preimenuj",
     "Done" : "Gotovo",
     "Title" : "Naslov",
     "Favorite" : "Omiljene",

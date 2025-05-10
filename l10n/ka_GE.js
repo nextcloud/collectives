@@ -13,6 +13,8 @@ OC.L10N.register(
     "Cancel" : "უარყოფა",
     "Create" : "შექმნა",
     "Back" : "უკან",
+    "Delete" : "წაშლა",
+    "Rename" : "სახელის შეცვლა",
     "Done" : "დასრულებულია",
     "Remove from favorites" : "რჩეულებიდან მოშორება",
     "Move or copy" : "გადაიტანეთ ან დააკოპირეთ",

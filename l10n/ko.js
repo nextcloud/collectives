@@ -25,6 +25,9 @@ OC.L10N.register(
     "Create" : "생성",
     "Select emoji" : "이모지 선택",
     "Back" : "뒤로",
+    "Delete" : "삭제",
+    "Rename" : "이름 바꾸기",
+    "Templates" : "템플릿",
     "Done" : "완료",
     "Hide outline" : "개요 숨기기",
     "Show outline" : "개요 표시",
@@ -32,7 +35,6 @@ OC.L10N.register(
     "Show in Files" : "파일로 표시",
     "Move or copy" : "이동이나 복사",
     "Select a page from the list or create a new one." : "목록에서 페이지를 선택하거나 새로 만드십시오",
-    "Template" : "템플릿",
     "Title" : "제목",
     "Clear search" : "찾기 초기화",
     "Favorite" : "즐겨찾기",
@@ -65,6 +67,7 @@ OC.L10N.register(
     "Cannot copy" : "복사할 수 없음",
     "Copy share link" : "공유 링크 복사",
     "Allow editing in share" : "공유에서 수정 허용",
-    "Admins and moderaters" : "관리자와 중재자"
+    "Admins and moderaters" : "관리자와 중재자",
+    "Template" : "템플릿"
 },
 "nplurals=1; plural=0;");

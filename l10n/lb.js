@@ -10,6 +10,8 @@ OC.L10N.register(
     "Cancel" : "Ofbriechen",
     "Create" : "Erstellen",
     "Back" : "Zeréck",
+    "Delete" : "Läschen",
+    "Rename" : "Ëmbenennen",
     "Done" : "Done",
     "Title" : "Titel",
     "Favorite" : "Favorit",

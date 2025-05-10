@@ -11,6 +11,8 @@ OC.L10N.register(
     "Cancel" : "Avbryt",
     "Create" : "Lag",
     "Back" : "Tilbake",
+    "Delete" : "Slett",
+    "Rename" : "Endra namn",
     "Done" : "Ferdig",
     "Add to favorites" : "Legg til i favorittar",
     "Title" : "Tittel",

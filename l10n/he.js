@@ -18,10 +18,11 @@ OC.L10N.register(
     "Cancel" : "ביטול",
     "Create" : "יצירה",
     "Back" : "חזרה",
+    "Delete" : "מחיקה",
+    "Rename" : "שינוי שם",
     "Done" : "הסתיים",
     "Show in Files" : "הצגה בקבצים",
     "Move or copy" : "העברה או העתקה",
-    "Template" : "תבנית",
     "Title" : "תפקיד",
     "Favorite" : "סימון כמועדף",
     "Favorites" : "מועדפים",
@@ -46,6 +47,7 @@ OC.L10N.register(
     "Link copied" : "הקישור הועתק",
     "_%n byte_::_%n bytes_" : ["%n בייט","%n בייטים","%n בייטים"],
     "Copied" : "הועתק",
-    "Copy share link" : "העתקת קישור השיתוף"
+    "Copy share link" : "העתקת קישור השיתוף",
+    "Template" : "תבנית"
 },
 "nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: 2;");

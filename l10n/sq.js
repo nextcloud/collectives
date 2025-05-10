@@ -15,6 +15,8 @@ OC.L10N.register(
     "Cancel" : "Anullo",
     "Create" : "Krijo",
     "Back" : "Prapa",
+    "Delete" : "Fshi",
+    "Rename" : "Riemërtoje",
     "Done" : "U krye",
     "Remove from favorites" : "Hiqeni nga të parapëlqyerat",
     "Add to favorites" : "U shtua te të parapëlqyerat",

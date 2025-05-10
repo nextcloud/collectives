@@ -23,11 +23,14 @@ OC.L10N.register(
     "Create" : "Luo",
     "Select emoji" : "Valitse emoji",
     "Back" : "Takaisin",
+    "Delete" : "Poista",
+    "Rename" : "Nimeä uudelleen",
+    "Templates" : "Mallipohjat",
+    "Add a template" : "Lisää mallipohja",
     "Done" : "Valmis",
     "Remove from favorites" : "Poista suosikeista",
     "Add to favorites" : "Lisää suosikkeihin",
     "Move or copy" : "Siirrä tai kopioi",
-    "Template" : "Malli",
     "Title" : "Nimeke",
     "Clear search" : "Tyhjennä haku",
     "Favorite" : "Suosikki",
@@ -57,6 +60,7 @@ OC.L10N.register(
     "Link copied" : "Linkki kopioitu",
     "Copied" : "Kopioitu",
     "Cannot copy" : "Ei voida kopioida",
-    "Copy share link" : "Kopioi jakolinkki"
+    "Copy share link" : "Kopioi jakolinkki",
+    "Template" : "Malli"
 },
 "nplurals=2; plural=(n != 1);");

@@ -14,6 +14,8 @@ OC.L10N.register(
     "Cancel" : "Cancel",
     "Create" : "Yaratish",
     "Back" : "Orqaga",
+    "Delete" : "O'chirish",
+    "Rename" : "Nomini o'zgartirish",
     "Done" : "Done",
     "Remove from favorites" : "Sevimlilardan olib tashlang",
     "Add to favorites" : "Sevimlilarga qo'shing",
