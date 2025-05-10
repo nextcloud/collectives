@@ -68,6 +68,13 @@ class CollectiveUserSettingsTest extends TestCase {
 		$settings->setPageOrder(max($pageOrders) + 1);
 	}
 
+	public function testSetShowMembers(): void {
+		$settings = new CollectiveUserSettings();
+		self::assertEquals(null, $settings->getSetting('show_members'));
+		$settings->setShowMembers(true);
+		self::assertEquals(true, $settings->getSetting('show_members'));
+	}
+
 	public function testSetShowRecentPages(): void {
 		$settings = new CollectiveUserSettings();
 		self::assertEquals(null, $settings->getSetting('show_recent_pages'));

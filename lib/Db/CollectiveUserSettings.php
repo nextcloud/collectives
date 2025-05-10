@@ -28,6 +28,7 @@ class CollectiveUserSettings extends Entity implements JsonSerializable {
 	/** @var array */
 	public const supportedSettings = [
 		'page_order',
+		'show_members',
 		'show_recent_pages',
 		'favorite_pages',
 	];
@@ -77,6 +78,14 @@ class CollectiveUserSettings extends Entity implements JsonSerializable {
 			throw new NotPermittedException('Invalid pageOrder value: ' . $pageOrder);
 		}
 		$this->setSetting('page_order', $pageOrder);
+	}
+
+	/**
+	 * @throws NotPermittedException
+	 * @throws JsonException
+	 */
+	public function setShowMembers(bool $showMembers): void {
+		$this->setSetting('show_members', $showMembers);
 	}
 
 	/**

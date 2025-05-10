@@ -188,13 +188,13 @@ export default {
 
 .recent-pages-widget-container {
 	position: relative;
-	padding-top: 12px;
 
 	.recent-pages-widget-pages {
 		display: flex;
 		flex-direction: row;
 		gap: 12px;
-
+		padding: 8px;
+		margin: -8px;
 		overflow-x: auto;
 		scroll-snap-type: x mandatory;
 		// Hide scrollbar

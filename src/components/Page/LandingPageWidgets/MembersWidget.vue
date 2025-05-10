@@ -5,28 +5,51 @@
 
 <template>
 	<div class="members-widget">
-		<SkeletonLoading v-if="loading"
-			type="avatar"
-			:count="3"
-			class="members-widget-skeleton" />
-		<div v-else ref="members" class="members-widget-members">
-			<NcAvatar v-for="member in trimmedMembers"
-				:key="member.singleId"
-				:user="member.userId"
-				:display-name="member.displayName"
-				:is-no-user="isNoUser(member)"
-				:icon-class="iconClass(member)"
-				:disable-menu="true"
-				:tooltip-message="member.displayName"
-				:size="avatarSize" />
-			<NcButton type="secondary"
-				:title="t('collectives', 'Show members')"
-				:aria-label="t('collectives', 'Show all members of the collective')"
-				@click="openCollectiveMembers()">
+		<div class="members-title-container">
+			<a class="members-title"
+				:aria-label="expandLabel"
+				@keydown.enter="toggleWidget"
+				@click="toggleWidget">
+				<WidgetHeading :title="t('collectives', 'Members')" />
+				<div class="toggle-icon">
+					<ChevronDownIcon :size="24"
+						:class="{ 'collapsed': !showMembers }" />
+				</div>
+			</a>
+			<NcButton v-if="showTeamOverviewButton" :href="teamUrl" target="_blank">
 				<template #icon>
-					<DotsHorizontalIcon :size="16" />
+					<TeamsIcon :size="20" />
+				</template>
+				<template v-if="!isMobile" #default>
+					{{ t('collectives','Team overview') }}
 				</template>
 			</NcButton>
+		</div>
+		<div v-show="showMembers" class="members-container">
+			<SkeletonLoading v-if="loading"
+				type="avatar"
+				:count="3"
+				class="members-skeleton" />
+			<div v-else ref="members" class="members-members">
+				<NcAvatar v-for="member in trimmedMembers"
+					:key="member.singleId"
+					:user="member.userId"
+					:display-name="member.displayName"
+					:is-no-user="isNoUser(member)"
+					:icon-class="iconClass(member)"
+					:disable-menu="true"
+					:tooltip-message="member.displayName"
+					:size="avatarSize" />
+				<NcButton type="secondary"
+					:title="showMembersTitle"
+					:aria-label="showMembersAriaLabel"
+					@click="openCollectiveMembers()">
+					<template #icon>
+						<AccountMultiplePlusIcon v-if="isAdmin" :size="16" />
+						<AccountMultipleIcon v-else :size="16" />
+					</template>
+				</NcButton>
+			</div>
 		</div>
 	</div>
 </template>
@@ -37,20 +60,37 @@ import { mapActions, mapState } from 'pinia'
 import { useCirclesStore } from '../../../stores/circles.js'
 import { useCollectivesStore } from '../../../stores/collectives.js'
 import { usePagesStore } from '../../../stores/pages.js'
-import { NcAvatar, NcButton } from '@nextcloud/vue'
-import DotsHorizontalIcon from 'vue-material-design-icons/DotsHorizontal.vue'
-import SkeletonLoading from '../../SkeletonLoading.vue'
+import { generateUrl } from '@nextcloud/router'
 import { circlesMemberTypes } from '../../../constants.js'
+import { showError } from '@nextcloud/dialogs'
+
+import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
+
+import { NcAvatar, NcButton } from '@nextcloud/vue'
+import AccountMultipleIcon from 'vue-material-design-icons/AccountMultiple.vue'
+import AccountMultiplePlusIcon from 'vue-material-design-icons/AccountMultiplePlus.vue'
+import ChevronDownIcon from 'vue-material-design-icons/ChevronDown.vue'
+import SkeletonLoading from '../../SkeletonLoading.vue'
+import TeamsIcon from '../../Icon/TeamsIcon.vue'
+import WidgetHeading from './WidgetHeading.vue'
 
 export default {
 	name: 'MembersWidget',
 
 	components: {
-		DotsHorizontalIcon,
+		AccountMultipleIcon,
+		AccountMultiplePlusIcon,
+		ChevronDownIcon,
 		NcAvatar,
 		NcButton,
 		SkeletonLoading,
+		TeamsIcon,
+		WidgetHeading,
 	},
+
+	mixins: [
+		isMobile,
+	],
 
 	data() {
 		return {
@@ -61,11 +101,25 @@ export default {
 
 	computed: {
 		...mapState(useCirclesStore, [
+			'circleMembers',
 			'circleMembersSorted',
 			'circleMemberType',
 		]),
-		...mapState(useCollectivesStore, ['currentCollective']),
+		...mapState(useCollectivesStore, [
+			'currentCollective',
+			'isCollectiveAdmin',
+		]),
 		...mapState(usePagesStore, ['recentPagesUserIds']),
+
+		expandLabel() {
+			return this.showMembers
+				? t('collectives', 'Collapse members')
+				: t('collectives', 'Expand members')
+		},
+
+		showMembers() {
+			return this.currentCollective.userShowMembers ?? true
+		},
 
 		sortedMembers() {
 			return this.circleMembersSorted(this.currentCollective.circleId)
@@ -97,6 +151,34 @@ export default {
 				return this.isNoUser(member) ? 'icon-group-white' : null
 			}
 		},
+
+		isAdmin() {
+			return this.isCollectiveAdmin(this.currentCollective)
+		},
+
+		showMembersTitle() {
+			return this.isAdmin
+				? t('collectives', 'Manage members')
+				: t('collectives', 'Show members')
+		},
+
+		showMembersAriaLabel() {
+			return this.isAdmin
+				? t('collectives', 'Manage members of the collective')
+				: t('collectives', 'Show all members of the collective')
+		},
+
+		teamUrl() {
+			return generateUrl('/apps/contacts/circle/{teamId}', { teamId: this.currentCollective.circleId })
+		},
+
+		hasContactsApp() {
+			return 'contacts' in this.OC.appswebroots
+		},
+
+		showTeamOverviewButton() {
+			return this.hasContactsApp && this.circleMembers(this.currentCollective.circleId).length > 1
+		},
 	},
 
 	watch: {
@@ -121,7 +203,10 @@ export default {
 
 	methods: {
 		...mapActions(useCirclesStore, ['getCircleMembers']),
-		...mapActions(useCollectivesStore, ['setMembersCollectiveId']),
+		...mapActions(useCollectivesStore, [
+			'setCollectiveUserSettingShowMembers',
+			'setMembersCollectiveId',
+		]),
 
 		updateShowMembersCount() {
 			// How many avatars (default-clickable-area + 12px gap) fit? Subtract one for the more button.
@@ -132,6 +217,14 @@ export default {
 				const maxMembers = Math.floor(membersWidth / avatarHeight) - 1
 				this.showMembersCount = Math.min(this.sortedMembers.length, maxMembers)
 			}
+		},
+
+		toggleWidget() {
+			this.setCollectiveUserSettingShowMembers({ id: this.currentCollective.id, showMembers: !this.showMembers })
+				.catch((error) => {
+					console.error(error)
+					showError(t('collectives', 'Could not save show members setting for collective'))
+				})
 		},
 
 		openCollectiveMembers() {
@@ -158,17 +251,39 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.members-widget {
+.members-title {
+	display: flex;
+
+	.toggle-icon {
+		display: flex;
+		padding: 24px 0 12px 8px;
+
+		.collapsed {
+			transition: transform var(--animation-slow);
+			transform: rotate(-90deg);
+		}
+	}
+}
+
+.members-title-container {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.members-container {
+	display: flex;
 	flex-grow: 1;
 }
 
-.members-widget-skeleton {
+.members-skeleton {
 	height: var(--default-clickable-area);
 }
 
-.members-widget-members {
+.members-members {
 	display: flex;
 	flex-direction: row;
 	gap: 12px;
+	flex-grow: 1;
 }
 </style>
