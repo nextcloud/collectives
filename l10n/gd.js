@@ -9,6 +9,8 @@ OC.L10N.register(
     "Cancel" : "Sguir dheth",
     "Create" : "Cruthaich",
     "Back" : "Air ais",
+    "Delete" : "Sguab às",
+    "Rename" : "Thoir ainm ùr air",
     "Add to favorites" : "Cuir ris na h-annsachdan",
     "Favorite" : "Annsachd",
     "Favorites" : "Annsachdan",

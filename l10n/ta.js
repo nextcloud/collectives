@@ -12,6 +12,8 @@ OC.L10N.register(
     "Cancel" : "ரத்து செய்",
     "Create" : "உருவாக்குக",
     "Back" : "பின்னுக்கு",
+    "Delete" : "நீக்குக",
+    "Rename" : "பெயர்மாற்றம்",
     "Stop editing" : "திருத்துவதை நிறுத்து",
     "Done" : "Done",
     "Remove from favorites" : "Remove from favorites",

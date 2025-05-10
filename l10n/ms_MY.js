@@ -8,6 +8,8 @@ OC.L10N.register(
     "Cancel" : "Batal",
     "Create" : "Buat",
     "Back" : "Kembali",
+    "Delete" : "Padam",
+    "Rename" : "Namakan",
     "Done" : "Done",
     "Title" : "Judul",
     "Favorites" : "Favorites",

@@ -9,6 +9,8 @@ OC.L10N.register(
     "Cancel" : "បោះបង់",
     "Create" : "បង្កើត",
     "Back" : "ត្រឡប់ក្រោយ",
+    "Delete" : "លុប",
+    "Rename" : "ប្ដូរ​ឈ្មោះ",
     "Done" : "Done",
     "Title" : "ចំណងជើង",
     "Favorites" : "Favorites",

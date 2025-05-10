@@ -9,6 +9,8 @@ OC.L10N.register(
     "Cancel" : "ýatyrmak",
     "Create" : "Dörediň",
     "Back" : "Yzyna",
+    "Delete" : "Pozmak",
+    "Rename" : "Adyny üýtgetmek",
     "Add to favorites" : "Saýlananlara goşuň",
     "Favorite" : "Halaýan",
     "Favorites" : "Halanýanlar",

@@ -10,6 +10,8 @@ OC.L10N.register(
     "Cancel" : "Sefsex",
     "Create" : "Snulfu-d",
     "Back" : "Retour",
+    "Delete" : "Kkes",
+    "Rename" : "Beddel isem",
     "Done" : "Immed",
     "Remove from favorites" : "Kkes-it seg ismal",
     "Add to favorites" : "Rnu ismal",

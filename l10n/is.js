@@ -17,6 +17,9 @@ OC.L10N.register(
     "Cancel" : "Hætta við",
     "Create" : "Búa til",
     "Back" : "Til baka",
+    "Delete" : "Eyða",
+    "Rename" : "Endurnefna",
+    "Templates" : "Sniðmát",
     "Done" : "Lokið",
     "Hide outline" : "Fela útlínu",
     "Show outline" : "Birta útlínu",
@@ -24,7 +27,6 @@ OC.L10N.register(
     "Add to favorites" : "Bæta í eftirlæti",
     "Show in Files" : "Sýna í skrám",
     "Move or copy" : "Færa eða afrita",
-    "Template" : "Sniðmát",
     "Title" : "Titill",
     "Clear search" : "Hreinsa leit",
     "Favorite" : "Eftirlæti",
@@ -56,6 +58,7 @@ OC.L10N.register(
     "_%n byte_::_%n bytes_" : ["%n bæti","%n bæti"],
     "Copied" : "Afritað",
     "Cannot copy" : "Get ekki afritað",
-    "Copy share link" : "Afrita deilitengil"
+    "Copy share link" : "Afrita deilitengil",
+    "Template" : "Sniðmát"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

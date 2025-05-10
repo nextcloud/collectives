@@ -10,6 +10,7 @@ OC.L10N.register(
     "Cancel" : "ຍົກເລີກ",
     "Create" : "ສ້າງ",
     "Back" : "ຫຼັງ",
+    "Delete" : "ລຶບ",
     "Done" : "ສໍາເລັດ",
     "Add to favorites" : "ເພີ່ມລາຍການທີ່ມັກ",
     "Favorite" : "ລາຍການທີ່ມັກ",

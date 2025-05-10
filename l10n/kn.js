@@ -7,6 +7,8 @@ OC.L10N.register(
     "Restore" : "ಮರುಸ್ಥಾಪಿಸು",
     "Cancel" : "﻿ರದ್ದು",
     "Create" : "ಸೃಷ್ಟಿಸಿ",
+    "Delete" : "﻿ಅಳಿಸಿ",
+    "Rename" : "﻿ಮರುಹೆಸರಿಸು",
     "Done" : "Done",
     "Title" : "ಶೀರ್ಷಿಕೆ",
     "Favorite" : "ಅಚ್ಚುಮೆಚ್ಚಿನ",
