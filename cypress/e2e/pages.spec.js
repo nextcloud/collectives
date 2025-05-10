@@ -14,9 +14,7 @@ describe('Pages', function() {
 			.seedPage('Day 2', '', 'Readme.md')
 			.seedPage('Page Title', '', 'Readme.md')
 			.seedPage('#% special chars', '', 'Readme.md')
-			.seedPage('Template', '', 'Readme.md')
 		cy.seedPageContent('Our Garden/Day 2.md', 'A test string with Day 2 in the middle and a [link to Day 1](/index.php/apps/collectives/Our%20Garden/Day%201).')
-		cy.seedPageContent('Our Garden/Template.md', 'This is going to be our template.')
 	})
 
 	beforeEach(function() {
