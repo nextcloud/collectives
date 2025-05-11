@@ -9,6 +9,8 @@ OC.L10N.register(
     "Cancel" : "বাতির",
     "Create" : "তৈরী কর",
     "Back" : "পেছনে যাও",
+    "Delete" : "মুছে",
+    "Rename" : "পূনঃনামকরণ",
     "Done" : "Done",
     "Title" : "শিরোনাম",
     "Favorite" : "প্রিয়জন",

@@ -10,6 +10,8 @@ OC.L10N.register(
     "Cancel" : "Dayandır",
     "Create" : "Yarat",
     "Back" : "Geri",
+    "Delete" : "Sil",
+    "Rename" : "Adı dəyiş",
     "Done" : "Done",
     "Move or copy" : "Köçürt və ya kopyala",
     "Title" : "Başlıq",

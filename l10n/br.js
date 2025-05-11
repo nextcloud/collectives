@@ -16,6 +16,8 @@ OC.L10N.register(
     "Cancel" : "Nullañ",
     "Create" : "Krouiñ",
     "Back" : "Distro",
+    "Delete" : "Dilemel",
+    "Rename" : "Adenvel",
     "Done" : "Graet",
     "Add to favorites" : "Ouzhpennañ d'ar penndibaboù",
     "Move or copy" : "Dilec'hiañ pe eilañ",

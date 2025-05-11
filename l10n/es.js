@@ -111,6 +111,8 @@ OC.L10N.register(
     "Cancel selecting a team" : "Cancelar la selección de equipo",
     "Add members" : "Añadir miembros",
     "Back" : "Atrás",
+    "Delete" : "Eliminar",
+    "Rename" : "Renombrar",
     "Templates" : "Plantillas",
     "Add a template" : "Agregar una plantilla",
     "Select a collective" : "Seleccionar cuaderno colectivo",

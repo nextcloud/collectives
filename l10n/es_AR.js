@@ -15,6 +15,8 @@ OC.L10N.register(
     "Cancel" : "Cancelar",
     "Create" : "Crear",
     "Back" : "Atrás",
+    "Delete" : "Eliminar",
+    "Rename" : "Renombrar",
     "Done" : "Hecho",
     "Remove from favorites" : "Quitar de favoritos",
     "Add to favorites" : "Añadir a favoritos",
