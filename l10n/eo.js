@@ -13,6 +13,8 @@ OC.L10N.register(
     "Cancel" : "Nuligi",
     "Create" : "Krei",
     "Back" : "Antaŭen",
+    "Delete" : "Forigi",
+    "Rename" : "Alinomi",
     "Templates" : "Ŝablonoj",
     "Done" : "Farita",
     "Remove from favorites" : "Malpliŝatigi",

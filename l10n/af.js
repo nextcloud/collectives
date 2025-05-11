@@ -11,6 +11,7 @@ OC.L10N.register(
     "Cancel" : "Kanselleer",
     "Create" : "Skep",
     "Back" : "Terug",
+    "Delete" : "Skrap",
     "Done" : "Gereed",
     "Move or copy" : "Kopieer of skuif",
     "Title" : "Titel",

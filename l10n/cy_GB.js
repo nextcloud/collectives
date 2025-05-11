@@ -11,6 +11,8 @@ OC.L10N.register(
     "Cancel" : "Diddymu",
     "Create" : "Creu",
     "Back" : "Nôl",
+    "Delete" : "Dileu",
+    "Rename" : "Ailenwi",
     "Done" : "Done",
     "Title" : "Teitl",
     "Favorite" : "Ffefryn",
