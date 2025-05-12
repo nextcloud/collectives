@@ -194,7 +194,7 @@
     "View only" : "Skrivskyddat läge",
     "Can edit" : "Kan ändra",
     "Cannot copy, please copy the link manually" : "Kan inte kopiera, länken måste kopieras manuellt",
-    "Copy public link of {title} to clipboard" : "Kopiera publika länken för {title} till urklipp",
+    "Copy public link of {title} to clipboard" : "Kopiera offentliga länken för {title} till urklipp",
     "Error generating password from password policy" : "Fel vid generering av lösenord från lösenordspolicy",
     "Quick share options dropdown" : "Meny snabba delningsalternativ",
     "Please enter the following required information before creating the share" : "Ange följande obligatorisk information innan du skapar delningen",
