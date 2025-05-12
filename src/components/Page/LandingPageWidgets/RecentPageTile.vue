@@ -4,7 +4,9 @@
 -->
 
 <template>
-	<router-link :to="pagePath(page)" class="recent-page-tile">
+	<router-link :to="pagePath(page)"
+		class="recent-page-tile"
+		:class="{ 'dark': isDarkTheme }">
 		<div class="recent-page-tile__icon">
 			<div v-if="page.emoji" class="recent-page-tile__emoji">
 				{{ page.emoji }}
@@ -32,6 +34,7 @@ import { mapState } from 'pinia'
 import { usePagesStore } from '../../../stores/pages.js'
 import { INDEX_PAGE } from '../../../constants.js'
 import moment from '@nextcloud/moment'
+import { isDarkTheme } from '@nextcloud/vue/functions/isDarkTheme'
 
 import PageIcon from '../../Icon/PageIcon.vue'
 import { NcAvatar } from '@nextcloud/vue'
@@ -52,6 +55,10 @@ export default {
 
 	computed: {
 		...mapState(usePagesStore, ['pagePath']),
+
+		isDarkTheme() {
+			return isDarkTheme
+		},
 
 		title() {
 			return this.page.title === INDEX_PAGE
@@ -83,6 +90,14 @@ export default {
 
 	&:hover {
 		box-shadow: 0 0 4px 0 var(--color-box-shadow);
+	}
+
+	&.dark {
+		background-color: var(--color-background-dark);
+
+		&:hover {
+			background-color: var(--color-background-hover);
+		}
 	}
 
 	&__icon {
@@ -126,11 +141,5 @@ export default {
 			margin-left: 2px;
 		}
 	}
-}
-</style>
-
-<style lang="scss">
-body[data-themes="dark"] .recent-page-tile {
-		background: var(--color-background-darker);
 }
 </style>
