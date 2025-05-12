@@ -88,6 +88,7 @@ export default {
 	&__icon {
 		display: flex;
 		height: 72px;
+		width: 144px;
 		align-items: center;
 		justify-content: flex-start;
 	}
@@ -126,7 +127,6 @@ export default {
 		}
 	}
 }
-
 </style>
 
 <style lang="scss">
