@@ -48,6 +48,7 @@ import { useRootStore } from '../../../stores/root.js'
 import { useCollectivesStore } from '../../../stores/collectives.js'
 import { usePagesStore } from '../../../stores/pages.js'
 import { showError } from '@nextcloud/dialogs'
+
 import ChevronDownIcon from 'vue-material-design-icons/ChevronDown.vue'
 import ChevronLeftIcon from 'vue-material-design-icons/ChevronLeft.vue'
 import ChevronRightIcon from 'vue-material-design-icons/ChevronRight.vue'
