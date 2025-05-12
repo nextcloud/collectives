@@ -132,7 +132,7 @@ export default {
 			if (!pagesliderEl) {
 				return
 			}
-			if (pagesliderEl.scrollLeft <= 0) {
+			if (pagesliderEl.scrollLeft <= 8) {
 				this.$refs.buttonslideleft.classList.add('hidden')
 			} else {
 				this.$refs.buttonslideleft.classList.remove('hidden')
@@ -197,6 +197,7 @@ export default {
 		margin: -8px;
 		overflow-x: auto;
 		scroll-snap-type: x mandatory;
+		scroll-padding-inline-start: 8px;
 		// Hide scrollbar
 		scrollbar-width: none;
 		-ms-overflow-style: none;
@@ -211,13 +212,13 @@ export default {
 	width: fit-content;
 	height: 100%;
 	display: flex;
-	right: 0;
+	right: -8px;
 	top: 0;
 	padding: 0;
 	margin: 0 !important;
 
 	&__left {
-		left: 0;
+		left: -8px;
 		justify-content: left;
 		background: linear-gradient(to left, rgba(0, 0, 0, 0), var(--color-main-background));
 
@@ -227,7 +228,7 @@ export default {
 	}
 
 	&__right {
-		right: 0;
+		right: -8px;
 		justify-content: right;
 		background: linear-gradient(to right, rgba(0, 0, 0, 0), var(--color-main-background));
 
