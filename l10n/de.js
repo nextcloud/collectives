@@ -115,7 +115,7 @@ OC.L10N.register(
     "Add members" : "Mitglieder hinzufügen",
     "Back" : "Zurück",
     "Delete template and subpages" : "Vorlage und Unterseiten löschen",
-    "Delete" : "Benötigt keine Übersetzung. Hier wird nur die formelle Übersetzung verwendet (de_DE).",
+    "Delete" : "Löschen",
     "Could not save emoji for template" : "Emoji konnte nicht für Vorlage gespeichert werden",
     "Could not rename template" : "Vorlage konnte nicht umbenannt werden",
     "Select emoji for template" : "Emoji für Vorlage auswählen",
