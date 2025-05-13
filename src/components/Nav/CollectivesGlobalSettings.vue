@@ -54,7 +54,11 @@ export default {
 		selectCollectivesFolder() {
 			const picker = getFilePickerBuilder(t('collectives', 'Select location for collectives'))
 				.setMultiSelect(false)
-				.setType(1)
+				.addButton({
+					label: t('collectives', 'Choose'),
+					type: 'primary',
+					callback: () => {},
+				})
 				.addMimeTypeFilter('httpd/unix-directory')
 				.allowDirectories()
 				.startAt(this.collectivesFolder)
