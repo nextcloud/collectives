@@ -34,6 +34,8 @@ export default {
 		...mapActions(useRootStore, ['done', 'load']),
 		...mapActions(usePagesStore, [
 			'expand',
+			'addToSubpageOrder',
+			'deleteFromSubpageOrder',
 			'updateSubpageOrder',
 			'getPages',
 			'createPage',
@@ -72,7 +74,7 @@ export default {
 			}
 
 			// Append new page to parent page subpageOrder
-			await this.subpageOrderAdd(parentId, this.newPageId)
+			this.addToSubpageOrder({ parentId, pageId: this.newPageId })
 		},
 
 		/**
@@ -126,7 +128,7 @@ export default {
 			const currentPageId = this.currentPage?.id
 
 			// Add page to subpageOrder of new parent first for instant UI feedback
-			this.subpageOrderAdd(newParentId, pageId, newIndex)
+			this.addToSubpageOrder({ parentId: newParentId, pageId, newIndex })
 
 			// Move subpage to new parent
 			try {
@@ -145,7 +147,7 @@ export default {
 			}
 
 			// Remove page from subpageOrder of old parent last
-			this.subpageOrderDelete(oldParentId, pageId)
+			this.deleteFromSubpageOrder({ parentId: oldParentId, pageId })
 
 			showSuccess(t('collectives', `Page ${this.pageTitle(pageId)} moved to ${this.pageTitle(newParentId)}`))
 		},
@@ -202,7 +204,7 @@ export default {
 			}
 
 			// Remove page from subpageOrder of old parent last
-			this.subpageOrderDelete(oldParentId, pageId)
+			this.deleteFromSubpageOrder({ parentId: oldParentId, pageId })
 
 			showSuccess(t('collectives', `Page ${pageTitle} moved to collective ${this.collectiveTitle(collectiveId)}`))
 		},
@@ -231,40 +233,6 @@ export default {
 
 			emit('collectives:page-list:page-trashed')
 			showSuccess(t('collectives', 'Page deleted'))
-		},
-
-		/**
-		 * Delete pageId from subpageOrder of parent page (only in frontend store)
-		 *
-		 * @param {number} parentId ID of the parent page
-		 * @param {number} pageId ID of the page to remove
-		 */
-		subpageOrderDelete(parentId, pageId) {
-			const parentPage = this.pages.find(p => (p.id === parentId))
-			this.updateSubpageOrder({ parentId, subpageOrder: parentPage.subpageOrder.filter(id => (id !== pageId)) })
-		},
-
-		/**
-		 * Add pageId to subpageOrder of parent page at specified index (only in frontend store)
-		 * If no index is provided, add to the beginning of the list.
-		 *
-		 * Build subpageOrder of parent page to maintain the displayed order. If no subpageOrder
-		 * was stored before or it missed pages, pages would jump around otherwise.
-		 *
-		 * @param {number} parentId ID of the parent page
-		 * @param {number} pageId ID of the page to remove
-		 * @param {number} newIndex New index for pageId (prepend by default)
-		 */
-		async subpageOrderAdd(parentId, pageId, newIndex = 0) {
-			// Get current subpage order of parentId
-			const subpageOrder = this.sortedSubpages(parentId, 'byOrder')
-				.map(p => p.id)
-				.filter(id => (id !== pageId))
-
-			// Add pageId to index position
-			subpageOrder.splice(newIndex, 0, pageId)
-
-			this.updateSubpageOrder({ parentId, subpageOrder })
 		},
 
 		/**
