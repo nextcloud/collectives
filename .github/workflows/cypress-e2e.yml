@@ -91,6 +91,14 @@ jobs:
           path: apps/files_pdfviewer
           ref: ${{ matrix.server-versions }}
 
+      - name: Checkout notifications app
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+          repository: nextcloud/notifications
+          path: apps/notifications
+          ref: ${{ matrix.server-versions }}
+
       - name: Checkout password_policy app
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
@@ -218,6 +226,7 @@ jobs:
           ./occ config:system:set --value="http://localhost:8081" -- overwrite.cli.url
           ./occ app:enable --force contacts
           ./occ app:enable --force files_pdfviewer
+          ./occ app:enable --force notifications
           ./occ app:disable password_policy
           ./occ app:enable --force ${{ env.APP_NAME }}
 
