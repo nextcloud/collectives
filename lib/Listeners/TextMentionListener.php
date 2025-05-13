@@ -19,6 +19,7 @@ use OCP\EventDispatcher\IEventListener;
 use OCP\IL10N;
 use OCP\IURLGenerator;
 
+/** @template-implements IEventListener<Event|MentionEvent> */
 class TextMentionListener implements IEventListener {
 	public function __construct(
 		private IL10N $l10n,
@@ -58,20 +59,22 @@ class TextMentionListener implements IEventListener {
 		$notification = $event->getNotification();
 		$notification->setIcon($this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('collectives', 'collectives-dark.svg')));
 		$notification->setLink($pageLink);
-		$notification->setRichSubject($this->l10n->t('{user} has mentioned you in {collective} - {page}'), [
-			...$notification->getRichSubjectParameters(),
-			'collective' => [
-				'id' => (string)$collective->getId(),
-				'type' => 'highlight',
-				'name' => $collectiveName,
-				'link' => $collectiveLink,
+		$notification->setRichSubject($this->l10n->t('{user} has mentioned you in {collective} - {page}'), array_merge(
+			$notification->getRichSubjectParameters(),
+			[
+				'collective' => [
+					'id' => (string)$collective->getId(),
+					'type' => 'highlight',
+					'name' => $collectiveName,
+					'link' => $collectiveLink,
+				],
+				'page' => [
+					'id' => (string)$pageInfo->getId(),
+					'type' => 'highlight',
+					'name' => $pageName,
+					'link' => $pageLink,
+				],
 			],
-			'page' => [
-				'id' => (string)$pageInfo->getId(),
-				'type' => 'highlight',
-				'name' => $pageName,
-				'link' => $pageLink,
-			],
-		]);
+		));
 	}
 }
