@@ -329,6 +329,42 @@ export const usePagesStore = defineStore('pages', {
 			}
 		},
 
+		/**
+		 * Add pageId to subpageOrder of parent page at specified index (only in frontend store)
+		 * If no index is provided, add to the beginning of the list.
+		 *
+		 * Build subpageOrder of parent page to maintain the displayed order. If no subpageOrder
+		 * was stored before or it missed pages, pages would jump around otherwise.
+		 *
+		 * @param {object} object parameters object
+		 * @param {number} object.parentId ID of the parent page
+		 * @param {number} object.pageId ID of the page to remove
+		 * @param {number} object.newIndex New index for pageId (prepend by default)
+		 */
+		addToSubpageOrder({ parentId, pageId, newIndex = 0 }) {
+			// Get current subpage order of parentId
+			const subpageOrder = this.sortedSubpages(parentId, 'byOrder')
+				.map(p => p.id)
+				.filter(id => (id !== pageId))
+
+			// Add pageId to index position
+			subpageOrder.splice(newIndex, 0, pageId)
+
+			this.updateSubpageOrder({ parentId, subpageOrder })
+		},
+
+		/**
+		 * Delete pageId from subpageOrder of parent page (only in frontend store)
+		 *
+		 * @param {object} object parameters object
+		 * @param {number} object.parentId ID of the parent page
+		 * @param {number} object.pageId ID of the page to remove
+		 */
+		deleteFromSubpageOrder({ parentId, pageId }) {
+			const parentPage = this.pages.find(p => (p.id === parentId))
+			this.updateSubpageOrder({ parentId, subpageOrder: parentPage.subpageOrder.filter(id => (id !== pageId)) })
+		},
+
 		setPageOrder(order) {
 			this.sortBy = order
 		},
