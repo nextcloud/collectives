@@ -62,19 +62,17 @@ export default {
 			}
 			try {
 				await this.createPage(page)
-				this.$router.push(this.newPagePath)
-				this.expand(parentId)
-				this.$nextTick(() => scrollToPage(this.newPageId))
-
-				// Parents location changes when the first subpage is created.
-				this.getPages(false)
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not create the page'))
 			}
 
-			// Append new page to parent page subpageOrder
-			this.addToSubpageOrder({ parentId, pageId: this.newPageId })
+			this.$router.push(this.newPagePath)
+			this.expand(parentId)
+			this.$nextTick(() => scrollToPage(this.newPageId))
+
+			// Parents location changes when the first subpage is created.
+			this.getPages(false)
 		},
 
 		/**
