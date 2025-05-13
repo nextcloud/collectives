@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Listeners;
 
+use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Mount\CollectiveMountPoint;
 use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\PageService;
@@ -42,7 +43,17 @@ class TextMentionListener implements IEventListener {
 		$pageInfo = $this->pageService->findByFile($mountPoint->getFolderId(), $event->getFile(), $this->userId);
 
 		$collectiveLink = $this->urlGenerator->linkToRouteAbsolute('collectives.start.index') . rawurlencode($collective->getName());
+		$collectiveName = $collective->getEmoji()
+			? $collective->getEmoji() . ' ' . $collective->getName()
+			: $collective->getName();
+
 		$pageLink = $this->urlGenerator->linkToRouteAbsolute('collectives.start.index') . $this->pageService->getPageLink($collective->getName(), $pageInfo);
+		$pageTitle = $pageInfo->getTitle() === PageInfo::INDEX_PAGE_TITLE
+			? $this->l10n->t('Landing page')
+			: $pageInfo->getTitle();
+		$pageName = $pageInfo->getEmoji()
+			? $pageInfo->getEmoji() . ' ' . $pageTitle
+			: $pageTitle;
 
 		$notification = $event->getNotification();
 		$notification->setIcon($this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('collectives', 'collectives-dark.svg')));
@@ -52,13 +63,13 @@ class TextMentionListener implements IEventListener {
 			'collective' => [
 				'id' => (string)$collective->getId(),
 				'type' => 'highlight',
-				'name' => $collective->getEmoji() . ' ' . $collective->getName(),
+				'name' => $collectiveName,
 				'link' => $collectiveLink,
 			],
 			'page' => [
 				'id' => (string)$pageInfo->getId(),
 				'type' => 'highlight',
-				'name' => $pageInfo->getEmoji() . ' ' . $pageInfo->getTitle(),
+				'name' => $pageName,
 				'link' => $pageLink,
 			],
 		]);
