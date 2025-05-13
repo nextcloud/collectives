@@ -339,7 +339,7 @@ export const usePagesStore = defineStore('pages', {
 		 * @param {object} object parameters object
 		 * @param {number} object.parentId ID of the parent page
 		 * @param {number} object.pageId ID of the page to remove
-		 * @param {number} object.newIndex New index for pageId (prepend by default)
+		 * @param {number|undefined} object.newIndex New index for pageId (prepend by default)
 		 */
 		addToSubpageOrder({ parentId, pageId, newIndex = 0 }) {
 			// Get current subpage order of parentId
@@ -462,7 +462,9 @@ export const usePagesStore = defineStore('pages', {
 
 			const response = await api.createPage(this.context, page)
 			// Add new page to the beginning of pages array
-			this.pages.unshift(response.data.data)
+			const newPage = response.data.data
+			this.pages.unshift(newPage)
+			this.addToSubpageOrder({ parentId: newPage.parentId, pageId: newPage.id })
 			this.newPage = response.data.data
 		},
 
