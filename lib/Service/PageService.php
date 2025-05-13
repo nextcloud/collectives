@@ -386,13 +386,22 @@ class PageService {
 				continue;
 			}
 
-			// Get page infos of subfolders
-			if ($recurse && $node instanceof Folder) {
-				try {
-					array_push($subPageInfos, ...$this->getPagesFromFolder($collectiveId, $node, $userId, true));
-				} catch (NotFoundException) {
-					// If parent folder doesn't have an index page, `getPagesFromFolder()` throws NotFoundException even though having subpages.
-					$hasPages = true;
+			if ($node instanceof Folder) {
+				if ($recurse) {
+					// Recursive: get subpage infos from folder
+					try {
+						array_push($subPageInfos, ...$this->getPagesFromFolder($collectiveId, $node, $userId, true));
+					} catch (NotFoundException) {
+						// If parent folder doesn't have an index page, `getPagesFromFolder()` throws NotFoundException even though having subpages.
+						$hasPages = true;
+					}
+				} else {
+					// Not recursive: get index page of folder, as the folder is not to be processed
+					try {
+						$subPageInfos[] = $this->getPageByFile(self::getIndexPageFile($node), $node);
+					} catch (NotFoundException) {
+						// Ignore subfolders without index page
+					}
 				}
 			} elseif ($node instanceof File && NodeHelper::isPage($node)) {
 				$hasPages = true;
