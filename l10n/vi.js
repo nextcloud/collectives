@@ -16,6 +16,7 @@ OC.L10N.register(
     "View" : "Xem",
     "Edit" : "Chỉnh sửa",
     "Danger zone" : "Khu vực nguy hiểm",
+    "Choose" : "Chọn",
     "Restore" : "Khôi phục",
     "Delete permanently" : "Xoá vĩnh viễn",
     "Cancel" : "Hủy",

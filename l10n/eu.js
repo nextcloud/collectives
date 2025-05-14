@@ -81,6 +81,7 @@ OC.L10N.register(
     "Delete collective" : "Ezabatu kolektiboa",
     "Create a collective first" : "Lehenengoz kolektibo bat sortu",
     "Select location for collectives" : "Hautatu kolektiboen kokapena",
+    "Choose" : "Aukeratu",
     "Invalid path selected. Only folders on first level are supported." : "Bide-izen baliogabea hautatu da. Lehen mailako karpetak bakarrik onartzen dira.",
     "Collectives settings" : "Kolektiboen ezarpenak",
     "Deleted collectives" : "Ezabatutako kolektiboak",

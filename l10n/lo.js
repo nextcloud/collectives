@@ -6,6 +6,7 @@ OC.L10N.register(
     "Remove" : "ຍ້າຍອອກ",
     "Loading…" : "ກຳລັງໂຫຼດ",
     "Edit" : "ແກ້ໄຂ",
+    "Choose" : "ເລືອກ",
     "Restore" : "ການກຸ້ຄຶນ",
     "Cancel" : "ຍົກເລີກ",
     "Create" : "ສ້າງ",

@@ -15,6 +15,7 @@ OC.L10N.register(
     "View" : "Veire",
     "Edit" : "Modificar",
     "Danger zone" : "Zòna perilhosa",
+    "Choose" : "Causir",
     "Restore" : "Restaurar",
     "Delete permanently" : "Suprimir definitivament",
     "Cancel" : "Anullar",

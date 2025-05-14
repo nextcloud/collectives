@@ -21,6 +21,7 @@ OC.L10N.register(
     "View" : "Vaata",
     "Edit" : "Redigeeri",
     "Danger zone" : "Ohtlik - siin ole ettevaatlik",
+    "Choose" : "Vali",
     "Restore" : "Taasta",
     "Delete permanently" : "Kustuta jäädavalt",
     "Cancel" : "Loobu",

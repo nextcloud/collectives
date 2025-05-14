@@ -13,6 +13,7 @@ OC.L10N.register(
     "Permissions" : "Permisiuni",
     "View" : "Vizualizare",
     "Edit" : "Editează",
+    "Choose" : "Alege",
     "Restore" : "Restaurare",
     "Delete permanently" : "Șterge permanent",
     "Cancel" : "Anulare",

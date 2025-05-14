@@ -87,6 +87,7 @@
     "Delete collective" : "Borrar cuaderno colectivo",
     "Create a collective first" : "Cree un cuaderno colectivo primero",
     "Select location for collectives" : "Seleccione la ubicación para los cuadernos colectivos",
+    "Choose" : "Seleccione",
     "Invalid path selected. Only folders on first level are supported." : "Se seleccionó una ruta inválida. Solo las carpetas de primer nivel están soportadas.",
     "Collectives settings" : "Configuraciones de cuadernos colectivos",
     "Deleted collectives" : "Cuadernos colectivos eliminados",

@@ -11,6 +11,7 @@ OC.L10N.register(
     "Permissions" : "Atļaujas",
     "View" : "Skats",
     "Edit" : "Labot",
+    "Choose" : "Izvēlēties",
     "Restore" : "Atjaunot",
     "Delete permanently" : "Neatgriezeniski izdzēst",
     "Cancel" : "Atcelt",

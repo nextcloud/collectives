@@ -17,6 +17,7 @@ OC.L10N.register(
     "View" : "Näytä",
     "Edit" : "Muokkaa",
     "Danger zone" : "Vaaravyöhyke",
+    "Choose" : "Valitse",
     "Restore" : "Palauta",
     "Delete permanently" : "Poista pysyvästi",
     "Cancel" : "Peruuta",

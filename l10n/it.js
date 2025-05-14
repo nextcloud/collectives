@@ -53,6 +53,7 @@ OC.L10N.register(
     "Delete collective" : "Elimina collettivo",
     "Create a collective first" : "Crea prima un collettivo",
     "Select location for collectives" : "Seleziona la posizione per i collettivi",
+    "Choose" : "Scegli",
     "Invalid path selected. Only folders on first level are supported." : "Percorso selezionato non valido. Sono supportate solo le cartelle di primo livello.",
     "Collectives settings" : "Impostazioni dei collettivi",
     "Deleted collectives" : "Collettivi eliminati",

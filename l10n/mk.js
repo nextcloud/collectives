@@ -15,6 +15,7 @@ OC.L10N.register(
     "View" : "Погледни",
     "Edit" : "Уреди",
     "Danger zone" : "Опасна зона",
+    "Choose" : "Избери",
     "Restore" : "Врати",
     "Delete permanently" : "Избриши",
     "Cancel" : "Откажи",

@@ -5,6 +5,7 @@ OC.L10N.register(
     "Settings" : "Поставке",
     "Loading…" : "Učitavam…",
     "Edit" : "Izmeni",
+    "Choose" : "Odaberi",
     "Delete permanently" : "Obriši zauvek",
     "Cancel" : "Otkaži",
     "Create" : "Napravi",

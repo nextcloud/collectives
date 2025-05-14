@@ -7,6 +7,7 @@ OC.L10N.register(
     "Remove" : "Kkes",
     "Loading…" : "Asali...",
     "Edit" : "Ẓreg",
+    "Choose" : "Fren",
     "Cancel" : "Sefsex",
     "Create" : "Snulfu-d",
     "Back" : "Retour",

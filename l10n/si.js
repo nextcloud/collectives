@@ -5,6 +5,7 @@ OC.L10N.register(
     "Remove" : "ඉවත් කරන්න",
     "Loading…" : "පූරණය වෙමින්…",
     "Edit" : "සංස්කරණය",
+    "Choose" : "තෝරන්න",
     "Restore" : "ප්‍රතිෂ්ථාපනය",
     "Cancel" : "අවලංගු",
     "Create" : "සාදන්න",

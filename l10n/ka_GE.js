@@ -8,6 +8,7 @@ OC.L10N.register(
     "Promote to moderator" : "დაწინაურება მოდერატორზე",
     "Permissions" : "უფლებები",
     "Edit" : "შეცვლა",
+    "Choose" : "აირჩიეთ",
     "Restore" : "აღდგენა",
     "Delete permanently" : "სამუდამოდ წაშლა",
     "Cancel" : "უარყოფა",

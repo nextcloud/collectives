@@ -8,6 +8,7 @@ OC.L10N.register(
     "Loading…" : "Ŝargado...",
     "View" : "Vidi",
     "Edit" : "Modifi",
+    "Choose" : "Elekti",
     "Restore" : "Restaŭri",
     "Delete permanently" : "Forigi por ĉiam",
     "Cancel" : "Nuligi",

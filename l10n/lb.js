@@ -5,6 +5,7 @@ OC.L10N.register(
     "Settings" : "Astellungen",
     "Loading…" : "Et gëtt gelueden",
     "Edit" : "Änneren",
+    "Choose" : "Auswielen",
     "Restore" : "Zrécksetzen",
     "Delete permanently" : "Permanent läschen",
     "Cancel" : "Ofbriechen",

@@ -13,6 +13,7 @@ OC.L10N.register(
     "Permissions" : "הרשאות",
     "View" : "צפייה",
     "Edit" : "עריכה",
+    "Choose" : "בחר",
     "Restore" : "שחזור",
     "Delete permanently" : "מחיקה לצמיתות",
     "Cancel" : "ביטול",
