@@ -63,12 +63,13 @@ class CollectiveUserSettingsMapper extends QBMapper {
 	 */
 	public function findByCollectiveAndUser(int $collectiveId, string $userId): ?CollectiveUserSettings {
 		$qb = $this->db->getQueryBuilder();
-		$where = $qb->expr()->andX();
-		$where->add($qb->expr()->eq('collective_id', $qb->createNamedParameter($collectiveId, IQueryBuilder::PARAM_INT)));
-		$where->add($qb->expr()->eq('user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
+		$andX = [
+			$qb->expr()->eq('collective_id', $qb->createNamedParameter($collectiveId, IQueryBuilder::PARAM_INT)),
+			$qb->expr()->eq('user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)),
+		];
 		$qb->select('*')
 			->from($this->tableName)
-			->where($where);
+			->where($qb->expr()->andX(...$andX));
 		try {
 			/** @var CollectiveUserSettings $this->findEntity($qb) */
 			return $this->findEntity($qb);

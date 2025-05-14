@@ -63,14 +63,15 @@ class CollectiveMapper extends QBMapper {
 	 */
 	public function findByCircleId(string $circleId, bool $includeTrash = false): ?Collective {
 		$qb = $this->db->getQueryBuilder();
-		$where = $qb->expr()->andX();
-		$where->add($qb->expr()->eq('circle_unique_id', $qb->createNamedParameter($circleId, IQueryBuilder::PARAM_STR)));
+		$andX = [
+			$qb->expr()->eq('circle_unique_id', $qb->createNamedParameter($circleId, IQueryBuilder::PARAM_STR)),
+		];
 		if (!$includeTrash) {
-			$where->add($qb->expr()->isNull('trash_timestamp'));
+			$andX[] = $qb->expr()->isNull('trash_timestamp');
 		}
 		$qb->select('*')
 			->from($this->tableName)
-			->where($where);
+			->where($qb->expr()->andX(...$andX));
 		try {
 			return $this->findEntity($qb);
 		} catch (DoesNotExistException|MultipleObjectsReturnedException) {
@@ -82,14 +83,15 @@ class CollectiveMapper extends QBMapper {
 
 	public function findByCircleIds(array $circleIds, bool $includeTrash = false): array {
 		$qb = $this->db->getQueryBuilder();
-		$where = $qb->expr()->andX();
-		$where->add($qb->expr()->in('circle_unique_id', $qb->createNamedParameter($circleIds, IQueryBuilder::PARAM_STR_ARRAY)));
+		$andX = [
+			$qb->expr()->in('circle_unique_id', $qb->createNamedParameter($circleIds, IQueryBuilder::PARAM_STR_ARRAY)),
+		];
 		if (!$includeTrash) {
-			$where->add($qb->expr()->isNull('trash_timestamp'));
+			$andX[] = $qb->expr()->isNull('trash_timestamp');
 		}
 		$qb->select('*')
 			->from($this->tableName)
-			->where($where);
+			->where($qb->expr()->andX(...$andX));
 		try {
 			return $this->findEntities($qb);
 		} catch (Exception $e) {
@@ -104,12 +106,13 @@ class CollectiveMapper extends QBMapper {
 	 */
 	public function findTrashByCircleIdsAndUser(array $circleIds, string $userId): array {
 		$qb = $this->db->getQueryBuilder();
-		$where = $qb->expr()->andX();
-		$where->add($qb->expr()->in('circle_unique_id', $qb->createNamedParameter($circleIds, IQueryBuilder::PARAM_STR_ARRAY)));
-		$where->add($qb->expr()->isNotNull('trash_timestamp'));
+		$andX = [
+			$qb->expr()->in('circle_unique_id', $qb->createNamedParameter($circleIds, IQueryBuilder::PARAM_STR_ARRAY)),
+			$qb->expr()->isNotNull('trash_timestamp'),
+		];
 		$qb->select('*')
 			->from($this->tableName)
-			->where($where);
+			->where($qb->expr()->andX(...$andX));
 		try {
 			$collectives = $this->findEntities($qb);
 		} catch (Exception $e) {
@@ -126,12 +129,13 @@ class CollectiveMapper extends QBMapper {
 	 */
 	public function findByIdAndUser(int $id, ?string $userId = null): ?Collective {
 		$qb = $this->db->getQueryBuilder();
-		$where = $qb->expr()->andX();
-		$where->add($qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
-		$where->add($qb->expr()->isNull('trash_timestamp'));
+		$andX = [
+			$qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)),
+			$qb->expr()->isNull('trash_timestamp'),
+		];
 		$qb->select('*')
 			->from($this->tableName)
-			->where($where);
+			->where($qb->expr()->andX(...$andX));
 		return $this->findBy($qb, $userId);
 	}
 
@@ -142,12 +146,13 @@ class CollectiveMapper extends QBMapper {
 	 */
 	public function findTrashByIdAndUser(int $id, string $userId): ?Collective {
 		$qb = $this->db->getQueryBuilder();
-		$where = $qb->expr()->andX();
-		$where->add($qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
-		$where->add($qb->expr()->isNotNull('trash_timestamp'));
+		$andX = [
+			$qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)),
+			$qb->expr()->isNotNull('trash_timestamp'),
+		];
 		$qb->select('*')
 			->from($this->tableName)
-			->where($where);
+			->where($qb->expr()->andX(...$andX));
 		return $this->findBy($qb, $userId, Member::LEVEL_ADMIN);
 	}
 

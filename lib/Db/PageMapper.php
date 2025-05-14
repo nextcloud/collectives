@@ -63,16 +63,17 @@ class PageMapper extends QBMapper {
 
 	public function findByFileId(int $fileId, bool $trashed = false): ?Page {
 		$qb = $this->db->getQueryBuilder();
-		$where = $qb->expr()->andX();
-		$where->add($qb->expr()->eq('file_id', $qb->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)));
+		$andX = [
+			$qb->expr()->eq('file_id', $qb->createNamedParameter($fileId, IQueryBuilder::PARAM_INT)),
+		];
 		if ($trashed) {
-			$where->add($qb->expr()->isNotNull('trash_timestamp'));
+			$andX[] = $qb->expr()->isNotNull('trash_timestamp');
 		} else {
-			$where->add($qb->expr()->isNull('trash_timestamp'));
+			$andX[] = $qb->expr()->isNull('trash_timestamp');
 		}
 		$qb->select('*')
 			->from($this->tableName)
-			->where($where);
+			->where($qb->expr()->andX(...$andX));
 		try {
 			return $this->findEntity($qb);
 		} catch (DoesNotExistException|MultipleObjectsReturnedException) {
