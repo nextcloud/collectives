@@ -19,6 +19,7 @@ OC.L10N.register(
     "View" : "보기",
     "Edit" : "편집",
     "Danger zone" : "위험 지역",
+    "Choose" : "선택",
     "Restore" : "복원",
     "Delete permanently" : "영구히 삭제",
     "Cancel" : "취소",

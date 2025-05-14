@@ -17,6 +17,7 @@ OC.L10N.register(
     "View" : "View",
     "Edit" : "Edit",
     "Danger zone" : "Danger zone",
+    "Choose" : "Choose",
     "Restore" : "Restore",
     "Delete permanently" : "Delete permanently",
     "Cancel" : "Cancel",

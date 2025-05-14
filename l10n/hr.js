@@ -16,6 +16,7 @@ OC.L10N.register(
     "View" : "Pregledaj",
     "Edit" : "Uredi",
     "Danger zone" : "Zona opasnosti",
+    "Choose" : "Odaberite",
     "Restore" : "Vrati",
     "Delete permanently" : "Trajno izbrišite",
     "Cancel" : "Odustani",

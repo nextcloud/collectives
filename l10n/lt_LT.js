@@ -29,6 +29,7 @@ OC.L10N.register(
     "Edit" : "Taisyti",
     "Danger zone" : "Pavojinga zona",
     "Delete collective" : "Ištrinti kolektyvą",
+    "Choose" : "Pasirinkite",
     "Deleted collectives" : "Ištrinti kolektyvai",
     "Restore" : "Atkurti",
     "Delete permanently" : "Ištrinti negrįžtamai",

@@ -75,6 +75,7 @@ OC.L10N.register(
     "Delete collective" : "Видалити колектив",
     "Create a collective first" : "Спочатку створіть новий колектив",
     "Select location for collectives" : "Вибрати розташування для колективів",
+    "Choose" : "Вибрати",
     "Invalid path selected. Only folders on first level are supported." : "Вибрано некоректний шлях. Підтримуються лише каталоги верхнього рівня.",
     "Collectives settings" : "Налаштування",
     "Deleted collectives" : "Видалені колективи",

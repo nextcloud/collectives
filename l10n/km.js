@@ -4,6 +4,7 @@ OC.L10N.register(
     "Share link" : "Share link",
     "Settings" : "ការកំណត់",
     "Edit" : "កែប្រែ",
+    "Choose" : "ជ្រើស",
     "Restore" : "ស្ដារ​មក​វិញ",
     "Delete permanently" : "លុប​ជា​អចិន្ត្រៃយ៍",
     "Cancel" : "បោះបង់",

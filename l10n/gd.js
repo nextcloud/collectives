@@ -6,6 +6,7 @@ OC.L10N.register(
     "Remove" : "Thoir air falbh",
     "Loading…" : "’Ga luchdadh…",
     "Edit" : "Deasaich",
+    "Choose" : "Tagh",
     "Cancel" : "Sguir dheth",
     "Create" : "Cruthaich",
     "Back" : "Air ais",

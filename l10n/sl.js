@@ -61,6 +61,7 @@ OC.L10N.register(
     "Delete collective" : "Izbriši zbirko",
     "Create a collective first" : "Najprej je treba ustvariti zbirko",
     "Select location for collectives" : "Izbor mesta datotek zbirke",
+    "Choose" : "Izbor",
     "Invalid path selected. Only folders on first level are supported." : "Izbrana je neveljavna pot. Podprte so le mape na prvi ravni drevesne strukture.",
     "Collectives settings" : "Nastavitve zbirk",
     "Deleted collectives" : "Izbrisane zbirke",

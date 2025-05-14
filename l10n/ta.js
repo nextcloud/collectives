@@ -7,6 +7,7 @@ OC.L10N.register(
     "Settings" : "அமைப்புகள்",
     "Remove" : "அகற்றுக",
     "Edit" : "தொகுக்க",
+    "Choose" : "தெரிவுசெய்க ",
     "Restore" : "மீட்டெடு",
     "Delete permanently" : "நிரந்தரமாக நீக்கவும்",
     "Cancel" : "ரத்து செய்",

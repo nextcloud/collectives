@@ -9,6 +9,7 @@ OC.L10N.register(
     "Loading…" : "A carregar…",
     "View" : "Ver",
     "Edit" : "Editar",
+    "Choose" : "Escolher",
     "Restore" : "Restaurar",
     "Delete permanently" : "Eliminar permanentemente",
     "Cancel" : "Cancelar",

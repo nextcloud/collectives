@@ -7,6 +7,7 @@ OC.L10N.register(
     "Members" : "Miembros",
     "Permissions" : "Permisos",
     "Edit" : "Editar",
+    "Choose" : "Seleccionar",
     "Restore" : "Restaurar",
     "Delete permanently" : "Borrar permanentemente",
     "Cancel" : "Cancelar",

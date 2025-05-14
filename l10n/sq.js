@@ -10,6 +10,7 @@ OC.L10N.register(
     "Permissions" : "Lejet",
     "View" : "Shiko",
     "Edit" : "Përpuno",
+    "Choose" : "Zgjidhni",
     "Restore" : "Rikthe",
     "Delete permanently" : "Fshije përgjithmonë",
     "Cancel" : "Anullo",

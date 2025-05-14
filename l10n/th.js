@@ -8,6 +8,7 @@ OC.L10N.register(
     "Loading…" : "กำลังโหลด…",
     "View" : "มุมมอง",
     "Edit" : "แก้ไข",
+    "Choose" : "เลือก",
     "Restore" : "คืนค่า",
     "Delete permanently" : "ลบแบบถาวร",
     "Cancel" : "ยกเลิก",

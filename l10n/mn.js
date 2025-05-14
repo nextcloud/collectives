@@ -6,6 +6,7 @@ OC.L10N.register(
     "Members" : "Гишүүд",
     "Loading…" : "уншиж байна",
     "Edit" : "засварлах",
+    "Choose" : "Сонгох",
     "Restore" : "Сэргээх",
     "Delete permanently" : "бүр мөсөн устгах",
     "Cancel" : "болиулах",

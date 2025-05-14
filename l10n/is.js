@@ -12,6 +12,7 @@ OC.L10N.register(
     "Permissions" : "Heimildir",
     "View" : "Skoða",
     "Edit" : "Breyta",
+    "Choose" : "Velja",
     "Restore" : "Endurheimta",
     "Delete permanently" : "Eyða varanlega",
     "Cancel" : "Hætta við",

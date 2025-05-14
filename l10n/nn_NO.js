@@ -6,6 +6,7 @@ OC.L10N.register(
     "Promote to moderator" : "Fremje til moderator",
     "Loading…" : "Lastar...",
     "Edit" : "Rediger",
+    "Choose" : "Vel",
     "Restore" : "Gjenopprett",
     "Delete permanently" : "Slett for godt",
     "Cancel" : "Avbryt",

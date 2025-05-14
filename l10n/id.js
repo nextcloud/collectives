@@ -10,6 +10,7 @@ OC.L10N.register(
     "Loading…" : "Memuat…",
     "View" : "Tampilan",
     "Edit" : "Sunting",
+    "Choose" : "Pilih",
     "Restore" : "Pulihkan",
     "Delete permanently" : "Hapus secara permanen",
     "Cancel" : "Membatalkan",

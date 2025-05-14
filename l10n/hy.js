@@ -4,6 +4,7 @@ OC.L10N.register(
     "Share link" : "Կիսվել հղմամբ",
     "Settings" : "կարգավորումներ",
     "Edit" : "մշակել",
+    "Choose" : "Ընտրել",
     "Restore" : "Վերականգնել",
     "Delete permanently" : "Ջնջել ընդմիշտ",
     "Cancel" : "ընդհատել",

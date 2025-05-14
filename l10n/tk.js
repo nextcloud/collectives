@@ -6,6 +6,7 @@ OC.L10N.register(
     "Remove" : "Aýyrmak",
     "Loading…" : "Ýüklenýär…",
     "Edit" : "Redaktirläň",
+    "Choose" : "saýlamak",
     "Cancel" : "ýatyrmak",
     "Create" : "Dörediň",
     "Back" : "Yzyna",

@@ -75,6 +75,7 @@ OC.L10N.register(
     "Delete collective" : "Kollektíva törlése",
     "Create a collective first" : "Először hozzon létre egy kollektívát",
     "Select location for collectives" : "Válasszon egy helyet a kollektíváknak",
+    "Choose" : "Válasszon",
     "Invalid path selected. Only folders on first level are supported." : "Érvénytelen útvonal kiválasztva. Csak az első szintű mappák támogatottak.",
     "Collectives settings" : "Kollektívák beállításai",
     "Deleted collectives" : "Kollektívák törlése",

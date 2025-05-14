@@ -33,6 +33,7 @@ OC.L10N.register(
     "Danger zone" : "危険区域",
     "Create a collective first" : "まずコレクティブを作成する",
     "Select location for collectives" : "コレクティブの場所を選択",
+    "Choose" : "選択",
     "Invalid path selected. Only folders on first level are supported." : "誤ったパスが選択されています。一番上の階層にあるフォルダーのみをサポートしています。",
     "Collectives settings" : "コレクティブ全体の設定",
     "Deleted collectives" : "コレクティブの削除",

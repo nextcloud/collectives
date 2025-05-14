@@ -9,6 +9,7 @@ OC.L10N.register(
     "Remove {name}" : " {name} ni o'chirish",
     "Add emoji" : "Emoji qo'shing",
     "Edit" : "Tahrirlash",
+    "Choose" : "Tanlang",
     "Restore" : "Qayta tiklangan",
     "Delete permanently" : "Butunlay o'chirish",
     "Cancel" : "Cancel",

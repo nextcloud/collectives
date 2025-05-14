@@ -85,6 +85,7 @@
     "Delete collective" : "删除知识库",
     "Create a collective first" : "请先创建一个知识库",
     "Select location for collectives" : "选择知识库的位置",
+    "Choose" : "选择",
     "Invalid path selected. Only folders on first level are supported." : "所选路径无效。仅支持第一级文件夹。",
     "Collectives settings" : "知识库设置",
     "Collectives folder" : "集体文件夹",

@@ -18,6 +18,7 @@ OC.L10N.register(
     "View" : "Visualiza",
     "Edit" : "Modìfica",
     "Danger zone" : "Zona de perìgulu",
+    "Choose" : "Sèbera",
     "Restore" : "Riprìstina",
     "Delete permanently" : "Cantzella in manera definitiva",
     "Cancel" : "Annulla",

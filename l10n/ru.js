@@ -56,6 +56,7 @@ OC.L10N.register(
     "Delete collective" : "Удалить группу",
     "Create a collective first" : "Сначала создайте группу",
     "Select location for collectives" : "Выберите место для группы",
+    "Choose" : "Выберите",
     "Invalid path selected. Only folders on first level are supported." : "Выбран неверный путь. Поддерживаются только каталоги первого уровня.",
     "Collectives settings" : "Настройки групп",
     "Deleted collectives" : "Удаленные группы",
