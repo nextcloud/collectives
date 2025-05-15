@@ -1,7 +1,38 @@
 # Changelog
 
+## 2.17.0 - 2025.05.14
+
+### ✨New
+* 📝 New templates management. (#267, #1195)
+* 🛬 Overhauled landingpage widgets.
+* 🧹 Remove Nextcloud 27 + 28 support.
+* 🔔 Custom notifications for mentions in Nextcloud 31+. (#1469)
+
+### 🐛Fixes
+* 💄 Save title on submit when in view mode.
+* 💄 Make toolbar sticky to bottom on mobile.
+* 💄 Several design papercut fixes.
+* 🧹 Unset trash pages when switching the collective.
+* 🐛 Don't throw when adding subpage of page without metadata. (#1726)
+* 🧹 Hide recent pages widget if less than four pages.
+* 🧹 Hide team overview button if only one member.
+* 🖱️ Scroll to heading when opening anchor link to page. (#1736)
+* 💄 Fix jumping page order when adding a new page.
+* 🔃 Fix broken page list order after adding subpage. (#1360)
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 2.16.3 - 2025.04.24
+
+### 🐛Fixes
 * 🖱️ Fix expanding/collapsing pages with subpages in the page list.
+
 
 ## 2.16.2 - 2025.04.23
 
