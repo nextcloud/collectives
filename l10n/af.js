@@ -6,6 +6,7 @@ OC.L10N.register(
     "Loading…" : "Laai…",
     "View" : "Bekyk",
     "Edit" : "Wysig",
+    "Choose" : "Kies",
     "Restore" : "Herstel",
     "Delete permanently" : "Skrap permanent",
     "Cancel" : "Kanselleer",

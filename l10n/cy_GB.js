@@ -6,6 +6,7 @@ OC.L10N.register(
     "Loading…" : "Yn llwytho…",
     "View" : "Golwg",
     "Edit" : "Golygu",
+    "Choose" : "Dewisa",
     "Restore" : "Adfer",
     "Delete permanently" : "Dileu'n barhaol",
     "Cancel" : "Diddymu",

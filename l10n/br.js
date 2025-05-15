@@ -11,6 +11,7 @@ OC.L10N.register(
     "Add emoji" : "Ouzhpennañ un emoji",
     "View" : "Gwell",
     "Edit" : "Cheñch",
+    "Choose" : "Dibab",
     "Restore" : "Adkrouiñ",
     "Delete permanently" : "Lamet da viken",
     "Cancel" : "Nullañ",
