@@ -5,6 +5,7 @@ OC.L10N.register(
     "Share link" : "লিংক ভাগাভাগি করেন",
     "Settings" : "সেটিংস",
     "Edit" : "সম্পাদনা",
+    "Choose" : "বেছে নিন",
     "Restore" : "ফিরিয়ে দাও",
     "Cancel" : "বাতির",
     "Create" : "তৈরী কর",

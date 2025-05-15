@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Recent pages" : "Legutóbbi oldalak",
     "Collectives" : "Kollektívák",
+    "Landing page" : "Érkező oldal",
     "Collective pages" : "Kollektíva oldalai",
     "In collective %1$s" : "A(z) %1$s kollektívában",
     "Last edition %1$s" : "Utolsó kiadás: %1$s",
@@ -12,7 +13,6 @@ OC.L10N.register(
     "You are not allowed to share %s" : "Nincs jogosultsága a(z) %s megosztásához",
     "You are not allowed to edit %s" : "Nincs jogosultsága a(z) %s szerkesztéséhez",
     "Share not found for user" : "Nem található megosztás a felhasználóhoz",
-    "Landing page" : "Érkező oldal",
     "A place for activist and community projects to build shared knowledge" : "Egy hely az aktivisták és a közösségi projektek számára, hogy közös tudásbázist építsenek",
     "Manage members" : "Tagok kezelése",
     "Share link" : "Megosztási hivatkozás",
