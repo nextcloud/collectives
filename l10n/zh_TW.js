@@ -5,6 +5,7 @@ OC.L10N.register(
     "Recent pages" : "最近的頁面",
     "Collectives" : "知識庫",
     "Landing page" : "首頁",
+    "{user} has mentioned you in {collective} - {page}" : "{user} 已在 {collective} - {page} 中提及您",
     "Collective pages" : "知識庫頁面",
     "In collective %1$s" : "在知識庫 %1$s 中",
     "Last edition %1$s" : "上一版 %1$s",

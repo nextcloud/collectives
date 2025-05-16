@@ -3,6 +3,7 @@
     "Recent pages" : "Aktuelle Seiten",
     "Collectives" : "Kollektive",
     "Landing page" : "Startseite",
+    "{user} has mentioned you in {collective} - {page}" : "{user} hat dich erwähnt in {collective} - {page}",
     "Collective pages" : "Kollektiv-Seiten",
     "In collective %1$s" : "In Kollektiv %1$s",
     "Last edition %1$s" : "Letzte Version %1$s",
