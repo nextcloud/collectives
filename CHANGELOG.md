@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.17.1 - 2025.05.16
+
+### 🐛Fixes
+* Fix migration of templates via web updater. (#1763)
+
+
 ## 2.17.0 - 2025.05.14
 
 ### ✨New

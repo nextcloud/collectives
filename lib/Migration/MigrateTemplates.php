@@ -21,6 +21,7 @@ use OCP\Files\InvalidPathException;
 use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\Files\NotPermittedException as FilesNotPermittedException;
 use OCP\IAppConfig;
+use OCP\Lock\LockedException;
 use OCP\Migration\IOutput;
 use OCP\Migration\IRepairStep;
 
@@ -38,6 +39,21 @@ class MigrateTemplates implements IRepairStep {
 
 	public function getName():string {
 		return 'Migrate templates to new implementation logic';
+	}
+
+	/**
+	 * @throws NotPermittedException
+	 */
+	public static function putContent(File $file, string $content): void {
+		if (!mb_check_encoding($content, 'UTF-8')) {
+			$content = mb_convert_encoding($content, 'UTF-8');
+		}
+
+		try {
+			$file->putContent($content);
+		} catch (FilesNotPermittedException|LockedException $e) {
+			throw new NotPermittedException('Failed to write file content for ' . $file->getPath(), 0, $e);
+		}
 	}
 
 	/**
@@ -79,7 +95,7 @@ class MigrateTemplates implements IRepairStep {
 			// Create missing template folder
 			$templateFolder = $collectiveFolder->newFolder(self::TEMPLATE_FOLDER);
 			$templateIndexFile = $templateFolder->newFile(PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX);
-			NodeHelper::putContent($templateIndexFile, self::TEMPLATE_INDEX_CONTENT);
+			self::putContent($templateIndexFile, self::TEMPLATE_INDEX_CONTENT);
 		}
 
 		return $templateFolder;
