@@ -3,6 +3,7 @@
     "Recent pages" : "Senaste sidorna",
     "Collectives" : "Collectives",
     "Landing page" : "Landningssida",
+    "{user} has mentioned you in {collective} - {page}" : "{user} har nämnt dig i {collective} - {page}",
     "Collective pages" : "Collectives-sidor",
     "In collective %1$s" : "I collective %1$s",
     "Last edition %1$s" : "Sista versionen %1$s",
