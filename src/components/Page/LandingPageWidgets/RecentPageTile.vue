@@ -8,8 +8,8 @@
 		class="recent-page-tile"
 		:class="{ 'dark': isDarkTheme }">
 		<div class="recent-page-tile__icon">
-			<div v-if="page.emoji" class="recent-page-tile__emoji">
-				{{ page.emoji }}
+			<div v-if="emoji" class="recent-page-tile__emoji">
+				{{ emoji }}
 			</div>
 			<PageIcon v-else :size="36" fill-color="var(--color-background-darker)" />
 		</div>
@@ -31,6 +31,7 @@
 
 <script>
 import { mapState } from 'pinia'
+import { useCollectivesStore } from '../../../stores/collectives.js'
 import { usePagesStore } from '../../../stores/pages.js'
 import { INDEX_PAGE } from '../../../constants.js'
 import moment from '@nextcloud/moment'
@@ -54,15 +55,26 @@ export default {
 	},
 
 	computed: {
+		...mapState(useCollectivesStore, ['currentCollective']),
 		...mapState(usePagesStore, ['pagePath']),
 
 		isDarkTheme() {
 			return isDarkTheme
 		},
 
-		title() {
+		isLandingPage() {
 			return this.page.title === INDEX_PAGE
-				? t('collectives', 'Landing page')
+		},
+
+		emoji() {
+			return (this.isLandingPage && this.currentCollective.emoji)
+				? this.currentCollective.emoji
+				: this.page.emoji
+		},
+
+		title() {
+			return this.isLandingPage
+				? this.currentCollective.name
 				: this.page.title
 		},
 
