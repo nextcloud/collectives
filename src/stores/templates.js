@@ -8,6 +8,7 @@ import { useRootStore } from './root.js'
 import { useCollectivesStore } from './collectives.js'
 import { usePagesStore } from './pages.js'
 import * as api from '../apis/collectives/index.js'
+import { byTitle } from '../util/sortOrders.js'
 import { TEMPLATE_PAGE } from '../constants.js'
 
 export const useTemplatesStore = defineStore('templates', {
@@ -27,6 +28,10 @@ export const useTemplatesStore = defineStore('templates', {
 			}
 		},
 
+		sortedTemplates(state) {
+			return state.templates.sort(byTitle)
+		},
+
 		hasTemplates(state) {
 			return state.templates.length > 0
 		},
@@ -44,14 +49,15 @@ export const useTemplatesStore = defineStore('templates', {
 		},
 
 		rootTemplates(state) {
-			return state.templates.filter(template => template.parentId === state.rootTemplateId)
+			return state.sortedTemplates
+				.filter(template => template.parentId === state.rootTemplateId)
 		},
 
 		currentPageFilePath(state) {
 			return state.pageFilePath(state.currentPage)
 		},
 
-		templateFilePath: (state) => (template) => {
+		templateFilePath: (_state) => (template) => {
 			const pagesStore = usePagesStore()
 			return pagesStore.pageFilePath(template)
 		},
