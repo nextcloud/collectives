@@ -137,6 +137,8 @@ export default {
 	justify-content: center;
 
 	.template-item {
+		// Leave enough space for long titles that take two lines
+		height: 220px;
 		display: flex;
 
 		&-link {
@@ -167,6 +169,13 @@ export default {
 		&-title {
 			max-width: calc(var(--icon-size) + 2 * var(--icon-border));
 			padding: calc(var(--icon-gap) / 2);
+
+			// Ellipsize long titles after two lines
+			overflow: hidden;
+			display: -webkit-box;
+			line-clamp: 2;
+			-webkit-line-clamp: 2;
+			-webkit-box-orient: vertical;
 		}
 	}
 }
