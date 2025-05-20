@@ -54,7 +54,7 @@ export default {
 
 	computed: {
 		...mapState(usePagesStore, ['newPageParentId']),
-		...mapState(useTemplatesStore, ['templates']),
+		...mapState(useTemplatesStore, ['sortedTemplates']),
 
 		templateList() {
 			return [
@@ -63,7 +63,7 @@ export default {
 					id: null,
 					title: t('collectives', 'Blank page'),
 				},
-				...this.templates,
+				...this.sortedTemplates,
 			]
 		},
 
