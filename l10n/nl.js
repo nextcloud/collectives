@@ -3,7 +3,7 @@ OC.L10N.register(
     {
     "Add a collective" : "Voeg een collectief toe",
     "Recent pages" : "Recente pagina's",
-    "Collectives" : "Collectieven",
+    "Collectives" : "Collectives",
     "Landing page" : "Landingspagina",
     "{user} has mentioned you in {collective} - {page}" : "{user} heeft je vermeld in {collective} - {page}",
     "Collective pages" : "Collectief paginas",
