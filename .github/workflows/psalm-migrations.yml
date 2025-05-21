@@ -1,0 +1,82 @@
+# This workflow is provided via the organization template repository
+#
+# https://github.com/nextcloud/.github
+# https://docs.github.com/en/actions/learn-github-actions/sharing-workflows-with-your-organization
+#
+# SPDX-FileCopyrightText: 2022-2025 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: MIT
+
+name: Static analysis of migrations with latest release
+
+on: pull_request
+
+concurrency:
+  group: psalm-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  APP_NAME: ${{ github.event.repository.name }}
+  BRANCH: ${{ github.head_ref || github.ref_name }}
+
+jobs:
+  static-analysis:
+    runs-on: ubuntu-latest
+
+    name: static-psalm-analysis-migrations
+    steps:
+      - name: Fetch appstore repository
+        id: appstore_apps
+        run: curl -fL -o '${{ runner.temp }}/apps.json' https://apps.nextcloud.com/api/v1/apps.json
+
+      - name: Setup jq
+        uses: dcarbone/install-jq-action@f0e10f46ff84f4d32178b4b76e1ef180b16f82c3 # v3
+
+      - name: Get latest app release version
+        id: app_release_version
+        run: |
+          echo -n 'version=' >> $GITHUB_OUTPUT
+          jq -r '.[] | select(.id == "${{ env.APP_NAME }}") | .releases | max_by(.version | split(".") | map(tonumber)) | .download | split("/")[-2]' ${{ runner.temp }}/apps.json >> $GITHUB_OUTPUT
+
+      - name: Checkout release tag
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ steps.app_release_version.outputs.version }}
+          persist-credentials: false
+
+      - name: Checkout migrations from main branch
+        run: |
+          git fetch origin ${{ env.BRANCH }}
+          git checkout origin/${{ env.BRANCH }} -- lib/Migration
+
+      - name: Get php version
+        id: versions
+        uses: icewind1991/nextcloud-version-matrix@58becf3b4bb6dc6cef677b15e2fd8e7d48c0908f # v1.3.1
+
+      - name: Check enforcement of minimum PHP version ${{ steps.versions.outputs.php-min }} in psalm.xml
+        run: grep 'phpVersion="${{ steps.versions.outputs.php-min }}' psalm.xml
+
+      - name: Set up php${{ steps.versions.outputs.php-available }}
+        uses: shivammathur/setup-php@cf4cade2721270509d5b1c766ab3549210a39a2a # v2.33.0
+        with:
+          php-version: ${{ steps.versions.outputs.php-available }}
+          extensions: bz2, ctype, curl, dom, fileinfo, gd, iconv, intl, json, libxml, mbstring, openssl, pcntl, posix, session, simplexml, xmlreader, xmlwriter, zip, zlib, sqlite, pdo_sqlite
+          coverage: none
+          ini-file: development
+          # Temporary workaround for missing pcntl_* in PHP 8.3
+          ini-values: disable_functions=
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install dependencies
+        run: |
+          composer remove nextcloud/ocp --dev
+          composer i
+
+      - name: Install nextcloud/ocp
+        run: composer require --dev nextcloud/ocp:dev-${{ steps.versions.outputs.branches-max }} --ignore-platform-reqs --with-dependencies
+
+      - name: Run coding standards check
+        run: composer run psalm -- --threads=1 --monochrome --no-progress --output-format=github
