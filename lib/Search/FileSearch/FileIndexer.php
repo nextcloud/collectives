@@ -71,14 +71,15 @@ class FileIndexer extends TNTIndexer {
 	 * @throws FileSearchException
 	 */
 	public function run(array $pages = []): void {
-		if (!$this->getIndex()) {
+		$index = $this->getIndex();
+		if ($index === null) {
 			throw new FileSearchException('Indexing could not be performed because index is not selected.');
 		}
 
-		$this->getIndex()->exec('CREATE TABLE IF NOT EXISTS filemap (
+		$index->exec('CREATE TABLE IF NOT EXISTS filemap (
                     id INTEGER PRIMARY KEY,
                     path TEXT)');
-		$this->getIndex()->beginTransaction();
+		$index->beginTransaction();
 
 		$processedPages = 0;
 		foreach ($pages as $page) {
@@ -97,7 +98,7 @@ class FileIndexer extends TNTIndexer {
 				}
 				$this->processDocument($fileCollection);
 
-				$statement = $this->getIndex()->prepare("INSERT INTO filemap ( 'id', 'path') values ( :id, :path)");
+				$statement = $index->prepare("INSERT INTO filemap ( 'id', 'path') values ( :id, :path)");
 				$statement->bindParam(':id', $id);
 				$statement->bindParam(':path', $internalPath);
 				$statement->execute();
@@ -107,10 +108,10 @@ class FileIndexer extends TNTIndexer {
 				throw new FileSearchException('File indexer failed to open and/or read file', 0, $e);
 			}
 		}
-		$this->getIndex()->exec("UPDATE info SET `value`=$processedPages WHERE `key`='total_documents'");
-		$this->getIndex()->exec("INSERT INTO info ( 'key', 'value') values ( 'driver', 'filesystem')");
+		$index->exec("UPDATE info SET `value`=$processedPages WHERE `key`='total_documents'");
+		$index->exec("INSERT INTO info ( 'key', 'value') values ( 'driver', 'filesystem')");
 
-		$this->getIndex()->commit();
+		$index->commit();
 	}
 
 	public function getIndex(): ?PDO {
