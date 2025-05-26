@@ -210,6 +210,7 @@ class PublicPageController extends PublicShareController {
 	#[PublicPage]
 	#[AnonRateLimit(limit: 10, period: 10)]
 	public function moveOrCopy(int $id, ?int $parentId, ?string $title = null, ?int $index = 0, bool $copy = false): DataResponse {
+		$index = $index ?? 0;
 		return $this->handleErrorResponse(function () use ($id, $parentId, $title, $index, $copy): array {
 			$this->checkEditPermissions();
 			$owner = $this->getCollectiveShare()->getOwner();
