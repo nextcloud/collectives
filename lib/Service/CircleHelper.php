@@ -62,6 +62,7 @@ class CircleHelper {
 		}
 
 		try {
+			/** @psalm-suppress PossiblyNullReference - we check if circlesManager is null */
 			return $this->circlesManager->getFederatedUser($userId, Member::TYPE_USER);
 		} catch (CircleNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
@@ -108,6 +109,7 @@ class CircleHelper {
 			$circleProbe->mustBeMember();
 			$dataProbe = new DataProbe();
 			$dataProbe->add(DataProbe::INITIATOR);
+			/** @psalm-suppress PossiblyNullReference - we check if circlesManager is null */
 			$circles = self::useProbeCircles()
 				? $this->circlesManager->probeCircles($circleProbe, $dataProbe)
 				: $this->circlesManager->getCircles($circleProbe, true);
@@ -132,6 +134,7 @@ class CircleHelper {
 			} else {
 				$this->startSession($userId);
 			}
+			/** @psalm-suppress PossiblyNullReference - we check if circlesManager is null */
 			$circle = $this->circlesManager->getCircle($circleId);
 		} catch (CircleNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
@@ -167,8 +170,9 @@ class CircleHelper {
 	 * @throws NotPermittedException
 	 */
 	private function existsCircle(string $name): bool {
-		$this->circlesManager->startSuperSession();
+		$this->startSuperSession();
 		try {
+			/** @psalm-suppress PossiblyNullReference - we check if circlesManager is null */
 			$circles = self::useProbeCircles()
 				? $this->circlesManager->probeCircles()
 				: $this->circlesManager->getCircles();
@@ -199,6 +203,7 @@ class CircleHelper {
 				throw new CircleExistsException('A team with that name exists');
 			}
 			$this->startSession($userId);
+			/** @psalm-suppress PossiblyNullReference - we check if circlesManager is null */
 			$circle = $this->circlesManager->createCircle($name, null, false, false);
 		} catch (CircleNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
@@ -217,8 +222,9 @@ class CircleHelper {
 	 * @throws NotPermittedException
 	 */
 	public function flagCircleAsAppManaged(string $circleId): void {
-		$this->circlesManager->startSuperSession();
+		$this->startSuperSession();
 		try {
+			/** @psalm-suppress PossiblyNullReference - we check if circlesManager is null */
 			$this->circlesManager->flagAsAppManaged($circleId);
 		} catch (RequestBuilderException|
 		FederatedItemException $e) {
@@ -231,8 +237,9 @@ class CircleHelper {
 	 * @throws NotPermittedException
 	 */
 	public function unflagCircleAsAppManaged(string $circleId): void {
-		$this->circlesManager->startSuperSession();
+		$this->startSuperSession();
 		try {
+			/** @psalm-suppress PossiblyNullReference - we check if circlesManager is null */
 			$this->circlesManager->flagAsAppManaged($circleId, false);
 		} catch (RequestBuilderException|
 				 FederatedItemException $e) {
@@ -253,6 +260,7 @@ class CircleHelper {
 		try {
 			$this->unflagCircleAsAppManaged($circleId);
 			$this->startSession($userId);
+			/** @psalm-suppress PossiblyNullReference - we check if circlesManager is null */
 			$this->circlesManager->destroyCircle($circleId);
 		} catch (CircleNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
