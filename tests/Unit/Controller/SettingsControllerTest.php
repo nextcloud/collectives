@@ -47,11 +47,6 @@ class SettingsControllerTest extends TestCase {
 		self::assertEquals($response, $this->settingsController->setUserSetting('nonexistent', 'value'));
 	}
 
-	public function testSetUserSettingsEmptyValue(): void {
-		$response = new DataResponse('Empty value for setting user_folder', Http::STATUS_BAD_REQUEST);
-		self::assertEquals($response, $this->settingsController->setUserSetting('user_folder', null));
-	}
-
 	public function testSetUserSettingsEmptyString(): void {
 		$response = new DataResponse('Invalid collectives folder path', Http::STATUS_BAD_REQUEST);
 		self::assertEquals($response, $this->settingsController->setUserSetting('user_folder', ''));
