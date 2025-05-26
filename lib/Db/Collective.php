@@ -75,9 +75,9 @@ class Collective extends Entity implements JsonSerializable {
 	protected bool $userShowMembers = Collective::defaultShowMembers;
 	protected bool $userShowRecentPages = Collective::defaultShowRecentPages;
 	protected array $userFavoritePages = [];
-	protected ?bool $canLeave = null;
+	protected bool $canLeave = false;
 
-	public function getCircleId(): ?string {
+	public function getCircleId(): string {
 		return $this->getCircleUniqueId();
 	}
 
@@ -200,11 +200,11 @@ class Collective extends Entity implements JsonSerializable {
 		return $this->userFavoritePages;
 	}
 
-	public function getCanLeave(): ?bool {
+	public function getCanLeave(): bool {
 		return $this->canLeave;
 	}
 
-	public function setCanLeave(?bool $canLeave): void {
+	public function setCanLeave(bool $canLeave): void {
 		$this->canLeave = $canLeave;
 	}
 

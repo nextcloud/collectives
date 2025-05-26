@@ -10,22 +10,21 @@ declare(strict_types=1);
 namespace OCA\Collectives\Db;
 
 use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
 /**
- * @method Page insert(Entity $page)
- * @method Page update(Entity $page)
- * @method Page delete(Entity $page)
+ * @method Page insert(Page $page)
+ * @method Page update(Page $page)
+ * @method Page delete(Page $page)
  * @method Page findEntity(IQueryBuilder $query)
  * @template-extends QBMapper<Page>
  */
 class PageMapper extends QBMapper {
-	public function __construct(IDBConnection $db, ?string $entityClass = null) {
-		parent::__construct($db, 'collectives_pages', $entityClass);
+	public function __construct(IDBConnection $db) {
+		parent::__construct($db, 'collectives_pages', Page::class);
 	}
 
 	public function updateOrInsert(Page $page): Page {

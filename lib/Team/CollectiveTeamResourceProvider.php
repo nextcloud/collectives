@@ -65,7 +65,7 @@ class CollectiveTeamResourceProvider implements ITeamResourceProvider {
 
 	public function isSharedWithTeam(string $teamId, string $resourceId): bool {
 		$teamIds = $this->getTeamsForResource($resourceId);
-		return in_array($teamId, $teamIds);
+		return in_array($teamId, $teamIds, true);
 	}
 
 	public function getTeamsForResource(string $resourceId): array {
@@ -74,7 +74,6 @@ class CollectiveTeamResourceProvider implements ITeamResourceProvider {
 		} catch (NotFoundException|NotPermittedException) {
 			return [];
 		}
-		$circleId = $collective->getCircleId();
-		return $circleId === null ? [] : [$circleId];
+		return [$collective->getCircleId()];
 	}
 }
