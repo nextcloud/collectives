@@ -13,6 +13,7 @@ use Closure;
 
 use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\CollectiveShareService;
+use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\PageService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
@@ -36,8 +37,15 @@ class ShareController extends Controller {
 		parent::__construct($AppName, $request);
 	}
 
+	/**
+	 * @throws NotFoundException
+	 */
 	private function getUserId(): string {
-		return $this->userSession->getUser()->getUID();
+		$user = $this->userSession->getUser();
+		if ($user === null) {
+			throw new NotFoundException('Session user not found');
+		}
+		return $user->getUID();
 	}
 
 	private function prepareResponse(Closure $callback) : DataResponse {

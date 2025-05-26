@@ -12,6 +12,7 @@ namespace OCA\Collectives\Controller;
 use Closure;
 
 use OCA\Collectives\Service\CollectiveUserSettingsService;
+use OCA\Collectives\Service\NotFoundException;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\DataResponse;
@@ -32,8 +33,15 @@ class CollectiveUserSettingsController extends Controller {
 		parent::__construct($AppName, $request);
 	}
 
+	/**
+	 * @throws NotFoundException
+	 */
 	private function getUserId(): string {
-		return $this->userSession->getUser()->getUID();
+		$user = $this->userSession->getUser();
+		if ($user === null) {
+			throw new NotFoundException('Session user not found');
+		}
+		return $user->getUID();
 	}
 
 	private function prepareResponse(Closure $callback) : DataResponse {
