@@ -723,6 +723,10 @@ namespace OCA\Files_Versions\Versions {
 	use OCP\Files\Storage\IStorage;
 	use OCP\IUser;
 
+	interface IMetadataVersion {
+		public function getMetadataValue(string $key): ?string;
+	}
+
 	interface IVersionBackend {
 	    public function useBackendForStorage(IStorage $storage): bool;
 

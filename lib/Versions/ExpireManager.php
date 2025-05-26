@@ -11,6 +11,7 @@ namespace OCA\Collectives\Versions;
 
 use OCA\Collectives\Service\MissingDependencyException;
 use OCA\Files_Versions\Expiration;
+use OCA\Files_Versions\Versions\IMetadataVersion;
 use OCA\Files_Versions\Versions\IVersion;
 use OCP\AppFramework\QueryException;
 use Psr\Container\ContainerInterface;
@@ -50,6 +51,7 @@ class ExpireManager {
 		if (!$versions) {
 			return [];
 		}
+
 		$toDelete = []; // versions we want to delete
 
 		// ensure the versions are sorted by newest first
@@ -68,12 +70,15 @@ class ExpireManager {
 			while ($newInterval && $interval <= 5) {
 				if ($nextInterval === -1 || $prevTimestamp > $nextInterval) {
 					if ($version->getTimestamp() > $nextVersion) {
-						// distance between two versions is too small, mark to delete
-						$toDelete[] = $version;
+						// Do not expire versions with a label.
+						if (!($version instanceof IMetadataVersion) || $version->getMetadataValue('label') === null || $version->getMetadataValue('label') === '') {
+							$toDelete[] = $version;
+						}
 					} else {
 						$nextVersion = $version->getTimestamp() - $step;
 						$prevTimestamp = $version->getTimestamp();
 					}
+
 					$newInterval = false; // version checked so we can move to the next one
 				} else { // time to move on to the next interval
 					$interval++;
@@ -85,6 +90,7 @@ class ExpireManager {
 					} else {
 						$nextInterval = $time - self::MAX_VERSIONS_PER_INTERVAL[$interval]['intervalEndsAfter'];
 					}
+
 					$newInterval = true; // we changed the interval -> check same version with new interval
 				}
 			}
@@ -94,6 +100,8 @@ class ExpireManager {
 	}
 
 	/**
+	 * @param IVersion[] $versions
+	 * @return IVersion[]
 	 * @throws MissingDependencyException
 	 */
 	public function getExpiredVersion(array $versions, int $time, bool $quotaExceeded): array {
@@ -110,7 +118,18 @@ class ExpireManager {
 		$versionsLeft = array_udiff($versions, $autoExpire, static fn (IVersion $a, IVersion $b) => ($a->getRevisionId() <=> $b->getRevisionId()) *
 			($a->getSourceFile()->getId() <=> $b->getSourceFile()->getId()));
 
-		$expired = array_filter($versionsLeft, fn (IVersion $version) => $this->expiration->isExpired($version->getTimestamp(), $quotaExceeded));
+		$expired = array_filter($versionsLeft, function (IVersion $version) use ($quotaExceeded) {
+			// Do not expire current version.
+			if ($version->getTimestamp() === $version->getSourceFile()->getMtime()) {
+				return false;
+			}
+
+			// Do not expire versions with a label.
+			if ($version instanceof IMetadataVersion && $version->getMetadataValue('label') !== null && $version->getMetadataValue('label') !== '') {
+				return false;
+			}
+			$this->expiration->isExpired($version->getTimestamp(), $quotaExceeded);
+		});
 
 		return array_merge($autoExpire, $expired);
 	}
