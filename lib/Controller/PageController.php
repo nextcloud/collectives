@@ -111,6 +111,7 @@ class PageController extends Controller {
 
 	#[NoAdminRequired]
 	public function moveOrCopy(int $collectiveId, int $id, ?int $parentId = null, ?string $title = null, ?int $index = 0, bool $copy = false): DataResponse {
+		$index = $index ?? 0;
 		return $this->handleErrorResponse(function () use ($collectiveId, $id, $parentId, $title, $index, $copy): array {
 			$userId = $this->getUserId();
 			$pageInfo = $copy
@@ -124,6 +125,7 @@ class PageController extends Controller {
 
 	#[NoAdminRequired]
 	public function moveOrCopyToCollective(int $collectiveId, int $id, int $newCollectiveId, ?int $parentId = null, ?int $index = 0, bool $copy = false): DataResponse {
+		$index = $index ?? 0;
 		return $this->handleErrorResponse(function () use ($collectiveId, $id, $newCollectiveId, $parentId, $index, $copy): array {
 			$userId = $this->getUserId();
 			if ($copy) {
