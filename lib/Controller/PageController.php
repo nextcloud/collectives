@@ -11,6 +11,7 @@ namespace OCA\Collectives\Controller;
 
 use OCA\Collectives\Service\AttachmentService;
 use OCA\Collectives\Service\CollectiveService;
+use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\PageService;
 use OCA\Collectives\Service\SearchService;
 use OCP\AppFramework\Controller;
@@ -36,8 +37,15 @@ class PageController extends Controller {
 		parent::__construct($appName, $request);
 	}
 
+	/**
+	 * @throws NotFoundException
+	 */
 	private function getUserId(): string {
-		return $this->userSession->getUser()->getUID();
+		$user = $this->userSession->getUser();
+		if ($user === null) {
+			throw new NotFoundException('Session user not found');
+		}
+		return $user->getUID();
 	}
 
 	#[NoAdminRequired]

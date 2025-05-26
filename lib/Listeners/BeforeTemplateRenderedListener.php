@@ -44,9 +44,7 @@ class BeforeTemplateRenderedListener implements IEventListener {
 			Util::addStyle('collectives', 'collectives');
 
 			// Get Collectives user folder for users
-			$userId = $this->userSession->getUser()
-				? $this->userSession->getUser()->getUID()
-				: null;
+			$userId = $this->userSession->getUser()?->getUID();
 			$userFolder = $this->userFolderHelper->getUserFolderSetting($userId);
 		}
 

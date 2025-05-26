@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Controller;
 
+use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\PageService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
@@ -33,8 +34,15 @@ class PageTrashController extends Controller {
 		$this->userSession = $userSession;
 	}
 
+	/**
+	 * @throws NotFoundException
+	 */
 	private function getUserId(): string {
-		return $this->userSession->getUser()->getUID();
+		$user = $this->userSession->getUser();
+		if ($user === null) {
+			throw new NotFoundException('Session user not found');
+		}
+		return $user->getUID();
 	}
 
 	#[NoAdminRequired]

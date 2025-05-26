@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Controller;
 
+use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\TemplateService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
@@ -30,8 +31,15 @@ class TemplateController extends Controller {
 		parent::__construct($appName, $request);
 	}
 
+	/**
+	 * @throws NotFoundException
+	 */
 	private function getUserId(): string {
-		return $this->userSession->getUser()->getUID();
+		$user = $this->userSession->getUser();
+		if ($user === null) {
+			throw new NotFoundException('Session user not found');
+		}
+		return $user->getUID();
 	}
 
 	#[NoAdminRequired]

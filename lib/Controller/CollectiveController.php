@@ -14,6 +14,7 @@ use Closure;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Service\CollectiveService;
+use OCA\Collectives\Service\NotFoundException;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\DataResponse;
@@ -38,8 +39,15 @@ class CollectiveController extends Controller {
 		parent::__construct($AppName, $request);
 	}
 
+	/**
+	 * @throws NotFoundException
+	 */
 	private function getUserId(): string {
-		return $this->userSession->getUser()->getUID();
+		$user = $this->userSession->getUser();
+		if ($user === null) {
+			throw new NotFoundException('Session user not found');
+		}
+		return $user->getUID();
 	}
 
 	private function getUserLang(): string {
