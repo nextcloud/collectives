@@ -109,7 +109,7 @@ class CollectiveFolderManager {
 
 		// apply acl before jail
 		if ($user) {
-			$inShare = $this->getCurrentUID() === null || $this->getCurrentUID() !== $user->getUID();
+			$inShare = !\OC::$CLI && ($this->getCurrentUID() === null || $this->getCurrentUID() !== $user->getUID());
 			$storage = new ACLStorageWrapper([
 				'storage' => $storage,
 				'permissions' => $permissions,
