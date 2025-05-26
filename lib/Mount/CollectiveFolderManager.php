@@ -11,6 +11,7 @@ namespace OCA\Collectives\Mount;
 
 use Exception;
 use OC;
+use OC\Files\Node\LazyFolder;
 use OC\Files\Storage\Wrapper\Jail;
 use OC\Files\Storage\Wrapper\PermissionsMask;
 use OCA\Collectives\ACL\ACLStorageWrapper;
@@ -28,7 +29,6 @@ use OCP\IDBConnection;
 use OCP\IRequest;
 use OCP\IUser;
 use OCP\IUserSession;
-use RuntimeException;
 
 class CollectiveFolderManager {
 	private const SKELETON_DIR = 'skeleton';
@@ -37,6 +37,7 @@ class CollectiveFolderManager {
 
 	private ?string $rootPath = null;
 	private ?int $rootFolderId = null;
+	private ?Folder $collectivesRootFolder = null;
 
 	public function __construct(
 		private IRootFolder $rootFolder,
@@ -47,22 +48,40 @@ class CollectiveFolderManager {
 	) {
 	}
 
+	private function getAppdataPath(): string {
+		$instanceId = $this->config->getSystemValueString('instanceid');
+		return 'appdata_' . $instanceId;
+	}
+
 	public function getRootPath(): string {
 		if ($this->rootPath !== null) {
 			return $this->rootPath;
 		}
 
-		$instanceId = $this->config->getSystemValue('instanceid', null);
-		if ($instanceId === null) {
-			throw new RuntimeException('no instance id!');
-		}
-
-		$this->rootPath = 'appdata_' . $instanceId . '/collectives';
+		$this->rootPath = $this->getAppdataPath() . '/collectives';
 		return $this->rootPath;
 	}
 
 	public function getRootFolder(): Folder {
-		return new LazyFolder($this->rootFolder, $this->getRootPath());
+		if ($this->collectivesRootFolder !== null) {
+			return $this->collectivesRootFolder;
+		}
+
+		$rootFolder = $this->rootFolder;
+		$appdataPath = $this->getAppdataPath();
+		$this->collectivesRootFolder = new LazyFolder($rootFolder, function () use ($rootFolder, $appdataPath) {
+			/** @var Folder $appdata */
+			$appdata = $rootFolder->get($appdataPath);
+			try {
+				return $appdata->get('/collectives');
+			} catch (NotFoundException) {
+				return $appdata->newFolder('collectives');
+			}
+		}, [
+			'path' => '/' . $this->getRootPath(),
+		]);
+
+		return $this->collectivesRootFolder;
 	}
 
 	private function getCurrentUID(): ?string {
