@@ -133,6 +133,7 @@ class ExpireManager {
 			if ($version instanceof IMetadataVersion && $version->getMetadataValue('label') !== null && $version->getMetadataValue('label') !== '') {
 				return false;
 			}
+			/** @psalm-suppress PossiblyNullReference - we checked if $this->expiration is null above */
 			return $this->expiration->isExpired($version->getTimestamp(), $quotaExceeded);
 		});
 

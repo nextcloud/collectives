@@ -159,7 +159,7 @@ class CollectiveFolderManager {
 				->where($qb->expr()->eq('storage', $qb->createNamedParameter($this->getRootFolderStorageId())))
 				->andWhere($qb->expr()->eq('path_hash', $qb->createNamedParameter(md5($this->getRootPath()))));
 
-			$this->rootFolderId = (int)$qb->execute()->fetchColumn();
+			$this->rootFolderId = (int)$qb->executeQuery()->fetchColumn();
 		}
 
 		return $this->rootFolderId;
@@ -206,7 +206,7 @@ class CollectiveFolderManager {
 			->where($qb->expr()->eq('co.id', $qb->createNamedParameter($id)))
 			->andWhere($qb->expr()->eq('fc.parent', $qb->createNamedParameter($this->getRootFolderId())))
 			->andWhere($qb->expr()->eq('fc.storage', $qb->createNamedParameter($this->getRootFolderStorageId(), IQueryBuilder::PARAM_INT)));
-		$cache = $qb->execute()->fetch();
+		$cache = $qb->executeQuery()->fetch();
 		$cache['mount_point'] = $name;
 		return $cache;
 	}
