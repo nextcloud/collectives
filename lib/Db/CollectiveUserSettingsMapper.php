@@ -31,12 +31,9 @@ class CollectiveUserSettingsMapper extends QBMapper {
 	 * Provide our own implementation of `insertOrUpdate` as the one from QBMapper throws
 	 * `REASON_NOT_NULL_CONSTRAINT_VIOLATION` for existing entities.
 	 *
-	 * TODO: Migrate to using `CollectiveUserSettings` in type hints once we drop PHP7.3.
-	 *
-	 * @return CollectiveUserSettings
 	 * @throws Exception
 	 */
-	public function insertOrUpdate(Entity $entity): Entity {
+	public function insertOrUpdate(CollectiveUserSettings|Entity $entity): CollectiveUserSettings {
 		if ($entity->getId() === null) {
 			return $this->insert($entity);
 		}

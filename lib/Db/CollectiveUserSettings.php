@@ -36,7 +36,7 @@ class CollectiveUserSettings extends Entity implements JsonSerializable {
 	protected ?int $collectiveId = null;
 	protected ?string $userId = null;
 	protected int $pageOrder = Collective::defaultPageOrder;
-	protected ?string $settings = '{}';
+	protected string $settings = '{}';
 
 	/**
 	 * @throws NotPermittedException
@@ -52,7 +52,7 @@ class CollectiveUserSettings extends Entity implements JsonSerializable {
 	 * @throws NotPermittedException
 	 * @throws JsonException
 	 */
-	public function getSetting(string $setting) {
+	public function getSetting(string $setting): mixed {
 		self::checkSetting($setting);
 		return json_decode($this->settings, true, 512, JSON_THROW_ON_ERROR)[$setting] ?? null;
 	}

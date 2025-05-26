@@ -75,7 +75,7 @@ class SettingsController extends OCSController {
 	}
 
 	#[NoAdminRequired]
-	public function setUserSetting(string $key, ?string $value): DataResponse {
+	public function setUserSetting(string $key, string $value): DataResponse {
 		return $this->prepareResponse(function () use ($key, $value): ?string {
 			$this->validateSetUserSetting($key, $value);
 			$this->config->setUserValue($this->userId, 'collectives', $key, $value);
