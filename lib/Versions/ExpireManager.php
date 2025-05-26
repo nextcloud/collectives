@@ -57,11 +57,7 @@ class ExpireManager {
 
 		$interval = 1;
 		$step = self::MAX_VERSIONS_PER_INTERVAL[$interval]['step'];
-		if (self::MAX_VERSIONS_PER_INTERVAL[$interval]['intervalEndsAfter'] === -1) {
-			$nextInterval = -1;
-		} else {
-			$nextInterval = $time - self::MAX_VERSIONS_PER_INTERVAL[$interval]['intervalEndsAfter'];
-		}
+		$nextInterval = $time - self::MAX_VERSIONS_PER_INTERVAL[$interval]['intervalEndsAfter'];
 
 		$firstVersion = array_shift($versions);
 		$prevTimestamp = $firstVersion->getTimestamp();
@@ -81,6 +77,7 @@ class ExpireManager {
 					$newInterval = false; // version checked so we can move to the next one
 				} else { // time to move on to the next interval
 					$interval++;
+					/** @psalm-suppress InvalidArrayOffset We know that $interval is <= 6 thanks to the -1 intervalEndsAfter in the last step */
 					$step = self::MAX_VERSIONS_PER_INTERVAL[$interval]['step'];
 					$nextVersion = $prevTimestamp - $step;
 					if (self::MAX_VERSIONS_PER_INTERVAL[$interval]['intervalEndsAfter'] === -1) {
