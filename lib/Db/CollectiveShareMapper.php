@@ -28,6 +28,9 @@ class CollectiveShareMapper extends QBMapper {
 		parent::__construct($db, 'collectives_shares', CollectiveShare::class);
 	}
 
+	/**
+	 * @return CollectiveShare[]
+	 */
 	public function findByCollectiveId(int $collectiveId): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
@@ -39,6 +42,7 @@ class CollectiveShareMapper extends QBMapper {
 	}
 
 	/**
+	 * @return CollectiveShare[]
 	 * @throws Exception
 	 */
 	public function findByCollectiveIdAndUser(int $collectiveId, string $userId): array {

@@ -231,9 +231,7 @@ class CollectiveShareService {
 			$pageId = $pageInfo->getId();
 		}
 
-		if (null === $share = $this->collectiveShareMapper->findOneByCollectiveIdAndTokenAndUser($collective->getId(), $pageId, $token, $userId)) {
-			throw new NotFoundException($this->l10n->t('Share not found for user'));
-		}
+		$share = $this->collectiveShareMapper->findOneByCollectiveIdAndTokenAndUser($collective->getId(), $pageId, $token, $userId);
 
 		try {
 			$folderShare = $this->shareManager->getShareByToken($token);
