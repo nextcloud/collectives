@@ -90,6 +90,7 @@ class MigrateTemplates implements IRepairStep {
 	 */
 	private function getTemplateFolder(Folder $collectiveFolder): Folder {
 		try {
+			/** @var Folder $templateFolder */
 			$templateFolder = $collectiveFolder->get(self::TEMPLATE_FOLDER);
 		} catch (FilesNotFoundException) {
 			// Create missing template folder
