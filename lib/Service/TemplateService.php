@@ -78,7 +78,7 @@ class TemplateService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function create(int $collectiveId, ?int $parentId, string $title, string $userId): PageInfo {
+	public function create(int $collectiveId, int $parentId, string $title, string $userId): PageInfo {
 		$parentId = $parentId !== 0
 			? $parentId
 			: PageService::getIndexPageFile($this->getTemplateFolder($collectiveId, $userId))->getId();
