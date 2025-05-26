@@ -191,7 +191,7 @@ class PageInfo implements JsonSerializable {
 		}
 		$this->setFilePath($dirName);
 		$this->setTimestamp($file->getMTime());
-		$this->setSize($file->getSize());
+		$this->setSize((int)$file->getSize());
 		$this->setFileName($file->getName());
 		$mountPoint = explode('/', $file->getMountPoint()->getMountPoint(), 4);
 		if (count($mountPoint) >= 4) {
