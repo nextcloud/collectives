@@ -28,7 +28,6 @@ use OCP\IDBConnection;
 use OCP\IRequest;
 use OCP\IUser;
 use OCP\IUserSession;
-use OCP\Util;
 use RuntimeException;
 
 class CollectiveFolderManager {
@@ -99,6 +98,9 @@ class CollectiveFolderManager {
 				return null;
 			}
 			$cacheEntry = $this->getRootFolder()->getStorage()->getCache()->get($folder->getId());
+			if ($cacheEntry === false) {
+				return null;
+			}
 		}
 
 		$storage = new NoExcludePropagatorStorageWrapper(['storage' => $this->getRootFolder()->getStorage()]);
@@ -108,7 +110,6 @@ class CollectiveFolderManager {
 		// apply acl before jail
 		if ($user) {
 			$inShare = $this->getCurrentUID() === null || $this->getCurrentUID() !== $user->getUID();
-			[$major, $minor, $micro] = Util::getVersion();
 			$storage = new ACLStorageWrapper([
 				'storage' => $storage,
 				'permissions' => $permissions,
@@ -231,6 +232,7 @@ class CollectiveFolderManager {
 		try {
 			$folder = $this->getFolder($id);
 		} catch (NotFoundException) {
+			/** @var Folder $folder */
 			$folder = $this->getSkeletonFolder($this->getRootFolder())
 				->copy($this->getRootFolder()->getPath() . '/' . $id);
 		}
