@@ -15,6 +15,8 @@ use OC\Files\ObjectStore\ObjectStoreScanner;
 use OC\Files\ObjectStore\ObjectStoreStorage;
 use OC\Files\Storage\Wrapper\Wrapper;
 use OCP\Files\Cache\ICacheEntry;
+use OCP\Files\Cache\IScanner;
+use OCP\Files\Storage\IStorage;
 use OCP\IUser;
 
 class CollectiveStorage extends Wrapper {
@@ -64,7 +66,7 @@ class CollectiveStorage extends Wrapper {
 	 * @param string $path
 	 * @param null $storage
 	 */
-	public function getScanner($path = '', $storage = null): Scanner {
+	public function getScanner($path = '', $storage = null): IScanner {
 		if (!$storage) {
 			$storage = $this;
 		}
