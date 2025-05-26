@@ -208,6 +208,7 @@ namespace OC\Files {
 		 */
 		public function __construct($path, $storage, $internalPath, $data, $mount, $owner = null) {}
 	}
+
 	class View {
 		public function __construct(string $path) {}
 		public function unlink($path) {}
@@ -274,6 +275,18 @@ namespace OC\BackgroundJob {
 
 		public function getArgument() {
 		}
+	}
+}
+
+namespace OC\Files\Node {
+	use OCP\Files\Folder;
+	use OCP\Files\IRootFolder;
+
+	class LazyFolder implements Folder {
+		protected IRootFolder $rootFolder;
+		protected array $data;
+
+		public function __construct(IRootFolder $rootFolder, \Closure $folderClosure, array $data = [])
 	}
 }
 
