@@ -71,7 +71,7 @@ class ExpireManager {
 
 		foreach ($versions as $version) {
 			$newInterval = true;
-			while ($newInterval && $interval <= 5) {
+			while ($newInterval) {
 				if ($nextInterval === -1 || $prevTimestamp > $nextInterval) {
 					if ($version->getTimestamp() > $nextVersion) {
 						// Do not expire versions with a label.
