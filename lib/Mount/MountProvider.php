@@ -89,9 +89,6 @@ class MountProvider implements IMountProvider {
 		return $folders;
 	}
 
-	/**
-	 * @return IMountPoint[]|null[]
-	 */
 	public function getMountsForUser(IUser $user, IStorageFactory $loader): array {
 		if (!$this->isEnabledForUser($user)) {
 			return [];
@@ -99,14 +96,14 @@ class MountProvider implements IMountProvider {
 
 		$folders = $this->getFoldersForUser($user);
 		try {
-			return array_map(fn ($folder) => $this->collectiveFolderManager->getMount(
+			return array_filter(array_map(fn ($folder): ?IMountPoint => $this->collectiveFolderManager->getMount(
 				$folder['folder_id'],
 				'/' . $user->getUID() . '/files/' . $folder['mount_point'],
 				$folder['permissions'],
 				$folder['rootCacheEntry'],
 				$loader,
 				$user
-			), $folders);
+			), $folders));
 		} catch (FilesNotFoundException|\Exception $e) {
 			$this->log($e);
 			return [];
