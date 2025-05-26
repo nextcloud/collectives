@@ -647,7 +647,7 @@ namespace OCA\Circles\Model {
 	    public function getName(): string {}
 	    public function getSingleId(): string {}
 	    public function getSanitizedName(): string {}
-	    public function getMembers(): array {}
+		public function getMembers(int $limit = 0): array {}
 	    public function getInitiator(): Member {}
 	}
 
@@ -709,7 +709,7 @@ namespace OCA\Circles {
 	    public function stopSession(): void {}
 		public function createCircle(string $name, ?FederatedUser $owner = null, bool $personal = false, bool $local = false): Circle {}
 	    public function destroyCircle(string $singleId): void {}
-	    public function getCircles(?CircleProbe $probe = null): array {}
+		public function getCircles(?CircleProbe $probe = null, bool $refreshCache = false): array {}
 	    public function getCircle(string $singleId, ?CircleProbe $probe = null): Circle {}
 	    public function flagAsAppManaged(string $circleId, bool $enabled = true): void {}
 	    public function probeCircles(?CircleProbe $circleProbe = null, ?DataProbe $dataProbe = null): array {}
