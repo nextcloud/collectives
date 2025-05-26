@@ -40,6 +40,10 @@ class TextMentionListener implements IEventListener {
 			return;
 		}
 
+		if (!$this->userId) {
+			return;
+		}
+
 		$collective = $this->collectiveService->getCollective($mountPoint->getFolderId(), $this->userId);
 		$pageInfo = $this->pageService->findByFile($mountPoint->getFolderId(), $event->getFile(), $this->userId);
 

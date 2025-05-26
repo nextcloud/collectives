@@ -11,6 +11,7 @@ namespace OCA\Collectives\Listeners;
 
 use OCA\Collectives\AppInfo\Application;
 use OCA\Collectives\Fs\UserFolderHelper;
+use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
 use OCA\Text\Event\LoadEditor;
 use OCP\AppFramework\Http\Events\BeforeTemplateRenderedEvent;
@@ -45,6 +46,9 @@ class BeforeTemplateRenderedListener implements IEventListener {
 
 			// Get Collectives user folder for users
 			$userId = $this->userSession->getUser()?->getUID();
+			if ($userId === null) {
+				throw new NotFoundException('Session user not found');
+			}
 			$userFolder = $this->userFolderHelper->getUserFolderSetting($userId);
 		}
 
