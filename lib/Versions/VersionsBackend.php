@@ -62,7 +62,7 @@ class VersionsBackend implements IVersionBackend {
 						(int)$versionFile->getName(),
 						(int)$versionFile->getName(),
 						$file->getName(),
-						$versionFile->getSize(),
+						(int)$versionFile->getSize(),
 						$versionFile->getMimetype(),
 						$versionFile->getPath(),
 						$file,
