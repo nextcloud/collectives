@@ -26,10 +26,11 @@ class CollectiveVersion extends Version {
 		FileInfo $sourceFileInfo,
 		IVersionBackend $backend,
 		IUser $user,
+		array $metadata,
 		private File $versionFile,
 		private int $folderId,
 	) {
-		parent::__construct($timestamp, $revisionId, $name, $size, $mimetype, $path, $sourceFileInfo, $backend, $user);
+		parent::__construct($timestamp, $revisionId, $name, $size, $mimetype, $path, $sourceFileInfo, $backend, $user, $metadata);
 	}
 
 	public function getVersionFile(): File {

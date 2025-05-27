@@ -29,9 +29,4 @@
       <code><![CDATA[OC_Util]]></code>
     </UndefinedClass>
   </file>
-  <file src="lib/Versions/VersionsBackend.php">
-    <UndefinedInterfaceMethod>
-      <code><![CDATA[getDirectoryListing]]></code>
-    </UndefinedInterfaceMethod>
-  </file>
 </files>
