@@ -44,12 +44,11 @@
 			:order="3"
 			:name="t('collectives', 'Versions')">
 			<template #icon>
-				<RestoreIcon :size="20" />
+				<BackupRestoreIcon :size="20" />
 			</template>
 			<SidebarTabVersions v-if="showing('sidebar')"
 				:page-id="currentPage.id"
-				:page-timestamp="currentPage.timestamp"
-				:page-size="currentPage.size" />
+				:page-timestamp="currentPage.timestamp" />
 		</NcAppSidebarTab>
 	</NcAppSidebar>
 </template>
@@ -61,7 +60,7 @@ import { useCollectivesStore } from '../stores/collectives.js'
 import { usePagesStore } from '../stores/pages.js'
 import { useVersionsStore } from '../stores/versions.js'
 import { NcAppSidebar, NcAppSidebarTab } from '@nextcloud/vue'
-import RestoreIcon from 'vue-material-design-icons/Restore.vue'
+import BackupRestoreIcon from 'vue-material-design-icons/BackupRestore.vue'
 import ArrowBottomLeftIcon from 'vue-material-design-icons/ArrowBottomLeft.vue'
 import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue'
 import ShareVariantIcon from 'vue-material-design-icons/ShareVariant.vue'
@@ -77,7 +76,7 @@ export default {
 	components: {
 		NcAppSidebar,
 		NcAppSidebarTab,
-		RestoreIcon,
+		BackupRestoreIcon,
 		ArrowBottomLeftIcon,
 		PaperclipIcon,
 		ShareVariantIcon,
