@@ -28,7 +28,7 @@
 			<NcButton :title="t('collectives', 'Restore this version')"
 				:aria-label="t('collectives', 'Restore this version')"
 				class="titleform-button"
-				@click="revertVersion">
+				@click="onRestoreVersion">
 				<template #icon>
 					<RestoreIcon :size="20" />
 				</template>
@@ -56,10 +56,6 @@ import editorMixin from '../mixins/editorMixin.js'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import pageContentMixin from '../mixins/pageContentMixin.js'
 
-import { getCurrentUser } from '@nextcloud/auth'
-import axios from '@nextcloud/axios'
-import { showError, showSuccess } from '@nextcloud/dialogs'
-import { generateRemoteUrl } from '@nextcloud/router'
 import { mapActions, mapState } from 'pinia'
 import { useRootStore } from '../stores/root.js'
 import { usePagesStore } from '../stores/pages.js'
@@ -94,7 +90,7 @@ export default {
 
 	computed: {
 		...mapState(useRootStore, ['loading']),
-		...mapState(useVersionsStore, ['version']),
+		...mapState(useVersionsStore, ['selectedVersion']),
 		...mapState(usePagesStore, [
 			'currentPage',
 			'title',
@@ -113,27 +109,17 @@ export default {
 			return isMobile ? 25 : 30
 		},
 
-		restoreFolderUrl() {
-			return generateRemoteUrl(
-				`dav/versions/${this.getUser}/restore/${this.currentPage.id}`,
-			)
-		},
-
-		getUser() {
-			return getCurrentUser().uid
-		},
-
 		versionTitle() {
-			return `${this.title} (${this.version.relativeTimestamp})`
+			return `${this.title} (${this.selectedVersion.basename})`
 		},
 
 		contentLoaded() {
-			return !!this.davContent || !this.loading(`version-${this.currentPage.id}-${this.version.timestamp}`)
+			return !!this.davContent || !this.loading(`version-${this.currentPage.id}-${this.selectedVersion.mtime}`)
 		},
 	},
 
 	watch: {
-		'version.timestamp'() {
+		'selectedVersion.mtime'() {
 			this.davContent = ''
 			this.getPageContent()
 		},
@@ -147,7 +133,11 @@ export default {
 
 	methods: {
 		...mapActions(useRootStore, ['done', 'hide', 'load']),
-		...mapActions(useVersionsStore, ['getVersions', 'selectVersion']),
+		...mapActions(useVersionsStore, [
+			'getVersions',
+			'restoreVersion',
+			'selectVersion',
+		]),
 
 		closeVersions() {
 			this.selectVersion(null)
@@ -156,36 +146,15 @@ export default {
 		/**
 		 * Revert page to an old version
 		 */
-		async revertVersion() {
-			const target = this.version
-			try {
-				await axios({
-					method: 'MOVE',
-					url: target.downloadUrl,
-					headers: {
-						Destination: this.restoreFolderUrl,
-					},
-				})
-				this.selectVersion(null)
-				this.getVersions(this.currentPage.id)
-				showSuccess(t('collectives', 'Reverted {page} to revision {timestamp}.', {
-					page: this.currentPage.title,
-					timestamp: target.relativeTimestamp,
-				}))
-			} catch (e) {
-				showError(t('collectives', 'Failed to revert {page} to revision {timestamp}.', {
-					page: this.currentPage.title,
-					timestamp: target.relativeTimestamp,
-				}))
-				console.error('Failed to move page to restore folder', e)
-			}
+		async onRestoreVersion() {
+			this.restoreVersion(this.selectedVersion)
 		},
 
 		async getPageContent() {
-			this.load(`version-${this.currentPage.id}-${this.version.timestamp}`)
-			this.davContent = await this.fetchPageContent(this.version.downloadUrl)
+			this.load(`version-${this.currentPage.id}-${this.selectedVersion.mtime}`)
+			this.davContent = await this.fetchPageContent(this.selectedVersion.url)
 			this.reader?.setContent(this.davContent)
-			this.done(`version-${this.currentPage.id}-${this.version.timestamp}`)
+			this.done(`version-${this.currentPage.id}-${this.selectedVersion.mtime}`)
 		},
 	},
 }
