@@ -8,7 +8,7 @@
 		<div v-if="loading('pagelist') || loading('currentPage')" class="sheet-view">
 			<SkeletonLoading :count="1" class="page-heading-skeleton" type="page-heading" />
 		</div>
-		<PageVersion v-else-if="currentPage && version" />
+		<PageVersion v-else-if="currentPage && selectedVersion" />
 		<Page v-else-if="currentPage" />
 		<PageNotFound v-else />
 	</NcAppContentDetails>
@@ -72,7 +72,7 @@ export default {
 			'currentPage',
 			'pagePath',
 		]),
-		...mapState(useVersionsStore, ['version']),
+		...mapState(useVersionsStore, ['selectedVersion']),
 
 		notFound() {
 			return !this.loading('pagelist') && !this.loading('currentPage') && !this.currentPage
