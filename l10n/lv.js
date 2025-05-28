@@ -1,7 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
-    "You are not allowed to share %s" : "Jums nav atļauts dalīties %s",
+    "You are not allowed to share %s" : "Tev nav ļauts kopīgot %s",
     "Share link" : "Koplietot saiti",
     "Settings" : "Iestatījumi",
     "Members" : "Biedri",
