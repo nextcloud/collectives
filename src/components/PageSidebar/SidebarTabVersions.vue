@@ -20,47 +20,21 @@
 		</NcEmptyContent>
 
 		<!-- versions list -->
-		<div v-else-if="!loading('versions') && versions.length">
-			<ul class="version-list">
-				<span :title="pageFormattedTimestamp">
-					<NcListItem :name="t('collectives', 'Current version')"
-						class="version"
-						:class="{'active': !version}"
-						:active="!version"
-						@click="clickPreviewVersion(null)">
-						<template #icon>
-							<PageIcon :size="26"
-								fill-color="var(--color-main-background)"
-								class="item-icon item-icon__page" />
-						</template>
-						<template #subname>
-							{{ pageHumanReadableSize }}
-						</template>
-					</NcListItem>
-				</span>
-				<span v-for="v in versions"
-					:key="v.downloadUrl"
-					:title="v.formattedTimestamp">
-					<NcListItem :name="v.relativeTimestamp"
-						class="version"
-						:class="{'active': selected(v)}"
-						:active="selected(v)"
-						@click="clickPreviewVersion(v)">
-						<template #icon>
-							<NcLoadingIcon v-if="loading(`version-${pageId}-${v.timestamp}`)"
-								:size="26"
-								fill-color="var(--color-main-background)"
-								class="item-icon item-icon__loading" />
-							<PageIcon v-else
-								:size="26"
-								fill-color="var(--color-main-background)"
-								class="item-icon item-icon__page" />
-						</template>
-						<template #subname>
-							{{ v.humanReadableSize }}
-						</template>
-					</NcListItem>
-				</span>
+		<div v-else-if="!loading('versions') && sortedVersions.length">
+			<ul :aria-label="t('collectives', 'Page versions')" class="version-list">
+				<Version v-for="version in sortedVersions"
+					:key="version.mtime"
+					:version="version"
+					:is-current="isCurrent(version.mtime)"
+					:is-selected="isSelected(version.mtime)"
+					:is-first-version="version.mtime === initialVersionMtime"
+					:is-loading="loading(`version-${pageId}-${version.mtime}`)"
+					:can-edit="currentCollectiveCanEdit"
+					@click="onOpenVersion(version)"
+					@start-label-update="onStartLabelUpdate(version)"
+					@compare="onCompareVersion(version)"
+					@restore="onRestoreVersion(version)"
+					@delete="onDeleteVersion(version)" />
 			</ul>
 		</div>
 
@@ -69,22 +43,27 @@
 			:name="t('collectives', 'No other versions available')"
 			:description="t( 'collectives', 'After editing you can find old versions of the page here.')">
 			<template #icon>
-				<RestoreIcon />
+				<BackupRestoreIcon />
 			</template>
 		</NcEmptyContent>
+		<VersionLabelDialog v-if="editedVersion"
+			:open.sync="showVersionLabelForm"
+			:version-label="editedVersion.label"
+			@label-update="onLabelUpdate" />
 	</div>
 </template>
 
 <script>
 import { mapActions, mapState } from 'pinia'
 import { useRootStore } from '../../stores/root.js'
+import { useCollectivesStore } from '../../stores/collectives.js'
 import { useVersionsStore } from '../../stores/versions.js'
-import { formatFileSize } from '@nextcloud/files'
-import { NcEmptyContent, NcListItem, NcLoadingIcon } from '@nextcloud/vue'
-import moment from '@nextcloud/moment'
+
+import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagon.vue'
-import RestoreIcon from 'vue-material-design-icons/Restore.vue'
-import PageIcon from '../Icon/PageIcon.vue'
+import BackupRestoreIcon from 'vue-material-design-icons/BackupRestore.vue'
+import Version from './Version.vue'
+import VersionLabelDialog from './VersionLabelDialog.vue'
 
 export default {
 	name: 'SidebarTabVersions',
@@ -92,10 +71,10 @@ export default {
 	components: {
 		AlertOctagonIcon,
 		NcEmptyContent,
-		NcListItem,
 		NcLoadingIcon,
-		PageIcon,
-		RestoreIcon,
+		BackupRestoreIcon,
+		Version,
+		VersionLabelDialog,
 	},
 
 	props: {
@@ -107,39 +86,56 @@ export default {
 			type: Number,
 			required: true,
 		},
-		pageSize: {
-			type: Number,
-			required: true,
-		},
 	},
 
 	data() {
 		return {
 			error: '',
+			showVersionLabelForm: false,
+			editedVersion: null,
 		}
 	},
 
 	computed: {
 		...mapState(useRootStore, ['loading']),
-		...mapState(useVersionsStore, ['version', 'versions']),
+		...mapState(useCollectivesStore, ['currentCollectiveCanEdit']),
+		...mapState(useVersionsStore, [
+			'currentVersion',
+			'selectedVersion',
+			'versions',
+		]),
 
-		/**
-		 * @return {string}
-		 */
-		pageFormattedTimestamp() {
-			return moment.unix(this.pageTimestamp).format('LLL')
+		pageMtime() {
+			return this.pageTimestamp * 1000
 		},
 
-		/**
-		 * @return {string}
-		 */
-		pageHumanReadableSize() {
-			return formatFileSize(this.pageSize)
+		sortedVersions() {
+			return [...this.versions].sort((a, b) => {
+				if (a.mtime === this.pageMtime) {
+					return -1
+				} else if (b.mtime === this.pageMtime) {
+					return 1
+				} else {
+					return b.mtime - a.mtime
+				}
+			})
 		},
 
-		selected() {
-			return (v) => {
-				return v.timestamp === this.version?.timestamp
+		initialVersionMtime() {
+			return this.versions
+				.map(version => version.mtime)
+				.reduce((a, b) => Math.min(a, b))
+		},
+
+		isCurrent() {
+			return (mtime) => mtime === this.pageMtime
+		},
+
+		isSelected() {
+			return (mtime) => {
+				return this.isCurrent(mtime)
+					? !this.selectedVersion
+					: mtime === this.selectedVersion?.mtime
 			}
 		},
 	},
@@ -158,7 +154,13 @@ export default {
 
 	methods: {
 		...mapActions(useRootStore, ['load', 'done']),
-		...mapActions(useVersionsStore, ['getVersions', 'selectVersion']),
+		...mapActions(useVersionsStore, [
+			'deleteVersion',
+			'getVersions',
+			'restoreVersion',
+			'selectVersion',
+			'setVersionLabel',
+		]),
 
 		/**
 		 * Get versions of a page
@@ -174,34 +176,43 @@ export default {
 			}
 		},
 
-		/**
-		 * Select page version object to display
-		 *
-		 * @param {object} version Page version object
-		 */
-		clickPreviewVersion(version) {
-			this.selectVersion(version)
+		onOpenVersion(version) {
+			if (this.isCurrent(version.mtime)) {
+				this.selectVersion(null)
+			} else {
+				this.selectVersion(version)
+			}
+		},
+
+		onStartLabelUpdate(version) {
+			this.showVersionLabelForm = true
+			this.editedVersion = version
+		},
+
+		async onLabelUpdate(newLabel) {
+			const oldLabel = this.editedVersion.label
+			this.editedVersion.label = newLabel
+			this.showVersionLabelForm = false
+
+			try {
+				await this.setVersionLabel(this.editedVersion, newLabel)
+				this.editedVersion = null
+			} catch (e) {
+				this.editedVersion.label = oldLabel
+			}
+		},
+
+		onCompareVersion(version) {
+			OCA.Viewer.compare(this.currentVersion, this.versions.find(v => v.source === version.source))
+		},
+
+		async onRestoreVersion(version) {
+			await this.restoreVersion(version)
+		},
+
+		async onDeleteVersion(version) {
+			await this.deleteVersion(version)
 		},
 	},
 }
 </script>
-
-<style lang="scss" scoped>
-.version {
-	display: flex;
-	flex-direction: row;
-
-	:deep(.line-one__name) {
-		font-weight: normal;
-	}
-
-	.item-icon {
-		height: 34px;
-		border-radius: var(--border-radius);
-
-		&__page {
-			background-color: var(--color-background-darker);
-		}
-	}
-}
-</style>

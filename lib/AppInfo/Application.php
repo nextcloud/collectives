@@ -14,6 +14,7 @@ use OCA\Circles\Events\CircleDestroyedEvent;
 use OCA\Collectives\CacheListener;
 use OCA\Collectives\Dashboard\RecentPagesWidget;
 use OCA\Collectives\Db\CollectiveMapper;
+use OCA\Collectives\Db\CollectiveVersionMapper;
 use OCA\Collectives\Db\PageMapper;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Listeners\BeforeTemplateRenderedListener;
@@ -43,7 +44,6 @@ use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\Http\Events\BeforeTemplateRenderedEvent;
-use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Collaboration\Reference\IPublicReferenceProvider;
 use OCP\Collaboration\Reference\RenderReferenceEvent;
 use OCP\Dashboard\IAPIWidgetV2;
@@ -100,7 +100,9 @@ class Application extends App implements IBootstrap {
 			if (interface_exists(IVersionBackend::class)) {
 				return new VersionsBackend(
 					$c->get(CollectiveFolderManager::class),
-					$c->get(ITimeFactory::class),
+					$c->get(CollectiveVersionMapper::class),
+					$c->get(IMimeTypeLoader::class),
+					$c->get(IUserSession::class),
 					$c->get(LoggerInterface::class)
 				);
 			}

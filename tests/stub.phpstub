@@ -732,12 +732,28 @@ namespace OCA\Circles {
 namespace OCA\Files_Versions\Versions {
 	use OCP\Files\File;
 	use OCP\Files\FileInfo;
+	use OCP\Files\Node;
 	use OCP\Files\NotFoundException;
 	use OCP\Files\Storage\IStorage;
 	use OCP\IUser;
 
+	interface IDeletableVersionBackend {
+		public function deleteVersion(IVersion $version): void;
+	}
+
 	interface IMetadataVersion {
+		public function getMetadata(): array;
 		public function getMetadataValue(string $key): ?string;
+	}
+
+	interface IMetadataVersionBackend {
+		public function setMetadataValue(Node $node, int $revision, string $key, string $value): void;
+	}
+
+	interface INeedSyncVersionBackend {
+		public function createVersionEntity(File $file): void;
+		public function updateVersionEntity(File $sourceFile, int $revision, array $properties): void;
+		public function deleteVersionsEntity(File $file): void;
 	}
 
 	interface IVersionBackend {
@@ -787,17 +803,23 @@ namespace OCA\Files_Versions\Versions {
 		public function getUser(): IUser;
 	}
 
+	interface IVersionsImporterBackend {
+		public function importVersionsForFile(IUser $user, Node $source, Node $target, array $versions): void
+		public function clearVersionsForFile(IUser $user, Node $source, Node $target): void
+	}
+
 	class Version implements IVersion {
 		public function __construct(
 			int $timestamp,
-			$revisionId,
+			int|string $revisionId,
 			string $name,
-			int $size,
+			int|float $size,
 			string $mimetype,
 			string $path,
 			FileInfo $sourceFileInfo,
 			IVersionBackend $backend,
-			IUser $user
+			IUser $user,
+			array $metadata = [],
 		) {
 		}
 
