@@ -199,7 +199,7 @@
     "Results in content" : "Tulemused sisus",
     "Share link ({index})" : "Jagamise link ({index})",
     "View only" : "Ainult vaatamine",
-    "Can edit" : "Võib redigeerida",
+    "Can edit" : "Võib muuta",
     "Cannot copy, please copy the link manually" : "Ei saa kopeerida, palun kopeeri link käsitsi",
     "Copy public link of {title} to clipboard" : "Kopeeri „{title}“ avlik  link lõikelauale",
     "Error generating password from password policy" : "Viga salasõnareeglitele vastava salasõna loomisel",
