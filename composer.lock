@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fce54c5e91a882fe3a5f9e86206e00e2",
+    "content-hash": "1555dc33c42f8d0c2b7a59c3a52d5540",
     "packages": [
         {
             "name": "predis/predis",
@@ -70,20 +70,21 @@
         },
         {
             "name": "teamtnt/tntsearch",
-            "version": "v4.4.0",
+            "version": "v5.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/teamtnt/tntsearch.git",
-                "reference": "781e0eec1a1f56db0cdc2936849c508482b25547"
+                "reference": "3f6078c37d55feab3927d8f988f9e1e8b3aaa2a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/teamtnt/tntsearch/zipball/781e0eec1a1f56db0cdc2936849c508482b25547",
-                "reference": "781e0eec1a1f56db0cdc2936849c508482b25547",
+                "url": "https://api.github.com/repos/teamtnt/tntsearch/zipball/3f6078c37d55feab3927d8f988f9e1e8b3aaa2a0",
+                "reference": "3f6078c37d55feab3927d8f988f9e1e8b3aaa2a0",
                 "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",
+                "ext-pdo": "*",
                 "php": "~7.1|^8",
                 "predis/predis": "^2.2"
             },
@@ -127,7 +128,7 @@
             ],
             "support": {
                 "issues": "https://github.com/teamtnt/tntsearch/issues",
-                "source": "https://github.com/teamtnt/tntsearch/tree/v4.4.0"
+                "source": "https://github.com/teamtnt/tntsearch/tree/v5.0.0"
             },
             "funding": [
                 {
@@ -135,7 +136,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-12-13T08:58:55+00:00"
+            "time": "2025-04-15T20:07:13+00:00"
         }
     ],
     "packages-dev": [
