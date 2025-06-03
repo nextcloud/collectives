@@ -44,6 +44,11 @@ export default {
 		PageVersion,
 	},
 
+	setup() {
+		const { getShares } = useSharesStore()
+		return { getShares }
+	},
+
 	data() {
 		return {
 			backgroundFetching: false,
@@ -118,7 +123,6 @@ export default {
 
 	methods: {
 		...mapActions(useRootStore, ['hide', 'load', 'show']),
-		...mapActions(useSharesStore, ['getShares']),
 		...mapActions(useTemplatesStore, ['getTemplates', 'unsetTemplates']),
 		...mapActions(usePagesStore, ['getPages', 'getTrashPages', 'unsetPages', 'unsetTrashPages']),
 		...mapActions(useVersionsStore, ['selectVersion']),

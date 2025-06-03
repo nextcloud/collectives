@@ -182,7 +182,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'pinia'
+import { mapState } from 'pinia'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { useSharesStore } from '../../stores/shares.js'
 import { usePagesStore } from '../../stores/pages.js'
@@ -252,6 +252,11 @@ export default {
 			type: Object,
 			default: () => {},
 		},
+	},
+
+	setup() {
+		const { createShare, deleteShare, updateShare } = useSharesStore()
+		return { createShare, deleteShare, updateShare }
 	},
 
 	data() {
@@ -373,11 +378,6 @@ export default {
 	},
 
 	methods: {
-		...mapActions(useSharesStore, [
-			'createShare',
-			'deleteShare',
-			'updateShare',
-		]),
 
 		handleClickOutside(event) {
 			const dropdownContainer = this.$refs.quickShareDropdownContainer
