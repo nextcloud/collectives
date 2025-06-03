@@ -4,6 +4,7 @@
  */
 
 import { defineStore } from 'pinia'
+import { set } from 'vue'
 import { useRootStore } from './root.js'
 import { useCollectivesStore } from './collectives.js'
 import { usePagesStore } from './pages.js'
@@ -13,65 +14,71 @@ import { TEMPLATE_PAGE } from '../constants.js'
 
 export const useTemplatesStore = defineStore('templates', {
 	state: () => ({
-		templates: [],
-		templatesLoaded: false,
+		allTemplates: {},
+		allTemplatesLoaded: {},
 	}),
 
 	getters: {
+		collectiveId() {
+			const collectivesStore = useCollectivesStore()
+			return collectivesStore.templatesCollectiveId || collectivesStore.currentCollective.id
+		},
+
 		context() {
 			const rootStore = useRootStore()
-			const collectivesStore = useCollectivesStore()
 			return {
 				isPublic: rootStore.isPublic,
-				collectiveId: collectivesStore.currentCollective?.id || collectivesStore.templatesCollectiveId,
+				collectiveId: this.collectiveId,
 				shareTokenParam: rootStore.shareTokenParam,
 			}
 		},
 
-		sortedTemplates(state) {
-			return state.templates.sort(byTitle)
+		templates: (state) => {
+			return state.allTemplates[state.collectiveId] || []
 		},
 
-		hasTemplates(state) {
-			return state.templates.length > 0
+		templatesLoaded: (state) => {
+			return state.allTemplatesLoaded[state.collectiveId] || false
 		},
 
-		hasSubpages(state) {
+		sortedTemplates() {
+			return this.templates.sort(byTitle)
+		},
+
+		hasTemplates() {
+			return this.templates.length > 0
+		},
+
+		hasSubpages() {
 			return (templateId) => {
-				return state.templates.filter(p => p.parentId === templateId).length > 0
+				return this.templates.filter(p => p.parentId === templateId).length > 0
 			}
 		},
 
-		rootTemplateId(state) {
-			return state.hasTemplates
-				? state.templates[0].parentId
+		rootTemplateId() {
+			return this.hasTemplates
+				? this.templates[0].parentId
 				: 0
 		},
 
-		rootTemplates(state) {
-			return state.sortedTemplates
-				.filter(template => template.parentId === state.rootTemplateId)
+		rootTemplates() {
+			return this.sortedTemplates
+				.filter(template => template.parentId === this.rootTemplateId)
 		},
 
-		currentPageFilePath(state) {
-			return state.pageFilePath(state.currentPage)
-		},
-
-		templateFilePath: (_state) => (template) => {
+		templateFilePath: () => (template) => {
 			const pagesStore = usePagesStore()
 			return pagesStore.pageFilePath(template)
 		},
 	},
 
 	actions: {
-		unsetTemplates() {
-			this.templates = []
-			this.templatesLoaded = false
-		},
-
 		_updateTemplatePage(template) {
-			this.templates.splice(
-				this.templates.findIndex(p => p.id === template.id),
+			if (this.allTemplates[this.collectiveId] === undefined) {
+				set(this.allTemplates, this.collectiveId, [])
+			}
+			this.allTemplates[this.collectiveId].splice(
+				this.allTemplates[this.collectiveId].findIndex(p => p.id === template.id),
 				1,
 				template,
 			)
@@ -80,19 +87,20 @@ export const useTemplatesStore = defineStore('templates', {
 		/**
 		 * Get list of all templates for current collective
 		 *
-		 * @param {boolean} setLoading Whether to set loading('template-list')
+		 * @param {boolean} setLoading Whether to set template list as loading
 		 */
 		async getTemplates(setLoading = true) {
 			const rootStore = useRootStore()
+			const collectiveId = this.collectiveId
 			if (setLoading) {
-				rootStore.load('template-list')
+				rootStore.load(`template-list-${collectiveId}`)
 			}
 			try {
 				const response = await api.getTemplates(this.context)
-				this.templates = response.data.data
-				this.templatesLoaded = true
+				set(this.allTemplates, collectiveId, response.data.data)
+				set(this.allTemplatesLoaded, collectiveId, true)
 			} finally {
-				rootStore.done('template-list')
+				rootStore.done(`template-list-${collectiveId}`)
 			}
 		},
 
@@ -114,7 +122,7 @@ export const useTemplatesStore = defineStore('templates', {
 			try {
 				const response = await api.createTemplate(this.context, template)
 				// Add new template to the beginning of templates array
-				this.templates.unshift(response.data.data)
+				this.allTemplates[this.collectiveId]?.unshift(response.data.data)
 
 				return response.data.data.id
 			} finally {
@@ -166,7 +174,7 @@ export const useTemplatesStore = defineStore('templates', {
 		 */
 		async deleteTemplate({ templateId }) {
 			await api.deleteTemplate(this.context, templateId)
-			this.templates.splice(this.templates.findIndex(p => p.id === templateId), 1)
+			this.allTemplates[this.collectiveId]?.splice(this.allTemplates[this.collectiveId]?.findIndex(p => p.id === templateId), 1)
 		},
 	},
 })
