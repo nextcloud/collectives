@@ -10,12 +10,17 @@ import * as api from '../apis/collectives/index.js'
 
 export const useSharesStore = defineStore('shares', {
 	state: () => ({
-		shares: [],
+		allShares: {},
 	}),
 
 	getters: {
-		sharesByPageId: (state) => (pageId) => {
-			return state.shares.filter(s => s.pageId === pageId)
+		shares: (state) => {
+			const collectivesStore = useCollectivesStore()
+			return state.allShares[collectivesStore.currentCollective.id] ?? []
+		},
+
+		sharesByPageId: () => (pageId) => {
+			return this.shares.filter(s => s.pageId === pageId)
 		},
 	},
 
@@ -26,18 +31,22 @@ export const useSharesStore = defineStore('shares', {
 		async getShares() {
 			const rootStore = useRootStore()
 			const collectivesStore = useCollectivesStore()
+			const collectiveId = collectivesStore.currentCollective.id
 			rootStore.load('shares')
-			const response = await api.getShares(collectivesStore.currentCollective.id)
-			this.shares = response.data.data
+			const response = await api.getShares(collectiveId)
+			this.allShares[collectiveId] = response.data.data
 			rootStore.done('shares')
 		},
 
 		_addOrUpdateShareState(share) {
+			const collectivesStore = useCollectivesStore()
+			const collectiveId = collectivesStore.currentCollective.id
 			const cur = this.shares.findIndex(s => s.id === share.id)
+			this.allShares[collectiveId] ??= []
 			if (cur === -1) {
-				this.shares.unshift(share)
+				this.allShares[collectiveId].unshift(share)
 			} else {
-				this.shares.splice(cur, 1, share)
+				this.allShares[collectiveId].splice(cur, 1, share)
 			}
 		},
 
@@ -78,15 +87,13 @@ export const useSharesStore = defineStore('shares', {
 		 * @param {object} share the share to be deleted
 		 */
 		async deleteShare(share) {
+			const collectivesStore = useCollectivesStore()
+			const collectiveId = collectivesStore.currentCollective.id
 			const rootStore = useRootStore()
 			rootStore.load('unshare')
 			await api.deleteShare(share)
-			this.shares.splice(this.shares.findIndex(s => s.id === share.id), 1)
+			this.allShares[collectiveId]?.splice(this.shares.findIndex(s => s.id === share.id), 1)
 			rootStore.done('unshare')
-		},
-
-		unsetShares() {
-			this.shares = []
 		},
 	},
 })
