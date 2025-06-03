@@ -4,7 +4,7 @@
  */
 
 import { defineStore, storeToRefs } from 'pinia'
-import { computed, set, ref } from 'vue'
+import { computed, reactive } from 'vue'
 import { useRootStore } from './root.js'
 import { useCollectivesStore } from './collectives.js'
 import * as api from '../apis/collectives/index.js'
@@ -13,11 +13,15 @@ export const useSharesStore = defineStore('shares', () => {
 	const { load, done } = useRootStore()
 	const { currentCollective } = storeToRefs(useCollectivesStore())
 
-	const allShares = ref({})
+	const allShares = reactive({})
 
 	const shares = computed(() => allShares[currentCollective.id] ?? [])
-	const sharesByPageId = pageId => shares
-		.filter(s => s.pageId === pageId)
+	const sharesByPageId = computed(() => {
+		return (pageId) => shares.value.filter(s => s.pageId === pageId)
+	})
+	const shareIndex = computed(() => {
+		return ({ id }) => shares.value.findIndex(s => s.id === id)
+	})
 
 	/**
 	 * Get shares of a collective and its pages
@@ -25,17 +29,17 @@ export const useSharesStore = defineStore('shares', () => {
 	async function getShares() {
 		load('shares')
 		const response = await api.getShares(currentCollective.id)
-		set(allShares, currentCollective.id, response.data.data)
+		allShares[currentCollective.id] = response.data.data
 		done('shares')
 	}
 
 	const _addOrUpdateShareState = share => {
-		const cur = shares.findIndex(s => s.id === share.id)
+		const idx = shareIndex(share).value
 		allShares[currentCollective.id] ??= []
-		if (cur === -1) {
+		if (idx === -1) {
 			allShares[currentCollective.id].unshift(share)
 		} else {
-			allShares[currentCollective.id].splice(cur, 1, share)
+			allShares[currentCollective.id].splice(idx, 1, share)
 		}
 	}
 
@@ -75,9 +79,9 @@ export const useSharesStore = defineStore('shares', () => {
 	 */
 	async function deleteShare(share) {
 		load('unshare')
+		const idx = shareIndex(share).value
 		await api.deleteShare(share)
-		const index = shares.findIndex(s => s.id === share.id)
-		allShares[currentCollective.id]?.splice(index, 1)
+		allShares[currentCollective.id]?.splice(idx, 1)
 		done('unshare')
 	}
 
