@@ -16,12 +16,10 @@ export const useSharesStore = defineStore('shares', () => {
 	const allShares = reactive({})
 
 	const shares = computed(() => allShares[currentCollective.id] ?? [])
-	const sharesByPageId = computed(() => {
-		return (pageId) => shares.value.filter(s => s.pageId === pageId)
-	})
-	const shareIndex = computed(() => {
-		return ({ id }) => shares.value.findIndex(s => s.id === id)
-	})
+	const sharesByPageId = (pageId) => shares.value
+		.filter(s => s.pageId === pageId)
+	const shareIndex = ({ id }) => shares.value
+		.findIndex(s => s.id === id)
 
 	/**
 	 * Get shares of a collective and its pages
@@ -34,7 +32,7 @@ export const useSharesStore = defineStore('shares', () => {
 	}
 
 	const _addOrUpdateShareState = share => {
-		const idx = shareIndex(share).value
+		const idx = shareIndex(share)
 		allShares[currentCollective.id] ??= []
 		if (idx === -1) {
 			allShares[currentCollective.id].unshift(share)
@@ -79,7 +77,7 @@ export const useSharesStore = defineStore('shares', () => {
 	 */
 	async function deleteShare(share) {
 		load('unshare')
-		const idx = shareIndex(share).value
+		const idx = shareIndex(share)
 		await api.deleteShare(share)
 		allShares[currentCollective.id]?.splice(idx, 1)
 		done('unshare')

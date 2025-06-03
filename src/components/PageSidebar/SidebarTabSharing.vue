@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { mapState, storeToRefs } from 'pinia'
+import { mapState } from 'pinia'
 import { useRootStore } from '../../stores/root.js'
 import { useSharesStore } from '../../stores/shares.js'
 import { usePagesStore } from '../../stores/pages.js'
@@ -49,7 +49,7 @@ export default {
 	},
 
 	setup() {
-		const { sharesByPageId } = storeToRefs(useSharesStore())
+		const { sharesByPageId } = useSharesStore()
 		return { sharesByPageId }
 	},
 
