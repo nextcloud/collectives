@@ -8,7 +8,7 @@
 		data-cy-collectives="templates-dialog"
 		size="normal"
 		@closing="onClose">
-		<SkeletonLoading v-if="loading('template-list')" type="items" />
+		<SkeletonLoading v-if="loading(`template-list-${templatesCollectiveId}`)" type="items" />
 		<!-- Template list -->
 		<ul v-else>
 			<TemplateListItem v-for="(template, index) in rootTemplates"
@@ -57,7 +57,7 @@ export default {
 	computed: {
 		...mapState(useRootStore, ['loading']),
 		...mapState(useCollectivesStore, [
-			'currentCollective',
+			'templatesCollectiveId',
 		]),
 		...mapState(useTemplatesStore, [
 			'rootTemplates',
@@ -71,15 +71,9 @@ export default {
 	},
 
 	async mounted() {
-		if (!this.templatesLoaded && !this.loading('template-list')) {
+		if (!this.templatesLoaded && !this.loading(`template-list-${this.templatesCollectiveId}`)) {
 			await this.getTemplates()
 				.catch(displayError('Could not fetch templates'))
-		}
-	},
-
-	beforeDestroy() {
-		if (!this.currentCollective?.id) {
-			this.unsetTemplates()
 		}
 	},
 
@@ -91,7 +85,6 @@ export default {
 			'createTemplate',
 			'deleteTemplate',
 			'getTemplates',
-			'unsetTemplates',
 		]),
 
 		onClose() {

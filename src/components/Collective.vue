@@ -84,7 +84,6 @@ export default {
 			this.load('collective')
 			this.unsetPages()
 			this.unsetTrashPages()
-			this.unsetTemplates()
 			this.clearListenPush()
 			if (val) {
 				this.initCollective()
@@ -119,7 +118,7 @@ export default {
 	methods: {
 		...mapActions(useRootStore, ['hide', 'load', 'show']),
 		...mapActions(useSharesStore, ['getShares']),
-		...mapActions(useTemplatesStore, ['getTemplates', 'unsetTemplates']),
+		...mapActions(useTemplatesStore, ['getTemplates']),
 		...mapActions(usePagesStore, ['getPages', 'getTrashPages', 'unsetPages', 'unsetTrashPages']),
 		...mapActions(useVersionsStore, ['selectVersion']),
 

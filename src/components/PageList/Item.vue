@@ -77,7 +77,7 @@
 				:in-page-list="true" />
 			<NcActions v-if="canEdit">
 				<NcActionButton class="action-button-add"
-					:disabled="loading('template-list')"
+					:disabled="loading(`template-list-${templatesCollectiveId}`)"
 					@click="onNewPage">
 					<template #icon>
 						<PlusIcon :size="20" fill-color="var(--color-main-text)" />
@@ -202,6 +202,7 @@ export default {
 		...mapState(useCollectivesStore, [
 			'currentCollective',
 			'isFavoritePage',
+			'templatesCollectiveId',
 		]),
 		...mapState(usePagesStore, [
 			'isCollapsed',
