@@ -108,7 +108,6 @@ export default {
 	watch: {
 		'page.id'() {
 			this.load('backlinks')
-			this.unsetBacklinks()
 			this.getBacklinksForPage()
 		},
 	},
@@ -120,7 +119,7 @@ export default {
 
 	methods: {
 		...mapActions(useRootStore, ['done', 'load']),
-		...mapActions(usePagesStore, ['getBacklinks', 'unsetBacklinks']),
+		...mapActions(usePagesStore, ['getBacklinks']),
 
 		/**
 		 * Get backlinks for a page

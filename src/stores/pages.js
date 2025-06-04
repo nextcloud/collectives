@@ -17,8 +17,8 @@ import * as api from '../apis/collectives/index.js'
 
 export const usePagesStore = defineStore('pages', {
 	state: () => ({
-		pages: [],
-		trashPages: [],
+		allPages: {},
+		allTrashPages: {},
 		newPage: undefined,
 		newPageParentId: null,
 		sortBy: undefined,
@@ -33,14 +33,25 @@ export const usePagesStore = defineStore('pages', {
 	}),
 
 	getters: {
+		collectiveId() {
+			const collectivesStore = useCollectivesStore()
+			return collectivesStore.currentCollective.id
+		},
+
 		context() {
 			const rootStore = useRootStore()
-			const collectivesStore = useCollectivesStore()
 			return {
 				isPublic: rootStore.isPublic,
-				collectiveId: collectivesStore.currentCollective.id,
+				collectiveId: this.collectiveId,
 				shareTokenParam: rootStore.shareTokenParam,
 			}
+		},
+
+		pages: (state) => {
+			return state.allPages[state.collectiveId] || []
+		},
+		trashPages: (state) => {
+			return state.allTrashPages[state.collectiveId] || []
 		},
 
 		isLandingPage: () => {
@@ -306,26 +317,9 @@ export const usePagesStore = defineStore('pages', {
 	},
 
 	actions: {
-		unsetPages() {
-			this.pages = []
-		},
-
-		unsetTrashPages() {
-			this.trashPages = []
-		},
-
-		unsetAttachments() {
-			this.attachments = []
-			this.deletedAttachments = []
-		},
-
-		unsetBacklinks() {
-			this.backlinks = []
-		},
-
 		updateSubpageOrder({ parentId, subpageOrder }) {
-			if (this.pages.find(p => p.id === parentId)) {
-				this.pages.find(p => p.id === parentId).subpageOrder = subpageOrder
+			if (this.allPages[this.collectiveId].find(p => p.id === parentId)) {
+				this.allPages[this.collectiveId].find(p => p.id === parentId).subpageOrder = subpageOrder
 			}
 		},
 
@@ -361,7 +355,7 @@ export const usePagesStore = defineStore('pages', {
 		 * @param {number} object.pageId ID of the page to remove
 		 */
 		deleteFromSubpageOrder({ parentId, pageId }) {
-			const parentPage = this.pages.find(p => (p.id === parentId))
+			const parentPage = this.allPages[this.collectiveId].find(p => (p.id === parentId))
 			this.updateSubpageOrder({ parentId, subpageOrder: parentPage.subpageOrder.filter(id => (id !== pageId)) })
 		},
 
@@ -415,7 +409,7 @@ export const usePagesStore = defineStore('pages', {
 				rootStore.load('collective')
 			}
 			const response = await api.getPages(this.context)
-			this.pages = response.data.data
+			set(this.allPages, this.collectiveId, response.data.data)
 			rootStore.done('collective')
 		},
 
@@ -426,13 +420,13 @@ export const usePagesStore = defineStore('pages', {
 			const rootStore = useRootStore()
 			rootStore.load('pageTrash')
 			const response = await api.getTrashPages(this.context)
-			this.trashPages = response.data.data
+			set(this.allTrashPages, this.collectiveId, response.data.data)
 			rootStore.done('pageTrash')
 		},
 
 		_updatePageState(page) {
-			this.pages.splice(
-				this.pages.findIndex(p => p.id === page.id),
+			this.allPages[this.collectiveId].splice(
+				this.allPages[this.collectiveId].findIndex(p => p.id === page.id),
 				1,
 				page,
 			)
@@ -463,7 +457,7 @@ export const usePagesStore = defineStore('pages', {
 			const response = await api.createPage(this.context, page)
 			// Add new page to the beginning of pages array
 			const newPage = response.data.data
-			this.pages.unshift(newPage)
+			this.allPages[this.collectiveId].unshift(newPage)
 			this.addToSubpageOrder({ parentId: newPage.parentId, pageId: newPage.id })
 			this.newPage = response.data.data
 		},
@@ -497,7 +491,7 @@ export const usePagesStore = defineStore('pages', {
 		async copyPage({ newParentId, pageId, index }) {
 			const rootStore = useRootStore()
 			rootStore.load('pagelist')
-			const page = { ...this.pages.find(p => p.id === pageId) }
+			const page = { ...this.allPages[this.collectiveId].find(p => p.id === pageId) }
 
 			// Keep subpage list of old parent page in DOM to prevent a race condition with sortableJS
 			const oldParentId = page.parentId
@@ -527,7 +521,7 @@ export const usePagesStore = defineStore('pages', {
 		async movePage({ newParentId, pageId, index }) {
 			const rootStore = useRootStore()
 			rootStore.load('pagelist')
-			const page = { ...this.pages.find(p => p.id === pageId) }
+			const page = { ...this.allPages[this.collectiveId].find(p => p.id === pageId) }
 			const hasSubpages = this.visibleSubpages(pageId).length > 0
 
 			// Save a clone of the page to restore in case of errors
@@ -535,7 +529,7 @@ export const usePagesStore = defineStore('pages', {
 
 			// Keep subpage list of old parent page in DOM to prevent a race condition with sortableJS
 			const oldParentId = page.parentId
-			this.pages.find(p => p.id === oldParentId).keepSortable = true
+			this.allPages[this.collectiveId].find(p => p.id === oldParentId).keepSortable = true
 
 			// Update page in store first to avoid page order jumping around
 			page.parentId = newParentId
@@ -548,7 +542,7 @@ export const usePagesStore = defineStore('pages', {
 				this._updatePageState(pageClone)
 				throw e
 			} finally {
-				delete this.pages.find(p => p.id === oldParentId).keepSortable
+				delete this.allPages[this.collectiveId].find(p => p.id === oldParentId).keepSortable
 				rootStore.done('pagelist')
 			}
 
@@ -587,11 +581,11 @@ export const usePagesStore = defineStore('pages', {
 		async movePageToCollective({ collectiveId, newParentId, pageId, index }) {
 			const rootStore = useRootStore()
 			rootStore.load('pagelist')
-			const page = { ...this.pages.find(p => p.id === pageId) }
+			const page = { ...this.allPages[this.collectiveId].find(p => p.id === pageId) }
 			const hasSubpages = this.visibleSubpages(pageId).length > 0
 
 			await api.movePageToCollective(this.context, pageId, collectiveId, newParentId, index)
-			this.pages.splice(this.pages.findIndex(p => p.id === page.id), 1)
+			this.allPages[this.collectiveId].splice(this.allPages[this.collectiveId].findIndex(p => p.id === page.id), 1)
 			rootStore.done('pagelist')
 
 			// Reload the page list if moved page had subpages (to remove subpages as well)
@@ -643,7 +637,7 @@ export const usePagesStore = defineStore('pages', {
 		async setPageSubpageOrder({ pageId, subpageOrder }) {
 			const rootStore = useRootStore()
 			rootStore.load('pagelist')
-			const page = { ...this.pages.find(p => p.id === pageId) }
+			const page = { ...this.allPages[this.collectiveId].find(p => p.id === pageId) }
 
 			// Save a clone of the page to restore in case of errors
 			const pageClone = { ...page }
@@ -676,9 +670,9 @@ export const usePagesStore = defineStore('pages', {
 		async trashPage({ pageId }) {
 			const response = await api.trashPage(this.context, pageId)
 			const trashPage = response.data.data
-			this.pages.splice(this.pages.findIndex(p => p.id === trashPage.id), 1)
+			this.allPages[this.collectiveId].splice(this.allPages[this.collectiveId].findIndex(p => p.id === trashPage.id), 1)
 			trashPage.trashTimestamp = Date.now() / 1000
-			this.trashPages.unshift(trashPage)
+			this.allTrashPages[this.collectiveId].unshift(trashPage)
 		},
 
 		/**
@@ -691,8 +685,8 @@ export const usePagesStore = defineStore('pages', {
 			const response = await api.restorePage(this.context, pageId)
 			const trashPage = response.data.data
 			trashPage.trashTimestamp = null
-			this.pages.unshift(trashPage)
-			this.trashPages.splice(this.trashPages.findIndex(p => p.id === trashPage.id), 1)
+			this.allPages[this.collectiveId].unshift(trashPage)
+			this.allTrashPages[this.collectiveId].splice(this.allTrashPages[this.collectiveId].findIndex(p => p.id === trashPage.id), 1)
 		},
 
 		/**
@@ -703,7 +697,7 @@ export const usePagesStore = defineStore('pages', {
 		 */
 		async deletePage({ pageId }) {
 			await api.deletePage(this.context, pageId)
-			this.trashPages.splice(this.trashPages.findIndex(p => p.id === pageId), 1)
+			this.allTrashPages[this.collectiveId].splice(this.allTrashPages[this.collectiveId].findIndex(p => p.id === pageId), 1)
 		},
 
 		/**

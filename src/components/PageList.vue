@@ -236,7 +236,9 @@ export default {
 		]),
 
 		allPagesSortedCached() {
-			return this.allPagesSorted(this.rootPage.id)
+			return this.rootPage
+				? this.allPagesSorted(this.rootPage.id)
+				: []
 		},
 
 		filteredPages() {

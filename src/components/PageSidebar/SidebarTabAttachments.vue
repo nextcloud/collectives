@@ -273,7 +273,6 @@ export default {
 	watch: {
 		'page.id'() {
 			this.load('attachments')
-			this.unsetAttachments()
 			this.getAttachmentsForPage()
 		},
 	},
@@ -304,7 +303,6 @@ export default {
 			'getAttachments',
 			'setAttachmentDeleted',
 			'setAttachmentUndeleted',
-			'unsetAttachments',
 		]),
 
 		/**
