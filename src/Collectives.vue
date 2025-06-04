@@ -80,7 +80,7 @@ export default {
 	},
 
 	mounted() {
-		this.rootStore.load('collective')
+		this.rootStore.load('pagelist')
 		this.getCollectives()
 			.catch(displayError('Could not fetch collectives'))
 		if (!this.isPublic) {

@@ -5,7 +5,7 @@
 
 <template>
 	<NcAppContentDetails>
-		<div v-if="loading('collective') || loading('currentPage')" class="sheet-view">
+		<div v-if="loading('pagelist') || loading('currentPage')" class="sheet-view">
 			<SkeletonLoading :count="1" class="page-heading-skeleton" type="page-heading" />
 		</div>
 		<PageVersion v-else-if="currentPage && version" />
@@ -75,13 +75,12 @@ export default {
 		...mapState(useVersionsStore, ['version']),
 
 		notFound() {
-			return !this.loading('collective') && !this.loading('currentPage') && !this.currentPage
+			return !this.loading('pagelist') && !this.loading('currentPage') && !this.currentPage
 		},
 	},
 
 	watch: {
 		'currentCollective.id'(val) {
-			this.load('collective')
 			this.clearListenPush()
 			if (val) {
 				this.initCollective()

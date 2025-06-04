@@ -245,7 +245,7 @@ export const usePagesStore = defineStore('pages', {
 			// Disable for readonly collective
 			return !collectivesStore.currentCollectiveCanEdit
 				// Disable if a page list is loading (e.g. when page move is pending)
-				|| rootStore.loading('pagelist')
+				|| rootStore.loading('pagelist-nodrag')
 				// For now also disable in alternative page order view
 				// TODO: Smoothen UX if allowed to move but not to sort with alternative page orders
 				|| (state.sortByOrder !== 'byOrder')
@@ -401,16 +401,16 @@ export const usePagesStore = defineStore('pages', {
 		/**
 		 * Get list of all pages for current collective
 		 *
-		 * @param {boolean} setLoading Whether to set loading('collective')
+		 * @param {boolean} setLoading Whether to set loading pagelist
 		 */
 		async getPages(setLoading = true) {
 			const rootStore = useRootStore()
-			if (setLoading) {
-				rootStore.load('collective')
+			if (setLoading && this.pages.length === 0) {
+				rootStore.load('pagelist')
 			}
 			const response = await api.getPages(this.context)
 			set(this.allPages, this.collectiveId, response.data.data)
-			rootStore.done('collective')
+			rootStore.done('pagelist')
 		},
 
 		/**
@@ -490,7 +490,7 @@ export const usePagesStore = defineStore('pages', {
 		 */
 		async copyPage({ newParentId, pageId, index }) {
 			const rootStore = useRootStore()
-			rootStore.load('pagelist')
+			rootStore.load('pagelist-nodrag')
 			const page = { ...this.allPages[this.collectiveId].find(p => p.id === pageId) }
 
 			// Keep subpage list of old parent page in DOM to prevent a race condition with sortableJS
@@ -506,7 +506,7 @@ export const usePagesStore = defineStore('pages', {
 				// Reload the page list to make new page appear
 				await this.getPages(false)
 			} finally {
-				rootStore.done('pagelist')
+				rootStore.done('pagelist-nodrag')
 			}
 		},
 
@@ -520,7 +520,7 @@ export const usePagesStore = defineStore('pages', {
 		 */
 		async movePage({ newParentId, pageId, index }) {
 			const rootStore = useRootStore()
-			rootStore.load('pagelist')
+			rootStore.load('pagelist-nodrag')
 			const page = { ...this.allPages[this.collectiveId].find(p => p.id === pageId) }
 			const hasSubpages = this.visibleSubpages(pageId).length > 0
 
@@ -543,7 +543,7 @@ export const usePagesStore = defineStore('pages', {
 				throw e
 			} finally {
 				delete this.allPages[this.collectiveId].find(p => p.id === oldParentId).keepSortable
-				rootStore.done('pagelist')
+				rootStore.done('pagelist-nodrag')
 			}
 
 			// Reload the page list if moved page had subpages (to get their updated paths)
@@ -563,10 +563,10 @@ export const usePagesStore = defineStore('pages', {
 		 */
 		async copyPageToCollective({ collectiveId, newParentId, pageId, index }) {
 			const rootStore = useRootStore()
-			rootStore.load('pagelist')
+			rootStore.load('pagelist-nodrag')
 
 			await api.copyPageToCollective(this.context, pageId, collectiveId, newParentId, index)
-			rootStore.done('pagelist')
+			rootStore.done('pagelist-nodrag')
 		},
 
 		/**
@@ -580,13 +580,13 @@ export const usePagesStore = defineStore('pages', {
 		 */
 		async movePageToCollective({ collectiveId, newParentId, pageId, index }) {
 			const rootStore = useRootStore()
-			rootStore.load('pagelist')
+			rootStore.load('pagelist-nodrag')
 			const page = { ...this.allPages[this.collectiveId].find(p => p.id === pageId) }
 			const hasSubpages = this.visibleSubpages(pageId).length > 0
 
 			await api.movePageToCollective(this.context, pageId, collectiveId, newParentId, index)
 			this.allPages[this.collectiveId].splice(this.allPages[this.collectiveId].findIndex(p => p.id === page.id), 1)
-			rootStore.done('pagelist')
+			rootStore.done('pagelist-nodrag')
 
 			// Reload the page list if moved page had subpages (to remove subpages as well)
 			if (hasSubpages) {
@@ -636,7 +636,7 @@ export const usePagesStore = defineStore('pages', {
 		 */
 		async setPageSubpageOrder({ pageId, subpageOrder }) {
 			const rootStore = useRootStore()
-			rootStore.load('pagelist')
+			rootStore.load('pagelist-nodrag')
 			const page = { ...this.allPages[this.collectiveId].find(p => p.id === pageId) }
 
 			// Save a clone of the page to restore in case of errors
@@ -657,7 +657,7 @@ export const usePagesStore = defineStore('pages', {
 				this._updatePageState(pageClone)
 				throw e
 			} finally {
-				rootStore.done('pagelist')
+				rootStore.done('pagelist-nodrag')
 			}
 		},
 
