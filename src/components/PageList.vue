@@ -50,7 +50,7 @@
 				</NcActionButton>
 			</NcActions>
 		</div>
-		<div v-if="!currentCollective || !rootPage || loading('collective')" class="page-list">
+		<div v-if="!currentCollective || !rootPage || loading('pagelist')" class="page-list">
 			<SkeletonLoading type="items" :count="3" />
 		</div>
 		<div v-else class="page-list">
