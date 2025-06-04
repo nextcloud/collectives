@@ -57,7 +57,7 @@ describe('Page landing page', function() {
 		})
 	})
 
-	describe.only('Displays recent members', function() {
+	describe('Displays recent members', function() {
 		it('Allows to toggle members widget', function() {
 			cy.get('.members-widget img[src*="/alice/"]')
 
