@@ -207,7 +207,7 @@ describe('Pages', function() {
 	})
 
 	describe('Full width view', function() {
-		it.only('Allows to toggle persistent full-width view', function() {
+		it('Allows to toggle persistent full-width view', function() {
 			cy.openPage('Day 2')
 			cy.get('[data-cy-collectives="page-title-container"]').should('have.class', 'sheet-view')
 			cy.getReadOnlyEditor()
