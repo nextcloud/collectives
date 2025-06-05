@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Service;
 
+use JsonException;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Db\CollectiveUserSettings;
 use OCA\Collectives\Db\CollectiveUserSettingsMapper;
@@ -92,7 +93,7 @@ class CollectiveUserSettingsService {
 		// Expect an array of
 		try {
 			$favoritePagesArray = json_decode($favoritePages, false, 512, JSON_THROW_ON_ERROR);
-		} catch (\JsonException) {
+		} catch (JsonException) {
 			throw new NotPermittedException('Unsupported favorite pages format (stringified array expected): ' . $favoritePages);
 		}
 		if (!is_array($favoritePagesArray)) {
