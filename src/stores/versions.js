@@ -6,10 +6,8 @@
 import { defineStore } from 'pinia'
 import { useCollectivesStore } from './collectives.js'
 import { usePagesStore } from './pages.js'
-import client from '../util/davClient.js'
-import davRequest from '../util/davRequest.js'
+import * as davApi from '../apis/dav/index.js'
 import { generateRemoteUrl } from '@nextcloud/router'
-import { getCurrentUser } from '@nextcloud/auth'
 import { joinPaths, encodePath } from '@nextcloud/paths'
 import moment from '@nextcloud/moment'
 import { showError, showSuccess } from '@nextcloud/dialogs'
@@ -52,13 +50,7 @@ export const useVersionsStore = defineStore('versions', {
 		},
 
 		async getVersions(pageId) {
-			const user = getCurrentUser().uid
-			const path = `/versions/${user}/versions/${pageId}`
-			const response = await client.getDirectoryContents(path, {
-				data: davRequest,
-				details: true,
-			})
-
+			const response = await davApi.getVersions(pageId)
 			this.versions = response.data
 				// filter out root
 				.filter(({ mime }) => mime !== '')
@@ -87,13 +79,9 @@ export const useVersionsStore = defineStore('versions', {
 
 		async restoreVersion(version) {
 			const pagesStore = usePagesStore()
-			const user = getCurrentUser().uid
 
 			try {
-				await client.moveFile(
-					`/versions/${user}/versions/${version.fileId}/${version.fileVersion}`,
-					`/versions/${user}/restore/target`,
-				)
+				await davApi.restoreVersion(version.fileId, version.fileVersion)
 			} catch (e) {
 				showError(t('collectives', 'Failed to restore {basename} version of {page}.', {
 					basename: version.basename,
@@ -111,25 +99,9 @@ export const useVersionsStore = defineStore('versions', {
 			}))
 		},
 
-		async setVersionLabel(version, newLabel) {
+		async setVersionLabel(version, label) {
 			try {
-				await client.customRequest(
-					version.filename,
-					{
-						method: 'PROPPATCH',
-						data: `<?xml version="1.0"?>
-							<d:propertyupdate xmlns:d="DAV:"
-								xmlns:oc="http://owncloud.org/ns"
-								xmlns:nc="http://nextcloud.org/ns"
-								xmlns:ocs="http://open-collaboration-services.org/ns">
-							<d:set>
-								<d:prop>
-									<nc:version-label>${newLabel}</nc:version-label>
-								</d:prop>
-							</d:set>
-							</d:propertyupdate>`,
-					},
-				)
+				await davApi.setVersionLabel(version.fileId, version.fileVersion, label)
 			} catch (e) {
 				showError(t('collectives', 'Failed to set version label for {basename}.', {
 					basename: version.basename,
@@ -147,7 +119,7 @@ export const useVersionsStore = defineStore('versions', {
 			const pagesStore = usePagesStore()
 
 			try {
-				await client.deleteFile(version.filename)
+				await davApi.deleteVersion(version.fileId, version.fileVersion)
 			} catch (e) {
 				showError(t('collectives', 'Failed to delete {basename} version of {page}.', {
 					basename: version.basename,
