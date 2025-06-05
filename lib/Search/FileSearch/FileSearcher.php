@@ -43,14 +43,14 @@ class FileSearcher extends TNTSearch {
 	private const UNSUPPORTED_LANGUAGE = 'No';
 
 	protected FileIndexer $indexer;
-	private ?string $language;
 
-	public function __construct(?string $language = null) {
+	public function __construct(
+		private ?string $language = null,
+	) {
 		parent::__construct();
 		$this->loadConfig();
 		$this->asYouType(true);
 		$this->fuzziness(true);
-		$this->language = $language;
 	}
 
 	public function loadConfig(array $config = self::DEFAULT_CONFIG): void {

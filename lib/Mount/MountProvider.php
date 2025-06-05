@@ -63,7 +63,7 @@ class MountProvider implements IMountProvider {
 
 		$userFolderSetting = $this->userFolderHelper->getUserFolderSetting($user->getUID());
 		$internalPathPrefix = 'files';
-		$userFolderPath = substr($userFolder->getInternalPath(), 0, strlen($internalPathPrefix)) == $internalPathPrefix
+		$userFolderPath = str_starts_with($userFolder->getInternalPath(), $internalPathPrefix)
 			? substr($userFolder->getInternalPath(), strlen('files')) . '/'
 			: $userFolder->getName() . '/';
 		$mountPointPath = ($userFolderSetting === '/')
