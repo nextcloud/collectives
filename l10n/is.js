@@ -50,16 +50,16 @@ OC.L10N.register(
     "Create a new share link" : "Búa til nýjan tengil á sameign",
     "Update share" : "Uppfæra sameign",
     "Download" : "Sækja",
-    "Current version" : "Fyrirliggjandi útgáfa",
     "No other versions available" : "Engar aðrar útgáfur í boði",
+    "Current version" : "Fyrirliggjandi útgáfa",
     "Attachments" : "Viðhengi",
     "Sharing" : "Deiling",
     "Versions" : "Útgáfur",
     "Link copied" : "Tengill afritaður",
-    "_%n byte_::_%n bytes_" : ["%n bæti","%n bæti"],
     "Copied" : "Afritað",
     "Cannot copy" : "Get ekki afritað",
     "Copy share link" : "Afrita deilitengil",
-    "Template" : "Sniðmát"
+    "Template" : "Sniðmát",
+    "_%n byte_::_%n bytes_" : ["%n bæti","%n bæti"]
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

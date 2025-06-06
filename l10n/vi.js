@@ -48,13 +48,13 @@ OC.L10N.register(
     "Create a new share link" : "Tạo liên kết chia sẻ mới",
     "Update share" : "Cập nhật chia sẻ",
     "Download" : "Tải xuống",
-    "Current version" : "Phiên bản hiện tại",
     "No other versions available" : "Không có các phiên bản khác có sẵn",
+    "Current version" : "Phiên bản hiện tại",
     "Attachments" : "Đính kèm",
     "Sharing" : "Đang chia sẽ",
     "Versions" : "Phiên bản",
     "Link copied" : "Đã sao chép liên kết",
-    "_%n byte_::_%n bytes_" : ["%n byte"],
-    "Copied" : "Đã sao chép"
+    "Copied" : "Đã sao chép",
+    "_%n byte_::_%n bytes_" : ["%n byte"]
 },
 "nplurals=1; plural=0;");

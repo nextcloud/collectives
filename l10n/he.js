@@ -40,15 +40,15 @@ OC.L10N.register(
     "Unshare" : "ביטול שיתוף",
     "Create a new share link" : "יצירת קישור שיתוף חדש",
     "Download" : "הורדה",
-    "Current version" : "גרסה נוכחית",
     "No other versions available" : "אין גרסאות אחרות זמינות",
+    "Current version" : "גרסה נוכחית",
     "Attachments" : "קבצים מצורפים",
     "Sharing" : "שיתוף",
     "Versions" : "גרסאות",
     "Link copied" : "הקישור הועתק",
-    "_%n byte_::_%n bytes_" : ["%n בייט","%n בייטים","%n בייטים"],
     "Copied" : "הועתק",
     "Copy share link" : "העתקת קישור השיתוף",
-    "Template" : "תבנית"
+    "Template" : "תבנית",
+    "_%n byte_::_%n bytes_" : ["%n בייט","%n בייטים","%n בייטים"]
 },
 "nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: 2;");
