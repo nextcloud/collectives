@@ -67,7 +67,10 @@ namespace OC\Core\Command {
 		public function __construct() {}
 		protected function configure() {}
 		public function run(InputInterface $input, OutputInterface $output) {}
-		public function setName(string $name) {}
+		public function setName(string $name): self {}
+		public function setDescription(string $description): self {}
+		public function addArgument(string $name, ?int $mode = null, string $description = '', mixed $default = null /* array|\Closure $suggestedValues = null */): self {}
+		public function addOption(string $name, string|array|null $shortcut = null, ?int $mode = null, string $description = '', mixed $default = null /* array|\Closure $suggestedValues = [] */): self {}
 		public function getHelper(string $name) {}
 		protected function writeArrayInOutputFormat(InputInterface $input, OutputInterface $output, $items, $prefix = '  - ') {
 		}
@@ -208,7 +211,6 @@ namespace OC\Files {
 		 */
 		public function __construct($path, $storage, $internalPath, $data, $mount, $owner = null) {}
 	}
-
 	class View {
 		public function __construct(string $path) {}
 		public function unlink($path) {}
@@ -275,18 +277,6 @@ namespace OC\BackgroundJob {
 
 		public function getArgument() {
 		}
-	}
-}
-
-namespace OC\Files\Node {
-	use OCP\Files\Folder;
-	use OCP\Files\IRootFolder;
-
-	class LazyFolder implements Folder {
-		protected IRootFolder $rootFolder;
-		protected array $data;
-
-		public function __construct(IRootFolder $rootFolder, \Closure $folderClosure, array $data = [])
 	}
 }
 
@@ -651,20 +641,30 @@ namespace OCA\Circles\Model {
 		public const APP_OCC = 10002;
 		public const APP_DEFAULT = 11000;
 
-		public function getSingleId(): string {}
-		public function getUserType(): int {}
 		public function getLevel(): int {}
+		public function getSingleId(): string {}
+		public function getUserId(): string {}
+		public function getUserType(): int {}
 	}
 
 	class Circle {
-		public function getName(): string {}
-		public function getSingleId(): string {}
-		public function getSanitizedName(): string {}
-		public function getMembers(int $limit = 0): array {}
 		public function getInitiator(): Member {}
+		public function getMembers(): array {}
+		public function getName(): string {}
+		public function getOwner(): Member {}
+		public function getSanitizedName(): string {}
+		public function getSingleId(): string {}
 	}
 
 	class FederatedUser {
+	}
+}
+
+namespace OCA\Circles\Model\Federated {
+	use OCA\Circles\Tools\Model\SimpleDataStore;
+
+	class FederatedEvent {
+		public function getParams(): SimpleDataStore {}
 	}
 }
 
@@ -688,6 +688,11 @@ namespace OCA\Circles\Events {
 	abstract class CircleDestroyedEvent extends CircleResultGenericEvent {
 		public function __construct(FederatedEvent $federatedEvent, array $results) {}
 	}
+	abstract class EditingCircleEvent extends CircleResultGenericEvent {
+		public function __construct(FederatedEvent $federatedEvent, array $results) {}
+
+		public function getFederatedEvent(): FederatedEvent;
+	}
 }
 
 namespace OCA\Circles\Exceptions {
@@ -710,6 +715,12 @@ namespace OCA\Circles\Tools\Exceptions {
 	class InvalidItemException extends Exception {}
 }
 
+namespace OCA\Circles\Tools\Model {
+	class SimpleDataStore {
+		public function g(string $key): string {}
+	}
+}
+
 namespace OCA\Circles {
 	use OCA\Circles\Model\Circle;
 	use OCA\Circles\Model\FederatedUser;
@@ -722,7 +733,7 @@ namespace OCA\Circles {
 		public function stopSession(): void {}
 		public function createCircle(string $name, ?FederatedUser $owner = null, bool $personal = false, bool $local = false): Circle {}
 		public function destroyCircle(string $singleId): void {}
-		public function getCircles(?CircleProbe $probe = null, bool $refreshCache = false): array {}
+		public function getCircles(?CircleProbe $probe = null): array {}
 		public function getCircle(string $singleId, ?CircleProbe $probe = null): Circle {}
 		public function flagAsAppManaged(string $circleId, bool $enabled = true): void {}
 		public function probeCircles(?CircleProbe $circleProbe = null, ?DataProbe $dataProbe = null): array {}
