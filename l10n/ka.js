@@ -56,10 +56,10 @@ OC.L10N.register(
     "Sharing" : "Sharing",
     "Versions" : "Versions",
     "Link copied" : "Link copied",
-    "_%n byte_::_%n bytes_" : ["%n byte","%n bytes"],
     "Copied" : "Copied",
     "Cannot copy" : "Cannot copy",
     "Copy share link" : "Copy share link",
-    "Template" : "Template"
+    "Template" : "Template",
+    "_%n byte_::_%n bytes_" : ["%n byte","%n bytes"]
 },
 "nplurals=2; plural=(n!=1);");
