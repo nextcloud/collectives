@@ -43,8 +43,10 @@ class Collective extends Entity implements JsonSerializable {
 
 	public const pageOrders = [
 		0 => 'byOrder',
-		1 => 'byTimestamp',
-		2 => 'byTitle',
+		1 => 'byTimeAsc',
+		2 => 'byTitleAsc',
+		3 => 'byTimeDesc',
+		4 => 'byTitleDesc',
 	];
 	public const defaultPageOrder = 0;
 

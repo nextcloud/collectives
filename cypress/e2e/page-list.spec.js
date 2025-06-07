@@ -63,7 +63,7 @@ describe('Page list', function() {
 				.should('contain', 'Target')
 
 			// Remove alternative sort order
-			cy.get('span.sort-order-chip > button').click()
+			cy.get('div.sort-order-chip > button').click()
 			cy.get('span.sort-ascending-icon')
 				.should('be.visible')
 			cy.get('.app-content-list-item').eq(1)
