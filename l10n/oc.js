@@ -42,6 +42,7 @@ OC.L10N.register(
     "Create a new share link" : "Crear un ligam de partatge novèl",
     "Download" : "Telecargar",
     "No other versions available" : "Cap d’autra version pas disponibla",
+    "You" : "Vos",
     "Sharing" : "Partiment",
     "Versions" : "Versions",
     "Link copied" : "Ligam copiat",

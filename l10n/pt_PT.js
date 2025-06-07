@@ -35,6 +35,8 @@ OC.L10N.register(
     "Unshare" : "Cancelar partilha",
     "Download" : "Transferir",
     "No other versions available" : "Nenhuma outra versão disponível",
+    "You" : "Vovê",
+    "Download version" : "Transferir versão",
     "Attachments" : "Anexos",
     "Sharing" : "Partilha",
     "Versions" : "Versões",
