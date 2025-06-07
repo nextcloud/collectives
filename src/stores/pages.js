@@ -294,7 +294,7 @@ export const usePagesStore = defineStore('pages', {
 		recentPages(state) {
 			return state.pages
 				.slice()
-				.sort(sortOrders.byTimestamp)
+				.sort(sortOrders.byTimeAsc)
 		},
 
 		recentPagesUserIds(state) {

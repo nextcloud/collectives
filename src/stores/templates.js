@@ -9,7 +9,7 @@ import { useRootStore } from './root.js'
 import { useCollectivesStore } from './collectives.js'
 import { usePagesStore } from './pages.js'
 import * as api from '../apis/collectives/index.js'
-import { byTitle } from '../util/sortOrders.js'
+import { byTitleAsc } from '../util/sortOrders.js'
 import { TEMPLATE_PAGE } from '../constants.js'
 
 export const useTemplatesStore = defineStore('templates', {
@@ -42,7 +42,7 @@ export const useTemplatesStore = defineStore('templates', {
 		},
 
 		sortedTemplates() {
-			return this.templates.sort(byTitle)
+			return this.templates.sort(byTitleAsc)
 		},
 
 		hasTemplates() {

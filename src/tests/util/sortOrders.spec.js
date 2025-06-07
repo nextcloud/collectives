@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { byName, byTitle, byOrder } from '../../util/sortOrders.js'
+import { byName, byTitleAsc, byTitleDesc, byTimeAsc, byTimeDesc, byOrder } from '../../util/sortOrders.js'
 
 global.OC = {
 	getLanguage: () => 'en',
@@ -33,14 +33,47 @@ test('by title', () => {
 		{ title: '10' },
 		{ title: '1' },
 	]
-	const sorted = [
+	const sortedAsc = [
 		{ title: '1' },
 		{ title: '2' },
 		{ title: '10' },
 		{ title: 'a' },
 	]
-	expect(unsorted.sort(byTitle))
-		.toStrictEqual(sorted)
+	const sortedDesc = [
+		{ title: 'a' },
+		{ title: '10' },
+		{ title: '2' },
+		{ title: '1' },
+	]
+	expect(unsorted.sort(byTitleAsc))
+		.toStrictEqual(sortedAsc)
+	expect(unsorted.sort(byTitleDesc))
+		.toStrictEqual(sortedDesc)
+})
+
+test('by time', () => {
+	const unsorted = [
+		{ timestamp: 7 },
+		{ timestamp: 1 },
+		{ timestamp: 3 },
+		{ timestamp: 10 },
+	]
+	const sortedAsc = [
+		{ timestamp: 10 },
+		{ timestamp: 7 },
+		{ timestamp: 3 },
+		{ timestamp: 1 },
+	]
+	const sortedDesc = [
+		{ timestamp: 1 },
+		{ timestamp: 3 },
+		{ timestamp: 7 },
+		{ timestamp: 10 },
+	]
+	expect(unsorted.sort(byTimeAsc))
+		.toStrictEqual(sortedAsc)
+	expect(unsorted.sort(byTimeDesc))
+		.toStrictEqual(sortedDesc)
 })
 
 test('by indices', () => {

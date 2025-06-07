@@ -4,23 +4,27 @@
  */
 
 const byName = (a, b) => a.name.localeCompare(b.name, OC.getLanguage(), { numeric: true })
-const byTitle = (a, b) => a.title.localeCompare(b.title, OC.getLanguage(), { numeric: true })
-const byTimestamp = (a, b) => b.timestamp - a.timestamp
+const byTitleAsc = (a, b) => a.title.localeCompare(b.title, OC.getLanguage(), { numeric: true })
+const byTitleDesc = (a, b) => byTitleAsc(b, a)
+const byTimeAsc = (a, b) => b.timestamp - a.timestamp
+const byTimeDesc = (a, b) => byTimeAsc(b, a)
 
 const byOrder = (a, b) => {
 	if (a.index >= 0 && b.index >= 0) {
 		// both are in the sort order - sort lower index first
 		return a.index - b.index
 	} else {
-		// not in sort order (index = -1) -> put at the end sorted by title
-		return b.index - a.index || byTitle(a, b)
+		// not in sort order (index = -1) -> put at the end sorted ascending by title
+		return b.index - a.index || byTitleAsc(a, b)
 	}
 }
 
 const pageOrders = {
 	byOrder: 0,
-	byTimestamp: 1,
-	byTitle: 2,
+	byTimeAsc: 1,
+	byTitleAsc: 2,
+	byTimeDesc: 3,
+	byTitleDesc: 4,
 }
 
 // Invert key and value of pageOrders
@@ -29,8 +33,10 @@ const pageOrdersByNumber = Object.entries(pageOrders)
 
 export {
 	byName,
-	byTitle,
-	byTimestamp,
+	byTitleAsc,
+	byTitleDesc,
+	byTimeAsc,
+	byTimeDesc,
 	byOrder,
 	pageOrders,
 	pageOrdersByNumber,

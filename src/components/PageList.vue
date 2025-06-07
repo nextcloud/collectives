@@ -18,8 +18,10 @@
 				:aria-label="t('collectives', 'Sort order')">
 				<template #icon>
 					<SortAscendingIcon v-if="sortedBy('byOrder')" :size="16" />
-					<SortAlphabeticalAscendingIcon v-else-if="sortedBy('byTitle')" :size="16" />
-					<SortClockAscendingIcon v-else :size="16" />
+					<SortAlphabeticalAscendingIcon v-else-if="sortedBy('byTitleAsc')" :size="16" />
+					<SortAlphabeticalDescendingIcon v-else-if="sortedBy('byTitleDesc')" :size="16" />
+					<SortClockAscendingIcon v-else-if="sortedBy('byTimeAsc')" :size="16" />
+					<SortClockDescendingIcon v-else :size="16" />
 				</template>
 				<NcActionButton class="toggle-button"
 					:class="{selected: sortedBy('byOrder')}"
@@ -31,22 +33,24 @@
 					{{ t('collectives', 'Sort by custom order') }}
 				</NcActionButton>
 				<NcActionButton class="toggle-button"
-					:class="{selected: sortedBy('byTimestamp')}"
+					:class="{selected: sortedBy('byTimeAsc') || sortedBy('byTimeDesc')}"
 					:close-after-click="true"
-					@click="sortPagesAndScroll('byTimestamp')">
+					@click="sortedBy('byTimeAsc') ? sortPagesAndScroll('byTimeDesc') : sortPagesAndScroll('byTimeAsc')">
 					<template #icon>
-						<SortClockAscendingIcon :size="20" />
+						<SortClockAscendingIcon v-if="!sortedBy('byTimeAsc')" :size="20" />
+						<SortClockDescendingIcon v-else :size="20" />
 					</template>
-					{{ t('collectives', 'Sort recently changed first') }}
+					{{ sortedBy('byTimeAsc') ? t('collectives', 'Sort least recently changed first') : t('collectives', 'Sort recently changed first') }}
 				</NcActionButton>
 				<NcActionButton class="toggle-button"
-					:class="{selected: sortedBy('byTitle')}"
+					:class="{selected: sortedBy('byTitleAsc') || sortedBy('byTitleDesc')}"
 					:close-after-click="true"
-					@click="sortPagesAndScroll('byTitle')">
+					@click="sortedBy('byTitleAsc') ? sortPagesAndScroll('byTitleDesc') : sortPagesAndScroll('byTitleAsc')">
 					<template #icon>
-						<SortAlphabeticalAscendingIcon :size="20" />
+						<SortAlphabeticalAscendingIcon v-if="!sortedBy('byTitleAsc')" :size="20" />
+						<SortAlphabeticalDescendingIcon v-else :size="20" />
 					</template>
-					{{ t('collectives', 'Sort by title') }}
+					{{ sortedBy('byTitleAsc') ? t('collectives', 'Sort descending by title') : t('collectives', 'Sort ascending by title') }}
 				</NcActionButton>
 			</NcActions>
 		</div>
@@ -74,17 +78,19 @@
 
 			<!-- Sort order container (optional) -->
 			<div v-if="!sortedBy('byOrder')" class="sort-order-container">
-				<span class="sort-order-chip">
-					{{ sortedBy('byTitle') ? t('collectives', 'Sorted by title') : t('collectives', 'Sorted by recently changed') }}
+				<div class="sort-order-chip">
+					<span class="sort-order-chip-text">
+						{{ sortedByString }}
+					</span>
 					<NcButton :aria-label="t('collectives', 'Switch back to default sort order')"
 						type="tertiary"
-						class="sort-oder-chip-button"
+						class="sort-order-chip-button"
 						@click="sortPagesAndScroll('byOrder')">
 						<template #icon>
 							<CloseIcon :size="20" />
 						</template>
 					</NcButton>
-				</span>
+				</div>
 			</div>
 
 			<!-- Favorites -->
@@ -148,7 +154,6 @@
 </template>
 
 <script>
-
 import { mapActions, mapState } from 'pinia'
 import { ref } from 'vue'
 import { useElementSize } from '@vueuse/core'
@@ -166,8 +171,10 @@ import Item from './PageList/Item.vue'
 import PageFavorites from './PageList/PageFavorites.vue'
 import PageTrash from './PageList/PageTrash.vue'
 import SortAlphabeticalAscendingIcon from 'vue-material-design-icons/SortAlphabeticalAscending.vue'
+import SortAlphabeticalDescendingIcon from 'vue-material-design-icons/SortAlphabeticalDescending.vue'
 import SortAscendingIcon from 'vue-material-design-icons/SortAscending.vue'
 import SortClockAscendingIcon from 'vue-material-design-icons/SortClockAscending.vue'
+import SortClockDescendingIcon from 'vue-material-design-icons/SortClockDescending.vue'
 import { scrollToPage } from '../util/scrollToElement.js'
 import { pageOrders } from '../util/sortOrders.js'
 import SkeletonLoading from './SkeletonLoading.vue'
@@ -195,8 +202,10 @@ export default {
 		PageTrash,
 		SubpageList,
 		SortAlphabeticalAscendingIcon,
+		SortAlphabeticalDescendingIcon,
 		SortAscendingIcon,
 		SortClockAscendingIcon,
+		SortClockDescendingIcon,
 		RecycleScroller,
 		NcAppNavigationCaption,
 	},
@@ -257,6 +266,18 @@ export default {
 
 		sortedBy() {
 			return (sortOrder) => this.sortByOrder === sortOrder
+		},
+
+		sortedByString() {
+			if (this.sortedBy('byTitleAsc')) {
+				return t('collectives', 'Sorted ascending by title')
+			} else if (this.sortedBy('byTitleDesc')) {
+				return t('collectives', 'Sorted descending by title')
+			} else if (this.sortedBy('byTimeAsc')) {
+				return t('collectives', 'Sorted by recently changed')
+			} else {
+				return t('collectives', 'Sorted by least recently changed')
+			}
 		},
 
 		showFavorites() {
@@ -492,16 +513,20 @@ li.toggle-button.selected {
 		align-items: center;
 
 		height: 24px;
+		// Required for ellipsised text overflow
+		max-width: calc(100% - 33px);
 		padding: 7px;
 		margin-left: 33px; // 40px - 7px
 		background-color: var(--color-primary-element-light);
 		border-radius: var(--border-radius-element, var(--border-radius-large));
 
-		overflow: hidden;
-		white-space: nowrap;
-		text-overflow: ellipsis;
+		&-text {
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		}
 
-		.sort-oder-chip-button {
+		&-button {
 			min-height: 20px;
 			min-width: 20px;
 			height: 20px;
