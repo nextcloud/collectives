@@ -39,6 +39,7 @@ OC.L10N.register(
     "Unshare" : "Oprește partajarea",
     "Download" : "Descărcare",
     "No other versions available" : "Nu există alte versiuni disponibile",
+    "You" : "Tu",
     "Attachments" : "Atașamente ",
     "Sharing" : "Partajare",
     "Versions" : "Versiuni",

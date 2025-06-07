@@ -18,6 +18,7 @@ OC.L10N.register(
     "Download" : "බාගන්න",
     "No other versions available" : "වෙනත් අනුවාද නැත",
     "Current version" : "වත්මන් අනුවාදය",
+    "You" : "ඔබ",
     "Attachments" : "ඇමිණුම්",
     "Versions" : "අනුවාද",
     "Link copied" : "සබැඳිය පිටපත් කළා",

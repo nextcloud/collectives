@@ -40,6 +40,7 @@ OC.L10N.register(
     "Download" : "Lejupielādēt",
     "No other versions available" : "Citas versijas nav pieejamas",
     "Current version" : "Pašreizējā versija",
+    "Compare to current version" : "Salīdzināt ar pašreizējo versiju",
     "Attachments" : "Pielikumi",
     "Sharing" : "Koplietošana",
     "Versions" : "Versijas",

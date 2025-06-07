@@ -24,6 +24,11 @@ OC.L10N.register(
     "Unshare" : "Paylaşımı durdur",
     "Download" : "Yüklə",
     "No other versions available" : "Başqa versiyalar mövcud deyil",
+    "Download version" : "Versiyanı yüklə",
+    "Delete version" : "Versiyanı sil",
+    "Version name" : "Versiyanın adı",
+    "Remove version name" : "Versiya adını sil",
+    "Save version name" : "Versiya adını yadda saxla",
     "Sharing" : "Paylaşılır",
     "Versions" : "Versiyaları",
     "Link copied" : "Link kopyalandı"
