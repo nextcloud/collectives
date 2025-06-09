@@ -56,6 +56,10 @@ return [
 		['name' => 'share#deletePageShare', 'url' => '/_api/{collectiveId}/_pages/{pageId}/share/{token}', 'verb' => 'DELETE',
 			'requirements' => ['collectiveId' => '\d+', 'pageId' => '\d+']],
 
+		// pages search API
+		['name' => 'page#contentSearch', 'url' => '/_api/{collectiveId}/_pages/search',
+			'verb' => 'GET', 'requirements' => ['collectiveId' => '\d+', 'filterString' => '\s+']],
+
 		// pages API
 		['name' => 'page#index', 'url' => '/_api/{collectiveId}/_pages',
 			'verb' => 'GET', 'requirements' => ['collectiveId' => '\d+']],
@@ -67,8 +71,6 @@ return [
 			'verb' => 'GET', 'requirements' => ['collectiveId' => '\d+', 'id' => '\d+']],
 		['name' => 'page#setFullWidth', 'url' => '/_api/{collectiveId}/_pages/{id}/fullWidth',
 			'verb' => 'PUT', 'requirements' => ['collectiveId' => '\d+', 'id' => '\d+']],
-		['name' => 'page#contentSearch', 'url' => '/_api/{collectiveId}/_pages/search',
-			'verb' => 'GET', 'requirements' => ['collectiveId' => '\d+', 'filterString' => '\s+']],
 		['name' => 'page#moveOrCopy', 'url' => '/_api/{collectiveId}/_pages/{id}',
 			'verb' => 'PUT', 'requirements' => ['collectiveId' => '\d+', 'id' => '\d+']],
 		['name' => 'page#moveOrCopyToCollective', 'url' => '/_api/{collectiveId}/_pages/{id}/to/{newCollectiveId}',
@@ -79,9 +81,9 @@ return [
 			'verb' => 'PUT', 'requirements' => ['collectiveId' => '\d+', 'id' => '\d+']],
 		['name' => 'page#trash', 'url' => '/_api/{collectiveId}/_pages/{id}',
 			'verb' => 'DELETE', 'requirements' => ['collectiveId' => '\d+', 'id' => '\d+']],
-		['name' => 'page#getBacklinks', 'url' => '/_api/{collectiveId}/_pages/{id}/backlinks',
-			'verb' => 'GET', 'requirements' => ['collectiveId' => '\d+', 'id' => '\d+']],
 		['name' => 'page#getAttachments', 'url' => '/_api/{collectiveId}/_pages/{id}/attachments',
+			'verb' => 'GET', 'requirements' => ['collectiveId' => '\d+', 'id' => '\d+']],
+		['name' => 'page#getBacklinks', 'url' => '/_api/{collectiveId}/_pages/{id}/backlinks',
 			'verb' => 'GET', 'requirements' => ['collectiveId' => '\d+', 'id' => '\d+']],
 
 		// pages trash API
@@ -106,6 +108,10 @@ return [
 
 		// public collectives API
 		['name' => 'publicCollective#get', 'url' => '/_api/p/{token}', 'verb' => 'GET'],
+
+		// public pages search API
+		['name' => 'publicPage#contentSearch', 'url' => '/_api/p/{token}/_pages/search',
+			'verb' => 'GET', 'requirements' => ['filterString' => '\s+']],
 
 		// public pages API
 		['name' => 'publicPage#index', 'url' => '/_api/p/{token}/_pages', 'verb' => 'GET'],

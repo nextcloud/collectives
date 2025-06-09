@@ -13,10 +13,12 @@ use OCA\Collectives\Db\CollectiveShare;
 use OCA\Collectives\Db\CollectiveShareMapper;
 use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Service\AttachmentService;
+use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\CollectiveShareService;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
 use OCA\Collectives\Service\PageService;
+use OCA\Collectives\Service\SearchService;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\AppFramework\Http\Attribute\AnonRateLimit;
@@ -44,6 +46,8 @@ class PublicPageController extends PublicShareController {
 		private CollectiveShareService $collectiveShareService,
 		private PageService $service,
 		private AttachmentService $attachmentService,
+		private SearchService $indexedSearchService,
+		private CollectiveService $collectiveService,
 		ISession $session,
 		private LoggerInterface $logger,
 	) {
@@ -313,6 +317,31 @@ class PublicPageController extends PublicShareController {
 			$backlinks = $this->service->getBacklinks($collectiveId, $id, $owner);
 			return [
 				'data' => $backlinks
+			];
+		}, $this->logger);
+	}
+
+	#[PublicPage]
+	#[AnonRateLimit(limit: 10, period: 10)]
+	public function contentSearch(string $searchString): DataResponse {
+		return $this->handleErrorResponse(function () use ($searchString): array {
+			$owner = $this->getCollectiveShare()->getOwner();
+			$collectiveId = $this->getCollectiveShare()->getCollectiveId();
+			$collective = $this->collectiveService->getCollective($collectiveId, $owner);
+			$results = $this->indexedSearchService->searchCollective($collective, $searchString, 100);
+			$pages = [];
+			foreach ($results as $value) {
+				if (0 !== $sharePageId = $this->getCollectiveShare()->getPageId()) {
+					try {
+						$this->checkPageShareAccess($collectiveId, $sharePageId, $value['id'], $owner);
+					} catch (NotPermittedException) {
+						continue;
+					}
+				}
+				$pages[] = $this->service->find($collectiveId, $value['id'], $owner);
+			}
+			return [
+				'data' => $pages
 			];
 		}, $this->logger);
 	}

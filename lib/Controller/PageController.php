@@ -92,23 +92,6 @@ class PageController extends Controller {
 		}, $this->logger);
 	}
 
-
-	#[NoAdminRequired]
-	public function contentSearch(int $collectiveId, string $searchString): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId, $searchString): array {
-			$userId = $this->getUserId();
-			$collective = $this->collectiveService->getCollective($collectiveId, $userId);
-			$results = $this->indexedSearchService->searchCollective($collective, $searchString, 100);
-			$pages = [];
-			foreach ($results as $value) {
-				$pages[] = $this->service->find($collectiveId, $value['id'], $userId);
-			}
-			return [
-				'data' => $pages
-			];
-		}, $this->logger);
-	}
-
 	#[NoAdminRequired]
 	public function moveOrCopy(int $collectiveId, int $id, ?int $parentId = null, ?string $title = null, ?int $index = 0, bool $copy = false): DataResponse {
 		$index ??= 0;
@@ -200,6 +183,22 @@ class PageController extends Controller {
 			$backlinks = $this->service->getBacklinks($collectiveId, $id, $userId);
 			return [
 				'data' => $backlinks
+			];
+		}, $this->logger);
+	}
+
+	#[NoAdminRequired]
+	public function contentSearch(int $collectiveId, string $searchString): DataResponse {
+		return $this->handleErrorResponse(function () use ($collectiveId, $searchString): array {
+			$userId = $this->getUserId();
+			$collective = $this->collectiveService->getCollective($collectiveId, $userId);
+			$results = $this->indexedSearchService->searchCollective($collective, $searchString, 100);
+			$pages = [];
+			foreach ($results as $value) {
+				$pages[] = $this->service->find($collectiveId, $value['id'], $userId);
+			}
+			return [
+				'data' => $pages
 			];
 		}, $this->logger);
 	}
