@@ -145,12 +145,14 @@ export default {
 		gap: 4px;
 		margin-top: auto;
 		align-items: center;
-		text-overflow: ellipsis;
-		white-space: nowrap;
 
 		.timestamp {
 			color: var(--color-text-maxcontrast);
 			margin-left: 2px;
+
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
 		}
 	}
 }
