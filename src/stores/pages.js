@@ -740,5 +740,13 @@ export const usePagesStore = defineStore('pages', {
 			const response = await api.getPageBacklinks(this.context, page.id)
 			this.backlinks = response.data.data
 		},
+
+		/**
+		 *
+		 * @param {string} searchString - Content search string
+		 */
+		async contentSearch(searchString) {
+			return await api.contentSearch(this.context, searchString)
+		},
 	},
 })

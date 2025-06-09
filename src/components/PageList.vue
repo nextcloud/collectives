@@ -182,7 +182,6 @@ import { RecycleScroller } from 'vue-virtual-scroller'
 
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import debounce from 'debounce'
-import { contentSearchPages } from '../apis/collectives/pages.js'
 
 export default {
 	name: 'PageList',
@@ -359,7 +358,7 @@ export default {
 	methods: {
 		...mapActions(useRootStore, ['show']),
 		...mapActions(useCollectivesStore, ['setCollectiveUserSettingPageOrder']),
-		...mapActions(usePagesStore, ['setPageOrder']),
+		...mapActions(usePagesStore, ['contentSearch', 'setPageOrder']),
 		...mapActions(useSearchStore, ['setSearchQuery']),
 
 		clearFilterString() {
@@ -405,11 +404,14 @@ export default {
 
 			this.loadingContentFilteredPages = true
 			const oldFilterString = this.filterString
-			this.contentFilteredPages = (await contentSearchPages(this.currentCollective.id, this.filterString)).data.data
-
-			// prevent showing old results
-			if (oldFilterString === this.filterString) {
-				this.loadingContentFilteredPages = false
+			try {
+				const result = await this.contentSearch(this.filterString)
+				this.contentFilteredPages = result.data?.data || []
+			} finally {
+				// prevent showing old results
+				if (oldFilterString === this.filterString) {
+					this.loadingContentFilteredPages = false
+				}
 			}
 		},
 	},
