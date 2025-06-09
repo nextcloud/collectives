@@ -1,5 +1,27 @@
 # Changelog
 
+## 2.18.0 - 2025.06.09
+
+### ✨New
+* 📜 Improved version support with named versions and authors. (#234)
+* 🚀 Faster loading when switching between collectives back and forth.
+* 🔃 Allow to sort pages descending by title/time. (#1680)
+* 🔎 Full text search in public shares. (#1790)
+
+### 🐛Fixes
+* 💄 Several smaller fixes around new templates management. (#1760)
+* 💄 Show title and emoji of landingpage in recent pages. (#1761)
+* 🐛 Fix listing members with latest server releases.
+* 💄 Ellipsise overflowing timestamp strings in recent pages. (#1786)
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 2.17.1 - 2025.05.16
 
 ### 🐛Fixes
