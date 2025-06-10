@@ -15,7 +15,6 @@ use OCP\AppFramework\Http\DataResponse;
 use OCP\IConfig;
 use OCP\IRequest;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 
 class SettingsControllerTest extends TestCase {
 	private SettingsController $settingsController;
@@ -29,15 +28,11 @@ class SettingsControllerTest extends TestCase {
 		$config = $this->getMockBuilder(IConfig::class)
 			->disableOriginalConstructor()
 			->getMock();
-		$logger = $this->getMockBuilder(LoggerInterface::class)
-			->disableOriginalConstructor()
-			->getMock();
 
 		$this->settingsController = new SettingsController(
 			'collectives',
 			$request,
 			$config,
-			$logger,
 			'jane'
 		);
 	}
