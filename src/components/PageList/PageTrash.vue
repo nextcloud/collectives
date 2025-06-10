@@ -204,7 +204,7 @@ export default {
 	width: 100%;
 	margin-top: auto;
 	background-color: var(--color-main-background);
-	padding: 20px 2px 4px 4px;
+	padding: 0 2px 4px 4px;
 
 	.page-trash-button {
 		width: calc(100% - 3px);

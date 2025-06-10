@@ -177,6 +177,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.page-list-dragarea {
+	padding-bottom: 20px;
+}
+
 // drag element in sortable.js lists
 :deep(.sortable-ghost) {
 	opacity: 0.7;
