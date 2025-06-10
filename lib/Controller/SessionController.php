@@ -9,65 +9,83 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Controller;
 
-use Closure;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\SessionService;
+use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\OCS\OCSNotFoundException;
 use OCP\AppFramework\OCSController;
 use OCP\IRequest;
-use OCP\IUserSession;
-use Psr\Log\LoggerInterface;
 
+/**
+ * Provides access to collectives user sessions.
+ * Sessions are used to track active users/clients in a collective, e.g. to notify about updates.
+ */
 class SessionController extends OCSController {
-	use ErrorHelper;
-
 	public function __construct(
 		string $appName,
 		IRequest $request,
 		private SessionService $sessionService,
-		private LoggerInterface $logger,
-		private IUserSession $userSession,
+		private string $userId,
 	) {
 		parent::__construct($appName, $request);
 	}
 
 	/**
-	 * @throws NotFoundException
+	 * Start a session for a collective
+	 *
+	 * @param int $collectiveId ID of the collective
+	 *
+	 * @return DataResponse<Http::STATUS_OK, array{token: string}, array{}>|DataResponse<Http::STATUS_NOT_FOUND, array{error: string}, array{}>
+	 *
+	 * 200: Session created, token returned
+	 * 404: Collective not found
 	 */
-	private function getUserId(): string {
-		$user = $this->userSession->getUser();
-		if ($user === null) {
-			throw new NotFoundException('Session user not found');
-		}
-		return $user->getUID();
-	}
-
-	private function prepareResponse(Closure $callback) : DataResponse {
-		return $this->handleErrorResponse($callback, $this->logger);
-	}
-
 	#[NoAdminRequired]
 	public function create(int $collectiveId): DataResponse {
-		return $this->prepareResponse(function () use ($collectiveId): array {
-			$session = $this->sessionService->initSession($collectiveId, $this->getUserId());
-			return ['token' => $session->getToken()];
-		});
+		try {
+			$session = $this->sessionService->initSession($collectiveId, $this->userId);
+		} catch (NotFoundException $e) {
+			return new DataResponse(['error' => $e->getMessage()], Http::STATUS_NOT_FOUND);
+		}
+		return new DataResponse(['token' => $session->getToken()]);
 	}
 
+	/**
+	 * Update a session for a collective
+	 *
+	 * @param int $collectiveId ID of the collective
+	 * @param string $token Token of the session
+	 *
+	 * @return DataResponse<Http::STATUS_OK, array<empty>, array{}>|DataResponse<Http::STATUS_NOT_FOUND, array{error: string}, array{}>
+	 *
+	 * 200: Session updated
+	 * 404: Session not found
+	 */
 	#[NoAdminRequired]
 	public function sync(int $collectiveId, string $token): DataResponse {
-		return $this->prepareResponse(function () use ($collectiveId, $token): array {
-			$this->sessionService->syncSession($collectiveId, $token, $this->getUserId());
-			return [];
-		});
+		try {
+			$this->sessionService->syncSession($collectiveId, $token, $this->userId);
+		} catch (NotFoundException $e) {
+			return new DataResponse(['error' => $e->getMessage()], Http::STATUS_NOT_FOUND);
+		}
+		return new DataResponse([]);
 	}
 
+	/**
+	 * Close a session for a collective
+	 *
+	 * @param int $collectiveId ID of the collective
+	 * @param string $token Token of the session
+	 *
+	 * @return DataResponse<Http::STATUS_OK, array<empty>, array{}>
+	 *
+	 * 200: Session closed or not found
+	 */
 	#[NoAdminRequired]
 	public function close(int $collectiveId, string $token): DataResponse {
-		return $this->prepareResponse(function () use ($collectiveId, $token): array {
-			$this->sessionService->closeSession($collectiveId, $token, $this->getUserId());
-			return [];
-		});
+		$this->sessionService->closeSession($collectiveId, $token, $this->userId);
+		return new DataResponse([]);
 	}
 }
