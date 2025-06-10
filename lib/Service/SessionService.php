@@ -32,6 +32,9 @@ class SessionService {
 		}
 	}
 
+	/**
+	 * @throws NotFoundException
+	 */
 	public function initSession(int $collectiveId, string $userId): Session {
 		$this->checkPermissions($collectiveId, $userId);
 		$session = new Session();

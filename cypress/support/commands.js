@@ -225,7 +225,7 @@ Cypress.Commands.add('getCollectives', () => {
 
 Cypress.Commands.add('getCollectivesFolder', () => {
 	return api.getCollectivesFolder()
-		.then(response => response.data.ocs.data)
+		.then(response => response.data.ocs.data.user_folder)
 })
 
 Cypress.Commands.add('setCollectivesFolder', api.setCollectivesFolder)
