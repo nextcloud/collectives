@@ -704,10 +704,10 @@ class FeatureContext implements Context {
 
 		$jsonBody = $this->getJson();
 		if ($value) {
-			Assert::assertEquals($value, $jsonBody['ocs']['data']);
+			Assert::assertEquals($value, $jsonBody['ocs']['data'][$key]);
 		}
 
-		return $jsonBody['ocs']['data'];
+		return $jsonBody['ocs']['data'][$key];
 	}
 
 	/**

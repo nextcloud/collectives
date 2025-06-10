@@ -12,6 +12,7 @@ namespace OCA\Collectives\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\OCS\OCSBadRequestException;
 use OCP\AppFramework\OCSController;
 use OCP\IConfig;
 use OCP\IRequest;
@@ -30,20 +31,23 @@ class SettingsController extends OCSController {
 		parent::__construct($appName, $request);
 	}
 
+	/**
+	 * @throws OCSBadRequestException
+	 */
 	private function validateGetUserSetting(string $setting): void {
 		if ($setting === 'user_folder') {
 			return;
 		}
 
-		throw new InvalidArgumentException('Unsupported setting ' . $setting);
+		throw new OCSBadRequestException('Unsupported setting ' . $setting);
 	}
 
 	/**
-	 * @throws InvalidArgumentException
+	 * @throws OCSBadRequestException
 	 */
 	private function validateSetUserSetting(string $setting, ?string $value): void {
 		if ($value === null) {
-			throw new InvalidArgumentException('Empty value for setting ' . $setting);
+			throw new OCSBadRequestException('Empty value for setting ' . $setting);
 		}
 
 		if ($setting === 'user_folder') {
@@ -51,13 +55,13 @@ class SettingsController extends OCSController {
 			if ($value === '/'
 				|| !(str_starts_with($value, '/'))
 				|| str_ends_with($value, '/')) {
-				throw new InvalidArgumentException('Invalid collectives folder path');
+				throw new OCSBadRequestException('Invalid collectives folder path');
 			}
 
 			return;
 		}
 
-		throw new InvalidArgumentException('Unsupported setting ' . $setting);
+		throw new OCSBadRequestException('Unsupported setting ' . $setting);
 	}
 
 	/**
@@ -65,18 +69,14 @@ class SettingsController extends OCSController {
 	 *
 	 * @param string $key The key to get
 	 *
-	 * @return DataResponse<Http::STATUS_OK, array<string>, array{}>|DataResponse<Http::STATUS_BAD_REQUEST, array{error: string}, array{}>
+	 * @return DataResponse<Http::STATUS_OK, array<string, string>, array{}>
+	 * @throws OCSBadRequestException Invalid key
 	 *
 	 * 200: Valid key, value returned
-	 * 400: Invalid key
 	 */
 	#[NoAdminRequired]
 	public function getUserSetting(string $key): DataResponse {
-		try {
-			$this->validateGetUserSetting($key);
-		} catch (InvalidArgumentException $e) {
-			return new DataResponse(['error' => $e->getMessage()], Http::STATUS_BAD_REQUEST);
-		}
+		$this->validateGetUserSetting($key);
 		return new DataResponse([$key => $this->config->getUserValue($this->userId, 'collectives', $key, '')]);
 	}
 
@@ -86,18 +86,14 @@ class SettingsController extends OCSController {
 	 * @param string $key The key to set
 	 * @param string $value The value
 	 *
-	 * @return DataResponse<Http::STATUS_OK, array<string>, array{}>|DataResponse<Http::STATUS_BAD_REQUEST, array{error: string}, array{}>
+	 * @return DataResponse<Http::STATUS_OK, array<string, string>, array{}>
+	 * @throws OCSBadRequestException Invalid key
 	 *
 	 * 200: Valid key set to value
-	 * 400: Invalid key
 	 */
 	#[NoAdminRequired]
 	public function setUserSetting(string $key, string $value): DataResponse {
-		try {
-			$this->validateSetUserSetting($key, $value);
-		} catch (InvalidArgumentException $e) {
-			return new DataResponse(['error' => $e->getMessage()], Http::STATUS_BAD_REQUEST);
-		}
+		$this->validateSetUserSetting($key, $value);
 		$this->config->setUserValue($this->userId, 'collectives', $key, $value);
 		return new DataResponse([$key => $value]);
 	}
