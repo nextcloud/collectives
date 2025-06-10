@@ -12,6 +12,7 @@ namespace Unit\Controller;
 use OCA\Collectives\Controller\SettingsController;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\OCS\OCSBadRequestException;
 use OCP\IConfig;
 use OCP\IRequest;
 use PHPUnit\Framework\TestCase;
@@ -38,40 +39,37 @@ class SettingsControllerTest extends TestCase {
 	}
 
 	public function testSetUserSettingInvalidSetting(): void {
-		$response = new DataResponse('Unsupported setting nonexistent', Http::STATUS_BAD_REQUEST);
-		self::assertEquals($response, $this->settingsController->setUserSetting('nonexistent', 'value'));
+		$this->expectException(OCSBadRequestException::class);
+		$this->settingsController->setUserSetting('nonexistent', 'value');
 	}
 
 	public function testSetUserSettingsEmptyString(): void {
-		$response = new DataResponse('Invalid collectives folder path', Http::STATUS_BAD_REQUEST);
-		self::assertEquals($response, $this->settingsController->setUserSetting('user_folder', ''));
+		$this->expectException(OCSBadRequestException::class);
+		$this->settingsController->setUserSetting('user_folder', '');
 	}
 
 	public function testSetUserSettingsNoSlashStart(): void {
-		$response = new DataResponse('Invalid collectives folder path', Http::STATUS_BAD_REQUEST);
-		self::assertEquals($response, $this->settingsController->setUserSetting('user_folder', 'test'));
-		self::assertEquals($response, $this->settingsController->setUserSetting('user_folder', 'test/'));
-		self::assertEquals($response, $this->settingsController->setUserSetting('user_folder', 'test/abc'));
+		$this->expectException(OCSBadRequestException::class);
+		$this->settingsController->setUserSetting('user_folder', 'test');
 	}
 
 	public function testSetUserSettingsRootFolder(): void {
-		$response = new DataResponse('Invalid collectives folder path', Http::STATUS_BAD_REQUEST);
-		self::assertEquals($response, $this->settingsController->setUserSetting('user_folder', '/'));
+		$this->expectException(OCSBadRequestException::class);
+		$this->settingsController->setUserSetting('user_folder', '/');
 	}
 
 	public function testSetUserSettingsSlashEnd(): void {
-		$response = new DataResponse('Invalid collectives folder path', Http::STATUS_BAD_REQUEST);
-		self::assertEquals($response, $this->settingsController->setUserSetting('user_folder', '/test/'));
-		self::assertEquals($response, $this->settingsController->setUserSetting('user_folder', '/test/abc/'));
+		$this->expectException(OCSBadRequestException::class);
+		$this->settingsController->setUserSetting('user_folder', '/test/');
 	}
 
 	public function testSetUserSettings(): void {
-		$response = new DataResponse('/test', Http::STATUS_OK);
+		$response = new DataResponse(['user_folder' => '/test'], Http::STATUS_OK);
 		self::assertEquals($response, $this->settingsController->setUserSetting('user_folder', '/test'));
 	}
 
 	public function testSetUserSettingsSubfolder(): void {
-		$response = new DataResponse('/test/abc', Http::STATUS_OK);
+		$response = new DataResponse(['user_folder' => '/test/abc'], Http::STATUS_OK);
 		self::assertEquals($response, $this->settingsController->setUserSetting('user_folder', '/test/abc'));
 	}
 }

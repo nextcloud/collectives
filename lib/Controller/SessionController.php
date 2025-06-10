@@ -37,17 +37,17 @@ class SessionController extends OCSController {
 	 *
 	 * @param int $collectiveId ID of the collective
 	 *
-	 * @return DataResponse<Http::STATUS_OK, array{token: string}, array{}>|DataResponse<Http::STATUS_NOT_FOUND, array{error: string}, array{}>
+	 * @return DataResponse<Http::STATUS_OK, array{token: string}, array{}>
+	 * @throws OCSNotFoundException Collective not found
 	 *
 	 * 200: Session created, token returned
-	 * 404: Collective not found
 	 */
 	#[NoAdminRequired]
 	public function create(int $collectiveId): DataResponse {
 		try {
 			$session = $this->sessionService->initSession($collectiveId, $this->userId);
 		} catch (NotFoundException $e) {
-			return new DataResponse(['error' => $e->getMessage()], Http::STATUS_NOT_FOUND);
+			throw new OCSNotFoundException($e->getMessage());
 		}
 		return new DataResponse(['token' => $session->getToken()]);
 	}
@@ -58,17 +58,17 @@ class SessionController extends OCSController {
 	 * @param int $collectiveId ID of the collective
 	 * @param string $token Token of the session
 	 *
-	 * @return DataResponse<Http::STATUS_OK, array<empty>, array{}>|DataResponse<Http::STATUS_NOT_FOUND, array{error: string}, array{}>
+	 * @return DataResponse<Http::STATUS_OK, list<empty>, array{}>
+	 * @throws OCSNotFoundException Session not found
 	 *
 	 * 200: Session updated
-	 * 404: Session not found
 	 */
 	#[NoAdminRequired]
 	public function sync(int $collectiveId, string $token): DataResponse {
 		try {
 			$this->sessionService->syncSession($collectiveId, $token, $this->userId);
 		} catch (NotFoundException $e) {
-			return new DataResponse(['error' => $e->getMessage()], Http::STATUS_NOT_FOUND);
+			throw new OCSNotFoundException($e->getMessage());
 		}
 		return new DataResponse([]);
 	}
@@ -79,7 +79,7 @@ class SessionController extends OCSController {
 	 * @param int $collectiveId ID of the collective
 	 * @param string $token Token of the session
 	 *
-	 * @return DataResponse<Http::STATUS_OK, array<empty>, array{}>
+	 * @return DataResponse<Http::STATUS_OK, list<empty>, array{}>
 	 *
 	 * 200: Session closed or not found
 	 */
