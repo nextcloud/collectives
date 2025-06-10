@@ -33,7 +33,6 @@ OC.L10N.register(
     "Favorite" : "Marcar como favorito",
     "Favorites" : "Favoritos",
     "Deleted" : "Eliminado",
-    "Sort by title" : "Ordenar por título",
     "Share link ({index})" : "Compartir enlace ({index})",
     "View only" : "Sólo lectura",
     "Can edit" : "Puede editar",
@@ -70,6 +69,7 @@ OC.L10N.register(
     "Link copied" : "Enlace copiado",
     "Copied" : "Copiado",
     "Cannot copy" : "No se puede copiar",
+    "Sort by title" : "Ordenar por título",
     "_%n byte_::_%n bytes_" : ["%n byte","%n bytes","%n bytes"]
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

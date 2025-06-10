@@ -30,7 +30,6 @@
     "Favorite" : "Favorit",
     "Favorites" : "Favoriti",
     "Deleted" : "Izbrisano",
-    "Sort by title" : "Razvrstaj prema naslovu",
     "View only" : "Samo za gledanje",
     "Can edit" : "Uređivanje moguće",
     "Cannot copy, please copy the link manually" : "Kopiranje nije moguće, ručno kopirajte poveznicu",
@@ -52,6 +51,7 @@
     "Copied" : "Kopirano",
     "Cannot copy" : "Nije moguće kopirati",
     "Copy share link" : "Kopiraj poveznicu dijeljenja",
-    "Template" : "Predložak"
+    "Template" : "Predložak",
+    "Sort by title" : "Razvrstaj prema naslovu"
 },"pluralForm" :"nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;"
 }

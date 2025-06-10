@@ -58,7 +58,6 @@
     "Favorites" : "Mėgstami",
     "Deleted" : "Ištrinta",
     "Sort order" : "Rikiavimo tvarka",
-    "Sort by title" : "Rikiuoti pagal sąveiką",
     "View only" : "Tik peržiūrėti",
     "Can edit" : "Gali taisyti",
     "Cannot copy, please copy the link manually" : "Nepavyksta nukopijuoti, nukopijuokite nuorodą rankiniu būdu",
@@ -103,6 +102,7 @@
     "Page content" : "Puslapio turinys",
     "Hide templates" : "Slėpti šablonus",
     "Show templates" : "Rodyti šablonus",
+    "Sort by title" : "Rikiuoti pagal sąveiką",
     "Link copied to the clipboard." : "Nuoroda nukopijuota į iškarpinę.",
     "New Page" : "Naujas puslapis"
 },"pluralForm" :"nplurals=4; plural=(n % 10 == 1 && (n % 100 > 19 || n % 100 < 11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? 1 : n % 1 != 0 ? 2: 3);"

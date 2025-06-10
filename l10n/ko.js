@@ -41,7 +41,6 @@ OC.L10N.register(
     "Favorite" : "즐겨찾기",
     "Favorites" : "즐겨찾기",
     "Deleted" : "삭제됨",
-    "Sort by title" : "제목순으로 정렬",
     "Share link ({index})" : "링크 공유 ({index})",
     "View only" : "읽기 전용",
     "Can edit" : "편집 허용",
@@ -81,6 +80,7 @@ OC.L10N.register(
     "Copy share link" : "공유 링크 복사",
     "Allow editing in share" : "공유에서 수정 허용",
     "Admins and moderaters" : "관리자와 중재자",
-    "Template" : "템플릿"
+    "Template" : "템플릿",
+    "Sort by title" : "제목순으로 정렬"
 },
 "nplurals=1; plural=0;");

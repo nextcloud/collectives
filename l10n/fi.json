@@ -35,7 +35,6 @@
     "Favorite" : "Suosikki",
     "Favorites" : "Suosikit",
     "Deleted" : "Poistettu",
-    "Sort by title" : "Lajittele nimen mukaan",
     "Share link ({index})" : "Jaa linkki ({index})",
     "View only" : "Vain katselu",
     "Can edit" : "Voi muokata",
@@ -71,6 +70,7 @@
     "Copied" : "Kopioitu",
     "Cannot copy" : "Ei voida kopioida",
     "Copy share link" : "Kopioi jakolinkki",
-    "Template" : "Malli"
+    "Template" : "Malli",
+    "Sort by title" : "Lajittele nimen mukaan"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

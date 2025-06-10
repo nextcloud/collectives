@@ -33,7 +33,6 @@ OC.L10N.register(
     "Favorite" : "Eftirlæti",
     "Favorites" : "Eftirlæti",
     "Deleted" : "Eytt",
-    "Sort by title" : "Raða eftir titli",
     "Share link ({index})" : "Tengill á sameign ({index})",
     "View only" : "Einungis skoða",
     "Can edit" : "Getur breytt",
@@ -72,6 +71,7 @@ OC.L10N.register(
     "Cannot copy" : "Get ekki afritað",
     "Copy share link" : "Afrita deilitengil",
     "Template" : "Sniðmát",
+    "Sort by title" : "Raða eftir titli",
     "_%n byte_::_%n bytes_" : ["%n bæti","%n bæti"]
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");
