@@ -60,7 +60,6 @@ OC.L10N.register(
     "Favorites" : "Mėgstami",
     "Deleted" : "Ištrinta",
     "Sort order" : "Rikiavimo tvarka",
-    "Sort by title" : "Rikiuoti pagal sąveiką",
     "View only" : "Tik peržiūrėti",
     "Can edit" : "Gali taisyti",
     "Cannot copy, please copy the link manually" : "Nepavyksta nukopijuoti, nukopijuokite nuorodą rankiniu būdu",
@@ -105,6 +104,7 @@ OC.L10N.register(
     "Page content" : "Puslapio turinys",
     "Hide templates" : "Slėpti šablonus",
     "Show templates" : "Rodyti šablonus",
+    "Sort by title" : "Rikiuoti pagal sąveiką",
     "Link copied to the clipboard." : "Nuoroda nukopijuota į iškarpinę.",
     "New Page" : "Naujas puslapis"
 },

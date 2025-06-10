@@ -36,7 +36,6 @@ OC.L10N.register(
     "Favorite" : "Preferidu",
     "Favorites" : "Preferidos",
     "Deleted" : "Cantzelladu",
-    "Sort by title" : "Assenta segundu tìtulu",
     "View only" : "Isceti in visualizatzione",
     "Can edit" : "Podet modificare",
     "Cannot copy, please copy the link manually" : "No at fatu a copiare, copia su ligòngiu a manu",
@@ -63,6 +62,7 @@ OC.L10N.register(
     "Link copied" : "Ligòngiu copiadu",
     "Copied" : "Copiadu",
     "Cannot copy" : "Non faghet a copiare",
-    "Template" : "Modellu"
+    "Template" : "Modellu",
+    "Sort by title" : "Assenta segundu tìtulu"
 },
 "nplurals=2; plural=(n != 1);");

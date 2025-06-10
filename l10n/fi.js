@@ -37,7 +37,6 @@ OC.L10N.register(
     "Favorite" : "Suosikki",
     "Favorites" : "Suosikit",
     "Deleted" : "Poistettu",
-    "Sort by title" : "Lajittele nimen mukaan",
     "Share link ({index})" : "Jaa linkki ({index})",
     "View only" : "Vain katselu",
     "Can edit" : "Voi muokata",
@@ -73,6 +72,7 @@ OC.L10N.register(
     "Copied" : "Kopioitu",
     "Cannot copy" : "Ei voida kopioida",
     "Copy share link" : "Kopioi jakolinkki",
-    "Template" : "Malli"
+    "Template" : "Malli",
+    "Sort by title" : "Lajittele nimen mukaan"
 },
 "nplurals=2; plural=(n != 1);");
