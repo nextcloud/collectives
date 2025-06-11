@@ -4,7 +4,32 @@
  */
 
 import axios from '@nextcloud/axios'
-import { collectivesUrl } from './urls.js'
+import { apiUrl } from './urls.js'
+
+/**
+ * URL for the shares API
+ *
+ * @param {number} collectiveId - ID of the collective
+ * @param {...any} parts - URL parts to append - will be joined with `/`
+ */
+function collectiveSharesApiUrl(collectiveId, ...parts) {
+	console.debug('parts', ...parts)
+	return apiUrl('v1.0', 'shares', collectiveId, ...parts)
+}
+
+/**
+ * Url of a share
+ *
+ * @param {object} share Share to update
+ * @param {number} share.collectiveId Id of the colletive
+ * @param {number} share.pageId Id of the colletive
+ * @param {string} share.token Token of the share to be updated
+ */
+function shareUrl({ collectiveId, pageId, token }) {
+	return pageId
+		? collectiveSharesApiUrl(collectiveId, 'pages', pageId, token)
+		: collectiveSharesApiUrl(collectiveId, token)
+}
 
 /**
  * Get shares of a collective and its pages
@@ -12,7 +37,7 @@ import { collectivesUrl } from './urls.js'
  * @param {number} collectiveId Id of the colletive
  */
 export function getShares(collectiveId) {
-	return axios.get(collectivesUrl(collectiveId, 'shares'))
+	return axios.get(collectiveSharesApiUrl(collectiveId))
 }
 
 /**
@@ -22,7 +47,7 @@ export function getShares(collectiveId) {
  * @param {string} password Optional password for the share
  */
 export function createCollectiveShare(collectiveId, password) {
-	return axios.post(collectivesUrl(collectiveId, 'share'))
+	return axios.post(collectiveSharesApiUrl(collectiveId))
 }
 
 /**
@@ -34,7 +59,7 @@ export function createCollectiveShare(collectiveId, password) {
  */
 export function createPageShare(collectiveId, pageId, password) {
 	return axios.post(
-		collectivesUrl(collectiveId, '_pages', pageId, 'share'),
+		collectiveSharesApiUrl(collectiveId, 'pages', pageId),
 		{ password },
 	)
 }
@@ -68,18 +93,4 @@ export function deleteShare(share) {
 	return axios.delete(
 		shareUrl(share),
 	)
-}
-
-/**
- * Url of a share
- *
- * @param {object} share Share to update
- * @param {number} share.collectiveId Id of the colletive
- * @param {number} share.pageId Id of the colletive
- * @param {string} share.token Token of the share to be updated
- */
-function shareUrl({ collectiveId, pageId, token }) {
-	return pageId
-		? collectivesUrl(collectiveId, '_pages', pageId, 'share', token)
-		: collectivesUrl(collectiveId, 'share', token)
 }

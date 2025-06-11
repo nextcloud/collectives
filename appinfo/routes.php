@@ -30,22 +30,6 @@ return [
 		['name' => 'trash#restore', 'url' => '/_api/trash/{id}', 'verb' => 'PATCH',
 			'requirements' => ['id' => '\d+']],
 
-		// share API
-		['name' => 'share#getCollectiveShares', 'url' => '/_api/{collectiveId}/shares', 'verb' => 'GET',
-			'requirements' => ['collectiveId' => '\d+']],
-		['name' => 'share#createCollectiveShare', 'url' => '/_api/{collectiveId}/share', 'verb' => 'POST',
-			'requirements' => ['collectiveId' => '\d+']],
-		['name' => 'share#updateCollectiveShare', 'url' => '/_api/{collectiveId}/share/{token}', 'verb' => 'PUT',
-			'requirements' => ['collectiveId' => '\d+']],
-		['name' => 'share#deleteCollectiveShare', 'url' => '/_api/{collectiveId}/share/{token}', 'verb' => 'DELETE',
-			'requirements' => ['collectiveId' => '\d+']],
-		['name' => 'share#createPageShare', 'url' => '/_api/{collectiveId}/_pages/{pageId}/share', 'verb' => 'POST',
-			'requirements' => ['collectiveId' => '\d+', 'pageId' => '\d+']],
-		['name' => 'share#updatePageShare', 'url' => '/_api/{collectiveId}/_pages/{pageId}/share/{token}', 'verb' => 'PUT',
-			'requirements' => ['collectiveId' => '\d+', 'pageId' => '\d+']],
-		['name' => 'share#deletePageShare', 'url' => '/_api/{collectiveId}/_pages/{pageId}/share/{token}', 'verb' => 'DELETE',
-			'requirements' => ['collectiveId' => '\d+', 'pageId' => '\d+']],
-
 		// pages search API
 		['name' => 'page#contentSearch', 'url' => '/_api/{collectiveId}/_pages/search',
 			'verb' => 'GET', 'requirements' => ['collectiveId' => '\d+', 'filterString' => '\s+']],
@@ -150,13 +134,23 @@ return [
 			'defaults' => ['path' => '/']],
 	],
 	'ocs' => [
-		// User settings API
-		['name' => 'settings#getUserSetting', 'url' => '/api/v{apiVersion}/settings/user/{key}', 'verb' => 'GET',
-			'requirements' => ['apiVersion' => '(1.0)']],
-		['name' => 'settings#setUserSetting', 'url' => '/api/v{apiVersion}/settings/user', 'verb' => 'POST',
-			'requirements' => ['apiVersion' => '(1.0)']],
+		// Collective shares API
+		['name' => 'share#getCollectiveShares', 'url' => '/api/v{apiVersion}/shares/{collectiveId}', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+']],
+		['name' => 'share#createPageShare', 'url' => '/api/v{apiVersion}/shares/{collectiveId}/pages/{pageId}', 'verb' => 'POST',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'pageId' => '\d+']],
+		['name' => 'share#updatePageShare', 'url' => '/api/v{apiVersion}/shares/{collectiveId}/pages/{pageId}/{token}', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'pageId' => '\d+']],
+		['name' => 'share#deletePageShare', 'url' => '/api/v{apiVersion}/shares/{collectiveId}/pages/{pageId}/{token}', 'verb' => 'DELETE',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'pageId' => '\d+']],
+		['name' => 'share#createCollectiveShare', 'url' => '/api/v{apiVersion}/shares/{collectiveId}', 'verb' => 'POST',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+']],
+		['name' => 'share#updateCollectiveShare', 'url' => '/api/v{apiVersion}/shares/{collectiveId}/{token}', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+']],
+		['name' => 'share#deleteCollectiveShare', 'url' => '/api/v{apiVersion}/shares/{collectiveId}/{token}', 'verb' => 'DELETE',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+']],
 
-		// Collective userSettings API
+		// Collective user settings API
 		['name' => 'collectiveUserSettings#setPageOrder', 'url' => '/api/v{apiVersion}/userSettings/{collectiveId}/pageOrder', 'verb' => 'PUT',
 			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+']],
 		['name' => 'collectiveUserSettings#setShowMembers', 'url' => '/api/v{apiVersion}/userSettings/{collectiveId}/showMembers', 'verb' => 'PUT',
@@ -172,6 +166,12 @@ return [
 		['name' => 'session#sync', 'url' => '/api/v{apiVersion}/session/{collectiveId}', 'verb' => 'PUT',
 			'requirements' => ['apiVersion' => '(1.0)']],
 		['name' => 'session#close', 'url' => '/api/v{apiVersion}/session/{collectiveId}', 'verb' => 'DELETE',
+			'requirements' => ['apiVersion' => '(1.0)']],
+
+		// Settings API
+		['name' => 'settings#getUserSetting', 'url' => '/api/v{apiVersion}/settings/user/{key}', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)']],
+		['name' => 'settings#setUserSetting', 'url' => '/api/v{apiVersion}/settings/user', 'verb' => 'POST',
 			'requirements' => ['apiVersion' => '(1.0)']],
 	]
 ];
