@@ -413,7 +413,7 @@ class FeatureContext implements Context {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$formData = new TableNode([[$userSetting, $value]]);
-		$this->sendRequest('PUT', '/apps/collectives/_api/' . $collectiveId . '/_userSettings/' . $userSetting, $formData);
+		$this->sendOcsRequest('PUT', '/apps/collectives/api/v1.0/userSettings/' . $collectiveId . '/' . $userSetting, $formData);
 		if ($this->response->getStatusCode() !== 200) {
 			throw new RuntimeException('Unable to set userSetting for collective');
 		}

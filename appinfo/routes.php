@@ -30,16 +30,6 @@ return [
 		['name' => 'trash#restore', 'url' => '/_api/trash/{id}', 'verb' => 'PATCH',
 			'requirements' => ['id' => '\d+']],
 
-		// collectives userSettings API
-		['name' => 'collectiveUserSettings#pageOrder', 'url' => '/_api/{id}/_userSettings/pageOrder', 'verb' => 'PUT',
-			'requirements' => ['id' => '\d+']],
-		['name' => 'collectiveUserSettings#showMembers', 'url' => '/_api/{id}/_userSettings/showMembers', 'verb' => 'PUT',
-			'requirements' => ['id' => '\d+']],
-		['name' => 'collectiveUserSettings#showRecentPages', 'url' => '/_api/{id}/_userSettings/showRecentPages', 'verb' => 'PUT',
-			'requirements' => ['id' => '\d+']],
-		['name' => 'collectiveUserSettings#favoritePages', 'url' => '/_api/{id}/_userSettings/favoritePages', 'verb' => 'PUT',
-			'requirements' => ['id' => '\d+']],
-
 		// share API
 		['name' => 'share#getCollectiveShares', 'url' => '/_api/{collectiveId}/shares', 'verb' => 'GET',
 			'requirements' => ['collectiveId' => '\d+']],
@@ -165,6 +155,16 @@ return [
 			'requirements' => ['apiVersion' => '(1.0)']],
 		['name' => 'settings#setUserSetting', 'url' => '/api/v{apiVersion}/settings/user', 'verb' => 'POST',
 			'requirements' => ['apiVersion' => '(1.0)']],
+
+		// Collective userSettings API
+		['name' => 'collectiveUserSettings#setPageOrder', 'url' => '/api/v{apiVersion}/userSettings/{collectiveId}/pageOrder', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+']],
+		['name' => 'collectiveUserSettings#setShowMembers', 'url' => '/api/v{apiVersion}/userSettings/{collectiveId}/showMembers', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+']],
+		['name' => 'collectiveUserSettings#setShowRecentPages', 'url' => '/api/v{apiVersion}/userSettings/{collectiveId}/showRecentPages', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+']],
+		['name' => 'collectiveUserSettings#setFavoritePages', 'url' => '/api/v{apiVersion}/userSettings/{collectiveId}/favoritePages', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+']],
 
 		// Session API
 		['name' => 'session#create', 'url' => '/api/v{apiVersion}/session/{collectiveId}', 'verb' => 'POST',
