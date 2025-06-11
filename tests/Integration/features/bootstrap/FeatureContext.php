@@ -922,13 +922,13 @@ class FeatureContext implements Context {
 	public function userCreatesPublicShare(string $user, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
-		$this->sendRequest('POST', '/apps/collectives/_api/' . $collectiveId . '/share');
+		$this->sendOcsRequest('POST', '/apps/collectives/api/v1.0/shares/' . $collectiveId);
 		if ($fail === 'fails') {
 			$this->assertStatusCode(403);
 		} else {
 			$this->assertStatusCode(200);
 			$jsonBody = $this->getJson();
-			Assert::assertNotEmpty($jsonBody['data']['token']);
+			Assert::assertNotEmpty($jsonBody['ocs']['data']['token']);
 		}
 	}
 
@@ -942,13 +942,13 @@ class FeatureContext implements Context {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$pageId = $this->pageIdByName($collectiveId, $page);
-		$this->sendRequest('POST', '/apps/collectives/_api/' . $collectiveId . '/_pages/' . $pageId . '/share');
+		$this->sendOcsRequest('POST', '/apps/collectives/api/v1.0/shares/' . $collectiveId . '/pages/' . $pageId);
 		if ($fail === 'fails') {
 			$this->assertStatusCode(403);
 		} else {
 			$this->assertStatusCode(200);
 			$jsonBody = $this->getJson();
-			Assert::assertNotEmpty($jsonBody['data']['token']);
+			Assert::assertNotEmpty($jsonBody['ocs']['data']['token']);
 		}
 	}
 
@@ -962,7 +962,7 @@ class FeatureContext implements Context {
 		$collectiveId = $this->collectiveIdByName($collective);
 		$token = $this->getShareToken($collectiveId);
 		$formData = new TableNode([['editable', true]]);
-		$this->sendRequest('PUT', '/apps/collectives/_api/' . $collectiveId . '/share/' . $token, $formData);
+		$this->sendOcsRequest('PUT', '/apps/collectives/api/v1.0/shares/' . $collectiveId . '/' . $token, $formData);
 		$this->assertStatusCode(200);
 	}
 
@@ -977,7 +977,7 @@ class FeatureContext implements Context {
 		$pageId = $this->pageIdByName($collectiveId, $page);
 		$token = $this->getShareToken($collectiveId, $pageId);
 		$formData = new TableNode([['editable', true]]);
-		$this->sendRequest('PUT', '/apps/collectives/_api/' . $collectiveId . '/_pages/' . $pageId . '/share/' . $token, $formData);
+		$this->sendOcsRequest('PUT', '/apps/collectives/api/v1.0/shares/' . $collectiveId . '/pages/' . $pageId . '/' . $token, $formData);
 		$this->assertStatusCode(200);
 	}
 
@@ -991,7 +991,7 @@ class FeatureContext implements Context {
 		$collectiveId = $this->collectiveIdByName($collective);
 		$token = $this->getShareToken($collectiveId);
 		$formData = new TableNode([['editable', false]]);
-		$this->sendRequest('PUT', '/apps/collectives/_api/' . $collectiveId . '/share/' . $token, $formData);
+		$this->sendOcsRequest('PUT', '/apps/collectives/api/v1.0/shares/' . $collectiveId . '/' . $token, $formData);
 		$this->assertStatusCode(200);
 	}
 
@@ -1006,7 +1006,7 @@ class FeatureContext implements Context {
 		$pageId = $this->pageIdByName($collectiveId, $page);
 		$token = $this->getShareToken($collectiveId, $pageId);
 		$formData = new TableNode([['editable', false]]);
-		$this->sendRequest('PUT', '/apps/collectives/_api/' . $collectiveId . '/share/' . $token, $formData);
+		$this->sendOcsRequest('PUT', '/apps/collectives/api/v1.0/shares/' . $collectiveId . '/pages/' . $pageId . '/' . $token, $formData);
 		$this->assertStatusCode(200);
 	}
 
@@ -1041,9 +1041,9 @@ class FeatureContext implements Context {
 		}
 		$token = $this->getShareToken($collectiveId, $pageShareId);
 		if ($pageShare) {
-			$this->sendRequest('DELETE', '/apps/collectives/_api/' . $collectiveId . '/_pages/' . $pageShareId . '/share/' . $token);
+			$this->sendOcsRequest('DELETE', '/apps/collectives/api/v1.0/shares' . $collectiveId . '/pages/' . $pageShareId . '/' . $token);
 		} else {
-			$this->sendRequest('DELETE', '/apps/collectives/_api/' . $collectiveId . '/share/' . $token);
+			$this->sendOcsRequest('DELETE', '/apps/collectives/api/v1.0/shares/' . $collectiveId . '/' . $token);
 		}
 		$this->assertStatusCode(200);
 	}
@@ -1960,12 +1960,12 @@ class FeatureContext implements Context {
 	}
 
 	private function getShareToken(int $collectiveId, int $pageId = 0): ?string {
-		$this->sendRequest('GET', '/apps/collectives/_api/' . $collectiveId . '/shares');
+		$this->sendOcsRequest('GET', '/apps/collectives/api/v1.0/shares/' . $collectiveId);
 		if ($this->response->getStatusCode() !== 200) {
 			throw new RuntimeException('Unable to get list of collectives');
 		}
 		$jsonBody = $this->getJson();
-		foreach ($jsonBody['data'] as $share) {
+		foreach ($jsonBody['ocs']['data'] as $share) {
 			if ($collectiveId === $share['collectiveId'] && $pageId === $share['pageId']) {
 				return $share['token'];
 			}
