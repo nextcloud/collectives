@@ -116,6 +116,7 @@ export default {
 		...mapActions(useRootStore, ['hide', 'load', 'show']),
 		...mapActions(useSharesStore, ['getShares']),
 		...mapActions(useTemplatesStore, ['getTemplates']),
+		...mapActions(useSessionsStore, ['createSession', 'updateSession', 'closeSession']),
 		...mapActions(usePagesStore, ['getPages', 'getTrashPages']),
 		...mapActions(useVersionsStore, ['selectVersion']),
 

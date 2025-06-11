@@ -13,7 +13,7 @@ export const useSessionsStore = defineStore('sessions', {
 	}),
 
 	getters: {
-		hasSession: (state) => Object.keys(state.session).length,
+		hasSession: (state) => !!Object.keys(state.session).length,
 	},
 
 	actions: {
