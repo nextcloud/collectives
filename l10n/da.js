@@ -213,7 +213,7 @@ OC.L10N.register(
     "Initial version" : "Oprindelig version",
     "You" : "Dig",
     "Name this version" : "Navngiv denne version",
-    "Edit version name" : "Rediger versionsnavn",
+    "Edit version name" : "Redigér versionsnavn",
     "Compare to current version" : "Sammenlign med den aktuelle version",
     "Restore version" : "Gendan version",
     "Download version" : "Download version",
