@@ -4,7 +4,17 @@
  */
 
 import axios from '@nextcloud/axios'
-import { collectivesUrl } from './urls.js'
+import { apiUrl } from './urls.js'
+
+/**
+ * URL for the collective user settings API
+ *
+ * @param {number} collectiveId - ID of the collective
+ * @param {...any} parts - URL parts to append - will be joined with `/`
+ */
+function collectiveUserSettingsApiUrl(collectiveId, ...parts) {
+	return apiUrl('v1.0', 'userSettings', collectiveId, parts)
+}
 
 /**
  * Set the page order for the current user
@@ -14,7 +24,7 @@ import { collectivesUrl } from './urls.js'
  */
 export function setCollectiveUserSettingPageOrder(collectiveId, pageOrder) {
 	return axios.put(
-		collectivesUrl(collectiveId, '_userSettings', 'pageOrder'),
+		collectiveUserSettingsApiUrl(collectiveId, 'pageOrder'),
 		{ pageOrder },
 	)
 }
@@ -27,7 +37,7 @@ export function setCollectiveUserSettingPageOrder(collectiveId, pageOrder) {
  */
 export function setCollectiveUserSettingShowMembers(collectiveId, showMembers) {
 	return axios.put(
-		collectivesUrl(collectiveId, '_userSettings', 'showMembers'),
+		collectiveUserSettingsApiUrl(collectiveId, 'showMembers'),
 		{ showMembers },
 	)
 }
@@ -40,7 +50,7 @@ export function setCollectiveUserSettingShowMembers(collectiveId, showMembers) {
  */
 export function setCollectiveUserSettingShowRecentPages(collectiveId, showRecentPages) {
 	return axios.put(
-		collectivesUrl(collectiveId, '_userSettings', 'showRecentPages'),
+		collectiveUserSettingsApiUrl(collectiveId, 'showRecentPages'),
 		{ showRecentPages },
 	)
 }
@@ -53,7 +63,7 @@ export function setCollectiveUserSettingShowRecentPages(collectiveId, showRecent
  */
 export function setCollectiveUserSettingFavoritePages(collectiveId, favoritePages) {
 	return axios.put(
-		collectivesUrl(collectiveId, '_userSettings', 'favoritePages'),
+		collectiveUserSettingsApiUrl(collectiveId, 'favoritePages'),
 		{ favoritePages: JSON.stringify(favoritePages) },
 	)
 }
