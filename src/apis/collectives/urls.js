@@ -6,10 +6,10 @@
 import { generateUrl, generateOcsUrl } from '@nextcloud/router'
 
 /**
- * Url for the versioned collectives api
+ * URL for the versioned collectives API
  *
- * @param {string} version - Version of the api - currently `v1.0`
- * @param {...any} parts - url parts to append - will be joined with `/`
+ * @param {string} version - Version of the API - currently `v1.0`
+ * @param {...any} parts - URL parts to append - will be joined with `/`
  */
 export function apiUrl(version, ...parts) {
 	const path = ['apps/collectives/api', version, ...parts]
@@ -18,9 +18,9 @@ export function apiUrl(version, ...parts) {
 }
 
 /**
- * Url for the collectives app endpoints
+ * URL for the collectives app endpoints
  *
- * @param {...any} parts - url parts to append - will be joined with `/`
+ * @param {...any} parts - URL parts to append - will be joined with `/`
  */
 export function collectivesUrl(...parts) {
 	const path = ['apps/collectives/_api', ...parts]
@@ -29,10 +29,10 @@ export function collectivesUrl(...parts) {
 }
 
 /**
- * Url for pages paths inside the given context.
+ * URL for pages paths inside the given context.
  *
  * @param {object} context - either the current collective or a share context
- * @param {...any} parts - url parts to append
+ * @param {...any} parts - URL parts to append
  */
 export function pagesUrl(context, ...parts) {
 	return context.isPublic
@@ -41,10 +41,10 @@ export function pagesUrl(context, ...parts) {
 }
 
 /**
- * Url for templates paths inside the given context.
+ * URL for templates paths inside the given context.
  *
  * @param {object} context - either the current collective or a share context
- * @param {...any} parts - url parts to append
+ * @param {...any} parts - URL parts to append
  */
 export function templatesUrl(context, ...parts) {
 	return context.isPublic

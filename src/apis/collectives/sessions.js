@@ -7,12 +7,20 @@ import axios from '@nextcloud/axios'
 import { apiUrl } from './urls.js'
 
 /**
+ * URL for the collective session API
+ *
+ * @param {number} collectiveId - ID of the collective
+ */
+function sessionApiUrl(collectiveId) {
+	return apiUrl('v1.0', 'session', collectiveId)
+}
+/**
  * Create a new session for the current user
  *
  * @param {number} collectiveId - ID of the collective
  */
 export function createSession(collectiveId) {
-	return axios.post(apiUrl('v1.0', `session/${collectiveId}`))
+	return axios.post(sessionApiUrl(collectiveId))
 }
 
 /**
@@ -22,7 +30,7 @@ export function createSession(collectiveId) {
  * @param {string} token - Session token
  */
 export function updateSession(collectiveId, token) {
-	return axios.put(apiUrl('v1.0', `session/${collectiveId}`), { token })
+	return axios.put(sessionApiUrl(collectiveId), { token })
 }
 
 /**
@@ -32,5 +40,5 @@ export function updateSession(collectiveId, token) {
  * @param {string} token - Session token
  */
 export function closeSession(collectiveId, token) {
-	return axios.delete(apiUrl('v1.0', `session/${collectiveId}?token=${token}`))
+	return axios.delete(sessionApiUrl(`${collectiveId}?token=${token}`))
 }
