@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace OCA\Collectives\Controller;
 
 use Closure;
-
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Service\CollectiveService;
@@ -68,11 +67,10 @@ class CollectiveController extends Controller {
 	#[NoAdminRequired]
 	public function create(string $name, ?string $emoji = null): DataResponse {
 		return $this->prepareResponse(function () use ($name, $emoji): array {
-			$safeName = $this->nodeHelper->sanitiseFilename($name);
 			[$collective, $info] = $this->service->createCollective(
 				$this->getUserId(),
 				$this->getUserLang(),
-				$safeName,
+				$name,
 				$emoji,
 			);
 			return [

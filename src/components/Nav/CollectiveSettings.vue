@@ -189,9 +189,10 @@ export default {
 
 	computed: {
 		...mapState(useRootStore, [
-			'collectiveParam',
+			'collectiveId',
 			'loading',
 			'pageParam',
+			'pageId',
 		]),
 		...mapState(useCollectivesStore, ['isCollectiveOwner']),
 		...mapState(usePagesStore, ['pages']),
@@ -320,7 +321,7 @@ export default {
 			this.load('renameCollective')
 
 			// If currentCollective is renamed, we need to update the router path later
-			const redirect = this.collectiveParam === this.collective.name
+			const redirect = this.collectiveId === this.collective.id
 
 			// Wait for team rename (also patches store with updated collective and pages)
 			const collective = { ...this.collective }
@@ -338,10 +339,7 @@ export default {
 
 			// Push new router path if currentCollective was renamed
 			if (redirect) {
-				this.$router.push(
-					'/' + encodeURIComponent(this.newCollectiveName)
-					+ (this.pageParam ? '/' + this.pageParam : ''),
-				)
+				this.$router.go(0)
 			}
 
 			this.done('renameCollective')
@@ -351,7 +349,7 @@ export default {
 		 * Trash a collective with the given name
 		 */
 		onTrashCollective() {
-			if (this.collectiveParam === this.collective.name) {
+			if (this.collectiveId === this.collective.id) {
 				this.$router.push('/')
 				emit('toggle-navigation', { open: true })
 			}
