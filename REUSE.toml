@@ -12,7 +12,7 @@ SPDX-FileCopyrightText = "none"
 SPDX-License-Identifier = "CC0-1.0"
 
 [[annotations]]
-path = ["cypress/fixtures/**", "tests/phpunit.xml", "tests/psalm-baseline.xml", "tests/Integration/features/fixtures/**", "vendor-bin/**"]
+path = ["cypress/fixtures/**", "openapi.json", "tests/phpunit.xml", "tests/psalm-baseline.xml", "tests/Integration/features/fixtures/**", "vendor-bin/**"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2020-2024 Nextcloud GmbH and Nextcloud contributors"
 SPDX-License-Identifier = "AGPL-3.0-or-later"
