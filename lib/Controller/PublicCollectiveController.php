@@ -9,9 +9,8 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Controller;
 
-use Closure;
-
 use OCA\Circles\Model\Member;
+use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveShareMapper;
 use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\NotFoundException;
@@ -77,14 +76,10 @@ class PublicCollectiveController extends PublicShareController {
 		return $this->getShare()->getPassword() !== null;
 	}
 
-	private function prepareResponse(Closure $callback) : DataResponse {
-		return $this->handleErrorResponse($callback, $this->logger);
-	}
-
 	#[PublicPage]
 	#[AnonRateLimit(limit: 10, period: 60)]
 	public function get(): DataResponse {
-		return $this->prepareResponse(function (): array {
+		$collective = $this->handleErrorResponse(function (): Collective {
 			try {
 				$share = $this->collectiveShareMapper->findOneByToken($this->getToken());
 			} catch (DoesNotExistException|MultipleObjectsReturnedException $e) {
@@ -95,9 +90,8 @@ class PublicCollectiveController extends PublicShareController {
 				$share->getToken());
 			// Explicitly set member level
 			$collective->setLevel(Member::LEVEL_MEMBER);
-			return [
-				'data' => [$collective],
-			];
-		});
+			return $collective;
+		}, $this->logger);
+		return new DataResponse(['data' => [$collective]]);
 	}
 }

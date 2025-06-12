@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Controller;
 
+use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\TemplateService;
 use OCP\AppFramework\Controller;
@@ -44,54 +45,46 @@ class TemplateController extends Controller {
 
 	#[NoAdminRequired]
 	public function index(int $collectiveId): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId): array {
+		$templateInfos = $this->handleErrorResponse(function () use ($collectiveId): array {
 			$userId = $this->getUserId();
-			$templateInfos = $this->templateService->getTemplates($collectiveId, $userId);
-			return [
-				'data' => $templateInfos
-			];
+			return $this->templateService->getTemplates($collectiveId, $userId);
 		}, $this->logger);
+		return new DataResponse(['data' => $templateInfos]);
 	}
 
 	#[NoAdminRequired]
 	public function create(int $collectiveId, string $title, int $parentId): DataResponse {
-		return $this->handleErrorResponse(function () use ($parentId, $collectiveId, $title): array {
+		$templateInfo = $this->handleErrorResponse(function () use ($parentId, $collectiveId, $title): PageInfo {
 			$userId = $this->getUserId();
-			$templateInfo = $this->templateService->create($collectiveId, $parentId, $title, $userId);
-			return [
-				'data' => $templateInfo
-			];
+			return $this->templateService->create($collectiveId, $parentId, $title, $userId);
 		}, $this->logger);
+		return new DataResponse(['data' => $templateInfo]);
 	}
 
 	#[NoAdminRequired]
 	public function delete(int $collectiveId, int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId, $id): array {
+		$this->handleErrorResponse(function () use ($collectiveId, $id): void {
 			$userId = $this->getUserId();
 			$this->templateService->delete($collectiveId, $id, $userId);
-			return [];
 		}, $this->logger);
+		return new DataResponse([]);
 	}
 
 	#[NoAdminRequired]
 	public function rename(int $collectiveId, int $id, string $title): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId, $id, $title): array {
+		$templateInfo = $this->handleErrorResponse(function () use ($collectiveId, $id, $title): PageInfo {
 			$userId = $this->getUserId();
-			$pageInfo = $this->templateService->rename($collectiveId, $id, $title, $userId);
-			return [
-				'data' => $pageInfo
-			];
+			return $this->templateService->rename($collectiveId, $id, $title, $userId);
 		}, $this->logger);
+		return new DataResponse(['data' => $templateInfo]);
 	}
 
 	#[NoAdminRequired]
 	public function setEmoji(int $collectiveId, int $id, ?string $emoji = null): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId, $id, $emoji): array {
+		$templateInfo = $this->handleErrorResponse(function () use ($collectiveId, $id, $emoji): PageInfo {
 			$userId = $this->getUserId();
-			$templateInfo = $this->templateService->setEmoji($collectiveId, $id, $emoji, $userId);
-			return [
-				'data' => $templateInfo
-			];
+			return $this->templateService->setEmoji($collectiveId, $id, $emoji, $userId);
 		}, $this->logger);
+		return new DataResponse(['data' => $templateInfo]);
 	}
 }

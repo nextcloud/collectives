@@ -302,7 +302,9 @@ export default {
 					updateCollective()
 				})
 				.catch((e) => {
-					if (e.response?.data === 'A team with that name exists') {
+					console.debug('eerror', e)
+					const emsg = e.response?.data?.error
+					if (emsg === 'A team with that name exists' || emsg === 'Collective already exists.') {
 						this.nameExists = this.newCollectiveName
 						this.state = 0
 					} else {
