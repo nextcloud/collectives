@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Controller;
 
+use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\NotFoundException;
 use OCP\AppFramework\Controller;
@@ -44,31 +45,25 @@ class TrashController extends Controller {
 
 	#[NoAdminRequired]
 	public function index(): DataResponse {
-		return $this->handleErrorResponse(function (): array {
-			$collectives = $this->service->getCollectivesTrash($this->getUserId());
-			return [
-				'data' => $collectives,
-			];
+		$collectives = $this->handleErrorResponse(function (): array {
+			return $this->service->getCollectivesTrash($this->getUserId());
 		}, $this->logger);
+		return new DataResponse(['data' => $collectives]);
 	}
 
 	#[NoAdminRequired]
 	public function delete(int $id, bool $circle = false): DataResponse {
-		return $this->handleErrorResponse(function () use ($circle, $id): array {
-			$collective = $this->service->deleteCollective($id, $this->getUserId(), $circle);
-			return [
-				'data' => $collective,
-			];
+		$collective = $this->handleErrorResponse(function () use ($circle, $id): Collective {
+			return $this->service->deleteCollective($id, $this->getUserId(), $circle);
 		}, $this->logger);
+		return new DataResponse(['data' => $collective]);
 	}
 
 	#[NoAdminRequired]
 	public function restore(int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($id): array {
-			$collective = $this->service->restoreCollective($id, $this->getUserId());
-			return [
-				'data' => $collective,
-			];
+		$collective = $this->handleErrorResponse(function () use ($id): Collective {
+			return $this->service->restoreCollective($id, $this->getUserId());
 		}, $this->logger);
+		return new DataResponse(['data' => $collective]);
 	}
 }
