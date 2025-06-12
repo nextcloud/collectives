@@ -9,27 +9,6 @@ declare(strict_types=1);
 
 return [
 	'routes' => [
-		// collectives API
-		['name' => 'collective#index', 'url' => '/_api', 'verb' => 'GET'],
-		['name' => 'collective#create', 'url' => '/_api', 'verb' => 'POST'],
-		['name' => 'collective#update', 'url' => '/_api/{id}', 'verb' => 'PUT',
-			'requirements' => ['id' => '\d+']],
-		['name' => 'collective#editLevel', 'url' => '/_api/{id}/editLevel', 'verb' => 'PUT',
-			'requirements' => ['id' => '\d+']],
-		['name' => 'collective#shareLevel', 'url' => '/_api/{id}/shareLevel', 'verb' => 'PUT',
-			'requirements' => ['id' => '\d+']],
-		['name' => 'collective#pageMode', 'url' => '/_api/{id}/pageMode', 'verb' => 'PUT',
-			'requirements' => ['id' => '\d+']],
-		['name' => 'collective#trash', 'url' => '/_api/{id}', 'verb' => 'DELETE',
-			'requirements' => ['id' => '\d+']],
-
-		// collectives trash API
-		['name' => 'trash#index', 'url' => '/_api/trash', 'verb' => 'GET'],
-		['name' => 'trash#delete', 'url' => '/_api/trash/{id}', 'verb' => 'DELETE',
-			'requirements' => ['id' => '\d+']],
-		['name' => 'trash#restore', 'url' => '/_api/trash/{id}', 'verb' => 'PATCH',
-			'requirements' => ['id' => '\d+']],
-
 		// pages search API
 		['name' => 'page#contentSearch', 'url' => '/_api/{collectiveId}/_pages/search',
 			'verb' => 'GET', 'requirements' => ['collectiveId' => '\d+', 'filterString' => '\s+']],
@@ -134,6 +113,30 @@ return [
 			'defaults' => ['path' => '/']],
 	],
 	'ocs' => [
+		// Collectives API
+		['name' => 'collective#index', 'url' => '/api/v{apiVersion}/collectives', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)']],
+		['name' => 'collective#create', 'url' => '/api/v{apiVersion}/collectives', 'verb' => 'POST',
+			'requirements' => ['apiVersion' => '(1.0)']],
+		['name' => 'collective#update', 'url' => '/api/v{apiVersion}/collectives/{id}', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
+		['name' => 'collective#editLevel', 'url' => '/api/v{apiVersion}/collectives/{id}/editLevel', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
+		['name' => 'collective#shareLevel', 'url' => '/api/v{apiVersion}/collectives/{id}/shareLevel', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
+		['name' => 'collective#pageMode', 'url' => '/api/v{apiVersion}/collectives/{id}/pageMode', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
+		['name' => 'collective#trash', 'url' => '/api/v{apiVersion}/collectives/{id}', 'verb' => 'DELETE',
+			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
+
+		// Collectives trash API
+		['name' => 'trash#index', 'url' => '/api/v{apiVersion}/trash', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)']],
+		['name' => 'trash#delete', 'url' => '/api/v{apiVersion}/trash/{id}', 'verb' => 'DELETE',
+			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
+		['name' => 'trash#restore', 'url' => '/api/v{apiVersion}/trash/{id}', 'verb' => 'PATCH',
+			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
+
 		// Collective shares API
 		['name' => 'share#getCollectiveShares', 'url' => '/api/v{apiVersion}/shares/{collectiveId}', 'verb' => 'GET',
 			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+']],
