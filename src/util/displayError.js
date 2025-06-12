@@ -30,7 +30,7 @@ function options(details) {
  * @param {Error} e request exception from axios
  */
 function showRequestException(msg, e) {
-	const details = e.response && e.response.data
+	const details = e.response?.data?.ocs?.meta?.message
 	if (e.response && e.response.status < 500) {
 		showWarning(content(msg, details), options(details))
 	} else {
