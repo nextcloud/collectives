@@ -10,6 +10,29 @@ declare(strict_types=1);
 namespace OCA\Collectives;
 
 /**
+ * @psalm-type CollectivesCollective = array{
+ *     id: int,
+ *     circleId: string,
+ *     emoji?: string,
+ *     trashTimestamp?: int,
+ *     pageMode: int,
+ *     name: string,
+ *     level: int,
+ *     editPermissionLevel: int,
+ *     sharePermissionLevel: int,
+ *     canEdit: bool,
+ *     canShare: bool,
+ *     shareToken?: string,
+ *     isPageShare: bool,
+ *     sharePageId?: int,
+ *     shareEditable: bool,
+ *     userPageOrder: int,
+ *     userShowMembers: bool,
+ *     userShowRecenPages: bool,
+ *     userFavoritePages: list<int>,
+ *     canLeave: bool,
+ * }
+ *
  * @psalm-type CollectivesCollectiveShare = array{
  *     id: int,
  *     collectiveId: int,
