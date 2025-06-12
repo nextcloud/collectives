@@ -9,11 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Controller;
 
-use Closure;
-
 use OCA\Collectives\Service\CollectiveUserSettingsService;
-use OCA\Collectives\Service\NotFoundException;
-use OCA\Collectives\Service\NotPermittedException;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\DataResponse;
@@ -21,32 +17,22 @@ use OCP\AppFramework\OCS\OCSForbiddenException;
 use OCP\AppFramework\OCS\OCSNotFoundException;
 use OCP\AppFramework\OCSController;
 use OCP\IRequest;
+use Psr\Log\LoggerInterface;
 
 /**
  * Provides access to user settings for a specific collective.
  */
 class CollectiveUserSettingsController extends OCSController {
+	use OCSExceptionHelper;
+
 	public function __construct(
 		string $AppName,
 		IRequest $request,
 		private CollectiveUserSettingsService $service,
+		private LoggerInterface $logger,
 		private string $userId,
 	) {
 		parent::__construct($AppName, $request);
-	}
-
-	/**
-	 * @throws OCSNotFoundException Collective not found
-	 * @throws OCSForbiddenException Not permitted
-	 */
-	private function prepareResponse(Closure $callback): void {
-		try {
-			$callback();
-		} catch (NotFoundException $e) {
-			throw new OCSNotFoundException($e->getMessage());
-		} catch (NotPermittedException $e) {
-			throw new OCSForbiddenException($e->getMessage());
-		}
 	}
 
 	/**
@@ -63,13 +49,13 @@ class CollectiveUserSettingsController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function setPageOrder(int $collectiveId, int $pageOrder): DataResponse {
-		$this->prepareResponse(function () use ($collectiveId, $pageOrder): void {
+		$this->handleErrorResponse(function () use ($collectiveId, $pageOrder): void {
 			$this->service->setPageOrder(
 				$collectiveId,
 				$this->userId,
 				$pageOrder
 			);
-		});
+		}, $this->logger);
 		return new DataResponse([]);
 	}
 
@@ -87,13 +73,13 @@ class CollectiveUserSettingsController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function setShowMembers(int $collectiveId, bool $showMembers): DataResponse {
-		$this->prepareResponse(function () use ($collectiveId, $showMembers): void {
+		$this->handleErrorResponse(function () use ($collectiveId, $showMembers): void {
 			$this->service->setShowMembers(
 				$collectiveId,
 				$this->userId,
 				$showMembers
 			);
-		});
+		}, $this->logger);
 		return new DataResponse([]);
 	}
 
@@ -111,13 +97,13 @@ class CollectiveUserSettingsController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function setShowRecentPages(int $collectiveId, bool $showRecentPages): DataResponse {
-		$this->prepareResponse(function () use ($collectiveId, $showRecentPages): void {
+		$this->handleErrorResponse(function () use ($collectiveId, $showRecentPages): void {
 			$this->service->setShowRecentPages(
 				$collectiveId,
 				$this->userId,
 				$showRecentPages
 			);
-		});
+		}, $this->logger);
 		return new DataResponse([]);
 	}
 
@@ -135,13 +121,13 @@ class CollectiveUserSettingsController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function setFavoritePages(int $collectiveId, string $favoritePages): DataResponse {
-		$this->prepareResponse(function () use ($collectiveId, $favoritePages): void {
+		$this->handleErrorResponse(function () use ($collectiveId, $favoritePages): void {
 			$this->service->setFavoritePages(
 				$collectiveId,
 				$this->userId,
 				$favoritePages
 			);
-		});
+		}, $this->logger);
 		return new DataResponse([]);
 	}
 }

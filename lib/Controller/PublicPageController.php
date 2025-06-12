@@ -140,7 +140,7 @@ class PublicPageController extends PublicShareController {
 	#[PublicPage]
 	#[AnonRateLimit(limit: 10, period: 10)]
 	public function index(): DataResponse {
-		return $this->handleErrorResponse(function (): array {
+		$pageInfos = $this->handleErrorResponse(function (): array {
 			$owner = $this->getCollectiveShare()->getOwner();
 			$collectiveId = $this->getCollectiveShare()->getCollectiveId();
 			$sharePageId = $this->getCollectiveShare()->getPageId();
@@ -152,16 +152,15 @@ class PublicPageController extends PublicShareController {
 			foreach ($pageInfos as $pageInfo) {
 				$this->decoratePageInfo($collectiveId, $sharePageId, $owner, $pageInfo);
 			}
-			return [
-				'data' => $pageInfos
-			];
+			return $pageInfos;
 		}, $this->logger);
+		return new DataResponse(['data' => $pageInfos]);
 	}
 
 	#[PublicPage]
 	#[AnonRateLimit(limit: 10, period: 10)]
 	public function get(int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($id): array {
+		$pageInfo = $this->handleErrorResponse(function () use ($id): PageInfo {
 			$owner = $this->getCollectiveShare()->getOwner();
 			$collectiveId = $this->getCollectiveShare()->getCollectiveId();
 			if (0 !== $sharePageId = $this->getCollectiveShare()->getPageId()) {
@@ -169,16 +168,15 @@ class PublicPageController extends PublicShareController {
 			}
 			$pageInfo = $this->service->find($collectiveId, $id, $owner);
 			$this->decoratePageInfo($collectiveId, $sharePageId, $owner, $pageInfo);
-			return [
-				'data' => $pageInfo
-			];
+			return $pageInfo;
 		}, $this->logger);
+		return new DataResponse(['data' => $pageInfo]);
 	}
 
 	#[PublicPage]
 	#[AnonRateLimit(limit: 10, period: 10)]
 	public function create(int $parentId, string $title, ?int $templateId = null): DataResponse {
-		return $this->handleErrorResponse(function () use ($parentId, $title, $templateId): array {
+		$pageInfo = $this->handleErrorResponse(function () use ($parentId, $title, $templateId): PageInfo {
 			$this->checkEditPermissions();
 			$owner = $this->getCollectiveShare()->getOwner();
 			$collectiveId = $this->getCollectiveShare()->getCollectiveId();
@@ -187,16 +185,15 @@ class PublicPageController extends PublicShareController {
 			}
 			$pageInfo = $this->service->create($collectiveId, $parentId, $title, $templateId, $owner);
 			$this->decoratePageInfo($collectiveId, $sharePageId, $owner, $pageInfo);
-			return [
-				'data' => $pageInfo
-			];
+			return $pageInfo;
 		}, $this->logger);
+		return new DataResponse(['data' => $pageInfo]);
 	}
 
 	#[PublicPage]
 	#[AnonRateLimit(limit: 10, period: 10)]
 	public function touch(int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($id): array {
+		$pageInfo = $this->handleErrorResponse(function () use ($id): PageInfo {
 			$this->checkEditPermissions();
 			$owner = $this->getCollectiveShare()->getOwner();
 			$collectiveId = $this->getCollectiveShare()->getCollectiveId();
@@ -205,17 +202,16 @@ class PublicPageController extends PublicShareController {
 			}
 			$pageInfo = $this->service->touch($collectiveId, $id, $owner);
 			$this->decoratePageInfo($collectiveId, $sharePageId, $owner, $pageInfo);
-			return [
-				'data' => $pageInfo
-			];
+			return $pageInfo;
 		}, $this->logger);
+		return new DataResponse(['data' => $pageInfo]);
 	}
 
 	#[PublicPage]
 	#[AnonRateLimit(limit: 10, period: 10)]
 	public function moveOrCopy(int $id, ?int $parentId, ?string $title = null, ?int $index = 0, bool $copy = false): DataResponse {
 		$index ??= 0;
-		return $this->handleErrorResponse(function () use ($id, $parentId, $title, $index, $copy): array {
+		$pageInfo = $this->handleErrorResponse(function () use ($id, $parentId, $title, $index, $copy): PageInfo {
 			$this->checkEditPermissions();
 			$owner = $this->getCollectiveShare()->getOwner();
 			$collectiveId = $this->getCollectiveShare()->getCollectiveId();
@@ -229,16 +225,15 @@ class PublicPageController extends PublicShareController {
 				? $this->service->copy($collectiveId, $id, $parentId, $title, $index, $owner)
 				: $this->service->move($collectiveId, $id, $parentId, $title, $index, $owner);
 			$this->decoratePageInfo($collectiveId, $sharePageId, $owner, $pageInfo);
-			return [
-				'data' => $pageInfo
-			];
+			return $pageInfo;
 		}, $this->logger);
+		return new DataResponse(['data' => $pageInfo]);
 	}
 
 	#[PublicPage]
 	#[AnonRateLimit(limit: 10, period: 10)]
 	public function setEmoji(int $id, ?string $emoji = null): DataResponse {
-		return $this->handleErrorResponse(function () use ($id, $emoji): array {
+		$pageInfo = $this->handleErrorResponse(function () use ($id, $emoji): PageInfo {
 			$this->checkEditPermissions();
 			$owner = $this->getCollectiveShare()->getOwner();
 			$collectiveId = $this->getCollectiveShare()->getCollectiveId();
@@ -247,16 +242,15 @@ class PublicPageController extends PublicShareController {
 			}
 			$pageInfo = $this->service->setEmoji($collectiveId, $id, $emoji, $owner);
 			$this->decoratePageInfo($collectiveId, $sharePageId, $owner, $pageInfo);
-			return [
-				'data' => $pageInfo
-			];
+			return $pageInfo;
 		}, $this->logger);
+		return new DataResponse(['data' => $pageInfo]);
 	}
 
 	#[PublicPage]
 	#[AnonRateLimit(limit: 10, period: 10)]
 	public function setSubpageOrder(int $id, ?string $subpageOrder = null): DataResponse {
-		return $this->handleErrorResponse(function () use ($id, $subpageOrder): array {
+		$pageInfo = $this->handleErrorResponse(function () use ($id, $subpageOrder): PageInfo {
 			$this->checkEditPermissions();
 			$owner = $this->getCollectiveShare()->getOwner();
 			$collectiveId = $this->getCollectiveShare()->getCollectiveId();
@@ -265,16 +259,15 @@ class PublicPageController extends PublicShareController {
 			}
 			$pageInfo = $this->service->setSubpageOrder($collectiveId, $id, $subpageOrder, $owner);
 			$this->decoratePageInfo($collectiveId, $sharePageId, $owner, $pageInfo);
-			return [
-				'data' => $pageInfo
-			];
+			return $pageInfo;
 		}, $this->logger);
+		return new DataResponse(['data' => $pageInfo]);
 	}
 
 	#[PublicPage]
 	#[AnonRateLimit(limit: 10, period: 10)]
 	public function trash(int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($id): array {
+		$pageInfo = $this->handleErrorResponse(function () use ($id): PageInfo {
 			$this->checkEditPermissions();
 			if ($this->getCollectiveShare()->getPageId()) {
 				throw new NotPermittedException('Not permitted to trash page from page share');
@@ -283,48 +276,43 @@ class PublicPageController extends PublicShareController {
 			$collectiveId = $this->getCollectiveShare()->getCollectiveId();
 			$pageInfo = $this->service->trash($collectiveId, $id, $owner);
 			$this->decoratePageInfo($collectiveId, 0, $owner, $pageInfo);
-			return [
-				'data' => $pageInfo
-			];
+			return $pageInfo;
 		}, $this->logger);
+		return new DataResponse(['data' => $pageInfo]);
 	}
 
 	#[PublicPage]
 	#[AnonRateLimit(limit: 10, period: 10)]
 	public function getAttachments(int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($id): array {
+		$attachments = $this->handleErrorResponse(function () use ($id): array {
 			$owner = $this->getCollectiveShare()->getOwner();
 			$collectiveId = $this->getCollectiveShare()->getCollectiveId();
 			if (0 !== $sharePageId = $this->getCollectiveShare()->getPageId()) {
 				$this->checkPageShareAccess($collectiveId, $sharePageId, $id, $owner);
 			}
-			$attachments = $this->attachmentService->getAttachments($collectiveId, $id, $owner);
-			return [
-				'data' => $attachments
-			];
+			return $this->attachmentService->getAttachments($collectiveId, $id, $owner);
 		}, $this->logger);
+		return new DataResponse(['data' => $attachments]);
 	}
 
 	#[PublicPage]
 	#[AnonRateLimit(limit: 10, period: 10)]
 	public function getBacklinks(int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($id): array {
+		$backlinks = $this->handleErrorResponse(function () use ($id): array {
 			$owner = $this->getCollectiveShare()->getOwner();
 			$collectiveId = $this->getCollectiveShare()->getCollectiveId();
 			if (0 !== $sharePageId = $this->getCollectiveShare()->getPageId()) {
 				$this->checkPageShareAccess($collectiveId, $sharePageId, $id, $owner);
 			}
-			$backlinks = $this->service->getBacklinks($collectiveId, $id, $owner);
-			return [
-				'data' => $backlinks
-			];
+			return $this->service->getBacklinks($collectiveId, $id, $owner);
 		}, $this->logger);
+		return new DataResponse(['data' => $backlinks]);
 	}
 
 	#[PublicPage]
 	#[AnonRateLimit(limit: 10, period: 10)]
 	public function contentSearch(string $searchString): DataResponse {
-		return $this->handleErrorResponse(function () use ($searchString): array {
+		$pages = $this->handleErrorResponse(function () use ($searchString): array {
 			$owner = $this->getCollectiveShare()->getOwner();
 			$collectiveId = $this->getCollectiveShare()->getCollectiveId();
 			$collective = $this->collectiveService->getCollective($collectiveId, $owner);
@@ -340,9 +328,8 @@ class PublicPageController extends PublicShareController {
 				}
 				$pages[] = $this->service->find($collectiveId, $value['id'], $owner);
 			}
-			return [
-				'data' => $pages
-			];
+			return $pages;
 		}, $this->logger);
+		return new DataResponse(['data' => $pages]);
 	}
 }

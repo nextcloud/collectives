@@ -29,7 +29,7 @@ use Psr\Log\LoggerInterface;
  * @psalm-import-type CollectivesCollectiveShare from ResponseDefinitions
  */
 class ShareController extends OCSController {
-	use ErrorHelper;
+	use OCSExceptionHelper;
 
 	public function __construct(
 		string $AppName,
@@ -160,7 +160,7 @@ class ShareController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function updatePageShare(int $collectiveId, int $pageId, string $token, bool $editable, ?string $password = null): DataResponse {
-		$share = $this->handleErrorResponse(function () use ($collectiveId, $pageId, $token, $editable, $password): CollectiveShare{
+		$share = $this->handleErrorResponse(function () use ($collectiveId, $pageId, $token, $editable, $password): CollectiveShare {
 			$userId = $this->userId;
 			$collective = $this->collectiveService->getCollective($collectiveId, $userId);
 			$pageInfo = null;

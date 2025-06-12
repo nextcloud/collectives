@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Controller;
 
+use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\PageService;
 use OCP\AppFramework\Controller;
@@ -47,32 +48,28 @@ class PageTrashController extends Controller {
 
 	#[NoAdminRequired]
 	public function index(int $collectiveId): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId): array {
+		$pageInfos = $this->handleErrorResponse(function () use ($collectiveId): array {
 			$userId = $this->getUserId();
-			$pageInfos = $this->service->findAllTrash($collectiveId, $userId);
-			return [
-				'data' => $pageInfos
-			];
+			return $this->service->findAllTrash($collectiveId, $userId);
 		}, $this->logger);
+		return new DataResponse(['data' => $pageInfos]);
 	}
 
 	#[NoAdminRequired]
 	public function restore(int $collectiveId, int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId, $id): array {
+		$pageInfo = $this->handleErrorResponse(function () use ($collectiveId, $id): PageInfo {
 			$userId = $this->getUserId();
-			$pageInfo = $this->service->restore($collectiveId, $id, $userId);
-			return [
-				'data' => $pageInfo
-			];
+			return $this->service->restore($collectiveId, $id, $userId);
 		}, $this->logger);
+		return new DataResponse(['data' => $pageInfo]);
 	}
 
 	#[NoAdminRequired]
 	public function delete(int $collectiveId, int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId, $id): array {
+		$this->handleErrorResponse(function () use ($collectiveId, $id): void {
 			$userId = $this->getUserId();
 			$this->service->delete($collectiveId, $id, $userId);
-			return [];
 		}, $this->logger);
+		return new DataResponse([]);
 	}
 }

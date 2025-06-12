@@ -17,7 +17,7 @@ use OCP\AppFramework\OCS\OCSForbiddenException;
 use OCP\AppFramework\OCS\OCSNotFoundException;
 use Psr\Log\LoggerInterface;
 
-trait ErrorHelper {
+trait OCSExceptionHelper {
 	/**
 	 * @throws OCSForbiddenException
 	 * @throws OCSNotFoundException
