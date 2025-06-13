@@ -9,197 +9,169 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Controller;
 
+use OCA\Collectives\Model\PageInfo;
+use OCA\Collectives\ResponseDefinitions;
 use OCA\Collectives\Service\AttachmentService;
 use OCA\Collectives\Service\CollectiveService;
-use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\PageService;
 use OCA\Collectives\Service\SearchService;
-use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\OCS\OCSForbiddenException;
+use OCP\AppFramework\OCS\OCSNotFoundException;
+use OCP\AppFramework\OCSController;
 use OCP\IRequest;
-use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
 
-class PageController extends Controller {
-	use ErrorHelper;
+/**
+ * Provides access to pages of a collective.
+ *
+ * @psalm-import-type CollectivesPageInfo from ResponseDefinitions
+ */
+class PageController extends OCSController {
+	use OCSExceptionHelper;
 
 	public function __construct(
 		string $appName,
 		IRequest $request,
 		private PageService $service,
 		private AttachmentService $attachmentService,
-		private IUserSession $userSession,
 		private SearchService $indexedSearchService,
 		private CollectiveService $collectiveService,
 		private LoggerInterface $logger,
+		private string $userId,
 	) {
 		parent::__construct($appName, $request);
 	}
 
 	/**
-	 * @throws NotFoundException
+	 * Get pages of a collective
+	 *
+	 * @param int $collectiveId ID of the collective
+	 *
+	 * @return DataResponse<Http::STATUS_OK, array{collectives: list<CollectivesPageInfo>}, array{}>
+	 * @throws OCSForbiddenException Not Permitted
+	 * @throws OCSNotFoundException Collective not found
+	 *
+	 * 200: Pages returned
 	 */
-	private function getUserId(): string {
-		$user = $this->userSession->getUser();
-		if ($user === null) {
-			throw new NotFoundException('Session user not found');
-		}
-		return $user->getUID();
-	}
-
 	#[NoAdminRequired]
 	public function index(int $collectiveId): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId): array {
-			$userId = $this->getUserId();
-			$pageInfos = $this->service->findAll($collectiveId, $userId);
-			return [
-				'data' => $pageInfos
-			];
+		$pageInfos = $this->handleErrorResponse(function () use ($collectiveId): array {
+			return $this->service->findAll($collectiveId, $this->userId);
 		}, $this->logger);
+		return new DataResponse(['pages' => $pageInfos]);
 	}
 
 	#[NoAdminRequired]
 	public function get(int $collectiveId, int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId, $id): array {
-			$userId = $this->getUserId();
-			$pageInfo = $this->service->find($collectiveId, $id, $userId);
-			return [
-				'data' => $pageInfo
-			];
+		$pageInfo = $this->handleErrorResponse(function () use ($collectiveId, $id): PageInfo {
+			return $this->service->find($collectiveId, $id, $this->userId);
 		}, $this->logger);
+		return new DataResponse(['page' => $pageInfo]);
 	}
 
 	#[NoAdminRequired]
 	public function create(int $collectiveId, int $parentId, string $title, ?int $templateId = null): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId, $parentId, $title, $templateId): array {
-			$userId = $this->getUserId();
-			$pageInfo = $this->service->create($collectiveId, $parentId, $title, $templateId, $userId);
-			return [
-				'data' => $pageInfo
-			];
+		$pageInfo = $this->handleErrorResponse(function () use ($collectiveId, $parentId, $title, $templateId): PageInfo {
+			return $this->service->create($collectiveId, $parentId, $title, $templateId, $this->userId);
 		}, $this->logger);
+		return new DataResponse(['page' => $pageInfo]);
 	}
 
 	#[NoAdminRequired]
 	public function touch(int $collectiveId, int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId, $id): array {
-			$userId = $this->getUserId();
-			$pageInfo = $this->service->touch($collectiveId, $id, $userId);
-			return [
-				'data' => $pageInfo
-			];
+		$pageInfo = $this->handleErrorResponse(function () use ($collectiveId, $id): PageInfo {
+			return $this->service->touch($collectiveId, $id, $this->userId);
 		}, $this->logger);
+		return new DataResponse(['page' => $pageInfo]);
 	}
 
 	#[NoAdminRequired]
 	public function moveOrCopy(int $collectiveId, int $id, ?int $parentId = null, ?string $title = null, ?int $index = 0, bool $copy = false): DataResponse {
 		$index ??= 0;
-		return $this->handleErrorResponse(function () use ($collectiveId, $id, $parentId, $title, $index, $copy): array {
-			$userId = $this->getUserId();
+		$pageInfo = $this->handleErrorResponse(function () use ($collectiveId, $id, $parentId, $title, $index, $copy): PageInfo {
 			$pageInfo = $copy
-				? $this->service->copy($collectiveId, $id, $parentId, $title, $index, $userId)
-				: $this->service->move($collectiveId, $id, $parentId, $title, $index, $userId);
-			return [
-				'data' => $pageInfo
-			];
+				? $this->service->copy($collectiveId, $id, $parentId, $title, $index, $this->userId)
+				: $this->service->move($collectiveId, $id, $parentId, $title, $index, $this->userId);
+			return $pageInfo;
 		}, $this->logger);
+		return new DataResponse(['page' => $pageInfo]);
 	}
 
 	#[NoAdminRequired]
 	public function moveOrCopyToCollective(int $collectiveId, int $id, int $newCollectiveId, ?int $parentId = null, ?int $index = 0, bool $copy = false): DataResponse {
 		$index ??= 0;
-		return $this->handleErrorResponse(function () use ($collectiveId, $id, $newCollectiveId, $parentId, $index, $copy): array {
-			$userId = $this->getUserId();
+		$this->handleErrorResponse(function () use ($collectiveId, $id, $newCollectiveId, $parentId, $index, $copy): void {
 			if ($copy) {
-				$this->service->copyToCollective($collectiveId, $id, $newCollectiveId, $parentId, $index, $userId);
+				$this->service->copyToCollective($collectiveId, $id, $newCollectiveId, $parentId, $index, $this->userId);
 			} else {
-				$this->service->moveToCollective($collectiveId, $id, $newCollectiveId, $parentId, $index, $userId);
+				$this->service->moveToCollective($collectiveId, $id, $newCollectiveId, $parentId, $index, $this->userId);
 
 			}
-			return [];
 		}, $this->logger);
+		return new DataResponse([]);
 	}
 
 	#[NoAdminRequired]
 	public function setEmoji(int $collectiveId, int $id, ?string $emoji = null): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId, $id, $emoji): array {
-			$userId = $this->getUserId();
-			$pageInfo = $this->service->setEmoji($collectiveId, $id, $emoji, $userId);
-			return [
-				'data' => $pageInfo
-			];
+		$pageInfo = $this->handleErrorResponse(function () use ($collectiveId, $id, $emoji): PageInfo {
+			return $this->service->setEmoji($collectiveId, $id, $emoji, $this->userId);
 		}, $this->logger);
+		return new DataResponse(['page' => $pageInfo]);
 	}
 
 	#[NoAdminRequired]
 	public function setFullWidth(int $collectiveId, int $id, bool $fullWidth): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId, $id, $fullWidth): array {
-			$userId = $this->getUserId();
-			$pageInfo = $this->service->setFullWidth($collectiveId, $id, $userId, $fullWidth);
-			return [
-				'data' => $pageInfo,
-			];
+		$pageInfo = $this->handleErrorResponse(function () use ($collectiveId, $id, $fullWidth): PageInfo {
+			return $this->service->setFullWidth($collectiveId, $id, $this->userId, $fullWidth);
 		}, $this->logger);
+		return new DataResponse(['page' => $pageInfo]);
 	}
 
 	#[NoAdminRequired]
 	public function setSubpageOrder(int $collectiveId, int $id, ?string $subpageOrder = null): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId, $id, $subpageOrder): array {
-			$userId = $this->getUserId();
-			$pageInfo = $this->service->setSubpageOrder($collectiveId, $id, $subpageOrder, $userId);
-			return [
-				'data' => $pageInfo
-			];
+		$pageInfo = $this->handleErrorResponse(function () use ($collectiveId, $id, $subpageOrder): PageInfo {
+			return $this->service->setSubpageOrder($collectiveId, $id, $subpageOrder, $this->userId);
 		}, $this->logger);
+		return new DataResponse(['page' => $pageInfo]);
 	}
 
 	#[NoAdminRequired]
 	public function trash(int $collectiveId, int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId, $id): array {
-			$userId = $this->getUserId();
-			$pageInfo = $this->service->trash($collectiveId, $id, $userId);
-			return [
-				'data' => $pageInfo
-			];
+		$pageInfo = $this->handleErrorResponse(function () use ($collectiveId, $id): PageInfo {
+			return $this->service->trash($collectiveId, $id, $this->userId);
 		}, $this->logger);
+		return new DataResponse(['page' => $pageInfo]);
 	}
 
 	#[NoAdminRequired]
 	public function getAttachments(int $collectiveId, int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId, $id): array {
-			$userId = $this->getUserId();
-			$attachments = $this->attachmentService->getAttachments($collectiveId, $id, $userId);
-			return [
-				'data' => $attachments
-			];
+		$attachments = $this->handleErrorResponse(function () use ($collectiveId, $id): array {
+			return $this->attachmentService->getAttachments($collectiveId, $id, $this->userId);
 		}, $this->logger);
+		return new DataResponse(['attachments' => $attachments]);
 	}
 
 	#[NoAdminRequired]
 	public function getBacklinks(int $collectiveId, int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId, $id): array {
-			$userId = $this->getUserId();
-			$backlinks = $this->service->getBacklinks($collectiveId, $id, $userId);
-			return [
-				'data' => $backlinks
-			];
+		$backlinks = $this->handleErrorResponse(function () use ($collectiveId, $id): array {
+			return $this->service->getBacklinks($collectiveId, $id, $this->userId);
 		}, $this->logger);
+		return new DataResponse(['backlinks' => $backlinks]);
 	}
 
 	#[NoAdminRequired]
 	public function contentSearch(int $collectiveId, string $searchString): DataResponse {
-		return $this->handleErrorResponse(function () use ($collectiveId, $searchString): array {
-			$userId = $this->getUserId();
-			$collective = $this->collectiveService->getCollective($collectiveId, $userId);
+		$pageInfos = $this->handleErrorResponse(function () use ($collectiveId, $searchString): array {
+			$collective = $this->collectiveService->getCollective($collectiveId, $this->userId);
 			$results = $this->indexedSearchService->searchCollective($collective, $searchString, 100);
 			$pages = [];
 			foreach ($results as $value) {
-				$pages[] = $this->service->find($collectiveId, $value['id'], $userId);
+				$pages[] = $this->service->find($collectiveId, $value['id'], $this->userId);
 			}
-			return [
-				'data' => $pages
-			];
+			return $pages;
 		}, $this->logger);
+		return new DataResponse(['pages' => $pageInfos]);
 	}
 }

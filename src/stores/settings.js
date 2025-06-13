@@ -17,7 +17,7 @@ export const useSettingsStore = defineStore('settings', {
 		 */
 		async getCollectivesFolder() {
 			const response = await settings.getCollectivesFolder()
-			this.collectivesFolder = response.data.ocs.data
+			this.collectivesFolder = response.data.ocs.data.user_folder
 		},
 
 		/**
@@ -27,7 +27,7 @@ export const useSettingsStore = defineStore('settings', {
 		 */
 		async updateCollectivesFolder(collectivesFolder) {
 			const response = await settings.setCollectivesFolder(collectivesFolder)
-			this.collectivesFolder = response.data.ocs.data
+			this.collectivesFolder = response.data.ocs.data.user_folder
 		},
 	},
 })

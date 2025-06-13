@@ -11,6 +11,7 @@ namespace OCA\Collectives\Controller;
 
 use OCA\Collectives\Db\CollectiveShare;
 use OCA\Collectives\Db\CollectiveShareMapper;
+use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Service\CollectiveShareService;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
@@ -111,7 +112,7 @@ class PublicPageTrashController extends PublicShareController {
 	#[PublicPage]
 	#[AnonRateLimit(limit: 10, period: 10)]
 	public function index(): DataResponse {
-		return $this->handleErrorResponse(function (): array {
+		$pageInfos = $this->handleErrorResponse(function (): array {
 			$owner = $this->getCollectiveShare()->getOwner();
 			$collectiveId = $this->getCollectiveShare()->getCollectiveId();
 			$pageInfos = $this->service->findAllTrash($collectiveId, $owner);
@@ -120,16 +121,15 @@ class PublicPageTrashController extends PublicShareController {
 				$pageInfo->setCollectivePath('');
 				$pageInfo->setShareToken($this->getToken());
 			}
-			return [
-				'data' => $pageInfos
-			];
+			return $pageInfos;
 		}, $this->logger);
+		return new DataResponse(['data' => $pageInfos]);
 	}
 
 	#[PublicPage]
 	#[AnonRateLimit(limit: 10, period: 10)]
 	public function restore(int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($id): array {
+		$pageInfo = $this->handleErrorResponse(function () use ($id): PageInfo {
 			$this->checkEditPermissions();
 			$owner = $this->getCollectiveShare()->getOwner();
 			$collectiveId = $this->getCollectiveShare()->getCollectiveId();
@@ -137,21 +137,20 @@ class PublicPageTrashController extends PublicShareController {
 			// Shares don't have a collective path
 			$pageInfo->setCollectivePath('');
 			$pageInfo->setShareToken($this->getToken());
-			return [
-				'data' => $pageInfo
-			];
+			return $pageInfo;
 		}, $this->logger);
+		return new DataResponse(['data' => $pageInfo]);
 	}
 
 	#[PublicPage]
 	#[AnonRateLimit(limit: 10, period: 10)]
 	public function delete(int $id): DataResponse {
-		return $this->handleErrorResponse(function () use ($id): array {
+		$this->handleErrorResponse(function () use ($id): void {
 			$this->checkEditPermissions();
 			$owner = $this->getCollectiveShare()->getOwner();
 			$collectiveId = $this->getCollectiveShare()->getCollectiveId();
 			$this->service->delete($collectiveId, $id, $owner);
-			return [];
 		}, $this->logger);
+		return new DataResponse([]);
 	}
 }

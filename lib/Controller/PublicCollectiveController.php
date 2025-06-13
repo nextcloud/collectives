@@ -9,18 +9,20 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Controller;
 
-use Closure;
-
 use OCA\Circles\Model\Member;
+use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveShareMapper;
+use OCA\Collectives\ResponseDefinitions;
 use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\NotFoundException;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
+use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\AnonRateLimit;
 use OCP\AppFramework\Http\Attribute\PublicPage;
 use OCP\AppFramework\Http\DataResponse;
-use OCP\AppFramework\PublicShareController;
+use OCP\AppFramework\OCS\OCSForbiddenException;
+use OCP\AppFramework\OCS\OCSNotFoundException;
 use OCP\IRequest;
 use OCP\ISession;
 use OCP\Share\Exceptions\ShareNotFound;
@@ -28,9 +30,15 @@ use OCP\Share\IManager as ShareManager;
 use OCP\Share\IShare;
 use Psr\Log\LoggerInterface;
 
-class PublicCollectiveController extends PublicShareController {
-	use ErrorHelper;
+/**
+ * Provides access to public collective and page shares.
+ *
+ * @psalm-import-type CollectivesCollective from ResponseDefinitions
+ */
+class PublicCollectiveController extends CollectivesPublicOCSController {
+	use OCSExceptionHelper;
 
+	private string $token;
 	private ?IShare $share = null;
 
 	public function __construct(
@@ -46,11 +54,15 @@ class PublicCollectiveController extends PublicShareController {
 	}
 
 	/**
-	 * @throws ShareNotFound
+	 * @throws OCSNotFoundException
 	 */
 	protected function getShare(): IShare {
 		if ($this->share === null) {
-			$this->share = $this->shareManager->getShareByToken($this->getToken());
+			try {
+				$this->share = $this->shareManager->getShareByToken($this->getToken());
+			} catch (ShareNotFound $e) {
+				throw new OCSNotFoundException($e->getMessage());
+			}
 		}
 		return $this->share;
 	}
@@ -77,14 +89,19 @@ class PublicCollectiveController extends PublicShareController {
 		return $this->getShare()->getPassword() !== null;
 	}
 
-	private function prepareResponse(Closure $callback) : DataResponse {
-		return $this->handleErrorResponse($callback, $this->logger);
-	}
-
+	/**
+	 * Get public collective/page share by token
+	 *
+	 * @return DataResponse<Http::STATUS_OK, array{collectives: list<CollectivesCollective>}, array{}>
+	 * @throws OCSForbiddenException Not permitted
+	 * @throws OCSNotFoundException Public collective/page share not found
+	 *
+	 * 200: Public collective/page share not found
+	 */
 	#[PublicPage]
 	#[AnonRateLimit(limit: 10, period: 60)]
 	public function get(): DataResponse {
-		return $this->prepareResponse(function (): array {
+		$collective = $this->handleErrorResponse(function (): Collective {
 			try {
 				$share = $this->collectiveShareMapper->findOneByToken($this->getToken());
 			} catch (DoesNotExistException|MultipleObjectsReturnedException $e) {
@@ -95,9 +112,8 @@ class PublicCollectiveController extends PublicShareController {
 				$share->getToken());
 			// Explicitly set member level
 			$collective->setLevel(Member::LEVEL_MEMBER);
-			return [
-				'data' => [$collective],
-			];
-		});
+			return $collective;
+		}, $this->logger);
+		return new DataResponse(['collectives' => [$collective]]);
 	}
 }

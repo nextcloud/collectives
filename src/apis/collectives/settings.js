@@ -7,10 +7,18 @@ import axios from '@nextcloud/axios'
 import { apiUrl } from './urls.js'
 
 /**
+ * URL for the settings API
+ *
+ * @param {...any} parts - URL parts to append - will be joined with `/`
+ */
+function settingsApiUrl(...parts) {
+	return apiUrl('v1.0', 'settings', parts)
+}
+/**
  * Get collectives folder setting for the current user
  */
 export function getCollectivesFolder() {
-	return axios.get(apiUrl('v1.0', 'settings/user/user_folder'))
+	return axios.get(settingsApiUrl('user/user_folder'))
 }
 
 /**
@@ -19,7 +27,7 @@ export function getCollectivesFolder() {
  */
 export function setCollectivesFolder(value) {
 	return axios.post(
-		apiUrl('v1.0', 'settings/user'),
+		settingsApiUrl('user'),
 		{ key: 'user_folder', value },
 	)
 }
