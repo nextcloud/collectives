@@ -200,7 +200,7 @@ class FeatureContext implements Context {
 	public function userSeesCollective(string $user, string $collective, ?string $trash = null): void {
 		$this->setCurrentUser($user);
 		if ($trash) {
-			$this->sendOcsCollectivesRequest('GET', 'trash');
+			$this->sendOcsCollectivesRequest('GET', 'collectives/trash');
 		} else {
 			$this->sendOcsCollectivesRequest('GET', 'collectives');
 		}
@@ -252,7 +252,7 @@ class FeatureContext implements Context {
 	public function userDoesntSeeCollective(string $user, string $collective, ?string $trash = null): void {
 		$this->setCurrentUser($user);
 		if ($trash) {
-			$this->sendOcsCollectivesRequest('GET', 'trash');
+			$this->sendOcsCollectivesRequest('GET', 'collectives/trash');
 		} else {
 			$this->sendOcsCollectivesRequest('GET', 'collectives');
 		}
@@ -338,7 +338,7 @@ class FeatureContext implements Context {
 		}
 		$this->setCurrentUser($user);
 
-		$this->sendOcsCollectivesRequest('DELETE', 'trash/' . $collectiveId);
+		$this->sendOcsCollectivesRequest('DELETE', 'collectives/trash/' . $collectiveId);
 		if ($fail === 'fails') {
 			$this->assertStatusCode(404);
 		} else {
@@ -362,7 +362,7 @@ class FeatureContext implements Context {
 			throw new RuntimeException('Could not get collectiveId for ' . $collective);
 		}
 		$this->setCurrentUser($user);
-		$this->sendOcsCollectivesRequest('DELETE', 'trash/' . $collectiveId . '?circle=1');
+		$this->sendOcsCollectivesRequest('DELETE', 'collectives/trash/' . $collectiveId . '?circle=1');
 		if ($fail === 'fails') {
 			$this->assertStatusCode($selfadmin ? 403 : 404);
 		} else {
@@ -383,7 +383,7 @@ class FeatureContext implements Context {
 		if ($collectiveId === null) {
 			throw new RuntimeException('Could not get collectiveId for ' . $collective);
 		}
-		$this->sendOcsCollectivesRequest('PATCH', 'trash/' . $collectiveId);
+		$this->sendOcsCollectivesRequest('PATCH', 'collectives/trash/' . $collectiveId);
 		if ($fail === 'fails') {
 			$this->assertStatusCode(404);
 		} else {
@@ -1686,7 +1686,7 @@ class FeatureContext implements Context {
 	 */
 	private function collectiveIdByName(string $name, bool $trash = false): ?int {
 		if ($trash) {
-			$this->sendOcsCollectivesRequest('GET', 'trash');
+			$this->sendOcsCollectivesRequest('GET', 'collectives/trash');
 		} else {
 			$this->sendOcsCollectivesRequest('GET', 'collectives');
 		}
