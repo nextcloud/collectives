@@ -42,6 +42,24 @@ namespace OCA\Collectives;
  *     editable: bool,
  *     password: string,
  * }
+ *
+ * @psalm-type CollectivesPageInfo = array{
+ *     id: int,
+ *     lastUserId?: string,
+ *     lastUserDisplayName?: string,
+ *     emoji?: string,
+ *     isFullWidth: bool,
+ *     subpageOrder: list<int>,
+ *     trashTimestamp?: int,
+ *     title: string,
+ *     timestamp: int,
+ *     size: int,
+ *     fileName: string,
+ *     filePath: string,
+ *     collectivePath: string,
+ *     parentId: int,
+ *     shareToken?: string,
+ * }
  */
 class ResponseDefinitions {
 }
