@@ -30,7 +30,7 @@ function publicCollectivesApiUrl(...parts) {
  * @param {...any} parts - URL parts to append - will be joined with `/`
  */
 function collectivesTrashApiUrl(...parts) {
-	return apiUrl('v1.0', 'trash', ...parts)
+	return collectivesApiUrl('trash', ...parts)
 }
 
 /**

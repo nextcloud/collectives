@@ -127,11 +127,11 @@ return [
 			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
 
 		// Collectives trash API
-		['name' => 'trash#index', 'url' => '/api/v{apiVersion}/trash', 'verb' => 'GET',
+		['name' => 'trash#index', 'url' => '/api/v{apiVersion}/collectives/trash', 'verb' => 'GET',
 			'requirements' => ['apiVersion' => '(1.0)']],
-		['name' => 'trash#delete', 'url' => '/api/v{apiVersion}/trash/{id}', 'verb' => 'DELETE',
+		['name' => 'trash#delete', 'url' => '/api/v{apiVersion}/collectives/trash/{id}', 'verb' => 'DELETE',
 			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
-		['name' => 'trash#restore', 'url' => '/api/v{apiVersion}/trash/{id}', 'verb' => 'PATCH',
+		['name' => 'trash#restore', 'url' => '/api/v{apiVersion}/collectives/trash/{id}', 'verb' => 'PATCH',
 			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
 
 		// Collective shares API
