@@ -1059,7 +1059,7 @@ class FeatureContext implements Context {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$token = $this->getShareToken($collectiveId);
-		$this->sendRequest('GET', '/apps/collectives/_api/p/' . $token, null, null, [], false);
+		$this->sendOcsCollectivesRequest('GET', 'p/collectives/' . $token, null, null, [], false);
 		$this->assertStatusCode(200);
 		$this->assertCollectiveByName($collective);
 		$this->assertCollectiveLevel($collective, 1);
@@ -1075,7 +1075,7 @@ class FeatureContext implements Context {
 		$collectiveId = $this->collectiveIdByName($collective);
 		$pageId = $this->pageIdByName($collectiveId, $page);
 		$token = $this->getShareToken($collectiveId, $pageId);
-		$this->sendRequest('GET', '/apps/collectives/_api/p/' . $token, null, null, [], false);
+		$this->sendOcsCollectivesRequest('GET', 'p/collectives/' . $token, null, null, [], false);
 		$this->assertStatusCode(200);
 		$this->assertCollectiveByName($collective);
 		$this->assertCollectiveLevel($collective, 1);
@@ -1089,7 +1089,7 @@ class FeatureContext implements Context {
 	public function anonymousFailsToSeePublicCollective(): void {
 		Assert::assertArrayHasKey('shareToken', $this->store);
 		Assert::assertNotEmpty($this->store['shareToken']);
-		$this->sendRequest('GET', '/apps/collectives/_api/p/' . $this->store['shareToken'], null, null, [], false);
+		$this->sendOcsCollectivesRequest('GET', 'p/collectives/' . $this->store['shareToken'], null, null, [], false);
 		$this->assertStatusCode(404);
 	}
 
@@ -2028,13 +2028,13 @@ class FeatureContext implements Context {
 	}
 
 	private function assertCollectiveLevel(string $name, int $level): void {
-		$data = $this->getJson()['ocs']['data']['collective'];
+		$data = $this->getJson()['ocs']['data'];
 		// Dirty hack. We don't know whether $data contains the collective (e.g. after collective#create)
 		// or an array of collectives (e.g. after collectives#index or publicCollectives#get)
-		if (array_key_exists(0, $data) && !array_key_exists('name', $data)) {
-			$collective = $data[0];
+		if (array_key_exists('collective', $data)) {
+			$collective = $data['collective'];
 		} else {
-			$collective = $data;
+			$collective = $data['collectives'][0];
 		}
 		Assert::assertEquals($name, $collective['name']);
 		Assert::assertEquals($level, $collective['level']);
