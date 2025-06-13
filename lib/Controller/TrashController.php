@@ -23,12 +23,12 @@ use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
 
 /**
- * Provides access to collectives.
+ * Provides access to the collective trash.
  *
  * @psalm-import-type CollectivesCollective from ResponseDefinitions
  */
 class TrashController extends OCSController {
-	use ErrorHelper;
+	use OCSExceptionHelper;
 
 	public function __construct(
 		string $AppName,

@@ -409,7 +409,7 @@ export const usePagesStore = defineStore('pages', {
 				rootStore.load('pagelist')
 			}
 			const response = await api.getPages(this.context)
-			set(this.allPages, this.collectiveId, response.data.data)
+			set(this.allPages, this.collectiveId, response.data.ocs.data.pages)
 			rootStore.done('pagelist')
 		},
 
@@ -420,7 +420,7 @@ export const usePagesStore = defineStore('pages', {
 			const rootStore = useRootStore()
 			rootStore.load('pageTrash')
 			const response = await api.getTrashPages(this.context)
-			set(this.allTrashPages, this.collectiveId, response.data.data)
+			set(this.allTrashPages, this.collectiveId, response.data.ocs.data.pages)
 			rootStore.done('pageTrash')
 		},
 
@@ -439,7 +439,7 @@ export const usePagesStore = defineStore('pages', {
 		 */
 		async getPage(pageId) {
 			const response = await api.getPage(this.context, pageId)
-			this._updatePageState(response.data.data)
+			this._updatePageState(response.data.ocs.data.page)
 		},
 
 		/**
@@ -456,10 +456,10 @@ export const usePagesStore = defineStore('pages', {
 
 			const response = await api.createPage(this.context, page)
 			// Add new page to the beginning of pages array
-			const newPage = response.data.data
+			const newPage = response.data.ocs.data.page
 			this.allPages[this.collectiveId].unshift(newPage)
 			this.addToSubpageOrder({ parentId: newPage.parentId, pageId: newPage.id })
-			this.newPage = response.data.data
+			this.newPage = response.data.ocs.data.page
 		},
 
 		/**
@@ -467,7 +467,7 @@ export const usePagesStore = defineStore('pages', {
 		 */
 		async touchPage() {
 			const response = await api.touchPage(this.context, this.currentPage.id)
-			this._updatePageState(response.data.data)
+			this._updatePageState(response.data.ocs.data.page)
 		},
 
 		/**
@@ -477,7 +477,7 @@ export const usePagesStore = defineStore('pages', {
 		 */
 		async renamePage(newTitle) {
 			const response = await api.renamePage(this.context, this.currentPage.id, newTitle)
-			this._updatePageState(response.data.data)
+			this._updatePageState(response.data.ocs.data.page)
 		},
 
 		/**
@@ -537,7 +537,7 @@ export const usePagesStore = defineStore('pages', {
 
 			try {
 				const response = await api.movePage(this.context, pageId, newParentId, index)
-				this._updatePageState(response.data.data)
+				this._updatePageState(response.data.ocs.data.page)
 			} catch (e) {
 				this._updatePageState(pageClone)
 				throw e
@@ -607,7 +607,7 @@ export const usePagesStore = defineStore('pages', {
 			rootStore.load(`pageEmoji-${pageId}`)
 			try {
 				const response = await api.setPageEmoji(this.context, pageId, emoji)
-				this._updatePageState(response.data.data)
+				this._updatePageState(response.data.ocs.data.page)
 			} finally {
 				rootStore.done(`pageEmoji-${pageId}`)
 			}
@@ -623,7 +623,7 @@ export const usePagesStore = defineStore('pages', {
 		 */
 		async setFullWidthView({ pageId, fullWidthView }) {
 			const response = await api.setFullWidth(this.context, pageId, fullWidthView)
-			this._updatePageState(response.data.data)
+			this._updatePageState(response.data.ocs.data.page)
 		},
 
 		/**
@@ -652,7 +652,7 @@ export const usePagesStore = defineStore('pages', {
 					pageId,
 					JSON.stringify(subpageOrder),
 				)
-				this._updatePageState(response.data.data)
+				this._updatePageState(response.data.ocs.data.page)
 			} catch (e) {
 				this._updatePageState(pageClone)
 				throw e
@@ -669,7 +669,7 @@ export const usePagesStore = defineStore('pages', {
 		 */
 		async trashPage({ pageId }) {
 			const response = await api.trashPage(this.context, pageId)
-			const trashPage = response.data.data
+			const trashPage = response.data.ocs.data.page
 			this.allPages[this.collectiveId].splice(this.allPages[this.collectiveId].findIndex(p => p.id === trashPage.id), 1)
 			trashPage.trashTimestamp = Date.now() / 1000
 			this.allTrashPages[this.collectiveId].unshift(trashPage)
@@ -683,7 +683,7 @@ export const usePagesStore = defineStore('pages', {
 		 */
 		async restorePage({ pageId }) {
 			const response = await api.restorePage(this.context, pageId)
-			const trashPage = response.data.data
+			const trashPage = response.data.ocs.data.page
 			trashPage.trashTimestamp = null
 			this.allPages[this.collectiveId].unshift(trashPage)
 			this.allTrashPages[this.collectiveId].splice(this.allTrashPages[this.collectiveId].findIndex(p => p.id === trashPage.id), 1)
@@ -707,12 +707,12 @@ export const usePagesStore = defineStore('pages', {
 		 */
 		async getAttachments(page) {
 			const response = await api.getPageAttachments(this.context, page.id)
-			this.attachments = response.data.data
+			this.attachments = response.data.ocs.data.attachments
 				// Disregard deletedAttachments when updating attachments
 				.filter(a => !this.deletedAttachments.map(a => a.name).includes(a.name))
 			this.deletedAttachments = this.deletedAttachments
 				// Only keep deletedAttachments that still exist
-				.filter(a => response.data.data.map(a => a.name).includes(a.name))
+				.filter(a => this.attachments.map(a => a.name).includes(a.name))
 		},
 
 		setAttachmentDeleted(name) {
@@ -738,7 +738,7 @@ export const usePagesStore = defineStore('pages', {
 		 */
 		async getBacklinks(page) {
 			const response = await api.getPageBacklinks(this.context, page.id)
-			this.backlinks = response.data.data
+			this.backlinks = response.data.ocs.data.backlinks
 		},
 
 		/**
