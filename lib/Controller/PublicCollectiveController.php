@@ -12,14 +12,18 @@ namespace OCA\Collectives\Controller;
 use OCA\Circles\Model\Member;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveShareMapper;
+use OCA\Collectives\ResponseDefinitions;
 use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\NotFoundException;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
+use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\AnonRateLimit;
 use OCP\AppFramework\Http\Attribute\PublicPage;
 use OCP\AppFramework\Http\DataResponse;
-use OCP\AppFramework\PublicShareController;
+use OCP\AppFramework\OCS\OCSForbiddenException;
+use OCP\AppFramework\OCS\OCSNotFoundException;
+use OCP\AppFramework\OCSController;
 use OCP\IRequest;
 use OCP\ISession;
 use OCP\Share\Exceptions\ShareNotFound;
@@ -27,9 +31,15 @@ use OCP\Share\IManager as ShareManager;
 use OCP\Share\IShare;
 use Psr\Log\LoggerInterface;
 
-class PublicCollectiveController extends PublicShareController {
-	use ErrorHelper;
+/**
+ * Provides access to public collective and page shares.
+ *
+ * @psalm-import-type CollectivesCollective from ResponseDefinitions
+ */
+class PublicCollectiveController extends CollectivesPublicOCSController {
+	use OCSExceptionHelper;
 
+	private string $token;
 	private ?IShare $share = null;
 
 	public function __construct(
@@ -76,9 +86,19 @@ class PublicCollectiveController extends PublicShareController {
 		return $this->getShare()->getPassword() !== null;
 	}
 
+	/**
+	 * @param string $token Share token of the public share
+	 *
+	 * @return DataResponse<Http::STATUS_OK, array{collectives: list<CollectivesCollective>}, array{}>
+	 * @throws OCSForbiddenException
+	 * @throws OCSNotFoundException
+	 *
+	 * 200: Collective returned
+	 */
 	#[PublicPage]
 	#[AnonRateLimit(limit: 10, period: 60)]
-	public function get(): DataResponse {
+	public function get(string $token): DataResponse {
+		$this->setToken($token);
 		$collective = $this->handleErrorResponse(function (): Collective {
 			try {
 				$share = $this->collectiveShareMapper->findOneByToken($this->getToken());
@@ -92,6 +112,6 @@ class PublicCollectiveController extends PublicShareController {
 			$collective->setLevel(Member::LEVEL_MEMBER);
 			return $collective;
 		}, $this->logger);
-		return new DataResponse(['data' => [$collective]]);
+		return new DataResponse(['collectives' => [$collective]]);
 	}
 }
