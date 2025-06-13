@@ -59,9 +59,6 @@ return [
 		['name' => 'template#setEmoji', 'url' => '/_api/{collectiveId}/_templates/{id}/emoji',
 			'verb' => 'PUT', 'requirements' => ['collectiveId' => '\d+', 'id' => '\d+']],
 
-		// public collectives API
-		['name' => 'publicCollective#get', 'url' => '/_api/p/{token}', 'verb' => 'GET'],
-
 		// public pages search API
 		['name' => 'publicPage#contentSearch', 'url' => '/_api/p/{token}/_pages/search',
 			'verb' => 'GET', 'requirements' => ['filterString' => '\s+']],
@@ -175,6 +172,10 @@ return [
 		['name' => 'settings#getUserSetting', 'url' => '/api/v{apiVersion}/settings/user/{key}', 'verb' => 'GET',
 			'requirements' => ['apiVersion' => '(1.0)']],
 		['name' => 'settings#setUserSetting', 'url' => '/api/v{apiVersion}/settings/user', 'verb' => 'POST',
+			'requirements' => ['apiVersion' => '(1.0)']],
+
+		// Public collectives API
+		['name' => 'publicCollective#get', 'url' => '/api/v{apiVersion}/p/collectives/{token}', 'verb' => 'GET',
 			'requirements' => ['apiVersion' => '(1.0)']],
 	]
 ];

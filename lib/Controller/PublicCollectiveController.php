@@ -23,7 +23,6 @@ use OCP\AppFramework\Http\Attribute\PublicPage;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCS\OCSForbiddenException;
 use OCP\AppFramework\OCS\OCSNotFoundException;
-use OCP\AppFramework\OCSController;
 use OCP\IRequest;
 use OCP\ISession;
 use OCP\Share\Exceptions\ShareNotFound;
@@ -55,11 +54,15 @@ class PublicCollectiveController extends CollectivesPublicOCSController {
 	}
 
 	/**
-	 * @throws ShareNotFound
+	 * @throws OCSNotFoundException
 	 */
 	protected function getShare(): IShare {
 		if ($this->share === null) {
-			$this->share = $this->shareManager->getShareByToken($this->getToken());
+			try {
+				$this->share = $this->shareManager->getShareByToken($this->getToken());
+			} catch (ShareNotFound $e) {
+				throw new OCSNotFoundException($e->getMessage());
+			}
 		}
 		return $this->share;
 	}
@@ -87,18 +90,17 @@ class PublicCollectiveController extends CollectivesPublicOCSController {
 	}
 
 	/**
-	 * @param string $token Share token of the public share
+	 * Get public collective/page share by token
 	 *
 	 * @return DataResponse<Http::STATUS_OK, array{collectives: list<CollectivesCollective>}, array{}>
-	 * @throws OCSForbiddenException
-	 * @throws OCSNotFoundException
+	 * @throws OCSForbiddenException Not permitted
+	 * @throws OCSNotFoundException Public collective/page share not found
 	 *
-	 * 200: Collective returned
+	 * 200: Public collective/page share not found
 	 */
 	#[PublicPage]
 	#[AnonRateLimit(limit: 10, period: 60)]
-	public function get(string $token): DataResponse {
-		$this->setToken($token);
+	public function get(): DataResponse {
 		$collective = $this->handleErrorResponse(function (): Collective {
 			try {
 				$share = $this->collectiveShareMapper->findOneByToken($this->getToken());
