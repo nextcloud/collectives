@@ -22,6 +22,7 @@ use OCA\Collectives\Listeners\CircleDestroyedListener;
 use OCA\Collectives\Listeners\CollectivesReferenceListener;
 use OCA\Collectives\Listeners\ShareDeletedListener;
 use OCA\Collectives\Listeners\TextMentionListener;
+use OCA\Collectives\Middleware\OCSPublicMiddleware;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Mount\MountProvider;
 use OCA\Collectives\Reference\SearchablePageReferenceProvider;
@@ -69,6 +70,8 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(ShareDeletedEvent::class, ShareDeletedListener::class);
 		$context->registerEventListener(RenderReferenceEvent::class, CollectivesReferenceListener::class);
 		$context->registerEventListener(MentionEvent::class, TextMentionListener::class);
+
+		$context->registerMiddleware(OCSPublicMiddleware::class);
 
 		$context->registerService(MountProvider::class, fn (ContainerInterface $c) => new MountProvider(
 			$c->get(CollectiveHelper::class),
