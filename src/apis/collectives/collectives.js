@@ -16,6 +16,15 @@ function collectivesApiUrl(...parts) {
 }
 
 /**
+ * URL for the public collectives API
+ *
+ * @param {...any} parts - URL parts to append - will be joined with `/`
+ */
+function publicCollectivesApiUrl(...parts) {
+	return apiUrl('v1.0', 'p', 'collectives', ...parts)
+}
+
+/**
  * URL for the collectives trash API
  *
  * @param {...any} parts - URL parts to append - will be joined with `/`
@@ -37,7 +46,7 @@ export function getCollectives() {
  * @param {string} shareToken authentication token from the share
  */
 export function getSharedCollective(shareToken) {
-	return axios.get(collectivesApiUrl('p', shareToken))
+	return axios.get(publicCollectivesApiUrl(shareToken))
 }
 
 /**

@@ -1323,7 +1323,7 @@
                 }
             }
         },
-        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/trash": {
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/collectives/trash": {
             "get": {
                 "operationId": "trash-index",
                 "summary": "Get trashed collectives",
@@ -1463,7 +1463,7 @@
                 }
             }
         },
-        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/trash/{id}": {
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/collectives/trash/{id}": {
             "delete": {
                 "operationId": "trash-delete",
                 "summary": "Delete a collective from trash",
@@ -4138,6 +4138,155 @@
                     }
                 }
             }
+        },
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/p/collectives/{token}": {
+            "get": {
+                "operationId": "public_collective-get",
+                "summary": "Get public collective/page share by token",
+                "tags": [
+                    "public_collective"
+                ],
+                "security": [
+                    {},
+                    {
+                        "bearer_auth": []
+                    },
+                    {
+                        "basic_auth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "apiVersion",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "1.0"
+                            ],
+                            "default": "1.0"
+                        }
+                    },
+                    {
+                        "name": "token",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "OCS-APIRequest",
+                        "in": "header",
+                        "description": "Required to be true for the API request to pass",
+                        "required": true,
+                        "schema": {
+                            "type": "boolean",
+                            "default": true
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Public collective/page share not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "ocs"
+                                    ],
+                                    "properties": {
+                                        "ocs": {
+                                            "type": "object",
+                                            "required": [
+                                                "meta",
+                                                "data"
+                                            ],
+                                            "properties": {
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/OCSMeta"
+                                                },
+                                                "data": {
+                                                    "type": "object",
+                                                    "required": [
+                                                        "collectives"
+                                                    ],
+                                                    "properties": {
+                                                        "collectives": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/components/schemas/Collective"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Not permitted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "ocs"
+                                    ],
+                                    "properties": {
+                                        "ocs": {
+                                            "type": "object",
+                                            "required": [
+                                                "meta",
+                                                "data"
+                                            ],
+                                            "properties": {
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/OCSMeta"
+                                                },
+                                                "data": {}
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Public collective/page share not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "ocs"
+                                    ],
+                                    "properties": {
+                                        "ocs": {
+                                            "type": "object",
+                                            "required": [
+                                                "meta",
+                                                "data"
+                                            ],
+                                            "properties": {
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/OCSMeta"
+                                                },
+                                                "data": {}
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "tags": [
@@ -4164,6 +4313,10 @@
         {
             "name": "settings",
             "description": "Provides access to the following user settings used by the collectives app. - user_folder: Path where collectives are mounted in user home directory."
+        },
+        {
+            "name": "public_collective",
+            "description": "Provides access to public collective and page shares."
         }
     ]
 }

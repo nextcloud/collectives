@@ -13,6 +13,9 @@ use OCP\AppFramework\OCSController;
 use OCP\IRequest;
 use OCP\ISession;
 
+/**
+ * Mostly copied from server/lib/public/AppFramework/PublicShareController.php
+ */
 abstract class CollectivesPublicOCSController extends OCSController {
 	private string $token;
 
