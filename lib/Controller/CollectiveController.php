@@ -34,7 +34,7 @@ use Psr\Log\LoggerInterface;
  * @psalm-import-type CollectivesCollective from ResponseDefinitions
  */
 class CollectiveController extends OCSController {
-	use ErrorHelper;
+	use OCSExceptionHelper;
 
 	public function __construct(
 		string $AppName,

@@ -139,7 +139,7 @@ class FeatureContext implements Context {
 		$parentId = $this->getParentId($collectiveId, $parentPath);
 
 		$formData = new TableNode([['title', $page]]);
-		$this->sendRequest('POST', '/apps/collectives/_api/' . $collectiveId . '/_pages/' . $parentId, $formData);
+		$this->sendOcsCollectivesRequest('POST', 'pages/' . $collectiveId . '/' . $parentId, $formData);
 
 		if ($fail === 'fails') {
 			$this->assertStatusCode(403);
@@ -161,7 +161,7 @@ class FeatureContext implements Context {
 		$templateId = $this->templateIdByName($collectiveId, $template);
 
 		$formData = new TableNode([['title', $page], ['templateId', $templateId]]);
-		$this->sendRequest('POST', '/apps/collectives/_api/' . $collectiveId . '/_pages/' . $parentId, $formData);
+		$this->sendOcsCollectivesRequest('POST', 'pages/' . $collectiveId . '/' . $parentId, $formData);
 
 		if ($fail === 'fails') {
 			$this->assertStatusCode(403);
@@ -217,7 +217,7 @@ class FeatureContext implements Context {
 	public function userSeesPagePath(string $user, string $pagePath, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
-		$this->sendRequest('GET', '/apps/collectives/_api/' . $collectiveId . '/_pages');
+		$this->sendOcsCollectivesRequest('GET', 'pages/' . $collectiveId);
 		$this->assertStatusCode(200);
 		if ($fail === 'fails') {
 			$this->assertPageByPath($pagePath, true);
@@ -268,7 +268,7 @@ class FeatureContext implements Context {
 	public function userDoesntSeePagePath(string $user, string $pagePath, string $collective): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
-		$this->sendRequest('GET', '/apps/collectives/_api/' . $collectiveId . '/_pages');
+		$this->sendOcsCollectivesRequest('GET', 'pages/' . $collectiveId);
 		$this->assertStatusCode(200);
 		$this->assertPageByPath($pagePath, true);
 	}
@@ -282,7 +282,7 @@ class FeatureContext implements Context {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$pageId = $this->pageIdByName($collectiveId, $page);
-		$this->sendRequest('GET', '/apps/collectives/_api/' . $collectiveId . '/_pages/' . $pageId . '/attachments');
+		$this->sendOcsCollectivesRequest('GET', 'pages/' . $collectiveId . '/' . $pageId . '/attachments');
 		$this->assertStatusCode(200);
 		$this->assertAttachment($name, $mimetype);
 	}
@@ -295,7 +295,7 @@ class FeatureContext implements Context {
 	public function userLastEditedPage(string $user, string $page, string $collective): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
-		$this->sendRequest('GET', '/apps/collectives/_api/' . $collectiveId . '/_pages');
+		$this->sendOcsCollectivesRequest('GET', 'pages/' . $collectiveId);
 		$this->assertStatusCode(200);
 		$this->assertPageLastEditedByUser($page, $user);
 	}
@@ -433,7 +433,7 @@ class FeatureContext implements Context {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$pageId = $this->pageIdByName($collectiveId, $page);
-		$this->sendRequest('DELETE', '/apps/collectives/_api/' . $collectiveId . '/_pages/' . $pageId);
+		$this->sendOcsCollectivesRequest('DELETE', 'pages/' . $collectiveId . '/' . $pageId);
 		if ($fail === 'fails') {
 			$this->assertStatusCode(403);
 		} else {
@@ -451,11 +451,11 @@ class FeatureContext implements Context {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
 		if ($fail === 'fails') {
-			$this->sendRequest('PATCH', '/apps/collectives/_api/' . $collectiveId . '/_pages/trash/' . 1);
+			$this->sendOcsCollectivesRequest('PATCH', 'pages/trash/' . $collectiveId . '/' . 1);
 			$this->assertStatusCode(403);
 		} else {
 			$pageId = $this->trashedPageIdByName($collectiveId, $page);
-			$this->sendRequest('PATCH', '/apps/collectives/_api/' . $collectiveId . '/_pages/trash/' . $pageId);
+			$this->sendOcsCollectivesRequest('PATCH', 'pages/trash/' . $collectiveId . '/' . $pageId);
 			$this->assertStatusCode(200);
 		}
 	}
@@ -470,11 +470,11 @@ class FeatureContext implements Context {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
 		if ($fail === 'fails') {
-			$this->sendRequest('DELETE', '/apps/collectives/_api/' . $collectiveId . '/_pages/trash/' . 1);
+			$this->sendOcsCollectivesRequest('DELETE', 'pages/trash/' . $collectiveId . '/' . 1);
 			$this->assertStatusCode(403);
 		} else {
 			$pageId = $this->trashedPageIdByName($collectiveId, $page);
-			$this->sendRequest('DELETE', '/apps/collectives/_api/' . $collectiveId . '/_pages/trash/' . $pageId);
+			$this->sendOcsCollectivesRequest('DELETE', 'pages/trash/' . $collectiveId . '/' . $pageId);
 			$this->assertStatusCode(200);
 		}
 	}
@@ -502,7 +502,7 @@ class FeatureContext implements Context {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$pageId = $this->pageIdByName($collectiveId, $page);
-		$this->sendRequest('GET', '/apps/collectives/_api/' . $collectiveId . '/_pages/' . $pageId . '/touch');
+		$this->sendOcsCollectivesRequest('GET', 'pages/' . $collectiveId . '/' . $pageId . '/touch');
 		if ($fail === 'fails') {
 			$this->assertStatusCode(403);
 		} else {
@@ -522,7 +522,7 @@ class FeatureContext implements Context {
 		$pageId = $this->pageIdByName($collectiveId, $page);
 		$parentId = $this->getParentId($collectiveId, $parentPath);
 		$formData = new TableNode([['parentId', $parentId], ['title', $newtitle]]);
-		$this->sendRequest('PUT', '/apps/collectives/_api/' . $collectiveId . '/_pages/' . $pageId, $formData);
+		$this->sendOcsCollectivesRequest('PUT', 'pages/' . $collectiveId . '/' . $pageId, $formData);
 		if ($fail === 'fails') {
 			$this->assertStatusCode(403);
 		} else {
@@ -546,7 +546,7 @@ class FeatureContext implements Context {
 			['title', $newtitle],
 			['copy', true],
 		]);
-		$this->sendRequest('PUT', '/apps/collectives/_api/' . $collectiveId . '/_pages/' . $pageId, $formData);
+		$this->sendOcsCollectivesRequest('PUT', 'pages/' . $collectiveId . '/' . $pageId, $formData);
 		if ($fail === 'fails') {
 			$this->assertStatusCode(403);
 		} else {
@@ -587,7 +587,7 @@ class FeatureContext implements Context {
 		} else {
 			$formData = null;
 		}
-		$this->sendRequest('PUT', '/apps/collectives/_api/' . $oldCollectiveId . '/_pages/' . $pageId . '/to/' . $newCollectiveId, $formData);
+		$this->sendOcsCollectivesRequest('PUT', 'pages/' . $oldCollectiveId . '/' . $pageId . '/to/' . $newCollectiveId, $formData);
 		$this->assertStatusCode(200);
 	}
 
@@ -608,7 +608,7 @@ class FeatureContext implements Context {
 		} else {
 			$formData = new TableNode([['copy', true]]);
 		}
-		$this->sendRequest('PUT', '/apps/collectives/_api/' . $oldCollectiveId . '/_pages/' . $pageId . '/to/' . $newCollectiveId, $formData);
+		$this->sendOcsCollectivesRequest('PUT', 'pages/' . $oldCollectiveId . '/' . $pageId . '/to/' . $newCollectiveId, $formData);
 		$this->assertStatusCode(200);
 	}
 
@@ -623,7 +623,7 @@ class FeatureContext implements Context {
 		$collectiveId = $this->collectiveIdByName($collective);
 		$pageId = $this->pageIdByName($collectiveId, $page);
 		$formData = new TableNode([['emoji', $emoji]]);
-		$this->sendRequest('PUT', '/apps/collectives/_api/' . $collectiveId . '/_pages/' . $pageId . '/emoji', $formData);
+		$this->sendOcsCollectivesRequest('PUT', 'pages/' . $collectiveId . '/' . $pageId . '/emoji', $formData);
 		if ($fail === 'fails') {
 			$this->assertStatusCode(403);
 		} else {
@@ -643,7 +643,7 @@ class FeatureContext implements Context {
 		$collectiveId = $this->collectiveIdByName($collective);
 		$templateId = $this->templateIdByName($collectiveId, $template);
 		$formData = new TableNode([['emoji', $emoji]]);
-		$this->sendRequest('PUT', '/apps/collectives/_api/' . $collectiveId . '/_pages/' . $templateId . '/emoji', $formData);
+		$this->sendOcsCollectivesRequest('PUT', 'pages/' . $collectiveId . '/' . $templateId . '/emoji', $formData);
 		if ($fail === 'fails') {
 			$this->assertStatusCode(403);
 		} else {
@@ -664,7 +664,7 @@ class FeatureContext implements Context {
 		$pageId = $this->pageIdByName($collectiveId, $page);
 		$isFullWidth = $fullWidth === 'true';
 		$formData = new TableNode([['fullWidth', $isFullWidth]]);
-		$this->sendRequest('PUT', '/apps/collectives/_api/' . $collectiveId . '/_pages/' . $pageId . '/fullWidth', $formData);
+		$this->sendOcsCollectivesRequest('PUT', 'pages/' . $collectiveId . '/' . $pageId . '/fullWidth', $formData);
 		if ($fail === 'fails') {
 			$this->assertStatusCode(403);
 		} else {
@@ -684,7 +684,7 @@ class FeatureContext implements Context {
 		$collectiveId = $this->collectiveIdByName($collective);
 		$pageId = $this->pageIdByName($collectiveId, $page);
 		$formData = new TableNode([['subpageOrder', $subpageOrder]]);
-		$this->sendRequest('PUT', '/apps/collectives/_api/' . $collectiveId . '/_pages/' . $pageId . '/subpageOrder', $formData);
+		$this->sendOcsCollectivesRequest('PUT', 'pages/' . $collectiveId . '/' . $pageId . '/subpageOrder', $formData);
 		if ($fail === 'fails') {
 			$this->assertStatusCode(403);
 		} else {
@@ -1706,12 +1706,12 @@ class FeatureContext implements Context {
 	 * @throws GuzzleException
 	 */
 	private function pageIdByName(int $collectiveId, string $name): ?int {
-		$this->sendRequest('GET', '/apps/collectives/_api/' . $collectiveId . '/_pages');
+		$this->sendOcsCollectivesRequest('GET', 'pages/' . $collectiveId);
 		if ($this->response->getStatusCode() !== 200) {
 			throw new RuntimeException('Unable to get list of pages for collective ' . $collectiveId);
 		}
 		$jsonBody = $this->getJson();
-		foreach ($jsonBody['data'] as $page) {
+		foreach ($jsonBody['ocs']['data']['pages'] as $page) {
 			if ($name === $page['title']) {
 				return $page['id'];
 			}
@@ -1744,13 +1744,13 @@ class FeatureContext implements Context {
 		if ($token) {
 			$this->sendRequest('GET', '/apps/collectives/_api/p/' . $token . '/_pages/trash', null, null, [], false);
 		} else {
-			$this->sendRequest('GET', '/apps/collectives/_api/' . $collectiveId . '/_pages/trash');
+			$this->sendOcsCollectivesRequest('GET', 'pages/trash/' . $collectiveId);
 		}
 		if ($this->response->getStatusCode() !== 200) {
 			throw new RuntimeException('Unable to get list of trashed pages for collective ' . $collectiveId);
 		}
 		$jsonBody = $this->getJson();
-		foreach ($jsonBody['data'] as $page) {
+		foreach ($jsonBody['ocs']['data']['pages'] as $page) {
 			if ($name === $page['title']) {
 				return $page['id'];
 			}
@@ -1959,9 +1959,9 @@ class FeatureContext implements Context {
 	}
 
 	private function getParentId(int $collectiveId, string $parentPath): int {
-		$this->sendRequest('GET', '/apps/collectives/_api/' . $collectiveId . '/_pages');
+		$this->sendOcsCollectivesRequest('GET', 'pages/' . $collectiveId);
 		$jsonBody = $this->getJson();
-		foreach ($jsonBody['data'] as $page) {
+		foreach ($jsonBody['ocs']['data']['pages'] as $page) {
 			$path = $page['filePath'] ? $page['filePath'] . '/' . $page['fileName'] : $page['fileName'];
 			if ($parentPath === $path) {
 				return $page['id'];
@@ -2043,7 +2043,7 @@ class FeatureContext implements Context {
 	private function assertPageByPath(string $path, ?bool $revert = false): void {
 		$jsonBody = $this->getJson();
 		$pagePaths = [];
-		foreach ($jsonBody['data'] as $page) {
+		foreach ($jsonBody['ocs']['data']['pages'] as $page) {
 			$pagePaths[] = $page['filePath'] ? $page['filePath'] . '/' . $page['fileName'] : $page['fileName'];
 		}
 		if ($revert === false) {
@@ -2055,7 +2055,7 @@ class FeatureContext implements Context {
 
 	private function assertPageKeyValue(int $id, string $key, mixed $value, ?bool $revert = false): void {
 		$jsonBody = $this->getJson();
-		$page = $jsonBody['data'];
+		$page = $jsonBody['ocs']['data']['page'];
 
 		if (!isset($page)) {
 			throw new RuntimeException('Unable to find page with ID ' . $id);
@@ -2071,7 +2071,7 @@ class FeatureContext implements Context {
 	private function assertPageLastEditedByUser(string $title, string $user): void {
 		$jsonBody = $this->getJson();
 		$pageTitles = [];
-		foreach ($jsonBody['data'] as $page) {
+		foreach ($jsonBody['ocs']['data']['pages'] as $page) {
 			if ($page['lastUserId'] === $user) {
 				$pageTitles[] = $page['title'];
 			}
@@ -2089,7 +2089,7 @@ class FeatureContext implements Context {
 		$pageAttachments = array_map(static fn ($attachment) => [
 			'name' => $attachment['name'],
 			'mimetype' => $attachment['mimetype'],
-		], $jsonBody['data']);
+		], $jsonBody['ocs']['data']['attachments']);
 
 		Assert::assertContains($attachment, $pageAttachments);
 	}
