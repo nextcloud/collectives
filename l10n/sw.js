@@ -1,0 +1,24 @@
+OC.L10N.register(
+    "collectives",
+    {
+    "Share link" : "Shirikisha kiungo",
+    "Settings" : "Mipangilio",
+    "Members" : "Wanachama",
+    "Permissions" : "Ruhusa",
+    "View" : "Angalia",
+    "Edit" : "Hariri",
+    "Restore" : "Hifadhi upya",
+    "Delete permanently" : "Futa moja kwa moja",
+    "Cancel" : "Cancel",
+    "Back" : "Rudi",
+    "Delete" : "Futa",
+    "Done" : "Imefanyika",
+    "Show in Files" : "Onesha katika mafaili",
+    "Deleted" : "Vilivyofutwa",
+    "Can edit" : "Inaweza kuhariri",
+    "Cannot copy, please copy the link manually" : "Haiwezi kunakili, tafadhali nakili kiungio kwa njia za kawaida",
+    "Download" : "Pakua",
+    "Attachments" : "Viambatanisho",
+    "Sharing" : "inashirikisha"
+},
+"nplurals=2; plural=(n != 1);");
