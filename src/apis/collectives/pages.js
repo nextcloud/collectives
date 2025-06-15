@@ -4,7 +4,7 @@
  */
 
 import axios from '@nextcloud/axios'
-import { apiUrl, collectivesUrl } from './urls.js'
+import { apiUrl } from './urls.js'
 
 /**
  * URL for the pages API inside the given context.
@@ -14,7 +14,7 @@ import { apiUrl, collectivesUrl } from './urls.js'
  */
 function pagesApiUrl(context, ...parts) {
 	return context.isPublic
-		? collectivesUrl('p', context.shareTokenParam, '_pages', ...parts)
+		? apiUrl('v1.0', 'p', 'pages', context.shareTokenParam, ...parts)
 		: apiUrl('v1.0', 'pages', context.collectiveId, ...parts)
 }
 
@@ -26,7 +26,7 @@ function pagesApiUrl(context, ...parts) {
  */
 function pagesTrashApiUrl(context, ...parts) {
 	return context.isPublic
-		? collectivesUrl('p', context.shareTokenParam, '_pages/trash', ...parts)
+		? apiUrl('v1.0', 'p', 'pages', 'trash', context.shareTokenParam, ...parts)
 		: apiUrl('v1.0', 'pages', 'trash', context.collectiveId, ...parts)
 }
 
@@ -38,7 +38,7 @@ function pagesTrashApiUrl(context, ...parts) {
  */
 function searchApiUrl(context, ...parts) {
 	return context.isPublic
-		? collectivesUrl('p', context.shareTokenParam, '_pages', ...parts)
+		? apiUrl('v1.0', 'p', 'search', context.shareTokenParam, ...parts)
 		: apiUrl('v1.0', 'search', context.collectiveId)
 }
 
