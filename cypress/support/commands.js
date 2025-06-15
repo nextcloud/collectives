@@ -295,7 +295,7 @@ function collectiveContext(collective) {
 
 Cypress.Commands.add('getPages', collective => {
 	return api.getPages(collectiveContext(collective))
-		.then(response => response.data.data)
+		.then(response => response.data.ocs.data.pages)
 })
 
 /**
@@ -313,7 +313,7 @@ Cypress.Commands.add('seedPage',
 					{ parentId, title: name, pagePath: name },
 				)
 			})
-			.its('data.data.id')
+			.its('data.ocs.data.page.id')
 			.then(pageId => ({ ...subject, pageId }))
 	})
 
