@@ -12,6 +12,7 @@ namespace OCA\Collectives\Controller;
 use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\ResponseDefinitions;
 use OCA\Collectives\Service\PageService;
+use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCS\OCSForbiddenException;
@@ -83,7 +84,7 @@ class PageTrashController extends OCSController {
 	 * @param int $collectiveId ID of the collective
 	 * @param int $id ID of the trashed page
 	 *
-	 * @return DataResponse<Http::STATUS_OK, array{page: CollectivesPageInfo}, array{}>
+	 * @return DataResponse<Http::STATUS_OK, list<empty>, array{}>
 	 * @throws OCSForbiddenException Not Permitted
 	 * @throws OCSNotFoundException Collective or page not found
 	 *

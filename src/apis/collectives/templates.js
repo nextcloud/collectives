@@ -4,7 +4,19 @@
  */
 
 import axios from '@nextcloud/axios'
-import { templatesUrl } from './urls.js'
+import { apiUrl, collectivesUrl } from './urls.js'
+
+/**
+ * URL for templates API inside the given context.
+ *
+ * @param {object} context - either the current collective or a share context
+ * @param {...any} parts - URL parts to append - will be joined with `/`
+ */
+function templatesApiUrl(context, ...parts) {
+	return context.isPublic
+		? collectivesUrl('p', context.shareTokenParam, '_templates', ...parts)
+		: apiUrl('v1.0', 'pages/templates', context.collectiveId, ...parts)
+}
 
 /**
  * Get all templates in the given context (collective or public share)
@@ -12,7 +24,7 @@ import { templatesUrl } from './urls.js'
  * @param {object} context - either the current collective or a share context
  */
 export function getTemplates(context) {
-	return axios.get(templatesUrl(context))
+	return axios.get(templatesApiUrl(context))
 }
 
 /**
@@ -23,7 +35,7 @@ export function getTemplates(context) {
  */
 export function createTemplate(context, template) {
 	return axios.post(
-		templatesUrl(context, template.parentId),
+		templatesApiUrl(context, template.parentId),
 		template,
 	)
 }
@@ -37,7 +49,7 @@ export function createTemplate(context, template) {
  */
 export function renameTemplate(context, templateId, title) {
 	return axios.put(
-		templatesUrl(context, templateId),
+		templatesApiUrl(context, templateId),
 		{ title },
 	)
 }
@@ -51,7 +63,7 @@ export function renameTemplate(context, templateId, title) {
  */
 export function setTemplateEmoji(context, templateId, emoji) {
 	return axios.put(
-		templatesUrl(context, templateId, 'emoji'),
+		templatesApiUrl(context, templateId, 'emoji'),
 		{ emoji },
 	)
 }
@@ -63,5 +75,5 @@ export function setTemplateEmoji(context, templateId, emoji) {
  * @param {number} templateId - ID of the template to delete
  */
 export function deleteTemplate(context, templateId) {
-	return axios.delete(templatesUrl(context, templateId))
+	return axios.delete(templatesApiUrl(context, templateId))
 }

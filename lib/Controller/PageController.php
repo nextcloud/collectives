@@ -15,6 +15,7 @@ use OCA\Collectives\Service\AttachmentService;
 use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\PageService;
 use OCA\Collectives\Service\SearchService;
+use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCS\OCSForbiddenException;
@@ -134,7 +135,7 @@ class PageController extends OCSController {
 	 * @param ?int $parentId ID of target parent page (optional)
 	 * @param ?string $title Target title (optional)
 	 * @param ?int $index Index in subpage order (optional, default 0)
-	 * @param ?bool $copy Copy the page instead of move (optional, default false)
+	 * @param bool $copy Copy the page instead of move (optional, default false)
 	 *
 	 * @return DataResponse<Http::STATUS_OK, array{page: CollectivesPageInfo}, array{}>
 	 * @throws OCSForbiddenException Not Permitted
@@ -162,9 +163,9 @@ class PageController extends OCSController {
 	 * @param int $newCollectiveId ID of the target collective
 	 * @param ?int $parentId ID of target parent page (optional)
 	 * @param ?int $index Index in subpage order (optional, default 0)
-	 * @param ?bool $copy Copy the page instead of move (optional, default false)
+	 * @param bool $copy Copy the page instead of move (optional, default false)
 	 *
-	 * @return DataResponse<Http::STATUS_OK, array{page: CollectivesPageInfo}, array{}>
+	 * @return DataResponse<Http::STATUS_OK, list<empty>, array{}>
 	 * @throws OCSForbiddenException Not Permitted
 	 * @throws OCSNotFoundException Collective or (parent) page not found
 	 *

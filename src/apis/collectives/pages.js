@@ -7,7 +7,7 @@ import axios from '@nextcloud/axios'
 import { apiUrl, collectivesUrl } from './urls.js'
 
 /**
- * URL for the pages API
+ * URL for the pages API inside the given context.
  *
  * @param {object} context - either the current collective or a share context
  * @param {...any} parts - URL parts to append - will be joined with `/`

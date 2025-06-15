@@ -181,7 +181,7 @@ class FeatureContext implements Context {
 		$collectiveId = $this->collectiveIdByName($collective);
 
 		$formData = new TableNode([['title', $page], ['parentId', 0]]);
-		$this->sendRequest('POST', '/apps/collectives/_api/' . $collectiveId . '/_templates/0', $formData);
+		$this->sendOcsCollectivesRequest('POST', 'pages/templates/' . $collectiveId . '/0', $formData);
 
 		if ($fail === 'fails') {
 			$this->assertStatusCode(403);
@@ -488,7 +488,7 @@ class FeatureContext implements Context {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$templateId = $this->templateIdByName($collectiveId, $template);
-		$this->sendRequest('DELETE', '/apps/collectives/_api/' . $collectiveId . '/_templates/' . $templateId);
+		$this->sendOcsCollectivesRequest('DELETE', 'pages/templates/' . $collectiveId . '/' . $templateId);
 		$this->assertStatusCode(200);
 	}
 
@@ -566,7 +566,7 @@ class FeatureContext implements Context {
 		$formData = new TableNode([
 			['title', $newtitle],
 		]);
-		$this->sendRequest('PUT', '/apps/collectives/_api/' . $collectiveId . '/_templates/' . $templateId, $formData);
+		$this->sendOcsCollectivesRequest('PUT', 'pages/templates/' . $collectiveId . '/' . $templateId, $formData);
 		$this->assertStatusCode(200);
 	}
 
@@ -1720,12 +1720,12 @@ class FeatureContext implements Context {
 	}
 
 	private function templateIdByName(int $collectiveId, string $name): ?int {
-		$this->sendRequest('GET', '/apps/collectives/_api/' . $collectiveId . '/_templates');
+		$this->sendOcsCollectivesRequest('GET', 'pages/templates/' . $collectiveId);
 		if ($this->response->getStatusCode() !== 200) {
 			throw new RuntimeException('Unable to get list of templates for collective ' . $collectiveId);
 		}
 		$jsonBody = $this->getJson();
-		foreach ($jsonBody['data'] as $page) {
+		foreach ($jsonBody['ocs']['data']['templates'] as $page) {
 			if ($name === $page['title']) {
 				return $page['id'];
 			}
