@@ -9,37 +9,6 @@ declare(strict_types=1);
 
 return [
 	'routes' => [
-		// public pages search API
-		['name' => 'publicPage#contentSearch', 'url' => '/_api/p/{token}/_pages/search', 'verb' => 'GET'],
-
-		// public pages API
-		['name' => 'publicPage#index', 'url' => '/_api/p/{token}/_pages', 'verb' => 'GET'],
-		['name' => 'publicPage#get', 'url' => '/_api/p/{token}/_pages/{id}',
-			'verb' => 'GET', 'requirements' => ['id' => '\d+']],
-		['name' => 'publicPage#create', 'url' => '/_api/p/{token}/_pages/{parentId}',
-			'verb' => 'POST', 'requirements' => ['parentId' => '\d+']],
-		['name' => 'publicPage#touch', 'url' => '/_api/p/{token}/_pages/{id}/touch',
-			'verb' => 'GET', 'requirements' => ['id' => '\d+']],
-		['name' => 'publicPage#moveOrCopy', 'url' => '/_api/p/{token}/_pages/{id}',
-			'verb' => 'PUT', 'requirements' => ['id' => '\d+']],
-		['name' => 'publicPage#setEmoji', 'url' => '/_api/p/{token}/_pages/{id}/emoji',
-			'verb' => 'PUT', 'requirements' => ['id' => '\d+']],
-		['name' => 'publicPage#setSubpageOrder', 'url' => '/_api/p/{token}/_pages/{id}/subpageOrder',
-			'verb' => 'PUT', 'requirements' => ['id' => '\d+']],
-		['name' => 'publicPage#trash', 'url' => '/_api/p/{token}/_pages/{id}',
-			'verb' => 'DELETE', 'requirements' => ['id' => '\d+']],
-		['name' => 'publicPage#getAttachments', 'url' => '/_api/p/{token}/_pages/{id}/attachments',
-			'verb' => 'GET', 'requirements' => ['id' => '\d+']],
-		['name' => 'publicPage#getBacklinks', 'url' => '/_api/p/{token}/_pages/{id}/backlinks',
-			'verb' => 'GET', 'requirements' => ['id' => '\d+']],
-
-		// public pages trash API
-		['name' => 'publicPageTrash#index', 'url' => '/_api/p/{token}/_pages/trash', 'verb' => 'GET'],
-		['name' => 'publicPageTrash#delete', 'url' => '/_api/p/{token}/_pages/trash/{id}', 'verb' => 'DELETE',
-			'requirements' => ['id' => '\d+']],
-		['name' => 'publicPageTrash#restore', 'url' => '/_api/p/{token}/_pages/trash/{id}', 'verb' => 'PATCH',
-			'requirements' => ['id' => '\d+']],
-
 		// default Vue.js router route (Vue.js frontend)
 		['name' => 'start#index', 'url' => '/', 'verb' => 'GET'],
 
@@ -176,5 +145,39 @@ return [
 		// Public collectives API
 		['name' => 'publicCollective#get', 'url' => '/api/v{apiVersion}/p/collectives/{token}', 'verb' => 'GET',
 			'requirements' => ['apiVersion' => '(1.0)']],
+
+		// Public pages search API
+		['name' => 'publicPage#contentSearch', 'url' => '/api/v{apiVersion}/p/search/{token}', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)']],
+
+		// Public pages API
+		['name' => 'publicPage#index', 'url' => '/api/v{apiVersion}/p/pages/{token}', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)']],
+		['name' => 'publicPage#get', 'url' => '/api/v{apiVersion}/p/pages/{token}/{id}', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
+		['name' => 'publicPage#create', 'url' => '/api/v{apiVersion}/p/pages/{token}/{parentId}', 'verb' => 'POST',
+			'requirements' => ['apiVersion' => '(1.0)', 'parentId' => '\d+']],
+		['name' => 'publicPage#touch', 'url' => '/api/v{apiVersion}/p/pages/{token}/{id}/touch', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
+		['name' => 'publicPage#moveOrCopy', 'url' => '/api/v{apiVersion}/p/pages/{token}/{id}', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
+		['name' => 'publicPage#setEmoji', 'url' => '/api/v{apiVersion}/p/pages/{token}/{id}/emoji', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
+		['name' => 'publicPage#setSubpageOrder', 'url' => '/api/v{apiVersion}/p/pages/{token}/{id}/subpageOrder', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
+		['name' => 'publicPage#trash', 'url' => '/api/v{apiVersion}/p/pages/{token}/{id}', 'verb' => 'DELETE',
+			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
+		['name' => 'publicPage#getAttachments', 'url' => '/api/v{apiVersion}/p/pages/{token}/{id}/attachments', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
+		['name' => 'publicPage#getBacklinks', 'url' => '/api/v{apiVersion}/p/pages/{token}/{id}/backlinks', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
+
+		// Public pages trash API
+		['name' => 'publicPageTrash#index', 'url' => '/api/v{apiVersion}/p/pages/trash/{token}', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)']],
+		['name' => 'publicPageTrash#delete', 'url' => '/api/v{apiVersion}/p/pages/trash/{token}/{id}', 'verb' => 'DELETE',
+			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
+		['name' => 'publicPageTrash#restore', 'url' => '/api/v{apiVersion}/p/pages/trash/{token}/{id}', 'verb' => 'PATCH',
+			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
 	]
 ];

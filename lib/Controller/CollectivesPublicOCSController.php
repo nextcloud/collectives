@@ -85,6 +85,6 @@ abstract class CollectivesPublicOCSController extends OCSController {
 	 *
 	 * You can use this to do some logging for example
 	 */
-	public function shareNotFound() {
+	public function shareNotFound(): void {
 	}
 }

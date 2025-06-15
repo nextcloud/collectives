@@ -4,7 +4,7 @@
  */
 
 import axios from '@nextcloud/axios'
-import { apiUrl, collectivesUrl } from './urls.js'
+import { apiUrl } from './urls.js'
 
 /**
  * URL for templates API inside the given context.
@@ -14,7 +14,7 @@ import { apiUrl, collectivesUrl } from './urls.js'
  */
 function templatesApiUrl(context, ...parts) {
 	return context.isPublic
-		? collectivesUrl('p', context.shareTokenParam, '_templates', ...parts)
+		? apiUrl('v1.0', 'p', 'pages', 'templates', context.shareTokenParam, ...parts)
 		: apiUrl('v1.0', 'pages/templates', context.collectiveId, ...parts)
 }
 

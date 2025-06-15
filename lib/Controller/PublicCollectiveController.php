@@ -38,7 +38,6 @@ use Psr\Log\LoggerInterface;
 class PublicCollectiveController extends CollectivesPublicOCSController {
 	use OCSExceptionHelper;
 
-	private string $token;
 	private ?IShare $share = null;
 
 	public function __construct(
@@ -70,6 +69,7 @@ class PublicCollectiveController extends CollectivesPublicOCSController {
 	/**
 	 * @psalm-suppress InvalidNullableReturnType
 	 * @psalm-suppress NullableReturnStatement
+	 * @throws OCSNotFoundException
 	 */
 	protected function getPasswordHash(): string {
 		return $this->getShare()->getPassword();
@@ -85,6 +85,9 @@ class PublicCollectiveController extends CollectivesPublicOCSController {
 		return true;
 	}
 
+	/**
+	 * @throws OCSNotFoundException
+	 */
 	protected function isPasswordProtected(): bool {
 		return $this->getShare()->getPassword() !== null;
 	}
@@ -96,7 +99,7 @@ class PublicCollectiveController extends CollectivesPublicOCSController {
 	 * @throws OCSForbiddenException Not permitted
 	 * @throws OCSNotFoundException Public collective/page share not found
 	 *
-	 * 200: Public collective/page share not found
+	 * 200: Public collective/page share returned
 	 */
 	#[PublicPage]
 	#[AnonRateLimit(limit: 10, period: 60)]
