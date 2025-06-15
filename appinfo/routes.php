@@ -9,18 +9,6 @@ declare(strict_types=1);
 
 return [
 	'routes' => [
-		// template pages API
-		['name' => 'template#index', 'url' => '/_api/{collectiveId}/_templates',
-			'verb' => 'GET', 'requirements' => ['collectiveId' => '\d+']],
-		['name' => 'template#create', 'url' => '/_api/{collectiveId}/_templates/{id}',
-			'verb' => 'POST', 'requirements' => ['collectiveId' => '\d+', 'id' => '\d+']],
-		['name' => 'template#delete', 'url' => '/_api/{collectiveId}/_templates/{id}',
-			'verb' => 'DELETE', 'requirements' => ['collectiveId' => '\d+', 'id' => '\d+']],
-		['name' => 'template#rename', 'url' => '/_api/{collectiveId}/_templates/{id}',
-			'verb' => 'PUT', 'requirements' => ['collectiveId' => '\d+', 'id' => '\d+']],
-		['name' => 'template#setEmoji', 'url' => '/_api/{collectiveId}/_templates/{id}/emoji',
-			'verb' => 'PUT', 'requirements' => ['collectiveId' => '\d+', 'id' => '\d+']],
-
 		// public pages search API
 		['name' => 'publicPage#contentSearch', 'url' => '/_api/p/{token}/_pages/search', 'verb' => 'GET'],
 
@@ -147,6 +135,18 @@ return [
 		['name' => 'pageTrash#delete', 'url' => '/api/v{apiVersion}/pages/trash/{collectiveId}/{id}', 'verb' => 'DELETE',
 			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+']],
 		['name' => 'pageTrash#restore', 'url' => '/api/v{apiVersion}/pages/trash/{collectiveId}/{id}', 'verb' => 'PATCH',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+']],
+
+		// Template pages API
+		['name' => 'template#index', 'url' => '/api/v{apiVersion}/pages/templates/{collectiveId}', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+']],
+		['name' => 'template#create', 'url' => '/api/v{apiVersion}/pages/templates/{collectiveId}/{id}', 'verb' => 'POST',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+']],
+		['name' => 'template#delete', 'url' => '/api/v{apiVersion}/pages/templates/{collectiveId}/{id}', 'verb' => 'DELETE',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+']],
+		['name' => 'template#rename', 'url' => '/api/v{apiVersion}/pages/templates/{collectiveId}/{id}', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+']],
+		['name' => 'template#setEmoji', 'url' => '/api/v{apiVersion}/pages/templates/{collectiveId}/{id}/emoji', 'verb' => 'PUT',
 			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+']],
 
 		// Collective user settings API
