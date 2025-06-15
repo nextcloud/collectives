@@ -167,7 +167,7 @@ export const useCollectivesStore = defineStore('collectives', {
 				const response = rootStore.isPublic
 					? await api.getSharedCollective(rootStore.shareTokenParam)
 					: await api.getCollectives()
-				this.collectives = response.data.data
+				this.collectives = response.data.ocs.data.collectives
 			} finally {
 				rootStore.done('collectives')
 			}
@@ -180,7 +180,7 @@ export const useCollectivesStore = defineStore('collectives', {
 			const rootStore = useRootStore()
 			rootStore.load('collectiveTrash')
 			const response = await api.getTrashCollectives()
-			this.trashCollectives = response.data.data
+			this.trashCollectives = response.data.ocs.data.collectives
 			rootStore.done('collectiveTrash')
 		},
 
@@ -214,7 +214,7 @@ export const useCollectivesStore = defineStore('collectives', {
 		async newCollective(collective) {
 			const settingsStore = useSettingsStore()
 			const response = await api.newCollective(collective)
-			this._addOrUpdateCollectiveState(response.data.data)
+			this._addOrUpdateCollectiveState(response.data.ocs.data.collective)
 			// If collectives folder wasn't initialized already, now it should be there
 			if (!settingsStore.collectivesFolder) {
 				await settingsStore.getCollectivesFolder()
@@ -229,7 +229,7 @@ export const useCollectivesStore = defineStore('collectives', {
 		 */
 		async updateCollective(collective) {
 			const response = await api.updateCollective(collective)
-			this._addOrUpdateCollectiveState(response.data.data)
+			this._addOrUpdateCollectiveState(response.data.ocs.data.collective)
 		},
 
 		/**
@@ -240,7 +240,7 @@ export const useCollectivesStore = defineStore('collectives', {
 		 */
 		async trashCollective({ id }) {
 			const response = await api.trashCollective(id)
-			const collective = response.data.data
+			const collective = response.data.ocs.data.collective
 			this.collectives.splice(this.collectives.findIndex(c => c.id === collective.id), 1)
 			this.trashCollectives.unshift(collective)
 		},
@@ -253,7 +253,7 @@ export const useCollectivesStore = defineStore('collectives', {
 		 */
 		async restoreCollective({ id }) {
 			const response = await api.restoreCollective(id)
-			const collective = response.data.data
+			const collective = response.data.ocs.data.collective
 			this.collectives.unshift(collective)
 			this.trashCollectives.splice(this.trashCollectives.findIndex(c => c.id === collective.id), 1)
 		},
@@ -268,10 +268,10 @@ export const useCollectivesStore = defineStore('collectives', {
 		async deleteCollective({ id, circle }) {
 			const circlesStore = useCirclesStore()
 			const response = await api.deleteCollective(id, circle)
-			const collective = response.data.data
+			const collective = response.data.ocs.data.collective
 			this.trashCollectives.splice(this.trashCollectives.findIndex(c => c.id === collective.id), 1)
 			if (circle) {
-				circlesStore.deleteCircleForCollectiveFromState(response.data.data)
+				circlesStore.deleteCircleForCollectiveFromState(collective)
 			}
 		},
 
@@ -292,7 +292,7 @@ export const useCollectivesStore = defineStore('collectives', {
 		 */
 		async updateCollectiveEditPermissions({ id, level }) {
 			const response = await api.updateCollectiveEditPermissions(id, level)
-			this._addOrUpdateCollectiveState(response.data.data)
+			this._addOrUpdateCollectiveState(response.data.ocs.data.collective)
 		},
 
 		/**
@@ -302,7 +302,7 @@ export const useCollectivesStore = defineStore('collectives', {
 		 */
 		async updateCollectiveSharePermissions({ id, level }) {
 			const response = await api.updateCollectiveSharePermissions(id, level)
-			this._addOrUpdateCollectiveState(response.data.data)
+			this._addOrUpdateCollectiveState(response.data.ocs.data.collective)
 		},
 
 		/**
@@ -312,7 +312,7 @@ export const useCollectivesStore = defineStore('collectives', {
 		 */
 		async updateCollectivePageMode({ id, mode }) {
 			const response = await api.updateCollectivePageMode(id, mode)
-			this._addOrUpdateCollectiveState(response.data.data)
+			this._addOrUpdateCollectiveState(response.data.ocs.data.collective)
 		},
 
 		/**

@@ -9,138 +9,6 @@ declare(strict_types=1);
 
 return [
 	'routes' => [
-		// collectives API
-		['name' => 'collective#index', 'url' => '/_api', 'verb' => 'GET'],
-		['name' => 'collective#create', 'url' => '/_api', 'verb' => 'POST'],
-		['name' => 'collective#update', 'url' => '/_api/{id}', 'verb' => 'PUT',
-			'requirements' => ['id' => '\d+']],
-		['name' => 'collective#editLevel', 'url' => '/_api/{id}/editLevel', 'verb' => 'PUT',
-			'requirements' => ['id' => '\d+']],
-		['name' => 'collective#shareLevel', 'url' => '/_api/{id}/shareLevel', 'verb' => 'PUT',
-			'requirements' => ['id' => '\d+']],
-		['name' => 'collective#pageMode', 'url' => '/_api/{id}/pageMode', 'verb' => 'PUT',
-			'requirements' => ['id' => '\d+']],
-		['name' => 'collective#trash', 'url' => '/_api/{id}', 'verb' => 'DELETE',
-			'requirements' => ['id' => '\d+']],
-
-		// collectives trash API
-		['name' => 'trash#index', 'url' => '/_api/trash', 'verb' => 'GET'],
-		['name' => 'trash#delete', 'url' => '/_api/trash/{id}', 'verb' => 'DELETE',
-			'requirements' => ['id' => '\d+']],
-		['name' => 'trash#restore', 'url' => '/_api/trash/{id}', 'verb' => 'PATCH',
-			'requirements' => ['id' => '\d+']],
-
-		// collectives userSettings API
-		['name' => 'collectiveUserSettings#pageOrder', 'url' => '/_api/{id}/_userSettings/pageOrder', 'verb' => 'PUT',
-			'requirements' => ['id' => '\d+']],
-		['name' => 'collectiveUserSettings#showMembers', 'url' => '/_api/{id}/_userSettings/showMembers', 'verb' => 'PUT',
-			'requirements' => ['id' => '\d+']],
-		['name' => 'collectiveUserSettings#showRecentPages', 'url' => '/_api/{id}/_userSettings/showRecentPages', 'verb' => 'PUT',
-			'requirements' => ['id' => '\d+']],
-		['name' => 'collectiveUserSettings#favoritePages', 'url' => '/_api/{id}/_userSettings/favoritePages', 'verb' => 'PUT',
-			'requirements' => ['id' => '\d+']],
-
-		// share API
-		['name' => 'share#getCollectiveShares', 'url' => '/_api/{collectiveId}/shares', 'verb' => 'GET',
-			'requirements' => ['collectiveId' => '\d+']],
-		['name' => 'share#createCollectiveShare', 'url' => '/_api/{collectiveId}/share', 'verb' => 'POST',
-			'requirements' => ['collectiveId' => '\d+']],
-		['name' => 'share#updateCollectiveShare', 'url' => '/_api/{collectiveId}/share/{token}', 'verb' => 'PUT',
-			'requirements' => ['collectiveId' => '\d+']],
-		['name' => 'share#deleteCollectiveShare', 'url' => '/_api/{collectiveId}/share/{token}', 'verb' => 'DELETE',
-			'requirements' => ['collectiveId' => '\d+']],
-		['name' => 'share#createPageShare', 'url' => '/_api/{collectiveId}/_pages/{pageId}/share', 'verb' => 'POST',
-			'requirements' => ['collectiveId' => '\d+', 'pageId' => '\d+']],
-		['name' => 'share#updatePageShare', 'url' => '/_api/{collectiveId}/_pages/{pageId}/share/{token}', 'verb' => 'PUT',
-			'requirements' => ['collectiveId' => '\d+', 'pageId' => '\d+']],
-		['name' => 'share#deletePageShare', 'url' => '/_api/{collectiveId}/_pages/{pageId}/share/{token}', 'verb' => 'DELETE',
-			'requirements' => ['collectiveId' => '\d+', 'pageId' => '\d+']],
-
-		// pages search API
-		['name' => 'page#contentSearch', 'url' => '/_api/{collectiveId}/_pages/search',
-			'verb' => 'GET', 'requirements' => ['collectiveId' => '\d+', 'filterString' => '\s+']],
-
-		// pages API
-		['name' => 'page#index', 'url' => '/_api/{collectiveId}/_pages',
-			'verb' => 'GET', 'requirements' => ['collectiveId' => '\d+']],
-		['name' => 'page#get', 'url' => '/_api/{collectiveId}/_pages/{id}',
-			'verb' => 'GET', 'requirements' => ['collectiveId' => '\d+', 'id' => '\d+']],
-		['name' => 'page#create', 'url' => '/_api/{collectiveId}/_pages/{parentId}',
-			'verb' => 'POST', 'requirements' => ['collectiveId' => '\d+', 'parentId' => '\d+']],
-		['name' => 'page#touch', 'url' => '/_api/{collectiveId}/_pages/{id}/touch',
-			'verb' => 'GET', 'requirements' => ['collectiveId' => '\d+', 'id' => '\d+']],
-		['name' => 'page#setFullWidth', 'url' => '/_api/{collectiveId}/_pages/{id}/fullWidth',
-			'verb' => 'PUT', 'requirements' => ['collectiveId' => '\d+', 'id' => '\d+']],
-		['name' => 'page#moveOrCopy', 'url' => '/_api/{collectiveId}/_pages/{id}',
-			'verb' => 'PUT', 'requirements' => ['collectiveId' => '\d+', 'id' => '\d+']],
-		['name' => 'page#moveOrCopyToCollective', 'url' => '/_api/{collectiveId}/_pages/{id}/to/{newCollectiveId}',
-			'verb' => 'PUT', 'requirements' => ['collectiveId' => '\d+', 'id' => '\d+', 'newCollectiveId' => '\d+']],
-		['name' => 'page#setEmoji', 'url' => '/_api/{collectiveId}/_pages/{id}/emoji',
-			'verb' => 'PUT', 'requirements' => ['collectiveId' => '\d+', 'id' => '\d+']],
-		['name' => 'page#setSubpageOrder', 'url' => '/_api/{collectiveId}/_pages/{id}/subpageOrder',
-			'verb' => 'PUT', 'requirements' => ['collectiveId' => '\d+', 'id' => '\d+']],
-		['name' => 'page#trash', 'url' => '/_api/{collectiveId}/_pages/{id}',
-			'verb' => 'DELETE', 'requirements' => ['collectiveId' => '\d+', 'id' => '\d+']],
-		['name' => 'page#getAttachments', 'url' => '/_api/{collectiveId}/_pages/{id}/attachments',
-			'verb' => 'GET', 'requirements' => ['collectiveId' => '\d+', 'id' => '\d+']],
-		['name' => 'page#getBacklinks', 'url' => '/_api/{collectiveId}/_pages/{id}/backlinks',
-			'verb' => 'GET', 'requirements' => ['collectiveId' => '\d+', 'id' => '\d+']],
-
-		// pages trash API
-		['name' => 'pageTrash#index', 'url' => '/_api/{collectiveId}/_pages/trash',
-			'verb' => 'GET', 'requirements' => ['collectiveId' => '\d+']],
-		['name' => 'pageTrash#delete', 'url' => '/_api/{collectiveId}/_pages/trash/{id}',
-			'verb' => 'DELETE', 'requirements' => ['collectiveId' => '\d+', 'id' => '\d+']],
-		['name' => 'pageTrash#restore', 'url' => '/_api/{collectiveId}/_pages/trash/{id}',
-			'verb' => 'PATCH', 'requirements' => ['collectiveId' => '\d+', 'id' => '\d+']],
-
-		// template pages API
-		['name' => 'template#index', 'url' => '/_api/{collectiveId}/_templates',
-			'verb' => 'GET', 'requirements' => ['collectiveId' => '\d+']],
-		['name' => 'template#create', 'url' => '/_api/{collectiveId}/_templates/{id}',
-			'verb' => 'POST', 'requirements' => ['collectiveId' => '\d+', 'id' => '\d+']],
-		['name' => 'template#delete', 'url' => '/_api/{collectiveId}/_templates/{id}',
-			'verb' => 'DELETE', 'requirements' => ['collectiveId' => '\d+', 'id' => '\d+']],
-		['name' => 'template#rename', 'url' => '/_api/{collectiveId}/_templates/{id}',
-			'verb' => 'PUT', 'requirements' => ['collectiveId' => '\d+', 'id' => '\d+']],
-		['name' => 'template#setEmoji', 'url' => '/_api/{collectiveId}/_templates/{id}/emoji',
-			'verb' => 'PUT', 'requirements' => ['collectiveId' => '\d+', 'id' => '\d+']],
-
-		// public collectives API
-		['name' => 'publicCollective#get', 'url' => '/_api/p/{token}', 'verb' => 'GET'],
-
-		// public pages search API
-		['name' => 'publicPage#contentSearch', 'url' => '/_api/p/{token}/_pages/search',
-			'verb' => 'GET', 'requirements' => ['filterString' => '\s+']],
-
-		// public pages API
-		['name' => 'publicPage#index', 'url' => '/_api/p/{token}/_pages', 'verb' => 'GET'],
-		['name' => 'publicPage#get', 'url' => '/_api/p/{token}/_pages/{id}',
-			'verb' => 'GET', 'requirements' => ['id' => '\d+']],
-		['name' => 'publicPage#create', 'url' => '/_api/p/{token}/_pages/{parentId}',
-			'verb' => 'POST', 'requirements' => ['parentId' => '\d+']],
-		['name' => 'publicPage#touch', 'url' => '/_api/p/{token}/_pages/{id}/touch',
-			'verb' => 'GET', 'requirements' => ['id' => '\d+']],
-		['name' => 'publicPage#moveOrCopy', 'url' => '/_api/p/{token}/_pages/{id}',
-			'verb' => 'PUT', 'requirements' => ['id' => '\d+']],
-		['name' => 'publicPage#setEmoji', 'url' => '/_api/p/{token}/_pages/{id}/emoji',
-			'verb' => 'PUT', 'requirements' => ['id' => '\d+']],
-		['name' => 'publicPage#setSubpageOrder', 'url' => '/_api/p/{token}/_pages/{id}/subpageOrder',
-			'verb' => 'PUT', 'requirements' => ['id' => '\d+']],
-		['name' => 'publicPage#trash', 'url' => '/_api/p/{token}/_pages/{id}',
-			'verb' => 'DELETE', 'requirements' => ['id' => '\d+']],
-		['name' => 'publicPage#getAttachments', 'url' => '/_api/p/{token}/_pages/{id}/attachments',
-			'verb' => 'GET', 'requirements' => ['id' => '\d+']],
-		['name' => 'publicPage#getBacklinks', 'url' => '/_api/p/{token}/_pages/{id}/backlinks',
-			'verb' => 'GET', 'requirements' => ['id' => '\d+']],
-
-		// public pages trash API
-		['name' => 'publicPageTrash#index', 'url' => '/_api/p/{token}/_pages/trash', 'verb' => 'GET'],
-		['name' => 'publicPageTrash#delete', 'url' => '/_api/p/{token}/_pages/trash/{id}', 'verb' => 'DELETE',
-			'requirements' => ['id' => '\d+']],
-		['name' => 'publicPageTrash#restore', 'url' => '/_api/p/{token}/_pages/trash/{id}', 'verb' => 'PATCH',
-			'requirements' => ['id' => '\d+']],
-
 		// default Vue.js router route (Vue.js frontend)
 		['name' => 'start#index', 'url' => '/', 'verb' => 'GET'],
 
@@ -160,18 +28,156 @@ return [
 			'defaults' => ['path' => '/']],
 	],
 	'ocs' => [
-		// User settings API
-		['name' => 'settings#getUserSetting', 'url' => '/api/v{apiVersion}/settings/user/{key}', 'verb' => 'GET',
-			'requirements' => ['apiVersion' => '1.0']],
-		['name' => 'settings#setUserSetting', 'url' => '/api/v{apiVersion}/settings/user', 'verb' => 'POST',
-			'requirements' => ['apiVersion' => '1.0']],
+		// Collectives API
+		['name' => 'collective#index', 'url' => '/api/v{apiVersion}/collectives', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)']],
+		['name' => 'collective#create', 'url' => '/api/v{apiVersion}/collectives', 'verb' => 'POST',
+			'requirements' => ['apiVersion' => '(1.0)']],
+		['name' => 'collective#update', 'url' => '/api/v{apiVersion}/collectives/{id}', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
+		['name' => 'collective#editLevel', 'url' => '/api/v{apiVersion}/collectives/{id}/editLevel', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
+		['name' => 'collective#shareLevel', 'url' => '/api/v{apiVersion}/collectives/{id}/shareLevel', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
+		['name' => 'collective#pageMode', 'url' => '/api/v{apiVersion}/collectives/{id}/pageMode', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
+		['name' => 'collective#trash', 'url' => '/api/v{apiVersion}/collectives/{id}', 'verb' => 'DELETE',
+			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
+
+		// Collectives trash API
+		['name' => 'trash#index', 'url' => '/api/v{apiVersion}/collectives/trash', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)']],
+		['name' => 'trash#delete', 'url' => '/api/v{apiVersion}/collectives/trash/{id}', 'verb' => 'DELETE',
+			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
+		['name' => 'trash#restore', 'url' => '/api/v{apiVersion}/collectives/trash/{id}', 'verb' => 'PATCH',
+			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
+
+		// Collective shares API
+		['name' => 'share#getCollectiveShares', 'url' => '/api/v{apiVersion}/shares/{collectiveId}', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+']],
+		['name' => 'share#createPageShare', 'url' => '/api/v{apiVersion}/shares/{collectiveId}/pages/{pageId}', 'verb' => 'POST',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'pageId' => '\d+']],
+		['name' => 'share#updatePageShare', 'url' => '/api/v{apiVersion}/shares/{collectiveId}/pages/{pageId}/{token}', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'pageId' => '\d+']],
+		['name' => 'share#deletePageShare', 'url' => '/api/v{apiVersion}/shares/{collectiveId}/pages/{pageId}/{token}', 'verb' => 'DELETE',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'pageId' => '\d+']],
+		['name' => 'share#createCollectiveShare', 'url' => '/api/v{apiVersion}/shares/{collectiveId}', 'verb' => 'POST',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+']],
+		['name' => 'share#updateCollectiveShare', 'url' => '/api/v{apiVersion}/shares/{collectiveId}/{token}', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+']],
+		['name' => 'share#deleteCollectiveShare', 'url' => '/api/v{apiVersion}/shares/{collectiveId}/{token}', 'verb' => 'DELETE',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+']],
+
+		// Pages search API
+		['name' => 'page#contentSearch', 'url' => '/api/v{apiVersion}/search/{collectiveId}', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+']],
+
+		// Pages API
+		['name' => 'page#index', 'url' => '/api/v{apiVersion}/pages/{collectiveId}', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+']],
+		['name' => 'page#get', 'url' => '/api/v{apiVersion}/pages/{collectiveId}/{id}', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+']],
+		['name' => 'page#create', 'url' => '/api/v{apiVersion}/pages/{collectiveId}/{parentId}', 'verb' => 'POST',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'parentId' => '\d+']],
+		['name' => 'page#touch', 'url' => '/api/v{apiVersion}/pages/{collectiveId}/{id}/touch', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+']],
+		['name' => 'page#setFullWidth', 'url' => '/api/v{apiVersion}/pages/{collectiveId}/{id}/fullWidth', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+']],
+		['name' => 'page#moveOrCopy', 'url' => '/api/v{apiVersion}/pages/{collectiveId}/{id}', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+']],
+		['name' => 'page#moveOrCopyToCollective', 'url' => '/api/v{apiVersion}/pages/{collectiveId}/{id}/to/{newCollectiveId}', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+', 'newCollectiveId' => '\d+']],
+		['name' => 'page#setEmoji', 'url' => '/api/v{apiVersion}/pages/{collectiveId}/{id}/emoji', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+']],
+		['name' => 'page#setSubpageOrder', 'url' => '/api/v{apiVersion}/pages/{collectiveId}/{id}/subpageOrder', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+']],
+		['name' => 'page#trash', 'url' => '/api/v{apiVersion}/pages/{collectiveId}/{id}', 'verb' => 'DELETE',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+']],
+		['name' => 'page#getAttachments', 'url' => '/api/v{apiVersion}/pages/{collectiveId}/{id}/attachments', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+']],
+		['name' => 'page#getBacklinks', 'url' => '/api/v{apiVersion}/pages/{collectiveId}/{id}/backlinks', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+']],
+
+		// Pages trash API
+		['name' => 'pageTrash#index', 'url' => '/api/v{apiVersion}/pages/trash/{collectiveId}', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+']],
+		['name' => 'pageTrash#delete', 'url' => '/api/v{apiVersion}/pages/trash/{collectiveId}/{id}', 'verb' => 'DELETE',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+']],
+		['name' => 'pageTrash#restore', 'url' => '/api/v{apiVersion}/pages/trash/{collectiveId}/{id}', 'verb' => 'PATCH',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+']],
+
+		// Template pages API
+		['name' => 'template#index', 'url' => '/api/v{apiVersion}/pages/templates/{collectiveId}', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+']],
+		['name' => 'template#create', 'url' => '/api/v{apiVersion}/pages/templates/{collectiveId}/{id}', 'verb' => 'POST',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+']],
+		['name' => 'template#delete', 'url' => '/api/v{apiVersion}/pages/templates/{collectiveId}/{id}', 'verb' => 'DELETE',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+']],
+		['name' => 'template#rename', 'url' => '/api/v{apiVersion}/pages/templates/{collectiveId}/{id}', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+']],
+		['name' => 'template#setEmoji', 'url' => '/api/v{apiVersion}/pages/templates/{collectiveId}/{id}/emoji', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+']],
+
+		// Collective user settings API
+		['name' => 'collectiveUserSettings#setPageOrder', 'url' => '/api/v{apiVersion}/userSettings/{collectiveId}/pageOrder', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+']],
+		['name' => 'collectiveUserSettings#setShowMembers', 'url' => '/api/v{apiVersion}/userSettings/{collectiveId}/showMembers', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+']],
+		['name' => 'collectiveUserSettings#setShowRecentPages', 'url' => '/api/v{apiVersion}/userSettings/{collectiveId}/showRecentPages', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+']],
+		['name' => 'collectiveUserSettings#setFavoritePages', 'url' => '/api/v{apiVersion}/userSettings/{collectiveId}/favoritePages', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+']],
 
 		// Session API
 		['name' => 'session#create', 'url' => '/api/v{apiVersion}/session/{collectiveId}', 'verb' => 'POST',
-			'requirements' => ['apiVersion' => '1.0']],
+			'requirements' => ['apiVersion' => '(1.0)']],
 		['name' => 'session#sync', 'url' => '/api/v{apiVersion}/session/{collectiveId}', 'verb' => 'PUT',
-			'requirements' => ['apiVersion' => '1.0']],
+			'requirements' => ['apiVersion' => '(1.0)']],
 		['name' => 'session#close', 'url' => '/api/v{apiVersion}/session/{collectiveId}', 'verb' => 'DELETE',
-			'requirements' => ['apiVersion' => '1.0']],
+			'requirements' => ['apiVersion' => '(1.0)']],
+
+		// Settings API
+		['name' => 'settings#getUserSetting', 'url' => '/api/v{apiVersion}/settings/user/{key}', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)']],
+		['name' => 'settings#setUserSetting', 'url' => '/api/v{apiVersion}/settings/user', 'verb' => 'POST',
+			'requirements' => ['apiVersion' => '(1.0)']],
+
+		// Public collectives API
+		['name' => 'publicCollective#get', 'url' => '/api/v{apiVersion}/p/collectives/{token}', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)']],
+
+		// Public pages search API
+		['name' => 'publicPage#contentSearch', 'url' => '/api/v{apiVersion}/p/search/{token}', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)']],
+
+		// Public pages API
+		['name' => 'publicPage#index', 'url' => '/api/v{apiVersion}/p/pages/{token}', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)']],
+		['name' => 'publicPage#get', 'url' => '/api/v{apiVersion}/p/pages/{token}/{id}', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
+		['name' => 'publicPage#create', 'url' => '/api/v{apiVersion}/p/pages/{token}/{parentId}', 'verb' => 'POST',
+			'requirements' => ['apiVersion' => '(1.0)', 'parentId' => '\d+']],
+		['name' => 'publicPage#touch', 'url' => '/api/v{apiVersion}/p/pages/{token}/{id}/touch', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
+		['name' => 'publicPage#moveOrCopy', 'url' => '/api/v{apiVersion}/p/pages/{token}/{id}', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
+		['name' => 'publicPage#setEmoji', 'url' => '/api/v{apiVersion}/p/pages/{token}/{id}/emoji', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
+		['name' => 'publicPage#setSubpageOrder', 'url' => '/api/v{apiVersion}/p/pages/{token}/{id}/subpageOrder', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
+		['name' => 'publicPage#trash', 'url' => '/api/v{apiVersion}/p/pages/{token}/{id}', 'verb' => 'DELETE',
+			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
+		['name' => 'publicPage#getAttachments', 'url' => '/api/v{apiVersion}/p/pages/{token}/{id}/attachments', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
+		['name' => 'publicPage#getBacklinks', 'url' => '/api/v{apiVersion}/p/pages/{token}/{id}/backlinks', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
+
+		// Public pages trash API
+		['name' => 'publicPageTrash#index', 'url' => '/api/v{apiVersion}/p/pages/trash/{token}', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)']],
+		['name' => 'publicPageTrash#delete', 'url' => '/api/v{apiVersion}/p/pages/trash/{token}/{id}', 'verb' => 'DELETE',
+			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
+		['name' => 'publicPageTrash#restore', 'url' => '/api/v{apiVersion}/p/pages/trash/{token}/{id}', 'verb' => 'PATCH',
+			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
 	]
 ];

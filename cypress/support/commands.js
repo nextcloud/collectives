@@ -220,12 +220,12 @@ Cypress.Commands.add('deleteCollective', (name) => {
 
 Cypress.Commands.add('getCollectives', () => {
 	return api.getCollectives()
-		.then(response => response.data.data)
+		.then(response => response.data.ocs.data.collectives)
 })
 
 Cypress.Commands.add('getCollectivesFolder', () => {
 	return api.getCollectivesFolder()
-		.then(response => response.data.ocs.data)
+		.then(response => response.data.ocs.data.user_folder)
 })
 
 Cypress.Commands.add('setCollectivesFolder', api.setCollectivesFolder)
@@ -243,7 +243,7 @@ Cypress.Commands.add('trashCollective', (name) => {
 
 Cypress.Commands.add('getTrashCollectives', () => {
 	return api.getTrashCollectives()
-		.then(response => response.data.data)
+		.then(response => response.data.ocs.data.collectives)
 })
 
 /**

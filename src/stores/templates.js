@@ -97,7 +97,7 @@ export const useTemplatesStore = defineStore('templates', {
 			}
 			try {
 				const response = await api.getTemplates(this.context)
-				set(this.allTemplates, collectiveId, response.data.data)
+				set(this.allTemplates, collectiveId, response.data.ocs.data.templates)
 				set(this.allTemplatesLoaded, collectiveId, true)
 			} finally {
 				rootStore.done(`template-list-${collectiveId}`)
@@ -122,9 +122,9 @@ export const useTemplatesStore = defineStore('templates', {
 			try {
 				const response = await api.createTemplate(this.context, template)
 				// Add new template to the beginning of templates array
-				this.allTemplates[this.collectiveId]?.unshift(response.data.data)
+				this.allTemplates[this.collectiveId]?.unshift(response.data.ocs.data.template)
 
-				return response.data.data.id
+				return response.data.ocs.data.template.id
 			} finally {
 				rootStore.done('newTemplate')
 			}
@@ -142,7 +142,7 @@ export const useTemplatesStore = defineStore('templates', {
 			rootStore.load(`templateRename-${templateId}`)
 			try {
 				const response = await api.renameTemplate(this.context, templateId, newTitle)
-				this._updateTemplatePage(response.data.data)
+				this._updateTemplatePage(response.data.ocs.data.template)
 			} finally {
 				rootStore.done(`templateRename-${templateId}`)
 			}
@@ -160,7 +160,7 @@ export const useTemplatesStore = defineStore('templates', {
 			rootStore.load(`templateEmoji-${templateId}`)
 			try {
 				const response = await api.setTemplateEmoji(this.context, templateId, emoji)
-				this._updateTemplatePage(response.data.data)
+				this._updateTemplatePage(response.data.ocs.data.template)
 			} finally {
 				rootStore.done(`templateEmoji-${templateId}`)
 			}

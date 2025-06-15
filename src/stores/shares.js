@@ -37,7 +37,7 @@ export const useSharesStore = defineStore('shares', {
 			const rootStore = useRootStore()
 			rootStore.load('shares')
 			const response = await api.getShares(this.collectiveId)
-			set(this.allShares, this.collectiveId, response.data.data)
+			set(this.allShares, this.collectiveId, response.data.ocs.data)
 			rootStore.done('shares')
 		},
 
@@ -67,7 +67,7 @@ export const useSharesStore = defineStore('shares', {
 			const response = pageId
 				? await api.createPageShare(collectiveId, pageId, password)
 				: await api.createCollectiveShare(collectiveId, password)
-			this._addOrUpdateShareState(response.data.data)
+			this._addOrUpdateShareState(response.data.ocs.data)
 			rootStore.done('share')
 		},
 
@@ -80,7 +80,7 @@ export const useSharesStore = defineStore('shares', {
 			const rootStore = useRootStore()
 			rootStore.load('share')
 			const response = await api.updateShare(share)
-			this._addOrUpdateShareState(response.data.data)
+			this._addOrUpdateShareState(response.data.ocs.data)
 			rootStore.done('share')
 		},
 
