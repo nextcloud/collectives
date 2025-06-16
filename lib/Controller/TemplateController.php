@@ -23,7 +23,7 @@ use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
 
 /**
- * Provides access to templates pages of a collective.
+ * Provides access to template pages of a collective.
  *
  * @psalm-import-type CollectivesPageInfo from ResponseDefinitions
  */

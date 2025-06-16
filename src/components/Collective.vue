@@ -212,10 +212,8 @@ export default {
 			await this.getPages(setLoading)
 				.catch(displayError('Could not fetch pages'))
 			if (this.currentCollectiveCanEdit) {
-				if (!this.isPublic) {
-					await this.getTemplates(setLoading)
-						.catch(displayError('Could not fetch templates'))
-				}
+				await this.getTemplates(setLoading)
+					.catch(displayError('Could not fetch templates'))
 				if (!this.currentCollectiveIsPageShare) {
 					await this.getTrashPages()
 						.catch(displayError('Could not fetch page trash'))
