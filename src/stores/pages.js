@@ -12,7 +12,6 @@ import { useCollectivesStore } from './collectives.js'
 import { INDEX_PAGE } from '../constants.js'
 /* eslint import/namespace: ['error', { allowComputed: true }] */
 import * as sortOrders from '../util/sortOrders.js'
-import { pageParents, sortedSubpages } from './pageExtracts.js'
 import * as api from '../apis/collectives/index.js'
 
 export const usePagesStore = defineStore('pages', {
@@ -47,6 +46,10 @@ export const usePagesStore = defineStore('pages', {
 			}
 		},
 
+		pagesForCollective: (state) => {
+			return (collectiveId) => state.allPages[collectiveId] || []
+		},
+
 		pages: (state) => {
 			return state.allPages[state.collectiveId] || []
 		},
@@ -62,6 +65,10 @@ export const usePagesStore = defineStore('pages', {
 				: !rootStore.pageParam || rootStore.pageParam === INDEX_PAGE
 		},
 		isIndexPage: (state) => state.currentPage.fileName === INDEX_PAGE + '.md',
+
+		rootPageForCollective(state) {
+			return (collectiveId) => state.pagesForCollective(collectiveId)[0]
+		},
 
 		rootPage(state) {
 			const collectivesStore = useCollectivesStore()
@@ -191,12 +198,29 @@ export const usePagesStore = defineStore('pages', {
 			return state.favoritePages.length > 0
 		},
 
-		sortedSubpages,
+		sortedSubpagesForCollective(state) {
+			return (collectiveId, parentId, sortOrder = null) => {
+				const parentPage = state.pagesForCollective(collectiveId).find(p => p.id === parentId)
+				const customOrder = parentPage?.subpageOrder || []
+				return state.pagesForCollective(collectiveId)
+					.filter(p => p.parentId === parentId)
+					// add the index from customOrder
+					.map(p => ({ ...p, index: customOrder.indexOf(p.id) }))
+					// sort by given order, fall back to user setting
+					.sort(sortOrders[sortOrder] || state.sortOrder)
+			}
+		},
+
+		sortedSubpages(state) {
+			return (parentId, sortOrder) => {
+				return state.sortedSubpagesForCollective(state.collectiveId, parentId, sortOrder)
+			}
+		},
 
 		allPagesSorted(state) {
 			const allSubPagesSorted = (pageId) => {
 				const res = []
-				sortedSubpages(state)(pageId).forEach(element => {
+				state.sortedSubpages(pageId).forEach(element => {
 					res.push(element)
 					res.push(...allSubPagesSorted(element.id))
 				})
@@ -224,7 +248,24 @@ export const usePagesStore = defineStore('pages', {
 			return state.pages.find(p => (p.id === pageId)).parentId
 		},
 
-		pageParents,
+		pageParentsForCollective(state) {
+			return (collectiveId, pageId) => {
+				const pages = []
+				while (pageId !== state.rootPage.id) {
+					const page = state.pagesForCollective(collectiveId).find(p => (p.id === pageId))
+					if (!page) {
+						break
+					}
+					pages.unshift(page)
+					pageId = page.parentId
+				}
+				return pages
+			}
+		},
+
+		pageParents(state) {
+			return (pageId) => state.pageParentsForCollective(state.collectiveId, pageId)
+		},
 
 		sortOrder(state) {
 			return sortOrders[state.sortByOrder] || sortOrders.byOrder
@@ -396,6 +437,27 @@ export const usePagesStore = defineStore('pages', {
 
 		setDraggedPageId(pageId) {
 			this.draggedPageId = pageId
+		},
+
+		/**
+		 * Get list of all pages for a collective
+		 *
+		 * @param {number} collectiveId ID of the collective
+		 * @param {boolean} setLoading Whether to set loading pagelist
+		 */
+		async getPagesForCollective(collectiveId, setLoading = true) {
+			const rootStore = useRootStore()
+			if (setLoading && this.pagesForCollective(collectiveId).length === 0) {
+				rootStore.load(`pagelist-${collectiveId}`)
+			}
+			const context = {
+				isPublic: false,
+				collectiveId,
+				shareTokenParam: null,
+			}
+			const response = await api.getPages(context)
+			set(this.allPages, collectiveId, response.data.ocs.data.pages)
+			rootStore.done(`pagelist-${collectiveId}`)
 		},
 
 		/**
