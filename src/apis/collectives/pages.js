@@ -39,7 +39,7 @@ function pagesTrashApiUrl(context, ...parts) {
 function searchApiUrl(context, ...parts) {
 	return context.isPublic
 		? apiUrl('v1.0', 'p', 'search', context.shareTokenParam, ...parts)
-		: apiUrl('v1.0', 'search', context.collectiveId)
+		: apiUrl('v1.0', 'search', context.collectiveId, ...parts)
 }
 
 /**
@@ -268,5 +268,5 @@ export function getPageBacklinks(context, pageId) {
  * @param {string} searchString string to search for
  */
 export function contentSearch(context, searchString) {
-	return axios.get(searchApiUrl(context, 'search'), { params: { searchString } })
+	return axios.get(searchApiUrl(context), { params: { searchString } })
 }

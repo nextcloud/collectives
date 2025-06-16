@@ -96,6 +96,23 @@ describe('Collective Share', function() {
 			cy.get('button.titleform-button')
 				.click()
 		})
+		it('Allows using the page list filter', function() {
+			cy.logout()
+			cy.visit(shareUrl)
+			cy.get('input[name="pageFilter"]')
+				.type('page')
+			cy.intercept('GET', '**/api/v1.0/p/search/*').as('searchCollective')
+			cy.get('.app-content-list-item-line-one:visible').should('have.length', 2)
+			cy.wait('@searchCollective')
+			cy.get('.app-content-list-item-line-one:visible').eq(0)
+				.should('contain', 'Share me')
+			cy.get('.app-content-list-item-line-one:visible').eq(1)
+				.should('contain', 'New page')
+			if (!['stable29'].includes(Cypress.env('ncVersion'))) {
+				cy.get('.search-dialog-container')
+					.should('be.visible')
+			}
+		})
 		it('Allows unsharing a collective', function() {
 			cy.loginAs('bob')
 			cy.visit('apps/collectives')
