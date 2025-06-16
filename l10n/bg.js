@@ -96,6 +96,7 @@ OC.L10N.register(
     "Could not rename the page" : "Страницата не можа да се преименува",
     "Select emoji for page" : "Избор на емотикони за страница",
     "Title" : "Заглавие",
+    "Clear search" : "Изчисти търсенето",
     "Add a page" : "Добавяне на страница",
     "Add a subpage" : "Добавяне на подстраница",
     "Expand subpage list" : "Разширяване на списъка с подстраници",
