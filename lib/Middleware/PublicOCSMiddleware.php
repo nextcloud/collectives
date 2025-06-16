@@ -19,7 +19,7 @@ use OCP\Security\Bruteforce\IThrottler;
 /**
  * Mostly copied from server/lib/private/AppFramework/Middleware/PublicShare/PublicShareMiddleware.php
  */
-class OCSPublicMiddleware extends Middleware {
+class PublicOCSMiddleware extends Middleware {
 	public function __construct(
 		private IRequest $request,
 		private IConfig $config,
