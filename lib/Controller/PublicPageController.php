@@ -307,6 +307,35 @@ class PublicPageController extends CollectivesPublicOCSController {
 	}
 
 	/**
+	 * Set/unset full width view for a page
+	 *
+	 * @param int $id ID of the page
+	 * @param bool $fullWidth Whether to enable full width view for the page
+	 *
+	 * @return DataResponse<Http::STATUS_OK, array{page: CollectivesPageInfo}, array{}>
+	 * @throws OCSForbiddenException Not Permitted
+	 * @throws OCSNotFoundException Collective or page not found
+	 *
+	 * 200: Full width view set/unset
+	 */
+	#[PublicPage]
+	#[AnonRateLimit(limit: 10, period: 10)]
+	public function setFullWidth(int $id, bool $fullWidth): DataResponse {
+		$pageInfo = $this->handleErrorResponse(function () use ($id, $fullWidth): PageInfo {
+			$this->checkEditPermissions();
+			$owner = $this->getCollectiveShare()->getOwner();
+			$collectiveId = $this->getCollectiveShare()->getCollectiveId();
+			if (0 !== $sharePageId = $this->getCollectiveShare()->getPageId()) {
+				$this->checkPageShareAccess($collectiveId, $sharePageId, $id, $owner);
+			}
+			$pageInfo = $this->service->setFullWidth($collectiveId, $id, $owner, $fullWidth);
+			$this->decoratePageInfo($collectiveId, $sharePageId, $owner, $pageInfo);
+			return $pageInfo;
+		}, $this->logger);
+		return new DataResponse(['page' => $pageInfo]);
+	}
+
+	/**
 	 * Set/unset emoji for a page
 	 *
 	 * @param int $id ID of the page
