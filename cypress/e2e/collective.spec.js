@@ -44,32 +44,27 @@ describe('Collective', function() {
 			cy.loginAs('bob')
 			cy.visit('apps/collectives')
 			cy.createCollective('Foreign Team')
-			cy.get('.modal-collective-name-error').should('contain', 'A collective with this name already exists')
+			cy.get('.modal-collective-name-error').should('contain', 'A collective/team with this name already exists')
 		})
 		it('Reports existing collective', function() {
 			cy.loginAs('bob')
 			cy.visit('apps/collectives')
 			cy.createCollective('Preexisting Collective')
-			cy.get('main .empty-content').should('contain', 'build shared knowledge')
-			cy.get('.toast-warning').should('contain', 'Could not create the collective')
-			cy.get('.toast-warning').should('contain', 'Collective already exists')
+			cy.get('.modal-collective-name-error').should('contain', 'A collective/team with this name already exists')
 		})
-		it('creates collectives by picking team',
-			function() {
-				cy.loginAs('bob')
-				cy.visit('apps/collectives')
-				cy.get('button').contains('New collective').click()
-				cy.get('button span.teams-icon').click()
-				// cy.get('.circle-selector ul').should('not.contain', 'Foreign')
-				cy.get('.circle-selector li [title*=History]').click()
-				cy.get('button').contains('Add members').click()
-				cy.get('button').contains('Create').click()
+		it('creates collectives by picking team', function() {
+			cy.loginAs('bob')
+			cy.visit('apps/collectives')
+			cy.get('button').contains('New collective').click()
+			cy.get('button span.teams-icon').click()
+			// cy.get('.circle-selector ul').should('not.contain', 'Foreign')
+			cy.get('.circle-selector li [title*=History]').click()
+			cy.get('button').contains('Add members').click()
+			cy.get('button').contains('Create').click()
 
-				cy.get('[data-cy-collectives="page-title-container"] input').invoke('val').should('contain', 'History Club')
-				cy.get('.toast-info').should('contain',
-					'Created collective "History Club" for existing team.',
-				)
-			})
+			cy.get('[data-cy-collectives="page-title-container"] input').invoke('val').should('contain', 'History Club')
+			cy.get('.toast-info').should('contain', 'Created collective "History Club" for existing team.')
+		})
 		it('collectives of visible teams only show for members',
 			function() {
 				cy.loginAs('jane')
