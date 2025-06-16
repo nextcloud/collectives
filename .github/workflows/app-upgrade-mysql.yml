@@ -96,6 +96,37 @@ jobs:
           path: apps/viewer
           ref: ${{ matrix.server-versions }}
 
+      - name: Save current date and hour for the cache key
+        run: echo "DATE_HOUR=$(date +"%Y-%m-%d-%H")" >> $GITHUB_ENV
+
+      - name: Restore appstore apps.json
+        id: cache_appstore_apps
+        uses: actions/cache@v4
+        with:
+          path: 'apps.json'
+          key: 'appstore_apps_${{ env.DATE_HOUR }}'
+
+      - name: Fetch appstore repository
+        if: ${{ steps.cache_appstore_apps.outputs.cache-hit != 'true' }}
+        id: appstore_apps
+        run: curl -fL -o 'apps.json' https://apps.nextcloud.com/api/v1/apps.json
+
+      - name: Get collectives app from app store
+        id: collectives-app
+        uses: mejo-/nextcloud-appstore-action@1873692fd1b3c198b3c57280462ed6ac7d6dde0a # v1.0.0
+        with:
+          appid: collectives
+
+      - name: Fetch collectives release tarball
+        run: |
+          curl -fL -o '${{ runner.temp }}/collectives.tar.gz' '${{ steps.collectives-app.outputs.download }}'
+
+      - name: Unpack collectives release tarball
+        run: |
+          cd apps
+          tar -xzf '${{ runner.temp }}/collectives.tar.gz'
+          cd ..
+
       - name: Set up php ${{ matrix.php-versions }}
         uses: shivammathur/setup-php@cf4cade2721270509d5b1c766ab3549210a39a2a # v2
         with:
@@ -112,7 +143,7 @@ jobs:
           echo "SET GLOBAL sql_mode=(SELECT CONCAT(@@sql_mode,',ONLY_FULL_GROUP_BY'));" | mysql -h 127.0.0.1 -P 4444 -u root -prootpassword
           echo "SELECT @@sql_mode;" | mysql -h 127.0.0.1 -P 4444 -u root -prootpassword
 
-      - name: Set up Nextcloud, enable collectives from app store and remove collectives
+      - name: Set up Nextcloud, enable downloaded collectives and remove collectives
         env:
           DB_PORT: 4444
         run: |
