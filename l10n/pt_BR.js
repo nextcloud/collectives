@@ -230,7 +230,7 @@ OC.L10N.register(
     "No backlinks available" : "Nenhum backlink disponível",
     "If other pages link to this one, they will be listed here." : "Se outras páginas fizerem link para esta, elas estarão listadas aqui.",
     "Could not get page versions" : "Não foi possível recuperar versões da página",
-    "Page versions" : "Versões de páginas",
+    "Page versions" : "Versões de página",
     "No other versions available" : "Não há outras versões disponíveis",
     "After editing you can find old versions of the page here." : "Após editar você pode encontrar versões antigas da página aqui.",
     "Current version" : "Versão atual",
