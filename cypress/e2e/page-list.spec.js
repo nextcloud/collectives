@@ -50,7 +50,7 @@ describe('Page list', function() {
 				.should('contain', 'Target')
 
 			// Reload to test persistence of sort order
-			cy.intercept('GET', '**/api/v1.0/pages/*').as('getPages')
+			cy.intercept('GET', '**/api/v1.0/collectives/*/pages').as('getPages')
 			cy.reload()
 			cy.wait('@getPages')
 			cy.get('.app-content-list-item').last()

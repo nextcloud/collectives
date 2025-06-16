@@ -13,7 +13,7 @@ import { apiUrl } from './urls.js'
  * @param {...any} parts - URL parts to append - will be joined with `/`
  */
 function collectiveUserSettingsApiUrl(collectiveId, ...parts) {
-	return apiUrl('v1.0', 'userSettings', collectiveId, parts)
+	return apiUrl('v1.0', 'collectives', collectiveId, 'userSettings', parts)
 }
 
 /**

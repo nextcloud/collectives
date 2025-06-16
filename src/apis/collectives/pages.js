@@ -14,8 +14,8 @@ import { apiUrl } from './urls.js'
  */
 function pagesApiUrl(context, ...parts) {
 	return context.isPublic
-		? apiUrl('v1.0', 'p', 'pages', context.shareTokenParam, ...parts)
-		: apiUrl('v1.0', 'pages', context.collectiveId, ...parts)
+		? apiUrl('v1.0', 'p', 'collectives', context.shareTokenParam, 'pages', ...parts)
+		: apiUrl('v1.0', 'collectives', context.collectiveId, 'pages', ...parts)
 }
 
 /**
@@ -25,9 +25,7 @@ function pagesApiUrl(context, ...parts) {
  * @param {...any} parts - URL parts to append - will be joined with `/`
  */
 function pagesTrashApiUrl(context, ...parts) {
-	return context.isPublic
-		? apiUrl('v1.0', 'p', 'pages', 'trash', context.shareTokenParam, ...parts)
-		: apiUrl('v1.0', 'pages', 'trash', context.collectiveId, ...parts)
+	return pagesApiUrl(context, 'trash', ...parts)
 }
 
 /**
@@ -38,8 +36,8 @@ function pagesTrashApiUrl(context, ...parts) {
  */
 function searchApiUrl(context, ...parts) {
 	return context.isPublic
-		? apiUrl('v1.0', 'p', 'search', context.shareTokenParam, ...parts)
-		: apiUrl('v1.0', 'search', context.collectiveId, ...parts)
+		? apiUrl('v1.0', 'p', 'collectives', context.shareTokenParam, 'search', ...parts)
+		: apiUrl('v1.0', 'collectives', context.collectiveId, 'search', ...parts)
 }
 
 /**

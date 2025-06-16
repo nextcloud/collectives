@@ -86,7 +86,7 @@ describe('Pages', function() {
 	describe('Creating a new subpage', function() {
 		it('Shows the title in the enabled titleform and full path in browser title', function() {
 			// Do some handstands to ensure that new page with editor is loaded before we edit the title
-			cy.intercept('POST', '**/api/v1.0/pages/*/*').as('createPage')
+			cy.intercept('POST', '**/api/v1.0/collectives/*/pages/*').as('createPage')
 			cy.intercept('PUT', '**/apps/text/session/*/create').as('textCreateSession')
 			cy.contains('.app-content-list-item', '#% special chars')
 				.find('button.action-button-add')

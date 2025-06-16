@@ -12,7 +12,7 @@ import { apiUrl } from './urls.js'
  * @param {number} collectiveId - ID of the collective
  */
 function sessionApiUrl(collectiveId) {
-	return apiUrl('v1.0', 'session', collectiveId)
+	return apiUrl('v1.0', 'collectives', collectiveId, 'sessions')
 }
 /**
  * Create a new session for the current user
