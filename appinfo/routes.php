@@ -181,5 +181,9 @@ return [
 			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
 		['name' => 'publicPageTrash#restore', 'url' => '/api/v{apiVersion}/p/pages/trash/{token}/{id}', 'verb' => 'PATCH',
 			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
+
+		// Public template pages API
+		['name' => 'publicTemplate#index', 'url' => '/api/v{apiVersion}/p/pages/templates/{token}', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)']],
 	]
 ];
