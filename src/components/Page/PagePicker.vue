@@ -4,7 +4,10 @@
 -->
 
 <template>
-	<NcDialog :name="t('collectives', 'Copy or move page')" size="normal" @closing="onClose">
+	<NcDialog :name="t('collectives', 'Copy or move page')"
+		size="normal"
+		class="page-picker"
+		@closing="onClose">
 		<span class="crumbs">
 			<div v-if="!selectedCollective || !selectedCollective.isPageShare" class="crumbs-home">
 				<NcButton type="tertiary"
@@ -64,7 +67,7 @@
 					</a>
 				</li>
 			</ul>
-			<SkeletonLoading v-else-if="loading('pages-foreign-collective')" type="items" />
+			<SkeletonLoading v-else-if="loading(`pagelist-${selectedCollective.id}`)" type="items" />
 			<ul v-else-if="subpages.length > 0">
 				<li v-for="(page, index) in subpages"
 					:id="`picker-page-${page.id}`"
@@ -125,8 +128,6 @@
 </template>
 
 <script>
-import axios from '@nextcloud/axios'
-import { generateUrl } from '@nextcloud/router'
 import { mapActions, mapState } from 'pinia'
 import { useRootStore } from '../../stores/root.js'
 import { useCollectivesStore } from '../../stores/collectives.js'
@@ -138,7 +139,6 @@ import ChevronRightIcon from 'vue-material-design-icons/ChevronRight.vue'
 import CollectivesIcon from '../Icon/CollectivesIcon.vue'
 import PageIcon from '../Icon/PageIcon.vue'
 import SkeletonLoading from '../SkeletonLoading.vue'
-import { sortedSubpages, pageParents } from '../../stores/pageExtracts.js'
 
 export default {
 	name: 'PagePicker',
@@ -176,9 +176,6 @@ export default {
 
 	data() {
 		return {
-			collectivesPages: {},
-			pageCrumbs: [],
-			subpages: [],
 			selectedCollective: null,
 			selectedPageId: null,
 		}
@@ -191,7 +188,9 @@ export default {
 			'rootPage',
 			'pageById',
 			'pageParents',
-			'sortOrder',
+			'pageParentsForCollective',
+			'pagesForCollective',
+			'sortedSubpagesForCollective',
 			'visibleSubpages',
 		]),
 
@@ -210,7 +209,29 @@ export default {
 
 			return this.isCurrentCollective
 				? this.rootPage
-				: this.collectivesPages[this.selectedCollective.id]?.find(p => (p.parentId === 0))
+				: this.pagesForCollective(this.selectedCollective.id).find(p => (p.parentId === 0))
+		},
+
+		subpages() {
+			let pages
+			if (this.isCurrentCollective) {
+				pages = this.visibleSubpages(this.selectedPageId)
+			} else {
+				pages = this.sortedSubpagesForCollective(this.selectedCollective.id, this.selectedPageId)
+			}
+
+			// Add current page to top of subpages if not part of it yet
+			if (!pages.find(p => (p.id === this.pageId))) {
+				pages.unshift(this.pageById(this.pageId))
+			}
+
+			return pages
+		},
+
+		pageCrumbs() {
+			return this.isCurrentCollective
+				? this.pageParents(this.selectedPageId)
+				: this.pageParentsForCollective(this.selectedCollective.id, this.selectedPageId)
 		},
 
 		collectivesCrumbString() {
@@ -253,7 +274,7 @@ export default {
 	watch: {
 		'selectedPageId'(val) {
 			if (val) {
-				this.updateSubpages()
+				this.scrollToPage()
 			}
 		},
 	},
@@ -261,7 +282,7 @@ export default {
 	mounted() {
 		this.selectedPageId = this.parentId
 		this.selectedCollective = this.currentCollective
-		this.updateSubpages()
+		this.scrollToPage()
 
 		window.addEventListener('keydown', this.handleKeyDown, true)
 	},
@@ -271,50 +292,13 @@ export default {
 	},
 
 	methods: {
-		...mapActions(useRootStore, ['done', 'load']),
+		...mapActions(usePagesStore, ['getPagesForCollective']),
 
-		async fetchCollectivePages() {
-			this.load('pages-foreign-collective')
-			this.subpages = []
-			const response = await axios.get(generateUrl(`/apps/collectives/_api/${this.selectedCollective.id}/_pages`))
-			this.collectivesPages[this.selectedCollective.id] = response.data.data
-			this.done('pages-foreign-collective')
-		},
-
-		updateSubpages() {
-			if (this.isCurrentCollective) {
-				this.subpages = this.visibleSubpages(this.selectedPageId)
-			} else {
-				const state = {
-					pages: this.collectivesPages[this.selectedCollective.id],
-					sortOrder: this.sortOrder,
-				}
-				this.subpages = sortedSubpages(state)(this.selectedPageId)
-			}
-
-			// Add current page to top of subpages if not part of it yet
-			if (!this.subpages.find(p => (p.id === this.pageId))) {
-				this.subpages.unshift(this.pageById(this.pageId))
-			}
-
+		scrollToPage() {
 			// Scroll current page into view (important when listing parent page)
 			this.$nextTick(() => {
 				document.getElementById(`picker-page-${this.pageId}`).scrollIntoView({ block: 'center' })
 			})
-
-			this.updatePageCrumbs()
-		},
-
-		updatePageCrumbs() {
-			if (this.isCurrentCollective) {
-				this.pageCrumbs = this.pageParents(this.selectedPageId)
-			} else {
-				const state = {
-					pages: this.collectivesPages[this.selectedCollective.id],
-					rootPage: this.selectedRootPage,
-				}
-				this.pageCrumbs = pageParents(state)(this.selectedPageId)
-			}
 		},
 
 		/**
@@ -335,8 +319,6 @@ export default {
 		},
 
 		onClickCollectivesList() {
-			this.pageCrumbs = []
-			this.subpages = []
 			this.selectedCollective = null
 			this.selectedPageId = null
 		},
@@ -351,8 +333,8 @@ export default {
 		 */
 		async onClickCollective(collective) {
 			this.selectedCollective = collective
-			if (!this.isCurrentCollective && !this.collectivesPages[this.selectedCollective.id]) {
-				await this.fetchCollectivePages()
+			if (!this.isCurrentCollective) {
+				await this.getPagesForCollective(this.selectedCollective.id)
 			}
 			this.selectedPageId = this.selectedRootPage.id
 		},
@@ -417,6 +399,11 @@ export default {
 	max-height: 500px !important;
 }
 
+.page-picker {
+	display: flex;
+	flex-direction: column;
+}
+
 .crumbs {
 	color: var(--color-text-maxcontrast);
 	display: inline-flex;
@@ -466,7 +453,7 @@ export default {
 .picker-list {
 	display: inline-block;
 	width: 100%;
-	height: 100%;
+	height: calc(100% - 34px - 8px - 6px);
 	overflow-y: auto;
 	flex: 1;
 
