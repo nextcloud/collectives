@@ -485,7 +485,7 @@ export default {
 					: t('collectives', 'Collective "{name}" has been shared', { name: this.currentCollective.name })
 				showSuccess(message)
 			} catch (error) {
-				const responseError = error.response?.data
+				const responseError = error.response?.data?.ocs.meta.message
 				const message = this.isPageShare
 					? t('collectives', 'Failed to share page "{name}": {responseError}', {
 						name: this.currentPage.title,
@@ -555,7 +555,7 @@ export default {
 				showSuccess(message)
 			} catch (error) {
 				console.error('Failed to update share link', error)
-				const responseError = error.response?.data
+				const responseError = error.response?.data?.ocs.meta.message
 				showError(t('collectives', 'Failed to update share link: {responseError}', { responseError }))
 				this.open = true
 			} finally {
@@ -578,7 +578,7 @@ export default {
 				showSuccess(message)
 			} catch (error) {
 				console.error('Failed to unshare', error)
-				const responseError = error.response?.data
+				const responseError = error.response?.data?.ocs.meta.message
 				showError(t('collectives', 'Failed to unshare: {responseError}', { responseError }))
 				this.open = true
 			} finally {
