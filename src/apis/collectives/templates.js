@@ -14,8 +14,8 @@ import { apiUrl } from './urls.js'
  */
 function templatesApiUrl(context, ...parts) {
 	return context.isPublic
-		? apiUrl('v1.0', 'p', 'pages', 'templates', context.shareTokenParam, ...parts)
-		: apiUrl('v1.0', 'pages', 'templates', context.collectiveId, ...parts)
+		? apiUrl('v1.0', 'p', 'collectives', context.shareTokenParam, 'pages', 'templates', ...parts)
+		: apiUrl('v1.0', 'collectives', context.collectiveId, 'pages', 'templates', ...parts)
 }
 
 /**

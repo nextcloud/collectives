@@ -1881,7 +1881,7 @@
                 }
             }
         },
-        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/shares/{collectiveId}": {
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/collectives/{collectiveId}/shares": {
             "get": {
                 "operationId": "share-get-collective-shares",
                 "summary": "Get collective and page shares of a collective",
@@ -2177,7 +2177,7 @@
                 }
             }
         },
-        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/shares/{collectiveId}/pages/{pageId}": {
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/collectives/{collectiveId}/pages/{pageId}/shares": {
             "post": {
                 "operationId": "share-create-page-share",
                 "summary": "Create a page share",
@@ -2344,7 +2344,7 @@
                 }
             }
         },
-        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/shares/{collectiveId}/pages/{pageId}/{token}": {
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/collectives/{collectiveId}/pages/{pageId}/shares/{token}": {
             "put": {
                 "operationId": "share-update-page-share",
                 "summary": "Update a page share",
@@ -2681,7 +2681,7 @@
                 }
             }
         },
-        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/shares/{collectiveId}/{token}": {
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/collectives/{collectiveId}/shares/{token}": {
             "put": {
                 "operationId": "share-update-collective-share",
                 "summary": "Update a collective share",
@@ -2997,7 +2997,7 @@
                 }
             }
         },
-        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/search/{collectiveId}": {
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/collectives/{collectiveId}/search": {
             "get": {
                 "operationId": "page-content-search",
                 "summary": "Search the content of pages",
@@ -3156,7 +3156,7 @@
                 }
             }
         },
-        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/pages/{collectiveId}": {
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/collectives/{collectiveId}/pages": {
             "get": {
                 "operationId": "page-index",
                 "summary": "Get pages of a collective",
@@ -3306,7 +3306,7 @@
                 }
             }
         },
-        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/pages/{collectiveId}/{id}": {
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/collectives/{collectiveId}/pages/{id}": {
             "get": {
                 "operationId": "page-get",
                 "summary": "Get one page",
@@ -3810,7 +3810,7 @@
                 }
             }
         },
-        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/pages/{collectiveId}/{parentId}": {
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/collectives/{collectiveId}/pages/{parentId}": {
             "post": {
                 "operationId": "page-create",
                 "summary": "Create a new page",
@@ -3993,7 +3993,7 @@
                 }
             }
         },
-        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/pages/{collectiveId}/{id}/touch": {
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/collectives/{collectiveId}/pages/{id}/touch": {
             "get": {
                 "operationId": "page-touch",
                 "summary": "Touch a page (updates last edited user)",
@@ -4150,7 +4150,7 @@
                 }
             }
         },
-        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/pages/{collectiveId}/{id}/fullWidth": {
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/collectives/{collectiveId}/pages/{id}/fullWidth": {
             "put": {
                 "operationId": "page-set-full-width",
                 "summary": "Set/unset full width view for a page",
@@ -4326,7 +4326,7 @@
                 }
             }
         },
-        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/pages/{collectiveId}/{id}/to/{newCollectiveId}": {
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/collectives/{collectiveId}/pages/{id}/to/{newCollectiveId}": {
             "put": {
                 "operationId": "page-move-or-copy-to-collective",
                 "summary": "Move or copy a page to another collective",
@@ -4514,7 +4514,7 @@
                 }
             }
         },
-        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/pages/{collectiveId}/{id}/emoji": {
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/collectives/{collectiveId}/pages/{id}/emoji": {
             "put": {
                 "operationId": "page-set-emoji",
                 "summary": "Set/unset emoji for a page",
@@ -4689,7 +4689,7 @@
                 }
             }
         },
-        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/pages/{collectiveId}/{id}/subpageOrder": {
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/collectives/{collectiveId}/pages/{id}/subpageOrder": {
             "put": {
                 "operationId": "page-set-subpage-order",
                 "summary": "Set subpage order for a page",
@@ -4864,7 +4864,7 @@
                 }
             }
         },
-        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/pages/{collectiveId}/{id}/attachments": {
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/collectives/{collectiveId}/pages/{id}/attachments": {
             "get": {
                 "operationId": "page-get-attachments",
                 "summary": "Get attachments of a page",
@@ -5024,7 +5024,7 @@
                 }
             }
         },
-        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/pages/{collectiveId}/{id}/backlinks": {
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/collectives/{collectiveId}/pages/{id}/backlinks": {
             "get": {
                 "operationId": "page-get-backlinks",
                 "summary": "Get backlinks of a page",
@@ -5184,7 +5184,7 @@
                 }
             }
         },
-        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/pages/trash/{collectiveId}": {
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/collectives/{collectiveId}/pages/trash": {
             "get": {
                 "operationId": "page_trash-index",
                 "summary": "Get trashed pages of a collective",
@@ -5334,7 +5334,7 @@
                 }
             }
         },
-        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/pages/trash/{collectiveId}/{id}": {
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/collectives/{collectiveId}/pages/trash/{id}": {
             "delete": {
                 "operationId": "page_trash-delete",
                 "summary": "Permanently delete a page from trash",
@@ -5636,7 +5636,7 @@
                 }
             }
         },
-        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/pages/templates/{collectiveId}": {
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/collectives/{collectiveId}/pages/templates": {
             "get": {
                 "operationId": "template-index",
                 "summary": "Get template pages of a collective",
@@ -5786,7 +5786,7 @@
                 }
             }
         },
-        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/pages/templates/{collectiveId}/{id}": {
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/collectives/{collectiveId}/pages/templates/{id}": {
             "post": {
                 "operationId": "template-create",
                 "summary": "Create a new template page",
@@ -6286,7 +6286,7 @@
                 }
             }
         },
-        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/pages/templates/{collectiveId}/{id}/emoji": {
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/collectives/{collectiveId}/pages/templates/{id}/emoji": {
             "put": {
                 "operationId": "template-set-emoji",
                 "summary": "Set/unset emoji for a template page",
@@ -6461,7 +6461,7 @@
                 }
             }
         },
-        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/userSettings/{collectiveId}/pageOrder": {
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/collectives/{collectiveId}/userSettings/pageOrder": {
             "put": {
                 "operationId": "collective_user_settings-set-page-order",
                 "summary": "Set order type for pages (in page list)",
@@ -6618,7 +6618,7 @@
                 }
             }
         },
-        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/userSettings/{collectiveId}/showMembers": {
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/collectives/{collectiveId}/userSettings/showMembers": {
             "put": {
                 "operationId": "collective_user_settings-set-show-members",
                 "summary": "Set whether members widget on landing page is expanded or not",
@@ -6774,7 +6774,7 @@
                 }
             }
         },
-        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/userSettings/{collectiveId}/showRecentPages": {
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/collectives/{collectiveId}/userSettings/showRecentPages": {
             "put": {
                 "operationId": "collective_user_settings-set-show-recent-pages",
                 "summary": "Set whether recent pages widget on landing page is expanded or not",
@@ -6930,7 +6930,7 @@
                 }
             }
         },
-        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/userSettings/{collectiveId}/favoritePages": {
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/collectives/{collectiveId}/userSettings/favoritePages": {
             "put": {
                 "operationId": "collective_user_settings-set-favorite-pages",
                 "summary": "Set list of page favorites",
@@ -7086,7 +7086,7 @@
                 }
             }
         },
-        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/session/{collectiveId}": {
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/collectives/{collectiveId}/sessions": {
             "post": {
                 "operationId": "session-create",
                 "summary": "Start a session for a collective",
@@ -7865,7 +7865,7 @@
                 }
             }
         },
-        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/p/search/{token}": {
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/p/collectives/{token}/search": {
             "get": {
                 "operationId": "public_page-content-search",
                 "summary": "Search the content of pages",
@@ -8023,7 +8023,7 @@
                 }
             }
         },
-        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/p/pages/{token}": {
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/p/collectives/{token}/pages": {
             "get": {
                 "operationId": "public_page-index",
                 "summary": "Get pages of a collective",
@@ -8172,7 +8172,7 @@
                 }
             }
         },
-        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/p/pages/{token}/{id}": {
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/p/collectives/{token}/pages/{id}": {
             "get": {
                 "operationId": "public_page-get",
                 "summary": "Get one page",
@@ -8672,7 +8672,7 @@
                 }
             }
         },
-        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/p/pages/{token}/{parentId}": {
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/p/collectives/{token}/pages/{parentId}": {
             "post": {
                 "operationId": "public_page-create",
                 "summary": "Create a new page",
@@ -8854,7 +8854,7 @@
                 }
             }
         },
-        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/p/pages/{token}/{id}/touch": {
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/p/collectives/{token}/pages/{id}/touch": {
             "get": {
                 "operationId": "public_page-touch",
                 "summary": "Touch a page (updates last edited user)",
@@ -9010,7 +9010,182 @@
                 }
             }
         },
-        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/p/pages/{token}/{id}/emoji": {
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/p/collectives/{token}/pages/{id}/fullWidth": {
+            "put": {
+                "operationId": "public_page-set-full-width",
+                "summary": "Set/unset full width view for a page",
+                "tags": [
+                    "public_page"
+                ],
+                "security": [
+                    {},
+                    {
+                        "bearer_auth": []
+                    },
+                    {
+                        "basic_auth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "fullWidth"
+                                ],
+                                "properties": {
+                                    "fullWidth": {
+                                        "type": "boolean",
+                                        "description": "Whether to enable full width view for the page"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "apiVersion",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "1.0"
+                            ],
+                            "default": "1.0"
+                        }
+                    },
+                    {
+                        "name": "token",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the page",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "OCS-APIRequest",
+                        "in": "header",
+                        "description": "Required to be true for the API request to pass",
+                        "required": true,
+                        "schema": {
+                            "type": "boolean",
+                            "default": true
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Full width view set/unset",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "ocs"
+                                    ],
+                                    "properties": {
+                                        "ocs": {
+                                            "type": "object",
+                                            "required": [
+                                                "meta",
+                                                "data"
+                                            ],
+                                            "properties": {
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/OCSMeta"
+                                                },
+                                                "data": {
+                                                    "type": "object",
+                                                    "required": [
+                                                        "page"
+                                                    ],
+                                                    "properties": {
+                                                        "page": {
+                                                            "$ref": "#/components/schemas/PageInfo"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Not Permitted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "ocs"
+                                    ],
+                                    "properties": {
+                                        "ocs": {
+                                            "type": "object",
+                                            "required": [
+                                                "meta",
+                                                "data"
+                                            ],
+                                            "properties": {
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/OCSMeta"
+                                                },
+                                                "data": {}
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Collective or page not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "ocs"
+                                    ],
+                                    "properties": {
+                                        "ocs": {
+                                            "type": "object",
+                                            "required": [
+                                                "meta",
+                                                "data"
+                                            ],
+                                            "properties": {
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/OCSMeta"
+                                                },
+                                                "data": {}
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/p/collectives/{token}/pages/{id}/emoji": {
             "put": {
                 "operationId": "public_page-set-emoji",
                 "summary": "Set/unset emoji for a page",
@@ -9184,7 +9359,7 @@
                 }
             }
         },
-        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/p/pages/{token}/{id}/subpageOrder": {
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/p/collectives/{token}/pages/{id}/subpageOrder": {
             "put": {
                 "operationId": "public_page-set-subpage-order",
                 "summary": "Set subpage order for a page",
@@ -9358,7 +9533,7 @@
                 }
             }
         },
-        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/p/pages/{token}/{id}/attachments": {
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/p/collectives/{token}/pages/{id}/attachments": {
             "get": {
                 "operationId": "public_page-get-attachments",
                 "summary": "Get attachments of a page",
@@ -9517,7 +9692,7 @@
                 }
             }
         },
-        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/p/pages/{token}/{id}/backlinks": {
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/p/collectives/{token}/pages/{id}/backlinks": {
             "get": {
                 "operationId": "public_page-get-backlinks",
                 "summary": "Get backlinks of a page",
@@ -9676,7 +9851,7 @@
                 }
             }
         },
-        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/p/pages/trash/{token}": {
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/p/collectives/{token}/pages/trash": {
             "get": {
                 "operationId": "public_page_trash-index",
                 "summary": "Get trashed pages of a collective",
@@ -9825,7 +10000,7 @@
                 }
             }
         },
-        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/p/pages/trash/{token}/{id}": {
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/p/collectives/{token}/pages/trash/{id}": {
             "delete": {
                 "operationId": "public_page_trash-delete",
                 "summary": "Permanently delete a page from trash",
@@ -10124,6 +10299,155 @@
                     }
                 }
             }
+        },
+        "/ocs/v2.php/apps/collectives/api/v{apiVersion}/p/collectives/{token}/pages/templates": {
+            "get": {
+                "operationId": "public_template-index",
+                "summary": "Get template pages of a collective",
+                "tags": [
+                    "public_template"
+                ],
+                "security": [
+                    {},
+                    {
+                        "bearer_auth": []
+                    },
+                    {
+                        "basic_auth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "apiVersion",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "1.0"
+                            ],
+                            "default": "1.0"
+                        }
+                    },
+                    {
+                        "name": "token",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "OCS-APIRequest",
+                        "in": "header",
+                        "description": "Required to be true for the API request to pass",
+                        "required": true,
+                        "schema": {
+                            "type": "boolean",
+                            "default": true
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Template pages returned",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "ocs"
+                                    ],
+                                    "properties": {
+                                        "ocs": {
+                                            "type": "object",
+                                            "required": [
+                                                "meta",
+                                                "data"
+                                            ],
+                                            "properties": {
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/OCSMeta"
+                                                },
+                                                "data": {
+                                                    "type": "object",
+                                                    "required": [
+                                                        "templates"
+                                                    ],
+                                                    "properties": {
+                                                        "templates": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/components/schemas/PageInfo"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Not permitted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "ocs"
+                                    ],
+                                    "properties": {
+                                        "ocs": {
+                                            "type": "object",
+                                            "required": [
+                                                "meta",
+                                                "data"
+                                            ],
+                                            "properties": {
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/OCSMeta"
+                                                },
+                                                "data": {}
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Public collective/page share not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "ocs"
+                                    ],
+                                    "properties": {
+                                        "ocs": {
+                                            "type": "object",
+                                            "required": [
+                                                "meta",
+                                                "data"
+                                            ],
+                                            "properties": {
+                                                "meta": {
+                                                    "$ref": "#/components/schemas/OCSMeta"
+                                                },
+                                                "data": {}
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "tags": [
@@ -10149,7 +10473,7 @@
         },
         {
             "name": "template",
-            "description": "Provides access to templates pages of a collective."
+            "description": "Provides access to template pages of a collective."
         },
         {
             "name": "collective_user_settings",
@@ -10174,6 +10498,10 @@
         {
             "name": "public_page_trash",
             "description": "Provides access to page trash of a public collective share."
+        },
+        {
+            "name": "public_template",
+            "description": "Provides access to template pages of a public collective share."
         }
     ]
 }

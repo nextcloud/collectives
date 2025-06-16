@@ -11,7 +11,7 @@ describe('Page templates', function() {
 
 	beforeEach(function() {
 		cy.loginAs('bob')
-		cy.intercept('GET', '**/api/v1.0/pages/templates/*').as('getTemplates')
+		cy.intercept('GET', '**/api/v1.0/collectives/*/pages/templates').as('getTemplates')
 		cy.visit('apps/collectives/Template Collective')
 		cy.wait('@getTemplates')
 	})
