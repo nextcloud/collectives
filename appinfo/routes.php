@@ -159,6 +159,8 @@ return [
 			'requirements' => ['apiVersion' => '(1.0)', 'parentId' => '\d+']],
 		['name' => 'publicPage#touch', 'url' => '/api/v{apiVersion}/p/pages/{token}/{id}/touch', 'verb' => 'GET',
 			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
+		['name' => 'publicPage#setFullWidth', 'url' => '/api/v{apiVersion}/p/pages/{token}/{id}/fullWidth', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
 		['name' => 'publicPage#moveOrCopy', 'url' => '/api/v{apiVersion}/p/pages/{token}/{id}', 'verb' => 'PUT',
 			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
 		['name' => 'publicPage#setEmoji', 'url' => '/api/v{apiVersion}/p/pages/{token}/{id}/emoji', 'verb' => 'PUT',
