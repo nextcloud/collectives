@@ -39,6 +39,8 @@ for help in case of questions.
 
 ## Developer documentation
 
+The OCS API is documented at [openapi.json](openapi.json). It's best viewed with the [OCS API Viewer app](https://apps.nextcloud.com/apps/ocs_api_viewer).
+
 Documentation for developers can be found at [DEVELOPING.md](DEVELOPING.md).
 
 ## Translations
