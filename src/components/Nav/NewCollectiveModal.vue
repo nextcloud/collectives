@@ -195,7 +195,7 @@ export default {
 			if (this.nameIsTooShort) {
 				return t('collectives', 'Name too short, requires at least three characters')
 			} else if (this.nameIsTaken) {
-				return t('collectives', 'A collective with this name already exists')
+				return t('collectives', 'A collective/team with this name already exists')
 			}
 			return null
 		},

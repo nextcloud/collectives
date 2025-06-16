@@ -219,7 +219,7 @@ export const useCollectivesStore = defineStore('collectives', {
 			if (!settingsStore.collectivesFolder) {
 				await settingsStore.getCollectivesFolder()
 			}
-			return response.data.message
+			return response.data.ocs.data.info
 		},
 
 		/**
