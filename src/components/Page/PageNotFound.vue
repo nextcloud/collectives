@@ -5,7 +5,8 @@
 
 <template>
 	<NcEmptyContent :name="t('collectives', 'Page not found: {page}', { page: pageParam })"
-		:description="t('collectives', 'Select a page from the list or create a new one.')">
+		:description="t('collectives', 'Select a page from the list or create a new one.')"
+		class="content-not-found">
 		<template #icon>
 			<PageIcon />
 		</template>
@@ -31,3 +32,9 @@ export default {
 	},
 }
 </script>
+
+<style lang="scss" scoped>
+.content-not-found {
+	height: 100%;
+}
+</style>
