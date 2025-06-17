@@ -133,6 +133,7 @@
 
 			<!-- Unfiltered view page list -->
 			<Draggable v-else
+				class="page-list-dragarea"
 				:list="subpages"
 				:parent-id="rootPage.id"
 				:disable-sorting="isFilteredView">
@@ -482,6 +483,10 @@ li.toggle-button.selected {
 	flex-direction: column;
 	flex-grow: 1;
 	padding: 0 4px;
+}
+
+.page-list-dragarea {
+	padding-bottom: 20px;
 }
 
 .page-list-root-page {
