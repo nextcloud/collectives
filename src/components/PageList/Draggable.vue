@@ -13,7 +13,6 @@
 		filter=".page-list-nodrag-item"
 		:sort="allowSorting"
 		:revert-on-spill="revertOnSpill"
-		class="page-list-dragarea"
 		:fallback-tolerance="5"
 		:animation="200"
 		:delay="500"
@@ -177,10 +176,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.page-list-dragarea {
-	padding-bottom: 20px;
-}
-
 // drag element in sortable.js lists
 :deep(.sortable-ghost) {
 	opacity: 0.7;
