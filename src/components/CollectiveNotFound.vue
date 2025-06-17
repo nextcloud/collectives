@@ -36,6 +36,5 @@ export default {
 <style lang="scss" scoped>
 .content-not-found {
 	height: 100%;
-	padding: calc(var(--default-grid-baseline) * 4);
 }
 </style>
