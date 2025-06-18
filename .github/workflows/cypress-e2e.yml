@@ -133,37 +133,13 @@ jobs:
           path: apps/viewer
           ref: ${{ matrix.server-versions }}
 
-      - name: Save current date and hour for the cache key
-        run: echo "DATE_HOUR=$(date +"%Y-%m-%d-%H")" >> $GITHUB_ENV
-
-      - name: Restore appstore apps.json
-        id: cache_appstore_apps
-        uses: actions/cache@v4
-        with:
-          path: 'apps.json'
-          key: 'appstore_apps_${{ env.DATE_HOUR }}'
-
-      - name: Fetch appstore repository
-        if: ${{ steps.cache_appstore_apps.outputs.cache-hit != 'true' }}
-        id: appstore_apps
-        run: curl -fL -o 'apps.json' https://apps.nextcloud.com/api/v1/apps.json
-
       - name: Get contacts app from app store
-        id: contacts-app
-        uses: mejo-/nextcloud-appstore-action@1873692fd1b3c198b3c57280462ed6ac7d6dde0a # v1.0.0
+        id: contacts_app
+        uses: nextcloud/appstore-action@74efb3de5a06a74f2bdf6f4f635468f14d8fee2c # v1.0.0
         with:
           appid: contacts
           server_major: ${{ matrix.server-major }}
-
-      - name: Fetch contacts release tarball
-        run: |
-          curl -fL -o '${{ runner.temp }}/contacts.tar.gz' '${{ steps.contacts-app.outputs.download }}'
-
-      - name: Unpack contacts release tarball
-        run: |
-          cd apps
-          tar -xzf '${{ runner.temp }}/contacts.tar.gz'
-          cd ..
+          download: true
 
       - name: Checkout app
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
