@@ -88,7 +88,6 @@ OC.L10N.register(
     "Cancel" : "Скасувати",
     "New collective" : "Новий колектив",
     "Add members to {name}" : "Додати учасників до {name}",
-    "A collective with this name already exists" : "Колектив з такою назвою вже існує",
     "Create" : "Створити",
     "Create without members" : "Створити без учасників",
     "Could not add members to the collective" : "Не вдалося додати учасників до колективу",

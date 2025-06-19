@@ -106,7 +106,6 @@ OC.L10N.register(
     "Cancel" : "Annuleren",
     "New collective" : "Nieuw collectief",
     "Add members to {name}" : "Leden toevoegen aan {name}",
-    "A collective with this name already exists" : "Er bestaat al een collectief met deze naam",
     "Create" : "Creëer",
     "Create without members" : "Creëer zonder leden",
     "Could not add members to the collective" : "Kan geen leden toevoegen aan het collectief",

@@ -104,7 +104,6 @@ OC.L10N.register(
     "Cancel" : "ۋاز كەچ",
     "New collective" : "يېڭى كوللېكتىپ",
     "Add members to {name}" : "ئەزالارنى {name} غا قوشۇڭ",
-    "A collective with this name already exists" : "بۇ ئىسىم بىلەن بىر كوللىكتىپ مەۋجۇت",
     "Create" : "قۇر",
     "Create without members" : "ئەزاسىز قۇر",
     "Could not add members to the collective" : "كوللىكتىپقا ئەزا قوشالمىدى",

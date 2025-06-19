@@ -70,7 +70,6 @@ OC.L10N.register(
     "Only collective" : "Le zbirko",
     "Cancel" : "Prekliči",
     "New collective" : "Nova zbirka",
-    "A collective with this name already exists" : "Zbirka s tem imenom že obstaja",
     "Create" : "Ustvarjeno",
     "Could not add members to the collective" : "Ni mogoče dodati članov v zbirko",
     "Select emoji" : "Izbor izrazne ikone",

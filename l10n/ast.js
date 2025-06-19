@@ -55,7 +55,6 @@ OC.L10N.register(
     "Delete permanently" : "Desaniciar permanentemente",
     "Cancel" : "Encaboxar",
     "New collective" : "Coleutivu nuevu",
-    "A collective with this name already exists" : "Yá esiste un coleutivu con esti nome",
     "Create" : "Crear",
     "Create without members" : "Crear ensin miembros",
     "Could not add members to the collective" : "Nun se pudieron amestar miembros al coleutivu",

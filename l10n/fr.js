@@ -105,7 +105,6 @@ OC.L10N.register(
     "Cancel" : "Annuler",
     "New collective" : "Nouveau collectif",
     "Add members to {name}" : "Ajouter des membres à {name}",
-    "A collective with this name already exists" : "Un collectif portant ce nom existe déjà",
     "Create" : "Créer",
     "Create without members" : "Créer sans membres",
     "Could not add members to the collective" : "Impossible d'ajouter des membres à ce collectif",

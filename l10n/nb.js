@@ -104,7 +104,6 @@ OC.L10N.register(
     "Cancel" : "Avbryt",
     "New collective" : "Nytt kollektiv",
     "Add members to {name}" : "Legg medlemmer til {name}",
-    "A collective with this name already exists" : "Et kollektiv med dette navnet finnes allerede",
     "Create" : "Opprett",
     "Create without members" : "Opprett uten medlemmer",
     "Could not add members to the collective" : "Kunne ikke legge medlemmer til kollektivet",

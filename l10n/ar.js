@@ -104,7 +104,6 @@ OC.L10N.register(
     "Cancel" : "إلغاء",
     "New collective" : "تجميعة جديدة",
     "Add members to {name}" : "إضافة أعضاء إلى {name}",
-    "A collective with this name already exists" : "توجد سلفاً تجميعة بهذا الاسم",
     "Create" : "إنشاء",
     "Create without members" : "إنشاء بدون أعضاء",
     "Could not add members to the collective" : "تعذّرت إضافة أعضاء إلى التجميعة",

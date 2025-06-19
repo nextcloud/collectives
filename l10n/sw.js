@@ -25,6 +25,7 @@ OC.L10N.register(
     "Can edit" : "Inaweza kuhariri",
     "Cannot copy, please copy the link manually" : "Haiwezi kunakili, tafadhali nakili kiungio kwa njia za kawaida",
     "Download" : "Pakua",
+    "You" : "Wewe",
     "Attachments" : "Viambatanisho",
     "Sharing" : "inashirikisha"
 },

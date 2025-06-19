@@ -100,7 +100,6 @@ OC.L10N.register(
     "Cancel" : "取消",
     "New collective" : "新知识库",
     "Add members to {name}" : "添加成员到 {name}",
-    "A collective with this name already exists" : "使用此名称的知识库已经存在",
     "Create" : "创建",
     "Create without members" : "不添加成员并创建",
     "Could not add members to the collective" : "无法将成员添加到知识库",
