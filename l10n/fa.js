@@ -103,7 +103,6 @@ OC.L10N.register(
     "Cancel" : "لغو",
     "New collective" : "New collective",
     "Add members to {name}" : "افزودن اعضا به {name}",
-    "A collective with this name already exists" : "A collective with this name already exists",
     "Create" : "ایجاد",
     "Create without members" : "ساخت بدون اعضا",
     "Could not add members to the collective" : "Could not add members to the collective",

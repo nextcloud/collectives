@@ -94,7 +94,6 @@ OC.L10N.register(
     "Cancel" : "Utzi",
     "New collective" : "Kolektibo berria",
     "Add members to {name}" : "Gehitu kideak {name}-ra",
-    "A collective with this name already exists" : "Badago izen hori duen kolektibo bat",
     "Create" : "Sortu",
     "Create without members" : "Sortu kiderik gabe",
     "Could not add members to the collective" : "Ezin izan dira kideak gehitu kolektiboan",

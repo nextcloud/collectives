@@ -90,7 +90,6 @@ OC.L10N.register(
     "Only collective" : "Tylko kolektyw",
     "Cancel" : "Anuluj",
     "New collective" : "Nowy kolektyw",
-    "A collective with this name already exists" : "Kolektyw z taką nazwą już istnieje",
     "Create" : "Utwórz",
     "Could not add members to the collective" : "Nie można dodać członków do kolektywu",
     "Select emoji" : "Wybierz emotikon",

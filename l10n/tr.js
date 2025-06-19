@@ -104,7 +104,6 @@ OC.L10N.register(
     "Cancel" : "İptal",
     "New collective" : "Topluluk ekle",
     "Add members to {name}" : "{name} üzerine üye ekle",
-    "A collective with this name already exists" : "Aynı adlı bir topluluk zaten var",
     "Create" : "Ekle",
     "Create without members" : "Üyeler olmadan oluştur",
     "Could not add members to the collective" : "Üyeler topluluğa eklenemedi",

@@ -102,7 +102,6 @@ OC.L10N.register(
     "Cancel" : "Cancelar",
     "New collective" : "Nuevo cuaderno colectivo",
     "Add members to {name}" : "Añadir miembros a {name}",
-    "A collective with this name already exists" : "Ya existe un cuaderno colectivo con ese nombre",
     "Create" : "Crear",
     "Create without members" : "Crear sin miembros",
     "Could not add members to the collective" : "No fue posible añadir miembros al cuaderno colectivo",

@@ -104,7 +104,6 @@ OC.L10N.register(
     "Cancel" : "Ακύρωση",
     "New collective" : "Νέα συλλογικότητα",
     "Add members to {name}" : "Προσθήκη μελών στο {name}",
-    "A collective with this name already exists" : "Υπάρχει ήδη συλλογικότητα με αυτό το όνομα",
     "Create" : "Δημιουργία",
     "Create without members" : "Δημιουργία χωρίς μέλη",
     "Could not add members to the collective" : "Δεν ήταν δυνατή η προσθήκη μελών στη συλλογικότητα",

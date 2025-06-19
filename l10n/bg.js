@@ -70,7 +70,6 @@ OC.L10N.register(
     "Only collective" : "Само колектива",
     "Cancel" : "Отказ",
     "New collective" : "Нов колектив",
-    "A collective with this name already exists" : "Колектив с това име вече съществува",
     "Create" : "Създаване",
     "Could not add members to the collective" : "Не можаха да се добавят членове към колектива",
     "Select emoji" : "Избор на емотикони",

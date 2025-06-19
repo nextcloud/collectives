@@ -84,7 +84,6 @@ OC.L10N.register(
     "Only collective" : "Csak a kollektívát",
     "Cancel" : "Mégse",
     "New collective" : "Új kollektíva",
-    "A collective with this name already exists" : "Már létezik ilyen nevű kollektíva",
     "Create" : "Létrehozás",
     "Could not add members to the collective" : "Nem sikerült a tagok hozzáadása a kollektívához",
     "Select emoji" : "Emodzsi kiválasztása",

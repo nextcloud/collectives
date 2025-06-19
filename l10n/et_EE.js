@@ -106,7 +106,6 @@ OC.L10N.register(
     "Cancel" : "Loobu",
     "New collective" : "Uus vabaühendus",
     "Add members to {name}" : "Lisa liikmeid „{name}“ vabaühendusse",
-    "A collective with this name already exists" : "Selle nimega vabaühendus on juba olemas.",
     "Create" : "Loo",
     "Create without members" : "Loo ilma liikmeteta",
     "Could not add members to the collective" : "Vabaühendusse liikmete lisamine ei õnnestunud",
