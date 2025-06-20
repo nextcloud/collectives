@@ -104,6 +104,7 @@
     "Cancel" : "取消",
     "New collective" : "新知識庫",
     "Add members to {name}" : "新增成員至 {name}",
+    "A collective/team with this name already exists" : "已有同名的知識庫/團隊",
     "Create" : "建立",
     "Create without members" : "建立無成員的知識庫",
     "Could not add members to the collective" : "無法新增成員至知識庫",
