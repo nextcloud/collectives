@@ -106,6 +106,7 @@ OC.L10N.register(
     "Cancel" : "Откажи",
     "New collective" : "Нови колектив",
     "Add members to {name}" : "Додај чланове у {name}",
+    "A collective/team with this name already exists" : "Колектив/тим под овим називом већ постоји",
     "Create" : "Направи",
     "Create without members" : "Креирај без чланова",
     "Could not add members to the collective" : "Чланови нису могли да се додају у овај колектив",

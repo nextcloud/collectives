@@ -106,6 +106,7 @@ OC.L10N.register(
     "Cancel" : "Storno",
     "New collective" : "Nový kolektiv",
     "Add members to {name}" : "Přidat členy do {name}",
+    "A collective/team with this name already exists" : "Takto nazvaný kolektiv/tým už existuje",
     "Create" : "Vytvářet",
     "Create without members" : "Vytvořit bez členů",
     "Could not add members to the collective" : "Členy se nedaří přidat do kolektivu",
