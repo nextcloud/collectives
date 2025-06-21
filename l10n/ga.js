@@ -106,6 +106,7 @@ OC.L10N.register(
     "Cancel" : "Cealaigh",
     "New collective" : "Comhchoiteann nua",
     "Add members to {name}" : "Cuir baill le {name}",
+    "A collective/team with this name already exists" : "Tá comhchoiteann/foireann leis an ainm seo ann cheana féin",
     "Create" : "Cruthaigh",
     "Create without members" : "Cruthaigh gan baill",
     "Could not add members to the collective" : "Níorbh fhéidir baill a chur leis an gcomhthionól",

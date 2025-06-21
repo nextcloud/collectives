@@ -106,6 +106,7 @@ OC.L10N.register(
     "Cancel" : "取消",
     "New collective" : "新知識庫",
     "Add members to {name}" : "添加成員到 {name}",
+    "A collective/team with this name already exists" : "已有同名的知識庫/團隊",
     "Create" : "創建",
     "Create without members" : "創建沒有成員的知識庫",
     "Could not add members to the collective" : "無法將成員添加到知識庫",

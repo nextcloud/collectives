@@ -104,6 +104,7 @@
     "Cancel" : "Cancel",
     "New collective" : "New collective",
     "Add members to {name}" : "Add members to {name}",
+    "A collective/team with this name already exists" : "A collective/team with this name already exists",
     "Create" : "Create",
     "Create without members" : "Create without members",
     "Could not add members to the collective" : "Could not add members to the collective",
