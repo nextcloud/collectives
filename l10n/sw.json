@@ -2,6 +2,7 @@
     "Share link" : "Shirikisha kiungo",
     "Settings" : "Mipangilio",
     "Members" : "Wanachama",
+    "Loading…" : "Inapakia",
     "Permissions" : "Ruhusa",
     "View" : "Angalia",
     "Edit" : "Hariri",
@@ -19,6 +20,7 @@
     "Add to favorites" : "Ongeza kwenye pendwa",
     "Show in Files" : "Onesha katika mafaili",
     "Move or copy" : "Hamisha au nakili",
+    "Title" : "Kichwa cha habari",
     "Clear search" : "Futa utafutaji",
     "Favorite" : "Kipendwa",
     "Favorites" : "Vipendwa",
@@ -31,6 +33,7 @@
     "You" : "Wewe",
     "Attachments" : "Viambatanisho",
     "Sharing" : "inashirikisha",
+    "Copied" : "Iliyonakiliwa",
     "_%n byte_::_%n bytes_" : ["%n byte","%n bytes"]
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

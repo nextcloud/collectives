@@ -4,6 +4,7 @@ OC.L10N.register(
     "Share link" : "Shirikisha kiungo",
     "Settings" : "Mipangilio",
     "Members" : "Wanachama",
+    "Loading…" : "Inapakia",
     "Permissions" : "Ruhusa",
     "View" : "Angalia",
     "Edit" : "Hariri",
@@ -21,6 +22,7 @@ OC.L10N.register(
     "Add to favorites" : "Ongeza kwenye pendwa",
     "Show in Files" : "Onesha katika mafaili",
     "Move or copy" : "Hamisha au nakili",
+    "Title" : "Kichwa cha habari",
     "Clear search" : "Futa utafutaji",
     "Favorite" : "Kipendwa",
     "Favorites" : "Vipendwa",
@@ -33,6 +35,7 @@ OC.L10N.register(
     "You" : "Wewe",
     "Attachments" : "Viambatanisho",
     "Sharing" : "inashirikisha",
+    "Copied" : "Iliyonakiliwa",
     "_%n byte_::_%n bytes_" : ["%n byte","%n bytes"]
 },
 "nplurals=2; plural=(n != 1);");
