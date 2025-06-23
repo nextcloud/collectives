@@ -4,7 +4,7 @@
  */
 
 describe('Page mentions', function() {
-	if (!['stable29', 'stable30'].includes(Cypress.env('ncVersion'))) {
+	if (!['stable30'].includes(Cypress.env('ncVersion'))) {
 		before(function() {
 			cy.loginAs('bob')
 			cy.deleteAndSeedCollective('Mention Collective')
