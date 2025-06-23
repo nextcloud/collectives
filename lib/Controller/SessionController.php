@@ -50,9 +50,7 @@ class SessionController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function create(int $collectiveId): DataResponse {
-		$session = $this->handleErrorResponse(function () use ($collectiveId): Session {
-			return $this->sessionService->initSession($collectiveId, $this->userId);
-		}, $this->logger);
+		$session = $this->handleErrorResponse(fn (): Session => $this->sessionService->initSession($collectiveId, $this->userId), $this->logger);
 		return new DataResponse(['token' => $session->getToken()]);
 	}
 

@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Versions;
 
+use LogicException;
 use OCA\Collectives\Db\CollectiveVersion as CollectiveVersionEntity;
 use OCA\Collectives\Db\CollectiveVersionMapper;
 use OCA\Collectives\Mount\CollectiveFolderManager;
@@ -65,7 +66,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 			/** var CollectiveStorage $storage */
 			return $storage->getFolderId();
 		}
-		throw new \LogicException('Collective folder version backend called for non Collective folder file');
+		throw new LogicException('Collective folder version backend called for non Collective folder file');
 	}
 
 	public function getVersionFolderForFile(FileInfo $file): Folder {
@@ -77,7 +78,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 			$versionsFolder = $collectivesVersionsFolder->get((string)$file->getId());
 
 			return $versionsFolder;
-		} catch (NotFoundException $e) {
+		} catch (NotFoundException) {
 			// The folder for the file's version might not exist if no versions have been created yet.
 			return $collectivesVersionsFolder->newFolder((string)$file->getId());
 		}
@@ -162,7 +163,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 				} else {
 					try {
 						$versionFile = $versionsFolder->get((string)$versionEntity->getTimestamp());
-					} catch (NotFoundException $e) {
+					} catch (NotFoundException) {
 						// The version does not exist on disk anymore, so we can delet eits entity the DB.
 						// The reality is that the disk version might have been lost during a move operation between storages,
 						// and it's not possible to recover it, so removing the entity makes sense.
@@ -216,10 +217,10 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 	 */
 	public function rollback(IVersion $version): void {
 		if (!($version instanceof CollectiveVersion)) {
-			throw new \LogicException('Trying to restore a version from a file not in a Collective folder');
+			throw new LogicException('Trying to restore a version from a file not in a Collective folder');
 		}
 
-		if (!$this->currentUserHasPermissions($version->getSourceFile(), \OCP\Constants::PERMISSION_UPDATE)) {
+		if (!$this->currentUserHasPermissions($version->getSourceFile(), Constants::PERMISSION_UPDATE)) {
 			throw new NotPermittedException('Failed to restore version');
 		}
 
@@ -347,7 +348,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 	}
 
 	public function setMetadataValue(Node $node, int $revision, string $key, string $value): void {
-		if (!$this->currentUserHasPermissions($node, \OCP\Constants::PERMISSION_UPDATE)) {
+		if (!$this->currentUserHasPermissions($node, Constants::PERMISSION_UPDATE)) {
 			throw new NotPermittedException('Failed to update version\'s metadata');
 		}
 
@@ -358,7 +359,7 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 	}
 
 	public function deleteVersion(IVersion $version): void {
-		if (!$this->currentUserHasPermissions($version->getSourceFile(), \OCP\Constants::PERMISSION_DELETE)) {
+		if (!$this->currentUserHasPermissions($version->getSourceFile(), Constants::PERMISSION_DELETE)) {
 			throw new NotPermittedException('Failed to delete version');
 		}
 

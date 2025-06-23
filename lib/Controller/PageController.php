@@ -59,9 +59,7 @@ class PageController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function index(int $collectiveId): DataResponse {
-		$pageInfos = $this->handleErrorResponse(function () use ($collectiveId): array {
-			return $this->service->findAll($collectiveId, $this->userId);
-		}, $this->logger);
+		$pageInfos = $this->handleErrorResponse(fn (): array => $this->service->findAll($collectiveId, $this->userId), $this->logger);
 		return new DataResponse(['pages' => $pageInfos]);
 	}
 
@@ -79,9 +77,7 @@ class PageController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function get(int $collectiveId, int $id): DataResponse {
-		$pageInfo = $this->handleErrorResponse(function () use ($collectiveId, $id): PageInfo {
-			return $this->service->find($collectiveId, $id, $this->userId);
-		}, $this->logger);
+		$pageInfo = $this->handleErrorResponse(fn (): PageInfo => $this->service->find($collectiveId, $id, $this->userId), $this->logger);
 		return new DataResponse(['page' => $pageInfo]);
 	}
 
@@ -101,9 +97,7 @@ class PageController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function create(int $collectiveId, int $parentId, string $title, ?int $templateId = null): DataResponse {
-		$pageInfo = $this->handleErrorResponse(function () use ($collectiveId, $parentId, $title, $templateId): PageInfo {
-			return $this->service->create($collectiveId, $parentId, $title, $templateId, $this->userId);
-		}, $this->logger);
+		$pageInfo = $this->handleErrorResponse(fn (): PageInfo => $this->service->create($collectiveId, $parentId, $title, $templateId, $this->userId), $this->logger);
 		return new DataResponse(['page' => $pageInfo]);
 	}
 
@@ -121,9 +115,7 @@ class PageController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function touch(int $collectiveId, int $id): DataResponse {
-		$pageInfo = $this->handleErrorResponse(function () use ($collectiveId, $id): PageInfo {
-			return $this->service->touch($collectiveId, $id, $this->userId);
-		}, $this->logger);
+		$pageInfo = $this->handleErrorResponse(fn (): PageInfo => $this->service->touch($collectiveId, $id, $this->userId), $this->logger);
 		return new DataResponse(['page' => $pageInfo]);
 	}
 
@@ -200,9 +192,7 @@ class PageController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function setEmoji(int $collectiveId, int $id, ?string $emoji = null): DataResponse {
-		$pageInfo = $this->handleErrorResponse(function () use ($collectiveId, $id, $emoji): PageInfo {
-			return $this->service->setEmoji($collectiveId, $id, $emoji, $this->userId);
-		}, $this->logger);
+		$pageInfo = $this->handleErrorResponse(fn (): PageInfo => $this->service->setEmoji($collectiveId, $id, $emoji, $this->userId), $this->logger);
 		return new DataResponse(['page' => $pageInfo]);
 	}
 
@@ -221,9 +211,7 @@ class PageController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function setFullWidth(int $collectiveId, int $id, bool $fullWidth): DataResponse {
-		$pageInfo = $this->handleErrorResponse(function () use ($collectiveId, $id, $fullWidth): PageInfo {
-			return $this->service->setFullWidth($collectiveId, $id, $this->userId, $fullWidth);
-		}, $this->logger);
+		$pageInfo = $this->handleErrorResponse(fn (): PageInfo => $this->service->setFullWidth($collectiveId, $id, $this->userId, $fullWidth), $this->logger);
 		return new DataResponse(['page' => $pageInfo]);
 	}
 
@@ -242,9 +230,7 @@ class PageController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function setSubpageOrder(int $collectiveId, int $id, ?string $subpageOrder = null): DataResponse {
-		$pageInfo = $this->handleErrorResponse(function () use ($collectiveId, $id, $subpageOrder): PageInfo {
-			return $this->service->setSubpageOrder($collectiveId, $id, $subpageOrder, $this->userId);
-		}, $this->logger);
+		$pageInfo = $this->handleErrorResponse(fn (): PageInfo => $this->service->setSubpageOrder($collectiveId, $id, $subpageOrder, $this->userId), $this->logger);
 		return new DataResponse(['page' => $pageInfo]);
 	}
 
@@ -262,9 +248,7 @@ class PageController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function trash(int $collectiveId, int $id): DataResponse {
-		$pageInfo = $this->handleErrorResponse(function () use ($collectiveId, $id): PageInfo {
-			return $this->service->trash($collectiveId, $id, $this->userId);
-		}, $this->logger);
+		$pageInfo = $this->handleErrorResponse(fn (): PageInfo => $this->service->trash($collectiveId, $id, $this->userId), $this->logger);
 		return new DataResponse(['page' => $pageInfo]);
 	}
 
@@ -282,9 +266,7 @@ class PageController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function getAttachments(int $collectiveId, int $id): DataResponse {
-		$attachments = $this->handleErrorResponse(function () use ($collectiveId, $id): array {
-			return $this->attachmentService->getAttachments($collectiveId, $id, $this->userId);
-		}, $this->logger);
+		$attachments = $this->handleErrorResponse(fn (): array => $this->attachmentService->getAttachments($collectiveId, $id, $this->userId), $this->logger);
 		return new DataResponse(['attachments' => $attachments]);
 	}
 
@@ -302,9 +284,7 @@ class PageController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function getBacklinks(int $collectiveId, int $id): DataResponse {
-		$backlinks = $this->handleErrorResponse(function () use ($collectiveId, $id): array {
-			return $this->service->getBacklinks($collectiveId, $id, $this->userId);
-		}, $this->logger);
+		$backlinks = $this->handleErrorResponse(fn (): array => $this->service->getBacklinks($collectiveId, $id, $this->userId), $this->logger);
 		return new DataResponse(['backlinks' => $backlinks]);
 	}
 

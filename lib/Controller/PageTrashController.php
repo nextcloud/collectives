@@ -52,9 +52,7 @@ class PageTrashController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function index(int $collectiveId): DataResponse {
-		$pageInfos = $this->handleErrorResponse(function () use ($collectiveId): array {
-			return $this->service->findAllTrash($collectiveId, $this->userId);
-		}, $this->logger);
+		$pageInfos = $this->handleErrorResponse(fn (): array => $this->service->findAllTrash($collectiveId, $this->userId), $this->logger);
 		return new DataResponse(['pages' => $pageInfos]);
 	}
 
@@ -72,9 +70,7 @@ class PageTrashController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function restore(int $collectiveId, int $id): DataResponse {
-		$pageInfo = $this->handleErrorResponse(function () use ($collectiveId, $id): PageInfo {
-			return $this->service->restore($collectiveId, $id, $this->userId);
-		}, $this->logger);
+		$pageInfo = $this->handleErrorResponse(fn (): PageInfo => $this->service->restore($collectiveId, $id, $this->userId), $this->logger);
 		return new DataResponse(['page' => $pageInfo]);
 	}
 

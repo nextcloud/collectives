@@ -64,9 +64,7 @@ class CollectiveController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function index(): DataResponse {
-		$collectives = $this->handleErrorResponse(function (): array {
-			return $this->service->getCollectivesWithShares($this->userId);
-		}, $this->logger);
+		$collectives = $this->handleErrorResponse(fn (): array => $this->service->getCollectivesWithShares($this->userId), $this->logger);
 		return new DataResponse(['collectives' => $collectives]);
 	}
 
@@ -117,13 +115,11 @@ class CollectiveController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function update(int $id, ?string $emoji = null): DataResponse {
-		$collective = $this->handleErrorResponse(function () use ($id, $emoji): Collective {
-			return $this->service->updateCollective(
-				$id,
-				$this->userId,
-				$emoji
-			);
-		}, $this->logger);
+		$collective = $this->handleErrorResponse(fn (): Collective => $this->service->updateCollective(
+			$id,
+			$this->userId,
+			$emoji
+		), $this->logger);
 		return new DataResponse(['collective' => $collective]);
 	}
 
@@ -141,14 +137,12 @@ class CollectiveController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function editLevel(int $id, int $level): DataResponse {
-		$collective = $this->handleErrorResponse(function () use ($id, $level): Collective {
-			return $this->service->setPermissionLevel(
-				$id,
-				$this->userId,
-				$level,
-				Collective::editPermissions
-			);
-		}, $this->logger);
+		$collective = $this->handleErrorResponse(fn (): Collective => $this->service->setPermissionLevel(
+			$id,
+			$this->userId,
+			$level,
+			Collective::editPermissions
+		), $this->logger);
 		return new DataResponse(['collective' => $collective]);
 	}
 
@@ -166,14 +160,12 @@ class CollectiveController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function shareLevel(int $id, int $level): DataResponse {
-		$collective = $this->handleErrorResponse(function () use ($id, $level): Collective {
-			return $this->service->setPermissionLevel(
-				$id,
-				$this->userId,
-				$level,
-				Constants::PERMISSION_SHARE
-			);
-		}, $this->logger);
+		$collective = $this->handleErrorResponse(fn (): Collective => $this->service->setPermissionLevel(
+			$id,
+			$this->userId,
+			$level,
+			Constants::PERMISSION_SHARE
+		), $this->logger);
 		return new DataResponse(['collective' => $collective]);
 	}
 
@@ -191,13 +183,11 @@ class CollectiveController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function pageMode(int $id, int $mode): DataResponse {
-		$collective = $this->handleErrorResponse(function () use ($id, $mode): Collective {
-			return $this->service->setPageMode(
-				$id,
-				$this->userId,
-				$mode,
-			);
-		}, $this->logger);
+		$collective = $this->handleErrorResponse(fn (): Collective => $this->service->setPageMode(
+			$id,
+			$this->userId,
+			$mode,
+		), $this->logger);
 		return new DataResponse(['collective' => $collective]);
 	}
 
@@ -214,9 +204,7 @@ class CollectiveController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function trash(int $id): DataResponse {
-		$collective = $this->handleErrorResponse(function () use ($id): Collective {
-			return $this->service->trashCollective($id, $this->userId);
-		}, $this->logger);
+		$collective = $this->handleErrorResponse(fn (): Collective => $this->service->trashCollective($id, $this->userId), $this->logger);
 		return new DataResponse(['collective' => $collective]);
 	}
 }

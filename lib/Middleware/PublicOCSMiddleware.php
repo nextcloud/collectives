@@ -32,7 +32,7 @@ class PublicOCSMiddleware extends Middleware {
 			return;
 		}
 
-		$controllerClassPath = explode('\\', get_class($controller));
+		$controllerClassPath = explode('\\', $controller::class);
 		$controllerShortClass = end($controllerClassPath);
 		$bruteforceProtectionAction = $controllerShortClass . '::' . $methodName;
 		$this->throttler->sleepDelayOrThrowOnMax($this->request->getRemoteAddress(), $bruteforceProtectionAction);
