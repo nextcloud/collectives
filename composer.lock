@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1555dc33c42f8d0c2b7a59c3a52d5540",
+    "content-hash": "548c128fb720d17dedcb6bafc01c83b1",
     "packages": [
         {
             "name": "predis/predis",
@@ -70,16 +70,16 @@
         },
         {
             "name": "teamtnt/tntsearch",
-            "version": "v5.0.0",
+            "version": "v5.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/teamtnt/tntsearch.git",
-                "reference": "3f6078c37d55feab3927d8f988f9e1e8b3aaa2a0"
+                "reference": "1a86ca3431dce7fcd816b153d5a340f5665bf40e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/teamtnt/tntsearch/zipball/3f6078c37d55feab3927d8f988f9e1e8b3aaa2a0",
-                "reference": "3f6078c37d55feab3927d8f988f9e1e8b3aaa2a0",
+                "url": "https://api.github.com/repos/teamtnt/tntsearch/zipball/1a86ca3431dce7fcd816b153d5a340f5665bf40e",
+                "reference": "1a86ca3431dce7fcd816b153d5a340f5665bf40e",
                 "shasum": ""
             },
             "require": {
@@ -128,7 +128,7 @@
             ],
             "support": {
                 "issues": "https://github.com/teamtnt/tntsearch/issues",
-                "source": "https://github.com/teamtnt/tntsearch/tree/v5.0.0"
+                "source": "https://github.com/teamtnt/tntsearch/tree/v5.0.1"
             },
             "funding": [
                 {
@@ -136,7 +136,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-04-15T20:07:13+00:00"
+            "time": "2025-06-17T16:10:52+00:00"
         }
     ],
     "packages-dev": [
@@ -845,20 +845,20 @@
         },
         {
             "name": "symfony/deprecation-contracts",
-            "version": "v3.0.2",
+            "version": "v3.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/deprecation-contracts.git",
-                "reference": "26954b3d62a6c5fd0ea8a2a00c0353a14978d05c"
+                "reference": "63afe740e99a13ba87ec199bb07bbdee937a5b62"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/deprecation-contracts/zipball/26954b3d62a6c5fd0ea8a2a00c0353a14978d05c",
-                "reference": "26954b3d62a6c5fd0ea8a2a00c0353a14978d05c",
+                "url": "https://api.github.com/repos/symfony/deprecation-contracts/zipball/63afe740e99a13ba87ec199bb07bbdee937a5b62",
+                "reference": "63afe740e99a13ba87ec199bb07bbdee937a5b62",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.0.2"
+                "php": ">=8.1"
             },
             "type": "library",
             "extra": {
@@ -867,7 +867,7 @@
                     "name": "symfony/contracts"
                 },
                 "branch-alias": {
-                    "dev-main": "3.0-dev"
+                    "dev-main": "3.6-dev"
                 }
             },
             "autoload": {
@@ -892,7 +892,7 @@
             "description": "A generic function and convention to trigger deprecation notices",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/deprecation-contracts/tree/v3.0.2"
+                "source": "https://github.com/symfony/deprecation-contracts/tree/v3.6.0"
             },
             "funding": [
                 {
@@ -908,16 +908,16 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-01-02T09:55:41+00:00"
+            "time": "2024-09-25T14:21:43+00:00"
         }
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=8.1",
+        "php": "^8.1",
         "ext-json": "*",
         "ext-pdo": "*",
         "ext-pdo_sqlite": "*"
@@ -925,5 +925,8 @@
     "platform-dev": {
         "ext-dom": "*"
     },
-    "plugin-api-version": "2.3.0"
+    "platform-overrides": {
+        "php": "8.1"
+    },
+    "plugin-api-version": "2.6.0"
 }
