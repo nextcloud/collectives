@@ -23,6 +23,7 @@ return function (RectorConfig $rectorConfig) {
 	$rectorConfig->sets([
 		SetList::PHP_74,
 		SetList::PHP_80,
+		SetList::PHP_81,
 	]);
 	$rectorConfig->rule(ReturnTypeFromStrictTypedPropertyRector::class);
 	$rectorConfig->rule(ReturnUnionTypeRector::class);

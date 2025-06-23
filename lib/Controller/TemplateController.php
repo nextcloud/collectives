@@ -54,9 +54,7 @@ class TemplateController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function index(int $collectiveId): DataResponse {
-		$templateInfos = $this->handleErrorResponse(function () use ($collectiveId): array {
-			return $this->templateService->getTemplates($collectiveId, $this->userId);
-		}, $this->logger);
+		$templateInfos = $this->handleErrorResponse(fn (): array => $this->templateService->getTemplates($collectiveId, $this->userId), $this->logger);
 		return new DataResponse(['templates' => $templateInfos]);
 	}
 
@@ -75,9 +73,7 @@ class TemplateController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function create(int $collectiveId, string $title, int $parentId): DataResponse {
-		$templateInfo = $this->handleErrorResponse(function () use ($parentId, $collectiveId, $title): PageInfo {
-			return $this->templateService->create($collectiveId, $parentId, $title, $this->userId);
-		}, $this->logger);
+		$templateInfo = $this->handleErrorResponse(fn (): PageInfo => $this->templateService->create($collectiveId, $parentId, $title, $this->userId), $this->logger);
 		return new DataResponse(['template' => $templateInfo]);
 	}
 
@@ -116,9 +112,7 @@ class TemplateController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function rename(int $collectiveId, int $id, string $title): DataResponse {
-		$templateInfo = $this->handleErrorResponse(function () use ($collectiveId, $id, $title): PageInfo {
-			return $this->templateService->rename($collectiveId, $id, $title, $this->userId);
-		}, $this->logger);
+		$templateInfo = $this->handleErrorResponse(fn (): PageInfo => $this->templateService->rename($collectiveId, $id, $title, $this->userId), $this->logger);
 		return new DataResponse(['template' => $templateInfo]);
 	}
 
@@ -137,9 +131,7 @@ class TemplateController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function setEmoji(int $collectiveId, int $id, ?string $emoji = null): DataResponse {
-		$templateInfo = $this->handleErrorResponse(function () use ($collectiveId, $id, $emoji): PageInfo {
-			return $this->templateService->setEmoji($collectiveId, $id, $emoji, $this->userId);
-		}, $this->logger);
+		$templateInfo = $this->handleErrorResponse(fn (): PageInfo => $this->templateService->setEmoji($collectiveId, $id, $emoji, $this->userId), $this->logger);
 		return new DataResponse(['template' => $templateInfo]);
 	}
 }

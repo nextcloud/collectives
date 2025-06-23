@@ -52,9 +52,7 @@ class TrashController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function index(): DataResponse {
-		$collectives = $this->handleErrorResponse(function (): array {
-			return $this->service->getCollectivesTrash($this->userId);
-		}, $this->logger);
+		$collectives = $this->handleErrorResponse(fn (): array => $this->service->getCollectivesTrash($this->userId), $this->logger);
 		return new DataResponse(['collectives' => $collectives]);
 	}
 
@@ -72,9 +70,7 @@ class TrashController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function delete(int $id, bool $circle = false): DataResponse {
-		$collective = $this->handleErrorResponse(function () use ($circle, $id): Collective {
-			return $this->service->deleteCollective($id, $this->userId, $circle);
-		}, $this->logger);
+		$collective = $this->handleErrorResponse(fn (): Collective => $this->service->deleteCollective($id, $this->userId, $circle), $this->logger);
 		return new DataResponse(['collective' => $collective]);
 	}
 
@@ -91,9 +87,7 @@ class TrashController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function restore(int $id): DataResponse {
-		$collective = $this->handleErrorResponse(function () use ($id): Collective {
-			return $this->service->restoreCollective($id, $this->userId);
-		}, $this->logger);
+		$collective = $this->handleErrorResponse(fn (): Collective => $this->service->restoreCollective($id, $this->userId), $this->logger);
 		return new DataResponse(['collective' => $collective]);
 	}
 }
