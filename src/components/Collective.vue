@@ -66,14 +66,15 @@ export default {
 			'currentCollective',
 			'currentCollectiveCanEdit',
 			'currentCollectiveIsPageShare',
+			'currentCollectivePath',
 		]),
 		...mapState(useSessionsStore, ['hasSession']),
 		...mapState(usePagesStore, [
 			'currentFileIdPage',
 			'currentPage',
-			'isIndexPage',
+			'isLandingPage',
 			'pagePath',
-			'pageSlugPath',
+			'currentPagePath',
 		]),
 		...mapState(useVersionsStore, ['selectedVersion']),
 
@@ -93,18 +94,14 @@ export default {
 		'currentPage.id'() {
 			this.selectVersion(null)
 
-			const routerParams = this.$router.currentRoute.params
-			// If the current page is not the one we are supposed to be on, redirect
-			if (this.currentPage && !this.isIndexPage) {
-				const actualUrl = `${routerParams.collectiveSlugPart}-${routerParams.collectiveId}/page-${routerParams.pageId}-${routerParams.pageSlug}`
-				const expectedUrl = this.pageSlugPath(this.currentPage)
-
-				if (actualUrl !== expectedUrl) {
-					this.$router.replace({ path: this.pagePath(this.currentPage), hash: document.location.hash })
-				}
-			} else if (this.currentCollective
-				&& `${routerParams.collectiveSlugPart}-${routerParams.collectiveId}` !== this.currentCollective.slug) {
-				this.$router.replace(this.collectivePath(this.currentCollective))
+			// Redirect to slugified URL if possible
+			if (this.currentCollective
+				&& this.isLandingPage
+				&& this.$route.fullPath !== this.currentCollectivePath) {
+				this.$router.replace(this.currentCollectivePath)
+			} else if (this.currentPage
+				&& this.$route.fullPath !== this.currentPagePath) {
+				this.$router.replace({ path: this.currentPagePath, hash: document.location.hash })
 			}
 		},
 		'notFound'(current) {

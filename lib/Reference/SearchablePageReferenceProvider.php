@@ -73,17 +73,18 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 			'collectiveName' => urldecode($matches[1]),
 			'pagePath' => urldecode($matches[2]),
 		];
+
 		preg_match('/\?fileId=(\d+)$/i', $url, $matches);
 		if ($matches && count($matches) > 1) {
 			$pagePath['fileId'] = (int)$matches[1];
 		}
 
-		if (preg_match('/page-(\d+)-(.+)$/i', $pagePath['pagePath'], $matches)) {
-			$pagePath['fileId'] = (int)$matches[1];
-			$pagePath['pagePath'] = urldecode($matches[2]);
+		if (preg_match('/(.+?)-(\d+)$/', $pagePath['pagePath'], $matches)) {
+			$pagePath['pagePath'] = urldecode($matches[0]);
+			$pagePath['fileId'] = (int)$matches[2];
 		}
 
-		if (preg_match('/(.+?)-(\d+)$/i', $pagePath['collectiveName'], $matches)) {
+		if (preg_match('/(.+?)-(\d+)$/', $pagePath['collectiveName'], $matches)) {
 			$pagePath['collectiveName'] = $matches[1];
 			$pagePath['collectiveId'] = (int)$matches[2];
 		}

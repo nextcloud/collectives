@@ -23,7 +23,7 @@ describe('Page link handling', function() {
 			})
 			.seedPage('Link Source', '', 'Readme.md').then(({ collectiveId, pageId }) => {
 				linkTestingCollectiveId = collectiveId
-				sourceUrl = new URL(`${baseUrl}/index.php/apps/collectives/Link-Testing-${collectiveId}/page-${pageId}-Link-Source`)
+				sourceUrl = new URL(`${baseUrl}/index.php/apps/collectives/Link-Testing-${collectiveId}/Link-Source-${pageId}`)
 			})
 		cy.seedPageContent('Link%20Testing/Link%20Target.md', 'Some content')
 		cy.uploadFile('test.md', 'text/markdown').then((id) => {
