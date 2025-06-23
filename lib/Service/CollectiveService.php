@@ -216,7 +216,7 @@ class CollectiveService extends CollectiveServiceBase {
 		}
 		$collective = $this->collectiveMapper->insert($collective);
 
-		$slug = $this->slugService->generateCollectiveSlug($collective->getId(), $name);
+		$slug = $this->slugService->generateCollectiveSlug($name);
 		$collective->setSlug($slug);
 		$this->collectiveMapper->update($collective);
 

@@ -62,7 +62,7 @@ class GenerateSlugs extends Command {
 
 		while ($row = $result->fetch()) {
 			$circle = $this->circleHelper->getCircle($row['circle_unique_id'], null, true);
-			$slug = $this->slugService->generateCollectiveSlug($row['id'], $circle->getSanitizedName());
+			$slug = $this->slugService->generateCollectiveSlug($circle->getSanitizedName());
 
 			$update
 				->setParameter('id', (int)$row['id'], IQueryBuilder::PARAM_INT)
