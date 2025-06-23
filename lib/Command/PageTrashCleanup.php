@@ -10,20 +10,22 @@ declare(strict_types=1);
 namespace OCA\Collectives\Command;
 
 use OC;
-use OC\Core\Command\Base;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Service\MissingDependencyException;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
 use OCA\Collectives\Trash\PageTrashBackend;
 use OCP\App\IAppManager;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\Console\Question\Question;
 
-class PageTrashCleanup extends Base {
+class PageTrashCleanup extends Command {
 	private ?PageTrashBackend $trashBackend = null;
 
 	public function __construct(
@@ -50,6 +52,7 @@ class PageTrashCleanup extends Base {
 			$output->writeln('<error>files_trashbin is disabled: collectives page trashbin is not available</error>');
 			return 1;
 		}
+		/** @var QuestionHelper $helper */
 		$helper = $this->getHelper('question');
 
 		$collectives = $this->collectiveMapper->getAll();
@@ -64,6 +67,7 @@ class PageTrashCleanup extends Base {
 				}
 
 				if ($foundCollectiveName === $collectiveName) {
+					/** @var Question $question */
 					$question = new ConfirmationQuestion('Are you sure you want to empty the page trashbin of collective ' . $collectiveName . '? This can not be undone. (y/N) ', false);
 					if (!$input->getOption('force') && !$helper->ask($input, $output, $question)) {
 						return -2;
@@ -78,6 +82,7 @@ class PageTrashCleanup extends Base {
 			return -1;
 		}
 
+		/** @var Question $question */
 		$question = new ConfirmationQuestion('Are you sure you want to empty the page trashbin of all collectives? This can not be undone (y/N).', false);
 		if (!$input->getOption('force') && !$helper->ask($input, $output, $question)) {
 			return -2;

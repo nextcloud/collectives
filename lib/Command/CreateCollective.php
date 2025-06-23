@@ -9,18 +9,18 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Command;
 
-use OC\Core\Command\Base;
 use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Service\CollectiveService;
 use OCP\IUserManager;
 use OCP\IUserSession;
 use OCP\L10N\IFactory;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CreateCollective extends Base {
+class CreateCollective extends Command {
 	public function __construct(
 		private CollectiveService $collectiveService,
 		private NodeHelper $nodeHelper,

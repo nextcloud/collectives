@@ -9,18 +9,18 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Command;
 
-use OC\Core\Command\Base;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Search\FileSearch\FileSearchException;
 use OCA\Collectives\Service\MissingDependencyException;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
 use OCA\Collectives\Service\SearchService;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class IndexCollectives extends Base {
+class IndexCollectives extends Command {
 	public function __construct(
 		private SearchService $searchService,
 		private CollectiveMapper $collectiveMapper,
