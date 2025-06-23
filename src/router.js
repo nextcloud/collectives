@@ -17,7 +17,7 @@ const routes = [
 		component: Home,
 	},
 	{
-		path: '/_/print/:collectiveSlugPart-:collectiveId(\\d+)',
+		path: '/_/print/:collectiveSlug-:collectiveId(\\d+)',
 		component: CollectivePrintView,
 		props: (route) => route.params,
 	},
@@ -27,7 +27,7 @@ const routes = [
 		props: (route) => route.params,
 	},
 	{
-		path: '/p/:token/print/:collectiveSlugPart-:collectiveId(\\d+)',
+		path: '/p/:token/print/:collectiveSlug-:collectiveId(\\d+)',
 		component: CollectivePrintView,
 		props: (route) => route.params,
 	},
@@ -37,11 +37,11 @@ const routes = [
 		props: (route) => route.params,
 	},
 	{
-		path: '/p/:token/:collectiveSlugPart-:collectiveId(\\d+)',
+		path: '/p/:token/:collectiveSlug-:collectiveId(\\d+)',
 		component: CollectiveView,
 		props: (route) => route.params,
 		children: [
-			{ path: 'page-:pageId(\\d+)-:pageSlug' },
+			{ path: ':pageSlug-:pageId(\\d+)' },
 			{ path: ':page*' },
 		],
 	},
@@ -52,11 +52,11 @@ const routes = [
 		children: [{ path: ':page*' }],
 	},
 	{
-		path: '/:collectiveSlugPart-:collectiveId(\\d+)',
+		path: '/:collectiveSlug-:collectiveId(\\d+)',
 		component: CollectiveView,
 		props: (route) => route.params,
 		children: [
-			{ path: 'page-:pageId(\\d+)-:pageSlug' },
+			{ path: ':pageSlug-:pageId(\\d+)' },
 			{ path: ':page*' },
 		],
 	},

@@ -64,7 +64,9 @@ export const usePagesStore = defineStore('pages', {
 				? false
 				: (!rootStore.pageId && !rootStore.pageParam) || rootStore.pageParam === INDEX_PAGE
 		},
-		isIndexPage: (state) => state.currentPage.fileName === INDEX_PAGE + '.md',
+		isIndexPage(state) {
+			return state.currentPage.fileName === INDEX_PAGE + '.md'
+		},
 
 		rootPageForCollective(state) {
 			return (collectiveId) => state.pagesForCollective(collectiveId)[0]
@@ -111,6 +113,12 @@ export const usePagesStore = defineStore('pages', {
 		},
 
 		currentPage(state) {
+			const rootStore = useRootStore()
+			if (rootStore.pageId) {
+				return state.pageById(rootStore.pageId)
+			} else if (rootStore.fileIdQuery) {
+				return state.pageById(Number(rootStore.fileIdQuery))
+			}
 			return state.pages.find(p => (p.id === state.currentPageIds[state.currentPageIds.length - 1]))
 		},
 
@@ -121,29 +129,22 @@ export const usePagesStore = defineStore('pages', {
 		},
 
 		pagePath: (state) => (page) => {
-			const rootStore = useRootStore()
-			// For public collectives, prepend `/p/{shareToken}`
-			let prefix = ''
-			if (rootStore.isPublic) {
-				prefix = `/p/${encodeURIComponent(rootStore.shareTokenParam)}`
-			}
-			return `${prefix}/${state.pageSlugPath(page)}`
-		},
-
-		pageSlugPath: (state) => (page) => {
 			const collectivesStore = useCollectivesStore()
-			const collective = collectivesStore.currentCollective.slug || collectivesStore.currentCollective.name
 			if (!page.slug) {
 				const { filePath, fileName, title, id } = page
 				const titlePart = fileName !== INDEX_PAGE + '.md' && title
 
-				const pagePath = [collective, ...filePath.split('/'), titlePart]
+				const pagePath = [...filePath.split('/'), titlePart]
 					.filter(Boolean).map(encodeURIComponent).join('/')
-
-				return `${pagePath}?fileId=${id}`
+				return pagePath
+					? `${collectivesStore.currentCollectivePath}/${pagePath}?fileId=${id}`
+					: collectivesStore.currentCollectivePath
 			}
+			return `${collectivesStore.currentCollectivePath}/${page.slug}-${page.id}`
+		},
 
-			return [collective, `page-${page.id}-${page.slug}`].join('/')
+		currentPagePath(state) {
+			return state.pagePath(state.currentPage)
 		},
 
 		pagePathTitle: () => (page) => {
