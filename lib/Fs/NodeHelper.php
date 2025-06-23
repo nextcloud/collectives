@@ -192,9 +192,9 @@ class NodeHelper {
 	public static function folderHasSubPages(Folder $folder): bool {
 		try {
 			foreach ($folder->getDirectoryListing() as $node) {
-				if ($node instanceof File &&
-					self::isPage($node) &&
-					!self::isIndexPage($node)) {
+				if ($node instanceof File
+					&& self::isPage($node)
+					&& !self::isIndexPage($node)) {
 					return true;
 				}
 
@@ -211,14 +211,14 @@ class NodeHelper {
 	public static function folderHasSubPage(Folder $folder, string $title): int {
 		try {
 			foreach ($folder->getDirectoryListing() as $node) {
-				if ($node instanceof File &&
-					strcmp($node->getName(), $title . PageInfo::SUFFIX) === 0) {
+				if ($node instanceof File
+					&& strcmp($node->getName(), $title . PageInfo::SUFFIX) === 0) {
 					return 1;
 				}
 
-				if ($node instanceof Folder &&
-					strcmp($node->getName(), $title) === 0 &&
-					$node->nodeExists(PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX)) {
+				if ($node instanceof Folder
+					&& strcmp($node->getName(), $title) === 0
+					&& $node->nodeExists(PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX)) {
 					return 2;
 				}
 			}

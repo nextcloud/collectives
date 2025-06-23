@@ -32,14 +32,14 @@ use RuntimeException;
  */
 class Collective extends Entity implements JsonSerializable {
 	/** @var int */
-	public const defaultPermissions =
-		Constants::PERMISSION_ALL * 100 + // Moderator
-		Constants::PERMISSION_ALL;        // Member
+	public const defaultPermissions
+		= Constants::PERMISSION_ALL * 100 // Moderator
+		+ Constants::PERMISSION_ALL;        // Member
 
-	public const editPermissions =
-		Constants::PERMISSION_UPDATE +
-		Constants::PERMISSION_CREATE +
-		Constants::PERMISSION_DELETE;
+	public const editPermissions
+		= Constants::PERMISSION_UPDATE
+		+ Constants::PERMISSION_CREATE
+		+ Constants::PERMISSION_DELETE;
 
 	public const pageOrders = [
 		0 => 'byOrder',
@@ -95,8 +95,8 @@ class Collective extends Entity implements JsonSerializable {
 	public function setModeratorPermissions(int $permissions): void {
 		// moderator permissions are stored in thousands and hundreds
 		$this->setPermissions(
-			$permissions * 100 +          // Moderator
-			$this->getMemberPermissions() // Member
+			$permissions * 100          // Moderator
+			+ $this->getMemberPermissions() // Member
 		);
 	}
 
@@ -108,8 +108,8 @@ class Collective extends Entity implements JsonSerializable {
 	public function setMemberPermissions(int $permissions): void {
 		// member permissions are stored in tens and ones
 		$this->setPermissions(
-			$this->getModeratorPermissions() * 100 + // Moderator
-			$permissions                             // Member
+			$this->getModeratorPermissions() * 100 // Moderator
+			+ $permissions                             // Member
 		);
 	}
 

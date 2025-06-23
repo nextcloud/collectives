@@ -71,8 +71,8 @@ abstract class CollectivesPublicOCSController extends OCSController {
 		}
 
 		// If we are authenticated properly
-		if ($this->session->get('public_link_authenticated_token') === $this->getToken() &&
-			$this->session->get('public_link_authenticated_password_hash') === $this->getPasswordHash()) {
+		if ($this->session->get('public_link_authenticated_token') === $this->getToken()
+			&& $this->session->get('public_link_authenticated_password_hash') === $this->getPasswordHash()) {
 			return true;
 		}
 

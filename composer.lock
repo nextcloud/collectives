@@ -70,16 +70,16 @@
         },
         {
             "name": "teamtnt/tntsearch",
-            "version": "v5.0.1",
+            "version": "v5.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/teamtnt/tntsearch.git",
-                "reference": "1a86ca3431dce7fcd816b153d5a340f5665bf40e"
+                "reference": "3f6078c37d55feab3927d8f988f9e1e8b3aaa2a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/teamtnt/tntsearch/zipball/1a86ca3431dce7fcd816b153d5a340f5665bf40e",
-                "reference": "1a86ca3431dce7fcd816b153d5a340f5665bf40e",
+                "url": "https://api.github.com/repos/teamtnt/tntsearch/zipball/3f6078c37d55feab3927d8f988f9e1e8b3aaa2a0",
+                "reference": "3f6078c37d55feab3927d8f988f9e1e8b3aaa2a0",
                 "shasum": ""
             },
             "require": {
@@ -128,7 +128,7 @@
             ],
             "support": {
                 "issues": "https://github.com/teamtnt/tntsearch/issues",
-                "source": "https://github.com/teamtnt/tntsearch/tree/v5.0.1"
+                "source": "https://github.com/teamtnt/tntsearch/tree/v5.0.0"
             },
             "funding": [
                 {
@@ -136,7 +136,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-06-17T16:10:52+00:00"
+            "time": "2025-04-15T20:07:13+00:00"
         }
     ],
     "packages-dev": [

@@ -153,8 +153,8 @@ class CircleHelper {
 	public function findCircle(string $name, string $userId, int $level = Member::LEVEL_MEMBER): ?Circle {
 		$circles = $this->getCircles($userId);
 		foreach ($circles as $circle) {
-			if (!strcmp(strtolower($circle->getName()), strtolower($name)) ||
-				!strcmp(strtolower($circle->getSanitizedName()), strtolower($name))) {
+			if (!strcmp(strtolower($circle->getName()), strtolower($name))
+				|| !strcmp(strtolower($circle->getSanitizedName()), strtolower($name))) {
 				if (!$this->hasLevel($circle->getSingleId(), $userId, $level)) {
 					return null;
 				}
@@ -180,8 +180,8 @@ class CircleHelper {
 		$this->circlesManager->stopSession();
 
 		foreach ($circles as $circle) {
-			if (!strcmp(strtolower($circle->getName()), strtolower($name)) ||
-				!strcmp(strtolower($circle->getSanitizedName()), strtolower($name))) {
+			if (!strcmp(strtolower($circle->getName()), strtolower($name))
+				|| !strcmp(strtolower($circle->getSanitizedName()), strtolower($name))) {
 				return true;
 			}
 		}

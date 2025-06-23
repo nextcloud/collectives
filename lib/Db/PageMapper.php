@@ -28,8 +28,8 @@ class PageMapper extends QBMapper {
 	}
 
 	public function updateOrInsert(Page $page): Page {
-		if ($page->getId() === null &&
-			null !== $oldPage = $this->findByFileId($page->getFileId())) {
+		if ($page->getId() === null
+			&& null !== $oldPage = $this->findByFileId($page->getFileId())) {
 			$page->setId($oldPage->getId());
 			return $this->update($page);
 		}
