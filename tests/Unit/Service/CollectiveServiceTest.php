@@ -167,8 +167,8 @@ class CollectiveServiceTest extends TestCase {
 		$this->collectiveMapper
 			->expects(self::once())
 			->method('insert')
-			->with(self::callback(fn ($collective) => is_callable([$collective, 'getCircleId']) &&
-					$collective->getCircleId() === 'CircleId'))
+			->with(self::callback(fn ($collective) => is_callable([$collective, 'getCircleId'])
+					&& $collective->getCircleId() === 'CircleId'))
 			->willReturn($collective);
 		$this->l10n
 			->expects(self::once())
@@ -198,8 +198,8 @@ class CollectiveServiceTest extends TestCase {
 		$this->collectiveMapper
 			->expects(self::once())
 			->method('insert')
-			->with(self::callback(fn ($collective) => is_callable([$collective, 'getCircleId']) &&
-					$collective->getCircleId() === 'CircleId'))
+			->with(self::callback(fn ($collective) => is_callable([$collective, 'getCircleId'])
+					&& $collective->getCircleId() === 'CircleId'))
 			->willReturn($collective);
 		[$collective, $info] = $this->service->createCollective($this->userId, 'de', 'free');
 		self::assertIsCallable([$collective, 'jsonSerialize']);

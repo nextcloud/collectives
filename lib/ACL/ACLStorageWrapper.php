@@ -31,8 +31,8 @@ class ACLStorageWrapper extends Wrapper {
 		if ($this->inShare) {
 			// Check if owner of the share is actually allowed to share
 			// $canRead = $this->permissions & (Constants::PERMISSION_READ + Constants::PERMISSION_SHARE);
-			$canRead = ($this->permissions & Constants::PERMISSION_READ) &&
-				($this->permissions & Constants::PERMISSION_SHARE);
+			$canRead = ($this->permissions & Constants::PERMISSION_READ)
+				&& ($this->permissions & Constants::PERMISSION_SHARE);
 		} else {
 			$canRead = $this->permissions & Constants::PERMISSION_READ;
 		}
@@ -73,10 +73,10 @@ class ACLStorageWrapper extends Wrapper {
 			}
 		}
 		$targetPermissions = $this->file_exists($target) ? Constants::PERMISSION_UPDATE : Constants::PERMISSION_CREATE;
-		return $this->checkPermissions(Constants::PERMISSION_READ) &&
-			$this->checkPermissions(Constants::PERMISSION_DELETE) &&
-			$this->checkPermissions($targetPermissions) &&
-			parent::rename($source, $target);
+		return $this->checkPermissions(Constants::PERMISSION_READ)
+			&& $this->checkPermissions(Constants::PERMISSION_DELETE)
+			&& $this->checkPermissions($targetPermissions)
+			&& parent::rename($source, $target);
 	}
 
 	public function opendir($path) {
@@ -88,9 +88,9 @@ class ACLStorageWrapper extends Wrapper {
 
 	public function copy($source, $target): bool {
 		$targetPermissions = $this->file_exists($target) ? Constants::PERMISSION_UPDATE : Constants::PERMISSION_CREATE;
-		return $this->checkPermissions(Constants::PERMISSION_READ) &&
-			$this->checkPermissions($targetPermissions) &&
-			parent::copy($source, $target);
+		return $this->checkPermissions(Constants::PERMISSION_READ)
+			&& $this->checkPermissions($targetPermissions)
+			&& parent::copy($source, $target);
 	}
 
 	public function touch($path, $mtime = null): bool {
@@ -155,13 +155,13 @@ class ACLStorageWrapper extends Wrapper {
 	}
 
 	public function is_dir($path): bool {
-		return $this->checkPermissions(Constants::PERMISSION_READ) &&
-			parent::is_dir($path);
+		return $this->checkPermissions(Constants::PERMISSION_READ)
+			&& parent::is_dir($path);
 	}
 
 	public function is_file($path): bool {
-		return $this->checkPermissions(Constants::PERMISSION_READ) &&
-			parent::is_file($path);
+		return $this->checkPermissions(Constants::PERMISSION_READ)
+			&& parent::is_file($path);
 	}
 
 	public function stat($path): array|false {

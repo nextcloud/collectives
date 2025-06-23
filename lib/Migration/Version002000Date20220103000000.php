@@ -18,9 +18,9 @@ use OCP\Migration\SimpleMigrationStep;
 
 class Version002000Date20220103000000 extends SimpleMigrationStep {
 	/** @var int */
-	private const defaultPermissions =
-		Constants::PERMISSION_ALL * 100 + // Moderator
-		Constants::PERMISSION_ALL;        // Member
+	private const defaultPermissions
+		= Constants::PERMISSION_ALL * 100 // Moderator
+		+ Constants::PERMISSION_ALL;        // Member
 
 	public function changeSchema(IOutput $output, Closure $schemaClosure, array $options): ?ISchemaWrapper {
 		/** @var ISchemaWrapper $schema */
