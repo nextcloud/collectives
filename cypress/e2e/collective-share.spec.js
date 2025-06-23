@@ -108,10 +108,8 @@ describe('Collective Share', function() {
 				.should('contain', 'Share me')
 			cy.get('.app-content-list-item-line-one:visible').eq(1)
 				.should('contain', 'New page')
-			if (!['stable29'].includes(Cypress.env('ncVersion'))) {
-				cy.get('.search-dialog-container')
-					.should('be.visible')
-			}
+			cy.get('.search-dialog-container')
+				.should('be.visible')
 		})
 		it('Allows unsharing a collective', function() {
 			cy.loginAs('bob')

@@ -265,61 +265,59 @@ describe('Pages', function() {
 		})
 	})
 
-	if (!['stable29'].includes(Cypress.env('ncVersion'))) {
-		describe('Search dialog', () => {
-			beforeEach(() => {
-				cy.get('input[name="pageFilter"]').type('collective')
-				cy.get('.search-dialog-container', { timeout: 5000 })
-					.should('be.visible')
-					.as('searchDialog')
-			})
-
-			it('Shows search dialog', () => {
-				cy.get('.search-dialog__info')
-					.invoke('text')
-					.invoke('trim')
-					.should('equal', 'Found 5 matches for "collective"')
-			})
-
-			it('Clears search', () => {
-				cy.get('.search-dialog__buttons')
-					.find('button[aria-label="Clear search"]')
-					.click()
-				cy.get('@searchDialog').should('not.exist')
-			})
-
-			it('Toggles highlight all', () => {
-				cy.get('.search-dialog__highlight-all')
-					.find('span.checkbox-radio-switch-checkbox')
-					.click()
-
-				cy.get('.search-dialog__info')
-					.invoke('text')
-					.invoke('trim')
-					.should('equal', 'Match 1 of 5 for "collective"')
-			})
-
-			it('Moves to next search', () => {
-				cy.get('.search-dialog__buttons')
-					.find('button[aria-label="Find next match"]')
-					.click()
-
-				cy.get('.search-dialog__info')
-					.invoke('text')
-					.invoke('trim')
-					.should('equal', 'Match 2 of 5 for "collective"')
-			})
-
-			it('Moves to previous search', () => {
-				cy.get('.search-dialog__buttons')
-					.find('button[aria-label="Find previous match"]')
-					.click()
-
-				cy.get('.search-dialog__info')
-					.invoke('text')
-					.invoke('trim')
-					.should('equal', 'Match 5 of 5 for "collective"')
-			})
+	describe('Search dialog', () => {
+		beforeEach(() => {
+			cy.get('input[name="pageFilter"]').type('collective')
+			cy.get('.search-dialog-container', { timeout: 5000 })
+				.should('be.visible')
+				.as('searchDialog')
 		})
-	}
+
+		it('Shows search dialog', () => {
+			cy.get('.search-dialog__info')
+				.invoke('text')
+				.invoke('trim')
+				.should('equal', 'Found 5 matches for "collective"')
+		})
+
+		it('Clears search', () => {
+			cy.get('.search-dialog__buttons')
+				.find('button[aria-label="Clear search"]')
+				.click()
+			cy.get('@searchDialog').should('not.exist')
+		})
+
+		it('Toggles highlight all', () => {
+			cy.get('.search-dialog__highlight-all')
+				.find('span.checkbox-radio-switch-checkbox')
+				.click()
+
+			cy.get('.search-dialog__info')
+				.invoke('text')
+				.invoke('trim')
+				.should('equal', 'Match 1 of 5 for "collective"')
+		})
+
+		it('Moves to next search', () => {
+			cy.get('.search-dialog__buttons')
+				.find('button[aria-label="Find next match"]')
+				.click()
+
+			cy.get('.search-dialog__info')
+				.invoke('text')
+				.invoke('trim')
+				.should('equal', 'Match 2 of 5 for "collective"')
+		})
+
+		it('Moves to previous search', () => {
+			cy.get('.search-dialog__buttons')
+				.find('button[aria-label="Find previous match"]')
+				.click()
+
+			cy.get('.search-dialog__info')
+				.invoke('text')
+				.invoke('trim')
+				.should('equal', 'Match 5 of 5 for "collective"')
+		})
+	})
 })
