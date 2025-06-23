@@ -36,8 +36,15 @@ class CollectiveTeamResourceProvider implements ITeamResourceProvider {
 		return 'Collective';
 	}
 
+	/**
+	 * @throws NotFoundException
+	 */
 	public function getIconSvg(): string {
-		return file_get_contents(__DIR__ . '/../../img/collectives.svg');
+		$icon = file_get_contents(__DIR__ . '/../../img/collectives.svg');
+		if ($icon === false) {
+			throw new NotFoundException('Failed to read file content of img/collectives.svg');
+		}
+		return $icon;
 	}
 
 	public function getSharedWith(string $teamId): array {

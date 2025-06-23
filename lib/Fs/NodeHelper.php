@@ -126,7 +126,10 @@ class NodeHelper {
 		}
 
 		if (!mb_check_encoding($content, 'UTF-8')) {
-			$content = mb_convert_encoding($content, 'UTF-8');
+			$convertedContent = mb_convert_encoding($content, 'UTF-8');
+			if ($convertedContent !== false) {
+				$content = $convertedContent;
+			}
 		}
 
 		return $content;
