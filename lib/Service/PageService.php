@@ -316,7 +316,7 @@ class PageService {
 				$this->getParentPageId($newFile),
 				$userId,
 				$this->userManager->getDisplayName($userId));
-			$slug = $title ? $this->generateSlugForPage($title, $newFile) : null;
+			$slug = $title ? $this->slugService->generatePageSlug($title) : null;
 			$this->updatePage($collectiveId, $newFile->getId(), $userId, null, null, $slug);
 			$pageInfo->setSlug($slug);
 		} catch (FilesNotFoundException|InvalidPathException $e) {
@@ -780,7 +780,7 @@ class PageService {
 		if (null !== $newFile = $this->moveOrCopyPage($collectiveFolder, $file, $parentId, $title, true)) {
 			$file = $newFile;
 		}
-		$slug = $this->generateSlugForPage($title ?: $pageInfo->getTitle(), $file);
+		$slug = $this->slugService->generatePageSlug($title ?: $pageInfo->getTitle());
 		try {
 			$this->updatePage($collectiveId, $file->getId(), $userId, $pageInfo->getEmoji(), $pageInfo->isFullWidth(), $slug);
 		} catch (InvalidPathException|FilesNotFoundException $e) {
@@ -808,7 +808,7 @@ class PageService {
 		if (null !== $newFile = $this->moveOrCopyPage($collectiveFolder, $file, $parentId, $title, false)) {
 			$file = $newFile;
 		}
-		$slug = $title ? $this->generateSlugForPage($title, $file) : null;
+		$slug = $title ? $this->slugService->generatePageSlug($title) : null;
 
 		try {
 			$this->updatePage($collectiveId, $file->getId(), $userId, null, null, $slug);
@@ -1120,13 +1120,5 @@ class PageService {
 		}
 
 		return $backlinks;
-	}
-
-	private function generateSlugForPage(string $title, ?File $file): ?string {
-		if (!$file) {
-			return null;
-		}
-
-		return $this->slugService->generatePageSlug($title);
 	}
 }
