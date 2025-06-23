@@ -31,11 +31,13 @@ OC.L10N.register(
     "Cannot copy, please copy the link manually" : "Haiwezi kunakili, tafadhali nakili kiungio kwa njia za kawaida",
     "Password" : "Nenosiri",
     "Create share" : "Tengeneza ushirikishaji",
+    "Unshare" : "Usishirikishe",
     "Download" : "Pakua",
     "You" : "Wewe",
     "Attachments" : "Viambatanisho",
     "Sharing" : "inashirikisha",
     "Copied" : "Iliyonakiliwa",
+    "Cannot copy" : "Haiwezi kunakili",
     "_%n byte_::_%n bytes_" : ["%n byte","%n bytes"]
 },
 "nplurals=2; plural=(n != 1);");
