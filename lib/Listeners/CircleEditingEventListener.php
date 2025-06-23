@@ -48,7 +48,7 @@ class CircleEditingEventListener implements IEventListener {
 		}
 
 		// Update slug if name has changed
-		$slug = $this->slugService->generateCollectiveSlug($collective->getId(), $name);
+		$slug = $this->slugService->generateCollectiveSlug($name);
 		$collective->setSlug($slug);
 		$this->collectiveMapper->update($collective);
 	}
