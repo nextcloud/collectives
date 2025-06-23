@@ -26,7 +26,6 @@ use OCA\Collectives\Middleware\PublicOCSMiddleware;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Mount\MountProvider;
 use OCA\Collectives\Reference\SearchablePageReferenceProvider;
-use OCA\Collectives\Reference\SearchablePageReferenceProvider29;
 use OCA\Collectives\Search\CollectiveProvider;
 use OCA\Collectives\Search\PageContentProvider;
 use OCA\Collectives\Search\PageProvider;
@@ -45,7 +44,6 @@ use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\AppFramework\Http\Events\BeforeTemplateRenderedEvent;
-use OCP\Collaboration\Reference\IPublicReferenceProvider;
 use OCP\Collaboration\Reference\RenderReferenceEvent;
 use OCP\Dashboard\IAPIWidgetV2;
 use OCP\Files\Config\IMountProviderCollection;
@@ -115,12 +113,7 @@ class Application extends App implements IBootstrap {
 		$context->registerSearchProvider(PageProvider::class);
 		$context->registerSearchProvider(PageContentProvider::class);
 
-		if (interface_exists(IPublicReferenceProvider::class)) {
-			// Nextcloud 30+
-			$context->registerReferenceProvider(SearchablePageReferenceProvider::class);
-		} else {
-			$context->registerReferenceProvider(SearchablePageReferenceProvider29::class);
-		}
+		$context->registerReferenceProvider(SearchablePageReferenceProvider::class);
 
 		$cacheListener = $this->getContainer()->get(CacheListener::class);
 		$cacheListener->listen();
