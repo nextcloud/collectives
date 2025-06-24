@@ -1102,7 +1102,7 @@ class PageService {
 		$backlinks = [];
 		foreach ($allPages as $p) {
 			$file = $this->nodeHelper->getFileById($this->getFolder($collectiveId, $p->getId(), $userId), $p->getId());
-			$content = NodeHelper::getContent($file);
+			$content = $this->nodeHelper->getContent($file);
 			if ($this->matchBacklinks($page, $content)) {
 				$backlinks[] = $p;
 			}
