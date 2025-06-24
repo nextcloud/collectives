@@ -14,12 +14,14 @@ use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
 use OCP\Files\File;
 use OCP\Files\Folder;
+use OCP\Files\GenericFileException;
 use OCP\Files\InvalidPathException;
 use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\Files\NotPermittedException as FilesNotPermittedException;
 use OCP\IDBConnection;
 use OCP\IL10N;
 use OCP\Lock\LockedException;
+use Psr\Log\LoggerInterface;
 
 class NodeHelper {
 	private bool $db4ByteSupport;
@@ -27,6 +29,7 @@ class NodeHelper {
 	public function __construct(
 		IDBConnection $db,
 		private IL10N $l10n,
+		private LoggerInterface $logger,
 	) {
 		$this->db4ByteSupport = $db->supports4ByteText();
 	}
@@ -105,11 +108,13 @@ class NodeHelper {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public static function getContent(File $file): string {
+	public function getContent(File $file): string {
 		try {
 			$content = $file->getContent();
 		} catch (FilesNotPermittedException|LockedException $e) {
 			throw new NotPermittedException('Failed to read file content for ' . $file->getPath(), 0, $e);
+		} catch (GenericFileException $e) {
+			throw new NotFoundException('Failed to read file content for ' . $file->getPath(), 0, $e);
 		}
 
 		// blank files return false when using object storage as primary storage
@@ -129,6 +134,8 @@ class NodeHelper {
 			$convertedContent = mb_convert_encoding($content, 'UTF-8');
 			if ($convertedContent !== false) {
 				$content = $convertedContent;
+			} else {
+				$this->logger->warning('Failed convert file content to UTF-8 for ' . $file->getPath());
 			}
 		}
 

@@ -16,6 +16,7 @@ use OCA\Collectives\Service\NotFoundException;
 use OCP\IDBConnection;
 use OCP\IL10N;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 class NodeHelperTest extends TestCase {
 	private IL10N $l10n;
@@ -30,8 +31,11 @@ class NodeHelperTest extends TestCase {
 		$this->l10n = $this->getMockBuilder(IL10N::class)
 			->disableOriginalConstructor()
 			->getMock();
+		$logger = $this->getMockBuilder(LoggerInterface::class)
+			->disableOriginalConstructor()
+			->getMock();
 
-		$this->helper = new NodeHelper($db, $this->l10n);
+		$this->helper = new NodeHelper($db, $this->l10n, $logger);
 	}
 
 	public function nameProvider(): array {
