@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<NcEmptyContent :name="t('collectives', 'Page not found: {page}', { page: pageParam })"
+	<NcEmptyContent :name="notFoundString"
 		:description="t('collectives', 'Select a page from the list or create a new one.')"
 		class="content-not-found">
 		<template #icon>
@@ -28,7 +28,13 @@ export default {
 	},
 
 	computed: {
-		...mapState(useRootStore, ['pageParam']),
+		...mapState(useRootStore, ['pageParam', 'pageId']),
+
+		notFoundString() {
+			return this.pageParam
+				? t('collectives', 'Page not found: {page}', { page: this.pageParam })
+				: t('collectives', 'Page with ID {id} not found', { id: this.pageId })
+		},
 	},
 }
 </script>
