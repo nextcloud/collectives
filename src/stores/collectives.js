@@ -43,13 +43,16 @@ export const useCollectivesStore = defineStore('collectives', {
 			)
 		},
 
-		collectivePath(state) {
-			return (collective) => {
+		collectivePath() {
+			return (collective, print = false) => {
 				const rootStore = useRootStore()
 				const slugOrName = collective.slug ? `${collective.slug}-${collective.id}` : encodeURIComponent(collective.name)
 				let prefix = ''
 				if (rootStore.isPublic) {
 					prefix = `/p/${encodeURIComponent(rootStore.shareTokenParam)}`
+					prefix += print ? '/print' : ''
+				} else {
+					prefix += print ? '/_/print' : ''
 				}
 				return `${prefix}/${slugOrName}`
 			}
@@ -57,6 +60,12 @@ export const useCollectivesStore = defineStore('collectives', {
 
 		currentCollectivePath(state) {
 			return state.collectivePath(state.currentCollective)
+		},
+
+		collectivePrintPath(state) {
+			return (collective) => {
+				return state.collectivePath(collective, true)
+			}
 		},
 
 		collectiveTitle(state) {
