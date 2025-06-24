@@ -111,7 +111,7 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 		}
 
 		// link examples:
-		// https://nextcloud.local/apps/collectives/supacollective-123/page-14457-spectre-slug
+		// https://nextcloud.local/apps/collectives/supacollective-123/spectre-slug-14457
 		// https://nextcloud.local/apps/collectives/supacollective/Tutos/Hacking/Spectre?fileId=14457
 		// https://nextcloud.local/apps/collectives/supacollective/Tutos/Hacking/Spectre
 		$startRegexes = [
@@ -222,7 +222,7 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 		$pageReferenceInfo['page'] = $page;
 
 		$collectivesLink = $this->urlGenerator->linkToRouteAbsolute('collectives.start.index') . ($public ? 'p/' . $sharingToken . '/' : '');
-		$link = $collectivesLink . $this->pageService->getPageLink($collective->getName(), $page);
+		$link = $collectivesLink . $this->pageService->getPageLink($collective->getUrlPath(), $page);
 		if (str_contains($referenceText, '#')) {
 			$link .= '#' . explode('#', $referenceText)[1];
 		}

@@ -164,6 +164,10 @@ class PageInfo implements JsonSerializable {
 		$this->shareToken = $shareToken;
 	}
 
+	public function getUrlPath(): string {
+		return $this->slug ? $this->slug . '-' . $this->id : $this->title;
+	}
+
 	public function jsonSerialize(): array {
 		return [
 			'id' => $this->id,
