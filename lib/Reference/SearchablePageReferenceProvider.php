@@ -74,16 +74,19 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 			'pagePath' => urldecode($matches[2]),
 		];
 
+		// URL with fileId query param
 		preg_match('/\?fileId=(\d+)$/i', $url, $matches);
 		if ($matches && count($matches) > 1) {
 			$pagePath['fileId'] = (int)$matches[1];
 		}
 
+		// Slugified page URL path
 		if (preg_match('/(.+?)-(\d+)$/', $pagePath['pagePath'], $matches)) {
 			$pagePath['pagePath'] = urldecode($matches[0]);
 			$pagePath['fileId'] = (int)$matches[2];
 		}
 
+		// Slugified collectives URL path
 		if (preg_match('/(.+?)-(\d+)$/', $pagePath['collectiveName'], $matches)) {
 			$pagePath['collectiveName'] = $matches[1];
 			$pagePath['collectiveId'] = (int)$matches[2];
@@ -94,9 +97,10 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 
 	public function matchUrl(string $url): ?array {
 		// link examples:
-		// https://nextcloud.local/apps/collectives/supacollective/p/MsdwSCmP9F6jcQX/Tutos/Hacking/Spectre?fileId=14457
-		// https://nextcloud.local/apps/collectives/supacollective/p/MsdwSCmP9F6jcQX/Tutos/Hacking/Spectre
-		// https://nextcloud.local/apps/collectives/supacollective/index.php/p/MsdwSCmP9F6jcQX/Tutos/Hacking/Spectre?fileId=14457
+		// https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective-123/spectre-slug-14457
+		// https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/Tutos/Hacking/Spectre?fileId=14457
+		// https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/Tutos/Hacking/Spectre
+		// https://nextcloud.local/index.php/apps/collectives/p/supacollective/MsdwSCmP9F6jcQX/Tutos/Hacking/Spectre?fileId=14457
 		$startPublicRegexes = [
 			$this->urlGenerator->getAbsoluteURL('/apps/' . Application::APP_NAME . '/p'),
 			$this->urlGenerator->getAbsoluteURL('/index.php/apps/' . Application::APP_NAME . '/p'),
@@ -275,12 +279,25 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 		return $referenceId;
 	}
 
+	private function getCollectiveIdPrefix(string $referenceId, ?string $sharingToken = null): string {
+		$pageReferenceInfo = $this->getPagePathFromDirectLink($referenceId);
+		$collectiveId = $pageReferenceInfo['collectiveId'] ?? null;
+		if (!$collectiveId) {
+			try {
+				$collective = $this->getCollective(null, $pageReferenceInfo['collectiveName'], $sharingToken);
+				$collectiveId = $collective->getId();
+			} catch (NotFoundException) {
+			}
+		}
+		return $collectiveId ? $collectiveId . '_' : '';
+	}
+
 	public function getCacheKey(string $referenceId): ?string {
-		return $this->userId ?? '';
+		return $this->getCollectiveIdPrefix($referenceId) . ($this->userId ?? '');
 	}
 
 	public function getCacheKeyPublic(string $referenceId, string $sharingToken): ?string {
-		return $sharingToken;
+		return $this->getCollectiveIdPrefix($referenceId, $sharingToken) . $sharingToken;
 	}
 
 	public function invalidateUserCache(string $userId): void {

@@ -60,6 +60,16 @@ class SearchablePageReferenceProviderTest extends TestCase {
 		}
 	}
 
+	private function slugUrlProvider(): array {
+		return [
+			// internal
+			['https://nextcloud.local/apps/collectives/supacollective-123/spectre-slug-14457', 'spectre-slug-14457'],
+
+			// public
+			['https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective-123/spectre-slug-14457', 'spectre-slug-14457'],
+		];
+	}
+
 	private function urlProvider(): array {
 		return [
 			// internal
@@ -97,9 +107,23 @@ class SearchablePageReferenceProviderTest extends TestCase {
 	}
 
 	/**
+	 * @dataProvider slugUrlProvider
+	 */
+	public function testMatchSlugUrl(string $url, string $pagePath): void {
+		$expectedPagePath = [
+			'collectiveName' => 'supacollective',
+			'pagePath' => $pagePath,
+			'fileId' => 14457,
+			'collectiveId' => 123,
+		];
+
+		self::assertEquals($expectedPagePath, $this->provider->matchUrl($url));
+	}
+
+	/**
 	 * @dataProvider urlProvider
 	 */
-	public function testMatchUrlInternal(string $url, string $pagePath): void {
+	public function testMatchUrl(string $url, string $pagePath): void {
 		$expectedPagePath = [
 			'collectiveName' => 'supacollective',
 			'pagePath' => $pagePath,
@@ -111,11 +135,11 @@ class SearchablePageReferenceProviderTest extends TestCase {
 	/**
 	 * @dataProvider urlFileIdProvider
 	 */
-	public function testMatchUrlInternalFileId(string $url, string $pagePath): void {
+	public function testMatchUrlFileId(string $url, string $pagePath): void {
 		$expectedPagePath = [
 			'collectiveName' => 'supacollective',
 			'pagePath' => $pagePath,
-			'fileId' => '14457',
+			'fileId' => 14457,
 		];
 
 		self::assertEquals($expectedPagePath, $this->provider->matchUrl($url));
