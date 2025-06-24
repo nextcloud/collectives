@@ -129,7 +129,7 @@ describe('Page link handling', function() {
 				: url.pathname
 			cy.location().should((loc) => {
 				expect(loc.pathname).to.match(new RegExp(`^${expectedPathname || pathname}$`))
-				expect(loc.search).to.eq(expectedSearch || url.search)
+				expect(loc.search).to.eq(expectedSearch ?? url.search)
 			})
 		})
 
@@ -193,50 +193,53 @@ describe('Page link handling', function() {
 		it('Opens link with URL to page in this collective in same tab', function() {
 			const href = `${baseUrl}/index.php/apps/collectives/Link%20Testing/Link%20Target`
 			testLinkToSameTab(href, {
-				expectedSearch: `?fileId=${linkTargetPageId}`,
+				expectedPathname: `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/Link-Target-${linkTargetPageId}`,
 			})
 		})
 		it('Opens link with absolute path to page in this collective in same tab', function() {
 			const href = '/index.php/apps/collectives/Link%20Testing/Link%20Target'
 			testLinkToSameTab(href, {
-				expectedSearch: `?fileId=${linkTargetPageId}`,
+				expectedPathname: `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/Link-Target-${linkTargetPageId}`,
 			})
 		})
 		it('Opens link with relative path to page in this collective with fileId in same tab', function() {
 			const href = `./Link%20Target?fileId=${linkTargetPageId}`
-			testLinkToSameTab(href)
+			testLinkToSameTab(href, {
+				expectedPathname: `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/Link-Target-${linkTargetPageId}`,
+				expectedSearch: '',
+			})
 		})
 		it('Opens link with relative path to page in this collective with fileId and outdated path in same tab', function() {
 			const href = `./Link%20Target%20Outdated?fileId=${linkTargetPageId}`
 			testLinkToSameTab(href, {
-				expectedPathname: '/index.php/apps/collectives/Link%20Testing/Link%20Target',
-				expectedSearch: `?fileId=${linkTargetPageId}`,
+				expectedPathname: `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/Link-Target-${linkTargetPageId}`,
+				expectedSearch: '',
 			})
 		})
 		it('Opens link with relative path to page in this collective without fileId in same tab', function() {
 			const href = './Link%20Target'
 			testLinkToSameTab(href, {
-				expectedPathname: '/index.php/apps/collectives/Link%20Testing/Link%20Target',
-				expectedSearch: `?fileId=${linkTargetPageId}`,
+				expectedPathname: `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/Link-Target-${linkTargetPageId}`,
 			})
 		})
 		it('Opens link with relative path to markdown file in this collective without fileId in same tab', function() {
-			// TODO: We want '.md' to be stripped when opening the link
 			const href = './Link%20Target.md'
 			testLinkToSameTab(href, {
-				expectedPathname: '/index.php/apps/collectives/Link%20Testing/Link%20Target',
-				expectedSearch: `?fileId=${linkTargetPageId}`,
+				expectedPathname: `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/Link-Target-${linkTargetPageId}`,
 			})
 		})
 
 		it('Opens link with URL to page in other collective with fileId in same tab', function() {
 			const href = `${baseUrl}/index.php/apps/collectives/Another%20Collective/First%20Page?fileId=${anotherCollectiveFirstPageId}`
-			testLinkToSameTab(href)
+			testLinkToSameTab(href, {
+				expectedPathname: `/index.php/apps/collectives/Another-Collective-${anotherCollectiveId}/First-Page-${anotherCollectiveFirstPageId}`,
+				expectedSearch: '',
+			})
 		})
 		it('Opens link with absolute path to page in other collective without fileId in same tab', function() {
 			const href = '/index.php/apps/collectives/Another%20Collective/First%20Page'
 			testLinkToSameTab(href, {
-				expectedSearch: `?fileId=${anotherCollectiveFirstPageId}`,
+				expectedPathname: `/index.php/apps/collectives/Another-Collective-${anotherCollectiveId}/First-Page-${anotherCollectiveFirstPageId}`,
 			})
 		})
 	})
@@ -247,7 +250,7 @@ describe('Page link handling', function() {
 			cy.switchToEditMode()
 			testLinkToSameTab(href, {
 				edit: true,
-				expectedSearch: `?fileId=${linkTargetPageId}`,
+				expectedPathname: `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/Link-Target-${linkTargetPageId}`,
 			})
 		})
 		it('Opens link with absolute path to page in this collective in same tab', function() {
@@ -255,21 +258,25 @@ describe('Page link handling', function() {
 			cy.switchToEditMode()
 			testLinkToSameTab(href, {
 				edit: true,
-				expectedSearch: `?fileId=${linkTargetPageId}`,
+				expectedPathname: `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/Link-Target-${linkTargetPageId}`,
 			})
 		})
 		it('Opens link with relative path to page in this collective with fileId in same tab', function() {
 			const href = `./Link%20Target?fileId=${linkTargetPageId}`
 			cy.switchToEditMode()
-			testLinkToSameTab(href, { edit: true })
+			testLinkToSameTab(href, {
+				edit: true,
+				expectedPathname: `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/Link-Target-${linkTargetPageId}`,
+				expectedSearch: '',
+			})
 		})
 		it('Opens link with relative path to page in this collective with fileId and outdated path in same tab', function() {
 			const href = `./Link%20Target%20Outdated?fileId=${linkTargetPageId}`
 			cy.switchToEditMode()
 			testLinkToSameTab(href, {
 				edit: true,
-				expectedPathname: '/index.php/apps/collectives/Link%20Testing/Link%20Target',
-				expectedSearch: `?fileId=${linkTargetPageId}`,
+				expectedPathname: `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/Link-Target-${linkTargetPageId}`,
+				expectedSearch: '',
 			})
 		})
 		it('Opens link with relative path to page in this collective without fileId in same tab', function() {
@@ -277,31 +284,34 @@ describe('Page link handling', function() {
 			cy.switchToEditMode()
 			testLinkToSameTab(href, {
 				edit: true,
-				expectedSearch: `?fileId=${linkTargetPageId}`,
+				expectedPathname: `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/Link-Target-${linkTargetPageId}`,
 			})
 		})
 		it('Opens link with relative path to markdown file in this collective without fileId in same tab', function() {
-			// TODO: We want '.md' to be stripped when opening the link
 			const href = './Link%20Target.md'
 			cy.switchToEditMode()
 			testLinkToSameTab(href, {
 				edit: true,
-				expectedPathname: '/index.php/apps/collectives/Link%20Testing/Link%20Target',
-				expectedSearch: `?fileId=${linkTargetPageId}`,
+				expectedPathname: `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/Link-Target-${linkTargetPageId}`,
 			})
 		})
 
 		it('Opens link with URL to page in other collective with fileId in same tab', function() {
 			const href = `${baseUrl}/index.php/apps/collectives/Another%20Collective/First%20Page?fileId=${anotherCollectiveFirstPageId}`
 			cy.switchToEditMode()
-			testLinkToSameTab(href, { edit: true })
+			testLinkToSameTab(href, {
+				edit: true,
+				expectedPathname: `/index.php/apps/collectives/Another-Collective-${anotherCollectiveId}/First-Page-${anotherCollectiveFirstPageId}`,
+				expectedSearch: '',
+			})
 		})
 		it('Opens link with absolute path to page in other collective without fileId in same tab', function() {
 			const href = '/index.php/apps/collectives/Another%20Collective/First%20Page'
 			cy.switchToEditMode()
 			testLinkToSameTab(href, {
 				edit: true,
-				expectedSearch: `?fileId=${anotherCollectiveFirstPageId}`,
+				expectedPathname: `/index.php/apps/collectives/Another-Collective-${anotherCollectiveId}/First-Page-${anotherCollectiveFirstPageId}`,
+				expectedSearch: '',
 			})
 		})
 	})
