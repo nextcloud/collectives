@@ -52,7 +52,7 @@ class TextMentionListener implements IEventListener {
 			? $collective->getEmoji() . ' ' . $collective->getName()
 			: $collective->getName();
 
-		$pageLink = $this->urlGenerator->linkToRouteAbsolute('collectives.start.index') . $this->pageService->getPageLink($collective->getName(), $pageInfo);
+		$pageLink = $this->urlGenerator->linkToRouteAbsolute('collectives.start.index') . $this->pageService->getPageLink($collective->getUrlPath(), $pageInfo);
 		$pageTitle = $pageInfo->getTitle() === PageInfo::INDEX_PAGE_TITLE
 			? $this->l10n->t('Landing page')
 			: $pageInfo->getTitle();

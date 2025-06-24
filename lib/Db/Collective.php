@@ -280,6 +280,10 @@ class Collective extends Entity implements JsonSerializable {
 		return $this->level >= $this->getSharePermissionLevel();
 	}
 
+	public function getUrlPath(): string {
+		return $this->slug ? $this->slug . '-' . $this->id : $this->name;
+	}
+
 	public function jsonSerialize(): array {
 		return [
 			'id' => $this->id,

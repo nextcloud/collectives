@@ -1058,17 +1058,19 @@ class PageService {
 		$this->notifyPush($collectiveId);
 	}
 
-	public function getPageLink(string $collectiveName, PageInfo $pageInfo, bool $withFileId = true): string {
-		$collectiveRoute = rawurlencode($collectiveName);
+	public function getPageLink(string $collectiveUrlPath, PageInfo $pageInfo, bool $withFileId = true): string {
+		$collectiveRoute = rawurlencode($collectiveUrlPath);
 		$pagePathRoute = implode('/', array_map('rawurlencode', explode('/', $pageInfo->getFilePath())));
-		$pageTitleRoute = ($pageInfo->getFileName() === PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX) ? '' : rawurlencode($pageInfo->getTitle());
+		$pageTitleRoute = ($pageInfo->getFileName() === PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX) ? '' : rawurlencode($pageInfo->getUrlPath());
 		$fullRoute = implode('/', array_filter([
 			$collectiveRoute,
 			$pagePathRoute,
 			$pageTitleRoute
 		]));
 
-		return $withFileId ? $fullRoute . '?fileId=' . $pageInfo->getId() : $fullRoute;
+		return $withFileId && !$pageInfo->getSlug()
+			? $fullRoute . '?fileId=' . $pageInfo->getId()
+			: $fullRoute;
 	}
 
 	public function matchBacklinks(PageInfo $pageInfo, string $content): bool {
