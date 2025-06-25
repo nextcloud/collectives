@@ -1058,22 +1058,28 @@ class PageService {
 		$this->notifyPush($collectiveId);
 	}
 
-	public function getPageLink(string $collectiveUrlPath, PageInfo $pageInfo, bool $withFileId = true): string {
+	public function getPageLink(string $collectiveUrlPath, PageInfo $pageInfo, bool $withFileId = true, bool $forceNoSlug = false): string {
 		$collectiveRoute = rawurlencode($collectiveUrlPath);
-		$pagePathRoute = implode('/', array_map('rawurlencode', explode('/', $pageInfo->getFilePath())));
-		$pageTitleRoute = ($pageInfo->getFileName() === PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX) ? '' : rawurlencode($pageInfo->getUrlPath());
-		$fullRoute = implode('/', array_filter([
+		$pagePathRoute = '';
+		$fileIdQuery = '';
+
+		if (!$forceNoSlug && $pageInfo->getSlug()) {
+			$pageTitleRoute = rawurlencode($pageInfo->getUrlPath());
+		} else {
+			$pagePathRoute = implode('/', array_map('rawurlencode', explode('/', $pageInfo->getFilePath())));
+			$pageTitleRoute = ($pageInfo->getFileName() === PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX) ? '' : rawurlencode($pageInfo->getTitle());
+			if ($withFileId) {
+				$fileIdQuery = '?fileId=' . $pageInfo->getId();
+			}
+		}
+		return implode('/', array_filter([
 			$collectiveRoute,
 			$pagePathRoute,
 			$pageTitleRoute
-		]));
-
-		return $withFileId && !$pageInfo->getSlug()
-			? $fullRoute . '?fileId=' . $pageInfo->getId()
-			: $fullRoute;
+		])) . $fileIdQuery;
 	}
 
-	public function matchBacklinks(PageInfo $pageInfo, string $content): bool {
+	public function matchBacklinks(Collective $collective, PageInfo $pageInfo, string $content): bool {
 		$prefix = '/(\[[^]]+]\(|<)';
 		$suffix = '(( \([^)]+\))?\)|>)/';
 
@@ -1088,19 +1094,31 @@ class PageService {
 
 		$appPath = '\/+apps\/+collectives\/+';
 
-		$pagePath = str_replace('/', '/+', preg_quote($this->getPageLink(explode('/', $pageInfo->getCollectivePath())[1], $pageInfo, false), '/'));
+		$collectivePath = '(' . implode('|', [
+			'[[:ascii:]]+\-' . $collective->getId(),
+			rawurlencode($collective->getName()),
+		]) . ')\/+';
+
+		$pagePathSlug = $collectivePath . '[[:ascii:]]+\-' . $pageInfo->getId();
+		$pagePathNoSlug = $collectivePath . str_replace('/', '/+', preg_quote($this->getPageLink('', $pageInfo, false, true), '/'));
 		$fileId = '.+\?fileId=' . $pageInfo->getId();
+
+		$relativeSlugPathPattern = $prefix . $relativeUrl . $basePath . $appPath . $pagePathSlug . $suffix;
+		$absoluteSlugPathPattern = $prefix . $absoluteUrl . $basePath . $appPath . $pagePathSlug . $suffix;
 
 		$relativeFileIdPattern = $prefix . $relativeUrl . $fileId . $suffix;
 		$absoluteFileIdPattern = $prefix . $absoluteUrl . $basePath . $appPath . $fileId . $suffix;
 
-		$relativePathPattern = $prefix . $relativeUrl . $basePath . $appPath . $pagePath . $suffix;
-		$absolutePathPattern = $prefix . $absoluteUrl . $basePath . $appPath . $pagePath . $suffix;
+		$relativeNoSlugPathPattern = $prefix . $relativeUrl . $basePath . $appPath . $pagePathNoSlug . $suffix;
+		$absoluteNoSlugPathPattern = $prefix . $absoluteUrl . $basePath . $appPath . $pagePathNoSlug . $suffix;
 
-		return preg_match($relativeFileIdPattern, $content)
-			|| preg_match($relativePathPattern, $content)
+		$matches = preg_match($relativeSlugPathPattern, $content)
+			|| preg_match($relativeFileIdPattern, $content)
+			|| preg_match($relativeNoSlugPathPattern, $content)
+			|| preg_match($absoluteSlugPathPattern, $content)
 			|| preg_match($absoluteFileIdPattern, $content)
-			|| preg_match($absolutePathPattern, $content);
+			|| preg_match($absoluteNoSlugPathPattern, $content);
+		return $matches;
 	}
 
 	/**
@@ -1111,12 +1129,13 @@ class PageService {
 	public function getBacklinks(int $collectiveId, int $id, string $userId): array {
 		$page = $this->find($collectiveId, $id, $userId);
 		$allPages = $this->findAll($collectiveId, $userId);
+		$collective = $this->getCollective($collectiveId, $userId);
 
 		$backlinks = [];
 		foreach ($allPages as $p) {
 			$file = $this->nodeHelper->getFileById($this->getFolder($collectiveId, $p->getId(), $userId), $p->getId());
 			$content = $this->nodeHelper->getContent($file);
-			if ($this->matchBacklinks($page, $content)) {
+			if ($this->matchBacklinks($collective, $page, $content)) {
 				$backlinks[] = $p;
 			}
 		}
