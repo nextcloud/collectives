@@ -124,8 +124,11 @@ describe('Page link handling', function() {
 		cy.url().then((newBaseUrl) => {
 			const url = new URL(href, newBaseUrl)
 			const encodedCollectiveName = encodeURIComponent('Link Testing')
+			const encodedSlugCollectiveUrl = `Link-Testing-${linkTestingCollectiveId}`
 			const pathname = isPublic
-				? url.pathname.replace(`/${encodedCollectiveName}`, `/p/\\w+/${encodedCollectiveName}`)
+				? url.pathname
+					.replace(`/${encodedCollectiveName}`, `/p/\\w+/${encodedCollectiveName}`)
+					.replace(`/${encodedSlugCollectiveUrl}`, `/p/\\w+/${encodedSlugCollectiveUrl}`)
 				: url.pathname
 			cy.location().should((loc) => {
 				expect(loc.pathname).to.match(new RegExp(`^${expectedPathname || pathname}$`))
@@ -142,8 +145,11 @@ describe('Page link handling', function() {
 
 		cy.url().then(() => {
 			const encodedCollectiveName = encodeURIComponent('Link Testing')
+			const encodedSlugCollectiveUrl = `Link-Testing-${linkTestingCollectiveId}`
 			const pathname = isPublic
-				? sourceUrl.pathname.replace(`/${encodedCollectiveName}`, `/p/\\w+/${encodedCollectiveName}`)
+				? sourceUrl.pathname
+					.replace(`/${encodedCollectiveName}`, `/p/\\w+/${encodedCollectiveName}`)
+					.replace(`/${encodedSlugCollectiveUrl}`, `/p/\\w+/${encodedSlugCollectiveUrl}`)
 				: sourceUrl.pathname
 			cy.location().should((loc) => {
 				expect(loc.pathname).to.match(new RegExp(`^${pathname}$`))
@@ -364,8 +370,7 @@ describe('Page link handling', function() {
 		})
 	})
 
-	// TODO: Adapt tests to Nextcloud 29+
-	describe.skip('Link handling public share', function() {
+	describe('Link handling in public share', function() {
 		let shareUrl
 
 		it('Share the collective', function() {
@@ -407,14 +412,21 @@ describe('Page link handling', function() {
 			cy.logout()
 			cy.visit(`${shareUrl}/Link Source`)
 			const href = '/index.php/apps/collectives/Link%20Testing/Link%20Target'
-			testLinkToSameTab(href, { isPublic: true })
+			testLinkToSameTab(href, {
+				isPublic: true,
+				expectedPathname: `/index.php/apps/collectives/p/\\w+/Link-Testing-${linkTestingCollectiveId}/Link-Target-${linkTargetPageId}`,
+			})
 		})
 		it('Public share in edit mode: opens link with absolute path to page in this collective in same tab', function() {
 			cy.logout()
 			cy.visit(`${shareUrl}/Link Source`)
 			const href = '/index.php/apps/collectives/Link%20Testing/Link%20Target'
 			cy.switchToEditMode()
-			testLinkToSameTab(href, { edit: true, isPublic: true })
+			testLinkToSameTab(href, {
+				edit: true,
+				isPublic: true,
+				expectedPathname: `/index.php/apps/collectives/p/\\w+/Link-Testing-${linkTestingCollectiveId}/Link-Target-${linkTargetPageId}`,
+			})
 		})
 		it('Public share in view mode: opens link to external website in new tab', function() {
 			cy.logout()
