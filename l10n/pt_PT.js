@@ -43,6 +43,7 @@ OC.L10N.register(
     "Link copied" : "Hiperligação copiada",
     "Copied" : "Copiado",
     "Cannot copy" : "Não é possível copiar",
-    "Copy share link" : "Copie partilhe ligação"
+    "Copy share link" : "Copie partilhe ligação",
+    "Template" : "Template"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
