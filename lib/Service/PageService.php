@@ -31,6 +31,7 @@ use OCP\IConfig;
 use OCP\IUserManager;
 use OCP\Lock\LockedException;
 use Psr\Container\ContainerInterface;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class PageService {
 	private const DEFAULT_PAGE_TITLE = 'New Page';
@@ -49,7 +50,7 @@ class PageService {
 		private IConfig $config,
 		ContainerInterface $container,
 		private SessionService $sessionService,
-		private SlugService $slugService,
+		private SluggerInterface $slugger,
 	) {
 		try {
 			$this->pushQueue = $container->get(IQueue::class);
@@ -316,7 +317,7 @@ class PageService {
 				$this->getParentPageId($newFile),
 				$userId,
 				$this->userManager->getDisplayName($userId));
-			$slug = $title ? $this->slugService->generatePageSlug($title) : null;
+			$slug = $title ? $this->slugger->slug($title)->toString() : null;
 			$this->updatePage($collectiveId, $newFile->getId(), $userId, null, null, $slug);
 			$pageInfo->setSlug($slug);
 		} catch (FilesNotFoundException|InvalidPathException $e) {
@@ -780,7 +781,7 @@ class PageService {
 		if (null !== $newFile = $this->moveOrCopyPage($collectiveFolder, $file, $parentId, $title, true)) {
 			$file = $newFile;
 		}
-		$slug = $this->slugService->generatePageSlug($title ?: $pageInfo->getTitle());
+		$slug = $this->slugger->slug($title ?: $pageInfo->getTitle())->toString();
 		try {
 			$this->updatePage($collectiveId, $file->getId(), $userId, $pageInfo->getEmoji(), $pageInfo->isFullWidth(), $slug);
 		} catch (InvalidPathException|FilesNotFoundException $e) {
@@ -808,7 +809,7 @@ class PageService {
 		if (null !== $newFile = $this->moveOrCopyPage($collectiveFolder, $file, $parentId, $title, false)) {
 			$file = $newFile;
 		}
-		$slug = $title ? $this->slugService->generatePageSlug($title) : null;
+		$slug = $title ? $this->slugger->slug($title)->toString() : null;
 
 		try {
 			$this->updatePage($collectiveId, $file->getId(), $userId, null, null, $slug);
