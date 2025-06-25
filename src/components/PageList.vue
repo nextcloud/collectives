@@ -407,7 +407,7 @@ export default {
 			const oldFilterString = this.filterString
 			try {
 				const result = await this.contentSearch(this.filterString)
-				this.contentFilteredPages = result.data?.data || []
+				this.contentFilteredPages = result.data?.ocs.data.pages || []
 			} finally {
 				// prevent showing old results
 				if (oldFilterString === this.filterString) {
