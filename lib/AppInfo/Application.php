@@ -138,9 +138,9 @@ class Application extends App implements IBootstrap {
 			$context->registerSetupCheck(CirclesAppIsEnableCheck::class);
 		}
 
-		$context->registerService(SluggerInterface::class, function (ContainerInterface $c) {
+		$context->registerService(SluggerInterface::class, function () {
 			return new AsciiSlugger();
-		});
+		}, false);
 	}
 
 	public function boot(IBootcontext $context): void {
