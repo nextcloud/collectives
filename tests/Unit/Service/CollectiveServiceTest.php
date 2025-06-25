@@ -31,6 +31,7 @@ use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IL10N;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\String\UnicodeString;
 
 class CollectiveServiceTest extends TestCase {
 	private string $userId = 'jane';
@@ -98,8 +99,9 @@ class CollectiveServiceTest extends TestCase {
 				return $name;
 			});
 
+		$slug = new UnicodeString('free-123');
 		$slugger = $this->createMock(SluggerInterface::class);
-		$slugger->method('slug')->willReturn('free-123');
+		$slugger->method('slug')->willReturn($slug);
 
 		$this->service = new CollectiveService(
 			$appManager,

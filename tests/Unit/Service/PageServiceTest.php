@@ -33,6 +33,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\String\UnicodeString;
 
 class PageServiceTest extends TestCase {
 	private PageMapper $pageMapper;
@@ -94,6 +95,10 @@ class PageServiceTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
+		$slug = new UnicodeString('free-123');
+		$slugger = $this->createMock(SluggerInterface::class);
+		$slugger->method('slug')->willReturn($slug);
+
 		$this->service = new PageService(
 			$appManager,
 			$this->pageMapper,
@@ -104,7 +109,7 @@ class PageServiceTest extends TestCase {
 			$this->config,
 			$container,
 			$sessionService,
-			$this->createMock(SluggerInterface::class),
+			$slugger,
 		);
 	}
 
@@ -414,6 +419,7 @@ class PageServiceTest extends TestCase {
 		$indexPageInfo->fromFile($indexFile, 1);
 		$indexPageInfo->setParentId(101);
 		$indexPageInfo->setTitle('testfolder');
+		$indexPageInfo->setSlug('free-123');
 		$indexPageInfo->setLastUserId('jane');
 		array_unshift($pageInfos, $indexPageInfo);
 
