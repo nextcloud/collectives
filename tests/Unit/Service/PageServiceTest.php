@@ -26,13 +26,13 @@ use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
 use OCA\Collectives\Service\PageService;
 use OCA\Collectives\Service\SessionService;
-use OCA\Collectives\Service\SlugService;
 use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\IConfig;
 use OCP\IUserManager;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class PageServiceTest extends TestCase {
 	private PageMapper $pageMapper;
@@ -104,7 +104,7 @@ class PageServiceTest extends TestCase {
 			$this->config,
 			$container,
 			$sessionService,
-			$this->createMock(SlugService::class),
+			$this->createMock(SluggerInterface::class),
 		);
 	}
 

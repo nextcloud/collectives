@@ -12,19 +12,19 @@ namespace OCA\Collectives\Command;
 use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Service\CircleHelper;
 use OCA\Collectives\Service\PageService;
-use OCA\Collectives\Service\SlugService;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class GenerateSlugs extends Command {
 	public function __construct(
 		private IDBConnection $connection,
 		private CircleHelper $circleHelper,
 		private PageService $pageService,
-		private SlugService $slugService,
+		private SluggerInterface $slugger,
 	) {
 		parent::__construct();
 	}
@@ -62,7 +62,7 @@ class GenerateSlugs extends Command {
 
 		while ($row = $result->fetch()) {
 			$circle = $this->circleHelper->getCircle($row['circle_unique_id'], null, true);
-			$slug = $this->slugService->generateCollectiveSlug($circle->getSanitizedName());
+			$slug = $this->slugger->slug($circle->getSanitizedName())->toString();
 
 			$update
 				->setParameter('id', (int)$row['id'], IQueryBuilder::PARAM_INT)
@@ -93,7 +93,7 @@ class GenerateSlugs extends Command {
 					continue;
 				}
 
-				$slug = $this->slugService->generatePageSlug($pageInfo->getTitle());
+				$slug = $this->slugger->slug($pageInfo->getTitle())->toString();
 				$update
 					->setParameter('file_id', $pageInfo->getId(), IQueryBuilder::PARAM_INT)
 					->setParameter('slug', $slug, IQueryBuilder::PARAM_STR)

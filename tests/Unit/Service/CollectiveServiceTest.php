@@ -25,12 +25,12 @@ use OCA\Collectives\Service\CollectiveHelper;
 use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\CollectiveShareService;
 use OCA\Collectives\Service\NotFoundException;
-use OCA\Collectives\Service\SlugService;
 use OCA\Collectives\Service\UnprocessableEntityException;
 use OCP\App\IAppManager;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IL10N;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class CollectiveServiceTest extends TestCase {
 	private string $userId = 'jane';
@@ -98,8 +98,8 @@ class CollectiveServiceTest extends TestCase {
 				return $name;
 			});
 
-		$slugService = $this->createMock(SlugService::class);
-		$slugService->method('generateCollectiveSlug')->willReturn('free-123');
+		$slugger = $this->createMock(SluggerInterface::class);
+		$slugger->method('slug')->willReturn('free-123');
 
 		$this->service = new CollectiveService(
 			$appManager,
@@ -113,7 +113,7 @@ class CollectiveServiceTest extends TestCase {
 			$this->l10n,
 			$eventDispatcher,
 			$nodeHelper,
-			$slugService,
+			$slugger,
 		);
 	}
 

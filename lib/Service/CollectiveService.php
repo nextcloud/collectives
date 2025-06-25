@@ -29,6 +29,7 @@ use OCP\Files\InvalidPathException;
 use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\Files\NotPermittedException as FilesNotPermittedException;
 use OCP\IL10N;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class CollectiveService extends CollectiveServiceBase {
 	private ?PageTrashBackend $pageTrashBackend = null;
@@ -46,7 +47,7 @@ class CollectiveService extends CollectiveServiceBase {
 		private IL10N $l10n,
 		private IEventDispatcher $eventDispatcher,
 		private NodeHelper $nodeHelper,
-		private SlugService $slugService,
+		private SluggerInterface $slugger,
 	) {
 		parent::__construct($collectiveMapper, $circleHelper);
 	}
@@ -216,7 +217,7 @@ class CollectiveService extends CollectiveServiceBase {
 		}
 		$collective = $this->collectiveMapper->insert($collective);
 
-		$slug = $this->slugService->generateCollectiveSlug($name);
+		$slug = $this->slugger->slug($name)->toString();
 		$collective->setSlug($slug);
 		$this->collectiveMapper->update($collective);
 

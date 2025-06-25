@@ -17,11 +17,7 @@ class SlugService {
 	) {
 	}
 
-	public function generateCollectiveSlug(string $name): string {
-		return $this->slugger->slug($name)->toString();
-	}
-
-	public function generatePageSlug(string $title): string {
-		return $this->slugger->slug($title)->toString();
+	public function generateSlug(string $string): string {
+		return $this->slugger->slug($string)->toString();
 	}
 }
