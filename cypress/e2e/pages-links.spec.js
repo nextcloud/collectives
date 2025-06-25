@@ -58,6 +58,7 @@ describe('Page link handling', function() {
 
 ## Links supposed to open in same window
 
+* Slugified URL to page in this collective: [Link Target](${baseUrl}/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/Link-Target-${linkTargetPageId})
 * URL to page in this collective: [Link Target](${baseUrl}/index.php/apps/collectives/Link%20Testing/Link%20Target)
 * Absolute path to page in this collective: [Link Target](/index.php/apps/collectives/Link%20Testing/Link%20Target)
 * Relative path to page in this collective with fileId: [Link Target](./Link%20Target?fileId=${linkTargetPageId})
@@ -196,6 +197,12 @@ describe('Page link handling', function() {
 	})
 
 	describe('Link handling to collectives in view mode', function() {
+		it('Opens link with slugified URL to page in this collective in same tab', function() {
+			const href = `${baseUrl}/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/Link-Target-${linkTargetPageId}`
+			testLinkToSameTab(href, {
+				expectedPathname: `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/Link-Target-${linkTargetPageId}`,
+			})
+		})
 		it('Opens link with URL to page in this collective in same tab', function() {
 			const href = `${baseUrl}/index.php/apps/collectives/Link%20Testing/Link%20Target`
 			testLinkToSameTab(href, {
@@ -251,6 +258,14 @@ describe('Page link handling', function() {
 	})
 
 	describe('Link handling to collectives in edit mode', function() {
+		it('Opens link with slugified URL to page in this collective in same tab', function() {
+			const href = `${baseUrl}/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/Link-Target-${linkTargetPageId}`
+			cy.switchToEditMode()
+			testLinkToSameTab(href, {
+				edit: true,
+				expectedPathname: `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/Link-Target-${linkTargetPageId}`,
+			})
+		})
 		it('Opens link with URL to page in this collective in same tab', function() {
 			const href = `${baseUrl}/index.php/apps/collectives/Link%20Testing/Link%20Target`
 			cy.switchToEditMode()
