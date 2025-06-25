@@ -58,6 +58,7 @@ In your Nextcloud instance, simply navigate to **»Apps«**, find the
 	</background-jobs>
 	<repair-steps>
 		<post-migration>
+			<step>OCA\Collectives\Migration\GenerateSlugs</step>
 			<step>OCA\Collectives\Migration\MigrateTemplates</step>
 		</post-migration>
 	</repair-steps>
