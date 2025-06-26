@@ -22,6 +22,7 @@ OC.L10N.register(
     "Remove from favorites" : "Remover dos favoritos",
     "Move or copy" : "Mover ou copiar",
     "Title" : "Título",
+    "Clear search" : "Limpar pesquisa",
     "Favorite" : "Favorito",
     "Favorites" : "Favoritos",
     "Deleted" : "Eliminado",
@@ -30,6 +31,7 @@ OC.L10N.register(
     "Cannot copy, please copy the link manually" : "Não foi possível copiar, copie a ligação manualmente",
     "Set password" : "Definir palavra-passe",
     "Password" : "Password",
+    "Create share" : "Criar partilha",
     "Add another link" : "Adicionar outra hiperligação",
     "Advanced settings" : "Definições avançadas",
     "Unshare" : "Cancelar partilha",
@@ -44,6 +46,7 @@ OC.L10N.register(
     "Copied" : "Copiado",
     "Cannot copy" : "Não é possível copiar",
     "Copy share link" : "Copie partilhe ligação",
-    "Template" : "Template"
+    "Template" : "Template",
+    "_%n byte_::_%n bytes_" : ["%n byte","%n bytes","%n bytes"]
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
