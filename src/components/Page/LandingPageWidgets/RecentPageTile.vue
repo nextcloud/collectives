@@ -96,12 +96,12 @@ export default {
 
 	scroll-snap-align: start;
 	border-radius: var(--border-radius-large);
-	box-shadow: 0 0 8px 0 var(--color-box-shadow);
+	box-shadow: 0 0 4px 0 var(--color-box-shadow);
 
 	padding: 8px;
 
 	&:hover {
-		box-shadow: 0 0 4px 0 var(--color-box-shadow);
+		box-shadow: 0 0 8px 0 var(--color-box-shadow);
 	}
 
 	&.dark {
