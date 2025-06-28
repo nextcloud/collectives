@@ -46,7 +46,6 @@ OC.L10N.register(
     "Copied" : "Copiado",
     "Cannot copy" : "Não é possível copiar",
     "Copy share link" : "Copie partilhe ligação",
-    "Template" : "Template",
     "_%n byte_::_%n bytes_" : ["%n byte","%n bytes","%n bytes"]
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

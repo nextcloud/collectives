@@ -37,6 +37,7 @@ OC.L10N.register(
     "View only" : "Sólo lectura",
     "Can edit" : "Puede editar",
     "Cannot copy, please copy the link manually" : "No se ha podido copiar, por favor, copia el enlace manualmente",
+    "Actions for \"{title}\"" : "Acciones para \"{title}\"",
     "Error generating password from password policy" : "Error al generar la contraseña según la política de contraseñas",
     "Please enter the following required information before creating the share" : "Por favor, ingrese la siguiente información requerida antes de crear el recurso compartido",
     "Password protection (enforced)" : "Protección con contraseña (exigida)",
@@ -69,7 +70,6 @@ OC.L10N.register(
     "Link copied" : "Enlace copiado",
     "Copied" : "Copiado",
     "Cannot copy" : "No se puede copiar",
-    "Sort by title" : "Ordenar por título",
     "_%n byte_::_%n bytes_" : ["%n byte","%n bytes","%n bytes"]
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

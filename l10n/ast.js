@@ -152,17 +152,8 @@ OC.L10N.register(
     "Collective not found:" : "Nun s'atopó'l coleutivu:",
     "Collectives Folder" : "Carpeta de los coleutivos",
     "Create a new collective" : "Crear un coleutivu",
-    "Delete template" : "Desaniciar la plantía",
-    "Page not found:" : "Nun s'atopó la páxina:",
-    "Could not find the Page." : "Nun se pudo atopar la páxina.",
-    "Template" : "Plantía",
-    "Page content" : "Conteníu de la páxina",
-    "Hide templates" : "Esconder les plantíes",
-    "Show templates" : "Amosar les plantíes",
-    "_%n byte_::_%n bytes_" : ["%n byte","%n bytes"],
-    "Pages that link to this one" : "Páxines qu'enllacien a esta",
-    "Old versions of this page" : "Versiones antigües d'esta páxina",
     "Link copied to the clipboard." : "L'enllaz copióse nel cartafueyu.",
-    "New Page" : "Páxina nueva"
+    "New Page" : "Páxina nueva",
+    "_%n byte_::_%n bytes_" : ["%n byte","%n bytes"]
 },
 "nplurals=2; plural=(n != 1);");

@@ -41,10 +41,6 @@ OC.L10N.register(
     "Cannot copy" : "நகலெடுக்க முடியாது",
     "Copy share link" : "பகிர்வு இணைப்பை நகலெடுக்கவும்",
     "Select circle..." : "வட்டத்தைத் தேர்ந்தெடுக்கவும்...",
-    "Page not found:" : "பக்கம் கிடைக்கவில்லை:",
-    "Could not find the Page." : "பக்கத்தைக் கண்டுபிடிக்க முடியவில்லை.",
-    "Pages that link to this one" : "இதை  இணைக்கும் பக்கங்கள்",
-    "Old versions of this page" : "இந்தப் பக்கத்தின் பழைய பதிப்புகள்",
     "New Page" : "புதிய பக்கம்"
 },
 "nplurals=2; plural=(n != 1);");

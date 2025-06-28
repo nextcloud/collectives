@@ -274,24 +274,8 @@
     "Select circle..." : "إختر دائرة اتصال Circle ...",
     "Create a new collective" : "إنشاء تجميعة جديدة",
     "Cancel creating a new collective" : "إلغاء عملية إنشاء تجميعة جديدة",
-    "Edit template for subpages" : "حرّر قالباً للصفحات الفرعية",
-    "Add template for subpages" : "أضِف قالباً للصفحات الفرعية",
-    "Cannot delete page with subpages" : "لا يمكن حذف صفحة بها صفحات فرعية",
-    "Delete template" : "ِحذف القالب",
-    "Page not found:" : "الصفحة غير موجودة:",
-    "Could not find the Page." : "تعذّر إيجاد الصفحة.",
-    "Reverted {page} to revision {timestamp}." : "صفحة معادة {page} إلى النسخة {timestamp}.",
-    "Failed to revert {page} to revision {timestamp}." : "تعذّرت إعادة الصفحة {page} إلى النسخة {timestamp}.",
-    "Template" : "قالب",
-    "Page content" : "محتوى الصفحة",
-    "Hide templates" : "إخفِ القوالب",
-    "Show templates" : "أظهِر القوالب",
-    "Sort by title" : "ترتيب بحسب العنوان",
-    "Sorted by title" : "مُرتّب بحسب العنوان",
-    "_%n byte_::_%n bytes_" : ["بايت","بايت","بايت","بايت","بايت","%n بايت"],
-    "Pages that link to this one" : "الصفحات التي لها روابط link إلى هذه الصفحة",
-    "Old versions of this page" : "النسخ القديمة من هذه الصفحة",
     "Link copied to the clipboard." : "تمّ نسخ الرابط إلى الحافظة",
-    "New Page" : "صفحة جديدة"
+    "New Page" : "صفحة جديدة",
+    "_%n byte_::_%n bytes_" : ["بايت","بايت","بايت","بايت","بايت","%n بايت"]
 },"pluralForm" :"nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;"
 }
