@@ -23,6 +23,8 @@ OC.L10N.register(
     "Collectives app is enabled, but PDO SQLite driver is missing. Please install it to enable full text search of the page content." : "تطبيق التجميعات Collectives مُمكَّن؛ لكن سوّاقة PDO SQLite driver ناقصة. رجاءً، قُم بتثبيتها لتمكين البحث النصي الشامل في محتويات الصفحات.",
     "A place for activist and community projects to build shared knowledge" : "مكان للنشطاء والمشاريع المجتمعية لبناء المعرفة المشتركة",
     "Collectives is a Nextcloud App for activist and community projects to organize together.\nCome and gather in collectives to build shared knowledge.\n\n* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n  tied to a [Nextcloud Team](https://github.com/nextcloud/circles) and\n  owned by the collective.\n* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**\n  for page formatting.\n\n## Installation\n\nIn your Nextcloud instance, simply navigate to **»Apps«**, find the\n**»Teams«** and **»Collectives«** apps and enable them." : "تطبيق التجميعات Collectives هو تطبيق لنكست كلاود لتنظيم عممل الفرق و المجموعات لبناء المعرفة المشتركة.\n\n * 👥 **أتمتة سير العمل الجماعي غير الهرمي.**: كل تجميعة مرتبطة بـفريق من مستخدِمي نكست كلاود [Nextcloud Team] (https://github.com/nextcloud/circles) . \n* 📝 **تحرير الصفحة تعاونيّاً ** بالكيفية المعروفة في إيثرباد Etherpad؛ و ذلك أصبح ممكنا بفضل التطبيق [Text app] (https://github.com/nextcloud/text). \n* 🔤 **صيغة قياسية متعارف عليها لتحرير التجميعة؛ و هي صيغة ماركداون الشهيرة [Markdown] (https://en.wikipedia.org/wiki/Markdown)**. \n\n## التثبيت \nعلى خادوم نكست كلاود عندك، ما عليك سوى الانتقال إلى جزء **«التطبيقات Apps»**، ثم  البحث عن تطبيقات **«الفرق Teams»** و **«التجميعات Collectives»** و تمكينها.",
+    "Left collective {name}" : "غادرت التجميعة {name}",
+    "Could not leave the collective. {errorMessage}" : "تعذّرت مغادرة التجميعة {errorMessage}",
     "Manage members" : "إدارة الإعضاء",
     "Share link" : "مشاركة الرابط",
     "Export or print" : "تصدير أو طباعة",
@@ -162,6 +164,7 @@ OC.L10N.register(
     "Found {matches} matches for \"{query}\"" : "تمّ العثور علي {matches} مطابقات لـ \"{query}\"",
     "Match {index} of {matches} for \"{query}\"" : "تطابقت {index} من {matches} لـ\"{query}\"",
     "Highlight all matches" : "ميِّز كل المطابقات",
+    "Error saving the document. Please try again." : "حدث خطأ أثناء حفظ المستند. يُرجى المحاولة مرة أخرى.",
     "Add a page" : "إضافة صفحة",
     "Add a subpage" : "إضِف صفحةً فرعيّةً",
     "Expand subpage list" : "قم بتوسيع قائمة الصفحات الفرعية",
@@ -187,6 +190,18 @@ OC.L10N.register(
     "Can edit" : "يمكنه التعديل",
     "Cannot copy, please copy the link manually" : "يتعذّر النسخ. يُرجى نسخ الرابط يدويًا",
     "Copy public link of {title} to clipboard" : "إنسَخ الرابط العمومي لـ {title} إلى الحافظة",
+    "Actions for \"{title}\"" : "إجراءات لـ \"{title}\"",
+    "Password field can't be empty" : "خانة كلمة المرور لايمكن أن تكون فارغة",
+    "Page \"{name}\" has been shared" : "الصفحة  \"{name}\" تمّت مشاركتها",
+    "Collective \"{name}\" has been shared" : "التجميعة  \"{name}\" تمّت مشاركتها",
+    "Failed to share page \"{name}\": {responseError}" : "تعذّرت مشاركة الصفحة \"{name}\": {responseError}",
+    "Failed to share collective \"{name}\": {responseError}" : "تعذّرت مشاركة التجميعة \"{name}\": {responseError}",
+    "Share link of page \"{name}\" has been updated" : "رابط مشاركة الصفحة  \"{name}\" تمّ تحديثه",
+    "Share link of collective \"{name}\" has been updated" : "رابط مشاركة التجميعة  \"{name}\" تمّ تحديثه",
+    "Failed to update share link: {responseError}" : "فشل في تحديث رابط المشاركة: {responseError}",
+    "Page \"{name}\" has been unshared" : "الصفحة  \"{name}\" تمّ إلغاء مشاركتها",
+    "Collective \"{name}\" has been unshared" : "التجميعة \"{name}\" تمّ إلغاء مشاركتها",
+    "Failed to unshare: {responseError}" : "فشل في إلغاء المشاركة: {responseError}",
     "Error generating password from password policy" : "خطأ في توليد كلمة المرور بسبب مخالفة سياسة كلمات المرور",
     "Quick share options dropdown" : "القائمة المنسدلة لخيارات المشاركة السريعة",
     "Please enter the following required information before creating the share" : "الرجاء إدخال المعلومات المطلوبة التالية قبل إنشاء المشاركة",
