@@ -188,24 +188,8 @@
     "Select circle..." : "Избор на кръг ...",
     "Create a new collective" : "Създаване на новия колектив",
     "Cancel creating a new collective" : "Отказ от създаване на новия колектив",
-    "Edit template for subpages" : "Редактиране на шаблона за подстраници",
-    "Add template for subpages" : "Добавяне на шаблон за подстраници",
-    "Cannot delete page with subpages" : "Не може да се изтрие страница с подстраници",
-    "Delete template" : "Изтриване на шаблон",
-    "Page not found:" : "Страницата не е намерена:",
-    "Could not find the Page." : "Страницата не е намерена.",
-    "Reverted {page} to revision {timestamp}." : "Върнато {page} към версия {timestamp}.",
-    "Failed to revert {page} to revision {timestamp}." : "Неуспешно връщане {page} към версия {timestamp}.",
-    "Template" : "Шаблон",
-    "Page content" : "Съдържание на страницата",
-    "Hide templates" : "Скриване на шаблони",
-    "Show templates" : "Показване на шаблони",
-    "Sort by title" : "Сортиране по заглавие",
-    "Sorted by title" : "Сортирано по заглавие",
-    "_%n byte_::_%n bytes_" : ["%n  байта","%n байта"],
-    "Pages that link to this one" : "Страници, които имат връзка с тази страница",
-    "Old versions of this page" : "Стари версии на тази страница",
     "Link copied to the clipboard." : "Връзката е копирана в клипборда.",
-    "New Page" : "Нова страница"
+    "New Page" : "Нова страница",
+    "_%n byte_::_%n bytes_" : ["%n  байта","%n байта"]
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

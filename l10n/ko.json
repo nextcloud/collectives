@@ -43,6 +43,8 @@
     "View only" : "읽기 전용",
     "Can edit" : "편집 허용",
     "Cannot copy, please copy the link manually" : "복사할 수 없습니다, 링크를 수동으로 복사하세요.",
+    "Actions for \"{title}\"" : "\"{title}\"에 대한 작업",
+    "Password field can't be empty" : "암호 칸은 비워둘 수 없습니다.",
     "Error generating password from password policy" : "암호 정책에서 암호 생성 중에 오류 발생",
     "Please enter the following required information before creating the share" : "공유를 하기 전에 다음 필수 정보를 입력하세요.",
     "Password protection (enforced)" : "암호 보호 (강제됨)",
@@ -77,8 +79,6 @@
     "Cannot copy" : "복사할 수 없음",
     "Copy share link" : "공유 링크 복사",
     "Allow editing in share" : "공유에서 수정 허용",
-    "Admins and moderaters" : "관리자와 중재자",
-    "Template" : "템플릿",
-    "Sort by title" : "제목순으로 정렬"
+    "Admins and moderaters" : "관리자와 중재자"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

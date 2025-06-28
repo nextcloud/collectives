@@ -37,6 +37,7 @@ OC.L10N.register(
     "View only" : "Einungis skoða",
     "Can edit" : "Getur breytt",
     "Cannot copy, please copy the link manually" : "Mistókst að afrita, afritaðu tengilinn handvirkt",
+    "Actions for \"{title}\"" : "Aðgerðir fyrir \"{title}\"",
     "Error generating password from password policy" : "Villa við að útbúa lykilorð út frá lykilorðastefnu",
     "Please enter the following required information before creating the share" : "Settu inn eftirfarandi nauðsynlegar upplýsingar áður en þú býrð til sameignina",
     "Password protection (enforced)" : "Verndun með lykilorði (nauðsynleg)",
@@ -70,8 +71,6 @@ OC.L10N.register(
     "Copied" : "Afritað",
     "Cannot copy" : "Get ekki afritað",
     "Copy share link" : "Afrita deilitengil",
-    "Template" : "Sniðmát",
-    "Sort by title" : "Raða eftir titli",
     "_%n byte_::_%n bytes_" : ["%n bæti","%n bæti"]
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

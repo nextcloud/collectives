@@ -39,6 +39,7 @@ OC.L10N.register(
     "View only" : "View only",
     "Can edit" : "Can edit",
     "Cannot copy, please copy the link manually" : "Cannot copy, please copy the link manually",
+    "Actions for \"{title}\"" : "Actions for \"{title}\"",
     "Error generating password from password policy" : "Error generating password from password policy",
     "Please enter the following required information before creating the share" : "Please enter the following required information before creating the share",
     "Password protection (enforced)" : "Password protection (enforced)",
@@ -71,7 +72,6 @@ OC.L10N.register(
     "Copied" : "Copied",
     "Cannot copy" : "Cannot copy",
     "Copy share link" : "Copy share link",
-    "Template" : "Template",
     "_%n byte_::_%n bytes_" : ["%n byte","%n bytes"]
 },
 "nplurals=2; plural=(n!=1);");

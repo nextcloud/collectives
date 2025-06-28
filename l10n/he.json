@@ -46,7 +46,6 @@
     "Link copied" : "הקישור הועתק",
     "Copied" : "הועתק",
     "Copy share link" : "העתקת קישור השיתוף",
-    "Template" : "תבנית",
     "_%n byte_::_%n bytes_" : ["%n בייט","%n בייטים","%n בייטים"]
 },"pluralForm" :"nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: 2;"
 }

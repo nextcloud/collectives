@@ -61,8 +61,6 @@ OC.L10N.register(
     "Versions" : "Versiones",
     "Link copied" : "Ligòngiu copiadu",
     "Copied" : "Copiadu",
-    "Cannot copy" : "Non faghet a copiare",
-    "Template" : "Modellu",
-    "Sort by title" : "Assenta segundu tìtulu"
+    "Cannot copy" : "Non faghet a copiare"
 },
 "nplurals=2; plural=(n != 1);");

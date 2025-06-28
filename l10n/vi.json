@@ -34,6 +34,7 @@
     "View only" : "Chỉ xem",
     "Can edit" : "Có thể chỉnh sửa",
     "Cannot copy, please copy the link manually" : "Không thể sao chép, vui lòng sao chép liên kết bằng tay",
+    "Actions for \"{title}\"" : "Hành động cho \"{title}\"",
     "Error generating password from password policy" : "Lỗi tạo mật khẩu từ chính sách mật khẩu",
     "Please enter the following required information before creating the share" : "Vui lòng nhập các thông tin bắt buộc sau trước khi tạo chia sẻ",
     "Password protection (enforced)" : "Bảo vệ bằng mật khẩu (bắt buộc)",

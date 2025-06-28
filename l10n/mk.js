@@ -36,6 +36,8 @@ OC.L10N.register(
     "View only" : "Само за гледање",
     "Can edit" : "Може да се уредува",
     "Cannot copy, please copy the link manually" : "Неможе да се копира, копирајте го линкот рачно",
+    "Actions for \"{title}\"" : "Акции за \"{title}\"",
+    "Password field can't be empty" : "Полето за лозинка неможе да биде празно",
     "Error generating password from password policy" : "Грешка при генерирање на лозинка од политиката на лозинки",
     "Please enter the following required information before creating the share" : "Внесете ги следниве потребни податоци пред да го креирате споделувањето",
     "Password protection (enforced)" : "Заштитено со лозинка (enforced)",
