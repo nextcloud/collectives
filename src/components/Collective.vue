@@ -60,17 +60,21 @@ export default {
 	},
 
 	computed: {
-		...mapState(useRootStore, ['isPublic', 'loading', 'pageParam']),
+		...mapState(useRootStore, ['isPublic', 'loading', 'pageParam', 'pageId']),
 		...mapState(useCollectivesStore, [
+			'collectivePath',
 			'currentCollective',
 			'currentCollectiveCanEdit',
 			'currentCollectiveIsPageShare',
+			'currentCollectivePath',
 		]),
 		...mapState(useSessionsStore, ['hasSession']),
 		...mapState(usePagesStore, [
 			'currentFileIdPage',
 			'currentPage',
+			'isLandingPage',
 			'pagePath',
+			'currentPagePath',
 		]),
 		...mapState(useVersionsStore, ['selectedVersion']),
 
@@ -89,6 +93,16 @@ export default {
 		},
 		'currentPage.id'() {
 			this.selectVersion(null)
+
+			// Redirect to slugified URL if possible
+			if (this.currentCollective
+				&& this.isLandingPage
+				&& this.$route.fullPath !== this.currentCollectivePath) {
+				this.$router.replace(this.currentCollectivePath)
+			} else if (this.currentPage
+				&& this.$route.fullPath !== this.currentPagePath) {
+				this.$router.replace({ path: this.currentPagePath, hash: document.location.hash })
+			}
 		},
 		'notFound'(current) {
 			if (current && this.currentFileIdPage) {

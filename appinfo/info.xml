@@ -58,12 +58,14 @@ In your Nextcloud instance, simply navigate to **»Apps«**, find the
 	</background-jobs>
 	<repair-steps>
 		<post-migration>
+			<step>OCA\Collectives\Migration\GenerateSlugs</step>
 			<step>OCA\Collectives\Migration\MigrateTemplates</step>
 		</post-migration>
 	</repair-steps>
 	<commands>
 		<command>OCA\Collectives\Command\CreateCollective</command>
 		<command>OCA\Collectives\Command\ExpirePageVersions</command>
+		<command>OCA\Collectives\Command\GenerateSlugs</command>
 		<command>OCA\Collectives\Command\IndexCollectives</command>
 		<command>OCA\Collectives\Command\PageTrashCleanup</command>
 		<command>OCA\Collectives\Command\PurgeObsoletePages</command>

@@ -104,6 +104,7 @@ export default {
 		...mapState(useRootStore, ['isPublic', 'shareTokenparam']),
 		...mapState(useCollectivesStore, [
 			'collectiveCanShare',
+			'collectivePrintPath',
 			'isCollectiveAdmin',
 		]),
 
@@ -112,9 +113,7 @@ export default {
 		},
 
 		printLink() {
-			return this.isPublic
-				? generateUrl(`/apps/collectives/p/${this.shareTokenParam}/print/${this.collective.name}`)
-				: generateUrl(`/apps/collectives/_/print/${this.collective.name}`)
+			return generateUrl(`/apps/collectives${this.collectivePrintPath(this.collective)}`)
 		},
 	},
 

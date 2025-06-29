@@ -106,7 +106,7 @@ class PageContentProvider implements IProvider {
 				'',
 				$highlighter->extractRelevant($query->getTerm(), $page->getContent(), $highlightLength, 5, ''),
 				$collective->getName() . ' / ' . $pageInfo->getTitle(),
-				$this->urlGenerator->linkToRouteAbsolute('collectives.start.index') . $this->pageService->getPageLink($collective->getName(), $pageInfo),
+				$this->urlGenerator->linkToRouteAbsolute('collectives.start.index') . $this->pageService->getPageLink($collective->getUrlPath(), $pageInfo),
 				'icon-collectives-page'
 			);
 		}

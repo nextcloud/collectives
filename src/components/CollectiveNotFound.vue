@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<NcEmptyContent :name="t('collectives', 'Collective not found: {collective}', { collective: collectiveParam })"
+	<NcEmptyContent :name="notFoundString"
 		:description="t('collectives', 'You\'re not part of a collective with that name.')"
 		class="content-not-found">
 		<template #icon>
@@ -28,7 +28,13 @@ export default {
 	},
 
 	computed: {
-		...mapState(useRootStore, ['collectiveParam']),
+		...mapState(useRootStore, ['collectiveParam', 'collectiveId']),
+
+		notFoundString() {
+			return this.collectiveParam
+				? t('collectives', 'Collective not found: {collective}', { collective: this.collectiveParam })
+				: t('collectives', 'Collective with ID {id} not found', { id: this.collectiveId })
+		},
 	},
 }
 </script>

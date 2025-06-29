@@ -17,6 +17,7 @@ use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Db\CollectiveUserSettingsMapper;
 use OCA\Collectives\Db\Page;
 use OCA\Collectives\Db\PageMapper;
+use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Trash\PageTrashBackend;
@@ -28,6 +29,7 @@ use OCP\Files\InvalidPathException;
 use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\Files\NotPermittedException as FilesNotPermittedException;
 use OCP\IL10N;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class CollectiveService extends CollectiveServiceBase {
 	private ?PageTrashBackend $pageTrashBackend = null;
@@ -44,6 +46,8 @@ class CollectiveService extends CollectiveServiceBase {
 		private PageMapper $pageMapper,
 		private IL10N $l10n,
 		private IEventDispatcher $eventDispatcher,
+		private NodeHelper $nodeHelper,
+		private SluggerInterface $slugger,
 	) {
 		parent::__construct($collectiveMapper, $circleHelper);
 	}
@@ -169,8 +173,10 @@ class CollectiveService extends CollectiveServiceBase {
 	 */
 	public function createCollective(string $userId,
 		string $userLang,
-		string $safeName,
+		string $name,
 		?string $emoji = null): array {
+		$safeName = $this->nodeHelper->sanitiseFilename($name);
+
 		if ($safeName === '') {
 			throw new UnprocessableEntityException('Empty collective name is not allowed');
 		}
@@ -202,7 +208,7 @@ class CollectiveService extends CollectiveServiceBase {
 			$this->eventDispatcher->dispatchTyped(new InvalidateMountCacheEvent(null));
 		}
 
-		// Create collective object
+		// Create a collective object
 		$collective = new Collective();
 		$collective->setCircleId($circle->getSingleId());
 		$collective->setPermissions(Collective::defaultPermissions);
@@ -211,7 +217,11 @@ class CollectiveService extends CollectiveServiceBase {
 		}
 		$collective = $this->collectiveMapper->insert($collective);
 
-		// Decorate collective object
+		$slug = $this->slugger->slug($name)->toString();
+		$collective->setSlug($slug);
+		$this->collectiveMapper->update($collective);
+
+		// Decorate a collective object
 		$collective->setName($circle->getSanitizedName());
 		$collective->setLevel($this->circleHelper->getLevel($circle->getSingleId(), $userId));
 

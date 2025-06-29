@@ -4,15 +4,15 @@
  */
 
 const baseUrl = Cypress.env('baseUrl')
-const sourceUrl = new URL(`${baseUrl}/index.php/apps/collectives/Link%20Testing/Link%20Source`)
-let imageId, pdfId, textId
-let anotherCollectiveFirstPageId, linkTargetPageId
+let imageId, pdfId, textId, sourceUrl
+let anotherCollectiveFirstPageId, anotherCollectiveId, linkTestingCollectiveId, linkTargetPageId
 
 describe('Page link handling', function() {
 	before(function() {
 		cy.loginAs('bob')
 		cy.deleteAndSeedCollective('Another Collective')
-			.seedPage('First Page', '', 'Readme.md').then(({ pageId }) => {
+			.seedPage('First Page', '', 'Readme.md').then(({ collectiveId, pageId }) => {
+				anotherCollectiveId = collectiveId
 				anotherCollectiveFirstPageId = pageId
 			})
 		cy.deleteAndSeedCollective('Link Testing')
@@ -21,7 +21,10 @@ describe('Page link handling', function() {
 			.seedPage('Link Target', '', 'Readme.md').then(({ pageId }) => {
 				linkTargetPageId = pageId
 			})
-			.seedPage('Link Source', '', 'Readme.md')
+			.seedPage('Link Source', '', 'Readme.md').then(({ collectiveId, pageId }) => {
+				linkTestingCollectiveId = collectiveId
+				sourceUrl = new URL(`${baseUrl}/index.php/apps/collectives/Link-Testing-${collectiveId}/Link-Source-${pageId}`)
+			})
 		cy.seedPageContent('Link%20Testing/Link%20Target.md', 'Some content')
 		cy.uploadFile('test.md', 'text/markdown').then((id) => {
 			textId = id
@@ -55,6 +58,7 @@ describe('Page link handling', function() {
 
 ## Links supposed to open in same window
 
+* Slugified URL to page in this collective: [Link Target](${baseUrl}/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/Link-Target-${linkTargetPageId})
 * URL to page in this collective: [Link Target](${baseUrl}/index.php/apps/collectives/Link%20Testing/Link%20Target)
 * Absolute path to page in this collective: [Link Target](/index.php/apps/collectives/Link%20Testing/Link%20Target)
 * Relative path to page in this collective with fileId: [Link Target](./Link%20Target?fileId=${linkTargetPageId})
@@ -121,12 +125,15 @@ describe('Page link handling', function() {
 		cy.url().then((newBaseUrl) => {
 			const url = new URL(href, newBaseUrl)
 			const encodedCollectiveName = encodeURIComponent('Link Testing')
+			const encodedSlugCollectiveUrl = `Link-Testing-${linkTestingCollectiveId}`
 			const pathname = isPublic
-				? url.pathname.replace(`/${encodedCollectiveName}`, `/p/\\w+/${encodedCollectiveName}`)
+				? url.pathname
+					.replace(`/${encodedCollectiveName}`, `/p/\\w+/${encodedCollectiveName}`)
+					.replace(`/${encodedSlugCollectiveUrl}`, `/p/\\w+/${encodedSlugCollectiveUrl}`)
 				: url.pathname
 			cy.location().should((loc) => {
 				expect(loc.pathname).to.match(new RegExp(`^${expectedPathname || pathname}$`))
-				expect(loc.search).to.eq(expectedSearch || url.search)
+				expect(loc.search).to.eq(expectedSearch ?? url.search)
 			})
 		})
 
@@ -139,8 +146,11 @@ describe('Page link handling', function() {
 
 		cy.url().then(() => {
 			const encodedCollectiveName = encodeURIComponent('Link Testing')
+			const encodedSlugCollectiveUrl = `Link-Testing-${linkTestingCollectiveId}`
 			const pathname = isPublic
-				? sourceUrl.pathname.replace(`/${encodedCollectiveName}`, `/p/\\w+/${encodedCollectiveName}`)
+				? sourceUrl.pathname
+					.replace(`/${encodedCollectiveName}`, `/p/\\w+/${encodedCollectiveName}`)
+					.replace(`/${encodedSlugCollectiveUrl}`, `/p/\\w+/${encodedSlugCollectiveUrl}`)
 				: sourceUrl.pathname
 			cy.location().should((loc) => {
 				expect(loc.pathname).to.match(new RegExp(`^${pathname}$`))
@@ -187,64 +197,81 @@ describe('Page link handling', function() {
 	})
 
 	describe('Link handling to collectives in view mode', function() {
+		it('Opens link with slugified URL to page in this collective in same tab', function() {
+			const href = `${baseUrl}/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/Link-Target-${linkTargetPageId}`
+			testLinkToSameTab(href, {
+				expectedPathname: `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/Link-Target-${linkTargetPageId}`,
+			})
+		})
 		it('Opens link with URL to page in this collective in same tab', function() {
 			const href = `${baseUrl}/index.php/apps/collectives/Link%20Testing/Link%20Target`
 			testLinkToSameTab(href, {
-				expectedSearch: `?fileId=${linkTargetPageId}`,
+				expectedPathname: `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/Link-Target-${linkTargetPageId}`,
 			})
 		})
 		it('Opens link with absolute path to page in this collective in same tab', function() {
 			const href = '/index.php/apps/collectives/Link%20Testing/Link%20Target'
 			testLinkToSameTab(href, {
-				expectedSearch: `?fileId=${linkTargetPageId}`,
+				expectedPathname: `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/Link-Target-${linkTargetPageId}`,
 			})
 		})
 		it('Opens link with relative path to page in this collective with fileId in same tab', function() {
 			const href = `./Link%20Target?fileId=${linkTargetPageId}`
-			testLinkToSameTab(href)
+			testLinkToSameTab(href, {
+				expectedPathname: `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/Link-Target-${linkTargetPageId}`,
+				expectedSearch: '',
+			})
 		})
 		it('Opens link with relative path to page in this collective with fileId and outdated path in same tab', function() {
 			const href = `./Link%20Target%20Outdated?fileId=${linkTargetPageId}`
 			testLinkToSameTab(href, {
-				expectedPathname: '/index.php/apps/collectives/Link%20Testing/Link%20Target',
-				expectedSearch: `?fileId=${linkTargetPageId}`,
+				expectedPathname: `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/Link-Target-${linkTargetPageId}`,
+				expectedSearch: '',
 			})
 		})
 		it('Opens link with relative path to page in this collective without fileId in same tab', function() {
 			const href = './Link%20Target'
 			testLinkToSameTab(href, {
-				expectedPathname: '/index.php/apps/collectives/Link%20Testing/Link%20Target',
-				expectedSearch: `?fileId=${linkTargetPageId}`,
+				expectedPathname: `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/Link-Target-${linkTargetPageId}`,
 			})
 		})
 		it('Opens link with relative path to markdown file in this collective without fileId in same tab', function() {
-			// TODO: We want '.md' to be stripped when opening the link
 			const href = './Link%20Target.md'
 			testLinkToSameTab(href, {
-				expectedPathname: '/index.php/apps/collectives/Link%20Testing/Link%20Target',
-				expectedSearch: `?fileId=${linkTargetPageId}`,
+				expectedPathname: `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/Link-Target-${linkTargetPageId}`,
 			})
 		})
 
 		it('Opens link with URL to page in other collective with fileId in same tab', function() {
 			const href = `${baseUrl}/index.php/apps/collectives/Another%20Collective/First%20Page?fileId=${anotherCollectiveFirstPageId}`
-			testLinkToSameTab(href)
+			testLinkToSameTab(href, {
+				expectedPathname: `/index.php/apps/collectives/Another-Collective-${anotherCollectiveId}/First-Page-${anotherCollectiveFirstPageId}`,
+				expectedSearch: '',
+			})
 		})
 		it('Opens link with absolute path to page in other collective without fileId in same tab', function() {
 			const href = '/index.php/apps/collectives/Another%20Collective/First%20Page'
 			testLinkToSameTab(href, {
-				expectedSearch: `?fileId=${anotherCollectiveFirstPageId}`,
+				expectedPathname: `/index.php/apps/collectives/Another-Collective-${anotherCollectiveId}/First-Page-${anotherCollectiveFirstPageId}`,
 			})
 		})
 	})
 
 	describe('Link handling to collectives in edit mode', function() {
+		it('Opens link with slugified URL to page in this collective in same tab', function() {
+			const href = `${baseUrl}/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/Link-Target-${linkTargetPageId}`
+			cy.switchToEditMode()
+			testLinkToSameTab(href, {
+				edit: true,
+				expectedPathname: `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/Link-Target-${linkTargetPageId}`,
+			})
+		})
 		it('Opens link with URL to page in this collective in same tab', function() {
 			const href = `${baseUrl}/index.php/apps/collectives/Link%20Testing/Link%20Target`
 			cy.switchToEditMode()
 			testLinkToSameTab(href, {
 				edit: true,
-				expectedSearch: `?fileId=${linkTargetPageId}`,
+				expectedPathname: `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/Link-Target-${linkTargetPageId}`,
 			})
 		})
 		it('Opens link with absolute path to page in this collective in same tab', function() {
@@ -252,21 +279,25 @@ describe('Page link handling', function() {
 			cy.switchToEditMode()
 			testLinkToSameTab(href, {
 				edit: true,
-				expectedSearch: `?fileId=${linkTargetPageId}`,
+				expectedPathname: `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/Link-Target-${linkTargetPageId}`,
 			})
 		})
 		it('Opens link with relative path to page in this collective with fileId in same tab', function() {
 			const href = `./Link%20Target?fileId=${linkTargetPageId}`
 			cy.switchToEditMode()
-			testLinkToSameTab(href, { edit: true })
+			testLinkToSameTab(href, {
+				edit: true,
+				expectedPathname: `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/Link-Target-${linkTargetPageId}`,
+				expectedSearch: '',
+			})
 		})
 		it('Opens link with relative path to page in this collective with fileId and outdated path in same tab', function() {
 			const href = `./Link%20Target%20Outdated?fileId=${linkTargetPageId}`
 			cy.switchToEditMode()
 			testLinkToSameTab(href, {
 				edit: true,
-				expectedPathname: '/index.php/apps/collectives/Link%20Testing/Link%20Target',
-				expectedSearch: `?fileId=${linkTargetPageId}`,
+				expectedPathname: `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/Link-Target-${linkTargetPageId}`,
+				expectedSearch: '',
 			})
 		})
 		it('Opens link with relative path to page in this collective without fileId in same tab', function() {
@@ -274,31 +305,34 @@ describe('Page link handling', function() {
 			cy.switchToEditMode()
 			testLinkToSameTab(href, {
 				edit: true,
-				expectedSearch: `?fileId=${linkTargetPageId}`,
+				expectedPathname: `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/Link-Target-${linkTargetPageId}`,
 			})
 		})
 		it('Opens link with relative path to markdown file in this collective without fileId in same tab', function() {
-			// TODO: We want '.md' to be stripped when opening the link
 			const href = './Link%20Target.md'
 			cy.switchToEditMode()
 			testLinkToSameTab(href, {
 				edit: true,
-				expectedPathname: '/index.php/apps/collectives/Link%20Testing/Link%20Target',
-				expectedSearch: `?fileId=${linkTargetPageId}`,
+				expectedPathname: `/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/Link-Target-${linkTargetPageId}`,
 			})
 		})
 
 		it('Opens link with URL to page in other collective with fileId in same tab', function() {
 			const href = `${baseUrl}/index.php/apps/collectives/Another%20Collective/First%20Page?fileId=${anotherCollectiveFirstPageId}`
 			cy.switchToEditMode()
-			testLinkToSameTab(href, { edit: true })
+			testLinkToSameTab(href, {
+				edit: true,
+				expectedPathname: `/index.php/apps/collectives/Another-Collective-${anotherCollectiveId}/First-Page-${anotherCollectiveFirstPageId}`,
+				expectedSearch: '',
+			})
 		})
 		it('Opens link with absolute path to page in other collective without fileId in same tab', function() {
 			const href = '/index.php/apps/collectives/Another%20Collective/First%20Page'
 			cy.switchToEditMode()
 			testLinkToSameTab(href, {
 				edit: true,
-				expectedSearch: `?fileId=${anotherCollectiveFirstPageId}`,
+				expectedPathname: `/index.php/apps/collectives/Another-Collective-${anotherCollectiveId}/First-Page-${anotherCollectiveFirstPageId}`,
+				expectedSearch: '',
 			})
 		})
 	})
@@ -351,8 +385,7 @@ describe('Page link handling', function() {
 		})
 	})
 
-	// TODO: Adapt tests to Nextcloud 29+
-	describe.skip('Link handling public share', function() {
+	describe('Link handling in public share', function() {
 		let shareUrl
 
 		it('Share the collective', function() {
@@ -394,14 +427,21 @@ describe('Page link handling', function() {
 			cy.logout()
 			cy.visit(`${shareUrl}/Link Source`)
 			const href = '/index.php/apps/collectives/Link%20Testing/Link%20Target'
-			testLinkToSameTab(href, { isPublic: true })
+			testLinkToSameTab(href, {
+				isPublic: true,
+				expectedPathname: `/index.php/apps/collectives/p/\\w+/Link-Testing-${linkTestingCollectiveId}/Link-Target-${linkTargetPageId}`,
+			})
 		})
 		it('Public share in edit mode: opens link with absolute path to page in this collective in same tab', function() {
 			cy.logout()
 			cy.visit(`${shareUrl}/Link Source`)
 			const href = '/index.php/apps/collectives/Link%20Testing/Link%20Target'
 			cy.switchToEditMode()
-			testLinkToSameTab(href, { edit: true, isPublic: true })
+			testLinkToSameTab(href, {
+				edit: true,
+				isPublic: true,
+				expectedPathname: `/index.php/apps/collectives/p/\\w+/Link-Testing-${linkTestingCollectiveId}/Link-Target-${linkTargetPageId}`,
+			})
 		})
 		it('Public share in view mode: opens link to external website in new tab', function() {
 			cy.logout()

@@ -633,20 +633,30 @@ namespace OCA\Circles\Model {
 		public const APP_OCC = 10002;
 		public const APP_DEFAULT = 11000;
 
-		public function getSingleId(): string {}
-		public function getUserType(): int {}
 		public function getLevel(): int {}
+		public function getSingleId(): string {}
+		public function getUserId(): string {}
+		public function getUserType(): int {}
 	}
 
 	class Circle {
-		public function getName(): string {}
-		public function getSingleId(): string {}
-		public function getSanitizedName(): string {}
-		public function getMembers(int $limit = 0): array {}
 		public function getInitiator(): Member {}
+		public function getMembers(int $limit = 0): array {}
+		public function getName(): string {}
+		public function getOwner(): Member {}
+		public function getSanitizedName(): string {}
+		public function getSingleId(): string {}
 	}
 
 	class FederatedUser {
+	}
+}
+
+namespace OCA\Circles\Model\Federated {
+	use OCA\Circles\Tools\Model\SimpleDataStore;
+
+	class FederatedEvent {
+		public function getParams(): SimpleDataStore {}
 	}
 }
 
@@ -670,6 +680,11 @@ namespace OCA\Circles\Events {
 	abstract class CircleDestroyedEvent extends CircleResultGenericEvent {
 		public function __construct(FederatedEvent $federatedEvent, array $results) {}
 	}
+	abstract class EditingCircleEvent extends CircleResultGenericEvent {
+		public function __construct(FederatedEvent $federatedEvent, array $results) {}
+
+		public function getFederatedEvent(): FederatedEvent;
+	}
 }
 
 namespace OCA\Circles\Exceptions {
@@ -690,6 +705,12 @@ namespace OCA\Circles\Exceptions {
 namespace OCA\Circles\Tools\Exceptions {
 	use Exception;
 	class InvalidItemException extends Exception {}
+}
+
+namespace OCA\Circles\Tools\Model {
+	class SimpleDataStore {
+		public function g(string $key): string {}
+	}
 }
 
 namespace OCA\Circles {

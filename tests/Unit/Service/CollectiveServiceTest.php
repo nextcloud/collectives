@@ -17,6 +17,7 @@ use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Db\CollectiveUserSettingsMapper;
 use OCA\Collectives\Db\PageMapper;
+use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Service\CircleExistsException;
 use OCA\Collectives\Service\CircleHelper;
@@ -29,6 +30,8 @@ use OCP\App\IAppManager;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IL10N;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\String\UnicodeString;
 
 class CollectiveServiceTest extends TestCase {
 	private string $userId = 'jane';
@@ -90,6 +93,16 @@ class CollectiveServiceTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
+		$nodeHelper = $this->createMock(NodeHelper::class);
+		$nodeHelper->method('sanitiseFilename')
+			->willReturnCallback(function (string $name, string $default = 'New File') {
+				return $name;
+			});
+
+		$slug = new UnicodeString('free-123');
+		$slugger = $this->createMock(SluggerInterface::class);
+		$slugger->method('slug')->willReturn($slug);
+
 		$this->service = new CollectiveService(
 			$appManager,
 			$this->collectiveMapper,
@@ -100,7 +113,9 @@ class CollectiveServiceTest extends TestCase {
 			$collectiveUserSettingsMapper,
 			$pageMapper,
 			$this->l10n,
-			$eventDispatcher
+			$eventDispatcher,
+			$nodeHelper,
+			$slugger,
 		);
 	}
 
@@ -203,8 +218,9 @@ class CollectiveServiceTest extends TestCase {
 			->willReturn($collective);
 		[$collective, $info] = $this->service->createCollective($this->userId, 'de', 'free');
 		self::assertIsCallable([$collective, 'jsonSerialize']);
-		self::assertEqualsCanonicalizing([
+		self::assertEquals([
 			'id' => 123,
+			'slug' => 'free-123',
 			'circleId' => null,
 			'emoji' => null,
 			'trashTimestamp' => null,

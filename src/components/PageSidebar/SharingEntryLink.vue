@@ -269,7 +269,7 @@ export default {
 	},
 
 	computed: {
-		...mapState(useCollectivesStore, ['currentCollective']),
+		...mapState(useCollectivesStore, ['currentCollective', 'currentCollectivePath']),
 		...mapState(usePagesStore, ['currentPage', 'isLandingPage']),
 
 		title() {
@@ -320,7 +320,7 @@ export default {
 
 		shareUrl() {
 			return this.share
-				? window.location.origin + generateUrl(`/apps/collectives/p/${this.share.token}/${encodeURIComponent(this.currentCollective.name)}`)
+				? window.location.origin + generateUrl(`/apps/collectives/p/${this.share.token}${this.currentCollectivePath}`)
 				: null
 		},
 

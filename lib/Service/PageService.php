@@ -31,6 +31,7 @@ use OCP\IConfig;
 use OCP\IUserManager;
 use OCP\Lock\LockedException;
 use Psr\Container\ContainerInterface;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class PageService {
 	private const DEFAULT_PAGE_TITLE = 'New Page';
@@ -49,6 +50,7 @@ class PageService {
 		private IConfig $config,
 		ContainerInterface $container,
 		private SessionService $sessionService,
+		private SluggerInterface $slugger,
 	) {
 		try {
 			$this->pushQueue = $container->get(IQueue::class);
@@ -201,6 +203,7 @@ class PageService {
 		$emoji = ($page !== null) ? $page->getEmoji() : null;
 		$subpageOrder = ($page !== null) ? $page->getSubpageOrder() : null;
 		$fullWidth = $page !== null && $page->getFullWidth();
+		$slug = $page !== null ? $page->getSlug() : null;
 		$pageInfo = new PageInfo();
 		try {
 			$pageInfo->fromFile($file,
@@ -209,7 +212,8 @@ class PageService {
 				$lastUserId ? $this->userManager->getDisplayName($lastUserId) : null,
 				$emoji,
 				$subpageOrder,
-				$fullWidth);
+				$fullWidth,
+				$slug);
 		} catch (FilesNotFoundException|InvalidPathException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
@@ -263,7 +267,7 @@ class PageService {
 		}
 	}
 
-	private function updatePage(int $collectiveId, int $fileId, string $userId, ?string $emoji = null, ?bool $fullWidth = null): void {
+	private function updatePage(int $collectiveId, int $fileId, string $userId, ?string $emoji = null, ?bool $fullWidth = null, ?string $slug = null): void {
 		$page = new Page();
 		$page->setFileId($fileId);
 		$page->setLastUserId($userId);
@@ -272,6 +276,9 @@ class PageService {
 		}
 		if ($fullWidth !== null) {
 			$page->setFullWidth($fullWidth);
+		}
+		if ($slug !== null) {
+			$page->setSlug($slug);
 		}
 		$this->pageMapper->updateOrInsert($page);
 		$this->notifyPush($collectiveId);
@@ -297,7 +304,7 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	private function newPage(int $collectiveId, Folder $folder, string $filename, string $userId): PageInfo {
+	private function newPage(int $collectiveId, Folder $folder, string $filename, string $userId, ?string $title): PageInfo {
 		try {
 			$newFile = $folder->newFile($filename . PageInfo::SUFFIX);
 		} catch (FilesNotPermittedException $e) {
@@ -310,7 +317,9 @@ class PageService {
 				$this->getParentPageId($newFile),
 				$userId,
 				$this->userManager->getDisplayName($userId));
-			$this->updatePage($collectiveId, $newFile->getId(), $userId);
+			$slug = $title ? $this->slugger->slug($title)->toString() : null;
+			$this->updatePage($collectiveId, $newFile->getId(), $userId, null, null, $slug);
+			$pageInfo->setSlug($slug);
 		} catch (FilesNotFoundException|InvalidPathException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
@@ -420,7 +429,7 @@ class PageService {
 		if (!isset($indexPage)) {
 			if ($hasPages || $forceIndex) {
 				// Create missing index page if folder or subfolders have page files (or forceIndex)
-				$indexPage = $this->newPage($collectiveId, $folder, PageInfo::INDEX_PAGE_TITLE, $userId);
+				$indexPage = $this->newPage($collectiveId, $folder, PageInfo::INDEX_PAGE_TITLE, $userId, PageInfo::INDEX_PAGE_TITLE);
 			} else {
 				// Ignore folders without an index page
 				return [];
@@ -630,7 +639,7 @@ class PageService {
 
 		$pageInfo = $templateId
 			? $this->copy($collectiveId, $templateId, $parentId, $safeTitle, 0, $userId)
-			: $this->newPage($collectiveId, $folder, $filename, $userId);
+			: $this->newPage($collectiveId, $folder, $filename, $userId, $title);
 		$this->addToSubpageOrder($collectiveId, $parentId, $pageInfo->getId(), 0, $userId);
 		return $pageInfo;
 	}
@@ -772,8 +781,9 @@ class PageService {
 		if (null !== $newFile = $this->moveOrCopyPage($collectiveFolder, $file, $parentId, $title, true)) {
 			$file = $newFile;
 		}
+		$slug = $this->slugger->slug($title ?: $pageInfo->getTitle())->toString();
 		try {
-			$this->updatePage($collectiveId, $file->getId(), $userId, $pageInfo->getEmoji(), $pageInfo->isFullWidth());
+			$this->updatePage($collectiveId, $file->getId(), $userId, $pageInfo->getEmoji(), $pageInfo->isFullWidth(), $slug);
 		} catch (InvalidPathException|FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
@@ -799,9 +809,10 @@ class PageService {
 		if (null !== $newFile = $this->moveOrCopyPage($collectiveFolder, $file, $parentId, $title, false)) {
 			$file = $newFile;
 		}
+		$slug = $title ? $this->slugger->slug($title)->toString() : null;
 
 		try {
-			$this->updatePage($collectiveId, $file->getId(), $userId);
+			$this->updatePage($collectiveId, $file->getId(), $userId, null, null, $slug);
 		} catch (InvalidPathException|FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
@@ -926,6 +937,7 @@ class PageService {
 		$file = $this->nodeHelper->getFileById($collectiveFolder, $pageId);
 		$pageInfo = $this->getPageByFile($file);
 
+		$subpageOrder = $pageInfo->getSubpageOrder();
 		$cleanedSubpageOrder = $this->cleanSubpageOrder($collectiveId, $pageInfo, $userId);
 		$newSubpageOrder = SubpageOrderService::add($cleanedSubpageOrder, $addId, $index);
 
@@ -1047,20 +1059,28 @@ class PageService {
 		$this->notifyPush($collectiveId);
 	}
 
-	public function getPageLink(string $collectiveName, PageInfo $pageInfo, bool $withFileId = true): string {
-		$collectiveRoute = rawurlencode($collectiveName);
-		$pagePathRoute = implode('/', array_map('rawurlencode', explode('/', $pageInfo->getFilePath())));
-		$pageTitleRoute = ($pageInfo->getFileName() === PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX) ? '' : rawurlencode($pageInfo->getTitle());
-		$fullRoute = implode('/', array_filter([
+	public function getPageLink(string $collectiveUrlPath, PageInfo $pageInfo, bool $withFileId = true, bool $forceNoSlug = false): string {
+		$collectiveRoute = rawurlencode($collectiveUrlPath);
+		$pagePathRoute = '';
+		$fileIdQuery = '';
+
+		if (!$forceNoSlug && $pageInfo->getSlug()) {
+			$pageTitleRoute = rawurlencode($pageInfo->getUrlPath());
+		} else {
+			$pagePathRoute = implode('/', array_map('rawurlencode', explode('/', $pageInfo->getFilePath())));
+			$pageTitleRoute = ($pageInfo->getFileName() === PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX) ? '' : rawurlencode($pageInfo->getTitle());
+			if ($withFileId) {
+				$fileIdQuery = '?fileId=' . $pageInfo->getId();
+			}
+		}
+		return implode('/', array_filter([
 			$collectiveRoute,
 			$pagePathRoute,
 			$pageTitleRoute
-		]));
-
-		return $withFileId ? $fullRoute . '?fileId=' . $pageInfo->getId() : $fullRoute;
+		])) . $fileIdQuery;
 	}
 
-	public function matchBacklinks(PageInfo $pageInfo, string $content): bool {
+	public function matchBacklinks(Collective $collective, PageInfo $pageInfo, string $content): bool {
 		$prefix = '/(\[[^]]+]\(|<)';
 		$suffix = '(( \([^)]+\))?\)|>)/';
 
@@ -1075,19 +1095,31 @@ class PageService {
 
 		$appPath = '\/+apps\/+collectives\/+';
 
-		$pagePath = str_replace('/', '/+', preg_quote($this->getPageLink(explode('/', $pageInfo->getCollectivePath())[1], $pageInfo, false), '/'));
+		$collectivePath = '(' . implode('|', [
+			'[[:ascii:]]+\-' . $collective->getId(),
+			rawurlencode($collective->getName()),
+		]) . ')\/+';
+
+		$pagePathSlug = $collectivePath . '[[:ascii:]]+\-' . $pageInfo->getId();
+		$pagePathNoSlug = $collectivePath . str_replace('/', '/+', preg_quote($this->getPageLink('', $pageInfo, false, true), '/'));
 		$fileId = '.+\?fileId=' . $pageInfo->getId();
+
+		$relativeSlugPathPattern = $prefix . $relativeUrl . $basePath . $appPath . $pagePathSlug . $suffix;
+		$absoluteSlugPathPattern = $prefix . $absoluteUrl . $basePath . $appPath . $pagePathSlug . $suffix;
 
 		$relativeFileIdPattern = $prefix . $relativeUrl . $fileId . $suffix;
 		$absoluteFileIdPattern = $prefix . $absoluteUrl . $basePath . $appPath . $fileId . $suffix;
 
-		$relativePathPattern = $prefix . $relativeUrl . $basePath . $appPath . $pagePath . $suffix;
-		$absolutePathPattern = $prefix . $absoluteUrl . $basePath . $appPath . $pagePath . $suffix;
+		$relativeNoSlugPathPattern = $prefix . $relativeUrl . $basePath . $appPath . $pagePathNoSlug . $suffix;
+		$absoluteNoSlugPathPattern = $prefix . $absoluteUrl . $basePath . $appPath . $pagePathNoSlug . $suffix;
 
-		return preg_match($relativeFileIdPattern, $content)
-			|| preg_match($relativePathPattern, $content)
+		$matches = preg_match($relativeSlugPathPattern, $content)
+			|| preg_match($relativeFileIdPattern, $content)
+			|| preg_match($relativeNoSlugPathPattern, $content)
+			|| preg_match($absoluteSlugPathPattern, $content)
 			|| preg_match($absoluteFileIdPattern, $content)
-			|| preg_match($absolutePathPattern, $content);
+			|| preg_match($absoluteNoSlugPathPattern, $content);
+		return $matches;
 	}
 
 	/**
@@ -1098,12 +1130,13 @@ class PageService {
 	public function getBacklinks(int $collectiveId, int $id, string $userId): array {
 		$page = $this->find($collectiveId, $id, $userId);
 		$allPages = $this->findAll($collectiveId, $userId);
+		$collective = $this->getCollective($collectiveId, $userId);
 
 		$backlinks = [];
 		foreach ($allPages as $p) {
 			$file = $this->nodeHelper->getFileById($this->getFolder($collectiveId, $p->getId(), $userId), $p->getId());
 			$content = $this->nodeHelper->getContent($file);
-			if ($this->matchBacklinks($page, $content)) {
+			if ($this->matchBacklinks($collective, $page, $content)) {
 				$backlinks[] = $p;
 			}
 		}
