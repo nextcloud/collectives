@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Command;
 
+use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Service\CircleHelper;
 use OCA\Collectives\Service\PageService;
@@ -88,8 +89,10 @@ class GenerateSlugs extends Command {
 			$circle = $this->circleHelper->getCircle($rowCollective['circle_unique_id'], null, true);
 			$pageInfos = $this->pageService->findAll($rowCollective['id'], $circle->getOwner()->getUserId());
 
+			/** @var PageInfo $pageInfo */
 			foreach ($pageInfos as $pageInfo) {
-				if ($pageInfo->getFileName() === PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX) {
+				$pageFile = $this->pageService->getPageFile($rowCollective['id'], $pageInfo->getId(), $circle->getOwner()->getUserId());
+				if (NodeHelper::isLandingPage($pageFile)) {
 					continue;
 				}
 
