@@ -98,11 +98,15 @@ class GenerateSlugs implements IRepairStep {
 
 		while ($row = $result->fetch()) {
 			$pageFile = $rootFolder->getById($row['file_id'])[0];
-			if (!($pageFile instanceof File) || NodeHelper::isIndexPage($pageFile)) {
+			if (!($pageFile instanceof File) || NodeHelper::isLandingPage($pageFile)) {
 				continue;
 			}
 
-			$slug = $this->slugger->slug(basename($pageFile->getName(), PageInfo::SUFFIX));
+			$slug = $this->slugger->slug(
+				NodeHelper::isIndexPage($pageFile)
+					? $pageFile->getParent()->getName()
+					: basename($pageFile->getName(), PageInfo::SUFFIX)
+			);
 			$update
 				->setParameter('file_id', $pageFile->getId(), IQueryBuilder::PARAM_INT)
 				->setParameter('slug', $slug, IQueryBuilder::PARAM_STR)
