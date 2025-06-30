@@ -1069,7 +1069,7 @@ class PageService {
 		} else {
 			$pagePathRoute = implode('/', array_map('rawurlencode', explode('/', $pageInfo->getFilePath())));
 			$pageTitleRoute = ($pageInfo->getFileName() === PageInfo::INDEX_PAGE_TITLE . PageInfo::SUFFIX) ? '' : rawurlencode($pageInfo->getTitle());
-			if ($withFileId) {
+			if ($withFileId && $pageInfo->getParentId() !== 0) {
 				$fileIdQuery = '?fileId=' . $pageInfo->getId();
 			}
 		}
