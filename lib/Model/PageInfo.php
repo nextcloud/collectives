@@ -203,8 +203,14 @@ class PageInfo implements JsonSerializable {
 		// Set folder name as title for all index pages except the collective landing page
 		$dirName = dirname($file->getInternalPath());
 		$dirName = $dirName === '.' ? '' : $dirName;
-		if ($parentId !== 0 && strcmp($file->getName(), self::INDEX_PAGE_TITLE . self::SUFFIX) === 0) {
-			$this->setTitle(basename($dirName));
+		if (strcmp($file->getName(), self::INDEX_PAGE_TITLE . self::SUFFIX) === 0) {
+			if ($parentId === 0) {
+				// Landing page
+				$this->setTitle(\OC::$server->getL10N('collectives')->t('Landing page'));
+			} else {
+				// Index page
+				$this->setTitle(basename($dirName));
+			}
 		} else {
 			$this->setTitle(basename($file->getName(), self::SUFFIX));
 		}

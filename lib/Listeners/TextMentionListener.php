@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Listeners;
 
-use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Mount\CollectiveMountPoint;
 use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\PageService;
@@ -53,12 +52,9 @@ class TextMentionListener implements IEventListener {
 			: $collective->getName();
 
 		$pageLink = $this->urlGenerator->linkToRouteAbsolute('collectives.start.index') . $this->pageService->getPageLink($collective->getUrlPath(), $pageInfo);
-		$pageTitle = $pageInfo->getTitle() === PageInfo::INDEX_PAGE_TITLE
-			? $this->l10n->t('Landing page')
-			: $pageInfo->getTitle();
 		$pageName = $pageInfo->getEmoji()
-			? $pageInfo->getEmoji() . ' ' . $pageTitle
-			: $pageTitle;
+			? $pageInfo->getEmoji() . ' ' . $pageInfo->getTitle()
+			: $pageInfo->getTitle();
 
 		$notification = $event->getNotification();
 		$notification->setIcon($this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('collectives', 'collectives-dark.svg')));
