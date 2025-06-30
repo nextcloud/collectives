@@ -427,25 +427,63 @@ class PageServiceTest extends TestCase {
 	}
 
 	public function testGetPageLink(): void {
-		$collectiveName = 'My Collective';
+		$collectiveUrlPath = 'My-Collective-2';
 
 		$pageInfo1 = new PageInfo();
 		$pageInfo1->setId(123);
+		$pageInfo1->setParentId(456);
+		$pageInfo1->setFilePath('page one');
+		$pageInfo1->setFileName('subpage2.md');
+		$pageInfo1->setTitle('subpage2');
+		$pageInfo1->setSlug('subpage2');
+
+		self::assertEquals('My-Collective-2/subpage2-123',
+			$this->service->getPageLink($collectiveUrlPath, $pageInfo1));
+
+		$pageInfo2 = new PageInfo();
+		$pageInfo2->setId(124);
+		$pageInfo2->setParentId(0);
+		$pageInfo2->setFilePath('');
+		$pageInfo2->setFileName('Readme.md');
+		$pageInfo2->setTitle('Landing page');
+		$pageInfo2->setSlug('');
+
+		self::assertEquals('My-Collective-2',
+			$this->service->getPageLink($collectiveUrlPath, $pageInfo2));
+	}
+
+	public function testGetPageLinkNoSlug(): void {
+		$collectiveUrlPath = 'My Collective';
+
+		$pageInfo1 = new PageInfo();
+		$pageInfo1->setId(123);
+		$pageInfo1->setParentId(456);
 		$pageInfo1->setFilePath('page one');
 		$pageInfo1->setFileName('subpage2.md');
 		$pageInfo1->setTitle('subpage2');
 
 		self::assertEquals('My%20Collective/page%20one/subpage2?fileId=123',
-			$this->service->getPageLink($collectiveName, $pageInfo1));
+			$this->service->getPageLink($collectiveUrlPath, $pageInfo1));
 
 		$pageInfo2 = new PageInfo();
 		$pageInfo2->setId(124);
+		$pageInfo2->setParentId(456);
 		$pageInfo2->setFilePath('page two/with another layer/and#spec!al_ch@rs?;/page');
 		$pageInfo2->setFileName('Readme.md');
 		$pageInfo2->setTitle('page');
 
 		self::assertEquals('My%20Collective/page%20two/with%20another%20layer/and%23spec%21al_ch%40rs%3F%3B/page?fileId=124',
-			$this->service->getPageLink($collectiveName, $pageInfo2));
+			$this->service->getPageLink($collectiveUrlPath, $pageInfo2));
+
+		$pageInfo3 = new PageInfo();
+		$pageInfo3->setId(125);
+		$pageInfo3->setParentId(0);
+		$pageInfo3->setFilePath('');
+		$pageInfo3->setFileName('Readme.md');
+		$pageInfo3->setTitle('Landing page');
+
+		self::assertEquals('My%20Collective',
+			$this->service->getPageLink($collectiveUrlPath, $pageInfo3));
 	}
 
 	public function testMatchBacklinks(): void {
