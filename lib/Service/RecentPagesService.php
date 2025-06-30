@@ -104,9 +104,9 @@ class RecentPagesService {
 				$pagePath = dirname($internalPath);
 			}
 
-			if ($pagePath === '.') {
-				$pagePath = '';
-			}
+			$pagePath = $pagePath === '.'
+				? ''
+				: str_replace(DIRECTORY_SEPARATOR, ' - ', $pagePath);
 
 			$fileIdSuffix = '?fileId=' . $row['file_id'];
 			$url = $this->urlGenerator->linkToRoute('collectives.start.indexPath', ['path' => implode('/', $pathParts)]) . $fileIdSuffix;

@@ -16,6 +16,7 @@ use OCA\Collectives\Search\FileSearch\ClauseTokenizer;
 use OCA\Collectives\Search\FileSearch\FileSearcher;
 use OCA\Collectives\Search\FileSearch\FileSearchException;
 use OCA\Collectives\Service\CollectiveHelper;
+use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\PageService;
 use OCA\Collectives\Service\SearchService;
 use OCP\App\IAppManager;
@@ -36,6 +37,7 @@ class PageContentProvider implements IProvider {
 		private IL10N $l10n,
 		private IURLGenerator $urlGenerator,
 		private CollectiveHelper $collectiveHelper,
+		private CollectiveService $collectiveService,
 		private PageService $pageService,
 		private SearchService $indexedSearchService,
 		private LoggerInterface $logger,
@@ -102,10 +104,15 @@ class PageContentProvider implements IProvider {
 				continue;
 			}
 
+			$descriptionSuffix = $pageInfo->getFilePath()
+				? ' - ' . $pageInfo->getFilePathString()
+				: '';
+			$description = $this->l10n->t('In collective %1$s', [$this->collectiveService->getCollectiveNameWithEmoji($collective)])
+				. $descriptionSuffix;
 			$pageSearchResults[] = new SearchResultEntry(
 				'',
 				$highlighter->extractRelevant($query->getTerm(), $page->getContent(), $highlightLength, 5, ''),
-				$collective->getName() . ' / ' . $pageInfo->getTitle(),
+				$description,
 				$this->urlGenerator->linkToRouteAbsolute('collectives.start.index') . $this->pageService->getPageLink($collective->getUrlPath(), $pageInfo),
 				'icon-collectives-page'
 			);

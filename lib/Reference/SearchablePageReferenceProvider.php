@@ -235,8 +235,11 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 		$refTitle = $pageEmoji ? $pageEmoji . ' ' . $page->getTitle() : $page->getTitle();
 		$reference->setTitle($refTitle);
 
+		$descriptionSuffix = $page->getFilePath()
+			? ' - ' . $page->getFilePathString()
+			: '';
 		$description = $this->l10n->t('In collective %1$s', [$this->collectiveService->getCollectiveNameWithEmoji($collective)])
-			. ' - ' . $page->getFilePath();
+			. $descriptionSuffix;
 		$reference->setDescription($description);
 		$pageReferenceInfo['description'] = $description;
 

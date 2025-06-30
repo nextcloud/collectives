@@ -58,6 +58,7 @@ class PageInfoTest extends TestCase {
 		self::assertEquals($fileSize, $pageInfo->getSize());
 		self::assertEquals($fileName, $pageInfo->getFileName());
 		self::assertEquals($parentInternalPath, $pageInfo->getFilePath());
+		self::assertEquals(str_replace(DIRECTORY_SEPARATOR, ' - ', $parentInternalPath), $pageInfo->getFilePathString());
 		self::assertEquals($fileCollectivePath, $pageInfo->getCollectivePath());
 	}
 }
