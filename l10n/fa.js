@@ -274,7 +274,6 @@ OC.L10N.register(
     "Only circle owners can delete a circle" : "تنها مالکان حلقه می‌توانند حلقه را پاک کنند",
     "Create collective for existing circle" : "ساخت انجمن برای حلقه موجود",
     "New collective name" : "نام انجمن جدید",
-    "Select circle..." : "انتخاب حلقه...",
     "Create a new collective" : "ساخت یک انجمن جدید",
     "Cancel creating a new collective" : "رد ساخت انجمن جدید",
     "Link copied to the clipboard." : "Link copied to the clipboard.",

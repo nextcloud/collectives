@@ -301,7 +301,6 @@ OC.L10N.register(
     "Only circle owners can delete a circle" : "Alleen kring eigenaren kunnen een kring verwijderen",
     "Create collective for existing circle" : "Collectief maken voor bestaande kring",
     "New collective name" : "Nieuwe naam collectief",
-    "Select circle..." : "Selecteer kring...",
     "Create a new collective" : "Een nieuw collectief maken",
     "Cancel creating a new collective" : "Aanmaken van een nieuw collectief annuleren",
     "Link copied to the clipboard." : "Link gekopieerd naar het klembord.",

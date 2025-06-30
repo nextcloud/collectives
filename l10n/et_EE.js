@@ -321,7 +321,6 @@ OC.L10N.register(
     "Only circle owners can delete a circle" : "Tiimi saavad kustutada vaid tiimi omanikud",
     "Create collective for existing circle" : "Loo vabaühendus olemasoleva tiimi jaoks",
     "New collective name" : "Uue vabaühenduse nimi",
-    "Select circle..." : "Vali tiim...",
     "Create a new collective" : "Loo uus vabaühendus",
     "Cancel creating a new collective" : "Katkesta vabaühenduse loomine",
     "Link copied to the clipboard." : "Link on kopeeritud lõikelauale.",

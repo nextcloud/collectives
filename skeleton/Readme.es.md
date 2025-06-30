@@ -5,7 +5,7 @@
 
 ### 👥 Invita a otras personas a colaborar en el cuaderno
 
-Para agregar personas, grupos o círculos, sigue el enlace a "Gestionar colaboradores" que se encuentra en el menú contextual (...) de cada cuaderno en la lista de cuadernos en el panel lateral izquierdo.
+Para agregar personas, grupos o círculos, sigue el enlace a "Gestionar colaboradores" que se encuentra en el menú contextual (…) de cada cuaderno en la lista de cuadernos en el panel lateral izquierdo.
 
 ### 🌱 Aquí conspiramos para lograr cambios
 

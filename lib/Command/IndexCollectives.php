@@ -52,8 +52,9 @@ class IndexCollectives extends Command {
 				if ($name && $name !== $circleName) {
 					continue;
 				}
-				$output->writeln('<info>Creating index for ' . $circleName . ' ... </info>');
+				$output->write('<info>Creating index for ' . $circleName . ' …</info>');
 				$this->searchService->indexCollective($collective);
+				$output->writeln('<info>done</info>');
 			} catch (MissingDependencyException|NotFoundException|NotPermittedException) {
 				$output->writeln("<error>Failed to find team associated with collective with ID={$collective->getId()}</error>");
 				return 1;

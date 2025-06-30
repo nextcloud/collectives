@@ -256,7 +256,6 @@ OC.L10N.register(
     "Only circle owners can delete a circle" : "Sols els propietaris d'un cercle poden suprimir un cercle",
     "Create collective for existing circle" : "Crear un Col·lectiu per al cercle existent",
     "New collective name" : "Nom del nou Col·lectiu",
-    "Select circle..." : "Seleccionar cercle...",
     "Create a new collective" : "Crear un nou col·lectiu",
     "Cancel creating a new collective" : "Cancel·la la creació d'un col·lectiu nou",
     "Link copied to the clipboard." : "S'ha copiat l'enllaç al porta-retalls.",

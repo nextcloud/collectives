@@ -53,7 +53,7 @@ class CreateCollective extends Command {
 		$this->userSession->setUser($user);
 		$lang = $this->l10nFactory->getUserLanguage($this->userSession->getUser());
 
-		$output->write('<info>Creating new collective ' . $name . ' ... </info>');
+		$output->write('<info>Creating new collective ' . $name . ' …</info>');
 
 		[, $info] = $this->collectiveService->createCollective($userId, $lang, $name);
 

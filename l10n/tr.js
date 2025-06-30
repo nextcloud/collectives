@@ -289,7 +289,6 @@ OC.L10N.register(
     "Only circle owners can delete a circle" : "Bir takımı yalnızca sahipleri silebilir ",
     "Create collective for existing circle" : "Var olan takım için topluluk ekle",
     "New collective name" : "Yeni topluluğun adı",
-    "Select circle..." : "Takım seçin...",
     "Create a new collective" : "Yeni bir topluluk ekle",
     "Cancel creating a new collective" : "Yeni bir topluluk eklemekten vazgeç",
     "Link copied to the clipboard." : "Bağlantı panoya kopyalandı.",

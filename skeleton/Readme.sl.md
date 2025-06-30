@@ -16,7 +16,7 @@ Ustvarjajte strani in si skupinsko izmenjujte misli, ki so zares pomembne. Ni po
 Pritisnite gumb s svinčnikom in začnite! ↗️
 
 
-## Dobro je tudi vedeti ...
+## Dobro je tudi vedeti…
 
 * Stran lahko hkrati ureja več oseb.
 * Krajevne strani je mogoče povezati tudi kot »povezave na datoteke«. Podprta je tudi možnost povleci in spusti s seznama strani v urejevalnik.

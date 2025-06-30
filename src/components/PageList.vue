@@ -10,7 +10,7 @@
 				:label="t('collectives', 'Search pages')"
 				:value.sync="filterString"
 				class="page-filter"
-				:placeholder="t('collectives', 'Search pages ...')"
+				:placeholder="t('collectives', 'Search pages…')"
 				trailing-button-icon="close"
 				:show-trailing-button="isFilteredView"
 				@trailing-button-click="clearFilterString" />

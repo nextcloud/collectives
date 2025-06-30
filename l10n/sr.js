@@ -317,7 +317,6 @@ OC.L10N.register(
     "Only circle owners can delete a circle" : "Круг могу да обришу само власници круга",
     "Create collective for existing circle" : "Креирај колектив за подтојећи круг",
     "New collective name" : "Нови назив колектива",
-    "Select circle..." : "Изаберите круг...",
     "Create a new collective" : "Креирај нови колектив",
     "Cancel creating a new collective" : "Откажи креирање новог колектива",
     "Link copied to the clipboard." : "Линк је копиран у клипборд",

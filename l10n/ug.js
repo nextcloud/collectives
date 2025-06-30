@@ -287,7 +287,6 @@ OC.L10N.register(
     "Only circle owners can delete a circle" : "پەقەت چەمبىرەك ئىگىلىرىلا چەمبىرەكنى ئۆچۈرەلەيدۇ",
     "Create collective for existing circle" : "مەۋجۇت چەمبىرەك ئۈچۈن كوللىكتىپ قۇرۇش",
     "New collective name" : "يېڭى كوللىكتىپ ئىسمى",
-    "Select circle..." : "چەمبىرەكنى تاللاڭ ...",
     "Create a new collective" : "يېڭى كوللىكتىپ قۇرۇش",
     "Cancel creating a new collective" : "يېڭى كوللىكتىپ قۇرۇشنى ئەمەلدىن قالدۇرۇڭ",
     "Link copied to the clipboard." : "ئۇلىنىش چاپلاش تاختىسىغا كۆچۈرۈلدى.",

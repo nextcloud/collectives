@@ -186,7 +186,6 @@ OC.L10N.register(
     "Only circle owners can delete a circle" : "Solo i proprietari di una cerchia possono rimuoverla",
     "Create collective for existing circle" : "Crea un collettivo per una cerchia esistente",
     "New collective name" : "Nome del nuovo collettivo",
-    "Select circle..." : "Seleziona cerchia...",
     "Create a new collective" : "Crea un nuovo collettivo",
     "Cancel creating a new collective" : "Annulla la creazione di un nuovo collettivo",
     "Link copied to the clipboard." : "Collegamento copiato negli appunti.",
