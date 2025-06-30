@@ -25,6 +25,7 @@ use OCP\Files\InvalidPathException;
 use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\Files\NotPermittedException as FilesNotPermittedException;
 use OCP\IDBConnection;
+use OCP\IUser;
 use Psr\Container\ContainerInterface;
 
 class CollectiveVersionsExpireManager extends BasicEmitter {
@@ -99,9 +100,17 @@ class CollectiveVersionsExpireManager extends BasicEmitter {
 		} catch (FilesNotPermittedException $e) {
 			throw new NotPermittedException($e->getMessage(), 0, $e);
 		}
+		/** @var IUser $dummyUser */
 		$dummyUser = new User('', null, $this->dispatcher);
 		foreach ($files as $fileId => $file) {
 			if ($file instanceof FileInfo) {
+				// Some versions could have been lost during move operations across storage.
+				// When this is the case, the fileinfo's path will not contain the name.
+				// When this is the case, we unlink the version's folder for the fileid, and continue to the next file.
+				if (!str_ends_with($file->getPath(), $file->getName())) {
+					$view->unlink('/' . $fileId);
+					continue;
+				}
 				try {
 					$versions = $this->versionsBackend->getVersionsForFile($dummyUser, $file);
 				} catch (FilesNotPermittedException|InvalidPathException $e) {

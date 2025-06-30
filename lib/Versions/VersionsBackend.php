@@ -281,8 +281,8 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 			return [];
 		}
 
-		$fileIds = array_map(static fn (Node $node) => (int)$node->getName(), $contents);
-		$files = array_map(static function (int $fileId) use ($mount): ?\OC\Files\FileInfo {
+		$fileIds = array_map(static fn (Node $node): int => (int)$node->getName(), $contents);
+		$files = array_map(static function (int $fileId) use ($mount): ?FileInfo {
 			$cacheEntry = $mount->getStorage()->getCache()->get($fileId);
 			if ($cacheEntry) {
 				return new \OC\Files\FileInfo($mount->getMountPoint() . '/' . $cacheEntry->getPath(), $mount->getStorage(), $cacheEntry->getPath(), $cacheEntry, $mount);
