@@ -288,7 +288,6 @@ OC.L10N.register(
     "Only circle owners can delete a circle" : "مُلّاك الدائرة فقط لهم صلاحية حذفها",
     "Create collective for existing circle" : "أنشيء تجميعة لدائرة التواصل القائمة",
     "New collective name" : "اسم تجميعة جديدة",
-    "Select circle..." : "إختر دائرة اتصال Circle ...",
     "Create a new collective" : "إنشاء تجميعة جديدة",
     "Cancel creating a new collective" : "إلغاء عملية إنشاء تجميعة جديدة",
     "Link copied to the clipboard." : "تمّ نسخ الرابط إلى الحافظة",

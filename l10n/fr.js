@@ -303,7 +303,6 @@ OC.L10N.register(
     "Only circle owners can delete a circle" : "Seuls les propriétaires de cercles peuvent supprimer un cercle",
     "Create collective for existing circle" : "Créer un collectif pour un cercle existant",
     "New collective name" : "Nom du nouveau collectif",
-    "Select circle..." : "Sélectionner un cercle…",
     "Create a new collective" : "Créer un nouveau collectif",
     "Cancel creating a new collective" : "Annuler la création d'un nouveau collectif",
     "Link copied to the clipboard." : "Lien copié dans le presse-papiers.",

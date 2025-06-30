@@ -37,7 +37,7 @@ class ExpirePageVersions extends Command {
 	 */
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		try {
-			$output->write('<info>Expiring old page versions ... </info>');
+			$output->write('<info>Expiring old page versions …</info>');
 			$this->expireManager->expireAll();
 			$output->writeln('<info>done</info>');
 			return 0;

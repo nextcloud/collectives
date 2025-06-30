@@ -315,7 +315,7 @@ Cypress.Commands.add('seedPage',
  */
 Cypress.Commands.add('seedPageContent', (pagePath, content) => {
 	const contentForLog = content.length > 200
-		? content.substring(0, 200) + '...'
+		? content.substring(0, 200) + '…'
 		: content
 	Cypress.log({ message: `${pagePath}, ${contentForLog}` })
 	cy.uploadContent(`Collectives/${pagePath}`, content)

@@ -141,7 +141,6 @@ OC.L10N.register(
     "Only circle owners can delete a circle" : "サークルの所有者のみがサークルを削除できます",
     "Create collective for existing circle" : "既存のサークルにコレクティブを作成",
     "New collective name" : "新規コレクティブの名称",
-    "Select circle..." : "サークルを選択...",
     "Link copied to the clipboard." : "クリップボードにリンクをコピーしました。",
     "New Page" : "新規ページ",
     "_%n byte_::_%n bytes_" : ["%n バイト"]

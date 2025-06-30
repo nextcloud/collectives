@@ -317,7 +317,6 @@ OC.L10N.register(
     "Only circle owners can delete a circle" : "Ní féidir ach le húinéirí ciorcail ciorcal a scriosadh",
     "Create collective for existing circle" : "Cruthaigh comhchoiteann don chiorcal atá ann cheana féin",
     "New collective name" : "Ainm comhchoiteann nua",
-    "Select circle..." : "Roghnaigh ciorcal...",
     "Create a new collective" : "Cruthaigh grúpa nua",
     "Cancel creating a new collective" : "Cealaigh cruthú comhchoiteann nua",
     "Link copied to the clipboard." : "Cóipeáladh an nasc chuig an ngearrthaisce.",

@@ -190,7 +190,6 @@ OC.L10N.register(
     "Only circle owners can delete a circle" : "Само собствениците на кръгове могат да изтриват кръгове",
     "Create collective for existing circle" : "Създаване на колектив за съществуващ кръг",
     "New collective name" : "Име на нов колектив",
-    "Select circle..." : "Избор на кръг ...",
     "Create a new collective" : "Създаване на новия колектив",
     "Cancel creating a new collective" : "Отказ от създаване на новия колектив",
     "Link copied to the clipboard." : "Връзката е копирана в клипборда.",

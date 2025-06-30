@@ -29,7 +29,7 @@ class PurgeObsoletePages extends Command {
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output): int {
-		$output->write('Start to purge cruft pages from database ...');
+		$output->write('Purging cruft pages from database …');
 		$count = $this->garbageCollector->purgeObsoletePages();
 		$output->writeln('done.');
 		$output->writeln(sprintf('Purged %d cruft pages from database.', $count));

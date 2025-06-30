@@ -259,7 +259,6 @@ OC.L10N.register(
     "Only circle owners can delete a circle" : "Zirkulu-jabeek soilik ezabatu dezakete zirkulu bat",
     "Create collective for existing circle" : "Sortu kolektiboa existittzen den zirkulurako",
     "New collective name" : "Kolektibo izen berria",
-    "Select circle..." : "Hautatu zirkulua...",
     "Create a new collective" : "Sortu kolektibo berria",
     "Cancel creating a new collective" : "Utzi kolektibo berria sortzeari",
     "Link copied to the clipboard." : "Esteka arbelera kopiatu da.",

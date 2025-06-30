@@ -18,7 +18,7 @@
 	">
 	<div>
 		<h2><?php print_unescaped($l->t('Error: Missing apps')); ?></h2>
-		<?php print_unescaped($l->t('The following dependency apps are missing: ')); ?>
+		<?php print_unescaped($l->t('The following dependency apps are missing:')); ?>
 	</div>
 	<br />
 	<ul style="font-weight: bold;">

@@ -286,7 +286,6 @@ OC.L10N.register(
     "Only circle owners can delete a circle" : "Kun eiere av sirkler kan slette en sirkel",
     "Create collective for existing circle" : "Opprett kollektiv for eksisterende sirkel",
     "New collective name" : "Nytt navn på kollektiv",
-    "Select circle..." : "Velg sirkel …",
     "Create a new collective" : "Opprett et nytt kollektiv",
     "Cancel creating a new collective" : "Avbryt oppretting av nytt kollektiv",
     "Link copied to the clipboard." : "Kobling kopiert til utklippstavlen.",

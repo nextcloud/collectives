@@ -288,7 +288,6 @@ OC.L10N.register(
     "Only circle owners can delete a circle" : "Kruh môžu odstrániť iba jeho vlastníci",
     "Create collective for existing circle" : "Vytvoriť kolektív pre existujúci kruh",
     "New collective name" : "Nový názov kolektívu",
-    "Select circle..." : "Vyberte kruh...",
     "Create a new collective" : "Vytvoriť nový kolektív",
     "Cancel creating a new collective" : "Zrušiť vytváranie nového kolektívu",
     "Link copied to the clipboard." : "Odkaz bol skopírovaný do schránky.",

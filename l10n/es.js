@@ -269,7 +269,6 @@ OC.L10N.register(
     "Only circle owners can delete a circle" : "Solo los propietarios del círculo pueden borrarlo",
     "Create collective for existing circle" : "Crear cuaderno colectivo para círculo existente",
     "New collective name" : "Nombre del cuaderno colectivo nuevo",
-    "Select circle..." : "Seleccionar círculo...",
     "Create a new collective" : "Crear un cuaderno colectivo nuevo",
     "Cancel creating a new collective" : "Cancelar la creación del cuaderno colectivo nuevo",
     "Link copied to the clipboard." : "Enlace copiado al portapapeles.",

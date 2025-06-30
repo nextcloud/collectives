@@ -317,7 +317,6 @@ OC.L10N.register(
     "Only circle owners can delete a circle" : "僅小圈圈擁有者可刪除小圈圈",
     "Create collective for existing circle" : "為既有的小圈圈建立知識庫",
     "New collective name" : "新知識庫名稱",
-    "Select circle..." : "選取小圈圈……",
     "Create a new collective" : "建立新知識庫",
     "Cancel creating a new collective" : "取消建立新知識庫",
     "Link copied to the clipboard." : "連結已複製到剪貼簿。",

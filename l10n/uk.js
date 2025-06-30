@@ -230,7 +230,6 @@ OC.L10N.register(
     "Only circle owners can delete a circle" : "Тільки власники кола можуть його вилучити",
     "Create collective for existing circle" : "Створити колектив на базі наявного кола",
     "New collective name" : "Назва нового колективу",
-    "Select circle..." : "Вибрати коло...",
     "Create a new collective" : "Створити новий колектив",
     "Cancel creating a new collective" : "Скасувати створення нового колективу",
     "Link copied to the clipboard." : "Посилання скопійовано до буферу обміну.",
