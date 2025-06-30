@@ -73,13 +73,13 @@ class SearchablePageReferenceProviderTest extends TestCase {
 	private function urlProvider(): array {
 		return [
 			// internal
-			// ['https://nextcloud.local/apps/collectives/supacollective', ''],
+			['https://nextcloud.local/apps/collectives/supacollective', ''],
 			['https://nextcloud.local/apps/collectives/supacollective/Tutos/Hacking/Spectre', 'Tutos/Hacking/Spectre'],
 			['https://nextcloud.local/apps/collectives/supacollective/Tutos/Hacking/Spectre', 'Tutos/Hacking/Spectre'],
 			['https://nextcloud.local/index.php/apps/collectives/supacollective/Tutos/Hacking/Spectre', 'Tutos/Hacking/Spectre'],
 
 			// public
-			// ['https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective', ''],
+			['https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective', ''],
 			['https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/abc', 'abc'],
 			['https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/Tutos/Hacking/Spectre', 'Tutos/Hacking/Spectre'],
 			['https://nextcloud.local/index.php/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/Tutos/Hacking/Spectre', 'Tutos/Hacking/Spectre'],

@@ -71,7 +71,7 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 	private static function pagePathFromMatches(string $url, array $matches): array {
 		$pagePath = [
 			'collectiveName' => urldecode($matches[1]),
-			'pagePath' => urldecode($matches[2]),
+			'pagePath' => urldecode(ltrim($matches[2] ?? '', '/')),
 		];
 
 		// URL with fileId query param
@@ -97,6 +97,7 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 
 	public function matchUrl(string $url): ?array {
 		// link examples:
+		// https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective-123
 		// https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective-123/spectre-slug-14457
 		// https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/Tutos/Hacking/Spectre?fileId=14457
 		// https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/Tutos/Hacking/Spectre
@@ -108,13 +109,14 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 
 		$matches = false;
 		foreach ($startPublicRegexes as $regex) {
-			preg_match('/^' . preg_quote($regex, '/') . '\/\w+' . '\/([^\/]+)\/([^?]+)/i', $url, $matches);
-			if ($matches && count($matches) > 2) {
+			preg_match('/^' . preg_quote($regex, '/') . '\/\w+' . '\/([^\/]+)(\/[^?]+)?/i', $url, $matches);
+			if ($matches && count($matches) > 1) {
 				return self::pagePathFromMatches($url, $matches);
 			}
 		}
 
 		// link examples:
+		// https://nextcloud.local/apps/collectives/supacollective-123
 		// https://nextcloud.local/apps/collectives/supacollective-123/spectre-slug-14457
 		// https://nextcloud.local/apps/collectives/supacollective/Tutos/Hacking/Spectre?fileId=14457
 		// https://nextcloud.local/apps/collectives/supacollective/Tutos/Hacking/Spectre
@@ -124,8 +126,8 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 		];
 
 		foreach ($startRegexes as $regex) {
-			preg_match('/^' . preg_quote($regex, '/') . '\/([^\/]+)\/([^?]+)/i', $url, $matches);
-			if ($matches && count($matches) > 2) {
+			preg_match('/^' . preg_quote($regex, '/') . '\/([^\/]+)(\/[^?]+)?/i', $url, $matches);
+			if ($matches && count($matches) > 1) {
 				return self::pagePathFromMatches($url, $matches);
 			}
 		}
