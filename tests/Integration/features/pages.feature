@@ -43,8 +43,8 @@ Feature: pages
     And user "jane" sees pagePath "firstpage (3).md" in "BehatPagesCollective"
 
   Scenario: Fails to move/copy landingpage
-    When user "jane" fails to move page "Readme" to "newnamepage" with parentPath "Readme.md" in "BehatPagesCollective"
-    When user "jane" fails to copy page "Readme" to "newnamepage" with parentPath "Readme.md" in "BehatPagesCollective"
+    When user "jane" fails to move page "Landing page" to "newnamepage" with parentPath "Readme.md" in "BehatPagesCollective"
+    When user "jane" fails to copy page "Landing page" to "newnamepage" with parentPath "Readme.md" in "BehatPagesCollective"
 
   Scenario: Change page emoji
     When user "jane" sets emoji for page "firstpage" to "🍏" in "BehatPagesCollective"

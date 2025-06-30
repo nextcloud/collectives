@@ -63,7 +63,7 @@ export default {
 		},
 
 		isLandingPage() {
-			return this.page.title === INDEX_PAGE
+			return this.page.fileName === INDEX_PAGE + '.md'
 		},
 
 		emoji() {
