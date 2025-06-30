@@ -84,7 +84,7 @@ class RecentPagesWidget implements IReloadableWidget, IIconWidget {
 	}
 
 	public function getUrl(): ?string {
-		return $this->urlGenerator->linkToRoute('collectives.collective.index');
+		return $this->urlGenerator->linkToRoute('collectives.start.index');
 	}
 
 	public function load(): void {
