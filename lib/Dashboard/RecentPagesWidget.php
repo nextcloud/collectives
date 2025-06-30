@@ -37,7 +37,7 @@ class RecentPagesWidget implements IReloadableWidget, IIconWidget {
 		$items = [];
 		foreach ($recentPages as $recentPage) {
 			$subtitle = $recentPage->getPagePath()
-				? $recentPage->getCollectiveName() . ': ' . $recentPage->getPagePath()
+				? $recentPage->getCollectiveName() . ' - ' . $recentPage->getPagePath()
 				: $recentPage->getCollectiveName();
 			$items[] = new WidgetItem(
 				$recentPage->getTitle(),

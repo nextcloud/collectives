@@ -136,6 +136,10 @@ class PageInfo implements JsonSerializable {
 		return $this->filePath;
 	}
 
+	public function getFilePathString(): string {
+		return str_replace(DIRECTORY_SEPARATOR, ' - ', $this->getFilePath());
+	}
+
 	public function setFilePath(string $filePath): void {
 		$this->filePath = $filePath;
 	}
@@ -183,6 +187,7 @@ class PageInfo implements JsonSerializable {
 			'size' => $this->size,
 			'fileName' => $this->fileName,
 			'filePath' => $this->filePath,
+			'filePathString' => $this->getFilePathString(),
 			'collectivePath' => $this->collectivePath,
 			'parentId' => $this->parentId,
 			'shareToken' => $this->shareToken,
