@@ -37,6 +37,8 @@ class CollectiveVersionsExpireManagerTest extends TestCase {
 			->willReturn($this->versionsBackend);
 
 		$file = $this->createMock(FileInfo::class);
+		$file->method('getPath')->willReturn('/path/to/file.txt');
+		$file->method('getName')->willReturn('file.txt');
 		$this->versionsBackend->method('getAllVersionedFiles')
 			->willReturn([$file]);
 		$this->versionsBackend->expects($this->once())
