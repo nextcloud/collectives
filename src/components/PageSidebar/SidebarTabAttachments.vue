@@ -190,7 +190,6 @@ export default {
 	computed: {
 		...mapState(useRootStore, [
 			'isPublic',
-			'isTextEdit',
 			'loading',
 			'shareTokenParam',
 		]),
@@ -200,6 +199,7 @@ export default {
 			'deletedAttachments',
 			'pagePath',
 			'pagePathTitle',
+			'isTextEdit',
 		]),
 
 		noAttachmentsDescription() {

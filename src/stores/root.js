@@ -5,15 +5,17 @@
 
 import { defineStore } from 'pinia'
 import { set } from 'vue'
-import { editorApiReaderFileId, editorApiUpdateReadonlyBarProps, pageModes } from '../constants.js'
+import { useLocalStorage } from '@vueuse/core'
+import { editorApiReaderFileId, editorApiUpdateReadonlyBarProps } from '../constants.js'
+
+const STORE_PREFIX = 'collectives/pinia/root/'
 
 export const useRootStore = defineStore('root', {
 	state: () => ({
-		textMode: pageModes.MODE_VIEW,
-		showings: {},
+		showings: useLocalStorage(STORE_PREFIX + 'showings', {}),
 		loadings: {},
 		printView: false,
-		activeSidebarTab: 'attachments',
+		activeSidebarTab: useLocalStorage(STORE_PREFIX + 'activeSidebarTab', 'attachments'),
 		collectiveParam: '',
 		collectiveId: null,
 		pageParam: '',
@@ -27,9 +29,6 @@ export const useRootStore = defineStore('root', {
 		showing: (state) => (aspect) => state.showings[aspect],
 
 		isPublic() { return !!this.shareTokenParam },
-
-		isTextEdit: (state) => state.textMode === pageModes.MODE_EDIT,
-		isTextView: (state) => state.textMode === pageModes.MODE_VIEW,
 
 		editorApiVersionCheck: () => (requiredVersion) => {
 			const apiVersion = window.OCA?.Text?.apiVersion || '0'
@@ -57,8 +56,6 @@ export const useRootStore = defineStore('root', {
 		toggle(aspect) { set(this.showings, aspect, !this.showings[aspect]) },
 
 		setPrintView() { this.printView = true },
-		setTextEdit() { this.textMode = pageModes.MODE_EDIT },
-		setTextView() { this.textMode = pageModes.MODE_VIEW },
 		setActiveSidebarTab(id) { this.activeSidebarTab = id },
 	},
 })

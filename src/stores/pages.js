@@ -9,15 +9,18 @@ import { getCurrentUser } from '@nextcloud/auth'
 import { generateRemoteUrl } from '@nextcloud/router'
 import { useRootStore } from './root.js'
 import { useCollectivesStore } from './collectives.js'
-import { INDEX_PAGE } from '../constants.js'
+import { INDEX_PAGE, pageModes } from '../constants.js'
 /* eslint import/namespace: ['error', { allowComputed: true }] */
 import * as sortOrders from '../util/sortOrders.js'
 import * as api from '../apis/collectives/index.js'
+
+const STORE_PREFIX = 'collectives/pinia/pages/'
 
 export const usePagesStore = defineStore('pages', {
 	state: () => ({
 		allPages: {},
 		allTrashPages: {},
+		textMode: useLocalStorage(STORE_PREFIX + 'textMode', {}),
 		newPage: undefined,
 		newPageParentId: null,
 		sortBy: undefined,
@@ -328,6 +331,10 @@ export const usePagesStore = defineStore('pages', {
 			}
 		},
 
+		getTextMode: (state) => state.textMode[state.currentPage.id] ?? pageModes.MODE_VIEW,
+		isTextEdit: (state) => state.getTextMode === pageModes.MODE_EDIT,
+		isTextView: (state) => state.getTextMode === pageModes.MODE_VIEW,
+
 		isCollapsed(state) {
 			// Default to 'true' if unset
 			return pageId => state.collapsed[pageId] != null ? state.collapsed[pageId] : true
@@ -423,6 +430,9 @@ export const usePagesStore = defineStore('pages', {
 		setPageOrder(order) {
 			this.sortBy = order
 		},
+
+		setTextEdit() { set(this.textMode, this.currentPage.id, pageModes.MODE_EDIT) },
+		setTextView() { set(this.textMode, this.currentPage.id, pageModes.MODE_VIEW) },
 
 		toggleCollapsed(pageId) {
 			// Default to 'false' if unset

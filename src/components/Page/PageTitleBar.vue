@@ -145,7 +145,6 @@ export default {
 	computed: {
 		...mapState(useRootStore, [
 			'isPublic',
-			'isTextEdit',
 			'loading',
 			'showing',
 		]),
@@ -158,6 +157,7 @@ export default {
 			'currentPagePath',
 			'isIndexPage',
 			'isLandingPage',
+			'isTextEdit',
 		]),
 
 		// TODO: remove when we stop supporting NC < 30
