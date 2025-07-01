@@ -5,13 +5,16 @@
 
 import { defineStore } from 'pinia'
 import { set } from 'vue'
+import { useLocalStorage } from '@vueuse/core'
 import { useRootStore } from './root.js'
 import { useCollectivesStore } from './collectives.js'
 import * as api from '../apis/collectives/index.js'
 
+const STORE_PREFIX = 'collectives/pinia/shares/'
+
 export const useSharesStore = defineStore('shares', {
 	state: () => ({
-		allShares: {},
+		allShares: useLocalStorage(STORE_PREFIX + 'allShares', {}),
 	}),
 
 	getters: {
