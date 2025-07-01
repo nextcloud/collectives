@@ -5,6 +5,7 @@
 
 import { defineStore } from 'pinia'
 import { set } from 'vue'
+import { useLocalStorage } from '@vueuse/core'
 import { useRootStore } from './root.js'
 import { useCollectivesStore } from './collectives.js'
 import { usePagesStore } from './pages.js'
@@ -12,10 +13,12 @@ import * as api from '../apis/collectives/index.js'
 import { byTitleAsc } from '../util/sortOrders.js'
 import { TEMPLATE_PAGE } from '../constants.js'
 
+const STORE_PREFIX = 'collectives/pinia/templates/'
+
 export const useTemplatesStore = defineStore('templates', {
 	state: () => ({
-		allTemplates: {},
-		allTemplatesLoaded: {},
+		allTemplates: useLocalStorage(STORE_PREFIX + 'allTemplates', {}),
+		allTemplatesLoaded: useLocalStorage(STORE_PREFIX + 'allTemplatesLoaded', {}),
 	}),
 
 	getters: {
