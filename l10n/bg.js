@@ -106,7 +106,6 @@ OC.L10N.register(
     "Deleted" : "Изтрито",
     "Sorted by recently changed" : "Сортирано по последно променени",
     "Could not save page order for collective" : "Не можа да запише реда на страницата за колектив",
-    "Search pages ..." : "Търсене на страници ...",
     "Sort order" : "Сортиране на реда",
     "Sort by custom order" : "Сортиране по персонализиран ред",
     "Sort recently changed first" : "Първо да се сортират наскоро променените",
@@ -161,7 +160,6 @@ OC.L10N.register(
     "Could not move page" : "Неуспешно преместване на страницата",
     "Could not delete the page" : "Неуспешно изтриване на страницата",
     "Error: Missing apps" : "Грешка: Липсват приложения",
-    "The following dependency apps are missing: " : "Липсват следните зависими приложения: ",
     "Please ask the administrator to enable these apps." : "Моля, помолете администратора да активира тези приложения.",
     "in Collective {collective}" : "в Колектива {collective}",
     "Created collective \"%s\" for existing circle." : "Създаден е колектив \"%s\" за съществуващ кръг.",
@@ -195,6 +193,7 @@ OC.L10N.register(
     "Cancel creating a new collective" : "Отказ от създаване на новия колектив",
     "Link copied to the clipboard." : "Връзката е копирана в клипборда.",
     "New Page" : "Нова страница",
-    "_%n byte_::_%n bytes_" : ["%n  байта","%n байта"]
+    "_%n byte_::_%n bytes_" : ["%n  байта","%n байта"],
+    "The following dependency apps are missing: " : "Липсват следните зависими приложения: "
 },
 "nplurals=2; plural=(n != 1);");

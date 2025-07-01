@@ -113,7 +113,6 @@ OC.L10N.register(
     "Could not add members to the collective" : "Kan geen leden toevoegen aan het collectief",
     "Select emoji" : "Selecteer emoji",
     "Select an existing team" : "Selecteer een bestaand team",
-    "Select a team..." : "Selecteer een team...",
     "Cancel selecting a team" : "Annuleer het selecteren van een team",
     "Add members" : "Leden toevoegen",
     "Back" : "Terug",
@@ -192,7 +191,6 @@ OC.L10N.register(
     "Sorted by recently changed" : "Gesorteerd op recent gewijzigd",
     "Could not save page order for collective" : "Kan paginavolgorde voor collectief niet opslaan",
     "Search pages" : "Zoek pagina's",
-    "Search pages ..." : "Zoek pagina's...",
     "Sort order" : "Sorteervolgorde",
     "Sort by custom order" : "Sorteren op aangepaste volgorde",
     "Sort recently changed first" : "Sorteer recentelijk gewijzigd eerst",
@@ -272,7 +270,6 @@ OC.L10N.register(
     "Could not move page to another collective" : "Kan pagina niet naar een ander collectief verplaatsen",
     "Could not delete the page" : "Kan de pagina niet verwijderen",
     "Error: Missing apps" : "Fout: ontbrekende apps",
-    "The following dependency apps are missing: " : "De volgende apps ontbreken: ",
     "Please ask the administrator to enable these apps." : "Vraag de beheerder om deze apps in te schakelen.",
     "in Collective {collective}" : "in collectief {collective}",
     "Created collective \"%s\" for existing circle." : "Gemaakt collectief \"%s\" voor bestaande kring.",
@@ -306,6 +303,7 @@ OC.L10N.register(
     "Cancel creating a new collective" : "Aanmaken van een nieuw collectief annuleren",
     "Link copied to the clipboard." : "Link gekopieerd naar het klembord.",
     "New Page" : "Nieuwe Pagina",
-    "_%n byte_::_%n bytes_" : ["%n byte","%n bytes"]
+    "_%n byte_::_%n bytes_" : ["%n byte","%n bytes"],
+    "The following dependency apps are missing: " : "De volgende apps ontbreken: "
 },
 "nplurals=2; plural=(n != 1);");

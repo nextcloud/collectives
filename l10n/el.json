@@ -107,7 +107,6 @@
     "Could not add members to the collective" : "Δεν ήταν δυνατή η προσθήκη μελών στη συλλογικότητα",
     "Select emoji" : "Επιλογή emoji",
     "Select an existing team" : "Επιλογή υπάρχουσας ομάδας",
-    "Select a team..." : "Επιλογή ομάδας...",
     "Cancel selecting a team" : "Ακύρωση επιλογής ομάδας",
     "Add members" : "Προσθήκη μελών",
     "Back" : "Πίσω",
@@ -173,7 +172,6 @@
     "Sorted by recently changed" : "Ταξινομημένο κατά πρόσφατες αλλαγές",
     "Could not save page order for collective" : "Δεν ήταν δυνατή η αποθήκευση της σειράς σελίδων για τη συλλογικότητα",
     "Search pages" : "Αναζήτηση σελίδων",
-    "Search pages ..." : "Αναζήτηση σελίδων ...",
     "Sort order" : "Σειρά ταξινόμησης",
     "Sort by custom order" : "Ταξινόμηση με προσαρμοσμένη σειρά",
     "Sort recently changed first" : "Ταξινόμηση με τις πρόσφατα αλλαγμένες πρώτες",
@@ -242,7 +240,6 @@
     "Could not move page to another collective" : "Δεν ήταν δυνατή η μετακίνηση της σελίδας σε άλλη συλλογικότητα",
     "Could not delete the page" : "Δεν ήταν δυνατή η διαγραφή της σελίδας",
     "Error: Missing apps" : "Σφάλμα: Λείπουν εφαρμογές",
-    "The following dependency apps are missing: " : "Λείπουν οι ακόλουθες εφαρμογές εξαρτήσεων: ",
     "Please ask the administrator to enable these apps." : "Παρακαλώ ζητήστε από τον διαχειριστή να ενεργοποιήσει αυτές τις εφαρμογές.",
     "in Collective {collective}" : "στην Συλλογικότητα {collective}",
     "Created collective \"%s\" for existing circle." : "Δημιουργήθηκε συλλογικότητα \"%s\" για υπάρχον κύκλο.",
@@ -275,6 +272,7 @@
     "Create a new collective" : "Δημιουργία νέας συλλογικότητας",
     "Cancel creating a new collective" : "Ακύρωση δημιουργίας νέας συλλογικότητας",
     "Link copied to the clipboard." : "Ο σύνδεσμος αντιγράφηκε στο πρόχειρο.",
-    "New Page" : "Νέα Σελίδα"
+    "New Page" : "Νέα Σελίδα",
+    "The following dependency apps are missing: " : "Λείπουν οι ακόλουθες εφαρμογές εξαρτήσεων: "
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

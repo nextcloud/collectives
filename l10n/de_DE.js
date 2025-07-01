@@ -114,7 +114,6 @@ OC.L10N.register(
     "Could not add members to the collective" : "Keine Mitglieder konnten zu diesem Kollektiv hinzugefügt werden",
     "Select emoji" : "Wählen Sie ein Emoji",
     "Select an existing team" : "Ein bestehendes Team wählen",
-    "Select a team..." : "Ein Team auswählen…",
     "Cancel selecting a team" : "Auswahl eines Teams abbrechen",
     "Add members" : "Mitglieder hinzufügen",
     "Back" : "Zurück",
@@ -198,7 +197,6 @@ OC.L10N.register(
     "Sorted by least recently changed" : "Sortiert nach letzter Änderung",
     "Could not save page order for collective" : "Sortierung der Seiten für das Kollektiv konnte nicht gespeichert werden",
     "Search pages" : "Seiten durchsuchen",
-    "Search pages ..." : "Seiten durchsuchen…",
     "Sort order" : "Sortierung",
     "Sort by custom order" : "Benutzerdefinierte Sortierung",
     "Sort least recently changed first" : "Sortieren nach letzten Änderungen zuerst",
@@ -224,7 +222,7 @@ OC.L10N.register(
     "Failed to update share link: {responseError}" : "Fehler beim Aktualisieren des Freigabelinks: {responseError}",
     "Page \"{name}\" has been unshared" : "Freigabe der Seite \"{name}\" wurde aufgehoben",
     "Collective \"{name}\" has been unshared" : "Freigabe des Kollektivs \"{name}\" wurde aufgehoben",
-    "Failed to unshare: {responseError}" : "Fehler beim entfernen der Freigabe: {responseError}",
+    "Failed to unshare: {responseError}" : "Fehler beim Entfernen der Freigabe: {responseError}",
     "Error generating password from password policy" : "Fehler beim Erzeugen des Passworts aufgrund der Passwortrichtlinie",
     "Quick share options dropdown" : "Dropdown-Liste mit Schnellfreigabeoptionen",
     "Please enter the following required information before creating the share" : "Bitte geben Sie die benötigten Informationen ein, bevor die Freigabe erstellt wird",
@@ -292,7 +290,6 @@ OC.L10N.register(
     "Failed to delete {basename} version of {page}." : "{basename}-Version von {page} konnte nicht gelöscht werden.",
     "Deleted {basename} version of {page}." : "{basename}-Version von {page} gelöscht.",
     "Error: Missing apps" : "Fehler: Apps fehlen",
-    "The following dependency apps are missing: " : "Die folgenden erforderlichen Apps fehlen: ",
     "Please ask the administrator to enable these apps." : "Bitten Sie Ihre Administration, diese Apps zu aktivieren.",
     "in Collective {collective}" : "in Kollektiv {collective}",
     "Created collective \"%s\" for existing circle." : "Kollektiv \"%s\" für bestehenden Kreis angelegt.",
@@ -326,6 +323,7 @@ OC.L10N.register(
     "Cancel creating a new collective" : "Erstellung eines neuen Kollektivs abbrechen",
     "Link copied to the clipboard." : "Link in die Zwischenablage kopiert.",
     "New Page" : "Neue Seite",
-    "_%n byte_::_%n bytes_" : ["%n Byte","%n Bytes"]
+    "_%n byte_::_%n bytes_" : ["%n Byte","%n Bytes"],
+    "The following dependency apps are missing: " : "Die folgenden erforderlichen Apps fehlen: "
 },
 "nplurals=2; plural=(n != 1);");

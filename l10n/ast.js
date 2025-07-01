@@ -96,7 +96,6 @@ OC.L10N.register(
     "Deleted pages" : "Páxines desaniciaes",
     "No deleted pages." : "Nun hai nenguna páxina desaniciada.",
     "Deleted" : "Desanicióse",
-    "Search pages ..." : "Buscar páxines…",
     "Share link ({index})" : "Compartir l'enllaz ({index})",
     "View only" : "Ver namás",
     "Can edit" : "Pue editar",

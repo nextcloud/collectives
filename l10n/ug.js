@@ -111,7 +111,6 @@ OC.L10N.register(
     "Could not add members to the collective" : "كوللىكتىپقا ئەزا قوشالمىدى",
     "Select emoji" : "Emoji نى تاللاڭ",
     "Select an existing team" : "مەۋجۇت گۇرۇپپىنى تاللاڭ",
-    "Select a team..." : "گۇرۇپپا تاللاڭ ...",
     "Cancel selecting a team" : "گۇرۇپپا تاللاشنى ئەمەلدىن قالدۇرۇڭ",
     "Add members" : "ئەزا قوشۇڭ",
     "Back" : "قايتىش",
@@ -178,7 +177,6 @@ OC.L10N.register(
     "Sorted by recently changed" : "يېقىندا ئۆزگەرتىلگەن",
     "Could not save page order for collective" : "كوللىكتىپ ئۈچۈن بەت تەرتىپىنى ساقلىيالمىدى",
     "Search pages" : "ئىزدەش بەتلىرى",
-    "Search pages ..." : "ئىزدەش بەتلىرى ...",
     "Sort order" : "تەرتىپلەش",
     "Sort by custom order" : "زاكاز بويىچە تەرتىپلەش",
     "Sort recently changed first" : "يېقىندا رەتلەش ئالدى بىلەن ئۆزگەردى",
@@ -258,7 +256,6 @@ OC.L10N.register(
     "Could not move page to another collective" : "بەتنى باشقا كوللىكتىپقا يۆتكىگىلى بولمىدى",
     "Could not delete the page" : "بۇ بەتنى ئۆچۈرەلمىدى",
     "Error: Missing apps" : "خاتالىق: ئەپلەرنى قولدىن بېرىپ قويۇش",
-    "The following dependency apps are missing: " : "تۆۋەندىكى بېقىنىش دېتاللىرى كەم: ",
     "Please ask the administrator to enable these apps." : "باشقۇرغۇچىدىن بۇ ئەپلەرنى قوزغىتىشنى تەلەپ قىلىڭ.",
     "in Collective {collective}" : "كوللىكتىپ {collective}",
     "Created collective \"%s\" for existing circle." : "مەۋجۇت چەمبىرەك ئۈچۈن كوللىكتىپ «% s» قۇرۇلدى.",
@@ -291,6 +288,7 @@ OC.L10N.register(
     "Create a new collective" : "يېڭى كوللىكتىپ قۇرۇش",
     "Cancel creating a new collective" : "يېڭى كوللىكتىپ قۇرۇشنى ئەمەلدىن قالدۇرۇڭ",
     "Link copied to the clipboard." : "ئۇلىنىش چاپلاش تاختىسىغا كۆچۈرۈلدى.",
-    "New Page" : "يېڭى بەت"
+    "New Page" : "يېڭى بەت",
+    "The following dependency apps are missing: " : "تۆۋەندىكى بېقىنىش دېتاللىرى كەم: "
 },
 "nplurals=2; plural=(n != 1);");

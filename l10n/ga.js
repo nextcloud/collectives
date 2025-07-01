@@ -114,7 +114,6 @@ OC.L10N.register(
     "Could not add members to the collective" : "Níorbh fhéidir baill a chur leis an gcomhthionól",
     "Select emoji" : "Roghnaigh emoji",
     "Select an existing team" : "Roghnaigh foireann atá ann cheana féin",
-    "Select a team..." : "Roghnaigh foireann...",
     "Cancel selecting a team" : "Cealaigh roghnú foirne",
     "Add members" : "Cuir baill leis",
     "Back" : "Ar ais",
@@ -196,7 +195,6 @@ OC.L10N.register(
     "Sorted by least recently changed" : "Sórtáilte de réir an líon is lú athraithe le déanaí",
     "Could not save page order for collective" : "Níorbh fhéidir ordú leathanaigh a shábháil le haghaidh comhchoiteann",
     "Search pages" : "Cuardaigh leathanaigh",
-    "Search pages ..." : "Cuardaigh leathanaigh ...",
     "Sort order" : "Ordú sórtála",
     "Sort by custom order" : "Sórtáil de réir ordú saincheaptha",
     "Sort least recently changed first" : "Sórtáil an líon is lú athraithe le déanaí ar dtús",
@@ -288,7 +286,6 @@ OC.L10N.register(
     "Failed to delete {basename} version of {page}." : "Theip ar leagan {basename} de {page} a scriosadh.",
     "Deleted {basename} version of {page}." : "Scriosadh leagan {basename} de {page}.",
     "Error: Missing apps" : "Earráid: Aipeanna ar iarraidh",
-    "The following dependency apps are missing: " : "Tá na haipeanna spleáchais seo a leanas in easnamh:",
     "Please ask the administrator to enable these apps." : "Iarr ar an riarthóir na haipeanna seo a chumasú.",
     "in Collective {collective}" : "in Collective {collective}",
     "Created collective \"%s\" for existing circle." : "Cruthaíodh \"%s\" comhchoiteann don chiorcal reatha.",
@@ -322,6 +319,7 @@ OC.L10N.register(
     "Cancel creating a new collective" : "Cealaigh cruthú comhchoiteann nua",
     "Link copied to the clipboard." : "Cóipeáladh an nasc chuig an ngearrthaisce.",
     "New Page" : "Leathanach Nua",
-    "_%n byte_::_%n bytes_" : ["%n beart ","%n bearta ","%n bearta","%n bearta","%n bearta"]
+    "_%n byte_::_%n bytes_" : ["%n beart ","%n bearta ","%n bearta","%n bearta","%n bearta"],
+    "The following dependency apps are missing: " : "Tá na haipeanna spleáchais seo a leanas in easnamh:"
 },
 "nplurals=5; plural=(n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n<11 ? 3 : 4);");

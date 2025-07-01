@@ -113,7 +113,6 @@ OC.L10N.register(
     "Could not add members to the collective" : "Impossible d'ajouter des membres à ce collectif",
     "Select emoji" : "Sélectionner un émoji",
     "Select an existing team" : "Sélectionner une équipe existante",
-    "Select a team..." : "Sélectionner une équipe…",
     "Cancel selecting a team" : "Annuler la sélection d'une équipe",
     "Add members" : "Ajouter des membres",
     "Back" : "Retour",
@@ -190,7 +189,6 @@ OC.L10N.register(
     "Sorted by recently changed" : "Trié par date de dernière modification",
     "Could not save page order for collective" : "Impossible de sauvegarder l'ordre des pages pour ce collectif",
     "Search pages" : "Rechercher des pages",
-    "Search pages ..." : "Rechercher des pages…",
     "Sort order" : "Ordre de tri",
     "Sort by custom order" : "Trier par ordre personnalisé",
     "Sort recently changed first" : "Trier par date de dernière modification",
@@ -274,7 +272,6 @@ OC.L10N.register(
     "Could not move page to another collective" : "Impossible de déplacer la page vers un autre collectif",
     "Could not delete the page" : "Impossible de supprimer la page",
     "Error: Missing apps" : "Erreur : Applications manquantes",
-    "The following dependency apps are missing: " : "Les applications de dépendance suivantes sont manquantes : ",
     "Please ask the administrator to enable these apps." : "Veuillez demander à l'administrateur d'activer ces applications.",
     "in Collective {collective}" : "dans le collectif {collective}",
     "Created collective \"%s\" for existing circle." : "Collectif « %s » créé pour le cercle existant.",
@@ -308,6 +305,7 @@ OC.L10N.register(
     "Cancel creating a new collective" : "Annuler la création d'un nouveau collectif",
     "Link copied to the clipboard." : "Lien copié dans le presse-papiers.",
     "New Page" : "Nouvelle page",
-    "_%n byte_::_%n bytes_" : ["%n octet","%n octets","%n octets"]
+    "_%n byte_::_%n bytes_" : ["%n octet","%n octets","%n octets"],
+    "The following dependency apps are missing: " : "Les applications de dépendance suivantes sont manquantes : "
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

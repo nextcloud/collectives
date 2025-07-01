@@ -114,7 +114,6 @@ OC.L10N.register(
     "Could not add members to the collective" : "Keine Mitglieder konnten zu diesem Kollektiv hinzugefügt werden",
     "Select emoji" : "Wähle emoji",
     "Select an existing team" : "Ein bestehendes Team wählen",
-    "Select a team..." : "Ein Team auswählen…",
     "Cancel selecting a team" : "Auswahl eines Teams abbrechen",
     "Add members" : "Mitglieder hinzufügen",
     "Back" : "Zurück",
@@ -198,7 +197,6 @@ OC.L10N.register(
     "Sorted by least recently changed" : "Sortiert nach letzter Änderung",
     "Could not save page order for collective" : "Die Seitenreihenfolge für Kollektiv konnte nicht gespeichert werden",
     "Search pages" : "Seiten durchsuchen",
-    "Search pages ..." : "Suche Seiten …",
     "Sort order" : "Sortierung",
     "Sort by custom order" : "Benutzerdefinierte Sortierung",
     "Sort least recently changed first" : "Sortieren nach letzten Änderungen zuerst",
@@ -292,7 +290,6 @@ OC.L10N.register(
     "Failed to delete {basename} version of {page}." : "{basename}-Version von {page} konnte nicht gelöscht werden.",
     "Deleted {basename} version of {page}." : "{basename}-Version von {page} gelöscht.",
     "Error: Missing apps" : "Fehler: Apps fehlen",
-    "The following dependency apps are missing: " : "Die folgenden erforderlichen Apps fehlen: ",
     "Please ask the administrator to enable these apps." : "Bitte die Admins, diese Apps zu aktivieren.",
     "in Collective {collective}" : "in Kollektiv {collective}",
     "Created collective \"%s\" for existing circle." : "Kollektiv \"%s\" für bestehenden Kreis angelegt.",
@@ -326,6 +323,7 @@ OC.L10N.register(
     "Cancel creating a new collective" : "Die Erstellung eines neuen Kollektivs abbrechen",
     "Link copied to the clipboard." : "Link in die Zwischenablage kopiert.",
     "New Page" : "Neue Seite",
-    "_%n byte_::_%n bytes_" : ["%n Byte","%n Bytes"]
+    "_%n byte_::_%n bytes_" : ["%n Byte","%n Bytes"],
+    "The following dependency apps are missing: " : "Die folgenden erforderlichen Apps fehlen: "
 },
 "nplurals=2; plural=(n != 1);");

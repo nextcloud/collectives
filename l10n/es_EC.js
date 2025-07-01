@@ -109,7 +109,6 @@ OC.L10N.register(
     "Sorted by recently changed" : "Ordenado por cambiadas recientemente",
     "Could not save page order for collective" : "No se pudo guardar el orden de las páginas para el colectivo",
     "Search pages" : "Buscar páginas",
-    "Search pages ..." : "Buscar páginas ...",
     "Sort order" : "Orden de clasificación",
     "Sort by custom order" : "Ordenar por orden personalizado",
     "Sort recently changed first" : "Ordenar primero las cambiadas recientemente",
@@ -162,7 +161,6 @@ OC.L10N.register(
     "Could not move page" : "No se pudo mover la página",
     "Could not delete the page" : "No se pudo eliminar la página",
     "Error: Missing apps" : "Error: Faltan aplicaciones",
-    "The following dependency apps are missing: " : "Faltan las siguientes aplicaciones de dependencia: ",
     "Please ask the administrator to enable these apps." : "Pide al administrador que habilite estas aplicaciones.",
     "in Collective {collective}" : "en el colectivo {collective}",
     "Created collective \"%s\" for existing circle." : "Se creó el colectivo \"%s\" para el círculo existente.",
@@ -196,6 +194,7 @@ OC.L10N.register(
     "Cancel creating a new collective" : "Cancelar la creación de un nuevo colectivo",
     "Link copied to the clipboard." : "Enlace copiado al portapapeles.",
     "New Page" : "Nueva página",
-    "_%n byte_::_%n bytes_" : ["%n byte","%n bytes","%n bytes"]
+    "_%n byte_::_%n bytes_" : ["%n byte","%n bytes","%n bytes"],
+    "The following dependency apps are missing: " : "Faltan las siguientes aplicaciones de dependencia: "
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

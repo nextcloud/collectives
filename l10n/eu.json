@@ -99,7 +99,6 @@
     "Could not add members to the collective" : "Ezin izan dira kideak gehitu kolektiboan",
     "Select emoji" : "Hautatu emojia",
     "Select an existing team" : "Hautatu dagoen lantalde bat",
-    "Select a team..." : "Hautatu lantalde bat...",
     "Cancel selecting a team" : "Utzi lantaldea hautatzeari",
     "Add members" : "Gehitu kideak",
     "Back" : "Atzera",
@@ -156,7 +155,6 @@
     "Sorted by recently changed" : "Ordenatu azkenaldian aldatutakoak",
     "Could not save page order for collective" : "Ezin izan da orriaren ordena gorde kolektiboarentzat",
     "Search pages" : "Bilatu orriak",
-    "Search pages ..." : "Bilatu orriak ...",
     "Sort order" : "Ordenatzeko irizpidea",
     "Sort by custom order" : "Ordenatu hurrenkera pertsonalizatuan",
     "Sort recently changed first" : "Ordenatu azkenaldian aldatutakoak lehenik",
@@ -228,7 +226,6 @@
     "Could not move page to another collective" : "Ezin izan da orria beste kolektibo batera eraman",
     "Could not delete the page" : "Ezin izan da orria ezabatu",
     "Error: Missing apps" : "Errorea: aplikazioak falta dira",
-    "The following dependency apps are missing: " : "Mendekotasun-aplikazio hauek falta dira:",
     "Please ask the administrator to enable these apps." : "Mesedez, eskatu administratzaileari aplikazio hauek gaitzeko.",
     "in Collective {collective}" : " {collective} kolektiboan",
     "Created collective \"%s\" for existing circle." : "Lehendik dagoen  \"%s\" zirkulurako kolektiboa sortu da.",
@@ -262,6 +259,7 @@
     "Cancel creating a new collective" : "Utzi kolektibo berria sortzeari",
     "Link copied to the clipboard." : "Esteka arbelera kopiatu da.",
     "New Page" : "Orri berria",
-    "_%n byte_::_%n bytes_" : ["Byte %n","%n byte"]
+    "_%n byte_::_%n bytes_" : ["Byte %n","%n byte"],
+    "The following dependency apps are missing: " : "Mendekotasun-aplikazio hauek falta dira:"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

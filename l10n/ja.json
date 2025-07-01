@@ -71,7 +71,6 @@
     "Favorites" : "お気に入り",
     "Deleted" : "削除済み",
     "Search pages" : "ページを検索",
-    "Search pages ..." : "ページを検索...",
     "Sort order" : "ソート順",
     "Share link ({index})" : "リンク共有 ({index})",
     "View only" : "閲覧のみ",
@@ -122,7 +121,6 @@
     "Could not create the page" : "ページを作成できません",
     "Could not delete the page" : "ページを削除できません",
     "Error: Missing apps" : "エラー: アプリが見つかりません",
-    "The following dependency apps are missing: " : "次の依存アプリが見つかりません: ",
     "Please ask the administrator to enable these apps." : "これらのアプリを有効にするために管理者に問い合わせてください。",
     "Created collective \"%s\" for existing circle." : "コレクティブ \"%s\" を既存のサークルに作成します。",
     "A share for collective %s exists already" : "コレクティブ\"%s\"への共有はすでに存在しています",
@@ -142,6 +140,7 @@
     "Select circle..." : "サークルを選択...",
     "Link copied to the clipboard." : "クリップボードにリンクをコピーしました。",
     "New Page" : "新規ページ",
-    "_%n byte_::_%n bytes_" : ["%n バイト"]
+    "_%n byte_::_%n bytes_" : ["%n バイト"],
+    "The following dependency apps are missing: " : "次の依存アプリが見つかりません: "
 },"pluralForm" :"nplurals=1; plural=0;"
 }

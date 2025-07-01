@@ -94,7 +94,6 @@ OC.L10N.register(
     "Deleted" : "Удалено",
     "Sorted by recently changed" : "Отсортировано по недавним изменениям",
     "Could not save page order for collective" : "Не удалось сохранить расположение страниц в группе",
-    "Search pages ..." : "Поиск страниц ...",
     "Sort order" : "Сортировка",
     "Sort by custom order" : "Сортировка в случайном порядке",
     "Sort recently changed first" : "Сначала отсортировать недавно измененные",
@@ -152,7 +151,6 @@ OC.L10N.register(
     "Could not move page" : "Не удалось переместить страницу",
     "Could not delete the page" : "Не удалось удалить страницу",
     "Error: Missing apps" : "Ошибка: Отсутствуют приложения",
-    "The following dependency apps are missing: " : "Отсутствуют следующие приложения-зависимости: ",
     "Please ask the administrator to enable these apps." : "Пожалуйста, попросите администратора включить эти приложения.",
     "in Collective {collective}" : "в группе {collective}",
     "Created collective \"%s\" for existing circle." : "Создана группа \"%s\" для существующего круга.",
@@ -185,6 +183,7 @@ OC.L10N.register(
     "Cancel creating a new collective" : "Отменить создание группы",
     "Link copied to the clipboard." : "Ссылка скопирована в буфер обмена.",
     "New Page" : "Новая страница",
-    "_%n byte_::_%n bytes_" : ["%n байт","%n байта","%n байт","%n байта"]
+    "_%n byte_::_%n bytes_" : ["%n байт","%n байта","%n байт","%n байта"],
+    "The following dependency apps are missing: " : "Отсутствуют следующие приложения-зависимости: "
 },
 "nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);");
