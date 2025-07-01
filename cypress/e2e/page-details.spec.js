@@ -36,6 +36,12 @@ describe('Page details', function() {
 				.find('.editor--toc .editor--toc__item')
 				.should('contain', 'Second-Level Heading')
 
+			// Reload to test persistence of outline
+			cy.reload()
+			cy.getReadOnlyEditor()
+				.find('.editor--toc .editor--toc__item')
+				.should('contain', 'Second-Level Heading')
+
 			cy.switchToEditMode()
 			cy.getEditor()
 				.contains('Second-Level Heading')

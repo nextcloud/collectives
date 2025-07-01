@@ -120,6 +120,7 @@ export default {
 				onLoaded: () => {
 					// TODO: remove check once we only support Nextcloud 30+
 					this.reader.setSearchQuery && this.reader.setSearchQuery(this.searchQuery, this.matchAll)
+					this.reader.setShowOutline(this.showOutline)
 				},
 				onSearch: (results) => {
 					this.setSearchResults(results)
@@ -150,6 +151,7 @@ export default {
 					onLoaded: () => {
 						// TODO: remove check once we only support Nextcloud 30+
 						this.editor.setSearchQuery && this.editor.setSearchQuery(this.searchQuery, this.matchAll)
+						this.editor.setShowOutline(this.showOutline)
 						this.done('editor')
 					},
 					onUpdate: ({ markdown }) => {
