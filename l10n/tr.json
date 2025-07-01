@@ -110,7 +110,6 @@
     "Could not add members to the collective" : "Üyeler topluluğa eklenemedi",
     "Select emoji" : "Emoji seçin",
     "Select an existing team" : "Var olan bir takım seçin",
-    "Select a team..." : "Bir takım seçin...",
     "Cancel selecting a team" : "Takım seçmekten vazgeç",
     "Add members" : "Üye ekle",
     "Back" : "Geri",
@@ -177,7 +176,6 @@
     "Sorted by recently changed" : "Son değiştirilmeye göre sıralı",
     "Could not save page order for collective" : "Topluluğun sayfa sıralaması kaydedilemedi",
     "Search pages" : "Sayfa arama",
-    "Search pages ..." : "Sayfa arama...",
     "Sort order" : "Sıralama",
     "Sort by custom order" : "Özel sıralama kullanılsın",
     "Sort recently changed first" : "Son değiştirilenler üstte görüntülensin",
@@ -204,7 +202,7 @@
     "Error generating password from password policy" : "Parola, parola ilkesine göre oluşturulurken sorun çıktı",
     "Quick share options dropdown" : "Hızlı paylaş seçenekleri açılan kutusu",
     "Please enter the following required information before creating the share" : "Lütfen paylaşımı oluşturmadan önce aşağıdaki zorunlu bilgileri yazın",
-    "Password protection (enforced)" : "Parola koruması (dayatılmış)",
+    "Password protection (enforced)" : "Parola koruması (zorunlu kılınmış)",
     "Set password" : "Parola ayarla",
     "Password" : "Parola",
     "Create share" : "Paylaşım ekle",
@@ -258,7 +256,6 @@
     "Could not move page to another collective" : "Sayfa başka bir topluluğa taşınamadı",
     "Could not delete the page" : "Sayfa silinemedi",
     "Error: Missing apps" : "Hata: Uygulamalar eksik",
-    "The following dependency apps are missing: " : "Gerekli şu uygulamalar eksik:",
     "Please ask the administrator to enable these apps." : "Lütfen bu uygulamaları kullanıma alması için BT yöneticiniz ile görüşün.",
     "in Collective {collective}" : "{collective} topluluğunda",
     "Created collective \"%s\" for existing circle." : "Var olan takım için \"%s\" topluluğu eklendi.",
@@ -287,10 +284,12 @@
     "Only circle owners can delete a circle" : "Bir takımı yalnızca sahipleri silebilir ",
     "Create collective for existing circle" : "Var olan takım için topluluk ekle",
     "New collective name" : "Yeni topluluğun adı",
+    "Select circle..." : "Takım seçin...",
     "Create a new collective" : "Yeni bir topluluk ekle",
     "Cancel creating a new collective" : "Yeni bir topluluk eklemekten vazgeç",
     "Link copied to the clipboard." : "Bağlantı panoya kopyalandı.",
     "New Page" : "Yeni sayfa",
-    "_%n byte_::_%n bytes_" : ["%n bayt","%n bayt"]
+    "_%n byte_::_%n bytes_" : ["%n bayt","%n bayt"],
+    "The following dependency apps are missing: " : "Gerekli şu uygulamalar eksik:"
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }

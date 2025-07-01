@@ -107,7 +107,6 @@ OC.L10N.register(
     "Deleted" : "Izbrisano",
     "Sorted by recently changed" : "Razvrščeno po času zadnje spremembe",
     "Could not save page order for collective" : "Ni mogoče shraniti razvrstitve strani za to zbirko",
-    "Search pages ..." : "Preišči strani ...",
     "Sort order" : "Razvrščanje",
     "Sort by custom order" : "Po meri",
     "Sort recently changed first" : "Najprej nedavno spremenjene",
@@ -165,7 +164,6 @@ OC.L10N.register(
     "Could not move page" : "Ni mogoče premakniti strani",
     "Could not delete the page" : "Strani ni mogoče izbrisati",
     "Error: Missing apps" : "Napaka: manjkajo programi",
-    "The following dependency apps are missing: " : "Manjkajo navedeni odvisni programi: ",
     "Please ask the administrator to enable these apps." : "Programe lahko omogoči le skrbnik sistema.",
     "in Collective {collective}" : "v Zbirki {collective}",
     "Created collective \"%s\" for existing circle." : "Za obstoječi krog je ustvarjena zbirka »%s«.",
@@ -194,10 +192,12 @@ OC.L10N.register(
     "Only circle owners can delete a circle" : "Le lastnik kroga lahko krog izbriše.",
     "Create collective for existing circle" : "Ustvari zbirko za obstoječ krog",
     "New collective name" : "Ime nove zbirke",
+    "Select circle..." : "Izbor kroga ...",
     "Create a new collective" : "Ustvari novo zbirko",
     "Cancel creating a new collective" : "Prekliči ustvarjanje nove zbirke",
     "Link copied to the clipboard." : "Povezava je kopirana v odložišče.",
     "New Page" : "Nova stran",
-    "_%n byte_::_%n bytes_" : ["%n bajt","%n bajta","%n bajti","%n bajtov"]
+    "_%n byte_::_%n bytes_" : ["%n bajt","%n bajta","%n bajti","%n bajtov"],
+    "The following dependency apps are missing: " : "Manjkajo navedeni odvisni programi: "
 },
 "nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);");

@@ -111,7 +111,6 @@ OC.L10N.register(
     "Could not add members to the collective" : "Non foi posíbel engadir membros ao colectivo",
     "Select emoji" : "Seleccionar «emoji»",
     "Select an existing team" : "Seleccionar un equipo existente",
-    "Select a team..." : "Seleccionar un equipo…",
     "Cancel selecting a team" : "Cancelar a selección dun equipo",
     "Add members" : "Engadir membros",
     "Back" : "Atrás",
@@ -178,7 +177,6 @@ OC.L10N.register(
     "Sorted by recently changed" : "Ordenados por cambiados recentemente",
     "Could not save page order for collective" : "Non foi posíbel gardar a orde das páxinas para o colectivo",
     "Search pages" : "Buscar páxinas",
-    "Search pages ..." : "Buscar páxinas…",
     "Sort order" : "Criterio de ordenación",
     "Sort by custom order" : "Ordenar de xeito personalizado",
     "Sort recently changed first" : "Ordenar por cambiados recentemente de primeiros",
@@ -259,7 +257,6 @@ OC.L10N.register(
     "Could not move page to another collective" : "Non foi posíbel mover a páxina cara a outro colectivo",
     "Could not delete the page" : "Non foi posíbel eliminar a páxina",
     "Error: Missing apps" : "Erro: faltan aplicacións",
-    "The following dependency apps are missing: " : "Son necesarias as seguintes aplicacións e non se atopan:",
     "Please ask the administrator to enable these apps." : "Pídalle á administración desta instancia que active esas aplicacións.",
     "in Collective {collective}" : "no colectivo {collective}",
     "Created collective \"%s\" for existing circle." : "Creouse o colectivo «%s» para o círculo existente.",
@@ -288,10 +285,12 @@ OC.L10N.register(
     "Only circle owners can delete a circle" : "Só a propiedade dos círculos poden eliminar un círculo",
     "Create collective for existing circle" : "Creouse o colectivo para o círculo existente",
     "New collective name" : "Novo nome do colectivo",
+    "Select circle..." : "Seleccionar un círculo…",
     "Create a new collective" : "Crear un novo colectivo",
     "Cancel creating a new collective" : "Cancelar a creación dun novo colectivo",
     "Link copied to the clipboard." : "A ligazón foi copiada no portapapeis.",
     "New Page" : "Nova páxina",
-    "_%n byte_::_%n bytes_" : ["%n  byte","%n bytes"]
+    "_%n byte_::_%n bytes_" : ["%n  byte","%n bytes"],
+    "The following dependency apps are missing: " : "Son necesarias as seguintes aplicacións e non se atopan:"
 },
 "nplurals=2; plural=(n != 1);");

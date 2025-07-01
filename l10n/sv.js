@@ -113,7 +113,6 @@ OC.L10N.register(
     "Could not add members to the collective" : "Kunde inte lägga till medlemmar i collective",
     "Select emoji" : "Välj emoji",
     "Select an existing team" : "Välj ett befintligt team",
-    "Select a team..." : "Välj ett team...",
     "Cancel selecting a team" : "Avbryt val av team",
     "Add members" : "Lägg till medlemmar",
     "Back" : "Tillbaka",
@@ -195,7 +194,6 @@ OC.L10N.register(
     "Sorted by least recently changed" : "Sorterad efter äldsta ändring",
     "Could not save page order for collective" : "Kunde inte spara sidordning för collective",
     "Search pages" : "Sök sidor",
-    "Search pages ..." : "Sök sidor ...",
     "Sort order" : "Sorteringsordning",
     "Sort by custom order" : "Sortera efter anpassad ordning",
     "Sort least recently changed first" : "Sorterad med äldsta ändring först",
@@ -287,7 +285,6 @@ OC.L10N.register(
     "Failed to delete {basename} version of {page}." : "Kunde inte ta bort versionen {basename} av {page}.",
     "Deleted {basename} version of {page}." : "Tog bort versionen {basename} av {page}.",
     "Error: Missing apps" : "Fel: Appar saknas",
-    "The following dependency apps are missing: " : "Följande obligatoriska appar saknas:",
     "Please ask the administrator to enable these apps." : "Be administratören att aktivera dessa appar.",
     "in Collective {collective}" : "i collective {collective}",
     "Created collective \"%s\" for existing circle." : "Skapade collective \"%s\" för befintlig cirkel.",
@@ -315,10 +312,12 @@ OC.L10N.register(
     "Only circle owners can delete a circle" : "Endast cirkelägare kan ta bort en cirkel",
     "Create collective for existing circle" : "Skapa collective för befintlig cirkel",
     "New collective name" : "Nytt namn för collective",
+    "Select circle..." : "Välj cirkel...",
     "Create a new collective" : "Skapa ett nytt collective",
     "Cancel creating a new collective" : "Avbryt skapande av nytt collective",
     "Link copied to the clipboard." : "Länken har kopierats till urklipp.",
     "New Page" : "Ny sida",
-    "_%n byte_::_%n bytes_" : ["%n byte","%n bytes"]
+    "_%n byte_::_%n bytes_" : ["%n byte","%n bytes"],
+    "The following dependency apps are missing: " : "Följande obligatoriska appar saknas:"
 },
 "nplurals=2; plural=(n != 1);");

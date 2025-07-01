@@ -40,6 +40,7 @@ OC.L10N.register(
     "Copied" : "நகலெடுக்கப்பட்டது",
     "Cannot copy" : "நகலெடுக்க முடியாது",
     "Copy share link" : "பகிர்வு இணைப்பை நகலெடுக்கவும்",
+    "Select circle..." : "வட்டத்தைத் தேர்ந்தெடுக்கவும்...",
     "New Page" : "புதிய பக்கம்"
 },
 "nplurals=2; plural=(n != 1);");

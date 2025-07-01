@@ -111,7 +111,6 @@ OC.L10N.register(
     "Could not add members to the collective" : "Do kolektívu sa nepodarilo pridať členov",
     "Select emoji" : "Vybrať emotikonu",
     "Select an existing team" : "Vyberte existujúci tím",
-    "Select a team..." : "Vyberte tím...",
     "Cancel selecting a team" : "Zrušiť výber tímu",
     "Add members" : "Pridať členov",
     "Back" : "Späť",
@@ -178,7 +177,6 @@ OC.L10N.register(
     "Sorted by recently changed" : "Podľa poslednej zmeny",
     "Could not save page order for collective" : "Nepodarilo sa uložiť poradie triedenia stránok kolektívu",
     "Search pages" : "Hľadať stránky",
-    "Search pages ..." : "Hľadať stránky...",
     "Sort order" : "Poradie triedenia",
     "Sort by custom order" : "Podľa vlastného kľúča",
     "Sort recently changed first" : "Naposledy menené ako prvé",
@@ -259,7 +257,6 @@ OC.L10N.register(
     "Could not move page to another collective" : "Nepodarilo sa presunúť stránku do iného kolektívu",
     "Could not delete the page" : "Stránku sa nepodarilo odstrániť",
     "Error: Missing apps" : "Chyba: Chýbajúce apky",
-    "The following dependency apps are missing: " : "Chýbajú nasledujúce aplikačné závislosti:",
     "Please ask the administrator to enable these apps." : "Prosím, požiadajte správcu, aby povolil tieto apky.",
     "in Collective {collective}" : "v kolektíve {collective}",
     "Created collective \"%s\" for existing circle." : "Vytvorený kolektív „%s“ pre existujúci kruh.",
@@ -288,10 +285,12 @@ OC.L10N.register(
     "Only circle owners can delete a circle" : "Kruh môžu odstrániť iba jeho vlastníci",
     "Create collective for existing circle" : "Vytvoriť kolektív pre existujúci kruh",
     "New collective name" : "Nový názov kolektívu",
+    "Select circle..." : "Vyberte kruh...",
     "Create a new collective" : "Vytvoriť nový kolektív",
     "Cancel creating a new collective" : "Zrušiť vytváranie nového kolektívu",
     "Link copied to the clipboard." : "Odkaz bol skopírovaný do schránky.",
     "New Page" : "Nová stránka",
-    "_%n byte_::_%n bytes_" : ["%n bajt","%n bajty","%n bajtov","%n bajtov"]
+    "_%n byte_::_%n bytes_" : ["%n bajt","%n bajty","%n bajtov","%n bajtov"],
+    "The following dependency apps are missing: " : "Chýbajú nasledujúce aplikačné závislosti:"
 },
 "nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);");

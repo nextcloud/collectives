@@ -112,7 +112,6 @@
     "Could not add members to the collective" : "Vabaühendusse liikmete lisamine ei õnnestunud",
     "Select emoji" : "Vali emoji",
     "Select an existing team" : "Vali olemasolev tiim",
-    "Select a team..." : "Vali tiim...",
     "Cancel selecting a team" : "Katkesta tiimi valimine",
     "Add members" : "Lisa liikmeid",
     "Back" : "Tagasi",
@@ -196,7 +195,6 @@
     "Sorted by least recently changed" : "Järjesta esmalt hiljuti muutmise alusel ",
     "Could not save page order for collective" : "Vabaühenduse lehtede järjestust ei õnnestunud salvestada",
     "Search pages" : "Otsi lehti",
-    "Search pages ..." : "Otsi lehti...",
     "Sort order" : "Järjestus",
     "Sort by custom order" : "Järjesta sinu loodud viisil",
     "Sort least recently changed first" : "Järjesta esmalt minevikus muutmise alusel ",
@@ -290,7 +288,6 @@
     "Failed to delete {basename} version of {page}." : "„{basename} - {page}“ lehe versiooni kustutamine ei õnnestunud.",
     "Deleted {basename} version of {page}." : "Kustutasin „{basename} - {page}“ lehe versiooni",
     "Error: Missing apps" : "Viga: puuduvad rakendused",
-    "The following dependency apps are missing: " : "Järgnevad sõltuvused on puudu:",
     "Please ask the administrator to enable these apps." : "Palun peakasutajat, et ta paigaldaks serverisse needrakendused.",
     "in Collective {collective}" : "Vabaühenduses {collective}",
     "Created collective \"%s\" for existing circle." : "Olemasoleva tiimi jaoks on loodud vabaühendus „%s“.",
@@ -319,10 +316,12 @@
     "Only circle owners can delete a circle" : "Tiimi saavad kustutada vaid tiimi omanikud",
     "Create collective for existing circle" : "Loo vabaühendus olemasoleva tiimi jaoks",
     "New collective name" : "Uue vabaühenduse nimi",
+    "Select circle..." : "Vali tiim...",
     "Create a new collective" : "Loo uus vabaühendus",
     "Cancel creating a new collective" : "Katkesta vabaühenduse loomine",
     "Link copied to the clipboard." : "Link on kopeeritud lõikelauale.",
     "New Page" : "Uus leht",
-    "_%n byte_::_%n bytes_" : ["%n bait","%n baiti"]
+    "_%n byte_::_%n bytes_" : ["%n bait","%n baiti"],
+    "The following dependency apps are missing: " : "Järgnevad sõltuvused on puudu:"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

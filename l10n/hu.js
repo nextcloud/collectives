@@ -133,7 +133,6 @@ OC.L10N.register(
     "Sorted by recently changed" : "Legutóbb változottak előre rendezve",
     "Could not save page order for collective" : "Nem sikerült az oldalsorrend mentése a kollektívánál",
     "Search pages" : "Oldalak keresése",
-    "Search pages ..." : "Oldalak keresése…",
     "Sort order" : "Rendezési sorrend",
     "Sort by custom order" : "Egyéni sorrendezés",
     "Sort recently changed first" : "Legutóbb változottak előre",
@@ -194,7 +193,6 @@ OC.L10N.register(
     "Could not move page" : "Nem sikerült az oldal áthelyezése",
     "Could not delete the page" : "Nem sikerült az oldal törlése",
     "Error: Missing apps" : "Hiba: Hiányzó alkalmazások",
-    "The following dependency apps are missing: " : "A következő alkalmazásfüggőségek hiányoznak: ",
     "Please ask the administrator to enable these apps." : "Kérje meg a rendszergazdát, hogy telepítse ezeket az alkalmazásokat.",
     "in Collective {collective}" : "a(z) {collective} kollektívában",
     "Created collective \"%s\" for existing circle." : "A(z) „%s” kollektíva létrehozva a meglévő körhöz.",
@@ -223,10 +221,12 @@ OC.L10N.register(
     "Only circle owners can delete a circle" : "Csak a körök tulajdonosai törölhetnek köröket",
     "Create collective for existing circle" : "Kollektíva létrehozása egy meglévő körhöz",
     "New collective name" : "Új kollektíva neve",
+    "Select circle..." : "Kör kiválasztása…",
     "Create a new collective" : "Új kollektíva létrehozása",
     "Cancel creating a new collective" : "Új kollektíva létrehozásának megszakítása",
     "Link copied to the clipboard." : "Hivatkozás a vágólapra másolva.",
     "New Page" : "Új oldal",
-    "_%n byte_::_%n bytes_" : ["%n bájt","%n bájt"]
+    "_%n byte_::_%n bytes_" : ["%n bájt","%n bájt"],
+    "The following dependency apps are missing: " : "A következő alkalmazásfüggőségek hiányoznak: "
 },
 "nplurals=2; plural=(n != 1);");

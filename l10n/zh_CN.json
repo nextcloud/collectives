@@ -158,7 +158,6 @@
     "Sorted by recently changed" : "按最近更改排序",
     "Could not save page order for collective" : "无法保存知识库的页面顺序",
     "Search pages" : "搜索页面",
-    "Search pages ..." : "搜索页面 ...",
     "Sort order" : "排序",
     "Sort by custom order" : "手动排序",
     "Sort recently changed first" : "按最近更改排序",
@@ -223,7 +222,6 @@
     "Could not move page to another collective" : "无法移动页面到另一个知识库",
     "Could not delete the page" : "无法删除此页面",
     "Error: Missing apps" : "错误：缺少应用",
-    "The following dependency apps are missing: " : "缺少以下依赖项应用： ",
     "Please ask the administrator to enable these apps." : "请让管理员启用这些应用。",
     "in Collective {collective}" : "在知识库 {collective}",
     "Created collective \"%s\" for existing circle." : "为已有的圈子创建知识库“%s”。",
@@ -251,10 +249,12 @@
     "Only circle owners can delete a circle" : "只有圈子所有者才能删除圈子",
     "Create collective for existing circle" : "为已有圈子创建知识库",
     "New collective name" : "新知识库名称",
+    "Select circle..." : "选择圈子 ...",
     "Create a new collective" : "创建新知识库",
     "Cancel creating a new collective" : "取消创建新知识库",
     "Link copied to the clipboard." : "已复制链接至剪贴板。",
     "New Page" : "新建页面",
-    "_%n byte_::_%n bytes_" : ["%n字节"]
+    "_%n byte_::_%n bytes_" : ["%n字节"],
+    "The following dependency apps are missing: " : "缺少以下依赖项应用： "
 },"pluralForm" :"nplurals=1; plural=0;"
 }

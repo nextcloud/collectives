@@ -109,7 +109,6 @@ OC.L10N.register(
     "Could not add members to the collective" : "No fue posible añadir miembros al cuaderno colectivo",
     "Select emoji" : "Seleccione el emoji",
     "Select an existing team" : "Seleccionar un equipo existente",
-    "Select a team..." : "Seleccione un equipo...",
     "Cancel selecting a team" : "Cancelar la selección de equipo",
     "Add members" : "Añadir miembros",
     "Back" : "Atrás",
@@ -167,7 +166,6 @@ OC.L10N.register(
     "Sorted by recently changed" : "Ordenado por cambiados recientemente",
     "Could not save page order for collective" : "No fue posible guardar el ordenamiento de páginas para el cuaderno colectivo",
     "Search pages" : "Buscar páginas",
-    "Search pages ..." : "Buscar en páginas ...",
     "Sort order" : "Ordenar",
     "Sort by custom order" : "Ordenar de manera personalizada",
     "Sort recently changed first" : "Ordernar por cambiados recientemente",
@@ -240,7 +238,6 @@ OC.L10N.register(
     "Could not move page to another collective" : "No se pudo mover la página a otro colectivo",
     "Could not delete the page" : "No se pudo eliminar la página",
     "Error: Missing apps" : "Error: aplicaciones faltantes",
-    "The following dependency apps are missing: " : "Las siguientes aplicaciones son necesarias y no se encuentran: ",
     "Please ask the administrator to enable these apps." : "Pida a la administrador que habilite estas aplicaciones.",
     "in Collective {collective}" : "en Cuaderno colectivo {collective}",
     "Created collective \"%s\" for existing circle." : "Cuaderno colectivo \"%s\" creado para el círculo existente.",
@@ -269,10 +266,12 @@ OC.L10N.register(
     "Only circle owners can delete a circle" : "Solo los propietarios del círculo pueden borrarlo",
     "Create collective for existing circle" : "Crear cuaderno colectivo para círculo existente",
     "New collective name" : "Nombre del cuaderno colectivo nuevo",
+    "Select circle..." : "Seleccionar círculo...",
     "Create a new collective" : "Crear un cuaderno colectivo nuevo",
     "Cancel creating a new collective" : "Cancelar la creación del cuaderno colectivo nuevo",
     "Link copied to the clipboard." : "Enlace copiado al portapapeles.",
     "New Page" : "Nueva página",
-    "_%n byte_::_%n bytes_" : ["%n byte","%n bytes","%n bytes"]
+    "_%n byte_::_%n bytes_" : ["%n byte","%n bytes","%n bytes"],
+    "The following dependency apps are missing: " : "Las siguientes aplicaciones son necesarias y no se encuentran: "
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

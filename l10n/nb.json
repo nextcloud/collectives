@@ -109,7 +109,6 @@
     "Could not add members to the collective" : "Kunne ikke legge medlemmer til kollektivet",
     "Select emoji" : "Velg emoji",
     "Select an existing team" : "Velg et eksisterende lag",
-    "Select a team..." : "Velg et lag...",
     "Cancel selecting a team" : "Avbryt velging av lag",
     "Add members" : "Legg til medlemmer",
     "Back" : "Tilbake",
@@ -175,7 +174,6 @@
     "Sorted by recently changed" : "Sortert etter nylig endret",
     "Could not save page order for collective" : "Kunne ikke lagre siderekkefølge for kollektiv",
     "Search pages" : "Søk etter sider",
-    "Search pages ..." : "Søker etter sider...",
     "Sort order" : "Sorteringsrekkefølge",
     "Sort by custom order" : "Sorter etter tilpasset rekkefølge",
     "Sort recently changed first" : "Sorter først etter nylig endret",
@@ -255,7 +253,6 @@
     "Could not move page to another collective" : "Kunne ikke flytte siden til et annet kollektiv",
     "Could not delete the page" : "Kunne ikke slette siden",
     "Error: Missing apps" : "Feil: Manglende programmer",
-    "The following dependency apps are missing: " : "Følgende avhengigheter mangler: ",
     "Please ask the administrator to enable these apps." : "Spør en administrator om å skru på disse programmene.",
     "in Collective {collective}" : "i kollektivet {collective}",
     "Created collective \"%s\" for existing circle." : "Opprettet kollektivet «%s» for eksisterende sirkel.",
@@ -284,10 +281,12 @@
     "Only circle owners can delete a circle" : "Kun eiere av sirkler kan slette en sirkel",
     "Create collective for existing circle" : "Opprett kollektiv for eksisterende sirkel",
     "New collective name" : "Nytt navn på kollektiv",
+    "Select circle..." : "Velg sirkel …",
     "Create a new collective" : "Opprett et nytt kollektiv",
     "Cancel creating a new collective" : "Avbryt oppretting av nytt kollektiv",
     "Link copied to the clipboard." : "Kobling kopiert til utklippstavlen.",
     "New Page" : "Ny side",
-    "_%n byte_::_%n bytes_" : ["%n byte","%n byte"]
+    "_%n byte_::_%n bytes_" : ["%n byte","%n byte"],
+    "The following dependency apps are missing: " : "Følgende avhengigheter mangler: "
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

@@ -127,7 +127,6 @@ OC.L10N.register(
     "Deleted" : "Usunięto",
     "Sorted by recently changed" : "Posortowano według ostatnio zmienionych",
     "Could not save page order for collective" : "Nie można zachować kolejność stron dla kolektywu",
-    "Search pages ..." : "Szukaj stron ...",
     "Sort order" : "Kolejność sortowania",
     "Sort by custom order" : "Sortuj według własne porządku",
     "Sort recently changed first" : "Sortuj ostatnio zmienione jako pierwsze",
@@ -189,7 +188,6 @@ OC.L10N.register(
     "Could not move page" : "Nie można przenieść strony",
     "Could not delete the page" : "Nie można usunąć tej strony",
     "Error: Missing apps" : "Błąd: Brakująca aplikacja",
-    "The following dependency apps are missing: " : "Brakująca zależna aplikacja: ",
     "Please ask the administrator to enable these apps." : "Proszę poproś administratora o włączenie tych aplikacji.",
     "in Collective {collective}" : "w Kolektywie {collective}",
     "Created collective \"%s\" for existing circle." : "Utworzono kolektyw \"%s\" dla istniejącego kręgu.",
@@ -218,10 +216,12 @@ OC.L10N.register(
     "Only circle owners can delete a circle" : "Tylko właściciele kręgu mogą usunąć krąg",
     "Create collective for existing circle" : "Utwórz kolektyw dla istniejącego kręgu",
     "New collective name" : "Nowa nazwa kolektywu",
+    "Select circle..." : "Wybierz krąg...",
     "Create a new collective" : "Stwórz nowy kolektyw",
     "Cancel creating a new collective" : "Anuluj tworzenie nowego kolektywu",
     "Link copied to the clipboard." : "Łącze skopiowane do schowka.",
     "New Page" : "Nowa strona",
-    "_%n byte_::_%n bytes_" : ["%n bajt","%n bajty","%n bajtów","%n bajtów"]
+    "_%n byte_::_%n bytes_" : ["%n bajt","%n bajty","%n bajtów","%n bajtów"],
+    "The following dependency apps are missing: " : "Brakująca zależna aplikacja: "
 },
 "nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);");

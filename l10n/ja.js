@@ -73,7 +73,6 @@ OC.L10N.register(
     "Favorites" : "お気に入り",
     "Deleted" : "削除済み",
     "Search pages" : "ページを検索",
-    "Search pages ..." : "ページを検索...",
     "Sort order" : "ソート順",
     "Share link ({index})" : "リンク共有 ({index})",
     "View only" : "閲覧のみ",
@@ -124,7 +123,6 @@ OC.L10N.register(
     "Could not create the page" : "ページを作成できません",
     "Could not delete the page" : "ページを削除できません",
     "Error: Missing apps" : "エラー: アプリが見つかりません",
-    "The following dependency apps are missing: " : "次の依存アプリが見つかりません: ",
     "Please ask the administrator to enable these apps." : "これらのアプリを有効にするために管理者に問い合わせてください。",
     "Created collective \"%s\" for existing circle." : "コレクティブ \"%s\" を既存のサークルに作成します。",
     "A share for collective %s exists already" : "コレクティブ\"%s\"への共有はすでに存在しています",
@@ -141,8 +139,10 @@ OC.L10N.register(
     "Only circle owners can delete a circle" : "サークルの所有者のみがサークルを削除できます",
     "Create collective for existing circle" : "既存のサークルにコレクティブを作成",
     "New collective name" : "新規コレクティブの名称",
+    "Select circle..." : "サークルを選択...",
     "Link copied to the clipboard." : "クリップボードにリンクをコピーしました。",
     "New Page" : "新規ページ",
-    "_%n byte_::_%n bytes_" : ["%n バイト"]
+    "_%n byte_::_%n bytes_" : ["%n バイト"],
+    "The following dependency apps are missing: " : "次の依存アプリが見つかりません: "
 },
 "nplurals=1; plural=0;");

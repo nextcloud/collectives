@@ -112,7 +112,6 @@
     "Could not add members to the collective" : "Členy se nedaří přidat do kolektivu",
     "Select emoji" : "Vyberte emotikonu",
     "Select an existing team" : "Vybrat existující tým",
-    "Select a team..." : "Vybrat tým…",
     "Cancel selecting a team" : "Zrušit vybírání týmu",
     "Add members" : "Přidat členy",
     "Back" : "Zpět",
@@ -196,7 +195,6 @@
     "Sorted by least recently changed" : "Seřazeno podle nejstarší nedávné změny",
     "Could not save page order for collective" : "Nepodařilo se uložit pořadí stránek v kolektivu",
     "Search pages" : "Hledat stránky",
-    "Search pages ..." : "Hledat stránky…",
     "Sort order" : "Pořadí řazení",
     "Sort by custom order" : "Uživatelsky určené pořadí",
     "Sort least recently changed first" : "Řadit před dlouhou dobou změněné jako první",
@@ -290,7 +288,6 @@
     "Failed to delete {basename} version of {page}." : "Nepodařilo se smazat verzi {basename} stránky {page}.",
     "Deleted {basename} version of {page}." : "Smazána verze {basename} stránky {page}.",
     "Error: Missing apps" : "Chyba: chybějící aplikace",
-    "The following dependency apps are missing: " : "Chybí následující aplikace, které tato potřebuje pro své fungování: ",
     "Please ask the administrator to enable these apps." : "Požádejte správce vámi využívané instance aby tyto aplikace zapnul.",
     "in Collective {collective}" : "V kolektivu {collective}",
     "Created collective \"%s\" for existing circle." : "Vytvořen kolektiv „%s“ pro existující okruh.",
@@ -319,10 +316,12 @@
     "Only circle owners can delete a circle" : "Okruh mohou smazat jen jeho vlastníci",
     "Create collective for existing circle" : "Vytvořit kolektiv pro existující okruh",
     "New collective name" : "Název pro nový kolektiv",
+    "Select circle..." : "Vybrat okruh…",
     "Create a new collective" : "Vytvořit nový kolektiv",
     "Cancel creating a new collective" : "Zrušit vytváření nového kolektivu",
     "Link copied to the clipboard." : "Odkaz na sdílení zkopírován do schránky.",
     "New Page" : "Nová stránka",
-    "_%n byte_::_%n bytes_" : ["%n bajt","%n bajty","%n bajtů","%n bajty"]
+    "_%n byte_::_%n bytes_" : ["%n bajt","%n bajty","%n bajtů","%n bajty"],
+    "The following dependency apps are missing: " : "Chybí následující aplikace, které tato potřebuje pro své fungování: "
 },"pluralForm" :"nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;"
 }

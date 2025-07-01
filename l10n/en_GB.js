@@ -114,7 +114,6 @@ OC.L10N.register(
     "Could not add members to the collective" : "Could not add members to the collective",
     "Select emoji" : "Select emoji",
     "Select an existing team" : "Select an existing team",
-    "Select a team..." : "Select a team...",
     "Cancel selecting a team" : "Cancel selecting a team",
     "Add members" : "Add members",
     "Back" : "Back",
@@ -198,7 +197,6 @@ OC.L10N.register(
     "Sorted by least recently changed" : "Sorted by least recently changed",
     "Could not save page order for collective" : "Could not save page order for collective",
     "Search pages" : "Search pages",
-    "Search pages ..." : "Search pages ...",
     "Sort order" : "Sort order",
     "Sort by custom order" : "Sort by custom order",
     "Sort least recently changed first" : "Sort least recently changed first",
@@ -292,7 +290,6 @@ OC.L10N.register(
     "Failed to delete {basename} version of {page}." : "Failed to delete {basename} version of {page}.",
     "Deleted {basename} version of {page}." : "Deleted {basename} version of {page}.",
     "Error: Missing apps" : "Error: Missing apps",
-    "The following dependency apps are missing: " : "The following dependency apps are missing: ",
     "Please ask the administrator to enable these apps." : "Please ask the administrator to enable these apps.",
     "in Collective {collective}" : "in Collective {collective}",
     "Created collective \"%s\" for existing circle." : "Created collective \"%s\" for existing circle.",
@@ -321,10 +318,12 @@ OC.L10N.register(
     "Only circle owners can delete a circle" : "Only circle owners can delete a circle",
     "Create collective for existing circle" : "Create collective for existing circle",
     "New collective name" : "New collective name",
+    "Select circle..." : "Select circle...",
     "Create a new collective" : "Create a new collective",
     "Cancel creating a new collective" : "Cancel creating a new collective",
     "Link copied to the clipboard." : "Link copied to the clipboard.",
     "New Page" : "New Page",
-    "_%n byte_::_%n bytes_" : ["%n byte","%n bytes"]
+    "_%n byte_::_%n bytes_" : ["%n byte","%n bytes"],
+    "The following dependency apps are missing: " : "The following dependency apps are missing: "
 },
 "nplurals=2; plural=(n != 1);");

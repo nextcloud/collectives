@@ -154,7 +154,6 @@ OC.L10N.register(
     "Sorted by recently changed" : "Ordenat per canviat recentment",
     "Could not save page order for collective" : "No s'ha pogut desar l'ordre de les pàgines per al col·lectiu",
     "Search pages" : "Cerca pàgines",
-    "Search pages ..." : "Cerca pàgines …",
     "Sort order" : "Ordenació",
     "Sort by custom order" : "Ordena per comanda personalitzada",
     "Sort recently changed first" : "Ordena per canviat recentment primer",
@@ -227,7 +226,6 @@ OC.L10N.register(
     "Could not move page to another collective" : "No s'ha pogut moure la pàgina a un altre col·lectiu",
     "Could not delete the page" : "No s'ha pogut suprimir la pàgina",
     "Error: Missing apps" : "Error: falten aplicacions",
-    "The following dependency apps are missing: " : "Falten les aplicacions amb dependència següents: ",
     "Please ask the administrator to enable these apps." : "Si us plau pregunti a l'administrador/a per habilitar aquestes apps.",
     "in Collective {collective}" : "al Col·lectiu {collective}",
     "Created collective \"%s\" for existing circle." : "Creat col·lectiu \"%s\" pel cercle existent.",
@@ -256,10 +254,12 @@ OC.L10N.register(
     "Only circle owners can delete a circle" : "Sols els propietaris d'un cercle poden suprimir un cercle",
     "Create collective for existing circle" : "Crear un Col·lectiu per al cercle existent",
     "New collective name" : "Nom del nou Col·lectiu",
+    "Select circle..." : "Seleccionar cercle...",
     "Create a new collective" : "Crear un nou col·lectiu",
     "Cancel creating a new collective" : "Cancel·la la creació d'un col·lectiu nou",
     "Link copied to the clipboard." : "S'ha copiat l'enllaç al porta-retalls.",
     "New Page" : "Nova Pàgina",
-    "_%n byte_::_%n bytes_" : ["%n byte","%n bytes"]
+    "_%n byte_::_%n bytes_" : ["%n byte","%n bytes"],
+    "The following dependency apps are missing: " : "Falten les aplicacions amb dependència següents: "
 },
 "nplurals=2; plural=(n != 1);");

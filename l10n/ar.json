@@ -109,7 +109,6 @@
     "Could not add members to the collective" : "تعذّرت إضافة أعضاء إلى التجميعة",
     "Select emoji" : "إختر رمزاً تعبيريّاً emji",
     "Select an existing team" : "إختَر فريقاً موجوداً",
-    "Select a team..." : "إختَر فريقاً ...",
     "Cancel selecting a team" : "إلغٍ عملية حذف فريق",
     "Add members" : "إضافة أعضاء",
     "Back" : "عودة",
@@ -176,7 +175,6 @@
     "Sorted by recently changed" : "مُرتّب بحسب التعديلات الأخيرة",
     "Could not save page order for collective" : "تعذّر حفظ ترتيب صفحة التجميعة",
     "Search pages" : "البحث في الصفحات",
-    "Search pages ..." : "إبحث في الصفحات ...",
     "Sort order" : "ترتيب الفرز",
     "Sort by custom order" : "فرز من خلال ترتيب مخصص",
     "Sort recently changed first" : "ترتيب بحسب التعديلات الأخيرة",
@@ -257,7 +255,6 @@
     "Could not move page to another collective" : "تعذّر نقل الصفحة إلى تجميعة أخرى",
     "Could not delete the page" : "تعذّر حذف الصفحة",
     "Error: Missing apps" : "خطأ: تطبيقات ناقصة",
-    "The following dependency apps are missing: " : "تطبيقات التبعيّة dependency التالية ناقصة:",
     "Please ask the administrator to enable these apps." : "رجاءً، أُطلُب من مسؤول النظام تمكين هذه التطبيقات",
     "in Collective {collective}" : "في  التجميعة {collective}",
     "Created collective \"%s\" for existing circle." : "التجميعة \"%s\" أُنشئت للدائرة القائمة.",
@@ -286,10 +283,12 @@
     "Only circle owners can delete a circle" : "مُلّاك الدائرة فقط لهم صلاحية حذفها",
     "Create collective for existing circle" : "أنشيء تجميعة لدائرة التواصل القائمة",
     "New collective name" : "اسم تجميعة جديدة",
+    "Select circle..." : "إختر دائرة اتصال Circle ...",
     "Create a new collective" : "إنشاء تجميعة جديدة",
     "Cancel creating a new collective" : "إلغاء عملية إنشاء تجميعة جديدة",
     "Link copied to the clipboard." : "تمّ نسخ الرابط إلى الحافظة",
     "New Page" : "صفحة جديدة",
-    "_%n byte_::_%n bytes_" : ["بايت","بايت","بايت","بايت","بايت","%n بايت"]
+    "_%n byte_::_%n bytes_" : ["بايت","بايت","بايت","بايت","بايت","%n بايت"],
+    "The following dependency apps are missing: " : "تطبيقات التبعيّة dependency التالية ناقصة:"
 },"pluralForm" :"nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;"
 }

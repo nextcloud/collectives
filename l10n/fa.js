@@ -110,7 +110,6 @@ OC.L10N.register(
     "Could not add members to the collective" : "Could not add members to the collective",
     "Select emoji" : "Select emoji",
     "Select an existing team" : "انتخاب یک گروه موجود",
-    "Select a team..." : "انتخاب یک گروه...",
     "Cancel selecting a team" : "رد انتخاب گروه",
     "Add members" : "افزودن اعضا",
     "Back" : "بازگشت",
@@ -176,7 +175,6 @@ OC.L10N.register(
     "Sorted by recently changed" : "Sorted by recently changed",
     "Could not save page order for collective" : "Could not save page order for collective",
     "Search pages" : "Search pages",
-    "Search pages ..." : "Search pages ...",
     "Sort order" : "Sort order",
     "Sort by custom order" : "Sort by custom order",
     "Sort recently changed first" : "Sort recently changed first",
@@ -245,7 +243,6 @@ OC.L10N.register(
     "Could not move page to another collective" : "نتوانستیم برگه را به انجمن دیگر ببریم",
     "Could not delete the page" : "Could not delete the page",
     "Error: Missing apps" : "Error: Missing apps",
-    "The following dependency apps are missing: " : "The following dependency apps are missing: ",
     "Please ask the administrator to enable these apps." : "Please ask the administrator to enable these apps.",
     "in Collective {collective}" : "in Collective {collective}",
     "Created collective \"%s\" for existing circle." : "Created collective \"%s\" for existing circle.",
@@ -274,10 +271,12 @@ OC.L10N.register(
     "Only circle owners can delete a circle" : "تنها مالکان حلقه می‌توانند حلقه را پاک کنند",
     "Create collective for existing circle" : "ساخت انجمن برای حلقه موجود",
     "New collective name" : "نام انجمن جدید",
+    "Select circle..." : "انتخاب حلقه...",
     "Create a new collective" : "ساخت یک انجمن جدید",
     "Cancel creating a new collective" : "رد ساخت انجمن جدید",
     "Link copied to the clipboard." : "Link copied to the clipboard.",
     "New Page" : "New Page",
-    "_%n byte_::_%n bytes_" : ["%n byte","%n bytes"]
+    "_%n byte_::_%n bytes_" : ["%n byte","%n bytes"],
+    "The following dependency apps are missing: " : "The following dependency apps are missing: "
 },
 "nplurals=2; plural=(n > 1);");

@@ -114,7 +114,6 @@ OC.L10N.register(
     "Could not add members to the collective" : "Чланови нису могли да се додају у овај колектив",
     "Select emoji" : "Изаберите емођи",
     "Select an existing team" : "Изаберите постојећи тим",
-    "Select a team..." : "Изаберите тим…",
     "Cancel selecting a team" : "Откажи одабир тима",
     "Add members" : "Додај чланове",
     "Back" : "Назад",
@@ -196,7 +195,6 @@ OC.L10N.register(
     "Sorted by least recently changed" : "Сортирано по најновијој измени",
     "Could not save page order for collective" : "Редослед страница за колектив није могао да се промени",
     "Search pages" : "Претражи странице",
-    "Search pages ..." : "Претражи странице ...",
     "Sort order" : "Редослед сортирања",
     "Sort by custom order" : "Поређај по ручно дефинисаном редоследу",
     "Sort least recently changed first" : "Сортирај прво најновије измењене",
@@ -288,7 +286,6 @@ OC.L10N.register(
     "Failed to delete {basename} version of {page}." : "Није успело брисање {basename} верзије од {page}.",
     "Deleted {basename} version of {page}." : "Обрисана је {basename} верзија од {page}.",
     "Error: Missing apps" : "Грешка: недостају апликације",
-    "The following dependency apps are missing: " : "Недостају следеће потребне апликације:",
     "Please ask the administrator to enable these apps." : "Молимо вас да замолите администратора да укључи ове апликације.",
     "in Collective {collective}" : "у Колективу {collective}",
     "Created collective \"%s\" for existing circle." : "Креиран је колектив „%s” за постојећи круг.",
@@ -317,10 +314,12 @@ OC.L10N.register(
     "Only circle owners can delete a circle" : "Круг могу да обришу само власници круга",
     "Create collective for existing circle" : "Креирај колектив за подтојећи круг",
     "New collective name" : "Нови назив колектива",
+    "Select circle..." : "Изаберите круг...",
     "Create a new collective" : "Креирај нови колектив",
     "Cancel creating a new collective" : "Откажи креирање новог колектива",
     "Link copied to the clipboard." : "Линк је копиран у клипборд",
     "New Page" : "Нова страница",
-    "_%n byte_::_%n bytes_" : ["%n бајт","%n бајта","%n бајтова"]
+    "_%n byte_::_%n bytes_" : ["%n бајт","%n бајта","%n бајтова"],
+    "The following dependency apps are missing: " : "Недостају следеће потребне апликације:"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);");

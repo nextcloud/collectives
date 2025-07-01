@@ -94,7 +94,6 @@ OC.L10N.register(
     "Could not add members to the collective" : "Не вдалося додати учасників до колективу",
     "Select emoji" : "Виберіть емодзі",
     "Select an existing team" : "Виберіть існуючу команду",
-    "Select a team..." : "Виберіть команду",
     "Add members" : "Додати учасників",
     "Back" : "Назад",
     "Delete" : "Вилучати",
@@ -140,7 +139,6 @@ OC.L10N.register(
     "Deleted" : "Вилучено",
     "Sorted by recently changed" : "Впорядковано за останніми змінами",
     "Search pages" : "Шукати сторінки...",
-    "Search pages ..." : "Шукати сторінки...",
     "Sort order" : "Впорядковано за",
     "Sort by custom order" : "За користувацьким порядком",
     "Sort recently changed first" : "Спочатку нещодавно змінені",
@@ -207,7 +205,6 @@ OC.L10N.register(
     "Could not move page to another collective" : "Не вдалося перенести сторінку в інший колектив",
     "Could not delete the page" : "Не вдалося вилучити сторінку",
     "Error: Missing apps" : "Помилка: відсутні додатки",
-    "The following dependency apps are missing: " : "Для роботи необхідні наступні додатки:",
     "Please ask the administrator to enable these apps." : "Будь ласка, попросіть адміністратора ввімкнути ці додатки.",
     "in Collective {collective}" : "В колективі {collective}",
     "Created collective \"%s\" for existing circle." : "Створити колектив \"%s\" на базі наявного кола.",
@@ -230,10 +227,12 @@ OC.L10N.register(
     "Only circle owners can delete a circle" : "Тільки власники кола можуть його вилучити",
     "Create collective for existing circle" : "Створити колектив на базі наявного кола",
     "New collective name" : "Назва нового колективу",
+    "Select circle..." : "Вибрати коло...",
     "Create a new collective" : "Створити новий колектив",
     "Cancel creating a new collective" : "Скасувати створення нового колективу",
     "Link copied to the clipboard." : "Посилання скопійовано до буферу обміну.",
     "New Page" : "Нова сторінка",
-    "_%n byte_::_%n bytes_" : ["%nбайт","%nбайтів","%nбайтів","%nбайтів"]
+    "_%n byte_::_%n bytes_" : ["%nбайт","%nбайтів","%nбайтів","%nбайтів"],
+    "The following dependency apps are missing: " : "Для роботи необхідні наступні додатки:"
 },
 "nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);");
