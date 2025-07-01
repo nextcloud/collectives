@@ -4,11 +4,14 @@
  */
 
 import { defineStore } from 'pinia'
+import { useLocalStorage } from '@vueuse/core'
 import * as settings from '../apis/collectives/settings.js'
+
+const STORE_PREFIX = 'collectives/pinia/settings/'
 
 export const useSettingsStore = defineStore('settings', {
 	state: () => ({
-		collectivesFolder: '',
+		collectivesFolder: useLocalStorage(STORE_PREFIX + 'collectivesFolder', ''),
 	}),
 
 	actions: {
