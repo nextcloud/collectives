@@ -1,5 +1,30 @@
 # Changelog
 
+## 3.0.0-dev - 2025.07.01
+
+### ✨New
+* 🌐 Slugified URLs to collectives and pages. Thanks @Koc.
+* 🔥 Documented OCS API with OpenAPI specification. (#690)
+* 🧹 Remove Nextcloud 29 and PHP 8.0 support.
+
+### 🐛Fixes
+* 🔔 Fix tracking notify_push sessions.
+* 🖱️ Fix dropping page below last item in list. (#423)
+* 💄 Align "page not found" empty content vertically.
+* 💄 Polish hover effect on recent pages. Thanks @kra-mo.
+* 🐛 Fix ExpirePageVersions background job. (#1834)
+* 🔗 Fix default route in recent pages widget. (#1830)
+* 🔎 Show page path in page search results. (#1778)
+* 🔗 Resolve links to landing pages in page reference provider. (#701)
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 2.18.0 - 2025.06.09
 
 ### ✨New
