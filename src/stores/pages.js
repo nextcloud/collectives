@@ -26,6 +26,7 @@ export const usePagesStore = defineStore('pages', {
 		newPageParentId: null,
 		sortBy: undefined,
 		collapsed: useLocalStorage(STORE_PREFIX + 'collapsed', {}),
+		outline: useLocalStorage(STORE_PREFIX + 'outline', {}),
 		attachments: [],
 		deletedAttachments: [],
 		backlinks: [],
@@ -341,6 +342,11 @@ export const usePagesStore = defineStore('pages', {
 			return pageId => state.collapsed[pageId] != null ? state.collapsed[pageId] : true
 		},
 
+		hasOutline(state) {
+			// Default to 'false' if unset
+			return pageId => state.outline[pageId] != null ? state.outline[pageId] : false
+		},
+
 		keptSortable(state) {
 			return (pageId) => state.pages.find(p => p.id === pageId)?.keepSortable
 		},
@@ -439,10 +445,15 @@ export const usePagesStore = defineStore('pages', {
 			// Default to 'false' if unset
 			set(this.collapsed, pageId, this.collapsed[pageId] == null ? false : !this.collapsed[pageId])
 		},
-
 		collapse(pageId) { set(this.collapsed, pageId, true) },
-
 		expand(pageId) { set(this.collapsed, pageId, false) },
+
+		toggleOutline(pageId) {
+			// Default to 'true' if unset
+			set(this.outline, pageId, this.outline[pageId] == null ? true : !this.outline[pageId])
+		},
+		showOutline(pageId) { set(this.outline, pageId, true) },
+		hideOutline(pageId) { set(this.outline, pageId, false) },
 
 		expandParents(pageId) {
 			for (const page of this.pageParents(pageId)) {

@@ -49,7 +49,7 @@
 			</NcActionCheckbox>
 			<NcActionButton v-if="!inPageList"
 				:close-after-click="true"
-				@click.native="toggle('outline')">
+				@click.native="toggleOutline(currentPage.id)">
 				<template #icon>
 					<FormatListBulletedIcon :size="20" />
 				</template>
@@ -219,7 +219,6 @@ export default {
 	},
 
 	computed: {
-		...mapState(useRootStore, ['showing']),
 		...mapState(useCollectivesStore, [
 			'currentCollective',
 			'currentCollectiveCanEdit',
@@ -228,6 +227,7 @@ export default {
 			'isFavoritePage',
 		]),
 		...mapState(usePagesStore, [
+			'hasOutline',
 			'hasSubpages',
 			'pagesTreeWalk',
 			'visibleSubpages',
@@ -252,7 +252,7 @@ export default {
 		},
 
 		toggleOutlineString() {
-			return this.showing('outline')
+			return this.hasOutline(this.currentPage.id)
 				? t('collectives', 'Hide outline')
 				: t('collectives', 'Show outline')
 		},
@@ -306,6 +306,7 @@ export default {
 		]),
 		...mapActions(usePagesStore, [
 			'setFullWidthView',
+			'toggleOutline',
 		]),
 
 		onCheckFullWidthView() {

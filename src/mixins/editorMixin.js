@@ -31,18 +31,17 @@ export default {
 			'editorApiFlags',
 			'loading',
 			'shareTokenParam',
-			'showing',
 		]),
 		...mapState(useSearchStore, ['searchQuery', 'matchAll']),
 		...mapState(useCollectivesStore, ['currentCollectiveCanEdit']),
-		...mapState(usePagesStore, ['currentPage', 'pageFilePath']),
+		...mapState(usePagesStore, ['currentPage', 'pageFilePath', 'hasOutline']),
 
 		pageContent() {
 			return this.editorContent?.trim() || this.davContent
 		},
 
-		showOutline() {
-			return this.showing('outline')
+		showCurrentPageOutline() {
+			return this.hasOutline(this.currentPage.id)
 		},
 
 		contentLoaded() {
@@ -71,7 +70,7 @@ export default {
 	},
 
 	watch: {
-		'showOutline'(value) {
+		'showCurrentPageOutline'(value) {
 			this.editor?.setShowOutline(value)
 			this.reader?.setShowOutline(value)
 		},
@@ -91,7 +90,8 @@ export default {
 	},
 
 	methods: {
-		...mapActions(useRootStore, ['done', 'hide', 'show']),
+		...mapActions(useRootStore, ['done']),
+		...mapActions(usePagesStore, ['showOutline', 'hideOutline']),
 		...mapActions(useSearchStore, ['showSearchDialog', 'setSearchResults']),
 
 		async setupReader() {
@@ -117,7 +117,7 @@ export default {
 				},
 				onLoaded: () => {
 					this.reader.setSearchQuery(this.searchQuery, this.matchAll)
-					this.reader.setShowOutline(this.showOutline)
+					this.reader.setShowOutline(this.showCurrentPageOutline)
 				},
 				onSearch: (results) => {
 					this.setSearchResults(results)
@@ -147,7 +147,7 @@ export default {
 					},
 					onLoaded: () => {
 						this.editor.setSearchQuery(this.searchQuery, this.matchAll)
-						this.editor.setShowOutline(this.showOutline)
+						this.editor.setShowOutline(this.showCurrentPageOutline)
 						this.done('editor')
 					},
 					onUpdate: ({ markdown }) => {
@@ -187,9 +187,9 @@ export default {
 
 		toggleOutlineFromEditor(visible) {
 			if (visible === true) {
-				this.show('outline')
+				this.showOutline(this.currentPage.id)
 			} else if (visible === false) {
-				this.hide('outline')
+				this.hideOutline(this.currentPage.id)
 			}
 		},
 
