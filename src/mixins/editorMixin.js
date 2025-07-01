@@ -76,14 +76,12 @@ export default {
 			this.reader?.setShowOutline(value)
 		},
 		'searchQuery'(value) {
-			// TODO: remove check once we only support Nextcloud 30+
-			this.editor?.setSearchQuery && this.editor.setSearchQuery(value)
-			this.reader?.setSearchQuery && this.reader.setSearchQuery(value)
+			this.editor?.setSearchQuery(value)
+			this.reader?.setSearchQuery(value)
 		},
 		'matchAll'(value) {
-			// TODO: remove check once we only support Nextcloud 30+
-			this.editor?.setSearchQuery && this.editor.setSearchQuery(this.searchQuery, value)
-			this.reader?.setSearchQuery && this.reader.setSearchQuery(this.searchQuery, value)
+			this.editor?.setSearchQuery(this.searchQuery, value)
+			this.reader?.setSearchQuery(this.searchQuery, value)
 		},
 	},
 
@@ -118,8 +116,7 @@ export default {
 					this.toggleOutlineFromEditor(visible)
 				},
 				onLoaded: () => {
-					// TODO: remove check once we only support Nextcloud 30+
-					this.reader.setSearchQuery && this.reader.setSearchQuery(this.searchQuery, this.matchAll)
+					this.reader.setSearchQuery(this.searchQuery, this.matchAll)
 					this.reader.setShowOutline(this.showOutline)
 				},
 				onSearch: (results) => {
@@ -149,8 +146,7 @@ export default {
 						this.updateEditorContentDebounced(markdown)
 					},
 					onLoaded: () => {
-						// TODO: remove check once we only support Nextcloud 30+
-						this.editor.setSearchQuery && this.editor.setSearchQuery(this.searchQuery, this.matchAll)
+						this.editor.setSearchQuery(this.searchQuery, this.matchAll)
 						this.editor.setShowOutline(this.showOutline)
 						this.done('editor')
 					},
