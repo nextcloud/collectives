@@ -5,6 +5,7 @@
 
 import { defineStore } from 'pinia'
 import { useRootStore } from './root.js'
+import { useLocalStorage } from '@vueuse/core'
 import { byName } from '../util/sortOrders.js'
 import { memberLevels } from '../constants.js'
 import randomEmoji from '../util/randomEmoji.js'
@@ -12,10 +13,12 @@ import * as api from '../apis/collectives/index.js'
 import { useSettingsStore } from './settings.js'
 import { useCirclesStore } from './circles.js'
 
+const STORE_PREFIX = 'collectives/pinia/collectives/'
+
 export const useCollectivesStore = defineStore('collectives', {
 	state: () => ({
-		collectives: [],
-		trashCollectives: [],
+		collectives: useLocalStorage(STORE_PREFIX + 'collectives', []),
+		trashCollectives: useLocalStorage(STORE_PREFIX + 'trashCollectives', []),
 		updatedCollective: undefined,
 		templatesCollectiveId: undefined,
 		membersCollectiveId: undefined,
