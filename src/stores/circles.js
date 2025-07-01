@@ -5,16 +5,19 @@
 
 import { defineStore } from 'pinia'
 import { set } from 'vue'
+import { useLocalStorage } from '@vueuse/core'
 import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
 import { circlesMemberTypes } from '../constants.js'
 import { useCollectivesStore } from './collectives.js'
 import { useRootStore } from './root.js'
 
+const STORE_PREFIX = 'collectives/pinia/circles/'
+
 export const useCirclesStore = defineStore('circles', {
 	state: () => ({
-		circles: [],
-		circlesMembers: {},
+		circles: useLocalStorage(STORE_PREFIX + 'circles', []),
+		circlesMembers: useLocalStorage(STORE_PREFIX + 'circlesMembers', {}),
 	}),
 
 	getters: {
