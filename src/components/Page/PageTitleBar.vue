@@ -212,7 +212,6 @@ export default {
 
 		'currentPage.id'() {
 			this.initTitleEntry()
-			this.hide('outline')
 		},
 	},
 
