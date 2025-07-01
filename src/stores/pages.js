@@ -5,6 +5,7 @@
 
 import { defineStore } from 'pinia'
 import { set } from 'vue'
+import { useLocalStorage } from '@vueuse/core'
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateRemoteUrl } from '@nextcloud/router'
 import { useRootStore } from './root.js'
@@ -18,13 +19,13 @@ const STORE_PREFIX = 'collectives/pinia/pages/'
 
 export const usePagesStore = defineStore('pages', {
 	state: () => ({
-		allPages: {},
-		allTrashPages: {},
+		allPages: useLocalStorage(STORE_PREFIX + 'allPages', {}),
+		allTrashPages: useLocalStorage(STORE_PREFIX + 'allTrashPages', {}),
 		textMode: useLocalStorage(STORE_PREFIX + 'textMode', {}),
 		newPage: undefined,
 		newPageParentId: null,
 		sortBy: undefined,
-		collapsed: {},
+		collapsed: useLocalStorage(STORE_PREFIX + 'collapsed', {}),
 		attachments: [],
 		deletedAttachments: [],
 		backlinks: [],
