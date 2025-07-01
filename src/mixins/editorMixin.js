@@ -9,16 +9,11 @@ import { useRootStore } from '../stores/root.js'
 import { useCollectivesStore } from '../stores/collectives.js'
 import { usePagesStore } from '../stores/pages.js'
 import { useSearchStore } from '../stores/search.js'
-import linkHandlerMixin from '../mixins/linkHandlerMixin.js'
 import PageInfoBar from '../components/Page/PageInfoBar.vue'
 import { editorApiReaderFileId } from '../constants.js'
 import { subscribe } from '@nextcloud/event-bus'
 
 export default {
-	mixins: [
-		linkHandlerMixin,
-	],
-
 	data() {
 		return {
 			reader: null,
