@@ -72,7 +72,7 @@ export default {
 	},
 
 	computed: {
-		...mapState(useRootStore, ['isPublic', 'isTextEdit', 'loading']),
+		...mapState(useRootStore, ['isPublic', 'loading']),
 		...mapState(useCollectivesStore, [
 			'currentCollective',
 			'currentCollectiveCanEdit',
@@ -80,6 +80,7 @@ export default {
 		...mapState(usePagesStore, [
 			'currentPage',
 			'currentPageDavUrl',
+			'isTextEdit',
 		]),
 
 		showEditor() {
@@ -132,14 +133,9 @@ export default {
 	},
 
 	methods: {
-		...mapActions(useRootStore, [
-			'load',
-			'done',
-			'setTextEdit',
-			'setTextView',
-		]),
+		...mapActions(useRootStore, ['load', 'done']),
 		...mapActions(useVersionsStore, ['getVersions']),
-		...mapActions(usePagesStore, ['touchPage']),
+		...mapActions(usePagesStore, ['setTextEdit', 'setTextView', 'touchPage']),
 
 		restoreAttachment(name) {
 			// inspired by the fixedEncodeURIComponent function suggested in

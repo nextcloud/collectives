@@ -62,7 +62,7 @@
 
 <script>
 import { mapActions, mapState } from 'pinia'
-import { useRootStore } from '../../stores/root.js'
+import { usePagesStore } from '../../stores/pages.js'
 import { useSearchStore } from '../../stores/search.js'
 import { translate as t } from '@nextcloud/l10n'
 
@@ -90,7 +90,7 @@ export default {
 	},
 
 	computed: {
-		...mapState(useRootStore, ['isTextEdit']),
+		...mapState(usePagesStore, ['isTextEdit']),
 		...mapState(useSearchStore, [
 		  'searchQuery',
 		  'matchAll',
