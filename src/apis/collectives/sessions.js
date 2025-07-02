@@ -14,6 +14,7 @@ import { apiUrl } from './urls.js'
 function sessionApiUrl(collectiveId) {
 	return apiUrl('v1.0', 'collectives', collectiveId, 'sessions')
 }
+
 /**
  * Create a new session for the current user
  *
@@ -40,5 +41,7 @@ export function updateSession(collectiveId, token) {
  * @param {string} token - Session token
  */
 export function closeSession(collectiveId, token) {
-	return axios.delete(sessionApiUrl(`${collectiveId}?token=${token}`))
+	return axios.delete(sessionApiUrl(collectiveId), {
+		params: { token },
+	})
 }
