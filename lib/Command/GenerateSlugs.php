@@ -54,7 +54,10 @@ class GenerateSlugs extends Command {
 		$query = $this->connection->getQueryBuilder();
 		$query->select(['id', 'circle_unique_id'])
 			->from('collectives')
-			->where('(slug IS NULL OR slug = \'\')');
+			->where($query->expr()->orX(
+				$query->expr()->isNull('slug'),
+				$query->expr()->emptyString('slug')
+			));
 		$result = $query->executeQuery();
 
 		$update = $this->connection->getQueryBuilder();
@@ -83,7 +86,7 @@ class GenerateSlugs extends Command {
 		$queryCollectives = $this->connection->getQueryBuilder();
 		$queryCollectives->select(['id', 'circle_unique_id'])
 			->from('collectives')
-			->where('trash_timestamp IS NULL');
+			->where($queryCollectives->expr()->isNull('trash_timestamp'));
 		$resultCollectives = $queryCollectives->executeQuery();
 
 		$update = $this->connection->getQueryBuilder();

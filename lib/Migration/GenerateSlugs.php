@@ -60,7 +60,10 @@ class GenerateSlugs implements IRepairStep {
 		$query = $this->connection->getQueryBuilder();
 		$query->select(['id', 'circle_unique_id'])
 			->from('collectives')
-			->where('(slug IS NULL OR slug = \'\')');
+			->where($query->expr()->orX(
+				$query->expr()->isNull('slug'),
+				$query->expr()->emptyString('slug')
+			));
 		$result = $query->executeQuery();
 
 		$update = $this->connection->getQueryBuilder();
@@ -91,7 +94,10 @@ class GenerateSlugs implements IRepairStep {
 		$query = $this->connection->getQueryBuilder();
 		$query->select(['id', 'file_id'])
 			->from('collectives_pages')
-			->where('(slug IS NULL OR slug = \'\')');
+			->where($query->expr()->orX(
+				$query->expr()->isNull('slug'),
+				$query->expr()->emptyString('slug')
+			));
 		$result = $query->executeQuery();
 
 
