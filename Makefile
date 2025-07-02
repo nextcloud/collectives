@@ -6,15 +6,10 @@ VERSION?=$(shell sed -ne 's/^\s*<version>\(.*\)<\/version>/\1/p' appinfo/info.xm
 GIT_TAG?=v$(VERSION)
 OCC?=php ../../occ
 NPM?=npm
-RELEASE_NIGHTLY?=0
+PRERELEASE?=0
 
 # Release variables
 VERSION_CHANGELOG:=$(shell sed -ne 's/^\#\#\s\([0-9\.]\+-*\w*\)\s-\s.*$$/\1/p' CHANGELOG.md | head -n1 )
-ifeq ($(RELEASE_NIGHTLY),1)
-    NIGHTLY := true
-else
-    NIGHTLY := false
-endif
 
 # Upgrade: once we have git >= 2.22 everywhere we can use the more
 # readable GIT_BRANCH:=$(shell git branch --show-current)
@@ -191,7 +186,7 @@ release-github: release-checks lint-appinfo distclean build
 	git tag $(GIT_TAG) -m "Version $(VERSION)" && git push $(GIT_REMOTE) $(GIT_TAG)
 
 	# Publish the release on Github
-ifeq ($(RELEASE_NIGHTLY),1)
+ifeq ($(PRERELEASE),1)
 	gh release create --prerelease --title "$(GIT_TAG)" $(GIT_TAG) ./build/release/$(APP_NAME)-$(VERSION).tar.gz
 else
 	gh release create --title "$(GIT_TAG)" $(GIT_TAG) ./build/release/$(APP_NAME)-$(VERSION).tar.gz
@@ -209,7 +204,7 @@ endif
 		curl -s -X POST $(NEXTCLOUD_APPSTORE_API_URL)/releases \
 			-H 'Content-Type: application/json' \
 			-d '{"download":"$(GITHUB_PROJECT_URL)/releases/download/$(GIT_TAG)/$(APP_NAME)-$(VERSION).tar.gz", "signature":"$(shell openssl dgst -sha512 -sign $(CERT_DIR)/$(APP_NAME).key \
-					$(RELEASE_DIR)/$(APP_NAME)-$(VERSION).tar.gz | openssl base64)","nightly":$(NIGHTLY)}' \
+					$(RELEASE_DIR)/$(APP_NAME)-$(VERSION).tar.gz | openssl base64)"}' \
 			-u 'collectivecloud:$(NEXTCLOUD_PASSWORD)'; \
 	fi
 
