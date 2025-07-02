@@ -48,6 +48,7 @@ OC.L10N.register(
     "Sharing" : "Koplietošana",
     "Versions" : "Versijas",
     "Link copied" : "Saite nokopēta",
-    "Copied" : "Nokopēts"
+    "Copied" : "Nokopēts",
+    "Failed to revert {page} to revision {timestamp}." : "Neizdevās atjaunot {page} no rediģējuma {timestamp} "
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");

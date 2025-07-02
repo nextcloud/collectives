@@ -25,6 +25,7 @@ OC.L10N.register(
     "No other versions available" : "Nulle altere versiones disponibile",
     "Attachments" : "Attachamentos",
     "Sharing" : "Compartente",
-    "Versions" : "Versiones"
+    "Versions" : "Versiones",
+    "Failed to revert {page} to revision {timestamp}." : "Il falleva a reverter {page} a revision {timestamp}."
 },
 "nplurals=2; plural=(n != 1);");

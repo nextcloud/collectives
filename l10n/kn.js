@@ -19,6 +19,7 @@ OC.L10N.register(
     "Download" : "ಪ್ರತಿಯನ್ನು ಸ್ಥಳೀಯವಾಗಿ ಉಳಿಸಿಕೊಳ್ಳಿ",
     "No other versions available" : "ಇನ್ನಿತರೆ ಯಾವುದೇ ಆವೃತ್ತಿಗಳು ಲಭ್ಯವಿಲ್ಲ",
     "Sharing" : "﻿ಹಂಚಿಕೆ",
-    "Versions" : "ಆವೃತ್ತಿಗಳು"
+    "Versions" : "ಆವೃತ್ತಿಗಳು",
+    "Failed to revert {page} to revision {timestamp}." : "{timestamp} ದ ಪರಿಷ್ಕರಣೆ ಇಂದ  {page}  ಕಡತವನ್ನು ಹಿಂದಿರುಗಿಸಲು ವಿಫಲವಾಗಿದೆ."
 },
 "nplurals=2; plural=(n > 1);");

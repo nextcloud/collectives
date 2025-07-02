@@ -27,6 +27,7 @@ OC.L10N.register(
     "No other versions available" : "Ingen andre utgåver tilgjengeleg",
     "Sharing" : "Deling",
     "Versions" : "Utgåver",
-    "Link copied" : "Lenkje kopiert"
+    "Link copied" : "Lenkje kopiert",
+    "Failed to revert {page} to revision {timestamp}." : "Klarte ikkje å tilbakestilla {page} til utgåva {timestamp}."
 },
 "nplurals=2; plural=(n != 1);");

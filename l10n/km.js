@@ -20,6 +20,7 @@ OC.L10N.register(
     "Download" : "ទាញយក",
     "No other versions available" : "មិន​មាន​កំណែ​ផ្សេង​ទៀត​ទេ",
     "Sharing" : "ការ​ចែក​រំលែក",
-    "Versions" : "កំណែ"
+    "Versions" : "កំណែ",
+    "Failed to revert {page} to revision {timestamp}." : "មិន​អាច​ត្រឡប់ {page} ទៅ​កំណែ​សម្រួល {timestamp} បាន​ទេ។"
 },
 "nplurals=1; plural=0;");

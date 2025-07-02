@@ -72,6 +72,7 @@ OC.L10N.register(
     "Copied" : "Copied",
     "Cannot copy" : "Cannot copy",
     "Copy share link" : "Copy share link",
+    "Template" : "Template",
     "_%n byte_::_%n bytes_" : ["%n byte","%n bytes"]
 },
 "nplurals=2; plural=(n!=1);");

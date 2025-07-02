@@ -73,6 +73,9 @@ OC.L10N.register(
     "Link copied" : "Linkki kopioitu",
     "Copied" : "Kopioitu",
     "Cannot copy" : "Ei voida kopioida",
-    "Copy share link" : "Kopioi jakolinkki"
+    "Copy share link" : "Kopioi jakolinkki",
+    "Failed to revert {page} to revision {timestamp}." : "Tiedoston {page} palautus versioon {timestamp} epäonnistui.",
+    "Template" : "Malli",
+    "Sort by title" : "Lajittele nimen mukaan"
 },
 "nplurals=2; plural=(n != 1);");

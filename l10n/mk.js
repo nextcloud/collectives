@@ -70,6 +70,7 @@ OC.L10N.register(
     "Link copied" : "Линкот е копиран",
     "Copied" : "Копирано",
     "Cannot copy" : "Не може да се копира",
-    "Copy share link" : "Копирај линк за споделување"
+    "Copy share link" : "Копирај линк за споделување",
+    "Failed to revert {page} to revision {timestamp}." : "Не успеав да го вратам {page} на ревизијата {timestamp}."
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");

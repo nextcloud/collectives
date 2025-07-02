@@ -288,9 +288,9 @@ OC.L10N.register(
     "Select circle..." : "إختر دائرة اتصال Circle ...",
     "Create a new collective" : "إنشاء تجميعة جديدة",
     "Cancel creating a new collective" : "إلغاء عملية إنشاء تجميعة جديدة",
+    "_%n byte_::_%n bytes_" : ["بايت","بايت","بايت","بايت","بايت","%n بايت"],
     "Link copied to the clipboard." : "تمّ نسخ الرابط إلى الحافظة",
     "New Page" : "صفحة جديدة",
-    "_%n byte_::_%n bytes_" : ["بايت","بايت","بايت","بايت","بايت","%n بايت"],
     "The following dependency apps are missing: " : "تطبيقات التبعيّة dependency التالية ناقصة:"
 },
 "nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;");

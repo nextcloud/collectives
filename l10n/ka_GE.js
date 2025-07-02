@@ -29,6 +29,7 @@ OC.L10N.register(
     "Unshare" : "გაზიარების შეწყვეტა",
     "Download" : "ჩამოტვირთვა",
     "Sharing" : "გაზიარება",
-    "Versions" : "ვერსიები"
+    "Versions" : "ვერსიები",
+    "Failed to revert {page} to revision {timestamp}." : "ფაილის {page} დაბრუნება რევიზიაზე {timestamp} ვერ ხერხდება."
 },
 "nplurals=2; plural=(n!=1);");

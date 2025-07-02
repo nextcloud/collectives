@@ -271,6 +271,12 @@
     "Select circle..." : "Επιλογή κύκλου...",
     "Create a new collective" : "Δημιουργία νέας συλλογικότητας",
     "Cancel creating a new collective" : "Ακύρωση δημιουργίας νέας συλλογικότητας",
+    "Edit template for subpages" : "Επεξεργασία προτύπου για υποσελίδες",
+    "Could not find the Page." : "Δεν ήταν δυνατή η εύρεση της Σελίδας.",
+    "Template" : "Πρότυπο",
+    "Page content" : "Περιεχόμενο σελίδας",
+    "Show templates" : "Εμφάνιση προτύπων",
+    "Sort by title" : "Ταξινόμηση κατά τίτλο",
     "Link copied to the clipboard." : "Ο σύνδεσμος αντιγράφηκε στο πρόχειρο.",
     "New Page" : "Νέα Σελίδα",
     "The following dependency apps are missing: " : "Λείπουν οι ακόλουθες εφαρμογές εξαρτήσεων: "

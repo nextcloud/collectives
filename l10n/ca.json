@@ -255,9 +255,11 @@
     "Select circle..." : "Seleccionar cercle...",
     "Create a new collective" : "Crear un nou col·lectiu",
     "Cancel creating a new collective" : "Cancel·la la creació d'un col·lectiu nou",
+    "Edit template for subpages" : "Edició de la plantilla per subpàgines",
+    "Template" : "Plantilla",
+    "_%n byte_::_%n bytes_" : ["%n byte","%n bytes"],
     "Link copied to the clipboard." : "S'ha copiat l'enllaç al porta-retalls.",
     "New Page" : "Nova Pàgina",
-    "_%n byte_::_%n bytes_" : ["%n byte","%n bytes"],
     "The following dependency apps are missing: " : "Falten les aplicacions amb dependència següents: "
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
