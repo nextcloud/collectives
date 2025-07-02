@@ -84,8 +84,10 @@ export function trashCollective(collectiveId) {
  * @param {boolean} removeCircle - also remove the circle if true
  */
 export function deleteCollective(collectiveId, removeCircle) {
-	const query = removeCircle ? '?circle=1' : ''
-	return axios.delete(collectivesTrashApiUrl(collectiveId + query))
+	const params = removeCircle ? { circle: 1 } : {}
+	return axios.delete(collectivesTrashApiUrl(collectiveId), {
+		params,
+	})
 }
 
 /**
