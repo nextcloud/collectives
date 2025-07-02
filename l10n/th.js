@@ -37,6 +37,7 @@ OC.L10N.register(
     "Attachments" : "ไฟล์แนบ",
     "Sharing" : "แชร์ข้อมูล",
     "Versions" : "รุ่น",
-    "Link copied" : "คัดลอกลิงก์แล้ว"
+    "Link copied" : "คัดลอกลิงก์แล้ว",
+    "Failed to revert {page} to revision {timestamp}." : "ไม่สามารถย้อนกลับ {page} ไปเป็นรุ่น {timestamp}"
 },
 "nplurals=1; plural=0;");

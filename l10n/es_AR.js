@@ -41,6 +41,7 @@ OC.L10N.register(
     "Link copied" : "Link copiado",
     "Copied" : "Copiado",
     "Cannot copy" : "No se pudo copiar",
-    "Copy share link" : "Copiar el enlace compartido"
+    "Copy share link" : "Copiar el enlace compartido",
+    "Failed to revert {page} to revision {timestamp}." : "Falla al revertir {archivo} a revisión {timestamp}."
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

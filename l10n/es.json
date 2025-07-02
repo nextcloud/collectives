@@ -267,9 +267,16 @@
     "Select circle..." : "Seleccionar círculo...",
     "Create a new collective" : "Crear un cuaderno colectivo nuevo",
     "Cancel creating a new collective" : "Cancelar la creación del cuaderno colectivo nuevo",
+    "Edit template for subpages" : "Editar la plantilla para subpáginas",
+    "Could not find the Page." : "No fue posible encontrar la página.",
+    "Template" : "Plantilla",
+    "Page content" : "Contenido de la página",
+    "Show templates" : "Mostrar plantillas",
+    "Sort by title" : "Ordenar por título",
+    "Sorted by title" : "Ordenar por título",
+    "_%n byte_::_%n bytes_" : ["%n byte","%n bytes","%n bytes"],
     "Link copied to the clipboard." : "Enlace copiado al portapapeles.",
     "New Page" : "Nueva página",
-    "_%n byte_::_%n bytes_" : ["%n byte","%n bytes","%n bytes"],
     "The following dependency apps are missing: " : "Las siguientes aplicaciones son necesarias y no se encuentran: "
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

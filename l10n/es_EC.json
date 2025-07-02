@@ -190,9 +190,22 @@
     "Select circle..." : "Seleccionar círculo...",
     "Create a new collective" : "Crear un nuevo colectivo",
     "Cancel creating a new collective" : "Cancelar la creación de un nuevo colectivo",
+    "Edit template for subpages" : "Editar plantilla para subpáginas",
+    "Add template for subpages" : "Añadir plantilla para subpáginas",
+    "Delete template" : "Eliminar plantilla",
+    "Page not found:" : "Página no encontrada:",
+    "Could not find the Page." : "No se pudo encontrar la página.",
+    "Failed to revert {page} to revision {timestamp}." : "Error al revertir la página {page} a la revisión {timestamp}.",
+    "Template" : "Plantilla",
+    "Page content" : "Contenido de la página",
+    "Hide templates" : "Ocultar plantillas",
+    "Show templates" : "Mostrar plantillas",
+    "Sort by title" : "Ordenar por título",
+    "Sorted by title" : "Ordenado por título",
+    "_%n byte_::_%n bytes_" : ["%n byte","%n bytes","%n bytes"],
+    "Pages that link to this one" : "Páginas que enlazan a esta",
     "Link copied to the clipboard." : "Enlace copiado al portapapeles.",
     "New Page" : "Nueva página",
-    "_%n byte_::_%n bytes_" : ["%n byte","%n bytes","%n bytes"],
     "The following dependency apps are missing: " : "Faltan las siguientes aplicaciones de dependencia: "
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

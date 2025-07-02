@@ -156,8 +156,8 @@
     "Collective not found:" : "Nun s'atopó'l coleutivu:",
     "Collectives Folder" : "Carpeta de los coleutivos",
     "Create a new collective" : "Crear un coleutivu",
+    "_%n byte_::_%n bytes_" : ["%n byte","%n bytes"],
     "Link copied to the clipboard." : "L'enllaz copióse nel cartafueyu.",
-    "New Page" : "Páxina nueva",
-    "_%n byte_::_%n bytes_" : ["%n byte","%n bytes"]
+    "New Page" : "Páxina nueva"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

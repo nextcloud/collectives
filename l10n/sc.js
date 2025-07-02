@@ -61,6 +61,9 @@ OC.L10N.register(
     "Versions" : "Versiones",
     "Link copied" : "Ligòngiu copiadu",
     "Copied" : "Copiadu",
-    "Cannot copy" : "Non faghet a copiare"
+    "Cannot copy" : "Non faghet a copiare",
+    "Failed to revert {page} to revision {timestamp}." : "Non s'at pòdidu torrare a {documentu} pro sa revisione {timestamp}.",
+    "Template" : "Modellu",
+    "Sort by title" : "Assenta segundu tìtulu"
 },
 "nplurals=2; plural=(n != 1);");

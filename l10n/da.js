@@ -285,9 +285,15 @@ OC.L10N.register(
     "Select circle..." : "Vælg cirkel...",
     "Create a new collective" : "Opret et nyt kollektiv",
     "Cancel creating a new collective" : "Annuller oprettelse af et nyt kollektiv",
+    "Edit template for subpages" : "Rediger skabelon til undersider",
+    "Could not find the Page." : "Kunne ikke finde siden.",
+    "Template" : "Skabelon",
+    "Page content" : "Sideindhold",
+    "Show templates" : "Vis skabeloner",
+    "Sort by title" : "Sortér efter titel",
+    "_%n byte_::_%n bytes_" : ["%n byte","%n bytes"],
     "Link copied to the clipboard." : "Linket er kopieret til udklipsholderen.",
     "New Page" : "Ny side",
-    "_%n byte_::_%n bytes_" : ["%n byte","%n bytes"],
     "The following dependency apps are missing: " : "Følgende afhængighedsapps mangler: "
 },
 "nplurals=2; plural=(n != 1);");

@@ -25,6 +25,7 @@ OC.L10N.register(
     "No other versions available" : "Keng aner Versiounen disponibel",
     "Sharing" : "Gedeelt",
     "Versions" : "Versiounen",
-    "Link copied" : "Link kopéiert"
+    "Link copied" : "Link kopéiert",
+    "Failed to revert {page} to revision {timestamp}." : "Konnt {page} net op d'Versioun {timestamp} zrécksetzen."
 },
 "nplurals=2; plural=(n != 1);");

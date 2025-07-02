@@ -46,6 +46,8 @@ OC.L10N.register(
     "Copied" : "Copiado",
     "Cannot copy" : "Não é possível copiar",
     "Copy share link" : "Copie partilhe ligação",
+    "Failed to revert {page} to revision {timestamp}." : "Falhou a recuperação do ficheiro {page} para a revisão {timestamp}.",
+    "Template" : "Modelo",
     "_%n byte_::_%n bytes_" : ["%n byte","%n bytes","%n bytes"]
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

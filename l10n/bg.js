@@ -191,9 +191,9 @@ OC.L10N.register(
     "Select circle..." : "Избор на кръг ...",
     "Create a new collective" : "Създаване на новия колектив",
     "Cancel creating a new collective" : "Отказ от създаване на новия колектив",
+    "_%n byte_::_%n bytes_" : ["%n  байта","%n байта"],
     "Link copied to the clipboard." : "Връзката е копирана в клипборда.",
     "New Page" : "Нова страница",
-    "_%n byte_::_%n bytes_" : ["%n  байта","%n байта"],
     "The following dependency apps are missing: " : "Липсват следните зависими приложения: "
 },
 "nplurals=2; plural=(n != 1);");

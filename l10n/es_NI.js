@@ -26,6 +26,7 @@ OC.L10N.register(
     "Unshare" : "Dejar de compartir",
     "Download" : "Descargar",
     "Sharing" : "Compartiendo",
-    "Versions" : "Versiones"
+    "Versions" : "Versiones",
+    "Failed to revert {page} to revision {timestamp}." : "Falla al revertir {page} a revisión {timestamp}."
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
