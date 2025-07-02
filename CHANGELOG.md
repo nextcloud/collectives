@@ -1,5 +1,15 @@
 # Changelog
 
+## 3.0.0-dev2 - 2025.07.02
+
+### ✨New
+* 🏬 Persist collectives and pages metadata in browser local storage.
+
+### 🐛Fixes
+* 🪤 Catch missing circles when generating slugs.
+* 🧹 Remove unused linkHandler mixin.
+
+
 ## 3.0.0-dev - 2025.07.01
 
 ### ✨New
