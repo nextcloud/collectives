@@ -6,6 +6,7 @@
 * 🏬 Persist collectives and pages metadata in browser local storage.
 
 ### 🐛Fixes
+* 🔥 Fix URL to delete a collectives session.
 * 🪤 Catch missing circles when generating slugs.
 * 🧹 Remove unused linkHandler mixin.
 
