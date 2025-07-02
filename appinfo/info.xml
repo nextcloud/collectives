@@ -26,7 +26,7 @@ In your Nextcloud instance, simply navigate to **»Apps«**, find the
 **»Teams«** and **»Collectives«** apps and enable them.
 
 	]]></description>
-	<version>3.0.0-dev</version>
+	<version>3.0.0-dev2</version>
 	<licence>agpl</licence>
 	<author>CollectiveCloud Team</author>
 	<namespace>Collectives</namespace>
