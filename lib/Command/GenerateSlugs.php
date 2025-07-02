@@ -12,6 +12,7 @@ namespace OCA\Collectives\Command;
 use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Service\CircleHelper;
+use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\PageService;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
@@ -62,7 +63,12 @@ class GenerateSlugs extends Command {
 			->where($update->expr()->eq('id', $update->createParameter('id')));
 
 		while ($row = $result->fetch()) {
-			$circle = $this->circleHelper->getCircle($row['circle_unique_id'], null, true);
+			try {
+				$circle = $this->circleHelper->getCircle($row['circle_unique_id'], null, true);
+			} catch (NotFoundException) {
+				// Cruft collective without circle
+				continue;
+			}
 			$slug = $this->slugger->slug($circle->getSanitizedName())->toString();
 
 			$update
@@ -86,7 +92,12 @@ class GenerateSlugs extends Command {
 			->where($update->expr()->eq('file_id', $update->createParameter('file_id')));
 
 		while ($rowCollective = $resultCollectives->fetch()) {
-			$circle = $this->circleHelper->getCircle($rowCollective['circle_unique_id'], null, true);
+			try {
+				$circle = $this->circleHelper->getCircle($rowCollective['circle_unique_id'], null, true);
+			} catch (NotFoundException) {
+				// Cruft collective without circle
+				continue;
+			}
 			$pageInfos = $this->pageService->findAll($rowCollective['id'], $circle->getOwner()->getUserId());
 
 			/** @var PageInfo $pageInfo */

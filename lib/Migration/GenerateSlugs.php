@@ -13,6 +13,7 @@ use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Service\CircleHelper;
+use OCA\Collectives\Service\NotFoundException;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\File;
 use OCP\IAppConfig;
@@ -68,7 +69,12 @@ class GenerateSlugs implements IRepairStep {
 			->where($update->expr()->eq('id', $update->createParameter('id')));
 
 		while ($row = $result->fetch()) {
-			$circle = $this->circleHelper->getCircle($row['circle_unique_id'], null, true);
+			try {
+				$circle = $this->circleHelper->getCircle($row['circle_unique_id'], null, true);
+			} catch (NotFoundException) {
+				// Cruft collective without circle
+				continue;
+			}
 			$slug = $this->slugger->slug($circle->getSanitizedName())->toString();
 
 			$update
