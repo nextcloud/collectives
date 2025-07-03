@@ -62,7 +62,7 @@ import { useVersionsStore } from '../stores/versions.js'
 
 import { NcActionButton, NcActions, NcButton } from '@nextcloud/vue'
 import DockRightIcon from 'vue-material-design-icons/DockRight.vue'
-import EmoticonIcon from 'vue-material-design-icons/Emoticon.vue'
+import EmoticonIcon from 'vue-material-design-icons/EmoticonOutline.vue'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
 import PageTitle from './Page/PageTitle.vue'
 import SkeletonLoading from './SkeletonLoading.vue'

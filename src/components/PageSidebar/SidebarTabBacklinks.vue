@@ -61,7 +61,7 @@ import { useRootStore } from '../../stores/root.js'
 import { usePagesStore } from '../../stores/pages.js'
 import { NcEmptyContent, NcListItem, NcLoadingIcon } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
-import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagon.vue'
+import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagonOutline.vue'
 import ArrowBottomLeftIcon from 'vue-material-design-icons/ArrowBottomLeft.vue'
 import PageIcon from '../Icon/PageIcon.vue'
 

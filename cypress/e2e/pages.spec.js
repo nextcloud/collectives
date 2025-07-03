@@ -54,7 +54,7 @@ describe('Pages', function() {
 
 			// Test persistence of unset emoji
 			cy.reload()
-			cy.get('[data-cy-collectives="page-title-container"] .page-title-icon .emoticon-icon')
+			cy.get('[data-cy-collectives="page-title-container"] .page-title-icon .emoticon-outline-icon')
 			cy.contains('.app-content-list-item', 'Day 1')
 				.find('.app-content-list-item-icon .collectives-page-icon')
 		})
