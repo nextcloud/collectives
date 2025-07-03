@@ -27,7 +27,7 @@
 import { generateUrl } from '@nextcloud/router'
 // As it's the only nextcloud-vue component used in collectives-files.js, import it separately to keep asset small
 import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
-import InformationIcon from 'vue-material-design-icons/Information.vue'
+import InformationIcon from 'vue-material-design-icons/InformationOutline.vue'
 
 export default {
 	name: 'FileListInfo',

@@ -65,12 +65,12 @@ import { useCirclesStore } from '../../stores/circles.js'
 import { NcActionButton, NcActionLink, NcActionSeparator } from '@nextcloud/vue'
 import { showError, showUndo } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
-import AccountMultipleIcon from 'vue-material-design-icons/AccountMultiple.vue'
-import CogIcon from 'vue-material-design-icons/Cog.vue'
-import DownloadIcon from 'vue-material-design-icons/Download.vue'
+import AccountMultipleIcon from 'vue-material-design-icons/AccountMultipleOutline.vue'
+import CogIcon from 'vue-material-design-icons/CogOutline.vue'
+import DownloadIcon from 'vue-material-design-icons/DownloadOutline.vue'
 import LogoutIcon from 'vue-material-design-icons/Logout.vue'
 import PageTemplateIcon from '../Icon/PageTemplateIcon.vue'
-import ShareVariantIcon from 'vue-material-design-icons/ShareVariant.vue'
+import ShareVariantIcon from 'vue-material-design-icons/ShareVariantOutline.vue'
 
 export default {
 	name: 'CollectiveActions',

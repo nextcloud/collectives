@@ -58,7 +58,7 @@ describe('Page list', function() {
 
 			// Select sorting by timestamp
 			cy.get('span.sort-alphabetical-ascending-icon').click()
-			cy.get('button.action-button > span.sort-clock-ascending-icon').click()
+			cy.get('button.action-button > span.sort-clock-ascending-outline-icon').click()
 			cy.get('.app-content-list-item').last()
 				.should('contain', 'Target')
 
