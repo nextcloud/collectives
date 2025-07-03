@@ -25,7 +25,7 @@
 
 <script>
 import CheckIcon from 'vue-material-design-icons/Check.vue'
-import PencilIcon from 'vue-material-design-icons/Pencil.vue'
+import PencilIcon from 'vue-material-design-icons/PencilOutline.vue'
 import { NcButton, NcLoadingIcon } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
 import { useRootStore } from '../../stores/root.js'
