@@ -42,7 +42,7 @@
 
 <script>
 import { NcButton, NcDialog, NcTextField } from '@nextcloud/vue'
-import CheckIcon from 'vue-material-design-icons/Check.vue'
+import CheckIcon from 'vue-material-design-icons/CheckOutline.vue'
 
 export default {
 	name: 'VersionLabelDialog',
