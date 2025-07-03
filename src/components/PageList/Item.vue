@@ -102,11 +102,11 @@ import pageMixin from '../../mixins/pageMixin.js'
 
 import CollectivesIcon from '../Icon/CollectivesIcon.vue'
 import { NcActionButton, NcActions } from '@nextcloud/vue'
-import MenuRightIcon from 'vue-material-design-icons/MenuRight.vue'
+import MenuRightIcon from 'vue-material-design-icons/MenuRightOutline.vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import PageIcon from '../Icon/PageIcon.vue'
 import PageActionMenu from '../Page/PageActionMenu.vue'
-import StarIcon from 'vue-material-design-icons/Star.vue'
+import StarIcon from 'vue-material-design-icons/StarOutline.vue'
 
 export default {
 	name: 'Item',
