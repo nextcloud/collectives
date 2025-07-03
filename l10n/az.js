@@ -31,6 +31,7 @@ OC.L10N.register(
     "Save version name" : "Versiya adını yadda saxla",
     "Sharing" : "Paylaşılır",
     "Versions" : "Versiyaları",
-    "Link copied" : "Link kopyalandı"
+    "Link copied" : "Link kopyalandı",
+    "Failed to revert {page} to revision {timestamp}." : "{timestamp} yenidən baxılması üçün {page} geri qaytarmaq mümkün olmadı."
 },
 "nplurals=2; plural=(n != 1);");

@@ -21,6 +21,7 @@ OC.L10N.register(
     "Download" : "ডাউনলোড",
     "No other versions available" : "আর কোন সংষ্করণ প্রাপ্তব্য নয়",
     "Sharing" : "ভাগাভাগিরত",
-    "Versions" : "সংষ্করন"
+    "Versions" : "সংষ্করন",
+    "Failed to revert {page} to revision {timestamp}." : " {page} সংশোধিত  {timestamp} এ ফিরে যেতে ব্যার্থ হলো।"
 },
 "nplurals=2; plural=(n != 1);");

@@ -24,6 +24,7 @@ OC.L10N.register(
     "Download" : "Laai af",
     "Versions" : "Weergawes",
     "Link copied" : "Skakel gekopieer",
-    "Copied" : "Gekopieer"
+    "Copied" : "Gekopieer",
+    "Failed to revert {page} to revision {timestamp}." : "Kon nie {page} na {timestamp} se hersiening terugstel nie."
 },
 "nplurals=2; plural=(n != 1);");
