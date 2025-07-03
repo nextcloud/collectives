@@ -40,6 +40,7 @@ OC.L10N.register(
     "Sharing" : "Kunhavigo",
     "Versions" : "Versioj",
     "Link copied" : "Ligilo kopiita",
-    "Copied" : "Kopiita"
+    "Copied" : "Kopiita",
+    "Failed to revert {page} to revision {timestamp}." : "Malsukcesis remeti {page} al la revizio {timestamp}."
 },
 "nplurals=2; plural=(n != 1);");
