@@ -202,12 +202,12 @@ import {
 	NcLoadingIcon,
 	NcPasswordField,
 } from '@nextcloud/vue'
-import CheckIcon from 'vue-material-design-icons/Check.vue'
-import CloseIcon from 'vue-material-design-icons/Close.vue'
-import CogIcon from 'vue-material-design-icons/Cog.vue'
+import CheckIcon from 'vue-material-design-icons/CheckOutline.vue'
+import CloseIcon from 'vue-material-design-icons/CloseOutline.vue'
+import CogIcon from 'vue-material-design-icons/CogOutline.vue'
 import ContentCopyIcon from 'vue-material-design-icons/ContentCopy.vue'
-import InformationIcon from 'vue-material-design-icons/Information.vue'
-import LockIcon from 'vue-material-design-icons/Lock.vue'
+import InformationIcon from 'vue-material-design-icons/InformationOutline.vue'
+import LockIcon from 'vue-material-design-icons/LockOutline.vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import TriangleSmallDownIcon from 'vue-material-design-icons/TriangleSmallDown.vue'
 
