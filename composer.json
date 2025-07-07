@@ -17,7 +17,7 @@
         "ext-pdo": "*",
         "ext-pdo_sqlite": "*",
         "symfony/string": "^6.0",
-        "symfony/translation-contracts": "^2.5",
+        "symfony/translation-contracts": "^3.6",
         "teamtnt/tntsearch": "^5.0"
     },
     "require-dev": {
