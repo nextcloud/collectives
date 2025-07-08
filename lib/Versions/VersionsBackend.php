@@ -457,4 +457,9 @@ class VersionsBackend implements IVersionBackend, IMetadataVersionBackend, IDele
 		$folderId = $this->getFolderIdForFile($source);
 		$this->deleteAllVersionsForFile($folderId, $target->getId());
 	}
+
+	public function getRevision(Node $node): int {
+		return $node->getMTime();
+	}
+
 }
