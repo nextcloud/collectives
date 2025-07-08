@@ -151,8 +151,10 @@ export default {
 			if (this.listenPush) {
 				console.debug('Has notify_push enabled, listening to pagelist updates and slowing polling to 15 minutes')
 				this.pollIntervalBase = 15 * 60 * 1000
-				this.createSession()
-				this.updateSessionIntervalId = setInterval(this.updateSession, sessionUpdateInterval * 1000)
+				if (!this.isPublic) {
+					this.createSession()
+					this.updateSessionIntervalId = setInterval(this.updateSession, sessionUpdateInterval * 1000)
+				}
 			}
 		},
 
