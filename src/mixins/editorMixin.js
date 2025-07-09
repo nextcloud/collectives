@@ -158,8 +158,6 @@ export default {
 					},
 				})
 				: null
-			this.setupEditorDebug()
-
 		},
 
 		updateEditorContent(markdown) {
@@ -201,32 +199,6 @@ export default {
 
 				for (const el of [readerEl, editorEl]) {
 					el?.querySelector(document.location.hash)?.scrollIntoView({ behavior: 'instant' })
-				}
-			}
-		},
-
-		setupEditorDebug() {
-			window.OCA.Collectives.editorApi = this.editor
-			if (!window.OCA.Collectives.editorApi.debugYjs) {
-				window.OCA.Collectives.editorApi.debugYjs = () => {
-					const editorComponent = window.OCA.Collectives.editorApi.vm.$children[0]
-					const yjsData = {
-						clientId: editorComponent.$ydoc.clientID,
-						pendingStructs: editorComponent.$ydoc.store.pendingStructs,
-						clientVectors: [],
-						documentState: editorComponent.$syncService.getDocumentState(),
-					}
-					for (const client of editorComponent.$ydoc.store.clients.values()) {
-						yjsData.clientVectors.push(client.at(-1).id)
-					}
-
-					const intro = 'Editor Yjs debug data. Copy the object above that starts with "clientId".'
-					const introChrome = '- In Chrome, select "Copy" at the end of the line.'
-					const introFirefox = '- In Firefox, right-click on the object and select "Copy object".'
-					const styleBold = 'font-weight: bold;'
-					const styleItalic = 'font-weight: normal; font-style: italic;'
-					console.warn(JSON.stringify(yjsData, null, ' '))
-					console.warn('%c%s\n%c%s\n%s', styleBold, intro, styleItalic, introChrome, introFirefox)
 				}
 			}
 		},
