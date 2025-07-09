@@ -5,7 +5,7 @@ OC.L10N.register(
     "Share link" : "Koplietot saiti",
     "Settings" : "Iestatījumi",
     "Members" : "Biedri",
-    "Remove" : "Izņemt",
+    "Remove" : "Noņemt",
     "Loading…" : "Ielādē …",
     "Add accounts" : "Pievienot kontus",
     "Could not rename the collective" : "Kolektīvu nevarēja pārdēvēt",
