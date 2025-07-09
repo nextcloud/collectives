@@ -35,6 +35,7 @@ OC.L10N.register(
     "Cannot copy, please copy the link manually" : "Haiwezi kunakili, tafadhali nakili kiungio kwa njia za kawaida",
     "Password" : "Nenosiri",
     "Create share" : "Tengeneza ushirikishaji",
+    "Advanced settings" : "Mipangilio ya kiwangi cha juu",
     "Unshare" : "Usishirikishe",
     "Download" : "Pakua",
     "Current version" : "Current version",
