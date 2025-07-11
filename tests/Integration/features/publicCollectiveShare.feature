@@ -47,7 +47,7 @@ Feature: publicCollectiveShare
     Then user "jane" doesn't see pagePath "secondpage.md" in "BehatPublicCollective"
 
   Scenario: Fail to restore+delete pages in read-only collective
-    When user "jane" unsets editing permissions for collective "BehatPublicCollective"
+    When user "jane" unsets editing permissions for collective share "BehatPublicCollective"
     Then anonymous fails to restore page "secondpage" from trash in public collective "BehatPublicCollective" with owner "jane"
     And anonymous fails to delete page "secondpage" from trash in public collective "BehatPublicCollective" with owner "jane"
 
