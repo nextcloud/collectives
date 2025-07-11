@@ -27,7 +27,7 @@ class SessionService {
 	}
 
 	private function checkPermissions(int $collectiveId, string $userId): void {
-		if (null === $collective = $this->collectiveMapper->findByIdAndUser($collectiveId, $userId)) {
+		if ($this->collectiveMapper->findByIdAndUser($collectiveId, $userId) === null) {
 			throw new NotFoundException('Collective not found: ' . $collectiveId);
 		}
 	}

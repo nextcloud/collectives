@@ -114,6 +114,16 @@ return [
 		['name' => 'template#setEmoji', 'url' => '/api/v{apiVersion}/collectives/{collectiveId}/pages/templates/{id}/emoji', 'verb' => 'PUT',
 			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+']],
 
+		// Tags API
+		['name' => 'tag#index', 'url' => '/api/v{apiVersion}/collectives/{collectiveId}/tags', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+']],
+		['name' => 'tag#create', 'url' => '/api/v{apiVersion}/collectives/{collectiveId}/tags', 'verb' => 'POST',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+']],
+		['name' => 'tag#update', 'url' => '/api/v{apiVersion}/collectives/{collectiveId}/tags/{id}', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+']],
+		['name' => 'tag#delete', 'url' => '/api/v{apiVersion}/collectives/{collectiveId}/tags/{id}', 'verb' => 'DELETE',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+']],
+
 		// Collective user settings API
 		['name' => 'collectiveUserSettings#setPageOrder', 'url' => '/api/v{apiVersion}/collectives/{collectiveId}/userSettings/pageOrder', 'verb' => 'PUT',
 			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+']],
@@ -181,5 +191,15 @@ return [
 		// Public template pages API
 		['name' => 'publicTemplate#index', 'url' => '/api/v{apiVersion}/p/collectives/{token}/pages/templates', 'verb' => 'GET',
 			'requirements' => ['apiVersion' => '(1.0)']],
+
+		// Public tags API
+		['name' => 'publicTag#index', 'url' => '/api/v{apiVersion}/p/collectives/{token}/tags', 'verb' => 'GET',
+			'requirements' => ['apiVersion' => '(1.0)']],
+		['name' => 'publicTag#create', 'url' => '/api/v{apiVersion}/p/collectives/{token}/tags', 'verb' => 'POST',
+			'requirements' => ['apiVersion' => '(1.0)']],
+		['name' => 'publicTag#update', 'url' => '/api/v{apiVersion}/p/collectives/{token}/tags/{id}', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
+		['name' => 'publicTag#delete', 'url' => '/api/v{apiVersion}/p/collectives/{token}/tags/{id}', 'verb' => 'DELETE',
+			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
 	]
 ];
