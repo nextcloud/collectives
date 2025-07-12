@@ -50,7 +50,7 @@ import { usePagesStore } from '../../stores/pages.js'
 import { NcButton } from '@nextcloud/vue'
 import Item from './Item.vue'
 import ChevronDownIcon from 'vue-material-design-icons/ChevronDown.vue'
-import StarIcon from 'vue-material-design-icons/Star.vue'
+import StarIcon from 'vue-material-design-icons/StarOutline.vue'
 
 export default {
 	name: 'PageFavorites',
