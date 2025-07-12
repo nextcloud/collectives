@@ -3,22 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-const { defineConfig } = require('cypress')
-const cypressSplit = require('cypress-split')
+import { defineConfig } from 'cypress'
+import cypressSplit from 'cypress-split'
 
-module.exports = defineConfig({
+export default defineConfig({
 	viewportWidth: 1280,
 	viewportHeight: 900,
 	e2e: {
 		setupNodeEvents(on, config) {
-			const browserify = require('@cypress/browserify-preprocessor')
-			const webpack = require('@cypress/webpack-preprocessor')
-
-			on('file:preprocessor', browserify())
-			on('file:preprocessor', webpack())
-
 			cypressSplit(on, config)
-
 			return config
 		},
 
