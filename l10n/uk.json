@@ -2,6 +2,7 @@
     "Add a collective" : "Додати колектив",
     "Recent pages" : "Недавні сторінки",
     "Collectives" : "Колективи",
+    "{user} has mentioned you in {collective} - {page}" : "{user} згадав(-ла) вас у {collective} - {page}",
     "Landing page" : "Стартова сторінка",
     "Collective pages" : "Сторінки колективу",
     "In collective %1$s" : "В колективі %1$s",
