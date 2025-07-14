@@ -394,6 +394,64 @@ class PublicPageController extends CollectivesPublicOCSController {
 	}
 
 	/**
+	 * Add tag to a page
+	 *
+	 * @param int $id ID of the page
+	 * @param int $tagId ID of the tag to add
+	 *
+	 * @return DataResponse<Http::STATUS_OK, array{page: CollectivesPageInfo}, array{}>
+	 * @throws OCSForbiddenException Not Permitted
+	 * @throws OCSNotFoundException Collective or page not found
+	 *
+	 * 200: Tag added
+	 */
+	#[PublicPage]
+	#[AnonRateLimit(limit: 10, period: 10)]
+	public function addTag(int $id, int $tagId): DataResponse {
+		$pageInfo = $this->handleErrorResponse(function () use ($id, $tagId): PageInfo {
+			$this->checkEditPermissions();
+			$owner = $this->getCollectiveShare()->getOwner();
+			$collectiveId = $this->getCollectiveShare()->getCollectiveId();
+			if (0 !== $sharePageId = $this->getCollectiveShare()->getPageId()) {
+				$this->checkPageShareAccess($collectiveId, $sharePageId, $id, $owner);
+			}
+			$pageInfo = $this->service->addTag($collectiveId, $id, $tagId, $owner);
+			$this->decoratePageInfo($collectiveId, $sharePageId, $owner, $pageInfo);
+			return $pageInfo;
+		}, $this->logger);
+		return new DataResponse(['page' => $pageInfo]);
+	}
+
+	/**
+	 * Remove tag from a page
+	 *
+	 * @param int $id ID of the page
+	 * @param int $tagId ID of the tag to remove
+	 *
+	 * @return DataResponse<Http::STATUS_OK, array{page: CollectivesPageInfo}, array{}>
+	 * @throws OCSForbiddenException Not Permitted
+	 * @throws OCSNotFoundException Collective or page not found
+	 *
+	 * 200: Tag removed
+	 */
+	#[PublicPage]
+	#[AnonRateLimit(limit: 10, period: 10)]
+	public function removeTag(int $id, int $tagId): DataResponse {
+		$pageInfo = $this->handleErrorResponse(function () use ($id, $tagId): PageInfo {
+			$this->checkEditPermissions();
+			$owner = $this->getCollectiveShare()->getOwner();
+			$collectiveId = $this->getCollectiveShare()->getCollectiveId();
+			if (0 !== $sharePageId = $this->getCollectiveShare()->getPageId()) {
+				$this->checkPageShareAccess($collectiveId, $sharePageId, $id, $owner);
+			}
+			$pageInfo = $this->service->removeTag($collectiveId, $id, $tagId, $owner);
+			$this->decoratePageInfo($collectiveId, $sharePageId, $owner, $pageInfo);
+			return $pageInfo;
+		}, $this->logger);
+		return new DataResponse(['page' => $pageInfo]);
+	}
+
+	/**
 	 * Trash a page
 	 *
 	 * @param int $id ID of the page

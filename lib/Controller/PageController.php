@@ -237,6 +237,44 @@ class PageController extends OCSController {
 	}
 
 	/**
+	 * Add tag to a page
+	 *
+	 * @param int $collectiveId ID of the collective
+	 * @param int $id ID of the page
+	 * @param int $tagId ID of the tag to add
+	 *
+	 * @return DataResponse<Http::STATUS_OK, array{page: CollectivesPageInfo}, array{}>
+	 * @throws OCSForbiddenException Not Permitted
+	 * @throws OCSNotFoundException Collective or page not found
+	 *
+	 * 200: Tag added
+	 */
+	#[NoAdminRequired]
+	public function addTag(int $collectiveId, int $id, int $tagId): DataResponse {
+		$pageInfo = $this->handleErrorResponse(fn (): PageInfo => $this->service->addTag($collectiveId, $id, $tagId, $this->userId), $this->logger);
+		return new DataResponse(['page' => $pageInfo]);
+	}
+
+	/**
+	 * Remove tag from a page
+	 *
+	 * @param int $collectiveId ID of the collective
+	 * @param int $id ID of the page
+	 * @param int $tagId ID of the tag to remove
+	 *
+	 * @return DataResponse<Http::STATUS_OK, array{page: CollectivesPageInfo}, array{}>
+	 * @throws OCSForbiddenException Not Permitted
+	 * @throws OCSNotFoundException Collective or page not found
+	 *
+	 * 200: Tag removed
+	 */
+	#[NoAdminRequired]
+	public function removeTag(int $collectiveId, int $id, int $tagId): DataResponse {
+		$pageInfo = $this->handleErrorResponse(fn (): PageInfo => $this->service->removeTag($collectiveId, $id, $tagId, $this->userId), $this->logger);
+		return new DataResponse(['page' => $pageInfo]);
+	}
+
+	/**
 	 * Trash a page
 	 *
 	 * @param int $collectiveId ID of the collective
