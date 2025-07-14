@@ -100,7 +100,7 @@ jobs:
 
       - name: Get collectives app from app store
         id: collectives_app
-        uses: nextcloud/appstore-action@74efb3de5a06a74f2bdf6f4f635468f14d8fee2c # v1.0.0
+        uses: nextcloud/appstore-action@facdd26645c34b31d2b58ddc658d7012299d2a14 # v1.0.0
         with:
           appid: collectives
           download: true
