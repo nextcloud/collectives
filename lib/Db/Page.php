@@ -29,6 +29,8 @@ use OCP\DB\Types;
  * @method void setSubpageOrder(string $value)
  * @method bool getFullWidth()
  * @method void setFullWidth(bool $value)
+ * @method string getTags()
+ * @method void setTags(string $value)
  * @method int|null getTrashTimestamp()
  * @method void setTrashTimestamp(?int $trashTimestamp)
  */
@@ -39,6 +41,7 @@ class Page extends Entity implements JsonSerializable {
 	protected ?string $emoji = null;
 	protected ?string $subpageOrder = null;
 	protected ?bool $fullWidth = null;
+	protected ?string $tags = null;
 	protected ?int $trashTimestamp = null;
 
 	public function __construct() {
@@ -54,6 +57,7 @@ class Page extends Entity implements JsonSerializable {
 			'emoji' => $this->emoji,
 			'subpageOrder' => json_decode($this->getSubpageOrder() ?? '[]', true, 512, JSON_THROW_ON_ERROR),
 			'fullWidth' => $this->fullWidth,
+			'tags' => json_decode($this->getTags() ?? '[]', true, 512, JSON_THROW_ON_ERROR),
 			'trashTimestamp' => $this->trashTimestamp,
 		];
 	}

@@ -53,6 +53,10 @@ class Version000200Date20200822000000 extends SimpleMigrationStep {
 				'default' => false,
 				'length' => 255,
 			]);
+			$table->addColumn('tags', Types::TEXT, [
+				'notnull' => false,
+				'length' => null,
+			]);
 
 			$table->setPrimaryKey(['id']);
 			$table->addUniqueIndex(['file_id'], 'collectives_pages_file_index');

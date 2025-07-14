@@ -15,6 +15,7 @@ use OC_Util;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\Page;
 use OCA\Collectives\Db\PageMapper;
+use OCA\Collectives\Db\TagMapper;
 use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Model\PageInfo;
@@ -51,6 +52,7 @@ class PageService {
 		ContainerInterface $container,
 		private SessionService $sessionService,
 		private SluggerInterface $slugger,
+		private TagMapper $tagMapper,
 	) {
 		try {
 			$this->pushQueue = $container->get(IQueue::class);
@@ -203,7 +205,8 @@ class PageService {
 		$emoji = ($page !== null) ? $page->getEmoji() : null;
 		$subpageOrder = ($page !== null) ? $page->getSubpageOrder() : null;
 		$fullWidth = $page !== null && $page->getFullWidth();
-		$slug = $page !== null ? $page->getSlug() : null;
+		$slug = ($page !== null) ? $page->getSlug() : null;
+		$tags = ($page !== null) ? $page->getTags() : null;
 		$pageInfo = new PageInfo();
 		try {
 			$pageInfo->fromFile($file,
@@ -213,7 +216,8 @@ class PageService {
 				$emoji,
 				$subpageOrder,
 				$fullWidth,
-				$slug);
+				$slug,
+				$tags);
 		} catch (FilesNotFoundException|InvalidPathException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
@@ -233,6 +237,9 @@ class PageService {
 		$lastUserId = ($page !== null) ? $page->getLastUserId() : null;
 		$emoji = ($page !== null) ? $page->getEmoji() : null;
 		$subpageOrder = ($page !== null) ? $page->getSubpageOrder() : null;
+		$fullWidth = $page !== null && $page->getFullWidth();
+		$slug = ($page !== null) ? $page->getSlug() : null;
+		$tags = ($page !== null) ? $page->getTags() : null;
 		$trashTimestamp = ($page !== null) ? $page->getTrashTimestamp(): (int)$timestamp;
 		$pageInfo = new PageInfo();
 		try {
@@ -242,7 +249,9 @@ class PageService {
 				$lastUserId ? $this->userManager->getDisplayName($lastUserId) : null,
 				$emoji,
 				$subpageOrder,
-				$page && $page->getFullWidth());
+				$fullWidth,
+				$slug,
+				$tags);
 			$pageInfo->setTrashTimestamp($trashTimestamp);
 			$pageInfo->setFilePath('');
 			$pageInfo->setTitle(basename($filename, PageInfo::SUFFIX));
@@ -267,7 +276,7 @@ class PageService {
 		}
 	}
 
-	private function updatePage(int $collectiveId, int $fileId, string $userId, ?string $emoji = null, ?bool $fullWidth = null, ?string $slug = null): void {
+	private function updatePage(int $collectiveId, int $fileId, string $userId, ?string $emoji = null, ?bool $fullWidth = null, ?string $slug = null, ?string $tags = null): void {
 		$page = new Page();
 		$page->setFileId($fileId);
 		$page->setLastUserId($userId);
@@ -280,6 +289,9 @@ class PageService {
 		if ($slug !== null) {
 			$page->setSlug($slug);
 		}
+		if ($tags !== null) {
+			$page->setTags($tags);
+		}
 		$this->pageMapper->updateOrInsert($page);
 		$this->notifyPush($collectiveId);
 	}
@@ -291,6 +303,18 @@ class PageService {
 		$page = new Page();
 		$page->setFileId($fileId);
 		$page->setSubpageOrder($subpageOrder);
+		if ($this->pageMapper->findByFileId($fileId) === null) {
+			// Required if page metadata in DB not present yet
+			$page->setLastUserId($userId);
+		}
+		$this->pageMapper->updateOrInsert($page);
+		$this->notifyPush($collectiveId);
+	}
+
+	private function updateTags(int $collectiveId, int $fileId, string $userId, string $tags): void {
+		$page = new Page();
+		$page->setFileId($fileId);
+		$page->setTags($tags);
 		if ($this->pageMapper->findByFileId($fileId) === null) {
 			// Required if page metadata in DB not present yet
 			$page->setLastUserId($userId);
@@ -783,7 +807,7 @@ class PageService {
 		}
 		$slug = $this->slugger->slug($title ?: $pageInfo->getTitle())->toString();
 		try {
-			$this->updatePage($collectiveId, $file->getId(), $userId, $pageInfo->getEmoji(), $pageInfo->isFullWidth(), $slug);
+			$this->updatePage($collectiveId, $file->getId(), $userId, $pageInfo->getEmoji(), $pageInfo->isFullWidth(), $slug, $pageInfo->getTags());
 		} catch (InvalidPathException|FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
@@ -872,7 +896,7 @@ class PageService {
 			$file = $newFile;
 		}
 		try {
-			$this->updatePage($newCollectiveId, $file->getId(), $userId);
+			$this->updatePage($newCollectiveId, $file->getId(), $userId, null, null, null, '[]');
 		} catch (InvalidPathException|FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
@@ -959,6 +983,50 @@ class PageService {
 
 		$pageInfo->setSubpageOrder($newSubpageOrder);
 		$this->updateSubpageOrder($collectiveId, $pageInfo->getId(), $userId, $newSubpageOrder);
+	}
+
+	/**
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function addTag(int $collectiveId, int $id, int $tagId, string $userId): PageInfo {
+		$this->verifyEditPermissions($collectiveId, $userId);
+		$folder = $this->getCollectiveFolder($collectiveId, $userId);
+		$file = $this->nodeHelper->getFileById($folder, $id);
+		$pageInfo = $this->getPageByFile($file);
+
+		$collectiveTags = array_map(static fn ($tag) => $tag->getId(), $this->tagMapper->findAll($collectiveId));
+		if (!in_array($tagId, $collectiveTags, true)) {
+			throw new NotFoundException('Tag ' . $tagId . ' not found for collective');
+		}
+
+		$tags = PageTagHelper::add($pageInfo->getTags(), $tagId, $collectiveTags);
+		$pageInfo->setTags($tags);
+		$this->updateTags($collectiveId, $pageInfo->getId(), $userId, $tags);
+		return $pageInfo;
+	}
+
+	/**
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function removeTag(int $collectiveId, int $id, int $tagId, string $userId): PageInfo {
+		$this->verifyEditPermissions($collectiveId, $userId);
+		$folder = $this->getCollectiveFolder($collectiveId, $userId);
+		$file = $this->nodeHelper->getFileById($folder, $id);
+		$pageInfo = $this->getPageByFile($file);
+
+		$collectiveTags = array_map(static fn ($tag) => $tag->getId(), $this->tagMapper->findAll($collectiveId));
+		if (!in_array($tagId, $collectiveTags, true)) {
+			throw new NotFoundException('Tag ' . $tagId . ' not found for collective');
+		}
+
+		$tags = PageTagHelper::remove($pageInfo->getTags(), $tagId, $collectiveTags);
+		$pageInfo->setTags($tags);
+		$this->updateTags($collectiveId, $pageInfo->getId(), $userId, $tags);
+		return $pageInfo;
 	}
 
 	/**
