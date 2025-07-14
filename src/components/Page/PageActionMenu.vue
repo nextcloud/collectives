@@ -108,6 +108,14 @@
 				{{ t('collectives', 'Move or copy') }}
 			</NcActionButton>
 
+			<NcActionButton v-if="currentCollectiveCanEdit"
+				:close-after-click="true"
+				@click="onOpenTagsModal">
+				<template #icon>
+					<TagMultipleIcon :size="20" />
+				</template>
+				{{ t('collectives', 'Manage tags') }}
+			</NcActionButton>
 			<!-- Delete page -->
 			<NcActionButton v-if="displayDeleteAction"
 				:close-after-click="true"
@@ -122,6 +130,9 @@
 			:page-id="pageId"
 			:parent-id="parentId"
 			@close="onCloseMoveOrCopyModal" />
+		<TagsModal v-if="showTagsModal"
+			:page-id="pageId"
+			@close="onCloseTagsModal" />
 	</div>
 </template>
 
@@ -143,6 +154,8 @@ import PageActionLastUser from './PageActionLastUser.vue'
 import ShareVariantIcon from 'vue-material-design-icons/ShareVariant.vue'
 import StarIcon from 'vue-material-design-icons/Star.vue'
 import StarOffIcon from 'vue-material-design-icons/StarOff.vue'
+import TagMultipleIcon from 'vue-material-design-icons/TagMultiple.vue'
+import TagsModal from './TagsModal.vue'
 import pageMixin from '../../mixins/pageMixin.js'
 import { usePagesStore } from '../../stores/pages.js'
 
@@ -166,6 +179,8 @@ export default {
 		ShareVariantIcon,
 		StarIcon,
 		StarOffIcon,
+		TagMultipleIcon,
+		TagsModal,
 	},
 
 	mixins: [
@@ -215,10 +230,12 @@ export default {
 	data() {
 		return {
 			showMoveOrCopyModal: false,
+			showTagsModal: false,
 		}
 	},
 
 	computed: {
+		...mapState(useRootStore, ['showing']),
 		...mapState(useCollectivesStore, [
 			'currentCollective',
 			'currentCollectiveCanEdit',
@@ -342,6 +359,14 @@ export default {
 
 		onCloseMoveOrCopyModal() {
 			this.showMoveOrCopyModal = false
+		},
+
+		onOpenTagsModal() {
+			this.showTagsModal = true
+		},
+
+		onCloseTagsModal() {
+			this.showTagsModal = false
 		},
 	},
 }

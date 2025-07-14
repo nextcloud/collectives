@@ -210,6 +210,32 @@ export function setPageSubpageOrder(context, pageId, subpageOrder) {
 }
 
 /**
+ * Add tag to a page
+ *
+ * @param {object} context - either the current collective or a share context
+ * @param {number} pageId - ID of the page to update
+ * @param {number} tagId - ID of the tag to add
+ */
+export function addPageTag(context, pageId, tagId) {
+	return axios.put(
+		pagesApiUrl(context, pageId, 'tags', tagId),
+	)
+}
+
+/**
+ * Remove tag from a page
+ *
+ * @param {object} context - either the current collective or a share context
+ * @param {number} pageId - ID of the page to update
+ * @param {number} tagId - ID of the tag to remove
+ */
+export function removePageTag(context, pageId, tagId) {
+	return axios.delete(
+		pagesApiUrl(context, pageId, 'tags', tagId),
+	)
+}
+
+/**
  * Trash a page in the given context (collective or public share)
  *
  * @param {object} context - either the current collective or a share context
