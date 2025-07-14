@@ -699,7 +699,6 @@ export const usePagesStore = defineStore('pages', {
 		},
 
 		/**
-		 *
 		 * Set emoji for a page
 		 *
 		 * @param {object} page the page
@@ -718,7 +717,6 @@ export const usePagesStore = defineStore('pages', {
 		},
 
 		/**
-		 *
 		 * Set full width for a page
 		 *
 		 * @param {object} page the page
@@ -731,7 +729,6 @@ export const usePagesStore = defineStore('pages', {
 		},
 
 		/**
-		 *
 		 * Set subpageOrder for a page
 		 *
 		 * @param {object} page the page
@@ -762,6 +759,87 @@ export const usePagesStore = defineStore('pages', {
 				throw e
 			} finally {
 				rootStore.done('pagelist-nodrag')
+			}
+		},
+
+		/**
+		 * Add a tag to a page
+		 *
+		 * @param {object} page the page
+		 * @param {number} page.pageId ID of the page
+		 * @param {number} tagId ID of the tag
+		 */
+		async addPageTag({ pageId }, tagId) {
+			const rootStore = useRootStore()
+			const page = { ...this.allPages[this.collectiveId].find(p => p.id === pageId) }
+
+			if (page.tags?.includes(tagId)) {
+				return
+			}
+
+			rootStore.load(`page-tag-${pageId}-${tagId}`)
+
+			// Save a clone of the tags to restore in case of errors
+			const tagsClone = [...page.tags]
+
+			// Update page in store first
+			page.tags.push(tagId)
+			this._updatePageState(page)
+
+			try {
+				const response = await api.addPageTag(
+					this.context,
+					pageId,
+					tagId,
+				)
+				this._updatePageState(response.data.ocs.data.page)
+			} catch (e) {
+				page.tags = tagsClone
+				this._updatePageState(page)
+				throw e
+			} finally {
+				rootStore.done(`page-tag-${pageId}-${tagId}`)
+			}
+		},
+
+		/**
+		 * Remove a tag from a page
+		 *
+		 * @param {object} page the page
+		 * @param {number} page.pageId ID of the page
+		 * @param {number} tagId ID of the tag
+		 */
+		async removePageTag({ pageId }, tagId) {
+			const rootStore = useRootStore()
+			const page = { ...this.allPages[this.collectiveId].find(p => p.id === pageId) }
+
+			const tagIndex = page.tags?.indexOf(tagId)
+			if (tagIndex === null || tagIndex === -1) {
+				return
+			}
+
+			rootStore.load(`page-tag-${pageId}-${tagId}`)
+
+			// Save a clone of the tags to restore in case of errors
+			const tagsClone = [...page.tags]
+
+			// Update page in store first
+			page.tags.splice(tagIndex, 1)
+			this._updatePageState(page)
+
+			try {
+				const response = await api.removePageTag(
+					this.context,
+					pageId,
+					tagId,
+				)
+				this._updatePageState(response.data.ocs.data.page)
+			} catch (e) {
+				page.tags = tagsClone
+				this._updatePageState(page)
+				throw e
+			} finally {
+				rootStore.done(`page-tag-${pageId}-${tagId}`)
 			}
 		},
 
