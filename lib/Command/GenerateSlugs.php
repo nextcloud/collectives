@@ -13,6 +13,7 @@ use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Service\CircleHelper;
 use OCA\Collectives\Service\NotFoundException;
+use OCA\Collectives\Service\NotPermittedException;
 use OCA\Collectives\Service\PageService;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
@@ -68,8 +69,8 @@ class GenerateSlugs extends Command {
 		while ($row = $result->fetch()) {
 			try {
 				$circle = $this->circleHelper->getCircle($row['circle_unique_id'], null, true);
-			} catch (NotFoundException) {
-				// Cruft collective without circle
+			} catch (NotFoundException|NotPermittedException) {
+				// Ignore exceptions from CircleManager (e.g. due to cruft collective without circle)
 				continue;
 			}
 			$slug = $this->slugger->slug($circle->getSanitizedName())->toString();
@@ -97,11 +98,11 @@ class GenerateSlugs extends Command {
 		while ($rowCollective = $resultCollectives->fetch()) {
 			try {
 				$circle = $this->circleHelper->getCircle($rowCollective['circle_unique_id'], null, true);
-			} catch (NotFoundException) {
-				// Cruft collective without circle
+				$pageInfos = $this->pageService->findAll($rowCollective['id'], $circle->getOwner()->getUserId());
+			} catch (NotFoundException|NotPermittedException) {
+				// Ignore exceptions from CircleManager (e.g. due to cruft collective without circle)
 				continue;
 			}
-			$pageInfos = $this->pageService->findAll($rowCollective['id'], $circle->getOwner()->getUserId());
 
 			/** @var PageInfo $pageInfo */
 			foreach ($pageInfos as $pageInfo) {

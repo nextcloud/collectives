@@ -14,6 +14,7 @@ use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Service\CircleHelper;
 use OCA\Collectives\Service\NotFoundException;
+use OCA\Collectives\Service\NotPermittedException;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\File;
 use OCP\IAppConfig;
@@ -39,7 +40,7 @@ class GenerateSlugs implements IRepairStep {
 	public function run(IOutput $output): void {
 		$appVersion = $this->config->getValueString('collectives', 'installed_version');
 
-		if (!$appVersion || version_compare($appVersion, '3.0.0') !== -1) {
+		if (!$appVersion || version_compare($appVersion, '3.0.2') !== -1) {
 			return;
 		}
 
@@ -74,8 +75,8 @@ class GenerateSlugs implements IRepairStep {
 		while ($row = $result->fetch()) {
 			try {
 				$circle = $this->circleHelper->getCircle($row['circle_unique_id'], null, true);
-			} catch (NotFoundException) {
-				// Cruft collective without circle
+			} catch (NotFoundException|NotPermittedException) {
+				// Ignore exceptions from CircleManager (e.g. due to cruft collective without circle)
 				continue;
 			}
 			$slug = $this->slugger->slug($circle->getSanitizedName())->toString();
