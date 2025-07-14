@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.0.1 - 2025.07.14
+
+### 🐛Fixes
+* 🪤 Catch more circles errors when generating slugs.
+
 ## 3.0.0 - 2025.07.14
 
 ### ✨New
@@ -9,7 +14,6 @@
 * 🧹 Remove Nextcloud 29 and PHP 8.0 support.
 
 ### 🐛Fixes
-
 * 🧹 Remove debugYjs function.
 * 🔥 Only initialize a collective session as logged in user.
 * 🩹 Add getRevision function required by NC 32.
