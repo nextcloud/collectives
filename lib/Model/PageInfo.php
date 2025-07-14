@@ -24,8 +24,9 @@ class PageInfo implements JsonSerializable {
 	private ?string $lastUserId = null;
 	private ?string $lastUserDisplayName = null;
 	private ?string $emoji = null;
-	private bool $fullWidth = false;
 	private ?string $subpageOrder = null;
+	private bool $fullWidth = false;
+	private ?string $tags = null;
 	private ?int $trashTimestamp = null;
 	private string $title;
 	private int $timestamp;
@@ -76,6 +77,14 @@ class PageInfo implements JsonSerializable {
 		$this->emoji = $emoji;
 	}
 
+	public function getSubpageOrder(): ?string {
+		return $this->subpageOrder;
+	}
+
+	public function setSubpageOrder(string $subpageOrder): void {
+		$this->subpageOrder = $subpageOrder;
+	}
+
 	public function isFullWidth(): bool {
 		return $this->fullWidth;
 	}
@@ -84,12 +93,12 @@ class PageInfo implements JsonSerializable {
 		$this->fullWidth = $fullWidth;
 	}
 
-	public function getSubpageOrder(): ?string {
-		return $this->subpageOrder;
+	public function getTags(): ?string {
+		return $this->tags;
 	}
 
-	public function setSubpageOrder(string $subpageOrder): void {
-		$this->subpageOrder = $subpageOrder;
+	public function setTags(string $tags): void {
+		$this->tags = $tags;
 	}
 
 	public function getTrashTimestamp(): ?int {
@@ -179,8 +188,9 @@ class PageInfo implements JsonSerializable {
 			'lastUserId' => $this->lastUserId,
 			'lastUserDisplayName' => $this->lastUserDisplayName,
 			'emoji' => $this->emoji,
-			'isFullWidth' => $this->fullWidth,
 			'subpageOrder' => json_decode($this->subpageOrder ?? '[]', true, 512, JSON_THROW_ON_ERROR),
+			'isFullWidth' => $this->fullWidth,
+			'tags' => json_decode($this->tags ?? '[]', true, 512, JSON_THROW_ON_ERROR),
 			'trashTimestamp' => $this->trashTimestamp,
 			'title' => $this->title,
 			'timestamp' => $this->timestamp,
@@ -198,7 +208,7 @@ class PageInfo implements JsonSerializable {
 	 * @throws InvalidPathException
 	 * @throws NotFoundException
 	 */
-	public function fromFile(File $file, int $parentId, ?string $lastUserId = null, ?string $lastUserDisplayName = null, ?string $emoji = null, ?string $subpageOrder = null, ?bool $fullWidth = false, ?string $slug = null): void {
+	public function fromFile(File $file, int $parentId, ?string $lastUserId = null, ?string $lastUserDisplayName = null, ?string $emoji = null, ?string $subpageOrder = null, ?bool $fullWidth = false, ?string $slug = null, ?string $tags = null): void {
 		$this->setId($file->getId());
 		// Set folder name as title for all index pages except the collective landing page
 		$dirName = dirname($file->getInternalPath());
@@ -239,6 +249,9 @@ class PageInfo implements JsonSerializable {
 		}
 		if ($slug !== null) {
 			$this->setSlug($slug);
+		}
+		if ($tags !== null) {
+			$this->setTags($tags);
 		}
 		$this->setParentId($parentId);
 	}
