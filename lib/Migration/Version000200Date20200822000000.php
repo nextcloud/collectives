@@ -40,6 +40,19 @@ class Version000200Date20200822000000 extends SimpleMigrationStep {
 			$table->addColumn('trash_timestamp', Types::INTEGER, [
 				'notnull' => false,
 			]);
+			$table->addColumn('subpage_order', Types::TEXT, [
+				'notnull' => false,
+				'length' => null,
+			]);
+			$table->addColumn('full_width', Types::BOOLEAN, [
+				'notnull' => false,
+				'default' => false,
+			]);
+			$table->addColumn('slug', Types::STRING, [
+				'notnull' => false,
+				'default' => false,
+				'length' => 255,
+			]);
 
 			$table->setPrimaryKey(['id']);
 			$table->addUniqueIndex(['file_id'], 'collectives_pages_file_index');
