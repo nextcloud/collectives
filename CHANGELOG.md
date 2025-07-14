@@ -1,5 +1,24 @@
 # Changelog
 
+## 3.0.0-dev3 - 2025.07.14
+
+### 🐛Fixes
+
+* 🧹 Remove debugYjs function.
+* 🔥 Only initialize a collective session as logged in user.
+* 🩹 Add getRevision function required by NC 32.
+* 🔗 Pass query params to axios using the params object.
+* 🔗 Fix URL to delete a session.
+* ⚙️  Use isNull and emptyString in slug queries.
+* 🚢 Prereleases don't need the nightly flag in app store.
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
 ## 3.0.0-dev2 - 2025.07.02
 
 ### ✨New
