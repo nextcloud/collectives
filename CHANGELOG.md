@@ -1,24 +1,25 @@
 # Changelog
 
-## 3.0.0-dev2 - 2025.07.02
+## 3.0.0 - 2025.07.14
 
 ### ✨New
 * 🏬 Persist collectives and pages metadata in browser local storage.
-
-### 🐛Fixes
-* 🔥 Fix URL to delete a collectives session.
-* 🪤 Catch missing circles when generating slugs.
-* 🧹 Remove unused linkHandler mixin.
-
-
-## 3.0.0-dev - 2025.07.01
-
-### ✨New
 * 🌐 Slugified URLs to collectives and pages. Thanks @Koc.
 * 🔥 Documented OCS API with OpenAPI specification. (#690)
 * 🧹 Remove Nextcloud 29 and PHP 8.0 support.
 
 ### 🐛Fixes
+
+* 🧹 Remove debugYjs function.
+* 🔥 Only initialize a collective session as logged in user.
+* 🩹 Add getRevision function required by NC 32.
+* 🔗 Pass query params to axios using the params object.
+* 🔗 Fix URL to delete a session.
+* ⚙️  Use isNull and emptyString in slug queries.
+* 🚢 Prereleases don't need the nightly flag in app store.
+* 🔥 Fix URL to delete a collectives session.
+* 🪤 Catch missing circles when generating slugs.
+* 🧹 Remove unused linkHandler mixin.
 * 🔔 Fix tracking notify_push sessions.
 * 🖱️ Fix dropping page below last item in list. (#423)
 * 💄 Align "page not found" empty content vertically.
@@ -34,7 +35,6 @@
 ### 🚧Updates & Tooling
 * ⬆️ Update NPM dependencies.
 * ⬆️ Update PHP composer dependencies.
-
 
 ## 2.18.0 - 2025.06.09
 
