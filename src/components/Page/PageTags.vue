@@ -14,44 +14,61 @@
 				'full-width-view': isFullWidth,
 				'sheet-view': !isFullWidth,
 			}">
-			<li v-for="tag in pageTagsVisible"
+			<PageTag v-for="tag in pageTagsVisible"
 				:key="tag.id"
-				:class="{
-					'color': tag.color,
-					'enough-contrast': tag.color && hasContrastToBackground(tag.color),
-				}"
-				:style="tag.color ? `--page-tag-color: #${tag.color}` : null">
-				{{ tag.name }}
-			</li>
+				:title="pageTagTitle"
+				:tag="tag"
+				@select="onSelectTag(tag.id)" />
 
-			<li v-if="pageTagsInvisible.length > 0" :title="pageTagsInvisibleTitle">
-				+ {{ pageTagsInvisible.length }}
-			</li>
+			<NcPopover v-if="pageTagsInvisible.length > 0" popup-role="listbox">
+				<template #trigger="{ attrs }">
+					<PageTag v-bind="attrs"
+						:title="pageTagsInvisibleTitle"
+						class="tag-invisible"
+						:tag="{
+							id: -1,
+							name: `+ ${pageTagsInvisible.length}`,
+							color: ''
+						}" />
+				</template>
+				<template #default>
+					<div class="page-tags-invisible-popover">
+						<ul class="page-tags popover">
+							<PageTag v-for="tag in pageTagsInvisible"
+								:key="tag.id"
+								:title="pageTagTitle"
+								:tag="tag"
+								@select="onSelectTag(tag.id)" />
+						</ul>
+					</div>
+				</template>
+			</NcPopover>
 		</ul>
 	</div>
 </template>
 
 <script>
-import { mapState } from 'pinia'
+import { mapActions, mapState } from 'pinia'
 import { usePagesStore } from '../../stores/pages.js'
 import { useTagsStore } from '../../stores/tags.js'
-import { useColor } from '../../composables/useColor.js'
+import { NcPopover } from '@nextcloud/vue'
+import PageTag from '../PageTag.vue'
 
 const TAGS_LIMIT = 5
 
 export default {
 	name: 'PageTags',
 
+	components: {
+		NcPopover,
+		PageTag,
+	},
+
 	props: {
 		isFullWidth: {
 			type: Boolean,
 			required: true,
 		},
-	},
-
-	setup() {
-		const { hasContrastToBackground } = useColor()
-		return { hasContrastToBackground }
 	},
 
 	computed: {
@@ -74,8 +91,20 @@ export default {
 			return this.pageTagsDecorated.slice(TAGS_LIMIT, this.pageTagsDecorated.length)
 		},
 
+		pageTagTitle() {
+			return t('collectives', 'Add tag to page list filter')
+		},
+
 		pageTagsInvisibleTitle() {
 			return this.pageTagsInvisible.map(t => t.name).join(', ')
+		},
+	},
+
+	methods: {
+		...mapActions(useTagsStore, ['addFilterTagId']),
+
+		onSelectTag(tagId) {
+			this.addFilterTagId(tagId)
 		},
 	},
 }
@@ -105,28 +134,15 @@ export default {
 		max-width: var(--text-editor-max-width);
 	}
 
-	li {
-		padding: 2px 8px;
-		font-size: 13px;
-		border: 1px solid;
-		border-radius: var(--border-radius-pill);
-		border-color: var(--color-border);
-		color: var(--color-text-maxcontrast);
-		max-width: 150px;
-
-		&.color {
-			padding-block: 1px;
-			border-color: var(--page-tag-color);
-			border-width: 2px;
-
-			&.enough-contrast {
-				color: var(--page-tag-color);
-			}
-		}
-
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
+	&.popover {
+		flex-direction: column;
 	}
+}
+
+.page-tags-invisible-popover {
+	max-height: 200px;
+	max-width: 140px;
+	padding: var(--default-grid-baseline);
+	overflow-y: auto;
 }
 </style>
