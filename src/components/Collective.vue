@@ -93,16 +93,7 @@ export default {
 		},
 		'currentPage.id'() {
 			this.selectVersion(null)
-
-			// Redirect to slugified URL if possible
-			if (this.currentCollective
-				&& this.isLandingPage
-				&& this.$route.fullPath !== this.currentCollectivePath) {
-				this.$router.replace(this.currentCollectivePath)
-			} else if (this.currentPage
-				&& this.$route.fullPath !== this.currentPagePath) {
-				this.$router.replace({ path: this.currentPagePath, hash: document.location.hash })
-			}
+			this.slugUrl()
 		},
 		'notFound'(current) {
 			if (current && this.currentFileIdPage) {
@@ -117,6 +108,7 @@ export default {
 		this._setPollingInterval(this.pollIntervalBase)
 		subscribe('networkOffline', this.handleNetworkOffline)
 		subscribe('networkOnline', this.handleNetworkOnline)
+		this.slugUrl()
 	},
 
 	beforeDestroy() {
@@ -239,6 +231,18 @@ export default {
 
 		closeNav() {
 			emit('toggle-navigation', { open: false })
+		},
+
+		slugUrl() {
+			// Redirect to slugified URL if possible
+			if (this.currentCollective
+				&& this.isLandingPage
+				&& this.$route.fullPath !== this.currentCollectivePath) {
+				this.$router.replace({ path: this.currentCollectivePath, hash: document.location.hash })
+			} else if (this.currentPage
+				&& this.$route.fullPath !== this.currentPagePath) {
+				this.$router.replace({ path: this.currentPagePath, hash: document.location.hash })
+			}
 		},
 	},
 
