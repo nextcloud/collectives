@@ -112,7 +112,6 @@ import { mapActions, mapState } from 'pinia'
 import { useRootStore } from '../../stores/root.js'
 import { useTagsStore } from '../../stores/tags.js'
 import { usePagesStore } from '../../stores/pages.js'
-import { getLanguage } from '@nextcloud/l10n'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 
 import { NcActions, NcActionButton, NcButton, NcCheckboxRadioSwitch, NcColorPicker, NcDialog, NcPopover, NcTextField } from '@nextcloud/vue'
@@ -162,15 +161,10 @@ export default {
 	computed: {
 		...mapState(useRootStore, ['loading']),
 		...mapState(usePagesStore, ['pages']),
-		...mapState(useTagsStore, ['tags']),
+		...mapState(useTagsStore, ['sortedTags']),
 
 		page() {
 			return this.pages.find(p => p.id === this.pageId)
-		},
-
-		sortedTags() {
-			return [...this.tags]
-				.sort((a, b) => a.name.localeCompare(b.name, getLanguage(), { ignorePunctuation: true }))
 		},
 
 		filteredTags() {
@@ -184,7 +178,7 @@ export default {
 
 		showCreateTag() {
 			return this.input.trim() !== ''
-				&& !this.tags.some(t => t.name.trim().toLocaleLowerCase() === this.input.trim().toLocaleLowerCase())
+				&& !this.sortedTags.some(t => t.name.trim().toLocaleLowerCase() === this.input.trim().toLocaleLowerCase())
 		},
 	},
 
@@ -280,9 +274,9 @@ export default {
 			this.load(`page-tag-${this.pageId}-${tag.id}`)
 			try {
 				await this.deleteTag(tag)
-				showSuccess(t('collectives', 'Deleted tag {name}', { name }))
+				showSuccess(t('collectives', 'Deleted tag {name}', { name: tag.name }))
 			} catch (e) {
-				showError(t('collectives', 'Could not delete tag {name}', { name }))
+				showError(t('collectives', 'Could not delete tag {name}', { name: tag.name }))
 				throw e
 			} finally {
 				this.done(`page-tag-${this.pageId}-${tag.id}`)
@@ -299,10 +293,11 @@ export default {
 				throw e
 			}
 
-			const tag = this.tags.find(t => t.name === name)
+			const tag = this.sortedTags.find(t => t.name === name)
 			this.load(`page-tag-${this.pageId}-${tag.id}`)
 			try {
 				await this.addPageTag({ pageId: this.pageId }, tag.id)
+				this.input = ''
 				showSuccess(t('collectives', 'Added tag {name} to page', { name }))
 			} catch (e) {
 				showError(t('collectives', 'Could not add tag {name} to page', { name }))
