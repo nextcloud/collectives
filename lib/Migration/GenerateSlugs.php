@@ -38,10 +38,8 @@ class GenerateSlugs implements IRepairStep {
 	}
 
 	public function run(IOutput $output): void {
-		$appVersion = $this->config->getValueString('collectives', 'installed_version');
-
-		if (!$appVersion || version_compare($appVersion, '3.0.2') !== -1) {
-			return;
+		if ($this->config->getValueBool('collectives', 'migrated_slugs')) {
+			$output->info('Slugs already generated');
 		}
 
 		$output->info('Generating slugs for collectives ...');
@@ -55,6 +53,8 @@ class GenerateSlugs implements IRepairStep {
 		$this->generatePageSlugs($output);
 		$output->finishProgress();
 		$output->info('done');
+
+		$this->config->setValueBool('collectives', 'migrated_slugs', true);
 	}
 
 	private function generateCollectiveSlugs(IOutput $output): void {
