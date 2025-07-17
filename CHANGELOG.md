@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.0.2 - 2025.07.17
+
+### 🐛Fixes
+* Make sure slugs are generated upon app upgrades. (#1879)
+* Handle page slug routes without collective slug. (#1879)
+* Use sluggified URLs in dashboard links.
+* Fix page titles in recent pages widget.
+* Redirect to sluggified URL when browsing old URL format.
+
 ## 3.0.1 - 2025.07.14
 
 ### 🐛Fixes
