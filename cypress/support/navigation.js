@@ -20,6 +20,12 @@ Cypress.Commands.add('openPageMenu', (pageName) => {
 		.click({ force: true })
 })
 
+Cypress.Commands.add('openPageTitleMenu', () => {
+	Cypress.log()
+	cy.get('.titlebar-buttons .action-item')
+		.click()
+})
+
 Cypress.Commands.add('openCollective', (collectiveName) => {
 	Cypress.log()
 	cy.routeTo(collectiveName)
