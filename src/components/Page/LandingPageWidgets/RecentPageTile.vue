@@ -33,7 +33,6 @@
 import { mapState } from 'pinia'
 import { useCollectivesStore } from '../../../stores/collectives.js'
 import { usePagesStore } from '../../../stores/pages.js'
-import { INDEX_PAGE } from '../../../constants.js'
 import moment from '@nextcloud/moment'
 import { isDarkTheme } from '@nextcloud/vue/functions/isDarkTheme'
 
@@ -63,7 +62,7 @@ export default {
 		},
 
 		isLandingPage() {
-			return this.page.fileName === INDEX_PAGE + '.md'
+			return this.page.parentId === 0
 		},
 
 		emoji() {
