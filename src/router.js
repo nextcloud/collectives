@@ -49,7 +49,10 @@ const routes = [
 		path: '/p/:token/:collective',
 		component: CollectiveView,
 		props: (route) => route.params,
-		children: [{ path: ':page*' }],
+		children: [
+			{ path: ':pageSlug-:pageId(\\d+)' },
+			{ path: ':page*' },
+		],
 	},
 	{
 		path: '/:collectiveSlug-:collectiveId(\\d+)',
@@ -64,7 +67,10 @@ const routes = [
 		path: '/:collective',
 		component: CollectiveView,
 		props: (route) => route.params,
-		children: [{ path: ':page*' }],
+		children: [
+			{ path: ':pageSlug-:pageId(\\d+)' },
+			{ path: ':page*' },
+		],
 	},
 ]
 
