@@ -86,6 +86,7 @@ export default {
 
 	watch: {
 		'currentCollective.id'(val) {
+			this.clearFilterTags()
 			this.clearListenPush()
 			if (val) {
 				this.initCollective()
@@ -123,7 +124,7 @@ export default {
 		...mapActions(useRootStore, ['hide', 'load', 'show']),
 		...mapActions(useSharesStore, ['getShares']),
 		...mapActions(useTemplatesStore, ['getTemplates']),
-		...mapActions(useTagsStore, ['getTags']),
+		...mapActions(useTagsStore, ['getTags', 'clearFilterTags']),
 		...mapActions(useSessionsStore, ['createSession', 'updateSession', 'closeSession']),
 		...mapActions(usePagesStore, ['getPages', 'getTrashPages']),
 		...mapActions(useVersionsStore, ['selectVersion']),
@@ -223,7 +224,6 @@ export default {
 				.catch(displayError('Could not fetch pages'))
 			await this.getTags()
 				.catch(displayError('Could not fetch tags'))
-			await this.getTags()
 			if (this.currentCollectiveCanEdit) {
 				if (!this.currentCollectiveIsPageShare) {
 					await this.getTemplates(setLoading)

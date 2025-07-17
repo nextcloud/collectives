@@ -5,15 +5,43 @@
 
 <template>
 	<NcAppContentList :show-details="showing('details')">
+		<!-- Headerbar with filter field and sort selector -->
 		<div class="page-list-headerbar">
-			<NcTextField name="pageFilter"
-				:label="t('collectives', 'Search pages')"
-				:value.sync="filterString"
+			<!-- Tag selection popover -->
+			<NcPopover popup-role="listbox"
 				class="page-filter"
-				:placeholder="t('collectives', 'Search pages…')"
-				trailing-button-icon="close"
-				:show-trailing-button="isFilteredView"
-				@trailing-button-click="clearFilterString" />
+				popover-base-class="page-filter-popover"
+				:shown="showTagSelection"
+				:triggers="[]"
+				placement="bottom-start"
+				no-focus-trap>
+				<template #trigger="{ attrs }">
+					<NcTextField ref="pageFilter"
+						name="pageFilter"
+						v-bind="attrs"
+						:label="t('collectives', 'Search pages')"
+						:value.sync="filterString"
+						:placeholder="t('collectives', 'Search pages…')"
+						trailing-button-icon="close"
+						:show-trailing-button="isFilteredView"
+						@trailing-button-click="clearFilterString"
+						@keydown.esc.prevent.stop="stopTagSelection"
+						@keydown.tab="onPageFilterTabKey" />
+				</template>
+				<template #default>
+					<div class="page-filter-tag-select"
+						@keydown.esc.prevent.stop="stopTagSelection">
+						<ul class="page-tags select-popover">
+							<PageTag v-for="tag in filterStringTags"
+								ref="filterStringTag"
+								:key="tag.id"
+								:tag="tag"
+								@select="onSelectFilterTag(tag.id)" />
+						</ul>
+					</div>
+				</template>
+			</NcPopover>
+
 			<NcActions class="toggle"
 				:aria-label="t('collectives', 'Sort order')">
 				<template #icon>
@@ -54,9 +82,24 @@
 				</NcActionButton>
 			</NcActions>
 		</div>
+
+		<!-- Filter tags -->
+		<div class="page-filter-tags">
+			<ul class="page-tags">
+				<PageTag v-for="tag in filterTags"
+					:key="tag.id"
+					:tag="tag"
+					:can-remove="true"
+					@remove="removeFilterTagId(tag.id)" />
+			</ul>
+		</div>
+
+		<!-- Loading -->
 		<div v-if="!currentCollective || !rootPage || loading('pagelist')" class="page-list">
 			<SkeletonLoading type="items" :count="3" />
 		</div>
+
+		<!-- Page list -->
 		<div v-else class="page-list">
 			<!-- Landing page -->
 			<Item key="Readme"
@@ -98,7 +141,7 @@
 
 			<!-- Filtered view page list -->
 			<div v-if="isFilteredView" ref="pageListFiltered" class="page-list-filtered">
-				<NcAppNavigationCaption v-if="filteredPages.length > 0" :name="t('Collectives','Results in title')" />
+				<NcAppNavigationCaption v-if="filteredPages.length > 0" :name="t('Collectives','Results in title or tags')" />
 				<RecycleScroller v-if="filteredPages.length > 0"
 					v-slot="{ item }"
 					ref="filteredScroller"
@@ -160,9 +203,10 @@ import { ref } from 'vue'
 import { useElementSize } from '@vueuse/core'
 import { useRootStore } from '../stores/root.js'
 import { useCollectivesStore } from '../stores/collectives.js'
+import { useTagsStore } from '../stores/tags.js'
 import { usePagesStore } from '../stores/pages.js'
 import { useSearchStore } from '../stores/search.js'
-import { NcAppNavigationCaption, NcActionButton, NcActions, NcAppContentList, NcButton, NcTextField } from '@nextcloud/vue'
+import { NcAppNavigationCaption, NcActionButton, NcActions, NcAppContentList, NcButton, NcPopover, NcTextField } from '@nextcloud/vue'
 import { showError } from '@nextcloud/dialogs'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 import Draggable from './PageList/Draggable.vue'
@@ -170,6 +214,7 @@ import NewPageDialog from './PageList/NewPageDialog.vue'
 import SubpageList from './PageList/SubpageList.vue'
 import Item from './PageList/Item.vue'
 import PageFavorites from './PageList/PageFavorites.vue'
+import PageTag from './PageTag.vue'
 import PageTrash from './PageList/PageTrash.vue'
 import SortAlphabeticalAscendingIcon from 'vue-material-design-icons/SortAlphabeticalAscending.vue'
 import SortAlphabeticalDescendingIcon from 'vue-material-design-icons/SortAlphabeticalDescending.vue'
@@ -188,17 +233,20 @@ export default {
 	name: 'PageList',
 
 	components: {
-		SkeletonLoading,
-		NcActions,
 		NcActionButton,
+		NcActions,
 		NcAppContentList,
+		NcAppNavigationCaption,
 		NcButton,
+		NcPopover,
 		NcTextField,
 		NewPageDialog,
+		SkeletonLoading,
 		CloseIcon,
 		Draggable,
 		Item,
 		PageFavorites,
+		PageTag,
 		PageTrash,
 		SubpageList,
 		SortAlphabeticalAscendingIcon,
@@ -207,7 +255,6 @@ export default {
 		SortClockAscendingIcon,
 		SortClockDescendingIcon,
 		RecycleScroller,
-		NcAppNavigationCaption,
 	},
 
 	setup() {
@@ -222,6 +269,7 @@ export default {
 			contentFilteredPages: [],
 			loadingContentFilteredPages: false,
 			getContentFilteredPagesDebounced: debounce(this.getContentFilteredPages, 700),
+			showTagSelection: false,
 		}
 	},
 
@@ -233,6 +281,7 @@ export default {
 			'currentCollectiveIsPageShare',
 			'currentCollectivePath',
 		]),
+		...mapState(useTagsStore, ['sortedTags', 'filterTags']),
 		...mapState(usePagesStore, [
 			'rootPage',
 			'currentPage',
@@ -251,9 +300,25 @@ export default {
 		},
 
 		filteredPages() {
-			return this.allPagesSortedCached.filter(p => {
-				return p.title.toLowerCase().includes(this.filterString.toLowerCase())
-			})
+			return this.allPagesSortedCached
+				// Filter by page title search string
+				.filter(p => p.title.toLowerCase().includes(this.filterString.toLowerCase()))
+				// Filter by page tags
+				.filter(p => this.filterTags.every(t => p.tags.includes(t.id)))
+		},
+
+		filterStringTagPart() {
+			return this.filterString.toLowerCase().split(' ').pop()
+		},
+
+		filterStringTags() {
+			if (!this.filterStringTagPart) {
+				return []
+			}
+			return this.sortedTags
+				// Ignore already selected tags
+				.filter(t => !this.filterTags.some(ft => ft.id === t.id))
+				.filter(t => t.name.includes(this.filterStringTagPart))
 		},
 
 		subpages() {
@@ -285,7 +350,7 @@ export default {
 		},
 
 		isFilteredView() {
-			return this.filterString !== ''
+			return this.filterString !== '' || this.filterTags.length > 0
 		},
 
 		defaultClickableArea() {
@@ -354,10 +419,14 @@ export default {
 		pageListFilteredHeight() {
 			this.updateScrollerHeights()
 		},
+		filterStringTags(val) {
+			this.showTagSelection = val && val.length > 0
+		},
 	},
 
 	methods: {
 		...mapActions(useRootStore, ['show']),
+		...mapActions(useTagsStore, ['addFilterTagId', 'removeFilterTagId']),
 		...mapActions(useCollectivesStore, ['setCollectiveUserSettingPageOrder']),
 		...mapActions(usePagesStore, ['contentSearch', 'setPageOrder']),
 		...mapActions(useSearchStore, ['setSearchQuery']),
@@ -414,6 +483,26 @@ export default {
 					this.loadingContentFilteredPages = false
 				}
 			}
+		},
+
+		onPageFilterTabKey(event) {
+			const firstTagLink = this.$refs.filterStringTag[0]?.$refs?.link
+			if (this.showTagSelection && firstTagLink) {
+				event.preventDefault()
+				firstTagLink.focus()
+			}
+		},
+
+		onSelectFilterTag(tagId) {
+			this.addFilterTagId(tagId)
+			// Remove the tag search part from filter string when selecting the tag
+			this.filterString = this.filterString.substring(0, this.filterString.length - this.filterStringTagPart.length)
+			this.$refs.pageFilter.focus()
+		},
+
+		stopTagSelection() {
+			this.showTagSelection = false
+			this.$refs.pageFilter.focus()
 		},
 	},
 }
@@ -541,6 +630,40 @@ li.toggle-button.selected {
 			padding: 7px;
 			margin-left: 10px;
 		}
+	}
+}
+
+.page-filter-tag-select {
+	max-height: 200px;
+	max-width: 140px;
+	padding: var(--default-grid-baseline);
+	overflow-y: auto;
+}
+
+.page-filter-tags {
+	padding-bottom: var(--default-grid-baseline);
+}
+
+.page-tags {
+	display: flex;
+	flex-wrap: wrap;
+	padding-inline: calc(2 * var(--default-grid-baseline));
+	gap: var(--default-grid-baseline);
+
+	&.select-popover {
+		padding-inline: unset;
+		flex-direction: column;
+	}
+}
+</style>
+
+<style lang="scss">
+.page-filter-popover {
+	margin-top: -18px;
+	margin-left: -4px;
+
+	.v-popper__arrow-container {
+		display: none;
 	}
 }
 </style>

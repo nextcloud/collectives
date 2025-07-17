@@ -6,6 +6,7 @@
 import { defineStore } from 'pinia'
 import { set } from 'vue'
 import { useLocalStorage } from '@vueuse/core'
+import { getLanguage } from '@nextcloud/l10n'
 import { useRootStore } from './root.js'
 import { useCollectivesStore } from './collectives.js'
 import * as api from '../apis/collectives/index.js'
@@ -16,6 +17,7 @@ export const useTagsStore = defineStore('tags', {
 	state: () => ({
 		allTags: useLocalStorage(STORE_PREFIX + 'allTags', {}),
 		allTagsLoaded: useLocalStorage(STORE_PREFIX + 'allTagsLoaded', {}),
+		filterTagIds: [],
 	}),
 
 	getters: {
@@ -37,12 +39,36 @@ export const useTagsStore = defineStore('tags', {
 			return state.allTags[state.collectiveId] || []
 		},
 
+		sortedTags(state) {
+			return state.tags
+				.sort((a, b) => a.name.localeCompare(b.name, getLanguage(), { ignorePunctuation: true }))
+		},
+
 		tagsLoaded: (state) => {
 			return state.allTagsLoaded[state.collectiveId] || false
+		},
+
+		filterTags: (state) => {
+			return state.tags.filter(t => state.filterTagIds.includes(t.id))
 		},
 	},
 
 	actions: {
+		addFilterTagId(tagId) {
+			this.filterTagIds.push(tagId)
+		},
+
+		removeFilterTagId(tagId) {
+			const idx = this.filterTagIds.indexOf(tagId)
+			if (idx > -1) {
+				this.filterTagIds.splice(idx, 1)
+			}
+		},
+
+		clearFilterTags() {
+			this.filterTagIds = []
+		},
+
 		/**
 		 * Get tags of a collective
 		 */
