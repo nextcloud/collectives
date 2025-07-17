@@ -88,7 +88,11 @@ class RecentPagesService {
 			unset($splitPath);
 
 			// prepare link and title
-			$pathParts = [$collectivesMap[$collectiveId]->getName()];
+			$collectiveUrlPart = $collectivesMap[$collectiveId]->getSlug()
+				? $collectivesMap[$collectiveId]->getSlug() . '-' . $collectivesMap[$collectiveId]->getId()
+				: $collectivesMap[$collectiveId]->getName();
+
+			$pathParts = [$collectiveUrlPart];
 			if ($internalPath !== '' && $internalPath !== '.') {
 				$pathParts = array_merge($pathParts, explode('/', $internalPath));
 			}
@@ -109,7 +113,9 @@ class RecentPagesService {
 				: str_replace(DIRECTORY_SEPARATOR, ' - ', $pagePath);
 
 			$fileIdSuffix = '?fileId=' . $row['file_id'];
-			$url = $this->urlGenerator->linkToRoute('collectives.start.indexPath', ['path' => implode('/', $pathParts)]) . $fileIdSuffix;
+			$url = $row['slug']
+				? $this->urlGenerator->linkToRoute('collectives.start.indexPath', ['path' => $collectiveUrlPart . '/' . $row['slug'] . '-' . $row['file_id']])
+				: $this->urlGenerator->linkToRoute('collectives.start.indexPath', ['path' => implode('/', $pathParts)]) . $fileIdSuffix;
 
 			// build result model
 			// not returning a PageInfo instance because it would be either incomplete or too expensive to build completely
