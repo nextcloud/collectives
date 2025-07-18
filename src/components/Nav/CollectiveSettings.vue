@@ -148,9 +148,9 @@ import { usePagesStore } from '../../stores/pages.js'
 import { emit } from '@nextcloud/event-bus'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { NcAppSettingsDialog, NcAppSettingsSection, NcButton, NcCheckboxRadioSwitch, NcTextField } from '@nextcloud/vue'
-import AlertCircleIcon from 'vue-material-design-icons/AlertCircle.vue'
+import AlertCircleIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
 import NcEmojiPicker from '@nextcloud/vue/dist/Components/NcEmojiPicker.js'
-import Emoticon from 'vue-material-design-icons/Emoticon.vue'
+import Emoticon from 'vue-material-design-icons/EmoticonOutline.vue'
 import displayError from '../../util/displayError.js'
 
 export default {
