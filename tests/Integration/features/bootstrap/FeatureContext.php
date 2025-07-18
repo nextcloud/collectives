@@ -808,6 +808,122 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @When user :user creates tag :tag with color :color for collective :collective
+	 * @When user :user :fails to create tag :tag with color :color for collective :collective
+	 * @When user :user :fails to create :existing tag :tag with color :color for collective :collective
+	 */
+	public function userCreatesTag(string $user, string $collective, string $tag, string $color, ?string $fails = null, ?string $existing = null): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$data = new TableNode([
+			['name', $tag],
+			['color', $color],
+		]);
+		$this->sendOcsCollectivesRequest('POST', 'collectives/' . $collectiveId . '/tags', $data);
+		if ($fails !== 'fails') {
+			$this->assertStatusCode(200);
+		} else {
+			if ($existing !== null) {
+				$this->assertStatusCode(400);
+			} else {
+				$this->assertStatusCode(403);
+			}
+		}
+	}
+
+	/**
+	 * @When user :user updates tag :tag with color :color for collective :collective
+	 * @When user :user :fails to update tag :tag with color :color for collective :collective
+	 */
+	public function userUpdatesTag(string $user, string $collective, string $tag, string $color, ?string $fails = null): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$id = $this->tagIdByName($collectiveId, $tag);
+		$data = new TableNode([
+			['name', $tag],
+			['color', $color],
+		]);
+		$this->sendOcsCollectivesRequest('PUT', 'collectives/' . $collectiveId . '/tags/' . $id, $data);
+		if ($fails !== 'fails') {
+			$this->assertStatusCode(200);
+		} else {
+			$this->assertStatusCode(403);
+		}
+	}
+
+	/**
+	 * @When user :user deletes tag :tag for collective :collective
+	 * @When user :user :fails to delete tag :tag for collective :collective
+	 */
+	public function userDeletesTag(string $user, string $collective, string $tag, ?string $fails = null): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$id = $this->tagIdByName($collectiveId, $tag);
+		$this->sendOcsCollectivesRequest('DELETE', 'collectives/' . $collectiveId . '/tags/' . $id);
+		if ($fails !== 'fails') {
+			$this->assertStatusCode(200);
+		} else {
+			$this->assertStatusCode(403);
+		}
+	}
+
+	/**
+	 * @When user :user sees tag :tag with color :color for collective :collective
+	 * @When user :user :fails to see tag :tag for collective :collective
+	 * @When user :user :fails to see tag :tag with color :color for collective :collective
+	 */
+	public function userSeesTag(string $user, string $collective, string $tag, ?string $color = null, ?string $fails = null): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$id = $this->tagIdByName($collectiveId, $tag, $color);
+		if ($fails !== 'fails') {
+			Assert::assertNotNull($id);
+		} else {
+			Assert::assertNull($id);
+		}
+	}
+
+	/**
+	 * @When user :user adds tag :tag to page :page in collective :collective
+	 * @When user :user :fails to add tag :tag to page :page in collective :collective
+	 * @When user :user :fails to add tagId :tagId to page :page in collective :collective
+	 */
+	public function userAddsTagToPage(string $user, string $collective, string $page, ?string $tag = null, ?string $tagId = null, ?string $fails = null): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$pageId = $this->pageIdByName($collectiveId, $page);
+		if ($tag) {
+			$tagId = $this->tagIdByName($collectiveId, $tag);
+		}
+		$this->sendOcsCollectivesRequest('PUT', 'collectives/' . $collectiveId . '/pages/' . $pageId . '/tags/' . $tagId);
+		if ($fails !== 'fails') {
+			$this->assertStatusCode(200);
+		} elseif (!$tag) {
+			// Trying to add a non-existent tag
+			$this->assertStatusCode(404);
+		} else {
+			$this->assertStatusCode(403);
+		}
+	}
+
+	/**
+	 * @When user :user removes tag :tag from page :page in collective :collective
+	 * @When user :user :fails to remove tag :tag from page :page in collective :collective
+	 */
+	public function userRemovesTagFromPage(string $user, string $collective, string $page, string $tag, ?string $fails = null): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$pageId = $this->pageIdByName($collectiveId, $page);
+		$tagId = $this->tagIdByName($collectiveId, $tag);
+		$this->sendOcsCollectivesRequest('DELETE', 'collectives/' . $collectiveId . '/pages/' . $pageId . '/tags/' . $tagId);
+		if ($fails !== 'fails') {
+			$this->assertStatusCode(200);
+		} else {
+			$this->assertStatusCode(403);
+		}
+	}
+
+	/**
 	 * @When user :user joins team :name with owner :owner
 	 * @When user :user joins team :name with owner :owner with level :level
 	 *
@@ -984,7 +1100,7 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user unsets editing permissions for collective :collective
+	 * @When user :user unsets editing permissions for collective share :collective
 	 *
 	 * @throws GuzzleException
 	 */
@@ -1416,6 +1532,128 @@ class FeatureContext implements Context {
 		$this->assertAttachment($name, $mimetype);
 	}
 
+	/**
+	 * @When anonymous creates tag :tag with color :color for collective :collective with owner :owner
+	 * @When anonymous :fails to create tag :tag with color :color for collective :collective with owner :owner
+	 * @When anonymous :fails to create :existing tag :tag with color :color for collective :collective with owner :owner
+	 */
+	public function anonymousCreatesTag(string $collective, string $tag, string $color, string $owner, ?string $fails = null, ?string $existing = null): void {
+		$this->setCurrentUser($owner);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$token = $this->getShareToken($collectiveId);
+		$data = new TableNode([
+			['name', $tag],
+			['color', $color],
+		]);
+		$this->sendOcsCollectivesRequest('POST', 'p/collectives/' . $token . '/tags', $data);
+		if ($fails !== 'fails') {
+			$this->assertStatusCode(200);
+		} else {
+			if ($existing !== null) {
+				$this->assertStatusCode(400);
+			} else {
+				$this->assertStatusCode(403);
+			}
+		}
+	}
+
+	/**
+	 * @When anonymous updates tag :tag with color :color for collective :collective with owner :owner
+	 * @When anonymous :fails to update tag :tag with color :color for collective :collective with owner :owner
+	 */
+	public function anonymousUpdatesTag(string $collective, string $tag, string $color, string $owner, ?string $fails = null): void {
+		$this->setCurrentUser($owner);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$token = $this->getShareToken($collectiveId);
+		$id = $this->tagIdByName($collectiveId, $tag, null, $token);
+		$data = new TableNode([
+			['name', $tag],
+			['color', $color],
+		]);
+		$this->sendOcsCollectivesRequest('PUT', 'p/collectives/' . $token . '/tags/' . $id, $data);
+		if ($fails !== 'fails') {
+			$this->assertStatusCode(200);
+		} else {
+			$this->assertStatusCode(403);
+		}
+	}
+
+	/**
+	 * @When anonymous deletes tag :tag for collective :collective with owner :owner
+	 * @When anonymous :fails to delete tag :tag for collective :collective with owner :owner
+	 */
+	public function anonymousDeletesTag(string $collective, string $tag, string $owner, ?string $fails = null): void {
+		$this->setCurrentUser($owner);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$token = $this->getShareToken($collectiveId);
+		$id = $this->tagIdByName($collectiveId, $tag, null, $token);
+		$this->sendOcsCollectivesRequest('DELETE', 'p/collectives/' . $token . '/tags/' . $id);
+		if ($fails !== 'fails') {
+			$this->assertStatusCode(200);
+		} else {
+			$this->assertStatusCode(403);
+		}
+	}
+
+	/**
+	 * @When anonymous sees tag :tag with color :color for collective :collective with owner :owner
+	 * @When anonymous :fails to see tag :tag for collective :collective with owner :owner
+	 * @When anonymous :fails to see tag :tag with color :color for collective :collective with owner :owner
+	 */
+	public function anonymousSeesTag(string $collective, string $tag, string $owner, ?string $color = null, ?string $fails = null): void {
+		$this->setCurrentUser($owner);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$token = $this->getShareToken($collectiveId);
+		$id = $this->tagIdByName($collectiveId, $tag, $color, $token);
+		if ($fails !== 'fails') {
+			Assert::assertNotNull($id);
+		} else {
+			Assert::assertNull($id);
+		}
+	}
+
+	/**
+	 * @When anonymous adds tag :tag to page :page in collective :collective with owner :owner
+	 * @When anonymous :fails to add tag :tag to page :page in collective :collective with owner :owner
+	 * @When anonymous :fails to add tagId :tagId to page :page in collective :collective with owner :owner
+	 */
+	public function anonymousAddsTagToPage(string $collective, string $page, string $owner, ?string $tag = null, ?string $tagId = null, ?string $fails = null): void {
+		$this->setCurrentUser($owner);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$token = $this->getShareToken($collectiveId);
+		$pageId = $this->pageIdByName($collectiveId, $page);
+		if ($tag) {
+			$tagId = $this->tagIdByName($collectiveId, $tag);
+		}
+		$this->sendOcsCollectivesRequest('PUT', 'p/collectives/' . $token . '/pages/' . $pageId . '/tags/' . $tagId);
+		if ($fails !== 'fails') {
+			$this->assertStatusCode(200);
+		} elseif (!$tag) {
+			// Trying to add a non-existent tag
+			$this->assertStatusCode(404);
+		} else {
+			$this->assertStatusCode(403);
+		}
+	}
+
+	/**
+	 * @When anonymous removes tag :tag from page :page in collective :collective with owner :owner
+	 * @When anonymous :fails to remove tag :tag from page :page in collective :collective with owner :owner
+	 */
+	public function anonymousRemovesTagFromPage(string $collective, string $page, string $owner, string $tag, ?string $fails = null): void {
+		$this->setCurrentUser($owner);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$token = $this->getShareToken($collectiveId);
+		$pageId = $this->pageIdByName($collectiveId, $page);
+		$tagId = $this->tagIdByName($collectiveId, $tag);
+		$this->sendOcsCollectivesRequest('DELETE', 'p/collectives/' . $token . '/pages/' . $pageId . '/tags/' . $tagId);
+		if ($fails !== 'fails') {
+			$this->assertStatusCode(200);
+		} else {
+			$this->assertStatusCode(403);
+		}
+	}
+
 	private function getUserCollectivesPath(string $user): string {
 		$this->setCurrentUser($user);
 		return $this->userGetsSetting($user, 'user_folder');
@@ -1753,6 +1991,27 @@ class FeatureContext implements Context {
 		foreach ($jsonBody['ocs']['data']['pages'] as $page) {
 			if ($name === $page['title']) {
 				return $page['id'];
+			}
+		}
+		return null;
+	}
+
+	private function tagIdByName(int $collectiveId, string $name, ?string $color = null, ?string $token = null): ?int {
+		if ($token) {
+			$this->sendOcsCollectivesRequest('GET', '/p/collectives/' . $token . '/tags', null, null, [], false);
+		} else {
+			$this->sendOcsCollectivesRequest('GET', 'collectives/' . $collectiveId . '/tags');
+		}
+		if ($this->response->getStatusCode() !== 200) {
+			throw new RuntimeException('Unable to get list of tags for collective ' . $collectiveId);
+		}
+		$jsonBody = $this->getJson();
+		foreach ($jsonBody['ocs']['data']['tags'] as $tag) {
+			if ($name === $tag['name']) {
+				if ($color !== null && $color !== $tag['color']) {
+					return null;
+				}
+				return $tag['id'];
 			}
 		}
 		return null;
