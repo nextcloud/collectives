@@ -52,6 +52,7 @@ describe('Page tags', function() {
 			cy.contains('.button-vue', 'Choose')
 				.click()
 			cy.get('.toast-success').should('contain', 'Updated tag initial')
+			cy.contains('.page-tags-container .tag', 'initial')
 
 			// Rename tag
 			cy.contains('.tags-modal__tag', 'initial')
@@ -65,16 +66,19 @@ describe('Page tags', function() {
 				.should('be.visible')
 			cy.contains('.tags-modal__tag', 'initial')
 				.should('not.exist')
+			cy.contains('.page-tags-container .tag', 'testing')
 
-			// Delete tag
+			// Mark tag as deleted
 			cy.contains('.tags-modal__tag', 'testing')
 				.find('.action-item')
 				.click()
 			cy.clickMenuButton('Delete')
-			cy.contains('.tags-modal__delete-dialog .button-vue', 'Delete')
+
+			cy.contains('.modal-container', 'Manage tags')
+				.find('.modal-container__close')
 				.click()
-			cy.get('.toast-success').should('contain', 'Deleted tag testing')
-			cy.contains('.tags-modal__tag', 'testing')
+			cy.get('.toast-success').should('contain', 'Deleted 1 tag')
+			cy.contains('.page-tags-container .tag', 'testing')
 				.should('not.exist')
 		})
 

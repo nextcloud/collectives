@@ -75,7 +75,7 @@ export default {
 		...mapState(usePagesStore, ['currentPage']),
 		...mapState(useTagsStore, ['tags']),
 
-		pageTagsDecorated() {
+		pageTags() {
 			return this.currentPage.tags
 				// Replace tagIds by their respective tags
 				.map(tagId => this.tags.find(t => t.id === tagId))
@@ -84,11 +84,11 @@ export default {
 		},
 
 		pageTagsVisible() {
-			return this.pageTagsDecorated.slice(0, TAGS_LIMIT)
+			return this.pageTags.slice(0, TAGS_LIMIT)
 		},
 
 		pageTagsInvisible() {
-			return this.pageTagsDecorated.slice(TAGS_LIMIT, this.pageTagsDecorated.length)
+			return this.pageTags.slice(TAGS_LIMIT, this.pageTags.length)
 		},
 
 		pageTagTitle() {
