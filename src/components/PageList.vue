@@ -319,6 +319,18 @@ export default {
 				// Ignore already selected tags
 				.filter(t => !this.filterTags.some(ft => ft.id === t.id))
 				.filter(t => t.name.includes(this.filterStringTagPart))
+				.sort((t1, t2) => {
+					if (t1.name.startsWith(this.filterStringTagPart)) {
+						return -1
+					} else if (t2.name.startsWith(this.filterStringTagPart)) {
+						return 1
+					} else if (t1.name.split(' ').some(str => str.startsWith(this.filterStringTagPart))) {
+						return -1
+					} else if (t2.name.split(' ').some(str => str.startsWith(this.filterStringTagPart))) {
+						return 1
+					}
+					return 0
+				})
 		},
 
 		subpages() {
