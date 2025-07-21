@@ -31,7 +31,7 @@
 <script>
 import { getCurrentUser } from '@nextcloud/auth'
 import { NcUserBubble } from '@nextcloud/vue'
-import CloseIcon from 'vue-material-design-icons/Close.vue'
+import CloseIcon from 'vue-material-design-icons/CloseOutline.vue'
 
 export default {
 	name: 'SelectedMembers',
