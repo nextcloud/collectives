@@ -14,9 +14,6 @@ updates:
   labels:
   - 3. to review
   - dependencies
-  reviewers:
-  - mejo-
-  - max-nextcloud
 
 - package-ecosystem: composer
   directories:
