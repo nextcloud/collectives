@@ -381,8 +381,7 @@ export default {
 
 			.checkbox-content {
 				max-width: none;
-				box-sizing: border-box;;
-				min-height: calc(var(--default-grid-baseline) * 2 + var(--default-clickable-area));
+				box-sizing: border-box;
 			}
 		}
 
