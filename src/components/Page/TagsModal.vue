@@ -42,9 +42,16 @@
 					:checked="isChecked(tag)"
 					:label="tag.name"
 					:loading="loading(`page-tag-${pageId}-${tag.id}`)"
+					:disabled="tag.deleted"
 					class="tags-modal__tag-checkbox"
 					@update:checked="onCheckUpdate(tag, $event)">
-					{{ tag.name }}
+					<template v-if="!tag.deleted">
+						{{ tag.name }}
+					</template>
+					<template v-else>
+						<span class="tags-modal__tag-title deleted">{{ tag.name }}</span>
+						<span v-if="countTagPages(tag.id) > 0">{{ n('collectives', '(removed from %n page)', '(removed from %n pages)', countTagPages(tag.id)) }}</span>
+					</template>
 				</NcCheckboxRadioSwitch>
 
 				<!-- Color picker -->
@@ -70,22 +77,22 @@
 						</template>
 						{{ t('collectives', 'Rename') }}
 					</NcActionButton>
-					<NcPopover popup-role="dialog">
-						<template #trigger="{ attrs }">
-							<NcActionButton v-bind="attrs">
-								<template #icon>
-									<DeleteIcon :size="20" />
-								</template>
-								{{ t('collectives', 'Delete') }}
-							</NcActionButton>
+					<NcActionButton v-if="!tag.deleted"
+						:close-after-click="true"
+						@click="onMarkDeleted(tag)">
+						<template #icon>
+							<DeleteIcon :size="20" />
 						</template>
-						<div class="tags-modal__delete-dialog" role="dialog" aria-modal="true">
-							{{ t('collectives', 'Tag {name} gets deleted for all pages.', { name: tag.name }) }}
-							<NcButton variant="error" @click="onDelete(tag)">
-								{{ t('collectives', 'Delete') }}
-							</NcButton>
-						</div>
-					</NcPopover>
+						{{ t('collectives', 'Delete') }}
+					</NcActionButton>
+					<NcActionButton v-else
+						:close-after-click="true"
+						@click="onRestore(tag)">
+						<template #icon>
+							<RestoreIcon :size="20" />
+						</template>
+						{{ t('collectives', 'Restore') }}
+					</NcActionButton>
 				</NcActions>
 			</li>
 
@@ -114,12 +121,13 @@ import { useTagsStore } from '../../stores/tags.js'
 import { usePagesStore } from '../../stores/pages.js'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 
-import { NcActions, NcActionButton, NcButton, NcCheckboxRadioSwitch, NcColorPicker, NcDialog, NcPopover, NcTextField } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcButton, NcCheckboxRadioSwitch, NcColorPicker, NcDialog, NcTextField } from '@nextcloud/vue'
 import CircleIcon from 'vue-material-design-icons/Circle.vue'
 import CircleOutlineIcon from 'vue-material-design-icons/CircleOutline.vue'
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 import PencilIcon from 'vue-material-design-icons/Pencil.vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
+import RestoreIcon from 'vue-material-design-icons/Restore.vue'
 import TagIcon from 'vue-material-design-icons/Tag.vue'
 
 export default {
@@ -132,13 +140,13 @@ export default {
 		NcCheckboxRadioSwitch,
 		NcColorPicker,
 		NcDialog,
-		NcPopover,
 		NcTextField,
 		CircleIcon,
 		CircleOutlineIcon,
 		DeleteIcon,
 		PencilIcon,
 		PlusIcon,
+		RestoreIcon,
 		TagIcon,
 	},
 
@@ -155,6 +163,7 @@ export default {
 			openedPicker: false,
 			renameTag: false,
 			renameName: '',
+			deletedTagIds: [],
 		}
 	},
 
@@ -167,13 +176,22 @@ export default {
 			return this.pages.find(p => p.id === this.pageId)
 		},
 
+		decoratedTags() {
+			return this.sortedTags
+				.map(tag => ({ ...tag, deleted: this.deletedTagIds.includes(tag.id) }))
+		},
+
 		filteredTags() {
 			if (this.input.trim() === '') {
-				return this.sortedTags
+				return this.decoratedTags
 			}
 
-			return this.sortedTags
+			return this.decoratedTags
 				.filter(tag => tag.name.normalize().toLowerCase().includes(this.input.normalize().toLowerCase()))
+		},
+
+		countTagPages() {
+			return (tagId) => this.pages.filter(p => p.tags.includes(tagId)).length
 		},
 
 		showCreateTag() {
@@ -200,6 +218,7 @@ export default {
 		},
 
 		onClose() {
+			this.deleteMarked()
 			this.$emit('close')
 		},
 
@@ -270,17 +289,34 @@ export default {
 			this.renameName = ''
 		},
 
-		async onDelete(tag) {
-			this.load(`page-tag-${this.pageId}-${tag.id}`)
-			try {
-				await this.deleteTag(tag)
-				showSuccess(t('collectives', 'Deleted tag {name}', { name: tag.name }))
-			} catch (e) {
-				showError(t('collectives', 'Could not delete tag {name}', { name: tag.name }))
-				throw e
-			} finally {
-				this.done(`page-tag-${this.pageId}-${tag.id}`)
+		onMarkDeleted(tag) {
+			this.deletedTagIds.push(tag.id)
+		},
+
+		onRestore(tag) {
+			const idx = this.deletedTagIds.indexOf(tag.id)
+			if (idx > -1) {
+				this.deletedTagIds.splice(idx, 1)
 			}
+		},
+
+		async deleteMarked() {
+			for (const tagId of this.deletedTagIds) {
+				const tag = this.sortedTags.find(t => t.id === tagId)
+				this.load(`page-tag-${this.pageId}-${tagId}`)
+				try {
+					await this.deleteTag(tag)
+				} catch (e) {
+					showError(t('collectives', 'Could not delete tag {name}', { name: tag.name }))
+					throw (e)
+				} finally {
+					this.done(`page-tag-${this.pageId}-${tagId}`)
+				}
+			}
+			showSuccess(n('collectives',
+				'Deleted %n tag',
+				'Deleted %n tags',
+				this.deletedTagIds.length))
 		},
 
 		async onNewTag() {
@@ -356,6 +392,10 @@ export default {
 			padding-left: 23px;
 			flex-grow: 1;
 		}
+
+		.tags-modal__tag-title.deleted {
+			text-decoration: line-through;
+		}
 	}
 
 	.tags-modal__tag-create {
@@ -368,12 +408,5 @@ export default {
 			font-weight: normal;
 		}
 	}
-}
-
-.tags-modal__delete-dialog {
-	display: flex;
-	flex-direction: column;
-	gap: var(--default-grid-baseline);
-	padding: calc(var(--default-grid-baseline) * 2);
 }
 </style>
