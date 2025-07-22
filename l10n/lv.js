@@ -49,6 +49,6 @@ OC.L10N.register(
     "Versions" : "Versijas",
     "Link copied" : "Saite nokopēta",
     "Copied" : "Nokopēts",
-    "Failed to revert {page} to revision {timestamp}." : "Neizdevās atjaunot {page} no rediģējuma {timestamp} "
+    "Failed to revert {page} to revision {timestamp}." : "Neizdevās atjaunot {page} uz labojuma versiju {timestamp} "
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");
