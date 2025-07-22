@@ -19,6 +19,7 @@
 <script>
 import { NcUserBubble } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'LastUserBubble',
@@ -50,6 +51,10 @@ export default {
 		lastUpdate() {
 			return moment.unix(this.timestamp).fromNow()
 		},
+	},
+
+	methods: {
+		t,
 	},
 }
 </script>
