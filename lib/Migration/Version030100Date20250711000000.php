@@ -44,7 +44,7 @@ class Version030100Date20250711000000 extends SimpleMigrationStep {
 		]);
 
 		$table->setPrimaryKey(['id']);
-		$table->addUniqueIndex(['id', 'collective_id'], 'c_tags_unique_idx');
+		$table->addUniqueIndex(['name', 'collective_id'], 'c_tags_unique_idx');
 
 		return $schema;
 	}
