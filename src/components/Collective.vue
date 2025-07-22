@@ -237,10 +237,10 @@ export default {
 			// Redirect to slugified URL if possible
 			if (this.currentCollective
 				&& this.isLandingPage
-				&& this.$route.fullPath !== this.currentCollectivePath) {
+				&& this.$route.path !== this.currentCollectivePath) {
 				this.$router.replace({ path: this.currentCollectivePath, hash: document.location.hash })
 			} else if (this.currentPage
-				&& this.$route.fullPath !== this.currentPagePath) {
+				&& this.$route.path !== this.currentPagePath) {
 				this.$router.replace({ path: this.currentPagePath, hash: document.location.hash })
 			}
 		},
