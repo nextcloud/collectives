@@ -24,32 +24,41 @@ class TagService {
 	/**
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
-	 * @throws MissingDependencyException
 	 */
-	private function checkPermissions(int $collectiveId, string $userId, bool $edit = false): void {
+	private function checkReadPermissions(int $collectiveId, string $userId): void {
 		if ($this->collectiveMapper->findByIdAndUser($collectiveId, $userId) === null) {
 			throw new NotFoundException('Collective not found: ' . $collectiveId);
 		}
+	}
 
-		if ($edit && !$this->collectiveService->getCollective($collectiveId, $userId)->canEdit()) {
+	/**
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	private function checkEditPermissions(int $collectiveId, string $userId): void {
+		$this->checkReadPermissions($collectiveId, $userId);
+
+		if (!$this->collectiveService->getCollective($collectiveId, $userId)->canEdit()) {
 			throw new NotPermittedException('Not allowed to edit collective');
 		}
 	}
 
 	/**
 	 * @throws NotFoundException
+	 * @throws NotPermittedException
 	 */
 	public function index(int $collectiveId, string $userId): array {
-		$this->checkPermissions($collectiveId, $userId);
+		$this->checkReadPermissions($collectiveId, $userId);
 		return $this->tagMapper->findAll($collectiveId);
 	}
 
 	/**
 	 * @throws NotFoundException
+	 * @throws NotPermittedException
 	 * @throws TagExistsException
 	 */
 	public function create(int $collectiveId, string $userId, string $name, string $color): Tag {
-		$this->checkPermissions($collectiveId, $userId, true);
+		$this->checkEditPermissions($collectiveId, $userId);
 		if ($this->tagMapper->findByName($collectiveId, $name) !== null) {
 			throw new TagExistsException('Tag already exists for collective: ' . $name);
 		}
@@ -63,9 +72,10 @@ class TagService {
 
 	/**
 	 * @throws NotFoundException
+	 * @throws NotPermittedException
 	 */
 	public function update(int $collectiveId, string $userId, int $id, string $name, string $color): Tag {
-		$this->checkPermissions($collectiveId, $userId, true);
+		$this->checkEditPermissions($collectiveId, $userId);
 		$tag = $this->tagMapper->find($collectiveId, $id);
 		$tag->setName($name);
 		$tag->setColor($color);
@@ -74,9 +84,10 @@ class TagService {
 
 	/**
 	 * @throws NotFoundException
+	 * @throws NotPermittedException
 	 */
 	public function delete(int $collectiveId, string $userId, int $id): void {
-		$this->checkPermissions($collectiveId, $userId, true);
+		$this->checkEditPermissions($collectiveId, $userId);
 		$tag = $this->tagMapper->find($collectiveId, $id);
 		$this->tagMapper->delete($tag);
 	}

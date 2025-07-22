@@ -992,15 +992,19 @@ class PageService {
 	 */
 	public function addTag(int $collectiveId, int $id, int $tagId, string $userId): PageInfo {
 		$this->verifyEditPermissions($collectiveId, $userId);
-		$folder = $this->getCollectiveFolder($collectiveId, $userId);
-		$file = $this->nodeHelper->getFileById($folder, $id);
-		$pageInfo = $this->getPageByFile($file);
 
 		$collectiveTags = array_map(static fn ($tag) => $tag->getId(), $this->tagMapper->findAll($collectiveId));
 		if (!in_array($tagId, $collectiveTags, true)) {
 			throw new NotFoundException('Tag ' . $tagId . ' not found for collective');
 		}
 
+		$folder = $this->getCollectiveFolder($collectiveId, $userId);
+		$file = $this->nodeHelper->getFileById($folder, $id);
+
+		// A race condition is possible here. If two requests both get the old tags list before writing the new one,
+		// the second request will overwrite the change from the first. We decided against implementing complex a
+		// check-and-retry solution for now due to unlikeliness and low impact.
+		$pageInfo = $this->getPageByFile($file);
 		$tags = PageTagHelper::add($pageInfo->getTags(), $tagId, $collectiveTags);
 		$pageInfo->setTags($tags);
 		$this->updateTags($collectiveId, $pageInfo->getId(), $userId, $tags);
@@ -1014,15 +1018,19 @@ class PageService {
 	 */
 	public function removeTag(int $collectiveId, int $id, int $tagId, string $userId): PageInfo {
 		$this->verifyEditPermissions($collectiveId, $userId);
-		$folder = $this->getCollectiveFolder($collectiveId, $userId);
-		$file = $this->nodeHelper->getFileById($folder, $id);
-		$pageInfo = $this->getPageByFile($file);
 
 		$collectiveTags = array_map(static fn ($tag) => $tag->getId(), $this->tagMapper->findAll($collectiveId));
 		if (!in_array($tagId, $collectiveTags, true)) {
 			throw new NotFoundException('Tag ' . $tagId . ' not found for collective');
 		}
 
+		$folder = $this->getCollectiveFolder($collectiveId, $userId);
+		$file = $this->nodeHelper->getFileById($folder, $id);
+
+		// A race condition is possible here. If two requests both get the old tags list before writing the new one,
+		// the second request will overwrite the change from the first. We decided against implementing complex a
+		// check-and-retry solution for now due to unlikeliness and low impact.
+		$pageInfo = $this->getPageByFile($file);
 		$tags = PageTagHelper::remove($pageInfo->getTags(), $tagId, $collectiveTags);
 		$pageInfo->setTags($tags);
 		$this->updateTags($collectiveId, $pageInfo->getId(), $userId, $tags);
