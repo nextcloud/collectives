@@ -42,7 +42,7 @@ jobs:
               - 'babel.config.js'
               - 'composer.json'
               - 'composer.lock'
-              - 'cypress.config.js'
+              - 'cypress.config.mjs'
               - 'package.json'
               - 'package-lock.json'
               - 'tsconfig.json'
