@@ -79,7 +79,7 @@ class PublicTemplateController extends CollectivesPublicOCSController {
 			}
 
 			if ($this->collectiveShare->getPageId() !== 0) {
-				throw new OCSNotFoundException('Page share does not support page trash');
+				throw new OCSNotFoundException('Page share does not support templates');
 			}
 		}
 
