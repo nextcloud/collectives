@@ -321,9 +321,12 @@ export default {
 
 		clickAttachment(attachment, ev) {
 			// Show in viewer if the mimetype is supported
-			if (!this.isPublic && window.OCA.Viewer.availableHandlers.map(handler => handler.mimes).flat().includes(attachment.mimetype)) {
+			if (window.OCA.Viewer?.availableHandlers.map(handler => handler.mimes).flat().includes(attachment.mimetype)) {
+				const path = this.isPublic
+					? `/${attachment.internalPath}`
+					: attachment.path
 				ev.preventDefault()
-				window.OCA.Viewer.open({ path: attachment.path })
+				window.OCA.Viewer.open({ path })
 			}
 		},
 
