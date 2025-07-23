@@ -5,7 +5,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-script('collectives', 'collectives-main');
+use OCP\Util;
+
+Util::addScript('collectives', 'collectives-main', 'text');
 ?>
 
 <div id="q-app"></div>
