@@ -116,6 +116,7 @@ class PublicStartController extends AuthPublicShareController {
 		$response = new PublicTemplateResponse('collectives', 'main', [ // templates/main.php
 			'id-app-content' => '#app-content-vue',
 			'id-app-navigation' => '#app-navigation-vue',
+			'token' => $this->getToken(),
 		]);
 		$response->setFooterVisible(false);
 		return $response;
