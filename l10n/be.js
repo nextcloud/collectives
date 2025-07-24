@@ -4,6 +4,7 @@ OC.L10N.register(
     "Share link" : "Абагуліць спасылку",
     "Settings" : "Налады",
     "Loading…" : "Загрузка…",
+    "Delete permanently" : "Выдаліць назаўжды",
     "Cancel" : "Скасаваць",
     "Create" : "Стварыць",
     "Back" : "Назад",
