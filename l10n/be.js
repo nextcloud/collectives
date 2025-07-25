@@ -14,6 +14,7 @@ OC.L10N.register(
     "Done" : "Гатова",
     "Remove from favorites" : "Выдаліць з абранага",
     "Add to favorites" : "У абранае",
+    "Move or copy" : "Перамясціць або капіяваць",
     "Title" : "Загаловак",
     "Clear search" : "Ачысціць пошук",
     "Favorite" : "Абранае",
