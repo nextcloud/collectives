@@ -73,7 +73,7 @@ describe('Page link handling', function() {
 
 * URL to another app in Nextcloud: [Contacts](${baseUrl}/index.php/apps/contacts)
 * Absolute path to another app in Nextcloud: [Contacts](/index.php/apps/contacts)
-* URL to a page in Collectives on another instance: [Foreign Page](https://example.org/apps/collectives/Foreign%20Collective/Foreign%20Page?fileId=123)
+* URL to a page in Collectives on another instance: [Foreign Page](https://github.com/apps/collectives/Foreign%20Collective/Foreign%20Page?fileId=123)
 * URL to external website: [github.com](https://github.com/)
 * Some content
 			`)
@@ -367,7 +367,7 @@ describe('Page link handling', function() {
 			testLinkToNewTab(href)
 		})
 		it('Opens link to foreign Collectives page in new tab', function() {
-			const href = 'https://example.org/apps/collectives/Foreign%20Collective/Foreign%20Page?fileId=123'
+			const href = 'https://github.com/apps/collectives/Foreign%20Collective/Foreign%20Page?fileId=123'
 			testLinkToNewTab(href)
 		})
 	})
@@ -379,7 +379,7 @@ describe('Page link handling', function() {
 			testLinkToNewTab(href, { edit: true })
 		})
 		it('Opens link to foreign Collectives page in new tab', function() {
-			const href = 'https://example.org/apps/collectives/Foreign%20Collective/Foreign%20Page?fileId=123'
+			const href = 'https://github.com/apps/collectives/Foreign%20Collective/Foreign%20Page?fileId=123'
 			cy.switchToEditMode()
 			testLinkToNewTab(href, { edit: true })
 		})
