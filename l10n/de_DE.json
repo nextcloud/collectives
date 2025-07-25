@@ -227,7 +227,7 @@
     "Failed to unshare: {responseError}" : "Fehler beim Entfernen der Freigabe: {responseError}",
     "Error generating password from password policy" : "Fehler beim Erzeugen des Passworts aufgrund der Passwortrichtlinie",
     "Quick share options dropdown" : "Dropdown-Liste mit Schnellfreigabeoptionen",
-    "Please enter the following required information before creating the share" : "Bitte geben Sie die benötigten Informationen ein, bevor die Freigabe erstellt wird",
+    "Please enter the following required information before creating the share" : "Vor Erstellen der Freigabe bitte die erforderlichen Informationen eingeben",
     "Password protection (enforced)" : "Passwortschutz (erzwungen)",
     "Set password" : "Passwort festlegen",
     "Password" : "Passwort",
