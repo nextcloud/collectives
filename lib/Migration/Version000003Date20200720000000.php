@@ -47,6 +47,11 @@ class Version000003Date20200720000000 extends SimpleMigrationStep {
 				'notnull' => true,
 				'default' => Collective::defaultPageMode,
 			]);
+			$table->addColumn('slug', Types::STRING, [
+				'notnull' => false,
+				'default' => false,
+				'length' => 255,
+			]);
 
 			$table->setPrimaryKey(['id']);
 			$table->addUniqueIndex(['circle_unique_id'], 'collectives_circle_id_index');

@@ -20,6 +20,7 @@ import { useRootStore } from '../stores/root.js'
 import { useCollectivesStore } from '../stores/collectives.js'
 import { useSharesStore } from '../stores/shares.js'
 import { useSessionsStore } from '../stores/sessions.js'
+import { useTagsStore } from '../stores/tags.js'
 import { usePagesStore } from '../stores/pages.js'
 import { useTemplatesStore } from '../stores/templates.js'
 import { useVersionsStore } from '../stores/versions.js'
@@ -85,6 +86,7 @@ export default {
 
 	watch: {
 		'currentCollective.id'(val) {
+			this.clearFilterTags()
 			this.clearListenPush()
 			if (val) {
 				this.initCollective()
@@ -122,6 +124,7 @@ export default {
 		...mapActions(useRootStore, ['hide', 'load', 'show']),
 		...mapActions(useSharesStore, ['getShares']),
 		...mapActions(useTemplatesStore, ['getTemplates']),
+		...mapActions(useTagsStore, ['getTags', 'clearFilterTags']),
 		...mapActions(useSessionsStore, ['createSession', 'updateSession', 'closeSession']),
 		...mapActions(usePagesStore, ['getPages', 'getTrashPages']),
 		...mapActions(useVersionsStore, ['selectVersion']),
@@ -219,6 +222,8 @@ export default {
 		async getAllPages(setLoading = true) {
 			await this.getPages(setLoading)
 				.catch(displayError('Could not fetch pages'))
+			await this.getTags()
+				.catch(displayError('Could not fetch tags'))
 			if (this.currentCollectiveCanEdit) {
 				if (!this.currentCollectiveIsPageShare) {
 					await this.getTemplates(setLoading)

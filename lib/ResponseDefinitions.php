@@ -71,6 +71,13 @@ namespace OCA\Collectives;
  *     internalPath: string,
  *     hasPreview: bool,
  * }
+ *
+ * @psalm-type CollectivesTag = array{
+ *     id: int,
+ *     collectiveId: int,
+ *     name: string,
+ *     color: string,
+ *  }
  */
 class ResponseDefinitions {
 }

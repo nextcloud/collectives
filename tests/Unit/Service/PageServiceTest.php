@@ -18,6 +18,7 @@ use OCA\Circles\Model\Member;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\Page;
 use OCA\Collectives\Db\PageMapper;
+use OCA\Collectives\Db\TagMapper;
 use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Model\PageInfo;
@@ -99,6 +100,8 @@ class PageServiceTest extends TestCase {
 		$slugger = $this->createMock(SluggerInterface::class);
 		$slugger->method('slug')->willReturn($slug);
 
+		$tagMapper = $this->createMock(TagMapper::class);
+
 		$this->service = new PageService(
 			$appManager,
 			$this->pageMapper,
@@ -110,6 +113,7 @@ class PageServiceTest extends TestCase {
 			$container,
 			$sessionService,
 			$slugger,
+			$tagMapper,
 		);
 	}
 
