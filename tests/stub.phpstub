@@ -607,6 +607,12 @@ namespace OC\Files\Storage\Wrapper{
 	}
 }
 
+namespace OCA\Files_Sharing\Event {
+	class ShareLinkAccessedEvent extends \OCP\EventDispatcher\Event {
+		public function __construct(\OCP\Share\IShare $share, string $step = '', int $errorCode = 200, string $errorMessage = '') {}
+	}
+}
+
 namespace OCA\Viewer\Event {
 	class LoadViewer extends \OCP\EventDispatcher\Event {}
 }

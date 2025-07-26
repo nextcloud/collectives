@@ -6,6 +6,7 @@
 <template>
 	<NcDialog :name="t('collectives', 'Templates')"
 		data-cy-collectives="templates-dialog"
+		class="templates-dialog"
 		size="normal"
 		@closing="onClose">
 		<SkeletonLoading v-if="loading(`template-list-${templatesCollectiveId}`)" type="items" />
@@ -132,11 +133,8 @@ export default {
 	align-items: center;
 	padding-inline: 12px;
 }
-</style>
-
-<style lang="scss">
-#viewer {
+.templates-dialog {
 	// Make viewer modal overlay the templates dialog modal
-	z-index: 9999;
+	z-index: 9997;
 }
 </style>

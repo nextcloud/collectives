@@ -11,6 +11,7 @@ namespace OCA\Collectives\Controller;
 
 use OCA\Collectives\Db\CollectiveShareMapper;
 use OCA\DAV\Connector\Sabre\PublicAuth;
+use OCA\Files_Sharing\Event\ShareLinkAccessedEvent;
 use OCA\Viewer\Event\LoadViewer;
 use OCP\App\IAppManager;
 use OCP\AppFramework\AuthPublicShareController;
@@ -110,10 +111,12 @@ class PublicStartController extends AuthPublicShareController {
 		if ($appsMissing = $this->checkDependencies()) {
 			return new PublicTemplateResponse('collectives', 'error', ['appsMissing' => $appsMissing]);  // templates/error.php
 		}
-		$this->eventDispatcher->dispatch(LoadViewer::class, new LoadViewer());
+		$this->eventDispatcher->dispatchTyped(new LoadViewer());
+		$this->eventDispatcher->dispatchTyped(new ShareLinkAccessedEvent($this->getShare(), 'show'));
 		$response = new PublicTemplateResponse('collectives', 'main', [ // templates/main.php
 			'id-app-content' => '#app-content-vue',
 			'id-app-navigation' => '#app-navigation-vue',
+			'token' => $this->getToken(),
 		]);
 		$response->setFooterVisible(false);
 		return $response;
