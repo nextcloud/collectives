@@ -88,11 +88,11 @@ export default {
 		},
 
 		pageTagsInvisible() {
-			return this.pageTags.slice(TAGS_LIMIT, this.pageTags.length)
+			return this.pageTags.slice(TAGS_LIMIT)
 		},
 
 		pageTagTitle() {
-			return t('collectives', 'Add tag to page list filter')
+			return t('collectives', 'Filter page list by tag')
 		},
 
 		pageTagsInvisibleTitle() {
