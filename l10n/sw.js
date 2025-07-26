@@ -31,6 +31,7 @@ OC.L10N.register(
     "Favorite" : "Kipendwa",
     "Favorites" : "Vipendwa",
     "Deleted" : "Vilivyofutwa",
+    "Sort order" : "Sort order",
     "Share link ({index})" : "Shiriki ya kiungo ({index})",
     "View only" : "View only",
     "Can edit" : "Inaweza kuhariri",
