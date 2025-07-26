@@ -73,8 +73,8 @@ describe('Page link handling', function() {
 
 * URL to another app in Nextcloud: [Contacts](${baseUrl}/index.php/apps/contacts)
 * Absolute path to another app in Nextcloud: [Contacts](/index.php/apps/contacts)
-* URL to a page in Collectives on another instance: [Foreign Page](https://example.org/apps/collectives/Foreign%20Collective/Foreign%20Page?fileId=123)
-* URL to external website: [example.org](http://example.org/)
+* URL to a page in Collectives on another instance: [Foreign Page](https://github.com/apps/collectives/Foreign%20Collective/Foreign%20Page?fileId=123)
+* URL to external website: [github.com](https://github.com/)
 * Some content
 			`)
 		})
@@ -363,23 +363,23 @@ describe('Page link handling', function() {
 
 	describe('Link handling to external in view mode', function() {
 		it('Opens link to external website in new tab', function() {
-			const href = 'http://example.org/'
+			const href = 'https://github.com/'
 			testLinkToNewTab(href)
 		})
 		it('Opens link to foreign Collectives page in new tab', function() {
-			const href = 'https://example.org/apps/collectives/Foreign%20Collective/Foreign%20Page?fileId=123'
+			const href = 'https://github.com/apps/collectives/Foreign%20Collective/Foreign%20Page?fileId=123'
 			testLinkToNewTab(href)
 		})
 	})
 
 	describe('Link handling to external in edit mode', function() {
 		it('Opens link to external website in new tab', function() {
-			const href = 'http://example.org/'
+			const href = 'https://github.com/'
 			cy.switchToEditMode()
 			testLinkToNewTab(href, { edit: true })
 		})
 		it('Opens link to foreign Collectives page in new tab', function() {
-			const href = 'https://example.org/apps/collectives/Foreign%20Collective/Foreign%20Page?fileId=123'
+			const href = 'https://github.com/apps/collectives/Foreign%20Collective/Foreign%20Page?fileId=123'
 			cy.switchToEditMode()
 			testLinkToNewTab(href, { edit: true })
 		})
@@ -446,13 +446,13 @@ describe('Page link handling', function() {
 		it('Public share in view mode: opens link to external website in new tab', function() {
 			cy.logout()
 			cy.visit(`${shareUrl}/Link Source`)
-			const href = 'http://example.org/'
+			const href = 'https://github.com/'
 			testLinkToNewTab(href, { isPublic: true })
 		})
 		it('Public share in edit mode: opens link to external website in new tab', function() {
 			cy.logout()
 			cy.visit(`${shareUrl}/Link Source`)
-			const href = 'http://example.org/'
+			const href = 'https://github.com/'
 			cy.switchToEditMode()
 			testLinkToNewTab(href, { edit: true, isPublic: true })
 		})

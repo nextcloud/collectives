@@ -657,7 +657,6 @@ class PageService {
 		$pageInfo->setLastUserId($userId);
 		$pageInfo->setLastUserDisplayName($this->userManager->getDisplayName($userId));
 		$this->updatePage($collectiveId, $pageInfo->getId(), $userId);
-		$file->touch();
 		return $pageInfo;
 	}
 
@@ -675,7 +674,6 @@ class PageService {
 		$pageInfo->setLastUserDisplayName($this->userManager->getDisplayName($userId));
 		$pageInfo->setFullWidth($fullWidth);
 		$this->updatePage($collectiveId, $pageInfo->getId(), $userId, fullWidth: $fullWidth);
-		$file->touch();
 		return $pageInfo;
 	}
 
@@ -897,7 +895,6 @@ class PageService {
 		$pageInfo->setLastUserDisplayName($this->userManager->getDisplayName($userId));
 		$pageInfo->setEmoji($emoji);
 		$this->updatePage($collectiveId, $pageInfo->getId(), $userId, $emoji);
-		$file->touch();
 		return $pageInfo;
 	}
 
