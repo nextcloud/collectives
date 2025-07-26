@@ -21,6 +21,7 @@ use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\OCS\OCSForbiddenException;
 use OCP\AppFramework\OCS\OCSNotFoundException;
 use OCP\AppFramework\OCSController;
+use OCP\Files\IRootFolder;
 use OCP\IRequest;
 use Psr\Log\LoggerInterface;
 
@@ -37,6 +38,7 @@ class PageController extends OCSController {
 		string $appName,
 		IRequest $request,
 		private PageService $service,
+		private IRootFolder $rootFolder,
 		private AttachmentService $attachmentService,
 		private SearchService $indexedSearchService,
 		private CollectiveService $collectiveService,
@@ -266,7 +268,9 @@ class PageController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function getAttachments(int $collectiveId, int $id): DataResponse {
-		$attachments = $this->handleErrorResponse(fn (): array => $this->attachmentService->getAttachments($collectiveId, $id, $this->userId), $this->logger);
+		$pageFile = $this->service->getPageFile($collectiveId, $id, $this->userId);
+		$userFolder = $this->rootFolder->getUserFolder($this->userId);
+		$attachments = $this->handleErrorResponse(fn (): array => $this->attachmentService->getAttachments($pageFile, $userFolder), $this->logger);
 		return new DataResponse(['attachments' => $attachments]);
 	}
 

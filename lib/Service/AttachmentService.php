@@ -17,7 +17,6 @@ use OCP\IPreview;
 
 class AttachmentService {
 	public function __construct(
-		private PageService $pageService,
 		private IPreview $preview,
 	) {
 	}
@@ -25,7 +24,7 @@ class AttachmentService {
 	/**
 	 * @throws NotFoundException
 	 */
-	private function fileToInfo(File $file, string $userId): array {
+	private function fileToInfo(File $file, folder $folder): array {
 		try {
 			return [
 				'id' => $file->getId(),
@@ -33,7 +32,7 @@ class AttachmentService {
 				'filesize' => $file->getSize(),
 				'mimetype' => $file->getMimeType(),
 				'timestamp' => $file->getMTime(),
-				'path' => substr($file->getPath(), strlen('/' . $userId . '/files')),
+				'path' => $folder->getRelativePath($file->getPath()),
 				'internalPath' => $file->getInternalPath(),
 				'hasPreview' => $this->preview->isAvailable($file),
 			];
@@ -62,12 +61,14 @@ class AttachmentService {
 	}
 
 	/**
+	 * @param File $pageFile file of the page with the attachments.
+	 * @param Folder $folder user or share folder for relative paths.
+	 *
 	 * @throws MissingDependencyException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function getAttachments(int $collectiveId, int $pageId, string $userId): array {
-		$pageFile = $this->pageService->getPageFile($collectiveId, $pageId, $userId);
+	public function getAttachments(File $pageFile, Folder $folder): array {
 		try {
 			$attachmentDir = $this->getAttachmentDirectory($pageFile);
 		} catch (NotFoundException) {
@@ -76,6 +77,6 @@ class AttachmentService {
 		}
 
 		// Only return files, ignore folders
-		return array_map(fn ($file) => $this->fileToInfo($file, $userId), array_filter($attachmentDir->getDirectoryListing(), static fn ($node) => $node instanceof File));
+		return array_map(fn ($file) => $this->fileToInfo($file, $folder), array_filter($attachmentDir->getDirectoryListing(), static fn ($node) => $node instanceof File));
 	}
 }
