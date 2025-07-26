@@ -441,7 +441,9 @@ class PublicPageController extends CollectivesPublicOCSController {
 			if (0 !== $sharePageId = $this->getCollectiveShare()->getPageId()) {
 				$this->checkPageShareAccess($collectiveId, $sharePageId, $id, $owner);
 			}
-			return $this->attachmentService->getAttachments($collectiveId, $id, $owner);
+			$pageFile = $this->service->getPageFile($collectiveId, $id, $owner);
+			$shareFolder = $this->getShare()->getNode();
+			return $this->attachmentService->getAttachments($pageFile, $shareFolder);
 		}, $this->logger);
 		return new DataResponse(['attachments' => $attachments]);
 	}
