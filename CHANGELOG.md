@@ -1,5 +1,23 @@
 # Changelog
 
+## 3.0.3 - 2025.07.28
+
+### 🐛Fixes
+* 📎 Load attachments in view mode. Thanks @emberfiend. (#1885)
+* 📎 Fix opening attachments in viewer from sidebar in public shares.
+* 🐛 Don't fetch templates in page shares.
+* ♻️ Avoid redundant navigation for URLs with hash.
+* 🐛 Fix displaying PageInfoBar with Nextcloud 32.
+
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 3.0.2 - 2025.07.17
 
 ### 🐛Fixes
@@ -9,10 +27,12 @@
 * Fix page titles in recent pages widget.
 * Redirect to sluggified URL when browsing old URL format.
 
+
 ## 3.0.1 - 2025.07.14
 
 ### 🐛Fixes
 * 🪤 Catch more circles errors when generating slugs.
+
 
 ## 3.0.0 - 2025.07.14
 
@@ -48,6 +68,7 @@
 ### 🚧Updates & Tooling
 * ⬆️ Update NPM dependencies.
 * ⬆️ Update PHP composer dependencies.
+
 
 ## 2.18.0 - 2025.06.09
 
