@@ -17,6 +17,7 @@ use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Db\CollectiveUserSettingsMapper;
 use OCA\Collectives\Db\Page;
 use OCA\Collectives\Db\PageMapper;
+use OCA\Collectives\Db\TagMapper;
 use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Model\PageInfo;
 use OCA\Collectives\Mount\CollectiveFolderManager;
@@ -44,6 +45,7 @@ class CollectiveService extends CollectiveServiceBase {
 		private CollectiveShareService $shareService,
 		private CollectiveUserSettingsMapper $collectiveUserSettingsMapper,
 		private PageMapper $pageMapper,
+		private TagMapper $tagMapper,
 		private IL10N $l10n,
 		private IEventDispatcher $eventDispatcher,
 		private NodeHelper $nodeHelper,
@@ -358,6 +360,9 @@ class CollectiveService extends CollectiveServiceBase {
 			// Delete shares and user settings
 			$this->shareService->deleteShareByCollectiveId($collective->getId());
 			$this->collectiveUserSettingsMapper->deleteByCollectiveId($collective->getId());
+
+			// Delete tags
+			$this->tagMapper->deleteByCollectiveId($collective->getId());
 
 			// Delete page trash for the collective
 			$this->initPageTrashBackend();
