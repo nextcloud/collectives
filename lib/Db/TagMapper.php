@@ -61,7 +61,7 @@ class TagMapper extends QBMapper {
 		return $this->findEntities($qb);
 	}
 
-	public function deleteForCollective(int $collectiveId): int {
+	public function deleteByCollectiveId(int $collectiveId): int {
 		$qb = $this->db->getQueryBuilder();
 		$qb->delete($this->getTableName())
 			->where($qb->expr()->eq('collective_id', $qb->createNamedParameter($collectiveId)));

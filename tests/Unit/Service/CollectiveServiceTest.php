@@ -17,6 +17,7 @@ use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Db\CollectiveUserSettingsMapper;
 use OCA\Collectives\Db\PageMapper;
+use OCA\Collectives\Db\TagMapper;
 use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCA\Collectives\Service\CircleExistsException;
@@ -42,56 +43,26 @@ class CollectiveServiceTest extends TestCase {
 	private CollectiveService $service;
 
 	protected function setUp(): void {
-		$appManager = $this->getMockBuilder(IAppManager::class)
-			->disableOriginalConstructor()
-			->getMock();
+		$appManager = $this->createMock(IAppManager::class);
 
-		$this->collectiveMapper = $this->getMockBuilder(CollectiveMapper::class)
-			->disableOriginalConstructor()
-			->getMock();
+		$this->collectiveMapper = $this->createMock(CollectiveMapper::class);
+		$this->collectiveHelper = $this->createMock(CollectiveHelper::class);
+		$collectiveFolderManager = $this->createMock(CollectiveFolderManager::class);
 
-		$this->collectiveHelper = $this->getMockBuilder(CollectiveHelper::class)
-			->disableOriginalConstructor()
-			->getMock();
-
-		$collectiveFolderManager = $this->getMockBuilder(CollectiveFolderManager::class)
-			->disableOriginalConstructor()
-			->getMock();
-
-		$folder = $this->getMockBuilder(Folder::class)
-			->disableOriginalConstructor()
-			->getMock();
-		$file = $this->getMockBuilder(File::class)
-			->disableOriginalConstructor()
-			->getMock();
+		$folder = $this->createMock(Folder::class);
+		$file = $this->createMock(File::class);
 		$folder->method('get')
 			->willReturn($file);
 		$collectiveFolderManager->method('initializeFolder')
 			->willReturn($folder);
 
-		$this->circleHelper = $this->getMockBuilder(CircleHelper::class)
-			->disableOriginalConstructor()
-			->getMock();
-
-		$shareService = $this->getMockBuilder(CollectiveShareService::class)
-			->disableOriginalConstructor()
-			->getMock();
-
-		$collectiveUserSettingsMapper = $this->getMockBuilder(CollectiveUserSettingsMapper::class)
-			->disableOriginalConstructor()
-			->getMock();
-
-		$pageMapper = $this->getMockBuilder(PageMapper::class)
-			->disableOriginalConstructor()
-			->getMock();
-
-		$this->l10n = $this->getMockBuilder(IL10N::class)
-			->disableOriginalConstructor()
-			->getMock();
-
-		$eventDispatcher = $this->getMockBuilder(IEventDispatcher::class)
-			->disableOriginalConstructor()
-			->getMock();
+		$this->circleHelper = $this->createMock(CircleHelper::class);
+		$shareService = $this->createMock(CollectiveShareService::class);
+		$collectiveUserSettingsMapper = $this->createMock(CollectiveUserSettingsMapper::class);
+		$pageMapper = $this->createMock(PageMapper::class);
+		$tagMapper = $this->createMock(TagMapper::class);
+		$this->l10n = $this->createMock(IL10N::class);
+		$eventDispatcher = $this->createMock(IEventDispatcher::class);
 
 		$nodeHelper = $this->createMock(NodeHelper::class);
 		$nodeHelper->method('sanitiseFilename')
@@ -112,6 +83,7 @@ class CollectiveServiceTest extends TestCase {
 			$shareService,
 			$collectiveUserSettingsMapper,
 			$pageMapper,
+			$tagMapper,
 			$this->l10n,
 			$eventDispatcher,
 			$nodeHelper,
@@ -164,9 +136,7 @@ class CollectiveServiceTest extends TestCase {
 	}
 
 	public function testCreateForOwnCircle(): void {
-		$circle = $this->getMockBuilder(Circle::class)
-			->disableOriginalConstructor()
-			->getMock();
+		$circle = $this->createMock(Circle::class);
 		$circle->method('getSingleId')
 			->willReturn('CircleId');
 		$circle->method('getName')
@@ -195,9 +165,7 @@ class CollectiveServiceTest extends TestCase {
 	}
 
 	public function testCreate(): void {
-		$circle = $this->getMockBuilder(Circle::class)
-			->disableOriginalConstructor()
-			->getMock();
+		$circle = $this->createMock(Circle::class);
 		$circle->method('getSingleId')
 			->willReturn('CircleId');
 		$circle->method('getSanitizedName')
