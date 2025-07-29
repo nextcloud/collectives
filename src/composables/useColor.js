@@ -4,6 +4,7 @@
  */
 
 import { useIsDarkTheme } from '@nextcloud/vue'
+import { computed } from 'vue'
 
 /**
  * Get luminance for a color
@@ -53,17 +54,23 @@ function hexToRgb(hexColor) {
  */
 export function useColor() {
 	const isDarkTheme = useIsDarkTheme()
-	const mainBackgroundColor = getComputedStyle(document.body)
-		.getPropertyValue('--color-main-background')
-		.replace('#', '') || isDarkTheme
-		? '000000'
-		: 'FFFFFF'
 
-	const hasContrastToBackground = (hexColor) => {
-		const rgbColor = hexToRgb(hexColor)
+	/* This is a computed that returns a function.
+	 * If `isDarkTheme` changes it will return a different function
+	 * as the contrast changes.
+	 */
+	const hasContrastToBackground = computed(() => {
+		const fallback = isDarkTheme.value ? '000000' : 'FFFFFF'
+		const fromDocument = getComputedStyle(document.body)
+			.getPropertyValue('--color-main-background')
+			.replace('#', '')
+		const mainBackgroundColor = fromDocument || fallback
 		const rgbBackgroundColor = hexToRgb(mainBackgroundColor)
-		return getContrastRatio(rgbColor, rgbBackgroundColor) >= 4.5
-	}
+		return (hexColor) => {
+			const rgbColor = hexToRgb(hexColor)
+			return getContrastRatio(rgbColor, rgbBackgroundColor) >= 4.5
+		}
+	})
 
-	return { mainBackgroundColor, hasContrastToBackground }
+	return { hasContrastToBackground }
 }
