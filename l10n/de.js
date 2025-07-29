@@ -210,7 +210,7 @@ OC.L10N.register(
     "Switch back to default sort order" : "Zur Standardsortierung wechseln",
     "Results in title" : "Ergebnisse im Titel",
     "Results in content" : "Ergebnisse im Inhalt",
-    "Share link ({index})" : "Link teilen ({index})",
+    "Share link ({index})" : "Externer Link ({index})",
     "View only" : "Nur anzeigen",
     "Can edit" : "Kann bearbeiten",
     "Cannot copy, please copy the link manually" : "Kopieren fehlgeschlagen. Bitte kopiere den Link manuell",
