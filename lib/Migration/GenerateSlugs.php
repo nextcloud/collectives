@@ -40,6 +40,7 @@ class GenerateSlugs implements IRepairStep {
 	public function run(IOutput $output): void {
 		if ($this->config->getValueBool('collectives', 'migrated_slugs')) {
 			$output->info('Slugs already generated');
+			return;
 		}
 
 		$output->info('Generating slugs for collectives ...');
