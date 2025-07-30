@@ -126,7 +126,7 @@ export default {
 		...mapActions(useTemplatesStore, ['getTemplates']),
 		...mapActions(useTagsStore, ['getTags', 'clearFilterTags']),
 		...mapActions(useSessionsStore, ['createSession', 'updateSession', 'closeSession']),
-		...mapActions(usePagesStore, ['getPages', 'getTrashPages']),
+		...mapActions(usePagesStore, ['getPages', 'getTrashPages', 'updatePages']),
 		...mapActions(useVersionsStore, ['selectVersion']),
 
 		initCollective() {
@@ -141,7 +141,7 @@ export default {
 		},
 
 		initListenPush() {
-			this.listenPush = listen(`collectives_${this.currentCollective.id}_pagelist`, this.getAllPages.bind(this, false))
+			this.listenPush = listen('collectives_pagelist', this.handleNotifyPushUpdate.bind(this))
 
 			if (this.listenPush) {
 				console.debug('Has notify_push enabled, listening to pagelist updates and slowing polling to 15 minutes')
@@ -182,6 +182,10 @@ export default {
 			this.getAllPages(false)
 			console.debug('Network is online.')
 			this._setPollingInterval(this.pollIntervalBase)
+		},
+
+		handleNotifyPushUpdate(_channel, message) {
+			this.updatePages(message.collectiveId, message)
 		},
 
 		_setPollingInterval(pollInterval) {
