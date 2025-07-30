@@ -262,17 +262,21 @@ class PageService {
 		return $pageInfo;
 	}
 
-	private function notifyPush(int $collectiveId): void {
+	private function notifyPush(int $collectiveId, ?array $body): void {
 		if (!$this->pushQueue) {
 			return;
 		}
 
 		$sessionUsers = $this->sessionService->getSessionUsers($collectiveId);
 		foreach ($sessionUsers as $userId) {
-			$this->pushQueue->push('notify_custom', [
+			$notification = [
 				'user' => $userId,
 				'message' => 'collectives_' . $collectiveId . '_pagelist',
-			]);
+			];
+			if ($body !== null) {
+				$notification['body'] = $body;
+			}
+			$this->pushQueue->push('notify_custom', $notification);
 		}
 	}
 
