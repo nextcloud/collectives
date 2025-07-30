@@ -181,7 +181,6 @@ OC.L10N.register(
     "Sort by custom order" : "فرز من خلال ترتيب مخصص",
     "Sort recently changed first" : "ترتيب بحسب التعديلات الأخيرة",
     "Switch back to default sort order" : "عُد إلى الترتيب التلقائي",
-    "Results in title" : "نتائج في العنوان",
     "Results in content" : "نتائج في المتن",
     "Share link ({index})" : "رابط المشاركة ({index})",
     "View only" : "للعرض فقط",

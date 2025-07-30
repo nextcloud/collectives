@@ -26,6 +26,7 @@ OC.L10N.register(
     "Add to favorites" : "Adaugă la favorite",
     "Show in Files" : "Arată în Fișiere",
     "Move or copy" : "Mută sau copiază",
+    "Manage tags" : "Administrați etichete",
     "Title" : "Titlu",
     "Favorite" : "Favorit",
     "Favorites" : "Favorite",

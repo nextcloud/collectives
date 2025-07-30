@@ -28,6 +28,7 @@ OC.L10N.register(
     "Done" : "Hoàn thành",
     "Show in Files" : "Hiển thị trong Files",
     "Move or copy" : "Di chuyển hoặc sao chép",
+    "Manage tags" : "Quản lý nhãn",
     "Title" : "Tiêu đề",
     "Favorite" : "Ưa thích",
     "Favorites" : "Ưa thích",

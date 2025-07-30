@@ -28,6 +28,7 @@ OC.L10N.register(
     "Done" : "Gotovo",
     "Show in Files" : "Prikaži u datotekama",
     "Move or copy" : "Premjesti ili kopiraj",
+    "Manage tags" : "Upravljaj oznakama",
     "Title" : "Naslov",
     "Favorite" : "Favorit",
     "Favorites" : "Favoriti",

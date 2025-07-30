@@ -26,6 +26,7 @@ OC.L10N.register(
     "Add to favorites" : "Ongeza kwenye pendwa",
     "Show in Files" : "Onesha katika mafaili",
     "Move or copy" : "Hamisha au nakili",
+    "Manage tags" : "Simamia lebo",
     "Title" : "Kichwa cha habari",
     "Clear search" : "Futa utafutaji",
     "Favorite" : "Kipendwa",

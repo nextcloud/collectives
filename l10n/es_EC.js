@@ -91,6 +91,7 @@ OC.L10N.register(
     "Open page sidebar" : "Abrir la barra lateral de la página",
     "Show in Files" : "Mostrar en Archivos",
     "Move or copy" : "Mover o copiar",
+    "Manage tags" : "Gestionar etiquetas",
     "Page not found: {page}" : "Página no encontrada: {page}",
     "Select a page from the list or create a new one." : "Selecciona una página de la lista o crea una nueva.",
     "Move page here" : "Mover página aquí",

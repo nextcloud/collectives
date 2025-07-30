@@ -20,6 +20,7 @@ OC.L10N.register(
     "Done" : "Done",
     "Remove from favorites" : "Sevimlilardan olib tashlang",
     "Add to favorites" : "Sevimlilarga qo'shing",
+    "Manage tags" : "Teglarni boshqarish",
     "Title" : "Sarlavha",
     "Clear search" : "Qidiruvni tozalash",
     "Favorite" : "Favorite",
