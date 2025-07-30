@@ -853,7 +853,6 @@ export const usePagesStore = defineStore('pages', {
 			const response = await api.trashPage(this.context, pageId)
 			const trashPage = response.data.ocs.data.page
 			this.allPages[this.collectiveId].splice(this.allPages[this.collectiveId].findIndex(p => p.id === trashPage.id), 1)
-			trashPage.trashTimestamp = Date.now() / 1000
 			this.allTrashPages[this.collectiveId].unshift(trashPage)
 		},
 
@@ -866,7 +865,6 @@ export const usePagesStore = defineStore('pages', {
 		async restorePage({ pageId }) {
 			const response = await api.restorePage(this.context, pageId)
 			const trashPage = response.data.ocs.data.page
-			trashPage.trashTimestamp = null
 			this.allPages[this.collectiveId].unshift(trashPage)
 			this.allTrashPages[this.collectiveId].splice(this.allTrashPages[this.collectiveId].findIndex(p => p.id === trashPage.id), 1)
 		},
