@@ -311,7 +311,6 @@ class PageService {
 			$page->setLastUserId($userId);
 		}
 		$this->pageMapper->updateOrInsert($page);
-		$this->notifyPush($collectiveId);
 	}
 
 	private function updateTags(int $collectiveId, int $fileId, string $userId, string $tags): void {
@@ -948,6 +947,7 @@ class PageService {
 
 		$pageInfo->setSubpageOrder($subpageOrder);
 		$this->updateSubpageOrder($collectiveId, $pageInfo->getId(), $userId, $subpageOrder);
+		$this->notifyPush($collectiveId);
 		return $pageInfo;
 	}
 
@@ -978,6 +978,7 @@ class PageService {
 
 		$pageInfo->setSubpageOrder($newSubpageOrder);
 		$this->updateSubpageOrder($collectiveId, $pageInfo->getId(), $userId, $newSubpageOrder);
+		$this->notifyPush($collectiveId);
 	}
 
 	/**
@@ -994,6 +995,7 @@ class PageService {
 
 		$pageInfo->setSubpageOrder($newSubpageOrder);
 		$this->updateSubpageOrder($collectiveId, $pageInfo->getId(), $userId, $newSubpageOrder);
+		$this->notifyPush($collectiveId);
 	}
 
 	/**
