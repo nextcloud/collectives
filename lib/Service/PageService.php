@@ -322,7 +322,6 @@ class PageService {
 			$page->setLastUserId($userId);
 		}
 		$this->pageMapper->updateOrInsert($page);
-		$this->notifyPush($collectiveId);
 	}
 
 	/**
@@ -1027,6 +1026,7 @@ class PageService {
 		$tags = PageTagHelper::add($pageInfo->getTags(), $tagId, $collectiveTags);
 		$pageInfo->setTags($tags);
 		$this->updateTags($collectiveId, $pageInfo->getId(), $userId, $tags);
+		$this->notifyPush($collectiveId);
 		return $pageInfo;
 	}
 
@@ -1053,6 +1053,7 @@ class PageService {
 		$tags = PageTagHelper::remove($pageInfo->getTags(), $tagId, $collectiveTags);
 		$pageInfo->setTags($tags);
 		$this->updateTags($collectiveId, $pageInfo->getId(), $userId, $tags);
+		$this->notifyPush($collectiveId);
 		return $pageInfo;
 	}
 
