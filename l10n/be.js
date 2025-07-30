@@ -4,6 +4,7 @@ OC.L10N.register(
     "Share link" : "Абагуліць спасылку",
     "Settings" : "Налады",
     "Loading…" : "Загрузка…",
+    "Edit" : "Рэдагаваць",
     "Restore" : "Аднавіць",
     "Delete permanently" : "Выдаліць назаўжды",
     "Cancel" : "Скасаваць",
@@ -21,7 +22,9 @@ OC.L10N.register(
     "Favorite" : "Абранае",
     "Favorites" : "Абранае",
     "Deleted" : "Выдалены",
+    "View only" : "Толькі прагляд",
     "Can edit" : "Можа рэдагаваць",
+    "Password protection (enforced)" : "Абарона паролем (прымусова)",
     "Password" : "Пароль",
     "Advanced settings" : "Пашыраныя налады",
     "Download" : "Спампаваць",
@@ -31,6 +34,7 @@ OC.L10N.register(
     "Version name" : "Назва версіі",
     "Remove version name" : "Выдаліць назву версіі",
     "Save version name" : "Захаваць назву версіі",
-    "Versions" : "Версіі"
+    "Versions" : "Версіі",
+    "Link copied" : "Спасылка скапіявана"
 },
 "nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);");

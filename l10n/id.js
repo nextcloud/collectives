@@ -22,6 +22,7 @@ OC.L10N.register(
     "Done" : "Selesai",
     "Remove from favorites" : "Hapus dari favorit",
     "Move or copy" : "Pindah atau salin",
+    "Manage tags" : "Kelola tag",
     "Title" : "Judul",
     "Favorite" : "Favorit",
     "Favorites" : "Disukai",

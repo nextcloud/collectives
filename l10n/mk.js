@@ -28,6 +28,7 @@ OC.L10N.register(
     "Remove from favorites" : "Избриши од фаворити",
     "Show in Files" : "Прикажи во датотеките",
     "Move or copy" : "Премести или копирај",
+    "Manage tags" : "Уреди ги ознаките",
     "Title" : "Наслов",
     "Favorite" : "Омилени",
     "Favorites" : "Омилени",

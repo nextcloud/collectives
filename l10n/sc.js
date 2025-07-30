@@ -31,6 +31,7 @@ OC.L10N.register(
     "Add to favorites" : "Agiunghe a preferidos",
     "Show in Files" : "Mustra in Archìvios",
     "Move or copy" : "Tràmuda o còpia",
+    "Manage tags" : "Gesti etichetas",
     "Copy or move page" : "Tràmuda o còpia sa pàgina",
     "Title" : "Tìtulu",
     "Favorite" : "Preferidu",

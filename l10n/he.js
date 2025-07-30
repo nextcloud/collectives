@@ -24,6 +24,7 @@ OC.L10N.register(
     "Done" : "הסתיים",
     "Show in Files" : "הצגה בקבצים",
     "Move or copy" : "העברה או העתקה",
+    "Manage tags" : "ניהול תגיות",
     "Title" : "תפקיד",
     "Favorite" : "סימון כמועדף",
     "Favorites" : "מועדפים",
