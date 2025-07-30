@@ -297,7 +297,6 @@ class PageService {
 			$page->setTags($tags);
 		}
 		$this->pageMapper->updateOrInsert($page);
-		$this->notifyPush($collectiveId);
 	}
 
 	/**
@@ -347,6 +346,7 @@ class PageService {
 				$this->userManager->getDisplayName($userId));
 			$slug = $title ? $this->slugger->slug($title)->toString() : null;
 			$this->updatePage($collectiveId, $newFile->getId(), $userId, null, null, $slug);
+			$this->notifyPush($collectiveId);
 			$pageInfo->setSlug($slug);
 		} catch (FilesNotFoundException|InvalidPathException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
@@ -685,6 +685,7 @@ class PageService {
 		$pageInfo->setLastUserId($userId);
 		$pageInfo->setLastUserDisplayName($this->userManager->getDisplayName($userId));
 		$this->updatePage($collectiveId, $pageInfo->getId(), $userId);
+		$this->notifyPush($collectiveId);
 		return $pageInfo;
 	}
 
@@ -702,6 +703,7 @@ class PageService {
 		$pageInfo->setLastUserDisplayName($this->userManager->getDisplayName($userId));
 		$pageInfo->setFullWidth($fullWidth);
 		$this->updatePage($collectiveId, $pageInfo->getId(), $userId, fullWidth: $fullWidth);
+		$this->notifyPush($collectiveId);
 		return $pageInfo;
 	}
 
@@ -812,6 +814,7 @@ class PageService {
 		$slug = $this->slugger->slug($title ?: $pageInfo->getTitle())->toString();
 		try {
 			$this->updatePage($collectiveId, $file->getId(), $userId, $pageInfo->getEmoji(), $pageInfo->isFullWidth(), $slug, $pageInfo->getTags());
+			$this->notifyPush($collectiveId);
 		} catch (InvalidPathException|FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
@@ -841,6 +844,7 @@ class PageService {
 
 		try {
 			$this->updatePage($collectiveId, $file->getId(), $userId, null, null, $slug);
+			$this->notifyPush($collectiveId);
 		} catch (InvalidPathException|FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
@@ -874,6 +878,7 @@ class PageService {
 		}
 		try {
 			$this->updatePage($newCollectiveId, $file->getId(), $userId, $pageInfo->getEmoji(), $pageInfo->isFullWidth());
+			$this->notifyPush($newcollectiveId);
 		} catch (InvalidPathException|FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
@@ -901,6 +906,7 @@ class PageService {
 		}
 		try {
 			$this->updatePage($newCollectiveId, $file->getId(), $userId, null, null, null, '[]');
+			$this->notifyPush($newcollectiveId);
 		} catch (InvalidPathException|FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
@@ -923,6 +929,7 @@ class PageService {
 		$pageInfo->setLastUserDisplayName($this->userManager->getDisplayName($userId));
 		$pageInfo->setEmoji($emoji);
 		$this->updatePage($collectiveId, $pageInfo->getId(), $userId, $emoji);
+		$this->notifyPush($collectiveId);
 		return $pageInfo;
 	}
 
