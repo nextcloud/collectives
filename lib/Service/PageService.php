@@ -344,7 +344,6 @@ class PageService {
 				$this->userManager->getDisplayName($userId));
 			$slug = $title ? $this->slugger->slug($title)->toString() : null;
 			$this->updatePage($collectiveId, $newFile->getId(), $userId, null, null, $slug);
-			$this->notifyPush($collectiveId);
 			$pageInfo->setSlug($slug);
 		} catch (FilesNotFoundException|InvalidPathException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
