@@ -196,7 +196,7 @@ export const useTemplatesStore = defineStore('templates', {
 				// only handle changes to the current collective
 				return
 			}
-			for (const page of pages) {
+			for (const page of (pages || [])) {
 				if (page.filePath !== TEMPLATE_PATH && !page.filePath.startsWith(TEMPLATE_PATH + '/')) {
 					// Only handle templates here.
 					continue
@@ -208,7 +208,7 @@ export const useTemplatesStore = defineStore('templates', {
 				updateOrAddTo(this.allTemplates[collectiveId], page)
 			}
 			if (this.allTemplates[this.collectiveId]) {
-				for (const id of removed) {
+				for (const id of (removed || [])) {
 					removeFrom(this.allTemplates[collectiveId], { id })
 				}
 			}

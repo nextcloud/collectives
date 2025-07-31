@@ -893,7 +893,7 @@ export const usePagesStore = defineStore('pages', {
 				// only handle changes to the current collective
 				return
 			}
-			for (const page of pages) {
+			for (const page of (pages || [])) {
 				if (page.filePath === '.templates' || page.filePath.startsWith('.templates/')) {
 					// template pages are handled in the ... templates store.
 					continue
@@ -907,7 +907,7 @@ export const usePagesStore = defineStore('pages', {
 					removeFrom(this.allTrashPages[collectiveId], page)
 				}
 			}
-			for (const id of removed) {
+			for (const id of (removed || [])) {
 				removeFrom(this.allTrashPages[collectiveId], { id })
 				removeFrom(this.allPages[collectiveId], { id })
 			}
