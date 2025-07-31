@@ -33,6 +33,7 @@ import { NcContent } from '@nextcloud/vue'
 import CollectiveSettings from './components/Nav/CollectiveSettings.vue'
 import Navigation from './components/Navigation.vue'
 import PageSidebar from './components/PageSidebar.vue'
+import { listen } from '@nextcloud/notify_push'
 
 export default {
 	name: 'Collectives',
@@ -46,6 +47,10 @@ export default {
 
 	setup() {
 		const rootStore = useRootStore()
+		const pagesStore = usePagesStore()
+		rootStore.listenPush = listen('collectives_pagelist', (_, message) => {
+			pagesStore.updatePages(message.collectiveId, message)
+		})
 		return { rootStore }
 	},
 

@@ -25,7 +25,6 @@ import { usePagesStore } from '../stores/pages.js'
 import { useTemplatesStore } from '../stores/templates.js'
 import { useVersionsStore } from '../stores/versions.js'
 import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { listen } from '@nextcloud/notify_push'
 import { NcAppContentDetails } from '@nextcloud/vue'
 import displayError from '../util/displayError.js'
 import Page from './Page.vue'
@@ -54,14 +53,13 @@ export default {
 			pollIntervalCurrent: 60 * 1000, // milliseconds
 			/** @type {null|number} */
 			getPagesIntervalId: null,
-			listenPush: null,
 			/** @type {null|number} */
 			updateSessionIntervalId: null,
 		}
 	},
 
 	computed: {
-		...mapState(useRootStore, ['isPublic', 'loading', 'pageParam', 'pageId']),
+		...mapState(useRootStore, ['isPublic', 'listenPush', 'loading', 'pageParam', 'pageId']),
 		...mapState(useCollectivesStore, [
 			'collectivePath',
 			'currentCollective',
@@ -87,10 +85,10 @@ export default {
 	watch: {
 		'currentCollective.id'(val) {
 			this.clearFilterTags()
-			this.clearListenPush()
+			this.clearSession()
 			if (val) {
 				this.initCollective()
-				this.initListenPush()
+				this.initSession()
 			}
 		},
 		'currentPage.id'() {
@@ -106,7 +104,7 @@ export default {
 
 	mounted() {
 		this.initCollective()
-		this.initListenPush()
+		this.initSession()
 		this._setPollingInterval(this.pollIntervalBase)
 		subscribe('networkOffline', this.handleNetworkOffline)
 		subscribe('networkOnline', this.handleNetworkOnline)
@@ -140,9 +138,7 @@ export default {
 			}
 		},
 
-		initListenPush() {
-			this.listenPush = listen('collectives_pagelist', this.handleNotifyPushUpdate.bind(this))
-
+		initSession() {
 			if (this.listenPush) {
 				console.debug('Has notify_push enabled, listening to pagelist updates and slowing polling to 15 minutes')
 				this.pollIntervalBase = 15 * 60 * 1000
@@ -151,12 +147,6 @@ export default {
 					this.updateSessionIntervalId = setInterval(this.updateSession, sessionUpdateInterval * 1000)
 				}
 			}
-		},
-
-		clearListenPush() {
-			this.clearSession()
-			this.listenPush = null
-			this.pollIntervalBase = 60 * 1000
 		},
 
 		async clearSession() {
@@ -182,10 +172,6 @@ export default {
 			this.getAllPages(false)
 			console.debug('Network is online.')
 			this._setPollingInterval(this.pollIntervalBase)
-		},
-
-		handleNotifyPushUpdate(_channel, message) {
-			this.updatePages(message.collectiveId, message)
 		},
 
 		_setPollingInterval(pollInterval) {
