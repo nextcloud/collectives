@@ -138,6 +138,7 @@ OC.L10N.register(
     "Full width" : "Πλήρους πλάτους",
     "Show in Files" : "Εμφάνιση σε Αρχεία",
     "Move or copy" : "Μετακίνηση ή αντιγραφή",
+    "Manage tags" : "Διαχείριση ετικετών",
     "Page not found: {page}" : "Η σελίδα δεν βρέθηκε: {page}",
     "Select a page from the list or create a new one." : "Επιλέξτε μια σελίδα από τη λίστα ή δημιουργήστε μια νέα.",
     "All collectives" : "Όλες οι συλλογικότητες",

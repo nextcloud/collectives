@@ -92,6 +92,7 @@ OC.L10N.register(
     "Open page sidebar" : "Отваряне на страничната лента на страницата",
     "Show in Files" : "Показване във файлове",
     "Move or copy" : "Премести или копирай",
+    "Manage tags" : "Управление на маркери",
     "Select a page from the list or create a new one." : "Избор на страница от списъка или създаване на нова страница.",
     "Move page here" : "Преместване на страницата тук",
     "Could not rename the page" : "Страницата не можа да се преименува",
