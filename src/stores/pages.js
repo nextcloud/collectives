@@ -918,6 +918,10 @@ export const usePagesStore = defineStore('pages', {
 		 * @param {number[]} changes.removed ids of all pages that were removed entirely
 		 */
 		updatePages(collectiveId, { pages, removed }) {
+			if (collectiveId !== this.collectiveId) {
+				// only handle changes to the current collective
+				return
+			}
 			for (const page of pages) {
 				if (page.trashTimestamp) {
 					// pages should not be updated in the trash - but better be save than sorry.
