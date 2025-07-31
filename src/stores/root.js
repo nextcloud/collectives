@@ -22,6 +22,7 @@ export const useRootStore = defineStore('root', {
 		pageId: null,
 		shareTokenParam: '',
 		fileIdQuery: '',
+		listenPush: false,
 	}),
 
 	getters: {
