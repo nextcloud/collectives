@@ -14,6 +14,7 @@ import { INDEX_PAGE, pageModes } from '../constants.js'
 /* eslint import/namespace: ['error', { allowComputed: true }] */
 import * as sortOrders from '../util/sortOrders.js'
 import * as api from '../apis/collectives/index.js'
+import { removeFrom, updateOrAddTo } from './collectionHelpers.js'
 
 const STORE_PREFIX = 'collectives/pinia/pages/'
 
@@ -560,7 +561,7 @@ export const usePagesStore = defineStore('pages', {
 			const response = await api.createPage(this.context, page)
 			// Add new page to the beginning of pages array
 			const newPage = response.data.ocs.data.page
-			this._updateOrAddTo(this.allPages[this.collectiveId], newPage)
+			updateOrAddTo(this.allPages[this.collectiveId], newPage)
 			this.addToSubpageOrder({ parentId: newPage.parentId, pageId: newPage.id })
 			this.newPage = response.data.ocs.data.page
 		},
@@ -688,7 +689,7 @@ export const usePagesStore = defineStore('pages', {
 			const hasSubpages = this.visibleSubpages(pageId).length > 0
 
 			await api.movePageToCollective(this.context, pageId, collectiveId, newParentId, index)
-			this._removeFrom(this.allPages[this.collectiveId], page)
+			removeFrom(this.allPages[this.collectiveId], page)
 			rootStore.done('pagelist-nodrag')
 
 			// Reload the page list if moved page had subpages (to remove subpages as well)
@@ -851,8 +852,8 @@ export const usePagesStore = defineStore('pages', {
 		async trashPage({ pageId }) {
 			const response = await api.trashPage(this.context, pageId)
 			const trashPage = response.data.ocs.data.page
-			this._removeFrom(this.allPages[this.collectiveId], trashPage)
-			this._updateOrAddTo(this.allTrashPages[this.collectiveId], trashPage)
+			removeFrom(this.allPages[this.collectiveId], trashPage)
+			updateOrAddTo(this.allTrashPages[this.collectiveId], trashPage)
 		},
 
 		/**
@@ -864,8 +865,8 @@ export const usePagesStore = defineStore('pages', {
 		async restorePage({ pageId }) {
 			const response = await api.restorePage(this.context, pageId)
 			const trashPage = response.data.ocs.data.page
-			this._updateOrAddTo(this.allPages[this.collectiveId], trashPage)
-			this._removeFrom(this.allTrashPages[this.collectiveId], trashPage)
+			updateOrAddTo(this.allPages[this.collectiveId], trashPage)
+			removeFrom(this.allTrashPages[this.collectiveId], trashPage)
 		},
 
 		/**
@@ -876,37 +877,7 @@ export const usePagesStore = defineStore('pages', {
 		 */
 		async deletePage({ pageId }) {
 			await api.deletePage(this.context, pageId)
-			this._removeFrom(this.allTrashPages[this.collectiveId], { id: pageId })
-		},
-
-		/**
-		 * Remove from the collection the given item (identified by id).
-		 *
-		 * If the item is not found this is a noop.
-		 * @param {object[]} collection array to remove item from.
-		 * @param {object} item the item
-		 * @param {number} item.id ID of the item to delete
-		 */
-		_removeFrom(collection, item) {
-			const index = collection.findIndex(i => i.id === item.id)
-			if (index > -1) {
-				collection.splice(index, 1)
-			}
-		},
-
-		/**
-		 * Update item in the collection or add if it does not exist (identified by id).
-		 * @param {object[]} collection array to modify
-		 * @param {object} item the item to update or add
-		 * @param {number} item.id used to find the item in the collection
-		 */
-		_updateOrAddTo(collection, item) {
-			const index = collection.findIndex(i => i.id === item.id)
-			if (index > -1) {
-				collection.splice(index, 1, item)
-			} else {
-				collection.unshift(item)
-			}
+			removeFrom(this.allTrashPages[this.collectiveId], { id: pageId })
 		},
 
 		/**
@@ -923,18 +894,22 @@ export const usePagesStore = defineStore('pages', {
 				return
 			}
 			for (const page of pages) {
+				if (page.filePath === '.templates' || page.filePath.startsWith('.templates/')) {
+					// template pages are handled in the ... templates store.
+					continue
+				}
 				if (page.trashTimestamp) {
 					// pages should not be updated in the trash - but better be save than sorry.
-					this._updateOrAddTo(this.allTrashPages[collectiveId], page)
-					this._removeFrom(this.allPages[collectiveId], page)
+					updateOrAddTo(this.allTrashPages[collectiveId], page)
+					removeFrom(this.allPages[collectiveId], page)
 				} else {
-					this._updateOrAddTo(this.allPages[collectiveId], page)
-					this._removeFrom(this.allTrashPages[collectiveId], page)
+					updateOrAddTo(this.allPages[collectiveId], page)
+					removeFrom(this.allTrashPages[collectiveId], page)
 				}
 			}
 			for (const id of removed) {
-				this._removeFrom(this.allTrashPages[collectiveId], { id })
-				this._removeFrom(this.allPages[collectiveId], { id })
+				removeFrom(this.allTrashPages[collectiveId], { id })
+				removeFrom(this.allPages[collectiveId], { id })
 			}
 		},
 
