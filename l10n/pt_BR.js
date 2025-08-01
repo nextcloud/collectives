@@ -225,6 +225,7 @@ OC.L10N.register(
     "Sort descending by title" : "Ordenar descendente por título",
     "Sort ascending by title" : "Ordenar ascendente por título",
     "Switch back to default sort order" : "Voltar para a ordenação padrão",
+    "Results in title or tags" : "Resultados em título ou etiquetas",
     "Results in content" : "Resultados nos conteúdos",
     "Share link ({index})" : "Compartilhar link ({index})",
     "View only" : "Somente visualização ",
