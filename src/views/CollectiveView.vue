@@ -30,6 +30,9 @@ import { NcAppContent, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 import Collective from '../components/Collective.vue'
 import CollectiveNotFound from '../components/CollectiveNotFound.vue'
 import PageList from '../components/PageList.vue'
+import { usePagesStore } from '../stores/pages.js'
+import { useTemplatesStore } from '../stores/templates.js'
+import { listen } from '@nextcloud/notify_push'
 
 export default {
 	name: 'CollectiveView',
@@ -41,6 +44,16 @@ export default {
 		NcEmptyContent,
 		NcLoadingIcon,
 		PageList,
+	},
+
+	setup() {
+		const rootStore = useRootStore()
+		const pagesStore = usePagesStore()
+		const templatesStore = useTemplatesStore()
+		rootStore.listenPush = listen('collectives_pagelist', (_, message) => {
+			pagesStore.updatePages(message.collectiveId, message)
+			templatesStore.updateTemplates(message.collectiveId, message)
+		})
 	},
 
 	computed: {

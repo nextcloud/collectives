@@ -28,13 +28,11 @@ import { useRootStore } from './stores/root.js'
 import { useSettingsStore } from './stores/settings.js'
 import { useCollectivesStore } from './stores/collectives.js'
 import { usePagesStore } from './stores/pages.js'
-import { useTemplatesStore } from './stores/templates.js'
 import displayError from './util/displayError.js'
 import { NcContent } from '@nextcloud/vue'
 import CollectiveSettings from './components/Nav/CollectiveSettings.vue'
 import Navigation from './components/Navigation.vue'
 import PageSidebar from './components/PageSidebar.vue'
-import { listen } from '@nextcloud/notify_push'
 
 export default {
 	name: 'Collectives',
@@ -48,12 +46,6 @@ export default {
 
 	setup() {
 		const rootStore = useRootStore()
-		const pagesStore = usePagesStore()
-		const templatesStore = useTemplatesStore()
-		rootStore.listenPush = listen('collectives_pagelist', (_, message) => {
-			pagesStore.updatePages(message.collectiveId, message)
-			templatesStore.updateTemplates(message.collectiveId, message)
-		})
 		return { rootStore }
 	},
 
