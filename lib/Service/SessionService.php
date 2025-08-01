@@ -16,7 +16,7 @@ use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\Security\ISecureRandom;
 
 class SessionService {
-	public const SESSION_VALID_TIME = 92;
+	public const SESSION_VALID_TIME = 120;
 
 	public function __construct(
 		private CollectiveMapper $collectiveMapper,

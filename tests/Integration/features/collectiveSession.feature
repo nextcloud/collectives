@@ -23,7 +23,7 @@ Feature: collectiveSession
 
   Scenario: Create a session as member, fail to update after it got invalidated
     When user "jane" creates session for "BehatSessionCollective"
-    And we wait for "95" seconds
+    And we wait for "122" seconds
     Then user "jane" fails to update session for "BehatSessionCollective"
 
   Scenario: Delete collective
