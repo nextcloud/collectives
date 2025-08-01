@@ -8,6 +8,7 @@ OC.L10N.register(
     "Promote to moderator" : "Promote to moderator",
     "Remove" : "Ondoa",
     "Loading…" : "Inapakia",
+    "Remove {name}" : "Remove {name}",
     "Permissions" : "Ruhusa",
     "View" : "Angalia",
     "Edit" : "Hariri",

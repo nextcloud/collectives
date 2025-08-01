@@ -15,8 +15,17 @@
     "Remove from favorites" : "Выдаліць з абранага",
     "Add to favorites" : "У абранае",
     "Move or copy" : "Перамясціць або капіяваць",
+    "Manage tags" : "Кіраванне тэгамі",
     "Title" : "Загаловак",
     "Clear search" : "Ачысціць пошук",
+    "Updated tag {name}" : "Абноўлены тэг {name}",
+    "Could not update tag {name}" : "Не ўдалося абнавіць тэг {name}",
+    "Could not delete tag {name}" : "Не ўдалося выдаліць тэг {name}",
+    "_Deleted %n tag_::_Deleted %n tags_" : ["Выдалены %n тэг","Выдалены %n тэгі","Выдалена %n тэгаў","Выдалена %n тэгаў"],
+    "Created tag {name}" : "Створаны тэг {name}",
+    "Tag name" : "Назва тэга",
+    "Change tag color" : "Змяніць колер тэга",
+    "Create new tag" : "Стварыйь новы тэг",
     "Favorite" : "Абранае",
     "Favorites" : "Абранае",
     "Deleted" : "Выдалены",
@@ -33,6 +42,7 @@
     "Remove version name" : "Выдаліць назву версіі",
     "Save version name" : "Захаваць назву версіі",
     "Versions" : "Версіі",
+    "Remove tag" : "Выдаліць тэг",
     "Link copied" : "Спасылка скапіявана"
 },"pluralForm" :"nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);"
 }
