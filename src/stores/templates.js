@@ -123,8 +123,8 @@ export const useTemplatesStore = defineStore('templates', {
 
 			try {
 				const response = await api.createTemplate(this.context, template)
-				// Add new template to the beginning of templates array
-				this.allTemplates[this.collectiveId]?.unshift(response.data.ocs.data.template)
+				const created = response.data.ocs.data.template
+				updateOrAddTo(this.allTemplates[this.collectiveId], created)
 
 				return response.data.ocs.data.template.id
 			} finally {
