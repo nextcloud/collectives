@@ -19,7 +19,11 @@ export function removeFrom(collection, item) {
 }
 
 /**
- * Update item in the collection or add if it does not exist (identified by id).
+ * Update item in the collection or add if it does not exist
+ *
+ * The existing item is identified by the id.
+ * If no item with a matching it exists the item will be added to the start of the collection.
+ *
  * @param {object[]} collection array to modify
  * @param {object} item the item to update or add
  * @param {number} item.id used to find the item in the collection
