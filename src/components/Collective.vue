@@ -19,19 +19,16 @@ import { mapActions, mapState } from 'pinia'
 import { useRootStore } from '../stores/root.js'
 import { useCollectivesStore } from '../stores/collectives.js'
 import { useSharesStore } from '../stores/shares.js'
-import { useSessionsStore } from '../stores/sessions.js'
 import { useTagsStore } from '../stores/tags.js'
 import { usePagesStore } from '../stores/pages.js'
-import { useTemplatesStore } from '../stores/templates.js'
 import { useVersionsStore } from '../stores/versions.js'
-import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { emit } from '@nextcloud/event-bus'
 import { NcAppContentDetails } from '@nextcloud/vue'
 import displayError from '../util/displayError.js'
 import Page from './Page.vue'
 import PageVersion from './PageVersion.vue'
 import PageNotFound from './Page/PageNotFound.vue'
 import SkeletonLoading from './SkeletonLoading.vue'
-import { sessionUpdateInterval } from '../constants.js'
 
 export default {
 	name: 'Collective',
@@ -44,30 +41,13 @@ export default {
 		PageVersion,
 	},
 
-	data() {
-		return {
-			backgroundFetching: false,
-			/** @type {number} */
-			pollIntervalBase: 60 * 1000, // milliseconds
-			/** @type {number} */
-			pollIntervalCurrent: 60 * 1000, // milliseconds
-			/** @type {null|number} */
-			getPagesIntervalId: null,
-			/** @type {null|number} */
-			updateSessionIntervalId: null,
-		}
-	},
-
 	computed: {
-		...mapState(useRootStore, ['isPublic', 'listenPush', 'loading', 'pageParam', 'pageId']),
+		...mapState(useRootStore, ['isPublic', 'loading', 'pageParam', 'pageId']),
 		...mapState(useCollectivesStore, [
 			'collectivePath',
 			'currentCollective',
-			'currentCollectiveCanEdit',
-			'currentCollectiveIsPageShare',
 			'currentCollectivePath',
 		]),
-		...mapState(useSessionsStore, ['hasSession']),
 		...mapState(usePagesStore, [
 			'currentFileIdPage',
 			'currentPage',
@@ -85,10 +65,8 @@ export default {
 	watch: {
 		'currentCollective.id'(val) {
 			this.clearFilterTags()
-			this.clearSession()
 			if (val) {
 				this.initCollective()
-				this.initSession()
 			}
 		},
 		'currentPage.id'() {
@@ -104,123 +82,22 @@ export default {
 
 	mounted() {
 		this.initCollective()
-		this.initSession()
-		this._setPollingInterval(this.pollIntervalBase)
-		subscribe('networkOffline', this.handleNetworkOffline)
-		subscribe('networkOnline', this.handleNetworkOnline)
 		this.slugUrl()
-	},
-
-	beforeDestroy() {
-		this.clearSession()
-		this.teardownBackgroundFetcher()
-		unsubscribe('networkOffline', this.handleNetworkOffline)
-		unsubscribe('networkOnline', this.handleNetworkOnline)
 	},
 
 	methods: {
 		...mapActions(useRootStore, ['hide', 'load', 'show']),
 		...mapActions(useSharesStore, ['getShares']),
-		...mapActions(useTemplatesStore, ['getTemplates']),
-		...mapActions(useTagsStore, ['getTags', 'clearFilterTags']),
-		...mapActions(useSessionsStore, ['createSession', 'updateSession', 'closeSession']),
-		...mapActions(usePagesStore, ['getPages', 'getTrashPages', 'updatePages']),
+		...mapActions(useTagsStore, ['clearFilterTags']),
 		...mapActions(useVersionsStore, ['selectVersion']),
 
 		initCollective() {
-			this.getAllPages()
 			this.closeNav()
 			this.show('details')
 
 			if (!this.isPublic) {
 				this.getShares()
 					.catch(displayError('Could not fetch shares'))
-			}
-		},
-
-		initSession() {
-			if (this.listenPush) {
-				console.debug('Has notify_push enabled, listening to pagelist updates and slowing polling to 15 minutes')
-				this.pollIntervalBase = 15 * 60 * 1000
-				if (!this.isPublic) {
-					this.createSession()
-					this.updateSessionIntervalId = setInterval(this.updateSession, sessionUpdateInterval * 1000)
-				}
-			}
-		},
-
-		async clearSession() {
-			if (this.updateSessionIntervalId) {
-				clearInterval(this.updateSessionIntervalId)
-			}
-			if (this.hasSession) {
-				await this.closeSession()
-			}
-		},
-
-		handleNetworkOffline() {
-			// If we poll less than every 10 Minutes
-			// - do not slow down further.
-			if (this.pollIntervalBase > 10 * 60 * 1000) {
-				return
-			}
-			console.debug('Network is offline.')
-			this._setPollingInterval(this.pollIntervalBase * 10)
-		},
-
-		handleNetworkOnline() {
-			this.getAllPages(false)
-			console.debug('Network is online.')
-			this._setPollingInterval(this.pollIntervalBase)
-		},
-
-		_setPollingInterval(pollInterval) {
-			console.debug(`Polling every ${pollInterval / 1000} seconds.`)
-			if (this.interval && pollInterval === this.pollIntervalCurrent) {
-				return
-			}
-
-			if (this.interval) {
-				window.clearInterval(this.interval)
-				this.interval = null
-			}
-
-			this.pollIntervalCurrent = pollInterval
-			this.setupBackgroundFetcher()
-		},
-
-		setupBackgroundFetcher() {
-			if (OC.config.session_keepalive) {
-				console.debug('Started background fetcher as session_keepalive is enabled')
-				this.getPagesIntervalId = window.setInterval(
-					this.getAllPages.bind(this, false),
-					this.pollIntervalCurrent,
-				)
-			} else {
-				console.debug('Did not start background fetcher as session_keepalive is off')
-			}
-		},
-
-		teardownBackgroundFetcher() {
-			console.debug('Stopping background fetcher.')
-			if (this.getPagesIntervalId) {
-				window.clearInterval(this.getPagesIntervalId)
-				this.getPagesIntervalId = null
-			}
-		},
-
-		async getAllPages(setLoading = true) {
-			await this.getPages(setLoading)
-				.catch(displayError('Could not fetch pages'))
-			await this.getTags()
-				.catch(displayError('Could not fetch tags'))
-			if (this.currentCollectiveCanEdit) {
-				if (!this.currentCollectiveIsPageShare) {
-					await this.getTemplates(setLoading)
-						.catch(displayError('Could not fetch templates'))
-					await this.getTrashPages()
-						.catch(displayError('Could not fetch page trash'))
-				}
 			}
 		},
 
