@@ -10,10 +10,11 @@ import { getCurrentUser } from '@nextcloud/auth'
 import { generateRemoteUrl } from '@nextcloud/router'
 import { useRootStore } from './root.js'
 import { useCollectivesStore } from './collectives.js'
-import { INDEX_PAGE, pageModes } from '../constants.js'
+import { INDEX_PAGE, PAGE_SUFFIX, pageModes, TEMPLATE_PATH } from '../constants.js'
 /* eslint import/namespace: ['error', { allowComputed: true }] */
 import * as sortOrders from '../util/sortOrders.js'
 import * as api from '../apis/collectives/index.js'
+import { removeFrom, updateOrAddTo } from './collectionHelpers.js'
 
 const STORE_PREFIX = 'collectives/pinia/pages/'
 
@@ -70,7 +71,7 @@ export const usePagesStore = defineStore('pages', {
 				: (!rootStore.pageId && !rootStore.pageParam) || rootStore.pageParam === INDEX_PAGE
 		},
 		isIndexPage(state) {
-			return state.currentPage.fileName === INDEX_PAGE + '.md'
+			return state.currentPage.fileName === INDEX_PAGE + PAGE_SUFFIX
 		},
 
 		rootPageForCollective(state) {
@@ -137,7 +138,7 @@ export const usePagesStore = defineStore('pages', {
 			const collectivesStore = useCollectivesStore()
 			if (!page.slug) {
 				const { filePath, fileName, title, id } = page
-				const titlePart = fileName !== INDEX_PAGE + '.md' && title
+				const titlePart = fileName !== INDEX_PAGE + PAGE_SUFFIX && title
 
 				const pagePath = [...filePath.split('/'), titlePart]
 					.filter(Boolean).map(encodeURIComponent).join('/')
@@ -154,7 +155,7 @@ export const usePagesStore = defineStore('pages', {
 
 		pagePathTitle: () => (page) => {
 			const { filePath, fileName, title } = page
-			const titlePart = fileName !== INDEX_PAGE + '.md' && title
+			const titlePart = fileName !== INDEX_PAGE + PAGE_SUFFIX && title
 			return [filePath, titlePart].filter(Boolean).join('/')
 		},
 
@@ -528,12 +529,11 @@ export const usePagesStore = defineStore('pages', {
 			rootStore.done('pageTrash')
 		},
 
-		_updatePageState(page) {
-			this.allPages[this.collectiveId].splice(
-				this.allPages[this.collectiveId].findIndex(p => p.id === page.id),
-				1,
-				page,
-			)
+		_updatePageState(page, collectiveId = this.collectiveId) {
+			const index = this.allPages[collectiveId].findIndex(p => p.id === page.id)
+			if (index > -1) {
+				this.allPages[collectiveId].splice(index, 1, page)
+			}
 		},
 
 		/**
@@ -561,7 +561,7 @@ export const usePagesStore = defineStore('pages', {
 			const response = await api.createPage(this.context, page)
 			// Add new page to the beginning of pages array
 			const newPage = response.data.ocs.data.page
-			this.allPages[this.collectiveId].unshift(newPage)
+			updateOrAddTo(this.allPages[this.collectiveId], newPage)
 			this.addToSubpageOrder({ parentId: newPage.parentId, pageId: newPage.id })
 			this.newPage = response.data.ocs.data.page
 		},
@@ -689,7 +689,7 @@ export const usePagesStore = defineStore('pages', {
 			const hasSubpages = this.visibleSubpages(pageId).length > 0
 
 			await api.movePageToCollective(this.context, pageId, collectiveId, newParentId, index)
-			this.allPages[this.collectiveId].splice(this.allPages[this.collectiveId].findIndex(p => p.id === page.id), 1)
+			removeFrom(this.allPages[this.collectiveId], page)
 			rootStore.done('pagelist-nodrag')
 
 			// Reload the page list if moved page had subpages (to remove subpages as well)
@@ -852,9 +852,8 @@ export const usePagesStore = defineStore('pages', {
 		async trashPage({ pageId }) {
 			const response = await api.trashPage(this.context, pageId)
 			const trashPage = response.data.ocs.data.page
-			this.allPages[this.collectiveId].splice(this.allPages[this.collectiveId].findIndex(p => p.id === trashPage.id), 1)
-			trashPage.trashTimestamp = Date.now() / 1000
-			this.allTrashPages[this.collectiveId].unshift(trashPage)
+			removeFrom(this.allPages[this.collectiveId], trashPage)
+			updateOrAddTo(this.allTrashPages[this.collectiveId], trashPage)
 		},
 
 		/**
@@ -866,9 +865,8 @@ export const usePagesStore = defineStore('pages', {
 		async restorePage({ pageId }) {
 			const response = await api.restorePage(this.context, pageId)
 			const trashPage = response.data.ocs.data.page
-			trashPage.trashTimestamp = null
-			this.allPages[this.collectiveId].unshift(trashPage)
-			this.allTrashPages[this.collectiveId].splice(this.allTrashPages[this.collectiveId].findIndex(p => p.id === trashPage.id), 1)
+			updateOrAddTo(this.allPages[this.collectiveId], trashPage)
+			removeFrom(this.allTrashPages[this.collectiveId], trashPage)
 		},
 
 		/**
@@ -879,7 +877,40 @@ export const usePagesStore = defineStore('pages', {
 		 */
 		async deletePage({ pageId }) {
 			await api.deletePage(this.context, pageId)
-			this.allTrashPages[this.collectiveId].splice(this.allTrashPages[this.collectiveId].findIndex(p => p.id === pageId), 1)
+			removeFrom(this.allTrashPages[this.collectiveId], { id: pageId })
+		},
+
+		/**
+		 * Update all pages provided, remove those listed as removed
+		 *
+		 * @param {number} collectiveId ID of the collective to work on
+		 * @param {object} changes the page
+		 * @param {object[]} changes.pages updated records for pages
+		 * @param {number[]} changes.removed ids of all pages that were removed entirely
+		 */
+		updatePages(collectiveId, { pages, removed }) {
+			if (collectiveId !== this.collectiveId) {
+				// only handle changes to the current collective
+				return
+			}
+			for (const page of (pages || [])) {
+				if (page.filePath === TEMPLATE_PATH || page.filePath.startsWith(TEMPLATE_PATH + '/')) {
+					// template pages are handled in the ... templates store.
+					continue
+				}
+				if (page.trashTimestamp) {
+					// pages should not be updated in the trash - but better be save than sorry.
+					updateOrAddTo(this.allTrashPages[collectiveId], page)
+					removeFrom(this.allPages[collectiveId], page)
+				} else {
+					updateOrAddTo(this.allPages[collectiveId], page)
+					removeFrom(this.allTrashPages[collectiveId], page)
+				}
+			}
+			for (const id of (removed || [])) {
+				removeFrom(this.allTrashPages[collectiveId], { id })
+				removeFrom(this.allPages[collectiveId], { id })
+			}
 		},
 
 		/**

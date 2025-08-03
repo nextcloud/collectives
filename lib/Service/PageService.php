@@ -262,17 +262,19 @@ class PageService {
 		return $pageInfo;
 	}
 
-	private function notifyPush(int $collectiveId): void {
+	private function notifyPush(array $body): void {
 		if (!$this->pushQueue) {
 			return;
 		}
 
-		$sessionUsers = $this->sessionService->getSessionUsers($collectiveId);
+		$sessionUsers = $this->sessionService->getSessionUsers($body['collectiveId']);
 		foreach ($sessionUsers as $userId) {
-			$this->pushQueue->push('notify_custom', [
+			$notification = [
 				'user' => $userId,
-				'message' => 'collectives_' . $collectiveId . '_pagelist',
-			]);
+				'message' => 'collectives_pagelist',
+				'body' => $body,
+			];
+			$this->pushQueue->push('notify_custom', $notification);
 		}
 	}
 
@@ -293,7 +295,6 @@ class PageService {
 			$page->setTags($tags);
 		}
 		$this->pageMapper->updateOrInsert($page);
-		$this->notifyPush($collectiveId);
 	}
 
 	/**
@@ -308,7 +309,6 @@ class PageService {
 			$page->setLastUserId($userId);
 		}
 		$this->pageMapper->updateOrInsert($page);
-		$this->notifyPush($collectiveId);
 	}
 
 	private function updateTags(int $collectiveId, int $fileId, string $userId, string $tags): void {
@@ -320,7 +320,6 @@ class PageService {
 			$page->setLastUserId($userId);
 		}
 		$this->pageMapper->updateOrInsert($page);
-		$this->notifyPush($collectiveId);
 	}
 
 	/**
@@ -664,7 +663,8 @@ class PageService {
 		$pageInfo = $templateId
 			? $this->copy($collectiveId, $templateId, $parentId, $safeTitle, 0, $userId)
 			: $this->newPage($collectiveId, $folder, $filename, $userId, $title);
-		$this->addToSubpageOrder($collectiveId, $parentId, $pageInfo->getId(), 0, $userId);
+		$parentPageInfo = $this->addToSubpageOrder($collectiveId, $parentId, $pageInfo->getId(), 0, $userId);
+		$this->notifyPush(['collectiveId' => $collectiveId, 'pages' => [$pageInfo, $parentPageInfo]]);
 		return $pageInfo;
 	}
 
@@ -681,6 +681,7 @@ class PageService {
 		$pageInfo->setLastUserId($userId);
 		$pageInfo->setLastUserDisplayName($this->userManager->getDisplayName($userId));
 		$this->updatePage($collectiveId, $pageInfo->getId(), $userId);
+		$this->notifyPush(['collectiveId' => $collectiveId, 'pages' => [$pageInfo]]);
 		return $pageInfo;
 	}
 
@@ -698,6 +699,7 @@ class PageService {
 		$pageInfo->setLastUserDisplayName($this->userManager->getDisplayName($userId));
 		$pageInfo->setFullWidth($fullWidth);
 		$this->updatePage($collectiveId, $pageInfo->getId(), $userId, fullWidth: $fullWidth);
+		$this->notifyPush(['collectiveId' => $collectiveId, 'pages' => [$pageInfo]]);
 		return $pageInfo;
 	}
 
@@ -812,9 +814,10 @@ class PageService {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
 
-		$this->addToSubpageOrder($collectiveId, $parentId, $file->getId(), $index, $userId);
-
-		return $this->getPageByFile($file);
+		$parentPageInfo = $this->addToSubpageOrder($collectiveId, $parentId, $file->getId(), $index, $userId);
+		$pageInfo = $this->getPageByFile($file);
+		$this->notifyPush(['collectiveId' => $collectiveId, 'pages' => [$pageInfo, $parentPageInfo]]);
+		return $pageInfo;
 	}
 
 	/**
@@ -841,10 +844,14 @@ class PageService {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
 
+		$pageInfo = $this->getPageByFile($file);
 		if ($oldParentId !== $parentId) {
 			// Page got moved: remove from subpage order of old parent page, add to new
-			$this->removeFromSubpageOrder($collectiveId, $oldParentId, $id, $userId);
-			$this->addToSubpageOrder($collectiveId, $parentId, $file->getId(), $index, $userId);
+			$oldParentPageInfo = $this->removeFromSubpageOrder($collectiveId, $oldParentId, $id, $userId);
+			$newParentPageInfo = $this->addToSubpageOrder($collectiveId, $parentId, $file->getId(), $index, $userId);
+			$this->notifyPush(['collectiveId' => $collectiveId, 'pages' => [$pageInfo, $oldParentPageInfo, $newParentPageInfo]]);
+		} else {
+			$this->notifyPush(['collectiveId' => $collectiveId, 'pages' => [$pageInfo]]);
 		}
 
 		return $this->getPageByFile($file);
@@ -874,7 +881,9 @@ class PageService {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
 
-		$this->addToSubpageOrder($newCollectiveId, $parentId, $file->getId(), $index, $userId);
+		$pageInfo = $this->getPageByFile($file);
+		$parentPageInfo = $this->addToSubpageOrder($newCollectiveId, $parentId, $file->getId(), $index, $userId);
+		$this->notifyPush(['collectiveId' => $newCollectiveId, 'pages' => [$pageInfo, $parentPageInfo]]);
 	}
 
 	/**
@@ -901,8 +910,11 @@ class PageService {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
 
-		$this->removeFromSubpageOrder($collectiveId, $oldParentId, $id, $userId);
-		$this->addToSubpageOrder($newCollectiveId, $parentId, $file->getId(), $index, $userId);
+		$oldParentPageInfo = $this->removeFromSubpageOrder($collectiveId, $oldParentId, $id, $userId);
+		$this->notifyPush(['collectiveId' => $collectiveId, 'pages' => [$oldParentPageInfo], 'removed' => [$id]]);
+		$pageInfo = $this->getPageByFile($file);
+		$newParentPageInfo = $this->addToSubpageOrder($newCollectiveId, $parentId, $file->getId(), $index, $userId);
+		$this->notifyPush(['collectiveId' => $newCollectiveId, 'pages' => [$pageInfo, $newParentPageInfo]]);
 	}
 
 	/**
@@ -919,6 +931,7 @@ class PageService {
 		$pageInfo->setLastUserDisplayName($this->userManager->getDisplayName($userId));
 		$pageInfo->setEmoji($emoji);
 		$this->updatePage($collectiveId, $pageInfo->getId(), $userId, $emoji);
+		$this->notifyPush(['collectiveId' => $collectiveId, 'pages' => [$pageInfo]]);
 		return $pageInfo;
 	}
 
@@ -937,6 +950,7 @@ class PageService {
 
 		$pageInfo->setSubpageOrder($subpageOrder);
 		$this->updateSubpageOrder($collectiveId, $pageInfo->getId(), $userId, $subpageOrder);
+		$this->notifyPush(['collectiveId' => $collectiveId, 'pages' => [$pageInfo]]);
 		return $pageInfo;
 	}
 
@@ -956,7 +970,7 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	private function addToSubpageOrder(int $collectiveId, int $pageId, int $addId, int $index, string $userId): void {
+	private function addToSubpageOrder(int $collectiveId, int $pageId, int $addId, int $index, string $userId): PageInfo {
 		$collectiveFolder = $this->getCollectiveFolder($collectiveId, $userId);
 		$file = $this->nodeHelper->getFileById($collectiveFolder, $pageId);
 		$pageInfo = $this->getPageByFile($file);
@@ -967,6 +981,7 @@ class PageService {
 
 		$pageInfo->setSubpageOrder($newSubpageOrder);
 		$this->updateSubpageOrder($collectiveId, $pageInfo->getId(), $userId, $newSubpageOrder);
+		return $pageInfo;
 	}
 
 	/**
@@ -974,7 +989,7 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	private function removeFromSubpageOrder(int $collectiveId, int $pageId, int $removeId, string $userId): void {
+	private function removeFromSubpageOrder(int $collectiveId, int $pageId, int $removeId, string $userId): PageInfo {
 		$collectiveFolder = $this->getCollectiveFolder($collectiveId, $userId);
 		$file = $this->nodeHelper->getFileById($collectiveFolder, $pageId);
 		$pageInfo = $this->getPageByFile($file);
@@ -983,6 +998,7 @@ class PageService {
 
 		$pageInfo->setSubpageOrder($newSubpageOrder);
 		$this->updateSubpageOrder($collectiveId, $pageInfo->getId(), $userId, $newSubpageOrder);
+		return $pageInfo;
 	}
 
 	/**
@@ -1008,6 +1024,7 @@ class PageService {
 		$tags = PageTagHelper::add($pageInfo->getTags(), $tagId, $collectiveTags);
 		$pageInfo->setTags($tags);
 		$this->updateTags($collectiveId, $pageInfo->getId(), $userId, $tags);
+		$this->notifyPush(['collectiveId' => $collectiveId, 'pages' => [$pageInfo]]);
 		return $pageInfo;
 	}
 
@@ -1034,6 +1051,7 @@ class PageService {
 		$tags = PageTagHelper::remove($pageInfo->getTags(), $tagId, $collectiveTags);
 		$pageInfo->setTags($tags);
 		$this->updateTags($collectiveId, $pageInfo->getId(), $userId, $tags);
+		$this->notifyPush(['collectiveId' => $collectiveId, 'pages' => [$pageInfo]]);
 		return $pageInfo;
 	}
 
@@ -1067,8 +1085,8 @@ class PageService {
 		if ($direct || !$this->trashBackend) {
 			// Delete directly if desired or trash is not available
 			$this->pageMapper->deleteByFileId($id);
-			$this->removeFromSubpageOrder($collectiveId, $parentId, $id, $userId);
-			$this->notifyPush($collectiveId);
+			$oldParentPageInfo = $this->removeFromSubpageOrder($collectiveId, $parentId, $id, $userId);
+			$this->notifyPush(['collectiveId' => $collectiveId, 'pages' => [$oldParentPageInfo], 'removed' => [$id]]);
 			return $pageInfo;
 		}
 
@@ -1078,7 +1096,7 @@ class PageService {
 		}
 
 		$pageInfo->setTrashTimestamp($trashedPage->getTrashTimestamp());
-		$this->notifyPush($collectiveId);
+		$this->notifyPush(['collectiveId' => $collectiveId, 'pages' => [$pageInfo]]);
 		return $pageInfo;
 	}
 
@@ -1105,8 +1123,9 @@ class PageService {
 			throw new NotFoundException('Failed to restore page ' . $id . ':' . $e->getMessage(), 0, $e);
 		}
 
-		$this->notifyPush($collectiveId);
-		return $this->findByFileId($collectiveId, $id, $userId);
+		$pageInfo = $this->findByFileId($collectiveId, $id, $userId);
+		$this->notifyPush(['collectiveId' => $collectiveId, 'pages' => [$pageInfo]]);
+		return $pageInfo;
 	}
 
 	/**
@@ -1132,7 +1151,7 @@ class PageService {
 			throw new NotFoundException('Failed to delete page from trash ' . $id . ':' . $e->getMessage());
 		}
 
-		$this->notifyPush($collectiveId);
+		$this->notifyPush(['collectiveId' => $collectiveId, 'removed' => [$id]]);
 	}
 
 	public function getPageLink(string $collectiveUrlPath, PageInfo $pageInfo, bool $withFileId = true, bool $forceNoSlug = false): string {

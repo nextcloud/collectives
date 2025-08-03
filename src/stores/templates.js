@@ -11,7 +11,8 @@ import { useCollectivesStore } from './collectives.js'
 import { usePagesStore } from './pages.js'
 import * as api from '../apis/collectives/index.js'
 import { byTitleAsc } from '../util/sortOrders.js'
-import { TEMPLATE_PAGE } from '../constants.js'
+import { INDEX_PAGE, PAGE_SUFFIX, TEMPLATE_PAGE, TEMPLATE_PATH } from '../constants.js'
+import { removeFrom, updateOrAddTo } from './collectionHelpers.js'
 
 const STORE_PREFIX = 'collectives/pinia/templates/'
 
@@ -80,11 +81,7 @@ export const useTemplatesStore = defineStore('templates', {
 			if (this.allTemplates[this.collectiveId] === undefined) {
 				set(this.allTemplates, this.collectiveId, [])
 			}
-			this.allTemplates[this.collectiveId].splice(
-				this.allTemplates[this.collectiveId].findIndex(p => p.id === template.id),
-				1,
-				template,
-			)
+			updateOrAddTo(this.allTemplates[this.collectiveId], template)
 		},
 
 		/**
@@ -124,8 +121,8 @@ export const useTemplatesStore = defineStore('templates', {
 
 			try {
 				const response = await api.createTemplate(this.context, template)
-				// Add new template to the beginning of templates array
-				this.allTemplates[this.collectiveId]?.unshift(response.data.ocs.data.template)
+				const created = response.data.ocs.data.template
+				updateOrAddTo(this.allTemplates[this.collectiveId], created)
 
 				return response.data.ocs.data.template.id
 			} finally {
@@ -177,7 +174,43 @@ export const useTemplatesStore = defineStore('templates', {
 		 */
 		async deleteTemplate({ templateId }) {
 			await api.deleteTemplate(this.context, templateId)
-			this.allTemplates[this.collectiveId]?.splice(this.allTemplates[this.collectiveId]?.findIndex(p => p.id === templateId), 1)
+			if (this.allTemplates[this.collectiveId]) {
+				removeFrom(this.allTemplates[this.collectiveId], { id: templateId })
+			}
 		},
+
+		/**
+		 * Update all pages provided if they are templates.
+		 *
+		 * Remove those listed as removed
+		 *
+		 * @param {number} collectiveId ID of the collective to work on
+		 * @param {object} changes the page
+		 * @param {object[]} changes.pages updated records for pages
+		 * @param {number[]} changes.removed ids of all pages that were removed entirely
+		 */
+		updateTemplates(collectiveId, { pages, removed }) {
+			if (collectiveId !== this.collectiveId) {
+				// only handle changes to the current collective
+				return
+			}
+			for (const page of (pages || [])) {
+				if (page.filePath !== TEMPLATE_PATH && !page.filePath.startsWith(TEMPLATE_PATH + '/')) {
+					// Only handle templates here.
+					continue
+				}
+				if (page.filePath === TEMPLATE_PATH && page.fileName === INDEX_PAGE + PAGE_SUFFIX) {
+					// Ignore the Readme.md in the template path
+					continue
+				}
+				updateOrAddTo(this.allTemplates[collectiveId], page)
+			}
+			if (this.allTemplates[this.collectiveId]) {
+				for (const id of (removed || [])) {
+					removeFrom(this.allTemplates[collectiveId], { id })
+				}
+			}
+		},
+
 	},
 })
