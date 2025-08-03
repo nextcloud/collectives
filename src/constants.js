@@ -5,6 +5,8 @@
 
 export const INDEX_PAGE = 'Readme'
 export const TEMPLATE_PAGE = 'Template'
+export const PAGE_SUFFIX = '.md'
+export const TEMPLATE_PATH = '.templates'
 
 // Circle lember levels
 export const memberLevels = {

@@ -10,7 +10,7 @@ import { getCurrentUser } from '@nextcloud/auth'
 import { generateRemoteUrl } from '@nextcloud/router'
 import { useRootStore } from './root.js'
 import { useCollectivesStore } from './collectives.js'
-import { INDEX_PAGE, pageModes } from '../constants.js'
+import { INDEX_PAGE, PAGE_SUFFIX, pageModes, TEMPLATE_PATH } from '../constants.js'
 /* eslint import/namespace: ['error', { allowComputed: true }] */
 import * as sortOrders from '../util/sortOrders.js'
 import * as api from '../apis/collectives/index.js'
@@ -71,7 +71,7 @@ export const usePagesStore = defineStore('pages', {
 				: (!rootStore.pageId && !rootStore.pageParam) || rootStore.pageParam === INDEX_PAGE
 		},
 		isIndexPage(state) {
-			return state.currentPage.fileName === INDEX_PAGE + '.md'
+			return state.currentPage.fileName === INDEX_PAGE + PAGE_SUFFIX
 		},
 
 		rootPageForCollective(state) {
@@ -138,7 +138,7 @@ export const usePagesStore = defineStore('pages', {
 			const collectivesStore = useCollectivesStore()
 			if (!page.slug) {
 				const { filePath, fileName, title, id } = page
-				const titlePart = fileName !== INDEX_PAGE + '.md' && title
+				const titlePart = fileName !== INDEX_PAGE + PAGE_SUFFIX && title
 
 				const pagePath = [...filePath.split('/'), titlePart]
 					.filter(Boolean).map(encodeURIComponent).join('/')
@@ -155,7 +155,7 @@ export const usePagesStore = defineStore('pages', {
 
 		pagePathTitle: () => (page) => {
 			const { filePath, fileName, title } = page
-			const titlePart = fileName !== INDEX_PAGE + '.md' && title
+			const titlePart = fileName !== INDEX_PAGE + PAGE_SUFFIX && title
 			return [filePath, titlePart].filter(Boolean).join('/')
 		},
 
@@ -894,7 +894,7 @@ export const usePagesStore = defineStore('pages', {
 				return
 			}
 			for (const page of (pages || [])) {
-				if (page.filePath === '.templates' || page.filePath.startsWith('.templates/')) {
+				if (page.filePath === TEMPLATE_PATH || page.filePath.startsWith(TEMPLATE_PATH + '/')) {
 					// template pages are handled in the ... templates store.
 					continue
 				}

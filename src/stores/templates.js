@@ -11,12 +11,10 @@ import { useCollectivesStore } from './collectives.js'
 import { usePagesStore } from './pages.js'
 import * as api from '../apis/collectives/index.js'
 import { byTitleAsc } from '../util/sortOrders.js'
-import { TEMPLATE_PAGE } from '../constants.js'
+import { INDEX_PAGE, PAGE_SUFFIX, TEMPLATE_PAGE, TEMPLATE_PATH } from '../constants.js'
 import { removeFrom, updateOrAddTo } from './collectionHelpers.js'
 
 const STORE_PREFIX = 'collectives/pinia/templates/'
-const TEMPLATE_PATH = '.templates'
-const INDEX_PAGE_NAME = 'Readme.md'
 
 export const useTemplatesStore = defineStore('templates', {
 	state: () => ({
@@ -201,7 +199,7 @@ export const useTemplatesStore = defineStore('templates', {
 					// Only handle templates here.
 					continue
 				}
-				if (page.filePath === TEMPLATE_PATH && page.fileName === INDEX_PAGE_NAME) {
+				if (page.filePath === TEMPLATE_PATH && page.fileName === INDEX_PAGE + PAGE_SUFFIX) {
 					// Ignore the Readme.md in the template path
 					continue
 				}
