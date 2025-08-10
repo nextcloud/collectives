@@ -22,6 +22,7 @@ OC.L10N.register(
     "Delete" : "Futa",
     "Rename" : "Ipe jina jipya",
     "Templates" : "Violezo",
+    "Add a template" : "Add a template",
     "Done" : "Imefanyika",
     "Remove from favorites" : "Ondoa kutoka katika pendwa",
     "Add to favorites" : "Ongeza kwenye pendwa",
