@@ -49,7 +49,7 @@ Cypress.Commands.add('openTrashedCollectiveMenu', (collectiveName) => {
 
 Cypress.Commands.add('clickMenuButton', (title) => {
 	Cypress.log()
-	cy.get('button.action-button')
+	cy.get('button.action-button, a.action-link')
 		.contains(title)
 		.click()
 })
