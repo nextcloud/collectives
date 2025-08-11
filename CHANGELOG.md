@@ -1,5 +1,23 @@
 # Changelog
 
+## 3.1.0 - 2025.08.11
+
+### ✨New
+* 🏷️ Page tags. (#470, #1604, #1703)
+* 🚀 Send live page list updates directly via notify_push deamon.
+
+### 🐛Fixes
+* 🐛 Stop slugs migration early if it already ran.
+* ⌛ Raise session valid time to fix outdated active sessions.
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 3.0.3 - 2025.07.28
 
 ### 🐛Fixes
@@ -8,7 +26,6 @@
 * 🐛 Don't fetch templates in page shares.
 * ♻️ Avoid redundant navigation for URLs with hash.
 * 🐛 Fix displaying PageInfoBar with Nextcloud 32.
-
 
 ### 🌎Translations
 * 🗣️ Translation updates from Transifex. Thanks to all contributors.
