@@ -50,16 +50,16 @@ export default {
 	},
 
 	computed: {
-		...mapState(useCollectivesStore, ['collectives']),
+		...mapState(useCollectivesStore, ['collectives', 'collectivePath']),
 	},
 
 	watch: {
-		// Open the navigation if we already have collectives.
-		// Only has an effect on mobile (where navigation is closed per default).
-		'collectives'(val, oldval) {
-			if (oldval.length === 0 && val.length === 1) {
-				this.$router.push(`/${encodeURIComponent(val[0].name)}`)
-			} else if (oldval.length === 0 && val.length > 1) {
+		'collectives'(val) {
+			if (val.length === 1) {
+				// Open collective if only one exists
+				this.$router.push(this.collectivePath(val[0]))
+			} else if (val.length > 1) {
+				// Open the navigation (on mobile) if we have collectives
 				emit('toggle-navigation', { open: true })
 			}
 		},
