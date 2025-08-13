@@ -4,7 +4,7 @@
  */
 
 :root {
-	--text-editor-max-width: 670px !important;
+	--text-editor-max-width: 80ch !important;
 }
 
 .text-editor__wrapper {
@@ -23,7 +23,7 @@
 }
 
 .sheet-view {
-	--text-editor-max-width: 670px !important;
+	--text-editor-max-width: 80ch !important;
 
 	&.landing-page-widgets,
 	.page-heading-skeleton,

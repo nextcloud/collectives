@@ -312,8 +312,8 @@ export default {
 	}
 }
 
-/* Leave space for page list toggle on small screens (editor 670px + toggle button) */
-@media screen and (max-width: calc(670px + 44px)) {
+/* Leave space for page list toggle on small screens (editor width 80ch + toggle button 44px) */
+@media screen and (max-width: calc(80ch + 44px)) {
 	.page-title-container {
 		padding-left: calc(var(--default-clickable-area) + 4px);
 	}
