@@ -90,11 +90,14 @@ describe('Page tags', function() {
 			const tags = Array.from({ length: 7 }, (_, i) => `tag${i + 1}`)
 			for (const tag of tags) {
 				cy.get('.tags-modal__input input[type="text"]')
+					.should('be.visible')
+					.clear()
+				cy.wait(200) // eslint-disable-line cypress/no-unnecessary-waiting
+				cy.get('.tags-modal__input input[type="text"]')
 					.type(tag)
 				cy.get('.tags-modal__tag-create')
 					.click()
 				cy.get('.toast-success').should('contain', `Created tag ${tag}`)
-				cy.wait(300) // eslint-disable-line cypress/no-unnecessary-waiting
 			}
 			cy.contains('.modal-container', 'Manage tags')
 				.find('.modal-container__close')
