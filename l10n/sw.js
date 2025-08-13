@@ -5,6 +5,8 @@ OC.L10N.register(
     "Settings" : "Mipangilio",
     "Members" : "Wanachama",
     "No search results" : "Hakuna matokeo ya utafutaji",
+    "admin" : "admin",
+    "moderator" : "moderator",
     "Promote to moderator" : "Promote to moderator",
     "Remove" : "Ondoa",
     "Loading…" : "Inapakia",

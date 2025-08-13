@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Share link" : "Абагуліць спасылку",
     "Settings" : "Налады",
+    "Remove" : "Выдаліць",
     "Loading…" : "Загрузка…",
     "Edit" : "Рэдагаваць",
     "Restore" : "Аднавіць",
