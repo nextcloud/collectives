@@ -213,7 +213,7 @@ describe('Pages', function() {
 			cy.getReadOnlyEditor()
 				.find('.editor__content')
 				.invoke('outerWidth')
-				.should('eq', 670)
+				.should('be.lessThan', 800)
 
 			// Set full width mode
 			cy.get('[data-cy-collectives="page-title-container"] .action-item__menutoggle')
@@ -224,7 +224,7 @@ describe('Pages', function() {
 			cy.getReadOnlyEditor()
 				.find('.editor__content')
 				.invoke('outerWidth')
-				.should('be.greaterThan', 700)
+				.should('be.greaterThan', 800)
 
 			// Reload to check persistence
 			cy.reload()
@@ -232,7 +232,7 @@ describe('Pages', function() {
 			cy.getReadOnlyEditor()
 				.find('.editor__content')
 				.invoke('outerWidth')
-				.should('be.greaterThan', 700)
+				.should('be.greaterThan', 800)
 
 			// Unset full width mode
 			cy.get('[data-cy-collectives="page-title-container"] .action-item__menutoggle')
@@ -243,7 +243,7 @@ describe('Pages', function() {
 			cy.getReadOnlyEditor()
 				.find('.editor__content')
 				.invoke('outerWidth')
-				.should('eq', 670)
+				.should('be.lessThan', 800)
 		})
 	})
 
