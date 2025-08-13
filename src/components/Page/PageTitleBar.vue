@@ -8,7 +8,6 @@
 		:class="{
 			'full-width-view': isFullWidth,
 			'sheet-view': !isFullWidth,
-			'pre-nc30': isPreNc30,
 		}"
 		data-cy-collectives="page-title-container">
 		<!-- Page emoji or icon -->
@@ -160,11 +159,6 @@ export default {
 			'isTextEdit',
 		]),
 
-		// TODO: remove when we stop supporting NC < 30
-		isPreNc30() {
-			return window.getComputedStyle(document.body).getPropertyValue('--default-clickable-area') === '44px'
-		},
-
 		titleChanged() {
 			return this.newTitle && this.newTitle !== this.currentPage.title
 		},
@@ -300,11 +294,6 @@ export default {
 
 	&.sheet-view {
 		margin: 0 0 0 max(0px, calc(50% - (var(--text-editor-max-width) / 2)));
-	}
-
-	// TODO: remove when we stop supporting NC < 30
-	&.pre-nc30 {
-		padding-top: 11px;
 	}
 
 	.button-emoji-page {
