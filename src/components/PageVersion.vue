@@ -9,7 +9,6 @@
 			:class="{
 				'full-width-view': isFullWidth,
 				'sheet-view': !isFullWidth,
-				'pre-nc30': isPreNc30,
 			}"
 			data-cy-collective="page-title-container">
 			<div class="page-title-icon">
@@ -96,11 +95,6 @@ export default {
 			'title',
 		]),
 
-		// TODO: remove when we stop supporting NC < 30
-		isPreNc30() {
-			return window.getComputedStyle(document.body).getPropertyValue('--default-clickable-area') === '44px'
-		},
-
 		isFullWidth() {
 			return this.currentPage.isFullWidth
 		},
@@ -171,11 +165,6 @@ export default {
 
 	&.sheet-view {
 		margin: 0 0 0 max(0px, calc(50% - (var(--text-editor-max-width) / 2)));
-	}
-
-	// TODO: remove when we stop supporting NC < 30
-	&.pre-nc30 {
-		padding-top: 11px;
 	}
 
 	.button-emoji-page {
