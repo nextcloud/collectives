@@ -55,15 +55,8 @@
 				</template>
 				{{ toggleOutlineString }}
 			</NcActionButton>
-			<NcActionSeparator v-if="!inPageList" />
 
-			<!-- Open in files app action: only displayed in page title menu -->
-			<NcActionLink v-if="!inPageList && showFilesLink"
-				:href="filesUrl"
-				icon="icon-files-dark"
-				:close-after-click="true">
-				{{ t('collectives', 'Show in Files') }}
-			</NcActionLink>
+			<NcActionSeparator v-if="!inPageList" />
 
 			<!-- Favor page action: only displayed in page list and not for landing page -->
 			<NcActionButton v-if="inPageList"
@@ -98,6 +91,16 @@
 				{{ setEmojiString }}
 			</NcActionButton>
 
+			<!-- Open tags modal: always displayed if has edit permissions -->
+			<NcActionButton v-if="currentCollectiveCanEdit"
+				:close-after-click="true"
+				@click="onOpenTagsModal">
+				<template #icon>
+					<TagMultipleIcon :size="20" />
+				</template>
+				{{ t('collectives', 'Manage tags') }}
+			</NcActionButton>
+
 			<!-- Move/copy page via modal: only displayed in page list -->
 			<NcActionButton v-if="inPageList && currentCollectiveCanEdit && !isLandingPage"
 				:close-after-click="true"
@@ -108,14 +111,27 @@
 				{{ t('collectives', 'Move or copy') }}
 			</NcActionButton>
 
-			<NcActionButton v-if="currentCollectiveCanEdit"
-				:close-after-click="true"
-				@click="onOpenTagsModal">
+			<!-- Download action: only displayed in page title menu -->
+			<NcActionLink v-if="!inPageList"
+				:href="currentPageDavUrl"
+				:download="currentPage.fileName"
+				:close-after-click="true">
 				<template #icon>
-					<TagMultipleIcon :size="20" />
+					<DownloadIcon :size="20" />
 				</template>
-				{{ t('collectives', 'Manage tags') }}
-			</NcActionButton>
+				{{ t('collectives', 'Download') }}
+			</NcActionLink>
+
+			<!-- Open in files app action: only displayed in page title menu -->
+			<NcActionLink v-if="!inPageList && showFilesLink"
+				:href="filesUrl"
+				:close-after-click="true">
+				<template #icon>
+					<FolderIcon :size="20" />
+				</template>
+				{{ t('collectives', 'Show in Files') }}
+			</NcActionLink>
+
 			<!-- Delete page -->
 			<NcActionButton v-if="displayDeleteAction"
 				:close-after-click="true"
@@ -146,7 +162,9 @@ import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import CollectiveActions from '../Collective/CollectiveActions.vue'
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 import DockRightIcon from 'vue-material-design-icons/DockRight.vue'
+import DownloadIcon from 'vue-material-design-icons/Download.vue'
 import EmoticonIcon from 'vue-material-design-icons/Emoticon.vue'
+import FolderIcon from 'vue-material-design-icons/Folder.vue'
 import FormatListBulletedIcon from 'vue-material-design-icons/FormatListBulleted.vue'
 import OpenInNewIcon from 'vue-material-design-icons/OpenInNew.vue'
 import MoveOrCopyModal from './MoveOrCopyModal.vue'
@@ -172,7 +190,9 @@ export default {
 		NcActionSeparator,
 		DeleteIcon,
 		DockRightIcon,
+		DownloadIcon,
 		EmoticonIcon,
+		FolderIcon,
 		FormatListBulletedIcon,
 		OpenInNewIcon,
 		PageActionLastUser,
@@ -244,6 +264,7 @@ export default {
 			'isFavoritePage',
 		]),
 		...mapState(usePagesStore, [
+			'currentPageDavUrl',
 			'hasOutline',
 			'hasSubpages',
 			'pagesTreeWalk',

@@ -14,5 +14,6 @@ js/*
 .php-cs-fixer.cache
 
 # Cypress test artifacts
+cypress/downloads/
 cypress/screenshots/
 cypress/videos/

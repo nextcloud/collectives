@@ -26,12 +26,9 @@ describe('Page details', function() {
 			cy.getReadOnlyEditor()
 				.contains('Second-Level Heading')
 			cy.wait(200) // eslint-disable-line cypress/no-unnecessary-waiting
-			cy.get('[data-cy-collectives="page-title-container"] .action-item__menutoggle')
-				.click()
 
-			cy.log('Show outline in view mode')
-			cy.contains('button', 'Show outline')
-				.click()
+			cy.openPageTitleMenu()
+			cy.clickMenuButton('Show outline')
 			cy.getReadOnlyEditor()
 				.find('.editor--toc .editor--toc__item')
 				.should('contain', 'Second-Level Heading')
@@ -62,6 +59,19 @@ describe('Page details', function() {
 
 			cy.get('.editor--toc')
 				.should('not.exist')
+		})
+	})
+
+	describe('Download markdown file', function() {
+		it('Allows to download markdown file', function() {
+			cy.intercept('PUT', '**/apps/text/session/*/create').as('textCreateSession')
+			cy.openPage('Day 1')
+			cy.wait('@textCreateSession')
+
+			cy.openPageTitleMenu()
+			cy.clickMenuButton('Download')
+
+			cy.readFile(`${Cypress.config('downloadsFolder')}/Day 1.md`)
 		})
 	})
 
