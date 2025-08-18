@@ -11,6 +11,7 @@
     "Delete" : "Sguab às",
     "Rename" : "Thoir ainm ùr air",
     "Add to favorites" : "Cuir ris na h-annsachdan",
+    "Download" : "Luchdaich a-nuas",
     "Favorite" : "Annsachd",
     "Favorites" : "Annsachdan",
     "Deleted" : "Chaidh a sguabadh às",
@@ -18,7 +19,6 @@
     "Password" : "Facal-faire",
     "Add another link" : "Cuir ceangal eile ris",
     "Unshare" : "Na co-roinn tuilleadh",
-    "Download" : "Luchdaich a-nuas",
     "Sharing" : "Co-roinneadh",
     "Link copied" : "Chaidh lethbhreac dhen cheangal a dhèanamh"
 },"pluralForm" :"nplurals=4; plural=(n==1 || n==11) ? 0 : (n==2 || n==12) ? 1 : (n > 2 && n < 20) ? 2 : 3;"

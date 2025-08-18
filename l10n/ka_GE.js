@@ -19,6 +19,7 @@ OC.L10N.register(
     "Done" : "დასრულებულია",
     "Remove from favorites" : "რჩეულებიდან მოშორება",
     "Move or copy" : "გადაიტანეთ ან დააკოპირეთ",
+    "Download" : "ჩამოტვირთვა",
     "Title" : "სათაური",
     "Favorite" : "რჩეული",
     "Favorites" : "რჩეულები",
@@ -27,7 +28,6 @@ OC.L10N.register(
     "Password" : "პაროლ",
     "Advanced settings" : "დამატებითი პარამეტრები",
     "Unshare" : "გაზიარების შეწყვეტა",
-    "Download" : "ჩამოტვირთვა",
     "Sharing" : "გაზიარება",
     "Versions" : "ვერსიები",
     "Failed to revert {page} to revision {timestamp}." : "ფაილის {page} დაბრუნება რევიზიაზე {timestamp} ვერ ხერხდება."

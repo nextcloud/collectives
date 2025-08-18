@@ -19,6 +19,7 @@ OC.L10N.register(
     "Done" : "Terminado",
     "Add to favorites" : "Agregar a favoritos",
     "Move or copy" : "Mover o copiar",
+    "Download" : "Descargar",
     "Title" : "Título",
     "Favorite" : "Favorito",
     "Favorites" : "Favoritos",
@@ -27,7 +28,6 @@ OC.L10N.register(
     "Add another link" : "Añadir otro enlace",
     "Advanced settings" : "Configuraciones avanzados",
     "Unshare" : "Dejar de compartir",
-    "Download" : "Descargar",
     "Sharing" : "Compartiendo",
     "Versions" : "Versiones",
     "Failed to revert {page} to revision {timestamp}." : "Falla al revertir {page} a revisión {timestamp}."

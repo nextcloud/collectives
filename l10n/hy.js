@@ -12,12 +12,12 @@ OC.L10N.register(
     "Delete" : "հեռացնել",
     "Rename" : "Վերանվանել",
     "Done" : "Done",
+    "Download" : "Ներբեռնել",
     "Title" : "Վերնագիր",
     "Favorites" : "Սիրվածներ",
     "Deleted" : "Ջնջված",
     "Password" : "գախտնաբառ",
     "Unshare" : "Չկիսվել",
-    "Download" : "Ներբեռնել",
     "No other versions available" : "Այլ տարբերակներ չկան",
     "Versions" : "Տարբերակներ"
 },
