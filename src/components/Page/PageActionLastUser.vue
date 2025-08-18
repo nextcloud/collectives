@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import ClockIcon from 'vue-material-design-icons/Clock.vue'
+import ClockIcon from 'vue-material-design-icons/ClockOutline.vue'
 import LastUserBubble from '../LastUserBubble.vue'
 
 export default {

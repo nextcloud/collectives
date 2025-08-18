@@ -92,10 +92,10 @@ import { directive as ClickOutside } from 'v-click-outside'
 import { NcActionButton, NcActions, NcButton, NcLoadingIcon, NcTextField } from '@nextcloud/vue'
 import NcEmojiPicker from '@nextcloud/vue/dist/Components/NcEmojiPicker.js'
 
-import DeleteIcon from 'vue-material-design-icons/Delete.vue'
-import EmoticonIcon from 'vue-material-design-icons/Emoticon.vue'
+import DeleteIcon from 'vue-material-design-icons/DeleteOutline.vue'
+import EmoticonIcon from 'vue-material-design-icons/EmoticonOutline.vue'
 import PageTemplateIcon from '../Icon/PageTemplateIcon.vue'
-import PencilIcon from 'vue-material-design-icons/Pencil.vue'
+import PencilIcon from 'vue-material-design-icons/PencilOutline.vue'
 
 export default {
 	name: 'TemplateListItem',

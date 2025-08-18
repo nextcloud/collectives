@@ -111,11 +111,11 @@ import { generateUrl } from '@nextcloud/router'
 
 import { NcActionButton, NcActionLink, NcAvatar, NcDateTime, NcListItem, NcLoadingIcon } from '@nextcloud/vue'
 import BackupRestoreIcon from 'vue-material-design-icons/BackupRestore.vue'
-import DeleteIcon from 'vue-material-design-icons/Delete.vue'
-import DownloadIcon from 'vue-material-design-icons/Download.vue'
+import DeleteIcon from 'vue-material-design-icons/DeleteOutline.vue'
+import DownloadIcon from 'vue-material-design-icons/DownloadOutline.vue'
 import FileCompareIcon from 'vue-material-design-icons/FileCompare.vue'
 import PageIcon from '../Icon/PageIcon.vue'
-import PencilIcon from 'vue-material-design-icons/Pencil.vue'
+import PencilIcon from 'vue-material-design-icons/PencilOutline.vue'
 
 export default {
 	name: 'Version',

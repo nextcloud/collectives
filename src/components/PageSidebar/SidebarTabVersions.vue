@@ -60,7 +60,7 @@ import { useCollectivesStore } from '../../stores/collectives.js'
 import { useVersionsStore } from '../../stores/versions.js'
 
 import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
-import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagon.vue'
+import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagonOutline.vue'
 import BackupRestoreIcon from 'vue-material-design-icons/BackupRestore.vue'
 import Version from './Version.vue'
 import VersionLabelDialog from './VersionLabelDialog.vue'

@@ -87,11 +87,11 @@ import { showError, showSuccess } from '@nextcloud/dialogs'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { circlesMemberTypes, memberLevels } from '../../constants.js'
 import { NcActions, NcActionButton, NcActionSeparator, NcAvatar, NcLoadingIcon } from '@nextcloud/vue'
-import AccountCogIcon from 'vue-material-design-icons/AccountCog.vue'
-import AccountIcon from 'vue-material-design-icons/Account.vue'
+import AccountCogIcon from 'vue-material-design-icons/AccountCogOutline.vue'
+import AccountIcon from 'vue-material-design-icons/AccountOutline.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
-import CrownIcon from 'vue-material-design-icons/Crown.vue'
-import DeleteIcon from 'vue-material-design-icons/Delete.vue'
+import CrownIcon from 'vue-material-design-icons/CrownOutline.vue'
+import DeleteIcon from 'vue-material-design-icons/DeleteOutline.vue'
 
 export default {
 	name: 'Member',

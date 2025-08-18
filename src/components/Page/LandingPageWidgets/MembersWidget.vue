@@ -67,7 +67,7 @@ import { showError } from '@nextcloud/dialogs'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 
 import { NcAvatar, NcButton } from '@nextcloud/vue'
-import AccountMultipleIcon from 'vue-material-design-icons/AccountMultiple.vue'
+import AccountMultipleIcon from 'vue-material-design-icons/AccountMultipleOutline.vue'
 import AccountMultiplePlusIcon from 'vue-material-design-icons/AccountMultiplePlus.vue'
 import ChevronDownIcon from 'vue-material-design-icons/ChevronDown.vue'
 import SkeletonLoading from '../../SkeletonLoading.vue'
