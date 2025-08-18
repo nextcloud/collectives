@@ -13,6 +13,7 @@ OC.L10N.register(
     "Delete" : "Pozmak",
     "Rename" : "Adyny üýtgetmek",
     "Add to favorites" : "Saýlananlara goşuň",
+    "Download" : "Göçürip almak",
     "Favorite" : "Halaýan",
     "Favorites" : "Halanýanlar",
     "Deleted" : "Öçürildi",
@@ -20,7 +21,6 @@ OC.L10N.register(
     "Password" : "Açarsöz",
     "Add another link" : "Başga bir baglanyşyk goşuň",
     "Unshare" : "Paýlaşma",
-    "Download" : "Göçürip almak",
     "Sharing" : "Paýlaşmak",
     "Link copied" : "Link-yň nusgasy alyndy"
 },

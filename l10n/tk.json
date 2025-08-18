@@ -11,6 +11,7 @@
     "Delete" : "Pozmak",
     "Rename" : "Adyny üýtgetmek",
     "Add to favorites" : "Saýlananlara goşuň",
+    "Download" : "Göçürip almak",
     "Favorite" : "Halaýan",
     "Favorites" : "Halanýanlar",
     "Deleted" : "Öçürildi",
@@ -18,7 +19,6 @@
     "Password" : "Açarsöz",
     "Add another link" : "Başga bir baglanyşyk goşuň",
     "Unshare" : "Paýlaşma",
-    "Download" : "Göçürip almak",
     "Sharing" : "Paýlaşmak",
     "Link copied" : "Link-yň nusgasy alyndy"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

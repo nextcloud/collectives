@@ -13,6 +13,7 @@ OC.L10N.register(
     "Delete" : "Sguab às",
     "Rename" : "Thoir ainm ùr air",
     "Add to favorites" : "Cuir ris na h-annsachdan",
+    "Download" : "Luchdaich a-nuas",
     "Favorite" : "Annsachd",
     "Favorites" : "Annsachdan",
     "Deleted" : "Chaidh a sguabadh às",
@@ -20,7 +21,6 @@ OC.L10N.register(
     "Password" : "Facal-faire",
     "Add another link" : "Cuir ceangal eile ris",
     "Unshare" : "Na co-roinn tuilleadh",
-    "Download" : "Luchdaich a-nuas",
     "Sharing" : "Co-roinneadh",
     "Link copied" : "Chaidh lethbhreac dhen cheangal a dhèanamh"
 },
