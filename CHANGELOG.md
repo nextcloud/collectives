@@ -1,5 +1,21 @@
 # Changelog
 
+## 3.1.1 - 2025.08.18
+
+### 🐛Fixes
+* 💄 Switch to outline icons to follow Nextcloud 32 style.
+* ⬇️ Add action to download markdown file. (#1347)
+* 💄 Change editor width to 80ch.
+* 💄 Open collective automatically if only one exists. (#1924)
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 3.1.0 - 2025.08.11
 
 ### ✨New
