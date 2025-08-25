@@ -7,6 +7,7 @@ OC.L10N.register(
     "Remove" : "Выдаліць",
     "Loading…" : "Загрузка…",
     "Edit" : "Рэдагаваць",
+    "Choose" : "Выбраць",
     "Restore" : "Аднавіць",
     "Delete permanently" : "Выдаліць назаўжды",
     "Cancel" : "Скасаваць",
