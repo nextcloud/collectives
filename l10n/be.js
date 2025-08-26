@@ -4,6 +4,7 @@ OC.L10N.register(
     "Share link" : "Абагуліць спасылку",
     "Settings" : "Налады",
     "Members" : "Удзельнікі",
+    "moderator" : "мадэратар",
     "Remove" : "Выдаліць",
     "Loading…" : "Загрузка…",
     "Edit" : "Рэдагаваць",
