@@ -46,6 +46,7 @@ OC.L10N.register(
     "Create a new share link" : "Izveidojiet jaunu kopīgošanas saiti",
     "No other versions available" : "Citas versijas nav pieejamas",
     "Current version" : "Pašreizējā versija",
+    "You" : "Tu",
     "Compare to current version" : "Salīdzināt ar pašreizējo versiju",
     "Attachments" : "Pielikumi",
     "Sharing" : "Koplietošana",
