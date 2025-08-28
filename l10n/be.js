@@ -7,6 +7,7 @@ OC.L10N.register(
     "moderator" : "мадэратар",
     "Remove" : "Выдаліць",
     "Loading…" : "Загрузка…",
+    "Permissions" : "Дазволы",
     "Edit" : "Рэдагаваць",
     "Choose" : "Выбраць",
     "Restore" : "Аднавіць",
@@ -20,9 +21,11 @@ OC.L10N.register(
     "Done" : "Гатова",
     "Remove from favorites" : "Выдаліць з абранага",
     "Add to favorites" : "У абранае",
+    "Delete page" : "Выдаліць старонку",
     "Manage tags" : "Кіраванне тэгамі",
     "Move or copy" : "Перамясціць або капіяваць",
     "Download" : "Спампаваць",
+    "Show in Files" : "Паказаць у Файлах",
     "Title" : "Загаловак",
     "Clear search" : "Ачысціць пошук",
     "Updated tag {name}" : "Абноўлены тэг {name}",
@@ -57,6 +60,12 @@ OC.L10N.register(
     "Sharing" : "Абагульванне",
     "Versions" : "Версіі",
     "Remove tag" : "Выдаліць тэг",
-    "Link copied" : "Спасылка скапіявана"
+    "Link copied" : "Спасылка скапіявана",
+    "New page" : "Новая старонка",
+    "Page deleted" : "Старонка выдалена",
+    "Template" : "Шаблон",
+    "Hide templates" : "Схаваць шаблоны",
+    "Show templates" : "Паказаць шаблоны",
+    "New Page" : "Новая старонка"
 },
 "nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);");

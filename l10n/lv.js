@@ -7,6 +7,8 @@ OC.L10N.register(
     "Share link" : "Koplietot saiti",
     "Settings" : "Iestatījumi",
     "Members" : "Biedri",
+    "moderator" : "satura pārraudzītājs",
+    "Promote to moderator" : "Paaugstināt par satura pārraudzītāju",
     "Remove" : "Noņemt",
     "Loading…" : "Ielādē …",
     "Add accounts" : "Pievienot kontus",
