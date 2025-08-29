@@ -27,6 +27,7 @@ OC.L10N.register(
     "Favorite" : "Favorite",
     "Favorites" : "Favorites",
     "Deleted" : "O`chirilgan",
+    "Sort order" : "Saralash tartibi",
     "Can edit" : "Can edit",
     "Password" : "Password",
     "Create share" : "Tarqatish yaratish",
