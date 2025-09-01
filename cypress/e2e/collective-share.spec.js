@@ -89,11 +89,12 @@ describe('Collective Share', function() {
 		cy.get('[data-cy-collectives="page-title-container"] input.title')
 			.should('have.value', '')
 		cy.get('[data-cy-collectives="page-title-container"] input.title')
-			.type('New page')
+			.type('New page{enter}')
 		cy.getEditorContent(true)
 			.type('New content')
 		cy.get('button.titleform-button')
 			.click()
+		cy.contains('.app-content-list-item a', 'New page')
 	})
 	it('Allows using the page list filter', function() {
 		cy.logout()
