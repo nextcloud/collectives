@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.1.2 - 2025.09.01
+
+### 🚧Updates & Tooling
+* ⬆️ Bump guzzlehttp/guzzle from 7.9.3 to 7.10.0. (#1942)
+* ⬆️ Bump codecov/codecov-action from 5.4.3 to 5.5.0. (#1943)
+* ⬆️ Update dependency jest to ^30.1.1. (#1947)
+
+
 ## 3.1.1 - 2025.08.18
 
 ### 🐛Fixes
