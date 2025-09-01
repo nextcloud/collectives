@@ -193,7 +193,7 @@ describe('Page share', function() {
 			cy.get('.sharing-entry button.new-share-link')
 				.click()
 			cy.wait('@generatePassword')
-			cy.get('input[autocomplete="new-password"][placeholder="Password"]').type('{selectAll}password12')
+			cy.get('input[autocomplete="new-password"]').type('{selectAll}password12')
 			cy.intercept('POST', '**/api/v1.0/collectives/*/pages/*/shares').as('createShare')
 			cy.get('button').contains('Create share').click()
 			cy.wait('@createShare')
