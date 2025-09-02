@@ -91,7 +91,7 @@ import AccountCogIcon from 'vue-material-design-icons/AccountCogOutline.vue'
 import AccountIcon from 'vue-material-design-icons/AccountOutline.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 import CrownIcon from 'vue-material-design-icons/CrownOutline.vue'
-import DeleteIcon from 'vue-material-design-icons/DeleteOutline.vue'
+import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
 
 export default {
 	name: 'Member',
