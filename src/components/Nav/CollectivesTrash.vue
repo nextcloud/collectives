@@ -93,7 +93,7 @@ import { useCollectivesStore } from '../../stores/collectives.js'
 import { NcActionButton, NcAppNavigationItem, NcButton, NcDialog } from '@nextcloud/vue'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import CollectivesIcon from '../Icon/CollectivesIcon.vue'
-import DeleteIcon from 'vue-material-design-icons/DeleteOutline.vue'
+import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
 import { directive as ClickOutside } from 'v-click-outside'
 
