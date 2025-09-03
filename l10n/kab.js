@@ -22,6 +22,7 @@ OC.L10N.register(
     "Favorites" : "Imenyafen",
     "Deleted" : "Yettwakkes",
     "Set password" : "Sbadu awal uffir",
+    "Password" : "Awal n uɛeddi",
     "Add another link" : "Rnu aseɣwen-nniḍen",
     "Attachments" : "Ticeqqufin",
     "Sharing" : "Beṭṭu",
