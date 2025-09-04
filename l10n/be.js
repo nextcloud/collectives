@@ -11,6 +11,7 @@ OC.L10N.register(
     "Permissions" : "Дазволы",
     "View" : "Выгляд",
     "Edit" : "Рэдагаваць",
+    "Danger zone" : "Небяспечная зона",
     "Choose" : "Выбраць",
     "Restore" : "Аднавіць",
     "Delete permanently" : "Выдаліць назаўжды",
