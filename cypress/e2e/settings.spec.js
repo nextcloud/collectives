@@ -33,7 +33,7 @@ describe('Settings', function() {
 			cy.get('#oc-dialog-filepicker-content > span > span > a.button-add, .breadcrumb__actions button')
 				.click()
 			cy.intercept('MKCOL', `**/remote.php/dav/files/**/${randomFolder}`).as('createFolder')
-			cy.get('nav.newFolderMenu > ul > li > form > input[type="text"], input[placeholder="New folder name"], input[placeholder="New folder"]')
+			cy.get('[role="dialog"] form input[type="text"], input[placeholder="New folder name"], input[placeholder="New folder"]')
 				.type(`${randomFolder}{enter}`)
 			cy.wait('@createFolder')
 			// Wait until new view of empty folder is loaded
