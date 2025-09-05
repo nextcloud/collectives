@@ -16,7 +16,6 @@
     "lint": "eslint --ext .js,.vue src cypress --max-warnings=0",
     "lint:fix": "eslint --ext .js,.vue src cypress --fix",
     "test": "vitest run",
-    "test:coverage": "vitest run --coverage",
     "stylelint": "stylelint css/collectives.css css/*.scss src/**/*.scss src/*.vue src/**/*.vue",
     "stylelint:fix": "stylelint css/collectives.css css/*.scss src/**/*.scss src/**/*.vue --fix"
   },
