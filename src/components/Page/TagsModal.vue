@@ -124,11 +124,11 @@ import { showError, showSuccess } from '@nextcloud/dialogs'
 import { NcActions, NcActionButton, NcButton, NcCheckboxRadioSwitch, NcColorPicker, NcDialog, NcTextField } from '@nextcloud/vue'
 import CircleIcon from 'vue-material-design-icons/Circle.vue'
 import CircleOutlineIcon from 'vue-material-design-icons/CircleOutline.vue'
-import DeleteIcon from 'vue-material-design-icons/Delete.vue'
-import PencilIcon from 'vue-material-design-icons/Pencil.vue'
+import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
+import PencilIcon from 'vue-material-design-icons/PencilOutline.vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
-import TagIcon from 'vue-material-design-icons/Tag.vue'
+import TagIcon from 'vue-material-design-icons/TagOutline.vue'
 
 export default {
 	name: 'TagsModal',
