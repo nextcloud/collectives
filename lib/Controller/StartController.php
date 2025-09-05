@@ -16,6 +16,8 @@ use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\Attribute\OpenAPI;
+use OCP\AppFramework\Http\ContentSecurityPolicy;
+use OCP\AppFramework\Http\StreamResponse;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IRequest;
@@ -39,16 +41,41 @@ class StartController extends Controller {
 		}
 		$this->eventDispatcher->dispatchTyped(new LoadViewer());
 		$this->eventDispatcher->dispatchTyped(new CollectivesLoadAdditionalScriptsEvent());
-		return new TemplateResponse('collectives', 'main', [ // templates/main.php
+		$response = new TemplateResponse('collectives', 'main', [ // templates/main.php
 			'id-app-content' => '#app-content-vue',
 			'id-app-navigation' => '#app-navigation-vue',
 		]);
+
+		$policy = new ContentSecurityPolicy();
+		$policy->addAllowedWorkerSrcDomain("'self'");
+		$policy->addAllowedScriptDomain("'self'");
+		$response->setContentSecurityPolicy($policy);
+
+		return $response;
 	}
 
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	public function indexPath(string $path): TemplateResponse {
 		return $this->index();
+	}
+
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	public function serviceWorker(): StreamResponse {
+		$response = new StreamResponse(__DIR__ . '/../../js/collectives-service-worker.js');
+		$response->setHeaders([
+			'Content-Type' => 'application/javascript',
+			'Service-Worker-Allowed' => '/',
+		]);
+
+		$policy = new ContentSecurityPolicy();
+		$policy->addAllowedWorkerSrcDomain("'self'");
+		$policy->addAllowedScriptDomain("'self'");
+		$policy->addAllowedConnectDomain("'self'");
+		$response->setContentSecurityPolicy($policy);
+
+		return $response;
 	}
 
 	private function checkDependencies(): array {
