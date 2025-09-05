@@ -4,6 +4,7 @@
  */
 
 import { byName, byTitleAsc, byTitleDesc, byTimeAsc, byTimeDesc, byOrder } from '../../util/sortOrders.js'
+import { test, expect } from 'vitest'
 
 global.OC = {
 	getLanguage: () => 'en',

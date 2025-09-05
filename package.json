@@ -3,20 +3,21 @@
   "description": "Nextcloud Collectives App",
   "author": "CollectiveCloud Team",
   "license": "AGPL-3.0-or-later",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/nextcloud/collectives.git"
   },
   "scripts": {
-    "build": "NODE_ENV=production webpack --config webpack.js",
-    "dev": "NODE_ENV=development webpack --progress --config webpack.js",
-    "watch": "NODE_ENV=development webpack --progress --watch --config webpack.js",
-    "serve": "NODE_ENV=development webpack serve --allowed-hosts all --config webpack.js",
+    "build": "vite --mode production build",
+    "dev": "vite --mode development build",
+    "watch": "vite --mode development build --watch",
+    "serve": "vite --mode development serve",
     "lint": "eslint --ext .js,.vue src cypress --max-warnings=0",
     "lint:fix": "eslint --ext .js,.vue src cypress --fix",
-    "test": "NODE_ENV=test jest --passWithNoTests src/",
-    "stylelint": "stylelint css/*.css css/*.scss src/**/*.scss src/*.vue src/**/*.vue",
-    "stylelint:fix": "stylelint css/*.css css/*.scss src/**/*.scss src/**/*.vue --fix"
+    "test": "vitest run",
+    "stylelint": "stylelint css/collectives.css css/*.scss src/**/*.scss src/*.vue src/**/*.vue",
+    "stylelint:fix": "stylelint css/collectives.css css/*.scss src/**/*.scss src/**/*.vue --fix"
   },
   "dependencies": {
     "@nextcloud/auth": "^2.5.2",
@@ -49,8 +50,8 @@
     "extends @nextcloud/browserslist-config"
   ],
   "engines": {
-    "node": "^20.0.0",
-    "npm": "^10.0.0"
+    "node": "^22.0.0",
+    "npm": "^10.5.0"
   },
   "devDependencies": {
     "@nextcloud/babel-config": "^1.2.0",
@@ -59,13 +60,13 @@
     "@nextcloud/eslint-config": "^8.4.2",
     "@nextcloud/eslint-plugin": "^2.2.1",
     "@nextcloud/stylelint-config": "^3.1.0",
-    "@nextcloud/webpack-vue-config": "^6.3.0",
+    "@nextcloud/vite-config": "^1.7.0",
+    "@vue/tsconfig": "^0.5.1",
     "cypress": "^13.6.4",
     "cypress-split": "^1.24.21",
     "eslint-plugin-cypress": "^3.6.0",
-    "eslint-webpack-plugin": "^5.0.2",
-    "jest": "^30.1.3",
-    "stylelint-webpack-plugin": "^5.0.1"
+    "vite": "^7.1.4",
+    "vitest": "^3.2.4"
   },
   "overrides": {
     "sortablejs": "$sortablejs"

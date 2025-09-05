@@ -4,7 +4,6 @@
  */
 
 import { generateUrl, imagePath } from '@nextcloud/router'
-import './shared-init.js'
 
 window.addEventListener('DOMContentLoaded', () => {
 	if (OCA.Theming) {

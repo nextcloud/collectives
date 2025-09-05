@@ -1,1 +1,11 @@
+# Normally this file serves for listing files
+# that should not be included in a build.
+#
+# Vite inludes files based on what is needed by the entry points.
+# So we do not need it for this purpose.
+#
+# However eslint will assume these files are unpublished
+# and therefore allow importing dev dependencies in them.
+
+src/tests/**
 cypress/**
