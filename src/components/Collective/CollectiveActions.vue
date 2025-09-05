@@ -148,7 +148,7 @@ export default {
 
 		leaveCollectiveWithUndo(collective) {
 			showUndo(
-				t('collectives', 'Left collective {name}', { name: collective.name }),
+				t('collectives', 'You left collective {name}', { name: collective.name }),
 				() => {
 					clearTimeout(this.leaveTimeout)
 					this.leaveTimeout = null
