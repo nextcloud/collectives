@@ -65,9 +65,7 @@
     "cypress": "^13.6.4",
     "cypress-split": "^1.24.21",
     "eslint-plugin-cypress": "^3.6.0",
-    "eslint-webpack-plugin": "^5.0.2",
     "jest": "^30.1.3",
-    "stylelint-webpack-plugin": "^5.0.1",
     "vite": "^7.1.4"
   },
   "overrides": {
