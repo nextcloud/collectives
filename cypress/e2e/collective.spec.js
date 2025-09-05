@@ -143,7 +143,7 @@ describe('Collective', function() {
 
 			// Undo leave collective
 			cy.get('.toast-undo')
-				.should('contain', 'Left collective Preexisting Collective')
+				.should('contain', 'You left collective Preexisting Collective')
 			cy.get('.toast-undo button')
 				.should('contain', 'Undo')
 				.click()
