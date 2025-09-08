@@ -196,7 +196,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '../../css/animation.scss';
+@use '../../css/animation';
 
 .page-trash {
 	position: sticky;

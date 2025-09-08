@@ -4,6 +4,7 @@
  */
 
 import randomEmoji from '../../util/randomEmoji.js'
+import { test, expect } from 'vitest'
 
 test('returns an emoji', () => {
 	const emojis = ['🥳']

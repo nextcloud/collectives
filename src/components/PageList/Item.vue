@@ -381,7 +381,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../css/animation.scss';
+@use '../../css/animation';
 
 .app-content-list-item {
 	box-sizing: border-box;

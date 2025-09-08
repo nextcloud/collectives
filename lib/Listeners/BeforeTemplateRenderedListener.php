@@ -52,6 +52,7 @@ class BeforeTemplateRenderedListener implements IEventListener {
 			$userFolder = $this->userFolderHelper->getUserFolderSetting($userId);
 		}
 
+		Util::addStyle('collectives', 'collectives-style');
 		Util::addInitScript('collectives', 'collectives-init');
 
 		if ($event->getResponse()->getApp() === 'files') {

@@ -8,8 +8,6 @@ import Collectives from './Collectives.vue'
 import router from './router.js'
 import { createPinia, PiniaVuePlugin } from 'pinia'
 
-import './shared-init.js'
-
 window.OCA.Collectives = {
 	...window.OCA.Collectives,
 	vueRouter: router,

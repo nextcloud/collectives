@@ -95,5 +95,5 @@ export default {
 </style>
 
 <style lang="scss">
-@import '../css/editor';
+@use '../css/editor';
 </style>

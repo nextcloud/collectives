@@ -75,7 +75,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../css/editor';
+@use '../css/editor';
 
 .page-title {
 	max-width: unset;

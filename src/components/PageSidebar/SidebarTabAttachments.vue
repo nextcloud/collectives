@@ -405,7 +405,7 @@ export default {
 </style>
 
 <style lang="scss">
-@import '../../css/animation.scss';
+@use '../../css/animation';
 
 .highlight-animation {
 	animation: highlight-animation 5s 1;

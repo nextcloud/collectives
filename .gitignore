@@ -5,7 +5,10 @@ node_modules/
 
 # Editor directories and files
 .idea/
+
+# Compiled frontend output of vite
 js/*
+css/collectives-style.css
 
 # PHPunit cache
 .phpunit.result.cache
