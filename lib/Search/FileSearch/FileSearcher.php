@@ -12,7 +12,7 @@ namespace OCA\Collectives\Search\FileSearch;
 use OCP\Files\File;
 use OCP\Files\NotFoundException;
 use PDO;
-use TeamTNT\TNTSearch\Support\TokenizerInterface;
+use TeamTNT\TNTSearch\Tokenizer\TokenizerInterface;
 use TeamTNT\TNTSearch\TNTSearch;
 
 /**
