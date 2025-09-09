@@ -11,12 +11,12 @@
 			type="text"
 			class="page-content-skeleton" />
 		<div v-show="contentLoaded && !showEditor"
-			ref="reader"
+			ref="readerEl"
 			data-collectives-el="reader"
 			data-cy-collectives="reader" />
 		<div v-if="currentCollectiveCanEdit"
 			v-show="contentLoaded && showEditor"
-			ref="editor"
+			ref="editorEl"
 			data-collectives-el="editor"
 			data-cy-collectives="editor" />
 	</div>
@@ -32,7 +32,7 @@ import { useRootStore } from '../../stores/root.js'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { usePagesStore } from '../../stores/pages.js'
 import { useVersionsStore } from '../../stores/versions.js'
-import editorMixin from '../../mixins/editorMixin.js'
+import { useEditor } from '../../composables/useEditor.js'
 import { editorApiUpdateReadonlyBarProps } from '../../constants.js'
 import pageContentMixin from '../../mixins/pageContentMixin.js'
 import SkeletonLoading from '../SkeletonLoading.vue'
@@ -45,7 +45,6 @@ export default {
 	},
 
 	mixins: [
-		editorMixin,
 		pageContentMixin,
 	],
 
@@ -62,7 +61,8 @@ export default {
 		watch(width, value => {
 			document.documentElement.style.setProperty('--text-container-width', value + 'px')
 		})
-		return { textContainer, width }
+		const { contentLoaded, davContent, editor, editorContent, editorEl, pageContent, reader, readerEl, setupEditor, setupReader } = useEditor()
+		return { contentLoaded, davContent, editor, editorContent, editorEl, pageContent, reader, readerEl, setupEditor, setupReader, textContainer, width }
 	},
 
 	data() {
@@ -160,6 +160,16 @@ export default {
 			}
 		},
 
+		// called from the parent component as well
+		focusEditor() {
+			this.editor?.focus()
+		},
+
+		// called from the parent component as well
+		saveEditor() {
+			return this.editor.save()
+		},
+
 		async stopEdit() {
 			// switch back to edit if there's no content
 			if (!this.pageContent?.trim()) {
@@ -174,7 +184,7 @@ export default {
 			if (changed) {
 				// Save pending changes in editor
 				// TODO: detect missing connection and display warning
-				await this.save()
+				await this.saveEditor()
 					.catch(() => {
 						showError(t('collectives', 'Error saving the document. Please try again.'))
 						this.setTextEdit()
