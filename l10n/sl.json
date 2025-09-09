@@ -10,7 +10,6 @@
     "You are not allowed to edit %s" : "Ni ustreznih dovoljenj za urejanje %s",
     "Share not found for user" : "Za uporabnika ni najdenega mesta souporabe",
     "A place for activist and community projects to build shared knowledge" : "Mesto za skupno izgrajevanje vsebine in znanja",
-    "Left collective {name}" : "Zapustili ste zbirko {name}",
     "Could not leave the collective. {errorMessage}" : "Ni mogoče zapustiti zbirke: {errorMessage}",
     "Manage members" : "Uredi člane",
     "Share link" : "Povezava za souporabo",

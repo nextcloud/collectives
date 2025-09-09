@@ -12,7 +12,6 @@ OC.L10N.register(
     "You are not allowed to edit %s" : "No tienes permisos para editar %s",
     "Share not found for user" : "No se encontró la compartición para el usuario",
     "A place for activist and community projects to build shared knowledge" : "Un lugar para proyectos activistas y comunitarios para construir conocimiento compartido",
-    "Left collective {name}" : "Abandonaste el colectivo {name}",
     "Could not leave the collective. {errorMessage}" : "No se pudo abandonar el colectivo. {errorMessage}",
     "Manage members" : "Administrar miembros",
     "Share link" : "Compartir liga",

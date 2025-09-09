@@ -14,7 +14,6 @@ OC.L10N.register(
     "You are not allowed to edit %s" : "Nincs jogosultsága a(z) %s szerkesztéséhez",
     "Share not found for user" : "Nem található megosztás a felhasználóhoz",
     "A place for activist and community projects to build shared knowledge" : "Egy hely az aktivisták és a közösségi projektek számára, hogy közös tudásbázist építsenek",
-    "Left collective {name}" : "A(z) {name} kollektíva elhagyva.",
     "Could not leave the collective. {errorMessage}" : "Nem sikerült a kollektíva elhagyása. {errorMessage}",
     "Manage members" : "Tagok kezelése",
     "Share link" : "Megosztási hivatkozás",

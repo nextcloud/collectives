@@ -20,7 +20,6 @@
     "PDO SQLite driver is enabled, full text search of page content is available." : "راننده PDO SQLite روشن شده است، جستجوی کامل متن محتوای برگه در دسترس است.",
     "Collectives app is enabled, but PDO SQLite driver is missing. Please install it to enable full text search of the page content." : "برنامه انجمن‌ها روشن شده است، اما راننده PDO SQLite نیست. لطفاً آن را نصب کنید تا جستجوی کامل متن محتوای برگه به‌کار افتد.",
     "A place for activist and community projects to build shared knowledge" : "A place for activist and community projects to build shared knowledge",
-    "Left collective {name}" : "Left collective {name}",
     "Could not leave the collective. {errorMessage}" : "Could not leave the collective. {errorMessage}",
     "Manage members" : "Manage members",
     "Share link" : "هم‌رسانی پیوند",

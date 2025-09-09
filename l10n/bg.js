@@ -12,7 +12,6 @@ OC.L10N.register(
     "You are not allowed to edit %s" : "Нямате права да редактирате %s",
     "Share not found for user" : "Не е намерено споделяне за потребителя",
     "A place for activist and community projects to build shared knowledge" : "Място за активисти и обществени проекти за изграждане на споделени знания",
-    "Left collective {name}" : "Напускане на колектива {name}",
     "Could not leave the collective. {errorMessage}" : "Не можа да се напусне колектива. {errorMessage}",
     "Manage members" : "Управление на членове",
     "Share link" : "Връзка за споделяне",
