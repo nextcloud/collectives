@@ -65,7 +65,7 @@
     "cypress": "^13.6.4",
     "cypress-split": "^1.24.21",
     "eslint-plugin-cypress": "^3.6.0",
-    "vite": "^7.1.4",
+    "vite": "^7.1.5",
     "vitest": "^3.2.4"
   },
   "overrides": {
