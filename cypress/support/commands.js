@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { logout } from '@nextcloud/cypress/commands'
-import { User } from '@nextcloud/cypress'
+import { logout } from '@nextcloud/e2e-test-server/commands'
+import { User } from '@nextcloud/e2e-test-server'
 
 import * as api from '../../src/apis/collectives/index.js'
 import axios from '@nextcloud/axios'
