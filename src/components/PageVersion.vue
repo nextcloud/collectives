@@ -45,13 +45,12 @@
 		<div v-show="contentLoaded"
 			id="text-container"
 			:class="[isFullWidth ? 'full-width-view' : 'sheet-view']">
-			<div ref="reader" data-collectives-el="reader" data-cy-collectives="reader" />
+			<div ref="readerEl" data-collectives-el="reader" data-cy-collectives="reader" />
 		</div>
 	</div>
 </template>
 
 <script>
-import editorMixin from '../mixins/editorMixin.js'
 import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import pageContentMixin from '../mixins/pageContentMixin.js'
 
@@ -66,6 +65,7 @@ import EmoticonIcon from 'vue-material-design-icons/EmoticonOutline.vue'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
 import PageTitle from './Page/PageTitle.vue'
 import SkeletonLoading from './SkeletonLoading.vue'
+import { useEditor } from '../composables/useEditor.js'
 
 export default {
 	name: 'PageVersion',
@@ -82,10 +82,14 @@ export default {
 	},
 
 	mixins: [
-		editorMixin,
 		isMobile,
 		pageContentMixin,
 	],
+
+	setup() {
+		const { davContent, reader, readerEl, setupReader } = useEditor()
+		return { davContent, reader, readerEl, setupReader }
+	},
 
 	computed: {
 		...mapState(useRootStore, ['loading']),

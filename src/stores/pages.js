@@ -453,8 +453,9 @@ export const usePagesStore = defineStore('pages', {
 			// Default to 'true' if unset
 			set(this.outline, pageId, this.outline[pageId] == null ? true : !this.outline[pageId])
 		},
-		showOutline(pageId) { set(this.outline, pageId, true) },
-		hideOutline(pageId) { set(this.outline, pageId, false) },
+		setOutlineForCurrentPage(visible) {
+			set(this.outline, this.currentPage.id, visible)
+		},
 
 		expandParents(pageId) {
 			for (const page of this.pageParents(pageId)) {
