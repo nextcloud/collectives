@@ -48,7 +48,7 @@
 					:class="isCollapsed(pageId) ? 'collapsed' : 'expanded'" />
 			</template>
 			<template v-if="showFavoriteStar">
-				<StarIcon v-show="!filteredView"
+				<StarIconFilled v-show="!filteredView"
 					:size="18"
 					fill-color="var(--color-warning)"
 					:title="t('collectives', 'Favorite')"
@@ -106,7 +106,7 @@ import MenuRightIcon from 'vue-material-design-icons/MenuRightOutline.vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import PageIcon from '../Icon/PageIcon.vue'
 import PageActionMenu from '../Page/PageActionMenu.vue'
-import StarIcon from 'vue-material-design-icons/StarOutline.vue'
+import StarIconFilled from 'vue-material-design-icons/Star.vue'
 
 export default {
 	name: 'Item',
@@ -119,7 +119,7 @@ export default {
 		PageIcon,
 		PageActionMenu,
 		PlusIcon,
-		StarIcon,
+		StarIconFilled,
 	},
 
 	mixins: [
