@@ -22,7 +22,6 @@ OC.L10N.register(
     "PDO SQLite driver" : "PDO SQLite ドライバー",
     "PDO SQLite driver is enabled, full text search of page content is available." : "PDO SQLite ドライバーが有効で、ページ内容の全文検索が使用できます。",
     "Collectives app is enabled, but PDO SQLite driver is missing. Please install it to enable full text search of the page content." : "Collectivesアプリは有効ですが、PDF SQLiteドライバーがありません。ページ内容の全文検索を有効にするにはインストールが必要です。",
-    "Left collective {name}" : "{name}さんがコレクティブから退出しました",
     "Could not leave the collective. {errorMessage}" : "次の理由でコレクティブから退出できません。 {errorMessage}",
     "Manage members" : "メンバーの管理",
     "Manage templates" : "管理テンプレート",

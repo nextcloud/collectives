@@ -14,7 +14,6 @@
     "You are not allowed to edit %s" : "No teniu permís per editar %s",
     "Share not found for user" : "No s'ha trobat la compartició per a l'usuari",
     "A place for activist and community projects to build shared knowledge" : "Un espai per activistes i projectes comunitaris per crear contingut compartit",
-    "Left collective {name}" : "Col·lectiu abandonat {name}",
     "Could not leave the collective. {errorMessage}" : "No es va poder abandonar el col·lectiu. {errorMessage}",
     "Manage members" : "Gestionar membres",
     "Share link" : "Comparteix l'enllaç",
