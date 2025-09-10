@@ -36,6 +36,7 @@ import { useEditor } from '../../composables/useEditor.js'
 import { editorApiUpdateReadonlyBarProps } from '../../constants.js'
 import pageContentMixin from '../../mixins/pageContentMixin.js'
 import SkeletonLoading from '../SkeletonLoading.vue'
+import { useReader } from '../../composables/useReader.js'
 
 export default {
 	name: 'TextEditor',
@@ -61,7 +62,9 @@ export default {
 		watch(width, value => {
 			document.documentElement.style.setProperty('--text-container-width', value + 'px')
 		})
-		const { contentLoaded, davContent, editor, editorContent, editorEl, pageContent, reader, readerEl, setupEditor, setupReader } = useEditor()
+		const davContent = ref('')
+		const { contentLoaded, editor, editorContent, editorEl, pageContent, setupEditor } = useEditor(davContent)
+		const { reader, readerEl, setupReader } = useReader(pageContent)
 		return { contentLoaded, davContent, editor, editorContent, editorEl, pageContent, reader, readerEl, setupEditor, setupReader, textContainer, width }
 	},
 
@@ -112,7 +115,7 @@ export default {
 	},
 
 	async mounted() {
-		const readerPromise = this.setupReader()
+		const readerPromise = this.setupReader(this.currentPage)
 		const editorPromise = this.setupEditor()
 		const pageContentPromise = this.getPageContent()
 		Promise.all([readerPromise, editorPromise, pageContentPromise]).then(() => {
@@ -202,7 +205,6 @@ export default {
 
 		async getPageContent() {
 			this.davContent = await this.fetchPageContent(this.currentPageDavUrl)
-			this.reader?.setContent(this.pageContent)
 			this.done('pageContent')
 		},
 	},
