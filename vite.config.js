@@ -48,29 +48,53 @@ export default createAppConfig(
 						inlineWorkboxRuntime: true,
 						// Let all clients use the new service worker version immediately after update
 						skipWaiting: true,
-						// Precaching
-						globPatterns: ["**/*.{js,wasm,css,html,mjs}"],
-						//globPatterns: undefined,
-						//globDirectory: undefined,
-						//globIgnores: undefined,
-						maximumFileSizeToCacheInBytes: 5242880,
+						// Disable precaching
+						globPatterns: undefined,
+						globDirectory: undefined,
+						globIgnores: undefined,
 						// Don't create a sourcemap for the service worker files
 						// sourcemap: false,
 
-						// Fallback URL for requests that are not cached.
-						// TODO: Doesn't work as expected, needs to point to a precached static HTML file
-						navigateFallback: '/index.php/apps/collectives',
-
 						// Configure cache responses for runtime routes
 						runtimeCaching: [
-							// Cache for all GET requests
+							// Cache for navigation requests within the vue router scope
 							{
 								// Strategy: try network first, then cache
 								handler: 'NetworkFirst',
-								// Cache all requests
-								urlPattern: /^.*/,
+								// Cache assets and API requests
+								// urlPattern: /^.*/,
+								urlPattern: ({ url, request }) => request.mode === 'navigate'
+									&& url.pathname.match(/(?:\/index\.php)?\/apps\/collectives/),
 								options: {
-									cacheName: 'collectives',
+									cacheName: 'collectives-vue-router',
+									// Cache max 10000 requests for one week
+									expiration: {
+										maxAgeSeconds: 3600 * 24 * 7, // one week
+										maxEntries: 10000,
+									},
+									plugins: [{
+										cacheKeyWillBeUsed: async () => {
+											// Always use same cache key (apps entrypoint) for vue-router URLs
+											// This means we only store one document: the main entry page
+											return '/apps/collectives/'
+										},
+										handlerDidError: async () => {
+											// If network fails, respond with cached app entrypoint
+											const cache = await self.caches.open('collectives-vue-router')
+											return await cache.match('/apps/collectives/') || Response.error()
+										},
+									}],
+								},
+							},
+							// Cache for any non-navigation requests
+							{
+								// Strategy: try network first, then cache
+								handler: 'NetworkFirst',
+								// Cache assets and API requests
+								// urlPattern: /^.*/,
+								urlPattern: ({ request }) => request.mode !== 'navigate',
+								options: {
+									cacheName: 'collectives-runtime',
 									// Cache max 10000 requests for one week
 									expiration: {
 										maxAgeSeconds: 3600 * 24 * 7, // one week
