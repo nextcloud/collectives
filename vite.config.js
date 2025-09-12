@@ -35,9 +35,9 @@ export default createAppConfig(
 					manifest: false,
 					// Don't try to inject service worker registration. We do it manually at Collectives.vue
 					injectRegister: false,
-					// Service worker asset destination
-					outDir: 'js',
-					filename: 'collectives-service-worker.js',
+					// matching nextcloud-vite-config
+					outDir: './',
+					filename: 'js/collectives-service-worker.js',
 					// Enable service worker in development build
 					devOptions: { enabled: true },
 
@@ -49,7 +49,10 @@ export default createAppConfig(
 						// Let all clients use the new service worker version immediately after update
 						skipWaiting: true,
 						// Precache for collectives app assets
-						globPatterns: ["**/*.{js,css,mjs}"],
+						globPatterns: [
+							"js/*.mjs",
+							"css/*.css",
+						],
 						maximumFileSizeToCacheInBytes: 5242880,
 
 						// Disable navigateFallback (required as precache seems to auto-enable it)
