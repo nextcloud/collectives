@@ -26,7 +26,6 @@
 </template>
 
 <script>
-import { generateUrl } from '@nextcloud/router'
 import { NcContent } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
 import CollectiveSettings from './components/Nav/CollectiveSettings.vue'
@@ -38,6 +37,7 @@ import { usePagesStore } from './stores/pages.js'
 import { useRootStore } from './stores/root.js'
 import { useSettingsStore } from './stores/settings.js'
 import displayError from './util/displayError.js'
+import registerServiceWorker from './util/registerServiceWorker.ts'
 
 export default {
 	name: 'CollectivesApp',
@@ -101,36 +101,11 @@ export default {
 		},
 	},
 
-	beforeMount() {
-		if ('serviceWorker' in navigator) {
-			// Use the window load event to keep the page load performant
-			window.addEventListener('load', () => {
-				navigator.serviceWorker.register(generateUrl('/apps/collectives/service-worker.js', {}, {
-					noRewrite: true,
-				}), {
-					scope: generateUrl('/apps/collectives'),
-				}).then((registration) => {
-					console.debug('SW registered: ', { registration })
-				}).catch((registrationError) => {
-					console.error('SW registration failed: ', { registrationError })
-				})
-			})
-		} else {
-			console.error('Service worker is not enabled on this browser.')
-		}
-	},
-
-	beforeDestroy() {
-		window.removeEventListener('load', () => {
-			navigator.serviceWorker.register(generateUrl('/apps/collectives/service-worker.js', {}, {
-				noRewrite: true,
-			}), {
-				scope: generateUrl('/apps/collectives'),
-			})
-		})
-	},
-
 	mounted() {
+		if ('serviceWorker' in navigator) {
+			registerServiceWorker()
+		}
+
 		this.getCollectivesAndSettings()
 	},
 
