@@ -17,7 +17,7 @@ use OCP\Files\NotFoundException;
 use OCP\Files\NotPermittedException;
 use OCP\Lock\LockedException;
 use PDO;
-use TeamTNT\TNTSearch\Contracts\EngineContract;
+use TeamTNT\TNTSearch\Engines\EngineInterface;
 use TeamTNT\TNTSearch\Indexer\TNTIndexer;
 use TeamTNT\TNTSearch\Support\Collection;
 
@@ -25,7 +25,7 @@ use TeamTNT\TNTSearch\Support\Collection;
  * @property PDO|null $index
  */
 class FileIndexer extends TNTIndexer {
-	public function __construct(EngineContract $engine) {
+	public function __construct(EngineInterface $engine) {
 		parent::__construct($engine);
 		$this->disableOutput(true);
 	}
