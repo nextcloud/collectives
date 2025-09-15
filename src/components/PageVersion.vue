@@ -65,7 +65,8 @@ import EmoticonIcon from 'vue-material-design-icons/EmoticonOutline.vue'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
 import PageTitle from './Page/PageTitle.vue'
 import SkeletonLoading from './SkeletonLoading.vue'
-import { useEditor } from '../composables/useEditor.js'
+import { useReader } from '../composables/useReader.js'
+import { ref } from 'vue'
 
 export default {
 	name: 'PageVersion',
@@ -87,8 +88,9 @@ export default {
 	],
 
 	setup() {
-		const { davContent, reader, readerEl, setupReader } = useEditor()
-		return { davContent, reader, readerEl, setupReader }
+		const content = ref('')
+		const { reader, readerEl, setupReader } = useReader(content)
+		return { content, reader, readerEl, setupReader }
 	},
 
 	computed: {
@@ -112,20 +114,20 @@ export default {
 		},
 
 		contentLoaded() {
-			return !!this.davContent || !this.loading(`version-${this.currentPage.id}-${this.selectedVersion.mtime}`)
+			return !!this.content || !this.loading(`version-${this.currentPage.id}-${this.selectedVersion.mtime}`)
 		},
 	},
 
 	watch: {
 		'selectedVersion.mtime'() {
-			this.davContent = ''
+			this.content = ''
 			this.getPageContent()
 		},
 	},
 
 	mounted() {
 		this.pageInfoBarPage = {}
-		this.setupReader()
+		this.setupReader(this.currentPage)
 		this.getPageContent()
 	},
 
@@ -150,8 +152,7 @@ export default {
 
 		async getPageContent() {
 			this.load(`version-${this.currentPage.id}-${this.selectedVersion.mtime}`)
-			this.davContent = await this.fetchPageContent(this.selectedVersion.url)
-			this.reader?.setContent(this.davContent)
+			this.content = await this.fetchPageContent(this.selectedVersion.url)
 			this.done(`version-${this.currentPage.id}-${this.selectedVersion.mtime}`)
 		},
 	},

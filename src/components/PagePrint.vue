@@ -23,7 +23,8 @@ import { mapState } from 'pinia'
 import { useCollectivesStore } from '../stores/collectives.js'
 import pageContentMixin from '../mixins/pageContentMixin.js'
 import { usePagesStore } from '../stores/pages.js'
-import { useEditor } from '../composables/useEditor.js'
+import { useReader } from '../composables/useReader.js'
+import { ref } from 'vue'
 
 export default {
 	name: 'PagePrint',
@@ -39,9 +40,10 @@ export default {
 		},
 	},
 
-	setup(props) {
-		const { davContent, reader, readerEl, setupReader } = useEditor(props.page)
-		return { davContent, reader, readerEl, setupReader }
+	setup() {
+		const content = ref('')
+		const { reader, readerEl, setupReader } = useReader(content)
+		return { content, reader, readerEl, setupReader }
 	},
 
 	computed: {
@@ -56,7 +58,7 @@ export default {
 	mounted() {
 		this.$emit('loading')
 
-		this.setupReader().then(() => {
+		this.setupReader(this.page).then(() => {
 			this.getPageContent().then(() => {
 				this.$emit('ready')
 			})
@@ -65,8 +67,7 @@ export default {
 
 	methods: {
 		async getPageContent() {
-			this.davContent = await this.fetchPageContent(this.pageDavUrl(this.page))
-			this.reader?.setContent(this.davContent)
+			this.content = await this.fetchPageContent(this.pageDavUrl(this.page))
 		},
 	},
 }
