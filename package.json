@@ -44,7 +44,8 @@
     "vue-material-design-icons": "^5.3.1",
     "vue-router": "^3.6.5",
     "vue-virtual-scroller": "^1.1.2",
-    "vuedraggable": "^2.24.3"
+    "vuedraggable": "^2.24.3",
+    "workbox-precaching": "^7.3.0"
   },
   "browserslist": [
     "extends @nextcloud/browserslist-config"
