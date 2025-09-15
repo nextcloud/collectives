@@ -69,6 +69,7 @@
     "vite": "^7.1.9",
     "vite-plugin-pwa": "^1.0.3",
     "vitest": "^3.2.4",
+    "workbox-core": "^7.3.0",
     "workbox-precaching": "^7.3.0"
   },
   "overrides": {
