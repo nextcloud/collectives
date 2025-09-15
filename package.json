@@ -69,7 +69,8 @@
     "vite": "^7.1.11",
     "vite-plugin-pwa": "^1.0.3",
     "vitest": "^3.2.4",
-    "wait-on": "^9.0.1"
+    "wait-on": "^9.0.1",
+    "workbox-precaching": "^7.3.0"
   },
   "overrides": {
     "sortablejs": "$sortablejs"
