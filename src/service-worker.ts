@@ -10,17 +10,17 @@ declare let self: ServiceWorkerGlobalScope
 // self.__WB_MANIFEST is default injection point
 const manifest = self.__WB_MANIFEST
 
-const registrationUrl = new URL(location.href);
-const prefix = registrationUrl.searchParams.get('prefix');
+const registrationUrl = new URL(location.href)
+const prefix = registrationUrl.searchParams.get('prefix')
 
 const itemsToPrecache = manifest.map(item => {
-    if (typeof item === 'string') {
-        return prefix + item
-    } else {
-        item.url = prefix + item.url
-        return item;
-    }
-});
+	if (typeof item === 'string') {
+		return prefix + item
+	} else {
+		item.url = prefix + item.url
+		return item
+	}
+})
 
 precacheAndRoute(itemsToPrecache)
 
