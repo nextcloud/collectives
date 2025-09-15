@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { clientsClaim } from 'workbox-core'
 import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching'
 
 declare let self: ServiceWorkerGlobalScope
@@ -28,3 +29,4 @@ precacheAndRoute(itemsToPrecache)
 cleanupOutdatedCaches()
 
 self.skipWaiting()
+clientsClaim()
