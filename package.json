@@ -46,7 +46,10 @@
     "vue-virtual-scroller": "^1.1.2",
     "vuedraggable": "^2.24.3",
     "workbox-core": "^7.3.0",
-    "workbox-precaching": "^7.3.0"
+    "workbox-expiration": "^7.3.0",
+    "workbox-precaching": "^7.3.0",
+    "workbox-routing": "^7.3.0",
+    "workbox-strategies": "^7.3.0"
   },
   "browserslist": [
     "extends @nextcloud/browserslist-config"
