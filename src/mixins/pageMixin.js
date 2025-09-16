@@ -101,14 +101,11 @@ export default {
 		async copy(oldParentId, newParentId, pageId, newIndex) {
 			// Copy subpage to new parent
 			try {
-				this.load('currentPage')
 				await this.copyPage({ newParentId, pageId, index: newIndex })
 			} catch (e) {
 				console.error(e)
 				showError(t('collectives', 'Could not copy page'))
 				return
-			} finally {
-				this.done('currentPage')
 			}
 
 			showSuccess(t('collectives', `Page ${this.pageTitle(pageId)} copied to ${this.pageTitle(newParentId)}`))
@@ -129,8 +126,10 @@ export default {
 			this.addToSubpageOrder({ parentId: newParentId, pageId, newIndex })
 
 			// Move subpage to new parent
-			try {
+			if (currentPageId === pageId) {
 				this.load('currentPage')
+			}
+			try {
 				await this.movePage({ newParentId, pageId, index: newIndex })
 			} catch (e) {
 				showError(t('collectives', 'Could not move page'))
