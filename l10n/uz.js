@@ -8,6 +8,7 @@ OC.L10N.register(
     "Loading…" : "Loading…",
     "Remove {name}" : " {name} ni o'chirish",
     "Add emoji" : "Emoji qo'shing",
+    "View" : "Ko'rish",
     "Edit" : "Tahrirlash",
     "Choose" : "Tanlang",
     "Restore" : "Qayta tiklangan",
