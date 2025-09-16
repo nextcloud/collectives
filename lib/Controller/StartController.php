@@ -63,7 +63,7 @@ class StartController extends Controller {
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	public function serviceWorker(): StreamResponse {
-		$response = new StreamResponse(__DIR__ . '/../../service-worker.js');
+		$response = new StreamResponse(__DIR__ . '/../../js/service-worker.js');
 		$response->setHeaders([
 			'Content-Type' => 'application/javascript',
 			'Service-Worker-Allowed' => '/',
