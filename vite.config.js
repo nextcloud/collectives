@@ -35,16 +35,30 @@ export default createAppConfig(
 					manifest: false,
 					// Don't try to inject service worker registration. We do it manually at Collectives.vue
 					injectRegister: false,
-					outDir: './',
+					outDir: 'js',
 					// Enable service worker in development build
 					devOptions: { enabled: true },
 					strategies: 'injectManifest',
 					srcDir: 'src',
 					filename: 'service-worker.js',
 					injectManifest: {
+						// Adjust paths in precaching manifest URLs
+						manifestTransforms: [
+							async (manifest) => {
+								manifest.map((entry) => {
+									if (entry.url.startsWith('../css/')) {
+										entry.url = entry.url.replace('../css/', 'css/')
+									} else {
+										entry.url = 'js/' + entry.url
+									}
+									return entry
+								})
+								return { manifest, warnings: [] }
+							},
+						],
 						globPatterns: [
-							 "css/*.css",
-							 "js/*.mjs",
+							 "../css/*.css",
+							 "*.mjs",
 						],
 						maximumFileSizeToCacheInBytes: 5242880,
 					},
