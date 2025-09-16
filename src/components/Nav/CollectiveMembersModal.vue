@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<NcDialog :name="t('collectives', 'Members of collective {name}', { name: collective.name })"
+	<NcDialog :name="t('collectives', 'Members of collective {name}', { name: collective.name }, { escape: false })"
 		size="normal"
 		@closing="onClose">
 		<div class="modal-collective-members">
