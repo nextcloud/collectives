@@ -29,6 +29,7 @@ import { useSettingsStore } from './stores/settings.js'
 import { useCollectivesStore } from './stores/collectives.js'
 import { usePagesStore } from './stores/pages.js'
 import displayError from './util/displayError.js'
+import registerServiceWorker from './util/registerServiceWorker.ts'
 import { NcContent } from '@nextcloud/vue'
 import CollectiveSettings from './components/Nav/CollectiveSettings.vue'
 import Navigation from './components/Navigation.vue'
@@ -82,6 +83,9 @@ export default {
 	},
 
 	mounted() {
+		if ('serviceWorker' in navigator) {
+			registerServiceWorker()
+		}
 		this.rootStore.load('pagelist')
 		this.getCollectives()
 			.catch(displayError('Could not fetch collectives'))
