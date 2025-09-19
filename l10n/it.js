@@ -27,6 +27,7 @@ OC.L10N.register(
     "An error occurred while performing the search" : "Si è verificato un errore durante l'esecuzione della ricerca",
     "Loading…" : "Caricamento…",
     "Add groups" : "Aggiungi gruppi",
+    "Add teams" : "Aggiungi teams",
     "Change emoji" : "Cambia emoji",
     "Add emoji" : "Aggiungi emoji",
     "Editing permissions updated" : "Permessi di modifica aggiornati",
