@@ -288,6 +288,7 @@ OC.L10N.register(
     "Show templates" : "Εμφάνιση προτύπων",
     "Sort by title" : "Ταξινόμηση κατά τίτλο",
     "Sorted by title" : "Ταξινομημένο κατά τίτλο",
+    "_%n byte_::_%n bytes_" : ["%n byte","%n bytes"],
     "Pages that link to this one" : "Σελίδες που συνδέονται με αυτήν",
     "Old versions of this page" : "Παλιές εκδόσεις αυτής της σελίδας",
     "Link copied to the clipboard." : "Ο σύνδεσμος αντιγράφηκε στο πρόχειρο.",
