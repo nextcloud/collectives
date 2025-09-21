@@ -218,6 +218,7 @@
     "Download version" : "Λήψη έκδοσης",
     "Delete version" : "Διαγραφή έκδοσης",
     "Version name" : "Όνομα έκδοσης",
+    "Named versions are persisted, and excluded from automatic cleanups when your storage quota is full." : "Οι ονομασμένες εκδόσεις διατηρούνται και εξαιρούνται από αυτόματες εκκαθαρίσεις όταν ο χώρος αποθήκευσής σας είναι πλήρης.",
     "Remove version name" : "Αφαίρεση ονόματος έκδοσης",
     "Save version name" : "Αποθήκευση ονόματος έκδοσης",
     "Attachments" : "Συνημμένα",
