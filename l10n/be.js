@@ -6,6 +6,8 @@ OC.L10N.register(
     "Members" : "Удзельнікі",
     "No search results" : "Няма вынікаў пошуку",
     "moderator" : "мадэратар",
+    "Promote to moderator" : "Прызначыць мадэратарам",
+    "Promote to admin" : "Прызначыць адміністратарам",
     "Remove" : "Выдаліць",
     "Loading…" : "Загрузка…",
     "Remove {name}" : "Выдаліць {name}",
