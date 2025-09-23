@@ -50,7 +50,7 @@
 			<template v-if="showFavoriteStar">
 				<StarIconFilled v-show="!filteredView"
 					:size="18"
-					fill-color="var(--color-warning)"
+					fill-color="var(--color-favorite)"
 					:title="t('collectives', 'Favorite')"
 					class="item-icon-favorite" />
 			</template>
