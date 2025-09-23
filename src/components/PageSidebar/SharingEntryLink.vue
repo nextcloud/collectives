@@ -31,6 +31,7 @@
 							ref="quickShareDropdown"
 							class="share-select-dropdown"
 							:aria-labelledby="dropdownId"
+							:title="offlineTitle"
 							tabindex="0"
 							@keydown.down="handleArrowDown"
 							@keydown.up="handleArrowUp"
@@ -38,7 +39,10 @@
 							<button v-for="option in dropdownOptions"
 								:key="option"
 								class="dropdown-item"
-								:class="{ 'selected': option === selectedDropdownOption }"
+								:class="{
+									'button--disabled': !networkOnline,
+									'selected': option === selectedDropdownOption,
+								}"
 								:aria-selected="option === selectedDropdownOption"
 								@click="selectOption(option)">
 								{{ option }}
@@ -116,6 +120,8 @@
 				class="sharing-entry__actions"
 				:aria-label="actionsTooltip"
 				menu-align="right"
+				:disabled="!networkOnline"
+				:title="offlineTitle"
 				:open.sync="open">
 				<template v-if="share">
 					<NcActionButton class="new-share-link" @click.prevent.stop="onNewShare">
@@ -186,6 +192,8 @@ import { mapActions, mapState } from 'pinia'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { useSharesStore } from '../../stores/shares.js'
 import { usePagesStore } from '../../stores/pages.js'
+import { useNetworkState } from '../../composables/useNetworkState.ts'
+
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 import { showError, showSuccess } from '@nextcloud/dialogs'
@@ -254,6 +262,11 @@ export default {
 		},
 	},
 
+	setup() {
+		const { networkOnline } = useNetworkState()
+		return { networkOnline }
+	},
+
 	data() {
 		return {
 			showDropdown: false,
@@ -276,6 +289,12 @@ export default {
 			return this.index > 1
 				? t('collectives', 'Share link ({index})', { index: this.index })
 				: t('collectives', 'Share link')
+		},
+
+		offlineTitle() {
+			return this.networkOnline
+				? ''
+				: t('collectives', 'You are offline')
 		},
 
 		dropdownId() {
@@ -715,6 +734,11 @@ export default {
 			width: 100%;
 			white-space: nowrap;
 			text-align: left;
+
+			&.button--disabled {
+				pointer-events: none;
+				opacity: .5;
+			}
 
 			&:hover {
 				background-color: var(--color-background-dark);
