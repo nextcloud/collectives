@@ -301,6 +301,9 @@ export default {
 		},
 
 		async deleteMarked() {
+			if (this.deletedTagIds.length < 1) {
+				return
+			}
 			for (const tagId of this.deletedTagIds) {
 				const tag = this.sortedTags.find(t => t.id === tagId)
 				this.load(`page-tag-${this.pageId}-${tagId}`)
