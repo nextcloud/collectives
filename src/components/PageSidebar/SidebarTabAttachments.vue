@@ -12,8 +12,11 @@
 			</template>
 		</NcEmptyContent>
 
+		<!-- offline -->
+		<OfflineContent v-else-if="!loaded && !networkOnline" />
+
 		<!-- error message -->
-		<NcEmptyContent v-else-if="error" :name="error">
+		<NcEmptyContent v-else-if="error " :name="error">
 			<template #icon>
 				<AlertOctagonIcon />
 			</template>
@@ -54,6 +57,8 @@
 						</NcActionButton>
 						<NcActionLink :href="davUrl(attachment)"
 							:download="attachment.name"
+							:class="{'action-link--disabled': !networkOnline}"
+							:title="offlineTitle"
 							:close-after-click="true">
 							<template #icon>
 								<DownloadIcon />
@@ -62,6 +67,8 @@
 						</NcActionLink>
 						<NcActionLink v-if="!isPublic"
 							:href="filesUrl(attachment.id)"
+							:class="{'action-link--disabled': !networkOnline}"
+							:title="offlineTitle"
 							:close-after-click="true">
 							<template #icon>
 								<FolderIcon />
@@ -143,6 +150,8 @@
 import { mapActions, mapState } from 'pinia'
 import { useRootStore } from '../../stores/root.js'
 import { usePagesStore } from '../../stores/pages.js'
+import { useNetworkState } from '../../composables/useNetworkState.ts'
+
 import { listen } from '@nextcloud/notify_push'
 import { formatFileSize } from '@nextcloud/files'
 import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
@@ -156,6 +165,7 @@ import EyeIcon from 'vue-material-design-icons/EyeOutline.vue'
 import FolderIcon from 'vue-material-design-icons/FolderOutline.vue'
 import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
+import OfflineContent from './OfflineContent.vue'
 
 export default {
 	name: 'SidebarTabAttachments',
@@ -170,6 +180,7 @@ export default {
 		NcEmptyContent,
 		NcLoadingIcon,
 		NcListItem,
+		OfflineContent,
 		PaperclipIcon,
 		RestoreIcon,
 	},
@@ -181,8 +192,14 @@ export default {
 		},
 	},
 
+	setup() {
+		const { networkOnline } = useNetworkState()
+		return { networkOnline }
+	},
+
 	data() {
 		return {
+			loaded: false,
 			error: '',
 		}
 	},
@@ -197,8 +214,6 @@ export default {
 			'attachments',
 			'currentPage',
 			'deletedAttachments',
-			'pagePath',
-			'pagePathTitle',
 			'isTextEdit',
 		]),
 
@@ -209,6 +224,12 @@ export default {
 		// Sort attachments chronologically, most recent first
 		sortedAttachments() {
 			return [...this.attachments].sort((a, b) => a.timestamp < b.timestamp)
+		},
+
+		offlineTitle() {
+			return this.networkOnline
+				? ''
+				: t('collectives', 'You are offline')
 		},
 
 		formattedFileSize() {
@@ -272,14 +293,17 @@ export default {
 
 	watch: {
 		'page.id'() {
-			this.load('attachments')
-			this.getAttachmentsForPage()
+			this.getAttachmentsForPage(true)
+		},
+		'networkOnline'(val) {
+			if (val && !this.loaded) {
+				this.getAttachmentsForPage(true)
+			}
 		},
 	},
 
 	mounted() {
-		this.load('attachments')
-		this.getAttachmentsForPage()
+		this.getAttachmentsForPage(true)
 		// Reload attachment list on event from Text
 		subscribe('collectives:text-image-node:add', this.getAttachmentsForPage)
 		subscribe('text:image-node:add', this.getAttachmentsForPage)
@@ -307,10 +331,20 @@ export default {
 
 		/**
 		 * Get attachments for a page
+		 *
+		 * @param {boolean} setLoading Whether to set loading attribute
 		 */
-		async getAttachmentsForPage() {
+		async getAttachmentsForPage(setLoading) {
+			if (!this.networkOnline) {
+				return
+			}
+
+			if (setLoading) {
+				this.load('attachments')
+			}
 			try {
 				await this.getAttachments(this.page)
+				this.loaded = true
 			} catch (e) {
 				this.error = t('collectives', 'Could not get attachments')
 				console.error('Failed to get page attachments', e)
@@ -401,6 +435,11 @@ export default {
 .attachment-list-subheading {
 	padding: 0.3rem 8px;
 	font-weight: bold;
+}
+
+.action-link--disabled {
+	pointer-events: none;
+	opacity: .5;
 }
 </style>
 
