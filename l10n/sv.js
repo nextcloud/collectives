@@ -23,6 +23,7 @@ OC.L10N.register(
     "PDO SQLite driver is enabled, full text search of page content is available." : "PDO SQLite-drivrutinen är aktiverad, fulltextsökning av sidinnehåll är tillgänglig.",
     "Collectives app is enabled, but PDO SQLite driver is missing. Please install it to enable full text search of the page content." : "Collectives-appen är aktiverad, men PDO SQLite-drivrutinen saknas. Installera det för att möjliggöra fulltextsökning av sidans innehåll.",
     "A place for activist and community projects to build shared knowledge" : "En plats för aktivist- och samhällsprojekt för att bygga delad kunskap",
+    "You left collective {name}" : "Du lämnade collective {name}",
     "Could not leave the collective. {errorMessage}" : "Kunde inte lämna collective. {errorMessage}",
     "Manage members" : "Hantera medlemmar",
     "Manage templates" : "Hantera mallar",
