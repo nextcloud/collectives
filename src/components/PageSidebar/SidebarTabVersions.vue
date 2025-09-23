@@ -12,6 +12,9 @@
 			</template>
 		</NcEmptyContent>
 
+		<!-- offline -->
+		<OfflineContent v-else-if="!networkOnline" />
+
 		<!-- error message -->
 		<NcEmptyContent v-else-if="error" :name="error">
 			<template #icon>
@@ -58,10 +61,12 @@ import { mapActions, mapState } from 'pinia'
 import { useRootStore } from '../../stores/root.js'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { useVersionsStore } from '../../stores/versions.js'
+import { useNetworkState } from '../../composables/useNetworkState.ts'
 
 import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagonOutline.vue'
 import BackupRestoreIcon from 'vue-material-design-icons/BackupRestore.vue'
+import OfflineContent from './OfflineContent.vue'
 import Version from './Version.vue'
 import VersionLabelDialog from './VersionLabelDialog.vue'
 
@@ -73,6 +78,7 @@ export default {
 		NcEmptyContent,
 		NcLoadingIcon,
 		BackupRestoreIcon,
+		OfflineContent,
 		Version,
 		VersionLabelDialog,
 	},
@@ -88,8 +94,14 @@ export default {
 		},
 	},
 
+	setup() {
+		const { networkOnline } = useNetworkState()
+		return { networkOnline }
+	},
+
 	data() {
 		return {
+			loaded: false,
 			error: '',
 			showVersionLabelForm: false,
 			editedVersion: null,
@@ -142,13 +154,16 @@ export default {
 
 	watch: {
 		'pageId'() {
-			this.load('versions')
 			this.getPageVersions()
+		},
+		'networkOnline'(val) {
+			if (val && !this.loaded) {
+				this.getPageVersions()
+			}
 		},
 	},
 
 	beforeMount() {
-		this.load('versions')
 		this.getPageVersions()
 	},
 
@@ -166,8 +181,14 @@ export default {
 		 * Get versions of a page
 		 */
 		async getPageVersions() {
+			if (!this.networkOnline) {
+				return
+			}
+
+			this.load('versions')
 			try {
 				await this.getVersions(this.pageId)
+				this.loaded = true
 			} catch (e) {
 				this.error = t('collectives', 'Could not get page versions')
 				console.error('Failed to get page versions', e)
