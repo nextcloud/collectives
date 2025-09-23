@@ -12,6 +12,9 @@
 			</template>
 		</NcEmptyContent>
 
+		<!-- offline -->
+		<OfflineContent v-else-if="!loaded && !networkOnline" />
+
 		<!-- error message -->
 		<NcEmptyContent v-else-if="error" :name="error">
 			<template #icon>
@@ -59,11 +62,14 @@
 import { mapActions, mapState } from 'pinia'
 import { useRootStore } from '../../stores/root.js'
 import { usePagesStore } from '../../stores/pages.js'
+import { useNetworkState } from '../../composables/useNetworkState.ts'
+
 import { NcEmptyContent, NcListItem, NcLoadingIcon } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagonOutline.vue'
 import ArrowBottomLeftIcon from 'vue-material-design-icons/ArrowBottomLeft.vue'
 import PageIcon from '../Icon/PageIcon.vue'
+import OfflineContent from './OfflineContent.vue'
 
 export default {
 	name: 'SidebarTabBacklinks',
@@ -74,6 +80,7 @@ export default {
 		NcListItem,
 		NcLoadingIcon,
 		ArrowBottomLeftIcon,
+		OfflineContent,
 		PageIcon,
 	},
 
@@ -84,8 +91,14 @@ export default {
 		},
 	},
 
+	setup() {
+		const { networkOnline } = useNetworkState()
+		return { networkOnline }
+	},
+
 	data() {
 		return {
+			loaded: false,
 			error: '',
 		}
 	},
@@ -107,13 +120,16 @@ export default {
 
 	watch: {
 		'page.id'() {
-			this.load('backlinks')
 			this.getBacklinksForPage()
+		},
+		'networkOnline'(val) {
+			if (val && !this.loaded) {
+				this.getBacklinksForPage()
+			}
 		},
 	},
 
 	mounted() {
-		this.load('backlinks')
 		this.getBacklinksForPage()
 	},
 
@@ -125,8 +141,14 @@ export default {
 		 * Get backlinks for a page
 		 */
 		async getBacklinksForPage() {
+			if (!this.networkOnline) {
+				return
+			}
+
+			this.load('backlinks')
 			try {
 				await this.getBacklinks(this.page)
+				this.loaded = true
 			} catch (e) {
 				this.error = t('collectives', 'Could not get page backlinks')
 				console.error('Failed to get page backlinks', e)
