@@ -29,6 +29,42 @@ Cypress.on('uncaught:exception', (err) => {
 	}
 })
 
+// Switch network state
+Cypress.Commands.add('goOffline', () => {
+	cy.log('**go offline**')
+		.then(() => {
+			return Cypress.automation('remote:debugger:protocol', { command: 'Network.enable' })
+		})
+		.then(() => {
+			return Cypress.automation('remote:debugger:protocol', {
+				command: 'Network.emulateNetworkConditions',
+				params: {
+					offline: true,
+					latency: -1,
+					downloadThroughput: -1,
+					uploadThroughput: -1,
+				},
+			})
+		})
+})
+Cypress.Commands.add('goOnline', () => {
+	cy.log('**go online**')
+		.then(() => {
+			return Cypress.automation('remote:debugger:protocol', {
+				command: 'Network.emulateNetworkConditions',
+				params: {
+					offline: false,
+					latency: -1,
+					downloadThroughput: -1,
+					uploadThroughput: -1,
+				},
+			})
+		})
+		.then(() => {
+			return Cypress.automation('remote:debugger:protocol', { command: 'Network.disable' })
+		})
+})
+
 // Copy of the new login command as long as we are blocked to upgrade @nextcloud/cypress by cypress crashes
 const login = function(user) {
 	cy.session(user, function() {
