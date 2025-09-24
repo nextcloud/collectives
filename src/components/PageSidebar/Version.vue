@@ -226,6 +226,21 @@ export default {
 	display: flex;
 	flex-direction: row;
 
+	&.active :deep(.list-item) {
+		background-color: var(--color-background-hover) !important;
+	}
+
+	:deep(.action-item__menutoggle) {
+		border: none !important;
+		outline: none !important;
+		box-shadow: none !important;
+	}
+
+	&.active :deep(.action-item__menutoggle) {
+		background-color: var(--color-background-hover);
+		color: var(--color-main-text);
+	}
+
 	.version-icon {
 		height: 34px;
 		border-radius: var(--border-radius);
