@@ -240,7 +240,6 @@ export default {
 		flex-direction: row;
 		align-items: center;
 		gap: 0.5rem;
-		color: var(--color-main-text);
 		font-weight: 500;
 
 		&__label {
@@ -254,10 +253,6 @@ export default {
 			// Fix overflow on narrow screens
 			overflow: hidden;
 			text-overflow: ellipsis;
-		}
-
-		&__subline {
-			// color: var(--color-text-maxcontrast);
 		}
 	}
 }
