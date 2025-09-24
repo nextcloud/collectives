@@ -37,7 +37,7 @@ import PageList from '../components/PageList.vue'
 import { listen } from '@nextcloud/notify_push'
 import displayError from '../util/displayError.js'
 import { sessionUpdateInterval } from '../constants.js'
-import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { useNetworkState } from '../composables/useNetworkState.ts'
 
 export default {
 	name: 'CollectiveView',
@@ -52,17 +52,19 @@ export default {
 	},
 
 	setup() {
+		const { networkOnline } = useNetworkState()
 		const pagesStore = usePagesStore()
 		const templatesStore = useTemplatesStore()
 		const listenPush = listen('collectives_pagelist', (_, message) => {
 			pagesStore.updatePages(message.collectiveId, message)
 			templatesStore.updateTemplates(message.collectiveId, message)
 		})
-		return { listenPush }
+		return { networkOnline, listenPush }
 	},
 
 	data() {
 		return {
+			loadPending: true,
 			backgroundFetching: false,
 			/** @type {number} */
 			pollIntervalBase: 60 * 1000, // milliseconds
@@ -93,6 +95,13 @@ export default {
 				this.initSession()
 			}
 		},
+		'networkOnline'(val) {
+			if (val) {
+				this.handleNetworkOnline()
+			} else {
+				this.handleNetworkOffline()
+			}
+		},
 	},
 
 	mounted() {
@@ -101,15 +110,11 @@ export default {
 			this.initSession()
 		}
 		this._setPollingInterval(this.pollIntervalBase)
-		subscribe('networkOffline', this.handleNetworkOffline)
-		subscribe('networkOnline', this.handleNetworkOnline)
 	},
 
 	beforeDestroy() {
 		this.clearSession()
 		this.teardownBackgroundFetcher()
-		unsubscribe('networkOffline', this.handleNetworkOffline)
-		unsubscribe('networkOnline', this.handleNetworkOnline)
 	},
 
 	methods: {
@@ -193,17 +198,31 @@ export default {
 		},
 
 		async getAllPages(setLoading = true) {
-			await this.getPages(setLoading)
-				.catch(displayError('Could not fetch pages'))
-			await this.getTags()
-				.catch(displayError('Could not fetch tags'))
+			this.loadPending = true
+			if (!this.networkOnline) {
+				return
+			}
+
+			try {
+				await this.getPages(setLoading)
+			} catch (e) {
+				displayError('Could not fetch collective pages')(e)
+				return
+			}
+
+			const promises = [this.getTags()]
 			if (this.currentCollectiveCanEdit) {
 				if (!this.currentCollectiveIsPageShare) {
-					await this.getTemplates(setLoading)
-						.catch(displayError('Could not fetch templates'))
-					await this.getTrashPages()
-						.catch(displayError('Could not fetch page trash'))
+					promises.push(this.getTemplates(setLoading))
+					promises.push(this.getTrashPages())
 				}
+			}
+
+			try {
+				await Promise.all(promises)
+				this.loadPending = false
+			} catch (e) {
+				displayError('Could not fetch collective details')(e)
 			}
 		},
 

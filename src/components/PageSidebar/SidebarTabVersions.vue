@@ -101,7 +101,7 @@ export default {
 
 	data() {
 		return {
-			loaded: false,
+			loadPending: true,
 			error: '',
 			showVersionLabelForm: false,
 			editedVersion: null,
@@ -157,7 +157,7 @@ export default {
 			this.getPageVersions()
 		},
 		'networkOnline'(val) {
-			if (val && !this.loaded) {
+			if (val && this.loadPending) {
 				this.getPageVersions()
 			}
 		},
@@ -181,6 +181,7 @@ export default {
 		 * Get versions of a page
 		 */
 		async getPageVersions() {
+			this.loadPending = true
 			if (!this.networkOnline) {
 				return
 			}
@@ -188,7 +189,7 @@ export default {
 			this.load('versions')
 			try {
 				await this.getVersions(this.pageId)
-				this.loaded = true
+				this.loadPending = false
 			} catch (e) {
 				this.error = t('collectives', 'Could not get page versions')
 				console.error('Failed to get page versions', e)
