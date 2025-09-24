@@ -99,6 +99,7 @@ export default {
 	data() {
 		return {
 			loaded: false,
+			loadPending: true,
 			error: '',
 		}
 	},
@@ -123,7 +124,7 @@ export default {
 			this.getBacklinksForPage()
 		},
 		'networkOnline'(val) {
-			if (val && !this.loaded) {
+			if (val && this.loadPending) {
 				this.getBacklinksForPage()
 			}
 		},
@@ -141,6 +142,7 @@ export default {
 		 * Get backlinks for a page
 		 */
 		async getBacklinksForPage() {
+			this.loadPending = true
 			if (!this.networkOnline) {
 				return
 			}
@@ -149,6 +151,7 @@ export default {
 			try {
 				await this.getBacklinks(this.page)
 				this.loaded = true
+				this.loadPending = false
 			} catch (e) {
 				this.error = t('collectives', 'Could not get page backlinks')
 				console.error('Failed to get page backlinks', e)

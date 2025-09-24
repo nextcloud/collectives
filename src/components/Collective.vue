@@ -72,6 +72,12 @@ export default {
 		return { isMobile, networkOnline }
 	},
 
+	data() {
+		return {
+			loadPending: true,
+		}
+	},
+
 	computed: {
 		...mapState(useRootStore, ['isPublic', 'loading', 'pageParam', 'pageId']),
 		...mapState(useCollectivesStore, [
@@ -115,6 +121,11 @@ export default {
 				this.$router.replace(this.pagePath(this.currentFileIdPage) + document.location.hash)
 			}
 		},
+		'networkOnline'(val) {
+			if (val && this.loadPending) {
+				this.getShares()
+			}
+		},
 	},
 
 	mounted() {
@@ -128,13 +139,22 @@ export default {
 		...mapActions(useTagsStore, ['clearFilterTags']),
 		...mapActions(useVersionsStore, ['selectVersion']),
 
-		initCollective() {
+		async initCollective() {
 			this.closeNav()
 			this.show('details')
 
+			this.loadPending = true
+			if (!this.networkOnline) {
+				return
+			}
+
 			if (!this.isPublic) {
-				this.getShares()
-					.catch(displayError('Could not fetch shares'))
+				try {
+					await this.getShares()
+					this.loadPending = false
+				} catch (e) {
+					displayError('Could not fetch shares')(e)
+				}
 			}
 		},
 

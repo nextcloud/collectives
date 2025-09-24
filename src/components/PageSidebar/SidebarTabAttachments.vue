@@ -200,6 +200,7 @@ export default {
 	data() {
 		return {
 			loaded: false,
+			loadPending: true,
 			error: '',
 		}
 	},
@@ -296,7 +297,7 @@ export default {
 			this.getAttachmentsForPage(true)
 		},
 		'networkOnline'(val) {
-			if (val && !this.loaded) {
+			if (val && this.loadPending) {
 				this.getAttachmentsForPage(true)
 			}
 		},
@@ -335,6 +336,7 @@ export default {
 		 * @param {boolean} setLoading Whether to set loading attribute
 		 */
 		async getAttachmentsForPage(setLoading) {
+			this.loadPending = true
 			if (!this.networkOnline) {
 				return
 			}
@@ -345,6 +347,7 @@ export default {
 			try {
 				await this.getAttachments(this.page)
 				this.loaded = true
+				this.loadPending = false
 			} catch (e) {
 				this.error = t('collectives', 'Could not get attachments')
 				console.error('Failed to get page attachments', e)
