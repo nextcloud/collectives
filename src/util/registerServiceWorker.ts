@@ -11,11 +11,19 @@ import { generateUrl, getAppRootUrl } from '@nextcloud/router'
  * @param app name of the app.
  */
 export default async function(app = 'collectives') {
-	const scope = generateUrl(`/apps/${app}`)
+	const { Workbox } = await import('workbox-window')
 	const url = generateServiceWorkerUrl(app)
+	const scope = generateUrl(`/apps/${app}`)
+	const wb = new Workbox(url, { scope });
+	wb.addEventListener('activated', (event) => {
+		if (event.isUpdate || event.isExternal)
+			console.info('A new collectives version is available.')
+			// window.location.reload()
+	})
+
 	try {
-		const registration = await navigator.serviceWorker.register(url, { scope })
-		console.debug('SW registered: ', { registration })
+		wb.register()
+		console.debug('SW registered.')
 	} catch (registrationError) {
 		console.error('SW registration failed: ', { registrationError })
 	}
