@@ -13,6 +13,8 @@ OC.L10N.register(
     "Remove" : "Выдаліць",
     "An error occurred while performing the search" : "Падчас выканання пошуку адбылася памылка",
     "Loading…" : "Загрузка…",
+    "Add groups" : "Дадаць групы",
+    "Add teams" : "Дадаць каманды",
     "Remove {name}" : "Выдаліць {name}",
     "Add emoji" : "Дадаць эмодзі",
     "Permissions" : "Дазволы",
