@@ -178,6 +178,7 @@ export default {
 		return {
 			selectedCollective: null,
 			selectedPageId: null,
+			reorderedSubpages: null,
 		}
 	},
 
@@ -213,6 +214,11 @@ export default {
 		},
 
 		subpages() {
+			// If we have reordered pages, return those for visual feedback
+			if (this.reorderedSubpages) {
+				return this.reorderedSubpages
+			}
+
 			let pages
 			if (this.isCurrentCollective) {
 				pages = this.visibleSubpages(this.selectedPageId)
@@ -309,7 +315,15 @@ export default {
 		swapSubpages(from, to) {
 			const length = this.subpages.length - 1
 			if (from >= 0 && from <= length && to >= 0 && to <= length) {
-				this.subpages.splice(from, 1, this.subpages.splice(to, 1, this.subpages[from])[0])
+				// Create a copy of the subpages array to manipulate
+				const reorderedPages = [...this.subpages]
+				// Swap the elements
+				const temp = reorderedPages[from]
+				reorderedPages[from] = reorderedPages[to]
+				reorderedPages[to] = temp
+
+				// Update the component data to trigger reactivity
+				this.$set(this, 'reorderedSubpages', reorderedPages)
 			}
 
 			// Scroll current page into view
@@ -337,6 +351,8 @@ export default {
 				await this.getPagesForCollective(this.selectedCollective.id)
 			}
 			this.selectedPageId = this.selectedRootPage.id
+			// Reset reordered pages when changing collective
+			this.reorderedSubpages = null
 		},
 
 		/**
@@ -349,6 +365,8 @@ export default {
 				return
 			}
 			this.selectedPageId = page.id
+			// Reset reordered pages when navigating
+			this.reorderedSubpages = null
 		},
 
 		onClickDown() {
