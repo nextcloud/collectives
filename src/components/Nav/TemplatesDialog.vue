@@ -21,7 +21,7 @@
 
 		<!-- Template actions -->
 		<template #actions>
-			<NcButton type="secondary"
+			<NcButton variant="secondary"
 				:aria-label="t('collectives', 'Add a template')"
 				@click="onCreate(0)">
 				<template #icon>

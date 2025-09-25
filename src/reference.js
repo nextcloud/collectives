@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { registerWidget } from '@nextcloud/vue/dist/Components/NcRichText.js'
+import { registerWidget } from '@nextcloud/vue/components/NcRichText'
 import Vue from 'vue'
 import PageReferenceWidget from './views/PageReferenceWidget.vue'
 

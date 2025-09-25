@@ -13,7 +13,7 @@
 
 				<a :href="collectivesLink">
 					<NcButton :aria-label="t('collectives', 'Open in Collectives')"
-						type="primary"
+						variant="primary"
 						class="button">
 						{{ t('collectives', 'Open in Collectives') }}
 					</NcButton>
@@ -26,7 +26,7 @@
 <script>
 import { generateUrl } from '@nextcloud/router'
 // As it's the only nextcloud-vue component used in collectives-files.js, import it separately to keep asset small
-import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
+import NcButton from '@nextcloud/vue/components/NcButton'
 import InformationIcon from 'vue-material-design-icons/InformationOutline.vue'
 
 export default {

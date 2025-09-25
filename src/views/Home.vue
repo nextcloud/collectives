@@ -12,7 +12,7 @@
 				<CollectivesIcon />
 			</template>
 			<template #action>
-				<NcButton :aria-label="t('collectives', 'Create new collective')" :type="buttonType" @click="newCollective">
+				<NcButton :aria-label="t('collectives', 'Create new collective')" :variant="buttonVariant" @click="newCollective">
 					{{ t('collectives', 'New collective') }}
 				</NcButton>
 			</template>
@@ -45,7 +45,7 @@ export default {
 
 	data() {
 		return {
-			buttonType: 'primary',
+			buttonVariant: 'primary',
 		}
 	},
 
@@ -67,7 +67,7 @@ export default {
 		newCollective() {
 			emit('toggle-navigation', { open: true })
 			emit('open-new-collective-modal')
-			this.buttonType = 'secondary'
+			this.buttonVariant = 'secondary'
 		},
 	},
 

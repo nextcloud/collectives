@@ -8,7 +8,7 @@
 		v-click-outside="closeTrash"
 		:class="{ open }">
 		<div id="collectives-trash__header">
-			<NcButton type="tertiary"
+			<NcButton variant="tertiary"
 				:aria-label="t('collectives', 'Deleted collectives')"
 				class="collectives-trash-button"
 				@click="toggleTrash">
@@ -64,21 +64,21 @@
 				</div>
 			</div>
 			<template #actions>
-				<NcButton type="error"
+				<NcButton variant="error"
 					:aria-label="t('collectives', 'Delete only collective')"
 					:wide="true"
 					@click="deleteCollective(modalCollective, false)">
 					{{ t('collectives', 'Only collective') }}
 				</NcButton>
 				<NcButton v-if="isCollectiveOwner(modalCollective)"
-					type="error"
+					variant="error"
 					:aria-label="t('collectives', 'Delete collective and team')"
 					:wide="true"
 					@click="deleteCollective(modalCollective, true)">
 					{{ t('collectives', 'Collective and team') }}
 				</NcButton>
 				<NcButton v-else
-					type="primary"
+					variant="primary"
 					disabled
 					:title="t('collectives', 'Only team owners can delete a team')"
 					:wide="true">

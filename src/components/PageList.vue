@@ -126,7 +126,7 @@
 						{{ sortedByString }}
 					</span>
 					<NcButton :aria-label="t('collectives', 'Switch back to default sort order')"
-						type="tertiary"
+						variant="tertiary"
 						class="sort-order-chip-button"
 						@click="sortPagesAndScroll('byOrder')">
 						<template #icon>

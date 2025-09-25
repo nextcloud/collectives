@@ -6,7 +6,7 @@
 <template>
 	<div class="page-trash">
 		<NcButton ref="pagetrashbutton"
-			type="tertiary"
+			variant="tertiary"
 			:aria-label="t('collectives', 'Show deleted pages')"
 			class="page-trash-button"
 			@click="openTrash">

@@ -14,7 +14,7 @@
 					:selected-emoji="collective.emoji"
 					@select="updateEmoji"
 					@unselect="unselectEmoji">
-					<NcButton type="tertiary"
+					<NcButton variant="tertiary"
 						:aria-label="t('collectives', 'Select emoji for collective')"
 						:class="{'loading': loading('updateCollectiveEmoji') || loading('renameCollective')}"
 						class="button-emoji"
@@ -31,7 +31,7 @@
 					:label="getRenameLabel"
 					:error="isNameTooShort"
 					:show-trailing-button="!isNameTooShort"
-					trailing-button-icon="arrowRight"
+					trailing-button-icon="arrowEnd"
 					class="collective-name-input"
 					@blur="renameCollective()"
 					@keypress.enter.prevent="renameCollective()"
@@ -130,7 +130,7 @@
 
 		<NcAppSettingsSection id="danger-zone" :name="t('collectives', 'Danger zone')">
 			<div>
-				<NcButton type="error" :aria-label="t('collectives', 'Delete collective')" @click="onTrashCollective()">
+				<NcButton variant="error" :aria-label="t('collectives', 'Delete collective')" @click="onTrashCollective()">
 					{{ t('collectives', 'Delete collective') }}
 				</NcButton>
 			</div>
@@ -147,9 +147,8 @@ import { useCollectivesStore } from '../../stores/collectives.js'
 import { usePagesStore } from '../../stores/pages.js'
 import { emit } from '@nextcloud/event-bus'
 import { showError, showSuccess } from '@nextcloud/dialogs'
-import { NcAppSettingsDialog, NcAppSettingsSection, NcButton, NcCheckboxRadioSwitch, NcTextField } from '@nextcloud/vue'
+import { NcAppSettingsDialog, NcAppSettingsSection, NcButton, NcCheckboxRadioSwitch, NcEmojiPicker, NcTextField } from '@nextcloud/vue'
 import AlertCircleIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
-import NcEmojiPicker from '@nextcloud/vue/dist/Components/NcEmojiPicker.js'
 import Emoticon from 'vue-material-design-icons/EmoticonOutline.vue'
 import displayError from '../../util/displayError.js'
 

@@ -7,7 +7,7 @@
 	<div v-if="shouldShow" class="search-dialog-container">
 		<div class="search-dialog__buttons">
 			<NcButton alignment="center-reverse"
-				type="tertiary"
+				variant="tertiary"
 				:aria-label="t('collectives', 'Clear search')"
 				@click="clearSearch">
 				<template #icon>
