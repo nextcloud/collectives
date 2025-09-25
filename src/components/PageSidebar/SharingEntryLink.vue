@@ -173,7 +173,7 @@
 				<NcButton :aria-label="t('collectives', 'Cancel')" @click="cancelSettings">
 					{{ t('collectives', 'Cancel') }}
 				</NcButton>
-				<NcButton type="primary" :aria-label="t('collectives', 'Update share')" @click="saveSettings">
+				<NcButton variant="primary" :aria-label="t('collectives', 'Update share')" @click="saveSettings">
 					{{ t('collectives', 'Update share') }}
 				</NcButton>
 			</div>

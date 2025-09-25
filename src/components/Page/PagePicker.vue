@@ -10,7 +10,7 @@
 		@closing="onClose">
 		<span class="crumbs">
 			<div v-if="!selectedCollective || !selectedCollective.isPageShare" class="crumbs-home">
-				<NcButton type="tertiary"
+				<NcButton variant="tertiary"
 					:aria-label="t('collectives', 'Breadcrumb for list of collectives')"
 					:disabled="!selectedCollective"
 					class="crumb-button home"
@@ -24,7 +24,7 @@
 			</div>
 			<template v-if="selectedCollective">
 				<div class="crumbs-level">
-					<NcButton type="tertiary"
+					<NcButton variant="tertiary"
 						:aria-label="collectiveBreadcrumbAriaLabel"
 						:disabled="pageCrumbs.length === 0"
 						class="crumb-button"
@@ -39,7 +39,7 @@
 					:key="page.id"
 					class="crumbs-level">
 					<ChevronRightIcon :size="20" />
-					<NcButton type="tertiary"
+					<NcButton variant="tertiary"
 						:aria-label="t('collectives', 'Breadcrumb, navigate to page {page}', {page: page.title })"
 						:disabled="(index + 1) === pageCrumbs.length"
 						class="crumb-button"
@@ -89,7 +89,7 @@
 						<div v-if="page.id === pageId" class="picker-move-buttons">
 							<NcButton :disabled="index === 0"
 								:aria-label="t('collectives', 'Move page up')"
-								type="tertiary"
+								variant="tertiary"
 								@click="onClickUp">
 								<template #icon>
 									<ArrowUpIcon :size="20" />
@@ -97,7 +97,7 @@
 							</NcButton>
 							<NcButton :disabled="index === (subpages.length - 1)"
 								:aria-label="t('collectives', 'Move page down')"
-								type="tertiary"
+								variant="tertiary"
 								@click="onClickDown">
 								<template #icon>
 									<ArrowDownIcon :size="20" />
@@ -109,7 +109,7 @@
 			</ul>
 		</div>
 		<template #actions>
-			<NcButton type="secondary"
+			<NcButton variant="secondary"
 				:aria-label="t('collectives', copyPageString)"
 				:disabled="isActionButtonsDisabled"
 				@click="onMoveOrCopy(true)">
@@ -118,7 +118,7 @@
 				</template>
 				{{ copyPageString }}
 			</NcButton>
-			<NcButton type="primary"
+			<NcButton variant="primary"
 				:aria-label="t('collectives', movePageString)"
 				:disabled="isActionButtonsDisabled"
 				@click="onMoveOrCopy(false)">

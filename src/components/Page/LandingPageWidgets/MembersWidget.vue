@@ -43,7 +43,7 @@
 					:disable-menu="true"
 					:tooltip-message="member.displayName"
 					:size="avatarSize" />
-				<NcButton type="tertiary"
+				<NcButton variant="tertiary"
 					:title="showMembersTitle"
 					:aria-label="showMembersAriaLabel"
 					@click="openCollectiveMembers()">

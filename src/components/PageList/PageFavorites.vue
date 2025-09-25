@@ -12,7 +12,7 @@
 			<div class="app-content-list-item-line-one" @click="toggleFavorites">
 				{{ t('collectives', 'Favorites') }}
 				<NcButton :aria-label="t('collectives', 'Toggle favorites')"
-					type="tertiary"
+					variant="tertiary"
 					class="toggle-favorites-button">
 					<template #icon>
 						<ChevronDownIcon :size="22"

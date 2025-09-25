@@ -10,7 +10,7 @@
 		<div v-if="state === 0" class="modal-collective-wrapper">
 			<div class="modal-collective-name">
 				<NcEmojiPicker :show-preview="true" @select="updateEmoji">
-					<NcButton type="tertiary"
+					<NcButton variant="tertiary"
 						:aria-label="t('collectives', 'Select emoji for collective')"
 						:title="t('collectives', 'Select emoji')"
 						class="button-emoji"
@@ -37,7 +37,7 @@
 					:placeholder="t('collectives', 'Select a team…')" />
 				<NcButton v-if="anyCircle && !pickCircle"
 					:title="t('collectives', 'Select an existing team')"
-					type="tertiary"
+					variant="tertiary"
 					@click.stop.prevent="startSelectCircle">
 					<template #icon>
 						<TeamsIcon :size="16" />
@@ -45,7 +45,7 @@
 				</NcButton>
 				<NcButton v-if="anyCircle && pickCircle"
 					:title="t('collectives', 'Cancel selecting a team')"
-					type="tertiary"
+					variant="tertiary"
 					@click.stop.prevent="stopSelectCircle">
 					<template #icon>
 						<CloseIcon :size="16" />
@@ -84,7 +84,7 @@
 				<NcButton :aria-label="t('collectives', 'Cancel')" @click="onClose">
 					{{ t('collectives', 'Cancel') }}
 				</NcButton>
-				<NcButton type="primary"
+				<NcButton variant="primary"
 					:aria-label="t('collectives', 'Add members')"
 					:disabled="!newCollectiveName || nameIsInvalid"
 					class="modal-buttons-right"
@@ -96,7 +96,7 @@
 				<NcButton :aria-label="t('collectives', 'Go back')" @click="state = 0">
 					{{ t('collectives', 'Back') }}
 				</NcButton>
-				<NcButton type="primary"
+				<NcButton variant="primary"
 					:aria-label="createButtonString"
 					:disabled="loading"
 					class="modal-buttons-right"

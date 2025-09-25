@@ -60,7 +60,7 @@
 					class="tags-modal__tag-color"
 					@update:shown="openedPicker = $event ? tag.id : false"
 					@submit="onSubmitColor(tag, $event)">
-					<NcButton :aria-label="t('collectives', 'Change tag color')" type="tertiary">
+					<NcButton :aria-label="t('collectives', 'Change tag color')" variant="tertiary">
 						<template #icon>
 							<CircleIcon v-if="tag.color" :size="24" fill-color="var(--color-circle-icon)" />
 							<CircleOutlineIcon v-else :size="24" fill-color="var(--color-circle-icon" />
@@ -101,8 +101,8 @@
 					:aria-label="t('collectives', 'Create new tag {tag}', { tag: input.trim() })"
 					alignment="start"
 					class="tags-modal__tag-create"
-					native-type="submit"
-					type="tertiary"
+					type="submit"
+					variant="tertiary"
 					@click="onNewTag">
 					{{ input.trim() }}<br>
 					<span class="tags-modal__tag-create-subline">{{ t('collectives', 'Create new tag') }}</span>

@@ -27,7 +27,7 @@
 				:selected-emoji="currentPage.emoji"
 				@select="onSelectEmoji"
 				@unselect="onUnselectEmoji">
-				<NcButton type="tertiary"
+				<NcButton variant="tertiary"
 					:aria-label="t('collectives', 'Select emoji for page')"
 					:title="t('collectives', 'Select emoji')"
 					class="button-emoji-page"
@@ -101,8 +101,7 @@ import { useCollectivesStore } from '../../stores/collectives.js'
 import { usePagesStore } from '../../stores/pages.js'
 import { showError } from '@nextcloud/dialogs'
 
-import { NcButton, NcLoadingIcon } from '@nextcloud/vue'
-import NcEmojiPicker from '@nextcloud/vue/dist/Components/NcEmojiPicker.js'
+import { NcButton, NcEmojiPicker, NcLoadingIcon } from '@nextcloud/vue'
 import CollectivesIcon from '../Icon/CollectivesIcon.vue'
 import EmoticonIcon from 'vue-material-design-icons/EmoticonOutline.vue'
 import EditButton from './EditButton.vue'

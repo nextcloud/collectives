@@ -23,14 +23,14 @@
 
 		<template #actions>
 			<NcButton v-if="versionLabel"
-				type="error"
-				native-type="reset"
+				variant="error"
+				type="reset"
 				:aria-label="t('collectives', 'Remove version name')"
 				@click="$emit('label-update', '')">
 				{{ t('collectives', 'Remove version name') }}
 			</NcButton>
-			<NcButton type="primary"
-				native-type="submit"
+			<NcButton variant="primary"
+				type="submit"
 				:aria-label="t('collectives', 'Save version name')"
 				:disabled="editedVersionLabel.trim() === ''">
 				<template #icon>

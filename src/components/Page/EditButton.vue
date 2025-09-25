@@ -10,7 +10,7 @@
 			:aria-label="description"
 			class="titleform-button"
 			:class="{ 'mobile': mobile }"
-			type="primary"
+			variant="primary"
 			@click="handleClick()">
 			<template #icon>
 				<NcLoadingIcon v-if="showLoadingIcon"

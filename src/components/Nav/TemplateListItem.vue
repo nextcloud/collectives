@@ -12,7 +12,7 @@
 				:selected-emoji="template.emoji"
 				@select="onSelectEmoji($event, template.id)"
 				@unselect="onUnselectEmoji(template.id)">
-				<NcButton type="tertiary"
+				<NcButton variant="tertiary"
 					:aria-label="t('collectives', 'Select emoji for template')"
 					:title="t('collectives', 'Select emoji')"
 					class="button-template-emoji"
@@ -89,8 +89,7 @@ import { useTemplatesStore } from '../../stores/templates.js'
 import { showError } from '@nextcloud/dialogs'
 import { directive as ClickOutside } from 'v-click-outside'
 
-import { NcActionButton, NcActions, NcButton, NcLoadingIcon, NcTextField } from '@nextcloud/vue'
-import NcEmojiPicker from '@nextcloud/vue/dist/Components/NcEmojiPicker.js'
+import { NcActionButton, NcActions, NcButton, NcEmojiPicker, NcLoadingIcon, NcTextField } from '@nextcloud/vue'
 
 import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
 import EmoticonIcon from 'vue-material-design-icons/EmoticonOutline.vue'

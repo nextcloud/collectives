@@ -18,7 +18,7 @@
 		</a>
 		<NcButton v-if="canRemove"
 			:aria-label="t('collectives', 'Remove tag')"
-			type="tertiary"
+			variant="tertiary"
 			class="remove-button"
 			@keydown.enter.prevent.stop="$emit('remove')"
 			@click="$emit('remove')">

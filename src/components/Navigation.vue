@@ -18,7 +18,7 @@
 			<li>
 				<NcAppNavigationNew v-if="!isPublic"
 					:text="t('collectives', 'New collective')"
-					type="secondary"
+					variant="secondary"
 					class="new-collective-button"
 					@click="onOpenNewCollectiveModal">
 					<template #icon>
