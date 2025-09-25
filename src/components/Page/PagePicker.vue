@@ -315,15 +315,12 @@ export default {
 		swapSubpages(from, to) {
 			const length = this.subpages.length - 1
 			if (from >= 0 && from <= length && to >= 0 && to <= length) {
-				// Create a copy of the subpages array to manipulate
-				const reorderedPages = [...this.subpages]
-				// Swap the elements
-				const temp = reorderedPages[from]
-				reorderedPages[from] = reorderedPages[to]
-				reorderedPages[to] = temp
-
-				// Update the component data to trigger reactivity
-				this.$set(this, 'reorderedSubpages', reorderedPages)
+				// Initialize reorderedSubpages if not already set
+				if (!this.reorderedSubpages) {
+					this.reorderedSubpages = [...this.subpages]
+				}
+				// Use splice to swap elements while maintaining reactivity
+				this.reorderedSubpages.splice(from, 1, this.reorderedSubpages.splice(to, 1, this.reorderedSubpages[from])[0])
 			}
 
 			// Scroll current page into view
