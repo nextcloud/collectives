@@ -59,11 +59,11 @@ import { useCollectivesStore } from '../stores/collectives.js'
 import { usePagesStore } from '../stores/pages.js'
 import { useVersionsStore } from '../stores/versions.js'
 import { NcAppSidebar, NcAppSidebarTab } from '@nextcloud/vue'
+import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import BackupRestoreIcon from 'vue-material-design-icons/BackupRestore.vue'
 import ArrowBottomLeftIcon from 'vue-material-design-icons/ArrowBottomLeft.vue'
 import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue'
 import ShareVariantIcon from 'vue-material-design-icons/ShareVariantOutline.vue'
-import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import SidebarTabAttachments from './PageSidebar/SidebarTabAttachments.vue'
 import SidebarTabBacklinks from './PageSidebar/SidebarTabBacklinks.vue'
 import SidebarTabSharing from './PageSidebar/SidebarTabSharing.vue'
@@ -85,9 +85,10 @@ export default {
 		SidebarTabVersions,
 	},
 
-	mixins: [
-		isMobile,
-	],
+	setup() {
+		const isMobile = useIsMobile()
+		return { isMobile }
+	},
 
 	computed: {
 		...mapState(useRootStore, ['activeSidebarTab', 'isPublic', 'showing']),

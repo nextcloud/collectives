@@ -87,7 +87,7 @@
 import { mapActions, mapState } from 'pinia'
 import { usePagesStore } from '../../stores/pages.js'
 import { NcActions, NcActionButton, NcButton, NcDialog, NcEmptyContent } from '@nextcloud/vue'
-import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
+import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { showSuccess } from '@nextcloud/dialogs'
 import moment from '@nextcloud/moment'
@@ -110,9 +110,10 @@ export default {
 		PageIcon,
 	},
 
-	mixins: [
-		isMobile,
-	],
+	setup() {
+		const isMobile = useIsMobile()
+		return { isMobile }
+	},
 
 	data() {
 		return {

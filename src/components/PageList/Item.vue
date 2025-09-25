@@ -97,11 +97,11 @@ import { usePagesStore } from '../../stores/pages.js'
 import { useTemplatesStore } from '../../stores/templates.js'
 import { generateUrl } from '@nextcloud/router'
 import { scrollToPage } from '../../util/scrollToElement.js'
-import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import pageMixin from '../../mixins/pageMixin.js'
 
 import CollectivesIcon from '../Icon/CollectivesIcon.vue'
 import { NcActionButton, NcActions } from '@nextcloud/vue'
+import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import MenuRightIcon from 'vue-material-design-icons/MenuRightOutline.vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import PageIcon from '../Icon/PageIcon.vue'
@@ -123,7 +123,6 @@ export default {
 	},
 
 	mixins: [
-		isMobile,
 		pageMixin,
 	],
 
@@ -188,6 +187,11 @@ export default {
 			type: Boolean,
 			required: true,
 		},
+	},
+
+	setup() {
+		const isMobile = useIsMobile()
+		return { isMobile }
 	},
 
 	data() {

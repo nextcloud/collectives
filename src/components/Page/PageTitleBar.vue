@@ -92,7 +92,6 @@
 	</div>
 </template>
 <script>
-import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import pageMixin from '../../mixins/pageMixin.js'
 
 import { mapActions, mapState } from 'pinia'
@@ -102,6 +101,7 @@ import { usePagesStore } from '../../stores/pages.js'
 import { showError } from '@nextcloud/dialogs'
 
 import { NcButton, NcEmojiPicker, NcLoadingIcon } from '@nextcloud/vue'
+import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import CollectivesIcon from '../Icon/CollectivesIcon.vue'
 import EmoticonIcon from 'vue-material-design-icons/EmoticonOutline.vue'
 import EditButton from './EditButton.vue'
@@ -123,7 +123,6 @@ export default {
 	},
 
 	mixins: [
-		isMobile,
 		pageMixin,
 	],
 
@@ -132,6 +131,11 @@ export default {
 			type: Boolean,
 			required: true,
 		},
+	},
+
+	setup() {
+		const isMobile = useIsMobile()
+		return { isMobile }
 	},
 
 	data() {
@@ -188,7 +192,7 @@ export default {
 		},
 
 		pageTitleIconSize() {
-			return isMobile ? 25 : 30
+			return this.isMobile ? 25 : 30
 		},
 	},
 
