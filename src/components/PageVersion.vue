@@ -51,7 +51,6 @@
 </template>
 
 <script>
-import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import pageContentMixin from '../mixins/pageContentMixin.js'
 
 import { mapActions, mapState } from 'pinia'
@@ -60,6 +59,7 @@ import { usePagesStore } from '../stores/pages.js'
 import { useVersionsStore } from '../stores/versions.js'
 
 import { NcActionButton, NcActions, NcButton } from '@nextcloud/vue'
+import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import DockRightIcon from 'vue-material-design-icons/DockRight.vue'
 import EmoticonIcon from 'vue-material-design-icons/EmoticonOutline.vue'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
@@ -83,14 +83,14 @@ export default {
 	},
 
 	mixins: [
-		isMobile,
 		pageContentMixin,
 	],
 
 	setup() {
+		const isMobile = useIsMobile()
 		const content = ref('')
 		const { reader, readerEl, setupReader } = useReader(content)
-		return { content, reader, readerEl, setupReader }
+		return { content, isMobile, reader, readerEl, setupReader }
 	},
 
 	computed: {
@@ -106,7 +106,7 @@ export default {
 		},
 
 		pageTitleIconSize() {
-			return isMobile ? 25 : 30
+			return this.isMobile ? 25 : 30
 		},
 
 		versionTitle() {

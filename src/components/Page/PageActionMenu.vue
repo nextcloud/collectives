@@ -158,7 +158,7 @@ import { useRootStore } from '../../stores/root.js'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { generateUrl } from '@nextcloud/router'
 import { NcActions, NcActionButton, NcActionCheckbox, NcActionLink, NcActionSeparator } from '@nextcloud/vue'
-import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
+import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import CollectiveActions from '../Collective/CollectiveActions.vue'
 import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
 import DockRightIcon from 'vue-material-design-icons/DockRight.vue'
@@ -204,7 +204,6 @@ export default {
 	},
 
 	mixins: [
-		isMobile,
 		pageMixin,
 	],
 
@@ -245,6 +244,11 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+	},
+
+	setup() {
+		const isMobile = useIsMobile()
+		return { isMobile }
 	},
 
 	data() {

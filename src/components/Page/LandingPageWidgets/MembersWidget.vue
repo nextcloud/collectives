@@ -67,9 +67,8 @@ import { generateUrl } from '@nextcloud/router'
 import { circlesMemberTypes } from '../../../constants.js'
 import { showError } from '@nextcloud/dialogs'
 
-import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
-
 import { NcAvatar, NcButton } from '@nextcloud/vue'
+import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import AccountMultipleIcon from 'vue-material-design-icons/AccountMultipleOutline.vue'
 import AccountMultiplePlusIcon from 'vue-material-design-icons/AccountMultiplePlus.vue'
 import ChevronDownIcon from 'vue-material-design-icons/ChevronDown.vue'
@@ -91,9 +90,10 @@ export default {
 		WidgetHeading,
 	},
 
-	mixins: [
-		isMobile,
-	],
+	setup() {
+		const isMobile = useIsMobile()
+		return { isMobile }
+	},
 
 	data() {
 		return {

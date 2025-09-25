@@ -22,14 +22,10 @@
 </template>
 
 <script>
-import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
+import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 
 export default {
 	name: 'PageTitle',
-
-	mixins: [
-		isMobile,
-	],
 
 	props: {
 		value: {
@@ -44,6 +40,11 @@ export default {
 			type: String,
 			default: '',
 		},
+	},
+
+	setup() {
+		const isMobile = useIsMobile()
+		return { isMobile }
 	},
 
 	data() {

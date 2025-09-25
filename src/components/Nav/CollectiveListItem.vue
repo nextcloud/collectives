@@ -30,7 +30,7 @@ import { mapActions, mapState } from 'pinia'
 import { useRootStore } from '../../stores/root.js'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { NcAppNavigationItem } from '@nextcloud/vue'
-import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
+import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import CollectiveActions from '../Collective/CollectiveActions.vue'
 import CollectivesIcon from '../Icon/CollectivesIcon.vue'
 
@@ -43,15 +43,16 @@ export default {
 		CollectivesIcon,
 	},
 
-	mixins: [
-		isMobile,
-	],
-
 	props: {
 		collective: {
 			type: Object,
 			required: true,
 		},
+	},
+
+	setup() {
+		const isMobile = useIsMobile()
+		return { isMobile }
 	},
 
 	computed: {

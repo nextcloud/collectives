@@ -25,7 +25,6 @@
 import { emit } from '@nextcloud/event-bus'
 import { NcAppContent, NcEmptyContent, NcButton } from '@nextcloud/vue'
 import CollectivesIcon from '../components/Icon/CollectivesIcon.vue'
-import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
 import { mapState } from 'pinia'
 import { useCollectivesStore } from '../stores/collectives.js'
 
@@ -38,10 +37,6 @@ export default {
 		CollectivesIcon,
 		NcEmptyContent,
 	},
-
-	mixins: [
-		isMobile,
-	],
 
 	data() {
 		return {

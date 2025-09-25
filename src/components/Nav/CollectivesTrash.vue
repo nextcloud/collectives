@@ -96,7 +96,7 @@
 import { mapState } from 'pinia'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { NcActionButton, NcAppNavigationItem, NcButton, NcDialog } from '@nextcloud/vue'
-import isMobile from '@nextcloud/vue/dist/Mixins/isMobile.js'
+import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import CollectivesIcon from '../Icon/CollectivesIcon.vue'
 import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
@@ -119,9 +119,10 @@ export default {
 		RestoreIcon,
 	},
 
-	mixins: [
-		isMobile,
-	],
+	setup() {
+		const isMobile = useIsMobile()
+		return { isMobile }
+	},
 
 	data() {
 		return {
