@@ -5,7 +5,6 @@
 
 <template>
 	<NcAppSidebar
-		ref="sidebar"
 		:name="title"
 		:active.sync="active"
 		:open.sync="open"

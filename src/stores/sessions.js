@@ -27,7 +27,7 @@ export const useSessionsStore = defineStore('sessions', {
 			try {
 				await api.updateSession(this.session.collectiveId, this.session.token)
 			} catch (e) {
-				console.error('Session update failed, creating a new one')
+				console.error('Session update failed, creating a new one', e)
 				this.createSession()
 			}
 		},

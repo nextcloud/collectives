@@ -8,7 +8,7 @@
 		<NcAppNavigationCaption
 			v-if="isSearching"
 			:name="t('collectives', 'Members')" />
-		<Member
+		<MemberItem
 			v-for="item in searchedMembers"
 			:key="item.singleId"
 			:circle-id="circleId"
@@ -20,7 +20,7 @@
 			:level="item.level"
 			:is-current-user="isCurrentUser(item)"
 			:is-searched="false" />
-		<Hint
+		<MembersHint
 			v-if="isSearching && searchedMembers.length === 0"
 			:hint="t('collectives', 'No search results')" />
 	</div>
@@ -30,16 +30,16 @@
 import { getCurrentUser } from '@nextcloud/auth'
 import { NcAppNavigationCaption } from '@nextcloud/vue'
 import { mapState } from 'pinia'
-import Hint from './Hint.vue'
-import Member from './Member.vue'
+import MemberItem from './MemberItem.vue'
+import MembersHint from './MembersHint.vue'
 import { useCirclesStore } from '../../stores/circles.js'
 
 export default {
 	name: 'CurrentMembers',
 
 	components: {
-		Hint,
-		Member,
+		MembersHint,
+		MemberItem,
 		NcAppNavigationCaption,
 	},
 
@@ -61,7 +61,7 @@ export default {
 
 		currentUserIsAdmin: {
 			type: Boolean,
-			default: true,
+			default: false,
 		},
 	},
 

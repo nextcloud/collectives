@@ -7,14 +7,14 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import CollectivePrintView from './views/CollectivePrintView.vue'
 import CollectiveView from './views/CollectiveView.vue'
-import Home from './views/Home.vue'
+import HomeView from './views/HomeView.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
 	{
 		path: '/',
-		component: Home,
+		component: HomeView,
 	},
 	{
 		path: '/_/print/:collectiveSlug-:collectiveId(\\d+)',

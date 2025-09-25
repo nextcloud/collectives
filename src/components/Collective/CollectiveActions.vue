@@ -107,7 +107,7 @@ export default {
 	},
 
 	computed: {
-		...mapState(useRootStore, ['isPublic', 'shareTokenparam']),
+		...mapState(useRootStore, ['isPublic']),
 		...mapState(useCollectivesStore, [
 			'collectiveCanShare',
 			'collectivePrintPath',

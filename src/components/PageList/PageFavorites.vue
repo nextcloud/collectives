@@ -25,7 +25,7 @@
 		</div>
 
 		<div v-show="showFavoritesOpen" class="page-list-favorites-list">
-			<Item
+			<PageListItem
 				v-for="page in favoritePages"
 				:key="page.title"
 				:to="pagePath(page)"
@@ -50,7 +50,7 @@ import { NcButton } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
 import ChevronDownIcon from 'vue-material-design-icons/ChevronDown.vue'
 import StarIcon from 'vue-material-design-icons/StarOutline.vue'
-import Item from './Item.vue'
+import PageListItem from './PageListItem.vue'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { usePagesStore } from '../../stores/pages.js'
 import { useRootStore } from '../../stores/root.js'
@@ -59,7 +59,7 @@ export default {
 	name: 'PageFavorites',
 
 	components: {
-		Item,
+		PageListItem,
 		NcButton,
 		ChevronDownIcon,
 		StarIcon,

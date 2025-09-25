@@ -137,7 +137,6 @@ export default {
 	methods: {
 		...mapActions(useRootStore, ['done', 'hide', 'load']),
 		...mapActions(useVersionsStore, [
-			'getVersions',
 			'restoreVersion',
 			'selectVersion',
 		]),

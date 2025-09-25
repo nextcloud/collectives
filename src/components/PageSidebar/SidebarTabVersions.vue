@@ -25,7 +25,7 @@
 		<!-- versions list -->
 		<div v-else-if="!loading('versions') && sortedVersions.length">
 			<ul :aria-label="t('collectives', 'Page versions')" class="version-list">
-				<Version
+				<VersionEntry
 					v-for="version in sortedVersions"
 					:key="version.mtime"
 					:version="version"
@@ -65,7 +65,7 @@ import { mapActions, mapState } from 'pinia'
 import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagonOutline.vue'
 import BackupRestoreIcon from 'vue-material-design-icons/BackupRestore.vue'
 import OfflineContent from './OfflineContent.vue'
-import Version from './Version.vue'
+import VersionEntry from './VersionEntry.vue'
 import VersionLabelDialog from './VersionLabelDialog.vue'
 import { useNetworkState } from '../../composables/useNetworkState.ts'
 import { useCollectivesStore } from '../../stores/collectives.js'
@@ -81,7 +81,7 @@ export default {
 		NcLoadingIcon,
 		BackupRestoreIcon,
 		OfflineContent,
-		Version,
+		VersionEntry,
 		VersionLabelDialog,
 	},
 
@@ -223,7 +223,7 @@ export default {
 			try {
 				await this.setVersionLabel(this.editedVersion, newLabel)
 				this.editedVersion = null
-			} catch (e) {
+			} catch {
 				this.editedVersion.label = oldLabel
 			}
 		},

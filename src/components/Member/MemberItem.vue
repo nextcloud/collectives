@@ -101,7 +101,7 @@ import { circlesMemberTypes, memberLevels } from '../../constants.js'
 import { useCirclesStore } from '../../stores/circles.js'
 
 export default {
-	name: 'Member',
+	name: 'MemberItem',
 
 	components: {
 		AccountCogIcon,
@@ -124,7 +124,7 @@ export default {
 
 		currentUserIsAdmin: {
 			type: Boolean,
-			default: true,
+			default: false,
 		},
 
 		memberId: {
@@ -159,7 +159,7 @@ export default {
 
 		isSearched: {
 			type: Boolean,
-			default: true,
+			default: false,
 		},
 
 		isSelected: {
@@ -285,7 +285,7 @@ export default {
 			}
 		},
 
-		onClick(event) {
+		onClick() {
 			if (this.isClickable) {
 				this.$emit('click')
 			}

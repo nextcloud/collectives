@@ -58,7 +58,7 @@
 				</div>
 
 				<!-- clipboard -->
-				<NcActions v-if="share && share.token" ref="copyButton" class="sharing-entry__copy">
+				<NcActions v-if="share && share.token" class="sharing-entry__copy">
 					<NcActionButton
 						:aria-label="copyLinkTooltip"
 						@click.prevent="copyLink">
@@ -629,8 +629,8 @@ export default {
 					if (request.data.ocs.data.password) {
 						return request.data.ocs.data.password
 					}
-				} catch (error) {
-					console.info('Error generating password from password_policy')
+				} catch {
+					console.error('Error generating password from password_policy')
 					showError(t('collectives', 'Error generating password from password policy'))
 				}
 			}

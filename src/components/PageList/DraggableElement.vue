@@ -42,7 +42,7 @@ import pageMixin from '../../mixins/pageMixin.js'
 import { usePagesStore } from '../../stores/pages.js'
 
 export default {
-	name: 'Draggable',
+	name: 'DraggableElement',
 
 	components: {
 		draggable,
@@ -78,11 +78,8 @@ export default {
 
 	computed: {
 		...mapState(usePagesStore, [
-			'isCollapsed',
 			'disableDragndropSortOrMove',
-			'isDragoverTargetPage',
 			'sortByOrder',
-			'visibleSubpages',
 		]),
 
 		allowSorting() {
@@ -91,7 +88,7 @@ export default {
 		},
 
 		disabled() {
-			// IMPORTANT: needs to be synchronized with custom drag/drop events in Item.vue
+			// IMPORTANT: needs to be synchronized with custom drag/drop events in PageListItem.vue
 			return this.disableDragndropSortOrMove
 				// Disable during Sortable move/sort operation
 				|| this.sortableActive
@@ -131,7 +128,7 @@ export default {
 		},
 
 		// Dragged element is moved inside list or between lists
-		onMove(ev, origEv) {
+		onMove(ev) {
 			this.dragoverPageId = ev.related.dataset.pageId || ev.related.dataset.parentId
 
 			// Force-move items to the end of the list if sorting is disabled (not effective for now, see `disabled()` method)
@@ -171,7 +168,7 @@ export default {
 		},
 
 		// Element stops being dragged
-		onEnd(ev) {
+		onEnd() {
 			this.setHighlightPageId(null)
 		},
 	},

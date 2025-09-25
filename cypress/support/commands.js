@@ -64,10 +64,10 @@ Cypress.Commands.add('goOnline', () => {
 		})
 })
 
-// Copy of the new login command as long as we are blocked to upgrade @nextcloud/cypress by cypress crashes
 /**
+ * Copy of the new login command as long as we are blocked to upgrade @nextcloud/cypress by cypress crashes
  *
- * @param user
+ * @param {string} user user to login
  */
 function login(user) {
 	cy.session(user, function() {
@@ -424,8 +424,8 @@ Cypress.Commands.add('seedCircle', (name, config = null) => {
 					['open', 16],
 				]
 				const value = bits
-					.filter(([k, v]) => config[k])
-					.reduce((sum, [k, v]) => sum + v, 0)
+					.filter(([k]) => config[k])
+					.reduce((sum, [, v]) => sum + v, 0)
 				await axios.put(
 					`${url}/${circleId}/config`,
 					{ value },

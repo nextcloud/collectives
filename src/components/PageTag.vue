@@ -12,7 +12,6 @@
 		}"
 		:style="style">
 		<a
-			ref="link"
 			href="#"
 			@keydown.enter.prevent.stop="$emit('select')"
 			@click="$emit('select')">

@@ -233,7 +233,6 @@ export default {
 		...mapActions(useRootStore, [
 			'done',
 			'hide',
-			'load',
 		]),
 
 		...mapActions(usePagesStore, [
