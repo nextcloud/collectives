@@ -19,7 +19,7 @@
 			:icon-class="iconClass"
 			:disable-menu="true"
 			:disable-tooltip="true"
-			:show-user-status="false"
+			:hide-status="true"
 			:size="avatarSize" />
 
 		<!-- Data -->
