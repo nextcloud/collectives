@@ -39,7 +39,7 @@
 						:size="20"
 						disable-menu
 						disable-tooltip
-						:show-user-status="false" />
+						:hide-status="true" />
 					<div>{{ versionAuthor }}</div>
 				</div>
 			</div>
