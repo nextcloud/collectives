@@ -174,7 +174,7 @@
 				:required="isPasswordEnforced"
 				:minlength="passwordPolicy.minLength ?? 0"
 				:label="t('collectives', 'Password')"
-				@update:value="onPasswordChange" />
+				@update:modelValue="onPasswordChange" />
 			<div class="button-group">
 				<NcButton :aria-label="t('collectives', 'Cancel')" @click="cancelSettings">
 					{{ t('collectives', 'Cancel') }}

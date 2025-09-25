@@ -12,7 +12,7 @@
 			:show-trailing-button="hasSearchQuery"
 			:label="t('collectives', 'Search accounts, groups, teams')"
 			@trailing-button-click="clearSearch"
-			@input="onSearch">
+			@update:modelValue="onSearch">
 			<MagnifyIcon :size="16" />
 		</NcTextField>
 
