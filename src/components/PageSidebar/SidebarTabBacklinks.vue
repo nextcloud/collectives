@@ -121,6 +121,7 @@ export default {
 
 	watch: {
 		'page.id'() {
+			this.loaded = false
 			this.getBacklinksForPage()
 		},
 		'networkOnline'(val) {

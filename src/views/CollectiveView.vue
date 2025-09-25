@@ -64,7 +64,6 @@ export default {
 
 	data() {
 		return {
-			loadPending: true,
 			backgroundFetching: false,
 			/** @type {number} */
 			pollIntervalBase: 60 * 1000, // milliseconds
@@ -198,7 +197,6 @@ export default {
 		},
 
 		async getAllPages(setLoading = true) {
-			this.loadPending = true
 			if (!this.networkOnline) {
 				return
 			}
@@ -220,7 +218,6 @@ export default {
 
 			try {
 				await Promise.all(promises)
-				this.loadPending = false
 			} catch (e) {
 				displayError('Could not fetch collective details')(e)
 			}

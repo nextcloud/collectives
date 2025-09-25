@@ -16,7 +16,7 @@
 		<OfflineContent v-else-if="!loaded && !networkOnline" />
 
 		<!-- error message -->
-		<NcEmptyContent v-else-if="error " :name="error">
+		<NcEmptyContent v-else-if="error" :name="error">
 			<template #icon>
 				<AlertOctagonIcon />
 			</template>
@@ -294,6 +294,7 @@ export default {
 
 	watch: {
 		'page.id'() {
+			this.loaded = false
 			this.getAttachmentsForPage(true)
 		},
 		'networkOnline'(val) {
