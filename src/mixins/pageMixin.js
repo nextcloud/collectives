@@ -132,6 +132,7 @@ export default {
 			try {
 				await this.movePage({ newParentId, pageId, index: newIndex })
 			} catch (e) {
+				console.error('Could not move page', e)
 				showError(t('collectives', 'Could not move page'))
 				return
 			} finally {

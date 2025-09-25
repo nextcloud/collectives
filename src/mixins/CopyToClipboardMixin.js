@@ -27,7 +27,7 @@ export default {
 
 				// Notify success
 				showSuccess(t('collectives', 'Link copied'))
-			} catch (error) {
+			} catch {
 				this.copySuccess = false
 				this.copied = true
 				showError(

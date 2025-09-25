@@ -30,7 +30,7 @@ import CollectivesIcon from '../components/Icon/CollectivesIcon.vue'
 import { useCollectivesStore } from '../stores/collectives.js'
 
 export default {
-	name: 'Home',
+	name: 'HomeView',
 
 	components: {
 		NcAppContent,

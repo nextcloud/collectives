@@ -111,7 +111,7 @@
 		<!-- Page list -->
 		<div v-else class="page-list">
 			<!-- Landing page -->
-			<Item
+			<PageListItem
 				key="Readme"
 				:to="currentCollectivePath"
 				:page-id="rootPage.id"
@@ -190,7 +190,7 @@
 			</div>
 
 			<!-- Unfiltered view page list -->
-			<Draggable
+			<DraggableElement
 				v-else
 				class="page-list-dragarea"
 				:list="subpages"
@@ -204,7 +204,7 @@
 					:level="1"
 					:filtered-view="false"
 					class="page-list-drag-item" />
-			</Draggable>
+			</DraggableElement>
 		</div>
 
 		<!-- Page trash -->
@@ -228,10 +228,10 @@ import SortAlphabeticalDescendingIcon from 'vue-material-design-icons/SortAlphab
 import SortAscendingIcon from 'vue-material-design-icons/SortAscending.vue'
 import SortClockAscendingIcon from 'vue-material-design-icons/SortClockAscendingOutline.vue'
 import SortClockDescendingIcon from 'vue-material-design-icons/SortClockDescendingOutline.vue'
-import Draggable from './PageList/Draggable.vue'
-import Item from './PageList/Item.vue'
+import DraggableElement from './PageList/DraggableElement.vue'
 import NewPageDialog from './PageList/NewPageDialog.vue'
 import PageFavorites from './PageList/PageFavorites.vue'
+import PageListItem from './PageList/PageListItem.vue'
 import PageTrash from './PageList/PageTrash.vue'
 import SubpageList from './PageList/SubpageList.vue'
 import PageTag from './PageTag.vue'
@@ -260,9 +260,9 @@ export default {
 		NewPageDialog,
 		SkeletonLoading,
 		CloseIcon,
-		Draggable,
-		Item,
+		DraggableElement,
 		PageFavorites,
+		PageListItem,
 		PageTag,
 		PageTrash,
 		SubpageList,
@@ -305,7 +305,6 @@ export default {
 			'currentPage',
 			'newPageParentId',
 			'hasFavoritePages',
-			'keptSortable',
 			'visibleSubpages',
 			'sortByOrder',
 			'allPagesSorted',

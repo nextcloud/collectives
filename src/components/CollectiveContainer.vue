@@ -9,7 +9,7 @@
 			<SkeletonLoading :count="1" class="page-heading-skeleton" type="page-heading" />
 		</div>
 		<PageVersion v-else-if="currentPage && selectedVersion" />
-		<Page v-else-if="currentPage" />
+		<PageContainer v-else-if="currentPage" />
 		<PageNotFound v-else />
 
 		<NcPopover
@@ -42,8 +42,8 @@ import { emit } from '@nextcloud/event-bus'
 import { NcAppContentDetails, NcButton, NcPopover } from '@nextcloud/vue'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { mapActions, mapState } from 'pinia'
-import Page from './Page.vue'
 import PageNotFound from './Page/PageNotFound.vue'
+import PageContainer from './PageContainer.vue'
 import PageVersion from './PageVersion.vue'
 import SkeletonLoading from './SkeletonLoading.vue'
 import { useNetworkState } from '../composables/useNetworkState.ts'
@@ -56,13 +56,13 @@ import { useVersionsStore } from '../stores/versions.js'
 import displayError from '../util/displayError.js'
 
 export default {
-	name: 'Collective',
+	name: 'CollectiveContainer',
 
 	components: {
 		NcAppContentDetails,
 		NcButton,
 		NcPopover,
-		Page,
+		PageContainer,
 		PageNotFound,
 		PageVersion,
 		SkeletonLoading,
@@ -81,9 +81,8 @@ export default {
 	},
 
 	computed: {
-		...mapState(useRootStore, ['isPublic', 'loading', 'pageParam', 'pageId']),
+		...mapState(useRootStore, ['isPublic', 'loading']),
 		...mapState(useCollectivesStore, [
-			'collectivePath',
 			'currentCollective',
 			'currentCollectivePath',
 		]),
@@ -141,7 +140,7 @@ export default {
 	},
 
 	methods: {
-		...mapActions(useRootStore, ['hide', 'load', 'show']),
+		...mapActions(useRootStore, ['show']),
 		...mapActions(useSharesStore, ['getShares']),
 		...mapActions(useTagsStore, ['clearFilterTags']),
 		...mapActions(useVersionsStore, ['selectVersion']),
@@ -232,7 +231,7 @@ export default {
 	width: 100%;
 }
 
-/* Format page title in Page.vue and PageVersion.vue */
+/* Format page title in PageContainer.vue and PageVersion.vue */
 .page-title {
 	position: relative;
 	z-index: 10022;

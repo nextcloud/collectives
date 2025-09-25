@@ -12,7 +12,7 @@
 		<template #list>
 			<PageList v-if="currentCollective" />
 		</template>
-		<Collective v-if="currentCollective" />
+		<CollectiveContainer v-if="currentCollective" />
 		<NcEmptyContent v-else-if="loading('collectives')">
 			<template #icon>
 				<NcLoadingIcon />
@@ -27,7 +27,7 @@
 import { listen } from '@nextcloud/notify_push'
 import { NcAppContent, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
-import Collective from '../components/Collective.vue'
+import CollectiveContainer from '../components/CollectiveContainer.vue'
 import CollectiveNotFound from '../components/CollectiveNotFound.vue'
 import PageList from '../components/PageList.vue'
 import { useNetworkState } from '../composables/useNetworkState.ts'
@@ -44,7 +44,7 @@ export default {
 	name: 'CollectiveView',
 
 	components: {
-		Collective,
+		CollectiveContainer,
 		CollectiveNotFound,
 		NcAppContent,
 		NcEmptyContent,
@@ -124,7 +124,7 @@ export default {
 		...mapActions(useSessionsStore, ['createSession', 'updateSession', 'closeSession']),
 		...mapActions(useTagsStore, ['getTags']),
 		...mapActions(useTemplatesStore, ['getTemplates']),
-		...mapActions(usePagesStore, ['getPages', 'getTrashPages', 'updatePages']),
+		...mapActions(usePagesStore, ['getPages', 'getTrashPages']),
 
 		initSession() {
 			if (this.listenPush) {

@@ -116,7 +116,7 @@ import { useTemplatesStore } from '../../stores/templates.js'
 import { scrollToPage } from '../../util/scrollToElement.js'
 
 export default {
-	name: 'Item',
+	name: 'PageListItem',
 
 	components: {
 		CollectivesIcon,
@@ -240,7 +240,6 @@ export default {
 			'isDragoverTargetPage',
 			'pageParent',
 			'pageParents',
-			'newPageParentId',
 		]),
 
 		...mapState(useTemplatesStore, ['hasTemplates']),
@@ -292,7 +291,7 @@ export default {
 		},
 
 		isPotentialDropTarget() {
-			// IMPORTANT: needs to be synchronized with custom drag/drop events in Item.vue
+			// IMPORTANT: needs to be synchronized with custom drag/drop events in DraggableElement.vue
 			return !this.disableDragndropSortOrMove
 				// Ignore if draggedPageId is unset
 				&& this.draggedPageId

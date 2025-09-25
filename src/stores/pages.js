@@ -10,7 +10,6 @@ import { defineStore } from 'pinia'
 import { set } from 'vue'
 import * as api from '../apis/collectives/index.js'
 import { INDEX_PAGE, PAGE_SUFFIX, pageModes, TEMPLATE_PATH } from '../constants.js'
-/* eslint import/namespace: ['error', { allowComputed: true }] */
 import * as sortOrders from '../util/sortOrders.js'
 import { removeFrom, updateOrAddTo } from './collectionHelpers.js'
 import { useCollectivesStore } from './collectives.js'
@@ -134,7 +133,7 @@ export const usePagesStore = defineStore('pages', {
 			}
 		},
 
-		pagePath: (state) => (page) => {
+		pagePath: () => (page) => {
 			const collectivesStore = useCollectivesStore()
 			if (!page.slug) {
 				const { filePath, fileName, title, id } = page
@@ -340,12 +339,12 @@ export const usePagesStore = defineStore('pages', {
 
 		isCollapsed(state) {
 			// Default to 'true' if unset
-			return (pageId) => state.collapsed[pageId] != null ? state.collapsed[pageId] : true
+			return (pageId) => state.collapsed[pageId] ?? true
 		},
 
 		hasOutline(state) {
 			// Default to 'false' if unset
-			return (pageId) => state.outline[pageId] != null ? state.outline[pageId] : false
+			return (pageId) => state.outline[pageId] ?? false
 		},
 
 		keptSortable(state) {
@@ -444,14 +443,14 @@ export const usePagesStore = defineStore('pages', {
 
 		toggleCollapsed(pageId) {
 			// Default to 'false' if unset
-			set(this.collapsed, pageId, this.collapsed[pageId] == null ? false : !this.collapsed[pageId])
+			set(this.collapsed, pageId, this.collapsed[pageId] === undefined ? false : !this.collapsed[pageId])
 		},
 		collapse(pageId) { set(this.collapsed, pageId, true) },
 		expand(pageId) { set(this.collapsed, pageId, false) },
 
 		toggleOutline(pageId) {
 			// Default to 'true' if unset
-			set(this.outline, pageId, this.outline[pageId] == null ? true : !this.outline[pageId])
+			set(this.outline, pageId, this.outline[pageId] === undefined ? true : !this.outline[pageId])
 		},
 		setOutlineForCurrentPage(visible) {
 			set(this.outline, this.currentPage.id, visible)

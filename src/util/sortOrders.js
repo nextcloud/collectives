@@ -11,8 +11,8 @@ const byTimeDesc = (a, b) => byTimeAsc(b, a)
 
 /**
  *
- * @param a
- * @param b
+ * @param {object} a first sortable object
+ * @param {object} b second sortable object
  */
 function byOrder(a, b) {
 	if (a.index >= 0 && b.index >= 0) {

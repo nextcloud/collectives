@@ -45,9 +45,9 @@
 			<!-- No search results -->
 			<template v-else-if="currentUserIsAdmin && !showCurrentSkeleton">
 				<NcAppNavigationCaption class="member-picker-caption" :name="t('collectives', 'Add accounts, groups or teams')" />
-				<Hint v-if="!searchWithoutQuery && !hasSearchQuery" :hint="t('collectives', 'Search for members to add.')" />
-				<Hint v-else-if="isSearchLoading" :hint="t('collectives', 'Loading…')" />
-				<Hint v-else :hint="t('collectives', 'No search results')" />
+				<MembersHint v-if="!searchWithoutQuery && !hasSearchQuery" :hint="t('collectives', 'Search for members to add.')" />
+				<MembersHint v-else-if="isSearchLoading" :hint="t('collectives', 'Loading…')" />
+				<MembersHint v-else :hint="t('collectives', 'No search results')" />
 			</template>
 		</div>
 	</div>
@@ -64,8 +64,8 @@ import { mapState } from 'pinia'
 import MagnifyIcon from 'vue-material-design-icons/Magnify.vue'
 import SkeletonLoading from '../SkeletonLoading.vue'
 import CurrentMembers from './CurrentMembers.vue'
-import Hint from './Hint.vue'
 import MemberSearchResults from './MemberSearchResults.vue'
+import MembersHint from './MembersHint.vue'
 import SelectedMembers from './SelectedMembers.vue'
 import { autocompleteSourcesToCircleMemberTypes, circlesMemberTypes, shareTypes } from '../../constants.js'
 import { useCirclesStore } from '../../stores/circles.js'
@@ -74,11 +74,11 @@ export default {
 	name: 'MemberPicker',
 
 	components: {
-		NcAppNavigationCaption,
 		CurrentMembers,
-		Hint,
 		MagnifyIcon,
 		MemberSearchResults,
+		MembersHint,
+		NcAppNavigationCaption,
 		NcTextField,
 		SelectedMembers,
 		SkeletonLoading,
@@ -97,7 +97,7 @@ export default {
 
 		currentUserIsAdmin: {
 			type: Boolean,
-			default: true,
+			default: false,
 		},
 
 		showCurrent: {

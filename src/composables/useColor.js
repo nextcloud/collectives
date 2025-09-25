@@ -44,7 +44,9 @@ function getContrastRatio(rgbColor1, rgbColor2) {
  */
 function hexToRgb(hexColor) {
 	hexColor = hexColor.replace(/^#/, '')
-	if (hexColor.length === 3) { hexColor = hexColor.split('').map((x) => x + x).join('') }
+	if (hexColor.length === 3) {
+		hexColor = hexColor.split('').map((x) => x + x).join('')
+	}
 	const num = parseInt(hexColor, 16)
 	return [(num >> 16) & 255, (num >> 8) & 255, num & 255]
 }

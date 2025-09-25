@@ -29,7 +29,6 @@
 					</NcButton>
 				</NcEmojiPicker>
 				<NcTextField
-					ref="collectiveName"
 					:value.sync="newCollectiveName"
 					:disabled="!isCollectiveOwner(collective)"
 					:label="getRenameLabel"
@@ -160,7 +159,6 @@ import Emoticon from 'vue-material-design-icons/EmoticonOutline.vue'
 import { memberLevels, pageModes } from '../../constants.js'
 import { useCirclesStore } from '../../stores/circles.js'
 import { useCollectivesStore } from '../../stores/collectives.js'
-import { usePagesStore } from '../../stores/pages.js'
 import { useRootStore } from '../../stores/root.js'
 import displayError from '../../util/displayError.js'
 
@@ -202,12 +200,9 @@ export default {
 		...mapState(useRootStore, [
 			'collectiveId',
 			'loading',
-			'pageParam',
-			'pageId',
 		]),
 
 		...mapState(useCollectivesStore, ['isCollectiveOwner']),
-		...mapState(usePagesStore, ['pages']),
 
 		emojiTitle() {
 			return this.collective.emoji ? t('collectives', 'Change emoji') : t('collectives', 'Add emoji')

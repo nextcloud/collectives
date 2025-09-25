@@ -9,10 +9,11 @@
 			<NcAppNavigationCaption
 				:name="t('collectives', 'Add accounts')"
 				class="member-picker-caption" />
-			<Member
+			<MemberItem
 				v-for="item in addableUsers"
 				:key="generateKey(item)"
 				:circle-id="circleId"
+				:current-user-is-admin="true"
 				:user-id="item.id"
 				:display-name="item.label"
 				:user-type="circleUserType(item.source)"
@@ -26,7 +27,7 @@
 			<NcAppNavigationCaption
 				:name="t('collectives', 'Add groups')"
 				class="member-picker-caption" />
-			<Member
+			<MemberItem
 				v-for="item in addableGroups"
 				:key="generateKey(item)"
 				:circle-id="circleId"
@@ -43,7 +44,7 @@
 			<NcAppNavigationCaption
 				:name="t('collectives', 'Add teams')"
 				class="member-picker-caption" />
-			<Member
+			<MemberItem
 				v-for="item in addableCircles"
 				:key="generateKey(item)"
 				:circle-id="circleId"
@@ -60,14 +61,14 @@
 
 <script>
 import { NcAppNavigationCaption } from '@nextcloud/vue'
-import Member from './Member.vue'
+import MemberItem from './MemberItem.vue'
 import { autocompleteSourcesToCircleMemberTypes, circlesMemberTypes } from '../../constants.js'
 
 export default {
 	name: 'MemberSearchResults',
 
 	components: {
-		Member,
+		MemberItem,
 		NcAppNavigationCaption,
 	},
 
@@ -103,7 +104,7 @@ export default {
 
 	computed: {
 		addableUsers() {
-			if (this.searchResults === []) {
+			if (this.searchResults.length === 0) {
 				return []
 			}
 
@@ -111,7 +112,7 @@ export default {
 		},
 
 		addableGroups() {
-			if (this.searchResults === []) {
+			if (this.searchResults.length === 0) {
 				return []
 			}
 
@@ -119,7 +120,7 @@ export default {
 		},
 
 		addableCircles() {
-			if (this.searchResults === []) {
+			if (this.searchResults.length === 0) {
 				return []
 			}
 

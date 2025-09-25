@@ -5,7 +5,7 @@
 
 import { createPinia, PiniaVuePlugin } from 'pinia'
 import Vue from 'vue'
-import Collectives from './Collectives.vue'
+import CollectivesApp from './CollectivesApp.vue'
 import router from './router.js'
 
 window.OCA.Collectives = {
@@ -25,7 +25,7 @@ const app = new Vue({
 	el: '#content',
 	router,
 	pinia,
-	render: (h) => h(Collectives),
+	render: (h) => h(CollectivesApp),
 })
 
 // Expose the app during E2E tests

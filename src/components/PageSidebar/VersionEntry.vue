@@ -129,7 +129,7 @@ import DownloadIcon from 'vue-material-design-icons/TrayArrowDown.vue'
 import PageIcon from '../Icon/PageIcon.vue'
 
 export default {
-	name: 'Version',
+	name: 'VersionEntry',
 
 	components: {
 		BackupRestoreIcon,

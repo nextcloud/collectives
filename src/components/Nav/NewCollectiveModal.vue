@@ -79,6 +79,7 @@
 				<MemberPicker
 					:show-selection="true"
 					:search-without-query="true"
+					:current-user-is-admin="true"
 					:selected-members="selectedMembers"
 					:no-delete-members="noDeleteMembers"
 					:on-click-searched="onClickSearched"
@@ -293,7 +294,7 @@ export default {
 					}))
 					try {
 						this.addMembersToCircle({ circleId: this.updatedCollective.circleId, members })
-					} catch (e) {
+					} catch {
 						showError(t('collectives', 'Could not add members to the collective'))
 					}
 				}

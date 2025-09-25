@@ -297,7 +297,6 @@ export default {
 			'hasOutline',
 			'hasSubpages',
 			'pagesTreeWalk',
-			'visibleSubpages',
 		]),
 
 		displaySidebarAction() {

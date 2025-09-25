@@ -62,7 +62,7 @@ import { useRootStore } from '../stores/root.js'
 import displayError from '../util/displayError.js'
 
 export default {
-	name: 'Navigation',
+	name: 'NavigationBar',
 
 	components: {
 		NcAppNavigation,

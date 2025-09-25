@@ -57,7 +57,6 @@ export default {
 
 	methods: {
 		...mapActions(useCirclesStore, ['getCircleMembers', 'addMemberToCircle']),
-		...mapActions(useCollectivesStore, ['setMembersCollectiveId']),
 
 		onClose() {
 			this.$emit('close')

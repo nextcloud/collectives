@@ -31,7 +31,7 @@ import { useSearchStore } from '../stores/search.js'
 import { useTagsStore } from '../stores/tags.js'
 
 export default {
-	name: 'Page',
+	name: 'PageContainer',
 
 	components: {
 		LandingPageWidgets,

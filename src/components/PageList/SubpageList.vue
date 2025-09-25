@@ -5,7 +5,7 @@
 
 <template>
 	<div>
-		<Item
+		<PageListItem
 			:key="page.title"
 			:to="pagePath(page)"
 			:page-id="page.id"
@@ -21,7 +21,7 @@
 			:filtered-view="filteredView"
 			@click.native="show('details')" />
 		<div class="page-list-indent">
-			<Draggable
+			<DraggableElement
 				v-if="subpagesView.length > 0 || keptSortable(page.id)"
 				:list="subpagesView"
 				:parent-id="page.id"
@@ -33,15 +33,15 @@
 					:page="subpage"
 					:level="level + 1"
 					class="page-list-drag-item" />
-			</Draggable>
+			</DraggableElement>
 		</div>
 	</div>
 </template>
 
 <script>
 import { mapActions, mapState } from 'pinia'
-import Draggable from './Draggable.vue'
-import Item from './Item.vue'
+import DraggableElement from './DraggableElement.vue'
+import PageListItem from './PageListItem.vue'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { usePagesStore } from '../../stores/pages.js'
 import { useRootStore } from '../../stores/root.js'
@@ -50,8 +50,8 @@ export default {
 	name: 'SubpageList',
 
 	components: {
-		Draggable,
-		Item,
+		DraggableElement,
+		PageListItem,
 	},
 
 	props: {
@@ -120,10 +120,7 @@ export default {
 
 	methods: {
 		...mapActions(useRootStore, ['show']),
-		...mapActions(usePagesStore, [
-			'collapse',
-			'expand',
-		]),
+		...mapActions(usePagesStore, ['expand']),
 
 		initCollapsed() {
 			// Expand subpages if they're in the path to currentPage

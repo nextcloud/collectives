@@ -53,19 +53,9 @@ export default {
 	},
 
 	props: {
-		richObjectType: {
-			type: String,
-			default: '',
-		},
-
 		richObject: {
 			type: Object,
 			default: null,
-		},
-
-		accessible: {
-			type: Boolean,
-			default: true,
 		},
 	},
 

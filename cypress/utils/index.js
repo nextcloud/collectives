@@ -5,7 +5,7 @@
 
 /**
  *
- * @param url
+ * @param {string} url - URL to parse
  */
 function getSearchParams(url) {
 	return url
