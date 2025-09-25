@@ -16,7 +16,10 @@
 						:class="{ 'collapsed': !showMembers }" />
 				</div>
 			</a>
-			<NcButton v-if="showTeamOverviewButton" :href="teamUrl" target="_blank">
+			<NcButton v-if="showTeamOverviewButton"
+				:aria-label="t('collectives', 'Team overview')"
+				:href="teamUrl"
+				target="_blank">
 				<template #icon>
 					<TeamsIcon :size="20" />
 				</template>

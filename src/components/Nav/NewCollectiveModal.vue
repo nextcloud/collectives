@@ -81,10 +81,11 @@
 
 		<template #actions>
 			<template v-if="state === 0">
-				<NcButton @click="onClose">
+				<NcButton :aria-label="t('collectives', 'Cancel')" @click="onClose">
 					{{ t('collectives', 'Cancel') }}
 				</NcButton>
 				<NcButton type="primary"
+					:aria-label="t('collectives', 'Add members')"
 					:disabled="!newCollectiveName || nameIsInvalid"
 					class="modal-buttons-right"
 					@click="advanceToMembers">
@@ -92,10 +93,11 @@
 				</NcButton>
 			</template>
 			<template v-else-if="state === 1">
-				<NcButton @click="state = 0">
+				<NcButton :aria-label="t('collectives', 'Go back')" @click="state = 0">
 					{{ t('collectives', 'Back') }}
 				</NcButton>
 				<NcButton type="primary"
+					:aria-label="createButtonString"
 					:disabled="loading"
 					class="modal-buttons-right"
 					@click="onCreate">
