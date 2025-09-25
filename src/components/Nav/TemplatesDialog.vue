@@ -22,6 +22,7 @@
 		<!-- Template actions -->
 		<template #actions>
 			<NcButton type="secondary"
+				:aria-label="t('collectives', 'Add a template')"
 				@click="onCreate(0)">
 				<template #icon>
 					<NcLoadingIcon v-if="isCreating" :size="20" />

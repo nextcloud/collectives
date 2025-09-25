@@ -7,6 +7,7 @@
 	<div class="page-trash">
 		<NcButton ref="pagetrashbutton"
 			type="tertiary"
+			:aria-label="t('collectives', 'Show deleted pages')"
 			class="page-trash-button"
 			@click="openTrash">
 			<template #icon>
@@ -53,7 +54,7 @@
 									</div>
 								</td>
 								<td class="actions">
-									<NcButton @click="onClickRestore(trashPage)">
+									<NcButton :aria-label="t('collectives', 'Restore page')" @click="onClickRestore(trashPage)">
 										<template #icon>
 											<RestoreIcon :size="20" />
 										</template>

@@ -98,6 +98,7 @@
 
 			<li>
 				<NcButton v-if="showCreateTag"
+					:aria-label="t('collectives', 'Create new tag {tag}', { tag: input.trim() })"
 					alignment="start"
 					class="tags-modal__tag-create"
 					native-type="submit"

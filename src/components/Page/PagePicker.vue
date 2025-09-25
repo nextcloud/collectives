@@ -37,10 +37,10 @@
 				</div>
 				<div v-for="(page, index) in pageCrumbs"
 					:key="page.id"
-					:aria-label="t('collectives', 'Breadcrumb for page {page}', { page: page.title })"
 					class="crumbs-level">
 					<ChevronRightIcon :size="20" />
 					<NcButton type="tertiary"
+						:aria-label="t('collectives', 'Breadcrumb, navigate to page {page}', {page: page.title })"
 						:disabled="(index + 1) === pageCrumbs.length"
 						class="crumb-button"
 						@click="onClickPage(page)">
@@ -88,6 +88,7 @@
 						</div>
 						<div v-if="page.id === pageId" class="picker-move-buttons">
 							<NcButton :disabled="index === 0"
+								:aria-label="t('collectives', 'Move page up')"
 								type="tertiary"
 								@click="onClickUp">
 								<template #icon>
@@ -95,6 +96,7 @@
 								</template>
 							</NcButton>
 							<NcButton :disabled="index === (subpages.length - 1)"
+								:aria-label="t('collectives', 'Move page down')"
 								type="tertiary"
 								@click="onClickDown">
 								<template #icon>
@@ -108,6 +110,7 @@
 		</div>
 		<template #actions>
 			<NcButton type="secondary"
+				:aria-label="t('collectives', copyPageString)"
 				:disabled="isActionButtonsDisabled"
 				@click="onMoveOrCopy(true)">
 				<template #icon>
@@ -116,6 +119,7 @@
 				{{ copyPageString }}
 			</NcButton>
 			<NcButton type="primary"
+				:aria-label="t('collectives', movePageString)"
 				:disabled="isActionButtonsDisabled"
 				@click="onMoveOrCopy(false)">
 				<template #icon>
