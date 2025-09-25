@@ -44,7 +44,7 @@
 					:loading="loading(`page-tag-${pageId}-${tag.id}`)"
 					:disabled="tag.deleted"
 					class="tags-modal__tag-checkbox"
-					@update:checked="onCheckUpdate(tag, $event)">
+					@update:modelValue="onCheckUpdate(tag, $event)">
 					<template v-if="!tag.deleted">
 						{{ tag.name }}
 					</template>
