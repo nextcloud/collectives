@@ -188,8 +188,6 @@ export default {
 	border-radius: var(--border-radius-element);
 
 	&__button {
-		border: 1px solid var(--color-border) !important;
-
 		&.mobile {
 			// Same padding left and right on mobile without text
 			padding-inline: var(--default-grid-baseline);
@@ -203,8 +201,8 @@ export default {
 
 	&__dot {
 		display: inline-block;
-		height: 14px;
-		width: 14px;
+		height: 12px;
+		width: 12px;
 		background-color: var(--color-element-error, var(--color-error));
 		border-radius: 50%;
 	}
