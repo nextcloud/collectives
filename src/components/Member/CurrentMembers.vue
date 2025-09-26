@@ -61,7 +61,7 @@ export default {
 
 		currentUserIsAdmin: {
 			type: Boolean,
-			default: false,
+			required: true,
 		},
 	},
 

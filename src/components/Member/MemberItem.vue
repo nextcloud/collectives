@@ -124,7 +124,7 @@ export default {
 
 		currentUserIsAdmin: {
 			type: Boolean,
-			default: false,
+			required: true,
 		},
 
 		memberId: {
@@ -159,7 +159,7 @@ export default {
 
 		isSearched: {
 			type: Boolean,
-			default: false,
+			required: true,
 		},
 
 		isSelected: {
