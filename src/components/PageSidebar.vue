@@ -4,7 +4,8 @@
 -->
 
 <template>
-	<NcAppSidebar ref="sidebar"
+	<NcAppSidebar
+		ref="sidebar"
 		:name="title"
 		:active.sync="active"
 		:open.sync="open"
@@ -13,7 +14,8 @@
 			'page-sidebar-button': true,
 		}"
 		@close="close">
-		<NcAppSidebarTab id="attachments"
+		<NcAppSidebarTab
+			id="attachments"
 			:order="0"
 			:name="t('collectives', 'Attachments')">
 			<template #icon>
@@ -21,7 +23,8 @@
 			</template>
 			<SidebarTabAttachments v-if="showing('sidebar')" :page="currentPage" />
 		</NcAppSidebarTab>
-		<NcAppSidebarTab id="backlinks"
+		<NcAppSidebarTab
+			id="backlinks"
 			:order="1"
 			:name="t('collectives', 'Backlinks')">
 			<template #icon>
@@ -29,7 +32,8 @@
 			</template>
 			<SidebarTabBacklinks v-if="showing('sidebar')" :page="currentPage" />
 		</NcAppSidebarTab>
-		<NcAppSidebarTab v-if="!isPublic && currentCollectiveCanShare"
+		<NcAppSidebarTab
+			v-if="!isPublic && currentCollectiveCanShare"
 			id="sharing"
 			:order="2"
 			:name="t('collectives', 'Sharing')">
@@ -38,14 +42,16 @@
 			</template>
 			<SidebarTabSharing v-if="showing('sidebar')" :page-id="currentPage.id" />
 		</NcAppSidebarTab>
-		<NcAppSidebarTab v-if="!isPublic && currentCollectiveCanEdit"
+		<NcAppSidebarTab
+			v-if="!isPublic && currentCollectiveCanEdit"
 			id="versions"
 			:order="3"
 			:name="t('collectives', 'Versions')">
 			<template #icon>
 				<BackupRestoreIcon :size="20" />
 			</template>
-			<SidebarTabVersions v-if="showing('sidebar')"
+			<SidebarTabVersions
+				v-if="showing('sidebar')"
 				:page-id="currentPage.id"
 				:page-timestamp="currentPage.timestamp" />
 		</NcAppSidebarTab>
@@ -53,21 +59,21 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'pinia'
-import { useRootStore } from '../stores/root.js'
-import { useCollectivesStore } from '../stores/collectives.js'
-import { usePagesStore } from '../stores/pages.js'
-import { useVersionsStore } from '../stores/versions.js'
 import { NcAppSidebar, NcAppSidebarTab } from '@nextcloud/vue'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
-import BackupRestoreIcon from 'vue-material-design-icons/BackupRestore.vue'
+import { mapActions, mapState } from 'pinia'
 import ArrowBottomLeftIcon from 'vue-material-design-icons/ArrowBottomLeft.vue'
+import BackupRestoreIcon from 'vue-material-design-icons/BackupRestore.vue'
 import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue'
 import ShareVariantIcon from 'vue-material-design-icons/ShareVariantOutline.vue'
 import SidebarTabAttachments from './PageSidebar/SidebarTabAttachments.vue'
 import SidebarTabBacklinks from './PageSidebar/SidebarTabBacklinks.vue'
 import SidebarTabSharing from './PageSidebar/SidebarTabSharing.vue'
 import SidebarTabVersions from './PageSidebar/SidebarTabVersions.vue'
+import { useCollectivesStore } from '../stores/collectives.js'
+import { usePagesStore } from '../stores/pages.js'
+import { useRootStore } from '../stores/root.js'
+import { useVersionsStore } from '../stores/versions.js'
 
 export default {
 	name: 'PageSidebar',
@@ -96,12 +102,14 @@ export default {
 			'currentCollectiveCanEdit',
 			'currentCollectiveCanShare',
 		]),
+
 		...mapState(usePagesStore, ['currentPage', 'title']),
 
 		active: {
 			get() {
 				return this.activeSidebarTab
 			},
+
 			set(id) {
 				this.setActiveSidebarTab(id)
 			},
@@ -111,6 +119,7 @@ export default {
 			get() {
 				return this.showing('sidebar') || false
 			},
+
 			set(value) {
 				if (value === true) {
 					this.show('sidebar')
@@ -127,6 +136,7 @@ export default {
 			'setActiveSidebarTab',
 			'show',
 		]),
+
 		...mapActions(useVersionsStore, ['selectVersion']),
 
 		/**

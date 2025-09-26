@@ -4,17 +4,19 @@
 -->
 
 <template>
-	<li class="member-row"
+	<li
+		class="member-row"
 		:tabindex="tabindex"
 		:role="ariaRole"
 		:class="{
-			'clickable': isClickable,
-			'selected': isSelected,
+			clickable: isClickable,
+			selected: isSelected,
 		}"
 		@click="onClick"
 		@keyup.enter="onClick">
 		<!-- Avatar -->
-		<NcAvatar :user="userId"
+		<NcAvatar
+			:user="userId"
 			:is-no-user="isNoUser"
 			:icon-class="iconClass"
 			:disable-menu="true"
@@ -39,11 +41,13 @@
 		</div>
 
 		<!-- Action menu -->
-		<NcActions v-else-if="currentUserIsAdmin && !isSearched && !isCurrentUser"
+		<NcActions
+			v-else-if="currentUserIsAdmin && !isSearched && !isCurrentUser"
 			:force-menu="true"
 			:open.sync="showActionMenu"
 			class="member-row__actions">
-			<NcActionButton v-if="!isAdmin"
+			<NcActionButton
+				v-if="!isAdmin"
 				:close-after-click="true"
 				@click="setMemberLevel(memberLevels.LEVEL_ADMIN)">
 				<template #icon>
@@ -51,7 +55,8 @@
 				</template>
 				{{ t('collectives', 'Promote to admin') }}
 			</NcActionButton>
-			<NcActionButton v-if="!isModerator"
+			<NcActionButton
+				v-if="!isModerator"
 				:close-after-click="true"
 				@click="setMemberLevel(memberLevels.LEVEL_MODERATOR)">
 				<template #icon>
@@ -59,7 +64,8 @@
 				</template>
 				{{ setLevelModeratorString }}
 			</NcActionButton>
-			<NcActionButton v-if="!isMember"
+			<NcActionButton
+				v-if="!isMember"
 				:close-after-click="true"
 				@click="setMemberLevel(memberLevels.LEVEL_MEMBER)">
 				<template #icon>
@@ -68,7 +74,8 @@
 				{{ t('collectives', 'Demote to member') }}
 			</NcActionButton>
 			<NcActionSeparator />
-			<NcActionButton :close-after-click="true"
+			<NcActionButton
+				:close-after-click="true"
 				class="critical"
 				@click="removeMember">
 				<template #icon>
@@ -81,17 +88,17 @@
 </template>
 
 <script>
-import { mapActions } from 'pinia'
-import { useCirclesStore } from '../../stores/circles.js'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { circlesMemberTypes, memberLevels } from '../../constants.js'
-import { NcActions, NcActionButton, NcActionSeparator, NcAvatar, NcLoadingIcon } from '@nextcloud/vue'
+import { NcActionButton, NcActions, NcActionSeparator, NcAvatar, NcLoadingIcon } from '@nextcloud/vue'
+import { mapActions } from 'pinia'
 import AccountCogIcon from 'vue-material-design-icons/AccountCogOutline.vue'
 import AccountIcon from 'vue-material-design-icons/AccountOutline.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 import CrownIcon from 'vue-material-design-icons/CrownOutline.vue'
 import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
+import { circlesMemberTypes, memberLevels } from '../../constants.js'
+import { useCirclesStore } from '../../stores/circles.js'
 
 export default {
 	name: 'Member',
@@ -114,42 +121,52 @@ export default {
 			type: String,
 			default: null,
 		},
+
 		currentUserIsAdmin: {
 			type: Boolean,
 			default: true,
 		},
+
 		memberId: {
 			type: String,
 			default: null,
 		},
+
 		userId: {
 			type: String,
 			required: true,
 		},
+
 		displayName: {
 			type: String,
 			required: true,
 		},
+
 		userType: {
 			type: Number,
 			required: true,
 		},
+
 		level: {
 			type: Number,
 			default: memberLevels.LEVEL_MEMBER,
 		},
+
 		isCurrentUser: {
 			type: Boolean,
 			default: false,
 		},
+
 		isSearched: {
 			type: Boolean,
 			default: true,
 		},
+
 		isSelected: {
 			type: Boolean,
 			default: false,
 		},
+
 		isLoading: {
 			type: Boolean,
 			default: false,
@@ -168,27 +185,35 @@ export default {
 		isClickable() {
 			return this.isSearched
 		},
+
 		tabindex() {
 			return this.isClickable ? 0 : undefined
 		},
+
 		ariaRole() {
 			return this.isClickable ? 'button' : undefined
 		},
+
 		isNoUser() {
 			return this.userType !== circlesMemberTypes.TYPE_USER
 		},
+
 		iconClass() {
 			return this.isNoUser ? 'icon-group-white' : null
 		},
+
 		isAdmin() {
 			return this.level >= memberLevels.LEVEL_ADMIN
 		},
+
 		isModerator() {
 			return this.level === memberLevels.LEVEL_MODERATOR
 		},
+
 		isMember() {
 			return this.level === memberLevels.LEVEL_MEMBER
 		},
+
 		levelLabel() {
 			return this.isAdmin
 				? t('collectives', 'admin')
@@ -196,14 +221,17 @@ export default {
 					? t('collectives', 'moderator')
 					: t('collectives', 'member')
 		},
+
 		showLevelLabel() {
 			return this.isAdmin || this.isModerator
 		},
+
 		setLevelModeratorString() {
 			return this.isAdmin
 				? t('collectives', 'Demote to moderator')
 				: t('collectives', 'Promote to moderator')
 		},
+
 		avatarSize() {
 			return parseInt(window.getComputedStyle(document.body).getPropertyValue('--default-clickable-area'))
 		},

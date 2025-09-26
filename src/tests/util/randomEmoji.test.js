@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { expect, test } from 'vitest'
 import randomEmoji from '../../util/randomEmoji.js'
-import { test, expect } from 'vitest'
 
 test('returns an emoji', () => {
 	const emojis = ['🥳']

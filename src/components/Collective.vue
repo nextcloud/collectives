@@ -12,16 +12,18 @@
 		<Page v-else-if="currentPage" />
 		<PageNotFound v-else />
 
-		<NcPopover v-if="!networkOnline"
+		<NcPopover
+			v-if="!networkOnline"
 			:aria-label="t('collectives', 'Offline')"
 			:auto-hide="false"
 			no-focus-trap
 			class="offline-indicator">
 			<template #trigger>
-				<NcButton type="tertiary"
+				<NcButton
+					variant="tertiary"
 					:aria-label="t('collectives', 'Offline')"
 					class="trigger offline-indicator__button"
-					:class="{'mobile': isMobile, 'desktop': !isMobile }">
+					:class="{ mobile: isMobile, desktop: !isMobile }">
 					<template #icon>
 						<span class="offline-indicator__dot" />
 					</template>
@@ -36,22 +38,22 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'pinia'
-import { useRootStore } from '../stores/root.js'
-import { useCollectivesStore } from '../stores/collectives.js'
-import { useSharesStore } from '../stores/shares.js'
-import { useTagsStore } from '../stores/tags.js'
-import { usePagesStore } from '../stores/pages.js'
-import { useVersionsStore } from '../stores/versions.js'
 import { emit } from '@nextcloud/event-bus'
 import { NcAppContentDetails, NcButton, NcPopover } from '@nextcloud/vue'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
-import displayError from '../util/displayError.js'
+import { mapActions, mapState } from 'pinia'
 import Page from './Page.vue'
-import PageVersion from './PageVersion.vue'
 import PageNotFound from './Page/PageNotFound.vue'
+import PageVersion from './PageVersion.vue'
 import SkeletonLoading from './SkeletonLoading.vue'
 import { useNetworkState } from '../composables/useNetworkState.ts'
+import { useCollectivesStore } from '../stores/collectives.js'
+import { usePagesStore } from '../stores/pages.js'
+import { useRootStore } from '../stores/root.js'
+import { useSharesStore } from '../stores/shares.js'
+import { useTagsStore } from '../stores/tags.js'
+import { useVersionsStore } from '../stores/versions.js'
+import displayError from '../util/displayError.js'
 
 export default {
 	name: 'Collective',
@@ -85,6 +87,7 @@ export default {
 			'currentCollective',
 			'currentCollectivePath',
 		]),
+
 		...mapState(usePagesStore, [
 			'currentFileIdPage',
 			'currentPage',
@@ -92,6 +95,7 @@ export default {
 			'pagePath',
 			'currentPagePath',
 		]),
+
 		...mapState(useVersionsStore, ['selectedVersion']),
 
 		notFound() {
@@ -106,22 +110,25 @@ export default {
 	},
 
 	watch: {
-		'currentCollective.id'(val) {
+		'currentCollective.id': function(val) {
 			this.clearFilterTags()
 			if (val) {
 				this.initCollective()
 			}
 		},
-		'currentPage.id'() {
+
+		'currentPage.id': function() {
 			this.selectVersion(null)
 			this.slugUrl()
 		},
-		'notFound'(current) {
+
+		notFound: function(current) {
 			if (current && this.currentFileIdPage) {
 				this.$router.replace(this.pagePath(this.currentFileIdPage) + document.location.hash)
 			}
 		},
-		'networkOnline'(val) {
+
+		networkOnline: function(val) {
 			if (val && this.loadPending) {
 				this.getShares()
 			}

@@ -4,7 +4,8 @@
 -->
 
 <template>
-	<NcEmptyContent :name="t('collectives', 'Offline')"
+	<NcEmptyContent
+		:name="t('collectives', 'Offline')"
 		:description="t('collectives', 'Make sure you are online and can reach the server.')">
 		<template #icon>
 			<CloudOffOutlineIcon />

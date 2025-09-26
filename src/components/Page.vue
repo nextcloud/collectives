@@ -5,7 +5,8 @@
 
 <template>
 	<div class="page-container">
-		<PageTitleBar :is-full-width="isFullWidth"
+		<PageTitleBar
+			:is-full-width="isFullWidth"
 			@focus-editor="focusEditor"
 			@save-editor="saveEditor" />
 		<PageTags v-if="tagsLoaded" :is-full-width="isFullWidth" />
@@ -19,16 +20,15 @@
 
 <script>
 import { mapState } from 'pinia'
-import { useRootStore } from '../stores/root.js'
-import { useTagsStore } from '../stores/tags.js'
-import { usePagesStore } from '../stores/pages.js'
-import { useSearchStore } from '../stores/search.js'
-
 import LandingPageWidgets from './Page/LandingPageWidgets.vue'
 import PageTags from './Page/PageTags.vue'
 import PageTitleBar from './Page/PageTitleBar.vue'
 import SearchDialog from './Page/SearchDialog.vue'
 import TextEditor from './Page/TextEditor.vue'
+import { usePagesStore } from '../stores/pages.js'
+import { useRootStore } from '../stores/root.js'
+import { useSearchStore } from '../stores/search.js'
+import { useTagsStore } from '../stores/tags.js'
 
 export default {
 	name: 'Page',
@@ -45,11 +45,13 @@ export default {
 		...mapState(useRootStore, [
 			'isTextEdit',
 		]),
+
 		...mapState(useTagsStore, ['tagsLoaded']),
 		...mapState(usePagesStore, [
 			'currentPage',
 			'isLandingPage',
 		]),
+
 		...mapState(useSearchStore, [
 			'shouldShowSearchDialog',
 		]),

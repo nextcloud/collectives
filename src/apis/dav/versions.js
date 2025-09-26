@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { getClient } from '@nextcloud/files/dav'
 import { getCurrentUser } from '@nextcloud/auth'
+import { getClient } from '@nextcloud/files/dav'
 import * as davRequests from './davRequests.js'
 
 /**

@@ -7,9 +7,11 @@
 	<div>
 		<NcActions :force-menu="true" @click.native.stop>
 			<!-- Collective actions: only displayed for landing page in page list -->
-			<CollectiveActions v-if="displayCollectiveActions"
+			<CollectiveActions
+				v-if="displayCollectiveActions"
 				:collective="currentCollective" />
-			<NcActionButton v-if="displayCollectiveActions && collectiveExtraAction"
+			<NcActionButton
+				v-if="displayCollectiveActions && collectiveExtraAction"
 				:close-after-click="true"
 				@click="collectiveExtraAction.click()">
 				{{ collectiveExtraAction.title }}
@@ -20,14 +22,16 @@
 			<NcActionSeparator v-if="displayCollectiveActions" />
 
 			<!-- Last edited info -->
-			<PageActionLastUser v-if="displayLastEditedInfo"
+			<PageActionLastUser
+				v-if="displayLastEditedInfo"
 				:last-user-id="lastUserId"
 				:last-user-display-name="lastUserDisplayName"
 				:timestamp="timestamp" />
 			<NcActionSeparator v-if="displayLastEditedInfo" />
 
 			<!-- Sidebar toggle: only displayed on mobile and in page title menu -->
-			<NcActionButton v-if="displaySidebarAction"
+			<NcActionButton
+				v-if="displaySidebarAction"
 				:aria-label="t('collectives', 'Open page sidebar')"
 				aria-controls="app-sidebar-vue"
 				:close-after-click="true"
@@ -40,14 +44,16 @@
 			<NcActionSeparator v-if="displaySidebarAction" />
 
 			<!-- Page view options: only displayed in page title menu -->
-			<NcActionCheckbox v-if="!inPageList && !isMobile"
+			<NcActionCheckbox
+				v-if="!inPageList && !isMobile"
 				:checked="currentPage.isFullWidth"
 				:disabled="!currentCollectiveCanEdit"
 				@check="onCheckFullWidthView"
 				@uncheck="onUncheckFullWidthView">
 				{{ t('collectives', 'Full width') }}
 			</NcActionCheckbox>
-			<NcActionButton v-if="!inPageList"
+			<NcActionButton
+				v-if="!inPageList"
 				:close-after-click="true"
 				@click.native="toggleOutline(currentPage.id)">
 				<template #icon>
@@ -59,7 +65,8 @@
 			<NcActionSeparator v-if="!inPageList" />
 
 			<!-- Favor page action: only displayed in page list and not for landing page -->
-			<NcActionButton v-if="inPageList"
+			<NcActionButton
+				v-if="inPageList"
 				:close-after-click="true"
 				@click="toggleFavoritePage({ id: currentCollective.id, pageId })">
 				<template #icon>
@@ -70,7 +77,8 @@
 			</NcActionButton>
 
 			<!-- Share page action: only displayed in page list and not for landing page (already in collectives actions there) -->
-			<NcActionButton v-if="inPageList && currentCollectiveCanShare && !isLandingPage"
+			<NcActionButton
+				v-if="inPageList && currentCollectiveCanShare && !isLandingPage"
 				:close-after-click="true"
 				@click.native="show('details')"
 				@click="openShareTab">
@@ -81,7 +89,8 @@
 			</NcActionButton>
 
 			<!-- Edit page emoji: only displayed in page list -->
-			<NcActionButton v-if="inPageList && currentCollectiveCanEdit && !isLandingPage"
+			<NcActionButton
+				v-if="inPageList && currentCollectiveCanEdit && !isLandingPage"
 				:close-after-click="true"
 				@click.native="show('details')"
 				@click="gotoPageEmojiPicker">
@@ -92,7 +101,8 @@
 			</NcActionButton>
 
 			<!-- Open tags modal: always displayed if has edit permissions -->
-			<NcActionButton v-if="currentCollectiveCanEdit"
+			<NcActionButton
+				v-if="currentCollectiveCanEdit"
 				:close-after-click="true"
 				@click="onOpenTagsModal">
 				<template #icon>
@@ -102,7 +112,8 @@
 			</NcActionButton>
 
 			<!-- Move/copy page via modal: only displayed in page list -->
-			<NcActionButton v-if="inPageList && currentCollectiveCanEdit && !isLandingPage"
+			<NcActionButton
+				v-if="inPageList && currentCollectiveCanEdit && !isLandingPage"
 				:close-after-click="true"
 				@click="onOpenMoveOrCopyModal">
 				<template #icon>
@@ -112,7 +123,8 @@
 			</NcActionButton>
 
 			<!-- Download action: only displayed in page title menu -->
-			<NcActionLink v-if="!inPageList"
+			<NcActionLink
+				v-if="!inPageList"
 				:href="currentPageDavUrl"
 				:download="currentPage.fileName"
 				:close-after-click="true">
@@ -123,7 +135,8 @@
 			</NcActionLink>
 
 			<!-- Open in files app action: only displayed in page title menu -->
-			<NcActionLink v-if="!inPageList && showFilesLink"
+			<NcActionLink
+				v-if="!inPageList && showFilesLink"
 				:href="filesUrl"
 				:close-after-click="true">
 				<template #icon>
@@ -133,7 +146,8 @@
 			</NcActionLink>
 
 			<!-- Delete page -->
-			<NcActionButton v-if="displayDeleteAction"
+			<NcActionButton
+				v-if="displayDeleteAction"
 				:close-after-click="true"
 				@click="deletePage(pageId)">
 				<template #icon>
@@ -142,40 +156,42 @@
 				{{ deletePageString }}
 			</NcActionButton>
 		</NcActions>
-		<MoveOrCopyModal v-if="showMoveOrCopyModal"
+		<MoveOrCopyModal
+			v-if="showMoveOrCopyModal"
 			:page-id="pageId"
 			:parent-id="parentId"
 			@close="onCloseMoveOrCopyModal" />
-		<TagsModal v-if="showTagsModal"
+		<TagsModal
+			v-if="showTagsModal"
 			:page-id="pageId"
 			@close="onCloseTagsModal" />
 	</div>
 </template>
 
 <script>
-import { mapActions, mapState } from 'pinia'
-import { useRootStore } from '../../stores/root.js'
-import { useCollectivesStore } from '../../stores/collectives.js'
 import { generateUrl } from '@nextcloud/router'
-import { NcActions, NcActionButton, NcActionCheckbox, NcActionLink, NcActionSeparator } from '@nextcloud/vue'
+import { NcActionButton, NcActionCheckbox, NcActionLink, NcActions, NcActionSeparator } from '@nextcloud/vue'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
-import CollectiveActions from '../Collective/CollectiveActions.vue'
-import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
+import { mapActions, mapState } from 'pinia'
 import DockRightIcon from 'vue-material-design-icons/DockRight.vue'
-import DownloadIcon from 'vue-material-design-icons/TrayArrowDown.vue'
 import EmoticonIcon from 'vue-material-design-icons/EmoticonOutline.vue'
 import FolderIcon from 'vue-material-design-icons/Folder.vue'
 import FormatListBulletedIcon from 'vue-material-design-icons/FormatListBulleted.vue'
 import OpenInNewIcon from 'vue-material-design-icons/OpenInNew.vue'
+import ShareVariantIcon from 'vue-material-design-icons/ShareVariantOutline.vue'
+import StarOffIcon from 'vue-material-design-icons/StarOffOutline.vue'
+import StarIcon from 'vue-material-design-icons/StarOutline.vue'
+import TagMultipleIcon from 'vue-material-design-icons/TagMultiple.vue'
+import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
+import DownloadIcon from 'vue-material-design-icons/TrayArrowDown.vue'
+import CollectiveActions from '../Collective/CollectiveActions.vue'
 import MoveOrCopyModal from './MoveOrCopyModal.vue'
 import PageActionLastUser from './PageActionLastUser.vue'
-import ShareVariantIcon from 'vue-material-design-icons/ShareVariantOutline.vue'
-import StarIcon from 'vue-material-design-icons/StarOutline.vue'
-import StarOffIcon from 'vue-material-design-icons/StarOffOutline.vue'
-import TagMultipleIcon from 'vue-material-design-icons/TagMultiple.vue'
 import TagsModal from './TagsModal.vue'
 import pageMixin from '../../mixins/pageMixin.js'
+import { useCollectivesStore } from '../../stores/collectives.js'
 import { usePagesStore } from '../../stores/pages.js'
+import { useRootStore } from '../../stores/root.js'
 
 export default {
 	name: 'PageActionMenu',
@@ -212,34 +228,42 @@ export default {
 			type: Number,
 			required: true,
 		},
+
 		pageUrl: {
 			type: String,
 			default: null,
 		},
+
 		parentId: {
 			type: Number,
 			required: true,
 		},
+
 		timestamp: {
 			type: Number,
 			required: true,
 		},
+
 		lastUserDisplayName: {
 			type: String,
 			default: null,
 		},
+
 		lastUserId: {
 			type: String,
 			default: null,
 		},
+
 		isLandingPage: {
 			type: Boolean,
 			default: false,
 		},
+
 		showFilesLink: {
 			type: Boolean,
 			default: false,
 		},
+
 		inPageList: {
 			type: Boolean,
 			default: false,
@@ -267,6 +291,7 @@ export default {
 			'currentCollectiveIsPageShare',
 			'isFavoritePage',
 		]),
+
 		...mapState(usePagesStore, [
 			'currentPageDavUrl',
 			'hasOutline',
@@ -329,7 +354,7 @@ export default {
 				return null
 			}
 
-			const pageIds = this.pagesTreeWalk().map(p => p.id)
+			const pageIds = this.pagesTreeWalk().map((p) => p.id)
 			return {
 				title: collectiveExtraAction.title ?? t('collectives', 'Extra action'),
 				click: () => collectiveExtraAction.click(pageIds) ?? function() {},
@@ -343,9 +368,11 @@ export default {
 			'show',
 			'toggle',
 		]),
+
 		...mapActions(useCollectivesStore, [
 			'toggleFavoritePage',
 		]),
+
 		...mapActions(usePagesStore, [
 			'setFullWidthView',
 			'toggleOutline',

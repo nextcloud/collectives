@@ -4,7 +4,8 @@
 -->
 
 <template>
-	<NcEmptyContent :name="notFoundString"
+	<NcEmptyContent
+		:name="notFoundString"
 		:description="t('collectives', 'Select a page from the list or create a new one.')"
 		class="content-not-found">
 		<template #icon>
@@ -14,10 +15,10 @@
 </template>
 
 <script>
-import { mapState } from 'pinia'
-import { useRootStore } from '../../stores/root.js'
 import { NcEmptyContent } from '@nextcloud/vue'
+import { mapState } from 'pinia'
 import PageIcon from '../Icon/PageIcon.vue'
+import { useRootStore } from '../../stores/root.js'
 
 export default {
 	name: 'PageNotFound',

@@ -5,7 +5,8 @@
 
 <template>
 	<div class="page-container">
-		<div class="page-title-container"
+		<div
+			class="page-title-container"
 			:class="{
 				'full-width-view': isFullWidth,
 				'sheet-view': !isFullWidth,
@@ -15,16 +16,19 @@
 				<div v-if="currentPage.emoji">
 					{{ currentPage.emoji }}
 				</div>
-				<EmoticonIcon v-else
+				<EmoticonIcon
+					v-else
 					class="emoji-picker-emoticon"
 					:size="pageTitleIconSize"
 					fill-color="var(--color-text-maxcontrast)" />
 			</div>
 
-			<PageTitle class="title title-version"
+			<PageTitle
+				class="title title-version"
 				:value="versionTitle"
 				:disabled="true" />
-			<NcButton :title="t('collectives', 'Restore this version')"
+			<NcButton
+				:title="t('collectives', 'Restore this version')"
 				:aria-label="t('collectives', 'Restore this version')"
 				class="titleform-button"
 				@click="onRestoreVersion">
@@ -42,7 +46,8 @@
 			</NcActions>
 		</div>
 		<SkeletonLoading v-show="!contentLoaded" class="page-content-skeleton" type="text" />
-		<div v-show="contentLoaded"
+		<div
+			v-show="contentLoaded"
 			id="text-container"
 			:class="[isFullWidth ? 'full-width-view' : 'sheet-view']">
 			<div ref="readerEl" data-collectives-el="reader" data-cy-collectives="reader" />
@@ -51,22 +56,20 @@
 </template>
 
 <script>
-import pageContentMixin from '../mixins/pageContentMixin.js'
-
-import { mapActions, mapState } from 'pinia'
-import { useRootStore } from '../stores/root.js'
-import { usePagesStore } from '../stores/pages.js'
-import { useVersionsStore } from '../stores/versions.js'
-
 import { NcActionButton, NcActions, NcButton } from '@nextcloud/vue'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
+import { mapActions, mapState } from 'pinia'
+import { ref } from 'vue'
 import DockRightIcon from 'vue-material-design-icons/DockRight.vue'
 import EmoticonIcon from 'vue-material-design-icons/EmoticonOutline.vue'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
 import PageTitle from './Page/PageTitle.vue'
 import SkeletonLoading from './SkeletonLoading.vue'
 import { useReader } from '../composables/useReader.js'
-import { ref } from 'vue'
+import pageContentMixin from '../mixins/pageContentMixin.js'
+import { usePagesStore } from '../stores/pages.js'
+import { useRootStore } from '../stores/root.js'
+import { useVersionsStore } from '../stores/versions.js'
 
 export default {
 	name: 'PageVersion',
@@ -119,7 +122,7 @@ export default {
 	},
 
 	watch: {
-		'selectedVersion.mtime'() {
+		'selectedVersion.mtime': function() {
 			this.content = ''
 			this.getPageContent()
 		},
@@ -143,6 +146,7 @@ export default {
 			this.selectVersion(null)
 			this.hide('sidebar')
 		},
+
 		/**
 		 * Revert page to an old version
 		 */

@@ -4,7 +4,8 @@
 -->
 
 <template>
-	<div :id="pageElementId"
+	<div
+		:id="pageElementId"
 		:data-page-id="pageId"
 		class="app-content-list-item"
 		:class="{
@@ -22,13 +23,14 @@
 		@dragover.prevent="onDragover"
 		@dragleave="onDragleave"
 		@drop="onDrop">
-		<div class="app-content-list-item-icon"
+		<div
+			class="app-content-list-item-icon"
 			:tabindex="isCollapsible ? '0' : null"
 			@keyup.enter="toggleCollapsedOrRoute"
 			@click="toggleCollapsedOrRoute">
 			<slot name="icon">
 				<template v-if="emoji">
-					<div class="item-icon-emoji" :class="{'root-page': isRootPage}">
+					<div class="item-icon-emoji" :class="{ 'root-page': isRootPage }">
 						{{ emoji }}
 					</div>
 				</template>
@@ -40,7 +42,8 @@
 				</template>
 			</slot>
 			<template v-if="isCollapsible">
-				<MenuRightIcon v-show="!filteredView"
+				<MenuRightIcon
+					v-show="!filteredView"
 					:size="18"
 					fill-color="var(--color-main-text)"
 					:title="t('collectives', 'Expand subpage list')"
@@ -48,17 +51,20 @@
 					:class="isCollapsed(pageId) ? 'collapsed' : 'expanded'" />
 			</template>
 			<template v-if="showFavoriteStar">
-				<StarIconFilled v-show="!filteredView"
+				<StarIconFilled
+					v-show="!filteredView"
 					:size="18"
 					fill-color="var(--color-favorite)"
 					:title="t('collectives', 'Favorite')"
 					class="item-icon-favorite" />
 			</template>
 		</div>
-		<router-link :to="to"
+		<router-link
+			:to="to"
 			draggable="false"
 			class="app-content-list-item-link">
-			<div ref="page-title"
+			<div
+				ref="page-title"
 				:title="pageTitleIfTruncated"
 				class="app-content-list-item-line-one"
 				@click="expandAndScroll">
@@ -66,7 +72,8 @@
 			</div>
 		</router-link>
 		<div class="page-list-item-actions">
-			<PageActionMenu v-if="canEdit || isLandingPage"
+			<PageActionMenu
+				v-if="canEdit || isLandingPage"
 				:page-id="pageId"
 				:page-url="to"
 				:parent-id="parentId"
@@ -76,7 +83,8 @@
 				:is-landing-page="isLandingPage"
 				:in-page-list="true" />
 			<NcActions v-if="canEdit">
-				<NcActionButton class="action-button-add"
+				<NcActionButton
+					class="action-button-add"
 					:disabled="loading(`template-list-${templatesCollectiveId}`)"
 					@click="onNewPage">
 					<template #icon>
@@ -90,23 +98,22 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'pinia'
-import { useRootStore } from '../../stores/root.js'
-import { useCollectivesStore } from '../../stores/collectives.js'
-import { usePagesStore } from '../../stores/pages.js'
-import { useTemplatesStore } from '../../stores/templates.js'
 import { generateUrl } from '@nextcloud/router'
-import { scrollToPage } from '../../util/scrollToElement.js'
-import pageMixin from '../../mixins/pageMixin.js'
-
-import CollectivesIcon from '../Icon/CollectivesIcon.vue'
 import { NcActionButton, NcActions } from '@nextcloud/vue'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
+import { mapActions, mapState } from 'pinia'
 import MenuRightIcon from 'vue-material-design-icons/MenuRightOutline.vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
+import StarIconFilled from 'vue-material-design-icons/Star.vue'
+import CollectivesIcon from '../Icon/CollectivesIcon.vue'
 import PageIcon from '../Icon/PageIcon.vue'
 import PageActionMenu from '../Page/PageActionMenu.vue'
-import StarIconFilled from 'vue-material-design-icons/Star.vue'
+import pageMixin from '../../mixins/pageMixin.js'
+import { useCollectivesStore } from '../../stores/collectives.js'
+import { usePagesStore } from '../../stores/pages.js'
+import { useRootStore } from '../../stores/root.js'
+import { useTemplatesStore } from '../../stores/templates.js'
+import { scrollToPage } from '../../util/scrollToElement.js'
 
 export default {
 	name: 'Item',
@@ -131,58 +138,72 @@ export default {
 			type: String,
 			default: '',
 		},
+
 		pageId: {
 			type: Number,
 			required: true,
 		},
+
 		parentId: {
 			type: Number,
 			required: true,
 		},
+
 		title: {
 			type: String,
 			required: true,
 		},
+
 		timestamp: {
 			type: Number,
 			required: true,
 		},
+
 		lastUserId: {
 			type: String,
 			default: null,
 		},
+
 		lastUserDisplayName: {
 			type: String,
 			default: null,
 		},
+
 		emoji: {
 			type: String,
 			default: '',
 		},
+
 		level: {
 			type: Number,
 			required: true,
 		},
+
 		canEdit: {
 			type: Boolean,
 			default: false,
 		},
+
 		inFavoriteList: {
 			type: Boolean,
 			default: false,
 		},
+
 		hasVisibleSubpages: {
 			type: Boolean,
 			default: false,
 		},
+
 		isRootPage: {
 			type: Boolean,
 			default: false,
 		},
+
 		isLandingPage: {
 			type: Boolean,
 			default: false,
 		},
+
 		filteredView: {
 			type: Boolean,
 			required: true,
@@ -208,6 +229,7 @@ export default {
 			'isFavoritePage',
 			'templatesCollectiveId',
 		]),
+
 		...mapState(usePagesStore, [
 			'isCollapsed',
 			'currentPage',
@@ -220,6 +242,7 @@ export default {
 			'pageParents',
 			'newPageParentId',
 		]),
+
 		...mapState(useTemplatesStore, ['hasTemplates']),
 
 		pageElementId() {

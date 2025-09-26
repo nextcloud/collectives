@@ -8,7 +8,8 @@
 		<!-- Headerbar with filter field and sort selector -->
 		<div class="page-list-headerbar">
 			<!-- Tag selection popover -->
-			<NcPopover popup-role="listbox"
+			<NcPopover
+				popup-role="listbox"
 				class="page-filter"
 				popover-base-class="page-filter-popover"
 				:shown="showTagSelection"
@@ -16,7 +17,8 @@
 				placement="bottom-start"
 				no-focus-trap>
 				<template #trigger="{ attrs }">
-					<NcTextField ref="pageFilter"
+					<NcTextField
+						ref="pageFilter"
 						name="pageFilter"
 						v-bind="attrs"
 						:label="t('collectives', 'Search pages')"
@@ -29,10 +31,12 @@
 						@keydown.tab="onPageFilterTabKey" />
 				</template>
 				<template #default>
-					<div class="page-filter-tag-select"
+					<div
+						class="page-filter-tag-select"
 						@keydown.esc.prevent.stop="stopTagSelection">
 						<ul class="page-tags select-popover">
-							<PageTag v-for="tag in filterStringTags"
+							<PageTag
+								v-for="tag in filterStringTags"
 								ref="filterStringTag"
 								:key="tag.id"
 								:tag="tag"
@@ -42,7 +46,8 @@
 				</template>
 			</NcPopover>
 
-			<NcActions class="toggle"
+			<NcActions
+				class="toggle"
 				:aria-label="t('collectives', 'Sort order')">
 				<template #icon>
 					<SortAscendingIcon v-if="sortedBy('byOrder')" :size="16" />
@@ -51,8 +56,9 @@
 					<SortClockAscendingIcon v-else-if="sortedBy('byTimeAsc')" :size="16" />
 					<SortClockDescendingIcon v-else :size="16" />
 				</template>
-				<NcActionButton class="toggle-button"
-					:class="{selected: sortedBy('byOrder')}"
+				<NcActionButton
+					class="toggle-button"
+					:class="{ selected: sortedBy('byOrder') }"
 					:close-after-click="true"
 					@click="sortPagesAndScroll('byOrder')">
 					<template #icon>
@@ -60,8 +66,9 @@
 					</template>
 					{{ t('collectives', 'Sort by custom order') }}
 				</NcActionButton>
-				<NcActionButton class="toggle-button"
-					:class="{selected: sortedBy('byTimeAsc') || sortedBy('byTimeDesc')}"
+				<NcActionButton
+					class="toggle-button"
+					:class="{ selected: sortedBy('byTimeAsc') || sortedBy('byTimeDesc') }"
 					:close-after-click="true"
 					@click="sortedBy('byTimeAsc') ? sortPagesAndScroll('byTimeDesc') : sortPagesAndScroll('byTimeAsc')">
 					<template #icon>
@@ -70,8 +77,9 @@
 					</template>
 					{{ sortedBy('byTimeAsc') ? t('collectives', 'Sort least recently changed first') : t('collectives', 'Sort recently changed first') }}
 				</NcActionButton>
-				<NcActionButton class="toggle-button"
-					:class="{selected: sortedBy('byTitleAsc') || sortedBy('byTitleDesc')}"
+				<NcActionButton
+					class="toggle-button"
+					:class="{ selected: sortedBy('byTitleAsc') || sortedBy('byTitleDesc') }"
 					:close-after-click="true"
 					@click="sortedBy('byTitleAsc') ? sortPagesAndScroll('byTitleDesc') : sortPagesAndScroll('byTitleAsc')">
 					<template #icon>
@@ -86,7 +94,8 @@
 		<!-- Filter tags -->
 		<div class="page-filter-tags">
 			<ul class="page-tags">
-				<PageTag v-for="tag in filterTags"
+				<PageTag
+					v-for="tag in filterTags"
 					:key="tag.id"
 					:tag="tag"
 					:can-remove="true"
@@ -102,7 +111,8 @@
 		<!-- Page list -->
 		<div v-else class="page-list">
 			<!-- Landing page -->
-			<Item key="Readme"
+			<Item
+				key="Readme"
 				:to="currentCollectivePath"
 				:page-id="rootPage.id"
 				:parent-id="0"
@@ -125,7 +135,8 @@
 					<span class="sort-order-chip-text">
 						{{ sortedByString }}
 					</span>
-					<NcButton :aria-label="t('collectives', 'Switch back to default sort order')"
+					<NcButton
+						:aria-label="t('collectives', 'Switch back to default sort order')"
 						variant="tertiary"
 						class="sort-order-chip-button"
 						@click="sortPagesAndScroll('byOrder')">
@@ -141,14 +152,16 @@
 
 			<!-- Filtered view page list -->
 			<div v-if="isFilteredView" ref="pageListFiltered" class="page-list-filtered">
-				<NcAppNavigationCaption v-if="filteredPages.length > 0" :name="t('Collectives','Results in title or tags')" />
-				<RecycleScroller v-if="filteredPages.length > 0"
+				<NcAppNavigationCaption v-if="filteredPages.length > 0" :name="t('Collectives', 'Results in title or tags')" />
+				<RecycleScroller
+					v-if="filteredPages.length > 0"
 					v-slot="{ item }"
 					ref="filteredScroller"
 					:items="filteredPages"
 					:item-size="itemSize"
 					key-field="id">
-					<SubpageList :key="item.id"
+					<SubpageList
+						:key="item.id"
 						:data-page-id="item.id"
 						:page="item"
 						:level="1"
@@ -156,13 +169,15 @@
 						class="page-list-drag-item" />
 				</RecycleScroller>
 				<NcAppNavigationCaption v-if="loadingContentFilteredPages || contentFilteredPages.length > 0" :name="t('Collectives', 'Results in content')" />
-				<RecycleScroller v-if="!loadingContentFilteredPages && contentFilteredPages.length > 0"
+				<RecycleScroller
+					v-if="!loadingContentFilteredPages && contentFilteredPages.length > 0"
 					v-slot="{ item }"
 					ref="contentFilteredScroller"
 					:items="contentFilteredPages"
 					:item-size="itemSize"
 					key-field="id">
-					<SubpageList :key="item.id"
+					<SubpageList
+						:key="item.id"
 						:data-page-id="item.id"
 						:page="item"
 						:level="1"
@@ -175,12 +190,14 @@
 			</div>
 
 			<!-- Unfiltered view page list -->
-			<Draggable v-else
+			<Draggable
+				v-else
 				class="page-list-dragarea"
 				:list="subpages"
 				:parent-id="rootPage.id"
 				:disable-sorting="isFilteredView">
-				<SubpageList v-for="page in subpages"
+				<SubpageList
+					v-for="page in subpages"
 					:key="page.id"
 					:data-page-id="page.id"
 					:page="page"
@@ -198,36 +215,36 @@
 </template>
 
 <script>
+import { showError } from '@nextcloud/dialogs'
+import { NcActionButton, NcActions, NcAppContentList, NcAppNavigationCaption, NcButton, NcPopover, NcTextField } from '@nextcloud/vue'
+import { useElementSize } from '@vueuse/core'
+import debounce from 'debounce'
 import { mapActions, mapState } from 'pinia'
 import { ref } from 'vue'
-import { useElementSize } from '@vueuse/core'
-import { useRootStore } from '../stores/root.js'
-import { useCollectivesStore } from '../stores/collectives.js'
-import { useTagsStore } from '../stores/tags.js'
-import { usePagesStore } from '../stores/pages.js'
-import { useSearchStore } from '../stores/search.js'
-import { NcAppNavigationCaption, NcActionButton, NcActions, NcAppContentList, NcButton, NcPopover, NcTextField } from '@nextcloud/vue'
-import { showError } from '@nextcloud/dialogs'
+import { RecycleScroller } from 'vue-virtual-scroller'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
-import Draggable from './PageList/Draggable.vue'
-import NewPageDialog from './PageList/NewPageDialog.vue'
-import SubpageList from './PageList/SubpageList.vue'
-import Item from './PageList/Item.vue'
-import PageFavorites from './PageList/PageFavorites.vue'
-import PageTag from './PageTag.vue'
-import PageTrash from './PageList/PageTrash.vue'
 import SortAlphabeticalAscendingIcon from 'vue-material-design-icons/SortAlphabeticalAscending.vue'
 import SortAlphabeticalDescendingIcon from 'vue-material-design-icons/SortAlphabeticalDescending.vue'
 import SortAscendingIcon from 'vue-material-design-icons/SortAscending.vue'
 import SortClockAscendingIcon from 'vue-material-design-icons/SortClockAscendingOutline.vue'
 import SortClockDescendingIcon from 'vue-material-design-icons/SortClockDescendingOutline.vue'
+import Draggable from './PageList/Draggable.vue'
+import Item from './PageList/Item.vue'
+import NewPageDialog from './PageList/NewPageDialog.vue'
+import PageFavorites from './PageList/PageFavorites.vue'
+import PageTrash from './PageList/PageTrash.vue'
+import SubpageList from './PageList/SubpageList.vue'
+import PageTag from './PageTag.vue'
+import SkeletonLoading from './SkeletonLoading.vue'
+import { useCollectivesStore } from '../stores/collectives.js'
+import { usePagesStore } from '../stores/pages.js'
+import { useRootStore } from '../stores/root.js'
+import { useSearchStore } from '../stores/search.js'
+import { useTagsStore } from '../stores/tags.js'
 import { scrollToPage } from '../util/scrollToElement.js'
 import { pageOrders } from '../util/sortOrders.js'
-import SkeletonLoading from './SkeletonLoading.vue'
-import { RecycleScroller } from 'vue-virtual-scroller'
 
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
-import debounce from 'debounce'
 
 export default {
 	name: 'PageList',
@@ -281,6 +298,7 @@ export default {
 			'currentCollectiveIsPageShare',
 			'currentCollectivePath',
 		]),
+
 		...mapState(useTagsStore, ['sortedTags', 'filterTags']),
 		...mapState(usePagesStore, [
 			'rootPage',
@@ -302,9 +320,9 @@ export default {
 		filteredPages() {
 			return this.allPagesSortedCached
 				// Filter by page title search string
-				.filter(p => p.title.toLowerCase().includes(this.filterString.toLowerCase()))
+				.filter((p) => p.title.toLowerCase().includes(this.filterString.toLowerCase()))
 				// Filter by page tags
-				.filter(p => this.filterTags.every(t => p.tags.includes(t.id)))
+				.filter((p) => this.filterTags.every((t) => p.tags.includes(t.id)))
 		},
 
 		filterStringTagPart() {
@@ -317,16 +335,16 @@ export default {
 			}
 			return this.sortedTags
 				// Ignore already selected tags
-				.filter(t => !this.filterTags.some(ft => ft.id === t.id))
-				.filter(t => t.name.toLowerCase().includes(this.filterStringTagPart))
+				.filter((t) => !this.filterTags.some((ft) => ft.id === t.id))
+				.filter((t) => t.name.toLowerCase().includes(this.filterStringTagPart))
 				.sort((t1, t2) => {
 					if (t1.name.toLowerCase().startsWith(this.filterStringTagPart)) {
 						return -1
 					} else if (t2.name.toLowerCase().startsWith(this.filterStringTagPart)) {
 						return 1
-					} else if (t1.name.toLowerCase().split(' ').some(str => str.startsWith(this.filterStringTagPart))) {
+					} else if (t1.name.toLowerCase().split(' ').some((str) => str.startsWith(this.filterStringTagPart))) {
 						return -1
-					} else if (t2.name.toLowerCase().split(' ').some(str => str.startsWith(this.filterStringTagPart))) {
+					} else if (t2.name.toLowerCase().split(' ').some((str) => str.startsWith(this.filterStringTagPart))) {
 						return 1
 					}
 					return 0
@@ -417,20 +435,24 @@ export default {
 	},
 
 	watch: {
-		'currentCollective.id'() {
+		'currentCollective.id': function() {
 			this.contentFilteredPages = []
 			this.getContentFilteredPagesDebounced()
 		},
+
 		filterString() {
 			this.getContentFilteredPagesDebounced()
 			this.setSearchQuery(this.filterString)
 		},
+
 		contentFilteredPages() {
 			this.updateScrollerHeights()
 		},
+
 		pageListFilteredHeight() {
 			this.updateScrollerHeights()
 		},
+
 		filterStringTags(val) {
 			this.showTagSelection = val && val.length > 0
 		},

@@ -9,7 +9,12 @@ const byTitleDesc = (a, b) => byTitleAsc(b, a)
 const byTimeAsc = (a, b) => b.timestamp - a.timestamp
 const byTimeDesc = (a, b) => byTimeAsc(b, a)
 
-const byOrder = (a, b) => {
+/**
+ *
+ * @param a
+ * @param b
+ */
+function byOrder(a, b) {
 	if (a.index >= 0 && b.index >= 0) {
 		// both are in the sort order - sort lower index first
 		return a.index - b.index
@@ -33,11 +38,11 @@ const pageOrdersByNumber = Object.entries(pageOrders)
 
 export {
 	byName,
-	byTitleAsc,
-	byTitleDesc,
+	byOrder,
 	byTimeAsc,
 	byTimeDesc,
-	byOrder,
+	byTitleAsc,
+	byTitleDesc,
 	pageOrders,
 	pageOrdersByNumber,
 }

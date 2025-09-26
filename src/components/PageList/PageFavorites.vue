@@ -11,19 +11,22 @@
 			</div>
 			<div class="app-content-list-item-line-one" @click="toggleFavorites">
 				{{ t('collectives', 'Favorites') }}
-				<NcButton :aria-label="t('collectives', 'Toggle favorites')"
+				<NcButton
+					:aria-label="t('collectives', 'Toggle favorites')"
 					variant="tertiary"
 					class="toggle-favorites-button">
 					<template #icon>
-						<ChevronDownIcon :size="22"
-							:class="{ 'collapsed': !showFavoritesOpen }" />
+						<ChevronDownIcon
+							:size="22"
+							:class="{ collapsed: !showFavoritesOpen }" />
 					</template>
 				</NcButton>
 			</div>
 		</div>
 
 		<div v-show="showFavoritesOpen" class="page-list-favorites-list">
-			<Item v-for="page in favoritePages"
+			<Item
+				v-for="page in favoritePages"
 				:key="page.title"
 				:to="pagePath(page)"
 				:page-id="page.id"
@@ -43,14 +46,14 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'pinia'
-import { useRootStore } from '../../stores/root.js'
-import { useCollectivesStore } from '../../stores/collectives.js'
-import { usePagesStore } from '../../stores/pages.js'
 import { NcButton } from '@nextcloud/vue'
-import Item from './Item.vue'
+import { mapActions, mapState } from 'pinia'
 import ChevronDownIcon from 'vue-material-design-icons/ChevronDown.vue'
 import StarIcon from 'vue-material-design-icons/StarOutline.vue'
+import Item from './Item.vue'
+import { useCollectivesStore } from '../../stores/collectives.js'
+import { usePagesStore } from '../../stores/pages.js'
+import { useRootStore } from '../../stores/root.js'
 
 export default {
 	name: 'PageFavorites',
@@ -72,6 +75,7 @@ export default {
 		...mapState(useCollectivesStore, [
 			'currentCollectiveCanEdit',
 		]),
+
 		...mapState(usePagesStore, [
 			'favoritePages',
 			'pagePath',

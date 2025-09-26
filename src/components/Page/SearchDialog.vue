@@ -6,7 +6,8 @@
 <template>
 	<div v-if="shouldShow" class="search-dialog-container">
 		<div class="search-dialog__buttons">
-			<NcButton alignment="center-reverse"
+			<NcButton
+				alignment="center-reverse"
 				variant="tertiary"
 				:aria-label="t('collectives', 'Clear search')"
 				@click="clearSearch">
@@ -16,7 +17,8 @@
 				{{ t('collectives', 'Clear search') }}
 			</NcButton>
 
-			<NcButton alignment="center-reverse"
+			<NcButton
+				alignment="center-reverse"
 				:aria-label="t('collectives', 'Find previous match')"
 				@click="previous">
 				<template #icon>
@@ -25,7 +27,8 @@
 				{{ t('collectives', 'Find previous') }}
 			</NcButton>
 
-			<NcButton alignment="center-reverse"
+			<NcButton
+				alignment="center-reverse"
 				:aria-label="t('collectives', 'Find next match')"
 				@click="next">
 				<template #icon>
@@ -61,15 +64,14 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'pinia'
-import { usePagesStore } from '../../stores/pages.js'
-import { useSearchStore } from '../../stores/search.js'
 import { translate as t } from '@nextcloud/l10n'
-
 import { NcButton, NcCheckboxRadioSwitch } from '@nextcloud/vue'
+import { mapActions, mapState } from 'pinia'
 import ArrowDown from 'vue-material-design-icons/ArrowDown.vue'
 import ArrowUp from 'vue-material-design-icons/ArrowUp.vue'
 import Close from 'vue-material-design-icons/Close.vue'
+import { usePagesStore } from '../../stores/pages.js'
+import { useSearchStore } from '../../stores/search.js'
 
 export default {
 	name: 'SearchDialog',
@@ -92,20 +94,23 @@ export default {
 	computed: {
 		...mapState(usePagesStore, ['isTextEdit']),
 		...mapState(useSearchStore, [
-		  'searchQuery',
-		  'matchAll',
-		  'results',
+			'searchQuery',
+			'matchAll',
+			'results',
 		]),
+
 		isHighlightAllChecked: {
 			get() {
 				return this.matchAll
 			},
+
 			set() {
 				this.toggleMatchAll()
 			},
 		},
+
 		shouldShow() {
-		  return this.show && this.results.totalMatches !== null
+			return this.show && this.results.totalMatches !== null
 		},
 	},
 

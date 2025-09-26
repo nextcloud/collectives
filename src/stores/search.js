@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { defineStore } from 'pinia'
 import { emit } from '@nextcloud/event-bus'
+import { defineStore } from 'pinia'
 
 export const useSearchStore = defineStore('search', {
 	state: () => ({

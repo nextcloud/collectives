@@ -5,31 +5,36 @@
 
 <template>
 	<div class="recent-pages-widget">
-		<a class="recent-pages-title"
+		<a
+			class="recent-pages-title"
 			:aria-label="expandLabel"
 			@keydown.enter="toggleWidget"
 			@click="toggleWidget">
 			<WidgetHeading :title="t('collectives', 'Recent pages')" />
 			<div class="toggle-icon">
-				<ChevronDownIcon :size="24"
-					:class="{ 'collapsed': !showRecentPages }" />
+				<ChevronDownIcon
+					:size="24"
+					:class="{ collapsed: !showRecentPages }" />
 			</div>
 		</a>
 		<div v-show="showRecentPages" class="recent-pages-widget-container">
 			<div ref="pageslider" class="recent-pages-widget-pages">
-				<RecentPageTile v-for="page in trimmedRecentPages"
+				<RecentPageTile
+					v-for="page in trimmedRecentPages"
 					:key="page.id"
 					:page="page" />
 			</div>
 			<div class="recent-pages-widget-buttons">
-				<button ref="buttonslideleft"
+				<button
+					ref="buttonslideleft"
 					class="button-slide button-slide__left hidden"
 					:aria-label="t('collectives', 'Scroll recent pages to the left')"
 					@click="slideLeft"
 					@keypress.enter.prevent="slideLeft">
 					<ChevronLeftIcon :size="44" />
 				</button>
-				<button ref="buttonslideright"
+				<button
+					ref="buttonslideright"
 					class="button-slide button-slide__right hidden"
 					:aria-label="t('collectives', 'Scroll recent pages to the left')"
 					@click="slideRight"
@@ -42,18 +47,17 @@
 </template>
 
 <script>
+import { showError } from '@nextcloud/dialogs'
 import debounce from 'debounce'
 import { mapActions, mapState } from 'pinia'
-import { useRootStore } from '../../../stores/root.js'
-import { useCollectivesStore } from '../../../stores/collectives.js'
-import { usePagesStore } from '../../../stores/pages.js'
-import { showError } from '@nextcloud/dialogs'
-
 import ChevronDownIcon from 'vue-material-design-icons/ChevronDown.vue'
 import ChevronLeftIcon from 'vue-material-design-icons/ChevronLeft.vue'
 import ChevronRightIcon from 'vue-material-design-icons/ChevronRight.vue'
 import RecentPageTile from './RecentPageTile.vue'
 import WidgetHeading from './WidgetHeading.vue'
+import { useCollectivesStore } from '../../../stores/collectives.js'
+import { usePagesStore } from '../../../stores/pages.js'
+import { useRootStore } from '../../../stores/root.js'
 
 const SLIDE_OFFSET = 198
 

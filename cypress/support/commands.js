@@ -3,12 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { logout } from '@nextcloud/cypress/commands'
-import { User } from '@nextcloud/cypress'
-
-import * as api from '../../src/apis/collectives/index.js'
 import axios from '@nextcloud/axios'
+import { User } from '@nextcloud/cypress'
+import { logout } from '@nextcloud/cypress/commands'
 import { generateOcsUrl } from '@nextcloud/router'
+import * as api from '../../src/apis/collectives/index.js'
 
 const url = Cypress.config('baseUrl').replace(/\/index.php\/?$/g, '')
 Cypress.env('baseUrl', url)
@@ -66,7 +65,11 @@ Cypress.Commands.add('goOnline', () => {
 })
 
 // Copy of the new login command as long as we are blocked to upgrade @nextcloud/cypress by cypress crashes
-const login = function(user) {
+/**
+ *
+ * @param user
+ */
+function login(user) {
 	cy.session(user, function() {
 		cy.request('/csrftoken').then(({ body }) => {
 			const requestToken = body.token
@@ -151,12 +154,12 @@ Cypress.Commands.add('switchToEditMode', () => {
 /**
  * Enable/disable a Nextcloud app
  */
-Cypress.Commands.add('enableApp', appName => {
+Cypress.Commands.add('enableApp', (appName) => {
 	Cypress.log()
 	cy.setAppEnabled(appName)
 })
 
-Cypress.Commands.add('disableApp', appName => {
+Cypress.Commands.add('disableApp', (appName) => {
 	Cypress.log()
 	cy.setAppEnabled(appName, false)
 })
@@ -164,7 +167,8 @@ Cypress.Commands.add('disableApp', appName => {
 Cypress.Commands.add('setAppEnabled', (appName, value = true) => {
 	const verb = value ? 'enable' : 'disable'
 	const url = `${Cypress.env('baseUrl')}/index.php/settings/apps/${verb}`
-	return axios.post(url,
+	return axios.post(
+		url,
 		{ appIds: [appName] },
 	)
 })
@@ -175,7 +179,8 @@ Cypress.Commands.add('setAppEnabled', (appName, value = true) => {
 Cypress.Commands.add('enableDashboardWidget', (widgetName) => {
 	Cypress.log()
 	const url = `${Cypress.env('baseUrl')}/ocs/v2.php/apps/dashboard/api/v3/layout`
-	return axios.post(url,
+	return axios.post(
+		url,
 		{ layout: [widgetName] },
 	)
 })
@@ -187,11 +192,12 @@ Cypress.Commands.add('routeTo', (path) => {
 		.invoke(silent, 'push', path)
 })
 
-Cypress.Commands.add('findBy',
+Cypress.Commands.add(
+	'findBy',
 	{ prevSubject: true },
 	(subject, properties) => {
 		Cypress.log()
-		return subject.find(item => {
+		return subject.find((item) => {
 			for (const key in properties) {
 				if (item[key] !== properties[key]) {
 					return false
@@ -199,7 +205,8 @@ Cypress.Commands.add('findBy',
 			}
 			return true
 		}) || null
-	})
+	},
+)
 
 /**
  * Create a fresh collective for use in the test
@@ -216,7 +223,7 @@ Cypress.Commands.add('deleteAndSeedCollective', (name) => {
 
 Cypress.Commands.add(
 	'seedCollective',
-	name => api.newCollective({ name }),
+	(name) => api.newCollective({ name }),
 )
 
 /**
@@ -249,12 +256,12 @@ Cypress.Commands.add('deleteCollective', (name) => {
 
 Cypress.Commands.add('getCollectives', () => {
 	return api.getCollectives()
-		.then(response => response.data.ocs.data.collectives)
+		.then((response) => response.data.ocs.data.collectives)
 })
 
 Cypress.Commands.add('getCollectivesFolder', () => {
 	return api.getCollectivesFolder()
-		.then(response => response.data.ocs.data.user_folder)
+		.then((response) => response.data.ocs.data.user_folder)
 })
 
 Cypress.Commands.add('setCollectivesFolder', api.setCollectivesFolder)
@@ -272,7 +279,7 @@ Cypress.Commands.add('trashCollective', (name) => {
 
 Cypress.Commands.add('getTrashCollectives', () => {
 	return api.getTrashCollectives()
-		.then(response => response.data.ocs.data.collectives)
+		.then((response) => response.data.ocs.data.collectives)
 })
 
 /**
@@ -322,15 +329,16 @@ function collectiveContext(collective) {
 	}
 }
 
-Cypress.Commands.add('getPages', collective => {
+Cypress.Commands.add('getPages', (collective) => {
 	return api.getPages(collectiveContext(collective))
-		.then(response => response.data.ocs.data.pages)
+		.then((response) => response.data.ocs.data.pages)
 })
 
 /**
  * Add a page to a collective
  */
-Cypress.Commands.add('seedPage',
+Cypress.Commands.add(
+	'seedPage',
 	{ prevSubject: true },
 	(subject, name, parentFilePath = '', parentFileName = 'Readme.md') => {
 		Cypress.log()
@@ -343,8 +351,9 @@ Cypress.Commands.add('seedPage',
 				)
 			})
 			.its('data.ocs.data.page.id')
-			.then(pageId => ({ ...subject, collectiveId: collectiveContext(subject).collectiveId, pageId }))
-	})
+			.then((pageId) => ({ ...subject, collectiveId: collectiveContext(subject).collectiveId, pageId }))
+	},
+)
 
 /**
  * Upload content of a page
@@ -360,12 +369,12 @@ Cypress.Commands.add('seedPageContent', (pagePath, content) => {
 Cypress.Commands.add('uploadFile', (path, mimeType, remotePath = '') => {
 	Cypress.log()
 	// Get fixture
-	return cy.fixture(path, 'base64').then(data => {
+	return cy.fixture(path, 'base64').then((data) => {
 		// convert the base64 string to a blob
 		const blob = Cypress.Blob.base64StringToBlob(data, mimeType)
 		const file = new File([blob], path, { type: mimeType })
 		return cy.uploadContent(remotePath + path, file, mimeType)
-			.then(response => {
+			.then((response) => {
 				const ocFileId = response.headers['oc-fileid']
 				const fileId = parseInt(ocFileId.substring(0, ocFileId.indexOf('oc')))
 				return fileId
@@ -396,11 +405,12 @@ Cypress.Commands.add('uploadContent', (path, content, mimetype = 'text/markdown'
 Cypress.Commands.add('seedCircle', (name, config = null) => {
 	Cypress.log()
 	cy.circleFind(name)
-		.then(async circle => {
+		.then(async (circle) => {
 			const url = `${Cypress.env('baseUrl')}/ocs/v2.php/apps/circles/circles`
 			let circleId
 			if (!circle) {
-				const response = await axios.post(url,
+				const response = await axios.post(
+					url,
 					{ name, personal: false, local: true },
 				)
 				circleId = response.data.ocs.data.id
@@ -416,7 +426,8 @@ Cypress.Commands.add('seedCircle', (name, config = null) => {
 				const value = bits
 					.filter(([k, v]) => config[k])
 					.reduce((sum, [k, v]) => sum + v, 0)
-				await axios.put(`${url}/${circleId}/config`,
+				await axios.put(
+					`${url}/${circleId}/config`,
 					{ value },
 				)
 			}
@@ -425,7 +436,7 @@ Cypress.Commands.add('seedCircle', (name, config = null) => {
 
 Cypress.Commands.add('getCircles', () => {
 	return axios.get(generateOcsUrl('apps/circles/circles'))
-		.then(response => response.data.ocs.data)
+		.then((response) => response.data.ocs.data)
 })
 
 Cypress.Commands.add('circleFind', (name) => {
@@ -437,12 +448,14 @@ Cypress.Commands.add('circleFind', (name) => {
 /**
  * Add someone to a team
  */
-Cypress.Commands.add('circleAddMember',
+Cypress.Commands.add(
+	'circleAddMember',
 	{ prevSubject: true },
 	async ({ id }, userId, type = 1) => {
 		Cypress.log()
 		const url = `${Cypress.env('baseUrl')}/ocs/v2.php/apps/circles/circles/${id}/members`
-		const response = await axios.post(url,
+		const response = await axios.post(
+			url,
 			{ userId, type },
 		)
 		const memberId = response.data.ocs.data.id
@@ -450,12 +463,14 @@ Cypress.Commands.add('circleAddMember',
 	},
 )
 
-Cypress.Commands.add('circleSetMemberLevel',
+Cypress.Commands.add(
+	'circleSetMemberLevel',
 	{ prevSubject: true },
 	({ circleId, memberId }, level) => {
 		Cypress.log()
 		const url = `${Cypress.env('baseUrl')}/ocs/v2.php/apps/circles/circles/${circleId}/members`
-		return axios.put(`${url}/${memberId}/level`,
+		return axios.put(
+			`${url}/${memberId}/level`,
 			{ level },
 		)
 	},

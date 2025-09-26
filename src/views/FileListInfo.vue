@@ -12,7 +12,8 @@
 				{{ t('collectives', 'The content of this folder is best viewed in the Collectives app.') }}
 
 				<a :href="collectivesLink">
-					<NcButton :aria-label="t('collectives', 'Open in Collectives')"
+					<NcButton
+						:aria-label="t('collectives', 'Open in Collectives')"
 						variant="primary"
 						class="button">
 						{{ t('collectives', 'Open in Collectives') }}
@@ -42,6 +43,7 @@ export default {
 			type: String,
 			required: true,
 		},
+
 		path: {
 			type: String,
 			required: true,
@@ -64,7 +66,7 @@ export default {
 	},
 
 	watch: {
-		'path'() {
+		path: function() {
 			this.setActive()
 		},
 	},

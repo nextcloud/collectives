@@ -6,7 +6,8 @@
 <template>
 	<li class="sharing-entry sharing-entry__link">
 		<div class="sharing-entry__entry">
-			<NcAvatar :is-no-user="true"
+			<NcAvatar
+				:is-no-user="true"
 				icon-class="avatar-link-share icon-public-white"
 				class="sharing-entry__avatar" />
 
@@ -15,10 +16,13 @@
 					<span class="sharing-entry__title" :title="title">
 						{{ title }}
 					</span>
-					<div v-if="share"
+					<div
+						v-if="share"
 						ref="quickShareDropdownContainer"
-						:class="{ 'active': showDropdown, 'share-select': true }">
-						<span :id="dropdownId"
+						class="share-select"
+						:class="{ active: showDropdown }">
+						<span
+							:id="dropdownId"
 							class="trigger-text"
 							:aria-expanded="showDropdown"
 							:aria-haspopup="true"
@@ -27,7 +31,8 @@
 							{{ selectedDropdownOption }}
 							<TriangleSmallDownIcon :size="15" />
 						</span>
-						<div v-if="showDropdown"
+						<div
+							v-if="showDropdown"
 							ref="quickShareDropdown"
 							class="share-select-dropdown"
 							:aria-labelledby="dropdownId"
@@ -36,12 +41,13 @@
 							@keydown.down="handleArrowDown"
 							@keydown.up="handleArrowUp"
 							@keydown.esc="closeDropdown">
-							<button v-for="option in dropdownOptions"
+							<button
+								v-for="option in dropdownOptions"
 								:key="option"
 								class="dropdown-item"
 								:class="{
 									'button--disabled': !networkOnline,
-									'selected': option === selectedDropdownOption,
+									selected: option === selectedDropdownOption,
 								}"
 								:aria-selected="option === selectedDropdownOption"
 								@click="selectOption(option)">
@@ -53,7 +59,8 @@
 
 				<!-- clipboard -->
 				<NcActions v-if="share && share.token" ref="copyButton" class="sharing-entry__copy">
-					<NcActionButton :aria-label="copyLinkTooltip"
+					<NcActionButton
+						:aria-label="copyLinkTooltip"
 						@click.prevent="copyLink">
 						<template #icon>
 							<CheckIcon v-if="copySuccess" :size="20" />
@@ -66,7 +73,8 @@
 			</div>
 
 			<!-- pending actions -->
-			<NcActions v-if="isPending"
+			<NcActions
+				v-if="isPending"
 				class="sharing-entry__pending_actions"
 				:aria-label="actionsTooltip"
 				menu-align="right"
@@ -85,13 +93,15 @@
 					</template>
 					{{ t('collectives', 'Password protection (enforced)') }}
 				</NcActionText>
-				<NcActionCheckbox v-else-if="isPasswordDefaultEnabled"
+				<NcActionCheckbox
+					v-else-if="isPasswordDefaultEnabled"
 					:checked.sync="isPendingPasswordProtected"
 					:disabled="loading"
 					@uncheck="onPendingDisablePassword">
 					{{ t('collectives', 'Set password') }}
 				</NcActionCheckbox>
-				<NcActionInput v-if="isPendingPasswordProtected"
+				<NcActionInput
+					v-if="isPendingPasswordProtected"
 					autocomplete="new-password"
 					:value.sync="pendingPassword"
 					:error="passwordError"
@@ -116,7 +126,8 @@
 			</NcActions>
 
 			<!-- actions -->
-			<NcActions v-else-if="!loading"
+			<NcActions
+				v-else-if="!loading"
 				class="sharing-entry__actions"
 				:aria-label="actionsTooltip"
 				menu-align="right"
@@ -147,7 +158,8 @@
 				</template>
 
 				<!-- Create new share -->
-				<NcActionButton v-else
+				<NcActionButton
+					v-else
 					class="new-share-link"
 					:aria-label="t('collectives', 'Create a new share link')"
 					@click.prevent.stop="onNewShare">
@@ -166,7 +178,8 @@
 			<NcCheckboxRadioSwitch :checked.sync="isPasswordProtected" :disabled="isPasswordEnforced">
 				{{ t('collectives', 'Set password') }}
 			</NcCheckboxRadioSwitch>
-			<NcPasswordField v-if="isPasswordProtected"
+			<NcPasswordField
+				v-if="isPasswordProtected"
 				autocomplete="new-password"
 				:value="hasUnsavedPassword ? share.newPassword : ''"
 				:error="passwordError"
@@ -188,28 +201,23 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'pinia'
-import { useCollectivesStore } from '../../stores/collectives.js'
-import { useSharesStore } from '../../stores/shares.js'
-import { usePagesStore } from '../../stores/pages.js'
-import { useNetworkState } from '../../composables/useNetworkState.ts'
-
 import axios from '@nextcloud/axios'
-import { generateUrl } from '@nextcloud/router'
 import { showError, showSuccess } from '@nextcloud/dialogs'
-import { createFocusTrap } from 'focus-trap'
+import { generateUrl } from '@nextcloud/router'
 import {
-	NcAvatar,
 	NcActionButton,
 	NcActionCheckbox,
 	NcActionInput,
-	NcActionText,
 	NcActions,
+	NcActionText,
+	NcAvatar,
 	NcButton,
 	NcCheckboxRadioSwitch,
 	NcLoadingIcon,
 	NcPasswordField,
 } from '@nextcloud/vue'
+import { createFocusTrap } from 'focus-trap'
+import { mapActions, mapState } from 'pinia'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 import CogIcon from 'vue-material-design-icons/CogOutline.vue'
@@ -218,9 +226,12 @@ import InformationIcon from 'vue-material-design-icons/InformationOutline.vue'
 import LockIcon from 'vue-material-design-icons/LockOutline.vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import TriangleSmallDownIcon from 'vue-material-design-icons/TriangleSmallDown.vue'
-
+import { useNetworkState } from '../../composables/useNetworkState.ts'
 import CopyToClipboardMixin from '../../mixins/CopyToClipboardMixin.js'
 import serverCapabilities from '../../mixins/serverCapabilities.js'
+import { useCollectivesStore } from '../../stores/collectives.js'
+import { usePagesStore } from '../../stores/pages.js'
+import { useSharesStore } from '../../stores/shares.js'
 
 export default {
 	name: 'SharingEntryLink',
@@ -256,6 +267,7 @@ export default {
 			type: Number,
 			default: null,
 		},
+
 		share: {
 			type: Object,
 			default: () => {},
@@ -359,6 +371,7 @@ export default {
 			get() {
 				return !!this.share.password
 			},
+
 			async set(enabled) {
 				if (enabled) {
 					const password = await this.generatePassword()
@@ -507,13 +520,13 @@ export default {
 				const responseError = error.response?.data?.ocs.meta.message
 				const message = this.isPageShare
 					? t('collectives', 'Failed to share page "{name}": {responseError}', {
-						name: this.currentPage.title,
-						responseError,
-					})
+							name: this.currentPage.title,
+							responseError,
+						})
 					: t('collectives', 'Failed to share collective "{name}": {responseError}', {
-						name: this.currentCollective.name,
-						responseError,
-					})
+							name: this.currentCollective.name,
+							responseError,
+						})
 				showError(message)
 				console.error('Failed to create share', responseError ?? error)
 				this.open = true

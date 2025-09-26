@@ -6,9 +6,11 @@
 <template>
 	<div class="member-search-results">
 		<template v-if="addableUsers.length !== 0">
-			<NcAppNavigationCaption :name="t('collectives', 'Add accounts')"
+			<NcAppNavigationCaption
+				:name="t('collectives', 'Add accounts')"
 				class="member-picker-caption" />
-			<Member v-for="item in addableUsers"
+			<Member
+				v-for="item in addableUsers"
 				:key="generateKey(item)"
 				:circle-id="circleId"
 				:user-id="item.id"
@@ -21,9 +23,11 @@
 		</template>
 
 		<template v-if="addableGroups.length !== 0">
-			<NcAppNavigationCaption :name="t('collectives', 'Add groups')"
+			<NcAppNavigationCaption
+				:name="t('collectives', 'Add groups')"
 				class="member-picker-caption" />
-			<Member v-for="item in addableGroups"
+			<Member
+				v-for="item in addableGroups"
 				:key="generateKey(item)"
 				:circle-id="circleId"
 				:user-id="item.id"
@@ -36,9 +40,11 @@
 		</template>
 
 		<template v-if="addableCircles.length !== 0">
-			<NcAppNavigationCaption :name="t('collectives', 'Add teams')"
+			<NcAppNavigationCaption
+				:name="t('collectives', 'Add teams')"
 				class="member-picker-caption" />
-			<Member v-for="item in addableCircles"
+			<Member
+				v-for="item in addableCircles"
 				:key="generateKey(item)"
 				:circle-id="circleId"
 				:user-id="item.id"
@@ -54,8 +60,8 @@
 
 <script>
 import { NcAppNavigationCaption } from '@nextcloud/vue'
-import { autocompleteSourcesToCircleMemberTypes, circlesMemberTypes } from '../../constants.js'
 import Member from './Member.vue'
+import { autocompleteSourcesToCircleMemberTypes, circlesMemberTypes } from '../../constants.js'
 
 export default {
 	name: 'MemberSearchResults',
@@ -70,14 +76,17 @@ export default {
 			type: String,
 			default: null,
 		},
+
 		searchResults: {
 			type: Array,
 			required: true,
 		},
+
 		selectionSet: {
 			type: Object,
 			required: true,
 		},
+
 		onClickSearched: {
 			type: Function,
 			default() {
@@ -98,7 +107,7 @@ export default {
 				return []
 			}
 
-			return this.searchResults.filter(item => item.source === 'users')
+			return this.searchResults.filter((item) => item.source === 'users')
 		},
 
 		addableGroups() {
@@ -106,7 +115,7 @@ export default {
 				return []
 			}
 
-			return this.searchResults.filter(item => item.source === 'groups')
+			return this.searchResults.filter((item) => item.source === 'groups')
 		},
 
 		addableCircles() {
@@ -114,7 +123,7 @@ export default {
 				return []
 			}
 
-			return this.searchResults.filter(item => item.source === 'circles')
+			return this.searchResults.filter((item) => item.source === 'circles')
 		},
 
 		circleUserType() {

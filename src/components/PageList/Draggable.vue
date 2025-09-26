@@ -4,7 +4,8 @@
 -->
 
 <template>
-	<draggable :list="list"
+	<draggable
+		:list="list"
 		:component-data="getComponentData()"
 		:data-parent-id="parentId"
 		:disabled="disabled"
@@ -35,9 +36,9 @@
 </template>
 
 <script>
+import { mapActions, mapState } from 'pinia'
 import draggable from 'vuedraggable'
 import pageMixin from '../../mixins/pageMixin.js'
-import { mapActions, mapState } from 'pinia'
 import { usePagesStore } from '../../stores/pages.js'
 
 export default {
@@ -56,10 +57,12 @@ export default {
 			type: Array,
 			required: true,
 		},
+
 		parentId: {
 			type: Number,
 			required: true,
 		},
+
 		disableSorting: {
 			type: Boolean,
 			default: false,

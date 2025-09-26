@@ -5,7 +5,8 @@
 
 <template>
 	<div>
-		<NcActionButton v-if="isCollectiveAdmin(collective)"
+		<NcActionButton
+			v-if="isCollectiveAdmin(collective)"
 			:close-after-click="true"
 			@click="openCollectiveMembers()">
 			<template #icon>
@@ -13,7 +14,8 @@
 			</template>
 			{{ t('collectives', 'Manage members') }}
 		</NcActionButton>
-		<NcActionButton v-if="!isPublic && collective.canEdit"
+		<NcActionButton
+			v-if="!isPublic && collective.canEdit"
 			:close-after-click="true"
 			@click="openTemplates()">
 			<template #icon>
@@ -22,7 +24,8 @@
 			{{ t('collectives', 'Manage templates') }}
 		</NcActionButton>
 		<NcActionSeparator v-if="isCollectiveAdmin(collective)" />
-		<NcActionButton v-if="collectiveCanShare(collective)"
+		<NcActionButton
+			v-if="collectiveCanShare(collective)"
 			:close-after-click="true"
 			@click="openShareTab(collective)">
 			{{ t('collectives', 'Share link') }}
@@ -30,7 +33,8 @@
 				<ShareVariantIcon :size="20" />
 			</template>
 		</NcActionButton>
-		<NcActionLink :close-after-click="true"
+		<NcActionLink
+			:close-after-click="true"
 			:href="printLink"
 			target="_blank">
 			{{ t('collectives', 'Export or print') }}
@@ -38,7 +42,8 @@
 				<DownloadIcon :size="20" />
 			</template>
 		</NcActionLink>
-		<NcActionButton v-if="isCollectiveAdmin(collective)"
+		<NcActionButton
+			v-if="isCollectiveAdmin(collective)"
 			:close-after-click="true"
 			@click="openCollectiveSettings()">
 			<template #icon>
@@ -46,7 +51,8 @@
 			</template>
 			{{ t('collectives', 'Settings') }}
 		</NcActionButton>
-		<NcActionButton v-if="!isPublic && collective.canLeave !== false"
+		<NcActionButton
+			v-if="!isPublic && collective.canLeave !== false"
 			:close-after-click="true"
 			@click="leaveCollectiveWithUndo(collective)">
 			{{ t('collectives', 'Leave collective') }}
@@ -58,19 +64,19 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'pinia'
-import { useRootStore } from '../../stores/root.js'
-import { useCollectivesStore } from '../../stores/collectives.js'
-import { useCirclesStore } from '../../stores/circles.js'
-import { NcActionButton, NcActionLink, NcActionSeparator } from '@nextcloud/vue'
 import { showError, showUndo } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
+import { NcActionButton, NcActionLink, NcActionSeparator } from '@nextcloud/vue'
+import { mapActions, mapState } from 'pinia'
 import AccountMultipleIcon from 'vue-material-design-icons/AccountMultipleOutline.vue'
 import CogIcon from 'vue-material-design-icons/CogOutline.vue'
-import DownloadIcon from 'vue-material-design-icons/TrayArrowDown.vue'
 import LogoutIcon from 'vue-material-design-icons/Logout.vue'
-import PageTemplateIcon from '../Icon/PageTemplateIcon.vue'
 import ShareVariantIcon from 'vue-material-design-icons/ShareVariantOutline.vue'
+import DownloadIcon from 'vue-material-design-icons/TrayArrowDown.vue'
+import PageTemplateIcon from '../Icon/PageTemplateIcon.vue'
+import { useCirclesStore } from '../../stores/circles.js'
+import { useCollectivesStore } from '../../stores/collectives.js'
+import { useRootStore } from '../../stores/root.js'
 
 export default {
 	name: 'CollectiveActions',
@@ -173,7 +179,3 @@ export default {
 	},
 }
 </script>
-
-<style scoped>
-
-</style>

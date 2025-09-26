@@ -4,11 +4,13 @@
 -->
 
 <template>
-	<transition-group v-if="hasSelectedMembers"
+	<transition-group
+		v-if="hasSelectedMembers"
 		name="zoom"
 		tag="div"
 		class="selected-members">
-		<NcUserBubble v-for="member in selectedMembers"
+		<NcUserBubble
+			v-for="member in selectedMembers"
 			:key="`member-${member.source}-${member.id}`"
 			:margin="0"
 			:size="22"
@@ -17,7 +19,8 @@
 			:primary="isCurrentUser(member)"
 			class="selected-member-bubble">
 			<template v-if="selectedMemberDeletable(member)" #title>
-				<a href="#"
+				<a
+					href="#"
 					:title="t('collectives', 'Remove {name}', { name: member.label })"
 					class="selected-member-bubble-delete"
 					@click="deleteMember(member)">
@@ -46,6 +49,7 @@ export default {
 			type: Object,
 			required: true,
 		},
+
 		noDeleteMembers: {
 			type: Array,
 			default() {

@@ -5,9 +5,11 @@
 
 <template>
 	<div class="current-members">
-		<NcAppNavigationCaption v-if="isSearching"
+		<NcAppNavigationCaption
+			v-if="isSearching"
 			:name="t('collectives', 'Members')" />
-		<Member v-for="item in searchedMembers"
+		<Member
+			v-for="item in searchedMembers"
 			:key="item.singleId"
 			:circle-id="circleId"
 			:current-user-is-admin="currentUserIsAdmin"
@@ -18,18 +20,19 @@
 			:level="item.level"
 			:is-current-user="isCurrentUser(item)"
 			:is-searched="false" />
-		<Hint v-if="isSearching && searchedMembers.length === 0"
+		<Hint
+			v-if="isSearching && searchedMembers.length === 0"
 			:hint="t('collectives', 'No search results')" />
 	</div>
 </template>
 
 <script>
-import { mapState } from 'pinia'
-import { useCirclesStore } from '../../stores/circles.js'
 import { getCurrentUser } from '@nextcloud/auth'
 import { NcAppNavigationCaption } from '@nextcloud/vue'
+import { mapState } from 'pinia'
 import Hint from './Hint.vue'
 import Member from './Member.vue'
+import { useCirclesStore } from '../../stores/circles.js'
 
 export default {
 	name: 'CurrentMembers',
@@ -45,14 +48,17 @@ export default {
 			type: String,
 			required: true,
 		},
+
 		currentMembers: {
 			type: Array,
 			required: true,
 		},
+
 		searchQuery: {
 			type: String,
 			default: '',
 		},
+
 		currentUserIsAdmin: {
 			type: Boolean,
 			default: true,
@@ -78,7 +84,7 @@ export default {
 			}
 
 			return this.sortedMembers
-				.filter(m => m.displayName.toLowerCase().includes(this.searchQuery.toLowerCase()))
+				.filter((m) => m.displayName.toLowerCase().includes(this.searchQuery.toLowerCase()))
 		},
 
 		currentUser() {

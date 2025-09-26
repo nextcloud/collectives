@@ -4,20 +4,23 @@
 -->
 
 <template>
-	<NcListItem :name="version.basename"
+	<NcListItem
+		:name="version.basename"
 		class="version"
-		:class="{'active': isSelected}"
+		:class="{ active: isSelected }"
 		:active="isSelected"
 		:force-display-actions="true"
 		:actions-aria-label="t('collectives', 'Actions for versions from {versionHumanExplicitDate}', { versionHumanExplicitDate })"
 		@click="$emit('click')">
 		<!-- Icon -->
 		<template #icon>
-			<NcLoadingIcon v-if="isLoading"
+			<NcLoadingIcon
+				v-if="isLoading"
 				:size="26"
 				fill-color="var(--color-main-background)"
 				class="version-icon version-icon__loading" />
-			<PageIcon v-else
+			<PageIcon
+				v-else
 				:size="26"
 				fill-color="var(--color-main-background)"
 				class="version-icon version-icon__page" />
@@ -26,15 +29,18 @@
 		<!-- Name and author -->
 		<template #name>
 			<div class="version-info">
-				<div v-if="versionLabel"
+				<div
+					v-if="versionLabel"
 					class="version-info__label"
 					:title="versionLabel">
 					{{ versionLabel }}
 				</div>
-				<div v-if="versionAuthor"
+				<div
+					v-if="versionAuthor"
 					class="version-info">
 					<span v-if="versionLabel">•</span>
-					<NcAvatar class="avatar"
+					<NcAvatar
+						class="avatar"
 						:user="version.author"
 						:size="20"
 						disable-menu
@@ -48,7 +54,8 @@
 		<!-- Version file size as subline -->
 		<template #subname>
 			<div class="version-info version-info__subline">
-				<NcDateTime class="version-info__date"
+				<NcDateTime
+					class="version-info__date"
 					relative-time="short"
 					:timestamp="version.mtime" />
 				<!-- separate dot to improve alignment -->
@@ -59,14 +66,16 @@
 
 		<!-- Actions -->
 		<template #actions>
-			<NcActionButton :close-after-click="true"
+			<NcActionButton
+				:close-after-click="true"
 				@click="$emit('start-label-update')">
 				<template #icon>
 					<PencilIcon :size="22" />
 				</template>
 				{{ version.label === '' ? t('collectives', 'Name this version') : t('collectives', 'Edit version name') }}
 			</NcActionButton>
-			<NcActionButton v-if="!isCurrent"
+			<NcActionButton
+				v-if="!isCurrent"
 				:close-after-click="true"
 				@click="$emit('compare')">
 				<template #icon>
@@ -74,7 +83,8 @@
 				</template>
 				{{ t('collectives', 'Compare to current version') }}
 			</NcActionButton>
-			<NcActionButton v-if="!isCurrent && canEdit"
+			<NcActionButton
+				v-if="!isCurrent && canEdit"
 				:close-after-click="true"
 				@click="$emit('restore')">
 				<template #icon>
@@ -82,7 +92,8 @@
 				</template>
 				{{ t('collectives', 'Restore version') }}
 			</NcActionButton>
-			<NcActionLink :href="version.source"
+			<NcActionLink
+				:href="version.source"
 				:close-after-click="true"
 				:download="version.source">
 				<template #icon>
@@ -90,7 +101,8 @@
 				</template>
 				{{ t('collectives', 'Download version') }}
 			</NcActionLink>
-			<NcActionButton v-if="!isCurrent && canEdit"
+			<NcActionButton
+				v-if="!isCurrent && canEdit"
 				:close-after-click="true"
 				@click="$emit('delete')">
 				<template #icon>
@@ -103,19 +115,18 @@
 </template>
 
 <script>
-import moment from '@nextcloud/moment'
+import { getCurrentUser } from '@nextcloud/auth'
 import axios from '@nextcloud/axios'
 import { formatFileSize } from '@nextcloud/files'
-import { getCurrentUser } from '@nextcloud/auth'
+import moment from '@nextcloud/moment'
 import { generateUrl } from '@nextcloud/router'
-
 import { NcActionButton, NcActionLink, NcAvatar, NcDateTime, NcListItem, NcLoadingIcon } from '@nextcloud/vue'
 import BackupRestoreIcon from 'vue-material-design-icons/BackupRestore.vue'
+import FileCompareIcon from 'vue-material-design-icons/FileCompare.vue'
+import PencilIcon from 'vue-material-design-icons/PencilOutline.vue'
 import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
 import DownloadIcon from 'vue-material-design-icons/TrayArrowDown.vue'
-import FileCompareIcon from 'vue-material-design-icons/FileCompare.vue'
 import PageIcon from '../Icon/PageIcon.vue'
-import PencilIcon from 'vue-material-design-icons/PencilOutline.vue'
 
 export default {
 	name: 'Version',
@@ -140,22 +151,27 @@ export default {
 			type: Object,
 			required: true,
 		},
+
 		isCurrent: {
 			type: Boolean,
 			default: false,
 		},
+
 		isFirstVersion: {
 			type: Boolean,
 			default: false,
 		},
+
 		isSelected: {
 			type: Boolean,
 			default: false,
 		},
+
 		isLoading: {
 			type: Boolean,
 			default: false,
 		},
+
 		canEdit: {
 			type: Boolean,
 			default: false,

@@ -5,7 +5,8 @@
 
 <template>
 	<NcAppNavigationSettings :name="t('collectives', 'Collectives settings')">
-		<NcTextField name="userFolder"
+		<NcTextField
+			name="userFolder"
 			:label="t('collectives', 'Collectives folder')"
 			:label-visible="true"
 			:value="userFolderValue"
@@ -15,10 +16,10 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'pinia'
-import { useSettingsStore } from '../../stores/settings.js'
 import { getFilePickerBuilder, showError } from '@nextcloud/dialogs'
 import { NcAppNavigationSettings, NcTextField } from '@nextcloud/vue'
+import { mapActions, mapState } from 'pinia'
+import { useSettingsStore } from '../../stores/settings.js'
 import displayError from '../../util/displayError.js'
 
 export default {

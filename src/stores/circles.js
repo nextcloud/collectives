@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { defineStore } from 'pinia'
-import { set } from 'vue'
-import { useLocalStorage } from '@vueuse/core'
 import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
+import { useLocalStorage } from '@vueuse/core'
+import { defineStore } from 'pinia'
+import { set } from 'vue'
 import { circlesMemberTypes } from '../constants.js'
 import { useCollectivesStore } from './collectives.js'
 import { useRootStore } from './root.js'
@@ -24,9 +24,9 @@ export const useCirclesStore = defineStore('circles', {
 		availableCircles(state) {
 			const collectivesStore = useCollectivesStore()
 			return state.circles
-				.filter(circle => circle.initiator) // only circles I am a member of
-				.filter(circle => {
-					const matchCircleId = c => {
+				.filter((circle) => circle.initiator) // only circles I am a member of
+				.filter((circle) => {
+					const matchCircleId = (c) => {
 						return (c.circleId === circle.id)
 					}
 					const alive = collectivesStore.collectives.find(matchCircleId)
@@ -81,7 +81,7 @@ export const useCirclesStore = defineStore('circles', {
 
 	actions: {
 		deleteCircleForCollectiveFromState(collective) {
-			this.circles.splice(this.circles.findIndex(c => c.id === collective.circleId), 1)
+			this.circles.splice(this.circles.findIndex((c) => c.id === collective.circleId), 1)
 		},
 
 		/**
@@ -108,7 +108,7 @@ export const useCirclesStore = defineStore('circles', {
 				{ value: collective.name },
 			)
 			this.circles.splice(
-				this.circles.findIndex(c => c.id === response.data.ocs.data.id),
+				this.circles.findIndex((c) => c.id === response.data.ocs.data.id),
 				1,
 				response.data.ocs.data,
 			)
@@ -171,9 +171,7 @@ export const useCirclesStore = defineStore('circles', {
 		 * @param {string} params.memberId Team member ID of the member to be removed
 		 */
 		async removeMemberFromCircle({ circleId, memberId }) {
-			const response = await axios.delete(
-				generateOcsUrl('apps/circles/circles/' + circleId + '/members/' + memberId),
-			)
+			const response = await axios.delete(generateOcsUrl('apps/circles/circles/' + circleId + '/members/' + memberId))
 			return response.data.ocs.data
 		},
 
@@ -201,7 +199,7 @@ export const useCirclesStore = defineStore('circles', {
 		async leaveCircle(collective) {
 			const collectivesStore = useCollectivesStore()
 			await axios.put(generateOcsUrl(`apps/circles/circles/${collective.circleId}/leave`))
-			this.circles.splice(this.circles.findIndex(c => c.id === collective.circleId), 1)
+			this.circles.splice(this.circles.findIndex((c) => c.id === collective.circleId), 1)
 			collectivesStore.removeCollectiveFromState(collective)
 		},
 

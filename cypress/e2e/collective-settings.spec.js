@@ -38,7 +38,6 @@ describe('Collective settings', function() {
 	})
 
 	describe('rename collective', function() {
-
 		beforeEach(function() {
 			cy.deleteCollective('Change me now')
 		})
@@ -51,7 +50,6 @@ describe('Collective settings', function() {
 			cy.get('.collectives_list_item')
 				.should('contain', 'Change me now')
 		})
-
 	})
 
 	describe('change edit permissions', function() {

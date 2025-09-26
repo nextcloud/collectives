@@ -4,11 +4,13 @@
 -->
 
 <template>
-	<NcDialog :name="t('collectives', 'Members of collective {name}', { name: collective.name }, { escape: false })"
+	<NcDialog
+		:name="t('collectives', 'Members of collective {name}', { name: collective.name }, { escape: false })"
 		size="normal"
 		@closing="onClose">
 		<div class="modal-collective-members">
-			<MemberPicker :show-current="true"
+			<MemberPicker
+				:show-current="true"
 				:circle-id="collective.circleId"
 				:current-user-is-admin="currentUserIsAdmin"
 				:current-members="circleMembersSorted(collective.circleId)"
@@ -18,12 +20,12 @@
 </template>
 
 <script>
+import { NcDialog } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
+import MemberPicker from '../Member/MemberPicker.vue'
+import { autocompleteSourcesToCircleMemberTypes, circlesMemberTypes } from '../../constants.js'
 import { useCirclesStore } from '../../stores/circles.js'
 import { useCollectivesStore } from '../../stores/collectives.js'
-import { autocompleteSourcesToCircleMemberTypes, circlesMemberTypes } from '../../constants.js'
-import { NcDialog } from '@nextcloud/vue'
-import MemberPicker from '../Member/MemberPicker.vue'
 
 export default {
 	name: 'CollectiveMembersModal',

@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { mapActions, mapState } from 'pinia'
-import { useRootStore } from '../stores/root.js'
-import { useCollectivesStore } from '../stores/collectives.js'
-import { usePagesStore } from '../stores/pages.js'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
+import { mapActions, mapState } from 'pinia'
+import { useCollectivesStore } from '../stores/collectives.js'
+import { usePagesStore } from '../stores/pages.js'
+import { useRootStore } from '../stores/root.js'
 import { scrollToPage } from '../util/scrollToElement.js'
 
 export default {
@@ -244,8 +244,8 @@ export default {
 		 */
 		async subpageOrderUpdate(parentId, pageId, newIndex) {
 			const subpageOrder = this.sortedSubpages(parentId)
-				.map(p => p.id)
-			subpageOrder.splice(subpageOrder.findIndex(id => id === pageId), 1)
+				.map((p) => p.id)
+			subpageOrder.splice(subpageOrder.findIndex((id) => id === pageId), 1)
 			subpageOrder.splice(newIndex, 0, pageId)
 
 			try {

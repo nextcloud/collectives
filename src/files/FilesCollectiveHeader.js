@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import FileListInfo from '../views/FileListInfo.vue'
-import Vue from 'vue'
-import { loadState } from '@nextcloud/initial-state'
 import { Header } from '@nextcloud/files'
+import { loadState } from '@nextcloud/initial-state'
+import Vue from 'vue'
+import FileListInfo from '../views/FileListInfo.vue'
 
 let vm = null
 

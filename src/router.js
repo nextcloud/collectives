@@ -1,13 +1,13 @@
+import { generateUrl } from '@nextcloud/router'
 /**
  * SPDX-FileCopyrightText: 2020 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import { generateUrl } from '@nextcloud/router'
-import Home from './views/Home.vue'
 import CollectivePrintView from './views/CollectivePrintView.vue'
 import CollectiveView from './views/CollectiveView.vue'
+import Home from './views/Home.vue'
 
 Vue.use(VueRouter)
 

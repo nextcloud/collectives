@@ -103,7 +103,5 @@ export function updateShare(share) {
  * @param {string} share.token Token of the share to be updated
  */
 export function deleteShare(share) {
-	return axios.delete(
-		shareUrl(share),
-	)
+	return axios.delete(shareUrl(share))
 }
