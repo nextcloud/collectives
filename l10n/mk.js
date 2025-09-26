@@ -20,6 +20,7 @@ OC.L10N.register(
     "Delete permanently" : "Избриши",
     "Cancel" : "Откажи",
     "Create" : "Креирај",
+    "Go back" : "Назад",
     "Back" : "Назад",
     "Delete" : "Избриши",
     "Rename" : "Преименувај",

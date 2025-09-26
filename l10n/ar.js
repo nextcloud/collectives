@@ -152,7 +152,6 @@ OC.L10N.register(
     "Copy page to {collective}" : "إنسَخ الصفحة إلى {collective}",
     "Copy or move page" : "إنسَخ أو انقُل الصفحة",
     "Breadcrumb for list of collectives" : "مسار التنقُّل لقائمة التجميعات",
-    "Breadcrumb for page {page}" : "مسار التنقُّل للصفحة {page}",
     "Could not rename the page" : "تعذّرت إعادة تسمية الصفحة",
     "Select emoji for page" : "إختر الرمز التعبيري emoji للصفحة",
     "Title" : "العنوان",

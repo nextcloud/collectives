@@ -18,6 +18,7 @@ OC.L10N.register(
     "Delete permanently" : "Șterge permanent",
     "Cancel" : "Anulare",
     "Create" : "Crează",
+    "Go back" : "Înapoi",
     "Back" : "Înapoi",
     "Delete" : "Șterge",
     "Rename" : "Redenumire",

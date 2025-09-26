@@ -74,6 +74,7 @@ OC.L10N.register(
     "Create" : "Ustvarjeno",
     "Could not add members to the collective" : "Ni mogoče dodati članov v zbirko",
     "Select emoji" : "Izbor izrazne ikone",
+    "Go back" : "Skoči nazaj",
     "Back" : "Nazaj",
     "Delete" : "Izbriši",
     "Rename" : "Preimenuj",

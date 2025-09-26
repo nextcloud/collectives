@@ -11,6 +11,7 @@ OC.L10N.register(
     "Delete permanently" : "Dileu'n barhaol",
     "Cancel" : "Diddymu",
     "Create" : "Creu",
+    "Go back" : "Nôl",
     "Back" : "Nôl",
     "Delete" : "Dileu",
     "Rename" : "Ailenwi",

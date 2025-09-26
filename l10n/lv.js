@@ -22,6 +22,7 @@ OC.L10N.register(
     "Delete permanently" : "Neatgriezeniski izdzēst",
     "Cancel" : "Atcelt",
     "Create" : "Izveidot",
+    "Go back" : "Atpakaļ",
     "Back" : "Atpakaļ",
     "Delete" : "Izdzēst",
     "Could not rename template" : "Sagatavi nevarēja pārdēvēt",

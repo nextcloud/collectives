@@ -9,6 +9,7 @@ OC.L10N.register(
     "Restore" : "ප්‍රතිෂ්ථාපනය",
     "Cancel" : "අවලංගු",
     "Create" : "සාදන්න",
+    "Go back" : "ආපසු යන්න",
     "Back" : "ආපසු",
     "Download" : "බාගන්න",
     "Could not rename the page" : "පිටුව නැවත නම් කිරීමට නොහැකි විය",

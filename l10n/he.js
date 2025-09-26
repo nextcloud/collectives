@@ -18,6 +18,7 @@ OC.L10N.register(
     "Delete permanently" : "מחיקה לצמיתות",
     "Cancel" : "ביטול",
     "Create" : "יצירה",
+    "Go back" : "חזרה",
     "Back" : "חזרה",
     "Delete" : "מחיקה",
     "Rename" : "שינוי שם",

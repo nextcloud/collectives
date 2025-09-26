@@ -13,6 +13,7 @@ OC.L10N.register(
     "Delete permanently" : "ลบแบบถาวร",
     "Cancel" : "ยกเลิก",
     "Create" : "สร้าง",
+    "Go back" : "กลับไป",
     "Back" : "ย้อนกลับ",
     "Delete" : "ลบ",
     "Rename" : "เปลี่ยนชื่อ",

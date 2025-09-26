@@ -23,6 +23,7 @@ OC.L10N.register(
     "Cancel" : "Peruuta",
     "Create" : "Luo",
     "Select emoji" : "Valitse emoji",
+    "Go back" : "Mene takaisin",
     "Back" : "Takaisin",
     "Delete" : "Poista",
     "Rename" : "Nimeä uudelleen",

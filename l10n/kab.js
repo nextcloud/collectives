@@ -10,6 +10,7 @@ OC.L10N.register(
     "Choose" : "Fren",
     "Cancel" : "Sefsex",
     "Create" : "Snulfu-d",
+    "Go back" : "Tuɣalin",
     "Back" : "Retour",
     "Delete" : "Kkes",
     "Rename" : "Beddel isem",

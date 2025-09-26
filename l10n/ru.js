@@ -66,6 +66,7 @@ OC.L10N.register(
     "Cancel" : "Отмена",
     "Create" : "Создать",
     "Select emoji" : "Выберите эмодзи",
+    "Go back" : "Назад",
     "Back" : "Назад",
     "Delete" : "Удаление",
     "Rename" : "Переименовать",

@@ -10,6 +10,7 @@ OC.L10N.register(
     "Delete permanently" : "Permanent läschen",
     "Cancel" : "Ofbriechen",
     "Create" : "Erstellen",
+    "Go back" : "Zeréckgoen",
     "Back" : "Zeréck",
     "Delete" : "Läschen",
     "Rename" : "Ëmbenennen",

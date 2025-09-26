@@ -137,7 +137,6 @@ OC.L10N.register(
     "Copy page to {collective}" : "Copia la pàgina a {collective}",
     "Copy or move page" : "Copia o mou la pàgina",
     "Breadcrumb for list of collectives" : "Ruta de pistes per a la llista de col·lectius",
-    "Breadcrumb for page {page}" : "Ruta de pistes per a la pàgina {page}",
     "Could not rename the page" : "No s'ha pogut canviar el nom de la pàgina",
     "Select emoji for page" : "Seleccioneu emoji per a la pàgina",
     "Title" : "Títol",

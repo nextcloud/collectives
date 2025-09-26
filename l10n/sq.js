@@ -15,6 +15,7 @@ OC.L10N.register(
     "Delete permanently" : "Fshije përgjithmonë",
     "Cancel" : "Anullo",
     "Create" : "Krijo",
+    "Go back" : "Shko prapa",
     "Back" : "Prapa",
     "Delete" : "Fshi",
     "Rename" : "Riemërtoje",

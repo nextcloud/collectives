@@ -63,6 +63,7 @@ OC.L10N.register(
     "Create" : "作成",
     "Select emoji" : "絵文字の選択",
     "Add members" : "メンバーの追加",
+    "Go back" : "戻る",
     "Back" : "戻る",
     "Delete" : "削除",
     "Rename" : "名前を変更",
