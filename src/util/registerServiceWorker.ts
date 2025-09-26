@@ -14,11 +14,12 @@ export default async function(app = 'collectives') {
 	const { Workbox } = await import('workbox-window')
 	const url = generateServiceWorkerUrl(app)
 	const scope = generateUrl(`/apps/${app}`)
-	const wb = new Workbox(url, { scope });
+	const wb = new Workbox(url, { scope })
 	wb.addEventListener('activated', (event) => {
-		if (event.isUpdate || event.isExternal)
+		if (event.isUpdate || event.isExternal) {
 			console.info('A new collectives version is available.')
 			// window.location.reload()
+		}
 	})
 
 	try {
