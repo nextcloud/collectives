@@ -25,7 +25,8 @@
 		<!-- versions list -->
 		<div v-else-if="!loading('versions') && sortedVersions.length">
 			<ul :aria-label="t('collectives', 'Page versions')" class="version-list">
-				<Version v-for="version in sortedVersions"
+				<Version
+					v-for="version in sortedVersions"
 					:key="version.mtime"
 					:version="version"
 					:is-current="isCurrent(version.mtime)"
@@ -42,14 +43,16 @@
 		</div>
 
 		<!-- no versions found -->
-		<NcEmptyContent v-else
+		<NcEmptyContent
+			v-else
 			:name="t('collectives', 'No other versions available')"
-			:description="t( 'collectives', 'After editing you can find old versions of the page here.')">
+			:description="t('collectives', 'After editing you can find old versions of the page here.')">
 			<template #icon>
 				<BackupRestoreIcon />
 			</template>
 		</NcEmptyContent>
-		<VersionLabelDialog v-if="editedVersion"
+		<VersionLabelDialog
+			v-if="editedVersion"
 			:open.sync="showVersionLabelForm"
 			:version-label="editedVersion.label"
 			@label-update="onLabelUpdate" />
@@ -57,18 +60,17 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'pinia'
-import { useRootStore } from '../../stores/root.js'
-import { useCollectivesStore } from '../../stores/collectives.js'
-import { useVersionsStore } from '../../stores/versions.js'
-import { useNetworkState } from '../../composables/useNetworkState.ts'
-
 import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
+import { mapActions, mapState } from 'pinia'
 import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagonOutline.vue'
 import BackupRestoreIcon from 'vue-material-design-icons/BackupRestore.vue'
 import OfflineContent from './OfflineContent.vue'
 import Version from './Version.vue'
 import VersionLabelDialog from './VersionLabelDialog.vue'
+import { useNetworkState } from '../../composables/useNetworkState.ts'
+import { useCollectivesStore } from '../../stores/collectives.js'
+import { useRootStore } from '../../stores/root.js'
+import { useVersionsStore } from '../../stores/versions.js'
 
 export default {
 	name: 'SidebarTabVersions',
@@ -88,6 +90,7 @@ export default {
 			type: Number,
 			required: true,
 		},
+
 		pageTimestamp: {
 			type: Number,
 			required: true,
@@ -135,7 +138,7 @@ export default {
 
 		initialVersionMtime() {
 			return this.versions
-				.map(version => version.mtime)
+				.map((version) => version.mtime)
 				.reduce((a, b) => Math.min(a, b))
 		},
 
@@ -153,10 +156,11 @@ export default {
 	},
 
 	watch: {
-		'pageId'() {
+		pageId: function() {
 			this.getPageVersions()
 		},
-		'networkOnline'(val) {
+
+		networkOnline: function(val) {
 			if (val && this.loadPending) {
 				this.getPageVersions()
 			}
@@ -225,7 +229,7 @@ export default {
 		},
 
 		onCompareVersion(version) {
-			OCA.Viewer.compare(this.currentVersion, this.versions.find(v => v.source === version.source))
+			OCA.Viewer.compare(this.currentVersion, this.versions.find((v) => v.source === version.source))
 		},
 
 		async onRestoreVersion(version) {

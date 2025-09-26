@@ -3,16 +3,16 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { useLocalStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
 import { set } from 'vue'
-import { useLocalStorage } from '@vueuse/core'
-import { useRootStore } from './root.js'
+import * as api from '../apis/collectives/index.js'
+import { INDEX_PAGE, PAGE_SUFFIX, TEMPLATE_PAGE, TEMPLATE_PATH } from '../constants.js'
+import { byTitleAsc } from '../util/sortOrders.js'
+import { removeFrom, updateOrAddTo } from './collectionHelpers.js'
 import { useCollectivesStore } from './collectives.js'
 import { usePagesStore } from './pages.js'
-import * as api from '../apis/collectives/index.js'
-import { byTitleAsc } from '../util/sortOrders.js'
-import { INDEX_PAGE, PAGE_SUFFIX, TEMPLATE_PAGE, TEMPLATE_PATH } from '../constants.js'
-import { removeFrom, updateOrAddTo } from './collectionHelpers.js'
+import { useRootStore } from './root.js'
 
 const STORE_PREFIX = 'collectives/pinia/templates/'
 
@@ -55,7 +55,7 @@ export const useTemplatesStore = defineStore('templates', {
 
 		hasSubpages() {
 			return (templateId) => {
-				return this.templates.filter(p => p.parentId === templateId).length > 0
+				return this.templates.filter((p) => p.parentId === templateId).length > 0
 			}
 		},
 
@@ -67,7 +67,7 @@ export const useTemplatesStore = defineStore('templates', {
 
 		rootTemplates() {
 			return this.sortedTemplates
-				.filter(template => template.parentId === this.rootTemplateId)
+				.filter((template) => template.parentId === this.rootTemplateId)
 		},
 
 		templateFilePath: () => (template) => {
@@ -128,7 +128,6 @@ export const useTemplatesStore = defineStore('templates', {
 			} finally {
 				rootStore.done('newTemplate')
 			}
-
 		},
 
 		/**

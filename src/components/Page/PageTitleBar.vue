@@ -4,15 +4,17 @@
 -->
 
 <template>
-	<div class="page-title-container"
+	<div
+		class="page-title-container"
 		:class="{
 			'full-width-view': isFullWidth,
 			'sheet-view': !isFullWidth,
 		}"
 		data-cy-collectives="page-title-container">
 		<!-- Page emoji or icon -->
-		<div class="page-title-icon"
-			:class="{ 'mobile': isMobile }">
+		<div
+			class="page-title-icon"
+			:class="{ mobile: isMobile }">
 			<!-- Landing page: collective emoji or CollectivesIcon -->
 			<div v-if="isLandingPage && currentCollective.emoji">
 				{{ currentCollective.emoji }}
@@ -20,27 +22,31 @@
 			<CollectivesIcon v-else-if="isLandingPage" :size="pageTitleIconSize" fill-color="var(--color-text-maxcontrast)" />
 
 			<!-- Emoji picker if editable -->
-			<NcEmojiPicker v-else-if="currentCollectiveCanEdit"
+			<NcEmojiPicker
+				v-else-if="currentCollectiveCanEdit"
 				ref="page-emoji-picker"
 				:show-preview="true"
 				:allow-unselect="true"
 				:selected-emoji="currentPage.emoji"
 				@select="onSelectEmoji"
 				@unselect="onUnselectEmoji">
-				<NcButton variant="tertiary"
+				<NcButton
+					variant="tertiary"
 					:aria-label="t('collectives', 'Select emoji for page')"
 					:title="t('collectives', 'Select emoji')"
 					class="button-emoji-page"
-					:class="{ 'mobile': isMobile }"
+					:class="{ mobile: isMobile }"
 					@click.prevent>
 					<template #icon>
-						<NcLoadingIcon v-if="emojiButtonIsLoading"
+						<NcLoadingIcon
+							v-if="emojiButtonIsLoading"
 							:size="pageTitleIconSize"
 							fill-color="var(--color-text-maxcontrast)" />
 						<div v-else-if="currentPage.emoji">
 							{{ currentPage.emoji }}
 						</div>
-						<EmoticonIcon v-else
+						<EmoticonIcon
+							v-else
 							class="emoji-picker-emoticon"
 							:size="pageTitleIconSize"
 							fill-color="var(--color-text-maxcontrast)" />
@@ -53,7 +59,8 @@
 				<div v-if="currentPage.emoji">
 					{{ currentPage.emoji }}
 				</div>
-				<EmoticonIcon v-else
+				<EmoticonIcon
+					v-else
 					class="emoji-picker-emoticon"
 					:size="pageTitleIconSize"
 					fill-color="var(--color-text-maxcontrast)" />
@@ -61,11 +68,13 @@
 		</div>
 
 		<!-- Page title -->
-		<PageTitle v-if="isLandingPage"
+		<PageTitle
+			v-if="isLandingPage"
 			ref="pageTitle"
 			:value="currentCollective.name"
 			:disabled="true" />
-		<PageTitle v-else
+		<PageTitle
+			v-else
 			ref="pageTitle"
 			v-model="newTitle"
 			:placeholder="t('collectives', 'Title')"
@@ -74,14 +83,16 @@
 			@save="$emit('save-editor')"
 			@submit="onSubmit()" />
 
-		<div class="titlebar-buttons" :class="{'titlebar-buttons_sidebar-toggle': !isMobile && !showing('sidebar')}">
+		<div class="titlebar-buttons" :class="{ 'titlebar-buttons_sidebar-toggle': !isMobile && !showing('sidebar') }">
 			<!-- Edit button if editable -->
-			<EditButton v-if="currentCollectiveCanEdit"
+			<EditButton
+				v-if="currentCollectiveCanEdit"
 				:mobile="isMobile"
 				class="edit-button" />
 
 			<!-- Actions menu -->
-			<PageActionMenu :show-files-link="!isPublic"
+			<PageActionMenu
+				:show-files-link="!isPublic"
 				:page-id="currentPage.id"
 				:parent-id="currentPage.parentId"
 				:timestamp="currentPage.timestamp"
@@ -91,22 +102,21 @@
 		</div>
 	</div>
 </template>
+
 <script>
-import pageMixin from '../../mixins/pageMixin.js'
-
-import { mapActions, mapState } from 'pinia'
-import { useRootStore } from '../../stores/root.js'
-import { useCollectivesStore } from '../../stores/collectives.js'
-import { usePagesStore } from '../../stores/pages.js'
 import { showError } from '@nextcloud/dialogs'
-
 import { NcButton, NcEmojiPicker, NcLoadingIcon } from '@nextcloud/vue'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
-import CollectivesIcon from '../Icon/CollectivesIcon.vue'
+import { mapActions, mapState } from 'pinia'
 import EmoticonIcon from 'vue-material-design-icons/EmoticonOutline.vue'
+import CollectivesIcon from '../Icon/CollectivesIcon.vue'
 import EditButton from './EditButton.vue'
 import PageActionMenu from './PageActionMenu.vue'
 import PageTitle from './PageTitle.vue'
+import pageMixin from '../../mixins/pageMixin.js'
+import { useCollectivesStore } from '../../stores/collectives.js'
+import { usePagesStore } from '../../stores/pages.js'
+import { useRootStore } from '../../stores/root.js'
 
 export default {
 	name: 'PageTitleBar',
@@ -150,10 +160,12 @@ export default {
 			'loading',
 			'showing',
 		]),
+
 		...mapState(useCollectivesStore, [
 			'currentCollective',
 			'currentCollectiveCanEdit',
 		]),
+
 		...mapState(usePagesStore, [
 			'currentPage',
 			'currentPagePath',
@@ -175,7 +187,7 @@ export default {
 			]
 			if (!this.isLandingPage) {
 				// Add parent page names in reverse order
-				filePath.split('/').forEach(part => part && parts.unshift(part))
+				filePath.split('/').forEach((part) => part && parts.unshift(part))
 				if (!this.isIndexPage) {
 					parts.unshift(title)
 				}
@@ -197,17 +209,17 @@ export default {
 	},
 
 	watch: {
-		'documentTitle'() {
+		documentTitle: function() {
 			document.title = this.documentTitle
 		},
 
-		'showingPageEmojiPicker'(val) {
+		showingPageEmojiPicker: function(val) {
 			if (val === true) {
 				this.openPageEmojiPicker()
 			}
 		},
 
-		'currentPage.id'() {
+		'currentPage.id': function() {
 			this.initTitleEntry()
 		},
 	},
@@ -223,6 +235,7 @@ export default {
 			'hide',
 			'load',
 		]),
+
 		...mapActions(usePagesStore, [
 			'getPages',
 			'renamePage',

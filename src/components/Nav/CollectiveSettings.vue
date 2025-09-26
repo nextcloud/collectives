@@ -4,19 +4,22 @@
 -->
 
 <template>
-	<NcAppSettingsDialog :open.sync="showSettings"
+	<NcAppSettingsDialog
+		:open.sync="showSettings"
 		:name="t('collectives', 'Collective settings')"
 		:show-navigation="true">
 		<NcAppSettingsSection id="name-and-emoji" :name="t('collectives', 'Name and emoji')">
 			<div class="collective-name">
-				<NcEmojiPicker :show-preview="true"
+				<NcEmojiPicker
+					:show-preview="true"
 					:allow-unselect="true"
 					:selected-emoji="collective.emoji"
 					@select="updateEmoji"
 					@unselect="unselectEmoji">
-					<NcButton variant="tertiary"
+					<NcButton
+						variant="tertiary"
 						:aria-label="t('collectives', 'Select emoji for collective')"
-						:class="{'loading': loading('updateCollectiveEmoji') || loading('renameCollective')}"
+						:class="{ loading: loading('updateCollectiveEmoji') || loading('renameCollective') }"
 						class="button-emoji"
 						@click.prevent>
 						{{ collective.emoji }}
@@ -25,7 +28,8 @@
 						</template>
 					</NcButton>
 				</NcEmojiPicker>
-				<NcTextField ref="collectiveName"
+				<NcTextField
+					ref="collectiveName"
 					:value.sync="newCollectiveName"
 					:disabled="!isCollectiveOwner(collective)"
 					:label="getRenameLabel"
@@ -53,21 +57,24 @@
 			</div>
 
 			<div class="permissions-input-edit">
-				<NcCheckboxRadioSwitch :checked.sync="editPermissions"
+				<NcCheckboxRadioSwitch
+					:checked.sync="editPermissions"
 					:value="String(memberLevels.LEVEL_ADMIN)"
 					:loading="loading('updateCollectiveEditPermissions_' + String(memberLevels.LEVEL_ADMIN))"
 					name="edit_admins"
 					type="radio">
 					{{ t('collectives', 'Admins only') }}
 				</NcCheckboxRadioSwitch>
-				<NcCheckboxRadioSwitch :checked.sync="editPermissions"
+				<NcCheckboxRadioSwitch
+					:checked.sync="editPermissions"
 					:value="String(memberLevels.LEVEL_MODERATOR)"
 					:loading="loading('updateCollectiveEditPermissions_' + String(memberLevels.LEVEL_MODERATOR))"
 					name="edit_moderators"
 					type="radio">
 					{{ t('collectives', 'Admins and moderators') }}
 				</NcCheckboxRadioSwitch>
-				<NcCheckboxRadioSwitch :checked.sync="editPermissions"
+				<NcCheckboxRadioSwitch
+					:checked.sync="editPermissions"
 					:value="String(memberLevels.LEVEL_MEMBER)"
 					:loading="loading('updateCollectiveEditPermissions_' + String(memberLevels.LEVEL_MEMBER))"
 					name="edit_members"
@@ -81,21 +88,24 @@
 			</div>
 
 			<div class="permissions-input-share">
-				<NcCheckboxRadioSwitch :checked.sync="sharePermissions"
+				<NcCheckboxRadioSwitch
+					:checked.sync="sharePermissions"
 					:value="String(memberLevels.LEVEL_ADMIN)"
 					:loading="loading('updateCollectiveSharePermissions_' + String(memberLevels.LEVEL_ADMIN))"
 					name="share_admins"
 					type="radio">
 					{{ t('collectives', 'Admins only') }}
 				</NcCheckboxRadioSwitch>
-				<NcCheckboxRadioSwitch :checked.sync="sharePermissions"
+				<NcCheckboxRadioSwitch
+					:checked.sync="sharePermissions"
 					:value="String(memberLevels.LEVEL_MODERATOR)"
 					:loading="loading('updateCollectiveSharePermissions_' + String(memberLevels.LEVEL_MODERATOR))"
 					name="share_moderators"
 					type="radio">
 					{{ t('collectives', 'Admins and moderators') }}
 				</NcCheckboxRadioSwitch>
-				<NcCheckboxRadioSwitch :checked.sync="sharePermissions"
+				<NcCheckboxRadioSwitch
+					:checked.sync="sharePermissions"
 					:value="String(memberLevels.LEVEL_MEMBER)"
 					:loading="loading('updateCollectiveSharePermissions_' + String(memberLevels.LEVEL_MEMBER))"
 					name="share_members"
@@ -111,14 +121,16 @@
 			</div>
 
 			<div class="edit-mode">
-				<NcCheckboxRadioSwitch :checked.sync="pageMode"
+				<NcCheckboxRadioSwitch
+					:checked.sync="pageMode"
 					:value="String(pageModes.MODE_VIEW)"
 					:loading="loading('updateCollectivePageMode_' + String(pageModes.MODE_VIEW))"
 					name="page_mode_view"
 					type="radio">
 					{{ t('collectives', 'View') }}
 				</NcCheckboxRadioSwitch>
-				<NcCheckboxRadioSwitch :checked.sync="pageMode"
+				<NcCheckboxRadioSwitch
+					:checked.sync="pageMode"
 					:value="String(pageModes.MODE_EDIT)"
 					:loading="loading('updateCollectivePageMode_' + String(pageModes.MODE_EDIT))"
 					name="page_mode_edit"
@@ -139,17 +151,17 @@
 </template>
 
 <script>
-import { memberLevels, pageModes } from '../../constants.js'
+import { showError, showSuccess } from '@nextcloud/dialogs'
+import { emit } from '@nextcloud/event-bus'
+import { NcAppSettingsDialog, NcAppSettingsSection, NcButton, NcCheckboxRadioSwitch, NcEmojiPicker, NcTextField } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
-import { useRootStore } from '../../stores/root.js'
+import AlertCircleIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
+import Emoticon from 'vue-material-design-icons/EmoticonOutline.vue'
+import { memberLevels, pageModes } from '../../constants.js'
 import { useCirclesStore } from '../../stores/circles.js'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { usePagesStore } from '../../stores/pages.js'
-import { emit } from '@nextcloud/event-bus'
-import { showError, showSuccess } from '@nextcloud/dialogs'
-import { NcAppSettingsDialog, NcAppSettingsSection, NcButton, NcCheckboxRadioSwitch, NcEmojiPicker, NcTextField } from '@nextcloud/vue'
-import AlertCircleIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
-import Emoticon from 'vue-material-design-icons/EmoticonOutline.vue'
+import { useRootStore } from '../../stores/root.js'
 import displayError from '../../util/displayError.js'
 
 export default {
@@ -193,6 +205,7 @@ export default {
 			'pageParam',
 			'pageId',
 		]),
+
 		...mapState(useCollectivesStore, ['isCollectiveOwner']),
 		...mapState(usePagesStore, ['pages']),
 
@@ -224,6 +237,7 @@ export default {
 				this.setSettingsCollectiveId(null)
 			}
 		},
+
 		editPermissions(val) {
 			const permission = String(val)
 			this.load('updateCollectiveEditPermissions_' + permission)
@@ -237,6 +251,7 @@ export default {
 				throw error
 			})
 		},
+
 		sharePermissions(val) {
 			const permission = String(val)
 			this.load('updateCollectiveSharePermissions_' + permission)
@@ -250,6 +265,7 @@ export default {
 				throw error
 			})
 		},
+
 		pageMode(val) {
 			const pageMode = String(val)
 			this.load('updateCollectivePageMode_' + pageMode)
@@ -270,6 +286,7 @@ export default {
 			'load',
 			'done',
 		]),
+
 		...mapActions(useCirclesStore, ['renameCircle']),
 		...mapActions(useCollectivesStore, [
 			'setSettingsCollectiveId',

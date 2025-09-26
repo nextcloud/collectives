@@ -11,12 +11,14 @@
 		</template>
 		<template v-else #list>
 			<NcAppNavigationCaption :name="t('collectives', 'Select a collective')" />
-			<CollectiveListItem v-for="collective in sortedCollectives"
+			<CollectiveListItem
+				v-for="collective in sortedCollectives"
 				v-show="!collective.deleted"
 				:key="collective.id"
 				:collective="collective" />
 			<li>
-				<NcAppNavigationNew v-if="!isPublic"
+				<NcAppNavigationNew
+					v-if="!isPublic"
 					:text="t('collectives', 'New collective')"
 					variant="secondary"
 					class="new-collective-button"
@@ -28,13 +30,15 @@
 			</li>
 		</template>
 		<template #footer>
-			<CollectivesTrash v-if="displayTrash"
+			<CollectivesTrash
+				v-if="displayTrash"
 				@restore-collective="onRestoreCollective"
 				@delete-collective="onDeleteCollective" />
 			<CollectivesGlobalSettings v-if="!isPublic" />
 		</template>
 		<NewCollectiveModal v-if="showNewCollectiveModal" @close="onCloseNewCollectiveModal" />
-		<CollectiveMembersModal v-if="showCollectiveMembersModal"
+		<CollectiveMembersModal
+			v-if="showCollectiveMembersModal"
 			:collective="membersCollective"
 			@close="onCloseCollectiveMembersModal" />
 		<TemplatesDialog v-if="templatesCollectiveId" />
@@ -42,20 +46,20 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'pinia'
-import { useRootStore } from '../stores/root.js'
-import { useCollectivesStore } from '../stores/collectives.js'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { NcAppNavigation, NcAppNavigationCaption, NcAppNavigationNew } from '@nextcloud/vue'
-import CollectiveMembersModal from './Nav/CollectiveMembersModal.vue'
+import { mapActions, mapState } from 'pinia'
+import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import CollectiveListItem from './Nav/CollectiveListItem.vue'
+import CollectiveMembersModal from './Nav/CollectiveMembersModal.vue'
 import CollectivesGlobalSettings from './Nav/CollectivesGlobalSettings.vue'
 import CollectivesTrash from './Nav/CollectivesTrash.vue'
 import NewCollectiveModal from './Nav/NewCollectiveModal.vue'
-import PlusIcon from 'vue-material-design-icons/Plus.vue'
-import displayError from '../util/displayError.js'
-import SkeletonLoading from './SkeletonLoading.vue'
 import TemplatesDialog from './Nav/TemplatesDialog.vue'
+import SkeletonLoading from './SkeletonLoading.vue'
+import { useCollectivesStore } from '../stores/collectives.js'
+import { useRootStore } from '../stores/root.js'
+import displayError from '../util/displayError.js'
 
 export default {
 	name: 'Navigation',

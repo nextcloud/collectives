@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { createPinia, PiniaVuePlugin } from 'pinia'
 import Vue from 'vue'
 import Collectives from './Collectives.vue'
 import router from './router.js'
-import { createPinia, PiniaVuePlugin } from 'pinia'
 
 window.OCA.Collectives = {
 	...window.OCA.Collectives,
@@ -25,7 +25,7 @@ const app = new Vue({
 	el: '#content',
 	router,
 	pinia,
-	render: h => h(Collectives),
+	render: (h) => h(Collectives),
 })
 
 // Expose the app during E2E tests

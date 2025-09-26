@@ -4,14 +4,16 @@
 -->
 
 <template>
-	<NcDialog content-classes="version-label-modal"
+	<NcDialog
+		content-classes="version-label-modal"
 		is-form
 		:open="open"
 		size:normal
 		:name="t('collectives', 'Name this version')"
 		@update:open="$emit('update:open', $event)"
 		@submit="$emit('label-update', editedVersionLabel)">
-		<NcTextField ref="labelInput"
+		<NcTextField
+			ref="labelInput"
 			class="version-label-modal__input"
 			:label="t('collectives', 'Version name')"
 			:placeholder="t('collectives', 'Version name')"
@@ -22,14 +24,16 @@
 		</p>
 
 		<template #actions>
-			<NcButton v-if="versionLabel"
+			<NcButton
+				v-if="versionLabel"
 				variant="error"
 				type="reset"
 				:aria-label="t('collectives', 'Remove version name')"
 				@click="$emit('label-update', '')">
 				{{ t('collectives', 'Remove version name') }}
 			</NcButton>
-			<NcButton variant="primary"
+			<NcButton
+				variant="primary"
 				type="submit"
 				:aria-label="t('collectives', 'Save version name')"
 				:disabled="editedVersionLabel.trim() === ''">
@@ -61,6 +65,7 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+
 		versionLabel: {
 			type: String,
 			default: '',
@@ -80,6 +85,7 @@ export default {
 				this.editedVersionLabel = label ?? ''
 			},
 		},
+
 		open: {
 			immediate: true,
 			handler(open) {

@@ -5,7 +5,8 @@
 
 <template>
 	<NcAppContent>
-		<NcEmptyContent :title="t('collectives', 'Collectives')"
+		<NcEmptyContent
+			:title="t('collectives', 'Collectives')"
 			:description="t('collectives', 'Come, organize and build shared knowledge!')"
 			class="content-home">
 			<template #icon>
@@ -23,9 +24,9 @@
 <script>
 
 import { emit } from '@nextcloud/event-bus'
-import { NcAppContent, NcEmptyContent, NcButton } from '@nextcloud/vue'
-import CollectivesIcon from '../components/Icon/CollectivesIcon.vue'
+import { NcAppContent, NcButton, NcEmptyContent } from '@nextcloud/vue'
 import { mapState } from 'pinia'
+import CollectivesIcon from '../components/Icon/CollectivesIcon.vue'
 import { useCollectivesStore } from '../stores/collectives.js'
 
 export default {

@@ -13,12 +13,12 @@
 
 <script>
 
-import { mapActions, mapState } from 'pinia'
-import { useRootStore } from '../stores/root.js'
-import { useCollectivesStore } from '../stores/collectives.js'
 import { NcAppContent, NcEmptyContent } from '@nextcloud/vue'
-import CollectivePrint from '../components/CollectivePrint.vue'
+import { mapActions, mapState } from 'pinia'
 import CollectiveNotFound from '../components/CollectiveNotFound.vue'
+import CollectivePrint from '../components/CollectivePrint.vue'
+import { useCollectivesStore } from '../stores/collectives.js'
+import { useRootStore } from '../stores/root.js'
 
 export default {
 	name: 'CollectivePrintView',

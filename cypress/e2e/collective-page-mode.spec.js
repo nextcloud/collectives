@@ -4,7 +4,6 @@
  */
 
 describe('Collective page mode', function() {
-
 	before(function() {
 		cy.loginAs('bob')
 		cy.deleteAndSeedCollective('Our Garden')

@@ -14,7 +14,7 @@ import { computed } from 'vue'
  */
 function getLuminance(rgbColor) {
 	// rgb is [R,G,B] with each value in 0...255
-	const [r, g, b] = rgbColor.map(v => {
+	const [r, g, b] = rgbColor.map((v) => {
 		v /= 255
 		return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4)
 	})
@@ -44,7 +44,7 @@ function getContrastRatio(rgbColor1, rgbColor2) {
  */
 function hexToRgb(hexColor) {
 	hexColor = hexColor.replace(/^#/, '')
-	if (hexColor.length === 3) hexColor = hexColor.split('').map(x => x + x).join('')
+	if (hexColor.length === 3) { hexColor = hexColor.split('').map((x) => x + x).join('') }
 	const num = parseInt(hexColor, 16)
 	return [(num >> 16) & 255, (num >> 8) & 255, num & 255]
 }

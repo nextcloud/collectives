@@ -217,9 +217,7 @@ export function setPageSubpageOrder(context, pageId, subpageOrder) {
  * @param {number} tagId - ID of the tag to add
  */
 export function addPageTag(context, pageId, tagId) {
-	return axios.put(
-		pagesApiUrl(context, pageId, 'tags', tagId),
-	)
+	return axios.put(pagesApiUrl(context, pageId, 'tags', tagId))
 }
 
 /**
@@ -230,9 +228,7 @@ export function addPageTag(context, pageId, tagId) {
  * @param {number} tagId - ID of the tag to remove
  */
 export function removePageTag(context, pageId, tagId) {
-	return axios.delete(
-		pagesApiUrl(context, pageId, 'tags', tagId),
-	)
+	return axios.delete(pagesApiUrl(context, pageId, 'tags', tagId))
 }
 
 /**

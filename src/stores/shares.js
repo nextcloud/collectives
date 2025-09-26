@@ -3,12 +3,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { useLocalStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
 import { set } from 'vue'
-import { useLocalStorage } from '@vueuse/core'
-import { useRootStore } from './root.js'
-import { useCollectivesStore } from './collectives.js'
 import * as api from '../apis/collectives/index.js'
+import { useCollectivesStore } from './collectives.js'
+import { useRootStore } from './root.js'
 
 const STORE_PREFIX = 'collectives/pinia/shares/'
 
@@ -28,7 +28,7 @@ export const useSharesStore = defineStore('shares', {
 		},
 
 		sharesByPageId: (state) => {
-			return (pageId) => state.shares.filter(s => s.pageId === pageId)
+			return (pageId) => state.shares.filter((s) => s.pageId === pageId)
 		},
 	},
 
@@ -48,7 +48,7 @@ export const useSharesStore = defineStore('shares', {
 			if (!this.allShares[this.collectiveId]) {
 				set(this.allShares, this.collectiveId, [])
 			}
-			const idx = this.shares.findIndex(s => s.id === share.id)
+			const idx = this.shares.findIndex((s) => s.id === share.id)
 			if (idx === -1) {
 				this.allShares[this.collectiveId].unshift(share)
 			} else {
@@ -98,7 +98,7 @@ export const useSharesStore = defineStore('shares', {
 			const rootStore = useRootStore()
 			rootStore.load('unshare')
 			await api.deleteShare(share)
-			const idx = this.shares.findIndex(s => s.id === share.id)
+			const idx = this.shares.findIndex((s) => s.id === share.id)
 			if (idx !== -1) {
 				this.allShares[collectiveId]?.splice(idx, 1)
 			}

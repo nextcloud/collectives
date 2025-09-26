@@ -4,17 +4,20 @@
 -->
 
 <template>
-	<a v-if="richObject"
+	<a
+		v-if="richObject"
 		:href="richObject.link"
 		target="_blank"
 		class="collective-page"
 		@click="clickLink">
 		<div class="collective-page--image">
-			<span v-if="emoji"
+			<span
+				v-if="emoji"
 				class="page-emoji">
 				{{ emoji }}
 			</span>
-			<PageIcon v-else
+			<PageIcon
+				v-else
 				:size="50" />
 		</div>
 		<div class="collective-page--info">
@@ -28,7 +31,8 @@
 			</div>
 			<div class="last-edited">
 				{{ richObject.lastEdited }}
-				<NcUserBubble :user="richObject.page.lastUserId"
+				<NcUserBubble
+					:user="richObject.page.lastUserId"
 					:display-name="richObject.page.lastUserDisplayName" />
 			</div>
 		</div>
@@ -36,9 +40,9 @@
 </template>
 
 <script>
-import PageIcon from '../components/Icon/PageIcon.vue'
-import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
 import { generateUrl } from '@nextcloud/router'
+import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
+import PageIcon from '../components/Icon/PageIcon.vue'
 
 export default {
 	name: 'PageReferenceWidget',
@@ -53,10 +57,12 @@ export default {
 			type: String,
 			default: '',
 		},
+
 		richObject: {
 			type: Object,
 			default: null,
 		},
+
 		accessible: {
 			type: Boolean,
 			default: true,

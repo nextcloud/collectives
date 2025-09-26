@@ -4,13 +4,15 @@
 -->
 
 <template>
-	<NcDialog :name="t('collectives', 'Copy or move page')"
+	<NcDialog
+		:name="t('collectives', 'Copy or move page')"
 		size="normal"
 		class="page-picker"
 		@closing="onClose">
 		<span class="crumbs">
 			<div v-if="!selectedCollective || !selectedCollective.isPageShare" class="crumbs-home">
-				<NcButton variant="tertiary"
+				<NcButton
+					variant="tertiary"
 					:aria-label="t('collectives', 'Breadcrumb for list of collectives')"
 					:disabled="!selectedCollective"
 					class="crumb-button home"
@@ -24,7 +26,8 @@
 			</div>
 			<template v-if="selectedCollective">
 				<div class="crumbs-level">
-					<NcButton variant="tertiary"
+					<NcButton
+						variant="tertiary"
 						:aria-label="collectiveBreadcrumbAriaLabel"
 						:disabled="pageCrumbs.length === 0"
 						class="crumb-button"
@@ -35,12 +38,14 @@
 						{{ collectiveBreadcrumbTitle }}
 					</NcButton>
 				</div>
-				<div v-for="(page, index) in pageCrumbs"
+				<div
+					v-for="(page, index) in pageCrumbs"
 					:key="page.id"
 					class="crumbs-level">
 					<ChevronRightIcon :size="20" />
-					<NcButton variant="tertiary"
-						:aria-label="t('collectives', 'Breadcrumb, navigate to page {page}', {page: page.title })"
+					<NcButton
+						variant="tertiary"
+						:aria-label="t('collectives', 'Breadcrumb, navigate to page {page}', { page: page.title })"
 						:disabled="(index + 1) === pageCrumbs.length"
 						class="crumb-button"
 						@click="onClickPage(page)">
@@ -51,14 +56,16 @@
 		</span>
 		<div class="picker-list">
 			<ul v-if="!selectedCollective">
-				<li v-for="collective in collectives"
+				<li
+					v-for="collective in collectives"
 					:id="`picker-collective-${collective.id}`"
 					:key="collective.id">
 					<a href="#" class="picker-item" @click="onClickCollective(collective)">
 						<div v-if="collective.emoji" class="picker-icon">
 							{{ collective.emoji }}
 						</div>
-						<CollectivesIcon v-else
+						<CollectivesIcon
+							v-else
 							class="picker-icon"
 							:size="20" />
 						<div class="picker-title">
@@ -69,17 +76,20 @@
 			</ul>
 			<SkeletonLoading v-else-if="loading(`pagelist-${selectedCollective.id}`)" type="items" />
 			<ul v-else-if="subpages.length > 0">
-				<li v-for="(page, index) in subpages"
+				<li
+					v-for="(page, index) in subpages"
 					:id="`picker-page-${page.id}`"
 					:key="page.id">
-					<a :class="{ 'self': page.id === pageId }"
+					<a
+						:class="{ self: page.id === pageId }"
 						:href="page.id === pageId ? false : '#'"
 						class="picker-item"
 						@click="onClickPage(page)">
 						<div v-if="page.emoji" class="picker-icon">
 							{{ page.emoji }}
 						</div>
-						<PageIcon v-else
+						<PageIcon
+							v-else
 							class="picker-icon"
 							:size="20"
 							fill-color="var(--color-background-darker)" />
@@ -87,7 +97,8 @@
 							{{ page.title }}
 						</div>
 						<div v-if="page.id === pageId" class="picker-move-buttons">
-							<NcButton :disabled="index === 0"
+							<NcButton
+								:disabled="index === 0"
 								:aria-label="t('collectives', 'Move page up')"
 								variant="tertiary"
 								@click="onClickUp">
@@ -95,7 +106,8 @@
 									<ArrowUpIcon :size="20" />
 								</template>
 							</NcButton>
-							<NcButton :disabled="index === (subpages.length - 1)"
+							<NcButton
+								:disabled="index === (subpages.length - 1)"
 								:aria-label="t('collectives', 'Move page down')"
 								variant="tertiary"
 								@click="onClickDown">
@@ -109,7 +121,8 @@
 			</ul>
 		</div>
 		<template #actions>
-			<NcButton variant="secondary"
+			<NcButton
+				variant="secondary"
 				:aria-label="t('collectives', copyPageString)"
 				:disabled="isActionButtonsDisabled"
 				@click="onMoveOrCopy(true)">
@@ -118,7 +131,8 @@
 				</template>
 				{{ copyPageString }}
 			</NcButton>
-			<NcButton variant="primary"
+			<NcButton
+				variant="primary"
 				:aria-label="t('collectives', movePageString)"
 				:disabled="isActionButtonsDisabled"
 				@click="onMoveOrCopy(false)">
@@ -132,17 +146,17 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'pinia'
-import { useRootStore } from '../../stores/root.js'
-import { useCollectivesStore } from '../../stores/collectives.js'
-import { usePagesStore } from '../../stores/pages.js'
 import { NcButton, NcDialog, NcLoadingIcon } from '@nextcloud/vue'
+import { mapActions, mapState } from 'pinia'
 import ArrowDownIcon from 'vue-material-design-icons/ArrowDown.vue'
 import ArrowUpIcon from 'vue-material-design-icons/ArrowUp.vue'
 import ChevronRightIcon from 'vue-material-design-icons/ChevronRight.vue'
 import CollectivesIcon from '../Icon/CollectivesIcon.vue'
 import PageIcon from '../Icon/PageIcon.vue'
 import SkeletonLoading from '../SkeletonLoading.vue'
+import { useCollectivesStore } from '../../stores/collectives.js'
+import { usePagesStore } from '../../stores/pages.js'
+import { useRootStore } from '../../stores/root.js'
 
 export default {
 	name: 'PagePicker',
@@ -164,14 +178,17 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+
 		isMoving: {
 			type: Boolean,
 			default: false,
 		},
+
 		pageId: {
 			type: Number,
 			required: true,
 		},
+
 		parentId: {
 			type: Number,
 			required: true,
@@ -214,7 +231,7 @@ export default {
 
 			return this.isCurrentCollective
 				? this.rootPage
-				: this.pagesForCollective(this.selectedCollective.id).find(p => (p.parentId === 0))
+				: this.pagesForCollective(this.selectedCollective.id).find((p) => (p.parentId === 0))
 		},
 
 		subpages() {
@@ -231,7 +248,7 @@ export default {
 			}
 
 			// Add current page to top of subpages if not part of it yet
-			if (!pages.find(p => (p.id === this.pageId))) {
+			if (!pages.find((p) => (p.id === this.pageId))) {
 				pages.unshift(this.pageById(this.pageId))
 			}
 
@@ -282,7 +299,7 @@ export default {
 	},
 
 	watch: {
-		'selectedPageId'(val) {
+		selectedPageId: function(val) {
 			if (val) {
 				this.scrollToPage()
 			}
@@ -371,12 +388,12 @@ export default {
 		},
 
 		onClickDown() {
-			const pageIndex = this.subpages.findIndex(p => (p.id === this.pageId))
+			const pageIndex = this.subpages.findIndex((p) => (p.id === this.pageId))
 			this.swapSubpages(pageIndex, pageIndex + 1)
 		},
 
 		onClickUp() {
-			const pageIndex = this.subpages.findIndex(p => (p.id === this.pageId))
+			const pageIndex = this.subpages.findIndex((p) => (p.id === this.pageId))
 			this.swapSubpages(pageIndex, pageIndex - 1)
 		},
 
@@ -388,7 +405,7 @@ export default {
 			const args = {
 				collectiveId: this.selectedCollective.id,
 				parentId: this.selectedPageId,
-				newIndex: this.subpages.findIndex(p => p.id === this.pageId),
+				newIndex: this.subpages.findIndex((p) => p.id === this.pageId),
 			}
 
 			if (copy) {

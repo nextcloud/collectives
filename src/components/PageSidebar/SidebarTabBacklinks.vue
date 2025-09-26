@@ -25,17 +25,20 @@
 		<!-- backlinks list -->
 		<div v-else-if="!loading('backlinks') && backlinks.length">
 			<ul class="backlink-list">
-				<NcListItem v-for="backlinkPage in backlinks"
+				<NcListItem
+					v-for="backlinkPage in backlinks"
 					:key="backlinkPage.id"
 					:name="pagePathTitle(backlinkPage)"
 					:to="pagePath(backlinkPage)"
 					class="backlink">
 					<template #icon>
-						<div v-if="backlinkPage.emoji"
+						<div
+							v-if="backlinkPage.emoji"
 							class="item-icon item-icon__emoji">
 							{{ backlinkPage.emoji }}
 						</div>
-						<PageIcon v-else
+						<PageIcon
+							v-else
 							:size="26"
 							fill-color="var(--color-main-background)"
 							class="item-icon item-icon__page" />
@@ -48,9 +51,10 @@
 		</div>
 
 		<!-- no backlinks found -->
-		<NcEmptyContent v-else
+		<NcEmptyContent
+			v-else
 			:name="t('collectives', 'No backlinks available')"
-			:description="t( 'collectives', 'If other pages link to this one, they will be listed here.')">
+			:description="t('collectives', 'If other pages link to this one, they will be listed here.')">
 			<template #icon>
 				<ArrowBottomLeftIcon />
 			</template>
@@ -59,17 +63,16 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'pinia'
-import { useRootStore } from '../../stores/root.js'
-import { usePagesStore } from '../../stores/pages.js'
-import { useNetworkState } from '../../composables/useNetworkState.ts'
-
-import { NcEmptyContent, NcListItem, NcLoadingIcon } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
+import { NcEmptyContent, NcListItem, NcLoadingIcon } from '@nextcloud/vue'
+import { mapActions, mapState } from 'pinia'
 import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagonOutline.vue'
 import ArrowBottomLeftIcon from 'vue-material-design-icons/ArrowBottomLeft.vue'
 import PageIcon from '../Icon/PageIcon.vue'
 import OfflineContent from './OfflineContent.vue'
+import { useNetworkState } from '../../composables/useNetworkState.ts'
+import { usePagesStore } from '../../stores/pages.js'
+import { useRootStore } from '../../stores/root.js'
 
 export default {
 	name: 'SidebarTabBacklinks',
@@ -108,6 +111,7 @@ export default {
 		...mapState(useRootStore, [
 			'loading',
 		]),
+
 		...mapState(usePagesStore, [
 			'backlinks',
 			'pagePath',
@@ -120,11 +124,12 @@ export default {
 	},
 
 	watch: {
-		'page.id'() {
+		'page.id': function() {
 			this.loaded = false
 			this.getBacklinksForPage()
 		},
-		'networkOnline'(val) {
+
+		networkOnline: function(val) {
 			if (val && this.loadPending) {
 				this.getBacklinksForPage()
 			}

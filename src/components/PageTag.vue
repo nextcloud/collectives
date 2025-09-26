@@ -4,19 +4,22 @@
 -->
 
 <template>
-	<li class="tag"
+	<li
+		class="tag"
 		:class="{
-			'color': tag.color,
+			color: tag.color,
 			'enough-contrast': enoughContrast,
 		}"
 		:style="style">
-		<a ref="link"
+		<a
+			ref="link"
 			href="#"
 			@keydown.enter.prevent.stop="$emit('select')"
 			@click="$emit('select')">
 			{{ tag.name }}
 		</a>
-		<NcButton v-if="canRemove"
+		<NcButton
+			v-if="canRemove"
 			:aria-label="t('collectives', 'Remove tag')"
 			variant="tertiary"
 			class="remove-button"
@@ -30,9 +33,9 @@
 </template>
 
 <script>
-import { useColor } from '../composables/useColor.js'
 import { NcButton } from '@nextcloud/vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
+import { useColor } from '../composables/useColor.js'
 
 export default {
 	name: 'PageTag',
@@ -47,6 +50,7 @@ export default {
 			type: Object,
 			required: true,
 		},
+
 		canRemove: {
 			type: Boolean,
 			default: false,

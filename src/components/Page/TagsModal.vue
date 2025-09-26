@@ -4,12 +4,14 @@
 -->
 
 <template>
-	<NcDialog :name="t('collectives', 'Manage tags')"
+	<NcDialog
+		:name="t('collectives', 'Manage tags')"
 		class="tags-modal"
 		@closing="onClose">
 		<!-- Search or create input -->
 		<div class="tags-modal__input">
-			<NcTextField :value.sync="input"
+			<NcTextField
+				:value.sync="input"
 				:label="t('collectives', 'Search or create tag')">
 				<TagIcon :size="20" />
 			</NcTextField>
@@ -17,15 +19,18 @@
 
 		<!-- Tags list -->
 		<ul class="tags-modal__tags">
-			<li v-for="tag in filteredTags"
+			<li
+				v-for="tag in filteredTags"
 				:key="tag.id"
 				:style="tagListStyle(tag)"
 				class="tags-modal__tag">
-				<form v-if="renameTag === tag.id"
+				<form
+					v-if="renameTag === tag.id"
 					class="tags-modal__name-form"
 					@submit.prevent.stop="onRename(tag)"
 					@click.prevent.stop>
-					<NcTextField ref="renameField"
+					<NcTextField
+						ref="renameField"
 						:placeholder="t('collectives', 'Tag name')"
 						:label-outside="true"
 						:autofocus="true"
@@ -38,7 +43,8 @@
 						@keyup.esc.prevent.stop="onStopRename"
 						@trailing-button-click="onStopRename" />
 				</form>
-				<NcCheckboxRadioSwitch v-else
+				<NcCheckboxRadioSwitch
+					v-else
 					:checked="isChecked(tag)"
 					:label="tag.name"
 					:loading="loading(`page-tag-${pageId}-${tag.id}`)"
@@ -55,7 +61,8 @@
 				</NcCheckboxRadioSwitch>
 
 				<!-- Color picker -->
-				<NcColorPicker :value="`#${tag.color}`"
+				<NcColorPicker
+					:value="`#${tag.color}`"
 					:shown="openedPicker === tag.id"
 					class="tags-modal__tag-color"
 					@update:shown="openedPicker = $event ? tag.id : false"
@@ -70,14 +77,16 @@
 
 				<!-- Actions menu -->
 				<NcActions :force-menu="true">
-					<NcActionButton :close-after-click="true"
+					<NcActionButton
+						:close-after-click="true"
 						@click="onInitRename(tag)">
 						<template #icon>
 							<PencilIcon :size="20" />
 						</template>
 						{{ t('collectives', 'Rename') }}
 					</NcActionButton>
-					<NcActionButton v-if="!tag.deleted"
+					<NcActionButton
+						v-if="!tag.deleted"
 						:close-after-click="true"
 						@click="onMarkDeleted(tag)">
 						<template #icon>
@@ -85,7 +94,8 @@
 						</template>
 						{{ t('collectives', 'Delete') }}
 					</NcActionButton>
-					<NcActionButton v-else
+					<NcActionButton
+						v-else
 						:close-after-click="true"
 						@click="onRestore(tag)">
 						<template #icon>
@@ -97,7 +107,8 @@
 			</li>
 
 			<li>
-				<NcButton v-if="showCreateTag"
+				<NcButton
+					v-if="showCreateTag"
 					:aria-label="t('collectives', 'Create new tag {tag}', { tag: input.trim() })"
 					alignment="start"
 					class="tags-modal__tag-create"
@@ -116,20 +127,19 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'pinia'
-import { useRootStore } from '../../stores/root.js'
-import { useTagsStore } from '../../stores/tags.js'
-import { usePagesStore } from '../../stores/pages.js'
 import { showError, showSuccess } from '@nextcloud/dialogs'
-
-import { NcActions, NcActionButton, NcButton, NcCheckboxRadioSwitch, NcColorPicker, NcDialog, NcTextField } from '@nextcloud/vue'
+import { NcActionButton, NcActions, NcButton, NcCheckboxRadioSwitch, NcColorPicker, NcDialog, NcTextField } from '@nextcloud/vue'
+import { mapActions, mapState } from 'pinia'
 import CircleIcon from 'vue-material-design-icons/Circle.vue'
 import CircleOutlineIcon from 'vue-material-design-icons/CircleOutline.vue'
-import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
 import PencilIcon from 'vue-material-design-icons/PencilOutline.vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
 import TagIcon from 'vue-material-design-icons/TagOutline.vue'
+import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
+import { usePagesStore } from '../../stores/pages.js'
+import { useRootStore } from '../../stores/root.js'
+import { useTagsStore } from '../../stores/tags.js'
 
 export default {
 	name: 'TagsModal',
@@ -174,12 +184,12 @@ export default {
 		...mapState(useTagsStore, ['sortedTags']),
 
 		page() {
-			return this.pages.find(p => p.id === this.pageId)
+			return this.pages.find((p) => p.id === this.pageId)
 		},
 
 		decoratedTags() {
 			return this.sortedTags
-				.map(tag => ({ ...tag, deleted: this.deletedTagIds.includes(tag.id) }))
+				.map((tag) => ({ ...tag, deleted: this.deletedTagIds.includes(tag.id) }))
 		},
 
 		filteredTags() {
@@ -188,16 +198,16 @@ export default {
 			}
 
 			return this.decoratedTags
-				.filter(tag => tag.name.normalize().toLowerCase().includes(this.input.normalize().toLowerCase()))
+				.filter((tag) => tag.name.normalize().toLowerCase().includes(this.input.normalize().toLowerCase()))
 		},
 
 		countTagPages() {
-			return (tagId) => this.pages.filter(p => p.tags.includes(tagId)).length
+			return (tagId) => this.pages.filter((p) => p.tags.includes(tagId)).length
 		},
 
 		showCreateTag() {
 			return this.input.trim() !== ''
-				&& !this.sortedTags.some(t => t.name.trim().toLocaleLowerCase() === this.input.trim().toLocaleLowerCase())
+				&& !this.sortedTags.some((t) => t.name.trim().toLocaleLowerCase() === this.input.trim().toLocaleLowerCase())
 		},
 	},
 
@@ -306,7 +316,7 @@ export default {
 				return
 			}
 			for (const tagId of this.deletedTagIds) {
-				const tag = this.sortedTags.find(t => t.id === tagId)
+				const tag = this.sortedTags.find((t) => t.id === tagId)
 				this.load(`page-tag-${this.pageId}-${tagId}`)
 				try {
 					await this.deleteTag(tag)
@@ -317,10 +327,12 @@ export default {
 					this.done(`page-tag-${this.pageId}-${tagId}`)
 				}
 			}
-			showSuccess(n('collectives',
+			showSuccess(n(
+				'collectives',
 				'Deleted %n tag',
 				'Deleted %n tags',
-				this.deletedTagIds.length))
+				this.deletedTagIds.length,
+			))
 		},
 
 		async onNewTag() {
@@ -333,7 +345,7 @@ export default {
 				throw e
 			}
 
-			const tag = this.sortedTags.find(t => t.name === name)
+			const tag = this.sortedTags.find((t) => t.name === name)
 			this.load(`page-tag-${this.pageId}-${tag.id}`)
 			try {
 				await this.addPageTag({ pageId: this.pageId }, tag.id)

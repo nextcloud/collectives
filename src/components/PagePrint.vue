@@ -11,7 +11,8 @@
 		<h2 v-else class="page-title page-title-subpage">
 			{{ pageTitleString }}
 		</h2>
-		<div ref="readerEl"
+		<div
+			ref="readerEl"
 			class="sheet-view"
 			data-collectives-el="reader"
 			data-cy-collectives="reader" />
@@ -20,11 +21,11 @@
 
 <script>
 import { mapState } from 'pinia'
-import { useCollectivesStore } from '../stores/collectives.js'
-import pageContentMixin from '../mixins/pageContentMixin.js'
-import { usePagesStore } from '../stores/pages.js'
-import { useReader } from '../composables/useReader.js'
 import { ref } from 'vue'
+import { useReader } from '../composables/useReader.js'
+import pageContentMixin from '../mixins/pageContentMixin.js'
+import { useCollectivesStore } from '../stores/collectives.js'
+import { usePagesStore } from '../stores/pages.js'
 
 export default {
 	name: 'PagePrint',

@@ -32,7 +32,8 @@ export default {
 				this.copied = true
 				showError(
 					`<div>${t('collectives', 'Could not copy link to the clipboard:')}</div><div>${url}</div>`,
-					{ isHTML: true })
+					{ isHTML: true },
+				)
 			} finally {
 				this.copyLoading = false
 				setTimeout(() => {

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { showWarning, showError } from '@nextcloud/dialogs'
+import { showError, showWarning } from '@nextcloud/dialogs'
 import escapeHtml from 'escape-html'
 
 /**
@@ -47,5 +47,5 @@ function showRequestException(msg, e) {
  * @return {Function} error handler function
  */
 export default function(msg) {
-	return e => showRequestException(t('collectives', msg), e)
+	return (e) => showRequestException(t('collectives', msg), e)
 }

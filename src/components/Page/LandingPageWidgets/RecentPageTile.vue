@@ -4,9 +4,10 @@
 -->
 
 <template>
-	<router-link :to="pagePath(page)"
+	<router-link
+		:to="pagePath(page)"
 		class="recent-page-tile"
-		:class="{ 'dark': isDarkTheme }">
+		:class="{ dark: isDarkTheme }">
 		<div class="recent-page-tile__icon">
 			<div v-if="emoji" class="recent-page-tile__emoji">
 				{{ emoji }}
@@ -18,7 +19,8 @@
 				{{ title }}
 			</div>
 			<div class="recent-page-tile__subtitle">
-				<NcAvatar :user="page.lastUserId || ''"
+				<NcAvatar
+					:user="page.lastUserId || ''"
 					:display-name="page.lastUserDisplayName || ''"
 					:size="24" />
 				<span class="timestamp">
@@ -30,14 +32,13 @@
 </template>
 
 <script>
+import moment from '@nextcloud/moment'
+import { NcAvatar } from '@nextcloud/vue'
+import { isDarkTheme } from '@nextcloud/vue/functions/isDarkTheme'
 import { mapState } from 'pinia'
+import PageIcon from '../../Icon/PageIcon.vue'
 import { useCollectivesStore } from '../../../stores/collectives.js'
 import { usePagesStore } from '../../../stores/pages.js'
-import moment from '@nextcloud/moment'
-import { isDarkTheme } from '@nextcloud/vue/functions/isDarkTheme'
-
-import PageIcon from '../../Icon/PageIcon.vue'
-import { NcAvatar } from '@nextcloud/vue'
 
 export default {
 	name: 'RecentPageTile',

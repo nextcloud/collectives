@@ -4,7 +4,8 @@
 -->
 
 <template>
-	<NcDialog :name="t('collectives', 'Templates')"
+	<NcDialog
+		:name="t('collectives', 'Templates')"
 		data-cy-collectives="templates-dialog"
 		class="templates-dialog"
 		size="normal"
@@ -12,7 +13,8 @@
 		<SkeletonLoading v-if="loading(`template-list-${templatesCollectiveId}`)" type="items" />
 		<!-- Template list -->
 		<ul v-else>
-			<TemplateListItem v-for="(template, index) in rootTemplates"
+			<TemplateListItem
+				v-for="(template, index) in rootTemplates"
 				:key="`template-page-${index}`"
 				:template="template"
 				@delete="onDelete(template.id)"
@@ -21,7 +23,8 @@
 
 		<!-- Template actions -->
 		<template #actions>
-			<NcButton variant="secondary"
+			<NcButton
+				variant="secondary"
 				:aria-label="t('collectives', 'Add a template')"
 				@click="onCreate(0)">
 				<template #icon>
@@ -34,16 +37,15 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'pinia'
-import { useRootStore } from '../../stores/root.js'
-import { useCollectivesStore } from '../../stores/collectives.js'
-import { useTemplatesStore } from '../../stores/templates.js'
-import displayError from '../../util/displayError.js'
 import { showError } from '@nextcloud/dialogs'
-
 import { NcButton, NcDialog, NcLoadingIcon } from '@nextcloud/vue'
+import { mapActions, mapState } from 'pinia'
 import SkeletonLoading from '../SkeletonLoading.vue'
 import TemplateListItem from './TemplateListItem.vue'
+import { useCollectivesStore } from '../../stores/collectives.js'
+import { useRootStore } from '../../stores/root.js'
+import { useTemplatesStore } from '../../stores/templates.js'
+import displayError from '../../util/displayError.js'
 
 export default {
 	name: 'TemplatesDialog',
@@ -61,6 +63,7 @@ export default {
 		...mapState(useCollectivesStore, [
 			'templatesCollectiveId',
 		]),
+
 		...mapState(useTemplatesStore, [
 			'rootTemplates',
 			'templatesLoaded',
@@ -83,6 +86,7 @@ export default {
 		...mapActions(useCollectivesStore, [
 			'setTemplatesCollectiveId',
 		]),
+
 		...mapActions(useTemplatesStore, [
 			'createTemplate',
 			'deleteTemplate',

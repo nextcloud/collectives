@@ -4,15 +4,16 @@
  */
 
 import debounce from 'debounce'
-import { useRootStore } from '../stores/root.js'
+import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import { useCollectivesStore } from '../stores/collectives.js'
 import { usePagesStore } from '../stores/pages.js'
+import { useRootStore } from '../stores/root.js'
 import { useSearchStore } from '../stores/search.js'
-import { computed, onBeforeUnmount, ref, watch, nextTick } from 'vue'
 import { useSearch } from './useSearch.js'
 
 /**
  * Composable for setting up the editor and reader.
+ *
  * @param {object} davContent markdown content fetched via dav.
  */
 export function useEditor(davContent) {
@@ -76,25 +77,25 @@ export function useEditor(davContent) {
 		const page = pagesStore.currentPage
 		editor.value = collectivesStore.currentCollectiveCanEdit
 			? await window.OCA.Text.createEditor({
-				el: editorEl.value,
-				fileId: page.id,
-				filePath: `/${pagesStore.pageFilePath(page)}`,
-				readOnly: false,
-				shareToken: rootStore.shareTokenParam || null,
-				autofocus: false,
-				onCreate: ({ markdown }) => {
-					updateEditorContentDebounced(markdown)
-				},
-				onLoaded: () => {
-					editor.value.setSearchQuery(searchStore.searchQuery, searchStore.matchAll)
-					editor.value.setShowOutline(showCurrentPageOutline.value)
-					rootStore.done('editor')
-				},
-				onUpdate: ({ markdown }) => {
-					updateEditorContentDebounced(markdown)
-				},
-				onOutlineToggle: pagesStore.setOutlineForCurrentPage,
-			})
+					el: editorEl.value,
+					fileId: page.id,
+					filePath: `/${pagesStore.pageFilePath(page)}`,
+					readOnly: false,
+					shareToken: rootStore.shareTokenParam || null,
+					autofocus: false,
+					onCreate: ({ markdown }) => {
+						updateEditorContentDebounced(markdown)
+					},
+					onLoaded: () => {
+						editor.value.setSearchQuery(searchStore.searchQuery, searchStore.matchAll)
+						editor.value.setShowOutline(showCurrentPageOutline.value)
+						rootStore.done('editor')
+					},
+					onUpdate: ({ markdown }) => {
+						updateEditorContentDebounced(markdown)
+					},
+					onOutlineToggle: pagesStore.setOutlineForCurrentPage,
+				})
 			: null
 	}
 

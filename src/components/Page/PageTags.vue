@@ -4,17 +4,20 @@
 -->
 
 <template>
-	<div class="page-tags-container"
+	<div
+		class="page-tags-container"
 		:class="{
 			'full-width-view': isFullWidth,
 			'sheet-view': !isFullWidth,
 		}">
-		<ul class="page-tags"
+		<ul
+			class="page-tags"
 			:class="{
 				'full-width-view': isFullWidth,
 				'sheet-view': !isFullWidth,
 			}">
-			<PageTag v-for="tag in pageTagsVisible"
+			<PageTag
+				v-for="tag in pageTagsVisible"
 				:key="tag.id"
 				:title="pageTagTitle"
 				:tag="tag"
@@ -22,19 +25,21 @@
 
 			<NcPopover v-if="pageTagsInvisible.length > 0" popup-role="listbox">
 				<template #trigger="{ attrs }">
-					<PageTag v-bind="attrs"
+					<PageTag
+						v-bind="attrs"
 						:title="pageTagsInvisibleTitle"
 						class="tag-invisible"
 						:tag="{
 							id: -1,
 							name: `+ ${pageTagsInvisible.length}`,
-							color: ''
+							color: '',
 						}" />
 				</template>
 				<template #default>
 					<div class="page-tags-invisible-popover">
 						<ul class="page-tags popover">
-							<PageTag v-for="tag in pageTagsInvisible"
+							<PageTag
+								v-for="tag in pageTagsInvisible"
 								:key="tag.id"
 								:title="pageTagTitle"
 								:tag="tag"
@@ -48,11 +53,11 @@
 </template>
 
 <script>
+import { NcPopover } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
+import PageTag from '../PageTag.vue'
 import { usePagesStore } from '../../stores/pages.js'
 import { useTagsStore } from '../../stores/tags.js'
-import { NcPopover } from '@nextcloud/vue'
-import PageTag from '../PageTag.vue'
 
 const TAGS_LIMIT = 5
 
@@ -78,7 +83,7 @@ export default {
 		pageTags() {
 			return this.currentPage.tags
 				// Replace tagIds by their respective tags
-				.map(tagId => this.tags.find(t => t.id === tagId))
+				.map((tagId) => this.tags.find((t) => t.id === tagId))
 				// Filter out undefined (if tag got removed)
 				.filter(Boolean)
 		},
@@ -96,7 +101,7 @@ export default {
 		},
 
 		pageTagsInvisibleTitle() {
-			return this.pageTagsInvisible.map(t => t.name).join(', ')
+			return this.pageTagsInvisible.map((t) => t.name).join(', ')
 		},
 	},
 

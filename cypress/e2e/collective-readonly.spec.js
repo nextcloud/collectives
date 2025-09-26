@@ -4,7 +4,6 @@
  */
 
 describe('Read-only collective', function() {
-
 	before(function() {
 		cy.loginAs('alice')
 		cy.deleteAndSeedCollective('PermissionCollective')

@@ -6,11 +6,12 @@
 <template>
 	<form @submit.prevent="$emit('submit')">
 		<h2 class="page-title">
-			<input ref="title"
+			<input
+				ref="title"
 				type="text"
 				v-bind="{ value }"
 				class="title"
-				:class="{ 'mobile': isMobile }"
+				:class="{ mobile: isMobile }"
 				:disabled="disabled"
 				:title="titleIfTruncated(value)"
 				:placeholder="placeholder"
@@ -32,10 +33,12 @@ export default {
 			type: String,
 			required: true,
 		},
+
 		disabled: {
 			type: Boolean,
 			default: false,
 		},
+
 		placeholder: {
 			type: String,
 			default: '',
