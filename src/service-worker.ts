@@ -6,7 +6,7 @@
 import { clientsClaim, type RouteMatchCallbackOptions } from 'workbox-core'
 import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching'
 import { registerRoute } from 'workbox-routing'
-import { NetworkFirst, StaleWhileRevalidate } from 'workbox-strategies'
+import { NetworkFirst, CacheFirst } from 'workbox-strategies'
 import { ExpirationPlugin } from 'workbox-expiration'
 
 declare let self: ServiceWorkerGlobalScope
@@ -48,7 +48,7 @@ registerRoute(matchNavigateCb, new NetworkFirst({
 }))
 
 // Cache for assets from other apps
-registerRoute(/.*\.(css|js|mjs|svg|webp)$/, new StaleWhileRevalidate({
+registerRoute(/.*\.(css|js|mjs|svg|webp)($|\?)/, new CacheFirst({
 	cacheName: 'collectives-assets',
 	plugins: [
 		new ExpirationPlugin({
