@@ -22,6 +22,7 @@ OC.L10N.register(
     "Delete permanently" : "Delete permanently",
     "Cancel" : "Cancel",
     "Create" : "Create",
+    "Go back" : "Go back",
     "Back" : "Back",
     "Delete" : "წაშლა",
     "Rename" : "Rename",

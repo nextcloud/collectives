@@ -17,6 +17,7 @@ OC.L10N.register(
     "Delete permanently" : "Eyða varanlega",
     "Cancel" : "Hætta við",
     "Create" : "Búa til",
+    "Go back" : "Fara til baka",
     "Back" : "Til baka",
     "Delete" : "Eyða",
     "Rename" : "Endurnefna",

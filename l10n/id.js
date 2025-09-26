@@ -15,6 +15,7 @@ OC.L10N.register(
     "Delete permanently" : "Hapus secara permanen",
     "Cancel" : "Membatalkan",
     "Create" : "Buat",
+    "Go back" : "Kembali",
     "Back" : "Kembali",
     "Delete" : "Hapus",
     "Rename" : "Ubah nama",

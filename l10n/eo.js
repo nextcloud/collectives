@@ -13,6 +13,7 @@ OC.L10N.register(
     "Delete permanently" : "Forigi por ĉiam",
     "Cancel" : "Nuligi",
     "Create" : "Krei",
+    "Go back" : "Reveni",
     "Back" : "Antaŭen",
     "Delete" : "Forigi",
     "Rename" : "Alinomi",

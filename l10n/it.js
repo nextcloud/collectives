@@ -65,6 +65,7 @@ OC.L10N.register(
     "Cancel" : "Annulla",
     "Create" : "Crea",
     "Select emoji" : "Seleziona un'emoji",
+    "Go back" : "Indietro",
     "Back" : "Indietro",
     "Delete" : "Elimina",
     "Rename" : "Rinomina",

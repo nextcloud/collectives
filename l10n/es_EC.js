@@ -72,6 +72,7 @@ OC.L10N.register(
     "Create" : "Crear",
     "Could not add members to the collective" : "No se pudieron añadir los miembros al colectivo",
     "Select emoji" : "Seleccionar emoji",
+    "Go back" : "Regresar",
     "Back" : "Atrás",
     "Delete" : "Borrar",
     "Rename" : "Renombrar",

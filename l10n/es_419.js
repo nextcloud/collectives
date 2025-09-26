@@ -12,6 +12,7 @@ OC.L10N.register(
     "Delete permanently" : "Borrar permanentemente",
     "Cancel" : "Cancelar",
     "Create" : "Crear",
+    "Go back" : "Regresar",
     "Back" : "Atrás",
     "Delete" : "Borrar",
     "Done" : "Terminado",

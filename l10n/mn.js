@@ -11,6 +11,7 @@ OC.L10N.register(
     "Delete permanently" : "бүр мөсөн устгах",
     "Cancel" : "болиулах",
     "Create" : "Үүсгэх",
+    "Go back" : "Буцах",
     "Back" : "буцах",
     "Delete" : "Устгах",
     "Rename" : "Нэрлэнэ үү",

@@ -13,6 +13,7 @@ OC.L10N.register(
     "Delete permanently" : "სამუდამოდ წაშლა",
     "Cancel" : "უარყოფა",
     "Create" : "შექმნა",
+    "Go back" : "უკან დაბრუნება",
     "Back" : "უკან",
     "Delete" : "წაშლა",
     "Rename" : "სახელის შეცვლა",

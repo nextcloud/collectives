@@ -21,6 +21,7 @@ OC.L10N.register(
     "Delete permanently" : "Trajno izbrišite",
     "Cancel" : "Odustani",
     "Create" : "Stvori",
+    "Go back" : "Natrag",
     "Back" : "Natrag",
     "Delete" : "Izbriši",
     "Rename" : "Preimenuj",

@@ -25,6 +25,7 @@ OC.L10N.register(
     "Cancel" : "취소",
     "Create" : "생성",
     "Select emoji" : "이모지 선택",
+    "Go back" : "뒤로 가기",
     "Back" : "뒤로",
     "Delete" : "삭제",
     "Rename" : "이름 바꾸기",

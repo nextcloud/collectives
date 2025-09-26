@@ -21,6 +21,7 @@ OC.L10N.register(
     "Delete permanently" : "Xoá vĩnh viễn",
     "Cancel" : "Hủy",
     "Create" : "‎Tạo‎",
+    "Go back" : "Quay lại",
     "Back" : "Quay lại",
     "Delete" : "Xóa",
     "Rename" : "Đổi tên",

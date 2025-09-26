@@ -23,6 +23,7 @@ OC.L10N.register(
     "Delete permanently" : "Cantzella in manera definitiva",
     "Cancel" : "Annulla",
     "Create" : "Crea",
+    "Go back" : "In segus",
     "Back" : "In segus",
     "Delete" : "Cantzella",
     "Templates" : "Modellos",

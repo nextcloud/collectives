@@ -88,6 +88,7 @@ OC.L10N.register(
     "Create" : "Létrehozás",
     "Could not add members to the collective" : "Nem sikerült a tagok hozzáadása a kollektívához",
     "Select emoji" : "Emodzsi kiválasztása",
+    "Go back" : "Visszalépés",
     "Back" : "Vissza",
     "Delete" : "Törlés",
     "Rename" : "Átnevezés",

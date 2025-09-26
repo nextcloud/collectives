@@ -36,6 +36,7 @@ OC.L10N.register(
     "Delete permanently" : "Ištrinti negrįžtamai",
     "Cancel" : "Atsisakyti",
     "Create" : "Sukurti",
+    "Go back" : "Grįžti",
     "Back" : "Atgal",
     "Delete" : "Ištrinti",
     "Rename" : "Pervadinti",
