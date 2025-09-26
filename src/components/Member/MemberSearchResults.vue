@@ -31,6 +31,7 @@
 				v-for="item in addableGroups"
 				:key="generateKey(item)"
 				:circle-id="circleId"
+				:current-user-is-admin="true"
 				:user-id="item.id"
 				:display-name="item.label"
 				:user-type="circleUserType(item.source)"
@@ -48,6 +49,7 @@
 				v-for="item in addableCircles"
 				:key="generateKey(item)"
 				:circle-id="circleId"
+				:current-user-is-admin="true"
 				:user-id="item.id"
 				:display-name="item.label"
 				:user-type="circleUserType(item.source)"
@@ -104,26 +106,14 @@ export default {
 
 	computed: {
 		addableUsers() {
-			if (this.searchResults.length === 0) {
-				return []
-			}
-
 			return this.searchResults.filter((item) => item.source === 'users')
 		},
 
 		addableGroups() {
-			if (this.searchResults.length === 0) {
-				return []
-			}
-
 			return this.searchResults.filter((item) => item.source === 'groups')
 		},
 
 		addableCircles() {
-			if (this.searchResults.length === 0) {
-				return []
-			}
-
 			return this.searchResults.filter((item) => item.source === 'circles')
 		},
 
