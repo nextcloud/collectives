@@ -112,6 +112,7 @@ OC.L10N.register(
     "Select an existing team" : "إختَر فريقاً موجوداً",
     "Cancel selecting a team" : "إلغٍ عملية حذف فريق",
     "Add members" : "إضافة أعضاء",
+    "Go back" : "عودة",
     "Back" : "عودة",
     "Delete" : "حذف",
     "Rename" : "إعادة التسمية",

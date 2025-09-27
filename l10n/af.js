@@ -11,6 +11,7 @@ OC.L10N.register(
     "Delete permanently" : "Skrap permanent",
     "Cancel" : "Kanselleer",
     "Create" : "Skep",
+    "Go back" : "Gaan terug",
     "Back" : "Terug",
     "Delete" : "Skrap",
     "Done" : "Gereed",

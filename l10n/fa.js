@@ -28,6 +28,7 @@ OC.L10N.register(
     "Export or print" : "Export or print",
     "Settings" : "تنظیمات",
     "Leave collective" : "Leave collective",
+    "Offline" : "آفلاین",
     "Collective not found: {collective}" : "Collective not found: {collective}",
     "You're not part of a collective with that name." : "You're not part of a collective with that name.",
     "Loading pages:" : "Loading pages:",

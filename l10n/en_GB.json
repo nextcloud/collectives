@@ -30,6 +30,7 @@
     "Export or print" : "Export or print",
     "Settings" : "Settings",
     "Leave collective" : "Leave collective",
+    "Offline" : "Offline",
     "Collective not found: {collective}" : "Collective not found: {collective}",
     "Collective with ID {id} not found" : "Collective with ID {id} not found",
     "You're not part of a collective with that name." : "You're not part of a collective with that name.",

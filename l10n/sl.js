@@ -18,6 +18,7 @@ OC.L10N.register(
     "Export or print" : "Izvozi ali natisni",
     "Settings" : "Nastavitve",
     "Leave collective" : "Zapusti zbirko",
+    "Offline" : "Brez povezave",
     "Collective not found: {collective}" : "Zbirke ni mogoče najti: {collective}",
     "You're not part of a collective with that name." : "Niste član zbirke s tem imenom.",
     "Loading pages:" : "Nalaganje strani:",

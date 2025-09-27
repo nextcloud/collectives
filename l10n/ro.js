@@ -4,6 +4,7 @@ OC.L10N.register(
     "You are not allowed to share %s" : "Nu există permisiunea de partajare %s",
     "Share link" : "Partajează link-ul",
     "Settings" : "Setări",
+    "Offline" : "Offline",
     "Members" : "Membri",
     "No search results" : "Căutarea nu are rezultate",
     "Promote to moderator" : "Promovează la moderator",

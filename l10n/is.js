@@ -4,6 +4,7 @@ OC.L10N.register(
     "You are not allowed to share %s" : "Þú hefur ekki heimild til að deila %s",
     "Share link" : "Deila tengli",
     "Settings" : "Stillingar",
+    "Offline" : "Ótengdur neti",
     "Members" : "Meðlimir",
     "No search results" : "Engar leitarniðurstöður",
     "Remove" : "Fjarlægja",

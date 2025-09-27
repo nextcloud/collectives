@@ -30,6 +30,7 @@
     "Export or print" : "Dışa aktar ya da yazdır",
     "Settings" : "Ayarlar",
     "Leave collective" : "Topluluktan ayrıl",
+    "Offline" : "Çevrim dışı",
     "Collective not found: {collective}" : "Topluluk bulunamadı: {collective}",
     "Collective with ID {id} not found" : "{id} kimlikli topluluk bulunamadı",
     "You're not part of a collective with that name." : "Bu adı taşıyan bir topluluğun üyesi değilsiniz.",

@@ -31,6 +31,7 @@ OC.L10N.register(
     "Export or print" : "Exporteren of afdrukken",
     "Settings" : "Instellingen",
     "Leave collective" : "Collectief verlaten",
+    "Offline" : "Offline",
     "Collective not found: {collective}" : "Collectief niet gevonden: {collectief}",
     "Collective with ID {id} not found" : "Collectief met ID {id} niet gevonden",
     "You're not part of a collective with that name." : "Je maakt geen deel uit van een collectief met die naam.",

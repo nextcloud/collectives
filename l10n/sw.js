@@ -32,6 +32,7 @@ OC.L10N.register(
     "Export or print" : "Hamisha au chapisha",
     "Settings" : "Mipangilio",
     "Leave collective" : "Ondoka kwa pamoja",
+    "Offline" : "Nje ya mtandao",
     "Collective not found: {collective}" : "Mkusanyiko haujapatikana: {collective}",
     "Collective with ID {id} not found" : "Kikundi chenye kitambulisho {id} hakijapatikana",
     "You're not part of a collective with that name." : "Wewe si sehemu ya kikundi kilicho na jina hilo.",

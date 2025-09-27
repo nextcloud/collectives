@@ -74,6 +74,7 @@ OC.L10N.register(
     "Create" : "Създаване",
     "Could not add members to the collective" : "Не можаха да се добавят членове към колектива",
     "Select emoji" : "Избор на емотикони",
+    "Go back" : "Назад",
     "Back" : "Назад",
     "Delete" : "Изтриване",
     "Rename" : "Преименуване",

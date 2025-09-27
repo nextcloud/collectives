@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Share link" : "Chia sẻ liên kết",
     "Settings" : "Cài đặt",
+    "Offline" : "Ngoại tuyến",
     "Members" : "Thành viên",
     "No search results" : "Không có kết quả tìm kiếm",
     "admin" : "quản trị viên",

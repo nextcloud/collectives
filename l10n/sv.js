@@ -31,6 +31,7 @@ OC.L10N.register(
     "Export or print" : "Exportera eller skriv ut",
     "Settings" : "Inställningar",
     "Leave collective" : "Lämna collective",
+    "Offline" : "Frånkopplad",
     "Collective not found: {collective}" : "Collective kunde inte hittas: {collective}",
     "Collective with ID {id} not found" : "Collective med ID {id} hittades inte",
     "You're not part of a collective with that name." : "Du är inte medlem i ett collective med det namnet.",

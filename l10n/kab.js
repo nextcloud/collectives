@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Share link" : "Fren aseɣwen",
     "Settings" : "Iɣewwaṛen",
+    "Offline" : "D aruqqin",
     "No search results" : "Ulac igmaḍ n unadi",
     "Remove" : "Kkes",
     "Loading…" : "Asali...",

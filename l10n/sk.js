@@ -29,6 +29,7 @@ OC.L10N.register(
     "Export or print" : "Exportovať alebo tlačiť",
     "Settings" : "Nastavenia",
     "Leave collective" : "Opustiť kolektív",
+    "Offline" : "Odpojené",
     "Collective not found: {collective}" : "Kolektív nebol nájdený: {collective}",
     "You're not part of a collective with that name." : "Nie ste súčasťou kolektívu s týmto menom.",
     "Loading pages:" : "Nahrávam stránky:",

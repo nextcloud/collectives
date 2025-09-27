@@ -32,6 +32,7 @@ OC.L10N.register(
     "Export or print" : "Easpórtáil nó priontáil",
     "Settings" : "Socruithe",
     "Leave collective" : "Fág comhchoiteann",
+    "Offline" : "As líne",
     "Collective not found: {collective}" : "Comhchoiteann gan aimsiú: {collective}",
     "Collective with ID {id} not found" : "Níor aimsíodh comhchoiteann le haitheantas {id}",
     "You're not part of a collective with that name." : "Níl tú mar chuid de ghrúpa a bhfuil an t-ainm sin air.",

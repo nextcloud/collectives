@@ -30,6 +30,7 @@
     "Export or print" : "Exportar o imprimir",
     "Settings" : "Ajustes",
     "Leave collective" : "Abandonar cuaderno colectivo",
+    "Offline" : "Fuera de línea",
     "Collective not found: {collective}" : "No se encontró el cuaderno colectivo: {collective}",
     "Collective with ID {id} not found" : "No se encontró el colectivo con ID {id}",
     "You're not part of a collective with that name." : "No tiene acceso a un cuaderno colectivo con ese nombre.",
