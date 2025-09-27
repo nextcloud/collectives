@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { byName, byTitleAsc, byTitleDesc, byTimeAsc, byTimeDesc, byOrder } from '../../util/sortOrders.js'
-import { test, expect } from 'vitest'
+import { expect, test } from 'vitest'
+import { byName, byOrder, byTimeAsc, byTimeDesc, byTitleAsc, byTitleDesc } from '../../util/sortOrders.js'
 
 global.OC = {
 	getLanguage: () => 'en',

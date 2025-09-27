@@ -4,13 +4,15 @@
 -->
 
 <template>
-	<NcDialog :name="dialogName"
+	<NcDialog
+		:name="dialogName"
 		size="normal"
 		@closing="onClose">
 		<div v-if="state === 0" class="modal-collective-wrapper">
 			<div class="modal-collective-name">
 				<NcEmojiPicker :show-preview="true" @select="updateEmoji">
-					<NcButton variant="tertiary"
+					<NcButton
+						variant="tertiary"
 						:aria-label="t('collectives', 'Select emoji for collective')"
 						:title="t('collectives', 'Select emoji')"
 						class="button-emoji"
@@ -18,7 +20,8 @@
 						{{ emoji }}
 					</NcButton>
 				</NcEmojiPicker>
-				<NcTextField v-if="!pickCircle"
+				<NcTextField
+					v-if="!pickCircle"
 					ref="collectiveName"
 					:value.sync="name"
 					class="collective-name"
@@ -27,7 +30,8 @@
 					:label="t('collectives', 'Name of the collective')"
 					@keypress.enter.prevent="advanceToMembers"
 					@trailing-button-click="clearName" />
-				<NcSelect v-else
+				<NcSelect
+					v-else
 					ref="circleSelector"
 					v-model="circle"
 					class="circle-selector"
@@ -35,7 +39,8 @@
 					:options="circles"
 					:aria-label-combobox="t('collectives', 'Select an existing team')"
 					:placeholder="t('collectives', 'Select a team…')" />
-				<NcButton v-if="anyCircle && !pickCircle"
+				<NcButton
+					v-if="anyCircle && !pickCircle"
 					:title="t('collectives', 'Select an existing team')"
 					variant="tertiary"
 					@click.stop.prevent="startSelectCircle">
@@ -43,7 +48,8 @@
 						<TeamsIcon :size="16" />
 					</template>
 				</NcButton>
-				<NcButton v-if="anyCircle && pickCircle"
+				<NcButton
+					v-if="anyCircle && pickCircle"
 					:title="t('collectives', 'Cancel selecting a team')"
 					variant="tertiary"
 					@click.stop.prevent="stopSelectCircle">
@@ -70,8 +76,10 @@
 
 		<div v-else-if="state === 1" class="modal-collective-wrapper">
 			<div class="modal-collective-members">
-				<MemberPicker :show-selection="true"
+				<MemberPicker
+					:show-selection="true"
 					:search-without-query="true"
+					:current-user-is-admin="true"
 					:selected-members="selectedMembers"
 					:no-delete-members="noDeleteMembers"
 					:on-click-searched="onClickSearched"
@@ -84,7 +92,8 @@
 				<NcButton :aria-label="t('collectives', 'Cancel')" @click="onClose">
 					{{ t('collectives', 'Cancel') }}
 				</NcButton>
-				<NcButton variant="primary"
+				<NcButton
+					variant="primary"
 					:aria-label="t('collectives', 'Add members')"
 					:disabled="!newCollectiveName || nameIsInvalid"
 					class="modal-buttons-right"
@@ -96,7 +105,8 @@
 				<NcButton :aria-label="t('collectives', 'Go back')" @click="state = 0">
 					{{ t('collectives', 'Back') }}
 				</NcButton>
-				<NcButton variant="primary"
+				<NcButton
+					variant="primary"
 					:aria-label="createButtonString"
 					:disabled="loading"
 					class="modal-buttons-right"
@@ -109,20 +119,20 @@
 </template>
 
 <script>
-import debounce from 'debounce'
-import { mapActions, mapState } from 'pinia'
-import { useCirclesStore } from '../../stores/circles.js'
-import { useCollectivesStore } from '../../stores/collectives.js'
 import { getCurrentUser } from '@nextcloud/auth'
 import { showError, showInfo } from '@nextcloud/dialogs'
 import { NcButton, NcDialog, NcEmojiPicker, NcEmptyContent, NcSelect, NcTextField } from '@nextcloud/vue'
-import displayError from '../../util/displayError.js'
-import { autocompleteSourcesToCircleMemberTypes, circlesMemberTypes } from '../../constants.js'
+import debounce from 'debounce'
+import { mapActions, mapState } from 'pinia'
 import AlertCircleIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 import CollectivesIcon from '../Icon/CollectivesIcon.vue'
-import MemberPicker from '../Member/MemberPicker.vue'
 import TeamsIcon from '../Icon/TeamsIcon.vue'
+import MemberPicker from '../Member/MemberPicker.vue'
+import { autocompleteSourcesToCircleMemberTypes, circlesMemberTypes } from '../../constants.js'
+import { useCirclesStore } from '../../stores/circles.js'
+import { useCollectivesStore } from '../../stores/collectives.js'
+import displayError from '../../util/displayError.js'
 
 export default {
 	name: 'NewCollectiveModal',
@@ -168,7 +178,7 @@ export default {
 		]),
 
 		circles() {
-			return this.availableCircles.map(c => c.sanitizedName)
+			return this.availableCircles.map((c) => c.sanitizedName)
 		},
 
 		anyCircle() {
@@ -204,7 +214,7 @@ export default {
 
 		selectedMembersWithoutSelf() {
 			return Object.keys(this.selectedMembers)
-				.filter(key => key !== `users-${this.currentUserId}`)
+				.filter((key) => key !== `users-${this.currentUserId}`)
 				.reduce((cur, key) => { return Object.assign(cur, { [key]: this.selectedMembers[key] }) }, {})
 		},
 
@@ -253,6 +263,7 @@ export default {
 			'getCircles',
 			'addMembersToCircle',
 		]),
+
 		...mapActions(useCollectivesStore, ['newCollective']),
 
 		setNameIsTooShort() {
@@ -277,13 +288,13 @@ export default {
 		onCreate() {
 			const updateCollective = () => {
 				if (this.updatedCollective && this.hasSelectedMembersWithoutSelf) {
-					const members = Object.values(this.selectedMembersWithoutSelf).map(entry => ({
+					const members = Object.values(this.selectedMembersWithoutSelf).map((entry) => ({
 						id: entry.id,
 						type: circlesMemberTypes[autocompleteSourcesToCircleMemberTypes[entry.source]],
 					}))
 					try {
 						this.addMembersToCircle({ circleId: this.updatedCollective.circleId, members })
-					} catch (e) {
+					} catch {
 						showError(t('collectives', 'Could not add members to the collective'))
 					}
 				}

@@ -4,17 +4,21 @@
 -->
 
 <template>
-	<div ref="textContainer"
+	<div
+		ref="textContainer"
 		class="collectives-text-container"
 		:class="[isFullWidth ? 'full-width-view' : 'sheet-view']">
-		<SkeletonLoading v-show="!contentLoaded"
+		<SkeletonLoading
+			v-show="!contentLoaded"
 			type="text"
 			class="page-content-skeleton" />
-		<div v-show="contentLoaded && !showEditor"
+		<div
+			v-show="contentLoaded && !showEditor"
 			ref="readerEl"
 			data-collectives-el="reader"
 			data-cy-collectives="reader" />
-		<div v-if="currentCollectiveCanEdit"
+		<div
+			v-if="currentCollectiveCanEdit"
 			v-show="contentLoaded && showEditor"
 			ref="editorEl"
 			data-collectives-el="editor"
@@ -23,20 +27,20 @@
 </template>
 
 <script>
-import { ref, watch } from 'vue'
-import { useElementSize } from '@vueuse/core'
-import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { showError } from '@nextcloud/dialogs'
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { useElementSize } from '@vueuse/core'
 import { mapActions, mapState } from 'pinia'
-import { useRootStore } from '../../stores/root.js'
-import { useCollectivesStore } from '../../stores/collectives.js'
-import { usePagesStore } from '../../stores/pages.js'
-import { useVersionsStore } from '../../stores/versions.js'
+import { ref, watch } from 'vue'
+import SkeletonLoading from '../SkeletonLoading.vue'
 import { useEditor } from '../../composables/useEditor.js'
+import { useReader } from '../../composables/useReader.js'
 import { editorApiUpdateReadonlyBarProps } from '../../constants.js'
 import pageContentMixin from '../../mixins/pageContentMixin.js'
-import SkeletonLoading from '../SkeletonLoading.vue'
-import { useReader } from '../../composables/useReader.js'
+import { useCollectivesStore } from '../../stores/collectives.js'
+import { usePagesStore } from '../../stores/pages.js'
+import { useRootStore } from '../../stores/root.js'
+import { useVersionsStore } from '../../stores/versions.js'
 
 export default {
 	name: 'TextEditor',
@@ -59,7 +63,7 @@ export default {
 	setup() {
 		const textContainer = ref(null)
 		const { width } = useElementSize(textContainer)
-		watch(width, value => {
+		watch(width, (value) => {
 			document.documentElement.style.setProperty('--text-container-width', value + 'px')
 		})
 		const davContent = ref('')
@@ -80,6 +84,7 @@ export default {
 			'currentCollective',
 			'currentCollectiveCanEdit',
 		]),
+
 		...mapState(usePagesStore, [
 			'currentPage',
 			'currentPageDavUrl',
@@ -92,7 +97,7 @@ export default {
 	},
 
 	watch: {
-		'currentPage.timestamp'(value) {
+		'currentPage.timestamp': function(value) {
 			if (value) {
 				// Update currentPage in PageInfoBar component through Text editorAPI
 				if (this.editorApiFlags.includes(editorApiUpdateReadonlyBarProps)) {

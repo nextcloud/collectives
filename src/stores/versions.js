@@ -3,14 +3,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { showError, showSuccess } from '@nextcloud/dialogs'
+import moment from '@nextcloud/moment'
+import { encodePath, joinPaths } from '@nextcloud/paths'
+import { generateRemoteUrl } from '@nextcloud/router'
 import { defineStore } from 'pinia'
+import * as davApi from '../apis/dav/index.js'
 import { useCollectivesStore } from './collectives.js'
 import { usePagesStore } from './pages.js'
-import * as davApi from '../apis/dav/index.js'
-import { generateRemoteUrl } from '@nextcloud/router'
-import { joinPaths, encodePath } from '@nextcloud/paths'
-import moment from '@nextcloud/moment'
-import { showError, showSuccess } from '@nextcloud/dialogs'
 
 export const useVersionsStore = defineStore('versions', {
 	state: () => ({
@@ -54,7 +54,7 @@ export const useVersionsStore = defineStore('versions', {
 			this.versions = response.data
 				// filter out root
 				.filter(({ mime }) => mime !== '')
-				.map(version => this.formatVersion(version, pageId))
+				.map((version) => this.formatVersion(version, pageId))
 		},
 
 		formatVersion(version, pageId) {

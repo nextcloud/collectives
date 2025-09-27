@@ -6,11 +6,14 @@
 <template>
 	<div class="member-search-results">
 		<template v-if="addableUsers.length !== 0">
-			<NcAppNavigationCaption :name="t('collectives', 'Add accounts')"
+			<NcAppNavigationCaption
+				:name="t('collectives', 'Add accounts')"
 				class="member-picker-caption" />
-			<Member v-for="item in addableUsers"
+			<MemberItem
+				v-for="item in addableUsers"
 				:key="generateKey(item)"
 				:circle-id="circleId"
+				:current-user-is-admin="true"
 				:user-id="item.id"
 				:display-name="item.label"
 				:user-type="circleUserType(item.source)"
@@ -21,11 +24,14 @@
 		</template>
 
 		<template v-if="addableGroups.length !== 0">
-			<NcAppNavigationCaption :name="t('collectives', 'Add groups')"
+			<NcAppNavigationCaption
+				:name="t('collectives', 'Add groups')"
 				class="member-picker-caption" />
-			<Member v-for="item in addableGroups"
+			<MemberItem
+				v-for="item in addableGroups"
 				:key="generateKey(item)"
 				:circle-id="circleId"
+				:current-user-is-admin="true"
 				:user-id="item.id"
 				:display-name="item.label"
 				:user-type="circleUserType(item.source)"
@@ -36,11 +42,14 @@
 		</template>
 
 		<template v-if="addableCircles.length !== 0">
-			<NcAppNavigationCaption :name="t('collectives', 'Add teams')"
+			<NcAppNavigationCaption
+				:name="t('collectives', 'Add teams')"
 				class="member-picker-caption" />
-			<Member v-for="item in addableCircles"
+			<MemberItem
+				v-for="item in addableCircles"
 				:key="generateKey(item)"
 				:circle-id="circleId"
+				:current-user-is-admin="true"
 				:user-id="item.id"
 				:display-name="item.label"
 				:user-type="circleUserType(item.source)"
@@ -54,14 +63,14 @@
 
 <script>
 import { NcAppNavigationCaption } from '@nextcloud/vue'
+import MemberItem from './MemberItem.vue'
 import { autocompleteSourcesToCircleMemberTypes, circlesMemberTypes } from '../../constants.js'
-import Member from './Member.vue'
 
 export default {
 	name: 'MemberSearchResults',
 
 	components: {
-		Member,
+		MemberItem,
 		NcAppNavigationCaption,
 	},
 
@@ -70,14 +79,17 @@ export default {
 			type: String,
 			default: null,
 		},
+
 		searchResults: {
 			type: Array,
 			required: true,
 		},
+
 		selectionSet: {
 			type: Object,
 			required: true,
 		},
+
 		onClickSearched: {
 			type: Function,
 			default() {
@@ -94,27 +106,15 @@ export default {
 
 	computed: {
 		addableUsers() {
-			if (this.searchResults === []) {
-				return []
-			}
-
-			return this.searchResults.filter(item => item.source === 'users')
+			return this.searchResults.filter((item) => item.source === 'users')
 		},
 
 		addableGroups() {
-			if (this.searchResults === []) {
-				return []
-			}
-
-			return this.searchResults.filter(item => item.source === 'groups')
+			return this.searchResults.filter((item) => item.source === 'groups')
 		},
 
 		addableCircles() {
-			if (this.searchResults === []) {
-				return []
-			}
-
-			return this.searchResults.filter(item => item.source === 'circles')
+			return this.searchResults.filter((item) => item.source === 'circles')
 		},
 
 		circleUserType() {

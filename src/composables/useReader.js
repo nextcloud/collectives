@@ -3,16 +3,17 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { useRootStore } from '../stores/root.js'
-import { usePagesStore } from '../stores/pages.js'
-import { useSearchStore } from '../stores/search.js'
+import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import PageInfoBar from '../components/Page/PageInfoBar.vue'
 import { editorApiReaderFileId } from '../constants.js'
-import { computed, onBeforeUnmount, ref, watch, nextTick } from 'vue'
+import { usePagesStore } from '../stores/pages.js'
+import { useRootStore } from '../stores/root.js'
+import { useSearchStore } from '../stores/search.js'
 import { useSearch } from './useSearch.js'
 
 /**
  * Composable for setting up the editor and reader.
+ *
  * @param {object} content ref to the markdown content.
  */
 export function useReader(content) {
@@ -57,6 +58,7 @@ export function useReader(content) {
 
 	/**
 	 * Create the reader instance and mount it to readerEl
+	 *
 	 * @param {object} page handed to the text app editor.
 	 */
 	async function setupReader(page) {

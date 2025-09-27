@@ -5,7 +5,8 @@
 
 <template>
 	<div class="page-trash">
-		<NcButton ref="pagetrashbutton"
+		<NcButton
+			ref="pagetrashbutton"
 			variant="tertiary"
 			:aria-label="t('collectives', 'Show deleted pages')"
 			class="page-trash-button"
@@ -15,12 +16,14 @@
 			</template>
 			{{ t('collectives', 'Deleted pages') }}
 		</NcButton>
-		<NcDialog :open.sync="showModal"
+		<NcDialog
+			:open.sync="showModal"
 			:name="t('collectives', 'Deleted pages')"
 			class="dialog__page-trash"
 			size="large">
 			<div class="modal__content">
-				<NcEmptyContent v-if="!sortedTrashPages.length"
+				<NcEmptyContent
+					v-if="!sortedTrashPages.length"
 					class="modal__content_empty"
 					:description="t('collectives', 'No deleted pages.')">
 					<template #icon>
@@ -84,16 +87,16 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'pinia'
-import { usePagesStore } from '../../stores/pages.js'
-import { NcActions, NcActionButton, NcButton, NcDialog, NcEmptyContent } from '@nextcloud/vue'
-import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
-import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { showSuccess } from '@nextcloud/dialogs'
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import moment from '@nextcloud/moment'
-import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
+import { NcActionButton, NcActions, NcButton, NcDialog, NcEmptyContent } from '@nextcloud/vue'
+import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
+import { mapActions, mapState } from 'pinia'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
+import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
 import PageIcon from '../Icon/PageIcon.vue'
+import { usePagesStore } from '../../stores/pages.js'
 import { scrollToPage } from '../../util/scrollToElement.js'
 
 export default {

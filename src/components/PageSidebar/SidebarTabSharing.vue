@@ -15,7 +15,8 @@
 		<!-- shares list -->
 		<ul v-else class="sharing-list">
 			<SharingEntryLink v-if="!shares.length" />
-			<SharingEntryLink v-for="(share, index) in shares"
+			<SharingEntryLink
+				v-for="(share, index) in shares"
 				v-else
 				:key="share.id"
 				:index="index + 1"
@@ -25,12 +26,12 @@
 </template>
 
 <script>
+import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 import { mapState } from 'pinia'
+import SharingEntryLink from './SharingEntryLink.vue'
+import { usePagesStore } from '../../stores/pages.js'
 import { useRootStore } from '../../stores/root.js'
 import { useSharesStore } from '../../stores/shares.js'
-import { usePagesStore } from '../../stores/pages.js'
-import { NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
-import SharingEntryLink from './SharingEntryLink.vue'
 
 export default {
 	name: 'SidebarTabSharing',

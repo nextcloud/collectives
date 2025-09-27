@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import FileListInfo from '../views/FileListInfo.vue'
-import Vue from 'vue'
-import { loadState } from '@nextcloud/initial-state'
 import { Header } from '@nextcloud/files'
+import { loadState } from '@nextcloud/initial-state'
+import Vue from 'vue'
+import FileListInfo from '../views/FileListInfo.vue'
 
 let vm = null
 
@@ -18,7 +18,7 @@ const FilesCollectiveHeader = new Header({
 		return view.id === 'files' || view.id === 'files.public'
 	},
 
-	render(el, folder, view) {
+	render(el, folder) {
 		el.id = 'files-collective-wrapper'
 		Vue.prototype.t = window.t
 		Vue.prototype.n = window.n
@@ -32,7 +32,7 @@ const FilesCollectiveHeader = new Header({
 		}).$mount(el)
 	},
 
-	updated(folder, view) {
+	updated(folder) {
 		vm.path = folder.path
 	},
 })

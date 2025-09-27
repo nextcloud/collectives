@@ -7,10 +7,12 @@
 	<NcDialog :name="t('collectives', 'Pick a template')" size="normal" @closing="onClose">
 		<!-- Template list -->
 		<ul class="templates-list">
-			<li v-for="template in templateList"
+			<li
+				v-for="template in templateList"
 				:key="template.id"
 				class="template-item">
-				<a :ref="templateRef(template.id)"
+				<a
+					:ref="templateRef(template.id)"
 					href="#"
 					class="template-item-link"
 					@click="onCreate(template.id)">
@@ -30,15 +32,13 @@
 </template>
 
 <script>
+import { showError } from '@nextcloud/dialogs'
+import { NcDialog } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
+import PageIcon from '../Icon/PageIcon.vue'
+import pageMixin from '../../mixins/pageMixin.js'
 import { usePagesStore } from '../../stores/pages.js'
 import { useTemplatesStore } from '../../stores/templates.js'
-import { showError } from '@nextcloud/dialogs'
-
-import pageMixin from '../../mixins/pageMixin.js'
-
-import { NcDialog } from '@nextcloud/vue'
-import PageIcon from '../Icon/PageIcon.vue'
 
 export default {
 	name: 'NewPageDialog',

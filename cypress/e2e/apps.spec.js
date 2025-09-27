@@ -5,7 +5,6 @@
 
 describe('The apps', function() {
 	describe('Collectives', function() {
-
 		it('allows creating a new collective', function() {
 			cy.loginAs('jane')
 			cy.visit('apps/collectives')
@@ -22,7 +21,6 @@ describe('The apps', function() {
 	 *
 	 */
 	describe('Disabled teams app does not break files view', function() {
-
 		before(function() {
 			cy.loginAs('admin')
 			cy.disableApp('circles')
@@ -38,6 +36,5 @@ describe('The apps', function() {
 			cy.visit('apps/files')
 			cy.fileList().should('contain', 'welcome')
 		})
-
 	})
 })

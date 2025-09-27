@@ -65,22 +65,27 @@ describe('Collective', function() {
 			cy.get('[data-cy-collectives="page-title-container"] input').invoke('val').should('contain', 'History Club')
 			cy.get('.toast-info').should('contain', 'Created collective "History Club" for existing team.')
 		})
-		it('collectives of visible teams only show for members',
+		it(
+			'collectives of visible teams only show for members',
 			function() {
 				cy.loginAs('jane')
 				cy.visit('apps/collectives')
 				cy.get('.app-navigation-entry').should('not.contain', 'History Club')
-			})
-		it('creates collectives for admins of corresponding team',
+			},
+		)
+		it(
+			'creates collectives for admins of corresponding team',
 			function() {
 				cy.loginAs('bob')
 				cy.visit('apps/collectives')
 				cy.createCollective('Preexisting Team')
 				cy.get('[data-cy-collectives="page-title-container"] input').invoke('val').should('contain', 'Preexisting Team')
-				cy.get('.toast-info').should('contain',
+				cy.get('.toast-info').should(
+					'contain',
 					'Created collective "Preexisting Team" for existing team.',
 				)
-			})
+			},
+		)
 		after(function() {
 			cy.deleteCollective('Preexisting Team')
 			cy.deleteCollective('History Club')
@@ -88,13 +93,15 @@ describe('Collective', function() {
 	})
 
 	describe('non ascii characters', function() {
-		it('can handle special chars in collective name',
+		it(
+			'can handle special chars in collective name',
 			function() {
 				cy.loginAs('bob')
 				cy.visit('apps/collectives')
 				cy.createCollective(specialCollective)
 				cy.get('[data-cy-collectives="page-title-container"] input').invoke('val').should('contain', specialCollective)
-			})
+			},
+		)
 
 		after(function() {
 			cy.deleteCollective(specialCollective)

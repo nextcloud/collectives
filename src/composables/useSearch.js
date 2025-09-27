@@ -3,12 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { useSearchStore } from '../stores/search.js'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { onMounted, onBeforeUnmount, watch } from 'vue'
+import { onBeforeUnmount, onMounted, watch } from 'vue'
+import { useSearchStore } from '../stores/search.js'
 
 /**
  * Handle search state and events.
+ *
  * @param {object} searchable Object to search in.
  */
 export function useSearch(searchable) {

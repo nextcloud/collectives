@@ -11,7 +11,7 @@
 
 <script>
 export default {
-	name: 'Hint',
+	name: 'MembersHint',
 
 	props: {
 		hint: {

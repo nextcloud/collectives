@@ -18,14 +18,16 @@
 
 			<ul :key="'list' + suffix" :class="'placeholder-list placeholder-list' + suffix + ' placeholder-list-' + type">
 				<li v-for="(width, index) in placeholderData" :key="'placeholder' + suffix + index">
-					<svg v-if="type === 'items' || type === 'members-list'"
+					<svg
+						v-if="type === 'items' || type === 'members-list'"
 						:class="`${type}-placeholder`"
 						xmlns="http://www.w3.org/2000/svg"
 						:fill="'url(#placeholder-gradient-' + uniqueId + suffix + ')'">
 						<circle :class="`${type}-placeholder-icon`" />
 						<rect :class="`${type}-placeholder-line-one`" :style="width" />
 					</svg>
-					<svg v-if="type === 'page-heading'"
+					<svg
+						v-if="type === 'page-heading'"
 						class="page-heading-placeholder"
 						xmlns="http://www.w3.org/2000/svg"
 						:fill="'url(#placeholder-gradient-' + uniqueId + suffix + ')'">
@@ -33,7 +35,8 @@
 						<rect class="page-heading-placeholder-line-one" :style="width" />
 						<rect class="page-heading-placeholder-line-two" />
 					</svg>
-					<svg v-if="type === 'text'"
+					<svg
+						v-if="type === 'text'"
 						class="text-placeholder"
 						xmlns="http://www.w3.org/2000/svg"
 						:fill="'url(#placeholder-gradient-' + uniqueId + suffix + ')'">
@@ -42,7 +45,8 @@
 						<rect class="text-placeholder-line-three" :style="textPlaceholderData[2]" />
 						<rect class="text-placeholder-line-four" :style="textPlaceholderData[3]" />
 					</svg>
-					<svg v-if="type === 'avatar'"
+					<svg
+						v-if="type === 'avatar'"
 						class="avatar-placeholder"
 						xmlns="http://www.w3.org/2000/svg"
 						:fill="'url(#placeholder-gradient-' + uniqueId + suffix + ')'">
@@ -70,6 +74,7 @@ export default {
 			type: String,
 			required: true,
 		},
+
 		count: {
 			type: Number,
 			default: 5,
@@ -92,6 +97,7 @@ export default {
 			}
 			return data
 		},
+
 		textPlaceholderData() {
 			const data = []
 			for (let i = 0; i < 4; i++) {

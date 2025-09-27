@@ -4,7 +4,8 @@
 -->
 
 <template>
-	<PagePicker :page-id="pageId"
+	<PagePicker
+		:page-id="pageId"
 		:parent-id="parentId"
 		:is-copying="copying"
 		:is-moving="moving"
@@ -33,6 +34,7 @@ export default {
 			type: Number,
 			required: true,
 		},
+
 		parentId: {
 			type: Number,
 			required: true,
@@ -94,6 +96,3 @@ export default {
 	},
 }
 </script>
-
-<style scoped>
-</style>

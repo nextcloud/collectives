@@ -25,7 +25,8 @@
 		<div v-else-if="!loading('attachments') && (attachments.length || deletedAttachments.length)">
 			<!-- attachments list -->
 			<ul v-show="sortedAttachments.length" class="attachment-list">
-				<NcListItem v-for="attachment in sortedAttachments"
+				<NcListItem
+					v-for="attachment in sortedAttachments"
 					:key="attachment.id"
 					:name="attachment.name"
 					:href="davUrl(attachment)"
@@ -33,7 +34,8 @@
 					class="attachment"
 					@click="clickAttachment(attachment, $event)">
 					<template #icon>
-						<img lazy="true"
+						<img
+							lazy="true"
 							:src="previewUrl(attachment)"
 							alt=""
 							height="256"
@@ -48,16 +50,18 @@
 						</div>
 					</template>
 					<template #actions>
-						<NcActionButton :close-after-click="true"
+						<NcActionButton
+							:close-after-click="true"
 							@click="scrollTo(attachment)">
 							<template #icon>
 								<EyeIcon />
 							</template>
 							{{ t('collectives', 'View in document') }}
 						</NcActionButton>
-						<NcActionLink :href="davUrl(attachment)"
+						<NcActionLink
+							:href="davUrl(attachment)"
 							:download="attachment.name"
-							:class="{'action-link--disabled': !networkOnline}"
+							:class="{ 'action-link--disabled': !networkOnline }"
 							:title="offlineTitle"
 							:close-after-click="true">
 							<template #icon>
@@ -65,9 +69,10 @@
 							</template>
 							{{ t('collectives', 'Download') }}
 						</NcActionLink>
-						<NcActionLink v-if="!isPublic"
+						<NcActionLink
+							v-if="!isPublic"
 							:href="filesUrl(attachment.id)"
-							:class="{'action-link--disabled': !networkOnline}"
+							:class="{ 'action-link--disabled': !networkOnline }"
 							:title="offlineTitle"
 							:close-after-click="true">
 							<template #icon>
@@ -85,7 +90,8 @@
 					{{ t('collectives', 'Recently deleted') }}
 				</div>
 
-				<NcListItem v-for="attachment in deletedAttachments"
+				<NcListItem
+					v-for="attachment in deletedAttachments"
 					:key="attachment.id"
 					:name="attachment.name"
 					:href="davUrl(attachment)"
@@ -93,7 +99,8 @@
 					class="attachment"
 					@click="clickAttachment(attachment, $event)">
 					<template #icon>
-						<img lazy="true"
+						<img
+							lazy="true"
 							:src="previewUrl(attachment)"
 							alt=""
 							height="256"
@@ -108,14 +115,16 @@
 						</div>
 					</template>
 					<template #actions>
-						<NcActionButton :close-after-click="true"
+						<NcActionButton
+							:close-after-click="true"
 							@click="restore(attachment)">
 							<template #icon>
 								<RestoreIcon />
 							</template>
 							{{ t('collectives', 'Restore') }}
 						</NcActionButton>
-						<NcActionLink :href="davUrl(attachment)"
+						<NcActionLink
+							:href="davUrl(attachment)"
 							:download="attachment.name"
 							:close-after-click="true">
 							<template #icon>
@@ -123,7 +132,8 @@
 							</template>
 							{{ t('collectives', 'Download') }}
 						</NcActionLink>
-						<NcActionLink :href="filesUrl(attachment.id)"
+						<NcActionLink
+							:href="filesUrl(attachment.id)"
 							:close-after-click="true">
 							<template #icon>
 								<FolderIcon />
@@ -136,7 +146,8 @@
 		</div>
 
 		<!-- no attachments found -->
-		<NcEmptyContent v-else
+		<NcEmptyContent
+			v-else
 			:name="t('collectives', 'No attachments available')"
 			:description="noAttachmentsDescription">
 			<template #icon>
@@ -147,25 +158,24 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'pinia'
-import { useRootStore } from '../../stores/root.js'
-import { usePagesStore } from '../../stores/pages.js'
-import { useNetworkState } from '../../composables/useNetworkState.ts'
-
-import { listen } from '@nextcloud/notify_push'
-import { formatFileSize } from '@nextcloud/files'
-import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
-import { NcActionButton, NcActionLink, NcEmptyContent, NcListItem, NcLoadingIcon } from '@nextcloud/vue'
+import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { formatFileSize } from '@nextcloud/files'
 import moment from '@nextcloud/moment'
+import { listen } from '@nextcloud/notify_push'
+import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
+import { NcActionButton, NcActionLink, NcEmptyContent, NcListItem, NcLoadingIcon } from '@nextcloud/vue'
+import { mapActions, mapState } from 'pinia'
 import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagonOutline.vue'
-import DownloadIcon from 'vue-material-design-icons/TrayArrowDown.vue'
 import EyeIcon from 'vue-material-design-icons/EyeOutline.vue'
 import FolderIcon from 'vue-material-design-icons/FolderOutline.vue'
 import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
+import DownloadIcon from 'vue-material-design-icons/TrayArrowDown.vue'
 import OfflineContent from './OfflineContent.vue'
+import { useNetworkState } from '../../composables/useNetworkState.ts'
+import { usePagesStore } from '../../stores/pages.js'
+import { useRootStore } from '../../stores/root.js'
 
 export default {
 	name: 'SidebarTabAttachments',
@@ -211,6 +221,7 @@ export default {
 			'loading',
 			'shareTokenParam',
 		]),
+
 		...mapState(usePagesStore, [
 			'attachments',
 			'currentPage',
@@ -293,11 +304,12 @@ export default {
 	},
 
 	watch: {
-		'page.id'() {
+		'page.id': function() {
 			this.loaded = false
 			this.getAttachmentsForPage(true)
 		},
-		'networkOnline'(val) {
+
+		networkOnline: function(val) {
 			if (val && this.loadPending) {
 				this.getAttachmentsForPage(true)
 			}
@@ -359,7 +371,7 @@ export default {
 
 		clickAttachment(attachment, ev) {
 			// Show in viewer if the mimetype is supported
-			if (window.OCA.Viewer?.availableHandlers.map(handler => handler.mimes).flat().includes(attachment.mimetype)) {
+			if (window.OCA.Viewer?.availableHandlers.map((handler) => handler.mimes).flat().includes(attachment.mimetype)) {
 				ev.preventDefault()
 				window.OCA.Viewer.open({ path: attachment.path })
 			}
@@ -373,7 +385,7 @@ export default {
 
 		scrollTo(attachment) {
 			const candidates = [...this.getActiveTextElement().querySelectorAll('[data-component="image-view"]')]
-			const element = candidates.find(el => el.dataset.src.endsWith(this.fileNameUriComponent(attachment.name)))
+			const element = candidates.find((el) => el.dataset.src.endsWith(this.fileNameUriComponent(attachment.name)))
 			if (element) {
 				// Scroll into view
 				element.scrollIntoView({ block: 'center' })

@@ -3,13 +3,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { getLanguage } from '@nextcloud/l10n'
+import { useLocalStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
 import { set } from 'vue'
-import { useLocalStorage } from '@vueuse/core'
-import { getLanguage } from '@nextcloud/l10n'
-import { useRootStore } from './root.js'
-import { useCollectivesStore } from './collectives.js'
 import * as api from '../apis/collectives/index.js'
+import { useCollectivesStore } from './collectives.js'
+import { useRootStore } from './root.js'
 
 const STORE_PREFIX = 'collectives/pinia/tags/'
 
@@ -49,7 +49,7 @@ export const useTagsStore = defineStore('tags', {
 		},
 
 		filterTags: (state) => {
-			return state.tags.filter(t => state.filterTagIds.includes(t.id))
+			return state.tags.filter((t) => state.filterTagIds.includes(t.id))
 		},
 	},
 
@@ -82,7 +82,7 @@ export const useTagsStore = defineStore('tags', {
 			if (!this.allTags[this.collectiveId]) {
 				set(this.allTags, this.collectiveId, [])
 			}
-			const idx = this.tags.findIndex(t => t.id === tag.id)
+			const idx = this.tags.findIndex((t) => t.id === tag.id)
 			if (idx === -1) {
 				this.allTags[this.collectiveId].unshift(tag)
 			} else {
@@ -119,7 +119,7 @@ export const useTagsStore = defineStore('tags', {
 		 */
 		async deleteTag(tag) {
 			await api.deleteTag(this.context, tag.id)
-			const idx = this.tags.findIndex(t => t.id === tag.id)
+			const idx = this.tags.findIndex((t) => t.id === tag.id)
 			if (idx !== -1) {
 				this.allTags[this.collectiveId]?.splice(idx, 1)
 			}

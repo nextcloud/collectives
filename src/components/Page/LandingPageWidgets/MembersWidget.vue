@@ -6,17 +6,20 @@
 <template>
 	<div class="members-widget">
 		<div class="members-title-container">
-			<a class="members-title"
+			<a
+				class="members-title"
 				:aria-label="expandLabel"
 				@keydown.enter="toggleWidget"
 				@click="toggleWidget">
 				<WidgetHeading :title="t('collectives', 'Members')" />
 				<div class="toggle-icon">
-					<ChevronDownIcon :size="24"
-						:class="{ 'collapsed': !showMembers }" />
+					<ChevronDownIcon
+						:size="24"
+						:class="{ collapsed: !showMembers }" />
 				</div>
 			</a>
-			<NcButton v-if="showTeamOverviewButton"
+			<NcButton
+				v-if="showTeamOverviewButton"
 				:aria-label="t('collectives', 'Team overview')"
 				:href="teamUrl"
 				target="_blank">
@@ -24,17 +27,19 @@
 					<TeamsIcon :size="20" />
 				</template>
 				<template v-if="!isMobile" #default>
-					{{ t('collectives','Team overview') }}
+					{{ t('collectives', 'Team overview') }}
 				</template>
 			</NcButton>
 		</div>
 		<div v-show="showMembers" class="members-container">
-			<SkeletonLoading v-if="loading"
+			<SkeletonLoading
+				v-if="loading"
 				type="avatar"
 				:count="3"
 				class="members-skeleton" />
 			<div v-else ref="members" class="members-members">
-				<NcAvatar v-for="member in trimmedMembers"
+				<NcAvatar
+					v-for="member in trimmedMembers"
 					:key="member.singleId"
 					:user="member.userId"
 					:display-name="member.displayName"
@@ -43,7 +48,8 @@
 					:disable-menu="true"
 					:tooltip-message="member.displayName"
 					:size="avatarSize" />
-				<NcButton variant="tertiary"
+				<NcButton
+					variant="tertiary"
 					:title="showMembersTitle"
 					:aria-label="showMembersAriaLabel"
 					@click="openCollectiveMembers()">
@@ -58,23 +64,22 @@
 </template>
 
 <script>
-import debounce from 'debounce'
-import { mapActions, mapState } from 'pinia'
-import { useCirclesStore } from '../../../stores/circles.js'
-import { useCollectivesStore } from '../../../stores/collectives.js'
-import { usePagesStore } from '../../../stores/pages.js'
-import { generateUrl } from '@nextcloud/router'
-import { circlesMemberTypes } from '../../../constants.js'
 import { showError } from '@nextcloud/dialogs'
-
+import { generateUrl } from '@nextcloud/router'
 import { NcAvatar, NcButton } from '@nextcloud/vue'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
+import debounce from 'debounce'
+import { mapActions, mapState } from 'pinia'
 import AccountMultipleIcon from 'vue-material-design-icons/AccountMultipleOutline.vue'
 import AccountMultiplePlusIcon from 'vue-material-design-icons/AccountMultiplePlus.vue'
 import ChevronDownIcon from 'vue-material-design-icons/ChevronDown.vue'
-import SkeletonLoading from '../../SkeletonLoading.vue'
 import TeamsIcon from '../../Icon/TeamsIcon.vue'
+import SkeletonLoading from '../../SkeletonLoading.vue'
 import WidgetHeading from './WidgetHeading.vue'
+import { circlesMemberTypes } from '../../../constants.js'
+import { useCirclesStore } from '../../../stores/circles.js'
+import { useCollectivesStore } from '../../../stores/collectives.js'
+import { usePagesStore } from '../../../stores/pages.js'
 
 export default {
 	name: 'MembersWidget',
@@ -108,10 +113,12 @@ export default {
 			'circleMembersSorted',
 			'circleMemberType',
 		]),
+
 		...mapState(useCollectivesStore, [
 			'currentCollective',
 			'isCollectiveAdmin',
 		]),
+
 		...mapState(usePagesStore, ['recentPagesUserIds']),
 
 		expandLabel() {
@@ -185,7 +192,7 @@ export default {
 	},
 
 	watch: {
-		'sortedMembers.length'() {
+		'sortedMembers.length': function() {
 			this.$nextTick(() => {
 				this.updateShowMembersCountDebounced()
 			})

@@ -4,7 +4,8 @@
 -->
 
 <template>
-	<NcEmptyContent :name="notFoundString"
+	<NcEmptyContent
+		:name="notFoundString"
 		:description="t('collectives', 'You\'re not part of a collective with that name.')"
 		class="content-not-found">
 		<template #icon>
@@ -14,10 +15,10 @@
 </template>
 
 <script>
-import { mapState } from 'pinia'
-import { useRootStore } from '../stores/root.js'
 import { NcEmptyContent } from '@nextcloud/vue'
+import { mapState } from 'pinia'
 import CollectivesIcon from './Icon/CollectivesIcon.vue'
+import { useRootStore } from '../stores/root.js'
 
 export default {
 	name: 'CollectiveNotFound',

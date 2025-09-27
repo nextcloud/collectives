@@ -23,6 +23,7 @@ export function getCollectivesFolder() {
 
 /**
  * Set collectives folder setting for the current user
+ *
  * @param {string} value Name of the collective folder to use
  */
 export function setCollectivesFolder(value) {

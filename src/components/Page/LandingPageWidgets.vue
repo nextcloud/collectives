@@ -4,7 +4,8 @@
 -->
 
 <template>
-	<div class="landing-page-widgets"
+	<div
+		class="landing-page-widgets"
 		:class="[isFullWidth ? 'full-width-view' : 'sheet-view']">
 		<MembersWidget v-if="!isPublic" />
 		<RecentPagesWidget v-if="showRecentPages" />
@@ -13,11 +14,10 @@
 
 <script>
 import { mapState } from 'pinia'
-import { useRootStore } from '../../stores/root.js'
-import { usePagesStore } from '../../stores/pages.js'
-
 import MembersWidget from './LandingPageWidgets/MembersWidget.vue'
 import RecentPagesWidget from './LandingPageWidgets/RecentPagesWidget.vue'
+import { usePagesStore } from '../../stores/pages.js'
+import { useRootStore } from '../../stores/root.js'
 
 export default {
 	name: 'LandingPageWidgets',

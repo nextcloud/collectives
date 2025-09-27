@@ -5,17 +5,20 @@
 
 <template>
 	<div>
-		<input v-if="isPublic"
+		<input
+			v-if="isPublic"
 			id="isPublic"
 			type="hidden"
 			name="isPublic"
 			value="1">
-		<input v-if="isPublic"
+		<input
+			v-if="isPublic"
 			id="sharingToken"
 			type="hidden"
 			name="sharingToken"
 			:value="shareTokenParam">
-		<NcEmptyContent v-show="loading"
+		<NcEmptyContent
+			v-show="loading"
 			:name="t('collectives', 'Preparing collective for exporting or printing')">
 			<template #icon>
 				<DownloadIcon />
@@ -25,7 +28,8 @@
 					{{ loadingProgress }}
 				</NcProgressBar>
 				<ul class="load-messages">
-					<li v-for="task in [loadPages, loadImages]"
+					<li
+						v-for="task in [loadPages, loadImages]"
 						v-show="task.total"
 						:key="task.message">
 						{{ task.message }}
@@ -35,7 +39,8 @@
 			</template>
 		</NcEmptyContent>
 		<div v-for="page in pagesTreeWalk()" v-show="!loading" :key="page.id">
-			<PagePrint :page="page"
+			<PagePrint
+				:page="page"
 				@loading="waitingFor.push(page.id)"
 				@ready="ready(page.id)" />
 		</div>
@@ -43,15 +48,15 @@
 </template>
 
 <script>
+import { NcEmptyContent } from '@nextcloud/vue'
+import debounce from 'debounce'
 import { mapActions, mapState } from 'pinia'
-import { useRootStore } from '../stores/root.js'
+import NcProgressBar from '@nextcloud/vue/components/NcProgressBar'
+import DownloadIcon from 'vue-material-design-icons/TrayArrowDown.vue'
+import PagePrint from './PagePrint.vue'
 import { useCollectivesStore } from '../stores/collectives.js'
 import { usePagesStore } from '../stores/pages.js'
-import { NcEmptyContent } from '@nextcloud/vue'
-import NcProgressBar from '@nextcloud/vue/dist/Components/NcProgressBar.js'
-import DownloadIcon from 'vue-material-design-icons/TrayArrowDown.vue'
-import debounce from 'debounce'
-import PagePrint from './PagePrint.vue'
+import { useRootStore } from '../stores/root.js'
 import displayError from '../util/displayError.js'
 
 export default {
@@ -73,6 +78,7 @@ export default {
 				count: 0,
 				total: 0,
 			},
+
 			loadImages: {
 				message: t('collectives', 'Loading images:'),
 				count: 0,

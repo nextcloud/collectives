@@ -3,15 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { defineStore } from 'pinia'
-import { useRootStore } from './root.js'
 import { useLocalStorage } from '@vueuse/core'
-import { byName } from '../util/sortOrders.js'
+import { defineStore } from 'pinia'
+import * as api from '../apis/collectives/index.js'
 import { memberLevels } from '../constants.js'
 import randomEmoji from '../util/randomEmoji.js'
-import * as api from '../apis/collectives/index.js'
-import { useSettingsStore } from './settings.js'
+import { byName } from '../util/sortOrders.js'
 import { useCirclesStore } from './circles.js'
+import { useRootStore } from './root.js'
+import { useSettingsStore } from './settings.js'
 
 const STORE_PREFIX = 'collectives/pinia/collectives/'
 
@@ -37,13 +37,9 @@ export const useCollectivesStore = defineStore('collectives', {
 		currentCollective(state) {
 			const rootStore = useRootStore()
 			if (rootStore.collectiveId) {
-				return state.collectives.find(
-					(collective) => collective.id === rootStore.collectiveId,
-				)
+				return state.collectives.find((collective) => collective.id === rootStore.collectiveId)
 			}
-			return state.collectives.find(
-				(collective) => collective.name === rootStore.collectiveParam,
-			)
+			return state.collectives.find((collective) => collective.name === rootStore.collectiveParam)
 		},
 
 		collectivePath() {
@@ -72,7 +68,7 @@ export const useCollectivesStore = defineStore('collectives', {
 		},
 
 		collectiveTitle(state) {
-			return (collectiveId) => state.collectives.find(c => c.id === collectiveId).name
+			return (collectiveId) => state.collectives.find((c) => c.id === collectiveId).name
 		},
 
 		currentCollectiveTitle(state) {
@@ -136,7 +132,7 @@ export const useCollectivesStore = defineStore('collectives', {
 		},
 
 		allCollectiveEmojis(state) {
-			return state.collectives.filter(c => c.emoji).map(c => c.emoji)
+			return state.collectives.filter((c) => c.emoji).map((c) => c.emoji)
 		},
 
 		// Return a function (with empty arguments list) to prevent caching the result
@@ -146,18 +142,18 @@ export const useCollectivesStore = defineStore('collectives', {
 
 		membersCollective(state) {
 			return state.membersCollectiveId
-				? state.collectives.find(c => c.id === state.membersCollectiveId)
+				? state.collectives.find((c) => c.id === state.membersCollectiveId)
 				: null
 		},
 
 		settingsCollective(state) {
 			return state.settingsCollectiveId
-				? state.collectives.find(c => c.id === state.settingsCollectiveId)
+				? state.collectives.find((c) => c.id === state.settingsCollectiveId)
 				: null
 		},
 
 		isFavoritePage: (state) => (id, pageId) => {
-			return state.collectives.find(c => c.id === id).userFavoritePages.includes(pageId)
+			return state.collectives.find((c) => c.id === id).userFavoritePages.includes(pageId)
 		},
 	},
 
@@ -202,7 +198,7 @@ export const useCollectivesStore = defineStore('collectives', {
 		},
 
 		_addOrUpdateCollectiveState(collective) {
-			const cur = this.collectives.findIndex(c => c.id === collective.id)
+			const cur = this.collectives.findIndex((c) => c.id === collective.id)
 			if (cur === -1) {
 				this.collectives.unshift(collective)
 			} else {
@@ -212,15 +208,15 @@ export const useCollectivesStore = defineStore('collectives', {
 		},
 
 		removeCollectiveFromState(collective) {
-			this.collectives.splice(this.collectives.findIndex(c => c.id === collective.id), 1)
+			this.collectives.splice(this.collectives.findIndex((c) => c.id === collective.id), 1)
 		},
 
 		patchCollectiveWithProperty({ id, property, value }) {
-			this.collectives.find(c => c.id === id)[property] = value
+			this.collectives.find((c) => c.id === id)[property] = value
 		},
 
 		patchCollectiveWithCircle(circle) {
-			this.collectives.find(c => c.circleId === circle.id).name = circle.sanitizedName
+			this.collectives.find((c) => c.circleId === circle.id).name = circle.sanitizedName
 		},
 
 		/**
@@ -258,7 +254,7 @@ export const useCollectivesStore = defineStore('collectives', {
 		async trashCollective({ id }) {
 			const response = await api.trashCollective(id)
 			const collective = response.data.ocs.data.collective
-			this.collectives.splice(this.collectives.findIndex(c => c.id === collective.id), 1)
+			this.collectives.splice(this.collectives.findIndex((c) => c.id === collective.id), 1)
 			this.trashCollectives.unshift(collective)
 		},
 
@@ -272,7 +268,7 @@ export const useCollectivesStore = defineStore('collectives', {
 			const response = await api.restoreCollective(id)
 			const collective = response.data.ocs.data.collective
 			this.collectives.unshift(collective)
-			this.trashCollectives.splice(this.trashCollectives.findIndex(c => c.id === collective.id), 1)
+			this.trashCollectives.splice(this.trashCollectives.findIndex((c) => c.id === collective.id), 1)
 		},
 
 		/**
@@ -286,7 +282,7 @@ export const useCollectivesStore = defineStore('collectives', {
 			const circlesStore = useCirclesStore()
 			const response = await api.deleteCollective(id, circle)
 			const collective = response.data.ocs.data.collective
-			this.trashCollectives.splice(this.trashCollectives.findIndex(c => c.id === collective.id), 1)
+			this.trashCollectives.splice(this.trashCollectives.findIndex((c) => c.id === collective.id), 1)
 			if (circle) {
 				circlesStore.deleteCircleForCollectiveFromState(collective)
 			}
@@ -339,7 +335,7 @@ export const useCollectivesStore = defineStore('collectives', {
 		 */
 		async toggleFavoritePage({ id, pageId }) {
 			const favoritePages = this.collectives
-				.find(c => c.id === id)
+				.find((c) => c.id === id)
 				.userFavoritePages
 				// Only unique entries, filter out duplicates
 				.filter((value, i, a) => a.indexOf(value) === i)
@@ -347,7 +343,7 @@ export const useCollectivesStore = defineStore('collectives', {
 			if (favoritePages.indexOf(pageId) === -1) {
 				favoritePages.push(pageId)
 			} else {
-				favoritePages.splice(favoritePages.findIndex(id => id === pageId), 1)
+				favoritePages.splice(favoritePages.findIndex((id) => id === pageId), 1)
 			}
 			await this.setCollectiveUserSettingFavoritePages({ id, favoritePages })
 		},

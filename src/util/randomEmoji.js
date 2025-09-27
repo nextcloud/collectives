@@ -38,7 +38,7 @@ const defaultEmojis = Object.values(emojiSet).reduce((setA, setB) => setA.concat
  * @return {string} random emoji
  */
 export default function randomEmoji(excludes = [], emojis = defaultEmojis) {
-	let filteredEmojis = excludes.length ? emojis.filter(e => !excludes.includes(e)) : emojis
+	let filteredEmojis = excludes.length ? emojis.filter((e) => !excludes.includes(e)) : emojis
 	if (filteredEmojis.length === 0) {
 		// Fallback to full emoji set if filtered list is empty
 		filteredEmojis = emojis

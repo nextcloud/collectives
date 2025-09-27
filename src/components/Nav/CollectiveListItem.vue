@@ -4,7 +4,8 @@
 -->
 
 <template>
-	<NcAppNavigationItem :key="collective.circleId"
+	<NcAppNavigationItem
+		:key="collective.circleId"
 		:name="collective.name"
 		:to="collectivePath(collective)"
 		:force-menu="true"
@@ -26,13 +27,13 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'pinia'
-import { useRootStore } from '../../stores/root.js'
-import { useCollectivesStore } from '../../stores/collectives.js'
 import { NcAppNavigationItem } from '@nextcloud/vue'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
+import { mapActions, mapState } from 'pinia'
 import CollectiveActions from '../Collective/CollectiveActions.vue'
 import CollectivesIcon from '../Icon/CollectivesIcon.vue'
+import { useCollectivesStore } from '../../stores/collectives.js'
+import { useRootStore } from '../../stores/root.js'
 
 export default {
 	name: 'CollectiveListItem',

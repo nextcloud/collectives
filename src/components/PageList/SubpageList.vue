@@ -5,7 +5,8 @@
 
 <template>
 	<div>
-		<Item :key="page.title"
+		<PageListItem
+			:key="page.title"
 			:to="pagePath(page)"
 			:page-id="page.id"
 			:parent-id="page.parentId"
@@ -20,35 +21,37 @@
 			:filtered-view="filteredView"
 			@click.native="show('details')" />
 		<div class="page-list-indent">
-			<Draggable v-if="subpagesView.length > 0 || keptSortable(page.id)"
+			<DraggableElement
+				v-if="subpagesView.length > 0 || keptSortable(page.id)"
 				:list="subpagesView"
 				:parent-id="page.id"
 				:disable-sorting="disableSorting">
-				<SubpageList v-for="subpage in subpagesView"
+				<SubpageList
+					v-for="subpage in subpagesView"
 					:key="subpage.id"
 					:data-page-id="subpage.id"
 					:page="subpage"
-					:level="level+1"
+					:level="level + 1"
 					class="page-list-drag-item" />
-			</Draggable>
+			</DraggableElement>
 		</div>
 	</div>
 </template>
 
 <script>
 import { mapActions, mapState } from 'pinia'
-import { useRootStore } from '../../stores/root.js'
+import DraggableElement from './DraggableElement.vue'
+import PageListItem from './PageListItem.vue'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { usePagesStore } from '../../stores/pages.js'
-import Draggable from './Draggable.vue'
-import Item from './Item.vue'
+import { useRootStore } from '../../stores/root.js'
 
 export default {
 	name: 'SubpageList',
 
 	components: {
-		Draggable,
-		Item,
+		DraggableElement,
+		PageListItem,
 	},
 
 	props: {
@@ -56,10 +59,12 @@ export default {
 			type: Object,
 			required: true,
 		},
+
 		level: {
 			type: Number,
 			required: true,
 		},
+
 		filteredView: {
 			type: Boolean,
 			default: false,
@@ -100,10 +105,11 @@ export default {
 
 	watch: {
 		// Reinitate collapsed state when route changes
-		'pageParam'() {
+		pageParam: function() {
 			this.initCollapsed()
 		},
-		'pageId'() {
+
+		pageId: function() {
 			this.initCollapsed()
 		},
 	},
@@ -114,10 +120,7 @@ export default {
 
 	methods: {
 		...mapActions(useRootStore, ['show']),
-		...mapActions(usePagesStore, [
-			'collapse',
-			'expand',
-		]),
+		...mapActions(usePagesStore, ['expand']),
 
 		initCollapsed() {
 			// Expand subpages if they're in the path to currentPage

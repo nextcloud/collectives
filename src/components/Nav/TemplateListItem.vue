@@ -6,25 +6,29 @@
 <template>
 	<li class="template-list-item">
 		<div class="template-list-item-icon" @click.prevent.stop>
-			<NcEmojiPicker :ref="`templateEmojiPicker-${template.id}`"
+			<NcEmojiPicker
+				:ref="`templateEmojiPicker-${template.id}`"
 				:show-preview="true"
 				:allow-unselect="true"
 				:selected-emoji="template.emoji"
 				@select="onSelectEmoji($event, template.id)"
 				@unselect="onUnselectEmoji(template.id)">
-				<NcButton variant="tertiary"
+				<NcButton
+					variant="tertiary"
 					:aria-label="t('collectives', 'Select emoji for template')"
 					:title="t('collectives', 'Select emoji')"
 					class="button-template-emoji"
 					@click.prevent>
 					<template #icon>
-						<NcLoadingIcon v-if="isLoading(template.id)"
+						<NcLoadingIcon
+							v-if="isLoading(template.id)"
 							:size="20"
 							fill-color="var(--color-text-maxcontrast)" />
 						<div v-else-if="template.emoji">
 							{{ template.emoji }}
 						</div>
-						<PageTemplateIcon v-else
+						<PageTemplateIcon
+							v-else
 							:size="20"
 							fill-color="var(--color-text-maxcontrast)" />
 					</template>
@@ -32,11 +36,13 @@
 			</NcEmojiPicker>
 		</div>
 		<div class="template-list-item-title">
-			<form v-if="renameTitle !== null"
+			<form
+				v-if="renameTitle !== null"
 				class="template-list-item-title-text"
 				@submit.prevent.stop="onRename"
 				@click.prevent.stop>
-				<NcTextField ref="renameField"
+				<NcTextField
+					ref="renameField"
 					v-click-outside="onRename"
 					:placeholder="t('collectives', 'Template title')"
 					:label-outside="true"
@@ -47,7 +53,8 @@
 					@keyup.enter.prevent.stop
 					@keyup.esc.prevent.stop="onStopRename" />
 			</form>
-			<a v-else
+			<a
+				v-else
 				href="#"
 				class="template-list-item-title-text"
 				@click="$emit('open', template)">
@@ -56,21 +63,24 @@
 		</div>
 		<div class="template-action-buttons" @click.prevent.stop>
 			<NcActions :force-menu="true">
-				<NcActionButton :close-after-click="true"
+				<NcActionButton
+					:close-after-click="true"
 					@click="onInitRename(template)">
 					<template #icon>
 						<PencilIcon :size="20" />
 					</template>
 					{{ t('collectives', 'Rename') }}
 				</NcActionButton>
-				<NcActionButton :close-after-click="true"
+				<NcActionButton
+					:close-after-click="true"
 					@click="onInitSelectEmoji(template.id)">
 					<template #icon>
 						<EmoticonIcon :size="20" />
 					</template>
 					{{ t('collectives', 'Select emoji') }}
 				</NcActionButton>
-				<NcActionButton :close-after-click="true"
+				<NcActionButton
+					:close-after-click="true"
 					@click="$emit('delete', template)">
 					<template #icon>
 						<DeleteIcon :size="20" />
@@ -83,18 +93,16 @@
 </template>
 
 <script>
+import { showError } from '@nextcloud/dialogs'
+import { NcActionButton, NcActions, NcButton, NcEmojiPicker, NcLoadingIcon, NcTextField } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
+import { directive as ClickOutside } from 'v-click-outside'
+import EmoticonIcon from 'vue-material-design-icons/EmoticonOutline.vue'
+import PencilIcon from 'vue-material-design-icons/PencilOutline.vue'
+import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
+import PageTemplateIcon from '../Icon/PageTemplateIcon.vue'
 import { useRootStore } from '../../stores/root.js'
 import { useTemplatesStore } from '../../stores/templates.js'
-import { showError } from '@nextcloud/dialogs'
-import { directive as ClickOutside } from 'v-click-outside'
-
-import { NcActionButton, NcActions, NcButton, NcEmojiPicker, NcLoadingIcon, NcTextField } from '@nextcloud/vue'
-
-import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
-import EmoticonIcon from 'vue-material-design-icons/EmoticonOutline.vue'
-import PageTemplateIcon from '../Icon/PageTemplateIcon.vue'
-import PencilIcon from 'vue-material-design-icons/PencilOutline.vue'
 
 export default {
 	name: 'TemplateListItem',

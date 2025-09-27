@@ -7,12 +7,13 @@
  * Remove from the collection the given item (identified by id).
  *
  * If the item is not found this is a noop.
+ *
  * @param {object[]} collection array to remove item from.
  * @param {object} item the item
  * @param {number} item.id ID of the item to delete
  */
 export function removeFrom(collection, item) {
-	const index = collection.findIndex(i => i.id === item.id)
+	const index = collection.findIndex((i) => i.id === item.id)
 	if (index > -1) {
 		collection.splice(index, 1)
 	}
@@ -29,7 +30,7 @@ export function removeFrom(collection, item) {
  * @param {number} item.id used to find the item in the collection
  */
 export function updateOrAddTo(collection, item) {
-	const index = collection.findIndex(i => i.id === item.id)
+	const index = collection.findIndex((i) => i.id === item.id)
 	if (index > -1) {
 		collection.splice(index, 1, item)
 	} else {

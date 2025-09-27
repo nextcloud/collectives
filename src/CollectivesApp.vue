@@ -5,42 +5,45 @@
 
 <template>
 	<NcContent app-name="collectives">
-		<input v-if="isPublic"
+		<input
+			v-if="isPublic"
 			id="isPublic"
 			type="hidden"
 			name="isPublic"
 			value="1">
-		<input v-if="isPublic"
+		<input
+			v-if="isPublic"
 			id="sharingToken"
 			type="hidden"
 			:value="shareTokenParam">
-		<Navigation v-if="!printView" />
+		<NavigationBar v-if="!printView" />
 		<router-view />
 		<PageSidebar v-if="currentCollective && currentPage" />
-		<CollectiveSettings v-if="showCollectiveSettings"
+		<CollectiveSettings
+			v-if="showCollectiveSettings"
 			:collective="settingsCollective" />
 	</NcContent>
 </template>
 
 <script>
+import { NcContent } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
-import { useRootStore } from './stores/root.js'
-import { useSettingsStore } from './stores/settings.js'
+import CollectiveSettings from './components/Nav/CollectiveSettings.vue'
+import NavigationBar from './components/NavigationBar.vue'
+import PageSidebar from './components/PageSidebar.vue'
 import { useCollectivesStore } from './stores/collectives.js'
 import { usePagesStore } from './stores/pages.js'
+import { useRootStore } from './stores/root.js'
+import { useSettingsStore } from './stores/settings.js'
 import displayError from './util/displayError.js'
-import { NcContent } from '@nextcloud/vue'
-import CollectiveSettings from './components/Nav/CollectiveSettings.vue'
-import Navigation from './components/Navigation.vue'
-import PageSidebar from './components/PageSidebar.vue'
 
 export default {
-	name: 'Collectives',
+	name: 'CollectivesApp',
 
 	components: {
 		CollectiveSettings,
 		NcContent,
-		Navigation,
+		NavigationBar,
 		PageSidebar,
 	},
 
@@ -54,12 +57,13 @@ export default {
 			'isPublic',
 			'printView',
 			'shareTokenParam',
-			'showing',
 		]),
+
 		...mapState(useCollectivesStore, [
 			'currentCollective',
 			'settingsCollective',
 		]),
+
 		...mapState(usePagesStore, ['currentPage']),
 
 		showCollectiveSettings() {
@@ -77,6 +81,7 @@ export default {
 				this.rootStore.shareTokenParam = val.params.token
 				this.rootStore.fileIdQuery = val.query.fileId
 			},
+
 			immediate: true,
 		},
 	},

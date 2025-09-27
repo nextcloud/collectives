@@ -4,14 +4,15 @@
 -->
 
 <template>
-	<NcAppContent :show-details="showing('details')"
+	<NcAppContent
+		:show-details="showing('details')"
 		:list-size="20"
 		:list-min-width="15"
 		@update:showDetails="hide('details')">
 		<template #list>
 			<PageList v-if="currentCollective" />
 		</template>
-		<Collective v-if="currentCollective" />
+		<CollectiveContainer v-if="currentCollective" />
 		<NcEmptyContent v-else-if="loading('collectives')">
 			<template #icon>
 				<NcLoadingIcon />
@@ -23,27 +24,27 @@
 
 <script>
 
+import { listen } from '@nextcloud/notify_push'
+import { NcAppContent, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
-import { useRootStore } from '../stores/root.js'
+import CollectiveContainer from '../components/CollectiveContainer.vue'
+import CollectiveNotFound from '../components/CollectiveNotFound.vue'
+import PageList from '../components/PageList.vue'
+import { useNetworkState } from '../composables/useNetworkState.ts'
+import { sessionUpdateInterval } from '../constants.js'
 import { useCollectivesStore } from '../stores/collectives.js'
 import { usePagesStore } from '../stores/pages.js'
+import { useRootStore } from '../stores/root.js'
 import { useSessionsStore } from '../stores/sessions.js'
 import { useTagsStore } from '../stores/tags.js'
 import { useTemplatesStore } from '../stores/templates.js'
-import { NcAppContent, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
-import Collective from '../components/Collective.vue'
-import CollectiveNotFound from '../components/CollectiveNotFound.vue'
-import PageList from '../components/PageList.vue'
-import { listen } from '@nextcloud/notify_push'
 import displayError from '../util/displayError.js'
-import { sessionUpdateInterval } from '../constants.js'
-import { useNetworkState } from '../composables/useNetworkState.ts'
 
 export default {
 	name: 'CollectiveView',
 
 	components: {
-		Collective,
+		CollectiveContainer,
 		CollectiveNotFound,
 		NcAppContent,
 		NcEmptyContent,
@@ -83,18 +84,20 @@ export default {
 			'currentCollectiveCanEdit',
 			'currentCollectiveIsPageShare',
 		]),
+
 		...mapState(useSessionsStore, ['hasSession']),
 	},
 
 	watch: {
-		'currentCollective.id'(val) {
+		'currentCollective.id': function(val) {
 			this.clearSession()
 			if (val) {
 				this.getAllPages()
 				this.initSession()
 			}
 		},
-		'networkOnline'(val) {
+
+		networkOnline: function(val) {
 			if (val) {
 				this.handleNetworkOnline()
 			} else {
@@ -121,7 +124,7 @@ export default {
 		...mapActions(useSessionsStore, ['createSession', 'updateSession', 'closeSession']),
 		...mapActions(useTagsStore, ['getTags']),
 		...mapActions(useTemplatesStore, ['getTemplates']),
-		...mapActions(usePagesStore, ['getPages', 'getTrashPages', 'updatePages']),
+		...mapActions(usePagesStore, ['getPages', 'getTrashPages']),
 
 		initSession() {
 			if (this.listenPush) {

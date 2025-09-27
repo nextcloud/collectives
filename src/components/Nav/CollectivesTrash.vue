@@ -4,11 +4,13 @@
 -->
 
 <template>
-	<div id="collectives-trash"
+	<div
+		id="collectives-trash"
 		v-click-outside="closeTrash"
 		:class="{ open }">
 		<div id="collectives-trash__header">
-			<NcButton variant="tertiary"
+			<NcButton
+				variant="tertiary"
 				:aria-label="t('collectives', 'Deleted collectives')"
 				class="collectives-trash-button"
 				@click="toggleTrash">
@@ -21,7 +23,8 @@
 		<transition name="slide-up">
 			<div v-show="open" id="collectives-trash__content">
 				<ul class="app-navigation__list">
-					<NcAppNavigationItem v-for="collective in sortedTrashCollectives"
+					<NcAppNavigationItem
+						v-for="collective in sortedTrashCollectives"
 						:key="collective.circleId"
 						:name="collective.name"
 						:force-menu="true"
@@ -54,7 +57,8 @@
 			</div>
 		</transition>
 
-		<NcDialog v-if="deleteModal"
+		<NcDialog
+			v-if="deleteModal"
 			:name="t('collectives', 'Permanently delete collective {collective}', { collective: modalCollective.name })"
 			size="small"
 			@closing="closeDeleteModal">
@@ -64,20 +68,23 @@
 				</div>
 			</div>
 			<template #actions>
-				<NcButton variant="error"
+				<NcButton
+					variant="error"
 					:aria-label="t('collectives', 'Delete only collective')"
 					:wide="true"
 					@click="deleteCollective(modalCollective, false)">
 					{{ t('collectives', 'Only collective') }}
 				</NcButton>
-				<NcButton v-if="isCollectiveOwner(modalCollective)"
+				<NcButton
+					v-if="isCollectiveOwner(modalCollective)"
 					variant="error"
 					:aria-label="t('collectives', 'Delete collective and team')"
 					:wide="true"
 					@click="deleteCollective(modalCollective, true)">
 					{{ t('collectives', 'Collective and team') }}
 				</NcButton>
-				<NcButton v-else
+				<NcButton
+					v-else
 					variant="primary"
 					disabled
 					:title="t('collectives', 'Only team owners can delete a team')"
@@ -93,14 +100,14 @@
 </template>
 
 <script>
-import { mapState } from 'pinia'
-import { useCollectivesStore } from '../../stores/collectives.js'
 import { NcActionButton, NcAppNavigationItem, NcButton, NcDialog } from '@nextcloud/vue'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
-import CollectivesIcon from '../Icon/CollectivesIcon.vue'
-import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
-import RestoreIcon from 'vue-material-design-icons/Restore.vue'
+import { mapState } from 'pinia'
 import { directive as ClickOutside } from 'v-click-outside'
+import RestoreIcon from 'vue-material-design-icons/Restore.vue'
+import DeleteIcon from 'vue-material-design-icons/TrashCanOutline.vue'
+import CollectivesIcon from '../Icon/CollectivesIcon.vue'
+import { useCollectivesStore } from '../../stores/collectives.js'
 
 export default {
 	name: 'CollectivesTrash',
@@ -143,20 +150,25 @@ export default {
 		toggleTrash() {
 			this.open = !this.open
 		},
+
 		closeTrash() {
 			this.open = false
 		},
+
 		restoreCollective(collective) {
 			this.$emit('restore-collective', collective)
 		},
+
 		deleteCollective(collective, circle) {
 			this.$emit('delete-collective', collective, circle)
 			this.closeDeleteModal()
 		},
+
 		showDeleteModal(collective) {
 			this.modalCollective = collective
 			this.deleteModal = true
 		},
+
 		closeDeleteModal() {
 			this.modalCollective = null
 			this.deleteModal = false

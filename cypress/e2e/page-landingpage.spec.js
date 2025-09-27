@@ -11,7 +11,7 @@ describe('Page landing page', function() {
 		cy.deleteAndSeedCollective(collective)
 			.seedPage('Page 1', '', 'Readme.md')
 			.seedPage('Page 2', '', 'Readme.md')
-			.then(collective => {
+			.then((collective) => {
 				// Wait 1 to make sure that page order by time is right
 				cy.wait(1000) // eslint-disable-line cypress/no-unnecessary-waiting
 				cy.wrap(collective)

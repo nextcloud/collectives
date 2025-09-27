@@ -1,20 +1,20 @@
+import { generateUrl } from '@nextcloud/router'
 /**
  * SPDX-FileCopyrightText: 2020 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import { generateUrl } from '@nextcloud/router'
-import Home from './views/Home.vue'
 import CollectivePrintView from './views/CollectivePrintView.vue'
 import CollectiveView from './views/CollectiveView.vue'
+import HomeView from './views/HomeView.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
 	{
 		path: '/',
-		component: Home,
+		component: HomeView,
 	},
 	{
 		path: '/_/print/:collectiveSlug-:collectiveId(\\d+)',

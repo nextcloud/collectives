@@ -6,7 +6,8 @@
 <template>
 	<div class="member-picker">
 		<!-- Search -->
-		<NcTextField ref="memberSearch"
+		<NcTextField
+			ref="memberSearch"
 			:value.sync="searchQuery"
 			type="text"
 			:show-trailing-button="hasSearchQuery"
@@ -19,20 +20,23 @@
 		<div ref="memberPickerList" class="member-picker-list">
 			<!-- Current members (optional) -->
 			<SkeletonLoading v-if="showCurrentSkeleton" type="members-list" :count="3" />
-			<CurrentMembers v-else-if="showCurrent"
+			<CurrentMembers
+				v-else-if="showCurrent"
 				:circle-id="circleId"
 				:current-members="currentMembers"
 				:search-query="searchQuery"
 				:current-user-is-admin="currentUserIsAdmin" />
 
 			<!-- Selected members (optional) -->
-			<SelectedMembers v-if="currentUserIsAdmin && !showCurrentSkeleton && showSelection"
+			<SelectedMembers
+				v-if="currentUserIsAdmin && !showCurrentSkeleton && showSelection"
 				:selected-members="selectedMembers"
 				:no-delete-members="noDeleteMembers"
 				@delete-from-selection="deleteFromSelection" />
 
 			<!-- Searched and picked members -->
-			<MemberSearchResults v-if="currentUserIsAdmin && !showCurrentSkeleton && hasSearchResults"
+			<MemberSearchResults
+				v-if="currentUserIsAdmin && !showCurrentSkeleton && hasSearchResults"
 				:circle-id="circleId"
 				:search-results="filteredSearchResults"
 				:selection-set="selectedMembers"
@@ -41,40 +45,40 @@
 			<!-- No search results -->
 			<template v-else-if="currentUserIsAdmin && !showCurrentSkeleton">
 				<NcAppNavigationCaption class="member-picker-caption" :name="t('collectives', 'Add accounts, groups or teams')" />
-				<Hint v-if="!searchWithoutQuery && !hasSearchQuery" :hint="t('collectives', 'Search for members to add.')" />
-				<Hint v-else-if="isSearchLoading" :hint="t('collectives', 'Loading…')" />
-				<Hint v-else :hint="t('collectives', 'No search results')" />
+				<MembersHint v-if="!searchWithoutQuery && !hasSearchQuery" :hint="t('collectives', 'Search for members to add.')" />
+				<MembersHint v-else-if="isSearchLoading" :hint="t('collectives', 'Loading…')" />
+				<MembersHint v-else :hint="t('collectives', 'No search results')" />
 			</template>
 		</div>
 	</div>
 </template>
 
 <script>
-import { mapState } from 'pinia'
-import { useCirclesStore } from '../../stores/circles.js'
 import axios from '@nextcloud/axios'
-import debounce from 'debounce'
-import { emit } from '@nextcloud/event-bus'
-import { autocompleteSourcesToCircleMemberTypes, circlesMemberTypes, shareTypes } from '../../constants.js'
-import { generateOcsUrl } from '@nextcloud/router'
 import { showError } from '@nextcloud/dialogs'
+import { emit } from '@nextcloud/event-bus'
+import { generateOcsUrl } from '@nextcloud/router'
 import { NcAppNavigationCaption, NcTextField } from '@nextcloud/vue'
-import CurrentMembers from './CurrentMembers.vue'
+import debounce from 'debounce'
+import { mapState } from 'pinia'
 import MagnifyIcon from 'vue-material-design-icons/Magnify.vue'
-import Hint from './Hint.vue'
-import MemberSearchResults from './MemberSearchResults.vue'
-import SelectedMembers from './SelectedMembers.vue'
 import SkeletonLoading from '../SkeletonLoading.vue'
+import CurrentMembers from './CurrentMembers.vue'
+import MemberSearchResults from './MemberSearchResults.vue'
+import MembersHint from './MembersHint.vue'
+import SelectedMembers from './SelectedMembers.vue'
+import { autocompleteSourcesToCircleMemberTypes, circlesMemberTypes, shareTypes } from '../../constants.js'
+import { useCirclesStore } from '../../stores/circles.js'
 
 export default {
 	name: 'MemberPicker',
 
 	components: {
-		NcAppNavigationCaption,
 		CurrentMembers,
-		Hint,
 		MagnifyIcon,
 		MemberSearchResults,
+		MembersHint,
+		NcAppNavigationCaption,
 		NcTextField,
 		SelectedMembers,
 		SkeletonLoading,
@@ -85,40 +89,48 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+
 		circleId: {
 			type: String,
 			default: null,
 		},
+
 		currentUserIsAdmin: {
 			type: Boolean,
-			default: true,
+			required: true,
 		},
+
 		showCurrent: {
 			type: Boolean,
 			default: false,
 		},
+
 		showSelection: {
 			type: Boolean,
 			default: false,
 		},
+
 		currentMembers: {
 			type: Array,
 			default() {
 				return []
 			},
 		},
+
 		selectedMembers: {
 			type: Object,
 			default() {
 				return {}
 			},
 		},
+
 		noDeleteMembers: {
 			type: Array,
 			default() {
 				return []
 			},
 		},
+
 		onClickSearched: {
 			type: Function,
 			default() {
@@ -202,7 +214,7 @@ export default {
 
 		// Filter out team itself and current members
 		filterSearchResults(item) {
-			return !this.currentMembers.find(m => {
+			return !this.currentMembers.find((m) => {
 				return (item.source === 'circlesx' && item.id === this.circleId)
 					|| (this.circleMemberType(m) === circlesMemberTypes[autocompleteSourcesToCircleMemberTypes[item.source]]
 						&& m.displayName === item.label)

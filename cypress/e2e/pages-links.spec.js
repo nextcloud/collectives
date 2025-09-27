@@ -128,8 +128,8 @@ describe('Page link handling', function() {
 			const encodedSlugCollectiveUrl = `Link-Testing-${linkTestingCollectiveId}`
 			const pathname = isPublic
 				? url.pathname
-					.replace(`/${encodedCollectiveName}`, `/p/\\w+/${encodedCollectiveName}`)
-					.replace(`/${encodedSlugCollectiveUrl}`, `/p/\\w+/${encodedSlugCollectiveUrl}`)
+						.replace(`/${encodedCollectiveName}`, `/p/\\w+/${encodedCollectiveName}`)
+						.replace(`/${encodedSlugCollectiveUrl}`, `/p/\\w+/${encodedSlugCollectiveUrl}`)
 				: url.pathname
 			cy.location().should((loc) => {
 				expect(loc.pathname).to.match(new RegExp(`^${expectedPathname || pathname}$`))
@@ -149,8 +149,8 @@ describe('Page link handling', function() {
 			const encodedSlugCollectiveUrl = `Link-Testing-${linkTestingCollectiveId}`
 			const pathname = isPublic
 				? sourceUrl.pathname
-					.replace(`/${encodedCollectiveName}`, `/p/\\w+/${encodedCollectiveName}`)
-					.replace(`/${encodedSlugCollectiveUrl}`, `/p/\\w+/${encodedSlugCollectiveUrl}`)
+						.replace(`/${encodedCollectiveName}`, `/p/\\w+/${encodedCollectiveName}`)
+						.replace(`/${encodedSlugCollectiveUrl}`, `/p/\\w+/${encodedSlugCollectiveUrl}`)
 				: sourceUrl.pathname
 			cy.location().should((loc) => {
 				expect(loc.pathname).to.match(new RegExp(`^${pathname}$`))
@@ -484,7 +484,6 @@ describe('Page link preview handling', function() {
 
 [Public link to page without fileId](${pageUrls[3]} (preview))
 						`)
-
 			})
 	})
 

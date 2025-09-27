@@ -4,13 +4,15 @@
 -->
 
 <template>
-	<span :aria-hidden="!title"
+	<span
+		:aria-hidden="!title"
 		:aria-label="title"
 		class="material-design-icon collectives-page-icon"
 		role="img"
 		v-bind="$attrs"
 		@click="$emit('click', $event)">
-		<svg :fill="fillColor"
+		<svg
+			:fill="fillColor"
 			class="material-design-icon__svg"
 			:width="size"
 			:height="size"
@@ -28,10 +30,12 @@ export default {
 			type: String,
 			default: '',
 		},
+
 		fillColor: {
 			type: String,
 			default: 'currentColor',
 		},
+
 		size: {
 			type: Number,
 			default: 24,
