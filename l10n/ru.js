@@ -17,6 +17,7 @@ OC.L10N.register(
     "Share link" : "Поделиться ссылкой",
     "Export or print" : "Печать",
     "Settings" : "Настройки",
+    "Offline" : "Не в сети",
     "You're not part of a collective with that name." : "Вы не являетесь частью группы с таким названием.",
     "Loading pages:" : "Загрузка страниц:",
     "Loading images:" : "Загрузка изображений:",

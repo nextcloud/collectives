@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Share link" : "Share link",
     "Settings" : "Sozlamalar",
+    "Offline" : "Offline",
     "No search results" : "Qidiruv natijalari yo‘q",
     "Remove" : "O'chirish",
     "Loading…" : "Loading…",

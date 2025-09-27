@@ -98,6 +98,7 @@ OC.L10N.register(
     "Could not add members to the collective" : "No s'han pogut afegir membres al col·lectiu",
     "Select emoji" : "Seleccioneu emoji",
     "Add members" : "Afegeix membres",
+    "Go back" : "Torna",
     "Back" : "Torna",
     "Delete" : "Suprimir",
     "Rename" : "Canviar el nom",

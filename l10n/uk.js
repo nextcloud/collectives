@@ -31,6 +31,7 @@ OC.L10N.register(
     "Export or print" : "Експорт або друк",
     "Settings" : "Налаштування",
     "Leave collective" : "Покинути колектив",
+    "Offline" : "Поза мережею",
     "Collective not found: {collective}" : "Колектив не знайдено: {collective}",
     "Collective with ID {id} not found" : "Колектив з ідентифікатором {id} не знайдено",
     "You're not part of a collective with that name." : "Ви не є частиною колективу з такою назвою.",

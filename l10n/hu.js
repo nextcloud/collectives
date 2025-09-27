@@ -20,6 +20,7 @@ OC.L10N.register(
     "Export or print" : "Exportálás vagy nyomtatás",
     "Settings" : "Beállítások",
     "Leave collective" : "Kollektíva elhagyása",
+    "Offline" : "Nincs kapcsolat",
     "Collective not found: {collective}" : "A kollektíva nem található: {collective}",
     "You're not part of a collective with that name." : "Nem része ilyen nevű kollektívának.",
     "Loading pages:" : "Oldalak betöltése:",

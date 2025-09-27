@@ -15,6 +15,7 @@ OC.L10N.register(
     "Export or print" : "Esporta o stampa",
     "Settings" : "Impostazioni",
     "Leave collective" : "Abbandona il collettivo",
+    "Offline" : "Offline",
     "Collective not found: {collective}" : "Collettivo non trovato: {collective}",
     "You're not part of a collective with that name." : "Non fai parte di un collettivo con quel nome.",
     "Loading pages:" : "Caricamento delle pagine:",

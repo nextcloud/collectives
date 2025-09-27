@@ -29,6 +29,7 @@ OC.L10N.register(
     "Export or print" : "エクスポートまたは印刷",
     "Settings" : "設定",
     "Leave collective" : "コレクティブを去る",
+    "Offline" : "オフライン",
     "Collective not found: {collective}" : "コレクティブ: {collective}が見つかりませんでした",
     "Collective with ID {id} not found" : "ID {id} のコレクティブが見つかりません",
     "Loading pages:" : "ページをロード中:",

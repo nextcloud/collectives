@@ -21,6 +21,7 @@ OC.L10N.register(
     "Export or print" : "Esportatu edo inprimatu",
     "Settings" : "Ezarpenak",
     "Leave collective" : "Utzi kolektiboa",
+    "Offline" : "Lineaz kanpo",
     "Collective not found: {collective}" : "Ez da aurkitu kolektiboa: {collective}",
     "You're not part of a collective with that name." : "Ez zara izen hori duen kolektibo baten parte.",
     "Loading pages:" : "Orriak kargatzen:",

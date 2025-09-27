@@ -29,6 +29,7 @@ OC.L10N.register(
     "Export or print" : "Eksporter eller skriv ut",
     "Settings" : "Innstillinger",
     "Leave collective" : "Forlat kollektiv",
+    "Offline" : "Frakoblet",
     "Collective not found: {collective}" : "Kollektiv ikke funnet: {collective}",
     "You're not part of a collective with that name." : "Du er ikke med i noe kollektiv med dette navnet.",
     "Loading pages:" : "Laster sider:",

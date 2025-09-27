@@ -60,6 +60,7 @@ OC.L10N.register(
     "Create without members" : "Crear ensin miembros",
     "Could not add members to the collective" : "Nun se pudieron amestar miembros al coleutivu",
     "Add members" : "Amestar miembros",
+    "Go back" : "Dir p'atrás",
     "Back" : "Atrás",
     "Delete" : "Desaniciar",
     "Rename" : "Renomar",

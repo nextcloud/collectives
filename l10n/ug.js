@@ -29,6 +29,7 @@ OC.L10N.register(
     "Export or print" : "چىقىرىش ياكى بېسىش",
     "Settings" : "تەڭشەكلەر",
     "Leave collective" : "كوللىكتىپتىن ئايرىلىش",
+    "Offline" : "تورسىز",
     "Collective not found: {collective}" : "كوللىكتىپ تېپىلمىدى: {collective}",
     "You're not part of a collective with that name." : "سىز بۇ ئىسىم بىلەن كوللىكتىپنىڭ ئەزاسى ئەمەس.",
     "Loading pages:" : "بەتلەرنى يۈكلەش:",

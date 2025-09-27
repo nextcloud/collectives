@@ -30,6 +30,7 @@
     "Export or print" : "導出或打印",
     "Settings" : "設定",
     "Leave collective" : "離開知識庫",
+    "Offline" : "離線",
     "Collective not found: {collective}" : "未找到知識庫：{collective}",
     "Collective with ID {id} not found" : "找不到 ID 為 {id} 的收藏",
     "You're not part of a collective with that name." : "您不是具有該名稱的知識庫的成員。",

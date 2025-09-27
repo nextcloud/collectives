@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Share link" : "Podeli vezu",
     "Settings" : "Поставке",
+    "Offline" : "Van mreže",
     "Loading…" : "Učitavam…",
     "Edit" : "Izmeni",
     "Choose" : "Odaberi",

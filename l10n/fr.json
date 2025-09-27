@@ -29,6 +29,7 @@
     "Export or print" : "Exporter ou imprimer",
     "Settings" : "Paramètres",
     "Leave collective" : "Quitter le collectif",
+    "Offline" : "Hors-ligne",
     "Collective not found: {collective}" : "Collectif introuvable : {collective}",
     "Collective with ID {id} not found" : "Collectif avec l'ID {id} non trouvé",
     "You're not part of a collective with that name." : "Vous ne faites pas partie d'un collectif portant ce nom.",

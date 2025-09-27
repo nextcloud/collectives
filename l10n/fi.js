@@ -4,6 +4,7 @@ OC.L10N.register(
     "You are not allowed to share %s" : "Oikeutesi eivät riitä kohteen %s jakamiseen.",
     "Share link" : "Jaa linkki",
     "Settings" : "Asetukset",
+    "Offline" : "Poissa",
     "Members" : "Jäsenet",
     "No search results" : "Ei hakutuloksia",
     "Promote to moderator" : "Korota moderaattoriksi",

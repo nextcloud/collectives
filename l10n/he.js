@@ -4,6 +4,7 @@ OC.L10N.register(
     "You are not allowed to share %s" : "אינך רשאי/ת לשתף %s",
     "Share link" : "קישור שיתוף",
     "Settings" : "הגדרות",
+    "Offline" : "בלתי מקוון",
     "Members" : "חברים",
     "Remove" : "הסרה",
     "An error occurred while performing the search" : "אירעה שגיאה בעת ביצוע החיפוש",

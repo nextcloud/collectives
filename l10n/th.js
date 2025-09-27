@@ -4,6 +4,7 @@ OC.L10N.register(
     "You are not allowed to share %s" : "คุณไม่ได้รับอนุญาตให้แชร์ %s",
     "Share link" : "แชร์ลิงก์",
     "Settings" : "การตั้งค่า",
+    "Offline" : "ออฟไลน์",
     "Remove" : "ลบออก",
     "Loading…" : "กำลังโหลด…",
     "View" : "มุมมอง",
