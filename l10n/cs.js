@@ -238,6 +238,7 @@ OC.L10N.register(
     "Results in title or tags" : "Výsledky z nadpisu nebo štítků",
     "Results in content" : "Výsledky v obsahu",
     "Share link ({index})" : "Odkaz na sdílení ({index})",
+    "You are offline" : "Jste bez připojení",
     "View only" : "Pouze prohlížet",
     "Can edit" : "Může upravovat",
     "Cannot copy, please copy the link manually" : "Nedaří se zkopírovat, zkopírujte odkaz ručně",
