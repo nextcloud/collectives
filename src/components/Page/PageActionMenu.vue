@@ -7,19 +7,19 @@
 	<div>
 		<NcActions :force-menu="true" @click.native.stop>
 			<!-- Collective actions: only displayed for landing page in page list -->
-			<CollectiveActions
-				v-if="displayCollectiveActions"
-				:collective="currentCollective" />
-			<NcActionButton
-				v-if="displayCollectiveActions && collectiveExtraAction"
-				:close-after-click="true"
-				@click="collectiveExtraAction.click()">
-				{{ collectiveExtraAction.title }}
-				<template #icon>
-					<OpenInNewIcon :size="20" />
-				</template>
-			</NcActionButton>
-			<NcActionSeparator v-if="displayCollectiveActions" />
+			<template v-if="displayCollectiveActions">
+				<CollectiveActions :collective="currentCollective" />
+				<NcActionButton
+					v-if="collectiveExtraAction"
+					:close-after-click="true"
+					@click="collectiveExtraAction.click()">
+					{{ collectiveExtraAction.title }}
+					<template #icon>
+						<OpenInNewIcon :size="20" />
+					</template>
+				</NcActionButton>
+				<NcActionSeparator />
+			</template>
 
 			<!-- Last edited info -->
 			<PageActionLastUser
@@ -30,43 +30,44 @@
 			<NcActionSeparator v-if="displayLastEditedInfo" />
 
 			<!-- Sidebar toggle: only displayed on mobile and in page title menu -->
-			<NcActionButton
-				v-if="displaySidebarAction"
-				:aria-label="t('collectives', 'Open page sidebar')"
-				aria-controls="app-sidebar-vue"
-				:close-after-click="true"
-				@click="toggle('sidebar')">
-				<template #icon>
-					<DockRightIcon :size="20" />
-				</template>
-				{{ t('collectives', 'Open page sidebar') }}
-			</NcActionButton>
-			<NcActionSeparator v-if="displaySidebarAction" />
+			<template v-if="displaySidebarAction">
+				<NcActionButton
+					:aria-label="t('collectives', 'Open page sidebar')"
+					aria-controls="app-sidebar-vue"
+					:close-after-click="true"
+					@click="toggle('sidebar')">
+					<template #icon>
+						<DockRightIcon :size="20" />
+					</template>
+					{{ t('collectives', 'Open page sidebar') }}
+				</NcActionButton>
+				<NcActionSeparator />
+			</template>
 
 			<!-- Page view options: only displayed in page title menu -->
-			<NcActionCheckbox
-				v-if="!inPageList && !isMobile"
-				:checked="currentPage.isFullWidth"
-				:disabled="!currentCollectiveCanEdit"
-				@check="onCheckFullWidthView"
-				@uncheck="onUncheckFullWidthView">
-				{{ t('collectives', 'Full width') }}
-			</NcActionCheckbox>
-			<NcActionButton
-				v-if="!inPageList"
-				:close-after-click="true"
-				@click.native="toggleOutline(currentPage.id)">
-				<template #icon>
-					<FormatListBulletedIcon :size="20" />
-				</template>
-				{{ toggleOutlineString }}
-			</NcActionButton>
+			<template v-if="!inPageList">
+				<NcActionCheckbox
+					v-if="!isMobile"
+					:checked="currentPage.isFullWidth"
+					:disabled="!currentCollectiveCanEdit"
+					@check="onCheckFullWidthView"
+					@uncheck="onUncheckFullWidthView">
+					{{ t('collectives', 'Full width') }}
+				</NcActionCheckbox>
+				<NcActionButton
+					:close-after-click="true"
+					@click.native="toggleOutline(currentPage.id)">
+					<template #icon>
+						<FormatListBulletedIcon :size="20" />
+					</template>
+					{{ toggleOutlineString }}
+				</NcActionButton>
+				<NcActionSeparator v-if="!inPageList" />
+			</template>
 
-			<NcActionSeparator v-if="!inPageList" />
-
-			<!-- Favor page action: only displayed in page list and not for landing page -->
+			<!-- Favor page action: not displayed for landing page -->
 			<NcActionButton
-				v-if="inPageList"
+				v-if="!isLandingPage"
 				:close-after-click="true"
 				@click="toggleFavoritePage({ id: currentCollective.id, pageId })">
 				<template #icon>
@@ -76,9 +77,9 @@
 				{{ toggleFavoriteString }}
 			</NcActionButton>
 
-			<!-- Share page action: only displayed in page list and not for landing page (already in collectives actions there) -->
+			<!-- Share page action: not displayed for landing page (already in collectives actions there) -->
 			<NcActionButton
-				v-if="inPageList && currentCollectiveCanShare && !isLandingPage"
+				v-if="currentCollectiveCanShare && !isLandingPage"
 				:close-after-click="true"
 				@click.native="show('details')"
 				@click="openShareTab">
@@ -88,9 +89,9 @@
 				{{ t('collectives', 'Share link') }}
 			</NcActionButton>
 
-			<!-- Edit page emoji: only displayed in page list -->
+			<!-- Edit page emoji: not displayed for landing page -->
 			<NcActionButton
-				v-if="inPageList && currentCollectiveCanEdit && !isLandingPage"
+				v-if="currentCollectiveCanEdit && !isLandingPage"
 				:close-after-click="true"
 				@click.native="show('details')"
 				@click="gotoPageEmojiPicker">
@@ -111,9 +112,9 @@
 				{{ t('collectives', 'Manage tags') }}
 			</NcActionButton>
 
-			<!-- Move/copy page via modal: only displayed in page list -->
+			<!-- Move/copy page via modal: always displayed if has edit permissions -->
 			<NcActionButton
-				v-if="inPageList && currentCollectiveCanEdit && !isLandingPage"
+				v-if="currentCollectiveCanEdit && !isLandingPage"
 				:close-after-click="true"
 				@click="onOpenMoveOrCopyModal">
 				<template #icon>
@@ -122,9 +123,8 @@
 				{{ t('collectives', 'Move or copy') }}
 			</NcActionButton>
 
-			<!-- Download action: only displayed in page title menu -->
+			<!-- Download action: always displayed -->
 			<NcActionLink
-				v-if="!inPageList"
 				:href="currentPageDavUrl"
 				:download="currentPage.fileName"
 				:close-after-click="true">
@@ -134,9 +134,9 @@
 				{{ t('collectives', 'Download') }}
 			</NcActionLink>
 
-			<!-- Open in files app action: only displayed in page title menu -->
+			<!-- Open in files app action: always displayed -->
 			<NcActionLink
-				v-if="!inPageList && showFilesLink"
+				v-if="showFilesLink"
 				:href="filesUrl"
 				:close-after-click="true">
 				<template #icon>
