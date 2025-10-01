@@ -20,6 +20,7 @@ export function useEditor(davContent) {
 	const editor = ref(null)
 	const editorEl = ref(null)
 	const editorContent = ref(null)
+	let editorPromise = null
 	const updateCounter = ref(0)
 	const rootStore = useRootStore()
 	const searchStore = useSearchStore()
@@ -63,7 +64,7 @@ export function useEditor(davContent) {
 	})
 
 	onBeforeUnmount(() => {
-		editor.value?.destroy()
+		editorPromise?.then((ed) => ed.destroy())
 	})
 
 	watch(showCurrentPageOutline, (value) => {
@@ -75,28 +76,32 @@ export function useEditor(davContent) {
 	 */
 	async function setupEditor() {
 		const page = pagesStore.currentPage
-		editor.value = collectivesStore.currentCollectiveCanEdit
-			? await window.OCA.Text.createEditor({
-					el: editorEl.value,
-					fileId: page.id,
-					filePath: `/${pagesStore.pageFilePath(page)}`,
-					readOnly: false,
-					shareToken: rootStore.shareTokenParam || null,
-					autofocus: false,
-					onCreate: ({ markdown }) => {
-						updateEditorContentDebounced(markdown)
-					},
-					onLoaded: () => {
-						editor.value.setSearchQuery(searchStore.searchQuery, searchStore.matchAll)
-						editor.value.setShowOutline(showCurrentPageOutline.value)
-						rootStore.done('editor')
-					},
-					onUpdate: ({ markdown }) => {
-						updateEditorContentDebounced(markdown)
-					},
-					onOutlineToggle: pagesStore.setOutlineForCurrentPage,
-				})
-			: null
+		if (!collectivesStore.currentCollectiveCanEdit) {
+			editor.value = null
+			return
+		}
+
+		editorPromise = window.OCA.Text.createEditor({
+			el: editorEl.value,
+			fileId: page.id,
+			filePath: `/${pagesStore.pageFilePath(page)}`,
+			readOnly: false,
+			shareToken: rootStore.shareTokenParam || null,
+			autofocus: false,
+			onCreate: ({ markdown }) => {
+				updateEditorContentDebounced(markdown)
+			},
+			onLoaded: () => {
+				editor.value.setSearchQuery(searchStore.searchQuery, searchStore.matchAll)
+				editor.value.setShowOutline(showCurrentPageOutline.value)
+				rootStore.done('editor')
+			},
+			onUpdate: ({ markdown }) => {
+				updateEditorContentDebounced(markdown)
+			},
+			onOutlineToggle: pagesStore.setOutlineForCurrentPage,
+		})
+		editor.value = await editorPromise
 	}
 
 	return {
