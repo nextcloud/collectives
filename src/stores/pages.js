@@ -216,7 +216,7 @@ export const usePagesStore = defineStore('pages', {
 		favoritePages(state) {
 			const collectivesStore = useCollectivesStore()
 			const favoritePages = collectivesStore.currentCollective.userFavoritePages
-			return state.pages.filter((p) => favoritePages.includes(p.id))
+			return state.allPagesSorted(state.rootPage.id).filter((p) => favoritePages.includes(p.id))
 		},
 
 		hasFavoritePages(state) {
