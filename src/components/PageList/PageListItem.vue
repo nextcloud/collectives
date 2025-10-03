@@ -299,6 +299,8 @@ export default {
 				&& !this.isDragged
 				// Ignore if in filtered view
 				&& !this.filteredView
+				// Ignore if inside favorite list
+				&& !this.inFavoriteList
 				// Ignore if dragged element is a parent of self
 				&& !this.pageParents(this.pageId).includes(this.draggedPageId)
 		},
@@ -358,10 +360,13 @@ export default {
 		},
 
 		onDragstart(event) {
-			// Set as dragged page if not root page (allows to move the page)
-			if (!this.isRootPage) {
-				this.setDraggedPageId(this.pageId)
+			// Don't set root page or favorite as dragged page
+			if (this.isRootPage || this.inFavoriteList) {
+				return
 			}
+
+			// Set dragged page (allows to move the page)
+			this.setDraggedPageId(this.pageId)
 
 			// Set drag data
 			const path = generateUrl(`/apps/collectives${this.to}`)
