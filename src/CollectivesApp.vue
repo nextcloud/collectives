@@ -86,8 +86,11 @@ export default {
 		},
 	},
 
-	mounted() {
+	beforeMount() {
 		this.rootStore.load('pagelist')
+	},
+
+	mounted() {
 		this.getCollectives()
 			.catch(displayError('Could not fetch collectives'))
 		if (!this.isPublic) {
