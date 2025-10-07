@@ -1,5 +1,39 @@
 # Changelog
 
+## 3.2.0 - 2025.10.07
+
+### ✨New
+* 🔌 Add offline state indicator.
+* 🔌 Disable some features in UI when offline.
+
+### 🐛Fixes
+* 💬 Clarify undo popup after leaving collective. (#1856)
+* 💄 Switch to more outline icons to follow Nextcloud 32 style.
+* 💄 Use filled star icon for favorites in page list.
+* 🐛 Disable drag and drop for page favorites.
+* 🐛 Sort favorite pages according to page list.
+* 🐛 Don't escape collective name in title. (#1690)
+* 🐛 Don't set current page as loading when moving another page.
+* 🏷️ Make tag filtering and sorting case-insensitive.
+* 🐛 Don't show a toast when no tags got deleted.
+* 🐛 Fix arrow buttons visual feedback in move/copy modal.
+* 💄 Fix color of remove button in members modal.
+* 💄 Make "Manage members" button tertiary.
+* 💄 Don't override text color for active page version element.
+* 🔌 Don't send API requests when offline.
+* 🐛 Always delete editor, fix race condition with dangling editor.
+* 🐛 Avoid loading state flipflop when first opening a page.
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⚙️ Migrate from webpack to vite.
+* ⚙️ Migrate to eslint 9.
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 3.1.2 - 2025.09.01
 
 ### 🚧Updates & Tooling
