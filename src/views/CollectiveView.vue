@@ -78,7 +78,7 @@ export default {
 	},
 
 	computed: {
-		...mapState(useRootStore, ['loading', 'showing']),
+		...mapState(useRootStore, ['loading', 'showing', 'isPublic']),
 		...mapState(useCollectivesStore, [
 			'currentCollective',
 			'currentCollectiveCanEdit',
