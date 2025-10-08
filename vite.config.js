@@ -16,7 +16,6 @@ export default createAppConfig(
 	{
 		config: {
 			build: {
-				cssCodeSplit: false,
 				rollupOptions: {
 					output: {
 						manualChunks: {
@@ -25,6 +24,12 @@ export default createAppConfig(
 					},
 				},
 			},
+			css: {
+				modules: {
+					localsConvention: 'camelCase',
+				},
+			},
 		},
+		createEmptyCSSEntryPoints: true,
 	},
 )

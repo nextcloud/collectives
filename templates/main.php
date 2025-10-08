@@ -8,6 +8,7 @@
 use OCP\Util;
 
 Util::addScript('collectives', 'collectives-main', 'text');
+Util::addStyle('collectives', 'collectives-main');
 ?>
 
 <div id="q-app"></div>
