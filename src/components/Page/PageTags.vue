@@ -23,7 +23,7 @@
 				:tag="tag"
 				@select="onSelectTag(tag.id)" />
 
-			<NcPopover v-if="pageTagsInvisible.length > 0" popup-role="listbox">
+			<NcPopover v-if="pageTagsInvisible.length > 0" popup-role="listbox" no-focus-trap>
 				<template #trigger="{ attrs }">
 					<PageTag
 						v-bind="attrs"
