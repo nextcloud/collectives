@@ -22,10 +22,10 @@ class CollectivePageTrashItem extends TrashItem {
 		string $trashPath,
 		FileInfo $fileInfo,
 		IUser $user,
+		?IUser $deletedBy,
 		private string $mountPoint,
 	) {
-		// *TODO* Add support for deletedby to collectives trash backend table
-		parent::__construct($backend, $originalLocation, $deletedTime, $trashPath, $fileInfo, $user, null);
+		parent::__construct($backend, $originalLocation, $deletedTime, $trashPath, $fileInfo, $user, $deletedBy);
 	}
 
 	public function isRootItem(): bool {
