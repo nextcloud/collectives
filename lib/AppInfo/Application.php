@@ -50,6 +50,7 @@ use OCP\Collaboration\Reference\RenderReferenceEvent;
 use OCP\Dashboard\IAPIWidgetV2;
 use OCP\Files\Config\IMountProviderCollection;
 use OCP\Files\IMimeTypeLoader;
+use OCP\IUserManager;
 use OCP\IUserSession;
 use OCP\SetupCheck\ISetupCheck;
 use OCP\Share\Events\ShareDeletedEvent;
@@ -93,7 +94,9 @@ class Application extends App implements IBootstrap {
 				$c->get(MountProvider::class),
 				$c->get(CollectiveMapper::class),
 				$c->get(PageMapper::class),
-				$c->get(LoggerInterface::class)
+				$c->get(LoggerInterface::class),
+				$c->get(IUserManager::class),
+				$c->get(IUserSession::class),
 			);
 			$hasVersionApp = interface_exists(IVersionBackend::class);
 			if ($hasVersionApp) {
