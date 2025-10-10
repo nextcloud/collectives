@@ -134,17 +134,6 @@
 				{{ t('collectives', 'Download') }}
 			</NcActionLink>
 
-			<!-- Open in files app action: always displayed -->
-			<NcActionLink
-				v-if="showFilesLink"
-				:href="filesUrl"
-				:close-after-click="true">
-				<template #icon>
-					<FolderIcon :size="20" />
-				</template>
-				{{ t('collectives', 'Show in Files') }}
-			</NcActionLink>
-
 			<!-- Delete page -->
 			<NcActionButton
 				v-if="displayDeleteAction"
@@ -169,13 +158,11 @@
 </template>
 
 <script>
-import { generateUrl } from '@nextcloud/router'
 import { NcActionButton, NcActionCheckbox, NcActionLink, NcActions, NcActionSeparator } from '@nextcloud/vue'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { mapActions, mapState } from 'pinia'
 import DockRightIcon from 'vue-material-design-icons/DockRight.vue'
 import EmoticonIcon from 'vue-material-design-icons/EmoticonOutline.vue'
-import FolderIcon from 'vue-material-design-icons/Folder.vue'
 import FormatListBulletedIcon from 'vue-material-design-icons/FormatListBulleted.vue'
 import OpenInNewIcon from 'vue-material-design-icons/OpenInNew.vue'
 import ShareVariantIcon from 'vue-material-design-icons/ShareVariantOutline.vue'
@@ -208,7 +195,6 @@ export default {
 		DockRightIcon,
 		DownloadIcon,
 		EmoticonIcon,
-		FolderIcon,
 		FormatListBulletedIcon,
 		OpenInNewIcon,
 		PageActionLastUser,
@@ -255,11 +241,6 @@ export default {
 		},
 
 		isLandingPage: {
-			type: Boolean,
-			default: false,
-		},
-
-		showFilesLink: {
 			type: Boolean,
 			default: false,
 		},
@@ -321,10 +302,6 @@ export default {
 			return this.hasOutline(this.currentPage.id)
 				? t('collectives', 'Hide outline')
 				: t('collectives', 'Show outline')
-		},
-
-		filesUrl() {
-			return generateUrl(`/f/${this.currentPage.id}`)
 		},
 
 		toggleFavoriteString() {
