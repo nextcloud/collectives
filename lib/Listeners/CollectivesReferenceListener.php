@@ -25,5 +25,6 @@ class CollectivesReferenceListener implements IEventListener {
 		}
 
 		Util::addScript(Application::APP_NAME, Application::APP_NAME . '-reference');
+		Util::addStyle(Application::APP_NAME, Application::APP_NAME . '-reference');
 	}
 }
