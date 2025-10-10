@@ -914,7 +914,7 @@ namespace OCA\Files_Trashbin\Trash {
 		public function getName() {}
 		public function getInternalPath() {}
 		public function getPath() {}
-		public function getMimetype() {}
+		public function getMimetype(): string {}
 		public function getMimePart() {}
 		public function getStorage() {}
 		public function getId() {}
