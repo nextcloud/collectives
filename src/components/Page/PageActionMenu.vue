@@ -158,6 +158,7 @@
 </template>
 
 <script>
+import { emit } from '@nextcloud/event-bus'
 import { NcActionButton, NcActionCheckbox, NcActionLink, NcActions, NcActionSeparator } from '@nextcloud/vue'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { mapActions, mapState } from 'pinia'
@@ -377,7 +378,7 @@ export default {
 				this.$router.push(this.pageUrl)
 			}
 			this.$nextTick(() => {
-				this.show('pageEmojiPicker')
+				emit('collectives:page:open-emoji-picker')
 			})
 		},
 
