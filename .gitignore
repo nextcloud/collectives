@@ -8,7 +8,8 @@ node_modules/
 
 # Compiled frontend output of vite
 js/*
-css/collectives-style.css
+css/*
+!css/collectives.css
 
 # PHPunit cache
 .phpunit.result.cache
