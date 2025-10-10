@@ -74,7 +74,6 @@
 		<div class="page-list-item-actions">
 			<PageActionMenu
 				v-if="canEdit || isLandingPage"
-				:show-files-link="!isPublic"
 				:page-id="pageId"
 				:page-url="to"
 				:parent-id="parentId"
@@ -224,7 +223,7 @@ export default {
 	},
 
 	computed: {
-		...mapState(useRootStore, ['isPublic', 'loading']),
+		...mapState(useRootStore, ['loading']),
 		...mapState(useCollectivesStore, [
 			'currentCollective',
 			'isFavoritePage',

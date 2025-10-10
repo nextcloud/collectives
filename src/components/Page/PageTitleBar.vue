@@ -92,7 +92,6 @@
 
 			<!-- Actions menu -->
 			<PageActionMenu
-				:show-files-link="!isPublic"
 				:page-id="currentPage.id"
 				:parent-id="currentPage.parentId"
 				:timestamp="currentPage.timestamp"
@@ -155,11 +154,7 @@ export default {
 	},
 
 	computed: {
-		...mapState(useRootStore, [
-			'isPublic',
-			'loading',
-			'showing',
-		]),
+		...mapState(useRootStore, ['loading', 'showing']),
 
 		...mapState(useCollectivesStore, [
 			'currentCollective',
