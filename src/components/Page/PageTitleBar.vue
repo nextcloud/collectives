@@ -92,7 +92,6 @@
 
 			<!-- Actions menu -->
 			<PageActionMenu
-				:show-files-link="!isPublic"
 				:page-id="currentPage.id"
 				:parent-id="currentPage.parentId"
 				:timestamp="currentPage.timestamp"
@@ -105,6 +104,7 @@
 
 <script>
 import { showError } from '@nextcloud/dialogs'
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { NcButton, NcEmojiPicker, NcLoadingIcon } from '@nextcloud/vue'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { mapActions, mapState } from 'pinia'
@@ -155,11 +155,7 @@ export default {
 	},
 
 	computed: {
-		...mapState(useRootStore, [
-			'isPublic',
-			'loading',
-			'showing',
-		]),
+		...mapState(useRootStore, ['loading', 'showing']),
 
 		...mapState(useCollectivesStore, [
 			'currentCollective',
@@ -199,10 +195,6 @@ export default {
 			return this.loading(`pageEmoji-${this.currentPage.id}`)
 		},
 
-		showingPageEmojiPicker() {
-			return this.showing('pageEmojiPicker')
-		},
-
 		pageTitleIconSize() {
 			return this.isMobile ? 25 : 30
 		},
@@ -213,12 +205,6 @@ export default {
 			document.title = this.documentTitle
 		},
 
-		showingPageEmojiPicker: function(val) {
-			if (val === true) {
-				this.openPageEmojiPicker()
-			}
-		},
-
 		'currentPage.id': function() {
 			this.initTitleEntry()
 		},
@@ -227,13 +213,16 @@ export default {
 	mounted() {
 		document.title = this.documentTitle
 		this.initTitleEntry()
+
+		subscribe('collectives:page:open-emoji-picker', this.openPageEmojiPicker)
+	},
+
+	beforeDestroy() {
+		unsubscribe('collectives:page:open-emoji-picker', this.openPageEmojiPicker)
 	},
 
 	methods: {
-		...mapActions(useRootStore, [
-			'done',
-			'hide',
-		]),
+		...mapActions(useRootStore, ['done']),
 
 		...mapActions(usePagesStore, [
 			'getPages',
@@ -265,7 +254,6 @@ export default {
 
 		openPageEmojiPicker() {
 			this.$refs['page-emoji-picker'].open = true
-			this.hide('pageEmojiPicker')
 		},
 
 		/**
