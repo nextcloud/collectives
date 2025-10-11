@@ -52,7 +52,7 @@ class StartController extends Controller {
 	}
 
 	private function checkDependencies(): array {
-		$apps = ['circles', 'files_versions', 'text', 'viewer'];
+		$apps = ['teams', 'files_versions', 'text', 'viewer'];
 		$appsMissing = [];
 		foreach ($apps as $app) {
 			if (!$this->appManager->isEnabledForUser($app)) {
