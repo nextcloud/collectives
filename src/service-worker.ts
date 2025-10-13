@@ -3,11 +3,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { clientsClaim, type RouteMatchCallbackOptions } from 'workbox-core'
+import {
+	type RouteMatchCallbackOptions,
+
+	clientsClaim,
+} from 'workbox-core'
+import { ExpirationPlugin } from 'workbox-expiration'
 import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching'
 import { registerRoute } from 'workbox-routing'
 import { NetworkFirst } from 'workbox-strategies'
-import { ExpirationPlugin } from 'workbox-expiration'
 
 declare let self: ServiceWorkerGlobalScope
 
@@ -17,7 +21,7 @@ const manifest = self.__WB_MANIFEST
 const registrationUrl = new URL(location.href)
 const prefix = registrationUrl.searchParams.get('prefix')
 
-const itemsToPrecache = manifest.map(item => {
+const itemsToPrecache = manifest.map((item) => {
 	if (typeof item === 'string') {
 		return prefix + item
 	} else {
@@ -31,8 +35,14 @@ precacheAndRoute(itemsToPrecache)
 // clean old assets
 cleanupOutdatedCaches()
 
-// Cache for navigation requests within the vue router scope
-const matchNavigateCb = ({ url, request }: RouteMatchCallbackOptions) => {
+/**
+ * Cache for navigation requests within the vue router scope
+ *
+ * @param matchOptions options
+ * @param matchOptions.url URL to match
+ * @param matchOptions.request request to match
+ */
+function matchNavigateCb({ url, request }: RouteMatchCallbackOptions) {
 	return request.mode === 'navigate' && url.pathname.match(/(?:\/index.php)?\/apps\/collectives/)
 }
 registerRoute(matchNavigateCb, new NetworkFirst({
