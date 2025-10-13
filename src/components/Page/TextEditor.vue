@@ -79,7 +79,7 @@ export default {
 	},
 
 	computed: {
-		...mapState(useRootStore, ['isPublic', 'loading']),
+		...mapState(useRootStore, ['editorApiFlags', 'isPublic', 'loading']),
 		...mapState(useCollectivesStore, [
 			'currentCollective',
 			'currentCollectiveCanEdit',
