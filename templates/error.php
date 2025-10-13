@@ -26,7 +26,7 @@
 $i = 0;
 $len = count($_['appsMissing']);
 foreach ($_['appsMissing'] as $app) {
-	print_unescaped('<li><a href="https://apps.nextcloud.com/apps/' . $app . '" style="text-decoration: underline;">' . $app . '</a></li>');
+	print_unescaped('<li>' . $app . '</li>');
 	if ($i !== $len - 1) {
 		print_unescaped(', ');
 	}
