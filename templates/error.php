@@ -23,7 +23,6 @@
 	<br />
 	<ul style="font-weight: bold;">
 		<?php
-$i = 0;
 $len = count($_['appsMissing']);
 foreach ($_['appsMissing'] as $app) {
 	print_unescaped('<li>' . $app . '</li>');
