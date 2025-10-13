@@ -27,10 +27,6 @@ $i = 0;
 $len = count($_['appsMissing']);
 foreach ($_['appsMissing'] as $app) {
 	print_unescaped('<li>' . $app . '</li>');
-	if ($i !== $len - 1) {
-		print_unescaped(', ');
-	}
-	$i++;
 }
 ?>
 	</ul>
