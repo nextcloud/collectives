@@ -45,18 +45,17 @@ class StartController extends Controller {
 		]);
 	}
 
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
-	public function indexPath(string $path): TemplateResponse {
-		return $this->index();
-	}
-
 	private function checkDependencies(): array {
-		$apps = ['teams', 'files_versions', 'text', 'viewer'];
+		$apps = ['circles', 'files_versions', 'text', 'viewer'];
 		$appsMissing = [];
 		foreach ($apps as $app) {
 			if (!$this->appManager->isEnabledForUser($app)) {
-				$appsMissing[] = $app;
+				if ($app === 'circles') {
+					$appInfo = $this->appManager->getAppInfo($app);
+					$appsMissing[] = $appInfo['name'] ?? $app;
+				} else {
+					$appsMissing[] = $app;
+				}
 			}
 		}
 		return $appsMissing;
