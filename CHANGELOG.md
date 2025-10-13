@@ -1,5 +1,22 @@
 # Changelog
 
+## 3.2.1 - 2025.10.13
+
+### 🐛Fixes
+* 🐛 Separate files for CSS entry points.
+* 💄 Show similar options page actions menu of page list and page title.
+* 💄 Don't use a focus trap for the additional page tags popover.
+* 🐛 Fix broken session request in public shares.
+* 🐛 Save `deletedBy` for trashed pages.
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 3.2.0 - 2025.10.07
 
 ### ✨New
