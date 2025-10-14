@@ -62,12 +62,18 @@ export const usePagesStore = defineStore('pages', {
 			return state.allTrashPages[state.collectiveId] || []
 		},
 
-		isLandingPage: () => {
+		isLandingPage: (state) => {
 			const rootStore = useRootStore()
 			const collectivesStore = useCollectivesStore()
-			return collectivesStore.currentCollectiveIsPageShare
-				? false
-				: (!rootStore.pageId && !rootStore.pageParam) || rootStore.pageParam === INDEX_PAGE
+
+			if (collectivesStore.currentCollectiveIsPageShare) {
+				// No landing page in page shares
+				return false
+			}
+
+			return (!rootStore.pageId && !rootStore.pageParam)
+				|| rootStore.pageId === state.rootPage.id
+				|| rootStore.pageParam === INDEX_PAGE
 		},
 		isIndexPage(state) {
 			return state.currentPage.fileName === INDEX_PAGE + PAGE_SUFFIX
@@ -133,8 +139,14 @@ export const usePagesStore = defineStore('pages', {
 			}
 		},
 
-		pagePath: () => (page) => {
+		pagePath: (state) => (page) => {
 			const collectivesStore = useCollectivesStore()
+
+			// Landing page
+			if (page.id === state.rootPage.id) {
+				return collectivesStore.currentCollectivePath
+			}
+
 			if (!page.slug) {
 				const { filePath, fileName, title, id } = page
 				const titlePart = fileName !== INDEX_PAGE + PAGE_SUFFIX && title
@@ -145,6 +157,7 @@ export const usePagesStore = defineStore('pages', {
 					? `${collectivesStore.currentCollectivePath}/${pagePath}?fileId=${id}`
 					: collectivesStore.currentCollectivePath
 			}
+
 			return `${collectivesStore.currentCollectivePath}/${page.slug}-${page.id}`
 		},
 
