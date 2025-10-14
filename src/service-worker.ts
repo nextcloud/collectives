@@ -36,7 +36,8 @@ precacheAndRoute(itemsToPrecache)
 cleanupOutdatedCaches()
 
 /**
- * Cache for navigation requests within the vue router scope
+ * Route match callback function for `collectives-vue-router`
+ * Matches navigation requests within the vue router scope
  *
  * @param matchOptions options
  * @param matchOptions.url URL to match
@@ -57,8 +58,22 @@ registerRoute(matchNavigateCb, new NetworkFirst({
 	],
 }))
 
+/**
+ * Route match callback function for `collectives-assets`
+ * Matches static assets, theming app icons and avatars
+ *
+ * @param matchOptions options
+ * @param matchOptions.url URL to match
+ */
+function matchAssetsCb({ url }: RouteMatchCallbackOptions) {
+	return url.pathname.match(/.*\.(css|js|mjs|svg|webp)($|\?)/)
+		|| url.pathname.match(/\/apps\/text\/(image|mediaPreview)\?/)
+		|| url.pathname.match(/\/apps\/theming\/((fav)?icon|manifest)\//)
+		|| url.pathname.match(/\/avatar\/[^/]+\/[0-9]+$/)
+}
+
 // Cache for assets from other apps
-registerRoute(/.*\.(css|js|mjs|svg|webp)($|\?)/, new NetworkFirst({
+registerRoute(matchAssetsCb, new NetworkFirst({
 	cacheName: 'collectives-assets',
 	plugins: [
 		new ExpirationPlugin({
