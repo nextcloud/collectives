@@ -13,9 +13,9 @@
 		</NcEmptyContent>
 
 		<!-- shares list -->
-		<ul v-else class="sharing-list__content">
-			<section>
-				<div class="section-header">
+		<div v-else class="sharing-list__content">
+			<div class="sharing-list-item">
+				<div class="sharing-list-item__header">
 					<h4>{{ t('collectives', 'Collective members') }}</h4>
 					<NcPopover popup-role="dialog">
 						<template #trigger>
@@ -37,9 +37,9 @@
 					@click="openCollectiveMembers">
 					{{ t('collectives', 'Manage collective members') }}
 				</NcButton>
-			</section>
-			<section>
-				<div class="section-header">
+			</div>
+			<div class="sharing-list-item">
+				<div class="sharing-list-item__header" style="padding-top: 10px;">
 					<h4>External shares</h4>
 					<NcPopover popup-role="dialog">
 						<template #trigger>
@@ -57,15 +57,17 @@
 						</p>
 					</NcPopover>
 				</div>
-				<SharingEntryLink v-if="!shares.length" />
-				<SharingEntryLink
-					v-for="(share, index) in shares"
-					v-else
-					:key="share.id"
-					:index="index + 1"
-					:share="share" />
-			</section>
-		</ul>
+				<ul class="external-shares-list">
+					<SharingEntryLink v-if="!shares.length" />
+					<SharingEntryLink
+						v-for="(share, index) in shares"
+						v-else
+						:key="share.id"
+						:index="index + 1"
+						:share="share" />
+				</ul>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -136,11 +138,10 @@ export default {
 	&__content {
 		padding: 0 6px;
 
-		section {
+		.sharing-list-item {
 			padding-bottom: 16px;
 
-			.section-header {
-				margin-top: 2px;
+			&__header {
 				margin-bottom: 2px;
 				display: flex;
 				align-items: center;
@@ -154,15 +155,12 @@ export default {
 				.hint-icon {
 					color: var(--color-primary-element);
 				}
-
 			}
-
 		}
 
-		& > section:not(:last-child) {
+		& > .sharing-list-item:not(:last-child) {
 			border-bottom: 2px solid var(--color-border);
 		}
-
 	}
 }
 
