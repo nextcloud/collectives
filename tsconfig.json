@@ -10,6 +10,7 @@
 		"allowJs": true,
 		"target": "ESNext",
 		"module": "ESNext",
-		"moduleResolution": "Bundler"
+		"moduleResolution": "Bundler",
+		"lib": ["webworker"]
 	}
 }

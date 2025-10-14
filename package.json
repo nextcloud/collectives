@@ -13,8 +13,8 @@
     "dev": "vite --mode development build",
     "watch": "vite --mode development build --watch",
     "serve": "vite --mode development serve",
-    "lint": "eslint --ext .js,.vue src cypress --max-warnings=0",
-    "lint:fix": "eslint --ext .js,.vue src cypress --fix",
+    "lint": "tsc && eslint --ext .js,ts,.vue src cypress",
+    "lint:fix": "tsc && eslint --ext .js,.ts,.vue src cypress --fix",
     "test": "vitest run",
     "stylelint": "stylelint css/collectives.css css/*.scss src/**/*.scss src/*.vue src/**/*.vue",
     "stylelint:fix": "stylelint css/collectives.css css/*.scss src/**/*.scss src/**/*.vue --fix"
@@ -44,7 +44,13 @@
     "vue-material-design-icons": "^5.3.1",
     "vue-router": "^3.6.5",
     "vue-virtual-scroller": "^1.1.2",
-    "vuedraggable": "^2.24.3"
+    "vuedraggable": "^2.24.3",
+    "workbox-core": "^7.3.0",
+    "workbox-expiration": "^7.3.0",
+    "workbox-precaching": "^7.3.0",
+    "workbox-routing": "^7.3.0",
+    "workbox-strategies": "^7.3.0",
+    "workbox-window": "^7.3.0"
   },
   "browserslist": [
     "extends @nextcloud/browserslist-config"
@@ -67,6 +73,7 @@
     "eslint": "^9.37.0",
     "eslint-plugin-cypress": "^5.2.0",
     "vite": "^7.1.9",
+    "vite-plugin-pwa": "^1.0.3",
     "vitest": "^3.2.4"
   },
   "overrides": {
