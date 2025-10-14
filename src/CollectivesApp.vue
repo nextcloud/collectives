@@ -88,14 +88,14 @@ export default {
 	},
 
 	beforeMount() {
-		this.rootStore.load('pagelist')
-	},
-
-	mounted() {
 		if ('serviceWorker' in navigator) {
 			registerServiceWorker()
 		}
 
+		this.rootStore.load('pagelist')
+	},
+
+	mounted() {
 		this.getCollectives()
 			.catch(displayError('Could not fetch collectives'))
 		if (!this.isPublic) {
