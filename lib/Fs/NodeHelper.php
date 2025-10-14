@@ -142,6 +142,20 @@ class NodeHelper {
 		return $content;
 	}
 
+	public static function getTitleFromFile(File $file): string {
+		if (self::isLandingPage($file)) {
+			return '';
+		}
+
+		if (self::isIndexPage($file)) {
+			$dirName = dirname($file->getInternalPath());
+			$dirName = $dirName === '.' ? '' : $dirName;
+			return basename($dirName);
+		}
+
+		return basename($file->getName(), PageInfo::SUFFIX);
+	}
+
 	/**
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
