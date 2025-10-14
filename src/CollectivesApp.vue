@@ -101,11 +101,13 @@ export default {
 		},
 	},
 
-	mounted() {
+	beforeMount() {
 		if ('serviceWorker' in navigator) {
 			registerServiceWorker()
 		}
+	},
 
+	mounted() {
 		this.getCollectivesAndSettings()
 	},
 
