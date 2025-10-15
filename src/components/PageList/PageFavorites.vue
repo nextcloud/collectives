@@ -40,6 +40,7 @@
 				:can-edit="currentCollectiveCanEdit"
 				:in-favorite-list="true"
 				:filtered-view="false"
+				:network-online="networkOnline"
 				@click.native="show('details')" />
 		</div>
 	</div>
@@ -63,6 +64,13 @@ export default {
 		NcButton,
 		ChevronDownIcon,
 		StarIcon,
+	},
+
+	props: {
+		networkOnline: {
+			type: Boolean,
+			required: true,
+		},
 	},
 
 	data() {

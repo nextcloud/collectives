@@ -29,6 +29,13 @@ export default {
 		NcTextField,
 	},
 
+	props: {
+		networkOnline: {
+			type: Boolean,
+			required: true,
+		},
+	},
+
 	data() {
 		return {
 			collectivesFolderLoading: false,
@@ -39,7 +46,7 @@ export default {
 		...mapState(useSettingsStore, ['collectivesFolder']),
 
 		disabledPicker() {
-			return this.collectivesFolderLoading || !this.collectivesFolder
+			return this.collectivesFolderLoading || !this.networkOnline || !this.collectivesFolder
 		},
 
 		userFolderValue() {

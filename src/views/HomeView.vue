@@ -13,7 +13,11 @@
 				<CollectivesIcon />
 			</template>
 			<template #action>
-				<NcButton :aria-label="t('collectives', 'Create new collective')" :variant="buttonVariant" @click="newCollective">
+				<NcButton
+					:aria-label="t('collectives', 'Create new collective')"
+					:variant="buttonVariant"
+					:disabled="!networkOnline"
+					@click="newCollective">
 					{{ t('collectives', 'New collective') }}
 				</NcButton>
 			</template>
@@ -27,6 +31,7 @@ import { emit } from '@nextcloud/event-bus'
 import { NcAppContent, NcButton, NcEmptyContent } from '@nextcloud/vue'
 import { mapState } from 'pinia'
 import CollectivesIcon from '../components/Icon/CollectivesIcon.vue'
+import { useNetworkState } from '../composables/useNetworkState.js'
 import { useCollectivesStore } from '../stores/collectives.js'
 
 export default {
@@ -37,6 +42,11 @@ export default {
 		NcButton,
 		CollectivesIcon,
 		NcEmptyContent,
+	},
+
+	setup() {
+		const { networkOnline } = useNetworkState()
+		return { networkOnline }
 	},
 
 	data() {

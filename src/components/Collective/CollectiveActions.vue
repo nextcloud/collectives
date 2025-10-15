@@ -8,6 +8,7 @@
 		<NcActionButton
 			v-if="isCollectiveAdmin(collective)"
 			:close-after-click="true"
+			:disabled="!networkOnline"
 			@click="openCollectiveMembers()">
 			<template #icon>
 				<AccountMultipleIcon :size="20" />
@@ -17,6 +18,7 @@
 		<NcActionButton
 			v-if="!isPublic && collective.canEdit"
 			:close-after-click="true"
+			:disabled="!networkOnline"
 			@click="openTemplates()">
 			<template #icon>
 				<PageTemplateIcon :size="18" />
@@ -36,6 +38,7 @@
 		<NcActionLink
 			:close-after-click="true"
 			:href="printLink"
+			:class="{ 'action-link--disabled': !networkOnline }"
 			target="_blank">
 			{{ t('collectives', 'Export or print') }}
 			<template #icon>
@@ -45,6 +48,7 @@
 		<NcActionButton
 			v-if="isCollectiveAdmin(collective)"
 			:close-after-click="true"
+			:disabled="!networkOnline"
 			@click="openCollectiveSettings()">
 			<template #icon>
 				<CogIcon :size="20" />
@@ -54,6 +58,7 @@
 		<NcActionButton
 			v-if="!isPublic && collective.canLeave !== false"
 			:close-after-click="true"
+			:disabled="!networkOnline"
 			@click="leaveCollectiveWithUndo(collective)">
 			{{ t('collectives', 'Leave collective') }}
 			<template #icon>
@@ -96,6 +101,11 @@ export default {
 	props: {
 		collective: {
 			type: Object,
+			required: true,
+		},
+
+		networkOnline: {
+			type: Boolean,
 			required: true,
 		},
 	},
@@ -179,3 +189,10 @@ export default {
 	},
 }
 </script>
+
+<style scoped lang="scss">
+.action-link--disabled {
+	pointer-events: none;
+	opacity: 0.5;
+}
+</style>

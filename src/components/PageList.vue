@@ -126,6 +126,7 @@
 				:is-root-page="true"
 				:is-landing-page="!currentCollectiveIsPageShare"
 				:filtered-view="false"
+				:network-online="networkOnline"
 				class="page-list-root-page"
 				@click.native="show('details')" />
 
@@ -148,7 +149,7 @@
 			</div>
 
 			<!-- Favorites -->
-			<PageFavorites v-if="showFavorites" />
+			<PageFavorites v-if="showFavorites" :network-online="networkOnline" />
 
 			<!-- Filtered view page list -->
 			<div v-if="isFilteredView" ref="pageListFiltered" class="page-list-filtered">
@@ -166,6 +167,7 @@
 						:page="item"
 						:level="1"
 						:filtered-view="true"
+						:network-online="networkOnline"
 						class="page-list-drag-item" />
 				</RecycleScroller>
 				<NcAppNavigationCaption v-if="loadingContentFilteredPages || contentFilteredPages.length > 0" :name="t('Collectives', 'Results in content')" />
@@ -182,6 +184,7 @@
 						:page="item"
 						:level="1"
 						:filtered-view="true"
+						:network-online="networkOnline"
 						class="page-list-drag-item" />
 				</RecycleScroller>
 				<div v-if="loadingContentFilteredPages" class="scrollload">
@@ -203,12 +206,13 @@
 					:page="page"
 					:level="1"
 					:filtered-view="false"
+					:network-online="networkOnline"
 					class="page-list-drag-item" />
 			</DraggableElement>
 		</div>
 
 		<!-- Page trash -->
-		<PageTrash v-if="displayTrash" />
+		<PageTrash v-if="displayTrash" :network-online="networkOnline" />
 
 		<NewPageDialog v-if="newPageParentId" />
 	</NcAppContentList>
@@ -236,6 +240,7 @@ import PageTrash from './PageList/PageTrash.vue'
 import SubpageList from './PageList/SubpageList.vue'
 import PageTag from './PageTag.vue'
 import SkeletonLoading from './SkeletonLoading.vue'
+import { useNetworkState } from '../composables/useNetworkState.js'
 import { useCollectivesStore } from '../stores/collectives.js'
 import { usePagesStore } from '../stores/pages.js'
 import { useRootStore } from '../stores/root.js'
@@ -275,9 +280,10 @@ export default {
 	},
 
 	setup() {
+		const { networkOnline } = useNetworkState()
 		const pageListFiltered = ref()
 		const { height: pageListFilteredHeight } = useElementSize(pageListFiltered)
-		return { pageListFiltered, pageListFilteredHeight }
+		return { networkOnline, pageListFiltered, pageListFilteredHeight }
 	},
 
 	data() {
