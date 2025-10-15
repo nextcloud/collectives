@@ -7,6 +7,11 @@ import { createPinia, PiniaVuePlugin } from 'pinia'
 import Vue from 'vue'
 import CollectivesApp from './CollectivesApp.vue'
 import router from './router.js'
+import registerServiceWorker from './util/registerServiceWorker.ts'
+
+if ('serviceWorker' in navigator) {
+	registerServiceWorker()
+}
 
 window.OCA.Collectives = {
 	...window.OCA.Collectives,

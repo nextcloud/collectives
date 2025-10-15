@@ -37,7 +37,6 @@ import { usePagesStore } from './stores/pages.js'
 import { useRootStore } from './stores/root.js'
 import { useSettingsStore } from './stores/settings.js'
 import displayError from './util/displayError.js'
-import registerServiceWorker from './util/registerServiceWorker.ts'
 
 export default {
 	name: 'CollectivesApp',
@@ -99,12 +98,6 @@ export default {
 				this.getCollectivesAndSettings()
 			}
 		},
-	},
-
-	beforeMount() {
-		if ('serviceWorker' in navigator) {
-			registerServiceWorker()
-		}
 	},
 
 	mounted() {
