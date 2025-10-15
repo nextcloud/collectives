@@ -50,12 +50,8 @@ class StartController extends Controller {
 		$appsMissing = [];
 		foreach ($apps as $app) {
 			if (!$this->appManager->isEnabledForUser($app)) {
-				if ($app === 'circles') {
-					$appInfo = $this->appManager->getAppInfo($app);
-					$appsMissing[] = $appInfo['name'] ?? $app;
-				} else {
-					$appsMissing[] = $app;
-				}
+				$appInfo = $this->appManager->getAppInfo($app);
+				$appsMissing[] = $appInfo['name'] ?? $app;
 			}
 		}
 		return $appsMissing;
