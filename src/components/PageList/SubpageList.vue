@@ -19,6 +19,7 @@
 			:can-edit="currentCollectiveCanEdit"
 			:has-visible-subpages="hasVisibleSubpages"
 			:filtered-view="filteredView"
+			:network-online="networkOnline"
 			@click.native="show('details')" />
 		<div class="page-list-indent">
 			<DraggableElement
@@ -68,6 +69,11 @@ export default {
 		filteredView: {
 			type: Boolean,
 			default: false,
+		},
+
+		networkOnline: {
+			type: Boolean,
+			required: true,
 		},
 	},
 

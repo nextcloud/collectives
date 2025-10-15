@@ -8,10 +8,11 @@
 		<NcActions :force-menu="true" @click.native.stop>
 			<!-- Collective actions: only displayed for landing page in page list -->
 			<template v-if="displayCollectiveActions">
-				<CollectiveActions :collective="currentCollective" />
+				<CollectiveActions :collective="currentCollective" :network-online="networkOnline" />
 				<NcActionButton
 					v-if="collectiveExtraAction"
 					:close-after-click="true"
+					:disabled="!networkOnline"
 					@click="collectiveExtraAction.click()">
 					{{ collectiveExtraAction.title }}
 					<template #icon>
@@ -49,7 +50,7 @@
 				<NcActionCheckbox
 					v-if="!isMobile"
 					:checked="currentPage.isFullWidth"
-					:disabled="!currentCollectiveCanEdit"
+					:disabled="!networkOnline || !currentCollectiveCanEdit"
 					@check="onCheckFullWidthView"
 					@uncheck="onUncheckFullWidthView">
 					{{ t('collectives', 'Full width') }}
@@ -69,6 +70,7 @@
 			<NcActionButton
 				v-if="!isLandingPage"
 				:close-after-click="true"
+				:disabled="!networkOnline"
 				@click="toggleFavoritePage({ id: currentCollective.id, pageId })">
 				<template #icon>
 					<StarOffIcon v-if="isFavoritePage(currentCollective.id, pageId)" :size="20" />
@@ -93,6 +95,7 @@
 			<NcActionButton
 				v-if="currentCollectiveCanEdit && !isLandingPage"
 				:close-after-click="true"
+				:disabled="!networkOnline"
 				@click.native="show('details')"
 				@click="gotoPageEmojiPicker">
 				<template #icon>
@@ -105,6 +108,7 @@
 			<NcActionButton
 				v-if="currentCollectiveCanEdit"
 				:close-after-click="true"
+				:disabled="!networkOnline"
 				@click="onOpenTagsModal">
 				<template #icon>
 					<TagMultipleIcon :size="20" />
@@ -116,6 +120,7 @@
 			<NcActionButton
 				v-if="currentCollectiveCanEdit && !isLandingPage"
 				:close-after-click="true"
+				:disabled="!networkOnline"
 				@click="onOpenMoveOrCopyModal">
 				<template #icon>
 					<OpenInNewIcon :size="20" />
@@ -126,6 +131,7 @@
 			<!-- Download action: always displayed -->
 			<NcActionLink
 				:href="currentPageDavUrl"
+				:class="{ 'action-link--disabled': !networkOnline }"
 				:download="currentPage.fileName"
 				:close-after-click="true">
 				<template #icon>
@@ -138,6 +144,7 @@
 			<NcActionButton
 				v-if="displayDeleteAction"
 				:close-after-click="true"
+				:disabled="!networkOnline"
 				@click="deletePage(pageId)">
 				<template #icon>
 					<DeleteIcon :size="20" />
@@ -249,6 +256,11 @@ export default {
 		inPageList: {
 			type: Boolean,
 			default: false,
+		},
+
+		networkOnline: {
+			type: Boolean,
+			required: true,
 		},
 	},
 
@@ -400,3 +412,10 @@ export default {
 	},
 }
 </script>
+
+<style scoped lang="scss">
+.action-link--disabled {
+	pointer-events: none;
+	opacity: 0.5;
+}
+</style>

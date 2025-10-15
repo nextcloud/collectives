@@ -15,11 +15,13 @@
 				v-for="collective in sortedCollectives"
 				v-show="!collective.deleted"
 				:key="collective.id"
-				:collective="collective" />
+				:collective="collective"
+				:network-online="networkOnline" />
 			<li>
 				<NcAppNavigationNew
 					v-if="!isPublic"
 					:text="t('collectives', 'New collective')"
+					:disabled="!networkOnline"
 					variant="secondary"
 					class="new-collective-button"
 					@click="onOpenNewCollectiveModal">
@@ -32,9 +34,10 @@
 		<template #footer>
 			<CollectivesTrash
 				v-if="displayTrash"
+				:network-online="networkOnline"
 				@restore-collective="onRestoreCollective"
 				@delete-collective="onDeleteCollective" />
-			<CollectivesGlobalSettings v-if="!isPublic" />
+			<CollectivesGlobalSettings v-if="!isPublic" :network-online="networkOnline" />
 		</template>
 		<NewCollectiveModal v-if="showNewCollectiveModal" @close="onCloseNewCollectiveModal" />
 		<CollectiveMembersModal
@@ -57,6 +60,7 @@ import CollectivesTrash from './Nav/CollectivesTrash.vue'
 import NewCollectiveModal from './Nav/NewCollectiveModal.vue'
 import TemplatesDialog from './Nav/TemplatesDialog.vue'
 import SkeletonLoading from './SkeletonLoading.vue'
+import { useNetworkState } from '../composables/useNetworkState.js'
 import { useCollectivesStore } from '../stores/collectives.js'
 import { useRootStore } from '../stores/root.js'
 import displayError from '../util/displayError.js'
@@ -76,6 +80,11 @@ export default {
 		SkeletonLoading,
 		PlusIcon,
 		TemplatesDialog,
+	},
+
+	setup() {
+		const { networkOnline } = useNetworkState()
+		return { networkOnline }
 	},
 
 	data() {

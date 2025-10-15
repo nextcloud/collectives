@@ -21,7 +21,9 @@
 			</template>
 		</template>
 		<template #actions>
-			<CollectiveActions :collective="collective" />
+			<CollectiveActions
+				:collective="collective"
+				:network-online="networkOnline" />
 		</template>
 	</NcAppNavigationItem>
 </template>
@@ -47,6 +49,11 @@ export default {
 	props: {
 		collective: {
 			type: Object,
+			required: true,
+		},
+
+		networkOnline: {
+			type: Boolean,
 			required: true,
 		},
 	},
