@@ -10,7 +10,7 @@
 			<div class="sharing-list-item">
 				<div class="sharing-list-item__header">
 					<h4>{{ t('collectives', 'Collective members') }}</h4>
-					<NcPopover popup-role="dialog">
+					<NcPopover popup-role="dialog" no-focus-trap>
 						<template #trigger>
 							<NcButton
 								class="hint-icon"
@@ -27,6 +27,7 @@
 					</NcPopover>
 				</div>
 				<NcButton
+					:disabled="!networkOnline"
 					@click="openCollectiveMembers">
 					{{ t('collectives', 'Manage collective members') }}
 				</NcButton>
@@ -36,7 +37,7 @@
 			<div class="sharing-list-item">
 				<div class="sharing-list-item__header sharing-list-item__header--external">
 					<h4>{{ t('collectives', 'External shares') }}</h4>
-					<NcPopover popup-role="dialog">
+					<NcPopover popup-role="dialog" no-focus-trap>
 						<template #trigger>
 							<NcButton
 								class="hint-icon"
@@ -80,6 +81,7 @@ import { NcButton, NcEmptyContent, NcLoadingIcon, NcPopover } from '@nextcloud/v
 import { mapActions, mapState } from 'pinia'
 import InformationIcon from 'vue-material-design-icons/InformationOutline.vue'
 import SharingEntryLink from './SharingEntryLink.vue'
+import { useNetworkState } from '../../composables/useNetworkState.ts'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { usePagesStore } from '../../stores/pages.js'
 import { useRootStore } from '../../stores/root.js'
@@ -104,6 +106,9 @@ export default {
 		},
 	},
 
+	setup() {
+		const { networkOnline } = useNetworkState()
+		return { networkOnline }
 	},
 
 	computed: {
