@@ -45,6 +45,12 @@ class StartController extends Controller {
 		]);
 	}
 
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	public function indexPath(string $path): TemplateResponse {
+		return $this->index();
+	}
+
 	private function checkDependencies(): array {
 		$apps = ['circles', 'files_versions', 'text', 'viewer'];
 		$appsMissing = [];
