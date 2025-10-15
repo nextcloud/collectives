@@ -104,11 +104,6 @@ export default {
 		},
 	},
 
-	data() {
-		return {
-			membersManagementHelpText: t('collectives', 'Share this page with members of your collective. Members can view and edit the shared content based on their permissions.'),
-			externalSharesHelpText: t('collectives', 'Share this page or collective with others outside your collective via public links. Anyone with the link can access the shared content.'),
-		}
 	},
 
 	computed: {
@@ -121,6 +116,18 @@ export default {
 			return this.isLandingPage
 				? this.sharesByPageId(0)
 				: this.sharesByPageId(this.pageId)
+		},
+
+		isCollective() {
+			return this.isLandingPage ? 'collective' : 'page'
+		},
+
+		membersManagementHelpText() {
+			return t('collectives', 'Manage members of your collective. Members have access to the whole collective.')
+		},
+
+		externalSharesHelpText() {
+			return t('collectives', 'Share this {item} with others outside your collective via public links. Anyone with the link can access the shared content.', { item: this.isCollective })
 		},
 	},
 

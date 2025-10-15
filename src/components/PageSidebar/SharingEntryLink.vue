@@ -299,8 +299,8 @@ export default {
 
 		title() {
 			return this.index > 1
-				? t('collectives', 'Share public link ({index})', { index: this.index })
-				: t('collectives', 'Share public link')
+				? t('collectives', 'Create public link ({index})', { index: this.index })
+				: t('collectives', 'Create public link')
 		},
 
 		offlineTitle() {
