@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { showError, TOAST_PERMANENT_TIMEOUT } from '@nextcloud/dialogs'
+import { t } from '@nextcloud/l10n'
 import { generateUrl, getAppRootUrl } from '@nextcloud/router'
 
 /**
@@ -16,9 +18,13 @@ export default async function(app = 'collectives') {
 	const scope = generateUrl(`/apps/${app}`)
 	const wb = new Workbox(url, { scope })
 	wb.addEventListener('activated', (event) => {
-		if (event.isUpdate || event.isExternal) {
-			console.info('A new collectives version is available.')
-			// window.location.reload()
+		if (event.isUpdate) {
+			console.info('[SW] A new collectives version is available, reloading.')
+			window.location.reload()
+		} else if (event.isExternal) {
+			console.info('[SW] A new collectives version is available, please reload.')
+			showError(t('collectives', 'Nextcloud Collectives was updated.') + '\n' + t('collectives', 'Please reload the page.'), { timeout: TOAST_PERMANENT_TIMEOUT })
+			// TODO: ask user to reload page
 		}
 	})
 
