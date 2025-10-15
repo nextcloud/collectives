@@ -5,15 +5,8 @@
 
 <template>
 	<div class="sharing-list">
-		<!-- loading -->
-		<NcEmptyContent v-if="loading('shares')">
-			<template #icon>
-				<NcLoadingIcon />
-			</template>
-		</NcEmptyContent>
-
-		<!-- shares list -->
-		<div v-else class="sharing-list__content">
+		<div class="sharing-list__content">
+			<!-- collective members section -->
 			<div class="sharing-list-item">
 				<div class="sharing-list-item__header">
 					<h4>{{ t('collectives', 'Collective members') }}</h4>
@@ -38,9 +31,11 @@
 					{{ t('collectives', 'Manage collective members') }}
 				</NcButton>
 			</div>
+
+			<!-- external shares section with loading state -->
 			<div class="sharing-list-item">
-				<div class="sharing-list-item__header" style="padding-top: 10px;">
-					<h4>External shares</h4>
+				<div class="sharing-list-item__header sharing-list-item__header--external">
+					<h4>{{ t('collectives', 'External shares') }}</h4>
 					<NcPopover popup-role="dialog">
 						<template #trigger>
 							<NcButton
@@ -57,7 +52,16 @@
 						</p>
 					</NcPopover>
 				</div>
-				<ul class="external-shares-list">
+
+				<!-- loading -->
+				<NcEmptyContent v-if="loading('shares')">
+					<template #icon>
+						<NcLoadingIcon />
+					</template>
+				</NcEmptyContent>
+
+				<!-- external shares list -->
+				<ul v-else class="external-shares-list">
 					<SharingEntryLink v-if="!shares.length" />
 					<SharingEntryLink
 						v-for="(share, index) in shares"
@@ -154,6 +158,10 @@ export default {
 
 				.hint-icon {
 					color: var(--color-primary-element);
+				}
+
+				&--external {
+					padding-top: 10px;
 				}
 			}
 		}
