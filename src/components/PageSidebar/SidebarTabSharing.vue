@@ -123,16 +123,14 @@ export default {
 				: this.sharesByPageId(this.pageId)
 		},
 
-		isCollective() {
-			return this.isLandingPage ? 'collective' : 'page'
-		},
-
 		membersManagementHelpText() {
 			return t('collectives', 'Manage members of your collective. Members have access to the whole collective.')
 		},
 
 		externalSharesHelpText() {
-			return t('collectives', 'Share this {item} with others outside your collective via public links. Anyone with the link can access the shared content.', { item: this.isCollective })
+			return this.isLandingPage
+				? t('collectives', 'Share this collective with others outside your collective via public links. Anyone with the link can access the shared content.')
+				: t('collectives', 'Share this page with others outside your collective via public links. Anyone with the link can access the shared content.')
 		},
 	},
 
