@@ -31,6 +31,7 @@ OC.L10N.register(
     "Favorites" : "מועדפים",
     "Favorite" : "סימון כמועדף",
     "Deleted" : "נמחק",
+    "Create public link" : "יצירת קישור ציבורי",
     "View only" : "לצפיה בלבד",
     "Can edit" : "ניתן לערוך",
     "Cannot copy, please copy the link manually" : "לא ניתן להעתיק, נא להעתיק את הקישור ידנית",

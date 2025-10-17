@@ -114,7 +114,7 @@ OC.L10N.register(
     "Sort by custom order" : "Ordenar por orden personalizado",
     "Sort recently changed first" : "Ordenar primero las cambiadas recientemente",
     "Switch back to default sort order" : "Volver al orden de clasificación predeterminado",
-    "Share link ({index})" : "Enlace compartido ({index})",
+    "Create public link" : "Crear enlace público",
     "View only" : "Solo vista",
     "Cannot copy, please copy the link manually" : "No se puede copiar, por favor copia el enlace manualmente",
     "Actions for \"{title}\"" : "Acciones para \"{title}\"",
