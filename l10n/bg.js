@@ -111,7 +111,6 @@ OC.L10N.register(
     "Sort by custom order" : "Сортиране по персонализиран ред",
     "Sort recently changed first" : "Първо да се сортират наскоро променените",
     "Switch back to default sort order" : "Връщане към ред на сортиране по подразбиране",
-    "Share link ({index})" : "Споделяне на връзка ({index})",
     "View only" : "Само изглед",
     "Can edit" : "Може да се редактира",
     "Cannot copy, please copy the link manually" : "Не може да се копира, моля, копирайте връзката ръчно",

@@ -67,6 +67,7 @@ OC.L10N.register(
     "Favorite" : "Mėgstami",
     "Deleted" : "Ištrinta",
     "Sort order" : "Rikiavimo tvarka",
+    "Create public link" : "Sukurti viešąją nuorodą",
     "View only" : "Tik peržiūrėti",
     "Can edit" : "Gali taisyti",
     "Cannot copy, please copy the link manually" : "Nepavyksta nukopijuoti, nukopijuokite nuorodą rankiniu būdu",

@@ -38,6 +38,7 @@ OC.L10N.register(
     "Favorites" : "Preferidos",
     "Favorite" : "Preferidu",
     "Deleted" : "Cantzelladu",
+    "Create public link" : "Crea unu ligòngiu pùblicu",
     "View only" : "Isceti in visualizatzione",
     "Can edit" : "Podet modificare",
     "Cannot copy, please copy the link manually" : "No at fatu a copiare, copia su ligòngiu a manu",

@@ -34,6 +34,7 @@ OC.L10N.register(
     "Favorites" : "Favoriti",
     "Favorite" : "Favorit",
     "Deleted" : "Izbrisano",
+    "Create public link" : "Stvori javnu poveznicu",
     "View only" : "Samo za gledanje",
     "Can edit" : "Uređivanje moguće",
     "Cannot copy, please copy the link manually" : "Kopiranje nije moguće, ručno kopirajte poveznicu",

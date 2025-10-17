@@ -37,6 +37,7 @@ OC.L10N.register(
     "Add another link" : "Adicionar outra hiperligação",
     "Advanced settings" : "Definições avançadas",
     "Unshare" : "Cancelar partilha",
+    "External shares" : "Partilhas externas",
     "No other versions available" : "Nenhuma outra versão disponível",
     "You" : "Vovê",
     "Download version" : "Transferir versão",

@@ -185,7 +185,7 @@ OC.L10N.register(
     "Sort recently changed first" : "يېقىندا رەتلەش ئالدى بىلەن ئۆزگەردى",
     "Switch back to default sort order" : "سۈكۈتتىكى تەرتىپ تەرتىپىگە قايتىڭ",
     "Results in content" : "مەزمۇندىكى نەتىجىلەر",
-    "Share link ({index})" : "ئورتاقلىشىش ئۇلىنىشى ({index})",
+    "Create public link" : "ئاممىۋى ئۇلىنىش قۇر",
     "View only" : "پەقەت كۆرۈش",
     "Can edit" : "تەھرىرلىيەلەيدۇ",
     "Cannot copy, please copy the link manually" : "كۆچۈرگىلى بولمايدۇ ، ئۇلىنىشنى قولدا كۆچۈرۈڭ",
