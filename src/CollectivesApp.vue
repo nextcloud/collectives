@@ -31,6 +31,7 @@ import { mapActions, mapState } from 'pinia'
 import CollectiveSettings from './components/Nav/CollectiveSettings.vue'
 import NavigationBar from './components/NavigationBar.vue'
 import PageSidebar from './components/PageSidebar.vue'
+import { useNetworkState } from './composables/useNetworkState.js'
 import { useCollectivesStore } from './stores/collectives.js'
 import { usePagesStore } from './stores/pages.js'
 import { useRootStore } from './stores/root.js'
@@ -49,7 +50,14 @@ export default {
 
 	setup() {
 		const rootStore = useRootStore()
-		return { rootStore }
+		const { networkOnline } = useNetworkState()
+		return { networkOnline, rootStore }
+	},
+
+	data() {
+		return {
+			loadPending: true,
+		}
 	},
 
 	computed: {
@@ -84,21 +92,16 @@ export default {
 
 			immediate: true,
 		},
-	},
 
-	beforeMount() {
-		this.rootStore.load('pagelist')
+		networkOnline: function(val) {
+			if (val && this.loadPending) {
+				this.getCollectivesAndSettings()
+			}
+		},
 	},
 
 	mounted() {
-		this.getCollectives()
-			.catch(displayError('Could not fetch collectives'))
-		if (!this.isPublic) {
-			this.getCollectivesFolder()
-				.catch(displayError('Could not fetch collectives folder'))
-			this.getTrashCollectives()
-				.catch(displayError('Could not fetch collectives from trash'))
-		}
+		this.getCollectivesAndSettings()
 	},
 
 	methods: {
@@ -107,6 +110,33 @@ export default {
 			'getCollectives',
 			'getTrashCollectives',
 		]),
+
+		async getCollectivesAndSettings() {
+			this.loadPending = true
+			if (!this.networkOnline) {
+				return
+			}
+
+			try {
+				await this.getCollectives()
+			} catch (e) {
+				displayError('Could not fetch collectives')(e)
+				return
+			}
+
+			if (!this.isPublic) {
+				const promises = [this.getCollectivesFolder()]
+				promises.push(this.getTrashCollectives())
+
+				try {
+					await Promise.all(promises)
+				} catch (e) {
+					displayError('Could not fetch collective details')(e)
+				}
+			}
+
+			this.loadPending = false
+		},
 	},
 
 }

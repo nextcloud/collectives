@@ -62,6 +62,10 @@ export const usePagesStore = defineStore('pages', {
 			return state.allTrashPages[state.collectiveId] || []
 		},
 
+		pagesLoaded: (state) => {
+			return state.pages.length > 0
+		},
+
 		isLandingPage: (state) => {
 			const rootStore = useRootStore()
 			const collectivesStore = useCollectivesStore()
@@ -523,7 +527,7 @@ export const usePagesStore = defineStore('pages', {
 		 */
 		async getPages(setLoading = true) {
 			const rootStore = useRootStore()
-			if (setLoading && this.pages.length === 0) {
+			if (setLoading && !this.pagesLoaded) {
 				rootStore.load('pagelist')
 			}
 			const response = await api.getPages(this.context)
