@@ -315,7 +315,10 @@ export default {
 					updateCollective()
 				})
 				.catch((e) => {
-					if (e.response?.status === 400) {
+					if(this.newCollectiveName.length > 255) {
+						showError('Collective name cannot be longer than 255 characters')
+						this.state = 0
+					} else if (e.response?.status === 400) {
 						this.nameExists = this.newCollectiveName
 						this.state = 0
 					} else {
