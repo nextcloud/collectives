@@ -278,10 +278,10 @@ export default {
 			if (this.newCollectiveName.length > 255) {
 				showError('Collective name cannot be longer than 255 characters')
 				return
-			} 
+			}
 			if (this.newCollectiveName && !this.nameIsInvalid) {
 				this.state = 1
-			} 
+			}
 		},
 
 		onClose() {
