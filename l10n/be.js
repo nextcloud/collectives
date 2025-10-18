@@ -57,6 +57,7 @@ OC.L10N.register(
     "Favorite" : "Абранае",
     "Show deleted pages" : "Паказаць выдаленыя старонкі",
     "Deleted" : "Выдалены",
+    "Create public link" : "Стварыць публічную спасылку",
     "You are offline" : "Вы па-за сеткай",
     "View only" : "Толькі прагляд",
     "Can edit" : "Можа рэдагаваць",
