@@ -57,14 +57,20 @@
 									</div>
 								</td>
 								<td class="actions">
-									<NcButton :aria-label="t('collectives', 'Restore page')" @click="onClickRestore(trashPage)">
+									<NcButton
+										:aria-label="t('collectives', 'Restore page')"
+										:disabled="!networkOnline"
+										@click="onClickRestore(trashPage)">
 										<template #icon>
 											<RestoreIcon :size="20" />
 										</template>
 										{{ t('collectives', 'Restore') }}
 									</NcButton>
 									<NcActions :force-menu="true">
-										<NcActionButton :close-after-click="true" @click="onClickDelete(trashPage)">
+										<NcActionButton
+											:close-after-click="true"
+											:disabled="!networkOnline"
+											@click="onClickDelete(trashPage)">
 											<template #icon>
 												<DeleteIcon :size="20" />
 											</template>
@@ -111,6 +117,13 @@ export default {
 		DeleteIcon,
 		RestoreIcon,
 		PageIcon,
+	},
+
+	props: {
+		networkOnline: {
+			type: Boolean,
+			required: true,
+		},
 	},
 
 	setup() {

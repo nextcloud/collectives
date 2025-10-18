@@ -81,11 +81,12 @@
 				:last-user-id="lastUserId"
 				:last-user-display-name="lastUserDisplayName"
 				:is-landing-page="isLandingPage"
-				:in-page-list="true" />
+				:in-page-list="true"
+				:network-online="networkOnline" />
 			<NcActions v-if="canEdit">
 				<NcActionButton
 					class="action-button-add"
-					:disabled="loading(`template-list-${templatesCollectiveId}`)"
+					:disabled="!networkOnline || loading(`template-list-${templatesCollectiveId}`)"
 					@click="onNewPage">
 					<template #icon>
 						<PlusIcon :size="20" fill-color="var(--color-main-text)" />
@@ -205,6 +206,11 @@ export default {
 		},
 
 		filteredView: {
+			type: Boolean,
+			required: true,
+		},
+
+		networkOnline: {
 			type: Boolean,
 			required: true,
 		},

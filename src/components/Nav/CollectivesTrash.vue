@@ -39,13 +39,19 @@
 							</template>
 						</template>
 						<template #actions>
-							<NcActionButton :close-after-click="true" @click="restoreCollective(collective)">
+							<NcActionButton
+								:close-after-click="true"
+								:disabled="!networkOnline"
+								@click="restoreCollective(collective)">
 								<template #icon>
 									<RestoreIcon :size="20" />
 								</template>
 								{{ t('collectives', 'Restore') }}
 							</NcActionButton>
-							<NcActionButton :close-after-click="true" @click="showDeleteModal(collective)">
+							<NcActionButton
+								:close-after-click="true"
+								:disabled="!networkOnline"
+								@click="showDeleteModal(collective)">
 								<template #icon>
 									<DeleteIcon :size="20" />
 								</template>
@@ -124,6 +130,13 @@ export default {
 		DeleteIcon,
 		NcDialog,
 		RestoreIcon,
+	},
+
+	props: {
+		networkOnline: {
+			type: Boolean,
+			required: true,
+		},
 	},
 
 	setup() {

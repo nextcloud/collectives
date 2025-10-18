@@ -36,6 +36,7 @@
 					:title="t('collectives', 'Select emoji')"
 					class="button-emoji-page"
 					:class="{ mobile: isMobile }"
+					:disabled="!networkOnline"
 					@click.prevent>
 					<template #icon>
 						<NcLoadingIcon
@@ -78,7 +79,7 @@
 			ref="pageTitle"
 			v-model="newTitle"
 			:placeholder="t('collectives', 'Title')"
-			:disabled="!currentCollectiveCanEdit"
+			:disabled="!currentCollectiveCanEdit || !networkOnline"
 			@blur="onTitleBlur()"
 			@save="$emit('save-editor')"
 			@submit="onSubmit()" />
@@ -97,7 +98,8 @@
 				:timestamp="currentPage.timestamp"
 				:last-user-id="currentPage.lastUserId"
 				:last-user-display-name="currentPage.lastUserDisplayName"
-				:is-landing-page="isLandingPage" />
+				:is-landing-page="isLandingPage"
+				:network-online="networkOnline" />
 		</div>
 	</div>
 </template>
@@ -113,6 +115,7 @@ import CollectivesIcon from '../Icon/CollectivesIcon.vue'
 import EditButton from './EditButton.vue'
 import PageActionMenu from './PageActionMenu.vue'
 import PageTitle from './PageTitle.vue'
+import { useNetworkState } from '../../composables/useNetworkState.js'
 import pageMixin from '../../mixins/pageMixin.js'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { usePagesStore } from '../../stores/pages.js'
@@ -145,7 +148,8 @@ export default {
 
 	setup() {
 		const isMobile = useIsMobile()
-		return { isMobile }
+		const { networkOnline } = useNetworkState()
+		return { isMobile, networkOnline }
 	},
 
 	data() {
