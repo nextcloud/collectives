@@ -163,7 +163,9 @@ export default {
 			selectedMembers: {},
 			noDeleteMembers: [],
 			nameIsTooShort: false,
+			nameIsTooLong: false,
 			setNameIsTooShortDebounced: debounce(this.setNameIsTooShort, 500),
+			setNameIsTooLongDebounced: debounce(this.setNameIsTooLong, 500),
 			state: 0,
 		}
 	},
@@ -200,12 +202,14 @@ export default {
 		},
 
 		nameIsInvalid() {
-			return this.nameIsTooShort || this.nameIsTaken
+			return this.nameIsTooShort || this.nameIsTaken || this.nameIsTooLong
 		},
 
 		nameError() {
 			if (this.nameIsTooShort) {
 				return t('collectives', 'Name too short, requires at least three characters')
+			} else if (this.nameIsTooLong) {
+				return t('collectives', 'Name too long, name cannot be longer than 127 characters')
 			} else if (this.nameIsTaken) {
 				return t('collectives', 'A collective/team with this name already exists')
 			}
@@ -231,13 +235,17 @@ export default {
 
 	watch: {
 		newCollectiveName(val) {
-			if (!val || this.newCollectiveName.length > 2) {
+			if (!val || (this.newCollectiveName.length > 2 && this.newCollectiveName.length < 128)) {
 				this.setNameIsTooShortDebounced.clear()
+				this.setNameIsTooLongDebounced.clear()
 				this.nameIsTooShort = false
+				this.nameIsTooLong = false
 				return
+			} else if (this.newCollectiveName.length > 127) {
+				this.setNameIsTooLongDebounced()
+			} else {
+				this.setNameIsTooShortDebounced()
 			}
-
-			this.setNameIsTooShortDebounced()
 		},
 
 	},
@@ -270,13 +278,17 @@ export default {
 			this.nameIsTooShort = true
 		},
 
+		setNameIsTooLong() {
+			this.nameIsTooLong = true
+		},
+
 		clearName() {
 			this.name = ''
 		},
 
 		advanceToMembers() {
-			if (this.newCollectiveName.length > 255) {
-				showError('Collective name cannot be longer than 255 characters')
+			if (this.nameIsTooLong) {
+				showError('Collective name cannot be longer than 127 characters')
 				return
 			}
 			if (this.newCollectiveName && !this.nameIsInvalid) {
