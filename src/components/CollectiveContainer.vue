@@ -5,7 +5,7 @@
 
 <template>
 	<NcAppContentDetails>
-		<div v-if="loading('pagelist') || loading('currentPage')" class="sheet-view">
+		<div v-if="loading('pagelist') || loading('currentPage') || !pagesLoaded" class="sheet-view">
 			<SkeletonLoading :count="1" class="page-heading-skeleton" type="page-heading" />
 		</div>
 		<PageVersion v-else-if="currentPage && selectedVersion" />
@@ -90,9 +90,10 @@ export default {
 		...mapState(usePagesStore, [
 			'currentFileIdPage',
 			'currentPage',
+			'currentPagePath',
 			'isLandingPage',
 			'pagePath',
-			'currentPagePath',
+			'pagesLoaded',
 		]),
 
 		...mapState(useVersionsStore, ['selectedVersion']),
