@@ -235,7 +235,7 @@ export default {
 
 	watch: {
 		newCollectiveName(val) {
-			if (!val || this.newCollectiveName.length < 3) {
+			if (val && this.newCollectiveName.length < 3) {
 				this.setNameIsTooShortDebounced()
 				this.setNameIsTooLongDebounced.clear()
 				this.nameIsTooShort = true
