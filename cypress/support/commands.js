@@ -4,8 +4,7 @@
  */
 
 import axios from '@nextcloud/axios'
-import { User } from '@nextcloud/cypress'
-import { logout } from '@nextcloud/cypress/commands'
+import { addCommands, User } from '@nextcloud/e2e-test-server/cypress'
 import { generateOcsUrl } from '@nextcloud/router'
 import * as api from '../../src/apis/collectives/index.js'
 
@@ -27,6 +26,8 @@ Cypress.on('uncaught:exception', (err) => {
 		return false
 	}
 })
+
+addCommands()
 
 // Switch network state
 Cypress.Commands.add('goOffline', () => {
@@ -63,42 +64,6 @@ Cypress.Commands.add('goOnline', () => {
 			return Cypress.automation('remote:debugger:protocol', { command: 'Network.disable' })
 		})
 })
-
-/**
- * Copy of the new login command as long as we are blocked to upgrade @nextcloud/cypress by cypress crashes
- *
- * @param {string} user user to login
- */
-function login(user) {
-	cy.session(user, function() {
-		cy.request('/csrftoken').then(({ body }) => {
-			const requestToken = body.token
-			cy.request({
-				method: 'POST',
-				url: '/login',
-				body: {
-					user: user.userId,
-					password: user.password,
-					requesttoken: requestToken,
-				},
-				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded',
-					// Add the Origin header so that the request is not blocked by the browser.
-					Origin: (Cypress.config('baseUrl') ?? '').replace('index.php/', ''),
-				},
-				followRedirect: false,
-			})
-		})
-	}, {
-		validate() {
-			cy.request('/apps/files').its('status').should('eq', 200)
-		},
-	})
-}
-
-// Authentication commands from @nextcloud/cypress
-Cypress.Commands.add('login', login)
-Cypress.Commands.add('logout', logout)
 
 /**
  * Login with the given username to Nextcloud
