@@ -28,7 +28,7 @@
       "groupName": "cypress",
       "matchPackageNames": [
         "cypress",
-        "@nextcloud/cypress"
+        "@nextcloud/e2e-test-server"
       ]
     },
     {
