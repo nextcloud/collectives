@@ -209,7 +209,7 @@ export default {
 			if (this.nameIsTooShort) {
 				return t('collectives', 'Name too short, requires at least three characters')
 			} else if (this.nameIsTooLong) {
-				return t('collectives', 'Name too long, name cannot be longer than 127 characters')
+				return t('collectives', 'Name too long, must not exceed 127 characters')
 			} else if (this.nameIsTaken) {
 				return t('collectives', 'A collective/team with this name already exists')
 			}
@@ -235,16 +235,21 @@ export default {
 
 	watch: {
 		newCollectiveName(val) {
-			if (!val || (this.newCollectiveName.length > 2 && this.newCollectiveName.length < 128)) {
+			if (!val || this.newCollectiveName.length < 3) {
+				this.setNameIsTooShortDebounced()
+				this.setNameIsTooLongDebounced.clear()
+				this.nameIsTooShort = true
+				this.nameIsTooLong = false
+			} else if (this.newCollectiveName.length > 127) {
+				this.setNameIsTooLongDebounced()
+				this.setNameIsTooShortDebounced.clear()
+				this.nameIsTooLong = true
+				this.nameIsTooShort = false
+			} else {
 				this.setNameIsTooShortDebounced.clear()
 				this.setNameIsTooLongDebounced.clear()
 				this.nameIsTooShort = false
 				this.nameIsTooLong = false
-				return
-			} else if (this.newCollectiveName.length > 127) {
-				this.setNameIsTooLongDebounced()
-			} else {
-				this.setNameIsTooShortDebounced()
 			}
 		},
 
@@ -287,10 +292,6 @@ export default {
 		},
 
 		advanceToMembers() {
-			if (this.nameIsTooLong) {
-				showError('Collective name cannot be longer than 127 characters')
-				return
-			}
 			if (this.newCollectiveName && !this.nameIsInvalid) {
 				this.state = 1
 			}
