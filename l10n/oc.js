@@ -37,6 +37,7 @@ OC.L10N.register(
     "Deleted" : "Suprimit",
     "View only" : "Veire solament",
     "Can edit" : "Pòt modificar",
+    "Password protection (enforced)" : "Proteccion per senhal (afortida)",
     "Set password" : "Definir lo senhal",
     "Password" : "Senhal",
     "Add another link" : "Ajustar un autre ligam",
