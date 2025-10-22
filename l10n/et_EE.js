@@ -112,6 +112,7 @@ OC.L10N.register(
     "Cancel" : "Loobu",
     "New collective" : "Uus vabaühendus",
     "Add members to {name}" : "Lisa liikmeid „{name}“ vabaühendusse",
+    "Name too long, must not exceed 127 characters" : "Nimi on liiga pikk - see ei tohiks olla üle 127 tähemärgi",
     "A collective/team with this name already exists" : "Sellise nimega tiim või vabaühendus on juba olemas",
     "Create" : "Loo",
     "Create without members" : "Loo ilma liikmeteta",

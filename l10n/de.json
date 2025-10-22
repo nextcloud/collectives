@@ -110,6 +110,7 @@
     "Cancel" : "Abbrechen",
     "New collective" : "Neues Kollektiv",
     "Add members to {name}" : "Mitglieder zu {name} hinzufügen",
+    "Name too long, must not exceed 127 characters" : "Name zu lang, darf 127 Zeichen nicht überschreiten",
     "A collective/team with this name already exists" : "Ein Kollektiv/Team mit diesem Namen existiert bereits",
     "Create" : "Erstellen",
     "Create without members" : "Ohne Mitglieder erstellen",

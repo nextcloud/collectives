@@ -112,6 +112,7 @@ OC.L10N.register(
     "Cancel" : "Cancelar",
     "New collective" : "Novo colectivo",
     "Add members to {name}" : "Engadir membros a {name}",
+    "Name too long, must not exceed 127 characters" : "O nome é longo de máis, non debe exceder os 127 caracteres",
     "A collective/team with this name already exists" : "Xa existe un colectivo/equipo con ese nome",
     "Create" : "Crear",
     "Create without members" : "Crear sen membros",
