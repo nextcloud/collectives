@@ -112,6 +112,7 @@ OC.L10N.register(
     "Cancel" : "取消",
     "New collective" : "新知識庫",
     "Add members to {name}" : "新增成員至 {name}",
+    "Name too long, must not exceed 127 characters" : "名稱太長，不能超過 127 個字元",
     "A collective/team with this name already exists" : "已有同名的知識庫/團隊",
     "Create" : "建立",
     "Create without members" : "建立無成員的知識庫",
