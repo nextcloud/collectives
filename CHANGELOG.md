@@ -1,5 +1,23 @@
 # Changelog
 
+## 3.2.2 - 2025.10.23
+
+### 🐛Fixes
+* 👥 Improve UX around sharing and managing members. Thanks @silverkszlo (#2003)
+* 🐛 Detect landing page if it has a slug.
+* 💄 Improve missing app dependencies error message. Thanks @janbaum (#1700)
+* 💄 Better error message if collective name is too long. Thanks @cyan-1 (#1833)
+* 🔌 Don't fetch collectives when offline.
+* 🔌 Disable more features in UI when offline.
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 3.2.1 - 2025.10.13
 
 ### 🐛Fixes
