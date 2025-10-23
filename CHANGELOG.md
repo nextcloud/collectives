@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.2.3 - 2025.10.23
+
+### 🐛Fixes
+* 🐛 Fix page actions being disabled for subpages starting in second level.
+
+
 ## 3.2.2 - 2025.10.23
 
 ### 🐛Fixes
