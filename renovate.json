@@ -1,19 +1,24 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base"
+    "config:recommended"
   ],
   "timezone": "Europe/Berlin",
   "schedule": [
     "before 5am every weekday",
     "every weekend"
   ],
-  "reviewers": ["max-nextcloud", "mejo-"],
-  "labels": ["dependencies"],
+  "reviewers": [
+    "max-nextcloud",
+    "mejo-"
+  ],
+  "labels": [
+    "dependencies"
+  ],
   "rangeStrategy": "bump",
   "rebaseWhen": "conflicted",
   "ignoreUnstable": false,
-  "baseBranches": [
+  "baseBranchPatterns": [
     "main"
   ],
   "enabledManagers": [
@@ -32,19 +37,27 @@
       ]
     },
     {
-      "matchPackageNames": ["pinia"],
+      "matchPackageNames": [
+        "pinia"
+      ],
       "allowedVersions": "<3"
     },
     {
-      "matchPackageNames": ["vue"],
+      "matchPackageNames": [
+        "vue"
+      ],
       "allowedVersions": "<3"
     },
     {
-      "matchPackageNames": ["vue-router"],
+      "matchPackageNames": [
+        "vue-router"
+      ],
       "allowedVersions": "<4"
     },
     {
-      "matchPackageNames": ["vueuse"],
+      "matchPackageNames": [
+        "vueuse"
+      ],
       "allowedVersions": "<12"
     }
   ]
