@@ -33,6 +33,7 @@
 					:data-page-id="subpage.id"
 					:page="subpage"
 					:level="level + 1"
+					:network-online="networkOnline"
 					class="page-list-drag-item" />
 			</DraggableElement>
 		</div>
