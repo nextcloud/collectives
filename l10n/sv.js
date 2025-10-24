@@ -111,6 +111,7 @@ OC.L10N.register(
     "Cancel" : "Avbryt",
     "New collective" : "Nytt collective",
     "Add members to {name}" : "Lägg till medlemmar till {name}",
+    "Name too long, must not exceed 127 characters" : "Namnet är för långt, får inte överstiga 127 tecken",
     "A collective/team with this name already exists" : "Ett collective/team med detta namn finns redan",
     "Create" : "Skapa",
     "Create without members" : "Skapa utan medlemmar",
