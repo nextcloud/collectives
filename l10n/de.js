@@ -333,7 +333,7 @@ OC.L10N.register(
     "Failed to delete {basename} version of {page}." : "{basename}-Version von {page} konnte nicht gelöscht werden.",
     "Deleted {basename} version of {page}." : "{basename}-Version von {page} gelöscht.",
     "Error: Missing apps" : "Fehler: Apps fehlen",
-    "The following dependency apps are missing:" : "Die folgenden erforderlichen Apps fehlen: ",
+    "The following dependency apps are missing:" : "Die folgenden erforderlichen Apps fehlen:",
     "Please ask the administrator to enable these apps." : "Bitte die Admins, diese Apps zu aktivieren.",
     "in Collective {collective}" : "in Kollektiv {collective}",
     "Created collective \"%s\" for existing circle." : "Kollektiv \"%s\" für bestehenden Kreis angelegt.",
