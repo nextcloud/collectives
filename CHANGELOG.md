@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.2.4 - 2025.10.26
+
+### 🐛Fixes
+* 🐛 Fix race condition with loading CollectiveExtraAction.
+
+
 ## 3.2.3 - 2025.10.23
 
 ### 🐛Fixes
