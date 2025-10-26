@@ -9,16 +9,6 @@
 			<!-- Collective actions: only displayed for landing page in page list -->
 			<template v-if="displayCollectiveActions">
 				<CollectiveActions :collective="currentCollective" :network-online="networkOnline" />
-				<NcActionButton
-					v-if="collectiveExtraAction"
-					:close-after-click="true"
-					:disabled="!networkOnline"
-					@click="collectiveExtraAction.click()">
-					{{ collectiveExtraAction.title }}
-					<template #icon>
-						<OpenInNewIcon :size="20" />
-					</template>
-				</NcActionButton>
 				<NcActionSeparator />
 			</template>
 
@@ -290,7 +280,6 @@ export default {
 			'currentPageDavUrl',
 			'hasOutline',
 			'hasSubpages',
-			'pagesTreeWalk',
 		]),
 
 		displaySidebarAction() {
@@ -331,23 +320,6 @@ export default {
 			return this.hasSubpages(this.pageId)
 				? t('collectives', 'Delete page and subpages')
 				: t('collectives', 'Delete page')
-		},
-
-		/**
-		 * Other apps can register an extra collective action via
-		 * OCA.Collectives.CollectiveExtraAction
-		 */
-		collectiveExtraAction() {
-			const collectiveExtraAction = this.OCA.Collectives?.CollectiveExtraAction
-			if (!collectiveExtraAction) {
-				return null
-			}
-
-			const pageIds = this.pagesTreeWalk().map((p) => p.id)
-			return {
-				title: collectiveExtraAction.title ?? t('collectives', 'Extra action'),
-				click: () => collectiveExtraAction.click(pageIds) ?? function() {},
-			}
 		},
 	},
 

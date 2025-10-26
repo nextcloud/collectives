@@ -65,6 +65,16 @@
 				<LogoutIcon :size="20" />
 			</template>
 		</NcActionButton>
+		<NcActionButton
+			v-if="collectiveExtraAction"
+			:close-after-click="true"
+			:disabled="!networkOnline"
+			@click="collectiveExtraAction.click()">
+			{{ collectiveExtraAction.title }}
+			<template #icon>
+				<OpenInNewIcon :size="20" />
+			</template>
+		</NcActionButton>
 	</div>
 </template>
 
@@ -76,11 +86,13 @@ import { mapActions, mapState } from 'pinia'
 import AccountMultipleIcon from 'vue-material-design-icons/AccountMultipleOutline.vue'
 import CogIcon from 'vue-material-design-icons/CogOutline.vue'
 import LogoutIcon from 'vue-material-design-icons/Logout.vue'
+import OpenInNewIcon from 'vue-material-design-icons/OpenInNew.vue'
 import ShareVariantIcon from 'vue-material-design-icons/ShareVariantOutline.vue'
 import DownloadIcon from 'vue-material-design-icons/TrayArrowDown.vue'
 import PageTemplateIcon from '../Icon/PageTemplateIcon.vue'
 import { useCirclesStore } from '../../stores/circles.js'
 import { useCollectivesStore } from '../../stores/collectives.js'
+import { usePagesStore } from '../../stores/pages.js'
 import { useRootStore } from '../../stores/root.js'
 
 export default {
@@ -94,6 +106,7 @@ export default {
 		NcActionButton,
 		NcActionLink,
 		NcActionSeparator,
+		OpenInNewIcon,
 		PageTemplateIcon,
 		ShareVariantIcon,
 	},
@@ -124,12 +137,31 @@ export default {
 			'isCollectiveAdmin',
 		]),
 
+		...mapState(usePagesStore, ['pagesTreeWalk']),
+
 		circleLink() {
 			return generateUrl('/apps/contacts/direct/circle/' + this.collective.circleId)
 		},
 
 		printLink() {
 			return generateUrl(`/apps/collectives${this.collectivePrintPath(this.collective)}`)
+		},
+
+		/**
+		 * Other apps can register an extra collective action via
+		 * window.OCA.Collectives.CollectiveExtraAction
+		 */
+		collectiveExtraAction() {
+			const collectiveExtraAction = window.OCA.Collectives?.CollectiveExtraAction
+			if (!collectiveExtraAction) {
+				return null
+			}
+
+			const pageIds = this.pagesTreeWalk().map((p) => p.id)
+			return {
+				title: collectiveExtraAction.title ?? t('collectives', 'Extra action'),
+				click: () => collectiveExtraAction.click(pageIds) ?? function() {},
+			}
 		},
 	},
 
