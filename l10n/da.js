@@ -25,7 +25,7 @@ OC.L10N.register(
     "Could not leave the collective. {errorMessage}" : "Kunne ikke forlade dette kollektiv. {errorMessage}",
     "Manage members" : "Administrer medlemmer",
     "Share link" : "Del dette link",
-    "Export or print" : "Eksporter eller udskriv",
+    "Export or print" : "Eksportér eller udskriv",
     "Settings" : "Indstillinger",
     "Leave collective" : "Forlad dette kollektiv",
     "Offline" : "Offline",
