@@ -112,6 +112,7 @@ OC.L10N.register(
     "Cancel" : "Cealaigh",
     "New collective" : "Comhchoiteann nua",
     "Add members to {name}" : "Cuir baill le {name}",
+    "Name too long, must not exceed 127 characters" : "Ainm rófhada, ní cheadaítear níos mó ná 127 carachtar",
     "A collective/team with this name already exists" : "Tá comhchoiteann/foireann leis an ainm seo ann cheana féin",
     "Create" : "Cruthaigh",
     "Create without members" : "Cruthaigh gan baill",
