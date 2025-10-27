@@ -279,7 +279,7 @@ jobs:
           SPLIT_INDEX: ${{ env.container_index }}
 
       - name: Upload snapshots
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         if: failure()
         with:
           name: screenshots_${{ matrix.server-versions }}_${{ matrix.containers }}
@@ -287,7 +287,7 @@ jobs:
           retention-days: 5
 
       - name: Upload NC logs
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         if: failure()
         with:
           name: nc_logs_${{ matrix.server-versions }}_${{ matrix.containers }}.log
