@@ -19,12 +19,14 @@ use OCP\ISession;
 abstract class CollectivesPublicOCSController extends OCSController {
 	private string $token;
 
+	public const DAV_AUTHENTICATED_FRONTEND = 'public_link_authenticated_frontend';
+
 	public function __construct(
-		string $AppName,
+		string $appName,
 		IRequest $request,
 		private ISession $session,
 	) {
-		parent::__construct($AppName, $request);
+		parent::__construct($appName, $request);
 	}
 
 	/**
@@ -71,8 +73,7 @@ abstract class CollectivesPublicOCSController extends OCSController {
 		}
 
 		// If we are authenticated properly
-		if ($this->session->get('public_link_authenticated_token') === $this->getToken()
-			&& $this->session->get('public_link_authenticated_password_hash') === $this->getPasswordHash()) {
+		if ($this->validateTokenSession($this->getToken(), $this->getPasswordHash())) {
 			return true;
 		}
 
@@ -86,5 +87,24 @@ abstract class CollectivesPublicOCSController extends OCSController {
 	 * You can use this to do some logging for example
 	 */
 	public function shareNotFound(): void {
+	}
+
+	/**
+	 * Validate the token and password hash stored in session
+	 */
+	protected function validateTokenSession(string $token, string $passwordHash): bool {
+		// Until Nextcloud 32 (TODO: remove once we support only NC33+)
+		if ($this->session->get('public_link_authenticated_token') === $this->getToken()
+			&& $this->session->get('public_link_authenticated_password_hash') === $this->getPasswordHash()) {
+			return true;
+		}
+
+		// Since Nextcloud 33
+		$allowedTokensJSON = $this->session->get(self::DAV_AUTHENTICATED_FRONTEND) ?? '[]';
+		$allowedTokens = json_decode($allowedTokensJSON, true);
+		if (!is_array($allowedTokens)) {
+			$allowedTokens = [];
+		}
+		return ($allowedTokens[$token] ?? '') === $passwordHash;
 	}
 }
