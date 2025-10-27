@@ -12,6 +12,9 @@ return [
 		// default Vue.js router route (Vue.js frontend)
 		['name' => 'start#index', 'url' => '/', 'verb' => 'GET'],
 
+		// Service worker route
+		['name' => 'start#serviceWorker', 'url' => '/service-worker.js', 'verb' => 'GET'],
+
 		// Vue.js router public route (Vue.js frontend)
 		['name' => 'publicStart#showAuthenticate', 'url' => '/p/{token}/authenticate/{redirect}', 'verb' => 'GET'],
 		['name' => 'publicStart#authenticate', 'url' => '/p/{token}/authenticate/{redirect}', 'verb' => 'POST'],
