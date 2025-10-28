@@ -17,7 +17,6 @@ if (isDevServer) {
 	)
 }
 
-webpackConfig.entry['files'] = path.join(__dirname, 'src', 'files.js')
 webpackConfig.entry['init'] = path.join(__dirname, 'src', 'init.js')
 webpackConfig.entry['reference'] = path.join(__dirname, 'src', 'reference.js')
 

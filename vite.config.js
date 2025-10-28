@@ -8,7 +8,6 @@ import { join, resolve } from 'path'
 
 export default createAppConfig(
 	{
-		files: resolve(join('src', 'files.js')),
 		init: resolve(join('src', 'init.js')),
 		main: resolve(join('src', 'main.js')),
 		reference: resolve(join('src', 'reference.js')),
