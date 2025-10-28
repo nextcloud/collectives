@@ -125,7 +125,6 @@ build: node-modules build-js-production composer-install-no-dev
 	rsync -a --delete --delete-excluded \
 		--exclude="$(APP_NAME)/.**" \
 		--exclude="$(APP_NAME)/Makefile" \
-		--exclude="$(APP_NAME)/Dockerfile" \
 		--exclude="$(APP_NAME)/TODO*" \
 		--exclude="$(APP_NAME)/babel.config.js" \
 		--exclude="$(APP_NAME)/build" \
@@ -133,7 +132,7 @@ build: node-modules build-js-production composer-install-no-dev
 		--exclude="$(APP_NAME)/cypress" \
 		--exclude="$(APP_NAME)/cypress.config.js" \
 		--exclude="$(APP_NAME)/docs" \
-		--exclude="$(APP_NAME)/jest.config.json" \
+		--exclude="$(APP_NAME)/eslint.config.*" \
 		--exclude="$(APP_NAME)/jsconfig.json" \
 		--exclude="$(APP_NAME)/node_modules" \
 		--exclude="$(APP_NAME)/package-lock.json" \
@@ -144,9 +143,10 @@ build: node-modules build-js-production composer-install-no-dev
 		--exclude="$(APP_NAME)/src" \
 		--exclude="$(APP_NAME)/stylelint.config.js" \
 		--exclude="$(APP_NAME)/tests" \
+		--exclude="$(APP_NAME)/tsconfig.json" \
 		--exclude="$(APP_NAME)/vendor-bin" \
-		--exclude="$(APP_NAME)/webpack.*" \
-	$(PROJECT_DIR) $(RELEASE_DIR)/
+		--exclude="$(APP_NAME)/vite.*" \
+		$(PROJECT_DIR) $(RELEASE_DIR)/
 	@if [ -f $(CERT_DIR)/$(APP_NAME).key ]; then \
 		echo "Signing code…"; \
 		$(OCC) integrity:sign-app --privateKey="$(CERT_DIR)/$(APP_NAME).key" \
