@@ -15,7 +15,7 @@
     "serve": "vite --mode development serve",
     "lint": "eslint --ext .js,.vue src cypress --max-warnings=0",
     "lint:fix": "eslint --ext .js,.vue src cypress --fix",
-    "test": "vitest run src/tests",
+    "test": "vitest run",
     "stylelint": "stylelint css/collectives.css css/*.scss src/**/*.scss src/*.vue src/**/*.vue",
     "stylelint:fix": "stylelint css/collectives.css css/*.scss src/**/*.scss src/**/*.vue --fix"
   },
@@ -67,7 +67,7 @@
     "eslint": "^9.38.0",
     "eslint-plugin-cypress": "^5.2.0",
     "vite": "^7.1.12",
-    "vitest": "^4.0.3",
+    "vitest": "^4.0.4",
     "wait-on": "^9.0.1"
   },
   "overrides": {
