@@ -15,7 +15,7 @@
     "serve": "vite --mode development serve",
     "lint": "eslint --ext .js,.vue src cypress --max-warnings=0",
     "lint:fix": "eslint --ext .js,.vue src cypress --fix",
-    "test": "vitest run src/tests",
+    "test": "vitest run",
     "stylelint": "stylelint css/collectives.css css/*.scss src/**/*.scss src/*.vue src/**/*.vue",
     "stylelint:fix": "stylelint css/collectives.css css/*.scss src/**/*.scss src/**/*.vue --fix"
   },
