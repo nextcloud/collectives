@@ -26,7 +26,6 @@
 
 <script>
 import { generateUrl } from '@nextcloud/router'
-// As it's the only nextcloud-vue component used in collectives-files.js, import it separately to keep asset small
 import NcButton from '@nextcloud/vue/components/NcButton'
 import InformationIcon from 'vue-material-design-icons/InformationOutline.vue'
 

@@ -55,11 +55,6 @@ class BeforeTemplateRenderedListener implements IEventListener {
 		Util::addInitScript('collectives', 'collectives-init');
 		Util::addStyle('collectives', 'collectives-init');
 
-		if ($event->getResponse()->getApp() === 'files') {
-			Util::addScript('collectives', 'collectives-files');
-			Util::addStyle('collectives', 'collectives-files');
-		}
-
 		$isCollectivesResponse = $event->getResponse()->getApp() === Application::APP_NAME;
 		if ($isCollectivesResponse && class_exists(LoadEditor::class)) {
 			$this->eventDispatcher->dispatchTyped(new LoadEditor());
