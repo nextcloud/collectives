@@ -85,7 +85,7 @@ OC.L10N.register(
     "Permissions" : "Rechte",
     "Allow editing for" : "Bearbeiten erlauben für",
     "Admins only" : "Nur Admins",
-    "Admins and moderators" : "Administrator:innen und Moderator:innen",
+    "Admins and moderators" : "Administrations- und Moderationsmitglieder",
     "All members" : "Alle Mitglieder",
     "Allow sharing for" : "Teilen erlauben für",
     "Page settings" : "Seiteneinstellungen",
