@@ -225,14 +225,14 @@ export default {
 			this.$emit('delete-from-selection', member)
 		},
 
-		onSearch() {
+		onSearch(searchQuery) {
 			// Don't search for new members if not admin
 			if (!this.currentUserIsAdmin) {
 				return
 			}
 
 			this.searchResults = []
-			if (this.searchWithoutQuery || this.hasSearchQuery) {
+			if (this.searchWithoutQuery || searchQuery) {
 				this.fetchSearchResultsDebounced()
 			}
 		},
