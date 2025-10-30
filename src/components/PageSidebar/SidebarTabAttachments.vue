@@ -13,10 +13,10 @@
 		</NcEmptyContent>
 
 		<!-- offline -->
-		<OfflineContent v-else-if="!loaded && !networkOnline" />
+		<OfflineContent v-else-if="!attachmentsLoaded && !networkOnline" />
 
 		<!-- error message -->
-		<NcEmptyContent v-else-if="error" :name="error">
+		<NcEmptyContent v-else-if="attachmentsError" :name="t('collectives', 'Could not get attachments')">
 			<template #icon>
 				<AlertOctagonIcon />
 			</template>
@@ -162,7 +162,6 @@ import { getCurrentUser } from '@nextcloud/auth'
 import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { formatFileSize } from '@nextcloud/files'
 import moment from '@nextcloud/moment'
-import { listen } from '@nextcloud/notify_push'
 import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
 import { NcActionButton, NcActionLink, NcEmptyContent, NcListItem, NcLoadingIcon } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
@@ -195,24 +194,9 @@ export default {
 		RestoreIcon,
 	},
 
-	props: {
-		page: {
-			type: Object,
-			required: true,
-		},
-	},
-
 	setup() {
 		const { networkOnline } = useNetworkState()
 		return { networkOnline }
-	},
-
-	data() {
-		return {
-			loaded: false,
-			loadPending: true,
-			error: '',
-		}
 	},
 
 	computed: {
@@ -224,6 +208,8 @@ export default {
 
 		...mapState(usePagesStore, [
 			'attachments',
+			'attachmentsError',
+			'attachmentsLoaded',
 			'currentPage',
 			'deletedAttachments',
 			'isTextEdit',
@@ -303,71 +289,22 @@ export default {
 		},
 	},
 
-	watch: {
-		'page.id': function() {
-			this.loaded = false
-			this.getAttachmentsForPage(true)
-		},
-
-		networkOnline: function(val) {
-			if (val && this.loadPending) {
-				this.getAttachmentsForPage(true)
-			}
-		},
-	},
-
 	mounted() {
-		this.getAttachmentsForPage(true)
-		// Reload attachment list on event from Text
-		subscribe('collectives:text-image-node:add', this.getAttachmentsForPage)
-		subscribe('text:image-node:add', this.getAttachmentsForPage)
 		// Move attachment to recently deleted on event from Text
 		subscribe('collectives:text-image-node:delete', this.onDeleteImageNode)
 		subscribe('text:image-node:delete', this.onDeleteImageNode)
-		// Reload attachment list on filesystem changes
-		listen('notify_file', this.getAttachmentsForPage.bind(this))
 	},
 
 	beforeDestroy() {
-		unsubscribe('collectives:text-image-node:add', this.getAttachmentsForPage)
-		unsubscribe('text:image-node:add', this.getAttachmentsForPage)
 		unsubscribe('collectives:text-image-node:delete', this.onDeleteImageNode)
 		unsubscribe('text:image-node:delete', this.onDeleteImageNode)
 	},
 
 	methods: {
-		...mapActions(useRootStore, ['done', 'load']),
 		...mapActions(usePagesStore, [
-			'getAttachments',
 			'setAttachmentDeleted',
 			'setAttachmentUndeleted',
 		]),
-
-		/**
-		 * Get attachments for a page
-		 *
-		 * @param {boolean} setLoading Whether to set loading attribute
-		 */
-		async getAttachmentsForPage(setLoading) {
-			this.loadPending = true
-			if (!this.networkOnline) {
-				return
-			}
-
-			if (setLoading) {
-				this.load('attachments')
-			}
-			try {
-				await this.getAttachments(this.page)
-				this.loaded = true
-				this.loadPending = false
-			} catch (e) {
-				this.error = t('collectives', 'Could not get attachments')
-				console.error('Failed to get page attachments', e)
-			} finally {
-				this.done('attachments')
-			}
-		},
 
 		clickAttachment(attachment, ev) {
 			// Show in viewer if the mimetype is supported

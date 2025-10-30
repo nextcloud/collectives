@@ -20,7 +20,7 @@
 			<template #icon>
 				<PaperclipIcon :size="20" />
 			</template>
-			<SidebarTabAttachments v-if="showing('sidebar')" :page="currentPage" />
+			<SidebarTabAttachments v-if="showing('sidebar')" />
 		</NcAppSidebarTab>
 		<NcAppSidebarTab
 			id="backlinks"
