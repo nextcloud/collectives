@@ -96,6 +96,7 @@ export default {
 		// Reload attachment list on event from Text
 		subscribe('collectives:text-image-node:add', this.getAttachmentsForPage)
 		subscribe('text:image-node:add', this.getAttachmentsForPage)
+		subscribe('collectives:page-sidebar', this.toggleSidebar)
 
 		// Reload attachment list on filesystem changes
 		listen('notify_file', this.getAttachmentsForPage.bind(this))
@@ -104,9 +105,16 @@ export default {
 	beforeDestroy() {
 		unsubscribe('collectives:text-image-node:add', this.getAttachmentsForPage)
 		unsubscribe('text:image-node:add', this.getAttachmentsForPage)
+		unsubscribe('collectives:page-sidebar', this.toggleSidebar)
 	},
 
 	methods: {
+		...mapActions(useRootStore, [
+			'hide',
+			'setActiveSidebarTab',
+			'show',
+		]),
+
 		...mapActions(usePagesStore, [
 			'getAttachments',
 			'setAttachmentsError',
@@ -147,6 +155,15 @@ export default {
 			} finally {
 				this.done('attachments')
 			}
+		},
+
+		toggleSidebar({ open, tab }) {
+			if (open) {
+				this.show('sidebar')
+			} else {
+				this.hide('sidebar')
+			}
+			this.setActiveSidebarTab(tab)
 		},
 	},
 }
