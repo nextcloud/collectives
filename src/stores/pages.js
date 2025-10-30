@@ -27,8 +27,10 @@ export const usePagesStore = defineStore('pages', {
 		sortBy: undefined,
 		collapsed: useLocalStorage(STORE_PREFIX + 'collapsed', {}),
 		outline: useLocalStorage(STORE_PREFIX + 'outline', {}),
-		attachments: [],
+		allAttachments: useLocalStorage(STORE_PREFIX + 'allAttachments', {}),
 		deletedAttachments: [],
+		attachmentsLoaded: false,
+		attachmentsError: false,
 		backlinks: [],
 		highlightPageId: null,
 		highlightAnimationPageId: null,
@@ -60,6 +62,10 @@ export const usePagesStore = defineStore('pages', {
 		},
 		trashPages: (state) => {
 			return state.allTrashPages[state.collectiveId] || []
+		},
+
+		attachments: (state) => {
+			return state.allAttachments[state.collectiveId]?.[state.currentPageId] || []
 		},
 
 		pagesLoaded: (state) => {
@@ -135,6 +141,10 @@ export const usePagesStore = defineStore('pages', {
 				return state.pageById(Number(rootStore.fileIdQuery))
 			}
 			return state.pages.find((p) => (p.id === state.currentPageIds[state.currentPageIds.length - 1]))
+		},
+
+		currentPageId(state) {
+			return state.currentPage.id
 		},
 
 		pageById(state) {
@@ -350,7 +360,7 @@ export const usePagesStore = defineStore('pages', {
 			}
 		},
 
-		getTextMode: (state) => state.textMode[state.currentPage.id] ?? pageModes.MODE_VIEW,
+		getTextMode: (state) => state.textMode[state.currentPageId] ?? pageModes.MODE_VIEW,
 		isTextEdit: (state) => state.getTextMode === pageModes.MODE_EDIT,
 		isTextView: (state) => state.getTextMode === pageModes.MODE_VIEW,
 
@@ -455,8 +465,8 @@ export const usePagesStore = defineStore('pages', {
 			this.sortBy = order
 		},
 
-		setTextEdit() { set(this.textMode, this.currentPage.id, pageModes.MODE_EDIT) },
-		setTextView() { set(this.textMode, this.currentPage.id, pageModes.MODE_VIEW) },
+		setTextEdit() { set(this.textMode, this.currentPageId, pageModes.MODE_EDIT) },
+		setTextView() { set(this.textMode, this.currentPageId, pageModes.MODE_VIEW) },
 
 		toggleCollapsed(pageId) {
 			// Default to 'false' if unset
@@ -470,7 +480,7 @@ export const usePagesStore = defineStore('pages', {
 			set(this.outline, pageId, this.outline[pageId] === undefined ? true : !this.outline[pageId])
 		},
 		setOutlineForCurrentPage(visible) {
-			set(this.outline, this.currentPage.id, visible)
+			set(this.outline, this.currentPageId, visible)
 		},
 
 		expandParents(pageId) {
@@ -587,7 +597,7 @@ export const usePagesStore = defineStore('pages', {
 		 * Touch current page
 		 */
 		async touchPage() {
-			const response = await api.touchPage(this.context, this.currentPage.id)
+			const response = await api.touchPage(this.context, this.currentPageId)
 			this._updatePageState(response.data.ocs.data.page)
 		},
 
@@ -597,7 +607,7 @@ export const usePagesStore = defineStore('pages', {
 		 * @param {string} newTitle new title for the page
 		 */
 		async renamePage(newTitle) {
-			const response = await api.renamePage(this.context, this.currentPage.id, newTitle)
+			const response = await api.renamePage(this.context, this.currentPageId, newTitle)
 			this._updatePageState(response.data.ocs.data.page)
 		},
 
@@ -937,9 +947,12 @@ export const usePagesStore = defineStore('pages', {
 		 */
 		async getAttachments(page) {
 			const response = await api.getPageAttachments(this.context, page.id)
-			this.attachments = response.data.ocs.data.attachments
+			if (typeof this.allAttachments[this.collectiveId] !== 'object') {
+				set(this.allAttachments, this.collectiveId, {})
+			}
+			set(this.allAttachments[this.collectiveId], page.id, response.data.ocs.data.attachments
 				// Disregard deletedAttachments when updating attachments
-				.filter((a) => !this.deletedAttachments.map((a) => a.name).includes(a.name))
+				.filter((a) => !this.deletedAttachments.map((a) => a.name).includes(a.name)))
 			this.deletedAttachments = this.deletedAttachments
 				// Only keep deletedAttachments that still exist
 				.filter((a) => this.attachments.map((a) => a.name).includes(a.name))
@@ -948,7 +961,7 @@ export const usePagesStore = defineStore('pages', {
 		setAttachmentDeleted(name) {
 			const index = this.attachments.findIndex((a) => a.name === name)
 			if (index !== -1) {
-				const [attachment] = this.attachments.splice(index, 1)
+				const [attachment] = this.allAttachments[this.collectiveId][this.currentPageId].splice(index, 1)
 				this.deletedAttachments.push(attachment)
 			}
 		},
@@ -957,8 +970,16 @@ export const usePagesStore = defineStore('pages', {
 			const index = this.deletedAttachments.findIndex((a) => a.name === name)
 			if (index !== -1) {
 				const [attachment] = this.deletedAttachments.splice(index, 1)
-				this.attachments.push(attachment)
+				this.allAttachments[this.collectiveId][this.currentPageId].push(attachment)
 			}
+		},
+
+		setAttachmentsLoaded(loaded) {
+			this.attachmentsLoaded = loaded
+		},
+
+		setAttachmentsError(error) {
+			this.attachmentsError = error
 		},
 
 		/**

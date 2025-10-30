@@ -19,12 +19,15 @@
 </template>
 
 <script>
-import { mapState } from 'pinia'
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { listen } from '@nextcloud/notify_push'
+import { mapActions, mapState } from 'pinia'
 import LandingPageWidgets from './Page/LandingPageWidgets.vue'
 import PageTags from './Page/PageTags.vue'
 import PageTitleBar from './Page/PageTitleBar.vue'
 import SearchDialog from './Page/SearchDialog.vue'
 import TextEditor from './Page/TextEditor.vue'
+import { useNetworkState } from '../composables/useNetworkState.ts'
 import { usePagesStore } from '../stores/pages.js'
 import { useRootStore } from '../stores/root.js'
 import { useSearchStore } from '../stores/search.js'
@@ -41,9 +44,22 @@ export default {
 		SearchDialog,
 	},
 
+	setup() {
+		const { networkOnline } = useNetworkState()
+		return { networkOnline }
+	},
+
+	data() {
+		return {
+			loadPending: true,
+		}
+	},
+
 	computed: {
 		...mapState(useRootStore, [
+			'done',
 			'isTextEdit',
+			'load',
 		]),
 
 		...mapState(useTagsStore, ['tagsLoaded']),
@@ -61,7 +77,42 @@ export default {
 		},
 	},
 
+	watch: {
+		'currentPage.id': function() {
+			this.setAttachmentsError(false)
+			this.setAttachmentsLoaded(false)
+			this.getAttachmentsForPage(true)
+		},
+
+		networkOnline: function(val) {
+			if (val && this.loadPending) {
+				this.getAttachmentsForPage(true)
+			}
+		},
+	},
+
+	mounted() {
+		this.getAttachmentsForPage(true)
+		// Reload attachment list on event from Text
+		subscribe('collectives:text-image-node:add', this.getAttachmentsForPage)
+		subscribe('text:image-node:add', this.getAttachmentsForPage)
+
+		// Reload attachment list on filesystem changes
+		listen('notify_file', this.getAttachmentsForPage.bind(this))
+	},
+
+	beforeDestroy() {
+		unsubscribe('collectives:text-image-node:add', this.getAttachmentsForPage)
+		unsubscribe('text:image-node:add', this.getAttachmentsForPage)
+	},
+
 	methods: {
+		...mapActions(usePagesStore, [
+			'getAttachments',
+			'setAttachmentsError',
+			'setAttachmentsLoaded',
+		]),
+
 		focusEditor() {
 			this.$refs.texteditor.focusEditor()
 		},
@@ -69,6 +120,32 @@ export default {
 		saveEditor() {
 			if (this.isTextEdit) {
 				this.$refs.texteditor.save()
+			}
+		},
+
+		/**
+		 * Get attachments for current page
+		 *
+		 * @param {boolean} setLoading Whether to set loading attribute
+		 */
+		async getAttachmentsForPage(setLoading) {
+			this.loadPending = true
+			if (!this.networkOnline) {
+				return
+			}
+
+			if (setLoading) {
+				this.load('attachments')
+			}
+			try {
+				await this.getAttachments(this.currentPage)
+				this.setAttachmentsLoaded(true)
+				this.loadPending = false
+			} catch (e) {
+				this.setAttachmentsError(true)
+				console.error('Failed to get page attachments', e)
+			} finally {
+				this.done('attachments')
 			}
 		},
 	},
