@@ -68,8 +68,8 @@ export default {
 		})
 		const davContent = ref('')
 		const { contentLoaded, editor, editorContent, editorEl, pageContent, setupEditor } = useEditor(davContent)
-		const { reader, readerEl, setupReader } = useReader(pageContent)
-		return { contentLoaded, davContent, editor, editorContent, editorEl, pageContent, reader, readerEl, setupEditor, setupReader, textContainer, width }
+		const { pageInfoBarPage, reader, readerEl, setupReader } = useReader(pageContent)
+		return { contentLoaded, davContent, editor, editorContent, editorEl, pageContent, pageInfoBarPage, reader, readerEl, setupEditor, setupReader, textContainer, width }
 	},
 
 	data() {
@@ -103,7 +103,7 @@ export default {
 				// Update currentPage in PageInfoBar component through Text editorAPI
 				if (this.editorApiFlags.includes(editorApiUpdateReadonlyBarProps)) {
 					this.reader?.updateReadonlyBarProps({
-						currentPage: this.pageInfoBarPage || this.pageToUse,
+						currentPage: this.pageInfoBarPage || this.currentPage,
 						attachmentCount: this.attachments.length,
 					})
 				}

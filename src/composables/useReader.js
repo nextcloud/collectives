@@ -98,6 +98,7 @@ export function useReader(content) {
 	}
 
 	return {
+		pageInfoBarPage,
 		reader,
 		readerEl,
 		setupReader,
