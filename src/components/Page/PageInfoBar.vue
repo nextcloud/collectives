@@ -5,19 +5,36 @@
 
 <template>
 	<div class="text-menubar">
-		<div v-if="currentPage.lastUserId" class="infobar-item infobar-lastupdate">
+		<a v-if="currentPage.lastUserId" class="infobar-item infobar-lastupdate" @click="emitSidebar('versions')">
 			<div class="item-text">
 				<LastUserBubble
 					:last-user-id="currentPage.lastUserId"
 					:last-user-display-name="currentPage.lastUserDisplayName"
 					:timestamp="currentPage.timestamp"
-					:show-prefix-string="true" />
+					:show-prefix-string="!isMobile" />
 			</div>
-		</div>
+		</a>
+		<template v-if="attachmentCount">
+			<div v-if="currentPage.lastUserId" class="infobar-seperator">
+				•
+			</div>
+			<a class="infobar-item" @click="emitSidebar('attachments')">
+				<div class="item-icon">
+					<PaperclipIcon :size="18" />
+				</div>
+				<div class="item-text">
+					{{ attachmentCountString }}
+				</div>
+			</a>
+		</template>
 	</div>
 </template>
 
 <script>
+import { emit } from '@nextcloud/event-bus'
+import { t } from '@nextcloud/l10n'
+import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
+import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue'
 import LastUserBubble from '../LastUserBubble.vue'
 
 export default {
@@ -25,12 +42,38 @@ export default {
 
 	components: {
 		LastUserBubble,
+		PaperclipIcon,
 	},
 
 	props: {
 		currentPage: {
 			type: Object,
 			required: true,
+		},
+
+		attachmentCount: {
+			type: Number,
+			required: true,
+		},
+	},
+
+	setup() {
+		const isMobile = useIsMobile()
+		return { isMobile }
+	},
+
+	computed: {
+		attachmentCountString() {
+			return this.isMobile
+				? this.attachmentCount
+				: t('collectives', '{attachmentCount} attachments', { attachmentCount: this.attachmentCount })
+		},
+	},
+
+	methods: {
+		t,
+		emitSidebar(tab) {
+			emit('collectives:page-sidebar', { open: true, tab })
 		},
 	},
 }

@@ -86,6 +86,7 @@ export default {
 		]),
 
 		...mapState(usePagesStore, [
+			'attachments',
 			'currentPage',
 			'currentPageDavUrl',
 			'isTextEdit',
@@ -103,6 +104,7 @@ export default {
 				if (this.editorApiFlags.includes(editorApiUpdateReadonlyBarProps)) {
 					this.reader?.updateReadonlyBarProps({
 						currentPage: this.pageInfoBarPage || this.pageToUse,
+						attachmentCount: this.attachments.length,
 					})
 				}
 
