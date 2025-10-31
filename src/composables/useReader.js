@@ -77,6 +77,7 @@ export function useReader(content) {
 				component: PageInfoBar,
 				props: {
 					currentPage: pageInfoBarPage.value || page,
+					attachmentCount: pagesStore.attachments.length,
 				},
 			},
 			onOutlineToggle: pagesStore.setOutlineForCurrentPage,
@@ -97,6 +98,7 @@ export function useReader(content) {
 	}
 
 	return {
+		pageInfoBarPage,
 		reader,
 		readerEl,
 		setupReader,
