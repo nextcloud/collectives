@@ -1,5 +1,25 @@
 # Changelog
 
+## 3.3.0 - 2025.11.03
+
+### ✨New
+* 👷‍♀️ Add service worker that caches app assets for offline support. (#1772)
+* 📎 List number of attachments and link to sidebar from page info bar. (#346)
+
+### 🐛Fixes
+* 🔒 Fix validating password hash in public shares in Nextcloud 33.
+* 📁 Remove obsolete mimetype folder icon registration.
+* 🔎 Fix search in member picker when pasting into search field.
+* ⌛ Update last edited timestamp in page info bar.
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 3.2.4 - 2025.10.26
 
 ### 🐛Fixes
