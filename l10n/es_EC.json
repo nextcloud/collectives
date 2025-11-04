@@ -159,6 +159,7 @@
     "Could not save emoji for page" : "No se pudo guardar el emoji para la página",
     "Could not move page" : "No se pudo mover la página",
     "Could not delete the page" : "No se pudo eliminar la página",
+    "Please reload the page." : "Por favor vuelve a cargar la página.",
     "Error: Missing apps" : "Error: Faltan aplicaciones",
     "Please ask the administrator to enable these apps." : "Pide al administrador que habilite estas aplicaciones.",
     "in Collective {collective}" : "en el colectivo {collective}",

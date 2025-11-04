@@ -329,6 +329,7 @@
     "Set label for {basename}." : "Ställ in etikett för {basename}.",
     "Failed to delete {basename} version of {page}." : "Kunde inte ta bort versionen {basename} av {page}.",
     "Deleted {basename} version of {page}." : "Tog bort versionen {basename} av {page}.",
+    "Please reload the page." : "Uppdatera sidan.",
     "Error: Missing apps" : "Fel: Appar saknas",
     "The following dependency apps are missing:" : "Följande obligatoriska appar saknas:",
     "Please ask the administrator to enable these apps." : "Be administratören att aktivera dessa appar.",

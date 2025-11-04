@@ -235,6 +235,7 @@ OC.L10N.register(
     "Could not copy page to another collective" : "Ezin izan da orria kopiatu beste kolektibo batera",
     "Could not move page to another collective" : "Ezin izan da orria beste kolektibo batera eraman",
     "Could not delete the page" : "Ezin izan da orria ezabatu",
+    "Please reload the page." : "Mesedez birkargatu orria.",
     "Error: Missing apps" : "Errorea: aplikazioak falta dira",
     "Please ask the administrator to enable these apps." : "Mesedez, eskatu administratzaileari aplikazio hauek gaitzeko.",
     "in Collective {collective}" : " {collective} kolektiboan",

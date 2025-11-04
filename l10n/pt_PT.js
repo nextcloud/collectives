@@ -45,6 +45,7 @@ OC.L10N.register(
     "Sharing" : "Partilha",
     "Versions" : "Versões",
     "Link copied" : "Hiperligação copiada",
+    "Please reload the page." : "Por favor, recarregue a página.",
     "Copied" : "Copiado",
     "Cannot copy" : "Não é possível copiar",
     "Copy share link" : "Copie partilhe ligação",

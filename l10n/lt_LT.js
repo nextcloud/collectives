@@ -103,6 +103,7 @@ OC.L10N.register(
     "Could not create the page" : "Nepavyko sukurti puslapio",
     "Could not move page" : "Nepavyko perkelti puslapio",
     "Could not delete the page" : "Nepavyko ištrinti puslapio",
+    "Please reload the page." : "Prašome įkelti puslapį iš naujo.",
     "Copied" : "Nukopijuota",
     "Cannot copy" : "Nepavyksta nukopijuoti",
     "Copy share link" : "Kopijuoti viešinio nuorodą",

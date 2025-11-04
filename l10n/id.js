@@ -42,6 +42,7 @@ OC.L10N.register(
     "Sharing" : "Berbagi",
     "Versions" : "Versi",
     "Link copied" : "Link tersalin",
+    "Please reload the page." : "Silakan muat ulang halaman.",
     "Copied" : "Tersalin",
     "Failed to revert {page} to revision {timestamp}." : "Gagal mengembalikan {page} ke revisi {timestamp}."
 },

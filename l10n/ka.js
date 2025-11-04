@@ -70,6 +70,7 @@ OC.L10N.register(
     "Sharing" : "Sharing",
     "Versions" : "Versions",
     "Link copied" : "Link copied",
+    "Please reload the page." : "Please reload the page.",
     "Copied" : "Copied",
     "Cannot copy" : "Cannot copy",
     "Copy share link" : "Copy share link",

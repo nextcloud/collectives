@@ -31,6 +31,7 @@ OC.L10N.register(
     "Unshare" : "გაზიარების შეწყვეტა",
     "Sharing" : "გაზიარება",
     "Versions" : "ვერსიები",
+    "Please reload the page." : "გთხოვთ გადატვირთოთ გვერდი.",
     "Failed to revert {page} to revision {timestamp}." : "ფაილის {page} დაბრუნება რევიზიაზე {timestamp} ვერ ხერხდება."
 },
 "nplurals=2; plural=(n!=1);");

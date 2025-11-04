@@ -260,6 +260,7 @@
     "Could not copy page to another collective" : "Nepodarilo sa skopírovať stránku do iného kolektívu",
     "Could not move page to another collective" : "Nepodarilo sa presunúť stránku do iného kolektívu",
     "Could not delete the page" : "Stránku sa nepodarilo odstrániť",
+    "Please reload the page." : "Obnovte prosím stránku.",
     "Error: Missing apps" : "Chyba: Chýbajúce apky",
     "Please ask the administrator to enable these apps." : "Prosím, požiadajte správcu, aby povolil tieto apky.",
     "in Collective {collective}" : "v kolektíve {collective}",

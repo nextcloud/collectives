@@ -69,6 +69,7 @@ OC.L10N.register(
     "Sharing" : "Đang chia sẽ",
     "Versions" : "Phiên bản",
     "Link copied" : "Đã sao chép liên kết",
+    "Please reload the page." : "Vui lòng tải lại trang.",
     "Copied" : "Đã sao chép",
     "Failed to revert {page} to revision {timestamp}." : "Thất bại khi trở lại {page} khi sử đổi {timestamp}.",
     "_%n byte_::_%n bytes_" : ["%n byte"]

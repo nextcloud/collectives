@@ -159,6 +159,7 @@ OC.L10N.register(
     "Could not save emoji for page" : "Не удалось сохранить эмодзи для страницы",
     "Could not move page" : "Не удалось переместить страницу",
     "Could not delete the page" : "Не удалось удалить страницу",
+    "Please reload the page." : "Обновите страницу.",
     "Error: Missing apps" : "Ошибка: Отсутствуют приложения",
     "Please ask the administrator to enable these apps." : "Пожалуйста, попросите администратора включить эти приложения.",
     "in Collective {collective}" : "в группе {collective}",

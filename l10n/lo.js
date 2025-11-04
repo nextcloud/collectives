@@ -22,6 +22,7 @@ OC.L10N.register(
     "Add another link" : "ເພີ່ມລິງອຶ່ນອີ",
     "Unshare" : "ຍົກເລີກການແບ່ງປັນ",
     "Sharing" : "ການແບ່ງປັນ",
-    "Link copied" : "ສຳເນົາລິງ"
+    "Link copied" : "ສຳເນົາລິງ",
+    "Please reload the page." : "ກະລຸນາໂຫຼດຫນ້າເພດອີກ."
 },
 "nplurals=1; plural=0;");

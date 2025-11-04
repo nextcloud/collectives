@@ -322,6 +322,7 @@
     "Set label for {basename}." : "Ορίστηκε ετικέτα για {basename}.",
     "Failed to delete {basename} version of {page}." : "Αποτυχία διαγραφής έκδοσης {basename} της {page}.",
     "Deleted {basename} version of {page}." : "Διαγράφηκε η έκδοση {basename} της {page}.",
+    "Please reload the page." : "Παρακαλούμε φορτώστε ξανά τη σελίδα.",
     "Error: Missing apps" : "Σφάλμα: Απουσιάζουν εφαρμογές",
     "The following dependency apps are missing:" : "Λείπουν οι ακόλουθες εφαρμογές εξαρτήσεων:",
     "Please ask the administrator to enable these apps." : "Παρακαλούμε ζητήστε από τον διαχειριστή να ενεργοποιήσει αυτές τις εφαρμογές.",

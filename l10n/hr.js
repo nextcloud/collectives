@@ -53,6 +53,7 @@ OC.L10N.register(
     "Sharing" : "Dijeljenje",
     "Versions" : "Inačice",
     "Link copied" : "Poveznica je kopirana",
+    "Please reload the page." : "Ponovno učitajte stranicu.",
     "Copied" : "Kopirano",
     "Cannot copy" : "Nije moguće kopirati",
     "Copy share link" : "Kopiraj poveznicu dijeljenja",

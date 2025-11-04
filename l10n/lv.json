@@ -56,6 +56,7 @@
     "Sharing" : "Koplietošana",
     "Versions" : "Versijas",
     "Link copied" : "Saite nokopēta",
+    "Please reload the page." : "Lūgums pārlādēt lapu",
     "Copied" : "Nokopēts",
     "Failed to revert {page} to revision {timestamp}." : "Neizdevās atjaunot {page} uz labojuma versiju {timestamp} "
 },"pluralForm" :"nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);"

@@ -310,6 +310,7 @@
     "Set label for {basename}." : "Label instellen voor {basename}.",
     "Failed to delete {basename} version of {page}." : "Verwijderen mislukt voor {basename} versie van {page}.",
     "Deleted {basename} version of {page}." : "{basename} verwijderd van versie {page}.",
+    "Please reload the page." : "Herlaad deze pagina.",
     "Error: Missing apps" : "Fout: ontbrekende apps",
     "The following dependency apps are missing:" : "De volgende afhankelijkheidsapps ontbreken:",
     "Please ask the administrator to enable these apps." : "Vraag de beheerder om deze apps in te schakelen.",

@@ -330,6 +330,7 @@
     "Set label for {basename}." : "Weka lebo kwenye {basename}.",
     "Failed to delete {basename} version of {page}." : "Imeshindwa kufuta toleo la {basename} la {page}.",
     "Deleted {basename} version of {page}." : "Toleo la {basename} la {page} limefutwa.",
+    "Please reload the page." : "Tafadhali pakia ukurasa upya ",
     "Error: Missing apps" : "Hitilafu: Programu zinakosekana",
     "The following dependency apps are missing:" : "Programu zifuatazo za utegemezi hazipo:",
     "Please ask the administrator to enable these apps." : "Tafadhali mwombe msimamizi kuwezesha programu hizi.",

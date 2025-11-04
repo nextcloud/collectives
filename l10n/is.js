@@ -77,6 +77,7 @@ OC.L10N.register(
     "Sharing" : "Deiling",
     "Versions" : "Útgáfur",
     "Link copied" : "Tengill afritaður",
+    "Please reload the page." : "Þú ættir að hlaða síðunni aftur inn.",
     "Copied" : "Afritað",
     "Cannot copy" : "Get ekki afritað",
     "Copy share link" : "Afrita deilitengil",

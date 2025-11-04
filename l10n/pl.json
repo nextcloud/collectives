@@ -297,6 +297,7 @@
     "Could not save emoji for page" : "Nie można zapisać emotikona dla tej strony",
     "Could not move page" : "Nie można przenieść strony",
     "Could not delete the page" : "Nie można usunąć tej strony",
+    "Please reload the page." : "Przeładuj stronę.",
     "Error: Missing apps" : "Błąd: Brakująca aplikacja",
     "Please ask the administrator to enable these apps." : "Proszę poproś administratora o włączenie tych aplikacji.",
     "in Collective {collective}" : "w Kolektywie {collective}",

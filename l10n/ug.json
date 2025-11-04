@@ -255,6 +255,7 @@
     "Could not copy page to another collective" : "بەتنى باشقا كوللىكتىپقا كۆچۈرەلمىدى",
     "Could not move page to another collective" : "بەتنى باشقا كوللىكتىپقا يۆتكىگىلى بولمىدى",
     "Could not delete the page" : "بۇ بەتنى ئۆچۈرەلمىدى",
+    "Please reload the page." : "بۇ بەتنى قايتا يۈكلەڭ.",
     "Error: Missing apps" : "خاتالىق: ئەپلەرنى قولدىن بېرىپ قويۇش",
     "Please ask the administrator to enable these apps." : "باشقۇرغۇچىدىن بۇ ئەپلەرنى قوزغىتىشنى تەلەپ قىلىڭ.",
     "in Collective {collective}" : "كوللىكتىپ {collective}",

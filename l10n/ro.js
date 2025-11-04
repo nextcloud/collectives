@@ -47,6 +47,7 @@ OC.L10N.register(
     "Sharing" : "Partajare",
     "Versions" : "Versiuni",
     "Link copied" : "Link copiat",
+    "Please reload the page." : "Te rugăm să reîncarci pagina.",
     "Copied" : "Copiat",
     "Cannot copy" : "Nu s-a putut copia",
     "Failed to revert {page} to revision {timestamp}." : "S-a eșuat restaurarea fișierului  {page} la revizia {timestamp}."

@@ -21,6 +21,7 @@ OC.L10N.register(
     "No other versions available" : "មិន​មាន​កំណែ​ផ្សេង​ទៀត​ទេ",
     "Sharing" : "ការ​ចែក​រំលែក",
     "Versions" : "កំណែ",
+    "Please reload the page." : "សូម​ផ្ទុក​ទំព័រ​នេះ​ឡើង​វិញ។",
     "Failed to revert {page} to revision {timestamp}." : "មិន​អាច​ត្រឡប់ {page} ទៅ​កំណែ​សម្រួល {timestamp} បាន​ទេ។"
 },
 "nplurals=1; plural=0;");

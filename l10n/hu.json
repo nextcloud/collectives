@@ -194,6 +194,7 @@
     "Could not save emoji for page" : "Nem sikerült az oldal emodzsijának mentése",
     "Could not move page" : "Nem sikerült az oldal áthelyezése",
     "Could not delete the page" : "Nem sikerült az oldal törlése",
+    "Please reload the page." : "Frissítse az oldalt.",
     "Error: Missing apps" : "Hiba: Hiányzó alkalmazások",
     "Please ask the administrator to enable these apps." : "Kérje meg a rendszergazdát, hogy telepítse ezeket az alkalmazásokat.",
     "in Collective {collective}" : "a(z) {collective} kollektívában",
