@@ -17,6 +17,7 @@ use OC\Files\Node\Folder;
 use OCA\Circles\Model\Member;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\Page;
+use OCA\Collectives\Db\PageLinkMapper;
 use OCA\Collectives\Db\PageMapper;
 use OCA\Collectives\Db\TagMapper;
 use OCA\Collectives\Fs\NodeHelper;
@@ -102,6 +103,8 @@ class PageServiceTest extends TestCase {
 
 		$tagMapper = $this->createMock(TagMapper::class);
 
+		$pageLinkMapper = this->createMock(PageLinkMapper::class);
+
 		$this->service = new PageService(
 			$appManager,
 			$this->pageMapper,
@@ -114,6 +117,7 @@ class PageServiceTest extends TestCase {
 			$sessionService,
 			$slugger,
 			$tagMapper,
+			$pageLinkMapper,
 		);
 	}
 
