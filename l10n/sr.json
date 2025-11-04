@@ -323,6 +323,7 @@
     "Set label for {basename}." : "Постави ознаку за {basename}.",
     "Failed to delete {basename} version of {page}." : "Није успело брисање {basename} верзије од {page}.",
     "Deleted {basename} version of {page}." : "Обрисана је {basename} верзија од {page}.",
+    "Please reload the page." : "Поново учитајте страницу.",
     "Error: Missing apps" : "Грешка: недостају апликације",
     "The following dependency apps are missing:" : "Недостају следеће потребне апликације:",
     "Please ask the administrator to enable these apps." : "Молимо вас да замолите администратора да укључи ове апликације.",

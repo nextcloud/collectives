@@ -323,6 +323,7 @@
     "Set label for {basename}." : "Establecer etiqueta para {basename}.",
     "Failed to delete {basename} version of {page}." : "Fallo al eliminar la versión {basename} de {page}.",
     "Deleted {basename} version of {page}." : "Se eliminó la versión {basename} de {page}.",
+    "Please reload the page." : "Por favor, recargue la página.",
     "Error: Missing apps" : "Error: aplicaciones faltantes",
     "The following dependency apps are missing:" : "Las siguientes apps de dependencia no pudieron ser encontradas:",
     "Please ask the administrator to enable these apps." : "Por favor, pida al administrador que habilite estas aplicaciones.",

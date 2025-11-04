@@ -49,6 +49,7 @@ OC.L10N.register(
     "Sharing" : "Partiment",
     "Versions" : "Versions",
     "Link copied" : "Ligam copiat",
+    "Please reload the page." : "Volgatz recargar la pagina.",
     "Copied" : "Copiat",
     "Copy share link" : "Copiar ligam de partatge",
     "Allow editing in share" : "Permetre la modificacion dins lo partatge",

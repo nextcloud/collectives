@@ -322,6 +322,7 @@
     "Set label for {basename}." : "Встановити мітку для {basename}.",
     "Failed to delete {basename} version of {page}." : "Не вдалося видалити {basename} версію {page}.",
     "Deleted {basename} version of {page}." : "Видалено {basename} версію {page}.",
+    "Please reload the page." : "Будь ласка, перезавантажте сторінку.",
     "Error: Missing apps" : "Помилка: відсутні додатки",
     "The following dependency apps are missing:" : "Відсутні наступні залежні програми:",
     "Please ask the administrator to enable these apps." : "Будь ласка, попросіть адміністратора ввімкнути ці додатки.",

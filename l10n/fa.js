@@ -243,6 +243,7 @@ OC.L10N.register(
     "Could not copy page to another collective" : "نتوانستیم برگه را به انجمن دیگر رونویسی کنیم",
     "Could not move page to another collective" : "نتوانستیم برگه را به انجمن دیگر ببریم",
     "Could not delete the page" : "Could not delete the page",
+    "Please reload the page." : "لطفا صفحه را دوباره بارگیری کنید.",
     "Error: Missing apps" : "Error: Missing apps",
     "Please ask the administrator to enable these apps." : "Please ask the administrator to enable these apps.",
     "in Collective {collective}" : "in Collective {collective}",

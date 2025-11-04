@@ -20,6 +20,7 @@ OC.L10N.register(
     "No other versions available" : "ಇನ್ನಿತರೆ ಯಾವುದೇ ಆವೃತ್ತಿಗಳು ಲಭ್ಯವಿಲ್ಲ",
     "Sharing" : "﻿ಹಂಚಿಕೆ",
     "Versions" : "ಆವೃತ್ತಿಗಳು",
+    "Please reload the page." : "﻿ಪುಟವನ್ನು ಪುನಃ ನವೀಕರಿಸಿ.",
     "Failed to revert {page} to revision {timestamp}." : "{timestamp} ದ ಪರಿಷ್ಕರಣೆ ಇಂದ  {page}  ಕಡತವನ್ನು ಹಿಂದಿರುಗಿಸಲು ವಿಫಲವಾಗಿದೆ."
 },
 "nplurals=2; plural=(n > 1);");

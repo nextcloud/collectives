@@ -159,6 +159,7 @@ OC.L10N.register(
     "Could not copy link to the clipboard:" : "クリップボードにリンクをコピーできませんでした:",
     "Could not create the page" : "ページを作成できません",
     "Could not delete the page" : "ページを削除できません",
+    "Please reload the page." : "ページをリロードしてください。",
     "Error: Missing apps" : "エラー: アプリが見つかりません",
     "Please ask the administrator to enable these apps." : "これらのアプリを有効にするために管理者に問い合わせてください。",
     "Created collective \"%s\" for existing circle." : "コレクティブ \"%s\" を既存のサークルに作成します。",

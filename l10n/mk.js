@@ -78,6 +78,7 @@ OC.L10N.register(
     "Sharing" : "Споделување",
     "Versions" : "Верзии",
     "Link copied" : "Линкот е копиран",
+    "Please reload the page." : "Превчитајте ја страницата.",
     "Copied" : "Копирано",
     "Cannot copy" : "Не може да се копира",
     "Copy share link" : "Копирај линк за споделување",

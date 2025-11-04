@@ -332,6 +332,7 @@ OC.L10N.register(
     "Set label for {basename}." : "Socraigh lipéad do {basename}.",
     "Failed to delete {basename} version of {page}." : "Theip ar leagan {basename} de {page} a scriosadh.",
     "Deleted {basename} version of {page}." : "Scriosadh leagan {basename} de {page}.",
+    "Please reload the page." : "Athlódáil an leathanach le do thoil.",
     "Error: Missing apps" : "Earráid: Aipeanna ar iarraidh",
     "The following dependency apps are missing:" : "Tá na haipeanna spleáchais seo a leanas ar iarraidh:",
     "Please ask the administrator to enable these apps." : "Iarr ar an riarthóir na haipeanna seo a chumasú.",

@@ -71,6 +71,7 @@ OC.L10N.register(
     "Sharing" : "Compartiendo",
     "Versions" : "Versiones",
     "Link copied" : "Enlace copiado",
+    "Please reload the page." : "Por favor vuelve a cargar la página.",
     "Copied" : "Copiado",
     "Cannot copy" : "No se puede copiar",
     "Failed to revert {page} to revision {timestamp}." : "Falla al revertir {page} a revisión {timestamp}.",

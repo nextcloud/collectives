@@ -330,6 +330,7 @@
     "Set label for {basename}." : "Beschriftung für {basename} festlegen.",
     "Failed to delete {basename} version of {page}." : "{basename}-Version von {page} konnte nicht gelöscht werden.",
     "Deleted {basename} version of {page}." : "{basename}-Version von {page} gelöscht.",
+    "Please reload the page." : "Bitte die Seite neu laden.",
     "Error: Missing apps" : "Fehler: Apps fehlen",
     "The following dependency apps are missing:" : "Die folgenden erforderlichen Apps fehlen:",
     "Please ask the administrator to enable these apps." : "Bitte die Admins, diese Apps zu aktivieren.",

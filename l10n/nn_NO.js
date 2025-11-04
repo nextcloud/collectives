@@ -28,6 +28,7 @@ OC.L10N.register(
     "Sharing" : "Deling",
     "Versions" : "Utgåver",
     "Link copied" : "Lenkje kopiert",
+    "Please reload the page." : "Ver venleg og last sida på nytt.",
     "Failed to revert {page} to revision {timestamp}." : "Klarte ikkje å tilbakestilla {page} til utgåva {timestamp}."
 },
 "nplurals=2; plural=(n != 1);");

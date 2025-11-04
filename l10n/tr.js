@@ -332,6 +332,7 @@ OC.L10N.register(
     "Set label for {basename}." : "{basename} için etiketi ayarlayın.",
     "Failed to delete {basename} version of {page}." : "{page} sayfasının {basename} sürümü silinemedi.",
     "Deleted {basename} version of {page}." : "{page} sayfasının {basename} sürümü silindi.",
+    "Please reload the page." : "Lütfen sayfayı yeniden yükleyin.",
     "Error: Missing apps" : "Hata: Uygulamalar eksik",
     "The following dependency apps are missing:" : "Gerekli şu uygulamalar eksik:",
     "Please ask the administrator to enable these apps." : "Lütfen bu uygulamaları kullanıma alması için BT yöneticiniz ile görüşün.",

@@ -229,6 +229,7 @@
     "Could not copy page to another collective" : "No s'ha pogut copiar la pàgina a un altre col·lectiu",
     "Could not move page to another collective" : "No s'ha pogut moure la pàgina a un altre col·lectiu",
     "Could not delete the page" : "No s'ha pogut suprimir la pàgina",
+    "Please reload the page." : "Torneu a carregar la pàgina.",
     "Error: Missing apps" : "Error: falten aplicacions",
     "Please ask the administrator to enable these apps." : "Si us plau pregunti a l'administrador/a per habilitar aquestes apps.",
     "in Collective {collective}" : "al Col·lectiu {collective}",

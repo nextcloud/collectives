@@ -229,6 +229,7 @@ OC.L10N.register(
     "Could not copy page to another collective" : "无法复制页面到另一个知识库",
     "Could not move page to another collective" : "无法移动页面到另一个知识库",
     "Could not delete the page" : "无法删除此页面",
+    "Please reload the page." : "请重新加载页面。",
     "Error: Missing apps" : "错误：缺少应用",
     "Please ask the administrator to enable these apps." : "请让管理员启用这些应用。",
     "in Collective {collective}" : "在知识库 {collective}",

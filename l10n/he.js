@@ -50,6 +50,7 @@ OC.L10N.register(
     "Sharing" : "שיתוף",
     "Versions" : "גרסאות",
     "Link copied" : "הקישור הועתק",
+    "Please reload the page." : "יש להעלות מחדש דף זה.",
     "Copied" : "הועתק",
     "Copy share link" : "העתקת קישור השיתוף",
     "Failed to revert {page} to revision {timestamp}." : "נכשל אחזור {page} לגרסה {timestamp}.",

@@ -313,6 +313,7 @@ OC.L10N.register(
     "Set label for {basename}." : "Définir une étiquette pour {basename}.",
     "Failed to delete {basename} version of {page}." : "Impossible de supprimer la version {basename} de {page}.",
     "Deleted {basename} version of {page}." : "Version {basename} de {page} supprimée.",
+    "Please reload the page." : "Veuillez recharger la page.",
     "Error: Missing apps" : "Erreur : Applications manquantes",
     "The following dependency apps are missing:" : "Les applications nécessaires suivantes sont absentes :",
     "Please ask the administrator to enable these apps." : "Veuillez demander à l'administrateur d'activer ces applications.",

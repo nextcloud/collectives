@@ -63,6 +63,7 @@ OC.L10N.register(
     "Sharing" : "Cumpartzende",
     "Versions" : "Versiones",
     "Link copied" : "Ligòngiu copiadu",
+    "Please reload the page." : "Torra a carrigare sa pàgina.",
     "Copied" : "Copiadu",
     "Cannot copy" : "Non faghet a copiare",
     "Failed to revert {page} to revision {timestamp}." : "Non s'at pòdidu torrare a {documentu} pro sa revisione {timestamp}.",

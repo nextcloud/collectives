@@ -332,6 +332,7 @@ OC.L10N.register(
     "Set label for {basename}." : "為 {basename} 設置標籤。",
     "Failed to delete {basename} version of {page}." : "刪除 {page} 的 {basename} 版本失敗。",
     "Deleted {basename} version of {page}." : "已已刪除 {page} 的 {basename} 版本。",
+    "Please reload the page." : "請重新整理頁面。",
     "Error: Missing apps" : "錯誤：缺少應用程式",
     "The following dependency apps are missing:" : "缺少以下依賴的應用程式：",
     "Please ask the administrator to enable these apps." : "請要求管理員啟用這些應用程式。",

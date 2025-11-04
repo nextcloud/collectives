@@ -76,6 +76,7 @@ OC.L10N.register(
     "Sharing" : "Jakaminen",
     "Versions" : "Versiot",
     "Link copied" : "Linkki kopioitu",
+    "Please reload the page." : "Päivitä sivu.",
     "Copied" : "Kopioitu",
     "Cannot copy" : "Ei voida kopioida",
     "Copy share link" : "Kopioi jakolinkki",

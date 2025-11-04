@@ -29,6 +29,7 @@ OC.L10N.register(
     "Attachments" : "Хавсралт",
     "Sharing" : "Түгээх",
     "Versions" : "Хувилбарууд",
+    "Please reload the page." : "Хуудасыг дахин ачаална уу",
     "Copied" : "Хуулагдсан",
     "Cannot copy" : "Хуулагдаагүй"
 },

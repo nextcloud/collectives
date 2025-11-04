@@ -58,6 +58,7 @@ OC.L10N.register(
     "Sharing" : "Koplietošana",
     "Versions" : "Versijas",
     "Link copied" : "Saite nokopēta",
+    "Please reload the page." : "Lūgums pārlādēt lapu",
     "Copied" : "Nokopēts",
     "Failed to revert {page} to revision {timestamp}." : "Neizdevās atjaunot {page} uz labojuma versiju {timestamp} "
 },

@@ -258,6 +258,7 @@ OC.L10N.register(
     "Could not copy page to another collective" : "Kunne ikke kopiere siden til et annet kollektiv",
     "Could not move page to another collective" : "Kunne ikke flytte siden til et annet kollektiv",
     "Could not delete the page" : "Kunne ikke slette siden",
+    "Please reload the page." : "Last inn siden på nytt.",
     "Error: Missing apps" : "Feil: Manglende programmer",
     "Please ask the administrator to enable these apps." : "Spør en administrator om å skru på disse programmene.",
     "in Collective {collective}" : "i kollektivet {collective}",

@@ -36,6 +36,7 @@ OC.L10N.register(
     "Sharing" : "Ndarje",
     "Versions" : "Versione",
     "Link copied" : "Linku u kopjua",
+    "Please reload the page." : "Ju lutemi, ringarkoni faqen.",
     "Copied" : "Kopjuar",
     "Failed to revert {page} to revision {timestamp}." : "Dështoi në rikthimin e {page} te rishikimi {timestamp}."
 },

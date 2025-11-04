@@ -330,6 +330,7 @@
     "Set label for {basename}." : "Nastavit jmenovku pro {basename}",
     "Failed to delete {basename} version of {page}." : "Nepodařilo se smazat verzi {basename} stránky {page}.",
     "Deleted {basename} version of {page}." : "Smazána verze {basename} stránky {page}.",
+    "Please reload the page." : "Načtěte stránku znovu.",
     "Error: Missing apps" : "Chyba: chybějící aplikace",
     "The following dependency apps are missing:" : "Chybí následující aplikace, které tato potřebuje pro své fungování:",
     "Please ask the administrator to enable these apps." : "Požádejte správce vámi využívané instance aby tyto aplikace zapnul.",

@@ -166,6 +166,7 @@ OC.L10N.register(
     "Could not save emoji for page" : "Ni mogoče shraniti izraznih ikon za to stran",
     "Could not move page" : "Ni mogoče premakniti strani",
     "Could not delete the page" : "Strani ni mogoče izbrisati",
+    "Please reload the page." : "Stran je treba osvežiti.",
     "Error: Missing apps" : "Napaka: manjkajo programi",
     "Please ask the administrator to enable these apps." : "Programe lahko omogoči le skrbnik sistema.",
     "in Collective {collective}" : "v Zbirki {collective}",

@@ -41,6 +41,7 @@ OC.L10N.register(
     "Sharing" : "Kunhavigo",
     "Versions" : "Versioj",
     "Link copied" : "Ligilo kopiita",
+    "Please reload the page." : "Bonvolu reŝargi la paĝon.",
     "Copied" : "Kopiita",
     "Failed to revert {page} to revision {timestamp}." : "Malsukcesis remeti {page} al la revizio {timestamp}."
 },

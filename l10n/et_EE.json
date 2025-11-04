@@ -330,6 +330,7 @@
     "Set label for {basename}." : "Lisa silt: {basename}.",
     "Failed to delete {basename} version of {page}." : "„{basename} - {page}“ lehe versiooni kustutamine ei õnnestunud.",
     "Deleted {basename} version of {page}." : "Kustutasin „{basename} - {page}“ lehe versiooni",
+    "Please reload the page." : "Palun laadi leht uuesti.",
     "Error: Missing apps" : "Viga: puuduvad rakendused",
     "The following dependency apps are missing:" : "Järgnevad sõltuvused on puudu:",
     "Please ask the administrator to enable these apps." : "Palun peakasutajat, et ta paigaldaks serverisse needrakendused.",

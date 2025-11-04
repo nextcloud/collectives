@@ -163,6 +163,7 @@ OC.L10N.register(
     "Could not save emoji for page" : "Impossibile salvare l'emoji per la pagina",
     "Could not move page" : "Impossibile spostare la pagina",
     "Could not delete the page" : "Non è stato possibile eliminare la pagina",
+    "Please reload the page." : "Ricarica la pagina.",
     "Error: Missing apps" : "Errore: applicazioni mancanti",
     "Please ask the administrator to enable these apps." : "Contatta l'amministratore per abilitare queste applicazioni.",
     "in Collective {collective}" : "nel Collettivo {collective}",
