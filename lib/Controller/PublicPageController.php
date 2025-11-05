@@ -507,31 +507,6 @@ class PublicPageController extends CollectivesPublicOCSController {
 	}
 
 	/**
-	 * Get backlinks of a page
-	 *
-	 * @param int $id ID of the page
-	 *
-	 * @return DataResponse<Http::STATUS_OK, array{backlinks: list<CollectivesPageInfo>}, array{}>
-	 * @throws OCSForbiddenException Not Permitted
-	 * @throws OCSNotFoundException Collective or page not found
-	 *
-	 * 200: Backlinks returned
-	 */
-	#[PublicPage]
-	#[AnonRateLimit(limit: 10, period: 10)]
-	public function getBacklinks(int $id): DataResponse {
-		$backlinks = $this->handleErrorResponse(function () use ($id): array {
-			$owner = $this->getCollectiveShare()->getOwner();
-			$collectiveId = $this->getCollectiveShare()->getCollectiveId();
-			if (0 !== $sharePageId = $this->getCollectiveShare()->getPageId()) {
-				$this->checkPageShareAccess($collectiveId, $sharePageId, $id, $owner);
-			}
-			return $this->service->getBacklinks($collectiveId, $id, $owner);
-		}, $this->logger);
-		return new DataResponse(['backlinks' => $backlinks]);
-	}
-
-	/**
 	 * Search the content of pages
 	 *
 	 * @param string $searchString String to search for
