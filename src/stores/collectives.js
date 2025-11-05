@@ -16,14 +16,19 @@ import { useSettingsStore } from './settings.js'
 const STORE_PREFIX = 'collectives/pinia/collectives/'
 
 export const useCollectivesStore = defineStore('collectives', {
-	state: () => ({
-		collectives: useLocalStorage(STORE_PREFIX + 'collectives', []),
-		trashCollectives: useLocalStorage(STORE_PREFIX + 'trashCollectives', []),
-		updatedCollective: undefined,
-		templatesCollectiveId: undefined,
-		membersCollectiveId: undefined,
-		settingsCollectiveId: undefined,
-	}),
+	state() {
+		const rootStore = useRootStore()
+		const LOCAL_STORE_PREFIX = rootStore.shareTokenParam ? STORE_PREFIX + rootStore.shareTokenParam + '/' : STORE_PREFIX
+
+		return {
+			collectives: useLocalStorage(LOCAL_STORE_PREFIX + 'collectives', []),
+			trashCollectives: useLocalStorage(LOCAL_STORE_PREFIX + 'trashCollectives', []),
+			updatedCollective: undefined,
+			templatesCollectiveId: undefined,
+			membersCollectiveId: undefined,
+			settingsCollectiveId: undefined,
+		}
+	},
 
 	getters: {
 		sortedCollectives(state) {

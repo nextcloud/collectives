@@ -15,10 +15,15 @@ import { useRootStore } from './root.js'
 const STORE_PREFIX = 'collectives/pinia/circles/'
 
 export const useCirclesStore = defineStore('circles', {
-	state: () => ({
-		circles: useLocalStorage(STORE_PREFIX + 'circles', []),
-		circlesMembers: useLocalStorage(STORE_PREFIX + 'circlesMembers', {}),
-	}),
+	state() {
+		const rootStore = useRootStore()
+		const LOCAL_STORE_PREFIX = rootStore.shareTokenParam ? STORE_PREFIX + rootStore.shareTokenParam + '/' : STORE_PREFIX
+
+		return {
+			circles: useLocalStorage(LOCAL_STORE_PREFIX + 'circles', []),
+			circlesMembers: useLocalStorage(LOCAL_STORE_PREFIX + 'circlesMembers', {}),
+		}
+	},
 
 	getters: {
 		availableCircles(state) {
