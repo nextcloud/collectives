@@ -62,6 +62,7 @@ In your Nextcloud instance, simply navigate to **»Apps«**, find the
 		</post-migration>
 		<live-migration>
 			<step>OCA\Collectives\Migration\GenerateSlugs</step>
+			<step>OCA\Collectives\Migration\MigrateBacklinks</step>
 		</live-migration>
 	</repair-steps>
 	<commands>
