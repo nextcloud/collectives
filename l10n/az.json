@@ -30,6 +30,7 @@
     "Sharing" : "Paylaşılır",
     "Versions" : "Versiyaları",
     "Link copied" : "Link kopyalandı",
+    "Please reload the page." : "Səhifəni yenidən yükləyin.",
     "Failed to revert {page} to revision {timestamp}." : "{timestamp} yenidən baxılması üçün {page} geri qaytarmaq mümkün olmadı."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

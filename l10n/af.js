@@ -25,6 +25,7 @@ OC.L10N.register(
     "Unshare" : "Ontdeel",
     "Versions" : "Weergawes",
     "Link copied" : "Skakel gekopieer",
+    "Please reload the page." : "Herlaai asseblief die bladsy.",
     "Copied" : "Gekopieer",
     "Failed to revert {page} to revision {timestamp}." : "Kon nie {page} na {timestamp} se hersiening terugstel nie."
 },
