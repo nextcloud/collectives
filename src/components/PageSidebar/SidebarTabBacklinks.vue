@@ -5,28 +5,11 @@
 
 <template>
 	<div class="backlinks-container">
-		<!-- loading -->
-		<NcEmptyContent v-if="loading('backlinks')">
-			<template #icon>
-				<NcLoadingIcon />
-			</template>
-		</NcEmptyContent>
-
-		<!-- offline -->
-		<OfflineContent v-else-if="!loaded && !networkOnline" />
-
-		<!-- error message -->
-		<NcEmptyContent v-else-if="error" :name="error">
-			<template #icon>
-				<AlertOctagonIcon />
-			</template>
-		</NcEmptyContent>
-
 		<!-- backlinks list -->
-		<div v-else-if="!loading('backlinks') && backlinks.length">
+		<div v-if="currentBacklinks.length">
 			<ul class="backlink-list">
 				<NcListItem
-					v-for="backlinkPage in backlinks"
+					v-for="backlinkPage in currentBacklinks"
 					:key="backlinkPage.id"
 					:name="pagePathTitle(backlinkPage)"
 					:to="pagePath(backlinkPage)"
@@ -64,26 +47,19 @@
 
 <script>
 import moment from '@nextcloud/moment'
-import { NcEmptyContent, NcListItem, NcLoadingIcon } from '@nextcloud/vue'
-import { mapActions, mapState } from 'pinia'
-import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagonOutline.vue'
+import { NcEmptyContent, NcListItem } from '@nextcloud/vue'
+import { mapState } from 'pinia'
 import ArrowBottomLeftIcon from 'vue-material-design-icons/ArrowBottomLeft.vue'
 import PageIcon from '../Icon/PageIcon.vue'
-import OfflineContent from './OfflineContent.vue'
-import { useNetworkState } from '../../composables/useNetworkState.ts'
 import { usePagesStore } from '../../stores/pages.js'
-import { useRootStore } from '../../stores/root.js'
 
 export default {
 	name: 'SidebarTabBacklinks',
 
 	components: {
-		AlertOctagonIcon,
 		NcEmptyContent,
 		NcListItem,
-		NcLoadingIcon,
 		ArrowBottomLeftIcon,
-		OfflineContent,
 		PageIcon,
 	},
 
@@ -94,76 +70,19 @@ export default {
 		},
 	},
 
-	setup() {
-		const { networkOnline } = useNetworkState()
-		return { networkOnline }
-	},
-
-	data() {
-		return {
-			loaded: false,
-			loadPending: true,
-			error: '',
-		}
-	},
-
 	computed: {
-		...mapState(useRootStore, [
-			'loading',
-		]),
-
 		...mapState(usePagesStore, [
 			'backlinks',
 			'pagePath',
 			'pagePathTitle',
 		]),
 
+		currentBacklinks() {
+			return this.backlinks(this.page.id)
+		},
+
 		lastUpdate() {
 			return (page) => moment.unix(page.timestamp).fromNow()
-		},
-	},
-
-	watch: {
-		'page.id': function() {
-			this.loaded = false
-			this.getBacklinksForPage()
-		},
-
-		networkOnline: function(val) {
-			if (val && this.loadPending) {
-				this.getBacklinksForPage()
-			}
-		},
-	},
-
-	mounted() {
-		this.getBacklinksForPage()
-	},
-
-	methods: {
-		...mapActions(useRootStore, ['done', 'load']),
-		...mapActions(usePagesStore, ['getBacklinks']),
-
-		/**
-		 * Get backlinks for a page
-		 */
-		async getBacklinksForPage() {
-			this.loadPending = true
-			if (!this.networkOnline) {
-				return
-			}
-
-			this.load('backlinks')
-			try {
-				await this.getBacklinks(this.page)
-				this.loaded = true
-				this.loadPending = false
-			} catch (e) {
-				this.error = t('collectives', 'Could not get page backlinks')
-				console.error('Failed to get page backlinks', e)
-			} finally {
-				this.done('backlinks')
-			}
 		},
 	},
 }
