@@ -1090,6 +1090,7 @@ class PageService {
 		$this->initTrashBackend();
 		if ($direct || !$this->trashBackend) {
 			// Delete directly if desired or trash is not available
+			$this->pageLinkMapper->deleteByPageId($id);
 			$this->pageMapper->deleteByFileId($id);
 			$oldParentPageInfo = $this->removeFromSubpageOrder($collectiveId, $parentId, $id, $userId);
 			$this->notifyPush(['collectiveId' => $collectiveId, 'pages' => [$oldParentPageInfo], 'removed' => [$id]]);

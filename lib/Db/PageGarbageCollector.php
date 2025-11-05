@@ -14,6 +14,7 @@ use OCA\Collectives\Mount\CollectiveFolderManager;
 class PageGarbageCollector {
 	public function __construct(
 		private PageMapper $pageMapper,
+		private PageLinkMapper $pageLinkMapper,
 		private CollectiveFolderManager $folderManager,
 	) {
 	}
@@ -24,6 +25,7 @@ class PageGarbageCollector {
 		foreach ($this->pageMapper->getAll() as $page) {
 			if ($rootFolder->getById($page->getFileId()) === []) {
 				$purgeCount++;
+				$this->pageLinkMapper->deleteByPageId($page->getFileId());
 				$this->pageMapper->delete($page);
 			}
 		}

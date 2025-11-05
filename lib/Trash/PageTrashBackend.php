@@ -13,6 +13,7 @@ use Exception;
 use LogicException;
 use OC\Files\Storage\Wrapper\Jail;
 use OCA\Collectives\Db\CollectiveMapper;
+use OCA\Collectives\Db\PageLinkMapper;
 use OCA\Collectives\Db\PageMapper;
 use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Model\PageInfo;
@@ -47,6 +48,7 @@ class PageTrashBackend implements ITrashBackend {
 		private readonly MountProvider $mountProvider,
 		private readonly CollectiveMapper $collectiveMapper,
 		private readonly PageMapper $pageMapper,
+		private readonly PageLinkMapper $pageLinkMapper,
 		private readonly LoggerInterface $logger,
 		private readonly IUserManager $userManager,
 		private readonly IUserSession $userSession,
@@ -234,6 +236,7 @@ class PageTrashBackend implements ITrashBackend {
 
 		// Delete page from collective page database
 		if ($deletePageId) {
+			$this->pageLinkMapper->deleteByPageId($deletePageId);
 			$this->pageMapper->deleteByFileId($deletePageId);
 		}
 
