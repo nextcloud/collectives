@@ -31,7 +31,6 @@ export const usePagesStore = defineStore('pages', {
 		deletedAttachments: [],
 		attachmentsLoaded: false,
 		attachmentsError: false,
-		backlinks: [],
 		highlightPageId: null,
 		highlightAnimationPageId: null,
 		isDragoverTargetPage: false,
@@ -986,16 +985,6 @@ export const usePagesStore = defineStore('pages', {
 
 		setAttachmentsError(error) {
 			this.attachmentsError = error
-		},
-
-		/**
-		 * Get list of backlinks for a page
-		 *
-		 * @param {object} page Page to get backlinks for
-		 */
-		async getBacklinks(page) {
-			const response = await api.getPageBacklinks(this.context, page.id)
-			this.backlinks = response.data.ocs.data.backlinks
 		},
 
 		/**

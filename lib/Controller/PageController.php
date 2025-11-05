@@ -313,24 +313,6 @@ class PageController extends OCSController {
 	}
 
 	/**
-	 * Get backlinks of a page
-	 *
-	 * @param int $collectiveId ID of the collective
-	 * @param int $id ID of the page
-	 *
-	 * @return DataResponse<Http::STATUS_OK, array{backlinks: list<CollectivesPageInfo>}, array{}>
-	 * @throws OCSForbiddenException Not Permitted
-	 * @throws OCSNotFoundException Collective or page not found
-	 *
-	 * 200: Backlinks returned
-	 */
-	#[NoAdminRequired]
-	public function getBacklinks(int $collectiveId, int $id): DataResponse {
-		$backlinks = $this->handleErrorResponse(fn (): array => $this->service->getBacklinks($collectiveId, $id, $this->userId), $this->logger);
-		return new DataResponse(['backlinks' => $backlinks]);
-	}
-
-	/**
 	 * Search the content of pages
 	 *
 	 * @param int $collectiveId ID of the collective

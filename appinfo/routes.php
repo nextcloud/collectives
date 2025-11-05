@@ -98,8 +98,6 @@ return [
 			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+']],
 		['name' => 'page#getAttachments', 'url' => '/api/v{apiVersion}/collectives/{collectiveId}/pages/{id}/attachments', 'verb' => 'GET',
 			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+']],
-		['name' => 'page#getBacklinks', 'url' => '/api/v{apiVersion}/collectives/{collectiveId}/pages/{id}/backlinks', 'verb' => 'GET',
-			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+']],
 
 		// Pages trash API
 		['name' => 'pageTrash#index', 'url' => '/api/v{apiVersion}/collectives/{collectiveId}/pages/trash', 'verb' => 'GET',
@@ -187,8 +185,6 @@ return [
 		['name' => 'publicPage#trash', 'url' => '/api/v{apiVersion}/p/collectives/{token}/pages/{id}', 'verb' => 'DELETE',
 			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
 		['name' => 'publicPage#getAttachments', 'url' => '/api/v{apiVersion}/p/collectives/{token}/pages/{id}/attachments', 'verb' => 'GET',
-			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
-		['name' => 'publicPage#getBacklinks', 'url' => '/api/v{apiVersion}/p/collectives/{token}/pages/{id}/backlinks', 'verb' => 'GET',
 			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
 
 		// Public pages trash API

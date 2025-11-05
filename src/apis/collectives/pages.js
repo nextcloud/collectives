@@ -272,16 +272,6 @@ export function getPageAttachments(context, pageId) {
 }
 
 /**
- * Get list of backlinks for a page
- *
- * @param {object} context - either the current collective or a share context
- * @param {number} pageId - ID of the page to list backlinks for
- */
-export function getPageBacklinks(context, pageId) {
-	return axios.get(pagesApiUrl(context, pageId, 'backlinks'))
-}
-
-/**
  * Perform index search on pages in given collective
  *
  * @param {object} context - either the current collective or a share context
