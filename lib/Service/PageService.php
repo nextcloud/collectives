@@ -14,6 +14,7 @@ use OC;
 use OC_Util;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\Page;
+use OCA\Collectives\Db\PageLinkMapper;
 use OCA\Collectives\Db\PageMapper;
 use OCA\Collectives\Db\TagMapper;
 use OCA\Collectives\Fs\NodeHelper;
@@ -42,17 +43,18 @@ class PageService {
 	private ?PageTrashBackend $trashBackend = null;
 
 	public function __construct(
-		private IAppManager $appManager,
-		private PageMapper $pageMapper,
-		private NodeHelper $nodeHelper,
-		private CollectiveServiceBase $collectiveService,
-		private UserFolderHelper $userFolderHelper,
-		private IUserManager $userManager,
-		private IConfig $config,
+		private readonly IAppManager $appManager,
+		private readonly PageMapper $pageMapper,
+		private readonly NodeHelper $nodeHelper,
+		private readonly CollectiveServiceBase $collectiveService,
+		private readonly UserFolderHelper $userFolderHelper,
+		private readonly IUserManager $userManager,
+		private readonly IConfig $config,
 		ContainerInterface $container,
-		private SessionService $sessionService,
-		private SluggerInterface $slugger,
-		private TagMapper $tagMapper,
+		private readonly SessionService $sessionService,
+		private readonly SluggerInterface $slugger,
+		private readonly TagMapper $tagMapper,
+		private readonly PageLinkMapper $pageLinkMapper,
 	) {
 		try {
 			$this->pushQueue = $container->get(IQueue::class);
@@ -207,6 +209,7 @@ class PageService {
 		$fullWidth = $page !== null && $page->getFullWidth();
 		$slug = ($page !== null) ? $page->getSlug() : null;
 		$tags = ($page !== null) ? $page->getTags() : null;
+		$linkedPageIds = ($page !== null) ? $this->pageLinkMapper->findByPageId($page->getFileId()) : null;
 		$pageInfo = new PageInfo();
 		try {
 			$pageInfo->fromFile($file,
@@ -217,7 +220,8 @@ class PageService {
 				$subpageOrder,
 				$fullWidth,
 				$slug,
-				$tags);
+				$tags,
+				$linkedPageIds);
 		} catch (FilesNotFoundException|InvalidPathException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
 		}
@@ -241,6 +245,7 @@ class PageService {
 		$slug = ($page !== null) ? $page->getSlug() : null;
 		$tags = ($page !== null) ? $page->getTags() : null;
 		$trashTimestamp = ($page !== null) ? $page->getTrashTimestamp(): (int)$timestamp;
+		$linkedPageIds = ($page !== null) ? $this->pageLinkMapper->findByPageId($page->getId()) : null;
 		$pageInfo = new PageInfo();
 		try {
 			$pageInfo->fromFile($file,
@@ -251,7 +256,8 @@ class PageService {
 				$subpageOrder,
 				$fullWidth,
 				$slug,
-				$tags);
+				$tags,
+				$linkedPageIds);
 			$pageInfo->setTrashTimestamp($trashTimestamp);
 			$pageInfo->setFilePath('');
 			$pageInfo->setTitle(basename($filename, PageInfo::SUFFIX));

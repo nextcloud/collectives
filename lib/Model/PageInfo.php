@@ -36,6 +36,7 @@ class PageInfo implements JsonSerializable {
 	private ?string $collectivePath = null;
 	private int $parentId;
 	private ?string $shareToken = null;
+	private array $linkedPageIds = [];
 
 	public function getId(): int {
 		return $this->id;
@@ -177,6 +178,14 @@ class PageInfo implements JsonSerializable {
 		$this->shareToken = $shareToken;
 	}
 
+	public function getLinkedPageIds(): array {
+		return $this->linkedPageIds;
+	}
+
+	public function setLinkedPageIds(array $linkedPageIds): void {
+		$this->linkedPageIds = $linkedPageIds;
+	}
+
 	public function getUrlPath(): string {
 		return $this->slug ? $this->slug . '-' . $this->id : $this->title;
 	}
@@ -201,6 +210,7 @@ class PageInfo implements JsonSerializable {
 			'collectivePath' => $this->collectivePath,
 			'parentId' => $this->parentId,
 			'shareToken' => $this->shareToken,
+			'linkedPageIds' => $this->linkedPageIds,
 		];
 	}
 
@@ -208,7 +218,18 @@ class PageInfo implements JsonSerializable {
 	 * @throws InvalidPathException
 	 * @throws NotFoundException
 	 */
-	public function fromFile(File $file, int $parentId, ?string $lastUserId = null, ?string $lastUserDisplayName = null, ?string $emoji = null, ?string $subpageOrder = null, ?bool $fullWidth = false, ?string $slug = null, ?string $tags = null): void {
+	public function fromFile(
+		File $file,
+		int $parentId,
+		?string $lastUserId = null,
+		?string $lastUserDisplayName = null,
+		?string $emoji = null,
+		?string $subpageOrder = null,
+		?bool $fullWidth = false,
+		?string $slug = null,
+		?string $tags = null,
+		?array $linkedPageIds = null,
+	): void {
 		$this->setId($file->getId());
 		// Set folder name as title for all index pages except the collective landing page
 		$dirName = dirname($file->getInternalPath());
@@ -252,6 +273,9 @@ class PageInfo implements JsonSerializable {
 		}
 		if ($tags !== null) {
 			$this->setTags($tags);
+		}
+		if ($linkedPageIds !== null) {
+			$this->setLinkedPageIds($linkedPageIds);
 		}
 		$this->setParentId($parentId);
 	}

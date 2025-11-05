@@ -409,6 +409,12 @@ export const usePagesStore = defineStore('pages', {
 				})
 		},
 
+		backlinks(state) {
+			return (pageId) => {
+				return state.pages.filter((p) => p.linkedPageIds.includes(pageId))
+			}
+		},
+
 		// TODO: rename
 		title: (state) => {
 			const collectivesStore = useCollectivesStore()
