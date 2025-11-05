@@ -88,6 +88,7 @@ OC.L10N.register(
     "Link copied" : "Спасылка скапіявана",
     "New page" : "Новая старонка",
     "Page deleted" : "Старонка выдалена",
+    "Please reload the page." : "Перазагрузіце старонку.",
     "Copied" : "Скапіявана",
     "Template" : "Шаблон",
     "Hide templates" : "Схаваць шаблоны",

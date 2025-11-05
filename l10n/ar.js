@@ -263,6 +263,7 @@ OC.L10N.register(
     "Could not copy page to another collective" : "تعذّر نسخ الصفحة إلى تجميعة أخرى",
     "Could not move page to another collective" : "تعذّر نقل الصفحة إلى تجميعة أخرى",
     "Could not delete the page" : "تعذّر حذف الصفحة",
+    "Please reload the page." : "رجاء أعد تحميل الصفحة.",
     "Error: Missing apps" : "خطأ: تطبيقات ناقصة",
     "Please ask the administrator to enable these apps." : "رجاءً، أُطلُب من مسؤول النظام تمكين هذه التطبيقات",
     "in Collective {collective}" : "في  التجميعة {collective}",

@@ -32,6 +32,7 @@ OC.L10N.register(
     "Sharing" : "Paylaşılır",
     "Versions" : "Versiyaları",
     "Link copied" : "Link kopyalandı",
+    "Please reload the page." : "Səhifəni yenidən yükləyin.",
     "Failed to revert {page} to revision {timestamp}." : "{timestamp} yenidən baxılması üçün {page} geri qaytarmaq mümkün olmadı."
 },
 "nplurals=2; plural=(n != 1);");

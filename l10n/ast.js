@@ -151,6 +151,7 @@ OC.L10N.register(
     "Could not copy page to another collective" : "Nun se pudo copiar la páxina a otru coleutivu",
     "Could not move page to another collective" : "Nun se pudo mover la páxina a otru coleutivu",
     "Could not delete the page" : "Nun se pudo desaniciar la páxina",
+    "Please reload the page." : "Volvi cargar la páxina.",
     "Error: Missing apps" : "Error: falten aplicaciones",
     "Please ask the administrator to enable these apps." : "Pídi-y a l'alministración qu'active estes aplicaciones.",
     "Copied" : "Copióse",
