@@ -87,6 +87,7 @@ export default {
 
 		...mapState(usePagesStore, [
 			'attachments',
+			'backlinks',
 			'currentPage',
 			'currentPageDavUrl',
 			'isTextEdit',
@@ -102,9 +103,11 @@ export default {
 			if (value) {
 				// Update currentPage in PageInfoBar component through Text editorAPI
 				if (this.editorApiFlags.includes(editorApiUpdateReadonlyBarProps)) {
+					const readerPage = this.pageInfoBarPage || this.currentPage
 					this.reader?.updateReadonlyBarProps({
-						currentPage: this.pageInfoBarPage || this.currentPage,
+						currentPage: readerPage,
 						attachmentCount: this.attachments.length,
+						backlinkCount: this.backlinks(readerPage.id).length,
 					})
 				}
 

@@ -27,13 +27,27 @@
 				</div>
 			</a>
 		</template>
+		<template v-if="backlinkCount">
+			<div v-if="currentPage.lastUserId || attachmentCount" class="infobar-seperator">
+				•
+			</div>
+			<a class="infobar-item" @click="emitSidebar('backlinks')">
+				<div class="item-icon">
+					<ArrowBottomLeftIcon :size="18" />
+				</div>
+				<div class="item-text">
+					{{ backlinkCountString }}
+				</div>
+			</a>
+		</template>
 	</div>
 </template>
 
 <script>
 import { emit } from '@nextcloud/event-bus'
-import { t } from '@nextcloud/l10n'
+import { n, t } from '@nextcloud/l10n'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
+import ArrowBottomLeftIcon from 'vue-material-design-icons/ArrowBottomLeft.vue'
 import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue'
 import LastUserBubble from '../LastUserBubble.vue'
 
@@ -41,6 +55,7 @@ export default {
 	name: 'PageInfoBar',
 
 	components: {
+		ArrowBottomLeftIcon,
 		LastUserBubble,
 		PaperclipIcon,
 	},
@@ -55,6 +70,11 @@ export default {
 			type: Number,
 			required: true,
 		},
+
+		backlinkCount: {
+			type: Number,
+			required: true,
+		},
 	},
 
 	setup() {
@@ -66,7 +86,13 @@ export default {
 		attachmentCountString() {
 			return this.isMobile
 				? this.attachmentCount
-				: t('collectives', '{attachmentCount} attachments', { attachmentCount: this.attachmentCount })
+				: n('collectives', '%n attachment', '%n attachments', this.attachmentCount)
+		},
+
+		backlinkCountString() {
+			return this.isMobile
+				? this.backlinkCount
+				: n('collectives', '%n backlink', '%n backlinks', this.backlinkCount)
 		},
 	},
 
