@@ -16,6 +16,7 @@ use OCA\Collectives\CacheListener;
 use OCA\Collectives\Dashboard\RecentPagesWidget;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Db\CollectiveVersionMapper;
+use OCA\Collectives\Db\PageLinkMapper;
 use OCA\Collectives\Db\PageMapper;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Listeners\BeforeTemplateRenderedListener;
@@ -100,6 +101,7 @@ class Application extends App implements IBootstrap {
 				$c->get(MountProvider::class),
 				$c->get(CollectiveMapper::class),
 				$c->get(PageMapper::class),
+				$c->get(PageLinkMapper::class),
 				$c->get(LoggerInterface::class),
 				$c->get(IUserManager::class),
 				$c->get(IUserSession::class),
