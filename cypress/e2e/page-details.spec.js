@@ -9,8 +9,8 @@ describe('Page details', function() {
 		cy.deleteAndSeedCollective('Our Garden')
 			.seedPage('TableOfContents', '', 'Readme.md')
 			.seedPage('Day 2', '', 'Readme.md')
-			.seedPage('Day 1', '', 'Readme.md').then(({ pageId }) => {
-				cy.seedPageContent('Our Garden/Day 2.md', `A test string with Day 2 in the middle and a [link to Day 1](/index.php/apps/collectives/Our%20Garden/Day-1-${pageId}).`)
+			.seedPage('Day 1', '', 'Readme.md').then(({ collectiveId, pageId }) => {
+				cy.seedPageContent('Our Garden/Day 2.md', `A test string with Day 2 in the middle and a [link to Day 1](/index.php/apps/collectives/Our-Garden-${collectiveId}/Day-1-${pageId}).`)
 			})
 		cy.seedPageContent('Our Garden/TableOfContents.md', '## Second-Level Heading')
 	})

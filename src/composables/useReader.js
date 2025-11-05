@@ -62,8 +62,9 @@ export function useReader(content) {
 	 * @param {object} page handed to the text app editor.
 	 */
 	async function setupReader(page) {
+		const readerPage = pageInfoBarPage.value || page
 		const fileId = rootStore.editorApiFlags.includes(editorApiReaderFileId)
-			? page.id
+			? readerPage.id
 			: null
 		reader.value = await window.OCA.Text.createEditor({
 			el: readerEl.value,
@@ -76,8 +77,9 @@ export function useReader(content) {
 			readonlyBar: {
 				component: PageInfoBar,
 				props: {
-					currentPage: pageInfoBarPage.value || page,
+					currentPage: readerPage,
 					attachmentCount: pagesStore.attachments.length,
+					backlinkCount: pagesStore.backlinks(readerPage.id).length,
 				},
 			},
 			onOutlineToggle: pagesStore.setOutlineForCurrentPage,
