@@ -6,8 +6,8 @@
 <template>
 	<div>
 		<NcActions :force-menu="true" @click.native.stop>
-			<!-- Collective actions: only displayed for landing page in page list -->
-			<template v-if="displayCollectiveActions">
+			<!-- Collective actions: only displayed for landing page -->
+			<template v-if="isLandingPage">
 				<CollectiveActions :collective="currentCollective" :network-online="networkOnline" />
 				<NcActionSeparator />
 			</template>
@@ -284,10 +284,6 @@ export default {
 
 		displaySidebarAction() {
 			return this.isMobile && !this.inPageList && !this.showing('sidebar')
-		},
-
-		displayCollectiveActions() {
-			return this.inPageList && this.isLandingPage
 		},
 
 		displayLastEditedInfo() {

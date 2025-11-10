@@ -16,6 +16,16 @@
 			{{ t('collectives', 'Manage members') }}
 		</NcActionButton>
 		<NcActionButton
+			v-if="collectiveCanShare(collective)"
+			:close-after-click="true"
+			@click="openShareTab(collective)">
+			{{ t('collectives', 'Share link') }}
+			<template #icon>
+				<ShareVariantIcon :size="20" />
+			</template>
+		</NcActionButton>
+		<NcActionSeparator v-if="isCollectiveAdmin(collective) || collectiveCanShare(collective)" />
+		<NcActionButton
 			v-if="!isPublic && collective.canEdit"
 			:close-after-click="true"
 			:disabled="!networkOnline"
@@ -24,16 +34,6 @@
 				<PageTemplateIcon :size="18" />
 			</template>
 			{{ t('collectives', 'Manage templates') }}
-		</NcActionButton>
-		<NcActionSeparator v-if="isCollectiveAdmin(collective)" />
-		<NcActionButton
-			v-if="collectiveCanShare(collective)"
-			:close-after-click="true"
-			@click="openShareTab(collective)">
-			{{ t('collectives', 'Share link') }}
-			<template #icon>
-				<ShareVariantIcon :size="20" />
-			</template>
 		</NcActionButton>
 		<NcActionLink
 			:close-after-click="true"
