@@ -9,9 +9,10 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Migration;
 
+use League\CommonMark\Exception\CommonMarkException;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Db\PageLinkMapper;
-use OCA\Collectives\Fs\NodeHelper;
+use OCA\Collectives\Fs\MarkdownHelper;
 use OCA\Collectives\Mount\CollectiveFolderManager;
 use OCP\Files\File;
 use OCP\Files\Folder;
@@ -67,6 +68,7 @@ class MigrateBacklinks implements IRepairStep {
 
 		$output->info('Caching backlinks for pages ...');
 		$output->startProgress();
+		$trustedDomains = $this->config->getSystemValue('trusted_domains', []);
 		foreach ($this->collectiveMapper->getAll() as $collective) {
 			try {
 				$collectiveFolder = $this->collectiveFolderManager->getFolder($collective->getId());
@@ -78,8 +80,11 @@ class MigrateBacklinks implements IRepairStep {
 			$pageFiles = $this->pagesFromFolder($collectiveFolder);
 
 			foreach ($pageFiles as $pageFile) {
-				$linkedPageIds = NodeHelper::getLinkedPageIds($collective, $pageFile->getContent(), $this->config->getSystemValue('trusted_domains', []));
-				$this->pageLinkMapper->updateByPageId($pageFile->getId(), $linkedPageIds);
+				try {
+					$linkedPageIds = MarkdownHelper::getLinkedPageIds($collective, $pageFile->getContent(), $trustedDomains);
+					$this->pageLinkMapper->updateByPageId($pageFile->getId(), $linkedPageIds);
+				} catch (CommonMarkException) {
+				}
 				$output->advance();
 			}
 		}
