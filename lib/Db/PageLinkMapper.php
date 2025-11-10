@@ -46,11 +46,11 @@ class PageLinkMapper {
 	/**
 	 * @throws Exception
 	 */
-	public function deletePageLink(int $pageId, int $linkedPageId): void {
+	public function deletePageLinks(int $pageId, array $linkedPageIds): void {
 		$qb = $this->db->getQueryBuilder();
 		$qb->delete(self::TABLE_NAME)
 			->where($qb->expr()->eq('page_id', $qb->createNamedParameter($pageId)))
-			->andWhere($qb->expr()->eq('linked_page_id', $qb->createNamedParameter($linkedPageId)));
+			->andWhere($qb->expr()->in('linked_page_id', $qb->createNamedParameter($linkedPageIds)));
 		$qb->executeStatement();
 	}
 
@@ -67,26 +67,18 @@ class PageLinkMapper {
 		sort($newLinkedPageIds, SORT_NUMERIC);
 		sort($dbLinkedPageIds, SORT_NUMERIC);
 
-		$mergedLinkedPageIds = array_unique(array_merge($newLinkedPageIds, $dbLinkedPageIds));
-
-		if ($newLinkedPageIds === $dbLinkedPageIds) {
-			// Same list of linked pageIds, nothing to do
+		$addedLinkedPageIds = array_diff($newLinkedPageIds, $dbLinkedPageIds);
+		$removedLinkedPageIds = array_diff($dbLinkedPageIds, $newLinkedPageIds);
+		if (empty($addedLinkedPageIds) && empty($removedLinkedPageIds)) {
 			return;
 		}
 
 		$this->db->beginTransaction();
-		foreach ($mergedLinkedPageIds as $linkedPageId) {
-			if (in_array($linkedPageId, $newLinkedPageIds, true)
-				&& in_array($linkedPageId, $dbLinkedPageIds, true)) {
-				// Linked pageId in both sets
-				continue;
-			}
-
-			if (in_array($linkedPageId, $newLinkedPageIds, true)) {
-				$this->insertPageLink($pageId, $linkedPageId);
-			} else {
-				$this->deletePageLink($pageId, $linkedPageId);
-			}
+		foreach ($addedLinkedPageIds as $linkedPageId) {
+			$this->insertPageLink($pageId, $linkedPageId);
+		}
+		if (!empty($removedLinkedPageIds)) {
+			$this->deletePageLinks($pageId, $removedLinkedPageIds);
 		}
 		$this->db->commit();
 	}
