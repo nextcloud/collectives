@@ -11,7 +11,7 @@ namespace OCA\Collectives\Listeners;
 
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Db\PageLinkMapper;
-use OCA\Collectives\Fs\NodeHelper;
+use OCA\Collectives\Fs\MarkdownHelper;
 use OCA\Collectives\Mount\CollectiveStorage;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
@@ -44,7 +44,7 @@ class NodeWrittenListener implements IEventListener {
 		$collectiveId = $storage->getFolderId();
 		$collective = $this->collectiveMapper->idToCollective($collectiveId);
 
-		$linkedPageIds = NodeHelper::getLinkedPageIds($collective, $node->getContent(), $this->config->getSystemValue('trusted_domains', []));
+		$linkedPageIds = MarkdownHelper::getLinkedPageIds($collective, $node->getContent(), $this->config->getSystemValue('trusted_domains', []));
 		$this->pageLinkMapper->updateByPageId($node->getId(), $linkedPageIds);
 	}
 }
