@@ -37,6 +37,8 @@ class MarkdownHelper {
 	}
 
 	/**
+	 * Extracts markdown links and returns them with link text, href and title
+	 *
 	 * @throws CommonMarkException
 	 */
 	public static function getLinksFromContent(string $content): array {
@@ -73,11 +75,9 @@ class MarkdownHelper {
 	}
 
 	/**
-	 * @throws CommonMarkException
+	 * Returns hrefs that point to given collective or are relative links (.e.g. `../Page-21`)
 	 */
-	public static function getLinkedPageIds(Collective $collective, string $content, array $trustedDomains = []): array {
-		$links = self::getLinksFromContent($content);
-
+	private static function getHrefsToCollectiveFromLinks(array $links, Collective $collective, array $trustedDomains): array {
 		// Absolute URL regex
 		$protocol = '^https?:\/\/';
 		$trustedDomainsArray = array_map(static fn (string $domain) => str_replace('\*', '\w*', preg_quote($domain, '/')), $trustedDomains);
@@ -95,13 +95,7 @@ class MarkdownHelper {
 		]) . ')(?=\/+)';
 		$rootRelativeUrlRegex = '/^' . $basePath . $appPath . $collectivePath . '(.+)$/';
 
-		// slug may only contain ascii characters
-		$slugFragmentSuffix = '(?:[?#].*)?$/';
-		$slugPagePathRegex = '/\/[\x00-\x7F]+\-([0-9]+)' . $slugFragmentSuffix;
-		$noSlugFragmentSuffix = '(?:[&#].*)?$/';
-		$noSlugPagePathRegex = '/^.*[^?]+\?fileId=([0-9]+)' . $noSlugFragmentSuffix;
-
-		$pageIds = [];
+		$hrefs = [];
 		foreach ($links as $link) {
 			$href = $link['href'];
 			if (!$href) {
@@ -128,12 +122,41 @@ class MarkdownHelper {
 				}
 			}
 
+			$hrefs[] = $href;
+		}
+
+		return $hrefs;
+	}
+
+	/**
+	 * Extracts pageIds from (absolute and relative) links to pages (in slug and fileId syntax)
+	 */
+	private static function getPageIdsFromHrefs(array $hrefs): array {
+		// slug may only contain ascii characters
+		$slugFragmentSuffix = '(?:[?#].*)?$/';
+		$slugPagePathRegex = '/\/[\x00-\x7F]+\-([0-9]+)' . $slugFragmentSuffix;
+		$noSlugFragmentSuffix = '(?:[&#].*)?$/';
+		$noSlugPagePathRegex = '/^.*[^?]+\?fileId=([0-9]+)' . $noSlugFragmentSuffix;
+
+		$pageIds = [];
+		foreach ($hrefs as $href) {
 			if (preg_match($slugPagePathRegex, $href, $matches)) {
 				$pageIds[] = (int)$matches[1];
 			} elseif (preg_match($noSlugPagePathRegex, $href, $matches)) {
 				$pageIds[] = (int)$matches[1];
 			}
 		}
+
+		return $pageIds;
+	}
+
+	/**
+	 * @throws CommonMarkException
+	 */
+	public static function getLinkedPageIds(Collective $collective, string $content, array $trustedDomains = []): array {
+		$links = self::getLinksFromContent($content);
+		$collectiveHrefs = self::getHrefsToCollectiveFromLinks($links, $collective, $trustedDomains);
+		$pageIds = self::getPageIdsFromHrefs($collectiveHrefs);
 
 		return array_unique($pageIds, SORT_NUMERIC);
 	}
