@@ -75,7 +75,7 @@
     "vite": "^7.2.0",
     "vite-plugin-pwa": "^1.1.0",
     "vitest": "^4.0.8",
-    "wait-on": "^9.0.1"
+    "wait-on": "^9.0.3"
   },
   "overrides": {
     "sortablejs": "$sortablejs"
