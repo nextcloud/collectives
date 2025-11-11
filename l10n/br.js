@@ -35,6 +35,7 @@ OC.L10N.register(
     "Sharing" : "Rannan",
     "Versions" : "Stumm",
     "Link copied" : "Liamm eilet",
+    "Please reload the page." : "Mar-plij adkargit ar bajenn",
     "Failed to revert {page} to revision {timestamp}." : "C'hwitet m ar mon en dro {page} evit adober {timestamp}.",
     "_%n byte_::_%n bytes_" : ["okted","okted","okted","okted","%neizhbit"]
 },
