@@ -160,6 +160,8 @@
     "Manage tags" : "管理標籤",
     "Move or copy" : "移動或複製",
     "Download" : "下載",
+    "_%n attachment_::_%n attachments_" : ["%n 個附件"],
+    "_%n backlink_::_%n backlinks_" : ["%n 個反向連結"],
     "Page not found: {page}" : "找不到頁面：{page}",
     "Page with ID {id} not found" : "找不到 ID 為 {id} 的頁面",
     "Select a page from the list or create a new one." : "從清單中選取頁面或建立新的。",

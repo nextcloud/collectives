@@ -162,6 +162,8 @@ OC.L10N.register(
     "Manage tags" : "Xestionar as etiquetas",
     "Move or copy" : "Mover ou copiar",
     "Download" : "Descargar",
+    "_%n attachment_::_%n attachments_" : ["%n anexo","%n anexos"],
+    "_%n backlink_::_%n backlinks_" : ["%n ligazón entrante","%n ligazóns entrantes"],
     "Page not found: {page}" : "Non se atopou a páxina: {page}",
     "Page with ID {id} not found" : "Non se atopou a páxina co ID {id}",
     "Select a page from the list or create a new one." : "Seleccione unha páxina da lista ou cree unha nova.",

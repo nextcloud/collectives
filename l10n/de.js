@@ -162,6 +162,8 @@ OC.L10N.register(
     "Manage tags" : "Schlagworte verwalten",
     "Move or copy" : "Verschieben oder kopieren",
     "Download" : "Herunterladen",
+    "_%n attachment_::_%n attachments_" : ["%n Anhang","%n Anhänge"],
+    "_%n backlink_::_%n backlinks_" : ["%n Rückverweis","%n Rückverweise"],
     "Page not found: {page}" : "Seite nicht gefunden: {page}",
     "Page with ID {id} not found" : "Seite mit der ID {id} nicht gefunden",
     "Select a page from the list or create a new one." : "Wähle eine Seite aus der Liste oder lege eine neue an.",

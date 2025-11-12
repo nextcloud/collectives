@@ -160,6 +160,8 @@
     "Manage tags" : "Halda silte",
     "Move or copy" : "Liiguta või kopeeri",
     "Download" : "Laadi alla",
+    "_%n attachment_::_%n attachments_" : ["%n manus","%n manust"],
+    "_%n backlink_::_%n backlinks_" : ["%n tagasiviide","%n tagasiviidet"],
     "Page not found: {page}" : "Lehte ei leidu: {page}",
     "Page with ID {id} not found" : "Lehte tunnusega „{id}“ ei leidu",
     "Select a page from the list or create a new one." : "Vali loendist olemasolev leht või koosta uus",
