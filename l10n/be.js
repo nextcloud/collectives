@@ -41,6 +41,7 @@ OC.L10N.register(
     "Manage tags" : "Кіраванне тэгамі",
     "Move or copy" : "Перамясціць або капіяваць",
     "Download" : "Спампаваць",
+    "_%n attachment_::_%n attachments_" : ["%n далучэнне","%n далучэнні","%n далучэнняў","%n далучэнняў"],
     "Could not rename the page" : "Не ўдалося перайменаваць старонку",
     "Title" : "Загаловак",
     "Clear search" : "Ачысціць пошук",
