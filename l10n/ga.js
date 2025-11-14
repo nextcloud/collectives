@@ -162,6 +162,8 @@ OC.L10N.register(
     "Manage tags" : "Bainistigh clibeanna",
     "Move or copy" : "Bog nó cóipeáil",
     "Download" : "Íoslódáil",
+    "_%n attachment_::_%n attachments_" : ["%n ceangaltán","%n ceangaltán","%n ceangaltán","%n ceangaltán","%n ceangaltán"],
+    "_%n backlink_::_%n backlinks_" : ["%n nasc siar","%n naisc siar","%n naisc siar","%n naisc siar","%n naisc siar"],
     "Page not found: {page}" : "Ní bhfuarthas leathanach: {page}",
     "Page with ID {id} not found" : "Níor aimsíodh leathanach leis an ID {id}",
     "Select a page from the list or create a new one." : "Roghnaigh leathanach ón liosta nó cruthaigh ceann nua.",
