@@ -50,6 +50,7 @@ OC.L10N.register(
     "Could not delete tag {name}" : "Не ўдалося выдаліць тэг {name}",
     "_Deleted %n tag_::_Deleted %n tags_" : ["Выдалены %n тэг","Выдалены %n тэгі","Выдалена %n тэгаў","Выдалена %n тэгаў"],
     "Created tag {name}" : "Створаны тэг {name}",
+    "Search or create tag" : "Знайсці або стварыць тэг",
     "Tag name" : "Назва тэга",
     "Change tag color" : "Змяніць колер тэга",
     "Create new tag {tag}" : "Стварыць новы тэг {tag}",

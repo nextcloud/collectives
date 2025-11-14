@@ -162,6 +162,8 @@ OC.L10N.register(
     "Manage tags" : "Manage tags",
     "Move or copy" : "Move or copy",
     "Download" : "Download",
+    "_%n attachment_::_%n attachments_" : ["%n attachment","%n attachments"],
+    "_%n backlink_::_%n backlinks_" : ["%n backlink","%n backlinks"],
     "Page not found: {page}" : "Page not found: {page}",
     "Page with ID {id} not found" : "Page with ID {id} not found",
     "Select a page from the list or create a new one." : "Select a page from the list or create a new one.",
