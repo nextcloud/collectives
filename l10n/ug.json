@@ -303,6 +303,7 @@
     "Sort by title" : "ماۋزۇ بويىچە تەرتىپلەش",
     "Sorted by title" : "ماۋزۇ بويىچە تەرتىپلەنگەن",
     "Could not get page backlinks" : "بەت ئۇلانمىسىغا ئېرىشەلمىدى",
+    "_%n byte_::_%n bytes_" : ["%n بايت","%n بايت"],
     "Pages that link to this one" : "بۇ بەتكە ئۇلانغان بەتلەر",
     "Old versions of this page" : "بۇ بەتنىڭ كونا نەشرى",
     "Link copied to the clipboard." : "ئۇلىنىش چاپلاش تاختىسىغا كۆچۈرۈلدى.",
