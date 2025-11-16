@@ -159,6 +159,8 @@
     "Manage tags" : "Hantera taggar",
     "Move or copy" : "Flytta eller kopiera",
     "Download" : "Ladda ner",
+    "_%n attachment_::_%n attachments_" : ["%n bilaga","%n bilagor"],
+    "_%n backlink_::_%n backlinks_" : ["%n bakåtlänk","%n bakåtlänkar"],
     "Page not found: {page}" : "Sidan hittades inte: {page}",
     "Page with ID {id} not found" : "Sidan med ID {id} hittades inte",
     "Select a page from the list or create a new one." : "Välj en sida från listan eller skapa en ny.",
