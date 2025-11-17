@@ -3,36 +3,94 @@
 declare(strict_types=1);
 
 /**
- * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-FileCopyrightText: 2025 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
 namespace OCA\Collectives\Search\FileSearch;
 
+use OCA\Collectives\Search\FileSearch\Db\SearchDocMapper;
+use OCA\Collectives\Search\FileSearch\Db\SearchFileMapper;
+use OCA\Collectives\Search\FileSearch\Db\SearchWordMapper;
+use OCA\Collectives\Search\FileSearch\Stemmer\Stemmer;
+use OCA\Collectives\Search\FileSearch\Tokenizer\WordTokenizer;
 use OCP\Files\File;
 use OCP\Files\Folder;
-use OCP\Files\GenericFileException;
-use OCP\Files\InvalidPathException;
 use OCP\Files\NotFoundException;
-use OCP\Files\NotPermittedException;
-use OCP\Lock\LockedException;
-use PDO;
-use TeamTNT\TNTSearch\Contracts\EngineContract;
-use TeamTNT\TNTSearch\Indexer\TNTIndexer;
-use TeamTNT\TNTSearch\Support\Collection;
 
-/**
- * @property PDO|null $index
- */
-class FileIndexer extends TNTIndexer {
-	public function __construct(EngineContract $engine) {
-		parent::__construct($engine);
-		$this->disableOutput(true);
+class FileIndexer {
+	public function __construct(
+		private SearchWordMapper $wordMapper,
+		private SearchDocMapper $docMapper,
+		private SearchFileMapper $fileMapper,
+		private WordTokenizer $tokenizer,
+		private Stemmer $stemmer,
+	) {
 	}
 
-	public function loadConfig(array $config): void {
-		parent::loadConfig($config);
-		$this->engine->config['storage'] = '';
+	public function indexFolder(Folder $folder, string $circleUniqueId, bool $incremental = false): void {
+
+		if (!$incremental) {
+			$this->deleteIndexByCircle($circleUniqueId);
+		}
+
+		$files = $this->getDirectoryFiles($folder, true);
+
+		foreach ($files as $file) {
+			$this->indexFile($file, $circleUniqueId, $incremental);
+		}
+	}
+
+	private function deleteIndexByCircle(string $circleUniqueId): void {
+		$this->wordMapper->deleteByCircle($circleUniqueId);
+		$this->docMapper->deleteByCircle($circleUniqueId);
+		$this->fileMapper->deleteByCircle($circleUniqueId);
+	}
+
+	private function indexFile(File $file, string $circleUniqueId, bool $incremental): void {
+
+		if ($incremental) {
+			$existingFile = $this->fileMapper->findByCircleAndFileId($circleUniqueId, $file->getId());
+
+			if ($existingFile && $existingFile->getMtime() >= $file->getMTime()) {
+				return;
+			}
+
+			if ($existingFile) {
+				$this->deleteFileFromIndex($circleUniqueId, $file->getId());
+			}
+		}
+
+		try {
+			$content = $file->getContent();
+		} catch (\Exception) {
+			return;
+		}
+
+		$tokens = $this->tokenizer->tokenize($content);
+
+		$stems = [];
+		foreach ($tokens as $token) {
+			$stems[] = $this->stemmer->stem($token);
+		}
+
+		$terms = array_count_values($stems);
+		unset($content, $tokens, $stems);
+
+		foreach ($terms as $term => $hitCount) {
+			try {
+				$term = substr((string)$term, 0, 50);
+				$word = $this->wordMapper->upsert($circleUniqueId, $term, $hitCount, 1);
+				$this->docMapper->insertDoc($circleUniqueId, (string)$word->getId(), $file->getId(), $hitCount);
+			} catch (\Exception) {
+				continue;
+			}
+		}
+
+		try {
+			$this->fileMapper->insertFile($circleUniqueId, $file->getId(), $file->getInternalPath(), $file->getMTime());
+		} catch (\Exception) {
+		}
 	}
 
 	private function getDirectoryFiles(Folder $folder, bool $recursive = false): array {
@@ -60,61 +118,14 @@ class FileIndexer extends TNTIndexer {
 		return array_merge($files, ...$filesRecursive);
 	}
 
-	/**
-	 * @throws FileSearchException
-	 */
-	public function runOnDirectory(Folder $folder, bool $recursive = true): void {
-		$this->run($this->getDirectoryFiles($folder, $recursive));
-	}
+	private function deleteFileFromIndex(string $circleUniqueId, int $fileId): void {
+		$docs = $this->docMapper->findByCircleAndFileId($circleUniqueId, $fileId);
 
-	/**
-	 * @throws FileSearchException
-	 */
-	public function run(array $pages = []): void {
-		$index = $this->getIndex();
-		if ($index === null) {
-			throw new FileSearchException('Indexing could not be performed because index is not selected.');
+		foreach ($docs as $doc) {
+			$this->wordMapper->decrementCounts($circleUniqueId, $doc->getWordId(), $doc->getHitCount());
+			$this->docMapper->delete($doc);
 		}
 
-		$index->exec('CREATE TABLE IF NOT EXISTS filemap (
-                    id INTEGER PRIMARY KEY,
-                    path TEXT)');
-		$index->beginTransaction();
-
-		$processedPages = 0;
-		foreach ($pages as $page) {
-			try {
-				$id = $page->getId();
-				$internalPath = $page->getInternalPath();
-				try {
-					$fileCollection = new Collection([
-						'id' => $id,
-						'name' => $page->getName(),
-						'content' => $page->getContent()
-					]);
-				} catch (GenericFileException) {
-					// Ignore files that went missing
-					continue;
-				}
-				$this->processDocument($fileCollection);
-
-				$statement = $index->prepare("INSERT INTO filemap ( 'id', 'path') values ( :id, :path)");
-				$statement->bindParam(':id', $id);
-				$statement->bindParam(':path', $internalPath);
-				$statement->execute();
-
-				$processedPages++;
-			} catch (NotFoundException|NotPermittedException|InvalidPathException|LockedException $e) {
-				throw new FileSearchException('File indexer failed to open and/or read file', 0, $e);
-			}
-		}
-		$index->exec("UPDATE info SET `value`=$processedPages WHERE `key`='total_documents'");
-		$index->exec("INSERT INTO info ( 'key', 'value') values ( 'driver', 'filesystem')");
-
-		$index->commit();
-	}
-
-	public function getIndex(): ?PDO {
-		return $this->engine->index;
+		$this->fileMapper->deleteByCircleAndFileId($circleUniqueId, $fileId);
 	}
 }

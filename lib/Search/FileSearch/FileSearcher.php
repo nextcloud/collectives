@@ -3,126 +3,106 @@
 declare(strict_types=1);
 
 /**
- * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-FileCopyrightText: 2025 Nextcloud GmbH and Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
 namespace OCA\Collectives\Search\FileSearch;
 
-use OCP\Files\File;
-use OCP\Files\NotFoundException;
-use PDO;
-use TeamTNT\TNTSearch\Support\TokenizerInterface;
-use TeamTNT\TNTSearch\TNTSearch;
+use OCA\Collectives\Search\FileSearch\Db\SearchDocMapper;
+use OCA\Collectives\Search\FileSearch\Db\SearchWordMapper;
+use OCA\Collectives\Search\FileSearch\Stemmer\Stemmer;
+use OCA\Collectives\Search\FileSearch\Tokenizer\ClauseTokenizer;
+use OCA\Collectives\Search\FileSearch\Tokenizer\WordTokenizer;
 
-/**
- * @property PDO|null $index;
- */
-class FileSearcher extends TNTSearch {
-	public const DEFAULT_CONFIG = [
-		'tokenizer' => WordTokenizer::class,
-		'wal' => false,
-		'driver' => 'filesystem',
-		'storage' => ''
-	];
-
-	public const SUPPORTED_LANGUAGES = [
-		'ar' => 'Arabic',
-		'cr' => 'Croatian',
-		'fr' => 'French',
-		'de' => 'German',
-		'en' => 'Porter',
-		'it' => 'Italian',
-		'lv' => 'Latvian',
-		'pl' => 'Polish',
-		'pt' => 'Portuguese',
-		'ru' => 'Russian',
-		'uk' => 'Ukrainian',
-	];
-
-	private const UNSUPPORTED_LANGUAGE = 'No';
-
-	protected FileIndexer $indexer;
+class FileSearcher {
+	private const DEFAULT_LIMIT = 15;
+	private const FUZZY_PREFIX_LENGTH = 2;
+	private const FUZZY_MAX_DISTANCE = 2;
 
 	public function __construct(
-		private ?string $language = null,
+		private SearchWordMapper $wordMapper,
+		private SearchDocMapper $docMapper,
+		private WordTokenizer $tokenizer,
+		private Stemmer $stemmer,
 	) {
-		parent::__construct();
-		$this->loadConfig();
-		$this->asYouType(true);
-		$this->fuzziness(true);
 	}
 
-	public function loadConfig(array $config = self::DEFAULT_CONFIG): void {
-		parent::loadConfig($config);
-		$this->indexer = new FileIndexer($this->engine);
-		$this->indexer->loadConfig($config);
-	}
+	public function search(string $circleId, string $query, int $limit = self::DEFAULT_LIMIT): array {
+		$tokens = $this->tokenizer->tokenize($query);
 
-	/**
-	 * @param string $phrase
-	 * @param int $numOfResults
-	 */
-	public function search($phrase, $numOfResults = 1000): array {
-		$this->setStemmer();
-		$this->setTokenizer();
-		return parent::search($phrase, $numOfResults);
-	}
+		$stems = [];
+		foreach ($tokens as $token) {
+			$stems[] = $this->stemmer->stem($token);
+		}
+		$stems = array_unique($stems);
 
-	/**
-	 * @throws FileSearchException
-	 */
-	public function selectIndexFile(File $indexFile): FileIndexer {
-		try {
-			$path = $indexFile->getStorage()->getLocalFile($indexFile->getInternalPath());
-		} catch (NotFoundException) {
-			throw new FileSearchException('File searcher could not find storage for index file.');
+		if (empty($stems)) {
+			return [];
 		}
 
-		if (!$path) {
-			throw new FileSearchException('File searcher could not create local index.');
+		$wordIds = [];
+		foreach ($stems as $stem) {
+			$word = $this->wordMapper->findByCircleAndTerm($circleId, $stem);
+			$words = $word ? [$word] : $this->fuzzySearchWord($circleId, $stem);
+
+			foreach ($words as $word) {
+				$wordIds[] = $word->getId();
+			}
 		}
 
-		return $this->selectIndex($path);
-	}
-
-	/**
-	 * @param string $indexName
-	 * @throws FileSearchException
-	 */
-	public function selectIndex($indexName): FileIndexer {
-		if (!file_exists($indexName)) {
-			throw new FileSearchException('Could not find an index for the collective.');
+		if (empty($wordIds)) {
+			return [];
 		}
-		$this->index = new PDO('sqlite:' . $indexName);
-		$this->index->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-		$this->indexer->setIndex($this->index);
-		$this->indexer->setLanguage($this->language ?? self::UNSUPPORTED_LANGUAGE);
-
-		return $this->indexer;
+		return $this->docMapper->findDocumentsByWords($circleId, $wordIds, $limit);
 	}
 
-	/**
-	 * @param string $indexName
-	 * @param bool $disableOutput
-	 */
-	public function createIndex($indexName = '', $disableOutput = false): FileIndexer {
-		$this->indexer->createIndex($indexName);
-		$this->indexer->setLanguage($this->language ?? self::UNSUPPORTED_LANGUAGE);
+	public function rankByBigrams(string $query, array $files): array {
+		$clauseTokenizer = new ClauseTokenizer();
+		$phrases = $clauseTokenizer->tokenize($query);
 
-		$this->index = $this->indexer->getIndex();
-		return $this->indexer;
+		if (empty($phrases)) {
+			return $files;
+		}
+
+		$scored = [];
+		foreach ($files as $file) {
+			$content = mb_strtolower($file->getContent());
+			$score = 0;
+
+			foreach ($phrases as $phrase) {
+				if (empty($phrase)) {
+					continue;
+				}
+				$count = substr_count(mb_strtolower($content), mb_strtolower($phrase));
+				$score += $count;
+			}
+
+			$scored[$file->getId()] = ['file' => $file, 'score' => $score];
+		}
+
+		uasort($scored, fn ($a, $b) => $b['score'] <=> $a['score']);
+
+		return array_map(fn ($item) => $item['file'], $scored);
 	}
 
-	public function createInMemoryIndex(): FileIndexer {
-		return $this->createIndex(':memory:');
-	}
+	private function fuzzySearchWord(string $circleId, string $term): array {
+		if (mb_strlen($term) < self::FUZZY_PREFIX_LENGTH) {
+			return [];
+		}
 
-	public function getTokenizer(): ?TokenizerInterface {
-		$this->index && $this->setTokenizer();
-		$configTokenizer = $this->config['tokenizer'];
-		$tokenizer = $this->tokenizer ?: new $configTokenizer();
-		return ($tokenizer instanceof TokenizerInterface) ? $tokenizer : null;
+		$prefix = mb_substr($term, 0, self::FUZZY_PREFIX_LENGTH);
+		$candidates = $this->wordMapper->findByCircleAndPrefix($circleId, $prefix);
+
+		$matches = [];
+		foreach ($candidates as $candidate) {
+			$distance = levenshtein($candidate->getTerm(), $term);
+			if ($distance <= self::FUZZY_MAX_DISTANCE) {
+				$matches[] = $candidate;
+			}
+		}
+
+		return $matches;
 	}
 }
