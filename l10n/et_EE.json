@@ -260,7 +260,7 @@
     "Error generating password from password policy" : "Viga salasõnareeglitele vastava salasõna loomisel",
     "Quick share options dropdown" : "Kiirjagamisvalikute rippmenüü",
     "Please enter the following required information before creating the share" : "Enne jaosmeedia loomist palun sisesta järgmine vajalik teave",
-    "Password protection (enforced)" : "Paroolikaitse (jõustatud)",
+    "Password protection (enforced)" : "Salasõnakaitse (jõustatud)",
     "Set password" : "Määra salasõna",
     "Password" : "Salasõna",
     "Create share" : "Lisa jagamine",
