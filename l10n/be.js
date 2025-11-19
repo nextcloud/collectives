@@ -84,6 +84,7 @@ OC.L10N.register(
     "Named versions are persisted, and excluded from automatic cleanups when your storage quota is full." : "Названыя версіі стала захоўваюцца і не ачышчаюцца аўтаматычна пры запаўненні сховішча.",
     "Remove version name" : "Выдаліць назву версіі",
     "Save version name" : "Захаваць назву версіі",
+    "Attachments" : "Далучэнні",
     "Sharing" : "Абагульванне",
     "Versions" : "Версіі",
     "Remove tag" : "Выдаліць тэг",

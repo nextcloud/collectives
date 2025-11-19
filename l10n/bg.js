@@ -135,6 +135,7 @@ OC.L10N.register(
     "No other versions available" : "Няма версии",
     "After editing you can find old versions of the page here." : "След редактиране можете да намерите стари версии на страницата тук.",
     "Current version" : "Текуща версия",
+    "You" : "Вие",
     "Name this version" : "Наименуване на тази версия",
     "Edit version name" : "Редактиране на името на версия",
     "Restore version" : "Възстановяване на версия",
