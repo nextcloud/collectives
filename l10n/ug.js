@@ -166,6 +166,8 @@ OC.L10N.register(
     "Highlight all matches" : "بارلىق مۇسابىقىلەرنى گەۋدىلەندۈرۈڭ",
     "Search or create tag" : "بەلگە ئىزدەش ياكى قۇرۇش",
     "Tag name" : "خەتكۈچ ئىسمى",
+    "Change tag color" : "بەلگە رەڭنى ئۆزگەرتىش",
+    "Create new tag" : "يېڭى بەلگە قۇر",
     "Error saving the document. Please try again." : "ھۆججەتنى ساقلاشتا خاتالىق. قايتا سىناڭ.",
     "Favorites" : "يىغقۇچ",
     "Toggle favorites" : "ياقتۇرىدىغانلارنى تاللاڭ",
