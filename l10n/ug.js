@@ -142,6 +142,7 @@ OC.L10N.register(
     "Manage tags" : "خەتكۈچلەرنى باشقۇرۇش",
     "Move or copy" : "يۆتكەش ياكى كۆچۈرۈش",
     "Download" : "چۈشۈر",
+    "_%n attachment_::_%n attachments_" : ["%n يوللانما","%n يوللانمىلار"],
     "Page not found: {page}" : "بەت تېپىلمىدى: {page}",
     "Select a page from the list or create a new one." : "تىزىملىكتىن بىر بەتنى تاللاڭ ياكى يېڭى بەت قۇرۇڭ.",
     "All collectives" : "بارلىق كوللىكتىپ",
