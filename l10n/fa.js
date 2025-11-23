@@ -208,6 +208,8 @@ OC.L10N.register(
     "No backlinks available" : "No backlinks available",
     "If other pages link to this one, they will be listed here." : "If other pages link to this one, they will be listed here.",
     "Collective members" : "Collective members",
+    "External shares" : "اشتراک خارجی",
+    "External shares explanation" : "توضیح اشتراک خارجی",
     "Could not get page versions" : "Could not get page versions",
     "No other versions available" : "نسخه ی دیگری در دسترس نیست",
     "After editing you can find old versions of the page here." : "After editing you can find old versions of the page here.",
