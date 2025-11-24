@@ -214,6 +214,7 @@ OC.L10N.register(
     "No other versions available" : "نسخه ی دیگری در دسترس نیست",
     "After editing you can find old versions of the page here." : "After editing you can find old versions of the page here.",
     "Current version" : "نسخه فعلی",
+    "Initial version" : "نسخه اولیه",
     "You" : "You",
     "Name this version" : "Name this version",
     "Edit version name" : "Edit version name",
