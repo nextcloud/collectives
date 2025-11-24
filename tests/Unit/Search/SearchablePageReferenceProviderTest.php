@@ -63,38 +63,43 @@ class SearchablePageReferenceProviderTest extends TestCase {
 	private function slugUrlProvider(): array {
 		return [
 			// internal
-			['https://nextcloud.local/apps/collectives/supacollective-123/spectre-slug-14457', 'spectre-slug-14457'],
+			['https://nextcloud.local/apps/collectives/supacollective-123/spectre-slug-14457', 'spectre-slug-14457', null],
+			['https://nextcloud.local/apps/collectives/supacollective-123/spectre-slug-14457#h-heading1', 'spectre-slug-14457', 'h-heading1'],
 
 			// public
-			['https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective-123/spectre-slug-14457', 'spectre-slug-14457'],
+			['https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective-123/spectre-slug-14457', 'spectre-slug-14457', null],
+			['https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective-123/spectre-slug-14457#h-heading1', 'spectre-slug-14457', 'h-heading1'],
 		];
 	}
 
 	private function urlProvider(): array {
 		return [
 			// internal
-			['https://nextcloud.local/apps/collectives/supacollective', ''],
-			['https://nextcloud.local/apps/collectives/supacollective/Tutos/Hacking/Spectre', 'Tutos/Hacking/Spectre'],
-			['https://nextcloud.local/apps/collectives/supacollective/Tutos/Hacking/Spectre', 'Tutos/Hacking/Spectre'],
-			['https://nextcloud.local/index.php/apps/collectives/supacollective/Tutos/Hacking/Spectre', 'Tutos/Hacking/Spectre'],
+			['https://nextcloud.local/apps/collectives/supacollective', '', null],
+			['https://nextcloud.local/apps/collectives/supacollective/Tutos/Hacking/Spectre', 'Tutos/Hacking/Spectre', null],
+			['https://nextcloud.local/apps/collectives/supacollective/Tutos/Hacking/Spectre#h-heading1', 'Tutos/Hacking/Spectre', 'h-heading1'],
+			['https://nextcloud.local/index.php/apps/collectives/supacollective/Tutos/Hacking/Spectre', 'Tutos/Hacking/Spectre', null],
 
 			// public
-			['https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective', ''],
-			['https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/abc', 'abc'],
-			['https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/Tutos/Hacking/Spectre', 'Tutos/Hacking/Spectre'],
-			['https://nextcloud.local/index.php/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/Tutos/Hacking/Spectre', 'Tutos/Hacking/Spectre'],
+			['https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective', '', null],
+			['https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/abc', 'abc', null],
+			['https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/Tutos/Hacking/Spectre', 'Tutos/Hacking/Spectre', null],
+			['https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/Tutos/Hacking/Spectre#h-heading1', 'Tutos/Hacking/Spectre', 'h-heading1'],
+			['https://nextcloud.local/index.php/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/Tutos/Hacking/Spectre', 'Tutos/Hacking/Spectre', null],
 		];
 	}
 
 	private function urlFileIdProvider(): array {
 		return [
 			// internal
-			['https://nextcloud.local/apps/collectives/supacollective/Tutos/Hacking/Spectre?fileId=14457', 'Tutos/Hacking/Spectre'],
-			['https://nextcloud.local/index.php/apps/collectives/supacollective/Tutos/Hacking/Spectre?fileId=14457', 'Tutos/Hacking/Spectre'],
+			['https://nextcloud.local/apps/collectives/supacollective/Tutos/Hacking/Spectre?fileId=14457', 'Tutos/Hacking/Spectre', null],
+			['https://nextcloud.local/apps/collectives/supacollective/Tutos/Hacking/Spectre?fileId=14457#h-heading1', 'Tutos/Hacking/Spectre', 'h-heading1'],
+			['https://nextcloud.local/index.php/apps/collectives/supacollective/Tutos/Hacking/Spectre?fileId=14457', 'Tutos/Hacking/Spectre', null],
 
 			// public
-			['https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/Tutos/Hacking/Spectre?fileId=14457', 'Tutos/Hacking/Spectre'],
-			['https://nextcloud.local/index.php/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/Tutos/Hacking/Spectre?fileId=14457', 'Tutos/Hacking/Spectre'],
+			['https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/Tutos/Hacking/Spectre?fileId=14457', 'Tutos/Hacking/Spectre', null],
+			['https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/Tutos/Hacking/Spectre?fileId=14457#h-heading1', 'Tutos/Hacking/Spectre', 'h-heading1'],
+			['https://nextcloud.local/index.php/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective/Tutos/Hacking/Spectre?fileId=14457', 'Tutos/Hacking/Spectre', null],
 		];
 	}
 
@@ -109,12 +114,13 @@ class SearchablePageReferenceProviderTest extends TestCase {
 	/**
 	 * @dataProvider slugUrlProvider
 	 */
-	public function testMatchSlugUrl(string $url, string $pagePath): void {
+	public function testMatchSlugUrl(string $url, string $pagePath, ?string $fragment): void {
 		$expectedPagePath = [
 			'collectiveName' => 'supacollective',
 			'pagePath' => $pagePath,
 			'fileId' => 14457,
 			'collectiveId' => 123,
+			'fragment' => $fragment,
 		];
 
 		self::assertEquals($expectedPagePath, $this->provider->matchUrl($url));
@@ -123,10 +129,11 @@ class SearchablePageReferenceProviderTest extends TestCase {
 	/**
 	 * @dataProvider urlProvider
 	 */
-	public function testMatchUrl(string $url, string $pagePath): void {
+	public function testMatchUrl(string $url, string $pagePath, ?string $fragment): void {
 		$expectedPagePath = [
 			'collectiveName' => 'supacollective',
 			'pagePath' => $pagePath,
+			'fragment' => $fragment,
 		];
 
 		self::assertEquals($expectedPagePath, $this->provider->matchUrl($url));
@@ -135,11 +142,12 @@ class SearchablePageReferenceProviderTest extends TestCase {
 	/**
 	 * @dataProvider urlFileIdProvider
 	 */
-	public function testMatchUrlFileId(string $url, string $pagePath): void {
+	public function testMatchUrlFileId(string $url, string $pagePath, ?string $fragment): void {
 		$expectedPagePath = [
 			'collectiveName' => 'supacollective',
 			'pagePath' => $pagePath,
 			'fileId' => 14457,
+			'fragment' => $fragment,
 		];
 
 		self::assertEquals($expectedPagePath, $this->provider->matchUrl($url));

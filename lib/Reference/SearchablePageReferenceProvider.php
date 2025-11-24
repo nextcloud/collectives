@@ -68,16 +68,19 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 		return ['collectives-pages'];
 	}
 
-	private static function pagePathFromMatches(string $url, array $matches): array {
+	private static function pagePathFromMatches(array $urlParts, string $collectivePart, string $pagePathPart): array {
 		$pagePath = [
-			'collectiveName' => urldecode($matches[1]),
-			'pagePath' => urldecode(ltrim($matches[2] ?? '', '/')),
+			'collectiveName' => urldecode($collectivePart),
+			'pagePath' => urldecode(ltrim($pagePathPart, '/')),
+			'fragment' => null,
 		];
 
 		// URL with fileId query param
-		preg_match('/\?fileId=(\d+)$/i', $url, $matches);
-		if ($matches && count($matches) > 1) {
-			$pagePath['fileId'] = (int)$matches[1];
+		if (array_key_exists('query', $urlParts)) {
+			preg_match('/fileId=(\d+)/i', $urlParts['query'], $matches);
+			if ($matches && count($matches) > 1) {
+				$pagePath['fileId'] = (int)$matches[1];
+			}
 		}
 
 		// Slugified page URL path
@@ -92,10 +95,20 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 			$pagePath['collectiveId'] = (int)$matches[2];
 		}
 
+		// URL with fragment
+		if (array_key_exists('fragment', $urlParts)) {
+			$pagePath['fragment'] = $urlParts['fragment'];
+		}
+
 		return $pagePath;
 	}
 
 	public function matchUrl(string $url): ?array {
+		$urlParts = parse_url($url);
+		if (!$urlParts || !array_key_exists('path', $urlParts) || empty($urlParts['path'])) {
+			return null;
+		}
+
 		// link examples:
 		// https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective-123
 		// https://nextcloud.local/apps/collectives/p/MsdwSCmP9F6jcQX/supacollective-123/spectre-slug-14457
@@ -109,9 +122,9 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 
 		$matches = false;
 		foreach ($startPublicRegexes as $regex) {
-			preg_match('/^' . preg_quote($regex, '/') . '\/\w+' . '\/([^\/]+)(\/[^?]+)?/i', $url, $matches);
+			preg_match('/^' . preg_quote($regex, '/') . '\/\w+' . '\/([^\/]+)(\/[^?#]+)?/i', $url, $matches);
 			if ($matches && count($matches) > 1) {
-				return self::pagePathFromMatches($url, $matches);
+				return self::pagePathFromMatches($urlParts, $matches[1], $matches[2] ?? '');
 			}
 		}
 
@@ -126,9 +139,9 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 		];
 
 		foreach ($startRegexes as $regex) {
-			preg_match('/^' . preg_quote($regex, '/') . '\/([^\/]+)(\/[^?]+)?/i', $url, $matches);
+			preg_match('/^' . preg_quote($regex, '/') . '\/([^\/]+)(\/[^?#]+)?/i', $url, $matches);
 			if ($matches && count($matches) > 1) {
-				return self::pagePathFromMatches($url, $matches);
+				return self::pagePathFromMatches($urlParts, $matches[1], $matches[2] ?? '');
 			}
 		}
 
@@ -229,8 +242,8 @@ class SearchablePageReferenceProvider extends ADiscoverableReferenceProvider imp
 
 		$collectivesLink = $this->urlGenerator->linkToRouteAbsolute('collectives.start.index') . ($public ? 'p/' . $sharingToken . '/' : '');
 		$link = $collectivesLink . $this->pageService->getPageLink($collective->getUrlPath(), $page);
-		if (str_contains($referenceText, '#')) {
-			$link .= '#' . explode('#', $referenceText)[1];
+		if ($pageReferenceInfo['fragment']) {
+			$link .= '#' . $pageReferenceInfo['fragment'];
 		}
 		$reference = new Reference($link);
 		$pageEmoji = $page->getEmoji();
