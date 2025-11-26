@@ -29,6 +29,7 @@ OC.L10N.register(
     "Export or print" : "导出或打印",
     "Settings" : "设置",
     "Leave collective" : "离开知识库",
+    "Offline" : "离线",
     "Collective not found: {collective}" : "未找到知识库：{collective}",
     "You're not part of a collective with that name." : "您不是具有此名称的知识库的成员。",
     "Loading pages:" : "正在加载页面：",
