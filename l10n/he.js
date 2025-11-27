@@ -31,6 +31,7 @@ OC.L10N.register(
     "Favorites" : "מועדפים",
     "Favorite" : "סימון כמועדף",
     "Deleted" : "נמחק",
+    "Sort order" : "סידור",
     "Create public link" : "יצירת קישור ציבורי",
     "View only" : "לצפיה בלבד",
     "Can edit" : "ניתן לערוך",
