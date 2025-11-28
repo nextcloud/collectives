@@ -20,6 +20,22 @@ export function removeFrom(collection, item) {
 }
 
 /**
+ * Update item in the collection
+ *
+ * The existing item is identified by the id.
+ *
+ * @param {object[]} collection array to modify
+ * @param {object} item the item to update or add
+ * @param {number} item.id used to find the item in the collection
+ */
+export function updateIn(collection, item) {
+	const index = collection.findIndex((i) => i.id === item.id)
+	if (index > -1) {
+		collection.splice(index, 1, item)
+	}
+}
+
+/**
  * Update item in the collection or add if it does not exist
  *
  * The existing item is identified by the id.
