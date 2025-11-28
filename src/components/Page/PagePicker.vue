@@ -231,7 +231,7 @@ export default {
 
 			return this.isCurrentCollective
 				? this.rootPage
-				: this.pagesForCollective(this.selectedCollective.id).find((p) => (p.parentId === 0))
+				: this.pagesForCollective(this.selectedCollective).find((p) => (p.parentId === 0))
 		},
 
 		subpages() {
@@ -244,7 +244,7 @@ export default {
 			if (this.isCurrentCollective) {
 				pages = this.visibleSubpages(this.selectedPageId)
 			} else {
-				pages = this.sortedSubpagesForCollective(this.selectedCollective.id, this.selectedPageId)
+				pages = this.sortedSubpagesForCollective(this.selectedCollective, this.selectedPageId)
 			}
 
 			// Add current page to top of subpages if not part of it yet
@@ -258,7 +258,7 @@ export default {
 		pageCrumbs() {
 			return this.isCurrentCollective
 				? this.pageParents(this.selectedPageId)
-				: this.pageParentsForCollective(this.selectedCollective.id, this.selectedPageId)
+				: this.pageParentsForCollective(this.selectedCollective, this.selectedPageId)
 		},
 
 		collectivesCrumbString() {
@@ -366,7 +366,7 @@ export default {
 		async onClickCollective(collective) {
 			this.selectedCollective = collective
 			if (!this.isCurrentCollective) {
-				await this.getPagesForCollective(this.selectedCollective.id)
+				await this.getPagesForCollective(this.selectedCollective)
 			}
 			this.selectedPageId = this.selectedRootPage.id
 			// Reset reordered pages when changing collective
