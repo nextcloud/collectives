@@ -10,27 +10,32 @@ import { memberLevels } from '../constants.js'
 import randomEmoji from '../util/randomEmoji.js'
 import { byName } from '../util/sortOrders.js'
 import { useCirclesStore } from './circles.js'
+import { removeFrom, updateOrAddTo } from './collectionHelpers.js'
 import { useRootStore } from './root.js'
 import { useSettingsStore } from './settings.js'
 
 const STORE_PREFIX = 'collectives/pinia/collectives/'
 
 export const useCollectivesStore = defineStore('collectives', {
-	state() {
-		const rootStore = useRootStore()
-		const LOCAL_STORE_PREFIX = rootStore.shareTokenParam ? STORE_PREFIX + rootStore.shareTokenParam + '/' : STORE_PREFIX
-
-		return {
-			collectives: useLocalStorage(LOCAL_STORE_PREFIX + 'collectives', []),
-			trashCollectives: useLocalStorage(LOCAL_STORE_PREFIX + 'trashCollectives', []),
-			updatedCollective: undefined,
-			templatesCollectiveId: undefined,
-			membersCollectiveId: undefined,
-			settingsCollectiveId: undefined,
-		}
-	},
+	state: () => ({
+		collectivesState: useLocalStorage(STORE_PREFIX + 'collectives', []),
+		publicCollectivesState: useLocalStorage(STORE_PREFIX + 'shareCollectives', []),
+		trashCollectives: useLocalStorage(STORE_PREFIX + 'trashCollectives', []),
+		updatedCollective: undefined,
+		templatesCollectiveId: undefined,
+		membersCollectiveId: undefined,
+		settingsCollectiveId: undefined,
+	}),
 
 	getters: {
+		collectives(state) {
+			const rootStore = useRootStore()
+			console.debug('COLLECTIVES GETTER isPublic', rootStore.isPublic)
+			return rootStore.isPublic
+				? state.publicCollectivesState
+				: state.collectivesState
+		},
+
 		sortedCollectives(state) {
 			return state.collectives.sort(byName)
 		},
@@ -182,10 +187,15 @@ export const useCollectivesStore = defineStore('collectives', {
 			const rootStore = useRootStore()
 			rootStore.load('collectives')
 			try {
-				const response = rootStore.isPublic
-					? await api.getSharedCollective(rootStore.shareTokenParam)
-					: await api.getCollectives()
-				this.collectives = response.data.ocs.data.collectives
+				if (rootStore.isPublic) {
+					console.debug('GETTING PUBLIC COLLECTIVES')
+					const response = await api.getSharedCollective(rootStore.shareTokenParam)
+					this.publicCollectivesState = response.data.ocs.data.collectives
+				} else {
+					console.debug('GETTING COLLECTIVES')
+					const response = await api.getCollectives()
+					this.collectivesState = response.data.ocs.data.collectives
+				}
 			} finally {
 				rootStore.done('collectives')
 			}
@@ -203,25 +213,40 @@ export const useCollectivesStore = defineStore('collectives', {
 		},
 
 		_addOrUpdateCollectiveState(collective) {
-			const cur = this.collectives.findIndex((c) => c.id === collective.id)
-			if (cur === -1) {
-				this.collectives.unshift(collective)
+			const rootStore = useRootStore()
+			if (rootStore.isPublic) {
+				updateOrAddTo(this.publicCollectivesState, collective)
 			} else {
-				this.collectives.splice(cur, 1, collective)
+				updateOrAddTo(this.collectivesState, collective)
 			}
 			this.updatedCollective = collective
 		},
 
 		removeCollectiveFromState(collective) {
-			this.collectives.splice(this.collectives.findIndex((c) => c.id === collective.id), 1)
+			const rootStore = useRootStore()
+			if (rootStore.isPublic) {
+				removeFrom(this.publicCollectivesState, collective)
+			} else {
+				removeFrom(this.collectivesState, collective)
+			}
 		},
 
 		patchCollectiveWithProperty({ id, property, value }) {
-			this.collectives.find((c) => c.id === id)[property] = value
+			const rootStore = useRootStore()
+			if (rootStore.isPublic) {
+				this.publicCollectivesState.find((c) => c.id === id)[property] = value
+			} else {
+				this.collectivesState.find((c) => c.id === id)[property] = value
+			}
 		},
 
 		patchCollectiveWithCircle(circle) {
-			this.collectives.find((c) => c.circleId === circle.id).name = circle.sanitizedName
+			const rootStore = useRootStore()
+			if (rootStore.isPublic) {
+				this.publicCollectivesState.find((c) => c.circleId === circle.id).name = circle.sanitizedName
+			} else {
+				this.collectivesState.find((c) => c.circleId === circle.id).name = circle.sanitizedName
+			}
 		},
 
 		/**
@@ -257,9 +282,14 @@ export const useCollectivesStore = defineStore('collectives', {
 		 * @param {number} collective.id ID of the collective to be trashed
 		 */
 		async trashCollective({ id }) {
+			const rootStore = useRootStore()
 			const response = await api.trashCollective(id)
 			const collective = response.data.ocs.data.collective
-			this.collectives.splice(this.collectives.findIndex((c) => c.id === collective.id), 1)
+			if (rootStore.isPublic) {
+				removeFrom(this.publicCollectivesState, collective)
+			} else {
+				removeFrom(this.collectivesState, collective)
+			}
 			this.trashCollectives.unshift(collective)
 		},
 
@@ -270,9 +300,14 @@ export const useCollectivesStore = defineStore('collectives', {
 		 * @param {number} collective.id ID of the collective to be restored
 		 */
 		async restoreCollective({ id }) {
+			const rootStore = useRootStore()
 			const response = await api.restoreCollective(id)
 			const collective = response.data.ocs.data.collective
-			this.collectives.unshift(collective)
+			if (rootStore.isPublic) {
+				this.publicCollectivesState.unshift(collective)
+			} else {
+				this.collectivesState.unshift(collective)
+			}
 			this.trashCollectives.splice(this.trashCollectives.findIndex((c) => c.id === collective.id), 1)
 		},
 
