@@ -5,32 +5,44 @@
 
 import { useLocalStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
+import { set } from 'vue'
 import * as api from '../apis/collectives/index.js'
 import { memberLevels } from '../constants.js'
 import randomEmoji from '../util/randomEmoji.js'
 import { byName } from '../util/sortOrders.js'
 import { useCirclesStore } from './circles.js'
+import { removeFrom, updateOrAddTo } from './collectionHelpers.js'
 import { useRootStore } from './root.js'
 import { useSettingsStore } from './settings.js'
 
 const STORE_PREFIX = 'collectives/pinia/collectives/'
 
 export const useCollectivesStore = defineStore('collectives', {
-	state() {
-		const rootStore = useRootStore()
-		const LOCAL_STORE_PREFIX = rootStore.shareTokenParam ? STORE_PREFIX + rootStore.shareTokenParam + '/' : STORE_PREFIX
-
-		return {
-			collectives: useLocalStorage(LOCAL_STORE_PREFIX + 'collectives', []),
-			trashCollectives: useLocalStorage(LOCAL_STORE_PREFIX + 'trashCollectives', []),
-			updatedCollective: undefined,
-			templatesCollectiveId: undefined,
-			membersCollectiveId: undefined,
-			settingsCollectiveId: undefined,
-		}
-	},
+	state: () => ({
+		collectivesState: useLocalStorage(STORE_PREFIX + 'collectives', []),
+		publicCollectivesState: useLocalStorage(STORE_PREFIX + 'publicCollectives', {}),
+		trashCollectives: useLocalStorage(STORE_PREFIX + 'trashCollectives', []),
+		updatedCollective: undefined,
+		templatesCollectiveId: undefined,
+		membersCollectiveId: undefined,
+		settingsCollectiveId: undefined,
+	}),
 
 	getters: {
+		publicCollective(state) {
+			const rootStore = useRootStore()
+			return rootStore.isPublic
+				? state.publicCollectivesState[rootStore.shareTokenParam]
+				: null
+		},
+
+		collectives(state) {
+			const rootStore = useRootStore()
+			return rootStore.isPublic
+				? [state.publicCollective]
+				: state.collectivesState
+		},
+
 		sortedCollectives(state) {
 			return state.collectives.sort(byName)
 		},
@@ -41,6 +53,9 @@ export const useCollectivesStore = defineStore('collectives', {
 
 		currentCollective(state) {
 			const rootStore = useRootStore()
+			if (rootStore.isPublic) {
+				return state.publicCollective
+			}
 			if (rootStore.collectiveId) {
 				return state.collectives.find((collective) => collective.id === rootStore.collectiveId)
 			}
@@ -182,10 +197,13 @@ export const useCollectivesStore = defineStore('collectives', {
 			const rootStore = useRootStore()
 			rootStore.load('collectives')
 			try {
-				const response = rootStore.isPublic
-					? await api.getSharedCollective(rootStore.shareTokenParam)
-					: await api.getCollectives()
-				this.collectives = response.data.ocs.data.collectives
+				if (rootStore.isPublic) {
+					const response = await api.getSharedCollective(rootStore.shareTokenParam)
+					set(this.publicCollectivesState, rootStore.shareTokenParam, response.data.ocs.data.collectives[0])
+				} else {
+					const response = await api.getCollectives()
+					this.collectivesState = response.data.ocs.data.collectives
+				}
 			} finally {
 				rootStore.done('collectives')
 			}
@@ -203,17 +221,12 @@ export const useCollectivesStore = defineStore('collectives', {
 		},
 
 		_addOrUpdateCollectiveState(collective) {
-			const cur = this.collectives.findIndex((c) => c.id === collective.id)
-			if (cur === -1) {
-				this.collectives.unshift(collective)
-			} else {
-				this.collectives.splice(cur, 1, collective)
-			}
+			updateOrAddTo(this.collectives, collective)
 			this.updatedCollective = collective
 		},
 
 		removeCollectiveFromState(collective) {
-			this.collectives.splice(this.collectives.findIndex((c) => c.id === collective.id), 1)
+			removeFrom(this.collectives, collective)
 		},
 
 		patchCollectiveWithProperty({ id, property, value }) {
@@ -259,7 +272,7 @@ export const useCollectivesStore = defineStore('collectives', {
 		async trashCollective({ id }) {
 			const response = await api.trashCollective(id)
 			const collective = response.data.ocs.data.collective
-			this.collectives.splice(this.collectives.findIndex((c) => c.id === collective.id), 1)
+			removeFrom(this.collectives, collective)
 			this.trashCollectives.unshift(collective)
 		},
 
