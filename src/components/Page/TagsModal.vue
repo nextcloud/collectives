@@ -388,16 +388,22 @@ export default {
 	li {
 		display: flex;
 		align-items: center;
-		justify-content: space-between;
 		width: 100%;
 
 		// Make switch full width
 		:deep(.checkbox-radio-switch) {
 			width: 100%;
+			overflow: hidden;
 
 			.checkbox-content {
 				max-width: none;
 				box-sizing: border-box;
+
+				&__wrapper {
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+				}
 			}
 		}
 
