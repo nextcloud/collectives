@@ -62,11 +62,12 @@
 
 				<!-- Color picker -->
 				<NcColorPicker
-					:model-value="`#${tag.color}`"
+					v-model="tag.color"
 					:shown="openedPicker === tag.id"
 					class="tags-modal__tag-color"
+					clearable
 					@update:shown="openedPicker = $event ? tag.id : false"
-					@submit="onSubmitColor(tag, $event)">
+					@submit="onSubmitColor(tag)">
 					<NcButton :aria-label="t('collectives', 'Change tag color')" variant="tertiary">
 						<template #icon>
 							<CircleIcon v-if="tag.color" :size="24" fill-color="var(--color-circle-icon)" />
@@ -257,8 +258,8 @@ export default {
 			}
 		},
 
-		async onSubmitColor(tag, color) {
-			tag.color = color.replace('#', '')
+		async onSubmitColor(tag) {
+			tag.color = tag.color?.replace('#', '') || ''
 			this.load(`page-tag-${this.pageId}-${tag.id}`)
 			try {
 				await this.updateTag(tag)
