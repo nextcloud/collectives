@@ -44,7 +44,6 @@ function showRequestException(msg, e) {
  * alongside the error itself.
  *
  * @param {string} msg translation key for the error message
- * @return {Function} error handler function
  */
 export default function(msg) {
 	return (e) => showRequestException(t('collectives', msg), e)

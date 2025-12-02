@@ -56,7 +56,7 @@
 		</div>
 
 		<div class="search-dialog__highlight-all">
-			<NcCheckboxRadioSwitch :checked.sync="isHighlightAllChecked">
+			<NcCheckboxRadioSwitch v-model="isHighlightAllChecked">
 				{{ t('collectives', 'Highlight all matches') }}
 			</NcCheckboxRadioSwitch>
 		</div>

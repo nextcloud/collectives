@@ -11,7 +11,7 @@
 		<!-- Search or create input -->
 		<div class="tags-modal__input">
 			<NcTextField
-				:value.sync="input"
+				v-model="input"
 				:label="t('collectives', 'Search or create tag')">
 				<TagIcon :size="20" />
 			</NcTextField>
@@ -31,12 +31,12 @@
 					@click.prevent.stop>
 					<NcTextField
 						ref="renameField"
+						v-model="renameName"
 						:placeholder="t('collectives', 'Tag name')"
 						:label-outside="true"
 						:autofocus="true"
 						:minlength="1"
 						:required="true"
-						:value.sync="renameName"
 						trailing-button-icon="close"
 						:show-trailing-button="true"
 						@keyup.enter.prevent.stop
@@ -45,7 +45,7 @@
 				</form>
 				<NcCheckboxRadioSwitch
 					v-else
-					:checked="isChecked(tag)"
+					:model-value="isChecked(tag)"
 					:label="tag.name"
 					:loading="loading(`page-tag-${pageId}-${tag.id}`)"
 					:disabled="tag.deleted"
@@ -62,11 +62,12 @@
 
 				<!-- Color picker -->
 				<NcColorPicker
-					:value="`#${tag.color}`"
+					v-model="tag.color"
 					:shown="openedPicker === tag.id"
 					class="tags-modal__tag-color"
+					clearable
 					@update:shown="openedPicker = $event ? tag.id : false"
-					@submit="onSubmitColor(tag, $event)">
+					@submit="onSubmitColor(tag)">
 					<NcButton :aria-label="t('collectives', 'Change tag color')" variant="tertiary">
 						<template #icon>
 							<CircleIcon v-if="tag.color" :size="24" fill-color="var(--color-circle-icon)" />
@@ -257,8 +258,8 @@ export default {
 			}
 		},
 
-		async onSubmitColor(tag, color) {
-			tag.color = color.replace('#', '')
+		async onSubmitColor(tag) {
+			tag.color = tag.color?.replace('#', '') || ''
 			this.load(`page-tag-${this.pageId}-${tag.id}`)
 			try {
 				await this.updateTag(tag)

@@ -23,7 +23,7 @@
 				<NcTextField
 					v-if="!pickCircle"
 					ref="collectiveName"
-					:value.sync="name"
+					v-model="name"
 					class="collective-name"
 					:error="nameIsInvalid"
 					:show-trailing-button="name !== ''"

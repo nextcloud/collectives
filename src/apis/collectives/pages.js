@@ -10,7 +10,7 @@ import { apiUrl } from './urls.js'
  * URL for the pages API inside the given context.
  *
  * @param {object} context - either the current collective or a share context
- * @param {...any} parts - URL parts to append - will be joined with `/`
+ * @param {Array} parts - URL parts to append - will be joined with `/`
  */
 function pagesApiUrl(context, ...parts) {
 	return context.isPublic
@@ -22,7 +22,7 @@ function pagesApiUrl(context, ...parts) {
  * URL for the page trash API
  *
  * @param {object} context - either the current collective or a share context
- * @param {...any} parts - URL parts to append - will be joined with `/`
+ * @param {Array} parts - URL parts to append - will be joined with `/`
  */
 function pagesTrashApiUrl(context, ...parts) {
 	return pagesApiUrl(context, 'trash', ...parts)
@@ -32,7 +32,7 @@ function pagesTrashApiUrl(context, ...parts) {
  * URL for the page search API
  *
  * @param {object} context - either the current collective or a share context
- * @param {...any} parts - URL parts to append - will be joined with `/`
+ * @param {Array} parts - URL parts to append - will be joined with `/`
  */
 function searchApiUrl(context, ...parts) {
 	return context.isPublic

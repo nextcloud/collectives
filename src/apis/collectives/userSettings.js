@@ -10,7 +10,7 @@ import { apiUrl } from './urls.js'
  * URL for the collective user settings API
  *
  * @param {number} collectiveId - ID of the collective
- * @param {...any} parts - URL parts to append - will be joined with `/`
+ * @param {Array} parts - URL parts to append - will be joined with `/`
  */
 function collectiveUserSettingsApiUrl(collectiveId, ...parts) {
 	return apiUrl('v1.0', 'collectives', collectiveId, 'userSettings', parts)

@@ -10,7 +10,7 @@ import { apiUrl } from './urls.js'
  * URL for the collective shares API
  *
  * @param {number} collectiveId - ID of the collective
- * @param {...any} parts - URL parts to append - will be joined with `/`
+ * @param {Array} parts - URL parts to append - will be joined with `/`
  */
 function collectiveSharesApiUrl(collectiveId, ...parts) {
 	return apiUrl('v1.0', 'collectives', collectiveId, 'shares', ...parts)
@@ -21,7 +21,7 @@ function collectiveSharesApiUrl(collectiveId, ...parts) {
  *
  * @param {number} collectiveId - ID of the collective
  * @param {number} pageId - ID of the page
- * @param {...any} parts - URL parts to append - will be joined with `/`
+ * @param {Array} parts - URL parts to append - will be joined with `/`
  */
 function pageSharesApiUrl(collectiveId, pageId, ...parts) {
 	return apiUrl('v1.0', 'collectives', collectiveId, 'pages', pageId, 'shares', ...parts)
