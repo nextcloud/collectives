@@ -1,5 +1,25 @@
 # Changelog
 
+## 3.4.0 - 2025.12.02
+
+### ✨New
+* 🔗 List number of backlinks and link to sidebar from page info bar. (#346)
+
+### 🐛Fixes
+* 🐛 Fix conflicts when opening internal and shared collective in parallel. Thanks @Koc.
+* 💄 Similar collective actions in page list and title of landing page. (#2057)
+* 🔗 Fix handling URLs with fragments in preview links. (#2044, #2096)
+* 💄 Ellipsise long tag names in tags modal.
+* 🏷️ Fix selecting and clearing color of page tags.
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 3.3.0 - 2025.11.03
 
 ### ✨New
