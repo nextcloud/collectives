@@ -95,15 +95,15 @@
 				</NcActionText>
 				<NcActionCheckbox
 					v-else-if="isPasswordDefaultEnabled"
-					:checked.sync="isPendingPasswordProtected"
+					v-model="isPendingPasswordProtected"
 					:disabled="loading"
 					@uncheck="onPendingDisablePassword">
 					{{ t('collectives', 'Set password') }}
 				</NcActionCheckbox>
 				<NcActionInput
 					v-if="isPendingPasswordProtected"
+					v-model="pendingPassword"
 					autocomplete="new-password"
-					:value.sync="pendingPassword"
 					:error="passwordError"
 					:helper-text="errorPasswordLabel"
 					:required="isPasswordEnforced"
@@ -175,13 +175,13 @@
 		</div>
 
 		<div v-if="showSettings" class="sharing-entry__settings">
-			<NcCheckboxRadioSwitch :checked.sync="isPasswordProtected" :disabled="isPasswordEnforced">
+			<NcCheckboxRadioSwitch v-model="isPasswordProtected" :disabled="isPasswordEnforced">
 				{{ t('collectives', 'Set password') }}
 			</NcCheckboxRadioSwitch>
 			<NcPasswordField
 				v-if="isPasswordProtected"
 				autocomplete="new-password"
-				:value="hasUnsavedPassword ? share.newPassword : ''"
+				:model-value="hasUnsavedPassword ? share.newPassword : ''"
 				:error="passwordError"
 				:helper-text="errorPasswordLabel"
 				:required="isPasswordEnforced"

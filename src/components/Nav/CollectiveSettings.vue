@@ -29,7 +29,7 @@
 					</NcButton>
 				</NcEmojiPicker>
 				<NcTextField
-					:value.sync="newCollectiveName"
+					v-model="newCollectiveName"
 					:disabled="!isCollectiveOwner(collective)"
 					:label="getRenameLabel"
 					:error="isNameTooShort"
@@ -57,7 +57,7 @@
 
 			<div class="permissions-input-edit">
 				<NcCheckboxRadioSwitch
-					:checked.sync="editPermissions"
+					v-model="editPermissions"
 					:value="String(memberLevels.LEVEL_ADMIN)"
 					:loading="loading('updateCollectiveEditPermissions_' + String(memberLevels.LEVEL_ADMIN))"
 					name="edit_admins"
@@ -65,7 +65,7 @@
 					{{ t('collectives', 'Admins only') }}
 				</NcCheckboxRadioSwitch>
 				<NcCheckboxRadioSwitch
-					:checked.sync="editPermissions"
+					v-model="editPermissions"
 					:value="String(memberLevels.LEVEL_MODERATOR)"
 					:loading="loading('updateCollectiveEditPermissions_' + String(memberLevels.LEVEL_MODERATOR))"
 					name="edit_moderators"
@@ -73,7 +73,7 @@
 					{{ t('collectives', 'Admins and moderators') }}
 				</NcCheckboxRadioSwitch>
 				<NcCheckboxRadioSwitch
-					:checked.sync="editPermissions"
+					v-model="editPermissions"
 					:value="String(memberLevels.LEVEL_MEMBER)"
 					:loading="loading('updateCollectiveEditPermissions_' + String(memberLevels.LEVEL_MEMBER))"
 					name="edit_members"
@@ -88,7 +88,7 @@
 
 			<div class="permissions-input-share">
 				<NcCheckboxRadioSwitch
-					:checked.sync="sharePermissions"
+					v-model="sharePermissions"
 					:value="String(memberLevels.LEVEL_ADMIN)"
 					:loading="loading('updateCollectiveSharePermissions_' + String(memberLevels.LEVEL_ADMIN))"
 					name="share_admins"
@@ -96,7 +96,7 @@
 					{{ t('collectives', 'Admins only') }}
 				</NcCheckboxRadioSwitch>
 				<NcCheckboxRadioSwitch
-					:checked.sync="sharePermissions"
+					v-model="sharePermissions"
 					:value="String(memberLevels.LEVEL_MODERATOR)"
 					:loading="loading('updateCollectiveSharePermissions_' + String(memberLevels.LEVEL_MODERATOR))"
 					name="share_moderators"
@@ -104,7 +104,7 @@
 					{{ t('collectives', 'Admins and moderators') }}
 				</NcCheckboxRadioSwitch>
 				<NcCheckboxRadioSwitch
-					:checked.sync="sharePermissions"
+					v-model="sharePermissions"
 					:value="String(memberLevels.LEVEL_MEMBER)"
 					:loading="loading('updateCollectiveSharePermissions_' + String(memberLevels.LEVEL_MEMBER))"
 					name="share_members"
@@ -121,7 +121,7 @@
 
 			<div class="edit-mode">
 				<NcCheckboxRadioSwitch
-					:checked.sync="pageMode"
+					v-model="pageMode"
 					:value="String(pageModes.MODE_VIEW)"
 					:loading="loading('updateCollectivePageMode_' + String(pageModes.MODE_VIEW))"
 					name="page_mode_view"
@@ -129,7 +129,7 @@
 					{{ t('collectives', 'View') }}
 				</NcCheckboxRadioSwitch>
 				<NcCheckboxRadioSwitch
-					:checked.sync="pageMode"
+					v-model="pageMode"
 					:value="String(pageModes.MODE_EDIT)"
 					:loading="loading('updateCollectivePageMode_' + String(pageModes.MODE_EDIT))"
 					name="page_mode_edit"

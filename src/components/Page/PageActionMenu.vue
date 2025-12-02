@@ -39,7 +39,7 @@
 			<template v-if="!inPageList">
 				<NcActionCheckbox
 					v-if="!isMobile"
-					:checked="currentPage.isFullWidth"
+					v-model="currentPage.isFullWidth"
 					:disabled="!networkOnline || !currentCollectiveCanEdit"
 					@check="onCheckFullWidthView"
 					@uncheck="onUncheckFullWidthView">

@@ -8,7 +8,7 @@
 		<!-- Search -->
 		<NcTextField
 			ref="memberSearch"
-			:value.sync="searchQuery"
+			v-model="searchQuery"
 			type="text"
 			:show-trailing-button="hasSearchQuery"
 			:label="t('collectives', 'Search accounts, groups, teams')"

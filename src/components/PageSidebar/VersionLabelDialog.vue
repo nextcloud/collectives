@@ -14,10 +14,10 @@
 		@submit="$emit('label-update', editedVersionLabel)">
 		<NcTextField
 			ref="labelInput"
+			v-model="editedVersionLabel"
 			class="version-label-modal__input"
 			:label="t('collectives', 'Version name')"
-			:placeholder="t('collectives', 'Version name')"
-			:value.sync="editedVersionLabel" />
+			:placeholder="t('collectives', 'Version name')" />
 
 		<p class="version-label-modal__info">
 			{{ t('files_versions', 'Named versions are persisted, and excluded from automatic cleanups when your storage quota is full.') }}

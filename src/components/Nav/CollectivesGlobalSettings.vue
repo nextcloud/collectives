@@ -9,7 +9,7 @@
 			name="userFolder"
 			:label="t('collectives', 'Collectives folder')"
 			:label-visible="true"
-			:value="userFolderValue"
+			:model-value="userFolderValue"
 			:disabled="disabledPicker"
 			@click="selectCollectivesFolder" />
 	</NcAppNavigationSettings>

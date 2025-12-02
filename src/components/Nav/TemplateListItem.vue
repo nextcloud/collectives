@@ -43,13 +43,13 @@
 				@click.prevent.stop>
 				<NcTextField
 					ref="renameField"
+					v-model="renameTitle"
 					v-click-outside="onRename"
 					:placeholder="t('collectives', 'Template title')"
 					:label-outside="true"
 					:autofocus="true"
 					:minlength="1"
 					:required="true"
-					:value.sync="renameTitle"
 					@keyup.enter.prevent.stop
 					@keyup.esc.prevent.stop="onStopRename" />
 			</form>

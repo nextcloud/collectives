@@ -19,10 +19,10 @@
 				<template #trigger="{ attrs }">
 					<NcTextField
 						ref="pageFilter"
+						v-model="filterString"
 						name="pageFilter"
 						v-bind="attrs"
 						:label="t('collectives', 'Search pages')"
-						:value.sync="filterString"
 						:placeholder="t('collectives', 'Search pages…')"
 						trailing-button-icon="close"
 						:show-trailing-button="isFilteredView"

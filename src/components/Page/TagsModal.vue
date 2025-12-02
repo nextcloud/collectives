@@ -11,7 +11,7 @@
 		<!-- Search or create input -->
 		<div class="tags-modal__input">
 			<NcTextField
-				:value.sync="input"
+				v-model="input"
 				:label="t('collectives', 'Search or create tag')">
 				<TagIcon :size="20" />
 			</NcTextField>
@@ -31,12 +31,12 @@
 					@click.prevent.stop>
 					<NcTextField
 						ref="renameField"
+						v-model="renameName"
 						:placeholder="t('collectives', 'Tag name')"
 						:label-outside="true"
 						:autofocus="true"
 						:minlength="1"
 						:required="true"
-						:value.sync="renameName"
 						trailing-button-icon="close"
 						:show-trailing-button="true"
 						@keyup.enter.prevent.stop
@@ -45,7 +45,7 @@
 				</form>
 				<NcCheckboxRadioSwitch
 					v-else
-					:checked="isChecked(tag)"
+					:model-value="isChecked(tag)"
 					:label="tag.name"
 					:loading="loading(`page-tag-${pageId}-${tag.id}`)"
 					:disabled="tag.deleted"
@@ -62,7 +62,7 @@
 
 				<!-- Color picker -->
 				<NcColorPicker
-					:value="`#${tag.color}`"
+					:model-value="`#${tag.color}`"
 					:shown="openedPicker === tag.id"
 					class="tags-modal__tag-color"
 					@update:shown="openedPicker = $event ? tag.id : false"
