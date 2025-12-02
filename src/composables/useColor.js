@@ -52,7 +52,7 @@ function hexToRgb(hexColor) {
 }
 
 /**
- * @return {{mainBackgroundColor: (string), hasContrastToBackground: (function(*): boolean)}}
+ * @return {{hasContrastToBackground: ComputedRef<function(): boolean>}}
  */
 export function useColor() {
 	const isDarkTheme = useIsDarkTheme()

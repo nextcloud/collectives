@@ -10,7 +10,7 @@ import { apiUrl } from './urls.js'
  * URL for templates API inside the given context.
  *
  * @param {object} context - either the current collective or a share context
- * @param {...any} parts - URL parts to append - will be joined with `/`
+ * @param {Array} parts - URL parts to append - will be joined with `/`
  */
 function templatesApiUrl(context, ...parts) {
 	return context.isPublic

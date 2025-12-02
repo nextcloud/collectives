@@ -9,7 +9,7 @@ import { apiUrl } from './urls.js'
 /**
  * URL for the collectives API
  *
- * @param {...any} parts - URL parts to append - will be joined with `/`
+ * @param {Array} parts - URL parts to append - will be joined with `/`
  */
 function collectivesApiUrl(...parts) {
 	return apiUrl('v1.0', 'collectives', ...parts)
@@ -18,7 +18,7 @@ function collectivesApiUrl(...parts) {
 /**
  * URL for the public collectives API
  *
- * @param {...any} parts - URL parts to append - will be joined with `/`
+ * @param {Array} parts - URL parts to append - will be joined with `/`
  */
 function publicCollectivesApiUrl(...parts) {
 	return apiUrl('v1.0', 'p', 'collectives', ...parts)
@@ -27,7 +27,7 @@ function publicCollectivesApiUrl(...parts) {
 /**
  * URL for the collectives trash API
  *
- * @param {...any} parts - URL parts to append - will be joined with `/`
+ * @param {Array} parts - URL parts to append - will be joined with `/`
  */
 function collectivesTrashApiUrl(...parts) {
 	return collectivesApiUrl('trash', ...parts)
