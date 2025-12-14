@@ -20,6 +20,7 @@ OC.L10N.register(
     "Done" : "Immed",
     "Remove from favorites" : "Kkes-it seg ismal",
     "Add to favorites" : "Rnu ismal",
+    "Move or copy" : "Smutti neɣ nɣel",
     "Download" : "Sider",
     "Title" : "Azwel",
     "Clear search" : "Sfeḍ anadi",
