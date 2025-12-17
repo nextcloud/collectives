@@ -125,11 +125,7 @@ class CollectiveShareService {
 			$collectiveShare->setPassword($folderShare->getPassword());
 		}
 
-		if ($folderShare->getExpirationDate()) {
-			$collectiveShare->setExpirationDate($folderShare->getExpirationDate());
-		} else {
-			$collectiveShare->setExpirationDate(null);
-		}
+		$collectiveShare->setExpirationDate($folderShare->getExpirationDate());
 		return $collectiveShare;
 	}
 
@@ -157,11 +153,7 @@ class CollectiveShareService {
 			$collectiveShare->setPassword($folderShare->getPassword());
 		}
 
-		if ($folderShare->getExpirationDate()) {
-			$collectiveShare->setExpirationDate($folderShare->getExpirationDate());
-		} else {
-			$collectiveShare->setExpirationDate(null);
-		}
+		$collectiveShare->setExpirationDate($folderShare->getExpirationDate());
 		return $collectiveShare;
 	}
 
@@ -181,12 +173,7 @@ class CollectiveShareService {
 				$share->setPassword($folderShare->getPassword());
 			}
 
-			$expirationDate = $folderShare->getExpirationDate();
-			if ($expirationDate) {
-				$share->setExpirationDate($expirationDate);
-			} else {
-				$share->setExpirationDate(null);
-			}
+			$share->setExpirationDate($folderShare->getExpirationDate());
 			$shares[] = $share;
 		}
 
@@ -238,6 +225,7 @@ class CollectiveShareService {
 		if ($password != '') {
 			$collectiveShare->setPassword($folderShare->getPassword());
 		}
+		$collectiveShare->setExpirationDate($folderShare->getExpirationDate());
 		return $collectiveShare;
 	}
 
@@ -297,11 +285,7 @@ class CollectiveShareService {
 		$share->setEditable($this->isShareEditable($folderShare));
 		$share->setPassword($folderShare->getPassword() ?? '');
 
-		if ($folderShare->getExpirationDate()) {
-			$share->setExpirationDate($folderShare->getExpirationDate());
-		} else {
-			$share->setExpirationDate(null);
-		}
+		$share->setExpirationDate($folderShare->getExpirationDate());
 
 		return $share;
 	}
