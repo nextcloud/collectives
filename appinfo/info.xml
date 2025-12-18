@@ -69,6 +69,7 @@ In your Nextcloud instance, simply navigate to **»Apps«**, find the
 		<command>OCA\Collectives\Command\CreateCollective</command>
 		<command>OCA\Collectives\Command\ExpirePageVersions</command>
 		<command>OCA\Collectives\Command\GenerateSlugs</command>
+		<command>OCA\Collectives\Command\ImportMarkdownDirectory</command>
 		<command>OCA\Collectives\Command\IndexCollectives</command>
 		<command>OCA\Collectives\Command\PageTrashCleanup</command>
 		<command>OCA\Collectives\Command\PurgeObsoletePages</command>
