@@ -13,7 +13,8 @@ describe('Collective Share', function() {
 
 	it('Allows sharing a collective', function() {
 		cy.loginAs('bob')
-		cy.visit('/apps/collectives', {
+		cy.visit({
+			url: '/apps/collectives',
 			onBeforeLoad(win) {
 				// navigator.clipboard doesn't exist on HTTP requests (in CI), so let's create it
 				if (!win.navigator.clipboard) {
@@ -126,7 +127,7 @@ describe('Collective Share', function() {
 	})
 	it('Opening unshared collective fails', function() {
 		cy.logout()
-		cy.visit(shareUrl, { failOnStatusCode: false })
+		cy.visit({ url: shareUrl, failOnStatusCode: false })
 		cy.get('.body-login-container').contains(/(File|Page|Share) not found/)
 	})
 })
