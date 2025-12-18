@@ -671,6 +671,10 @@ class PageService {
 	 */
 	public function create(int $collectiveId, int $parentId, string $title, ?int $templateId, string $userId, ?string $defaultTitle = null): PageInfo {
 		$this->verifyEditPermissions($collectiveId, $userId);
+		if ($parentId === 0) {
+			$collectiveFolder = $this->getCollectiveFolder($collectiveId, $userId);
+			$parentId = self::getIndexPageFile($collectiveFolder)->getId();
+		}
 		$folder = $this->getFolder($collectiveId, $parentId, $userId);
 		$parentFile = $this->nodeHelper->getFileById($folder, $parentId);
 		$folder = $this->initSubFolder($parentFile);
@@ -683,6 +687,29 @@ class PageService {
 		$parentPageInfo = $this->addToSubpageOrder($collectiveId, $parentId, $pageInfo->getId(), 0, $userId);
 		$this->notifyPush(['collectiveId' => $collectiveId, 'pages' => [$pageInfo, $parentPageInfo]]);
 		return $pageInfo;
+	}
+
+	/**
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function getOrCreate(int $collectiveId, int $parentId, string $title, string $userId): PageInfo {
+		$folder = $this->getFolder($collectiveId, $parentId, $userId);
+		$landingPageId = self::getIndexPageFile($folder)->getId();
+		try {
+			$childPages = $this->getPagesFromFolder($collectiveId, $folder, $userId);
+		} catch (FilesNotFoundException $e) {
+			throw new NotFoundException($e->getMessage(), 0, $e);
+		}
+		foreach ($childPages as $pageInfo) {
+			if ($pageInfo->getTitle() === $title && $pageInfo->getParentId() === $landingPageId) {
+				return $pageInfo;
+			}
+		}
+
+		$this->verifyEditPermissions($collectiveId, $userId);
+		return $this->create($collectiveId, $parentId, $title, null, $userId);
 	}
 
 	/**
