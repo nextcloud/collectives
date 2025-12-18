@@ -54,7 +54,8 @@ describe('Page link preview handling', function() {
 	let shareUrl
 
 	it('Share the collective', function() {
-		cy.visit('/apps/collectives', {
+		cy.visit({
+			url: '/apps/collectives',
 			onBeforeLoad(win) {
 				// navigator.clipboard doesn't exist on HTTP requests (in CI), so let's create it
 				if (!win.navigator.clipboard) {
