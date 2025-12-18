@@ -221,7 +221,8 @@ describe('Page list', function() {
 
 	it('renders all the pages', function() {
 		let printStub
-		cy.visit('apps/collectives/_/print/Our%20Garden', {
+		cy.visit({
+			url: 'apps/collectives/_/print/Our%20Garden',
 			onBeforeLoad: (win) => {
 				printStub = cy.stub(win, 'print').as('print')
 			},
