@@ -26,4 +26,5 @@ export default defineConfig({
 	},
 	numTestsKeptInMemory: 5,
 	experimentalMemoryManagement: true,
+	experimentalFastVisibility: true,
 })
