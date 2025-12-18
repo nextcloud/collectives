@@ -28,4 +28,5 @@ export default defineConfig({
 	experimentalMemoryManagement: true,
 	// TODO: remove once we upgrade to newer Cypress
 	userAgent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Cypress/13.6.4 Chrome/144.0.0.0 Electron/25.8.4 Safari/537.36',
+	experimentalFastVisibility: true,
 })
