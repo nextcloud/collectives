@@ -49,11 +49,11 @@ Feature: mountpoint
     And user "jane" sets "share" level in collective "BehatMountPoint" to "Member"
     And user "jane" creates public share for "BehatMountPoint"
     And user "jane" sets editing permissions for collective share "BehatMountPoint"
-    Then public share with owner "jane" has webdav access to "BehatMountPoint" with permissions "RMGDNVCK"
+    Then public share with owner "jane" has webdav access to "BehatMountPoint" with permissions "RGDNVCK"
 
   Scenario: Editable public share of collective with admin-only permissions is read-only
     When user "jane" sets "edit" level in collective "BehatMountPoint" to "Admin"
-    Then public share with owner "jane" has webdav access to "BehatMountPoint" with permissions "RMG"
+    Then public share with owner "jane" has webdav access to "BehatMountPoint" with permissions "RG"
 
   Scenario: Trash and delete collective and team
     Then user "jane" trashes collective "BehatMountPoint"
