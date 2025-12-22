@@ -161,14 +161,35 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	private function getSubpagesFromFile(int $collectiveId, File $file, string $userId): array {
+	private function getChildPageIds(int $collectiveId, File $file, string $userId): array {
 		if (!NodeHelper::isIndexPage($file)) {
 			return [];
 		}
 
 		$parentId = $file->getId();
 		$folder = $this->getFolder($collectiveId, $parentId, $userId);
-		return array_filter($this->getPagesFromFolder($collectiveId, $folder, $userId), static fn (PageInfo $pageInfo) => $pageInfo->getParentId() === $parentId);
+		$folderNodes = $folder->getDirectoryListing();
+
+		$childIds = [];
+		foreach ($folderNodes as $node) {
+			if (str_starts_with($node->getName(), '.')) {
+				continue;
+			}
+
+			if ($node instanceof Folder) {
+				// Get index page ID from subfolder
+				try {
+					$childIds[] = self::getIndexPageFile($node)->getId();
+				} catch (NotFoundException) {
+					// Ignore subfolders without index page
+				}
+			} elseif ($node instanceof File && NodeHelper::isPage($node) && !NodeHelper::isIndexPage($node)) {
+				// Regular page file (not index page)
+				$childIds[] = $node->getId();
+			}
+		}
+
+		return $childIds;
 	}
 
 	/**
@@ -967,7 +988,7 @@ class PageService {
 	 */
 	private function cleanSubpageOrder(int $collectiveId, PageInfo $pageInfo, string $userId): string {
 		$pageFile = $this->getPageFile($collectiveId, $pageInfo->getId(), $userId);
-		$childIds = array_map(static fn (PageInfo $pageInfo) => $pageInfo->getId(), $this->getSubpagesFromFile($collectiveId, $pageFile, $userId));
+		$childIds = $this->getChildPageIds($collectiveId, $pageFile, $userId);
 		return SubpageOrderService::clean($pageInfo->getSubpageOrder(), $childIds);
 	}
 
