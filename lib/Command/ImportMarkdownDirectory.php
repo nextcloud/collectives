@@ -74,24 +74,23 @@ class ImportMarkdownDirectory extends Command {
 			return 1;
 		}
 
+		$progressCallback = function (string $status, string $path, ?string $message = null) use ($output) {
+			if ($status === 'success') {
+				$output->writeln('<info>✓ Imported: ' . $path . ' - ' . $message . '</info>');
+			} elseif ($status === 'error') {
+				$output->writeln('<error>✗ Failed: ' . $path . ' - ' . $message . '</error>');
+			}
+		};
+
 		try {
-			[$successCount, $failureCount, $errorFiles] = $this->importService->importDirectory($directory, $collective, $parentId, $user);
+			$count = $this->importService->importDirectory($directory, $collective, $parentId, $user, $progressCallback);
 		} catch (NotFoundException $e) {
 			$output->writeln('<error>' . $e->getMessage() . '</error>');
 			return 1;
 		}
 
-		$output->writeln('<info>Processed ' . ($successCount + $failureCount) . ' file(s) for collective "' . $collective->getName() . '" (ID: ' . $collectiveId . ').</info>');
 		$output->writeln('');
-		$output->writeln('<info>Import completed:</info>');
-		$output->writeln('<info>  Success: ' . $successCount . '</info>');
-		if ($failureCount > 0) {
-			$output->writeln('<error>  Failed: ' . $failureCount . '</error>');
-			foreach ($errorFiles as $errorFile) {
-				$output->writeln('<error>    ' . $errorFile . '</error>');
-			}
-			return 1;
-		}
+		$output->writeln('<info>Processed ' . $count . ' file(s) for collective "' . $collective->getName() . '" (ID: ' . $collectiveId . ').</info>');
 
 		return 0;
 	}
