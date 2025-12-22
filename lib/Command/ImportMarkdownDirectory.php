@@ -77,6 +77,8 @@ class ImportMarkdownDirectory extends Command {
 		$progressCallback = function (string $status, string $path, ?string $message = null) use ($output) {
 			if ($status === 'success') {
 				$output->writeln('<info>✓ Imported: ' . $path . ' - ' . $message . '</info>');
+			} elseif ($status === 'link_update') {
+				$output->writeln('<info>🔗 Links updated: ' . $path . ' - ' . $message . '</info>');
 			} elseif ($status === 'error') {
 				$output->writeln('<error>✗ Failed: ' . $path . ' - ' . $message . '</error>');
 			}
