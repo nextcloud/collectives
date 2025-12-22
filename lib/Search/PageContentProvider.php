@@ -12,8 +12,6 @@ namespace OCA\Collectives\Search;
 use Exception;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Model\PageInfo;
-use OCA\Collectives\Search\FileSearch\ClauseTokenizer;
-use OCA\Collectives\Search\FileSearch\FileSearcher;
 use OCA\Collectives\Search\FileSearch\FileSearchException;
 use OCA\Collectives\Service\CollectiveHelper;
 use OCA\Collectives\Service\CollectiveService;
@@ -30,7 +28,6 @@ use OCP\Search\ISearchQuery;
 use OCP\Search\SearchResult;
 use OCP\Search\SearchResultEntry;
 use Psr\Log\LoggerInterface;
-use TeamTNT\TNTSearch\Support\Highlighter;
 
 class PageContentProvider implements IProvider {
 	public function __construct(
@@ -83,19 +80,21 @@ class PageContentProvider implements IProvider {
 				]);
 				continue;
 			}
-			foreach ($results as $fileId => $fileData) {
+
+			foreach ($results as $fileData) {
+				$fileId = $fileData['file_id'];
 				$fileEntries = $collectiveRoot->getById($fileId);
-				if (!empty($fileEntries)) {
-					$pages[$fileId] = $fileEntries[0];
-					$collectiveMap[$fileId] = $collective;
+				if (empty($fileEntries)) {
+					continue;
 				}
+
+				$pages[$fileId] = $fileEntries[0];
+				$collectiveMap[$fileId] = $collective;
 			}
 		}
 
-		$highlighter = new Highlighter((new FileSearcher())->getTokenizer());
-		$highlightLength = 50;
+		$pages = $this->indexedSearchService->rankByBigrams($query->getTerm(), $pages);
 
-		$pages = $this->rankPages($query->getTerm(), $pages);
 		$pageSearchResults = [];
 		foreach ($pages as $page) {
 			$collective = $collectiveMap[$page->getId()];
@@ -109,9 +108,11 @@ class PageContentProvider implements IProvider {
 				: '';
 			$description = $this->l10n->t('In collective %1$s', [$this->collectiveService->getCollectiveNameWithEmoji($collective)])
 				. $descriptionSuffix;
+
+			$content = $page->getContent();
 			$pageSearchResults[] = new SearchResultEntry(
 				'',
-				$highlighter->extractRelevant($query->getTerm(), $page->getContent(), $highlightLength, 5, ''),
+				mb_substr($content, mb_stripos($content, $query->getTerm()), 200),
 				$description,
 				$this->urlGenerator->linkToRouteAbsolute('collectives.start.index') . $this->pageService->getPageLink($collective->getUrlPath(), $pageInfo),
 				'icon-collectives-page'
@@ -122,45 +123,6 @@ class PageContentProvider implements IProvider {
 			$this->getName(),
 			$pageSearchResults
 		);
-	}
-
-	/**
-	 * @param File[] $pages
-	 * @return File[]
-	 * @throws FileSearchException
-	 */
-	private function rankPages(string $term, array $pages): array {
-		if (!$this->indexedSearchService->areDependenciesMet()) {
-			return $pages;
-		}
-
-		$ranked = [];
-		$searcher = new FileSearcher();
-
-		// Run once using clause tokenizer to extract most relevant results (if term has at least two words)
-		$words = explode(' ', $term);
-		if (count($words) > 1) {
-			$config = FileSearcher::DEFAULT_CONFIG;
-			$config['tokenizer'] = ClauseTokenizer::class;
-			$searcher->loadConfig($config);
-
-			$searcher->createInMemoryIndex()->run($pages);
-			$results = $searcher->search($term);
-			foreach (array_keys($results) as $pageId) {
-				$ranked[] = $pages[$pageId];
-				unset($pages[$pageId]);
-			}
-		}
-
-		// Run using default tokenizer to rank remaining results
-		$searcher = new FileSearcher();
-		$searcher->createInMemoryIndex()->run($pages);
-		$results = $searcher->search($term, 50);
-		foreach (array_keys($results) as $pageId) {
-			$ranked[] = $pages[$pageId];
-		}
-
-		return $ranked;
 	}
 
 	private function getPageInfo(Collective $collective, File $file, string $userId): ?PageInfo {

@@ -18,6 +18,7 @@ use OCA\Collectives\Service\SearchService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class IndexCollectives extends Command {
@@ -32,18 +33,15 @@ class IndexCollectives extends Command {
 		$this
 			->setName('collectives:index')
 			->setDescription('Indexes collectives for full text search.')
-			->addArgument('name', InputArgument::OPTIONAL, 'name of new collective');
+			->addArgument('name', InputArgument::OPTIONAL, 'name of new collective')
+			->addOption('full', 'f', InputOption::VALUE_NONE, 'Full re-index (default: incremental)');
 		parent::configure();
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output): int {
-		if (!$this->searchService->areDependenciesMet()) {
-			$output->writeln('<error>Could not index the collectives: PDO or SQLite extension not installed.</error>');
-			return 1;
-		}
-
 		$collectives = $this->collectiveMapper->getAll();
 		$name = $input->getArgument('name');
+		$fullIndex = $input->getOption('full');
 
 		foreach ($collectives as $collective) {
 			try {
@@ -53,7 +51,7 @@ class IndexCollectives extends Command {
 					continue;
 				}
 				$output->write('<info>Creating index for ' . $circleName . ' …</info>');
-				$this->searchService->indexCollective($collective);
+				$this->searchService->indexCollective($collective, !$fullIndex);
 				$output->writeln('<info>done</info>');
 			} catch (MissingDependencyException|NotFoundException|NotPermittedException) {
 				$output->writeln("<error>Failed to find team associated with collective with ID={$collective->getId()}</error>");

@@ -12,6 +12,7 @@ namespace OCA\Collectives\BackgroundJob;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Mount\CollectiveFolderManager;
+use OCA\Collectives\Search\FileSearch\Db\SearchFileMapper;
 use OCA\Collectives\Search\FileSearch\FileSearchException;
 use OCA\Collectives\Service\SearchService;
 use OCP\AppFramework\Utility\ITimeFactory;
@@ -25,6 +26,7 @@ class IndexCollectives extends TimedJob {
 		ITimeFactory $time,
 		private CollectiveMapper $collectiveMapper,
 		private CollectiveFolderManager $collectiveFolderManager,
+		private SearchFileMapper $fileMapper,
 		private LoggerInterface $logger,
 		private SearchService $searchService,
 	) {
@@ -37,10 +39,6 @@ class IndexCollectives extends TimedJob {
 	 * @param $argument
 	 */
 	protected function run($argument): void {
-		if (!$this->searchService->areDependenciesMet()) {
-			return;
-		}
-
 		$collectives = $this->collectiveMapper->getAll();
 		foreach ($collectives as $collective) {
 			if ($this->isOutdatedIndex($collective)) {
@@ -57,14 +55,12 @@ class IndexCollectives extends TimedJob {
 	}
 
 	private function isOutdatedIndex(Collective $collective): bool {
-		$index = $this->searchService->getIndexForCollective($collective);
-		if (!$index) {
-			return true;
-		}
-
 		try {
 			$folder = $this->collectiveFolderManager->getRootFolder()->get((string)$collective->getId());
-			return $folder->getMTime() > $index->getMTime();
+			$folderMtime = $folder->getMTime();
+			$maxIndexedMtime = $this->fileMapper->getMaxMtimeByCircle($collective->getCircleId());
+
+			return $maxIndexedMtime === null || $folderMtime > $maxIndexedMtime;
 		} catch (NotFoundException|InvalidPathException) {
 			return false;
 		}
