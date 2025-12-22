@@ -21,7 +21,7 @@ class ImportService {
 	) {
 	}
 
-	public function importDirectory(string $directory, Collective $collective, int $parentId, IUser $user): array {
+	public function importDirectory(string $directory, Collective $collective, int $parentId, IUser $user, ?callable $progressCallback = null): int {
 		// Verify directory exists and is readable
 		if (!file_exists($directory) || !is_dir($directory) || !is_readable($directory)) {
 			throw new NotFoundException('Directory not accessible: ' . $directory);
@@ -32,20 +32,25 @@ class ImportService {
 			$this->pageService->findByFileId($collective->getId(), $parentId, $user->getUID());
 		}
 
-		$stats = ['success' => 0, 'failure' => 0, 'errors' => []];
-		$this->processDirectory($directory, $collective, $parentId, $user, $stats);
+		if ($progressCallback === null) {
+			$progressCallback = function (string $status, string $path, ?string $message) {
+				// no-op
+			};
+		}
 
-		if ($stats['success'] === 0 && $stats['failure'] === 0) {
+		$count = $this->processDirectory($directory, $collective, $parentId, $user, $progressCallback);
+		if ($count === 0) {
 			throw new NotFoundException('No markdown files found in directory: ' . $directory);
 		}
 
-		return [$stats['success'], $stats['failure'], $stats['errors']];
+		return $count;
 	}
 
 	/**
 	 * Recursively import markdown files from directory
 	 */
-	private function processDirectory(string $directory, Collective $collective, int $parentId, IUser $user, array &$stats): void {
+	private function processDirectory(string $directory, Collective $collective, int $parentId, IUser $user, callable $progressCallback): int {
+		$count = 0;
 		$items = scandir($directory);
 		if ($items === false) {
 			throw new NotFoundException('Unable to read directory: ' . $directory);
@@ -61,30 +66,26 @@ class ImportService {
 
 			// Verify directory exists and is readable
 			if (!is_readable($directory)) {
-				$stats['errors'][] = $path;
-				$stats['failure']++;
+				$progressCallback('error', $path, 'Directory not readable');
 				continue;
 			}
 
 			if (is_file($path) && strtolower(pathinfo($path, PATHINFO_EXTENSION)) === 'md') {
 				if (!is_readable($path)) {
-					$stats['errors'][] = $path;
-					$stats['failure']++;
+					$progressCallback('error', $path, 'File not readable');
 					continue;
 				}
 
 				$mimeType = $this->mimeTypeDetector->detectPath($path);
 				if (!in_array($mimeType, ['text/markdown', 'text/plain'], true)) {
-					$stats['errors'][] = $path;
-					$stats['failure']++;
+					$progressCallback('error', $path, 'Invalid mime type: ' . $mimeType);
 					continue;
 				}
 
 				$title = basename($path, '.md');
 				$content = file_get_contents($path);
 				if ($content === false) {
-					$stats['errors'][] = $path;
-					$stats['failure']++;
+					$progressCallback('error', $path, 'Failed to read file content');
 					continue;
 				}
 
@@ -99,10 +100,11 @@ class ImportService {
 
 					$pageFile = $this->pageService->getPageFile($collective->getId(), $pageInfo->getId(), $user->getUID());
 					NodeHelper::putContent($pageFile, $content);
-					$stats['success']++;
+					$count++;
+					$message = $pageInfo->getTitle() . ' (pageId: ' . $pageInfo->getId() . ')';
+					$progressCallback('success', $path, $message);
 				} catch (NotFoundException|NotPermittedException $e) {
-					$stats['errors'][] = $path;
-					$stats['failure']++;
+					$progressCallback('error', $path, $e->getMessage());
 				}
 
 				continue;
@@ -110,9 +112,11 @@ class ImportService {
 
 			if (is_dir($path)) {
 				$dirPage = $this->pageService->getOrCreate($collective->getId(), $parentId, $item, $user->getUID());
-				$this->processDirectory($path, $collective, $dirPage->getId(), $user, $stats);
+				$count += $this->processDirectory($path, $collective, $dirPage->getId(), $user, $progressCallback);
 				continue;
 			}
 		}
+
+		return $count;
 	}
 }
