@@ -24,6 +24,10 @@ describe('Page details', function() {
 
 	describe('Display table of contents', function() {
 		it('Allows to display/close TOC and switch page modes in between', function() {
+			// TODO: Remove once we only support nc33+
+			const tocSelector = ['stable30', 'stable31', 'stable32'].includes(Cypress.env('ncVersion'))
+				? '.editor--toc .editor--toc__item'
+				: '.editor__toc .toc-list__item'
 			cy.openPage('TableOfContents')
 			cy.getReadOnlyEditor()
 				.contains('Second-Level Heading')
@@ -32,13 +36,19 @@ describe('Page details', function() {
 			cy.openPageTitleMenu()
 			cy.clickMenuButton('Show outline')
 			cy.getReadOnlyEditor()
-				.find('.editor--toc .editor--toc__item')
+				.find(tocSelector)
 				.should('contain', 'Second-Level Heading')
+			// TODO Remove condition once we only support nc33+
+			if (!['stable30', 'stable31', 'stable32'].includes(Cypress.env('ncVersion'))) {
+				cy.getReadOnlyEditor()
+					.find('.editor__toc .pin-outline-icon')
+					.click()
+			}
 
-			// Reload to test persistence of outline
+			// Reload to test persistence of toc
 			cy.reload()
 			cy.getReadOnlyEditor()
-				.find('.editor--toc .editor--toc__item')
+				.find(tocSelector)
 				.should('contain', 'Second-Level Heading')
 
 			cy.switchToEditMode()
@@ -47,19 +57,36 @@ describe('Page details', function() {
 			cy.wait(200) // eslint-disable-line cypress/no-unnecessary-waiting
 
 			cy.getEditor()
-				.find('.editor--toc .editor--toc__item')
+				.find(tocSelector)
 				.should('contain', 'Second-Level Heading')
 
-			cy.log('Close outline in edit mode')
-			cy.getEditor()
-				.find('.editor--outline__header .close-icon')
-				.click()
+			cy.log('Close toc in edit mode')
+			// TODO Remove condition once we only support nc33+
+			if (['stable30', 'stable31', 'stable32'].includes(Cypress.env('ncVersion'))) {
+				cy.getEditor()
+					.find('.editor--outline__header .close-icon')
+					.click()
+			} else {
+				// TODO: Fix bug in text that toc is not pinned after reload
+				cy.getEditor()
+					.find('.editor__toc .pin-outline-icon')
+					.click()
+
+				cy.getEditor()
+					.find('.editor__toc .close-icon')
+					.click()
+
+				// Click outside toc to trigger `mouseleave`
+				cy.getEditor()
+					.click()
+			}
 
 			// Switch back to view mode
 			cy.switchToViewMode()
 				.contains('Second-Level Heading')
 
-			cy.get('.editor--toc')
+			// TODO: Remove first selector once we only support nc33+
+			cy.get('.editor--toc, .editor__toc')
 				.should('not.exist')
 		})
 	})
