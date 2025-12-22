@@ -1715,6 +1715,11 @@ class FeatureContext implements Context {
 		// simplexml_load_string() would be better than preg_replace
 		$folderPermissions = preg_replace('/.*<oc:permissions>(.*)<\/oc:permissions>.*/sm', '\1', $this->response->getBody()->getContents());
 
+		// TODO: Remove after we only support Nextcloud 33
+		if ((int)$this->getNextcloudVersion(true) <= 32) {
+			$permissions = str_replace('RG', 'RMG', $permissions);
+		}
+
 		Assert::assertEquals($permissions, $folderPermissions);
 	}
 
