@@ -58,8 +58,18 @@ class ShareController extends OCSController {
 	public function getCollectiveShares(int $collectiveId): DataResponse {
 		$share = $this->handleErrorResponse(function () use ($collectiveId): array {
 			$userId = $this->userId;
-			$collective = $this->collectiveService->getCollective($collectiveId, $userId);
-			return $this->shareService->getSharesByCollectiveAndUser($userId, $collective->getId());
+			$this->collectiveService->getCollective($collectiveId, $userId);
+			$shares = $this->shareService->getSharesByCollectiveAndUser($userId, $collectiveId);
+
+			// Get global expiry configuration
+			return [
+				'shares' => $shares,
+				'expiryConfig' => [
+					'hasDefaultExpireDate' => $this->shareService->hasDefaultExpireDate(),
+					'isExpireDateEnforced' => $this->shareService->isExpireDateEnforced(),
+					'defaultExpireDays' => $this->shareService->getDefaultExpireDays(),
+				],
+			];
 		}, $this->logger);
 		return new DataResponse($share);
 	}
@@ -96,8 +106,8 @@ class ShareController extends OCSController {
 	 * 200: Share updated
 	 */
 	#[NoAdminRequired]
-	public function updateCollectiveShare(int $collectiveId, string $token, bool $editable, string $password = ''): DataResponse {
-		return $this->updatePageShare($collectiveId, 0, $token, $editable, $password);
+	public function updateCollectiveShare(int $collectiveId, string $token, bool $editable, string $password = '', ?string $expiryDate = null): DataResponse {
+		return $this->updatePageShare($collectiveId, 0, $token, $editable, $password, $expiryDate);
 	}
 
 	/**
@@ -159,15 +169,15 @@ class ShareController extends OCSController {
 	 * 200: Share updated
 	 */
 	#[NoAdminRequired]
-	public function updatePageShare(int $collectiveId, int $pageId, string $token, bool $editable, ?string $password = null): DataResponse {
-		$share = $this->handleErrorResponse(function () use ($collectiveId, $pageId, $token, $editable, $password): CollectiveShare {
+	public function updatePageShare(int $collectiveId, int $pageId, string $token, bool $editable, ?string $password = null, ?string $expiryDate = null): DataResponse {
+		$share = $this->handleErrorResponse(function () use ($collectiveId, $pageId, $token, $editable, $password, $expiryDate): CollectiveShare {
 			$userId = $this->userId;
 			$collective = $this->collectiveService->getCollective($collectiveId, $userId);
 			$pageInfo = null;
 			if ($pageId !== 0) {
 				$pageInfo = $this->pageService->findByFileId($collectiveId, $pageId, $userId);
 			}
-			return $this->shareService->updateShare($userId, $collective, $pageInfo, $token, $editable, $password);
+			return $this->shareService->updateShare($userId, $collective, $pageInfo, $token, $editable, $password, $expiryDate);
 		}, $this->logger);
 		return new DataResponse($share);
 	}

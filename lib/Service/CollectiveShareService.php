@@ -124,6 +124,8 @@ class CollectiveShareService {
 		if ($folderShare->getPassword()) {
 			$collectiveShare->setPassword($folderShare->getPassword());
 		}
+
+		$collectiveShare->setExpirationDate($folderShare->getExpirationDate());
 		return $collectiveShare;
 	}
 
@@ -150,6 +152,8 @@ class CollectiveShareService {
 		if ($folderShare->getPassword()) {
 			$collectiveShare->setPassword($folderShare->getPassword());
 		}
+
+		$collectiveShare->setExpirationDate($folderShare->getExpirationDate());
 		return $collectiveShare;
 	}
 
@@ -168,6 +172,8 @@ class CollectiveShareService {
 			if ($folderShare->getPassword()) {
 				$share->setPassword($folderShare->getPassword());
 			}
+
+			$share->setExpirationDate($folderShare->getExpirationDate());
 			$shares[] = $share;
 		}
 
@@ -177,6 +183,18 @@ class CollectiveShareService {
 	private function isShareEditable(IShare $folderShare): bool {
 		$folderShare->getPermissions();
 		return ($folderShare->getPermissions() & Collective::editPermissions) === Collective::editPermissions;
+	}
+
+	public function isExpireDateEnforced(): bool {
+		return $this->shareManager->shareApiLinkDefaultExpireDateEnforced();
+	}
+
+	public function getDefaultExpireDays(): int {
+		return $this->shareManager->shareApiLinkDefaultExpireDays();
+	}
+
+	public function hasDefaultExpireDate(): bool {
+		return $this->shareManager->shareApiLinkDefaultExpireDate();
 	}
 
 	/**
@@ -207,6 +225,7 @@ class CollectiveShareService {
 		if ($password != '') {
 			$collectiveShare->setPassword($folderShare->getPassword());
 		}
+		$collectiveShare->setExpirationDate($folderShare->getExpirationDate());
 		return $collectiveShare;
 	}
 
@@ -217,7 +236,7 @@ class CollectiveShareService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function updateShare(string $userId, Collective $collective, ?PageInfo $pageInfo, string $token, bool $editable, ?string $password): CollectiveShare {
+	public function updateShare(string $userId, Collective $collective, ?PageInfo $pageInfo, string $token, bool $editable, ?string $password, ?string $expiryDate = null): CollectiveShare {
 		if (!$collective->canShare()) {
 			throw new NotPermittedException($this->l10n->t('You are not allowed to share %s', $collective->getName()));
 		}
@@ -250,10 +269,24 @@ class CollectiveShareService {
 			$password = null;
 		}
 		$folderShare->setPassword($password);
+
+		if ($expiryDate !== null) {
+			if ($expiryDate === '') {
+				// Empty string means remove expiration date
+				$folderShare->setExpirationDate(null);
+			} else {
+				$folderShare->setExpirationDate(new \DateTime($expiryDate));
+			}
+		}
+		// If $expiryDate === null, don't change existing expiry date
+
 		$this->shareManager->updateShare($folderShare);
 
 		$share->setEditable($this->isShareEditable($folderShare));
 		$share->setPassword($folderShare->getPassword() ?? '');
+
+		$share->setExpirationDate($folderShare->getExpirationDate());
+
 		return $share;
 	}
 
