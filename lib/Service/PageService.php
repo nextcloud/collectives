@@ -669,7 +669,7 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function create(int $collectiveId, int $parentId, string $title, ?int $templateId, string $userId, ?string $defaultTitle = null): PageInfo {
+	public function createBase(int $collectiveId, int $parentId, string $title, ?int $templateId, string $userId, ?string $defaultTitle = null): PageInfo {
 		$this->verifyEditPermissions($collectiveId, $userId);
 		if ($parentId === 0) {
 			$collectiveFolder = $this->getCollectiveFolder($collectiveId, $userId);
@@ -681,9 +681,18 @@ class PageService {
 		$safeTitle = $this->nodeHelper->sanitiseFilename($title, $defaultTitle ?: self::DEFAULT_PAGE_TITLE);
 		$filename = NodeHelper::generateFilename($folder, $safeTitle, PageInfo::SUFFIX);
 
-		$pageInfo = $templateId
+		return $templateId
 			? $this->copy($collectiveId, $templateId, $parentId, $safeTitle, 0, $userId)
 			: $this->newPage($collectiveId, $folder, $filename, $userId, $title);
+	}
+
+	/**
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function create(int $collectiveId, int $parentId, string $title, ?int $templateId, string $userId, ?string $defaultTitle = null): PageInfo {
+		$pageInfo = $this->createBase($collectiveId, $parentId, $title, $templateId, $userId, $defaultTitle);
 		$parentPageInfo = $this->addToSubpageOrder($collectiveId, $parentId, $pageInfo->getId(), 0, $userId);
 		$this->notifyPush(['collectiveId' => $collectiveId, 'pages' => [$pageInfo, $parentPageInfo]]);
 		return $pageInfo;
@@ -709,7 +718,7 @@ class PageService {
 		}
 
 		$this->verifyEditPermissions($collectiveId, $userId);
-		return $this->create($collectiveId, $parentId, $title, null, $userId);
+		return $this->createBase($collectiveId, $parentId, $title, null, $userId);
 	}
 
 	/**
