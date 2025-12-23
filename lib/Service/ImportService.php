@@ -144,7 +144,7 @@ class ImportService {
 				$title = basename($directory);
 				$parentId = $parentPage !== null ? $parentPage->getParentId() : 0;
 			}
-			$pageInfo = $this->pageService->create(
+			$pageInfo = $this->pageService->createBase(
 				$collective->getId(),
 				$parentId,
 				$title,
