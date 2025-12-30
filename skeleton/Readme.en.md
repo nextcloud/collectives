@@ -8,6 +8,6 @@
 
 ## 🛋️ Edit this landing page to feel like home
 
-* Push the pencil button to get started! ↗️
+* Press the pencil button to get started! ↗️
 * Multiple people can edit the same page simultaneously.
 * Find out more in the [documentation](https://nextcloud.github.io/collectives/) or ask [the community](https://help.nextcloud.com/c/apps/collectives/174).
