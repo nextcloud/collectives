@@ -22,17 +22,20 @@
 		<CollectiveSettings
 			v-if="showCollectiveSettings"
 			:collective="settingsCollective" />
+		<CommandPalette />
 	</NcContent>
 </template>
 
 <script>
 import { NcContent } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
+import CommandPalette from './components/CommandPalette.vue'
 import CollectiveSettings from './components/Nav/CollectiveSettings.vue'
 import NavigationBar from './components/NavigationBar.vue'
 import PageSidebar from './components/PageSidebar.vue'
 import { useNetworkState } from './composables/useNetworkState.js'
 import { useCollectivesStore } from './stores/collectives.js'
+import { useCommandPaletteStore } from './stores/commandPalette.js'
 import { usePagesStore } from './stores/pages.js'
 import { useRootStore } from './stores/root.js'
 import { useSettingsStore } from './stores/settings.js'
@@ -43,6 +46,7 @@ export default {
 
 	components: {
 		CollectiveSettings,
+		CommandPalette,
 		NcContent,
 		NavigationBar,
 		PageSidebar,
@@ -102,6 +106,11 @@ export default {
 
 	mounted() {
 		this.getCollectivesAndSettings()
+		this.setupKeyboardShortcuts()
+	},
+
+	beforeDestroy() {
+		this.removeKeyboardShortcuts()
 	},
 
 	methods: {
@@ -110,6 +119,8 @@ export default {
 			'getCollectives',
 			'getTrashCollectives',
 		]),
+
+		...mapActions(useCommandPaletteStore, { toggleCommandPalette: 'toggle' }),
 
 		async getCollectivesAndSettings() {
 			this.loadPending = true
@@ -136,6 +147,22 @@ export default {
 			}
 
 			this.loadPending = false
+		},
+
+		setupKeyboardShortcuts() {
+			document.addEventListener('keydown', this.handleGlobalKeyDown)
+		},
+
+		removeKeyboardShortcuts() {
+			document.removeEventListener('keydown', this.handleGlobalKeyDown)
+		},
+
+		handleGlobalKeyDown(event) {
+			// Check for Cmd+K (Mac) or Ctrl+K (Windows/Linux)
+			if ((event.metaKey || event.ctrlKey) && event.key === 'k') {
+				event.preventDefault()
+				this.toggleCommandPalette()
+			}
 		},
 	},
 
