@@ -5,7 +5,11 @@
 
 <template>
 	<div class="text-menubar">
-		<a v-if="currentPage.lastUserId" class="infobar-item infobar-lastupdate" @click="emitSidebar('versions')">
+		<component
+			:is="canEdit ? 'a' : 'div'"
+			v-if="currentPage.lastUserId"
+			class="infobar-item infobar-lastupdate"
+			@click="canEdit ? emitSidebar('versions') : undefined">
 			<div class="item-text">
 				<LastUserBubble
 					:last-user-id="currentPage.lastUserId"
@@ -13,7 +17,7 @@
 					:timestamp="currentPage.timestamp"
 					:show-prefix-string="!isMobile" />
 			</div>
-		</a>
+		</component>
 		<template v-if="attachmentCount">
 			<div v-if="currentPage.lastUserId" class="infobar-seperator">
 				•
@@ -63,6 +67,11 @@ export default {
 	props: {
 		currentPage: {
 			type: Object,
+			required: true,
+		},
+
+		canEdit: {
+			type: Boolean,
 			required: true,
 		},
 

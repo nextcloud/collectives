@@ -6,6 +6,7 @@
 import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import PageInfoBar from '../components/Page/PageInfoBar.vue'
 import { editorApiReaderFileId } from '../constants.js'
+import { useCollectivesStore } from '../stores/collectives.js'
 import { usePagesStore } from '../stores/pages.js'
 import { useRootStore } from '../stores/root.js'
 import { useSearchStore } from '../stores/search.js'
@@ -21,6 +22,7 @@ export function useReader(content) {
 	const readerEl = ref(null)
 	const pageInfoBarPage = ref(null)
 	const rootStore = useRootStore()
+	const collectivesStore = useCollectivesStore()
 	const searchStore = useSearchStore()
 	const pagesStore = usePagesStore()
 
@@ -78,6 +80,7 @@ export function useReader(content) {
 				component: PageInfoBar,
 				props: {
 					currentPage: readerPage,
+					canEdit: collectivesStore.currentCollectiveCanEdit,
 					attachmentCount: pagesStore.attachments.length,
 					backlinkCount: pagesStore.backlinks(readerPage.id).length,
 				},
