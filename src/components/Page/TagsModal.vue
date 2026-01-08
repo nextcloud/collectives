@@ -367,6 +367,11 @@ export default {
 .tags-modal {
 	display: flex;
 	flex-direction: column;
+
+	:deep(.dialog__content) {
+		// Leave space for focus border
+		padding-left: 2px;
+	}
 }
 
 .tags-modal__input {
