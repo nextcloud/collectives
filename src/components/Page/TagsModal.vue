@@ -12,7 +12,8 @@
 		<div class="tags-modal__input">
 			<NcTextField
 				v-model="input"
-				:label="t('collectives', 'Search or create tag')">
+				:label="t('collectives', 'Search or create tag')"
+				@keyup.enter.prevent.stop="onNewTag">
 				<TagIcon :size="20" />
 			</NcTextField>
 		</div>
@@ -338,6 +339,10 @@ export default {
 
 		async onNewTag() {
 			const name = this.input.trim()
+			if (name === '') {
+				return
+			}
+
 			try {
 				await this.createTag({ name, color: '' })
 				showSuccess(t('collectives', 'Created tag {name}', { name }))
