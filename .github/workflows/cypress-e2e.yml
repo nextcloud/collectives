@@ -72,20 +72,13 @@ jobs:
       PUPPETEER_SKIP_DOWNLOAD: true
 
     steps:
-      # TODO: revert after viewer is fixed with latest server and `@nextcloud/files` v4.x
-      - name: Register server Git reference
-        run: |
-          server_ref="$(if [ "${{ matrix.server-versions }}" = "master" ]; then echo -n "282341a8d67b552a89768a1f91c1efe59b6ae254"; else echo -n "${{ matrix.server-versions }}"; fi)"
-          echo "server_ref=$server_ref" >> $GITHUB_ENV
-
       - name: Checkout server
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           persist-credentials: false
           submodules: true
           repository: nextcloud/server
-          # TODO: revert after viewer is fixed with latest server and `@nextcloud/files` v4.x
-          ref: ${{ env.server_ref }}
+          ref: ${{ matrix.server-versions }}
 
       - name: Checkout circles app
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
