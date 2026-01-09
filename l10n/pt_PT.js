@@ -47,7 +47,7 @@ OC.L10N.register(
     "External shares" : "Partilhas externas",
     "External shares explanation" : "Explicação das partilhas externas",
     "No other versions available" : "Nenhuma outra versão disponível",
-    "You" : "Vovê",
+    "You" : "Você",
     "Download version" : "Transferir versão",
     "Attachments" : "Anexos",
     "Sharing" : "Partilha",
