@@ -114,24 +114,30 @@ describe('Collective', function() {
 	// So in all but the first run it block
 	// bob will be logged out.
 	describe('after creation', function() {
-		const randomName = 'Created just now ' + Math.random().toString(36).substr(2, 4)
+		beforeEach(function() {
+			cy.wrap('Created just now ' + Math.random().toString(36).substr(2, 4))
+				.as('randomName')
+		})
+
 		it('has all the ui elements', function() {
 			cy.loginAs('bob')
 			cy.visit('apps/collectives')
-			cy.createCollective(randomName, ['jane', 'john'])
+			cy.createCollective(this.randomName, ['jane', 'john'])
 			cy.log('Check name in the disabled titleform')
-			cy.get('[data-cy-collectives="page-title-container"] input').invoke('val').should('contain', randomName)
+			cy.get('[data-cy-collectives="page-title-container"] input').invoke('val').should('contain', this.randomName)
 			cy.get('[data-cy-collectives="page-title-container"] input').should('have.attr', 'disabled')
 			cy.log('Check initial Readme.md')
 			cy.getReadOnlyEditor()
-				.find('h1').should('contain', 'Welcome to your new collective')
+				.find('h1').should('contain', 'Welcome')
+			cy.getReadOnlyEditor()
+				.find('h1').should('contain', this.randomName)
 			cy.log('Allows creation of pages')
 			cy.get('.app-content-list-item')
 				.trigger('mouseover')
 			cy.get('.app-content-list button.action-button-add')
 				.should('have.attr', 'aria-label')
 				.and('contain', 'Add a page')
-			cy.deleteCollective(randomName)
+			cy.deleteCollective(this.randomName)
 		})
 	})
 

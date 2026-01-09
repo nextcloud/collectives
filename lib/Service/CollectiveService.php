@@ -229,7 +229,8 @@ class CollectiveService extends CollectiveServiceBase {
 
 		// Create folder for collective and optionally copy default landing page
 		try {
-			$collectiveFolder = $this->collectiveFolderManager->initializeFolder($collective->getId(), $userLang);
+			$name = $this->getCollectiveNameWithEmoji($collective);
+			$collectiveFolder = $this->collectiveFolderManager->initializeFolder($collective->getId(), $userLang, $name);
 		} catch (InvalidPathException|FilesNotPermittedException $e) {
 			throw new NotPermittedException($e->getMessage(), 0, $e);
 		}

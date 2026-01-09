@@ -50,7 +50,7 @@ describe('Collective Share', function() {
 		cy.get('[data-cy-collectives="page-title-container"] input').should('have.value', 'Share me')
 		cy.get('button.titleform-button').should('not.exist')
 		cy.getReadOnlyEditor()
-			.find('h1').should('contain', 'Welcome to your new collective')
+			.find('h1').should('contain', 'Welcome Share me')
 		cy.get('.app-content-list-item.toplevel')
 			.find('button.icon.add')
 			.should('not.exist')

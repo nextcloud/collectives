@@ -259,15 +259,15 @@ describe('Pages', function() {
 		it('Search for page content', function() {
 			cy.get('.unified-search a, button.unified-search__button, .unified-search-menu button').click()
 			cy.get('.unified-search__form input, .unified-search-modal input')
-				.type('share your thoughts')
+				.type('yourself at home')
 			cy.get('.unified-search__results-collectives-page-content, .unified-search-modal__results')
-				.should('contain', 'your thoughts that really matter')
+				.should('contain', 'Multiple people can edit')
 		})
 	})
 
 	describe('Search dialog', () => {
 		beforeEach(() => {
-			cy.get('input[name="pageFilter"]').type('collective')
+			cy.get('input[name="pageFilter"]').type('the')
 			cy.get('.search-dialog-container', { timeout: 5000 })
 				.should('be.visible')
 				.as('searchDialog')
@@ -277,7 +277,7 @@ describe('Pages', function() {
 			cy.get('.search-dialog__info')
 				.invoke('text')
 				.invoke('trim')
-				.should('equal', 'Found 5 matches for "collective"')
+				.should('equal', 'Found 9 matches for "the"')
 		})
 
 		it('Clears search', () => {
@@ -295,7 +295,7 @@ describe('Pages', function() {
 			cy.get('.search-dialog__info')
 				.invoke('text')
 				.invoke('trim')
-				.should('equal', 'Match 1 of 5 for "collective"')
+				.should('equal', 'Match 1 of 9 for "the"')
 		})
 
 		it('Moves to next search', () => {
@@ -306,7 +306,7 @@ describe('Pages', function() {
 			cy.get('.search-dialog__info')
 				.invoke('text')
 				.invoke('trim')
-				.should('equal', 'Match 2 of 5 for "collective"')
+				.should('equal', 'Match 2 of 9 for "the"')
 		})
 
 		it('Moves to previous search', () => {
@@ -317,7 +317,7 @@ describe('Pages', function() {
 			cy.get('.search-dialog__info')
 				.invoke('text')
 				.invoke('trim')
-				.should('equal', 'Match 5 of 5 for "collective"')
+				.should('equal', 'Match 9 of 9 for "the"')
 		})
 	})
 })
