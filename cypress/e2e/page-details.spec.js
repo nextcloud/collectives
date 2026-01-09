@@ -25,7 +25,7 @@ describe('Page details', function() {
 	describe('Display table of contents', function() {
 		it('Allows to display/close TOC and switch page modes in between', function() {
 			// TODO: Remove once we only support nc33+
-			const tocSelector = ['stable30', 'stable31', 'stable32'].includes(Cypress.env('ncVersion'))
+			const tocSelector = ['stable31', 'stable32'].includes(Cypress.env('ncVersion'))
 				? '.editor--toc .editor--toc__item'
 				: '.editor__toc .toc-list__item'
 			cy.openPage('TableOfContents')
@@ -39,7 +39,7 @@ describe('Page details', function() {
 				.find(tocSelector)
 				.should('contain', 'Second-Level Heading')
 			// TODO Remove condition once we only support nc33+
-			if (!['stable30', 'stable31', 'stable32'].includes(Cypress.env('ncVersion'))) {
+			if (!['stable31', 'stable32'].includes(Cypress.env('ncVersion'))) {
 				cy.getReadOnlyEditor()
 					.find('.editor__toc .pin-outline-icon')
 					.click()
@@ -62,7 +62,7 @@ describe('Page details', function() {
 
 			cy.log('Close toc in edit mode')
 			// TODO Remove condition once we only support nc33+
-			if (['stable30', 'stable31', 'stable32'].includes(Cypress.env('ncVersion'))) {
+			if (['stable31', 'stable32'].includes(Cypress.env('ncVersion'))) {
 				cy.getEditor()
 					.find('.editor--outline__header .close-icon')
 					.click()

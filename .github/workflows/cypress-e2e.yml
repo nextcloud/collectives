@@ -61,10 +61,10 @@ jobs:
 
     strategy:
       matrix:
-        server-versions: ['stable30', 'master']
+        server-versions: ['stable31', 'master']
         include:
-          - server-versions: 'stable30'
-            server-major: '30'
+          - server-versions: 'stable31'
+            server-major: '31'
           - server-versions: 'master'
             server-major: ''
 
@@ -186,12 +186,12 @@ jobs:
       fail-fast: false
       matrix:
         containers: [1, 2, 3, 4]
-        php-versions: ['8.1', '8.3']
+        php-versions: ['8.1', '8.4']
         databases: ['sqlite']
-        server-versions: ['stable30', 'master']
+        server-versions: ['stable31', 'master']
         exclude:
-          - php-versions: '8.3'
-            server-versions: 'stable30'
+          - php-versions: '8.4'
+            server-versions: 'stable31'
           - php-versions: '8.1'
             server-versions: 'master'
 
