@@ -12,12 +12,6 @@
 	overflow: unset !important;
 }
 
-// TODO: can be removed once we only support Nextcloud 30+
-.text-menubar {
-	border-bottom: 1px solid var(--color-border);
-	box-sizing: content-box !important;
-}
-
 .full-width-view {
 	--text-editor-max-width: 100% !important;
 }
