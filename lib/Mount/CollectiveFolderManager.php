@@ -29,6 +29,7 @@ use OCP\IDBConnection;
 use OCP\IRequest;
 use OCP\IUser;
 use OCP\IUserSession;
+use OCP\L10N\IFactory;
 
 class CollectiveFolderManager {
 	private const SKELETON_DIR = 'skeleton';
@@ -45,6 +46,7 @@ class CollectiveFolderManager {
 		private IConfig $config,
 		private IUserSession $userSession,
 		private IRequest $request,
+		private IFactory $l10nFactory,
 	) {
 	}
 
@@ -205,13 +207,6 @@ class CollectiveFolderManager {
 		return $skeletonFolder;
 	}
 
-	public function getLandingPagePath(string $path, string $lang): string {
-		$landingPagePathEnglish = $path . '/' . self::LANDING_PAGE_TITLE . '.en' . self::SUFFIX;
-		$landingPagePathLocalized = $path . '/' . self::LANDING_PAGE_TITLE . '.' . $lang . self::SUFFIX;
-
-		return file_exists($landingPagePathLocalized) ? $landingPagePathLocalized : $landingPagePathEnglish;
-	}
-
 	/**
 	 * @throws NotFoundException
 	 * @throws \OCP\DB\Exception
@@ -263,18 +258,22 @@ class CollectiveFolderManager {
 	 * @throws InvalidPathException
 	 * @throws NotPermittedException
 	 */
-	public function initializeFolder(int $id, string $lang): Folder {
+	public function initializeFolder(int $id, string $lang, string $name): Folder {
 		$folder = $this->getOrCreateFolder($id);
 
 		$landingPageFileName = self::LANDING_PAGE_TITLE . self::SUFFIX;
 		if (!$folder->nodeExists($landingPageFileName)) {
-			$landingPageDir = __DIR__ . '/../../' . self::SKELETON_DIR;
-			$landingPagePath = $this->getLandingPagePath($landingPageDir, $lang);
-			if (false !== $content = file_get_contents($landingPagePath)) {
-				$folder->newFile($landingPageFileName, $content);
-			}
+			$content = $this->getLandingPageContent($name, $lang);
+			$folder->newFile($landingPageFileName, $content);
 		}
 
 		return $folder;
+	}
+
+	private function getLandingPageContent(string $name, string $lang): string {
+		$l10n = $this->l10nFactory->get('collectives', $lang);
+		return '# ' . $l10n->t('Welcome %s', $name) . "\n\n"
+			. $l10n->t('Add pages with the ➕ in the page list! You can drag them to change the order. Dragging them into the editor will create a 🔗 link.') . "\n\n"
+			. $l10n->t('Press `✏️ Edit` to change this text and make yourself at home! Multiple people can edit together. Find out more in the [documentation](https://nextcloud.github.io/collectives/) or ask [the community](https://help.nextcloud.com/tag/collectives-app).');
 	}
 }
