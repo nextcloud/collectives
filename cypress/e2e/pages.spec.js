@@ -162,7 +162,7 @@ describe('Pages', function() {
 			// Delete image
 			cy.getEditor()
 				.find('[data-component="image-view"] .image__view')
-				.trigger('mouseover')
+				.trigger('mouseenter')
 			cy.getEditor()
 				.get('.image__caption__delete')
 				.click()
