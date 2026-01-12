@@ -208,4 +208,17 @@ class AttachmentService {
 
 		return $this->getAttachmentDirectory($pageFile)->getById($attachmentId);
 	}
+
+	/**
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function putAttachment(File $pageFile, string $attachmentName, string $content): string {
+		$attachmentDir = $this->getAttachmentDirectory($pageFile, true);
+
+		$filename = NodeHelper::generateFilename($attachmentDir, $attachmentName);
+		$attachmentFile = $attachmentDir->newFile($filename);
+		$attachmentFile->putContent($content);
+		return '.attachments.' . $pageFile->getId() . DIRECTORY_SEPARATOR . $filename;
+	}
 }
