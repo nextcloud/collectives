@@ -1,5 +1,25 @@
 # Changelog
 
+## 3.5.0 - 2026.01.12
+
+### ✨New
+* ✨ Add Nextcloud 33 support.
+
+### 🐛Fixes
+* 💄 Cleanup default landing page.
+* 🔗 Only link from PageInfoBar to versions sidebar tab we can edit. (#2169)
+* 💄 Small improvements to the tags modal. (#2162, #2163)
+* 🚀 Improve performance when cleaning subpage order.
+* 🔗 Fix download links in page list.
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 3.4.0 - 2025.12.02
 
 ### ✨New
