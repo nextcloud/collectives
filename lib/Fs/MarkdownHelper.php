@@ -12,9 +12,11 @@ namespace OCA\Collectives\Fs;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Exception\CommonMarkException;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
+use League\CommonMark\Extension\CommonMark\Node\Inline\Image;
 use League\CommonMark\Extension\CommonMark\Node\Inline\Link;
 use League\CommonMark\Node\Inline\Text;
 use League\CommonMark\Node\Node;
+use League\CommonMark\Node\NodeWalker;
 use League\CommonMark\Parser\MarkdownParser;
 use OC;
 use OCA\Collectives\Db\Collective;
@@ -36,17 +38,21 @@ class MarkdownHelper {
 		return $out;
 	}
 
+	private static function getDocumentWalker(string $content): NodeWalker {
+		$environment = new Environment();
+		$environment->addExtension(new CommonMarkCoreExtension());
+		$parser = new MarkdownParser($environment);
+		$document = $parser->parse($content);
+		return $document->walker();
+	}
+
 	/**
 	 * Extracts Markdown links and returns them with link text, href and title
 	 *
 	 * @throws CommonMarkException
 	 */
 	public static function getLinksFromContent(string $content): array {
-		$environment = new Environment();
-		$environment->addExtension(new CommonMarkCoreExtension());
-		$parser = new MarkdownParser($environment);
-		$document = $parser->parse($content);
-		$walker = $document->walker();
+		$walker = self::getDocumentWalker($content);
 
 		$links = [];
 		while ($event = $walker->next()) {
@@ -72,6 +78,40 @@ class MarkdownHelper {
 		}
 
 		return $links;
+	}
+
+	/**
+	 * Extracts Markdown images and returns them with alt text, url and title
+	 *
+	 * @throws CommonMarkException
+	 */
+	public static function getImageLinksFromContent(string $content): array {
+		$walker = self::getDocumentWalker($content);
+
+		$images = [];
+		while ($event = $walker->next()) {
+			if (! $event->isEntering()) {
+				continue;
+			}
+			$node = $event->getNode();
+			if (!($node instanceof Image)) {
+				continue;
+			}
+
+			$altTextParts = [];
+			foreach ($node->children() as $child) {
+				$altTextParts[] = self::collectText($child);
+			}
+			$altText = trim(implode('', array_filter($altTextParts)));
+
+			$images[] = [
+				'alt' => $altText,
+				'url' => $node->getUrl(),
+				'title' => $node->getTitle() ?? '',
+			];
+		}
+
+		return $images;
 	}
 
 	/**
