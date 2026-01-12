@@ -22,9 +22,9 @@ use OCP\IUser;
 
 class CollectiveStorage extends Wrapper implements IConstructableStorage {
 	private int $folderId;
-	private ICacheEntry $rootEntry;
+	private ?ICacheEntry $rootEntry;
 	private ?IUser $mountOwner;
-	/** @var RootEntryCache */
+	/** @var ICache|null */
 	public $cache;
 
 	public function __construct($parameters) {
@@ -50,7 +50,12 @@ class CollectiveStorage extends Wrapper implements IConstructableStorage {
 			$storage = $this;
 		}
 
-		$this->cache = new RootEntryCache(parent::getCache($path, $storage), $this->rootEntry);
+		$cache = parent::getCache($path, $storage);
+		if ($this->rootEntry !== null) {
+			$cache = new RootEntryCache($cache, $this->rootEntry);
+		}
+		$this->cache = $cache;
+
 		return $this->cache;
 	}
 
