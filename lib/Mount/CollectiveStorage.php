@@ -10,16 +10,17 @@ declare(strict_types=1);
 namespace OCA\Collectives\Mount;
 
 use OC\Files\Cache\Scanner;
-use OC\Files\ObjectStore\NoopScanner;
 use OC\Files\ObjectStore\ObjectStoreScanner;
 use OC\Files\ObjectStore\ObjectStoreStorage;
 use OC\Files\Storage\Wrapper\Wrapper;
+use OCP\Files\Cache\ICache;
 use OCP\Files\Cache\ICacheEntry;
 use OCP\Files\Cache\IScanner;
+use OCP\Files\Storage\IConstructableStorage;
 use OCP\Files\Storage\IStorage;
 use OCP\IUser;
 
-class CollectiveStorage extends Wrapper {
+class CollectiveStorage extends Wrapper implements IConstructableStorage {
 	private int $folderId;
 	private ICacheEntry $rootEntry;
 	private ?IUser $mountOwner;
@@ -37,20 +38,11 @@ class CollectiveStorage extends Wrapper {
 		return $this->folderId;
 	}
 
-	/**
-	 * @param string $path
-	 *
-	 * @return string|false
-	 */
-	public function getOwner($path): string|false {
+	public function getOwner(string $path): string|false {
 		return $this->mountOwner !== null ? $this->mountOwner->getUID() : false;
 	}
 
-	/**
-	 * @param string $path
-	 * @param IStorage|null $storage
-	 */
-	public function getCache($path = '', $storage = null): RootEntryCache {
+	public function getCache(string $path = '', ?IStorage $storage = null): ICache {
 		if ($this->cache) {
 			return $this->cache;
 		}
@@ -62,17 +54,12 @@ class CollectiveStorage extends Wrapper {
 		return $this->cache;
 	}
 
-	/**
-	 * @param string $path
-	 * @param null $storage
-	 */
-	public function getScanner($path = '', $storage = null): IScanner {
+	public function getScanner(string $path = '', ?IStorage $storage = null): IScanner {
 		if (!$storage) {
 			$storage = $this;
 		}
 		if ($storage->instanceOfStorage(ObjectStoreStorage::class)) {
-			// NoopScanner is private API and kept here for compatibility with older releases
-			$storage->scanner = class_exists(NoopScanner::class) ? new NoopScanner($storage) : new ObjectStoreScanner($storage);
+			$storage->scanner = new ObjectStoreScanner($storage);
 		} elseif (!isset($storage->scanner)) {
 			$storage->scanner = new Scanner($storage);
 		}
