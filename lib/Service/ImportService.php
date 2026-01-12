@@ -56,7 +56,7 @@ class ImportService {
 	}
 
 	/**
-	 * Recursively import markdown files from directory
+	 * Recursively import Markdown files from directory
 	 */
 	private function processDirectory(string $directory, Collective $collective, ?PageInfo $parentPage, IUser $user, bool $skipReadme, ?callable $progressCallback = null, array &$fileMap = []): int {
 		$count = 0;
@@ -66,7 +66,7 @@ class ImportService {
 			throw new NotFoundException('Unable to read directory: ' . $directory);
 		}
 
-		// First pass: import markdown files at this level
+		// First pass: import Markdown files at this level
 		foreach ($items as $item) {
 			if ($item === '.' || $item === '..') {
 				continue;
@@ -78,7 +78,7 @@ class ImportService {
 
 			// Verify directory exists and is readable
 			if (!is_readable($directory)) {
-				$progressCallback('error', $path, 'Directory not readable');
+				$progressCallback('error', $directory, 'Directory not readable');
 				continue;
 			}
 
