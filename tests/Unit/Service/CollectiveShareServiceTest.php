@@ -158,9 +158,8 @@ class CollectiveShareServiceTest extends TestCase {
 	}
 
 	public function testFindShareShareNotFoundException(): void {
-		$collectiveShare = $this->getMockBuilder(CollectiveShare::class)
-			->disableOriginalConstructor()
-			->getMock();
+		$collectiveShare = new CollectiveShare();
+		$collectiveShare->setToken('token');
 		$this->collectiveShareMapper->method('findOneByCollectiveIdAndUser')
 			->willReturn($collectiveShare);
 
@@ -173,6 +172,7 @@ class CollectiveShareServiceTest extends TestCase {
 
 	public function testFindShare(): void {
 		$collectiveShare = new CollectiveShare();
+		$collectiveShare->setToken('token');
 		$this->collectiveShareMapper->method('findOneByCollectiveIdAndUser')
 			->willReturn($collectiveShare);
 		$folderShare = $this->getMockBuilder(Share::class)
