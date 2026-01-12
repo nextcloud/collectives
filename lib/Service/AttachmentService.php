@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Service;
 
+use OCA\Collectives\Fs\NodeHelper;
 use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\InvalidPathException;
@@ -44,7 +45,7 @@ class AttachmentService {
 	/**
 	 * @throws NotFoundException
 	 */
-	private function getAttachmentDirectory(File $pageFile): Folder {
+	private function getAttachmentDirectory(File $pageFile, bool $createIfNotExists = false): Folder {
 		try {
 			$parentFolder = $pageFile->getParent();
 			$attachmentFolderName = '.attachments.' . $pageFile->getId();
@@ -53,6 +54,8 @@ class AttachmentService {
 				if ($attachmentFolder instanceof Folder) {
 					return $attachmentFolder;
 				}
+			} elseif ($createIfNotExists) {
+				return $parentFolder->newFolder($attachmentFolderName);
 			}
 		} catch (FilesNotFoundException|InvalidPathException) {
 			throw new NotFoundException('Failed to get attachment directory for page ' . $pageFile->getId() . '.');
@@ -78,5 +81,18 @@ class AttachmentService {
 
 		// Only return files, ignore folders
 		return array_map(fn ($file) => $this->fileToInfo($file, $folder), array_filter($attachmentDir->getDirectoryListing(), static fn ($node) => $node instanceof File));
+	}
+
+	/**
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function putAttachment(File $pageFile, string $attachmentName, string $content): string {
+		$attachmentDir = $this->getAttachmentDirectory($pageFile, true);
+
+		$filename = NodeHelper::generateFilename($attachmentDir, $attachmentName);
+		$attachmentFile = $attachmentDir->newFile($filename);
+		$attachmentFile->putContent($content);
+		return '.attachments.' . $pageFile->getId() . DIRECTORY_SEPARATOR . $filename;
 	}
 }
