@@ -9,12 +9,13 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\ACL;
 
-use OC\Files\Cache\Cache;
 use OC\Files\Cache\Wrapper\CacheWrapper;
 use OC\Files\Storage\Wrapper\Wrapper;
 use OCP\Constants;
+use OCP\Files\Cache\ICache;
 use OCP\Files\Cache\IScanner;
 use OCP\Files\Storage\IConstructableStorage;
+use OCP\Files\Storage\IStorage;
 use Traversable;
 
 class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
@@ -130,7 +131,7 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 		return $this->checkPermissions($permissions) ? parent::writeStream($path, $stream, $size) : 0;
 	}
 
-	public function getCache(string $path = '', $storage = null): Cache {
+	public function getCache(string $path = '', ?IStorage $storage = null): ICache {
 		if (!$storage) {
 			$storage = $this;
 		}
@@ -148,7 +149,7 @@ class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 		return $data;
 	}
 
-	public function getScanner(string $path = '', $storage = null): IScanner {
+	public function getScanner(string $path = '', ?IStorage $storage = null): IScanner {
 		if (!$storage) {
 			$storage = $this->storage;
 		}
