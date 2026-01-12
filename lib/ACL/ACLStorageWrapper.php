@@ -14,9 +14,10 @@ use OC\Files\Cache\Wrapper\CacheWrapper;
 use OC\Files\Storage\Wrapper\Wrapper;
 use OCP\Constants;
 use OCP\Files\Cache\IScanner;
+use OCP\Files\Storage\IConstructableStorage;
 use Traversable;
 
-class ACLStorageWrapper extends Wrapper {
+class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
 	private int $permissions;
 	private bool $inShare;
 
