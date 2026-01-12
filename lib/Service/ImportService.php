@@ -10,16 +10,17 @@ declare(strict_types=1);
 namespace OCA\Collectives\Service;
 
 use OCA\Collectives\Db\Collective;
-use OCA\Collectives\Db\Page;
 use OCA\Collectives\Fs\MarkdownHelper;
 use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Model\PageInfo;
+use OCP\Files\File;
 use OCP\Files\IMimeTypeDetector;
 use OCP\IUser;
 
 class ImportService {
 	public function __construct(
 		private PageService $pageService,
+		private AttachmentService $attachmentService,
 		private IMimeTypeDetector $mimeTypeDetector,
 	) {
 	}
@@ -44,13 +45,13 @@ class ImportService {
 		}
 
 		$fileMap = [];
-		$count = $this->processDirectory($directory, $collective, $parentPage, $user, false, $progressCallback, $fileMap);
+		$count = $this->processDirectory($directory, $collective, $parentPage, $user, false, $fileMap, $progressCallback);
 		if ($count === 0) {
 			throw new NotFoundException('No markdown files found in directory: ' . $directory);
 		}
 
 		// Second pass: rewrite relative links in all imported pages
-		$this->rewriteInternalLinks($collective, $user, $fileMap, $parentId, $progressCallback);
+		$this->rewriteInternalLinksAndAttachments($collective, $user, $fileMap, $parentId, $directory, $progressCallback);
 
 		return $count;
 	}
@@ -58,7 +59,7 @@ class ImportService {
 	/**
 	 * Recursively import Markdown files from directory
 	 */
-	private function processDirectory(string $directory, Collective $collective, ?PageInfo $parentPage, IUser $user, bool $skipReadme, ?callable $progressCallback = null, array &$fileMap = []): int {
+	private function processDirectory(string $directory, Collective $collective, ?PageInfo $parentPage, IUser $user, bool $skipReadme, array &$fileMap, ?callable $progressCallback = null): int {
 		$count = 0;
 		$parentId = $parentPage !== null ? $parentPage->getId() : 0;
 		$items = scandir($directory);
@@ -109,10 +110,10 @@ class ImportService {
 						$progressCallback('error', $path . DIRECTORY_SEPARATOR . $readmeName, $e->getMessage());
 						continue;
 					}
-					$count += $this->processDirectory($path, $collective, $indexPageInfo, $user, true, $progressCallback, $fileMap);
+					$count += $this->processDirectory($path, $collective, $indexPageInfo, $user, true, $fileMap, $progressCallback);
 				} else {
 					$indexPageInfo = $this->pageService->getOrCreate($collective->getId(), $parentId, $item, $user->getUID());
-					$count += $this->processDirectory($path, $collective, $indexPageInfo, $user, false, $progressCallback, $fileMap);
+					$count += $this->processDirectory($path, $collective, $indexPageInfo, $user, false, $fileMap, $progressCallback);
 				}
 			}
 		}
@@ -165,7 +166,7 @@ class ImportService {
 	/**
 	 * Rewrite relative links in all imported pages to point to new page URLs
 	 */
-	private function rewriteInternalLinks(Collective $collective, IUser $user, array $fileMap, int $parentId, callable $progressCallback): void {
+	private function rewriteInternalLinksAndAttachments(Collective $collective, IUser $user, array $fileMap, int $parentId, string $baseDirectory, callable $progressCallback): void {
 		foreach ($fileMap as $filePath => $pageId) {
 			try {
 				$pageFile = $this->pageService->getPageFile($collective->getId(), $pageId, $user->getUID());
@@ -175,79 +176,157 @@ class ImportService {
 				continue;
 			}
 
-			$links = MarkdownHelper::getLinksFromContent($content);
-			if (empty($links)) {
-				continue;
-			}
-
 			$updatedContent = $content;
+
+			$links = MarkdownHelper::getLinksFromContent($content);
 			$linkCount = 0;
-
 			foreach ($links as $link) {
-				$href = $link['href'];
-
-				// Only process relative links (not absolute URLs or root-relative paths)
-				if (!$href || str_starts_with($href, '/') || preg_match('/^[a-zA-Z]+:\/\//', $href)) {
-					continue;
-				}
-
-				// Remove fragment and query string from link
-				$alteredHref = preg_replace('/[?#].*$/', '', $href);
-
-				// Remove `./` prefix from relative link
-				if (str_starts_with($alteredHref, './')) {
-					$alteredHref = substr($alteredHref, 2);
-				}
-
-				$candidates = [];
-
-				// Consider link with and without .md extension
-				if (str_ends_with($alteredHref, '.md')) {
-					$candidates[] = $alteredHref;
-					$candidates[] = substr($alteredHref, 0, -3); // without .md
-				} else {
-					$candidates[] = $alteredHref;
-					$candidates[] = $alteredHref . '.md';
-				}
-
-				// E.g. Dokuwiki2Markdown generates links where pages are separated with colons
-				$candidates[] = str_replace(':', DIRECTORY_SEPARATOR, $alteredHref);
-
-				// Try to find target page
-				$targetPageInfo = null;
-				foreach ($candidates as $candidate) {
-					try {
-						$targetPageInfo = $this->pageService->findByPath($collective->getId(), $candidate, $user->getUID(), $parentId)
-							?? $this->pageService->findByPath($collective->getId(), $candidate, $user->getUID(), $parentId);
-						break;
-					} catch (NotFoundException|NotPermittedException) {
-					}
-				}
-
-				if ($targetPageInfo === null) {
-					$progressCallback('error', $filePath, "Didn't find target page for link $href, not updated");
-					continue;
-				}
-
-				$newHref = $this->pageService->getPageLink($collective->getUrlPath(), $targetPageInfo);
-
-				// Preserve fragment if present
-				if (preg_match('/#(.+)$/', $href, $matches)) {
-					$newHref .= '#' . $matches[1];
-				}
-
-				// Replace the link in content
-				$oldLink = '](' . $href . ')';
-				$newLink = '](' . $newHref . ')';
-				$updatedContent = str_replace($oldLink, $newLink, $updatedContent);
-				$linkCount++;
+				$linkCount += $this->processLink($link, $collective, $user, $parentId, $filePath, $updatedContent, $progressCallback);
 			}
 
-			if ($linkCount > 0) {
+			$attachments = MarkdownHelper::getImageLinksFromContent($content);
+			$attachmentCount = 0;
+			foreach ($attachments as $attachment) {
+				$attachmentCount += $this->processAttachment($attachment, $collective, $user, $pageFile, $filePath, $baseDirectory, $updatedContent, $progressCallback);
+			}
+
+			$updateCount = $linkCount + $attachmentCount;
+			if ($updateCount > 0) {
 				NodeHelper::putContent($pageFile, $updatedContent);
-				$progressCallback('link_update', $filePath, "Updated $linkCount internal link(s)");
+				$progressCallback('link_update', $filePath, "Updated $updateCount internal links and attachments");
 			}
 		}
+	}
+
+	private static function sanitizeHref(string $href): ?string {
+		// Only process relative links (not absolute URLs or root-relative paths)
+		if (!$href || str_starts_with($href, '/') || preg_match('/^[a-zA-Z]+:\/\//', $href)) {
+			return null;
+		}
+
+		// Ignore mailto links
+		if (str_starts_with($href, 'mailto:')) {
+			return null;
+		}
+
+		// Remove fragment and query string from link
+		$sanitizedHref = preg_replace('/[?#].*$/', '', $href);
+
+		// Remove `./` prefix from relative link
+		if (str_starts_with($sanitizedHref, './')) {
+			$sanitizedHref = substr($sanitizedHref, 2);
+		}
+
+		return $sanitizedHref;
+	}
+
+	private function processLink(array $link, Collective $collective, IUser $user, int $parentId, string $filePath, string &$updatedContent, callable $progressCallback): int {
+		$href = $link['href'];
+		$sanitizedHref = self::sanitizeHref($href);
+		if ($sanitizedHref === null) {
+			return 0;
+		}
+
+		$candidates = [];
+
+		// Consider link with and without .md extension
+		if (str_ends_with($sanitizedHref, '.md')) {
+			$candidates[] = $sanitizedHref;
+			$candidates[] = substr($sanitizedHref, 0, -3); // without .md
+		} else {
+			$candidates[] = $sanitizedHref;
+			$candidates[] = $sanitizedHref . '.md';
+		}
+
+		// E.g. Dokuwiki2Markdown generates links where pages are separated with colons
+		$candidates[] = str_replace(':', DIRECTORY_SEPARATOR, $sanitizedHref);
+
+		// Try to find target page
+		$targetPageInfo = null;
+		foreach ($candidates as $candidate) {
+			try {
+				$targetPageInfo = $this->pageService->findByPath($collective->getId(), $candidate, $user->getUID(), $parentId);
+				break;
+			} catch (NotFoundException|NotPermittedException) {
+			}
+		}
+
+		if ($targetPageInfo === null) {
+			$progressCallback('error', $filePath, "Didn't find target page for link $href, not updated");
+			return 0;
+		}
+
+		$newHref = $this->pageService->getPageLink($collective->getUrlPath(), $targetPageInfo);
+
+		// Preserve fragment if present
+		if (preg_match('/#(.+)$/', $href, $matches)) {
+			$newHref .= '#' . $matches[1];
+		}
+
+		// Replace the link in content
+		$oldLink = '](' . $href . ')';
+		$newLink = '](' . $newHref . ')';
+		$updatedContent = str_replace($oldLink, $newLink, $updatedContent);
+		return 1;
+	}
+
+	private function processAttachment(array $image, Collective $collective, IUser $user, File $pageFile, string $filePath, string $baseDirectory, string &$updatedContent, callable $progressCallback): int {
+		$url = $image['url'];
+		if (!$url) {
+			return 0;
+		}
+		$sanitizedHref = self::sanitizeHref($url);
+		if ($sanitizedHref === null) {
+			return 0;
+		}
+
+		$candidates = [];
+		$candidates[] = $baseDirectory . DIRECTORY_SEPARATOR . $sanitizedHref;
+
+		if (str_contains($sanitizedHref, ':')) {
+			// Dokuwiki2Markdown generates links where attachments are separated with colons
+
+			// Remove leading ':' if existent
+			if (str_starts_with($sanitizedHref, ':')) {
+				$sanitizedHref = substr($sanitizedHref, 1);
+			}
+
+			// Convert :directory:attachment.png?400 to directory/attachment.png
+			$dokuwikiPath = str_replace(':', DIRECTORY_SEPARATOR, $sanitizedHref);
+			// Remove query string (image size) if present
+			$dokuwikiPath = preg_replace('/[?#].*$/', '', $dokuwikiPath);
+
+			$candidates[] = $baseDirectory . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'media' . DIRECTORY_SEPARATOR . $dokuwikiPath;
+			$candidates[] = $baseDirectory . DIRECTORY_SEPARATOR . 'media' . DIRECTORY_SEPARATOR . $dokuwikiPath;
+		}
+
+		// Try to find linked attachment
+		$targetAttachment = null;
+		foreach ($candidates as $candidate) {
+			$realPath = realpath($candidate);
+			if ($realPath && is_file($realPath) && is_readable($realPath)) {
+				$targetAttachment = $realPath;
+				break;
+			}
+		}
+
+
+		if ($targetAttachment === null) {
+			$progressCallback('error', $filePath, "Didn't find source file for attachment reference $url, not updated");
+			return 0;
+		}
+
+		$newUrl = $this->attachmentService->putAttachment(
+			$pageFile,
+			basename($targetAttachment),
+			file_get_contents($targetAttachment) ?: '',
+		);
+
+		// Replace the attachment reference in content
+		$oldLink = '](' . $url . ')';
+		$newLink = '](' . $newUrl . ')';
+		$updatedContent = str_replace($oldLink, $newLink, $updatedContent);
+		return 1;
 	}
 
 	private static function getReadmeName(string $path): ?string {
