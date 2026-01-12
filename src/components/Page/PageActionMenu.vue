@@ -120,9 +120,9 @@
 
 			<!-- Download action: always displayed -->
 			<NcActionLink
-				:href="currentPageDavUrl"
+				:href="pageDavUrl(pageById(pageId))"
 				:class="{ 'action-link--disabled': !networkOnline }"
-				:download="currentPage.fileName"
+				:download="pageById(pageId).fileName"
 				:close-after-click="true">
 				<template #icon>
 					<DownloadIcon :size="20" />
@@ -277,9 +277,10 @@ export default {
 		]),
 
 		...mapState(usePagesStore, [
-			'currentPageDavUrl',
 			'hasOutline',
 			'hasSubpages',
+			'pageById',
+			'pageDavUrl',
 		]),
 
 		displaySidebarAction() {
