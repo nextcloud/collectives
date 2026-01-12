@@ -21,9 +21,9 @@ use OCP\Files\Storage\IStorage;
 use OCP\IUser;
 
 class CollectiveStorage extends Wrapper implements IConstructableStorage {
-	private int $folderId;
-	private ?ICacheEntry $rootEntry;
-	private ?IUser $mountOwner;
+	private readonly int $folderId;
+	private readonly ?ICacheEntry $rootEntry;
+	private readonly ?IUser $mountOwner;
 	/** @var ICache|null */
 	public $cache;
 
