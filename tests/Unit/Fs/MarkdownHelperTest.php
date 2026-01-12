@@ -67,6 +67,29 @@ class MarkdownHelperTest extends TestCase {
 		self::assertEquals($links, MarkdownHelper::getLinksFromContent($content));
 	}
 
+	public function imageContentProvider(): array {
+		return [
+			// Valid image syntax
+			['#Title\n\nImage: ![alt text](https://example.org/image.png)\n\nMore text...', [['alt text', 'https://example.org/image.png', '']]],
+			['![alt text](https://example.org/image.png (title))', [['alt text', 'https://example.org/image.png', 'title']]],
+			['![alt text](https://example.org/image.png "title")', [['alt text', 'https://example.org/image.png', 'title']]],
+			['![](./image.png)', [['', './image.png', '']]],
+			['![](</my image.png>)', [['', '/my%20image.png', '']]],
+		];
+	}
+
+	/**
+	 * @dataProvider imageContentProvider
+	 */
+	public function testGetImagesFromContent(string $content, array $imagesProps): void {
+		$images = [];
+		foreach ($imagesProps as $imageProps) {
+			$images[] = ['alt' => $imageProps[0], 'url' => $imageProps[1], 'title' => $imageProps[2]];
+		}
+		self::assertEquals($images, MarkdownHelper::getImageLinksFromContent($content));
+	}
+
+
 	public function testGetLinkedPageIds(): void {
 		$trustedDomains = ['nextcloud.local'];
 
