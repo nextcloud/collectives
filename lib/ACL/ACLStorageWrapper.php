@@ -19,8 +19,8 @@ use OCP\Files\Storage\IStorage;
 use Traversable;
 
 class ACLStorageWrapper extends Wrapper implements IConstructableStorage {
-	private int $permissions;
-	private bool $inShare;
+	private readonly int $permissions;
+	private readonly bool $inShare;
 
 	public function __construct($arguments) {
 		parent::__construct($arguments);
