@@ -37,7 +37,7 @@ class MarkdownHelper {
 	}
 
 	/**
-	 * Extracts markdown links and returns them with link text, href and title
+	 * Extracts Markdown links and returns them with link text, href and title
 	 *
 	 * @throws CommonMarkException
 	 */
