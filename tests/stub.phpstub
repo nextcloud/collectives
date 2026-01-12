@@ -533,7 +533,11 @@ namespace OC\Files\Storage\Wrapper{
 			throw new \Exception('stub');
 		}
 
-		public function getDirectDownload($path) {
+		public function getDirectDownload(string $path): array|false {
+			throw new \Exception('stub');
+		}
+
+		public function getDirectDownloadById(string $fileId): array|false {
 			throw new \Exception('stub');
 		}
 
