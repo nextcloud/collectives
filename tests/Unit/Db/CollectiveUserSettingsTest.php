@@ -21,7 +21,6 @@ class CollectiveUserSettingsTest extends TestCase {
 	protected static function getPrivateSetSettingMethod(): ReflectionMethod {
 		$class = new ReflectionClass(CollectiveUserSettings::class);
 		$method = $class->getMethod('setSetting');
-		$method->setAccessible(true);
 		return $method;
 	}
 

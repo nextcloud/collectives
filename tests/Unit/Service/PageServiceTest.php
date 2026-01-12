@@ -497,7 +497,6 @@ class PageServiceTest extends TestCase {
 		// Allow testing the private function
 		$reflection = new ReflectionClass($this->service);
 		$method = $reflection->getMethod('isAncestorOf');
-		$method->setAccessible(true);
 
 		$pageId = 1;
 		$targetId = 2;
