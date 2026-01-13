@@ -289,7 +289,7 @@ Cypress.Commands.add('seedPageContent', (pagePath, content) => {
 		? content.substring(0, 200) + '…'
 		: content
 	Cypress.log({ message: `${pagePath}, ${contentForLog}` })
-	cy.uploadContent(`Collectives/${pagePath}`, content)
+	cy.uploadContent(`.Collectives/${pagePath}`, content)
 })
 
 Cypress.Commands.add('uploadFile', (path, mimeType, remotePath = '') => {
