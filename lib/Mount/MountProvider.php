@@ -20,6 +20,7 @@ use OCP\App\IAppManager;
 use OCP\AppFramework\QueryException;
 use OCP\DB\Exception;
 use OCP\Files\Config\IMountProvider;
+use OCP\Files\Folder;
 use OCP\Files\IMimeTypeLoader;
 use OCP\Files\Mount\IMountPoint;
 use OCP\Files\NotFoundException as FilesNotFoundException;
@@ -97,6 +98,20 @@ class MountProvider implements IMountProvider {
 		try {
 			// Get user folder setting to determine user mount point path
 			$userFolderSetting = $this->userFolderHelper->getUserFolderSetting($user->getUID());
+
+			// Delete or rename existing node to avoid conflicts
+			$userRootFolder = $this->userFolderHelper->getUserRootFolder($user->getUID());
+			if ($userRootFolder->nodeExists($userFolderSetting)) {
+				$node = $userRootFolder->get($userFolderSetting);
+				if ($node instanceof Folder && count($node->getDirectoryListing()) === 0) {
+					// Delete empty folder
+					$node->delete();
+				} else {
+					// Rename node
+					$newNodeName = NodeHelper::generateFilename($userRootFolder, $userFolderSetting);
+					$node->move($userRootFolder->getPath() . DIRECTORY_SEPARATOR . $newNodeName);
+				}
+			}
 
 			// Create the collectives root mount point with empty storage
 			// The empty storage ensures only mount points exist here, no actual files
