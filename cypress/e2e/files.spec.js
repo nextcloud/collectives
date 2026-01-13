@@ -13,8 +13,8 @@ describe('Files app', function() {
 		const breadcrumbsSelector = '[data-cy-files-content-breadcrumbs] :is(a, button)'
 		cy.visit('/apps/files')
 
-		cy.openFile('Collectives')
-		cy.get(breadcrumbsSelector).should('contain', 'Collectives')
+		cy.openFile('.Collectives')
+		cy.get(breadcrumbsSelector).should('contain', '.Collectives')
 		cy.openFile('Preexisting Collective')
 		cy.get(breadcrumbsSelector).should('contain', 'Preexisting Collective')
 		cy.fileList().should('contain', 'Readme')

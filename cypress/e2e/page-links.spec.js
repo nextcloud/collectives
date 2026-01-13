@@ -32,7 +32,7 @@ describe('Page link handling', function() {
 			cy.uploadFile('test.png', 'image/png').then((id) => {
 				imageId = id
 			})
-			cy.uploadFile('test.pdf', 'application/pdf', 'Collectives/Link%20Testing/').then((id) => {
+			cy.uploadFile('test.pdf', 'application/pdf', '.Collectives/Link%20Testing/').then((id) => {
 				pdfId = id
 			})
 		}).then(() => {

@@ -35,7 +35,7 @@ class UserFolderHelper {
 			$user = $this->userManager->get($userId);
 			$userLang = $this->l10nFactory->getUserLanguage($user);
 			$l10n = $this->l10nFactory->get('collectives', $userLang);
-			$userCollectivesPath = '/' . $l10n->t('Collectives');
+			$userCollectivesPath = DIRECTORY_SEPARATOR . '.' . $l10n->t('Collectives');
 			$this->config->setUserValue($userId, 'collectives', 'user_folder', $userCollectivesPath);
 		}
 
