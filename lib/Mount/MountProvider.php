@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace OCA\Collectives\Mount;
 
 use OC\Files\Cache\Cache;
+use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Service\CollectiveHelper;
 use OCA\Collectives\Service\MissingDependencyException;
@@ -54,21 +55,11 @@ class MountProvider implements IMountProvider {
 			return $folders;
 		}
 
-		try {
-			$userFolder = $this->userFolderHelper->get($user->getUID());
-		} catch (NotPermittedException $e) {
-			$this->log($e);
-			return $folders;
-		}
-
 		$userFolderSetting = $this->userFolderHelper->getUserFolderSetting($user->getUID());
-		$internalPathPrefix = 'files';
-		$userFolderPath = str_starts_with($userFolder->getInternalPath(), $internalPathPrefix)
-			? substr($userFolder->getInternalPath(), strlen('files')) . '/'
-			: $userFolder->getName() . '/';
-		$mountPointPath = ($userFolderSetting === '/')
+		$mountPointPath = ($userFolderSetting === DIRECTORY_SEPARATOR)
 			? ''
-			: $userFolderPath;
+			: $userFolderSetting . DIRECTORY_SEPARATOR;
+
 		foreach ($collectives as $c) {
 			$mountPointName = $c->getName();
 			try {
@@ -95,8 +86,30 @@ class MountProvider implements IMountProvider {
 		}
 
 		$folders = $this->getFoldersForUser($user);
+
+		// If there are no collectives, don't create any mounts
+		if (empty($folders)) {
+			return [];
+		}
+
+		$mounts = [];
+
 		try {
-			return array_filter(array_map(fn ($folder): ?IMountPoint => $this->collectiveFolderManager->getMount(
+			// Get user folder setting to determine user mount point path
+			$userFolderSetting = $this->userFolderHelper->getUserFolderSetting($user->getUID());
+
+			// Create the collectives root mount point with empty storage
+			// The empty storage ensures only mount points exist here, no actual files
+			$userMountPoint = '/' . $user->getUID() . '/files' . $userFolderSetting;
+
+			$mounts[] = new CollectivesUserMountPoint(
+				$userMountPoint,
+				null,
+				$loader
+			);
+
+			// Create mount points for individual collectives
+			$collectiveMounts = array_filter(array_map(fn ($folder): ?IMountPoint => $this->collectiveFolderManager->getMount(
 				$folder['folder_id'],
 				'/' . $user->getUID() . '/files/' . $folder['mount_point'],
 				$folder['permissions'],
@@ -104,6 +117,10 @@ class MountProvider implements IMountProvider {
 				$loader,
 				$user
 			), $folders));
+
+			$mounts = array_merge($mounts, $collectiveMounts);
+
+			return $mounts;
 		} catch (FilesNotFoundException|\Exception $e) {
 			$this->log($e);
 			return [];

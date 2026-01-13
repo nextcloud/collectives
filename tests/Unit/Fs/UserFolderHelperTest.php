@@ -15,7 +15,7 @@ use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Service\NotPermittedException;
 use OCP\Files\IRootFolder;
-use OCP\Files\NotFoundException;
+use OCP\IAppConfig;
 use OCP\IConfig;
 use OCP\IL10N;
 use OCP\IUser;
@@ -28,6 +28,7 @@ class UserFolderHelperTest extends TestCase {
 	private Folder $collectivesUserFolder;
 	private Folder $userFolder;
 	private IL10N $l10n;
+	private IAppConfig $appConfig;
 	private IConfig $config;
 	private UserFolderHelper $helper;
 
@@ -62,12 +63,15 @@ class UserFolderHelperTest extends TestCase {
 		$user = $this->getMockBuilder(IUser::class)
 			->disableOriginalConstructor()
 			->getMock();
+		$user->method('getQuota')
+			->willReturn('none');
 		$userManager = $this->getMockBuilder(IUserManager::class)
 			->disableOriginalConstructor()
 			->getMock();
 		$userManager->method('get')
 			->willReturn($user);
 
+		$this->appConfig = $this->createMock(IAppConfig::class);
 		$this->config = $this->createMock(IConfig::class);
 
 		$this->l10n = $this->getMockBuilder(IL10N::class)
@@ -79,7 +83,7 @@ class UserFolderHelperTest extends TestCase {
 		$l10nFactory->method('get')
 			->willReturn($this->l10n);
 
-		$this->helper = new UserFolderHelper($rootFolder, $userManager, $this->config, $l10nFactory);
+		$this->helper = new UserFolderHelper($rootFolder, $userManager, $this->appConfig, $this->config, $l10nFactory);
 	}
 
 	public function testGetUserFolderSetting(): void {
@@ -134,19 +138,6 @@ class UserFolderHelperTest extends TestCase {
 
 		$this->userFolder->method('get')
 			->willReturn($file);
-
-		self::assertEquals($this->collectivesUserFolder, $this->helper->get('jane'));
-	}
-
-	public function testGetFolderNotExists(): void {
-		$this->config->method('getAppValue')
-			->with('collectives', 'default_user_folder', '')
-			->willReturn('');
-		$this->config->method('getUserValue')
-			->willReturn('');
-
-		$this->userFolder->method('get')
-			->willThrowException(new NotFoundException);
 
 		self::assertEquals($this->collectivesUserFolder, $this->helper->get('jane'));
 	}
