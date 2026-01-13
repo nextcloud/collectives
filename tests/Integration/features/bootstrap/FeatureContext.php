@@ -1775,6 +1775,32 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @When user :user creates folder :folder
+	 *
+	 * @throws GuzzleException
+	 */
+	public function createsFolder(string $user, string $folderName): void {
+		$this->setCurrentUser($user);
+		$folderPath = '/dav/files/' . $user . '/' . $folderName;
+
+		$this->sendRemoteRequest('MKCOL', $folderPath);
+		$this->assertStatusCode(201);
+	}
+
+	/**
+	 * @When user :user deletes folder :folder
+	 *
+	 * @throws GuzzleException
+	 */
+	public function deletesFolder(string $user, string $folderName): void {
+		$this->setCurrentUser($user);
+		$folderPath = '/dav/files/' . $user . '/' . $folderName;
+
+		$this->sendRemoteRequest('DELETE', $folderPath);
+		$this->assertStatusCode(204);
+	}
+
+	/**
 	 * @When user :user uploads attachment :fileName to :page with file path :filePath in :collective
 	 *
 	 * @throws GuzzleException
