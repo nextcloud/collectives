@@ -9,10 +9,12 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Service;
 
+use OCA\Collectives\Fs\NodeHelper;
 use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\InvalidPathException;
 use OCP\Files\NotFoundException as FilesNotFoundException;
+use OCP\Files\NotPermittedException as FilesNotPermittedException;
 use OCP\IPreview;
 
 class AttachmentService {
@@ -24,7 +26,7 @@ class AttachmentService {
 	/**
 	 * @throws NotFoundException
 	 */
-	private function fileToInfo(File $file, folder $folder): array {
+	private function fileToInfo(File $file, folder $folder, string $type = 'text'): array {
 		try {
 			return [
 				'id' => $file->getId(),
@@ -35,6 +37,7 @@ class AttachmentService {
 				'path' => $folder->getRelativePath($file->getPath()),
 				'internalPath' => $file->getInternalPath(),
 				'hasPreview' => $this->preview->isAvailable($file),
+				'type' => $type,
 			];
 		} catch (FilesNotFoundException|InvalidPathException $e) {
 			throw new NotFoundException($e->getMessage());
@@ -60,6 +63,28 @@ class AttachmentService {
 		throw new NotFoundException('Failed to get attachment directory for page ' . $pageFile->getId() . '.');
 	}
 
+	private function getTextAttachments(File $pageFile, Folder $folder): array {
+		try {
+			$attachmentDir = $this->getAttachmentDirectory($pageFile);
+		} catch (NotFoundException) {
+			// No attachment folder -> empty list
+			// return [];
+		}
+
+		// Only return files, ignore folders
+		return array_map(fn ($file) => $this->fileToInfo($file, $folder, 'text'), array_filter($attachmentDir->getDirectoryListing(), static fn ($node) => $node instanceof File));
+	}
+
+	private function getFolderAttachments(File $pageFile, Folder $folder): array {
+		if (!NodeHelper::isIndexPage($pageFile)) {
+			return [];
+		}
+
+		$attachmentDir = $pageFile->getParent();
+		// Only return files that are not pages
+		return array_map(fn ($file) => $this->fileToInfo($file, $folder, 'folder'), array_filter($attachmentDir->getDirectoryListing(), static fn ($node) => $node instanceof File && !NodeHelper::isPage($node)));
+	}
+
 	/**
 	 * @param File $pageFile file of the page with the attachments.
 	 * @param Folder $folder user or share folder for relative paths.
@@ -69,14 +94,29 @@ class AttachmentService {
 	 * @throws NotPermittedException
 	 */
 	public function getAttachments(File $pageFile, Folder $folder): array {
-		try {
-			$attachmentDir = $this->getAttachmentDirectory($pageFile);
-		} catch (NotFoundException) {
-			// No attachment folder -> empty list
-			return [];
-		}
+		return array_merge($this->getTextAttachments($pageFile, $folder), $this->getFolderAttachments($pageFile, $folder));
+	}
 
-		// Only return files, ignore folders
-		return array_map(fn ($file) => $this->fileToInfo($file, $folder), array_filter($attachmentDir->getDirectoryListing(), static fn ($node) => $node instanceof File));
+	/**
+	 * @param File $pageFile file of the page with the attachment.
+	 * @param int $attachmentId
+	 *
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function deleteAttachment(File $pageFile, int $attachmentId): void {
+		$pageFolder = $pageFile->getParent();
+		$node = $pageFolder->getById($attachmentId);
+		if (count($node) === 0) {
+			throw new NotFoundException('Failed to delete attachment ' . $attachmentId . '.');
+		}
+		try {
+			$node[0]->delete();
+		} catch (FilesNotFoundException|InvalidPathException $e) {
+			throw new NotFoundException($e->getMessage());
+		} catch (FilesNotPermittedException $e) {
+			throw new NotPermittedException($e->getMessage());
+		}
 	}
 }

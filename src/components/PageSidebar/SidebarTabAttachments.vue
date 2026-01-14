@@ -23,126 +23,201 @@
 		</NcEmptyContent>
 
 		<div v-else-if="!loading('attachments') && (attachments.length || deletedAttachments.length)">
-			<!-- attachments list -->
-			<ul v-show="sortedAttachments.length" class="attachment-list">
-				<NcListItem
-					v-for="attachment in sortedAttachments"
-					:key="attachment.id"
-					:name="attachment.name"
-					:href="davUrl(attachment)"
-					:force-display-actions="true"
-					class="attachment"
-					@click="clickAttachment(attachment, $event)">
-					<template #icon>
-						<img
-							lazy="true"
-							:src="previewUrl(attachment)"
-							alt=""
-							height="256"
-							width="256"
-							class="attachment__image">
-					</template>
-					<template #subname>
-						<div class="attachment__info">
-							<span class="attachment__info_size">{{ formattedFileSize(attachment.filesize) }}</span>
-							<span class="attachment__info_size">·</span>
-							<span :title="formattedDate(attachment.timestamp)">{{ relativeDate(attachment.timestamp) }}</span>
-						</div>
-					</template>
-					<template #actions>
-						<NcActionButton
-							:close-after-click="true"
-							@click="scrollTo(attachment)">
-							<template #icon>
-								<EyeIcon />
-							</template>
-							{{ t('collectives', 'View in document') }}
-						</NcActionButton>
-						<NcActionLink
-							:href="davUrl(attachment)"
-							:download="attachment.name"
-							:class="{ 'action-link--disabled': !networkOnline }"
-							:title="offlineTitle"
-							:close-after-click="true">
-							<template #icon>
-								<DownloadIcon />
-							</template>
-							{{ t('collectives', 'Download') }}
-						</NcActionLink>
-						<NcActionLink
-							v-if="!isPublic"
-							:href="filesUrl(attachment.id)"
-							:class="{ 'action-link--disabled': !networkOnline }"
-							:title="offlineTitle"
-							:close-after-click="true">
-							<template #icon>
-								<FolderIcon />
-							</template>
-							{{ t('collectives', 'Show in Files') }}
-						</NcActionLink>
-					</template>
-				</NcListItem>
-			</ul>
+			<!-- text attachments list -->
+			<div v-show="textAttachments.length">
+				<div class="attachment-list-subheading">
+					{{ t('collectives', 'Embedded in page') }}
+				</div>
+
+				<ul class="attachment-list">
+					<NcListItem
+						v-for="attachment in textAttachments"
+						:key="attachment.id"
+						:name="attachment.name"
+						:href="davUrl(attachment)"
+						:force-display-actions="true"
+						class="attachment"
+						@click="clickAttachment(attachment, $event)">
+						<template #icon>
+							<img
+								lazy="true"
+								:src="previewUrl(attachment)"
+								alt=""
+								height="256"
+								width="256"
+								class="attachment__image">
+						</template>
+						<template #subname>
+							<div class="attachment__info">
+								<span class="attachment__info_size">{{ formattedFileSize(attachment.filesize) }}</span>
+								<span class="attachment__info_size">·</span>
+								<span :title="formattedDate(attachment.timestamp)">{{ relativeDate(attachment.timestamp) }}</span>
+							</div>
+						</template>
+						<template #actions>
+							<NcActionButton
+								:close-after-click="true"
+								@click="scrollTo(attachment)">
+								<template #icon>
+									<EyeIcon />
+								</template>
+								{{ t('collectives', 'View in document') }}
+							</NcActionButton>
+							<NcActionLink
+								:href="davUrl(attachment)"
+								:download="attachment.name"
+								:class="{ 'action-link--disabled': !networkOnline }"
+								:title="offlineTitle"
+								:close-after-click="true">
+								<template #icon>
+									<DownloadIcon />
+								</template>
+								{{ t('collectives', 'Download') }}
+							</NcActionLink>
+							<NcActionLink
+								v-if="!isPublic"
+								:href="filesUrl(attachment.id)"
+								:class="{ 'action-link--disabled': !networkOnline }"
+								:title="offlineTitle"
+								:close-after-click="true">
+								<template #icon>
+									<FolderIcon />
+								</template>
+								{{ t('collectives', 'Show in Files') }}
+							</NcActionLink>
+						</template>
+					</NcListItem>
+				</ul>
+			</div>
+
+			<!-- folder attachments list -->
+			<div v-show="folderAttachments.length">
+				<div class="attachment-list-subheading">
+					{{ t('collectives', 'In folder') }}
+				</div>
+
+				<ul class="attachments-list">
+					<NcListItem
+						v-for="attachment in folderAttachments"
+						:key="attachment.id"
+						:name="attachment.name"
+						:href="davUrl(attachment)"
+						:force-display-actions="true"
+						class="attachment"
+						@click="clickAttachment(attachment, $event)">
+						<template #icon>
+							<img
+								lazy="true"
+								:src="previewUrl(attachment)"
+								alt=""
+								height="256"
+								width="256"
+								class="attachment__image">
+						</template>
+						<template #subname>
+							<div class="attachment__info">
+								<span class="attachment__info_size">{{ formattedFileSize(attachment.filesize) }}</span>
+								<span class="attachment__info_size">·</span>
+								<span :title="formattedDate(attachment.timestamp)">{{ relativeDate(attachment.timestamp) }}</span>
+							</div>
+						</template>
+						<template #actions>
+							<NcActionLink
+								:href="davUrl(attachment)"
+								:download="attachment.name"
+								:class="{ 'action-link--disabled': !networkOnline }"
+								:title="offlineTitle"
+								:close-after-click="true">
+								<template #icon>
+									<DownloadIcon />
+								</template>
+								{{ t('collectives', 'Download') }}
+							</NcActionLink>
+							<NcActionLink
+								v-if="!isPublic"
+								:href="filesUrl(attachment.id)"
+								:class="{ 'action-link--disabled': !networkOnline }"
+								:title="offlineTitle"
+								:close-after-click="true">
+								<template #icon>
+									<FolderIcon />
+								</template>
+								{{ t('collectives', 'Show in Files') }}
+							</NcActionLink>
+							<NcActionButton
+								:close-after-click="true"
+								@click="onDelete(attachment)">
+								<template #icon>
+									<DeleteIcon />
+								</template>
+								{{ t('collectives', 'Delete') }}
+							</NcActionButton>
+						</template>
+					</NcListItem>
+				</ul>
+			</div>
 
 			<!-- deleted attachments list -->
-			<ul v-show="isTextEdit && deletedAttachments.length" class="attachment-list-deleted">
+			<div v-show="isTextEdit && deletedAttachments.length">
 				<div class="attachment-list-subheading">
 					{{ t('collectives', 'Recently deleted') }}
 				</div>
 
-				<NcListItem
-					v-for="attachment in deletedAttachments"
-					:key="attachment.id"
-					:name="attachment.name"
-					:href="davUrl(attachment)"
-					:force-display-actions="true"
-					class="attachment"
-					@click="clickAttachment(attachment, $event)">
-					<template #icon>
-						<img
-							lazy="true"
-							:src="previewUrl(attachment)"
-							alt=""
-							height="256"
-							width="256"
-							class="attachment__image">
-					</template>
-					<template #subname>
-						<div class="attachment__info">
-							<span class="attachment__info_size">{{ formattedFileSize(attachment.filesize) }}</span>
-							<span class="attachment__info_size">·</span>
-							<span :title="formattedDate(attachment.timestamp)">{{ relativeDate(attachment.timestamp) }}</span>
-						</div>
-					</template>
-					<template #actions>
-						<NcActionButton
-							:close-after-click="true"
-							@click="restore(attachment)">
-							<template #icon>
-								<RestoreIcon />
-							</template>
-							{{ t('collectives', 'Restore') }}
-						</NcActionButton>
-						<NcActionLink
-							:href="davUrl(attachment)"
-							:download="attachment.name"
-							:close-after-click="true">
-							<template #icon>
-								<DownloadIcon />
-							</template>
-							{{ t('collectives', 'Download') }}
-						</NcActionLink>
-						<NcActionLink
-							:href="filesUrl(attachment.id)"
-							:close-after-click="true">
-							<template #icon>
-								<FolderIcon />
-							</template>
-							{{ t('collectives', 'Show in Files') }}
-						</NcActionLink>
-					</template>
-				</NcListItem>
-			</ul>
+				<ul class="attachment-list-deleted">
+					<NcListItem
+						v-for="attachment in deletedAttachments"
+						:key="attachment.id"
+						:name="attachment.name"
+						:href="davUrl(attachment)"
+						:force-display-actions="true"
+						class="attachment"
+						@click="clickAttachment(attachment, $event)">
+						<template #icon>
+							<img
+								lazy="true"
+								:src="previewUrl(attachment)"
+								alt=""
+								height="256"
+								width="256"
+								class="attachment__image">
+						</template>
+						<template #subname>
+							<div class="attachment__info">
+								<span class="attachment__info_size">{{ formattedFileSize(attachment.filesize) }}</span>
+								<span class="attachment__info_size">·</span>
+								<span :title="formattedDate(attachment.timestamp)">{{ relativeDate(attachment.timestamp) }}</span>
+							</div>
+						</template>
+						<template #actions>
+							<NcActionButton
+								:close-after-click="true"
+								@click="restore(attachment)">
+								<template #icon>
+									<RestoreIcon />
+								</template>
+								{{ t('collectives', 'Restore') }}
+							</NcActionButton>
+							<NcActionLink
+								:href="davUrl(attachment)"
+								:download="attachment.name"
+								:close-after-click="true">
+								<template #icon>
+									<DownloadIcon />
+								</template>
+								{{ t('collectives', 'Download') }}
+							</NcActionLink>
+							<NcActionLink
+								:href="filesUrl(attachment.id)"
+								:close-after-click="true">
+								<template #icon>
+									<FolderIcon />
+								</template>
+								{{ t('collectives', 'Show in Files') }}
+							</NcActionLink>
+						</template>
+					</NcListItem>
+				</ul>
+			</div>
 		</div>
 
 		<!-- no attachments found -->
@@ -159,6 +234,7 @@
 
 <script>
 import { getCurrentUser } from '@nextcloud/auth'
+import { showError, showSuccess } from '@nextcloud/dialogs'
 import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { formatFileSize } from '@nextcloud/files'
 import { t } from '@nextcloud/l10n'
@@ -171,6 +247,7 @@ import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcListItem from '@nextcloud/vue/components/NcListItem'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagonOutline.vue'
+import DeleteIcon from 'vue-material-design-icons/DeleteOutline.vue'
 import EyeIcon from 'vue-material-design-icons/EyeOutline.vue'
 import FolderIcon from 'vue-material-design-icons/FolderOutline.vue'
 import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue'
@@ -186,6 +263,7 @@ export default {
 
 	components: {
 		AlertOctagonIcon,
+		DeleteIcon,
 		DownloadIcon,
 		EyeIcon,
 		FolderIcon,
@@ -224,9 +302,18 @@ export default {
 			return t('collectives', 'Add attachments using drag and drop or via "Insert attachment" in the formatting menu.')
 		},
 
-		// Sort attachments chronologically, most recent first
-		sortedAttachments() {
-			return [...this.attachments].sort((a, b) => a.timestamp < b.timestamp)
+		textAttachments() {
+			return [...this.attachments]
+				.filter((a) => a.type === 'text')
+				// Sort attachments chronologically, most recent first
+				.sort((a, b) => a.timestamp < b.timestamp)
+		},
+
+		folderAttachments() {
+			return [...this.attachments]
+				.filter((a) => a.type === 'folder')
+				// Sort attachments chronologically, most recent first
+				.sort((a, b) => a.timestamp < b.timestamp)
 		},
 
 		offlineTitle() {
@@ -309,6 +396,7 @@ export default {
 		t,
 
 		...mapActions(usePagesStore, [
+			'deleteFolderAttachment',
 			'setAttachmentDeleted',
 			'setAttachmentUndeleted',
 		]),
@@ -345,6 +433,16 @@ export default {
 			emit('collectives:attachment:restore', this.fileNameUriComponent(attachment.name))
 			this.scrollTo(attachment)
 			this.setAttachmentUndeleted(attachment.name)
+		},
+
+		async onDelete(attachment) {
+			try {
+				await this.deleteFolderAttachment(attachment.id)
+				showSuccess(t('collectives', 'Deleted folder attachment {name}', { name: attachment.name }))
+			} catch (e) {
+				showError(t('collectives', 'Failed to delete folder attachment'))
+				console.error('Failed to delete folder attachment', e)
+			}
 		},
 
 		onDeleteImageNode(imageUrl) {

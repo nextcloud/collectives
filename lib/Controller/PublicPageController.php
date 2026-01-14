@@ -507,6 +507,34 @@ class PublicPageController extends CollectivesPublicOCSController {
 	}
 
 	/**
+	 * Delete a folder attachment
+	 *
+	 * @param int $id ID of the page
+	 * @param int $attachmentId ID of the attachment
+	 *
+	 * @return DataResponse<Http::STATUS_OK, list<empty>, array{}>
+	 * @throws OCSForbiddenException Not Permitted
+	 * @throws OCSNotFoundException Collective or attachment not found
+	 *
+	 * 200: Attachment deleted
+	 */
+	#[PublicPage]
+	#[AnonRateLimit(limit: 10, period: 10)]
+	public function deleteAttachment(int $id, int $attachmentId): DataResponse {
+		$this->handleErrorResponse(function () use ($id, $attachmentId): void {
+			$this->checkEditPermissions();
+			$owner = $this->getCollectiveShare()->getOwner();
+			$collectiveId = $this->getCollectiveShare()->getCollectiveId();
+			if (0 !== $sharePageId = $this->getCollectiveShare()->getPageId()) {
+				$this->checkPageShareAccess($collectiveId, $sharePageId, $id, $owner);
+			}
+			$pageFile = $this->service->getPageFile($collectiveId, $id, $owner);
+			$this->attachmentService->deleteAttachment($pageFile, $attachmentId);
+		}, $this->logger);
+		return new DataResponse([]);
+	}
+
+	/**
 	 * Search the content of pages
 	 *
 	 * @param string $searchString String to search for

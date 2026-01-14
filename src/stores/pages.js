@@ -980,6 +980,17 @@ export const usePagesStore = defineStore('pages', {
 				.filter((a) => this.attachments.map((a) => a.name).includes(a.name))
 		},
 
+		/**
+		 * Delete a folder attachment of a page
+		 *
+		 * @param {number} attachmentId ID of the attachment to delete
+		 */
+		async deleteFolderAttachment(attachmentId) {
+			await api.deletePageFolderAttachment(this.context, this.currentPageId, attachmentId)
+			const index = this.attachments.findIndex((a) => a.id === attachmentId)
+			this.allAttachments[this.collectiveIndex][this.currentPageId].splice(index, 1)
+		},
+
 		setAttachmentDeleted(name) {
 			const index = this.attachments.findIndex((a) => a.name === name)
 			if (index !== -1) {
