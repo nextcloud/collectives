@@ -2409,16 +2409,18 @@ class FeatureContext implements Context {
 		Assert::assertContains($title, $pageTitles);
 	}
 
-	private function assertAttachment(string $name, string $mimetype): void {
+	private function assertAttachment(string $name, string $mimetype, string $type = 'text'): void {
 		$jsonBody = $this->getJson();
 		$attachment = [
 			'name' => $name,
 			'mimetype' => $mimetype,
+			'type' => $type,
 		];
 
 		$pageAttachments = array_map(static fn ($attachment) => [
 			'name' => $attachment['name'],
 			'mimetype' => $attachment['mimetype'],
+			'type' => $attachment['type'],
 		], $jsonBody['ocs']['data']['attachments']);
 
 		Assert::assertContains($attachment, $pageAttachments);
