@@ -25,7 +25,7 @@ export function useNetworkState() {
 		}
 	})
 	subscribe('networkOffline', () => {
-		offlineSince.value = Date.now()
+		// offlineSince.value = Date.now()
 	})
 
 	return { networkOnline, offlineSince }

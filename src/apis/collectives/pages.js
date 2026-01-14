@@ -272,6 +272,17 @@ export function getPageAttachments(context, pageId) {
 }
 
 /**
+ * Delete folder attachment of a page
+ *
+ * @param {object} context - either the current collective or a share context
+ * @param {number} pageId - ID of the page to delete the folder attachment from
+ * @param {number} attachmentId - ID of the attachment to delete
+ */
+export function deletePageFolderAttachment(context, pageId, attachmentId) {
+	return axios.delete(pagesApiUrl(context, pageId, 'attachments', attachmentId))
+}
+
+/**
  * Perform index search on pages in given collective
  *
  * @param {object} context - either the current collective or a share context
