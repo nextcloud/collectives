@@ -326,6 +326,29 @@ class PageController extends OCSController {
 	}
 
 	/**
+	 * Delete a folder attachment
+	 *
+	 * @param int $collectiveId ID of the collective
+	 * @param int $id ID of the page
+	 * @param int $attachmentId ID of the attachment
+	 *
+	 * @return DataResponse<Http::STATUS_OK, list<empty>, array{}>
+	 * @throws OCSForbiddenException Not Permitted
+	 * @throws OCSNotFoundException Collective or attachment not found
+	 *
+	 * 200: Attachment deleted
+	 */
+	#[NoAdminRequired]
+	public function deleteAttachment(int $collectiveId, int $id, int $attachmentId): DataResponse {
+		$this->handleErrorResponse(function () use ($collectiveId, $id, $attachmentId): void {
+			$this->service->verifyEditPermissions($collectiveId, $this->userId);
+			$pageFile = $this->service->getPageFile($collectiveId, $id, $this->userId);
+			$this->attachmentService->deleteAttachment($pageFile, $attachmentId);
+		}, $this->logger);
+		return new DataResponse([]);
+	}
+
+	/**
 	 * Search the content of pages
 	 *
 	 * @param int $collectiveId ID of the collective

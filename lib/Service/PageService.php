@@ -83,7 +83,7 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	private function verifyEditPermissions(int $collectiveId, string $userId): void {
+	public function verifyEditPermissions(int $collectiveId, string $userId): void {
 		if (!$this->getCollective($collectiveId, $userId)->canEdit()) {
 			throw new NotPermittedException('Not allowed to edit collective');
 		}
