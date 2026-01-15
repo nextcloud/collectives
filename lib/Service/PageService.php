@@ -29,7 +29,6 @@ use OCP\Files\InvalidPathException;
 use OCP\Files\Node;
 use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\Files\NotPermittedException as FilesNotPermittedException;
-use OCP\IConfig;
 use OCP\IUserManager;
 use OCP\Lock\LockedException;
 use Psr\Container\ContainerInterface;
@@ -49,7 +48,6 @@ class PageService {
 		private readonly CollectiveServiceBase $collectiveService,
 		private readonly UserFolderHelper $userFolderHelper,
 		private readonly IUserManager $userManager,
-		private readonly IConfig $config,
 		ContainerInterface $container,
 		private readonly SessionService $sessionService,
 		private readonly SluggerInterface $slugger,
