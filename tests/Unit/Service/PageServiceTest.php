@@ -113,7 +113,6 @@ class PageServiceTest extends TestCase {
 			$this->collectiveService,
 			$userFolderHelper,
 			$userManager,
-			$this->config,
 			$container,
 			$sessionService,
 			$slugger,
