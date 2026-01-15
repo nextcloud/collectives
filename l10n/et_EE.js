@@ -6,6 +6,7 @@ OC.L10N.register(
     "Collectives" : "Vabaühendused",
     "{user} has mentioned you in {collective} - {page}" : "{user} on sind maininud „{collective}“ vabaühenduses - {page}",
     "Landing page" : "Maandumisleht",
+    "Welcome %s" : "Tere tulemast, %s",
     "Collective pages" : "Vabaühenduse lehed",
     "In collective %1$s" : "Vabaühenduses %1$s",
     "Last edition %1$s" : "Viimane muutmine: %1$s",
