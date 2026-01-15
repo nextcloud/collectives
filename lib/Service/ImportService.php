@@ -151,16 +151,14 @@ class ImportService {
 				$title,
 				null,
 				$user->getUID(),
+				null,
+				$content,
 			);
-
-			$pageFile = $this->pageService->getPageFile($collective->getId(), $pageInfo->getId(), $user->getUID());
-			NodeHelper::putContent($pageFile, $content);
 		} catch (NotFoundException|NotPermittedException $e) {
 			throw new NotFoundException('Failed to create page: ' . $e->getMessage());
 		}
 
 		return $pageInfo;
-
 	}
 
 	/**

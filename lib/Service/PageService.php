@@ -345,9 +345,12 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	private function newPage(int $collectiveId, Folder $folder, string $filename, string $userId, ?string $title): PageInfo {
+	private function newPage(int $collectiveId, Folder $folder, string $filename, string $userId, ?string $title, ?string $content = null): PageInfo {
 		try {
 			$newFile = $folder->newFile($filename . PageInfo::SUFFIX);
+			if ($content) {
+				NodeHelper::putContent($newFile, $content);
+			}
 		} catch (FilesNotPermittedException $e) {
 			throw new NotPermittedException($e->getMessage(), 0, $e);
 		}
@@ -669,7 +672,7 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function createBase(int $collectiveId, int $parentId, string $title, ?int $templateId, string $userId, ?string $defaultTitle = null): PageInfo {
+	public function createBase(int $collectiveId, int $parentId, string $title, ?int $templateId, string $userId, ?string $defaultTitle = null, ?string $content = null): PageInfo {
 		$this->verifyEditPermissions($collectiveId, $userId);
 		if ($parentId === 0) {
 			$collectiveFolder = $this->getCollectiveFolder($collectiveId, $userId);
@@ -683,7 +686,7 @@ class PageService {
 
 		return $templateId
 			? $this->copy($collectiveId, $templateId, $parentId, $safeTitle, 0, $userId)
-			: $this->newPage($collectiveId, $folder, $filename, $userId, $title);
+			: $this->newPage($collectiveId, $folder, $filename, $userId, $title, $content);
 	}
 
 	/**
