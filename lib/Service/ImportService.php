@@ -88,10 +88,10 @@ class ImportService {
 
 			if (is_file($path) && strtolower(pathinfo($path, PATHINFO_EXTENSION)) === 'md') {
 				try {
-					$pageInfo = $this->processFile($directory, $item, $collective, $user, $parentPage);
-					$fileMap[$path] = $pageInfo->getId();
+					[$id, $title] = $this->processFile($directory, $item, $collective, $user, $parentPage);
+					$fileMap[$path] = $id;
 					$count++;
-					$message = $pageInfo->getTitle() . ' (pageId: ' . $pageInfo->getId() . ')';
+					$message = $title . ' (pageId: ' . $id . ')';
 					$progressCallback('success', $path, $message);
 				} catch (NotFoundException $e) {
 					$progressCallback('error', $path, $e->getMessage());
@@ -121,7 +121,7 @@ class ImportService {
 		return $count;
 	}
 
-	private function processFile(string $directory, string $item, Collective $collective, IUser $user, ?PageInfo $parentPage, ?string $title = null): PageInfo {
+	private function processFile(string $directory, string $item, Collective $collective, IUser $user, ?PageInfo $parentPage, ?string $title = null): array {
 		$path = $directory . DIRECTORY_SEPARATOR . $item;
 		$parentId = $parentPage !== null ? $parentPage->getId() : 0;
 		$title = $title ?? basename($path, '.md');
@@ -158,7 +158,14 @@ class ImportService {
 			throw new NotFoundException('Failed to create page: ' . $e->getMessage());
 		}
 
-		return $pageInfo;
+		$id = $pageInfo->getId();
+		$title = $pageInfo->getTitle();
+
+		// Free some memory
+		unset($content, $pageInfo);
+		gc_collect_cycles();
+
+		return [$id, $title];
 	}
 
 	/**
