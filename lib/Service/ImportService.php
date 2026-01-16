@@ -114,16 +114,17 @@ class ImportService {
 				$readmeName = self::getReadmeName($path);
 				if ($readmeName !== null) {
 					try {
-						$indexPageInfo = $this->processFile($path, $readmeName, $collective, $user, $parentPage, $title);
-						$fileMap[$path . DIRECTORY_SEPARATOR . $readmeName] = $indexPageInfo->getId();
+						[$id, $title] = $this->processFile($path, $readmeName, $collective, $user, $parentPage, $title);
+						$fileMap[$path . DIRECTORY_SEPARATOR . $readmeName] = $id;
 						$count++;
-						$message = sprintf('✓ Imported #%d: %s - %s (pageId: %d)', $count, $path . DIRECTORY_SEPARATOR . $readmeName, $indexPageInfo->getTitle(), $indexPageInfo->getId());
+						$message = sprintf('✓ Imported #%d: %s - %s (pageId: %d)', $count, $path . DIRECTORY_SEPARATOR . $readmeName, $title, $id);
 						$progressCallback('success', $message);
 					} catch (NotFoundException $e) {
 						$message = sprintf('✗ Failed: %s - %s', $path, $e->getMessage());
 						$progressCallback('error', $message);
 						continue;
 					}
+					$indexPageInfo = $this->pageService->findByFileId($collective->getId(), $id, $user->getUID());
 					$this->processDirectory($path, $collective, $indexPageInfo, $user, true, $fileMap, $count, $progressCallback);
 				} else {
 					$indexPageInfo = $this->pageService->getOrCreate($collective->getId(), $parentId, $item, $user->getUID());
