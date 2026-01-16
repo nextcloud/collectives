@@ -348,10 +348,7 @@ class PageService {
 	 */
 	private function newPage(int $collectiveId, Folder $folder, string $filename, string $userId, ?string $title, ?string $content = null): PageInfo {
 		try {
-			$newFile = $folder->newFile($filename . PageInfo::SUFFIX);
-			if ($content) {
-				NodeHelper::putContent($newFile, $content);
-			}
+			$newFile = $folder->newFile($filename . PageInfo::SUFFIX, $content);
 		} catch (FilesNotPermittedException $e) {
 			throw new NotPermittedException($e->getMessage(), 0, $e);
 		}
