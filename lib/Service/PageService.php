@@ -39,6 +39,7 @@ class PageService {
 	private ?IQueue $pushQueue = null;
 	private ?Collective $collective = null;
 	private ?PageTrashBackend $trashBackend = null;
+	private ?array $allPageInfos = null;
 
 	public function __construct(
 		private readonly IAppManager $appManager,
@@ -526,12 +527,16 @@ class PageService {
 	 * @throws NotPermittedException
 	 */
 	public function findAll(int $collectiveId, string $userId): array {
-		$folder = $this->getCollectiveFolder($collectiveId, $userId);
-		try {
-			return $this->getPagesFromFolder($collectiveId, $folder, $userId, true, true);
-		} catch (FilesNotFoundException $e) {
-			throw new NotFoundException($e->getMessage(), 0, $e);
+		if ($this->allPageInfos === null || $this->collective->getId() !== $collectiveId) {
+			$folder = $this->getCollectiveFolder($collectiveId, $userId);
+			try {
+				$this->allPageInfos = $this->getPagesFromFolder($collectiveId, $folder, $userId, true, true);
+			} catch (FilesNotFoundException $e) {
+				throw new NotFoundException($e->getMessage(), 0, $e);
+			}
 		}
+
+		return $this->allPageInfos;
 	}
 
 	/**
@@ -609,10 +614,11 @@ class PageService {
 		}
 
 		$parentPageId = $landingPageId;
-		$allPages = $this->findAll($collectiveId, $userId);
+		$allPageInfos = $this->findAll($collectiveId, $userId);
+		$matchingPage = null;
 		foreach (explode('/', $path) as $title) {
 			$matchingPage = null;
-			foreach ($allPages as $pageInfo) {
+			foreach ($allPageInfos as $pageInfo) {
 				if ($pageInfo->getTitle() === $title && $pageInfo->getParentId() === $parentPageId) {
 					$matchingPage = $pageInfo;
 					break;
