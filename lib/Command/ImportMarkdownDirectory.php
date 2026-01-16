@@ -32,6 +32,7 @@ class ImportMarkdownDirectory extends Command {
 		$this
 			->setName('collectives:import:markdown')
 			->setDescription('Import markdown files from a directory to a collective')
+			->setHelp('<info>Memory-intensive operation if importing many files. Consider to raise memory limit with `php -d memory_limit=<X>G occ ...`</info>')
 			->addArgument('directory', InputArgument::REQUIRED, 'Directory containing markdown files to import')
 			->addOption('collective-id', 'c', InputOption::VALUE_REQUIRED, 'Collective ID to import into')
 			->addOption('user-id', 'u', InputOption::VALUE_REQUIRED, 'UserId of collective member performing the import')
@@ -44,6 +45,7 @@ class ImportMarkdownDirectory extends Command {
 		$directory = $input->getArgument('directory');
 		$userId = $input->getOption('user-id');
 		$parentId = (int)$input->getOption('parent-id');
+		$verbose = (bool)$input->getOption('verbose');
 
 		if ($collectiveId === 0) {
 			$output->writeln('<error>Required option missing: --collective-id=COLLECTIVE_ID</error>');
@@ -74,13 +76,15 @@ class ImportMarkdownDirectory extends Command {
 			return 1;
 		}
 
-		$progressCallback = function (string $status, string $path, ?string $message = null) use ($output) {
+		$progressCallback = function (string $status, string $message) use ($output, $verbose) {
 			if ($status === 'success') {
-				$output->writeln('<info>✓ Imported: ' . $path . ' - ' . $message . '</info>');
-			} elseif ($status === 'link_update') {
-				$output->writeln('<info>🔗 Links and attachments updated: ' . $path . ' - ' . $message . '</info>');
+				$output->writeln('<info>' . $message . '</info>');
+			} elseif ($verbose === true && $status === 'success_verbose') {
+				$output->writeln('<info>' . $message . '</info>');
 			} elseif ($status === 'error') {
-				$output->writeln('<error>✗ Failed: ' . $path . ' - ' . $message . '</error>');
+				$output->writeln('<error>' . $message . '</error>');
+			} elseif ($verbose === true && $status === 'error_verbose') {
+				$output->writeln('<error>' . $message . '</error>');
 			}
 		};
 
