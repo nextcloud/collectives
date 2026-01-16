@@ -17,6 +17,8 @@ use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\IPreview;
 
 class AttachmentService {
+	private array $attachmentDirectory = [];
+
 	public function __construct(
 		private IPreview $preview,
 	) {
@@ -46,21 +48,29 @@ class AttachmentService {
 	 * @throws NotFoundException
 	 */
 	private function getAttachmentDirectory(File $pageFile, bool $createIfNotExists = false): Folder {
-		try {
-			$parentFolder = $pageFile->getParent();
-			$attachmentFolderName = '.attachments.' . $pageFile->getId();
-			if ($parentFolder->nodeExists($attachmentFolderName)) {
-				$attachmentFolder = $parentFolder->get($attachmentFolderName);
-				if ($attachmentFolder instanceof Folder) {
-					return $attachmentFolder;
+		$id = $pageFile->getId();
+		if (!isset($this->attachmentDirectory[$id])) {
+			try {
+				$parentFolder = $pageFile->getParent();
+				$attachmentFolderName = '.attachments.' . $id;
+				if ($parentFolder->nodeExists($attachmentFolderName)) {
+					$attachmentFolder = $parentFolder->get($attachmentFolderName);
+					if ($attachmentFolder instanceof Folder) {
+						$this->attachmentDirectory[$id] = $attachmentFolder;
+					}
+				} elseif ($createIfNotExists) {
+					$this->attachmentDirectory[$id] = $parentFolder->newFolder($attachmentFolderName);
 				}
-			} elseif ($createIfNotExists) {
-				return $parentFolder->newFolder($attachmentFolderName);
+			} catch (FilesNotFoundException|InvalidPathException) {
+				throw new NotFoundException('Failed to get attachment directory for page ' . $id . '.');
 			}
-		} catch (FilesNotFoundException|InvalidPathException) {
-			throw new NotFoundException('Failed to get attachment directory for page ' . $pageFile->getId() . '.');
+
+			if (!isset($this->attachmentDirectory[$id])) {
+				throw new NotFoundException('Attachment directory for page ' . $id . ' does not exist.');
+			}
 		}
-		throw new NotFoundException('Failed to get attachment directory for page ' . $pageFile->getId() . '.');
+
+		return $this->attachmentDirectory[$id];
 	}
 
 	/**
@@ -91,8 +101,7 @@ class AttachmentService {
 		$attachmentDir = $this->getAttachmentDirectory($pageFile, true);
 
 		$filename = NodeHelper::generateFilename($attachmentDir, $attachmentName);
-		$attachmentFile = $attachmentDir->newFile($filename);
-		$attachmentFile->putContent($content);
+		$attachmentDir->newFile($filename, $content);
 		return '.attachments.' . $pageFile->getId() . DIRECTORY_SEPARATOR . $filename;
 	}
 }
