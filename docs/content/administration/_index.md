@@ -86,3 +86,37 @@ this also allows adding entire groups to collectives.
 
 Keep in mind thought that in contrast to teams, groups can only be
 managed by server admins.
+
+## Importing existing data
+
+It's possible to import existing Markdown files with `occ collectives:import:markdown`.
+
+The command imports Markdown files from a directory as new pages into a collective. After
+importing all files, it processes relative links and referenced local attachments in the
+Markdown files. It tries to fix links to other pages and uploads referenced attachments when
+the source file is found in the import directory.
+
+Please beware that the command is memory intensive. When importing a directory with many
+Markdown files, make sure to increase the PHP memory limit accordingly:
+
+```shell
+php -d memory_limit=<X>G ./occ collectives:import:markdown -c <collectiveId> -u <userId> /path/to/markdown/files
+```
+
+Tests show that importing 500 Markdown files without attachments needs around 1.5GB of memory.
+
+### Importing from Dokuwiki
+
+The Markdown directory import command (see above) supports to import Markdown files
+generated from a Dokuwiki instance and tries to fix relative links to other pages and
+upload referenced attachments.
+
+Importing is tested with Markdown files generated with the [Dokuwiki2Markdown](https://github.com/mm503/Dokuwiki2Markdown)
+tool.
+
+Here's an example how to import from a Dokuwiki instance:
+
+```shell
+/path/to/doku2md.py -d /path/to/dokuwiki/data/pages -T
+php -d memory_limit=2G ./occ collectives:import:markdown -c 123 -u alice /path/to/dokuwiki/data/pages
+```
