@@ -47,6 +47,7 @@ OC.L10N.register(
     "Link copied" : "Link tersalin",
     "Please reload the page." : "Silakan muat ulang halaman.",
     "Copied" : "Tersalin",
-    "Failed to revert {page} to revision {timestamp}." : "Gagal mengembalikan {page} ke revisi {timestamp}."
+    "Failed to revert {page} to revision {timestamp}." : "Gagal mengembalikan {page} ke revisi {timestamp}.",
+    "_%n byte_::_%n bytes_" : ["%n byte"]
 },
 "nplurals=1; plural=0;");
