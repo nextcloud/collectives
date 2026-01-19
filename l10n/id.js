@@ -1,6 +1,7 @@
 OC.L10N.register(
     "collectives",
     {
+    "Collectives" : "Collectives",
     "You are not allowed to share %s" : "Anda tidak diizinkan untuk membagikan %s",
     "Share link" : "Bagikan tautan",
     "Settings" : "Setelan",
@@ -48,6 +49,7 @@ OC.L10N.register(
     "Please reload the page." : "Silakan muat ulang halaman.",
     "Copied" : "Tersalin",
     "Failed to revert {page} to revision {timestamp}." : "Gagal mengembalikan {page} ke revisi {timestamp}.",
+    "Sort by title" : "Urutkan berdasarkan judul",
     "_%n byte_::_%n bytes_" : ["%n byte"]
 },
 "nplurals=1; plural=0;");
