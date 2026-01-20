@@ -29,6 +29,7 @@ OC.L10N.register(
     "Favorites" : "รายการโปรด",
     "Favorite" : "รายการโปรด",
     "Deleted" : "ลบแล้ว",
+    "Create public link" : "สร้างลิงค์สาธารณะ",
     "View only" : "ดูเท่านั้น",
     "Can edit" : "สามารถแก้ไข",
     "Cannot copy, please copy the link manually" : "ไม่สามารถคัดลอก กรุณาคัดลอกลิงก์เอง",
