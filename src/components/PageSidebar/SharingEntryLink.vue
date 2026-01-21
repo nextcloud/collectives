@@ -355,7 +355,7 @@ export default {
 
 		shareUrl() {
 			return this.share
-				? window.location.origin + generateUrl(`/apps/collectives/p/${this.share.token}${this.currentCollectivePath}`)
+				? window.location.origin + generateUrl(`/apps/collectives/p/${this.share.token}${this.currentCollectivePath}/${this.currentPage.slug}-${this.currentPage.id}`)
 				: null
 		},
 
