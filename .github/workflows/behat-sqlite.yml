@@ -10,7 +10,6 @@ permissions:
 
 concurrency:
   group: behat-sqlite-${{ github.head_ref || github.run_id }}
-  cancel-in-progress: true
 
 env:
   # Location of the behat.yml file
