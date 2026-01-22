@@ -77,13 +77,9 @@ class UserFolderHelper {
 		$userRootFolder = $this->getUserRootFolder($userId);
 		$userCollectivesPath = $this->getUserFolderSetting($userId);
 
-		try {
-			$userCollectivesFolder = $userRootFolder->get($userCollectivesPath);
-			if (!$userCollectivesFolder instanceof Folder) {
-				throw new NotFoundException('Collectives path exists but is not a folder');
-			}
-		} catch (FilesNotFoundException $e) {
-			throw new NotFoundException('Collectives folder mount point not found', 0, $e);
+		$userCollectivesFolder = $userRootFolder->get($userCollectivesPath);
+		if (!$userCollectivesFolder instanceof Folder) {
+			throw new NotFoundException('Collectives path exists but is not a folder');
 		}
 
 		return $userCollectivesFolder;
