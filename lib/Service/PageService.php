@@ -11,7 +11,6 @@ namespace OCA\Collectives\Service;
 
 use Exception;
 use OC;
-use OC_Util;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\Page;
 use OCA\Collectives\Db\PageLinkMapper;
@@ -100,13 +99,7 @@ class PageService {
 	 */
 	public function getCollectiveFolder(int $collectiveId, string $userId): Folder {
 		$collectiveName = $this->getCollective($collectiveId, $userId)->getName();
-		try {
-			$folder = $this->userFolderHelper->get($userId)->get($collectiveName);
-		} catch (FilesNotFoundException) {
-			// Workaround issue #332
-			OC_Util::setupFS($userId);
-			$folder = $this->userFolderHelper->get($userId)->get($collectiveName);
-		}
+		$folder = $this->userFolderHelper->get($userId)->get($collectiveName);
 
 		if (!($folder instanceof Folder)) {
 			throw new FilesNotFoundException('Folder not found for collective ' . $collectiveId);
