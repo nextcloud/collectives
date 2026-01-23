@@ -304,7 +304,7 @@
     "Come, organize and build shared knowledge!" : "Запрошуємо, організовуйте та наповнюйте колективні бази знань!",
     "Create new collective" : "Створити новий колектив",
     "Link copied" : "Посилання скопійовано",
-    "Could not copy link to the clipboard:" : "Не вдалося скопіювати посилання до буферу обміну.",
+    "Could not copy link to the clipboard:" : "Не вдалося скопіювати посилання до буфера обміну.",
     "New page" : "Нова сторінка",
     "Could not create the page" : "Не вдалося створити сторінку",
     "Could not save emoji for page" : "Неможливо зберегти емодзі для сторінки",
@@ -374,7 +374,7 @@
     "_%n byte_::_%n bytes_" : ["%nбайт","%nбайтів","%nбайтів","%nбайтів"],
     "Pages that link to this one" : "Сторінки, які посилаються на цю сторінку",
     "Old versions of this page" : "Попередні версії сторінки",
-    "Link copied to the clipboard." : "Посилання скопійовано до буферу обміну.",
+    "Link copied to the clipboard." : "Посилання скопійовано до буфера обміну.",
     "New Page" : "Нова сторінка",
     "The following dependency apps are missing: " : "Для роботи необхідні наступні додатки:"
 },"pluralForm" :"nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);"
