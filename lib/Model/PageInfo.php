@@ -14,6 +14,8 @@ use JsonSerializable;
 use OCP\Files\File;
 use OCP\Files\InvalidPathException;
 use OCP\Files\NotFoundException;
+use OCP\L10N\IFactory;
+use OCP\Server;
 
 class PageInfo implements JsonSerializable {
 	public const INDEX_PAGE_TITLE = 'Readme';
@@ -237,7 +239,7 @@ class PageInfo implements JsonSerializable {
 		if (strcmp($file->getName(), self::INDEX_PAGE_TITLE . self::SUFFIX) === 0) {
 			if ($parentId === 0) {
 				// Landing page
-				$this->setTitle(\OC::$server->getL10N('collectives')->t('Landing page'));
+				$this->setTitle(Server::get(IFactory::class)->get('collectives')->t('Landing page'));
 			} else {
 				// Index page
 				$this->setTitle(basename($dirName));

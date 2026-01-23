@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Service;
 
-use OC;
 use OC\Files\Node\File;
 use OCA\Circles\Model\Member;
 use OCA\Collectives\Db\Collective;
@@ -30,6 +29,7 @@ use OCP\Files\InvalidPathException;
 use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\Files\NotPermittedException as FilesNotPermittedException;
 use OCP\IL10N;
+use OCP\Server;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 class CollectiveService extends CollectiveServiceBase {
@@ -56,13 +56,13 @@ class CollectiveService extends CollectiveServiceBase {
 
 	private function initPageTrashBackend(): void {
 		if ($this->appManager->isEnabledForUser('files_trashbin')) {
-			$this->pageTrashBackend = OC::$server->get(PageTrashBackend::class);
+			$this->pageTrashBackend = Server::get(PageTrashBackend::class);
 		}
 	}
 
 	private function initPageVersionsBackend(): void {
 		if ($this->appManager->isEnabledForUser('files_versions')) {
-			$this->pageVersionsBackend = OC::$server->get(VersionsBackend::class);
+			$this->pageVersionsBackend = Server::get(VersionsBackend::class);
 		}
 	}
 

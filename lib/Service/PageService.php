@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace OCA\Collectives\Service;
 
 use Exception;
-use OC;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\Page;
 use OCA\Collectives\Db\PageLinkMapper;
@@ -31,6 +30,7 @@ use OCP\Files\NotPermittedException as FilesNotPermittedException;
 use OCP\IConfig;
 use OCP\IUserManager;
 use OCP\Lock\LockedException;
+use OCP\Server;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
@@ -63,7 +63,7 @@ class PageService {
 
 	private function initTrashBackend(): void {
 		if ($this->appManager->isEnabledForUser('files_trashbin')) {
-			$this->trashBackend = OC::$server->get(PageTrashBackend::class);
+			$this->trashBackend = Server::get(PageTrashBackend::class);
 		}
 	}
 

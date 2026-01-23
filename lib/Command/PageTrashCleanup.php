@@ -9,13 +9,13 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Command;
 
-use OC;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Service\MissingDependencyException;
 use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
 use OCA\Collectives\Trash\PageTrashBackend;
 use OCP\App\IAppManager;
+use OCP\Server;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputArgument;
@@ -34,7 +34,7 @@ class PageTrashCleanup extends Command {
 	) {
 		parent::__construct();
 		if ($appManager->isEnabledForUser('files_trashbin')) {
-			$this->trashBackend = OC::$server->get(PageTrashBackend::class);
+			$this->trashBackend = Server::get(PageTrashBackend::class);
 		}
 	}
 

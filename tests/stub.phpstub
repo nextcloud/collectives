@@ -8,14 +8,10 @@ declare(strict_types=1);
  */
 
 namespace {
-	use OCP\IServerContainer;
-
 	class OC {
 		static $CLI = false;
 		/** @var string */
 		static $WEBROOT;
-		/** @var IServerContainer */
-		static $server;
 	}
 }
 
