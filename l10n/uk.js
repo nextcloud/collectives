@@ -306,7 +306,7 @@ OC.L10N.register(
     "Come, organize and build shared knowledge!" : "Запрошуємо, організовуйте та наповнюйте колективні бази знань!",
     "Create new collective" : "Створити новий колектив",
     "Link copied" : "Посилання скопійовано",
-    "Could not copy link to the clipboard:" : "Не вдалося скопіювати посилання до буферу обміну.",
+    "Could not copy link to the clipboard:" : "Не вдалося скопіювати посилання до буфера обміну.",
     "New page" : "Нова сторінка",
     "Could not create the page" : "Не вдалося створити сторінку",
     "Could not save emoji for page" : "Неможливо зберегти емодзі для сторінки",
@@ -376,7 +376,7 @@ OC.L10N.register(
     "_%n byte_::_%n bytes_" : ["%nбайт","%nбайтів","%nбайтів","%nбайтів"],
     "Pages that link to this one" : "Сторінки, які посилаються на цю сторінку",
     "Old versions of this page" : "Попередні версії сторінки",
-    "Link copied to the clipboard." : "Посилання скопійовано до буферу обміну.",
+    "Link copied to the clipboard." : "Посилання скопійовано до буфера обміну.",
     "New Page" : "Нова сторінка",
     "The following dependency apps are missing: " : "Для роботи необхідні наступні додатки:"
 },
