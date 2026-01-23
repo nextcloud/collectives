@@ -36,10 +36,12 @@
 			<errorLevel type="suppress">
 				<referencedClass name="Doctrine\DBAL\Types\Type" />
 				<referencedClass name="OCP\SetupCheck\ISetupCheck" />
+				<referencedClass name="OCA\Richdocuments\Db\WopiMapper" />
 			</errorLevel>
 		</UndefinedClass>
 		<UndefinedDocblockClass>
 			<errorLevel type="suppress">
+				<referencedClass name="OCA\Richdocuments\Db\WopiMapper" />
 				<referencedClass name="Doctrine\DBAL\Driver\Statement" />
 				<referencedClass name="Doctrine\DBAL\Schema\Schema" />
 				<referencedClass name="Doctrine\DBAL\Schema\SchemaException" />

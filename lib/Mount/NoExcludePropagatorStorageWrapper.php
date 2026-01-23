@@ -9,10 +9,11 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Mount;
 
-use OC;
 use OC\Files\Cache\Propagator;
 use OC\Files\Storage\Storage;
 use OC\Files\Storage\Wrapper\Wrapper;
+use OCP\IDBConnection;
+use OCP\Server;
 
 class NoExcludePropagatorStorageWrapper extends Wrapper {
 	/**
@@ -26,7 +27,7 @@ class NoExcludePropagatorStorageWrapper extends Wrapper {
 			$storage = $this;
 		}
 		if (!isset($storage->propagator)) {
-			$storage->propagator = new Propagator($storage, OC::$server->getDatabaseConnection());
+			$storage->propagator = new Propagator($storage, Server::get(IDBConnection::class));
 		}
 		return $storage->propagator;
 	}

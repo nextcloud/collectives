@@ -30,6 +30,7 @@ use OCP\IRequest;
 use OCP\IUser;
 use OCP\IUserSession;
 use OCP\L10N\IFactory;
+use OCP\Server;
 
 class CollectiveFolderManager {
 	private const SKELETON_DIR = 'skeleton';
@@ -89,8 +90,8 @@ class CollectiveFolderManager {
 	private function getCurrentUID(): ?string {
 		try {
 			// wopi requests are not logged in, instead we need to get the editor user from the access token
-			if (strpos($this->request->getRawPathInfo(), 'apps/richdocuments/wopi') && class_exists('OCA\Richdocuments\Db\WopiMapper')) {
-				$wopiMapper = OC::$server->query('OCA\Richdocuments\Db\WopiMapper');
+			if (strpos($this->request->getRawPathInfo(), 'apps/richdocuments/wopi') && class_exists(\OCA\Richdocuments\Db\WopiMapper::class)) {
+				$wopiMapper = Server::get(\OCA\Richdocuments\Db\WopiMapper::class);
 				$token = $this->request->getParam('access_token');
 				if ($token) {
 					return $wopiMapper->getPathForToken($token)->getEditorUid();
@@ -210,6 +211,22 @@ class CollectiveFolderManager {
 	/**
 	 * @throws NotFoundException
 	 * @throws \OCP\DB\Exception
+	 * @return array{
+	 *     folder_id: int,
+	 *     fileid: int,
+	 *     storage: int,
+	 *     path: string,
+	 *     name: string,
+	 *     mimetype: string,
+	 *     mimepart: string,
+	 *     size: int|float,
+	 *     mtime: int,
+	 *     storage_mtime: int,
+	 *     etag: string,
+	 *     encrytped: bool,
+	 *     parent: int,
+	 *     permissions: int,
+	 * }
 	 */
 	public function getFolderFileCache(int $id, string $name): array {
 		$qb = $this->connection->getQueryBuilder();
