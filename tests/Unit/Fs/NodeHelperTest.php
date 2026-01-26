@@ -9,10 +9,10 @@ declare(strict_types=1);
 
 namespace Unit\Fs;
 
-use OC\Files\Node\File;
-use OC\Files\Node\Folder;
 use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Service\NotFoundException;
+use OCP\Files\File;
+use OCP\Files\Folder;
 use OCP\IDBConnection;
 use OCP\IL10N;
 use PHPUnit\Framework\TestCase;

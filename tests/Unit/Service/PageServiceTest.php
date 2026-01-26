@@ -11,8 +11,6 @@ namespace Unit\Service;
 
 use OC\App\AppManager;
 use OC\Files\Mount\MountPoint;
-use OC\Files\Node\File;
-use OC\Files\Node\Folder;
 use OCA\Circles\Model\Member;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\Page;
@@ -27,6 +25,9 @@ use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
 use OCA\Collectives\Service\PageService;
 use OCA\Collectives\Service\SessionService;
+use OCP\Files\File;
+use OCP\Files\Folder;
+use OCP\Files\Mount\IMountPoint;
 use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\IConfig;
 use OCP\IUserManager;
@@ -199,7 +200,7 @@ class PageServiceTest extends TestCase {
 		PageService::getIndexPageFile($folder);
 	}
 
-	private function prepareFile(string $fileName, Folder $parent, MountPoint $mountPoint, int $id = 1): File {
+	private function prepareFile(string $fileName, Folder $parent, IMountPoint $mountPoint, int $id = 1): File {
 		$file = $this->createMock(File::class);
 		$file->method('getId')
 			->willReturn($id);
@@ -310,9 +311,7 @@ class PageServiceTest extends TestCase {
 		$folder->method('getName')
 			->willReturn('testfolder');
 
-		$mountPoint = $this->getMockBuilder(MountPoint::class)
-			->disableOriginalConstructor()
-			->getMock();
+		$mountPoint = $this->createMock(IMountPoint::class);
 		$mountPoint->method('getMountPoint')->willReturn('/files/user/Collectives/collective/');
 
 		$indexFile = $this->prepareFile('Readme.md', $folder, $mountPoint, 101);

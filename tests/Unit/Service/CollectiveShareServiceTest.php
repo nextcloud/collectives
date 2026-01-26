@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace Unit\Service;
 
-use OC\Files\Node\Folder;
 use OC\Share20\Share;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveShare;
@@ -20,6 +19,7 @@ use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\PageService;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
+use OCP\Files\Folder;
 use OCP\IL10N;
 use OCP\Lock\LockedException;
 use OCP\Share\Exceptions\GenericShareException;

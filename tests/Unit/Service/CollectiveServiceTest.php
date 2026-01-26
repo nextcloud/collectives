@@ -9,8 +9,6 @@ declare(strict_types=1);
 
 namespace Unit\Service;
 
-use OC\Files\Node\File;
-use OC\Files\Node\Folder;
 use OCA\Circles\Model\Circle;
 use OCA\Circles\Model\Member;
 use OCA\Collectives\Db\Collective;
@@ -29,6 +27,8 @@ use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\UnprocessableEntityException;
 use OCP\App\IAppManager;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Files\File;
+use OCP\Files\Folder;
 use OCP\IL10N;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\String\Slugger\SluggerInterface;

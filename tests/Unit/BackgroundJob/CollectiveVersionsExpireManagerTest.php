@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace BackgroundJob;
 
-use OC\Files\FileInfo;
 use OC\User\User;
 use OCA\Collectives\Db\CollectiveMapper;
 use OCA\Collectives\Mount\CollectiveFolderManager;
@@ -18,6 +17,7 @@ use OCA\Collectives\Versions\ExpireManager;
 use OCA\Collectives\Versions\VersionsBackend;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Files\FileInfo;
 use OCP\IDBConnection;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Container\ContainerInterface;

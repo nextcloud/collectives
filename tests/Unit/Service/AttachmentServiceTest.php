@@ -9,9 +9,9 @@ declare(strict_types=1);
 
 namespace Unit\Service;
 
-use OC\Files\Node\File;
-use OC\Files\Node\Folder;
 use OCA\Collectives\Service\AttachmentService;
+use OCP\Files\File;
+use OCP\Files\Folder;
 use OCP\IPreview;
 use PHPUnit\Framework\TestCase;
 
