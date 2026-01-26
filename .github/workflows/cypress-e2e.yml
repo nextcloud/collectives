@@ -73,7 +73,7 @@ jobs:
 
     steps:
       - name: Checkout server
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
           submodules: true
@@ -81,7 +81,7 @@ jobs:
           ref: ${{ matrix.server-versions }}
 
       - name: Checkout circles app
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
           repository: nextcloud/circles
@@ -89,7 +89,7 @@ jobs:
           ref: ${{ matrix.server-versions }}
 
       - name: Checkout files_pdfviewer app
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
           repository: nextcloud/files_pdfviewer
@@ -97,7 +97,7 @@ jobs:
           ref: ${{ matrix.server-versions }}
 
       - name: Checkout notifications app
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
           repository: nextcloud/notifications
@@ -105,7 +105,7 @@ jobs:
           ref: ${{ matrix.server-versions }}
 
       - name: Checkout password_policy app
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
           repository: nextcloud/password_policy
@@ -118,7 +118,7 @@ jobs:
           echo "text_app_ref=$text_app_ref" >> $GITHUB_ENV
 
       - name: Checkout text app
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
           repository: nextcloud/text
@@ -126,7 +126,7 @@ jobs:
           ref: ${{ env.text_app_ref }}
 
       - name: Checkout viewer app
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
           repository: nextcloud/viewer
@@ -142,7 +142,7 @@ jobs:
           download: true
 
       - name: Checkout app
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
           path: apps/${{ env.APP_NAME }}
@@ -151,12 +151,12 @@ jobs:
         uses: skjnldsv/read-package-engines-version-actions@06d6baf7d8f41934ab630e97d9e6c0bc9c9ac5e4 # v3
         id: versions
         with:
-          fallbackNode: "^20"
-          fallbackNpm: "^10"
+          fallbackNode: '^24'
+          fallbackNpm: '^11.3'
           path: apps/${{ env.APP_NAME }}
 
       - name: Set up node ${{ steps.versions.outputs.nodeVersion }}
-        uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6.1.0
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           cache: 'npm'
           node-version: ${{ steps.versions.outputs.nodeVersion }}
@@ -216,7 +216,7 @@ jobs:
         run: npm i -g 'npm@${{ needs.init.outputs.npmVersion }}'
 
       - name: Set up php ${{ matrix.php-versions }}
-        uses: shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1 # v2
+        uses: shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1 # v2.36.0
         with:
           php-version: ${{ matrix.php-versions }}
           # https://docs.nextcloud.com/server/stable/admin_manual/installation/source_installation.html#prerequisites-for-manual-installation
