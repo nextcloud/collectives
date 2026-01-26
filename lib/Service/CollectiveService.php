@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace OCA\Collectives\Service;
 
-use OC\Files\Node\File;
 use OCA\Circles\Model\Member;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Db\CollectiveMapper;
@@ -25,6 +24,7 @@ use OCA\Collectives\Versions\VersionsBackend;
 use OCP\App\IAppManager;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Files\Events\InvalidateMountCacheEvent;
+use OCP\Files\File;
 use OCP\Files\InvalidPathException;
 use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\Files\NotPermittedException as FilesNotPermittedException;

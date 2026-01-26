@@ -10,11 +10,6 @@
       <code><![CDATA[$maskedStorage]]></code>
     </InvalidArgument>
   </file>
-  <file src="lib/Service/CollectiveService.php">
-    <UndefinedClass>
-      <code><![CDATA[File]]></code>
-    </UndefinedClass>
-  </file>
   <file src="lib/Service/PageService.php">
     <UndefinedClass>
       <code><![CDATA[$this->pushQueue]]></code>

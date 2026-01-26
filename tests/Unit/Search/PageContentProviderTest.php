@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace Unit\Service;
 
-use OC\Files\Node\Folder;
 use OC\Search\SearchQuery;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Search\PageContentProvider;
@@ -18,6 +17,7 @@ use OCA\Collectives\Service\CollectiveService;
 use OCA\Collectives\Service\PageService;
 use OCA\Collectives\Service\SearchService;
 use OCP\App\IAppManager;
+use OCP\Files\Folder;
 use OCP\IL10N;
 use OCP\IURLGenerator;
 use OCP\IUser;
