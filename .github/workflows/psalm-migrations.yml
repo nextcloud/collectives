@@ -29,7 +29,7 @@ jobs:
     steps:
       - name: Get collectives app from app store
         id: collectives_app
-        uses: nextcloud/appstore-action@facdd26645c34b31d2b58ddc658d7012299d2a14 # v1.0.0
+        uses: nextcloud/appstore-action@7a3f0a4a270bb84dc57a396fad0b9549064605ec # v1.0.1
         with:
           appid: collectives
 
