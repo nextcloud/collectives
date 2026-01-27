@@ -112,7 +112,7 @@ OC.L10N.register(
     "Add members to {name}" : "Ajouter des membres à {name}",
     "A collective/team with this name already exists" : "Un collectif ou une équipe avec ce nom existe déjà",
     "Create" : "Créer",
-    "Create without members" : "Créer sans membres",
+    "Create without members" : "Créer sans membre",
     "Could not add members to the collective" : "Impossible d'ajouter des membres à ce collectif",
     "Select emoji" : "Sélectionner un émoji",
     "Select an existing team" : "Sélectionner une équipe existante",
