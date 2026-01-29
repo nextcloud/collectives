@@ -6,7 +6,7 @@ OC.L10N.register(
     "Collectives" : "Coletivos",
     "{user} has mentioned you in {collective} - {page}" : "{user} mencionou você em {collective} - {page}",
     "Landing page" : "Página de destino",
-    "Welcome %s" : "Olá, %s!",
+    "Welcome %s" : "Olá, %s",
     "Add pages with the ➕ in the page list! You can drag them to change the order. Dragging them into the editor will create a 🔗 link." : "Adicione páginas com o ➕ na lista de páginas! Você pode arrastá-las para alterar a ordem. Arrastá-las para o editor criará um 🔗 link.",
     "Press `✏️ Edit` to change this text and make yourself at home! Multiple people can edit together. Find out more in the [documentation](https://nextcloud.github.io/collectives/) or ask [the community](https://help.nextcloud.com/tag/collectives-app)." : "Pressione `✏️ Editar` para alterar este texto e sinta-se à vontade! Várias pessoas podem editar juntas. Saiba mais na [documentação](https://nextcloud.github.io/collectives/) ou pergunte à [comunidade](https://help.nextcloud.com/tag/collectives-app).",
     "Collective pages" : "Páginas de coletivos",
