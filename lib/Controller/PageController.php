@@ -326,6 +326,30 @@ class PageController extends OCSController {
 	}
 
 	/**
+	 * Rename a folder attachment
+	 *
+	 * @param int $collectiveId ID of the collective
+	 * @param int $id ID of the page
+	 * @param int $attachmentId ID of the attachment
+	 * @param string $name Target name
+	 *
+	 * @return DataResponse<Http::STATUS_OK, array{attachment: CollectivesPageAttachment}, array{}>
+	 * @throws OCSForbiddenException Not Permitted
+	 * @throws OCSNotFoundException Collective or attachment not found
+	 *
+	 * 200: Attachment renamed
+	 */
+	#[NoAdminRequired]
+	public function renameAttachment(int $collectiveId, int $id, int $attachmentId, string $name): DataResponse {
+		$attachment = $this->handleErrorResponse(function () use ($collectiveId, $id, $attachmentId, $name): array {
+			$this->service->verifyEditPermissions($collectiveId, $this->userId);
+			$pageFile = $this->service->getPageFile($collectiveId, $id, $this->userId);
+			return $this->attachmentService->renameAttachment($pageFile, $attachmentId, $name);
+		}, $this->logger);
+		return new DataResponse(['attachment' => $attachment]);
+	}
+
+	/**
 	 * Delete a folder attachment
 	 *
 	 * @param int $collectiveId ID of the collective
