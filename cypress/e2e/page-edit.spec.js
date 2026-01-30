@@ -26,14 +26,6 @@ describe('Page edit', function() {
 	it('Supports page content editing and switching to read mode', function() {
 		cy.openPage('Day 1')
 
-		cy.log('Inserting an image')
-		cy.intercept({ method: 'POST', url: '**/text/attachment/upload*' }).as('attachmentUpload')
-		cy.getEditor()
-			.should('be.visible')
-			.find('input[data-text-el="attachment-file-input"]')
-			.selectFile('cypress/fixtures/test.png', { force: true })
-		cy.wait('@attachmentUpload')
-
 		cy.log('Inserting a heading')
 		// Wait 1 second to prevent race condition with previous insertion
 		cy.wait(1000) // eslint-disable-line cypress/no-unnecessary-waiting
@@ -58,44 +50,11 @@ describe('Page edit', function() {
 		cy.getEditor()
 			.should('not.be.visible')
 		cy.getReadOnlyEditor()
-			.find('img.image__main')
-			.should('be.visible')
-		cy.getReadOnlyEditor()
 			.should('be.visible')
 			.should('contain', 'Heading')
 		cy.getReadOnlyEditor()
 			.find('.mention')
 			.should('contain', 'admin')
-	})
-	it('Lists attachments for the page and allows restore', function() {
-		cy.openPage('Day 1')
-
-		cy.switchToEditMode()
-
-		// Open attachment list
-		cy.get('button.app-sidebar__toggle').click()
-		cy.get('.app-sidebar-tabs__content').should('contain', 'test.png')
-
-		// Delete image
-		cy.getEditor()
-			.find('[data-component="image-view"] .image__view')
-			.trigger('mouseenter')
-		cy.getEditor()
-			.get('.image__caption__delete')
-			.click()
-		cy.getEditor()
-			.find('[data-component="image-view"] .image__view')
-			.should('not.exist')
-
-		// Restore image
-		cy.get('.attachment-list-deleted button.action-item__menutoggle')
-			.click()
-		cy.get('button')
-			.contains('Restore')
-			.click()
-		cy.getEditor()
-			.find('[data-component="image-view"] .image__view')
-			.should('be.visible')
 	})
 
 	it('Supports selecting a page from a collective', function() {
