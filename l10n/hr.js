@@ -72,6 +72,7 @@ OC.L10N.register(
     "Copy share link" : "Kopiraj poveznicu dijeljenja",
     "Failed to revert {page} to revision {timestamp}." : "Neuspješno vraćanje {page} na reviziju {timestamp}.",
     "Template" : "Predložak",
-    "Sort by title" : "Razvrstaj prema naslovu"
+    "Sort by title" : "Razvrstaj prema naslovu",
+    "_%n byte_::_%n bytes_" : ["%n bajt","%n bajta","%n bajtova"]
 },
 "nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;");
