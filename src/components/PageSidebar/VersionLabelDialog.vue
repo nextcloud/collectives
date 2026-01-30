@@ -20,7 +20,7 @@
 			:placeholder="t('collectives', 'Version name')" />
 
 		<p class="version-label-modal__info">
-			{{ t('files_versions', 'Named versions are persisted, and excluded from automatic cleanups when your storage quota is full.') }}
+			{{ t('collectives', 'Named versions are persisted, and excluded from automatic cleanups when your storage quota is full.') }}
 		</p>
 
 		<template #actions>

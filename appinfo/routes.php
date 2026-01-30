@@ -98,6 +98,8 @@ return [
 			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+']],
 		['name' => 'page#getAttachments', 'url' => '/api/v{apiVersion}/collectives/{collectiveId}/pages/{id}/attachments', 'verb' => 'GET',
 			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+']],
+		['name' => 'page#renameAttachment', 'url' => '/api/v{apiVersion}/collectives/{collectiveId}/pages/{id}/attachments/{attachmentId}', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+', 'attachmentId' => '\d+']],
 		['name' => 'page#deleteAttachment', 'url' => '/api/v{apiVersion}/collectives/{collectiveId}/pages/{id}/attachments/{attachmentId}', 'verb' => 'DELETE',
 			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+', 'attachmentId' => '\d+']],
 
@@ -188,6 +190,8 @@ return [
 			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
 		['name' => 'publicPage#getAttachments', 'url' => '/api/v{apiVersion}/p/collectives/{token}/pages/{id}/attachments', 'verb' => 'GET',
 			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+']],
+		['name' => 'publicPage#renameAttachment', 'url' => '/api/v{apiVersion}/p/collectives/{token}/pages/{id}/attachments/{attachmentId}', 'verb' => 'PUT',
+			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+', 'attachmentId' => '\d+']],
 		['name' => 'publicPage#deleteAttachment', 'url' => '/api/v{apiVersion}/p/collectives/{token}/pages/{id}/attachments/{attachmentId}', 'verb' => 'DELETE',
 			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+', 'attachmentId' => '\d+']],
 
