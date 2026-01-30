@@ -146,6 +146,16 @@
 							</NcActionLink>
 							<NcActionButton
 								:close-after-click="true"
+								:class="{ 'action-link--disabled': !networkOnline }"
+								@click="onStartRename(attachment)">
+								<template #icon>
+									<PencilOutlineIcon />
+								</template>
+								{{ t('collectives', 'Rename') }}
+							</NcActionButton>
+							<NcActionButton
+								:close-after-click="true"
+								:class="{ 'action-link--disabled': !networkOnline }"
 								@click="onDelete(attachment)">
 								<template #icon>
 									<DeleteIcon />
@@ -229,6 +239,13 @@
 				<PaperclipIcon />
 			</template>
 		</NcEmptyContent>
+
+		<!-- rename dialog -->
+		<AttachmentRenameDialog
+			v-if="renamedAttachment"
+			:open.sync="showRenameAttachmentsForm"
+			:attachment-name="renamedAttachment.name"
+			@attachment-rename="onRename" />
 	</div>
 </template>
 
@@ -251,8 +268,10 @@ import DeleteIcon from 'vue-material-design-icons/DeleteOutline.vue'
 import EyeIcon from 'vue-material-design-icons/EyeOutline.vue'
 import FolderIcon from 'vue-material-design-icons/FolderOutline.vue'
 import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue'
+import PencilOutlineIcon from 'vue-material-design-icons/PencilOutline.vue'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
 import DownloadIcon from 'vue-material-design-icons/TrayArrowDown.vue'
+import AttachmentRenameDialog from './AttachmentRenameDialog.vue'
 import OfflineContent from './OfflineContent.vue'
 import { useNetworkState } from '../../composables/useNetworkState.ts'
 import { usePagesStore } from '../../stores/pages.js'
@@ -263,6 +282,7 @@ export default {
 
 	components: {
 		AlertOctagonIcon,
+		AttachmentRenameDialog,
 		DeleteIcon,
 		DownloadIcon,
 		EyeIcon,
@@ -274,12 +294,20 @@ export default {
 		NcListItem,
 		OfflineContent,
 		PaperclipIcon,
+		PencilOutlineIcon,
 		RestoreIcon,
 	},
 
 	setup() {
 		const { networkOnline } = useNetworkState()
 		return { networkOnline }
+	},
+
+	data() {
+		return {
+			renamedAttachment: null,
+			showRenameAttachmentsForm: false,
+		}
 	},
 
 	computed: {
@@ -397,6 +425,7 @@ export default {
 
 		...mapActions(usePagesStore, [
 			'deleteFolderAttachment',
+			'renameFolderAttachment',
 			'setAttachmentDeleted',
 			'setAttachmentUndeleted',
 		]),
@@ -433,6 +462,26 @@ export default {
 			emit('collectives:attachment:restore', this.fileNameUriComponent(attachment.name))
 			this.scrollTo(attachment)
 			this.setAttachmentUndeleted(attachment.name)
+		},
+
+		async onStartRename(attachment) {
+			this.showRenameAttachmentsForm = true
+			this.renamedAttachment = attachment
+		},
+
+		async onRename(newName) {
+			const oldName = this.renamedAttachment.name
+			this.renamedAttachment.name = newName
+			this.showRenameAttachmentsForm = false
+
+			try {
+				await this.renameFolderAttachment(this.renamedAttachment.id, newName)
+				this.renamedAttachment = null
+			} catch (e) {
+				this.renamedAttachment.name = oldName
+				showError(t('collectives', 'Failed to rename folder attachment', {}))
+				console.error('Failed to rename folder attachment', e)
+			}
 		},
 
 		async onDelete(attachment) {

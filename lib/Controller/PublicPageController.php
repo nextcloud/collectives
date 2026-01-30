@@ -507,6 +507,35 @@ class PublicPageController extends CollectivesPublicOCSController {
 	}
 
 	/**
+	 * Rename a folder attachment
+	 *
+	 * @param int $id ID of the page
+	 * @param int $attachmentId ID of the attachment
+	 * @param string $name Target name
+	 *
+	 * @return DataResponse<Http::STATUS_OK, array{attachment: CollectivesPageAttachment}, array{}>
+	 * @throws OCSForbiddenException Not Permitted
+	 * @throws OCSNotFoundException Collective or attachment not found
+	 *
+	 * 200: Attachment renamed
+	 */
+	#[PublicPage]
+	#[AnonRateLimit(limit: 10, period: 10)]
+	public function renameAttachment(int $id, int $attachmentId, string $name): DataResponse {
+		$attachment = $this->handleErrorResponse(function () use ($id, $attachmentId, $name): array {
+			$this->checkEditPermissions();
+			$owner = $this->getCollectiveShare()->getOwner();
+			$collectiveId = $this->getCollectiveShare()->getCollectiveId();
+			if (0 !== $sharePageId = $this->getCollectiveShare()->getPageId()) {
+				$this->checkPageShareAccess($collectiveId, $sharePageId, $id, $owner);
+			}
+			$pageFile = $this->service->getPageFile($collectiveId, $id, $owner);
+			return $this->attachmentService->renameAttachment($pageFile, $attachmentId, $name);
+		}, $this->logger);
+		return new DataResponse(['attachment' => $attachment]);
+	}
+
+	/**
 	 * Delete a folder attachment
 	 *
 	 * @param int $id ID of the page
