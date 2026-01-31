@@ -41,6 +41,7 @@ import { useCollectivesStore } from '../../stores/collectives.js'
 import { usePagesStore } from '../../stores/pages.js'
 import { useRootStore } from '../../stores/root.js'
 import { useVersionsStore } from '../../stores/versions.js'
+import { encodeAttachmentFilename } from '../../util/attachmentFilename.ts'
 
 export default {
 	name: 'TextEditor',
@@ -138,9 +139,13 @@ export default {
 			}
 		})
 		subscribe('collectives:attachment:restore', this.restoreAttachment)
+		subscribe('collectives:attachment:replaceFilename', this.replaceAttachmentFilename)
+		subscribe('collectives:attachment:removeReferences', this.removeAttachmentReferences)
 	},
 
 	beforeDestroy() {
+		unsubscribe('collectives:attachment:removeReferences', this.removeAttachmentReferences)
+		unsubscribe('collectives:attachment:replaceFilename', this.replaceAttachmentFilename)
 		unsubscribe('collectives:attachment:restore', this.restoreAttachment)
 		this.textEditWatcher()
 	},
@@ -150,15 +155,29 @@ export default {
 		...mapActions(useVersionsStore, ['getVersions']),
 		...mapActions(usePagesStore, ['setTextEdit', 'setTextView', 'touchPage']),
 
-		restoreAttachment(name) {
+		restoreAttachment({ name }) {
 			// inspired by the fixedEncodeURIComponent function suggested in
 			// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent
-			const src = '.attachments.' + this.currentPage.id + '/' + name
+			const src = '.attachments.' + this.currentPage.id + '/' + encodeAttachmentFilename(name)
 			// simply get rid of brackets to make sure link text is valid
 			// as it does not need to be unique and matching the real file name
 			const alt = name.replaceAll(/[[\]]/g, '')
 
 			this.editor.insertAtCursor(`<img src="${src}" alt="${alt}" />`)
+		},
+
+		replaceAttachmentFilename({ pageId, oldName, newName }) {
+			// Only available since editorApi 1.4
+			if (this.editor.replaceAttachmentFilename) {
+				this.editor.replaceAttachmentFilename(pageId, oldName, newName)
+			}
+		},
+
+		removeAttachmentReferences({ pageId, name }) {
+			// Only available since editorApi 1.4
+			if (this.editor.removeAttachmentReferences) {
+				this.editor.removeAttachmentReferences(pageId, name)
+			}
 		},
 
 		initEditMode() {
