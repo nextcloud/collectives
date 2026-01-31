@@ -326,7 +326,7 @@ class PageController extends OCSController {
 	}
 
 	/**
-	 * Rename a folder attachment
+	 * Rename an attachment
 	 *
 	 * @param int $collectiveId ID of the collective
 	 * @param int $id ID of the page
@@ -335,7 +335,7 @@ class PageController extends OCSController {
 	 *
 	 * @return DataResponse<Http::STATUS_OK, array{attachment: CollectivesPageAttachment}, array{}>
 	 * @throws OCSForbiddenException Not Permitted
-	 * @throws OCSNotFoundException Collective or attachment not found
+	 * @throws OCSNotFoundException Collective, page or attachment not found
 	 *
 	 * 200: Attachment renamed
 	 */
@@ -350,7 +350,7 @@ class PageController extends OCSController {
 	}
 
 	/**
-	 * Delete a folder attachment
+	 * Delete an attachment
 	 *
 	 * @param int $collectiveId ID of the collective
 	 * @param int $id ID of the page
@@ -358,7 +358,7 @@ class PageController extends OCSController {
 	 *
 	 * @return DataResponse<Http::STATUS_OK, list<empty>, array{}>
 	 * @throws OCSForbiddenException Not Permitted
-	 * @throws OCSNotFoundException Collective or attachment not found
+	 * @throws OCSNotFoundException Collective, page or attachment not found
 	 *
 	 * 200: Attachment deleted
 	 */
