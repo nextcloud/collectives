@@ -980,6 +980,21 @@ export const usePagesStore = defineStore('pages', {
 				.filter((a) => this.attachments.map((a) => a.name).includes(a.name))
 		},
 
+		async uploadAttachment(file) {
+			const formData = new FormData()
+			formData.append('file', file)
+
+			const response = await api.uploadAttachment(this.context, this.currentPageId, formData)
+			if (typeof this.allAttachments[this.collectiveIndex] !== 'object') {
+				set(this.allAttachments, this.collectiveIndex, {})
+			}
+			if (!Array.isArray(this.allAttachments[this.collectiveIndex][this.currentPageId])) {
+				set(this.allAttachments[this.collectiveIndex], this.currentPageId, [])
+			}
+			this.allAttachments[this.collectiveIndex][this.currentPageId].push(response.data.ocs.data.attachment)
+			return response.data.ocs.data.attachment
+		},
+
 		/**
 		 * Rename an attachment of a page
 		 *

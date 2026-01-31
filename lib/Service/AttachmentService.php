@@ -99,6 +99,24 @@ class AttachmentService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
+	public function uploadAttachment(File $pageFile, string $name, $resource): array {
+		$attachmentFolder = $this->getAttachmentDirectory($pageFile);
+		if ($attachmentFolder->nodeExists($name)) {
+			$pathinfo = pathinfo($name);
+			$i = 0;
+			do {
+				$name = $pathinfo['filename'] . ' (' . ++$i . ').' . $pathinfo['extension'];
+			} while ($attachmentFolder->nodeExists($name));
+		}
+		$file = $attachmentFolder->newFile($name, $resource);
+		return $this->fileToInfo($file, $attachmentFolder);
+	}
+
+	/**
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
 	public function renameAttachment(File $pageFile, int $attachmentId, string $targetName): array {
 		$attachmentFolder = $this->getAttachmentDirectory($pageFile);
 		$node = $attachmentFolder->getById($attachmentId);

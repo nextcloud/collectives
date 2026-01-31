@@ -26,6 +26,7 @@ use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\AnonRateLimit;
 use OCP\AppFramework\Http\Attribute\PublicPage;
 use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\OCS\OCSBadRequestException;
 use OCP\AppFramework\OCS\OCSForbiddenException;
 use OCP\AppFramework\OCS\OCSNotFoundException;
 use OCP\IRequest;
@@ -504,6 +505,46 @@ class PublicPageController extends CollectivesPublicOCSController {
 			return $this->attachmentService->getAttachments($pageFile, $shareFolder);
 		}, $this->logger);
 		return new DataResponse(['attachments' => $attachments]);
+	}
+
+	/**
+	 * Upload an attachment
+	 *
+	 * @param int $id ID of the page
+	 *
+	 * @return DataResponse<Http::STATUS_OK, array{attachment: CollectivesPageAttachment}, array{}>
+	 * @throws OCSForbiddenException Not Permitted
+	 * @throws OCSNotFoundException Collective or page not found
+	 * @throws OCSBadRequestException Invalid file upload
+	 *
+	 * 200: Attachment uploaded
+	 */
+	#[PublicPage]
+	#[AnonRateLimit(limit: 10, period: 10)]
+	public function uploadAttachment(int $id): DataResponse {
+		$attachment = $this->handleErrorResponse(function () use ($id): array {
+			$this->checkEditPermissions();
+			$owner = $this->getCollectiveShare()->getOwner();
+			$collectiveId = $this->getCollectiveShare()->getCollectiveId();
+			if (0 !== $sharePageId = $this->getCollectiveShare()->getPageId()) {
+				$this->checkPageShareAccess($collectiveId, $sharePageId, $id, $owner);
+			}
+			$pageFile = $this->service->getPageFile($collectiveId, $id, $owner);
+			$file = $this->request->getUploadedFile('file');
+			if ($file === null) {
+				throw new OCSBadRequestException('No file uploaded of file exceeds maximum size.');
+			}
+			if (isset($file['tmp_name'], $file['name'], $file['type'])) {
+				$resource = fopen($file['tmp_name'], 'rb');
+				if (!$resource) {
+					throw new OCSBadRequestException('Failed to open uploaded file.');
+				}
+				$name = $file['name'];
+				return $this->attachmentService->uploadAttachment($pageFile, $name, $resource);
+			}
+			throw new OCSBadRequestException('Invalid file upload.');
+		}, $this->logger);
+		return new DataResponse(['attachment' => $attachment]);
 	}
 
 	/**
