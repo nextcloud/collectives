@@ -25,10 +25,6 @@
 		<div v-else-if="!loading('attachments') && (attachments.length || deletedAttachments.length)">
 			<!-- text attachments list -->
 			<div v-show="textAttachments.length">
-				<div class="attachment-list-subheading">
-					{{ t('collectives', 'Embedded in page') }}
-				</div>
-
 				<ul class="attachment-list">
 					<NcListItem
 						v-for="attachment in textAttachments"
@@ -63,65 +59,6 @@
 								</template>
 								{{ t('collectives', 'View in document') }}
 							</NcActionButton>
-							<NcActionLink
-								:href="davUrl(attachment)"
-								:download="attachment.name"
-								:class="{ 'action-link--disabled': !networkOnline }"
-								:title="offlineTitle"
-								:close-after-click="true">
-								<template #icon>
-									<DownloadIcon />
-								</template>
-								{{ t('collectives', 'Download') }}
-							</NcActionLink>
-							<NcActionLink
-								v-if="!isPublic"
-								:href="filesUrl(attachment.id)"
-								:class="{ 'action-link--disabled': !networkOnline }"
-								:title="offlineTitle"
-								:close-after-click="true">
-								<template #icon>
-									<FolderIcon />
-								</template>
-								{{ t('collectives', 'Show in Files') }}
-							</NcActionLink>
-						</template>
-					</NcListItem>
-				</ul>
-			</div>
-
-			<!-- folder attachments list -->
-			<div v-show="folderAttachments.length">
-				<div class="attachment-list-subheading">
-					{{ t('collectives', 'In folder') }}
-				</div>
-
-				<ul class="attachments-list">
-					<NcListItem
-						v-for="attachment in folderAttachments"
-						:key="attachment.id"
-						:name="attachment.name"
-						:href="davUrl(attachment)"
-						:force-display-actions="true"
-						class="attachment"
-						@click="clickAttachment(attachment, $event)">
-						<template #icon>
-							<img
-								lazy="true"
-								:src="previewUrl(attachment)"
-								alt=""
-								height="256"
-								width="256"
-								class="attachment__image">
-						</template>
-						<template #subname>
-							<div class="attachment__info">
-								<span class="attachment__info_size">{{ formattedFileSize(attachment.filesize) }}</span>
-								<span class="attachment__info_size">·</span>
-								<span :title="formattedDate(attachment.timestamp)">{{ relativeDate(attachment.timestamp) }}</span>
-							</div>
-						</template>
-						<template #actions>
 							<NcActionLink
 								:href="davUrl(attachment)"
 								:download="attachment.name"
@@ -228,6 +165,65 @@
 					</NcListItem>
 				</ul>
 			</div>
+
+			<!-- folder attachments list -->
+			<div v-show="folderAttachments.length">
+				<div class="attachment-list-subheading">
+					{{ t('collectives', 'Files next to page') }}
+				</div>
+
+				<ul class="attachments-list">
+					<NcListItem
+						v-for="attachment in folderAttachments"
+						:key="attachment.id"
+						:name="attachment.name"
+						:href="davUrl(attachment)"
+						:force-display-actions="true"
+						class="attachment"
+						@click="clickAttachment(attachment, $event)">
+						<template #icon>
+							<img
+								lazy="true"
+								:src="previewUrl(attachment)"
+								alt=""
+								height="256"
+								width="256"
+								class="attachment__image">
+						</template>
+						<template #subname>
+							<div class="attachment__info">
+								<span class="attachment__info_size">{{ formattedFileSize(attachment.filesize) }}</span>
+								<span class="attachment__info_size">·</span>
+								<span :title="formattedDate(attachment.timestamp)">{{ relativeDate(attachment.timestamp) }}</span>
+							</div>
+						</template>
+						<template #actions>
+							<NcActionLink
+								:href="davUrl(attachment)"
+								:download="attachment.name"
+								:class="{ 'action-link--disabled': !networkOnline }"
+								:title="offlineTitle"
+								:close-after-click="true">
+								<template #icon>
+									<DownloadIcon />
+								</template>
+								{{ t('collectives', 'Download') }}
+							</NcActionLink>
+							<NcActionLink
+								v-if="!isPublic"
+								:href="filesUrl(attachment.id)"
+								:class="{ 'action-link--disabled': !networkOnline }"
+								:title="offlineTitle"
+								:close-after-click="true">
+								<template #icon>
+									<FolderIcon />
+								</template>
+								{{ t('collectives', 'Show in Files') }}
+							</NcActionLink>
+						</template>
+					</NcListItem>
+				</ul>
+			</div>
 		</div>
 
 		<!-- no attachments found -->
@@ -276,6 +272,7 @@ import OfflineContent from './OfflineContent.vue'
 import { useNetworkState } from '../../composables/useNetworkState.ts'
 import { usePagesStore } from '../../stores/pages.js'
 import { useRootStore } from '../../stores/root.js'
+import { encodeAttachmentFilename } from '../../util/attachmentFilename.ts'
 
 export default {
 	name: 'SidebarTabAttachments',
@@ -362,13 +359,6 @@ export default {
 			return (timestamp) => moment.unix(timestamp).fromNow()
 		},
 
-		// Encode name the same way as Text does at `insertAttachment` in MediaHandler.vue
-		fileNameUriComponent() {
-			return (fileName) => encodeURIComponent(fileName).replace(/[!'()*]/g, (c) => {
-				return '%' + c.charCodeAt(0).toString(16).toUpperCase()
-			})
-		},
-
 		filesUrl() {
 			return (fileId) => generateUrl(`/f/${fileId}`)
 		},
@@ -424,8 +414,8 @@ export default {
 		t,
 
 		...mapActions(usePagesStore, [
-			'deleteFolderAttachment',
-			'renameFolderAttachment',
+			'deleteAttachment',
+			'renameAttachment',
 			'setAttachmentDeleted',
 			'setAttachmentUndeleted',
 		]),
@@ -446,7 +436,7 @@ export default {
 
 		scrollTo(attachment) {
 			const candidates = [...this.getActiveTextElement().querySelectorAll('[data-component="image-view"]')]
-			const element = candidates.find((el) => el.dataset.src.endsWith(this.fileNameUriComponent(attachment.name)))
+			const element = candidates.find((el) => el.dataset.src.endsWith(encodeAttachmentFilename(attachment.name)))
 			if (element) {
 				// Scroll into view
 				element.scrollIntoView({ block: 'center' })
@@ -459,7 +449,9 @@ export default {
 		},
 
 		restore(attachment) {
-			emit('collectives:attachment:restore', this.fileNameUriComponent(attachment.name))
+			emit('collectives:attachment:restore', {
+				name: attachment.name,
+			})
 			this.scrollTo(attachment)
 			this.setAttachmentUndeleted(attachment.name)
 		},
@@ -475,8 +467,13 @@ export default {
 			this.showRenameAttachmentsForm = false
 
 			try {
-				await this.renameFolderAttachment(this.renamedAttachment.id, newName)
+				const newAttachment = await this.renameAttachment(this.renamedAttachment.id, newName)
 				this.renamedAttachment = null
+				emit('collectives:attachment:replaceFilename', {
+					pageId: this.currentPage.id,
+					oldName,
+					newName: newAttachment.name,
+				})
 			} catch (e) {
 				this.renamedAttachment.name = oldName
 				showError(t('collectives', 'Failed to rename folder attachment', {}))
@@ -486,7 +483,11 @@ export default {
 
 		async onDelete(attachment) {
 			try {
-				await this.deleteFolderAttachment(attachment.id)
+				await this.deleteAttachment(attachment.id)
+				emit('collectives:attachment:removeReferences', {
+					pageId: this.currentPage.id,
+					name: attachment.name,
+				})
 				showSuccess(t('collectives', 'Deleted folder attachment {name}', { name: attachment.name }))
 			} catch (e) {
 				showError(t('collectives', 'Failed to delete folder attachment'))

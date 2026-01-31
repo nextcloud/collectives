@@ -272,14 +272,14 @@ export function getPageAttachments(context, pageId) {
 }
 
 /**
- * Rename folder attachment of a page
+ * Rename attachment of a page
  *
  * @param {object} context - either the current collective or a share context
- * @param {number} pageId - ID of the page to delete the folder attachment from
+ * @param {number} pageId - ID of the page that the attachment belongs to
  * @param {number} attachmentId - ID of the attachment to rename
  * @param {string} name - Target name of the attachment
  */
-export function renameFolderAttachment(context, pageId, attachmentId, name) {
+export function renameAttachment(context, pageId, attachmentId, name) {
 	return axios.put(
 		pagesApiUrl(context, pageId, 'attachments', attachmentId),
 		{ name },
@@ -287,13 +287,13 @@ export function renameFolderAttachment(context, pageId, attachmentId, name) {
 }
 
 /**
- * Delete folder attachment of a page
+ * Delete attachment of a page
  *
  * @param {object} context - either the current collective or a share context
- * @param {number} pageId - ID of the page to delete the folder attachment from
+ * @param {number} pageId - ID of the page that the attachment belongs to
  * @param {number} attachmentId - ID of the attachment to delete
  */
-export function deleteFolderAttachment(context, pageId, attachmentId) {
+export function deleteAttachment(context, pageId, attachmentId) {
 	return axios.delete(pagesApiUrl(context, pageId, 'attachments', attachmentId))
 }
 

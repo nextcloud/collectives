@@ -100,8 +100,8 @@ class AttachmentService {
 	 * @throws NotPermittedException
 	 */
 	public function renameAttachment(File $pageFile, int $attachmentId, string $targetName): array {
-		$pageFolder = $pageFile->getParent();
-		$node = $pageFolder->getById($attachmentId);
+		$attachmentFolder = $this->getAttachmentDirectory($pageFile);
+		$node = $attachmentFolder->getById($attachmentId);
 		if (count($node) === 0) {
 			throw new NotFoundException('Attachment not found: ' . $attachmentId . '.');
 		}
@@ -110,7 +110,7 @@ class AttachmentService {
 			throw new NotFoundException('Attachment not a file: ' . $attachmentId . '.');
 		}
 		try {
-			$newNode = $node->move($pageFolder->getPath() . DIRECTORY_SEPARATOR . $targetName);
+			$newNode = $node->move($attachmentFolder->getPath() . DIRECTORY_SEPARATOR . $targetName);
 		} catch (FilesNotFoundException $e) {
 			throw new NotFoundException($e->getMessage());
 		} catch (FilesNotPermittedException $e) {
@@ -121,7 +121,7 @@ class AttachmentService {
 			throw new NotFoundException('Node not a file: ' . $newNode->getId());
 		}
 
-		return $this->fileToInfo($newNode, $pageFolder, 'folder');
+		return $this->fileToInfo($newNode, $attachmentFolder);
 	}
 
 	/**
@@ -130,8 +130,8 @@ class AttachmentService {
 	 * @throws NotPermittedException
 	 */
 	public function deleteAttachment(File $pageFile, int $attachmentId): void {
-		$pageFolder = $pageFile->getParent();
-		$node = $pageFolder->getById($attachmentId);
+		$attachmentFolder = $this->getAttachmentDirectory($pageFile);
+		$node = $attachmentFolder->getById($attachmentId);
 		if (count($node) === 0) {
 			throw new NotFoundException('Attachment not found: ' . $attachmentId . '.');
 		}
