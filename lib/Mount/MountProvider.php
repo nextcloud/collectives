@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace OCA\Collectives\Mount;
 
 use OC\Files\Cache\Cache;
+use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Service\CollectiveHelper;
 use OCA\Collectives\Service\MissingDependencyException;
@@ -17,7 +18,6 @@ use OCA\Collectives\Service\NotFoundException;
 use OCA\Collectives\Service\NotPermittedException;
 use OCP\App\IAppManager;
 use OCP\AppFramework\QueryException;
-use OCP\DB\Exception;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\Config\IMountProvider;
 use OCP\Files\Config\IMountProviderCollection;
@@ -65,23 +65,25 @@ class MountProvider implements IMountProvider {
 			? ''
 			: $userFolderSetting . DIRECTORY_SEPARATOR;
 
-		foreach ($collectives as $c) {
-			$mountPointName = $c->getName();
-			try {
-				$cacheEntry = $this->collectiveFolderManager->getFolderFileCache($c->getId(), $mountPointName);
-			} catch (FilesNotFoundException|Exception $e) {
-				$this->log($e);
-				// maybe some other caches can be found.
+		$isShare = $this->userSession->getUser() === null;
+		$collectiveIds = array_map(fn (Collective $collective): int => $collective->getId(), $collectives);
+		$cacheEntriesPerCollectiveId = $this->collectiveFolderManager->getFolderFileCachePerCollectiveId($collectiveIds);
+		foreach ($collectives as $collective) {
+			/** @var array|null $cacheEntry */
+			$cacheEntry = $cacheEntriesPerCollectiveId[$collective->getId()] ?? null;
+			if ($cacheEntry === null) {
+				$this->logger->warning('Could not find cache entry for collective ' . $collective->getId());
 				continue;
 			}
-			$isShare = $this->userSession->getUser() === null;
+			$cacheEntry['mount_point'] = $collective->getName();
 			$folders[] = [
-				'folder_id' => $c->getId(),
-				'mount_point' => $mountPointPath . $mountPointName,
-				'permissions' => $c->getUserPermissions($isShare),
+				'folder_id' => $collective->getId(),
+				'mount_point' => $mountPointPath . $collective->getName(),
+				'permissions' => $collective->getUserPermissions($isShare),
 				'rootCacheEntry' => (isset($cacheEntry['fileid'])) ? Cache::cacheEntryFromData($cacheEntry, $this->mimeTypeLoader) : null
 			];
 		}
+
 		return $folders;
 	}
 
