@@ -226,21 +226,27 @@ class CollectiveFolderManager {
 	 *     encrytped: bool,
 	 *     parent: int,
 	 *     permissions: int,
-	 * }
+	 * }|null[]
 	 */
-	public function getFolderFileCache(int $id, string $name): array {
+	public function getFolderFileCachePerCollectiveId(array $ids): array {
+		if (!$ids) {
+			return [];
+		}
 		$qb = $this->connection->getQueryBuilder();
 		$qb->select(
 			'co.id AS folder_id', 'fc.fileid', 'fc.storage', 'fc.path', 'fc.name AS name',
 			'fc.mimetype', 'fc.mimepart', 'fc.size', 'fc.mtime', 'fc.storage_mtime', 'fc.etag', 'fc.encrypted', 'fc.parent', 'fc.permissions AS permissions')
 			->from('collectives', 'co')
 			->leftJoin('co', 'filecache', 'fc', $qb->expr()->eq('fc.name', $qb->expr()->castColumn('co.id', IQueryBuilder::PARAM_STR)))
-			->where($qb->expr()->eq('co.id', $qb->createNamedParameter($id)))
+			->where($qb->expr()->in('co.id', $qb->createNamedParameter($ids, IQueryBuilder::PARAM_INT_ARRAY)))
 			->andWhere($qb->expr()->eq('fc.parent', $qb->createNamedParameter($this->getRootFolderId())))
 			->andWhere($qb->expr()->eq('fc.storage', $qb->createNamedParameter($this->getRootFolderStorageId(), IQueryBuilder::PARAM_INT)));
-		$cache = $qb->executeQuery()->fetch();
-		$cache['mount_point'] = $name;
-		return $cache;
+		$rows = $qb->executeQuery()->fetchAll();
+		$result = [];
+		foreach ($rows as $row) {
+			$result[$row['folder_id']] = $row;
+		}
+		return $result;
 	}
 
 	/**
