@@ -47,7 +47,7 @@ class AttachmentService {
 	/**
 	 * @throws NotFoundException
 	 */
-	private function getAttachmentDirectory(File $pageFile): Folder {
+	private function getAttachmentDirectory(File $pageFile, bool $create = false): Folder {
 		try {
 			$parentFolder = $pageFile->getParent();
 			$attachmentFolderName = '.attachments.' . $pageFile->getId();
@@ -56,6 +56,8 @@ class AttachmentService {
 				if ($attachmentFolder instanceof Folder) {
 					return $attachmentFolder;
 				}
+			} elseif ($create) {
+				return $parentFolder->newFolder($attachmentFolderName);
 			}
 		} catch (FilesNotFoundException|InvalidPathException) {
 			throw new NotFoundException('Failed to get attachment directory for page ' . $pageFile->getId() . '.');
@@ -68,7 +70,7 @@ class AttachmentService {
 			$attachmentDir = $this->getAttachmentDirectory($pageFile);
 		} catch (NotFoundException) {
 			// No attachment folder -> empty list
-			// return [];
+			return [];
 		}
 
 		// Only return files, ignore folders
@@ -92,6 +94,24 @@ class AttachmentService {
 	 */
 	public function getAttachments(File $pageFile, Folder $folder): array {
 		return array_merge($this->getTextAttachments($pageFile, $folder), $this->getFolderAttachments($pageFile, $folder));
+	}
+
+	/**
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function uploadAttachment(File $pageFile, string $name, $resource): array {
+		$attachmentFolder = $this->getAttachmentDirectory($pageFile, true);
+		if ($attachmentFolder->nodeExists($name)) {
+			$pathinfo = pathinfo($name);
+			$i = 0;
+			do {
+				$name = $pathinfo['filename'] . ' (' . ++$i . ').' . $pathinfo['extension'];
+			} while ($attachmentFolder->nodeExists($name));
+		}
+		$file = $attachmentFolder->newFile($name, $resource);
+		return $this->fileToInfo($file, $attachmentFolder);
 	}
 
 	/**

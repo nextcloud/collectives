@@ -4,7 +4,12 @@
 -->
 
 <template>
-	<div class="attachments-container">
+	<div
+		ref="attachmentsContainer"
+		class="attachments-container"
+		@dragover="onDragover"
+		@dragleave="onDragleave"
+		@drop="onDrop">
 		<!-- loading -->
 		<NcEmptyContent v-if="loading('attachments')">
 			<template #icon>
@@ -22,9 +27,33 @@
 			</template>
 		</NcEmptyContent>
 
-		<div v-else-if="!loading('attachments') && (attachments.length || deletedAttachments.length)">
+		<div v-else-if="!loading('attachments')">
+			<!-- upload button and area -->
+			<div v-if="currentCollectiveCanEdit" class="upload-button">
+				<NcButton @click="$refs.fileInput.click()">
+					<template #icon>
+						<PlusIcon />
+					</template>
+					{{ t('collectives', 'Upload') }}
+				</NcButton>
+				<input
+					ref="fileInput"
+					type="file"
+					multiple
+					style="display: none"
+					@change="onFilesSelected">
+
+				<!-- drag and drop notice -->
+				<div v-show="dragover" class="upload-drop-area">
+					<TrayArrowDownIcon :size="24" />
+					<div class="upload-drop-area__title">
+						{{ t('collectives', 'Drag and drop files here to upload') }}
+					</div>
+				</div>
+			</div>
+
 			<!-- text attachments list -->
-			<div v-show="textAttachments.length">
+			<div v-if="textAttachments.length">
 				<ul class="attachment-list">
 					<NcListItem
 						v-for="attachment in textAttachments"
@@ -82,6 +111,7 @@
 								{{ t('collectives', 'Show in Files') }}
 							</NcActionLink>
 							<NcActionButton
+								v-if="currentCollectiveCanEdit"
 								:close-after-click="true"
 								:class="{ 'action-link--disabled': !networkOnline }"
 								@click="onStartRename(attachment)">
@@ -91,6 +121,7 @@
 								{{ t('collectives', 'Rename') }}
 							</NcActionButton>
 							<NcActionButton
+								v-if="currentCollectiveCanEdit"
 								:close-after-click="true"
 								:class="{ 'action-link--disabled': !networkOnline }"
 								@click="onDelete(attachment)">
@@ -105,7 +136,7 @@
 			</div>
 
 			<!-- deleted attachments list -->
-			<div v-show="isTextEdit && deletedAttachments.length">
+			<div v-if="isTextEdit && deletedAttachments.length">
 				<div class="attachment-list-subheading">
 					{{ t('collectives', 'Recently deleted') }}
 				</div>
@@ -167,7 +198,7 @@
 			</div>
 
 			<!-- folder attachments list -->
-			<div v-show="folderAttachments.length">
+			<div v-if="folderAttachments.length">
 				<div class="attachment-list-subheading">
 					{{ t('collectives', 'Files next to page') }}
 				</div>
@@ -228,7 +259,7 @@
 
 		<!-- no attachments found -->
 		<NcEmptyContent
-			v-else
+			v-else-if="!attachments.length && !folderAttachments.length"
 			:name="t('collectives', 'No attachments available')"
 			:description="noAttachmentsDescription">
 			<template #icon>
@@ -252,7 +283,7 @@ import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { formatFileSize } from '@nextcloud/files'
 import moment from '@nextcloud/moment'
 import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
-import { NcActionButton, NcActionLink, NcEmptyContent, NcListItem, NcLoadingIcon } from '@nextcloud/vue'
+import { NcActionButton, NcActionLink, NcButton, NcEmptyContent, NcListItem, NcLoadingIcon } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
 import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagonOutline.vue'
 import DeleteIcon from 'vue-material-design-icons/DeleteOutline.vue'
@@ -260,11 +291,14 @@ import EyeIcon from 'vue-material-design-icons/EyeOutline.vue'
 import FolderIcon from 'vue-material-design-icons/FolderOutline.vue'
 import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue'
 import PencilOutlineIcon from 'vue-material-design-icons/PencilOutline.vue'
+import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
 import DownloadIcon from 'vue-material-design-icons/TrayArrowDown.vue'
+import TrayArrowDownIcon from 'vue-material-design-icons/TrayArrowDown.vue'
 import AttachmentRenameDialog from './AttachmentRenameDialog.vue'
 import OfflineContent from './OfflineContent.vue'
 import { useNetworkState } from '../../composables/useNetworkState.ts'
+import { useCollectivesStore } from '../../stores/collectives.js'
 import { usePagesStore } from '../../stores/pages.js'
 import { useRootStore } from '../../stores/root.js'
 import { encodeAttachmentFilename } from '../../util/attachmentFilename.ts'
@@ -281,13 +315,16 @@ export default {
 		FolderIcon,
 		NcActionButton,
 		NcActionLink,
+		NcButton,
 		NcEmptyContent,
 		NcLoadingIcon,
 		NcListItem,
 		OfflineContent,
 		PaperclipIcon,
 		PencilOutlineIcon,
+		PlusIcon,
 		RestoreIcon,
+		TrayArrowDownIcon,
 	},
 
 	setup() {
@@ -297,6 +334,7 @@ export default {
 
 	data() {
 		return {
+			dragover: false,
 			renamedAttachment: null,
 			showRenameAttachmentsForm: false,
 		}
@@ -308,6 +346,8 @@ export default {
 			'loading',
 			'shareTokenParam',
 		]),
+
+		...mapState(useCollectivesStore, ['currentCollectiveCanEdit']),
 
 		...mapState(usePagesStore, [
 			'attachments',
@@ -411,7 +451,38 @@ export default {
 			'renameAttachment',
 			'setAttachmentDeleted',
 			'setAttachmentUndeleted',
+			'uploadAttachment',
 		]),
+
+		onDragover(event) {
+			// Needed to keep the drag/drop chain working
+			event.preventDefault()
+
+			const isForeignFile = event.dataTransfer?.types.includes('Files')
+			if (isForeignFile) {
+				this.dragover = true
+				this.$refs.attachmentsContainer.scrollIntoView({ behaviour: 'smooth', block: 'start' })
+			}
+		},
+
+		onDragleave() {
+			if (this.dragover) {
+				this.dragover = false
+			}
+		},
+
+		onDrop(event) {
+			const files = event.dataTransfer?.files
+			if (!files) {
+				return
+			}
+
+			event.preventDefault()
+			event.stopPropagation()
+
+			this.uploadAttachments(files)
+			this.dragover = false
+		},
 
 		clickAttachment(attachment, ev) {
 			// Show in viewer if the mimetype is supported
@@ -449,6 +520,27 @@ export default {
 			this.setAttachmentUndeleted(attachment.name)
 		},
 
+		async onFilesSelected(event) {
+			const files = event.target?.files
+			if (!files) {
+				return
+			}
+
+			await this.uploadAttachments(files)
+		},
+
+		async uploadAttachments(files) {
+			for (const file of files) {
+				try {
+					await this.uploadAttachment(file)
+					this.$refs.fileInput.value = ''
+				} catch (e) {
+					console.error('Failed to upload attachment', e)
+					showError(t('collectives', 'Failed to upload attachment {name}', { name: file.name }))
+				}
+			}
+		},
+
 		async onStartRename(attachment) {
 			this.showRenameAttachmentsForm = true
 			this.renamedAttachment = attachment
@@ -469,8 +561,8 @@ export default {
 				})
 			} catch (e) {
 				this.renamedAttachment.name = oldName
-				showError(t('collectives', 'Failed to rename folder attachment', {}))
 				console.error('Failed to rename folder attachment', e)
+				showError(t('collectives', 'Failed to rename folder attachment', {}))
 			}
 		},
 
@@ -483,8 +575,8 @@ export default {
 				})
 				showSuccess(t('collectives', 'Deleted folder attachment {name}', { name: attachment.name }))
 			} catch (e) {
-				showError(t('collectives', 'Failed to delete folder attachment'))
 				console.error('Failed to delete folder attachment', e)
+				showError(t('collectives', 'Failed to delete folder attachment'))
 			}
 		},
 
@@ -504,6 +596,32 @@ export default {
 <style lang="scss" scoped>
 .attachments-container {
 	height: calc(100% - 24px);
+}
+
+.upload-button {
+	padding-block: 4px;
+	padding-inline: 8px;
+}
+
+.upload-drop-area {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	user-select: none;
+	color: var(--color-text-maxcontrast);
+	background-color: var(--color-main-background);
+	margin-block: 8px;
+	padding: 12px;
+	border: 2px var(--color-border-dark) dashed;
+	border-radius: var(--border-radius-large);
+
+	&__title {
+		font-weight: bold;
+		font-size: 1.2em;
+		padding-inline-start: 12px;
+		color: inherit;
+	}
 }
 
 .attachment {
