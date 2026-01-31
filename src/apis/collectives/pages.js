@@ -272,6 +272,25 @@ export function getPageAttachments(context, pageId) {
 }
 
 /**
+ * Upload attachment of a page
+ *
+ * @param {object} context - either the current collective or a share context
+ * @param {number} pageId - ID of the page that the attachment belongs to
+ * @param {string} formData - The formData containing the attachment
+ */
+export function uploadAttachment(context, pageId, formData) {
+	return axios.post(
+		pagesApiUrl(context, pageId, 'attachments'),
+		formData,
+		{
+			headers: {
+				'Content-Type': 'multipart/form-data',
+			},
+		},
+	)
+}
+
+/**
  * Rename attachment of a page
  *
  * @param {object} context - either the current collective or a share context
