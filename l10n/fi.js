@@ -75,6 +75,7 @@ OC.L10N.register(
     "Attachments" : "Liitteet",
     "Sharing" : "Jakaminen",
     "Versions" : "Versiot",
+    "Restore this version" : "Palauta tämä versio",
     "Link copied" : "Linkki kopioitu",
     "Please reload the page." : "Päivitä sivu.",
     "Copied" : "Kopioitu",

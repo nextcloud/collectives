@@ -26,6 +26,7 @@ OC.L10N.register(
     "Delete" : "Izbriši",
     "Rename" : "Preimenuj",
     "Templates" : "Predlošci",
+    "Add a template" : "Dodaj predložak",
     "Done" : "Gotovo",
     "Manage tags" : "Upravljaj oznakama",
     "Move or copy" : "Premjesti ili kopiraj",
