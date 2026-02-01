@@ -7,6 +7,7 @@ OC.L10N.register(
     "{user} has mentioned you in {collective} - {page}" : "{user} vás zmínil/a v {collective} – {page}",
     "Landing page" : "Úvodní stránka",
     "Welcome %s" : "Vítejte %s",
+    "Add pages with the ➕ in the page list! You can drag them to change the order. Dragging them into the editor will create a 🔗 link." : "Stránky přidávejte pomocí ➕ v seznamu stránek! Pořadí je možné měnit přetahováním. Přetažením do editoru vytvoří odkaz 🔗.",
     "Press `✏️ Edit` to change this text and make yourself at home! Multiple people can edit together. Find out more in the [documentation](https://nextcloud.github.io/collectives/) or ask [the community](https://help.nextcloud.com/tag/collectives-app)." : "Klikněte na `✏️ Edit` a změňte tento text a přizpůsobte si! Upravovat může vícero lidí naráz. Další informace naleznete v [dokumentaci](https://nextcloud.github.io/collectives/) nebo se zeptejte [komunity](https://help.nextcloud.com/tag/collectives-app).",
     "Collective pages" : "Kolektivy – stránky",
     "In collective %1$s" : "V kolektivu %1$s",
