@@ -200,7 +200,24 @@
 			<!-- folder attachments list -->
 			<div v-if="folderAttachments.length">
 				<div class="attachment-list-subheading">
-					{{ t('collectives', 'Files next to page') }}
+					<div>
+						{{ t('collectives', 'Files next to page') }}
+					</div>
+					<NcPopover popover-role="dialog" no-focus-trap>
+						<template #trigger>
+							<NcButton
+								class="hint-icon"
+								variant="tertiary-no-background"
+								:aria-label="t('collectives', 'Files next to page explanation')">
+								<template #icon>
+									<InformationIcon :size="20" />
+								</template>
+							</NcButton>
+						</template>
+						<p class="hint-body">
+							{{ t('collectives', 'Files that are stored in the same folder as the page.') }}
+						</p>
+					</NcPopover>
 				</div>
 
 				<ul class="attachments-list">
@@ -291,10 +308,12 @@ import NcButton from '@nextcloud/vue/components/NcButton'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcListItem from '@nextcloud/vue/components/NcListItem'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
+import NcPopover from '@nextcloud/vue/components/NcPopover'
 import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagonOutline.vue'
 import DeleteIcon from 'vue-material-design-icons/DeleteOutline.vue'
 import EyeIcon from 'vue-material-design-icons/EyeOutline.vue'
 import FolderIcon from 'vue-material-design-icons/FolderOutline.vue'
+import InformationIcon from 'vue-material-design-icons/InformationOutline.vue'
 import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue'
 import PencilOutlineIcon from 'vue-material-design-icons/PencilOutline.vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
@@ -319,12 +338,14 @@ export default {
 		DownloadIcon,
 		EyeIcon,
 		FolderIcon,
+		InformationIcon,
 		NcActionButton,
 		NcActionLink,
 		NcButton,
 		NcEmptyContent,
 		NcLoadingIcon,
 		NcListItem,
+		NcPopover,
 		OfflineContent,
 		PaperclipIcon,
 		PencilOutlineIcon,
@@ -660,8 +681,19 @@ export default {
 }
 
 .attachment-list-subheading {
+	display: flex;
+	align-items: center;
 	padding: 0.3rem 8px;
 	font-weight: bold;
+
+	.hint-icon {
+		color: var(--color-primary-element);
+	}
+
+	.hint-body {
+		max-width: 300px;
+		padding: var(--border-radius-element);
+	}
 }
 
 .action-link--disabled {
