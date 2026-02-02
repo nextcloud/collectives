@@ -29,7 +29,7 @@
     "@nextcloud/auth": "^2.5.3",
     "@nextcloud/axios": "^2.5.2",
     "@nextcloud/capabilities": "^1.2.1",
-    "@nextcloud/dialogs": "^6.4.2",
+    "@nextcloud/dialogs": "^7.2.0",
     "@nextcloud/event-bus": "^3.3.3",
     "@nextcloud/files": "^4.0.0",
     "@nextcloud/files-legacy": "npm:@nextcloud/files@^3.12.1",
