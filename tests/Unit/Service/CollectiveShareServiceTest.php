@@ -40,6 +40,7 @@ class CollectiveShareServiceTest extends TestCase {
 	private Folder $collectiveFolder;
 
 	protected function setUp(): void {
+		parent::setUp();
 		$this->shareManager = $this->getMockBuilder(IShareManager::class)
 			->disableOriginalConstructor()
 			->getMock();

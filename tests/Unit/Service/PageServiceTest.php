@@ -47,6 +47,7 @@ class PageServiceTest extends TestCase {
 	private int $collectiveId = 1;
 
 	protected function setUp(): void {
+		parent::setUp();
 		$appManager = $this->getMockBuilder(AppManager::class)
 			->disableOriginalConstructor()
 			->getMock();
