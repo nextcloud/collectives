@@ -731,11 +731,6 @@ class FeatureContext implements Context {
 		} else {
 			$this->assertStatusCode(400);
 		}
-
-		if ($key === 'user_folder') {
-			// Workaround some weird caching/timing issue by resetting user session after changing user_folder setting
-			unset($this->cookieJars[$user], $this->requestTokens[$user]);
-		}
 	}
 
 	/**
