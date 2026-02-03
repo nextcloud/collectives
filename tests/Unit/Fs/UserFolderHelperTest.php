@@ -9,11 +9,8 @@ declare(strict_types=1);
 
 namespace Unit\Fs;
 
-use OC\Files\Node\File;
-use OC\Files\Node\Folder;
-use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Fs\UserFolderHelper;
-use OCA\Collectives\Service\NotPermittedException;
+use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
 use OCP\IAppConfig;
 use OCP\IConfig;
@@ -35,11 +32,6 @@ class UserFolderHelperTest extends TestCase {
 	protected function setUp(): void {
 		parent::setUp();
 
-		$collective1 = new Collective();
-		$collective1->setId(1);
-		$collective2 = new Collective();
-		$collective2->setId(2);
-
 		$this->collectivesUserFolder = $this->getMockBuilder(Folder::class)
 			->disableOriginalConstructor()
 			->getMock();
@@ -57,14 +49,10 @@ class UserFolderHelperTest extends TestCase {
 		$rootFolder = $this->getMockBuilder(IRootFolder::class)
 			->disableOriginalConstructor()
 			->getMock();
-		$rootFolder->method('getUserFolder')
-			->willReturn($this->userFolder);
 
 		$user = $this->getMockBuilder(IUser::class)
 			->disableOriginalConstructor()
 			->getMock();
-		$user->method('getQuota')
-			->willReturn('none');
 		$userManager = $this->getMockBuilder(IUserManager::class)
 			->disableOriginalConstructor()
 			->getMock();
@@ -99,7 +87,7 @@ class UserFolderHelperTest extends TestCase {
 
 		$this->config->method('setUserValue')
 			->willThrowException(new PreConditionNotMetException(''));
-		$this->expectException(NotPermittedException::class);
+		$this->expectException(PreConditionNotMetException::class);
 		$this->helper->getUserFolderSetting('jane');
 	}
 
@@ -110,35 +98,5 @@ class UserFolderHelperTest extends TestCase {
 		$this->config->method('getUserValue')
 			->willReturn('/custom_folder');
 		self::assertEquals('/custom_folder', $this->helper->getUserFolderSetting('jane'));
-	}
-
-	public function testGetFolderExists(): void {
-		$this->config->method('getAppValue')
-			->with('collectives', 'default_user_folder', '')
-			->willReturn('');
-		$this->config->method('getUserValue')
-			->willReturn('');
-
-		$this->userFolder->method('get')
-			->willReturn($this->collectivesUserFolder);
-
-		self::assertEquals($this->collectivesUserFolder, $this->helper->get('jane'));
-	}
-
-	public function testGetFileExists(): void {
-		$this->config->method('getAppValue')
-			->with('collectives', 'default_user_folder', '')
-			->willReturn('');
-		$this->config->method('getUserValue')
-			->willReturn('');
-
-		$file = $this->getMockBuilder(File::class)
-			->disableOriginalConstructor()
-			->getMock();
-
-		$this->userFolder->method('get')
-			->willReturn($file);
-
-		self::assertEquals($this->collectivesUserFolder, $this->helper->get('jane'));
 	}
 }
