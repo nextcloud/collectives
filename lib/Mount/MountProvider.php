@@ -12,6 +12,7 @@ namespace OCA\Collectives\Mount;
 use OC\Files\Cache\Cache;
 use OCA\Collectives\Db\Collective;
 use OCA\Collectives\Fs\UserFolderHelper;
+use OCA\Collectives\Service\CircleException;
 use OCA\Collectives\Service\CollectiveHelper;
 use OCA\Collectives\Service\MissingDependencyException;
 use OCA\Collectives\Service\NotFoundException;
@@ -50,7 +51,7 @@ class MountProvider implements IMountProvider {
 
 		try {
 			$collectives = $this->collectiveHelper->getCollectivesForUser($user->getUID(), true, false);
-		} catch (QueryException|MissingDependencyException|NotFoundException|NotPermittedException $e) {
+		} catch (QueryException|MissingDependencyException|NotFoundException|NotPermittedException|CircleException $e) {
 			$this->log($e);
 			return $folders;
 		}
