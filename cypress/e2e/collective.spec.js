@@ -27,7 +27,7 @@ describe('Collective', function() {
 			cy.visit('/apps/files')
 		})
 		it('has a matching folder', function() {
-			const breadcrumbsSelector = '.files-controls .breadcrumb, [data-cy-files-content-breadcrumbs] a'
+			const breadcrumbsSelector = '[data-cy-files-content-breadcrumbs] :is(a, button)'
 			cy.openFile('Collectives')
 			cy.get(breadcrumbsSelector).should('contain', 'Collectives')
 			cy.openFile('Preexisting Collective')

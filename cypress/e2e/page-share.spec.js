@@ -162,8 +162,12 @@ describe('Page share', function() {
 		it('Allows opening a password-protected shared (non-editable) page', function() {
 			cy.logout()
 			cy.visit(shareUrl)
-			cy.get('#password-input-form input[type="password"]').type('password')
-			cy.get('#password-input-form input[type="submit"]').click()
+			cy.get('input[type="password"]').type('password')
+			if (['stable31', 'stable32'].includes(Cypress.env('ncVersion'))) {
+				cy.get('#password-input-form input[type="submit"]').click()
+			} else {
+				cy.get('button').contains('Submit').click()
+			}
 
 			cy.get('[data-cy-collectives="page-title-container"] input').should('have.value', 'Sharepage')
 			cy.getReadOnlyEditor()

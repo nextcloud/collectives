@@ -12,7 +12,7 @@ describe('Settings', function() {
 	describe('Collectives folder setting', function() {
 		it('Allows changing the collective user folder', function() {
 			const randomFolder = Math.random().toString(36).replace(/[^a-z]+/g, '').slice(0, 10)
-			const breadcrumbsSelector = '.files-controls .breadcrumb, [data-cy-files-content-breadcrumbs] a'
+			const breadcrumbsSelector = '[data-cy-files-content-breadcrumbs] :is(a, button)'
 			cy.loginAs('bob')
 			cy.visit('apps/collectives/A%20Collective')
 			cy.get('button.app-navigation-toggle').click()
