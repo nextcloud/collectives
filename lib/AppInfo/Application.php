@@ -55,6 +55,7 @@ use OCP\Files\Config\IMountProviderCollection;
 use OCP\Files\Events\Node\NodeRenamedEvent;
 use OCP\Files\Events\Node\NodeWrittenEvent;
 use OCP\Files\IMimeTypeLoader;
+use OCP\IDBConnection;
 use OCP\IUserManager;
 use OCP\IUserSession;
 use OCP\SetupCheck\ISetupCheck;
@@ -87,6 +88,8 @@ class Application extends App implements IBootstrap {
 		$context->registerService(MountProvider::class, fn (ContainerInterface $c) => new MountProvider(
 			$c->get(CollectiveHelper::class),
 			$c->get(CollectiveFolderManager::class),
+			$c->get(IDBConnection::class),
+			$c->get(IMountProviderCollection::class),
 			$c->get(IMimeTypeLoader::class),
 			$c->get(IAppManager::class),
 			$c->get(LoggerInterface::class),

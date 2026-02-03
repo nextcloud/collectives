@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace OCA\Collectives\Mount;
 
 use OC\Files\Cache\Cache;
-use OCA\Collectives\Fs\NodeHelper;
 use OCA\Collectives\Fs\UserFolderHelper;
 use OCA\Collectives\Service\CollectiveHelper;
 use OCA\Collectives\Service\MissingDependencyException;
@@ -19,12 +18,15 @@ use OCA\Collectives\Service\NotPermittedException;
 use OCP\App\IAppManager;
 use OCP\AppFramework\QueryException;
 use OCP\DB\Exception;
+use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\Files\Config\IMountProvider;
-use OCP\Files\Folder;
+use OCP\Files\Config\IMountProviderCollection;
 use OCP\Files\IMimeTypeLoader;
 use OCP\Files\Mount\IMountPoint;
 use OCP\Files\NotFoundException as FilesNotFoundException;
+use OCP\Files\Storage\IStorage;
 use OCP\Files\Storage\IStorageFactory;
+use OCP\IDBConnection;
 use OCP\IUser;
 use OCP\IUserSession;
 use Psr\Log\LoggerInterface;
@@ -33,6 +35,8 @@ class MountProvider implements IMountProvider {
 	public function __construct(
 		private CollectiveHelper $collectiveHelper,
 		private CollectiveFolderManager $collectiveFolderManager,
+		private IDBConnection $connection,
+		private IMountProviderCollection $mountProviderCollection,
 		private IMimeTypeLoader $mimeTypeLoader,
 		private IAppManager $appManager,
 		private LoggerInterface $logger,
@@ -100,18 +104,7 @@ class MountProvider implements IMountProvider {
 			$userFolderSetting = $this->userFolderHelper->getUserFolderSetting($user->getUID());
 
 			// Delete or rename existing node to avoid conflicts
-			$userRootFolder = $this->userFolderHelper->getUserRootFolder($user->getUID());
-			if ($userRootFolder->nodeExists($userFolderSetting)) {
-				$node = $userRootFolder->get($userFolderSetting);
-				if ($node instanceof Folder && count($node->getDirectoryListing()) === 0) {
-					// Delete empty folder
-					$node->delete();
-				} else {
-					// Rename node
-					$newNodeName = NodeHelper::generateFilename($userRootFolder, $userFolderSetting);
-					$node->move($userRootFolder->getPath() . DIRECTORY_SEPARATOR . $newNodeName);
-				}
-			}
+			$this->resolveNameConflict($user, trim($userFolderSetting, '/'));
 
 			// Create the collectives root mount point with empty storage
 			// The empty storage ensures only mount points exist here, no actual files
@@ -142,14 +135,68 @@ class MountProvider implements IMountProvider {
 		}
 	}
 
-	protected function isEnabledForUser(IUser $user): bool {
+	private function isEnabledForUser(IUser $user): bool {
 		return $this->appManager->isEnabledForUser('circles', $user)
 			&& $this->appManager->isEnabledForUser('collectives', $user);
 	}
 
-	protected function log(\Exception $e): void {
+	private function log(\Exception $e): void {
 		$this->logger->error('Collectives App Error: ' . $e->getMessage(),
 			['exception' => $e]
 		);
+	}
+
+	private function resolveNameConflict(IUser $user, string $path): void {
+		$userHome = $this->mountProviderCollection->getHomeMountForUser($user);
+		$filesPath = 'files/' . $path;
+		$filesPathHash = md5($filesPath);
+
+		$query = $this->connection->getQueryBuilder();
+		$query->select('path')
+			->from('filecache')
+			->where($query->expr()->eq('storage', $query->createNamedParameter($userHome->getNumericStorageId(), IQueryBuilder::PARAM_INT)))
+			->andWhere($query->expr()->eq('path_hash', $query->createNamedParameter($filesPathHash, IQueryBuilder::PARAM_STR)));
+
+		if ($query->executeQuery()->fetchOne() === false) {
+			// No conflicting entry found
+			return;
+		};
+
+		/** @var IStorage $userHomeStorage */
+		$userHomeStorage = $userHome->getStorage();
+		$userHomeCache = $userHomeStorage->getCache();
+		$userFolderCache = $userHomeCache->get($filesPath);
+
+		// Check if node is a folder and empty
+		$isEmptyDir = false;
+		if ($userFolderCache && $userFolderCache['mimetype'] === 'httpd/unix-directory') {
+			$query = $this->connection->getQueryBuilder();
+			$query->select('path')
+				->from('filecache')
+				->where($query->expr()->eq('storage', $query->createNamedParameter($userHome->getNumericStorageId(), IQueryBuilder::PARAM_INT)))
+				->andWhere($query->expr()->like('path', $query->createNamedParameter($filesPath . '/%', IQueryBuilder::PARAM_STR)))
+				->setMaxResults(1);
+			if ($query->executeQuery()->fetchOne() === false) {
+				$isEmptyDir = true;
+			}
+		}
+
+		if ($isEmptyDir) {
+			// Delete empty folder
+			$userHomeStorage->unlink($filesPath);
+			$userHomeCache->remove($filesPath);
+			$userHomeStorage->getPropagator()->propagateChange($filesPath, time());
+		} else {
+			// Rename node
+			$i = 1;
+			$folderName = $path . ' (' . $i++ . ')';
+			while ($userHomeCache->inCache('files/' . $folderName)) {
+				$folderName = $path . ' (' . $i++ . ')';
+			}
+
+			$userHomeStorage->rename($filesPath, 'files/' . $folderName);
+			$userHomeCache->move($filesPath, 'files/' . $folderName);
+			$userHomeStorage->getPropagator()->propagateChange('files/' . $folderName, time());
+		}
 	}
 }
