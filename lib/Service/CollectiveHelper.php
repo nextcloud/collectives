@@ -37,7 +37,7 @@ class CollectiveHelper {
 			$circle = $circles[$cid];
 			$c->setName($circle->getSanitizedName());
 			$level = 0;
-			if ($circle->getInitiator() === null) {
+			if ($circle->hasInitiator() === false) {
 				\OCP\Server::get(\Psr\Log\LoggerInterface::class)->error('CollectiveHelper: Circle initiator is null for circle ID ' . $circle->getSingleId(), [
 					'collectiveId' => $c->getId(),
 					'circleId' => $cid,
