@@ -27,6 +27,7 @@ class CollectiveVersionsExpireManagerTest extends TestCase {
 	private VersionsBackend|MockObject $versionsBackend;
 
 	public function setUp(): void {
+		parent::setUp();
 		$this->versionsBackend = $this->createMock(VersionsBackend::class);
 	}
 

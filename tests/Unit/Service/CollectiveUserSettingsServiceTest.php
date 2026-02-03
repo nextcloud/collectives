@@ -23,6 +23,7 @@ class CollectiveUserSettingsServiceTest extends TestCase {
 	private CollectiveUserSettingsService $service;
 
 	protected function setUp(): void {
+		parent::setUp();
 		$this->collectiveUserSettingsMapper = $this->getMockBuilder(CollectiveUserSettingsMapper::class)
 			->disableOriginalConstructor()
 			->getMock();

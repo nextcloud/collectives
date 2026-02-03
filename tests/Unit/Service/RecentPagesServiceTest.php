@@ -27,6 +27,7 @@ class RecentPagesServiceTest extends TestCase {
 	private IUser $user;
 
 	protected function setUp(): void {
+		parent::setUp();
 		$this->collectiveService = $this->createMock(CollectiveService::class);
 		$dbc = $this->createMock(IDBConnection::class);
 		$config = $this->createMock(IConfig::class);

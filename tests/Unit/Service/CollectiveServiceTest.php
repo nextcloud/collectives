@@ -43,6 +43,7 @@ class CollectiveServiceTest extends TestCase {
 	private CollectiveService $service;
 
 	protected function setUp(): void {
+		parent::setUp();
 		$appManager = $this->createMock(IAppManager::class);
 
 		$this->collectiveMapper = $this->createMock(CollectiveMapper::class);

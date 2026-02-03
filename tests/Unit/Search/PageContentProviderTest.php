@@ -31,6 +31,7 @@ class PageContentProviderTest extends TestCase {
 	private PageContentProvider $provider;
 
 	protected function setUp(): void {
+		parent::setUp();
 		$collective = new Collective();
 		$collective->setId(123);
 

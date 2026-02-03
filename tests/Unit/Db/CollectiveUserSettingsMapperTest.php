@@ -22,6 +22,7 @@ class CollectiveUserSettingsMapperTest extends TestCase {
 	private CollectiveUserSettingsMapper $mapper;
 
 	public function setUp(): void {
+		parent::setUp();
 		$expr = $this->getMockBuilder(IExpressionBuilder::class)
 			->disableOriginalConstructor()
 			->getMock();

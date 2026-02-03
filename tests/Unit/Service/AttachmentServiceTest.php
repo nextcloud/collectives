@@ -23,6 +23,7 @@ class AttachmentServiceTest extends TestCase {
 	private string $attachmentFolderName = '.attachments.' . 1;
 
 	protected function setUp(): void {
+		parent::setUp();
 		$preview = $this->getMockBuilder(IPreview::class)
 			->disableOriginalConstructor()
 			->getMock();
