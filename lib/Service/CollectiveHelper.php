@@ -22,6 +22,7 @@ class CollectiveHelper {
 	}
 
 	/**
+	 * @throws CircleException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 * @throws MissingDependencyException
@@ -36,7 +37,11 @@ class CollectiveHelper {
 			$cid = $c->getCircleId();
 			$circle = $circles[$cid];
 			$c->setName($circle->getSanitizedName());
-			$c->setLevel($getLevel ? $circle->getInitiator()->getLevel(): 0);
+			try {
+				$c->setLevel($getLevel ? $circle->getInitiator()->getLevel(): 0);
+			} catch (\Exception $e) {
+				throw new CircleException($e->getMessage(), 0, $e);
+			}
 			if ($getUserSettings) {
 				// TODO: merge queries for collective and user settings into one?
 				$settings = $this->collectiveUserSettingsMapper->findByCollectiveAndUser($c->getId(), $userId);
@@ -50,6 +55,7 @@ class CollectiveHelper {
 	}
 
 	/**
+	 * @throws CircleException
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 * @throws MissingDependencyException
@@ -63,7 +69,11 @@ class CollectiveHelper {
 			$cid = $c->getCircleId();
 			$circle = $circles[$cid];
 			$c->setName($circle->getSanitizedName());
-			$c->setLevel($circle->getInitiator()->getLevel());
+			try {
+				$c->setLevel($circle->getInitiator()->getLevel());
+			} catch (\Exception $e) {
+				throw new CircleException($e->getMessage(), 0, $e);
+			}
 		}
 		return $collectives;
 	}

@@ -285,10 +285,9 @@ class CircleHelper {
 			$member = $circle->getInitiator();
 		} catch (CircleNotFoundException $e) {
 			throw new NotFoundException($e->getMessage(), 0, $e);
-		} catch (RequestBuilderException|
-			FederatedItemException $e) {
-				throw new NotPermittedException($e->getMessage(), 0, $e);
-			}
+		} catch (RequestBuilderException|FederatedItemException $e) {
+			throw new NotPermittedException($e->getMessage(), 0, $e);
+		}
 
 		return $member->getLevel();
 	}
