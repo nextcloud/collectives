@@ -1665,11 +1665,27 @@ class FeatureContext implements Context {
 	}
 
 	/**
+	 * @When user :user sees webdav node :path
+	 * @When user :user fails to see webdav node :path
+	 *
+	 * @throws GuzzleException
+	 */
+	public function webdavNodeExists(string $user, string $path, ?string $fail = null): bool {
+		$this->setCurrentUser($user);
+		$this->sendRemoteRequest('PROPFIND', '/dav/files/' . $user . '/' . trim($path, '/'), null, null, ['Depth' => 0]);
+		if ($fail === 'fails') {
+			return $this->response->getStatusCode() !== 404;
+		} else {
+			return $this->response->getStatusCode() === 207;
+		}
+	}
+
+	/**
 	 * @When user :user has webdav access to :collective with permissions :permissions
 	 *
 	 * @throws GuzzleException
 	 */
-	public function hasWebdavAccess(string $collective, string $user, string $permissions): void {
+	public function hasCollectiveWebdavAccess(string $collective, string $user, string $permissions): void {
 		$this->setCurrentUser($user);
 		$headers = [
 			'Content-Type' => 'Content-Type: text/xml; charset="utf-8"',
@@ -1698,7 +1714,7 @@ class FeatureContext implements Context {
 	 *
 	 * @throws GuzzleException
 	 */
-	public function hasPublicWebdavAccess(string $collective, string $user, string $permissions): void {
+	public function hasCollectivePublicWebdavAccess(string $collective, string $user, string $permissions): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$token = $this->getShareToken($collectiveId);

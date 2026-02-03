@@ -17,6 +17,24 @@ Feature: mountpoint
     And user "alice" has webdav access to "BehatMountPoint" with permissions "RMG"
     And user "bob" has webdav access to "BehatMountPoint" with permissions "MG"
 
+  Scenario: Delete empty folder when in conflict with mountpoint
+    When user "jane" creates folder "MyCollectives"
+    And user "jane" sees webdav node "MyCollectives"
+    Then user "jane" sets setting "user_folder" to value "/MyCollectives"
+    And user "jane" fails to see webdav node "MyCollectives (1)"
+    Then user "jane" sets setting "user_folder" to value "/Collectives"
+    And user "jane" fails to see webdav node "MyCollectives"
+
+  Scenario: Rename non-empty node when in conflict with mountpoint
+    When user "jane" creates folder "MyCollectives"
+    And user "jane" creates folder "MyCollectives/subfolder"
+    And user "jane" sees webdav node "MyCollectives/subfolder"
+    Then user "jane" sets setting "user_folder" to value "/MyCollectives"
+    And user "jane" fails to see webdav node "MyCollectives/subfolder"
+    And user "jane" sees webdav node "MyCollectives (1)/subfolder"
+    Then user "jane" sets setting "user_folder" to value "/Collectives"
+    And user "jane" deletes folder "MyCollectives (1)"
+
   Scenario: Change collectives user folder for user
     When user "bob" creates folder "some"
     And user "bob" sets setting "user_folder" to value "/some/folder"
