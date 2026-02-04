@@ -152,12 +152,12 @@ class MountProvider implements IMountProvider {
 		$filesPathHash = md5($filesPath);
 
 		$query = $this->connection->getQueryBuilder();
-		$query->select('path')
+		$query->select($query->func()->count('path'))
 			->from('filecache')
 			->where($query->expr()->eq('storage', $query->createNamedParameter($userHome->getNumericStorageId(), IQueryBuilder::PARAM_INT)))
 			->andWhere($query->expr()->eq('path_hash', $query->createNamedParameter($filesPathHash, IQueryBuilder::PARAM_STR)));
 
-		if ($query->executeQuery()->rowCount() === 0) {
+		if ($query->executeQuery()->fetchOne() === 0) {
 			// No conflicting entry found
 			return;
 		};
@@ -171,11 +171,10 @@ class MountProvider implements IMountProvider {
 		$isEmptyDir = false;
 		if ($userFolderCacheEntry !== false && $userFolderCacheEntry->getMimeType() === 'httpd/unix-directory') {
 			$query = $this->connection->getQueryBuilder();
-			$query->select('path')
+			$query->select($query->func()->count('path'))
 				->from('filecache')
-				->where($query->expr()->eq('parent', $query->createNamedParameter($userFolderCacheEntry->getId(), IQueryBuilder::PARAM_INT)))
-				->setMaxResults(1);
-			if ($query->executeQuery()->rowCount() === 0) {
+				->where($query->expr()->eq('parent', $query->createNamedParameter($userFolderCacheEntry->getId(), IQueryBuilder::PARAM_INT)));
+			if ($query->executeQuery()->fetchOne() === 0) {
 				$isEmptyDir = true;
 			}
 		}
