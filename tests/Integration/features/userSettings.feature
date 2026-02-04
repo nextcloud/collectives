@@ -13,5 +13,4 @@ Feature: userSettings
     Then user "jane" collective "BehatUserSettingsCollective" property "userFavoritePages" is "[1,2]"
 
   Scenario: Trash and delete collective and team
-    Then user "jane" trashes collective "BehatUserSettingsCollective"
-    And user "jane" deletes collective+team "BehatUserSettingsCollective"
+    Then user "jane" trashes and deletes collective "BehatUserSettingsCollective"

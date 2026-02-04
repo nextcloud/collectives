@@ -38,5 +38,4 @@ Feature: tags
     Then anonymous fails to see tag "test1" for collective "BehatTagsPublicCollective" with owner "jane"
 
   Scenario: Trash and delete collective and team
-    Then user "jane" trashes collective "BehatTagsPublicCollective"
-    And user "jane" deletes collective+team "BehatTagsPublicCollective"
+    Then user "jane" trashes and deletes collective "BehatTagsPublicCollective"

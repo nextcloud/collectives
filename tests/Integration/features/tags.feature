@@ -36,5 +36,4 @@ Feature: tags
     Then user "jane" fails to see tag "test1" for collective "BehatTagsCollective"
 
   Scenario: Trash and delete collective and team
-    Then user "jane" trashes collective "BehatTagsCollective"
-    And user "jane" deletes collective+team "BehatTagsCollective"
+    Then user "jane" trashes and deletes collective "BehatTagsCollective"

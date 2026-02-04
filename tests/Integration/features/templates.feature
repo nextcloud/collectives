@@ -26,5 +26,4 @@ Feature: templates
     Then user "jane" fails to see templateName "newtemplate2" in "BehatTemplatesCollective"
 
   Scenario: Trash and delete collective and team
-    Then user "jane" trashes collective "BehatTemplatesCollective"
-    And user "jane" deletes collective+team "BehatTemplatesCollective"
+    Then user "jane" trashes and deletes collective "BehatTemplatesCollective"
