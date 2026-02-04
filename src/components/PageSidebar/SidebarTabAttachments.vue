@@ -7,9 +7,9 @@
 	<div
 		ref="attachmentsContainer"
 		class="attachments-container"
-		@dragover="onDragover"
-		@dragleave="onDragleave"
-		@drop="onDrop">
+		@dragover="onContainerDragover"
+		@dragleave="onContainerDragleave"
+		@drop="onContainerDrop">
 		<!-- loading -->
 		<NcEmptyContent v-if="loading('attachments')">
 			<template #icon>
@@ -62,6 +62,7 @@
 						:href="davUrl(attachment)"
 						:force-display-actions="true"
 						class="attachment"
+						@dragstart="onItemDragstart($event, attachment)">
 						@click="clickAttachment(attachment, $event)">
 						<template #icon>
 							<img
@@ -149,6 +150,7 @@
 						:href="davUrl(attachment)"
 						:force-display-actions="true"
 						class="attachment"
+						@dragstart="onItemDragstart($event, attachment)"
 						@click="clickAttachment(attachment, $event)">
 						<template #icon>
 							<img
@@ -483,7 +485,7 @@ export default {
 			'uploadAttachment',
 		]),
 
-		onDragover(event) {
+		onContainerDragover(event) {
 			// Needed to keep the drag/drop chain working
 			event.preventDefault()
 
@@ -494,13 +496,13 @@ export default {
 			}
 		},
 
-		onDragleave() {
+		onContainerDragleave() {
 			if (this.dragover) {
 				this.dragover = false
 			}
 		},
 
-		onDrop(event) {
+		onContainerDrop(event) {
 			const files = event.dataTransfer?.files
 			if (!files) {
 				return
@@ -511,6 +513,23 @@ export default {
 
 			this.uploadAttachments(files)
 			this.dragover = false
+		},
+
+		onItemDragstart(event, attachment) {
+			// Extract last two path segments (attachment directory and filename)
+			const pathParts = attachment.path.split('/')
+			const path = pathParts.slice(-2).join('/')
+
+			const url = this.davUrl(attachment)
+
+			const markdown = `![${attachment.name}](${path})`
+			const html = `<img src="${path}" alt="${attachment.name}">`
+
+			event.dataTransfer.effectAllowed = 'link'
+			event.dataTransfer.setData('text/plain', url)
+			event.dataTransfer.setData('text/uri-list', url)
+			event.dataTransfer.setData('text/markdown', markdown)
+			event.dataTransfer.setData('text/html', html)
 		},
 
 		clickAttachment(attachment, ev) {
