@@ -20,8 +20,7 @@ Feature: pagesDisabledTrashbin
     When user "jane" fails to delete page "firstpage" from trash in "BehatPagesDisabledTrashAndVersionsCollective"
 
   Scenario: Trash and delete collective and team with all remaining pages
-    Then user "jane" trashes collective "BehatPagesDisabledTrashAndVersionsCollective"
-    And user "jane" deletes collective+team "BehatPagesDisabledTrashAndVersionsCollective"
+    Then user "jane" trashes and deletes collective "BehatPagesDisabledTrashAndVersionsCollective"
 
   Scenario: Enable trashbin and versions apps
     When app "files_trashbin" is "enabled"

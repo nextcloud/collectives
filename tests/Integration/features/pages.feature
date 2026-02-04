@@ -113,7 +113,5 @@ Feature: pages
     And user "john" fails to trash page "secondpage" in "BehatPagesCollective"
 
   Scenario: Trash and delete collective and team with all remaining pages
-    Then user "jane" trashes collective "BehatPagesCollective"
-    Then user "jane" trashes collective "BehatPagesCollective2"
-    And user "jane" deletes collective+team "BehatPagesCollective"
-    And user "jane" deletes collective+team "BehatPagesCollective2"
+    Then user "jane" trashes and deletes collective "BehatPagesCollective"
+    Then user "jane" trashes and deletes collective "BehatPagesCollective2"

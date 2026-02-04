@@ -27,5 +27,4 @@ Feature: collectiveSession
     Then user "jane" fails to update session for "BehatSessionCollective"
 
   Scenario: Delete collective
-    When user "jane" trashes collective "BehatSessionCollective"
-    And user "jane" deletes collective+team "BehatSessionCollective"
+    When user "jane" trashes and deletes collective "BehatSessionCollective"

@@ -97,5 +97,4 @@ Feature: mountpoint
     Then public share with owner "jane" has webdav access to "BehatMountPoint" with permissions "RG"
 
   Scenario: Trash and delete collective and team
-    Then user "jane" trashes collective "BehatMountPoint"
-    And user "jane" deletes collective+team "BehatMountPoint"
+    Then user "jane" trashes and deletes collective "BehatMountPoint"

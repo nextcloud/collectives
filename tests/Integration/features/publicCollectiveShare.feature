@@ -74,5 +74,4 @@ Feature: publicCollectiveShare
     Then anonymous fails to see public share with stored token
 
   Scenario: Trash and delete collective and team with all remaining pages
-    Then user "jane" trashes collective "BehatPublicCollective"
-    And user "jane" deletes collective+team "BehatPublicCollective"
+    Then user "jane" trashes and deletes collective "BehatPublicCollective"
