@@ -165,15 +165,16 @@ class MountProvider implements IMountProvider {
 		/** @var IStorage $userHomeStorage */
 		$userHomeStorage = $userHome->getStorage();
 		$userHomeCache = $userHomeStorage->getCache();
-		$userFolderCacheEntry = $userHomeCache->get($filesPath);
+		$userFolderCache = $userHomeCache->get($filesPath);
 
 		// Check if node is a folder and empty
 		$isEmptyDir = false;
-		if ($userFolderCacheEntry !== false && $userFolderCacheEntry->getMimeType() === 'httpd/unix-directory') {
+		if ($userFolderCache !== false && $userFolderCache->getMimeType() === 'httpd/unix-directory') {
 			$query = $this->connection->getQueryBuilder();
 			$query->select('path')
 				->from('filecache')
-				->where($query->expr()->eq('parent', $query->createNamedParameter($userFolderCacheEntry->getId(), IQueryBuilder::PARAM_INT)))
+				->where($query->expr()->eq('storage', $query->createNamedParameter($userHome->getNumericStorageId(), IQueryBuilder::PARAM_INT)))
+				->andWhere($query->expr()->eq('parent', $query->createNamedParameter($userFolderCache->getId(), IQueryBuilder::PARAM_INT)))
 				->setMaxResults(1);
 			if ($query->executeQuery()->rowCount() === 0) {
 				$isEmptyDir = true;
@@ -187,10 +188,11 @@ class MountProvider implements IMountProvider {
 			$userHomeStorage->getPropagator()->propagateChange($filesPath, time());
 		} else {
 			// Rename node
-			$i = 0;
-			do {
+			$i = 1;
+			$folderName = $path . ' (' . $i . ')';
+			while ($userHomeCache->inCache('files/' . $folderName)) {
 				$folderName = $path . ' (' . ++$i . ')';
-			} while ($userHomeCache->inCache('files/' . $folderName));
+			}
 
 			$userHomeStorage->rename($filesPath, 'files/' . $folderName);
 			$userHomeCache->move($filesPath, 'files/' . $folderName);
