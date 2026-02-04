@@ -298,9 +298,13 @@ export default {
 		...mapState(usePagesStore, ['currentPage', 'isLandingPage']),
 
 		title() {
+			if (!this.share) {
+				return t('collectives', 'Create public link')
+			}
+
 			return this.index > 1
-				? t('collectives', 'Create public link ({index})', { index: this.index })
-				: t('collectives', 'Create public link')
+				? t('collectives', 'Share link ({index})', { index: this.index })
+				: t('collectives', 'Share link')
 		},
 
 		offlineTitle() {
