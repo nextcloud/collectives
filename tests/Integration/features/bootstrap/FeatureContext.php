@@ -301,16 +301,6 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user trashes and deletes collective :collective
-	 *
-	 * @throws GuzzleException
-	 */
-	public function userTrashesAndDeletesCollectiveAndTeam(string $user, string $collective): void {
-		$this->userTrashesCollective($user, $collective);
-		$this->userDeletesCollectiveAndTeam($user, $collective);
-	}
-
-	/**
 	 * @When user :user trashes collective :collective
 	 * @When user :user :fails to trash collective :collective
 	 * @When user :user :fails to trash foreign collective :collective with member :member
@@ -1671,17 +1661,17 @@ class FeatureContext implements Context {
 
 	/**
 	 * @When user :user sees webdav node :path
-	 * @When user :user :fails to see webdav node :path
+	 * @When user :user fails to see webdav node :path
 	 *
 	 * @throws GuzzleException
 	 */
-	public function webdavNodeExists(string $user, string $path, ?string $fail = null): void {
+	public function webdavNodeExists(string $user, string $path, ?string $fail = null): bool {
 		$this->setCurrentUser($user);
 		$this->sendRemoteRequest('PROPFIND', '/dav/files/' . $user . '/' . trim($path, '/'), null, null, ['Depth' => 0]);
 		if ($fail === 'fails') {
-			$this->assertStatusCode(404);
+			return $this->response->getStatusCode() !== 404;
 		} else {
-			$this->assertStatusCode(207);
+			return $this->response->getStatusCode() === 207;
 		}
 	}
 

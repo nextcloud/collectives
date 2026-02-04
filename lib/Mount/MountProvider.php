@@ -157,7 +157,7 @@ class MountProvider implements IMountProvider {
 			->where($query->expr()->eq('storage', $query->createNamedParameter($userHome->getNumericStorageId(), IQueryBuilder::PARAM_INT)))
 			->andWhere($query->expr()->eq('path_hash', $query->createNamedParameter($filesPathHash, IQueryBuilder::PARAM_STR)));
 
-		if ($query->executeQuery()->rowCount() === 0) {
+		if ($query->executeQuery()->fetchOne() === false) {
 			// No conflicting entry found
 			return;
 		};
@@ -169,29 +169,29 @@ class MountProvider implements IMountProvider {
 
 		// Check if node is a folder and empty
 		$isEmptyDir = false;
-		if ($userFolderCache !== false && $userFolderCache->getMimeType() === 'httpd/unix-directory') {
+		if ($userFolderCache && $userFolderCache['mimetype'] === 'httpd/unix-directory') {
 			$query = $this->connection->getQueryBuilder();
 			$query->select('path')
 				->from('filecache')
 				->where($query->expr()->eq('storage', $query->createNamedParameter($userHome->getNumericStorageId(), IQueryBuilder::PARAM_INT)))
-				->andWhere($query->expr()->eq('parent', $query->createNamedParameter($userFolderCache->getId(), IQueryBuilder::PARAM_INT)))
+				->andWhere($query->expr()->like('path', $query->createNamedParameter($filesPath . '/%', IQueryBuilder::PARAM_STR)))
 				->setMaxResults(1);
-			if ($query->executeQuery()->rowCount() === 0) {
+			if ($query->executeQuery()->fetchOne() === false) {
 				$isEmptyDir = true;
 			}
 		}
 
 		if ($isEmptyDir) {
 			// Delete empty folder
-			$userHomeStorage->rmdir($filesPath);
+			$userHomeStorage->unlink($filesPath);
 			$userHomeCache->remove($filesPath);
 			$userHomeStorage->getPropagator()->propagateChange($filesPath, time());
 		} else {
 			// Rename node
 			$i = 1;
-			$folderName = $path . ' (' . $i . ')';
+			$folderName = $path . ' (' . $i++ . ')';
 			while ($userHomeCache->inCache('files/' . $folderName)) {
-				$folderName = $path . ' (' . ++$i . ')';
+				$folderName = $path . ' (' . $i++ . ')';
 			}
 
 			$userHomeStorage->rename($filesPath, 'files/' . $folderName);
