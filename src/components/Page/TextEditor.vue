@@ -36,7 +36,6 @@ import { ref, watch } from 'vue'
 import SkeletonLoading from '../SkeletonLoading.vue'
 import { useEditor } from '../../composables/useEditor.js'
 import { useReader } from '../../composables/useReader.js'
-import { editorApiUpdateReadonlyBarProps } from '../../constants.js'
 import pageContentMixin from '../../mixins/pageContentMixin.js'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { usePagesStore } from '../../stores/pages.js'
@@ -81,15 +80,13 @@ export default {
 	},
 
 	computed: {
-		...mapState(useRootStore, ['editorApiFlags', 'isPublic', 'loading']),
+		...mapState(useRootStore, ['isPublic', 'loading']),
 		...mapState(useCollectivesStore, [
 			'currentCollective',
 			'currentCollectiveCanEdit',
 		]),
 
 		...mapState(usePagesStore, [
-			'attachments',
-			'backlinks',
 			'currentPage',
 			'currentPageDavUrl',
 			'isTextEdit',
@@ -103,16 +100,6 @@ export default {
 	watch: {
 		'currentPage.timestamp': function(value) {
 			if (value) {
-				// Update currentPage in PageInfoBar component through Text editorAPI
-				if (this.editorApiFlags.includes(editorApiUpdateReadonlyBarProps)) {
-					const readerPage = this.pageInfoBarPage || this.currentPage
-					this.reader?.updateReadonlyBarProps({
-						currentPage: readerPage,
-						attachmentCount: this.attachments.length,
-						backlinkCount: this.backlinks(readerPage.id).length,
-					})
-				}
-
 				this.getPageContent()
 			}
 		},

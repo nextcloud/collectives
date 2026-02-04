@@ -15,7 +15,7 @@ import { useSearch } from './useSearch.js'
 /**
  * Composable for setting up the editor and reader.
  *
- * @param {object} content ref to the markdown content.
+ * @param {object} content ref to the Markdown content.
  */
 export function useReader(content) {
 	const reader = ref(null)
@@ -26,8 +26,20 @@ export function useReader(content) {
 	const searchStore = useSearchStore()
 	const pagesStore = usePagesStore()
 
+	const defaultReaderPage = computed(() => {
+		return pageInfoBarPage.value || pagesStore.currentPage
+	})
+
 	const showCurrentPageOutline = computed(() => {
 		return pagesStore.hasOutline(pagesStore.currentPage.id)
+	})
+
+	const attachmentCount = computed(() => {
+		return pagesStore.attachments.length
+	})
+
+	const backlinkCount = computed(() => {
+		return pagesStore.backlinks(defaultReaderPage.id).length
 	})
 
 	const scrollToLocationHash = () => {
@@ -58,6 +70,20 @@ export function useReader(content) {
 		reader.value?.setShowOutline(value)
 	})
 
+	watch(defaultReaderPage.timestamp, (value) => {
+		if (value) {
+			updateReadonlyBarProps()
+		}
+	})
+
+	watch(attachmentCount, () => {
+		updateReadonlyBarProps()
+	})
+
+	watch(backlinkCount, () => {
+		updateReadonlyBarProps()
+	})
+
 	/**
 	 * Create the reader instance and mount it to readerEl
 	 *
@@ -81,8 +107,8 @@ export function useReader(content) {
 				props: {
 					currentPage: readerPage,
 					canEdit: collectivesStore.currentCollectiveCanEdit,
-					attachmentCount: pagesStore.attachments.length,
-					backlinkCount: pagesStore.backlinks(readerPage.id).length,
+					attachmentCount,
+					backlinkCount,
 				},
 			},
 			onOutlineToggle: pagesStore.setOutlineForCurrentPage,
@@ -99,6 +125,21 @@ export function useReader(content) {
 		if (!rootStore.loading('pageContent')) {
 			reader.value.setContent(content.value.trim())
 			nextTick(scrollToLocationHash)
+		}
+	}
+
+	/**
+	 * Update properties of the PageInfoBar in the reader
+	 */
+	function updateReadonlyBarProps() {
+		// Update currentPage in PageInfoBar component through Text editorAPI
+		if (reader.value?.updateReadonlyBarProps) {
+			reader.value?.updateReadonlyBarProps({
+				currentPage: defaultReaderPage.value,
+				canEdit: collectivesStore.currentCollectiveCanEdit,
+				attachmentCount: attachmentCount.value,
+				backlinkCount: backlinkCount.value,
+			})
 		}
 	}
 
