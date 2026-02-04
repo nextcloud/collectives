@@ -11,7 +11,6 @@ namespace OCA\Collectives\Fs;
 
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
-use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\IAppConfig;
 use OCP\IConfig;
 use OCP\IUserManager;
@@ -45,11 +44,8 @@ class UserFolderHelper {
 	public function get(string $userId): Folder {
 		$userHomeFolder = $this->rootFolder->getUserFolder($userId);
 		$userCollectivesPath = $this->getUserFolderSetting($userId);
+		/** @var Folder $userCollectivesFolder */
 		$userCollectivesFolder = $userHomeFolder->get($userCollectivesPath);
-		if (!$userCollectivesFolder instanceof Folder) {
-			throw new FilesNotFoundException('Collectives path exists but is not a folder');
-		}
-
 		return $userCollectivesFolder;
 	}
 }
