@@ -354,9 +354,13 @@ export default {
 		},
 
 		shareUrl() {
-			return this.share
+			if (!this.share) {
+				return null
+			}
+
+			return this.isPageShare
 				? window.location.origin + generateUrl(`/apps/collectives/p/${this.share.token}${this.currentCollectivePath}/${this.currentPage.slug}-${this.currentPage.id}`)
-				: null
+				: window.location.origin + generateUrl(`/apps/collectives/p/${this.share.token}${this.currentCollectivePath}`)
 		},
 
 		actionsTooltip() {
