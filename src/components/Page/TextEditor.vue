@@ -125,7 +125,7 @@ export default {
 				this.stopEdit()
 			}
 		})
-		subscribe('collectives:attachment:restore', this.restoreAttachment)
+		subscribe('collectives:attachment:insert', this.insertAttachment)
 		subscribe('collectives:attachment:replaceFilename', this.replaceAttachmentFilename)
 		subscribe('collectives:attachment:removeReferences', this.removeAttachmentReferences)
 	},
@@ -133,7 +133,7 @@ export default {
 	beforeDestroy() {
 		unsubscribe('collectives:attachment:removeReferences', this.removeAttachmentReferences)
 		unsubscribe('collectives:attachment:replaceFilename', this.replaceAttachmentFilename)
-		unsubscribe('collectives:attachment:restore', this.restoreAttachment)
+		unsubscribe('collectives:attachment:insert', this.insertAttachment)
 		this.textEditWatcher()
 	},
 
@@ -142,7 +142,7 @@ export default {
 		...mapActions(useVersionsStore, ['getVersions']),
 		...mapActions(usePagesStore, ['setTextEdit', 'setTextPreview', 'touchPage']),
 
-		restoreAttachment({ name }) {
+		insertAttachment({ name }) {
 			// inspired by the fixedEncodeURIComponent function suggested in
 			// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent
 			const src = '.attachments.' + this.currentPage.id + '/' + encodeAttachmentFilename(name)

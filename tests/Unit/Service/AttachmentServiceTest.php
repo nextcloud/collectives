@@ -42,6 +42,8 @@ class AttachmentServiceTest extends TestCase {
 		$attachmentFolder = $this->getMockBuilder(Folder::class)
 			->disableOriginalConstructor()
 			->getMock();
+		$attachmentFolder->method('getName')
+			->willReturn($this->attachmentFolderName);
 		$attachmentFile = $this->getMockBuilder(File::class)
 			->disableOriginalConstructor()
 			->getMock();
@@ -49,8 +51,12 @@ class AttachmentServiceTest extends TestCase {
 			->willReturn(2);
 		$attachmentFile->method('getPath')
 			->willReturn('/' . $this->userId . '/files/Collectives/x/path/to/' . $this->attachmentFolderName . '/attachmentFile1');
+		$attachmentFile->method('getParent')
+			->willReturn($attachmentFolder);
 		$attachmentFile->method('getInternalPath')
 			->willReturn('/path/to/' . $this->attachmentFolderName . '/attachmentFile1');
+		$attachmentFile->method('getName')
+			->willReturn('attachmentFile1');
 		$attachmentFolder->method('getDirectoryListing')
 			->willReturn([$attachmentFile]);
 		$this->parentFolder->method('get')
@@ -67,13 +73,15 @@ class AttachmentServiceTest extends TestCase {
 	public function testGetAttachments(): void {
 		$attachmentInfo = [
 			'id' => 2,
-			'name' => null,
-			'filesize' => 0.0,
-			'mimetype' => null,
+			'name' => 'attachmentFile1',
+			'filesize' => null,
+			'mimetype' => '',
 			'timestamp' => null,
 			'path' => '/Collectives/x/path/to/' . $this->attachmentFolderName . '/attachmentFile1',
 			'internalPath' => '/path/to/' . $this->attachmentFolderName . '/attachmentFile1',
-			'hasPreview' => null,
+			'hasPreview' => false,
+			'src' => $this->attachmentFolderName . DIRECTORY_SEPARATOR . 'attachmentFile1',
+			'type' => 'text',
 		];
 
 		self::assertEquals([$attachmentInfo], $this->service->getAttachments($this->pageFile, $this->parentFolder));
