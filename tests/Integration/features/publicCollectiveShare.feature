@@ -11,7 +11,7 @@ Feature: publicCollectiveShare
     And anonymous sees pagePath "Readme.md" in public collective "BehatPublicCollective" with owner "jane"
 
   Scenario: Upload and list attachment for page
-    When user "jane" uploads attachment "test.png" to "firstpage" with file path "/" in "BehatPublicCollective"
+    When user "jane" uploads attachment "test.png" via webdav to "firstpage" with file path "/" in "BehatPublicCollective"
     Then anonymous sees attachment "test.png" with mimetype "image/png" for "firstpage" in public collective "BehatPublicCollective" with owner "jane"
 
   Scenario: Create a second public share

@@ -28,7 +28,7 @@ class FeatureContext implements Context {
 	private array $cookieJars = [];
 	private array $requestTokens = [];
 	private array $store = [];
-	private bool $setXdebugSession = false;
+	private bool $setXdebugSession = true;
 
 	private const CIRCLE_MEMBER_LEVEL = [
 		1 => 'Member',
@@ -275,16 +275,22 @@ class FeatureContext implements Context {
 
 	/**
 	 * @Then user :user sees attachment :name with mimetype :mimetype for :page in :collective
+	 * @Then user :user :fails to see attachment :name with mimetype :mimetype for :page in :collective
 	 *
 	 * @throws GuzzleException
 	 */
-	public function userSeesAttachments(string $user, string $name, string $mimetype, string $page, string $collective): void {
+	public function userSeesAttachment(string $user, string $name, ?string $mimetype, string $page, string $collective, ?string $fail = null): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$pageId = $this->pageIdByName($collectiveId, $page);
 		$this->sendOcsCollectivesRequest('GET', 'collectives/' . $collectiveId . '/pages/' . $pageId . '/attachments');
-		$this->assertStatusCode(200);
-		$this->assertAttachment($name, $mimetype);
+		if ($fail === 'fails') {
+			$this->assertStatusCode(200);
+			$this->assertAttachment($name, $mimetype, 'text', true);
+		} else {
+			$this->assertStatusCode(200);
+			$this->assertAttachment($name, $mimetype);
+		}
 	}
 
 	/**
@@ -700,6 +706,70 @@ class FeatureContext implements Context {
 		} else {
 			$this->assertStatusCode(200);
 			$this->assertPageKeyValue($pageId, 'subpageOrder', json_decode($subpageOrder, true, 512, JSON_THROW_ON_ERROR));
+		}
+	}
+
+	/**
+	 * @When user :user uploads attachment :fileName to page :page in :collective
+	 * @When user :user :fails to upload attachment :fileName to page :page in :collective
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userUploadsAttachment(string $user, string $fileName, string $page, string $collective, ?string $fail = null): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$pageId = $this->pageIdByName($collectiveId, $page);
+		$filePath = 'tests/Integration/features/fixtures/' . $fileName;
+		$file = fopen($filePath, 'rb');
+		$multipart = [[
+			'name' => 'file',
+			'contents' => $file,
+			'filename' => $fileName,
+		]];
+		$this->sendOcsCollectivesRequest('POST', 'collectives/' . $collectiveId . '/pages/' . $pageId . '/attachments', $multipart);
+		if ($fail === 'fails') {
+			$this->assertStatusCode(403);
+		} else {
+			$this->assertStatusCode(200);
+		}
+	}
+
+	/**
+	 * @When user :user renames attachment :fileName to :newFileName for page :page in :collective
+	 * @When user :user :fails to rename attachment :fileName to :newFileName for page :page in :collective
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userRenamesAttachment(string $user, string $fileName, string $newFileName, string $page, string $collective, ?string $fail = null): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$pageId = $this->pageIdByName($collectiveId, $page);
+		$attachmentId = $this->attachmentIdByName($collectiveId, $pageId, $fileName);
+		$formData = new TableNode([['name', $newFileName]]);
+		$this->sendOcsCollectivesRequest('PUT', 'collectives/' . $collectiveId . '/pages/' . $pageId . '/attachments/' . $attachmentId, $formData);
+		if ($fail === 'fails') {
+			$this->assertStatusCode(403);
+		} else {
+			$this->assertStatusCode(200);
+		}
+	}
+
+	/**
+	 * @When user :user deletes attachment :fileName for page :page in :collective
+	 * @When user :user :fails to delete attachment :fileName for page :page in :collective
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userDeletesAttachment(string $user, string $fileName, string $page, string $collective, ?string $fail = null): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$pageId = $this->pageIdByName($collectiveId, $page);
+		$attachmentId = $this->attachmentIdByName($collectiveId, $pageId, $fileName);
+		$this->sendOcsCollectivesRequest('DELETE', 'collectives/' . $collectiveId . '/pages/' . $pageId . '/attachments/' . $attachmentId);
+		if ($fail === 'fails') {
+			$this->assertStatusCode(403);
+		} else {
+			$this->assertStatusCode(200);
 		}
 	}
 
@@ -1512,18 +1582,92 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @Then anonymous sees attachment :name with mimetype :mimetype for :page in public collective :collective with owner :owner
+	 * @When anonymous uploads attachment :fileName to page :page in public collective :collective with owner :owner
+	 * @When anonymous :fails to upload attachment :fileName to page :page in public collective :collective with owner :owner
 	 *
 	 * @throws GuzzleException
 	 */
-	public function anonymousSeesAttachments(string $name, string $mimetype, string $page, string $collective, string $owner): void {
+	public function anonymousUploadsAttachment(string $fileName, string $page, string $collective, string $owner, ?string $fail = null): void {
+		$this->setCurrentUser($owner);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$token = $this->getShareToken($collectiveId);
+
+		$pageId = $this->pageIdByName($collectiveId, $page);
+		$filePath = 'tests/Integration/features/fixtures/' . $fileName;
+		$file = fopen($filePath, 'rb');
+		$multipart = [[
+			'name' => 'file',
+			'contents' => $file,
+			'filename' => $fileName,
+		]];
+		$this->sendOcsCollectivesRequest('POST', 'p/collectives/' . $token . '/pages/' . $pageId . '/attachments', $multipart);
+		if ($fail === 'fails') {
+			$this->assertStatusCode(403);
+		} else {
+			$this->assertStatusCode(200);
+		}
+	}
+
+	/**
+	 * @When anonymous renames attachment :fileName to :newFileName for page :page in public collective :collective with owner :owner
+	 * @When anonymous :fails to rename attachment :fileName to :newFileName for page :page in public collective :collective with owner :owner
+	 *
+	 * @throws GuzzleException
+	 */
+	public function anonymousRenamesAttachment(string $fileName, string $newFileName, string $page, string $collective, string $owner, ?string $fail = null): void {
+		$this->setCurrentUser($owner);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$token = $this->getShareToken($collectiveId);
+		$pageId = $this->pageIdByName($collectiveId, $page);
+		$attachmentId = $this->attachmentIdByName($collectiveId, $pageId, $fileName);
+		$formData = new TableNode([['name', $newFileName]]);
+		$this->sendOcsCollectivesRequest('PUT', 'p/collectives/' . $token . '/pages/' . $pageId . '/attachments/' . $attachmentId, $formData);
+		if ($fail === 'fails') {
+			$this->assertStatusCode(403);
+		} else {
+			$this->assertStatusCode(200);
+		}
+	}
+
+	/**
+	 * @When anonymous deletes attachment :fileName for page :page in public collective :collective with owner :owner
+	 * @When anonymous :fails to delete attachment :fileName for page :page in public collective :collective with owner :owner
+	 *
+	 * @throws GuzzleException
+	 */
+	public function anonymousDeletesAttachment(string $fileName, string $page, string $collective, string $owner, ?string $fail = null): void {
+		$this->setCurrentUser($owner);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$token = $this->getShareToken($collectiveId);
+		$pageId = $this->pageIdByName($collectiveId, $page);
+		$attachmentId = $this->attachmentIdByName($collectiveId, $pageId, $fileName);
+		$this->sendOcsCollectivesRequest('DELETE', 'p/collectives/' . $token . '/pages/' . $pageId . '/attachments/' . $attachmentId);
+		if ($fail === 'fails') {
+			$this->assertStatusCode(403);
+		} else {
+			$this->assertStatusCode(200);
+		}
+	}
+
+	/**
+	 * @Then anonymous sees attachment :name with mimetype :mimetype for :page in public collective :collective with owner :owner
+	 * @Then anonymous :fails to see attachment :name with mimetype :mimetype for :page in public collective :collective with owner :owner
+	 *
+	 * @throws GuzzleException
+	 */
+	public function anonymousSeesAttachment(string $name, string $mimetype, string $page, string $collective, string $owner, ?string $fail = null): void {
 		$this->setCurrentUser($owner);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$token = $this->getShareToken($collectiveId);
 		$pageId = $this->pageIdByName($collectiveId, $page);
 		$this->sendOcsCollectivesRequest('GET', 'p/collectives/' . $token . '/pages/' . $pageId . '/attachments');
-		$this->assertStatusCode(200);
-		$this->assertAttachment($name, $mimetype);
+		if ($fail === 'fails') {
+			$this->assertStatusCode(200);
+			$this->assertAttachment($name, $mimetype, 'text', true);
+		} else {
+			$this->assertStatusCode(200);
+			$this->assertAttachment($name, $mimetype);
+		}
 	}
 
 	/**
@@ -1827,11 +1971,11 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @When user :user uploads attachment :fileName to :page with file path :filePath in :collective
+	 * @When user :user uploads attachment :fileName via webdav to :page with file path :filePath in :collective
 	 *
 	 * @throws GuzzleException
 	 */
-	public function uploadsAttachment(string $user, string $fileName, string $page, string $filePath, string $collective): void {
+	public function uploadsAttachmentWebdav(string $user, string $fileName, string $page, string $filePath, string $collective): void {
 		$this->setCurrentUser($user);
 		$collectiveId = $this->collectiveIdByName($collective);
 		$pageId = $this->pageIdByName($collectiveId, $page);
@@ -2014,6 +2158,20 @@ class FeatureContext implements Context {
 		return null;
 	}
 
+	private function attachmentIdByName(int $collectiveId, int $pageId, string $name): ?int {
+		$this->sendOcsCollectivesRequest('GET', 'collectives/' . $collectiveId . '/pages/' . $pageId . '/attachments');
+		if ($this->response->getStatusCode() !== 200) {
+			throw new RuntimeException('Unable to get list of attachments for page ' . $pageId . ' in collective ' . $collectiveId);
+		}
+		$jsonBody = $this->getJson();
+		foreach ($jsonBody['ocs']['data']['attachments'] as $attachment) {
+			if ($name === $attachment['name']) {
+				return $attachment['id'];
+			}
+		}
+		return null;
+	}
+
 	private function templateIdByName(int $collectiveId, string $name): ?int {
 		$this->sendOcsCollectivesRequest('GET', 'collectives/' . $collectiveId . '/pages/templates');
 		if ($this->response->getStatusCode() !== 200) {
@@ -2088,7 +2246,7 @@ class FeatureContext implements Context {
 	}
 
 	/**
-	 * @param string|resource|null $body
+	 * @param TableNode|array|string|resource|null $body
 	 *
 	 * @throws GuzzleException
 	 */
@@ -2107,11 +2265,15 @@ class FeatureContext implements Context {
 	 */
 	private function sendOcsRequest(string $verb,
 		string $url,
-		?TableNode $body = null,
+		TableNode|array|null $body = null,
 		?array $jsonBody = null,
 		array $headers = [],
 		?bool $auth = true): void {
 		$fullUrl = $this->ocsUrl . $url;
+
+		$headers = array_merge($headers, [
+			'OCS-APIRequest' => 'true',
+		]);
 
 		// Add Xdebug trigger variable as GET parameter
 		$ocsJsonFormat = 'format=json';
@@ -2123,26 +2285,32 @@ class FeatureContext implements Context {
 		$this->sendRequestBase($verb, $fullUrl, $body, $jsonBody, $headers, $auth);
 	}
 
+	/**
+	 * @throws GuzzleException
+	 */
 	private function sendOcsCollectivesRequest(string $verb,
 		string $url,
-		?TableNode $body = null,
+		TableNode|array|null $body = null,
 		?array $jsonBody = null,
 		array $headers = [],
 		?bool $auth = true): void {
 		$this->sendOcsRequest($verb, self::API_URL . $url, $body, $jsonBody, $headers, $auth);
 	}
 
+	/**
+	 * @throws GuzzleException
+	 */
 	private function sendPublicRequest(string $verb,
 		string $url,
 		$body = null,
 		?array $jsonBody = null,
-		array $headers = []) {
+		array $headers = []): void {
 		$fullUrl = $this->publicUrl . $url;
 		$this->sendRequestBase($verb, $fullUrl, $body, $jsonBody, $headers, false);
 	}
 
 	/**
-	 * @param TableNode|string|null $body
+	 * @param TableNode|array|string|resource|null $body
 	 *
 	 * @throws GuzzleException
 	 */
@@ -2172,6 +2340,8 @@ class FeatureContext implements Context {
 		if ($body instanceof TableNode) {
 			$fd = $body->getRowsHash();
 			$options['form_params'] = $fd;
+		} elseif (is_array($body)) {
+			$options['multipart'] = $body;
 		} elseif (is_string($body)) {
 			$options['body'] = $body;
 		}
@@ -2190,7 +2360,7 @@ class FeatureContext implements Context {
 			}
 		}
 
-		// clear the cached json response
+		// clear the cached JSON response
 		$this->json = null;
 		try {
 			if ($verb === 'PROPFIND' || $verb === 'MOVE') {
@@ -2369,7 +2539,7 @@ class FeatureContext implements Context {
 		}
 	}
 
-	private function assertPageKeyValue(int $id, string $key, mixed $value, ?bool $revert = false): void {
+	private function assertPageKeyValue(int $id, string $key, mixed $value, bool $revert = false): void {
 		$jsonBody = $this->getJson();
 		$page = $jsonBody['ocs']['data']['page'];
 
@@ -2395,20 +2565,31 @@ class FeatureContext implements Context {
 		Assert::assertContains($title, $pageTitles);
 	}
 
-	private function assertAttachment(string $name, string $mimetype, string $type = 'text'): void {
+	private function assertAttachment(string $name, ?string $mimetype = null, string $type = 'text', bool $revert = false): void {
 		$jsonBody = $this->getJson();
 		$attachment = [
 			'name' => $name,
-			'mimetype' => $mimetype,
 			'type' => $type,
 		];
+		if ($mimetype) {
+			$attachment['mimetype'] = $mimetype;
+		}
 
-		$pageAttachments = array_map(static fn ($attachment) => [
-			'name' => $attachment['name'],
-			'mimetype' => $attachment['mimetype'],
-			'type' => $attachment['type'],
-		], $jsonBody['ocs']['data']['attachments']);
+		$pageAttachments = array_map(static function ($attachment) use ($mimetype) {
+			$attachment = [
+				'name' => $attachment['name'],
+				'type' => $attachment['type'],
+			];
+			if ($mimetype) {
+				$attachment['mimetype'] = $mimetype;
+			}
+			return $attachment;
+		}, $jsonBody['ocs']['data']['attachments']);
 
-		Assert::assertContains($attachment, $pageAttachments);
+		if ($revert === false) {
+			Assert::assertContains($attachment, $pageAttachments);
+		} else {
+			Assert::assertNotContains($attachment, $pageAttachments);
+		}
 	}
 }
