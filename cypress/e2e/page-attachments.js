@@ -48,7 +48,9 @@ describe('Page attachments', function() {
 
 			// Open attachment list
 			cy.get('button.app-sidebar__toggle').click()
-			cy.get('.app-sidebar-tabs__content').should('contain', 'test.png')
+
+			cy.get('.attachment-list-embedded').should('contain', 'test.png')
+			cy.get('.attachment-list-not-embedded').should('not.exist')
 
 			// Delete image
 			cy.getEditor()
@@ -60,6 +62,10 @@ describe('Page attachments', function() {
 			cy.getEditor()
 				.find('[data-component="image-view"] .image__view')
 				.should('not.exist')
+
+			cy.get('.attachment-list-embedded').should('not.exist')
+			cy.get('.attachment-list-not-embedded').should('not.exist')
+			cy.get('.attachment-list-deleted').should('contain', 'test.png')
 
 			// Restore image
 			cy.get('.attachment-list-deleted button.action-item__menutoggle')
@@ -88,10 +94,10 @@ describe('Page attachments', function() {
 				.selectFile('cypress/fixtures/test.pdf', { force: true })
 			cy.wait('@attachmentUpload')
 
-			cy.get('.attachment-list').should('contain', 'test.pdf')
+			cy.get('.attachment-list-not-embedded').should('contain', 'test.pdf')
 
 			// Rename attachment
-			cy.get('.attachment-list')
+			cy.get('.attachment-list-not-embedded')
 				.contains('.list-item', 'test.pdf')
 				.find('.action-item')
 				.click()
@@ -105,10 +111,10 @@ describe('Page attachments', function() {
 				.type('renamed.pdf{enter}')
 			cy.wait('@attachmentRename')
 
-			cy.get('.attachment-list').should('contain', 'renamed.pdf')
+			cy.get('.attachment-list-not-embedded').should('contain', 'renamed.pdf')
 
 			// Delete attachment
-			cy.get('.attachment-list')
+			cy.get('.attachment-list-not-embedded')
 				.contains('.list-item', 'renamed.pdf')
 				.find('.action-item')
 				.click()
@@ -118,7 +124,7 @@ describe('Page attachments', function() {
 				.click()
 			cy.wait('@attachmentDelete')
 
-			cy.get('.attachment-list').should('not.contain', 'renamed.pdf')
+			cy.get('.attachment-list-not-embedded').should('not.exist')
 
 			// Close sidebar
 			cy.get('button.app-sidebar__close').click({ force: true })
