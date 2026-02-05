@@ -32,6 +32,8 @@ export const usePagesStore = defineStore('pages', {
 		deletedAttachments: [],
 		attachmentsLoaded: false,
 		attachmentsError: false,
+		editorEmbeddedAttachmentSrcs: [],
+		readerEmbeddedAttachmentSrcs: [],
 		highlightPageId: null,
 		highlightAnimationPageId: null,
 		isDragoverTargetPage: false,
@@ -1041,6 +1043,14 @@ export const usePagesStore = defineStore('pages', {
 
 		setAttachmentsError(error) {
 			this.attachmentsError = error
+		},
+
+		setEditorEmbeddedAttachmentSrcs(attachmentSrcs) {
+			this.editorEmbeddedAttachmentSrcs = attachmentSrcs
+		},
+
+		setReaderEmbeddedAttachmentSrcs(attachmentSrcs) {
+			this.readerEmbeddedAttachmentSrcs = attachmentSrcs
 		},
 
 		/**

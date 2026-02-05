@@ -53,20 +53,38 @@
 			</div>
 
 			<!-- text attachments in page list -->
-			<div v-if="textAttachments.length">
+			<div v-if="embeddedAttachments.length">
 				<div class="attachment-list-subheading">
 					<div>
 						{{ t('collectives', 'In page') }}
 					</div>
 				</div>
 
-				<ul class="attachment-list">
+				<ul class="attachment-list-embedded">
 					<AttachmentItem
-						v-for="attachment in textAttachments"
+						v-for="attachment in embeddedAttachments"
 						:key="attachment.id"
 						:attachment="attachment"
 						:is-embedded="true"
-						@startRename="onStartRename(attachment)"
+						@rename="onStartRename(attachment)"
+						@delete="onDelete(attachment)" />
+				</ul>
+			</div>
+
+			<!-- text attachments not in page list -->
+			<div v-if="notEmbeddedAttachments.length">
+				<div class="attachment-list-subheading">
+					<div>
+						{{ t('collectives', 'Not in page') }}
+					</div>
+				</div>
+
+				<ul class="attachment-list-not-embedded">
+					<AttachmentItem
+						v-for="attachment in notEmbeddedAttachments"
+						:key="attachment.id"
+						:attachment="attachment"
+						@rename="onStartRename(attachment)"
 						@delete="onDelete(attachment)" />
 				</ul>
 			</div>
@@ -109,7 +127,7 @@
 					</NcPopover>
 				</div>
 
-				<ul class="attachments-list">
+				<ul class="attachment-list-folder">
 					<AttachmentItem
 						v-for="attachment in folderAttachments"
 						:key="attachment.id"
@@ -199,6 +217,8 @@ export default {
 			'attachments',
 			'attachmentsError',
 			'attachmentsLoaded',
+			'editorEmbeddedAttachmentSrcs',
+			'readerEmbeddedAttachmentSrcs',
 			'currentPage',
 			'deletedAttachments',
 			'isTextEdit',
@@ -208,11 +228,25 @@ export default {
 			return t('collectives', 'Add attachments using drag and drop or via "Insert attachment" in the formatting menu.')
 		},
 
+		embeddedAttachmentSrcs() {
+			return this.currentCollectiveCanEdit
+				? this.editorEmbeddedAttachmentSrcs
+				: this.readerEmbeddedAttachmentSrcs
+		},
+
 		textAttachments() {
 			return [...this.attachments]
 				.filter((a) => a.type === 'text')
 				// Sort attachments chronologically, most recent first
 				.sort((a, b) => a.timestamp < b.timestamp)
+		},
+
+		embeddedAttachments() {
+			return this.textAttachments.filter((attachment) => this.embeddedAttachmentSrcs.includes(attachment.src))
+		},
+
+		notEmbeddedAttachments() {
+			return this.textAttachments.filter((attachment) => !this.embeddedAttachmentSrcs.includes(attachment.src))
 		},
 
 		folderAttachments() {
@@ -421,10 +455,11 @@ export default {
 		color: var(--color-primary-element);
 	}
 
-	.hint-body {
-		max-width: 300px;
-		padding: var(--border-radius-element);
-	}
+}
+
+.hint-body {
+	max-width: 300px;
+	padding: var(--border-radius-element);
 }
 
 .action-link--disabled {

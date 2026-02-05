@@ -35,7 +35,16 @@
 				<template #icon>
 					<EyeIcon />
 				</template>
-				{{ t('collectives', 'View in document') }}
+				{{ t('collectives', 'View in page') }}
+			</NcActionButton>
+			<NcActionButton
+				v-if="!isEmbedded && !isDeleted"
+				:close-after-click="true"
+				@click="onInsert">
+				<template #icon>
+					<FileDocumentPlusOutlineIcon />
+				</template>
+				{{ t('collectives', 'Add to page') }}
 			</NcActionButton>
 			<NcActionButton
 				v-if="isDeleted"
@@ -70,7 +79,7 @@
 				v-if="!isDeleted && !isInFolder && currentCollectiveCanEdit"
 				:close-after-click="true"
 				:class="{ 'action-link--disabled': !networkOnline }"
-				@click="$emit('start-rename')">
+				@click="$emit('rename')">
 				<template #icon>
 					<PencilOutlineIcon />
 				</template>
@@ -103,6 +112,7 @@ import NcListItem from '@nextcloud/vue/dist/NcListItem'
 import { mapState } from 'pinia'
 import DeleteIcon from 'vue-material-design-icons/DeleteOutline.vue'
 import EyeIcon from 'vue-material-design-icons/EyeOutline.vue'
+import FileDocumentPlusOutlineIcon from 'vue-material-design-icons/FileDocumentPlusOutline.vue'
 import FolderIcon from 'vue-material-design-icons/FolderOutline.vue'
 import PencilOutlineIcon from 'vue-material-design-icons/PencilOutline.vue'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
@@ -119,6 +129,7 @@ export default {
 	components: {
 		DeleteIcon,
 		EyeIcon,
+		FileDocumentPlusOutlineIcon,
 		FolderIcon,
 		DownloadIcon,
 		NcActionButton,
@@ -242,13 +253,8 @@ export default {
 				return
 			}
 
-			// Extract last two path segments (attachment directory and filename)
-			const pathParts = this.attachment.path.split('/')
-			const path = pathParts.slice(-2).join('/')
-
 			const url = this.davUrl
-
-			const html = `<img src="${path}" alt="${this.attachment.name}">`
+			const html = `<img src="${this.attachment.src}" alt="${this.attachment.name}">`
 
 			event.dataTransfer.effectAllowed = 'link'
 			event.dataTransfer.setData('text/plain', url)
@@ -264,11 +270,15 @@ export default {
 			}
 		},
 
-		onRestore() {
-			emit('collectives:attachment:restore', {
+		onInsert() {
+			emit('collectives:attachment:insert', {
 				name: this.attachment.name,
 			})
 			this.scrollTo(this.attachment)
+		},
+
+		onRestore() {
+			this.onInsert()
 			this.setAttachmentUndeleted(this.attachment.name)
 		},
 	},
