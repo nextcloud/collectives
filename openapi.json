@@ -13141,7 +13141,7 @@
         "/ocs/v2.php/apps/collectives/api/v{apiVersion}/p/collectives/{token}/pages/{id}/attachments/{attachmentId}": {
             "put": {
                 "operationId": "public_page-rename-attachment",
-                "summary": "Rename a folder attachment",
+                "summary": "Rename an attachment",
                 "tags": [
                     "public_page"
                 ],
@@ -13324,7 +13324,7 @@
             },
             "delete": {
                 "operationId": "public_page-delete-attachment",
-                "summary": "Delete a folder attachment",
+                "summary": "Delete an attachment",
                 "tags": [
                     "public_page"
                 ],
