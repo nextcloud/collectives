@@ -57,21 +57,20 @@ class CollectiveShareService {
 
 		$userFolder = $this->userFolderHelper->get($userId);
 		try {
-			$path = $userFolder->get($collectiveName);
-			if (!($path instanceof Folder)) {
+			$node = $userFolder->get($collectiveName);
+			if (!($node instanceof Folder)) {
 				throw new FilesNotFoundException();
 			}
 			if ($nodeId !== 0) {
-				$nodes = $path->getById($nodeId);
-				if (count($nodes) <= 0) {
+				$node = $node->getFirstNodeById($nodeId);
+				if ($node === null) {
 					throw new FilesNotFoundException();
 				}
-				$path = $nodes[0];
 			}
 		} catch (FilesNotFoundException $e) {
 			throw new NotFoundException('Wrong path, collective folder doesn\'t exist', 0, $e);
 		}
-		$share->setNode($path);
+		$share->setNode($node);
 
 		try {
 			$share->getNode()->lock(ILockingProvider::LOCK_SHARED);

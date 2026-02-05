@@ -73,10 +73,10 @@ class NodeHelperTest extends TestCase {
 		$folder = $this->getMockBuilder(Folder::class)
 			->disableOriginalConstructor()
 			->getMock();
-		$folder->method('getById')
+		$folder->method('getFirstNodeById')
 			->willReturnMap([
-				[1, [$file]],
-				[2, []],
+				[1, $file],
+				[2, null],
 			]);
 
 		self::assertEquals($file, $this->helper->getFileById($folder, 1));

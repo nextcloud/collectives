@@ -46,8 +46,8 @@ class PageContentProviderTest extends TestCase {
 		$collectiveService = $this->createMock(CollectiveService::class);
 		/** @var Folder&MockObject $folder */
 		$folder = $this->createMock(Folder::class);
-		$folder->method('getById')
-			->willReturn([]);
+		$folder->method('getFirstNodeById')
+			->willReturn(null);
 		/** @var PageService&MockObject $pageService */
 		$pageService = $this->createMock(PageService::class);
 		$pageService->method('getCollectiveFolder')
