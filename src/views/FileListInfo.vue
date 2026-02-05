@@ -97,12 +97,12 @@ export default {
 		justify-content: flex-start;
 
 		background-color: var(--color-background-hover);
-		border-left-color: var(--color-primary-element);
+		border-inline-start-color: var(--color-primary-element);
 		border-radius: var(--border-radius);
 		padding: 1em;
-		padding-left: 0.5em;
-		border-left-width: 0.3em;
-		border-left-style: solid;
+		padding-inline-start: 0.5em;
+		border-inline-start-width: 0.3em;
+		border-inline-start-style: solid;
 		margin-bottom: 0.5em;
 
 		.content {
@@ -110,11 +110,11 @@ export default {
 			align-items: center;
 			justify-content: flex-start;
 
-			margin-left: 1em;
+			margin-inline-start: 1em;
 			margin-bottom: 0;
 
 			.button {
-				margin-left: 12px;
+				margin-inline-start: 12px;
 			}
 		}
 	}

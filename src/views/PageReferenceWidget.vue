@@ -103,7 +103,7 @@ export default {
 	color: var(--color-main-text) !important;
 
 	&--image {
-		margin-right: 12px;
+		margin-inline-end: 12px;
 		display: flex;
 		align-items: center;
 		.page-emoji {
