@@ -30,13 +30,14 @@ use Psr\Log\LoggerInterface;
  */
 class TagController extends OCSController {
 	use OCSExceptionHelper;
+	use UserTrait;
 
 	public function __construct(
 		string $AppName,
 		IRequest $request,
 		private TagService $service,
 		private LoggerInterface $logger,
-		private string $userId,
+		private ?string $userId,
 	) {
 		parent::__construct($AppName, $request);
 	}
@@ -54,7 +55,7 @@ class TagController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function index(int $collectiveId): DataResponse {
-		$tags = $this->handleErrorResponse(fn (): array => $this->service->index($collectiveId, $this->userId), $this->logger);
+		$tags = $this->handleErrorResponse(fn (): array => $this->service->index($collectiveId, $this->getUid()), $this->logger);
 		return new DataResponse(['tags' => $tags]);
 	}
 
@@ -77,14 +78,15 @@ class TagController extends OCSController {
 		try {
 			$tag = $this->handleErrorResponse(fn (): Tag => $this->service->create(
 				$collectiveId,
-				$this->userId,
+				$this->getUid(),
 				$name,
 				$color,
 			), $this->logger);
 		} catch (TagExistsException $e) {
 			throw new OCSBadRequestException($e->getMessage());
 		}
-		return new DataResponse(['tag' => $tag]);
+		// Return 'info' key to match the required OpenAPI schema
+		return new DataResponse(['tag' => $tag, 'info' => '']);
 	}
 
 	/**
@@ -105,7 +107,7 @@ class TagController extends OCSController {
 	public function update(int $collectiveId, int $id, string $name, string $color): DataResponse {
 		$tag = $this->handleErrorResponse(fn (): Tag => $this->service->update(
 			$collectiveId,
-			$this->userId,
+			$this->getUid(),
 			$id,
 			$name,
 			$color,
@@ -127,7 +129,7 @@ class TagController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function delete(int $collectiveId, int $id): DataResponse {
-		$this->handleErrorResponse(fn () => $this->service->delete($collectiveId, $this->userId, $id), $this->logger);
+		$this->handleErrorResponse(fn () => $this->service->delete($collectiveId, $this->getUid(), $id), $this->logger);
 		return new DataResponse([]);
 	}
 }

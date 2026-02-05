@@ -30,6 +30,7 @@ use Psr\Log\LoggerInterface;
  */
 class ShareController extends OCSController {
 	use OCSExceptionHelper;
+	use UserTrait;
 
 	public function __construct(
 		string $AppName,
@@ -38,7 +39,7 @@ class ShareController extends OCSController {
 		private PageService $pageService,
 		private CollectiveShareService $shareService,
 		private LoggerInterface $logger,
-		private string $userId,
+		private ?string $userId,
 	) {
 		parent::__construct($AppName, $request);
 	}
@@ -57,9 +58,9 @@ class ShareController extends OCSController {
 	#[NoAdminRequired]
 	public function getCollectiveShares(int $collectiveId): DataResponse {
 		$share = $this->handleErrorResponse(function () use ($collectiveId): array {
-			$userId = $this->userId;
-			$collective = $this->collectiveService->getCollective($collectiveId, $userId);
-			return $this->shareService->getSharesByCollectiveAndUser($userId, $collective->getId());
+			$uid = $this->getUid();
+			$collective = $this->collectiveService->getCollective($collectiveId, $uid);
+			return $this->shareService->getSharesByCollectiveAndUser($uid, $collective->getId());
 		}, $this->logger);
 		return new DataResponse($share);
 	}
@@ -133,12 +134,13 @@ class ShareController extends OCSController {
 	#[NoAdminRequired]
 	public function createPageShare(int $collectiveId, int $pageId = 0, string $password = ''): DataResponse {
 		$share = $this->handleErrorResponse(function () use ($collectiveId, $pageId, $password): CollectiveShare {
-			$collective = $this->collectiveService->getCollective($collectiveId, $this->userId);
+			$uid = $this->getUid();
+			$collective = $this->collectiveService->getCollective($collectiveId, $uid);
 			$pageInfo = null;
 			if ($pageId !== 0) {
-				$pageInfo = $this->pageService->pageToSubFolder($collectiveId, $pageId, $this->userId);
+				$pageInfo = $this->pageService->pageToSubFolder($collectiveId, $pageId, $uid);
 			}
-			return $this->shareService->createShare($this->userId, $collective, $pageInfo, $password);
+			return $this->shareService->createShare($uid, $collective, $pageInfo, $password);
 		}, $this->logger);
 		return new DataResponse($share);
 	}
@@ -161,13 +163,13 @@ class ShareController extends OCSController {
 	#[NoAdminRequired]
 	public function updatePageShare(int $collectiveId, int $pageId, string $token, bool $editable, ?string $password = null): DataResponse {
 		$share = $this->handleErrorResponse(function () use ($collectiveId, $pageId, $token, $editable, $password): CollectiveShare {
-			$userId = $this->userId;
-			$collective = $this->collectiveService->getCollective($collectiveId, $userId);
+			$uid = $this->getUid();
+			$collective = $this->collectiveService->getCollective($collectiveId, $uid);
 			$pageInfo = null;
 			if ($pageId !== 0) {
-				$pageInfo = $this->pageService->findByFileId($collectiveId, $pageId, $userId);
+				$pageInfo = $this->pageService->findByFileId($collectiveId, $pageId, $uid);
 			}
-			return $this->shareService->updateShare($userId, $collective, $pageInfo, $token, $editable, $password);
+			return $this->shareService->updateShare($uid, $collective, $pageInfo, $token, $editable, $password);
 		}, $this->logger);
 		return new DataResponse($share);
 	}
@@ -188,9 +190,9 @@ class ShareController extends OCSController {
 	#[NoAdminRequired]
 	public function deletePageShare(int $collectiveId, int $pageId, string $token): DataResponse {
 		$this->handleErrorResponse(function () use ($collectiveId, $pageId, $token): void {
-			$userId = $this->userId;
-			$this->collectiveService->getCollective($collectiveId, $userId);
-			$this->shareService->deleteShare($userId, $collectiveId, $pageId, $token);
+			$uid = $this->getUid();
+			$this->collectiveService->getCollective($collectiveId, $uid);
+			$this->shareService->deleteShare($uid, $collectiveId, $pageId, $token);
 		}, $this->logger);
 		return new DataResponse([]);
 	}

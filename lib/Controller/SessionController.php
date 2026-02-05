@@ -26,13 +26,14 @@ use Psr\Log\LoggerInterface;
  */
 class SessionController extends OCSController {
 	use OCSExceptionHelper;
+	use UserTrait;
 
 	public function __construct(
 		string $appName,
 		IRequest $request,
 		private SessionService $sessionService,
 		private LoggerInterface $logger,
-		private string $userId,
+		private ?string $userId,
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -50,7 +51,7 @@ class SessionController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function create(int $collectiveId): DataResponse {
-		$session = $this->handleErrorResponse(fn (): Session => $this->sessionService->initSession($collectiveId, $this->userId), $this->logger);
+		$session = $this->handleErrorResponse(fn (): Session => $this->sessionService->initSession($collectiveId, $this->getUid()), $this->logger);
 		return new DataResponse(['token' => $session->getToken()]);
 	}
 
@@ -69,7 +70,7 @@ class SessionController extends OCSController {
 	#[NoAdminRequired]
 	public function sync(int $collectiveId, string $token): DataResponse {
 		$this->handleErrorResponse(function () use ($collectiveId, $token): void {
-			$this->sessionService->syncSession($collectiveId, $token, $this->userId);
+			$this->sessionService->syncSession($collectiveId, $token, $this->getUid());
 		}, $this->logger);
 		return new DataResponse([]);
 	}
@@ -86,7 +87,7 @@ class SessionController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function close(int $collectiveId, string $token): DataResponse {
-		$this->sessionService->closeSession($collectiveId, $token, $this->userId);
+		$this->sessionService->closeSession($collectiveId, $token, $this->getUid());
 		return new DataResponse([]);
 	}
 }

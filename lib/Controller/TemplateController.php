@@ -29,6 +29,7 @@ use Psr\Log\LoggerInterface;
  */
 class TemplateController extends OCSController {
 	use OCSExceptionHelper;
+	use UserTrait;
 
 	public function __construct(
 		string $appName,
@@ -36,7 +37,7 @@ class TemplateController extends OCSController {
 		private IUserSession $userSession,
 		private TemplateService $templateService,
 		private LoggerInterface $logger,
-		private string $userId,
+		private ?string $userId,
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -54,7 +55,7 @@ class TemplateController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function index(int $collectiveId): DataResponse {
-		$templateInfos = $this->handleErrorResponse(fn (): array => $this->templateService->getTemplates($collectiveId, $this->userId), $this->logger);
+		$templateInfos = $this->handleErrorResponse(fn (): array => $this->templateService->getTemplates($collectiveId, $this->getUid()), $this->logger);
 		return new DataResponse(['templates' => $templateInfos]);
 	}
 
@@ -73,7 +74,7 @@ class TemplateController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function create(int $collectiveId, string $title, int $parentId): DataResponse {
-		$templateInfo = $this->handleErrorResponse(fn (): PageInfo => $this->templateService->create($collectiveId, $parentId, $title, $this->userId), $this->logger);
+		$templateInfo = $this->handleErrorResponse(fn (): PageInfo => $this->templateService->create($collectiveId, $parentId, $title, $this->getUid()), $this->logger);
 		return new DataResponse(['template' => $templateInfo]);
 	}
 
@@ -92,7 +93,7 @@ class TemplateController extends OCSController {
 	#[NoAdminRequired]
 	public function delete(int $collectiveId, int $id): DataResponse {
 		$this->handleErrorResponse(function () use ($collectiveId, $id): void {
-			$this->templateService->delete($collectiveId, $id, $this->userId);
+			$this->templateService->delete($collectiveId, $id, $this->getUid());
 		}, $this->logger);
 		return new DataResponse([]);
 	}
@@ -112,7 +113,7 @@ class TemplateController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function rename(int $collectiveId, int $id, string $title): DataResponse {
-		$templateInfo = $this->handleErrorResponse(fn (): PageInfo => $this->templateService->rename($collectiveId, $id, $title, $this->userId), $this->logger);
+		$templateInfo = $this->handleErrorResponse(fn (): PageInfo => $this->templateService->rename($collectiveId, $id, $title, $this->getUid()), $this->logger);
 		return new DataResponse(['template' => $templateInfo]);
 	}
 
@@ -131,7 +132,7 @@ class TemplateController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function setEmoji(int $collectiveId, int $id, ?string $emoji = null): DataResponse {
-		$templateInfo = $this->handleErrorResponse(fn (): PageInfo => $this->templateService->setEmoji($collectiveId, $id, $emoji, $this->userId), $this->logger);
+		$templateInfo = $this->handleErrorResponse(fn (): PageInfo => $this->templateService->setEmoji($collectiveId, $id, $emoji, $this->getUid()), $this->logger);
 		return new DataResponse(['template' => $templateInfo]);
 	}
 }

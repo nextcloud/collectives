@@ -24,13 +24,14 @@ use Psr\Log\LoggerInterface;
  */
 class CollectiveUserSettingsController extends OCSController {
 	use OCSExceptionHelper;
+	use UserTrait;
 
 	public function __construct(
 		string $AppName,
 		IRequest $request,
 		private CollectiveUserSettingsService $service,
 		private LoggerInterface $logger,
-		private string $userId,
+		private ?string $userId,
 	) {
 		parent::__construct($AppName, $request);
 	}
@@ -52,7 +53,7 @@ class CollectiveUserSettingsController extends OCSController {
 		$this->handleErrorResponse(function () use ($collectiveId, $pageOrder): void {
 			$this->service->setPageOrder(
 				$collectiveId,
-				$this->userId,
+				$this->getUid(),
 				$pageOrder
 			);
 		}, $this->logger);
@@ -76,7 +77,7 @@ class CollectiveUserSettingsController extends OCSController {
 		$this->handleErrorResponse(function () use ($collectiveId, $showMembers): void {
 			$this->service->setShowMembers(
 				$collectiveId,
-				$this->userId,
+				$this->getUid(),
 				$showMembers
 			);
 		}, $this->logger);
@@ -100,7 +101,7 @@ class CollectiveUserSettingsController extends OCSController {
 		$this->handleErrorResponse(function () use ($collectiveId, $showRecentPages): void {
 			$this->service->setShowRecentPages(
 				$collectiveId,
-				$this->userId,
+				$this->getUid(),
 				$showRecentPages
 			);
 		}, $this->logger);
@@ -124,7 +125,7 @@ class CollectiveUserSettingsController extends OCSController {
 		$this->handleErrorResponse(function () use ($collectiveId, $favoritePages): void {
 			$this->service->setFavoritePages(
 				$collectiveId,
-				$this->userId,
+				$this->getUid(),
 				$favoritePages
 			);
 		}, $this->logger);

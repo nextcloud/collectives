@@ -29,6 +29,7 @@ use Psr\Log\LoggerInterface;
  */
 class TrashController extends OCSController {
 	use OCSExceptionHelper;
+	use UserTrait;
 
 	public function __construct(
 		string $AppName,
@@ -36,7 +37,7 @@ class TrashController extends OCSController {
 		private CollectiveService $service,
 		private IUserSession $userSession,
 		private LoggerInterface $logger,
-		private string $userId,
+		private ?string $userId,
 	) {
 		parent::__construct($AppName, $request);
 	}
@@ -52,7 +53,7 @@ class TrashController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function index(): DataResponse {
-		$collectives = $this->handleErrorResponse(fn (): array => $this->service->getCollectivesTrash($this->userId), $this->logger);
+		$collectives = $this->handleErrorResponse(fn (): array => $this->service->getCollectivesTrash($this->getUid()), $this->logger);
 		return new DataResponse(['collectives' => $collectives]);
 	}
 
@@ -70,7 +71,7 @@ class TrashController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function delete(int $id, bool $circle = false): DataResponse {
-		$collective = $this->handleErrorResponse(fn (): Collective => $this->service->deleteCollective($id, $this->userId, $circle), $this->logger);
+		$collective = $this->handleErrorResponse(fn (): Collective => $this->service->deleteCollective($id, $this->getUid(), $circle), $this->logger);
 		return new DataResponse(['collective' => $collective]);
 	}
 
@@ -87,7 +88,7 @@ class TrashController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function restore(int $id): DataResponse {
-		$collective = $this->handleErrorResponse(fn (): Collective => $this->service->restoreCollective($id, $this->userId), $this->logger);
+		$collective = $this->handleErrorResponse(fn (): Collective => $this->service->restoreCollective($id, $this->getUid()), $this->logger);
 		return new DataResponse(['collective' => $collective]);
 	}
 }

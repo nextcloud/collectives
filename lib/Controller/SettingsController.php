@@ -22,11 +22,13 @@ use OCP\IRequest;
  * - user_folder: Path where collectives are mounted in user home directory.
  */
 class SettingsController extends OCSController {
+	use UserTrait;
+
 	public function __construct(
 		string $appName,
 		IRequest $request,
 		private IConfig $config,
-		private string $userId,
+		private ?string $userId,
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -77,7 +79,7 @@ class SettingsController extends OCSController {
 	#[NoAdminRequired]
 	public function getUserSetting(string $key): DataResponse {
 		$this->validateGetUserSetting($key);
-		return new DataResponse([$key => $this->config->getUserValue($this->userId, 'collectives', $key, '')]);
+		return new DataResponse([$key => $this->config->getUserValue($this->getUid(), 'collectives', $key, '')]);
 	}
 
 	/**
@@ -94,7 +96,7 @@ class SettingsController extends OCSController {
 	#[NoAdminRequired]
 	public function setUserSetting(string $key, string $value): DataResponse {
 		$this->validateSetUserSetting($key, $value);
-		$this->config->setUserValue($this->userId, 'collectives', $key, $value);
+		$this->config->setUserValue($this->getUid(), 'collectives', $key, $value);
 		return new DataResponse([$key => $value]);
 	}
 }
