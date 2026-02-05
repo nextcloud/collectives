@@ -35,6 +35,7 @@ class AttachmentService {
 				'mimetype' => $file->getMimeType(),
 				'timestamp' => $file->getMTime(),
 				'path' => $folder->getRelativePath($file->getPath()),
+				'src' => $file->getParent()->getName() . DIRECTORY_SEPARATOR . rawurlencode($file->getName()),
 				'internalPath' => $file->getInternalPath(),
 				'hasPreview' => $this->preview->isAvailable($file),
 				'type' => $type,

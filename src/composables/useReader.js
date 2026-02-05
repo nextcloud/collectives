@@ -120,6 +120,9 @@ export function useReader(content) {
 				searchStore.setSearchResults(results)
 				searchStore.showSearchDialog(true)
 			},
+			onAttachmentsUpdated({ attachmentSrcs }) {
+				pagesStore.setReaderEmbeddedAttachmentSrcs(attachmentSrcs)
+			},
 		})
 
 		if (!rootStore.loading('pageContent')) {
