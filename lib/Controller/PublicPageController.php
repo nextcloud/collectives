@@ -548,7 +548,7 @@ class PublicPageController extends CollectivesPublicOCSController {
 	}
 
 	/**
-	 * Rename a folder attachment
+	 * Rename an attachment
 	 *
 	 * @param int $id ID of the page
 	 * @param int $attachmentId ID of the attachment
@@ -577,7 +577,7 @@ class PublicPageController extends CollectivesPublicOCSController {
 	}
 
 	/**
-	 * Delete a folder attachment
+	 * Delete an attachment
 	 *
 	 * @param int $id ID of the page
 	 * @param int $attachmentId ID of the attachment
