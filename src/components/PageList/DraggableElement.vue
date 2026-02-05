@@ -45,6 +45,7 @@ export default {
 	name: 'DraggableElement',
 
 	components: {
+		/* eslint-disable-next-line vue/component-options-name-casing */
 		draggable,
 	},
 
