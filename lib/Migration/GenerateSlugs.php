@@ -111,7 +111,7 @@ class GenerateSlugs implements IRepairStep {
 		$rootFolder = $this->collectiveFolderManager->getRootFolder();
 
 		while ($row = $result->fetch()) {
-			$pageFile = $rootFolder->getById($row['file_id'])[0];
+			$pageFile = $rootFolder->getFirstNodeById($row['file_id']);
 			if (!($pageFile instanceof File) || NodeHelper::isLandingPage($pageFile)) {
 				continue;
 			}
