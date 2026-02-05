@@ -321,8 +321,8 @@ export default {
 				})
 			} catch (e) {
 				this.renamedAttachment.name = oldName
-				console.error('Failed to rename folder attachment', e)
-				showError(t('collectives', 'Failed to rename folder attachment', {}))
+				console.error('Failed to rename attachment', e)
+				showError(t('collectives', 'Failed to rename attachment', {}))
 			}
 		},
 
@@ -333,10 +333,10 @@ export default {
 					pageId: this.currentPage.id,
 					name: attachment.name,
 				})
-				showSuccess(t('collectives', 'Deleted folder attachment {name}', { name: attachment.name }))
+				showSuccess(t('collectives', 'Deleted attachment {name}', { name: attachment.name }))
 			} catch (e) {
-				console.error('Failed to delete folder attachment', e)
-				showError(t('collectives', 'Failed to delete folder attachment'))
+				console.error('Failed to delete attachment', e)
+				showError(t('collectives', 'Failed to delete attachment'))
 			}
 		},
 
