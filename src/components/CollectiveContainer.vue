@@ -190,7 +190,7 @@ export default {
 	position: absolute;
 	z-index: 100010;
 	bottom: calc(var(--default-grid-baseline) * 3);
-	margin-left: calc(var(--default-grid-baseline) * 3);
+	margin-inline-start: calc(var(--default-grid-baseline) * 3);
 	background-color: var(--color-main-background);
 	border-radius: var(--border-radius-element);
 
