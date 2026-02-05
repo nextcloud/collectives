@@ -84,9 +84,9 @@ class PageContentProvider implements IProvider {
 				continue;
 			}
 			foreach ($results as $fileId => $fileData) {
-				$fileEntries = $collectiveRoot->getById($fileId);
-				if (!empty($fileEntries)) {
-					$pages[$fileId] = $fileEntries[0];
+				$fileEntry = $collectiveRoot->getFirstNodeById($fileId);
+				if ($fileEntry !== null) {
+					$pages[$fileId] = $fileEntry;
 					$collectiveMap[$fileId] = $collective;
 				}
 			}

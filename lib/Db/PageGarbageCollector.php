@@ -23,7 +23,7 @@ class PageGarbageCollector {
 		$purgeCount = 0;
 		$rootFolder = $this->folderManager->getRootFolder();
 		foreach ($this->pageMapper->getAll() as $page) {
-			if ($rootFolder->getById($page->getFileId()) === []) {
+			if ($rootFolder->getFirstNodeById($page->getFileId()) === null) {
 				$purgeCount++;
 				$this->pageLinkMapper->deleteByPageId($page->getFileId());
 				$this->pageMapper->delete($page);

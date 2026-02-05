@@ -38,12 +38,12 @@ class NodeHelper {
 	 * @throws NotFoundException
 	 */
 	public function getFileById(Folder $folder, int $id): File {
-		$file = $folder->getById($id);
+		$file = $folder->getFirstNodeById($id);
 
-		if (count($file) <= 0 || !($file[0] instanceof File)) {
+		if (!($file instanceof File)) {
 			throw new NotFoundException('File not found: ' . $id);
 		}
-		return $file[0];
+		return $file;
 	}
 
 	public static function generateFilename(Folder $folder, string $filename, string $suffix = ''): string {

@@ -29,7 +29,6 @@ use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\Mount\IMountPoint;
 use OCP\Files\NotFoundException as FilesNotFoundException;
-use OCP\IConfig;
 use OCP\IUserManager;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
@@ -42,7 +41,6 @@ class PageServiceTest extends TestCase {
 	private NodeHelper $nodeHelper;
 	private CollectiveServiceBase $collectiveService;
 	private Folder $collectiveFolder;
-	private IConfig $config;
 	private PageService $service;
 	private string $userId = 'jane';
 	private int $collectiveId = 1;
@@ -86,10 +84,6 @@ class PageServiceTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
-		$this->config = $this->getMockBuilder(IConfig::class)
-			->disableOriginalConstructor()
-			->getMock();
-
 		$container = $this->getMockBuilder(ContainerInterface::class)
 			->disableOriginalConstructor()
 			->getMock();
@@ -113,7 +107,6 @@ class PageServiceTest extends TestCase {
 			$this->collectiveService,
 			$userFolderHelper,
 			$userManager,
-			$this->config,
 			$container,
 			$sessionService,
 			$slugger,
