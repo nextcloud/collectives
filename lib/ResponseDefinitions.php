@@ -41,6 +41,7 @@ namespace OCA\Collectives;
  *     owner: string,
  *     editable: bool,
  *     password: string,
+ *     expirationDate: string|null,
  * }
  *
  * @psalm-type CollectivesPageInfo = array{
