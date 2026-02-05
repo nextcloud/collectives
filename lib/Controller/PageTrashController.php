@@ -28,13 +28,14 @@ use Psr\Log\LoggerInterface;
  */
 class PageTrashController extends OCSController {
 	use OCSExceptionHelper;
+	use UserTrait;
 
 	public function __construct(
 		string $appName,
 		IRequest $request,
 		private PageService $service,
 		private LoggerInterface $logger,
-		private string $userId,
+		private ?string $userId,
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -52,7 +53,7 @@ class PageTrashController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function index(int $collectiveId): DataResponse {
-		$pageInfos = $this->handleErrorResponse(fn (): array => $this->service->findAllTrash($collectiveId, $this->userId), $this->logger);
+		$pageInfos = $this->handleErrorResponse(fn (): array => $this->service->findAllTrash($collectiveId, $this->getUid()), $this->logger);
 		return new DataResponse(['pages' => $pageInfos]);
 	}
 
@@ -70,7 +71,7 @@ class PageTrashController extends OCSController {
 	 */
 	#[NoAdminRequired]
 	public function restore(int $collectiveId, int $id): DataResponse {
-		$pageInfo = $this->handleErrorResponse(fn (): PageInfo => $this->service->restore($collectiveId, $id, $this->userId), $this->logger);
+		$pageInfo = $this->handleErrorResponse(fn (): PageInfo => $this->service->restore($collectiveId, $id, $this->getUid()), $this->logger);
 		return new DataResponse(['page' => $pageInfo]);
 	}
 
@@ -89,7 +90,7 @@ class PageTrashController extends OCSController {
 	#[NoAdminRequired]
 	public function delete(int $collectiveId, int $id): DataResponse {
 		$this->handleErrorResponse(function () use ($collectiveId, $id): void {
-			$this->service->delete($collectiveId, $id, $this->userId);
+			$this->service->delete($collectiveId, $id, $this->getUid());
 		}, $this->logger);
 		return new DataResponse([]);
 	}
