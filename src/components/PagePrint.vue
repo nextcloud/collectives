@@ -75,7 +75,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use '../css/editor';
+@use '../css/editor.scss';
 
 .page-title {
 	max-width: unset;
@@ -88,7 +88,6 @@ export default {
 	}
 
 	&-subpage {
-		page-break-before: always;
 		break-before: always;
 	}
 }

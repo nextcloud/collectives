@@ -191,5 +191,5 @@ export default {
 </style>
 
 <style lang="scss">
-@use '../css/editor';
+@use '../css/editor.scss';
 </style>
