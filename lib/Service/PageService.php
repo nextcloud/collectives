@@ -27,7 +27,6 @@ use OCP\Files\InvalidPathException;
 use OCP\Files\Node;
 use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\Files\NotPermittedException as FilesNotPermittedException;
-use OCP\IConfig;
 use OCP\IUserManager;
 use OCP\Lock\LockedException;
 use OCP\Server;
@@ -40,6 +39,7 @@ class PageService {
 	private ?IQueue $pushQueue = null;
 	private ?Collective $collective = null;
 	private ?PageTrashBackend $trashBackend = null;
+	private ?array $allPageInfos = null;
 
 	public function __construct(
 		private readonly IAppManager $appManager,
@@ -48,7 +48,6 @@ class PageService {
 		private readonly CollectiveServiceBase $collectiveService,
 		private readonly UserFolderHelper $userFolderHelper,
 		private readonly IUserManager $userManager,
-		private readonly IConfig $config,
 		ContainerInterface $container,
 		private readonly SessionService $sessionService,
 		private readonly SluggerInterface $slugger,
@@ -347,9 +346,9 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	private function newPage(int $collectiveId, Folder $folder, string $filename, string $userId, ?string $title): PageInfo {
+	private function newPage(int $collectiveId, Folder $folder, string $filename, string $userId, ?string $title, ?string $content = null): PageInfo {
 		try {
-			$newFile = $folder->newFile($filename . PageInfo::SUFFIX);
+			$newFile = $folder->newFile($filename . PageInfo::SUFFIX, $content);
 		} catch (FilesNotPermittedException $e) {
 			throw new NotPermittedException($e->getMessage(), 0, $e);
 		}
@@ -525,12 +524,16 @@ class PageService {
 	 * @throws NotPermittedException
 	 */
 	public function findAll(int $collectiveId, string $userId): array {
-		$folder = $this->getCollectiveFolder($collectiveId, $userId);
-		try {
-			return $this->getPagesFromFolder($collectiveId, $folder, $userId, true, true);
-		} catch (FilesNotFoundException $e) {
-			throw new NotFoundException($e->getMessage(), 0, $e);
+		if ($this->allPageInfos === null || $this->collective->getId() !== $collectiveId) {
+			$folder = $this->getCollectiveFolder($collectiveId, $userId);
+			try {
+				$this->allPageInfos = $this->getPagesFromFolder($collectiveId, $folder, $userId, true, true);
+			} catch (FilesNotFoundException $e) {
+				throw new NotFoundException($e->getMessage(), 0, $e);
+			}
 		}
+
+		return $this->allPageInfos;
 	}
 
 	/**
@@ -608,10 +611,11 @@ class PageService {
 		}
 
 		$parentPageId = $landingPageId;
-		$allPages = $this->findAll($collectiveId, $userId);
+		$allPageInfos = $this->findAll($collectiveId, $userId);
+		$matchingPage = null;
 		foreach (explode('/', $path) as $title) {
 			$matchingPage = null;
-			foreach ($allPages as $pageInfo) {
+			foreach ($allPageInfos as $pageInfo) {
 				if ($pageInfo->getTitle() === $title && $pageInfo->getParentId() === $parentPageId) {
 					$matchingPage = $pageInfo;
 					break;
@@ -672,20 +676,56 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	public function create(int $collectiveId, int $parentId, string $title, ?int $templateId, string $userId, ?string $defaultTitle = null): PageInfo {
+	public function createBase(int $collectiveId, int $parentId, string $title, ?int $templateId, string $userId, ?string $defaultTitle = null, ?string $content = null): PageInfo {
 		$this->verifyEditPermissions($collectiveId, $userId);
+		if ($parentId === 0) {
+			$collectiveFolder = $this->getCollectiveFolder($collectiveId, $userId);
+			$parentId = self::getIndexPageFile($collectiveFolder)->getId();
+		}
 		$folder = $this->getFolder($collectiveId, $parentId, $userId);
 		$parentFile = $this->nodeHelper->getFileById($folder, $parentId);
 		$folder = $this->initSubFolder($parentFile);
 		$safeTitle = $this->nodeHelper->sanitiseFilename($title, $defaultTitle ?: self::DEFAULT_PAGE_TITLE);
 		$filename = NodeHelper::generateFilename($folder, $safeTitle, PageInfo::SUFFIX);
 
-		$pageInfo = $templateId
+		return $templateId
 			? $this->copy($collectiveId, $templateId, $parentId, $safeTitle, 0, $userId)
-			: $this->newPage($collectiveId, $folder, $filename, $userId, $title);
+			: $this->newPage($collectiveId, $folder, $filename, $userId, $title, $content);
+	}
+
+	/**
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function create(int $collectiveId, int $parentId, string $title, ?int $templateId, string $userId, ?string $defaultTitle = null): PageInfo {
+		$pageInfo = $this->createBase($collectiveId, $parentId, $title, $templateId, $userId, $defaultTitle);
 		$parentPageInfo = $this->addToSubpageOrder($collectiveId, $parentId, $pageInfo->getId(), 0, $userId);
 		$this->notifyPush(['collectiveId' => $collectiveId, 'pages' => [$pageInfo, $parentPageInfo]]);
 		return $pageInfo;
+	}
+
+	/**
+	 * @throws MissingDependencyException
+	 * @throws NotFoundException
+	 * @throws NotPermittedException
+	 */
+	public function getOrCreate(int $collectiveId, int $parentId, string $title, string $userId): PageInfo {
+		$folder = $this->getFolder($collectiveId, $parentId, $userId);
+		$landingPageId = self::getIndexPageFile($folder)->getId();
+		try {
+			$childPages = $this->getPagesFromFolder($collectiveId, $folder, $userId);
+		} catch (FilesNotFoundException $e) {
+			throw new NotFoundException($e->getMessage(), 0, $e);
+		}
+		foreach ($childPages as $pageInfo) {
+			if ($pageInfo->getTitle() === $title && $pageInfo->getParentId() === $landingPageId) {
+				return $pageInfo;
+			}
+		}
+
+		$this->verifyEditPermissions($collectiveId, $userId);
+		return $this->createBase($collectiveId, $parentId, $title, null, $userId);
 	}
 
 	/**
