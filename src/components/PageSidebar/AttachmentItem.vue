@@ -9,6 +9,7 @@
 		:href="davUrl"
 		:force-display-actions="true"
 		class="attachment"
+		:class="{ mobile: isMobile }"
 		@dragstart="onDragstart"
 		@click="onClick">
 		<template #icon>
@@ -106,9 +107,8 @@ import { formatFileSize } from '@nextcloud/files'
 import { t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
 import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
-import NcActionButton from '@nextcloud/vue/dist/NcActionButton'
-import NcActionLink from '@nextcloud/vue/dist/NcActionLink'
-import NcListItem from '@nextcloud/vue/dist/NcListItem'
+import { NcActionButton, NcActionLink, NcListItem } from '@nextcloud/vue'
+import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { mapState } from 'pinia'
 import DeleteIcon from 'vue-material-design-icons/DeleteOutline.vue'
 import EyeIcon from 'vue-material-design-icons/EyeOutline.vue'
@@ -157,8 +157,9 @@ export default {
 	},
 
 	setup() {
+		const isMobile = useIsMobile()
 		const { networkOnline } = useNetworkState()
-		return { networkOnline }
+		return { isMobile, networkOnline }
 	},
 
 	computed: {
@@ -311,6 +312,12 @@ export default {
 		border: 1px solid var(--color-border);
 		border-radius: var(--border-radius-large);
 	}
+
+	&.mobile, &:hover, &:focus, &:active {
+		:deep(.list-item-content__actions) {
+			visibility: visible;
+		}
+	}
 }
 
 .attachment-list-subheading {
@@ -332,5 +339,9 @@ export default {
 .action-link--disabled {
 	pointer-events: none;
 	opacity: .5;
+}
+
+:deep(.list-item-content__actions) {
+	visibility: hidden;
 }
 </style>
