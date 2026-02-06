@@ -38,7 +38,7 @@
 				{{ t('collectives', 'View in page') }}
 			</NcActionButton>
 			<NcActionButton
-				v-if="!isEmbedded && !isDeleted"
+				v-if="!isEmbedded && !isDeleted && currentCollectiveCanEdit"
 				:close-after-click="true"
 				@click="onInsert">
 				<template #icon>
@@ -47,7 +47,7 @@
 				{{ t('collectives', 'Add to page') }}
 			</NcActionButton>
 			<NcActionButton
-				v-if="isDeleted"
+				v-if="isDeleted && currentCollectiveCanEdit"
 				:close-after-click="true"
 				@click="onRestore">
 				<template #icon>
