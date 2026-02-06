@@ -68,8 +68,8 @@ describe('Page attachments', function() {
 			cy.get('.attachment-list-deleted').should('contain', 'test.png')
 
 			// Restore image
-			cy.get('.attachment-list-deleted button.action-item__menutoggle')
-				.click()
+			cy.get('.attachment-list-deleted .action-item button')
+				.click({ force: true })
 			cy.get('button')
 				.contains('Restore')
 				.click()
@@ -99,8 +99,8 @@ describe('Page attachments', function() {
 			// Rename attachment
 			cy.get('.attachment-list-not-embedded')
 				.contains('.list-item', 'test.pdf')
-				.find('.action-item')
-				.click()
+				.find('.action-item button')
+				.click({ force: true })
 			cy.get('button.action-button')
 				.contains('Rename')
 				.click()
@@ -116,8 +116,8 @@ describe('Page attachments', function() {
 			// Delete attachment
 			cy.get('.attachment-list-not-embedded')
 				.contains('.list-item', 'renamed.pdf')
-				.find('.action-item')
-				.click()
+				.find('.action-item button')
+				.click({ force: true })
 			cy.intercept({ method: 'DELETE', url: '**/collectives/*/pages/*/attachments/*' }).as('attachmentDelete')
 			cy.get('button.action-button')
 				.contains('Delete')
