@@ -110,6 +110,7 @@ OC.L10N.register(
     "Sort ascending by title" : "タイトルの昇順でソート",
     "Switch back to default sort order" : "既定のソート順に戻す",
     "Create public link" : "公開リンクを作成",
+    "Share link ({index})" : "リンク共有 ({index})",
     "View only" : "閲覧のみ",
     "Can edit" : "編集可能",
     "Cannot copy, please copy the link manually" : "コピーできませんでした。手動でリンクをコピーしてください。",

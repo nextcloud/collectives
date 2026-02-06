@@ -115,6 +115,7 @@ OC.L10N.register(
     "Sort recently changed first" : "Najprej nedavno spremenjene",
     "Switch back to default sort order" : "Preklopi na privzet način razvrščanja",
     "Create public link" : "Ustvari javno povezavo",
+    "Share link ({index})" : "Souporaba povezave ({index})",
     "View only" : "Le ogled",
     "Can edit" : "Lahko ureja",
     "Cannot copy, please copy the link manually" : "Povezave ni mogoče kopirati. Storite to ročno.",

@@ -47,6 +47,7 @@ OC.L10N.register(
     "Deleted" : "삭제됨",
     "Sort order" : "정렬 순서",
     "Create public link" : "공개 링크 만들기",
+    "Share link ({index})" : "링크 공유 ({index})",
     "View only" : "읽기 전용",
     "Can edit" : "편집 허용",
     "Cannot copy, please copy the link manually" : "복사할 수 없습니다, 링크를 수동으로 복사하세요.",

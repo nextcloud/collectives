@@ -238,6 +238,7 @@ OC.L10N.register(
     "Results in content" : "Резултати у садржају",
     "Make sure you are online and can reach the server." : "Проверите да ли сте на мрежи и да ли можете да дођете до сервера.",
     "Create public link" : "Направи јавну везу",
+    "Share link ({index})" : "Дели линк ({index})",
     "You are offline" : "Ви сте ван мреже",
     "View only" : "Само преглед",
     "Can edit" : "Може да уређује",

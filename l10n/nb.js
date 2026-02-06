@@ -187,6 +187,7 @@ OC.L10N.register(
     "Switch back to default sort order" : "Bytt til standard sorteringsrekkefølge",
     "Results in content" : "Resultater i innhold",
     "Create public link" : "Opprett offentlig kobling",
+    "Share link ({index})" : "Del lenke ({index})",
     "View only" : "Kun se",
     "Can edit" : "Kan redigere",
     "Cannot copy, please copy the link manually" : "Kan ikke kopiere, kopier lenken manuelt",

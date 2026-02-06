@@ -186,6 +186,7 @@ OC.L10N.register(
     "Switch back to default sort order" : "Switch back to default sort order",
     "Results in content" : "نتایج در محتوا",
     "Create public link" : "ایجاد پیوند عمومی",
+    "Share link ({index})" : "اشتراک‌گذاری لینک ({index})",
     "View only" : "تنها مشاهده",
     "Can edit" : "توانایی ویرایش",
     "Cannot copy, please copy the link manually" : "کپی کردن امکان پذیر نیست ، لطفا پیوند را به صورت دستی کپی کنید",

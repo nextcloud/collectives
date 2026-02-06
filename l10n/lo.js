@@ -53,6 +53,7 @@ OC.L10N.register(
     "Deleted" : "ລືບ",
     "Sort order" : "ລຳດັບການຈັດລຽງ",
     "Create public link" : "ສ້າງລິງສາທາລະນະ",
+    "Share link ({index})" : "ແບ່ງປັນລິງ ({index})",
     "View only" : "ເບິ່ງເທົ່ານັ້ນ",
     "Can edit" : "ສາມາດແກ້ໄຂໄດ້",
     "Cannot copy, please copy the link manually" : "ບໍ່ສາມາດສຳເນົາໄດ້, ກະລຸນາສຳເນົາລິງດ້ວຍຕົວເອງ",

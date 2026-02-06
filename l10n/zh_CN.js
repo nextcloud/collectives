@@ -170,6 +170,7 @@ OC.L10N.register(
     "Sort recently changed first" : "按最近更改排序",
     "Switch back to default sort order" : "切换回默认排序顺序",
     "Create public link" : "创建公开链接",
+    "Share link ({index})" : "分享链接（{index}）",
     "View only" : "仅查看",
     "Can edit" : "可以编辑",
     "Cannot copy, please copy the link manually" : "无法复制，请手动复制链接",

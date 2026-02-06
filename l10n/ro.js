@@ -33,6 +33,7 @@ OC.L10N.register(
     "Favorites" : "Favorite",
     "Favorite" : "Favorit",
     "Deleted" : "Șters",
+    "Share link ({index})" : "Trimite link ({index})",
     "View only" : "Numai se vizualizează",
     "Can edit" : "Poate edita",
     "Cannot copy, please copy the link manually" : "Nu s-a putut copia, vă rugăm să copiați link-ul manual",

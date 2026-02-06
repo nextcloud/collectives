@@ -17,6 +17,7 @@ OC.L10N.register(
     "Favorites" : "Annsachdan",
     "Favorite" : "Annsachd",
     "Deleted" : "Chaidh a sguabadh às",
+    "Share link ({index})" : "Ceangal co-roinnidh ({index})",
     "Set password" : "Suidhich facal-faire",
     "Password" : "Facal-faire",
     "Add another link" : "Cuir ceangal eile ris",

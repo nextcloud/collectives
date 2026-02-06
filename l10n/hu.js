@@ -144,6 +144,7 @@ OC.L10N.register(
     "Sort recently changed first" : "Legutóbb változottak előre",
     "Switch back to default sort order" : "Visszaváltás az alapértelmezett rendezésre",
     "Create public link" : "Nyilvános hivatkozás létrehozása",
+    "Share link ({index})" : "Megosztási hivatkozás ({index})",
     "View only" : "Csak megtekintés",
     "Can edit" : "Szerkesztheti",
     "Cannot copy, please copy the link manually" : "A másolás sikertelen, másolja kézzel a hivatkozást",

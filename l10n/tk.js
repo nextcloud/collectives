@@ -17,6 +17,7 @@ OC.L10N.register(
     "Favorites" : "Halanýanlar",
     "Favorite" : "Halaýan",
     "Deleted" : "Öçürildi",
+    "Share link ({index})" : "({index})Baglanyşyk paýlaş",
     "Set password" : "Paroly düzüň",
     "Password" : "Açarsöz",
     "Add another link" : "Başga bir baglanyşyk goşuň",

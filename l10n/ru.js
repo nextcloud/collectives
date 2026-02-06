@@ -106,6 +106,7 @@ OC.L10N.register(
     "Sort recently changed first" : "Сначала отсортировать недавно измененные",
     "Switch back to default sort order" : "Вернуться на способ сортировки по умолчанию",
     "Create public link" : "Создать общедоступную ссылку",
+    "Share link ({index})" : "Ссылка общего доступа ({index})",
     "View only" : "Для просмотра",
     "Can edit" : "Разрешено редактировать",
     "Cannot copy, please copy the link manually" : "Не удалось скопировать, выполните копирование вручную",

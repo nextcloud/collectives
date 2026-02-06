@@ -226,6 +226,7 @@ OC.L10N.register(
     "Results in title or tags" : "Resultaten in titel of label",
     "Results in content" : "Resultaten in inhoud",
     "Create public link" : "Creëer openbare link",
+    "Share link ({index})" : "Deellink ({index})",
     "View only" : "Alleen bekijken",
     "Can edit" : "Kan bewerken",
     "Cannot copy, please copy the link manually" : "Kopiëren niet mogelijk, kopieer de link handmatig",

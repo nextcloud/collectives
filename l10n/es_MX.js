@@ -37,6 +37,7 @@ OC.L10N.register(
     "Favorite" : "Marcar como favorito",
     "Deleted" : "Eliminado",
     "Create public link" : "Crear enlace público",
+    "Share link ({index})" : "Compartir enlace ({index})",
     "View only" : "Sólo lectura",
     "Can edit" : "Puede editar",
     "Cannot copy, please copy the link manually" : "No se ha podido copiar, por favor, copia el enlace manualmente",

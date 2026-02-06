@@ -35,6 +35,7 @@ OC.L10N.register(
     "Favorites" : "Favorits",
     "Favorite" : "Prefetit",
     "Deleted" : "Suprimit",
+    "Share link ({index})" : "Ligam de partatge ({index})",
     "View only" : "Veire solament",
     "Can edit" : "Pòt modificar",
     "Password protection (enforced)" : "Proteccion per senhal (afortida)",

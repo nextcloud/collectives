@@ -41,6 +41,7 @@ OC.L10N.register(
     "Favorite" : "Eftirlæti",
     "Deleted" : "Eytt",
     "Create public link" : "Búa til opinberan tengil",
+    "Share link ({index})" : "Tengill á sameign ({index})",
     "View only" : "Einungis skoða",
     "Can edit" : "Getur breytt",
     "Cannot copy, please copy the link manually" : "Mistókst að afrita, afritaðu tengilinn handvirkt",

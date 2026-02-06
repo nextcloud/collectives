@@ -43,6 +43,7 @@ OC.L10N.register(
     "Favorite" : "Suosikki",
     "Deleted" : "Poistettu",
     "Create public link" : "Luo julkinen linkki",
+    "Share link ({index})" : "Jaa linkki ({index})",
     "View only" : "Vain katselu",
     "Can edit" : "Voi muokata",
     "Cannot copy, please copy the link manually" : "Kopioiminen ei onnistu. Kopioi linkki manuaalisesti",

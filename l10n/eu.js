@@ -167,6 +167,7 @@ OC.L10N.register(
     "Sort recently changed first" : "Ordenatu azkenaldian aldatutakoak lehenik",
     "Switch back to default sort order" : "Itzuli ordenatzeko hurrenkera lehenetsira",
     "Create public link" : "Sortu esteka publikoa",
+    "Share link ({index})" : "Partekatu ({index}) esteka",
     "View only" : "Ikustea soilik",
     "Can edit" : "Editatu dezake",
     "Cannot copy, please copy the link manually" : "Ezin izan da kopiatu. Kopiatu esteka eskuz",
