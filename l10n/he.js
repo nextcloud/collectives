@@ -33,6 +33,7 @@ OC.L10N.register(
     "Deleted" : "נמחק",
     "Sort order" : "סידור",
     "Create public link" : "יצירת קישור ציבורי",
+    "Share link ({index})" : "שתף קישור ({index})",
     "View only" : "לצפיה בלבד",
     "Can edit" : "ניתן לערוך",
     "Cannot copy, please copy the link manually" : "לא ניתן להעתיק, נא להעתיק את הקישור ידנית",

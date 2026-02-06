@@ -41,6 +41,7 @@ OC.L10N.register(
     "Favorite" : "Омилени",
     "Deleted" : "Избришани",
     "Create public link" : "Креирај јавен линк",
+    "Share link ({index})" : "Сподели линк ({index})",
     "View only" : "Само за гледање",
     "Can edit" : "Може да се уредува",
     "Cannot copy, please copy the link manually" : "Неможе да се копира, копирајте го линкот рачно",

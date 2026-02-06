@@ -109,6 +109,7 @@ OC.L10N.register(
     "Sort recently changed first" : "Ordina prima le modifiche recenti",
     "Switch back to default sort order" : "Torna all'ordinamento predefinito",
     "Create public link" : "Crea collegamento pubblico",
+    "Share link ({index})" : "Condividi collegamento ({index})",
     "View only" : "Sola lettura",
     "Can edit" : "Può modificare",
     "Cannot copy, please copy the link manually" : "Impossibile copiare, copia il collegamento manualmente",

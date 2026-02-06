@@ -238,6 +238,7 @@ OC.L10N.register(
     "Results in content" : "Resultados en contenido",
     "Make sure you are online and can reach the server." : "Asegúrese de estar en línea y que puede alcanzar el servidor.",
     "Create public link" : "Crear un enlace público",
+    "Share link ({index})" : "Enlace de recurso compartido ({index})",
     "You are offline" : "Está fuera de línea",
     "View only" : "Solo ver",
     "Can edit" : "Puede editar",

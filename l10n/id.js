@@ -45,6 +45,7 @@ OC.L10N.register(
     "Deleted" : "Dihapus",
     "Sort order" : "Urutkan",
     "Create public link" : "Buat tautan publik",
+    "Share link ({index})" : "Tautan berbagi ({index})",
     "View only" : "Hanya lihat",
     "Can edit" : "Dapat mengedit",
     "Cannot copy, please copy the link manually" : "Tidak dapat menyalin, silakan salin tautan secara manual",

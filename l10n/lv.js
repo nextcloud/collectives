@@ -40,6 +40,7 @@ OC.L10N.register(
     "Favorite" : "Izlasē",
     "Deleted" : "Izdzēsts",
     "Create public link" : "Izveidot publisku saiti",
+    "Share link ({index})" : "Kopīgot saiti ({index})",
     "View only" : "Tikai skatīt",
     "Can edit" : "Var labot",
     "Set password" : "Uzstādīt paroli",

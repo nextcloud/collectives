@@ -238,6 +238,7 @@ OC.L10N.register(
     "Results in content" : "Αποτελέσματα στο περιεχόμενο",
     "Make sure you are online and can reach the server." : "Βεβαιωθείτε ότι είστε συνδεδεμένοι στο διαδίκτυο και μπορείτε να φτάσετε τον διακομιστή.",
     "Create public link" : "Δημιουργία δημόσιου συνδέσμου",
+    "Share link ({index})" : "Διαμοιρασμός συνδέσμου ({index})",
     "You are offline" : "Είστε εκτός σύνδεσης",
     "View only" : "Μόνο προβολή",
     "Can edit" : "Μπορεί να επεξεργαστεί",
