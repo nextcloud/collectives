@@ -32,7 +32,6 @@ use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\IConfig;
 use OCP\IUserManager;
 use PHPUnit\Framework\TestCase;
-use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\String\UnicodeString;
@@ -90,10 +89,6 @@ class PageServiceTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
-		$container = $this->getMockBuilder(ContainerInterface::class)
-			->disableOriginalConstructor()
-			->getMock();
-
 		$sessionService = $this->getMockBuilder(SessionService::class)
 			->disableOriginalConstructor()
 			->getMock();
@@ -114,7 +109,6 @@ class PageServiceTest extends TestCase {
 			$userFolderHelper,
 			$userManager,
 			$this->config,
-			$container,
 			$sessionService,
 			$slugger,
 			$tagMapper,

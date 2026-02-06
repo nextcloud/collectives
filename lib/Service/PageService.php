@@ -27,7 +27,6 @@ use OCP\Files\InvalidPathException;
 use OCP\Files\Node;
 use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\Files\NotPermittedException as FilesNotPermittedException;
-use OCP\IConfig;
 use OCP\IUserManager;
 use OCP\Lock\LockedException;
 use OCP\Server;
@@ -48,7 +47,6 @@ class PageService {
 		private readonly CollectiveServiceBase $collectiveService,
 		private readonly UserFolderHelper $userFolderHelper,
 		private readonly IUserManager $userManager,
-		private readonly IConfig $config,
 		ContainerInterface $container,
 		private readonly SessionService $sessionService,
 		private readonly SluggerInterface $slugger,
@@ -144,7 +142,7 @@ class PageService {
 	 */
 	public function isPageInPageFolder(int $collectiveId, int $parentId, int $pageId, string $userId): void {
 		$folder = $this->getFolder($collectiveId, $parentId, $userId);
-		if (!isset($folder->getById($pageId)[0])) {
+		if ($folder->getFirstNodeById($pageId) === null) {
 			throw new NotFoundException('Page ' . $pageId . ' is not a child of ' . $parentId);
 		}
 	}
@@ -636,9 +634,8 @@ class PageService {
 		$collectiveFolder = $parentId
 			? $this->getFolder($collectiveId, $parentId, $userId)
 			: $this->getCollectiveFolder($collectiveId, $userId);
-		$pageFile = $collectiveFolder->getById($fileId);
-		if (isset($pageFile[0]) && $pageFile[0] instanceof File) {
-			$pageFile = $pageFile[0];
+		$pageFile = $collectiveFolder->getFirstNodeById($fileId);
+		if ($pageFile instanceof File) {
 			return $this->findByFile($collectiveId, $pageFile, $userId);
 		}
 		throw new NotFoundException('Failed to get page by file ID ' . $fileId . ' in collective ' . $collectiveId);
