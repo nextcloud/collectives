@@ -156,6 +156,7 @@
 
 <script>
 import { emit } from '@nextcloud/event-bus'
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { NcActionButton, NcActionCheckbox, NcActionLink, NcActions, NcActionSeparator } from '@nextcloud/vue'
 import { useIsMobile } from '@nextcloud/vue/composables/useIsMobile'
 import { mapActions, mapState } from 'pinia'
@@ -318,6 +319,16 @@ export default {
 				? t('collectives', 'Delete page and subpages')
 				: t('collectives', 'Delete page')
 		},
+	},
+
+	mounted() {
+		subscribe('collectives:page:open-tags-modal', this.onOpenTagsModal)
+		subscribe('collectives:page:open-move-or-copy-modal', this.onOpenMoveOrCopyModal)
+	},
+
+	beforeDestroy() {
+		unsubscribe('collectives:page:open-tags-modal', this.onOpenTagsModal)
+		unsubscribe('collectives:page:open-move-or-copy-modal', this.onOpenMoveOrCopyModal)
 	},
 
 	methods: {
