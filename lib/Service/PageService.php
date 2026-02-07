@@ -85,7 +85,7 @@ class PageService {
 	 * @throws NotFoundException
 	 * @throws NotPermittedException
 	 */
-	private function verifyEditPermissions(int $collectiveId, string $userId): void {
+	public function verifyEditPermissions(int $collectiveId, string $userId): void {
 		if (!$this->getCollective($collectiveId, $userId)->canEdit()) {
 			throw new NotPermittedException('Not allowed to edit collective');
 		}
@@ -805,7 +805,7 @@ class PageService {
 			// Return index page if node is a folder
 			$newNode = self::getIndexPageFile($newNode);
 		} elseif (!($newNode instanceof File)) {
-			throw new NotFoundException('Node not a file: ' . $node->getId());
+			throw new NotFoundException('Node not a file: ' . $newNode->getId());
 		}
 		return $newNode;
 	}

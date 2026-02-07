@@ -18,8 +18,10 @@ use OCA\Collectives\Service\SearchService;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\OCS\OCSBadRequestException;
 use OCP\AppFramework\OCS\OCSForbiddenException;
 use OCP\AppFramework\OCS\OCSNotFoundException;
+use OCP\AppFramework\OCS\OCSPreconditionFailedException;
 use OCP\AppFramework\OCSController;
 use OCP\Files\IRootFolder;
 use OCP\IRequest;
@@ -310,6 +312,88 @@ class PageController extends OCSController {
 		$userFolder = $this->rootFolder->getUserFolder($this->userId);
 		$attachments = $this->handleErrorResponse(fn (): array => $this->attachmentService->getAttachments($pageFile, $userFolder), $this->logger);
 		return new DataResponse(['attachments' => $attachments]);
+	}
+
+	/**
+	 * Upload an attachment
+	 *
+	 * @param int $collectiveId ID of the collective
+	 * @param int $id ID of the page
+	 *
+	 * @return DataResponse<Http::STATUS_OK, array{attachment: CollectivesPageAttachment}, array{}>
+	 * @throws OCSForbiddenException Not Permitted
+	 * @throws OCSNotFoundException Collective or page not found
+	 * @throws OCSBadRequestException Invalid file upload
+	 *
+	 * 200: Attachment uploaded
+	 */
+	#[NoAdminRequired]
+	public function uploadAttachment(int $collectiveId, int $id): DataResponse {
+		$attachment = $this->handleErrorResponse(function () use ($collectiveId, $id) : array {
+			$this->service->verifyEditPermissions($collectiveId, $this->userId);
+			$pageFile = $this->service->getPageFile($collectiveId, $id, $this->userId);
+			$file = $this->request->getUploadedFile('file');
+			if ($file === null) {
+				throw new OCSBadRequestException('No file uploaded of file exceeds maximum size.');
+			}
+			if (isset($file['tmp_name'], $file['name'], $file['type'])) {
+				$resource = fopen($file['tmp_name'], 'rb');
+				if (!$resource) {
+					throw new OCSBadRequestException('Failed to open uploaded file.');
+				}
+				$name = $file['name'];
+				return $this->attachmentService->uploadAttachment($pageFile, $name, $resource);
+			}
+			throw new OCSBadRequestException('Invalid file upload.');
+		}, $this->logger);
+		return new DataResponse(['attachment' => $attachment]);
+	}
+
+	/**
+	 * Rename an attachment
+	 *
+	 * @param int $collectiveId ID of the collective
+	 * @param int $id ID of the page
+	 * @param int $attachmentId ID of the attachment
+	 * @param string $name Target name
+	 *
+	 * @return DataResponse<Http::STATUS_OK, array{attachment: CollectivesPageAttachment}, array{}>
+	 * @throws OCSForbiddenException Not Permitted
+	 * @throws OCSNotFoundException Collective, page or attachment not found
+	 *
+	 * 200: Attachment renamed
+	 */
+	#[NoAdminRequired]
+	public function renameAttachment(int $collectiveId, int $id, int $attachmentId, string $name): DataResponse {
+		$attachment = $this->handleErrorResponse(function () use ($collectiveId, $id, $attachmentId, $name): array {
+			$this->service->verifyEditPermissions($collectiveId, $this->userId);
+			$pageFile = $this->service->getPageFile($collectiveId, $id, $this->userId);
+			return $this->attachmentService->renameAttachment($pageFile, $attachmentId, $name);
+		}, $this->logger);
+		return new DataResponse(['attachment' => $attachment]);
+	}
+
+	/**
+	 * Delete an attachment
+	 *
+	 * @param int $collectiveId ID of the collective
+	 * @param int $id ID of the page
+	 * @param int $attachmentId ID of the attachment
+	 *
+	 * @return DataResponse<Http::STATUS_OK, list<empty>, array{}>
+	 * @throws OCSForbiddenException Not Permitted
+	 * @throws OCSNotFoundException Collective, page or attachment not found
+	 *
+	 * 200: Attachment deleted
+	 */
+	#[NoAdminRequired]
+	public function deleteAttachment(int $collectiveId, int $id, int $attachmentId): DataResponse {
+		$this->handleErrorResponse(function () use ($collectiveId, $id, $attachmentId): void {
+			$this->service->verifyEditPermissions($collectiveId, $this->userId);
+			$pageFile = $this->service->getPageFile($collectiveId, $id, $this->userId);
+			$this->attachmentService->deleteAttachment($pageFile, $attachmentId);
+		}, $this->logger);
+		return new DataResponse([]);
 	}
 
 	/**

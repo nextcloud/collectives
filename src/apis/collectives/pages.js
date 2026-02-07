@@ -272,6 +272,51 @@ export function getPageAttachments(context, pageId) {
 }
 
 /**
+ * Upload attachment of a page
+ *
+ * @param {object} context - either the current collective or a share context
+ * @param {number} pageId - ID of the page that the attachment belongs to
+ * @param {string} formData - The formData containing the attachment
+ */
+export function uploadAttachment(context, pageId, formData) {
+	return axios.post(
+		pagesApiUrl(context, pageId, 'attachments'),
+		formData,
+		{
+			headers: {
+				'Content-Type': 'multipart/form-data',
+			},
+		},
+	)
+}
+
+/**
+ * Rename attachment of a page
+ *
+ * @param {object} context - either the current collective or a share context
+ * @param {number} pageId - ID of the page that the attachment belongs to
+ * @param {number} attachmentId - ID of the attachment to rename
+ * @param {string} name - Target name of the attachment
+ */
+export function renameAttachment(context, pageId, attachmentId, name) {
+	return axios.put(
+		pagesApiUrl(context, pageId, 'attachments', attachmentId),
+		{ name },
+	)
+}
+
+/**
+ * Delete attachment of a page
+ *
+ * @param {object} context - either the current collective or a share context
+ * @param {number} pageId - ID of the page that the attachment belongs to
+ * @param {number} attachmentId - ID of the attachment to delete
+ */
+export function deleteAttachment(context, pageId, attachmentId) {
+	return axios.delete(pagesApiUrl(context, pageId, 'attachments', attachmentId))
+}
+
+/**
  * Perform index search on pages in given collective
  *
  * @param {object} context - either the current collective or a share context
