@@ -161,6 +161,7 @@
     "Sort recently changed first" : "Ordena per canviat recentment primer",
     "Switch back to default sort order" : "Torna a l'ordre d'ordenació per defecte",
     "Create public link" : "Crea un enllaç públic",
+    "Share link ({index})" : "Comparteix un enllaç ({index})",
     "View only" : "Només visualitació",
     "Can edit" : "Pot editar",
     "Cannot copy, please copy the link manually" : "No es pot copiar; copieu l'enllaç manualment",

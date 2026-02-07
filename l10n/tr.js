@@ -244,7 +244,7 @@ OC.L10N.register(
     "Results in content" : "İçerik sonuçları",
     "Make sure you are online and can reach the server." : "Çevrim içi olduğunuzdan ve sunucuya erişebildiğinizden emin olun.",
     "Create public link" : "Herkese açık bağlantı ekle",
-    "Share link ({index})" : "Paylaşım bağlantısı ({index})",
+    "Share link ({index})" : "Bağlantıyı paylaş ({index})",
     "You are offline" : "Çevrim dışısınız",
     "View only" : "Yalnızca görüntüleme",
     "Can edit" : "Düzenleyebilir",
