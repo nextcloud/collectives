@@ -188,6 +188,7 @@ OC.L10N.register(
     "Switch back to default sort order" : "عُد إلى الترتيب التلقائي",
     "Results in content" : "نتائج في المتن",
     "Create public link" : "إنشاء رابط عمومي",
+    "Share link ({index})" : "رابط المشاركة ({index})",
     "View only" : "للعرض فقط",
     "Can edit" : "يمكنه التعديل",
     "Cannot copy, please copy the link manually" : "يتعذّر النسخ. يُرجى نسخ الرابط يدويًا",

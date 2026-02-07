@@ -100,6 +100,7 @@ OC.L10N.register(
     "Deleted pages" : "Páxines desaniciaes",
     "No deleted pages." : "Nun hai nenguna páxina desaniciada.",
     "Deleted" : "Desanicióse",
+    "Share link ({index})" : "Compartir l'enllaz ({index})",
     "View only" : "Ver namás",
     "Can edit" : "Pue editar",
     "Cannot copy, please copy the link manually" : "Nun se pue copiar. Copia l'enllaz manualmente",
