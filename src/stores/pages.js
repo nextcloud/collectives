@@ -1017,20 +1017,29 @@ export const usePagesStore = defineStore('pages', {
 		 */
 		async deleteAttachment(attachmentId) {
 			await api.deleteAttachment(this.context, this.currentPageId, attachmentId)
-			const index = this.attachments.findIndex((a) => a.id === attachmentId)
-			this.allAttachments[this.collectiveIndex][this.currentPageId].splice(index, 1)
+			this.setAttachmentDeleted(attachmentId)
 		},
 
-		setAttachmentDeleted(name) {
-			const index = this.attachments.findIndex((a) => a.name === name)
+		/**
+		 * Restore an attachment of a page from trash
+		 *
+		 * @param {number} attachmentId ID of the attachment to restore
+		 */
+		async restoreAttachment(attachmentId) {
+			await api.restoreAttachment(this.context, this.currentPageId, attachmentId)
+			this.setAttachmentUndeleted(attachmentId)
+		},
+
+		setAttachmentDeleted(attachmentId) {
+			const index = this.attachments.findIndex((a) => a.id === attachmentId)
 			if (index !== -1) {
 				const [attachment] = this.allAttachments[this.collectiveIndex][this.currentPageId].splice(index, 1)
 				this.deletedAttachments.push(attachment)
 			}
 		},
 
-		setAttachmentUndeleted(name) {
-			const index = this.deletedAttachments.findIndex((a) => a.name === name)
+		setAttachmentUndeleted(attachmentId) {
+			const index = this.deletedAttachments.findIndex((a) => a.id === attachmentId)
 			if (index !== -1) {
 				const [attachment] = this.deletedAttachments.splice(index, 1)
 				this.allAttachments[this.collectiveIndex][this.currentPageId].push(attachment)

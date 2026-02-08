@@ -10,17 +10,31 @@ declare(strict_types=1);
 namespace OCA\Collectives\Service;
 
 use OCA\Collectives\Fs\NodeHelper;
+use OCA\Collectives\Trash\PageTrashBackend;
+use OCP\App\IAppManager;
 use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\Files\InvalidPathException;
 use OCP\Files\NotFoundException as FilesNotFoundException;
 use OCP\Files\NotPermittedException as FilesNotPermittedException;
 use OCP\IPreview;
+use OCP\IUserManager;
+use OCP\Server;
 
 class AttachmentService {
+	private ?PageTrashBackend $trashBackend = null;
+
 	public function __construct(
-		private IPreview $preview,
+		private readonly IAppManager $appManager,
+		private readonly IUserManager $userManager,
+		private readonly IPreview $preview,
 	) {
+	}
+
+	private function initTrashBackend(): void {
+		if ($this->appManager->isEnabledForUser('files_trashbin')) {
+			$this->trashBackend = Server::get(PageTrashBackend::class);
+		}
 	}
 
 	/**
@@ -163,5 +177,29 @@ class AttachmentService {
 		} catch (FilesNotPermittedException $e) {
 			throw new NotPermittedException($e->getMessage());
 		}
+	}
+
+	/**
+	 * @throws NotPermittedException
+	 * @throws NotFoundException
+	 */
+	public function restoreAttachment(int $collectiveId, File $pageFile, int $attachmentId, string $userId): array {
+		$this->initTrashBackend();
+		if (!$this->trashBackend) {
+			throw new NotPermittedException('Failed to restore page. Trash is disabled.');
+		}
+
+		$trashItem = $this->trashBackend->getTrashItemByCollectiveAndId($this->userManager->get($userId), $collectiveId, $attachmentId);
+		if ($trashItem === null) {
+			throw new NotFoundException('Failed to restore attachment ' . $attachmentId . '. Not found in trash.');
+		}
+
+		try {
+			$this->trashBackend->restoreItem($trashItem);
+		} catch (FilesNotFoundException|FilesNotPermittedException|InvalidPathException $e) {
+			throw new NotFoundException('Failed to restore attachment ' . $attachmentId . ':' . $e->getMessage(), 0, $e);
+		}
+
+		return $this->getAttachmentDirectory($pageFile)->getById($attachmentId);
 	}
 }

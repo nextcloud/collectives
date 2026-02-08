@@ -10,9 +10,11 @@ declare(strict_types=1);
 namespace Unit\Service;
 
 use OCA\Collectives\Service\AttachmentService;
+use OCP\App\IAppManager;
 use OCP\Files\File;
 use OCP\Files\Folder;
 use OCP\IPreview;
+use OCP\IUserManager;
 use PHPUnit\Framework\TestCase;
 
 class AttachmentServiceTest extends TestCase {
@@ -24,29 +26,22 @@ class AttachmentServiceTest extends TestCase {
 
 	protected function setUp(): void {
 		parent::setUp();
-		$preview = $this->getMockBuilder(IPreview::class)
-			->disableOriginalConstructor()
-			->getMock();
 
-		$this->pageFile = $this->getMockBuilder(File::class)
-			->disableOriginalConstructor()
-			->getMock();
-		$this->parentFolder = $this->getMockBuilder(Folder::class)
-			->disableOriginalConstructor()
-			->getMock();
+		$appManager = $this->createMock(IAppManager::class);
+		$userManager = $this->createMock(IUserManager::class);
+		$preview = $this->createMock(IPreview::class);
+
+		$this->pageFile = $this->createMock(File::class);
+		$this->parentFolder = $this->createMock(Folder::class);
 		$this->parentFolder->method('nodeExists')
 			->with($this->attachmentFolderName)
 			->willReturn(true);
 		$this->parentFolder->method('getRelativePath')
 			->willReturn('/Collectives/x/path/to/' . $this->attachmentFolderName . '/attachmentFile1');
-		$attachmentFolder = $this->getMockBuilder(Folder::class)
-			->disableOriginalConstructor()
-			->getMock();
+		$attachmentFolder = $this->createMock(Folder::class);
 		$attachmentFolder->method('getName')
 			->willReturn($this->attachmentFolderName);
-		$attachmentFile = $this->getMockBuilder(File::class)
-			->disableOriginalConstructor()
-			->getMock();
+		$attachmentFile = $this->createMock(File::class);
 		$attachmentFile->method('getId')
 			->willReturn(2);
 		$attachmentFile->method('getPath')
@@ -67,7 +62,7 @@ class AttachmentServiceTest extends TestCase {
 		$this->pageFile->method('getId')
 			->willReturn(1);
 
-		$this->service = new AttachmentService($preview);
+		$this->service = new AttachmentService($appManager, $userManager, $preview);
 	}
 
 	public function testGetAttachments(): void {

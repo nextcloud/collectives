@@ -28,7 +28,8 @@ class FeatureContext implements Context {
 	private array $cookieJars = [];
 	private array $requestTokens = [];
 	private array $store = [];
-	private bool $setXdebugSession = true;
+	private ?int $deletedAttachmentId = null;
+	private bool $setXdebugSession = false;
 
 	private const CIRCLE_MEMBER_LEVEL = [
 		1 => 'Member',
@@ -779,7 +780,28 @@ class FeatureContext implements Context {
 		$collectiveId = $this->collectiveIdByName($collective);
 		$pageId = $this->pageIdByName($collectiveId, $page);
 		$attachmentId = $this->attachmentIdByName($collectiveId, $pageId, $fileName);
+		$this->deletedAttachmentId = $attachmentId;
 		$this->sendOcsCollectivesRequest('DELETE', 'collectives/' . $collectiveId . '/pages/' . $pageId . '/attachments/' . $attachmentId);
+		if ($fail === 'fails') {
+			$this->assertStatusCode(403);
+		} else {
+			$this->assertStatusCode(200);
+		}
+	}
+
+	/**
+	 * @When user :user restores deleted attachment for page :page in :collective
+	 * @When user :user :fails to restore deleted attachment for page :page in :collective
+	 *
+	 * @throws GuzzleException
+	 */
+	public function userRestoresAttachment(string $user, string $page, string $collective, ?string $fail = null): void {
+		$this->setCurrentUser($user);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$pageId = $this->pageIdByName($collectiveId, $page);
+		Assert::assertNotNull($this->deletedAttachmentId, 'No attachment has been deleted previously');
+		$attachmentId = $this->deletedAttachmentId;
+		$this->sendOcsCollectivesRequest('PATCH', 'collectives/' . $collectiveId . '/pages/' . $pageId . '/attachments/trash/' . $attachmentId);
 		if ($fail === 'fails') {
 			$this->assertStatusCode(403);
 		} else {
@@ -1655,7 +1677,29 @@ class FeatureContext implements Context {
 		$token = $this->getShareToken($collectiveId);
 		$pageId = $this->pageIdByName($collectiveId, $page);
 		$attachmentId = $this->attachmentIdByName($collectiveId, $pageId, $fileName);
+		$this->deletedAttachmentId = $attachmentId;
 		$this->sendOcsCollectivesRequest('DELETE', 'p/collectives/' . $token . '/pages/' . $pageId . '/attachments/' . $attachmentId);
+		if ($fail === 'fails') {
+			$this->assertStatusCode(403);
+		} else {
+			$this->assertStatusCode(200);
+		}
+	}
+
+	/**
+	 * @When anonymous restores deleted attachment for page :page in public collective :collective with owner :owner
+	 * @When anonymous :fails to restore deleted attachment for page :page in public collective :collective with owner :owner
+	 *
+	 * @throws GuzzleException
+	 */
+	public function anonymousRestoresAttachment(string $page, string $collective, string $owner, ?string $fail = null): void {
+		$this->setCurrentUser($owner);
+		$collectiveId = $this->collectiveIdByName($collective);
+		$token = $this->getShareToken($collectiveId);
+		$pageId = $this->pageIdByName($collectiveId, $page);
+		Assert::assertNotNull($this->deletedAttachmentId, 'No attachment has been deleted previously');
+		$attachmentId = $this->deletedAttachmentId;
+		$this->sendOcsCollectivesRequest('PATCH', 'p/collectives/' . $token . '/pages/' . $pageId . '/attachments/trash/' . $attachmentId, null, null, [], false);
 		if ($fail === 'fails') {
 			$this->assertStatusCode(403);
 		} else {
