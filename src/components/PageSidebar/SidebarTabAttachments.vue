@@ -27,15 +27,16 @@
 			</template>
 		</NcEmptyContent>
 
-		<div v-else-if="!loading('attachments')">
+		<div v-else>
 			<!-- upload button and area -->
-			<div v-if="currentCollectiveCanEdit" class="upload-button">
-				<NcButton @click="$refs.fileInput.click()">
+			<div v-if="currentCollectiveCanEdit" v-show="networkOnline" class="upload-area">
+				<NcButton :disabled="!networkOnline" @click="$refs.fileInput.click()">
 					<template #icon>
 						<PlusIcon />
 					</template>
 					{{ t('collectives', 'Upload') }}
 				</NcButton>
+
 				<input
 					ref="fileInput"
 					type="file"
@@ -44,7 +45,7 @@
 					@change="onFilesSelected">
 
 				<!-- drag and drop notice -->
-				<div v-show="dragover" class="upload-drop-area">
+				<div v-show="!hasAttachments || isDragover" class="upload-drop-area">
 					<TrayArrowDownIcon :size="24" />
 					<div class="upload-drop-area__title">
 						{{ t('collectives', 'Drag and drop files here to upload') }}
@@ -52,99 +53,102 @@
 				</div>
 			</div>
 
-			<!-- text attachments in page list -->
-			<div v-if="embeddedAttachments.length">
-				<div class="attachment-list-subheading">
-					<div>
-						{{ t('collectives', 'In page') }}
+			<!-- attachments lists -->
+			<div v-if="hasAttachments">
+				<!-- text attachments in page list -->
+				<div v-if="embeddedAttachments.length">
+					<div class="attachment-list-subheading">
+						<div>
+							{{ t('collectives', 'In page') }}
+						</div>
 					</div>
+
+					<ul class="attachment-list-embedded">
+						<AttachmentItem
+							v-for="attachment in embeddedAttachments"
+							:key="attachment.id"
+							:attachment="attachment"
+							:is-embedded="true"
+							@rename="onStartRename(attachment)"
+							@delete="onDelete(attachment)" />
+					</ul>
 				</div>
 
-				<ul class="attachment-list-embedded">
-					<AttachmentItem
-						v-for="attachment in embeddedAttachments"
-						:key="attachment.id"
-						:attachment="attachment"
-						:is-embedded="true"
-						@rename="onStartRename(attachment)"
-						@delete="onDelete(attachment)" />
-				</ul>
-			</div>
-
-			<!-- text attachments not in page list -->
-			<div v-if="notEmbeddedAttachments.length">
-				<div class="attachment-list-subheading">
-					<div>
-						{{ t('collectives', 'Not in page') }}
+				<!-- text attachments not in page list -->
+				<div v-if="notEmbeddedAttachments.length">
+					<div class="attachment-list-subheading">
+						<div>
+							{{ t('collectives', 'Not in page') }}
+						</div>
 					</div>
+
+					<ul class="attachment-list-not-embedded">
+						<AttachmentItem
+							v-for="attachment in notEmbeddedAttachments"
+							:key="attachment.id"
+							:attachment="attachment"
+							@rename="onStartRename(attachment)"
+							@delete="onDelete(attachment)" />
+					</ul>
 				</div>
 
-				<ul class="attachment-list-not-embedded">
-					<AttachmentItem
-						v-for="attachment in notEmbeddedAttachments"
-						:key="attachment.id"
-						:attachment="attachment"
-						@rename="onStartRename(attachment)"
-						@delete="onDelete(attachment)" />
-				</ul>
-			</div>
-
-			<!-- deleted attachments list -->
-			<div v-if="isTextEdit && deletedAttachments.length">
-				<div class="attachment-list-subheading">
-					{{ t('collectives', 'Recently deleted') }}
-				</div>
-
-				<ul class="attachment-list-deleted">
-					<AttachmentItem
-						v-for="attachment in deletedAttachments"
-						:key="attachment.id"
-						:attachment="attachment"
-						:is-deleted="true" />
-				</ul>
-			</div>
-
-			<!-- folder attachments list -->
-			<div v-if="folderAttachments.length">
-				<div class="attachment-list-subheading">
-					<div>
-						{{ t('collectives', 'Found in folder') }}
+				<!-- deleted attachments list -->
+				<div v-if="isTextEdit && deletedAttachments.length">
+					<div class="attachment-list-subheading">
+						{{ t('collectives', 'Recently deleted') }}
 					</div>
-					<NcPopover popover-role="dialog" no-focus-trap>
-						<template #trigger>
-							<NcButton
-								class="hint-icon"
-								variant="tertiary-no-background"
-								:aria-label="t('collectives', 'Explanation for found in folder list')">
-								<template #icon>
-									<InformationIcon :size="20" />
-								</template>
-							</NcButton>
-						</template>
-						<p class="hint-body">
-							{{ t('collectives', 'Files in the same folder as the page.') }}
-						</p>
-					</NcPopover>
+
+					<ul class="attachment-list-deleted">
+						<AttachmentItem
+							v-for="attachment in deletedAttachments"
+							:key="attachment.id"
+							:attachment="attachment"
+							:is-deleted="true" />
+					</ul>
 				</div>
 
-				<ul class="attachment-list-folder">
-					<AttachmentItem
-						v-for="attachment in folderAttachments"
-						:key="attachment.id"
-						:attachment="attachment" />
-				</ul>
+				<!-- folder attachments list -->
+				<div v-if="folderAttachments.length">
+					<div class="attachment-list-subheading">
+						<div>
+							{{ t('collectives', 'Found in folder') }}
+						</div>
+						<NcPopover popover-role="dialog" no-focus-trap>
+							<template #trigger>
+								<NcButton
+									class="hint-icon"
+									variant="tertiary-no-background"
+									:aria-label="t('collectives', 'Explanation for found in folder list')">
+									<template #icon>
+										<InformationIcon :size="20" />
+									</template>
+								</NcButton>
+							</template>
+							<p class="hint-body">
+								{{ t('collectives', 'Files in the same folder as the page.') }}
+							</p>
+						</NcPopover>
+					</div>
+
+					<ul class="attachment-list-folder">
+						<AttachmentItem
+							v-for="attachment in folderAttachments"
+							:key="attachment.id"
+							:attachment="attachment" />
+					</ul>
+				</div>
 			</div>
+
+			<!-- no attachments found -->
+			<NcEmptyContent
+				v-else
+				:name="t('collectives', 'No attachments')"
+				:description="noAttachmentsDescription">
+				<template #icon>
+					<PaperclipIcon />
+				</template>
+			</NcEmptyContent>
 		</div>
-
-		<!-- no attachments found -->
-		<NcEmptyContent
-			v-else-if="!attachments.length && !folderAttachments.length"
-			:name="t('collectives', 'No attachments available')"
-			:description="noAttachmentsDescription">
-			<template #icon>
-				<PaperclipIcon />
-			</template>
-		</NcEmptyContent>
 
 		<!-- rename dialog -->
 		<AttachmentRenameDialog
@@ -202,7 +206,7 @@ export default {
 
 	data() {
 		return {
-			dragover: false,
+			isDragover: false,
 			renamedAttachment: null,
 			showRenameAttachmentsForm: false,
 		}
@@ -256,6 +260,13 @@ export default {
 				.sort((a, b) => a.timestamp < b.timestamp)
 		},
 
+		hasAttachments() {
+			return this.embeddedAttachments.length > 0
+				|| this.notEmbeddedAttachments.length > 0
+				|| this.deletedAttachments.length > 0
+				|| this.folderAttachments.length > 0
+		},
+
 		offlineTitle() {
 			return this.networkOnline
 				? ''
@@ -290,14 +301,14 @@ export default {
 
 			const isForeignFile = event.dataTransfer?.types.includes('Files')
 			if (isForeignFile) {
-				this.dragover = true
+				this.isDragover = true
 				this.$refs.attachmentsContainer.scrollIntoView({ behaviour: 'smooth', block: 'start' })
 			}
 		},
 
 		onContainerDragleave() {
-			if (this.dragover) {
-				this.dragover = false
+			if (this.isDragover) {
+				this.isDragover = false
 			}
 		},
 
@@ -311,7 +322,7 @@ export default {
 			event.stopPropagation()
 
 			this.uploadAttachments(files)
-			this.dragover = false
+			this.isDragover = false
 		},
 
 		async onFilesSelected(event) {
@@ -392,7 +403,7 @@ export default {
 	height: calc(100% - 24px);
 }
 
-.upload-button {
+.upload-area {
 	padding-block: 4px;
 	padding-inline: 8px;
 }
@@ -454,7 +465,6 @@ export default {
 	.hint-icon {
 		color: var(--color-primary-element);
 	}
-
 }
 
 .hint-body {
