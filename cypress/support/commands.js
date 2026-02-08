@@ -50,6 +50,9 @@ Cypress.Commands.add('goOffline', () => {
 Cypress.Commands.add('goOnline', () => {
 	cy.log('**go online**')
 		.then(() => {
+			return Cypress.automation('remote:debugger:protocol', { command: 'Network.enable' })
+		})
+		.then(() => {
 			return Cypress.automation('remote:debugger:protocol', {
 				command: 'Network.emulateNetworkConditions',
 				params: {
