@@ -112,7 +112,7 @@ describe('Page link handling', function() {
 			expect(loc.search).to.eq(sourceUrl.search)
 		})
 		cy.get('.modal-header').should('contain', fileName)
-		cy.get(`.viewer__content ${viewerFileElement}.viewer__file, .viewer__content .viewer__file ${viewerFileElement}`).should('exist')
+		cy.get(`.viewer__content ${viewerFileElement}`).should('exist')
 
 		cy.get('.modal-header > .icons-menu > button.header-close')
 			.click()
