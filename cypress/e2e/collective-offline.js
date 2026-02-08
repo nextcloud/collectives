@@ -35,7 +35,9 @@ describe('Collective offline', function() {
 		})
 
 		it('Shows offline state in version tab', function() {
+			cy.intercept('PROPFIND', '**/remote.php/dav/versions/**').as('pageVersions')
 			cy.get('button.app-sidebar__toggle').click()
+			cy.wait('@pageVersions')
 			cy.get('#tab-button-versions').click()
 
 			cy.get('.app-sidebar-tabs__content .version-list .list-item')
