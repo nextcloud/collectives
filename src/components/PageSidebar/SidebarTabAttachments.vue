@@ -93,7 +93,7 @@
 				</div>
 
 				<!-- deleted attachments list -->
-				<div v-if="isTextEdit && deletedAttachments.length">
+				<div v-if="deletedAttachments.length">
 					<div class="attachment-list-subheading">
 						{{ t('collectives', 'Recently deleted') }}
 					</div>
@@ -103,7 +103,8 @@
 							v-for="attachment in deletedAttachments"
 							:key="attachment.id"
 							:attachment="attachment"
-							:is-deleted="true" />
+							:is-deleted="true"
+							@restore="onRestore(attachment)" />
 					</ul>
 				</div>
 
@@ -161,7 +162,7 @@
 
 <script>
 import { showError, showSuccess } from '@nextcloud/dialogs'
-import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { emit } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
 import { mapActions, mapState } from 'pinia'
 import NcButton from '@nextcloud/vue/components/NcButton'
@@ -225,7 +226,6 @@ export default {
 			'readerEmbeddedAttachmentSrcs',
 			'currentPage',
 			'deletedAttachments',
-			'isTextEdit',
 		]),
 
 		noAttachmentsDescription() {
@@ -274,24 +274,13 @@ export default {
 		},
 	},
 
-	mounted() {
-		// Move attachment to recently deleted on event from Text
-		subscribe('collectives:text-image-node:delete', this.onDeleteImageNode)
-		subscribe('text:image-node:delete', this.onDeleteImageNode)
-	},
-
-	beforeDestroy() {
-		unsubscribe('collectives:text-image-node:delete', this.onDeleteImageNode)
-		unsubscribe('text:image-node:delete', this.onDeleteImageNode)
-	},
-
 	methods: {
 		t,
 
 		...mapActions(usePagesStore, [
 			'deleteAttachment',
 			'renameAttachment',
-			'setAttachmentDeleted',
+			'restoreAttachment',
 			'uploadAttachment',
 		]),
 
@@ -385,14 +374,14 @@ export default {
 			}
 		},
 
-		onDeleteImageNode(imageUrl) {
-			const url = new URL(imageUrl, window.location)
-			const imageFileName = url.searchParams.get('imageFileName') || url.searchParams.get('mediaFileName')
-			if (!url.pathname.includes('/apps/text/') || !imageFileName) {
-				// Ignore image nodes that don't point to direct Text attachments
-				return
+		async onRestore(attachment) {
+			console.debug('onRestore', attachment)
+			try {
+				await this.restoreAttachment(attachment.id)
+			} catch (e) {
+				console.error('Failed to restore attachment', e)
+				showError(t('collectives', 'Failed to restore attachment'))
 			}
-			this.setAttachmentDeleted(imageFileName)
 		},
 	},
 }

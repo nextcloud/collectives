@@ -50,13 +50,14 @@
 			<NcActionButton
 				v-if="isDeleted && currentCollectiveCanEdit"
 				:close-after-click="true"
-				@click="onRestore">
+				@click="$emit('restore')">
 				<template #icon>
 					<RestoreIcon />
 				</template>
 				{{ t('collectives', 'Restore') }}
 			</NcActionButton>
 			<NcActionLink
+				:v-if="!isDeleted"
 				:href="davUrl"
 				:download="attachment.name"
 				:class="{ 'action-link--disabled': !networkOnline }"
@@ -67,7 +68,7 @@
 				{{ t('collectives', 'Download') }}
 			</NcActionLink>
 			<NcActionLink
-				v-if="!isPublic"
+				v-if="!isDeleted && !isPublic"
 				:href="filesUrl"
 				:class="{ 'action-link--disabled': !networkOnline }"
 				:close-after-click="true">
@@ -173,7 +174,6 @@ export default {
 		...mapState(usePagesStore, [
 			'currentPage',
 			'isTextEdit',
-			'setAttachmentUndeleted',
 		]),
 
 		isInFolder() {
@@ -276,11 +276,6 @@ export default {
 				name: this.attachment.name,
 			})
 			this.scrollTo(this.attachment)
-		},
-
-		onRestore() {
-			this.onInsert()
-			this.setAttachmentUndeleted(this.attachment.name)
 		},
 	},
 }

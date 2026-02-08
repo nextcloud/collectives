@@ -317,6 +317,17 @@ export function deleteAttachment(context, pageId, attachmentId) {
 }
 
 /**
+ * Restore attachment of a page from trash
+ *
+ * @param {object} context - either the current collective or a share context
+ * @param {number} pageId - ID of the page that the attachment belongs to
+ * @param {number} attachmentId - ID of the attachment to restore
+ */
+export function restoreAttachment(context, pageId, attachmentId) {
+	return axios.patch(pagesApiUrl(context, pageId, 'attachments/trash', attachmentId))
+}
+
+/**
  * Perform index search on pages in given collective
  *
  * @param {object} context - either the current collective or a share context

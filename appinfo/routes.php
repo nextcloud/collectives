@@ -104,6 +104,8 @@ return [
 			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+', 'attachmentId' => '\d+']],
 		['name' => 'page#deleteAttachment', 'url' => '/api/v{apiVersion}/collectives/{collectiveId}/pages/{id}/attachments/{attachmentId}', 'verb' => 'DELETE',
 			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+', 'attachmentId' => '\d+']],
+		['name' => 'page#restoreAttachment', 'url' => '/api/v{apiVersion}/collectives/{collectiveId}/pages/{id}/attachments/trash/{attachmentId}', 'verb' => 'PATCH',
+			'requirements' => ['apiVersion' => '(1.0)', 'collectiveId' => '\d+', 'id' => '\d+', 'attachmentId' => '\d+']],
 
 		// Pages trash API
 		['name' => 'pageTrash#index', 'url' => '/api/v{apiVersion}/collectives/{collectiveId}/pages/trash', 'verb' => 'GET',
@@ -197,6 +199,8 @@ return [
 		['name' => 'publicPage#renameAttachment', 'url' => '/api/v{apiVersion}/p/collectives/{token}/pages/{id}/attachments/{attachmentId}', 'verb' => 'PUT',
 			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+', 'attachmentId' => '\d+']],
 		['name' => 'publicPage#deleteAttachment', 'url' => '/api/v{apiVersion}/p/collectives/{token}/pages/{id}/attachments/{attachmentId}', 'verb' => 'DELETE',
+			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+', 'attachmentId' => '\d+']],
+		['name' => 'publicPage#restoreAttachment', 'url' => '/api/v{apiVersion}/p/collectives/{token}/pages/{id}/attachments/trash/{attachmentId}', 'verb' => 'PATCH',
 			'requirements' => ['apiVersion' => '(1.0)', 'id' => '\d+', 'attachmentId' => '\d+']],
 
 		// Public pages trash API
