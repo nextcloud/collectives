@@ -88,7 +88,7 @@ describe('Page attachments', function() {
 
 		// Upload new attachment
 		cy.intercept({ method: 'POST', url: '**/collectives/*/pages/*/attachments' }).as('attachmentUpload')
-		cy.get('.upload-button')
+		cy.get('.upload-area')
 			.find('input[type="file"]')
 			.selectFile('cypress/fixtures/test.pdf', { force: true })
 		cy.wait('@attachmentUpload')
