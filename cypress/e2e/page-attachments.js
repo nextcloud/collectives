@@ -17,7 +17,7 @@ describe('Page attachments', function() {
 		cy.contains('.app-content-list-item a', 'Page1')
 	})
 
-	it('Supports inserting image into editor', function() {
+	it('Inserted attachment listed in sidebar tab', function() {
 		cy.openPage('Page1')
 
 		cy.intercept({ method: 'POST', url: '**/text/attachment/upload*' }).as('textAttachmentUpload')
@@ -38,9 +38,18 @@ describe('Page attachments', function() {
 		cy.getReadOnlyEditor()
 			.find('img.image__main')
 			.should('be.visible')
+
+		// Open attachment list
+		cy.get('button.app-sidebar__toggle').click()
+
+		cy.get('.attachment-list-embedded').should('contain', 'test.png')
+		cy.get('.attachment-list-not-embedded').should('not.exist')
+
+		// Close sidebar
+		cy.get('button.app-sidebar__close').click({ force: true })
 	})
 
-	it('Lists image in attachments sidebar and allows restore', function() {
+	it('Removing attachment from editor lists it in non-embedded list in sidebar tab', function() {
 		cy.openPage('Page1')
 
 		cy.switchToEditMode()
@@ -51,7 +60,7 @@ describe('Page attachments', function() {
 		cy.get('.attachment-list-embedded').should('contain', 'test.png')
 		cy.get('.attachment-list-not-embedded').should('not.exist')
 
-		// Delete image
+		// Delete image from editor
 		cy.getEditor()
 			.find('[data-component="image-view"] .image__view')
 			.trigger('mouseenter')
@@ -62,25 +71,25 @@ describe('Page attachments', function() {
 			.find('[data-component="image-view"] .image__view')
 			.should('not.exist')
 
+		cy.get('.attachment-list-not-embedded').should('contain', 'test.png')
 		cy.get('.attachment-list-embedded').should('not.exist')
-		cy.get('.attachment-list-not-embedded').should('not.exist')
-		cy.get('.attachment-list-deleted').should('contain', 'test.png')
 
-		// Restore image
-		cy.get('.attachment-list-deleted .action-item button')
+		// Delete attachment
+		cy.get('.attachment-list-not-embedded')
+			.contains('.list-item', 'test.png')
+			.find('.action-item button')
 			.click({ force: true })
-		cy.get('button')
-			.contains('Restore')
+		cy.intercept({ method: 'DELETE', url: '**/collectives/*/pages/*/attachments/*' }).as('attachmentDelete')
+		cy.get('button.action-button')
+			.contains('Delete')
 			.click()
-		cy.getEditor()
-			.find('[data-component="image-view"] .image__view')
-			.should('be.visible')
+		cy.wait('@attachmentDelete')
 
 		// Close sidebar
-		cy.get('button.app-sidebar__close').click()
+		cy.get('button.app-sidebar__close').click({ force: true })
 	})
 
-	it('Allows to upload, rename and delete attachments in attachments sidebar', function() {
+	it('Allows to upload, rename, delete and restore attachment in sidebar tab', function() {
 		cy.openPage('Page1')
 
 		// Open attachment list
@@ -98,7 +107,7 @@ describe('Page attachments', function() {
 		// Rename attachment
 		cy.get('.attachment-list-not-embedded')
 			.contains('.list-item', 'test.pdf')
-			.find('.action-item')
+			.find('.action-item button')
 			.click({ force: true })
 		cy.get('button.action-button')
 			.contains('Rename')
@@ -115,7 +124,7 @@ describe('Page attachments', function() {
 		// Delete attachment
 		cy.get('.attachment-list-not-embedded')
 			.contains('.list-item', 'renamed.pdf')
-			.find('.action-item')
+			.find('.action-item button')
 			.click({ force: true })
 		cy.intercept({ method: 'DELETE', url: '**/collectives/*/pages/*/attachments/*' }).as('attachmentDelete')
 		cy.get('button.action-button')
@@ -123,7 +132,20 @@ describe('Page attachments', function() {
 			.click()
 		cy.wait('@attachmentDelete')
 
-		cy.get('.attachment-list-not-embedded').should('not.exit')
+		cy.get('.attachment-list-not-embedded').should('not.exist')
+		cy.get('.attachment-list-deleted').should('contain', 'renamed.pdf')
+
+		// Restore attachment
+		cy.get('.attachment-list-deleted')
+			.contains('.list-item', 'renamed.pdf')
+			.find('.action-item button')
+			.click({ force: true })
+		cy.get('button.action-button')
+			.contains('Restore')
+			.click()
+
+		cy.get('.attachment-list-not-embedded').should('contain', 'renamed.pdf')
+		cy.get('.attachment-list-deleted').should('not.exist')
 
 		// Close sidebar
 		cy.get('button.app-sidebar__close').click({ force: true })
