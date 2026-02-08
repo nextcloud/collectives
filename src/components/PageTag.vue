@@ -109,7 +109,7 @@ li {
 		height: 20px;
 		width: 20px !important;
 		padding: 7px;
-		margin-left: 10px;
+		margin-inline-start: 10px;
 		color: var(--color-text-maxcontrast);
 	}
 

@@ -583,10 +583,10 @@ export default {
 	background-color: var(--color-main-background);
 	align-items: center;
 	justify-content: space-between;
-	margin-right: 4px;
+	margin-inline-end: 4px;
 
 	.page-filter {
-		margin-left: calc(var(--default-clickable-area) + 12px) !important;
+		margin-inline-start: calc(var(--default-clickable-area) + 12px) !important;
 		padding-bottom: 6px;
 	}
 }
@@ -651,7 +651,7 @@ li.toggle-button.selected {
 		// Required for ellipsised text overflow
 		max-width: calc(100% - 33px);
 		padding: 7px;
-		margin-left: 33px; // 40px - 7px
+		margin-inline-start: 33px; // 40px - 7px
 		background-color: var(--color-primary-element-light);
 		border-radius: var(--border-radius-element, var(--border-radius-large));
 
@@ -667,7 +667,7 @@ li.toggle-button.selected {
 			height: 20px;
 			width: 20px !important;
 			padding: 7px;
-			margin-left: 10px;
+			margin-inline-start: 10px;
 		}
 	}
 }
@@ -699,7 +699,7 @@ li.toggle-button.selected {
 <style lang="scss">
 .page-filter-popover {
 	margin-top: -18px;
-	margin-left: -4px;
+	margin-inline-start: -4px;
 
 	.v-popper__arrow-container {
 		display: none;
