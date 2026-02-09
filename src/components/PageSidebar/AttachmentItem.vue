@@ -39,7 +39,7 @@
 				{{ t('collectives', 'View in page') }}
 			</NcActionButton>
 			<NcActionButton
-				v-if="!isEmbedded && !isDeleted && currentCollectiveCanEdit"
+				v-if="!isEmbedded && !isDeleted && !isInFolder && isTextEdit && currentCollectiveCanEdit"
 				:close-after-click="true"
 				@click="onInsert">
 				<template #icon>
