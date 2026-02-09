@@ -47,7 +47,7 @@ class ImportService {
 		$fileMap = [];
 		$count = 0;
 		$memory = memory_get_usage();
-		$this->processDirectory($directory, $collective, $parentPage, $user, false, $fileMap, $count, $progressCallback);
+		$this->processDirectory($directory, $collective, $parentPage, $user, $fileMap, $count, $progressCallback);
 		$message = sprintf('Memory usage after importing pages: %.2fMB (peak usage: %.2fMB)',
 			((float)memory_get_usage() - (float)$memory) / 1024.0 / 1024.0,
 			(float)memory_get_peak_usage() / 1024.0 / 1024.0);
@@ -57,7 +57,7 @@ class ImportService {
 			throw new NotFoundException('No markdown files found in directory: ' . $directory);
 		}
 
-		// Second pass: rewrite relative links in all imported pages
+		// Third pass: rewrite relative links in all imported pages
 		$this->rewriteInternalLinksAndAttachments($collective, $user, $fileMap, $parentId, $directory, $progressCallback);
 		$message = sprintf('Memory usage after rewriting links and attachments: %.2fMB (+%.2fMb, peak usage: %.2fMB)',
 			(float)memory_get_usage() / 1024.0 / 1024.0,
@@ -71,7 +71,14 @@ class ImportService {
 	/**
 	 * Recursively import Markdown files from directory
 	 */
-	private function processDirectory(string $directory, Collective $collective, ?PageInfo $parentPage, IUser $user, bool $skipReadme, array &$fileMap, int &$count, ?callable $progressCallback = null): int {
+	private function processDirectory(string $directory, Collective $collective, ?PageInfo $parentPage, IUser $user, array &$fileMap, int &$count, ?callable $progressCallback = null): void {
+		// Verify directory exists and is readable
+		if (!is_readable($directory)) {
+			$message = sprintf('✗ Failed: %s - Directory not readable', $directory);
+			$progressCallback('error', $message);
+			return;
+		}
+
 		$parentId = $parentPage !== null ? $parentPage->getId() : 0;
 		$items = scandir($directory);
 		if ($items === false) {
@@ -79,61 +86,52 @@ class ImportService {
 		}
 
 		// First pass: import Markdown files at this level
-		foreach ($items as $item) {
-			if ($item === '.' || $item === '..') {
-				continue;
-			}
-
-			if ($skipReadme && self::getReadmeName($directory) === $item) {
-				continue;
-			}
-
-			// Verify directory exists and is readable
-			if (!is_readable($directory)) {
-				$message = sprintf('✗ Failed: %s - Directory not readable', $directory);
-				$progressCallback('error', $message);
-				continue;
-			}
-
+		$mdFiles = array_filter($items, static function ($item) use ($directory) {
+			return is_file($directory . DIRECTORY_SEPARATOR . $item) && strtolower(pathinfo($item, PATHINFO_EXTENSION)) === 'md';
+		});
+		foreach ($mdFiles as $item) {
 			$path = $directory . DIRECTORY_SEPARATOR . $item;
-			$title = basename($path, '.md');
 
-			if (is_file($path) && strtolower(pathinfo($path, PATHINFO_EXTENSION)) === 'md') {
+			try {
+				[$id, $title] = $this->processFile($directory, $item, $collective, $user, $parentPage);
+				$fileMap[$path] = $id;
+				$count++;
+				$message = sprintf('✓ Imported #%d: %s - %s (pageId: %d)', $count, $path, $title, $id);
+				$progressCallback('success', $message);
+			} catch (NotFoundException $e) {
+				$message = sprintf('✗ Failed: %s - %s', $path, $e->getMessage());
+				$progressCallback('error', $message);
+			}
+		}
+
+		// Second pass: import subdirectories
+		$subDirs = array_filter($items, static function ($item) use ($directory) {
+			return is_dir($directory . DIRECTORY_SEPARATOR . $item) && $item !== '.' && $item !== '..';
+		});
+		foreach ($subDirs as $item) {
+			$path = $directory . DIRECTORY_SEPARATOR . $item;
+
+			$readmeName = self::getReadmeFromDirectory($path);
+			if ($readmeName !== null) {
+				// Create index page from readme.md if exists
 				try {
-					[$id, $title] = $this->processFile($directory, $item, $collective, $user, $parentPage);
-					$fileMap[$path] = $id;
+					[$id, $title] = $this->processFile($path, $readmeName, $collective, $user, $parentPage, $item);
+					$fileMap[$path . DIRECTORY_SEPARATOR . $readmeName] = $id;
 					$count++;
-					$message = sprintf('✓ Imported #%d: %s - %s (pageId: %d)', $count, $path, $title, $id);
+					$message = sprintf('✓ Imported #%d: %s - %s (pageId: %d)', $count, $path . DIRECTORY_SEPARATOR . $readmeName, $title, $id);
 					$progressCallback('success', $message);
 				} catch (NotFoundException $e) {
 					$message = sprintf('✗ Failed: %s - %s', $path, $e->getMessage());
 					$progressCallback('error', $message);
+					continue;
 				}
-			} elseif (is_dir($path)) {
-				// Create index page if directory contains a README.md
-				$readmeName = self::getReadmeName($path);
-				if ($readmeName !== null) {
-					try {
-						[$id, $title] = $this->processFile($path, $readmeName, $collective, $user, $parentPage, $title);
-						$fileMap[$path . DIRECTORY_SEPARATOR . $readmeName] = $id;
-						$count++;
-						$message = sprintf('✓ Imported #%d: %s - %s (pageId: %d)', $count, $path . DIRECTORY_SEPARATOR . $readmeName, $title, $id);
-						$progressCallback('success', $message);
-					} catch (NotFoundException $e) {
-						$message = sprintf('✗ Failed: %s - %s', $path, $e->getMessage());
-						$progressCallback('error', $message);
-						continue;
-					}
-					$indexPageInfo = $this->pageService->findByFileId($collective->getId(), $id, $user->getUID());
-					$this->processDirectory($path, $collective, $indexPageInfo, $user, true, $fileMap, $count, $progressCallback);
-				} else {
-					$indexPageInfo = $this->pageService->getOrCreate($collective->getId(), $parentId, $item, $user->getUID());
-					$this->processDirectory($path, $collective, $indexPageInfo, $user, false, $fileMap, $count, $progressCallback);
-				}
+				$indexPageInfo = $this->pageService->findByFileId($collective->getId(), $id, $user->getUID());
+			} else {
+				// Create new empty index page
+				$indexPageInfo = $this->pageService->getOrCreate($collective->getId(), $parentId, $item, $user->getUID());
 			}
+			$this->processDirectory($path, $collective, $indexPageInfo, $user, $fileMap, $count, $progressCallback);
 		}
-
-		return $count;
 	}
 
 	private function processFile(string $directory, string $item, Collective $collective, IUser $user, ?PageInfo $parentPage, ?string $title = null): array {
@@ -352,7 +350,7 @@ class ImportService {
 		return 1;
 	}
 
-	private static function getReadmeName(string $path): ?string {
+	private static function getReadmeFromDirectory(string $path): ?string {
 		$items = scandir($path);
 		if ($items === false) {
 			return null;
