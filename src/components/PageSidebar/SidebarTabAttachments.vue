@@ -30,7 +30,7 @@
 		<div v-else>
 			<!-- upload button and area -->
 			<div v-if="currentCollectiveCanEdit" v-show="networkOnline" class="upload-area">
-				<NcButton :disabled="!networkOnline" @click="$refs.fileInput.click()">
+				<NcButton :disabled="!networkOnline" variant="tertiary" @click="$refs.fileInput.click()">
 					<template #icon>
 						<PlusIcon />
 					</template>
@@ -393,19 +393,17 @@ export default {
 }
 
 .upload-area {
-	padding-block: 4px;
-	padding-inline: 8px;
+	padding-block: 8px;
 }
 
 .upload-drop-area {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 100%;
 	user-select: none;
 	color: var(--color-text-maxcontrast);
 	background-color: var(--color-main-background);
-	margin-block: 8px;
+	margin: 8px;
 	padding: 12px;
 	border: 2px var(--color-border-dark) dashed;
 	border-radius: var(--border-radius-large);
