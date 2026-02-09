@@ -126,7 +126,7 @@
 								</NcButton>
 							</template>
 							<p class="hint-body">
-								{{ t('collectives', 'Files in the same folder as the page.') }}
+								{{ t('collectives', 'Files in the folder of the page.') }}
 							</p>
 						</NcPopover>
 					</div>
