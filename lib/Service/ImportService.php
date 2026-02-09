@@ -46,8 +46,9 @@ class ImportService {
 
 		$fileMap = [];
 		$count = 0;
+		$skipFilenames = [];
 		$memory = memory_get_usage();
-		$this->processDirectory($directory, $collective, $parentPage, $user, false, $fileMap, $count, $progressCallback);
+		$this->processDirectory($directory, $collective, $parentPage, $user, $skipFilenames, $fileMap, $count, $progressCallback);
 		$message = sprintf('Memory usage after importing pages: %.2fMB (peak usage: %.2fMB)',
 			((float)memory_get_usage() - (float)$memory) / 1024.0 / 1024.0,
 			(float)memory_get_peak_usage() / 1024.0 / 1024.0);
@@ -71,7 +72,7 @@ class ImportService {
 	/**
 	 * Recursively import Markdown files from directory
 	 */
-	private function processDirectory(string $directory, Collective $collective, ?PageInfo $parentPage, IUser $user, bool $skipReadme, array &$fileMap, int &$count, ?callable $progressCallback = null): int {
+	private function processDirectory(string $directory, Collective $collective, ?PageInfo $parentPage, IUser $user, array &$skipFilenames, array &$fileMap, int &$count, ?callable $progressCallback = null): void {
 		$parentId = $parentPage !== null ? $parentPage->getId() : 0;
 		$items = scandir($directory);
 		if ($items === false) {
@@ -84,7 +85,8 @@ class ImportService {
 				continue;
 			}
 
-			if ($skipReadme && self::getReadmeName($directory) === $item) {
+			if (in_array($item, $skipFilenames, true)) {
+				array_splice($skipFilenames, array_search($item, $skipFilenames, true), 1);
 				continue;
 			}
 
@@ -110,9 +112,9 @@ class ImportService {
 					$progressCallback('error', $message);
 				}
 			} elseif (is_dir($path)) {
-				// Create index page if directory contains a README.md
-				$readmeName = self::getReadmeName($path);
+				$readmeName = self::getReadmeFromDirectory($path);
 				if ($readmeName !== null) {
+					// Create index page from readme.md if exists
 					try {
 						[$id, $title] = $this->processFile($path, $readmeName, $collective, $user, $parentPage, $title);
 						$fileMap[$path . DIRECTORY_SEPARATOR . $readmeName] = $id;
@@ -125,15 +127,36 @@ class ImportService {
 						continue;
 					}
 					$indexPageInfo = $this->pageService->findByFileId($collective->getId(), $id, $user->getUID());
-					$this->processDirectory($path, $collective, $indexPageInfo, $user, true, $fileMap, $count, $progressCallback);
+					$this->processDirectory($path, $collective, $indexPageInfo, $user, $skipFilenames, $fileMap, $count, $progressCallback);
 				} else {
-					$indexPageInfo = $this->pageService->getOrCreate($collective->getId(), $parentId, $item, $user->getUID());
-					$this->processDirectory($path, $collective, $indexPageInfo, $user, false, $fileMap, $count, $progressCallback);
+					$candidateName = $item . '.md';
+					$parentPath = dirname($path);
+					if (self::checkNameInDirectory($parentPath, $candidateName)) {
+						// Use <directory_name>.md from parent directory if exists
+						$parentFilePath = $parentPath . DIRECTORY_SEPARATOR . $candidateName;
+						try {
+							[$id, $title] = $this->processFile($parentPath, $candidateName, $collective, $user, $parentPage, $item);
+							$fileMap[$parentFilePath] = $id;
+							$count++;
+							$message = sprintf('✓ Imported #%d: %s - %s (pageId: %d)', $count, $parentFilePath, $title, $id);
+							$progressCallback('success', $message);
+						} catch (NotFoundException $e) {
+							$message = sprintf('✗ Failed: %s - %s', $parentFilePath, $e->getMessage());
+							$progressCallback('error', $message);
+							continue;
+						}
+						// Add the index file to skip list so it won't be processed again in this directory
+						$skipFilenames[] = $candidateName;
+						$indexPageInfo = $this->pageService->findByFileId($collective->getId(), $id, $user->getUID());
+						$this->processDirectory($path, $collective, $indexPageInfo, $user, $skipFilenames, $fileMap, $count, $progressCallback);
+					} else {
+						// Create new empty index page
+						$indexPageInfo = $this->pageService->getOrCreate($collective->getId(), $parentId, $item, $user->getUID());
+						$this->processDirectory($path, $collective, $indexPageInfo, $user, $skipFilenames, $fileMap, $count, $progressCallback);
+					}
 				}
 			}
 		}
-
-		return $count;
 	}
 
 	private function processFile(string $directory, string $item, Collective $collective, IUser $user, ?PageInfo $parentPage, ?string $title = null): array {
@@ -352,7 +375,7 @@ class ImportService {
 		return 1;
 	}
 
-	private static function getReadmeName(string $path): ?string {
+	private static function getReadmeFromDirectory(string $path): ?string {
 		$items = scandir($path);
 		if ($items === false) {
 			return null;
@@ -365,5 +388,21 @@ class ImportService {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Return <name>.md file if it exists in a directory
+	 */
+	private static function checkNameInDirectory(string $directory, string $name): bool {
+		$items = scandir($directory);
+		if ($items === false) {
+			return false;
+		}
+
+		if (in_array($name, $items, true)) {
+			return true;
+		}
+
+		return false;
 	}
 }
