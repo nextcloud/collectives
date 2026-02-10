@@ -168,7 +168,7 @@ jobs:
         working-directory: apps/${{ env.APP_NAME }}
         run: |
           npm ci
-          TESTING=true npm run build --if-present
+          TESTING=true npm run dev
 
       - name: Save context
         uses: actions/cache/save@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
