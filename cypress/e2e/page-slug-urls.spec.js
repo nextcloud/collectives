@@ -24,26 +24,24 @@ describe('Page slug URLs', function() {
 		cy.loginAs('bob')
 	})
 
-	describe('Opens URLs with and without slugs', function() {
-		it('URL with collective and page slugs', function() {
-			cy.visit(slugUrl)
-			cy.location().should((loc) => {
-				expect(loc.pathname).to.eq(`/index.php${slugUrl}`)
-			})
+	it('Opens URL with collective and page slugs', function() {
+		cy.visit(slugUrl)
+		cy.location().should((loc) => {
+			expect(loc.pathname).to.eq(`/index.php${slugUrl}`)
 		})
+	})
 
-		it('URL with collective and page name without pageId', function() {
-			cy.visit(nameUrl)
-			cy.location().should((loc) => {
-				expect(loc.pathname).to.eq(`/index.php${slugUrl}`)
-			})
+	it('Opens URL with collective and page name without pageId', function() {
+		cy.visit(nameUrl)
+		cy.location().should((loc) => {
+			expect(loc.pathname).to.eq(`/index.php${slugUrl}`)
 		})
+	})
 
-		it('URL with collective and page name with pageId', function() {
-			cy.visit(`${nameUrl}?fileId=${pageId}`)
-			cy.location().should((loc) => {
-				expect(loc.pathname).to.eq(`/index.php${slugUrl}`)
-			})
+	it('Opens URL with collective and page name with pageId', function() {
+		cy.visit(`${nameUrl}?fileId=${pageId}`)
+		cy.location().should((loc) => {
+			expect(loc.pathname).to.eq(`/index.php${slugUrl}`)
 		})
 	})
 })

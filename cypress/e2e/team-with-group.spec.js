@@ -12,7 +12,7 @@
  * but you can't see a list of pages or access any page.
  *
  */
-describe('Pages are accessible via group membership to team', function() {
+describe('Collective via group membership to team', function() {
 	before(function() {
 		cy.loginAs('jane')
 		cy.deleteAndSeedCollective('Group Collective')

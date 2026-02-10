@@ -13,27 +13,25 @@ describe('Read-only collective', function() {
 		cy.seedCollectivePermissions('PermissionCollective', 'edit', 4)
 	})
 
-	describe('in read-only collective', function() {
-		beforeEach(function() {
-			cy.loginAs('bob')
-			cy.visit('/apps/collectives/PermissionCollective/SecondPage')
-		})
+	beforeEach(function() {
+		cy.loginAs('bob')
+		cy.visit('/apps/collectives/PermissionCollective/SecondPage')
+	})
 
-		it('not able to edit collective', function() {
-			cy.get('[data-cy-collectives="page-title-container"] input').should('have.attr', 'disabled')
-			cy.get('button.titleform-button').should('not.exist')
-			cy.get('.app-content-list-item.toplevel')
-				.find('button.icon.add')
-				.should('not.exist')
-			cy.getEditor()
-				.should('not.exist')
-		})
+	it('not able to edit collective', function() {
+		cy.get('[data-cy-collectives="page-title-container"] input').should('have.attr', 'disabled')
+		cy.get('button.titleform-button').should('not.exist')
+		cy.get('.app-content-list-item.toplevel')
+			.find('button.icon.add')
+			.should('not.exist')
+		cy.getEditor()
+			.should('not.exist')
+	})
 
-		it('actions menu with outline toggle is there', function() {
-			cy.get('[data-cy-collectives="page-title-container"] button.action-item__menutoggle')
-				.click()
-			cy.get('button.action-button')
-				.contains('Show outline')
-		})
+	it('actions menu with outline toggle is there', function() {
+		cy.get('[data-cy-collectives="page-title-container"] button.action-item__menutoggle')
+			.click()
+		cy.get('button.action-button')
+			.contains('Show outline')
 	})
 })

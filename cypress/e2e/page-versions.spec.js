@@ -30,101 +30,99 @@ describe('Page versions', function() {
 		cy.get('#tab-button-versions').click()
 	})
 
-	describe('Sidebar versions tab', function() {
-		it('Lists versions', function() {
-			cy.getReadOnlyEditor()
-				.should('contain', 'v4')
+	it('Lists versions', function() {
+		cy.getReadOnlyEditor()
+			.should('contain', 'v4')
 
-			cy.get('.app-sidebar-tabs__content .version-list .list-item')
-				.should('have.length', 4)
+		cy.get('.app-sidebar-tabs__content .version-list .list-item')
+			.should('have.length', 4)
 
-			cy.get('.app-sidebar-tabs__content .version-list .list-item')
-				.should('contain', 'Current version')
+		cy.get('.app-sidebar-tabs__content .version-list .list-item')
+			.should('contain', 'Current version')
 
-			cy.get('.app-sidebar-tabs__content .version-list .list-item')
-				.should('contain', 'Initial version')
-		})
+		cy.get('.app-sidebar-tabs__content .version-list .list-item')
+			.should('contain', 'Initial version')
+	})
 
-		it('Open initial and current version', function() {
-			cy.get('.app-sidebar-tabs__content .version-list .list-item')
-				.contains('Initial version')
-				.click()
+	it('Open initial and current version', function() {
+		cy.get('.app-sidebar-tabs__content .version-list .list-item')
+			.contains('Initial version')
+			.click()
 
-			cy.get('.page-title-container')
-				.find('.title-version')
-				.should('be.visible')
-			cy.getReadOnlyEditor()
-				.should('contain', 'v1')
+		cy.get('.page-title-container')
+			.find('.title-version')
+			.should('be.visible')
+		cy.getReadOnlyEditor()
+			.should('contain', 'v1')
 
-			cy.get('.app-sidebar-tabs__content .version-list .list-item')
-				.contains('Current version')
-				.click()
+		cy.get('.app-sidebar-tabs__content .version-list .list-item')
+			.contains('Current version')
+			.click()
 
-			cy.get('.page-title-container')
-				.find('.title-version')
-				.should('not.exist')
-			cy.getReadOnlyEditor()
-				.should('contain', 'v4')
-		})
+		cy.get('.page-title-container')
+			.find('.title-version')
+			.should('not.exist')
+		cy.getReadOnlyEditor()
+			.should('contain', 'v4')
+	})
 
-		it('Add label to version', function() {
-			cy.get('.app-sidebar-tabs__content .version-list .list-item')
-				.eq(1)
-				.find('.list-item-content__actions')
-				.click()
+	it('Add label to version', function() {
+		cy.get('.app-sidebar-tabs__content .version-list .list-item')
+			.eq(1)
+			.find('.list-item-content__actions')
+			.click()
 
-			cy.clickMenuButton('Name this version')
+		cy.clickMenuButton('Name this version')
 
-			cy.get('.version-label-modal input[type="text"]')
-				.type('v3{enter}')
+		cy.get('.version-label-modal input[type="text"]')
+			.type('v3{enter}')
 
-			cy.get('.app-sidebar-tabs__content .version-list .list-item')
-				.should('contain', 'v3')
-		})
+		cy.get('.app-sidebar-tabs__content .version-list .list-item')
+			.should('contain', 'v3')
+	})
 
-		it('Compare initial and current version', function() {
-			cy.get('.app-sidebar-tabs__content .version-list .list-item')
-				.eq(3)
-				.find('.list-item-content__actions')
-				.click()
+	it('Compare initial and current version', function() {
+		cy.get('.app-sidebar-tabs__content .version-list .list-item')
+			.eq(3)
+			.find('.list-item-content__actions')
+			.click()
 
-			cy.clickMenuButton('Compare to current version')
+		cy.clickMenuButton('Compare to current version')
 
-			cy.get('#viewer .text-editor')
-				.should('contain', 'v1')
-			cy.get('#viewer .text-editor')
-				.should('contain', 'v4')
+		cy.get('#viewer .text-editor')
+			.should('contain', 'v1')
+		cy.get('#viewer .text-editor')
+			.should('contain', 'v4')
 
-			cy.get('#viewer .header-close')
-				.click()
-		})
+		cy.get('#viewer .header-close')
+			.click()
+	})
 
-		it('Restore initial version', function() {
-			cy.get('.app-sidebar-tabs__content .version-list .list-item')
-				.eq(3)
-				.find('.list-item-content__actions')
-				.click()
+	it('Restore initial version', function() {
+		cy.get('.app-sidebar-tabs__content .version-list .list-item')
+			.eq(3)
+			.find('.list-item-content__actions')
+			.click()
 
-			cy.intercept('MOVE', '**/dav/versions/**').as('moveVersion')
-			cy.clickMenuButton('Restore version')
-			cy.wait('@moveVersion')
+		cy.intercept('MOVE', '**/dav/versions/**').as('moveVersion')
+		cy.clickMenuButton('Restore version')
+		cy.wait('@moveVersion')
 
-			cy.reload()
-			cy.getReadOnlyEditor()
-				.should('contain', 'v1')
-		})
+		cy.reload()
+		cy.getReadOnlyEditor()
+			.should('contain', 'v1')
+	})
 
-		it('Delete version', function() {
-			cy.get('.app-sidebar-tabs__content .version-list .list-item')
-				.eq(2)
-				.find('.list-item-content__actions')
-				.click()
+	it('Delete version', function() {
+		cy.get('.app-sidebar-tabs__content .version-list .list-item')
+			.eq(2)
+			.find('.list-item-content__actions')
+			.click()
 
-			cy.intercept('MOVE', '**/dav/versions/**').as('moveVersion')
-			cy.clickMenuButton('Delete version')
+		cy.intercept('MOVE', '**/dav/versions/**').as('moveVersion')
+		cy.clickMenuButton('Delete version')
 
-			cy.get('.app-sidebar-tabs__content .version-list .list-item')
-				.should('have.length', 3)
-		})
+		cy.get('.app-sidebar-tabs__content .version-list .list-item')
+			.should('have.length', 3)
 	})
 })
