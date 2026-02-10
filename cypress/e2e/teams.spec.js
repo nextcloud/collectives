@@ -10,7 +10,7 @@
  * it will also break all following tests.
  *
  */
-describe('Disabled teams app does not break files view', function() {
+describe('Disabled teams app', function() {
 	before(function() {
 		cy.loginAs('admin')
 		cy.disableApp('circles')

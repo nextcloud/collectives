@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-describe('Collective Share', function() {
+describe('Collective share', function() {
 	let shareUrl
 
 	before(function() {

@@ -26,29 +26,27 @@ describe('Collective offline', function() {
 		cy.contains('.app-content-list-item a', pageName)
 	})
 
-	describe('Offline mode', function() {
-		it('Shows offline indicator', function() {
-			cy.get('.offline-indicator').should('not.exist')
-			cy.goOffline()
-			cy.get('.offline-indicator').should('be.visible')
-			cy.goOnline()
-		})
+	it('Shows offline indicator', function() {
+		cy.get('.offline-indicator').should('not.exist')
+		cy.goOffline()
+		cy.get('.offline-indicator').should('be.visible')
+		cy.goOnline()
+	})
 
-		it('Shows offline state in version tab', function() {
-			cy.intercept('PROPFIND', '**/remote.php/dav/versions/**').as('pageVersions')
-			cy.get('button.app-sidebar__toggle').click()
-			cy.wait('@pageVersions')
-			cy.get('#tab-button-versions').click()
+	it('Shows offline state in version tab', function() {
+		cy.intercept('PROPFIND', '**/remote.php/dav/versions/**').as('pageVersions')
+		cy.get('button.app-sidebar__toggle').click()
+		cy.wait('@pageVersions')
+		cy.get('#tab-button-versions').click()
 
-			cy.get('.app-sidebar-tabs__content .version-list .list-item')
-				.should('contain', 'Current version')
+		cy.get('.app-sidebar-tabs__content .version-list .list-item')
+			.should('contain', 'Current version')
 
-			cy.goOffline()
-			cy.get('.app-sidebar-tabs__content .version-list .list-item')
-				.should('not.exist')
-			cy.get('.app-sidebar-tabs__content .versions-container')
-				.should('contain', 'Offline')
-			cy.goOnline()
-		})
+		cy.goOffline()
+		cy.get('.app-sidebar-tabs__content .version-list .list-item')
+			.should('not.exist')
+		cy.get('.app-sidebar-tabs__content .versions-container')
+			.should('contain', 'Offline')
+		cy.goOnline()
 	})
 })

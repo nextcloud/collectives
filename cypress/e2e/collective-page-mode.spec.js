@@ -15,29 +15,27 @@ describe('Collective page mode', function() {
 		cy.loginAs('bob')
 	})
 
-	describe('Changing page mode', function() {
-		it('Opens edit mode per default', function() {
-			cy.seedCollectivePageMode('Our Garden', 1)
-			cy.visit('/apps/collectives/Our Garden')
-			// make sure the page list loaded properly
-			cy.contains('.app-content-list-item a', 'Day 1')
-			cy.openPage('Day 2')
-			cy.getEditor()
-				.should('be.visible')
-			cy.getReadOnlyEditor()
-				.should('not.be.visible')
-		})
+	it('Opens edit mode per default', function() {
+		cy.seedCollectivePageMode('Our Garden', 1)
+		cy.visit('/apps/collectives/Our Garden')
+		// make sure the page list loaded properly
+		cy.contains('.app-content-list-item a', 'Day 1')
+		cy.openPage('Day 2')
+		cy.getEditor()
+			.should('be.visible')
+		cy.getReadOnlyEditor()
+			.should('not.be.visible')
+	})
 
-		it('Opens preview mode per default', function() {
-			cy.seedCollectivePageMode('Our Garden', 0)
-			cy.visit('/apps/collectives/Our Garden')
-			// make sure the page list loaded properly
-			cy.contains('.app-content-list-item a', 'Day 1')
-			cy.openPage('Day 2')
-			cy.getReadOnlyEditor()
-				.should('be.visible')
-			cy.getEditor()
-				.should('not.be.visible')
-		})
+	it('Opens preview mode per default', function() {
+		cy.seedCollectivePageMode('Our Garden', 0)
+		cy.visit('/apps/collectives/Our Garden')
+		// make sure the page list loaded properly
+		cy.contains('.app-content-list-item a', 'Day 1')
+		cy.openPage('Day 2')
+		cy.getReadOnlyEditor()
+			.should('be.visible')
+		cy.getEditor()
+			.should('not.be.visible')
 	})
 })

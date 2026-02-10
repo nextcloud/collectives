@@ -14,6 +14,9 @@ function generateLongContent() {
 }
 
 describe('Page anchor links', function() {
+	const heading = 'Heading 7'
+	const headingAnchor = 'h-heading-7'
+
 	before(function() {
 		cy.loginAs('bob')
 		cy.deleteAndSeedCollective('Anchor Links')
@@ -21,29 +24,22 @@ describe('Page anchor links', function() {
 		cy.seedPageContent('Anchor Links/Page.md', generateLongContent())
 	})
 
-	beforeEach(function() {
+	it('Scrolls to heading in preview mode', function() {
 		cy.loginAs('bob')
+		cy.visit(`/apps/collectives/Anchor Links/Page#${headingAnchor}`)
+		cy.getReadOnlyEditor()
+			.find('h2')
+			.contains(heading)
+			.should('be.visible')
 	})
 
-	describe('Scrolls to heading when opening anchor link', function() {
-		const heading = 'Heading 7'
-		const headingAnchor = 'h-heading-7'
-
-		it('In preview mode', function() {
-			cy.visit(`/apps/collectives/Anchor Links/Page#${headingAnchor}`)
-			cy.getReadOnlyEditor()
-				.find('h2')
-				.contains(heading)
-				.should('be.visible')
-		})
-
-		it('In edit mode', function() {
-			cy.seedCollectivePageMode('Anchor Links', 1)
-			cy.visit(`/apps/collectives/Anchor Links/Page#${headingAnchor}`)
-			cy.getEditor()
-				.find('h2')
-				.contains(heading)
-				.should('be.visible')
-		})
+	it('Scrolls to heading in edit mode', function() {
+		cy.loginAs('bob')
+		cy.seedCollectivePageMode('Anchor Links', 1)
+		cy.visit(`/apps/collectives/Anchor Links/Page#${headingAnchor}`)
+		cy.getEditor()
+			.find('h2')
+			.contains(heading)
+			.should('be.visible')
 	})
 })

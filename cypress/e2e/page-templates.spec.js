@@ -16,92 +16,90 @@ describe('Page templates', function() {
 		cy.wait('@getTemplates')
 	})
 
-	describe('Create and edit a page template', function() {
-		it('Create a new template', function() {
-			cy.openPageMenu('Template Collective')
-			cy.clickMenuButton('Manage templates')
+	it('Create a new template', function() {
+		cy.openPageMenu('Template Collective')
+		cy.clickMenuButton('Manage templates')
 
-			// Create template
-			cy.get('[data-cy-collectives="templates-dialog"] button')
-				.contains('Add a template')
-				.click()
+		// Create template
+		cy.get('[data-cy-collectives="templates-dialog"] button')
+			.contains('Add a template')
+			.click()
 
-			cy.get('#viewer .ProseMirror')
-				.should('be.visible')
-				.type('## Template Heading{enter}Template body')
+		cy.get('#viewer .ProseMirror')
+			.should('be.visible')
+			.type('## Template Heading{enter}Template body')
 
-			cy.get('#viewer button.header-close')
-				.click()
+		cy.get('#viewer button.header-close')
+			.click()
 
-			// Rename template
-			cy.contains('.template-list-item', 'Template')
-				.find('.template-action-buttons')
-				.click()
+		// Rename template
+		cy.contains('.template-list-item', 'Template')
+			.find('.template-action-buttons')
+			.click()
 
-			cy.clickMenuButton('Rename')
-			cy.get('.template-list-item input[type="text"]')
-				.type('{selectAll}Supertemplate{enter}')
+		cy.clickMenuButton('Rename')
+		cy.get('.template-list-item input[type="text"]')
+			.type('{selectAll}Supertemplate{enter}')
 
-			// Set emoji
-			cy.contains('.template-list-item', 'Supertemplate')
-				.find('.template-list-item-icon')
-				.click()
+		// Set emoji
+		cy.contains('.template-list-item', 'Supertemplate')
+			.find('.template-list-item-icon')
+			.click()
 
-			cy.contains('.emoji-mart-scroll .emoji-mart-emoji', '🥰')
-				.click()
+		cy.contains('.emoji-mart-scroll .emoji-mart-emoji', '🥰')
+			.click()
 
-			cy.contains('.template-list-item', 'Supertemplate')
-				.find('.template-list-item-icon')
-				.should('contain', '🥰')
+		cy.contains('.template-list-item', 'Supertemplate')
+			.find('.template-list-item-icon')
+			.should('contain', '🥰')
 
-			cy.get('[data-cy-collectives="templates-dialog"] button.modal-container__close')
-				.click()
-		})
+		cy.get('[data-cy-collectives="templates-dialog"] button.modal-container__close')
+			.click()
+	})
 
-		it('Create a new page from template', function() {
-			cy.contains('.app-content-list-item', 'Template Collective')
-				.find('button.action-button-add')
-				.click()
+	it('Create a new page from template', function() {
+		cy.contains('.app-content-list-item', 'Template Collective')
+			.find('button.action-button-add')
+			.click()
 
-			cy.get('.template-item')
-				.contains('Supertemplate')
-				.click()
-			cy.getEditor()
-				.should('be.visible')
-				.contains('Template body')
+		cy.get('.template-item')
+			.contains('Supertemplate')
+			.click()
+		cy.getEditor()
+			.should('be.visible')
+			.contains('Template body')
 
-			cy.get('[data-cy-collectives="page-title-container"] .page-title-icon')
-				.should('contain', '🥰')
-		})
+		cy.get('[data-cy-collectives="page-title-container"] .page-title-icon')
+			.should('contain', '🥰')
+	})
 
-		it('Create a new blank page', function() {
-			cy.contains('.app-content-list-item', 'Template Collective')
-				.find('button.action-button-add')
-				.click()
+	it('Create a new blank page', function() {
+		cy.contains('.app-content-list-item', 'Template Collective')
+			.find('button.action-button-add')
+			.click()
 
-			cy.get('.template-item')
-				.contains('Blank page')
-				.click()
-			cy.getEditor()
-				.should('be.visible')
-				.should('not.contain', 'Template body')
-		})
+		cy.get('.template-item')
+			.contains('Blank page')
+			.click()
+		cy.getEditor()
+			.should('be.visible')
+			.should('not.contain', 'Template body')
+	})
 
-		it('Delete template', function() {
-			cy.openPageMenu('Template Collective')
-			cy.clickMenuButton('Manage templates')
+	it('Delete template', function() {
+		cy.openPageMenu('Template Collective')
+		cy.clickMenuButton('Manage templates')
 
-			cy.contains('.template-list-item', 'Supertemplate')
-				.find('.template-action-buttons')
-				.click()
+		cy.contains('.template-list-item', 'Supertemplate')
+			.find('.template-action-buttons')
+			.click()
 
-			cy.clickMenuButton('Delete')
+		cy.clickMenuButton('Delete')
 
-			cy.get('.template-list-item')
-				.should('not.exist')
+		cy.get('.template-list-item')
+			.should('not.exist')
 
-			cy.get('[data-cy-collectives="templates-dialog"] button.modal-container__close')
-				.click()
-		})
+		cy.get('[data-cy-collectives="templates-dialog"] button.modal-container__close')
+			.click()
 	})
 })

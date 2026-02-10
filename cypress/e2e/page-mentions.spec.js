@@ -22,17 +22,15 @@ describe('Page mentions', function() {
 			.click()
 	})
 
-	describe('Mentioning another member in a page', function() {
-		it('Notification is shown to mentioned member', function() {
-			cy.loginAs('alice')
-			cy.visit('/apps/collectives/Mention Collective')
-			cy.get('.notifications-button')
-				.click()
+	it('Notification is shown to mentioned member', function() {
+		cy.loginAs('alice')
+		cy.visit('/apps/collectives/Mention Collective')
+		cy.get('.notifications-button')
+			.click()
 
-			cy.get('#header-menu-notifications')
-				.find('.notification .rich-text--wrapper')
-				.invoke('text')
-				.should('match', /bob \s*has mentioned you in .*Mention Collective - .*Page 1/)
-		})
+		cy.get('#header-menu-notifications')
+			.find('.notification .rich-text--wrapper')
+			.invoke('text')
+			.should('match', /bob \s*has mentioned you in .*Mention Collective - .*Page 1/)
 	})
 })
