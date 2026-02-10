@@ -117,8 +117,8 @@ export default {
 	},
 
 	beforeMount() {
-		// Change back to default view mode
-		this.setTextView()
+		// Change back to default preview mode
+		this.setTextPreview()
 
 		this.load('editor')
 		this.load('pageContent')
@@ -148,7 +148,7 @@ export default {
 	methods: {
 		...mapActions(useRootStore, ['load', 'done']),
 		...mapActions(useVersionsStore, ['getVersions']),
-		...mapActions(usePagesStore, ['setTextEdit', 'setTextView', 'touchPage']),
+		...mapActions(usePagesStore, ['setTextEdit', 'setTextPreview', 'touchPage']),
 
 		restoreAttachment(name) {
 			// inspired by the fixedEncodeURIComponent function suggested in

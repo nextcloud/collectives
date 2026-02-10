@@ -122,11 +122,11 @@
 			<div class="edit-mode">
 				<NcCheckboxRadioSwitch
 					v-model="pageMode"
-					:value="String(pageModes.MODE_VIEW)"
-					:loading="loading('updateCollectivePageMode_' + String(pageModes.MODE_VIEW))"
-					name="page_mode_view"
+					:value="String(pageModes.MODE_PREVIEW)"
+					:loading="loading('updateCollectivePageMode_' + String(pageModes.MODE_PREVIEW))"
+					name="page_mode_preview"
 					type="radio">
-					{{ t('collectives', 'View') }}
+					{{ t('collectives', 'Preview') }}
 				</NcCheckboxRadioSwitch>
 				<NcCheckboxRadioSwitch
 					v-model="pageMode"

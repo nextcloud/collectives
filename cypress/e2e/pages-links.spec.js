@@ -159,7 +159,7 @@ describe('Page link handling', function() {
 		})
 	}
 
-	describe('Link handling to viewer in view mode', function() {
+	describe('Link handling to viewer in preview mode', function() {
 		it('Opens link with absolute path to image in Nextcloud in viewer', function() {
 			const href = `/index.php/f/${imageId}`
 			testLinkToViewer(href, { fileName: 'test.png', viewerFileElement: 'img' })
@@ -196,7 +196,7 @@ describe('Page link handling', function() {
 		})
 	})
 
-	describe('Link handling to collectives in view mode', function() {
+	describe('Link handling to collectives in preview mode', function() {
 		it('Opens link with slugified URL to page in this collective in same tab', function() {
 			const href = `${baseUrl}/index.php/apps/collectives/Link-Testing-${linkTestingCollectiveId}/Link-Target-${linkTargetPageId}`
 			testLinkToSameTab(href, {
@@ -337,7 +337,7 @@ describe('Page link handling', function() {
 		})
 	})
 
-	describe('Link handling to Nextcloud in view mode', function() {
+	describe('Link handling to Nextcloud in preview mode', function() {
 		it('Opens link with URL to another Nextcloud app in new tab', function() {
 			const href = `${baseUrl}/index.php/apps/contacts`
 			testLinkToNewTab(href)
@@ -361,7 +361,7 @@ describe('Page link handling', function() {
 		})
 	})
 
-	describe('Link handling to external in view mode', function() {
+	describe('Link handling to external in preview mode', function() {
 		it('Opens link to external website in new tab', function() {
 			const href = 'https://github.com/'
 			testLinkToNewTab(href)
@@ -423,7 +423,7 @@ describe('Page link handling', function() {
 				.click()
 			cy.get('@clipBoardWriteText').should('have.been.calledOnce')
 		})
-		it('Public share in view mode: opens link with absolute path to page in this collective in same tab', function() {
+		it('Public share in preview mode: opens link with absolute path to page in this collective in same tab', function() {
 			cy.logout()
 			cy.visit(`${shareUrl}/Link Source`)
 			const href = '/index.php/apps/collectives/Link%20Testing/Link%20Target'
@@ -443,7 +443,7 @@ describe('Page link handling', function() {
 				expectedPathname: `/index.php/apps/collectives/p/\\w+/Link-Testing-${linkTestingCollectiveId}/Link-Target-${linkTargetPageId}`,
 			})
 		})
-		it('Public share in view mode: opens link to external website in new tab', function() {
+		it('Public share in preview mode: opens link to external website in new tab', function() {
 			cy.logout()
 			cy.visit(`${shareUrl}/Link Source`)
 			const href = 'https://github.com/'
@@ -494,7 +494,7 @@ describe('Page link preview handling', function() {
 		cy.contains('.app-content-list-item a', 'Link Target')
 	})
 
-	it('Shows previews in view and edit mode', function() {
+	it('Shows previews in preview and edit mode', function() {
 		cy.getEditorContent()
 			.find('.widget-custom a.collective-page')
 			.should('have.length', 4)
@@ -544,7 +544,7 @@ describe('Page link preview handling', function() {
 		cy.get('@clipBoardWriteText').should('have.been.calledOnce')
 	})
 
-	it('Public share: Shows previews in view and edit mode', function() {
+	it('Public share: Shows previews in preview and edit mode', function() {
 		cy.logout()
 		cy.visit(`${shareUrl}/Link Source`)
 

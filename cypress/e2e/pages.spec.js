@@ -106,7 +106,7 @@ describe('Pages', function() {
 	})
 
 	describe('Editing a page', function() {
-		it('Supports page content editing and switching to read mode', function() {
+		it('Supports page content editing and switching to preview mode', function() {
 			cy.openPage('Day 1')
 
 			cy.log('Inserting an image')
@@ -135,8 +135,8 @@ describe('Pages', function() {
 			// Wait 1 second to prevent race condition when switching mode
 			cy.wait(1000) // eslint-disable-line cypress/no-unnecessary-waiting
 
-			// Switch back to view mode
-			cy.switchToViewMode()
+			// Switch back to preview mode
+			cy.switchToPreviewMode()
 
 			cy.getEditor()
 				.should('not.be.visible')

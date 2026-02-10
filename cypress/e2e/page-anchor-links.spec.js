@@ -29,7 +29,7 @@ describe('Page anchor links', function() {
 		const heading = 'Heading 7'
 		const headingAnchor = 'h-heading-7'
 
-		it('In view mode', function() {
+		it('In preview mode', function() {
 			cy.visit(`/apps/collectives/Anchor Links/Page#${headingAnchor}`)
 			cy.getReadOnlyEditor()
 				.find('h2')
