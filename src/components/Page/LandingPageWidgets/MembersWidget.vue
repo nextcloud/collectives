@@ -5,32 +5,18 @@
 
 <template>
 	<div class="members-widget">
-		<div class="members-title-container">
-			<a
-				class="members-title"
-				:aria-label="expandLabel"
-				@keydown.enter="toggleWidget"
-				@click="toggleWidget">
-				<WidgetHeading :title="t('collectives', 'Members')" />
-				<div class="toggle-icon">
-					<ChevronDownIcon
-						:size="24"
-						:class="{ collapsed: !showMembers }" />
-				</div>
-			</a>
-			<NcButton
-				v-if="showTeamOverviewButton"
-				:aria-label="t('collectives', 'Team overview')"
-				:href="teamUrl"
-				target="_blank">
-				<template #icon>
-					<TeamsIcon :size="20" />
-				</template>
-				<template v-if="!isMobile" #default>
-					{{ t('collectives', 'Team overview') }}
-				</template>
-			</NcButton>
-		</div>
+		<a
+			class="members-title"
+			:aria-label="expandLabel"
+			@keydown.enter="toggleWidget"
+			@click="toggleWidget">
+			<WidgetHeading :title="t('collectives', 'Members')" />
+			<div class="toggle-icon">
+				<ChevronDownIcon
+					:size="24"
+					:class="{ collapsed: !showMembers }" />
+			</div>
+		</a>
 		<div v-show="showMembers" class="members-container">
 			<SkeletonLoading
 				v-if="loading"
@@ -73,7 +59,6 @@ import { mapActions, mapState } from 'pinia'
 import AccountMultipleIcon from 'vue-material-design-icons/AccountMultipleOutline.vue'
 import AccountMultiplePlusIcon from 'vue-material-design-icons/AccountMultiplePlus.vue'
 import ChevronDownIcon from 'vue-material-design-icons/ChevronDown.vue'
-import TeamsIcon from '../../Icon/TeamsIcon.vue'
 import SkeletonLoading from '../../SkeletonLoading.vue'
 import WidgetHeading from './WidgetHeading.vue'
 import { circlesMemberTypes } from '../../../constants.js'
@@ -91,7 +76,6 @@ export default {
 		NcAvatar,
 		NcButton,
 		SkeletonLoading,
-		TeamsIcon,
 		WidgetHeading,
 	},
 
@@ -273,12 +257,6 @@ export default {
 			transform: rotate(-90deg);
 		}
 	}
-}
-
-.members-title-container {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
 }
 
 .members-container {
