@@ -376,9 +376,9 @@ export const usePagesStore = defineStore('pages', {
 			}
 		},
 
-		getTextMode: (state) => state.textMode[state.currentPageId] ?? pageModes.MODE_VIEW,
+		getTextMode: (state) => state.textMode[state.currentPageId] ?? pageModes.MODE_PREVIEW,
 		isTextEdit: (state) => state.getTextMode === pageModes.MODE_EDIT,
-		isTextView: (state) => state.getTextMode === pageModes.MODE_VIEW,
+		isTextPreview: (state) => state.getTextMode === pageModes.MODE_PREVIEW,
 
 		isCollapsed(state) {
 			// Default to 'true' if unset
@@ -488,7 +488,7 @@ export const usePagesStore = defineStore('pages', {
 		},
 
 		setTextEdit() { set(this.textMode, this.currentPageId, pageModes.MODE_EDIT) },
-		setTextView() { set(this.textMode, this.currentPageId, pageModes.MODE_VIEW) },
+		setTextPreview() { set(this.textMode, this.currentPageId, pageModes.MODE_PREVIEW) },
 
 		toggleCollapsed(pageId) {
 			// Default to 'false' if unset

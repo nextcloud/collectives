@@ -28,7 +28,7 @@ describe('Collective page mode', function() {
 				.should('not.be.visible')
 		})
 
-		it('Opens view mode per default', function() {
+		it('Opens preview mode per default', function() {
 			cy.seedCollectivePageMode('Our Garden', 0)
 			cy.visit('/apps/collectives/Our Garden')
 			// make sure the page list loaded properly

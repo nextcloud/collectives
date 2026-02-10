@@ -143,7 +143,7 @@ export function updateCollectiveSharePermissions(collectiveId, level) {
  * @param {number} collectiveId - id of the collective to update
  * @param {number} mode - pageMode to use.
  *
- * Possible modes: pageModes.MODE_VIEW or pageModes.MODE_EDIT
+ * Possible modes: pageModes.MODE_PREVIEW or pageModes.MODE_EDIT
  */
 export function updateCollectivePageMode(collectiveId, mode) {
 	return axios.put(

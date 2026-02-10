@@ -11,13 +11,13 @@
 			:aria-label="description"
 			class="titleform-button"
 			:class="{ mobile: mobile }"
-			variant="primary"
+			:variant="variant"
 			@click="handleClick()">
 			<template #icon>
 				<NcLoadingIcon
 					v-if="showLoadingIcon"
 					:size="20" />
-				<CheckIcon v-else-if="isTextEdit" :size="20" />
+				<EyeOutlineIcon v-else-if="isTextEdit" :size="20" />
 				<PencilIcon v-else :size="20" />
 			</template>
 			{{ buttonTitle }}
@@ -28,7 +28,7 @@
 <script>
 import { NcButton, NcLoadingIcon } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
-import CheckIcon from 'vue-material-design-icons/Check.vue'
+import EyeOutlineIcon from 'vue-material-design-icons/EyeOutline.vue'
 import PencilIcon from 'vue-material-design-icons/PencilOutline.vue'
 import { usePagesStore } from '../../stores/pages.js'
 import { useRootStore } from '../../stores/root.js'
@@ -37,7 +37,7 @@ export default {
 	name: 'EditButton',
 
 	components: {
-		CheckIcon,
+		EyeOutlineIcon,
 		NcButton,
 		NcLoadingIcon,
 		PencilIcon,
@@ -59,7 +59,11 @@ export default {
 		},
 
 		title() {
-			return this.isTextEdit ? t('collectives', 'Done') : t('collectives', 'Edit')
+			return this.isTextEdit ? t('collectives', 'Preview') : t('collectives', 'Edit')
+		},
+
+		variant() {
+			return this.isTextEdit ? 'secondary' : 'primary'
 		},
 
 		buttonTitle() {
@@ -72,11 +76,11 @@ export default {
 	},
 
 	methods: {
-		...mapActions(usePagesStore, ['setTextEdit', 'setTextView']),
+		...mapActions(usePagesStore, ['setTextEdit', 'setTextPreview']),
 
 		handleClick() {
 			if (this.isTextEdit) {
-				this.setTextView()
+				this.setTextPreview()
 			} else {
 				this.setTextEdit()
 			}

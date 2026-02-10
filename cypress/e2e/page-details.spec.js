@@ -81,8 +81,8 @@ describe('Page details', function() {
 					.click()
 			}
 
-			// Switch back to view mode
-			cy.switchToViewMode()
+			// Switch back to preview mode
+			cy.switchToPreviewMode()
 				.contains('Second-Level Heading')
 
 			// TODO: Remove first selector once we only support nc33+

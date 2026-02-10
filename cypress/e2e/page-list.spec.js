@@ -259,7 +259,7 @@ describe('Page list', function() {
 			cy.wait(1000) // eslint-disable-line cypress/no-unnecessary-waiting
 			cy.getEditorContent(true)
 				.type('text')
-			cy.switchToViewMode()
+			cy.switchToPreviewMode()
 
 			// Trash page
 			cy.openPageMenu('Day 1')

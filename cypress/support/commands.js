@@ -96,12 +96,12 @@ Cypress.Commands.add('getEditorContent', (edit = false) => {
 })
 
 /**
- * Switch page mode to view or edit
+ * Switch page mode to preview or edit
  */
-Cypress.Commands.add('switchToViewMode', () => {
+Cypress.Commands.add('switchToPreviewMode', () => {
 	Cypress.log()
 	cy.get('button.titleform-button')
-		.should('contain', 'Done')
+		.should('contain', 'Preview')
 		.click()
 	cy.getReadOnlyEditor()
 		.should('be.visible')

@@ -41,7 +41,7 @@ export const shareTypes = {
 
 // Page modes
 export const pageModes = {
-	MODE_VIEW: 0,
+	MODE_PREVIEW: 0,
 	MODE_EDIT: 1,
 }
 
