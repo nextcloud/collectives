@@ -147,7 +147,7 @@ export default {
 		...mapActions(useVersionsStore, ['selectVersion']),
 
 		async initCollective() {
-			this.closeNav()
+			setTimeout(() => this.closeNav(), 1000)
 			this.show('details')
 
 			this.loadPending = true
