@@ -185,7 +185,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        containers: [1, 2, 3, 4]
+        containers: [1]
         php-versions: ['8.1', '8.4']
         databases: ['sqlite']
         server-versions: ['stable31', 'master']
