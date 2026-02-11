@@ -4,7 +4,6 @@ OC.L10N.register(
     "Share link" : "Rhannu dolen",
     "Settings" : "Gosodiadau",
     "Loading…" : "Yn llwytho…",
-    "View" : "Golwg",
     "Edit" : "Golygu",
     "Choose" : "Dewisa",
     "Restore" : "Adfer",
@@ -15,7 +14,6 @@ OC.L10N.register(
     "Back" : "Nôl",
     "Delete" : "Dileu",
     "Rename" : "Ailenwi",
-    "Done" : "Done",
     "Download" : "Llwytho i lawr",
     "Title" : "Teitl",
     "Favorites" : "Ffefrynnau",
@@ -24,6 +22,8 @@ OC.L10N.register(
     "Add another link" : "Ychwanegu dolen arall",
     "Unshare" : "Dad-rannu",
     "Link copied" : "Dolen wedi'i gopïo",
-    "Copied" : "Copïwyd"
+    "Copied" : "Copïwyd",
+    "View" : "Golwg",
+    "Done" : "Done"
 },
 "nplurals=4; plural=(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != 11) ? 2 : 3;");

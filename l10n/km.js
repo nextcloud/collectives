@@ -12,7 +12,6 @@ OC.L10N.register(
     "Back" : "ត្រឡប់ក្រោយ",
     "Delete" : "លុប",
     "Rename" : "ប្ដូរ​ឈ្មោះ",
-    "Done" : "Done",
     "Download" : "ទាញយក",
     "Title" : "ចំណងជើង",
     "Favorites" : "Favorites",
@@ -22,6 +21,7 @@ OC.L10N.register(
     "Sharing" : "ការ​ចែក​រំលែក",
     "Versions" : "កំណែ",
     "Please reload the page." : "សូម​ផ្ទុក​ទំព័រ​នេះ​ឡើង​វិញ។",
-    "Failed to revert {page} to revision {timestamp}." : "មិន​អាច​ត្រឡប់ {page} ទៅ​កំណែ​សម្រួល {timestamp} បាន​ទេ។"
+    "Failed to revert {page} to revision {timestamp}." : "មិន​អាច​ត្រឡប់ {page} ទៅ​កំណែ​សម្រួល {timestamp} បាន​ទេ។",
+    "Done" : "Done"
 },
 "nplurals=1; plural=0;");

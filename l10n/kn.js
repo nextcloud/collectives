@@ -10,7 +10,6 @@ OC.L10N.register(
     "Create" : "ಸೃಷ್ಟಿಸಿ",
     "Delete" : "﻿ಅಳಿಸಿ",
     "Rename" : "﻿ಮರುಹೆಸರಿಸು",
-    "Done" : "Done",
     "Download" : "ಪ್ರತಿಯನ್ನು ಸ್ಥಳೀಯವಾಗಿ ಉಳಿಸಿಕೊಳ್ಳಿ",
     "Title" : "ಶೀರ್ಷಿಕೆ",
     "Favorites" : "ಅಚ್ಚುಮೆಚ್ಚಿನ",
@@ -21,6 +20,7 @@ OC.L10N.register(
     "Sharing" : "﻿ಹಂಚಿಕೆ",
     "Versions" : "ಆವೃತ್ತಿಗಳು",
     "Please reload the page." : "﻿ಪುಟವನ್ನು ಪುನಃ ನವೀಕರಿಸಿ.",
-    "Failed to revert {page} to revision {timestamp}." : "{timestamp} ದ ಪರಿಷ್ಕರಣೆ ಇಂದ  {page}  ಕಡತವನ್ನು ಹಿಂದಿರುಗಿಸಲು ವಿಫಲವಾಗಿದೆ."
+    "Failed to revert {page} to revision {timestamp}." : "{timestamp} ದ ಪರಿಷ್ಕರಣೆ ಇಂದ  {page}  ಕಡತವನ್ನು ಹಿಂದಿರುಗಿಸಲು ವಿಫಲವಾಗಿದೆ.",
+    "Done" : "Done"
 },
 "nplurals=2; plural=(n > 1);");

@@ -17,7 +17,6 @@ OC.L10N.register(
     "Back" : "უკან",
     "Delete" : "წაშლა",
     "Rename" : "სახელის შეცვლა",
-    "Done" : "დასრულებულია",
     "Remove from favorites" : "რჩეულებიდან მოშორება",
     "Move or copy" : "გადაიტანეთ ან დააკოპირეთ",
     "Download" : "ჩამოტვირთვა",
@@ -32,6 +31,7 @@ OC.L10N.register(
     "Sharing" : "გაზიარება",
     "Versions" : "ვერსიები",
     "Please reload the page." : "გთხოვთ გადატვირთოთ გვერდი.",
-    "Failed to revert {page} to revision {timestamp}." : "ფაილის {page} დაბრუნება რევიზიაზე {timestamp} ვერ ხერხდება."
+    "Failed to revert {page} to revision {timestamp}." : "ფაილის {page} დაბრუნება რევიზიაზე {timestamp} ვერ ხერხდება.",
+    "Done" : "დასრულებულია"
 },
 "nplurals=2; plural=(n!=1);");

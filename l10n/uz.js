@@ -9,7 +9,7 @@ OC.L10N.register(
     "Loading…" : "Loading…",
     "Remove {name}" : " {name} ni o'chirish",
     "Add emoji" : "Emoji qo'shing",
-    "View" : "Ko'rish",
+    "Preview" : "Ko‘rib chiqish",
     "Edit" : "Tahrirlash",
     "Choose" : "Tanlang",
     "Restore" : "Qayta tiklangan",
@@ -19,7 +19,6 @@ OC.L10N.register(
     "Back" : "Orqaga",
     "Delete" : "O'chirish",
     "Rename" : "Nomini o'zgartirish",
-    "Done" : "Done",
     "Remove from favorites" : "Sevimlilardan olib tashlang",
     "Add to favorites" : "Sevimlilarga qo'shing",
     "Manage tags" : "Teglarni boshqarish",
@@ -38,6 +37,8 @@ OC.L10N.register(
     "Sharing" : "Ulashish",
     "Versions" : "Versions",
     "Link copied" : "Havola nusxalandi",
-    "Please reload the page." : "Iltimos, sahifani qayta yuklang."
+    "Please reload the page." : "Iltimos, sahifani qayta yuklang.",
+    "View" : "Ko'rish",
+    "Done" : "Done"
 },
 "nplurals=1; plural=0;");

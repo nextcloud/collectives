@@ -16,7 +16,6 @@ OC.L10N.register(
     "Back" : "Atrás",
     "Delete" : "Borrar",
     "Rename" : "Renombrar",
-    "Done" : "Terminado",
     "Add to favorites" : "Agregar a favoritos",
     "Move or copy" : "Mover o copiar",
     "Download" : "Descargar",
@@ -30,6 +29,7 @@ OC.L10N.register(
     "Sharing" : "Compartiendo",
     "Versions" : "Versiones",
     "Please reload the page." : "Por favor vuelve a cargar la página.",
-    "Failed to revert {page} to revision {timestamp}." : "Falla al revertir {page} a revisión {timestamp}."
+    "Failed to revert {page} to revision {timestamp}." : "Falla al revertir {page} a revisión {timestamp}.",
+    "Done" : "Terminado"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

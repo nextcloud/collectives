@@ -4,7 +4,6 @@ OC.L10N.register(
     "Share link" : "Deel skakel",
     "Settings" : "Instellings",
     "Loading…" : "Laai…",
-    "View" : "Bekyk",
     "Edit" : "Wysig",
     "Choose" : "Kies",
     "Restore" : "Herstel",
@@ -14,7 +13,6 @@ OC.L10N.register(
     "Go back" : "Gaan terug",
     "Back" : "Terug",
     "Delete" : "Skrap",
-    "Done" : "Gereed",
     "Move or copy" : "Kopieer of skuif",
     "Download" : "Laai af",
     "Title" : "Titel",
@@ -27,6 +25,8 @@ OC.L10N.register(
     "Link copied" : "Skakel gekopieer",
     "Please reload the page." : "Herlaai asseblief die bladsy.",
     "Copied" : "Gekopieer",
-    "Failed to revert {page} to revision {timestamp}." : "Kon nie {page} na {timestamp} se hersiening terugstel nie."
+    "View" : "Bekyk",
+    "Failed to revert {page} to revision {timestamp}." : "Kon nie {page} na {timestamp} se hersiening terugstel nie.",
+    "Done" : "Gereed"
 },
 "nplurals=2; plural=(n != 1);");

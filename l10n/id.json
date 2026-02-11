@@ -10,7 +10,6 @@
     "Loading…" : "Memuat…",
     "Remove {name}" : "Hapus {name}",
     "Permissions" : "Izin",
-    "View" : "Tampilan",
     "Edit" : "Sunting",
     "Choose" : "Pilih",
     "Restore" : "Pulihkan",
@@ -23,7 +22,6 @@
     "Rename" : "Ubah nama",
     "Templates" : "Templat",
     "Add a template" : "Tambahkan template",
-    "Done" : "Selesai",
     "Hide outline" : "Sembunyikan kerangka",
     "Show outline" : "Tampilkan kerangka",
     "Remove from favorites" : "Hapus dari favorit",
@@ -84,7 +82,9 @@
     "Please reload the page." : "Silakan muat ulang halaman.",
     "Copied" : "Tersalin",
     "Cannot copy" : "Tidak dapat menyalin",
+    "View" : "Tampilan",
     "Failed to revert {page} to revision {timestamp}." : "Gagal mengembalikan {page} ke revisi {timestamp}.",
+    "Done" : "Selesai",
     "Sort by title" : "Urutkan berdasarkan judul",
     "_%n byte_::_%n bytes_" : ["%n byte"]
 },"pluralForm" :"nplurals=1; plural=0;"

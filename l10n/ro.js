@@ -12,7 +12,7 @@ OC.L10N.register(
     "Loading…" : "Se încarcă...",
     "Add groups" : "Adaugă grupuri",
     "Permissions" : "Permisiuni",
-    "View" : "Vizualizare",
+    "Preview" : "Previzualizare",
     "Edit" : "Editează",
     "Choose" : "Alege",
     "Restore" : "Restaurare",
@@ -24,7 +24,6 @@ OC.L10N.register(
     "Delete" : "Șterge",
     "Rename" : "Redenumire",
     "Templates" : "Șabloane",
-    "Done" : "Realizat",
     "Add to favorites" : "Adaugă la favorite",
     "Manage tags" : "Administrați etichete",
     "Move or copy" : "Mută sau copiază",
@@ -51,6 +50,8 @@ OC.L10N.register(
     "Please reload the page." : "Te rugăm să reîncarci pagina.",
     "Copied" : "Copiat",
     "Cannot copy" : "Nu s-a putut copia",
-    "Failed to revert {page} to revision {timestamp}." : "S-a eșuat restaurarea fișierului  {page} la revizia {timestamp}."
+    "View" : "Vizualizare",
+    "Failed to revert {page} to revision {timestamp}." : "S-a eșuat restaurarea fișierului  {page} la revizia {timestamp}.",
+    "Done" : "Realizat"
 },
 "nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));");

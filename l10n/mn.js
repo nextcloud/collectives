@@ -5,6 +5,7 @@ OC.L10N.register(
     "Settings" : "Тохиргоо",
     "Members" : "Гишүүд",
     "Loading…" : "уншиж байна",
+    "Preview" : "шалгах",
     "Edit" : "засварлах",
     "Choose" : "Сонгох",
     "Restore" : "Сэргээх",
@@ -15,7 +16,6 @@ OC.L10N.register(
     "Back" : "буцах",
     "Delete" : "Устгах",
     "Rename" : "Нэрлэнэ үү",
-    "Done" : "Хийсэн",
     "Move or copy" : "Зөөх эсвэл хуулах",
     "Download" : "Татах",
     "Title" : "Цол/Албан тушаал",
@@ -31,6 +31,7 @@ OC.L10N.register(
     "Versions" : "Хувилбарууд",
     "Please reload the page." : "Хуудасыг дахин ачаална уу",
     "Copied" : "Хуулагдсан",
-    "Cannot copy" : "Хуулагдаагүй"
+    "Cannot copy" : "Хуулагдаагүй",
+    "Done" : "Хийсэн"
 },
 "nplurals=2; plural=(n != 1);");

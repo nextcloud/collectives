@@ -14,7 +14,6 @@ OC.L10N.register(
     "Back" : "Tilbake",
     "Delete" : "Slett",
     "Rename" : "Endra namn",
-    "Done" : "Ferdig",
     "Add to favorites" : "Legg til i favorittar",
     "Download" : "Last ned",
     "Title" : "Tittel",
@@ -29,6 +28,7 @@ OC.L10N.register(
     "Versions" : "Utgåver",
     "Link copied" : "Lenkje kopiert",
     "Please reload the page." : "Ver venleg og last sida på nytt.",
-    "Failed to revert {page} to revision {timestamp}." : "Klarte ikkje å tilbakestilla {page} til utgåva {timestamp}."
+    "Failed to revert {page} to revision {timestamp}." : "Klarte ikkje å tilbakestilla {page} til utgåva {timestamp}.",
+    "Done" : "Ferdig"
 },
 "nplurals=2; plural=(n != 1);");

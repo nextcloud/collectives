@@ -12,7 +12,7 @@
     "Loading…" : "Đang tải…",
     "Add groups" : "Thêm nhóm",
     "Add emoji" : "Thêm biểu tượng cảm xúc",
-    "View" : "Xem",
+    "Preview" : "Xem trước",
     "Edit" : "Chỉnh sửa",
     "Danger zone" : "Khu vực nguy hiểm",
     "Choose" : "Chọn",
@@ -25,7 +25,6 @@
     "Delete" : "Xóa",
     "Rename" : "Đổi tên",
     "Templates" : "Mẫu",
-    "Done" : "Hoàn thành",
     "Manage tags" : "Quản lý nhãn",
     "Move or copy" : "Di chuyển hoặc sao chép",
     "Download" : "Tải xuống",
@@ -70,7 +69,9 @@
     "Link copied" : "Đã sao chép liên kết",
     "Please reload the page." : "Vui lòng tải lại trang.",
     "Copied" : "Đã sao chép",
+    "View" : "Xem",
     "Failed to revert {page} to revision {timestamp}." : "Thất bại khi trở lại {page} khi sử đổi {timestamp}.",
+    "Done" : "Hoàn thành",
     "_%n byte_::_%n bytes_" : ["%n byte"]
 },"pluralForm" :"nplurals=1; plural=0;"
 }

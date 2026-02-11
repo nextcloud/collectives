@@ -14,7 +14,6 @@ OC.L10N.register(
     "Back" : "Zeréck",
     "Delete" : "Läschen",
     "Rename" : "Ëmbenennen",
-    "Done" : "Done",
     "Download" : "Eroflueden",
     "Title" : "Titel",
     "Favorites" : "Favoriten",
@@ -27,6 +26,7 @@ OC.L10N.register(
     "Sharing" : "Gedeelt",
     "Versions" : "Versiounen",
     "Link copied" : "Link kopéiert",
-    "Failed to revert {page} to revision {timestamp}." : "Konnt {page} net op d'Versioun {timestamp} zrécksetzen."
+    "Failed to revert {page} to revision {timestamp}." : "Konnt {page} net op d'Versioun {timestamp} zrécksetzen.",
+    "Done" : "Done"
 },
 "nplurals=2; plural=(n != 1);");

@@ -14,7 +14,6 @@ OC.L10N.register(
     "Add groups" : "Add groups",
     "Add emoji" : "Add emoji",
     "Permissions" : "Permissions",
-    "View" : "View",
     "Edit" : "Edit",
     "Danger zone" : "Danger zone",
     "Choose" : "Choose",
@@ -27,7 +26,6 @@ OC.L10N.register(
     "Delete" : "წაშლა",
     "Rename" : "Rename",
     "Templates" : "Templates",
-    "Done" : "Done",
     "Remove from favorites" : "Remove from favorites",
     "Add to favorites" : "Add to favorites",
     "Move or copy" : "Move or copy",
@@ -75,7 +73,9 @@ OC.L10N.register(
     "Copied" : "Copied",
     "Cannot copy" : "Cannot copy",
     "Copy share link" : "Copy share link",
+    "View" : "View",
     "Template" : "Template",
+    "Done" : "Done",
     "_%n byte_::_%n bytes_" : ["%n byte","%n bytes"]
 },
 "nplurals=2; plural=(n!=1);");

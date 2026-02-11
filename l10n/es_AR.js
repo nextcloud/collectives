@@ -8,7 +8,6 @@ OC.L10N.register(
     "Remove" : "Eliminar",
     "Loading…" : "Cargando…",
     "Permissions" : "Permisos",
-    "View" : "Ver",
     "Edit" : "Editar",
     "Choose" : "Elige",
     "Restore" : "Restaurar",
@@ -19,7 +18,6 @@ OC.L10N.register(
     "Back" : "Atrás",
     "Delete" : "Eliminar",
     "Rename" : "Renombrar",
-    "Done" : "Hecho",
     "Remove from favorites" : "Quitar de favoritos",
     "Add to favorites" : "Añadir a favoritos",
     "Move or copy" : "Mover o Copiar",
@@ -45,6 +43,8 @@ OC.L10N.register(
     "Copied" : "Copiado",
     "Cannot copy" : "No se pudo copiar",
     "Copy share link" : "Copiar el enlace compartido",
-    "Failed to revert {page} to revision {timestamp}." : "Falla al revertir {archivo} a revisión {timestamp}."
+    "View" : "Ver",
+    "Failed to revert {page} to revision {timestamp}." : "Falla al revertir {archivo} a revisión {timestamp}.",
+    "Done" : "Hecho"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

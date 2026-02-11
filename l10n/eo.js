@@ -6,7 +6,6 @@ OC.L10N.register(
     "Settings" : "Agordoj",
     "Members" : "Membroj",
     "Loading…" : "Ŝargado...",
-    "View" : "Vidi",
     "Edit" : "Modifi",
     "Choose" : "Elekti",
     "Restore" : "Restaŭri",
@@ -18,7 +17,6 @@ OC.L10N.register(
     "Delete" : "Forigi",
     "Rename" : "Alinomi",
     "Templates" : "Ŝablonoj",
-    "Done" : "Farita",
     "Remove from favorites" : "Malpliŝatigi",
     "Add to favorites" : "Aldoni al pliŝatataĵoj",
     "Move or copy" : "Movi aŭ kopii",
@@ -43,6 +41,8 @@ OC.L10N.register(
     "Link copied" : "Ligilo kopiita",
     "Please reload the page." : "Bonvolu reŝargi la paĝon.",
     "Copied" : "Kopiita",
-    "Failed to revert {page} to revision {timestamp}." : "Malsukcesis remeti {page} al la revizio {timestamp}."
+    "View" : "Vidi",
+    "Failed to revert {page} to revision {timestamp}." : "Malsukcesis remeti {page} al la revizio {timestamp}.",
+    "Done" : "Farita"
 },
 "nplurals=2; plural=(n != 1);");

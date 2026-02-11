@@ -3,6 +3,7 @@
     "Settings" : "Тохиргоо",
     "Members" : "Гишүүд",
     "Loading…" : "уншиж байна",
+    "Preview" : "шалгах",
     "Edit" : "засварлах",
     "Choose" : "Сонгох",
     "Restore" : "Сэргээх",
@@ -13,7 +14,6 @@
     "Back" : "буцах",
     "Delete" : "Устгах",
     "Rename" : "Нэрлэнэ үү",
-    "Done" : "Хийсэн",
     "Move or copy" : "Зөөх эсвэл хуулах",
     "Download" : "Татах",
     "Title" : "Цол/Албан тушаал",
@@ -29,6 +29,7 @@
     "Versions" : "Хувилбарууд",
     "Please reload the page." : "Хуудасыг дахин ачаална уу",
     "Copied" : "Хуулагдсан",
-    "Cannot copy" : "Хуулагдаагүй"
+    "Cannot copy" : "Хуулагдаагүй",
+    "Done" : "Хийсэн"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

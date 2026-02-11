@@ -17,7 +17,7 @@
     "Remove {name}" : "Remove {name}",
     "Add emoji" : "Add emoji",
     "Permissions" : "ການອະນຸຍາດ",
-    "View" : "ເບິ່ງ",
+    "Preview" : "ເບິ່ງຕົວຢ່າງ",
     "Edit" : "ແກ້ໄຂ",
     "Danger zone" : "Danger zone",
     "Choose" : "ເລືອກ",
@@ -31,7 +31,6 @@
     "Delete" : "ລຶບ",
     "Rename" : "Rename",
     "Templates" : "Templates",
-    "Done" : "ສໍາເລັດ",
     "Hide outline" : "ເຊື່ອງໂຄງຮ່າງ",
     "Show outline" : "ສະແດງໂຄງຮ່າງ",
     "Remove from favorites" : "Remove from favorites",
@@ -91,7 +90,9 @@
     "Copied" : "Copied",
     "Cannot copy" : "Cannot copy",
     "Copy share link" : "Copy share link",
+    "View" : "ເບິ່ງ",
     "Template" : "ແມ່ແບບ",
+    "Done" : "ສໍາເລັດ",
     "Sort by title" : "ຈັດຮຽງຕາມຫົວຂໍ້",
     "_%n byte_::_%n bytes_" : ["%n bytes"]
 },"pluralForm" :"nplurals=1; plural=0;"
