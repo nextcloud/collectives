@@ -16,7 +16,6 @@ OC.L10N.register(
     "Delete" : "நீக்குக",
     "Rename" : "பெயர்மாற்றம்",
     "Stop editing" : "திருத்துவதை நிறுத்து",
-    "Done" : "Done",
     "Remove from favorites" : "Remove from favorites",
     "Delete page" : "பக்கத்தை நீக்கு",
     "Download" : "பதிவிறக்குக",
@@ -43,6 +42,7 @@ OC.L10N.register(
     "Select circle..." : "வட்டத்தைத் தேர்ந்தெடுக்கவும்...",
     "Page not found:" : "பக்கம் கிடைக்கவில்லை:",
     "Could not find the Page." : "பக்கத்தைக் கண்டுபிடிக்க முடியவில்லை.",
+    "Done" : "Done",
     "Pages that link to this one" : "இதை  இணைக்கும் பக்கங்கள்",
     "Old versions of this page" : "இந்தப் பக்கத்தின் பழைய பதிப்புகள்",
     "New Page" : "புதிய பக்கம்"

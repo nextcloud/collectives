@@ -4,6 +4,7 @@ OC.L10N.register(
     "Settings" : "සැකසුම්",
     "Remove" : "ඉවත් කරන්න",
     "Loading…" : "පූරණය වෙමින්…",
+    "Preview" : "පෙරදසුන",
     "Edit" : "සංස්කරණය",
     "Choose" : "තෝරන්න",
     "Restore" : "ප්‍රතිෂ්ථාපනය",

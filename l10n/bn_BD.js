@@ -13,7 +13,6 @@ OC.L10N.register(
     "Back" : "পেছনে যাও",
     "Delete" : "মুছে",
     "Rename" : "পূনঃনামকরণ",
-    "Done" : "Done",
     "Download" : "ডাউনলোড",
     "Title" : "শিরোনাম",
     "Favorites" : "প্রিয়জন",
@@ -24,6 +23,7 @@ OC.L10N.register(
     "Sharing" : "ভাগাভাগিরত",
     "Versions" : "সংষ্করন",
     "Please reload the page." : "দয়া করে পৃষ্ঠাটি পূনরায় লোড করুন।",
-    "Failed to revert {page} to revision {timestamp}." : " {page} সংশোধিত  {timestamp} এ ফিরে যেতে ব্যার্থ হলো।"
+    "Failed to revert {page} to revision {timestamp}." : " {page} সংশোধিত  {timestamp} এ ফিরে যেতে ব্যার্থ হলো।",
+    "Done" : "Done"
 },
 "nplurals=2; plural=(n != 1);");

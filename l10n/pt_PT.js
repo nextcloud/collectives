@@ -19,7 +19,7 @@ OC.L10N.register(
     "Members" : "Membros",
     "Remove" : "Remover",
     "Loading…" : "A carregar…",
-    "View" : "Ver",
+    "Preview" : "Pré-visualizar",
     "Edit" : "Editar",
     "Choose" : "Escolher",
     "Restore" : "Restaurar",
@@ -31,7 +31,6 @@ OC.L10N.register(
     "Delete" : "Eliminar",
     "Rename" : "Renomear",
     "Templates" : "Modelos",
-    "Done" : "Concluído",
     "Remove from favorites" : "Remover dos favoritos",
     "Manage tags" : "Gerir etiquetas",
     "Move or copy" : "Mover ou copiar",
@@ -69,8 +68,10 @@ OC.L10N.register(
     "Copied" : "Copiado",
     "Cannot copy" : "Não é possível copiar",
     "Copy share link" : "Copie partilhe ligação",
+    "View" : "Ver",
     "Failed to revert {page} to revision {timestamp}." : "Falhou a recuperação do ficheiro {page} para a revisão {timestamp}.",
     "Template" : "Modelo",
+    "Done" : "Concluído",
     "_%n byte_::_%n bytes_" : ["%n byte","%n bytes","%n bytes"]
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

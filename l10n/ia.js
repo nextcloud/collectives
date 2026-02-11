@@ -5,7 +5,6 @@ OC.L10N.register(
     "Settings" : "Configurationes",
     "Members" : "Membros",
     "Loading…" : "Cargante...",
-    "View" : "Vider",
     "Edit" : "Modificar",
     "Restore" : "Restaurar",
     "Delete permanently" : "Deler permanentemente",
@@ -15,7 +14,6 @@ OC.L10N.register(
     "Back" : "Retro",
     "Delete" : "Deler",
     "Rename" : "Renominar",
-    "Done" : "Preste",
     "Download" : "Discargar",
     "Title" : "Titulo",
     "Favorites" : "Favoritos",
@@ -27,6 +25,8 @@ OC.L10N.register(
     "Attachments" : "Attachamentos",
     "Sharing" : "Compartente",
     "Versions" : "Versiones",
-    "Failed to revert {page} to revision {timestamp}." : "Il falleva a reverter {page} a revision {timestamp}."
+    "View" : "Vider",
+    "Failed to revert {page} to revision {timestamp}." : "Il falleva a reverter {page} a revision {timestamp}.",
+    "Done" : "Preste"
 },
 "nplurals=2; plural=(n != 1);");

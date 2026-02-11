@@ -13,7 +13,7 @@ OC.L10N.register(
     "Add emoji" : "Apondre emoji",
     "Permissions" : "Autorizacions",
     "Allow editing for" : "Permetre la modificacion per",
-    "View" : "Veire",
+    "Preview" : "Apercebut",
     "Edit" : "Modificar",
     "Danger zone" : "Zòna perilhosa",
     "Choose" : "Causir",
@@ -26,7 +26,6 @@ OC.L10N.register(
     "Delete" : "Suprimir",
     "Rename" : "Tornar nommar",
     "Templates" : "Modèls",
-    "Done" : "Done",
     "Remove from favorites" : "Tirar dels favorits",
     "Add to favorites" : "Apondre als favorits",
     "Move or copy" : "Desplaçar o copiar",
@@ -54,6 +53,8 @@ OC.L10N.register(
     "Copied" : "Copiat",
     "Copy share link" : "Copiar ligam de partatge",
     "Allow editing in share" : "Permetre la modificacion dins lo partatge",
+    "View" : "Veire",
+    "Done" : "Done",
     "_%n byte_::_%n bytes_" : ["%n octet","%n octets"]
 },
 "nplurals=2; plural=(n > 1);");

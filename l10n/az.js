@@ -13,7 +13,6 @@ OC.L10N.register(
     "Back" : "Geri",
     "Delete" : "Sil",
     "Rename" : "Adı dəyiş",
-    "Done" : "Done",
     "Move or copy" : "Köçürt və ya kopyala",
     "Download" : "Yüklə",
     "Title" : "Başlıq",
@@ -33,6 +32,7 @@ OC.L10N.register(
     "Versions" : "Versiyaları",
     "Link copied" : "Link kopyalandı",
     "Please reload the page." : "Səhifəni yenidən yükləyin.",
-    "Failed to revert {page} to revision {timestamp}." : "{timestamp} yenidən baxılması üçün {page} geri qaytarmaq mümkün olmadı."
+    "Failed to revert {page} to revision {timestamp}." : "{timestamp} yenidən baxılması üçün {page} geri qaytarmaq mümkün olmadı.",
+    "Done" : "Done"
 },
 "nplurals=2; plural=(n != 1);");

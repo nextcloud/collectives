@@ -12,7 +12,6 @@ OC.L10N.register(
     "Add groups" : "הוספת קבוצות",
     "Add emoji" : "הוספת אמוג׳י",
     "Permissions" : "הרשאות",
-    "View" : "צפייה",
     "Edit" : "עריכה",
     "Choose" : "בחר",
     "Restore" : "שחזור",
@@ -23,7 +22,6 @@ OC.L10N.register(
     "Back" : "חזרה",
     "Delete" : "מחיקה",
     "Rename" : "שינוי שם",
-    "Done" : "הסתיים",
     "Manage tags" : "ניהול תגיות",
     "Move or copy" : "העברה או העתקה",
     "Download" : "הורדה",
@@ -55,8 +53,10 @@ OC.L10N.register(
     "Please reload the page." : "יש להעלות מחדש דף זה.",
     "Copied" : "הועתק",
     "Copy share link" : "העתקת קישור השיתוף",
+    "View" : "צפייה",
     "Failed to revert {page} to revision {timestamp}." : "נכשל אחזור {page} לגרסה {timestamp}.",
     "Template" : "תבנית",
+    "Done" : "הסתיים",
     "_%n byte_::_%n bytes_" : ["%n בייט","%n בייטים","%n בייטים"]
 },
 "nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: 2;");

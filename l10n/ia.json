@@ -3,7 +3,6 @@
     "Settings" : "Configurationes",
     "Members" : "Membros",
     "Loading…" : "Cargante...",
-    "View" : "Vider",
     "Edit" : "Modificar",
     "Restore" : "Restaurar",
     "Delete permanently" : "Deler permanentemente",
@@ -13,7 +12,6 @@
     "Back" : "Retro",
     "Delete" : "Deler",
     "Rename" : "Renominar",
-    "Done" : "Preste",
     "Download" : "Discargar",
     "Title" : "Titulo",
     "Favorites" : "Favoritos",
@@ -25,6 +23,8 @@
     "Attachments" : "Attachamentos",
     "Sharing" : "Compartente",
     "Versions" : "Versiones",
-    "Failed to revert {page} to revision {timestamp}." : "Il falleva a reverter {page} a revision {timestamp}."
+    "View" : "Vider",
+    "Failed to revert {page} to revision {timestamp}." : "Il falleva a reverter {page} a revision {timestamp}.",
+    "Done" : "Preste"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

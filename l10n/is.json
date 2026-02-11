@@ -9,7 +9,6 @@
     "Loading…" : "Hleð inn…",
     "Add emoji" : "Bæta við tjáningartákni",
     "Permissions" : "Heimildir",
-    "View" : "Skoða",
     "Edit" : "Breyta",
     "Choose" : "Velja",
     "Restore" : "Endurheimta",
@@ -21,7 +20,6 @@
     "Delete" : "Eyða",
     "Rename" : "Endurnefna",
     "Templates" : "Sniðmát",
-    "Done" : "Lokið",
     "Hide outline" : "Fela útlínu",
     "Show outline" : "Birta útlínu",
     "Remove from favorites" : "Fjarlægja úr eftirlætum",
@@ -80,8 +78,10 @@
     "Copied" : "Afritað",
     "Cannot copy" : "Get ekki afritað",
     "Copy share link" : "Afrita deilitengil",
+    "View" : "Skoða",
     "Failed to revert {page} to revision {timestamp}." : "Mistókst að endurheimta {page} útgáfu {timestamp}.",
     "Template" : "Sniðmát",
+    "Done" : "Lokið",
     "Sort by title" : "Raða eftir titli",
     "_%n byte_::_%n bytes_" : ["%n bæti","%n bæti"]
 },"pluralForm" :"nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);"

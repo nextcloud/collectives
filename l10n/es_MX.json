@@ -8,7 +8,6 @@
     "Remove" : "Borrar",
     "Loading…" : "Cargando...",
     "Permissions" : "Permisos",
-    "View" : "Ver",
     "Edit" : "Editar",
     "Choose" : "Elegir",
     "Restore" : "Restaurar",
@@ -20,7 +19,6 @@
     "Delete" : "Eliminar",
     "Rename" : "Renombrar",
     "Templates" : "Plantillas",
-    "Done" : "Terminado",
     "Hide outline" : "Ocultar esquema",
     "Show outline" : "Mostrar esquema",
     "Remove from favorites" : "Eliminar de favoritos",
@@ -73,7 +71,9 @@
     "Please reload the page." : "Por favor vuelve a cargar la página.",
     "Copied" : "Copiado",
     "Cannot copy" : "No se puede copiar",
+    "View" : "Ver",
     "Failed to revert {page} to revision {timestamp}." : "Falla al revertir {page} a revisión {timestamp}.",
+    "Done" : "Terminado",
     "Sort by title" : "Ordenar por título",
     "_%n byte_::_%n bytes_" : ["%n byte","%n bytes","%n bytes"]
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"

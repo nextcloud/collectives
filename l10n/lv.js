@@ -15,7 +15,7 @@ OC.L10N.register(
     "Add teams" : "Pievienot komandas",
     "Could not rename the collective" : "Kolektīvu nevarēja pārdēvēt",
     "Permissions" : "Atļaujas",
-    "View" : "Skats",
+    "Preview" : "Priekšskatīt",
     "Edit" : "Labot",
     "Choose" : "Izvēlēties",
     "Restore" : "Atjaunot",
@@ -27,8 +27,6 @@ OC.L10N.register(
     "Delete" : "Izdzēst",
     "Could not rename template" : "Sagatavi nevarēja pārdēvēt",
     "Rename" : "Pārdēvēt",
-    "Done" : "Pabeigts",
-    "Team overview" : "Komandas pārskats",
     "Remove from favorites" : "Noņemt no izlases",
     "Add to favorites" : "Pievienot izlasei",
     "Move or copy" : "Pārvietot vai kopēt",
@@ -61,6 +59,8 @@ OC.L10N.register(
     "Link copied" : "Saite nokopēta",
     "Please reload the page." : "Lūgums pārlādēt lapu",
     "Copied" : "Nokopēts",
-    "Failed to revert {page} to revision {timestamp}." : "Neizdevās atjaunot {page} uz labojuma versiju {timestamp} "
+    "View" : "Skats",
+    "Failed to revert {page} to revision {timestamp}." : "Neizdevās atjaunot {page} uz labojuma versiju {timestamp} ",
+    "Done" : "Pabeigts"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");

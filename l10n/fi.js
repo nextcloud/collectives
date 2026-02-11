@@ -15,7 +15,6 @@ OC.L10N.register(
     "Add teams" : "Lisää tiimejä",
     "Add emoji" : "Lisää emoji",
     "Permissions" : "Oikeudet",
-    "View" : "Näytä",
     "Edit" : "Muokkaa",
     "Danger zone" : "Vaaravyöhyke",
     "Choose" : "Valitse",
@@ -30,7 +29,6 @@ OC.L10N.register(
     "Rename" : "Nimeä uudelleen",
     "Templates" : "Mallipohjat",
     "Add a template" : "Lisää mallipohja",
-    "Done" : "Valmis",
     "Remove from favorites" : "Poista suosikeista",
     "Add to favorites" : "Lisää suosikkeihin",
     "Manage tags" : "Hallitse tunnisteita",
@@ -82,8 +80,10 @@ OC.L10N.register(
     "Copied" : "Kopioitu",
     "Cannot copy" : "Ei voida kopioida",
     "Copy share link" : "Kopioi jakolinkki",
+    "View" : "Näytä",
     "Failed to revert {page} to revision {timestamp}." : "Tiedoston {page} palautus versioon {timestamp} epäonnistui.",
     "Template" : "Malli",
+    "Done" : "Valmis",
     "Sort by title" : "Lajittele nimen mukaan"
 },
 "nplurals=2; plural=(n != 1);");

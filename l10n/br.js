@@ -9,7 +9,6 @@ OC.L10N.register(
     "Loading…" : "O Kargañ...",
     "Add groups" : "Ouzhoennañ strolladoù",
     "Add emoji" : "Ouzhpennañ un emoji",
-    "View" : "Gwell",
     "Edit" : "Cheñch",
     "Choose" : "Dibab",
     "Restore" : "Adkrouiñ",
@@ -19,7 +18,6 @@ OC.L10N.register(
     "Back" : "Distro",
     "Delete" : "Dilemel",
     "Rename" : "Adenvel",
-    "Done" : "Graet",
     "Add to favorites" : "Ouzhpennañ d'ar penndibaboù",
     "Move or copy" : "Dilec'hiañ pe eilañ",
     "Download" : "Pellgargañ",
@@ -36,7 +34,9 @@ OC.L10N.register(
     "Versions" : "Stumm",
     "Link copied" : "Liamm eilet",
     "Please reload the page." : "Mar-plij adkargit ar bajenn",
+    "View" : "Gwell",
     "Failed to revert {page} to revision {timestamp}." : "C'hwitet m ar mon en dro {page} evit adober {timestamp}.",
+    "Done" : "Graet",
     "_%n byte_::_%n bytes_" : ["okted","okted","okted","okted","%neizhbit"]
 },
 "nplurals=5; plural=((n%10 == 1) && (n%100 != 11) && (n%100 !=71) && (n%100 !=91) ? 0 :(n%10 == 2) && (n%100 != 12) && (n%100 !=72) && (n%100 !=92) ? 1 :(n%10 ==3 || n%10==4 || n%10==9) && (n%100 < 10 || n% 100 > 19) && (n%100 < 70 || n%100 > 79) && (n%100 < 90 || n%100 > 99) ? 2 :(n != 0 && n % 1000000 == 0) ? 3 : 4);");

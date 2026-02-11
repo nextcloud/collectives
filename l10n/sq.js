@@ -8,7 +8,7 @@ OC.L10N.register(
     "Remove" : "Hiqe",
     "Loading…" : "Duke u ngarkuar…",
     "Permissions" : "Lejet",
-    "View" : "Shiko",
+    "Preview" : "Parapamje ",
     "Edit" : "Përpuno",
     "Choose" : "Zgjidhni",
     "Restore" : "Rikthe",
@@ -19,7 +19,6 @@ OC.L10N.register(
     "Back" : "Prapa",
     "Delete" : "Fshi",
     "Rename" : "Riemërtoje",
-    "Done" : "U krye",
     "Remove from favorites" : "Hiqeni nga të parapëlqyerat",
     "Add to favorites" : "U shtua te të parapëlqyerat",
     "Download" : "Shkarko",
@@ -38,6 +37,8 @@ OC.L10N.register(
     "Link copied" : "Linku u kopjua",
     "Please reload the page." : "Ju lutemi, ringarkoni faqen.",
     "Copied" : "Kopjuar",
-    "Failed to revert {page} to revision {timestamp}." : "Dështoi në rikthimin e {page} te rishikimi {timestamp}."
+    "View" : "Shiko",
+    "Failed to revert {page} to revision {timestamp}." : "Dështoi në rikthimin e {page} te rishikimi {timestamp}.",
+    "Done" : "U krye"
 },
 "nplurals=2; plural=(n != 1);");

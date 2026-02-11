@@ -7,7 +7,7 @@ OC.L10N.register(
     "Offline" : "ออฟไลน์",
     "Remove" : "ลบออก",
     "Loading…" : "กำลังโหลด…",
-    "View" : "มุมมอง",
+    "Preview" : "ตัวอย่าง",
     "Edit" : "แก้ไข",
     "Choose" : "เลือก",
     "Restore" : "คืนค่า",
@@ -19,7 +19,6 @@ OC.L10N.register(
     "Delete" : "ลบ",
     "Rename" : "เปลี่ยนชื่อ",
     "Templates" : "เทมเพลต",
-    "Done" : "เสร็จสิ้น",
     "Remove from favorites" : "เอาออกจากรายการโปรด",
     "Add to favorites" : "เพิ่มในรายการโปรด",
     "Move or copy" : "ย้ายหรือคัดลอก",
@@ -42,6 +41,8 @@ OC.L10N.register(
     "Versions" : "รุ่น",
     "Link copied" : "คัดลอกลิงก์แล้ว",
     "Please reload the page." : "โปรดโหลดหน้าเว็บใหม่",
-    "Failed to revert {page} to revision {timestamp}." : "ไม่สามารถย้อนกลับ {page} ไปเป็นรุ่น {timestamp}"
+    "View" : "มุมมอง",
+    "Failed to revert {page} to revision {timestamp}." : "ไม่สามารถย้อนกลับ {page} ไปเป็นรุ่น {timestamp}",
+    "Done" : "เสร็จสิ้น"
 },
 "nplurals=1; plural=0;");

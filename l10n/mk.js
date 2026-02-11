@@ -12,7 +12,6 @@ OC.L10N.register(
     "Add groups" : "Додади групи",
     "Add emoji" : "Додади емотикон",
     "Permissions" : "Дозволи",
-    "View" : "Погледни",
     "Edit" : "Уреди",
     "Danger zone" : "Опасна зона",
     "Choose" : "Избери",
@@ -25,7 +24,6 @@ OC.L10N.register(
     "Delete" : "Избриши",
     "Rename" : "Преименувај",
     "Templates" : "Шаблони",
-    "Done" : "Готово",
     "Remove from favorites" : "Избриши од фаворити",
     "Manage tags" : "Уреди ги ознаките",
     "Move or copy" : "Премести или копирај",
@@ -83,7 +81,9 @@ OC.L10N.register(
     "Copied" : "Копирано",
     "Cannot copy" : "Не може да се копира",
     "Copy share link" : "Копирај линк за споделување",
+    "View" : "Погледни",
     "Failed to revert {page} to revision {timestamp}." : "Не успеав да го вратам {page} на ревизијата {timestamp}.",
-    "Template" : "Шаблон"
+    "Template" : "Шаблон",
+    "Done" : "Готово"
 },
 "nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;");

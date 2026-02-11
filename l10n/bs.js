@@ -11,7 +11,6 @@ OC.L10N.register(
     "Create" : "Ustvari",
     "Delete" : "Obriši",
     "Rename" : "Preimenuj",
-    "Done" : "Done",
     "Download" : "Preuzmi",
     "Title" : "Naslov",
     "Favorites" : "Favoriti",
@@ -21,6 +20,7 @@ OC.L10N.register(
     "Sharing" : "Dijeljenje",
     "Versions" : "Verzije",
     "Please reload the page." : "Molim, ponovno učitajte stranicu",
-    "Failed to revert {page} to revision {timestamp}." : "Nije uspelo vraćanje {page} na reviziju {timestamp}."
+    "Failed to revert {page} to revision {timestamp}." : "Nije uspelo vraćanje {page} na reviziju {timestamp}.",
+    "Done" : "Done"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);");

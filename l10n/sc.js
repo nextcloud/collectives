@@ -15,7 +15,6 @@ OC.L10N.register(
     "Add groups" : "Agiunghe grupos",
     "Add emoji" : "Agiunghe carighedda",
     "Permissions" : "Permissos",
-    "View" : "Visualiza",
     "Edit" : "Modìfica",
     "Danger zone" : "Zona de perìgulu",
     "Choose" : "Sèbera",
@@ -27,7 +26,6 @@ OC.L10N.register(
     "Back" : "In segus",
     "Delete" : "Cantzella",
     "Templates" : "Modellos",
-    "Done" : "Fatu",
     "Remove from favorites" : "Boga·nche dae preferidos",
     "Add to favorites" : "Agiunghe a preferidos",
     "Manage tags" : "Gesti etichetas",
@@ -67,8 +65,10 @@ OC.L10N.register(
     "Please reload the page." : "Torra a carrigare sa pàgina.",
     "Copied" : "Copiadu",
     "Cannot copy" : "Non faghet a copiare",
+    "View" : "Visualiza",
     "Failed to revert {page} to revision {timestamp}." : "Non s'at pòdidu torrare a {documentu} pro sa revisione {timestamp}.",
     "Template" : "Modellu",
+    "Done" : "Fatu",
     "Sort by title" : "Assenta segundu tìtulu"
 },
 "nplurals=2; plural=(n != 1);");

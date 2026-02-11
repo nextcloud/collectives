@@ -17,7 +17,6 @@ OC.L10N.register(
     "Delete" : "Kkes",
     "Rename" : "Beddel isem",
     "Templates" : "Timudmiwin",
-    "Done" : "Immed",
     "Remove from favorites" : "Kkes-it seg ismal",
     "Add to favorites" : "Rnu ismal",
     "Move or copy" : "Smutti neɣ nɣel",
@@ -34,6 +33,7 @@ OC.L10N.register(
     "You" : "Kemm·čč",
     "Attachments" : "Ticeqqufin",
     "Sharing" : "Beṭṭu",
-    "Link copied" : "Aseɣwen yettwanɣel"
+    "Link copied" : "Aseɣwen yettwanɣel",
+    "Done" : "Immed"
 },
 "nplurals=2; plural=(n != 1);");
