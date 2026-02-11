@@ -3,22 +3,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-:root {
-	--text-editor-max-width: 80ch !important;
-}
-
-.text-editor__wrapper {
-	// Required for sticky menubar. Can be removed after nextcloud/text#7130 got released.
-	overflow: unset !important;
-}
-
 .full-width-view {
 	--text-editor-max-width: 100% !important;
 }
 
 .sheet-view {
-	--text-editor-max-width: 80ch !important;
-
 	&.landing-page-widgets,
 	.page-heading-skeleton,
 	.page-content-skeleton {
@@ -27,23 +16,12 @@
 		margin-inline: auto;
 	}
 
-	// Editor document status bar
-	.document-status {
-		max-width: min(var(--text-editor-max-width), 100%);
-		padding: 0 2px;
-		margin: auto;
-	}
+	.text-menubar {
+		width: var(--text-editor-max-width) !important;
+		margin-inline: calc((100% - var(--text-editor-max-width)) / 2) !important;
 
-	[data-collectives-el='editor'],
-	[data-collectives-el='reader'] {
-		max-width: unset;
-		width: min(var(--text-editor-max-width), 100%);
-		margin-inline: auto;
-		flex-grow: 1;
-
-		.text-menubar {
-			max-width: min(var(--text-editor-max-width), 100%);
-			margin: auto;
+		.text-menubar__entries {
+			margin-left: unset !important;
 		}
 	}
 }
@@ -53,10 +31,6 @@
 	box-shadow: 0 1px 10px var(--color-box-shadow);
 	background-color: var(--color-main-background);
 	z-index: 10021;
-	// Margin of text editor inside text container
-	--text-container-margin: calc((var(--text-container-width) - var(--text-editor-max-width)) / 2);
-	// Move outline to the margin
-	translate: clamp((300px + 4px) * -1, var(--text-container-margin) * -1, 0px);
 }
 
 @media print {
