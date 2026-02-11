@@ -1,5 +1,31 @@
 # Changelog
 
+## 3.6.0 - 2026.02.12
+
+### ✨New
+* 🚀 Make collectives user folder a mount point. (#2201, 2189)
+
+### 🐛Fixes
+* 🧹 Remove team overview button from landing page. It caused too much confusion.
+* ⏱️ Delay closing collectives list by one second.
+* 🚫 Add user trait to handle requests without user session. Thanks to @solracsf.
+* 🔐 Allow to rename a collective as admin. (#1716)
+* 💄 Fix title for existing share links.
+* 💄 Rename "Done" button to "Preview" to avoid confusion.
+* 💄 Fix hidden editor nodes drag handle. (#2098)
+* 💄 Fix new editor outline overlaying content.
+* 🔗 Add page slug + id to page share link. Thanks to @MrAn0nym.
+* 🚀 Use single query to get collectives mounts. Thanks to @Koc.
+* 🚀 Replace getById by getFistNodeById in backend. Thanks to @CarlSchwan.
+
+### 🌎Translations
+* 🗣️ Translation updates from Transifex. Thanks to all contributors.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+* ⬆️ Update PHP composer dependencies.
+
+
 ## 3.5.0 - 2026.01.12
 
 ### ✨New
