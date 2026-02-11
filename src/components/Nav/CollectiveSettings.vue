@@ -30,8 +30,7 @@
 				</NcEmojiPicker>
 				<NcTextField
 					v-model="newCollectiveName"
-					:disabled="!isCollectiveOwner(collective)"
-					:label="getRenameLabel"
+					:label="t('collectives', 'Name of the collective')"
 					:error="isNameTooShort"
 					:show-trailing-button="!isNameTooShort"
 					trailing-button-icon="arrowEnd"
@@ -202,16 +201,8 @@ export default {
 			'loading',
 		]),
 
-		...mapState(useCollectivesStore, ['isCollectiveOwner']),
-
 		emojiTitle() {
 			return this.collective.emoji ? t('collectives', 'Change emoji') : t('collectives', 'Add emoji')
-		},
-
-		getRenameLabel() {
-			return this.isCollectiveOwner(this.collective)
-				? t('collectives', 'Name of the collective')
-				: t('collectives', 'Renaming is limited to owners of the team')
 		},
 
 		isNameTooShort() {
