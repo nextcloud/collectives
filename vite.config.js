@@ -15,6 +15,7 @@ export default createAppConfig(
 	},
 	{
 		config: {
+			/*
 			build: {
 				rollupOptions: {
 					output: {
@@ -24,6 +25,7 @@ export default createAppConfig(
 					},
 				},
 			},
+			*/
 			css: {
 				modules: {
 					localsConvention: 'camelCase',
