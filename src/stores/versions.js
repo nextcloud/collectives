@@ -5,7 +5,7 @@
 
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import moment from '@nextcloud/moment'
-import { encodePath, joinPaths } from '@nextcloud/paths'
+import { encodePath, join } from '@nextcloud/paths'
 import { generateRemoteUrl } from '@nextcloud/router'
 import { defineStore } from 'pinia'
 import * as davApi from '../apis/dav/index.js'
@@ -38,7 +38,7 @@ export const useVersionsStore = defineStore('versions', {
 				type: 'file',
 				mtime: pagesStore.currentPage.timestamp * 1000,
 				permissions: collectivesStore.currentCollectiveCanEdit ? 'RWD' : 'R',
-				url: joinPaths('/remote.php/dav', pageDavPath),
+				url: join('/remote.php/dav', pageDavPath),
 				source: generateRemoteUrl('dav') + pageDavPath,
 			}
 		},
@@ -71,7 +71,7 @@ export const useVersionsStore = defineStore('versions', {
 				type: version.type,
 				mtime,
 				permissions: 'R',
-				url: joinPaths('/remote.php/dav', version.filename),
+				url: join('/remote.php/dav', version.filename),
 				source: generateRemoteUrl('dav') + encodePath(version.filename),
 				fileVersion: version.basename,
 			}
