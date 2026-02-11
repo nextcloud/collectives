@@ -1,23 +1,29 @@
 {
   "name": "collectives",
   "description": "Nextcloud Collectives App",
-  "author": "CollectiveCloud Team",
-  "license": "AGPL-3.0-or-later",
-  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/nextcloud/collectives.git"
   },
+  "license": "AGPL-3.0-or-later",
+  "author": "CollectiveCloud Team",
+  "type": "module",
   "scripts": {
     "build": "vite --mode production build",
     "dev": "vite --mode development build",
-    "watch": "vite --mode development build --watch",
-    "serve": "vite --mode development serve",
     "lint": "tsc && eslint --ext .js,.ts,.vue src cypress --max-warnings=0",
     "lint:fix": "tsc && eslint --ext .js,.ts,.vue src cypress --fix",
-    "test": "vitest run",
+    "serve": "vite --mode development serve",
     "stylelint": "stylelint css/collectives.css css/*.scss src/**/*.scss src/*.vue src/**/*.vue",
-    "stylelint:fix": "stylelint css/collectives.css css/*.scss src/**/*.scss src/**/*.vue --fix"
+    "stylelint:fix": "stylelint css/collectives.css css/*.scss src/**/*.scss src/**/*.vue --fix",
+    "test": "vitest run",
+    "watch": "vite --mode development build --watch"
+  },
+  "browserslist": [
+    "extends @nextcloud/browserslist-config"
+  ],
+  "overrides": {
+    "sortablejs": "$sortablejs"
   },
   "dependencies": {
     "@nextcloud/auth": "^2.5.3",
@@ -25,7 +31,8 @@
     "@nextcloud/capabilities": "^1.2.1",
     "@nextcloud/dialogs": "^6.4.2",
     "@nextcloud/event-bus": "^3.3.3",
-    "@nextcloud/files": "^3.12.2",
+    "@nextcloud/files": "^4.0.0",
+    "@nextcloud/files-legacy": "npm:@nextcloud/files@^3.12.1",
     "@nextcloud/initial-state": "^3.0.0",
     "@nextcloud/l10n": "^3.4.1",
     "@nextcloud/moment": "^1.3.5",
@@ -52,13 +59,6 @@
     "workbox-strategies": "^7.4.0",
     "workbox-window": "^7.4.0"
   },
-  "browserslist": [
-    "extends @nextcloud/browserslist-config"
-  ],
-  "engines": {
-    "node": "^24.0.0",
-    "npm": "^11.3.0"
-  },
   "devDependencies": {
     "@nextcloud/babel-config": "^1.3.0",
     "@nextcloud/browserslist-config": "^3.0.1",
@@ -77,7 +77,8 @@
     "vitest": "^4.0.18",
     "wait-on": "^9.0.3"
   },
-  "overrides": {
-    "sortablejs": "$sortablejs"
+  "engines": {
+    "node": "^24.0.0",
+    "npm": "^11.3.0"
   }
 }

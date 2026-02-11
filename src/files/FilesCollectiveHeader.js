@@ -3,14 +3,16 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { Header } from '@nextcloud/files'
 import { loadState } from '@nextcloud/initial-state'
 import Vue from 'vue'
 import FileListInfo from '../views/FileListInfo.vue'
 
 let vm = null
 
-const FilesCollectiveHeader = new Header({
+/**
+ * @type {import('@nextcloud/files').IFileListHeader}
+ */
+const FilesCollectiveHeader = {
 	id: 'collective',
 	order: 9,
 
@@ -35,7 +37,7 @@ const FilesCollectiveHeader = new Header({
 	updated(folder) {
 		vm.path = folder.path
 	},
-})
+}
 
 export {
 	FilesCollectiveHeader,
