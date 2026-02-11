@@ -6,7 +6,8 @@
 describe('Settings', function() {
 	before(function() {
 		cy.loginAs('bob')
-		cy.deleteAndSeedCollective('A Collective')
+		cy.deleteAndSeedCollective('Collective1')
+		cy.deleteAndSeedCollective('Collective2')
 	})
 
 	describe('Collectives folder setting', function() {
@@ -14,8 +15,7 @@ describe('Settings', function() {
 			const randomFolder = Math.random().toString(36).replace(/[^a-z]+/g, '').slice(0, 10)
 			const breadcrumbsSelector = '[data-cy-files-content-breadcrumbs] :is(a, button)'
 			cy.loginAs('bob')
-			cy.visit('apps/collectives/A%20Collective')
-			cy.get('button.app-navigation-toggle').click()
+			cy.visit('apps/collectives')
 
 			cy.get('#app-settings')
 				.click()
@@ -52,7 +52,7 @@ describe('Settings', function() {
 			cy.visit('/apps/files')
 			cy.openFile(randomFolder)
 			cy.get(breadcrumbsSelector).should('contain', randomFolder)
-			cy.fileList().should('contain', 'A Collective')
+			cy.fileList().should('contain', 'Collective1')
 
 			// Change user folder back to default
 			cy.setCollectivesFolder('/Collectives')
