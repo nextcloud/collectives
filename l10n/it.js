@@ -51,6 +51,7 @@ OC.L10N.register(
     "Allow sharing for" : "Consenti la modifica",
     "Page settings" : "Impostazioni della pagina",
     "Default page mode" : "Modalità predefinita della pagina",
+    "Preview" : "Anteprima",
     "Edit" : "Modifica",
     "Danger zone" : "Zona pericolosa",
     "Delete collective" : "Elimina collettivo",

@@ -6,6 +6,7 @@ OC.L10N.register(
     "Settings" : "Agordoj",
     "Members" : "Membroj",
     "Loading…" : "Ŝargado...",
+    "Preview" : "Antaŭvidi",
     "Edit" : "Modifi",
     "Choose" : "Elekti",
     "Restore" : "Restaŭri",

@@ -5,6 +5,7 @@ OC.L10N.register(
     "Settings" : "Configurationes",
     "Members" : "Membros",
     "Loading…" : "Cargante...",
+    "Preview" : "Previsualisar",
     "Edit" : "Modificar",
     "Restore" : "Restaurar",
     "Delete permanently" : "Deler permanentemente",

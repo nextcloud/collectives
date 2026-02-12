@@ -5,6 +5,7 @@ OC.L10N.register(
     "Settings" : "Roghainnean",
     "Remove" : "Thoir air falbh",
     "Loading…" : "’Ga luchdadh…",
+    "Preview" : "Ro-sheall",
     "Edit" : "Deasaich",
     "Choose" : "Tagh",
     "Cancel" : "Sguir dheth",

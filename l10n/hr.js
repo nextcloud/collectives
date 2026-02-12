@@ -30,6 +30,7 @@ OC.L10N.register(
     "Add a template" : "Dodaj predložak",
     "Hide outline" : "Sakrij strukturu",
     "Show outline" : "Prikaži strukturu",
+    "Remove from favorites" : "Ukloni iz omiljenih",
     "Manage tags" : "Upravljaj oznakama",
     "Move or copy" : "Premjesti ili kopiraj",
     "Download" : "Preuzmi",

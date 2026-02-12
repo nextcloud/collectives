@@ -7,6 +7,7 @@ OC.L10N.register(
     "Members" : "წევრები",
     "Promote to moderator" : "დაწინაურება მოდერატორზე",
     "Permissions" : "უფლებები",
+    "Preview" : "წინასწარი ჩვენება",
     "Edit" : "შეცვლა",
     "Choose" : "აირჩიეთ",
     "Restore" : "აღდგენა",
