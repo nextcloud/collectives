@@ -76,7 +76,7 @@
 
 				<!-- text attachments not in page list -->
 				<div v-if="notEmbeddedAttachments.length">
-					<div class="attachment-list-subheading">
+					<div v-if="editorApiAttachments" class="attachment-list-subheading">
 						<div>
 							{{ t('collectives', 'Not in page') }}
 						</div>
@@ -178,6 +178,7 @@ import AttachmentItem from './AttachmentItem.vue'
 import AttachmentRenameDialog from './AttachmentRenameDialog.vue'
 import OfflineContent from './OfflineContent.vue'
 import { useNetworkState } from '../../composables/useNetworkState.ts'
+import { editorApiAttachments } from '../../constants.js'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { usePagesStore } from '../../stores/pages.js'
 import { useRootStore } from '../../stores/root.js'
@@ -214,7 +215,7 @@ export default {
 	},
 
 	computed: {
-		...mapState(useRootStore, ['loading']),
+		...mapState(useRootStore, ['editorApiFlags', 'loading']),
 
 		...mapState(useCollectivesStore, ['currentCollectiveCanEdit']),
 
@@ -227,6 +228,10 @@ export default {
 			'currentPage',
 			'deletedAttachments',
 		]),
+
+		editorApiAttachments() {
+			return this.editorApiFlags.includes(editorApiAttachments)
+		},
 
 		noAttachmentsDescription() {
 			return t('collectives', 'Add attachments using drag and drop or via "Insert attachment" in the formatting menu.')
