@@ -4,23 +4,14 @@
  */
 
 describe('Collective', function() {
-	const specialCollective = 'stupid !@#$%^&()_ special chars'
-
 	before(function() {
 		cy.loginAs('bob')
-		cy.deleteCollective(specialCollective)
 		cy.deleteAndSeedCollective('Preexisting Collective')
 		cy.circleFind('Preexisting Collective')
 			.circleAddMember('jane')
 		cy.loginAs('jane')
 	})
 
-	it('can handle special chars in collective name', function() {
-		cy.loginAs('bob')
-		cy.visit('apps/collectives')
-		cy.createCollective(specialCollective)
-		cy.get('[data-cy-collectives="page-title-container"] input').invoke('val').should('contain', specialCollective)
-	})
 	it('has all the ui elements', function() {
 		cy.wrap('Created just now ' + Math.random().toString(36).substr(2, 4))
 			.as('randomName')
@@ -96,10 +87,5 @@ describe('Collective', function() {
 		cy.get('[data-cy-collectives="page-title-container"] input').should('have.value', 'Preexisting Collective')
 		cy.reload()
 		cy.get('[data-cy-collectives="page-title-container"] input').should('have.value', 'Preexisting Collective')
-	})
-
-	after(function() {
-		cy.loginAs('bob')
-		cy.deleteCollective(specialCollective)
 	})
 })

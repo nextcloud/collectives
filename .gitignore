@@ -21,3 +21,7 @@ css/*
 cypress/downloads/
 cypress/screenshots/
 cypress/videos/
+
+# Playwright test artifacts
+/playwright-report/
+/test-results/
