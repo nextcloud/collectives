@@ -113,7 +113,7 @@ export default {
 		'currentCollective.id': function(val) {
 			this.clearFilterTags()
 			if (val) {
-				this.initCollective()
+				this.initCollective({ closeNavDelay: true })
 			}
 		},
 
@@ -136,7 +136,7 @@ export default {
 	},
 
 	mounted() {
-		this.initCollective()
+		this.initCollective({})
 		this.slugUrl()
 	},
 
@@ -146,8 +146,12 @@ export default {
 		...mapActions(useTagsStore, ['clearFilterTags']),
 		...mapActions(useVersionsStore, ['selectVersion']),
 
-		async initCollective() {
-			setTimeout(() => this.closeNav(), 1000)
+		async initCollective({ closeNavDelay = false }) {
+			if (closeNavDelay && !this.isPublic) {
+				setTimeout(() => this.closeNav(), 1000)
+			} else {
+				this.closeNav()
+			}
 			this.show('details')
 
 			this.loadPending = true
