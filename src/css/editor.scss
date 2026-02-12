@@ -38,6 +38,14 @@
 }
 
 @media print {
+	:root {
+		--text-editor-max-width: 100%;
+	}
+
+	.full-width-view {
+		--text-editor-max-width: 100%;
+	}
+
 	.sheet-view {
 		margin: unset !important;
 	}
