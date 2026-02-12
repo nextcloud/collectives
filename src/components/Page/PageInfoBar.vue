@@ -129,7 +129,6 @@ export default {
 	border-bottom: 1px solid var(--color-border);
 	padding-block: var(--default-grid-baseline);
 	display: flex;
-	flex-grow: 1;
 	margin-inline: calc((100% - var(--text-editor-max-width)) / 2);
 	align-items: center;
 
