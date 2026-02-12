@@ -31,7 +31,7 @@ describe('Page attachments', function() {
 		cy.wait(1000) // eslint-disable-line cypress/no-unnecessary-waiting
 
 		// Switch back to view mode
-		cy.switchToViewMode()
+		cy.switchToPreviewMode()
 
 		cy.getEditor()
 			.should('not.be.visible')
