@@ -6,6 +6,7 @@ OC.L10N.register(
     "Settings" : "Ajustes",
     "Members" : "Miembros",
     "Permissions" : "Permisos",
+    "Preview" : "Previsualizar",
     "Edit" : "Editar",
     "Choose" : "Seleccionar",
     "Restore" : "Restaurar",

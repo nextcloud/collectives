@@ -14,6 +14,7 @@ OC.L10N.register(
     "Add groups" : "Add groups",
     "Add emoji" : "Add emoji",
     "Permissions" : "Permissions",
+    "Preview" : "Preview",
     "Edit" : "Edit",
     "Danger zone" : "Danger zone",
     "Choose" : "Choose",

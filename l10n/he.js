@@ -12,6 +12,7 @@ OC.L10N.register(
     "Add groups" : "הוספת קבוצות",
     "Add emoji" : "הוספת אמוג׳י",
     "Permissions" : "הרשאות",
+    "Preview" : "תצוגה מקדימה",
     "Edit" : "עריכה",
     "Choose" : "בחר",
     "Restore" : "שחזור",

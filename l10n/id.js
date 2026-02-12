@@ -12,6 +12,7 @@ OC.L10N.register(
     "Loading…" : "Memuat…",
     "Remove {name}" : "Hapus {name}",
     "Permissions" : "Izin",
+    "Preview" : "Pratinjau",
     "Edit" : "Sunting",
     "Choose" : "Pilih",
     "Restore" : "Pulihkan",

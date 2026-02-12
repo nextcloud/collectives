@@ -11,6 +11,7 @@ OC.L10N.register(
     "Loading…" : "Hleð inn…",
     "Add emoji" : "Bæta við tjáningartákni",
     "Permissions" : "Heimildir",
+    "Preview" : "Forskoðun",
     "Edit" : "Breyta",
     "Choose" : "Velja",
     "Restore" : "Endurheimta",

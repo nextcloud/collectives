@@ -9,6 +9,7 @@ OC.L10N.register(
     "Loading…" : "O Kargañ...",
     "Add groups" : "Ouzhoennañ strolladoù",
     "Add emoji" : "Ouzhpennañ un emoji",
+    "Preview" : "Ragwell",
     "Edit" : "Cheñch",
     "Choose" : "Dibab",
     "Restore" : "Adkrouiñ",

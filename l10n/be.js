@@ -19,6 +19,7 @@ OC.L10N.register(
     "Remove {name}" : "Выдаліць {name}",
     "Add emoji" : "Дадаць эмодзі",
     "Permissions" : "Дазволы",
+    "Preview" : "Перадпрагляд",
     "Edit" : "Рэдагаваць",
     "Danger zone" : "Небяспечная зона",
     "Choose" : "Выбраць",

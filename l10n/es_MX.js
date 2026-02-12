@@ -10,6 +10,7 @@ OC.L10N.register(
     "Remove" : "Borrar",
     "Loading…" : "Cargando...",
     "Permissions" : "Permisos",
+    "Preview" : "Previsualizar",
     "Edit" : "Editar",
     "Choose" : "Elegir",
     "Restore" : "Restaurar",

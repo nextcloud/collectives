@@ -4,6 +4,7 @@ OC.L10N.register(
     "Share link" : "Rhannu dolen",
     "Settings" : "Gosodiadau",
     "Loading…" : "Yn llwytho…",
+    "Preview" : "Rhagolwg",
     "Edit" : "Golygu",
     "Choose" : "Dewisa",
     "Restore" : "Adfer",

@@ -7,6 +7,7 @@ OC.L10N.register(
     "Members" : "Miembros",
     "Loading…" : "Cargando...",
     "Permissions" : "Permisos",
+    "Preview" : "Previsualizar",
     "Edit" : "Editar",
     "Choose" : "Seleccionar",
     "Restore" : "Restaurar",

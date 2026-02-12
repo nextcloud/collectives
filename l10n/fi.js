@@ -15,6 +15,7 @@ OC.L10N.register(
     "Add teams" : "Lisää tiimejä",
     "Add emoji" : "Lisää emoji",
     "Permissions" : "Oikeudet",
+    "Preview" : "Esikatselu",
     "Edit" : "Muokkaa",
     "Danger zone" : "Vaaravyöhyke",
     "Choose" : "Valitse",
