@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.6.1 - 2026.02.12
+
+### 🐛Fixes
+* 💄 Fix the page info bar height in page preview mode. (#2258)
+* 💄 Only delay closing collectives list if switching between collectives.
+* 💄 Add native tooltips to links in page info bar.
+
+### 🚧Updates & Tooling
+* ⬆️ Update NPM dependencies.
+
+
 ## 3.6.0 - 2026.02.12
 
 ### ✨New
