@@ -9,6 +9,7 @@
 			:is="canEdit ? 'a' : 'div'"
 			v-if="currentPage.lastUserId"
 			class="infobar-item infobar-lastupdate"
+			:title="versionsLinkTitle"
 			@click="canEdit ? emitSidebar('versions') : undefined">
 			<div class="item-text">
 				<LastUserBubble
@@ -22,7 +23,7 @@
 			<div v-if="currentPage.lastUserId" class="infobar-seperator">
 				•
 			</div>
-			<a class="infobar-item" @click="emitSidebar('attachments')">
+			<a class="infobar-item" :title="attachmentsLinkTitle" @click="emitSidebar('attachments')">
 				<div class="item-icon">
 					<PaperclipIcon :size="18" />
 				</div>
@@ -35,7 +36,7 @@
 			<div v-if="currentPage.lastUserId || attachmentCount" class="infobar-seperator">
 				•
 			</div>
-			<a class="infobar-item" @click="emitSidebar('backlinks')">
+			<a class="infobar-item" :title="backlinksLinkTitle" @click="emitSidebar('backlinks')">
 				<div class="item-icon">
 					<ArrowBottomLeftIcon :size="18" />
 				</div>
@@ -92,6 +93,20 @@ export default {
 	},
 
 	computed: {
+		versionsLinkTitle() {
+			return this.canEdit
+				? t('collectives', 'Open version history')
+				: ''
+		},
+
+		attachmentsLinkTitle() {
+			return t('collectives', 'Open attachments')
+		},
+
+		backlinksLinkTitle() {
+			return t('collectives', 'Open backlinks')
+		},
+
 		attachmentCountString() {
 			return this.isMobile
 				? this.attachmentCount
