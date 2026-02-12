@@ -39,7 +39,7 @@
 				{{ t('collectives', 'View in page') }}
 			</NcActionButton>
 			<NcActionButton
-				v-if="!isEmbedded && !isDeleted && !isInFolder && isTextEdit && currentCollectiveCanEdit"
+				v-if="!isEmbedded && !isDeleted && !isInFolder && editorApiAttachments && isTextEdit && currentCollectiveCanEdit"
 				:close-after-click="true"
 				@click="onInsert">
 				<template #icon>
@@ -119,6 +119,7 @@ import PencilOutlineIcon from 'vue-material-design-icons/PencilOutline.vue'
 import RestoreIcon from 'vue-material-design-icons/Restore.vue'
 import DownloadIcon from 'vue-material-design-icons/TrayArrowDown.vue'
 import { useNetworkState } from '../../composables/useNetworkState.ts'
+import { editorApiAttachments } from '../../constants.js'
 import { useCollectivesStore } from '../../stores/collectives.js'
 import { usePagesStore } from '../../stores/pages.js'
 import { useRootStore } from '../../stores/root.js'
@@ -165,6 +166,7 @@ export default {
 
 	computed: {
 		...mapState(useRootStore, [
+			'editorApiFlags',
 			'isPublic',
 			'shareTokenParam',
 		]),
@@ -175,6 +177,10 @@ export default {
 			'currentPage',
 			'isTextEdit',
 		]),
+
+		editorApiAttachments() {
+			return this.editorApiFlags.includes(editorApiAttachments)
+		},
 
 		isInFolder() {
 			return this.attachment.type === 'folder'

@@ -6,7 +6,7 @@
 import { useLocalStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
 import { set } from 'vue'
-import { editorApiReaderFileId, editorApiUpdateReadonlyBarProps } from '../constants.js'
+import { editorApiAttachments, editorApiReaderFileId, editorApiUpdateReadonlyBarProps } from '../constants.js'
 
 const STORE_PREFIX = 'collectives/pinia/root/'
 
@@ -43,6 +43,9 @@ export const useRootStore = defineStore('root', {
 			}
 			if (this.editorApiVersionCheck('1.2')) {
 				flags.push(editorApiUpdateReadonlyBarProps)
+			}
+			if (this.editorApiVersionCheck('1.4')) {
+				flags.push(editorApiAttachments)
 			}
 			return flags
 		},
