@@ -36,7 +36,7 @@
                     "shareEditable",
                     "userPageOrder",
                     "userShowMembers",
-                    "userShowRecenPages",
+                    "userShowRecentPages",
                     "userFavoritePages",
                     "canLeave"
                 ],
@@ -100,7 +100,7 @@
                     "userShowMembers": {
                         "type": "boolean"
                     },
-                    "userShowRecenPages": {
+                    "userShowRecentPages": {
                         "type": "boolean"
                     },
                     "userFavoritePages": {

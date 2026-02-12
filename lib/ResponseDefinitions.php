@@ -28,7 +28,7 @@ namespace OCA\Collectives;
  *     shareEditable: bool,
  *     userPageOrder: int,
  *     userShowMembers: bool,
- *     userShowRecenPages: bool,
+ *     userShowRecentPages: bool,
  *     userFavoritePages: list<int>,
  *     canLeave: bool,
  * }

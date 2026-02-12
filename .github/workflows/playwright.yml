@@ -1,0 +1,73 @@
+# SPDX-FileCopyrightText: 2025 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: MIT
+
+name: Playwright Tests
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    strategy:
+        matrix:
+            server-branch: ['stable31', 'master']
+            #shardIndex: [1, 2]
+            #shardTotal: [2]
+    steps:
+      - name: Checkout app
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Check composer.json
+        id: check_composer
+        uses: andstor/file-existence-action@076e0072799f4942c8bc574a82233e1e4d13e9d6 # v3.0.0
+        with:
+          files: 'composer.json'
+
+      - name: Install composer dependencies
+        if: steps.check_composer.outputs.files_exists == 'true'
+        run: composer install --no-dev
+
+      - name: Read package.json
+        uses: nextcloud-libraries/parse-package-engines-action@122ae05d4257008180a514e1ddeb0c1b9d094bdd # v0.1.0
+        id: versions
+
+      - name: Set up node
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
+        with:
+          node-version: ${{ steps.versions.outputs.node-version }}
+
+      - name: Set up npm
+        run: npm i -g 'npm@${{ steps.versions.outputs.package-manager-version }}'
+
+      - name: Install node dependencies & build app
+        env:
+          CYPRESS_INSTALL_BINARY: 0
+        run: |
+          npm ci
+          npm run build --if-present
+
+      - name: Install Playwright Browsers
+        run: npx playwright install chromium --only-shell
+
+      - name: Run Playwright tests
+        #run: npx playwright test --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
+        run: npx playwright test
+        env:
+          PLAYWRIGHT_NC_SERVER_BRANCH: ${{ matrix.server-branch }}
+
+      - name: Upload results
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        if: ${{ !cancelled() }}
+        with:
+          #name: playwright-report_${{ matrix.server-branch }}_shard${{ matrix.shardIndex }}
+          name: playwright-report_${{ matrix.server-branch }}
+          path: test-results/
+          retention-days: 7
