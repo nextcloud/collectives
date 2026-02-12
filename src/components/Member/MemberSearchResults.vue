@@ -142,8 +142,11 @@ export default {
 
 		async onClick(item) {
 			this.$set(this.loadingItems, `${item.source}-${item.id}`, true)
-			await this.onClickSearched(item)
-			this.$delete(this.loadingItems, `${item.source}-${item.id}`)
+			try {
+				await this.onClickSearched(item)
+			} finally {
+				this.$delete(this.loadingItems, `${item.source}-${item.id}`)
+			}
 		},
 
 		generateKey(item) {
