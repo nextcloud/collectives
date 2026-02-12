@@ -42,8 +42,12 @@ describe('Page attachments', function() {
 		// Open attachment list
 		cy.get('button.app-sidebar__toggle').click()
 
-		cy.get('.attachment-list-embedded').should('contain', 'test.png')
-		cy.get('.attachment-list-not-embedded').should('not.exist')
+		if (['stable31'].includes(Cypress.env('ncVersion'))) {
+			cy.get('.attachment-list-not-embedded').should('contain', 'test.png')
+		} else {
+			cy.get('.attachment-list-embedded').should('contain', 'test.png')
+			cy.get('.attachment-list-not-embedded').should('not.exist')
+		}
 
 		// Close sidebar
 		cy.get('button.app-sidebar__close').click({ force: true })
@@ -57,8 +61,12 @@ describe('Page attachments', function() {
 		// Open attachment list
 		cy.get('button.app-sidebar__toggle').click()
 
-		cy.get('.attachment-list-embedded').should('contain', 'test.png')
-		cy.get('.attachment-list-not-embedded').should('not.exist')
+		if (['stable31'].includes(Cypress.env('ncVersion'))) {
+			cy.get('.attachment-list-not-embedded').should('contain', 'test.png')
+		} else {
+			cy.get('.attachment-list-embedded').should('contain', 'test.png')
+			cy.get('.attachment-list-not-embedded').should('not.exist')
+		}
 
 		// Delete image from editor
 		cy.getEditor()
