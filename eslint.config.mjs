@@ -18,6 +18,16 @@ export default defineConfig([
 	},
 
 	{
+		name: 'playwright',
+		files: ['playwright/start-nextcloud-server.js'],
+		languageOptions: {
+			globals: {
+				process: 'readonly',
+			},
+		},
+	},
+
+	{
 		name: 'collectives/disable',
 		rules: {
 			'no-console': 'off', // we make extensive use of console
