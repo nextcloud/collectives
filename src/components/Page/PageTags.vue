@@ -125,7 +125,7 @@ export default {
 	background-color: var(--color-main-background);
 
 	&.sheet-view {
-		margin-left: max(0px, calc(50% - (var(--text-editor-max-width) / 2)));
+		margin-left: max(0px, calc(50% - (var(--text-editor-max-width, var(--text-editor-max-width-default)) / 2)));
 	}
 }
 
@@ -136,7 +136,7 @@ export default {
 	max-width: 100%;
 
 	&.sheet-view {
-		max-width: var(--text-editor-max-width);
+		max-width: var(--text-editor-max-width, var(--text-editor-max-width-default));
 	}
 
 	&.popover {
