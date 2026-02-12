@@ -300,7 +300,7 @@ export default {
 	background-color: var(--color-main-background);
 
 	&.sheet-view {
-		margin: 0 0 0 max(0px, calc(50% - (var(--text-editor-max-width) / 2)));
+		margin: 0 0 0 max(0px, calc(50% - (var(--text-editor-max-width, var(--text-editor-max-width-default)) / 2)));
 	}
 
 	.button-emoji-page {

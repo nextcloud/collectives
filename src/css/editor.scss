@@ -3,22 +3,26 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+:root {
+	--text-editor-max-width-default: min(80ch, 100%);
+}
+
 .full-width-view {
-	--text-editor-max-width: 100% !important;
+	--text-editor-max-width: calc(100% - 2 * 40px);
 }
 
 .sheet-view {
 	&.landing-page-widgets,
 	.page-heading-skeleton,
 	.page-content-skeleton {
-		width: min(var(--text-editor-max-width), 100%);
-		max-width: min(var(--text-editor-max-width), 100%);
+		width: min(var(--text-editor-max-width, var(--text-editor-max-width-default)), 100%);
+		max-width: min(var(--text-editor-max-width, var(--text-editor-max-width-default)), 100%);
 		margin-inline: auto;
 	}
 
 	.text-menubar {
-		width: var(--text-editor-max-width) !important;
-		margin-inline: calc((100% - var(--text-editor-max-width)) / 2) !important;
+		width: var(--text-editor-max-width, var(--text-editor-max-width-default)) !important;
+		margin-inline: calc((100% - var(--text-editor-max-width, var(--text-editor-max-width-default))) / 2) !important;
 
 		.text-menubar__entries {
 			margin-left: unset !important;
@@ -41,6 +45,6 @@
 	.page-title-container, .page-tags-container, .editor__content {
 		margin: unset !important;
 		max-width: unset !important;
-		width: var(--text-editor-max-width);
+		width: var(--text-editor-max-width, var(--text-editor-max-width-default));
 	}
 }

@@ -136,7 +136,7 @@ export default {
 	position: sticky;
 	top: 0;
 	bottom: var(--default-grid-baseline);
-	width: var(--text-editor-max-width);
+	width: var(--text-editor-max-width, var(--text-editor-max-width-default));
 	z-index: 10021;
 	background-color: var(--color-main-background-translucent);
 	backdrop-filter: var(--background-blur);
@@ -144,7 +144,7 @@ export default {
 	border-bottom: 1px solid var(--color-border);
 	padding-block: var(--default-grid-baseline);
 	display: flex;
-	margin-inline: calc((100% - var(--text-editor-max-width)) / 2);
+	margin-inline: calc((100% - var(--text-editor-max-width, var(--text-editor-max-width-default))) / 2);
 	align-items: center;
 
 	overflow: hidden;
