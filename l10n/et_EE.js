@@ -7,6 +7,8 @@ OC.L10N.register(
     "{user} has mentioned you in {collective} - {page}" : "{user} on sind maininud „{collective}“ vabaühenduses - {page}",
     "Landing page" : "Maandumisleht",
     "Welcome %s" : "Tere tulemast, %s",
+    "Add pages with the ➕ in the page list! You can drag them to change the order. Dragging them into the editor will create a 🔗 link." : "➕ ikoonist saad lehtede loendist lisada uusi lehti! Lohistades võid muuta nende järjekorda. Lohistades lehe muutmisvaatesse, tekib sellest 🔗 link.",
+    "Press `✏️ Edit` to change this text and make yourself at home! Multiple people can edit together. Find out more in the [documentation](https://nextcloud.github.io/collectives/) or ask [the community](https://help.nextcloud.com/tag/collectives-app)." : "Selle teksti muutmiseks vajuta „✏️ Muuda“ ning asu toimetama. Mitu huvilist võivad teksti muuta üheskoos. Lisateavet leiad [juhendist](https://nextcloud.github.io/collectives/) või [suhtle kogukonnaga](https://help.nextcloud.com/tag/collectives-app).",
     "Collective pages" : "Vabaühenduse lehed",
     "In collective %1$s" : "Vabaühenduses %1$s",
     "Last edition %1$s" : "Viimane muutmine: %1$s",

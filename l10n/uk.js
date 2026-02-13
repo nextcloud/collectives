@@ -7,6 +7,7 @@ OC.L10N.register(
     "{user} has mentioned you in {collective} - {page}" : "{user} згадав(-ла) вас у {collective} - {page}",
     "Landing page" : "Стартова сторінка",
     "Welcome %s" : "Вітання, %s",
+    "Add pages with the ➕ in the page list! You can drag them to change the order. Dragging them into the editor will create a 🔗 link." : "Додайте сторінки за допомогою ➕ у списку сторінок! Ви можете перетягувати їх для зміни порядку. Перетягування до редактора створить 🔗 посилання.",
     "Collective pages" : "Сторінки колективу",
     "In collective %1$s" : "В колективі %1$s",
     "Last edition %1$s" : "Востаннє редаговано %1$s",
