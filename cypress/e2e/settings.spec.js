@@ -26,7 +26,7 @@ describe('Settings', function() {
 		cy.wait('@propfindFolder')
 
 		// Open home folder
-		cy.get('.file-picker nav [title="Home"]')
+		cy.get('.file-picker .breadcrumb [aria-label="All files"]')
 			.click()
 		cy.wait('@propfindFolder')
 
