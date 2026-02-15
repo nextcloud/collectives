@@ -192,8 +192,6 @@ Cypress.Commands.add('getCollectivesFolder', () => {
 		.then((response) => response.data.ocs.data.user_folder)
 })
 
-Cypress.Commands.add('setCollectivesFolder', api.setCollectivesFolder)
-
 /**
  * Move a collective into the trash if it exists.
  *
