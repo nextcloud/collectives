@@ -11,6 +11,7 @@ namespace OCA\Collectives\Fs;
 
 use OCP\Files\Folder;
 use OCP\Files\IRootFolder;
+use OCP\Files\NotFoundException;
 use OCP\IAppConfig;
 use OCP\IConfig;
 use OCP\IUserManager;
@@ -44,8 +45,14 @@ class UserFolderHelper {
 	public function get(string $userId): Folder {
 		$userHomeFolder = $this->rootFolder->getUserFolder($userId);
 		$userCollectivesPath = $this->getUserFolderSetting($userId);
-		/** @var Folder $userCollectivesFolder */
-		$userCollectivesFolder = $userHomeFolder->get($userCollectivesPath);
+		try {
+			/** @var Folder $userCollectivesFolder */
+			$userCollectivesFolder = $userHomeFolder->get($userCollectivesPath);
+		} catch (NotFoundException $e) {
+			\OC_Util::setupFS($userId);
+			/** @var Folder $userCollectivesFolder */
+			$userCollectivesFolder = $userHomeFolder->get($userCollectivesPath);
+		}
 		return $userCollectivesFolder;
 	}
 }

@@ -5,12 +5,13 @@
 
 {
 	"extends": "@vue/tsconfig",
-	"include": ["src/**.ts", "*.ts"],
+	"include": ["src/**.ts", "*.ts", "playwright/**/*.ts"],
 	"compilerOptions": {
 		"allowJs": true,
 		"target": "ESNext",
 		"module": "ESNext",
 		"moduleResolution": "Bundler",
-		"lib": ["webworker"]
+		"lib": ["webworker"],
+		"allowImportingTsExtensions": true
 	}
 }
