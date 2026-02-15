@@ -4,7 +4,12 @@
 -->
 
 <template>
-	<div class="attachments-container">
+	<div
+		ref="attachmentsContainer"
+		class="attachments-container"
+		@dragover="onContainerDragover"
+		@dragleave="onContainerDragleave"
+		@drop="onContainerDrop">
 		<!-- loading -->
 		<NcEmptyContent v-if="loading('attachments')">
 			<template #icon>
@@ -22,157 +27,155 @@
 			</template>
 		</NcEmptyContent>
 
-		<div v-else-if="!loading('attachments') && (attachments.length || deletedAttachments.length)">
-			<!-- attachments list -->
-			<ul v-show="sortedAttachments.length" class="attachment-list">
-				<NcListItem
-					v-for="attachment in sortedAttachments"
-					:key="attachment.id"
-					:name="attachment.name"
-					:href="davUrl(attachment)"
-					:force-display-actions="true"
-					class="attachment"
-					@click="clickAttachment(attachment, $event)">
+		<div v-else>
+			<!-- upload button and area -->
+			<div v-if="currentCollectiveCanEdit" v-show="networkOnline" class="upload-area">
+				<NcButton :disabled="!networkOnline" variant="tertiary" @click="$refs.fileInput.click()">
 					<template #icon>
-						<img
-							lazy="true"
-							:src="previewUrl(attachment)"
-							alt=""
-							height="256"
-							width="256"
-							class="attachment__image">
+						<PlusIcon />
 					</template>
-					<template #subname>
-						<div class="attachment__info">
-							<span class="attachment__info_size">{{ formattedFileSize(attachment.filesize) }}</span>
-							<span class="attachment__info_size">·</span>
-							<span :title="formattedDate(attachment.timestamp)">{{ relativeDate(attachment.timestamp) }}</span>
-						</div>
-					</template>
-					<template #actions>
-						<NcActionButton
-							:close-after-click="true"
-							@click="scrollTo(attachment)">
-							<template #icon>
-								<EyeIcon />
-							</template>
-							{{ t('collectives', 'View in document') }}
-						</NcActionButton>
-						<NcActionLink
-							:href="davUrl(attachment)"
-							:download="attachment.name"
-							:class="{ 'action-link--disabled': !networkOnline }"
-							:title="offlineTitle"
-							:close-after-click="true">
-							<template #icon>
-								<DownloadIcon />
-							</template>
-							{{ t('collectives', 'Download') }}
-						</NcActionLink>
-						<NcActionLink
-							v-if="!isPublic"
-							:href="filesUrl(attachment.id)"
-							:class="{ 'action-link--disabled': !networkOnline }"
-							:title="offlineTitle"
-							:close-after-click="true">
-							<template #icon>
-								<FolderIcon />
-							</template>
-							{{ t('collectives', 'Show in Files') }}
-						</NcActionLink>
-					</template>
-				</NcListItem>
-			</ul>
+					{{ t('collectives', 'Upload') }}
+				</NcButton>
 
-			<!-- deleted attachments list -->
-			<ul v-show="isTextEdit && deletedAttachments.length" class="attachment-list-deleted">
-				<div class="attachment-list-subheading">
-					{{ t('collectives', 'Recently deleted') }}
+				<input
+					ref="fileInput"
+					type="file"
+					multiple
+					style="display: none"
+					@change="onFilesSelected">
+
+				<!-- drag and drop notice -->
+				<div v-show="!hasAttachments || isDragover" class="upload-drop-area">
+					<TrayArrowDownIcon :size="24" />
+					<div class="upload-drop-area__title">
+						{{ t('collectives', 'Drag and drop files here to upload') }}
+					</div>
+				</div>
+			</div>
+
+			<!-- attachments lists -->
+			<div v-if="hasAttachments">
+				<!-- text attachments in page list -->
+				<div v-if="embeddedAttachments.length">
+					<div class="attachment-list-subheading">
+						<div>
+							{{ t('collectives', 'In page') }}
+						</div>
+					</div>
+
+					<ul class="attachment-list-embedded">
+						<AttachmentItem
+							v-for="attachment in embeddedAttachments"
+							:key="attachment.id"
+							:attachment="attachment"
+							:is-embedded="true"
+							@rename="onStartRename(attachment)"
+							@delete="onDelete(attachment)" />
+					</ul>
 				</div>
 
-				<NcListItem
-					v-for="attachment in deletedAttachments"
-					:key="attachment.id"
-					:name="attachment.name"
-					:href="davUrl(attachment)"
-					:force-display-actions="true"
-					class="attachment"
-					@click="clickAttachment(attachment, $event)">
-					<template #icon>
-						<img
-							lazy="true"
-							:src="previewUrl(attachment)"
-							alt=""
-							height="256"
-							width="256"
-							class="attachment__image">
-					</template>
-					<template #subname>
-						<div class="attachment__info">
-							<span class="attachment__info_size">{{ formattedFileSize(attachment.filesize) }}</span>
-							<span class="attachment__info_size">·</span>
-							<span :title="formattedDate(attachment.timestamp)">{{ relativeDate(attachment.timestamp) }}</span>
+				<!-- text attachments not in page list -->
+				<div v-if="notEmbeddedAttachments.length">
+					<div v-if="editorApiAttachments" class="attachment-list-subheading">
+						<div>
+							{{ t('collectives', 'Not in page') }}
 						</div>
-					</template>
-					<template #actions>
-						<NcActionButton
-							:close-after-click="true"
-							@click="restore(attachment)">
-							<template #icon>
-								<RestoreIcon />
+					</div>
+
+					<ul class="attachment-list-not-embedded">
+						<AttachmentItem
+							v-for="attachment in notEmbeddedAttachments"
+							:key="attachment.id"
+							:attachment="attachment"
+							@rename="onStartRename(attachment)"
+							@delete="onDelete(attachment)" />
+					</ul>
+				</div>
+
+				<!-- deleted attachments list -->
+				<div v-if="deletedAttachments.length">
+					<div class="attachment-list-subheading">
+						{{ t('collectives', 'Recently deleted') }}
+					</div>
+
+					<ul class="attachment-list-deleted">
+						<AttachmentItem
+							v-for="attachment in deletedAttachments"
+							:key="attachment.id"
+							:attachment="attachment"
+							:is-deleted="true"
+							@restore="onRestore(attachment)" />
+					</ul>
+				</div>
+
+				<!-- folder attachments list -->
+				<div v-if="folderAttachments.length">
+					<div class="attachment-list-subheading">
+						<div>
+							{{ t('collectives', 'Found in folder') }}
+						</div>
+						<NcPopover popover-role="dialog" no-focus-trap>
+							<template #trigger>
+								<NcButton
+									class="hint-icon"
+									variant="tertiary-no-background"
+									:aria-label="t('collectives', 'Explanation for found in folder list')">
+									<template #icon>
+										<InformationIcon :size="20" />
+									</template>
+								</NcButton>
 							</template>
-							{{ t('collectives', 'Restore') }}
-						</NcActionButton>
-						<NcActionLink
-							:href="davUrl(attachment)"
-							:download="attachment.name"
-							:close-after-click="true">
-							<template #icon>
-								<DownloadIcon />
-							</template>
-							{{ t('collectives', 'Download') }}
-						</NcActionLink>
-						<NcActionLink
-							:href="filesUrl(attachment.id)"
-							:close-after-click="true">
-							<template #icon>
-								<FolderIcon />
-							</template>
-							{{ t('collectives', 'Show in Files') }}
-						</NcActionLink>
-					</template>
-				</NcListItem>
-			</ul>
+							<p class="hint-body">
+								{{ t('collectives', 'Files in the folder of the page.') }}
+							</p>
+						</NcPopover>
+					</div>
+
+					<ul class="attachment-list-folder">
+						<AttachmentItem
+							v-for="attachment in folderAttachments"
+							:key="attachment.id"
+							:attachment="attachment" />
+					</ul>
+				</div>
+			</div>
+
+			<!-- no attachments found -->
+			<NcEmptyContent
+				v-else
+				:name="t('collectives', 'No attachments')"
+				:description="noAttachmentsDescription">
+				<template #icon>
+					<PaperclipIcon />
+				</template>
+			</NcEmptyContent>
 		</div>
 
-		<!-- no attachments found -->
-		<NcEmptyContent
-			v-else
-			:name="t('collectives', 'No attachments available')"
-			:description="noAttachmentsDescription">
-			<template #icon>
-				<PaperclipIcon />
-			</template>
-		</NcEmptyContent>
+		<!-- rename dialog -->
+		<AttachmentRenameDialog
+			v-if="renamedAttachment"
+			:open.sync="showRenameAttachmentsForm"
+			:attachment-name="renamedAttachment.name"
+			@attachment-rename="onRename" />
 	</div>
 </template>
 
 <script>
-import { getCurrentUser } from '@nextcloud/auth'
-import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { formatFileSize } from '@nextcloud/files'
-import moment from '@nextcloud/moment'
-import { generateRemoteUrl, generateUrl } from '@nextcloud/router'
-import { NcActionButton, NcActionLink, NcEmptyContent, NcListItem, NcLoadingIcon } from '@nextcloud/vue'
+import { showError, showSuccess } from '@nextcloud/dialogs'
+import { emit } from '@nextcloud/event-bus'
+import { NcButton, NcEmptyContent, NcLoadingIcon, NcPopover } from '@nextcloud/vue'
 import { mapActions, mapState } from 'pinia'
 import AlertOctagonIcon from 'vue-material-design-icons/AlertOctagonOutline.vue'
-import EyeIcon from 'vue-material-design-icons/EyeOutline.vue'
-import FolderIcon from 'vue-material-design-icons/FolderOutline.vue'
+import InformationIcon from 'vue-material-design-icons/InformationOutline.vue'
 import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue'
-import RestoreIcon from 'vue-material-design-icons/Restore.vue'
-import DownloadIcon from 'vue-material-design-icons/TrayArrowDown.vue'
+import PlusIcon from 'vue-material-design-icons/Plus.vue'
+import TrayArrowDownIcon from 'vue-material-design-icons/TrayArrowDown.vue'
+import AttachmentItem from './AttachmentItem.vue'
+import AttachmentRenameDialog from './AttachmentRenameDialog.vue'
 import OfflineContent from './OfflineContent.vue'
 import { useNetworkState } from '../../composables/useNetworkState.ts'
+import { editorApiAttachments } from '../../constants.js'
+import { useCollectivesStore } from '../../stores/collectives.js'
 import { usePagesStore } from '../../stores/pages.js'
 import { useRootStore } from '../../stores/root.js'
 
@@ -181,17 +184,17 @@ export default {
 
 	components: {
 		AlertOctagonIcon,
-		DownloadIcon,
-		EyeIcon,
-		FolderIcon,
-		NcActionButton,
-		NcActionLink,
+		AttachmentItem,
+		AttachmentRenameDialog,
+		InformationIcon,
+		NcButton,
 		NcEmptyContent,
 		NcLoadingIcon,
-		NcListItem,
+		NcPopover,
 		OfflineContent,
 		PaperclipIcon,
-		RestoreIcon,
+		PlusIcon,
+		TrayArrowDownIcon,
 	},
 
 	setup() {
@@ -199,29 +202,70 @@ export default {
 		return { networkOnline }
 	},
 
+	data() {
+		return {
+			isDragover: false,
+			renamedAttachment: null,
+			showRenameAttachmentsForm: false,
+		}
+	},
+
 	computed: {
-		...mapState(useRootStore, [
-			'isPublic',
-			'loading',
-			'shareTokenParam',
-		]),
+		...mapState(useRootStore, ['editorApiFlags', 'loading']),
+
+		...mapState(useCollectivesStore, ['currentCollectiveCanEdit']),
 
 		...mapState(usePagesStore, [
 			'attachments',
 			'attachmentsError',
 			'attachmentsLoaded',
+			'editorEmbeddedAttachmentSrcs',
+			'readerEmbeddedAttachmentSrcs',
 			'currentPage',
 			'deletedAttachments',
-			'isTextEdit',
 		]),
+
+		editorApiAttachments() {
+			return this.editorApiFlags.includes(editorApiAttachments)
+		},
 
 		noAttachmentsDescription() {
 			return t('collectives', 'Add attachments using drag and drop or via "Insert attachment" in the formatting menu.')
 		},
 
-		// Sort attachments chronologically, most recent first
-		sortedAttachments() {
-			return [...this.attachments].sort((a, b) => a.timestamp < b.timestamp)
+		embeddedAttachmentSrcs() {
+			return this.currentCollectiveCanEdit
+				? this.editorEmbeddedAttachmentSrcs
+				: this.readerEmbeddedAttachmentSrcs
+		},
+
+		textAttachments() {
+			return [...this.attachments]
+				.filter((a) => a.type === 'text')
+				// Sort attachments chronologically, most recent first
+				.sort((a, b) => a.timestamp < b.timestamp)
+		},
+
+		embeddedAttachments() {
+			return this.textAttachments.filter((attachment) => this.embeddedAttachmentSrcs.includes(attachment.src))
+		},
+
+		notEmbeddedAttachments() {
+			return this.textAttachments.filter((attachment) => !this.embeddedAttachmentSrcs.includes(attachment.src))
+		},
+
+		folderAttachments() {
+			return [...this.attachments]
+				.filter((a) => a.type === 'folder')
+				// Sort attachments chronologically, most recent first
+				.sort((a, b) => a.timestamp < b.timestamp)
+		},
+
+		hasAttachments() {
+			return this.embeddedAttachments.length > 0
+				|| this.notEmbeddedAttachments.length > 0
+				|| this.deletedAttachments.length > 0
+				|| this.folderAttachments.length > 0
 		},
 
 		offlineTitle() {
@@ -229,125 +273,114 @@ export default {
 				? ''
 				: t('collectives', 'You are offline')
 		},
-
-		formattedFileSize() {
-			return (fileSize) => formatFileSize(fileSize)
-		},
-
-		formattedDate() {
-			return (timestamp) => moment.unix(timestamp).format('LLL')
-		},
-
-		relativeDate() {
-			return (timestamp) => moment.unix(timestamp).fromNow()
-		},
-
-		// Encode name the same way as Text does at `insertAttachment` in MediaHandler.vue
-		fileNameUriComponent() {
-			return (fileName) => encodeURIComponent(fileName).replace(/[!'()*]/g, (c) => {
-				return '%' + c.charCodeAt(0).toString(16).toUpperCase()
-			})
-		},
-
-		filesUrl() {
-			return (fileId) => generateUrl(`/f/${fileId}`)
-		},
-
-		pathSplit() {
-			return (filepath) => {
-				const lastSlashIndex = filepath.lastIndexOf('/')
-				const path = filepath.substring(0, lastSlashIndex)
-				const filename = filepath.substring(lastSlashIndex + 1)
-				return [path, filename]
-			}
-		},
-
-		davUrl() {
-			return function(attachment) {
-				const [path, filename] = this.pathSplit(attachment.internalPath)
-				return this.isPublic
-					? generateUrl(`s/${this.shareTokenParam}/download?path=/${path}&files=${filename}`)
-					: generateRemoteUrl(`dav/files/${getCurrentUser()?.uid}/${this.currentPage.collectivePath}/${encodeURI(attachment.internalPath)}`)
-			}
-		},
-
-		previewUrl() {
-			return function(attachment) {
-				return attachment.hasPreview
-					? this.attachmentPreview(attachment)
-					: OC.MimeType.getIconUrl(attachment.mimetype ?? 'undefined')
-			}
-		},
-
-		attachmentPreview() {
-			return function(attachment) {
-				const searchParams = '&x=64&y=64&a=true'
-				return this.isPublic
-					? generateUrl(`/apps/files_sharing/publicpreview/${this.shareTokenParam}?fileId=${attachment.id}&file=${encodeURI(attachment.internalPath)}${searchParams}`)
-					: generateUrl(`/core/preview?fileId=${attachment.id}${searchParams}`)
-			}
-		},
-	},
-
-	mounted() {
-		// Move attachment to recently deleted on event from Text
-		subscribe('collectives:text-image-node:delete', this.onDeleteImageNode)
-		subscribe('text:image-node:delete', this.onDeleteImageNode)
-	},
-
-	beforeDestroy() {
-		unsubscribe('collectives:text-image-node:delete', this.onDeleteImageNode)
-		unsubscribe('text:image-node:delete', this.onDeleteImageNode)
 	},
 
 	methods: {
 		...mapActions(usePagesStore, [
-			'setAttachmentDeleted',
-			'setAttachmentUndeleted',
+			'deleteAttachment',
+			'renameAttachment',
+			'restoreAttachment',
+			'uploadAttachment',
 		]),
 
-		clickAttachment(attachment, ev) {
-			// Show in viewer if the mimetype is supported
-			if (window.OCA.Viewer?.availableHandlers.map((handler) => handler.mimes).flat().includes(attachment.mimetype)) {
-				ev.preventDefault()
-				window.OCA.Viewer.open({ path: attachment.path })
+		onContainerDragover(event) {
+			// Needed to keep the drag/drop chain working
+			event.preventDefault()
+
+			const isForeignFile = event.dataTransfer?.types.includes('Files')
+			if (isForeignFile) {
+				this.isDragover = true
+				this.$refs.attachmentsContainer.scrollIntoView({ behaviour: 'smooth', block: 'start' })
 			}
 		},
 
-		getActiveTextElement() {
-			return this.isTextEdit
-				? document.querySelector('[data-collectives-el="editor"]')
-				: document.querySelector('[data-collectives-el="reader"]')
-		},
-
-		scrollTo(attachment) {
-			const candidates = [...this.getActiveTextElement().querySelectorAll('[data-component="image-view"]')]
-			const element = candidates.find((el) => el.dataset.src.endsWith(this.fileNameUriComponent(attachment.name)))
-			if (element) {
-				// Scroll into view
-				element.scrollIntoView({ block: 'center' })
-				// Highlight
-				element.children[0].classList.add('highlight-animation')
-				setTimeout(() => {
-					element.children[0].classList.remove('highlight-animation')
-				}, 5000)
+		onContainerDragleave() {
+			if (this.isDragover) {
+				this.isDragover = false
 			}
 		},
 
-		restore(attachment) {
-			emit('collectives:attachment:restore', this.fileNameUriComponent(attachment.name))
-			this.scrollTo(attachment)
-			this.setAttachmentUndeleted(attachment.name)
-		},
-
-		onDeleteImageNode(imageUrl) {
-			const url = new URL(imageUrl, window.location)
-			const imageFileName = url.searchParams.get('imageFileName') || url.searchParams.get('mediaFileName')
-			if (!url.pathname.includes('/apps/text/') || !imageFileName) {
-				// Ignore image nodes that don't point to direct Text attachments
+		onContainerDrop(event) {
+			const files = event.dataTransfer?.files
+			if (!files) {
 				return
 			}
-			this.setAttachmentDeleted(imageFileName)
+
+			event.preventDefault()
+			event.stopPropagation()
+
+			this.uploadAttachments(files)
+			this.isDragover = false
+		},
+
+		async onFilesSelected(event) {
+			const files = event.target?.files
+			if (!files) {
+				return
+			}
+
+			await this.uploadAttachments(files)
+		},
+
+		async uploadAttachments(files) {
+			for (const file of files) {
+				try {
+					await this.uploadAttachment(file)
+					this.$refs.fileInput.value = ''
+				} catch (e) {
+					console.error('Failed to upload attachment', e)
+					showError(t('collectives', 'Failed to upload attachment {name}', { name: file.name }))
+				}
+			}
+		},
+
+		async onStartRename(attachment) {
+			this.showRenameAttachmentsForm = true
+			this.renamedAttachment = attachment
+		},
+
+		async onRename(newName) {
+			const oldName = this.renamedAttachment.name
+			this.renamedAttachment.name = newName
+			this.showRenameAttachmentsForm = false
+
+			try {
+				const newAttachment = await this.renameAttachment(this.renamedAttachment.id, newName)
+				this.renamedAttachment = null
+				emit('collectives:attachment:replaceFilename', {
+					pageId: this.currentPage.id,
+					oldName,
+					newName: newAttachment.name,
+				})
+			} catch (e) {
+				this.renamedAttachment.name = oldName
+				console.error('Failed to rename attachment', e)
+				showError(t('collectives', 'Failed to rename attachment', {}))
+			}
+		},
+
+		async onDelete(attachment) {
+			try {
+				await this.deleteAttachment(attachment.id)
+				emit('collectives:attachment:removeReferences', {
+					pageId: this.currentPage.id,
+					name: attachment.name,
+				})
+				showSuccess(t('collectives', 'Deleted attachment {name}', { name: attachment.name }))
+			} catch (e) {
+				console.error('Failed to delete attachment', e)
+				showError(t('collectives', 'Failed to delete attachment'))
+			}
+		},
+
+		async onRestore(attachment) {
+			console.debug('onRestore', attachment)
+			try {
+				await this.restoreAttachment(attachment.id)
+			} catch (e) {
+				console.error('Failed to restore attachment', e)
+				showError(t('collectives', 'Failed to restore attachment'))
+			}
 		},
 	},
 }
@@ -356,6 +389,30 @@ export default {
 <style lang="scss" scoped>
 .attachments-container {
 	height: calc(100% - 24px);
+}
+
+.upload-area {
+	padding-block: 8px;
+}
+
+.upload-drop-area {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	user-select: none;
+	color: var(--color-text-maxcontrast);
+	background-color: var(--color-main-background);
+	margin: 8px;
+	padding: 12px;
+	border: 2px var(--color-border-dark) dashed;
+	border-radius: var(--border-radius-large);
+
+	&__title {
+		font-weight: bold;
+		font-size: 1.2em;
+		padding-inline-start: 12px;
+		color: inherit;
+	}
 }
 
 .attachment {
@@ -386,8 +443,19 @@ export default {
 }
 
 .attachment-list-subheading {
+	display: flex;
+	align-items: center;
 	padding: 0.3rem 8px;
 	font-weight: bold;
+
+	.hint-icon {
+		color: var(--color-primary-element);
+	}
+}
+
+.hint-body {
+	max-width: 300px;
+	padding: var(--border-radius-element);
 }
 
 .action-link--disabled {

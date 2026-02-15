@@ -99,6 +99,9 @@ export function useEditor(davContent) {
 			onUpdate: ({ markdown }) => {
 				updateEditorContentDebounced(markdown)
 			},
+			onAttachmentsUpdated({ attachmentSrcs }) {
+				pagesStore.setEditorEmbeddedAttachmentSrcs(attachmentSrcs)
+			},
 			onOutlineToggle: pagesStore.setOutlineForCurrentPage,
 		})
 		editor.value = await editorPromise

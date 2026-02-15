@@ -32,6 +32,8 @@ export const usePagesStore = defineStore('pages', {
 		deletedAttachments: [],
 		attachmentsLoaded: false,
 		attachmentsError: false,
+		editorEmbeddedAttachmentSrcs: [],
+		readerEmbeddedAttachmentSrcs: [],
 		highlightPageId: null,
 		highlightAnimationPageId: null,
 		isDragoverTargetPage: false,
@@ -980,16 +982,64 @@ export const usePagesStore = defineStore('pages', {
 				.filter((a) => this.attachments.map((a) => a.name).includes(a.name))
 		},
 
-		setAttachmentDeleted(name) {
-			const index = this.attachments.findIndex((a) => a.name === name)
+		async uploadAttachment(file) {
+			const formData = new FormData()
+			formData.append('file', file)
+
+			const response = await api.uploadAttachment(this.context, this.currentPageId, formData)
+			if (typeof this.allAttachments[this.collectiveIndex] !== 'object') {
+				set(this.allAttachments, this.collectiveIndex, {})
+			}
+			if (!Array.isArray(this.allAttachments[this.collectiveIndex][this.currentPageId])) {
+				set(this.allAttachments[this.collectiveIndex], this.currentPageId, [])
+			}
+			this.allAttachments[this.collectiveIndex][this.currentPageId].push(response.data.ocs.data.attachment)
+			return response.data.ocs.data.attachment
+		},
+
+		/**
+		 * Rename an attachment of a page
+		 *
+		 * @param {number} attachmentId ID of the attachment to delete
+		 * @param {string} name - Target name of the attachment
+		 */
+		async renameAttachment(attachmentId, name) {
+			const response = await api.renameAttachment(this.context, this.currentPageId, attachmentId, name)
+			const index = this.attachments.findIndex((a) => a.id === attachmentId)
+			this.allAttachments[this.collectiveIndex][this.currentPageId].splice(index, 1, response.data.ocs.data.attachment)
+			return response.data.ocs.data.attachment
+		},
+
+		/**
+		 * Delete an attachment of a page
+		 *
+		 * @param {number} attachmentId ID of the attachment to delete
+		 */
+		async deleteAttachment(attachmentId) {
+			await api.deleteAttachment(this.context, this.currentPageId, attachmentId)
+			this.setAttachmentDeleted(attachmentId)
+		},
+
+		/**
+		 * Restore an attachment of a page from trash
+		 *
+		 * @param {number} attachmentId ID of the attachment to restore
+		 */
+		async restoreAttachment(attachmentId) {
+			await api.restoreAttachment(this.context, this.currentPageId, attachmentId)
+			this.setAttachmentUndeleted(attachmentId)
+		},
+
+		setAttachmentDeleted(attachmentId) {
+			const index = this.attachments.findIndex((a) => a.id === attachmentId)
 			if (index !== -1) {
 				const [attachment] = this.allAttachments[this.collectiveIndex][this.currentPageId].splice(index, 1)
 				this.deletedAttachments.push(attachment)
 			}
 		},
 
-		setAttachmentUndeleted(name) {
-			const index = this.deletedAttachments.findIndex((a) => a.name === name)
+		setAttachmentUndeleted(attachmentId) {
+			const index = this.deletedAttachments.findIndex((a) => a.id === attachmentId)
 			if (index !== -1) {
 				const [attachment] = this.deletedAttachments.splice(index, 1)
 				this.allAttachments[this.collectiveIndex][this.currentPageId].push(attachment)
@@ -1002,6 +1052,14 @@ export const usePagesStore = defineStore('pages', {
 
 		setAttachmentsError(error) {
 			this.attachmentsError = error
+		},
+
+		setEditorEmbeddedAttachmentSrcs(attachmentSrcs) {
+			this.editorEmbeddedAttachmentSrcs = attachmentSrcs
+		},
+
+		setReaderEmbeddedAttachmentSrcs(attachmentSrcs) {
+			this.readerEmbeddedAttachmentSrcs = attachmentSrcs
 		},
 
 		/**

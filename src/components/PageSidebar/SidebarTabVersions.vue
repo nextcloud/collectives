@@ -51,6 +51,8 @@
 				<BackupRestoreIcon />
 			</template>
 		</NcEmptyContent>
+
+		<!-- label dialog -->
 		<VersionLabelDialog
 			v-if="editedVersion"
 			:open.sync="showVersionLabelForm"

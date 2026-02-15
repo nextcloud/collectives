@@ -94,7 +94,6 @@ export default {
 	mounted() {
 		this.getAttachmentsForPage(true)
 		// Reload attachment list on event from Text
-		subscribe('collectives:text-image-node:add', this.getAttachmentsForPage)
 		subscribe('text:image-node:add', this.getAttachmentsForPage)
 		subscribe('collectives:page-sidebar', this.toggleSidebar)
 
@@ -103,7 +102,6 @@ export default {
 	},
 
 	beforeDestroy() {
-		unsubscribe('collectives:text-image-node:add', this.getAttachmentsForPage)
 		unsubscribe('text:image-node:add', this.getAttachmentsForPage)
 		unsubscribe('collectives:page-sidebar', this.toggleSidebar)
 	},
