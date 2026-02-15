@@ -4,11 +4,11 @@
  */
 
 import { expect, mergeTests } from '@playwright/test'
-import { test as createCollectiveTest } from '../support/fixtures/create-collective.ts'
+import { test as createCollectivesTest } from '../support/fixtures/create-collectives.ts'
 import { test as offlineTest } from '../support/fixtures/offline.ts'
 import { test as pageSidebarTest } from '../support/fixtures/pageSidebar.ts'
 
-const test = mergeTests(createCollectiveTest, offlineTest, pageSidebarTest)
+const test = mergeTests(createCollectivesTest, offlineTest, pageSidebarTest)
 
 // As we switch on and off the network
 // we cannot run tests in parallel.
@@ -18,7 +18,7 @@ test.describe('Offline mode', () => {
 	test.use({})
 
 	test.beforeEach(async ({ collective }) => {
-		await collective.open()
+		await collective.openCollective()
 	})
 
 	test('Shows offline indicator', async ({ collective, setOffline }) => {

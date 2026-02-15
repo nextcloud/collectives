@@ -78,7 +78,11 @@ export class Collective {
 		this.page = data.page
 	}
 
-	async open() {
+	async openApp() {
+		await this.page.goto('/index.php/apps/collectives')
+	}
+
+	async openCollective() {
 		const path = this.slug
 			? `${this.slug}-${this.id}`
 			: encodeURIComponent(this.name)

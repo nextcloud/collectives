@@ -4,14 +4,20 @@
  */
 
 import { expect } from '@playwright/test'
-import { test } from '../support/fixtures/create-collective.ts'
+import { test as createCollectiveTest } from '../support/fixtures/create-collectives.ts'
+
+const collectiveName = 'many !@#$%^&()_ special chars 🚀'
+
+const test = createCollectiveTest.extend({
+	// eslint-disable-next-line no-empty-pattern
+	collectiveConfigs: async ({}, use) => use([
+		{ name: collectiveName },
+	]),
+})
 
 test.describe('Collective', () => {
-	const collectiveName = 'many !@#$%^&()_ special chars 🚀'
-	test.use({ collectiveName })
-
 	test.beforeEach(async ({ collective }) => {
-		await collective.open()
+		await collective.openCollective()
 	})
 
 	test('Can handle special chars in collective name', async ({ collective }) => {
